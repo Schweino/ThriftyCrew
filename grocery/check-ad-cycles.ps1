@@ -3327,10 +3327,21 @@ function Get-TestGuardsStampPlan {
   return [pscustomobject]@{ weekly = (($Rc -eq 0) -or ($Rc -eq 1)); proved = ($Rc -eq 0) }
 }
 function Get-TestGuardsSubject {
-  param([int]$Rc)
+  param([int]$Rc, [bool]$MutationFailed = $true)
   if ($Rc -eq 3) { return 'Grocery: test-guards could not evaluate (guards already red on the unmutated board)' }
   if ($Rc -eq 4) { return 'Grocery: test-guards weekly did not run (hermetic copy failed)' }
+  # A SOURCE-SCAN finding is not a blind guard (2026-09-19, queue 2026-09-19-a1c25d): that day's rc 1 was the
+  # empty-stamp idiom scan alone while every mutation case still exited 2, and the subject paged as decorative.
+  if (($Rc -eq 1) -and (-not $MutationFailed)) { return 'Grocery: test-guards weekly: a source-scan case failed, every invariant still fails' }
   return 'Grocery: a BLOCKING invariant can no longer fail (test-guards weekly)'
+}
+function Test-TestGuardsMutationFailed {
+  # FAILS CLOSED: only when EVERY FAIL line is the empty-stamp source scan's "throwing idiom is back" line is it
+  # scan-only. No FAIL line at all, or any other FAIL line, reads as a mutation failure (the blind subject).
+  param([string]$Output)
+  $fails = @(($Output -split "`r?`n") | Where-Object { $_ -match '^\s*FAIL\b' })
+  if ($fails.Count -eq 0) { return $true }
+  return (@($fails | Where-Object { $_ -notmatch '^\s*FAIL\s+empty-stamp: throwing idiom is back in ' }).Count -gt 0)
 }
 
 # ---- WEEKLY: prove each BLOCKING invariant can still FAIL (test-guards, hermetically) ----
@@ -3375,7 +3386,7 @@ try {
       Log ('test-guards weekly rc=' + $tgRc)
       $summary += 'INVARIANTS a blocking guard may no longer be able to fire - see test-guards weekly alert'
       if (-not $NoAlert) {
-        $tgSubject = Get-TestGuardsSubject -Rc $tgRc
+        $tgSubject = Get-TestGuardsSubject -Rc $tgRc -MutationFailed (Test-TestGuardsMutationFailed -Output $tg)
         Send-Alert -Subject $tgSubject -Body ("run-test-guards-weekly.ps1 breaks each hard invariant inside a scratch COPY of the grocery tree and asserts guards.ps1 exits 2 with that guard's own failure text. Exit " + $tgRc + ": 1 = a broken invariant did NOT fail guards (that guard is decorative until fixed - do not trust a quiet board on it); 3 = baseline already red, nothing proven (the daily run is already alerting on the real failure); 4 = the hermetic copy failed. Production files are never touched by this job.`n`n" + $tg) | Out-Null
       }
     }

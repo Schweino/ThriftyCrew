@@ -43,7 +43,21 @@ param([switch]$SelfTest, [switch]$Staged)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ps-source.ps1')   # Get-PsBlockCommentsBlanked; no param() block
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\production-text.ps1')   # Get-TcProductionText; no param() block
 $repo = Split-Path $PSScriptRoot -Parent
+
+# ---- THE EMPTY-STAMP THROWING IDIOM, AT COMMIT TIME (2026-09-19, queue 2026-09-19-a1c25d) -----------------
+# ([string](Get-Content $f -Raw)).Trim() THROWS on a zero-byte file under PS 5.1. test-guards.ps1 has swept
+# grocery\*.ps1 for it since 2026-07-30, but only in the WEEKLY hermetic run, so triage-due.ps1:115 shipped
+# on 2026-09-10 and lived nine days before anything read it. The same expression and the same line filter as
+# test-guards' Test-HasThrowingIdiom (production statements only, comments and -SelfTest fixtures skipped),
+# run here over EVERY staged .ps1, not only grocery\, so ops\, lib\ and meal-prep\ are covered too.
+# grocery\test-guards.ps1 is exempt by construction: its must-fire HAS to contain the idiom to run it.
+function Test-HasThrowingIdiom {
+  param([string]$Path)
+  $lines = Get-PsCodeLines -Text (Get-TcProductionText -Path $Path)
+  return @($lines | Where-Object { $_ -match '\(\[string\]\(Get-Content [^)]*\)\)\.Trim\(\)' }).Count -gt 0
+}
 
 # ---- the invariants, as functions, so the self-test drives the SAME code the live path does -------------
 function Test-BomUnchanged {
@@ -306,8 +320,28 @@ $rc = Read-JsonFile $p
   if (@(0, 1, 3) -contains $rcGood) { Write-Output "  PASS  CLEAN TWIN: a DECLARED parameter still binds and the script still runs (rc=$rcGood)" }
   else { Write-Output "  FAIL  a legitimate declared parameter stopped working (rc=$rcGood)"; $fail++ }
 
+  # ---- DEFECT 9: THE EMPTY-STAMP THROWING IDIOM (2026-09-19, queue 2026-09-19-a1c25d) ----------------------
+  # The needle is BUILT, so this file's own source never carries the idiom it refuses.
+  $idiomDir = Join-Path $env:TEMP ('vbe-idiom-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+  New-Item -ItemType Directory -Path $idiomDir -ErrorAction Stop | Out-Null
+  try {
+    $q = [char]39
+    $needle = '([' + 'string](Get-Content $f -Raw)).Trim()'
+    $idBad = Join-Path $idiomDir 'bad.ps1'; $idOk = Join-Path $idiomDir 'ok.ps1'; $idFx = Join-Path $idiomDir 'fx.ps1'
+    [IO.File]::WriteAllText($idBad, ('$p = ' + $needle + "`n"))
+    $okLine1 = '# PS 5.1: ' + $needle + ' THROWS on a zero-byte stamp.'
+    $okLine2 = '$p = ((Get-Content $f -Raw) + ' + $q + $q + ').Trim()'
+    [IO.File]::WriteAllText($idOk, ($okLine1 + "`n" + $okLine2 + "`n"))
+    $fxLine1 = 'param([switch]$SelfTest)'
+    $fxLine2 = 'if ($SelfTest) { $p = ' + $needle + '; exit 0 }'
+    [IO.File]::WriteAllText($idFx, ($fxLine1 + "`n" + $fxLine2 + "`n" + $okLine2 + "`n"))
+    if (Test-HasThrowingIdiom -Path $idBad) { Write-Output '  PASS  MUST FIRE: the throwing stamp idiom in a production statement is refused at commit (triage-due.ps1:115, 2026-09-10)' } else { Write-Output '  FAIL  the throwing stamp idiom in real code went unreported'; $fail++ }
+    if (-not (Test-HasThrowingIdiom -Path $idOk)) { Write-Output '  PASS  MUST NOT FIRE: the idiom quoted in a COMMENT beside the shipped form is not a finding' } else { Write-Output '  FAIL  a comment documenting the trap was refused'; $fail++ }
+    if (-not (Test-HasThrowingIdiom -Path $idFx)) { Write-Output '  PASS  MUST NOT FIRE: the idiom inside a -SelfTest fixture body is not a production statement' } else { Write-Output '  FAIL  a -SelfTest fixture body was refused as a live call site'; $fail++ }
+  } finally { Remove-Item -LiteralPath $idiomDir -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($fail) { Write-Output "SELF-TEST FAILED ($fail)"; exit 2 }
-  Write-Output 'SELF-TEST PASS - every founding defect armed (BOM, EOL, unresolvable call, converted frozen literal, dot-source below its callers, undeclared parameter refused) and every clean twin holds'
+  Write-Output 'SELF-TEST PASS - every founding defect armed (BOM, EOL, unresolvable call, converted frozen literal, dot-source below its callers, undeclared parameter refused, throwing stamp idiom) and every clean twin holds'
   exit 0
 }
 
@@ -373,6 +407,10 @@ try {
       $txt = [IO.File]::ReadAllText($full)
       $gap = Get-DependencyGaps -Text $txt -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1' -FilePath $full
       if ($gap) { [void]$findings.Add("DEPENDENCY    $n - $gap") }
+      if ($n -ne 'grocery/test-guards.ps1' -and (Test-HasThrowingIdiom -Path $full)) {
+        # the idiom is named in two halves, or this line would be a live call site of the scan above
+        [void]$findings.Add("STAMP IDIOM   $n - ([string](Get-Content ...)" + ").Trim() throws on a zero-byte file; use ((Get-Content `$f -Raw) + '').Trim()")
+      }
     }
   }
   Write-Output ("verify-bulk-edit: $checked modified tracked file(s) compared against HEAD; $parsed .ps1 parsed clean; $($findings.Count) finding(s)")

@@ -112,7 +112,7 @@ function Read-LaneStamp {
   param([string]$Path)
   if (-not $Path -or -not (Test-Path -LiteralPath $Path)) { return $null }
   try {
-    $raw = ([string](Get-Content -LiteralPath $Path -Raw -ErrorAction Stop)).Trim()
+    $raw = ((Get-Content -LiteralPath $Path -Raw -ErrorAction Stop) + '').Trim()
     if (-not $raw) { return $null }
     return [datetime]::Parse($raw, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::RoundtripKind)
   } catch { return $null }

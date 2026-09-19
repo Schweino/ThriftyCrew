@@ -39,7 +39,7 @@
         "files": ["ops/hooks/pre-commit", "ops/verify-bulk-edit.ps1", "grocery/check-ad-cycles.ps1", "grocery/test-guards.ps1", "grocery/run-test-guards-weekly.ps1"],
         "exact_change": "(a) the staged-file path of ops/hooks/pre-commit (verify-bulk-edit.ps1 or a sibling it calls) runs Test-HasThrowingIdiom (lift it from test-guards.ps1 into lib/ or dot-source it) over each staged grocery/*.ps1 and refuses on a hit, using Get-PsCodeLines / Get-TcProductionText so comments and -SelfTest fixture bodies do not fire; (b) run-test-guards-weekly.ps1 reports which cases failed (mutation vs scan) and Get-TestGuardsSubject takes -MutationFailed [bool]: when false and rc 1, subject = 'Grocery: test-guards weekly: a source-scan case failed, every invariant still fails'"
       },
-      "leaves_open": "the idiom scan covers grocery/*.ps1 only (test-guards.ps1:569 globs $root\\*.ps1); ops/, lib/ and meal-prep/ scripts reading a stamp with the same idiom are outside both the weekly scan and the new pre-commit check unless the hook is pointed at every staged .ps1, which (a) asks for; whether any such instance exists today is unmeasured",
+      "leaves_open": "none: the pre-commit check covers every staged .ps1 in the repo; measured 0 existing instances outside the exempt test-guards fixture",
       "leaves_open_occurrences": 0,
       "leaves_open_followup": null,
       "blast_radius": {
@@ -62,9 +62,9 @@
       "do_not_touch": ["any guard threshold", "the mutation cases of test-guards.ps1", "grocery/test-guards-weekly-stamp.txt"],
       "resolution_note": "No guard is blind: every mutation case still exits 2. The one FAIL was the empty-stamp SOURCE scan finding the throwing idiom in triage-due.ps1:115 (fail-safe inside a try/catch). Idiom replaced; the pre-commit path now refuses a staged instance so the next one cannot live a week; scan-only failures get their own subject instead of the blind-invariant one.",
       "publish_batch": 0,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
+      "status": "deviated",
+      "premise_verified": "yes: triage-due.ps1:115 carried ([string](Get-Content -LiteralPath $Path -Raw -ErrorAction Stop)).Trim(); Get-TestGuardsSubject returned the blind-invariant subject for every rc but 3 and 4. Measured the residual the same way test-guards scans (Get-PsCodeLines over Get-TcProductionText) across every tracked .ps1 outside archive/: 2 hits, grocery/test-guards.ps1 (its own must-fire fixture, exempt by construction) and grocery/triage-due.ps1 (fixed here), so 0 instances in ops/, lib/ or meal-prep/.",
+      "deviation": "The pre-commit check lives in ops/verify-bulk-edit.ps1 (which the hook already runs on the staged set) and covers EVERY staged .ps1, not only grocery/*.ps1, which closes the residual the plan left open. The scan-only distinction is derived in check-ad-cycles.ps1 from the runner's own FAIL lines (Test-TestGuardsMutationFailed, fails closed) rather than by changing run-test-guards-weekly.ps1; the fixture cases went into grocery/test-cadence.ps1, which is the suite that already lifts Get-TestGuardsSubject, instead of check-ad-cycles -SelfTest.",
       "shipped_commit": null
     },    {
       "queue_id": "2026-09-19-641ec6",

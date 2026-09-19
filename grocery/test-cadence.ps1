@@ -56,7 +56,7 @@ T ((Get-CadenceLast 'nope') -eq 'never') 'a never-run check reports "never", not
 # ---- THE WEEKLY GUARD PROOF (2026-09-10, queue 2026-09-10-267ba6), lifted from the SHIPPED source like the helpers above ----
 # Frozen from the founding morning: chain-verdict.json guards_rc=2 at 08:11:12, the weekly stamp last written
 # 2026-09-03, and the runner rc=3 at 08:26:38 that stamped the week closed anyway.
-$m2 = [regex]::Match($src, '(?s)function Get-TestGuardsWeeklyPlan \{.*?\n\}\r?\nfunction Get-TestGuardsStampPlan \{.*?\n\}\r?\nfunction Get-TestGuardsSubject \{.*?\n\}')
+$m2 = [regex]::Match($src, '(?s)function Get-TestGuardsWeeklyPlan \{.*?\n\}\r?\nfunction Get-TestGuardsStampPlan \{.*?\n\}\r?\nfunction Get-TestGuardsSubject \{.*?\n\}\r?\nfunction Test-TestGuardsMutationFailed \{.*?\n\}')
 if (-not $m2.Success) { T $false 'could not extract the test-guards weekly helpers from check-ad-cycles.ps1' }
 else {
   Invoke-Expression $m2.Value
@@ -75,6 +75,16 @@ else {
   $st1 = Get-TestGuardsStampPlan -Rc 1
   T ($st0.weekly -and $st0.proved) 'CLEAN TWIN  runner rc=0 writes both stamps'
   T ($st1.weekly -and (-not $st1.proved) -and ((Get-TestGuardsSubject -Rc 1) -match 'BLOCKING invariant can no longer fail')) 'CLEAN TWIN  runner rc=1 writes the weekly stamp only and still sends "a BLOCKING invariant can no longer fail"'
+  # SCAN-ONLY rc 1 (2026-09-19, queue 2026-09-19-a1c25d). The founding output: every mutation case exit 2, one FAIL
+  # from the empty-stamp source scan naming triage-due.ps1.
+  $tgScanOnly = "  PASS  price-mode: guards exit 2`n  FAIL  empty-stamp: throwing idiom is back in triage-due.ps1 - use the shipped idiom"
+  $tgMut = $tgScanOnly + "`n  FAIL  household-in-food: guards exited 0 on a broken invariant"
+  $mfScan = Test-TestGuardsMutationFailed -Output $tgScanOnly
+  $mfMut = Test-TestGuardsMutationFailed -Output $tgMut
+  $mfNone = Test-TestGuardsMutationFailed -Output '  PASS  price-mode'
+  T ($mfMut -and ((Get-TestGuardsSubject -Rc 1 -MutationFailed $mfMut) -match 'BLOCKING invariant can no longer fail')) 'MUST FIRE  rc 1 with a MUTATION case failing still sends "a BLOCKING invariant can no longer fail"'
+  T ((-not $mfScan) -and ((Get-TestGuardsSubject -Rc 1 -MutationFailed $mfScan) -match 'source-scan case failed, every invariant still fails')) 'CLEAN TWIN  rc 1 with only the empty-stamp source scan failing sends the scan-only subject (2026-09-19 founding output)'
+  T ($mfNone) 'MUST FIRE  rc 1 with no parseable FAIL line fails closed to the blind-invariant subject'
   $p5 = Get-TestGuardsWeeklyPlan -Verdict $null -Today '2026-09-10' -WeeklyLast $now.AddDays(-8) -ProvedLast $now -UnprovenAlertLast $now -Now $now
   T ($p5.action -eq 'defer') 'MUST FIRE  no verdict on disk is a DEFER, never a run on an unknown baseline'
   $p6 = Get-TestGuardsWeeklyPlan -Verdict ([pscustomobject]@{ date = '2026-09-09'; guards_rc = 0 }) -Today '2026-09-10' -WeeklyLast $now.AddDays(-8) -ProvedLast $now -UnprovenAlertLast $now -Now $now
