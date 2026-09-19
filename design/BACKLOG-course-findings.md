@@ -13764,7 +13764,28 @@ already fixed on 2026-09-05.** All counts at `ba5c5ef18`, over tracked files.
   `fareway-shop-2026-08-05.json`, holds 2 two-layer sequences inside the capture itself. The three newest
   captures (09-10 rescue, 09-11, 09-12) hold none. Which emitter wrote those was not measured.
 
-### I175 - Windows PowerShell 5.1 Sort-Object is unstable, and 17 cheapest-row picks break price ties by the sort's internals `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+### I175 - Windows PowerShell 5.1 Sort-Object is unstable, and 17 cheapest-row picks break price ties by the sort's internals `DONE` `queue-7`
+
+**Done 2026-09-19: landed on Brad's approval 2026-09-19 (option A, the branch as built).** Brad approved landing
+`claude/i175-tie-break` in chat. It was rebased onto `23ef8f58a` (after the non-food bundle, I222 and the I191
+re-land, all on main), with no conflicts; the landed blobs are `compare-deals.ps1` `a91efa1c` and
+`price-table-lib.ps1` `3b9aa9a9`. Verified in the seeded land worktree: compare-deals `-SelfTest` exit 0 (all three
+11i cases ok), `test-price-table.ps1` exit 0 (`PRICE-TABLE PASSED`, cases 13 and 14 ok), `regression-test.ps1` exit 0
+(`all 37 commodities match`). Break once: with both tie-breaks reverted to `Sort-Object unit_price` in place,
+compare-deals exited 1 (`SELF-TEST FAIL: 2 case(s)`) and test-price-table exited 1 (`PRICE-TABLE FAILED (2)`);
+restored, both files md5-identical. Main's code run against the edited baseline failed on exactly one entry,
+`chicken-thighs: nomem_store Baker's -> Family Fare`, so that one hand-edited field is the only baseline entry the
+tie-break moves. **Re-measured on the newest seeded inputs** (board date 2026-09-17, seeded `comparison-2026-09-17.json`
+sha256 `6b20e403ab41...`, a rebuild newer than the one measured below), building `compare-deals.ps1 -MinStores 1
+-OutName <arm>` with main's two files and with the branch's, plus a second branch build as a control. Control: 0 of
+572 crowns and 0 of 3,187 price-table cells differed. Old against new: **0 prices moved** (board and table); every
+crown, non-member crown and store reorder is between exactly equal `per_unit`, checked per commodity by the diff
+harness (0 violations); `cheapest_store` changed on **9 of 572** (the 8 below plus tomatillos Fareway to Family Fare,
+a tie on the newer inputs) and `nomem_store` on **11 of 572** (the 10 below plus tomatillos); 76 commodities reorder
+tied stores further down `stores`; the price table changed a product field in **384 of 3,187** cells, no price.
+The table's shown product now matches the board's item in 3,172 of 3,187 cells (2,846 before); the 15 left are all
+an everyday and an ad row at the same price where the table shows the ad half and the board the everyday half,
+whose everyday product does match, so they are the table's `shown_kind` rule and not a tie this item covers.
 
 **The ruling asked for (backlog run 2026-09-19).** The measurement below found real ties on the real board, and a
 fix is built and held on branch `claude/i175-tie-break`, because it changes which store a reader sees crowned on 8
