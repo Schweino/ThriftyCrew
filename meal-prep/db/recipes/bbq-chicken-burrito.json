@@ -28,7 +28,7 @@
                  "fat":  12,
                  "cost_ps":  "2.98"
              },
-    "intro_html":  "\u003cp\u003eSweet, smoky, and honest about its numbers. This one lands at {{cal}} calories with {{protein}} grams of protein, wrapped in a tortilla that brings 18 grams of fiber for about 5 grams of net carb. The trick is a BBQ crema: blended cottage cheese and a little cream cheese carry the sauce so you get the creamy, saucy feel without a cup of mayo behind it. If you like our Lean BBQ Chicken and Rice Bowls, this is the same flavor you can eat with one hand.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eSweet, smoky, and honest about its numbers. This one lands at {{cal}} calories with {{protein}} grams of protein, wrapped in a tortilla that brings 18 grams of fiber for about 5 grams of net carb. The trick is a BBQ crema: blended cottage cheese and a little cream cheese carry the sauce so you get the creamy, saucy feel without a cup of mayo behind it. If you like our BBQ Chicken and Rice Bowls, this is the same flavor you can eat with one hand.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
@@ -60,9 +60,9 @@
                    ],
     "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a BBQ chicken bowl at a fast-casual spot. Catch the breast on sale and it slides lower.\u003c/p\u003e",
     "shop_smart":  [
-                       "\u003cstrong\u003eRegular BBQ sauce is fine, but read the label.\u003c/strong\u003e One bottle sauces the whole batch. If you want to shave carbs, the no-sugar-added versions taste nearly identical once they hit the hot chicken.",
+                       "\u003cstrong\u003eRegular BBQ sauce is fine, but read the label.\u003c/strong\u003e One bottle sauces the whole batch. If you want to shave carbs, compare the sugar grams on the labels and grab the bottle with the fewest. It tastes nearly identical once it hits the hot chicken.",
                        "\u003cstrong\u003eA little cream cheese goes a long way.\u003c/strong\u003e You only need part of one 8 ounce brick to make the crema silky, so the rest keeps for bagels or the next batch.",
-                       "\u003cstrong\u003eCottage cheese is the protein trick in the sauce.\u003c/strong\u003e Blended smooth, nobody knows it is there, and it turns a normally fatty sauce into a lean one. Buy the big tub and you will find other uses for it fast."
+                       "\u003cstrong\u003eCottage cheese is the protein trick in the sauce.\u003c/strong\u003e Blended smooth, nobody knows it is there, and it carries a creamy sauce that is usually all mayo. Buy the big tub and you will find other uses for it fast."
                    ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -175,8 +175,8 @@
                            ]
                },
     "head":  {
-                 "description":  "A sweet and smoky BBQ chicken burrito under 400 calories, built on a lean blended crema. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
-                 "keywords":  "bbq chicken burrito, high protein meal prep, low calorie burrito, cheap meal prep, budget dinner",
+                 "description":  "A sweet and smoky BBQ chicken burrito under 400 calories, built on a blended cottage cheese crema. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
+                 "keywords":  "bbq chicken burrito, high protein meal prep, meal prep burrito, cheap meal prep, budget dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT30M",

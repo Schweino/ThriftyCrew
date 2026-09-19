@@ -43,11 +43,11 @@
                        "\u003cstrong\u003eTrue shopping cost: about $22.06 across 14 servings, roughly $1.58 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $1.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $23.26. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a lean, cheesy enchilada bowl that beats the frozen dinner on every count.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a cheesy, filling enchilada bowl that beats the frozen dinner on every count.",
     "shop_smart":  [
                        "\u003cstrong\u003eChicken on sale, frozen,\u003c/strong\u003e is the single best habit for keeping these bowls cheap.",
                        "\u003cstrong\u003eEnchilada sauce comes in mild and hot.\u003c/strong\u003e Grab whichever your table likes. The macros are the same.",
-                       "\u003cstrong\u003eFat free cheddar\u003c/strong\u003e adds 9 grams of protein per quarter cup for 45 calories and no fat, which is why it earns its spot in the lean bowls."
+                       "\u003cstrong\u003eFat free cheddar\u003c/strong\u003e adds 9 grams of protein per quarter cup for 45 calories, which is why it earns its spot in these bowls."
                    ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -59,7 +59,7 @@
                 ],
     "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near {{cal}} calories and {{protein}} grams of protein at just {{fat}} grams of fat.",
     "credit_html":  "",
-    "upsell_html":  "Lean, cheesy dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Cheesy, filling dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  19,
     "cost_batch_true":  22.06,
     "cost_per_serving":  1.36,
