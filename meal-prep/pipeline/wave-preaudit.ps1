@@ -465,7 +465,8 @@ function Get-AllergenLineCheck {
       ('the rendered card''s Contains line disagrees with what the spec''s current ingredients derive, so propagate''s pre-publish allergen gate would refuse the wave.'))
   }
   $named = @($r.present | ForEach-Object { $_.label })
-  return (New-Check 'allergen-line' $true ([ordered]@{ contains = $named; hidden = @($r.hidden).Count }) `
+  # `also` is outside the nine (coconut since Brad's 2026-09-19 ruling, backlog I144): reported, never counted as contained.
+  return (New-Check 'allergen-line' $true ([ordered]@{ contains = $named; hidden = @($r.hidden).Count; also = @($r.also) }) `
     ('the built card carries exactly the Contains line its ingredients derive (' + $(if ($named.Count) { $named -join ', ' } else { 'none of the nine' }) + '), so propagate''s pre-publish allergen gate will pass it'))
 }
 

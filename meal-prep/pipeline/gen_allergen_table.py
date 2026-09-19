@@ -104,7 +104,9 @@ T = {
     "Chili Powder": ([], {}),
     "Chipotle in Adobo": ([], {}),
     "Cocoa Powder": ([], {}),
-    "Coconut Milk": (["tree_nuts:coconut"], {"tree_nuts": "coconut, which the FDA lists as a tree nut"}),
+    # NOT a tree nut since the FDA's final allergen guidance of 2025-01-06 (Brad's ruling, 2026-09-19,
+    # backlog I144). It carries the separate coconut note instead: see ALSO below.
+    "Coconut Milk": ([], {}),
     "Condensed French Onion Soup": (["wheat", "soy"], {"wheat": "the wheat in condensed soup", "soy": "the soy protein in condensed soup"}),
     "Corn Chips": ([], {}),
     "Corn Muffin Mix": (["wheat"], {}),
@@ -394,6 +396,17 @@ T = {
     "Tomatoes": ([], {}),
 }
 
+# OUTSIDE THE NINE, NAMED ANYWAY (Brad's ruling, 2026-09-19, backlog I144). An ingredient here is not
+# one of the nine major US allergens, so it never reaches the "Contains" list, but some readers avoid it
+# for an allergy anyway and the card says so in a separate short note. The key is the note's vocabulary
+# in meal-prep/lib/allergen-lib.ps1 ($TcAllergenAlso), which spells the sentence; the table only names
+# which rows carry it. Coconut Oil is deliberately NOT here: the ruling named coconut milk's 28 cards,
+# and the oil's word "Coconut" is already in the ingredient name the reader sees.
+ALSO_KEYS = ["coconut"]
+ALSO = {
+    "Coconut Milk": ["coconut"],
+}
+
 # Rows in the ingredient map that are not foods. They carry no classification and no spec may use
 # them; the completeness check below names any row that is neither classified nor listed here.
 NOT_A_FOOD = ["_r300_note"]
@@ -414,12 +427,14 @@ RULE = (
     "that food without it, or the standard US supermarket formulation of that named product carries "
     "it as a defining component. An allergen only SOME brands add is not listed, because that is a "
     "guess rather than a derivation, and the card's own note is what covers it: the line reflects the "
-    "recipe as written, and the reader checks the label on the brand they buy. Two consequences worth "
+    "recipe as written, and the reader checks the label on the brand they buy. Three consequences worth "
     "stating because they look like omissions. (1) Refined oils are exempt from FALCPA allergen "
     "labelling, so soybean oil alone does not make a row soy. (2) 'May contain' is not recognised by "
-    "FALCPA and is purely voluntary, so it never appears here. Coconut IS listed as a tree nut "
-    "because the FDA's tree-nut list includes it; the card names the specific nut, so a reader "
-    "allergic to almonds is not misled by a coconut recipe."
+    "FALCPA and is purely voluntary, so it never appears here. (3) Coconut is NOT a tree nut: the "
+    "FDA took it off its tree-nut list in its final allergen labelling guidance of 2025-01-06, so it "
+    "never appears under 'Contains'. Because some readers with a nut allergy avoid it anyway, a row "
+    "carrying it lists 'coconut' under `also` and the card prints a separate short note naming it "
+    "(Brad's ruling, 2026-09-19, backlog I144): nothing understated, nothing false claimed."
 )
 
 
@@ -437,6 +452,9 @@ def main():
         raise SystemExit("UNCLASSIFIED ingredient-map rows (%d): %s" % (len(missing), ", ".join(missing)))
     if extra:
         raise SystemExit("classified rows that are not in the ingredient map (%d): %s" % (len(extra), ", ".join(extra)))
+    also_extra = [n for n in ALSO if n not in names]
+    if also_extra:
+        raise SystemExit("ALSO rows that are not in the ingredient map (%d): %s" % (len(also_extra), ", ".join(also_extra)))
 
     keys = {a["key"] for a in NINE}
     items = {}
@@ -454,11 +472,20 @@ def main():
         e = {"contains": toks}
         if hidden:
             e["hidden"] = hidden
+        also = ALSO.get(n, [])
+        for a in also:
+            if a not in ALSO_KEYS:
+                raise SystemExit("%s: also '%s' is not one of %s" % (n, a, ", ".join(ALSO_KEYS)))
+            if a in [t.split(":", 1)[1] for t in toks if ":" in t]:
+                raise SystemExit("%s: '%s' is both a named allergen and an also note" % (n, a))
+        if also:
+            e["also"] = also
         items[n] = e
 
     doc = {
         "readme": README,
-        "ruling": "Brad, 2026-09-12, backlog I144. See design/RULING-allergen-line-2026-09-12.md.",
+        "ruling": "Brad, 2026-09-12, backlog I144; coconut amended 2026-09-19. See design/RULING-allergen-line-2026-09-12.md.",
+        "also_keys": ALSO_KEYS,
         "rule": RULE,
         "generated_by": "meal-prep/pipeline/gen_allergen_table.py",
         "allergens": NINE,
@@ -470,9 +497,10 @@ def main():
         fh.write(text)
     n_with = sum(1 for v in items.values() if v["contains"])
     n_hidden = sum(1 for v in items.values() if v.get("hidden"))
-    print("allergens.json: %d item(s) classified, %d carry at least one of the nine, %d carry a hidden source"
-          % (len(items), n_with, n_hidden))
-    print("GEN-ALLERGEN-TABLE-COMPLETE items=%d classified=%d hidden=%d" % (len(items), n_with, n_hidden))
+    n_also = sum(1 for v in items.values() if v.get("also"))
+    print("allergens.json: %d item(s) classified, %d carry at least one of the nine, %d carry a hidden source, %d carry an also note"
+          % (len(items), n_with, n_hidden, n_also))
+    print("GEN-ALLERGEN-TABLE-COMPLETE items=%d classified=%d hidden=%d also=%d" % (len(items), n_with, n_hidden, n_also))
 
 
 if __name__ == "__main__":

@@ -42,6 +42,15 @@ $script:TcAllergenLabel = @{
 # The note Brad's ruling asks for, in one place. A card that loses it fails the publish check, because
 # the check compares the whole line.
 $script:TcAllergenNote = 'Generated from the ingredients above, for the nine major US allergens. This is the recipe as written, so read the label on the brands you buy.'
+# OUTSIDE THE NINE, NAMED ANYWAY (Brad's ruling, 2026-09-19, backlog I144). The FDA took coconut off its
+# tree-nut list in its final allergen labelling guidance of 2025-01-06, so a coconut recipe must NOT say
+# "Contains: tree nuts" - that is a false claim on 28 cards. But some readers with a nut allergy avoid
+# coconut anyway, so the card names it in a separate short sentence: nothing understated, nothing false.
+# The table (db\allergens.json, `also`) names WHICH rows carry a note; the sentence is spelled only here,
+# and Get-TcAllergenTable refuses a table naming a key this list does not know.
+$script:TcAllergenAlso = [ordered]@{
+  'coconut' = 'Also contains coconut, which the FDA no longer lists as a tree nut but some people with nut allergies still avoid.'
+}
 
 function ConvertTo-TcAllergenHtml {
   # Escapes exactly like build-card2.ps1's Enc2. The specifics and hidden clauses are our own authored
@@ -78,7 +87,17 @@ function Get-TcAllergenTable {
     if ($p.Value.PSObject.Properties.Name -contains 'hidden' -and $p.Value.hidden) {
       foreach ($h in $p.Value.hidden.PSObject.Properties) { $hidden[[string]$h.Name] = [string]$h.Value }
     }
-    $items[$p.Name] = [pscustomobject]@{ contains = $contains; hidden = $hidden }
+    $also = @()
+    if ($p.Value.PSObject.Properties.Name -contains 'also') {
+      foreach ($a in @($p.Value.also)) {
+        $ak = [string]$a
+        if (-not $script:TcAllergenAlso.Contains($ak)) {
+          throw ("Get-TcAllergenTable: '{0}' carries an also note '{1}' that allergen-lib does not spell (known: {2})" -f $p.Name, $ak, (@($script:TcAllergenAlso.Keys) -join ','))
+        }
+        $also += $ak
+      }
+    }
+    $items[$p.Name] = [pscustomobject]@{ contains = $contains; hidden = $hidden; also = $also }
   }
   return [pscustomobject]@{ Items = $items }
 }
@@ -90,6 +109,7 @@ function Get-TcRecipeAllergens {
 
       .present  ordered @( @{ key; label; specifics=@() } ) in the statutory order
       .hidden   ordered @( "<label>, from <clause>" ) deduped, in the statutory order
+      .also     ordered @( also-keys such as 'coconut' ) - OUTSIDE the nine, never in "Contains"
       .unknown  @( ingredient names the table cannot classify ) - a HARD STOP for every caller
 
     Keyed on the ingredient's canon name where it has one, exactly as the costing and the vocabulary
@@ -98,6 +118,7 @@ function Get-TcRecipeAllergens {
   param($ScalerIng, $Items)
   $seen = @{}         # key -> hashtable of specifics
   $hiddenBy = @{}     # key -> hashtable of clause -> 1
+  $alsoSeen = @{}     # also-key -> 1 (outside the nine: coconut, backlog I144 ruling of 2026-09-19)
   $unknown = @()
   foreach ($e in @($ScalerIng)) {
     if (-not $e) { continue }
@@ -117,7 +138,14 @@ function Get-TcRecipeAllergens {
       if (-not $hiddenBy.ContainsKey($hk)) { $hiddenBy[$hk] = @{} }
       $hiddenBy[$hk][[string]$entry.hidden[$hk]] = 1
     }
+    # An entry built before the coconut ruling (a fixture, an older caller) has no `also` at all.
+    if ($entry.PSObject.Properties.Name -contains 'also') {
+      foreach ($a in @($entry.also)) { if ($a) { $alsoSeen[[string]$a] = 1 } }
+    }
   }
+  # In the lib's own vocabulary order, so the bytes never depend on ingredient order.
+  $also = @()
+  foreach ($ak in @($script:TcAllergenAlso.Keys)) { if ($alsoSeen.ContainsKey($ak)) { $also += $ak } }
   $present = @()
   $hidden = @()
   foreach ($k in $script:TcAllergenOrder) {
@@ -132,7 +160,7 @@ function Get-TcRecipeAllergens {
       }
     }
   }
-  return [pscustomobject]@{ present = @($present); hidden = @($hidden); unknown = @($unknown | Select-Object -Unique) }
+  return [pscustomobject]@{ present = @($present); hidden = @($hidden); also = @($also); unknown = @($unknown | Select-Object -Unique) }
 }
 
 function Format-TcAllergenLine {
@@ -149,7 +177,7 @@ function Format-TcAllergenLine {
   foreach ($p in @($Result.present)) {
     $n = ConvertTo-TcAllergenHtml $p.label
     # Brad's ruling: name the SPECIFIC nut or shellfish. A reader allergic to almonds is not served by
-    # a bare "tree nuts", and a reader who eats coconut is not served by it either.
+    # a bare "tree nuts". (Coconut is not a tree nut at all since 2025-01-06; it has its own note below.)
     if (@($p.specifics).Count -gt 0) {
       $n += ' (' + ((@($p.specifics) | ForEach-Object { ConvertTo-TcAllergenHtml $_ }) -join ', ') + ')'
     }
@@ -160,6 +188,14 @@ function Format-TcAllergenLine {
   if (@($Result.hidden).Count -gt 0) {
     $clauses = @($Result.hidden | ForEach-Object { ConvertTo-TcAllergenHtml $_ })
     $html += ' <span class="smp-allergen-hidden">Easy to miss: ' + ($clauses -join '; ') + '.</span>'
+  }
+  # Outside the nine, so after "Contains" and its hidden sources and never inside them. The property is
+  # absent on a result built by hand before the coconut ruling, which reads as no note.
+  $alsoKeys = @()
+  if ($Result.PSObject.Properties.Name -contains 'also') { $alsoKeys = @($Result.also | Where-Object { $_ }) }
+  if (@($alsoKeys).Count -gt 0) {
+    $sentences = @($alsoKeys | ForEach-Object { ConvertTo-TcAllergenHtml $script:TcAllergenAlso[[string]$_] })
+    $html += ' <span class="smp-allergen-also">' + ($sentences -join ' ') + '</span>'
   }
   $html += ' <span class="smp-allergen-note">' + (ConvertTo-TcAllergenHtml $script:TcAllergenNote) + '</span></p>'
   return $html

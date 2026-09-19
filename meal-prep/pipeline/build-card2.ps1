@@ -406,10 +406,11 @@ if(-not $global:__tcTplCache.ContainsKey('elite-recipe')){
 .smp-rel-m{font-size:1.15rem;color:#8a94a6}
 .smp-rel-p{margin-top:.2rem;font-size:1.5rem;font-weight:750;color:#0c5c3b;font-variant-numeric:tabular-nums}
 .smp-rel-p em{font-size:1.08rem;font-weight:500;font-style:normal;color:#8a94a6}
-.smp-allergen{margin:1.1rem 0 0;padding:.9rem 1.1rem;background:#fbf8f1;border:1px solid #e7e2d4;border-left:4px solid #16263F;border-radius:10px;font-size:1.25rem;line-height:1.55;color:#16263F}
+.smp-allergen{margin:1.1rem 0 0;padding:.9rem 1.1rem;background:#fbf8f1;border:1px solid #e7e2d4;border-left:4px solid #16263F;border-radius:10px;font-size:1.7rem;line-height:1.55;color:#16263F}
 .smp-allergen strong{letter-spacing:.01em}
 .smp-allergen-hidden{display:block;margin-top:.35rem;font-weight:650}
-.smp-allergen-note{display:block;margin-top:.35rem;font-size:1.08rem;color:#6b7484}
+.smp-allergen-also{display:block;margin-top:.35rem}
+.smp-allergen-note{display:block;margin-top:.35rem;color:#6b7484}
 '@) + (Compress-TcCss (Get-TcPrintCss)) + '</style>' + (Compress-TcAsset (Get-TcMotionJs)) + '<!--TC-ELITE-END-->'
 }
 $L.Add($global:__tcTplCache['elite-recipe'])
@@ -449,6 +450,11 @@ $L.Add('</ul>')
 # IT THROWS RATHER THAN UNDERSTATING. Format-TcAllergenLine refuses an ingredient db\allergens.json
 # cannot classify, so a new ingredient blocks the build until somebody classifies it. On this page a
 # quiet "contains nothing" is the worst answer available: it reads as a clean lookup.
+#
+# IT IS BODY-SIZE TEXT, line and note alike (Brad's ruling, 2026-09-19, backlog I144). The live theme's
+# root is 10px, so the .smp-allergen rule's 1.7rem is the 17px the ingredient list above it renders at;
+# the 1.25rem and 1.08rem it shipped with came out at 12.5px and 10.8px, fine print on a safety line.
+# The note and the coconut sentence inherit that size and differ only in colour and weight.
 $allergenTable = Get-TcAllergenTable -Path (Join-Path $here '..\db\allergens.json')
 $allergenResult = Get-TcRecipeAllergens $spec.scaler.ing $allergenTable.Items
 $L.Add((Format-TcAllergenLine $allergenResult $spec.slug))

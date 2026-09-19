@@ -1,7 +1,10 @@
 {
   "readme": "ALLERGEN CLASSIFICATION for every row of db/ingredients.json, one entry per ingredient-map item name. Brad's ruling, 2026-09-12, backlog I144: every recipe card carries a generated 'Contains' line over the nine major US allergens, naming the specific nut, shellfish or fish, and calling out hidden sources. The line is NEVER hand-written: meal-prep/lib/allergen-lib.ps1 derives it from this table by the spec's own scaler ingredient names, build-card2.ps1 renders it, and pipeline/audit-allergen-line.ps1 refuses a card whose line is missing or disagrees. EDIT pipeline/gen_allergen_table.py AND RERUN IT; do not hand-edit this file, because the generator is what proves every map row is covered.",
-  "ruling": "Brad, 2026-09-12, backlog I144. See design/RULING-allergen-line-2026-09-12.md.",
-  "rule": "An allergen is listed when it is inherent to the food the ingredient NAMES: the food cannot be that food without it, or the standard US supermarket formulation of that named product carries it as a defining component. An allergen only SOME brands add is not listed, because that is a guess rather than a derivation, and the card's own note is what covers it: the line reflects the recipe as written, and the reader checks the label on the brand they buy. Two consequences worth stating because they look like omissions. (1) Refined oils are exempt from FALCPA allergen labelling, so soybean oil alone does not make a row soy. (2) 'May contain' is not recognised by FALCPA and is purely voluntary, so it never appears here. Coconut IS listed as a tree nut because the FDA's tree-nut list includes it; the card names the specific nut, so a reader allergic to almonds is not misled by a coconut recipe.",
+  "ruling": "Brad, 2026-09-12, backlog I144; coconut amended 2026-09-19. See design/RULING-allergen-line-2026-09-12.md.",
+  "also_keys": [
+    "coconut"
+  ],
+  "rule": "An allergen is listed when it is inherent to the food the ingredient NAMES: the food cannot be that food without it, or the standard US supermarket formulation of that named product carries it as a defining component. An allergen only SOME brands add is not listed, because that is a guess rather than a derivation, and the card's own note is what covers it: the line reflects the recipe as written, and the reader checks the label on the brand they buy. Three consequences worth stating because they look like omissions. (1) Refined oils are exempt from FALCPA allergen labelling, so soybean oil alone does not make a row soy. (2) 'May contain' is not recognised by FALCPA and is purely voluntary, so it never appears here. (3) Coconut is NOT a tree nut: the FDA took it off its tree-nut list in its final allergen labelling guidance of 2025-01-06, so it never appears under 'Contains'. Because some readers with a nut allergy avoid it anyway, a row carrying it lists 'coconut' under `also` and the card prints a separate short note naming it (Brad's ruling, 2026-09-19, backlog I144): nothing understated, nothing false claimed.",
   "generated_by": "meal-prep/pipeline/gen_allergen_table.py",
   "allergens": [
     {
@@ -309,12 +312,10 @@
       "contains": []
     },
     "Coconut Milk": {
-      "contains": [
-        "tree_nuts:coconut"
-      ],
-      "hidden": {
-        "tree_nuts": "coconut, which the FDA lists as a tree nut"
-      }
+      "contains": [],
+      "also": [
+        "coconut"
+      ]
     },
     "Condensed French Onion Soup": {
       "contains": [

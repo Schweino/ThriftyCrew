@@ -77,6 +77,14 @@ own `rule` field, where the next person to add a row will actually read it.
 already requires naming the specific nut, a reader who is allergic to almonds and eats coconut reads
 "tree nuts (coconut)" and is not misled, which is the outcome that made this safe to decide either way.
 
+**4, SUPERSEDED by Brad's ruling of 2026-09-19 (backlog I144).** The premise was wrong: the FDA took
+coconut off its tree-nut list in its final allergen labelling guidance of 2025-01-06. Coconut is now
+OUTSIDE the "Contains" list, and a card whose ingredients include it carries a separate short note:
+*"Also contains coconut, which the FDA no longer lists as a tree nut but some people with nut allergies
+still avoid."* Nothing understated, nothing false. The same ruling raised the line and its note to body
+text size (1.7rem, the 17px the ingredient list renders at on the live theme). The table marks the row
+with `also` (`pipeline\gen_allergen_table.py`), and `lib\allergen-lib.ps1` spells the sentence.
+
 ## What makes the check worth having
 
 It does not re-implement the rule and compare conclusions. It re-derives the line through the same

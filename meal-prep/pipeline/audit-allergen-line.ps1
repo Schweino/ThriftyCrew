@@ -91,6 +91,7 @@ if ($runSelfTest) {
     'Walnuts'              = [pscustomobject]@{ contains=@('tree_nuts:walnut'); hidden=@{} }
     'Soy Sauce'            = [pscustomobject]@{ contains=@('soy','wheat'); hidden=@{ 'wheat'='the wheat soy sauce is brewed with' } }
     'Teriyaki Sauce'       = [pscustomobject]@{ contains=@('soy','wheat'); hidden=@{ 'wheat'='the wheat soy sauce is brewed with' } }
+    'Coconut Milk'         = [pscustomobject]@{ contains=@(); hidden=@{}; also=@('coconut') }
   }
   function Ing([string[]]$Names) { $o = @(); foreach ($n in $Names) { $o += [pscustomobject]@{ item=$n; grams=100 } }; return ,$o }
 
@@ -171,6 +172,31 @@ if ($runSelfTest) {
   T 'CLEAN TWIN the lookup keys on canon, not on the drifting display name' `
     (@($rC.unknown).Count -eq 0 -and @($rC.present).Count -eq 1) (@($rC.unknown) -join ',')
 
+  # ---- COCONUT (Brad's ruling, 2026-09-19, backlog I144) -----------------------------------------
+  # The FDA took coconut off its tree-nut list on 2025-01-06, so 28 cards whose only "tree nut" was
+  # coconut milk would have told a reader "Contains: tree nuts" for a food the regulator no longer calls
+  # one. It leaves "Contains" and gets its own short note, because some readers avoid it anyway.
+  $rCo = Get-TcRecipeAllergens (Ing @('93/7 Ground Beef','Coconut Milk','Salt')) $FX
+  $lCo = Format-TcAllergenLine $rCo 'fixture-coconut'
+  T 'MUST FIRE  a coconut-only recipe does NOT say tree nuts, and carries the coconut note' `
+    ($lCo -notmatch 'tree nuts' -and $lCo -match 'Contains:</strong> none of the nine major US allergens\.' -and `
+     $lCo -match '<span class="smp-allergen-also">Also contains coconut, which the FDA no longer lists as a tree nut but some people with nut allergies still avoid\.</span>') $lCo
+  $rAl = Get-TcRecipeAllergens (Ing @('93/7 Ground Beef','Almonds')) $FX
+  $lAl = Format-TcAllergenLine $rAl 'fixture-almond'
+  T 'CLEAN TWIN a recipe with almonds still says tree nuts (almond), note and all' `
+    ($lAl -match 'Contains:</strong> tree nuts \(almond\)\.' -and $lAl -match 'smp-allergen-note') $lAl
+  $rCW = Get-TcRecipeAllergens (Ing @('Coconut Milk','Walnuts')) $FX
+  $lCW = Format-TcAllergenLine $rCW 'fixture-coconut-walnut'
+  T 'CLEAN TWIN coconut plus walnut says tree nuts (walnut) AND carries the coconut note' `
+    ($lCW -match 'Contains:</strong> tree nuts \(walnut\)\.' -and $lCW -match 'smp-allergen-also">Also contains coconut' -and $lCW -notmatch 'tree nuts \([^)]*coconut') $lCW
+  # The live table, not only the frozen one: a renderer that is right over a table still classing coconut
+  # milk as a tree nut ships the false line anyway.
+  $liveCo = Get-TcAllergenTable -Path $TablePath
+  $coEntry = $liveCo.Items['Coconut Milk']
+  T 'MUST FIRE  the live table carries Coconut Milk outside the nine, with the coconut note' `
+    ($null -ne $coEntry -and @($coEntry.contains).Count -eq 0 -and (@($coEntry.also) -join ',') -eq 'coconut') `
+    $(if ($coEntry) { ('contains=' + (@($coEntry.contains) -join ',') + ' also=' + (@($coEntry.also) -join ',')) } else { 'absent' })
+
   # ---- MUST FIRE: the note Brad's ruling requires is part of the line -----------------------------
   T 'MUST FIRE  every line carries the note that it is the recipe as written and brands differ' `
     ($lW -match 'the recipe as written' -and $lW -match 'read the label on the brands you buy') $lW
@@ -212,6 +238,14 @@ if ($runSelfTest) {
   $idxWall = $bc.IndexOf("'<!--TC-PAYWALL-->'")
   T 'MUST FIRE  the line is rendered ABOVE the paywall cut, so it is free to read' `
     ($idxLine -gt 0 -and $idxWall -gt 0 -and $idxLine -lt $idxWall) ("line@$idxLine wall@$idxWall")
+  # BODY SIZE (Brad's ruling, 2026-09-19, backlog I144). The theme root is 10px, so 1.7rem is the 17px
+  # the ingredient list renders at; the line shipped at 1.25rem and its note at 1.08rem (12.5px and
+  # 10.8px), fine print on a safety line. No allergen rule may set a font-size below the line's own.
+  $alCss = @([regex]::Matches($bc, '\.smp-allergen[^{]*\{[^}]*\}') | ForEach-Object { $_.Value })
+  $alSizes = @($alCss | ForEach-Object { [regex]::Match($_, 'font-size:\s*([0-9.]+)rem') } | Where-Object { $_.Success } | ForEach-Object { [double]$_.Groups[1].Value })
+  $lineRule = @($alCss | Where-Object { $_ -match '^\.smp-allergen\{' })
+  T 'MUST FIRE  the line renders at body size (1.7rem) and no allergen rule shrinks the note below it' `
+    (@($lineRule).Count -eq 1 -and $lineRule[0] -match 'font-size:1\.7rem' -and @($alSizes | Where-Object { $_ -lt 1.7 }).Count -eq 0) (@($alCss) -join ' ')
   # Wired in propagate-recipes.ps1 since 2026-09-18, between build-cards and engine\publish.ps1, which is
   # the only place the card that ships exists and has not shipped. (It was in wave-publish's P5 before,
   # where no card of the wave had been built yet.)
@@ -227,7 +261,7 @@ if ($runSelfTest) {
 
   # THE CASES ARE A LITERAL LIST, so this suite knows its own number and a shortfall is a defect rather
   # than a smaller tree. One branch of this estate once printed PASS with a case never reached.
-  $expectedCases = 23
+  $expectedCases = 28
   if ($ran -ne $expectedCases) {
     Write-Output ("audit-allergen-line SELF-TEST FAIL: ran {0} case(s), expected {1} - a case did not run" -f $ran, $expectedCases)
     exit 2
