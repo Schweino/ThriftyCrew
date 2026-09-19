@@ -28,8 +28,22 @@
     install-harvest-task.ps1 -Remove      remove it
     install-harvest-task.ps1 -Status      show what is registered
     install-harvest-task.ps1 -At 17:00    a different daily time
+    install-harvest-task.ps1 -Domains '' -EndBoundary ''
+                                          the pre-2026-09-17 shape: every publisher, daily, hourly catch-up, no end
+
+  THE RULED RETRY WINDOW IS THE DEFAULT (2026-09-18). Brad's ruling of 2026-09-17 (4d5d96b43) retired the daily
+  crawl to a five-evening retry of the four publishers that answered 429, and set the live task and
+  ops\scheduled-tasks\tc-recipe-harvest-crawl.xml to it by hand: -Domains on the action, a trigger from
+  2026-09-20 18:00 to an EndBoundary of 2026-09-25 with no hourly repetition. This registrar was not changed, so
+  re-running it would have dropped all three and put the full daily crawl back, unended. The defaults below are
+  the live task's values, read from Get-ScheduledTask on 2026-09-18, and the self-test compares what this file
+  would register with the committed definition, so the two cannot drift apart silently again.
 #>
-param([switch]$Remove, [switch]$Status, [string]$At = '18:00', [switch]$SelfTest)
+param([switch]$Remove, [switch]$Status, [string]$At = '18:00', [switch]$SelfTest,
+      # A comma-separated STRING, never [string[]]: under -File a list arrives as one string (ops-and-gates.md).
+      [string]$Domains = 'thereciperebel.com,lecremedelacrumb.com,fitfoodiefinds.com,healthyfitnessmeals.com',
+      [string]$StartDate = '2026-09-20',
+      [string]$EndBoundary = '2026-09-25T00:00:00-05:00')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $TASK = 'TC Recipe Harvest Crawl'
@@ -73,6 +87,35 @@ function Test-TaskWatched {
   return ''
 }
 
+function Get-HarvestTaskArgument {
+  <#
+    .SYNOPSIS The action's argument string: conhost --headless, powershell, the wrapper, and -Domains when given.
+    .DESCRIPTION Pure, so the self-test can compare it with the committed definition's <Arguments> exactly.
+  #>
+  param([Parameter(Mandatory=$true)][string]$Script, [string]$Domains = '')
+  $a = '--headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "{0}"' -f $Script
+  $d = @(($Domains -split ',') | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+  if ($d.Count) { $a += ' -Domains ' + ($d -join ',') }
+  return $a
+}
+
+function Get-HarvestTriggerSpec {
+  <#
+    .SYNOPSIS What the trigger must be: start, end, and whether the hourly catch-up repetition is added.
+    .DESCRIPTION A bounded window (an EndBoundary) is the ruled retry, which runs once an evening with NO
+                 repetition (4d5d96b43). An open-ended trigger is the older daily crawl, which keeps its hourly
+                 catch-up for the reason recorded at the registration below. Pure over its arguments.
+  #>
+  param([string]$At = '18:00', [string]$StartDate = '', [string]$EndBoundary = '')
+  $day = if ($StartDate) { [datetime]::ParseExact($StartDate, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture) } else { (Get-Date).Date }
+  $tod = [datetime]::ParseExact($At, 'HH:mm', [Globalization.CultureInfo]::InvariantCulture)
+  return [pscustomobject]@{
+    Start       = $day.Date.AddHours($tod.Hour).AddMinutes($tod.Minute)
+    EndBoundary = $EndBoundary
+    Repeat      = (-not $EndBoundary)
+  }
+}
+
 if ($SelfTest) {
   $bad = 0
   $ran = 0
@@ -96,7 +139,7 @@ if ($SelfTest) {
   T 'the execution marker is present, or the guards below scan nothing' ($code.Length -gt 0) 'no marker'
   T 'MUST FIRE  it registers exactly ONE action, built from $script and nothing else' `
     ($code.Length -gt 0 -and ([regex]::Matches($code, 'New-ScheduledTaskAction')).Count -eq 1 `
-     -and $code -match '-f \$script') 'not exactly one action built from $script'
+     -and $code -match 'Get-HarvestTaskArgument -Script \$script ') 'not exactly one action built from $script'
   # A scheduler that could quietly register a RUN is the whole thing this split exists to prevent.
   T 'MUST FIRE  it never schedules a run or the card - no hunt-daemon, no serve.ps1, no nightly.ps1' `
     ($code.Length -gt 0 -and -not ($code -match 'hunt-daemon|serve\.ps1|nightly\.ps1')) `
@@ -133,9 +176,45 @@ if ($SelfTest) {
   T 'CLEAN TWIN the execution path actually calls the refusal before registering' `
     ($code.Length -gt 0 -and $code.Contains($nCall)) 'the refusal is defined but never called'
 
+  # ---- what a re-run would register IS the committed definition (2026-09-18) --------------------------
+  # MUST FIRE, FROZEN FROM THE ESTATE'S REAL STATE ON 2026-09-18: 4d5d96b43 put -Domains and a bounded trigger on
+  # the live task and the xml by hand, this registrar still built the bare action and an open-ended hourly
+  # trigger, and a re-run would have silently put the full daily crawl back. Compared with the committed file,
+  # whose -File path is used as the script path so a worktree's own path does not decide the answer.
+  if (Test-Path -LiteralPath $xmlOut) {
+    $xDoc = [xml]([IO.File]::ReadAllText($xmlOut))
+    $xArgs = [string]$xDoc.Task.Actions.Exec.Arguments
+    $xTrig = $xDoc.Task.Triggers.CalendarTrigger
+    $xFile = [regex]::Match($xArgs, '-File "([^"]+)"').Groups[1].Value
+    $mine = Get-HarvestTaskArgument -Script $xFile -Domains $Domains
+    T 'MUST FIRE  the default action argument is the committed definition''s, -Domains included' `
+      ($xFile -and [string]::Equals($mine, $xArgs, [StringComparison]::Ordinal)) ("mine=[" + $mine + "] committed=[" + $xArgs + "]")
+    $sp = Get-HarvestTriggerSpec -At $At -StartDate $StartDate -EndBoundary $EndBoundary
+    # The WALL-CLOCK part only: the task scheduler stamps the offset in force when it registers, so parsing the
+    # offset would read 17:00 once daylight saving ends and turn this case red on a date, not on a change.
+    $xStart = ([string]$xTrig.StartBoundary).Substring(0, 19)
+    T 'MUST FIRE  the default trigger starts and ends where the committed definition does' `
+      ($sp.Start.ToString('yyyy-MM-ddTHH:mm:ss') -eq $xStart -and [string]::Equals($sp.EndBoundary, [string]$xTrig.EndBoundary, [StringComparison]::Ordinal)) `
+      ("start " + $sp.Start.ToString('s') + " vs " + $xStart + ", end [" + $sp.EndBoundary + "] vs [" + $xTrig.EndBoundary + "]")
+    T 'MUST FIRE  and adds the hourly repetition exactly when the committed definition has one' `
+      ($sp.Repeat -eq [bool]$xTrig.Repetition) ("spec repeats=" + $sp.Repeat + " committed repeats=" + [bool]$xTrig.Repetition)
+  } else {
+    T 'the committed definition exists' $false $xmlOut
+  }
+  # CLEAN TWIN: the older shape is still reachable, and correct - every publisher, open-ended, hourly catch-up.
+  $old = Get-HarvestTaskArgument -Script 'C:\x\harvest-crawl.ps1' -Domains ''
+  $oldSp = Get-HarvestTriggerSpec -At '18:00' -StartDate '2026-08-24' -EndBoundary ''
+  T 'CLEAN TWIN with no domains and no end it builds the all-publisher daily crawl with its hourly catch-up' `
+    ($old.EndsWith('-File "C:\x\harvest-crawl.ps1"') -and $old.StartsWith('--headless ') -and $oldSp.Repeat -and $oldSp.Start -eq [datetime]'2026-08-24 18:00') `
+    ("arg=[" + $old + "] repeat=" + $oldSp.Repeat + " start=" + $oldSp.Start.ToString('s'))
+  # CLEAN TWIN: the registration reads the spec, so a trigger cannot be built beside it.
+  $nSpec = '$spec    = Get-Harvest' + 'TriggerSpec -At $At -StartDate $StartDate -EndBoundary $EndBoundary'
+  T 'CLEAN TWIN the execution path builds its trigger from Get-HarvestTriggerSpec' `
+    ($code.Length -gt 0 -and $code.Contains($nSpec)) 'the trigger is built without the spec'
+
   Write-Output ''
   if ($bad -gt 0) { Write-Output ("install-harvest-task SELF-TEST FAIL: {0} of {1} case(s)" -f $bad, $ran); exit 1 }
-  Write-Output ("install-harvest-task SELF-TEST PASS: {0} case(s) - the wrapper it schedules, the one-action shape, the never-schedule-a-run guard, and the watch-entry refusal (registry silent about the task, a thin entry, an unreadable registry, and the live row)" -f $ran)
+  Write-Output ("install-harvest-task SELF-TEST PASS: {0} case(s) - the wrapper it schedules, the one-action shape, the never-schedule-a-run guard, and the watch-entry refusal (registry silent about the task, a thin entry, an unreadable registry, and the live row), and a re-run registers the committed definition (domains, window, repetition)" -f $ran)
   exit 0
 }
 
@@ -182,21 +261,26 @@ Write-Output ("install-harvest-task: watch entry OK for '{0}'" -f $TASK)
 # self-test fails any committed definition that launches powershell.exe directly, so a re-run exporting the old shape
 # cannot be pushed.
 $action  = New-ScheduledTaskAction -Execute 'C:\WINDOWS\System32\conhost.exe' `
-                                   -Argument ('--headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "{0}"' -f $script)
-$trigger = New-ScheduledTaskTrigger -Daily -At $At
+                                   -Argument (Get-HarvestTaskArgument -Script $script -Domains $Domains)
+$spec    = Get-HarvestTriggerSpec -At $At -StartDate $StartDate -EndBoundary $EndBoundary
+$trigger = New-ScheduledTaskTrigger -Daily -At $spec.Start
+if ($spec.EndBoundary) { $trigger.EndBoundary = $spec.EndBoundary }
 # HOURLY CATCH-UP INSIDE A 6-HOUR WINDOW (2026-09-10, queue 2026-09-10-2b79d3). A one-occurrence daily trigger on an
 # Interactive task is unrunnable when a Windows Update restart lands before a sign-in, and StartWhenAvailable does not
 # re-queue that occurrence. A repeat of THIS task is already a no-op by harvest.py's own per-publisher daily budget
 # (the header above: "a second run in the same day finds no room and fetches nothing"), so it needs no run-once wrapper. Repetition
 # is lifted off a throwaway -Once trigger, the only way PowerShell 5.1 exposes it on a daily trigger - the same
 # construction the nightly matching registrar uses.
+# Only on an open-ended trigger: the ruled retry window runs once an evening (Get-HarvestTriggerSpec).
+if ($spec.Repeat) {
 $trigger.Repetition = (New-ScheduledTaskTrigger -Once -At $At -RepetitionInterval (New-TimeSpan -Hours 1) -RepetitionDuration (New-TimeSpan -Hours 6)).Repetition
 # StopAtDurationEnd STAYS FALSE, as graph\pipeline\install-nightly-task.ps1 sets it and for the same reason: it does not
 # decide whether occurrences fire (the duration does), it decides whether Task Scheduler KILLS a crawl still running when
 # the window closes, and a kill skips the crawl's own commit at the bottom. The lifted -Once repetition defaults it to
 # true, which is what the first export of this change showed (2026-09-10).
 $trigger.Repetition.StopAtDurationEnd = $false
-$set     = New-ScheduledTaskSettingsSet -StartWhenAvailable -DontStopOnIdleEnd -ExecutionTimeLimit (New-TimeSpan -Hours 2) -MultipleInstances IgnoreNew
+}
+$set    = New-ScheduledTaskSettingsSet -StartWhenAvailable -DontStopOnIdleEnd -ExecutionTimeLimit (New-TimeSpan -Hours 2) -MultipleInstances IgnoreNew
 Register-ScheduledTask -TaskName $TASK -Action $action -Trigger $trigger -Settings $set -Force | Out-Null
 
 # EXPORT THE DEFINITION THIS REGISTRAR JUST CREATED, so three gates read a file that matches the live
@@ -217,7 +301,9 @@ if ($exported -match 'S-1-5-21-') {
 [IO.File]::WriteAllText($xmlOut, $exported, (New-Object Text.UTF8Encoding($false)))
 Write-Output ("install-harvest-task: exported the live definition to {0} ({1} bytes)" -f $xmlOut, $exported.Length)
 
-Write-Output ("install-harvest-task: registered '{0}' daily at {1}" -f $TASK, $At)
+Write-Output ("install-harvest-task: registered '{0}' daily at {1} from {2}{3}{4}" -f $TASK, $At, $spec.Start.ToString('yyyy-MM-dd'),
+  $(if ($spec.EndBoundary) { ' until ' + $spec.EndBoundary } else { ', no end, hourly catch-up' }),
+  $(if ($Domains) { ' over ' + $Domains } else { ' over every publisher' }))
 Write-Output ("  {0}" -f $script)
 Write-Output '  costs no Claude tokens and no GPU; harvest caps itself at 60 fetches per publisher per day'
 exit 0

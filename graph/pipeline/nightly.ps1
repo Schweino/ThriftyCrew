@@ -457,7 +457,11 @@ function Invoke-Stage {
   Remove-Item $so, $se -Force -ErrorAction SilentlyContinue
   $rc = try { [int]$p.ExitCode } catch { 3 }
   Log ("{0}: rc={1} in {2}s" -f $Name, $rc, $elapsed)
-  foreach ($l in @($out | Select-Object -Last 4)) { Write-Output ("    | " + $l) }
+  # Log, NEVER Write-Output (2026-09-18). The echo went to the success stream, so every stage that printed
+  # anything returned [line, line, ..., result]: reads such as $r.Ok still worked by member enumeration, and
+  # the first WRITE, ml-eval's `$r.Tail = ...`, threw "The property 'Tail' cannot be found on this object"
+  # and ended the chain as FAILED on 2026-09-17, before the weekly stamp was written. The Stop-Llama rule above.
+  foreach ($l in @($out | Select-Object -Last 4)) { Log ("    | " + $l) }
   return [pscustomobject]@{ Ok = ($rc -eq 0); ExitCode = $rc; TimedOut = $false; Elapsed = $elapsed
                             Tail = @(@($out | Select-Object -Last 14) | ForEach-Object { [string]$_ }) }
 }
@@ -465,7 +469,7 @@ function Invoke-Stage {
 # ---------------------------------------------------------------- self-test
 if ($SelfTest) {
   $bad = 0
-  Write-Output 'nightly.ps1 self-test (no GPU, no data files, no processes touched)'
+  Write-Output 'nightly.ps1 self-test (no GPU, no data files, no process touched but one cmd echo child)'
 
   # -- ml-eval: the weekly run never writes the hand-run stock record, and its stamp keeps the numbers (2026-09-11)
   $mlA = Get-MlEvalArgs -Sidecar 'C:\x\sc' -FrozenDefs 'C:\x\defs.json' -HaveFrozen $true
@@ -492,6 +496,24 @@ if ($SelfTest) {
   if (-not $mlSrc.Contains($nMlArgs)) { Write-Output '  X MUST-FIRE: stage ml-eval must build its command line with Get-MlEvalArgs'; $bad++ }
   if (-not ($mlSrc.Contains($nMlDetail) -and $mlSrc.Contains($nMlTail))) { Write-Output '  X MUST-FIRE: stage ml-eval must put Get-MlEvalDetail''s line into the tail the stamp reads'; $bad++ }
   if ($mlSrc.Contains($nMlOld)) { Write-Output '  X MUST-FIRE: the untagged hardeval command line is back in this file'; $bad++ }
+
+  # -- Invoke-Stage returns ONE result object, whatever its child prints (2026-09-18). Its echo of the child's
+  # last lines went to the success stream, so the return was [line, line, ..., result]; reads worked by member
+  # enumeration and ml-eval's `$r.Tail = ...` threw, failing the 2026-09-17 chain. Driven through a real child
+  # (cmd echo, no GPU, no data file), because the defect is in what the function RETURNS, not in a helper.
+  $isRes = Invoke-Stage 'selftest-echo' $env:ComSpec @('/c', 'echo stage-line-1& echo stage-line-2& echo stage-line-3') 60 $env:TEMP
+  $isN = @($isRes).Count
+  # CLEAN TWIN: the result object itself is unchanged - rc 0 is Ok, and Tail carries the child's lines in order.
+  $isObj = @($isRes)[$isN - 1]
+  $isTail = (@(@($isObj.Tail) | ForEach-Object { ([string]$_).TrimEnd() }) -join '|')   # cmd echoes the last line with a trailing space
+  if (-not ($isObj.Ok -eq $true -and $isObj.ExitCode -eq 0 -and $isObj.TimedOut -eq $false -and $isTail -eq 'stage-line-1|stage-line-2|stage-line-3')) {
+    Write-Output ('  X CLEAN TWIN: a clean stage must still return Ok, rc 0 and the child''s lines as Tail (got Ok=' + $isObj.Ok + ' rc=' + $isObj.ExitCode + ' tail=' + $isTail + ')'); $bad++ }
+  # MUST-FIRE: one object, and the property ml-eval writes can be written.
+  if ($isN -ne 1) { Write-Output ('  X MUST-FIRE: Invoke-Stage must return exactly one result object for a child that prints lines (got ' + $isN + ')'); $bad++ }
+  else {
+    try { $isRes.Tail = @('set-by-selftest') } catch { }
+    if ((@($isRes.Tail) -join '|') -ne 'set-by-selftest') { Write-Output '  X MUST-FIRE: the stage result''s Tail must be settable, as ml-eval sets it'; $bad++ }
+  }
 
   # -- deadline: the EARLIER of the two clocks wins, in both directions
   $now = [datetime]'2026-08-22 23:00'
