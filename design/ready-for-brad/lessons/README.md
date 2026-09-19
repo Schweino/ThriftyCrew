@@ -1,8 +1,8 @@
 # Three lesson drafts for Brad's approval (backlog I108, I109, I111)
 
 Ruled by Brad in chat on 2026-09-19: draft three new normal-titled lessons outside the closed Week 1-52
-series. **Nothing here is published.** No Ghost call of any kind was made to prepare them (only public
-read-only page loads, to check slugs and links). Each lesson is here twice: the `.md` source in the
+series. **Nothing here is published.** No Ghost write of any kind was made to prepare them: the only calls
+were public page loads (slugs, links, the sitemap) and read-only Admin API GETs of eight live lessons for the voice. Each lesson is here twice: the `.md` source in the
 `lesson` skill's skeleton, and the `.html` body `publish-lesson.ps1` takes (generated from the `.md`).
 
 | Backlog | Display title | Slug | Hub | Visibility |
@@ -15,6 +15,32 @@ Paywall: a lesson is gated whole-post by `-Visibility paid`, and the script writ
 itself. There is no in-body paywall marker for lessons (the `<!--TC-PAYWALL-->` split is the recipe
 convention, not the lesson one). Say if any of the three should be free (`-Visibility public` and a
 `free-` slug prefix, per the skill).
+
+## Voice: what each draft was modelled on
+
+Brad's feedback on 2026-09-19 was that lesson copy must be in his own voice. The repo's `content\lessons` files
+predate the July voice rewrite, so the drafts were rewritten against the LIVE posts instead, read through
+`lib\ghost-lib.ps1` GETs only (journal cleared, no write). Eight live posts were read in full: Week 9 Pay
+Yourself First, Week 10 Opening the First Account, Week 29 The Custodial Account Conversation, Week 35 What
+"Affordable" Really Means, Week 37 Student Loans Without the Panic, Week 38 Credit Scores, Explained Simply,
+Week 42 The 30% Breathing Room Rule, and Vacations: Approaches We Use to Save Hundreds. The July rewrite archive
+(`archive\ghost-config\voice-rewrite\`) has before and after bodies and the publish script, but no written brief.
+
+- **Insurance** is modelled on **Week 38** (a plain "what it actually is" opening, then real consequences, then
+  "what builds it and what hurts it") and **Week 10** (the parent-first walkthrough of a practical product).
+- **Emergency fund** is modelled on **Week 42** (the gap and the cushion, "a car repair doesn't detonate their
+  week") and **Week 9** (the teen-scale version of the same habit, "start where you are").
+- **Balance sheet** is modelled on **Week 35** (a definition broken into its parts, then made concrete, then the
+  one question to carry) and **Week 37** (a big scary number named out loud, then defused without panic).
+
+What changed in the rewrite: Title Case punchy headings as the weeks use them; "your teen" and "your kid"
+instead of "a young person"; a source named in the sentence the way Week 38 names AnnualCreditReport.com,
+never a bracketed "(source)" link; short fragments ("Not your life." "Still negative."); lead-ins the live
+posts use ("Here's the simple version.", "Let's make it concrete.", "Here's the part most folks..."). Crude
+check, sentences split on end punctuation before "Try This Together": average words per sentence 13.4, 13.1
+and 10.3 for the three drafts against 10.3, 12.6 and 13.3 for Weeks 9, 35 and 42. That is a shape check, not
+a voice verdict; the read-aloud is Brad's. No personal story was invented: the drafts use "I" only for an
+opinion ("Here's the parent move I'd make"), never for something Brad did.
 
 ## Every number in the drafts, and where it comes from
 
@@ -33,7 +59,7 @@ convention, not the lesson one). Say if any of the three should be free (`-Visib
   sentence that introduces it** (the $500 deductible, the $3,200-a-month household, the new graduate at
   minus $8,000, which is the course's example figure rebuilt from stated made-up line items).
 - **No rate of return appears in any draft.** `ops\audit-lesson-rate-claims.ps1` over the three drafts
-  (pointed at a temp copy with a zero baseline): 3 files, 112 paragraphs, 0 rate-of-return claims,
+  (pointed at a temp copy with a zero baseline): 3 files, 118 paragraphs (after the voice rewrite), 0 rate-of-return claims,
   0 findings, exit 0. That detector is unsound, so its zero means it found none of the spellings it knows;
   the drafts were also written to carry no return rate at all.
 - Em dashes: 0 in all six files. Non-ASCII characters: 0.
@@ -57,12 +83,16 @@ placed directly under its "Nothing here is financial advice" block:
 
     Want a worksheet for it? [Here's how to build your personal balance sheet](/personal-balance-sheet/), step by step, with a version to do alongside a teen.
 
-Week 29 and 30 are published paid lessons. Applying a line means editing the `.md`, then republishing
-that week with the skill's legacy form (`-WeekNumber 29` / `-WeekNumber 30`, keeping its `Week N` title)
-so its archive slot does not move. Week 30 quotes a historical return rate that
+Week 29 and 30 are published paid lessons. **Do NOT republish them from `content\lessons\`**: those repo
+files predate the July 2026 voice rewrite (the live posts were last updated 2026-07-03), so publishing one
+would silently revert that week to its pre-rewrite text. Insert the line into the LIVE body instead (fetch
+the post, add the paragraph, put it back), keeping its `Week N` title and archive date, and bring the repo
+file up to the live text in the same sitting. Week 30 quotes a historical return rate that
 `audit-lesson-rate-claims` lists as unqualified, and Brad's I112 ruling says a lesson that quotes a rate is
 checked "the next time they are edited", so **adding this line to Week 30 obliges fixing that rate in the
 same edit.** The net-worth page is a standalone lesson and republishes with its own slug.
+
+**Week 30 is already queued for a republish under I60** (`design\ready-for-brad\I60-lesson-republish.md`, prepared the same day for Weeks 30, 31 and 37). If you approve the Week 30 line, fold it into that I60 swap so the post is republished once, not twice.
 
 ## Publish steps (Brad, in this order)
 
