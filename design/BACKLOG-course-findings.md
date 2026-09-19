@@ -13544,7 +13544,9 @@ md5-identical, exit 0, 18 cases. `push-ledger` 18, `hold-push-lock` 21 and `push
 `pushes-2026-09-18.jsonl` held 200 rows over 197 distinct pids, 3 of them on more than one row; whether those were
 recycled pids or one process writing twice was not established, and with the run id it no longer matters.
 
-### I172 - the 584 live recipe cards carry no allergen line, and the backfill is a republish of the whole catalogue `PARTLY DONE - THE REPUBLISH RAN: 449 OF 583 LIVE CARDS CARRY THE LINE, 134 NEED ONE MORE PUBLISH` `queue-7` `2-WAY` `RUNG1 BLOCKED`
+### I172 - the 584 live recipe cards carry no allergen line, and the backfill is a republish of the whole catalogue `DONE` `queue-7`
+
+**DONE 2026-09-19, on Brad's go-ahead in chat for the remaining 134.** `build-cards -Slugs <the 134>` built 134/134, `audit-allergen-line -Slugs` clean over 134, `publish.ps1 -Slugs` published and verified 134 of 134. Afterwards: `audit-ghost-drift -Recipes` 583 match, 0 drift; a logged-out fetch of all 583 live recipe pages found the allergen line on 583 of 583; all 563 paid recipes served no cost section and an upgrade prompt on every one (the check finds the section on 5 of 5 public recipes). `slow-cooker-boneless-beef-short-ribs` has no live post and is not part of this item.
 
 **2026-09-19, 06:18: the catalogue republish RAN on Brad's go-ahead, and landed at `3371c6df5`.** It ran as
 `propagate-recipes.ps1 -AllowCatalogue`, not as the four commands below. What it did:
