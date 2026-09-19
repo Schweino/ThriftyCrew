@@ -19,3 +19,9 @@ in-page copy of the extractor is refused with a message telling the operator to 
 
 The before and after of the three finance lessons (30, 31, 37), the checks, and the commands that swap only the
 changed passages into the live posts. Nothing is republished until you run them.
+
+## lessons/ (backlog I108, I109, I111, 2026-09-19)
+
+Three lesson drafts Brad ruled on 2026-09-19 (insurance basics, the emergency fund, the personal balance sheet),
+with their HTML bodies, the three cross-link lines, and the exact publish commands in `lessons\README.md`.
+Nothing is published until Brad runs them.
