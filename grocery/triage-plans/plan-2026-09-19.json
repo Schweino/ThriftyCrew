@@ -39,7 +39,7 @@
         "files": ["ops/hooks/pre-commit", "ops/verify-bulk-edit.ps1", "grocery/check-ad-cycles.ps1", "grocery/test-guards.ps1", "grocery/run-test-guards-weekly.ps1"],
         "exact_change": "(a) the staged-file path of ops/hooks/pre-commit (verify-bulk-edit.ps1 or a sibling it calls) runs Test-HasThrowingIdiom (lift it from test-guards.ps1 into lib/ or dot-source it) over each staged grocery/*.ps1 and refuses on a hit, using Get-PsCodeLines / Get-TcProductionText so comments and -SelfTest fixture bodies do not fire; (b) run-test-guards-weekly.ps1 reports which cases failed (mutation vs scan) and Get-TestGuardsSubject takes -MutationFailed [bool]: when false and rc 1, subject = 'Grocery: test-guards weekly: a source-scan case failed, every invariant still fails'"
       },
-      "leaves_open": "none: the pre-commit check covers every staged .ps1 in the repo; measured 0 existing instances outside the exempt test-guards fixture",
+      "leaves_open": "nothing",
       "leaves_open_occurrences": 0,
       "leaves_open_followup": null,
       "blast_radius": {
@@ -319,7 +319,7 @@
       },
       "leaves_open": "other emitters that resolve out\\ against their own $PSScriptRoot can still page from a linked-worktree copy; this change fixes the heartbeat only. The alert footer in 405c73 root_fix (b) makes the graded tree legible on every Send-Alert but does not stop a worktree emitter from sending.",
       "leaves_open_occurrences": 2,
-      "leaves_open_followup": null,
+      "leaves_open_followup": "2026-09-19-8a3090",
       "prior_closes": ["2026-09-18-1dfd03"],
       "prevention": {
         "source": ["grocery/health-heartbeat.ps1"],
