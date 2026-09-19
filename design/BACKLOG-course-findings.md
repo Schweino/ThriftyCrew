@@ -16582,3 +16582,358 @@ pager went red on the 250 case (`read=100 pages=1 fetches=1` with the total chec
 exit 1; with the total check kept, the 250 case named the short-read throw, exit 1); removing the total check alone
 went red on the short-read case (exit 1). The live members path was not run (it writes the tracked aggregate),
 so the only live evidence is the one GET above.
+
+### I239 - the price-alert endpoint tells a stranger which emails belong to paying members `OPEN` `code-review` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\code-review-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Code review against the knowledge store, 2026-09-18, verified in code by the orchestrator.
+
+**What is wrong.** `worker/index.js`, the `/alert` route, looks up the email the CALLER TYPES with
+`findMemberByEmail` and answers 200 for a paid or comped member and 403 "members-only perk" for anyone
+else. So anyone can post a list of emails and learn who pays, and can switch price alerts on for a paying
+member's inbox without that member. The board's client check is UX only, as the route's own comment says.
+
+**The fix, and it also retires redesign C below.** Stop trusting a typed email. The board is served from
+thriftycrew.com, so it can fetch the signed-in member's Ghost identity token (`/members/api/session`) and
+send it; the Worker verifies the signature against Ghost's published keys and takes the email from the
+token. No token, one generic answer. The plan is `design/PLAN-alert-member-token-2026-09-18.md`.
+Reversible: the Worker redeploys and the board rebuilds.
+
+**Knowledge consulted.** `security-craft/estate-exposure.md` (section 4, what the estate already gets
+right is the server-side check; this route checks the wrong thing); `reliability-craft` was not relevant.
+
+### I240 - the public worker holds the full Ghost Admin key on routes anyone can call `OPEN` `code-review` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\code-review-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Code review 2026-09-18, redesign C. **What is wrong.** `/alert` and `/submit` run with the
+Ghost Admin key in the same Worker that answers the public internet, so one bug in any public route
+reaches everything the key can do. Moving member checks to the member's own token (the item above)
+removes the admin lookup from `/alert`; `/submit` still needs it. Rung 1 lists every route that touches
+the admin key and whether it can be reached without the shared-secret check `notifyAuthOk` gives the
+server-only routes. **Knowledge consulted.** `security-craft/estate-exposure.md` sections 1 and 4.
+
+### I241 - is the meal plan builder's per-recipe cost and grams meant to be free `NEEDS A RULING` `code-review` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\code-review-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Code review 2026-09-18, verified in the data and headers; the live URL was not fetched.
+`public/planner-data.json` is served with open CORS and carries cost per serving and full grams for all
+583 recipes, while cost is normally the paid section of a recipe (split at `<!--TC-PAYWALL-->`). **Brad
+rules**: if the planner is a free tool on purpose, record that and close this; if not, the file moves
+behind the member token the alert fix introduces. **Knowledge consulted.** memory
+`paywall-leak-direction-unwatched` (check the direction that loses money).
+
+### I242 - the request form creates a ghost draft per call with no login and no rate limit `OPEN` `code-review` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\code-review-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Code review 2026-09-18, read from code; no abuse seen. `/submit` in `worker/index.js` makes a
+Ghost draft and can send mail from the business address for every request. Rung 1 counts the drafts it
+has made per day from the Ghost admin list, so a limit is set from the real rate and not guessed.
+**Knowledge consulted.** `security-craft/estate-exposure.md` section 1.
+
+### I243 - the null-rate audit counts the sale-ads feed and sams in its pass without checking them `OPEN` `code-review` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\code-review-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Code review 2026-09-18, reviewer measured. `grocery/audit-null-rate.ps1` skips those two feeds
+and still reports them inside its PASS, and a could-not-evaluate exit sends no alert
+(`grocery/capture-run.ps1` about lines 684-686). A skipped feed must be counted as not checked, and a 3
+must alert. **Knowledge consulted.** `data-quality-craft/checks-and-thresholds.md` sections 4 and 7.
+
+### I244 - the hunt daemon's food-db write has no retry and no lock shared with the retire tool `OPEN` `code-review` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\code-review-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Code review 2026-09-18, no-retry verified in code, failure measured by the reviewer.
+`meal-prep/pipeline/hunt-daemon.py` about lines 2708-2712 replaces the food DB with no retry, and
+`retire_food_db_row.py` writes the same file under no shared lock, so a reader holding it open drops the
+write and a race loses one. **Knowledge consulted.** `concurrency-craft/durable-file-writes.md`;
+`.claude/rules/ops-and-gates.md` (a mutex serialises writers, never readers).
+
+### I245 - the capture-cursor log appends with a bare add-content inside an empty catch `OPEN` `code-review` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\code-review-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Code review 2026-09-18, verified. `grocery/capture-policy-lib.ps1` about line 1239 appends to
+`grocery/out/capture-cursor-log.jsonl` with `Add-Content` inside `catch { }`, so a line lost to a
+concurrent appender vanishes silently. Route it through `Add-TcLine` (`lib/append-line.ps1`), which the
+event bus already uses. **Knowledge consulted.** `.claude/rules/ops-and-gates.md` (an append is not a
+locked write); `concurrency-craft/durable-file-writes.md`.
+
+### I246 - a ghost update that lands but loses its reply is reported failed on retry `OPEN` `code-review` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\code-review-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Code review 2026-09-18, read from code, not reproduced. A PUT that succeeds but whose reply is
+lost gets a 409 (stale `updated_at`) on retry and is reported as failed; in the rollback path a drafted
+post would read "STILL LIVE". The retry should re-read the post and compare, since only then is the
+update idempotent. **Knowledge consulted.** `.claude/rules/ops-and-gates.md` (state whether a retried
+operation is idempotent); `lib/ghost-lib.ps1` header (I198).
+
+### I247 - the graph import never deletes, so retired commodities keep their prices forever `OPEN` `code-review` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\code-review-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Code review 2026-09-18, redesign A. 42 retired commodities still hold 1,043 prices in
+`graph.db`, and 19 of their cells land in tracked state daily. Build to a temp file and swap, as
+`meal-prep/db/build_db.py` already does. The per-importer atomicity fix landed at 2c6a2b5b5 and is the
+first half. **Knowledge consulted.** `database-craft/transactions-and-recovery.md` section 3.
+
+### I248 - the push gate cannot see a deleted must-fire case `OPEN` `code-review` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\code-review-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Code review 2026-09-18, redesign B. `ops/run-gates.ps1` reads each suite's exit code and verdict
+line only, so deleting a MUST FIRE case (44 in compare-deals, 50 in wave-preaudit) still passes. Pin case
+names as the nightly daemon battery already does (`--names-diff`). **Knowledge consulted.**
+`software-craft/test-design-and-oracles.md`; memory `names-gate-cannot-see-a-lost-flag`.
+
+### I249 - no board row records when it was captured, which product, or which store id `OPEN` `code-review` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\code-review-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Code review 2026-09-18, redesign D. Age survives only in free text, so a stale or wrong-store
+price cannot be seen. Additive fields. Overlaps the capture-time item already in the backlog (search
+"capture starts recording its capture time"); the merge should fold them. **Knowledge consulted.**
+`data-quality-craft/checks-and-thresholds.md` section 1 (freshness).
+
+### I250 - price math is tested only with hand-picked examples `OPEN` `code-review` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\code-review-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Code review 2026-09-18, redesign E. Add seeded property checks to `pricing-math-lib.ps1`'s
+suite (ounces and pounds give one unit price; "2 for $5" equals one at $2.50) and run the mutation
+harness against it, report only first. **Knowledge consulted.** `software-craft/test-design-and-oracles.md`
+section 5.2; `ops/probe-hostile-input.ps1` is the seeded-generator exemplar.
+
+### I251 - brad ruled the walmart bellevue 68123 rows may stand beside l st `DONE` `code-review`
+
+**Merged from `design\backlog-inbox\rulings-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Ruling.** Brad, 2026-09-18, asked which Walmart store ruling stands for the 20 board rows that
+`grocery/import-walmart-batch.ps1:168` labels "Walmart Bellevue 68123": **"Bellevue still OK"**. Both the
+07-15 Bellevue approval and the 08-28 L St ruling stand, so those rows are not relabelled or dropped. This
+answers the store question under I165 (search "stamps every row \"Walmart Bellevue 68123\""); it does not
+touch the separate point there that the label is a literal rather than a store the capture read, which the
+estate's store-line rule still covers.
+
+### I252 - brad ruled the meal plan builder's ingredient amounts and data are members only `PARTLY DONE` `code-review` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\rulings-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Ruling.** Brad, 2026-09-18, on the finding "is the meal plan builder's per-recipe cost and grams meant to
+be free", after being shown that the live `planner-data.json` gives all 583 recipes' cost and full
+ingredient amounts to anyone: **"ingredients and planner need to be hidden"**. The fix is built and held on
+branch `claude/member-token-gate` with the price-alert fix, because the Worker deploys from main; see
+`design/PLAN-alert-member-token-2026-09-18.md`. Not covered by the ruling and left public: the price feed's
+per-recipe weekly cost and cost per serving, which carry no ingredients and which the hub pages show by
+design.
+
+### I253 - graph nightly's stage runner leaked its echo lines into its return value, and ml-eval's first write ended the chain `DONE` `run-0919`
+
+**Merged from `design\backlog-inbox\run0919-nightly-mleval.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**What broke.** `graph/pipeline/nightly.ps1` `Invoke-Stage` echoed the child's last four lines with `Write-Output`,
+so every stage that printed anything returned `[line, ..., result]` instead of one result. Reads such as `$r.Ok` and
+`$r.Tail` kept working by member enumeration, which is why nothing noticed; the first WRITE, ml-eval's
+`$r.Tail = @($mlDetail)` (added by 2a0c60298 on 2026-09-11), threw *"The property 'Tail' cannot be found on this
+object"* and the chain's catch recorded `chain FAILED`. The file's own header already warned about exactly this
+for `Stop-Llama`; the rule had not reached the runner.
+
+**How many nights.** Over the 19 committed versions of `grocery/out/logs/graph-nightly-status.json` on origin/main
+(2026-08-23 to 2026-09-18), exactly 1 carries it: the 2026-09-17 21:30 run (1a20a05c6). It was the first night
+ml-eval was DUE after 2a0c60298: the weekly stamp read 2026-09-07T21:33:43, so the 09-11 to 09-14 runs were all
+inside 7 days (the 09-11 status records `ml-eval SKIP`; the 09-12 to 09-14 statuses were never committed because
+bot-commit-scope refused those commits until a34add59f), and no graph-nightly transcript exists for 09-15 or 09-16.
+It would have failed every night from 09-17 on, because the failure came before the stamp write.
+
+**What the graph missed.** Nothing downstream: ml-eval is the LAST stage in the chain's try, and the finally
+(llama-server stop, status write) and the commit still ran, rc 0. What was lost is ml-eval's own output: its stage
+record, which is the only committed copy of the week's hardeval summary line, and `ml-eval-last.txt`, so the suite
+would have re-run every night instead of weekly. hardeval itself did run to completion and wrote its gitignored
+`weekly`-tagged pair.
+
+**Fix.** The echo goes through `Log` (`[Console]::WriteLine`), which reaches stdout without touching the return.
+`nightly.ps1 -SelfTest` drives `Invoke-Stage` through a real `cmd` child that prints three lines: MUST FIRE asserts
+one result object whose `Tail` can be set, CLEAN TWIN asserts Ok, rc 0 and the three lines as Tail. With the old
+`Write-Output` restored the MUST FIRE went red (`got 4`, exit 2); restored, exit 0, md5 identical. No other
+`$r.<prop> =` site exists in the file. Two unlanded sibling branches (`claude/serene-lichterman-3e9092`,
+`claude/commit-outcome-exit-codes-v2`, 2026-09-12) had changed the same line to `Write-Host`; neither landed.
+
+**What the next nightly does.** Once the main checkout carries this, ml-eval is due (last stamp 2026-09-07), so it
+runs `hardeval.py --stage score --tag weekly` on the frozen defs within min(1800 s, remaining window), records
+`ml-eval OK` with the `hardeval:` summary in the status file, and writes `ml-eval-last.txt`. It changes no price and
+nothing on the board.
+
+### I254 - TC Recipe Harvest Crawl reads stale because it is paused by ruling until 2026-09-20, and its registrar would have undone that ruling `NEEDS A RULING` `run-0919` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\run0919-nightly-mleval.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Why it is stale.** `Get-ScheduledTaskInfo` on 2026-09-18: LastRunTime 2026-09-17 07:12:19, LastTaskResult 1,
+NumberOfMissedRuns 0, NextRunTime 2026-09-20 18:00. The three scheduled runs that morning (05:12, 06:12, 07:12)
+each crawled and then exited 1 because bot-commit-scope refused `candidate-pool.json` and `harvest-state.json`, the
+lane-ownership gap a34add59f closed at 08:21 the same morning; a hand run at 08:28 then exited 0. At 08:41,
+Brad's ruling (4d5d96b43) retired the daily crawl to a five-evening retry of four 429 publishers: the live task
+now has one daily trigger from 2026-09-20 18:00 to an EndBoundary of 2026-09-25, no repetition, and `-Domains`.
+So nothing is broken on the repo side and no run was missed; health-heartbeat's `max_age_hours: 30` simply does not
+know about a deliberate pause, and reads the task TASK STALE (33.3 h at 16:30, 35.7 h later) until the 09-20 run.
+
+**Fixed here (repo side).** `meal-prep/pipeline/install-harvest-task.ps1` built the pre-ruling task: no `-Domains`,
+an open-ended trigger and hourly repetition, so a re-run would have silently restored the full daily crawl. Its
+defaults are now the live task's values (read with `Get-ScheduledTask`, not changed), and its self-test compares
+what it would register with `ops/scheduled-tasks/tc-recipe-harvest-crawl.xml`: the argument string exactly, the
+trigger's wall-clock start and EndBoundary, and whether repetition is added. Three mutants (domains, end and start
+defaults blanked) each went red in their named case, exit 1; restored 15 of 15 pass, md5 identical.
+
+**The question for Brad.** After 2026-09-25 the trigger never fires again, so from about 2026-09-26 the heartbeat
+will page TASK STALE for this task every morning, permanently. Options:
+1. Retire it when the window closes: unregister the task, and drop its `windows_tasks` row and committed definition
+   in the same change (the registration audit requires the three to agree).
+2. Teach health-heartbeat to read a task's trigger boundaries: not due before StartBoundary, retired after
+   EndBoundary, printed as an OK line rather than paged. General, but it widens what a silent death can hide behind.
+3. Leave it, and accept the page as the reminder to do 1.
+
+**Recommendation: 1**, done by whoever reads the 09-24 run's result, because the ruling already says the crawl
+stops at 09-25 and a paging row for a retired task is exactly the ignored-red the rules warn about. Option 2 is
+worth it only if a second task gets a bounded schedule.
+
+### I255 - Reader-facing: Walmart artichokes is a canned 12-pack divided by 8, and Hy-Vee harissa is a dry spice blend `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings-3.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found under I222 and I220. On `comparison-2026-09-17`, artichokes | Walmart is a 12-pack of canned artichoke
+hearts sized "6-8 CT-14 OZ" and divided by 8, shown at $8.9988 (too high). Hy-Vee "Morton & Bassett Harissa,
+1.9 oz", a dry spice blend, matches `harissa-paste`; it is hidden today only because Walmart's batch row is
+cheaper, and I220's part 2 would put it on show. Both are catalogue or known-wrong corrections.
+
+### I256 - The daily recipe republish died at the costing step on 11 of 58 runs `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings-3.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found under I234. Of 58 daily republish outcomes from 2026-08-08 to 2026-09-18, 11 ended in a compute-v2
+failure, so recipe costs did not move those days. Nobody has read why.
+
+### I257 - Walmart store proof has three more gaps `OPEN` `run-0919` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings-3.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found under I220. `grocery/walmart-capture-reducer.js` writes no `#tc-store` line, so after I220's part 1 the
+batch import lane refuses every capture until it learns one. `walmart-regular-2026-09-12.json` was built
+without a store line and is still priced. The July "staples300" rows claim only "Omaha", not a store id.
+
+### I258 - Fareway's was-price is sometimes a per-pound price set against a per-pack sale `OPEN` `run-0919` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings-3.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found under I223. In 3 of the 41 rows that gained a sale end, the was-price is lower than the sale price
+(Banana 0.49 vs 0.23, Chicken Drumsticks 1.39 vs 0.75, Chuck Roast 7.88 vs 26.97). None changes a board cell
+today.
+
+### I259 - Silent logs and a one-sided audit `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings-3.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+- `grocery/check-ad-cycles.ps1:2498` logs only the last output line of `send-price-alerts`, so per-item
+  failures are lost (I224).
+- `ops/audit-write-only-reports.ps1:105` counts a read only through a fixed list of read commands, so a read
+  through a helper reads as write-only (I224).
+- `grocery/audit-coverage-gaps.ps1:319` still accepts single-search not-carried entries, so the 24 entries
+  I221 found untrustworthy keep that audit quiet about those gaps until 2026-11-19 (I221).
+- The 2026-09-17 graph nightly recorded `gold-score BLIND rc=1` (`graph\eval\score.py` exited 1), not read.
+- `grocery/out/logs/ml-eval-last.txt` and `rejection-families-last.txt` are tracked but not in the graph lane's
+  commit list in `lib/pipeline-commit.ps1`, so only the 07:00 bot commits them.
+
+### I260 - Graph quality: wrong resolver picks, an each-branch pack gap, rows with no term, and file growth `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings-3.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found under I222 and I235. The graph's automatic resolver picked wrong products for newly added shadow cells
+(dried-ancho-chiles = a Street Corn Kit, sponges = dishwand heads, pineapple = fresh-cut cubes, Walmart
+eggplant = a roasted eggplant jar). `graph/lib/units.py` `per_unit`'s each branch prices a whole pack as one
+when the size is only a volume and no count is written (Aldi Puraqua 16.9 FL OZ at 3.19). 361,906 capture rows
+(118,557 Baker's) have no `found_by_term` and are dropped nightly; 12,720 more stay unresolved. One import grew
+a copy of graph.db from 323.8 MB to 446.5 MB, which is I211's churn made larger by I235. No reader sees graph
+prices.
+
+### I261 - The paused harvest task will page daily after its window closes `DONE` `run-0919`
+
+**Closed 2026-09-18 as a duplicate of I254**, filed by the graph-nightly fix a few minutes earlier with the same question and options; the ruling lives there.
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings-3.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found by the graph-nightly fix. `TC Recipe Harvest Crawl` is paused by Brad's ruling until a five-evening retry,
+2026-09-20 to 09-25. From about 09-26 the heartbeat's 30-hour limit will page TASK STALE every morning. Options:
+(1) retire the task when the window closes, dropping its heartbeat row and committed definition in the same
+change; (2) teach the heartbeat to read a task's start and end dates; (3) leave it and let the page be the
+reminder. Recommendation: 1.
+
+### I262 - No chain ran on 2026-09-15 or 09-16 `OPEN` `run-0919` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings-3.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found by several agents. There is no capture-run-daily log and no Daily pipeline commit for either day; the box
+slept from 2026-09-16 08:02 to 09-17 05:06 (System log event 42). Whether the heartbeat paged for the two lost
+days, and whether a sleep that long should be prevented, is unread.
+
+### I263 - The daily worklist lost `terms` and `commodities` on 2026-09-12, and the browser driver read that as "nothing owed today" `DONE` `run-0919`
+
+**Merged from `design\backlog-inbox\run0919-worklist-stall.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**What broke.** 7e1c7d94e (2026-09-12 11:58, the Walmart store-drift ruling terms) replaced the two lines of
+`Write-CaptureWorklist` (`grocery/capture-policy-lib.ps1`) that wrote `terms` and `commodities` with the new
+`ruling_terms` block, instead of adding it beside them. `grocery/pull-browser-stores.py` reads exactly those two
+fields (`read_worklist` for the sweep lane, `read_worklist_pairs` for Fareway's navigate lane), read the missing
+field as an empty list, and returned "worklist is empty - nothing owed today", which `run_store` scored `ok
+skipped` and the driver exited 0. Every fixture read `Get-CaptureWorklist` in memory, where `Terms` was still
+right, so nothing went red.
+
+**Measured in the main checkout.** Of the 49 worklist files dated 2026-09-10 to 09-18 (7 stores x 7 days), the 21
+dated 09-10, 09-11 and 09-12 carry `terms` and `commodities` and all 28 dated 09-13, 09-14, 09-17 and 09-18 carry
+neither. Each of those four chain logs queues "Fareway 42 term(s)" and "Sam's Club 7 term(s)", then prints
+`Fareway ok skipped: worklist is empty - nothing owed today` and the same for Sam's Club, then `browser driver
+rc=0`. There is no chain log for 09-15 or 09-16 at all, which is a separate gap this did not cause.
+
+**Capture days lost.** Fareway: the driver captured nothing on 4 of 4 chain runs since 09-12 (09-13, 09-14, 09-17,
+09-18); the newest raw capture is still `fareway-shop-2026-09-12.jsonl`, so no Fareway capture exists for 6
+calendar days. Sam's Club: the driver captured nothing on 4 of 4 runs, and the 09:00 browser agent landed
+`sams-capture-2026-09-17.csv`, so 3 of 4 run days were lost (09-13, 09-14, 09-18); no Sam's capture exists for 5
+calendar days. Capture-run only advances a cursor after a capture lands, so Fareway's rotation slice was re-owed
+rather than skipped.
+
+**Other lanes that read this shape.** The only programmatic readers of the worklist FILE are the two driver
+functions above. The 09:00 browser agent's runbook (`ops/prompt-backup/scheduled-tasks/grocery-browser-stores-refresh/SKILL.md`)
+also reads the file's `terms` and its term-to-commodity map for Walmart and Aldi (and Fareway and Sam's when the
+driver fails), so it too was handed a file without them from 09-13; that includes the Walmart ruling terms
+7e1c7d94e exists to lead with. Walmart and Aldi each have one capture after 09-12 (09-17), and whether the
+others were missed because of this cannot be told from the files. Hy-Vee, Family Fare and Baker's never read the
+file: they call `Get-CaptureWorklist` in process.
+
+**Fixed.** `Write-CaptureWorklist` writes `terms` and `commodities` again, the merged capped list as parallel
+arrays, with every part list (`ruling_terms`, `ad_terms`, `rotation_terms`, `sale_terms`) kept. The driver's
+readers now raise `WorklistUnreadable` for a worklist that is missing, not JSON, has no `terms` list, has an empty
+`terms` over non-empty part lists, has `commodities` of a different length, or has a blank term or id; `run_store`
+reports that as a FAIL beginning `BLIND - could not read the worklist`, and `main()` exits 3. Only a present,
+empty `terms` with every part list empty still reads "nothing owed today".
+
+**Verified.** `test-capture-policy.ps1` case Q writes Fareway, Sam's Club and Family Fare worklists with
+`Write-CaptureWorklist` and reads each back through the driver's own two readers in a child python: 3, 2 and 2
+pairs, in order, Fareway's including both terms of one commodity. Exit 0. With the two restored lines removed:
+exit 1, all three Q cases red, each naming `has no terms list`. `pull-browser-stores.py --selftest-lookup` gained
+seven cases in `worklist_shape_self_test`: MUST FIRE on the real 09-13 shape through both readers, through
+`run_store` on both lanes and through `main()` (exit 3); MUST FIRE on an empty `terms` over owed parts, a length
+mismatch and a missing file; CLEAN TWIN on a genuinely empty day (`ok skipped`, exit 0) and on a good list. Exit 0.
+With `run_store` scoring the refusal as a skip again: exit 1, the run_store and main() cases red. With the
+missing-`terms` refusal disabled: exit 1, its own case red (the empty-over-owed check still caught the run_store
+path, so that one mutant was only partly killed: two guards over one rule). Both files restored hash-identical.
+
+**A sibling holds a rival version.** `claude/restore-worklist-terms` (692e1d36b, pushed to origin, not on main)
+carries the same writer fix and a narrower reader guard, held as READY FOR BRAD on the grounds that resumed
+captures move prices. Both were run over one 8-case list through `run_store` with Chrome stubbed: they agree on 5
+(the 09-13 shape fails, an empty day skips, a good list proceeds, a length mismatch and a blank term fail). They
+differ on 3: a missing worklist and a worklist with no `terms` and empty parts read `ok skipped` on the sibling
+and BLIND here, and a non-JSON worklist throws out of the sibling's reader (scored FAIL, exit 1) and reads BLIND
+here. This lane landed under the orchestrator's instruction that restoring the pipeline changes no price by
+itself; the sibling branch can be retired.

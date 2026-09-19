@@ -122,3 +122,8 @@ Every in-scope OPEN and PARTLY DONE item has a final state above. Left for Brad:
 | I223 | READY FOR BRAD | d3e317a2d (text) + branch claude/i223-fareway-sale: the selector keeps Fareway's sale end; 16 of 572 rows change (3 cheapest-store verdicts: peppercorns, carrots, shredded cheese move to Sam's) because the board had kept expired Fareway sales alive on a 30-day guess. Found: Fareway and Sam's captures stalled since 09-12 (worklist lost its terms field) |
 | I234 | READY FOR BRAD (lands with I233) | 24cac24f9 (text) + branch claude/i234-republish: the daily republish holds a slug whose rebuild failed or whose allergen line is wrong, publishes the rest, never calls publish.ps1 directly; 4 breaks red. Measured: 0 of 58 daily republishes ever reached build-cards (45 nothing moved, 11 compute-v2 failures), so it never fired |
 | NEW capture worklist stall | DONE | f4bd8b66c: 7e1c7d94e had replaced the worklist's terms and commodities with ruling_terms, so the Fareway and Sam's drivers said 'nothing owed today' on every run since 09-12 (Fareway 6 days without a capture, Sam's 5); both fields restored and an unreadable worklist now exits 3 BLIND. Sibling branch claude/restore-worklist-terms is superseded |
+| inbox 3 | merged | 25 findings merged as I239 to I263 (including two inbox files other sessions had left: a code review and a rulings file); I261 closed as a duplicate of I254 |
+
+## Second pass finished 2026-09-18
+
+Every new item from the first pass has a state. Landed: I216, I225 to I238 (where 2-WAY), the nightly and worklist fixes. Held for Brad on branches: I215+I217 (nonfood-bundle), I220, I221, I222 board half, I223, I224, I233, I234.
