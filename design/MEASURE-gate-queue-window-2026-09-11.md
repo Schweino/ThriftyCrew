@@ -86,6 +86,10 @@ or `lib/gate-slots.ps1`. The one number it can move is each run's slot tenure, u
 of gate work inside a pool 24 wide, which is far below the per-run spread this file reports and in the same
 direction as the `53e1d65bf` and `1a97b53af` entries above. Every total below still reads as measured.
 
+**Re-read at harness blob `a4fda6bb0fb3` (`ops/run-gates.ps1`, `git rev-parse HEAD:<path>`):** the store-citation
+change (2026-09-18) added one entry to the `$pyStatic` list, a plan audit (the knowledge-store citation check) that runs in
+the same pool as every other static audit. No slot, queue, wait or dispatch logic moved, so every total below still reads as measured.
+
 **Re-read at harness blob `87c8fb25b01a` (`ops/run-gates.ps1`, `git rev-parse HEAD:<path>`):** backlog I230 changed
 one comment line in the script's header, the `blind=no-gate-worker-slot` description, from "10" to "24"
 machine-wide slots, to match the budget Brad raised in 39be9900e. No code, no gate entry, no pool or slot logic
