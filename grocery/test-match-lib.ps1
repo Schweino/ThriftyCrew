@@ -183,7 +183,18 @@ if (-not $isShard) {
   _RT 'CLEAN TWIN  canned diced green chiles still price canned-green-chilies' '(2 pack) Ortega Mild Fire Roasted Diced Green Chiles, Kosher, 7 oz Can' 'canned-green-chilies'
   _RT 'CLEAN TWIN  unwrapped sponges still price sponges' 'Scotch-Brite Heavy Duty Scrub Sponges' 'sponges'
   _RT 'CLEAN TWIN  plain coconut aminos still price coconut-aminos' 'Big Tree Farms Organic Coconut Aminos Original, 10 oz Bottle' 'coconut-aminos'
-  $rtWant = 20   # 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), 2026-09-19
+  # BRAD'S RULING 2026-09-19 "Fix all produce": the condiment class must hold on a produce commodity other than the
+  # founding green-chilli. Garlic is the widest include in Vegetables (a bare \bgarlic\b), so a flavoured mayo or aioli
+  # named for it is the likeliest next winner. No garlic mayo or aioli was in any capture that day, so these two names
+  # are written for the case; both routed to garlic before condiment_carrier was baked in (checked against the rules
+  # with the class's 681 baked patterns removed). The CLEAN TWINS are real shelf names from the 2026-09-17 board.
+  _RT 'MUST FIRE  a roasted garlic mayo leaves the fresh garlic cell and prices mayonnaise' 'Kraft Roasted Garlic Mayo Mayonnaise, 12 fl oz' 'mayonnaise'
+  _RT 'MUST FIRE  a garlic aioli mayo leaves the fresh garlic cell' 'Primal Kitchen Garlic Aioli Mayo, 12 oz' '<none>'
+  _RT 'CLEAN TWIN  a fresh garlic bulb still prices garlic' 'Kroger Whole Garlic Bulbs' 'garlic'
+  _RT 'CLEAN TWIN  fresh jalapenos still price jalapenos' 'Fresh Jalapeno Peppers' 'jalapenos'
+  _RT 'CLEAN TWIN  fresh basil still prices fresh-basil' 'Gotham Greens Fresh Basil' 'fresh-basil'
+  _RT 'CLEAN TWIN  fresh green chiles still price green-chilli' 'Fresh Green Chiles, per lb' 'green-chilli'
+  $rtWant = 26   # 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, 2026-09-19
   if ($rtRan -ne $rtWant) { Write-Output ("  FAIL  routing fixtures ran {0} case(s), the list holds {1}" -f $rtRan, $rtWant); $rtBad++ }
   if ($rtBad -gt 0) {
     Write-Output ("MATCH-LIB FAILED (routing fixtures: {0} of {1} failed)" -f $rtBad, $rtRan)
