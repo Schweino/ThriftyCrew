@@ -279,6 +279,28 @@ function Get-FarewayCaptureStore {
   return @{ loc = $loc; total = $total; refuse = $why; nostamp = ($total -gt 0 -and $stamped -eq 0) }
 }
 
+# ---- THE SELECTED ROW, as a pure function so -SelfTest drives the code the main loop runs --------------------------
+# THE STORE'S OWN SALE COUNTDOWN RIDES THE ROW (2026-09-18, backlog I223). farewayShopExtract reads "Sale ends in N
+# days" out of the page's Apollo cache and emits it as sale_ends_days (the integer) and sale_note (the text), and
+# build-fareway-regular carries both onto the priced row so compare-deals can date the sale from the store's own
+# answer. This row was built from a fixed field list that named neither, so both were dropped HERE, between the
+# capture and the builder: on the 2026-09-11 capture 143 of 2,392 candidates carried a sale end and 0 of the 44
+# selected rows kept one, so the builder's countdown branch could never fire on a daily capture.
+# Copied only when the candidate carries the field, so a candidate without one yields exactly the row it always did.
+# The value is passed through as captured; build-fareway-regular is the one place that parses and bounds it.
+function ConvertTo-ShopRow {
+  param($Id, $Best, [string]$Term, [string]$StoreLoc)
+  $row = [ordered]@{
+    id=$Id; name=[string]$Best.name; price=[string]$Best.price; per=[string]$Best.per;
+    orig=[string]$Best.orig; unit=[string]$Best.unit; size=[string]$Best.size; url=[string]$Best.url;
+    term=$Term; taxonomy_path=[string]$Best.taxonomy_path;
+    store_loc=$StoreLoc
+  }
+  if ($Best.PSObject.Properties['sale_ends_days'] -and $null -ne $Best.sale_ends_days -and "$($Best.sale_ends_days)" -ne '') { $row['sale_ends_days'] = $Best.sale_ends_days }
+  if ($Best.PSObject.Properties['sale_note'] -and "$($Best.sale_note)" -ne '') { $row['sale_note'] = [string]$Best.sale_note }
+  return $row
+}
+
 if ($SelfTest) {
   $script:stFail = 0
   $script:stRan = 0
@@ -311,6 +333,16 @@ if ($SelfTest) {
   $s4 = Select-ShopCandidate -Candidates @($noUrl) -Include $cocoInc -Exclude $cocoExc -Unit 'each'
   T 'MUST NOT FIRE  a candidate with no url is scored on its name alone and never demoted' (([string]$s4.best.name -eq 'Coconut') -and (@($s4.demoted).Count -eq 0)) ('' + @($s4.demoted).Count)
   T 'CLEAN TWIN  the slug words are the last path segment, query dropped, id stripped' ((Get-SlugWords 'https://shop.fareway.com/store/fareway-meat-grocery/products/20002358-kind-bars-almond-coconut-6-ea?x=1') -eq 'kind bars almond coconut 6 ea') (Get-SlugWords 'https://shop.fareway.com/store/fareway-meat-grocery/products/20002358-kind-bars-almond-coconut-6-ea?x=1')
+  # ---- THE SALE COUNTDOWN RIDES THE SELECTED ROW (2026-09-18, backlog I223) -----------------------------------------
+  # FROZEN, never regenerated: the first line of out\fareway\fareway-shop-2026-09-11.jsonl, term 'cod fillets', one of
+  # the 143 of 2,392 candidates that day carrying the store's countdown. The row built from it lost both fields.
+  $cod = [pscustomobject]@{ id = '84386690'; term = 'cod fillets'; name = 'Fresh Cod Fillets'; price = '8.74'; per = 'each'; orig = '11.37'; unit = '$9.99 / lb'; size = ''; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/84386690-fresh-cod-fillets-1-each'; sale_ends_days = 1; sale_note = 'Sale ends in 1 day' }
+  $codRow = ConvertTo-ShopRow -Id 'cod' -Best $cod -Term 'cod fillets' -StoreLoc '531573'
+  T 'MUST FIRE  a selected candidate with a sale end keeps sale_ends_days 1 and its sale_note on the shop row' (($codRow.Contains('sale_ends_days')) -and ([string]$codRow['sale_ends_days'] -eq '1') -and ([string]$codRow['sale_note'] -eq 'Sale ends in 1 day') -and ([string]$codRow['price'] -eq '8.74')) ($codRow | ConvertTo-Json -Compress)
+  # The pre-I223 row, key for key: a candidate that carries no countdown must come out exactly as it always did.
+  $preKeys = 'id,name,price,per,orig,unit,size,url,term,taxonomy_path,store_loc'
+  $cocoRow = ConvertTo-ShopRow -Id 'coconut' -Best $coconut -Term 'whole coconut' -StoreLoc '531573'
+  T 'CLEAN TWIN  a candidate without a sale end yields the pre-fix row: the same eleven keys in order, price 3.99' ((@($cocoRow.Keys) -join ',') -eq $preKeys -and [string]$cocoRow['price'] -eq '3.99' -and [string]$cocoRow['store_loc'] -eq '531573') (@($cocoRow.Keys) -join ',')
   # ---- THE STORE A CAPTURE WAS READ AT (2026-09-18, backlog I124) -------------------------------------------------
   # The same two frozen coconut candidates, each carrying the loc farewayShopExtract now stamps. The founding shape
   # is a capture read on the plausible wrong store: a fresh session sits on Des Moines (513473) and every price in it
@@ -375,12 +407,20 @@ if ($SelfTest) {
     T 'CLEAN TWIN  -WaiveMissingStoreStamp re-selects an old capture and says store_loc UNRECORDED, never a store' ($e4.rc -eq 0 -and $e4Row -and [string]$e4Row.store_loc -eq 'UNRECORDED' -and [string]$e4Row.price -eq '3.99') ('rc=' + $e4.rc + ' row=' + ($e4Row | ConvertTo-Json -Compress) + ' | ' + ($e4.lines -join ' / '))
     $e5 = _FwRun 'waivewrong' (_FwLine '513473' '513473') @('-WaiveMissingStoreStamp')
     T 'MUST FIRE  the waiver does not waive a WRONG store' ($e5.rc -eq 1 -and $null -eq $e5.doc) ('rc=' + $e5.rc + ' | ' + ($e5.lines -join ' / '))
+    # The same frozen coconut capture with the countdown the cod row carried, through the whole script: the path
+    # capture-run takes, and the one the fixed field list broke.
+    $saleLine = _FwLine '531573' '531573'
+    $saleLine.candidates[1] | Add-Member -NotePropertyName sale_ends_days -NotePropertyValue 1 -Force
+    $saleLine.candidates[1] | Add-Member -NotePropertyName sale_note -NotePropertyValue 'Sale ends in 1 day' -Force
+    $e6 = _FwRun 'sale' $saleLine @()
+    $e6Row = if ($e6.doc) { @($e6.doc)[0] } else { $null }
+    T 'MUST FIRE  end to end, the selected Coconut keeps sale_ends_days 1 and its sale_note in the shop file' ($e6.rc -eq 0 -and $e6Row -and [string]$e6Row.name -eq 'Coconut' -and [string]$e6Row.sale_ends_days -eq '1' -and [string]$e6Row.sale_note -eq 'Sale ends in 1 day') ('rc=' + $e6.rc + ' row=' + ($e6Row | ConvertTo-Json -Compress) + ' | ' + ($e6.lines -join ' / '))
   } finally { Remove-Item -LiteralPath $stT -Recurse -Force -ErrorAction SilentlyContinue }
 
-  $stTotal = 8 + $tblS.Count + 3 + 5
+  $stTotal = 8 + 2 + $tblS.Count + 3 + 6
   if ($script:stRan -ne $stTotal) { Write-Output ('FAIL  the suite ran ' + $script:stRan + ' case(s), not the ' + $stTotal + ' it lists'); $script:stFail++ }
   if ($script:stFail) { Write-Output ('select-fareway-shop SELF-TEST FAIL (' + $script:stFail + ' of ' + $stTotal + ')'); exit 1 }
-  Write-Output ('select-fareway-shop SELF-TEST PASS (' + $stTotal + ' of ' + $stTotal + ': slug demotion, demotion logged, founding bug reachable, demote-not-delete, cheapest wins, clean slugs demote nothing, no-url, slug parse, store ruling x' + ($tblS.Count + 3) + ', end to end x5)')
+  Write-Output ('select-fareway-shop SELF-TEST PASS (' + $stTotal + ' of ' + $stTotal + ': slug demotion, demotion logged, founding bug reachable, demote-not-delete, cheapest wins, clean slugs demote nothing, no-url, slug parse, sale countdown kept x2, store ruling x' + ($tblS.Count + 3) + ', end to end x6)')
   exit 0
 }
 
@@ -424,13 +464,7 @@ foreach ($id in $byIdRaw.Keys) {
   $sel = Select-ShopCandidate -Candidates $byIdRaw[$id].candidates -Include $incMap[$id] -Exclude $excMap[$id] -Unit $unitMap[$id]
   foreach ($dl in @($sel.demoted)) { Write-Output ('  [' + $id + '] ' + $dl); $demotedTotal++ }
   if ($null -eq $sel.best) { $dropped += $id; continue }
-  $best = $sel.best
-  [void]$outRows.Add([ordered]@{
-    id=$id; name=[string]$best.name; price=[string]$best.price; per=[string]$best.per;
-    orig=[string]$best.orig; unit=[string]$best.unit; size=[string]$best.size; url=[string]$best.url;
-    term=[string]$byIdRaw[$id].term; taxonomy_path=[string]$best.taxonomy_path;
-    store_loc=$storeLoc
-  })
+  [void]$outRows.Add((ConvertTo-ShopRow -Id $id -Best $sel.best -Term ([string]$byIdRaw[$id].term) -StoreLoc $storeLoc))
 }
 $outDir = Split-Path $Out -Parent; New-Item -ItemType Directory -Force -Path $outDir | Out-Null
 ($outRows | ConvertTo-Json -Depth 5) | Set-Content $Out -Encoding UTF8

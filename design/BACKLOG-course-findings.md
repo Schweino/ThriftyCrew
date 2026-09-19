@@ -15854,7 +15854,7 @@ entries and 0 of 572 cheapest-store verdicts**:
   uncertain casualty is settled either way before it ships.
 - **C. Leave it**: the eggplant entry keeps publishing $1.82 each from a $1.82/lb capture; it is not a crown today.
 
-### I223 - Fareway's selector drops the sale end date, so sale dating never fires on the daily capture `PARTLY DONE - BUILT AND TESTED ON BRANCH claude/i223-fareway-sale, READY FOR BRAD TO MERGE` `run-0919` `1-WAY` `RUNG1 RULING`
+### I223 - Fareway's selector drops the sale end date, so sale dating never fires on the daily capture `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15923,6 +15923,23 @@ nothing owed today`, and Sam's Club says the same. `pull-browser-stores.py:read_
 terms) REPLACED the `terms` and `commodities` lines in `Write-CaptureWorklist` (`capture-policy-lib.ps1`) with
 `ruling_terms`: the 09-12 worklist has `terms` and `commodities`, every worklist from 09-13 on has only
 `rotation_terms`/`sale_terms`/`ruling_terms`. Filed as a separate finding; nothing was changed here.
+
+**Done 2026-09-19: landed on Brad's approval 2026-09-19, 16 of 572 commodity rows changed.** The branch was
+rebased onto origin/main at `f4e50313b` with no conflict (main had not touched `select-fareway-shop.ps1` since the
+I124 store stamp, which the branch already sat on). Selector self-test 25 of 25, exit 0; `build-fareway-regular
+-SelfTest` exit 0. The comparison was re-run on the newest inputs with the same two scratch harnesses described
+above: no Fareway capture has landed since 2026-09-12 and the newest board is still 2026-09-17, so the inputs
+match the prepared measurement. Both arms rebuilt 470 rows from the 22 raw captures and differ only in the two
+fields (41 of 470 rows gain them, 34 with a day count, 7 a note alone, 0 other differences). The old arm
+reproduced the live `comparison-2026-09-17.json` 572 of 572 rows; the new arm changes the same 16 rows as the
+table above, 16 Fareway cells and 0 cells at any other store, and moves the same 3 cheapest-store verdicts to
+Sam's Club (black-peppercorns, carrots, shredded-cheese). Every one of the 16 old cells is a Fareway sale whose
+own countdown on the capture ends between 2026-08-29 and 2026-09-12. The 12 that revert to everyday show
+exactly the capture's own was-price (for example almond milk 4.88 to 5.49, capture orig 5.49); the other 4
+(caesar-salad-kit, granola-bars, shredded-cheese, strawberries) fall to another Fareway row priced below the
+expired item's capture was-price. The two ad-window cells (caesar-salad-kit, refried-beans) were shop rows given
+the current weekly ad's dates; the 09-17 Fareway weekly ad lists neither product, so no sale Fareway says is
+still running disappears.
 
 ### I224 - The price-alert email leaves an orphan draft on every failed send, and the alert state is unguarded `DONE` `run-0919`
 
