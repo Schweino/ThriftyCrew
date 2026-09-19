@@ -5,7 +5,86 @@ BEFORE the three drafts in this folder go live. This is that review. **Nothing w
 unpublished.** Every page was read from Ghost with read-only Admin API GETs (write journal cleared), and search
 numbers came from a read-only Search Console query.
 
-## Where this stands: approved, STAGED, NOT YET SENT (2026-09-19)
+## Where this stands: APPLIED AND VERIFIED LIVE (2026-09-19)
+
+Queue 1, the redirect and queue 2 are all live. They were sent from the main checkout with
+`ops\review-staged.ps1 -Apply` at the orchestrator's hand on Brad's "all as drafted" approval in chat, and each
+page was then read back with a read-only GET and loaded at 375px. What follows the APPLIED record below is the plan
+as it was staged, kept as the record of what was approved.
+
+**Two id spaces, and only one of them undoes a write.** Each call carries a STAGED id (its line in the queue file)
+and a separate WRITE-JOURNAL id (its entry in `ops\ghost-journal.jsonl`, holding the before-copy).
+`ops\revert-ghost-write.ps1` takes the journal id.
+
+### Queue 1: APPLIED 2026-09-19 04:59 (US Central), verified 14 of 14
+
+| Page | Staged id | Journal id | New updated_at | html sha256 read back |
+|---|---|---|---|---|
+| `/life-insurance/` | `6f68329397f2` | `511c5e41de5f` | 2026-09-19T09:58:59.000Z | `b5045843b8c07c5c`, matches |
+| `/term-vs-whole-life/` | `0cf899d47b2f` | `18705e3ed1a5` | 2026-09-19T09:58:59.000Z | `9086a009a48133fe`, matches |
+| `/is-renters-insurance-worth-it/` | `e6c52e28f8e7` | `bf3a68bc8be0` | 2026-09-19T09:59:00.000Z | `bf996281c510feba`, matches |
+| `/homeowners-insurance/` | `6ad589ae801c` | `eb34ba4c43af` | 2026-09-19T09:59:00.000Z | `674b8f02823c53b3`, matches |
+| `/umbrella-insurance/` | `09e0ed40bfc9` | `164c7fea3891` | 2026-09-19T09:59:01.000Z | `5a580eccc5013554`, matches |
+| `/insurance-premium/` | `000ca6237493` | `70dde4f968e9` | 2026-09-19T09:59:02.000Z | `ae8667c0818d9e6d`, matches |
+| `/insurance-deductible/` | `9592fe0895c6` | `f96dd7d76fc5` | 2026-09-19T09:59:02.000Z | `f29267d4cab58634`, matches |
+| `/how-to-build-an-emergency-fund/` | `4c7e8a707297` | `8b573ce85396` | 2026-09-19T09:59:03.000Z | `68337fb18f9ad596`, matches |
+| `/emergency-fund-calculator/` | `be3e12ab67b5` | `83729c4ccbcf` | 2026-09-19T09:59:03.000Z | `675e9ab5f8b602e7`, matches |
+| `/how-much-should-i-have-in-savings-by-age/` | `71a97db4b622` | `11c1a89454e6` | 2026-09-19T09:59:04.000Z | `87e5a07678e87f9b`, matches |
+| `/how-to-save-on-car-insurance/` | `8d0af76beb6c` | `d606063640da` | 2026-09-19T09:59:04.000Z | `00143dcc19dce255`, matches |
+| `/how-to-track-your-net-worth/` | `e236ef28e664` | `998c3d64a5cb` | 2026-09-19T09:59:05.000Z | `cae643bbadc91819`, matches |
+| `/net-worth-calculator/` | `e41638b54583` | `8361968bca17` | 2026-09-19T09:59:05.000Z | `bdbb51296d31ff3c`, matches |
+| `/net-worth/` | `b97277d9ab19` | `e2082497766e` | 2026-09-19T09:59:06.000Z | `6a28c26221f60e9f`, matches |
+
+**What was checked on every page (read-only GETs, write journal cleared).** The lexical is still ONE html card, and
+its html is byte-identical (ordinal compare) to the staged body. Its sha256 starts with the value in the table at
+the top of the staged plan below. Every sentence the fix added appears exactly once. Every removed figure is gone
+from the body. The body carries no em or en dash, before or after. Status (`published`), visibility (`public`),
+slug, title, excerpt, meta, OG and Twitter fields, tags, tiers and the author id all equal the journal's before-copy.
+Then each live page was loaded in the built-in browser at 375px with a cache-busting query: every page's
+`scrollWidth` is 375 with no body element past the right edge, and the changed words were read on the rendered
+page (for example *"What would that policy cost? I'm not going to guess."* and *"Get the number in dollars."*), with
+the Fed link on `/how-to-build-an-emergency-fund/` pointing at the 2025 report. The one dash on any rendered page is
+the theme's byline (*"04 Jul 2026 - 1 min read"* with an em dash), which no post body carries.
+
+**Left standing, because queue 1 changed the card only (by design, see Queue 1 below).** These fields still carry
+wording the body fixes took out, and they are what a reader sees under the title and what search shows:
+
+- `/is-renters-insurance-worth-it/`: the excerpt shown under the title, *"For about 15 dollars a month..."*, and the
+  meta, OG and Twitter descriptions, *"For roughly 15 dollars a month ... Here is the real-dollar math."* The body's
+  heading is also still *"The real-dollar math"*, which was not in the drafted fixes.
+- `/how-to-save-on-car-insurance/`: the excerpt shown under the title, *"Cut $300 to $600 a year off your car
+  insurance..."*, and the meta, OG and Twitter descriptions, *"Save $300 to $600 a year..."*.
+- `/term-vs-whole-life/`: the excerpt, *"Term life is cheap protection for now."*, where the body now says
+  "costs less".
+- "real-dollar" in the meta descriptions of `/homeowners-insurance/`, `/how-much-should-i-have-in-savings-by-age/`
+  and `/how-to-build-an-emergency-fund/`.
+
+Fixing them is a second PUT per page and a new approval; nothing was changed for them.
+
+### The redirect: APPLIED 2026-09-19
+
+Uploaded in Ghost Admin (Settings, Advanced, Redirects): the live file is the previous one plus exactly one line,
+`^/good-net-worth-by-age/?$: /net-worth-by-age/`. **The previous file is backed up at
+`C:\Users\Owner\Downloads\redirects-backup-2026-09-19.yaml`** (27,387 bytes, 490 lines), which is outside the repo;
+upload it back to undo. Checked after queue 2 with curl: `/good-net-worth-by-age/` and `/good-net-worth-by-age` both
+answer **301** to `https://www.thriftycrew.com/net-worth-by-age/`, which answers 200, and the browser lands there.
+
+### Queue 2: APPLIED 2026-09-19 05:01 (US Central), verified 2 of 2
+
+| Call | Staged id | Journal id | New updated_at | Read back |
+|---|---|---|---|---|
+| `/good-net-worth-by-age/` to draft | `31b75e67716c` | `69417ca37264` | 2026-09-19T10:01:40.000Z | status `published` to `draft`; body, slug, visibility, published_at and meta unchanged |
+| Money Hacks hub card and count | `af95a0568161` | `d7f82cd0db95` | 2026-09-19T10:01:40.000Z | card byte-identical to the staged body; item list 183 to 182, none the retired slug; "183 free guides" and "Search 183 guides..." now read 182, and the page shows 182 at 375px |
+
+Afterwards `ops\audit-ghost-page-census.ps1 -Export` refreshed `content\ghost-adopted\` (196 of 196 declared pages
+read; 10 files changed, the 5 edited pages that are declared), and `good-net-worth-by-age` left
+`ops\ghost-page-estate.json` and the export. The census then read 1,083 live web pages, 887 named by a tracked file,
+196 declared, 0 findings. The other 9 edited pages are not declared, because the census's whole-token test finds
+their slugs in tracked files: the glossary hub list in `.claude\skills\meal-macro\build-content-hubs.ps1`, the
+redirect files, the new lesson drafts, this review and the backlog. None of those holds the page body, so the
+census cannot see what changed on those 9; this review and the write journal are the record.
+
+## As staged (the approved plan)
 
 Brad approved the whole plan as drafted on 2026-09-19 and ruled that **$1,000 stays the site's starter
 emergency-fund number**. Everything below is prepared. **No Ghost write has been made and no redirect uploaded:**

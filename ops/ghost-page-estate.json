@@ -23,7 +23,10 @@
     "",
     "THE EXPORT COMMIT is the commit that added export_dir: git log --diff-filter=A --format=%h -- content/ghost-adopted.",
     "It is not written here because the push rebases and renames it; exported_from_base is the origin/main commit the",
-    "export was taken on."
+    "export was taken on.",
+    "",
+    "RETIRED 2026-09-19: good-net-worth-by-age left pages (and its export) when it was unpublished on Brad's approval",
+    "of design/ready-for-brad/lessons/overlap-review.md, after its URL answered 301 to /net-worth-by-age/. 196 declared now."
   ],
   "export_dir": "content/ghost-adopted",
   "exported_on": "2026-09-19",
@@ -75,7 +78,6 @@
     "fast-food-copycat-meal-prep": { "kind": "post", "visibility": "public", "published_at": "2026-07-05T00:39:56.000Z", "why": "published 2026-07-05 in the July bulk post set; no tracked file produces it; adopted under I167" },
     "free-things-to-do-for-fun": { "kind": "post", "visibility": "public", "published_at": "2026-07-04T23:49:25.000Z", "why": "published 2026-07-04 in the July bulk post set; no tracked file produces it; adopted under I167" },
     "frugal-habits-that-build-wealth": { "kind": "post", "visibility": "public", "published_at": "2026-07-05T00:22:36.000Z", "why": "published 2026-07-05 in the July bulk post set; no tracked file produces it; adopted under I167" },
-    "good-net-worth-by-age": { "kind": "post", "visibility": "public", "published_at": "2026-07-05T00:22:33.000Z", "why": "published 2026-07-05 in the July bulk post set; no tracked file produces it; adopted under I167" },
     "ground-beef-meal-prep-ideas": { "kind": "post", "visibility": "public", "published_at": "2026-07-04T23:59:53.000Z", "why": "published 2026-07-04 in the July bulk post set; no tracked file produces it; adopted under I167" },
     "high-fiber-meal-prep-ideas": { "kind": "post", "visibility": "public", "published_at": "2026-07-05T00:22:37.000Z", "why": "published 2026-07-05 in the July bulk post set; no tracked file produces it; adopted under I167" },
     "high-protein-lunch-meal-prep": { "kind": "post", "visibility": "public", "published_at": "2026-07-04T23:56:10.000Z", "why": "published 2026-07-04 in the July bulk post set; no tracked file produces it; adopted under I167" },
