@@ -946,6 +946,21 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # reverts automatically when a sale ends). MUST run BEFORE resolve-worklist so the link worklist reflects
       # TODAY's recipe board, not yesterday's. Non-fatal - only runs once the recipe rule-set exists.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'recipe-overlay.ps1') | Out-Null; Log 'recipe-overlay applied' } catch { Log ('recipe-overlay threw: ' + $_.Exception.Message) }
+      # RECIPE PRICES COME FROM THE PRICING DATABASE (Brad, 2026-09-19). recipe-overlay records, per ingredient, whether
+      # its price came from today's gated recipe build or still from the undated July snapshot. Any snapshot price on a
+      # live recipe is a number nobody re-read, so it pages until every recipe ingredient has a rule of its own.
+      try {
+        $rbPath = Join-Path $OutDir 'recipe-board.json'
+        if (Test-Path $rbPath) {
+          $rbDoc = Get-Content $rbPath -Raw -Encoding UTF8 | ConvertFrom-Json
+          $rbSnap = @(@($rbDoc.recipe_price_source.snapshot_undated) | Where-Object { $_ })
+          $rbWith = @(@($rbDoc.recipe_price_source.withheld) | Where-Object { $_ })
+          Log ("recipe price source: recipe_build=$($rbDoc.recipe_price_source.recipe_build) withheld=$($rbWith.Count) snapshot_undated=$($rbSnap.Count)")
+          if ($rbSnap.Count -gt 0) {
+            try { Send-Alert -Subject "Recipe prices still from the undated snapshot - $asofS" -Body ("recipe-overlay priced $($rbSnap.Count) recipe ingredient(s) from recipe-board-everyday.json, a week_of 2026-07-06 table nothing re-reads, because no rule in commodities.json or recipe-commodities.json prices them from today's captures. Give each one a rule (or a recipe-floor-id-map entry to its staple twin) and it moves to the gated daily build. Ingredients: " + ($rbSnap -join ', ')) | Out-Null } catch {}
+          }
+        }
+      } catch { Log ('recipe price source check threw: ' + $_.Exception.Message) }
       # UNIFIED ENGINE (2026-07-26 consolidation): re-cost the whole catalog from today's boards into
       # db\costed.json, then recompute the v2 per-serving manifest (everyday + cheapest whole-package)
       # that top5-weekly reads. MUST run before top5-weekly or per_serving falls back to the legacy

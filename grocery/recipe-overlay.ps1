@@ -132,9 +132,68 @@ if ($stapleIds.Count -gt 0) {
 } else {
   Write-Output 'recipe-overlay: WARNING - no staples comparison found, so the overlap filter examined NOTHING and every recipe row is kept; duplicate-price rows are possible this run'
 }
+# 2c. PRICES COME FROM THE PRICING DATABASE, NOT THE SNAPSHOT (Brad, 2026-09-19). recipe-board-everyday.json is a
+# week_of 2026-07-06 table whose 894 store cells carry no date; nothing refreshes it (derive-recipe-floors -Apply has
+# no caller), and until today this file overlaid only SALES onto it, so every everyday recipe price on the page and
+# in the recipe costs was the snapshot's. Step 1 above already priced every recipe-rule commodity from TODAY'S
+# captures, through the same provenance contract as the weekly board. So, per row:
+#   - the gated recipe build prices it   -> its row replaces the snapshot's, cells, dates and all ('recipe-build');
+#   - it HAS a recipe rule but no gated cell today -> it is WITHHELD, no fallback: the contract refused every cell
+#     or nothing was captured, and publishing the July number instead is the defect this block exists to end;
+#   - it has NO rule in either rule-set  -> the snapshot is still its only source. Each such cell is tagged
+#     'snapshot-undated', counted into recipe_price_source, and check-ad-cycles pages on a count above zero. This is
+#     a transition, not a tier: the set empties as each id gets a rule, and then the snapshot has no reader here.
+$recipeRuleIds = @{}
+try {
+  $rcDoc = Read-JsonFile $rulesFile
+  foreach ($rr in @($rcDoc.commodities)) { if ($rr.id) { $recipeRuleIds[[string]$rr.id] = $true } }
+} catch { Write-Output ('recipe-overlay: WARNING - recipe-commodities.json unreadable (' + $_.Exception.Message + ')') }
+$builtRows = @{}
+if ($salesFile) {
+  try { foreach ($br in @((Read-JsonFile $salesFile.FullName).comparison)) { if ($br.id) { $builtRows[[string]$br.id] = $br } } } catch {}
+}
+$srcBuild = New-Object System.Collections.Generic.List[string]
+$srcWithheld = New-Object System.Collections.Generic.List[string]
+$srcSnapshot = New-Object System.Collections.Generic.List[string]
+$kept = New-Object System.Collections.Generic.List[object]
+$seenIds = @{}
+foreach ($row in @($base.comparison)) {
+  $id = [string]$row.id
+  $seenIds[$id] = $true
+  if ($builtRows.ContainsKey($id)) {
+    $nr = $builtRows[$id]
+    if ($row.PSObject.Properties['category'] -and -not $nr.PSObject.Properties['category']) { $nr | Add-Member -NotePropertyName category -NotePropertyValue $row.category -Force }
+    $nr | Add-Member -NotePropertyName price_source -NotePropertyValue 'recipe-build' -Force
+    $kept.Add($nr); $srcBuild.Add($id)
+  } elseif ($recipeRuleIds.ContainsKey($id)) {
+    $srcWithheld.Add($id)
+  } else {
+    foreach ($s in @($row.stores)) { $s | Add-Member -NotePropertyName source -NotePropertyValue 'snapshot-undated' -Force }
+    $row | Add-Member -NotePropertyName price_source -NotePropertyValue 'snapshot-undated' -Force
+    $kept.Add($row); $srcSnapshot.Add($id)
+  }
+}
+# A recipe-rule commodity the build priced but the snapshot never listed is still a recipe price; the weekly board
+# owns any id it also rules, exactly as the filter above decides for snapshot rows.
+foreach ($bid in @($builtRows.Keys)) {
+  if ($seenIds.ContainsKey($bid) -or $stapleIds.ContainsKey($bid)) { continue }
+  if ($idMap.ContainsKey($bid) -and $stapleIds.ContainsKey($idMap[$bid])) { continue }
+  $nr = $builtRows[$bid]
+  $nr | Add-Member -NotePropertyName price_source -NotePropertyValue 'recipe-build' -Force
+  $kept.Add($nr); $srcBuild.Add($bid)
+}
+$base.comparison = $kept.ToArray()
+$base | Add-Member -NotePropertyName recipe_price_source -NotePropertyValue ([ordered]@{
+  recipe_build = $srcBuild.Count; withheld = $srcWithheld.ToArray(); snapshot_undated = $srcSnapshot.ToArray()
+  build_file = $(if ($salesFile) { $salesFile.Name } else { $null })
+}) -Force
+Write-Output ("recipe-overlay: RECIPE-PRICE-SOURCE recipe_build=$($srcBuild.Count) withheld=$($srcWithheld.Count) snapshot_undated=$($srcSnapshot.Count)" + $(if ($srcSnapshot.Count) { ' - still priced from the undated snapshot: ' + (($srcSnapshot | Select-Object -First 12) -join ', ') } else { '' }))
+
 $overlaid = 0
 foreach ($row in $base.comparison) {
   $id = [string]$row.id
+  # A row from the gated build already chose each store's cheapest cell, sale or everyday, with its own dates.
+  if ([string]$row.price_source -eq 'recipe-build') { continue }
   foreach ($s in $row.stores) {
     $store = [string]$s.store
     if ($sales.ContainsKey($id) -and $sales[$id].ContainsKey($store)) {
