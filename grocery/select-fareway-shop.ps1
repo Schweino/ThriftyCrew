@@ -172,6 +172,80 @@ function Get-SlugWords([string]$url) {
   return ((($tail -replace '^\d+-', '') -replace '-', ' ').Trim())
 }
 
+# ---- A SIZE ITS OWN LINK CONTRADICTS IS REFUSED (2026-09-19, design\PLAN-board-accuracy-2026-09-19.md 4f) ---------
+# FOUNDING BUG: 'Softsoap Liquid Hand Soap Pump, Fresh Breeze' at $1.99 carried size "221 fl oz" in four captures
+# (2026-08-25 to 09-01) while its own link says .../17105464-softsoap-hand-soap-fresh-breeze-7-5-oz. Scored at
+# $0.009/fl oz it won hand-soap outright, the engine refused it as out of band, and a stale Dial row took the cell
+# on the 2026-09-17 board. The storefront's size line was wrong and the slug was right.
+# THE SLUG IS NOISY TOO, so the test is built to fire only on a contradiction no honest reading explains:
+#   * slug readings: the trailing "<a>-<b>-<unit>" reads a.b AND b ("7-5-oz" is 7.5; "no-87-1-lb" is a pasta cut
+#     number then 1 lb); a bare "<a>-<unit>" reads a, a/10 and a/100, because slugs drop the decimal point
+#     ("108-fl-oz" is 10.8, "823-oz" is 8.23). Only oz / fl oz / fz / lb, in ounces; counts are never compared.
+#   * size readings: the total, and the per-item size of an "N x M" pack.
+#   * AGREE when any pair is within SLUG_SIZE_TOLERANCE of each other, or when the PRIMARY slug reading (a.b, or a)
+#     and a size reading are a whole multiple k of each other (2..64, within 1%): a slug that names one cup of a
+#     4-cup pack ("snack-pack-... -3-25-oz" beside "13 oz") is describing the item, not contradicting the pack.
+#     The multiple test is on the primary reading only: with the loose readings too, 221 / 5 = 44.2 read as a pack
+#     and the founding row passed, which is how the first cut of this rule was caught (measured, not guessed).
+# SLUG_SIZE_TOLERANCE = 1.5, and what else was tried, over every distinct candidate in grocery\out\fareway\
+# fareway-shop-*.jsonl on 2026-09-19 that carries both a weight/volume size and a slug quantity (5,231):
+#   1.25 -> 30 refused,  1.5 -> 18 refused,  2.0 -> 13 refused.  The founding row is refused at all three.
+# 1.5 because the legitimate disagreements the measurement listed are reformulations the slug never caught up with,
+# and they reach exactly 1.5 (Fareway Gouda slices 8 oz against a 12-oz slug; Fareway bratwurst 12 against 18),
+# while above it the list is dominated by rows whose size or link is plainly wrong (402 oz of buffalo sauce whose
+# link says 13.6 oz; a cocoa mix whose link is a lip colour). A refused candidate costs that candidate only: the
+# next qualifying one is considered, and only a commodity whose EVERY candidate is refused loses its cell - which
+# is a gap, never a wrong number.
+$script:SLUG_SIZE_TOLERANCE = 1.5
+
+function Get-SlugSizeReadings([string]$url) {
+  if (-not $url) { return @() }
+  $tail = (@((($url -replace '[?#].*$', '') -replace '/+$', '') -split '/')[-1]).ToLower()
+  $m = [regex]::Match($tail, '(?:^|-)(\d+)(?:-(\d+))?-(fl-oz|fz|floz|oz|lb|lbs)$')
+  if (-not $m.Success) { return @() }
+  $a = $m.Groups[1].Value; $b = $m.Groups[2].Value
+  $mult = 1.0; if ($m.Groups[3].Value -match '^lbs?$') { $mult = 16.0 }
+  $out = @()
+  if ($b) { $out += ([double]("$a.$b") * $mult); $out += ([double]$b * $mult) }   # primary first
+  else {
+    $out += ([double]$a * $mult)
+    if ($a.Length -ge 2) { $out += (([double]$a / 10) * $mult); $out += (([double]$a / 100) * $mult) }
+  }
+  return @($out | Where-Object { $_ -gt 0 })
+}
+
+function Get-ShopSizeReadings([string]$sz) {
+  $s = ([string]$sz).ToLower().Trim() -replace '^about\s+', ''
+  $m = [regex]::Match($s, '^(?:(\d+(?:\.\d+)?)\s*x\s*)?(\d+(?:\.\d+)?)\s*(fl oz|oz|lb|lbs|pounds?)$')
+  if (-not $m.Success) { return @() }
+  $n = 1.0; if ($m.Groups[1].Value) { $n = [double]$m.Groups[1].Value }
+  $each = [double]$m.Groups[2].Value
+  if ($m.Groups[3].Value -match '^(lb|lbs|pounds?)$') { $each = $each * 16 }
+  if ($each -le 0 -or $n -le 0) { return @() }
+  # Parenthesised: in @($n * $each, $each) the comma binds first and multiplies an array (ops-and-gates.md).
+  if ($n -ne 1) { return @(($n * $each), $each) }
+  return @($each)
+}
+
+# Returns @{ contradicts = [bool]; detail = text }. No reading on either side is never a contradiction.
+function Test-SlugSizeContradiction($c) {
+  $S = @(Get-SlugSizeReadings ([string]$c.url))
+  $Z = @(Get-ShopSizeReadings ([string]$c.size))
+  if (-not $S.Count -or -not $Z.Count) { return @{ contradicts = $false; detail = '' } }
+  for ($i = 0; $i -lt $S.Count; $i++) {
+    foreach ($z in $Z) {
+      $hi = [math]::Max($z, $S[$i]); $lo = [math]::Min($z, $S[$i])
+      if ($lo -le 0) { continue }
+      $r = $hi / $lo
+      if ($r -le $script:SLUG_SIZE_TOLERANCE) { return @{ contradicts = $false; detail = '' } }
+      $k = [math]::Round($r)
+      if ($i -eq 0 -and $k -ge 2 -and $k -le 64 -and ([math]::Abs($r - $k) / $k) -le 0.01) { return @{ contradicts = $false; detail = '' } }
+    }
+  }
+  return @{ contradicts = $true
+            detail = ("size '" + [string]$c.size + "' contradicts its own link, which states " + $S[0] + ' oz (' + (Get-SlugWords ([string]$c.url)) + ')') }
+}
+
 # ONE COMMODITY'S CHOICE, as a pure function so -SelfTest drives the code the main loop runs.
 # Returns @{ best = <the chosen candidate, or $null when none passes the name test>; demoted = <log lines> }.
 # RANK, lowest wins:
@@ -186,6 +260,7 @@ function Select-ShopCandidate {
   param($Candidates, $Include, $Exclude, [string]$Unit)
   $hits = New-Object System.Collections.ArrayList
   $demoted = New-Object System.Collections.ArrayList
+  $refused = New-Object System.Collections.ArrayList
   foreach ($c in @($Candidates)) {
     if ($null -eq $c) { continue }
     $name = [string]$c.name; if (-not $name) { continue }
@@ -193,6 +268,10 @@ function Select-ShopCandidate {
     if (-not $okInc) { continue }
     $bad = $false; foreach ($p in $Exclude) { if ($p -and $name -imatch $p) { $bad = $true; break } }
     if ($bad) { continue }
+    # REFUSED, not demoted: a size the link contradicts would be scored on a wrong quantity, so it may not win even
+    # as the last candidate. The next name-matching candidate is considered instead (see the block above).
+    $sc0 = Test-SlugSizeContradiction $c
+    if ($sc0.contradicts) { [void]$refused.Add(("refused '" + $name + "': " + $sc0.detail)); continue }
     $slugWord = ''
     $slug = Get-SlugWords ([string]$c.url)
     if ($slug) {
@@ -206,7 +285,7 @@ function Select-ShopCandidate {
     if ($slugWord) { [void]$demoted.Add(("demoted '" + $name + "': slug '" + $slug + "' says '" + $slugWord + "'")) }
     [void]$hits.Add([pscustomobject]@{ C = $c; SlugKilled = [bool]$slugWord })
   }
-  if (-not $hits.Count) { return @{ best = $null; demoted = $demoted } }
+  if (-not $hits.Count) { return @{ best = $null; demoted = $demoted; refused = $refused } }
   $fam = UnitFamily $Unit
   $scored = foreach ($h in $hits) {
     $sc = PerUnit $h.C $fam
@@ -220,7 +299,7 @@ function Select-ShopCandidate {
     }
   }
   $best = ($scored | Sort-Object Rank, Sub, Score, Len | Select-Object -First 1).C
-  return @{ best = $best; demoted = $demoted }
+  return @{ best = $best; demoted = $demoted; refused = $refused }
 }
 
 # ---- THE STORE A CAPTURE WAS READ AT (2026-09-18, backlog I124) - see the header ----------------------------------
@@ -343,6 +422,34 @@ if ($SelfTest) {
   $preKeys = 'id,name,price,per,orig,unit,size,url,term,taxonomy_path,store_loc'
   $cocoRow = ConvertTo-ShopRow -Id 'coconut' -Best $coconut -Term 'whole coconut' -StoreLoc '531573'
   T 'CLEAN TWIN  a candidate without a sale end yields the pre-fix row: the same eleven keys in order, price 3.99' ((@($cocoRow.Keys) -join ',') -eq $preKeys -and [string]$cocoRow['price'] -eq '3.99' -and [string]$cocoRow['store_loc'] -eq '531573') (@($cocoRow.Keys) -join ',')
+  # ---- A SIZE ITS OWN LINK CONTRADICTS (2026-09-19, PLAN-board-accuracy 4f) ------------------------------------------
+  # FROZEN, never regenerated: out\fareway\fareway-shop-2026-09-01.jsonl, term 'liquid hand soap' (commodity hand-soap,
+  # unit floz), the founding row and two of its real neighbours. Include/exclude are hand-soap's in commodities.json.
+  $hsInc = @('hands?\s+soap', 'hand\s+wash\b')
+  $hsExc = @('sanitizer', '\bdish\b', '\bbar\b', 'dispenser', '\bbody\b')
+  $ss221 = [pscustomobject]@{ id = '17105464'; term = 'liquid hand soap'; name = 'Softsoap Liquid Hand Soap Pump, Fresh Breeze'; price = '1.99'; per = ''; orig = '2.99'; unit = ''; size = '221 fl oz'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/17105464-softsoap-hand-soap-fresh-breeze-7-5-oz' }
+  $ssAloe = [pscustomobject]@{ id = '81826'; term = 'liquid hand soap'; name = 'Softsoap Liquid Hand Soap Pump, Aloe Vera Fresh'; price = '1.99'; per = ''; orig = ''; unit = ''; size = '7.5 fl oz'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/81826-softsoap-hand-soap-moisturizing-soothing-clean-aloe-vera-fresh-scent-7-5-fl-oz' }
+  $ssRefill = [pscustomobject]@{ id = '19613282'; term = 'liquid hand soap'; name = 'Softsoap Aquarium Liquid Hand Soap Refill'; price = '5.97'; per = ''; orig = ''; unit = ''; size = '50 fl oz'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/19613282-softsoap-aquarium-liquid-hand-soap-refill-50-fl-oz' }
+  $s5 = Select-ShopCandidate -Candidates @($ss221, $ssAloe, $ssRefill) -Include $hsInc -Exclude $hsExc -Unit 'floz'
+  T 'MUST FIRE  hand-soap does not select the Fresh Breeze pump whose size 221 fl oz contradicts its 7.5-oz link; the next qualifying row (the 50 fl oz refill) wins' ([string]$s5.best.id -eq '19613282') ([string]$s5.best.name + ' / ' + [string]$s5.best.size)
+  T 'MUST FIRE  ...and the refusal is logged once, naming the 7.5 the link states' ((@($s5.refused).Count -eq 1) -and ([string]@($s5.refused)[0] -match 'Fresh Breeze') -and ([string]@($s5.refused)[0] -match '7\.5 oz')) (@($s5.refused) -join ' | ')
+  T 'MUST FIRE  the founding bug is reachable on these rows: at 221 fl oz the pump scores cheaper per fl oz than the refill' ((PerUnit $ss221 'volume') -lt (PerUnit $ssRefill 'volume')) ('' + (PerUnit $ss221 'volume') + ' vs ' + (PerUnit $ssRefill 'volume'))
+  T 'MUST NOT FIRE  a 7.5 fl oz pump whose link says 7-5-fl-oz is not refused' (-not (Test-SlugSizeContradiction $ssAloe).contradicts) ((Test-SlugSizeContradiction $ssAloe).detail)
+  # MUST NOT FIRE - the three honest slug shapes a naive comparison refuses. Each is a real candidate from the captures.
+  $slDrop = [pscustomobject]@{ size = '10.8 fl oz'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/27081907-bright-essentials-hand-soap-fresh-lemon-scent-108-fl-oz' }
+  T 'MUST NOT FIRE  a slug that dropped the decimal point (108-fl-oz beside 10.8 fl oz) still agrees' (-not (Test-SlugSizeContradiction $slDrop).contradicts) ((Test-SlugSizeContradiction $slDrop).detail)
+  $slCup = [pscustomobject]@{ size = '13 oz'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/43460-snack-pack-pudding-sugar-free-vanilla-3-25-oz' }
+  T 'MUST NOT FIRE  a slug naming one cup of a 4-cup pack (3-25-oz beside 13 oz, an exact multiple) still agrees' (-not (Test-SlugSizeContradiction $slCup).contradicts) ((Test-SlugSizeContradiction $slCup).detail)
+  $slCut = [pscustomobject]@{ size = '1 lb'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/19040859-rummo-orecchiette-no-87-1-lb' }
+  T 'MUST NOT FIRE  a pasta cut number before the size (no-87-1-lb beside 1 lb) still agrees' (-not (Test-SlugSizeContradiction $slCut).contradicts) ((Test-SlugSizeContradiction $slCut).detail)
+  # AT THE BAR (ratio exactly SLUG_SIZE_TOLERANCE 1.5) and ONE STEP PAST IT (0.1 oz, the size line's resolution).
+  $slAt = [pscustomobject]@{ size = '15 oz'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/1-some-sauce-10-oz' }
+  $slPast = [pscustomobject]@{ size = '15.1 oz'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/1-some-sauce-10-oz' }
+  T 'MUST NOT FIRE at the bar  15 oz beside a 10-oz link (ratio 1.5 = SLUG_SIZE_TOLERANCE) agrees' (-not (Test-SlugSizeContradiction $slAt).contradicts) ((Test-SlugSizeContradiction $slAt).detail)
+  T 'MUST FIRE one step past the bar  15.1 oz beside a 10-oz link (ratio 1.51) is refused' ((Test-SlugSizeContradiction $slPast).contradicts) ('contradicts=' + (Test-SlugSizeContradiction $slPast).contradicts)
+  # REFUSED, NOT DEMOTED: when the contradicted row is the only candidate, the commodity selects nothing (a gap).
+  $s6 = Select-ShopCandidate -Candidates @($ss221) -Include $hsInc -Exclude $hsExc -Unit 'floz'
+  T 'MUST FIRE  a contradicted row that is the ONLY candidate is not selected - the cell is withheld, never priced on 221 fl oz' ($null -eq $s6.best -and @($s6.refused).Count -eq 1) ('best=' + [string]$s6.best.name)
   # ---- THE STORE A CAPTURE WAS READ AT (2026-09-18, backlog I124) -------------------------------------------------
   # The same two frozen coconut candidates, each carrying the loc farewayShopExtract now stamps. The founding shape
   # is a capture read on the plausible wrong store: a fresh session sits on Des Moines (513473) and every price in it
@@ -417,10 +524,10 @@ if ($SelfTest) {
     T 'MUST FIRE  end to end, the selected Coconut keeps sale_ends_days 1 and its sale_note in the shop file' ($e6.rc -eq 0 -and $e6Row -and [string]$e6Row.name -eq 'Coconut' -and [string]$e6Row.sale_ends_days -eq '1' -and [string]$e6Row.sale_note -eq 'Sale ends in 1 day') ('rc=' + $e6.rc + ' row=' + ($e6Row | ConvertTo-Json -Compress) + ' | ' + ($e6.lines -join ' / '))
   } finally { Remove-Item -LiteralPath $stT -Recurse -Force -ErrorAction SilentlyContinue }
 
-  $stTotal = 8 + 2 + $tblS.Count + 3 + 6
+  $stTotal = 8 + 2 + 10 + $tblS.Count + 3 + 6
   if ($script:stRan -ne $stTotal) { Write-Output ('FAIL  the suite ran ' + $script:stRan + ' case(s), not the ' + $stTotal + ' it lists'); $script:stFail++ }
   if ($script:stFail) { Write-Output ('select-fareway-shop SELF-TEST FAIL (' + $script:stFail + ' of ' + $stTotal + ')'); exit 1 }
-  Write-Output ('select-fareway-shop SELF-TEST PASS (' + $stTotal + ' of ' + $stTotal + ': slug demotion, demotion logged, founding bug reachable, demote-not-delete, cheapest wins, clean slugs demote nothing, no-url, slug parse, sale countdown kept x2, store ruling x' + ($tblS.Count + 3) + ', end to end x6)')
+  Write-Output ('select-fareway-shop SELF-TEST PASS (' + $stTotal + ' of ' + $stTotal + ': slug demotion, demotion logged, founding bug reachable, demote-not-delete, cheapest wins, clean slugs demote nothing, no-url, slug parse, sale countdown kept x2, size contradicts its link x10, store ruling x' + ($tblS.Count + 3) + ', end to end x6)')
   exit 0
 }
 
@@ -459,14 +566,16 @@ foreach ($r in $rows) { $byIdRaw[[string]$r.id] = $r }
 $outRows = New-Object System.Collections.ArrayList
 $dropped = @()
 $demotedTotal = 0
+$sizeRefusedTotal = 0
 foreach ($id in $byIdRaw.Keys) {
   if (-not $incMap.ContainsKey($id)) { continue }
   $sel = Select-ShopCandidate -Candidates $byIdRaw[$id].candidates -Include $incMap[$id] -Exclude $excMap[$id] -Unit $unitMap[$id]
   foreach ($dl in @($sel.demoted)) { Write-Output ('  [' + $id + '] ' + $dl); $demotedTotal++ }
+  foreach ($rl in @($sel.refused)) { Write-Output ('  [' + $id + '] SIZE-CONTRADICTS-LINK ' + $rl); $sizeRefusedTotal++ }
   if ($null -eq $sel.best) { $dropped += $id; continue }
   [void]$outRows.Add((ConvertTo-ShopRow -Id $id -Best $sel.best -Term ([string]$byIdRaw[$id].term) -StoreLoc $storeLoc))
 }
 $outDir = Split-Path $Out -Parent; New-Item -ItemType Directory -Force -Path $outDir | Out-Null
 ($outRows | ConvertTo-Json -Depth 5) | Set-Content $Out -Encoding UTF8
-Write-Output ("fareway-shop-$asof.json: $($outRows.Count) commodities selected (from $($byIdRaw.Count) captured); $($dropped.Count) had no include-match; $demotedTotal candidate(s) slug-demoted")
+Write-Output ("fareway-shop-$asof.json: $($outRows.Count) commodities selected (from $($byIdRaw.Count) captured); $($dropped.Count) had no include-match; $demotedTotal candidate(s) slug-demoted; $sizeRefusedTotal candidate(s) refused SIZE-CONTRADICTS-LINK")
 if ($dropped.Count) { Write-Output ("  no-match ids: " + ($dropped -join ', ')) }

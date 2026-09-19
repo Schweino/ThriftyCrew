@@ -50,6 +50,38 @@ if (-not $QueueFile) { $QueueFile = Join-Path $root 'ingredient-queue.json' }
 if (-not $MapFile) { $MapFile = Join-Path $root 'ingredient-queue-map.json' }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')
 
+# ---- A PRICE COPIED OFF OUR OWN BOARD IS NOT A STORE READ (2026-09-19, design\PLAN-board-accuracy-2026-09-19.md 4d) --
+# FOUNDING BUG: the queue's Fareway 'Green Bell Pepper' $0.77 carried the evidence "price-ingredient tier 1 on today's
+# captures (comparison-2026-08-15): ..." - an answer read back off the engine's own board - and -Apply wrote it into
+# hunter-fareway-regular-2026-08-16.json as source_ad "in-store verified". The board then priced the cell from itself
+# for a month (live shelf $1.17). On the queue as it stood on 2026-09-19, 13 of the 85 promotable rows carry evidence
+# of this shape. A row the agent answered from disk never had a store look at it, so it is REFUSED here, named
+# SELF-SOURCED and counted, and is re-priced by an agent that opens the store.
+# The phrases are the ones the pricing agent actually writes when it answers from our data rather than a store:
+#   a board file named as the source (comparison-YYYY-MM-DD), "price-ingredient tier 1", "from the priced board",
+#   "board cell is/at" (quoting the board's own cell), and "ruled from disk" / "price-ingredient.ps1 -Name ..."
+#   (a capture-file lookup, labelled in-store verified by the writer below). A bare mention of the word "board" is
+#   NOT evidence: "should be re-verified before any board cell" (chipotle, a real store probe) must still promote.
+# UNSOUND by construction: an agent that answers from the board in words not listed here passes. The list is what the
+# 520 priced queue rows actually say on 2026-09-19, and the fixture below pins each spelling.
+$script:SELF_SOURCED_EVIDENCE = @(
+  '(?i)\bcomparison-\d{4}-\d{2}-\d{2}\b',
+  '(?i)\bprice-ingredient(?:\.ps1)?\s+tier\s*1\b',
+  '(?i)\bprice-ingredient(?:\.ps1)?\s+-Name\b',
+  '(?i)\bprice-ingredient\s+CAPTURE\s+tier\b',
+  '(?i)\bfrom\s+the\s+priced\s+board\b',
+  '(?i)\bruled\s+from\s+disk\b',
+  '(?i)\bboard\s+cell\s+(?:is|at)\b'
+)
+function Get-SelfSourcedEvidence([string]$Evidence) {
+  if (-not $Evidence) { return '' }
+  foreach ($rx in $script:SELF_SOURCED_EVIDENCE) {
+    $m = [regex]::Match($Evidence, $rx)
+    if ($m.Success) { return $m.Value }
+  }
+  return ''
+}
+
 function Get-QueuePromotions {
   <#
     .SYNOPSIS Every (commodity, store, price) the ruling allows to be promoted.
@@ -57,7 +89,7 @@ function Get-QueuePromotions {
                  the map is SKIPPED and counted, never guessed at.
   #>
   param($Queue, $Map)
-  $rows = @(); $skipped = @(); $banned = 0
+  $rows = @(); $skipped = @(); $banned = 0; $refused = @()
   foreach ($it in @($Queue.items)) {
     $term = [string]$it.term
     if (-not $it.stores) { continue }
@@ -71,6 +103,12 @@ function Get-QueuePromotions {
       # A price with no SIZE cannot be turned into a per-unit number, and a cell that cannot be priced
       # per unit cannot be compared against another store - which is the entire job of the board.
       if (-not [string]$s.size) { continue }
+      $self = Get-SelfSourcedEvidence ([string]$s.evidence)
+      if ($self) {
+        $refused += [pscustomobject]@{ reason = 'SELF-SOURCED'; id = [string]$ruling.id; term = $term; store = [string]$p.Name
+                                       price = [double]$s.price; matched = $self }
+        continue
+      }
       $rows += [pscustomobject]@{
         id = [string]$ruling.id; term = $term; store = [string]$p.Name
         price = [double]$s.price; size = [string]$s.size; item = [string]$s.item
@@ -78,7 +116,7 @@ function Get-QueuePromotions {
       }
     }
   }
-  return [pscustomobject]@{ rows = $rows; skipped = @($skipped | Select-Object -Unique); banned = $banned }
+  return [pscustomobject]@{ rows = $rows; skipped = @($skipped | Select-Object -Unique); banned = $banned; refused = $refused }
 }
 
 if ($SelfTest) {
@@ -110,6 +148,47 @@ if ($SelfTest) {
   T (-not (@($r.rows | Where-Object { $_.store -eq 'Aldi' })).Count) 'a null price is not promoted'
   # MUST FIRE: no size means no per-unit price, so the cell could never be compared.
   T (-not (@($r.rows | Where-Object { $_.term -eq 'fennel' })).Count) 'a price with no SIZE is refused - it cannot be made per-unit'
+
+  # ---- SELF-SOURCED (2026-09-19, PLAN-board-accuracy 4d) ------------------------------------------------------------
+  # FROZEN, never regenerated: the Fareway green-bell-pepper evidence as ingredient-queue.json carried it when -Apply
+  # wrote the $0.77 row (git history of that file), and the store read that later replaced it ($1.17).
+  $evBoard = 'price-ingredient tier 1 on today''s captures (comparison-2026-08-15): Fareway ''Green Bell Pepper'' \.77 each, plain fresh produce row, exact ingredient. No adjudication ambiguity.'
+  $evStore = 'driver rung 1 ''green bell pepper'', 20 rows: ''Green Bell Pepper'' 1 each $1.17, the plain fresh pepper. The red/orange bells, sweet onion, scallions and cilantro in the same pile are suggestion tiles and were rejected.'
+  $evChip  = 'probe ''chipotle powder'' returned NO-CANDIDATES; re-probe ''ground chipotle'' returned exactly one qualifying jar, Spice Islands Ground Chipotle Chile 2.3oz \.49. Pure ground chipotle, not a sauce or blend. Price looks high for the size and should be re-verified before any board cell.'
+  $q2 = [pscustomobject]@{ items = @(
+    [pscustomobject]@{ term = 'green bell pepper'; stores = [pscustomobject]@{
+      'Fareway' = [pscustomobject]@{ price = 0.77; size = 'each'; item = 'Green Bell Pepper'; evidence = $evBoard }
+      "Baker's" = [pscustomobject]@{ price = 0.89; size = '1 ct'; item = 'Fresh Large Green Bell Pepper'; evidence = 'server probe rung 1 ''green bell pepper'', 3 hits: Fresh Large Green Bell Pepper 1 ct $0.89' } } },
+    [pscustomobject]@{ term = 'green bell pepper 2'; stores = [pscustomobject]@{
+      'Fareway' = [pscustomobject]@{ price = 1.17; size = '1 each'; item = 'Green Bell Pepper'; evidence = $evStore } } },
+    [pscustomobject]@{ term = 'chipotle-powder'; stores = [pscustomobject]@{
+      "Baker's" = [pscustomobject]@{ price = 14.49; size = '2.3 oz'; item = 'Spice Islands Ground Chipotle Chile'; evidence = $evChip } } }
+  ) }
+  $m2 = [pscustomobject]@{ map = [pscustomobject]@{
+    'green bell pepper' = [pscustomobject]@{ id = 'bell-peppers' }; 'green bell pepper 2' = [pscustomobject]@{ id = 'bell-peppers' }
+    'chipotle-powder' = [pscustomobject]@{ id = 'chipotle-powder' } } }
+  $r2 = Get-QueuePromotions -Queue $q2 -Map $m2
+  $r2Ref = @($r2.refused)
+  T ($r2Ref.Count -eq 1 -and $r2Ref[0].reason -eq 'SELF-SOURCED' -and $r2Ref[0].store -eq 'Fareway' -and $r2Ref[0].price -eq 0.77) ("MUST FIRE  the `$0.77 Fareway pepper answered from comparison-2026-08-15 is refused SELF-SOURCED and counted (refused=$($r2Ref.Count))")
+  T (-not (@($r2.rows | Where-Object { $_.store -eq 'Fareway' -and $_.price -eq 0.77 })).Count) 'MUST FIRE  ...and it is NOT among the rows -Apply would write'
+  T ((@($r2.rows | Where-Object { $_.store -eq 'Fareway' -and $_.price -eq 1.17 })).Count -eq 1) 'MUST NOT FIRE  the store read that replaced it ($1.17, driver rung 1) promotes'
+  T ((@($r2.rows | Where-Object { $_.store -eq "Baker's" -and $_.term -eq 'green bell pepper' })).Count -eq 1) 'CLEAN TWIN  a store read beside a refused sibling in the SAME queue item still promotes - the refusal is per row, not per term'
+  T ((@($r2.rows | Where-Object { $_.term -eq 'chipotle-powder' })).Count -eq 1) 'CLEAN TWIN  a real probe whose prose merely says "before any board cell" still promotes - the word board is not the evidence'
+  # Each spelling the agent actually writes when it answered from our data, one case per pattern (a defence worth
+  # having per spelling is worth a case per spelling), and the plain store read beside them.
+  $spell = @(
+    @{ e = 'Answered at tier 1 from the priced board, comparison-2026-08-15.json (week of 2026-08-15).'; want = 'comparison-2026-08-15' },
+    @{ e = 'price-ingredient tier 1: ''bacon bits'' MAPS to the existing priced commodity'; want = 'price-ingredient tier 1' },
+    @{ e = 'no browser this session; ruled from disk instead'; want = 'ruled from disk' },
+    @{ e = 'returns the row via price-ingredient.ps1 -Name ''x'''; want = 'price-ingredient.ps1 -Name' },
+    @{ e = 'price-ingredient CAPTURE tier: two Walmart captures agree'; want = 'price-ingredient CAPTURE tier' },
+    @{ e = 'Answered at tier 1 from the priced board.'; want = 'from the priced board' },
+    @{ e = 'Baker''s board cell is Kroger Thick Cut Bacon'; want = 'board cell is' }
+  )
+  $spellOk = 0
+  foreach ($sp in $spell) { if ([string]::Equals((Get-SelfSourcedEvidence $sp.e), $sp.want, [StringComparison]::OrdinalIgnoreCase)) { $spellOk++ } else { Write-Output ("      spelling missed: [" + $sp.e + "] got [" + (Get-SelfSourcedEvidence $sp.e) + "]") } }
+  T ($spellOk -eq $spell.Count) ("MUST FIRE  every self-sourced spelling the queue carries is named ($spellOk of $($spell.Count))")
+  T ((Get-SelfSourcedEvidence 'Server tier rung 1 ''eggs'' = 12 hits (kroger-public)') -eq '') 'MUST NOT FIRE  a server-tier store probe is a store read'
   Write-Output ("PROMOTE-QUEUE " + $(if ($f) { "SELF-TEST FAILED ($f)" } else { 'SELF-TEST PASS' }))
   Exit-Guard -Name 'promote-ingredient-queue' -Summary "selftest failed=$f" -Code $(if ($f) { 2 } else { 0 })
 }
@@ -135,10 +214,14 @@ foreach ($g in $byStore) {
   Write-Output ("   {0,-13} {1} price(s)" -f $g.Name, $g.Count)
 }
 if ($res.skipped.Count) { Write-Output ("  held pending a new commodity id: " + (($res.skipped | Sort-Object) -join ', ')) }
+# SELF-SOURCED, NAMED AND COUNTED WITH ITS DENOMINATOR. These rows are never written; each is owed a store read.
+$refusedN = @($res.refused).Count
+Write-Output ("  refused SELF-SOURCED: {0} of {1} priced, ruled row(s) - their evidence is our own board or captures, not a store read" -f $refusedN, ($refusedN + $res.rows.Count))
+foreach ($x in @($res.refused)) { Write-Output ("   SELF-SOURCED  {0,-13} {1} ({2}) `${3} - evidence says '{4}'" -f $x.store, $x.term, $x.id, $x.price, $x.matched) }
 
 if (-not $Apply) {
   Write-Output '  REPORT ONLY - re-run with -Apply to write the per-store files.'
-  Exit-Guard -Name 'promote-ingredient-queue' -Summary "promotable=$($res.rows.Count) applied=0" -Code 0
+  Exit-Guard -Name 'promote-ingredient-queue' -Summary "promotable=$($res.rows.Count) refused_self_sourced=$refusedN applied=0" -Code 0
 }
 
 $regDir = Join-Path $OutDir 'regular'
@@ -173,4 +256,4 @@ foreach ($g in $byStore) {
   Write-Output ("  wrote {0} ({1} row(s))" -f (Split-Path $f -Leaf), $deals.Count)
 }
 Write-Output ("promote-queue: wrote {0} store file(s) into out\regular" -f $written)
-Exit-Guard -Name 'promote-ingredient-queue' -Summary "promotable=$($res.rows.Count) applied=$written" -Code 0
+Exit-Guard -Name 'promote-ingredient-queue' -Summary "promotable=$($res.rows.Count) refused_self_sourced=$refusedN applied=$written" -Code 0

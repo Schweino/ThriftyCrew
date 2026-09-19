@@ -22,8 +22,12 @@
 #   - $script:CaptureDate, the capture date Build-Row stamps into every row's as_of. build-walmart-deals.ps1
 #     sets it from -Date or the input filename. import-walmart-batch.ps1 does NOT set it: its rows come back
 #     with as_of $null and its import loop stamps the run date itself.
+#   - $script:CaptureStoreId (optional, 2026-09-19), the storeId the capture's #tc-store line read. Build-Row
+#     stamps it as every row's store_id. build-walmart-deals.ps1 sets it after Split-WalmartCaptureStore rules;
+#     import-walmart-batch.ps1 does not yet, so its rows say store_id '' (unknown).
 # WHAT IT PROVIDES: Resolve-Unit, Get-NameQtyCandidates, Get-NamePackMultipliers, Get-SameFamilyNameQty,
-# Get-NamePack, Format-Qty, Build-Row, and the $script:UnitFamily constant the helpers read. Since
+# Get-NamePack, Format-Qty, Split-WalmartShelfField, Get-WalmartChannel, Build-Row, and the $script:UnitFamily
+# constant the helpers read. Since
 # 2026-09-18 (backlog I220) also the store ruling both Walmart writers apply to a capture:
 # Get-WalmartSanctionedStore, Split-WalmartCaptureStore and $script:WM_CAPTURE_COLUMNS, at the end.
 #
@@ -274,6 +278,71 @@ function Format-Qty([double]$q) {
   return ('{0:0.###}' -f $q)
 }
 
+# ===================================================================================================
+# THE SHELF SIGNAL, AND WHY IT RIDES INSIDE THE ff COLUMN (2026-09-19, design\PLAN-board-accuracy-2026-09-19.md).
+# `fulfillment` alone could not say whether a shopper can BUY the item at the store. Verified against the live
+# /search payload on 2026-09-19 through Brad's Chrome (session storeId 5361, zip 68137, read off
+# pageMetadata.location): "Green Giant Season Brussel Sprout Intro" reads fulfillmentType STORE and
+# availabilityStatusV2.value OUT_OF_STOCK, isOutOfStock true, fulfillmentSummary []; a sibling in stock reads
+# IN_STOCK with fulfillmentSummary [{fulfillment:PICKUP, storeId:5361}]. Those three fields on the SAME item node
+# the agent already reads are the in-stock signal:
+#     availabilityStatusV2.value     IN_STOCK / OUT_OF_STOCK / UNKNOWN (secondary nodes read UNKNOWN with no
+#                                    fulfillmentType at all)
+#     isOutOfStock                   boolean, used only when availabilityStatusV2 is absent
+#     fulfillmentSummary[].storeId   the stores a PICKUP is offered at
+# pull-walmart-instore.js carries them as a suffix on the ff column: "STORE;av=IN_STOCK;pk=5361". NOT as new
+# columns, because the 9-column shape is asserted outside this lane (pull-browser-stores.py's csv_header and its
+# column-count refusal, and test-pull-agent-lib's contract case) and a tenth column would make the daily driver
+# refuse every Walmart capture. A plain "STORE" (every capture before this) splits to availability '' and no
+# pickup list, which is UNKNOWN, never in stock.
+function Split-WalmartShelfField([string]$ff) {
+  $parts = @(([string]$ff) -split ';')
+  $out = @{ fulfillment = ([string]$parts[0]).Trim().ToUpper(); availability = ''; pickup = @() }
+  for ($i = 1; $i -lt $parts.Count; $i++) {
+    $kv = ([string]$parts[$i]).Trim()
+    if ($kv -match '^(?i)av=(.*)$') { $out.availability = $matches[1].Trim().ToUpper() }
+    elseif ($kv -match '^(?i)pk=(.*)$') { $out.pickup = @($matches[1] -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }) }
+    # Any other key is from a newer agent this library does not know yet: ignored, never guessed at.
+  }
+  return $out
+}
+
+# CAN A SHOPPER BUY THIS AT THE STORE? Returns @{ channel; basis }, channel one of:
+#   'ship-only'  the store's own payload says it cannot be bought off this store's shelf
+#   'in-store'   fulfillment STORE and Walmart says IN_STOCK at the page's store
+#   ''           unknown: no availability recorded (every capture before 2026-09-19), UNKNOWN, a pickup list that
+#                does not name the store the capture read, or a fulfillment word nobody has ruled on
+# The order is the order of certainty. A title that declares an online bundle "(N pack)" with N > 1 is ship-only
+# FIRST, whatever the payload says (the brief's ruling for the "(12 pack) Great Value Original Baked Beans, 28 oz"
+# cell: an online multipack, not a shelf item). RECORDED AGAINST IT, 2026-09-19: the same live read showed
+# "(12 pack) Parent's Choice Organic Stage 2 ..." IN_STOCK with PICKUP at 5361, so for some bundles Walmart offers
+# a store pickup; the rule stands because a 12-unit bundle price is not the shelf price of one unit, and it is a
+# policy line Brad can reverse, not a payload fact. The size arithmetic is untouched by it.
+function Get-WalmartChannel {
+  param([string]$Fulfillment, [string]$Availability, [string[]]$PickupStores, [string]$StoreId, [string]$Name)
+  $f = ([string]$Fulfillment).Trim().ToUpper()
+  $a = ([string]$Availability).Trim().ToUpper()
+  $pm = [regex]::Match([string]$Name, '(?i)\(\s*(\d+)\s*-?\s*pack\s*\)')
+  if ($pm.Success -and [int]$pm.Groups[1].Value -gt 1) {
+    return @{ channel = 'ship-only'; basis = ('online multipack: the title declares (' + $pm.Groups[1].Value + ' pack)') }
+  }
+  if ($f -eq 'FC' -or $f -eq 'SHIP' -or $f -eq 'MARKETPLACE') {
+    return @{ channel = 'ship-only'; basis = ('fulfillment ' + $f + ': not sold off the store shelf') }
+  }
+  if ($a -eq 'OUT_OF_STOCK') {
+    return @{ channel = 'ship-only'; basis = ('availability OUT_OF_STOCK at the page''s store (fulfillment ' + $(if ($f) { $f } else { 'unrecorded' }) + ')') }
+  }
+  if ($f -eq 'STORE' -and $a -eq 'IN_STOCK') {
+    $pk = @($PickupStores | Where-Object { $_ })
+    if ($pk.Count -and $StoreId -and -not ($pk -contains $StoreId)) {
+      return @{ channel = ''; basis = ('IN_STOCK, but pickup is offered at storeId ' + ($pk -join ',') + ', not the ' + $StoreId + ' the capture read') }
+    }
+    return @{ channel = 'in-store'; basis = ('fulfillment STORE, availability IN_STOCK' + $(if ($pk.Count) { ', pickup at ' + ($pk -join ',') } else { '' })) }
+  }
+  # Deliberate fallback, not a silent one: '' is the contract's UNPROVEN, which withholds the cell downstream.
+  return @{ channel = ''; basis = ('unproven: fulfillment ' + $(if ($f) { $f } else { 'unrecorded' }) + ', availability ' + $(if ($a) { $a } else { 'unrecorded' })) }
+}
+
 # Build ONE engine-shaped row from a raw capture row. Returns @{row=..; err=..}
 function Build-Row($raw) {
   $lpm = [regex]::Match(("" + $raw.lp), '\$\s*([\d,]+(?:\.\d{1,2})?)')
@@ -480,6 +549,10 @@ function Build-Row($raw) {
     @{ ad=('${0:N2}' -f $up); size=$bare;    shape='per-unit' }
   )
   $errs = @()
+  # The shelf signal, split once for whichever shape wins below (it does not depend on the shape).
+  $shelf = Split-WalmartShelfField ([string]$raw.ff)
+  $chan  = Get-WalmartChannel -Fulfillment $shelf.fulfillment -Availability $shelf.availability `
+             -PickupStores $shelf.pickup -StoreId ([string]$script:CaptureStoreId) -Name ([string]$raw.n)
   foreach ($t in $tries) {
     $d = [pscustomobject]@{ price_text=$t.ad; name=[string]$raw.n; size_text=$t.size; regular=$null }
     $got = Get-UnitPrice $d ([pscustomobject]@{ unit=$u.unit })
@@ -535,7 +608,16 @@ function Build-Row($raw) {
       # sel/ff at all, and the 90-day union keeps them until they roll off. Anything downstream must treat
       # '' as no-information and admit the row; refusing on absence would drop most of the union overnight.
       seller        = [string]$raw.sel
-      fulfillment   = ([string]$raw.ff).ToUpper()
+      fulfillment   = $shelf.fulfillment
+      # THE STORE AND THE CHANNEL, PER ROW (2026-09-19, design\PLAN-board-accuracy-2026-09-19.md 4c/4e). See
+      # Split-WalmartShelfField and Get-WalmartChannel below for every rule. store_id is the storeId the capture's
+      # #tc-store line READ, never a literal; '' when the caller recorded none (import-walmart-batch sets no
+      # $script:CaptureStoreId today, so its rows say '' - unknown, not L St). availability is Walmart's own
+      # word for this listing at the page's store; channel is the verdict the board's provenance contract reads.
+      store_id      = $(if ($script:CaptureStoreId) { [string]$script:CaptureStoreId } else { '' })
+      availability  = $shelf.availability
+      channel       = $chan.channel
+      channel_basis = $chan.basis
     } }
   }
   return @{ err=("INVARIANT: no shape reproduces Walmart's " + $up + '/' + $u.tok + ' -> ' + ($errs -join ' | ')) }

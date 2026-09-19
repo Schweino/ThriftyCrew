@@ -508,6 +508,35 @@ function loadAgent(pageStore) {
   T('...and the 9-column positional contract build-walmart-deals reads is unchanged',
     csv[2].split('|').length === 9, csv[2]);
 
+  // 9b. IN STOCK AT THIS STORE (2026-09-19, design\PLAN-board-accuracy-2026-09-19.md). The item-node fields are
+  //     the ones measured on the live payload that day: availabilityStatusV2.value, isOutOfStock and
+  //     fulfillmentSummary[{fulfillment:'PICKUP', storeId}]. They travel as a suffix on the ff COLUMN so the
+  //     9-column contract above holds; walmart-row-lib's Split-WalmartShelfField is the reader.
+  const stocked = (id, name, extra) => Object.assign(item(id, '2.98'), { name }, extra);
+  const sv = loadAgent(LST);
+  sv.walmartIdentity();
+  sv.ctx.page = html(payload(LST, [
+    stocked(71, 'Green Giant Season Brussel Sprout Intro', { availabilityStatusV2: { display: 'Out of stock', value: 'OUT_OF_STOCK' }, isOutOfStock: true, fulfillmentSummary: [] }),
+    stocked(72, 'Seedless English Cucumbers, 3 ct.', { availabilityStatusV2: { display: 'In stock', value: 'IN_STOCK' }, isOutOfStock: false,
+      fulfillmentSummary: [{ fulfillment: 'PICKUP', storeId: '5361' }, { fulfillment: 'PICKUP', storeId: '5361' }] }),
+    stocked(73, 'Only isOutOfStock says so', { isOutOfStock: true }),
+    stocked(74, 'Says nothing about stock', {}),
+  ]));
+  const rSv = await sv.walmartProbe('brussels sprouts');
+  const byId = {}; (rSv.rows || []).forEach(x => { byId[x.id] = x; });
+  T('MUST FIRE  an OUT_OF_STOCK node carries av=OUT_OF_STOCK and no pickup store', (byId['71'] || {}).av === 'OUT_OF_STOCK' && (byId['71'] || {}).pk === '', JSON.stringify(byId['71']));
+  T('MUST NOT FIRE  an IN_STOCK node carries av=IN_STOCK and pickup 5361, de-duplicated', (byId['72'] || {}).av === 'IN_STOCK' && (byId['72'] || {}).pk === '5361', JSON.stringify(byId['72']));
+  T('MUST FIRE  isOutOfStock alone (no availabilityStatusV2) still reads OUT_OF_STOCK', (byId['73'] || {}).av === 'OUT_OF_STOCK', JSON.stringify(byId['73']));
+  T('MUST NOT DEFAULT  a node that says nothing about stock emits av EMPTY, never IN_STOCK', (byId['74'] || {}).av === '' && (byId['74'] || {}).pk === '', JSON.stringify(byId['74']));
+  sv.ctx.kv['TC_WALMART_SWEEP'] = JSON.stringify({ 'brussels sprouts': { v: 'MATCHES', why: null, rows: rSv.rows } });
+  const svc = sv.walmartSweepToCsv().split('\n');
+  const col = (id) => { const ln = svc.find(l => l.split('|')[4] === id) || ''; return ln.split('|'); };
+  T('the shelf signal rides the ff column as a suffix: STORE;av=OUT_OF_STOCK', col('71')[8] === 'STORE;av=OUT_OF_STOCK', col('71').join('|'));
+  T('...and STORE;av=IN_STOCK;pk=5361 for the stocked row', col('72')[8] === 'STORE;av=IN_STOCK;pk=5361', col('72').join('|'));
+  T('CLEAN TWIN  a row with no availability writes the bare fulfillment word, byte-identical to before', col('74')[8] === 'STORE', col('74').join('|'));
+  T('CLEAN TWIN  every data row still splits into exactly 9 columns, the contract pull-browser-stores.py asserts',
+    svc.slice(2).length === 4 && svc.slice(2).every(l => l.split('|').length === 9), svc.join(' / '));
+
   // 10. MUST FIRE - a row persisted by an older agent has no store and must never be folded into one.
   const old = loadAgent(LST);
   old.ctx.kv['TC_WALMART_SWEEP'] = JSON.stringify({ t: { v: 'MATCHES', rows: [

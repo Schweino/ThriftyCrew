@@ -250,7 +250,11 @@ if ($SelfTest) {
     Chk '(w) MUST FIRE  the store_loc a shop row carries is written as store_location  531573' ($f -and [string]$f.store_location -eq '531573') ("store_location=$($f.store_location)")
     Chk '(w) MUST FIRE  a shop row with no stamp says store_location UNRECORDED, never a store' ($e -and [string]$e.store_location -eq 'UNRECORDED') ("store_location=$($e.store_location)")
     $fNames = if ($f) { @($f.PSObject.Properties.Name) } else { @() }
-    Chk '(w) CLEAN TWIN  store_location is the row''s last field, after every priced one' ($fNames.Count -gt 0 -and $fNames[-1] -eq 'store_location' -and ($fNames -join ',') -like 'store,item,ad_price,size,regular,source_ad,as_of,found_by_term,*') ($fNames -join ',')
+    Chk '(w) CLEAN TWIN  store_location and store_id are the row''s last two fields, after every priced one' ($fNames.Count -gt 1 -and $fNames[-2] -eq 'store_location' -and $fNames[-1] -eq 'store_id' -and ($fNames -join ',') -like 'store,item,ad_price,size,regular,source_ad,as_of,found_by_term,*') ($fNames -join ',')
+    # (x) store_id FROM THE loc STAMP (2026-09-19, PLAN-board-accuracy 4c). MUST FIRE: the stamped row carries store_id
+    #     531573. MUST NOT FIRE: an unstamped row says store_id '' (unknown), never UNRECORDED and never a store.
+    Chk '(x) MUST FIRE  the loc stamp 531573 is written as store_id 531573' ($f -and [string]$f.store_id -eq '531573') ("store_id=$($f.store_id)")
+    Chk '(x) MUST NOT FIRE  a row with no stamp has store_id '''', not a store and not the word UNRECORDED' ($e -and $e.PSObject.Properties['store_id'] -and [string]$e.store_id -eq '') ("store_id=[$($e.store_id)]")
     $slDoc = $doc.store_locations
     Chk '(w) the file counts its rows by store: 1 at 531573, the rest UNRECORDED' ($slDoc -and [int]$slDoc.'531573' -eq 1 -and ([int]$slDoc.'531573' + [int]$slDoc.UNRECORDED) -eq @($doc.deals).Count) ("store_locations=" + ($slDoc | ConvertTo-Json -Compress))
     # CLEAN TWINS for (n)/(o), in their own child run because deals are keyed by commodity id and only one
@@ -613,6 +617,10 @@ foreach ($f in $In) {
     # exactly as before. A shop file from before the stamp, or one written by hand, has none and says UNRECORDED -
     # never "Omaha", which is what the file-level `source` has always asserted without reading it.
     $row['store_location'] = if ($r.PSObject.Properties['store_loc'] -and ([string]$r.store_loc).Trim()) { ([string]$r.store_loc).Trim() } else { 'UNRECORDED' }
+    # store_id (2026-09-19, design\PLAN-board-accuracy-2026-09-19.md 4c): the SAME field name every store's rows carry,
+    # so the board's provenance contract reads one key for Walmart and Fareway alike. It is the retailerLocation the
+    # loc stamp read, and '' - unknown - when there was none: UNRECORDED is a statement about the capture, not a store.
+    $row['store_id'] = if ($row['store_location'] -match '^\d+$') { [string]$row['store_location'] } else { '' }
 
     $byId[$id] = $row
     # emit the product-URL input using the SAME price+size the board uses, so the "See item" link's per-unit

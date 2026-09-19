@@ -359,6 +359,28 @@ async function walmartProbe(term) {
     */
     const sel = node.sellerName ?? '';
     const ff  = (node.fulfillmentType ?? '');
+    /*
+      IN STOCK AT THIS STORE? (2026-09-19, design\PLAN-board-accuracy-2026-09-19.md). fulfillmentType STORE says the
+      listing is a shelf item somewhere; it does not say this store has it. Two board cells proved the difference
+      ("Green Giant Season Brussel Sprout Intro" and a Parent's Choice Stage 2 12 Count, both STORE, both out of stock
+      at 5361). Measured on the live /search payload that day through Brad's Chrome, session storeId 5361, on the SAME
+      item node this walk already reads:
+          availabilityStatusV2.value   'IN_STOCK' | 'OUT_OF_STOCK' | 'UNKNOWN'   (the store-level verdict)
+          availabilityStatusDisplayValue 'In stock' ...                           (display text, not read)
+          isOutOfStock                 true | false                              (fallback when V2 is absent)
+          fulfillmentSummary[]         [{ fulfillment: 'PICKUP', storeId: '5361' }] (where a pickup is offered)
+          canAddToCart / showAtc       present, not read: they follow availability and add nothing to it
+      Same ordered-candidate rule as the prices: the first candidate that says something wins, and an absent or
+      empty field emits EMPTY, which build-walmart-deals reads as UNKNOWN - never as in stock.
+    */
+    const av = [
+      node.availabilityStatusV2?.value,
+      typeof node.availabilityStatus === 'string' ? node.availabilityStatus : node.availabilityStatus?.value,
+      node.isOutOfStock === true ? 'OUT_OF_STOCK' : undefined,
+    ].find(v => v != null && String(v).trim() !== '');
+    const pk = [...new Set((Array.isArray(node.fulfillmentSummary) ? node.fulfillmentSummary : [])
+      .filter(f => f && String(f.fulfillment || '').toUpperCase() === 'PICKUP' && f.storeId != null && String(f.storeId).trim() !== '')
+      .map(f => String(f.storeId).trim()))];
     if (name && id && lp != null && !seen.has(String(id))) {
       seen.add(String(id));
       rows.push({
@@ -369,7 +391,10 @@ async function walmartProbe(term) {
         was: was,
         rb: rb ? 1 : 0,
         sel: String(sel).replace(/[|\r\n]+/g, ' ').trim(),
-        ff: String(ff).replace(/[|\r\n]+/g, ' ').trim().toUpperCase(),
+        ff: String(ff).replace(/[|;\r\n]+/g, ' ').trim().toUpperCase(),
+        // Kept apart from ff on the row; walmartSweepToCsv folds them into the ff column (see walmartShelfField).
+        av: av == null ? '' : String(av).replace(/[|;=,\s]+/g, '_').trim().toUpperCase(),
+        pk: pk.map(s => s.replace(/[^0-9A-Za-z]/g, '')).filter(Boolean).join(','),
         // THE STORE TRAVELS WITH THE ROW, the way aldiSearchProbe puts st/md on each row. These do
         // NOT become CSV columns - walmartSweepToCsv counts them off into the #tc-store header, so
         // the 9-column positional contract build-walmart-deals has always read is untouched.
@@ -448,6 +473,21 @@ const WALMART_CAPTURE_COLUMNS = 'q|n|lp|up|id|was|rb|sel|ff';
 // one would split into the wrong number of fields.
 const walmartStoreField = s => String(s == null ? '' : s).replace(/["|\r\n\u0000]/g, ' ').replace(/\s+/g, ' ').trim();
 
+/*
+  THE ff COLUMN CARRIES THE SHELF SIGNAL AS A SUFFIX (2026-09-19): "STORE;av=IN_STOCK;pk=5361".
+  Not new columns, because the 9-column shape is asserted outside this file - pull-browser-stores.py declares the
+  header and REFUSES a capture whose first data line has another count - so a tenth column would stop every daily
+  Walmart capture. walmart-row-lib.ps1's Split-WalmartShelfField is the one reader; it writes `fulfillment` as the
+  bare word before the first ';', so the board's channel gate reads exactly what it always read. A row with no
+  availability and no pickup list emits the bare fulfillment word, byte-identical to every capture before this.
+*/
+const walmartShelfField = p => {
+  let s = String(p.ff ?? '');
+  if (p.av) s += ';av=' + p.av;
+  if (p.pk) s += ';pk=' + p.pk;
+  return s;
+};
+
 const walmartSweepToCsv = () => {
   const res = JSON.parse(localStorage.getItem(WALMART_STORAGE_KEY) || '{}');
   const out = [];
@@ -458,7 +498,7 @@ const walmartSweepToCsv = () => {
       const k = [walmartStoreField(p.si) || 'UNRECORDED', walmartStoreField(p.sz),
                  walmartStoreField(p.st) || 'UNRECORDED', walmartStoreField(p.sr) || 'UNRECORDED'].join('\u0000');
       stores.set(k, (stores.get(k) || 0) + 1);
-      out.push([term, p.n, p.lp ?? '', p.up ?? '', p.id ?? '', p.was ?? '', p.rb ?? 0, p.sel ?? '', p.ff ?? ''].join('|'));
+      out.push([term, p.n, p.lp ?? '', p.up ?? '', p.id ?? '', p.was ?? '', p.rb ?? 0, p.sel ?? '', walmartShelfField(p)].join('|'));
     }
   }
   const head = [];

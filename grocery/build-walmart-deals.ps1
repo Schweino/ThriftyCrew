@@ -159,6 +159,13 @@ function Read-WalmartCapture {
   return @{ refuse = ''; cs = $cs; raw = $raw; waived = $waived }
 }
 
+# The storeId every row of a ruled capture is stamped with. One function so the self-test drives the value the build
+# stamps. A waived (store-less) or refused capture gives '' - never the sanctioned id it was not read at.
+function Get-WalmartCaptureStoreId($Cap) {
+  if (-not $Cap -or $Cap.refuse -or $Cap.waived -or -not $Cap.cs) { return '' }
+  return [string]$Cap.cs.id
+}
+
 if ($SelfTest) {
   $fail = 0
   function _R($n,$lp,$up) { [pscustomobject]@{ q='t'; n=$n; lp=$lp; up=$up; id='1' } }
@@ -519,6 +526,83 @@ if ($SelfTest) {
     if ($wmNo.refuse -and -not $wmNo.id -and $capNoReg.refuse -and $capNoReg.raw.Count -eq 0) {
       Write-Output 'ok    MUST FIRE  a registry with no store_identity refuses the build instead of assuming a store'
     } else { Write-Output ("FAIL  a registry with no store_identity did not refuse: id='$($wmNo.id)' refusal=[$($wmNo.refuse)] cap=[$($capNoReg.refuse)]"); $fail++ }
+    # ---- THE STORE AND THE CHANNEL ON EVERY ROW (2026-09-19, design\PLAN-board-accuracy-2026-09-19.md) ----------
+    # Founding bugs, all measured on the 2026-09-17 board's blind verification: rows carried fulfillment only, and
+    # nothing said whether the item was IN STOCK at 5361 or which store the row was read at. Names are verbatim from
+    # the board; the ff values are the shapes the live payload gave on 2026-09-19 (see walmart-row-lib's header).
+    $capLStId = Get-WalmartCaptureStoreId $capLSt
+    $capOldId = Get-WalmartCaptureStoreId $capOld
+    if ($capLStId -eq '5361' -and $capOldId -eq '' -and (Get-WalmartCaptureStoreId $cap3153) -eq '') {
+      Write-Output 'ok    MUST FIRE  store_id is the storeId the #tc-store line READ (5361); a waived or refused capture stamps '''', never the sanctioned id'
+    } else { Write-Output ("FAIL  capture store id: 5361 capture='$capLStId' waived='$capOldId'"); $fail++ }
+    $script:CaptureStoreId = $capLStId
+    try {
+      $chRow = { param($n, $lp, $up, $ff) (Build-Row ([pscustomobject]@{ q = 't'; n = $n; lp = $lp; up = $up; id = '1'; sel = 'Walmart.com'; ff = $ff })) }
+      $bSprout = & $chRow 'Green Giant Season Brussel Sprout Intro' '$2.98' '$2.98/ea' 'STORE;av=OUT_OF_STOCK'
+      if ($bSprout.row -and $bSprout.row.channel -eq 'ship-only' -and $bSprout.row.availability -eq 'OUT_OF_STOCK' -and $bSprout.row.store_id -eq '5361') {
+        Write-Output ('ok    MUST FIRE  fulfillment STORE but OUT_OF_STOCK at 5361 is ship-only, store_id 5361 [' + $bSprout.row.channel_basis + ']')
+      } else { Write-Output ("FAIL  MUST FIRE: the out-of-stock Brussels sprouts row read channel='$($bSprout.row.channel)' store_id='$($bSprout.row.store_id)' $($bSprout.err)"); $fail++ }
+      $bBaby = & $chRow 'Parent''s Choice Stage 2 Baby Food Variety Pack, 4 oz Pouch, 12 Count' '$9.97' '$0.21/oz' 'STORE;av=OUT_OF_STOCK'
+      if ($bBaby.row -and $bBaby.row.channel -eq 'ship-only') { Write-Output 'ok    MUST FIRE  the Parent''s Choice 12 Count (STORE, out of stock at 5361) is ship-only' }
+      else { Write-Output ("FAIL  MUST FIRE: Parent's Choice 12 Count read channel='$($bBaby.row.channel)' $($bBaby.err)"); $fail++ }
+      # The online multipack: in stock, pickup at 5361, and still ship-only because the TITLE declares a 12-pack
+      # bundle. Its size arithmetic must be exactly what it is with no shelf signal at all (the CLEAN TWIN below).
+      $bBeans = & $chRow '(12 pack) Great Value Original Baked Beans, 28 oz' '$23.76' ('7.1 ' + [string][char]0x00A2 + '/oz') 'STORE;av=IN_STOCK;pk=5361'
+      $bBeans0 = & $chRow '(12 pack) Great Value Original Baked Beans, 28 oz' '$23.76' ('7.1 ' + [string][char]0x00A2 + '/oz') ''
+      if ($bBeans.row -and $bBeans.row.channel -eq 'ship-only' -and $bBeans.row.channel_basis -match '12 pack') {
+        Write-Output ('ok    MUST FIRE  "(12 pack) ... 28 oz" is ship-only even IN_STOCK with pickup at 5361 [' + $bBeans.row.channel_basis + ']')
+      } else { Write-Output ("FAIL  MUST FIRE: the 12-pack baked beans read channel='$($bBeans.row.channel)' $($bBeans.err)"); $fail++ }
+      if ($bBeans.row -and $bBeans0.row -and $bBeans.row.size -eq '336 oz' -and $bBeans.row.size -eq $bBeans0.row.size -and $bBeans.row.ad_price -eq $bBeans0.row.ad_price) {
+        Write-Output "ok    CLEAN TWIN  the multipack's size arithmetic is unchanged by the channel: 12 x 28 = '336 oz' either way"
+      } else { Write-Output ("FAIL  CLEAN TWIN: multipack size moved: with='$($bBeans.row.size)' without='$($bBeans0.row.size)'"); $fail++ }
+      # AT THE BAR AND ONE STEP PAST IT (N > 1): a "(1 pack)" is a single unit, a "(2 pack)" is a bundle.
+      $bOne = & $chRow '(1 pack) Great Value Original Baked Beans, 28 oz' '$1.98' ('7.1 ' + [string][char]0x00A2 + '/oz') 'STORE;av=IN_STOCK;pk=5361'
+      $bTwo = & $chRow '(2 pack) Great Value Original Baked Beans, 28 oz' '$3.96' ('7.1 ' + [string][char]0x00A2 + '/oz') 'STORE;av=IN_STOCK;pk=5361'
+      if ($bOne.row -and $bOne.row.channel -eq 'in-store' -and $bTwo.row -and $bTwo.row.channel -eq 'ship-only') {
+        Write-Output 'ok    MUST NOT FIRE at the bar  "(1 pack)" stays in-store; one step past it "(2 pack)" is ship-only'
+      } else { Write-Output ("FAIL  pack bar: (1 pack)='$($bOne.row.channel)' (2 pack)='$($bTwo.row.channel)' $($bOne.err)$($bTwo.err)"); $fail++ }
+      foreach ($fx in @('FC', 'SHIP', 'MARKETPLACE')) {
+        $bx = & $chRow 'Seedless English Cucumbers, 3 ct.' '$3.27' '$1.09/ea' ($fx + ';av=IN_STOCK')
+        if ($bx.row -and $bx.row.channel -eq 'ship-only' -and $bx.row.fulfillment -eq $fx) { Write-Output ("ok    MUST FIRE  fulfillment $fx is ship-only whatever the availability") }
+        else { Write-Output ("FAIL  MUST FIRE: fulfillment $fx read channel='$($bx.row.channel)'"); $fail++ }
+      }
+      # MUST NOT FIRE: the legal row - STORE, in stock, pickup at the very store the capture read.
+      $bOk = & $chRow 'Seedless English Cucumbers, 3 ct.' '$3.27' '$1.09/ea' 'STORE;av=IN_STOCK;pk=5361'
+      if ($bOk.row -and $bOk.row.channel -eq 'in-store' -and $bOk.row.availability -eq 'IN_STOCK' -and $bOk.row.store_id -eq '5361') {
+        Write-Output ('ok    MUST NOT FIRE  STORE + IN_STOCK + pickup at 5361 is in-store [' + $bOk.row.channel_basis + ']')
+      } else { Write-Output ("FAIL  MUST NOT FIRE: the legal in-stock row read channel='$($bOk.row.channel)'"); $fail++ }
+      # CLEAN TWIN - THE FIELD THE BOARD'S CHANNEL GATE ALREADY READS. instore-lib compares `fulfillment` to the bare
+      # word STORE; the suffix must never reach it, or every packed row would read as not-STORE.
+      if ($bOk.row.fulfillment -eq 'STORE' -and $bSprout.row.fulfillment -eq 'STORE' -and $bOk.row.seller -eq 'Walmart.com') {
+        Write-Output 'ok    CLEAN TWIN  a packed ff column still writes fulfillment as the bare word STORE the channel gate reads'
+      } else { Write-Output ("FAIL  CLEAN TWIN: fulfillment carried the suffix: '$($bOk.row.fulfillment)'"); $fail++ }
+      # ABSENCE IS UNKNOWN, NEVER IN STOCK: every capture before 2026-09-19 carries a bare "STORE".
+      $bOld = & $chRow 'Seedless English Cucumbers, 3 ct.' '$3.27' '$1.09/ea' 'STORE'
+      $bUnk = & $chRow 'Seedless English Cucumbers, 3 ct.' '$3.27' '$1.09/ea' ';av=UNKNOWN'
+      if ($bOld.row -and $bOld.row.channel -eq '' -and $bOld.row.availability -eq '' -and $bUnk.row -and $bUnk.row.channel -eq '' -and $bUnk.row.fulfillment -eq '') {
+        Write-Output 'ok    MUST NOT FIRE  a bare STORE (no availability recorded) and an UNKNOWN availability are unproven '''', never in-store'
+      } else { Write-Output ("FAIL  absence read as a channel: bare='$($bOld.row.channel)' unknown='$($bUnk.row.channel)'"); $fail++ }
+      # END TO END THROUGH THE CAPTURE READER: the exact column shape walmartSweepToCsv writes, read by the path the
+      # build runs (Read-WalmartCapture -> Import-CaptureCsv -> Build-Row), with the store id the build stamps.
+      $wmRowOos = 'brussels sprouts|Green Giant Season Brussel Sprout Intro|$2.98|$2.98/ea|333||0|Walmart.com|STORE;av=OUT_OF_STOCK'
+      $wmRowIn  = 'cucumbers|Seedless English Cucumbers, 3 ct.|$3.27|$1.09/ea|222||0|Walmart.com|STORE;av=IN_STOCK;pk=5361'
+      $capSh = Read-WalmartCapture -Path (_WmCapture @($wmLSt, $wmCols, $wmRowOos, $wmRowIn)) -Sanctioned $wmSanct
+      $script:CaptureStoreId = Get-WalmartCaptureStoreId $capSh
+      $shRows = @($capSh.raw | ForEach-Object { (Build-Row $_).row })
+      $shOos = @($shRows | Where-Object { $_.item_id -eq '333' })[0]; $shIn = @($shRows | Where-Object { $_.item_id -eq '222' })[0]
+      if (-not $capSh.refuse -and $shOos -and $shIn -and $shOos.channel -eq 'ship-only' -and $shIn.channel -eq 'in-store' -and
+          $shOos.store_id -eq '5361' -and $shIn.store_id -eq '5361' -and $shIn.fulfillment -eq 'STORE') {
+        Write-Output 'ok    END TO END  a capture in walmartSweepToCsv''s shape builds ship-only / in-store rows stamped store_id 5361'
+      } else { Write-Output ("FAIL  end to end shelf signal: refuse=[$($capSh.refuse)] oos='$($shOos.channel)' in='$($shIn.channel)' ids='$($shOos.store_id)/$($shIn.store_id)'"); $fail++ }
+      # Pickup offered only at ANOTHER store proves nothing about the store the capture read.
+      $bElse = & $chRow 'Seedless English Cucumbers, 3 ct.' '$3.27' '$1.09/ea' 'STORE;av=IN_STOCK;pk=3153'
+      if ($bElse.row -and $bElse.row.channel -eq '' -and $bElse.row.channel_basis -match '3153') { Write-Output 'ok    MUST FIRE  IN_STOCK with pickup only at 3153 is unproven for a 5361 capture' }
+      else { Write-Output ("FAIL  pickup at another store read channel='$($bElse.row.channel)'"); $fail++ }
+    } finally { $script:CaptureStoreId = '' }
+    # And with no capture store recorded at all (the batch lane today), store_id is '' and the channel still reads.
+    $bNoId = Build-Row ([pscustomobject]@{ q = 't'; n = 'Seedless English Cucumbers, 3 ct.'; lp = '$3.27'; up = '$1.09/ea'; id = '1'; sel = 'Walmart.com'; ff = 'STORE;av=IN_STOCK' })
+    if ($bNoId.row -and $bNoId.row.store_id -eq '' -and $bNoId.row.channel -eq 'in-store') { Write-Output 'ok    CLEAN TWIN  with no capture store recorded, store_id is '''' and the channel is still read' }
+    else { Write-Output ("FAIL  no-store row: store_id='$($bNoId.row.store_id)' channel='$($bNoId.row.channel)'"); $fail++ }
   } finally {
     Remove-Item -LiteralPath $wmDir -Recurse -Force -ErrorAction SilentlyContinue
   }
@@ -549,6 +633,9 @@ if ($cap.waived) {
   }
 }
 $raw = $cap.raw
+# EVERY ROW CARRIES THE storeId ITS CAPTURE READ (2026-09-19, PLAN-board-accuracy 4c). Build-Row stamps store_id from
+# this. A waived, store-less capture stamps '' - unknown - and never the sanctioned id it was not proven to be read at.
+$script:CaptureStoreId = Get-WalmartCaptureStoreId $cap
 # FLAGGED, NOT REFUSED: the store line counts the rows the page wrote under it. A different count means
 # rows were added to or lost from the file after the page wrote it - a hand edit or a truncated post.
 if (-not $cap.waived -and $cap.cs.rows -ne $script:CaptureRowsRead) {
@@ -624,6 +711,11 @@ if ($rejects.Count) {
   $rejects | ConvertTo-Json -Depth 4 | Set-Content $rj -Encoding UTF8
 }
 Write-Output ("${Me}: {0} raw -> {1} priced ({2} after de-dupe), {3} rejected -> {4}" -f $raw.Count, $rows.Count, $ded.Count, $rejects.Count, (Split-Path $outFile -Leaf))
+# THE CHANNEL, WITH ITS DENOMINATOR. Rows are written whatever their channel (the board's provenance contract is the
+# one place that withholds), so this line is what says how much of the file can prove it is buyable at the store.
+$chIn = @($ded | Where-Object { [string]$_.channel -eq 'in-store' }).Count
+$chShip = @($ded | Where-Object { [string]$_.channel -eq 'ship-only' }).Count
+Write-Output ("${Me}: channel in-store {0} of {1}, ship-only {2} of {1}, unproven {3} of {1} (store_id {4})" -f $chIn, $ded.Count, $chShip, ($ded.Count - $chIn - $chShip), $(if ($script:CaptureStoreId) { $script:CaptureStoreId } else { 'unrecorded' }))
 if ($rejects.Count) {
   Write-Output "  reject reasons:"
   $rejects | Group-Object { ($_.reason -split ':')[0] -replace '\d+','N' } | Sort-Object Count -Descending | Select-Object -First 8 | ForEach-Object { Write-Output ("   {0,4}x {1}" -f $_.Count, $_.Name) }
