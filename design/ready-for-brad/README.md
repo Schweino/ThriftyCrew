@@ -14,3 +14,8 @@ its repo copy differ, so both copies must change together. From the main checkou
 
 then commit the prompt-backup copy and delete this file. Until then an attended Fareway rescue that uses an old
 in-page copy of the extractor is refused with a message telling the operator to reload pull-fareway-shop.js.
+
+## I60-lesson-republish.md (backlog I60, 2026-09-19)
+
+The before and after of the three finance lessons (30, 31, 37), the checks, and the commands that swap only the
+changed passages into the live posts. Nothing is republished until you run them.

@@ -5968,7 +5968,43 @@ files and a republish of each, which is a real risk to live pages and should not
 **Constraint acknowledged.** Nothing was changed. Every figure above was read off the filesystem or
 off a public page.
 
-### I60 - three finance lessons make a quantified claim and give no quantity `PARTLY DONE - SOURCE FIXED AND VERIFIED; THE LIVE POSTS ARE NOT REPUBLISHED` `queue-4` `1-WAY` `RUNG1 BUILD`
+### I60 - three finance lessons make a quantified claim and give no quantity `NEEDS A RULING` `queue-4` `1-WAY` `RUNG1 RULING`
+
+**`[2026-09-19. The republish is prepared and rehearsed; it waits for Brad. Read design\ready-for-brad\I60-lesson-republish.md.]`**
+
+**Brad asked on 2026-09-19 to see the diffs before any republish.** They are in
+`design\ready-for-brad\I60-lesson-republish.md`, with the command. Three findings changed the plan:
+
+- **The repo lesson files are OLDER than the live posts.** The live posts are the July 2026 voice rewrite
+  (`archive\ghost-config\voice-rewrite\rewrites\`), which never reached `content\lessons\`. Only 21 of 48,
+  19 of 50 and 12 of 42 live paragraphs (lessons 30, 31, 37) match the file word for word, the files carry
+  24, 32 and 24 em dashes against 0 live, lack the "For yourself" block, and lesson 31's file still says the
+  2024 401(k) limit where live says 2026 and $24,500. A whole-file republish would undo all of that. So the
+  prepared command swaps ONLY the changed passages inside each live post, sending the body and `updated_at`
+  and nothing else, through the staging queue (`ops\review-staged.ps1`). Rehearsed with writes staged on
+  2026-09-19: each queued body differs from live in exactly the intended blocks; the queue was discarded.
+- **Two of the 2026-09-09 fixes were wrong and are corrected in that file.** Lesson 30 said "about a third"
+  of years since 1928 finished down; Damodaran's yearly S&P 500 series reads 26 of 98 (about a quarter), with
+  a 10.02% compound average. Its sentence also failed I112 (no source, no fee note), which is on
+  `audit-lesson-rate-claims`' worklist today. Lesson 37 said $4,800 of in-school interest payments holds a
+  $27,000 loan flat; that takes $7,020 ($146.25 a month), and it compounded yearly where federal loans
+  capitalise simple interest. Re-derived: $34,020 at repayment, 14 years 9 months against 10 years 4 months at
+  $300 a month, $15,778 less after graduation, $8,758 less all in. Lesson 31's arithmetic checked exactly.
+  The corrected passages pass the rate audit in a temp tree (2 claims, 1 labelled illustration, 1 fully
+  qualified, 0 unqualified, exit 0) and carry no em dash.
+- **The live posts' paywall structured data names the old domain** (`simplemoneyplaybook.com`): 52 of 56
+  posts tagged financial-lessons, by a GET on 2026-09-19. The swap does not touch it. Its own item.
+
+**THE RULING WANTED.** Approve the corrected wording and the republish path?
+1. **Approve as written and run the swap** (the six commands in the file). **Recommended**: narrowest change,
+   keeps the voice rewrite, visibility and code injection exactly as they are, and every number is re-derived.
+2. Approve with wording edits first (edit the file's passages, then the same commands).
+3. Republish whole files with `publish-lesson.ps1` after first bringing `content\lessons\` up to the live
+   text. Correct but larger, and it also rewrites each post's code injection.
+4. Leave the live posts as they are and only correct the repo files.
+
+After any republish, `content\lessons\` and the substack mirrors still need bringing up to the live text; the
+source files here were not changed by this pass.
 
 **`[2026-09-09. Brad ruled: worked example with stated assumptions.]`**
 
