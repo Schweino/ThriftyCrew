@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-17T21:40:28",
+  "generated_at": "2026-09-18T21:41:44",
   "reviewer": "claude-fable-medium",
   "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise. hold_clears are NOT proposals to rule on here: each names a promotion hold that has matched nothing on the board for 30 consecutive daily rechecks, with its readings. Clearing one means re-running the full guard suite (promote_aliases.py --gated) and stays with a person (ruling 2026-09-09, backlog I92).",
   "gates": {
@@ -898,6 +898,42 @@
       }
     },
     {
+      "proposal_id": "lp:5376e132c72cd921fad5",
+      "kind": "add_alias",
+      "target": "zero-sugar-soda-2l",
+      "target_label": null,
+      "payload": "zero\\s+sugar.*2\\s*l",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Dr Pepper Soda, Zero Sugar 2 L' specifically for the 2L size commodity.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:634acf9464beaeb04f43",
+      "kind": "add_alias",
+      "target": "dish-soap-liquid",
+      "target_label": null,
+      "payload": "dawn.*ezs",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Dawn Plat Ezs Fresh Rain'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:e6910bf05574b0efb2d5",
+      "kind": "add_alias",
+      "target": "iced-tea-bottled-gallon",
+      "target_label": null,
+      "payload": "arizona\\s+green\\s+tea.*1\\s+gal",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Arizona Green Tea With Ginseng And Honey 1 Gal'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
       "proposal_id": "lp:4a3463ec5779e1cce86a",
       "kind": "add_alias",
       "target": "buffalo-wing-sauce",
@@ -1085,6 +1121,18 @@
       "payload": "alani.*\\benrgy\\b|summit.*\\bgridlock\\b|summit.*\\braspberry\\s+lemon\\b|summit.*\\btropical\\b|summit.*\\bwatermelon\\b",
       "stage1_confidence": 0.85,
       "rationale": "Matches specific energy drink brands and flavors listed.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:dccb9940b0fdb87f690f",
+      "kind": "add_alias",
+      "target": "energy-drinks",
+      "target_label": null,
+      "payload": "summit\\s+(gridlock|raspberry|tropical|watermelon)",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches various Summit energy drink flavors.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }

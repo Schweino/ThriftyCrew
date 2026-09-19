@@ -1,38 +1,38 @@
 ﻿{
-    "generated":  "2026-09-17T21:41:53",
-    "started":  "2026-09-17T21:30:02",
-    "deadline":  "2026-09-18T00:00:02",
+    "generated":  "2026-09-18T21:45:42",
+    "started":  "2026-09-18T21:30:02",
+    "deadline":  "2026-09-19T00:00:02",
     "hard_stop":  "06:30",
     "jobs":  4,
-    "contested":  194,
-    "elapsed_sec":  711,
+    "contested":  551,
+    "elapsed_sec":  940,
     "card_free":  true,
-    "free_vram_mib":  14215,
+    "free_vram_mib":  15238,
     "llama_started":  true,
     "stages":  [
                    {
                        "stage":  "inputs",
                        "state":  "OK",
-                       "detail":  "C:\\Codex\\ThriftyCrew\\graph\\sqlite\\graph.db is 14.3 h old, inside its 26 h window (producer: the daily chain\u0027s graph-gates lane (grocery\\audit-graph-gates.ps1 -\u003e graph\\import\\import_all.py --observations)). Its newest price_observations.observed_at is 2026-09-17, inside its 36 h window.",
+                       "detail":  "C:\\Codex\\ThriftyCrew\\graph\\sqlite\\graph.db is 6.6 h old, inside its 26 h window (producer: the daily chain\u0027s graph-gates lane (grocery\\audit-graph-gates.ps1 -\u003e graph\\import\\import_all.py --observations)). Its newest price_observations.observed_at is 2026-09-18, inside its 36 h window.",
                        "sec":  0
                    },
                    {
                        "stage":  "verdict-expiry",
                        "state":  "OK",
-                       "detail":  "total=10993 expired=0 reask=0 deferred=0",
+                       "detail":  "total=10796 expired=0 reask=0 deferred=0",
                        "sec":  0
                    },
                    {
                        "stage":  "emit",
                        "state":  "OK",
-                       "detail":  "contested: 194 question(s) of 29620 (29426 settled by the deterministic layers), 7462 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 3.5s",
-                       "sec":  4
+                       "detail":  "contested: 551 question(s) of 30374 (29823 settled by the deterministic layers), 7509 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 2.8s",
+                       "sec":  3
                    },
                    {
                        "stage":  "defs",
                        "state":  "OK",
-                       "detail":  "[21:30:08] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
-                       "sec":  1
+                       "detail":  "[21:30:06] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
+                       "sec":  0
                    },
                    {
                        "stage":  "hunter",
@@ -44,37 +44,37 @@
                        "stage":  "durability",
                        "state":  "OK",
                        "detail":  "GRAPH-DURABILITY-COMPLETE findings=0",
-                       "sec":  2
+                       "sec":  0
                    },
                    {
                        "stage":  "handoff",
                        "state":  "OK",
                        "detail":  "STOP-SIDECAR-COMPLETE service=2 stopped=2 port=free",
-                       "sec":  1
+                       "sec":  2
                    },
                    {
                        "stage":  "sweep",
                        "state":  "OK",
                        "detail":  "",
-                       "sec":  155
+                       "sec":  168
                    },
                    {
                        "stage":  "serve",
                        "state":  "OK",
                        "detail":  "4 slots",
-                       "sec":  8
+                       "sec":  13
                    },
                    {
                        "stage":  "resolve",
                        "state":  "OK",
-                       "detail":  "resolved 31713 rows in 428.5s (29620 distinct questions, 175 model calls)",
-                       "sec":  429
+                       "detail":  "resolved 32509 rows in 495.2s (30374 distinct questions, 222 model calls)",
+                       "sec":  495
                    },
                    {
                        "stage":  "stage1",
                        "state":  "OK",
                        "detail":  "Next: python graph/learning/stage2_review.py --emit-packet",
-                       "sec":  24
+                       "sec":  20
                    },
                    {
                        "stage":  "stage2-packet",
@@ -85,32 +85,32 @@
                    {
                        "stage":  "gold-seed",
                        "state":  "OK",
-                       "detail":  "      pepperoncini",
+                       "detail":  "      penne-pasta",
                        "sec":  0
                    },
                    {
                        "stage":  "gold-score",
                        "state":  "BLIND",
                        "detail":  "rc=1 - never fatal",
-                       "sec":  2
+                       "sec":  1
                    },
                    {
                        "stage":  "lint-adjacency",
                        "state":  "OK",
-                       "detail":  "709 near-miss(es); 19 on a product the board publishes",
-                       "sec":  41
+                       "detail":  "709 near-miss(es); 20 on a product the board publishes",
+                       "sec":  42
                    },
                    {
                        "stage":  "rejection-families",
-                       "state":  "SKIP",
-                       "detail":  "ran within the last 7 days",
-                       "sec":  0
+                       "state":  "OK",
+                       "detail":  "  [NEW  ] olive-oil-for-vegetable-oil               1 members, 1 commodities",
+                       "sec":  148
                    },
                    {
-                       "stage":  "chain",
-                       "state":  "FAILED",
-                       "detail":  "The property \u0027Tail\u0027 cannot be found on this object. Verify that the property exists and can be set.",
-                       "sec":  0
+                       "stage":  "ml-eval",
+                       "state":  "OK",
+                       "detail":  "hardeval: tag=weekly defs=phase3-baseline pinned=True positives=2816 old=25 auc_old=0.9705 gold=45 auc_gold=0.8329 mined=5132 auc_mined=0.9544",
+                       "sec":  45
                    },
                    {
                        "stage":  "stop",
