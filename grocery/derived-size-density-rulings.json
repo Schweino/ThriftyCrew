@@ -45,6 +45,20 @@
       "ruled_by": "claude (derived-size-density round, 2026-08-30)",
       "review_by": "2026-10-01",
       "retire_when": "the Walmart capture records a stated size for this bottle rather than a derived one, or the derived size changes"
+    },
+    {
+      "store": "Walmart",
+      "name": "SPECTRUM NATURALS EXPELLER PRESSED PEANUT OIL, 32 OZ.",
+      "size": "15.998 fl oz",
+      "ad_price": "$14.99",
+      "displayed_unit_price": "93.7 cents/fl oz",
+      "implied_density": 1.917,
+      "reason": "The derived size is half the stated one. Walmart displayed 93.7 c/fl oz against $14.99, which derives 15.998 fl oz (473 mL), while the name says 32 OZ (907 g): an implied 1.917 g/mL, about twice peanut oil's 0.91. One of Walmart's own two numbers is wrong, and the row does not say which. At $14.99 for 32 fl oz the true rate is $0.468/fl oz; at 93.7 c/fl oz for 32 fl oz the true price is $29.98. NOT VERIFIED at the store: walmart.com/ip/10535798 returned a bot check to an unattended read on 2026-09-19, and a bot wall is a hard stop. So this entry records the contradiction and its board impact, the form the 2026-08-30 ketchup entry set, and asserts neither number.",
+      "board_impact": "NONE, twice over. (1) The row is a MARKETPLACE listing (seller Fletho, fulfilment FC, channel ship-only), and the provenance contract (a95c6fed4) withholds every SHIP-ONLY row, so no per-unit price from it can publish. (2) Its derived size is too SMALL, so its per-unit reads too HIGH and it can only lose a crown, never steal one: peanut-oil's Walmart cell on the 2026-09-19 13:0x board is Great Value Peanut Oil, 1 Gallon Bottle at $0.1345/fl oz, and this row reads $0.937 by the derivation or $0.468 by the name. Not added to known-wrong.json: this is a capture defect, and a known-wrong entry would block the product, not the number.",
+      "ruled_on": "2026-09-19",
+      "ruled_by": "claude (grocery triage 2026-09-19, queue 2026-09-19-641ec6 follow-up; the full pre-push test-auditors run surfaced it)",
+      "review_by": "2026-10-01",
+      "retire_when": "the Walmart capture records a stated size for this bottle rather than a derived one, the derived size changes, or the row stops being captured"
     }
   ]
 }
