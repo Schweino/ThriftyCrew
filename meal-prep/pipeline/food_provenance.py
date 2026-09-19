@@ -41,7 +41,9 @@ from __future__ import annotations
 
 import glob
 import json
+import math
 import os
+import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 MP = os.path.dirname(HERE)
@@ -228,6 +230,42 @@ def source_violations(db=None, legacy=None, legacy_path=None):
     return out
 
 
+# ---- the sodium gate (backlog I137, ruled 2026-09-19: stored, not shown) ---------------------------
+#
+# `sodium_mg` is OPTIONAL and per serving, on the row's own basis. Absent means nobody knows; a number
+# means somebody can say where it came from. So when present it must be a real, finite, non-negative
+# number (a bool is an int in Python and is refused), and `sodium_source` must name its origin as
+# `fdc:<id>` or `label-capture:<ref>`. A source with no value is refused too: it claims a reading that
+# is not there. food_sodium_backfill.py is the only writer and refuses to write anything this rejects.
+
+SODIUM_SOURCE_RX = re.compile(r"^(fdc:\d{4,8}|label-capture:\S.*)$")
+
+
+def sodium_violations(db=None):
+    db = db if db is not None else load_db()
+    out = []
+    for row in db.get("items", []):
+        if not isinstance(row, dict):
+            continue
+        name = str(row.get("item") or "")
+        has_v, has_s = "sodium_mg" in row, "sodium_source" in row
+        if not has_v and not has_s:
+            continue
+        if not has_v:
+            out.append("food-DB row %r carries sodium_source with no sodium_mg" % name)
+            continue
+        v = row["sodium_mg"]
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v):
+            out.append("food-DB row %r: sodium_mg %r is not a number" % (name, v))
+        elif v < 0:
+            out.append("food-DB row %r: sodium_mg %r is negative" % (name, v))
+        src = row.get("sodium_source")
+        if not isinstance(src, str) or not SODIUM_SOURCE_RX.match(src):
+            out.append("food-DB row %r: sodium_mg needs a sodium_source of fdc:<id> or "
+                       "label-capture:<ref>, got %r" % (name, src))
+    return out
+
+
 def render_report(doc):
     rows = doc["rows"]
     by = {"A": [], "B": [], "C": []}
@@ -281,11 +319,12 @@ def render_report(doc):
 
 # ---- selftest ---------------------------------------------------------------------------------
 
-def _row(name, cal=100.0, sg=100.0, source=None):
+def _row(name, cal=100.0, sg=100.0, source=None, **kw):
     r = {"item": name, "serving_grams": sg, "serving_qty": 1, "serving_unit": "serving",
          "calories": cal, "protein_g": 1, "carbs_g": 1, "fat_g": 1}
     if source is not None:
         r["source"] = source
+    r.update(kw)
     return r
 
 
@@ -369,6 +408,27 @@ def selftest():
         import shutil                                              # noqa: PLC0415
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # The sodium gate (I137). Each MUST FIRE is one way a stored sodium can be a lie.
+    ok_src = "fdc:171077"
+    for label, val in (("negative", -5), ("a string", "830"), ("a bool", True), ("NaN", float("nan"))):
+        v = sodium_violations({"items": [_row("Bad", sodium_mg=val, sodium_source=ok_src)]})
+        T("MUST FIRE  a sodium_mg that is %s is a violation" % label, len(v) == 1, json.dumps(v)[:200])
+    v = sodium_violations({"items": [_row("Unsourced", sodium_mg=100)]})
+    T("MUST FIRE  a sodium_mg with no sodium_source is a violation - a number must say who says so",
+      len(v) == 1 and "sodium_source" in v[0], json.dumps(v)[:200])
+    v = sodium_violations({"items": [_row("Orphan", sodium_source=ok_src)]})
+    T("MUST FIRE  a sodium_source with no sodium_mg is a violation", len(v) == 1, json.dumps(v)[:200])
+    v = sodium_violations({"items": [_row("Unknown"), _row("Oil", sodium_mg=0, sodium_source=ok_src),
+                                     _row("Broth", sodium_mg=830,
+                                          sodium_source="label-capture:db/food-label-captures.json#Beef Broth")]})
+    T("MUST NOT FIRE  an absent sodium (unknown), a sourced 0 and a label-capture value are all legal",
+      v == [], json.dumps(v)[:200])
+    live = load_db()
+    lv = sodium_violations(live)
+    n_na = sum(1 for r in live.get("items", []) if isinstance(r, dict) and "sodium_mg" in r)
+    T("CLEAN TWIN the tracked food DB holds sodium on %d row(s) and every one passes the gate" % n_na,
+      n_na > 0 and lv == [], json.dumps(lv)[:300])
+
     # The verdict names the self-test: run-gates reads it before believing exit 0 (lib/selftest-verdict.ps1).
     print("food_provenance self-test: %d assertion(s) failed" % len(bad) if bad
           else "food_provenance self-test: all assertions passed")
@@ -381,7 +441,7 @@ if __name__ == "__main__":
     if "--selftest" in sys.argv:
         raise SystemExit(selftest())
     if "--gate" in sys.argv:
-        vs = source_violations()
+        vs = source_violations() + sodium_violations()
         for v in vs:
             print("  X     " + v)
         print("  ok    every food-DB row outside the 2026-08-26 freeze names a source"

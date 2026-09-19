@@ -11066,7 +11066,7 @@ knowledge (`database-craft/analytical-stores.md`) and is a lens for a future dec
 to propose today. Proposing a warehouse, a cube or a document store against this data volume would
 be the course selling its own subject through me.
 
-### I137 - the food database cannot represent sodium, sugar or saturated fat, so three of the course's four checkable recommendations are unfalsifiable against anything we sell `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+### I137 - the food database cannot represent sodium, sugar or saturated fat, so three of the course's four checkable recommendations are unfalsifiable against anything we sell `DONE` `queue-7`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Two of the item`s own numbers are WRONG. "needs_verify is set on 117 of 441" conflates carrying the key with being true: 117 rows carry it, only **10 are true**. And its backfill question is answered - **165 of 441 rows name a USDA FDC id or the portal**, so they can be backfilled by API with no photograph needed. Worse than the item says in one respect: sugars and saturated fat are not even transcribed in the label captures (0 of 10 label blocks), while sodium IS captured (9 of 10) and then dropped on the way in.
 
@@ -11172,6 +11172,43 @@ whose page did not answer with sodium), at the five to eight round trips per lab
 **Recommendation: A.** Sodium is the one of the three FDC reaches almost completely (218 of 220 cited
 rows), it is the one the captures already pay to transcribe, and storing it without rendering it is
 fully reversible. It also turns I145's "paying for it and discarding it" into neither.
+
+**Done 2026-09-19. Ruled 2026-09-19: stored, not shown.** Brad chose A. `meal-prep/food-macros-db.json`
+now carries an optional `sodium_mg` (mg PER SERVING, the same basis as its four macros) and
+`sodium_source` (`fdc:<id>` or `label-capture:<ref>`) on **225 of 441 rows**: 7 from label captures and
+218 from the FDC record the row's own text cites. The other 216 carry no field at all, never a 0.
+Nothing renders it: no card, page or feed reads either field.
+
+- **Where a value may come from.** `meal-prep/pipeline/food_sodium_backfill.py` is the writer. A
+  LABEL or PROXY capture that states sodium wins (Chicken Broth, Beef Broth, Marinara Sauce, Fries,
+  Potato Gnocchi, Seasoned Black Beans, Mexican Cheese Blend). A CONFLICT capture is never used: Soy
+  Sauce's panel is a regular 900 mg bottle against a row that is USDA low-sodium soy sauce, so it has
+  no value. An FDC record is used only when it REPRODUCES the row's four macros inside
+  `food_source_backfill`'s stated tolerance, widened only by the panel's own rounding at the row's
+  serving (0.5 g, 5 kcal). That widening was added after the first run and is stated in the source: the
+  first run skipped 5 rows, 4 of them teaspoon spices whose "0 g protein" is label rounding; the fifth,
+  Beef Back Ribs (99 kcal per 100 g as purchased bone-in against FDC's 324 edible), is still refused. One
+  variant tried. Nutrients are read by NUMBER from `format=abridged` (307 sodium), so the I137 finding
+  about `full` dropping nutrient names on Branded records does not apply.
+- **Why the 216 have nothing:** 207 cite no FDC id and have no capture; 7 have a capture that cannot
+  be used (4 UNFOUND, 2 CONFLICT, 1 Hickory Smoked Bacon whose panel was transcribed without sodium) and
+  no id; FDC 1249618 (Hummus) did not answer in the abridged format; Beef Back Ribs failed the basis
+  check. 207 distinct ids were asked about, all 207 looked at, 206 answered.
+- **Recipes fully covered: 0 of 584.** Every one of the 584 specs has at least one ingredient without
+  a value. Salt blocks 522 (the Salt row cites no FDC id), Black Pepper 496, Garlic 400, Rice 306.
+  Filling Salt and Black Pepper alone would cover 4. Run `food_sodium_backfill.py --coverage` for the
+  current figure rather than quoting this one.
+- **The gate.** `food_provenance.py`'s `sodium_violations` refuses a `sodium_mg` that is not a finite
+  non-negative number (a string, a bool, NaN, a negative), one with no valid `sodium_source`, and a
+  source with no value. Its self-test runs that over the tracked DB as a CLEAN TWIN (225 rows, 0
+  violations), and `--gate` includes it.
+- **Verified.** Parsing the DB before and after: 441 rows, 0 differ in anything but the two new
+  fields, and the readme only gained a sentence; the diff's 226 removed lines are 225 re-commaed last
+  lines plus the readme. Breaking the negative check turned `MUST FIRE a sodium_mg that is negative`
+  red (exit 1); breaking the CONFLICT exclusion turned `MUST FIRE a CONFLICT capture` red (exit 1);
+  both restored md5-identical and green. One row per food-DB row, with the input blobs and the harness
+  blob, is `design/MEASURE-i137-sodium-backfill-2026-09-19.jsonl` (base cbf146ee8, food DB blob
+  61680fc8f, captures blob afcb22c5a).
 
 ### I138 - two recipes we sell carry "Healthy" in the title we publish, and one of them is 5.5% vegetable by weight `DONE` `queue-7`
 

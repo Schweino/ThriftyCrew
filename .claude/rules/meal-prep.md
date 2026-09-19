@@ -46,6 +46,13 @@ the named memory or file.
   number nobody stores. What is wrong today is neither answer - it is paying for it and discarding
   it. Worth knowing while deciding: a meal-prep audience is a plausible sodium-watching audience, and
   broth, canned tomatoes and soy sauce are exactly where it concentrates.
+  **ANSWERED 2026-09-19 (backlog I137, option A): SODIUM IS STORED, NOT SHOWN.** `sodium_mg` (per
+  serving, the row's own basis) and `sodium_source` (`fdc:<id>` or `label-capture:<ref>`) are optional
+  fields; an absent value is UNKNOWN, never 0. `pipeline/food_sodium_backfill.py` is the only writer
+  (label capture first, CONFLICT captures never, an FDC record only when it reproduces the row's
+  macros) and `food_provenance.py` gates the field. **No renderer may read it** until every ingredient
+  of a recipe has a value, and showing it even then is a separate ruling; `--coverage` says how far off
+  that is (0 of 584 recipes on the day it landed: Salt alone blocks 522).
 - **A DUAL-COLUMN PANEL DECLARES TWO DIFFERENT FOODS, AND NOTHING WE CAPTURE RECORDS WHICH COLUMN A
   NUMBER CAME FROM** (2026-09-12, backlog I146). A cereal box legally carries both "per 1.5 cup
   serving" and "per serving with three quarters of a cup of skim milk", side by side. The capture

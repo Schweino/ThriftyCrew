@@ -1,5 +1,5 @@
 {
- "readme": "Food macro database for Thrifty Crew meal prep. Each item's calories/protein_g/carbs_g/fat_g are PER SERVING. serving_grams = grams in one serving (used to scale by weight, e.g. pounds). For count or volume items (eggs, tbsp), serving_qty + serving_unit describe the serving. Conversions: 1 lb = 453.592 g, 1 oz = 28.3495 g. Note raw vs cooked for meats. brand empty string = not specified yet. null macro = pending label.",
+ "readme": "Food macro database for Thrifty Crew meal prep. Each item's calories/protein_g/carbs_g/fat_g are PER SERVING. serving_grams = grams in one serving (used to scale by weight, e.g. pounds). For count or volume items (eggs, tbsp), serving_qty + serving_unit describe the serving. Conversions: 1 lb = 453.592 g, 1 oz = 28.3495 g. Note raw vs cooked for meats. brand empty string = not specified yet. null macro = pending label. sodium_mg (OPTIONAL, backlog I137, ruled 2026-09-19: stored, not shown) = mg of sodium PER SERVING on the same basis as the macros, with sodium_source naming where it came from (fdc:<id> or label-capture:<ref>); an ABSENT sodium_mg means unknown, never 0. Written only by meal-prep/pipeline/food_sodium_backfill.py, checked by food_provenance.py, and rendered NOWHERE.",
  "items": [
   {
    "item": "Boneless Skinless Chicken Breast",
@@ -12,7 +12,9 @@
    "carbs_g": 0,
    "fat_g": 3,
    "notes": "raw",
-   "source": "USDA FDC 171077 (SR Legacy) Chicken, broiler or fryers, breast, skinless, boneless, meat only, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 171077 (SR Legacy) Chicken, broiler or fryers, breast, skinless, boneless, meat only, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 50.4,
+   "sodium_source": "fdc:171077"
   },
   {
    "item": "Boneless Skinless Chicken Thigh",
@@ -37,7 +39,9 @@
    "carbs_g": 5,
    "fat_g": 3,
    "notes": "1/2 cup (113g) per serving; from label",
-   "source": "USDA FDC 328841 (Foundation) Cheese, cottage, lowfat, 2% milkfat; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 328841 (Foundation) Cheese, cottage, lowfat, 2% milkfat; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 362.7,
+   "sodium_source": "fdc:328841"
   },
   {
    "item": "Alfredo Sauce",
@@ -63,7 +67,9 @@
    "fat_g": 1,
    "fiber_g": 2,
    "notes": "CORRECTED 2026-08-29: this row carried the Barilla PROTEIN PLUS panel (190 cal / 10 P / 38 C / 5 fiber) while every recipe using it sells REGULAR rotini - the source line, the buy string, the cost class and shop_smart all say so, and the board prices regular. Wave 5 of hunt-2026-08-27-highprotein blocked healthy-hamburger-helper on exactly this. Now the regular enriched-semolina panel, 2 oz (56 g) dry per serving. The Protein Plus numbers still live, correctly named, in the High Protein Pasta row.",
-   "source": "Great Value enriched semolina panel, identical across every GV dry cut already in this DB (Orzo, Ziti, Farfalle, Pasta Shells): 56 g / 200 cal / 7 P / 42 C / 1 F. Corroborated by USDA FDC 169736 (SR Legacy) Pasta, dry, enriched, the same record those rows cite."
+   "source": "Great Value enriched semolina panel, identical across every GV dry cut already in this DB (Orzo, Ziti, Farfalle, Pasta Shells): 56 g / 200 cal / 7 P / 42 C / 1 F. Corroborated by USDA FDC 169736 (SR Legacy) Pasta, dry, enriched, the same record those rows cite.",
+   "sodium_mg": 3.4,
+   "sodium_source": "fdc:169736"
   },
   {
    "item": "Broccoli Florets",
@@ -76,7 +82,9 @@
    "carbs_g": 5,
    "fat_g": 0,
    "notes": "1 cup (85g) per serving; from label",
-   "source": "USDA FDC 170379 (SR Legacy) Broccoli, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170379 (SR Legacy) Broccoli, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 28.1,
+   "sodium_source": "fdc:170379"
   },
   {
    "item": "93/7 Ground Beef",
@@ -89,7 +97,9 @@
    "carbs_g": 0,
    "fat_g": 8,
    "notes": "4 oz raw (113g) per serving; from label",
-   "source": "USDA FDC 173110 (SR Legacy) Beef, ground, 93% lean meat / 7% fat, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 173110 (SR Legacy) Beef, ground, 93% lean meat / 7% fat, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 74.6,
+   "sodium_source": "fdc:173110"
   },
   {
    "item": "Traditional Pasta Sauce",
@@ -102,7 +112,9 @@
    "carbs_g": 11,
    "fat_g": 1.5,
    "notes": "1/2 cup (128g) per serving; from label",
-   "source": "PROXY - USDA FDC 1999587 (Branded) TRADITIONAL PASTA SAUCE, TRADITIONAL PASTA standing in; no Great Value entry; this store-brand traditional sauce reproduces the row exactly; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "PROXY - USDA FDC 1999587 (Branded) TRADITIONAL PASTA SAUCE, TRADITIONAL PASTA standing in; no Great Value entry; this store-brand traditional sauce reproduces the row exactly; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 480,
+   "sodium_source": "fdc:1999587"
   },
   {
    "item": "Penne Pasta",
@@ -179,7 +191,9 @@
    "carbs_g": 7,
    "fat_g": 0,
    "notes": "2/3 cup (170g) per serving; from label (1 cup = 255g)",
-   "source": "USDA FDC 330137 (Foundation) Yogurt, Greek, plain, nonfat; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 330137 (Foundation) Yogurt, Greek, plain, nonfat; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 61.2,
+   "sodium_source": "fdc:330137"
   },
   {
    "item": "Honey",
@@ -192,7 +206,9 @@
    "carbs_g": 17,
    "fat_g": 0,
    "notes": "1 tbsp (21g) per serving; from label",
-   "source": "USDA FDC 169640 (SR Legacy) Honey; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169640 (SR Legacy) Honey; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 0.8,
+   "sodium_source": "fdc:169640"
   },
   {
    "item": "Hot Honey",
@@ -205,7 +221,9 @@
    "carbs_g": 17,
    "fat_g": 0,
    "notes": "1 tbsp (21g) per serving; from label",
-   "source": "PROXY - USDA FDC 2561072 (Branded) HOT HONEY standing in; no Better Goods entry; three unrelated hot honeys all read 286/81, which is the row; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "PROXY - USDA FDC 2561072 (Branded) HOT HONEY standing in; no Better Goods entry; three unrelated hot honeys all read 286/81, which is the row; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 0,
+   "sodium_source": "fdc:2561072"
   },
   {
    "item": "Honey Dijon Mustard",
@@ -243,7 +261,9 @@
    "carbs_g": 17,
    "fat_g": 5,
    "notes": "Crinkle Cut; 3 oz (85g / about 13 pieces) per serving; from label",
-   "source": "Great Value Crinkle Cut French Fried Potatoes, 32 oz label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/10534212): 3 oz (85g / about 13 pieces), 110 cal / 5 g fat / 17 g carb / 1 g protein, about 11 servings per container. brand matches; exact."
+   "source": "Great Value Crinkle Cut French Fried Potatoes, 32 oz label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/10534212): 3 oz (85g / about 13 pieces), 110 cal / 5 g fat / 17 g carb / 1 g protein, about 11 servings per container. brand matches; exact.",
+   "sodium_mg": 350,
+   "sodium_source": "label-capture:db/food-label-captures.json#Fries"
   },
   {
    "item": "Hot Italian Sausage",
@@ -268,7 +288,9 @@
    "carbs_g": 0,
    "fat_g": 0,
    "notes": "1 cup (240 mL) per serving; from label",
-   "source": "Great Value Family Size Beef Broth, 48 oz Carton label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/4-pack-Great-Value-Family-Size-Beef-Broth-48-oz-Carton-Shelf-Stable-Ambient-Gluten-Free/1528146699): 1 cup (240mL), 10 cal / 0 g fat / 0 g carb / 2 g protein, about 6 servings per container. brand matches the row; every stored number matches the panel exactly."
+   "source": "Great Value Family Size Beef Broth, 48 oz Carton label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/4-pack-Great-Value-Family-Size-Beef-Broth-48-oz-Carton-Shelf-Stable-Ambient-Gluten-Free/1528146699): 1 cup (240mL), 10 cal / 0 g fat / 0 g carb / 2 g protein, about 6 servings per container. brand matches the row; every stored number matches the panel exactly.",
+   "sodium_mg": 810,
+   "sodium_source": "label-capture:db/food-label-captures.json#Beef Broth"
   },
   {
    "item": "Tomato Paste",
@@ -281,7 +303,9 @@
    "carbs_g": 6,
    "fat_g": 0,
    "notes": "2 tbsp (33g) per serving; from label",
-   "source": "USDA FDC 170459 (SR Legacy) Tomato products, canned, paste, without salt added (Includes foods for USDA's Food Distribution Program); corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170459 (SR Legacy) Tomato products, canned, paste, without salt added (Includes foods for USDA's Food Distribution Program); corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 19.5,
+   "sodium_source": "fdc:170459"
   },
   {
    "item": "1/3 Fat Cream Cheese",
@@ -318,7 +342,9 @@
    "carbs_g": 3,
    "fat_g": 0,
    "notes": "1/4 cup (60g) per serving; from label (corrected from old sheet: was 20cal/4c)",
-   "source": "USDA FDC 2758125 (Branded) Old El Paso Medium Red Enchilada Sauce; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 2758125 (Branded) Old El Paso Medium Red Enchilada Sauce; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 289.8,
+   "sodium_source": "fdc:2758125"
   },
   {
    "item": "Rice",
@@ -355,7 +381,9 @@
    "carbs_g": 11.5,
    "fat_g": 4.8,
    "notes": "Store-brand 2% REDUCED-FAT milk, 1 cup (240 g). Brad's ruling 2026-08-27: a recipe that just says 'milk' means the generic store-brand carton, NOT Fairlife - see the separate Ultra-Filtered Fat Free Milk row, which is only for a recipe that names it. The `milk` commodity is fat-blind (its 7 board cells span whole, 1% and 2%), so 2% is the stated basis for all of them: protein and carbs are identical across fat levels, only calories and fat move.",
-   "source": "fdc:171267 (Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D; 50 cal / 3.3 P / 4.8 C / 1.98 F per 100 g, scaled to the 240 g cup)"
+   "source": "fdc:171267 (Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D; 50 cal / 3.3 P / 4.8 C / 1.98 F per 100 g, scaled to the 240 g cup)",
+   "sodium_mg": 112.8,
+   "sodium_source": "fdc:171267"
   },
   {
    "item": "Marinara Sauce",
@@ -368,7 +396,9 @@
    "carbs_g": 9,
    "fat_g": 2.5,
    "notes": "1/2 cup (123g) per serving; from label (corrected from old sheet: was 60cal/10c/1.5f)",
-   "source": "Great Value Marinara Pasta Sauce, 23 oz label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/952045923): 1/2 cup (123g), 70 cal / 2.5 g fat / 9 g carb / 2 g protein, about 6 servings per container. brand matches; every stored number matches the panel exactly."
+   "source": "Great Value Marinara Pasta Sauce, 23 oz label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/952045923): 1/2 cup (123g), 70 cal / 2.5 g fat / 9 g carb / 2 g protein, about 6 servings per container. brand matches; every stored number matches the panel exactly.",
+   "sodium_mg": 510,
+   "sodium_source": "label-capture:db/food-label-captures.json#Marinara Sauce"
   },
   {
    "item": "Fat Free Cottage Cheese",
@@ -393,7 +423,9 @@
    "carbs_g": 1,
    "fat_g": 4,
    "notes": "16 slices (28g) per serving; from label",
-   "source": "PROXY - USDA FDC 2127345 (Branded) TURKEY PEPPERONI, TURKEY standing in; no Great Value turkey pepperoni entry exists; Smithfield's reproduces the stored row exactly; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "PROXY - USDA FDC 2127345 (Branded) TURKEY PEPPERONI, TURKEY standing in; no Great Value turkey pepperoni entry exists; Smithfield's reproduces the stored row exactly; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 380.8,
+   "sodium_source": "fdc:2127345"
   },
   {
    "item": "Reduced Fat Mozzarella",
@@ -431,7 +463,9 @@
    "fat_g": 1.22,
    "fiber_g": 2.0,
    "source": "USDA FDC 169214 (SR Legacy) Corn, sweet, yellow, canned, whole kernel, drained solids; portions 1 cup = 164 g, 1 can (303 x 406) = 298 g; fetched from the FDC API 2026-09-02",
-   "notes": "DRAINED SOLIDS basis. The retired Great Value label row (1/2 cup 125 g = 80 cal) was the UNDRAINED panel - 64 cal/100 g, which matches FDC 169360 'solids and liquids', so it was a faithful transcription of the wrong basis rather than a typo. Every spec gram for this item is a drained gram. Do not put an undrained label back on this row."
+   "notes": "DRAINED SOLIDS basis. The retired Great Value label row (1/2 cup 125 g = 80 cal) was the UNDRAINED panel - 64 cal/100 g, which matches FDC 169360 'solids and liquids', so it was a faithful transcription of the wrong basis rather than a typo. Every spec gram for this item is a drained gram. Do not put an undrained label back on this row.",
+   "sodium_mg": 205,
+   "sodium_source": "fdc:169214"
   },
   {
    "item": "Seasoned Black Beans",
@@ -444,7 +478,9 @@
    "carbs_g": 23,
    "fat_g": 0.5,
    "notes": "1/2 cup (130g) per serving; from label",
-   "source": "Great Value Seasoned Black Beans, 15 oz Can label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/Great-Value-Seasoned-Black-Beans-15-oz-Can/39778877): 1/2 cup (130g), 130 cal / 0.5 g fat / 23 g carb / 8 g protein, about 3.5 servings per container. brand matches; exact."
+   "source": "Great Value Seasoned Black Beans, 15 oz Can label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/Great-Value-Seasoned-Black-Beans-15-oz-Can/39778877): 1/2 cup (130g), 130 cal / 0.5 g fat / 23 g carb / 8 g protein, about 3.5 servings per container. brand matches; exact.",
+   "sodium_mg": 430,
+   "sodium_source": "label-capture:db/food-label-captures.json#Seasoned Black Beans"
   },
   {
    "item": "Taco Seasoning",
@@ -469,7 +505,9 @@
    "carbs_g": 5,
    "fat_g": 0,
    "notes": "Original Fajita Seasoning Mix; 1 tbsp (8g) per serving; from label. 1 PACKET = 1.4 oz (~40g) = ~5 tbsp servings, so '6 packets' = ~238g (do NOT confuse packets with tbsp; that error under-counted the fajita bowl macros)",
-   "source": "PROXY - USDA FDC 2503374 (Branded) FAJITA SEASONING, FAJITA standing in; no Taco Bell seasoning entry; this reproduces the row; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "PROXY - USDA FDC 2503374 (Branded) FAJITA SEASONING, FAJITA standing in; no Taco Bell seasoning entry; this reproduces the row; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 764.8,
+   "sodium_source": "fdc:2503374"
   },
   {
    "item": "Chipotle in Adobo",
@@ -494,7 +532,9 @@
    "carbs_g": 0,
    "fat_g": 8,
    "notes": "4 oz raw (112g) per serving; from label",
-   "source": "USDA FDC 172850 (SR Legacy) Turkey, ground, 93% lean, 7% fat, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 172850 (SR Legacy) Turkey, ground, 93% lean, 7% fat, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 77.3,
+   "sodium_source": "fdc:172850"
   },
   {
    "item": "Shredded Carrots",
@@ -507,7 +547,9 @@
    "carbs_g": 7,
    "fat_g": 0,
    "notes": "3 oz (85g) per serving; produce estimate (no packaged label); protein confirmed 0g",
-   "source": "USDA FDC 170393 (SR Legacy) Carrots, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170393 (SR Legacy) Carrots, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 58.6,
+   "sodium_source": "fdc:170393"
   },
   {
    "item": "Green Bell Peppers",
@@ -532,7 +574,9 @@
    "carbs_g": 0,
    "fat_g": 4,
    "notes": "raw; USDA lean tenderloin; 4 oz (112g); high conf",
-   "source": "USDA FDC 168312 (SR Legacy) Pork, fresh, loin, tenderloin, separable lean and fat, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 168312 (SR Legacy) Pork, fresh, loin, tenderloin, separable lean and fat, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 58.2,
+   "sodium_source": "fdc:168312"
   },
   {
    "item": "Pork Loin",
@@ -545,7 +589,9 @@
    "carbs_g": 0,
    "fat_g": 6,
    "notes": "raw, LEAN pork loin roast trimmed; reconciled to recipe-source (carnitas); center-rib-with-fat runs ~231cal; MED conf",
-   "source": "USDA FDC 168320 (SR Legacy) HORMEL ALWAYS TENDER, Boneless Pork Loin, Fresh Pork; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 168320 (SR Legacy) HORMEL ALWAYS TENDER, Boneless Pork Loin, Fresh Pork; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 401,
+   "sodium_source": "fdc:168320"
   },
   {
    "item": "Beef Chuck Roast",
@@ -570,7 +616,9 @@
    "carbs_g": 1,
    "fat_g": 9,
    "notes": "full-fat regular shredded cheddar; 1/4 cup (28g); from label; high conf",
-   "source": "USDA FDC 328637 (Foundation) Cheese, cheddar; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 328637 (Foundation) Cheese, cheddar; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 183.1,
+   "sodium_source": "fdc:328637"
   },
   {
    "item": "Olive Oil",
@@ -583,7 +631,9 @@
    "carbs_g": 0,
    "fat_g": 13.5,
    "notes": "USDA; 1 tbsp (13.5g); high conf",
-   "source": "USDA FDC 171413 (SR Legacy) Oil, olive, salad or cooking; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 171413 (SR Legacy) Oil, olive, salad or cooking; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 0.3,
+   "sodium_source": "fdc:171413"
   },
   {
    "item": "Buffalo Wing Sauce",
@@ -632,7 +682,9 @@
    "carbs_g": 3,
    "fat_g": 0,
    "notes": "red chunky medium; 2 tbsp (30g); label; high conf",
-   "source": "USDA FDC 1926808 (Branded) PACE, CHUNKY SALSA, MEDIUM; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 1926808 (Branded) PACE, CHUNKY SALSA, MEDIUM; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 230.1,
+   "sodium_source": "fdc:1926808"
   },
   {
    "item": "Teriyaki Sauce",
@@ -669,7 +721,9 @@
    "carbs_g": 1,
    "fat_g": 0,
    "notes": "regular; 1 cup (240g); label; high conf",
-   "source": "PROXY - Great Value Family Size Gluten-Free Chicken Broth, 48 oz Carton label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/Great-Value-Family-Size-Chicken-Broth-48-oz-Carton-Shelf-Stable-Ambient-Gluten-Free/46330157): 1 cup (240mL), 10 cal / 0 g fat / 0 g carb / 1 g protein, about 6 servings per container. row states Swanson; this is the Great Value carton the board actually prices. Agrees but for 1 g of carbohydrate."
+   "source": "PROXY - Great Value Family Size Gluten-Free Chicken Broth, 48 oz Carton label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/Great-Value-Family-Size-Chicken-Broth-48-oz-Carton-Shelf-Stable-Ambient-Gluten-Free/46330157): 1 cup (240mL), 10 cal / 0 g fat / 0 g carb / 1 g protein, about 6 servings per container. row states Swanson; this is the Great Value carton the board actually prices. Agrees but for 1 g of carbohydrate.",
+   "sodium_mg": 830,
+   "sodium_source": "label-capture:db/food-label-captures.json#Chicken Broth"
   },
   {
    "item": "Ranch Seasoning Mix",
@@ -694,7 +748,9 @@
    "carbs_g": 2,
    "fat_g": 0,
    "notes": "canned mild; 2 tbsp (30g); label; Hatch equivalent; high conf",
-   "source": "USDA FDC 2740589 (Branded) Old El Paso Mild Chopped Green Chiles; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 2740589 (Branded) Old El Paso Mild Chopped Green Chiles; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 95.1,
+   "sodium_source": "fdc:2740589"
   },
   {
    "item": "Diced Tomatoes",
@@ -707,7 +763,9 @@
    "carbs_g": 5,
    "fat_g": 0,
    "notes": "canned in juice; 1/2 cup (121g); label; fire-roasted equivalent; high conf",
-   "source": "USDA FDC 333281 (Foundation) Tomatoes, canned, red, ripe, diced; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 333281 (Foundation) Tomatoes, canned, red, ripe, diced; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 151.2,
+   "sodium_source": "fdc:333281"
   },
   {
    "item": "Sun-Dried Tomatoes",
@@ -720,7 +778,9 @@
    "carbs_g": 15.6,
    "fat_g": 0.8,
    "notes": "DRY not oil-packed; USDA; 1 oz (28g); ~3.3g fiber; high conf",
-   "source": "USDA FDC 168567 (SR Legacy) Tomatoes, sun-dried; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 168567 (SR Legacy) Tomatoes, sun-dried; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 30,
+   "sodium_source": "fdc:168567"
   },
   {
    "item": "Pepperoncini",
@@ -745,7 +805,9 @@
    "carbs_g": 7.4,
    "fat_g": 0.1,
    "notes": "raw; USDA; 1/2 cup chopped (80g); high conf",
-   "source": "USDA FDC 790646 (Foundation) Onions, yellow, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 790646 (Foundation) Onions, yellow, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 0.8,
+   "sodium_source": "fdc:790646"
   },
   {
    "item": "Zucchini",
@@ -758,7 +820,9 @@
    "carbs_g": 3.8,
    "fat_g": 0.4,
    "notes": "raw w/ skin; USDA; 1 cup sliced (124g); high conf",
-   "source": "USDA FDC 169291 (SR Legacy) Squash, summer, zucchini, includes skin, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169291 (SR Legacy) Squash, summer, zucchini, includes skin, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 9.9,
+   "sodium_source": "fdc:169291"
   },
   {
    "item": "White Mushrooms",
@@ -771,7 +835,9 @@
    "carbs_g": 2.3,
    "fat_g": 0.2,
    "notes": "raw; USDA; 1 cup sliced (70g); high conf",
-   "source": "USDA FDC 169251 (SR Legacy) Mushrooms, white, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169251 (SR Legacy) Mushrooms, white, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 3.5,
+   "sodium_source": "fdc:169251"
   },
   {
    "item": "Garlic",
@@ -833,7 +899,9 @@
    "carbs_g": 1.3,
    "fat_g": 0.4,
    "notes": "USDA; 1 tsp (2.7g); high conf",
-   "source": "USDA FDC 171319 (SR Legacy) Spices, chili powder; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 171319 (SR Legacy) Spices, chili powder; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 77.5,
+   "sodium_source": "fdc:171319"
   },
   {
    "item": "Ground Cumin",
@@ -846,7 +914,9 @@
    "carbs_g": 0.9,
    "fat_g": 0.5,
    "notes": "USDA; 1 tsp (2.1g); high conf",
-   "source": "USDA FDC 170923 (SR Legacy) Spices, cumin seed; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170923 (SR Legacy) Spices, cumin seed; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 3.5,
+   "sodium_source": "fdc:170923"
   },
   {
    "item": "Garlic Powder",
@@ -895,7 +965,9 @@
    "carbs_g": 1.2,
    "fat_g": 0.3,
    "notes": "USDA; 1 tsp (2.3g); high conf",
-   "source": "USDA FDC 171329 (SR Legacy) Spices, paprika; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 171329 (SR Legacy) Spices, paprika; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 1.6,
+   "sodium_source": "fdc:171329"
   },
   {
    "item": "99/1 Ground Turkey",
@@ -908,7 +980,9 @@
    "carbs_g": 0,
    "fat_g": 1.5,
    "notes": "99% lean ground turkey breast, raw; 4 oz (112g); label; high conf",
-   "source": "USDA FDC 172847 (SR Legacy) Turkey, ground, fat free, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 172847 (SR Legacy) Turkey, ground, fat free, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 57.1,
+   "sodium_source": "fdc:172847"
   },
   {
    "item": "Soy Sauce",
@@ -957,7 +1031,9 @@
    "carbs_g": 0,
    "fat_g": 100,
    "notes": "NEW wave90 (per 100g). USDA FDC sesame oil",
-   "source": "USDA FDC 171016 (SR Legacy) Oil, sesame, salad or cooking; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 171016 (SR Legacy) Oil, sesame, salad or cooking; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 0,
+   "sodium_source": "fdc:171016"
   },
   {
    "item": "Ketchup",
@@ -994,7 +1070,9 @@
    "carbs_g": 40,
    "fat_g": 0.6,
    "notes": "NEW wave90 (per 100g). USDA FDC bbq sauce",
-   "source": "PROXY - USDA FDC 385580 (Branded) BBQ SAUCE standing in; the row is generic; this is one real label that reproduces it; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "PROXY - USDA FDC 385580 (Branded) BBQ SAUCE standing in; the row is generic; this is one real label that reproduces it; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 365,
+   "sodium_source": "fdc:385580"
   },
   {
    "item": "Sugar-Free Maple Syrup",
@@ -1019,7 +1097,9 @@
    "carbs_g": 21,
    "fat_g": 53.8,
    "notes": "NEW wave90 (per 100g). USDA FDC tahini",
-   "source": "USDA FDC 170189 (SR Legacy) Seeds, sesame butter, tahini, from roasted and toasted kernels (most common type); corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170189 (SR Legacy) Seeds, sesame butter, tahini, from roasted and toasted kernels (most common type); corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 115,
+   "sodium_source": "fdc:170189"
   },
   {
    "item": "Peanut Butter",
@@ -1032,7 +1112,9 @@
    "carbs_g": 20,
    "fat_g": 50,
    "notes": "NEW wave90 (per 100g). USDA FDC peanut butter",
-   "source": "PROXY - USDA FDC 2063467 (Branded) PEANUT BUTTER standing in; the row is generic; this is one real label that reproduces it; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "PROXY - USDA FDC 2063467 (Branded) PEANUT BUTTER standing in; the row is generic; this is one real label that reproduces it; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 0,
+   "sodium_source": "fdc:2063467"
   },
   {
    "item": "White Vinegar",
@@ -1069,7 +1151,9 @@
    "carbs_g": 17,
    "fat_g": 0,
    "notes": "NEW wave90 (per 100g). USDA FDC balsamic vinegar",
-   "source": "USDA FDC 172241 (SR Legacy) Vinegar, balsamic; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 172241 (SR Legacy) Vinegar, balsamic; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 23,
+   "sodium_source": "fdc:172241"
   },
   {
    "item": "Zero-Sugar Soda",
@@ -1094,7 +1178,9 @@
    "carbs_g": 2.6,
    "fat_g": 0,
    "notes": "NEW wave90 (per 100g). USDA FDC red table wine",
-   "source": "USDA FDC 173190 (SR Legacy) Alcoholic beverage, wine, table, red; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 173190 (SR Legacy) Alcoholic beverage, wine, table, red; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 4,
+   "sodium_source": "fdc:173190"
   },
   {
    "item": "Brown Sugar",
@@ -1107,7 +1193,9 @@
    "carbs_g": 98,
    "fat_g": 0,
    "notes": "NEW wave90 (per 100g). USDA FDC brown sugar",
-   "source": "USDA FDC 168833 (SR Legacy) Sugars, brown; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 168833 (SR Legacy) Sugars, brown; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 28,
+   "sodium_source": "fdc:168833"
   },
   {
    "item": "Cornstarch",
@@ -1120,7 +1208,9 @@
    "carbs_g": 91,
    "fat_g": 0.1,
    "notes": "NEW wave90 (per 100g). USDA FDC cornstarch",
-   "source": "USDA FDC 169698 (SR Legacy) Cornstarch; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169698 (SR Legacy) Cornstarch; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 9,
+   "sodium_source": "fdc:169698"
   },
   {
    "item": "Bread Crumbs",
@@ -1133,7 +1223,9 @@
    "carbs_g": 72,
    "fat_g": 5,
    "notes": "NEW wave90 (per 100g). USDA FDC plain breadcrumbs",
-   "source": "USDA FDC 174928 (SR Legacy) Bread, crumbs, dry, grated, plain; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 174928 (SR Legacy) Bread, crumbs, dry, grated, plain; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 732,
+   "sodium_source": "fdc:174928"
   },
   {
    "item": "Butter",
@@ -1146,7 +1238,9 @@
    "carbs_g": 0.06,
    "fat_g": 81,
    "notes": "NEW wave90 (per 100g). USDA FDC butter",
-   "source": "USDA FDC 173410 (SR Legacy) Butter, salted; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 173410 (SR Legacy) Butter, salted; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 643,
+   "sodium_source": "fdc:173410"
   },
   {
    "item": "Light Sour Cream",
@@ -1159,7 +1253,9 @@
    "carbs_g": 7,
    "fat_g": 10,
    "notes": "NEW wave90 (per 100g). USDA FDC light sour cream",
-   "source": "USDA FDC 173443 (SR Legacy) Sour cream, light; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 173443 (SR Legacy) Sour cream, light; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 83,
+   "sodium_source": "fdc:173443"
   },
   {
    "item": "Provolone Cheese",
@@ -1172,7 +1268,9 @@
    "carbs_g": 2,
    "fat_g": 27,
    "notes": "NEW wave90 (per 100g). USDA FDC provolone",
-   "source": "USDA FDC 170850 (SR Legacy) Cheese, provolone; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170850 (SR Legacy) Cheese, provolone; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 727,
+   "sodium_source": "fdc:170850"
   },
   {
    "item": "Beef Flank/Sirloin Steak",
@@ -1185,7 +1283,9 @@
    "carbs_g": 0,
    "fat_g": 7,
    "notes": "NEW wave90 (per 100g). USDA FDC beef flank/top sirloin, lean, raw",
-   "source": "USDA FDC 169433 (SR Legacy) Beef, flank, steak, separable lean and fat, trimmed to 0\" fat, choice, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169433 (SR Legacy) Beef, flank, steak, separable lean and fat, trimmed to 0\" fat, choice, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 54,
+   "sodium_source": "fdc:169433"
   },
   {
    "item": "Carrots",
@@ -1198,7 +1298,9 @@
    "carbs_g": 9.6,
    "fat_g": 0.2,
    "notes": "NEW wave90 (per 100g). USDA FDC raw carrots",
-   "source": "USDA FDC 170393 (SR Legacy) Carrots, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170393 (SR Legacy) Carrots, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 69,
+   "sodium_source": "fdc:170393"
   },
   {
    "item": "Green Beans",
@@ -1211,7 +1313,9 @@
    "carbs_g": 7,
    "fat_g": 0.2,
    "notes": "NEW wave90 (per 100g). USDA FDC green beans",
-   "source": "USDA FDC 169961 (SR Legacy) Beans, snap, green, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169961 (SR Legacy) Beans, snap, green, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 6,
+   "sodium_source": "fdc:169961"
   },
   {
    "item": "Green Cabbage",
@@ -1224,7 +1328,9 @@
    "carbs_g": 5.8,
    "fat_g": 0.1,
    "notes": "NEW wave90 (per 100g). USDA FDC raw cabbage",
-   "source": "USDA FDC 169975 (SR Legacy) Cabbage, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169975 (SR Legacy) Cabbage, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 18,
+   "sodium_source": "fdc:169975"
   },
   {
    "item": "Poblano Peppers",
@@ -1273,7 +1379,9 @@
    "carbs_g": 5.8,
    "fat_g": 1,
    "notes": "NEW wave90 (per 100g). USDA FDC tomatillos",
-   "source": "USDA FDC 168566 (SR Legacy) Tomatillos, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 168566 (SR Legacy) Tomatillos, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 1,
+   "sodium_source": "fdc:168566"
   },
   {
    "item": "Frozen Chopped Spinach",
@@ -1286,7 +1394,9 @@
    "carbs_g": 3.6,
    "fat_g": 0.4,
    "notes": "NEW wave90 (per 100g). USDA FDC frozen spinach",
-   "source": "USDA FDC 169287 (SR Legacy) Spinach, frozen, chopped or leaf, unprepared (Includes foods for USDA's Food Distribution Program); corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169287 (SR Legacy) Spinach, frozen, chopped or leaf, unprepared (Includes foods for USDA's Food Distribution Program); corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 74,
+   "sodium_source": "fdc:169287"
   },
   {
    "item": "Frozen Green Peas",
@@ -1299,7 +1409,9 @@
    "carbs_g": 14.5,
    "fat_g": 0.4,
    "notes": "NEW wave90 (per 100g). USDA FDC frozen peas",
-   "source": "USDA FDC 170017 (SR Legacy) Peas, green, frozen, cooked, boiled, drained, without salt; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170017 (SR Legacy) Peas, green, frozen, cooked, boiled, drained, without salt; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 72,
+   "sodium_source": "fdc:170017"
   },
   {
    "item": "Potato",
@@ -1312,7 +1424,9 @@
    "carbs_g": 17.5,
    "fat_g": 0.1,
    "notes": "NEW wave90 (per 100g). USDA FDC russet potato raw",
-   "source": "USDA FDC 170027 (SR Legacy) Potatoes, russet, flesh and skin, raw (Includes foods for USDA's Food Distribution Program); corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170027 (SR Legacy) Potatoes, russet, flesh and skin, raw (Includes foods for USDA's Food Distribution Program); corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 5,
+   "sodium_source": "fdc:170027"
   },
   {
    "item": "Ginger",
@@ -1325,7 +1439,9 @@
    "carbs_g": 18,
    "fat_g": 0.8,
    "notes": "NEW wave90 (per 100g). USDA FDC raw ginger",
-   "source": "USDA FDC 169231 (SR Legacy) Ginger root, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169231 (SR Legacy) Ginger root, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 13,
+   "sodium_source": "fdc:169231"
   },
   {
    "item": "Apple",
@@ -1362,7 +1478,9 @@
    "carbs_g": 22.5,
    "fat_g": 2.6,
    "notes": "NEW wave90 (per 100g). USDA FDC canned chickpeas drained",
-   "source": "USDA FDC 173800 (SR Legacy) Chickpeas (garbanzo beans, bengal gram), mature seeds, canned, drained solids; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 173800 (SR Legacy) Chickpeas (garbanzo beans, bengal gram), mature seeds, canned, drained solids; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 246,
+   "sodium_source": "fdc:173800"
   },
   {
    "item": "Kidney Beans",
@@ -1375,7 +1493,9 @@
    "carbs_g": 22.8,
    "fat_g": 0.5,
    "notes": "NEW wave90 (per 100g). USDA FDC canned kidney beans drained",
-   "source": "USDA FDC 174285 (SR Legacy) Beans, kidney, red, mature seeds, canned, drained solids; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 174285 (SR Legacy) Beans, kidney, red, mature seeds, canned, drained solids; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 231,
+   "sodium_source": "fdc:174285"
   },
   {
    "item": "Crushed Tomatoes",
@@ -1388,7 +1508,9 @@
    "carbs_g": 7,
    "fat_g": 0.3,
    "notes": "NEW wave90 (per 100g). USDA FDC canned crushed tomatoes",
-   "source": "USDA FDC 170501 (SR Legacy) Tomatoes, crushed, canned; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170501 (SR Legacy) Tomatoes, crushed, canned; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 186,
+   "sodium_source": "fdc:170501"
   },
   {
    "item": "Tomato Sauce",
@@ -1401,7 +1523,9 @@
    "carbs_g": 6.7,
    "fat_g": 0.2,
    "notes": "NEW wave90 (per 100g). USDA FDC canned tomato sauce",
-   "source": "USDA FDC 170054 (SR Legacy) Tomato products, canned, sauce; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170054 (SR Legacy) Tomato products, canned, sauce; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 474,
+   "sodium_source": "fdc:170054"
   },
   {
    "item": "Hominy",
@@ -1414,7 +1538,9 @@
    "carbs_g": 14.5,
    "fat_g": 0.9,
    "notes": "NEW wave90 (per 100g). USDA FDC canned white hominy drained",
-   "source": "USDA FDC 169701 (SR Legacy) Hominy, canned, white; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169701 (SR Legacy) Hominy, canned, white; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 267,
+   "sodium_source": "fdc:169701"
   },
   {
    "item": "Cashews",
@@ -1427,7 +1553,9 @@
    "carbs_g": 30.2,
    "fat_g": 43.8,
    "notes": "NEW wave90 (per 100g). USDA FDC raw cashews",
-   "source": "USDA FDC 170162 (SR Legacy) Nuts, cashew nuts, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170162 (SR Legacy) Nuts, cashew nuts, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 12,
+   "sodium_source": "fdc:170162"
   },
   {
    "item": "Olives",
@@ -1452,7 +1580,9 @@
    "carbs_g": 79,
    "fat_g": 0.5,
    "notes": "NEW wave90 (per 100g). USDA FDC raisins",
-   "source": "USDA FDC 168164 (SR Legacy) Raisins, golden, seedless; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 168164 (SR Legacy) Raisins, golden, seedless; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 24,
+   "sodium_source": "fdc:168164"
   },
   {
    "item": "Pineapple Chunks",
@@ -1466,7 +1596,9 @@
    "fat_g": 0.11,
    "fiber_g": 1.3,
    "source": "USDA FDC 167767 (SR Legacy) Pineapple, canned, juice pack, DRAINED; portions cup sliced 162 g, spear 26 g, cup chunks 181 g, cup crushed 195 g; fetched from the FDC API 2026-09-02",
-   "notes": "DRAINED SOLIDS basis, matching densities 'Pineapple Chunks'.can 412 (derived 181/249 x 567 - see the note there). The retired row read 50 cal / 0.5 P / 13 C / 0.1 F under the label 'USDA FDC pineapple in juice', and it was neither: FDC's in-juice row 169126 (solids and liquids) is 60 kcal per 100 g, while 50 / 0.54 P / 13.12 C / 0.12 F is FDC 169124 'Pineapple, raw, all varieties'. Fresh-fruit macros were sitting under a canned name, and 169124's own 'cup, chunks' is 165 g, which is where densities' old cup came from too. Drained (167767) and undrained (169126) canned-in-juice are BOTH 60 kcal per 100 g, so this correction is about which FOOD the row describes, not about the draining. Every spec gram for this item is a drained gram. Do not put a raw or an undrained row back here."
+   "notes": "DRAINED SOLIDS basis, matching densities 'Pineapple Chunks'.can 412 (derived 181/249 x 567 - see the note there). The retired row read 50 cal / 0.5 P / 13 C / 0.1 F under the label 'USDA FDC pineapple in juice', and it was neither: FDC's in-juice row 169126 (solids and liquids) is 60 kcal per 100 g, while 50 / 0.54 P / 13.12 C / 0.12 F is FDC 169124 'Pineapple, raw, all varieties'. Fresh-fruit macros were sitting under a canned name, and 169124's own 'cup, chunks' is 165 g, which is where densities' old cup came from too. Drained (167767) and undrained (169126) canned-in-juice are BOTH 60 kcal per 100 g, so this correction is about which FOOD the row describes, not about the draining. Every spec gram for this item is a drained gram. Do not put a raw or an undrained row back here.",
+   "sodium_mg": 1,
+   "sodium_source": "fdc:167767"
   },
   {
    "item": "Curry Powder",
@@ -1491,7 +1623,9 @@
    "carbs_g": 23,
    "fat_g": 49.7,
    "notes": "NEW wave90 (per 100g). USDA FDC sesame seeds",
-   "source": "USDA FDC 170151 (SR Legacy) Seeds, sesame seeds, whole, roasted and toasted; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170151 (SR Legacy) Seeds, sesame seeds, whole, roasted and toasted; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 11,
+   "sodium_source": "fdc:170151"
   },
   {
    "item": "Salt",
@@ -1528,7 +1662,9 @@
    "carbs_g": 0,
    "fat_g": 5,
    "notes": "USDA large egg [R100 verified: Great Value large egg label: 1 egg (50g) 70 cal, 6P, 0C, 5F (eatthismuch/myfooddiary GV listings)]",
-   "source": "USDA FDC 748967 (Foundation) Eggs, Grade A, Large, egg whole; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 748967 (Foundation) Eggs, Grade A, Large, egg whole; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 64.5,
+   "sodium_source": "fdc:748967"
   },
   {
    "item": "Heavy Cream",
@@ -1553,7 +1689,9 @@
    "carbs_g": 0,
    "fat_g": 14,
    "notes": "canola/vegetable [R100 verified: Great Value Vegetable Oil (soybean) label: 1 tbsp (14g) 120 cal, 14F (fatsecret/calorieking GV listings)]",
-   "source": "USDA FDC 172370 (SR Legacy) Oil, vegetable, soybean, refined; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 172370 (SR Legacy) Oil, vegetable, soybean, refined; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 0,
+   "sodium_source": "fdc:172370"
   },
   {
    "item": "All-Purpose Flour",
@@ -1566,7 +1704,9 @@
    "carbs_g": 23,
    "fat_g": 0,
    "notes": "[R100 verified: Great Value All-Purpose Flour label: 1/4 cup (30g) 110 cal, 3P, 23C, 0F (fatsecret/myfooddiary GV listings) - exact match]",
-   "source": "USDA FDC 169761 (SR Legacy) Wheat flour, white, all-purpose, unenriched; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169761 (SR Legacy) Wheat flour, white, all-purpose, unenriched; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 0.6,
+   "sodium_source": "fdc:169761"
   },
   {
    "item": "Sugar",
@@ -1579,7 +1719,9 @@
    "carbs_g": 4,
    "fat_g": 0,
    "notes": "granulated [R100 verified: Standard US granulated sugar label: 1 tsp (4g) 15-16 cal, 4C (fatsecret USDA granulated sugar; Kroger label 15 cal)]",
-   "source": "USDA FDC 169655 (SR Legacy) Sugars, granulated; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169655 (SR Legacy) Sugars, granulated; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 0,
+   "sodium_source": "fdc:169655"
   },
   {
    "item": "Green Onions",
@@ -1592,7 +1734,9 @@
    "carbs_g": 1,
    "fat_g": 0,
    "notes": "USDA scallion [R100 verified: USDA scallions raw 32 cal/100g -> 15g = 4.8 cal (nutrition-and-you/USDA SR)]",
-   "source": "PROXY - USDA FDC 170006 (SR Legacy) Onions, young green, tops only standing in; FDC's curated set carries scallion TOPS ONLY, not the whole trimmed onion the recipes use. Stands in, and says so.; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "PROXY - USDA FDC 170006 (SR Legacy) Onions, young green, tops only standing in; FDC's curated set carries scallion TOPS ONLY, not the whole trimmed onion the recipes use. Stands in, and says so.; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 2.2,
+   "sodium_source": "fdc:170006"
   },
   {
    "item": "Red Onion",
@@ -1605,7 +1749,9 @@
    "carbs_g": 10,
    "fat_g": 0,
    "notes": "USDA onion 40kcal/100g [R100 verified: USDA onions raw 40 cal/100g -> 110g = 44 cal, ~10C (USDA FDC 170000 via myfooddata)]",
-   "source": "USDA FDC 790577 (Foundation) Onions, red, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 790577 (Foundation) Onions, red, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 1.1,
+   "sodium_source": "fdc:790577"
   },
   {
    "item": "Cucumber",
@@ -1618,7 +1764,9 @@
    "carbs_g": 3,
    "fat_g": 0,
    "notes": "with peel [R100 verified: USDA cucumber with peel raw 15 cal/100g -> 99g = 15 cal; FDA raw-veg labeling lists 1/3 medium (99g) 10 cal, 2C. Authored 12 cal sits inside that label-rounding band]",
-   "source": "USDA FDC 168409 (SR Legacy) Cucumber, with peel, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 168409 (SR Legacy) Cucumber, with peel, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 2,
+   "sodium_source": "fdc:168409"
   },
   {
    "item": "Celery",
@@ -1642,7 +1790,9 @@
    "protein_g": 0,
    "carbs_g": 1,
    "fat_g": 0,
-   "notes": "USDA jalapeno 29kcal/100g [R100 verified: USDA peppers, jalapeno, raw 29 cal/100g (0.9P, 6.5C, 0.4F) -> 14g = 4 cal (USDA FDC 168576 via myfooddata/nutritionvalue)]"
+   "notes": "USDA jalapeno 29kcal/100g [R100 verified: USDA peppers, jalapeno, raw 29 cal/100g (0.9P, 6.5C, 0.4F) -> 14g = 4 cal (USDA FDC 168576 via myfooddata/nutritionvalue)]",
+   "sodium_mg": 0.4,
+   "sodium_source": "fdc:168576"
   },
   {
    "item": "Cherry Tomatoes",
@@ -1702,7 +1852,9 @@
    "protein_g": 0,
    "carbs_g": 1,
    "fat_g": 0,
-   "notes": "[R100 verified: ReaLemon 100% lemon juice: 1 tbsp (15g) 3 cal, ~1C (USDA FDC 167802 / eatthismuch ReaLemon)]"
+   "notes": "[R100 verified: ReaLemon 100% lemon juice: 1 tbsp (15g) 3 cal, ~1C (USDA FDC 167802 / eatthismuch ReaLemon)]",
+   "sodium_mg": 3.9,
+   "sodium_source": "fdc:167802"
   },
   {
    "item": "Dried Oregano",
@@ -1738,7 +1890,9 @@
    "protein_g": 0,
    "carbs_g": 2,
    "fat_g": 0,
-   "notes": "[R100 verified: USDA spices, cinnamon, ground: 6 cal per tsp (fatsecret/myfooddata USDA FDC 171320)]"
+   "notes": "[R100 verified: USDA spices, cinnamon, ground: 6 cal per tsp (fatsecret/myfooddata USDA FDC 171320)]",
+   "sodium_mg": 0.3,
+   "sodium_source": "fdc:171320"
   },
   {
    "item": "Ground Coriander",
@@ -1762,7 +1916,9 @@
    "protein_g": 0,
    "carbs_g": 1,
    "fat_g": 0,
-   "notes": "[R100 verified: USDA spices, cloves, ground: 6-7 cal per 1 tsp (2.1g) (fatsecret/myfooddata USDA FDC 171321); within rounding]"
+   "notes": "[R100 verified: USDA spices, cloves, ground: 6-7 cal per 1 tsp (2.1g) (fatsecret/myfooddata USDA FDC 171321); within rounding]",
+   "sodium_mg": 5.8,
+   "sodium_source": "fdc:171321"
   },
   {
    "item": "Ground Allspice",
@@ -1798,7 +1954,9 @@
    "protein_g": 0,
    "carbs_g": 1,
    "fat_g": 0,
-   "notes": "dried ground [R100 verified: USDA spices, ginger, ground: 6 cal per 1 tsp (USDA FDC 170926 via myfooddata) - exact match]"
+   "notes": "dried ground [R100 verified: USDA spices, ginger, ground: 6 cal per 1 tsp (USDA FDC 170926 via myfooddata) - exact match]",
+   "sodium_mg": 0.5,
+   "sodium_source": "fdc:170926"
   },
   {
    "item": "Dried Thyme",
@@ -1906,7 +2064,9 @@
    "protein_g": 1,
    "carbs_g": 1,
    "fat_g": 1,
-   "notes": "[R100 verified: USDA spices, poppy seed: 1 tsp (2.8g) 15 cal, 0.5P, 0.8C, 1.2F (nutritionix/uhhospitals USDA FDC 171330) - matches with label rounding]"
+   "notes": "[R100 verified: USDA spices, poppy seed: 1 tsp (2.8g) 15 cal, 0.5P, 0.8C, 1.2F (nutritionix/uhhospitals USDA FDC 171330) - matches with label rounding]",
+   "sodium_mg": 0.7,
+   "sodium_source": "fdc:171330"
   },
   {
    "item": "Walnuts",
@@ -1919,7 +2079,9 @@
    "carbs_g": 4,
    "fat_g": 18,
    "notes": "chopped [R100 verified: Great Value Walnuts Halves & Pieces label: 1 oz 190 cal, 4P, 4C, 18F (myfooddiary/eatthismuch GV); GV chopped prints 180 cal - same rounding band; USDA walnuts 185 cal/oz]",
-   "source": "USDA FDC 170187 (SR Legacy) Nuts, walnuts, english; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 170187 (SR Legacy) Nuts, walnuts, english; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 0.6,
+   "sodium_source": "fdc:170187"
   },
   {
    "item": "Peanuts",
@@ -1944,7 +2106,9 @@
    "carbs_g": 1,
    "fat_g": 0,
    "notes": "[R100 verified: Lea & Perrins label: 1 tsp 5 cal, 1C, 0P, 0F (eatthismuch/nutritionvalue L&P) - exact match]",
-   "source": "USDA FDC 2678484 (Branded) WORCESTERSHIRE SAUCE, WORCESTERSHIRE; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 2678484 (Branded) WORCESTERSHIRE SAUCE, WORCESTERSHIRE; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 74.1,
+   "sodium_source": "fdc:2678484"
   },
   {
    "item": "Apple Cider Vinegar",
@@ -1981,7 +2145,9 @@
    "carbs_g": 0,
    "fat_g": 10,
    "notes": "[R100 verified: Great Value Mayonnaise label: 1 tbsp (13g) 90 cal, 10F, 0C, 0P (myfooddata/fatsecret GV) - exact match; Hellmann's Real identical]",
-   "source": "PROXY - USDA FDC 167736 (SR Legacy) Mayonnaise dressing, no cholesterol standing in; the only corroborating curated entry is a no-cholesterol dressing; Great Value mayonnaise is egg-based. Stands in, and says so.; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "PROXY - USDA FDC 167736 (SR Legacy) Mayonnaise dressing, no cholesterol standing in; the only corroborating curated entry is a no-cholesterol dressing; Great Value mayonnaise is egg-based. Stands in, and says so.; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 63.2,
+   "sodium_source": "fdc:167736"
   },
   {
    "item": "Hummus",
@@ -2018,7 +2184,9 @@
    "carbs_g": 0,
    "fat_g": 22,
    "notes": "~80/20, raw [R100 verified: 80/20 fresh ground pork retail label (SmartLabel product 6066387; same values across Never Any!, Open Nature, supermarketlabels 80/20 SKUs): 4 oz (112g) 280 cal, 20P, 0C, 22F]",
-   "source": "USDA FDC 167902 (SR Legacy) Pork, fresh, ground, raw; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 167902 (SR Legacy) Pork, fresh, ground, raw; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 62.7,
+   "sodium_source": "fdc:167902"
   },
   {
    "item": "Pork Chops",
@@ -2043,7 +2211,9 @@
    "carbs_g": 40,
    "fat_g": 3,
    "notes": "dry [R100 verified: Great Value Extra Wide Egg Noodles label: 2 oz dry (56g) 210 cal, 8P, 40C, 2.5F (eatthismuch/myfooddiary GV) - matches (fat 3 vs 2.5 label rounding)]",
-   "source": "USDA FDC 169731 (SR Legacy) Noodles, egg, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169731 (SR Legacy) Noodles, egg, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 11.8,
+   "sodium_source": "fdc:169731"
   },
   {
    "item": "Sweet Potatoes",
@@ -2080,7 +2250,9 @@
    "carbs_g": 4,
    "fat_g": 0,
    "notes": "canned [R100 verified: Ro-Tel Original label: 1/2 cup (125g) 25 cal, 1P, 5C, 0F (myfooddiary/fatsecret Ro-Tel). Authored GV values (20 cal, 4C) sit one 5-cal rounding step below - within label tolerance for store-brand equivalents]",
-   "source": "PROXY - USDA FDC 2406710 (Branded) DICED TOMATOES WITH GREEN CHILIES, GREEN CHILIES standing in; the row is already a Ro-Tel-style stand-in; this is another; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "PROXY - USDA FDC 2406710 (Branded) DICED TOMATOES WITH GREEN CHILIES, GREEN CHILIES standing in; the row is already a Ro-Tel-style stand-in; this is another; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 300.1,
+   "sodium_source": "fdc:2406710"
   },
   {
    "item": "Pork Chorizo",
@@ -2093,7 +2265,9 @@
    "carbs_g": 3,
    "fat_g": 16,
    "notes": "label: Cacique Pork Chorizo (Refrigerated) [R100 labels-P1.json]",
-   "source": "USDA FDC 2027889 (Branded) PORK CHORIZO, PORK; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 2027889 (Branded) PORK CHORIZO, PORK; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 580.3,
+   "sodium_source": "fdc:2027889"
   },
   {
    "item": "Smoked Turkey Sausage",
@@ -2118,7 +2292,9 @@
    "carbs_g": 4,
    "fat_g": 8,
    "notes": "label: Great Value Original Whole Milk Ricotta Cheese, tub [R100 labels-P1.json]",
-   "source": "USDA FDC 746766 (Foundation) Cheese, ricotta, whole milk; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 746766 (Foundation) Cheese, ricotta, whole milk; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 65.1,
+   "sodium_source": "fdc:746766"
   },
   {
    "item": "Mexican Cheese Blend",
@@ -2131,7 +2307,9 @@
    "carbs_g": 1,
    "fat_g": 8,
    "notes": "label: Great Value Fiesta Blend Finely Shredded Cheese (Monterey Jack, cheddar, queso quesadilla, asadero) [R100 labels-P1.json]",
-   "source": "Great Value Fiesta Blend Finely Shredded Cheese, 16 oz Bag label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/Great-Value-Finely-Shredded-Fiesta-Blend-Cheese-16-oz/15544059): 1/4 cup (28g), 110 cal / 8 g fat / 1 g carb / 6 g protein, 16 servings per container. macros exact. The stored serving_unit says about 8 servings per container, which is the 8 oz bag; this 16 oz bag states 16. Container note only - no macro moves."
+   "source": "Great Value Fiesta Blend Finely Shredded Cheese, 16 oz Bag label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/Great-Value-Finely-Shredded-Fiesta-Blend-Cheese-16-oz/15544059): 1/4 cup (28g), 110 cal / 8 g fat / 1 g carb / 6 g protein, 16 servings per container. macros exact. The stored serving_unit says about 8 servings per container, which is the 8 oz bag; this 16 oz bag states 16. Container note only - no macro moves.",
+   "sodium_mg": 170,
+   "sodium_source": "label-capture:db/food-label-captures.json#Mexican Cheese Blend"
   },
   {
    "item": "Cheese Tortellini",
@@ -2157,7 +2335,9 @@
    "carbs_g": 46,
    "fat_g": 0.5,
    "notes": "label: Great Value Potato Gnocchi, shelf-stable (Product of Italy) [R100 labels-P1.json]",
-   "source": "Great Value Potato Gnocchi, 17.6 oz label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/6-pack-Great-Value-Gv-Gnocchi-17-6oz/1834968118): 3/4 cup (124g) dry, 200 cal / 0.5 g fat / 46 g carb / 4 g protein, about 4 servings per container. brand matches; exact, container count included."
+   "source": "Great Value Potato Gnocchi, 17.6 oz label, read off the product photograph in Brad's Chrome 2026-08-26 (https://www.walmart.com/ip/6-pack-Great-Value-Gv-Gnocchi-17-6oz/1834968118): 3/4 cup (124g) dry, 200 cal / 0.5 g fat / 46 g carb / 4 g protein, about 4 servings per container. brand matches; exact, container count included.",
+   "sodium_mg": 690,
+   "sodium_source": "label-capture:db/food-label-captures.json#Potato Gnocchi"
   },
   {
    "item": "Refrigerated Biscuits",
@@ -2182,7 +2362,9 @@
    "carbs_g": 29,
    "fat_g": 0.5,
    "notes": "label: Quaker Original Quick 5-Minute Grits, canister (dry) [R100 labels-P1.json]",
-   "source": "USDA FDC 174629 (SR Legacy) Cereals, QUAKER, hominy grits, white, quick, dry; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 174629 (SR Legacy) Cereals, QUAKER, hominy grits, white, quick, dry; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 0.4,
+   "sodium_source": "fdc:174629"
   },
   {
    "item": "Corn Muffin Mix",
@@ -2195,7 +2377,9 @@
    "carbs_g": 56,
    "fat_g": 9,
    "notes": "label: JIFFY Corn Muffin Mix [R100 labels-P1.json]",
-   "source": "USDA FDC 2569180 (Branded) JIFFY CORN MUFFIN MIX, 8.5 OZ, 6 COUNT; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 2569180 (Branded) JIFFY CORN MUFFIN MIX, 8.5 OZ, 6 COUNT; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 690.3,
+   "sodium_source": "fdc:2569180"
   },
   {
    "item": "Corn Chips",
@@ -2208,7 +2392,9 @@
    "carbs_g": 16,
    "fat_g": 10,
    "notes": "label: Fritos Original Corn Chips [R100 labels-P1.json]",
-   "source": "USDA FDC 2747610 (Branded) Fritos Corn Chips Regular 16 Oz; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 2747610 (Branded) Fritos Corn Chips Regular 16 Oz; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 150.1,
+   "sodium_source": "fdc:2747610"
   },
   {
    "item": "Butter Crackers",
@@ -2245,7 +2431,9 @@
    "carbs_g": 45,
    "fat_g": 0.5,
    "notes": "label: Thai Kitchen Gluten Free Stir Fry Rice Noodles (dry, pad-thai style) [R100 labels-P1.json]",
-   "source": "USDA FDC 2402246 (Branded) RICE NOODLES; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 2402246 (Branded) RICE NOODLES; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 0,
+   "sodium_source": "fdc:2402246"
   },
   {
    "item": "Korean glass noodles (dangmyeon)",
@@ -2270,7 +2458,9 @@
    "carbs_g": 41,
    "fat_g": 1,
    "notes": "label: Simply Asia Chinese Style Lo Mein Noodles (dry wheat noodles) [R100 labels-P1.json]",
-   "source": "PROXY - USDA FDC 2601293 (Branded) ORGANIC NOODLES, LO MEIN standing in; no Simply Asia lo mein entry; this one reproduces the row; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "PROXY - USDA FDC 2601293 (Branded) ORGANIC NOODLES, LO MEIN standing in; no Simply Asia lo mein entry; this one reproduces the row; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 360.1,
+   "sodium_source": "fdc:2601293"
   },
   {
    "item": "Oyster Sauce",
@@ -2331,7 +2521,9 @@
    "carbs_g": 3,
    "fat_g": 0.5,
    "notes": "label: Thai Kitchen Gluten Free Red Curry Paste, 4 oz jar [R100 labels-P2.json]",
-   "source": "USDA FDC 2034463 (Branded) RED CURRY PASTE; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 2034463 (Branded) RED CURRY PASTE; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 409.5,
+   "sodium_source": "fdc:2034463"
   },
   {
    "item": "Japanese Curry Roux",
@@ -2356,7 +2548,9 @@
    "carbs_g": 1,
    "fat_g": 0.5,
    "notes": "label: Mina Harissa Spicy Moroccan Red Pepper Sauce, 10 oz jar [R100 labels-P2.json]",
-   "source": "USDA FDC 1870738 (Branded) MINA, HARISSA MOROCCAN RED PEPPER SAUCE, SPICY, SPICY; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 1870738 (Branded) MINA, HARISSA MOROCCAN RED PEPPER SAUCE, SPICY, SPICY; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 80,
+   "sodium_source": "fdc:1870738"
   },
   {
    "item": "Mole Paste",
@@ -2369,7 +2563,9 @@
    "carbs_g": 10,
    "fat_g": 13,
    "notes": "label: DONA MARIA Traditional Mole, 8.25 oz glass jar [R100 labels-P2.json]",
-   "source": "USDA FDC 2008408 (Branded) DONA MARIA, MEXICAN CONDIMENT MOLE; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 2008408 (Branded) DONA MARIA, MEXICAN CONDIMENT MOLE; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 399,
+   "sodium_source": "fdc:2008408"
   },
   {
    "item": "Cajun Seasoning",
@@ -2394,7 +2590,9 @@
    "carbs_g": 42,
    "fat_g": 1,
    "notes": "label: Great Value Orzo Pasta, 16 oz [R100 labels-P3.json]",
-   "source": "USDA FDC 169736 (SR Legacy) Pasta, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169736 (SR Legacy) Pasta, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 3.4,
+   "sodium_source": "fdc:169736"
   },
   {
    "item": "Ziti Pasta",
@@ -2407,7 +2605,9 @@
    "carbs_g": 42,
    "fat_g": 1,
    "notes": "label: Great Value Ziti, 16 oz [R100 labels-P3.json]",
-   "source": "USDA FDC 169736 (SR Legacy) Pasta, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169736 (SR Legacy) Pasta, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 3.4,
+   "sodium_source": "fdc:169736"
   },
   {
    "item": "Pasta Shells - jumbo",
@@ -2420,7 +2620,9 @@
    "carbs_g": 42,
    "fat_g": 1,
    "notes": "label: Great Value Jumbo Shells Pasta, 12 oz [R100 labels-P3.json]",
-   "source": "USDA FDC 169736 (SR Legacy) Pasta, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169736 (SR Legacy) Pasta, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 3.4,
+   "sodium_source": "fdc:169736"
   },
   {
    "item": "Fettuccine",
@@ -2433,7 +2635,9 @@
    "carbs_g": 42,
    "fat_g": 1,
    "notes": "label: Great Value Fettuccine, 16 oz [R100 labels-P3.json]",
-   "source": "USDA FDC 169736 (SR Legacy) Pasta, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169736 (SR Legacy) Pasta, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 3.4,
+   "sodium_source": "fdc:169736"
   },
   {
    "item": "Spaghetti",
@@ -2446,7 +2650,9 @@
    "carbs_g": 42,
    "fat_g": 1,
    "notes": "label: Great Value Spaghetti, 16 oz [R100 labels-P3.json]",
-   "source": "USDA FDC 169736 (SR Legacy) Pasta, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169736 (SR Legacy) Pasta, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 3.4,
+   "sodium_source": "fdc:169736"
   },
   {
    "item": "Mirin",
@@ -2483,7 +2689,9 @@
    "carbs_g": 7,
    "fat_g": 0.5,
    "notes": "label: El Yucateco Achiote Paste (Condimented Annatto Paste), 3.5 oz, pack of 3 [R100 labels-P2.json]",
-   "source": "USDA FDC 2036622 (Branded) EL YUCATECO, CONDIMENTED ANNATTO PASTE; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 2036622 (Branded) EL YUCATECO, CONDIMENTED ANNATTO PASTE; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 560,
+   "sodium_source": "fdc:2036622"
   },
   {
    "item": "Pomegranate Molasses",
@@ -2496,7 +2704,9 @@
    "carbs_g": 9,
    "fat_g": 0,
    "notes": "label: Cortas Pomegranate Molasses, 10 oz bottle [R100 labels-P2.json]",
-   "source": "USDA FDC 1862942 (Branded) MOLASSES, POMEGRANATE; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 1862942 (Branded) MOLASSES, POMEGRANATE; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 0,
+   "sodium_source": "fdc:1862942"
   },
   {
    "item": "Five-Spice Powder",
@@ -2533,7 +2743,9 @@
    "carbs_g": 42,
    "fat_g": 1,
    "notes": "label: Great Value Jumbo Shells Pasta, 12 oz [R100 labels-P3.json]",
-   "source": "USDA FDC 169736 (SR Legacy) Pasta, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 169736 (SR Legacy) Pasta, dry, enriched; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 3.4,
+   "sodium_source": "fdc:169736"
   },
   {
    "item": "Berbere Seasoning",
@@ -2572,7 +2784,9 @@
    "notes": "raw; Boston butt blade, separable lean and fat",
    "source": "USDA FDC 167849 (SR Legacy) Pork, fresh, shoulder, (Boston butt), blade (steaks), separable lean and fat, raw",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 181 vs 186 ok"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 181 vs 186 ok",
+   "sodium_mg": 61,
+   "sodium_source": "fdc:167849"
   },
   {
    "item": "Turkey Breast",
@@ -2587,7 +2801,9 @@
    "notes": "raw; whole-bird breast, meat only (skinless)",
    "source": "USDA FDC 171098 (SR Legacy) Turkey, whole, breast, meat only, raw",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 109 vs 114 ok (specific factors)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 109 vs 114 ok (specific factors)",
+   "sodium_mg": 113,
+   "sodium_source": "fdc:171098"
   },
   {
    "item": "Dried Arbol Chiles",
@@ -2602,7 +2818,9 @@
    "notes": "whole dried red chiles; USDA generic sun-dried hot chile",
    "source": "USDA FDC 168570 (SR Legacy) Peppers, hot chile, sun-dried",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater overshoots (374 vs 324) due to 28.7 g fiber - USDA specific factors, expected"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater overshoots (374 vs 324) due to 28.7 g fiber - USDA specific factors, expected",
+   "sodium_mg": 91,
+   "sodium_source": "fdc:168570"
   },
   {
    "item": "Dried Guajillo Chiles",
@@ -2617,7 +2835,9 @@
    "notes": "whole dried guajillos; shares the USDA generic sun-dried hot chile record with arbol (no guajillo-specific USDA entry; disclosed, not averaged)",
    "source": "USDA FDC 168570 (SR Legacy) Peppers, hot chile, sun-dried",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25"
+   "verify_source": "fetched from FDC portal API 2026-07-25",
+   "sodium_mg": 91,
+   "sodium_source": "fdc:168570"
   },
   {
    "item": "Kale",
@@ -2632,7 +2852,9 @@
    "notes": "raw; 1 bunch ~250 g (store estimate, see mapper decisions)",
    "source": "USDA FDC 168421 (SR Legacy) Kale, raw",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 43 vs 35 ok (fiber 4.1 g)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 43 vs 35 ok (fiber 4.1 g)",
+   "sodium_mg": 53,
+   "sodium_source": "fdc:168421"
   },
   {
    "item": "Cream of Chicken Soup",
@@ -2647,7 +2869,9 @@
    "notes": "CONDENSED, undiluted; 10.5 oz can = 298 g",
    "source": "USDA FDC 171146 (SR Legacy) Soup, cream of chicken, canned, condensed",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (90.1 vs 90)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (90.1 vs 90)",
+   "sodium_mg": 702,
+   "sodium_source": "fdc:171146"
   },
   {
    "item": "Dried Ancho Chiles",
@@ -2662,7 +2886,9 @@
    "notes": "whole dried anchos",
    "source": "USDA FDC 169396 (SR Legacy) Peppers, ancho, dried",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 327 vs 281 ok (fiber 21.6 g)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 327 vs 281 ok (fiber 21.6 g)",
+   "sodium_mg": 43,
+   "sodium_source": "fdc:169396"
   },
   {
    "item": "Cream of Mushroom Soup",
@@ -2677,7 +2903,9 @@
    "notes": "CONDENSED, undiluted; 10.5 oz can = 298 g",
    "source": "USDA FDC 172901 (SR Legacy) CAMPBELL'S, Cream of Mushroom Soup, condensed",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (81 vs 81)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (81 vs 81)",
+   "sodium_mg": 697,
+   "sodium_source": "fdc:172901"
   },
   {
    "item": "Diced Ham",
@@ -2692,7 +2920,9 @@
    "notes": "water added, diced/cubed packaged ham; per-serving from branded label data",
    "source": "USDA FDC 2622828 (Branded) JOHN MORRELL, WATER ADDED DICED HAM",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 74 vs 70 ok (label rounding)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 74 vs 70 ok (label rounding)",
+   "sodium_mg": 700,
+   "sodium_source": "fdc:2622828"
   },
   {
    "item": "Sazon Seasoning",
@@ -2707,7 +2937,9 @@
    "notes": "coriander & annatto packets; zero-macro",
    "source": "USDA FDC 1869030 (Branded) SAZON GOYA (CORIANDER & ANNATTO)",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25"
+   "verify_source": "fetched from FDC portal API 2026-07-25",
+   "sodium_mg": 140,
+   "sodium_source": "fdc:1869030"
   },
   {
    "item": "Sauerkraut",
@@ -2722,7 +2954,9 @@
    "notes": "canned/jarred, solids and liquids",
    "source": "USDA FDC 169279 (SR Legacy) Sauerkraut, canned, solids and liquids",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 22 vs 19 ok"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 22 vs 19 ok",
+   "sodium_mg": 661,
+   "sodium_source": "fdc:169279"
   },
   {
    "item": "Apple Juice",
@@ -2737,7 +2971,9 @@
    "notes": "unsweetened 100% juice; ~30.8 g per floz",
    "source": "USDA FDC 167771 (SR Legacy) Apple juice, canned or bottled, unsweetened, with added ascorbic acid",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 47 vs 46 ok"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 47 vs 46 ok",
+   "sodium_mg": 4,
+   "sodium_source": "fdc:167771"
   },
   {
    "item": "Swiss Cheese",
@@ -2752,7 +2988,9 @@
    "notes": "natural swiss (not pasteurized-process)",
    "source": "USDA FDC 171251 (SR Legacy) Cheese, swiss",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (393 vs 393)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (393 vs 393)",
+   "sodium_mg": 187,
+   "sodium_source": "fdc:171251"
   },
   {
    "item": "Gruyere Cheese",
@@ -2767,7 +3005,9 @@
    "notes": "natural gruyere; distinct from the Swiss Cheese row (413 vs 393 cal/100g)",
    "source": "USDA FDC 171242 (SR Legacy) Cheese, gruyere",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-08-15; Atwater 411 vs 413 ok"
+   "verify_source": "fetched from FDC portal API 2026-08-15; Atwater 411 vs 413 ok",
+   "sodium_mg": 714,
+   "sodium_source": "fdc:171242"
   },
   {
    "item": "Eggplant",
@@ -2782,7 +3022,9 @@
    "notes": "raw; 1 eggplant (approx 1-1/4 lb) = 548 g per USDA portion",
    "source": "USDA FDC 169228 (SR Legacy) Eggplant, raw",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 29 vs 25 ok (fiber 3 g)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 29 vs 25 ok (fiber 3 g)",
+   "sodium_mg": 2,
+   "sodium_source": "fdc:169228"
   },
   {
    "item": "Brown Gravy Mix",
@@ -2797,7 +3039,9 @@
    "notes": "DRY mix basis; typical packet 0.87 oz = 25 g",
    "source": "USDA FDC 171565 (SR Legacy) Gravy, brown, dry",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (367 vs 367)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (367 vs 367)",
+   "sodium_mg": 4840,
+   "sodium_source": "fdc:171565"
   },
   {
    "item": "Sandwich Bread",
@@ -2812,7 +3056,9 @@
    "notes": "commercial white sandwich bread; slice ~25-28 g, 20 oz loaf = 567 g",
    "source": "USDA FDC 174924 (SR Legacy) Bread, white, commercially prepared (includes soft bread crumbs)",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 263 vs 266 ok"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 263 vs 266 ok",
+   "sodium_mg": 490,
+   "sodium_source": "fdc:174924"
   },
   {
    "item": "Chicken Livers",
@@ -2827,7 +3073,9 @@
    "notes": "raw",
    "source": "USDA FDC 171060 (SR Legacy) Chicken, liver, all classes, raw",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 114 vs 119 ok"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 114 vs 119 ok",
+   "sodium_mg": 71,
+   "sodium_source": "fdc:171060"
   },
   {
    "item": "Baking Soda",
@@ -2842,7 +3090,9 @@
    "notes": "zero-macro",
    "source": "USDA FDC 175040 (SR Legacy) Leavening agents, baking soda",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25"
+   "verify_source": "fetched from FDC portal API 2026-07-25",
+   "sodium_mg": 27400,
+   "sodium_source": "fdc:175040"
   },
   {
    "item": "Almonds",
@@ -2857,7 +3107,9 @@
    "notes": "raw whole; also covers blanched/slivered/sliced lines",
    "source": "USDA FDC 170567 (SR Legacy) Nuts, almonds",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 620 vs 579 ok (fiber 12.5 g)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 620 vs 579 ok (fiber 12.5 g)",
+   "sodium_mg": 1,
+   "sodium_source": "fdc:170567"
   },
   {
    "item": "Caraway Seeds",
@@ -2872,7 +3124,9 @@
    "notes": "whole seed; 1 tsp ~ 2.1 g",
    "source": "USDA FDC 170918 (SR Legacy) Spices, caraway seed",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater overshoots (410 vs 333) due to 38 g fiber - expected for spices"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater overshoots (410 vs 333) due to 38 g fiber - expected for spices",
+   "sodium_mg": 17,
+   "sodium_source": "fdc:170918"
   },
   {
    "item": "Baking Powder",
@@ -2887,7 +3141,9 @@
    "notes": "double-acting; near-zero at recipe quantities (1 tsp ~ 4.6 g = 2 cal)",
    "source": "USDA FDC 172803 (SR Legacy) Leavening agents, baking powder, double-acting, sodium aluminum sulfate",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater deviation is a USDA specific-factor case (leavening: carbonate/CO2-releasing carbs are non-caloric), label 53 kcal per 100 g stands"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater deviation is a USDA specific-factor case (leavening: carbonate/CO2-releasing carbs are non-caloric), label 53 kcal per 100 g stands",
+   "sodium_mg": 10600,
+   "sodium_source": "fdc:172803"
   },
   {
    "item": "Poultry Seasoning",
@@ -2902,7 +3158,9 @@
    "notes": "dry herb blend; 1 tsp ~ 1.5 g",
    "source": "USDA FDC 171331 (SR Legacy) Spices, poultry seasoning",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 369 vs 307 ok (fiber 11 g, specific factors)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 369 vs 307 ok (fiber 11 g, specific factors)",
+   "sodium_mg": 27,
+   "sodium_source": "fdc:171331"
   },
   {
    "item": "Wild Rice",
@@ -2917,7 +3175,9 @@
    "notes": "DRY basis",
    "source": "USDA FDC 169726 (SR Legacy) Wild rice, raw",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 368 vs 357 ok"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 368 vs 357 ok",
+   "sodium_mg": 7,
+   "sodium_source": "fdc:169726"
   },
   {
    "item": "Ground Fennel",
@@ -2932,7 +3192,9 @@
    "notes": "fennel seed, ground form (same spice milled); 1 tsp ground ~ 2 g",
    "source": "USDA FDC 171323 (SR Legacy) Spices, fennel seed",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater overshoots (406 vs 345) due to 40 g fiber - expected"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater overshoots (406 vs 345) due to 40 g fiber - expected",
+   "sodium_mg": 88,
+   "sodium_source": "fdc:171323"
   },
   {
    "item": "Bratwurst",
@@ -2947,7 +3209,9 @@
    "notes": "COOKED basis - Johnsonville package label states per grilled link; raw pack weight per link ~91 g",
    "source": "USDA FDC 1909061 (Branded) JOHNSONVILLE BRATS ORIGINAL BRATWURST",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 253 vs 260 ok (label rounding)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 253 vs 260 ok (label rounding)",
+   "sodium_mg": 679.8,
+   "sodium_source": "fdc:1909061"
   },
   {
    "item": "Cocoa Powder",
@@ -2962,7 +3226,9 @@
    "notes": "natural unsweetened baking cocoa; 1 tbsp ~ 5.4 g",
    "source": "USDA FDC 169593 (SR Legacy) Cocoa, dry powder, unsweetened",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 433 vs 228 - known cocoa case (37 g fiber, USDA specific factors), USDA value transcribed as-is"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 433 vs 228 - known cocoa case (37 g fiber, USDA specific factors), USDA value transcribed as-is",
+   "sodium_mg": 21,
+   "sodium_source": "fdc:169593"
   },
   {
    "item": "Stuffing Mix",
@@ -2977,7 +3243,9 @@
    "notes": "DRY mix basis; box label serving 28 g dry ~ 107 cal",
    "source": "USDA FDC 175079 (SR Legacy) Kraft, Stove Top Stuffing Mix Chicken Flavor",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 380 vs 381 ok"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 380 vs 381 ok",
+   "sodium_mg": 1530,
+   "sodium_source": "fdc:175079"
   },
   {
    "item": "Snow Peas",
@@ -2992,7 +3260,9 @@
    "notes": "raw, edible-podded (snow/sugar snap)",
    "source": "USDA FDC 170010 (SR Legacy) Peas, edible-podded, raw",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 43 vs 42 ok"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 43 vs 42 ok",
+   "sodium_mg": 4,
+   "sodium_source": "fdc:170010"
   },
   {
    "item": "Capers",
@@ -3007,7 +3277,9 @@
    "notes": "canned/jarred, drained caper buds; 1 tbsp ~ 8.6 g",
    "source": "USDA FDC 172238 (SR Legacy) Capers, canned",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 37 vs 23 (brine organic acids/fiber) - macro-trivial at caper quantities"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 37 vs 23 (brine organic acids/fiber) - macro-trivial at caper quantities",
+   "sodium_mg": 2350,
+   "sodium_source": "fdc:172238"
   },
   {
    "item": "Brussels Sprouts",
@@ -3022,7 +3294,9 @@
    "notes": "raw",
    "source": "USDA FDC 170383 (SR Legacy) Brussels sprouts, raw",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 52 vs 43 ok (fiber 3.8 g)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 52 vs 43 ok (fiber 3.8 g)",
+   "sodium_mg": 25,
+   "sodium_source": "fdc:170383"
   },
   {
    "item": "Basil Pesto",
@@ -3037,7 +3311,9 @@
    "notes": "jarred ready-to-serve basil pesto; 1/4 cup ~ 60 g",
    "source": "USDA FDC 171582 (SR Legacy) Sauce, pesto, CLASSICO, basil pesto, ready-to-serve",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (372 vs 372)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (372 vs 372)",
+   "sodium_mg": 1030,
+   "sodium_source": "fdc:171582"
   },
   {
    "item": "Artichoke Hearts",
@@ -3050,7 +3326,9 @@
    "carbs_g": 9,
    "fat_g": 0,
    "notes": "canned quartered artichoke hearts, DRAINED - the label states the serving as \"0.75 cup drained\", which is the basis the recipes measure and the basis densities.json prices (240 g drained per 13.75 oz can). The previous row was Hannaford and its note read \"with liquid\"; that annotation was WRONG. Both cans print 130 g servings whose per-100 g values sit within 13% of each other (31 vs 35 cal), and a with-liquid basis would be about 1.6x lower, not 13%. Canned vegetables packed in water are labelled on drained weight, so the old row was never understating - only mis-annotated. Swapped anyway because the board prices Great Value Quartered Artichoke Hearts 13.75 oz at Walmart, so this is the can a reader actually buys, and its serving text removes the ambiguity for good.",
-   "source": "USDA FDC 2313271 (Branded) QUARTERED ARTICHOKE HEARTS (Wal-Mart Stores, Inc.), label per 130 g serving: 45.5 cal / 3.0 P / 9.0 C / 0.0 F / 4.03 fiber; fetched 2026-09-01"
+   "source": "USDA FDC 2313271 (Branded) QUARTERED ARTICHOKE HEARTS (Wal-Mart Stores, Inc.), label per 130 g serving: 45.5 cal / 3.0 P / 9.0 C / 0.0 F / 4.03 fiber; fetched 2026-09-01",
+   "sodium_mg": 379.6,
+   "sodium_source": "fdc:2313271"
   },
   {
    "item": "Sumac",
@@ -3065,7 +3343,9 @@
    "notes": "ground sumac berry; zero-macro at recipe quantities",
    "source": "USDA FDC 2630657 (Branded) GROUND SUMAC (Frontier Cooperative)",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25"
+   "verify_source": "fetched from FDC portal API 2026-07-25",
+   "sodium_mg": 15,
+   "sodium_source": "fdc:2630657"
   },
   {
    "item": "Onion Soup Mix",
@@ -3080,7 +3360,9 @@
    "notes": "dry onion recipe soup & dip mix; Lipton-packet class, 1 packet ~ 28 g",
    "source": "USDA FDC 2524752 (Branded) ONION RECIPE SOUP & DIP MIX (Wal-Mart Stores)",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (20 vs 20)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (20 vs 20)",
+   "sodium_mg": 569.8,
+   "sodium_source": "fdc:2524752"
   },
   {
    "item": "Jerk Seasoning",
@@ -3095,7 +3377,9 @@
    "notes": "Caribbean jerk dry seasoning; zero-macro",
    "source": "USDA FDC 2034560 (Branded) CARIBBEAN JERK SEASONING (McCormick)",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25"
+   "verify_source": "fetched from FDC portal API 2026-07-25",
+   "sodium_mg": 109.9,
+   "sodium_source": "fdc:2034560"
   },
   {
    "item": "Horseradish Sauce",
@@ -3110,7 +3394,9 @@
    "notes": "creamy horseradish sauce (mayo-base), NOT prepared horseradish; 1 tsp ~ 5 g",
    "source": "USDA FDC 171833 (SR Legacy) Sauce, horseradish",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 502 vs 503 exact"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 502 vs 503 exact",
+   "sodium_mg": 730,
+   "sodium_source": "fdc:171833"
   },
   {
    "item": "Corned Beef Brisket",
@@ -3125,7 +3411,9 @@
    "notes": "raw, cured brisket (flat/point with brine)",
    "source": "USDA FDC 170199 (SR Legacy) Beef, cured, corned beef, brisket, raw",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 193 vs 198 ok"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 193 vs 198 ok",
+   "sodium_mg": 1220,
+   "sodium_source": "fdc:170199"
   },
   {
    "item": "Baked Beans",
@@ -3140,7 +3428,9 @@
    "notes": "canned pork-and-beans class (GV cheapest-mainline); 15 oz can = 425 g",
    "source": "USDA FDC 175185 (SR Legacy) Beans, baked, canned, with pork",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 115 vs 106 ok (fiber)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 115 vs 106 ok (fiber)",
+   "sodium_mg": 414,
+   "sodium_source": "fdc:175185"
   },
   {
    "item": "Blackberries",
@@ -3155,7 +3445,9 @@
    "notes": "raw",
    "source": "USDA FDC 173946 (SR Legacy) Blackberries, raw",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 48 vs 43 ok (fiber 5.3 g)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 48 vs 43 ok (fiber 5.3 g)",
+   "sodium_mg": 1,
+   "sodium_source": "fdc:173946"
   },
   {
    "item": "Korean Rice Cakes",
@@ -3170,7 +3462,9 @@
    "notes": "tteok (chewy rice cakes for tteokbokki), refrigerated/frozen",
    "source": "USDA FDC 2167323 (Branded) KOREAN RICE CAKE (Walong Marketing)",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (237 vs 237)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater exact (237 vs 237)",
+   "sodium_mg": 20,
+   "sodium_source": "fdc:2167323"
   },
   {
    "item": "Pumpkin Puree",
@@ -3185,7 +3479,9 @@
    "notes": "100% pumpkin, canned; 15 oz can = 425 g",
    "source": "USDA FDC 168450 (SR Legacy) Pumpkin, canned, without salt",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 39 vs 34 ok (fiber)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 39 vs 34 ok (fiber)",
+   "sodium_mg": 5,
+   "sodium_source": "fdc:168450"
   },
   {
    "item": "Gingersnap Cookies",
@@ -3200,7 +3496,9 @@
    "notes": "packaged gingersnaps (sauerbraten gravy thickener)",
    "source": "USDA FDC 2448755 (Branded) GINGER SNAP COOKIES (Winco Foods)",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 116 vs 110 ok (label rounding)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 116 vs 110 ok (label rounding)",
+   "sodium_mg": 110,
+   "sodium_source": "fdc:2448755"
   },
   {
    "item": "Tater Tots",
@@ -3215,7 +3513,9 @@
    "notes": "frozen golden tater tots, seasoned shredded potatoes",
    "source": "USDA FDC 1727638 (Branded) GOLDEN TATER TOTS SEASONED SHREDDED POTATOES (Kraft Heinz)",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 136 vs 130 ok (label rounding)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 136 vs 130 ok (label rounding)",
+   "sodium_mg": 449.8,
+   "sodium_source": "fdc:1727638"
   },
   {
    "item": "Pigeon Peas",
@@ -3230,7 +3530,9 @@
    "notes": "canned green pigeon peas (gandules), with liquid",
    "source": "USDA FDC 2503338 (Branded) GREEN PIGEON PEAS (La Preferida)",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 140 vs 120 - fiber-adjusted label math, transcribed as printed"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 140 vs 120 - fiber-adjusted label math, transcribed as printed",
+   "sodium_mg": 54.6,
+   "sodium_source": "fdc:2503338"
   },
   {
    "item": "Rye Bread",
@@ -3245,7 +3547,9 @@
    "notes": "seeded/plain rye loaf; slice ~32 g, 16 oz loaf = 454 g",
    "source": "USDA FDC 172684 (SR Legacy) Bread, rye",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 257 vs 259 ok"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 257 vs 259 ok",
+   "sodium_mg": 603,
+   "sodium_source": "fdc:172684"
   },
   {
    "item": "Bulgur Wheat",
@@ -3260,7 +3564,9 @@
    "notes": "DRY basis (kibbeh)",
    "source": "USDA FDC 170688 (SR Legacy) Bulgur, dry",
    "needs_verify": false,
-   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 365 vs 342 ok (fiber)"
+   "verify_source": "fetched from FDC portal API 2026-07-25; Atwater 365 vs 342 ok (fiber)",
+   "sodium_mg": 17,
+   "sodium_source": "fdc:170688"
   },
   {
    "item": "Sweet Soy Sauce",
@@ -3496,7 +3802,9 @@
    "fat_g": 3.57,
    "fiber_g": 3.6,
    "source": "fdc:1862715",
-   "notes": "PANKO [Branded]. Brad ruled 2026-08-28 on the two-row collision the LOCKSTEP fixture surfaced: the FDC basis stands and the Kikkoman label row was dropped. The rows agreed on calories, protein and carbs and disagreed only on FAT - the label printed 0 g per 30 g serving, but this basis puts 1.07 g on that same serving, and a US label rounds to 0 only under 0.5 g. So the two could not both be right and the label was the likelier error. The name is the LABEL row's because that is the vocabulary row and the canon on all four specs that cost panko; only the numbers and the source moved."
+   "notes": "PANKO [Branded]. Brad ruled 2026-08-28 on the two-row collision the LOCKSTEP fixture surfaced: the FDC basis stands and the Kikkoman label row was dropped. The rows agreed on calories, protein and carbs and disagreed only on FAT - the label printed 0 g per 30 g serving, but this basis puts 1.07 g on that same serving, and a US label rounds to 0 only under 0.5 g. So the two could not both be right and the label was the likelier error. The name is the LABEL row's because that is the vocabulary row and the canon on all four specs that cost panko; only the numbers and the source moved.",
+   "sodium_mg": 268,
+   "sodium_source": "fdc:1862715"
   },
   {
    "item": "Sweet Chili Sauce",
@@ -3522,7 +3830,9 @@
    "carbs_g": 64.1,
    "fat_g": 15.2,
    "notes": "per 100g, same convention as the Dried Thyme/Dried Oregano rows. Atwater over-counts (413 vs 331) because dried herbs are ~43% fiber; USDA energy uses specific factors.",
-   "source": "USDA FDC 171333 (SR Legacy) Spices, rosemary, dried; fetched from FDC API 2026-08-07"
+   "source": "USDA FDC 171333 (SR Legacy) Spices, rosemary, dried; fetched from FDC API 2026-08-07",
+   "sodium_mg": 50,
+   "sodium_source": "fdc:171333"
   },
   {
    "item": "Celery Salt",
@@ -3548,7 +3858,9 @@
    "carbs_g": 25,
    "fat_g": 0.2,
    "notes": "orange peel, raw, per 100g; recipes use single-digit grams so the per-serving impact is trace but honest. Atwater 108 vs 97 is the peel's fiber.",
-   "source": "USDA FDC 169103 (SR Legacy) Orange peel, raw; fetched from FDC API 2026-08-07"
+   "source": "USDA FDC 169103 (SR Legacy) Orange peel, raw; fetched from FDC API 2026-08-07",
+   "sodium_mg": 3,
+   "sodium_source": "fdc:169103"
   },
   {
    "item": "Half and Half",
@@ -3561,7 +3873,9 @@
    "carbs_g": 1,
    "fat_g": 3.5,
    "notes": "2 tbsp (30 mL) per serving; NOT the Heavy Cream row (50 cal/tbsp, different product). Atwater exact (39.5 vs 40).",
-   "source": "Great Value Half & Half label (myfooddata FDC branded 2380490 / fatsecret concur)"
+   "source": "Great Value Half & Half label (myfooddata FDC branded 2380490 / fatsecret concur)",
+   "sodium_mg": 30,
+   "sodium_source": "fdc:2380490"
   },
   {
    "item": "Shallots",
@@ -3574,7 +3888,9 @@
    "carbs_g": 16.8,
    "fat_g": 0.1,
    "notes": "raw, per 100g. Distinct from Yellow Onion (40 cal/100g) and Red Onion; shallots are denser in sugars.",
-   "source": "USDA FDC 170499 (SR Legacy) Shallots, raw; fetched from FDC API 2026-08-07"
+   "source": "USDA FDC 170499 (SR Legacy) Shallots, raw; fetched from FDC API 2026-08-07",
+   "sodium_mg": 12,
+   "sodium_source": "fdc:170499"
   },
   {
    "item": "Apple Cider",
@@ -3587,7 +3903,9 @@
    "carbs_g": 11.3,
    "fat_g": 0.13,
    "notes": "fresh-pressed cider, per 100g; ~30.8 g per floz. Nutritionally the same class as the Apple Juice row BY DESIGN (cider is unfiltered juice); kept as its own row so the spec name resolves and stays honest to what the recipe pours.",
-   "source": "USDA FDC 2709319 (FNDDS Survey) Apple cider; fetched from FDC API 2026-08-07"
+   "source": "USDA FDC 2709319 (FNDDS Survey) Apple cider; fetched from FDC API 2026-08-07",
+   "sodium_mg": 4,
+   "sodium_source": "fdc:2709319"
   },
   {
    "item": "Pineapple Juice",
@@ -3600,7 +3918,9 @@
    "carbs_g": 12.9,
    "fat_g": 0.12,
    "notes": "canned/bottled 100% juice, unsweetened, per 100g; ~30.8 g per floz. Juice DRINK is a different product and must not use this row.",
-   "source": "USDA FDC 169947 (SR Legacy) Pineapple juice, canned or bottled, unsweetened, without added ascorbic acid; fetched from FDC API 2026-08-07"
+   "source": "USDA FDC 169947 (SR Legacy) Pineapple juice, canned or bottled, unsweetened, without added ascorbic acid; fetched from FDC API 2026-08-07",
+   "sodium_mg": 2,
+   "sodium_source": "fdc:169947"
   },
   {
    "item": "Green Chile Sauce",
@@ -3626,7 +3946,9 @@
    "carbs_g": 4.66,
    "fat_g": 3.25,
    "notes": "plain WHOLE-MILK yogurt, per 100g. Deliberately NOT the Greek Yogurt row (100 cal/17P per 170 g - different product; the fuzzy-match proposal was rejected). The map prices Plain Yogurt through the greek-yogurt cell; macros stay honest to plain.",
-   "source": "USDA FDC 171284 (SR Legacy) Yogurt, plain, whole milk; fetched from FDC API 2026-08-07"
+   "source": "USDA FDC 171284 (SR Legacy) Yogurt, plain, whole milk; fetched from FDC API 2026-08-07",
+   "sodium_mg": 46,
+   "sodium_source": "fdc:171284"
   },
   {
    "item": "Mozzarella Cheese",
@@ -3639,7 +3961,9 @@
    "carbs_g": 8.06,
    "fat_g": 19.7,
    "notes": "low-moisture part-skim SHREDDED, per 100g - the form the priced '8oz bag' package row describes. Deliberately NOT the Reduced Fat Mozzarella row (70 cal/28g, a specific GV reduced-fat product) and not Fat Free; split per the shared-item-carrying-a-brand rule.",
-   "source": "USDA FDC 170900 (SR Legacy) Cheese, mozzarella, low moisture, part-skim, shredded; fetched from FDC API 2026-08-07"
+   "source": "USDA FDC 170900 (SR Legacy) Cheese, mozzarella, low moisture, part-skim, shredded; fetched from FDC API 2026-08-07",
+   "sodium_mg": 682,
+   "sodium_source": "fdc:170900"
   },
   {
    "item": "Condensed French Onion Soup",
@@ -3852,7 +4176,9 @@
    "needs_verify": false,
    "verify_source": "fetched from FDC portal API 2026-08-15; Atwater 374 vs 364 ok (fiber 22.2 g/100 g explains the gap); 1 cup dry = 196 g per the same record",
    "notes": "DRY split peas, per 100 g raw. USDA record is 'Peas, green, split, mature seeds, raw' (no yellow-specific SR record exists); yellow split peas share the record class - disclosed, not averaged (Dried Guajillo precedent). NOT the Frozen Green Peas, Pigeon Peas or Chickpeas rows. Added 2026-08-15 (lowcarb-100 run, burmese-chicken-dal-curry).",
-   "source": "USDA FDC 172428 (SR Legacy 16085) Peas, green, split, mature seeds, raw"
+   "source": "USDA FDC 172428 (SR Legacy 16085) Peas, green, split, mature seeds, raw",
+   "sodium_mg": 5,
+   "sodium_source": "fdc:172428"
   },
   {
    "item": "Lime",
@@ -3867,7 +4193,9 @@
    "needs_verify": false,
    "verify_source": "fetched from FDC portal API 2026-08-15; 1 fruit (2 inch dia) = 67 g per the same record",
    "notes": "WHOLE raw lime, per 100 g; 1 fruit = 67 g. Distinct from the Lime Juice row (that row is juice at 15 g/tbsp; this is the purchased fruit, wedge-garnish use). Fresh produce has no package label; USDA is the label-equivalent authority (Cauliflower-row precedent). Added 2026-08-15 (lowcarb-100 run, burmese-chicken-dal-curry garnish).",
-   "source": "USDA FDC 168155 (SR Legacy) Limes, raw"
+   "source": "USDA FDC 168155 (SR Legacy) Limes, raw",
+   "sodium_mg": 2,
+   "sodium_source": "fdc:168155"
   },
   {
    "item": "Thai Chiles",
@@ -3883,7 +4211,9 @@
    "needs_verify_note": "Per-100g macros are USDA-verified; the per-CHILE weight (~5 g for a thai/bird's-eye) has no USDA portion row and is flagged in the mapped file. Macro-immaterial: the only current use is an OPTIONAL 35 g batch line = 14 cal across 14 servings (Berbere spice-exempt precedent).",
    "verify_source": "fetched from FDC portal API 2026-08-15 (FDC 170106)",
    "notes": "FRESH hot red chiles, per 100 g raw. USDA record is generic 'Peppers, hot chili, red, raw'; thai/bird's-eye shares the record class - disclosed, not averaged. NOT the dried-chile rows (form-flip) and NOT serrano (variety). Added 2026-08-15 (lowcarb-100 run, burmese-chicken-dal-curry optional heat).",
-   "source": "USDA FDC 170106 (SR Legacy) Peppers, hot chili, red, raw"
+   "source": "USDA FDC 170106 (SR Legacy) Peppers, hot chili, red, raw",
+   "sodium_mg": 9,
+   "sodium_source": "fdc:170106"
   },
   {
    "item": "Shaved Beef Steak",
@@ -3913,7 +4243,9 @@
    "needs_verify": false,
    "verify_source": "fetched from FDC portal API 2026-08-16 (FDC 170827); cross-checked against the source page's published macros in the mapped file: recomputed calories land -0.5% and protein +3.3% of the source's 581 cal / 39 g per serving, which confirms both the cut and the raw lean-and-fat basis",
    "notes": "Retail boneless beef short ribs are the CHUCK cut, lean and fat, raw - the whole piece goes in the slow cooker and the rendered fat stays in the braise, so the lean-and-fat record is the honest basis (no drained-chuck discount taken; distinct from the Beef Chuck Roast row, which books a drained shredded basis). NOT bone-in rib-section short ribs (USDA 388 cal/100 g class) and NOT chuck roast (different cut and price class). Added 2026-08-16 (lowcarb-100 run, slow-cooker-boneless-beef-short-ribs).",
-   "source": "USDA FDC 170827 (SR Legacy) Beef, chuck, short ribs, boneless, separable lean and fat, trimmed to 0 in fat, choice, raw"
+   "source": "USDA FDC 170827 (SR Legacy) Beef, chuck, short ribs, boneless, separable lean and fat, trimmed to 0 in fat, choice, raw",
+   "sodium_mg": 75,
+   "sodium_source": "fdc:170827"
   },
   {
    "item": "Broccoli",
@@ -3928,7 +4260,9 @@
    "needs_verify": false,
    "verify_source": "USDA SR Legacy 11090 (broccoli, raw): 34 cal / 2.82 P / 6.64 C / 0.37 F per 100 g; the estate's existing Broccoli Florets row (GV frozen bag, 30 cal per 85 g cup = 35.3 cal/100 g) independently lands within 4% of the same figures",
    "notes": "FRESH raw broccoli, per 100 g; USDA generic (produce has no label, same basis as the Yellow Onion and Garlic rows). Distinct from the Broccoli Florets row, which is the Great Value FROZEN bag label mapped to the frozen commodity - fresh is not frozen (form-flip), so fresh recipe lines book this row against the fresh 'broccoli' board commodity. densities.json carries head=300 and cup=85 under 'Broccoli Florets'; a 'Broccoli' alias row is proposed in the mapped file. Added 2026-08-16 (lowcarb-100 run, keto-turkey-broccoli-cheddar-casserole).",
-   "source": "USDA FDC 170379 (SR Legacy, NDB 11090) Broccoli, raw"
+   "source": "USDA FDC 170379 (SR Legacy, NDB 11090) Broccoli, raw",
+   "sodium_mg": 33,
+   "sodium_source": "fdc:170379"
   },
   {
    "item": "Smoked Sausage",
@@ -3973,7 +4307,9 @@
    "needs_verify": false,
    "verify_source": "USDA FDC search API checked 2026-08-16: Branded FDC 2424770 'Steakhouse Style Broccolini Baby Broccoli', Mann's, per 85 g serving = 35 cal / 3.53 P / 5.88 C / 0.0 F (manufacturer label submission); corroborated by Branded FDC 2655063 (Texas Harvest broccolini + rainbow carrots, 85 g = 35 cal / 2.35 P / 7.06 C / 0 F) sitting in the same 35 cal per 85 g class",
    "notes": "FRESH raw broccolini (baby broccoli, a broccoli x gai lan hybrid) - broccolini has NO USDA generic/SR record, so the branded produce label is the label-accurate basis. The 0 g fat on the label confirms the record is the plain bunch, not a seasoned kit, despite the 'Steakhouse Style' line name. NOT broccoli raab/rapini (bitter mustard-family green, FNDDS 22 cal/100 g) and NOT the fresh Broccoli or frozen Broccoli Florets rows (different vegetable and different price class - broccolini sells per bunch at roughly 4x broccoli). Sold as ~8 oz (227 g) bunches; densities.json has no row (followup flagged in the mapped file). Added 2026-08-16 (lowcarb-100 run, chimichurri-steak-sheet-pan).",
-   "source": "USDA FDC Branded 2424770, Mann's Broccolini Baby Broccoli (manufacturer label submission via FDC)"
+   "source": "USDA FDC Branded 2424770, Mann's Broccolini Baby Broccoli (manufacturer label submission via FDC)",
+   "sodium_mg": 10.2,
+   "sodium_source": "fdc:2424770"
   },
   {
    "item": "Coconut Oil",
@@ -4138,7 +4474,9 @@
    "needs_verify": false,
    "verify_source": "USDA branded record FDC 2666734 (Shan Tandoori Masala Seasoning Mix) via myfooddata/search mirrors checked 2026-08-16: 1 tbsp (8 g) = 25 cal, energy split ~19% P / 38% C / 43% F -> 1 P / 2 C / 1 F per tbsp",
    "notes": "Tandoori spice blend (paprika, chili, ginger, cumin, etc). Shan's blend contains salt; recipes calling for a no-salt-added mix differ only in sodium, which this DB does not track - macro fields carry. ~3.1 cal/g, spice-class stakes. Other branded records spread 10-20 cal/tsp on inconsistent tsp weights; the USDA branded record is the anchor. Added 2026-08-16 (lowcarb-100 run, sheet-pan-tandoori-chicken-cauliflower).",
-   "source": "USDA branded FDC 2666734, Shan Tandoori Masala"
+   "source": "USDA branded FDC 2666734, Shan Tandoori Masala",
+   "sodium_mg": 1200,
+   "sodium_source": "fdc:2666734"
   },
   {
    "item": "Baby Bella (Crimini) Mushrooms",
@@ -4284,7 +4622,9 @@
    "carbs_g": 0,
    "fat_g": 14,
    "notes": "Pure avocado oil, 1 tbsp = 14 g. USDA FDC 173573 (verified 2026-08-16 via nutritionvalue USDA mirror: 124 cal / 14 F per tbsp; 886 cal/100 g). Same macro class as the Olive Oil / Vegetable Oil rows within 5 cal/tbsp. Board commodity avocado-oil exists but is capture-tier (no priced cell today); queue verdict CARRIED (trial-run-2026-08-15). Added 2026-08-16 (lowcarb-100 run, garlic-butter-steak-bites-zucchini).",
-   "source": "USDA FDC 173573 oil, avocado"
+   "source": "USDA FDC 173573 oil, avocado",
+   "sodium_mg": 0,
+   "sodium_source": "fdc:173573"
   },
   {
    "item": "String Cheese",
@@ -4324,7 +4664,9 @@
    "needs_verify": false,
    "verify_source": "USDA SR Lentils, raw (FDC 172420 / SR 16069), fetched from the FDC search API 2026-08-24: 352 cal / 24.6 P / 63.4 C / 1.06 F, fiber 10.7 per 100 g. Retail bag labels (1/4 cup = 50 g: ~180 cal, ~12 P) agree per gram. FDC BRANDED brown-lentil entries were fetched and REJECTED as corrupt (720-791 kcal/100 g dry lentils is physically impossible - serving-size entry errors); do not swap this row for one of them.",
    "notes": "DRY (raw) basis, per 100 g; 1 cup dry = 192 g (densities row added same day). Board commodity brown-lentils, 5 of 7 stores. Added 2026-08-24 (p5 micro-batch, lentil-sausage-soup).",
-   "source": "USDA FDC 172420 (SR Legacy) Lentils, raw"
+   "source": "USDA FDC 172420 (SR Legacy) Lentils, raw",
+   "sodium_mg": 6,
+   "sodium_source": "fdc:172420"
   },
   {
    "item": "Chicken Bouillon",
@@ -4599,7 +4941,9 @@
    "needs_verify": false,
    "verify_source": "USDA SR Beef, chuck for stew, separable lean and fat, all grades, raw: 128 cal / 22 P / 0.2 C / 4 F per 100 g (eatthismuch USDA mirror, checked 2026-08-24); the select-grade record (FDC 170809, nutritionvalue mirror) prints 124 / 21.9 / 0.2 / 4.0, within rounding. Cross-checked against the source page in the same run: recomputed per serving lands 428 cal / 33.4 P / 25.8 C against the published 454 / 35 / 26, so protein is -4.5% and carbs -0.8%.",
    "notes": "RAW retail stew meat, cubed chuck, TRIMMED basis (the USDA chuck-for-stew record is already trimmed and runs leaner than whole chuck). Deliberately NOT the Beef Chuck Roast row (213 cal / 112 g, a drained slow-cooked shredded basis) and NOT any ground beef row - a grind is a different price class and a different gram weight. Added 2026-08-24 (v3-noband-drill, beef-stroganoff-soup).",
-   "source": "USDA SR beef, chuck for stew, separable lean and fat, all grades, raw"
+   "source": "USDA SR beef, chuck for stew, separable lean and fat, all grades, raw",
+   "sodium_mg": 81,
+   "sodium_source": "fdc:170809"
   },
   {
    "item": "Fresh Mozzarella Cheese",
@@ -4658,7 +5002,9 @@
    "fiber_g": 7.0,
    "source": "fdc:168874",
    "notes": "SR Legacy 'Quinoa, uncooked' - the dry-weight row, which matches how this line is bought and weighed. Atwater checks at 367.8 vs 368.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)",
+   "sodium_mg": 5,
+   "sodium_source": "fdc:168874"
   },
   {
    "item": "Frozen Corn Kernels",
@@ -4672,7 +5018,9 @@
    "fiber_g": 2.6,
    "source": "fdc:169217",
    "notes": "ATWATER WARNING: 4/4/9 gives 130.9 against a stated 113, about 16% high, which is normal for SR Legacy plant rows where fiber is inside total carbohydrate. If the check refuses it, a typical frozen-corn label reads about 90 cal per 100 g and the recipe loses roughly 4 cal per serving.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)",
+   "sodium_mg": 4,
+   "sodium_source": "fdc:169217"
   },
   {
    "item": "Beef Stew Meat",
@@ -4730,7 +5078,9 @@
    "fiber_g": 7.3,
    "source": "fdc:173941",
    "notes": "Apricots, dried, sulfured, uncooked [SR Legacy], per 100 g.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)",
+   "sodium_mg": 10,
+   "sodium_source": "fdc:173941"
   },
   {
    "item": "Lemons",
@@ -4757,7 +5107,9 @@
    "fiber_g": 0,
    "source": "fdc:168341",
    "notes": "Pork, cured, ham with natural juices, spiral slice, boneless, separable lean and fat, unheated [SR Legacy], per 100 g.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)",
+   "sodium_mg": 881,
+   "sodium_source": "fdc:168341"
   },
   {
    "item": "Chicken Wings",
@@ -4786,7 +5138,9 @@
    "fiber_g": 26.2,
    "source": "fdc:170933",
    "notes": "Spices, pepper, white [SR Legacy], per 100 g. The 4/4/9 sum runs ~13% over the stated calories, which is normal for a high-fiber ground spice.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)",
+   "sodium_mg": 5,
+   "sodium_source": "fdc:170933"
   },
   {
    "item": "Cooking Spray",
@@ -4801,7 +5155,9 @@
    "fiber_g": 0,
    "source": "fdc:171430",
    "notes": "Oil, PAM cooking spray, original [SR Legacy], per 100 g.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)",
+   "sodium_mg": 59,
+   "sodium_source": "fdc:171430"
   },
   {
    "item": "Eye of Round Roast",
@@ -4831,7 +5187,9 @@
    "fiber_g": 14.1,
    "notes": "Herb row; 4/4/9 runs high against the stated calories the way most whole-spice rows do.",
    "source": "fdc:173473",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)",
+   "sodium_mg": 26,
+   "sodium_source": "fdc:173473"
   },
   {
    "item": "Cremini Mushrooms",
@@ -4861,7 +5219,9 @@
    "fiber_g": 0,
    "notes": "Raw basis to match the purchased pound.",
    "source": "fdc:174617",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)",
+   "sodium_mg": 593,
+   "sodium_source": "fdc:174617"
   },
   {
    "item": "Fennel Seeds",
@@ -4875,7 +5235,9 @@
    "fat_g": 14.9,
    "fiber_g": 39.8,
    "source": "fdc:171323",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)",
+   "sodium_mg": 88,
+   "sodium_source": "fdc:171323"
   },
   {
    "item": "Asiago Cheese",
@@ -4904,7 +5266,9 @@
    "fiber_g": 6.1,
    "notes": "One bun weighs about 43 g.",
    "source": "fdc:174090",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)",
+   "sodium_mg": 477,
+   "sodium_source": "fdc:174090"
   },
   {
    "item": "Buttermilk",
@@ -4919,7 +5283,9 @@
    "fiber_g": 0,
    "notes": "Whole-milk buttermilk; most retail cartons in Omaha are lowfat at roughly 40 cal per 100 g, so this row runs a little rich.",
    "source": "fdc:172225",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-ten)",
+   "sodium_mg": 105,
+   "sodium_source": "fdc:172225"
   },
   {
    "item": "Butternut Squash",
@@ -4933,7 +5299,9 @@
    "fiber_g": 2.0,
    "source": "fdc:169295",
    "notes": "Squash, winter, butternut, raw [SR Legacy]. Raw, not the frozen row.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-smoke3)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-smoke3)",
+   "sodium_mg": 4,
+   "sodium_source": "fdc:169295"
   },
   {
    "item": "Fresh Dill",
@@ -4947,7 +5315,9 @@
    "fiber_g": 2.1,
    "source": "fdc:172233",
    "notes": "Dill weed, fresh [SR Legacy]. Not the pickle rows the keyword shelf offered.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-smoke3)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-smoke3)",
+   "sodium_mg": 61,
+   "sodium_source": "fdc:172233"
   },
   {
    "item": "Lemon Zest",
@@ -4961,7 +5331,9 @@
    "fiber_g": 10.6,
    "source": "fdc:167749",
    "notes": "Lemon peel, raw [SR Legacy]. Atwater on the printed figures overshoots 47 because 10.6 g of the 16 g carbohydrate is fiber; transcribed as printed, not reconciled.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-smoke3)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-smoke3)",
+   "sodium_mg": 6,
+   "sodium_source": "fdc:167749"
   },
   {
    "item": "Lean Ground Bison",
@@ -4975,7 +5347,9 @@
    "fiber_g": 0.0,
    "source": "fdc:175293",
    "notes": "Bison, ground, grass-fed, raw [SR Legacy]. Raw basis to match the 1 lb purchase; the cooked row would double-count shrink.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-smoke3)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-smoke3)",
+   "sodium_mg": 70,
+   "sodium_source": "fdc:175293"
   },
   {
    "item": "Tzatziki",
@@ -4989,7 +5363,9 @@
    "fiber_g": 0.0,
    "source": "fdc:2023348",
    "notes": "TZATZIKI [Branded]. Branded tzatziki labels on the shelf spread 50 to 156 cal/100 g; this mid row is a real single label, not an average. The line carries 0 g, so nothing in this recipe depends on it.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-26-smoke3)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-26-smoke3)",
+   "sodium_mg": 214,
+   "sodium_source": "fdc:2023348"
   },
   {
    "item": "Sirloin Steak",
@@ -5032,7 +5408,9 @@
    "fiber_g": 0.0,
    "source": "fdc:167839",
    "notes": "Pork, fresh, loin, top loin (chops), boneless, separable lean and fat, raw [SR Legacy]. Raw basis, which is the purchase basis. Chosen over fdc:168251 (lean only) because the chops are bought and cooked with their fat, and over the blade-chop rows because the recipe specifies loin chops.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-ten)",
+   "sodium_mg": 48,
+   "sodium_source": "fdc:167839"
   },
   {
    "item": "Fresh Cranberries",
@@ -5046,7 +5424,9 @@
    "fiber_g": 3.6,
    "source": "fdc:171722",
    "notes": "Cranberries, raw [SR Legacy]. 1 cup whole = 100 g, so the recipe's 1/2 cup = 50 g.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-ten)",
+   "sodium_mg": 2,
+   "sodium_source": "fdc:171722"
   },
   {
    "item": "Boneless Eye of Round Roast",
@@ -5075,7 +5455,9 @@
    "fiber_g": 0,
    "source": "fdc:173190",
    "notes": "ATWATER WILL FAIL BY DESIGN: 4/4/9 gives 10.7 cal against the printed 85 because ethanol carries about 7 cal/g and is not a macro field. These are FDC's own published values for table red wine, unaltered. Please accept or waive rather than treating the gap as a transcription error.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-ten)",
+   "sodium_mg": 4,
+   "sodium_source": "fdc:173190"
   },
   {
    "item": "Bone-In Skin-On Chicken Thighs",
@@ -5104,7 +5486,9 @@
    "fiber_g": 1.5,
    "source": "fdc:169298",
    "notes": "Raw basis, taken from the shelf ('Squash, winter, spaghetti, raw') to match the raw as-purchased grams on the line. Atwater with fiber netted out is 29.3 vs 31 printed.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-ten)",
+   "sodium_mg": 17,
+   "sodium_source": "fdc:169298"
   },
   {
    "item": "Mexican Crema",
@@ -5148,7 +5532,9 @@
    "fiber_g": 0,
    "source": "fdc:173438",
    "notes": "Shelf candidate 'Cheese, mexican, queso chihuahua' is this exact food, so no open-web read was needed.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-ten)",
+   "sodium_mg": 617,
+   "sodium_source": "fdc:173438"
   },
   {
    "item": "Fresh Sage",
@@ -5191,7 +5577,9 @@
    "fiber_g": 3.9,
    "source": "fdc:168922",
    "notes": "Shelf candidate 'Cornmeal, degermed, enriched, white' is the supermarket bag this line calls for; white versus yellow is a colour difference, not a macro one.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-ten)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-ten)",
+   "sodium_mg": 7,
+   "sodium_source": "fdc:168922"
   },
   {
    "item": "Black Olives",
@@ -5218,7 +5606,9 @@
    "carbs_g": 6,
    "fat_g": 0,
    "notes": "Fat free/nonfat ULTRA-FILTERED milk; 1 cup (240 mL) per serving; from label. A DISTINCT FOOD from ordinary milk, not a brand of it: ultra-filtration roughly doubles the protein (13 g/cup vs ~8) and removes the fat, and a recipe reaching for it is buying that protein deliberately (Brad's ruling 2026-08-27). Do not map a line that just says 'milk' onto this row.",
-   "source": "USDA FDC 2756934 (Branded) Fairlife Fat Free Ultra- Filtered Milk; corroborates the stored row within tolerance, checked 2026-08-26"
+   "source": "USDA FDC 2756934 (Branded) Fairlife Fat Free Ultra- Filtered Milk; corroborates the stored row within tolerance, checked 2026-08-26",
+   "sodium_mg": 120,
+   "sodium_source": "fdc:2756934"
   },
   {
    "item": "Bell Peppers",
@@ -5232,7 +5622,9 @@
    "fiber_g": 1.2,
    "source": "fdc:2079108",
    "notes": "BELL PEPPERS (Branded), as printed. Atwater on gross carbs reads 23.6 vs the stated 18; net of the 1.2 g fiber it reads 18.8, which is the usual produce-label pattern - flagging it rather than adjusting the printed numbers.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 0,
+   "sodium_source": "fdc:2079108"
   },
   {
    "item": "Shredded Cheese",
@@ -5291,7 +5683,9 @@
    "fiber_g": 0,
    "source": "fdc:174158",
    "notes": "Water, bottled, generic - a label-accurate row of zeroes.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 2,
+   "sodium_source": "fdc:174158"
   },
   {
    "item": "Almond Butter",
@@ -5305,7 +5699,9 @@
    "fiber_g": 10.3,
    "notes": "Plain almond butter, salt added, per 100 g.",
    "source": "fdc:168603",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 227,
+   "sodium_source": "fdc:168603"
   },
   {
    "item": "Masa Harina",
@@ -5319,7 +5715,9 @@
    "fiber_g": 6.4,
    "notes": "Corn flour, masa, enriched, white - per 100 g.",
    "source": "fdc:169694",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 5,
+   "sodium_source": "fdc:169694"
   },
   {
    "item": "Sea Salt",
@@ -5333,7 +5731,9 @@
    "fiber_g": 0,
    "source": "fdc:173468",
    "notes": "Sodium chloride: the printed label reads zero for every macro, identical to the SR Legacy table-salt entry.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 2328,
+   "sodium_source": "fdc:173468"
   },
   {
    "item": "Lime Zest",
@@ -5347,7 +5747,9 @@
    "fiber_g": 2.8,
    "source": "fdc:168155",
    "notes": "Limes, raw, standing in for grated peel as published. Same citrus Atwater caveat as Lime Juice; the line is 2 g at source scale.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 2,
+   "sodium_source": "fdc:168155"
   },
   {
    "item": "Frozen Lightly Breaded Chicken Breast Bites",
@@ -5421,7 +5823,9 @@
    "fiber_g": 0.3,
    "notes": "Raw squeezed juice, the shelf's own match for this term.",
    "source": "fdc:167747",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 1,
+   "sodium_source": "fdc:167747"
   },
   {
    "item": "Couscous",
@@ -5435,7 +5839,9 @@
    "fiber_g": 5.0,
    "notes": "Dry basis, the shelf's exact match for this term.",
    "source": "fdc:169699",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 10,
+   "sodium_source": "fdc:169699"
   },
   {
    "item": "Moroccan Spice Mix",
@@ -5463,7 +5869,9 @@
    "fiber_g": 2.1,
    "source": "fdc:169247",
    "notes": "Raw cos/romaine per 100 g; shredded is 47 g per cup.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 8,
+   "sodium_source": "fdc:169247"
   },
   {
    "item": "Reduced Fat Cheddar Cheese",
@@ -5507,7 +5915,9 @@
    "fat_g": 4.2,
    "fiber_g": 0.7,
    "source": "fdc:2597142 (Branded) BEN'S ORIGINAL READY RICE, CILANTRO LIME, 8.5 OZ. POUCH, Uncle Ben's Inc. - per 100 g. Atwater 4/4/9 gives 164 against the recorded 168.",
-   "notes": "The CARRIED product behind the cilantro-lime-rice commodity: Ben's Original shelf-stable 8.5 oz pouch, the only cell on the board (carriage.json:744, Fareway $1.97). Registrar 2026-08-28 ruled the id deliberately does NOT say frozen - pouch-vs-frozen is the same ready-cooked-seasoned-rice purchase - so the price row needed its own label rather than borrowing the Path of Life frozen row's numbers. Distinct from that row (240 cal / 140 g cup); the two agree closely per gram, 1.68 vs 1.71 cal/g, which is the sanity anchor the registrar asked for and not a reason to merge them."
+   "notes": "The CARRIED product behind the cilantro-lime-rice commodity: Ben's Original shelf-stable 8.5 oz pouch, the only cell on the board (carriage.json:744, Fareway $1.97). Registrar 2026-08-28 ruled the id deliberately does NOT say frozen - pouch-vs-frozen is the same ready-cooked-seasoned-rice purchase - so the price row needed its own label rather than borrowing the Path of Life frozen row's numbers. Distinct from that row (240 cal / 140 g cup); the two agree closely per gram, 1.68 vs 1.71 cal/g, which is the sanity anchor the registrar asked for and not a reason to merge them.",
+   "sodium_mg": 196,
+   "sodium_source": "fdc:2597142"
   },
   {
    "item": "Frozen Cilantro Lime Rice",
@@ -5535,7 +5945,9 @@
    "fiber_g": 1.1,
    "source": "fdc:173961",
    "notes": "Cranberry sauce, canned, sweetened [SR Legacy].",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 5,
+   "sodium_source": "fdc:173961"
   },
   {
    "item": "Whole Wheat Flour",
@@ -5549,7 +5961,9 @@
    "fiber_g": 10.6,
    "source": "fdc:790085",
    "notes": "Flour, whole wheat, unenriched [Foundation]. Chosen over the SR rows because its Atwater sum matches the stated calories exactly.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 3,
+   "sodium_source": "fdc:790085"
   },
   {
    "item": "Fresh Red Chili",
@@ -5591,7 +6005,9 @@
    "fiber_g": 0,
    "source": "fdc:171288",
    "notes": "Cheese, Mexican blend [SR Legacy].",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 607,
+   "sodium_source": "fdc:171288"
   },
   {
    "item": "White Onion",
@@ -5605,7 +6021,9 @@
    "fiber_g": 1.2,
    "source": "fdc:1104962",
    "notes": "Onions, white, raw [Foundation].",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 2,
+   "sodium_source": "fdc:1104962"
   },
   {
    "item": "Reduced Fat Mexican Blend Shredded Cheese",
@@ -5619,7 +6037,9 @@
    "fiber_g": 0,
    "source": "fdc:172216",
    "notes": "Cheese, Mexican, blend, reduced fat [SR Legacy].",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 776,
+   "sodium_source": "fdc:172216"
   },
   {
    "item": "Baby Potatoes",
@@ -5648,7 +6068,9 @@
    "fiber_g": 0.3,
    "source": "fdc:170645",
    "notes": "SR Legacy 'Jams and preserves, apricot', per 100 g as published; preferred off this run's shelf over an open-web brand.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 40,
+   "sodium_source": "fdc:170645"
   },
   {
    "item": "Black Peppercorns",
@@ -5662,7 +6084,9 @@
    "fiber_g": 25.3,
    "source": "fdc:170931",
    "notes": "SR Legacy 'Spices, pepper, black', per 100 g as published. 25.3 g of the carbs are fiber, which is the Atwater gap.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 20,
+   "sodium_source": "fdc:170931"
   },
   {
    "item": "Broccoli Rabe",
@@ -5676,7 +6100,9 @@
    "fiber_g": 2.7,
    "source": "fdc:170381",
    "notes": "SR Legacy 'Broccoli raab, raw', per 100 g as published; raw basis matches the trimmed-bunch weight.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 33,
+   "sodium_source": "fdc:170381"
   },
   {
    "item": "Prosciutto",
@@ -5735,7 +6161,9 @@
    "fiber_g": 0,
    "source": "fdc:173594",
    "notes": "Salad dressing, mayonnaise, light [SR Legacy], off this run's shelf.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 827,
+   "sodium_source": "fdc:173594"
   },
   {
    "item": "Powdered Peanut Butter",
@@ -5764,7 +6192,9 @@
    "fiber_g": 0.3,
    "source": "fdc:168880",
    "notes": "Rice, white, medium-grain, enriched, cooked [SR Legacy]. 1 cup cooked = 158 g.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 0,
+   "sodium_source": "fdc:168880"
   },
   {
    "item": "Frozen Cauliflower Rice",
@@ -5778,7 +6208,9 @@
    "fiber_g": 2.7,
    "source": "fdc:170399",
    "notes": "Cauliflower, frozen, cooked, boiled, drained, without salt [SR Legacy]. Atwater runs high against 19 cal because 2.7 g of the 3.75 g carbohydrate is fiber - normal for a low-calorie vegetable.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 18,
+   "sodium_source": "fdc:170399"
   },
   {
    "item": "Adobo Seasoning",
@@ -5807,7 +6239,9 @@
    "fiber_g": 1.3,
    "source": "fdc:173864",
    "notes": "Ham, sliced, regular (approximately 11% fat) [SR Legacy], off this run's shelf.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 814,
+   "sodium_source": "fdc:173864"
   },
   {
    "item": "Carnitas",
@@ -5865,7 +6299,9 @@
    "fiber_g": 1.0,
    "source": "fdc:168558",
    "notes": "Pickles, cucumber, dill or kosher dill [SR Legacy], per 100 g as published.",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)",
+   "sodium_mg": 809,
+   "sodium_source": "fdc:168558"
   },
   {
    "item": "Coconut Sugar",
@@ -5894,7 +6330,9 @@
    "fiber_g": 3.7,
    "source": "fdc:170591",
    "notes": "USDA Nuts, pine nuts, dried.",
-   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five)"
+   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five)",
+   "sodium_mg": 2,
+   "sodium_source": "fdc:170591"
   },
   {
    "item": "Bok Choy",
@@ -5908,7 +6346,9 @@
    "fiber_g": 1.0,
    "source": "fdc:170390",
    "notes": "USDA Cabbage, chinese (pak-choi), raw.",
-   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five)"
+   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five)",
+   "sodium_mg": 65,
+   "sodium_source": "fdc:170390"
   },
   {
    "item": "Bean Sprouts",
@@ -5922,7 +6362,9 @@
    "fiber_g": 1.8,
    "source": "fdc:169957",
    "notes": "USDA Mung beans, sprouted, raw - the sprout sold as bean sprouts.",
-   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five)"
+   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five)",
+   "sodium_mg": 6,
+   "sodium_source": "fdc:169957"
   },
   {
    "item": "Fresh Egg Noodles",
@@ -5936,7 +6378,9 @@
    "fiber_g": 1.2,
    "source": "fdc:169732",
    "notes": "USDA Noodles, egg, enriched, cooked - the hydrated basis, which is what a refrigerated fresh Asian egg noodle is sold at. This is the basis that reconciles the source's own published macros; the dry row at 384 cal/100 g is the wrong food for this line.",
-   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five)"
+   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five)",
+   "sodium_mg": 5,
+   "sodium_source": "fdc:169732"
   },
   {
    "item": "Chinese Cooking Wine",
@@ -5950,7 +6394,9 @@
    "fiber_g": 0,
    "source": "fdc:169070",
    "notes": "USDA Alcoholic beverage, wine, cooking. Calories are partly from alcohol, so a 4/4/9 sum reads low, exactly as the existing Dry White Wine row does.",
-   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five)"
+   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five)",
+   "sodium_mg": 626,
+   "sodium_source": "fdc:169070"
   },
   {
    "item": "Tomatoes",
@@ -5978,7 +6424,9 @@
    "fiber_g": 2.8,
    "source": "fdc:168917",
    "notes": "Quinoa, cooked (SR Legacy), per 100 g. Cooked basis on purpose - the line measures cooked quinoa, and the canon_item name carries that basis. Atwater 17.6+85.2+17.3 = 120.1 against the stated 120.",
-   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five-b)"
+   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five-b)",
+   "sodium_mg": 7,
+   "sodium_source": "fdc:168917"
   },
   {
    "item": "Shredded Mozzarella",
@@ -5992,7 +6440,9 @@
    "fiber_g": 0.0,
    "source": "fdc:170900",
    "notes": "Cheese, mozzarella, low moisture, part-skim, shredded (SR Legacy), per 100 g - the exact form of the line. Atwater 94.4+32.2+177.3 = 303.9 against the stated 304.",
-   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five-b)"
+   "added_by": "recipe-hunter map lane (hunt-2026-09-04-five-b)",
+   "sodium_mg": 682,
+   "sodium_source": "fdc:170900"
   }
  ]
 }
