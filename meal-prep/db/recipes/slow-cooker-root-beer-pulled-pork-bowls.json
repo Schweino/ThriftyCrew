@@ -20,7 +20,7 @@
                  "fat":  9,
                  "cost_ps":  "3.88"
              },
-    "intro_html":  "Yes, root beer, and yes, it works. Zero-sugar soda and sugar-free barbecue sauce keep this pulled pork lean while the slow cooker turns tenderloin into fork-tender shreds. It goes over potatoes with a little cabbage on the side, runs around ${{cost_ps}} a serving (at everyday cost), and packs {{protein}} grams of protein across 14 bowls.",
+    "intro_html":  "Yes, root beer, and yes, it works. Zero-sugar soda and sugar-free BBQ sauce do the sweetening while the slow cooker turns tenderloin into fork-tender shreds. It goes over potatoes with a little cabbage on the side, runs around ${{cost_ps}} a serving (at everyday cost), and packs {{protein}} grams of protein across 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3400 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 10 lb (4300 g)",
@@ -51,7 +51,7 @@
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
-                       "Sugar-free barbecue sauce cuts the sugar without cutting flavor. \u003cstrong\u003eGrab the sugar-free bottle\u003c/strong\u003e and nobody will know the difference.",
+                       "Sugar-free BBQ sauce cuts the sugar without cutting flavor. \u003cstrong\u003eGrab the sugar-free bottle\u003c/strong\u003e and nobody will know the difference.",
                        "Zero-sugar soda is often cheaper by the store brand. \u003cstrong\u003eBuy the generic diet soda\u003c/strong\u003e instead of the name brand for the same result.",
                        "Green cabbage is one of the cheapest vegetables per pound all year. \u003cstrong\u003eBuy a whole head of cabbage\u003c/strong\u003e and use it across several meals."
                    ],
