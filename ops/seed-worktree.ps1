@@ -800,6 +800,57 @@ if ($SelfTest) {
     } else {
       T 'MUST FIRE  THE FOUNDING BUG, live: the linked worktree''s COMMITTED record names an older board than the one the source would seed' $false 'the temp worktree could not be created, so the live pair cases could not run'
     }
+
+    # ---- THE FEED, END TO END THROUGH THE SHIPPED LIST (2026-09-19) ------------------------------
+    # The canonical feed on disk was gitignored and on no list, so every worktree lacked it: 1 of 76 held a copy
+    # that day, and audit-db-agreement's 189 false GPU-DRIFT lines in a feedless checkout stopped an approved
+    # republish. These cases run THIS SCRIPT as a child against the temp repo, so the list it reads is the SHIPPED
+    # .worktreeinclude and the copy is the live one: drop the feed's line from that file and all three go red.
+    # The other shipped patterns match nothing in the temp source and print MISSING, so the child's exit is 2 and
+    # is not what is asserted; each case reads the feed's OWN row line and the bytes that landed.
+    $fxFeed = 'grocery\out\smp-feed.json'   # reach-fixture-ok: written into a %TEMP% throwaway repo and its linked worktree; nothing here opens this repo's feed
+    $selfPath = if ($PSCommandPath) { $PSCommandPath } else { Join-Path $here 'seed-worktree.ps1' }
+    $feedRow = { param($lines, $verb) @(@($lines) | Where-Object { ([string]$_).Trim() -match ('^' + $verb + '\s+' + [regex]::Escape($fxFeed) + '(\s|$)') }).Count -eq 1 }
+    $runSeed = {
+      # No stderr redirect: under EAP=Stop in PS 5.1 that turns a child's first stderr line into a throw.
+      $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $selfPath -Target $tmpWt -Source $tmp
+      return ,@($o)
+    }
+    if ($wtOk) {
+      $fSrc = Join-Path $tmp $fxFeed
+      $fDst = Join-Path $tmpWt $fxFeed
+      $null = New-Item -ItemType Directory -Force (Split-Path $fSrc -Parent)
+      $feedA = '{"generated":"2026-01-01","ingredients":{}}'
+      $feedB = '{"generated":"2026-01-02","ingredients":{"x":{"unit":"oz"}}}'
+      [IO.File]::WriteAllText($fSrc, $feedA, $utf8)
+      [IO.File]::SetLastWriteTimeUtc($fSrc, [datetime]::new(2026, 9, 19, 9, 0, 0, [DateTimeKind]::Utc))
+      $pre = Test-Path -LiteralPath $fDst
+      # MUST FIRE - THE FOUNDING BUG. An unseeded target gains the feed, byte for byte.
+      $o1 = & $runSeed
+      $got1 = if (Test-Path -LiteralPath $fDst) { [IO.File]::ReadAllText($fDst) } else { '(absent)' }
+      T 'MUST FIRE  an unseeded target GAINS the feed through the shipped .worktreeinclude, byte for byte' `
+        ((-not $pre) -and ($got1 -ceq $feedA) -and (& $feedRow $o1 'copied')) `
+        ("pre=" + $pre + " target=" + $got1 + " row=" + (@($o1 | Where-Object { $_ -like '*smp-feed.json*' }) -join ' | '))
+      # CLEAN TWIN - the refresh the boards already had still works for the feed: the source is rebuilt in place
+      # under the same name, later than the copy, and a re-seed carries the new bytes over the stale ones.
+      [IO.File]::WriteAllText($fSrc, $feedB, $utf8)
+      [IO.File]::SetLastWriteTimeUtc($fSrc, [datetime]::new(2026, 9, 19, 16, 2, 28, [DateTimeKind]::Utc))
+      $o2 = & $runSeed
+      $got2 = if (Test-Path -LiteralPath $fDst) { [IO.File]::ReadAllText($fDst) } else { '(absent)' }
+      T 'CLEAN TWIN a stale feed copy is REFRESHED when the source was rebuilt after it was taken' `
+        (($got2 -ceq $feedB) -and (& $feedRow $o2 'refreshed')) `
+        ("target=" + $got2 + " row=" + (@($o2 | Where-Object { $_ -like '*smp-feed.json*' }) -join ' | '))
+      # MUST NOT FIRE - a copy identical to its source, bytes and time, is left alone: no copy, no refresh.
+      $t3 = if (Test-Path -LiteralPath $fDst) { (Get-Item -LiteralPath $fDst).LastWriteTimeUtc } else { [datetime]::MinValue }
+      $o3 = & $runSeed
+      $t3b = if (Test-Path -LiteralPath $fDst) { (Get-Item -LiteralPath $fDst).LastWriteTimeUtc } else { [datetime]::MinValue }
+      T 'MUST NOT FIRE  an identical feed copy is not rewritten - the row reads present, never copied or refreshed' `
+        ((& $feedRow $o3 'present') -and -not (& $feedRow $o3 'copied') -and -not (& $feedRow $o3 'refreshed') -and ($t3 -eq $t3b) -and
+         ([IO.File]::ReadAllText($fDst) -ceq $feedB)) `
+        ("row=" + (@($o3 | Where-Object { $_ -like '*smp-feed.json*' }) -join ' | ') + " mtime " + $t3.ToString('o') + " -> " + $t3b.ToString('o'))
+    } else {
+      T 'MUST FIRE  an unseeded target GAINS the feed through the shipped .worktreeinclude' $false 'the temp worktree could not be created, so the feed cases could not run'
+    }
     # The live REFRESH predicate against real files. Its whole premise is that Copy-Item carries the source's
     # LastWriteTime onto the copy, so this measures that rather than assuming it.
     $nSrc = Join-Path $tmp 'data\a.json'
@@ -838,7 +889,7 @@ if ($SelfTest) {
     $(if ($null -eq $shipped) { 'missing' } else { "patterns=$($shipped.Patterns.Count) refused=$($shipped.Refused.Count)" })
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
-  Write-Output ("SELF-TEST PASS: {0} of {0} checks - directory and .worktreeinclude file seeding, the git resolver in a temp repo, the main-checkout source resolver (pure and from a real linked worktree), the source guard, both shipped lists, and the pair check (pure, and live over a record that reached a linked worktree by commit while the file it names reached it by copy)" -f $cases)
+  Write-Output ("SELF-TEST PASS: {0} of {0} checks - directory and .worktreeinclude file seeding, the git resolver in a temp repo, the main-checkout source resolver (pure and from a real linked worktree), the source guard, both shipped lists, the feed seeded, refreshed and left alone end to end through the shipped list, and the pair check (pure, and live over a record that reached a linked worktree by commit while the file it names reached it by copy)" -f $cases)
   exit 0
 }
 

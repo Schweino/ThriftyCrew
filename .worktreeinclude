@@ -70,6 +70,17 @@ grocery/out/comparison-*.json
 # line MISSING-SOURCE and exits non-zero, which is true. design/PLAN-capture-eviction-stamp-2026-09-11.md.
 grocery/out/capture-evictions-stamp.json
 
+# ---- the feed the recipe checks read ------------------------------------------------------------
+# THE CANONICAL FEED ON DISK (2026-09-19). Gitignored, and the tracked public/smp-feed.json beside it is a
+# different road: the recipe-side checks read THIS file. Without it a checkout cannot judge anything priced
+# per feed unit, and that was not loud: meal-prep\engine\audit-db-agreement.ps1 printed 189 GPU-DRIFT lines
+# that were a missing file, not drift, until 4f32d0f84 made it say BLIND; its CHEAPEST-FALLBACK guard
+# skips when the feed is absent; meal-prep\pipeline\feed-covers-published.ps1 exits 3. The false drift is
+# what stopped the approved catalogue republish that day. Measured at 00032d4d8 in the main checkout,
+# 2026-09-19: 1 of 76 worktrees under .claude\worktrees held a copy. About 800 KB. Rebuilt in place under
+# the same name by grocery\export-feed.ps1, so a re-seed REFRESHES a copy the source has rewritten since.
+grocery/out/smp-feed.json
+
 # ---- WHAT THIS FILE CANNOT FIX ------------------------------------------------------------------
 # Two of the six worktree failures are not missing data and no entry here will help, because both are
 # TRACKED files and only ignored files are eligible:

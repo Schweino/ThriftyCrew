@@ -13674,6 +13674,21 @@ gate's own remedy ("rebuild the spec") would have priced brown sugar at 16x on 4
 nothing else wrong exits 3 with one line naming the cause, and a run with the feed is judged exactly as before.
 It changes no number anywhere. Brad's command is unchanged; it only has to run where the feed is.
 
+**2026-09-19, later: the feed is now SEEDED.** `grocery/out/smp-feed.json` is a line in `.worktreeinclude`, so
+`ops\seed-worktree.ps1 -Target <checkout>` copies it and REFRESHES a copy the source has rebuilt since (the refresh
+the boards already had). Measured before the change: 1 of 76 worktrees held a copy. `seed-worktree -SelfTest` gains
+three cases that run the script itself against a throwaway repo through the SHIPPED list: an unseeded target gains
+the feed byte for byte (MUST FIRE), a stale copy is refreshed (CLEAN TWIN), an identical copy reads `present` with
+its mtime unmoved (MUST NOT FIRE); 54 of 54, exit 0. With the feed's line commented out, all three went red (51 of
+54, exit 1); with the refresh predicate neutered, the CLEAN TWIN went red; restored md5-identical both times. In a
+worktree seeded this way `audit-db-agreement` reads `DB-AGREEMENT-COMPLETE recipes=584 issues=0`, exit 0.
+`meal-prep\test-scale-hardening.ps1` now counts its three CHEAPEST-FALLBACK cases BLIND when that gate exits 3 (no
+feed) and exits 3 itself when nothing failed but something was blind. **Still unseeded, and not the same change:**
+`meal-prep/db/published-hashes.json` (read by `audit-db-agreement`, `publish.ps1`, `feed-covers-published`,
+`wave-publish`; `publish.ps1` WRITES it, so a seeded copy is a ledger that can fork from main's), which is why
+`feed-covers-published` still exits 3 in a seeded worktree (`no published set`); and `grocery/out/recipe-board.json`
+and `grocery/out/recipe-costs.json` (read by `cost-recipes`, `export-feed`, `top5-weekly`, `wave-publish`).
+
 ### I173 - the allergen line is checked at publish but not surfaced at pre-audit `DONE` `queue-7`
 
 **Merged from `design\backlog-inbox\approvals-i144-2026-09-12.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.

@@ -92,7 +92,7 @@ function Get-GpuVerdict {
        BLIND IS NOT DRIFT (2026-09-19). The spec's gpu is grams per the unit the FEED quotes: build-v2-spec's
        Resolve-ScalerGpu rescales db gpu 28.3495 g/oz to 29.57 for a feed that prices soy sauce per floz and
        to 453.592 for one that prices brown sugar per lb. This guard used to treat a checkout with NO
-       grocery\out\smp-feed.json (gitignored, and not seeded into worktrees) exactly like "the feed has no
+       grocery\out\smp-feed.json (gitignored, and not seeded into worktrees until .worktreeinclude listed it later that day) exactly like "the feed has no
        row for this bid", fell back to the map unit, and so compared 29.57 with 28.3495 as if both were per
        oz. A propagate run from a worktree then refused on 189 GPU-DRIFT lines over 150 recipes (5 items:
        Soy Sauce 101, Brown Sugar 48, White Vinegar 20, Red Wine Vinegar 14, Balsamic Vinegar 6), every one
@@ -403,7 +403,7 @@ if($fallback.Count){
 # A CHECKOUT WITH NO FEED CANNOT JUDGE GPU, and says so (2026-09-19, see Get-GpuVerdict). Printed in both
 # branches below; with nothing else wrong it is exit 3, could-not-evaluate, never a pass - so propagate
 # still stops in a feedless checkout, but on a line that names the cause instead of 189 false drifts.
-$blindLine = if($gpuBlind -gt 0){ "db-agreement: BLIND - no feed at $fuPath in this checkout, so $gpuBlind gpu comparison(s) could not be made (the spec gpu is grams per FEED unit) and CHEAPEST-FALLBACK was skipped. Run from a checkout with the feed, or copy it in; this is not drift." } else { '' }
+$blindLine = if($gpuBlind -gt 0){ "db-agreement: BLIND - no feed at $fuPath in this checkout, so $gpuBlind gpu comparison(s) could not be made (the spec gpu is grams per FEED unit) and CHEAPEST-FALLBACK was skipped. Run from a checkout with the feed, or seed this one with ops\seed-worktree.ps1 -Target <this checkout> (the feed is on .worktreeinclude since 2026-09-19); this is not drift." } else { '' }
 if($issues.Count -eq 0){
   # Reported, never silent. An in-flight spec is expected, but a growing pile of them is how twelve
   # never-audited specs sat unnoticed until a publish tried to create them as live posts.

@@ -3,14 +3,16 @@
   can silently break and give false confidence). Covers: Set-RecipeVisibility (lib\json-db-io),
   Invoke-GhostApi (lib\ghost-lib), audit-db-agreement CHEAPEST-FALLBACK guard, audit-store-registry.
   Fixture-based where possible; the two guard negative-tests mutate a real file inside try/finally and
-  ALWAYS restore. Exit 0 = all pass, 1 = a failure.
+  ALWAYS restore. Exit 0 = all pass, 1 = a failure, 3 = no failure but at least one case could not look
+  (BLIND, counted and named - a could-not-look is never a pass and never a fail).
 #>
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $mp   = $PSScriptRoot
 $root = Split-Path $mp -Parent
-$pass = 0; $fail = 0
+$pass = 0; $fail = 0; $blind = 0
 function Ok($name, $cond) { if ($cond) { Write-Output ("  PASS  " + $name); $script:pass++ } else { Write-Output ("  FAIL  " + $name); $script:fail++ } }
+function Blind($name, $why) { Write-Output ("  BLIND " + $name + "   (" + $why + ")"); $script:blind++ }
 
 . (Join-Path $mp 'lib\json-db-io.ps1')
 . (Join-Path $root 'lib\ghost-lib.ps1')
@@ -62,7 +64,18 @@ Ok '404 status surfaced to caller' ($code -eq 404)
 # ---- 3. audit-db-agreement: regression (clean on real data) + CHEAPEST-FALLBACK negative ----
 Write-Output 'audit-db-agreement (CHEAPEST-FALLBACK guard):'
 & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mp 'engine\audit-db-agreement.ps1') | Out-Null
-Ok 'clean on live data (exit 0)' ($LASTEXITCODE -eq 0)
+$dbLive = $LASTEXITCODE
+if ($dbLive -eq 3) {
+  # A CHECKOUT WITH NO FEED CANNOT LOOK (2026-09-19). audit-db-agreement exits 3 when grocery\out\smp-feed.json is
+  # absent, and CHEAPEST-FALLBACK, the guard this section tests, is skipped without it. So none of the three cases
+  # can be judged here: not a pass, not a fail, three counted BLIND. The negative case is skipped rather than run,
+  # because it would rewrite a live file to prove nothing. ops\seed-worktree.ps1 -Target <this checkout> carries
+  # the feed (it is on .worktreeinclude since 2026-09-19), after which all three run.
+  Blind 'clean on live data (exit 0)' 'audit-db-agreement exit 3: no feed in this checkout'
+  Blind 'flags an unallowlisted off-feed bid (exit 1)' 'CHEAPEST-FALLBACK is skipped with no feed, so the mutation would prove nothing'
+  Blind 'clean again after restore (exit 0)' 'no feed'
+} else {
+Ok 'clean on live data (exit 0)' ($dbLive -eq 0)
 # negative: temporarily REMOVE an allowlisted exotic bid so its recipe lines become an unguarded fallback
 $npF = Join-Path $mp 'db\no-board-price-ok.json'
 $npBak = Get-Content $npF -Raw
@@ -75,6 +88,7 @@ try {
 } finally { [IO.File]::WriteAllText($npF, $npBak) }
 & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mp 'engine\audit-db-agreement.ps1') | Out-Null
 Ok 'clean again after restore (exit 0)' ($LASTEXITCODE -eq 0)
+}
 
 # ---- 3b. COST-DRIFT: the founding-bug fixture is hermetic, so it runs as the guard's own -SelfTest
 # rather than by mutating a 3.9 MB live file. Both scripts in the repair pair are checked: the guard that
@@ -134,5 +148,5 @@ try {
 & powershell -NoProfile -ExecutionPolicy Bypass -File $hb | Out-Null
 Ok 'healthy again after restore (exit 0)' ($LASTEXITCODE -eq 0)
 
-Write-Output ("`n{0} passed, {1} failed" -f $pass, $fail)
-if ($fail) { exit 1 } else { exit 0 }
+Write-Output ("`n{0} passed, {1} failed, {2} blind of {3} case(s)" -f $pass, $fail, $blind, ($pass + $fail + $blind))
+if ($fail) { exit 1 } elseif ($blind) { exit 3 } else { exit 0 }
