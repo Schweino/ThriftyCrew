@@ -15586,7 +15586,7 @@ guard 2 exists for exactly this class (its own header names household products s
 
 **What did not ship (origin), and why.** The fixture is deliberate and its case is right, so it was left alone. Silencing it is not trivially safe: the only quiet route is to capture that push's streams in production, and `graph\pipeline\nightly.ps1:1236`, `grocery\check-ad-cycles.ps1:3516` and `meal-prep\pipeline\harvest-crawl.ps1:299` all push through it, so their transcripts would lose the pre-push hook's own output. It is not a silent pass either: a push that could not reach origin is still reported as "push failed, left local". If it is ever wanted, the change is to run that push through `Invoke-GitCaptured` (already used for the commit five lines above) and append `Format-GitRefusal`'s summary to the verdict, which also gives a failed push its reason; the cost is the hook transcript in three scheduled lanes' logs.
 
-### I220 - Reader-facing: 20 Walmart board entries rest on a store nobody sanctioned `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
+### I220 - Reader-facing: 20 Walmart board entries rest on a store nobody sanctioned `NEEDS A RULING` `run-0919` `1-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15596,6 +15596,55 @@ reads the capture's `#tc-store` line, which `build-walmart-deals` refuses a capt
 picks, on a store basis Brad never ruled (the ruled store is 5361 / 68137). Fixing it changes live board
 cells, so the first rung is Brad's: retire the batch rows, re-stamp them, or give the importer the same
 store-line refusal the builder has.
+
+**Re-measured 2026-09-18 on the republished `comparison-2026-09-17` (main checkout, read-only, 15:46 build).**
+Still 20 of 3,189 store entries across 572 cells rest on batch rows, 12 of them cheapest-store picks (cantaloupe,
+fish-sauce, grapefruit, harissa-paste, honeydew, kale, lemons, limes, parchment-paper, plastic-wrap,
+pomegranate-molasses, watermelon). 16 of the 20 come from `walmart-regular-2026-09-05.json` (as_of 2026-09-05,
+13 days old); fish-sauce and harissa-paste from the 2026-07-18 file and pomegranate-molasses and tomatillos from
+the 2026-08-01 file (as_of 2026-07-30, 50 days old). **No store can be proven for any of them:** the raw batch
+files the `batch_imports` stamps name (`walmart-stale22` and `walmart-markdown4` of 2026-09-05,
+`walmart-priority-2026-07-30`, the four `wm-*-2026-07-31` files, `walmart-r300-pruned23`) carry no `#tc-store`
+line and no storeId, zip or store name, and commit 8523fd033 (the 09-05 import) records none. The 90-day union
+holds 6,570 such rows across seven files (2026-07-15 to 2026-09-05).
+
+**Prepared on branch `claude/i220-walmart-batch` (pushed, gated, not on main):**
+1. Behaviour-neutral: `Split-WalmartCaptureStore` and `Get-WalmartSanctionedStore` move unchanged into
+   `walmart-row-lib.ps1` (builder self-test output byte-identical), and `import-walmart-batch` rules on the
+   capture with them before parsing a row, writes nothing on a refusal, and stamps `source_ad` from the line it
+   read. Five MUST FIRE and a CLEAN TWIN in its `-SelfTest`; broken once, the five went red. The real 09-05
+   capture is refused end to end. `walmart-capture-reducer.js` writes no store line, so that lane refuses every
+   capture until it does. Importer blob `3d348b9a3bbb`, lib blob `b91ff0250f83`.
+2. Price-moving: `compare-deals` refuses a Walmart batch row whose stamp lacks "store read from the capture"
+   (`Test-UnreadWalmartBatchStore`, compare-deals blob `e26f32100bae`), counted in
+   `health.walmart_batch_rows_store_unread`. Rebuilt both arms on the seeded 2026-09-17 inputs: the old arm
+   reproduces the live board exactly (0 of 572 cells differ); the new arm changes **22 of 572 cells and 5
+   cheapest-store verdicts**:
+   - fish-sauce: Walmart $0.4176/fl oz (Kikkoman 6.8 fl oz, the 2026-07-27 fish-sauce-class row) -> Fareway $0.4986
+   - harissa-paste: Walmart $0.845/oz (Mina, 10 oz) -> Hy-Vee $6.3105/oz, "Morton & Bassett Harissa" 1.9 oz, a dry
+     spice blend (a wrong product the retirement EXPOSES)
+   - mangoes: Baker's $1.00 -> Walmart $0.75 ("Fresh Red Mango", a 2026-07-12..18 row)
+   - pomegranate-molasses: Walmart $0.578/fl oz was its only store, so the cell leaves the board (572 -> 571)
+   - watermelon: Walmart $4.64 -> Aldi $4.65 (Walmart falls back to $4.65, a tie Aldi takes)
+   - same store, new price: cantaloupe Walmart $2.50 sale -> $2.69; kale $1.62 -> $1.48; french-bread $1.47 ->
+     $1.25 sale (window 08-31..09-30, a knock-on: the 09-05 batch row had superseded that product id)
+   - Walmart entry only: canned-pinto-beans (0.0548 -> 0.0594, knock-on), cauliflower (2.96 -> 3.97),
+     green-onions (1.17 -> 1.07), pineapple (1.88 -> 1.98), tomatillos (2.86 -> 3.68), rotisserie-chicken (same
+     $5.97, Lemon Pepper instead of Traditional), and same-price product swaps on celery, cucumbers, grapefruit,
+     honeydew, lemons, limes, parchment-paper and plastic-wrap.
+   **The catch: 14 of the 20 retired entries fall back to hand-built rows from the 2026-07-05..07-18 files**
+   ("walmart.com (Omaha, staples300)" and similar), which are older (61 to 74 days before the board date) and no better
+   proven, and leave the 90-day union between 2026-10-03 and 2026-10-16; the 09-05 batch rows would stay until 2026-12-04.
+
+**RULING NEEDED: what happens to the 6,570 batch rows already in the union?**
+- **A. Retire now**: land the branch whole. 22 cells move as listed, pomegranate-molasses leaves the board,
+  Hy-Vee's spice blend takes harissa-paste unless fixed first, and 14 cells trade a 13-day-old unproven row for
+  a two-month-old one.
+- **B. Recapture forward, then retire** (recommended): land part 1 now (no board change), recapture the 20
+  commodities through `pull-walmart-instore.js` + `build-walmart-deals` at 5361 (a fresh sanctioned row takes
+  each cell on freshness), fix harissa-paste's Hy-Vee match, then land part 2 so the fallback is sanctioned. Same
+  shape as the 2026-08-28 ruling ("leave the existing rows, recapture forward").
+- **C. Leave them**: land part 1 only; the batch rows age out of the union by 2026-12-04.
 
 ### I221 - Reader-facing: the deals page never shows "Doesn't carry" `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
 
