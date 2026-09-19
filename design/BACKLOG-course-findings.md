@@ -15139,6 +15139,55 @@ measured; it needs the AST (callee's `throw` outside `try`, caller's argument), 
 and the estate mostly runs under `EAP = 'Stop'`, where the problem cannot occur. Brad decides whether the
 rule is worth stating before the join is measured.
 
+**Ruled 2026-09-19: MEASURE first. Acceptance bar, written and committed 2026-09-19 before any call site is
+counted** (base origin/main d335a9a3f).
+
+*The premise, re-probed first* (scratch, one child `powershell.exe` 5.1.26100 per case, so no enclosing `try`
+masks it: a `throw` anywhere under a `try` on the stack stays terminating, and a first probe run inside a
+wrapper `try` read every case as THREW for exactly that reason). A `[CmdletBinding()]` function doing
+`throw 'Err'; 'AFTER'`: with `-ErrorAction SilentlyContinue`, `-EA 0` or `-ErrorAction:SilentlyContinue` it
+returned `AFTER` and the caller carried on, rc 0; with `-ErrorAction Ignore` the function stopped, returned
+nothing, and the caller carried on silently, rc 0; with no `-ErrorAction` it threw, rc 1. A function with no
+`[CmdletBinding()]` but a `[Parameter()]` attribute behaves the same (it is advanced too). A `throw` inside a
+`catch` block behaves the same. Under `$ErrorActionPreference = 'SilentlyContinue'` a PLAIN function's `throw`,
+and a top-level one, also ran on to `AFTER`. A caller's own `EAP = 'Stop'` does not restore the throw when the
+call passes `-ErrorAction SilentlyContinue`. And `$PSCmdlet.ThrowTerminatingError`, which the paragraph above
+calls immune, stopped its function but the caller still carried on silently, rc 0: immune in the callee,
+not for the caller.
+
+*Population.* `git ls-files '*.ps1'` at the bar commit, minus every path with an `archive/` segment, parsed
+with the PS 5.1 AST (parse errors counted and printed).
+
+*Callee.* A function definition whose OWN body (not a nested function) holds a `throw` statement outside every
+`try` body. It is ADVANCED if its param block carries `[CmdletBinding()]` or any parameter carries
+`[Parameter()]`; the two are reported separately.
+
+*Call sites, three arms, one row each:*
+- **arg**: a command naming an ADVANCED callee with `-ErrorAction` (any prefix of at least two letters, or
+  `-EA`) valued `SilentlyContinue`, `Ignore`, `0` or `4`.
+- **eap**: a command naming ANY callee (the probe shows the preference swallows a plain function's throw too)
+  after an assignment of `SilentlyContinue` or `Ignore` to `$ErrorActionPreference` in the same function or at
+  file scope around it.
+- **splat**: a call to a callee with a splatted argument, listed and read by hand because its value is not
+  resolved.
+Callee identity is by NAME, so a hit is a candidate, never a finding.
+
+*Every hit is READ.* A hit is a **real silent swallow of a guard** only if all four hold: a bare `throw` in the
+callee is reachable on the caller's inputs; it is a GUARD (it refuses a bad input or state, rather than signalling
+an outcome the caller expects); the call is not under a `try` the reader can see, lexically or in every caller
+up the stack; and the caller goes on to act on the missing or partial result as though the guard had passed.
+Not real: an intended probe whose caller handles the empty result as the answer and says so, an unreachable
+throw, a name that resolves to a different function, or a call under a `try`.
+
+*The verdict.* **0 real sites: DONE with the measurement, no rule.** **1 or more**: each is fixed at its call
+site (a MUST FIRE fixture of the swallow, broken once), and a rule for new code goes into
+`.claude/rules/ops-and-gates.md`.
+
+*Unsound, stated before the run.* The EAP arm is LEXICAL, while the preference propagates DYNAMICALLY: a script
+that sets `SilentlyContinue` at file scope and calls a library function that calls a callee is not joined, so
+file-scope swallowing assignments are counted and listed beside the join. Dynamic calls (`& $name`,
+`Invoke-Expression`) and `$PSDefaultParameterValues` are not seen.
+
 ### I208 - one catalogue include is cubic on a whitespace run and an atomic group makes it linear with no answer changed `DONE` `queue-8`
 
 **Merged from `design\backlog-inbox\q8-regex-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
