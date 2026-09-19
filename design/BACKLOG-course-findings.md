@@ -6068,9 +6068,43 @@ files and a republish of each, which is a real risk to live pages and should not
 **Constraint acknowledged.** Nothing was changed. Every figure above was read off the filesystem or
 off a public page.
 
-### I60 - three finance lessons make a quantified claim and give no quantity `NEEDS A RULING` `queue-4` `1-WAY` `RUNG1 RULING`
+### I60 - three finance lessons make a quantified claim and give no quantity `DONE` `queue-4` `1-WAY` `RUNG1 RULING`
 
-**`[2026-09-19. The republish is prepared and rehearsed; it waits for Brad. Read design\ready-for-brad\I60-lesson-republish.md.]`**
+**`[2026-09-19. DONE. Brad approved option 1 in chat, having read the exact passages, and the swap is live.]`**
+
+**Applied 2026-09-19 at 08:57 UTC**, exactly as written in `design\ready-for-brad\I60-lesson-republish.md` at
+bd9e94199, from the main checkout, through `ops\review-staged.ps1` (3 PUTs staged, each body decoded and diffed
+against live, then `-Apply`, exit 0, `sent=3`). A GET just before the write read all three posts still at their
+July `updated_at`, so nothing had moved since the rehearsal.
+
+| Lesson | Post id | `updated_at` before | `updated_at` after | Journal entry |
+|---|---|---|---|---|
+| 30 | `6a43b4155e9f16000182e978` | 2026-07-03T11:28:13.000Z | 2026-09-19T08:57:44.000Z | `d756b254abd8` |
+| 31 | `6a43b4165e9f16000182e97d` | 2026-07-05T11:02:38.000Z | 2026-09-19T08:57:44.000Z | `250aff606263` |
+| 37 | `6a43b4185e9f16000182e99b` | 2026-07-03T11:28:09.000Z | 2026-09-19T08:57:45.000Z | `67ada48d4147` |
+
+The journal entries are in the main checkout's `ops\ghost-journal.jsonl` (gitignored). Each holds a captured
+before-image, so `ops\revert-ghost-write.ps1` can put any one post back.
+
+**Checked after the write, by GET and field by field against a snapshot taken just before it.** All three are
+still `published` and `visibility: paid`. The only fields that moved are `html`, `lexical` and `updated_at`, plus
+`reading_time` on lesson 37, which Ghost works out from the longer body. Title, excerpt, tags, tiers, code
+injection, meta and SEO fields and the publish date are all unchanged. Undo the swap in the new html and you get
+the old html byte for byte, so no other block changed. Each new paragraph appears exactly once (2, 3, 5 and 1).
+None of the old passages or removed sentences is left. There is no em dash in the html or the lexical. The one en
+dash on lesson 37 is the live `$5,000-$10,000` range, which the swap did not touch.
+
+**Checked on the live site signed out, at 375px.** None of the three posts has an in-body paywall card, so no body
+paragraph shows above the paywall. Each page shows only the title, excerpt, byline, disclaimer and the "This post
+is for paying subscribers only" box. None of the new wording is anywhere in the served HTML, so the paywall holds
+in the direction that loses money. The width is 375 and the scroll width is 375, so there is no horizontal scroll.
+The member view was not opened in a browser, because signing in needs a password this session may not enter. The
+member text was read back by Admin API GET instead.
+
+**Still owed, and not part of this item's ruling:** bringing `content\lessons\lesson-30|31|37*.md` and the substack
+mirrors up to the live text (the doc's last step), and the old-domain paywall structured data on 52 of 56 lessons.
+
+**`[2026-09-19, earlier. The republish is prepared and rehearsed; it waits for Brad. Read design\ready-for-brad\I60-lesson-republish.md.]`**
 
 **Brad's feedback, 2026-09-19: "It MUST be in my own voice."** The first corrected passages read like an
 analyst. All eleven replacement paragraphs (lessons 30, 31 and both lesson 37 passages) were rewritten off his

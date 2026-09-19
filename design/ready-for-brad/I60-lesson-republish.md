@@ -1,5 +1,14 @@
 # I60: the three lesson fixes, shown before anything is republished
 
+**APPLIED 2026-09-19 at 08:57 UTC. Brad approved it in chat after reading the exact passages below.** The swap
+ran exactly as written here, from the main checkout through `ops\review-staged.ps1`, and all three PUTs were
+sent (exit 0). Lesson 30 (`6a43b4155e9f16000182e978`) is now at `updated_at` 2026-09-19T08:57:44.000Z, journal
+entry `d756b254abd8`. Lesson 31 (`6a43b4165e9f16000182e97d`) is at 2026-09-19T08:57:44.000Z, journal
+`250aff606263`. Lesson 37 (`6a43b4185e9f16000182e99b`) is at 2026-09-19T08:57:45.000Z, journal `67ada48d4147`.
+All three are still published and paid, and only the body changed. The checks are recorded in backlog I60. What
+this file still asks for is bringing `content/lessons/` and the substack mirrors up to the live text. After
+that, delete the file, as its last line says.
+
 Backlog I60. Prepared 2026-09-19 at base commit ceed001cc. Nothing was sent to Ghost: every live read was a
 GET, and the republish below was rehearsed with writes STAGED (queued, never sent), then the queue was
 discarded.
