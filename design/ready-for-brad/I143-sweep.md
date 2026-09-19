@@ -151,8 +151,14 @@ bbq-chicken-rice-bowls,bbq-chicken-burrito,chicken-enchilada-rice-bowls,fajita-c
 0 skipped. The publish journal gained exactly these 10 keys (583 before and after), and a second drift run read
 583 match, 0 drift. A logged-out fetch of bbq-chicken-rice-bowls, hot-honey-chicken-bowls and
 chimichurri-steak-sheet-pan read the new title, no "lean", and no "What This Batch Costs" section served free.
-Only words changed, with no layout change, so no 375px check was run. The pot-pie footer below was NOT run: it is
-outside the approved batch and carries drift of its own.
+Only words changed, with no layout change, so no 375px check was run. The pot-pie footer below was held back from the batch
+and then approved by Brad separately.
+
+**Pot-pie footer APPLIED 2026-09-19 on Brad's separate go-ahead.** The probe showed exactly two pending changes,
+the allergen line and the footer. build-cards 1/1, audit-allergen-line clean, publish 1 of 1 verified. The live
+footer now names "BBQ Chicken and Rice Bowls". The page serves its cost section to logged-out readers because it
+is one of the 20 recipes marked `public` in recipes-db.json, and it was public before this write (the journal's
+before-copy says so). That is not a leak.
 
 Optional, after batch 1 is live: `build-cards.ps1 -Slugs chicken-pot-pie-biscuit-casserole`, then `audit-allergen-line.ps1` and `publish.ps1` with the same slug, so its footer stops naming the old title. That card carries its own pending drift too; run the probe on it first.
 
