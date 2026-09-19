@@ -1,0 +1,726 @@
+diff --git a/graph/audit_graph_shape.py b/graph/audit_graph_shape.py
+index 7e2248f72..e8745f068 100644
+--- a/graph/audit_graph_shape.py
++++ b/graph/audit_graph_shape.py
+@@ -73,7 +73,7 @@ CUT_TYPES = ("Store", "Commodity")
+ # happened to be fully orphaned this morning into a permanent blind spot.
+ #
+ # CategoryExclude: an exclude is a statement about what must NOT match, so it joins nothing.
+-#   graph/import/importers.py:455 upserts it with `db.upsert_node(xid, "CategoryExclude", ...)` and
++#   graph/import/importers.py:466 upserts it with `db.upsert_node(xid, "CategoryExclude", ...)` and
+ #   creates no edge; graph/pipeline/resolve.py:301 only SELECTs the rows back out by type. Measured
+ #   2026-09-09 against graph/sqlite/graph.db: 201 of 201 are degree 0, and every one has been since
+ #   the day it was created.
+diff --git a/graph/eval/probe_listing_overlap.py b/graph/eval/probe_listing_overlap.py
+index 9814a7ca0..8d804a9e6 100644
+--- a/graph/eval/probe_listing_overlap.py
++++ b/graph/eval/probe_listing_overlap.py
+@@ -12,8 +12,12 @@ TWO SOURCES, and they differ on purpose:
+   --source graph     (default) instance_of edges in graph.db, the rebuildable INDEX.
+   --source identity  the tracked identity .jsonl files, which are the TRUTH the index is built from.
+ The graph also prints how many of its identity-table edges the current files no longer assert
+-(`stale`): graph/import/importers.py upserts instance_of edges and never retracts one, so a listing
+-the engine has since re-filed keeps its old edge. Measure a form question on --source identity.
++(`stale`). Until 2026-09-19 that number only grew: graph/import/importers.py upserted instance_of
++edges and never retracted one, so a listing the engine had since re-filed kept its old edge (3,230
++of 34,994 staple filings and 385 of 3,911 recipe ones when it was fixed). The importer now retracts
++them, so `stale` reads as drift SINCE THE LAST IMPORT rather than since the graph was built - a
++large number here is now a stale graph.db, not a design gap. Measure a form question on
++--source identity either way: the files are the truth, and the index is only as fresh as its run.
+ 
+ READ-ONLY. graph.db is opened with sqlite URI mode=ro; nothing is written anywhere. Point --db at a
+ COPY when the daily pipeline may be writing. graph.db is gitignored, so a worktree has none: pass --db.
+diff --git a/graph/import/importers.py b/graph/import/importers.py
+index 86a220d7c..6eb876268 100644
+--- a/graph/import/importers.py
++++ b/graph/import/importers.py
+@@ -1,8 +1,17 @@
+ """Seed importers ΓÇö legacy JSON estate -> knowledge graph (Phase 2).
+ 
+-Every importer is DETERMINISTIC and ADDITIVE: re-running it is a no-op, never a
+-duplicate. Each writes a provenance row naming the exact source file, so any node
+-in the graph can be traced back to the file and line of the estate it came from.
++Every importer is DETERMINISTIC: re-running it is a no-op, never a duplicate. Each
++writes a provenance row naming the exact source file, so any node in the graph can
++be traced back to the file and line of the estate it came from.
++
++All but one are also ADDITIVE, and the exception is worth knowing before you copy a
++pattern from here. `import_identity` writes `instance_of` FILINGS, and a filing is an
++EXCLUSIVE claim: the identity table holds one current row per (store, product key),
++so a product re-filed under another commodity has not gained a second answer, it has
++replaced the first. Upserting alone left both standing forever - which is what this
++docstring said to do until 2026-09-19. That importer therefore RETRACTS the filings
++its source no longer asserts, inside the scope its read can vouch for, and
++`_reconcile_identity_namespace` is the account of it. Nothing else here deletes.
+ 
+ These run in DUAL-WRITE mode. The legacy PowerShell path stays fully
+ authoritative; the graph is a shadow copy whose quality is measured against the
+@@ -1174,6 +1183,166 @@ IDENTITY = os.path.join(REPO_ROOT, "graph", "identity")
+ # is no third namespace to invent here.
+ IDENTITY_NAMESPACES = ("staple", "recipe")
+ 
++# Only filings this importer asserted may be retracted by it. import_product_urls
++# writes instance_of edges too, from the hand-curated links, and those are a
++# different claim with a different owner.
++IDENTITY_EDGE_SOURCE = "identity-table"
++
++# THE PLAUSIBILITY BAR ON A ONE-DIRECTIONAL ACTUATOR (ops rules, backlog I93).
++# Retraction only ever removes, so one degraded emitter run - a rules build that
++# matched nothing, a half-written namespace whose manifest was rebuilt to match -
++# could empty the index's filings in a single pass, and nothing downstream would
++# say anything except that the exemplar lists got shorter. Over this bar the
++# namespace's retraction is REFUSED, the edges are KEPT, and the refusal is
++# spoken in the counters and in the decision log, so a run that declined to act
++# is never mistaken for a run with nothing to do.
++#
++# WHAT ELSE WAS TRIED: nothing. This is the FIRST plausible number, not the
++# survivor of a sweep, and it is stated that way on purpose. What it is chosen
++# against IS a measurement: on a backup-API copy of the live graph.db taken
++# 2026-09-19, against graph/identity at that hour, the stale share was 9.23% of
++# 34,994 staple filings and 9.84% of 3,911 recipe filings - and that is the
++# ALL-TIME accumulation of roughly four weeks in which nothing ever retracted
++# one, so it is the largest single retraction ordinary drift can produce here.
++# 20 is a shade over twice it. A LEGITIMATE mass re-filing (a big rules change)
++# will trip it: that is the point, and TC_IDENTITY_ACCEPT_RETRACT=1 is the
++# deliberate, loud override for the run that follows it.
++#
++# WHEN THE PRODUCER STOPS this bar cannot fire at all, and by construction rather
++# than by luck: with no identity directory the importer returns before reaching
++# here, and with an empty namespace nothing is asserted, nothing is `seen`, and
++# the narrowed reconcile below has nothing to retract. An absence can never widen
++# a retraction here - only a present, complete, manifest-backed snapshot can.
++IDENTITY_MAX_RETRACT_PCT = 20.0
++
++
++def _identity_retract_accepted() -> bool:
++    """The deliberate override for a run whose retraction is over the bar."""
++    v = str(os.environ.get("TC_IDENTITY_ACCEPT_RETRACT", "")).strip()
++    return v not in ("", "0", "false", "False")
++
++
++def _commodity_namespace(cid: str) -> str | None:
++    """`commodity:staple:canned-peas` -> `staple`. Anything else -> None."""
++    parts = (cid or "").split(":")
++    return parts[1] if len(parts) >= 3 and parts[0] == "commodity" else None
++
++
++def _identity_edges_in(db: GraphDB, ns: str) -> list[tuple[str, str]]:
++    """Every (sku, commodity) filing THIS importer has written in namespace `ns`.
++
++    Read from the edge's own `source` property rather than from its provenance
++    row, because provenance is minted per RUN and the question here is who
++    ASSERTED the filing, which is a property of the claim and not of the day.
++    """
++    out = []
++    for src, tgt, props in db.conn.execute(
++            "SELECT source_id, target_id, properties_json FROM edges "
++            "WHERE predicate = 'instance_of'"):
++        if _commodity_namespace(tgt) != ns:
++            continue
++        try:
++            owner = json.loads(props or "{}").get("source")
++        except ValueError:
++            owner = None
++        if owner == IDENTITY_EDGE_SOURCE:
++            out.append((src, tgt))
++    return out
++
++
++def _reconcile_identity_namespace(db: GraphDB, ts: str, run: str, ns: str,
++                                  asserted: dict, seen: set, complete: bool) -> dict:
++    """Retract the filings in `ns` that the CURRENT identity files no longer assert.
++
++    THE DEFECT THIS EXISTS FOR (2026-09-19). Every other importer here is additive
++    on purpose, and for a node or an observation that is right: nothing there is a
++    claim that EXCLUDES another. A filing is. The identity table holds ONE CURRENT
++    ROW per (store, product key), so when the engine re-files a product the new row
++    REPLACES the old answer - but an upsert-only importer wrote the new edge beside
++    the old one and left both standing forever. Measured on a backup-API copy of
++    the live graph.db, 2026-09-19: 3,230 of 34,994 staple filings and 385 of 3,911
++    recipe filings were no longer asserted by the files they are an index OF, and
++    268 of the 3,822 exemplar slots graph/pipeline/emit_commodity_defs.py builds -
++    7.0%, across 185 of 687 commodities - were held by one of them. The named case
++    is Birds Eye Steamfresh Sweet Peas at Hy-Vee and Walmart, still filed
++    `commodity:staple:canned-peas` while the current rules file it under no staple
++    commodity at all: a frozen product teaching a canned commodity.
++
++    THE THREE WAYS A FILING GOES STALE, and all three are retracted here:
++      * RE-FILED - the row now names a DIFFERENT commodity in this namespace.
++      * UNFILED  - the row is still there and now names NO commodity. That is an
++        ANSWER ("no commodity owns this product under these rules"), not a gap,
++        and it is the shape the founding example has.
++      * GONE     - the product has left the identity table entirely, so no row
++        asserts it any more. This is the bulk of the count, and it is the one that
++        needs the snapshot to be complete before it can be believed.
++
++    SCOPE IS WHAT THE READ CAN VOUCH FOR, which is the whole of the safety here.
++    `complete` is true only when the namespace's _manifest.json claimed a row count
++    and the loop above read exactly that many - the same manifest check that
++    already refuses a truncated read. Then the files are a full snapshot, and a
++    filing they do not assert is stale whatever became of its product. WITHOUT that
++    proof the reconcile NARROWS to the SKUs this pass actually read: a re-filing or
++    an unfiling is still the engine's own current answer about a product in front
++    of us, but a filing whose product is merely ABSENT is left alone and COUNTED,
++    because an absent row cannot tell "the engine dropped it" from "that store's
++    file was not written today". A could-not-look must not settle the question.
++
++    A ROW WHOSE COMMODITY NODE IS MISSING asserts nothing here, so its old filing
++    is retracted like any other. That is deliberate: the row is the engine saying
++    "this product is X", which supersedes the old answer whether or not this index
++    can represent X. The caller counts those rows separately, and the bar above is
++    what stops a namespace-wide failure of that kind emptying the index.
++    """
++    existing = _identity_edges_in(db, ns)
++    stale = [e for e in existing if e[1] not in asserted.get(e[0], ())]
++    blind = []
++    if not complete:
++        blind = [e for e in stale if e[0] not in seen]
++        stale = [e for e in stale if e[0] in seen]
++
++    out = {
++        "identity_%s_filings_read" % ns: len(existing),
++        "identity_%s_retracted" % ns: 0,
++        "identity_%s_stale_kept_blind" % ns: len(blind),
++        "identity_%s_reconcile" % ns: "full" if complete else "narrowed",
++    }
++    if not stale:
++        return out
++
++    pct = 100.0 * len(stale) / max(1, len(existing))
++    if pct > IDENTITY_MAX_RETRACT_PCT and not _identity_retract_accepted():
++        # KEEP the old state and SPEAK the refusal. Degrading to the behaviour of
++        # the day before - both filings standing - is the safe direction; deleting
++        # a fifth of the index on one bad emitter run is not.
++        db.log_event(run=run, timestamp=ts, etype="escalate", step_id="identity",
++                     decision="identity_retract_refused",
++                     detail={"namespace": ns, "stale": len(stale), "of": len(existing),
++                             "pct": round(pct, 2), "bar_pct": IDENTITY_MAX_RETRACT_PCT,
++                             "override": "TC_IDENTITY_ACCEPT_RETRACT=1"})
++        out["identity_%s_retract_refused_pct" % ns] = round(pct, 2)
++        return out
++
++    # The three ways it went stale are counted apart, because they are three
++    # different things to be told and the total hides which one moved: a rules
++    # change shows up as `refiled`, a rule that stopped matching as `unfiled`, and
++    # a delisting or a store that stopped being captured as `gone`.
++    n = {"refiled": 0, "unfiled": 0, "gone": 0}
++    for sku, cid in stale:
++        if asserted.get(sku):
++            kind, why = "refiled", "re-files this product under another commodity"
++        elif sku in seen:
++            kind, why = "unfiled", "files this product under no commodity"
++        else:
++            kind, why = "gone", "no longer carries this product at all"
++        n[kind] += 1
++        db.retract_edge(sku, "instance_of", cid, ts, run=run,
++                        reason="the %s identity table %s" % (ns, why))
++    out["identity_%s_retracted" % ns] = len(stale)
++    for kind, count in n.items():
++        out["identity_%s_retracted_%s" % (ns, kind)] = count
++    return out
++
+ 
+ def _read_jsonl(path: str) -> list[dict]:
+     """Rows of a .jsonl file. A line that will not parse is a hard error.
+@@ -1215,17 +1384,34 @@ def import_identity(db: GraphDB, ts: str, run: str) -> dict:
+     PROVENANCE. record_provenance() is the only minting path (commitment 1) and it
+     is Python, so the PowerShell emitter mints nothing: it writes a _manifest.json
+     naming the run, and one provenance id is minted here per namespace.
++
++    THIS IMPORTER IS THE ONE THAT IS NOT PURELY ADDITIVE, and the module docstring
++    above is about the others. A filing is an EXCLUSIVE claim: the identity table
++    holds one current row per (store, product key), so a new answer replaces the
++    old one rather than joining it. Upserting alone left both standing forever -
++    3,230 of 34,994 staple filings were no longer asserted by the files when this
++    was measured. `_reconcile_identity_namespace` is the retraction, its docstring
++    is the account of the defect, and re-running is still a no-op: the second run
++    over unchanged files asserts the same set and finds nothing stale.
+     """
+     if not os.path.isdir(IDENTITY):
+         return {"identity_skus": 0, "identity_namespaces": 0}
+ 
+     n_sku = n_edge = n_ns = n_unmatched = n_missing_commodity = 0
++    totals: dict = {}
+     for ns in IDENTITY_NAMESPACES:
+         nsdir = os.path.join(IDENTITY, ns)
+         if not os.path.isdir(nsdir):
+             continue
+         n_ns += 1
+         ns_rows = 0
++        # What the CURRENT files of this namespace assert, and which products they
++        # were read for. A set per SKU rather than one id: nothing guarantees the
++        # table files a (store, name, size) under only one commodity per namespace
++        # (0 do today, over 31,767 staple and 3,526 recipe filings), and assuming
++        # it would make the second one look stale on every run.
++        asserted: dict = {}
++        seen: set = set()
+         prov = db.record_provenance(rel(nsdir), f"import:identity:{ns}", ts, run=run)
+ 
+         for fname in sorted(os.listdir(nsdir)):
+@@ -1238,6 +1424,7 @@ def import_identity(db: GraphDB, ts: str, run: str) -> dict:
+                     continue
+                 ns_rows += 1
+                 skid = sku_id(store, name, row.get("size"))
++                seen.add(skid)
+                 db.upsert_node(
+                     skid, "ProductSKU", name, ts,
+                     properties={
+@@ -1279,10 +1466,13 @@ def import_identity(db: GraphDB, ts: str, run: str) -> dict:
+                     # become a graph node that later looks like evidence.
+                     n_missing_commodity += 1
+                     continue
++                asserted.setdefault(skid, set()).add(cid)
+                 db.upsert_edge(
+                     skid, "instance_of", cid, ts, provenance=prov,
+                     properties={
+-                        "source": "identity-table",
++                        # the same constant the reconcile below retracts on, so
++                        # the two spellings cannot drift apart
++                        "source": IDENTITY_EDGE_SOURCE,
+                         "how": row.get("how"),
+                         "include_hit": row.get("include_hit"),
+                         "excludes_tested": row.get("excludes_tested"),
+@@ -1297,21 +1487,35 @@ def import_identity(db: GraphDB, ts: str, run: str) -> dict:
+         # The manifest's own count against what was actually read. A mismatch
+         # means a file was written or truncated between the emitter and this
+         # import, and the index would be a partial view calling itself complete.
++        #
++        # IT IS ALSO WHAT AUTHORISES A FULL RECONCILE, which is new (2026-09-19)
++        # and is the reason this check now has an answer rather than only a
++        # refusal. A snapshot proven complete lets a filing whose product has left
++        # the table be retracted; without that proof the retraction narrows to the
++        # products actually read. So the check must come BEFORE the reconcile: a
++        # short read raises here and rolls the importer back, and never gets to
++        # delete on the strength of what it did not see.
+         manifest_path = os.path.join(nsdir, "_manifest.json")
++        complete = False
+         if os.path.exists(manifest_path):
+             claimed = int((read_json(manifest_path) or {}).get("rows_total") or 0)
+             if claimed and claimed != ns_rows:
+                 raise ValueError(
+                     f"identity[{ns}]: _manifest.json claims {claimed} rows, "
+                     f"{ns_rows} were read from the .jsonl files")
++            complete = bool(claimed)
++
++        totals.update(_reconcile_identity_namespace(
++            db, ts, run, ns, asserted, seen, complete))
+ 
+-    return {
++    totals.update({
+         "identity_skus": n_sku,
+         "identity_instance_of": n_edge,
+         "identity_namespaces": n_ns,
+         "identity_unmatched_products": n_unmatched,
+         "identity_missing_commodity_node": n_missing_commodity,
+-    }
++    })
++    return totals
+ 
+ 
+ ALL_IMPORTERS: list[tuple[str, Callable]] = [
+diff --git a/graph/import/importers_selftest.py b/graph/import/importers_selftest.py
+index 2a43192b2..3e7404c17 100644
+--- a/graph/import/importers_selftest.py
++++ b/graph/import/importers_selftest.py
+@@ -1,6 +1,7 @@
+ """importers_selftest.py - the product-urls importer's price boundary (backlog I200, 2026-09-18), the capture
+-lanes' commodity-id search terms and the fareway-shop observed_at (backlog I235, same day), and the
+-supersede guard that stops every import re-inserting what the last prune deleted (backlog I211, 2026-09-19).
++lanes' commodity-id search terms and the fareway-shop observed_at (backlog I235, same day), the
++supersede guard that stops every import re-inserting what the last prune deleted (backlog I211, 2026-09-19),
++and the identity importer's stale filings - the edge it upserted and never retracted (2026-09-19).
+ 
+     python graph/import/importers_selftest.py --selftest
+ 
+@@ -41,7 +42,7 @@ import importers as I                                    # noqa: E402
+ 
+ _fails: list[str] = []
+ _ran = 0
+-CASES = 27
++CASES = 46
+ 
+ 
+ def T(label: str, ok: bool, got: str = "") -> None:
+@@ -366,6 +367,361 @@ def run_supersede_guard() -> None:
+         shutil.rmtree(tmp, ignore_errors=True)
+ 
+ 
++# ---------------------------------------------------------------------------
++# The identity importer's stale filings (2026-09-19)
++# ---------------------------------------------------------------------------
++
++def _irow(name: str, commodity, size: str = "10 oz", store: str = "Baker's") -> dict:
++    """One identity-table row, in the shape compare-deals.ps1 -IdentityNamespace writes."""
++    key = ("name:" + name).lower()
++    return {"store": store, "key": key, "key_kind": "name", "name": name,
++            "name_key": name.lower(), "size": size, "commodity": commodity,
++            "how": "rule", "include_hit": "" if commodity is None else r"\bfixture\b",
++            "include_hit_ix": -1 if commodity is None else 0,
++            "excludes_tested": 0 if commodity is None else 12, "candidates": [],
++            "rules_hash": "fixture-rules-hash", "first_seen": "2026-08-23"}
++
++
++def _write_ns(root: str, ns: str, rows: list, manifest: bool = True) -> None:
++    """Write one namespace of the identity table, one file per store.
++
++    `manifest=False` is the could-not-vouch arm: the emitter wrote the rows but
++    nothing states how many there should be, which is what narrows the reconcile.
++    """
++    nsdir = os.path.join(root, ns)
++    if os.path.isdir(nsdir):
++        shutil.rmtree(nsdir)
++    os.makedirs(nsdir)
++    by_store = {}
++    for r in rows:
++        by_store.setdefault(r["store"], []).append(r)
++    for store, srows in by_store.items():
++        fname = store.lower().replace("'", "").replace(" ", "-") + ".jsonl"
++        with open(os.path.join(nsdir, fname), "w", encoding="utf-8", newline="\n") as fh:
++            for r in srows:
++                fh.write(json.dumps(r, ensure_ascii=False) + "\n")
++    if manifest:
++        _write(os.path.join(nsdir, "_manifest.json"),
++               {"namespace": ns, "rows_total": len(rows), "rules_hash": "fixture-rules-hash"})
++
++
++def _filings(db, sku: str) -> dict:
++    """commodity -> the edge's `source` property, for one SKU's live instance_of edges."""
++    out = {}
++    for tgt, props in db.conn.execute(
++            "SELECT target_id, properties_json FROM edges "
++            "WHERE predicate='instance_of' AND source_id=?", (sku,)):
++        out[tgt] = json.loads(props or "{}").get("source")
++    return out
++
++
++def _seed_commodities(db, ts: str) -> None:
++    db.upsert_node(I.store_id("Baker's"), "Store", "Baker's", ts)
++    for nid, label in ((I.commodity_id("canned-peas", "staple"), "Canned Peas"),
++                       (I.commodity_id("frozen-peas", "staple"), "Frozen Peas"),
++                       (I.commodity_id("canned-corn", "staple"), "Canned Corn"),
++                       (I.commodity_id("frozen-green-peas", "recipe"), "Frozen Green Peas")):
++        db.upsert_node(nid, "Commodity", label, ts)
++
++
++def run_identity_refile() -> None:
++    """The founding defect: import_identity upserted a filing and never retracted one.
++
++    THE NAMED CASE, read off the live graph.db on a backup-API copy 2026-09-19: Birds Eye
++    Steamfresh Sweet Peas at Hy-Vee and at Walmart were filed `commodity:staple:canned-peas`,
++    while the current staple rules file them under NO commodity - the include that catches the
++    Baker's spelling wants `frozen|bag|steam` within 20 characters of the word peas, and these
++    two names do not carry it. So a frozen product was sitting in a canned commodity's exemplar
++    list, and nothing in the graph could tell it from a filing the engine still believes.
++
++    The fixture reproduces all three ways a filing goes stale in one pass, with the founding
++    shape (a row that now names no commodity) as the MUST FIRE, and asserts the two claims the
++    retraction must NOT reach: another namespace, and another importer's edge.
++    """
++    # THE BAR IS LIFTED FOR THIS SUITE, DELIBERATELY. IDENTITY_MAX_RETRACT_PCT is a
++    # percentage of a namespace's filings, and a five-filing fixture is over it the
++    # moment it retracts anything - so with the bar live these cases would judge the
++    # bar and never reach the semantics. The bar has its own three cases in
++    # run_identity_bar(), at it and one row past it, which is where it is judged.
++    tmp = tempfile.mkdtemp(prefix="i-refile-")
++    saved, saved_bar = I.IDENTITY, I.IDENTITY_MAX_RETRACT_PCT
++    I.IDENTITY_MAX_RETRACT_PCT = 100.0
++    db = None
++    try:
++        root = os.path.join(tmp, "identity")
++        I.IDENTITY = root
++        db = _fresh(tmp)
++        ts0 = "2026-09-18T00:00:00"
++        _seed_commodities(db, ts0)
++        canned = I.commodity_id("canned-peas", "staple")
++        frozen = I.commodity_id("frozen-peas", "staple")
++        corn = I.commodity_id("canned-corn", "staple")
++        rec_peas = I.commodity_id("frozen-green-peas", "recipe")
++
++        SWEET, CORNY = "Birds Eye Steamfresh Sweet Peas", "Fixture Sweet Corn Cut"
++        GONE, KEEP = "Fixture Discontinued Peas", "Fixture Del Monte Sweet Peas"
++        sku = {n: I.sku_id("Baker's", n, "10 oz") for n in (SWEET, CORNY, GONE, KEEP)}
++
++        # A hand-curated link's filing, from the OTHER importer, on a SKU the identity
++        # table never mentions. Nothing here may touch it.
++        urlsku = I.sku_id("Baker's", "Fixture Curated Peas", "10 oz")
++        prov0 = db.record_provenance("fixture/product-urls.json", "import:product-urls", ts0,
++                                     run="run:refile-0")
++        db.upsert_node(urlsku, "ProductSKU", "Fixture Curated Peas", ts0, provenance=prov0)
++        db.upsert_edge(urlsku, "instance_of", canned, ts0, provenance=prov0,
++                       properties={"source": "product-urls"})
++
++        # RUN 1 - yesterday's answer. Four staple rows, one of them the founding mis-filing.
++        _write_ns(root, "staple", [_irow(SWEET, canned), _irow(CORNY, canned),
++                                   _irow(GONE, canned), _irow(KEEP, canned)])
++        _write_ns(root, "recipe", [_irow(SWEET, rec_peas)])
++        r1 = I.import_identity(db, ts0, "run:refile-1")
++        T("CLEAN TWIN run 1 files all four staple products and the recipe one, retracting nothing",
++          r1.get("identity_instance_of") == 5 and r1.get("identity_staple_retracted") == 0
++          and _filings(db, sku[SWEET]) == {canned: "identity-table", rec_peas: "identity-table"},
++          json.dumps(r1, sort_keys=True))
++
++        # RUN 2 - today's answer. SWEET is unfiled, CORNY re-filed, GONE has left the table,
++        # KEEP is unchanged, and the recipe namespace has not moved at all.
++        ts1 = "2026-09-19T00:00:00"
++        _write_ns(root, "staple", [_irow(SWEET, None), _irow(CORNY, corn), _irow(KEEP, canned)])
++        _write_ns(root, "recipe", [_irow(SWEET, rec_peas)])
++        r2 = I.import_identity(db, ts1, "run:refile-2")
++
++        T("MUST FIRE a row that now names NO commodity retracts its old filing "
++          "(Steamfresh Sweet Peas leaves canned-peas)",
++          canned not in _filings(db, sku[SWEET]), repr(_filings(db, sku[SWEET])))
++        T("MUST FIRE a row re-filed under another commodity keeps only the new one "
++          "(canned-peas out, canned-corn in)",
++          _filings(db, sku[CORNY]) == {corn: "identity-table"}, repr(_filings(db, sku[CORNY])))
++        T("MUST FIRE a product that has left the table entirely loses its filing",
++          _filings(db, sku[GONE]) == {}, repr(_filings(db, sku[GONE])))
++        T("MUST FIRE the run reports 3 retracted of 5 staple filings read, counted by cause "
++          "(1 refiled, 1 unfiled, 1 gone), reconcile=full",
++          (r2.get("identity_staple_retracted") == 3
++           and r2.get("identity_staple_filings_read") == 5
++           and r2.get("identity_staple_retracted_refiled") == 1
++           and r2.get("identity_staple_retracted_unfiled") == 1
++           and r2.get("identity_staple_retracted_gone") == 1
++           and r2.get("identity_staple_reconcile") == "full"), json.dumps(r2, sort_keys=True))
++        T("MUST NOT FIRE the staple pass leaves the SAME product's recipe filing standing",
++          _filings(db, sku[SWEET]) == {rec_peas: "identity-table"}, repr(_filings(db, sku[SWEET])))
++        T("MUST NOT FIRE another importer's filing on a SKU the identity table never names "
++          "is untouched (product-urls)",
++          _filings(db, urlsku) == {canned: "product-urls"}, repr(_filings(db, urlsku)))
++        T("MUST NOT FIRE the recipe namespace retracts nothing, its one row being unchanged",
++          r2.get("identity_recipe_retracted") == 0, json.dumps(r2, sort_keys=True))
++        T("CLEAN TWIN an unchanged row keeps its filing (Del Monte Sweet Peas, canned-peas)",
++          _filings(db, sku[KEEP]) == {canned: "identity-table"}, repr(_filings(db, sku[KEEP])))
++        T("CLEAN TWIN the retraction is logged, never silent: 3 retract_edge decisions",
++          db.conn.execute("SELECT count(*) FROM decision_log WHERE decision='retract_edge' "
++                          "AND run_id='run:refile-2'").fetchone()[0] == 3,
++          str(db.conn.execute("SELECT count(*) FROM decision_log "
++                              "WHERE decision='retract_edge'").fetchone()[0]))
++
++        # RUN 3 - the same files again. Re-running an importer here is a no-op by contract,
++        # and a reconcile that retracted on a second look would be the estate's own
++        # re-insert-what-the-prune-deleted shape (backlog I211) with the sign flipped.
++        before = {r[0] for r in db.conn.execute(
++            "SELECT id FROM edges WHERE predicate='instance_of'")}
++        r3 = I.import_identity(db, "2026-09-19T06:00:00", "run:refile-3")
++        after = {r[0] for r in db.conn.execute(
++            "SELECT id FROM edges WHERE predicate='instance_of'")}
++        T("CLEAN TWIN re-importing the same files retracts 0 and moves no edge (idempotent)",
++          r3.get("identity_staple_retracted") == 0 and r3.get("identity_recipe_retracted") == 0
++          and before == after,
++          json.dumps(r3, sort_keys=True) + " moved=" + repr(sorted(before ^ after)))
++
++        # RUNS 4 and 5 - a row that names a commodity with no node. The importer has always
++        # counted that and refused to mint the node (a typo in the rules must not become
++        # evidence), so the new filing cannot be written; the old one is retracted anyway,
++        # because the row IS the engine superseding its own earlier answer. Leaving it would
++        # keep asserting a filing the table has already moved off.
++        TYPO = "Fixture Typo Peas"
++        sku[TYPO] = I.sku_id("Baker's", TYPO, "10 oz")
++        rows_now = [_irow(SWEET, None), _irow(CORNY, corn), _irow(KEEP, canned)]
++        _write_ns(root, "staple", rows_now + [_irow(TYPO, canned)])
++        I.import_identity(db, "2026-09-19T12:00:00", "run:refile-4")
++        _write_ns(root, "staple",
++                  rows_now + [_irow(TYPO, I.commodity_id("no-such-commodity", "staple"))])
++        r5 = I.import_identity(db, "2026-09-19T18:00:00", "run:refile-5")
++        T("MUST FIRE a row naming a commodity with NO node still retracts the old filing, "
++          "counted as 1 missing node and 1 retracted UNFILED - the index holds no filing for it, "
++          "whatever the row names - with the others untouched",
++          (_filings(db, sku[TYPO]) == {} and r5.get("identity_missing_commodity_node") == 1
++           and r5.get("identity_staple_retracted") == 1
++           and r5.get("identity_staple_retracted_unfiled") == 1
++           and _filings(db, sku[KEEP]) == {canned: "identity-table"}),
++          json.dumps(r5, sort_keys=True) + " typo=" + repr(_filings(db, sku[TYPO])))
++    except Exception as e:                                # noqa: BLE001
++        _fails.append("identity-refile suite raised: %r" % (e,))
++        print("  FAILED identity-refile suite raised: %r" % (e,))
++    finally:
++        I.IDENTITY, I.IDENTITY_MAX_RETRACT_PCT = saved, saved_bar
++        if db is not None:
++            db.conn.close()
++        shutil.rmtree(tmp, ignore_errors=True)
++
++
++def run_identity_narrowed() -> None:
++    """Without a manifest the read cannot vouch for itself, so the reconcile narrows.
++
++    A namespace whose _manifest.json states a row count and matches it is a proven complete
++    snapshot; one without is not, and an absent row there cannot tell "the engine dropped this
++    product" from "that store's file was not written today". The re-filing and the unfiling are
++    still the engine's own current answer about a product in front of us, so they are retracted
++    either way - only the ABSENT product's filing is kept, and it is counted rather than passed
++    over in silence.
++    """
++    # THE BAR IS LIFTED FOR THIS SUITE, DELIBERATELY. IDENTITY_MAX_RETRACT_PCT is a
++    # percentage of a namespace's filings, and a five-filing fixture is over it the
++    # moment it retracts anything - so with the bar live these cases would judge the
++    # bar and never reach the semantics. The bar has its own three cases in
++    # run_identity_bar(), at it and one row past it, which is where it is judged.
++    tmp = tempfile.mkdtemp(prefix="i-narrow-")
++    saved, saved_bar = I.IDENTITY, I.IDENTITY_MAX_RETRACT_PCT
++    I.IDENTITY_MAX_RETRACT_PCT = 100.0
++    db = None
++    try:
++        root = os.path.join(tmp, "identity")
++        I.IDENTITY = root
++        db = _fresh(tmp)
++        ts0 = "2026-09-18T00:00:00"
++        _seed_commodities(db, ts0)
++        canned = I.commodity_id("canned-peas", "staple")
++        corn = I.commodity_id("canned-corn", "staple")
++        SWEET, CORNY, GONE = ("Birds Eye Steamfresh Sweet Peas", "Fixture Sweet Corn Cut",
++                              "Fixture Discontinued Peas")
++        sku = {n: I.sku_id("Baker's", n, "10 oz") for n in (SWEET, CORNY, GONE)}
++
++        _write_ns(root, "staple", [_irow(SWEET, canned), _irow(CORNY, canned),
++                                   _irow(GONE, canned)], manifest=False)
++        I.import_identity(db, ts0, "run:narrow-1")
++        _write_ns(root, "staple", [_irow(SWEET, None), _irow(CORNY, corn)], manifest=False)
++        r2 = I.import_identity(db, "2026-09-19T00:00:00", "run:narrow-2")
++
++        T("MUST FIRE with no manifest the absent product KEEPS its filing and is counted "
++          "(1 stale kept blind), reconcile=narrowed",
++          (_filings(db, sku[GONE]) == {canned: "identity-table"}
++           and r2.get("identity_staple_stale_kept_blind") == 1
++           and r2.get("identity_staple_reconcile") == "narrowed"),
++          json.dumps(r2, sort_keys=True) + " gone=" + repr(_filings(db, sku[GONE])))
++        T("CLEAN TWIN the two products it DID read are still reconciled (2 retracted: "
++          "1 unfiled, 1 refiled)",
++          (r2.get("identity_staple_retracted") == 2
++           and r2.get("identity_staple_retracted_gone") == 0
++           and _filings(db, sku[SWEET]) == {} and _filings(db, sku[CORNY]) == {corn: "identity-table"}),
++          json.dumps(r2, sort_keys=True))
++
++        # And the same tree WITH a manifest: the absent product's filing goes. This is the
++        # pair that proves the manifest is what moved the scope, not the fixture's shape.
++        _write_ns(root, "staple", [_irow(SWEET, None), _irow(CORNY, corn)], manifest=True)
++        r3 = I.import_identity(db, "2026-09-19T06:00:00", "run:narrow-3")
++        T("CLEAN TWIN the identical files WITH a manifest reconcile in full and retract it "
++          "(1 gone, 0 kept blind)",
++          (_filings(db, sku[GONE]) == {} and r3.get("identity_staple_retracted_gone") == 1
++           and r3.get("identity_staple_stale_kept_blind") == 0
++           and r3.get("identity_staple_reconcile") == "full"), json.dumps(r3, sort_keys=True))
++
++        # A manifest that disagrees with what was read is the founding refusal, and it must
++        # still come BEFORE the reconcile: a short read never gets to delete on the strength
++        # of what it did not see.
++        _write_ns(root, "staple", [_irow(CORNY, corn)], manifest=True)
++        _write(os.path.join(root, "staple", "_manifest.json"),
++               {"namespace": "staple", "rows_total": 99})
++        edges_before = {r[0] for r in db.conn.execute(
++            "SELECT id FROM edges WHERE predicate='instance_of'")}
++        raised = ""
++        try:
++            I.import_identity(db, "2026-09-19T07:00:00", "run:narrow-4")
++        except ValueError as e:
++            raised = str(e)
++        edges_after = {r[0] for r in db.conn.execute(
++            "SELECT id FROM edges WHERE predicate='instance_of'")}
++        T("MUST NOT FIRE a manifest that disagrees with the rows read raises before any "
++          "retraction, leaving every filing standing",
++          "claims 99 rows" in raised and edges_before == edges_after,
++          repr(raised) + " moved=" + repr(sorted(edges_before ^ edges_after)))
++    except Exception as e:                                # noqa: BLE001
++        _fails.append("identity-narrowed suite raised: %r" % (e,))
++        print("  FAILED identity-narrowed suite raised: %r" % (e,))
++    finally:
++        I.IDENTITY, I.IDENTITY_MAX_RETRACT_PCT = saved, saved_bar
++        if db is not None:
++            db.conn.close()
++        shutil.rmtree(tmp, ignore_errors=True)
++
++
++def _bar_arm(n_stale: int, accept: bool = False) -> tuple[dict, int]:
++    """100 filings, `n_stale` of them unfiled today. Returns (counters, filings left).
++
++    100 is chosen so one row IS one percentage point: the bar is a percentage, and a case a
++    step past it has to be a step of the comparison's own resolution (Brad's ruling, I196).
++    """
++    tmp = tempfile.mkdtemp(prefix="i-bar-")
++    saved_ident, saved_env = I.IDENTITY, os.environ.get("TC_IDENTITY_ACCEPT_RETRACT")
++    db = None
++    try:
++        root = os.path.join(tmp, "identity")
++        I.IDENTITY = root
++        db = _fresh(tmp)
++        ts0 = "2026-09-18T00:00:00"
++        _seed_commodities(db, ts0)
++        canned = I.commodity_id("canned-peas", "staple")
++        names = ["Fixture Peas %03d" % i for i in range(100)]
++        _write_ns(root, "staple", [_irow(nm, canned) for nm in names])
++        I.import_identity(db, ts0, "run:bar-1")
++        _write_ns(root, "staple",
++                  [_irow(nm, None if i < n_stale else canned) for i, nm in enumerate(names)])
++        if accept:
++            os.environ["TC_IDENTITY_ACCEPT_RETRACT"] = "1"
++        else:
++            os.environ.pop("TC_IDENTITY_ACCEPT_RETRACT", None)
++        res = I.import_identity(db, "2026-09-19T00:00:00", "run:bar-2")
++        left = db.conn.execute(
++            "SELECT count(*) FROM edges WHERE predicate='instance_of'").fetchone()[0]
++        return res, left
++    finally:
++        I.IDENTITY = saved_ident
++        if saved_env is None:
++            os.environ.pop("TC_IDENTITY_ACCEPT_RETRACT", None)
++        else:
++            os.environ["TC_IDENTITY_ACCEPT_RETRACT"] = saved_env
++        if db is not None:
++            db.conn.close()
++        shutil.rmtree(tmp, ignore_errors=True)
++
++
++def run_identity_bar() -> None:
++    """The plausibility bar on a one-directional actuator: 20.0% of a namespace's filings.
++
++    Retraction only ever removes, so one degraded emitter run could empty the index in a pass.
++    Over the bar the namespace is REFUSED, its edges KEPT, and the refusal SPOKEN - a run that
++    declined to act must not look like a run with nothing to do. The three cases are the bar
++    itself (20 of 100 retracts), one row past it (21 of 100 refuses), and the override.
++    """
++    try:
++        at, left_at = _bar_arm(20)
++        T("CLEAN TWIN exactly AT the 20.0% bar (20 stale of 100) the retraction proceeds",
++          at.get("identity_staple_retracted") == 20 and left_at == 80
++          and "identity_staple_retract_refused_pct" not in at,
++          json.dumps(at, sort_keys=True) + " left=%d" % left_at)
++        past, left_past = _bar_arm(21)
++        T("MUST FIRE one row PAST the 20.0% bar (21 stale of 100) the namespace is refused, "
++          "all 100 filings kept, and the refusal is reported as 21.0%",
++          past.get("identity_staple_retracted") == 0 and left_past == 100
++          and past.get("identity_staple_retract_refused_pct") == 21.0,
++          json.dumps(past, sort_keys=True) + " left=%d" % left_past)
++        over, left_over = _bar_arm(21, accept=True)
++        T("CLEAN TWIN TC_IDENTITY_ACCEPT_RETRACT=1 is the deliberate override: the same 21 "
++          "are retracted",
++          over.get("identity_staple_retracted") == 21 and left_over == 79,
++          json.dumps(over, sort_keys=True) + " left=%d" % left_over)
++    except Exception as e:                                # noqa: BLE001
++        _fails.append("identity-bar suite raised: %r" % (e,))
++        print("  FAILED identity-bar suite raised: %r" % (e,))
++
++
+ def run() -> int:
+     tmp = tempfile.mkdtemp(prefix="i200-imp-")
+     saved_grocery = I.GROCERY
+@@ -408,6 +764,9 @@ def run() -> int:
+         run_capture_terms()
+         run_fareway_dates()
+         run_supersede_guard()
++        run_identity_refile()
++        run_identity_narrowed()
++        run_identity_bar()
+     except Exception as e:                                # noqa: BLE001
+         _fails.append("suite raised: %r" % (e,))
+         print("  FAILED suite raised: %r" % (e,))
+@@ -426,7 +785,9 @@ def run() -> int:
+     print("SELF-TEST PASS: importers %d of %d cases - a zero product-urls price is stored NULL, "
+           "a real one unchanged; a staple-id capture term resolves namespaced, an unknown one stays counted; "
+           "a fareway-shop file is dated from the date in its name or refused; a re-import inserts 0 "
+-          "rows the prune deletes, and a new or rewritten capture still lands" % (_ran, CASES))
++          "rows the prune deletes, and a new or rewritten capture still lands; a re-filed, unfiled or "
++          "delisted product loses its stale filing while the other namespace, the other importer's edge "
++          "and an unvouched-for absence keep theirs" % (_ran, CASES))
+     return 0
+ 
+ 

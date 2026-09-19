@@ -1,0 +1,15 @@
+{
+    "disableAllHooks":  true,
+    "permissions":  {
+                        "deny":  [
+                                     "Read(//C:/Users/Owner/.claude/skills/**)",
+                                     "Read(~/.claude/skills/**)",
+                                     "Bash(*skills*)",
+                                     "PowerShell(*skills*)",
+                                     "Skill",
+                                     "Agent",
+                                     "WebFetch",
+                                     "WebSearch"
+                                 ]
+                    }
+}

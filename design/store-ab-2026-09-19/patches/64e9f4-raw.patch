@@ -1,0 +1,1192 @@
+diff --git a/graph/import/import_all.py b/graph/import/import_all.py
+index cd7902ddc..363d07069 100644
+--- a/graph/import/import_all.py
++++ b/graph/import/import_all.py
+@@ -7,6 +7,25 @@
+ Dual-write: this reads the legacy estate and writes only the graph. It never
+ writes back to grocery/*.json. Safe to run while the daily pipeline is idle;
+ by design it takes no locks on the legacy files.
++
++EVERY IMPORTER IS ALL-OR-NOTHING, AND A RUN THAT LOST ONE SAYS SO (2026-09-19).
++Each importer runs inside `db.step()`, a SAVEPOINT, so one that raises at entry 300 of 400
++leaves NONE of its rows rather than 299 - a half-loaded ruling or override set is worse than
++an absent one, because an absent one is visible as a count of zero and a half-loaded one
++answers every question with quiet confidence. The run then:
++
++  * records `import_incomplete` in the decision log, naming the steps that failed, so the
++    INDEX itself carries the verdict and `GraphDB.import_health()` can be asked for it long
++    after the process that made it has gone;
++  * SKIPS the derived phase, which is destructive - `supersede_prune` DELETES evidence rows
++    and `cell_state`'s git diff IS this estate's price history. Rebuilding the answer from a
++    load that is missing its known-wrong rulings, and then pruning the evidence that would
++    have shown it, writes a wrong price history that no later run can reconstruct. Refusing
++    KEEPS yesterday's state and SAYS so. `--force-derive` is the deliberate override;
++  * exits 1. grocery/audit-graph-gates.ps1 already reads that exit code and reports BLIND,
++    which is the correct verdict for an index nobody can trust today.
++
++Exit: 0 every importer landed, 1 at least one did not (or the run could not be marked).
+ """
+ 
+ from __future__ import annotations
+@@ -18,11 +37,17 @@ import time
+ 
+ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "lib"))
+ 
+-from graphdb import open_db                      # noqa: E402
++from graphdb import open_db, GraphDB, GraphDBMissing   # noqa: E402
+ from ids import run_id as make_run_id            # noqa: E402
+ import importers                                 # noqa: E402
+ 
+ 
++def open_db_health() -> GraphDB:
++    """The live index, read-only in intent: no schema re-run, no learning restore, no warning
++    (this caller prints the verdict itself). Refuses a missing file like every other reader."""
++    return GraphDB(create=False, restore_learning=False, health_warn=False)
++
++
+ def main() -> int:
+     ap = argparse.ArgumentParser(description="Seed the knowledge graph from the legacy estate")
+     ap.add_argument("--observations", action="store_true",
+@@ -31,6 +56,13 @@ def main() -> int:
+                     help="only the N most recent capture files per lane")
+     ap.add_argument("--export", action="store_true",
+                     help="write the durable git-tracked JSON after importing")
++    ap.add_argument("--force-derive", action="store_true",
++                    help="run the derived phase (resolve/state/prune/export) even when an "
++                         "importer failed. It REBUILDS AND PRUNES from a half-loaded index; "
++                         "only pass it when you have read which step failed and why")
++    ap.add_argument("--check-health", action="store_true",
++                    help="import nothing; report what the newest import run left behind "
++                         "(exit 0 complete, 1 incomplete/interrupted/unknown)")
+     ap.add_argument("--quiet", action="store_true")
+     args = ap.parse_args()
+ 
+@@ -38,52 +70,81 @@ def main() -> int:
+     run = make_run_id("import", time.strftime("%Y%m%dT%H%M%S"))
+     say = (lambda *a: None) if args.quiet else print
+ 
++    if args.check_health:
++        # Reads only. It opens the live index with health_warn=False because it is about to
++        # print the same thing properly, with the failed step names. NO INDEX AT ALL is a
++        # could-not-look, which is never a pass - it answers 1 like any other not-complete,
++        # in a sentence rather than a traceback.
++        try:
++            with open_db_health() as db:
++                h = db.import_health()
++        except GraphDBMissing as e:
++            say("index health: absent - %s" % e)
++            return 1
++        say("index health: %s  (run %s)" % (h["status"], h["run"]))
++        say("  " + h["note"])
++        for s in h["failed_steps"]:
++            say("  MISSING data set: %s" % s)
++        return 0 if h["ok"] else 1
++
+     say(f"run: {run}")
+     say(f"repo: {importers.REPO_ROOT}")
+     say("")
+ 
+     totals: dict[str, int] = {}
++    failed: list[str] = []
++    attempted: list[str] = []
+     # allow_new: this is the road that builds graph.db from nothing (a fresh box, a CI clone, the
+     # README's delete-and-rebuild), so a missing file is expected here and nowhere else (I229).
+-    with open_db(allow_new=True) as db:
+-        db.log_event(run=run, timestamp=ts, etype="state_transition",
+-                     decision="import_start", detail={"observations": args.observations})
++    # health_warn=False: this run IS the import, so it would only warn about itself.
++    with open_db(allow_new=True, health_warn=False) as db:
+ 
+-        for name, fn in importers.ALL_IMPORTERS:
++        def run_step(name: str, fn, *a, **kw):
++            """One importer, all-or-nothing, counted. Returns its result or None on failure."""
+             t0 = time.time()
++            attempted.append(name)
++            rec = None
+             try:
+-                res = fn(db, ts, run)
++                with db.step(name) as rec:
++                    res = fn(*a, **kw)
+             except Exception as e:                      # noqa: BLE001
+-                say(f"  {name:<20} FAILED: {e}")
++                # The savepoint has already unwound this step's writes (or said it could not).
++                undone = (rec or {}).get("undone") or "not-started"
++                failed.append(name)
++                say(f"  {name:<20} FAILED: {e}   [{undone}]")
+                 db.log_event(run=run, timestamp=ts, etype="escalate", step_id=name,
+-                             decision="importer_failed", detail={"error": str(e)})
+-                continue
+-            totals.update(res)
++                             decision="importer_failed",
++                             detail={"error": str(e), "undone": undone})
++                db.conn.commit()                        # keep the escalation, not the writes
++                return None
+             db.conn.commit()
+             say(f"  {name:<20} {res}   ({time.time()-t0:.1f}s)")
++            return res
++
++        # COMMITTED BEFORE ANY DATA LANDS. A process killed mid-import writes no ending, and
++        # import_health() then reports `interrupted` - which is the only way an index can say
++        # "I am half a load" about a failure no exception handler was alive to catch.
++        db.mark_import_start(run, ts, {"observations": args.observations})
++
++        for name, fn in importers.ALL_IMPORTERS:
++            res = run_step(name, fn, db, ts, run)
++            if res is not None:
++                totals.update(res)
+ 
+         if args.observations:
+             say("\n  observations (this reads every capture file; slowest step)")
+-            t0 = time.time()
+-            res = importers.import_observations(
+-                db, ts, run, limit_files=args.limit_files,
+-                progress=None if args.quiet else (lambda m: say(m)))
+-            totals.update(res)
+-            db.conn.commit()
+-            say(f"  {'observations':<20} {res}   ({time.time()-t0:.1f}s)")
++            # It used to sit outside any try at all: a raise here propagated out of the
++            # `with`, and GraphDB.close() committed the partial backfill on its way down.
++            res = run_step("observations", importers.import_observations,
++                           db, ts, run, limit_files=args.limit_files,
++                           progress=None if args.quiet else (lambda m: say(m)))
++            if res is not None:
++                totals.update(res)
+ 
+             for name, fn in importers.LANE_IMPORTERS:
+-                t0 = time.time()
+-                try:
+-                    res = fn(db, ts, run, limit_files=args.limit_files)
+-                except Exception as e:                  # noqa: BLE001
+-                    say(f"  {name:<20} FAILED: {e}")
+-                    db.log_event(run=run, timestamp=ts, etype="escalate", step_id=name,
+-                                 decision="lane_importer_failed", detail={"error": str(e)})
+-                    continue
+-                totals.update(res)
+-                db.conn.commit()
+-                say(f"  {name:<20} {res}   ({time.time()-t0:.1f}s)")
++                res = run_step(name, fn, db, ts, run, limit_files=args.limit_files)
++                if res is not None:
++                    totals.update(res)
+ 
+         # PHASE C: the answer is rebuilt and the evidence bounded as part of the
+         # import, not as a chore someone remembers. The ORDER is load-bearing,
+@@ -100,66 +161,98 @@ def main() -> int:
+         #
+         # The resolver consults the banked verdicts (layer 4.5), so questions a
+         # model already answered in an earlier run cost nothing to re-settle.
+-        if args.observations:
+-            pipeline_dir = os.path.join(
+-                os.path.dirname(os.path.abspath(__file__)), "..", "pipeline")
+-            sys.path.insert(0, pipeline_dir)
+-            from resolve import Resolver                                  # noqa: PLC0415
+-            from state import (build_cell_state, build_question_verdicts,  # noqa: PLC0415
+-                               supersede_prune, export_state)
+-            say("\n  adjudicate + price state ...")
+-            # Rulings first, and again here rather than only in the seed pass:
+-            # the lanes above insert rows pre-marked include_hit, so a ruling
+-            # that swept before they landed never touched them.
+-            # The learning loop's applied patches live only in this index, so a
+-            # rebuild must re-materialise them or it silently un-applies work
+-            # the proposals still report as applied.
+-            sys.path.insert(0, os.path.join(
+-                os.path.dirname(os.path.abspath(__file__)), "..", "learning"))
+-            from stage2_review import reapply_applied_patches      # noqa: PLC0415
+-            t0 = time.time()
+-            res = reapply_applied_patches(db, ts, run)
+-            totals.update(res)
+-            say(f"  {'reapply patches':<20} {res}   ({time.time()-t0:.1f}s)")
++        derive = args.observations
++        if derive and failed and not args.force_derive:
++            derive = False
++            say("\n  SKIPPING the derived phase: %d importer(s) failed (%s)."
++                % (len(failed), ", ".join(failed)))
++            say("  resolve/cell_state/prune/export would rebuild the answer from an index "
++                "that is missing those data sets, and the prune DELETES the evidence that "
++                "would show it. Yesterday's state is KEPT. Re-run when the cause is fixed, "
++                "or pass --force-derive to build from a partial load anyway.")
++        # THE WHOLE PHASE IS ONE STEP, because the comment above is the argument for it:
++        # the ORDER is load-bearing and each stage is the input to the next, so the unit of
++        # business invariance is the chain and not any one link. A prune that raises halfway
++        # used to propagate out of the `with` and be committed by close() on its way down,
++        # which left the evidence half-deleted under a cell_state built before the deletion.
++        # Rolled back as a unit, yesterday's cell_state and verdicts simply stand.
++        #
++        # `export_state` writes TRACKED JSON and is outside any database transaction, so a
++        # raise inside it rolls the rows back and may leave a written file. It is last on
++        # purpose: by then every row it reads is final, and the next run rewrites it.
++        if derive:
++            def _derive() -> dict:
++                local: dict = {}
++                pipeline_dir = os.path.join(
++                    os.path.dirname(os.path.abspath(__file__)), "..", "pipeline")
++                sys.path.insert(0, pipeline_dir)
++                from resolve import Resolver                                  # noqa: PLC0415
++                from state import (build_cell_state, build_question_verdicts,  # noqa: PLC0415
++                                   supersede_prune, export_state)
++                say("\n  adjudicate + price state ...")
++                # Rulings first, and again here rather than only in the seed pass:
++                # the lanes above insert rows pre-marked include_hit, so a ruling
++                # that swept before they landed never touched them.
++                # The learning loop's applied patches live only in this index, so a
++                # rebuild must re-materialise them or it silently un-applies work
++                # the proposals still report as applied.
++                sys.path.insert(0, os.path.join(
++                    os.path.dirname(os.path.abspath(__file__)), "..", "learning"))
++                from stage2_review import reapply_applied_patches      # noqa: PLC0415
++                t0 = time.time()
++                res = reapply_applied_patches(db, ts, run)
++                local.update(res)
++                say(f"  {'reapply patches':<20} {res}   ({time.time()-t0:.1f}s)")
+ 
+-            t0 = time.time()
+-            n_demoted = importers.retro_apply_known_wrong(db, ts, run)
+-            totals["known_wrong_retro_demoted"] = n_demoted
+-            say(f"  {'known-wrong sweep':<20} {n_demoted} rows demoted   "
+-                f"({time.time()-t0:.1f}s)")
+-            t0 = time.time()
+-            res = Resolver(db, use_llm=False).resolve_pending(run=run, ts=ts,
+-                                                              allow_llm=False)
+-            totals["resolved_rows"] = res["resolved"]
+-            say(f"  {'resolve':<20} {res['resolved']} rows, "
+-                f"{res['questions']} questions   ({time.time()-t0:.1f}s)")
+-            for label, fn in (("cell_state", build_cell_state),
+-                              ("verdicts", build_question_verdicts)):
+                 t0 = time.time()
+-                out = fn(db, ts)
+-                totals.update(out)
+-                say(f"  {label:<20} {out}   ({time.time()-t0:.1f}s)")
+-
+-            # The migration gate, measured while both derivations still see the
+-            # same evidence ΓÇö the prune below removes rows the observations path
+-            # would need to answer with, so this is the only honest moment for it.
+-            from state import verify_against_matrix            # noqa: PLC0415
+-            gate = verify_against_matrix(db)
+-            totals["state_gate_ok"] = gate["ok"]
+-            say(f"  {'state gate':<20} {'PASS' if gate['ok'] else 'FAIL'}  "
+-                f"cells {gate['state_cells']}, live-board agreement "
+-                f"{gate['agreement_from_state']} vs {gate['agreement_from_observations']} "
+-                f"from observations")
++                n_demoted = importers.retro_apply_known_wrong(db, ts, run)
++                local["known_wrong_retro_demoted"] = n_demoted
++                say(f"  {'known-wrong sweep':<20} {n_demoted} rows demoted   "
++                    f"({time.time()-t0:.1f}s)")
++                t0 = time.time()
++                res = Resolver(db, use_llm=False).resolve_pending(run=run, ts=ts,
++                                                                  allow_llm=False)
++                local["resolved_rows"] = res["resolved"]
++                say(f"  {'resolve':<20} {res['resolved']} rows, "
++                    f"{res['questions']} questions   ({time.time()-t0:.1f}s)")
++                for label, fn in (("cell_state", build_cell_state),
++                                  ("verdicts", build_question_verdicts)):
++                    t0 = time.time()
++                    out = fn(db, ts)
++                    local.update(out)
++                    say(f"  {label:<20} {out}   ({time.time()-t0:.1f}s)")
+ 
+-            t0 = time.time()
+-            out = supersede_prune(db, ts)
+-            totals.update(out)
+-            say(f"  {'prune':<20} {out}   ({time.time()-t0:.1f}s)")
+-            say(f"  {'state export':<20} {export_state(db)}")
++                # The migration gate, measured while both derivations still see the
++                # same evidence ΓÇö the prune below removes rows the observations path
++                # would need to answer with, so this is the only honest moment for it.
++                from state import verify_against_matrix            # noqa: PLC0415
++                gate = verify_against_matrix(db)
++                local["state_gate_ok"] = gate["ok"]
++                say(f"  {'state gate':<20} {'PASS' if gate['ok'] else 'FAIL'}  "
++                    f"cells {gate['state_cells']}, live-board agreement "
++                    f"{gate['agreement_from_state']} vs {gate['agreement_from_observations']} "
++                    f"from observations")
++
++                t0 = time.time()
++                out = supersede_prune(db, ts)
++                local.update(out)
++                say(f"  {'prune':<20} {out}   ({time.time()-t0:.1f}s)")
++                say(f"  {'state export':<20} {export_state(db)}")
++                return local
++
++            out = run_step("derive", _derive)
++            if out is None:
++                say("  the derived phase was ROLLED BACK as a unit. The counts printed above "
++                    "it are what it did before it raised, not what the index now holds; "
++                    "yesterday's cell_state and question_verdicts stand.")
++            else:
++                totals.update(out)
+ 
+         stats = db.stats()
+-        db.log_event(run=run, timestamp=ts, etype="state_transition",
+-                     decision="import_complete", detail={"totals": totals, "stats": stats})
++        status = db.mark_import_end(run, ts, failed,
++                                    {"totals": totals, "stats": stats,
++                                     "derived": bool(derive),
++                                     "forced_derive": bool(args.force_derive)})
+ 
+         if args.export:
+             say("\n  exporting durable JSON ...")
+@@ -168,6 +261,15 @@ def main() -> int:
+     say("\n--- graph stats ---")
+     for k, v in stats.items():
+         say(f"  {k:<14} {v}")
++    if failed:
++        # NOT exit 0. The caller (grocery/audit-graph-gates.ps1) reads this code and reports
++        # BLIND, which is the honest verdict for an index that is missing a data set: never a
++        # pass, and never a data failure either, because the board itself is unaffected.
++        say("\nINCOMPLETE IMPORT: %d of %d step(s) failed and were rolled back: %s"
++            % (len(failed), len(attempted), ", ".join(failed)))
++        say("the index is marked '%s' - any reader can ask GraphDB.import_health()" % status)
++        return 1
++    say("\nimport %s: %d of %d step(s) landed" % (status, len(attempted), len(attempted)))
+     return 0
+ 
+ 
+diff --git a/graph/import/import_all_selftest.py b/graph/import/import_all_selftest.py
+new file mode 100644
+index 000000000..60da2709b
+--- /dev/null
++++ b/graph/import/import_all_selftest.py
+@@ -0,0 +1,339 @@
++"""import_all_selftest.py - the nightly import's ATOMICITY and its verdict (2026-09-19).
++
++    python graph/import/import_all_selftest.py --selftest
++
++WHY THIS FILE EXISTS. `graph/import/import_all.py` is the daily chain's graph-gates lane and the
++README's rebuild road, and nothing ran any of its control flow: `importers_selftest.py` covers one
++importer's price handling, and the loop that decides what a failure MEANS had no fixture at all.
++
++WHAT IT GUARDS. An importer that raised partway used to leave its partial writes in graph.db and the
++run still exited 0. Three separate mechanisms made that possible and all three are fixtured here:
++
++  1. NOTHING BOUNDED ONE IMPORTER'S WRITES. The loop caught the exception and `continue`d, so the
++     rows written before the raise stayed in the open transaction and were committed by the NEXT
++     importer's `db.conn.commit()`. A known-wrong or override set two thirds loaded became the day's
++     index. Each importer now runs inside `db.step()`, a SAVEPOINT.
++  2. `import_observations` SAT OUTSIDE ANY try. A raise there propagated out of `with open_db()`,
++     whose `__exit__` declined to commit - and then called `close()`, which committed anyway.
++  3. THE RUN EXITED 0 AND THE INDEX SAID NOTHING. It now records `import_incomplete` naming the
++     steps it lost, skips the DESTRUCTIVE derived phase (`supersede_prune` deletes evidence and
++     `cell_state`'s git diff is the price history), and returns 1 - which
++     `grocery/audit-graph-gates.ps1` already reads as BLIND.
++
++HERMETIC. `graphdb.DB_PATH` points at a fresh file in a per-run temp directory, so `open_db()` never
++reaches `graph/sqlite/graph.db`; `importers.ALL_IMPORTERS`, `LANE_IMPORTERS` and
++`import_observations` are replaced with fixtures, so no capture file and no grocery/*.json is read;
++`GraphDB._append_jsonl` is replaced, so the tracked graph/provenance trail is never written; and the
++derived phase's three modules are replaced in `sys.modules` with recording fakes, so no resolver,
++state build or prune runs. Every substitution is restored in a `finally`. Nothing outside the temp
++directory is written.
++
++EXIT: 0 all cases pass, 1 at least one failed. Read the verdict LINE, not the number.
++"""
++from __future__ import annotations
++
++import io
++import contextlib
++import json
++import os
++import shutil
++import sys
++import tempfile
++import types
++
++HERE = os.path.dirname(os.path.abspath(__file__))
++REPO = os.path.normpath(os.path.join(HERE, "..", ".."))
++sys.path.insert(0, HERE)
++sys.path.insert(0, os.path.join(REPO, "graph", "lib"))
++
++import graphdb                                           # noqa: E402
++import importers as I                                    # noqa: E402
++import import_all as IA                                  # noqa: E402
++
++_fails: list[str] = []
++_ran = 0
++CASES = 17
++TS = "2026-09-19T00:00:00"
++
++# Unique per call: two runs inside one second would otherwise share a run id, and every marker of
++# the second would merge into the first one's verdict.
++_seq = [0]
++
++
++def _run_id(kind: str, stamp: str) -> str:
++    _seq[0] += 1
++    return "run:%s:fixture%04d" % (kind, _seq[0])
++
++
++def T(label: str, ok: bool, got: str = "") -> None:
++    global _ran
++    _ran += 1
++    if ok:
++        print("  ok    " + label)
++    else:
++        _fails.append(label)
++        print("  FAILED " + label + ("   got: " + got if got else ""))
++
++
++# ---------------------------------------------------------------------------
++# fixture importers - the shape of the founding bug: N rows written, then a raise
++# ---------------------------------------------------------------------------
++def _good(prefix: str, n: int, ntype: str = "Store"):
++    def fn(db, ts, run, **kw):
++        for i in range(n):
++            db.upsert_node("%s:%d" % (prefix, i), ntype, "%s %d" % (prefix, i), ts)
++        return {prefix: n}
++    return fn
++
++
++def _half(prefix: str, written: int, ntype: str = "KnownWrong", exc=RuntimeError):
++    def fn(db, ts, run, **kw):
++        for i in range(written):
++            db.upsert_node("%s:%d" % (prefix, i), ntype, "%s %d" % (prefix, i), ts)
++        raise exc("%s source truncated after %d rows" % (prefix, written))
++    return fn
++
++
++def _node_ids(path: str) -> list[str]:
++    """Reopen the FILE. Reading the live connection cannot tell a committed row from one still
++    sitting in an open transaction, and that difference is the entire subject here."""
++    db = graphdb.GraphDB(path, restore_learning=False, health_warn=False)
++    try:
++        return [r[0] for r in db.conn.execute("SELECT id FROM nodes ORDER BY id")]
++    finally:
++        db.conn.close()
++
++
++def _health(path: str) -> dict:
++    db = graphdb.GraphDB(path, restore_learning=False, health_warn=False)
++    try:
++        return db.import_health()
++    finally:
++        db.conn.close()
++
++
++def _invoke(db_path: str, argv: list[str]) -> tuple[int, str]:
++    """Run import_all.main() against a temp index and capture what it said."""
++    graphdb.DB_PATH = db_path
++    buf = io.StringIO()
++    saved_argv = sys.argv
++    sys.argv = ["import_all.py"] + argv
++    try:
++        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
++            rc = IA.main()
++    except BaseException as e:                            # noqa: BLE001
++        # A raise out of main() is not a return code and must not be scored as one. Carrying the
++        # repr is what stops "the suite failed" from being a mystery: the first run of this file
++        # caught a TypeError here and the only symptom was a later case's missing database.
++        sys.argv = saved_argv
++        return ("raised:%r" % (e,)), buf.getvalue()
++    sys.argv = saved_argv
++    return rc, buf.getvalue()
++
++
++# ---------------------------------------------------------------------------
++# recording fakes for the derived phase
++# ---------------------------------------------------------------------------
++def _install_derive_fakes(calls: list, fail_at: str | None = None):
++    """Replace resolve/state/stage2_review with fakes that RECORD and optionally raise.
++
++    They write real rows, because the point of the derived-phase case is that the phase unwinds
++    as ONE unit - which cannot be asserted against a fake that touches no database.
++    """
++    def mark(name, db=None, node=None):
++        calls.append(name)
++        if db is not None and node is not None:
++            db.upsert_node(node, "AuditFinding", node, TS)
++        if fail_at == name:
++            raise RuntimeError("derived stage %s blew up" % name)
++
++    resolve = types.ModuleType("resolve")
++
++    class Resolver:
++        def __init__(self, db, use_llm=False):
++            self.db = db
++
++        def resolve_pending(self, run, ts, allow_llm=False):
++            mark("resolve", self.db, "derived:resolve")
++            return {"resolved": 0, "questions": 0}
++
++    resolve.Resolver = Resolver
++
++    state = types.ModuleType("state")
++    state.build_cell_state = lambda db, ts: (mark("cell_state", db, "derived:cell_state")
++                                             or {"cell_state_rows": 0})
++    state.build_question_verdicts = lambda db, ts: (mark("verdicts", db, "derived:verdicts")
++                                                    or {"verdict_rows": 0})
++    state.verify_against_matrix = lambda db: (mark("gate") or {
++        "ok": 1, "state_cells": 0, "agreement_from_state": 0,
++        "agreement_from_observations": 0})
++    state.supersede_prune = lambda db, ts: (mark("prune", db, "derived:prune")
++                                            or {"pruned": 0})
++    state.export_state = lambda db: (mark("export") or {"exported": 0})
++
++    review = types.ModuleType("stage2_review")
++    review.reapply_applied_patches = lambda db, ts, run: (
++        mark("reapply", db, "derived:reapply") or {"reapplied": 0})
++
++    for name, mod in (("resolve", resolve), ("state", state), ("stage2_review", review)):
++        sys.modules[name] = mod
++
++
++def run() -> int:
++    tmp = tempfile.mkdtemp(prefix="ia-st-")
++    saved = {
++        "DB_PATH": graphdb.DB_PATH,
++        "append": graphdb.GraphDB._append_jsonl,
++        "ALL": I.ALL_IMPORTERS,
++        "LANE": I.LANE_IMPORTERS,
++        "obs": I.import_observations,
++        "run_id": IA.make_run_id,
++        "mods": {k: sys.modules.get(k) for k in ("resolve", "state", "stage2_review")},
++    }
++    graphdb.GraphDB._append_jsonl = staticmethod(lambda run, record: None)
++    IA.make_run_id = _run_id
++    try:
++        # ---- 1. a seed importer that raises partway ------------------------------------------
++        p = os.path.join(tmp, "partial.db")
++        I.ALL_IMPORTERS = [("stores", _good("store", 2)),
++                           ("known_wrong", _half("kw", 3)),
++                           ("overrides", _good("ov", 2, "Override"))]
++        rc, out = _invoke(p, [])
++        ids = _node_ids(p)
++        T("MUST FIRE  a run that lost an importer returns 1, never 0", rc == 1, repr(rc))
++        T("MUST FIRE  NONE of the failed importer's 3 written rows survive (all-or-nothing, not "
++          "2 of 3)", [i for i in ids if i.startswith("kw:")] == [],
++          repr([i for i in ids if i.startswith("kw:")]))
++        T("CLEAN TWIN  every row of the importers that DID land is there - one step's rollback is "
++          "not the run's", sorted(i for i in ids if not i.startswith("kw:")) ==
++          ["ov:0", "ov:1", "store:0", "store:1"], repr(ids))
++        h = _health(p)
++        T("MUST FIRE  the INDEX carries the verdict: status 'incomplete', naming known_wrong",
++          h["status"] == "incomplete" and h["failed_steps"] == ["known_wrong"], json.dumps(h))
++        T("MUST FIRE  the run says which step it lost and that it was rolled back",
++          "known_wrong" in out and "rolled_back" in out and "INCOMPLETE IMPORT" in out,
++          repr(out[-300:]))
++
++        # ---- 2. the all-green twin -------------------------------------------------------------
++        p2 = os.path.join(tmp, "green.db")
++        I.ALL_IMPORTERS = [("stores", _good("store", 2)), ("overrides", _good("ov", 2, "Override"))]
++        rc, out = _invoke(p2, [])
++        h = _health(p2)
++        T("CLEAN TWIN  a run where every importer landed returns 0 and reads 'complete'",
++          rc == 0 and h["status"] == "complete" and h["ok"], "rc=%r %s" % (rc, json.dumps(h)))
++        T("CLEAN TWIN  and it holds every row it imported (4 of 4)",
++          len(_node_ids(p2)) == 4, repr(_node_ids(p2)))
++
++        # ---- 3. the process DIES mid-import ----------------------------------------------------
++        # KeyboardInterrupt is not an Exception, so no handler in the loop catches it: this is the
++        # Ctrl-C / reboot / task-killed shape, the one no in-process except clause can ever see.
++        p3 = os.path.join(tmp, "killed.db")
++        I.ALL_IMPORTERS = [("stores", _good("store", 2)),
++                           ("known_wrong", _half("kw", 3, exc=KeyboardInterrupt))]
++        rc, out = _invoke(p3, [])
++        h = _health(p3)
++        T("MUST FIRE  a killed run leaves the index reading 'interrupted' - the start marker is "
++          "committed BEFORE any data lands, so the index can say it never finished",
++          h["status"] == "interrupted" and not h["ok"], json.dumps(h))
++        T("MUST FIRE  and it leaves none of the dying importer's rows",
++          [i for i in _node_ids(p3) if i.startswith("kw:")] == [], repr(_node_ids(p3)))
++
++        # THE CASE ABOVE CANNOT SEE WHEN THE START MARKER WAS COMMITTED, and a mutation probe
++        # is how that was found: dropping the commit out of mark_import_start left it GREEN,
++        # because the `stores` step's own commit landed the marker on its way past. The
++        # assertion has to be on the MECHANISM - kill the run inside the FIRST importer, and
++        # there is no later commit to carry the marker for it.
++        p3b = os.path.join(tmp, "killed-first.db")
++        I.ALL_IMPORTERS = [("known_wrong", _half("kw", 3, exc=KeyboardInterrupt)),
++                           ("stores", _good("store", 2))]
++        rc, out = _invoke(p3b, [])
++        h = _health(p3b)
++        T("MUST FIRE  a run killed inside its FIRST importer still reads 'interrupted', never "
++          "'unknown' - nothing else had committed anything to carry the marker",
++          h["status"] == "interrupted" and _node_ids(p3b) == [],
++          "%s nodes=%s" % (json.dumps(h), _node_ids(p3b)))
++
++        # ---- 4. the DESTRUCTIVE derived phase is not run over a partial load -------------------
++        I.import_observations = _good("obs", 1, "ProductSKU")
++        I.LANE_IMPORTERS = []
++        calls: list[str] = []
++        _install_derive_fakes(calls)
++        p4 = os.path.join(tmp, "noderive.db")
++        I.ALL_IMPORTERS = [("stores", _good("store", 2)), ("known_wrong", _half("kw", 3))]
++        rc, out = _invoke(p4, ["--observations"])
++        T("MUST FIRE  with an importer lost, the derived phase does not run at all - no resolve, no "
++          "cell_state, and above all no prune",
++          rc == 1 and calls == [] and "SKIPPING the derived phase" in out,
++          "rc=%r calls=%s" % (rc, calls))
++
++        # ---- 5. --force-derive is a real override, so the guard is not 'never runs' -------------
++        calls2: list[str] = []
++        _install_derive_fakes(calls2)
++        p5 = os.path.join(tmp, "forced.db")
++        rc, out = _invoke(p5, ["--observations", "--force-derive"])
++        T("CLEAN TWIN  --force-derive runs it anyway over the same partial load, and the run is "
++          "STILL reported incomplete", "prune" in calls2 and rc == 1, "rc=%r calls=%s" % (rc, calls2))
++
++        # ---- 6. a clean run still derives ------------------------------------------------------
++        calls3: list[str] = []
++        _install_derive_fakes(calls3)
++        p6 = os.path.join(tmp, "derived.db")
++        I.ALL_IMPORTERS = [("stores", _good("store", 2))]
++        rc, out = _invoke(p6, ["--observations"])
++        T("CLEAN TWIN  with nothing lost the derived phase runs in its load-bearing ORDER",
++          rc == 0 and calls3 == ["reapply", "resolve", "cell_state", "verdicts", "gate", "prune",
++                                 "export"], "rc=%r calls=%s" % (rc, calls3))
++        T("CLEAN TWIN  and the rows it wrote are committed",
++          "derived:prune" in _node_ids(p6), repr(_node_ids(p6)))
++
++        # ---- 7. the derived phase unwinds as ONE unit ------------------------------------------
++        # Its own header says the ORDER is load-bearing and each stage feeds the next, so the unit
++        # of atomicity is the chain: a prune that dies must not leave a cell_state built from a
++        # half-deleted evidence set.
++        calls4: list[str] = []
++        _install_derive_fakes(calls4, fail_at="prune")
++        p7 = os.path.join(tmp, "derive-fails.db")
++        rc, out = _invoke(p7, ["--observations"])
++        ids = _node_ids(p7)
++        T("MUST FIRE  a derived stage that raises rolls back EVERY stage before it, not just its own",
++          rc == 1 and [i for i in ids if i.startswith("derived:")] == [],
++          "rc=%r %s" % (rc, [i for i in ids if i.startswith("derived:")]))
++        T("CLEAN TWIN  the IMPORTED rows are untouched by that rollback - yesterday's state stands, "
++          "today's import does not have to be redone", "store:0" in ids and "obs:0" in ids, repr(ids))
++        h = _health(p7)
++        T("MUST FIRE  and the index names 'derive' as the data set it is missing",
++          h["status"] == "incomplete" and h["failed_steps"] == ["derive"], json.dumps(h))
++    except Exception as e:                                # noqa: BLE001
++        _fails.append("suite raised: %r" % (e,))
++        print("  FAILED suite raised: %r" % (e,))
++    finally:
++        graphdb.DB_PATH = saved["DB_PATH"]
++        graphdb.GraphDB._append_jsonl = saved["append"]
++        I.ALL_IMPORTERS = saved["ALL"]
++        I.LANE_IMPORTERS = saved["LANE"]
++        I.import_observations = saved["obs"]
++        IA.make_run_id = saved["run_id"]
++        for k, v in saved["mods"].items():
++            if v is None:
++                sys.modules.pop(k, None)
++            else:
++                sys.modules[k] = v
++        shutil.rmtree(tmp, ignore_errors=True)
++
++    if _ran != CASES and not _fails:
++        _fails.append("ran %d of %d cases" % (_ran, CASES))
++    if _fails:
++        print("SELF-TEST FAIL: import_all %d of %d case(s) failed, %d ran"
++              % (len(_fails), CASES, _ran))
++        return 1
++    print("SELF-TEST PASS: import_all %d of %d cases - an importer that raises partway leaves NONE "
++          "of its rows, the run exits 1, the index reads 'incomplete', and the destructive derived "
++          "phase does not run over a partial load" % (_ran, CASES))
++    return 0
++
++
++if __name__ == "__main__":
++    if "--selftest" in sys.argv:
++        sys.exit(run())
++    print("usage: import_all_selftest.py --selftest")
++    sys.exit(2)
+diff --git a/graph/import/importers.py b/graph/import/importers.py
+index 939c365be..dc993464e 100644
+--- a/graph/import/importers.py
++++ b/graph/import/importers.py
+@@ -359,7 +359,11 @@ def retro_apply_known_wrong(db: GraphDB, ts: str, run: str) -> int:
+                 "confidence=1.0 WHERE id=?", [(i,) for i in hits])
+             demoted += len(hits)
+     if demoted:
+-        db.conn.commit()
++        # NO commit() HERE (2026-09-19). This runs inside import_all's `db.step()`, whose
++        # SAVEPOINT is what makes a half-applied sweep impossible - and a commit() inside a
++        # savepoint RELEASES it, so a raise after this line would have left the demotions
++        # durable with nothing able to take them back. import_all commits the step when it
++        # lands. The sweep is called twice per run and is idempotent either way.
+         db.log_event(run=run, timestamp=ts, etype="resolve",
+                      decision="known_wrong_retro_sweep",
+                      detail={"rows_demoted": demoted})
+diff --git a/graph/lib/graphdb.py b/graph/lib/graphdb.py
+index bea230cb9..d4652cc40 100644
+--- a/graph/lib/graphdb.py
++++ b/graph/lib/graphdb.py
+@@ -21,6 +21,7 @@ import json
+ import os
+ import re
+ import sqlite3
++import sys
+ from contextlib import contextmanager
+ from typing import Any, Iterable, Sequence
+ 
+@@ -66,12 +67,15 @@ class GraphDB:
+     """Thin, explicit wrapper over SQLite. No ORM, no magic."""
+ 
+     def __init__(self, path: str | None = None, create: bool = True,
+-                 restore_learning: bool = True, allow_new: bool = False):
++                 restore_learning: bool = True, allow_new: bool = False,
++                 health_warn: bool = True):
+         # `path=None` reads the module's DB_PATH at CALL time rather than binding it at definition,
+         # so a harness can point the whole module at a copy by setting graphdb.DB_PATH.
+         path = path or DB_PATH
+         self.path = path
+         self.restore_skipped: dict[str, int] = {}
++        self._step_seq = 0
++        self.last_step: dict[str, Any] | None = None
+         # A MISSING DATABASE IS REFUSED UNLESS THE CALLER SAYS IT MAY BE CREATED (2026-09-18, backlog
+         # I229). sqlite3.connect() creates any path it is handed, so every open_db() script used to
+         # build a fresh, empty graph.db wherever it ran - a worktree has none - restore the learning
+@@ -98,6 +102,16 @@ class GraphDB:
+         # durability. Cheap: it is a no-op once the tables are populated.
+         if restore_learning and not any(self.learning_counts().values()):
+             self.import_learning()
++        # EVERY READER IS TOLD, not just whoever ran the import. The import's own exit code
++        # reaches its caller and nobody else, and the half-loaded index outlives the run that
++        # made it - it is the day's index until tomorrow's import replaces it. This is one
++        # indexed query on open and it writes nothing. `health_warn=False` is for the import
++        # itself, which is mid-run by construction and would otherwise warn about itself.
++        if health_warn:
++            h = self.import_health()
++            if h["status"] in ("incomplete", "interrupted"):
++                print("WARNING graph.db: the newest import run (%s) is %s - %s"
++                      % (h["run"], h["status"], h["note"]), file=sys.stderr)
+ 
+     def init_schema(self) -> None:
+         with io.open(SCHEMA_PATH, encoding="utf-8") as fh:
+@@ -105,17 +119,35 @@ class GraphDB:
+         self.conn.commit()
+ 
+     # -- lifecycle ---------------------------------------------------------
+-    def close(self) -> None:
+-        self.conn.commit()
++    def close(self, commit: bool = True) -> None:
++        """Close the connection. `commit=False` DISCARDS whatever is still pending.
++
++        The default stays True because every hand-written script calls db.close() meaning
++        "I am done, save it". __exit__ is the one caller that says False, and it has to:
++        see the comment there.
++        """
++        if commit:
++            self.conn.commit()
++        else:
++            self.conn.rollback()
+         self.conn.close()
+ 
+     def __enter__(self):
+         return self
+ 
+     def __exit__(self, *exc):
++        # `close()` USED TO COMMIT UNCONDITIONALLY, which silently undid the refusal on the
++        # line above it (2026-09-19). The intent was already written - "do not commit when
++        # the block raised" - and `self.close()` then committed the very transaction the
++        # `if` had just declined to commit. Measured on a temp database: a node written
++        # immediately before a raise inside `with GraphDB(...) as db:` was present after
++        # reopening the file. So an importer that died mid-set left its partial rows in the
++        # index, and the next reader could not tell them from a complete load.
+         if exc[0] is None:
+             self.conn.commit()
+-        self.close()
++            self.close()
++        else:
++            self.close(commit=False)
+         return False
+ 
+     @contextmanager
+@@ -127,6 +159,158 @@ class GraphDB:
+             self.conn.rollback()
+             raise
+ 
++    # -- an importer's writes are ONE unit ---------------------------------
++    @contextmanager
++    def step(self, name: str):
++        """Run one named step's writes inside a SAVEPOINT: all of them land, or none do.
++
++        THE UNIT OF ATOMICITY IS THE UNIT OF BUSINESS INVARIANCE, which here is one
++        importer's whole data set and never one row. A known-wrong or override importer that
++        raises at entry 300 of 400 used to leave 299 rows committed by the NEXT step's
++        commit, and the day's index then answered every question from a ruling set that was
++        two thirds of itself - an agreeing answer about something else. Half a ruling set is
++        worse than none, because none is visible as a count of zero and half is not.
++
++        WHY A SAVEPOINT AND NOT conn.rollback(). rollback() throws away everything since the
++        last commit, which on this connection includes the run's own start marker and any
++        step that has not been committed yet. A savepoint names exactly this step's writes.
++        It also nests, so a caller already inside a transaction keeps it.
++
++        WHAT IT CANNOT UNDO, AND IT SAYS SO RATHER THAN PRETENDING. A commit() anywhere
++        inside the body RELEASES the savepoint - SQLite then answers `no such savepoint` and
++        the partial writes are already durable. That is caught, and the step record carries
++        `undone='could-not-undo: ...'` instead of `'rolled_back'`, so the caller reports a
++        step that could not be unwound rather than claiming an atomicity it did not get.
++        (This is why `retro_apply_known_wrong` no longer commits mid-sweep.)
++
++        The decision-log JSONL trail is deliberately NOT rewound: it is an append-only record
++        of what was ATTEMPTED, and an attempt that was rolled back is true content for it.
++
++        Yields a record dict; it stays readable after the exception propagates, and is also
++        left on `self.last_step`:
++
++            rec = None
++            try:
++                with db.step("known_wrong") as rec:
++                    ...
++            except Exception:
++                print(rec["undone"])        # 'rolled_back' | 'could-not-undo: ...'
++        """
++        self._step_seq += 1
++        sp = "tc_step_%d" % self._step_seq
++        rec: dict[str, Any] = {"name": name, "savepoint": sp, "ok": False, "undone": None,
++                               "error": None}
++        self.last_step = rec
++        self.conn.execute("SAVEPOINT " + sp)
++        try:
++            yield rec
++        except BaseException as e:
++            rec["error"] = "%s: %s" % (type(e).__name__, e)
++            try:
++                self.conn.execute("ROLLBACK TO " + sp)
++                self.conn.execute("RELEASE " + sp)
++                rec["undone"] = "rolled_back"
++            except sqlite3.Error as undo_err:
++                # The savepoint is gone, so something inside the body committed. The partial
++                # writes are durable and nothing here can take them back; say which.
++                rec["undone"] = "could-not-undo: %s" % undo_err
++            raise
++        else:
++            self.conn.execute("RELEASE " + sp)
++            rec["ok"] = True
++
++    # -- is the index a COMPLETE load? -------------------------------------
++    # An import that dies partway is now rolled back per step (see `step` above), but a
++    # rolled-back step still leaves the index MISSING a whole data set, and a missing ruling
++    # set is exactly as dangerous as a half-loaded one. So the run writes its own verdict
++    # into the decision log, and `import_health()` is how any reader asks for it.
++    #
++    # THE START MARKER IS COMMITTED BEFORE ANY DATA LANDS, on purpose. That is the
++    # write-the-pointed-to-object-first rule read in the direction that matters here: an
++    # interruption then leaves a run that says "started, never finished" (loud, and
++    # recoverable) rather than an index that looks finished because nothing recorded that it
++    # was not. A killed process - a reboot, a Ctrl-C, the box going down - writes no
++    # completion marker and is reported `interrupted`, which no in-process exception handler
++    # could ever have caught.
++    #
++    # IT IS A ROW IN decision_log, NOT A NEW TABLE, deliberately. graph/audit_schema_change.py
++    # states the reason in its own header: adding a table to the live ~127 MB graph.db is
++    # itself a schema change against the thing with no undo. decision_log already exists, is
++    # already indexed by (run_id, timestamp), and is already mirrored to the tracked JSONL
++    # trail, so the verdict survives a delete-and-rebuild of the database.
++    IMPORT_MARKERS = ("import_start", "import_complete", "import_incomplete")
++
++    def import_health(self) -> dict:
++        """What the NEWEST import run left behind. Never raises; a missing answer is 'unknown'.
++
++        status: 'complete'    the run finished and every step landed
++                'incomplete'  the run finished and at least one step failed (and was undone)
++                'interrupted' a run started and never recorded an ending - the process died
++                'unknown'     no import run has ever marked this index
++        """
++        blank = {"run": None, "status": "unknown", "ok": False, "failed_steps": [],
++                 "timestamp": None,
++                 "note": "no import run has marked this index - it may be a rebuild or a copy"}
++        try:
++            marks = ", ".join("'%s'" % m for m in self.IMPORT_MARKERS)
++            row = self.conn.execute(
++                "SELECT run_id FROM decision_log WHERE decision IN (%s) "
++                "ORDER BY timestamp DESC, rowid DESC LIMIT 1" % marks).fetchone()
++            if not row:
++                return blank
++            run = row["run_id"]
++            rows = self.conn.execute(
++                "SELECT decision, timestamp, detail_json FROM decision_log "
++                "WHERE run_id=? AND decision IN (%s) ORDER BY rowid" % marks, (run,)).fetchall()
++        except sqlite3.Error as e:
++            return dict(blank, note="could not read the decision log: %s" % e)
++
++        seen = {r["decision"]: r for r in rows}
++        if "import_incomplete" in seen:
++            end = seen["import_incomplete"]
++            status = "incomplete"
++        elif "import_complete" in seen:
++            end = seen["import_complete"]
++            status = "complete"
++        else:
++            end = seen.get("import_start")
++            status = "interrupted"
++        detail = {}
++        try:
++            detail = json.loads(end["detail_json"]) if end else {}
++        except (TypeError, ValueError):
++            detail = {}
++        failed = [str(f) for f in (detail.get("failed_steps") or [])]
++        note = {
++            "complete": "every importer landed",
++            "incomplete": "the index is MISSING %d data set(s): %s - the rest of it is a "
++                          "complete load, but any answer that depends on these is not"
++                          % (len(failed), ", ".join(failed) or "unnamed"),
++            "interrupted": "an import started and never finished - the index holds however "
++                           "much of it had been committed when the process died",
++        }[status]
++        return {"run": run, "status": status, "ok": status == "complete",
++                "failed_steps": failed,
++                "timestamp": end["timestamp"] if end else None, "note": note}
++
++    def mark_import_start(self, run: str, timestamp: str, detail: dict | None = None) -> None:
++        """Record - and COMMIT - that an import began. See the comment above import_health."""
++        self.log_event(run=run, timestamp=timestamp, etype="state_transition",
++                       decision="import_start", detail=detail or {})
++        self.conn.commit()
++
++    def mark_import_end(self, run: str, timestamp: str, failed_steps: Sequence[str],
++                        detail: dict | None = None) -> str:
++        """Record - and COMMIT - the run's verdict. Returns 'complete' or 'incomplete'."""
++        failed = [str(f) for f in failed_steps]
++        status = "incomplete" if failed else "complete"
++        self.log_event(run=run, timestamp=timestamp,
++                       etype="escalate" if failed else "state_transition",
++                       decision="import_%s" % status,
++                       detail=dict(detail or {}, failed_steps=failed))
++        self.conn.commit()
++        return status
++
+     # -- provenance --------------------------------------------------------
+     def record_provenance(self, source_document: str, extraction_method: str,
+                           timestamp: str, model: str | None = None,
+@@ -534,6 +718,11 @@ class GraphDB:
+                 for t, _ in self.LEARNING_TABLES}
+ 
+ 
+-def open_db(create: bool = True, allow_new: bool = False) -> GraphDB:
+-    """The live graph.db. Refuses a missing file unless `allow_new` (see GraphDB.__init__)."""
+-    return GraphDB(create=create, allow_new=allow_new)
++def open_db(create: bool = True, allow_new: bool = False,
++            health_warn: bool = True) -> GraphDB:
++    """The live graph.db. Refuses a missing file unless `allow_new` (see GraphDB.__init__).
++
++    `health_warn=False` is for the import itself, which is mid-run by construction and would
++    otherwise warn about its own unfinished marker. Everything else wants the warning.
++    """
++    return GraphDB(create=create, allow_new=allow_new, health_warn=health_warn)
+diff --git a/graph/lib/graphdb_selftest.py b/graph/lib/graphdb_selftest.py
+index 7b7213242..ed2f362b0 100644
+--- a/graph/lib/graphdb_selftest.py
++++ b/graph/lib/graphdb_selftest.py
+@@ -1,4 +1,4 @@
+-"""graphdb_selftest.py - the store layer's two I229 boundaries (backlog I229, 2026-09-18).
++"""graphdb_selftest.py - the store layer's I229 boundaries, and its write ATOMICITY.
+ 
+     python graph/lib/graphdb_selftest.py --selftest
+ 
+@@ -14,14 +14,26 @@ WHAT IT GUARDS.
+    OFFERED, so a cell-state.json whose rows were refused (a NULL key, a duplicate key) reported them as
+    restored: 3 counted, 1 in the table. It now counts rowcount and puts the rest in restore_skipped.
+ 
++3. A WRITE SET IS ALL-OR-NOTHING, AND A HALF-LOADED INDEX SAYS SO (2026-09-19). Two defects, both
++   silent. `close()` committed unconditionally, which undid the `if exc[0] is None` on the line above
++   it - so `with GraphDB(...) as db:` plus a raise PERSISTED the partial writes it had just refused to
++   commit. And nothing bounded one importer's writes, so a raise at entry 300 of 400 left 299 rows to
++   be committed by the next step. `step()` is the savepoint that bounds them; it reports
++   `could-not-undo` rather than claiming an atomicity a commit() inside the body destroyed.
++   `import_health()` is how a later reader asks what the newest run left behind - `complete`,
++   `incomplete` (a step failed), `interrupted` (the process died) or `unknown`.
++
+ HERMETIC. Every database is a fresh file in a per-run temp directory; graphdb.DB_PATH is pointed there
+ for the open_db() case and restored in a finally. Nothing reads or writes graph/sqlite/graph.db or any
+-tracked JSON, and no case calls log_event, so the tracked graph/provenance trail is never touched.
++tracked JSON, and GraphDB._append_jsonl - the tracked graph/provenance trail - is replaced for the
++whole suite, because the health cases have to call log_event.
+ 
+ EXIT: 0 all cases pass, 1 at least one failed. Read the verdict LINE, not the number.
+ """
+ from __future__ import annotations
+ 
++import contextlib
++import io
+ import json
+ import os
+ import shutil
+@@ -35,7 +47,7 @@ import graphdb                                           # noqa: E402
+ 
+ _fails: list[str] = []
+ _ran = 0
+-CASES = 8
++CASES = 23
+ 
+ 
+ def T(label: str, ok: bool, got: str = "") -> None:
+@@ -48,6 +60,22 @@ def T(label: str, ok: bool, got: str = "") -> None:
+         print("  FAILED " + label + ("   got: " + got if got else ""))
+ 
+ 
++def _rows(path: str) -> list[str]:
++    """Reopen the FILE and read it back. An assertion against the live connection cannot tell a
++    committed row from one sitting in an open transaction, which is the whole subject here."""
++    db = graphdb.GraphDB(path, restore_learning=False, health_warn=False)
++    try:
++        return [r[0] for r in db.conn.execute("SELECT id FROM nodes ORDER BY id")]
++    finally:
++        db.conn.close()
++
++
++def _mark(db, run: str, ts: str, failed: list[str] | None, start_only: bool = False) -> None:
++    db.mark_import_start(run, ts, {"fixture": True})
++    if not start_only:
++        db.mark_import_end(run, ts, failed or [], {"fixture": True})
++
++
+ def _raises_missing(fn) -> tuple[bool, str]:
+     try:
+         db = fn()
+@@ -62,6 +90,8 @@ def _raises_missing(fn) -> tuple[bool, str]:
+ def run() -> int:
+     tmp = tempfile.mkdtemp(prefix="gdb-st-")
+     saved_path = graphdb.DB_PATH
++    saved_append = graphdb.GraphDB._append_jsonl
++    graphdb.GraphDB._append_jsonl = staticmethod(lambda run, record: None)
+     try:
+         # ---- 1. a missing database ------------------------------------------------------------
+         missing = os.path.join(tmp, "nope", "graph.db")
+@@ -118,11 +148,139 @@ def run() -> int:
+           skipped.get("cell_state") == 2, json.dumps(skipped))
+         T("CLEAN TWIN  the row that did land is the first one offered, value intact (1.0)",
+           price == 1.0, repr(price))
++
++        # ---- 3. a write set is all-or-nothing --------------------------------------------------
++        ts = "2026-09-19T00:00:00"
++
++        # THE FOUNDING SHAPE: an importer that raises partway through its own data set.
++        atom = os.path.join(tmp, "atomic.db")
++        db = graphdb.GraphDB(atom, restore_learning=False, allow_new=True, health_warn=False)
++        with db.step("stores"):
++            db.upsert_node("store:kept", "Store", "Kept Store", ts)
++        db.conn.commit()
++        err = None
++        rec = None
++        try:
++            with db.step("known_wrong") as rec:
++                for i in range(4):
++                    if i == 3:
++                        raise RuntimeError("known-wrong.json truncated at entry 4")
++                    db.upsert_node("kw:%d" % i, "KnownWrong", "Partial %d" % i, ts)
++        except RuntimeError as e:
++            err = e
++        db.conn.commit()
++        db.close()
++        after = _rows(atom)
++        T("MUST FIRE  a step that raises at entry 4 of 4 leaves ZERO of its 3 written rows, never 3",
++          err is not None and not [r for r in after if r.startswith("kw:")], repr(after))
++        T("MUST FIRE  the step record says it was rolled back, so the caller can report which",
++          (rec or {}).get("undone") == "rolled_back", repr((rec or {}).get("undone")))
++        T("CLEAN TWIN  the step that already RELEASED keeps every row - a sibling's rollback is not "
++          "a whole-run rollback", after == ["store:kept"], repr(after))
++
++        # A step that returns normally is durable, or the savepoint would be a data-loss bug.
++        db = graphdb.GraphDB(atom, restore_learning=False, health_warn=False)
++        with db.step("overrides"):
++            db.upsert_node("ov:1", "Override", "Fixture Override", ts)
++        db.close()
++        T("CLEAN TWIN  a step that RETURNS keeps its rows after the file is reopened",
++          "ov:1" in _rows(atom), repr(_rows(atom)))
++
++        # __exit__ refuses the commit; close() used to make it anyway.
++        wit = os.path.join(tmp, "withblock.db")
++        try:
++            with graphdb.GraphDB(wit, restore_learning=False, allow_new=True,
++                                 health_warn=False) as wdb:
++                wdb.upsert_node("n:half", "Store", "Half Written", ts)
++                raise RuntimeError("observations importer died here")
++        except RuntimeError:
++            pass
++        T("MUST FIRE  a raise out of `with GraphDB(...)` persists NOTHING - close() no longer commits "
++          "the transaction __exit__ just refused", _rows(wit) == [], repr(_rows(wit)))
++
++        with graphdb.GraphDB(wit, restore_learning=False, health_warn=False) as wdb:
++            wdb.upsert_node("n:whole", "Store", "Whole Write", ts)
++        T("CLEAN TWIN  a `with` block that RETURNS still commits, exactly as before",
++          _rows(wit) == ["n:whole"], repr(_rows(wit)))
++
++        cl = os.path.join(tmp, "close.db")
++        cdb = graphdb.GraphDB(cl, restore_learning=False, allow_new=True, health_warn=False)
++        cdb.upsert_node("n:byclose", "Store", "Saved By Close", ts)
++        cdb.close()
++        T("CLEAN TWIN  a bare db.close() still COMMITS - every hand-written script depends on it",
++          _rows(cl) == ["n:byclose"], repr(_rows(cl)))
++
++        # A commit() inside the body releases the savepoint. Saying so is the whole point:
++        # the alternative is reporting an atomicity that was not there.
++        cu = os.path.join(tmp, "cannot-undo.db")
++        db = graphdb.GraphDB(cu, restore_learning=False, allow_new=True, health_warn=False)
++        rec2 = None
++        try:
++            with db.step("commits_inside") as rec2:
++                db.upsert_node("n:leaked", "Store", "Leaked", ts)
++                db.conn.commit()                      # releases the savepoint
++                raise RuntimeError("raised after an inner commit")
++        except RuntimeError:
++            pass
++        db.close()
++        T("MUST FIRE  a commit() inside a step is reported 'could-not-undo', never 'rolled_back'",
++          str((rec2 or {}).get("undone", "")).startswith("could-not-undo"),
++          repr((rec2 or {}).get("undone")))
++        T("CLEAN TWIN  and the row it could not undo really is still there - the report is true",
++          _rows(cu) == ["n:leaked"], repr(_rows(cu)))
++
++        # ---- the index carries the verdict -----------------------------------------------------
++        h = graphdb.GraphDB(os.path.join(tmp, "fresh.db"), restore_learning=False, allow_new=True,
++                            health_warn=False)
++        st = h.import_health()
++        h.close()
++        T("MUST FIRE  an index nobody has imported into reads 'unknown', never 'complete'",
++          st["status"] == "unknown" and not st["ok"], json.dumps(st))
++
++        ipath = os.path.join(tmp, "health.db")
++        db = graphdb.GraphDB(ipath, restore_learning=False, allow_new=True, health_warn=False)
++        _mark(db, "run:import:A", "2026-09-19T01:00:00", None, start_only=True)
++        st = db.import_health()
++        T("MUST FIRE  a run that started and never ended reads 'interrupted' - the killed-process "
++          "case no exception handler could catch", st["status"] == "interrupted" and not st["ok"],
++          json.dumps(st))
++
++        _mark(db, "run:import:B", "2026-09-19T02:00:00", ["known_wrong", "overrides"])
++        st = db.import_health()
++        T("MUST FIRE  a run that lost a step reads 'incomplete' and NAMES the missing data sets",
++          st["status"] == "incomplete" and not st["ok"]
++          and st["failed_steps"] == ["known_wrong", "overrides"], json.dumps(st))
++
++        _mark(db, "run:import:C", "2026-09-19T03:00:00", [])
++        st = db.import_health()
++        db.close()
++        T("CLEAN TWIN  the next run, with every step landed, reads 'complete' and ok",
++          st["status"] == "complete" and st["ok"] and st["run"] == "run:import:C", json.dumps(st))
++
++        # The verdict has to reach EVERY reader, not just whoever ran the import.
++        warned = os.path.join(tmp, "warns.db")
++        db = graphdb.GraphDB(warned, restore_learning=False, allow_new=True, health_warn=False)
++        _mark(db, "run:import:D", "2026-09-19T04:00:00", ["known_wrong"])
++        db.close()
++        buf = io.StringIO()
++        with contextlib.redirect_stderr(buf):
++            graphdb.GraphDB(warned, restore_learning=False).close()
++        msg = buf.getvalue()
++        T("MUST FIRE  opening a half-loaded index WARNS on stderr, naming the run and what is missing",
++          "run:import:D" in msg and "incomplete" in msg and "known_wrong" in msg, repr(msg[:160]))
++
++        buf2 = io.StringIO()
++        with contextlib.redirect_stderr(buf2):
++            graphdb.GraphDB(atom, restore_learning=False).close()
++        T("MUST NOT FIRE  an index with no failed run says NOTHING on stderr - the warning cannot "
++          "cry wolf. Labelled MUST NOT FIRE and not CLEAN TWIN because it asserts an ABSENCE.",
++          buf2.getvalue() == "", repr(buf2.getvalue()[:160]))
+     except Exception as e:                                # noqa: BLE001
+         _fails.append("suite raised: %r" % (e,))
+         print("  FAILED suite raised: %r" % (e,))
+     finally:
+         graphdb.DB_PATH = saved_path
++        graphdb.GraphDB._append_jsonl = saved_append
+         shutil.rmtree(tmp, ignore_errors=True)
+ 
+     if _ran != CASES and not _fails:
+@@ -131,7 +289,8 @@ def run() -> int:
+         print("SELF-TEST FAIL: graphdb %d of %d case(s) failed, %d ran" % (len(_fails), CASES, _ran))
+         return 1
+     print("SELF-TEST PASS: graphdb %d of %d cases - a missing graph.db is refused unless allow_new, "
+-          "and a restore counts only the rows it inserted" % (_ran, CASES))
++          "a restore counts only the rows it inserted, a step's writes are all-or-nothing, and a "
++          "half-loaded index says so" % (_ran, CASES))
+     return 0
+ 
+ 

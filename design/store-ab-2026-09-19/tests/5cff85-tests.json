@@ -1,0 +1,17 @@
+{
+    "code":  "5cff85",
+    "changed":  [
+                    "grocery/compare-deals.ps1",
+                    "grocery/price-table-lib.ps1",
+                    "grocery/regression-baseline.json",
+                    "grocery/test-price-table.ps1"
+                ],
+    "scrubbed_lines":  0,
+    "tests":  [
+                  {
+                      "file":  "grocery/compare-deals.ps1",
+                      "exit":  0,
+                      "last_line":  "SELF-TEST PASS  (all multibuy / BOGO cases correct, plus the format-layer nameless-row counter)"
+                  }
+              ]
+}

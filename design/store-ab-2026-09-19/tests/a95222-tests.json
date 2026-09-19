@@ -1,0 +1,27 @@
+{
+    "code":  "a95222",
+    "changed":  [
+                    "grocery/capture-policy-lib.ps1",
+                    "grocery/commit-capture-cursor.ps1",
+                    "grocery/pull-regular-bakers-api.ps1",
+                    "grocery/test-capture-policy.ps1"
+                ],
+    "scrubbed_lines":  0,
+    "tests":  [
+                  {
+                      "file":  "grocery/capture-policy-lib.ps1",
+                      "exit":  0,
+                      "last_line":  "CAPTURE-POLICY-LIB-COMPLETE cases=10 failed=0"
+                  },
+                  {
+                      "file":  "grocery/commit-capture-cursor.ps1",
+                      "exit":  0,
+                      "last_line":  "SELFTEST PASSED"
+                  },
+                  {
+                      "file":  "grocery/pull-regular-bakers-api.ps1",
+                      "exit":  0,
+                      "last_line":  "SELF-TEST PASS"
+                  }
+              ]
+}

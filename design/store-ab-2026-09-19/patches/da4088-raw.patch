@@ -1,0 +1,270 @@
+diff --git a/ops/audit-memory-backup.ps1 b/ops/audit-memory-backup.ps1
+index 3f9c7296c..30f6cfd9a 100644
+--- a/ops/audit-memory-backup.ps1
++++ b/ops/audit-memory-backup.ps1
+@@ -1,6 +1,6 @@
+ <#
+   audit-memory-backup.ps1 - the agent memory store is DATA THIS ESTATE REASONS FROM. Version it, prove the
+-  history is current, and prove it never reaches the public repo.
++  history is current, and prove it never reaches this shared repo.
+ 
+   SCOPE OF A CLEAN REPORT: SOUND about currency, silent about content. It proves the backup
+     EXISTS and is current, which is a property it can fully decide. It says nothing about
+@@ -17,12 +17,21 @@
+   that is a checkout.
+ 
+   SECOND, the obvious fix was nearly the wrong one. ops\prompt-backup mirrors the agent prompts INTO this
+-  repo, so mirroring memory the same way looks like the answer. It is not: this repo is PUBLIC (verified by
+-  an unauthenticated GitHub API call returning private=False), and the memory store carries the business's
+-  cost and revenue notes, account identifiers and contact addresses. So memory gets its OWN git history,
+-  local, with NO REMOTE, and this guard exists as much to keep it out of the public repo as to keep it
++  repo, so mirroring memory the same way looks like the answer. It is not: the memory store carries the
++  business's cost and revenue notes, account identifiers and contact addresses. So memory gets its OWN git
++  history, local, with NO REMOTE, and this guard exists as much to keep it out of THIS repo as to keep it
+   backed up. Those are the same job: "memory and git must not drift" cuts both ways.
+ 
++  WHEN THIS WAS WRITTEN, ThriftyCrew WAS PUBLIC, verified by an unauthenticated GitHub API call returning
++  private=False, and every line here said so. Brad is making it private (2026-09-19), so THE REASON IS
++  RESTATED WITHOUT THAT FACT, because the rule never turned on it: ThriftyCrew is pushed to a hosted remote,
++  worked by many sessions and worktrees at once, and cloned onto machines and into CI - a different audience
++  and a different retention from a directory on one box. A repository's visibility is also a setting somebody
++  can flip back in a minute, and "memory is safe because a checkbox is ticked today" is not a property this
++  guard can hold. Check 3 is therefore about a memory file being TRACKED HERE AT ALL, whatever the repo's
++  visibility, and nothing in this file asserts that visibility any more - see the self-test block, where
++  this repository used to stand as the live known-PUBLIC control for the visibility probe.
++
+   Seven checks:
+     1. HISTORY EXISTS   - the memory directory is a git repository at all
+     2. NO REMOTE        - it has no push target, so it cannot leak to a public host
+@@ -290,12 +299,12 @@ function Test-MemoryStore {
+     }
+   }
+ 
+-  # 3. NOT TRACKED BY THE PUBLIC REPO
++  # 3. NOT TRACKED BY THIS REPO AT ALL (whatever its visibility - see the header)
+   $checked++
+   if (Test-Path (Join-Path $REPO '.git')) {
+     $tracked = Get-GitOut $REPO 'ls-files'
+     $leak = @(($tracked.Text -split "`r?`n") | Where-Object { $_ -match 'projects/C--Codex/memory/' })
+-    if ($leak.Count) { $issues.Add(("EXPOSURE: $($leak.Count) memory file(s) are TRACKED BY THE PUBLIC ThriftyCrew REPO, e.g. " + ($leak[0]))) }
++    if ($leak.Count) { $issues.Add(("EXPOSURE: $($leak.Count) memory file(s) are TRACKED BY THE ThriftyCrew REPO, which is pushed to a hosted remote and cloned onto other machines, e.g. " + ($leak[0]))) }
+   }
+ 
+   # 4. HISTORY CURRENT
+@@ -476,24 +485,172 @@ if ($SelfTest) {
+     T 'MUST-FIRE a MISSING allowlist allows nothing (it must not read as permission)' ($null -eq $e4) 'a missing file granted permission'
+   } finally { Remove-Item -LiteralPath $allowFx -Force -ErrorAction SilentlyContinue }
+ 
+-  # The probe's own decision table, exercised through a real HTTP call to hosts that cannot change
+-  # meaning under us. This is the assertion the whole ruling rests on: the check can TELL public from
+-  # private, so a 401 is a measurement rather than a probe that always says no.
+-  $pubProbe = Test-RemoteIsPrivate -Url 'https://github.com/Schweino/ThriftyCrew.git'
+-  $privProbe = Test-RemoteIsPrivate -Url 'https://github.com/Schweino/codex-memory.git'
+-  if ($pubProbe.State -eq 'unverified' -and $privProbe.State -eq 'unverified') {
+-    # No network. Say so - a skipped case must never read as a passed one.
+-    T 'NETWORK  the visibility probe could not run at all, so it proved nothing this run (not a pass)' $true ''
+-    Write-Output '  (both probes returned unverified - offline. The live path treats that as BLIND, never clean.)'
++  # ---- THE VISIBILITY PROBE'S DECISION TABLE, DRIVEN OVER REAL HTTP AGAINST A LOOPBACK FIXTURE ------
++  #
++  # This is the assertion the whole reviewed-remote ruling rests on: the check can TELL public from
++  # private, so a 401 from the live remote is a MEASUREMENT rather than a probe that always says no.
++  #
++  # IT USED TO BE PROVEN AGAINST THIS REPOSITORY, and that was a fixture whose answer somebody else
++  # owned. https://github.com/Schweino/ThriftyCrew.git stood here as the known-PUBLIC control, so the
++  # day Brad makes that repository private this case goes red, run-gates fails and every push on the
++  # box is refused - for a change nobody made to any code, on a fact this guard has no business
++  # depending on. Its twin was the live memory remote, which is the very thing the live run is FOR:
++  # the self-test and production were asserting the same external state, so one flip broke both and
++  # neither could tell the other's failure from its own.
++  #
++  # The rule itself is NOT duplicated here - there is one Test-RemoteIsPrivate and this drives it end
++  # to end, the way Get-MemoryReachability is driven over disk and over a past commit. What changes is
++  # only WHO ANSWERS: a System.Net.HttpListener on a loopback port, serving a frozen status table that
++  # cannot change meaning under us and needs no network at all. That buys back what a pure decision
++  # table could never assert - that the probe really builds git's info/refs URL, really issues the
++  # request, and really sends NO credentials - and it costs one runspace.
++  #
++  # The live path is untouched: it still probes the real allowlisted remote over the real network, and
++  # still treats a could-not-look as BLIND.
++  $VIS_CASES = 10   # cases in the block below. The blind arm reports this as what it did NOT cover,
++                    # and the seeing arm's last case re-derives it, so adding a case without moving
++                    # this constant goes red (2026-09-12 blind-marker ruling, ops-and-gates.md).
++
++  function New-VisibilityFixture {
++    <# Serve the probe's decision table over real HTTP on a loopback port.
++
++       Returns $null when the listener cannot bind - a could-not-look, never a failure and never a
++       pass. Port 0 picks a free ephemeral port, so concurrent run-gates runs on this box cannot
++       collide, and nothing off this machine can reach a localhost prefix. #>
++    $port = 0
++    try {
++      $probeSock = New-Object System.Net.Sockets.TcpListener([Net.IPAddress]::Loopback, 0)
++      $probeSock.Start()
++      $port = ([Net.IPEndPoint]$probeSock.LocalEndpoint).Port
++      $probeSock.Stop()
++    } catch { return $null }
++    $lsn = New-Object System.Net.HttpListener
++    $lsn.Prefixes.Add("http://localhost:$port/")
++    try { $lsn.Start() } catch { return $null }
++    $shared = [hashtable]::Synchronized(@{ Seen = (New-Object System.Collections.ArrayList) })
++    $rs = [runspacefactory]::CreateRunspace()
++    $rs.Open()
++    $rs.SessionStateProxy.SetVariable('shared', $shared)
++    $rs.SessionStateProxy.SetVariable('lsn', $lsn)
++    $shell = [powershell]::Create()
++    $shell.Runspace = $rs
++    $null = $shell.AddScript({
++      while ($true) {
++        try { $ctx = $lsn.GetContext() } catch { break }
++        $rq = $ctx.Request
++        # RECORD BEFORE ANSWERING: what the probe actually sent is half of what these cases assert.
++        [void]$shared.Seen.Add([pscustomobject]@{
++          Path = [string]$rq.Url.PathAndQuery
++          Auth = [string]$rq.Headers['Authorization']
++          Ua   = [string]$rq.UserAgent })
++        # THE FROZEN TABLE. One repository name per status a real git host can answer with.
++        $ap = [string]$rq.Url.AbsolutePath
++        $code = 500
++        if     ($ap -like '/pub.git/*')  { $code = 200 }   # public: anonymous clone is served
++        elseif ($ap -like '/priv.git/*') { $code = 401 }   # GitHub's answer for a private repository
++        elseif ($ap -like '/forb.git/*') { $code = 403 }
++        elseif ($ap -like '/gone.git/*') { $code = 404 }
++        elseif ($ap -like '/odd.git/*')  { $code = 418 }   # a status this check does not recognise
++        $resp = $ctx.Response
++        $resp.StatusCode = $code
++        if ($code -eq 401) { $resp.AddHeader('WWW-Authenticate', 'Basic realm="fixture"') }
++        $body = [Text.Encoding]::ASCII.GetBytes("fixture`n")
++        $resp.ContentLength64 = $body.Length
++        try { $resp.OutputStream.Write($body, 0, $body.Length) } catch { }
++        $resp.Close()
++      }
++    })
++    $async = $shell.BeginInvoke()
++    return [pscustomobject]@{ Port = $port; Listener = $lsn; Shell = $shell; Runspace = $rs
++                              Async = $async; Shared = $shared; Stopped = $false }
++  }
++
++  function Close-VisibilityFixture {
++    # IDEMPOTENT ON PURPOSE: the closed-port case needs the listener down while the block is still
++    # running, and the finally must still be safe to call afterwards.
++    param($Fx)
++    if (-not $Fx -or $Fx.Stopped) { return }
++    $Fx.Stopped = $true
++    try { $Fx.Listener.Stop() } catch { }
++    try { $Fx.Listener.Close() } catch { }
++    # Generous HANG GUARD, never a bar on how fast it ran: Stop() makes GetContext throw at once.
++    if (-not $Fx.Async.AsyncWaitHandle.WaitOne(20000)) { try { $Fx.Shell.Stop() } catch { } }
++    try { $Fx.Shell.Dispose() } catch { }
++    try { $Fx.Runspace.Dispose() } catch { }
++  }
++
++  $visFx = New-VisibilityFixture
++  if (-not $visFx) {
++    # A could-not-look is never a pass. Say what it did not cover, not just that it noticed.
++    T ("BLIND  no loopback HTTP listener could be bound, so the visibility probe's decision table was " +
++       "NOT exercised this run: $VIS_CASES case(s) not covered (this is not a pass)") $true ''
+   } else {
+-    T 'MUST-FIRE  a PUBLIC repository is detected as public (the control - without this a 401 proves nothing)' `
+-      ($pubProbe.State -eq 'public') ("got " + $pubProbe.State + ': ' + $pubProbe.Detail)
+-    T 'CLEAN TWIN a PRIVATE repository is detected as private' `
+-      ($privProbe.State -eq 'private') ("got " + $privProbe.State + ': ' + $privProbe.Detail)
++    $visStart = $script:cases
++    try {
++      $pubProbe  = Test-RemoteIsPrivate -Url ("http://localhost:$($visFx.Port)/pub.git")  -TimeoutSec 10
++      $privProbe = Test-RemoteIsPrivate -Url ("http://localhost:$($visFx.Port)/priv.git") -TimeoutSec 10
++      $forbProbe = Test-RemoteIsPrivate -Url ("http://localhost:$($visFx.Port)/forb.git") -TimeoutSec 10
++      $goneProbe = Test-RemoteIsPrivate -Url ("http://localhost:$($visFx.Port)/gone.git") -TimeoutSec 10
++      $oddProbe  = Test-RemoteIsPrivate -Url ("http://localhost:$($visFx.Port)/odd.git")  -TimeoutSec 10
++
++      T 'MUST-FIRE  a host that serves the repository anonymously (HTTP 200) is read as PUBLIC - the control, without which a 401 proves nothing' `
++        ($pubProbe.State -eq 'public') ("got " + $pubProbe.State + ': ' + $pubProbe.Detail)
++      T 'CLEAN TWIN a 401 is read as PRIVATE' `
++        ($privProbe.State -eq 'private') ("got " + $privProbe.State + ': ' + $privProbe.Detail)
++      T 'CLEAN TWIN a 403 is read as PRIVATE' `
++        ($forbProbe.State -eq 'private') ("got " + $forbProbe.State + ': ' + $forbProbe.Detail)
++      T 'CLEAN TWIN a 404 is read as PRIVATE (GitHub hides a private repository behind one)' `
++        ($goneProbe.State -eq 'private') ("got " + $goneProbe.State + ': ' + $goneProbe.Detail)
++      T 'MUST-FIRE  a status this check does not recognise is UNVERIFIED, never private - it must not invent "safe"' `
++        ($oddProbe.State -eq 'unverified') ("got " + $oddProbe.State + ': ' + $oddProbe.Detail)
++
++      # THE MECHANISM, not the verdict: what the probe actually put on the wire. A pure status-code
++      # table cannot see a wrong URL or a leaked credential, and both would make the verdict lie.
++      $seenPub = $null
++      if ($visFx.Shared.Seen.Count -ge 1) { $seenPub = $visFx.Shared.Seen[0] }
++      T 'MUST-FIRE  the probe asks for git''s info/refs UNDER THE REMOTE''S OWN PATH, so the verdict is about that repository' `
++        (($null -ne $seenPub) -and ([string]$seenPub.Path -eq '/pub.git/info/refs?service=git-upload-pack')) `
++        ("server saw: " + $(if ($seenPub) { [string]$seenPub.Path } else { '<no request arrived>' }))
++
++      # NO CREDENTIALS, and the hostile case is a remote URL that CARRIES them: git remotes routinely
++      # do (https://x-access-token:TOKEN@host/...). A probe that forwarded them would get 200 for a
++      # private repository and report it public, which is the failure that ends belief in this check.
++      $credProbe = Test-RemoteIsPrivate -Url ("http://carol:s3cret@localhost:$($visFx.Port)/priv.git") -TimeoutSec 10
++      $seenCred = $null
++      if ($visFx.Shared.Seen.Count -ge 6) { $seenCred = $visFx.Shared.Seen[5] }
++      T 'MUST-FIRE  a remote URL carrying credentials is still probed ANONYMOUSLY - no Authorization header reaches the host, and it still reads private' `
++        (($null -ne $seenCred) -and ([string]$seenCred.Auth -eq '') -and ($credProbe.State -eq 'private')) `
++        ("state=" + $credProbe.State + " auth=[" + $(if ($seenCred) { [string]$seenCred.Auth } else { '<no request arrived>' }) + ']')
++
++      # A trailing slash is how plenty of remotes are spelled; it must not become a doubled slash,
++      # which is a DIFFERENT path and so a verdict about a different thing.
++      # ASSERT ON THE URL THE CHECK BUILT, NOT ONLY ON WHAT THE SERVER SAW. System.Uri collapses
++      # '//' in a path on its way out, so the server sees the right thing either way: the first
++      # version of this case read the server's record alone and SURVIVED the mutant that removes
++      # the strip (probe 2026-09-19, 7 mutants, this was the one survivor). The reported Detail is
++      # where an unstripped URL is still visible, and it is also what a human reads in the finding.
++      $slashProbe = Test-RemoteIsPrivate -Url ("http://localhost:$($visFx.Port)/pub.git/") -TimeoutSec 10
++      $seenSlash = $null
++      if ($visFx.Shared.Seen.Count -ge 7) { $seenSlash = $visFx.Shared.Seen[6] }
++      T 'CLEAN TWIN a trailing slash on the remote URL probes the SAME path, not a doubled one' `
++        (($null -ne $seenSlash) -and ([string]$seenSlash.Path -eq '/pub.git/info/refs?service=git-upload-pack') `
++         -and ($slashProbe.State -eq 'public') -and (([string]$slashProbe.Detail) -notmatch '\.git//')) `
++        ("server saw: " + $(if ($seenSlash) { [string]$seenSlash.Path } else { '<no request arrived>' }) +
++         ' | check reported: ' + [string]$slashProbe.Detail)
++
++      # A HOST THAT WILL NOT ANSWER. Taken on the fixture's own port with the listener already down,
++      # so the refusal is produced here rather than by whatever a name server or a captive portal
++      # feels like doing: an invented hostname is another answer somebody else owns.
++      Close-VisibilityFixture $visFx
++      $deadProbe = Test-RemoteIsPrivate -Url ("http://127.0.0.1:$($visFx.Port)/pub.git") -TimeoutSec 5
++      T 'MUST-FIRE  a host that refuses the connection is UNVERIFIED, never private - a could-not-look must not settle it' `
++        ($deadProbe.State -eq 'unverified') ("got " + $deadProbe.State + ': ' + $deadProbe.Detail)
++
++      $visRan = ($script:cases - $visStart) + 1
++      T "CLEAN TWIN the seeing arm ran exactly the $VIS_CASES case(s) the blind arm reports as not covered" `
++        ($visRan -eq $VIS_CASES) ("ran=$visRan declared=$VIS_CASES - move `$VIS_CASES with the case list")
++    } finally { Close-VisibilityFixture $visFx }
+   }
+-  $bad = Test-RemoteIsPrivate -Url 'https://no-such-host-thriftycrew-probe.invalid/x.git' -TimeoutSec 5
+-  T 'MUST-FIRE an unreachable host is UNVERIFIED, never private - a could-not-look must not settle it' `
+-    ($bad.State -eq 'unverified') ("got " + $bad.State)
+ 
+   # MUST-FIRE 3: uncommitted change - the history no longer holds what the store says
+   NewStore; Add-Content (Join-Path $fx 'alpha.md') 'edited after the commit'
+@@ -662,7 +819,7 @@ if ($res.rc -eq 3) {
+   Exit-Guard -Name 'memory-backup' -Summary 'blind' -Code 3
+ }
+ if ($res.issues.Count -eq 0) {
+-  Write-Output '  ok - the memory store is versioned locally, has no remote this run could not account for, is absent from the public repo, is fully committed, its index agrees with the files on disk, and nothing is mojibaked'
++  Write-Output '  ok - the memory store is versioned locally, has no remote this run could not account for, is absent from this repo, is fully committed, its index agrees with the files on disk, and nothing is mojibaked'
+   Exit-Guard -Name 'memory-backup' -Summary ("files={0} clean" -f [int]$res.files) -Code 0
+ }
+ foreach ($i in $res.issues) { Write-Output ('  ' + $i) }
+@@ -670,5 +827,5 @@ foreach ($i in $res.issues) { Write-Output ('  ' + $i) }
+ # untracking for every finding this guard can produce, which meant the two INDEX arms - unreachability
+ # and reachability regression - were told to run a command that does nothing for them. Those two carry
+ # their own FIX sentence inside the finding.
+-Write-Output '  Fix: run this with -Sync to commit pending memory changes. An UNREVIEWED remote, or a memory file tracked by ThriftyCrew, must be removed by hand - that repo is PUBLIC. A remote that is a deliberate private backup goes in ops\memory-remote-allowlist.json with its evidence, and is re-proven private on every run. An unreachability or REACHABILITY REGRESSION finding is a ROUTING problem and carries its own fix above: -Sync will not clear either one.'
++Write-Output '  Fix: run this with -Sync to commit pending memory changes. An UNREVIEWED remote, or a memory file tracked by ThriftyCrew, must be removed by hand - that repo is pushed to a hosted remote and cloned onto other machines, whatever its visibility setting. A remote that is a deliberate private backup goes in ops\memory-remote-allowlist.json with its evidence, and is re-proven private on every run. An unreachability or REACHABILITY REGRESSION finding is a ROUTING problem and carries its own fix above: -Sync will not clear either one.'
+ Exit-Guard -Name 'memory-backup' -Summary ("files={0} issues={1}" -f [int]$res.files, $res.issues.Count) -Code 2
+diff --git a/ops/memory-remote-allowlist.json b/ops/memory-remote-allowlist.json
+index 297ed99d0..d6af8a97c 100644
+--- a/ops/memory-remote-allowlist.json
++++ b/ops/memory-remote-allowlist.json
+@@ -10,6 +10,7 @@
+       "approved_on": "2026-09-07",
+       "purpose": "Offsite backup of the agent memory store. The store carries cost, revenue and account notes, so this repository must remain private for the life of the entry.",
+       "evidence_when_approved": "Anonymous GET https://github.com/Schweino/codex-memory.git/info/refs?service=git-upload-pack returned HTTP 401. Anonymous GET https://api.github.com/repos/Schweino/codex-memory returned HTTP 404, which is how GitHub answers for a private repository. Control, run in the same session against a repository known to be public: https://github.com/Schweino/ThriftyCrew.git/info/refs returned HTTP 200 - so the probe can distinguish, and the 401 is a measurement rather than a probe that always says no.",
++      "evidence_control_note_2026_09_19": "THE CONTROL NAMED ABOVE HAS EXPIRED. https://github.com/Schweino/ThriftyCrew.git was a known-PUBLIC repository on 2026-09-07 and that 200 is what made the 401 a measurement; Brad is making it private, so re-running that control today returns 401 and proves nothing. Do NOT read that as the probe being broken. The probe's ability to tell public from private is now held by frozen fixtures in audit-memory-backup.ps1 -SelfTest, which serve 200/401/403/404 and an unrecognised status over a loopback HTTP listener - no third party's setting decides whether that case passes. The evidence above is left as written because it records what was observed on the day, and rewriting dated evidence is worse than annotating it.",
+       "retire_when": "the repository is made public, or the backup is abandoned"
+     }
+   ]

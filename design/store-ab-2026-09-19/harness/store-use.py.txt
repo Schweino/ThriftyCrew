@@ -1,0 +1,36 @@
+"""Per S-arm run: searches (from the experiment search log) and store files read (from the transcript)."""
+import json, os, re
+here = os.path.dirname(os.path.abspath(__file__))
+m = json.load(open(os.path.join(here, "map.json"), encoding="utf-8-sig"))
+for r in m:
+    code = r["code"]
+    log = os.path.join(here, "runs", code + "-search-log.jsonl")
+    qs = []
+    if os.path.exists(log):
+        for line in open(log, encoding="utf-8"):
+            try:
+                row = json.loads(line)
+            except Exception:
+                continue
+            if row.get("ev") == "search":
+                qs.append(" / ".join(row.get("q") or []))
+    reads = set()
+    tp = os.path.join(here, "runs", code + "-transcript.jsonl")
+    for line in open(tp, encoding="utf-8", errors="replace"):
+        try:
+            ev = json.loads(line)
+        except Exception:
+            continue
+        msg = ev.get("message") if isinstance(ev, dict) else None
+        if not isinstance(msg, dict) or not isinstance(msg.get("content"), list):
+            continue
+        for c in msg["content"]:
+            if isinstance(c, dict) and c.get("type") == "tool_use":
+                s = json.dumps(c.get("input"))
+                for hit in re.findall(r"(?i)skills[\\/]+([a-z0-9-]+[\\/]+[a-z0-9_.-]+\.md)", s):
+                    reads.add(hit.replace("\\\\", "/").replace("\\", "/"))
+    print("%s %s%s%d searches=%d" % (code, r["task"], r["arm"], r["rep"], len(qs)))
+    for q in qs:
+        print("   q:", q[:140])
+    for f in sorted(reads):
+        print("   read:", f)

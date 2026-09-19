@@ -1,0 +1,23 @@
+{
+    "code":  "64e9f4",
+    "changed":  [
+                    "graph/import/import_all.py",
+                    "graph/import/import_all_selftest.py",
+                    "graph/import/importers.py",
+                    "graph/lib/graphdb.py",
+                    "graph/lib/graphdb_selftest.py"
+                ],
+    "scrubbed_lines":  0,
+    "tests":  [
+                  {
+                      "file":  "graph/import/import_all_selftest.py",
+                      "exit":  0,
+                      "last_line":  "SELF-TEST PASS: import_all 17 of 17 cases - an importer that raises partway leaves NONE of its rows, the run exits 1, the index reads \u0027incomplete\u0027, and the destructive derived phase does not run over a partial load"
+                  },
+                  {
+                      "file":  "graph/lib/graphdb_selftest.py",
+                      "exit":  0,
+                      "last_line":  "SELF-TEST PASS: graphdb 23 of 23 cases - a missing graph.db is refused unless allow_new, a restore counts only the rows it inserted, a step\u0027s writes are all-or-nothing, and a half-loaded index says so"
+                  }
+              ]
+}

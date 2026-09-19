@@ -1,0 +1,964 @@
+diff --git a/graph/README.md b/graph/README.md
+index fd11913d5..45d605fdd 100644
+--- a/graph/README.md
++++ b/graph/README.md
+@@ -25,6 +25,10 @@ pwsh tools/local-llm/serve.ps1
+ #    known-wrong rulings -> resolve -> rebuild cell_state + question_verdicts
+ #    -> state gate -> supersede-prune -> export tracked state. ~25s.
+ python graph/import/import_all.py --observations
++#    EXIT 0 = every step landed. EXIT 1 = a step FAILED: its writes were rolled
++#    back (each importer is all-or-nothing, so there is no half-loaded set), the
++#    derive + export phase was REFUSED, and the run names the step. Re-run after
++#    fixing it, or --allow-partial to derive from what landed anyway.
+ 
+ # 1b. price state on its own (rebuild, gate, prune, ad-reversion worklist)
+ python graph/pipeline/state.py                  # rebuild + gate + export
+diff --git a/graph/import/import_all.py b/graph/import/import_all.py
+index cd7902ddc..642e831a2 100644
+--- a/graph/import/import_all.py
++++ b/graph/import/import_all.py
+@@ -7,6 +7,35 @@
+ Dual-write: this reads the legacy estate and writes only the graph. It never
+ writes back to grocery/*.json. Safe to run while the daily pipeline is idle;
+ by design it takes no locks on the legacy files.
++
++EXIT 0 = every step landed. EXIT 1 = at least one step FAILED, and what it was
++going to write is not in the index. Read the exit code first: the one scheduled
++caller, grocery/audit-graph-gates.ps1, already reads it and reports BLIND, which
++is the right verdict because a step that could not run is not a step that found
++nothing.
++
++A STEP THAT FAILS LEAVES NOTHING, AND THE DAY'S ANSWER IS NOT DERIVED FROM WHAT
++IS LEFT (2026-09-19). Each importer used to write straight into the connection's
++open transaction, so an importer that raised part way - a truncated known-wrong
++file, a bad row 300 of 500 - left its finished rows there and the NEXT importer's
++commit committed them with its own. graph.db then held a HALF data set (a ruling
++set missing its newest rulings, an override set missing cells), every count still
++plausible, and this script exited 0, so the gates lane judged it, the resolver
++resolved against it and cell_state exported from it. Three things changed:
++
++  1. every importer runs inside GraphDB.step(), which is all-or-nothing, so a
++     failed importer contributes NOTHING and the index keeps the whole previous
++     set. Stale is a state a caller can see; half is not.
++  2. the derive-and-export phase is REFUSED when any step failed. Evidence may be
++     incomplete and still be worth recording; the ANSWER may not be derived from
++     an index we already know is incomplete, because cell_state's git diff IS the
++     price history and a wrong row there is permanent. --allow-partial overrides
++     it deliberately, and the exit code still says a step failed.
++  3. the run's closing decision_log event is `import_incomplete` naming the failed
++     steps, so the durable provenance trail says so too and not only this stdout.
++
++The run is deliberately NOT atomic as a whole: steps that finished stay committed,
++because re-reading every capture file costs ~40 s and that evidence is additive.
+ """
+ 
+ from __future__ import annotations
+@@ -31,6 +60,9 @@ def main() -> int:
+                     help="only the N most recent capture files per lane")
+     ap.add_argument("--export", action="store_true",
+                     help="write the durable git-tracked JSON after importing")
++    ap.add_argument("--allow-partial", action="store_true",
++                    help="derive and export even though a step failed (the exit code still "
++                         "reports the failure)")
+     ap.add_argument("--quiet", action="store_true")
+     args = ap.parse_args()
+ 
+@@ -43,133 +75,177 @@ def main() -> int:
+     say("")
+ 
+     totals: dict[str, int] = {}
++    failed: list[str] = []
+     # allow_new: this is the road that builds graph.db from nothing (a fresh box, a CI clone, the
+     # README's delete-and-rebuild), so a missing file is expected here and nowhere else (I229).
+     with open_db(allow_new=True) as db:
+         db.log_event(run=run, timestamp=ts, etype="state_transition",
+                      decision="import_start", detail={"observations": args.observations})
++        db.commit()
+ 
+-        for name, fn in importers.ALL_IMPORTERS:
++        def run_step(name, fn, **kwargs) -> None:
++            """Run one importer as a unit. It lands whole, or it lands not at all.
++
++            The `with db.step(name)` is the whole repair: the importer's writes go into a
++            savepoint, and a raise rolls them back before anything else can commit them. The
++            failure is then RECORDED - in `failed`, which refuses the derive phase below and
++            sets the exit code, and in the decision_log, which is durable - because a step
++            that could not run is neither a pass nor a finding of nothing.
++            """
+             t0 = time.time()
+             try:
+-                res = fn(db, ts, run)
++                with db.step(name):
++                    res = fn(db, ts, run, **kwargs)
+             except Exception as e:                      # noqa: BLE001
+-                say(f"  {name:<20} FAILED: {e}")
++                failed.append(name)
++                say(f"  {name:<20} FAILED, nothing it wrote was kept: {e}")
+                 db.log_event(run=run, timestamp=ts, etype="escalate", step_id=name,
+-                             decision="importer_failed", detail={"error": str(e)})
+-                continue
++                             decision="importer_failed",
++                             detail={"error": str(e), "error_type": type(e).__name__,
++                                     "writes_rolled_back": True})
++                db.commit()
++                return
+             totals.update(res)
+-            db.conn.commit()
+             say(f"  {name:<20} {res}   ({time.time()-t0:.1f}s)")
+ 
++        for name, fn in importers.ALL_IMPORTERS:
++            run_step(name, fn)
++
+         if args.observations:
+             say("\n  observations (this reads every capture file; slowest step)")
+-            t0 = time.time()
+-            res = importers.import_observations(
+-                db, ts, run, limit_files=args.limit_files,
+-                progress=None if args.quiet else (lambda m: say(m)))
+-            totals.update(res)
+-            db.conn.commit()
+-            say(f"  {'observations':<20} {res}   ({time.time()-t0:.1f}s)")
++            run_step("observations", importers.import_observations,
++                     limit_files=args.limit_files,
++                     progress=None if args.quiet else (lambda m: say(m)))
+ 
+             for name, fn in importers.LANE_IMPORTERS:
+-                t0 = time.time()
+-                try:
+-                    res = fn(db, ts, run, limit_files=args.limit_files)
+-                except Exception as e:                  # noqa: BLE001
+-                    say(f"  {name:<20} FAILED: {e}")
+-                    db.log_event(run=run, timestamp=ts, etype="escalate", step_id=name,
+-                                 decision="lane_importer_failed", detail={"error": str(e)})
+-                    continue
+-                totals.update(res)
+-                db.conn.commit()
+-                say(f"  {name:<20} {res}   ({time.time()-t0:.1f}s)")
+-
+-        # PHASE C: the answer is rebuilt and the evidence bounded as part of the
+-        # import, not as a chore someone remembers. The ORDER is load-bearing,
+-        # and getting it wrong is silent rather than loud:
+-        #
+-        #   1. resolve (deterministic)  ΓÇö freshly imported rows arrive
+-        #      'unadjudicated', and the prune refuses to delete an open question.
+-        #      Building state before this produced a prune that removed 2,400
+-        #      rows instead of 103,000 and looked like it had worked.
+-        #   2. rebuild cell_state       ΓÇö the current answer per cell
+-        #   3. bank question_verdicts   ΓÇö so pruning destroys no adjudication
+-        #   4. supersede-prune          ΓÇö drop rows a newer sighting replaced
+-        #   5. export                   ΓÇö cell_state's git diff IS the price history
+-        #
+-        # The resolver consults the banked verdicts (layer 4.5), so questions a
+-        # model already answered in an earlier run cost nothing to re-settle.
+-        if args.observations:
+-            pipeline_dir = os.path.join(
+-                os.path.dirname(os.path.abspath(__file__)), "..", "pipeline")
+-            sys.path.insert(0, pipeline_dir)
+-            from resolve import Resolver                                  # noqa: PLC0415
+-            from state import (build_cell_state, build_question_verdicts,  # noqa: PLC0415
+-                               supersede_prune, export_state)
+-            say("\n  adjudicate + price state ...")
+-            # Rulings first, and again here rather than only in the seed pass:
+-            # the lanes above insert rows pre-marked include_hit, so a ruling
+-            # that swept before they landed never touched them.
+-            # The learning loop's applied patches live only in this index, so a
+-            # rebuild must re-materialise them or it silently un-applies work
+-            # the proposals still report as applied.
+-            sys.path.insert(0, os.path.join(
+-                os.path.dirname(os.path.abspath(__file__)), "..", "learning"))
+-            from stage2_review import reapply_applied_patches      # noqa: PLC0415
+-            t0 = time.time()
+-            res = reapply_applied_patches(db, ts, run)
+-            totals.update(res)
+-            say(f"  {'reapply patches':<20} {res}   ({time.time()-t0:.1f}s)")
+-
+-            t0 = time.time()
+-            n_demoted = importers.retro_apply_known_wrong(db, ts, run)
+-            totals["known_wrong_retro_demoted"] = n_demoted
+-            say(f"  {'known-wrong sweep':<20} {n_demoted} rows demoted   "
+-                f"({time.time()-t0:.1f}s)")
+-            t0 = time.time()
+-            res = Resolver(db, use_llm=False).resolve_pending(run=run, ts=ts,
+-                                                              allow_llm=False)
+-            totals["resolved_rows"] = res["resolved"]
+-            say(f"  {'resolve':<20} {res['resolved']} rows, "
+-                f"{res['questions']} questions   ({time.time()-t0:.1f}s)")
+-            for label, fn in (("cell_state", build_cell_state),
+-                              ("verdicts", build_question_verdicts)):
+-                t0 = time.time()
+-                out = fn(db, ts)
+-                totals.update(out)
+-                say(f"  {label:<20} {out}   ({time.time()-t0:.1f}s)")
+-
+-            # The migration gate, measured while both derivations still see the
+-            # same evidence ΓÇö the prune below removes rows the observations path
+-            # would need to answer with, so this is the only honest moment for it.
+-            from state import verify_against_matrix            # noqa: PLC0415
+-            gate = verify_against_matrix(db)
+-            totals["state_gate_ok"] = gate["ok"]
+-            say(f"  {'state gate':<20} {'PASS' if gate['ok'] else 'FAIL'}  "
+-                f"cells {gate['state_cells']}, live-board agreement "
+-                f"{gate['agreement_from_state']} vs {gate['agreement_from_observations']} "
+-                f"from observations")
+-
+-            t0 = time.time()
+-            out = supersede_prune(db, ts)
+-            totals.update(out)
+-            say(f"  {'prune':<20} {out}   ({time.time()-t0:.1f}s)")
+-            say(f"  {'state export':<20} {export_state(db)}")
++                run_step(name, fn, limit_files=args.limit_files)
++
++        # THE ANSWER IS NOT DERIVED FROM AN INDEX WE KNOW IS INCOMPLETE. Evidence that landed
++        # is additive and stays; resolving, rebuilding cell_state and EXPORTING it are a
++        # different act, and cell_state's git diff is the price history - a row written from a
++        # half-loaded ruling set is a wrong price recorded permanently, which is the one thing
++        # this estate treats as a real cost to a real reader.
++        if args.observations and failed and not args.allow_partial:
++            say("\n  REFUSED the adjudicate + price state phase: " +
++                f"{len(failed)} step(s) failed ({', '.join(failed)}), so this index is not "
++                "the whole estate. Nothing was resolved, rebuilt, pruned or exported. Fix the "
++                "step and re-run, or pass --allow-partial to derive from what landed anyway.")
++        elif args.observations:
++            if failed:
++                say(f"\n  --allow-partial: deriving despite {len(failed)} failed step(s) "
++                    f"({', '.join(failed)}).")
++            derive_and_export(db, ts, run, totals, say)
+ 
+         stats = db.stats()
+         db.log_event(run=run, timestamp=ts, etype="state_transition",
+-                     decision="import_complete", detail={"totals": totals, "stats": stats})
+-
+-        if args.export:
++                     decision="import_complete" if not failed else "import_incomplete",
++                     detail={"totals": totals, "stats": stats, "failed_steps": failed})
++        db.commit()
++
++        if args.export and failed and not args.allow_partial:
++            say("\n  REFUSED the durable JSON export: the index is incomplete "
++                f"({', '.join(failed)}).")
++        elif args.export:
+             say("\n  exporting durable JSON ...")
+             say(f"  {db.export_json()}")
+ 
+     say("\n--- graph stats ---")
+     for k, v in stats.items():
+         say(f"  {k:<14} {v}")
++    if failed:
++        # The verdict LINE, and it is the last thing printed for the same reason every
++        # self-test here ends with one: a tally above it is not a verdict.
++        say(f"\nIMPORT INCOMPLETE: {len(failed)} of {_step_total(args)} step(s) failed "
++            f"({', '.join(failed)}). Their writes were rolled back; the index holds the "
++            f"previous whole set for each.")
++        return 1
++    say(f"\nIMPORT COMPLETE: {_step_total(args)} of {_step_total(args)} step(s) landed.")
+     return 0
+ 
+ 
++def _step_total(args) -> int:
++    """How many steps this invocation was going to run - the DENOMINATOR the failure line
++    is reported against. `3 failed` is a mood; `3 of 12 failed` is a measurement."""
++    n = len(importers.ALL_IMPORTERS)
++    if args.observations:
++        n += 1 + len(importers.LANE_IMPORTERS)
++    return n
++
++
++def derive_and_export(db, ts: str, run: str, totals: dict, say) -> None:
++    """PHASE C: rebuild the answer from the evidence and export it.
++
++    Only ever called when every step landed (or --allow-partial said to anyway): see main().
++
++    The ORDER is load-bearing, and getting it wrong is silent rather than loud:
++
++      1. resolve (deterministic)  - freshly imported rows arrive 'unadjudicated', and the
++         prune refuses to delete an open question. Building state before this produced a
++         prune that removed 2,400 rows instead of 103,000 and looked like it had worked.
++      2. rebuild cell_state       - the current answer per cell
++      3. bank question_verdicts   - so pruning destroys no adjudication
++      4. supersede-prune          - drop rows a newer sighting replaced
++      5. export                   - cell_state's git diff IS the price history
++
++    The resolver consults the banked verdicts (layer 4.5), so questions a model already
++    answered in an earlier run cost nothing to re-settle.
++    """
++    pipeline_dir = os.path.join(
++        os.path.dirname(os.path.abspath(__file__)), "..", "pipeline")
++    sys.path.insert(0, pipeline_dir)
++    from resolve import Resolver                                  # noqa: PLC0415
++    from state import (build_cell_state, build_question_verdicts,  # noqa: PLC0415
++                       supersede_prune, export_state)
++    say("\n  adjudicate + price state ...")
++    # Rulings first, and again here rather than only in the seed pass: the lanes above
++    # insert rows pre-marked include_hit, so a ruling that swept before they landed never
++    # touched them.
++    # The learning loop's applied patches live only in this index, so a rebuild must
++    # re-materialise them or it silently un-applies work the proposals still report as
++    # applied.
++    sys.path.insert(0, os.path.join(
++        os.path.dirname(os.path.abspath(__file__)), "..", "learning"))
++    from stage2_review import reapply_applied_patches      # noqa: PLC0415
++    t0 = time.time()
++    res = reapply_applied_patches(db, ts, run)
++    totals.update(res)
++    say(f"  {'reapply patches':<20} {res}   ({time.time()-t0:.1f}s)")
++
++    t0 = time.time()
++    n_demoted = importers.retro_apply_known_wrong(db, ts, run)
++    totals["known_wrong_retro_demoted"] = n_demoted
++    say(f"  {'known-wrong sweep':<20} {n_demoted} rows demoted   "
++        f"({time.time()-t0:.1f}s)")
++    t0 = time.time()
++    res = Resolver(db, use_llm=False).resolve_pending(run=run, ts=ts,
++                                                      allow_llm=False)
++    totals["resolved_rows"] = res["resolved"]
++    say(f"  {'resolve':<20} {res['resolved']} rows, "
++        f"{res['questions']} questions   ({time.time()-t0:.1f}s)")
++    for label, fn in (("cell_state", build_cell_state),
++                      ("verdicts", build_question_verdicts)):
++        t0 = time.time()
++        out = fn(db, ts)
++        totals.update(out)
++        say(f"  {label:<20} {out}   ({time.time()-t0:.1f}s)")
++
++    # The migration gate, measured while both derivations still see the same evidence - the
++    # prune below removes rows the observations path would need to answer with, so this is
++    # the only honest moment for it.
++    from state import verify_against_matrix            # noqa: PLC0415
++    gate = verify_against_matrix(db)
++    totals["state_gate_ok"] = gate["ok"]
++    say(f"  {'state gate':<20} {'PASS' if gate['ok'] else 'FAIL'}  "
++        f"cells {gate['state_cells']}, live-board agreement "
++        f"{gate['agreement_from_state']} vs {gate['agreement_from_observations']} "
++        f"from observations")
++
++    t0 = time.time()
++    out = supersede_prune(db, ts)
++    totals.update(out)
++    say(f"  {'prune':<20} {out}   ({time.time()-t0:.1f}s)")
++    say(f"  {'state export':<20} {export_state(db)}")
++
++
+ if __name__ == "__main__":
+     raise SystemExit(main())
+diff --git a/graph/import/import_all_selftest.py b/graph/import/import_all_selftest.py
+new file mode 100644
+index 000000000..496031763
+--- /dev/null
++++ b/graph/import/import_all_selftest.py
+@@ -0,0 +1,248 @@
++"""import_all_selftest.py - a failed importer leaves nothing, and says so (2026-09-19).
++
++    python graph/import/import_all_selftest.py --selftest
++
++WHY THIS FILE EXISTS. `graph/import/import_all.py` is the nightly import - the daily chain reaches it
++through `grocery/audit-graph-gates.ps1 -> import_all.py --observations`. An importer that raised part
++way through wrote its finished rows straight into the connection's open transaction, and the NEXT
++importer's `db.conn.commit()` committed them along with its own. graph.db then held a HALF data set: a
++known-wrong set missing its newest rulings, an override set missing cells, every count still plausible.
++The run exited 0, the gates lane judged that index, the resolver resolved against it, and cell_state -
++whose git diff IS this estate's price history - was exported from it. Nothing anywhere said so.
++
++WHAT IT GUARDS, in the three places the repair lives:
++
++  1. each importer runs inside `GraphDB.step()`, so a failure contributes NOTHING and the index keeps
++     the whole previous set. Stale is a state a caller can see; half is not.
++  2. the derive + export phase is REFUSED after a failed step, and `--allow-partial` is the loud,
++     deliberate override.
++  3. the run exits 1 and its closing decision_log event is `import_incomplete` naming the failed steps,
++     so the durable trail carries the failure and not only this stdout.
++
++THE DENOMINATOR IS IN THE VERDICT LINE for the reason `.claude/rules/measurement.md` gives: `1 failed`
++is a mood, `1 of 5 failed` is a measurement, and only the second one shows a run that skipped four
++steps it meant to take.
++
++HERMETIC. Every case drives `import_all.main()` in-process against a FRESH TEMPORARY DATABASE in its
++own temp directory: `graphdb.DB_PATH` and `graphdb.GRAPH_DIR` are both pointed there, so the restore,
++the durable JSON export and the provenance trail all land in the temp tree, and `_append_jsonl` is
++replaced for the whole suite as a second guard. The importer list is a fixture, never the real one, so
++no case reads `grocery/`, and `derive_and_export` is replaced by a SPY, so the real resolve / cell_state
++/ export path - which writes tracked JSON under `graph/state/` - is never reachable from here. Nothing
++reads or writes `graph/sqlite/graph.db`. Every module attribute is restored in a `finally`.
++
++SCOPE OF A CLEAN REPORT: these cases drive the real `main()`, so a pass is evidence about the control
++flow that decides whether a half-loaded index becomes the day's answer. It says nothing about whether
++any individual importer parses its own file correctly, and the failure it injects is a raise - an
++importer that returns a WRONG count without raising is outside every case here.
++
++EXIT: 0 all cases pass, 1 at least one failed. Read the verdict LINE, not the number.
++"""
++from __future__ import annotations
++
++import io
++import json
++import os
++import shutil
++import sys
++import tempfile
++
++HERE = os.path.dirname(os.path.abspath(__file__))
++REPO = os.path.normpath(os.path.join(HERE, "..", ".."))
++sys.path.insert(0, HERE)
++sys.path.insert(0, os.path.join(REPO, "graph", "lib"))
++
++import graphdb                                           # noqa: E402
++import importers                                         # noqa: E402
++import import_all                                        # noqa: E402
++
++_fails: list[str] = []
++_ran = 0
++CASES = 12
++TS = "2026-09-19T00:00:00"
++
++
++def T(label: str, ok: bool, got: str = "") -> None:
++    global _ran
++    _ran += 1
++    if ok:
++        print("  ok    " + label)
++    else:
++        _fails.append(label)
++        print("  FAILED " + label + ("   got: " + got if got else ""))
++
++
++# ---------------------------------------------------------------------------
++# Fixture importers: the shape of every real one - a loop over a file's entries
++# upserting as it goes, with nothing between the rows and the database.
++# ---------------------------------------------------------------------------
++
++def _make_importer(prefix: str, n: int, fail_at: int | None = None):
++    def fn(db, ts, run, **kwargs):
++        for i in range(n):
++            if fail_at is not None and i == fail_at:
++                raise ValueError("fixture: %s entry %d is malformed" % (prefix, i))
++            db.upsert_node("commodity:staple:%s-%d" % (prefix, i), "Commodity",
++                           "%s %d" % (prefix, i), ts)
++        return {prefix + "_rows": n}
++    return fn
++
++
++class _Spy:
++    """Stands in for derive_and_export. Records that it was reached, and reaches nothing."""
++
++    def __init__(self):
++        self.calls = 0
++
++    def __call__(self, db, ts, run, totals, say):
++        self.calls += 1
++        totals["spy_derived"] = 1
++
++
++def _drive(tmp: str, name: str, argv: list[str], all_importers: list) -> dict:
++    """Run import_all.main() once, hermetically, and return everything a case may ask about."""
++    root = os.path.join(tmp, name)
++    os.makedirs(root)
++    spy = _Spy()
++    saved = (graphdb.DB_PATH, graphdb.GRAPH_DIR, importers.ALL_IMPORTERS,
++             importers.LANE_IMPORTERS, importers.import_observations,
++             import_all.derive_and_export, sys.argv)
++    buf = io.StringIO()
++    try:
++        graphdb.DB_PATH = os.path.join(root, "sqlite", "graph.db")
++        graphdb.GRAPH_DIR = root
++        importers.ALL_IMPORTERS = all_importers
++        importers.LANE_IMPORTERS = [("lane_fixture", _make_importer("lane", 1))]
++        importers.import_observations = _make_importer("obs", 1)
++        import_all.derive_and_export = spy
++        sys.argv = ["import_all.py"] + argv
++        stdout, sys.stdout = sys.stdout, buf
++        try:
++            rc = import_all.main()
++        finally:
++            sys.stdout = stdout
++    finally:
++        (graphdb.DB_PATH, graphdb.GRAPH_DIR, importers.ALL_IMPORTERS,
++         importers.LANE_IMPORTERS, importers.import_observations,
++         import_all.derive_and_export, sys.argv) = saved
++    return {"rc": rc, "out": buf.getvalue(), "spy": spy.calls,
++            "db": os.path.join(root, "sqlite", "graph.db"), "root": root}
++
++
++def _rows(db_path: str, prefix: str) -> int:
++    """How many of `prefix`'s rows the INDEX holds, asked by reopening the file: an
++    uncommitted row answers the connection that wrote it and nobody else."""
++    db = graphdb.GraphDB(db_path, restore_learning=False)
++    try:
++        return db.conn.execute("SELECT COUNT(*) FROM nodes WHERE id LIKE ?",
++                               ("commodity:staple:" + prefix + "-%",)).fetchone()[0]
++    finally:
++        db.conn.close()
++
++
++def _decisions(db_path: str) -> list[dict]:
++    db = graphdb.GraphDB(db_path, restore_learning=False)
++    try:
++        return [dict(r) for r in db.conn.execute(
++            "SELECT decision, step_id, detail_json FROM decision_log")]
++    finally:
++        db.conn.close()
++
++
++def run() -> int:
++    tmp = tempfile.mkdtemp(prefix="imp-all-st-")
++    saved_append = graphdb.GraphDB._append_jsonl
++    graphdb.GraphDB._append_jsonl = staticmethod(lambda run, record: None)
++    try:
++        # ---- 1. a run with one importer that dies part way through -------------------------
++        half = [("stores", _make_importer("stores", 2)),
++                ("known_wrong", _make_importer("known_wrong", 4, fail_at=2)),
++                ("overrides", _make_importer("overrides", 1))]
++        r = _drive(tmp, "half", ["--observations", "--export"], half)
++
++        n_kw = _rows(r["db"], "known_wrong")
++        T("MUST FIRE  the importer that raised at entry 2 of 4 leaves NONE of the 2 rows it had "
++          "already written - no half-loaded known-wrong set", n_kw == 0, "rows=%s" % n_kw)
++        n_before, n_after = _rows(r["db"], "stores"), _rows(r["db"], "overrides")
++        T("CLEAN TWIN  the importers either side of it land every row (2 and 1): the run is not "
++          "rolled back whole, only the step that failed",
++          n_before == 2 and n_after == 1, "stores=%s overrides=%s" % (n_before, n_after))
++        T("MUST FIRE  the run exits 1, never 0 - a step that could not run is not a step that "
++          "found nothing", r["rc"] == 1, "rc=%s" % r["rc"])
++        T("MUST FIRE  the derive + export phase is REFUSED and names the failed step, so no "
++          "answer is built from a half index",
++          r["spy"] == 0 and "REFUSED the adjudicate" in r["out"] and "known_wrong" in r["out"],
++          "spy=%s" % r["spy"])
++        T("CLEAN TWIN  the verdict line carries its denominator (1 of 5), not a bare count",
++          "IMPORT INCOMPLETE: 1 of 5 step(s) failed" in r["out"],
++          r["out"].strip().splitlines()[-1][:110] if r["out"].strip() else "")
++
++        dec = _decisions(r["db"])
++        closing = [d for d in dec if d["decision"] in ("import_complete", "import_incomplete")]
++        named = [d for d in closing
++                 if d["decision"] == "import_incomplete"
++                 and "known_wrong" in json.loads(d["detail_json"]).get("failed_steps", [])]
++        T("MUST FIRE  the closing decision_log event is import_incomplete and NAMES the failed "
++          "step, so the durable trail says it too",
++          len(closing) == 1 and len(named) == 1,
++          "closing=%s" % [d["decision"] for d in closing])
++        esc = [d for d in dec if d["decision"] == "importer_failed"]
++        T("CLEAN TWIN  the failed step also leaves its own escalate event, carrying the error "
++          "and the fact that its writes were rolled back",
++          len(esc) == 1 and esc[0]["step_id"] == "known_wrong"
++          and json.loads(esc[0]["detail_json"]).get("writes_rolled_back") is True,
++          json.dumps([e["step_id"] for e in esc]))
++        exported = os.path.exists(os.path.join(r["root"], "nodes", "nodes.json"))
++        T("MUST FIRE  --export writes no durable JSON while the index is incomplete - truth "
++          "does not get overwritten from a half-loaded one", not exported,
++          "nodes.json exists=%s" % exported)
++
++        # ---- 2. the green run, unchanged --------------------------------------------------
++        whole = [("stores", _make_importer("stores", 2)),
++                 ("known_wrong", _make_importer("known_wrong", 4)),
++                 ("overrides", _make_importer("overrides", 1))]
++        g = _drive(tmp, "whole", ["--observations", "--export"], whole)
++        T("CLEAN TWIN  a run with every step green exits 0, lands all 7 rows and DERIVES "
++          "(the phase runs exactly once)",
++          g["rc"] == 0 and g["spy"] == 1
++          and _rows(g["db"], "known_wrong") == 4 and _rows(g["db"], "stores") == 2
++          and _rows(g["db"], "overrides") == 1 and _rows(g["db"], "lane") == 1
++          and _rows(g["db"], "obs") == 1,
++          "rc=%s spy=%s" % (g["rc"], g["spy"]))
++        g_dec = [d["decision"] for d in _decisions(g["db"])]
++        T("CLEAN TWIN  its closing event is import_complete and the verdict line says 5 of 5",
++          "import_complete" in g_dec and "IMPORT COMPLETE: 5 of 5 step(s) landed" in g["out"],
++          json.dumps(g_dec))
++        T("CLEAN TWIN  --export still writes the durable JSON when nothing failed",
++          os.path.exists(os.path.join(g["root"], "nodes", "nodes.json")), g["root"])
++
++        # ---- 3. the deliberate override ---------------------------------------------------
++        a = _drive(tmp, "allowpartial", ["--observations", "--allow-partial"], half)
++        T("CLEAN TWIN  --allow-partial derives anyway AND still exits 1, so the override "
++          "changes what runs and never what the run reports",
++          a["spy"] == 1 and a["rc"] == 1 and "--allow-partial: deriving despite" in a["out"],
++          "spy=%s rc=%s" % (a["spy"], a["rc"]))
++    except Exception as e:                                # noqa: BLE001
++        _fails.append("suite raised: %r" % (e,))
++        print("  FAILED suite raised: %r" % (e,))
++    finally:
++        graphdb.GraphDB._append_jsonl = saved_append
++        shutil.rmtree(tmp, ignore_errors=True)
++
++    if _ran != CASES and not _fails:
++        _fails.append("ran %d of %d cases" % (_ran, CASES))
++    if _fails:
++        print("SELF-TEST FAIL: import_all %d of %d case(s) failed, %d ran"
++              % (len(_fails), CASES, _ran))
++        return 1
++    print("SELF-TEST PASS: import_all %d of %d cases - a failed importer leaves nothing, the day's "
++          "answer is not derived from a half index, and the run exits 1 saying which step failed"
++          % (_ran, CASES))
++    return 0
++
++
++if __name__ == "__main__":
++    if "--selftest" in sys.argv:
++        sys.exit(run())
++    print("usage: import_all_selftest.py --selftest")
++    sys.exit(2)
+diff --git a/graph/import/importers.py b/graph/import/importers.py
+index 939c365be..9bb9deb38 100644
+--- a/graph/import/importers.py
++++ b/graph/import/importers.py
+@@ -359,7 +359,10 @@ def retro_apply_known_wrong(db: GraphDB, ts: str, run: str) -> int:
+                 "confidence=1.0 WHERE id=?", [(i,) for i in hits])
+             demoted += len(hits)
+     if demoted:
+-        db.conn.commit()
++        # db.commit(), never db.conn.commit(): import_all runs this inside a GraphDB.step(),
++        # and a raw commit there ends the step's savepoint - which is what made a half-loaded
++        # known-wrong set survivable in the first place. Outside a step this commits as before.
++        db.commit()
+         db.log_event(run=run, timestamp=ts, etype="resolve",
+                      decision="known_wrong_retro_sweep",
+                      detail={"rows_demoted": demoted})
+diff --git a/graph/lib/graphdb.py b/graph/lib/graphdb.py
+index bea230cb9..e2a331051 100644
+--- a/graph/lib/graphdb.py
++++ b/graph/lib/graphdb.py
+@@ -62,6 +62,22 @@ class GraphDBMissing(FileNotFoundError):
+     """The database file is not there and the caller did not say it may be created."""
+ 
+ 
++class StepAtomicityBroken(RuntimeError):
++    """A step() could not be undone, so PART of it may be standing in the index.
++
++    Raised when the step's SAVEPOINT is gone by the time the step ends, which under SQLite
++    means one thing: something COMMITTED inside the step. A commit ends the savepoint, so
++    the rollback meant to undo a half-load has nothing to roll back to and the half-load
++    stands. Measured 2026-09-19 on this machine's SQLite: after SAVEPOINT s, one INSERT and
++    a conn.commit(), `ROLLBACK TO SAVEPOINT s` raises `sqlite3.OperationalError: no such
++    savepoint: s` and the inserted row is still there.
++
++    This raises rather than passing quietly because the quiet version IS the failure this
++    mechanism exists to prevent: a partial data set sitting in the day's index with nothing
++    saying so. Route a mid-step commit through GraphDB.commit(), which a step suppresses.
++    """
++
++
+ class GraphDB:
+     """Thin, explicit wrapper over SQLite. No ORM, no magic."""
+ 
+@@ -72,6 +88,9 @@ class GraphDB:
+         path = path or DB_PATH
+         self.path = path
+         self.restore_skipped: dict[str, int] = {}
++        # How many step() blocks are open. commit() is a no-op while one is, so an inner
++        # commit cannot end that step's savepoint and cost it its rollback.
++        self._step_depth = 0
+         # A MISSING DATABASE IS REFUSED UNLESS THE CALLER SAYS IT MAY BE CREATED (2026-09-18, backlog
+         # I229). sqlite3.connect() creates any path it is handed, so every open_db() script used to
+         # build a fresh, empty graph.db wherever it ran - a worktree has none - restore the learning
+@@ -106,6 +125,8 @@ class GraphDB:
+ 
+     # -- lifecycle ---------------------------------------------------------
+     def close(self) -> None:
++        """Commit what is open, then close. A caller that must NOT commit rolls back first,
++        which is exactly what __exit__ does on the exception path."""
+         self.conn.commit()
+         self.conn.close()
+ 
+@@ -113,11 +134,90 @@ class GraphDB:
+         return self
+ 
+     def __exit__(self, *exc):
++        # A RAISE IS NOT A COMMIT. This used to fall straight into close(), which commits
++        # unconditionally, so a run that died half way through writing a data set committed
++        # that half on its way out and no reader could tell. Rolling back first leaves the
++        # last COMMITTED state, which is a whole state, and close() then commits nothing.
++        # Read-only callers are unaffected; a caller that wants work kept across a raise
++        # has to say so by committing before it leaves.
+         if exc[0] is None:
+             self.conn.commit()
++        else:
++            try:
++                self.conn.rollback()
++            except sqlite3.Error:
++                pass
+         self.close()
+         return False
+ 
++    def commit(self) -> None:
++        """Commit, UNLESS a step() is open around this call, where it is a no-op.
++
++        A step is all-or-nothing (see step()), and under SQLite a commit inside one ends its
++        savepoint - after which the rollback that would undo a half-load raises instead.
++        Library code that says commit() gets the right answer in both positions: immediately
++        when it is called on its own, at the end of the step when it is called inside one.
++        """
++        if self._step_depth:
++            return
++        self.conn.commit()
++
++    @contextmanager
++    def step(self, name: str):
++        """ONE STEP'S WRITES ARE ALL OR NOTHING. Everything written inside this block lands
++        together or not at all; a raise leaves the index exactly as the step found it.
++
++        THE DEFECT THIS EXISTS FOR (2026-09-19). An importer that raised part way through -
++        a truncated known-wrong file, a bad row 300 of 500 - left its finished rows sitting
++        in an OPEN transaction, and the very next importer's conn.commit() committed them
++        along with its own. graph.db then held a HALF data set: a known-wrong set missing
++        its newest rulings, an override set missing cells, every count still plausible, the
++        run still exiting 0. Reproduced on this machine before the fix: 4 rows to write, a
++        raise at row 3, the next step commits, and rows 1 and 2 are in the table for good.
++
++        The unit of atomicity has to be the unit the INVARIANT is stated over, and here that
++        is the data SET, not the row: "the rulings in the index are the rulings in the file"
++        is either true or it is not. So a failed step contributes nothing and the index keeps
++        the whole previous set - stale, which a caller can see and act on, rather than half,
++        which it cannot.
++
++        WHAT IT DOES NOT DO, on purpose. It does not make the RUN atomic: steps that already
++        finished stay committed, because the observation evidence they carry is worth keeping
++        and re-reading every capture file costs 40 s. It is the caller's job to notice a
++        failed step and refuse to derive the day's ANSWER from what is left - import_all.py
++        does that and exits non-zero. Nor can it undo a write outside the database: a
++        log_event inside a failed step leaves its line in the tracked provenance trail while
++        its decision_log row rolls back, which is the safe direction of that pair (a record
++        pointing at nothing, never a row nothing recorded).
++        """
++        sp = "tc_step_%d" % (self._step_depth + 1)
++        self.conn.execute("SAVEPOINT " + sp)
++        self._step_depth += 1
++        try:
++            yield self
++        except BaseException as exc:
++            self._step_depth -= 1
++            try:
++                self.conn.execute("ROLLBACK TO SAVEPOINT " + sp)
++                self.conn.execute("RELEASE SAVEPOINT " + sp)
++            except sqlite3.OperationalError as e:
++                raise StepAtomicityBroken(
++                    "step %r failed with %r and could NOT be rolled back (%s): something "
++                    "committed inside it, so part of it may be standing in the index. A "
++                    "mid-step commit goes through GraphDB.commit()." % (name, exc, e)) from e
++            raise
++        else:
++            self._step_depth -= 1
++            try:
++                self.conn.execute("RELEASE SAVEPOINT " + sp)
++            except sqlite3.OperationalError as e:
++                raise StepAtomicityBroken(
++                    "step %r finished but its savepoint was gone (%s): something committed "
++                    "inside it, so it was never all-or-nothing. A mid-step commit goes "
++                    "through GraphDB.commit()." % (name, e)) from e
++            if not self._step_depth:
++                self.conn.commit()
++
+     @contextmanager
+     def tx(self):
+         try:
+diff --git a/graph/lib/graphdb_selftest.py b/graph/lib/graphdb_selftest.py
+index 7b7213242..9d40e8ff4 100644
+--- a/graph/lib/graphdb_selftest.py
++++ b/graph/lib/graphdb_selftest.py
+@@ -1,9 +1,18 @@
+-"""graphdb_selftest.py - the store layer's two I229 boundaries (backlog I229, 2026-09-18).
++"""graphdb_selftest.py - the store layer's I229 boundaries and its step atomicity.
+ 
+     python graph/lib/graphdb_selftest.py --selftest
+ 
+ WHAT IT GUARDS.
+ 
++0. A STEP LANDS WHOLE OR NOT AT ALL, and a raise is not a commit (2026-09-19). An importer that
++   raised part way left its finished rows in the connection's open transaction, and the next
++   importer's conn.commit() committed them: graph.db then held a HALF data set - a known-wrong
++   set missing its newest rulings, an override set missing cells - with every count plausible
++   and the run still exiting 0. The exception path out of `with GraphDB(...)` did the same on
++   its way out, because __exit__ fell into close(), which commits unconditionally. The first
++   case below drives the founding shape with no step() around it and asserts the two partial
++   rows ARE kept, so the cases after it cannot pass vacuously.
++
+ 1. A MISSING DATABASE IS REFUSED. sqlite3.connect() creates whatever path it is handed, so GraphDB used
+    to build a fresh, empty graph.db wherever an open_db() script ran (a worktree has none), restore the
+    learning records into it, and answer every later question from an index with no nodes, edges or
+@@ -17,6 +26,8 @@ WHAT IT GUARDS.
+ HERMETIC. Every database is a fresh file in a per-run temp directory; graphdb.DB_PATH is pointed there
+ for the open_db() case and restored in a finally. Nothing reads or writes graph/sqlite/graph.db or any
+ tracked JSON, and no case calls log_event, so the tracked graph/provenance trail is never touched.
++Every case that asks what the INDEX holds reopens the file and asks that, rather than asking the
++connection that wrote it - an uncommitted row answers the writer and nobody else.
+ 
+ EXIT: 0 all cases pass, 1 at least one failed. Read the verdict LINE, not the number.
+ """
+@@ -35,7 +46,7 @@ import graphdb                                           # noqa: E402
+ 
+ _fails: list[str] = []
+ _ran = 0
+-CASES = 8
++CASES = 18
+ 
+ 
+ def T(label: str, ok: bool, got: str = "") -> None:
+@@ -48,6 +59,32 @@ def T(label: str, ok: bool, got: str = "") -> None:
+         print("  FAILED " + label + ("   got: " + got if got else ""))
+ 
+ 
++TS = "2026-09-19T00:00:00"
++
++
++def _write_set(db, prefix: str, n: int, fail_at: int | None = None) -> None:
++    """Write one importer's worth of rows, optionally dying part way through it.
++
++    This is the shape of every seed importer: a loop over a file's entries, upserting as it
++    goes, with nothing between the rows and the database.
++    """
++    for i in range(n):
++        if fail_at is not None and i == fail_at:
++            raise ValueError("fixture: %s entry %d is malformed" % (prefix, i))
++        db.upsert_node("commodity:staple:%s-%d" % (prefix, i), "Commodity",
++                       "%s %d" % (prefix, i), TS)
++
++
++def _count_on_disk(path: str, prefix: str) -> int:
++    """How many of `prefix`'s rows the INDEX holds, read by reopening the file."""
++    db = graphdb.GraphDB(path, restore_learning=False)
++    try:
++        return db.conn.execute("SELECT COUNT(*) FROM nodes WHERE id LIKE ?",
++                               ("commodity:staple:" + prefix + "-%",)).fetchone()[0]
++    finally:
++        db.conn.close()
++
++
+ def _raises_missing(fn) -> tuple[bool, str]:
+     try:
+         db = fn()
+@@ -118,6 +155,127 @@ def run() -> int:
+           skipped.get("cell_state") == 2, json.dumps(skipped))
+         T("CLEAN TWIN  the row that did land is the first one offered, value intact (1.0)",
+           price == 1.0, repr(price))
++
++        # ---- 3. a step lands whole or not at all ----------------------------------------
++        # THE FOUNDING SHAPE, with no step() around it, so the cases below cannot pass
++        # vacuously: an importer dies at entry 2 of 4 and the NEXT importer's commit adopts
++        # the two rows it had already written.
++        bare = os.path.join(tmp, "bare.db")
++        db = graphdb.GraphDB(bare, restore_learning=False, allow_new=True)
++        try:
++            _write_set(db, "bare", 4, fail_at=2)
++        except ValueError:
++            pass
++        _write_set(db, "next", 1)
++        db.conn.commit()
++        db.conn.close()
++        n_bare = _count_on_disk(bare, "bare")
++        T("MUST FIRE  the founding shape reproduces: WITHOUT step(), a raise at entry 2 of 4 "
++          "leaves 2 rows that the next importer's commit makes permanent", n_bare == 2,
++          "rows=%s" % n_bare)
++
++        stepped = os.path.join(tmp, "stepped.db")
++        db = graphdb.GraphDB(stepped, restore_learning=False, allow_new=True)
++        with db.step("first"):
++            _write_set(db, "first", 2)
++        try:
++            with db.step("half"):
++                _write_set(db, "half", 4, fail_at=2)
++        except ValueError:
++            pass
++        with db.step("after"):
++            _write_set(db, "after", 1)
++        db.close()
++        n_half = _count_on_disk(stepped, "half")
++        n_first = _count_on_disk(stepped, "first")
++        n_after = _count_on_disk(stepped, "after")
++        T("MUST FIRE  inside step(), the same raise at entry 2 of 4 leaves NONE of that "
++          "step's rows, even after a later step commits", n_half == 0, "rows=%s" % n_half)
++        T("CLEAN TWIN  the step that ran AFTER the failure still lands its own row",
++          n_after == 1, "rows=%s" % n_after)
++        T("CLEAN TWIN  the step that COMPLETED before it keeps its 2 rows - the run is not "
++          "rolled back whole, only the step that failed", n_first == 2, "rows=%s" % n_first)
++
++        dying = os.path.join(tmp, "dying.db")
++        try:
++            with graphdb.GraphDB(dying, restore_learning=False, allow_new=True) as db:
++                _write_set(db, "dying", 3)
++                raise RuntimeError("fixture: the run died here")
++        except RuntimeError:
++            pass
++        n_dying = _count_on_disk(dying, "dying")
++        T("MUST FIRE  a raise out of `with GraphDB(...)` commits nothing - __exit__ rolls "
++          "back instead of falling into close(), which commits", n_dying == 0,
++          "rows=%s" % n_dying)
++
++        living = os.path.join(tmp, "living.db")
++        with graphdb.GraphDB(living, restore_learning=False, allow_new=True) as db:
++            _write_set(db, "living", 3)
++        n_living = _count_on_disk(living, "living")
++        T("CLEAN TWIN  a clean exit from `with GraphDB(...)` still commits its 3 rows, "
++          "exactly as before", n_living == 3, "rows=%s" % n_living)
++
++        # A COMMIT INSIDE A STEP IS CAUGHT, because it has already cost the step its
++        # rollback: the savepoint is gone and the half IS standing.
++        raw = os.path.join(tmp, "raw.db")
++        db = graphdb.GraphDB(raw, restore_learning=False, allow_new=True)
++        broke = ""
++        try:
++            with db.step("raw-commit-then-raise"):
++                _write_set(db, "rawb", 2)
++                db.conn.commit()
++                raise ValueError("fixture: entry 2 is malformed")
++        except graphdb.StepAtomicityBroken as e:
++            broke = str(e)
++        except ValueError as e:                           # the quiet, wrong outcome
++            broke = "swallowed, raised %r instead" % (e,)
++        T("MUST FIRE  a raw conn.commit() inside a step that then raises is REFUSED loudly "
++          "(StepAtomicityBroken naming the step), never left half-standing in silence",
++          "no such savepoint" in broke and "raw-commit-then-raise" in broke, broke[:120])
++
++        quiet = ""
++        try:
++            with db.step("raw-commit-then-succeed"):
++                _write_set(db, "rawc", 1)
++                db.conn.commit()
++        except graphdb.StepAtomicityBroken as e:
++            quiet = str(e)
++        T("MUST FIRE  a raw conn.commit() inside a step that SUCCEEDS is refused too - it "
++          "was never all-or-nothing, and only this run can still say so",
++          "was gone" in quiet, quiet[:120])
++
++        db.close()
++
++        # db.commit() is the safe spelling: suppressed inside a step, immediate outside one.
++        safe = os.path.join(tmp, "safe.db")
++        db = graphdb.GraphDB(safe, restore_learning=False, allow_new=True)
++        # Both halves are asserted in one case ON PURPOSE: if the suppression goes, this step
++        # dies with StepAtomicityBroken instead of the importer's own ValueError, and a suite
++        # that only caught ValueError would report "suite raised" and name no case at all.
++        raised = ""
++        try:
++            with db.step("safe-commit"):
++                _write_set(db, "safe", 2)
++                db.commit()
++                _write_set(db, "safe", 4, fail_at=2)
++        except ValueError:
++            raised = "ValueError"
++        except Exception as e:                            # noqa: BLE001
++            raised = repr(e)
++        db.close()
++        n_safe = _count_on_disk(safe, "safe")
++        T("MUST FIRE  db.commit() inside a step is suppressed, so the step is still "
++          "all-or-nothing and the half never lands",
++          n_safe == 0 and raised == "ValueError", "rows=%s raised=%s" % (n_safe, raised[:60]))
++
++        outside = os.path.join(tmp, "outside.db")
++        db = graphdb.GraphDB(outside, restore_learning=False, allow_new=True)
++        _write_set(db, "outside", 2)
++        db.commit()
++        n_outside = _count_on_disk(outside, "outside")   # a SECOND connection, so only a real commit shows
++        db.conn.close()
++        T("CLEAN TWIN  db.commit() outside a step commits at once - another connection reads "
++          "both rows, so it is not a no-op everywhere", n_outside == 2, "rows=%s" % n_outside)
+     except Exception as e:                                # noqa: BLE001
+         _fails.append("suite raised: %r" % (e,))
+         print("  FAILED suite raised: %r" % (e,))
+@@ -130,8 +288,9 @@ def run() -> int:
+     if _fails:
+         print("SELF-TEST FAIL: graphdb %d of %d case(s) failed, %d ran" % (len(_fails), CASES, _ran))
+         return 1
+-    print("SELF-TEST PASS: graphdb %d of %d cases - a missing graph.db is refused unless allow_new, "
+-          "and a restore counts only the rows it inserted" % (_ran, CASES))
++    print("SELF-TEST PASS: graphdb %d of %d cases - a step lands whole or not at all, a raise is "
++          "not a commit, a missing graph.db is refused unless allow_new, and a restore counts only "
++          "the rows it inserted" % (_ran, CASES))
+     return 0
+ 
+ 

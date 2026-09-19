@@ -1,0 +1,694 @@
+diff --git a/grocery/capture-policy-lib.ps1 b/grocery/capture-policy-lib.ps1
+index 9a5cd1e11..9f30ac56e 100644
+--- a/grocery/capture-policy-lib.ps1
++++ b/grocery/capture-policy-lib.ps1
+@@ -1309,12 +1309,268 @@ function Test-CaptureLanded {
+   return $false
+ }
+ 
++# ---------------------------------------------------------------------------
++# DID THE CAPTURE COVER THE SLICE THE CURSOR IS ABOUT TO ADVANCE PAST? (2026-09-19)
++#
++# THE DEFECT, replayed out of out\capture-cursor-log.jsonl against the captures of those days:
++#   Sam's Club 2026-08-22  #0  -> #7   122 fresh rows landed, for 7 terms, and NOT ONE of them in #0-#6
++#   Fareway    2026-08-22  #14 -> #21  7 fresh rows landed, for 7 other terms; the file's other 905 rows
++#                                      were CARRIED, dated 2026-07-14 to 2026-08-21
++#   Walmart    2026-08-30  #28 -> #35  525 fresh rows landed, every one for a term outside #28-#34
++# Each of those slices then waited a whole 90-day rotation, and some of their terms have no captured row
++# to this day.
++#
++# WHY THE OLD TEST COULD NOT SEE IT. Test-CaptureLanded asks a question about the FILE - does this store's
++# everyday file for today exist and hold rows - and the answer is yes in two situations that have nothing
++# to do with the slice:
++#   1. THE FILE IS A CARRY FILE. out\regular\<prefix>-regular-<date>.json is rebuilt daily from the
++#      previous day's rows plus today's, so it holds rows whether or not anything was captured today.
++#   2. THE CAPTURE WAS REAL AND WAS OF SOMETHING ELSE. An expiry re-price, a standing ruling's recapture,
++#      a rescue rebuild or a hand capture all land fresh rows for terms that are not the rotation slice.
++# "Rows landed" and "the slice was captured" are two different questions, and only the second is the
++# cursor's business. Test-CaptureLanded still answers the first, and is still the gate in front of this.
++#
++# WHAT COUNTS AS EVIDENCE, strongest first. Every tier is something the capture already records:
++#   asked     the lane passes -AskedTerms: what it actually put to the store this run. The only tier
++#             open to a lane that commits the cursor BEFORE writing its file, which the Baker's lane
++#             does on purpose (a refused write must not also refuse the rotation - see its header).
++#   receipts  the file carries capture_terms, one entry per term with an outcome. success or empty both
++#             mean the term was ASKED and the store answered, and that is the whole point of preferring
++#             receipts: a term the store does not stock is covered by its empty answer, so it can never
++#             freeze the rotation. Baker's, Family Fare and Hy-Vee write these today.
++#   rows      the file's rows carry found_by_term and as_of. A slice term is covered when a row dated
++#             TODAY was found by it. Weaker, in a known direction: a term asked that answered nothing is
++#             indistinguishable from a term nobody asked (.claude\rules\grocery.md - UNCHECKED IS NEVER
++#             NOT-CARRIED), so this tier UNDER-counts coverage and the cursor moves more slowly than it
++#             might. Under-counting costs a repeated request; over-counting costs a quarter of coverage.
++#   none      the capture records neither, so the slice cannot be looked at. That is NOT scored as a
++#             failure - a could-not-look must not settle the question - so the run falls back to the
++#             landing test exactly as it behaved before, and says so in its reason.
++#
++# AND HOW FAR IT MAY MOVE. The cursor advances to ONE PAST THE LAST COVERED TERM of the slice and never
++# further. There is no threshold and no tuning constant in that rule, which is the point of it: whatever
++# IS covered still moves the cursor, so an uncovered term cannot freeze the rotation, and the terms past
++# the last covered one are not stepped over but lead tomorrow's slice. A slice with nothing covered holds
++# the cursor exactly where it is, which is what the old test already promised it would do.
++#
++# STATE WHAT THAT DOES AND DOES NOT PROMISE. A term the capture never reached at all - everything past
++# the last covered one - is never stepped over, and those are the whole slices the three incidents
++# skipped. A term INSIDE the covered span that shows no coverage IS stepped over, and is read as asked
++# and answered nothing: the capture demonstrably reached the terms on both sides of it. On the receipts
++# tier that reading is exact (the receipt says empty, or says not_asked and is then not covered at all);
++# on the rows tier it is an inference, and it is the one the vocabulary cannot settle. Advancing the
++# whole slice on a stop-at-the-first-gap rule would be the safer-sounding choice and is the wrong one:
++# one genuinely not-carried term at the head of a slice would then hold that store's rotation for ever,
++# which is the Hy-Vee deadlock of 2026-08-22 wearing a different coat.
++# ---------------------------------------------------------------------------
++
++# An outcome that means the term was ASKED and the store answered. Deliberately the same vocabulary as
++# $script:BakersAdAskedOutcomes, which reads the same receipts for the ad list; the self-test asserts
++# the two lists are equal so they cannot drift into two meanings of "asked".
++$script:SliceAskedOutcomes = @('success', 'empty')
++
++function Get-CaptureEvidencePath {
++  <#
++    .SYNOPSIS The file(s) a store's capture for -Today lands in: its everyday file, its deals file, or both.
++    .DESCRIPTION Reads stores.json's own regular_prefix and deals_glob, so the mapping is not duplicated.
++                 Returns the paths whether or not they exist - the caller says what an absent one means.
++  #>
++  [CmdletBinding()]
++  param([Parameter(Mandatory)][string]$Store, [string]$Today = '', [string]$OutDir = '')
++  if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
++  $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
++  $paths = New-Object System.Collections.Generic.List[string]
++  $prefix = $null; $dealsGlob = $null
++  try {
++    $sj = Get-PolicyJson 'stores.json'
++    foreach ($s in $sj.stores) {
++      if ([string]$s.name -eq $Store) { $prefix = [string]$s.regular_prefix; $dealsGlob = [string]$s.deals_glob; break }
++    }
++  } catch { }
++  if ($prefix) { [void]$paths.Add((Join-Path $OutDir ("regular\{0}-regular-{1}.json" -f $prefix, $todayS))) }
++  if ($dealsGlob) {
++    $rel = ($dealsGlob -replace '^out[\\/]', '') -replace '/', '\'
++    [void]$paths.Add((Join-Path $OutDir ($rel -replace '\*', $todayS)))
++  }
++  return $paths.ToArray()
++}
++
++function Read-CaptureTermReceipts {
++  <#
++    .SYNOPSIS The capture_terms array of a capture file's TEXT, or $null when it carries none.
++    .DESCRIPTION Cuts the array out by matching its brackets and parses that alone, because the files
++                 that carry receipts are the big ones (Baker's is ~8 MB) and the cursor is committed
++                 inside a lock. Quotes and escapes are tracked so a bracket inside a term cannot end
++                 the array early. $null means NO capture_terms property - which is a different answer
++                 from an empty array, and the caller treats them differently.
++  #>
++  [CmdletBinding()]
++  param([Parameter(Mandatory)][AllowEmptyString()][string]$Text)
++  $a = $Text.IndexOf('"capture_terms"')
++  if ($a -lt 0) { return $null }
++  $open = $Text.IndexOf('[', $a)
++  if ($open -lt 0) { return $null }
++  $depth = 0; $inStr = $false; $esc = $false; $end = -1
++  for ($i = $open; $i -lt $Text.Length; $i++) {
++    $c = $Text[$i]
++    if ($esc) { $esc = $false; continue }
++    if ($inStr) {
++      if ($c -eq '\') { $esc = $true }
++      elseif ($c -eq '"') { $inStr = $false }
++      continue
++    }
++    if ($c -eq '"') { $inStr = $true; continue }
++    if ($c -eq '[') { $depth++ ; continue }
++    if ($c -eq ']') { $depth-- ; if ($depth -le 0) { $end = $i; break } }
++  }
++  if ($end -lt 0) { return $null }
++  $frag = $Text.Substring($open, $end - $open + 1)
++  $parsed = $null
++  try { $parsed = ConvertFrom-Json $frag } catch { return $null }
++  # assign, THEN wrap - a one-element JSON array comes back unwrapped ([[ps-json-array-collapse]])
++  return @($parsed)
++}
++
++function Get-CursorSlice {
++  <#
++    .SYNOPSIS The -Count terms a cursor at -From is sitting on, in rotation order.
++    .DESCRIPTION The one place that turns (cursor, rotation size) into terms, so the advance decision
++                 and its fixtures cannot describe two different slices.
++  #>
++  [CmdletBinding()]
++  param([Parameter(Mandatory)][AllowEmptyCollection()]$All, [int]$From = 0, [int]$Count = 0)
++  $items = @($All)
++  $out = New-Object System.Collections.Generic.List[string]
++  if ($items.Count -le 0 -or $Count -le 0) { return $out.ToArray() }
++  $start = (($From % $items.Count) + $items.Count) % $items.Count
++  for ($k = 0; $k -lt $Count; $k++) { [void]$out.Add([string]$items[(($start + $k) % $items.Count)].term) }
++  return $out.ToArray()
++}
++
++function Get-SliceCoverage {
++  <#
++    .SYNOPSIS Which terms of -Slice this store's capture for -Today actually covered, and on what evidence.
++    .DESCRIPTION Pure read. See the block above for the evidence tiers and why the weakest one under-counts.
++    .PARAMETER AskedTerms  what the lane put to the store this run, when the lane knows (strongest tier).
++    .OUTPUTS @{ Store; Today; Slice; Covered; Missing; Flags; LastCovered; Evidence; Blind; File; Why }
++  #>
++  [CmdletBinding()]
++  param(
++    [Parameter(Mandatory)][string]$Store,
++    [Parameter(Mandatory)][AllowEmptyCollection()][string[]]$Slice,
++    [string]$Today = '',
++    [string]$OutDir = '',
++    [AllowEmptyCollection()][string[]]$AskedTerms = @()
++  )
++  if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
++  $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
++  # A LOCAL WITH ITS OWN NAME. PowerShell names are case-insensitive, so a local $slice IS the [string[]]
++  # parameter $Slice, and writing through it is the typed-parameter shadow audit-typed-param-shadow ratchets.
++  $want = @($Slice)
++  $res = [pscustomobject]@{
++    Store = $Store; Today = $todayS; Slice = $want; Covered = @(); Missing = $want
++    Flags = @(); LastCovered = -1; Evidence = 'none'; Blind = $true; File = ''; Why = ''
++  }
++  # Case-insensitively, because a term's spelling reaches a row through the store's own echo.
++  $covered = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
++
++  $asked = @(@($AskedTerms) | Where-Object { $_ })
++  if ($asked.Count -gt 0) {
++    foreach ($t in $asked) { [void]$covered.Add(([string]$t).Trim()) }
++    $res.Evidence = 'asked'; $res.Blind = $false
++    $res.Why = "the lane reported $($asked.Count) term(s) asked this run"
++  } else {
++    $paths = @(Get-CaptureEvidencePath -Store $Store -Today $todayS -OutDir $OutDir)
++    $present = @($paths | Where-Object { Test-Path -LiteralPath $_ })
++    if ($present.Count -eq 0) {
++      $res.Why = if ($paths.Count -eq 0) { "stores.json declares no capture file for $Store, so its slice cannot be checked" }
++                 else { "no capture file for $todayS to read (" + (($paths | ForEach-Object { Split-Path $_ -Leaf }) -join ', ') + ')' }
++      return $res
++    }
++    $res.File = ($present | ForEach-Object { Split-Path $_ -Leaf }) -join ', '
++    $sawTerm = $false; $sawAsOf = $false
++    $fresh = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
++    $any = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
++    $receiptSeen = $false; $receiptAsked = 0; $receiptTotal = 0
++    foreach ($p in $present) {
++      $txt = ''
++      try { $txt = [IO.File]::ReadAllText($p) } catch { continue }
++      $rec = Read-CaptureTermReceipts -Text $txt
++      if ($null -ne $rec) {
++        $receiptSeen = $true
++        foreach ($ct in @($rec)) {
++          if ($null -eq $ct) { continue }
++          $receiptTotal++
++          if ($script:SliceAskedOutcomes -contains [string]$ct.outcome) {
++            $receiptAsked++
++            $tt = ([string]$ct.term).Trim(); if ($tt) { [void]$covered.Add($tt) }
++          }
++        }
++        continue      # receipts beat rows for this file: they can say ASKED AND EMPTY, rows cannot
++      }
++      $doc = $null
++      try { $doc = ConvertFrom-Json $txt } catch { continue }
++      $rows = if ($doc.PSObject.Properties['deals']) { @($doc.deals) } else { @($doc) }
++      foreach ($r in @($rows)) {
++        if ($null -eq $r -or -not ($r -is [psobject])) { continue }
++        $tp = $r.PSObject.Properties['found_by_term']
++        if (-not $tp) { continue }
++        $tt = ([string]$tp.Value).Trim()
++        if (-not $tt) { continue }
++        $sawTerm = $true
++        [void]$any.Add($tt)
++        $ap = $r.PSObject.Properties['as_of']
++        $av = if ($ap) { ([string]$ap.Value).Trim() } else { '' }
++        if ($av) { $sawAsOf = $true }
++        if ($av -and [string]::Equals($av, $todayS, [StringComparison]::Ordinal)) { [void]$fresh.Add($tt) }
++      }
++    }
++    if ($receiptSeen) {
++      $res.Evidence = 'receipts'; $res.Blind = $false
++      $res.Why = "capture_terms says $receiptAsked of $receiptTotal term(s) were asked and answered"
++    } elseif ($sawTerm) {
++      $res.Evidence = 'rows'; $res.Blind = $false
++      # A file whose rows carry as_of is judged on TODAY'S rows only: a carry file holds rows from every
++      # earlier day of the quarter, and those say nothing about what was captured today.
++      $src = if ($sawAsOf) { $fresh } else { $any }
++      foreach ($t in $src) { [void]$covered.Add($t) }
++      $res.Why = if ($sawAsOf) { "$($fresh.Count) term(s) have a row dated $todayS ($($any.Count) term(s) in the file altogether)" }
++                 else { "$($any.Count) term(s) named in the file, which dates no row, so every one is read as today's" }
++    } else {
++      $res.Why = "the capture ($($res.File)) carries no capture_terms and no found_by_term, so which terms it covered cannot be read"
++      return $res
++    }
++  }
++
++  $flags = New-Object System.Collections.Generic.List[bool]
++  $hit = New-Object System.Collections.Generic.List[string]
++  $miss = New-Object System.Collections.Generic.List[string]
++  $last = -1
++  for ($i = 0; $i -lt $want.Count; $i++) {
++    $t = ([string]$want[$i]).Trim()
++    $isHit = ($t -and $covered.Contains($t))
++    [void]$flags.Add([bool]$isHit)
++    if ($isHit) { [void]$hit.Add($t); $last = $i } else { [void]$miss.Add($t) }
++  }
++  $res.Flags = $flags.ToArray()
++  $res.Covered = $hit.ToArray()
++  $res.Missing = $miss.ToArray()
++  $res.LastCovered = $last
++  return $res
++}
++
+ function Step-CaptureCursor {
+   <#
+-    .SYNOPSIS The ONE implementation of "advance only after the capture landed".
++    .SYNOPSIS The ONE implementation of "advance only past what the capture actually covered".
+     .DESCRIPTION Returns a result object describing what it did and why. Every lane
+                  calls this rather than computing its own next index, so the rule
+                  cannot drift into five slightly different versions.
++                 THE RULE IS TWO TESTS, NOT ONE (2026-09-19). Test-CaptureLanded asks whether the store
++                 contributed anything today; Get-SliceCoverage asks whether what it contributed covered
++                 the terms this advance would step over. A file full of carried rows, or a real capture
++                 of somebody else's terms, passes the first and fails the second - which is exactly how
++                 Sam's, Fareway and Walmart each skipped a slice for a whole quarter. The cursor moves to
++                 one past the last covered term of the slice and never further.
+   #>
+   [CmdletBinding()]
+   param(
+@@ -1324,6 +1580,9 @@ function Step-CaptureCursor {
+     # Override the landing test when the caller already knows (a browser builder
+     # that just wrote the file, say). Still verified unless -Force.
+     [nullable[bool]]$Landed = $null,
++    # What the lane actually asked the store for this run, when it knows. The strongest slice
++    # evidence there is, and the ONLY one open to a lane that commits before it writes its file.
++    [AllowEmptyCollection()][string[]]$AskedTerms = @(),
+     [switch]$Force
+   )
+   if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
+@@ -1387,11 +1646,43 @@ function Step-CaptureCursor {
+     if ($all.Count -le 0) {
+       return [pscustomobject]@{ Store = $Store; Advanced = $false; From = $from; To = $from; Reason = 'no terms' }
+     }
+-    $to = (($from + $plan.RotationTerms) % $all.Count)
++
++    # ONLY PAST WHAT THE CAPTURE COVERED (2026-09-19). See the block above Get-SliceCoverage: a landed
++    # file is not a captured slice, and the three advances that proved it - Sam's and Fareway on
++    # 2026-08-22, Walmart on 2026-08-30 - each stepped over seven terms nothing had asked for.
++    $slice = @(Get-CursorSlice -All $all -From $from -Count $plan.RotationTerms)
++    $cov = Get-SliceCoverage -Store $Store -Today $todayS -OutDir $OutDir -Slice $slice -AskedTerms $AskedTerms
++    $step = $plan.RotationTerms
++    $covWhy = "covered $(@($cov.Covered).Count) of $($slice.Count) slice term(s) [$($cov.Evidence)]"
++    if ($Force) {
++      $covWhy = "-Force: the slice was not checked ($covWhy)"
++    } elseif ($cov.Blind) {
++      # A COULD-NOT-LOOK IS NOT A FAILURE, and it is not a pass either - it is the old behaviour, said
++      # out loud. The lane that needs this branch is the one that commits before writing (Baker's);
++      # give it -AskedTerms and it stops needing it.
++      $covWhy = "the slice could not be checked ($($cov.Why)) - advanced on the landing test alone"
++    } elseif ($cov.LastCovered -lt 0) {
++      $miss = @($cov.Missing | Select-Object -First 4) -join ', '
++      return [pscustomobject]@{ Store = $Store; Advanced = $false; From = $from; To = $from
++        Coverage = $cov; Covered = 0; SliceSize = $slice.Count; Evidence = $cov.Evidence
++        Reason = ("today's capture covered NONE of the $($slice.Count) term(s) this slice would step over " +
++                  "($miss$(if ($slice.Count -gt 4) { ', ...' })) - $($cov.Why); the slice is re-attempted tomorrow, not skipped") }
++    } else {
++      # One past the last covered term: the uncovered TAIL is not stepped over, it leads tomorrow's
++      # slice. A gap INSIDE the covered span is stepped over and read as asked-and-empty - see the
++      # block above Get-SliceCoverage for why that is the deliberate half of the rule.
++      $step = $cov.LastCovered + 1
++      if ($step -lt $plan.RotationTerms) {
++        $covWhy += ", so the cursor stops at the last covered one and [$(@($cov.Missing | Select-Object -First 4) -join ', ')] lead tomorrow's slice"
++      }
++    }
++
++    $to = (($from + $step) % $all.Count)
+     Save-CaptureCursor -Store $Store -Next $to -OutDir $OutDir -AdvancedOn $todayS
+     Write-CursorLog -Store $Store -From $from -To $to -Today $todayS -OutDir $OutDir
+     return [pscustomobject]@{ Store = $Store; Advanced = $true; From = $from; To = $to
+-      Reason = "advanced $($plan.RotationTerms) term(s) after a landed capture" }
++      Coverage = $cov; Covered = @($cov.Covered).Count; SliceSize = $slice.Count; Evidence = $cov.Evidence
++      Reason = "advanced $step of $($plan.RotationTerms) rotation term(s) after a landed capture - $covWhy" }
+   } finally { Exit-TcLedgerLock $lock }
+ }
+ 
+diff --git a/grocery/commit-capture-cursor.ps1 b/grocery/commit-capture-cursor.ps1
+index 0010ee410..d2840fee9 100644
+--- a/grocery/commit-capture-cursor.ps1
++++ b/grocery/commit-capture-cursor.ps1
+@@ -27,6 +27,15 @@
+   store's out\regular\<prefix>-regular-<date>.json exists and holds rows. A lane that
+   exits 0 having bought nothing must re-attempt the same slice tomorrow, never skip it.
+ 
++  AND LANDING IS NOT COVERAGE (2026-09-19). "Rows landed" and "the slice was captured" are two
++  different questions: the everyday files are CARRY files, so they hold rows every day whichever
++  terms were asked, and a real capture of an expiry, a ruling recapture or a rescue rebuild lands
++  fresh rows for terms that are not the rotation slice. Replaying out\capture-cursor-log.jsonl
++  against the captures of those days found three advances over terms nothing had asked for - Sam's
++  Club #0 and Fareway #14 on 2026-08-22, Walmart #28 on 2026-08-30 - each of which cost those seven
++  terms a whole 90-day rotation. Step-CaptureCursor now advances to one past the LAST COVERED TERM
++  of the slice, judged on the capture's own receipts or its rows for today; see Get-SliceCoverage.
++
+   Usage:
+       .\commit-capture-cursor.ps1 -Store Walmart -Date 2026-08-21
+       .\commit-capture-cursor.ps1 -Report          # every store, no writes
+@@ -54,17 +63,59 @@ if ($SelfTest) {
+   $tmp = Join-Path ([IO.Path]::GetTempPath()) ("cursor-selftest-" + [guid]::NewGuid().ToString('N'))
+   New-Item -ItemType Directory -Path (Join-Path $tmp 'regular') -Force | Out-Null
+   $fail = 0
++  $realToday = (Get-Date).ToString('yyyy-MM-dd')
++
++  # EVERY FIXTURE BELOW IS DATED TODAY ON PURPOSE. The replay guard refuses any other date, so an
++  # incident is reproduced by its SHAPE - which rows, for which terms, dated when relative to the
++  # run - and never by its calendar date.
++  $selfAll = @(Get-AllTerms)
++  # A capture file shaped like the ones the walled builders write: one row per term, each stamped
++  # with the term that found it and the day it was read, which is what Get-SliceCoverage reads.
++  function Write-CursorFixture([string]$Prefix, [string]$Date, [string[]]$FreshTerms, [string[]]$CarriedTerms = @(), [string]$Root = '', [string]$CarriedOn = '2026-08-11') {
++    $rows = @()
++    foreach ($t in @($CarriedTerms)) { $rows += @{ item = ('a product found by ' + $t); ad_price = '$1.00'; as_of = $CarriedOn; found_by_term = $t } }
++    foreach ($t in @($FreshTerms)) { $rows += @{ item = ('a product found by ' + $t); ad_price = '$1.00'; as_of = $Date; found_by_term = $t } }
++    if (@($rows).Count -eq 0) { $rows = @(@{ item = 'x'; ad_price = '$1.00' }) }
++    $where = if ($Root) { $Root } else { $tmp }
++    $p = Join-Path $where ("regular\{0}-regular-{1}.json" -f $Prefix, $Date)
++    Set-Content -LiteralPath $p -Value (ConvertTo-Json @($rows) -Depth 4) -Encoding UTF8
++    return $p
++  }
++  function Get-FixtureSlice([int]$From, [int]$Count) { return @(Get-CursorSlice -All $selfAll -From $From -Count $Count) }
++  $rotN = (Get-CapturePlan -Store 'Walmart' -Today $realToday).RotationTerms
++  # EVERY MUST-FIRE BELOW GETS ITS OWN CHECKOUT. Sharing one made a case that wrongly advanced move the
++  # cursor for the NEXT case as well, which then failed the day guard: the suite went red twice and
++  # named the second one, and a red that names the wrong case is how a mutation probe scores a survivor.
++  function New-CursorRoot { $d = Join-Path $tmp ('r' + [guid]::NewGuid().ToString('N').Substring(0, 8)); New-Item -ItemType Directory -Path (Join-Path $d 'regular') -Force | Out-Null; return $d }
+ 
+   # MUST-FIRE fixture: no capture landed -> the cursor must NOT move.
+-  $r1 = Step-CaptureCursor -Store 'Walmart' -Today (Get-Date).ToString('yyyy-MM-dd') -OutDir $tmp
++  $r1 = Step-CaptureCursor -Store 'Walmart' -Today $realToday -OutDir $tmp
+   if ($r1.Advanced) { Write-Output 'FAIL  a store with no landed capture advanced its cursor - that is the skip-the-slice bug'; $fail++ }
+   else { Write-Output 'ok    no landed capture -> cursor held' }
+ 
+-  # CLEAN TWIN: a real capture landed -> the cursor must move by the rotation size.
+-  $prefix = 'walmart'
+-  @(@{ item = 'x'; ad_price = '$1.00' }) | ConvertTo-Json |
+-    Set-Content (Join-Path $tmp ("regular\{0}-regular-{1}.json" -f $prefix, (Get-Date).ToString('yyyy-MM-dd'))) -Encoding UTF8
+-  $r2 = Step-CaptureCursor -Store 'Walmart' -Today (Get-Date).ToString('yyyy-MM-dd') -OutDir $tmp
++  # MUST-FIRE fixture: WALMART 2026-08-30, in shape. A real capture landed 525 fresh rows and the
++  # cursor stepped over #28-#34 anyway, because every one of those rows was found by some OTHER term.
++  # The old test asked only "does the file hold rows", so this file passes it.
++  $sliceNow = Get-FixtureSlice 0 $rotN
++  $elsewhere = @(Get-FixtureSlice ($rotN * 8) $rotN)
++  $rootOther = New-CursorRoot
++  $null = Write-CursorFixture 'walmart' $realToday $elsewhere @() $rootOther
++  $rOther = Step-CaptureCursor -Store 'Walmart' -Today $realToday -OutDir $rootOther
++  if ($rOther.Advanced) { Write-Output ("FAIL  a capture of somebody else's terms advanced the cursor past [$($sliceNow -join ', ')] - the Walmart 2026-08-30 skip"); $fail++ }
++  else { Write-Output 'ok    fresh rows for terms OUTSIDE the slice -> cursor held (Walmart 2026-08-30)' }
++
++  # MUST-FIRE fixture: FAREWAY 2026-08-22, in shape. The slice's own terms ARE in the file - carried
++  # from 2026-08-11 - while the seven rows actually read that day were for other terms. A test that
++  # counts rows, or even looks for the slice's terms without reading their date, passes this file.
++  $rootCarry = New-CursorRoot
++  $null = Write-CursorFixture 'walmart' $realToday $elsewhere $sliceNow $rootCarry
++  $rCarry = Step-CaptureCursor -Store 'Walmart' -Today $realToday -OutDir $rootCarry
++  if ($rCarry.Advanced) { Write-Output ("FAIL  CARRIED rows for the slice's terms advanced the cursor - the Fareway 2026-08-22 skip (a carry file holds rows every day)"); $fail++ }
++  else { Write-Output 'ok    the slice''s terms present only as CARRIED rows -> cursor held (Fareway 2026-08-22)' }
++
++  # CLEAN TWIN: a real capture OF THIS SLICE landed -> the cursor must move by the rotation size.
++  $null = Write-CursorFixture 'walmart' $realToday $sliceNow
++  $r2 = Step-CaptureCursor -Store 'Walmart' -Today $realToday -OutDir $tmp
+   if (-not $r2.Advanced) { Write-Output "FAIL  a landed capture did NOT advance the cursor ($($r2.Reason))"; $fail++ }
+   elseif ($r2.To -le $r2.From) { Write-Output "FAIL  cursor went backwards or nowhere: $($r2.From) -> $($r2.To)"; $fail++ }
+   else { Write-Output "ok    landed capture -> cursor $($r2.From) -> $($r2.To)" }
+@@ -85,9 +136,7 @@ if ($SelfTest) {
+   # past date is exactly what a self-test or a rebuild looks like, and that is the thing that moved
+   # Fareway seven slices. What the day-guard actually keys on is <store>_last, so rolling that back a
+   # day is what "a new day" genuinely means to it, and the run still carries today's real date.
+-  $realToday = (Get-Date).ToString('yyyy-MM-dd')
+-  @(@{ item = 'x'; ad_price = '$1.00' }) | ConvertTo-Json |
+-    Set-Content (Join-Path $tmp ("regular\walmart-regular-$realToday.json")) -Encoding UTF8
++  $null = Write-CursorFixture 'walmart' $realToday (Get-FixtureSlice $r2.To $rotN)
+   $cf = Join-Path $tmp 'capture-cursor.json'
+   $cj = ConvertFrom-Json ([IO.File]::ReadAllText($cf))
+   $cj.Walmart_last = (Get-Date).AddDays(-1).ToString('yyyy-MM-dd')
+@@ -122,6 +171,84 @@ if ($SelfTest) {
+   if ($rb.Advanced -and $rb.To -gt 0) { Write-Output ("ok    Baker's now takes a term cursor and advanced #" + $rb.From + ' -> #' + $rb.To) }
+   else { Write-Output ("FAIL  Baker's did not get its term cursor: " + $rb.Reason); $fail++ }
+ 
++  # ---- THE FOUR EVIDENCE TIERS, each in its own checkout so no case can be answered by another's
++  #      cursor file. 2026-09-19, with Get-SliceCoverage.
++  function Write-CursorReceipts([string]$Root, [string]$Prefix, [string]$Date, $Receipts, [string[]]$RowTerms = @()) {
++    $rows = @(); foreach ($t in @($RowTerms)) { $rows += @{ item = ('a product found by ' + $t); ad_price = '$1.00'; as_of = $Date; found_by_term = $t } }
++    $doc = [ordered]@{ store = 'fixture'; week_of = $Date; capture_terms = @($Receipts); deal_count = @($rows).Count; deals = $rows }
++    Set-Content -LiteralPath (Join-Path $Root ("regular\{0}-regular-{1}.json" -f $Prefix, $Date)) -Value ($doc | ConvertTo-Json -Depth 6) -Encoding UTF8
++  }
++
++  # CLEAN TWIN: a PARTIAL capture moves the cursor exactly as far as it was covered, and no further.
++  # This is the half that keeps a working rotation working: four of seven terms answered is a slower
++  # day, not a frozen one, and the three that were not answered lead tomorrow's slice instead of
++  # being skipped for a quarter.
++  $rootP = New-CursorRoot
++  $sliceP = Get-FixtureSlice 0 $rotN
++  $headP = @($sliceP | Select-Object -First ([Math]::Max(1, $rotN - 3)))
++  $rowsP = @(); foreach ($t in $headP) { $rowsP += @{ item = ('a product found by ' + $t); ad_price = '$1.00'; as_of = $realToday; found_by_term = $t } }
++  Set-Content -LiteralPath (Join-Path $rootP ("regular\walmart-regular-$realToday.json")) -Value (ConvertTo-Json @($rowsP) -Depth 4) -Encoding UTF8
++  $rP = Step-CaptureCursor -Store 'Walmart' -Today $realToday -OutDir $rootP
++  if ($rP.Advanced -and $rP.To -eq $headP.Count -and $rP.Evidence -eq 'rows') {
++    Write-Output ("ok    a capture covering $($headP.Count) of $rotN slice terms advanced exactly $($rP.To) - the uncovered tail leads tomorrow")
++  } else { Write-Output ("FAIL  partial coverage advanced to #$($rP.To), wanted #$($headP.Count) [$($rP.Evidence)]: $($rP.Reason)"); $fail++ }
++
++  # CLEAN TWIN: a RECEIPT of an empty answer covers the term. A store that does not stock a thing
++  # answers with no rows, and a rule that read rows alone could never tell that from a term nobody
++  # asked for - so with receipts on the file, a not-carried term can never freeze the rotation.
++  $rootE = New-CursorRoot
++  $sliceE = Get-FixtureSlice 0 $rotN
++  $recE = @(); $i = 0
++  foreach ($t in $sliceE) { $recE += @{ term = $t; ordinal = $i; outcome = $(if ($i -eq 1) { 'empty' } else { 'success' }); row_count = $(if ($i -eq 1) { 0 } else { 3 }) }; $i++ }
++  Write-CursorReceipts $rootE 'walmart' $realToday $recE @($sliceE | Where-Object { $_ -ne $sliceE[1] })
++  $rE = Step-CaptureCursor -Store 'Walmart' -Today $realToday -OutDir $rootE
++  if ($rE.Advanced -and $rE.To -eq $rotN -and $rE.Evidence -eq 'receipts') {
++    Write-Output "ok    a term the store answered EMPTY still counts as covered - the rotation is not frozen by a not-carried term"
++  } else { Write-Output ("FAIL  an asked-and-empty term did not count: #$($rE.To) of $rotN [$($rE.Evidence)] - $($rE.Reason)"); $fail++ }
++
++  # MUST-FIRE: a receipt that says NOT_ASKED is not coverage. This is the Baker's 2026-09-18 shape -
++  # the run asked a different slice entirely, and its own receipts say so.
++  $rootN2 = New-CursorRoot
++  $sliceN = Get-FixtureSlice 0 $rotN
++  $nextN = Get-FixtureSlice $rotN $rotN
++  $recN = @(); $i = 0
++  foreach ($t in $sliceN) { $recN += @{ term = $t; ordinal = $i; outcome = 'not_asked'; row_count = 0 }; $i++ }
++  foreach ($t in $nextN) { $recN += @{ term = $t; ordinal = $i; outcome = 'success'; row_count = 5 }; $i++ }
++  Write-CursorReceipts $rootN2 'walmart' $realToday $recN $nextN
++  $rN = Step-CaptureCursor -Store 'Walmart' -Today $realToday -OutDir $rootN2
++  if ($rN.Advanced) { Write-Output ("FAIL  a slice its own receipts call not_asked was stepped over (#$($rN.From) -> #$($rN.To)) - the Baker's 2026-09-18 shape"); $fail++ }
++  else { Write-Output 'ok    receipts that say not_asked hold the cursor, however many other terms landed' }
++
++  # CLEAN TWIN: -AskedTerms, the tier for a lane that commits BEFORE it writes its file (Baker's, on
++  # purpose: a refused write must not also refuse the rotation). Nothing on disk, and the slice is
++  # still judged - because the lane says what it asked.
++  $rootA = New-CursorRoot
++  $rA = Step-CaptureCursor -Store 'Walmart' -Today $realToday -OutDir $rootA -Landed $true -AskedTerms (Get-FixtureSlice 0 $rotN)
++  if ($rA.Advanced -and $rA.To -eq $rotN -and $rA.Evidence -eq 'asked') { Write-Output "ok    a lane that reports what it asked advances on that, with no file written yet" }
++  else { Write-Output ("FAIL  -AskedTerms did not carry the slice: #$($rA.To) of $rotN [$($rA.Evidence)] - $($rA.Reason)"); $fail++ }
++  # ...and the same lane reporting somebody else's terms is refused, or -AskedTerms would just be a
++  # second -Force.
++  $rootA2 = New-CursorRoot
++  $rA2 = Step-CaptureCursor -Store 'Walmart' -Today $realToday -OutDir $rootA2 -Landed $true -AskedTerms (Get-FixtureSlice ($rotN * 8) $rotN)
++  if ($rA2.Advanced) { Write-Output "FAIL  -AskedTerms naming other terms still advanced - the override is not checked"; $fail++ }
++  else { Write-Output 'ok    a lane that asked for other terms is held, so -AskedTerms is evidence and not a bypass' }
++
++  # BLIND: a capture that records no terms at all is a could-not-look, not a failure. It advances on
++  # the landing test exactly as it did before this rule existed, and SAYS SO - the old behaviour kept
++  # deliberately, because a gate that cannot arm is how the Hy-Vee lane froze for two days.
++  $rootB = New-CursorRoot
++  Set-Content -LiteralPath (Join-Path $rootB ("regular\walmart-regular-$realToday.json")) -Value (ConvertTo-Json @(@(@{ item = 'x'; ad_price = '$1.00' })) -Depth 4) -Encoding UTF8
++  $rB = Step-CaptureCursor -Store 'Walmart' -Today $realToday -OutDir $rootB
++  if ($rB.Advanced -and $rB.Evidence -eq 'none' -and $rB.Reason -match 'could not be checked') {
++    Write-Output 'ok    a capture that stamps no terms is BLIND: it advances as before and says the slice was not checked'
++  } else { Write-Output ("FAIL  the blind path changed: advanced=$($rB.Advanced) [$($rB.Evidence)] $($rB.Reason)"); $fail++ }
++
++  # The two readers of capture_terms must mean the same thing by "asked", or a term could be covered
++  # for the cursor and still owed for the Baker's ad list.
++  if ((@($script:SliceAskedOutcomes) -join '|') -ceq (@($script:BakersAdAskedOutcomes) -join '|')) {
++    Write-Output "ok    the cursor and the ad list share one asked-outcome vocabulary ($($script:SliceAskedOutcomes -join ', '))"
++  } else { Write-Output ("FAIL  two vocabularies for 'asked': [$($script:SliceAskedOutcomes -join ',')] vs [$($script:BakersAdAskedOutcomes -join ',')]"); $fail++ }
++
+   Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
+   Write-Output ("SELFTEST " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
+   exit $(if ($fail) { 1 } else { 0 })
+@@ -139,7 +266,19 @@ if ($Report -or -not $Store) {
+     $cur = Get-CaptureCursor -Store $s -OutDir $OutDir
+     $landed = Test-CaptureLanded -Store $s -Today $todayS -OutDir $OutDir
+     $plan = Get-CapturePlan -Store $s -Today $todayS
+-    Write-Output ("  {0,-12} #{1,-4} landed_today={2,-5} rotation={3}/day" -f $s, $cur, $landed, $plan.RotationTerms)
++    # LANDED AND COVERED, SIDE BY SIDE, because the whole point is that they are different questions:
++    # landed_today=True covered=0/7 is precisely the shape that skipped a slice for a quarter.
++    # ...and only for TODAY. The cursor file holds where each store stands NOW, so pairing it with an
++    # older day's capture would compare this week's slice against last week's rows and print a 0 that
++    # means nothing. The landed column has the same shape and has always been read that way.
++    $covText = 'covered=n/a (past date)'
++    if ($todayS -eq (Get-Date).ToString('yyyy-MM-dd')) {
++      $cov = Get-SliceCoverage -Store $s -Today $todayS -OutDir $OutDir `
++               -Slice (Get-CursorSlice -All (Get-AllTerms) -From $cur -Count $plan.RotationTerms)
++      $covText = if ($cov.Blind) { 'covered=? (not visible)' }
++                 else { "covered={0}/{1} [{2}]" -f @($cov.Covered).Count, @($cov.Slice).Count, $cov.Evidence }
++    }
++    Write-Output ("  {0,-12} #{1,-4} landed_today={2,-5} rotation={3}/day  {4}" -f $s, $cur, $landed, $plan.RotationTerms, $covText)
+   }
+   exit 0
+ }
+diff --git a/grocery/pull-regular-bakers-api.ps1 b/grocery/pull-regular-bakers-api.ps1
+index 01cdc1009..b6dcbf4e3 100644
+--- a/grocery/pull-regular-bakers-api.ps1
++++ b/grocery/pull-regular-bakers-api.ps1
+@@ -813,6 +813,27 @@ if ($SelfTest) {
+     $d3 = Step-CaptureCursor -Store "Baker's" -Today '2026-01-01' -OutDir $bkTmp -Landed $true
+     B '(d) a REPLAY (or a self-test on a frozen date) never moves the live rotation' (
+         (-not $d3.Advanced) -and ([int](ConvertFrom-Json ([IO.File]::ReadAllText($cFile))).Bakers -eq $onDisk))
++
++    # (g) WHAT THIS LANE HANDS THE CURSOR (2026-09-19). Step-CaptureCursor now judges the slice, and this
++    # lane commits BEFORE it writes its file on purpose, so the only evidence it can offer is what it
++    # asked: the receipts it built above, filtered to the outcomes that mean the store answered. The
++    # expression is fixtured here rather than left to the live run because $captureTerms is a New-Object
++    # List[object] - @($list) THROWS under PS 5.1 even when it is empty, which is a run-time death on a
++    # path no fixture reached ([[ps-list-object-array-wrap-throws]]).
++    $gList = New-Object System.Collections.Generic.List[object]
++    $gList.Add([pscustomobject]@{ term = 'cottage cheese'; outcome = 'success'; row_count = 12 })
++    $gList.Add([pscustomobject]@{ term = 'corn dogs'; outcome = 'empty'; row_count = 0 })
++    $gList.Add([pscustomobject]@{ term = 'cornmeal'; outcome = 'not_asked'; row_count = 0 })
++    $gList.Add([pscustomobject]@{ term = 'corn starch'; outcome = 'blocked'; row_count = 0 })
++    $gAsked = @($gList.ToArray() | Where-Object { $script:SliceAskedOutcomes -contains [string]$_.outcome } |
++                ForEach-Object { [string]$_.term } | Where-Object { $_ })
++    B '(g) the lane hands the cursor exactly the terms the store ANSWERED - asked-and-empty in, not_asked and blocked out' (
++        (@($gAsked).Count -eq 2) -and (@($gAsked) -contains 'cottage cheese') -and (@($gAsked) -contains 'corn dogs'))
++    $gEmpty = New-Object System.Collections.Generic.List[object]
++    $gNone = @($gEmpty.ToArray() | Where-Object { $script:SliceAskedOutcomes -contains [string]$_.outcome } |
++               ForEach-Object { [string]$_.term })
++    B '(g) CLEAN TWIN a run with no receipts at all builds an empty list without throwing, and commits blind as before' (
++        @($gNone).Count -eq 0)
+   } finally { Remove-Item -LiteralPath $bkTmp -Recurse -Force -ErrorAction SilentlyContinue }
+ 
+   # --- the comprehensive pull is unchanged: every term asked, nothing carried -----------------------
+@@ -1244,10 +1265,21 @@ if ($Commodities -and $Commodities.Count) {
+ # actually ANSWER for at least one term we asked about? Same judgement Test-HyVeeCursorAdvance makes.
+ # Replay refusal, one-slice-per-day and the atomic temp-then-move all still come from Step-CaptureCursor;
+ # only the landing question is answered here, where it can be answered truthfully.
++#
++# AND -AskedTerms FOR THE SAME REASON (2026-09-19). Step-CaptureCursor now advances only past the slice
++# terms the capture actually covered, and it reads that off the file - which this lane has not written
++# yet when it commits, and deliberately will not before. So the lane hands over the receipts it built a
++# hundred lines up: every term whose outcome says the store was asked and answered. Without this the
++# commit is a could-not-look and falls back to the landing test alone, which is the old behaviour and
++# is what skipped whole slices at the other four stores.
+ if ($null -ne $script:BkCursorNext -and $script:PolicyOk) {
+   try {
+     $bkLanded = ($stats.terms -gt 0)
+-    $cs = Step-CaptureCursor -Store "Baker's" -Today $today -OutDir $out -Landed $bkLanded
++    # .ToArray(), never @($captureTerms): that list came from New-Object, so the wrap throws under PS 5.1
++    # even when it is empty ([[ps-list-object-array-wrap-throws]], ops\audit-list-array-wrap.ps1).
++    $bkAsked = @($captureTerms.ToArray() | Where-Object { $script:SliceAskedOutcomes -contains [string]$_.outcome } |
++                 ForEach-Object { [string]$_.term } | Where-Object { $_ })
++    $cs = Step-CaptureCursor -Store "Baker's" -Today $today -OutDir $out -Landed $bkLanded -AskedTerms $bkAsked
+     if ($cs.Advanced) { Write-Output ("bakers-api: rotation cursor advanced #{0} -> #{1} ({2})" -f $cs.From, $cs.To, $cs.Reason) }
+     else { Write-Warning ("bakers-api: rotation cursor HELD at #{0} - {1}" -f $script:BkCursorFrom, $cs.Reason) }
+   } catch {
+diff --git a/grocery/test-capture-policy.ps1 b/grocery/test-capture-policy.ps1
+index 4d4a84379..3581a2042 100644
+--- a/grocery/test-capture-policy.ps1
++++ b/grocery/test-capture-policy.ps1
+@@ -539,6 +539,101 @@ try {
+       }
+     }
+   }
++  # ---- DID THE CAPTURE COVER THE SLICE? (2026-09-19) ---------------------------------------------
++  # Get-SliceCoverage, driven on its own rather than through the cursor, so its answer can be read
++  # term by term. These fixtures carry the incidents' REAL DATES, which the cursor's fixtures cannot:
++  # nothing here advances anything, so the replay guard is not in the way.
++  #
++  # SAM'S CLUB ON PURPOSE. Its capture does not land in out\regular at all - build-sams-deals writes
++  # out\sams\sams-deals-<date>.json, declared in stores.json as deals_glob - and that second road is
++  # exactly where Test-CaptureLanded was blind until 2026-08-22. A coverage test that only ever read
++  # the everyday file would be the same defect one layer up.
++  $covOut = Join-Path $tmp 'covout'
++  New-Item -ItemType Directory -Path (Join-Path $covOut 'sams') -Force | Out-Null
++  New-Item -ItemType Directory -Path (Join-Path $covOut 'regular') -Force | Out-Null
++  [IO.File]::WriteAllText((Join-Path $tmp 'stores.json'), (@{ stores = @(
++      @{ name = 'Family Fare'; regular_prefix = 'family-fare' },
++      @{ name = "Sam's Club"; regular_prefix = 'sams'; deals_glob = 'out/sams/sams-deals-*.json' }) } | ConvertTo-Json -Depth 4))
++  $covAll = @(Get-AllTerms)
++  $covSlice = @(Get-CursorSlice -All $covAll -From 0 -Count 3)          # apples, bacon, bananas
++  $covOther = @(Get-CursorSlice -All $covAll -From 6 -Count 3)          # eggs, flour, milk
++  function Write-SamsCapture([string]$Date, $Rows) {
++    [IO.File]::WriteAllText((Join-Path $covOut ("sams\sams-deals-$Date.json")), (@{ deals = @($Rows) } | ConvertTo-Json -Depth 5))
++  }
++  function New-CovRow([string]$Term, [string]$AsOf) { return @{ item = ('a product found by ' + $Term); found_by_term = $Term; as_of = $AsOf; current_price = 1.99 } }
++
++  # MUST FIRE: the Sam's Club advance of 2026-08-22. 122 rows landed that morning, for seven terms,
++  # and not one of them was in slice #0-#6. Reproduced here as three terms out of three.
++  Write-SamsCapture '2026-08-22' @($covOther | ForEach-Object { New-CovRow $_ '2026-08-22' })
++  $covSams = Get-SliceCoverage -Store "Sam's Club" -Today '2026-08-22' -OutDir $covOut -Slice $covSlice
++  if (@($covSams.Covered).Count -eq 0 -and $covSams.LastCovered -eq -1 -and -not $covSams.Blind -and $covSams.Evidence -eq 'rows' -and @($covSams.Missing).Count -eq 3) {
++    Ok "MUST FIRE  Sam's Club 2026-08-22: a real capture of OTHER terms covers 0 of 3 slice terms, read off the deals file ($($covSams.Why))"
++  } else { Bad "the Sam's deals-file road did not read as an uncovered slice: covered=$(@($covSams.Covered).Count) last=$($covSams.LastCovered) evidence=$($covSams.Evidence) blind=$($covSams.Blind) why=$($covSams.Why)" }
++
++  # MUST FIRE: the Fareway shape - the slice's own terms in the file, CARRIED from an earlier day.
++  Write-SamsCapture '2026-08-23' @(@($covSlice | ForEach-Object { New-CovRow $_ '2026-08-11' }) + @($covOther | ForEach-Object { New-CovRow $_ '2026-08-23' }))
++  $covCarry = Get-SliceCoverage -Store "Sam's Club" -Today '2026-08-23' -OutDir $covOut -Slice $covSlice
++  if (@($covCarry.Covered).Count -eq 0 -and $covCarry.LastCovered -eq -1) {
++    Ok 'MUST FIRE  Fareway 2026-08-22 shape: the slice''s terms are in the file only as CARRIED rows, and cover nothing'
++  } else { Bad "carried rows were counted as coverage: covered=[$(@($covCarry.Covered) -join ', ')] why=$($covCarry.Why)" }
++
++  # CLEAN TWIN: the same road, on a day the slice really was captured.
++  Write-SamsCapture '2026-08-24' @($covSlice | ForEach-Object { New-CovRow $_ '2026-08-24' })
++  $covGood = Get-SliceCoverage -Store "Sam's Club" -Today '2026-08-24' -OutDir $covOut -Slice $covSlice
++  if (@($covGood.Covered).Count -eq 3 -and $covGood.LastCovered -eq 2 -and @($covGood.Missing).Count -eq 0) {
++    Ok 'CLEAN TWIN a capture of the slice itself covers all 3 of its terms, so the cursor may step over all three'
++  } else { Bad "a covered slice did not read as covered: covered=[$(@($covGood.Covered) -join ', ')] last=$($covGood.LastCovered)" }
++
++  # CLEAN TWIN: a HOLE IN THE MIDDLE stops the cursor at the last covered term, not at the hole and
++  # not past the tail. This is the rule that keeps a working rotation working without ever skipping.
++  Write-SamsCapture '2026-08-25' @(@((New-CovRow $covSlice[0] '2026-08-25'), (New-CovRow $covSlice[1] '2026-08-25')))
++  $covPart = Get-SliceCoverage -Store "Sam's Club" -Today '2026-08-25' -OutDir $covOut -Slice $covSlice
++  if ($covPart.LastCovered -eq 1 -and @($covPart.Missing) -contains $covSlice[2]) {
++    Ok "CLEAN TWIN 2 of 3 covered stops the advance at 2 - '$($covSlice[2])' leads tomorrow's slice instead of waiting a quarter"
++  } else { Bad "partial coverage read wrong: last=$($covPart.LastCovered) missing=[$(@($covPart.Missing) -join ', ')]" }
++
++  # THE DELIBERATE HALF, fixtured so it cannot change by accident: a GAP INSIDE the covered span is
++  # stepped over. The capture reached the terms on both sides of it, so the term is read as asked and
++  # answered nothing; stopping at the first gap instead would let one genuinely not-carried term hold a
++  # store's rotation for ever, which is the Hy-Vee deadlock in another coat. Only the TAIL is retained.
++  Write-SamsCapture '2026-08-30' @(@((New-CovRow $covSlice[0] '2026-08-30'), (New-CovRow $covSlice[2] '2026-08-30')))
++  $covGap = Get-SliceCoverage -Store "Sam's Club" -Today '2026-08-30' -OutDir $covOut -Slice $covSlice
++  if ($covGap.LastCovered -eq 2 -and (@($covGap.Missing) -contains $covSlice[1]) -and @($covGap.Covered).Count -eq 2) {
++    Ok "a gap INSIDE the covered span ('$($covSlice[1])') is stepped over and named as missing - only the tail is held back"
++  } else { Bad "the gap rule changed: last=$($covGap.LastCovered) covered=[$(@($covGap.Covered) -join ', ')] missing=[$(@($covGap.Missing) -join ', ')]" }
++
++  # MUST NOT FIRE: a could-not-look is neither a pass nor a failure. No capture file at all, and a
++  # capture whose rows name no term, both report BLIND rather than an uncovered slice - the caller
++  # falls back to the landing test, because a gate that cannot arm is worse than the defect.
++  $covNone = Get-SliceCoverage -Store "Sam's Club" -Today '2026-08-26' -OutDir $covOut -Slice $covSlice
++  Write-SamsCapture '2026-08-27' @(@{ item = 'a row from before found_by_term existed'; current_price = 1.99 })
++  $covMute = Get-SliceCoverage -Store "Sam's Club" -Today '2026-08-27' -OutDir $covOut -Slice $covSlice
++  if ($covNone.Blind -and $covNone.Evidence -eq 'none' -and $covMute.Blind -and $covMute.Evidence -eq 'none') {
++    Ok 'MUST NOT FIRE  no capture, and a capture that names no terms, both report BLIND - never an uncovered slice'
++  } else { Bad "a could-not-look was scored: absent blind=$($covNone.Blind)/$($covNone.Evidence), unstamped blind=$($covMute.Blind)/$($covMute.Evidence)" }
++
++  # CLEAN TWIN: receipts beat rows, and an EMPTY answer is coverage. A store that does not stock a
++  # term answers with no rows; scored on rows alone that term would look uncaptured forever, which is
++  # how a not-carried term could freeze a rotation. With receipts on the file it cannot.
++  [IO.File]::WriteAllText((Join-Path $covOut ("sams\sams-deals-2026-08-28.json")), (@{
++      capture_terms = @(@{ term = $covSlice[0]; outcome = 'success'; row_count = 4 },
++                        @{ term = $covSlice[1]; outcome = 'empty'; row_count = 0 },
++                        @{ term = $covSlice[2]; outcome = 'blocked'; row_count = 0 })
++      deals = @(New-CovRow $covSlice[0] '2026-08-28') } | ConvertTo-Json -Depth 5))
++  $covRec = Get-SliceCoverage -Store "Sam's Club" -Today '2026-08-28' -OutDir $covOut -Slice $covSlice
++  if ($covRec.Evidence -eq 'receipts' -and $covRec.LastCovered -eq 1 -and (@($covRec.Covered) -contains $covSlice[1]) -and (@($covRec.Missing) -contains $covSlice[2])) {
++    Ok "CLEAN TWIN receipts win: '$($covSlice[1])' answered EMPTY counts as covered, '$($covSlice[2])' BLOCKED does not"
++  } else { Bad "receipts read wrong: evidence=$($covRec.Evidence) last=$($covRec.LastCovered) covered=[$(@($covRec.Covered) -join ', ')]" }
++
++  # MUST FIRE: a term inside a receipt must not be matched loosely. 'apples' and 'apple juice' are
++  # different terms and different commodities; a substring match would have covered the slice here.
++  [IO.File]::WriteAllText((Join-Path $covOut ("sams\sams-deals-2026-08-29.json")), (@{
++      capture_terms = @(@{ term = ($covSlice[0] + ' juice'); outcome = 'success'; row_count = 4 })
++      deals = @() } | ConvertTo-Json -Depth 5))
++  $covNear = Get-SliceCoverage -Store "Sam's Club" -Today '2026-08-29' -OutDir $covOut -Slice $covSlice
++  if (@($covNear.Covered).Count -eq 0) { Ok "MUST FIRE  '$($covSlice[0]) juice' does not cover '$($covSlice[0])' - a near term is a different term" }
++  else { Bad "a near term was counted as coverage: [$(@($covNear.Covered) -join ', ')]" }
++
+ } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
+ 
+ Write-Output ("CAPTURE-POLICY " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))

@@ -1,0 +1,22 @@
+﻿judges parsed: 16 of 16
+judges read by the scores-and-verdict fallback: 5 ['T2-SB-o1', 'T3-SB-o2', 'T4-SB-o2', 'T6-SB-o2', 'T4-SS-o1']
+T1-SB    judges=['S1', 'S1'] -> S1
+T2-SB    judges=['B1', 'B1'] -> B1
+T3-SB    judges=['S1', 'B1'] -> TIE
+T3-SS    judges=['S2', 'S2'] -> S2
+T4-SB    judges=['S1', 'S1'] -> S1
+T4-SS    judges=['S1', 'S1'] -> S1
+T5-SB    judges=['S1', 'S1'] -> S1
+T6-SB    judges=['S1', 'S1'] -> S1
+real pairs 6: store wins 4, blocked wins 1, ties 1, d=3
+noise pairs with a consistent winner: 2 of 2
+VERDICT: INCONCLUSIVE (noise override: both same-arm pairs returned a consistent winner)
+
+per-dimension, store minus blocked, mean of the two judges, per real pair:
+  T1-SB  correctness=+0.0  traps=+0.0  fit=+1.0  tests=+0.5  scope=-0.5  total=+1.0
+  T2-SB  correctness=-1.0  traps=-1.0  fit=-1.0  tests=-1.0  scope=+0.0  total=-4.0
+  T3-SB  correctness=-1.5  traps=+1.0  fit=-1.5  tests=+0.0  scope=+1.5  total=-0.5
+  T4-SB  correctness=+1.0  traps=+0.5  fit=+0.5  tests=+0.0  scope=-1.0  total=+1.0
+  T5-SB  correctness=+1.0  traps=+0.5  fit=+0.0  tests=+0.5  scope=+0.0  total=+2.0
+  T6-SB  correctness=+1.0  traps=+0.5  fit=+0.0  tests=+1.0  scope=-1.0  total=+1.5
+STORE-AB-SCORE-COMPLETE judges=16 parsed=16 pairs=8

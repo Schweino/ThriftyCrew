@@ -1,0 +1,678 @@
+diff --git a/graph/import/import_all.py b/graph/import/import_all.py
+index cd7902ddc..59676d4bc 100644
+--- a/graph/import/import_all.py
++++ b/graph/import/import_all.py
+@@ -7,6 +7,23 @@
+ Dual-write: this reads the legacy estate and writes only the graph. It never
+ writes back to grocery/*.json. Safe to run while the daily pipeline is idle;
+ by design it takes no locks on the legacy files.
++
++EXIT CODE (read it first, the tally second):
++
++    0  every importer that ran landed WHOLE.
++    1  at least one importer failed. Its writes were rolled back, so the index
++       is missing that data set entirely rather than holding part of it, and the
++       run said which. The rest of the index is intact and usable.
++
++A FAILED IMPORTER USED TO EXIT 0 AND LEAVE ITS PARTIAL WRITES BEHIND (fixed
++2026-09-19). sqlite3 opens an implicit transaction on the first INSERT, so an
++importer that raised after 40 of 80 known-wrong rulings left all 40 pending; the
++except branch logged and continued, and the NEXT importer's commit landed them.
++A half-loaded ruling or override set then WAS the day's index, indistinguishable
++from a whole one, and the run reported success. Each importer now runs inside
++`GraphDB.atomic()` - all of it lands or none of it does - and a run with any
++failure exits 1 and logs `import_incomplete` with the step names, so the nightly
++chain and anything reading the decision log can both see it.
+ """
+ 
+ from __future__ import annotations
+@@ -18,7 +35,7 @@ import time
+ 
+ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "lib"))
+ 
+-from graphdb import open_db                      # noqa: E402
++from graphdb import GraphDBUnitNotAtomic, open_db   # noqa: E402
+ from ids import run_id as make_run_id            # noqa: E402
+ import importers                                 # noqa: E402
+ 
+@@ -43,47 +60,57 @@ def main() -> int:
+     say("")
+ 
+     totals: dict[str, int] = {}
++    failed: list[str] = []
++    unrolled: list[str] = []      # failed AND left partial writes behind (see GraphDBUnitNotAtomic)
+     # allow_new: this is the road that builds graph.db from nothing (a fresh box, a CI clone, the
+     # README's delete-and-rebuild), so a missing file is expected here and nowhere else (I229).
+     with open_db(allow_new=True) as db:
+         db.log_event(run=run, timestamp=ts, etype="state_transition",
+                      decision="import_start", detail={"observations": args.observations})
+ 
+-        for name, fn in importers.ALL_IMPORTERS:
++        def run_importer(name, fn, *a, **kw) -> bool:
++            """One importer, all-or-nothing. Returns True if it landed whole.
++
++            The failure is RECORDED in three places on purpose, because each is read by someone
++            different: stdout for whoever ran it, the decision log for anything querying the
++            index, and `failed` for the exit code the nightly chain reads.
++            """
+             t0 = time.time()
+             try:
+-                res = fn(db, ts, run)
++                with db.atomic(name):
++                    res = fn(*a, **kw)
++            except GraphDBUnitNotAtomic as e:
++                # The one failure atomic() cannot repair: the unit committed mid-flight, so its
++                # partial writes ARE in the index. Never reported as a clean rollback.
++                failed.append(name)
++                unrolled.append(name)
++                say(f"  {name:<20} FAILED, NOT ROLLED BACK: {e}")
++                db.log_event(run=run, timestamp=ts, etype="escalate", step_id=name,
++                             decision="importer_failed_unrolled", detail={"error": str(e)})
++                db.commit()
++                return False
+             except Exception as e:                      # noqa: BLE001
+-                say(f"  {name:<20} FAILED: {e}")
++                failed.append(name)
++                say(f"  {name:<20} FAILED (rolled back): {e}")
+                 db.log_event(run=run, timestamp=ts, etype="escalate", step_id=name,
+                              decision="importer_failed", detail={"error": str(e)})
+-                continue
++                db.commit()
++                return False
+             totals.update(res)
+-            db.conn.commit()
+             say(f"  {name:<20} {res}   ({time.time()-t0:.1f}s)")
++            return True
++
++        for name, fn in importers.ALL_IMPORTERS:
++            run_importer(name, fn, db, ts, run)
+ 
+         if args.observations:
+             say("\n  observations (this reads every capture file; slowest step)")
+-            t0 = time.time()
+-            res = importers.import_observations(
+-                db, ts, run, limit_files=args.limit_files,
+-                progress=None if args.quiet else (lambda m: say(m)))
+-            totals.update(res)
+-            db.conn.commit()
+-            say(f"  {'observations':<20} {res}   ({time.time()-t0:.1f}s)")
++            run_importer("observations", importers.import_observations,
++                         db, ts, run, limit_files=args.limit_files,
++                         progress=None if args.quiet else (lambda m: say(m)))
+ 
+             for name, fn in importers.LANE_IMPORTERS:
+-                t0 = time.time()
+-                try:
+-                    res = fn(db, ts, run, limit_files=args.limit_files)
+-                except Exception as e:                  # noqa: BLE001
+-                    say(f"  {name:<20} FAILED: {e}")
+-                    db.log_event(run=run, timestamp=ts, etype="escalate", step_id=name,
+-                                 decision="lane_importer_failed", detail={"error": str(e)})
+-                    continue
+-                totals.update(res)
+-                db.conn.commit()
+-                say(f"  {name:<20} {res}   ({time.time()-t0:.1f}s)")
++                run_importer(name, fn, db, ts, run, limit_files=args.limit_files)
+ 
+         # PHASE C: the answer is rebuilt and the evidence bounded as part of the
+         # import, not as a chore someone remembers. The ORDER is load-bearing,
+@@ -158,8 +185,12 @@ def main() -> int:
+             say(f"  {'state export':<20} {export_state(db)}")
+ 
+         stats = db.stats()
++        # THE DECISION NAMES WHICH RUN THIS WAS. `import_complete` used to be written whatever
++        # happened, so the index's own record of the night said "complete" over a run that had
++        # dropped a data set. A consumer asking whether today's index is whole reads this row.
+         db.log_event(run=run, timestamp=ts, etype="state_transition",
+-                     decision="import_complete", detail={"totals": totals, "stats": stats})
++                     decision="import_complete" if not failed else "import_incomplete",
++                     detail={"totals": totals, "stats": stats, "failed_importers": failed})
+ 
+         if args.export:
+             say("\n  exporting durable JSON ...")
+@@ -168,6 +199,23 @@ def main() -> int:
+     say("\n--- graph stats ---")
+     for k, v in stats.items():
+         say(f"  {k:<14} {v}")
++    if failed:
++        # The count AND the denominator: "2 failed" is a mood, "2 of 15" is the measurement.
++        n_all = len(importers.ALL_IMPORTERS) + (
++            1 + len(importers.LANE_IMPORTERS) if args.observations else 0)
++        rolled = [n for n in failed if n not in unrolled]
++        say(f"\nIMPORT INCOMPLETE: {len(failed)} of {n_all} importer(s) failed. Exit 1.")
++        if rolled:
++            say(f"  rolled back ({len(rolled)} of {len(failed)}), so the index is MISSING their "
++                f"data entirely rather than holding part of it: {', '.join(rolled)}")
++        if unrolled:
++            # Said separately and never folded into the line above: this is the one case where
++            # the index really does hold a partial data set, and calling it a rollback would be
++            # the reassurance this whole change exists to remove.
++            say(f"  NOT ROLLED BACK ({len(unrolled)} of {len(failed)}) - these committed "
++                f"mid-flight and their PARTIAL writes are in the index: {', '.join(unrolled)}")
++        say("  Everything else landed.")
++        return 1
+     return 0
+ 
+ 
+diff --git a/graph/import/import_all_selftest.py b/graph/import/import_all_selftest.py
+new file mode 100644
+index 000000000..168f4bab4
+--- /dev/null
++++ b/graph/import/import_all_selftest.py
+@@ -0,0 +1,339 @@
++"""import_all_selftest.py - a failed importer leaves NOTHING and exits 1 (2026-09-19).
++
++    python graph/import/import_all_selftest.py --selftest
++
++THE DEFECT IT GUARDS. An importer that raised partway through left its partial writes in graph.db
++and the nightly import still exited 0, so a half-loaded data set - a known-wrong set, an override
++set - became the day's index with nothing flagging it. sqlite3's legacy mode opens an implicit
++transaction on the first INSERT; import_all caught the exception, logged it and carried on, and the
++NEXT importer's `db.conn.commit()` landed the dead importer's rows. Measured on a temp database
++before the fix: an importer that wrote 3 nodes and then raised left 3 nodes COMMITTED, and the run
++returned 0. Two further roads wrote the same partial state: `GraphDB.__exit__` said it would not
++commit on an exception and then called `close()`, which committed unconditionally; and a unit that
++commits mid-flight destroys its own savepoint, which SQLite reports rather than hiding.
++
++WHICH FAILURE THIS CHOOSES. A leak, never corruption (.claude/rules/ops-and-gates.md): the index is
++missing the data set entirely rather than holding part of it, because a 40-of-80 ruling set reads
++exactly like a whole one and an absent one does not.
++
++WHY IT DRIVES THE REAL main() AND THE REAL import_known_wrong. The loop cases replace ALL_IMPORTERS
++with fixture importers and then call `import_all.main()` itself, not a re-implementation of it, so a
++rollback removed from GraphDB.atomic() or an `exit 0` restored to main() goes red here. One case
++drives the REAL importer as well, because a fixture cannot cover `retro_apply_known_wrong`'s inner
++commit and that is production code.
++
++MUTATION PROBE, 2026-09-19, 8 single compiling mutants from a temp mirror of graph/, one at a time,
++originals verified md5-identical afterwards and the mirror removed: 8 of 8 KILLED, each in its own
++named case. The one that first SURVIVED is why case 4b exists - restoring `db.conn.commit()` in
++`importers.retro_apply_known_wrong` left every case green, because no fixture importer reaches that
++line. Control: 15 of 15 pass, exit 0.
++
++HERMETIC. graphdb.DB_PATH is pointed at a fresh file in a per-run temp directory and restored in a
++finally; every database in this file is that temp file. GraphDB._append_jsonl (the tracked
++graph/provenance trail) is replaced for the whole suite, and ALL_IMPORTERS / LANE_IMPORTERS are
++replaced, so no case reads grocery/*.json, touches graph/sqlite/graph.db, or writes a tracked file.
++`--observations` is never passed, so phase C never runs and no capture file is read.
++
++EXIT: 0 all cases pass, 1 at least one failed. Read the verdict LINE, not the number.
++"""
++from __future__ import annotations
++
++import io
++import json
++import os
++import shutil
++import sys
++import tempfile
++
++HERE = os.path.dirname(os.path.abspath(__file__))
++REPO = os.path.normpath(os.path.join(HERE, "..", ".."))
++sys.path.insert(0, HERE)
++sys.path.insert(0, os.path.join(REPO, "graph", "lib"))
++
++import graphdb                                           # noqa: E402
++import import_all                                        # noqa: E402
++import importers                                         # noqa: E402
++
++_fails: list[str] = []
++_ran = 0
++CASES = 15
++
++TS = "2026-09-19T00:00:00"
++
++
++def T(label: str, ok: bool, got: str = "") -> None:
++    global _ran
++    _ran += 1
++    if ok:
++        print("  ok    " + label)
++    else:
++        _fails.append(label)
++        print("  FAILED " + label + ("   got: " + got if got else ""))
++
++
++# --- fixture importers -------------------------------------------------------------------------
++# Shaped like the real ones: an Override/KnownWrong node per entry, written one at a time. The
++# founding bug is a raise BETWEEN entries, which is where a real importer dies (a malformed entry,
++# a missing key, a file truncated mid-read).
++
++def _write_rulings(db, prefix: str, n: int, ntype: str = "KnownWrong") -> None:
++    for i in range(n):
++        db.upsert_node(f"{prefix}:{i}", ntype, f"{prefix} ruling {i}", TS)
++
++
++def half_known_wrong(db, ts, run):
++    """Writes 3 of 6 rulings, then dies. THE FOUNDING SHAPE."""
++    _write_rulings(db, "kw", 3)
++    raise ValueError("malformed entry 4 of 6")
++
++
++def whole_overrides(db, ts, run):
++    _write_rulings(db, "ov", 4, "Override")
++    return {"overrides": 4}
++
++
++def committing_known_wrong(db, ts, run):
++    """Reaches past GraphDB.commit() to the raw connection, then dies - the un-rollback-able unit."""
++    _write_rulings(db, "kwc", 3)
++    db.conn.commit()
++    raise ValueError("died after committing mid-flight")
++
++
++def polite_known_wrong(db, ts, run):
++    """The same shape written correctly: db.commit() is a no-op inside a unit."""
++    _write_rulings(db, "kwp", 3)
++    db.commit()
++    return {"known_wrong": 3}
++
++
++def _real_known_wrong_fixture(db, tmp: str) -> str:
++    """Set up the REAL import_known_wrong so its inner sweep demotes a row.
++
++    That sweep is the one production commit that runs both inside a unit and standalone, and a
++    mutation probe found it undefended: with `db.conn.commit()` restored there, every case in this
++    file stayed green because no fixture importer reaches it. This builds the real thing instead -
++    a ruling, a commodity, and an already-include_hit observation the ruling demotes - so the
++    commit really is executed inside the unit.
++    """
++    gro = os.path.join(tmp, "grocery-kw")
++    os.makedirs(gro, exist_ok=True)
++    with io.open(os.path.join(gro, "known-wrong.json"), "w", encoding="utf-8",
++                 newline="\n") as fh:
++        fh.write(json.dumps({"entries": [{
++            "commodity": "fixture-juice", "store": "Fareway",
++            "names": ["FOCO Coconut Juice"], "verdict": "wrong-product",
++            "evidence": "fixture ruling"}]}))
++    cid = importers.commodity_id("fixture-juice", "staple")
++    sid = importers.store_id("Fareway")
++    db.upsert_node(cid, "Commodity", "Fixture Juice", TS)
++    db.upsert_node(sid, "Store", "Fareway", TS)
++    prov = db.record_provenance("fixture", "fixture", TS)
++    db.add_observation({"id": "obs:fixture:1", "commodity_id": cid, "store_id": sid,
++                        "provenance_id": prov, "observed_at": TS,
++                        "product_name": "FOCO Coconut Juice", "price": 4.99,
++                        "match_status": "include_hit"})
++    db.commit()
++    return gro
++
++
++def _count(path: str, ntype: str) -> int:
++    db = graphdb.GraphDB(path, restore_learning=False)
++    try:
++        return db.conn.execute("SELECT COUNT(*) FROM nodes WHERE type=?", (ntype,)).fetchone()[0]
++    finally:
++        db.conn.close()
++
++
++def _decisions(path: str) -> list[str]:
++    db = graphdb.GraphDB(path, restore_learning=False)
++    try:
++        return [r[0] for r in db.conn.execute(
++            "SELECT decision FROM decision_log WHERE decision IS NOT NULL").fetchall()]
++    finally:
++        db.conn.close()
++
++
++_last_out = ""
++
++
++def _run_main(dbpath: str, all_importers, loud: bool = False) -> int:
++    """Drive the REAL main() over a fresh temp database and a fixture importer list.
++
++    `loud=True` drops --quiet and captures what an operator would read, so the cases can assert
++    the words as well as the rows. Its stdout is captured, never printed, or the fixture's own
++    lines would land among this suite's case lines and confuse lib\\selftest-verdict.ps1.
++    """
++    global _last_out
++    if os.path.exists(dbpath):
++        os.remove(dbpath)
++    graphdb.DB_PATH = dbpath
++    saved = importers.ALL_IMPORTERS
++    importers.ALL_IMPORTERS = all_importers
++    argv, stdout = sys.argv, sys.stdout
++    sys.argv = ["import_all.py"] + ([] if loud else ["--quiet"])
++    buf = io.StringIO()
++    sys.stdout = buf
++    try:
++        return import_all.main()
++    finally:
++        sys.stdout = stdout
++        _last_out = buf.getvalue()
++        sys.argv = argv
++        importers.ALL_IMPORTERS = saved
++
++
++def run() -> int:
++    tmp = tempfile.mkdtemp(prefix="import-all-st-")
++    saved_path = graphdb.DB_PATH
++    saved_append = graphdb.GraphDB._append_jsonl
++    saved_lanes = importers.LANE_IMPORTERS
++    graphdb.GraphDB._append_jsonl = staticmethod(lambda run, record: None)
++    importers.LANE_IMPORTERS = []
++    try:
++        # ---- 1. the founding bug: a half-written data set ----------------------------------
++        dbp = os.path.join(tmp, "half.db")
++        rc = _run_main(dbp, [("known_wrong", half_known_wrong),
++                             ("overrides", whole_overrides)])
++        kw, ov = _count(dbp, "KnownWrong"), _count(dbp, "Override")
++        T("MUST FIRE  an importer that raises after 3 of 6 rulings leaves ZERO of them in the "
++          "index, never 3 - a missing set, not a half-loaded one that reads as whole",
++          kw == 0, "KnownWrong rows=%d" % kw)
++        T("MUST FIRE  the run EXITS 1, so the nightly chain sees a day whose index is not whole",
++          rc == 1, "rc=%r" % rc)
++        T("MUST FIRE  the index's own record says import_incomplete, never import_complete",
++          "import_incomplete" in _decisions(dbp) and "import_complete" not in _decisions(dbp),
++          ",".join(sorted(set(_decisions(dbp)))))
++        T("MUST NOT FIRE  the failure is named in the decision log as an escalate",
++          "importer_failed" in _decisions(dbp), ",".join(sorted(set(_decisions(dbp)))))
++        T("CLEAN TWIN  the importer AFTER the failure still lands whole - one bad data set does "
++          "not cost the rest of the index", ov == 4, "Override rows=%d" % ov)
++
++        # ---- 2. the clean run is untouched -------------------------------------------------
++        dbp = os.path.join(tmp, "whole.db")
++        rc = _run_main(dbp, [("known_wrong", polite_known_wrong),
++                             ("overrides", whole_overrides)])
++        T("CLEAN TWIN  a run where every importer lands still exits 0 and commits everything",
++          rc == 0 and _count(dbp, "KnownWrong") == 3 and _count(dbp, "Override") == 4,
++          "rc=%r kw=%d ov=%d" % (rc, _count(dbp, "KnownWrong"), _count(dbp, "Override")))
++        T("CLEAN TWIN  and its record says import_complete",
++          "import_complete" in _decisions(dbp), ",".join(sorted(set(_decisions(dbp)))))
++
++        # ---- 3. a unit that commits mid-flight is LOUD, never a silent non-rollback ---------
++        dbp = os.path.join(tmp, "commits.db")
++        rc = _run_main(dbp, [("known_wrong", committing_known_wrong),
++                             ("overrides", whole_overrides)], loud=True)
++        d = _decisions(dbp)
++        T("MUST FIRE  a unit that committed mid-flight is reported as NOT ROLLED BACK, never as a "
++          "clean rollback - its rows really are in the index (3)",
++          rc == 1 and "importer_failed_unrolled" in d and _count(dbp, "KnownWrong") == 3,
++          "rc=%r decisions=%s kw=%d" % (rc, ",".join(sorted(set(d))), _count(dbp, "KnownWrong")))
++        T("MUST FIRE  the summary an operator reads says its PARTIAL writes are in the index and "
++          "does NOT fold it into the rolled-back count",
++          "NOT ROLLED BACK (1 of 1)" in _last_out and "PARTIAL writes are in the index" in _last_out
++          and "rolled back (" not in _last_out,
++          _last_out[-200:].replace("\n", " | "))
++
++        # ---- 3b. and the rolled-back failure says exactly the opposite ---------------------
++        dbp = os.path.join(tmp, "loud.db")
++        _run_main(dbp, [("known_wrong", half_known_wrong), ("overrides", whole_overrides)],
++                  loud=True)
++        T("CLEAN TWIN  a genuinely rolled-back failure is reported as MISSING its data, with its "
++          "denominator (1 of 2), and claims no partial writes",
++          "IMPORT INCOMPLETE: 1 of 2 importer(s) failed" in _last_out
++          and "rolled back (1 of 1)" in _last_out and "MISSING their data entirely" in _last_out
++          and "NOT ROLLED BACK" not in _last_out, _last_out[-260:].replace("\n", " | "))
++
++        # ---- 4. GraphDB.__exit__ discards an open transaction ------------------------------
++        # The second road to the same partial state, one level out from atomic(): close() used to
++        # commit unconditionally, so `if exc[0] is None` above it decided nothing.
++        dbp = os.path.join(tmp, "crash.db")
++        try:
++            with graphdb.GraphDB(dbp, restore_learning=False, allow_new=True) as db:
++                _write_rulings(db, "crash", 5)
++                raise ValueError("the caller died holding an open transaction")
++        except ValueError:
++            pass
++        T("MUST FIRE  leaving a `with GraphDB(...)` block on an exception DISCARDS the open "
++          "transaction instead of committing it", _count(dbp, "KnownWrong") == 0,
++          "KnownWrong rows=%d" % _count(dbp, "KnownWrong"))
++        with graphdb.GraphDB(dbp, restore_learning=False) as db:
++            _write_rulings(db, "clean", 5)
++        T("CLEAN TWIN  leaving the same block NORMALLY still commits every row",
++          _count(dbp, "KnownWrong") == 5, "KnownWrong rows=%d" % _count(dbp, "KnownWrong"))
++
++        # ---- 4b. the REAL importer, whose sweep commits inside the unit ---------------------
++        db = graphdb.GraphDB(os.path.join(tmp, "real-kw.db"), restore_learning=False,
++                             allow_new=True)
++        saved_gro = importers.GROCERY
++        try:
++            importers.GROCERY = _real_known_wrong_fixture(db, tmp)
++            res = None
++            try:
++                with db.atomic("known_wrong"):
++                    res = importers.import_known_wrong(db, TS, "run:st")
++                    raise ValueError("the importer's LAST entry is malformed")
++            except graphdb.GraphDBUnitNotAtomic as e:
++                res = "UNIT NOT ATOMIC: %s" % e
++            except ValueError:
++                pass
++            n_kw = db.conn.execute(
++                "SELECT COUNT(*) FROM nodes WHERE type='KnownWrong'").fetchone()[0]
++            status = db.conn.execute(
++                "SELECT match_status FROM price_observations WHERE id='obs:fixture:1'"
++            ).fetchone()[0]
++            T("MUST FIRE  the REAL import_known_wrong rolls back WHOLE even though its retro sweep "
++              "commits inside the unit - db.commit() is a no-op there, db.conn.commit() would not be",
++              n_kw == 0 and status == "include_hit",
++              "KnownWrong=%d obs.match_status=%r res=%r" % (n_kw, status, res))
++        finally:
++            importers.GROCERY = saved_gro
++            db.conn.close()
++
++        # ---- 5. units do not nest ----------------------------------------------------------
++        db = graphdb.GraphDB(os.path.join(tmp, "nest.db"), restore_learning=False, allow_new=True)
++        try:
++            nested = "no refusal"
++            try:
++                with db.atomic("outer"):
++                    with db.atomic("inner"):
++                        pass
++            except RuntimeError as e:
++                nested = str(e)
++            T("MUST NOT FIRE  nesting two units is REFUSED rather than silently rolling back to "
++              "the wrong place", "do not nest" in nested, nested[:70])
++        finally:
++            db.conn.close()
++
++        # ---- 6. nothing tracked was touched ------------------------------------------------
++        live = os.path.join(REPO, "graph", "sqlite", "graph.db")
++        T("CLEAN TWIN  the suite is hermetic: every case ran on a temp database, and the live "
++          "graph/sqlite/graph.db was never opened by it",
++          graphdb.DB_PATH.startswith(tmp) and os.path.abspath(dbp).startswith(tmp),
++          "DB_PATH=%s live_exists=%s" % (graphdb.DB_PATH, os.path.exists(live)))
++    except Exception as e:                                # noqa: BLE001
++        _fails.append("suite raised: %r" % (e,))
++        print("  FAILED suite raised: %r" % (e,))
++    finally:
++        graphdb.DB_PATH = saved_path
++        graphdb.GraphDB._append_jsonl = saved_append
++        importers.LANE_IMPORTERS = saved_lanes
++        shutil.rmtree(tmp, ignore_errors=True)
++
++    if _ran != CASES and not _fails:
++        # A LITERAL CASE LIST KNOWS ITS OWN NUMBER, so a shortfall is a defect and not a smaller
++        # tree (.claude/rules/ops-and-gates.md).
++        _fails.append("ran %d of %d cases" % (_ran, CASES))
++    if _fails:
++        print("SELF-TEST FAIL: import_all %d of %d case(s) failed, %d ran"
++              % (len(_fails), CASES, _ran))
++        return 1
++    print("SELF-TEST PASS: import_all %d of %d cases - a failed importer leaves none of its rows "
++          "and the run exits 1" % (_ran, CASES))
++    return 0
++
++
++if __name__ == "__main__":
++    if "--selftest" in sys.argv:
++        sys.exit(run())
++    print("usage: import_all_selftest.py --selftest")
++    sys.exit(2)
+diff --git a/graph/import/importers.py b/graph/import/importers.py
+index 939c365be..d15dbfaa4 100644
+--- a/graph/import/importers.py
++++ b/graph/import/importers.py
+@@ -359,7 +359,10 @@ def retro_apply_known_wrong(db: GraphDB, ts: str, run: str) -> int:
+                 "confidence=1.0 WHERE id=?", [(i,) for i in hits])
+             demoted += len(hits)
+     if demoted:
+-        db.conn.commit()
++        # db.commit(), never db.conn.commit(): this runs BOTH inside import_known_wrong (where it
++        # is one step of an atomic unit and a commit here would destroy the unit's savepoint) and
++        # again standalone from import_all's phase C (where it must commit its own sweep).
++        db.commit()
+         db.log_event(run=run, timestamp=ts, etype="resolve",
+                      decision="known_wrong_retro_sweep",
+                      detail={"rows_demoted": demoted})
+diff --git a/graph/lib/graphdb.py b/graph/lib/graphdb.py
+index bea230cb9..bb783c548 100644
+--- a/graph/lib/graphdb.py
++++ b/graph/lib/graphdb.py
+@@ -6,6 +6,8 @@ Design rules this module enforces (from the implementation plan):
+   write method takes one, and `record_provenance` is the only way to mint one.
+ * **Additive.** Writes are upserts; nothing is destructively deleted by the
+   pipeline. Retraction is an explicit, provenanced act (`retract_edge`).
++* **All-or-nothing per unit.** `atomic()` bounds one importer's writes, so a
++  data set is loaded whole or not at all - never half, which reads as whole.
+ * **Deterministic.** All ids come from `ids.py`. Re-running an import is a no-op
+   rather than a duplicate.
+ * **The DB is an index.** `export_json()` writes the durable, git-tracked JSON;
+@@ -62,6 +64,17 @@ class GraphDBMissing(FileNotFoundError):
+     """The database file is not there and the caller did not say it may be created."""
+ 
+ 
++class GraphDBUnitNotAtomic(RuntimeError):
++    """A unit inside `atomic()` committed mid-flight, so its partial writes could NOT be undone.
++
++    This is the one failure `atomic()` cannot repair, and it is raised rather than swallowed
++    because the alternative is the exact shape this whole mechanism exists to end: a rollback
++    that silently did nothing, over a database that now holds half a data set. SQLite destroys
++    every open savepoint on COMMIT, so the `ROLLBACK TO` raises "no such savepoint" - the breach
++    is detectable, and the caller is told which unit did it and that the writes are still there.
++    """
++
++
+ class GraphDB:
+     """Thin, explicit wrapper over SQLite. No ORM, no magic."""
+ 
+@@ -72,6 +85,9 @@ class GraphDB:
+         path = path or DB_PATH
+         self.path = path
+         self.restore_skipped: dict[str, int] = {}
++        # Depth of the open `atomic()` unit (0 or 1 - units do not nest). `commit()` reads it.
++        self._unit_depth = 0
++        self._unit_label: str | None = None
+         # A MISSING DATABASE IS REFUSED UNLESS THE CALLER SAYS IT MAY BE CREATED (2026-09-18, backlog
+         # I229). sqlite3.connect() creates any path it is handed, so every open_db() script used to
+         # build a fresh, empty graph.db wherever it ran - a worktree has none - restore the learning
+@@ -105,19 +121,116 @@ class GraphDB:
+         self.conn.commit()
+ 
+     # -- lifecycle ---------------------------------------------------------
+-    def close(self) -> None:
+-        self.conn.commit()
++    def close(self, commit: bool = True) -> None:
++        """Close the connection. `commit=False` DISCARDS whatever is still open.
++
++        The default stays True because every ordinary caller closes a run it means to keep.
++        `commit=False` exists because `__exit__` used to say it would not commit on an exception
++        and then call this, which committed anyway - see __exit__.
++        """
++        if commit:
++            self.conn.commit()
++        else:
++            self.conn.rollback()
+         self.conn.close()
+ 
+     def __enter__(self):
+         return self
+ 
+     def __exit__(self, *exc):
++        # LEAVING ON AN EXCEPTION DISCARDS THE OPEN TRANSACTION, and until 2026-09-19 it did not.
++        # The `if exc[0] is None` below has always been here and has always been defeated one line
++        # later: close() committed unconditionally, so a crash anywhere inside a `with open_db()`
++        # block wrote whatever the dying caller had half-written. That is the second half of the
++        # partial-import defect - atomic() bounds one importer, this bounds the whole block.
+         if exc[0] is None:
+             self.conn.commit()
+-        self.close()
++            self.close()
++        else:
++            self.close(commit=False)
+         return False
+ 
++    def commit(self) -> bool:
++        """Commit - UNLESS a unit of work is open, where committing would destroy its savepoint.
++
++        Returns True if it actually committed. Code that runs BOTH inside an `atomic()` unit and
++        standalone (`importers.retro_apply_known_wrong` is called from both roads) calls this
++        rather than `db.conn.commit()`, so the same function is all-or-nothing when it runs as
++        part of an importer and self-committing when it runs on its own.
++
++        A caller that reaches past this to `db.conn.commit()` inside a unit is not silently
++        tolerated: it makes the unit un-rollback-able, and atomic() raises GraphDBUnitNotAtomic
++        instead of reporting a rollback that did nothing.
++        """
++        if self._unit_depth:
++            return False
++        self.conn.commit()
++        return True
++
++    @contextmanager
++    def atomic(self, label: str):
++        """ALL-OR-NOTHING around one unit of import work. Either every row lands or none does.
++
++        WHY. graph/import/import_all.py runs each importer in a try/except and carries on past a
++        failure. Until 2026-09-19 nothing bounded those writes: sqlite3's legacy mode opens an
++        implicit transaction on the first INSERT, so an importer that raised after 40 of 80
++        known-wrong rulings left all 40 sitting in an open transaction, and the NEXT importer's
++        commit landed them. A half-loaded ruling set then WAS the day's index, and the run exited
++        0. Measured on a temp database before the fix: an importer that wrote 3 nodes and raised
++        left 3 nodes committed.
++
++        WHICH FAILURE THIS CHOOSES. An interrupted unit now leaves the index missing that data set
++        entirely rather than holding part of it - a LEAK, never CORRUPTION, which is the ordering
++        rule in .claude/rules/ops-and-gates.md ("write the pointed-to object before the object that
++        points to it"). A missing known-wrong set is visible to anything that counts it; a set that
++        is 40/80 loaded looks exactly like a set that is whole.
++
++        WHAT IT DOES NOT COVER, stated rather than left to be discovered:
++          * `log_event` mirrors to graph/provenance/<day>.jsonl OUTSIDE the database. A rolled-back
++            unit can leave its line in that append-only trail. That is the harmless direction - an
++            orphan record carrying its own event_id, not a missing one - and it is the same
++            leak-not-corruption choice.
++          * Files an importer wrote are not rolled back. Nothing in ALL_IMPORTERS writes one.
++          * It is NOT reentrant: nesting units would make "roll back to where this one started"
++            ambiguous at the point it matters most, so it refuses instead of guessing.
++        """
++        if self._unit_depth:
++            raise RuntimeError(
++                f"atomic({label!r}) nested inside atomic({self._unit_label!r}) - units do not nest")
++        # Start from a clean boundary so ROLLBACK TO can only ever undo THIS unit, never work a
++        # previous importer left uncommitted.
++        self.conn.commit()
++        self._unit_depth = 1
++        self._unit_label = label
++        name = "tc_unit"
++        self.conn.execute(f"SAVEPOINT {name}")
++        try:
++            yield self
++        except BaseException:
++            self._unit_depth = 0
++            try:
++                self.conn.execute(f"ROLLBACK TO {name}")
++                self.conn.execute(f"RELEASE {name}")
++            except sqlite3.OperationalError as oe:
++                self.conn.commit()
++                raise GraphDBUnitNotAtomic(
++                    f"{label}: failed AND could not be rolled back - it committed mid-flight "
++                    f"({oe}). Its partial writes are in the database. Route the commit inside it "
++                    f"through GraphDB.commit(), which is a no-op inside a unit.") from None
++            self.conn.commit()
++            raise
++        else:
++            self._unit_depth = 0
++            try:
++                self.conn.execute(f"RELEASE {name}")
++            except sqlite3.OperationalError as oe:
++                self.conn.commit()
++                raise GraphDBUnitNotAtomic(
++                    f"{label}: committed mid-flight ({oe}), so it was never all-or-nothing. It "
++                    f"SUCCEEDED this time; the next failure would land partial. Route its commit "
++                    f"through GraphDB.commit().") from None
++            self.conn.commit()
++
+     @contextmanager
+     def tx(self):
+         try:

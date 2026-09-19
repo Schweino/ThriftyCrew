@@ -1,0 +1,48 @@
+﻿b35921 T1S1 searches=4
+   q: capture cursor advance landed slice coverage rotation
+   q: capture cursor advance landed slice coverage rotation
+   q: gate that can never arm / could not look / threshold self-test at the bar
+   q: gate that can never arm
+a95222 T1B1 searches=0
+d3373e T2S1 searches=0
+7c6256 T2B1 searches=0
+358601 T3S1 searches=6
+   q: tie-break deterministic ordering cheapest store
+   q: sort stability reproducible ordering PowerShell
+   q: tie-break deterministic ordering cheapest store
+   q: sort stability reproducible ordering determinism
+   q: tie-break / determinism / cheapest_store / price-table
+   q: tie-break
+   read: algorithms-craft/applies-here.md
+3bfee4 T3B1 searches=0
+5cff85 T3S2 searches=3
+   q: tie-break reproducible sort order board winner
+   q: tie-break / stable sort / deterministic ordering / Sort-Object stable
+   q: tie-break / stable sort / deterministic ordering
+   read: algorithms-craft/applies-here.md
+7dbd99 T4S1 searches=4
+   q: partial write transaction rollback importer
+   q: partial write transaction rollback all-or-nothing atomic import
+   q: a step that fails must not exit 0
+   q: atomicity / transaction / partial failure
+0609c1 T4B1 searches=0
+64e9f4 T4S2 searches=4
+   q: partial write transaction rollback importer atomicity
+   q: partial write rollback transaction atomicity
+   q: a step that fails must not exit 0 partial data set
+   q: sqlite transaction / savepoint / partial import / exit code nonzero on failure
+   read: database-craft/sqlite-engine.md
+   read: database-craft/transactions-and-recovery.md
+d7e629 T5S1 searches=5
+   q: retract stale edge graph index truth rebuild
+   q: retract stale edge when the index is rebuilt from truth files
+   q: retraction / stale index / idempotent import / delete-orphan
+   q: idempotent / tombstone / soft-delete / change-data-capture / full-refresh
+   q: moving data in flight upsert delete reconcile
+   read: data-quality-craft/moving-data-in-flight.md
+9a6d43 T5B1 searches=0
+da4088 T6S1 searches=3
+   q: self-test must not depend on the network; fixture an HTTP probe locally
+   q: self-test depends on external network state; fixture the decision locally
+   q: hermetic self-test / network fixture / loopback HTTP listener / test double seam
+56dc42 T6B1 searches=0

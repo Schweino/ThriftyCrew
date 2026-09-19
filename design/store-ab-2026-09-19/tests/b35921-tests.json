@@ -1,0 +1,28 @@
+{
+    "code":  "b35921",
+    "changed":  [
+                    "docs/CONTROL-CONSTANTS.md",
+                    "grocery/capture-policy-lib.ps1",
+                    "grocery/commit-capture-cursor.ps1",
+                    "grocery/replay-cursor-coverage.ps1",
+                    "grocery/test-capture-policy.ps1"
+                ],
+    "scrubbed_lines":  0,
+    "tests":  [
+                  {
+                      "file":  "grocery/capture-policy-lib.ps1",
+                      "exit":  0,
+                      "last_line":  "CAPTURE-POLICY-LIB-COMPLETE cases=10 failed=0"
+                  },
+                  {
+                      "file":  "grocery/commit-capture-cursor.ps1",
+                      "exit":  0,
+                      "last_line":  "SELFTEST PASSED"
+                  },
+                  {
+                      "file":  "grocery/replay-cursor-coverage.ps1",
+                      "exit":  0,
+                      "last_line":  "REPLAY-CURSOR-COVERAGE-SELFTEST-COMPLETE cases=5 failed=0"
+                  }
+              ]
+}

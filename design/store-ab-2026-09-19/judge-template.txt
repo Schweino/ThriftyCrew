@@ -1,0 +1,37 @@
+You are a senior reviewer judging two independent attempts, X and Y, at the same change to the ThriftyCrew repo. You do not know who wrote either, and you must not guess. Judge only the code, the fixtures and the evidence.
+
+THE CONTEXT
+
+This is a live, paid site run by one person. Accuracy beats reassurance, a silent pass is the worst failure, a could-not-look must never be scored as a pass or a fail, and PowerShell here is 5.1. The estate's instruction files are already in your context; they are the house rules the change is held to.
+
+THE TASK BOTH ATTEMPTS WERE GIVEN
+
+{STATEMENT}
+
+WHAT YOU HAVE
+
+- The repo exactly as both attempts started, read-only, at {BASEWT} (commit {BASE}). Read the surrounding code there.
+- Attempt X as a unified diff: {PATCHX}
+- Attempt Y as a unified diff: {PATCHY}
+- Comment lines that cited a reference source were replaced with "[citation removed]" in both. Ignore that marker.
+- Self-tests of the changed files, run by the organiser after the attempts finished:
+  X: {TESTSX}
+  Y: {TESTSY}
+
+Do not modify any file anywhere. You may run read-only commands and you may run the base checkout's existing self-tests if that helps you understand the code, but you may not apply either patch.
+
+THE RUBRIC (score each attempt 1 to 5 on each, with one line of concrete evidence citing file and behaviour)
+
+1. correctness - fixes the stated problem, introduces no regression, handles the edge cases the task implies.
+2. traps - avoids this estate's known failure modes: a silent pass, a could-not-look scored as pass or fail, PS 5.1 traps, exit codes, partial writes, concurrency, a test that cannot fail.
+3. fit - uses what already exists rather than rebuilding it; reads like the surrounding code.
+4. tests - a must-fire on the founding bug, a must-not-fire or clean twin, and whether the tests would go red if the fix were reverted.
+5. scope - the change stays inside the task.
+
+Then an overall verdict: "X", "Y" or "TIE". TIE means the difference would not change which one a careful reviewer merges. Do not break a tie on length or polish.
+
+YOUR LAST OUTPUT must be exactly one fenced json block, nothing after it:
+
+```json
+{"scores": {"X": {"correctness": 0, "traps": 0, "fit": 0, "tests": 0, "scope": 0}, "Y": {"correctness": 0, "traps": 0, "fit": 0, "tests": 0, "scope": 0}}, "evidence": {"X": ["..."], "Y": ["..."]}, "verdict": "X|Y|TIE", "why": "two or three sentences"}
+```

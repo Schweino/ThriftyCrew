@@ -1,0 +1,14 @@
+{
+    "code":  "56dc42",
+    "changed":  [
+                    "ops/audit-memory-backup.ps1"
+                ],
+    "scrubbed_lines":  0,
+    "tests":  [
+                  {
+                      "file":  "ops/audit-memory-backup.ps1",
+                      "exit":  0,
+                      "last_line":  "SELF-TEST PASS (35 memory-store cases, live probe blind=0)"
+                  }
+              ]
+}

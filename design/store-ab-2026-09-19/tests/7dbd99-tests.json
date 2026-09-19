@@ -1,0 +1,24 @@
+{
+    "code":  "7dbd99",
+    "changed":  [
+                    "graph/README.md",
+                    "graph/import/import_all.py",
+                    "graph/import/import_all_selftest.py",
+                    "graph/import/importers.py",
+                    "graph/lib/graphdb.py",
+                    "graph/lib/graphdb_selftest.py"
+                ],
+    "scrubbed_lines":  0,
+    "tests":  [
+                  {
+                      "file":  "graph/import/import_all_selftest.py",
+                      "exit":  0,
+                      "last_line":  "SELF-TEST PASS: import_all 12 of 12 cases - a failed importer leaves nothing, the day\u0027s answer is not derived from a half index, and the run exits 1 saying which step failed"
+                  },
+                  {
+                      "file":  "graph/lib/graphdb_selftest.py",
+                      "exit":  0,
+                      "last_line":  "SELF-TEST PASS: graphdb 18 of 18 cases - a step lands whole or not at all, a raise is not a commit, a missing graph.db is refused unless allow_new, and a restore counts only the rows it inserted"
+                  }
+              ]
+}

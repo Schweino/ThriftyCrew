@@ -1,0 +1,784 @@
+diff --git a/grocery/build-regression-baseline.ps1 b/grocery/build-regression-baseline.ps1
+index 9007d57da..f1b20c171 100644
+--- a/grocery/build-regression-baseline.ps1
++++ b/grocery/build-regression-baseline.ps1
+@@ -22,6 +22,12 @@
+ param([string]$OutDir = "")
+ $ErrorActionPreference = 'Stop'
+ . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
++# regression-baseline.json is TRACKED and .gitattributes stores it LF, so the habitual
++# `ConvertTo-Json | Set-Content -Encoding UTF8` is wrong here twice over: ConvertTo-Json joins with CRLF
++# and Set-Content adds one more. Measured 2026-09-19, running this after an engine change: the file came
++# back with 530 CR bytes over an LF blob, so every line read as touched. Write-TcLfFile emits the bytes
++# git stores and skips an identical write.
++. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\lf-write.ps1')
+ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+ $fz = Join-Path $root 'regression-inputs'
+ if (-not (Test-Path (Join-Path $fz 'ads-2026-07-05.json'))) { Write-Output "regression-inputs\ missing - freeze the inputs first"; exit 2 }
+@@ -55,5 +61,5 @@ foreach ($r in $doc.comparison) {
+ }
+ $out = [ordered]@{ frozen_week=[string]$doc.week_of; built_at=(Get-Date).ToString('s'); source='regression-inputs (hermetic; engine-rebuilt)'; commodities=$rows.ToArray() }
+ $file = Join-Path $root 'regression-baseline.json'
+-($out | ConvertTo-Json -Depth 8) | Set-Content $file -Encoding UTF8
++[void](Write-TcLfFile -Path $file -Text ($out | ConvertTo-Json -Depth 8))
+ Write-Output ("golden baseline frozen: " + $rows.Count + " commodities (week " + $doc.week_of + ") -> " + $file)
+diff --git a/grocery/compare-deals.ps1 b/grocery/compare-deals.ps1
+index a357d6af9..9b5140397 100644
+--- a/grocery/compare-deals.ps1
++++ b/grocery/compare-deals.ps1
+@@ -177,16 +177,10 @@ foreach ($c in $commodities) { if ($c.PSObject.Properties['min_pack_oz']) { $MIN
+ # was written to protect and leave only the minis it was written to refuse.
+ $MINPIECE = @{}
+ foreach ($c in $commodities) { if ($c.PSObject.Properties['min_piece_oz']) { $MINPIECE[[string]$c.id] = [double]$c.min_piece_oz } }
+-function Get-PackOz([string]$size, [string]$name) {
+-  # Total package weight in ounces, ONLY when the size string states one plainly. Returns $null otherwise -
+-  # an unknown size must never be treated as a violation, or every store that omits sizes loses the cell.
+-  $t = (("" + $size + " " + $name)).ToLower()
+-  $m = [regex]::Match($t, '(\d+(?:\.\d+)?)\s*(?:fl\s*)?oz\b')
+-  if ($m.Success) { return [double]$m.Groups[1].Value }
+-  $m = [regex]::Match($t, '(\d+(?:\.\d+)?)\s*(?:lbs?|pounds?)\b')
+-  if ($m.Success) { return ([double]$m.Groups[1].Value * 16) }
+-  return $null
+-}
++# Get-PackOz LIVES IN pricing-math-lib.ps1 (moved 2026-09-19). It is dot-sourced below, before any of the
++# three Test-* rules here is CALLED - they are function bodies, so the library only has to arrive before the
++# matching pipeline runs, not before they are defined. It moved because price-table-lib.ps1 now needs the
++# Select-StoreWinner that reads it, and a second copy of a ranking rule is the drift this estate has paid for.
+ function Test-PackSize($id, $size, $name) {
+   if (-not $MAXPACK.ContainsKey([string]$id)) { return $true }
+   $oz = Get-PackOz $size $name
+@@ -263,29 +257,11 @@ function Test-PackSizeFloor($id, $size, $name) {
+ # achiote bug. It is shared with audit-coverage-gaps.ps1, which would otherwise report every row this gate
+ # refuses as "the store carries it but the board is missing it".
+ . (Join-Path $PSScriptRoot 'instore-lib.ps1')
+-# WHICH ROW REPRESENTS A STORE for one commodity. Lives here as ONE function rather than inline at the
+-# ranker so -SelfTest exercises the rule the board actually runs; an inline sort can only be tested by
+-# transcribing it, and a transcribed test passes while the original regresses. Keys, in order:
+-#   1. per-unit price     - the whole point of the board; nothing below can make a cell dearer
+-#   2. can we link it     - 2026-08-22, an unlinkable row cannot be verified or re-found
+-#   3. smaller package    - 2026-08-31, a case pack ties its own single unit and must not beat it
+-#   4. product name       - a TOTAL order, so the winner is reproducible
+-#
+-# KEY 4 IS NOT DECORATION. The 2026-08-22 note above this rule reasoned "sorting is stable, so rows equal
+-# on both keys keep their previous relative order" - that is not true on this runtime. Windows PowerShell
+-# 5.1's Sort-Object is NOT a stable sort and has no -Stable parameter (that arrived in PowerShell 6), so
+-# rows equal on every key came out in an arbitrary order that could differ run to run on the same input.
+-# Caught while proving the key-3 fixture must-fire: with key 3 removed the case-pack test still PASSED,
+-# because the winner was being decided by luck rather than by any rule. A board cell has to be
+-# reproducible, so the comparison ends on something total.
+-function Select-StoreWinner($rows) {
+-  $rows |
+-    Sort-Object @{Expression = { $_.unit_price }},
+-                @{Expression = { if ($_.has_identity) { 0 } else { 1 } }},
+-                @{Expression = { $s = Get-PackOz $_.size_text $_.name; if ($null -eq $s -or $s -le 0) { [double]::MaxValue } else { [double]$s } }},
+-                @{Expression = { [string]$_.name }} |
+-    Select-Object -First 1
+-}
++# WHICH ROW REPRESENTS A STORE, and WHICH STORE WEARS THE CROWN, both live in pricing-math-lib.ps1
++# (Select-StoreWinner moved there 2026-09-19; Sort-StoreCells was written there). Their headers carry the
++# founding bugs and the key ladders. They are there rather than here because price-table-lib.ps1 has to
++# reach the same decision about the same rows - it used to reach its own, and at an exact per-unit tie the
++# two disagreed about which PRODUCT represents a store while agreeing perfectly about the price.
+ # bulk / non-single-unit heuristic on a size string (so the winner line can flag "10 lb pack" etc.)
+ # THE PRICING MATH LIVES IN A LIBRARY NOW (2026-09-09, backlog I82). It used to be defined here and
+ # LIFTED as source text by twelve other scripts, because this file runs a pipeline on load and could
+@@ -1148,6 +1124,131 @@ if ($SelfTest) {
+   $wB = (Select-StoreWinner @($twinA[1],$twinA[0])).name
+   if ($wA -eq $wB -and $wA -eq 'Alpha brand, 10 oz') { Write-Output 'ok    rows equal on every real key resolve to ONE reproducible winner' } else { Write-Output ("FAIL  equal rows are order-dependent ('$wA' vs '$wB') - the board cell is not reproducible"); $script:fail++ }
+ 
++  # --- 11i: Sort-StoreCells - the CROSS-STORE tie, i.e. WHO WEARS THE CROWN (2026-09-19) -------------------
++  # THE SAME DEFECT ONE LEVEL UP FROM 11h, and it stood for as long as the board has existed. Across stores
++  # the ranker was `$byStore | Sort-Object unit_price`: one key, over a list in whatever order Group-Object
++  # yielded for that day's captures. On an EXACT per-unit tie nothing decided the crown at all.
++  # THE LIVE ROWS, from comparison-2026-09-17: cream-of-chicken-soup and cream-of-mushroom-soup are both
++  # $0.0695, both tied between Aldi and Hy-Vee, and the board crowned Aldi on one and Hy-Vee on the other,
++  # printing the two stores in opposite orders. 23 of that board's 572 crowns are an exact multi-store tie,
++  # 26 of 572 no-membership crowns are, and 132 of 572 rows carry a tie somewhere in their store list.
++  # MUST FIRE: one crown, whatever order the stores arrive in. CLEAN TWINS: a genuinely cheaper store still
++  # wins, including a cheaper MEMBERSHIP store, so no key below price can make the board dearer.
++  # _Cell, NOT _C. This self-test already defines `_C($unit)` up at the pricing cases, and a second
++  # definition does not collide loudly - it silently REPLACES the first for every case BELOW it. Written
++  # as _C here first, it handed four later cauliflower cases a store row where they expected a commodity
++  # and they failed with `got <null>` pointing nowhere near the cause. Same family as the cmdlet-shadow
++  # rule one scope in: in PowerShell the last definition wins and says nothing about it. A helper added to
++  # an existing suite gets a name nothing else in the file uses.
++  function _Cell($store, $up, $mem, $id, $sz, $nm) { [pscustomobject]@{ store=$store; unit_price=$up; membership=$mem; has_identity=$id; size_text=$sz; name=$nm } }
++  $permIdx = @(@(0,1,2), @(0,2,1), @(1,0,2), @(1,2,0), @(2,0,1), @(2,1,0))
++  function _CrownsOver($cells, $idx) {
++    # every permutation of the same three cells, crowned; the answer set must have exactly one member
++    $out = New-Object System.Collections.Generic.List[string]
++    foreach ($p in $idx) {
++      $ordered = @($p | ForEach-Object { $cells[$_] })
++      $r = @(Sort-StoreCells $ordered)
++      [void]$out.Add([string]$r[0].store)
++    }
++    return $out.ToArray()
++  }
++  function _NomemOver($cells, $idx) {
++    $out = New-Object System.Collections.Generic.List[string]
++    foreach ($p in $idx) {
++      $ordered = @($p | ForEach-Object { $cells[$_] })
++      $r = @(Sort-StoreCells $ordered)
++      $nmr = @($r | Where-Object { -not $_.membership } | Select-Object -First 1)
++      [void]$out.Add($(if ($nmr.Count) { [string]$nmr[0].store } else { '(none)' }))
++    }
++    return $out.ToArray()
++  }
++  # the soup shape: Aldi and Hy-Vee tied at 0.0695, Walmart genuinely dearer
++  $soup = @((_Cell 'Aldi' 0.0695 $false $true '10.5 oz' 'Chef''s Cupboard Cream of Chicken'),
++            (_Cell 'Hy-Vee' 0.0695 $false $true '10.5 oz' 'Hy-Vee Cream of Chicken Soup'),
++            (_Cell 'Walmart' 0.0743 $false $true '10.5 oz' 'Campbell''s Cream of Chicken'))
++  $soupCrowns = _CrownsOver $soup $permIdx
++  $soupCrowns = @($soupCrowns)
++  $soupDistinct = @($soupCrowns | Select-Object -Unique)
++  if ($soupDistinct.Count -eq 1 -and $soupDistinct[0] -eq 'Aldi') { Write-Output ('ok    cross-store tie: all ' + $soupCrowns.Count + ' input orders crown ONE store (Aldi, on the ordinal key)') }
++  else { Write-Output ("FAIL  the crown still depends on input order: " + (($soupDistinct) -join ' / ') + " - cheapest_store is not reproducible"); $script:fail++ }
++  # SENSITIVITY, not a rule: prove this fixture's input really does exercise a tie, so the case above is
++  # not passing over a set the OLD one-key sort would also have agreed on. If PowerShell ever gains a
++  # stable Sort-Object this goes red, and the repair is to pick an input that still exercises the tie -
++  # never to delete the case. Without it, 11i could be green against a set that decides itself.
++  $naive = New-Object System.Collections.Generic.List[string]
++  foreach ($p in $permIdx) {
++    $ordered = @($p | ForEach-Object { $soup[$_] })
++    $old = @($ordered | Sort-Object unit_price)
++    [void]$naive.Add([string]$old[0].store)
++  }
++  $naiveDistinct = @($naive.ToArray() | Select-Object -Unique)
++  if ($naiveDistinct.Count -gt 1) { Write-Output ('ok    SENSITIVITY: the old one-key sort crowns ' + $naiveDistinct.Count + ' different stores over these same 6 orders, so the case above is live') }
++  else { Write-Output 'FAIL  SENSITIVITY: the one-key sort agrees with itself on this input, so 11i proves nothing - choose an input that ties'; $script:fail++ }
++  # CLEAN TWIN: price is still key 1 and nothing below it can make the board dearer
++  $cheaper = @((_Cell 'Aldi' 0.0695 $false $true '10.5 oz' 'Aldi soup'),
++               (_Cell 'Hy-Vee' 0.0650 $false $true '10.5 oz' 'Hy-Vee soup'),
++               (_Cell 'Walmart' 0.0743 $false $true '10.5 oz' 'Walmart soup'))
++  $cheaperCrowns = @(_CrownsOver $cheaper $permIdx | Select-Object -Unique)
++  if ($cheaperCrowns.Count -eq 1 -and $cheaperCrowns[0] -eq 'Hy-Vee') { Write-Output 'ok    a genuinely cheaper store still takes the crown - the order below price cannot make the board dearer' }
++  else { Write-Output ("FAIL  a tie-break key outranked the price key: crowned " + ($cheaperCrowns -join ' / ')); $script:fail++ }
++  # KEY 2: at an EXACT tie a price anyone can pay beats one behind a paid membership. No row on
++  # comparison-2026-09-17 exercises this (0 of 572 crown ties pair a membership store with a
++  # non-membership one), so it is fixtured rather than measured - and it is why the report line
++  # "cheapest: Sam's Club $X | no-membership: Aldi $X" can no longer be printed at one price.
++  $memTie = @((_Cell "Sam's Club" 0.0695 $true $true '10.5 oz' "Sam's soup"),
++              (_Cell 'Aldi' 0.0695 $false $true '10.5 oz' 'Aldi soup'),
++              (_Cell 'Walmart' 0.0743 $false $true '10.5 oz' 'Walmart soup'))
++  $memCrowns = @(_CrownsOver $memTie $permIdx | Select-Object -Unique)
++  if ($memCrowns.Count -eq 1 -and $memCrowns[0] -eq 'Aldi') { Write-Output 'ok    at an exact tie the no-membership price wears the crown' }
++  else { Write-Output ("FAIL  a membership cell won an exact tie: crowned " + ($memCrowns -join ' / ')); $script:fail++ }
++  # CLEAN TWIN for key 2: a membership store that is genuinely CHEAPER still wins. The key speaks only
++  # where price was already equal, so Sam's does not lose a crown it earned on price.
++  $memCheaper = @((_Cell "Sam's Club" 0.0500 $true $true '10.5 oz' "Sam's soup"),
++                  (_Cell 'Aldi' 0.0695 $false $true '10.5 oz' 'Aldi soup'),
++                  (_Cell 'Walmart' 0.0743 $false $true '10.5 oz' 'Walmart soup'))
++  $memCheapCrowns = @(_CrownsOver $memCheaper $permIdx | Select-Object -Unique)
++  if ($memCheapCrowns.Count -eq 1 -and $memCheapCrowns[0] -eq "Sam's Club") { Write-Output 'ok    a membership store that is genuinely cheaper keeps the crown' }
++  else { Write-Output ("FAIL  the membership key overrode a real price advantage: crowned " + ($memCheapCrowns -join ' / ')); $script:fail++ }
++  # nomem_store reads off the same array, so it becomes reproducible with it
++  $nomemAns = @(_NomemOver $memTie $permIdx | Select-Object -Unique)
++  if ($nomemAns.Count -eq 1 -and $nomemAns[0] -eq 'Aldi') { Write-Output 'ok    nomem_store is reproducible across input orders too' }
++  else { Write-Output ("FAIL  nomem_store depends on input order: " + ($nomemAns -join ' / ')); $script:fail++ }
++  # KEY 3 and KEY 4, each where every key above it is silent
++  $linkTie = @((_Cell 'Aldi' 0.0695 $false $false '10.5 oz' 'unlinkable soup'),
++               (_Cell 'Hy-Vee' 0.0695 $false $true '10.5 oz' 'linkable soup'),
++               (_Cell 'Walmart' 0.0743 $false $true '10.5 oz' 'dearer soup'))
++  $linkCrowns = @(_CrownsOver $linkTie $permIdx | Select-Object -Unique)
++  if ($linkCrowns.Count -eq 1 -and $linkCrowns[0] -eq 'Hy-Vee') { Write-Output 'ok    a linkable cell beats an unlinkable one at the same price (key 3)' }
++  else { Write-Output ("FAIL  the linkability key did not decide a tie: crowned " + ($linkCrowns -join ' / ')); $script:fail++ }
++  $sizeTie = @((_Cell 'Aldi' 0.498 $false $true '120 oz' '(12 pack) case'),
++               (_Cell 'Hy-Vee' 0.498 $false $true '10 oz' 'single jar'),
++               (_Cell 'Walmart' 0.60 $false $true '10 oz' 'dearer jar'))
++  $sizeCrowns = @(_CrownsOver $sizeTie $permIdx | Select-Object -Unique)
++  if ($sizeCrowns.Count -eq 1 -and $sizeCrowns[0] -eq 'Hy-Vee') { Write-Output 'ok    the smaller package beats a case pack at the same per-unit price (key 4)' }
++  else { Write-Output ("FAIL  a case pack won a cross-store tie: crowned " + ($sizeCrowns -join ' / ')); $script:fail++ }
++  # THE MECHANISM, asserted directly rather than through an outcome: the comparison is a TOTAL order, so
++  # it returns 0 only for a row against itself. That, and not the sort, is what makes the crown unique -
++  # List.Sort is an unstable introsort and is allowed to do anything it likes with genuine ties.
++  $totalOk = $true
++  foreach ($x in $soup) { foreach ($y in $soup) {
++    $c = Compare-StoreCell $x $y
++    if ([object]::ReferenceEquals($x, $y)) { if ($c -ne 0) { $totalOk = $false } }
++    elseif ($c -eq 0) { $totalOk = $false }
++    # SIGNS, not values. Key 5 is [string]::CompareOrdinal, which returns a character DISTANCE (-7, +12),
++    # and a comparison contract is only ever about the sign. Asserting the values here failed the first
++    # run against perfectly correct code.
++    elseif ([math]::Sign((Compare-StoreCell $y $x)) -ne (-1 * [math]::Sign($c))) { $totalOk = $false }
++  } }
++  if ($totalOk) { Write-Output 'ok    Compare-StoreCell is a total order (0 only against itself, and antisymmetric), so the sort cannot introduce luck' }
++  else { Write-Output 'FAIL  Compare-StoreCell ties two different stores or is not antisymmetric - an unstable sort then decides the crown'; $script:fail++ }
++  # A row that could not be priced sorts LAST rather than reading as an agreeing zero and crowning itself.
++  $withNull = @((_Cell 'Aldi' 0.0695 $false $true '10.5 oz' 'priced'),
++                (_Cell 'Hy-Vee' $null $false $true '10.5 oz' 'unpriced'),
++                (_Cell 'Walmart' 0.0743 $false $true '10.5 oz' 'dearer'))
++  $nullRanked = @(Sort-StoreCells $withNull)
++  if ($nullRanked[0].store -eq 'Aldi' -and $nullRanked[2].store -eq 'Hy-Vee') { Write-Output 'ok    a row with no price sorts last instead of crowning itself at an agreeing zero' }
++  else { Write-Output ("FAIL  an unpriced row was ranked as if it cost 0: order " + (($nullRanked | ForEach-Object { $_.store }) -join ' < ')); $script:fail++ }
++
+   # the 'snax' GLOBAL_EXCLUDE token (blocks snack TRAYS from winning real-commodity cells). $GLOBAL_EXCLUDE
+   # is defined AFTER this block exits, so read the token from this script's own source (the extraction regex
+   # audit-match-soundness.ps1 already uses) - a hard-coded 'snax' literal here would pass whether or not the
+@@ -2974,7 +3075,14 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
+     # An unreadable size sorts last - we cannot claim a package is smaller when we cannot read it.
+     Select-StoreWinner $rows
+   }
+-  $ranked = @($byStore | Sort-Object unit_price)
++  # ACROSS STORES, BY A DECLARED TOTAL ORDER (2026-09-19). This was `Sort-Object unit_price` - one key over
++  # a list in whatever order Group-Object yielded - so on an EXACT per-unit tie nothing chose the crown.
++  # Sort-StoreCells' header has the key ladder, the measurement (23 of 572 crowns on comparison-2026-09-17
++  # are exact ties) and the probe showing PS 5.1's Sort-Object reverses even two tied rows. Price is still
++  # key 1, so no cell's price can move and the board cannot get dearer; every key below it speaks only
++  # where price was already equal. cheapest_store, nomem_store and the published `stores` order all read
++  # off this one array, so all three become reproducible together.
++  $ranked = @(Sort-StoreCells $byStore)
+   if ($ranked.Count -lt $MinStores) { continue }
+   $f = $priced[0]
+   $nm = @($ranked | Where-Object { -not $_.membership } | Select-Object -First 1)
+@@ -3144,7 +3252,7 @@ if ($ptBad.Count) {
+   Write-Output ("!! PRICE-TABLE PARITY: {0} cell(s) disagree with the published board - the table and the ranker have drifted:" -f $ptBad.Count)
+   foreach ($b in ($ptBad | Select-Object -First 12)) { Write-Output ("   [{0}] {1}: {2}" -f $b.id, $b.store, $b.why) }
+ } else {
+-  Write-Output ("price-table: parity OK - every one of the {0} cell(s) matches the price the board published" -f $ptCells)
++  Write-Output ("price-table: parity OK - every one of the {0} cell(s) matches the price AND the product the board published" -f $ptCells)
+ }
+ Write-Output ("Saved: " + $ptFile)
+ Write-Output ("Saved: " + $ptCsvFile)
+diff --git a/grocery/price-table-lib.ps1 b/grocery/price-table-lib.ps1
+index c247e50f9..0e8060c1f 100644
+--- a/grocery/price-table-lib.ps1
++++ b/grocery/price-table-lib.ps1
+@@ -37,12 +37,31 @@
+   while both look right - and this estate has paid for that twice this week alone. Test-PriceTableParity
+   exists to prove they still agree, per cell, every build.
+ 
++  AND IT WAS RE-DECIDING ONE THING, FOR SIX WEEKS (fixed 2026-09-19). The sentence above was true of
++  ELIGIBILITY and false of RANKING. Which of the eligible rows represents a store was written here as
++  `Sort-Object unit_price | Select-Object -First 1` - one key, over a list in capture order - while the
++  board chose the same row through Select-StoreWinner, whose ladder goes on to ask whether the row can be
++  linked, whether the package is smaller, and finally its name. The two agree on every row that is
++  strictly cheapest and disagree the moment two rows tie EXACTLY on per-unit price: same price, different
++  PRODUCT, so the table named one brand and the board named another on the same cell. Parity could not
++  see it, because parity compared prices and there is no price difference in a tie to find. Both halves
++  of that are fixed here: the selection is now Select-StoreWinner itself, and parity now compares the
++  product as well as the price.
++#>
++<#
++  ---------------------------------------------------------------------------------------------------
++  Select-StoreWinner and Get-PackOz live in pricing-math-lib.ps1. It is PURE and has no side effects on
++  load - its own header promises that and says why - so dot-sourcing it here is safe even though
++  compare-deals.ps1 has already loaded it before it dot-sources this file.
++
+   A STORE MAY LEGITIMATELY HAVE ONLY ONE HALF. A store that never advertises (Walmart, Sam's - ad_cycle
+   'none' in stores.json) has an everyday price and a null ad, permanently and correctly. A store we have
+   only ever seen on ad has an ad price and a null everyday. Neither is a defect and neither may be
+   papered over by copying one column into the other - that IS the founding rule.
+ #>
+ 
++. (Join-Path $PSScriptRoot 'pricing-math-lib.ps1')
++
+ $script:PT_SLUG = @{
+   'Hy-Vee' = 'hyvee'; 'Aldi' = 'aldi'; 'Family Fare' = 'familyfare'; 'Fareway' = 'fareway'
+   "Baker's" = 'bakers'; "Sam's Club" = 'sams'; 'Walmart' = 'walmart'
+@@ -100,21 +119,28 @@ function Build-PriceTableRow {
+     # which the closed price exists in the table at all.
+     $adLive = @($adRows | Where-Object { Test-AdWindowLive -AdTo ([string]$_.ad_to) -AdFrom ([string]$_.ad_from) -Today $Today })
+ 
+-    $ev = @($evRows | Sort-Object unit_price | Select-Object -First 1)
+-    $ad = @($adLive | Sort-Object unit_price | Select-Object -First 1)
+-    if (-not $ev.Count -and -not $ad.Count) { continue }
+-
+-    $evR = if ($ev.Count) { $ev[0] } else { $null }
+-    $adR = if ($ad.Count) { $ad[0] } else { $null }
++    # WHICH ROW REPRESENTS EACH HALF: the BOARD'S rule, the function itself, never a transcription of it
++    # (2026-09-19). This was `Sort-Object unit_price | Select-Object -First 1`, which decides nothing at an
++    # exact per-unit tie - and PS 5.1's Sort-Object does not even preserve the input order there, it
++    # reverses two tied rows and scrambles more. So the half's product was chosen by luck while the board
++    # chose the same store's product by rule, and the two disagreed with no price difference to show for it.
++    $evR = $(if ($evRows.Count) { Select-StoreWinner $evRows } else { $null })
++    $adR = $(if ($adLive.Count) { Select-StoreWinner $adLive } else { $null })
++    if ($null -eq $evR -and $null -eq $adR) { continue }
+ 
+     # WHAT A PAGE SHOWS: the cheaper of the two, exactly as Brad specified. When only one half exists
+     # that half is shown; when the ad has nulled out the everyday price is shown again by arithmetic.
+-    $shown = $null; $shownKind = ''
+-    if ($null -ne $evR -and $null -ne $adR) {
+-      if ([double]$adR.unit_price -le [double]$evR.unit_price) { $shown = [double]$adR.unit_price; $shownKind = 'ad' }
+-      else { $shown = [double]$evR.unit_price; $shownKind = 'everyday' }
+-    } elseif ($null -ne $adR) { $shown = [double]$adR.unit_price; $shownKind = 'ad' }
+-    else { $shown = [double]$evR.unit_price; $shownKind = 'everyday' }
++    # AND WHICH HALF AT AN EXACT TIE IS THE BOARD'S DECISION TOO. This was `ad -le everyday`, which handed
++    # the ad every tie; the board has no halves at all - it ranks every eligible row together - so at a tie
++    # it can perfectly well name the everyday row, a different product under the same price. Putting the
++    # two representatives back through Select-StoreWinner IS what the board does, because that ladder is a
++    # total order and the minimum over the whole set equals the minimum over the two halves' minima. Price
++    # is still key 1, so a half that is genuinely cheaper still wins and no shown price can move.
++    $winner = Select-StoreWinner @(@($evR, $adR) | Where-Object { $null -ne $_ })
++    $shown = [double]$winner.unit_price
++    # The halves ARE the price_type split, so the winner's own price_type names the half it came from.
++    # Read from the row rather than from object identity, which a pipeline is not obliged to preserve.
++    $shownKind = $(if ([string]$winner.price_type -eq 'sale') { 'ad' } else { 'everyday' })
+ 
+     $stores[[string]$g.Name] = [ordered]@{
+       everyday          = $(if ($evR) { [double]$evR.unit_price } else { $null })
+@@ -136,6 +162,11 @@ function Build-PriceTableRow {
+       membership        = $(if ($adR) { [bool]$adR.membership } elseif ($evR) { [bool]$evR.membership } else { $false })
+       shown             = $shown
+       shown_kind        = $shownKind
++      # shown_product: the PRODUCT the shown price belongs to, written down instead of left to be
++      # re-derived from shown_kind by every reader. It is also the field Test-PriceTableParity compares,
++      # and that is the point of storing it: "same price, different product" is precisely the
++      # disagreement a price-only parity check is structurally unable to see.
++      shown_product     = [string]$winner.name
+     }
+   }
+   return [ordered]@{ id = $Id; commodity = $Commodity; unit = $Unit; stores = $stores }
+@@ -143,12 +174,17 @@ function Build-PriceTableRow {
+ 
+ function Test-PriceTableParity {
+   <#
+-    .SYNOPSIS Does the wide table's `shown` price equal the price the board published, per cell?
++    .SYNOPSIS Does the wide table's `shown` cell equal the cell the board published - price AND product?
+     .DESCRIPTION Returns an array of disagreements (empty = agree). This is the invariant that keeps
+-                 the table honest: it is DERIVED from the same rows by the same eligibility rule, so
+-                 any divergence means one of the two selections has drifted - and a price table that
+-                 quietly disagrees with the board it describes is worse than no table, because it will
+-                 be believed. Compared on unit_price to 4dp, the precision the board itself carries.
++                 the table honest: it is DERIVED from the same rows by the same eligibility rule and the
++                 same ranking rule, so any divergence means one of the two selections has drifted - and a
++                 price table that quietly disagrees with the board it describes is worse than no table,
++                 because it will be believed. Price is compared on unit_price to 4dp, the precision the
++                 board itself carries. PRODUCT is compared too (2026-09-19): an exact per-unit tie
++                 produces no price difference at all, so a price-only check could not see the one class
++                 of drift a tie can cause.
++    .OUTPUTS     One object per disagreement, `kind` being 'price', 'product', 'table-only' or
++                 'board-only'. An EMPTY array is the clean answer.
+   #>
+   param([object[]]$Table, $Comparison)
+   $bad = @()
+@@ -172,6 +208,21 @@ function Test-PriceTableParity {
+         $bad += [pscustomobject]@{ id = $row.id; store = $st; kind = 'price'; table = $t.shown; board = $b
+           why = ("the table shows {0} where the board published {1}" -f $t.shown, $b) }
+       }
++      # THE PRODUCT, NOT ONLY THE PRICE (2026-09-19). When two of a store's rows tie EXACTLY on per-unit
++      # price there is no price difference for the check above to find, however far apart the two
++      # selections have drifted - so a price-only parity check was blind in exactly the case it most
++      # needed to see. The board names its winning row in `item` and the table names the same decision in
++      # `shown_product`; both are now Select-StoreWinner over the same rows, so a difference is real drift.
++      # ORDINAL, because PowerShell's default string comparison is culture-sensitive and ignores a NUL
++      # byte outright - it cannot be trusted on text that arrived from a store's feed.
++      # A cell where either side recorded no product name is SKIPPED rather than failed: a could-not-look
++      # must never settle the question, in either direction.
++      $bItem = [string]$cell[$k].item
++      $tItem = [string]$t.shown_product
++      if ($bItem -and $tItem -and -not [string]::Equals($bItem, $tItem, [StringComparison]::Ordinal)) {
++        $bad += [pscustomobject]@{ id = $row.id; store = $st; kind = 'product'; table = $tItem; board = $bItem
++          why = ("same price, different product: the table shows '{0}' where the board published '{1}'" -f $tItem, $bItem) }
++      }
+     }
+   }
+   foreach ($k in $cell.Keys) {
+diff --git a/grocery/pricing-math-lib.ps1 b/grocery/pricing-math-lib.ps1
+index 1419c3cd3..5b751f5f8 100644
+--- a/grocery/pricing-math-lib.ps1
++++ b/grocery/pricing-math-lib.ps1
+@@ -578,6 +578,137 @@ function Get-RoundingBandTies($cheapest, $others) {
+   }
+   return ,@($ties.ToArray())
+ }
++# ================================================================ WHICH ROW, AND WHICH STORE, WINS
++# MOVED HERE FROM compare-deals.ps1 ON 2026-09-19, for the reason this whole file exists: the board stopped
++# being the only caller. price-table-lib.ps1 had its own "cheapest row per store" written as a one-key
++# `Sort-Object unit_price | Select-Object -First 1`, so at an EXACT per-unit tie it named a different
++# product for a store than the board did - same price, different brand - and Test-PriceTableParity could
++# not see it, because parity compared prices and a tie has no price difference to find. Two
++# implementations of "which row wins" is the drift this estate has already paid for twice. One copy,
++# dot-sourced by both, is the only shape that cannot drift. Neither body's DECISION changed in the move.
++function Get-PackOz([string]$size, [string]$name) {
++  # Total package weight in ounces, ONLY when the size string states one plainly. Returns $null otherwise -
++  # an unknown size must never be treated as a violation, or every store that omits sizes loses the cell.
++  $t = (("" + $size + " " + $name)).ToLower()
++  $m = [regex]::Match($t, '(\d+(?:\.\d+)?)\s*(?:fl\s*)?oz\b')
++  if ($m.Success) { return [double]$m.Groups[1].Value }
++  $m = [regex]::Match($t, '(\d+(?:\.\d+)?)\s*(?:lbs?|pounds?)\b')
++  if ($m.Success) { return ([double]$m.Groups[1].Value * 16) }
++  return $null
++}
++# WHICH ROW REPRESENTS A STORE for one commodity. Lives as ONE function rather than inline at the ranker so
++# -SelfTest exercises the rule the board actually runs; an inline sort can only be tested by transcribing
++# it, and a transcribed test passes while the original regresses. Keys, in order:
++#   1. per-unit price     - the whole point of the board; nothing below can make a cell dearer
++#   2. can we link it     - 2026-08-22, an unlinkable row cannot be verified or re-found
++#   3. smaller package    - 2026-08-31, a case pack ties its own single unit and must not beat it
++#   4. product name       - a TOTAL order, so the winner is reproducible
++#
++# KEY 4 IS NOT DECORATION. The 2026-08-22 note that this rule replaced reasoned "sorting is stable, so rows
++# equal on both keys keep their previous relative order" - that is not true on this runtime. Windows
++# PowerShell 5.1's Sort-Object is NOT a stable sort and has no -Stable parameter (that arrived in PowerShell
++# 6), so rows equal on every key came out in an arbitrary order that could differ run to run on the same
++# input. Caught while proving the key-3 fixture must-fire: with key 3 removed the case-pack test still
++# PASSED, because the winner was being decided by luck rather than by any rule. A board cell has to be
++# reproducible, so the comparison ends on something total.
++function Select-StoreWinner($rows) {
++  $rows |
++    Sort-Object @{Expression = { $_.unit_price }},
++                @{Expression = { if ($_.has_identity) { 0 } else { 1 } }},
++                @{Expression = { $s = Get-PackOz $_.size_text $_.name; if ($null -eq $s -or $s -le 0) { [double]::MaxValue } else { [double]$s } }},
++                @{Expression = { [string]$_.name }} |
++    Select-Object -First 1
++}
++# ---------------------------------------------------------------- WHICH STORE WEARS THE CROWN (2026-09-19)
++# THE SAME DEFECT ONE LEVEL UP, and it had never been given key 4's treatment. Across stores the ranker was
++# `$byStore | Sort-Object unit_price` - ONE key, over a list whose order is whatever Group-Object happened to
++# yield for that day's captures. When two stores tie EXACTLY on per-unit price nothing decided the crown, so
++# `cheapest_store`, `nomem_store` and the published `stores` order were all decided by luck and could differ
++# run to run over the very same rows.
++#
++# MEASURED on the live comparison-2026-09-17 board (572 commodities), which is the denominator this claim is
++# worth nothing without: 23 of 572 crowns are an exact multi-store tie, 26 of 572 no-membership crowns are,
++# and 132 of 572 rows carry an exact tie somewhere in their store list, so that many rows publish an
++# unreproducible store ORDER. The pair that shows it plainly is cream-of-chicken-soup and
++# cream-of-mushroom-soup: both $0.0695, both tied between Aldi and Hy-Vee, and the board crowned Aldi on one
++# and Hy-Vee on the other, having printed the two stores in opposite orders. No rule chose either.
++#
++# AND SORT-OBJECT IS NOT MERELY UNDEFINED ON TIES, IT ACTIVELY REORDERS THEM. Probed on this runtime
++# (5.1.26100): two tied rows come back REVERSED, and 24 tied rows come back as 16,17,18,13,14,15,22,... So
++# "it kept the order it was given" was never available as a fallback, at any list length.
++#
++# The keys, and each one can only speak where every key above it was silent, so none of them can move a
++# price or make the board dearer:
++#   1. per-unit price     - the board's whole point. A row with no price sorts last; it cannot be crowned.
++#   2. no membership      - at an EXACT tie, a price any reader can pay outranks one behind a paid
++#                           membership. It also stops the report line "cheapest: Sam's Club $X  |
++#                           no-membership: Aldi $X", which reads as if the membership bought something.
++#                           0 of the 572 rows on the 2026-09-17 board exercise this key today - no tie there
++#                           pairs a membership store with a non-membership one - so it is stated and
++#                           fixtured rather than measured, and it is the key that will matter the first day
++#                           Sam's ties Aldi.
++#   3. can we link it     - Select-StoreWinner's key 2, for its reason: an unlinkable cell cannot be
++#                           verified against the shelf and gives the reader nowhere to click.
++#   4. smaller package    - Select-StoreWinner's key 3, for its reason: between two equal per-unit prices
++#                           the one that costs the shopper less to walk out with should win.
++#   5. store name, ORDINAL - the TOTAL order. Arbitrary, and that is the point: a store appears at most once
++#                           in this list, so key 5 can never tie, and the crown is therefore decided by a
++#                           declared rule rather than by arrival order. ORDINAL and not the default, because
++#                           PowerShell's string comparison is culture-sensitive and a culture-sensitive
++#                           order is not a stable base for a reproducibility claim.
++#
++# WRITTEN AS A COMPARISON RATHER THAN AS Sort-Object KEYS on purpose. Sort-Object cannot be given an ordinal
++# comparer for key 5, and List.Sort is itself an unstable introsort - which does not matter here and is the
++# property worth naming: this comparison returns 0 only for a row compared with itself, so the result is
++# unique whatever the sort does with ties. A fixture asserts exactly that.
++function Compare-StoreCell($a, $b) {
++  # 1. per-unit price. An absent price sorts LAST rather than reading as 0 - an agreeing zero would crown a
++  #    row that could not be priced at all, which is the worst answer available.
++  $pa = $(if ($null -eq $a.unit_price) { [double]::MaxValue } else { [double]$a.unit_price })
++  $pb = $(if ($null -eq $b.unit_price) { [double]::MaxValue } else { [double]$b.unit_price })
++  if ($pa -lt $pb) { return -1 }
++  if ($pa -gt $pb) { return 1 }
++  # 2. a price anyone can pay, ahead of one behind a paid membership
++  $ma = $(if ($a.membership) { 1 } else { 0 })
++  $mb = $(if ($b.membership) { 1 } else { 0 })
++  if ($ma -ne $mb) { return ($ma - $mb) }
++  # 3. can we link it
++  $ia = $(if ($a.has_identity) { 0 } else { 1 })
++  $ib = $(if ($b.has_identity) { 0 } else { 1 })
++  if ($ia -ne $ib) { return ($ia - $ib) }
++  # 4. smaller package. An unreadable size sorts last - we cannot claim a package is smaller when we cannot
++  #    read it. Same treatment Select-StoreWinner's key 3 gives it.
++  $sa = Get-PackOz ([string]$a.size_text) ([string]$a.name)
++  $sb = Get-PackOz ([string]$b.size_text) ([string]$b.name)
++  $sa = $(if ($null -eq $sa -or $sa -le 0) { [double]::MaxValue } else { [double]$sa })
++  $sb = $(if ($null -eq $sb -or $sb -le 0) { [double]::MaxValue } else { [double]$sb })
++  if ($sa -lt $sb) { return -1 }
++  if ($sa -gt $sb) { return 1 }
++  # 5. the total order
++  return [string]::CompareOrdinal([string]$a.store, [string]$b.store)
++}
++function Sort-StoreCells($cells) {
++  <#
++    .SYNOPSIS The per-store winners of one commodity, cheapest first, in a REPRODUCIBLE order.
++    .DESCRIPTION One row per store (Select-StoreWinner has already picked each store's row). The first
++                 element is the crown; the first non-membership element is the no-membership crown; the
++                 whole array is what the board publishes as `stores`. Pure over its argument.
++    .NOTES  RETURNS THE ARRAY UNWRAPPED - no `return ,$arr` here, deliberately, and the first run of the
++            fixtures below is why. Every caller writes `@(Sort-StoreCells $x)`, which is the inline wrap
++            the ops rules warn about: against a comma-returned array it reads as ONE element, so
++            `$ranked[0]` is $null and `$ranked[0].store` is an agreeing blank crown. Select-FreshestCaptureRows
++            returns its array the same plain way for the same reason. A single cell therefore unrolls to a
++            scalar, which every caller's `@()` re-wraps correctly.
++  #>
++  $list = New-Object System.Collections.Generic.List[object]
++  foreach ($c in @($cells)) { if ($null -ne $c) { [void]$list.Add($c) } }
++  # .ToArray(), never @($list): wrapping a New-Object List[object] throws "Argument types do not match"
++  # on PS 5.1 even when the list is empty (see ops/audit-list-array-wrap.ps1).
++  if ($list.Count -lt 2) { return $list.ToArray() }
++  $list.Sort([System.Comparison[object]]{ param($a, $b) Compare-StoreCell $a $b })
++  return $list.ToArray()
++}
++
+ function Get-PackCount($text) {
+   if (-not $text) { return $null }
+   $t = ("" + $text).ToLower()
+diff --git a/grocery/regression-baseline.json b/grocery/regression-baseline.json
+index 75c0321e2..99af09fb3 100644
+--- a/grocery/regression-baseline.json
++++ b/grocery/regression-baseline.json
+@@ -1,6 +1,6 @@
+ ∩╗┐{
+     "frozen_week":  "2026-07-05",
+-    "built_at":  "2026-09-05T14:33:01",
++    "built_at":  "2026-09-19T07:04:45",
+     "source":  "regression-inputs (hermetic; engine-rebuilt)",
+     "commodities":  [
+                         {
+@@ -14,8 +14,8 @@
+                                            "Baker\u0027s":  4.99,
+                                            "Sam\u0027s Club":  5.56,
+                                            "Family Fare":  6.6632999999999996,
+-                                           "Walmart":  6.99,
+-                                           "Hy-Vee":  6.99
++                                           "Hy-Vee":  6.99,
++                                           "Walmart":  6.99
+                                        }
+                         },
+                         {
+@@ -153,12 +153,12 @@
+                             "unit":  "lb",
+                             "cheapest_store":  "Sam\u0027s Club",
+                             "cheapest_price":  1.28,
+-                            "nomem_store":  "Family Fare",
++                            "nomem_store":  "Baker\u0027s",
+                             "nomem_price":  1.99,
+                             "stores":  {
+                                            "Sam\u0027s Club":  1.28,
+-                                           "Family Fare":  1.99,
+                                            "Baker\u0027s":  1.99,
++                                           "Family Fare":  1.99,
+                                            "Walmart":  2.58
+                                        }
+                         },
+@@ -285,8 +285,8 @@
+                             "nomem_price":  0.0687,
+                             "stores":  {
+                                            "Baker\u0027s":  0.0687,
+-                                           "Hy-Vee":  0.0702,
+                                            "Family Fare":  0.0702,
++                                           "Hy-Vee":  0.0702,
+                                            "Walmart":  0.0762
+                                        }
+                         },
+@@ -491,8 +491,8 @@
+                             "nomem_price":  4.48,
+                             "stores":  {
+                                            "Hy-Vee":  4.48,
+-                                           "Walmart":  4.65,
+                                            "Aldi":  4.65,
++                                           "Walmart":  4.65,
+                                            "Sam\u0027s Club":  4.97,
+                                            "Baker\u0027s":  4.99,
+                                            "Family Fare":  6.99
+diff --git a/grocery/test-price-table.ps1 b/grocery/test-price-table.ps1
+index b66f9c904..be22e293f 100644
+--- a/grocery/test-price-table.ps1
++++ b/grocery/test-price-table.ps1
+@@ -23,10 +23,14 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
+ $fail = 0
+ function Ok($m) { Write-Output "ok    $m" }
+ function Bad($m) { Write-Output "FAIL  $m"; $script:fail++ }
+-function PtRow($store, $up, $type, $name, [string]$from = '', [string]$to = '', [string]$basis = '', [string]$src = '') {
+-  [pscustomobject]@{ store = $store; unit_price = $up; price_type = $type; name = $name; size_text = ''
++function PtRow($store, $up, $type, $name, [string]$from = '', [string]$to = '', [string]$basis = '', [string]$src = '',
++               $id = $true, [string]$size = '') {
++  # has_identity and size_text are the keys Select-StoreWinner reaches for once price has tied, so a
++  # fixture that cannot set them cannot exercise a tie at all. Defaulted so every case above is unchanged:
++  # has_identity $true throughout means the linkability key stays silent unless a case asks for it.
++  [pscustomobject]@{ store = $store; unit_price = $up; price_type = $type; name = $name; size_text = $size
+     price_text = ('$' + $up); src_date = ''; ad_from = $from; ad_to = $to; ad_basis = $basis
+-    source_ad = $src; membership = $false }
++    source_ad = $src; membership = $false; has_identity = $id }
+ }
+ # NOTE: the helper is PtRow, not R. `R` is the built-in alias for Invoke-History, so a fixture file
+ # that defines a function called R dies with "a positional parameter cannot be found that accepts
+@@ -156,5 +160,113 @@ $dataLine = @($csv -split "`n")[1]
+ if ($dataLine -eq 'rice,Rice,lb,0.42,,,,0.42') { Ok 'the CSV renders a null ad as an empty field, not a 0' }
+ else { Bad "the CSV row is not what it should be: '$dataLine'" }
+ 
++# ======================================================================================================
++# 13-18: THE TABLE AND THE BOARD MUST NAME THE SAME PRODUCT, NOT ONLY THE SAME PRICE (2026-09-19)
++#
++# The founding defect. This file's header promised the table "does not re-decide anything", and that was
++# true of ELIGIBILITY and false of RANKING: which of the eligible rows represents a store was written here
++# as `Sort-Object unit_price | Select-Object -First 1` while the board chose through Select-StoreWinner,
++# whose ladder goes on to ask whether the row can be LINKED, whether the package is SMALLER, and finally
++# its NAME. Those agree on every row that is strictly cheapest and disagree the instant two rows tie
++# exactly on per-unit price - and PS 5.1's Sort-Object does not even leave a tie in the order it was
++# handed, it reverses two tied rows outright. So the table named one brand and the board another on the
++# same cell, at the same price.
++#
++# WHY IT WAS INVISIBLE: parity compared PRICES, and a tie has no price difference in it. A check that is
++# blind in precisely the case it exists to catch is the most dangerous object in this estate - case 10
++# says so about a different half of the same function.
++#
++# THE ASSERTION IS AGAINST Select-StoreWinner ITSELF, never against a transcription of its answer. That is
++# the whole point of the repair: if the board's rule changes, these cases follow it, and the day the table
++# stops calling that rule they go red.
++
++# 13. MUST FIRE - the tie the board decides on LINKABILITY. Two Hy-Vee everyday rows, identical price and
++#     size, one of them unlinkable. The board takes the linkable one (the 2026-08-22 pancake ruling); the
++#     table must take the same one. The unlinkable row sorts FIRST under a bare one-key Sort-Object here,
++#     which is what made this the live shape rather than a hypothetical.
++$tieRows = @(
++  (PtRow 'Hy-Vee' 1.95 'everyday' 'Millville Complete Buttermilk Pancake & Waffle Mix' '' '' '' '' $false '32 oz'),
++  (PtRow 'Hy-Vee' 1.95 'everyday' "Aunt Maple's Buttermilk Pancake Mix 32 OZ"          '' '' '' '' $true  '32 oz')
++)
++#     ASSERTED OVER BOTH INPUT ORDERS, and that is not belt-and-braces. Checked by mutation: with the
++#     selection reverted to the one-key sort, this case with ONE order still PASSED - the unstable sort
++#     happened to yield the linkable row for that particular input - and the whole fixture rested on the
++#     order-independence case below. A tie fixture that feeds one order is testing luck, not a rule.
++$boardPick = (Select-StoreWinner $tieRows).name
++$got13 = @()
++foreach ($ord in @($tieRows, @($tieRows[1], $tieRows[0]))) {
++  $r = Build-PriceTableRow -Id 'pancake-mix' -Commodity 'Pancake Mix' -Unit 'oz' -Today $TODAY -Rows $ord
++  $cc = $r.stores['Hy-Vee']
++  $got13 += ('{0}|{1}|{2}' -f $cc.everyday, $cc.everyday_product, $cc.shown_product)
++}
++$want13 = ('{0}|{1}|{2}' -f 1.95, $boardPick, $boardPick)
++if (@($got13 | Where-Object { $_ -ne $want13 }).Count -eq 0) {
++  Ok ("at an exact per-unit tie the table names the board's product ('" + $boardPick + "') in either input order, not whichever row the sort yielded")
++} else { Bad ("the table and the board disagree about the PRODUCT at an identical price. board='" + $boardPick + "' table=[" + ($got13 -join '] [') + "] - same money, different brand on the tile") }
++
++# 14. MUST FIRE - the tie that crosses the HALVES. An ad row and an everyday row at exactly the same
++#     per-unit price. The board has no halves at all: it ranks every eligible row together, so it can
++#     perfectly well name the everyday row. The table used to hand the ad every tie unconditionally
++#     (`ad -le everyday`), which is a different product under the same price whenever the everyday row
++#     wins the ladder. Here the ad row is the unlinkable one, so the board names the everyday row.
++$halfTie = @(
++  (PtRow 'Aldi' 0.99 'everyday' 'Millville Rolled Oats 42 oz' '' '' '' '' $true  '42 oz'),
++  (PtRow 'Aldi' 0.99 'sale'     'Unbranded Oats, 42 oz'       '2026-08-19' '2026-08-25' 'ad' '' $false '42 oz')
++)
++$boardPick2 = (Select-StoreWinner $halfTie).name
++$r = Build-PriceTableRow -Id 'oats' -Commodity 'Oats' -Unit 'oz' -Today $TODAY -Rows $halfTie
++$c = $r.stores['Aldi']
++if ($c.shown -eq 0.99 -and $c.shown_product -eq $boardPick2 -and $c.shown_kind -eq 'everyday' -and $c.ad -eq 0.99) {
++  Ok 'an ad tying the everyday price does not automatically take the tile - the board''s own ladder decides which product is shown'
++} else { Bad ("the half tie was decided by luck: shown_kind=$($c.shown_kind) shown_product='$($c.shown_product)' board='$boardPick2'") }
++
++# 15. CLEAN TWIN - and this is the one the fix was most likely to break. An ad that is genuinely CHEAPER
++#     must still win the tile and still be stored as the ad, because price is key 1 of that ladder and
++#     every key below it speaks only where price was already equal. If this ever goes red the tie-break
++#     has started overriding Brad's cheaper-of rule, which would put a dearer number on a paid page.
++$adCheaper = @(
++  (PtRow 'Aldi' 0.99 'everyday' 'Millville Rolled Oats 42 oz' '' '' '' '' $true  '42 oz'),
++  (PtRow 'Aldi' 0.98 'sale'     'Unbranded Oats, 42 oz'       '2026-08-19' '2026-08-25' 'ad' '' $false '42 oz')
++)
++$r = Build-PriceTableRow -Id 'oats' -Commodity 'Oats' -Unit 'oz' -Today $TODAY -Rows $adCheaper
++$c = $r.stores['Aldi']
++if ($c.shown -eq 0.98 -and $c.shown_kind -eq 'ad' -and $c.shown_product -eq 'Unbranded Oats, 42 oz' -and $c.everyday -eq 0.99) {
++  Ok 'a genuinely cheaper ad still wins the tile - the tie-break never makes a page dearer'
++} else { Bad ("the tie-break overrode the cheaper-of rule: shown=$($c.shown) kind=$($c.shown_kind)") }
++
++# 16. CLEAN TWIN - the OTHER selection is reproducible too. Case 13 covers which row wins inside a half;
++#     this covers which HALF wins the tile, a separate decision in a separate branch. The board cell both
++#     must agree with is reproducible for the same reason (Sort-StoreCells' total order), so a table that
++#     still depended on row order could only agree with the board by luck.
++$rA = Build-PriceTableRow -Id 'oats' -Commodity 'Oats' -Unit 'oz' -Today $TODAY -Rows $halfTie
++$rB = Build-PriceTableRow -Id 'oats' -Commodity 'Oats' -Unit 'oz' -Today $TODAY -Rows @($halfTie[1], $halfTie[0])
++$sA = $rA.stores['Aldi']; $sB = $rB.stores['Aldi']
++if ($sA.shown_product -eq $sB.shown_product -and $sA.shown_kind -eq $sB.shown_kind) {
++  Ok 'the shown half is the same whichever order the tied ad and everyday rows arrive in'
++} else { Bad ("the shown half still depends on row order: '" + $sA.shown_product + "'/" + $sA.shown_kind + " vs '" + $sB.shown_product + "'/" + $sB.shown_kind) }
++
++# 17. MUST FIRE - PARITY MUST BE ABLE TO SEE IT. The whole reason this defect survived is that the check
++#     meant to catch drift compared only prices, so a tie produced nothing for it to find. Identical
++#     price, different product: parity has to report it, or the repair above is unguarded from tomorrow.
++$tbl = @( (Build-PriceTableRow -Id 'x' -Commodity 'X' -Unit 'lb' -Today $TODAY -Rows @( (PtRow 'Aldi' 1.00 'everyday' 'Millville Oats') )) )
++$cmpSameProduct = [pscustomobject]@{ comparison = @([pscustomobject]@{ id = 'x'; stores = @([pscustomobject]@{ store = 'Aldi'; per_unit = 1.00; item = 'Millville Oats' }) }) }
++$cmpOtherProduct = [pscustomobject]@{ comparison = @([pscustomobject]@{ id = 'x'; stores = @([pscustomobject]@{ store = 'Aldi'; per_unit = 1.00; item = 'Some Other Brand Oats' }) }) }
++$b = @(Test-PriceTableParity -Table $tbl -Comparison $cmpOtherProduct)
++if ($b.Count -eq 1 -and $b[0].kind -eq 'product') { Ok 'parity FIRES on same price, different product - the blind spot that hid this for six weeks' }
++else { Bad ("parity cannot see a product disagreement at an identical price (got " + $b.Count + " finding(s), kind=" + (@($b | ForEach-Object { $_.kind }) -join ',') + ")") }
++
++# 18. MUST NOT FIRE - twice over, because a check that fires on agreement is worse than no check.
++#     (a) the board names the same product: silent.
++#     (b) the board cell records NO product at all: SKIPPED, never failed. A could-not-look must not
++#         settle the question in either direction, and every board built before shown_product existed is
++#         exactly that case.
++$b = @(Test-PriceTableParity -Table $tbl -Comparison $cmpSameProduct)
++if (-not $b.Count) { Ok 'parity is silent when the table and board name the same product' }
++else { Bad ("parity fired on an agreeing product: " + $b[0].why) }
++$cmpNoItem = [pscustomobject]@{ comparison = @([pscustomobject]@{ id = 'x'; stores = @([pscustomobject]@{ store = 'Aldi'; per_unit = 1.00 }) }) }
++$b = @(Test-PriceTableParity -Table $tbl -Comparison $cmpNoItem)
++if (-not $b.Count) { Ok 'a board cell that records no product is SKIPPED, not failed (a could-not-look settles nothing)' }
++else { Bad ("parity treated a missing board product as a disagreement: " + $b[0].why) }
++
+ Write-Output ("PRICE-TABLE " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
+ Exit-Guard -Name 'price-table' -Summary "failed=$fail" -Code $(if ($fail) { 1 } else { 0 })
+diff --git a/grocery/test-pu-lib.ps1 b/grocery/test-pu-lib.ps1
+index f88beb1f3..159939ff6 100644
+--- a/grocery/test-pu-lib.ps1
++++ b/grocery/test-pu-lib.ps1
+@@ -1,4 +1,4 @@
+-<#
++∩╗┐<#
+   test-pu-lib.ps1 - frozen fixtures for pu-lib.ps1 (Get-LinkPerUnit), the ONE per-unit implementation.
+ 
+   WHAT THIS USED TO BE, AND WHY IT WAS PERMANENTLY RED (fixed 2026-08-22). This file was written as a
+@@ -194,10 +194,54 @@ foreach ($c in $bandCases) {
+   $got = @($got)
+   $ok = ((@($got) -join ',') -eq (@($c.want) -join ','))
+   if ($ok) { Write-Output ("ok    band  " + $c.why + " -> [" + (@($got) -join ', ') + "]") }
+-  else { $afail++; Write-Output ("FAIL  band  " + $c.why + "  want=[" + (@($c.want) -join ', ') + "] got=[" + (@($got) -join ', ') + "]") }
++  else { $afail++; Write-Output ("FAIL  band  " + $c.why + "  told want=[" + (@($c.want) -join ', ') + "] got=[" + (@($got) -join ', ') + "]") }
+ }
+ Write-Output ''
+ 
++# ==== THE RANKING RULES, which moved INTO this library on 2026-09-19 ==================================
++# Get-PackOz and Select-StoreWinner lived in compare-deals.ps1 until price-table-lib.ps1 needed the same
++# decision about the same rows; Sort-StoreCells was written here. compare-deals' own -SelfTest drives all
++# three over the founding bugs and the full key ladders, and that is where the behaviour is pinned.
++# WHAT IS PINNED HERE IS THE PROVIDED INTERFACE: that dot-sourcing this file alone actually yields the
++# three, and that they still decide the shape each was moved for. Without it, a change that put any of
++# them back in the engine would leave price-table-lib calling a function that is not there - at RUN time,
++# as "not recognized as the name of a cmdlet", which is the exact failure mode this library exists to
++# make impossible (see the header).
++# RankT COUNTS. The case list here is a LITERAL one, so it knows its own number and a shortfall is a
++# defect rather than a smaller tree - which is only true if the number is derived from the cases that
++# actually ran. Hand-typing it read 11 against 10 real cases on the first run.
++$rankCases = 0
++function RankT($label, $cond, $detail) {
++  $script:rankCases++
++  if ($cond) { Write-Output ("ok    rank  " + $label) }
++  else { $script:afail++; Write-Output ("FAIL  rank  " + $label + $(if ($detail) { "  " + $detail } else { '' })) }
++}
++$rankFail0 = $afail
++foreach ($fn in @('Get-PackOz', 'Select-StoreWinner', 'Compare-StoreCell', 'Sort-StoreCells')) {
++  RankT ("pricing-math-lib provides " + $fn) ($null -ne (Get-Command $fn -CommandType Function -ErrorAction SilentlyContinue)) 'every caller that dot-sources this file would die at run time'
++}
++function PmCell($store, $up, $mem, $id, $sz, $nm) { [pscustomobject]@{ store=$store; unit_price=$up; membership=$mem; has_identity=$id; size_text=$sz; name=$nm } }
++# Get-PackOz: the two shapes it reads and the one it refuses. An unreadable size returns $null, never 0 -
++# a 0 would read as "the smallest package there is" and win every size tie-break it entered.
++RankT 'Get-PackOz reads a plain ounce size' ((Get-PackOz '10 oz' '') -eq 10) ''
++RankT 'Get-PackOz converts pounds to ounces' ((Get-PackOz '2 lb' '') -eq 32) ''
++RankT 'Get-PackOz returns $null on an unreadable size, never an agreeing 0' ($null -eq (Get-PackOz 'each' 'no size anywhere')) ''
++# Select-StoreWinner: the harissa ruling, the shape it was moved for.
++$hz = @((PmCell 'Walmart' 0.498 $false $true '120 oz' '(12 pack) Mina Harissa'), (PmCell 'Walmart' 0.498 $false $true '10 oz' 'Mina Harissa'))
++RankT 'Select-StoreWinner still gives a per-unit tie to the smaller package, in either order' ((Select-StoreWinner $hz).size_text -eq '10 oz' -and (Select-StoreWinner @($hz[1], $hz[0])).size_text -eq '10 oz') 'the case-pack tie-break was lost in the move'
++# Sort-StoreCells: the crown at an exact cross-store tie, and its return shape.
++$cells = @((PmCell 'Walmart' 1.00 $false $true '10 oz' 'W'), (PmCell 'Aldi' 1.00 $false $true '10 oz' 'A'), (PmCell 'Hy-Vee' 0.90 $false $true '10 oz' 'H'))
++$ordA = @(Sort-StoreCells $cells)
++$ordB = @(Sort-StoreCells @($cells[1], $cells[2], $cells[0]))
++RankT 'Sort-StoreCells returns one reproducible order, cheapest first, whatever order it is given' ($ordA.Count -eq 3 -and (($ordA | ForEach-Object { $_.store }) -join ',') -eq (($ordB | ForEach-Object { $_.store }) -join ',') -and $ordA[0].store -eq 'Hy-Vee') ("order-dependent or mis-shaped: A=[" + (($ordA | ForEach-Object { $_.store }) -join ',') + "] B=[" + (($ordB | ForEach-Object { $_.store }) -join ',') + "]")
++# THE RETURN SHAPE IS PART OF THE INTERFACE. Every caller writes @(Sort-StoreCells $x); if this ever goes
++# back to `return ,$arr` that inline wrap reads the whole array as ONE element and $ranked[0].store is a
++# blank crown with nothing thrown. That is not hypothetical - it is what the first version of this did.
++$one = @(Sort-StoreCells @($cells[0]))
++RankT 'a single cell comes back as one cell under the caller''s @() wrap, not as a nested array' ($one.Count -eq 1 -and $one[0].store -eq 'Walmart') ("the return shape breaks the caller's @() wrap: Count=" + $one.Count)
++Write-Output ("rank cases: $rankCases run, " + ($afail - $rankFail0) + " failed")
++Write-Output ''
++
+ # --- INFORMATION ONLY: how much of the live board's linked cells pu-lib can judge today. Never a failure:
+ # live data changes daily and is not a fixture. A rising unresolved count is worth a look, not a red build.
+ try {
+@@ -223,5 +267,5 @@ try {
+ } catch { Write-Output ("live sweep skipped: " + $_.Exception.Message) }
+ 
+ if ($afail) { Write-Output "PU-LIB FAILED ($afail) - pu-lib or pricing-math-lib no longer agrees with its frozen expected values."; exit 1 }
+-Write-Output "PU-LIB PASSED ($($cases.Count) pu-lib + $($splitCases.Count) ad-split + $($sizeCases.Count) part-size + $($roundCases.Count) rounding-pct + $($bandCases.Count) rounding-band frozen cases)"
++Write-Output "PU-LIB PASSED ($($cases.Count) pu-lib + $($splitCases.Count) ad-split + $($sizeCases.Count) part-size + $($roundCases.Count) rounding-pct + $($bandCases.Count) rounding-band + $rankCases ranking frozen cases)"
+ exit 0

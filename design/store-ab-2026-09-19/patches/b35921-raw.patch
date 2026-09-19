@@ -1,0 +1,1148 @@
+diff --git a/docs/CONTROL-CONSTANTS.md b/docs/CONTROL-CONSTANTS.md
+index 32c0e5120..51280b6c6 100644
+--- a/docs/CONTROL-CONSTANTS.md
++++ b/docs/CONTROL-CONSTANTS.md
+@@ -50,6 +50,7 @@ tuning one can see the others, and that a constant with no stated direction stan
+ | `$PAIR_MAX_BYTES = 2MB` | `ops/seed-worktree.ps1` | the largest tracked record the seeding pair check will read when looking for a stale pointer to a seeded dated file | two-way, an upper bound | goes quiet, and it has nothing to lose: this is a REPORT with no verdict, and a record that stops being written keeps its last pointer and is still reported as stale | **first plausible value**, NOT a sweep: a board pointer lives in a small report and the boards themselves carry a dated NAME, so they are excluded before the size matters. 9 of the 304 records examined on 2026-09-11 were over it or unreadable, and the run prints that count |
+ | `$script:TcPushLockTotal = 1` | `lib/push-lock.ps1` | how many pushes on this box may hold the machine-wide push lock, and so gate-then-land, at once | **fixed by the mechanism, not tuned**: `refs/heads/main` accepts one push at a time whatever this says, so the only question was whether the losers find that out before or after gating | goes quiet - nothing pushing, nothing held; a holder that is killed frees the lock at once as an abandoned mutex | **not a tuning constant and NOT a sweep.** It is a property of git. A value above 1 would not add landings, only restore the race |
+ | `$WaitSec = 1200` in `Enter-TcPushLock` (`-WaitSec` on `ops/hold-push-lock.ps1`) | `lib/push-lock.ps1` | how long the PUSH queue may go WITHOUT MOVING before a hook gives up on the lock; as with the gate queue it does not bound the whole wait | two-way, an upper bound on no progress | **spoken, and it degrades rather than firing**: the hook prints `push lock - unlocked <why>` and pushes on, gated exactly as before. That is deliberate - this is a fairness device, and a refusal here would be worse than the livelock it fixes | **kept from `Enter-TcGateSlots`**, which is the same queue with a budget of one; NOT a sweep |
++| `$script:CursorStallDays = 3` | `grocery/capture-policy-lib.ps1` | how many days whose capture LANDED a slice's head term may block the quarterly rotation, showing no evidence it was asked, before the cursor steps over that ONE term | two-way, an upper bound on doubt: raising it is slower and safer, lowering it makes a silent skip cheaper | **nothing happens, and that is the design** - the counter is only touched on a day whose capture landed, so a lane that stops capturing never accumulates one and never escapes; its slice is held exactly as it is today, and `commit-capture-cursor.ps1 -Report` prints the stall | **grounded on a committed replay**, NOT a sweep. `grocery/replay-cursor-coverage.ps1` over `out/capture-cursor-log.jsonl` on 2026-09-19 (111 advances by the five stores that call `Step-CaptureCursor`): the longest run of consecutive advances this rule would have HELD on is Fareway 2, Walmart 1, Sam's Club 1, Baker's 1, Aldi 0, so 3 clears every working lane by a day. Rejected: 1 (indistinguishable from no rule by day two) and 7 (a week of a frozen head). The run lengths are over the HISTORICAL cursor positions, not a simulation, which is why the margin is a day rather than nothing |
+ | `$MaxHoldSec = 5400` | `ops/hold-push-lock.ps1` | the hang guard on one hold, after which the lock is released whatever the hook is doing | two-way, an upper bound | goes quiet; and it is the THIRD of three ways a hold ends, behind the hook writing its release file and behind the watched hook process disappearing, so it only ever fires if both of those fail | **first plausible value**, NOT a sweep: about three times the longest hook measured on 2026-09-11 (1,840 s) |
+ 
+ **Most rows say "not recorded" and that is the honest state.** `I94` established the convention that a
+diff --git a/grocery/capture-policy-lib.ps1 b/grocery/capture-policy-lib.ps1
+index 9a5cd1e11..df762680c 100644
+--- a/grocery/capture-policy-lib.ps1
++++ b/grocery/capture-policy-lib.ps1
+@@ -317,6 +317,36 @@ function Get-PolicyQuarterDays { return $script:QuarterDays }
+ 
+ $script:CursorFile = 'capture-cursor.json'
+ 
++# HOW MANY LANDED DAYS A HEAD TERM MAY BLOCK THE ROTATION BEFORE IT IS STEPPED OVER (2026-09-19).
++#
++# WHAT IT IS. Step-CaptureCursor advances only over slice terms today's capture shows were asked. For
++# the four lanes with no per-term ledger, an uncovered term has two indistinguishable meanings: the
++# capture never asked for it (must not be skipped), or it was asked and the store had nothing (must not
++# freeze the rotation). This number is how long the doubt is resolved in the term's favour. On the Nth
++# consecutive day where the capture LANDED and the head term still shows nothing, the cursor steps over
++# that ONE term - never the whole slice - and says so in its reason.
++#
++# DIRECTION. Raising it makes the rotation slower and safer; lowering it makes a silent skip cheaper.
++# It may only be changed with the measurement below re-run.
++#
++# WHAT IT DOES WHEN THE PRODUCER STOPS. Nothing, which is the point: the counter is only touched on a
++# day whose capture LANDED, so a dead lane never accumulates one and never escapes. A store that stops
++# capturing holds its slice forever, exactly as it does today.
++#
++# WHY 3, AND WHAT ELSE WAS CONSIDERED. Measured with grocery\replay-cursor-coverage.ps1 over
++# out\capture-cursor-log.jsonl on 2026-09-19 (2026-08-21 to 2026-09-19, 111 advances by the five stores
++# that call Step-CaptureCursor): the longest run of consecutive advances this rule would have HELD on is
++# Fareway 2, Walmart 1, Sam's Club 1, Baker's 1, Aldi 0. So 3 clears every working lane in that window
++# by at least a day. It is not the first plausible number: 1 was rejected as indistinguishable from
++# having no rule at all by the second day, and 7 as a week of a frozen head, long enough that nobody
++# would connect the stall to its cause. Family Fare's 28 is not evidence about this number - that lane
++# does not call this function and its own commit rule is the open item in Step-CaptureCursor's header.
++# HOW TO READ THAT RUN LENGTH HONESTLY: it is a run over the HISTORICAL sequence of cursor positions,
++# not a simulation. Under this rule a hold repeats the same slice tomorrow, so a real run can be longer
++# than the replay's, which is the other reason the margin is a day rather than nothing.
++# The counter is date-stamped, so a builder that runs four times a day counts one day, not four.
++$script:CursorStallDays = 3
++
+ function Get-AllTerms {
+   # Flattened in a STABLE order so a cursor means the same thing across runs.
+   # commodity-search.json maps one commodity to one term OR a list of them.
+@@ -1167,7 +1197,11 @@ function Save-CaptureCursor {
+     file and a failed write leaves the previous index intact.
+   #>
+   [CmdletBinding()]
+-  param([Parameter(Mandatory)][string]$Store, [Parameter(Mandatory)][int]$Next, [string]$OutDir = '', [string]$AdvancedOn = '')
++  param([Parameter(Mandatory)][string]$Store, [Parameter(Mandatory)][int]$Next, [string]$OutDir = '', [string]$AdvancedOn = '',
++        # The stall counter Step-CaptureCursor keeps for this store, and the day it last counted. Left
++        # exactly as it is when not passed, so every other caller (Family Fare's lane writes this file
++        # too) neither reads nor disturbs it.
++        [nullable[int]]$Stall = $null, [string]$StallDay = '')
+   if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
+   if (-not (Test-TermRotationStore $Store)) {
+     throw ("REFUSING to write a TERM cursor for '$Store': it does not rotate through " +
+@@ -1199,6 +1233,20 @@ function Save-CaptureCursor {
+     # The date this store last moved. Step-CaptureCursor reads it to enforce one slice per day,
+     # so a builder that runs twice does not rotate twice.
+     if ($AdvancedOn) { $h[((Get-CursorKey $Store) + '_last')] = $AdvancedOn }
++    # ZERO IS THE ABSENCE OF A STALL, so it is written by REMOVING the keys rather than by storing 0:
++    # a reader then cannot tell "no stall" from "a stall this file happens to spell as 0", and the file
++    # stays quiet on the six stores that are rotating normally.
++    if ($null -ne $Stall) {
++      $sKey = (Get-CursorKey $Store) + '_stall'
++      $dKey = (Get-CursorKey $Store) + '_stall_day'
++      if ([int]$Stall -gt 0) {
++        $h[$sKey] = [int]$Stall
++        $h[$dKey] = [string]$StallDay
++      } else {
++        if ($h.ContainsKey($sKey)) { [void]$h.Remove($sKey) }
++        if ($h.ContainsKey($dKey)) { [void]$h.Remove($dKey) }
++      }
++    }
+     $h['updated'] = (Get-Date).ToString('s')
+     $h['note'] = 'index into the commodity-search term order where each TERM-ROTATION store starts next. Advanced only after that store''s capture landed. Baker''s joined this cursor on 2026-08-22 (it used to pull all 598 terms daily). Hy-Vee is deliberately absent: it rotates by PRODUCT ID and keeps hyvee-rotation-cursor.json.'
+     # Retried against a lock-free reader, in the bytes the Set-Content -Encoding UTF8 it replaced wrote.
+@@ -1223,7 +1271,13 @@ function Write-CursorLog {
+       must not lose the capture.
+   #>
+   [CmdletBinding()]
+-  param([Parameter(Mandatory)][string]$Store, [int]$From, [int]$To, [string]$Today, [string]$OutDir = '')
++  param([Parameter(Mandatory)][string]$Store, [int]$From, [int]$To, [string]$Today, [string]$OutDir = '',
++        # WHAT THE ADVANCE WAS JUDGED ON (2026-09-19). The three skipped slices were found by replaying
++        # this log against the capture files of those days, which cost an afternoon and a historical
++        # commodity-search.json per day; recording the coverage on the line is what makes the same
++        # question a grep next time. Optional, so every existing caller (Family Fare's lane) still logs
++        # exactly the line it logged before and no reader of this file sees a new shape it must handle.
++        [nullable[int]]$Covered = $null, [nullable[int]]$SliceSize = $null, [string]$CoverageSource = '')
+   try {
+     if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
+     # The outermost script in the call stack is the thing that actually caused this.
+@@ -1232,31 +1286,36 @@ function Write-CursorLog {
+       $stack = @(Get-PSCallStack | Where-Object { $_.ScriptName } | Select-Object -ExpandProperty ScriptName)
+       if ($stack.Count) { $caller = (Split-Path $stack[-1] -Leaf) }
+     } catch { }
+-    $line = [ordered]@{
++    $rec = [ordered]@{
+       at = (Get-Date).ToString('s'); store = $Store; from = $From; to = $To
+       day = $Today; caller = $caller; pid = $PID
+-    } | ConvertTo-Json -Compress
++    }
++    if ($null -ne $Covered) { $rec['covered'] = [int]$Covered }
++    if ($null -ne $SliceSize) { $rec['slice'] = [int]$SliceSize }
++    if ($CoverageSource) { $rec['coverage'] = [string]$CoverageSource }
++    $line = $rec | ConvertTo-Json -Compress
+     Add-Content -LiteralPath (Join-Path $OutDir 'capture-cursor-log.jsonl') -Value $line -Encoding UTF8
+   } catch { }
+ }
+ 
+-function Test-CaptureLanded {
++function Get-CaptureDayFiles {
+   <#
+-    .SYNOPSIS Did this store actually contribute fresh everyday rows for $Today?
+-
+-    This is the gate on advancing the cursor, and it deliberately asks about the
+-    DATA, not about an exit code. A lane can exit 0 having bought nothing - that
+-    is exactly what Family Fare's throttled runs do - and advancing on rc=0 would
+-    skip the slice those terms were owed. A run that fetched nothing must re-attempt
+-    the same slice tomorrow, never skip it.
++    .SYNOPSIS The file(s) this store's capture for ONE day is written to, that exist right now.
++    .DESCRIPTION
++      Lifted out of Test-CaptureLanded on 2026-09-19 so that the LANDED test and the COVERAGE test
++      below read exactly the same bytes. Two resolutions of "where does this store write" is the
++      duplicated-rule trap this whole file exists to cure, and here it would be worse than usual:
++      the two tests disagreeing would mean the cursor advanced on evidence from one file while
++      judging coverage from another.
++
++      regular_prefix and deals_glob are stores.json's own names for a store's everyday file, so the
++      mapping is not duplicated here. Returns the paths that EXIST, regular file first; an empty
++      array means there is nothing to look at, which is a could-not-look and never a verdict.
+   #>
+   [CmdletBinding()]
+   param([Parameter(Mandatory)][string]$Store, [string]$Today = '', [string]$OutDir = '')
+   if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
+   $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
+-
+-  # regular_prefix is stores.json's own name for the store's everyday file, so the
+-  # mapping is not duplicated here.
+   $prefix = $null
+   $dealsGlob = $null
+   try {
+@@ -1265,7 +1324,60 @@ function Test-CaptureLanded {
+       if ([string]$s.name -eq $Store) { $prefix = [string]$s.regular_prefix; $dealsGlob = [string]$s.deals_glob; break }
+     }
+   } catch { }
+-  if (-not $prefix -and -not $dealsGlob) { return $false }
++  $found = New-Object System.Collections.Generic.List[string]
++  if ($prefix) {
++    $f = Join-Path $OutDir ("regular\{0}-regular-{1}.json" -f $prefix, $todayS)
++    if (Test-Path -LiteralPath $f) { [void]$found.Add($f) }
++  }
++  # NOT EVERY STORE HAS AN out\regular FILE, AND SAM'S NEVER HAS (fixed 2026-08-22).
++  # Test-CaptureLanded asked only about regular\<prefix>-regular-<date>.json. Sam's Club does not
++  # produce one - build-sams-deals writes out\sams\sams-deals-<date>.json, which is the contract
++  # compare-deals reads it through (-SamsFile). So the answer for Sam's was ALWAYS $false, which meant
++  # its rotation cursor could never advance: a landed capture of 100 priced rows still reported
++  # "no fresh rows landed - the slice is re-attempted tomorrow", forever, on slice #0.
++  # A gate that can never arm ([[gates-that-can-never-arm]]) - and a silent one, because
++  # "re-attempt tomorrow" is the SAFE-sounding branch, so it reads as caution rather than a defect.
++  # stores.json already declares deals_glob for exactly these stores; consult it rather than
++  # inventing a second mapping here.
++  if ($dealsGlob) {
++    $rel = ($dealsGlob -replace '^out[\\/]', '') -replace '/', '\'
++    # The glob names the SHAPE; only today's file counts, so the date is substituted in.
++    $dated = $rel -replace '\*', $todayS
++    $f2 = Join-Path $OutDir $dated
++    if (Test-Path -LiteralPath $f2) { [void]$found.Add($f2) }
++  }
++  return $found.ToArray()
++}
++
++# WHICH capture_terms OUTCOMES MEAN THE STORE WAS NEVER ASKED (2026-09-19). Three lanes write a
++# per-term ledger into their capture file - Family Fare, Baker's and Hy-Vee - and its `outcome` is the
++# only thing in this estate that distinguishes "asked, and the store had nothing" from "never asked".
++# That distinction is the whole coverage question: an ASKED term with no rows is a legitimate empty
++# (the four causes in .claude/rules/grocery.md - not-carried, blocked, unrendered, unsettled), and its
++# slice may advance; a term the lane never put to the store may not. A closed list, because an outcome
++# this does not recognise must read as ASKED only when the lane says it asked: anything not named here
++# is treated as a request that was made. An entry with no outcome at all is treated as NOT asked -
++# a ledger that will not say is a could-not-look.
++$script:CaptureNotAskedOutcomes = @('not_asked', 'not_attempted', 'skipped', 'deferred', '')
++
++function Test-CaptureLanded {
++  <#
++    .SYNOPSIS Did this store actually contribute fresh everyday rows for $Today?
++
++    This is the FIRST gate on advancing the cursor, and it deliberately asks about the
++    DATA, not about an exit code. A lane can exit 0 having bought nothing - that
++    is exactly what Family Fare's throttled runs do - and advancing on rc=0 would
++    skip the slice those terms were owed. A run that fetched nothing must re-attempt
++    the same slice tomorrow, never skip it.
++
++    IT IS NOT THE WHOLE QUESTION, AND ON ITS OWN IT ANSWERS THE WRONG ONE (2026-09-19). It asks
++    whether ANY rows landed, never whether the rows are the ones the slice being advanced past was
++    owed. Get-CaptureSliceCoverage below asks that second question; both are required.
++  #>
++  [CmdletBinding()]
++  param([Parameter(Mandatory)][string]$Store, [string]$Today = '', [string]$OutDir = '')
++  if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
++  $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
+ 
+   function Test-RowsDated([string]$Path) {
+     if (-not (Test-Path $Path)) { return $false }
+@@ -1285,36 +1397,210 @@ function Test-CaptureLanded {
+     } catch { return $false }
+   }
+ 
+-  if ($prefix) {
+-    $f = Join-Path $OutDir ("regular\{0}-regular-{1}.json" -f $prefix, $todayS)
++  $files = @(Get-CaptureDayFiles -Store $Store -Today $todayS -OutDir $OutDir)
++  foreach ($f in $files) {
+     if (Test-RowsDated $f) { return $true }
+   }
++  return $false
++}
+ 
+-  # NOT EVERY STORE HAS AN out\regular FILE, AND SAM'S NEVER HAS (fixed 2026-08-22).
+-  # This asked only about regular\<prefix>-regular-<date>.json. Sam's Club does not produce one -
+-  # build-sams-deals writes out\sams\sams-deals-<date>.json, which is the contract compare-deals
+-  # reads it through (-SamsFile). So the answer for Sam's was ALWAYS $false, which meant its
+-  # rotation cursor could never advance: a landed capture of 100 priced rows still reported
+-  # "no fresh rows landed - the slice is re-attempted tomorrow", forever, on slice #0.
+-  # A gate that can never arm ([[gates-that-can-never-arm]]) - and a silent one, because
+-  # "re-attempt tomorrow" is the SAFE-sounding branch, so it reads as caution rather than a defect.
+-  # stores.json already declares deals_glob for exactly these stores; consult it rather than
+-  # inventing a second mapping here.
+-  if ($dealsGlob) {
+-    $rel = ($dealsGlob -replace '^out[\\/]', '') -replace '/', '\'
+-    # The glob names the SHAPE; only today's file counts, so the date is substituted in.
+-    $dated = $rel -replace '\*', $todayS
+-    if (Test-RowsDated (Join-Path $OutDir $dated)) { return $true }
++function Get-CaptureSliceCoverage {
++  <#
++    .SYNOPSIS Did today's capture actually cover these terms - the slice the cursor is about to
++              advance PAST?
++
++    THE DEFECT (2026-09-19). Test-CaptureLanded asks "did any rows land today", and Step-CaptureCursor
++    advanced a whole rotation slice on that answer. The two questions are not the same question, and
++    replaying out\capture-cursor-log.jsonl against the captures shows where they came apart - the slice
++    terms are the ones the cursor stepped over, and the coverage is of THOSE terms on THAT day:
++
++        Sam's Club  2026-08-22  #0  -> #7   0 of 7 covered; the 122 rows that landed were terms #7..#13
++        Fareway     2026-08-22  #14 -> #21  0 of 7 covered; 912 rows on file, 7 of them fresh that day
++        Walmart     2026-08-30  #28 -> #35  0 of 7 covered; 525 fresh rows, from 24 OTHER terms
++
++    Each advance was "landed" and each skipped its slice for a whole 90-day rotation. Some of those
++    terms have had no captured row since.
++
++    THE EVIDENCE, STRONGEST FIRST, AND WHY THERE ARE TWO KINDS.
++      1. capture_terms - the per-term ledger Family Fare, Baker's and Hy-Vee write into their capture
++         file. It names what was ASKED and how each ask came out, so an asked term that returned
++         nothing counts as COVERED. This is the right primitive: the cursor's question is whether the
++         request was made, not whether the store had the goods.
++      2. found_by_term on rows whose as_of is today. The four browser/HTML lanes (Aldi, Fareway,
++         Sam's Club, Walmart) write no ledger, so the only trace of an ask is a row it returned. This
++         evidence is ONE-SIDED, and the header of every detector here owes that line: a covered term is
++         PROOF the term was asked, an uncovered one proves nothing, because an empty answer has four
++         causes and none of them writes a row. Step-CaptureCursor's stall escape exists for exactly
++         that asymmetry - it is what stops a legitimately empty term freezing the rotation on it.
++      3. Neither - no file, an unreadable one, or rows that carry neither field. Then this is BLIND and
++         says so. A could-not-look must not settle the question either way
++         ([[a-could-not-look-must-not-settle-the-question]]), so the caller degrades to the behaviour
++         of the day before rather than refusing: a store whose capture shape this cannot read must
++         still rotate.
++
++    Terms are matched ordinal-case-insensitively after trimming: a lane that echoes a term back with
++    different casing has still asked for it, and treating that as uncovered would stall a rotation
++    that is working.
++  #>
++  [CmdletBinding()]
++  param(
++    [Parameter(Mandatory)][string]$Store,
++    [string[]]$Terms = @(),
++    [string]$Today = '',
++    [string]$OutDir = ''
++  )
++  if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
++  $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
++
++  $askedSet = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
++  $source = 'none'
++  $ledgerAsked = 0
++  $ledgerRows = 0
++  $rowsSpoke = 0
++  $rowsFresh = 0
++  $files = @(Get-CaptureDayFiles -Store $Store -Today $todayS -OutDir $OutDir)
++  foreach ($f in $files) {
++    $doc = $null
++    try { $doc = ConvertFrom-Json ([IO.File]::ReadAllText($f)) } catch { $doc = $null }
++    if ($null -eq $doc) { continue }
++
++    # 1. the per-term ledger, when the lane writes one.
++    if ($doc.PSObject.Properties['capture_terms']) {
++      foreach ($e in @($doc.capture_terms)) {
++        if ($null -eq $e) { continue }
++        $t = ''
++        if ($e.PSObject.Properties['term']) { $t = ([string]$e.term).Trim() }
++        if (-not $t) { continue }
++        $ledgerRows++
++        $outcome = ''
++        if ($e.PSObject.Properties['outcome']) { $outcome = ([string]$e.outcome).Trim().ToLowerInvariant() }
++        if ($script:CaptureNotAskedOutcomes -contains $outcome) { continue }
++        $ledgerAsked++
++        [void]$askedSet.Add($t)
++      }
++      if ($ledgerRows -gt 0) { $source = 'capture_terms' }
++    }
++
++    # 2. the rows themselves. as_of is what separates a row bought TODAY from one carried forward -
++    #    Aldi, Fareway and Family Fare files hold months of carried rows, and a carried row is
++    #    evidence about the day it was bought, never about this one.
++    $rows = if ($doc.PSObject.Properties['deals']) { @($doc.deals) } else { @($doc) }
++    foreach ($r in $rows) {
++      if ($null -eq $r) { continue }
++      if (-not $r.PSObject.Properties['found_by_term']) { continue }
++      if (-not $r.PSObject.Properties['as_of']) { continue }
++      $t = ([string]$r.found_by_term).Trim()
++      if (-not $t) { continue }
++      $rowsSpoke++
++      if (([string]$r.as_of).StartsWith($todayS)) { $rowsFresh++; [void]$askedSet.Add($t) }
++    }
++  }
++  if ($source -eq 'none' -and $rowsSpoke -gt 0) { $source = 'found_by_term' }
++
++  $covered = New-Object System.Collections.Generic.List[string]
++  $uncovered = New-Object System.Collections.Generic.List[string]
++  $prefix = 0
++  $inPrefix = $true
++  foreach ($t in @($Terms)) {
++    $term = ([string]$t).Trim()
++    if ($term -and $askedSet.Contains($term)) {
++      [void]$covered.Add([string]$t)
++      if ($inPrefix) { $prefix++ }
++    } else {
++      [void]$uncovered.Add([string]$t)
++      $inPrefix = $false
++    }
++  }
++
++  $blind = ($source -eq 'none')
++  $why = if ($blind) {
++    if ($files.Count -eq 0) { "no capture file for $todayS under $OutDir" }
++    else { "$($files.Count) capture file(s) for $todayS carry neither a capture_terms ledger nor rows with found_by_term + as_of" }
++  } elseif ($source -eq 'capture_terms') {
++    "capture_terms ledger: $ledgerAsked of $ledgerRows term(s) were asked"
++  } else {
++    "found_by_term on $rowsFresh row(s) dated $todayS of $rowsSpoke that carry the field"
++  }
++
++  return [pscustomobject]@{
++    Store         = $Store
++    Today         = $todayS
++    Terms         = @($Terms)
++    Covered       = $covered.ToArray()
++    Uncovered     = $uncovered.ToArray()
++    # The advance the evidence supports: the slice is walked in order and stops at the first term
++    # nothing shows was asked, so no uncovered term is ever stepped over on a partial day.
++    CoveredPrefix = $prefix
++    Source        = $source
++    Blind         = $blind
++    Files         = $files
++    Why           = $why
+   }
+-  return $false
+ }
+ 
+ function Step-CaptureCursor {
+   <#
+-    .SYNOPSIS The ONE implementation of "advance only after the capture landed".
++    .SYNOPSIS The ONE implementation of "advance only over the terms the capture really covered".
+     .DESCRIPTION Returns a result object describing what it did and why. Every lane
+                  calls this rather than computing its own next index, so the rule
+                  cannot drift into five slightly different versions.
++
++    IT USED TO SAY "advance after the capture landed", AND THAT SKIPPED SLICES NOBODY CAPTURED
++    (2026-09-19). Landed means "some rows arrived today"; it never asked whether those rows are the
++    ones the slice being stepped over was owed, and the two came apart whenever a capture walked a
++    different list - a hand re-run against yesterday's worklist, a backfill, an allowance eaten by a
++    standing ruling's terms or a weekly ad list. Replayed off out\capture-cursor-log.jsonl:
++
++        Sam's Club  2026-08-22  #0  -> #7   0 of 7 slice terms covered (the 122 rows were #7..#13)
++        Fareway     2026-08-22  #14 -> #21  0 of 7 covered
++        Walmart     2026-08-30  #28 -> #35  0 of 7 covered (525 fresh rows, all from OTHER terms)
++        Baker's     2026-09-18  #168-> #175 0 of 7 covered (70 of its 74 asks were the ad list)
++
++    Each of those slices then waited a full 90-day rotation for its next turn, and some of those terms
++    have no captured row to this day. The rule now: the slice is walked in order against
++    Get-CaptureSliceCoverage and the cursor advances over the COVERED PREFIX only, so it never steps
++    over a term today's capture cannot show was asked.
++
++    AND WHY THAT ALONE WOULD BE WORSE, NOT BETTER. For the four lanes with no per-term ledger the only
++    evidence is a returned row, and a term genuinely asked that the store does not carry returns none -
++    so a strict rule would park the rotation on the first not-carried term forever, which is the
++    gate-that-can-never-arm shape this file has already been bitten by twice (Sam's cursor before
++    2026-08-22, and the empty-deals inversion above). Hence two escapes, both of which say what they
++    did rather than doing it quietly:
++      * BLIND - the capture shape carries no coverage evidence at all. The advance degrades to exactly
++        what it did the day before this change, and the reason says blind. A could-not-look is never a
++        refusal ([[a-could-not-look-must-not-settle-the-question]]).
++      * STALL - the head term has blocked the rotation for $script:CursorStallDays days whose capture
++        LANDED. The cursor steps over that ONE term, never the rest of the slice.
++
++    MEASURED, AND THE DENOMINATOR IS THE POINT. The harness is grocery\replay-cursor-coverage.ps1,
++    which replays every advance in out\capture-cursor-log.jsonl against the capture of its day -
++    through this file's own Get-CaptureSliceCoverage, and against the commodity-search.json of that day
++    out of git history, because a slice is an INDEX into a list that moves. Run on 2026-09-19 over the
++    live log (185 lines; 160 term-rotation advances, the rest Hy-Vee's product cursor):
++
++        of the 111 advances by the five stores that call this function, 82 would still advance their
++        whole slice (4 of those because they read BLIND), 15 would advance part of it, and 14 would
++        hold - the four cases above among them.
++        Per store, advances left untouched: Aldi 17 of 17, Walmart 18 of 19, Baker's 20 of 25,
++        Sam's Club 14 of 22, Fareway 13 of 28.
++
++    Harness blob 0bec870053e9d8677df1fb99645dfee9be7c2100 (grocery\replay-cursor-coverage.ps1), input out\capture-cursor-log.jsonl at 185
++    lines on 2026-09-19. The blob rather than a commit because the harness is cited from the file it
++    measures and a rebase cannot move a blob; re-read it with `git hash-object` before trusting these
++    numbers against a changed harness.
++
++    That is what the rule would have DECIDED at each historical advance. It is NOT a simulation of the
++    rotation that would have followed: after the first divergence the cursor sits somewhere else and
++    later captures would have asked for different terms, so no honest counterfactual runs past it.
++
++    NOT COVERED BY THIS CHANGE, AND IT IS THE LARGEST REMAINING HOLE: pull-regular-familyfare.ps1
++    advances the shared cursor itself through Save-CaptureCursor (its Get-FfCursorCommit rule) and
++    never calls this function, so none of the above reaches it. Of its 49 advances in that log, 48
++    would have held: on 2026-09-18 its last window asked 8 terms, every one an expiry or victim term
++    and none of them the slice it then stepped over. That is this same defect at three windows a day,
++    and fixing it is a decision about what a window whose whole allowance went to re-prices should do
++    to the rotation, which is Brad's to make and not a detail of this one.
+   #>
+   [CmdletBinding()]
+   param(
+@@ -1387,11 +1673,78 @@ function Step-CaptureCursor {
+     if ($all.Count -le 0) {
+       return [pscustomobject]@{ Store = $Store; Advanced = $false; From = $from; To = $from; Reason = 'no terms' }
+     }
+-    $to = (($from + $plan.RotationTerms) % $all.Count)
+-    Save-CaptureCursor -Store $Store -Next $to -OutDir $OutDir -AdvancedOn $todayS
+-    Write-CursorLog -Store $Store -From $from -To $to -Today $todayS -OutDir $OutDir
++
++    # THE SLICE THIS ADVANCE WOULD STEP OVER. Exactly the rotation terms Get-CaptureWorklist handed the
++    # lane this morning, read from the same cursor and the same plan, so the question asked here is the
++    # question the lane was actually set.
++    $rot = [int]$plan.RotationTerms
++    $slice = New-Object System.Collections.Generic.List[string]
++    for ($k = 0; $k -lt $rot; $k++) { [void]$slice.Add([string]$all[(($from + $k) % $all.Count)].term) }
++    $sliceTerms = $slice.ToArray()
++    # READ INSIDE THE LOCK, deliberately. It only reads capture files - it takes no second lock, so this
++    # is not a nesting - and the decision, the day guard and the write have to be one read-modify-write
++    # for the same reason the day guard does. The cost was measured against the live files on
++    # 2026-09-19: Baker's 7,284 rows 699 ms, Family Fare 5,486 rows 312 ms, Aldi 4 ms, Walmart 1 ms.
++    $cov = Get-CaptureSliceCoverage -Store $Store -Terms $sliceTerms -Today $todayS -OutDir $OutDir
++
++    $stallKey = (Get-CursorKey $Store) + '_stall'
++    $stallDayKey = (Get-CursorKey $Store) + '_stall_day'
++    $stall = 0
++    if ($cursors.PSObject.Properties.Name -contains $stallKey) { try { $stall = [int]$cursors.$stallKey } catch { $stall = 0 } }
++    $stallDay = ''
++    if ($cursors.PSObject.Properties.Name -contains $stallDayKey) { $stallDay = [string]$cursors.$stallDayKey }
++
++    $firstGap = if (@($cov.Uncovered).Count -gt 0) { [string]@($cov.Uncovered)[0] } else { '' }
++    $step = $rot
++    $why = "advanced $rot term(s) after a landed capture"
++    $newStall = 0
++    if ($Force) {
++      $why = "advanced $rot term(s) - FORCED, coverage of the slice not required"
++    } elseif ($cov.Blind) {
++      # DEGRADE TO THE DAY BEFORE, NEVER TO A REFUSAL. This is a could-not-look, and the store still has
++      # a rotation to run; the reason carries the word so a run of these is countable.
++      $why = "advanced $rot term(s) after a landed capture - coverage BLIND ($($cov.Why)), so the slice was not checked"
++    } else {
++      $step = [int]$cov.CoveredPrefix
++      if ($step -ge $rot) {
++        $why = "advanced $rot term(s); today's capture covered all $rot ($($cov.Source): $($cov.Why))"
++      } elseif ($step -gt 0) {
++        $why = ("advanced $step of $rot term(s): today's capture covered #$from..#$(($from + $step - 1) % $all.Count) and shows nothing for '" +
++                $firstGap + "', which leads tomorrow's slice instead of being skipped ($($cov.Source))")
++      } else {
++        # THE HEAD TERM IS UNCOVERED. Count the day once, and escape only after the bar.
++        $newStall = if ($stallDay -eq $todayS) { [math]::Max($stall, 1) } else { $stall + 1 }
++        if ($newStall -ge $script:CursorStallDays) {
++          $step = 1
++          $newStall = 0
++          $why = ("stepping over ONE term ('" + $firstGap + "', #$from): it has blocked the rotation for " +
++                  "$script:CursorStallDays landed capture(s) without a row, which is what an asked-and-empty term looks like " +
++                  "to a lane that keeps no per-term ledger ($($cov.Source))")
++        } else {
++          $step = 0
++          $why = ("held at #$from - today's capture landed but covered NONE of the $rot slice term(s) starting '" +
++                  $firstGap + "' ($($cov.Source): $($cov.Why)); day $newStall of $script:CursorStallDays before that term is stepped over")
++        }
++      }
++    }
++
++    if ($step -le 0) {
++      # The cursor does not move, but the day IS counted: written through the same locked read-modify-write
++      # so a second builder run in the same second cannot count it twice. <store>_last is deliberately NOT
++      # set - a later run today with a real capture of this slice may still advance it.
++      Save-CaptureCursor -Store $Store -Next $from -OutDir $OutDir -Stall $newStall -StallDay $todayS
++      return [pscustomobject]@{ Store = $Store; Advanced = $false; From = $from; To = $from
++        Covered = @($cov.Covered).Count; Slice = $rot; CoverageSource = $cov.Source; Stall = $newStall
++        Reason = $why }
++    }
++
++    $to = (($from + $step) % $all.Count)
++    Save-CaptureCursor -Store $Store -Next $to -OutDir $OutDir -AdvancedOn $todayS -Stall $newStall -StallDay $todayS
++    Write-CursorLog -Store $Store -From $from -To $to -Today $todayS -OutDir $OutDir `
++      -Covered @($cov.Covered).Count -SliceSize $rot -CoverageSource $cov.Source
+     return [pscustomobject]@{ Store = $Store; Advanced = $true; From = $from; To = $to
+-      Reason = "advanced $($plan.RotationTerms) term(s) after a landed capture" }
++      Covered = @($cov.Covered).Count; Slice = $rot; CoverageSource = $cov.Source; Stall = $newStall
++      Reason = $why }
+   } finally { Exit-TcLedgerLock $lock }
+ }
+ 
+diff --git a/grocery/commit-capture-cursor.ps1 b/grocery/commit-capture-cursor.ps1
+index 0010ee410..08d6ce437 100644
+--- a/grocery/commit-capture-cursor.ps1
++++ b/grocery/commit-capture-cursor.ps1
+@@ -27,6 +27,13 @@
+   store's out\regular\<prefix>-regular-<date>.json exists and holds rows. A lane that
+   exits 0 having bought nothing must re-attempt the same slice tomorrow, never skip it.
+ 
++  AND LANDING IS NOT COVERAGE (2026-09-19). "Some rows arrived" is not "the terms this advance steps
++  over were captured", and where the two came apart the cursor skipped a slice for a whole 90-day
++  rotation: Sam's Club #0 -> #7 on 2026-08-22 against a capture of terms #7..#13, Fareway #14 -> #21
++  the same day, Walmart #28 -> #35 on 2026-08-30 against 525 fresh rows from 24 other terms. This CLI
++  is unchanged - the rule lives in Step-CaptureCursor, which now advances only over the slice terms
++  today's capture shows were asked, and says so in the reason this script prints.
++
+   Usage:
+       .\commit-capture-cursor.ps1 -Store Walmart -Date 2026-08-21
+       .\commit-capture-cursor.ps1 -Report          # every store, no writes
+@@ -122,6 +129,55 @@ if ($SelfTest) {
+   if ($rb.Advanced -and $rb.To -gt 0) { Write-Output ("ok    Baker's now takes a term cursor and advanced #" + $rb.From + ' -> #' + $rb.To) }
+   else { Write-Output ("FAIL  Baker's did not get its term cursor: " + $rb.Reason); $fail++ }
+ 
++  # MUST-FIRE fixture #4: A CAPTURE THAT LANDED ROWS FOR OTHER TERMS IS NOT A CAPTURE OF THIS SLICE
++  # (2026-09-19). Every fixture above writes a row with no found_by_term, which is the BLIND shape, so
++  # none of them can see this rule at all - they pass on the code from before it and the code after it.
++  # This one is the Walmart 2026-08-30 shape: the store's real term list, the store's real file name,
++  # rows that are fresh today and belong to terms the cursor is nowhere near. The cursor must hold.
++  #
++  # DRIVEN THROUGH Step-CaptureCursor AND DELIBERATELY NOT THROUGH THIS SCRIPT'S OWN CLI. The CLI does
++  # two things after the cursor, and the second is Set-SaleExpiryProcessed, which writes
++  # grocery\sale-windows.json AT THE POLICY ROOT - the live ledger, whatever -OutDir says. Spawning it
++  # from a self-test would retire real re-prices as processed and leave those sale prices publishing on
++  # the board until each item's next quarterly slot, which is the 2026-08-21 lesson (a self-test moved
++  # the production cursor) with a different file. The CLI's own printing is one line over this result.
++  # The term list is the live commodity-search.json, so the slice is read from it rather than guessed:
++  # Get-AllTerms is a List and is indexed, never @()-wrapped (that throws on PS 5.1).
++  $ccTmp = Join-Path ([IO.Path]::GetTempPath()) ("cursor-cov-" + [guid]::NewGuid().ToString('N'))
++  New-Item -ItemType Directory -Path (Join-Path $ccTmp 'regular') -Force | Out-Null
++  $ccToday = (Get-Date).ToString('yyyy-MM-dd')
++  $ccAll = Get-AllTerms
++  $ccPlan = Get-CapturePlan -Store 'Walmart' -Today $ccToday
++  $ccFar = New-Object System.Collections.Generic.List[object]
++  for ($k = 0; $k -lt [int]$ccPlan.RotationTerms -and $ccAll.Count -gt 0; $k++) {
++    # Terms half a catalogue away from cursor #0, so no slice term can appear by accident.
++    $t = [string]$ccAll[(([int]($ccAll.Count / 2)) + $k) % $ccAll.Count].term
++    [void]$ccFar.Add([ordered]@{ item = ('a product for ' + $t); ad_price = '$1.00'; found_by_term = $t; as_of = $ccToday })
++  }
++  [IO.File]::WriteAllText((Join-Path $ccTmp ("regular\walmart-regular-$ccToday.json")),
++    ((@{ deals = $ccFar.ToArray() }) | ConvertTo-Json -Depth 5))
++  $ccFar1 = Step-CaptureCursor -Store 'Walmart' -Today $ccToday -OutDir $ccTmp
++  $ccCursor = Get-CaptureCursor -Store 'Walmart' -OutDir $ccTmp
++  if ($ccCursor -eq 0 -and -not $ccFar1.Advanced -and $ccFar1.Reason -match 'covered NONE') {
++    Write-Output ("ok    a landed capture of terms the slice does not contain holds the cursor, and says why (" + $ccFar1.Reason + ')')
++  } else { Write-Output ("FAIL  the cursor moved to #$ccCursor on a capture that covered none of its slice: " + $ccFar1.Reason); $fail++ }
++
++  # CLEAN TWIN: the same call, the same file shape, the terms the slice ACTUALLY holds -> it advances.
++  # Without this the case above would be satisfied by a cursor that never moves again.
++  $ccNear = New-Object System.Collections.Generic.List[object]
++  for ($k = 0; $k -lt [int]$ccPlan.RotationTerms -and $ccAll.Count -gt 0; $k++) {
++    $t = [string]$ccAll[$k % $ccAll.Count].term
++    [void]$ccNear.Add([ordered]@{ item = ('a product for ' + $t); ad_price = '$1.00'; found_by_term = $t; as_of = $ccToday })
++  }
++  [IO.File]::WriteAllText((Join-Path $ccTmp ("regular\walmart-regular-$ccToday.json")),
++    ((@{ deals = $ccNear.ToArray() }) | ConvertTo-Json -Depth 5))
++  $ccNear1 = Step-CaptureCursor -Store 'Walmart' -Today $ccToday -OutDir $ccTmp
++  $ccCursor2 = Get-CaptureCursor -Store 'Walmart' -OutDir $ccTmp
++  if ($ccCursor2 -eq [int]$ccPlan.RotationTerms -and $ccNear1.Advanced) {
++    Write-Output ("ok    the same call advances #0 -> #$ccCursor2 once the capture covers the slice it is stepping over")
++  } else { Write-Output ("FAIL  a covered slice did not advance (cursor #$ccCursor2 of an expected #$($ccPlan.RotationTerms)): " + $ccNear1.Reason); $fail++ }
++  Remove-Item -LiteralPath $ccTmp -Recurse -Force -ErrorAction SilentlyContinue
++
+   Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
+   Write-Output ("SELFTEST " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
+   exit $(if ($fail) { 1 } else { 0 })
+@@ -139,7 +195,21 @@ if ($Report -or -not $Store) {
+     $cur = Get-CaptureCursor -Store $s -OutDir $OutDir
+     $landed = Test-CaptureLanded -Store $s -Today $todayS -OutDir $OutDir
+     $plan = Get-CapturePlan -Store $s -Today $todayS
+-    Write-Output ("  {0,-12} #{1,-4} landed_today={2,-5} rotation={3}/day" -f $s, $cur, $landed, $plan.RotationTerms)
++    # AND WHAT TODAY'S CAPTURE COVERED OF THE SLICE THIS STORE IS SITTING ON. A report that says only
++    # "landed=True" is the exact reading that let three slices be skipped: it answers a question nobody
++    # was asking. Get-AllTerms returns a List, so it is indexed rather than wrapped - @() on a
++    # New-Object List[object] throws under PS 5.1.
++    $allT = Get-AllTerms
++    $sl = New-Object System.Collections.Generic.List[string]
++    for ($k = 0; $k -lt [int]$plan.RotationTerms -and $allT.Count -gt 0; $k++) { [void]$sl.Add([string]$allT[(($cur + $k) % $allT.Count)].term) }
++    $cv = Get-CaptureSliceCoverage -Store $s -Terms $sl.ToArray() -Today $todayS -OutDir $OutDir
++    $cvText = if ($cv.Blind) { 'slice coverage BLIND' } else { "slice covered $(@($cv.Covered).Count)/$($sl.Count) ($($cv.Source))" }
++    $stallN = 0
++    $cursorsAll = Get-CaptureCursors $OutDir
++    $stallKey = (Get-CursorKey $s) + '_stall'
++    if ($cursorsAll.PSObject.Properties.Name -contains $stallKey) { try { $stallN = [int]$cursorsAll.$stallKey } catch { $stallN = 0 } }
++    if ($stallN -gt 0) { $cvText += ", STALLED $stallN day(s) on '$(@($cv.Uncovered)[0])'" }
++    Write-Output ("  {0,-12} #{1,-4} landed_today={2,-5} rotation={3}/day  {4}" -f $s, $cur, $landed, $plan.RotationTerms, $cvText)
+   }
+   exit 0
+ }
+diff --git a/grocery/replay-cursor-coverage.ps1 b/grocery/replay-cursor-coverage.ps1
+new file mode 100644
+index 000000000..0bec87005
+--- /dev/null
++++ b/grocery/replay-cursor-coverage.ps1
+@@ -0,0 +1,252 @@
++<#
++  replay-cursor-coverage.ps1 - replay every recorded cursor advance against the capture of its day,
++  and answer the one question the advance itself never recorded: did that capture actually cover the
++  rotation slice the cursor stepped over?
++
++  WHY THIS EXISTS (2026-09-19). Three advances skipped their slice for a whole 90-day rotation -
++  Sam's Club and Fareway on 2026-08-22, Walmart on 2026-08-30 - and finding them took a hand replay of
++  out\capture-cursor-log.jsonl against the captures of those days, with a commodity-search.json pulled
++  out of git history for each day because the term list moves and a slice is an INDEX into it. That is
++  an afternoon of archaeology for a question that will be asked again every time the rotation looks
++  slow, so the harness is committed rather than described: a measurement anyone may want to repeat
++  commits its harness, and a described probe rewritten later is a second harness however faithful the
++  description was.
++
++  IT IS A REPORT, NEVER A GATE, and it writes nothing. The numbers in $script:CursorStallDays' comment
++  block in capture-policy-lib.ps1 and in docs/CONTROL-CONSTANTS.md come from this script.
++
++  IT RUNS THROUGH THE PRODUCTION FUNCTION. Get-CaptureSliceCoverage decides coverage here exactly as it
++  does inside Step-CaptureCursor - a second implementation of "did the capture cover this" is the
++  duplicated-rule trap capture-policy-lib.ps1 exists to cure, and it would let the replay and the live
++  rule drift apart silently. The day's term list is supplied by pointing the library's policy root at a
++  temp directory holding that day's commodity-search.json and the current stores.json; nothing else in
++  the library is redirected.
++
++  WHAT A CLEAN REPORT MEANS (scope). UNSOUND and INCOMPLETE, both by construction:
++    * a day whose capture file has been deleted, or whose rows carry neither a capture_terms ledger nor
++      found_by_term + as_of, reads BLIND - the coverage is unknown, never zero;
++    * git history gives the term list as it was COMMITTED, and a same-day edit that was committed later
++      moves indices, so an old row's slice can be off by the terms added that day;
++    * the log records advances only, so a day the cursor was held leaves no line to judge.
++  So a row saying 0 of 7 is a candidate to read, not a verdict, and a page of clean rows does not prove
++  no slice was ever skipped.
++
++  Usage:
++      .\replay-cursor-coverage.ps1                       # every advance in the live log
++      .\replay-cursor-coverage.ps1 -Store 'Walmart' -Since 2026-08-25
++      .\replay-cursor-coverage.ps1 -SelfTest
++#>
++[CmdletBinding()]
++param(
++  [string]$OutDir = '',
++  [string]$Store = '',
++  [string]$Since = '',
++  [switch]$NoGitHistory,
++  [switch]$SelfTest
++)
++$ErrorActionPreference = 'Stop'
++$root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
++. (Join-Path $root 'capture-policy-lib.ps1')
++. (Join-Path $root 'native-lib.ps1')
++
++# One scratch root per run, handed out through one function and removed in finally: two replays of the
++# same log in two sessions must not share a day-root, or one reads the other's term list.
++$script:RcScratch = Join-Path ([IO.Path]::GetTempPath()) ('rcc-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
++
++function Get-RcDayRoot {
++  <#
++    A policy root for ONE day: that day's commodity-search.json (from git history when it can be read)
++    plus the current stores.json, which is only used to find where a store writes and has no index in it.
++    Returns a hashtable with Path and Source so the caller can print which list it judged against, because
++    "the current list" and "the list as it was" are different measurements and must not be reported alike.
++  #>
++  param([Parameter(Mandatory)][string]$Day, [string]$RepoRoot, [switch]$NoHistory)
++  $dir = Join-Path $script:RcScratch $Day
++  $src = 'working copy'
++  if (Test-Path -LiteralPath (Join-Path $dir 'commodity-search.json')) {
++    $stamp = Join-Path $dir 'source.txt'
++    if (Test-Path -LiteralPath $stamp) { $src = [IO.File]::ReadAllText($stamp) }
++    return @{ Path = $dir; Source = $src }
++  }
++  [void][IO.Directory]::CreateDirectory($dir)
++  $wrote = $false
++  if (-not $NoHistory -and $RepoRoot) {
++    # Invoke-Native, because under EAP=Stop a native child's first stderr line is a terminating throw and
++    # a try/catch around it would keep the caller alive while throwing git's answer away.
++    $rev = Invoke-Native 'git' '-C' $RepoRoot 'rev-list' '-1' ("--before=$Day 23:59:59") 'HEAD' '--' 'grocery/commodity-search.json'
++    $commit = ''
++    if ($rev.ExitCode -eq 0) { $commit = (@($rev.Output) | Where-Object { $_ } | Select-Object -First 1) }
++    if ($commit) {
++      $show = Invoke-Native 'git' '-C' $RepoRoot 'show' ($commit + ':grocery/commodity-search.json')
++      if ($show.ExitCode -eq 0 -and @($show.Output).Count -gt 0) {
++        [IO.File]::WriteAllText((Join-Path $dir 'commodity-search.json'), ((@($show.Output) -join "`n")))
++        $src = 'git ' + $commit.Substring(0, [Math]::Min(9, $commit.Length))
++        $wrote = $true
++      }
++    }
++  }
++  if (-not $wrote) {
++    Copy-Item -LiteralPath (Join-Path $root 'commodity-search.json') -Destination (Join-Path $dir 'commodity-search.json') -Force
++  }
++  Copy-Item -LiteralPath (Join-Path $root 'stores.json') -Destination (Join-Path $dir 'stores.json') -Force
++  [IO.File]::WriteAllText((Join-Path $dir 'source.txt'), $src)
++  return @{ Path = $dir; Source = $src }
++}
++
++function Get-RcAdvances {
++  <#
++    The advance lines of a cursor log, oldest first. PURE, so a fixture can hand it frozen lines
++    instead of a live log. A line that does not parse, or that names no store, is SKIPPED and counted:
++    this report must never manufacture an advance out of a bad line.
++  #>
++  param([string[]]$Lines, [string]$Store = '', [string]$Since = '')
++  $out = New-Object System.Collections.Generic.List[object]
++  $bad = 0
++  foreach ($ln in @($Lines)) {
++    if (-not ("$ln").Trim()) { continue }
++    $rec = $null
++    try { $rec = "$ln" | ConvertFrom-Json } catch { $bad++; continue }
++    if (-not $rec -or -not $rec.PSObject.Properties['store'] -or -not $rec.PSObject.Properties['day']) { $bad++; continue }
++    if ($Store -and [string]$rec.store -ne $Store) { continue }
++    if ($Since -and [string]$rec.day -lt $Since) { continue }
++    if (-not (Test-TermRotationStore ([string]$rec.store))) { continue }   # Hy-Vee rotates by product id
++    [void]$out.Add($rec)
++  }
++  return @{ Rows = $out.ToArray(); Unreadable = $bad }
++}
++
++# ---------------------------------------------------------------------------
++if ($SelfTest) {
++  $rcN = 0; $rcBad = 0
++  function Test-RcCase([string]$What, [bool]$Cond, [string]$Detail = '') {
++    $script:rcN++
++    if ($Cond) { Write-Output ('ok    ' + $What) }
++    else { $script:rcBad++; Write-Output ('FAIL  ' + $What + $(if ($Detail) { ' -> ' + $Detail } else { '' })) }
++  }
++  $rcTmp = Join-Path ([IO.Path]::GetTempPath()) ('rcc-selftest-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
++  [void][IO.Directory]::CreateDirectory((Join-Path $rcTmp 'sams'))
++  try {
++    # MUST FIRE: the 2026-08-22 Sam's Club line, replayed against a capture of the NEXT slice's terms.
++    # The whole point of this script is that this row reads 0 of 7 rather than looking like every other
++    # advance in the log.
++    $rcTerms = [ordered]@{}
++    for ($n = 0; $n -lt 630; $n++) { $rcTerms[('c' + $n.ToString('000'))] = ('term ' + $n.ToString('000')) }
++    [IO.File]::WriteAllText((Join-Path $rcTmp 'commodity-search.json'), (@{ terms = $rcTerms } | ConvertTo-Json -Depth 4))
++    [IO.File]::WriteAllText((Join-Path $rcTmp 'stores.json'), (@{ stores = @(
++        @{ name = "Sam's Club"; regular_prefix = 'sams'; deals_glob = 'out/sams/sams-deals-*.json' }) } | ConvertTo-Json -Depth 4))
++    $rcRows = @(7..13 | ForEach-Object { [ordered]@{ item = 'x'; found_by_term = ('term ' + $_.ToString('000')); as_of = '2026-08-22' } })
++    [IO.File]::WriteAllText((Join-Path $rcTmp 'sams\sams-deals-2026-08-22.json'), ((@{ deals = $rcRows }) | ConvertTo-Json -Depth 5))
++    $savedRoot = $script:PolicyRoot
++    $script:PolicyRoot = $rcTmp
++    try {
++      $slice = @(0..6 | ForEach-Object { 'term ' + $_.ToString('000') })
++      $cv = Get-CaptureSliceCoverage -Store "Sam's Club" -Terms $slice -Today '2026-08-22' -OutDir $rcTmp
++      Test-RcCase "MUST FIRE  the 2026-08-22 Sam's advance replays as 0 of 7 covered, against a capture of the NEXT slice" `
++        (@($cv.Covered).Count -eq 0 -and -not $cv.Blind -and $cv.Source -eq 'found_by_term') `
++        ("covered=$(@($cv.Covered).Count) blind=$($cv.Blind) source=$($cv.Source)")
++      $slice2 = @(7..13 | ForEach-Object { 'term ' + $_.ToString('000') })
++      $cv2 = Get-CaptureSliceCoverage -Store "Sam's Club" -Terms $slice2 -Today '2026-08-22' -OutDir $rcTmp
++      Test-RcCase 'CLEAN TWIN the slice that capture DID cover replays as 7 of 7, so the replay is reading the file and not just failing' `
++        (@($cv2.Covered).Count -eq 7) ("covered=$(@($cv2.Covered).Count)")
++      $cv3 = Get-CaptureSliceCoverage -Store "Sam's Club" -Terms $slice -Today '2026-08-23' -OutDir $rcTmp
++      Test-RcCase 'MUST NOT FIRE  a day with no capture file on disk reads BLIND, never 0 of 7 - a could-not-look is not a skip' `
++        ($cv3.Blind -and $cv3.Source -eq 'none') ("blind=$($cv3.Blind) source=$($cv3.Source)")
++    } finally { $script:PolicyRoot = $savedRoot }
++
++    # The log reader: a bad line is skipped and COUNTED, a store filter holds, and Hy-Vee's product
++    # cursor is never judged against the term list - that is the namespace confusion this estate has
++    # paid for before.
++    $lines = @(
++      '{"at":"2026-08-22T10:08:44","store":"Sam''s Club","from":0,"to":7,"day":"2026-08-22"}',
++      'not json at all',
++      '{"at":"2026-08-22T10:26:04","store":"Hy-Vee (products)","from":0,"to":18,"day":"2026-08-22"}',
++      '{"at":"2026-08-30T09:09:53","store":"Walmart","from":28,"to":35,"day":"2026-08-30"}')
++    $rd = Get-RcAdvances -Lines $lines
++    Test-RcCase 'the log reader keeps the two term-rotation advances, drops Hy-Vee''s product cursor, and counts the unreadable line' `
++      (@($rd.Rows).Count -eq 2 -and $rd.Unreadable -eq 1) ("rows=$(@($rd.Rows).Count) unreadable=$($rd.Unreadable)")
++    $rd2 = Get-RcAdvances -Lines $lines -Store 'Walmart' -Since '2026-08-25'
++    Test-RcCase 'the store and -Since filters select exactly one row' (@($rd2.Rows).Count -eq 1 -and [string]@($rd2.Rows)[0].day -eq '2026-08-30') `
++      ("rows=$(@($rd2.Rows).Count)")
++  } catch {
++    Test-RcCase 'the self-test ran to its end with no unexpected error' $false ($_.Exception.Message + ' (line ' + $_.InvocationInfo.ScriptLineNumber + ')')
++  } finally {
++    Remove-Item -LiteralPath $rcTmp -Recurse -Force -ErrorAction SilentlyContinue
++  }
++  Write-Output ('replay-cursor-coverage self-test {0} ({1} of {2} case(s) failed)' -f $(if ($rcBad) { 'FAIL' } else { 'PASS' }), $rcBad, $rcN)
++  Write-Output ('REPLAY-CURSOR-COVERAGE-SELFTEST-COMPLETE cases={0} failed={1}' -f $rcN, $rcBad)
++  if ($rcBad -gt 0) { exit 1 }
++  exit 0
++}
++
++# ---------------------------------------------------------------------------
++if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
++$repoRoot = Split-Path -Parent $root
++$logFile = Join-Path $OutDir 'capture-cursor-log.jsonl'
++if (-not (Test-Path -LiteralPath $logFile)) {
++  Write-Output "no cursor log at $logFile - nothing to replay (this checkout may never have run a capture)"
++  Write-Output 'REPLAY-CURSOR-COVERAGE-COMPLETE advances=0 judged=0 blind=0'
++  exit 0
++}
++
++[void][IO.Directory]::CreateDirectory($script:RcScratch)
++$savedPolicyRoot = $script:PolicyRoot
++try {
++  $read = Get-RcAdvances -Lines ([IO.File]::ReadAllLines($logFile)) -Store $Store -Since $Since
++  $rows = @($read.Rows)
++  Write-Output ("replaying {0} advance(s) from {1}{2}{3}" -f $rows.Count, $logFile,
++    $(if ($Store) { " for $Store" } else { '' }), $(if ($Since) { " since $Since" } else { '' }))
++  if ($read.Unreadable -gt 0) { Write-Output ("  ({0} log line(s) could not be parsed and are not counted anywhere below)" -f $read.Unreadable) }
++  Write-Output ''
++  # covered is how many of the slice's terms the capture shows were asked; adv is what the rule would
++  # advance - the COVERED PREFIX, which is the number Step-CaptureCursor actually uses, because a term
++  # with no evidence is never stepped over even when later terms of the slice have some.
++  Write-Output ('{0,-12} {1,-11} {2,6} {3,6} {4,8} {5,5}  {6}' -f 'store', 'day', 'from', 'to', 'covered', 'adv', 'first uncovered term / why')
++
++  $judged = 0; $full = 0; $partial = 0; $none = 0; $blind = 0
++  $held = 0; $stepPart = 0; $stepFull = 0
++  $runNow = @{}; $runBest = @{}
++  foreach ($rec in $rows) {
++    $st = [string]$rec.store
++    $day = [string]$rec.day
++    $from = [int]$rec.from
++    $dayRoot = Get-RcDayRoot -Day $day -RepoRoot $repoRoot -NoHistory:$NoGitHistory
++    $script:PolicyRoot = $dayRoot.Path
++    $plan = Get-CapturePlan -Store $st -Today $day
++    $all = Get-AllTerms
++    if ($all.Count -le 0) { continue }
++    $slice = New-Object System.Collections.Generic.List[string]
++    for ($k = 0; $k -lt [int]$plan.RotationTerms; $k++) { [void]$slice.Add([string]$all[(($from + $k) % $all.Count)].term) }
++    $cv = Get-CaptureSliceCoverage -Store $st -Terms $slice.ToArray() -Today $day -OutDir $OutDir
++    $judged++
++    $n = @($cv.Covered).Count
++    if ($cv.Blind) { $blind++ }
++    elseif ($n -ge $slice.Count) { $full++ }
++    elseif ($n -gt 0) { $partial++ }
++    else { $none++ }
++    $pre = [int]$cv.CoveredPrefix
++    if ($cv.Blind) { $stepFull++ } elseif ($pre -ge $slice.Count) { $stepFull++ } elseif ($pre -gt 0) { $stepPart++ } else { $held++ }
++    # The longest run of consecutive advances this store would have HELD on, which is the number
++    # $script:CursorStallDays is set against. Reset by any advance, blind or otherwise.
++    if (-not $cv.Blind -and $pre -eq 0) {
++      $runNow[$st] = [int]$runNow[$st] + 1
++      if ([int]$runNow[$st] -gt [int]$runBest[$st]) { $runBest[$st] = [int]$runNow[$st] }
++    } else { $runNow[$st] = 0 }
++    $tail = if ($cv.Blind) { 'BLIND - ' + $cv.Why } elseif (@($cv.Uncovered).Count -eq 0) { '-' } else { "'" + [string]@($cv.Uncovered)[0] + "' (" + $cv.Source + ', terms from ' + $dayRoot.Source + ')' }
++    Write-Output ('{0,-12} {1,-11} {2,6} {3,6} {4,8} {5,5}  {6}' -f $st, $day, $from, [int]$rec.to, ("$n/$($slice.Count)"), $(if ($cv.Blind) { 'blind' } else { "$pre" }), $tail)
++  }
++
++  Write-Output ''
++  # Every count with its denominator, per the measurement rules: a bare "19 skipped" is a mood.
++  Write-Output ("judged {0} of {1} advance(s): {2} covered the whole slice, {3} covered part of it, {4} covered NONE of it, {5} could not be judged (BLIND)" -f `
++    $judged, $rows.Count, $full, $partial, $none, $blind)
++  Write-Output ("under today's rule those same {0} would be: {1} advancing the full slice ({2} of them because they are BLIND), {3} advancing part of it, {4} holding" -f `
++    $judged, $stepFull, $blind, $stepPart, $held)
++  foreach ($k in @($runBest.Keys | Sort-Object)) {
++    Write-Output ("  longest run of consecutive HELD advances: {0,-12} {1} (the stall escape steps over one term at {2})" -f $k, [int]$runBest[$k], $script:CursorStallDays)
++  }
++  Write-Output ('REPLAY-CURSOR-COVERAGE-COMPLETE advances={0} judged={1} full={2} partial={3} none={4} blind={5} would_advance={6} would_part={7} would_hold={8}' -f $rows.Count, $judged, $full, $partial, $none, $blind, $stepFull, $stepPart, $held)
++} finally {
++  $script:PolicyRoot = $savedPolicyRoot
++  Remove-Item -LiteralPath $script:RcScratch -Recurse -Force -ErrorAction SilentlyContinue
++}
++exit 0
+diff --git a/grocery/test-capture-policy.ps1 b/grocery/test-capture-policy.ps1
+index 4d4a84379..b8576dc4e 100644
+--- a/grocery/test-capture-policy.ps1
++++ b/grocery/test-capture-policy.ps1
+@@ -539,6 +539,261 @@ try {
+       }
+     }
+   }
++
++  # ================================================================================================
++  # THE CURSOR ADVANCES ONLY OVER TERMS THE CAPTURE COVERED (2026-09-19)
++  #
++  # THE FOUNDING BUG, replayed off out\capture-cursor-log.jsonl against the captures of those days:
++  #     Sam's Club  2026-08-22  #0  -> #7   0 of 7 slice terms covered; the 122 rows were terms #7..#13
++  #     Fareway     2026-08-22  #14 -> #21  0 of 7 covered
++  #     Walmart     2026-08-30  #28 -> #35  0 of 7 covered; 525 fresh rows, all from 24 OTHER terms
++  #     Baker's     2026-09-18  #168-> #175 0 of 7 covered; 70 of its 74 asks were the weekly ad list
++  # Each was "landed" - rows arrived - so Test-CaptureLanded said yes and the slice was skipped for a
++  # whole 90-day rotation. The fixtures below are those four shapes plus the two escapes that stop the
++  # fix freezing a rotation that is working.
++  #
++  # THE DATE IS TODAY'S REAL DATE ON PURPOSE. Step-CaptureCursor refuses any other as a replay, which
++  # is the 2026-08-21 rule that stopped self-tests moving the live cursor. A run that straddles
++  # midnight therefore fails these for the harness's reason, not the code's, exactly as
++  # commit-capture-cursor.ps1 -SelfTest already does.
++  $covRoot = Join-Path $tmp 'cov'
++  New-Item -ItemType Directory -Path $covRoot -Force | Out-Null
++  $covToday = (Get-Date).ToString('yyyy-MM-dd')
++  $covYday = (Get-Date).AddDays(-1).ToString('yyyy-MM-dd')
++  # 630 terms -> ceil(630/90) = 7 a day, the same rotation size the live catalogue produces, so the
++  # slice arithmetic in these cases is production's arithmetic. Term k is 'term <k>', zero-padded so
++  # the id sort order and the index agree.
++  $covTerms = [ordered]@{}
++  for ($n = 0; $n -lt 630; $n++) { $covTerms[('c' + $n.ToString('000'))] = ('term ' + $n.ToString('000')) }
++  [IO.File]::WriteAllText((Join-Path $covRoot 'commodity-search.json'), (@{ terms = $covTerms } | ConvertTo-Json -Depth 4))
++  [IO.File]::WriteAllText((Join-Path $covRoot 'stores.json'), (@{ stores = @(
++      @{ name = 'Walmart'; regular_prefix = 'walmart' },
++      @{ name = "Sam's Club"; regular_prefix = 'sams'; deals_glob = 'out/sams/sams-deals-*.json' }) } | ConvertTo-Json -Depth 4))
++  $script:PolicyRoot = $covRoot
++  $covTermAt = { param([int]$Ix) 'term ' + ($Ix % 630).ToString('000') }
++
++  # One out\ per case: the cursor file, the capture and the log are per-case state, and sharing them
++  # would make each case depend on the one before it.
++  function New-CovOut([string]$Name) {
++    $o = Join-Path $covRoot ('out-' + $Name)
++    New-Item -ItemType Directory -Path (Join-Path $o 'regular') -Force | Out-Null
++    New-Item -ItemType Directory -Path (Join-Path $o 'sams') -Force | Out-Null
++    return $o
++  }
++  # A row shaped like the ones every term-rotation builder writes: what it was found by, and when.
++  function New-CovRow([string]$Term, [string]$AsOf) {
++    return [ordered]@{ store = 'Walmart'; item = ('a product for ' + $Term); ad_price = '$1.00'
++                       current_price = 1.0; found_by_term = $Term; as_of = $AsOf }
++  }
++  function Write-CovCapture([string]$OutDir, [string]$Rel, $Rows, $Ledger) {
++    $doc = [ordered]@{ store = 'Walmart'; price_type = 'everyday'; captured = $covToday; deals = @($Rows) }
++    if ($null -ne $Ledger) { $doc['capture_terms'] = @($Ledger) }
++    [IO.File]::WriteAllText((Join-Path $OutDir $Rel), ($doc | ConvertTo-Json -Depth 6))
++  }
++  function Set-CovCursor([string]$OutDir, $Fields) {
++    [IO.File]::WriteAllText((Join-Path $OutDir 'capture-cursor.json'), ($Fields | ConvertTo-Json -Depth 4))
++  }
++  function Get-CovCursorField([string]$OutDir, [string]$Name) {
++    $p = Join-Path $OutDir 'capture-cursor.json'
++    if (-not (Test-Path -LiteralPath $p)) { return $null }
++    $d = ConvertFrom-Json ([IO.File]::ReadAllText($p))
++    if ($d.PSObject.Properties[$Name]) { return $d.$Name }
++    return $null
++  }
++
++  # ---- 1. MUST FIRE: the Sam's Club 2026-08-22 shape, on the store whose capture is a deals_glob ----
++  # Cursor at #0, and the capture that landed is 122 rows of terms #7..#13 - the NEXT slice. Under the
++  # old rule this advanced #0 -> #7 and those seven terms waited a quarter.
++  $o1 = New-CovOut 'sams-next-slice'
++  $r1rows = @(0..6 | ForEach-Object { New-CovRow (& $covTermAt (7 + $_)) $covToday })
++  [IO.File]::WriteAllText((Join-Path $o1 ('sams\sams-deals-' + $covToday + '.json')),
++    (([ordered]@{ store = "Sam's Club"; captured = $covToday; deals = @($r1rows) }) | ConvertTo-Json -Depth 6))
++  $c1 = Step-CaptureCursor -Store "Sam's Club" -Today $covToday -OutDir $o1
++  if (-not $c1.Advanced -and $c1.From -eq 0 -and $c1.To -eq 0 -and $c1.Covered -eq 0 -and $c1.Reason -match 'covered NONE') {
++    Ok "MUST FIRE  a landed Sam's capture of the NEXT slice's terms does not advance the cursor past the slice it skipped ($($c1.Reason))"
++  } else { Bad "the 2026-08-22 Sam's skip did not reproduce: advanced=$($c1.Advanced) $($c1.From)->$($c1.To) covered=$($c1.Covered) - $($c1.Reason)" }
++  if ((Get-CovCursorField $o1 'SamsClub_stall') -eq 1 -and (Get-CovCursorField $o1 'SamsClub_stall_day') -eq $covToday) {
++    Ok 'the held day is counted once, in the cursor file, so a stuck rotation is visible on disk instead of being silent'
++  } else { Bad "the stall was not recorded: stall=$(Get-CovCursorField $o1 'SamsClub_stall') day=$(Get-CovCursorField $o1 'SamsClub_stall_day')" }
++  if ($null -eq (Get-CovCursorField $o1 'SamsClub_last')) {
++    Ok 'a held day does not stamp <store>_last, so a real capture of that slice later the same day can still advance it'
++  } else { Bad 'a held day stamped <store>_last and locked the store out of its own slice for the rest of the day' }
++
++  # ---- 2. MUST FIRE: the Walmart 2026-08-30 shape - 525 fresh rows, none of them the slice ----
++  $o2 = New-CovOut 'walmart-other-terms'
++  Set-CovCursor $o2 ([ordered]@{ Walmart = 28 })
++  $r2rows = @(0..23 | ForEach-Object { New-CovRow (& $covTermAt $_) $covToday })
++  Write-CovCapture $o2 ('regular\walmart-regular-' + $covToday + '.json') $r2rows $null
++  $c2 = Step-CaptureCursor -Store 'Walmart' -Today $covToday -OutDir $o2
++  if (-not $c2.Advanced -and $c2.To -eq 28) {
++    Ok "MUST FIRE  a landed Walmart capture of 24 other terms does not carry slice #28..#34 ($($c2.Reason))"
++  } else { Bad "the 2026-08-30 Walmart skip did not reproduce: advanced=$($c2.Advanced) $($c2.From)->$($c2.To) - $($c2.Reason)" }
++
++  # ---- 3. MUST NOT FIRE: a capture that really covered its slice advances the whole slice ----
++  # This is the crying-wolf half. If it ever goes red the rule has stopped being a rule and become a
++  # freeze, which is the failure mode the escapes below exist to keep out.
++  $o3 = New-CovOut 'covered'
++  Set-CovCursor $o3 ([ordered]@{ Walmart = 28 })
++  $r3rows = @(28..34 | ForEach-Object { New-CovRow (& $covTermAt $_) $covToday })
++  Write-CovCapture $o3 ('regular\walmart-regular-' + $covToday + '.json') $r3rows $null
++  $c3 = Step-CaptureCursor -Store 'Walmart' -Today $covToday -OutDir $o3
++  if ($c3.Advanced -and $c3.From -eq 28 -and $c3.To -eq 35 -and $c3.Covered -eq 7 -and $c3.CoverageSource -eq 'found_by_term') {
++    Ok "MUST NOT FIRE  a capture covering all 7 slice terms advances the full slice, #28 -> #35 ($($c3.Reason))"
++  } else { Bad "a fully covered slice did not advance: advanced=$($c3.Advanced) $($c3.From)->$($c3.To) covered=$($c3.Covered) - $($c3.Reason)" }
++  if ($null -eq (Get-CovCursorField $o3 'Walmart_stall')) { Ok 'a clean advance leaves no stall key behind - zero is written as the absence of a stall' }
++  else { Bad "a clean advance left a stall counter of $(Get-CovCursorField $o3 'Walmart_stall')" }
++
++  # ---- 4. A PARTIAL DAY ADVANCES TO THE FIRST GAP AND NO FURTHER ----
++  # Terms #28,#29,#30 and #32,#33,#34 came back, #31 did not. Advancing 7 skips #31 for a quarter;
++  # advancing 0 would stall a capture that plainly worked. Three is the only honest number, and #31
++  # leads tomorrow's slice.
++  $o4 = New-CovOut 'partial'
++  Set-CovCursor $o4 ([ordered]@{ Walmart = 28 })
++  $r4rows = @(@(28, 29, 30, 32, 33, 34) | ForEach-Object { New-CovRow (& $covTermAt $_) $covToday })
++  Write-CovCapture $o4 ('regular\walmart-regular-' + $covToday + '.json') $r4rows $null
++  $c4 = Step-CaptureCursor -Store 'Walmart' -Today $covToday -OutDir $o4
++  if ($c4.Advanced -and $c4.To -eq 31 -and $c4.Reason -match 'term 031') {
++    Ok "MUST FIRE  a slice with a hole at #31 advances 3 of 7 and stops there, so #31 leads tomorrow instead of being skipped ($($c4.Reason))"
++  } else { Bad "partial coverage advanced wrongly: $($c4.From)->$($c4.To) - $($c4.Reason)" }
++  # AND THE MECHANISM, not the message: TOMORROW re-offers #31. The day is rolled back the way
++  # commit-capture-cursor's own suite does it - by ageing <store>_last, never by faking the date, which
++  # the replay guard refuses. The same capture file is still on disk and still shows nothing for #31,
++  # so the honest answer tomorrow is to hold there and say so.
++  $cur4 = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $o4 'capture-cursor.json')))
++  $cur4.Walmart_last = $covYday
++  [IO.File]::WriteAllText((Join-Path $o4 'capture-cursor.json'), ($cur4 | ConvertTo-Json -Depth 4))
++  $c4b = Step-CaptureCursor -Store 'Walmart' -Today $covToday -OutDir $o4
++  if (-not $c4b.Advanced -and $c4b.From -eq 31 -and $c4b.Reason -match 'term 031') {
++    Ok 'MUST FIRE  the next day starts at #31, the term nothing covered, rather than a quarter past it'
++  } else { Bad "the uncovered term was not re-offered the next day: from=$($c4b.From) advanced=$($c4b.Advanced) - $($c4b.Reason)" }
++
++  # ---- 5. MUST FIRE: a CARRIED row is evidence about the day it was bought, not about today ----
++  # Aldi, Fareway and Family Fare files hold months of carried rows; counting them would make every
++  # rotation look covered forever.
++  $o5 = New-CovOut 'carried'
++  Set-CovCursor $o5 ([ordered]@{ Walmart = 28 })
++  $r5rows = @(28..34 | ForEach-Object { New-CovRow (& $covTermAt $_) $covYday })
++  Write-CovCapture $o5 ('regular\walmart-regular-' + $covToday + '.json') $r5rows $null
++  $c5 = Step-CaptureCursor -Store 'Walmart' -Today $covToday -OutDir $o5
++  if (-not $c5.Advanced) { Ok "MUST FIRE  rows carried from $covYday do not count as today's coverage ($($c5.Reason))" }
++  else { Bad "carried rows advanced the cursor $($c5.From)->$($c5.To) - a file of old rows would rotate the catalogue on its own" }
++
++  # ---- 6. MUST NOT FIRE: an ASKED term the store had nothing for is COVERED ----
++  # The capture_terms ledger Family Fare, Baker's and Hy-Vee write is the only thing here that can tell
++  # "asked, and the store had nothing" from "never asked". The first must advance: an empty answer has
++  # four causes (not-carried, blocked, unrendered, unsettled) and none of them writes a row, so treating
++  # it as uncovered would park the rotation on the first item the store does not stock.
++  $o6 = New-CovOut 'asked-empty'
++  Set-CovCursor $o6 ([ordered]@{ Walmart = 28 })
++  $l6 = @(28..34 | ForEach-Object { [ordered]@{ term = (& $covTermAt $_); ordinal = $_; outcome = 'empty'; row_count = 0 } })
++  Write-CovCapture $o6 ('regular\walmart-regular-' + $covToday + '.json') @(New-CovRow 'term 500' $covToday) $l6
++  $c6 = Step-CaptureCursor -Store 'Walmart' -Today $covToday -OutDir $o6
++  if ($c6.Advanced -and $c6.To -eq 35 -and $c6.CoverageSource -eq 'capture_terms') {
++    Ok "MUST NOT FIRE  a slice the ledger says was ASKED and came back empty advances in full ($($c6.Reason))"
++  } else { Bad "an asked-and-empty slice was treated as uncovered: advanced=$($c6.Advanced) $($c6.From)->$($c6.To) source=$($c6.CoverageSource) - $($c6.Reason)" }
++
++  # ---- 7. MUST FIRE: the Baker's 2026-09-18 shape - the ledger says the slice was NOT asked ----
++  # 70 of its 74 asks that day were the weekly ad list, which leads the worklist inside the same
++  # allowance; the rotation slice was never put to the store and the cursor stepped over it anyway.
++  $o7 = New-CovOut 'ledger-not-asked'
++  Set-CovCursor $o7 ([ordered]@{ Walmart = 28 })
++  $l7 = @()
++  $l7 += @(28..34 | ForEach-Object { [ordered]@{ term = (& $covTermAt $_); ordinal = $_; outcome = 'not_asked'; row_count = 0
++                                                 reason = "outside today's capture-policy slice" } })
++  $l7 += @(100..109 | ForEach-Object { [ordered]@{ term = (& $covTermAt $_); ordinal = $_; outcome = 'success'; row_count = 5 } })
++  Write-CovCapture $o7 ('regular\walmart-regular-' + $covToday + '.json') @(New-CovRow 'term 100' $covToday) $l7
++  $c7 = Step-CaptureCursor -Store 'Walmart' -Today $covToday -OutDir $o7
++  if (-not $c7.Advanced -and $c7.CoverageSource -eq 'capture_terms') {
++    Ok "MUST FIRE  a ledger that says the slice was not_asked holds the cursor, however many other terms succeeded ($($c7.Reason))"
++  } else { Bad "a not_asked slice advanced: advanced=$($c7.Advanced) $($c7.From)->$($c7.To) - $($c7.Reason)" }
++
++  # ---- 8. CLEAN TWIN: a capture whose shape carries NO coverage evidence still rotates ----
++  # Every lock path in this estate degrades to the behaviour of the day before, never to a refusal. A
++  # capture file with neither a ledger nor found_by_term/as_of on its rows is a could-not-look, so the
++  # advance is exactly what it was before this rule existed - and the reason says BLIND, so a run of
++  # them can be counted rather than mistaken for coverage.
++  $o8 = New-CovOut 'blind'
++  Set-CovCursor $o8 ([ordered]@{ Walmart = 28 })
++  Write-CovCapture $o8 ('regular\walmart-regular-' + $covToday + '.json') @(@{ item = 'x'; ad_price = '$1.00' }) $null
++  $c8 = Step-CaptureCursor -Store 'Walmart' -Today $covToday -OutDir $o8
++  if ($c8.Advanced -and $c8.To -eq 35 -and $c8.CoverageSource -eq 'none' -and $c8.Reason -match 'BLIND') {
++    Ok "CLEAN TWIN a capture shape with no coverage evidence advances as it did before the rule, and says BLIND ($($c8.Reason))"
++  } else { Bad "a blind capture was refused instead of degrading: advanced=$($c8.Advanced) $($c8.From)->$($c8.To) - $($c8.Reason)" }
++
++  # ---- 9. THE STALL ESCAPE, AT ITS BAR AND EITHER SIDE OF IT ----
++  # The bar is $script:CursorStallDays = 3 LANDED days. A term with no per-term ledger behind it cannot
++  # prove it was asked, so after three landed captures that show nothing for it the cursor steps over
++  # THAT ONE TERM and says why. The cases sit at 2 (one short), 3 (exactly at it) and 4 (past it),
++  # because a suite that only tests the far side of a bar cannot see a -gt flipped to a -ge.
++  foreach ($seed in @(1, 2, 3)) {
++    $oS = New-CovOut ('stall-' + $seed)
++    Set-CovCursor $oS ([ordered]@{ Walmart = 28; Walmart_stall = $seed; Walmart_stall_day = $covYday })
++    $rS = @(100..109 | ForEach-Object { New-CovRow (& $covTermAt $_) $covToday })
++    Write-CovCapture $oS ('regular\walmart-regular-' + $covToday + '.json') $rS $null
++    $cS = Step-CaptureCursor -Store 'Walmart' -Today $covToday -OutDir $oS
++    $day = $seed + 1
++    if ($day -lt 3) {
++      if (-not $cS.Advanced -and $cS.Stall -eq $day) {
++        Ok "MUST NOT FIRE  day $day of 3 (the bar is $script:CursorStallDays landed days): the head term still holds the cursor"
++      } else { Bad "day $day of 3 escaped early: advanced=$($cS.Advanced) stall=$($cS.Stall) - $($cS.Reason)" }
++    } else {
++      $where = if ($day -eq $script:CursorStallDays) { "exactly AT the bar of $script:CursorStallDays" } else { "one day PAST the bar of $script:CursorStallDays" }
++      if ($cS.Advanced -and $cS.To -eq 29 -and $cS.Reason -match 'stepping over ONE term') {
++        Ok "MUST FIRE  day $day, $where landed days, steps over ONE term (#28 -> #29), never the slice"
++      } else { Bad "day $day ($where) did not take the one-term escape: advanced=$($cS.Advanced) $($cS.From)->$($cS.To) - $($cS.Reason)" }
++      if ($null -eq (Get-CovCursorField $oS 'Walmart_stall')) { Ok "the escape resets the counter, so the next term gets its own $script:CursorStallDays days" }
++      else { Bad "the stall counter survived the escape at $(Get-CovCursorField $oS 'Walmart_stall') - the rest of the slice would be stepped over one term per run" }
++    }
++  }
++
++  # ---- 10. CLEAN TWIN: a builder that runs four times today counts ONE day, not four ----
++  # Without the date stamp the escape would fire inside a single morning, which is the one-slice-per-day
++  # bug of 2026-08-21 wearing a different coat.
++  $o10 = New-CovOut 'same-day'
++  Set-CovCursor $o10 ([ordered]@{ Walmart = 28 })
++  $r10 = @(100..109 | ForEach-Object { New-CovRow (& $covTermAt $_) $covToday })
++  Write-CovCapture $o10 ('regular\walmart-regular-' + $covToday + '.json') $r10 $null
++  $c10 = $null
++  for ($n = 0; $n -lt 4; $n++) { $c10 = Step-CaptureCursor -Store 'Walmart' -Today $covToday -OutDir $o10 }
++  if (-not $c10.Advanced -and (Get-CovCursorField $o10 'Walmart_stall') -eq 1) {
++    Ok 'CLEAN TWIN four runs of the builder on one day count one stall day, so the escape cannot fire in a single morning'
++  } else { Bad "four runs counted $(Get-CovCursorField $o10 'Walmart_stall') day(s) - advanced=$($c10.Advanced)" }
++
++  # ---- 11. CLEAN TWIN: the three guards that were already here still hold on the new path ----
++  $o11 = New-CovOut 'guards'
++  Set-CovCursor $o11 ([ordered]@{ Walmart = 28 })
++  $c11a = Step-CaptureCursor -Store 'Walmart' -Today $covToday -OutDir $o11
++  if (-not $c11a.Advanced -and $c11a.Reason -match 'no fresh rows landed') { Ok 'CLEAN TWIN no capture at all still holds the cursor with its own reason, ahead of any coverage question' }
++  else { Bad "the landed guard changed: advanced=$($c11a.Advanced) - $($c11a.Reason)" }
++  $c11b = Step-CaptureCursor -Store 'Walmart' -Today '2026-07-31' -OutDir $o11
++  if (-not $c11b.Advanced -and $c11b.Reason -match 'REPLAY') { Ok 'CLEAN TWIN a replay date is still refused before anything is read' }
++  else { Bad "the replay guard changed: advanced=$($c11b.Advanced) - $($c11b.Reason)" }
++  $r11 = @(100..109 | ForEach-Object { New-CovRow (& $covTermAt $_) $covToday })
++  Write-CovCapture $o11 ('regular\walmart-regular-' + $covToday + '.json') $r11 $null
++  $c11c = Step-CaptureCursor -Store 'Walmart' -Today $covToday -OutDir $o11 -Force
++  if ($c11c.Advanced -and $c11c.To -eq 35 -and $c11c.Reason -match 'FORCED') { Ok 'CLEAN TWIN -Force still advances the whole slice, and says the coverage was not required' }
++  else { Bad "-Force did not advance: advanced=$($c11c.Advanced) $($c11c.From)->$($c11c.To) - $($c11c.Reason)" }
++
++  # ---- 12. CLEAN TWIN: a covering capture clears a stall the store had accumulated ----
++  $o12 = New-CovOut 'recover'
++  Set-CovCursor $o12 ([ordered]@{ Walmart = 28; Walmart_stall = 2; Walmart_stall_day = $covYday })
++  $r12 = @(28..34 | ForEach-Object { New-CovRow (& $covTermAt $_) $covToday })
++  Write-CovCapture $o12 ('regular\walmart-regular-' + $covToday + '.json') $r12 $null
++  $c12 = Step-CaptureCursor -Store 'Walmart' -Today $covToday -OutDir $o12
++  if ($c12.Advanced -and $c12.To -eq 35 -and $null -eq (Get-CovCursorField $o12 'Walmart_stall')) {
++    Ok 'CLEAN TWIN a store that was 2 days into a stall advances normally once its slice is covered, and the counter is cleared'
++  } else { Bad "a stalled store did not recover: advanced=$($c12.Advanced) $($c12.From)->$($c12.To) stall=$(Get-CovCursorField $o12 'Walmart_stall')" }
++
++  # ---- 13. THE ADVANCE LINE RECORDS WHAT IT WAS JUDGED ON ----
++  # Finding the three skipped slices took a replay of this log against the captures of those days and a
++  # historical commodity-search.json for each. The coverage on the line is what makes the same question
++  # a grep next time.
++  $logLine = @(Get-Content -LiteralPath (Join-Path $o3 'capture-cursor-log.jsonl') | Where-Object { $_.Trim() })
++  $logRec = $null
++  if ($logLine.Count -eq 1) { try { $logRec = $logLine[0] | ConvertFrom-Json } catch { } }
++  if ($logRec -and [int]$logRec.covered -eq 7 -and [int]$logRec.slice -eq 7 -and [string]$logRec.coverage -eq 'found_by_term') {
++    Ok 'the cursor log line carries covered / slice / coverage, so a later replay does not have to rebuild the evidence'
++  } else { Bad "the advance was logged without its coverage: [$($logLine -join ' | ')]" }
+ } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
+ 
+ Write-Output ("CAPTURE-POLICY " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))

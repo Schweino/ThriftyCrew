@@ -1,0 +1,14 @@
+import json, os, re, sys
+here = os.path.dirname(os.path.abspath(__file__))
+runs = os.path.join(here, "runs")
+m = json.load(open(os.path.join(here, "map.json"), encoding="utf-8-sig"))
+for r in m:
+    p = os.path.join(runs, r["code"] + "-transcript.jsonl")
+    text = open(p, encoding="utf-8", errors="replace").read()
+    sp = len(re.findall(r"search\.py", text))
+    skills_reads = len(re.findall(r"(?i)\.claude[\\/]+skills[\\/]+[a-z0-9-]+[\\/]+[a-z0-9-]+\.md", text))
+    denied = len(re.findall(r"(?i)(permission|denied|deny rule)", text))
+    done = '"type":"result"' in text
+    tools = len(re.findall(r'"type":"tool_use"', text))
+    print("%s %s%s%d tools=%d search.py=%d skillsmd=%d denyish=%d done=%s" % (
+        r["code"], r["task"], r["arm"], r["rep"], tools, sp, skills_reads, denied, done))

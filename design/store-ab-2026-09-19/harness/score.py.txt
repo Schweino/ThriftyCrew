@@ -1,0 +1,95 @@
+"""Store A/B pilot scorer. Reads judges.json and each judge's output, writes one row per judge per arm
+to cases.jsonl, applies the pre-registered pair rule and bar (PLAN-store-ab-2026-09-19.md), prints it."""
+import json, os, re, sys
+here = os.path.dirname(os.path.abspath(__file__))
+jd = os.path.join(here, "judges")
+judges = json.load(open(os.path.join(here, "judges.json"), encoding="utf-8-sig"))
+DIMS = ["correctness", "traps", "fit", "tests", "scope"]
+rows, verdicts, bad, fallback = [], {}, [], []
+for j in judges:
+    p = os.path.join(jd, j["judge"] + "-out.json")
+    try:
+        out = json.load(open(p, encoding="utf-8"))
+        text = out.get("result") or ""
+        if out.get("is_error"):
+            raise ValueError("is_error: " + text[:120])
+        blocks = re.findall(r"```json\s*(\{.*?\})\s*```", text, re.S)
+        try:
+            v = json.loads(blocks[-1])
+        except Exception:
+            # Fallback: the free-text evidence can carry unescaped quotes; the scores object holds
+            # only integers and the verdict one token, so read those two fields alone and say so.
+            blk = blocks[-1]
+            sm = re.search(r'"scores"\s*:\s*(\{\s*"X"\s*:\s*\{[^{}]*\}\s*,\s*"Y"\s*:\s*\{[^{}]*\}\s*\})', blk)
+            vm = re.search(r'"verdict"\s*:\s*"(X|Y|TIE)"', blk)
+            if not (sm and vm):
+                raise
+            v = {"scores": json.loads(sm.group(1)), "verdict": vm.group(1), "why": "(evidence unparsed)"}
+            fallback.append(j["judge"])
+    except Exception as e:
+        bad.append((j["judge"], str(e)[:160]))
+        continue
+    arm_of = {"X": j["Xarm"], "Y": j["Yarm"]}
+    pick = v.get("verdict", "").strip().upper()
+    picked_arm = arm_of.get(pick, "TIE")
+    verdicts.setdefault(j["pair"], []).append(picked_arm)
+    for side in "XY":
+        s = v["scores"][side]
+        rows.append({"pair": j["pair"], "judge": j["judge"], "order": j["order"], "side": side,
+                     "arm": arm_of[side], "code": j[side], "scores": {d: s.get(d) for d in DIMS},
+                     "total": sum(s.get(d) or 0 for d in DIMS), "verdict_side": pick,
+                     "verdict_arm": picked_arm, "why": v.get("why", "")})
+with open(os.path.join(here, "cases.jsonl"), "w", encoding="utf-8", newline="\n") as fh:
+    for r in rows:
+        fh.write(json.dumps(r) + "\n")
+
+print("judges parsed: %d of %d" % (len(judges) - len(bad), len(judges)))
+for b in bad:
+    print("  UNPARSED", b)
+print("judges read by the scores-and-verdict fallback: %d %s" % (len(fallback), fallback))
+pair_result = {}
+for pair in sorted(verdicts):
+    vs = verdicts[pair]
+    if len(vs) == 2 and vs[0] == vs[1] and vs[0] != "TIE":
+        res = vs[0]
+    else:
+        res = "TIE"
+    pair_result[pair] = res
+    print("%-8s judges=%s -> %s" % (pair, vs, res))
+
+real = [p for p in pair_result if p.endswith("-SB")]
+s_w = sum(1 for p in real if pair_result[p].startswith("S"))
+b_w = sum(1 for p in real if pair_result[p].startswith("B"))
+d = s_w - b_w
+noise = [p for p in pair_result if p.endswith("-SS")]
+noise_consistent = sum(1 for p in noise if pair_result[p] != "TIE")
+if len(real) < 6 or any(len(verdicts.get(p, [])) < 2 for p in real):
+    verdict = "INCOMPLETE - not every real pair has two parsed judges"
+elif noise_consistent == len(noise) and len(noise) == 2:
+    verdict = "INCONCLUSIVE (noise override: both same-arm pairs returned a consistent winner)"
+elif d >= 4:
+    verdict = "HELPS"
+elif d <= 1:
+    verdict = "NO DETECTABLE HELP"
+else:
+    verdict = "INCONCLUSIVE"
+print("real pairs %d: store wins %d, blocked wins %d, ties %d, d=%d" % (len(real), s_w, b_w, len(real) - s_w - b_w, d))
+print("noise pairs with a consistent winner: %d of %d" % (noise_consistent, len(noise)))
+print("VERDICT:", verdict)
+
+print("\nper-dimension, store minus blocked, mean of the two judges, per real pair:")
+for pair in sorted(real):
+    diffs = {}
+    for dim in DIMS + ["total"]:
+        vals = []
+        for jj in ("o1", "o2"):
+            sr = [r for r in rows if r["judge"] == pair + "-" + jj and r["arm"].startswith("S")]
+            br = [r for r in rows if r["judge"] == pair + "-" + jj and r["arm"].startswith("B")]
+            if sr and br:
+                a = sr[0]["total"] if dim == "total" else sr[0]["scores"][dim]
+                b = br[0]["total"] if dim == "total" else br[0]["scores"][dim]
+                if a is not None and b is not None:
+                    vals.append(a - b)
+        diffs[dim] = (sum(vals) / len(vals)) if vals else None
+    print("  %-6s %s" % (pair, "  ".join("%s=%+.1f" % (k, v) if v is not None else "%s=NA" % k for k, v in diffs.items())))
+print("STORE-AB-SCORE-COMPLETE judges=%d parsed=%d pairs=%d" % (len(judges), len(judges) - len(bad), len(pair_result)))

@@ -1,0 +1,49 @@
+# Store A/B pilot harness, 2026-09-19. Creates one worktree per run under a random code, seeds it,
+# and launches one headless claude session per run. The code-to-arm map is written to map.json and is
+# never shown to a judge.
+param([switch]$DryRun)
+$ErrorActionPreference = 'Stop'
+$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+$repo = 'C:\Codex\ThriftyCrew'
+$tasks = Get-Content -Raw -Encoding UTF8 (Join-Path $here 'tasks.json') | ConvertFrom-Json
+$template = [IO.File]::ReadAllText((Join-Path $here 'prompt-template.txt'))
+$settings = @{
+    S = (Join-Path (Split-Path -Parent $here) 'arm-store-settings.json')
+    B = (Join-Path (Split-Path -Parent $here) 'arm-blocked-settings.json')
+}
+$runs = New-Object System.Collections.ArrayList
+foreach ($t in $tasks) {
+    [void]$runs.Add(@{ task = $t; arm = 'S'; rep = 1 })
+    [void]$runs.Add(@{ task = $t; arm = 'B'; rep = 1 })
+    if ($t.id -eq 'T3' -or $t.id -eq 'T4') { [void]$runs.Add(@{ task = $t; arm = 'S'; rep = 2 }) }
+}
+$rng = New-Object System.Random 20260919
+$map = New-Object System.Collections.ArrayList
+$runDir = Join-Path $here 'runs'
+New-Item -ItemType Directory -Force $runDir | Out-Null
+foreach ($r in $runs) {
+    $code = ('{0:x6}' -f $rng.Next(0, 0xFFFFFF))
+    $wt = "C:\Codex\tc-exp-$code"
+    $row = [ordered]@{ code = $code; task = $r.task.id; arm = $r.arm; rep = $r.rep; base = $r.task.base; worktree = $wt }
+    [void]$map.Add($row)
+    if ($DryRun) { continue }
+    & git -C $repo worktree add -q --detach $wt $r.task.base
+    if ($LASTEXITCODE -ne 0) { throw "worktree add failed for $code" }
+    & powershell -NoProfile -File (Join-Path $repo 'ops\seed-worktree.ps1') -Target $wt > (Join-Path $runDir "$code-seed.log")
+    $prompt = $template.Replace('{WORKTREE}', $wt).Replace('{BASE}', $r.task.base).Replace('{STATEMENT}', $r.task.statement)
+    $pf = Join-Path $runDir "$code-prompt.txt"
+    [IO.File]::WriteAllText($pf, $prompt, (New-Object Text.UTF8Encoding($false)))
+    $env:RECALL_LOG = Join-Path $runDir "$code-search-log.jsonl"
+    $cargs = @('-p', '--model', 'claude-opus-5', '--permission-mode', 'bypassPermissions',
+              '--settings', $settings[$r.arm], '--output-format', 'stream-json', '--verbose')
+    $p = Start-Process -FilePath 'C:\Users\Owner\.local\bin\claude.exe' -ArgumentList $cargs `
+        -WorkingDirectory $wt -RedirectStandardInput $pf `
+        -RedirectStandardOutput (Join-Path $runDir "$code-transcript.jsonl") `
+        -RedirectStandardError (Join-Path $runDir "$code-stderr.txt") -WindowStyle Hidden -PassThru
+    $row.pid = $p.Id
+    $row.started = (Get-Date).ToString('s')
+}
+Remove-Item Env:\RECALL_LOG -ErrorAction SilentlyContinue
+$json = ($map | ForEach-Object { [pscustomobject]$_ } | ConvertTo-Json -Depth 4)
+[IO.File]::WriteAllText((Join-Path $here 'map.json'), $json, (New-Object Text.UTF8Encoding($false)))
+"launched=$($map.Count) dryrun=$DryRun"

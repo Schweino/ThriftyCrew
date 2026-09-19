@@ -1,0 +1,18 @@
+You are working alone in a git worktree of the ThriftyCrew repo at {WORKTREE}, checked out detached at commit {BASE}. Your working directory is that worktree.
+
+THE TASK
+
+{STATEMENT}
+
+HOW TO WORK
+
+- Work the way this estate's instruction files say you should, and do the whole task: diagnose, change the code, write the fixtures, run them.
+- Run the self-tests of every file you change and read their exit codes.
+- Do NOT commit, do NOT push, do NOT create branches, and do NOT run ops/run-gates.ps1 (the box is shared). Leave your change uncommitted in this worktree's working tree.
+- Write nothing outside this worktree. Files under C:\Codex\ThriftyCrew (the main checkout) may be READ for data, never written. Temporary files go under your worktree or a fresh directory under %TEMP% that you remove.
+- The estate's knowledge store search, if you want it: C:\Codex\Python312\python.exe C:\Users\Owner\.claude\skills\knowledge-search\search.py "<query>" (flags: --full, --multi, --files, --budget N).
+- Do not ask questions; nobody will answer. Make reasonable choices and state them.
+
+WHEN YOU ARE DONE
+
+End with a short report: what you found, what you changed and why, the self-test commands you ran with their exit codes, and anything you chose not to do.

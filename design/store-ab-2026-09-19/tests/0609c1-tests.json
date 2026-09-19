@@ -1,0 +1,17 @@
+{
+    "code":  "0609c1",
+    "changed":  [
+                    "graph/import/import_all.py",
+                    "graph/import/import_all_selftest.py",
+                    "graph/import/importers.py",
+                    "graph/lib/graphdb.py"
+                ],
+    "scrubbed_lines":  0,
+    "tests":  [
+                  {
+                      "file":  "graph/import/import_all_selftest.py",
+                      "exit":  0,
+                      "last_line":  "SELF-TEST PASS: import_all 15 of 15 cases - a failed importer leaves none of its rows and the run exits 1"
+                  }
+              ]
+}

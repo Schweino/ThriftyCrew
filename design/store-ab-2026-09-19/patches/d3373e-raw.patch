@@ -1,0 +1,439 @@
+diff --git a/grocery/expected-automations.json b/grocery/expected-automations.json
+index 76fdf7717..4e74ac0e7 100644
+--- a/grocery/expected-automations.json
++++ b/grocery/expected-automations.json
+@@ -1,5 +1,5 @@
+ {
+-    "readme":  "Registry of automations + critical outputs the health-heartbeat.ps1 watches for SILENT DEATH - an automation that stopped being scheduled (deleted/disabled), or an output that quietly went stale, WITHOUT a loud failure. Since 2026-08-22 health-heartbeat runs from the \u0027TC Grocery Capture Watchdog\u0027 task, moved to 10:30 on 2026-08-31 and RENAMED to \u0027TC Grocery Capture Watchdog 1030\u0027 on 2026-09-07 by ops/install-grocery-tasks.ps1 -FixName (the earlier ruling here said the 0930 name was deliberately not renamed; the registrar renamed it on the live scheduler at 06:30 and this registry did not hear, so the heartbeat paged one rename as two issues - a phantom TASK MISSING and an unwatched real task - at 10:30 the same morning. The registrar\u0027s $OWNED table and this registry MUST name the same tasks, and ops/install-grocery-tasks.ps1 -VerifyRegistry now checks exactly that on every push, through ops/audit-task-registry.ps1 in run-gates) (local-watchdog.ps1 and the SMP tasks are retired); capture-watchdog covers loud failures and the run record. Brad\u0027s rule 2026-08-22: Windows tasks are the ONLY routines that fire (no Claude scheduled agents) - every one belongs HERE, and health-heartbeat\u0027s REGISTRY DRIFT check pages if a \u0027TC *\u0027 or \u0027SMP *\u0027 task exists that is not listed. The rule was written when there were exactly three and said \u0027the three TC Grocery tasks\u0027; two more were registered after it (TC Graph Nightly Matching 08-22, TC Recipe Harvest Crawl 08-24) and neither was added here, so each was unwatched from birth. Re-worded 2026-08-25 to state the rule that actually holds - a registry whose preamble contradicts its own contents teaches the reader to skip both. THE COUNT IS NOT THE RULE; THE REGISTRATION IS. Adding a task without adding it here is the defect, whatever the total. max_age_hours ~30 tolerates a late run + a weekend gap on a daily thing. Optional \u0027proves\u0027 (path or glob, repo-relative) names the output that shows the task\u0027s WORK actually landed: a nonzero exit whose proof output is fresh is reported as a warning, not paged as a death. The proof must be no older than the run it claims to prove. Optional \u0027run_log\u0027 (repo-relative directory plus the Start-RunLog name, e.g. grocery/out/logs/graph-nightly) is for a task whose WORK ends in a commit and whose LastTaskResult later occurrences overwrite: the heartbeat reads the last session of the newest \u003cname\u003e-\u003cdate\u003e.log and pages unless it stamped rc=0, carries a committed or nothing-changed verdict under that name, and began inside max_age_hours, whatever LastTaskResult says (RUN-LOG-VERDICT in health-heartbeat.ps1). OUTPUT_FILES HAS A SECOND, OPT-IN FORM (2026-09-04, queue 2026-09-04-2feb5c): a writer that legitimately no-ops when its inputs have not changed gives its output no mtime liveness signal at all, so such a row declares \u0027currency_field\u0027 (the field inside the file that carries its currency stamp) plus \u0027currency_equals\u0027 (what that stamp must equal; only \u0027board_week\u0027, the newest grocery/out/comparison-\u003cdate\u003e.json by name, is understood) and is judged on CONTENT instead. It is opt-in because the other four output_files rows are rewritten on every run and their mtime IS a real liveness signal - a default-on content check would silently disarm all four. Do not add these fields to a row whose writer cannot no-op, and do not widen max_age_hours to silence a no-op writer: see the CONTENT-CURRENCY block in health-heartbeat.ps1 for both rejected remedies.",
++    "readme":  "Registry of automations + critical outputs the health-heartbeat.ps1 watches for SILENT DEATH - an automation that stopped being scheduled (deleted/disabled), or an output that quietly went stale, WITHOUT a loud failure. Since 2026-08-22 health-heartbeat runs from the \u0027TC Grocery Capture Watchdog\u0027 task, moved to 10:30 on 2026-08-31 and RENAMED to \u0027TC Grocery Capture Watchdog 1030\u0027 on 2026-09-07 by ops/install-grocery-tasks.ps1 -FixName (the earlier ruling here said the 0930 name was deliberately not renamed; the registrar renamed it on the live scheduler at 06:30 and this registry did not hear, so the heartbeat paged one rename as two issues - a phantom TASK MISSING and an unwatched real task - at 10:30 the same morning. The registrar\u0027s $OWNED table and this registry MUST name the same tasks, and ops/install-grocery-tasks.ps1 -VerifyRegistry now checks exactly that on every push, through ops/audit-task-registry.ps1 in run-gates) (local-watchdog.ps1 and the SMP tasks are retired); capture-watchdog covers loud failures and the run record. Brad\u0027s rule 2026-08-22: Windows tasks are the ONLY routines that fire (no Claude scheduled agents) - every one belongs HERE, and health-heartbeat\u0027s REGISTRY DRIFT check pages if a \u0027TC *\u0027 or \u0027SMP *\u0027 task exists that is not listed. The rule was written when there were exactly three and said \u0027the three TC Grocery tasks\u0027; two more were registered after it (TC Graph Nightly Matching 08-22, TC Recipe Harvest Crawl 08-24) and neither was added here, so each was unwatched from birth. Re-worded 2026-08-25 to state the rule that actually holds - a registry whose preamble contradicts its own contents teaches the reader to skip both. THE COUNT IS NOT THE RULE; THE REGISTRATION IS. Adding a task without adding it here is the defect, whatever the total. max_age_hours ~30 tolerates a late run + a weekend gap on a daily thing. Optional \u0027proves\u0027 (path or glob, repo-relative) names the output that shows the task\u0027s WORK actually landed: a nonzero exit whose proof output is fresh is reported as a warning, not paged as a death. The proof must be no older than the run it claims to prove. Optional \u0027run_log\u0027 (repo-relative directory plus the Start-RunLog name, e.g. grocery/out/logs/graph-nightly) is for a task whose WORK ends in a commit and whose LastTaskResult later occurrences overwrite: the heartbeat reads the last session of the newest \u003cname\u003e-\u003cdate\u003e.log and pages unless it stamped rc=0, carries a committed or nothing-changed verdict under that name, and began inside max_age_hours, whatever LastTaskResult says (RUN-LOG-VERDICT in health-heartbeat.ps1). OUTPUT_FILES HAS A SECOND, OPT-IN FORM (2026-09-04, queue 2026-09-04-2feb5c): a writer that legitimately no-ops when its inputs have not changed gives its output no mtime liveness signal at all, so such a row declares \u0027currency_field\u0027 (the field inside the file that carries its currency stamp) plus \u0027currency_equals\u0027 (what that stamp must equal; only \u0027board_week\u0027, the newest grocery/out/comparison-\u003cdate\u003e.json by name, is understood) and is judged on CONTENT instead. It is opt-in because the other four output_files rows are rewritten on every run and their mtime IS a real liveness signal - a default-on content check would silently disarm all four. Do not add these fields to a row whose writer cannot no-op, and do not widen max_age_hours to silence a no-op writer: see the CONTENT-CURRENCY block in health-heartbeat.ps1 for both rejected remedies. THAT ROW MAY ALSO DECLARE \u0027held_when\u0027 (2026-09-19): the name of the mechanism that legitimately STOPS its writer, so a stamp lagging for that reason is reported as HELD with its cause instead of paged as a death. Only \u0027chain_guards_blocked\u0027 is understood - check-ad-cycles skips top5-weekly, rotate-free-dinners and the hub publish whenever guards refuse a board, and the heartbeat then reads the chain\u0027s own ship-path lines since the board week began: every run HELD excuses the lag, any run that SHIPPED pages it, and no line or an unclassifiable one pages it too. The excuse expires with the row\u0027s own max_age_hours, so a chain that stops running stops excusing anything. Do not add held_when to a row whose writer nothing gates, and do not add it to a row with no currency_field: on the mtime rule it would do nothing.",
+     "windows_tasks":  [
+                           {
+                               "name":  "TC Grocery Ad Pulls 0700",
+@@ -88,7 +88,8 @@
+                              "max_age_hours":  30,
+                              "currency_field":  "week_of",
+                              "currency_equals":  "board_week",
+-                             "why":  "this week\u0027s free-dinner rotation. REWRITTEN ONLY WHEN THE FREE SET FLIPS, so its mtime tracks the WEEKLY rotation, not the daily run that rotate-free-dinners.ps1 makes: the no-op early return at rotate-free-dinners.ps1:129-130 sits before the write at line 228. Judged on week_of, not on mtime. max_age_hours is kept here and is NOT consulted while currency_field is present - deleting the two currency_* fields is the rollback, and the number is left alone so nobody widens it (a window wider than the cadence never fires on time)."
++                             "held_when":  "chain_guards_blocked",
++                             "why":  "this week\u0027s free-dinner rotation. REWRITTEN ONLY WHEN THE FREE SET FLIPS, so its mtime tracks the WEEKLY rotation, not the daily run that rotate-free-dinners.ps1 makes: the no-op early return at rotate-free-dinners.ps1:129-130 sits before the write at line 228. Judged on week_of, not on mtime. max_age_hours is kept here and is NOT consulted while currency_field is present - deleting the two currency_* fields is the rollback, and the number is left alone so nobody widens it (a window wider than the cadence never fires on time). held_when (2026-09-19) is the SECOND thing that was wrong with this row: check-ad-cycles skips rotate-free-dinners whenever guards refuse the board, so on 2026-09-13, 09-14, 09-17 and 09-18 this row paged OUTPUT NOT CURRENT while the rotation was working perfectly and being held on purpose - a page that was true and named the wrong component. max_age_hours IS consulted for that excuse, and only for it: the newest held chain run must be inside it, or the hold is stale and the row pages again."
+                          },
+                          {
+                              "path":  "meal-prep/pipeline/v2-perserving.json",
+diff --git a/grocery/health-heartbeat.ps1 b/grocery/health-heartbeat.ps1
+index f39c77ab2..e6905558a 100644
+--- a/grocery/health-heartbeat.ps1
++++ b/grocery/health-heartbeat.ps1
+@@ -12,12 +12,16 @@
+       silent death; LastTaskResult "not yet run" is OK only when allow_pending);
+     - each critical output file / glob exists and is fresher than max_age_hours, EXCEPT an output_files row
+       that declares currency_field: that one is rewritten only when it changes, so its mtime proves nothing
+-      and it is judged on the currency stamp inside it instead (see the CONTENT-CURRENCY block);
++      and it is judged on the currency stamp inside it instead (see the CONTENT-CURRENCY block). Such a row
++      may also declare held_when, which names the mechanism that legitimately STOPS its writer: a stamp that
++      lags because the writer was skipped by design is reported as HELD, with its cause, instead of being
++      paged as a death - and only while that hold is proven, unbroken and current (CONTENT-CURRENCY again);
+     - each task row that declares run_log is judged on its RUN'S OWN TRANSCRIPT, whatever LastTaskResult says: the
+       last session of the newest <name>-<date>.log must carry rc=0, a committed or nothing-changed commit verdict in
+       that name, and a start inside max_age_hours (see the RUN-LOG-VERDICT block).
+ 
+-  Exit 0 = all healthy, 2 = one or more silently dead/stale. -SelfTest runs the frozen RUN-LOG-VERDICT fixtures and
++  Exit 0 = all healthy (a HELD row is reported and does not change the exit code - see CONTENT-CURRENCY),
++  2 = one or more silently dead/stale. -SelfTest runs the frozen RUN-LOG-VERDICT fixtures and
+   touches no scheduler and no mail: exit 0 pass, 1 a case failed, 3 could not run. -Alert emails Brad (de-duped by signature so
+   a persistent outage is one email). Meant to run INDEPENDENTLY of the pipeline it watches - it is invoked
+   from local-watchdog.ps1 (its own WakeToRun task), so a dead main pipeline cannot suppress its own alarm.
+@@ -62,6 +66,10 @@ function Add-HbIssue([string]$Class, [string]$Subject, [string]$Text) {
+   $issues.Add($o.text); $issueObjs.Add($o)
+ }
+ $okLines = New-Object System.Collections.Generic.List[string]
++# HELD IS ITS OWN BUCKET, neither ok nor an issue (CONTENT-CURRENCY). It is printed on every run, it never
++# reaches $issueObjs, so it never pages and never moves the alert signature, and it does not count towards the
++# "all fresh" tally - a held output is not fresh, it is explained.
++$heldLines = New-Object System.Collections.Generic.List[string]
+ $TASK_NOT_YET_RUN = 267011   # 0x00041303 SCHED_S_TASK_HAS_NOT_RUN
+ $TASK_RUNNING     = 267009   # 0x00041301 SCHED_S_TASK_RUNNING (transient: reported as LastTaskResult while a run is in flight)
+ 
+@@ -137,10 +145,146 @@ function Get-BoardWeek {
+   if ($wk.Count -eq 0) { return '' }
+   return [regex]::Match($wk[0].BaseName, '\d{4}-\d{2}-\d{2}').Value
+ }
++# A LAG THE WRITER WAS NEVER ALLOWED TO CLOSE IS NOT A SILENT DEATH (2026-09-19). Second founding case, same
++# row. This check paged OUTPUT NOT CURRENT for public\free-dinners.json on 2026-09-13, 09-14, 09-17 and 09-18,
++# and every one of those pages was TRUE and named the wrong cause: week_of stayed 2026-09-11 while the board
++# moved to 09-13, 09-14 and 09-17, and nothing whatsoever was wrong with the rotation. check-ad-cycles logged
++# 'held: guards blocked' on every one of those runs, and it SKIPS rotate-free-dinners - with top5-weekly and the
++# hub publish - whenever guards refuse a board, by design, because a held board must not publish anything costed
++# off it. So the writer could not run, its hold already pages from the chain, and naming the rotation for it
++# sends the reader to the one component that was working.
++#
++# THE EXCUSE IS EXACT RATHER THAN APPROXIMATE, and that is the whole of why it is allowed to be quiet.
++# rotate-free-dinners takes the SAME board week Get-BoardWeek takes above, and its no-op early return needs
++# state.week_of to EQUAL it (rotate-free-dinners.ps1:94-95, 130-131), so any green chain run since this board
++# week began would have advanced week_of. The question is therefore not "is the writer alive" but "was it ever
++# let out", and the chain answers that once per run, in its own log, in one of exactly two wordings:
++#   '---- SHIP PATH COMPLETE in N s (...): the board was HELD (guards blocked it), ...'
++#   '---- SHIP PATH COMPLETE in N s (...): the board, the feed and the cards are published. ...'
++#   every run since <board week> HELD  -> the writer never had its chance, so the lag is explained, not silent
++#   ANY of them SHIPPED                -> it had its chance and the stamp is still behind: page, as before
++#   none at all, or a wording this parser cannot classify -> nothing is proven, so page. FAIL CLOSED.
++#
++# AND THE EXCUSE EXPIRES, which is what stops a genuinely dead rotation hiding behind an old hold. The newest
++# held run must be inside the row's OWN max_age_hours (no new constant, exactly as RUN-LOG-VERDICT does below):
++# a hold past that bar is not a hold, it is a second silence, and the row goes back to paging.
++#
++# TWO REMEDIES REJECTED, again, for the same reasons as the two above. Dropping currency_field to silence this
++# would restore the 2026-09-04 daily false page; keeping the page and widening its window would put a rotation
++# that HAS died past a bar it can never cross in time.
++#
++# SCOPE OF A HELD VERDICT: UNSOUND, deliberately. It says the writer was skipped on every chain run that
++# COMPLETED a ship path since this board week, and nothing more. It does not prove the writer still works - the
++# first run that ships a board and leaves the stamp behind pages here - and it cannot see a run that died BEFORE
++# the ship boundary, which leaves no line at all and is the chain's own task row to page, not this one.
++function Get-ChainShipRuns {
++  # PURE over the chain log TEXT. One row per completed ship path dated on or after $SinceDate, sorted oldest
++  # first. The date is compared ORDINALLY: this is text read off a file, and PowerShell's default string
++  # comparison is culture-sensitive (see the -ne rule in .claude\rules\ops-and-gates.md).
++  param([string]$Text, [string]$SinceDate)
++  $rows = New-Object System.Collections.Generic.List[object]
++  foreach ($l in @(([string]$Text) -split "\r?\n")) {
++    $m = [regex]::Match($l, '^\[(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2})\]\s+-*\s*SHIP PATH COMPLETE')
++    if (-not $m.Success) { continue }
++    if ([string]::CompareOrdinal($m.Groups[1].Value, [string]$SinceDate) -lt 0) { continue }
++    # Both wordings are matched POSITIVELY. A line that is neither is 'unclassified' and refuses the excuse,
++    # because a reworded ship-path line must not read as a hold; the self-test's JOIN case reads both wordings
++    # back out of check-ad-cycles.ps1 so a rename there turns a case red instead of turning this one blind.
++    $kind = if ($l.Contains('HELD (guards blocked it)')) { 'held' }
++            elseif ($l.Contains('the board, the feed and the cards are published')) { 'shipped' }
++            else { 'unclassified' }
++    $rows.Add([pscustomobject]@{
++      when = [datetime]::ParseExact(($m.Groups[1].Value + 'T' + $m.Groups[2].Value), 'yyyy-MM-ddTHH:mm:ss', [Globalization.CultureInfo]::InvariantCulture)
++      kind = $kind
++      line = $l })
++  }
++  $arr = $rows.ToArray()
++  return @($arr | Sort-Object when)
++}
++function Test-WriterHeldByChain {
++  # PURE. Was this row's writer skipped by the chain's own hold on every run since $SinceDate, and is that hold
++  # still current? Returns @{ held; runs; held_runs; shipped_runs; unclassified_runs; newest; ageH; why }, and
++  # every path that is not a proven, unbroken, current hold returns held=$false with a why that names what it read.
++  param([string]$Text, [string]$SinceDate, [double]$MaxAgeHours, [datetime]$Now)
++  $r = @{ held = $false; runs = 0; held_runs = 0; shipped_runs = 0; unclassified_runs = 0; newest = $null; ageH = $null; why = '' }
++  if (-not $SinceDate) { $r.why = 'no board week was resolved, so there is no span to read the chain log over'; return $r }
++  $rows = @(Get-ChainShipRuns -Text $Text -SinceDate $SinceDate)
++  $r.runs = $rows.Count
++  $heldRows  = @($rows | Where-Object { $_.kind -eq 'held' })
++  $shipRows  = @($rows | Where-Object { $_.kind -eq 'shipped' })
++  $otherRows = @($rows | Where-Object { $_.kind -eq 'unclassified' })
++  $r.held_runs = $heldRows.Count; $r.shipped_runs = $shipRows.Count; $r.unclassified_runs = $otherRows.Count
++  if ($rows.Count) { $r.newest = $rows[$rows.Count - 1].when; $r.ageH = [math]::Round(($Now - $r.newest).TotalHours, 1) }
++  if ($r.runs -eq 0) {
++    $r.why = ("the chain log records NO completed ship path since the board week began on {0}, so nothing there explains the lag" -f $SinceDate)
++    return $r
++  }
++  if ($r.unclassified_runs -gt 0) {
++    $r.why = ("{0} of the {1} ship-path line(s) since {2} match neither the chain's held nor its published wording, so they cannot be classified and nothing is proven" -f $r.unclassified_runs, $r.runs, $SinceDate)
++    return $r
++  }
++  if ($r.shipped_runs -gt 0) {
++    $ns = $shipRows[$shipRows.Count - 1].when
++    $r.why = ("the chain SHIPPED a board at {0} ({1} of the {2} run(s) since {3}), so the writer HAD its chance and the stamp is still behind" -f $ns.ToString('yyyy-MM-ddTHH:mm:ss'), $r.shipped_runs, $r.runs, $SinceDate)
++    return $r
++  }
++  # $null -lt 0 IS TRUE IN POWERSHELL, so this asks for the age explicitly rather than relying on the branch
++  # above having already returned on a null one (mutation probe, 2026-09-19: with that branch disabled this one
++  # fired on a null age and threw in its own message instead of reporting).
++  if ($null -ne $r.ageH -and $r.ageH -lt 0) {
++    # A HELD RUN DATED AFTER NOW IS NOT EVIDENCE (found by the live probe, 2026-09-19). The age test below is an
++    # UPPER bound, so a line stamped in the future sails through it and would excuse the lag for as long as the
++    # stamp stays ahead of the clock - the date-laundering direction the CONTENT-CURRENCY block already refuses.
++    $r.why = ("the newest held run in the chain log is stamped {0}, which is AFTER this check's own clock, so it cannot be evidence about anything" -f $r.newest.ToString('yyyy-MM-ddTHH:mm:ss'))
++    return $r
++  }
++  if ($r.ageH -gt $MaxAgeHours) {
++    $r.why = ("all {0} run(s) since {1} were HELD, but the newest was {2}, {3}h ago and past the row's own {4}h, so the hold is not CURRENT and cannot excuse anything - the chain itself may have stopped" -f $r.runs, $SinceDate, $r.newest.ToString('yyyy-MM-ddTHH:mm:ss'), $r.ageH, $MaxAgeHours)
++    return $r
++  }
++  # THE CLAIM IS MADE POSITIVELY, not by having survived the branches above (mutation probe, 2026-09-19). With
++  # the runs-eq-0 branch removed, every count was zero and this branch claimed a hold over NOTHING - and threw on
++  # $r.newest rather than saying so, which is a case killed by an accident instead of by its own assertion.
++  if ($r.held_runs -lt 1 -or $null -eq $r.newest) {
++    $r.why = ("nothing in the chain log since {0} can be read as a held run, so no hold is proven" -f $SinceDate)
++    return $r
++  }
++  $r.held = $true
++  $r.why = ("all {0} chain run(s) since the board week began on {1} HELD the board (guards blocked it), the newest at {2}, {3}h ago and inside the row's own {4}h" -f $r.runs, $SinceDate, $r.newest.ToString('yyyy-MM-ddTHH:mm:ss'), $r.ageH, $MaxAgeHours)
++  return $r
++}
++function Get-ChainHoldVerdict {
++  # THE LIVE HALF, kept thin: read the chain's own log and judge it. Only the ship-path lines are kept, so the
++  # cost does not grow with the log (2.3 MB and 18.9k lines on 2026-09-19). The LOCKED-<date> sidecars a
++  # lock-diverted run writes are read too: the next run that can write the primary folds them back in, and
++  # until it does they are the only record of that run (check-ad-cycles.ps1's SIDECAR-RECOVERY block).
++  param([string]$RepoRoot, [string]$SinceDate, [double]$MaxAgeHours, [datetime]$Now)
++  $primary = Join-Path (Join-Path $RepoRoot 'grocery') 'ad-cycle-log.txt'
++  $files = New-Object System.Collections.Generic.List[string]
++  if (Test-Path -LiteralPath $primary) { $files.Add($primary) }
++  $sides = @(Get-ChildItem (Join-Path (Join-Path $RepoRoot 'grocery') 'ad-cycle-log.LOCKED-*.txt') -ErrorAction SilentlyContinue | Sort-Object Name)
++  foreach ($s in $sides) { $files.Add($s.FullName) }
++  $keep = New-Object System.Collections.Generic.List[string]
++  foreach ($p in $files.ToArray()) {
++    # Shared ReadWrite, because a run may be appending to this very file while the heartbeat reads it.
++    try {
++      $fs = [IO.File]::Open($p, 'Open', 'Read', 'ReadWrite')
++      try {
++        $sr = New-Object IO.StreamReader($fs, $true)
++        while ($null -ne ($ln = $sr.ReadLine())) { if ($ln.Contains('SHIP PATH COMPLETE')) { $keep.Add($ln) } }
++      } finally { $fs.Dispose() }
++    } catch { }
++  }
++  $v = Test-WriterHeldByChain -Text (($keep.ToArray()) -join "`n") -SinceDate $SinceDate -MaxAgeHours $MaxAgeHours -Now $Now
++  if ($files.Count -eq 0) { $v.held = $false; $v.why = ("no chain log exists at {0}, so nothing can explain the lag" -f $primary) }
++  return $v
++}
+ function Test-ContentCurrency {
+-  param($Row, [string]$Path, [string]$BoardWeek, [datetime]$Now)
++  param($Row, [string]$Path, [string]$BoardWeek, [datetime]$Now, $Hold = $null)
+   # applies=$false means "this row is not on the content form" and the caller uses the plain mtime rule.
+-  $r = @{ applies = $false; current = $false; detail = '' }
++  # held=$true is the third answer: not current, and not a silence either - the writer was skipped by design
++  # and by something that pages on its own. A caller must branch on all three (current, held, neither).
++  $r = @{ applies = $false; current = $false; held = $false; detail = '' }
+   if (-not $Row) { return $r }
+   $field = if ($Row.PSObject.Properties['currency_field']) { [string]$Row.currency_field } else { '' }
+   if (-not $field) { return $r }
+@@ -167,7 +311,17 @@ function Test-ContentCurrency {
+   $stamp = if ($doc.PSObject.Properties[$field]) { [string]$doc.$field } else { '' }
+   if (-not $stamp) { $r.detail = "has no $field field, so nothing in it says which week it describes (mtime ${ageH}h)"; return $r }
+   if ($stamp -ne $BoardWeek) {
++    # THE LAG IS REAL EITHER WAY; ONLY THE CAUSE DIFFERS. An absent $Hold, or one that could not prove an
++    # unbroken current hold, keeps the page it always printed, with the hold's own reading appended so the
++    # reader sees WHY it is not excused rather than wondering whether it was asked.
++    $holdWhy = if ($Hold) { [string]$Hold.why } else { '' }
++    if ($Hold -and $Hold.held) {
++      $r.held = $true
++      $r.detail = "carries $field=$stamp while the board week is $BoardWeek, and the job that writes it was SKIPPED BY DESIGN: $holdWhy. A held board must not publish anything costed off it, and that hold pages from the chain, not from here. This does NOT say the writer still works: the first run that ships a board and leaves $field behind pages here (mtime ${ageH}h, which is NOT the tell here)"
++      return $r
++    }
+     $r.detail = "carries $field=$stamp but the current board week is $BoardWeek, so the job that writes it has not run for this week (mtime ${ageH}h, which is NOT the tell here)"
++    if ($holdWhy) { $r.detail = $r.detail + ". It is not excused as held: $holdWhy" }
+     return $r
+   }
+   $r.current = $true
+@@ -314,9 +468,11 @@ function Get-HeartbeatAlertSignature([object[]]$Issues) {
+ # <<< ALERT-SIGNATURE
+ 
+ if ($SelfTest) {
+-  # HERMETIC. Frozen transcripts under regression-inputs\, no scheduler, no mail. The two live reads at the end are
+-  # labelled. Every case runs under Stop inside a try whose catch is a counted failure.
+-  $hbFail = 0; $hbCases = 0
++  # HERMETIC. Frozen transcripts under regression-inputs\, no scheduler, no mail. The live reads are labelled.
++  # Every case runs under Stop inside a try whose catch is a counted failure.
++  # ONE SCRATCH DIRECTORY PER RUN, never a fixed name under %TEMP%: run-gates runs this suite and pre-push runs
++  # run-gates, so concurrent pushes run it over each other (ops\audit-fixed-temp-names.ps1 holds the rule).
++  $hbFail = 0; $hbCases = 0; $hbScratch = ''
+   function HbCase([string]$n, [bool]$c, [string]$got = '') {
+     $script:hbCases++
+     if ($c) { Write-Output ('  ok    ' + $n) } else { Write-Output ('  FAIL  ' + $n + '   got: ' + $got); $script:hbFail++ }
+@@ -327,6 +483,8 @@ if ($SelfTest) {
+     if (-not (Get-Command Get-PipelineCommitOutcome -ErrorAction SilentlyContinue)) { throw 'lib\pipeline-commit.ps1 did not load, so Get-PipelineCommitOutcome is missing' }
+     $fx0909 = [IO.File]::ReadAllText((Join-Path $root 'regression-inputs\graph-nightly-2026-09-09.transcript.txt'))
+     $fxTwin = [IO.File]::ReadAllText((Join-Path $root 'regression-inputs\graph-nightly-committed-twin.transcript.txt'))
++    $hbScratch = Join-Path $env:TEMP ('hb-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
++    [void](New-Item -ItemType Directory -Path $hbScratch -ErrorAction Stop)
+   } catch { Write-Output ('health-heartbeat self-test: COULD NOT RUN - ' + $_.Exception.Message); exit 3 }
+ 
+   try {
+@@ -391,6 +549,148 @@ if ($SelfTest) {
+     HbCase 'MUST FIRE  the task loop reads the run-log verdict for a row that declares one' ($hbSrc.Contains('Get-RunLog' + 'Verdict -RunLog $rlDecl'))
+     HbCase 'MUST FIRE  a nonzero result whose run did not land is not excused as "work landed" by a fresh proves output' ($hbSrc.Contains('if ($rv -and ' + '-not $rv.landed)'))
+ 
++    # ---- THE HELD ROTATION (2026-09-19). FROZEN from grocery\ad-cycle-log.txt: the seven ship-path lines below
++    #      are verbatim, the two indented ones between them are synthetic noise added to prove the parser reads
++    #      the ship-path line and nothing else. week_of stayed 2026-09-11 (written at the 09-12 green run) while
++    #      the board moved to 09-13, 09-14 and 09-17, and every chain run from 09-13 on HELD the board - which is
++    #      the four mornings this row paged OUTPUT NOT CURRENT and named the rotation, the one part that worked.
++    $fxChain = @'
++[2026-09-11T08:17:46] ---- SHIP PATH COMPLETE in 584 s (9.7 min): the board, the feed and the cards are published. INSPECT (advisory audits) starts now and cannot change what shipped. ----
++   [2026-09-11T08:18:02] free-rotation: rotation: board-week=2026-09-11  (synthetic noise line)
++[2026-09-12T09:21:54] ---- SHIP PATH COMPLETE in 1068 s (17.8 min): the board, the feed and the cards are published. INSPECT (advisory audits) starts now and cannot change what shipped. ----
++[2026-09-13T08:11:59] ---- SHIP PATH COMPLETE in 538 s (9 min): the board was HELD (guards blocked it), so neither the board nor the feed nor the recipe cards were published. INSPECT (advisory audits) starts now. ----
++   [2026-09-13T08:11:59] held: guards blocked - hub/rotation not republished from a refused board (top5-weekly, rotate-free-dinners, build-hub-grid -Publish all skipped)
++[2026-09-14T08:12:04] ---- SHIP PATH COMPLETE in 505 s (8.4 min): the board was HELD (guards blocked it), so neither the board nor the feed nor the recipe cards were published. INSPECT (advisory audits) starts now. ----
++[2026-09-17T07:11:00] ---- SHIP PATH COMPLETE in 494 s (8.2 min): the board was HELD (guards blocked it), so neither the board nor the feed nor the recipe cards were published. INSPECT (advisory audits) starts now. ----
++[2026-09-18T08:13:31] ---- SHIP PATH COMPLETE in 616 s (10.3 min): the board was HELD (guards blocked it), so neither the board nor the feed nor the recipe cards were published. INSPECT (advisory audits) starts now. ----
++[2026-09-18T14:53:43] ---- SHIP PATH COMPLETE in 726 s (12.1 min): the board was HELD (guards blocked it), so neither the board nor the feed nor the recipe cards were published. INSPECT (advisory audits) starts now. ----
++'@
++    # The registry row as it ships, and the two files Test-ContentCurrency reads. The stamp file is written with
++    # the real week_of and a real mtime; the mtime is deliberately days old, because it is NOT the tell here.
++    $fdRow  = [pscustomobject]@{ path = 'public/free-dinners.json'; max_age_hours = 30; currency_field = 'week_of'
++                                 currency_equals = 'board_week'; held_when = 'chain_guards_blocked'; why = "this week's free-dinner rotation" }
++    $fdPath = Join-Path $hbScratch 'free-dinners.json'
++    [IO.File]::WriteAllText($fdPath, '{"week_of":"2026-09-11","updated":"2026-09-12T09:22:22","free":[]}', (New-Object Text.UTF8Encoding($false)))
++    (Get-Item $fdPath).LastWriteTime = [datetime]'2026-09-12T09:22:22'
++    $hbNow  = [datetime]'2026-09-19T10:30:00'     # the 10:30 heartbeat, the hour it paged on all four days
++    function HbHold($text, $since, $now) { return (Test-WriterHeldByChain -Text $text -SinceDate $since -MaxAgeHours 30 -Now $now) }
++    function HbShowHold($h) { return ('held=' + $h.held + ' runs=' + $h.runs + ' heldRuns=' + $h.held_runs + ' shipped=' + $h.shipped_runs + ' other=' + $h.unclassified_runs + ' ageH=' + $h.ageH + ' why=' + $h.why) }
++
++    # ---- MUST NOT FIRE, THE FOUNDING FALSE PAGE: the four mornings above, read at the 10:30 heartbeat.
++    $h1 = HbHold $fxChain '2026-09-17' $hbNow
++    HbCase 'MUST NOT FIRE  every chain run since the 2026-09-17 board week HELD the board, so the lag is EXPLAINED (3 held, 0 shipped)' ($h1.held -and $h1.runs -eq 3 -and $h1.held_runs -eq 3 -and $h1.shipped_runs -eq 0) (HbShowHold $h1)
++    $c1 = Test-ContentCurrency -Row $fdRow -Path $fdPath -BoardWeek '2026-09-17' -Now $hbNow -Hold $h1
++    HbCase 'MUST NOT FIRE  the row reads HELD, not current and not a death, and its detail names the hold and says the hold pages from the chain' `
++      ($c1.applies -and $c1.held -and (-not $c1.current) -and $c1.detail -match 'SKIPPED BY DESIGN' -and $c1.detail -match 'HELD the board' -and $c1.detail -match 'pages from the chain') ($c1.detail)
++    HbCase 'MUST NOT FIRE  the HELD detail still carries week_of=2026-09-11, the board week 2026-09-17 and the mtime, so the reader sees the lag it is excusing' `
++      ($c1.detail -match 'week_of=2026-09-11' -and $c1.detail -match '2026-09-17' -and $c1.detail -match 'mtime [0-9.]+h') ($c1.detail)
++    HbCase 'MUST NOT FIRE  and it says what it does NOT prove: the next run that ships a board and leaves week_of behind pages here' ($c1.detail -match 'does NOT say the writer still works') ($c1.detail)
++
++    # ---- MUST FIRE, A ROTATION THAT GENUINELY STOPPED: one green run inside the same span and the stamp still
++    #      behind. The excuse must collapse to the ORIGINAL page, wording for wording, or this fix hides the
++    #      death it was written to keep visible.
++    $fxShipped = $fxChain -replace '(?m)^\[2026-09-17T07:11:00\].*$', '[2026-09-17T07:11:00] ---- SHIP PATH COMPLETE in 494 s (8.2 min): the board, the feed and the cards are published. INSPECT (advisory audits) starts now and cannot change what shipped. ----'
++    HbCase 'MUST FIRE  the shipped-run fixture really does differ from the held one, so the case below is not vacuous' (($fxShipped -ne $fxChain) -and ($fxShipped -match '2026-09-17T07:11:00\] ---- SHIP PATH COMPLETE in 494 s \(8\.2 min\): the board, the feed')) 'the replace did not take'
++    $h2 = HbHold $fxShipped '2026-09-17' $hbNow
++    HbCase 'MUST FIRE  ONE shipped run in the span withdraws the excuse: the writer had its chance (1 shipped of 3)' ((-not $h2.held) -and $h2.shipped_runs -eq 1 -and $h2.why -match 'HAD its chance') (HbShowHold $h2)
++    $c2 = Test-ContentCurrency -Row $fdRow -Path $fdPath -BoardWeek '2026-09-17' -Now $hbNow -Hold $h2
++    HbCase 'MUST FIRE  a rotation that had its chance and did not take it pages, with the 2026-09-04 wording intact and the reason it is not excused' `
++      ($c2.applies -and (-not $c2.held) -and (-not $c2.current) -and $c2.detail -match 'has not run for this week' -and $c2.detail -match 'not excused as held' -and $c2.detail -match 'SHIPPED a board') ($c2.detail)
++
++    # ---- MUST FIRE, NO EVIDENCE AT ALL. Every held line in the fixture predates the board week, which is the
++    #      span rule doing its job: a hold on an OLDER board says nothing about the week the stamp is missing.
++    $h3 = HbHold $fxChain '2026-09-19' $hbNow
++    HbCase 'MUST FIRE  no completed ship path since the board week began means nothing is proven, so the row pages (fail closed)' ((-not $h3.held) -and $h3.runs -eq 0 -and $h3.why -match 'NO completed ship path since the board week began on 2026-09-19') (HbShowHold $h3)
++    $h3b = HbHold '' '2026-09-17' $hbNow
++    HbCase 'MUST FIRE  an unreadable or empty chain log excuses nothing' ((-not $h3b.held) -and $h3b.runs -eq 0) (HbShowHold $h3b)
++    $h3c = HbHold $fxChain '' $hbNow
++    HbCase 'MUST FIRE  with no board week resolved there is no span, and no hold is claimed over one' ((-not $h3c.held) -and $h3c.why -match 'no span') (HbShowHold $h3c)
++
++    # ---- MUST FIRE, THE WORDING DRIFTED. A ship-path line this parser cannot classify is not a hold.
++    $fxOdd = $fxChain -replace '(?m)^\[2026-09-18T14:53:43\].*$', '[2026-09-18T14:53:43] ---- SHIP PATH COMPLETE in 726 s (12.1 min): the board did something nobody has a word for. ----'
++    $h4 = HbHold $fxOdd '2026-09-17' $hbNow
++    HbCase 'MUST FIRE  one unclassifiable ship-path line withdraws the excuse - a reworded chain must not read as a hold' ((-not $h4.held) -and $h4.unclassified_runs -eq 1 -and $h4.why -match 'neither the chain') (HbShowHold $h4)
++
++    # ---- THE BAR IS THE ROW'S OWN 30h, AND THE EXCUSE EXPIRES AT IT. One case exactly AT 30.0h and one a step
++    #      past at 30.1h (the comparison's own resolution, since the age is rounded to a tenth of an hour). The
++    #      newest held run is 2026-09-18T14:53:43, so the bar falls at 2026-09-19T20:53:43.
++    $atBar   = [datetime]'2026-09-19T20:53:43'
++    $pastBar = $atBar.AddMinutes(6)
++    $h5 = HbHold $fxChain '2026-09-17' $atBar
++    HbCase 'MUST NOT FIRE  a hold whose newest run is EXACTLY at the row''s 30h bar (30h) is still current and still excuses the lag' ($h5.held -and $h5.ageH -eq 30) (HbShowHold $h5)
++    $h6 = HbHold $fxChain '2026-09-17' $pastBar
++    HbCase 'MUST FIRE  one step past that bar (30.1h of 30h) the hold is STALE and the row pages again - a dead rotation cannot hide behind an old hold' ((-not $h6.held) -and $h6.ageH -eq 30.1 -and $h6.why -match 'not CURRENT') (HbShowHold $h6)
++    $c6 = Test-ContentCurrency -Row $fdRow -Path $fdPath -BoardWeek '2026-09-17' -Now $pastBar -Hold $h6
++    HbCase 'MUST FIRE  and the row pages with the stale hold named, never silently' ((-not $c6.held) -and $c6.detail -match 'not excused as held' -and $c6.detail -match 'not CURRENT') ($c6.detail)
++
++    # ---- THE OTHER END OF THAT BAR IS ZERO. A held run stamped AFTER this check's clock is not evidence; the
++    #      bar is 0h, so the case AT it is a run stamped exactly now and the step past it is one 6 minutes ahead
++    #      (0.1h, the comparison's own resolution). The live probe found this: the age test is an upper bound and
++    #      a negative age passes every upper bound there is.
++    $atNow = [datetime]'2026-09-18T14:53:43'
++    $h7 = HbHold $fxChain '2026-09-17' $atNow
++    HbCase 'MUST NOT FIRE  a hold whose newest run is stamped EXACTLY now (0h) is evidence, and still excuses the lag' ($h7.held -and $h7.ageH -eq 0) (HbShowHold $h7)
++    $h8 = HbHold $fxChain '2026-09-17' ($atNow.AddMinutes(-6))
++    HbCase 'MUST FIRE  one step the other side of that bar (-0.1h: a run stamped AFTER this check''s clock) excuses nothing' ((-not $h8.held) -and $h8.ageH -eq -0.1 -and $h8.why -match "AFTER this check's own clock") (HbShowHold $h8)
++
++    # ---- CLEAN TWIN: the 2026-09-04 fix is untouched. A stamp that MATCHES the board week is current whatever
++    #      the chain log says, and the hold is never consulted for it.
++    $fdCur = Join-Path $hbScratch 'free-dinners-current.json'
++    [IO.File]::WriteAllText($fdCur, '{"week_of":"2026-09-17","updated":"2026-09-17T08:10:35","free":[]}', (New-Object Text.UTF8Encoding($false)))
++    (Get-Item $fdCur).LastWriteTime = [datetime]'2026-09-17T08:10:35'
++    $c7 = Test-ContentCurrency -Row $fdRow -Path $fdCur -BoardWeek '2026-09-17' -Now $hbNow -Hold $h1
++    HbCase 'CLEAN TWIN a stamp on the current board week is CURRENT, not held, even on a held day, and its mtime is past the 30h window' `
++      ($c7.current -and (-not $c7.held) -and $c7.detail -match 'matches the board week' -and (([regex]::Match($c7.detail, 'mtime ([0-9.]+)h').Groups[1].Value -as [double]) -gt 30)) ($c7.detail)
++
++    # ---- CLEAN TWIN: THE EXCUSE IS OPT-IN THROUGH EVIDENCE. With no -Hold at all - which is how every caller
++    #      that does not declare held_when reaches this function, and how test-auditors u138 drives it - the
++    #      lagging stamp pages exactly as it did before this change, byte for byte.
++    $c8 = Test-ContentCurrency -Row $fdRow -Path $fdPath -BoardWeek '2026-09-17' -Now $hbNow
++    HbCase 'CLEAN TWIN with no hold evidence passed, a lagging stamp still pages in the pre-2026-09-19 wording and claims nothing about a hold' `
++      ((-not $c8.held) -and (-not $c8.current) -and $c8.detail -eq 'carries week_of=2026-09-11 but the current board week is 2026-09-17, so the job that writes it has not run for this week (mtime 169.1h, which is NOT the tell here)') ($c8.detail)
++
++    # ---- THE SPAN IS READ OFF THE LINE'S OWN DATE, ORDINALLY. A run dated before the board week never counts.
++    $spanRuns = @(Get-ChainShipRuns -Text $fxChain -SinceDate '2026-09-13')
++    HbCase 'MUST FIRE  the span takes every ship path on or after the board week date and no earlier one (5 of the 7 runs here; 09-18 ran twice)' `
++      ($spanRuns.Count -eq 5 -and $spanRuns[0].when -eq [datetime]'2026-09-13T08:11:59' -and $spanRuns[4].when -eq [datetime]'2026-09-18T14:53:43') ('' + $spanRuns.Count)
++    HbCase 'MUST FIRE  and it ignores every other line in the log, including the held: guards blocked line beside it' (@(Get-ChainShipRuns -Text $fxChain -SinceDate '2026-09-01').Count -eq 7) ('' + @(Get-ChainShipRuns -Text $fxChain -SinceDate '2026-09-01').Count)
++
++    # ---- THE JOIN. LIVE-TWIN, on purpose, the same shape as the run-log JOIN above: this check keys on two
++    #      wordings that live in check-ad-cycles.ps1, and a rename there would leave it unable to classify any
++    #      run - which fails closed into a daily page for the wrong reason. A rename now turns THIS red instead.
++    $caSrc = [IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))
++    # FOUR branches in that file read $guardsBlocked; the one this check depends on is the SHIP BOUNDARY's, so it
++    # is found by what it logs and not by being first - a branch picked by position drifts with the next edit.
++    $caIdx = -1; $caElse = -1; $caHeldBranch = ''
++    $caScan = 0
++    while ($true) {
++      $caTry = $caSrc.IndexOf('if ($guardsBlocked) {', $caScan, [StringComparison]::Ordinal)
++      if ($caTry -lt 0) { break }
++      $caEnd = $caSrc.IndexOf('} else {', $caTry, [StringComparison]::Ordinal)
++      if ($caEnd -gt $caTry) {
++        $caBody = $caSrc.Substring($caTry, $caEnd - $caTry)
++        if ($caBody.Contains('SHIP PATH COMPLETE')) { $caIdx = $caTry; $caElse = $caEnd; $caHeldBranch = $caBody; break }
++      }
++      $caScan = $caTry + 1
++    }
++    HbCase 'MUST FIRE  the chain still logs the HELD wording this check reads, and logs it inside its own if ($guardsBlocked) branch' `
++      ($caHeldBranch -and $caHeldBranch.Contains('SHIP PATH COMPLETE') -and $caHeldBranch.Contains('HELD (guards blocked it)')) ('branch len ' + $caHeldBranch.Length)
++    HbCase 'MUST FIRE  and it still logs the PUBLISHED wording, in the else arm, so a shipped run is positively identified rather than assumed' `
++      (($caElse -gt 0) -and $caSrc.IndexOf('the board, the feed and the cards are published', $caElse, [StringComparison]::Ordinal) -gt $caElse) ('else at ' + $caElse)
++    HbCase 'MUST FIRE  and rotate-free-dinners really is gated on that same verdict, or there is no hold to excuse' `
++      ($caSrc.Contains("if (-not `$guardsBlocked) { try { (Invoke-Bounded 'free-rotation'")) 'the rotation is no longer gated on $guardsBlocked'
++    HbCase 'MUST FIRE  the chain log this check reads is the one check-ad-cycles writes' ($caSrc.Contains("`$LogFile = Join-Path `$root 'ad-cycle-log.txt'")) 'check-ad-cycles logs somewhere else now'
++
++    # ---- THE WIRING, and the REGISTRY. Needles built by concatenation, so these lines are not their own matches.
++    HbCase 'MUST FIRE  the output_files loop asks for a chain-hold verdict for a row that declares held_when' ($hbSrc.Contains('Get-ChainHold' + 'Verdict -RepoRoot $repo -SinceDate $boardWeek'))
++    HbCase 'MUST FIRE  a HELD row goes to the held bucket and NOT to Add-HbIssue, so it neither pages nor moves the alert signature' ($hbSrc.Contains('elseif ($cc.held) { $held' + 'Lines.Add'))
++    HbCase 'MUST FIRE  held_when is allowlisted: a form this code has never heard of excuses nothing' ($hbSrc.Contains('$hwDecl -eq ' + "'chain_guards_blocked'") -and $hbSrc.Contains('not a form this check knows, so no hold can excuse it'))
++    $fdReg = @(@($reg.output_files) | Where-Object { [string]$_.path -eq 'public/free-dinners.json' })
++    HbCase 'MUST FIRE  the live free-dinners row declares held_when=chain_guards_blocked, so the fix is wired in the registry and not merely available in the code' `
++      ($fdReg.Count -eq 1 -and $fdReg[0].PSObject.Properties['held_when'] -and [string]$fdReg[0].held_when -eq 'chain_guards_blocked') ($fdReg.Count)
++    $fdOther = @(@($reg.output_files) | Where-Object { $_.PSObject.Properties['held_when'] -and [string]$_.path -ne 'public/free-dinners.json' })
++    HbCase 'CLEAN TWIN no other output row claims a hold - the excuse did not leak to the four rows whose writers nothing gates' ($fdOther.Count -eq 0) ('' + $fdOther.Count)
++
+     # ---- ALERT SIGNATURE (backlog I225). The founding case is the 2026-09-17/18 page: 'TC Produce Intraday Probe'
+     #      stale at 57.2h and then older, and 2026-09-13/14, where five unchanged conditions paged on both days.
+     $why = 'BOUNDED, AND IT IS MEANT TO GO STALE.'
+@@ -414,6 +714,7 @@ if ($SelfTest) {
+     HbCase 'MUST FIRE  the -Alert path hashes the issue KEYS through Get-HeartbeatAlertSignature, not the texts' ($hbSrc.Contains('$sig = Get-Heartbeat' + 'AlertSignature $issueObjs.ToArray()'))
+     HbCase 'MUST FIRE  a healthy -Alert run clears the stored signature, so an outage that recovers and returns pages again' ($hbSrc.Contains('if ($Alert -and ' + '(Test-Path $sigF)) { Remove-Item'))
+   } catch { HbCase ('a case threw: ' + $_.Exception.Message) $false }
++  finally { if ($hbScratch -and (Test-Path -LiteralPath $hbScratch)) { Remove-Item -LiteralPath $hbScratch -Recurse -Force -ErrorAction SilentlyContinue } }
+ 
+   Write-Output ("health-heartbeat self-test: {0} case(s), {1} failed" -f $hbCases, $hbFail)
+   if ($hbFail) { exit 1 }
+@@ -533,9 +834,22 @@ $boardWeek = Get-BoardWeek $repo
+ foreach ($f in @($cfg.output_files)) {
+   $fPath  = Join-Path $repo ([string]$f.path)
+   $fLabel = [IO.Path]::GetFileName([string]$f.path)
+-  $cc = Test-ContentCurrency -Row $f -Path $fPath -BoardWeek $boardWeek -Now $now
++  # held_when names the mechanism that may legitimately STOP this row's writer. Opt-in and ALLOWLISTED for the
++  # same reason currency_equals is: a form this code has never heard of is unproven, not fine, and a typo in the
++  # registry must not hand a row a permanent excuse.
++  $hold = $null
++  $hwDecl = if ($f.PSObject.Properties['held_when']) { [string]$f.held_when } else { '' }
++  if ($hwDecl -eq 'chain_guards_blocked' -and $boardWeek) {
++    $hold = Get-ChainHoldVerdict -RepoRoot $repo -SinceDate $boardWeek -MaxAgeHours ([double]$f.max_age_hours) -Now $now
++  } elseif ($hwDecl) {
++    $hold = @{ held = $false; why = ("the row declares held_when '" + $hwDecl + "', which is not a form this check knows, so no hold can excuse it") }
++  }
++  $cc = Test-ContentCurrency -Row $f -Path $fPath -BoardWeek $boardWeek -Now $now -Hold $hold
+   if (-not $cc.applies) { Check-Age $fPath $f.max_age_hours $f.why $fLabel ([string]$f.path); continue }
+   if ($cc.current) { $okLines.Add(("{0,-38} {1}" -f $fLabel, $cc.detail)) }
++  # The row's own why is NOT appended here as it is to the issue below: the held detail already names the cause,
++  # the mechanism and what it does not prove, and this row's why is several hundred characters of history.
++  elseif ($cc.held) { $heldLines.Add(("{0,-38} HELD: {1}" -f $fLabel, $cc.detail)) }
+   else { Add-HbIssue 'OUTPUT NOT CURRENT' ([string]$f.path) ("OUTPUT NOT CURRENT: {0} {1} - {2}" -f $fLabel, $cc.detail, $f.why) }
+ }
+ foreach ($g in @($cfg.output_globs)) {
+@@ -570,8 +884,10 @@ foreach ($x in @($cfg.external_files)) {
+ # ---- report ----
+ Write-Output ("health-heartbeat  " + $now.ToString('yyyy-MM-dd HH:mm'))
+ $okLines | ForEach-Object { Write-Output ("  ok    " + $_) }
++$heldLines | ForEach-Object { Write-Output ("  held  " + $_) }
+ if ($issues.Count -eq 0) {
+-  Write-Output ("HEALTHY: {0} automation(s)/output(s) all fresh." -f $okLines.Count)
++  if ($heldLines.Count) { Write-Output ("HEALTHY: {0} automation(s)/output(s) all fresh; {1} HELD by design, named above with what each does NOT prove." -f $okLines.Count, $heldLines.Count) }
++  else { Write-Output ("HEALTHY: {0} automation(s)/output(s) all fresh." -f $okLines.Count) }
+   # A healthy -Alert run forgets the last outage, so the same outage coming back later pages again (ALERT-SIGNATURE).
+   $sigF = Join-Path $root 'out\health-heartbeat.sig'
+   if ($Alert -and (Test-Path $sigF)) { Remove-Item -LiteralPath $sigF -Force -ErrorAction SilentlyContinue }

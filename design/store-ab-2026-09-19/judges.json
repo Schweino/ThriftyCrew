@@ -1,0 +1,162 @@
+[
+    {
+        "judge":  "T1-SB-o1",
+        "pair":  "T1-SB",
+        "order":  1,
+        "X":  "b35921",
+        "Y":  "a95222",
+        "Xarm":  "S1",
+        "Yarm":  "B1",
+        "pid":  30668
+    },
+    {
+        "judge":  "T1-SB-o2",
+        "pair":  "T1-SB",
+        "order":  2,
+        "X":  "a95222",
+        "Y":  "b35921",
+        "Xarm":  "B1",
+        "Yarm":  "S1",
+        "pid":  12472
+    },
+    {
+        "judge":  "T2-SB-o1",
+        "pair":  "T2-SB",
+        "order":  1,
+        "X":  "d3373e",
+        "Y":  "7c6256",
+        "Xarm":  "S1",
+        "Yarm":  "B1",
+        "pid":  27696
+    },
+    {
+        "judge":  "T2-SB-o2",
+        "pair":  "T2-SB",
+        "order":  2,
+        "X":  "7c6256",
+        "Y":  "d3373e",
+        "Xarm":  "B1",
+        "Yarm":  "S1",
+        "pid":  29688
+    },
+    {
+        "judge":  "T3-SB-o1",
+        "pair":  "T3-SB",
+        "order":  1,
+        "X":  "358601",
+        "Y":  "3bfee4",
+        "Xarm":  "S1",
+        "Yarm":  "B1",
+        "pid":  12700
+    },
+    {
+        "judge":  "T3-SB-o2",
+        "pair":  "T3-SB",
+        "order":  2,
+        "X":  "3bfee4",
+        "Y":  "358601",
+        "Xarm":  "B1",
+        "Yarm":  "S1",
+        "pid":  49692
+    },
+    {
+        "judge":  "T4-SB-o1",
+        "pair":  "T4-SB",
+        "order":  1,
+        "X":  "7dbd99",
+        "Y":  "0609c1",
+        "Xarm":  "S1",
+        "Yarm":  "B1",
+        "pid":  47280
+    },
+    {
+        "judge":  "T4-SB-o2",
+        "pair":  "T4-SB",
+        "order":  2,
+        "X":  "0609c1",
+        "Y":  "7dbd99",
+        "Xarm":  "B1",
+        "Yarm":  "S1",
+        "pid":  34660
+    },
+    {
+        "judge":  "T5-SB-o1",
+        "pair":  "T5-SB",
+        "order":  1,
+        "X":  "d7e629",
+        "Y":  "9a6d43",
+        "Xarm":  "S1",
+        "Yarm":  "B1",
+        "pid":  3976
+    },
+    {
+        "judge":  "T5-SB-o2",
+        "pair":  "T5-SB",
+        "order":  2,
+        "X":  "9a6d43",
+        "Y":  "d7e629",
+        "Xarm":  "B1",
+        "Yarm":  "S1",
+        "pid":  23096
+    },
+    {
+        "judge":  "T6-SB-o1",
+        "pair":  "T6-SB",
+        "order":  1,
+        "X":  "da4088",
+        "Y":  "56dc42",
+        "Xarm":  "S1",
+        "Yarm":  "B1",
+        "pid":  40376
+    },
+    {
+        "judge":  "T6-SB-o2",
+        "pair":  "T6-SB",
+        "order":  2,
+        "X":  "56dc42",
+        "Y":  "da4088",
+        "Xarm":  "B1",
+        "Yarm":  "S1",
+        "pid":  39940
+    },
+    {
+        "judge":  "T3-SS-o1",
+        "pair":  "T3-SS",
+        "order":  1,
+        "X":  "358601",
+        "Y":  "5cff85",
+        "Xarm":  "S1",
+        "Yarm":  "S2",
+        "pid":  14356
+    },
+    {
+        "judge":  "T3-SS-o2",
+        "pair":  "T3-SS",
+        "order":  2,
+        "X":  "5cff85",
+        "Y":  "358601",
+        "Xarm":  "S2",
+        "Yarm":  "S1",
+        "pid":  29840
+    },
+    {
+        "judge":  "T4-SS-o1",
+        "pair":  "T4-SS",
+        "order":  1,
+        "X":  "7dbd99",
+        "Y":  "64e9f4",
+        "Xarm":  "S1",
+        "Yarm":  "S2",
+        "pid":  35132
+    },
+    {
+        "judge":  "T4-SS-o2",
+        "pair":  "T4-SS",
+        "order":  2,
+        "X":  "64e9f4",
+        "Y":  "7dbd99",
+        "Xarm":  "S2",
+        "Yarm":  "S1",
+        "pid":  25260
+    }
+]

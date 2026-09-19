@@ -1,0 +1,38 @@
+[
+  {
+    "id": "T1",
+    "base": "23ef8f58a",
+    "reference": "eb98181f2",
+    "statement": "A store's capture cursor walks a rotating list of search terms: each day the cursor's current slice of terms is supposed to be captured, and once the capture has landed the cursor advances to the next slice. The advance is decided in grocery/capture-policy-lib.ps1 (Step-CaptureCursor and the landed test it uses); grocery/commit-capture-cursor.ps1 is a caller. Replaying the cursor log shows real advances where the terms of the slice being advanced past were never actually captured that day: Sam's on 2026-08-22, Fareway on 2026-08-22 and Walmart on 2026-08-30. Those terms were skipped for a whole rotation, and some have had no captured row since. Make the cursor advance only when the capture really covered the slice it is advancing past, without freezing a rotation that is working, and prove the behaviour with self-test fixtures."
+  },
+  {
+    "id": "T2",
+    "base": "e6309fd58",
+    "reference": "baece0f29",
+    "statement": "grocery/health-heartbeat.ps1 paged OUTPUT NOT CURRENT for public/free-dinners.json on 2026-09-13, 09-14, 09-17 and 09-18, because that file's week_of stayed 2026-09-11 while the board moved on. Nothing was wrong with the rotation: during that span check-ad-cycles logged 'held: guards blocked' on every run and, by design, skips rotate-free-dinners (and top5-weekly and the hub publish) when the guards refuse a board. That hold is already paged on its own. So the heartbeat's page was true and named the wrong cause. Fix the heartbeat so this situation is reported correctly, without hiding a rotation that has genuinely stopped, and prove it with fixtures."
+  },
+  {
+    "id": "T3",
+    "base": "7695b84c1",
+    "reference": "efc9c335f",
+    "statement": "On the comparison board built by grocery/compare-deals.ps1, when two stores tie exactly on unit price for a commodity, the store crowned cheapest (cheapest_store, and nomem_store for the no-membership crown) is not reproducible from one run to the next, and the price table built through grocery/price-table-lib.ps1 can name a different product for a store cell than the board chose for that same store. Make ties resolve reproducibly, and make the price table agree with the board about which product represents each store, with fixtures. No price may change."
+  },
+  {
+    "id": "T4",
+    "base": "2c250d017",
+    "reference": "2c6a2b5b5",
+    "statement": "In graph/, an importer that raises partway through can leave its partial writes in graph.db, and the nightly import (graph/import/import_all.py, using graph/lib/graphdb.py) still exits 0. A half-loaded data set, for example a partial known-wrong or override set, then becomes the day's index with nothing flagging it. Fix this, and prove it with self-test cases that use temporary databases only."
+  },
+  {
+    "id": "T5",
+    "base": "e92d64fee",
+    "reference": "522a9046f",
+    "statement": "The identity importer in graph/import only ever upserts instance_of edges, so when the engine re-files a product under a different commodity, the old filing stays in graph.db forever beside the new one (for example Birds Eye Steamfresh Sweet Peas is still filed as canned-peas). Stale filings flow downstream into commodity exemplar lists and labelled pair corpora. Fix it, and prove it with self-test cases. Never open the live graph/sqlite/graph.db for writing; if you want to measure against real data, work on a copy inside your worktree made with the SQLite backup API."
+  },
+  {
+    "id": "T6",
+    "base": "8038bb2cb",
+    "reference": "015d207cb",
+    "statement": "Brad is making the GitHub repo Schweino/ThriftyCrew private. ops/audit-memory-backup.ps1's self-test uses that very repo as its live, known-PUBLIC control when it proves the audit can tell a public remote from a private one, so the flip will turn that case red and refuse every push on the box. Fix it so the self-test no longer depends on this repo's visibility, while the audit's live run still checks the real memory remote over the network."
+  }
+]

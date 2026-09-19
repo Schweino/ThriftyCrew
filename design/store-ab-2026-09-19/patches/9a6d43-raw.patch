@@ -1,0 +1,544 @@
+diff --git a/docs/CONTROL-CONSTANTS.md b/docs/CONTROL-CONSTANTS.md
+index 32c0e5120..19931559c 100644
+--- a/docs/CONTROL-CONSTANTS.md
++++ b/docs/CONTROL-CONSTANTS.md
+@@ -35,6 +35,7 @@ tuning one can see the others, and that a constant with no stated direction stan
+ | `$SENT_LOG_KEEP_DAYS = 180` | `grocery/notify-item-added.ps1` | how long a sent-notification row is kept | two-way | goes quiet | not recorded |
+ | `$DELETE_GIVE_UP = 5` | `grocery/notify-item-added.ps1` | attempts before a delete is abandoned | two-way | goes quiet | not recorded |
+ | `MAX_NEW_HOLDS_PER_RUN = 10` | `graph/learning/promote_aliases.py` | the largest plausible batch of new promotion holds in one run | **one-way actuator** (holds only accumulate and never expire) | goes quiet | **first plausible value**, grounded on the live set of 16 holds across 10 commodities; NOT a sweep |
++| `MAX_STALE_RETRACT_FRACTION = 0.25` | `graph/import/importers.py` | the largest share of the identity table's own `instance_of` edges one import may retract as no longer asserted; over it the run keeps every edge and reports why | a **rate limit on a one-way actuator** (retraction only deletes) | goes quiet - an import that reads no identity file retracts nothing, and that is the completeness guard beside this one, not this one | **first plausible value**, grounded on the only measurement there is: 3,615 of 38,905 identity-table edges (9.3%) stale on the 2026-09-19 index, the whole backlog since the table began. Day-over-day churn is unmeasured and NOT a sweep |
+ | `HISTORY_MAX_AGE_DAYS = 40` | `ops/member-cohorts.ps1` | how stale the monthly member snapshot series may get | a **floor**, watching for absence | **fires** - that is its whole job | **first plausible value**, 31 days plus a week of slack; NOT a sweep |
+ | `MIN_SCORE = 8.5` | `~/.claude/skills/recall-hook.py` | the recall floor | two-way | goes quiet | derived; see the file's own note on the 9.0 -> 8.5 move |
+ | `MAX_REASKS_PER_NIGHT = 200` | `graph/learning/verdict_expiry.py` | how many expired model verdicts one night may re-ask, oldest first | two-way, an upper bound: the rate limit on an expiry actuator that would otherwise re-ask every lapsed verdict at once | **spoken** - `--emit` counts how many of last night's list now carry a newer date, and prints DID NOT FULLY LAND into the nightly status when the resolve stage re-asked fewer than it was given | **first plausible value**, well under one night's model budget; NOT a sweep. No verdict can expire before 2026-11-19, so the first real reading is that night |
+diff --git a/graph/eval/probe_listing_overlap.py b/graph/eval/probe_listing_overlap.py
+index 9814a7ca0..bfa05a034 100644
+--- a/graph/eval/probe_listing_overlap.py
++++ b/graph/eval/probe_listing_overlap.py
+@@ -12,8 +12,12 @@ TWO SOURCES, and they differ on purpose:
+   --source graph     (default) instance_of edges in graph.db, the rebuildable INDEX.
+   --source identity  the tracked identity .jsonl files, which are the TRUTH the index is built from.
+ The graph also prints how many of its identity-table edges the current files no longer assert
+-(`stale`): graph/import/importers.py upserts instance_of edges and never retracts one, so a listing
+-the engine has since re-filed keeps its old edge. Measure a form question on --source identity.
++(`stale`). Since backlog I229 (2026-09-19) import_identity RETRACTS those on every run, so this count
++reads 0 on an index built since - it is now a check on the importer rather than a standing defect, and
++a non-zero reading means either the files moved after the last import or the retraction refused (its
++reason is in the run's `identity_stale_kept_reason` and in the decision log). Before I229 the importer
++only upserted, and a listing the engine had re-filed kept its old edge: 3,615 of 38,905 on
++2026-09-19. Measure a form question on --source identity.
+ 
+ READ-ONLY. graph.db is opened with sqlite URI mode=ro; nothing is written anywhere. Point --db at a
+ COPY when the daily pipeline may be writing. graph.db is gitignored, so a worktree has none: pass --db.
+diff --git a/graph/import/importers.py b/graph/import/importers.py
+index 86a220d7c..6c1fde59d 100644
+--- a/graph/import/importers.py
++++ b/graph/import/importers.py
+@@ -1,8 +1,11 @@
+ """Seed importers ΓÇö legacy JSON estate -> knowledge graph (Phase 2).
+ 
+-Every importer is DETERMINISTIC and ADDITIVE: re-running it is a no-op, never a
+-duplicate. Each writes a provenance row naming the exact source file, so any node
+-in the graph can be traced back to the file and line of the estate it came from.
++Every importer is DETERMINISTIC and re-running it is a no-op, never a duplicate.
++All but one are also purely ADDITIVE; the exception is import_identity, which
++RETRACTS the `instance_of` edges its source files no longer assert (backlog I229),
++because an upsert-only mirror of a table that re-files products keeps every filing
++it has ever made. Each writes a provenance row naming the exact source file, so any
++node in the graph can be traced back to the file and line of the estate it came from.
+ 
+ These run in DUAL-WRITE mode. The legacy PowerShell path stays fully
+ authoritative; the graph is a shadow copy whose quality is measured against the
+@@ -1174,6 +1177,116 @@ IDENTITY = os.path.join(REPO_ROOT, "graph", "identity")
+ # is no third namespace to invent here.
+ IDENTITY_NAMESPACES = ("staple", "recipe")
+ 
++# The `source` property every identity-table instance_of edge carries. It is what
++# says WHO asserted the filing, and so who is allowed to take it back: an edge
++# import_product_urls wrote reads 'product-urls' and is never touched here.
++IDENTITY_EDGE_SOURCE = "identity-table"
++
++# THE PLAUSIBILITY BAR ON ONE RUN'S RETRACTION (backlog I229, 2026-09-19).
++# Retraction is a one-way actuator over content this index cannot rebuild from
++# itself, so it gets the rate limit and plausibility bar `lib/ratchet.ps1` and
++# promote_aliases.py already carry: a run that would delete more than this share
++# of the filed-under edges refuses, KEEPS everything, and says so - because at
++# that size "the engine re-filed a quarter of the estate overnight" is a much
++# worse explanation than "one identity file was truncated or half-written".
++# TUNED HOW (the I94 convention): FIRST PLAUSIBLE VALUE, not the survivor of a
++# sweep. The only measurement behind it is the live drift on 2026-09-19 - 3,615
++# of 38,905 identity-table edges, 9.3% - so 0.25 is that figure with room for it
++# to grow, and nothing rules out a legitimate run above it. When it refuses, the
++# fix is to look at the identity files, never to raise the number quietly.
++MAX_STALE_RETRACT_FRACTION = 0.25
++
++
++def _retract_stale_identity_edges(db: GraphDB, ts: str, run: str,
++                                  asserted: set[tuple[str, str]],
++                                  blind: list[str]) -> dict:
++    """Delete the identity-table `instance_of` edges this run's files do not assert.
++
++    `asserted` is every (sku_id, commodity_id) pair import_identity wrote an edge
++    for in THIS run; `blind` names any namespace it could not read.
++
++    WHY DELETE AT ALL. graph/identity/<ns>/*.jsonl holds one CURRENT row per
++    (store, product), so the files are a snapshot and not a log: a pair they no
++    longer carry is the engine's PREVIOUS answer, superseded the day it re-filed
++    the product. Upserting only, this importer kept both answers forever.
++
++    A COULD-NOT-LOOK IS NEVER A RETRACTION. Every edge of an unread namespace
++    looks exactly like a stale one, so a missing directory, a directory holding
++    no .jsonl, or a namespace whose files yielded no row refuses the whole
++    retraction rather than emptying that namespace. The manifest row-count check
++    in import_identity is the third guard on the same question and raises, which
++    rolls the importer back.
++
++    NEVER ANOTHER IMPORTER'S EDGE. Only edges whose `source` property is
++    'identity-table' are candidates. That is sound because import_product_urls
++    runs BEFORE this importer in ALL_IMPORTERS: any pair it asserts this run
++    carries its own source by the time we look, unless the identity files assert
++    it too, in which case the pair is in `asserted` and kept either way.
++
++    IT DEPENDS ON A FULL READ OF EVERY IDENTITY FILE. `asserted` is this run's
++    whole answer, so anything that lets import_identity SKIP a file it read last
++    night turns that file's edges into stale ones. Nothing does today - I211's
++    incremental guard (graph/lib/supersede.py) skips observation ROWS in the price
++    importers and never touches this one - but a future skip here must either add
++    the skipped file's pairs to `asserted` or name the file in `blind`.
++
++    SCOPE OF A CLEAN REPORT: a retraction of 0 means no identity-table edge named
++    an unasserted pair, which is trustworthy for edges this importer wrote. An
++    `instance_of` edge carrying no `source` at all (none exist today; both writers
++    stamp one) is outside the candidate set and would be left in place, so this is
++    UNSOUND for a future writer that forgets the property. What it retracts is
++    real: the pair is read off the edge itself and checked against the set the run
++    just built.
++    """
++    rows = db.conn.execute(
++        "SELECT id, source_id, target_id FROM edges WHERE predicate = 'instance_of' "
++        "AND json_extract(properties_json, '$.source') = ?",
++        (IDENTITY_EDGE_SOURCE,)).fetchall()
++    stale = sorted(r["id"] for r in rows
++                   if (r["source_id"], r["target_id"]) not in asserted)
++    out = {
++        "identity_edges_examined": len(rows),
++        "identity_stale_found": len(stale),
++        "identity_stale_retracted": 0,
++        # ALWAYS present, empty when nothing was refused: a refusal that is not
++        # spoken cannot be told apart from a run with nothing to do.
++        "identity_stale_kept_reason": "",
++    }
++    if blind:
++        reason = "could not read " + "; ".join(blind)
++    elif rows and len(stale) / len(rows) > MAX_STALE_RETRACT_FRACTION:
++        reason = ("%d of %d identity-table edges (%.1f%%) would be retracted, over the "
++                  "%.0f%% bar" % (len(stale), len(rows),
++                                  100.0 * len(stale) / len(rows),
++                                  100.0 * MAX_STALE_RETRACT_FRACTION))
++    else:
++        reason = ""
++
++    # ONE logged decision, not 3,615 of them: retract_edge() logs per edge and
++    # mirrors each to the tracked provenance trail, which for a sweep this size
++    # would write more history than the change it records. The count, a hash of
++    # the full id list and the first 50 ids are what make it re-checkable.
++    detail = {"stale": len(stale), "identity_table_edges": len(rows),
++              "bar": MAX_STALE_RETRACT_FRACTION, "stale_ids_sha256": hash_obj(stale),
++              "first_ids": stale[:50], "blind": blind}
++    if reason:
++        out["identity_stale_kept_reason"] = reason
++        detail["reason"] = reason
++        db.log_event(run=run, timestamp=ts, etype="escalate", step_id="identity",
++                     decision="retract_stale_identity_refused", detail=detail)
++        return out
++    if not stale:
++        return out
++
++    db.log_event(run=run, timestamp=ts, etype="state_transition", step_id="identity",
++                 decision="retract_stale_identity_edges", detail=detail)
++    for i in range(0, len(stale), 500):
++        chunk = stale[i:i + 500]
++        db.conn.execute("DELETE FROM edges WHERE id IN (%s)" % ",".join("?" * len(chunk)),
++                        chunk)
++    out["identity_stale_retracted"] = len(stale)
++    return out
++
+ 
+ def _read_jsonl(path: str) -> list[dict]:
+     """Rows of a .jsonl file. A line that will not parse is a hard error.
+@@ -1215,22 +1328,47 @@ def import_identity(db: GraphDB, ts: str, run: str) -> dict:
+     PROVENANCE. record_provenance() is the only minting path (commitment 1) and it
+     is Python, so the PowerShell emitter mints nothing: it writes a _manifest.json
+     naming the run, and one provenance id is minted here per namespace.
+-    """
+-    if not os.path.isdir(IDENTITY):
+-        return {"identity_skus": 0, "identity_namespaces": 0}
+ 
++    IT RETRACTS WHAT IT NO LONGER ASSERTS (backlog I229, 2026-09-19). The files
++    are the truth and they hold one CURRENT row per (store, product), so a filing
++    they have dropped is the engine's previous answer, not evidence. This importer
++    upserted and never retracted, so both answers stood: measured on a backup-API
++    copy of the live index that day (323,358,720 bytes, taken 2026-09-18 21:41),
++    3,615 of 38,905 identity-table instance_of edges (9.3%) named a (sku,
++    commodity) pair the current files do not, against 3 current pairs holding no
++    edge. Birds Eye Steamfresh Sweet Peas is among them - still filed as canned-peas
++    at Hy-Vee and at Walmart after the engine re-filed it under frozen-peas.
++    Nothing downstream filters an edge by recency, so a stale filing becomes a
++    commodity exemplar in graph/pipeline/emit_commodity_defs.py and a POSITIVE
++    training pair in sidecar/build_pair_corpus.py, where a frozen bag of peas
++    teaches the matcher what canned peas look like. The retraction, its two
++    refusals and what it will not touch are in _retract_stale_identity_edges.
++    """
+     n_sku = n_edge = n_ns = n_unmatched = n_missing_commodity = 0
+-    for ns in IDENTITY_NAMESPACES:
++    # Every (sku, commodity) pair this run filed, and every namespace it could not
++    # read. The second decides whether the first may be used to delete anything.
++    asserted: set[tuple[str, str]] = set()
++    blind: list[str] = []
++    have_tree = os.path.isdir(IDENTITY)
++    if not have_tree:
++        # A clean checkout, a worktree or a CI clone has no identity tree at all.
++        # The loop is skipped and the retraction below refuses on `blind`, which
++        # is the whole difference between "nothing is filed" and "we cannot see".
++        blind.append(f"{rel(IDENTITY)}: no directory")
++    for ns in (IDENTITY_NAMESPACES if have_tree else ()):
+         nsdir = os.path.join(IDENTITY, ns)
+         if not os.path.isdir(nsdir):
++            blind.append(f"{ns}: no directory")
+             continue
+         n_ns += 1
+         ns_rows = 0
++        ns_files = 0
+         prov = db.record_provenance(rel(nsdir), f"import:identity:{ns}", ts, run=run)
+ 
+         for fname in sorted(os.listdir(nsdir)):
+             if not fname.endswith(".jsonl"):
+                 continue
++            ns_files += 1
+             for row in _read_jsonl(os.path.join(nsdir, fname)):
+                 store = row.get("store") or ""
+                 name = row.get("name") or ""
+@@ -1292,8 +1430,18 @@ def import_identity(db: GraphDB, ts: str, run: str) -> dict:
+                         "candidates": row.get("candidates") or [],
+                         "rules_hash": row.get("rules_hash"),
+                     })
++                asserted.add((skid, cid))
+                 n_edge += 1
+ 
++        # A namespace with no file, or files with no row, is a could-not-look and
++        # never "every product in it was unfiled" - without this its whole edge
++        # set reads as stale. Counted per namespace, because one empty namespace
++        # is enough to make the other's count untrustworthy as a denominator.
++        if ns_files == 0:
++            blind.append(f"{ns}: no .jsonl file")
++        elif ns_rows == 0:
++            blind.append(f"{ns}: 0 rows read")
++
+         # The manifest's own count against what was actually read. A mismatch
+         # means a file was written or truncated between the emitter and this
+         # import, and the index would be a partial view calling itself complete.
+@@ -1305,13 +1453,15 @@ def import_identity(db: GraphDB, ts: str, run: str) -> dict:
+                     f"identity[{ns}]: _manifest.json claims {claimed} rows, "
+                     f"{ns_rows} were read from the .jsonl files")
+ 
+-    return {
++    out = {
+         "identity_skus": n_sku,
+         "identity_instance_of": n_edge,
+         "identity_namespaces": n_ns,
+         "identity_unmatched_products": n_unmatched,
+         "identity_missing_commodity_node": n_missing_commodity,
+     }
++    out.update(_retract_stale_identity_edges(db, ts, run, asserted, blind))
++    return out
+ 
+ 
+ ALL_IMPORTERS: list[tuple[str, Callable]] = [
+diff --git a/graph/import/importers_selftest.py b/graph/import/importers_selftest.py
+index 2a43192b2..82c48ebef 100644
+--- a/graph/import/importers_selftest.py
++++ b/graph/import/importers_selftest.py
+@@ -1,6 +1,7 @@
+ """importers_selftest.py - the product-urls importer's price boundary (backlog I200, 2026-09-18), the capture
+ lanes' commodity-id search terms and the fareway-shop observed_at (backlog I235, same day), and the
+-supersede guard that stops every import re-inserting what the last prune deleted (backlog I211, 2026-09-19).
++supersede guard that stops every import re-inserting what the last prune deleted (backlog I211, 2026-09-19),
++and the identity importer's retraction of the filings its files no longer assert (backlog I229, same day).
+ 
+     python graph/import/importers_selftest.py --selftest
+ 
+@@ -16,6 +17,15 @@ the 3 of them banked llm_match_unverified, given a reviewer CONFIRM and a curren
+ priced 3 cells at 0.0. A zero is an unknown, so it is stored as NULL, which that filter already
+ refuses, and the row is KEPT as evidence.
+ 
++AND WHAT I229 GUARDS. import_identity upserted `instance_of` edges and never retracted one, so a
++product the engine re-filed kept BOTH answers: on a backup-API copy of the live index (2026-09-19)
++3,615 of 38,905 identity-table edges named a (sku, commodity) pair the current identity files no
++longer assert - Birds Eye Steamfresh Sweet Peas still an instance_of canned-peas at Hy-Vee and at
++Walmart. Stale filings are read as commodity exemplars and as POSITIVE matcher training pairs. The
++retraction is guarded three ways, and each guard has its own case here: an unread namespace refuses
++the whole sweep, a sweep over MAX_STALE_RETRACT_FRACTION refuses, and only edges stamped
++`source: identity-table` are ever candidates.
++
+ HERMETIC. A temp directory holds the fixture product-urls.json and a fresh temp database; the module's
+ GROCERY constant is pointed there for the run, and GraphDB._append_jsonl (the tracked graph/provenance
+ trail) is replaced for the whole suite so no fixture writes a tracked file. Nothing reads graph.db.
+@@ -41,7 +51,7 @@ import importers as I                                    # noqa: E402
+ 
+ _fails: list[str] = []
+ _ran = 0
+-CASES = 27
++CASES = 46
+ 
+ 
+ def T(label: str, ok: bool, got: str = "") -> None:
+@@ -366,6 +376,229 @@ def run_supersede_guard() -> None:
+         shutil.rmtree(tmp, ignore_errors=True)
+ 
+ 
++def _idrow(store: str, name: str, commodity: str | None, size: str = "15 oz",
++           rules_hash: str = "rh-1") -> dict:
++    """One row of graph/identity/<ns>/<store>.jsonl, in the emitter's shape."""
++    return {"store": store, "name": name, "size": size,
++            "key": name.lower().replace(" ", "-"), "key_kind": "name",
++            "name_key": name.lower(), "first_seen": "2026-08-01",
++            "commodity": commodity, "how": "include", "include_hit": "peas",
++            "excludes_tested": 3, "candidates": [], "rules_hash": rules_hash}
++
++
++def _write_jsonl(path: str, rows: list[dict]) -> None:
++    os.makedirs(os.path.dirname(path), exist_ok=True)
++    with open(path, "w", encoding="utf-8", newline="\n") as fh:
++        for r in rows:
++            fh.write(json.dumps(r, sort_keys=True) + "\n")
++
++
++def run_stale_identity_edges() -> None:
++    """Backlog I229: import_identity upserted filings and never retracted one.
++
++    The founding bug, live: Birds Eye Steamfresh Sweet Peas is a frozen bag, the engine re-filed
++    it from canned-peas to frozen-peas, and BOTH edges stood in graph.db - 3,615 of 38,905
++    identity-table instance_of edges named a pair the current identity files no longer assert
++    (measured 2026-09-19 on a backup-API copy). Those reach emit_commodity_defs' exemplar lists
++    and build_pair_corpus' POSITIVE pairs, so a frozen bag teaches the matcher about canned peas.
++    """
++    tmp = tempfile.mkdtemp(prefix="i229-ident-")
++    saved_identity = I.IDENTITY
++    db = None
++    try:
++        ident = os.path.join(tmp, "identity")
++        I.IDENTITY = ident
++        db = _fresh(tmp)
++        ts = "2026-09-18T00:00:00"
++        canned = I.commodity_id("canned-peas", "staple")
++        frozen = I.commodity_id("frozen-peas", "staple")
++        rfrozen = I.commodity_id("frozen-green-peas", "recipe")
++        for nid, label in ((canned, "Canned Peas"), (frozen, "Frozen Peas"),
++                           (rfrozen, "Frozen Green Peas")):
++            db.upsert_node(nid, "Commodity", label, ts)
++        for st in ("Hy-Vee", "Baker's"):
++            db.upsert_node(I.store_id(st), "Store", st, ts)
++
++        BE, CP, ORPH = ("Birds Eye Steamfresh Sweet Peas", "Fixture Store Brand Peas",
++                        "Fixture Orphan Peas")
++        # Eight more filings that never change. They are the DENOMINATOR: without them the one
++        # unread-namespace edge below is a third of the table and trips the fraction bar too, and
++        # a case with two guards over it cannot see which one worked (ops-and-gates.md).
++        filler = ["Fixture Peas %02d" % i for i in range(8)]
++        staple_f = os.path.join(ident, "staple", "hy-vee.jsonl")
++        bakers_f = os.path.join(ident, "staple", "bakers.jsonl")
++        recipe_f = os.path.join(ident, "recipe", "hy-vee.jsonl")
++
++        def edge(src: str, tgt: str) -> dict | None:
++            r = db.conn.execute("SELECT properties_json FROM edges WHERE source_id=? AND "
++                                "target_id=? AND predicate='instance_of'", (src, tgt)).fetchone()
++            return json.loads(r["properties_json"]) if r else None
++
++        be_sku = I.sku_id("Hy-Vee", BE, "10 oz")
++        orph_sku = I.sku_id("Baker's", ORPH, "15 oz")
++        cp_sku = I.sku_id("Hy-Vee", CP, "15 oz")
++
++        # --- yesterday's engine run: Birds Eye is filed as canned peas
++        _write_jsonl(staple_f, [_idrow("Hy-Vee", BE, canned, size="10 oz"),
++                                _idrow("Hy-Vee", CP, canned)]
++                     + [_idrow("Hy-Vee", f, canned) for f in filler])
++        _write_jsonl(bakers_f, [_idrow("Baker's", ORPH, canned)])
++        _write_jsonl(recipe_f, [_idrow("Hy-Vee", BE, rfrozen, size="10 oz")])
++        res1 = I.import_identity(db, ts, "run:i229-1")
++
++        # A filing product-urls owns, for a pair no identity row will ever assert.
++        pu_sku = I.sku_id("Hy-Vee", "Fixture Linked Peas", "15 oz")
++        db.upsert_node(pu_sku, "ProductSKU", "Fixture Linked Peas", ts,
++                       properties={"store": "Hy-Vee"})
++        db.upsert_edge(pu_sku, "instance_of", canned, ts, properties={"source": "product-urls"})
++
++        T("CLEAN TWIN yesterday's import files all 12 rows and retracts nothing (nothing is stale yet)",
++          res1.get("identity_instance_of") == 12 and res1.get("identity_stale_retracted") == 0
++          and res1.get("identity_stale_kept_reason") == "", json.dumps(res1, sort_keys=True))
++
++        # --- today's engine run: Birds Eye re-filed as frozen peas, the orphan row unfiled
++        ts2 = "2026-09-19T00:00:00"
++        _write_jsonl(staple_f, [_idrow("Hy-Vee", BE, frozen, size="10 oz", rules_hash="rh-2"),
++                                _idrow("Hy-Vee", CP, canned)]
++                     + [_idrow("Hy-Vee", f, canned) for f in filler])
++        _write_jsonl(bakers_f, [_idrow("Baker's", ORPH, None)])
++        res2 = I.import_identity(db, ts2, "run:i229-2")
++
++        T("MUST FIRE a re-filed product loses its old filing (Birds Eye Steamfresh Sweet Peas is "
++          "no longer an instance_of canned-peas)", edge(be_sku, canned) is None,
++          repr(edge(be_sku, canned)))
++        T("MUST FIRE a product whose row now names no commodity loses its filing too",
++          edge(orph_sku, canned) is None, repr(edge(orph_sku, canned)))
++        T("MUST FIRE the run reports what it retracted (2 found, 2 retracted, nothing refused)",
++          res2.get("identity_stale_found") == 2 and res2.get("identity_stale_retracted") == 2
++          and res2.get("identity_stale_kept_reason") == "", json.dumps(res2, sort_keys=True))
++        log = db.conn.execute("SELECT detail_json FROM decision_log WHERE "
++                              "decision='retract_stale_identity_edges'").fetchall()
++        det = json.loads(log[0]["detail_json"]) if log else {}
++        T("MUST FIRE the retraction is ONE logged decision carrying the count, the id hash and the ids",
++          len(log) == 1 and det.get("stale") == 2 and len(det.get("stale_ids_sha256") or "") == 64
++          and len(det.get("first_ids") or []) == 2, "%d rows %r" % (len(log), det))
++        T("CLEAN TWIN the new filing lands with its new rules_hash (frozen-peas, rh-2)",
++          (edge(be_sku, frozen) or {}).get("rules_hash") == "rh-2", repr(edge(be_sku, frozen)))
++        T("CLEAN TWIN an unchanged filing is untouched (store brand peas -> canned-peas)",
++          edge(cp_sku, canned) is not None, "None")
++        T("CLEAN TWIN the re-filed product itself survives: the filing is retracted, not the SKU",
++          db.get_node(be_sku) is not None and db.get_node(orph_sku) is not None,
++          repr(db.get_node(be_sku)))
++        T("CLEAN TWIN the same product's filing in the OTHER namespace is untouched "
++          "(recipe:frozen-green-peas)", edge(be_sku, rfrozen) is not None, "None")
++        T("MUST NOT FIRE an edge another importer asserts is never retracted here "
++          "(source=product-urls, a pair no identity row carries)",
++          edge(pu_sku, canned) is not None, "None")
++        n_sold = db.conn.execute("SELECT count(*) FROM edges WHERE source_id=? AND "
++                                 "predicate='sold_at'", (be_sku,)).fetchone()[0]
++        T("MUST NOT FIRE another predicate on the same product is never retracted (sold_at)",
++          n_sold == 1, str(n_sold))
++
++        # --- a could-not-look is never a retraction. Each of the three shapes in turn, all of
++        # them well under the fraction bar (1 of 11 = 9.1%), so each case sees its own guard.
++        def recipe_blind(label: str, want: str) -> None:
++            res = I.import_identity(db, ts2, "run:i229-blind")
++            T("MUST NOT FIRE %s: nothing is retracted, the refusal is spoken, and the "
++              "unread namespace keeps its edge" % label,
++              res.get("identity_stale_retracted") == 0
++              and want in res.get("identity_stale_kept_reason", "")
++              and res.get("identity_stale_found") == 1
++              and edge(be_sku, rfrozen) is not None, json.dumps(res, sort_keys=True))
++
++        shutil.rmtree(os.path.join(ident, "recipe"))
++        recipe_blind("a namespace directory is missing", "recipe: no directory")
++        refused = db.conn.execute("SELECT count(*) FROM decision_log WHERE "
++                                  "decision='retract_stale_identity_refused'").fetchone()[0]
++        T("MUST FIRE the refusal is logged, not only returned", refused == 1, str(refused))
++        os.makedirs(os.path.join(ident, "recipe"))
++        recipe_blind("a namespace holds no .jsonl file", "recipe: no .jsonl file")
++        _write_jsonl(recipe_f, [{"store": "", "name": "", "commodity": rfrozen}])
++        recipe_blind("a namespace's files yield no usable row", "recipe: 0 rows read")
++
++        I.IDENTITY = os.path.join(tmp, "no-such-identity")
++        res5 = I.import_identity(db, ts2, "run:i229-5")
++        T("MUST NOT FIRE the whole identity tree is absent (a clean checkout, a worktree, a CI "
++          "clone): all 11 filings look stale and not one is retracted",
++          res5.get("identity_stale_found") == 11 and res5.get("identity_stale_retracted") == 0
++          and "no directory" in res5.get("identity_stale_kept_reason", ""),
++          json.dumps(res5, sort_keys=True))
++        I.IDENTITY = ident
++
++        _write_jsonl(recipe_f, [_idrow("Hy-Vee", BE, rfrozen, size="10 oz")])
++        res6 = I.import_identity(db, ts2, "run:i229-6")
++        T("CLEAN TWIN with the namespace readable again nothing is stale, nothing is retracted, "
++          "and nothing is refused",
++          res6.get("identity_stale_found") == 0 and res6.get("identity_stale_retracted") == 0
++          and res6.get("identity_stale_kept_reason") == "", json.dumps(res6, sort_keys=True))
++    except Exception as e:                                # noqa: BLE001
++        _fails.append("stale-identity suite raised: %r" % (e,))
++        print("  FAILED stale-identity suite raised: %r" % (e,))
++    finally:
++        I.IDENTITY = saved_identity
++        if db is not None:
++            db.conn.close()
++        shutil.rmtree(tmp, ignore_errors=True)
++
++
++def run_stale_retract_bar() -> None:
++    """The plausibility bar, at it and one edge past it (Brad's ruling, backlog I196).
++
++    100 identity-table edges, so one edge is one percentage point: 25 unfiled is EXACTLY
++    MAX_STALE_RETRACT_FRACTION and must still retract, 26 is one unit of the comparison's own
++    resolution past it and must keep everything and say why.
++    """
++    def arm(n_unfiled: int) -> tuple[dict, int]:
++        tmp = tempfile.mkdtemp(prefix="i229-bar-")
++        saved_identity = I.IDENTITY
++        db = None
++        try:
++            ident = os.path.join(tmp, "identity")
++            I.IDENTITY = ident
++            db = _fresh(tmp)
++            ts = "2026-09-18T00:00:00"
++            cid = I.commodity_id("canned-peas", "staple")
++            rid = I.commodity_id("frozen-green-peas", "recipe")
++            db.upsert_node(cid, "Commodity", "Canned Peas", ts)
++            db.upsert_node(rid, "Commodity", "Frozen Green Peas", ts)
++            names = ["Fixture Bar Peas %03d" % i for i in range(99)]
++            staple_f = os.path.join(ident, "staple", "hy-vee.jsonl")
++            _write_jsonl(staple_f, [_idrow("Hy-Vee", n, cid) for n in names])
++            _write_jsonl(os.path.join(ident, "recipe", "hy-vee.jsonl"),
++                         [_idrow("Hy-Vee", "Fixture Bar Recipe Peas", rid)])
++            I.import_identity(db, ts, "run:i229-bar-1")
++            # Unfile n of the 99: an unfiled row writes no new edge, so the denominator stays 100.
++            _write_jsonl(staple_f, [_idrow("Hy-Vee", n, None if i < n_unfiled else cid)
++                                    for i, n in enumerate(names)])
++            res = I.import_identity(db, "2026-09-19T00:00:00", "run:i229-bar-2")
++            left = db.conn.execute("SELECT count(*) FROM edges WHERE predicate='instance_of'"
++                                   ).fetchone()[0]
++            return res, left
++        finally:
++            I.IDENTITY = saved_identity
++            if db is not None:
++                db.conn.close()
++            shutil.rmtree(tmp, ignore_errors=True)
++
++    try:
++        at, at_left = arm(25)
++        T("MUST FIRE 25 stale of 100 is EXACTLY the 25% bar, not over it: all 25 are retracted "
++          "and 75 filings are left",
++          at.get("identity_edges_examined") == 100 and at.get("identity_stale_retracted") == 25
++          and at.get("identity_stale_kept_reason") == "" and at_left == 75,
++          "left=%d %s" % (at_left, json.dumps(at, sort_keys=True)))
++        past, past_left = arm(26)
++        T("MUST NOT FIRE 26 stale of 100 is ONE EDGE past the 25% bar: nothing is retracted, "
++          "every edge is kept, and the refusal names the bar",
++          past.get("identity_stale_found") == 26 and past.get("identity_stale_retracted") == 0
++          and "26.0%" in past.get("identity_stale_kept_reason", "")
++          and "25% bar" in past.get("identity_stale_kept_reason", "") and past_left == 100,
++          "left=%d %s" % (past_left, json.dumps(past, sort_keys=True)))
++    except Exception as e:                                # noqa: BLE001
++        _fails.append("stale-retract-bar suite raised: %r" % (e,))
++        print("  FAILED stale-retract-bar suite raised: %r" % (e,))
++
++
+ def run() -> int:
+     tmp = tempfile.mkdtemp(prefix="i200-imp-")
+     saved_grocery = I.GROCERY
+@@ -408,6 +641,8 @@ def run() -> int:
+         run_capture_terms()
+         run_fareway_dates()
+         run_supersede_guard()
++        run_stale_identity_edges()
++        run_stale_retract_bar()
+     except Exception as e:                                # noqa: BLE001
+         _fails.append("suite raised: %r" % (e,))
+         print("  FAILED suite raised: %r" % (e,))
+@@ -426,7 +661,10 @@ def run() -> int:
+     print("SELF-TEST PASS: importers %d of %d cases - a zero product-urls price is stored NULL, "
+           "a real one unchanged; a staple-id capture term resolves namespaced, an unknown one stays counted; "
+           "a fareway-shop file is dated from the date in its name or refused; a re-import inserts 0 "
+-          "rows the prune deletes, and a new or rewritten capture still lands" % (_ran, CASES))
++          "rows the prune deletes, and a new or rewritten capture still lands; a re-filed or unfiled product "
++          "loses its old filing while another importer's edge, another namespace and the SKU itself "
++          "survive, and an unread namespace or a sweep past the bar retracts nothing and says so"
++          % (_ran, CASES))
+     return 0
+ 
+ 

@@ -1,0 +1,27 @@
+{
+    "code":  "d7e629",
+    "changed":  [
+                    "graph/audit_graph_shape.py",
+                    "graph/eval/probe_listing_overlap.py",
+                    "graph/import/importers.py",
+                    "graph/import/importers_selftest.py"
+                ],
+    "scrubbed_lines":  0,
+    "tests":  [
+                  {
+                      "file":  "graph/audit_graph_shape.py",
+                      "exit":  0,
+                      "last_line":  "SELF-TEST PASS: 18 case(s) - must-fire led by the founding one (a node with no edges scores 0 rather than vanishing), the cut-point shatter, the two real steam-bag-carrier ids raising the structural count and naming themselves, a by-construction type that gained an edge, and a pre-split baseline that must not read as a pass; must-not-fire including the leaf that shatters nothing and those same two ids at their real CategoryExclude type; clean twins over chains, the empty graph, a 5,000-node iterative flood fill, the I75 shatter and a baseline compared with itself"
+                  },
+                  {
+                      "file":  "graph/eval/probe_listing_overlap.py",
+                      "exit":  0,
+                      "last_line":  "probe_listing_overlap self-test PASS"
+                  },
+                  {
+                      "file":  "graph/import/importers_selftest.py",
+                      "exit":  0,
+                      "last_line":  "SELF-TEST PASS: importers 46 of 46 cases - a zero product-urls price is stored NULL, a real one unchanged; a staple-id capture term resolves namespaced, an unknown one stays counted; a fareway-shop file is dated from the date in its name or refused; a re-import inserts 0 rows the prune deletes, and a new or rewritten capture still lands; a re-filed, unfiled or delisted product loses its stale filing while the other namespace, the other importer\u0027s edge and an unvouched-for absence keep theirs"
+                  }
+              ]
+}

@@ -1,0 +1,142 @@
+[
+    {
+        "code":  "b35921",
+        "task":  "T1",
+        "arm":  "S",
+        "rep":  1,
+        "base":  "23ef8f58a",
+        "worktree":  "C:\\Codex\\tc-exp-b35921",
+        "pid":  27992,
+        "started":  "2026-09-19T06:43:58"
+    },
+    {
+        "code":  "a95222",
+        "task":  "T1",
+        "arm":  "B",
+        "rep":  1,
+        "base":  "23ef8f58a",
+        "worktree":  "C:\\Codex\\tc-exp-a95222",
+        "pid":  31644,
+        "started":  "2026-09-19T06:44:11"
+    },
+    {
+        "code":  "d3373e",
+        "task":  "T2",
+        "arm":  "S",
+        "rep":  1,
+        "base":  "e6309fd58",
+        "worktree":  "C:\\Codex\\tc-exp-d3373e",
+        "pid":  11104,
+        "started":  "2026-09-19T06:44:25"
+    },
+    {
+        "code":  "7c6256",
+        "task":  "T2",
+        "arm":  "B",
+        "rep":  1,
+        "base":  "e6309fd58",
+        "worktree":  "C:\\Codex\\tc-exp-7c6256",
+        "pid":  25380,
+        "started":  "2026-09-19T06:44:36"
+    },
+    {
+        "code":  "358601",
+        "task":  "T3",
+        "arm":  "S",
+        "rep":  1,
+        "base":  "7695b84c1",
+        "worktree":  "C:\\Codex\\tc-exp-358601",
+        "pid":  42124,
+        "started":  "2026-09-19T06:44:47"
+    },
+    {
+        "code":  "3bfee4",
+        "task":  "T3",
+        "arm":  "B",
+        "rep":  1,
+        "base":  "7695b84c1",
+        "worktree":  "C:\\Codex\\tc-exp-3bfee4",
+        "pid":  9900,
+        "started":  "2026-09-19T06:44:59"
+    },
+    {
+        "code":  "5cff85",
+        "task":  "T3",
+        "arm":  "S",
+        "rep":  2,
+        "base":  "7695b84c1",
+        "worktree":  "C:\\Codex\\tc-exp-5cff85",
+        "pid":  26536,
+        "started":  "2026-09-19T06:45:25"
+    },
+    {
+        "code":  "7dbd99",
+        "task":  "T4",
+        "arm":  "S",
+        "rep":  1,
+        "base":  "2c250d017",
+        "worktree":  "C:\\Codex\\tc-exp-7dbd99",
+        "pid":  48408,
+        "started":  "2026-09-19T06:45:38"
+    },
+    {
+        "code":  "0609c1",
+        "task":  "T4",
+        "arm":  "B",
+        "rep":  1,
+        "base":  "2c250d017",
+        "worktree":  "C:\\Codex\\tc-exp-0609c1",
+        "pid":  47144,
+        "started":  "2026-09-19T06:46:00"
+    },
+    {
+        "code":  "64e9f4",
+        "task":  "T4",
+        "arm":  "S",
+        "rep":  2,
+        "base":  "2c250d017",
+        "worktree":  "C:\\Codex\\tc-exp-64e9f4",
+        "pid":  49468,
+        "started":  "2026-09-19T06:46:22"
+    },
+    {
+        "code":  "d7e629",
+        "task":  "T5",
+        "arm":  "S",
+        "rep":  1,
+        "base":  "e92d64fee",
+        "worktree":  "C:\\Codex\\tc-exp-d7e629",
+        "pid":  29532,
+        "started":  "2026-09-19T06:46:44"
+    },
+    {
+        "code":  "9a6d43",
+        "task":  "T5",
+        "arm":  "B",
+        "rep":  1,
+        "base":  "e92d64fee",
+        "worktree":  "C:\\Codex\\tc-exp-9a6d43",
+        "pid":  35452,
+        "started":  "2026-09-19T06:46:58"
+    },
+    {
+        "code":  "da4088",
+        "task":  "T6",
+        "arm":  "S",
+        "rep":  1,
+        "base":  "8038bb2cb",
+        "worktree":  "C:\\Codex\\tc-exp-da4088",
+        "pid":  27264,
+        "started":  "2026-09-19T06:47:12"
+    },
+    {
+        "code":  "56dc42",
+        "task":  "T6",
+        "arm":  "B",
+        "rep":  1,
+        "base":  "8038bb2cb",
+        "worktree":  "C:\\Codex\\tc-exp-56dc42",
+        "pid":  35372,
+        "started":  "2026-09-19T06:47:35"
+    }
+]

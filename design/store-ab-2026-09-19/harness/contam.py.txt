@@ -1,0 +1,26 @@
+"""For a B-arm transcript: list every tool_use that mentions the store and the start of its tool_result."""
+import json, os, re, sys
+here = os.path.dirname(os.path.abspath(__file__))
+code = sys.argv[1]
+p = os.path.join(here, "runs", code + "-transcript.jsonl")
+uses = {}
+for line in open(p, encoding="utf-8", errors="replace"):
+    try:
+        ev = json.loads(line)
+    except Exception:
+        continue
+    msg = ev.get("message") if isinstance(ev, dict) else None
+    if not isinstance(msg, dict):
+        continue
+    for c in msg.get("content") or [] if isinstance(msg.get("content"), list) else []:
+        if c.get("type") == "tool_use":
+            s = json.dumps(c.get("input"))
+            if re.search(r"(?i)skills|search\.py|craft", s):
+                uses[c["id"]] = s[:220]
+        elif c.get("type") == "tool_result" and c.get("tool_use_id") in uses:
+            body = c.get("content")
+            if isinstance(body, list):
+                body = " ".join(x.get("text", "") for x in body if isinstance(x, dict))
+            print("USE   ", uses[c["tool_use_id"]])
+            print("RESULT", str(body)[:300].replace("\n", " | "))
+            print()

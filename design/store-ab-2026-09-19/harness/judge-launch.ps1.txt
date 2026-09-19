@@ -1,0 +1,52 @@
+# Store A/B pilot: launch two blind judges per pair, arm order swapped between them.
+param([switch]$DryRun)
+$ErrorActionPreference = 'Stop'
+$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+$runDir = Join-Path $here 'runs'
+$jDir = Join-Path $here 'judges'
+New-Item -ItemType Directory -Force $jDir | Out-Null
+$repo = 'C:\Codex\ThriftyCrew'
+$tasks = Get-Content -Raw -Encoding UTF8 (Join-Path $here 'tasks.json') | ConvertFrom-Json
+$map = Get-Content -Raw -Encoding UTF8 (Join-Path $here 'map.json') | ConvertFrom-Json
+$tpl = [IO.File]::ReadAllText((Join-Path $here 'judge-template.txt'))
+$blocked = Join-Path (Split-Path -Parent $here) 'arm-blocked-settings.json'
+
+function RunOf($task, $arm, $rep) { $map | Where-Object { $_.task -eq $task -and $_.arm -eq $arm -and $_.rep -eq $rep } }
+function TestsText($code) {
+    $t = Get-Content -Raw -Encoding UTF8 (Join-Path $runDir "$code-tests.json") | ConvertFrom-Json
+    if (-not $t.tests -or @($t.tests).Count -eq 0) { return 'no changed file carries a self-test the organiser could find' }
+    (@($t.tests) | ForEach-Object { "$($_.file) exit=$($_.exit) last line: $($_.last_line)" }) -join ' ; '
+}
+
+$pairs = New-Object System.Collections.ArrayList
+foreach ($t in $tasks) { [void]$pairs.Add(@{ pair = "$($t.id)-SB"; task = $t; a = (RunOf $t.id 'S' 1); b = (RunOf $t.id 'B' 1) }) }
+foreach ($id in 'T3', 'T4') { $t = $tasks | Where-Object id -eq $id; [void]$pairs.Add(@{ pair = "$id-SS"; task = $t; a = (RunOf $id 'S' 1); b = (RunOf $id 'S' 2) }) }
+
+$jobs = New-Object System.Collections.ArrayList
+foreach ($p in $pairs) {
+    $basewt = "C:\Codex\tc-exp-base-$($p.task.id)"
+    if (-not $DryRun -and -not (Test-Path $basewt)) {
+        & git -C $repo worktree add -q --detach $basewt $p.task.base
+        if ($LASTEXITCODE -ne 0) { throw "base worktree failed $basewt" }
+    }
+    foreach ($order in 1, 2) {
+        if ($order -eq 1) { $x = $p.a; $y = $p.b } else { $x = $p.b; $y = $p.a }
+        $jid = "$($p.pair)-o$order"
+        $prompt = $tpl.Replace('{STATEMENT}', $p.task.statement).Replace('{BASEWT}', $basewt).Replace('{BASE}', $p.task.base).
+            Replace('{PATCHX}', (Join-Path $runDir "$($x.code)-judge.patch")).Replace('{PATCHY}', (Join-Path $runDir "$($y.code)-judge.patch")).
+            Replace('{TESTSX}', (TestsText $x.code)).Replace('{TESTSY}', (TestsText $y.code))
+        $pf = Join-Path $jDir "$jid-prompt.txt"
+        [IO.File]::WriteAllText($pf, $prompt, (New-Object Text.UTF8Encoding($false)))
+        $row = [ordered]@{ judge = $jid; pair = $p.pair; order = $order; X = $x.code; Y = $y.code; Xarm = "$($x.arm)$($x.rep)"; Yarm = "$($y.arm)$($y.rep)" }
+        if (-not $DryRun) {
+            $cargs = @('-p', '--model', 'claude-opus-5', '--permission-mode', 'bypassPermissions', '--settings', $blocked, '--output-format', 'json')
+            $proc = Start-Process -FilePath 'C:\Users\Owner\.local\bin\claude.exe' -ArgumentList $cargs -WorkingDirectory $basewt `
+                -RedirectStandardInput $pf -RedirectStandardOutput (Join-Path $jDir "$jid-out.json") `
+                -RedirectStandardError (Join-Path $jDir "$jid-stderr.txt") -WindowStyle Hidden -PassThru
+            $row.pid = $proc.Id
+        }
+        [void]$jobs.Add([pscustomobject]$row)
+    }
+}
+[IO.File]::WriteAllText((Join-Path $here 'judges.json'), ($jobs | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
+"judges=$($jobs.Count) dryrun=$DryRun"

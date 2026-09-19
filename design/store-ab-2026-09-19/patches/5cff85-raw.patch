@@ -1,0 +1,361 @@
+diff --git a/grocery/compare-deals.ps1 b/grocery/compare-deals.ps1
+index a357d6af9..e3d81308c 100644
+--- a/grocery/compare-deals.ps1
++++ b/grocery/compare-deals.ps1
+@@ -286,6 +286,26 @@ function Select-StoreWinner($rows) {
+                 @{Expression = { [string]$_.name }} |
+     Select-Object -First 1
+ }
++# WHICH STORE WEARS THE CROWN when two stores' winning rows cost exactly the SAME per unit (2026-09-19,
++# backlog I175, Brad's option A). This was `$byStore | Sort-Object unit_price`, and 5.1's Sort-Object is not
++# stable, so an exact cross-store tie handed cheapest_store, nomem_store AND the order of the whole `stores`
++# array to the sort's internals - the same defect Select-StoreWinner's key 4 exists to close one level down.
++# Measured on the live comparison-2026-09-17.json: 23 of 572 commodities (543 of which price two or more
++# stores) have rank 1 and rank 2 at an EXACTLY equal per_unit, and 26 have that tie between the first two
++# no-membership stores. Keys, in order:
++#   1. per-unit price  - unchanged and first, so no cell's price moves and no cheaper store loses a crown
++#   2. no membership   - a tie must not send a reader to a store they have to buy a membership to shop at.
++#                        It cannot make the board dearer: it only ever speaks between equal prices, and it
++#                        pulls cheapest_store toward nomem_store rather than away from it.
++#   3. store name      - a TOTAL order (store names are unique on a board row), so the crown is reproducible
++# THE RANK IS RETURNED WHOLE, not just its head: `stores` is emitted from it, so the published order of the
++# tied stores becomes reproducible too, and `nomem_store` is its first non-member row.
++function Select-CrossStoreRank($winners) {
++  @($winners |
++    Sort-Object @{Expression = { $_.unit_price }},
++                @{Expression = { if ($_.membership) { 1 } else { 0 } }},
++                @{Expression = { [string]$_.store }})
++}
+ # bulk / non-single-unit heuristic on a size string (so the winner line can flag "10 lb pack" etc.)
+ # THE PRICING MATH LIVES IN A LIBRARY NOW (2026-09-09, backlog I82). It used to be defined here and
+ # LIFTED as source text by twelve other scripts, because this file runs a pipeline on load and could
+@@ -1148,6 +1168,112 @@ if ($SelfTest) {
+   $wB = (Select-StoreWinner @($twinA[1],$twinA[0])).name
+   if ($wA -eq $wB -and $wA -eq 'Alpha brand, 10 oz') { Write-Output 'ok    rows equal on every real key resolve to ONE reproducible winner' } else { Write-Output ("FAIL  equal rows are order-dependent ('$wA' vs '$wB') - the board cell is not reproducible"); $script:fail++ }
+ 
++  # --- 11i: Select-CrossStoreRank - WHICH STORE WEARS A TIED CROWN (2026-09-19, backlog I175) --------------
++  # FROZEN FOUNDING CASE, read off the live comparison-2026-09-17.json: collard-greens prices exactly two
++  # stores - Hy-Vee 'Collard Greens' and Baker's 'Jumbo Collard Greens Bunch' - at exactly $1.99 each, and
++  # 23 of that board's 572 commodities carry a tie like it. Under the old `$byStore | Sort-Object unit_price`
++  # the crown between them was decided by 5.1's unstable sort, so the same prices could crown either store.
++  # MUST FIRE: every input order of the same rows gives ONE crown, and it is the key-3 (store name) answer.
++  # A dearer third store is carried so the case also proves the rank keeps the rows it is not deciding.
++  function _X($st, $up, $mem) { [pscustomobject]@{ store = $st; unit_price = $up; membership = $mem } }
++  $cgRows = @((_X 'Hy-Vee' 1.99 $false), (_X "Baker's" 1.99 $false), (_X 'Fareway' 2.49 $false))
++  $cgOrders = @(@(0,1,2), @(2,1,0), @(1,0,2), @(1,2,0), @(2,0,1))
++  $cgCrowns = @($cgOrders | ForEach-Object {
++    $ord = $_; $inRows = @($ord | ForEach-Object { $cgRows[$_] })
++    $rk = @(Select-CrossStoreRank $inRows); [string]$rk[0].store } | Select-Object -Unique)
++  if ($cgCrowns.Count -eq 1 -and $cgCrowns[0] -eq "Baker's") { Write-Output 'ok    a tied crown is ONE reproducible store whatever the input order (the collard-greens cell)' } else { Write-Output ('FAIL  a tied crown depends on the input order: ' + ($cgCrowns -join ' | ') + ' - the board cell is not reproducible'); $script:fail++ }
++  # MUST FIRE: a tie never sends a reader to the store they must buy a membership to shop at. Sam's Club is
++  # the only one, so this is the rule that keeps cheapest_store and nomem_store from disagreeing for free.
++  $memTie = @((_X "Sam's Club" 0.10 $true), (_X 'Walmart' 0.10 $false))
++  $m1 = @(Select-CrossStoreRank $memTie)[0].store
++  $m2 = @(Select-CrossStoreRank @($memTie[1], $memTie[0]))[0].store
++  if ($m1 -eq 'Walmart' -and $m2 -eq 'Walmart') { Write-Output 'ok    an exact tie goes to the store with no membership, in either input order' } else { Write-Output ("FAIL  a tie crowned '$m1' / '$m2' - a membership store took a tied crown"); $script:fail++ }
++  # CLEAN TWIN: price is still key 1, so a genuinely cheaper membership store keeps its crown and nothing
++  # below price can make the board dearer - and the rank returns every store it was handed, in price order.
++  $cheapMem = @((_X 'Walmart' 0.11 $false), (_X "Sam's Club" 0.10 $true), (_X 'Aldi' 0.12 $false))
++  $cmRank = @(Select-CrossStoreRank $cheapMem)
++  if ($cmRank.Count -eq 3 -and $cmRank[0].store -eq "Sam's Club" -and $cmRank[1].store -eq 'Walmart' -and $cmRank[2].store -eq 'Aldi') { Write-Output 'ok    a cheaper membership store still wins, and the rank keeps every store in price order' } else { Write-Output ('FAIL  the tie-break disturbed unequal prices: ' + (($cmRank | ForEach-Object { $_.store }) -join ',')); $script:fail++ }
++  # CLEAN TWIN: nomem_store is read off this same rank, so it is reproducible for the same reason. Two tied
++  # no-membership stores behind a cheaper Sam's must name ONE of them, and the same one in either order.
++  $nmTie = @((_X "Sam's Club" 0.09 $true), (_X 'Hy-Vee' 0.10 $false), (_X 'Aldi' 0.10 $false))
++  $n1 = @(@(Select-CrossStoreRank $nmTie) | Where-Object { -not $_.membership } | Select-Object -First 1).store
++  $n2 = @(@(Select-CrossStoreRank @($nmTie[2], $nmTie[1], $nmTie[0])) | Where-Object { -not $_.membership } | Select-Object -First 1).store
++  if ($n1 -eq 'Aldi' -and $n2 -eq 'Aldi') { Write-Output 'ok    nomem_store is reproducible too - it is the first non-member row of the same rank' } else { Write-Output ("FAIL  nomem_store depends on input order ('$n1' / '$n2')"); $script:fail++ }
++
++  # --- 11j: the PRICE TABLE names the board's own product for a store (2026-09-19, backlog I175) -----------
++  # The table's header promises it is not a second implementation of "which row wins". It was one anyway:
++  # both halves picked with `Sort-Object unit_price | Select-Object -First 1`, which 5.1 breaks by the sort's
++  # internals, and `shown` gave an exact everyday/ad tie to the AD unconditionally. Measured on the live
++  # 2026-09-17 pair: 337 of 3,189 published cells named a different product than the board cell above them,
++  # at an identical price in every one; 20 cells tie everyday against ad and the board named the everyday
++  # product on 12 of them. Build-PriceTableRow now takes -Pick, and the engine hands it Select-StoreWinner.
++  # This case drives the REAL library with the REAL board rule, because that pairing is the whole claim.
++  . (Join-Path $PSScriptRoot 'price-table-lib.ps1')
++  function _PT($up, $type, $name, $size, $ident) {
++    [pscustomobject]@{ store = 'Aldi'; unit_price = $up; price_type = $type; name = $name; size_text = $size
++      has_identity = $ident; price_text = '$2.29'; src_date = ''; ad_from = ''; ad_to = ''; ad_basis = ''
++      source_ad = ''; membership = $false }
++  }
++  # FROZEN from candidates-2026-09-17: Aldi almond-milk carries six everyday rows and one flyer row at
++  # exactly $0.0358/floz. The board published 'Friendly Farms Almond Original Milk' for that cell; the live
++  # price table named the flyer row. has_identity is the constructed half - the candidates file does not
++  # carry it - and it is set the way the live rows behave: an Aldi shelf row links, a flyer line does not.
++  $amRows = @(
++    (_PT 0.0358 'everyday' 'Friendly Farms Almond Original Milk' '64 fl oz' $true),
++    (_PT 0.0358 'everyday' 'Friendly Farms Original Almond Milk' '64 fl oz' $true),
++    (_PT 0.0577 'everyday' 'Friendly Farms Organic Original Unsweetened Almondmilk 64 FL OZ' '64 fl oz' $true),
++    (_PT 0.0358 'sale'     'Friendly Farms Unsweetened Vanilla or Sweetened Almondmilk' '64 oz.' $false)
++  )
++  $amBoard = (Select-StoreWinner $amRows).name
++  $amCell = (Build-PriceTableRow -Id 'almond-milk' -Commodity 'Almond Milk' -Unit 'floz' -Today '2026-09-17' -Rows $amRows -Pick ${function:Select-StoreWinner}).stores['Aldi']
++  # MUST FIRE: the shown half names the board's row, which on an exact everyday/ad tie is the EVERYDAY one.
++  # The old `-le` gave every one of these to the ad, so a revert reads red here.
++  if ($amCell.shown_kind -eq 'everyday' -and $amCell.everyday_product -eq $amBoard -and $amBoard -eq 'Friendly Farms Almond Original Milk') { Write-Output 'ok    the table shows the board''s own row when the everyday and ad halves tie exactly' } else { $amShownProduct = $(if ($amCell.shown_kind -eq 'ad') { $amCell.ad_product } else { $amCell.everyday_product })
++  Write-Output ("FAIL  the table shows the " + $amCell.shown_kind + " row '" + $amShownProduct + "' where the board names '" + $amBoard + "' - the table disagrees with the board it is derived from"); $script:fail++ }
++  # CLEAN TWIN: no price moved and Brad's founding rule is untouched - the ad column still stores the ad at
++  # its own price, the everyday column still stores the everyday price, and `shown` is still the cheaper.
++  if ($amCell.ad -eq 0.0358 -and $amCell.everyday -eq 0.0358 -and $amCell.shown -eq 0.0358 -and $amCell.ad_product -eq 'Friendly Farms Unsweetened Vanilla or Sweetened Almondmilk') { Write-Output 'ok    both halves are still stored under their own kind at their own price (the founding rule)' } else { Write-Output ("FAIL  a half was lost or moved: everyday=$($amCell.everyday) ad=$($amCell.ad) shown=$($amCell.shown) ad_product='$($amCell.ad_product)'"); $script:fail++ }
++  # MUST FIRE: -Pick has to REACH the halves, not just the everyday/ad tie. The pancake-mix shape (2026-08-22):
++  # two rows at one price where the linkable one sorts LATER by name, so the board's rule and any name-ordered
++  # fallback disagree. The table must name the linkable row, which is what the board publishes.
++  $pkRows = @(
++    (_PT 0.0500 'everyday' 'Alpha Almondmilk 64 FL OZ' '64 fl oz' $false),
++    (_PT 0.0500 'everyday' 'Zeta Almondmilk 64 FL OZ' '64 fl oz' $true)
++  )
++  $pkBoard = (Select-StoreWinner $pkRows).name
++  $pkCell = (Build-PriceTableRow -Id 'almond-milk' -Commodity 'Almond Milk' -Unit 'floz' -Today '2026-09-17' -Rows $pkRows -Pick ${function:Select-StoreWinner}).stores['Aldi']
++  if ($pkCell.everyday_product -eq $pkBoard -and $pkBoard -eq 'Zeta Almondmilk 64 FL OZ' -and $pkCell.everyday -eq 0.0500) { Write-Output 'ok    a tie INSIDE one store names the board''s row (the linkable one), at the same price' } else { Write-Output ("FAIL  the table named '" + $pkCell.everyday_product + "' where the board names '" + $pkBoard + "' - -Pick is not reaching the halves"); $script:fail++ }
++  # CLEAN TWIN: the pick is consulted only between EQUAL prices. A genuinely cheaper ad is still shown as the
++  # ad even though the board's rule would prefer the linkable everyday row on a tie, so no cell can go dearer.
++  $chRows = @(
++    (_PT 0.0500 'everyday' 'Alpha Almondmilk 64 FL OZ' '64 fl oz' $true),
++    (_PT 0.0400 'sale'     'Zeta Almondmilk 64 FL OZ' '64 fl oz' $false)
++  )
++  $chCell = (Build-PriceTableRow -Id 'almond-milk' -Commodity 'Almond Milk' -Unit 'floz' -Today '2026-09-17' -Rows $chRows -Pick ${function:Select-StoreWinner}).stores['Aldi']
++  if ($chCell.shown -eq 0.0400 -and $chCell.shown_kind -eq 'ad') { Write-Output 'ok    a genuinely cheaper ad is still what the page shows - the pick never outranks price' } else { Write-Output ("FAIL  the tie-break outranked price: shown=$($chCell.shown) kind=$($chCell.shown_kind)"); $script:fail++ }
++
++  # --- 11k: THE RULES ARE WIRED INTO THE ENGINE, not only defined (2026-09-19, backlog I175) ---------------
++  # Both cases above drive the functions directly, so they stay green if the ENGINE stops calling them - the
++  # ranker falling back to `Sort-Object unit_price`, or the price-table build dropping -Pick, would leave
++  # every fixture here passing while the board and the table went back to being decided by the sort. The
++  # call sites are read from this file's own AST, with the self-test block EXCLUDED by extent so this
++  # block's own calls cannot answer the question (a self-test that finds its own needle cannot fail).
++  $wFile = [System.Management.Automation.Language.Parser]::ParseFile($PSCommandPath, [ref]$null, [ref]$null)
++  $wSelf = $wFile.Find({ param($n) $n -is [System.Management.Automation.Language.IfStatementAst] -and $n.Clauses[0].Item1.Extent.Text -match 'SelfTest' }, $true)
++  if (-not $wSelf) { Write-Output 'FAIL  wiring: the self-test block could not be located in this file''s AST, so the engine call sites could not be told from the fixtures'; $script:fail++ }
++  else {
++    $wLo = $wSelf.Extent.StartOffset; $wHi = $wSelf.Extent.EndOffset
++    $wEngine = @($wFile.FindAll({ param($n) $n -is [System.Management.Automation.Language.CommandAst] }, $true) |
++      Where-Object { $_.Extent.StartOffset -lt $wLo -or $_.Extent.StartOffset -ge $wHi })
++    $wRank = @($wEngine | Where-Object { $_.GetCommandName() -eq 'Select-CrossStoreRank' })
++    $wPt = @($wEngine | Where-Object { $_.GetCommandName() -eq 'Build-PriceTableRow' })
++    $wPtPicked = @($wPt | Where-Object { @($_.CommandElements | Where-Object { $_ -is [System.Management.Automation.Language.CommandParameterAst] -and $_.ParameterName -eq 'Pick' }).Count -gt 0 })
++    if ($wRank.Count -ge 1) { Write-Output ('ok    wiring: the engine ranks stores through Select-CrossStoreRank (' + $wRank.Count + ' call site(s) outside the self-test)') }
++    else { Write-Output 'FAIL  wiring: no engine call to Select-CrossStoreRank - the crown is back to whatever the sort yields'; $script:fail++ }
++    if ($wPt.Count -ge 1 -and $wPtPicked.Count -eq $wPt.Count) { Write-Output ('ok    wiring: every engine Build-PriceTableRow call passes -Pick (' + $wPt.Count + ' of ' + $wPt.Count + ')') }
++    else { Write-Output ('FAIL  wiring: ' + ($wPt.Count - $wPtPicked.Count) + ' of ' + $wPt.Count + ' engine Build-PriceTableRow call(s) pass no -Pick - the table decides a tie without the board'); $script:fail++ }
++  }
++
+   # the 'snax' GLOBAL_EXCLUDE token (blocks snack TRAYS from winning real-commodity cells). $GLOBAL_EXCLUDE
+   # is defined AFTER this block exits, so read the token from this script's own source (the extraction regex
+   # audit-match-soundness.ps1 already uses) - a hard-coded 'snax' literal here would pass whether or not the
+@@ -2974,7 +3100,10 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
+     # An unreadable size sorts last - we cannot claim a package is smaller when we cannot read it.
+     Select-StoreWinner $rows
+   }
+-  $ranked = @($byStore | Sort-Object unit_price)
++  # THE CROSS-STORE ORDER IS A RULE, NOT A SORT'S INTERNALS (2026-09-19, backlog I175). See
++  # Select-CrossStoreRank: price first, then a store with no membership, then the store name. cheapest_store
++  # is its head, nomem_store its first non-member row, and `stores` below is emitted in this order.
++  $ranked = @(Select-CrossStoreRank $byStore)
+   if ($ranked.Count -lt $MinStores) { continue }
+   $f = $priced[0]
+   $nm = @($ranked | Where-Object { -not $_.membership } | Select-Object -First 1)
+@@ -3105,7 +3234,11 @@ Write-Output ("Saved: " + $file)
+ $ptRows = New-Object System.Collections.Generic.List[object]
+ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Object id)) {
+   $f0 = $g.Group[0]
+-  [void]$ptRows.Add((Build-PriceTableRow -Id $g.Name -Commodity ([string]$f0.label) -Unit ([string]$f0.unit) -Rows $g.Group -Today $today))
++  # -Pick IS THE BOARD'S OWN PER-STORE RULE (2026-09-19, backlog I175). Without it the table broke a price
++  # tie with an unstable Sort-Object and could name a different product for a store than the cell above it
++  # published - 337 of 3,189 cells on the live 2026-09-17 pair, every one at an identical price. Handing it
++  # the function itself keeps the header's promise literally: not a copy of the board's rule, the rule.
++  [void]$ptRows.Add((Build-PriceTableRow -Id $g.Name -Commodity ([string]$f0.label) -Unit ([string]$f0.unit) -Rows $g.Group -Today $today -Pick ${function:Select-StoreWinner}))
+ }
+ $ptTable = @($ptRows | Sort-Object id)
+ $ptStoreOrder = @('Hy-Vee', 'Aldi', 'Family Fare', 'Fareway', "Baker's", "Sam's Club", 'Walmart')
+diff --git a/grocery/price-table-lib.ps1 b/grocery/price-table-lib.ps1
+index c247e50f9..c9b8781a1 100644
+--- a/grocery/price-table-lib.ps1
++++ b/grocery/price-table-lib.ps1
+@@ -36,6 +36,13 @@
+   A second implementation of "which row wins" is how a table and the board it describes drift apart
+   while both look right - and this estate has paid for that twice this week alone. Test-PriceTableParity
+   exists to prove they still agree, per cell, every build.
++  THAT WAS TRUE OF THE PRICE AND FALSE OF THE PRODUCT until 2026-09-19 (backlog I175). Both halves picked
++  their row with an unstable `Sort-Object unit_price`, so a tie named whichever product the sort yielded,
++  and Test-PriceTableParity compares the NUMBER only - it was silent through all of it. The row is now
++  chosen by -Pick, which compare-deals fills with the board's own Select-StoreWinner. Measured by building
++  the 2026-09-17 board twice from one seeded input set, against a control pair of two unchanged builds that
++  differed in 0 of 3,187 cells: no price moved anywhere, and the table names the board's own product in
++  3,187 of 3,187 published cells, against 2,846 of 3,187 before.
+ 
+   A STORE MAY LEGITIMATELY HAVE ONLY ONE HALF. A store that never advertises (Walmart, Sam's - ad_cycle
+   'none' in stores.json) has an everyday price and a null ad, permanently and correctly. A store we have
+@@ -70,6 +77,33 @@ function Test-AdWindowLive {
+   return ([string]$AdTo -ge [string]$Today)
+ }
+ 
++function Select-PriceTableWinner {
++  <#
++    .SYNOPSIS The ONE row that represents a store's everyday half, or its live-ad half.
++    .DESCRIPTION This was `Sort-Object unit_price | Select-Object -First 1`, and Windows PowerShell 5.1's
++                 Sort-Object is NOT stable (no -Stable switch before PowerShell 6), so whenever two rows
++                 tied on unit price the PRODUCT this table named was chosen by the sort's internals and
++                 could differ from the one the board named for the same store (backlog I175). Measured on
++                 the live 2026-09-17 pair: 337 of 3,189 published cells named a different product in the
++                 table than on the board, at an identical price in every one.
++                 -Pick is the board's OWN rule - compare-deals hands it Select-StoreWinner - so a tie
++                 resolves exactly as the board resolved it. That is the only answer that cannot drift from
++                 the board, because it is not a second implementation of "which row wins" at all.
++                 Without -Pick (the fixtures, which load this library on its own) the fallback is still a
++                 TOTAL order - price, then name, then size - so the same rows name the same product whatever
++                 order they arrive in. Price is the first key in both, so no key below it can move a price.
++  #>
++  param([object[]]$Rows, [scriptblock]$Pick = $null)
++  $rs = @($Rows | Where-Object { $null -ne $_ })
++  if (-not $rs.Count) { return }
++  if ($Pick) { return (& $Pick $rs) }
++  $rs |
++    Sort-Object @{Expression = { [double]$_.unit_price }},
++                @{Expression = { [string]$_.name }},
++                @{Expression = { [string]$_.size_text }} |
++    Select-Object -First 1
++}
++
+ function Build-PriceTableRow {
+   <#
+     .SYNOPSIS One wide row: an item, with every store's everyday and ad halves as columns.
+@@ -81,7 +115,9 @@ function Build-PriceTableRow {
+     [string]$Commodity = '',
+     [string]$Unit = '',
+     [object[]]$Rows = @(),
+-    [string]$Today = ''
++    [string]$Today = '',
++    # THE BOARD'S OWN PER-STORE RULE. compare-deals passes Select-StoreWinner; see Select-PriceTableWinner.
++    [scriptblock]$Pick = $null
+   )
+   $stores = [ordered]@{}
+   foreach ($g in (@($Rows) | Where-Object { $null -ne $_.unit_price } | Group-Object store | Sort-Object Name)) {
+@@ -100,8 +136,8 @@ function Build-PriceTableRow {
+     # which the closed price exists in the table at all.
+     $adLive = @($adRows | Where-Object { Test-AdWindowLive -AdTo ([string]$_.ad_to) -AdFrom ([string]$_.ad_from) -Today $Today })
+ 
+-    $ev = @($evRows | Sort-Object unit_price | Select-Object -First 1)
+-    $ad = @($adLive | Sort-Object unit_price | Select-Object -First 1)
++    $ev = @(Select-PriceTableWinner $evRows $Pick)
++    $ad = @(Select-PriceTableWinner $adLive $Pick)
+     if (-not $ev.Count -and -not $ad.Count) { continue }
+ 
+     $evR = if ($ev.Count) { $ev[0] } else { $null }
+@@ -109,10 +145,27 @@ function Build-PriceTableRow {
+ 
+     # WHAT A PAGE SHOWS: the cheaper of the two, exactly as Brad specified. When only one half exists
+     # that half is shown; when the ad has nulled out the everyday price is shown again by arithmetic.
++    #
++    # AND WHEN THE TWO HALVES COST EXACTLY THE SAME, THE BOARD DECIDES WHICH ROW IS SHOWN (2026-09-19,
++    # backlog I175). This used to read `if ($adR.unit_price -le $evR.unit_price) { ad }`, so an exact tie
++    # always showed the AD row - while the board, ranking the same two rows through Select-StoreWinner,
++    # breaks that tie on linkability, then package size, then name, and usually lands on the everyday shelf
++    # row (the flyer line rarely carries a link). Measured on the live 2026-09-17 pair: 20 published cells
++    # have an exactly equal everyday and ad price, and on 12 of them the board named the everyday product
++    # and this table named the ad one at the same number. Asking the SAME rule closes that by construction.
++    # THE PRICE COMPARISON STILL DECIDES FIRST, and the pick is consulted ONLY on an exact tie: it is then
++    # arithmetically impossible for a tie-break to show a dearer price than the old code did.
++    # Classified by the winner's own price_type rather than by object identity, because a -Pick is free to
++    # return a projection - and the two candidates are one 'everyday' row and one 'sale' row by construction.
+     $shown = $null; $shownKind = ''
+     if ($null -ne $evR -and $null -ne $adR) {
+-      if ([double]$adR.unit_price -le [double]$evR.unit_price) { $shown = [double]$adR.unit_price; $shownKind = 'ad' }
+-      else { $shown = [double]$evR.unit_price; $shownKind = 'everyday' }
++      if ([double]$adR.unit_price -lt [double]$evR.unit_price) { $shown = [double]$adR.unit_price; $shownKind = 'ad' }
++      elseif ([double]$evR.unit_price -lt [double]$adR.unit_price) { $shown = [double]$evR.unit_price; $shownKind = 'everyday' }
++      else {
++        $tieWin = Select-PriceTableWinner @($evR, $adR) $Pick
++        if ($null -ne $tieWin -and [string]$tieWin.price_type -eq 'sale') { $shown = [double]$adR.unit_price; $shownKind = 'ad' }
++        else { $shown = [double]$evR.unit_price; $shownKind = 'everyday' }
++      }
+     } elseif ($null -ne $adR) { $shown = [double]$adR.unit_price; $shownKind = 'ad' }
+     else { $shown = [double]$evR.unit_price; $shownKind = 'everyday' }
+ 
+diff --git a/grocery/regression-baseline.json b/grocery/regression-baseline.json
+index 75c0321e2..b43ccff3c 100644
+--- a/grocery/regression-baseline.json
++++ b/grocery/regression-baseline.json
+@@ -2,6 +2,9 @@
+     "frozen_week":  "2026-07-05",
+     "built_at":  "2026-09-05T14:33:01",
+     "source":  "regression-inputs (hermetic; engine-rebuilt)",
++    "hand_edits":  [
++                       "2026-09-19, backlog I175: chicken-thighs nomem_store Family Fare -> Baker\u0027s. ONE field, edited by hand - no rebuild and no wholesale accept. Baker\u0027s and Family Fare both price that frozen cell at exactly 1.99/lb, so the old value was whichever way 5.1\u0027s unstable Sort-Object happened to fall; Select-CrossStoreRank breaks that tie on the store name. nomem_price is unchanged at 1.99, no price moved, and no other baseline field differs."
++                   ],
+     "commodities":  [
+                         {
+                             "id":  "ground-beef-8020",
+@@ -153,7 +156,7 @@
+                             "unit":  "lb",
+                             "cheapest_store":  "Sam\u0027s Club",
+                             "cheapest_price":  1.28,
+-                            "nomem_store":  "Family Fare",
++                            "nomem_store":  "Baker\u0027s",
+                             "nomem_price":  1.99,
+                             "stores":  {
+                                            "Sam\u0027s Club":  1.28,
+diff --git a/grocery/test-price-table.ps1 b/grocery/test-price-table.ps1
+index b66f9c904..5988b5cdf 100644
+--- a/grocery/test-price-table.ps1
++++ b/grocery/test-price-table.ps1
+@@ -156,5 +156,60 @@ $dataLine = @($csv -split "`n")[1]
+ if ($dataLine -eq 'rice,Rice,lb,0.42,,,,0.42') { Ok 'the CSV renders a null ad as an empty field, not a 0' }
+ else { Bad "the CSV row is not what it should be: '$dataLine'" }
+ 
++# 13. MUST FIRE - A PRICE TIE INSIDE ONE STORE NAMES ONE PRODUCT (2026-09-19, backlog I175). Frozen from
++#     candidates-2026-09-17: Aldi frosting carries three Baker's Corner 16 oz tubs at exactly $0.1094/oz.
++#     `Sort-Object unit_price | Select-Object -First 1` is not stable under PowerShell 5.1, so the product
++#     the table named followed the order the rows happened to arrive in, and the live table named a
++#     different product than the board for 337 of 3,189 cells. Every order of the same rows, one answer.
++$frost = @(
++  (PtRow 'Aldi' 0.1094 'everyday' 'Baker S Corner Vanilla Frosting 16 OZ'),
++  (PtRow 'Aldi' 0.1094 'everyday' 'Baker S Corner Chocolate Frosting 16 OZ'),
++  (PtRow 'Aldi' 0.1094 'everyday' 'Baker S Corner Cream Cheese Frosting 16 OZ'),
++  (PtRow 'Aldi' 0.1500 'everyday' 'Some Dearer Frosting 16 OZ')
++)
++$frostOrders = @(@(0,1,2,3), @(3,2,1,0), @(1,2,0,3), @(2,0,3,1), @(1,0,3,2), @(0,2,1,3))
++$named = @($frostOrders | ForEach-Object { $ord = $_; $inRows = @($ord | ForEach-Object { $frost[$_] })
++  [string](Build-PriceTableRow -Id 'frosting' -Commodity 'Frosting' -Unit 'oz' -Today $TODAY -Rows $inRows).stores['Aldi'].everyday_product } | Select-Object -Unique)
++if ($named.Count -eq 1 -and $named[0] -eq 'Baker S Corner Chocolate Frosting 16 OZ') { Ok 'a price tie names ONE product whatever the input order' }
++else { Bad ('a price tie named a different product per input order: ' + ($named -join ' | ')) }
++
++# 14. MUST FIRE - -Pick DECIDES, because that is how compare-deals hands this library the board's own
++#     Select-StoreWinner and so how the table stops being a second implementation of "which row wins".
++#     The pick here deliberately chooses the LAST-named tied row, which the fallback order never would, so
++#     a -Pick that is ignored reads red instead of passing by agreeing with the fallback.
++$pickLast = { param($rows) $min = ($rows | Measure-Object unit_price -Minimum).Minimum
++  @($rows | Where-Object { $_.unit_price -eq $min } | Sort-Object @{Expression = { [string]$_.name }} -Descending | Select-Object -First 1) }
++$pk = (Build-PriceTableRow -Id 'frosting' -Commodity 'Frosting' -Unit 'oz' -Today $TODAY -Rows $frost -Pick $pickLast).stores['Aldi']
++if ($pk.everyday_product -eq 'Baker S Corner Vanilla Frosting 16 OZ' -and $pk.everyday -eq 0.1094) { Ok 'with -Pick the table names the product the board''s own rule chose, at the same price' }
++else { Bad ("-Pick was not honoured: got '" + $pk.everyday_product + "' at " + $pk.everyday) }
++
++# 15. MUST FIRE - AN EXACT everyday/ad TIE IS DECIDED BY THE SAME RULE, NOT BY "THE AD ALWAYS WINS".
++#     This read `if ($adR.unit_price -le $evR.unit_price) { ad }`, so a tie always showed the ad row - while
++#     the board ranks both rows through one rule and usually lands on the everyday shelf row, because the
++#     flyer line carries no link. Measured on the live 2026-09-17 pair: 20 cells tie everyday against ad,
++#     and on 12 of them the board named the everyday product while this table named the ad one.
++$evAdTie = @(
++  (PtRow 'Aldi' 0.10 'everyday' 'Zeta Everyday Frosting 16 OZ'),
++  (PtRow 'Aldi' 0.10 'sale'     'Alpha Ad Frosting 16 OZ' '2026-08-19' '2026-08-25' 'ad')
++)
++$te = (Build-PriceTableRow -Id 'frosting' -Commodity 'Frosting' -Unit 'oz' -Today $TODAY -Rows $evAdTie -Pick $pickLast).stores['Aldi']
++if ($te.shown -eq 0.10 -and $te.shown_kind -eq 'everyday' -and $te.ad -eq 0.10 -and $te.everyday -eq 0.10) { Ok 'an exact everyday/ad tie shows the row the rule picked, and both halves are still stored' }
++else { Bad ("the everyday/ad tie ignored the rule: shown=$($te.shown) kind=$($te.shown_kind) everyday=$($te.everyday) ad=$($te.ad)") }
++# CLEAN TWIN: the rule is consulted ONLY between equal prices, so a genuinely cheaper ad is still shown as
++# the ad even under a pick that prefers the everyday row. No tie-break here can show a dearer number.
++$evAdCheap = @(
++  (PtRow 'Aldi' 0.10 'everyday' 'Zeta Everyday Frosting 16 OZ'),
++  (PtRow 'Aldi' 0.09 'sale'     'Alpha Ad Frosting 16 OZ' '2026-08-19' '2026-08-25' 'ad')
++)
++$tc = (Build-PriceTableRow -Id 'frosting' -Commodity 'Frosting' -Unit 'oz' -Today $TODAY -Rows $evAdCheap -Pick $pickLast).stores['Aldi']
++if ($tc.shown -eq 0.09 -and $tc.shown_kind -eq 'ad') { Ok 'a cheaper ad is still shown as the ad - price outranks the tie-break' }
++else { Bad ("the tie-break outranked price: shown=$($tc.shown) kind=$($tc.shown_kind)") }
++# CLEAN TWIN: with NO pick - the shape every caller of this library but compare-deals has - the same tie
++# still resolves the same way every run, by the fallback's total order rather than by the sort's internals.
++$tf1 = (Build-PriceTableRow -Id 'frosting' -Commodity 'Frosting' -Unit 'oz' -Today $TODAY -Rows $evAdTie).stores['Aldi']
++$tf2 = (Build-PriceTableRow -Id 'frosting' -Commodity 'Frosting' -Unit 'oz' -Today $TODAY -Rows @($evAdTie[1], $evAdTie[0])).stores['Aldi']
++if ($tf1.shown_kind -eq $tf2.shown_kind -and $tf1.shown_kind -eq 'ad' -and $tf1.shown -eq 0.10) { Ok 'without -Pick the same tie still resolves to ONE answer in either input order' }
++else { Bad ("the no-pick tie is order-dependent: '$($tf1.shown_kind)' vs '$($tf2.shown_kind)'") }
++
+ Write-Output ("PRICE-TABLE " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
+ Exit-Guard -Name 'price-table' -Summary "failed=$fail" -Code $(if ($fail) { 1 } else { 0 })

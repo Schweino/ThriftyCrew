@@ -1,0 +1,51 @@
+# Store A/B pilot: collect one finished run. Writes <code>-raw.patch, <code>-judge.patch (store
+# citations scrubbed) and <code>-tests.json (each changed file's own self-test, exit code first).
+param([Parameter(Mandatory)][string]$Code)
+$ErrorActionPreference = 'Continue'
+$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+$runDir = Join-Path $here 'runs'
+$row = (Get-Content -Raw -Encoding UTF8 (Join-Path $here 'map.json') | ConvertFrom-Json) | Where-Object { $_.code -eq $Code }
+if (-not $row) { throw "no run $Code" }
+$wt = $row.worktree
+$py = 'C:\Codex\Python312\python.exe'
+
+# Untracked, non-ignored files the arm created count as part of its change.
+& git -C $wt add --intent-to-add --all . 2>$null
+$raw = & git -C $wt -c core.quotepath=false diff --no-color $row.base
+$rawText = ($raw -join "`n") + "`n"
+[IO.File]::WriteAllText((Join-Path $runDir "$Code-raw.patch"), $rawText, (New-Object Text.UTF8Encoding($false)))
+
+# Scrub anything that names the store, so the judge cannot tell the arms apart by citation.
+$pat = '(?i)(\.claude[\\/]skills|skills[\\/][a-z0-9-]+|[a-z]+-craft\b|knowledge[- ]search|knowledge store|^\+?\s*#?\s*Store:|\bmemory:[a-z0-9-]+)'
+$scrubbed = 0
+$out = foreach ($l in $raw) {
+    if ($l -match '^(\+\+\+|---|@@|diff |index )') { $l; continue }
+    if ($l -match $pat) { $scrubbed++; ($l.Substring(0, [Math]::Min(1, $l.Length))) + ' [citation removed]' } else { $l }
+}
+[IO.File]::WriteAllText((Join-Path $runDir "$Code-judge.patch"), (($out -join "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
+
+# Each changed code file's own self-test, run from the worktree.
+$changed = & git -C $wt -c core.quotepath=false diff --name-only $row.base
+$tests = New-Object System.Collections.ArrayList
+foreach ($f in $changed) {
+    $full = Join-Path $wt $f
+    if (-not (Test-Path -LiteralPath $full)) { continue }
+    $txt = [IO.File]::ReadAllText($full)
+    $cmd = $null
+    if ($f -like '*.ps1' -and $txt -match '\[switch\]\s*\$SelfTest') { $cmd = @('powershell.exe', @('-NoProfile', '-File', $full, '-SelfTest')) }
+    elseif ($f -like '*.ps1' -and $txt -match '\[switch\]\s*\$(\w+SelfTest)\b') { $cmd = @('powershell.exe', @('-NoProfile', '-File', $full, "-$($Matches[1])")) }
+    elseif ($f -like '*_selftest.py') { $cmd = @($py, @($full, '--selftest')) }
+    elseif ($f -like '*.py' -and $txt -match '--selftest') { $cmd = @($py, @($full, '--selftest')) }
+    if (-not $cmd) { continue }
+    $log = Join-Path $runDir ("$Code-test-" + ($f -replace '[\\/]', '_') + '.log')
+    $p = Start-Process -FilePath $cmd[0] -ArgumentList $cmd[1] -WorkingDirectory $wt -NoNewWindow -PassThru `
+        -RedirectStandardOutput $log -RedirectStandardError "$log.err"
+    $null = $p.Handle
+    if (-not $p.WaitForExit(1200000)) { try { $p.Kill() } catch {}; $rc = 'TIMEOUT' } else { $rc = $p.ExitCode }
+    $lines = @(Get-Content -LiteralPath $log -Encoding UTF8 -ErrorAction SilentlyContinue)
+    $last = if ($lines.Count) { [string]$lines[-1] } else { '' }
+    [void]$tests.Add([ordered]@{ file = $f; exit = $rc; last_line = $last })
+}
+$res = [ordered]@{ code = $Code; changed = @($changed); scrubbed_lines = $scrubbed; tests = @($tests) }
+[IO.File]::WriteAllText((Join-Path $runDir "$Code-tests.json"), ($res | ConvertTo-Json -Depth 5), (New-Object Text.UTF8Encoding($false)))
+"COLLECT-COMPLETE code=$Code changed=$(@($changed).Count) tests=$($tests.Count) scrubbed=$scrubbed"

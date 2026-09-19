@@ -1,0 +1,11 @@
+{
+  "disableAllHooks": true,
+  "permissions": {
+    "deny": [
+      "Skill",
+      "Agent",
+      "WebFetch",
+      "WebSearch"
+    ]
+  }
+}
