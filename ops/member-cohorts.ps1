@@ -56,6 +56,9 @@ $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
+# ghost-lib is loaded here rather than in the live section so the self-test can reach Invoke-TcGhostPaged
+# (the grocery\audit-ghost-drift.ps1 shape). Loading it makes no call.
+. (Join-Path $repo 'lib\ghost-lib.ps1')
 
 # The three properties this script is permitted to touch on a member. Written as data so the
 # self-test can assert the list has not grown - a fourth entry here is a privacy change and should
@@ -166,6 +169,41 @@ function Get-TcAlertCount {
     if (([string]$l.name -match '^alert-') -or ([string]$l.slug -match '^alert-')) { $n++ }
   }
   return $n
+}
+
+# ---- THE MEMBERS READ (2026-09-18, backlog I238) --------------------------------------------------------
+# This paged at limit=500 and stopped at the first page SHORTER than 500, recording meta.pagination.pages and
+# never reading it. Ghost does not honour 500: one read-only GET on 2026-09-18 (limit=500, page=1, fields=id)
+# answered meta.pagination limit=100, pages=1, total=18. So the first page always came back "short" and the
+# loop always stopped after it: correct at 18 members, and silently 100 at 101 or more, with nothing on the
+# output to say a single page had been read.
+# It now pages through Invoke-TcGhostPaged (lib\ghost-lib.ps1), which follows meta.pagination.next, throws on a
+# next that does not advance and past -MaxPages, and never returns a partial list. And the count is checked
+# against Ghost's own meta.pagination.total, so a short read throws here instead of becoming a smaller cohort.
+# $Fetch takes a page number and returns the parsed response, so the fixtures drive this with no network.
+# Returns ONLY (created_at, status, alerts) triples; no other member property leaves this function.
+function Read-TcMemberPairs {
+  param([Parameter(Mandatory)][scriptblock]$Fetch, [int]$MaxPages = 200)
+  $pages = Invoke-TcGhostPaged -Fetch $Fetch -MaxPages $MaxPages
+  $pairs = New-Object System.Collections.ArrayList
+  $total = $null
+  foreach ($r in @($pages)) {
+    if ($null -eq $total -and $r.meta -and $r.meta.pagination -and ($null -ne $r.meta.pagination.total)) {
+      $total = [int]$r.meta.pagination.total
+    }
+    foreach ($m in @($r.members)) {
+      if ($null -eq $m) { continue }
+      # THE ONLY THREE THINGS EVER READ off a member: signup date, current status, and an INTEGER count
+      # of alert-* labels. Nothing else on $m is touched, no label string is kept, and $m is not
+      # retained past this line.
+      [void]$pairs.Add([pscustomobject]@{ created_at = [string]$m.created_at; status = [string]$m.status
+                                          alerts = (Get-TcAlertCount -Member $m) })
+    }
+  }
+  if ($null -ne $total -and $pairs.Count -ne $total) {
+    throw ("short read: Ghost's meta.pagination.total says {0} member(s) and {1} page(s) returned {2}. Refusing to count a partial membership as the whole." -f $total, @($pages).Count, $pairs.Count)
+  }
+  return [pscustomobject]@{ Pairs = $pairs.ToArray(); Pages = @($pages).Count; Total = $total }
 }
 
 function Get-TcAlertBucket {
@@ -424,8 +462,53 @@ if ($SelfTest) {
   T 'CLEAN TWIN  the history rows still sum to the same member total the table reported' `
     ($rowSum -eq $t.Total) ("rows sum=" + $rowSum + " table total=" + $t.Total)
 
+  # ---------------------------------------------------------------- I238, the members read
+  # A STUBBED Ghost, no network: it serves a population of N members in pages of AT MOST 100 whatever
+  # limit was asked for, which is what the live site did on 2026-09-18 (asked 500, applied 100). The
+  # founding bug is a pager that stopped at the first page shorter than 500 and so read 100 of 250.
+  $env:TC_WRITE_JOURNAL = $null
+  function New-TcStubMembersFetch {
+    param([int]$Population, [int]$Cap = 100, [int]$DropFromPage = 0, [hashtable]$Calls)
+    $pages = [int][math]::Ceiling($Population / [double]$Cap)
+    if ($pages -lt 1) { $pages = 1 }
+    return {
+      param($page)
+      $Calls.n++
+      $from = ($page - 1) * $Cap
+      $to = [math]::Min($Population, $from + $Cap)
+      $ms = @()
+      if (-not ($DropFromPage -gt 0 -and $page -ge $DropFromPage)) {
+        for ($i = $from; $i -lt $to; $i++) {
+          $ms += [pscustomobject]@{ created_at = '2026-01-05T00:00:00Z'; status = 'free'; labels = @() }
+        }
+      }
+      $next = if ($page -lt $pages) { $page + 1 } else { $null }
+      [pscustomobject]@{ members = $ms
+                         meta = [pscustomobject]@{ pagination = [pscustomobject]@{
+                           page = $page; limit = $Cap; pages = $pages; total = $Population; next = $next } } }
+    }.GetNewClosure()
+  }
+  # Caught, so a pager that stops early fails THIS case by name rather than killing the suite with the
+  # short-read throw below (the first break of this fix did exactly that).
+  $c250 = @{ n = 0 }; $r250 = $null; $err250 = ''
+  try { $r250 = Read-TcMemberPairs -Fetch (New-TcStubMembersFetch -Population 250 -Calls $c250) }
+  catch { $err250 = $_.Exception.Message }
+  T 'MUST FIRE  a Ghost that caps the page at 100 is paged to the end - 250 members read over 3 pages, never the first 100' `
+    ((-not $err250) -and (@($r250.Pairs).Count -eq 250) -and ($r250.Pages -eq 3) -and ($c250.n -eq 3)) `
+    ("read=" + @($r250.Pairs).Count + " pages=" + $r250.Pages + " fetches=" + $c250.n + " threw=" + $err250)
+  $cShort = @{ n = 0 }; $shortMsg = ''
+  try { $null = Read-TcMemberPairs -Fetch (New-TcStubMembersFetch -Population 250 -DropFromPage 3 -Calls $cShort) }
+  catch { $shortMsg = $_.Exception.Message }
+  T 'MUST FIRE  a read that returns fewer members than meta.pagination.total throws, so a partial membership is never counted as the whole' `
+    ($shortMsg -like '*short read*') ("no throw; message=" + $shortMsg)
+  $c18 = @{ n = 0 }
+  $r18 = Read-TcMemberPairs -Fetch (New-TcStubMembersFetch -Population 18 -Calls $c18)
+  T 'CLEAN TWIN  today''s membership, under one page, still reads every member in exactly one fetch' `
+    ((@($r18.Pairs).Count -eq 18) -and ($r18.Pages -eq 1) -and ($c18.n -eq 1) -and ($r18.Total -eq 18)) `
+    ("read=" + @($r18.Pairs).Count + " fetches=" + $c18.n)
+
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 29 case(s) resolved - 14 must-fire, 12 must-not-fire, 3 clean twins. Led by the founding privacy constraint (an input row carrying an email produces an aggregate that cannot contain one), the undated-signup count, the monthly idempotence guard, the series-has-stopped absence check, and the I99 boundary that no LABEL STRING reaches a history row. The must-not-fires include the empty membership, the empty history, and a member with no labels counting 0 rather than 1'
+  Write-Output 'SELF-TEST PASS: 32 case(s) resolved - 16 must-fire, 12 must-not-fire, 4 clean twins. Led by the founding privacy constraint (an input row carrying an email produces an aggregate that cannot contain one), the undated-signup count, the monthly idempotence guard, the series-has-stopped absence check, and the I99 boundary that no LABEL STRING reaches a history row. The must-not-fires include the empty membership, the empty history, and a member with no labels counting 0 rather than 1'
   exit 0
 }
 
@@ -478,41 +561,31 @@ if (-not $adminKey) {
   Write-Output 'MEMBER COHORTS BLIND: no GHOST_ADMIN_KEY and no meal-prep\.ghostkey, so nothing was read. That is could-not-evaluate, never "no members".'
   Exit-Guard -Name 'member-cohorts' -Summary 'blind=no-key' -Code 3
 }
-. (Join-Path $repo 'lib\ghost-lib.ps1')
 $apiUrl = 'https://map-to-success.ghost.io'
 
 # Only the three permitted properties are requested. If Ghost ignores `fields` the extra properties
 # arrive in memory and are simply never referenced - rules 1 and 2 hold either way.
-$pairs = New-Object System.Collections.ArrayList
-$page = 1; $limit = 500; $pagesRead = 0; $lastPages = $null
+# limit=100 because that is the page size Ghost actually applies (measured 2026-09-18, see Read-TcMemberPairs);
+# asking for more changes nothing, and the pager follows meta.pagination.next whatever size comes back.
+$memberLimit = 100
+$fetchMembers = {
+  param($page)
+  $jwt = Get-GhostJWT -Key $adminKey
+  $hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' }
+  $uri = ($apiUrl + '/ghost/api/admin/members/?limit=' + $memberLimit + '&page=' + $page +
+          '&fields=' + ($ALLOWED_MEMBER_FIELDS -join ',') +
+          '&include=' + ($ALLOWED_MEMBER_INCLUDES -join ','))
+  Invoke-GhostApi -Method 'GET' -Uri $uri -Headers $hdr -TimeoutSec 60
+}
 try {
-  while ($true) {
-    $jwt = Get-GhostJWT -Key $adminKey
-    $hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' }
-    $uri = ($apiUrl + '/ghost/api/admin/members/?limit=' + $limit + '&page=' + $page +
-            '&fields=' + ($ALLOWED_MEMBER_FIELDS -join ',') +
-            '&include=' + ($ALLOWED_MEMBER_INCLUDES -join ','))
-    $res = Invoke-RestMethod -Uri $uri -Headers $hdr -TimeoutSec 60
-    $batch = @($res.members)
-    foreach ($m in $batch) {
-      # THE ONLY THREE THINGS EVER READ off a member: signup date, current status, and an INTEGER count
-      # of alert-* labels. Nothing else on $m is touched, no label string is kept, and $m is not
-      # retained past this line.
-      [void]$pairs.Add([pscustomobject]@{ created_at = [string]$m.created_at; status = [string]$m.status
-                                          alerts = (Get-TcAlertCount -Member $m) })
-    }
-    $pagesRead++
-    if ($res.meta -and $res.meta.pagination) { $lastPages = $res.meta.pagination.pages }
-    if ($batch.Count -lt $limit) { break }
-    $page++
-    if ($page -gt 200) { break }   # a bound, so a pagination bug cannot loop forever
-  }
+  $read = Read-TcMemberPairs -Fetch $fetchMembers -MaxPages 200
 } catch {
   Write-Output ("MEMBER COHORTS BLIND: the members read failed ({0}). Nothing was written." -f $_.Exception.Message)
   Exit-Guard -Name 'member-cohorts' -Summary 'blind=read-failed' -Code 3
 }
+Write-Output ("members read: {0} over {1} page(s), Ghost's total {2}" -f @($read.Pairs).Count, $read.Pages, $read.Total)
 
-$t = Get-TcCohortTable -Pairs $pairs.ToArray()
+$t = Get-TcCohortTable -Pairs $read.Pairs
 if ($t.Total -eq 0) {
   Write-Output 'MEMBER COHORTS BLIND: the API returned zero members. That is not "nobody signed up" - it is a read that produced nothing, and no file was written.'
   Exit-Guard -Name 'member-cohorts' -Summary 'blind=zero-members' -Code 3
@@ -521,7 +594,7 @@ if ($t.Total -eq 0) {
 # ---- report. Every rate prints with its denominator (.claude\rules\measurement.md). ----
 $statusNames = @($t.Statuses.Keys | Sort-Object)
 Write-Output ''
-Write-Output ("MEMBER COHORTS - signup month against CURRENT status. {0} member(s) over {1} page(s)." -f $t.Total, $pagesRead)
+Write-Output ("MEMBER COHORTS - signup month against CURRENT status. {0} member(s) over {1} page(s)." -f $t.Total, $read.Pages)
 Write-Output ("statuses present: {0}" -f (($statusNames | ForEach-Object { "$_=$($t.Statuses[$_])" }) -join ', '))
 if ($t.Undated) { Write-Output ("  {0} member(s) had an unreadable signup date and are counted here but in NO month bucket." -f $t.Undated) }
 Write-Output ''
@@ -615,7 +688,7 @@ if ($AppendHistory) {
   if ($aAlready -and -not $Force) {
     Write-Output ("  alerts:  {0} already has a snapshot, nothing appended." -f $snapshot)
   } else {
-    $at = Get-TcAlertTable -Pairs $pairs.ToArray()
+    $at = Get-TcAlertTable -Pairs $read.Pairs
     $aRows = New-TcAlertHistoryRows -Table $at -Snapshot $snapshot -Generated (Get-Date -Format 'yyyy-MM-dd')
     $aLines = @()
     foreach ($r in $aRows) { $aLines += ($r | ConvertTo-Json -Depth 4 -Compress) }

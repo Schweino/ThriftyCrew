@@ -16161,7 +16161,7 @@ two looser cuts (22 and 5 false sites) are in its header and fixtured as MUST NO
 (4) `ops/seo_url_inspect.py` prints one row per URL (last crawl, verdict, url), an uncrawled URL as `none`;
 self-test 9 -> 12 cases, now asserting its own count. The credential file was not touched.
 
-### I238 - Unverified leftovers `OPEN` `run-0919` `2-WAY` `RUNG1 READ`
+### I238 - Unverified leftovers `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings-2.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -16171,3 +16171,39 @@ self-test 9 -> 12 cases, now asserting its own count. The credential file was no
 - `ops/member-cohorts.ps1:477-496` pages Ghost members at 500 and stops at the first short page, recording
   `lastPages` and never checking it; a server cap below 500 would undercount silently. Needs one read-only call
   to settle (I197).
+
+**Done 2026-09-18.** Both bullets settled, one by evidence and one by a fix.
+
+*The three branch commits are all superseded; nothing from the branch was landed, and the branch and its
+worktree were left alone.* `git cherry -v origin/main claude/youthful-mirzakhani-eef33c` marks all three `+`
+(no patch-identical copy on main), so each was compared by content against origin/main at 22a9b219c:
+- 59b25fb61 (Hy-Vee pin scan skips self-test regions) was written against blob a9540b476 of
+  `grocery/test-hyvee-tag-check.ps1`, the same blob 345a515be started from; 345a515be (18:59, before it at
+  21:23, and not its ancestor) did the same job through the shared `lib/production-text.ps1`
+  (`Get-TcProductionLines`) with its own MUST FIRE / MUST NOT FIRE fixture tree, and main's item 12 carries it.
+  Superseded by **345a515be**.
+- 17777dd5e (feed-freshness clobber probe named per run) is superseded by **8bc6bf576**, which moved the same
+  probe off the fixed `%TEMP%` name (now `FfScratch 'ff-clobber-probe.ps1'` in a per-run directory, measured
+  29 of 60 red before, 0 of 60 after).
+- fc2fae0a2 regenerated the data artifact `grocery/out/capture-evictions.json` in one worktree on 2026-09-11.
+  The daily bot has rewritten that file since (latest 574f6a380, naming `comparison-2026-09-17.json`), and the
+  lag it worked around was fixed structurally by **422699bb3** (a gitignored stamp that travels with the board)
+  and **6ffd9adce** (a checkout that cannot run the pass reports SKIP). Landing it now would roll the artifact
+  back a week.
+
+*Ghost DOES cap the page below 500.* One read-only GET through `Invoke-GhostApi` (`TC_WRITE_JOURNAL` cleared,
+`members/?limit=500&page=1&fields=id`, only the pagination meta and a row count printed) answered
+`limit=100 pages=1 total=18 next=` with 18 rows. So the old loop always stopped after page 1: right at 18
+members, and silently 100 at 101 or more. `ops/member-cohorts.ps1` now reads members through a new
+`Read-TcMemberPairs`, which pages with `Invoke-TcGhostPaged` (follows `meta.pagination.next`, throws on a next
+that does not advance or past the cap), asks for `limit=100`, and throws a "short read" when the members read
+differ from Ghost's own `meta.pagination.total`, so the live run exits 3 BLIND instead of writing a smaller
+membership. ghost-lib is now dot-sourced at the top so the self-test can reach the pager.
+
+Verified: `-SelfTest` exit 0, 32 of 32 cases (was 29), with a stubbed Ghost capping pages at 100. MUST FIRE:
+250 members read over 3 fetches; MUST FIRE: a read one page short of `total` throws; CLEAN TWIN: 18 members
+read in exactly one fetch. Broken three ways in place and restored md5-identical: the old stop-at-first-short-page
+pager went red on the 250 case (`read=100 pages=1 fetches=1` with the total check also removed, 2 named FAILs,
+exit 1; with the total check kept, the 250 case named the short-read throw, exit 1); removing the total check alone
+went red on the short-read case (exit 1). The live members path was not run (it writes the tracked aggregate),
+so the only live evidence is the one GET above.
