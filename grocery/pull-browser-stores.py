@@ -1305,15 +1305,9 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slo
         # counted, and a body that already opens with the declared header does not get a second copy.
         # The column count is still asserted, against the first real DATA line, because that is the
         # check that catches a field-shifting drift.
-        lines = [ln for ln in body.strip().split("\n") if not ln.lstrip().startswith("#tc-store")]
-        own_header = bool(lines) and lines[0].strip() == header
-        data = lines[1:] if own_header else lines
-        first = data[0] if data else ""
-        got = len(first.split("|"))
-        if got != cols:
-            return False, (f"capture shape drift: {cfg['to_csv']}() emits {got} columns but the declared "
-                           f"header '{header}' names {cols}. Refusing to write - a mismatched header "
-                           f"silently shifts every field rather than failing.")
+        shape_ok, shape_why, own_header = check_capture_shape(body, header, cfg["to_csv"])
+        if not shape_ok:
+            return False, shape_why
         with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
             if not own_header:
                 fh.write(header + "\n")
@@ -1439,6 +1433,31 @@ def worklist_shape_self_test(T):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def check_capture_shape(body, header, emitter="sweepToCsv"):
+    """(ok, why, own_header) for a capture body against its declared csv_header.
+
+    PULLED OUT OF run_store ON 2026-09-19 BECAUSE IT HAD NO TEST THAT COULD REACH IT. a5bea95ed (2026-09-12)
+    deleted `cols = len(header.split("|"))` while teaching this check to accept an emitter's own header and
+    #tc-store lines, and left `if got != cols` behind, so every capture write through the driver raised
+    NameError. Nothing noticed for a week only because a SECOND defect hid the first: from 2026-09-13 the
+    worklists lost their terms (fixed in f4bd8b66c), every walled store logged "skipped: worklist is empty", and
+    no run reached this line. The next run that had terms would have crashed here. The check now lives in a pure
+    function the hermetic self-test drives (lookup_self_test, the suite a push runs), both the passing shape and
+    the drift it exists to refuse, so a deleted name fails at push instead of at 08:00.
+    """
+    cols = len(header.split("|"))
+    lines = [ln for ln in body.strip().split("\n") if not ln.lstrip().startswith("#tc-store")]
+    own_header = bool(lines) and lines[0].strip() == header
+    data = lines[1:] if own_header else lines
+    first = data[0] if data else ""
+    got = len(first.split("|"))
+    if got != cols:
+        return False, (f"capture shape drift: {emitter}() emits {got} columns but the declared "
+                       f"header '{header}' names {cols}. Refusing to write - a mismatched header "
+                       f"silently shifts every field rather than failing."), own_header
+    return True, "", own_header
+
+
 def lookup_self_test():
     """LOOKUP MODE's own fixtures. HERMETIC: no Chrome, no network, no capture file, no profile.
 
@@ -1460,6 +1479,23 @@ def lookup_self_test():
         else:
             print("    X     %s   got: %s" % (name, got))
             bad.append(name)
+
+    # ---- the capture write's shape check (2026-09-19: a5bea95ed left it reading a deleted name) ----------------
+    try:
+        ok, why, own = check_capture_shape("eggs|Large Eggs|2.38|0.20|123|\nmilk|Milk|3.19|0.02|456|\n",
+                                           "q|n|lp|up|id|was", "samsSweepToCsv")
+        T("MUST FIRE  a capture whose rows match the declared header is WRITABLE (the 09-12 NameError path)",
+          ok and not own, why)
+    except Exception as e:  # the founding bug: NameError on a deleted `cols`
+        T("MUST FIRE  a capture whose rows match the declared header is WRITABLE (the 09-12 NameError path)",
+          False, repr(e))
+    ok, why, own = check_capture_shape("#tc-store 5361 68137\nq|n|lp\na|b|1\n", "q|n|lp", "walmartSweepToCsv")
+    T("CLEAN TWIN  an emitter's own header and #tc-store line are accepted, and the header is not doubled",
+      ok and own, why)
+    ok, why, own = check_capture_shape("eggs|Large Eggs|2.38|0.20|123|x|PICKUP@8146\n", "q|n|lp|up|id|was",
+                                       "samsSweepToCsv")
+    T("MUST FIRE  seven columns under a six-name header is refused as shape drift, never written shifted",
+      (not ok) and "emits 7 columns" in why and "names 6" in why, why)
 
     # ---- the flag contract -------------------------------------------------------------------
     ok, why = validate_lookup_args(["fareway"], "t.json", "")
