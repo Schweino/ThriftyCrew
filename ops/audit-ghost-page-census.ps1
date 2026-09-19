@@ -321,7 +321,7 @@ try { $reg = Read-TcCensusRegistry $registryPath } catch {
 }
 $exportRel = [string]$reg.doc.export_dir
 $exportDir = Join-Path $repo $exportRel
-$getHeaders = { @{ Authorization = ('Ghost ' + (Get-GhostJWT -Key $key)); 'Accept-Version' = 'v5.0' } }
+$getHeaders = { @{ Authorization = ('Ghost ' + (Get-GhostJWT -Key $key)); 'Accept-Version' = (Get-GhostAcceptVersion) } }
 
 if ($Export) {
   # Fetch EVERY declared page first and write nothing until all of them came back: a half-written export
