@@ -11638,7 +11638,9 @@ CONFLICT / UNFOUND) and a free-text note, which is provenance, not precision. Th
 prove the capture process already refuses to write on disagreement, so the discipline exists; it just
 has no notion of a number being rounded rather than wrong.
 
-### I143 - Reader-facing recipe prose uses FDA-defined nutrient content claim terms 767 times with no numeric bar behind any of them `PARTLY DONE - READY FOR BRAD: THE SWEEP IS FIVE BATCHES ON claude/i143-sweep` `queue-7` `1-WAY` `RUNG1 RULING`
+### I143 - Reader-facing recipe prose uses FDA-defined nutrient content claim terms 767 times with no numeric bar behind any of them `DONE` `queue-7`
+
+**DONE 2026-09-19: all five batches are live, each on Brad's go-ahead in chat.** Batch 1 (10 recipes) and the pot-pie footer, batch 2 (11), batches 3 to 5 (32) landed at 66ed2335a and published and verified 32 of 32. Every batch ran build-cards, audit-allergen-line and publish.ps1 -Slugs over exactly its own recipes, never propagate. After the last one: audit-nutrient-claims exit 0, 670 uses, 670 pass, 0 fail, 0 not computable; ghost-drift 581 match, 2 URL round-trip, 0 drift; the allergen line on 583 of 583 live recipe pages. The per-batch record is design/ready-for-brad/I143-sweep.md.
 
 **Merged from `design\backlog-inbox\q7-foodlabel-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
