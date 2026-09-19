@@ -1316,10 +1316,182 @@
                                            "source":  "promoted from ingredient-queue term \u0027shredded low-moisture mozzarella\u0027",
                                            "why":  "carried by Baker\u0027s, Family Fare, Aldi, Fareway, Sam\u0027s Club"
                                        },
-                 "berbere-seasoning":  {
-                     "verdict": "UNKNOWN",
+                 "five-spice-powder":  {
+                     "verdict": "CARRIED",
+                     "store": "Hy-Vee",
+                     "item": "McCormick Gourmet Chinese Five Spice Blend, 1.75 oz",
+                     "size": "1.75 oz",
+                     "price": 9.99,
+                     "product_id": "400543",
                      "as_of": "2026-09-19",
-                     "why": "NOT ESTABLISHED EITHER WAY, and deliberately not recorded NOT-CARRIED. Three stores answered on two or more wordings and none carry it; four answered on ONE wording only ('berbere seasoning', the commodity-search term), and one wording is never enough (derive-not-carried.ps1, backlog I221). No store was found carrying it in store. The second wording 'berbere' was added to commodity-search.json the same day, so the rotation asks the four stores again and derive-not-carried can settle it from their own captures.",
+                     "source": "Hy-Vee Omaha #02 (storeId 1466, locationId 09e8f4f0), read-only POST https://www.hy-vee.com/aisles-online/api/search/products with storeId 1466 term 'five spice' (also 'chinese five spice'), then the persisted GraphQL getProductDetailsWithPrice (grocery\\hyvee\\query-b64.txt sent verbatim) for productId 400543: storeProducts echoed storeId 1466 only, price 9.99 = basePrice 9.99 = shelf tagPrice 9.99, not on sale, department Cooking & Baking / Herbs, Spices & Seasoning.",
+                     "why": "Hy-Vee Omaha #02 stocks it on the spice shelf, read live today. A second five spice product answered the same way: Morton & Bassett Chinese 5 Spice 1.9 oz shaker $9.99 (productId 4879, echoed storeId 1466 only). The old UNKNOWN came from a Hy-Vee row read at the retired store (1465); today's read is at the current one.",
+                     "recheck": "Drop this row once five-spice-powder prices in smp-feed.json at a store."
+                 },
+                 "harissa-paste":  {
+                     "verdict": "NOT-CARRIED",
+                     "as_of": "2026-09-19",
+                     "stores": {
+                         "Hy-Vee": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "harissa",
+                                 "harissa paste",
+                                 "harissa sauce",
+                                 "mina harissa"
+                             ],
+                             "evidence": "Hy-Vee Omaha #02 (storeId 1466, locationId 09e8f4f0), read-only POST https://www.hy-vee.com/aisles-online/api/search/products with storeId 1466, 2026-09-19. 'harissa' -> 22 rows: Morton & Bassett Harissa 1.9 oz $11.99 (productId 2345453, department Herbs, Spices & Seasoning: the DRY spice blend, not the paste), Mighty Sesame Co Harissa Tahini 10.9 oz $8.99 (a tahini, not harissa paste), and 20 Haribo candies. 'harissa paste' -> 30 rows, ginger/garlic/curry/tomato pastes and the same two, no harissa paste. 'harissa sauce' -> 30 sauces, the same two only. 'mina harissa' -> Maruchan noodles and the Morton & Bassett jar. Form matters: the dry blend is not the paste the recipes call for."
+                         },
+                         "Baker's": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "harissa",
+                                 "harissa paste",
+                                 "harissa sauce"
+                             ],
+                             "evidence": "Kroger product API filter.locationId=61500319, read-only, 2026-09-19. 'harissa' -> 0 rows, 'harissa paste' -> 0 rows, 'harissa sauce' -> 0 rows, all HTTP 200. Not a dead lane: 'molasses' and 'pomegranate' in the same run answered 2 and 50 rows."
+                         },
+                         "Family Fare": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "harissa",
+                                 "harissa paste"
+                             ],
+                             "evidence": "GET https://api.freshop.ncrcloud.com/1/products?app_key=family_fare&store_id=6401&q=<term>, 2026-09-19, spaced 4 s. Not a throttle: the requests either side answered rows (q=pomegranate 21 items all store_id 6401; q=cumin 10 items incl. Mc Cormick Ground Cumin 1.5 Oz $3.99). 'harissa' -> HTTP 200, total 0; 'harissa paste' -> HTTP 200, total 0."
+                         },
+                         "Walmart": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "harissa",
+                                 "harissa paste"
+                             ],
+                             "evidence": "Brad's Chrome 2026-09-19, walmart.com search, in-page fetch of /search?q=<term> and parse of __NEXT_DATA__; the only storeId the payload names besides the ship-to-home 0 is 5361 (the sanctioned store). Channel read from each product's fulfillmentType (STORE = on the shelf at 5361, FC = shipped from a fulfilment centre, MARKETPLACE = third party; grocery/instore-lib.ps1). 'harissa' -> 59 products, 44 name harissa: 20 FC, 23 MARKETPLACE and 1 STORE, and that one STORE row is Tyson Chicken Bites Harissa Style Seasoned (a frozen snack, not the paste). 'harissa paste' -> 64 products, 43 name harissa: 13 FC and 30 MARKETPLACE, NONE STORE. The real pastes are all ship-only: Mina Harissa Mild 10 oz and Mina Harissa Spicy 10 fl oz (FC, sold by Walmart.com), Kartago Tunisian Harissa 7.05 oz 2-pack (FC), Etto Harissa tube 4.2 oz (FC), Casablanca Market Moroccan Harissa 10.58 oz (FC), Belazu, Bart, Al'fez, Lamiri, Zwita (MARKETPLACE). Walmart 5361 ships harissa paste; it does not shelve it."
+                         },
+                         "Sam's Club": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "harissa",
+                                 "harissa paste"
+                             ],
+                             "evidence": "Brad's Chrome 2026-09-19, samsclub.com, in-page fetch of /s/<term> and parse of __NEXT_DATA__; the payload's stores= parameter is 8146 with zipcode 68137 Omaha, the club the capture fixtures name. CONTROL: 'milk' returned 30 products (Member's Mark Grade A Vitamin D Whole Milk 1 gal $3.92 etc), so the lane and the parse both work. 'harissa' -> 3 products, the only harissa one being Member's Mark Sweet Harissa Seasoned Salmon priced per pound $15.27 (a seasoned fish, not the paste). 'harissa paste' -> 8 products, vanilla bean pastes and baking mixes, no harissa."
+                         },
+                         "Aldi": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "harissa",
+                                 "harissa paste"
+                             ],
+                             "evidence": "Brad's Chrome 2026-09-19, aldi.us/store/aldi/s?k=<term>; header reads 'In-Store - open 9am - 8pm', 'ALDI - OLA 42 - Omaha'. An explicit 'No results for ...' banner is the answer; the tiles under it are the Related items rail. CONTROLS: 'cumin' -> Results for cumin (Stonemill Ground Cumin 2 oz $0.99); 'molasses' -> Results for molasses (Grandma's Molasses Original 12 fl oz $3.94). 'harissa' -> No results for \"harissa\" (related rail: Stonemill Chicken Tikka Masala seasoning, tzatziki, hummus, Burman's Tikka Masala). 'harissa paste' -> No results for \"harissa paste\" (related rail: roasted red peppers, curry sauce, Simply Nature garlic and ginger stir-in pastes)."
+                         },
+                         "Fareway": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "harissa",
+                                 "harissa paste"
+                             ],
+                             "evidence": "Brad's Chrome 2026-09-19, shop.fareway.com/store/fareway-meat-grocery/s?k=<term>; header In-Store Omaha, and the page's __APOLLO_CLIENT__ cache names retailerLocation 531573 only, lineOneString '17070 Audrey Street', lineTwoString 'Omaha, NE 68136' (stores.json store_identity). An explicit 'No results for ...' banner is the answer; the tiles under it are the Related items rail. 'harissa' -> No results for \"harissa\" (related rail: salt and pepper, tzatziki, Huy Fong chili garlic sauce, Sabra hummus, Badia paprika). 'harissa paste' -> No results for \"harissa paste\"."
+                         }
+                     },
+                     "source": "live seven-store read 2026-09-19 (carriage recheck of the 16 recipes a gated recost left UNKNOWN)",
+                     "why": "all seven Omaha stores answered on two or more wordings and none shelves harissa PASTE. Hy-Vee shelves a DRY harissa blend (Morton & Bassett 1.9 oz $11.99) and Walmart ships real pastes from FC and Marketplace sellers; neither is the ingredient on an Omaha shelf.",
+                     "recheck": "A CARRIED row anywhere ends this entry. If a recipe can take the dry blend instead, that is a recipe change under a different commodity, not a carriage ruling here."
+                 },
+                 "wild-rice":  {
+                     "verdict": "CARRIED",
+                     "store": "Hy-Vee",
+                     "item": "Quality Wild Rice",
+                     "size": "16 oz (1 lb stand up bag)",
+                     "price": 8.99,
+                     "product_id": "36825",
+                     "as_of": "2026-09-19",
+                     "source": "Hy-Vee Omaha #02 (storeId 1466, locationId 09e8f4f0), read-only POST https://www.hy-vee.com/aisles-online/api/search/products with storeId 1466 term 'wild rice', then the persisted GraphQL getProductDetailsWithPrice (grocery\\hyvee\\query-b64.txt sent verbatim) for productId 36825: storeProducts echoed storeId 1466 only, price 8.99 = basePrice 8.99 = shelf tagPrice 8.99, not on sale, department Packaged Meals & Sides / Sides.",
+                     "why": "Whole wild rice, not a blend. The same search also returned Hy-Vee Select Wild Rice 16 oz $10.99 (productId 1517940, echoed storeId 1466 only) and Canoe Cooked Wild Rice 15 oz can $4.99 (productId 55402). The long-grain-and-wild mixes on that page (Zatarain's, Rice-A-Roni, Ben's Original, Hy-Vee Long Grain & Wild) and the Lundberg / Hy-Vee Ruby Wild Blend rices are blends and are NOT the evidence.",
+                     "recheck": "Drop this row once wild-rice prices in smp-feed.json at a store."
+                 },
+                 "snow-peas":  {
+                     "verdict": "CARRIED",
+                     "store": "Hy-Vee",
+                     "item": "Mann's Snow Peas 6 oz",
+                     "size": "6 oz bag",
+                     "price": 3.99,
+                     "product_id": "361644",
+                     "as_of": "2026-09-19",
+                     "source": "Hy-Vee Omaha #02 (storeId 1466, locationId 09e8f4f0), read-only POST https://www.hy-vee.com/aisles-online/api/search/products with storeId 1466 terms 'snow peas' and 'pea pods', then the persisted GraphQL getProductDetailsWithPrice (grocery\\hyvee\\query-b64.txt sent verbatim) for productId 361644: storeProducts echoed storeId 1466 only, price 3.99 = basePrice 3.99 = shelf tagPrice 3.99, not on sale, department Produce / Fresh Vegetables.",
+                     "why": "Fresh snow peas in the produce department, not the frozen stir-fry mixes and not sugar snap peas (Mann's Stringless Sugar Snap Peas and Birds Eye Steamfresh Sugar Snap Peas came back beside it and are a different vegetable).",
+                     "recheck": "Drop this row once snow-peas prices in smp-feed.json at a store."
+                 },
+                 "pomegranate-molasses":  {
+                     "verdict": "NOT-CARRIED",
+                     "as_of": "2026-09-19",
+                     "stores": {
+                         "Hy-Vee": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "pomegranate molasses",
+                                 "pomegranate syrup",
+                                 "cortas"
+                             ],
+                             "evidence": "Hy-Vee Omaha #02 (storeId 1466, locationId 09e8f4f0), read-only POST https://www.hy-vee.com/aisles-online/api/search/products with storeId 1466, 2026-09-19. 'pomegranate molasses' -> 30 rows: POM juices, Grandma's and Brer Rabbit cane molasses, Torani Pomegranate Syrup 15.4 fl oz (a coffee syrup), prunes, pomegranate arils, Pama liqueur; no pomegranate molasses. 'pomegranate syrup' -> Torani and Master of Mixes grenadine syrups and pancake syrups, none the ingredient. 'cortas' (the common brand) -> 11 rows, all pharmacy (Cortizone-10, CoQ10)."
+                         },
+                         "Baker's": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "pomegranate molasses",
+                                 "pomegranate",
+                                 "molasses"
+                             ],
+                             "evidence": "Kroger product API filter.locationId=61500319, read-only, 2026-09-19. 'pomegranate molasses' -> 0 rows. 'pomegranate' -> 50 rows: fresh pomegranates, Kroger arils, POM and other juices, teas, waters, soaps; no pomegranate molasses. 'molasses' -> 2 rows: Grandma's Original Molasses 12 fl oz $4.49 and Archway molasses cookies."
+                         },
+                         "Family Fare": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "pomegranate molasses",
+                                 "pomegranate"
+                             ],
+                             "evidence": "GET https://api.freshop.ncrcloud.com/1/products?app_key=family_fare&store_id=6401&q=<term>, 2026-09-19, spaced 4 s. Not a throttle: the requests either side answered rows (q=pomegranate 21 items all store_id 6401; q=cumin 10 items incl. Mc Cormick Ground Cumin 1.5 Oz $3.99). 'pomegranate molasses' -> HTTP 200, total 0. 'pomegranate' -> 21 items, all juices, waters, soaps and a cold medicine; no pomegranate molasses."
+                         },
+                         "Walmart": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "pomegranate molasses",
+                                 "pomegranate syrup"
+                             ],
+                             "evidence": "Brad's Chrome 2026-09-19, walmart.com search, in-page fetch of /search?q=<term> and parse of __NEXT_DATA__; the only storeId the payload names besides the ship-to-home 0 is 5361 (the sanctioned store). Channel read from each product's fulfillmentType (STORE = on the shelf at 5361, FC = shipped from a fulfilment centre, MARKETPLACE = third party; grocery/instore-lib.ps1). 'pomegranate molasses' -> 59 products, 49 name pomegranate: 21 FC, 25 MARKETPLACE and 3 with no fulfilment type whose summary is DELIVERY from storeId 0 (third-party sellers Gourmet Solutions, Miralay Food, Ameridepot), NONE STORE. Real products are all ship-only: Cortas Molasses Pomegranate 10 oz (FC), Hirmas 12 oz (FC), Eastanbul 9.7 and 12.35 oz (FC), Sadaf (third party). 'pomegranate syrup' -> 59 products, 46 name pomegranate, 26 FC and 20 MARKETPLACE, NONE STORE. Walmart 5361 ships it; it does not shelve it."
+                         },
+                         "Sam's Club": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "pomegranate molasses",
+                                 "pomegranate"
+                             ],
+                             "evidence": "Brad's Chrome 2026-09-19, samsclub.com, in-page fetch of /s/<term> and parse of __NEXT_DATA__; the payload's stores= parameter is 8146 with zipcode 68137 Omaha, the club the capture fixtures name. CONTROL: 'milk' returned 30 products (Member's Mark Grade A Vitamin D Whole Milk 1 gal $3.92 etc), so the lane and the parse both work. 'pomegranate molasses' -> 20 products, seasonings and energy drinks, none pomegranate molasses. 'pomegranate' -> 27 products: POM Wonderful 100% Pomegranate Juice 60 fl oz, SuperBeets chews, Brookside chocolate, Sahale cashews; no molasses or syrup."
+                         },
+                         "Aldi": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "pomegranate molasses",
+                                 "molasses",
+                                 "pomegranate"
+                             ],
+                             "evidence": "Brad's Chrome 2026-09-19, aldi.us/store/aldi/s?k=<term>; header reads 'In-Store - open 9am - 8pm', 'ALDI - OLA 42 - Omaha'. An explicit 'No results for ...' banner is the answer; the tiles under it are the Related items rail. CONTROLS: 'cumin' -> Results for cumin (Stonemill Ground Cumin 2 oz $0.99); 'molasses' -> Results for molasses (Grandma's Molasses Original 12 fl oz $3.94). 'pomegranate molasses' -> No results for \"pomegranate molasses\" (related rail: Grandma's Molasses, POM juice, Simply Nature Pomegranate Plum juice, Specially Selected 100% Pomegranate juice). 'molasses' -> Results for molasses: ONE product, Grandma's Molasses Original 12 fl oz (cane molasses). 'pomegranate' -> No results for \"pomegranate\"."
+                         },
+                         "Fareway": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "pomegranate molasses",
+                                 "molasses"
+                             ],
+                             "evidence": "Brad's Chrome 2026-09-19, shop.fareway.com/store/fareway-meat-grocery/s?k=<term>; header In-Store Omaha, and the page's __APOLLO_CLIENT__ cache names retailerLocation 531573 only, lineOneString '17070 Audrey Street', lineTwoString 'Omaha, NE 68136' (stores.json store_identity). An explicit 'No results for ...' banner is the answer; the tiles under it are the Related items rail. 'pomegranate molasses' -> No results for \"pomegranate molasses\" (related rail: Grandma's Original Molasses, POM juice, Brer Rabbit molasses, R.W. Knudsen pomegranate juice). 'molasses' -> Results for molasses: Grandma's Original Molasses 12 fl oz and Brer Rabbit Mild Molasses 12 fl oz only, both cane molasses."
+                         }
+                     },
+                     "source": "live seven-store read 2026-09-19 (carriage recheck of the 16 recipes a gated recost left UNKNOWN)",
+                     "why": "all seven Omaha stores answered on two or more wordings and none shelves pomegranate molasses. Walmart ships it (Cortas, Hirmas, Eastanbul) from FC and third-party sellers only; cane molasses and pomegranate juice are different foods.",
+                     "recheck": "A CARRIED row anywhere ends this entry."
+                 },
+                 "berbere-seasoning":  {
+                     "verdict": "NOT-CARRIED",
+                     "as_of": "2026-09-19",
+                     "why": "all seven Omaha stores have now answered on two or more wordings and none shelves berbere. Walmart ships it (The Spice Way, Frontier, Morton & Bassett, Eastanbul) from FC, Marketplace and third-party sellers only. Until 2026-09-19 this entry was UNKNOWN because Sam's Club, Aldi, Fareway and Walmart had answered one wording; the second wording 'berbere' was asked of each live that day.",
                      "stores": {
                          "Baker's": {
                              "state": "not-carried",
@@ -1349,36 +1521,38 @@
                          "Walmart": {
                              "state": "not-carried",
                              "terms_tried": [
-                                 "berbere seasoning"
+                                 "berbere seasoning",
+                                 "berbere"
                              ],
-                             "evidence": "Walmart store 5361 captures under the exact term 'berbere seasoning': walmart-capture-2026-08-31.csv 29 rows (18 berbere products) and walmart-capture-2026-09-02.csv 27 rows (17 berbere products). Every berbere row is fulfilment MARKETPLACE (The Spice Way, Frontier Co-op via Cozy Farm, Spice Hut, NY Spice Shop, Birch & Meadow, Bart). None is STORE, so Walmart ships it and does not shelve it. One wording, but the search demonstrably reached the product class."
+                             "evidence": "Walmart store 5361 captures under the exact term 'berbere seasoning': walmart-capture-2026-08-31.csv 29 rows (18 berbere products) and walmart-capture-2026-09-02.csv 27 rows (17 berbere products). Every berbere row is fulfilment MARKETPLACE (The Spice Way, Frontier Co-op via Cozy Farm, Spice Hut, NY Spice Shop, Birch & Meadow, Bart). None is STORE, so Walmart ships it and does not shelve it. One wording, but the search demonstrably reached the product class. SECOND WORDING, Brad's Chrome 2026-09-19, walmart.com search, in-page fetch of /search?q=<term> and parse of __NEXT_DATA__; the only storeId the payload names besides the ship-to-home 0 is 5361 (the sanctioned store). Channel read from each product's fulfillmentType (STORE = on the shelf at 5361, FC = shipped from a fulfilment centre, MARKETPLACE = third party; grocery/instore-lib.ps1). 'berbere' -> 53 products, 24 name berbere: 20 MARKETPLACE, 1 FC (Eastanbul Berbere 5.3 oz) and 3 with no fulfilment type whose summary is DELIVERY from storeId 0 (Morton & Bassett Berbere 2.1 oz, Hampton tin, Frontier 1 lb, all third party), NONE STORE. The same live read of 'berbere seasoning' -> 35 products, 25 name berbere, none STORE."
                          },
                          "Sam's Club": {
-                             "state": "unchecked-second-wording",
+                             "state": "not-carried",
                              "terms_tried": [
-                                 "berbere seasoning"
+                                 "berbere seasoning",
+                                 "berbere"
                              ],
-                             "evidence": "sams-capture-2026-08-15.csv 21 rows and sams-capture-2026-08-28.csv 20 rows under 'berbere seasoning', no berbere product in either. One wording only."
+                             "evidence": "sams-capture-2026-08-15.csv 21 rows and sams-capture-2026-08-28.csv 20 rows under 'berbere seasoning', no berbere product in either. SECOND WORDING, Brad's Chrome 2026-09-19, samsclub.com, in-page fetch of /s/<term> and parse of __NEXT_DATA__; the payload's stores= parameter is 8146 with zipcode 68137 Omaha, the club the capture fixtures name. CONTROL: 'milk' returned 30 products (Member's Mark Grade A Vitamin D Whole Milk 1 gal $3.92 etc), so the lane and the parse both work. 'berbere' -> 27 products (Barber Foods chicken, Braun trimmers, Scott Barber shirts), no berbere product."
                          },
                          "Aldi": {
-                             "state": "unchecked-second-wording",
+                             "state": "not-carried",
                              "terms_tried": [
-                                 "berbere seasoning"
+                                 "berbere seasoning",
+                                 "berbere"
                              ],
-                             "evidence": "aldi-capture-2026-08-05.csv 9 rows and aldi-capture-2026-09-01.csv 50 rows under 'berbere seasoning' (In-Store, OLA 42), no berbere product. One wording only."
+                             "evidence": "aldi-capture-2026-08-05.csv 9 rows and aldi-capture-2026-09-01.csv 50 rows under 'berbere seasoning' (In-Store, OLA 42), no berbere product. SECOND WORDING, Brad's Chrome 2026-09-19, aldi.us/store/aldi/s?k=<term>; header reads 'In-Store - open 9am - 8pm', 'ALDI - OLA 42 - Omaha'. An explicit 'No results for ...' banner is the answer; the tiles under it are the Related items rail. CONTROLS: 'cumin' -> Results for cumin (Stonemill Ground Cumin 2 oz $0.99); 'molasses' -> Results for molasses (Grandma's Molasses Original 12 fl oz $3.94). 'berbere' -> No results for \"berbere\" (related rail: Stonemill seasonings - chicken tikka masala, ground cumin, chili powder, Italian herb, Cajun)."
                          },
                          "Fareway": {
-                             "state": "unchecked-second-wording",
+                             "state": "not-carried",
                              "terms_tried": [
-                                 "berbere seasoning"
+                                 "berbere seasoning",
+                                 "berbere"
                              ],
-                             "evidence": "fareway-shop-2026-08-26.jsonl, term 'berbere seasoning', 72 candidate rows, no berbere product. One wording only."
+                             "evidence": "fareway-shop-2026-08-26.jsonl, term 'berbere seasoning', 72 candidate rows, no berbere product. SECOND WORDING, Brad's Chrome 2026-09-19, shop.fareway.com/store/fareway-meat-grocery/s?k=<term>; header In-Store Omaha, and the page's __APOLLO_CLIENT__ cache names retailerLocation 531573 only, lineOneString '17070 Audrey Street', lineTwoString 'Omaha, NE 68136' (stores.json store_identity). An explicit 'No results for ...' banner is the answer; the tiles under it are the Related items rail. 'berbere' -> No results for \"berbere\" (related rail: McCormick curry powder, chili powder, turmeric, smoked paprika, Badia paprika)."
                          }
                      },
-                     "terms_never_tried": [
-                         "berbere (at Sam's Club, Aldi, Fareway, Walmart)"
-                     ],
-                     "recheck": "Promote to NOT-CARRIED only when Sam's Club, Aldi, Fareway and Walmart have each answered a second wording ('berbere'). A CARRIED row anywhere ends this entry."
+                     "recheck": "A CARRIED row anywhere ends this entry.",
+                     "source": "recorded UNKNOWN 2026-09-19 from captures and three live stores; the four one-wording stores answered a second wording live the same day"
                  }
              },
     "_parked_doc":  "parked_recipes lists slugs held out of the catalogue by this ingredient. They were unpublished to DRAFT on Ghost, not deleted, precisely so a CARRIED verdict can bring them back. audit-carriage.ps1 -Revivable reads this field; without it, reviving a recipe means reconstructing from commit messages."
