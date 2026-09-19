@@ -53,6 +53,121 @@ function Test-FfMayAttempt {
   return ($Attempted -lt $Cap)
 }
 
+# THE WINDOW'S SLICE, FROM THE ONE FRESHNESS RULE (2026-09-19, design\PLAN-board-accuracy-2026-09-19.md).
+# Until today this lane took Get-CapturePlan's TermBudget, then added one slot per extra expiry term and one per
+# pull-drop victim, and clamped the sum at the plan's CallCap (40) - while the buy loop stopped at $ATTEMPT_CAP
+# (20). So the budget the log printed was not the budget the loop could spend, and whatever did not fit was
+# cut from the TAIL of the slice: the rotation terms, the one part of the window the freshness rule depends on.
+# And Set-SaleExpiryProcessed then marked every expiry the plan named, fetched or not.
+# The rule now, in one pure function so a fixture can reach it:
+#   1. the ceiling is the SMALLER of the store's call cap and this lane's attempt cap - the two are one number
+#      as far as the loop is concerned;
+#   2. the rotation drip is RotationTerms from Get-CapturePlan (ceil(terms / RotationDays / runs a day)), and it
+#      is reserved first - a rotation the ceiling cannot hold is a policy that cannot be met, and says so;
+#   3. what is left is the FRONT allowance, shared by sale expiries and pull-drop victims, oldest first;
+#   4. the budget is the rotation plus the front terms actually taken, never more than the ceiling.
+function Get-FfWindowBudget {
+  param([int]$RotationTerms, [int]$FrontTerms, [int]$CallCap, [int]$AttemptCap)
+  $ceiling = $AttemptCap
+  if ($CallCap -gt 0 -and $CallCap -lt $ceiling) { $ceiling = $CallCap }
+  if ($RotationTerms -gt $ceiling) {
+    return [pscustomobject]@{ Ok = $false; Ceiling = $ceiling; Rotation = $RotationTerms; Front = 0; FrontDeferred = [math]::Max($FrontTerms, 0); Budget = $ceiling
+      Why = ("rotation $RotationTerms per window exceeds the window ceiling $ceiling (call cap $CallCap, attempt cap $AttemptCap): the freshness rule cannot be met by this lane at this cadence") }
+  }
+  $front = [math]::Max($FrontTerms, 0)
+  $room = $ceiling - $RotationTerms
+  if ($front -gt $room) { $front = $room }
+  return [pscustomobject]@{ Ok = $true; Ceiling = $ceiling; Rotation = $RotationTerms; Front = $front
+    FrontDeferred = ([math]::Max($FrontTerms, 0) - $front); Budget = ($RotationTerms + $front); Why = '' }
+}
+
+# PUT A BOUNDED FRONT AHEAD OF THE ROTATION. $Front is the ordered list of terms owed a place at the head of the
+# window (expiry terms first, then victims); only the first $Allowance of them move, the rest keep their rotation
+# positions and stay owed. Returns the reordered list and exactly which terms went to the front.
+# WHICH EXPIRING COMMODITIES DID THIS WINDOW ACTUALLY ASK? One whose terms reached the front and at least one of
+# them was attempted (answered or not: Set-SaleExpiryProcessed's rule is attempted-and-landed, and the landing is
+# the caller's own gate). An expiry left owed is re-offered at the front of the next window, oldest first.
+function Get-FfExpiryIdsAsked {
+  param([AllowEmptyCollection()][string[]]$ExpiryIds = @(), [AllowEmptyCollection()]$TermPairs = @(), [hashtable]$Attempted = @{})
+  $out = New-Object System.Collections.Generic.List[string]
+  foreach ($eid in @($ExpiryIds)) {
+    if (-not $eid) { continue }
+    foreach ($tp in @($TermPairs)) {
+      if ([string]$tp.id -eq [string]$eid -and $Attempted.ContainsKey([string]$tp.term)) { if (-not $out.Contains([string]$eid)) { [void]$out.Add([string]$eid) }; break }
+    }
+  }
+  return ,$out.ToArray()
+}
+
+function Join-FfFront {
+  param([AllowEmptyCollection()][string[]]$TermList = @(), [AllowEmptyCollection()][string[]]$Front = @(), [int]$Allowance)
+  $set = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  $inList = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($t in @($TermList)) { if ($null -ne $t) { [void]$inList.Add([string]$t) } }
+  $head = New-Object System.Collections.Generic.List[string]
+  foreach ($t in @($Front)) {
+    if ($head.Count -ge $Allowance) { break }
+    if (-not $t) { continue }
+    if (-not $inList.Contains([string]$t)) { continue }
+    if ($set.Add([string]$t)) { [void]$head.Add([string]$t) }
+  }
+  $rest = @(@($TermList) | Where-Object { -not $set.Contains([string]$_) })
+  return [pscustomobject]@{ Items = (@($head.ToArray()) + $rest); Prepended = $head.Count; Front = $head.ToArray() }
+}
+
+# A MULTI-BUY IS A PRICE EACH (2026-09-19). Freshop sends an offer as text, "4 for $5.00". Stripping non-digits
+# read it as "45.00", which is how "Pampa Pickles, Sweet Relish 12 Oz" reached a board at $45 (ad_price "$45",
+# current_price 45, captured 2026-07-30), and since 2026-07-31 Get-FfPrice (ff-price-lib.ps1) drops such rows
+# instead, which made every multi-buy product a blank cell. Ruled for the board-accuracy fix: "N for $X" is X/N
+# each, rounded to the cent, and the row SAYS it came from a multi-buy (multi_buy, multi_buy_qty, multi_buy_total)
+# so a reader of the file and the board can see the basis. Returns $null for anything that is not that shape -
+# a plain "$4.50" is not a multi-buy, and a quantity below 2 is not one either.
+function ConvertFrom-FfMultiBuy([string]$PriceText) {
+  if (-not $PriceText) { return $null }
+  $m = [regex]::Match($PriceText, '^\s*(\d{1,3})\s+for\s+\$?\s*(\d{1,6}(?:\.\d{1,2})?)\s*$', [Text.RegularExpressions.RegexOptions]::IgnoreCase)
+  if (-not $m.Success) { return $null }
+  $qty = [int]$m.Groups[1].Value
+  $total = [double]::Parse($m.Groups[2].Value, [Globalization.CultureInfo]::InvariantCulture)
+  if ($qty -lt 2 -or $total -le 0) { return $null }
+  return [pscustomobject]@{ qty = $qty; total = $total; each = [math]::Round($total / $qty, 2); text = $PriceText.Trim() }
+}
+
+# THE PRICE OF ONE FRESHOP ROW, WITH ITS CONTRACT FIELDS (2026-09-19). Ingest-Items wrote current_price=$cur and
+# tested $base, and neither variable has existed in that function since the price rule moved to ff-price-lib.ps1
+# (5957a80ca): 0 of 5,486 rows in family-fare-regular-2026-09-18.json carried current_price, so guard 10 had no
+# Family Fare row to police, and base_price / marked_down were never set from the product record. Computed here,
+# once, for the row: price = what a shopper pays for one today; current = the same number, recorded as the
+# contract field; base = the regular price when the record carries one; multi = the parsed offer, or $null.
+function Get-FfRowPrice($Item) {
+  if (-not $Item) { return $null }
+  $base = 0.0; [void][double]::TryParse((([string]$Item.base_price) -replace '[^0-9.]', ''), [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$base)
+  $mb = ConvertFrom-FfMultiBuy ([string]$Item.price)
+  if ($mb) { return [pscustomobject]@{ price = [double]$mb.each; current = [double]$mb.each; base = $base; multi = $mb } }
+  $val = Get-FfPrice $Item
+  if ($null -eq $val) { return $null }
+  return [pscustomobject]@{ price = [double]$val; current = [double]$val; base = $base; multi = $null }
+}
+
+# MAY A ROW FROM THE PREVIOUS CATALOG BE CARRIED? (2026-09-19). One answer per row, pure, so the fixtures reach it:
+#   'undated'     - no as_of. The row used to borrow its FILE's week_of, which is a date on the file, not a
+#                   date the price was read; a carried row can no longer prove when it was read, so it goes.
+#   'expired'     - older than MaxCarryDays (capture-policy's history window). Publication age is enforced at
+#                   the board by the provenance contract; this is only how long the lane KEEPS a row.
+#   'wrong-store' - it names a store_id other than the one this lane asks. Rows are stamped from the request
+#                   configuration since 2026-09-19; a row from another store can never be carried as this one.
+#   'carry'       - everything else. A legacy row with no store_id is carried UNSTAMPED, never stamped here:
+#                   nothing on it proves where it was read, so the board's contract decides, not this lane.
+function Get-FfCarryVerdict($Row, [string]$StoreId, [string]$Today, [int]$MaxCarryDays) {
+  $ao = [string]$Row.as_of
+  if (-not ($ao -match '^\d{4}-\d{2}-\d{2}$')) { return 'undated' }
+  $age = 9999
+  try { $age = [int](([datetime]::ParseExact($Today, 'yyyy-MM-dd', $null)) - ([datetime]::ParseExact($ao, 'yyyy-MM-dd', $null))).TotalDays } catch { return 'undated' }
+  if ($age -gt $MaxCarryDays) { return 'expired' }
+  $rs = [string]$Row.store_id
+  if ($rs -and -not [string]::Equals($rs, $StoreId, [StringComparison]::Ordinal)) { return 'wrong-store' }
+  return 'carry'
+}
+
 # WRITE THE CATALOG WITHOUT BEING ABLE TO LOSE IT (2026-08-02, plan item 2026-08-02-91d877).
 # Measured, not theorised, in this pipeline's own ff-sweep-log.txt: the 2026-08-02T07:00 window bought terms
 # #458..#34 (686 rows), wrote its throttled diagnostic, ADVANCED THE CURSOR #458 -> #35 at 07:06:40, and then
@@ -165,7 +280,8 @@ function Get-FfExpiryClass([string]$foundByTerm, [string]$lastSuccess, [string]$
 # The old alert asked "did ONE run capture the whole store", comparing this run's raw collection against the
 # best deal_count of recent MERGED files. That was the right question at one pull per day. Under the 3-hourly
 # sharded sweep it is a question that can NEVER be answered yes - capture-policy buys ceil(602/90) = 7 terms
-# per window BY DESIGN, three windows a day, a full rotation in about 29 days - so
+# per window BY DESIGN, three windows a day, a full rotation in about 29 days (15 a window and 14 days since the
+# 2026-09-19 freshness rule; the argument is unchanged) - so
 # it paged every single day about an architecture that was working: catalog 1909 -> 3974 items across 8
 # sweeps, 0 expired, 358 board cells against a 256-cell pre-freeze baseline.
 # So ask about OUTCOMES instead, on the MERGED catalog, where "Family Fare stopped refreshing" is actually
@@ -234,18 +350,69 @@ function Get-FfTermsBought48h {
   return $n
 }
 
-function Test-FfCatalogDegraded([int]$mergedCount, [int]$prevMax, [int]$starvedExpired, [int]$churnExpired, [int]$recentVerified, [int]$termsBought48h = -1, [int]$rotationTerms = 7) {
+function Test-FfCatalogDegraded([int]$mergedCount, [int]$prevMax, [int]$starvedExpired, [int]$churnExpired, [int]$recentVerified, [int]$termsBought48h = -1, [int]$rotationTerms = 0) {
   $reasons = @()
   $totalExpired = $starvedExpired + $churnExpired
   if ($starvedExpired -gt 0) { $reasons += ("$starvedExpired row(s) aged out past the capture-policy carry on a STARVED search term - that term has not returned a single product inside the carry window, so the sweep genuinely cannot replace those products") }
   if ($mergedCount -gt 0 -and $totalExpired -gt ($mergedCount * 0.02)) { $reasons += ("$totalExpired row(s) aged out in ONE run against a $mergedCount-item catalog - that is a mass loss (over 2%) whatever class the rows are") }
   # Terms, not rows. See the note above the function for the five days of measurement that retired the
   # rows floor. -1 is "not measured" and must stay silent; 0 is a frozen store and must page.
-  if ($termsBought48h -ge 0 -and $termsBought48h -lt (2 * $rotationTerms)) {
+  # rotationTerms 0 means the caller has no plan to measure against: 'not measured', never a page.
+  if ($rotationTerms -gt 0 -and $termsBought48h -ge 0 -and $termsBought48h -lt (2 * $rotationTerms)) {
     $reasons += ("only $termsBought48h term(s) bought in the last 48h against a policy of $rotationTerms per window - fewer than two landed windows in two days; the sweep is not buying")
   }
   if ($prevMax -gt 100 -and $mergedCount -lt ($prevMax * 0.80)) { $reasons += ("merged catalog is $mergedCount items against a best-of-recent $prevMax - it shrank by more than 20%") }
   return @{ degraded = ($reasons.Count -gt 0); reasons = $reasons }
+}
+
+
+# ONE FRESH ROW FROM ONE FRESHOP PRODUCT (lifted out of Ingest-Items on 2026-09-19 so the fixtures can reach it).
+# THE CONTRACT (guards invariant 10): current_price is what the STORE CHARGES, recorded independently of what we
+# choose to publish in ad_price. A puller that reaches for the regular-price field then produces two different
+# numbers on the row, and the guard sees it. Until today this line read an undefined $cur, so the field was
+# never written at all.
+# STAMP THE PRODUCT IDENTITY WE ALREADY HAVE. We just fetched this price FROM a specific Freshop product, and
+# Freshop hands us its canonical_url and id in the same response. A price and its link are the same fact; carry
+# the id with the price and they cannot drift apart (the "Hy Vee Almondmilk" / "Blue Diamond" wrong-link class).
+# WHICH TERM FOUND THIS ROW (2026-08-02). It exists so that when this row eventually ages out of the carry, the
+# expiry can be CLASSIFIED instead of guessed at: out\ff-term-ledger.json carries each term's last successful buy.
+# WHERE AND WHEN IT WAS READ (2026-09-19). as_of is the day the price was read and store_id is the location id
+# the request was sent to, both passed in by the caller from its own configuration. The board's provenance
+# contract refuses a price that cannot prove either.
+function New-FfRow($Item, [string]$Term, [string]$Today, [string]$StoreId, $Offers) {
+  if (-not $Item -or -not $Item.name) { return $null }
+  $pr = Get-FfRowPrice $Item
+  if ($null -eq $pr) { return $null }
+  $val = [double]$pr.price
+  $row = [ordered]@{ store='Family Fare'; item=[string]$Item.name; ad_price=('$' + $val); size=[string]$Item.size; regular=$val; current_price=[double]$pr.current; source_ad='everyday shelf price'; as_of=$Today; store_id=$StoreId }
+  if ($Term) { $row['found_by_term'] = [string]$Term }
+  if ($Item.canonical_url) { $row['canonical_url'] = [string]$Item.canonical_url }
+  if ($Item.id) { $row['product_id'] = [string]$Item.id }
+  if ($pr.multi) {
+    # THE BASIS IS ON THE ROW. On a multi-buy row Freshop's base_price is the OFFER total (5.0 for "4 for
+    # $5.00" on the ground-cloves record), not a regular single price, so it is NOT recorded as a was-price
+    # and the row is NOT marked down from it: a $5.00 "regular" beside a $1.25 each would invent a 75% saving.
+    $row['multi_buy'] = [string]$pr.multi.text
+    $row['multi_buy_qty'] = [int]$pr.multi.qty
+    $row['multi_buy_total'] = [double]$pr.multi.total
+  } else {
+    if ($pr.base -gt 0) { $row['base_price'] = [double]$pr.base }
+    if ($pr.base -gt 0 -and $val -lt ($pr.base - 0.005)) { $row['marked_down'] = $true }
+  }
+  # THE OFFER THAT MAKES THIS A SALE, AND THE WINDOW IT RUNS IN (2026-08-21). See the /offers block for why the
+  # product record alone cannot answer this. Only a LIVE offer reaches $Offers, so a row that gets these dates
+  # really is on sale today.
+  $offKey = [string]$Item.id
+  if ($offKey -and $Offers -and $Offers.ContainsKey($offKey)) {
+    $ofr = $Offers[$offKey]
+    $row['ad_from'] = [string]$ofr.ad_from
+    $row['ad_to']   = [string]$ofr.ad_to
+    $row['marked_down'] = $true
+    # Record the offer's own regular price when the product record never carried one - that is the number a
+    # shopper is being saved from, and without it the saving cannot be stated honestly.
+    if (-not $row.Contains('base_price') -and -not $row.Contains('multi_buy') -and $ofr.base_price) { $row['base_price'] = [double]$ofr.base_price }
+  }
+  return $row
 }
 
 # One uniform row shape. Fresh rows are [ordered] hashtables; rows re-read from JSON are PSCustomObjects, and
@@ -267,7 +434,9 @@ function Norm-Row($r, $asOf, $isCarried) {
   # ingest, and this list threw it away one line later - so the window never reached the file, the engine
   # could not retire the sale on the day Freshop says it ends, and FF markdowns were dated by nothing.
   # The same normalizer-strips-the-contract shape as the three fields above; same fix.
-  foreach ($k in @('current_price', 'base_price', 'marked_down', 'canonical_url', 'product_id', 'found_by_term', 'ad_from', 'ad_to')) { if ($null -ne $r.$k) { $h[$k] = $r.$k } }
+  # store_id joined on 2026-09-19 with the multi-buy basis fields: the location that answered is part of the
+  # price's provenance, and a normalizer that dropped it would carry every row forward unstamped.
+  foreach ($k in @('current_price', 'base_price', 'marked_down', 'canonical_url', 'product_id', 'found_by_term', 'ad_from', 'ad_to', 'store_id', 'multi_buy', 'multi_buy_qty', 'multi_buy_total')) { if ($null -ne $r.$k) { $h[$k] = $r.$k } }
   # THE STORE'S OWN SHELF, AS FIELDS (2026-09-11, queue 2026-09-11-62b248). dept and aisle are segments 1-2 of
   # canonical_url, reduced by aisle-lib.ps1 - the one copy compare-deals admits Family Fare rows through - so a
   # reader of this file sees the department the store filed each product in without re-deriving it. Recomputed
@@ -513,6 +682,97 @@ if ($SelfTest) {
     _T 'CLEAN-TWIN: the advance is still logged once, from and to, for the capture-watchdog cadence watcher' ($cl -and ($cl.store -eq 'Family Fare') -and ([int]$cl.from -eq 329) -and ([int]$cl.to -eq 336))
   } finally { Remove-Item -LiteralPath $cdir -Recurse -Force -ErrorAction SilentlyContinue }
 
+
+  # ==================================================================================================
+  # THE BOARD-ACCURACY FIX (2026-09-19, design\PLAN-board-accuracy-2026-09-19.md). 36 of 100 verified cells
+  # wrong, driven by stale prices; this lane's part is five rules, each with its founding case below.
+  # ==================================================================================================
+  . (Join-Path $root 'capture-policy-lib.ps1')
+
+  # ---- 1/2. THE WINDOW BUDGET COMES FROM THE FRESHNESS RULE, AND FITS UNDER THE WINDOW CEILING ----------------
+  # The live policy, read from the tracked files: RotationTerms is ceil(terms / RotationDays / runs a day) and the
+  # window reserves exactly that. Computed here from Get-RotationTermsPerRun, never restated as a number.
+  $ffPlanT = Get-CapturePlan -Store 'Family Fare' -Today '2026-09-19'
+  $ffRotT = Get-RotationTermsPerRun ([int]$ffPlanT.TermCount) 'Family Fare'
+  $ffQuarterRate = [int][math]::Ceiling([int]$ffPlanT.TermCount / [double](Get-PolicyQuarterDays))
+  _T ("CLEAN-TWIN the plan's rotation is ceil($($ffPlanT.TermCount) terms / $($ffPlanT.RotationDays)d / $(Get-StoreRunsPerDay 'Family Fare') windows) = $ffRotT, from Get-RotationTermsPerRun") (([int]$ffPlanT.RotationTerms -eq $ffRotT) -and ($ffRotT -eq [int][math]::Ceiling([int]$ffPlanT.TermCount / [double]$ffPlanT.RotationDays / 3.0)))
+  _T ("MUST-FIRE the quarter rate ($ffQuarterRate a day, the 2026-08-20 drip behind the stale board) is NOT this window's rotation ($ffRotT)") ($ffQuarterRate -ne $ffRotT)
+  $ffWinLive = Get-FfWindowBudget -RotationTerms $ffRotT -FrontTerms 0 -CallCap ([int]$ffPlanT.CallCap) -AttemptCap 20
+  _T ("CLEAN-TWIN a window with nothing owed asks exactly the rotation ($ffRotT), inside the attempt cap 20 and the call cap $($ffPlanT.CallCap)") ($ffWinLive.Ok -and $ffWinLive.Budget -eq $ffRotT -and $ffWinLive.Budget -le 20 -and $ffWinLive.Budget -le [int]$ffPlanT.CallCap)
+  # The founding shape: the plan allowed CallCap - rotation = 25 expiries, the old code clamped the sum at the
+  # call cap 40, and the loop could only attempt 20 - so the log's budget was not the loop's, and the cut fell on
+  # the rotation at the tail. Frozen numbers (15 rotation, 25 owed, cap 40, attempt cap 20), not read back.
+  $wF = Get-FfWindowBudget -RotationTerms 15 -FrontTerms 25 -CallCap 40 -AttemptCap 20
+  _T 'MUST-FIRE rotation 15 + 25 owed under call cap 40 and attempt cap 20: the budget is 20, not 40, and the rotation keeps all 15' ($wF.Ok -and $wF.Budget -eq 20 -and $wF.Rotation -eq 15 -and $wF.Front -eq 5 -and $wF.FrontDeferred -eq 20)
+  $wAt = Get-FfWindowBudget -RotationTerms 15 -FrontTerms 5 -CallCap 40 -AttemptCap 20
+  _T 'CLEAN-TWIN exactly AT the ceiling of 20 (15 rotation + 5 front): every front term fits, none deferred' ($wAt.Ok -and $wAt.Budget -eq 20 -and $wAt.Front -eq 5 -and $wAt.FrontDeferred -eq 0)
+  $wPast = Get-FfWindowBudget -RotationTerms 15 -FrontTerms 6 -CallCap 40 -AttemptCap 20
+  _T 'MUST-FIRE one term PAST the ceiling of 20 (15 rotation + 6 front): the budget stays 20 and exactly 1 is deferred' ($wPast.Ok -and $wPast.Budget -eq 20 -and $wPast.Front -eq 5 -and $wPast.FrontDeferred -eq 1)
+  $wRotAt = Get-FfWindowBudget -RotationTerms 20 -FrontTerms 3 -CallCap 40 -AttemptCap 20
+  _T 'CLEAN-TWIN a rotation exactly AT the ceiling of 20 is met, with no room for a front term' ($wRotAt.Ok -and $wRotAt.Budget -eq 20 -and $wRotAt.Front -eq 0 -and $wRotAt.FrontDeferred -eq 3)
+  $wRotPast = Get-FfWindowBudget -RotationTerms 21 -FrontTerms 0 -CallCap 40 -AttemptCap 20
+  _T 'MUST-FIRE a rotation one PAST the ceiling of 20 is refused as unmeetable, and still never asks more than 20' ((-not $wRotPast.Ok) -and $wRotPast.Budget -eq 20 -and $wRotPast.Why -match 'cannot be met')
+  $wCap = Get-FfWindowBudget -RotationTerms 15 -FrontTerms 10 -CallCap 18 -AttemptCap 20
+  _T 'CLEAN-TWIN a call cap BELOW the attempt cap (18 < 20) is the ceiling' ($wCap.Budget -eq 18 -and $wCap.Front -eq 3)
+  $jf = Join-FfFront -TermList @('apples','bananas','cherries','dates') -Front @('cherries','zucchini','apples') -Allowance 1
+  _T 'MUST-FIRE the front takes only its allowance (1 of 2 listed terms moves; an unknown term is ignored)' (($jf.Prepended -eq 1) -and (($jf.Items -join ',') -eq 'cherries,apples,bananas,dates'))
+  $jf2 = Join-FfFront -TermList @('apples','bananas','cherries','dates') -Front @('cherries','apples') -Allowance 5
+  _T 'CLEAN-TWIN with room, every owed term leads in the order owed and the rotation keeps its order behind them' (($jf2.Prepended -eq 2) -and (($jf2.Items -join ',') -eq 'cherries,apples,bananas,dates'))
+  $tpFix = @([pscustomobject]@{ id = 'butter'; term = 'butter' }, [pscustomobject]@{ id = 'popsicles'; term = 'popsicles' }, [pscustomobject]@{ id = 'popsicles'; term = 'ice pops' }, [pscustomobject]@{ id = 'eggs'; term = 'eggs' })
+  $askedIds = Get-FfExpiryIdsAsked -ExpiryIds @('butter', 'popsicles', 'eggs') -TermPairs $tpFix -Attempted @{ 'butter' = $true; 'ice pops' = $true }
+  _T 'MUST-FIRE an expiry whose term was never attempted is NOT marked re-priced (eggs stays owed)' ((@($askedIds) -join ',') -eq 'butter,popsicles')
+  $askedNone = Get-FfExpiryIdsAsked -ExpiryIds @('eggs') -TermPairs $tpFix -Attempted @{}
+  _T 'MUST-NOT-FIRE a window that attempted nothing marks nothing' (@($askedNone).Count -eq 0)
+
+  # ---- 3. "N for $X" IS X/N EACH ----------------------------------------------------------------------------
+  # Founding row: "Pampa Pickles, Sweet Relish 12 Oz", captured 2026-07-30 as ad_price "$45" / current_price 45.
+  $pampa = [pscustomobject]@{ name = 'Pampa Pickles, Sweet Relish 12 Oz'; size = '12 oz'; price = '4 for $5.00'; base_price = 5.0; id = '777' }
+  $pr4 = Get-FfRowPrice $pampa
+  _T 'MUST-FIRE "4 for $5.00" prices at $1.25 each, never $45 (Pampa sweet relish, 2026-07-30)' (($null -ne $pr4) -and ([math]::Abs($pr4.price - 1.25) -lt 0.0001) -and ($pr4.price -ne 45))
+  $pr2 = Get-FfRowPrice ([pscustomobject]@{ name = 'x'; price = '2 for $3'; base_price = 3.0 })
+  _T 'MUST-FIRE "2 for $3" prices at $1.50 each' (($null -ne $pr2) -and ([math]::Abs($pr2.price - 1.5) -lt 0.0001))
+  $pr10 = Get-FfRowPrice ([pscustomobject]@{ name = 'x'; price = '10 for $10'; base_price = 10.0 })
+  _T 'MUST-FIRE "10 for $10" prices at $1.00 each, not $1010' (($null -ne $pr10) -and ([math]::Abs($pr10.price - 1.0) -lt 0.0001))
+  _T 'MUST-NOT-FIRE a plain "$4.50" is not a multi-buy' ($null -eq (ConvertFrom-FfMultiBuy '$4.50'))
+  $pr45 = Get-FfRowPrice ([pscustomobject]@{ name = 'x'; price = '$4.50'; base_price = 4.5 })
+  _T 'CLEAN-TWIN a plain "$4.50" still prices at 4.50 with no multi-buy basis' (($null -ne $pr45) -and ([math]::Abs($pr45.price - 4.5) -lt 0.0001) -and ($null -eq $pr45.multi))
+  _T 'MUST-NOT-FIRE "1 for $3" is not a multi-buy (a quantity under 2)' ($null -eq (ConvertFrom-FfMultiBuy '1 for $3'))
+  $rowMb = New-FfRow $pampa 'relish' '2026-09-19' '6401' @{}
+  _T 'MUST-FIRE the multi-buy row says its basis and records no invented was-price (base_price 5.00 is the offer total)' (($rowMb.ad_price -eq '$1.25') -and ($rowMb.current_price -eq 1.25) -and ($rowMb.multi_buy -eq '4 for $5.00') -and ($rowMb.multi_buy_qty -eq 4) -and (-not $rowMb.Contains('base_price')) -and (-not $rowMb.Contains('marked_down')))
+
+  # ---- THE CONTRACT FIELD THAT WAS NEVER WRITTEN: current_price (0 of 5,486 rows on 2026-09-18) ---------------
+  $rowPlain = New-FfRow ([pscustomobject]@{ name = 'Our Family Sour Cream 16 Oz'; size = '16 oz'; price = '$2.29'; base_price = 2.89; id = '4411'; canonical_url = 'https://x/p/4411' }) 'sour cream' '2026-09-19' '6401' @{}
+  _T 'MUST-FIRE a fresh row carries current_price (what the store charges) beside ad_price, and the regular price as base_price' (($rowPlain.current_price -eq 2.29) -and ($rowPlain.ad_price -eq '$2.29') -and ($rowPlain.base_price -eq 2.89) -and ([bool]$rowPlain.marked_down))
+  $rowSame = New-FfRow ([pscustomobject]@{ name = 'Milk'; size = 'gal'; price = '$3.19'; base_price = 3.19 }) 'milk' '2026-09-19' '6401' @{}
+  _T 'MUST-NOT-FIRE a row whose price equals its regular price is not marked down' (($rowSame.current_price -eq 3.19) -and (-not $rowSame.Contains('marked_down')))
+  _T 'CLEAN-TWIN found_by_term, product_id and canonical_url still ride on the fresh row' (($rowPlain.found_by_term -eq 'sour cream') -and ($rowPlain.product_id -eq '4411') -and ($rowPlain.canonical_url -eq 'https://x/p/4411'))
+  _T 'MUST-NOT-FIRE a row with no honest price is no row (Get-FfPrice''s null survives)' ($null -eq (New-FfRow ([pscustomobject]@{ name = 'x'; price = ''; base_price = 0 }) 't' '2026-09-19' '6401' @{}))
+
+  # ---- 5. EVERY ROW SAYS WHEN AND WHERE IT WAS READ ------------------------------------------------------------
+  _T 'MUST-FIRE a fresh row carries as_of (the read date) and store_id (the location the request named)' (($rowPlain.as_of -eq '2026-09-19') -and ($rowPlain.store_id -eq '6401'))
+  $nrStamp = Norm-Row ([pscustomobject]$rowPlain) '2026-09-19' $true
+  _T 'CLEAN-TWIN Norm-Row keeps store_id and the multi-buy basis on a carried row (the normalizer-drops-the-contract class)' (($nrStamp.store_id -eq '6401') -and ((Norm-Row ([pscustomobject]$rowMb) '2026-09-19' $true).multi_buy -eq '4 for $5.00'))
+
+  # ---- 4. THE CARRY READS MaxCarryDays FROM THE POLICY, AND CARRIES ONLY WHAT IT CAN DATE AND PLACE ----------
+  $mcd = [int](Get-PolicyMaxCarryDays)
+  $tdy = '2026-09-19'
+  $atBar = ([datetime]$tdy).AddDays(-$mcd).ToString('yyyy-MM-dd')
+  $pastBar = ([datetime]$tdy).AddDays(-($mcd + 1)).ToString('yyyy-MM-dd')
+  _T ("CLEAN-TWIN a row exactly AT MaxCarryDays ($mcd d, read $atBar) is still carried") ((Get-FfCarryVerdict ([pscustomobject]@{ as_of = $atBar; store_id = '6401' }) '6401' $tdy $mcd) -eq 'carry')
+  _T ("MUST-FIRE a row one day PAST MaxCarryDays ($($mcd + 1) d, read $pastBar) expires") ((Get-FfCarryVerdict ([pscustomobject]@{ as_of = $pastBar; store_id = '6401' }) '6401' $tdy $mcd) -eq 'expired')
+  _T 'MUST-FIRE the 2026-08-13 carry of 14 days is gone: a 15-day-old row is carried under the policy window' ((Get-FfCarryVerdict ([pscustomobject]@{ as_of = '2026-09-04' }) '6401' $tdy $mcd) -eq 'carry')
+  _T 'MUST-FIRE a row with no as_of is not carried (it used to borrow its FILE''s week_of)' ((Get-FfCarryVerdict ([pscustomobject]@{ item = 'x'; store_id = '6401' }) '6401' $tdy $mcd) -eq 'undated')
+  _T 'MUST-FIRE a row stamped with another store is never carried as this one' ((Get-FfCarryVerdict ([pscustomobject]@{ as_of = '2026-09-18'; store_id = '6399' }) '6401' $tdy $mcd) -eq 'wrong-store')
+  _T 'CLEAN-TWIN a legacy row with no store_id is carried unstamped (the board decides it; nothing here invents a store)' ((Get-FfCarryVerdict ([pscustomobject]@{ as_of = '2026-09-18' }) '6401' $tdy $mcd) -eq 'carry')
+  _T ("CLEAN-TWIN at the policy's own MaxCarryDays ($mcd) the starvation classifier calls a term last bought exactly $mcd days ago CHURN") ((Get-FfExpiryClass 'relish' $atBar $tdy $mcd) -eq 'churn')
+  _T ("MUST-FIRE ...and one day past ($($mcd + 1)) STARVED") ((Get-FfExpiryClass 'relish' $pastBar $tdy $mcd) -eq 'starved')
+
+  # ---- THE FREEZE FLOOR MOVES WITH THE PLAN (2 x RotationTerms, now per the freshness rule) -------------------
+  $flr = 2 * $ffRotT
+  _T ("MUST-NOT-FIRE exactly AT the floor ($flr terms in 48h, two landed windows of $ffRotT) stays silent") (-not (Test-FfCatalogDegraded 5486 5486 0 0 400 $flr $ffRotT).degraded)
+  _T ("MUST-FIRE one term under the floor ($($flr - 1) in 48h) pages") ((Test-FfCatalogDegraded 5486 5486 0 0 400 ($flr - 1) $ffRotT).degraded)
+  _T 'MUST-NOT-FIRE with no plan to measure against (rotationTerms 0) the terms arm says nothing' (-not (Test-FfCatalogDegraded 5486 5486 0 0 400 0 0).degraded)
+
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
@@ -522,6 +782,16 @@ if (-not (Test-Path $regDir)) { New-Item -ItemType Directory -Force $regDir | Ou
 $UA = @{ 'User-Agent' = 'Mozilla/5.0' }
 $todayS = Get-OmahaDateKey
 $terms = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
+# THE CAPTURE POLICY IS LOADED ONCE, HERE, AND A RUN THAT CANNOT LOAD IT DOES NOT RUN (2026-09-19). It answers
+# every number this lane spends or keeps: the window's rotation (Get-CapturePlan, the FRESHNESS RULE), the carry
+# window (MaxCarryDays) and the promo-length bound (QuarterDays). Each call site used to dot-source it inside its
+# own try and fall back to a typed number on failure - 7 terms, 90 days, 90 days - which is a second copy of the
+# policy that only switches on when the first cannot be read, and is exactly how a budget drifts from its rule.
+# Exit 2 is this lane's existing refusal code (the wrong-city FATAL below uses it); nothing has been asked yet.
+try { . (Join-Path $root 'capture-policy-lib.ps1') } catch {
+  Write-Output ('FATAL: Family Fare cannot load capture-policy-lib.ps1 (' + $_.Exception.Message + ') - without it this lane has no rotation budget and no carry window. Nothing asked, nothing written.')
+  exit 2
+}
 
 $ak = 'family_fare'; $sid = '6401'; $b = 'https://api.freshop.ncrcloud.com/1'
 function Get-FreshToken {
@@ -550,8 +820,7 @@ $tok = Get-FreshToken
 # they did before, rather than the whole everyday pull dying over an enrichment.
 $script:FfOffers = @{}
 # The promo-length bound, read from the capture policy rather than written here.
-$script:FfOfferMaxDays = 90
-try { . (Join-Path $root 'capture-policy-lib.ps1'); $script:FfOfferMaxDays = [int](Get-PolicyQuarterDays) } catch { }
+$script:FfOfferMaxDays = [int](Get-PolicyQuarterDays)
 try {
   $tqO = if ($tok) { "&token=$tok" } else { "" }
   $offPage = 1; $offTotal = 0
@@ -706,71 +975,18 @@ $seen = @{}
 function Ingest-Items($items, $term) {
   foreach ($it in $items) {
     if (-not $it.name) { continue }
-    # PUBLISH THE CURRENT PRICE, NEVER THE REGULAR ONE.
-    # This used to read `base_price` FIRST and only fall back to `price`. base_price is the REGULAR price;
-    # `price` is what the store charges today. That is exactly the bug that had the board publishing Hy-Vee
-    # sirloin at $13.99/lb while Omaha #01 was charging $11.99, and Baker's chicken breast at $2.89/lb while
-    # the store was charging $2.29. Freshop happens to return the two fields identical for every one of the
-    # 375 Family Fare products sampled on 2026-07-14, so it was harmless - but it was a loaded gun. The day
-    # Freshop starts populating a markdown into `price`, the old order would have quietly published the
-    # regular price instead, and nothing downstream would have caught it.
-        # `price` comes back as a string with a $ ("$3.59"); base_price as a number (3.59).
-    # ...AND SOMETIMES IT IS NOT A PRICE AT ALL. Freshop returns multi-buy offers as text: "4 for $5.00".
-    # Stripping non-digits from that yields "45.00", so the row gets published at $45. Measured 2026-07-31:
-    # 28 of 3,856 Family Fare rows carried a price built exactly that way (all "4 for $5.00" -> 45,
-    # "3 for $5.00" -> 35, "2 for $3.00" -> 23), and one of them was LIVE ON THE PUBLISHED BOARD:
-    # ground-cloves @ Family Fare read "Spice Supreme Spice Ground Cloves", size 1.25 oz, ad $45, which the
-    # engine correctly divided into $36.00/oz against a real cheapest of $1.09/oz at Walmart. No price band,
-    # no guard and no audit blinked, because $45 for a spice jar is absurd but not arithmetically impossible.
-    # DROP, DO NOT FLIP. Freshop's own row says base_price=5.0 and unit_price=1.25 for that product, so the
-    # OFFER costs $5.00 and a jar inside the offer works out at $1.25. Neither number says what ONE jar costs
-    # a shopper who does not buy four, and "4 for $5.00" is very often must-buy-four. Two readings, no way to
-    # choose between them: the honest output is no row. Skipping costs one board cell today (ground-cloves
-    # keeps Walmart, Hy-Vee, Baker's and Fareway, and Walmart stays cheapest) and removes a 36x error.
-    # If a later pass proves Family Fare honours the single price, read unit_price here and require
-    # n * unit_price to reconcile with base_price before trusting it - do not simply divide.
-    # The rule above now lives in ff-price-lib.ps1, because probe-ingredient.ps1 (the Recipe Hunter's
-    # targeted single-term probe) reads the same Freshop rows and has to make the same call. A second inline
-    # copy is how a corrected rule ships to one caller and not the other. $null means "no honest price".
-    $val = Get-FfPrice $it
-    if ($null -eq $val) { continue }
+    # PUBLISH THE CURRENT PRICE, NEVER THE REGULAR ONE, AND NEVER A MULTI-BUY READ AS DIGITS. Both rules, and the
+    # full account of what each cost, live with the row builder New-FfRow (top of this file) and ff-price-lib.ps1:
+    # `price` is what the store charges today and `base_price` is the regular price (the Hy-Vee sirloin and
+    # Baker's chicken breast defects), and "4 for $5.00" is $1.25 each, never $45 (the ground-cloves and Pampa
+    # relish defects). $null from the builder means "no honest price" and the product is skipped.
+    # $sid is this lane's own request configuration (the store_id every search above is sent with), so the row
+    # is stamped with the location that answered it, never with a second literal.
+    $row = New-FfRow $it $term $todayS $sid $script:FfOffers
+    if ($null -eq $row) { continue }
     $key = ([string]$it.name + '|' + [string]$it.size)
     if ($seen.ContainsKey($key)) { continue }
     $seen[$key] = $true
-    # THE CONTRACT (guards invariant 10): current_price is what the STORE CHARGES, recorded independently of
-    # what we choose to publish in ad_price. A puller that reaches for the regular-price field then produces
-    # two different numbers on the row, and the guard sees it. Without this field the guard cannot check us.
-    # STAMP THE PRODUCT IDENTITY WE ALREADY HAVE.
-    # We just fetched this price FROM a specific Freshop product, and Freshop hands us its canonical_url and id
-    # in the same response - then this row threw both away. A separate pass later had to SEARCH the store to
-    # re-find the product so it could be linked, and sometimes found a different one: the board published
-    # "Hy Vee Almondmilk" while its link opened "Blue Diamond Almond Breeze". Two independent pipelines for one
-    # fact can always disagree, and that disagreement is the entire wrong-link bug class.
-    # A price and its link are the same fact. Carry the id with the price and they cannot drift apart.
-    $row = [ordered]@{ store='Family Fare'; item=[string]$it.name; ad_price=('$' + $val); size=[string]$it.size; regular=$val; current_price=$cur; source_ad='everyday shelf price'; as_of=$todayS }
-    # WHICH TERM FOUND THIS ROW (2026-08-02). Additive metadata; compare-deals and every board consumer ignore
-    # it. It exists so that when this row eventually ages out of the 14-day carry, the expiry can be
-    # CLASSIFIED instead of guessed at: rows carry their own provenance, and out\ff-term-ledger.json carries
-    # each term's last successful buy, so "the sweep can no longer reach this product" becomes a measurement
-    # rather than an inference from a date. Without it, starvation and ordinary name-churn are the same event.
-    if ($term) { $row['found_by_term'] = [string]$term }
-    if ($it.canonical_url) { $row['canonical_url'] = [string]$it.canonical_url }
-    if ($it.id) { $row['product_id'] = [string]$it.id }
-    if ($base -gt 0) { $row['base_price'] = $base }
-    if ($base -gt 0 -and $val -lt ($base - 0.005)) { $row['marked_down'] = $true }
-    # THE OFFER THAT MAKES THIS A SALE, AND THE WINDOW IT RUNS IN (2026-08-21). See the /offers block
-    # above for why the product record alone cannot answer this. Only a LIVE offer reaches here, so a
-    # row that gets these dates really is on sale today.
-    $offKey = [string]$it.id
-    if ($offKey -and $script:FfOffers.ContainsKey($offKey)) {
-      $ofr = $script:FfOffers[$offKey]
-      $row['ad_from'] = [string]$ofr.ad_from
-      $row['ad_to']   = [string]$ofr.ad_to
-      $row['marked_down'] = $true
-      # Record the offer's own regular price when the product record never carried one - that is the
-      # number a shopper is being saved from, and without it the saving cannot be stated honestly.
-      if (-not $row.Contains('base_price') -and $ofr.base_price) { $row['base_price'] = [double]$ofr.base_price }
-    }
     $script:deals += ,$row
   }
 }
@@ -786,7 +1002,7 @@ $termPairs = @(Get-SearchTermPairs $terms)
 $termList = @($termPairs | ForEach-Object { $_.term })
 $extraTerms = @($termPairs | Where-Object { -not $_.primary }).Count
 if ($extraTerms -gt 0) {
-  # The budget is the binding constraint (capture-policy's RotationTerms per window, 7 today), so say what the extra
+  # The budget is the binding constraint (capture-policy's RotationTerms per window, 15 at 602 terms since the 2026-09-19 freshness rule), so say what the extra
   # terms cost rather than letting a longer rotation be discovered later as an unexplained slowdown.
   Write-Output ("Family Fare: {0} search term(s) across {1} commodit(y/ies) - {2} are ADDITIONAL terms on multi-term commodities and each one spends a budget slot every rotation" -f $termList.Count, @($terms.PSObject.Properties).Count, $extraTerms)
 }
@@ -812,7 +1028,6 @@ if ($extraTerms -gt 0) {
 # its position over and then left alone as a record.
 $startIdx = 0
 try {
-  . (Join-Path $root 'capture-policy-lib.ps1')
   $startIdx = [int](Get-CaptureCursor -Store 'Family Fare' -OutDir $OutDir)
 } catch {
   Write-Warning ('Family Fare: shared capture cursor unreadable (' + $_.Exception.Message + ') - starting at 0')
@@ -873,7 +1088,7 @@ $ABORT_COLD_START = 30     # refused from the very first term - nothing has EVER
 # 200ms all succeeding while a second burst came back all-empty. Today this lane made about 590 requests
 # in one window - 324 rows priced against 544 empty term-responses - and store-verified throughput fell to
 # 393 rows/48h against a healthy 1259, which is the below-500 alarm firing on an outcome.
-# WHERE THE 590 CAME FROM, and it is not the main pass: the main pass stops at TermBudget (7 today) and
+# WHERE THE 590 CAME FROM, and it is not the main pass: the main pass stops at TermBudget (7 that day) and
 # then dumps EVERY remaining term into $empty marked 'term budget reached before request'. The recovery
 # passes below then iterate $empty and ask all of them - twice. So the run re-asks about 590 terms it
 # deliberately chose not to ask, spends the whole window budget proving the API is throttled, and comes
@@ -887,97 +1102,66 @@ $ABORT_COLD_START = 30     # refused from the very first term - nothing has EVER
 $ATTEMPT_CAP = 20
 $script:ffAttempts = 0
 $streak = 0; $emptyRun = 0; $aborted = $false; $lastSuccessRot = -1
-# TERM BUDGET (capture policy, 2026-08-20). The wall-clock cap alone let one run buy
-# 60-90 terms and the estate ran TWO passes a day, which is what put us over Freshop's
-# window and got the search endpoint answering 400/error_code 429. The budget is now
-# derived, not guessed: total terms / 90 days, plus one extra for each sale reverting
-# today. See capture-policy.ps1 - the single place that decides this for every store.
-$script:TermBudget = [int]::MaxValue
+# TERM BUDGET (capture policy, 2026-08-20; the freshness rule, 2026-09-19). The wall-clock cap alone let one
+# run buy 60-90 terms and the estate ran TWO passes a day, which is what put us over Freshop's window and got
+# the search endpoint answering 400/error_code 429. The budget is derived, never guessed: Get-CapturePlan's
+# RotationTerms is ceil(terms / RotationDays / runs a day) - this lane's share of re-reading the whole list inside
+# RotationDays across its three windows - and Get-FfWindowBudget (top of this file) adds the front terms that
+# fit under the window ceiling, which is the smaller of the plan's CallCap and $ATTEMPT_CAP. There is no
+# fallback number: the policy loaded at the top of the live section or the run already refused.
+$script:TermBudget = 0
 $ffPrepended = 0
+$script:FfExpiryFrontIds = @()
+$plan = Get-CapturePlan -Store 'Family Fare' -Today $todayS
+# Emit the worklist too, so this store's slice is recorded the same way the walled
+# stores' is. One shape for all seven means an audit can ask "what was this store
+# asked for on that day?" and get an answer regardless of how it was fetched.
+try { $null = Write-CaptureWorklist -Store 'Family Fare' -Today $todayS -OutDir $OutDir } catch { }
+# THE FRONT OF THE WINDOW: expiring sales first, then confirmed pull-drop victims.
+# EXPIRIES (2026-08-22). Brad's rule: "reprice whenever an ad price / sale price / rollback price /
+# instant-savings price drops off." Every term of each expiring commodity, oldest-owed commodity first (the order
+# Get-CapturePlan hands them over), each commodity's terms in catalogue order.
+$expiryFront = New-Object System.Collections.Generic.List[string]
+foreach ($eid in @($plan.SaleExpiries)) {
+  foreach ($tp in $termPairs) { if ([string]$tp.id -eq [string]$eid -and -not $expiryFront.Contains([string]$tp.term)) { [void]$expiryFront.Add([string]$tp.term) } }
+}
+# VICTIMS (2026-09-07, queue 2026-09-07-72756b). audit-ff-carry writes out\ff-carry-report.json with a
+# confirmed_victims array, and its alert told the reader those victims 'lead the next window's slice
+# automatically' while nothing read the file. Get-FfVictimTerms (capture-policy-lib.ps1, fixtured in
+# test-capture-policy.ps1) decides the freshness (48 hours, so a frozen report cannot pin the front forever)
+# and the term list. An unreadable or undated report promotes nothing and says so.
+$victimFront = @()
 try {
-  . (Join-Path $root 'capture-policy-lib.ps1')
-  $plan = Get-CapturePlan -Store 'Family Fare' -Today $todayS
-  $script:TermBudget = [int]$plan.TermBudget
-  # Emit the worklist too, so this store's slice is recorded the same way the walled
-  # stores' is. One shape for all seven means an audit can ask "what was this store
-  # asked for on that day?" and get an answer regardless of how it was fetched.
-  try { $null = Write-CaptureWorklist -Store 'Family Fare' -Today $todayS -OutDir $OutDir } catch { }
-  # THE EXPIRING SALES GO TO THE FRONT OF THE LIST (2026-08-22). The budget above already counted one
-  # slot per expiry, but nothing put the expiring commodity's TERMS into the slice - the extra slot was
-  # spent on whatever sat at the cursor while the item whose sale just ended waited its quarter. Brad's
-  # rule: "reprice whenever an ad price / sale price / rollback price / instant-savings price drops off."
-  # Select-ExpiryFirstSlice is pure and fixtured in test-capture-policy.ps1; unbudgeted here (the budget
-  # counter in the buy loop still applies) so it simply reorders: every term of every expiring commodity
-  # first, then the rotation exactly as the cursor left it.
-  if (@($plan.SaleExpiries).Count -gt 0) {
-    $byTerm = @{}; foreach ($tp in $termPairs) { if (-not $byTerm.ContainsKey($tp.term)) { $byTerm[$tp.term] = @() }; $byTerm[$tp.term] += [string]$tp.id }
-    $sl = Select-ExpiryFirstSlice -Items $termList -Expiring @($plan.SaleExpiries) -KeyOf { param($t) $byTerm[$t] } -Budget 0 -CursorStart 0
-    $termList = @($sl.Items)
-    $ffPrepended = [int]$sl.Prepended
-    # The policy budgets one slot per expiring COMMODITY; a multi-term commodity needs one per TERM, and
-    # the rotation must not pay for the difference or its slice silently shrinks on expiry days.
-    # ...BUT NEVER PAST THE WALL (2026-08-22). This top-up used to be unbounded, and with 19 FF
-    # windows reverting on 2026-08-23 (and 130 across the estate) a multi-term commodity could
-    # push the budget straight through Freshop's ~40-call window - the throttle this whole
-    # policy exists to avoid. The plan's own CallCap is the ceiling; anything the cap defers is
-    # still OWED in sale-windows.json and leads tomorrow's slice, oldest first.
-    $extraTerms = $ffPrepended - @($plan.SaleExpiries).Count
-    if ($extraTerms -gt 0 -and $script:TermBudget -lt [int]::MaxValue) { $script:TermBudget += $extraTerms }
-    if ($plan.CallCap -gt 0 -and $script:TermBudget -gt [int]$plan.CallCap) {
-      Write-Output ("Family Fare: budget clamped from " + $script:TermBudget + " to the store call cap " + $plan.CallCap + " (" + $plan.CallCapBasis + ") - multi-term expiries do not get to breach the Freshop window")
-      $script:TermBudget = [int]$plan.CallCap
-    }
-    Write-Output ("Family Fare: " + $sl.Prepended + " term(s) for " + @($plan.SaleExpiries).Count + " expiring sale(s) moved to the FRONT of today's slice: " + (($termList | Select-Object -First $sl.Prepended) -join ', '))
+  $ffcF = Join-Path $OutDir 'ff-carry-report.json'
+  if (Test-Path $ffcF) {
+    $ffcDoc = Read-JsonFile $ffcF
+    $ffcV = Get-FfVictimTerms -Report $ffcDoc -MaxAgeHours 48
+    $victimFront = @($ffcV.terms)
+    if ($victimFront.Count -eq 0) { Write-Output ('Family Fare: no pull-drop victim promoted (' + $ffcV.reason + ')') }
   }
-  # ---- THE CONFIRMED PULL-DROP VICTIMS GO TO THE FRONT TOO (2026-09-07, queue 2026-09-07-72756b) -----
-  # audit-ff-carry writes out\ff-carry-report.json with a confirmed_victims array, and its alert told the
-  # reader those victims 'lead the next window's slice automatically'. Nothing read that file. Repo-wide,
-  # 'ff-carry-report' and 'confirmed_victims' appeared ONLY in the writer and in two shape assertions in
-  # test-auditors - no consumer, no promotion path - so a genuinely dropped carried item waited its full
-  # turn in the 90-day rotation (the two found on 2026-09-07 were due in 33 and 58 windows). The human
-  # reading that alert was reassured by a mechanism that did not exist.
-  # SAME HELPER AS THE EXPIRIES, on purpose: Select-ExpiryFirstSlice is pure and already fixtured, and it
-  # enforces 'front of the slice, in the order given, stop at the budget'. A second ordering routine here
-  # would be a second set of rules to keep in step.
-  # 48 HOURS, because a stale report must not re-ask a term forever: once a victim is captured the next
-  # report drops it, but if the audit stops running the file freezes and would otherwise pin the front of
-  # every future slice. An unreadable or undated report promotes nothing and says so.
-  try {
-    $ffcF = Join-Path $OutDir 'ff-carry-report.json'
-    if (Test-Path $ffcF) {
-      $ffcDoc = Read-JsonFile $ffcF
-      # ONE implementation, shared with the fixture: Get-FfVictimTerms (capture-policy-lib.ps1) decides
-      # both the freshness and the term list, and test-capture-policy.ps1 drives that same function.
-      $ffcV = Get-FfVictimTerms -Report $ffcDoc -MaxAgeHours 48
-      $ffcTerms = @($ffcV.terms)
-      if ($ffcTerms.Count -eq 0) {
-        Write-Output ('Family Fare: no pull-drop victim promoted (' + $ffcV.reason + ')')
-      } else {
-        $slV = Select-ExpiryFirstSlice -Items $termList -Expiring $ffcTerms -KeyOf { param($t) @($t) } -Budget 0 -CursorStart 0
-        $termList = @($slV.Items)
-        $vAdded = [int]$slV.Prepended
-        if ($vAdded -gt 0) {
-          # counted into the budget exactly as an expiry is - one slot per TERM - and clamped by the same
-          # CallCap, so promoting a victim can never breach the Freshop window.
-          if ($script:TermBudget -lt [int]::MaxValue) { $script:TermBudget += $vAdded }
-          if ($plan.CallCap -gt 0 -and $script:TermBudget -gt [int]$plan.CallCap) {
-            Write-Output ('Family Fare: budget clamped to the store call cap ' + $plan.CallCap + ' after promoting pull-drop victims')
-            $script:TermBudget = [int]$plan.CallCap
-          }
-          Write-Output ('Family Fare: ' + $vAdded + ' confirmed pull-drop victim term(s) moved to the FRONT of today''s slice: ' + (($termList | Select-Object -First $vAdded) -join ', '))
-        }
-      }
-    }
-  } catch { Write-Output ('Family Fare: could not read ff-carry-report.json (' + $_.Exception.Message + ') - no victims promoted, which is not the same as none existing') }
-  Write-Output ("Family Fare: capture-policy budget = " + $script:TermBudget + " term(s) today (" + $plan.RotationTerms + " rotation + " + @($plan.SaleExpiries).Count + " sale expiry, cap " + $plan.CallCap + "; quarter " + $plan.QuarterDays + "d)")
-  if ([int]$plan.ExpiryDeferred -gt 0) {
-    Write-Output ("Family Fare: " + $plan.ExpiryDeferred + " further expiry(ies) OWED and deferred by the cap (oldest owed since " + $plan.ExpiryOldest + ") - they are NOT dropped; sale-windows.json keeps them until a landed run records them.")
-  }
-} catch {
-  # A policy that cannot load must NOT silently become "unlimited" - that is the state
-  # we are fixing. Fall back to the quarter rate rather than the old free-for-all.
-  $script:TermBudget = 7
-  Write-Warning ("Family Fare: capture-policy.ps1 did not load (" + $_.Exception.Message + ") - falling back to a conservative 7-term budget")
+} catch { Write-Output ('Family Fare: could not read ff-carry-report.json (' + $_.Exception.Message + ') - no victims promoted, which is not the same as none existing') }
+$frontWanted = New-Object System.Collections.Generic.List[string]
+foreach ($t in @($expiryFront.ToArray()) + @($victimFront)) { if ($t -and ($termList -contains [string]$t) -and -not $frontWanted.Contains([string]$t)) { [void]$frontWanted.Add([string]$t) } }
+# THE WINDOW: rotation reserved first, the front shares what is left under the ceiling, and nothing past it.
+$ffWin = Get-FfWindowBudget -RotationTerms ([int]$plan.RotationTerms) -FrontTerms $frontWanted.Count -CallCap ([int]$plan.CallCap) -AttemptCap $ATTEMPT_CAP
+if (-not $ffWin.Ok) { Write-Warning ('Family Fare: ' + $ffWin.Why + ' - asking the ceiling (' + $ffWin.Ceiling + ') this window; test-capture-policy.ps1 fails this policy at push') }
+$ffFront = Join-FfFront -TermList $termList -Front $frontWanted.ToArray() -Allowance $ffWin.Front
+$termList = @($ffFront.Items)
+$ffPrepended = [int]$ffFront.Prepended
+$script:TermBudget = [int]$ffWin.Budget
+# Which expiring COMMODITIES got at least one term into the front. Only these may be marked re-priced, and only
+# if the term was actually attempted (see the sale-expiry ledger commit below).
+$frontSet = @{}; foreach ($t in @($ffFront.Front)) { $frontSet[[string]$t] = $true }
+$script:FfExpiryFrontIds = @(@($plan.SaleExpiries) | Where-Object { $eid = [string]$_; @($termPairs | Where-Object { [string]$_.id -eq $eid -and $frontSet.ContainsKey([string]$_.term) }).Count -gt 0 })
+if ($ffPrepended -gt 0) {
+  Write-Output ("Family Fare: " + $ffPrepended + " term(s) moved to the FRONT of this window (" + @($script:FfExpiryFrontIds).Count + " of " + @($plan.SaleExpiries).Count + " expiring sale(s), then pull-drop victims): " + (($termList | Select-Object -First $ffPrepended) -join ', '))
+}
+if ($ffWin.FrontDeferred -gt 0) {
+  Write-Output ("Family Fare: " + $ffWin.FrontDeferred + " front term(s) did not fit under the window ceiling of " + $ffWin.Ceiling + " after the " + $ffWin.Rotation + "-term rotation - expiries stay OWED in sale-windows.json and victims stay in the carry report; both lead the next window")
+}
+Write-Output ("Family Fare: capture-policy budget = " + $script:TermBudget + " term(s) this window (" + $plan.RotationTerms + " rotation, ceil(" + $plan.TermCount + " terms / " + $plan.RotationDays + "d / " + (Get-StoreRunsPerDay 'Family Fare') + " windows) + " + $ffWin.Front + " front; ceiling " + $ffWin.Ceiling + " = min(call cap " + $plan.CallCap + ", attempt cap " + $ATTEMPT_CAP + "))")
+if ([int]$plan.ExpiryDeferred -gt 0) {
+  Write-Output ("Family Fare: " + $plan.ExpiryDeferred + " further expiry(ies) OWED and deferred by the cap (oldest owed since " + $plan.ExpiryOldest + ") - they are NOT dropped; sale-windows.json keeps them until a landed run records them.")
 }
 $bought = 0
 for ($i = 0; $i -lt $termList.Count; $i++) {
@@ -1088,7 +1272,7 @@ if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
   # THE ALERT USED TO LIVE HERE AND IT HAS MOVED (2026-07-31, plan item 30a1a8).
   # Writing the diagnostic is the GUARD and it stays exactly as it is. What was wrong was ALERTING off it:
   # this branch tests ONE RUN's raw collection against the best of recent MERGED files, and under the 3-hourly
-  # sharded sweep a run buys capture-policy's RotationTerms (7 today) of 602 BY DESIGN, so the branch is now
+  # sharded sweep a run buys capture-policy's RotationTerms (7 then, 15 since 2026-09-19) of 602 BY DESIGN, so the branch is now
   # permanently true and paged every
   # day about a pipeline that had taken the catalog from 1909 to 3974 items with 0 expired rows.
   # A trigger that can never be false is not a signal. The alert is re-keyed on the MERGED catalog's outcomes
@@ -1123,13 +1307,15 @@ if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
 # So: today's price ALWAYS wins for a product this run returned; a product it did NOT return is carried
 # forward at its last verified price, stamped with the date that price was captured, and dropped once that
 # capture goes stale. Absence from one throttled response is not evidence of absence from the store.
-# MUST track capture-policy's quarter. At a 90-day rotation a term is only revisited
-# every ~85 days, so a 14-day carry would expire ~85% of the catalog before its turn
-# came round again - the rotation and the expiry are two halves of one decision and
-# cannot be set independently. Read from the policy so they can never drift apart.
-$MaxCarryDays = 90
-try { . (Join-Path $root 'capture-policy-lib.ps1'); $MaxCarryDays = Get-PolicyMaxCarryDays } catch { }
-$carried = 0; $expired = 0
+# THE CARRY WINDOW IS capture-policy's MaxCarryDays, READ THROUGH Get-PolicyMaxCarryDays AND NOWHERE ELSE
+# (2026-09-19). This lane carried rows 14 days until 2026-08-20 (family-fare-regular files of 2026-08-13 still
+# record max_carry_days 14), then 90 read from the policy, but beside a typed 90 that silently took over whenever
+# the policy failed to load. Since the freshness rule MaxCarryDays is the HISTORY window - how long a row may be
+# KEPT for trend, graph time gates and the starvation classifier - and publication age is enforced at the board
+# by the provenance contract against MaxPublishAgeDays. A carried row older than the publish limit stays in this
+# file, dated, and the board withholds it; it is never re-dated here.
+$MaxCarryDays = [int](Get-PolicyMaxCarryDays)
+$carried = 0; $expired = 0; $carryUndated = 0; $carryWrongStore = 0; $carryUnstamped = 0
 # EXPIRY CLASSIFICATION (2026-08-02). Counted here, not inferred later. See Get-FfExpiryClass for what the
 # three classes mean and why only one of them is allowed to page. The ledger has already been merged with
 # this run's measured successes by the time the carry loop runs, so a term bought minutes ago reads as fresh.
@@ -1151,10 +1337,12 @@ if ($prevF) {
   foreach ($d in @($pdoc.deals)) {
     $k = ([string]$d.item).ToLower()
     if (-not $k -or $have.ContainsKey($k)) { continue }
-    $asOf = if ($d.as_of) { [string]$d.as_of } else { [string]$pdoc.week_of }
-    $age = 9999
-    try { $age = [int](([datetime]$todayS) - ([datetime]$asOf)).TotalDays } catch {}
-    if ($age -gt $MaxCarryDays) {
+    # ONE VERDICT PER ROW, from Get-FfCarryVerdict (top of this file, fixtured): undated, expired, wrong-store
+    # or carry. An undated row no longer borrows its file's week_of - that date is when the FILE was written.
+    $verdict = Get-FfCarryVerdict $d $sid $todayS $MaxCarryDays
+    if ($verdict -eq 'undated') { $carryUndated++; continue }
+    if ($verdict -eq 'wrong-store') { $carryWrongStore++; continue }
+    if ($verdict -eq 'expired') {
       $expired++
       $ft = [string]$d.found_by_term
       $cls = Get-FfExpiryClass $ft ([string]$ledger[$ft]) $todayS $MaxCarryDays
@@ -1163,11 +1351,15 @@ if ($prevF) {
       else { $expUnknown++ }
       continue
     }
+    if ($verdict -ne 'carry') { throw ('unknown carry verdict: ' + $verdict) }
+    if (-not [string]$d.store_id) { $carryUnstamped++ }
     $have[$k] = $true
-    [void]$rows.Add((Norm-Row $d $asOf $true))
+    [void]$rows.Add((Norm-Row $d ([string]$d.as_of) $true))
     $carried++
   }
 }
+if ($carryUndated -or $carryWrongStore) { Write-Warning ("Family Fare: not carried - " + $carryUndated + " row(s) with no as_of (no proof of when the price was read), " + $carryWrongStore + " row(s) stamped with a store other than " + $sid) }
+if ($carryUnstamped) { Write-Output ("Family Fare: " + $carryUnstamped + " carried row(s) predate the store_id stamp and are carried UNSTAMPED - the board's provenance contract decides them; each is re-stamped when its term is re-read inside the " + $plan.RotationDays + "-day rotation") }
 $deals = $rows.ToArray()
 
 # AUTHORITATIVE WORKLIST LEDGER. This is the actual rotated search worklist, not buckets inferred from
@@ -1190,7 +1382,7 @@ for ($termOrdinal = 0; $termOrdinal -lt $termList.Count; $termOrdinal++) {
   }
 }
 
-$out = [ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; price_mode='pickup'; mode_verified=$todayS; coverage_mode='partial'; source='Freshop catalog base_price (store_id 6401, Omaha), NOT Instacart'; deal_count=@($deals).Count; fresh_count=(@($deals).Count - $carried); carried_count=$carried; expired_count=$expired; expired_starved=$expStarved; expired_churn=$expChurn; expired_unknown=$expUnknown; max_carry_days=$MaxCarryDays; empty_terms=@($empty); capture_terms=$captureTerms.ToArray(); deals=$deals }
+$out = [ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; price_mode='pickup'; mode_verified=$todayS; coverage_mode='partial'; source=('Freshop catalog (store_id ' + $sid + ', Omaha), NOT Instacart'); store_id=$sid; deal_count=@($deals).Count; fresh_count=(@($deals).Count - $carried); carried_count=$carried; carried_unstamped=$carryUnstamped; carry_refused_undated=$carryUndated; carry_refused_wrong_store=$carryWrongStore; expired_count=$expired; expired_starved=$expStarved; expired_churn=$expChurn; expired_unknown=$expUnknown; max_carry_days=$MaxCarryDays; rotation_days=[int]$plan.RotationDays; rotation_terms=[int]$plan.RotationTerms; window_budget=$script:TermBudget; window_ceiling=[int]$ffWin.Ceiling; empty_terms=@($empty); capture_terms=$captureTerms.ToArray(); deals=$deals }
 
 # THE ONE WRITE THIS RUN EXISTS TO PRODUCE. Atomic, retried, and NON-FATAL - see Write-FfJsonAtomic. Under the
 # old bare Set-Content this line threw at 2026-08-02T07:06:41 and took 686 rows of purchases down with it,
@@ -1216,7 +1408,6 @@ if ($null -ne $commitIdx) {
   # owning WHEN to commit - Get-FfCursorCommit's cold-shutout rule is Family Fare's own hard-won
   # knowledge - and hands off only WHERE the number is stored.
   try {
-    . (Join-Path $root 'capture-policy-lib.ps1')
     # Save-FfCursorAdvance (top of this file) writes the cursor WITH FamilyFare_last and logs the advance, so the
     # self-test drives the same two calls this window makes.
     Save-FfCursorAdvance -From $startIdx -To $commitIdx -Today $todayS -OutDir $OutDir
@@ -1240,19 +1431,23 @@ if ($null -ne $commitIdx) {
 # by date - it prunes only what was recorded as done. So this write is what lets the ledger
 # drain; without it every expiry is re-queued forever. Gated on $mergedOk exactly like the
 # cursor above: a run whose rows did not land must repeat its expiries, not retire them. Only
-# the ids this run was actually ASKED for are marked - Set-SaleExpiryProcessed reads the same
-# capped plan the slice was built from.
+# the ids this run was actually ASKED are marked (2026-09-19): Get-FfExpiryIdsAsked keeps an expiring commodity
+# only when one of its terms reached the front of this window AND was attempted. Until today the call named no
+# ids, so Set-SaleExpiryProcessed marked the plan's whole expiry slice (up to CallCap - rotation = 25) while the
+# window could attempt 20 terms in all - a sale whose term was never asked was recorded as re-priced.
 if ($mergedOk) {
   try {
-    . (Join-Path $root 'capture-policy-lib.ps1')
-    $mk = Set-SaleExpiryProcessed -Store 'Family Fare' -Today $todayS -OutDir $OutDir -Landed $true
-    if ($mk.Marked -gt 0) { Write-Output ("Family Fare: recorded " + $mk.Marked + " sale re-price(s) in sale-windows.json") }
+    $ffAskedIds = Get-FfExpiryIdsAsked -ExpiryIds @($script:FfExpiryFrontIds) -TermPairs $termPairs -Attempted $termAttempted
+    $mk = $null
+    if (@($ffAskedIds).Count -gt 0) { $mk = Set-SaleExpiryProcessed -Store 'Family Fare' -Today $todayS -OutDir $OutDir -Landed $true -Ids @($ffAskedIds) }
+    if (@($plan.SaleExpiries).Count -gt @($ffAskedIds).Count) { Write-Output ("Family Fare: " + (@($plan.SaleExpiries).Count - @($ffAskedIds).Count) + " expiring sale(s) were not asked this window and stay OWED") }
+    if ($mk -and $mk.Marked -gt 0) { Write-Output ("Family Fare: recorded " + $mk.Marked + " sale re-price(s) in sale-windows.json") }
   } catch { Write-Warning ('Family Fare: sale-expiry ledger not updated (' + $_.Exception.Message + ') - those re-prices stay owed and lead tomorrow''s slice') }
 }
 # The ledger is a full rewrite of a merged map, so a failed write costs the run's new dates and nothing else:
 # every term simply keeps its last honestly-earned date and re-earns today's on the next window.
 if ($ledger.Count) {
-  $ledgerDoc = [ordered]@{ store='Family Fare'; updated=(Get-Date).ToString('s'); note='term -> the last date that search term returned products. Written ONLY from measured receipt inside the buy loop, never bulk-stamped. Used to classify a 14-day carry expiry as starved / churn / unknown; see Get-FfExpiryClass in pull-regular-familyfare.ps1.'; term_count=$ledger.Count; terms=[ordered]@{} }
+  $ledgerDoc = [ordered]@{ store='Family Fare'; updated=(Get-Date).ToString('s'); note='term -> the last date that search term returned products. Written ONLY from measured receipt inside the buy loop, never bulk-stamped. Used to classify a carry expiry (past capture-policy MaxCarryDays) as starved / churn / unknown; see Get-FfExpiryClass in pull-regular-familyfare.ps1.'; term_count=$ledger.Count; terms=[ordered]@{} }
   foreach ($k in ($ledger.Keys | Sort-Object)) { $ledgerDoc.terms[[string]$k] = [string]$ledger[$k] }
   if (-not (Write-FfJsonAtomic $ledgerFile ($ledgerDoc | ConvertTo-Json -Depth 4))) {
     Write-Warning ('Family Fare: could not write the term ledger to ' + $ledgerFile + ' - expiry classification falls back to unknown (which never pages) until it writes.')
@@ -1280,11 +1475,10 @@ try {
   # Three sources in order, and the last one is deliberately SILENT rather than alarming: an unreadable log
   # is a fact about the logger, not about the store.
   $termsBought48h = -1
-  # RotationTerms comes from the same plan the sweep budgeted with (line ~810), never from a second copy of
-  # the number: a threshold derived from a hand-restated constant is the drift this re-key exists to end.
-  # 7 is only the fallback for a plan that did not load, matching the budget fallback above.
-  $ffRotation = 7
-  if ($plan -and [int]$plan.RotationTerms -gt 0) { $ffRotation = [int]$plan.RotationTerms }
+  # RotationTerms comes from the same plan the sweep budgeted with, never from a second copy of the number: a
+  # threshold derived from a hand-restated constant is the drift this re-key exists to end. There is no fallback
+  # any more - the run refuses at the top when the policy cannot load - so the plan is always here.
+  $ffRotation = [int]$plan.RotationTerms
   try {
     $curLogF = Join-Path $OutDir 'capture-cursor-log.jsonl'
     if (Test-Path $curLogF) {
@@ -1322,7 +1516,7 @@ try {
               "What tripped it:`n  - " + (($ffState.reasons) -join "`n  - ") + "`n`n" + $starvedLine +
               "Merged catalog: $(@($deals).Count) items ($(@($deals).Count - $carried) fresh this run, $carried carried forward, $expired expired past $MaxCarryDays days [$expStarved starved, $expChurn churn, $expUnknown unknown], $recentVerified re-verified in the last 48h) against a best-of-recent of $prevMax. File: $file`n`n" +
               "Expiry classes: STARVED means the row's own search term has returned nothing for the whole carry window and the sweep genuinely cannot replace that product. CHURN means the term is being bought fine and only the NAME left the store's top-25 (a rename, a ranking shift, a delisting, or the multi-buy skip) - the catalog is a name-keyed union, so a trickle of those is the healthy steady state and does NOT page on its own. UNKNOWN means the row predates the found_by_term field, so it cannot be classified yet; it never pages and the class empties itself within $MaxCarryDays days.`n`n" +
-              "Throttled diagnostics written on $($recent.Count) of the last 4 days - that alone is NORMAL under the 3-hourly sharded sweep (capture-policy buys RotationTerms per window by design, 7 of 602 today) and is no longer what this alert keys on. It fires only when the merged catalog is actually losing ground.`n`n" +
+              "Throttled diagnostics written on $($recent.Count) of the last 4 days - that alone is NORMAL under the 3-hourly sharded sweep (capture-policy buys RotationTerms per window by design, $ffRotation of $($termList.Count) today) and is no longer what this alert keys on. It fires only when the merged catalog is actually losing ground.`n`n" +
               "Freshop rate-limits several hundred sequential terms from one IP. The fix is fewer requests per window (shard the term list across the day), NOT slower pacing - a 2026-07-28 probe showed 20 terms at 200ms all succeed while a second burst all came back empty, so the budget is per-window request COUNT."
       Send-Alert -Subject ("Grocery: Family Fare catalog is degrading - " + $ffState.reasons.Count + " signal(s)") -Body $body | Out-Null
       # stamp only on a SENT alert: a failed send must be free to try again on the next run, or a transient

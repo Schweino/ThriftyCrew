@@ -60,7 +60,10 @@
   rotation and 'everyday' pricing. IDK why its pulling the entire thing but it needs to stop."
 
   capture-policy-lib.ps1 decides what each of the seven stores is asked for daily - ad rollover, sale expiry,
-  and a 90-day quarterly rotation (total terms / 90 = 7 a day). Every store honoured it except this lane,
+  and the rotation: a 90-day quarter (total terms / 90 = 7 a day) when this was written, and since 2026-09-19 the
+  FRESHNESS RULE, ceil(terms / RotationDays / runs a day) = ceil(602 / 14 / 1) = 43 a day, read from
+  Get-CapturePlan and never computed here. Brad's ruling still holds word for word: the SAME rule as every
+  other store, at the new rate. Every store honoured the quarter except this lane,
   which took no slice at all and walked all 598 terms at 180ms pacing every morning: ~5 minutes of the daily
   run, the single largest remaining cost in the pipeline, to re-read prices that had not moved.
 
@@ -95,14 +98,14 @@
     -ResultsPerTerm N how many products per search (default 15)
     -Commodities ids  targeted re-price of specific commodity ids, merged into the newest capture
 
-  HOW OFTEN A FULL PULL IS STILL NEEDED. The rotation covers 598 terms at ceil(598/90) = 7 a day, so a
-  complete sweep takes ceil(598/7) = 86 days against capture-policy's 90-day MaxCarryDays - a 4-day margin.
-  That margin is the whole answer: if this lane runs every day, no row ever ages out and no full pull is
-  required. Every day the daily run does NOT happen spends one of those four days. So: run -Full once a
-  quarter as a matter of course, and run it after any stretch where the daily lane missed more than four
-  days in a 90-day window (out\capture-cursor-log.jsonl records every advance, so the gaps are countable).
-  A row whose as_of is past MaxCarryDays is DROPPED by the carry rather than published stale, so the cost of
-  skipping the full pull is coverage, never a wrong price.
+  HOW OFTEN A FULL PULL IS STILL NEEDED (re-derived 2026-09-19 for the freshness rule). The rotation now asks
+  Get-CapturePlan's RotationTerms a day - ceil(602 / 14) = 43 - so the whole list is re-read inside RotationDays
+  (14), the same window as capture-policy's MaxPublishAgeDays. The board's provenance contract WITHHOLDS a price
+  older than that, so a missed day costs coverage for the terms whose turn it was, never a wrong price, and the
+  next day's run cannot catch it up by itself (one slice a day). So: run -Full after any missed day when the
+  board must be whole, and before a verification sample (out\capture-cursor-log.jsonl records every advance,
+  so the gaps are countable). MaxCarryDays (90) is now only how long this file KEEPS a row, for history: a row
+  past it is DROPPED by the carry, and a row inside it but past the publish limit stays here, dated, unpublished.
   Credentials: grocery\.krogerkey (gitignored) or $env:KROGER_CLIENT_ID / $env:KROGER_CLIENT_SECRET in CI.
 #>
 param(
@@ -494,6 +497,15 @@ function Invoke-BakersCarryMerge {
            unless their as_of is already past MaxCarryDays, in which case they are DROPPED and counted.
            capture-policy-lib is explicit that rows carried longer than that expire, and dropping one is
            a coverage gap the ledger can see; publishing it is a stale price nothing reports.
+           MaxCarryDays is capture-policy's HISTORY window (90); how old a price may be when it is PUBLISHED
+           is the board's provenance contract (MaxPublishAgeDays), so a row inside the carry but past that
+           limit stays here, dated, and is withheld there. Nothing here re-dates it.
+        4. A ROW THAT CANNOT SAY WHEN OR WHERE IT WAS READ IS NOT CARRIED (2026-09-19). No as_of: dropped and
+           counted as Undated (it used to be carried with as_of '' forever, because rule 3 could not age a row
+           with no date). Its store is its own store_id, or else the location the PREVIOUS CAPTURE recorded it
+           asked (-PrevStoreId, that file's location_id) - the lane's own request configuration on the day the
+           row was read - and the carried row is stamped with it. A row whose store is not -StoreId is dropped
+           and counted as WrongStore. A row with neither is carried unstamped: nothing invents a store.
 
       A term that FAILED both request passes is deliberately NOT in AskedTerms, so its rows carry. That
       retires the 2026-07-28 defect this file documents at length - "because this is a comprehensive pull
@@ -505,7 +517,9 @@ function Invoke-BakersCarryMerge {
     .PARAMETER AskedTerms  hashtable of commodity id -> $true for the terms this run actually re-read
     .PARAMETER Today       yyyy-MM-dd
     .PARAMETER MaxCarryDays  rows whose as_of is older than this are dropped (0 = never expire)
-    .OUTPUTS @{ Rows; Carried; Expired; Restated; Superseded }
+    .PARAMETER StoreId       the location this run asked ('' = no store rule, for callers that have none)
+    .PARAMETER PrevStoreId   the location_id the previous capture recorded asking, for rows it did not stamp
+    .OUTPUTS @{ Rows; Carried; Expired; Restated; Superseded; Undated; WrongStore; Unstamped }
   #>
   [CmdletBinding()]
   param(
@@ -513,7 +527,9 @@ function Invoke-BakersCarryMerge {
     [AllowEmptyCollection()]$PrevDeals = @(),
     [hashtable]$AskedTerms = @{},
     [Parameter(Mandatory)][string]$Today,
-    [int]$MaxCarryDays = 0
+    [int]$MaxCarryDays = 0,
+    [string]$StoreId = '',
+    [string]$PrevStoreId = ''
   )
   $rows = New-Object System.Collections.Generic.List[object]
   $freshIds = @{}
@@ -527,22 +543,27 @@ function Invoke-BakersCarryMerge {
     $rid = if ($r -is [System.Collections.IDictionary]) { [string]$r['product_id'] } else { [string]$r.product_id }
     if ($rid) { $freshIds[$rid] = $true }
   }
-  $carried = 0; $expired = 0; $restated = 0; $superseded = 0
+  $carried = 0; $expired = 0; $restated = 0; $superseded = 0; $undated = 0; $wrongStore = 0; $unstamped = 0
   $todayD = $null
   if ($MaxCarryDays -gt 0) { try { $todayD = [datetime]::ParseExact($Today, 'yyyy-MM-dd', $null) } catch { $todayD = $null } }
   foreach ($d in @($PrevDeals)) {
     $rid = [string]$d.product_id
     if ($rid -and $freshIds.ContainsKey($rid)) { $superseded++; continue }        # rule 1
     if ($AskedTerms.ContainsKey([string]$d.found_by_term)) { $restated++; continue } # rule 2
+    $ao = [string]$d.as_of
+    if (-not ($ao -match '^\d{4}-\d{2}-\d{2}$')) { $undated++; continue }             # rule 4: when
     if ($null -ne $todayD) {                                                       # rule 3
-      $ao = [string]$d.as_of
-      if ($ao -match '^\d{4}-\d{2}-\d{2}$') {
-        $aoD = $null
-        try { $aoD = [datetime]::ParseExact($ao, 'yyyy-MM-dd', $null) } catch { $aoD = $null }
-        if ($aoD -and (($todayD - $aoD).TotalDays -gt $MaxCarryDays)) { $expired++; continue }
-      }
+      $aoD = $null
+      try { $aoD = [datetime]::ParseExact($ao, 'yyyy-MM-dd', $null) } catch { $aoD = $null }
+      if ($null -eq $aoD) { $undated++; continue }
+      if (($todayD - $aoD).TotalDays -gt $MaxCarryDays) { $expired++; continue }
     }
-    [void]$rows.Add([pscustomobject](Get-BakersCarryRow $d $Today))
+    $rowStore = [string]$d.store_id                                                # rule 4: where
+    if (-not $rowStore) { $rowStore = [string]$PrevStoreId }
+    if ($StoreId -and $rowStore -and -not [string]::Equals($rowStore, $StoreId, [StringComparison]::Ordinal)) { $wrongStore++; continue }
+    $cr = Get-BakersCarryRow $d $Today
+    if ($rowStore) { $cr['store_id'] = $rowStore } else { $unstamped++ }
+    [void]$rows.Add([pscustomobject]$cr)
     $carried++
   }
   # .ToArray(), NOT the List itself. In Windows PowerShell 5.1 `@( )` around a
@@ -550,7 +571,8 @@ function Invoke-BakersCarryMerge {
   # every caller here wraps the result in @( ). audit-ff-carry.ps1 carries a long note about this exact
   # trap - it silently broke that script on every run for 17 days.
   return [pscustomobject]@{ Rows = $rows.ToArray(); Carried = $carried; Expired = $expired
-                            Restated = $restated; Superseded = $superseded }
+                            Restated = $restated; Superseded = $superseded
+                            Undated = $undated; WrongStore = $wrongStore; Unstamped = $unstamped }
 }
 
 # ---------------------------------------------------------------- self-test (no credentials, no network)
@@ -693,9 +715,29 @@ if ($SelfTest) {
       base_price=5.49; marked_down=$true; ad_from='2026-08-19'; ad_to='2026-08-26' })
   }
   $POP = $bkPrev.Count            # 480 rows
-  # the rotation budget for this population, from the policy's own quarter: ceil(240/90) = 3 terms a day
-  $bkBudget = [int][math]::Ceiling($NT_TERMS / [double](Get-PolicyQuarterDays))
-  B "the daily slice is ceil($NT_TERMS terms / $(Get-PolicyQuarterDays)d) = $bkBudget term(s), not the whole list" ($bkBudget -eq 3)
+  # THE ROTATION BUDGET FOR THIS POPULATION, FROM THE FRESHNESS RULE (2026-09-19): Get-RotationTermsPerRun, the
+  # same function Get-CapturePlan uses for every store, at Baker's one run a day. It was ceil(240 / QuarterDays)
+  # = 3 here until today, the quarterly drip the stale 2026-09-17 board was built on.
+  $bkBudget = Get-RotationTermsPerRun $NT_TERMS "Baker's"
+  $bkWant = [int][math]::Ceiling($NT_TERMS / [double]$script:RotationDays / [double](Get-StoreRunsPerDay "Baker's"))
+  B "CLEAN TWIN  the daily slice is ceil($NT_TERMS terms / $($script:RotationDays)d / $(Get-StoreRunsPerDay "Baker's") run) = $bkBudget term(s), not the whole list" (($bkBudget -eq $bkWant) -and ($bkBudget -lt $NT_TERMS) -and ($bkBudget -gt 0))
+  $bkQuarter = [int][math]::Ceiling($NT_TERMS / [double](Get-PolicyQuarterDays))
+  B "MUST FIRE  the quarter rate ($bkQuarter a day, ceil($NT_TERMS / $(Get-PolicyQuarterDays))) is NOT the slice any more ($bkBudget)" ($bkQuarter -ne $bkBudget)
+  # THE LIVE LANE READS THE SAME RULE: Get-CapturePlan for Baker's over the tracked term list, and the ask plan the
+  # run builds from it, never over the call cap.
+  $bkLivePlan = Get-CapturePlan -Store "Baker's" -Today '2026-09-19'
+  B ("CLEAN TWIN  the live Baker's plan asks ceil($($bkLivePlan.TermCount) / $($bkLivePlan.RotationDays)) = " + $bkLivePlan.RotationTerms + " rotation terms a day, from Get-RotationTermsPerRun") (
+      [int]$bkLivePlan.RotationTerms -eq (Get-RotationTermsPerRun ([int]$bkLivePlan.TermCount) "Baker's"))
+  # AT THE CAP AND ONE PAST IT. A frozen plan (the shape Get-CapturePlan returns) with a call cap of rotation + 2:
+  # two expiries fit exactly, a third is deferred and stays owed, and the ask never exceeds the cap.
+  $bkCapPlan = [pscustomobject]@{ RotationTerms = $bkBudget; CallCap = ($bkBudget + 2); SaleExpiries = @('fix-200', 'fix-201') }
+  $bkAtCap = Get-BakersAskPlan -AllTerms $bkTerms.ToArray() -Plan $bkCapPlan -CursorStart 0 -AdOwed @()
+  B "CLEAN TWIN  exactly AT the call cap ($($bkBudget + 2)): the $bkBudget-term rotation and both expiries are asked, and no more" (
+      (@($bkAtCap.Terms).Count -eq ($bkBudget + 2)) -and (@($bkAtCap.ExpiringKept).Count -eq 2) -and ([int]$bkAtCap.CursorNext -eq $bkBudget))
+  $bkPastPlan = [pscustomobject]@{ RotationTerms = $bkBudget; CallCap = ($bkBudget + 2); SaleExpiries = @('fix-200', 'fix-201', 'fix-202') }
+  $bkPast = Get-BakersAskPlan -AllTerms $bkTerms.ToArray() -Plan $bkPastPlan -CursorStart 0 -AdOwed @()
+  B "MUST FIRE  one expiry PAST the call cap ($($bkBudget + 2)): the ask stays at the cap, the rotation keeps all $bkBudget, and the third expiry is NOT marked asked" (
+      (@($bkPast.Terms).Count -eq ($bkBudget + 2)) -and (@($bkPast.ExpiringKept) -notcontains 'fix-202') -and ([int]$bkPast.CursorNext -eq $bkBudget))
 
   # --- (a) a rotation-sized slice still writes a row for EVERY product the previous file had ---------
   $sliceA = Select-ExpiryFirstSlice -Items $bkTerms.ToArray() -Expiring @() -Budget $bkBudget -CursorStart 0 -KeyOf { param($t) @([string]$t.id) }
@@ -754,6 +796,35 @@ if ($SelfTest) {
   $mAged = Invoke-BakersCarryMerge -Fresh @() -PrevDeals @($bkPrev[0]) -AskedTerms @{} -Today '2026-12-01' -MaxCarryDays 90
   B '(b) a row past MaxCarryDays is DROPPED and counted, never published stale' (
       (@($mAged.Rows).Count -eq 0) -and ($mAged.Expired -eq 1))
+
+  # --- (g) WHEN AND WHERE (2026-09-19): every row the lane writes says when it was read and which location answered
+  $bkLoc = '61500319'
+  $mcdB = [int](Get-PolicyMaxCarryDays)
+  $atB = ([datetime]'2026-09-19').AddDays(-$mcdB).ToString('yyyy-MM-dd')
+  $pastB = ([datetime]'2026-09-19').AddDays(-($mcdB + 1)).ToString('yyyy-MM-dd')
+  $gRows = @(
+    [pscustomobject]@{ item = 'dated, unstamped'; product_id = 'G1'; found_by_term = 'fix-001'; as_of = '2026-09-18'; ad_price = '$1.00'; current_price = 1.0; source_ad = 'kroger-api' },
+    [pscustomobject]@{ item = 'no as_of';         product_id = 'G2'; found_by_term = 'fix-002'; ad_price = '$1.00'; current_price = 1.0; source_ad = 'kroger-api' },
+    [pscustomobject]@{ item = 'other store';      product_id = 'G3'; found_by_term = 'fix-003'; as_of = '2026-09-18'; store_id = '61500999'; ad_price = '$1.00'; current_price = 1.0; source_ad = 'kroger-api' },
+    [pscustomobject]@{ item = 'at the carry bar'; product_id = 'G4'; found_by_term = 'fix-004'; as_of = $atB; store_id = $bkLoc; ad_price = '$1.00'; current_price = 1.0; source_ad = 'kroger-api' },
+    [pscustomobject]@{ item = 'past the bar';     product_id = 'G5'; found_by_term = 'fix-005'; as_of = $pastB; store_id = $bkLoc; ad_price = '$1.00'; current_price = 1.0; source_ad = 'kroger-api' }
+  )
+  $mG = Invoke-BakersCarryMerge -Fresh @() -PrevDeals $gRows -AskedTerms @{} -Today '2026-09-19' -MaxCarryDays $mcdB -StoreId $bkLoc -PrevStoreId $bkLoc
+  $gIds = @($mG.Rows | ForEach-Object { [string]$_.product_id })
+  B '(g) MUST FIRE  a carried row with no as_of is DROPPED and counted, never carried undated forever' (($gIds -notcontains 'G2') -and ($mG.Undated -eq 1))
+  # ...and with no carry window at all (MaxCarryDays 0, where rule 3 never parses a date), rule 4 still drops it.
+  $mG0 = Invoke-BakersCarryMerge -Fresh @() -PrevDeals @($gRows[1]) -AskedTerms @{} -Today '2026-09-19' -MaxCarryDays 0 -StoreId $bkLoc -PrevStoreId $bkLoc
+  B '(g) MUST FIRE  with MaxCarryDays 0 an undated row is STILL dropped (the when-rule does not lean on the age rule)' ((@($mG0.Rows).Count -eq 0) -and ($mG0.Undated -eq 1))
+  B '(g) MUST FIRE  a carried row read at another location is DROPPED and counted, never carried as Saddlecreek' (($gIds -notcontains 'G3') -and ($mG.WrongStore -eq 1))
+  $g1 = @($mG.Rows | Where-Object { [string]$_.product_id -eq 'G1' })[0]
+  B '(g) CLEAN TWIN  an unstamped row the previous capture read at 61500319 is carried and stamped from that capture''s own location_id' (($null -ne $g1) -and ([string]$g1.store_id -eq $bkLoc) -and ([string]$g1.as_of -eq '2026-09-18'))
+  B "(g) CLEAN TWIN  a row exactly AT MaxCarryDays ($mcdB d) is carried" ($gIds -contains 'G4')
+  B "(g) MUST FIRE  a row one day PAST MaxCarryDays ($($mcdB + 1) d) expires" (($gIds -notcontains 'G5') -and ($mG.Expired -eq 1))
+  $mGn = Invoke-BakersCarryMerge -Fresh @() -PrevDeals @($gRows[0]) -AskedTerms @{} -Today '2026-09-19' -MaxCarryDays $mcdB -StoreId $bkLoc -PrevStoreId ''
+  B '(g) CLEAN TWIN  with no recorded location anywhere the row is carried UNSTAMPED - nothing invents a store' ((@($mGn.Rows).Count -eq 1) -and (-not [string]@($mGn.Rows)[0].store_id) -and ($mGn.Unstamped -eq 1))
+  $lpSrc = Get-Content -LiteralPath (Join-Path $root 'pull-regular-bakers-api.ps1') -Raw
+  $lpNeedle = 'store_id    = [string]' + '$LocationId'
+  B '(g) MUST FIRE  a fresh row is stamped store_id from the lane''s own -LocationId, the value every request sends as filter.locationId' ($lpSrc.Contains($lpNeedle) -and $lpSrc.Contains(('filter.location' + 'Id={1}')))
 
   # --- (c) the THROTTLE-WIPEOUT guard does not trip on a budgeted run --------------------------------
   B "(c) MUST-FIRE: the guard does NOT trip on a budgeted run ($($rowsA.Count) rows vs a $POP high-water mark)" (
@@ -853,15 +924,21 @@ if ($SelfTest) {
 $terms = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
 # THE POLICY IS LOADED FIRST, NOT LAST. It answers three separate questions below - the promo-length
 # bound, today's slice, and the carry window - so it has to be in scope before any of them.
+# A RUN THAT CANNOT LOAD THE POLICY DOES NOT RUN (2026-09-19). It used to fall back to typed numbers - a 90-day
+# promo bound, a 90-day carry - and a comprehensive 602-term pull, which is a second copy of the policy that
+# switches on only when the first cannot be read, and a request count past the store's call cap. Nothing has been
+# asked yet, so refusing costs one day's slice and the newest capture keeps serving; exit 2 matches the other
+# refusals capture-run and bakers-daily-scan already read as "the newest existing capture keeps serving".
 $script:PolicyOk = $false
-$script:PromoMaxDays = 90
-$script:CarryDays = 90
 try {
   . (Join-Path $root 'capture-policy-lib.ps1')
   $script:PromoMaxDays = [int](Get-PolicyQuarterDays)
   $script:CarryDays = [int](Get-PolicyMaxCarryDays)
   $script:PolicyOk = $true
-} catch { Write-Warning ("bakers-api: capture-policy did not load (" + $_.Exception.Message + ") - falling back to a COMPREHENSIVE pull this pass") }
+} catch {
+  Write-Warning ("bakers-api: capture-policy did not load (" + $_.Exception.Message + ") - no rotation budget and no carry window, so nothing is asked and nothing written")
+  exit 2
+}
 
 # THE TERM LIST COMES FROM Get-AllTerms, NOT FROM THE RAW PROPERTY BAG (2026-08-22).
 # The cursor indexes Get-AllTerms' order - sorted by commodity id, one entry PER TERM - so slicing any
@@ -899,7 +976,8 @@ if ($Commodities -and $Commodities.Count) {
 }
 # ---------------------------------------------------------------- today's slice
 # BRAD'S RULING, APPLIED: the same ad-rotation + everyday logic as literally everyone else.
-# Get-CapturePlan gives the daily drip (598/90 = 7 terms) plus today's capped slice of sales whose
+# Get-CapturePlan gives the daily drip (RotationTerms: ceil(terms / RotationDays / runs a day), 43 at 602 terms on
+# 2026-09-19; 7 under the old quarter) plus today's capped slice of sales whose
 # window ended, all bounded by this store's own call cap ($StoreCallCap, 250 for Baker's).
 # Select-ExpiryFirstSlice puts the expiring commodities at the FRONT and fills the rest from the
 # shared rotation cursor, exactly as the Family Fare and Hy-Vee lanes do.
@@ -911,7 +989,7 @@ elseif (-not $Full -and $script:PolicyOk) {
     # sale only when it asks, and the rotation cannot know what newly went on sale. pull-bakers-ad-list.ps1 reads
     # the ad's own list and routes it onto our terms; Get-BakersAdOwed says which of those no file inside the ad
     # window has asked yet, and Get-BakersAskPlan puts them first, out of the allowance the expiries get (cap 250
-    # minus the 7-term drip = 243), so the rotation cursor below advances exactly as it would with no ad at all.
+    # minus the rotation drip, 207 at 43 terms), so the rotation cursor below advances exactly as it would with no ad at all.
     $bkAd = Get-BakersAdOwed -OutDir $out -Date $today
     $bkAsk = Get-BakersAskPlan -AllTerms $allTerms -Plan $bkPlan -CursorStart $bkCur -AdOwed @($bkAd.Owed)
     $bkSlice = $bkAsk.Slice
@@ -1035,6 +1113,10 @@ foreach ($tp in $pending) {
       regular     = $null
       source_ad   = 'kroger-api'
       as_of       = $today
+      # WHERE IT WAS READ (2026-09-19): the locationId this very request was sent with (filter.locationId in the
+      # URL above), from the lane's own -LocationId, never a second literal. The board's provenance contract
+      # refuses a price that cannot name the store that answered it.
+      store_id    = [string]$LocationId
       current_price = $cur          # guard-10 contract: what the store charges, recorded independently
       product_id  = $prodId
       size_raw    = [string]$it.size
@@ -1083,7 +1165,8 @@ foreach ($tp in $pending) {
       # NO sale at all - the row keeps its price as everyday and gets no ad window - rather than
       # publishing a discount that never expires, which is exactly the failure the whole ad/everyday
       # split exists to end. Bounded by the POLICY's own number, never a fresh literal, so the two
-      # cannot drift: at a 90-day rotation we would re-capture such a row before it ended anyway.
+      # cannot drift. (Written at a 90-day rotation; since 2026-09-19 the row is re-read inside RotationDays anyway,
+      # so the quarter is only the ceiling on what may be called a sale, never a freshness claim.)
       $eff = [string]$it.price.effectiveDate.value
       $exp = [string]$it.price.expirationDate.value
       if ($eff -match '^(\d{4}-\d{2}-\d{2})' -and $exp -match '^(\d{4}-\d{2}-\d{2})') {
@@ -1274,8 +1357,9 @@ $prevFile = Get-ChildItem (Join-Path $regDir 'bakers-regular-*.json') -EA Silent
             Sort-Object Name -Descending | Select-Object -First 1
 $prevDeals = @()
 $prevName = ''
+$prevLocation = ''
 if ($prevFile) {
-  try { $prevDeals = @((Read-JsonFile $prevFile.FullName).deals); $prevName = $prevFile.Name }
+  try { $prevDoc = Read-JsonFile $prevFile.FullName; $prevDeals = @($prevDoc.deals); $prevName = $prevFile.Name; $prevLocation = [string]$prevDoc.location_id }
   catch { Write-Warning ("bakers-api: the previous capture " + $prevFile.Name + " could not be read (" + $_.Exception.Message + ") - NOTHING can be carried this run"); $prevDeals = @() }
 }
 # A ROTATION RUN WITH NOTHING TO CARRY IS A COLD START, AND IT MUST SAY SO. Today's ~7 terms are not a
@@ -1291,8 +1375,12 @@ if ($rotationMode -eq 'rotation' -and @($prevDeals).Count -eq 0) {
 # failed both passes was struck from $askedTerms above, so its rows are CARRIED instead of leaving the
 # board hole this file has documented since 2026-07-28. One code path for both modes, and the counters
 # printed below say which happened.
+# The previous capture's location_id is what that run asked (its own -LocationId), so a row it wrote unstamped
+# is stamped from it; a row from another location is never carried as this one (rule 4).
 $merge = Invoke-BakersCarryMerge -Fresh $deals.ToArray() -PrevDeals $prevDeals -AskedTerms $askedTerms `
-           -Today $today -MaxCarryDays $script:CarryDays
+           -Today $today -MaxCarryDays $script:CarryDays -StoreId ([string]$LocationId) -PrevStoreId $prevLocation
+if ($merge.Undated -or $merge.WrongStore) { Write-Warning ("bakers-api: not carried - {0} row(s) with no as_of (no proof of when the price was read), {1} row(s) read at a store other than {2}" -f $merge.Undated, $merge.WrongStore, $LocationId) }
+if ($merge.Unstamped) { Write-Output ("bakers-api: {0} carried row(s) name no store and the previous capture recorded none - carried UNSTAMPED for the board's provenance contract to decide" -f $merge.Unstamped) }
 $allRows = $merge.Rows
 Write-Output ("bakers-api: {0} fresh row(s) + {1} carried (not re-verified) = {2} row(s) | {3} superseded by a fresh row, {4} restated by a re-read term, {5} EXPIRED past the {6}-day carry" -f `
   $deals.Count, $merge.Carried, $allRows.Count, $merge.Superseded, $merge.Restated, $merge.Expired, $script:CarryDays)
@@ -1353,6 +1441,8 @@ $doc = [ordered]@{
   ad_terms_asked = $(if ($script:BkAsk) { @($script:BkAsk.AdTerms).Count } else { 0 })
   fresh_rows = $deals.Count; carried_rows = $merge.Carried; not_reverified = $merge.Carried
   carry_expired = $merge.Expired; carry_days = $script:CarryDays
+  carry_refused_undated = $merge.Undated; carry_refused_wrong_store = $merge.WrongStore; carried_unstamped = $merge.Unstamped
+  rotation_terms = $(if ($bkPlan) { [int]$bkPlan.RotationTerms } else { $null }); rotation_days = $(if ($bkPlan) { [int]$bkPlan.RotationDays } else { $null })
   carried_from = $prevName
   pull_terms = $stats.terms; capture_terms = $captureTerms.ToArray(); deal_count = $allRows.Count
   deals = $allRows
