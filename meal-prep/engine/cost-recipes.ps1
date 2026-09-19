@@ -174,13 +174,27 @@ foreach($b in $noBoardOk.Keys){
   $c = Get-Carriage -Bid $b -Item '' -FeedCarried $FEEDCARRIED -Ledger $CARRLEDGER
   if($c.verdict -ne 'CARRIED'){ $nbBad += ($b + ' [' + $c.verdict + ': ' + $c.why + ']') }
 }
+# REFUSE THE BID, NOT THE CATALOGUE (2026-09-19). This used to throw, which was right about the bid and
+# wrong about everything else: on 2026-09-19 the provenance contract withheld every guajillo cell (the
+# Walmart and Sam's listings are ship-only, the Baker's and Family Fare ones hunter rows nothing re-reads),
+# the feed stopped carrying it, and the throw took down the recost of all 580-odd recipes - while
+# check-ad-cycles discarded the exit code, so db\costed.json silently stayed priced off yesterday's board.
+# An unproven bid is now struck from the allowlist for this run and named in cost-flags.txt, which the chain
+# alerts on. Nothing is pardoned: with no allowlist entry and no carriage, line 227 below refuses its label
+# price for every recipe that uses it, exactly as it refuses any other uncarried food.
+$script:NbRefused = @()
 if($nbBad.Count){
-  throw ("no-board-price-ok.json lists bid(s) with no carriage evidence: " + ($nbBad -join '; ') +
+  foreach($b in @($noBoardOk.Keys)){
+    $c = Get-Carriage -Bid $b -Item '' -FeedCarried $FEEDCARRIED -Ledger $CARRLEDGER
+    if($c.verdict -ne 'CARRIED'){ $noBoardOk.Remove($b); $script:NbRefused += $b }
+  }
+  Write-Warning ("no-board-price-ok.json lists bid(s) with no carriage evidence, refused for this run: " + ($nbBad -join '; ') +
          ". This list may only excuse BOARD PRICING for a food an Omaha store is proven to stock. " +
          "Either record store evidence in grocery\carriage.json or remove the bid.")
 }
 $script:registerEst=0
 $out=@(); $costFlags=New-Object System.Collections.Generic.List[string]
+foreach($b in $nbBad){ $costFlags.Add(('ALLOWLIST :: no-board-price-ok.json :: BID REFUSED, NO CARRIAGE EVIDENCE ' + $b)) }
 foreach($r in $computed){
   $lines=@(); $batch=0.0; $trueCost=0.0; $bulkUtil=0.0; $starterOutlay=0.0
   $uncarried=@()   # item names whose carriage is not CARRIED; survives the `continue` paths below

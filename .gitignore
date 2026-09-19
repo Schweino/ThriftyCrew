@@ -206,7 +206,7 @@ __pycache__/
 /grocery/out/*candidates*.json
 /grocery/out/records-*.json
 /grocery/out/flagged-*.json
-/grocery/out/provenance-withheld-*.json
+/grocery/out/*provenance-withheld-*.json
 /grocery/out/guards-*.json
 /grocery/out/verified-*.json
 /grocery/out/verify-input-*.json

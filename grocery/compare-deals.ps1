@@ -3026,7 +3026,7 @@ if ($NoProvenanceContract) {
     $by = @($wh | Group-Object why | Sort-Object Name | ForEach-Object { "$($_.Name)=$($_.Count)" }) -join ', '
     Write-Output ("provenance contract: {0,-12} withheld {1,5} of {2,5} captured row(s) judged (max age {3} d){4}" -f $s, $wh.Count, $ProvJudged[$s], $MaxPublishAgeDays, $(if ($by) { " - $by" } else { '' }))
   }
-  $pwPath = Join-Path $OutDir ("provenance-withheld-" + $today + ".json")
+  $pwPath = Join-Path $OutDir ($(if ($OutName -eq 'comparison') { 'provenance-withheld' } else { "$OutName-provenance-withheld" }) + "-" + $today + ".json")   # per run, like candidates and flagged: the recipe run wrote the staple run's list over
   (@{ board = $today; max_publish_age_days = $MaxPublishAgeDays; judged = $ProvJudged; withheld = @($ProvWithheld) } | ConvertTo-Json -Depth 5) | Set-Content -LiteralPath $pwPath -Encoding UTF8
 }
 

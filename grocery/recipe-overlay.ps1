@@ -72,6 +72,26 @@ $newestCmp = Get-ChildItem (Join-Path $out 'comparison-*.json') -ErrorAction Sil
 if ($newestCmp) {
   try { foreach ($sr in @((Read-JsonFile $newestCmp.FullName).comparison)) { $stapleIds[[string]$sr.id] = $true } } catch {}
 }
+# THE STAPLE COMMODITY OWNS ITS ID, NOT ONLY THE STAPLE ROW (2026-09-19). The filter above read the ids the
+# weekly board PUBLISHED today, so a staple with no publishable cell - every cell withheld by the provenance
+# contract as stale, ship-only or self-sourced - left the set, and this file then served that commodity from
+# the frozen 2026-07-06 recipe snapshot instead: the exact prices the contract had just refused, back on the
+# page one step later, with no date on any of the 894 cells to say so. Measured on the gated rebuild that day:
+# audit-known-wrong hard-failed on 6 staples resurrected this way. The weekly rule-set names every staple
+# commodity whether or not it priced today, so its ids join the set: a staple with no honest price shows no
+# price, which is what the weekly board already decided.
+$stapleRules = Join-Path $root 'commodities.json'
+if (Test-Path $stapleRules) {
+  # commodities.json is a BARE top-level array. `.commodities` on it member-enumerates to one $null per row -
+  # 592 of them, a count that looks loaded and matches nothing - so read the array itself, assigned first.
+  try {
+    $stapleRuleRows = Read-JsonFile $stapleRules
+    $stapleRuleN = 0
+    foreach ($sc in @($stapleRuleRows)) { if ($sc.id) { $stapleIds[[string]$sc.id] = $true; $stapleRuleN++ } }
+    if ($stapleRuleN -eq 0) { Write-Output 'recipe-overlay: WARNING - commodities.json yielded no staple ids; a staple with no cell today can be served from the recipe snapshot' }
+  }
+  catch { Write-Output ('recipe-overlay: WARNING - commodities.json unreadable (' + $_.Exception.Message + '); a staple with no cell today can be served from the recipe snapshot') }
+}
 # THE SAME COMMODITY UNDER TWO ID SPELLINGS IS STILL THE SAME COMMODITY (2026-08-08). The filter above
 # compares RAW ids, and it works: exactly 0 recipe rows collide with the weekly board by literal id. But
 # the recipe and weekly namespaces spell 33 shared commodities differently - 93-7-ground-beef against

@@ -952,7 +952,20 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # basis. Feed path = the local smp-feed, which is now exported immediately below rather than 270
       # lines later - the one-day lag this comment used to describe was the bug fixed on 2026-08-22.
       # Non-fatal.
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\cost-recipes.ps1') | Out-Null; Log 'engine cost-recipes refreshed db\costed' } catch { Log ('engine cost-recipes threw: ' + $_.Exception.Message) }
+      # THE EXIT CODE IS THE VERDICT (2026-09-19). A child powershell that throws does not throw HERE - it
+      # exits 1 - so the catch below never fired and 'refreshed db\costed' was logged over a recost that had
+      # died, leaving every recipe priced off the previous board with nothing said. Still non-fatal: a failed
+      # recost is not a reason to withhold a correct board, the same reasoning as the freshness check below.
+      try {
+        $crRun = Invoke-NativeScript (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\cost-recipes.ps1')
+        $crRc = $crRun.ExitCode
+        if ($crRc -eq 0) { Log 'engine cost-recipes refreshed db\costed' }
+        else {
+          $crTail = @(@($crRun.Lines) | ForEach-Object { [string]$_ } | Select-Object -Last 8) -join "`n"
+          Log ("engine cost-recipes FAILED rc=$crRc - db\costed.json was NOT refreshed: " + ($crTail -replace "`n", ' | '))
+          try { Send-Alert -Subject "Recipe recost failed - $asofS" -Body ("meal-prep\engine\cost-recipes.ps1 exited $crRc, so db\costed.json still holds the costs from the previous board and every recipe page reads them. Last lines:`n" + $crTail) | Out-Null } catch {}
+        }
+      } catch { Log ('engine cost-recipes threw: ' + $_.Exception.Message) }
       # DID THE RECOST ACTUALLY LAND AGAINST THE BOARD THAT IS LIVE NOW (2026-09-07)? On 2026-09-06
       # guards blocked the 08:00 publish, triage unblocked the guard and rebuilt the board at 11:55,
       # the feed was re-exported to match - and the recost never re-ran. db\costed.json stayed priced
