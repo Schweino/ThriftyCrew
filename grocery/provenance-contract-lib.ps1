@@ -94,7 +94,13 @@ function Get-PclStatedStores($Row, [string]$FileSource) {
   $ids = New-Object System.Collections.Generic.List[string]
   $texts = New-Object System.Collections.Generic.List[string]
   foreach ($f in @('store_id', 'loc', 'store_location', 'club')) {
-    if ($Row -and $Row.PSObject.Properties[$f] -and [string]$Row.$f) { [void]$ids.Add(([string]$Row.$f).Trim()) }
+    if ($Row -and $Row.PSObject.Properties[$f] -and [string]$Row.$f) {
+      $v = ([string]$Row.$f).Trim()
+      # A capture's own "I could not read the store" sentinel is NO statement, never a statement of another store:
+      # it proves nothing, so the row is UNPROVEN-STORE, not WRONG-STORE (153 Fareway rows on 2026-09-19).
+      if ($v -match '^(?i)(UNRECORDED|UNKNOWN|NONE|N/?A)$') { continue }
+      [void]$ids.Add($v)
+    }
   }
   if ($Row -and $Row.PSObject.Properties['source_ad'] -and [string]$Row.source_ad) { [void]$texts.Add([string]$Row.source_ad) }
   if ($FileSource) { [void]$texts.Add($FileSource) }
@@ -233,6 +239,8 @@ if ($__pclSelfTest) {
     _P 'MUST FIRE  a Walmart row from a capture built under -WaiveMissingStoreLine is UNPROVEN-STORE' (-not $wmWaived.ok -and $wmWaived.why -eq 'UNPROVEN-STORE') "$($wmWaived.why) $($wmWaived.detail)"
     $fw = Test-CellProvenance -Store 'Fareway' -Row (_R @{ as_of = '2026-09-12'; loc = '513473' }) -BoardDate $B -MaxAgeDays $M -Pins $pins
     _P 'MUST FIRE  a Fareway row stamped with Des Moines 513473 is WRONG-STORE' (-not $fw.ok -and $fw.why -eq 'WRONG-STORE') "$($fw.why) $($fw.detail)"
+    $fwU = Test-CellProvenance -Store 'Fareway' -Row (_R @{ as_of = '2026-09-12'; loc = 'UNRECORDED' }) -BoardDate $B -MaxAgeDays $M -Pins $pins
+    _P 'MUST FIRE  a Fareway row stamped loc UNRECORDED is UNPROVEN-STORE (a could-not-read is no statement), never WRONG-STORE' (-not $fwU.ok -and $fwU.why -eq 'UNPROVEN-STORE') "$($fwU.why) $($fwU.detail)"
     $aldi = Test-CellProvenance -Store 'Aldi' -Row (_R @{ as_of = '2026-09-12' }) -BoardDate $B -MaxAgeDays $M -Pins $pins
     _P 'CLEAN TWIN  Aldi is deliberately not pinned, so no store proof is asked of it' ($aldi.ok) "$($aldi.why) $($aldi.detail)"
 
