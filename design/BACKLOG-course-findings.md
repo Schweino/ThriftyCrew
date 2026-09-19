@@ -12258,7 +12258,7 @@ reason to sweep the 37 correct sites. No sweep under any option.
 
 ---
 
-### I161 - Four of five tracked state ledgers have no schema check, while known-wrong.json has both a required-key list and a closed vocabulary `NEEDS A RULING - THE ROLLBACK GAP IS FIXED, THE ALERT-STATE FIX TOUCHES THE EMAIL PATH` `queue-7` `2-WAY` `RUNG1 RULING`
+### I161 - Four of five tracked state ledgers have no schema check, while known-wrong.json has both a required-key list and a closed vocabulary `PARTLY DONE - THE ROLLBACK GAP IS FIXED; THE ALERT-STATE HALF (OPTION A) IS READY FOR BRAD ON BRANCH claude/i224-price-alerts` `queue-7` `2-WAY` `RUNG1 RULING`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** The item`s own table is WRONG on two of five rows. `cell-state.json` is the mirror of a SQLite table with a real DDL (3 NOT NULLs, a composite primary key), which is STRONGER enforcement than the `known-wrong.json` exemplar the item picked, because it happens at the write rather than post-hoc; and `capture-cursor.json` throws at its writer on a closed store list. The two real gaps are elsewhere, and one is proved: a rollback row missing `price` reads silently as 0.0.
 
@@ -12387,6 +12387,18 @@ Read and Save with every key forced dirty came out md5-identical under the old a
 - **C. Leave it.** One row, one writer that always writes all three keys; the only producer of a bad row is a hand
   edit or a torn write, and the file is 70 bytes.
 Recommendation A: the torn-write path emails every subscriber at a low twice, and the refusal costs one skipped day.
+
+**Option A prepared 2026-09-18 on branch `claude/i224-price-alerts`, with I224; not landed, because it is the email
+path.** `grocery/send-price-alerts.ps1`: an `alert-state.json` that exists and reads as invalid JSON, empty, or not a
+JSON object REFUSES the run (nothing sent, nothing written, the reason on the last line, one page, exit 1); a missing
+file is still a fresh start. A missing, non-numeric or zero price reads as unknown: the item alerts once and the real
+price is recorded, and an unknown price is saved as `null`, never laundered into 0. Fixtures in the new `-SelfTest`
+(Ghost transport stubbed): MUST FIRE for each of the three unreadable shapes (zero Ghost calls, file bytes unchanged,
+one page), MUST FIRE for a missing and a zero price (alerts once, records 1.89, quiet the day after), CLEAN TWIN a
+missing file still sends, MUST NOT FIRE a well-formed row at the same price inside 30 days stays quiet. Mutants:
+invalid JSON read as empty (1 red), a non-object read as empty (2 red), a missing price read as 0 (2 red), each
+restored md5-identical. Today's file (1 row, 70 bytes) round-trips byte-identical through the old and the new writer,
+so today's run is unchanged.
 
 ---
 
@@ -15740,7 +15752,7 @@ of 2,392 candidates carried a sale end and 0 of 44 selected rows kept it, so `bu
 never fires. Fixing it changes sale dating on the board. Also: the newest Fareway storefront capture in the
 main checkout was from 2026-09-12 when read on 09-18.
 
-### I224 - The price-alert email leaves an orphan draft on every failed send, and the alert state is unguarded `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
+### I224 - The price-alert email leaves an orphan draft on every failed send, and the alert state is unguarded `PARTLY DONE - BUILT AND TESTED ON BRANCH claude/i224-price-alerts, READY FOR BRAD TO MERGE` `run-0919` `1-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15748,6 +15760,33 @@ Found under I105 and I161. `grocery/send-price-alerts.ps1:131`: when the PUT tha
 the draft POSTed a moment earlier is never deleted (lines 143-147 only print SEND FAILED), so each retry leaves
 another draft in Ghost. I161's held half is the same script: an unreadable state file is treated as empty
 (every subscriber re-alerted) and a missing price mutes an item forever. Both change what members are emailed.
+
+**Prepared 2026-09-18, not landed: the script emails members, so the merge is Brad's.** Branch
+`claude/i224-price-alerts` changes `grocery/send-price-alerts.ps1` (plus one `.gitignore` line and one
+`grocery/alert-registry.json` entry). What a failed publish does now turns on what the failure PROVES, the rule
+`lib/ghost-lib.ps1` set for POST under I198. Ghost refused the PUT (a 4xx other than 408/429) or it provably never
+reached Ghost: the draft just created is DELETEd (idempotent, a 404 counts as gone), and if that delete fails the
+message and a page name the orphan draft id. The PUT's outcome is UNKNOWN (timeout, 5xx, reset), or it succeeded
+and the email check could not be read: Ghost may be mailing, so nothing is deleted. That second case could
+double-mail before, so it takes the send-friday-email pattern: `grocery/out/price-alerts.invoking.json`
+(gitignored, written atomically before the PUT) holds the item, Brad is paged with the post id, and no run alerts
+it again until `send-price-alerts.ps1 -ResolveInvoking <id> [-Mailed]`. The PUT is attempted once, because a replay
+after a lost success would 409 and read as a refusal, deleting a post that is mailing. A live run or a resolve from
+a linked worktree is refused. I161's option A ships on the same branch (see I161).
+Verified with the Ghost transport stubbed and `TC_WRITE_JOURNAL`/`TC_STAGE_WRITES` cleared (no Ghost call, no
+email): the new `-SelfTest` passes 25 of 25, exit 0. MUST FIRE a 422 on the PUT gives exactly one DELETE, of
+`draft-abc123`; CLEAN TWIN a good publish sends once and records 1.89; MUST NOT FIRE it deletes nothing. Six
+mutants, each red in its own named case and restored md5-identical: no delete after a refused PUT (3 red), a held
+item not held (2), an unknown PUT outcome treated as a refusal (4), and the three I161 mutants.
+**Orphan drafts from past failures: probably none, and the logs cannot prove it.** Read-only, from the main
+checkout: `check-ad-cycles` logs only the LAST line of each run, so a `SEND FAILED` line never reaches a log.
+Over `grocery/logs-archive/ad-cycle-log-2026-07.txt`, `-2026-08.txt` and `grocery/ad-cycle-log.txt`, 106 runs
+from 2026-07-12 to 2026-09-18 end 3 "1 email(s) sent" (07-12, 08-12, 09-11), 103 "0 email(s) sent", and none
+threw. The three sends are 30 days apart, which is chicken-breast (the only row in `alert-state.json`) re-alerting on
+its cooldown, and `price-history.json` puts its 08-03 week at 2.19, not a low, which explains the two 0-sent runs
+on 08-11 without a failure. `send-price-alerts` never went through `Invoke-GhostApi`, so the Ghost journal (59
+lines) holds none of its calls. **To check in Ghost admin:** Posts, filter Drafts, tag `#price-alerts`; any draft
+titled "Price alert: ..." is an orphan and can be deleted.
 
 ### I225 - The heartbeat's dedup signature changes every run, so a stale-task page repeats `DONE` `run-0919`
 
