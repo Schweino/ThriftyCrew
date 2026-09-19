@@ -36,6 +36,7 @@
   Usage:  audit-board-freshness.ps1 [-OutDir <grocery\out>]      exit 0, findings on stdout (the chain alerts)
           audit-board-freshness.ps1 -SelfTest
 #>
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = '', [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -122,7 +123,7 @@ if ($SelfTest) {
     $sPast = Get-BoardFreshness (_Board $B @(,@('eggs', 'Walmart', '2026-09-17'))) (_Wh @{ Walmart = 50 } $wh6) 3 0.10
     _T 'MUST FIRE  6 of 50 (12%, one row past the bar) withheld for age is AGING' (@($sPast.lines | Where-Object { $_ -match '^! AGING  Walmart' }).Count -eq 1) (($sPast.lines) -join ' | ')
     $wrongStore = Get-BoardFreshness (_Board $B @(,@('eggs', 'Hy-Vee', '2026-09-17'))) (_Wh @{ 'Hy-Vee' = 50 } @(1..20 | ForEach-Object { ,@('Hy-Vee', 'WRONG-STORE', '2026-09-10') })) 3 0.10
-    _T 'CLEAN TWIN  rows withheld for a reason other than age (WRONG-STORE) do not count toward AGING' (@($wrongStore.lines | Where-Object { $_ -match '^! AGING' }).Count -eq 0) (($wrongStore.lines) -join ' | ')
+    _T 'MUST NOT FIRE  rows withheld for a reason other than age (WRONG-STORE) do not count toward AGING' (@($wrongStore.lines | Where-Object { $_ -match '^! AGING' }).Count -eq 0) (($wrongStore.lines) -join ' | ')
     $blind = Get-BoardFreshness (_Board $B @(,@('milk', 'Aldi', '2026-09-16')) 'OFF') $null 3 0.10
     _T 'MUST FIRE  a board built without the provenance contract is BLIND, never a clean report' (@($blind.lines | Where-Object { $_ -match '^! BLIND' }).Count -eq 1) (($blind.lines) -join ' | ')
   } catch { _T 'the self-test ran to its end with no unexpected error' $false ($_.Exception.Message + ' line ' + $_.InvocationInfo.ScriptLineNumber) }

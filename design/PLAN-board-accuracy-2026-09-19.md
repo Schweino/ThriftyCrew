@@ -181,3 +181,39 @@ the next capture worklist (the `Get-WalmartRulingOwed` shape: derived, self-empt
 | Stale or unproven cell | **Withheld, not shown with a date** | "Understating is exactly as wrong as overstating": a withheld cell is a gap, a stale one is a wrong number |
 | Walmart floor cleaner (a multi-purpose cleaner that says floor cleaner) | **Left as is, flagged** | It is a deliberate exclude, so it needs Brad's ruling, not mine |
 | Baker's "same logic" ruling | **Kept**: one SLO-driven rule for every store | Restores the capacity without making Baker's a special case |
+
+## Addendum, 2026-09-19 afternoon: what switching the contract on broke downstream, and what was found
+
+### Fixed and landed with the contract
+- **The recipe overlay resurrected withheld staples.** It dropped a July recipe-snapshot row only when its
+  id was published on today's board, so every staple the contract emptied came back from the snapshot.
+  The staple rule-set now owns its ids. 117 of 184 snapshot rows defer to the weekly board; the
+  known-wrong audit, which failed on 6 resurrected rows, reads 0 of 309.
+- **One unproven allowlist bid killed the whole recost.** cost-recipes threw on dried-guajillo-chiles and
+  costed none of 584 recipes; the chain logged success because it never read the exit code. The bid is
+  now refused on its own and named in cost-flags, and the chain pages "Recipe recost failed".
+- **The recipe run overwrote the staple run's withheld list.** Named per run now.
+- **Coverage alarm.** A transition ack, expiring 2026-09-23, for the five stores whose counts drop the day
+  the contract switches on.
+
+### Search-term quality is part of why commodities vanish
+On 2026-09-19, 30 of 602 terms returned nothing at Baker's. A hand probe found products on the shelf for
+several once a packaging word or plural went: beef chuck roast, pork tenderloin, minced garlic, fajita
+seasoning, jasmine rice, guajillo. Baker's now retries an empty term once without packaging words and in the
+singular, never dropping a form word. Dried arbol needed a spelling ("chili de arbol"), which no rule could
+reach, so it carries two terms. The other 20 of the 22 emptied commodities are with a recovery lane that
+checks each store for a real in-store listing or records not-carried with two wordings.
+
+### Open, measured, not yet changed
+1. **51 recipe lines across 42 recipes have no price basis on the gated board**, all 11 ingredients among
+   the emptied commodities. Guajillo and arbol (22 lines) are covered by the Baker's fixes above from the
+   next capture. An unpriced line makes a recipe read LOW. If the recovery lane cannot find an in-store
+   price for an ingredient, the precedent (doubanjiang, 2026-08-22) is that its recipes become drafts until
+   a real capture lands. That is a publishing decision for Brad.
+2. **The recipe snapshot is undated.** After the overlay fix, 67 recipe-only rows remain in
+   recipe-board-everyday.json (week_of 2026-07-06), and none of its 894 store cells carries a date, so the
+   14-day rule cannot reach them. The daily recipe compare run already reads today's captures; the durable
+   fix is to take its gated everyday cells as well as its sale cells and retire the snapshot.
+3. **The recost reads yesterday's feed.** check-ad-cycles runs cost-recipes before export-feed, and
+   export-feed reads recipe costs, so each day's carriage verdicts come from the previous day's feed. On the
+   first gated day the recost judges carriage from the ungated feed.

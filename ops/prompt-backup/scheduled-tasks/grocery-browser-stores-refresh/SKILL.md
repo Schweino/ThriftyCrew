@@ -100,6 +100,14 @@ real one, which is both fuller and more restricted.
      filename and times out when idle; a fresh listener written under time pressure is both
      unreviewed and, on 2026-08-25, the thing that got the whole browser half of a run refused.
      What moves here is public product-listing data, on Brad's machine, to Brad's disk.
+     POST FROM THE STORE TAB'S OWN DOCUMENT, NEVER FROM AN IFRAME (2026-09-19 full recapture). A form
+     inside an injected iframe inherits the frame's origin rules and the post did not arrive; the same
+     form built on the tab's own document landed every time. Confirm the sink's echoed char and line
+     counts match the page's before building.
+     THE IN-MEMORY SINK IS NOT OPTIONAL ON ALDI EITHER (same day). aldi.us held a stale TC_ALDI_SEARCH
+     key in localStorage from an earlier sweep, and a sweep that reads it resumes from someone else's
+     cursor. Use the plain-object tcGet/tcSet sink on every store, and never trust or clear a TC_* key
+     you did not set this run: leave it, and do not read it.
   3. THE TOOL CALL TIMES OUT AT 45s. Any sweep or long scroll must be started as a background promise
      (window.__tcRun = ...) and POLLED, never awaited in one call. Do not try to return the CSV
      through the tool output either: it truncates around 1 KB, so a 40-60 KB sweep would need ~60
@@ -326,6 +334,9 @@ actually touching. The parts that cost a whole day to rediscover on 2026-08-22:
     farewayShopExtract(term) from pull-fareway-shop.js. The fetch-and-regex probe is DEAD - the
     storefront is client-rendered and returns a shell.
     Assert retailerLocation 531573 AND In-Store before trusting anything.
+    ON 2026-09-19 THE SESSION WAS SITTING ON PICKUP, at the right store. The store id alone did not
+    catch it: read the fulfilment mode the page shows and switch it to In-Store in the page's own
+    picker before the first term, then assert again. Pickup prices are not shelf prices.
     Emit JSONL {id,term,candidates:[...]} -> out\fareway\fareway-shop-<date>.jsonl
     Then: select-fareway-shop.ps1 -In <that> -Today <date>
           build-fareway-regular.ps1 -Today <date> -ModeVerified <date>
