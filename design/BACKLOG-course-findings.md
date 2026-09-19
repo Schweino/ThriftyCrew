@@ -14165,7 +14165,9 @@ scan finds a call passing `$pid`, MUST NOT FIRE none of the file's Add-Norm call
 Three mutants, each in place and restored md5-identical: positional binding re-allowed (red, 1 case),
 `[CmdletBinding]` removed (red, 2 cases), `$pid` restored in the loop (red, 1 case); unmutated exit 0.
 
-### I192 - 25 live scripts still hold their own copy of the board's store list `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
+### I192 - 25 live scripts still hold their own copy of the board's store list `DONE` `queue-6`
+
+**Ruled by Brad 2026-09-19: convert on touch.** Detection (`grocery/audit-store-registry.ps1` check 5) stays as the guard, and there is no sweep. A script that holds its own copy of the store list switches to reading `grocery/stores.json` the next time it is edited for any other reason, in that same change. Recorded as a line in `.claude/rules/grocery.md` so the editor who touches one of the 25 files meets it.
 
 **Merged from `design\backlog-inbox\q6-smells-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

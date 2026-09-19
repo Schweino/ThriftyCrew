@@ -91,6 +91,7 @@ is one copy of every rule and nothing here can drift from it.
   cursor can never advance over a term a prepend displaced. A file built under `-WaiveMissingStoreLine`
   discharges NOTHING - its own stamp says the store was never recorded.
 - **No hard-coded bands** (Brad, 2026-09-04). [[no-hardcoded-bands]]
+- **A script you edit that holds its own copy of the store list reads `stores.json` instead, in the same change** (Brad, 2026-09-19, backlog I192: convert on touch, no sweep). `audit-store-registry.ps1` check 5 stays the guard for the copies nobody has touched yet.
 - **The boards are gitignored**, so a worktree, a CI runner or a clean checkout is BLIND here and the
   engines exit 0 having priced nothing. `ops/seed-worktree.ps1` and `.worktreeinclude` seed them.
   **A RE-SEED REFRESHES a seeded FILE whose source was rewritten since the copy** (2026-09-11). A board is

@@ -128,3 +128,46 @@ Every in-scope OPEN and PARTLY DONE item has a final state above. Left for Brad:
 
 Every new item from the first pass has a state. Landed: I216, I225 to I238 (where 2-WAY), the nightly and worklist fixes. Held for Brad on branches: I215+I217 (nonfood-bundle), I220, I221, I222 board half, I223, I224, I233, I234.
 | I220 note | - | Brad's I251 ruling (Bellevue still OK) supersedes I220 part 2; part 1 must also accept the Bellevue store before it lands. Noted on the item |
+
+## Third pass: Brad's rulings one by one (2026-09-19)
+
+| Item | Ruling | Action |
+|---|---|---|
+| I215+I217 | land | 42056585e landed |
+| I233+I234 | land both | a94d87edb landed |
+| I223 | land now | cbf146ee8 landed |
+| I224+I161 | land | ce75cd7cc landed |
+| I221 | land, two-search rule | 8959b1f30 landed |
+| I222 board | land | agent landing |
+| I220 | both stores (L St 5361, Bellevue Supercenter 2847 read from walmart.com) + reducer store line | agent building |
+| I211/I212/I213 | swap SQLite (Brad), nightly ANALYZE, fix churn then compact | I212 landed ceed001cc; I211 agent; I213 is Brad's step |
+| I191 | land | agent waiting on compare-deals order |
+| I175 | land as built | agent waiting |
+| I193 | rule fix | agent waiting on commodities order |
+| I144 | coconut noted separately, body size | agent building |
+| I167 | adopt the 196 pages | agent building |
+| I125 | Brad unregisters the task | waiting on Brad |
+| I229 | land stale-edge retraction | agent waiting on I211 |
+| I60 | show the 3 diffs first | agent preparing |
+| I186/I202 | half-up on exact decimal | agent building |
+| I179 | pilot strict mode | agent building |
+| I177, I196, I160 | rules text | d335a9a3f landed (I160 in C:\Codex\CLAUDE.md) |
+| I207 | measure first | agent |
+| I232 | scheduled agent every 14 days | agent preparing, Brad registers |
+| I129 | liveness only where missing | agent |
+| I236 | leave as is | agent records |
+| I254 | retire after 09-25 | agent records + branch |
+| I137 | store sodium, not shown | agent |
+| I48 | 4 paid calls, then decide | agent |
+| I230 | move to Ghost v6 after a read-only trial | agent |
+| I55 | not yet | parked |
+| I108, I109, I111 | one lesson each (+ cross-links) | agent drafting, nothing published |
+| I143 | rule for new, measure old | agent |
+| I166 | public key, keep; add a secret scan | agent |
+| I147 | closed on the recommendation | agent records |
+| I163 | count, then rule only if needed | agent |
+| I214, I190 | add constraints; add the store test | agent |
+| I192 | convert on touch | recorded (rules line) |
+| I194 | not answered | left open |
+| public repo | survey first | agent surveying |
+| Worker deploy 0a488c1f9 | Brad had approved it at 20:33 on 09-18 | no action; I252 text stale |
