@@ -145,6 +145,30 @@
       "reviewed": "2026-09-19",
       "reviewed_by": "claude (grocery triage 2026-09-19, queue 2026-09-19-641ec6, money lane)",
       "reason": "'Kroger Teriyaki Pineapple Marinade' is sized in fl oz, the commodity's DECLARED unit, and is accused only by a weight-labelled peer majority (Sam's 27.5 oz), the inverted-reference case. The engine divided $2.00 by 12 fl oz (basis 'size 12 floz'), giving 0.1667, which is right as printed. The runner-up, Walmart at 0.1687 on 15 fl oz, is in the same unit, so the thin 1.2% margin compares like with like. Surfaced on the 2026-09-19 rebuild."
+    },
+    {
+      "id": "apple-cider-vinegar",
+      "store": "Baker's",
+      "size": "1 gal",
+      "reviewed": "2026-09-19",
+      "reviewed_by": "claude (grocery triage 2026-09-19, queue 2026-09-19-641ec6 follow-up, money lane)",
+      "reason": "'Kroger Apple Cider Vinegar' in a gallon jug: the size names a gallon while its shelf-mates write fluid sizes as '64 oz' and '12 oz'. The engine priced it by volume (basis 'size 128 floz'): 1 gal = 128 fl oz, $6.99 / 128 = 0.0546, the published number. Vinegar sits at water density, so no reading of the peers' 'oz' moves it more than a percent or two. It crowns by a wide margin either way against Family Fare at 0.0889 on 64 fl oz. First crowned on the 2026-09-19 rebuild under the provenance contract (a95c6fed4), which withheld the stale rows that used to hold this cell."
+    },
+    {
+      "id": "coconut-milk-canned",
+      "store": "Aldi",
+      "size": "13.66 oz",
+      "reviewed": "2026-09-19",
+      "reviewed_by": "claude (grocery triage 2026-09-19, queue 2026-09-19-641ec6 follow-up, money lane)",
+      "reason": "'Aldi Coconut Milk 13.66 FL OZ': the product NAME states fluid ounces and the size field dropped the 'fl'. The engine divided by 13.66 fl oz (basis 'size 13.66 floz'): $1.59 / 13.66 = 0.1164, the published number, in the same unit as its peers (Walmart 0.1467 and Baker's 0.1474, both on 13.5 fl oz cans). The margin is 26%, far more than any density question could move. Crowned on the 2026-09-19 rebuild under the provenance contract."
+    },
+    {
+      "id": "miracle-whip",
+      "store": "Aldi",
+      "size": "30 fl oz",
+      "reviewed": "2026-09-19",
+      "reviewed_by": "claude (grocery triage 2026-09-19, queue 2026-09-19-641ec6 follow-up, money lane)",
+      "reason": "'Burman S Whipped Dressing 30 FL OZ': a 30 fl oz jar whose peers write the same jar size as '30 oz' (Fareway, Family Fare). The engine divided $2.89 by 30 (basis 'size 30 oz'), giving 0.0963. Every cell in the row is a 30-ounce jar divided by 30, so the comparison is like for like whichever way the label is read, and a whipped dressing near water density makes the two readings agree within a few percent. It crowns by about 2x against Fareway at 0.1993. Crowned on the 2026-09-19 rebuild under the provenance contract."
     }
   ]
 }
