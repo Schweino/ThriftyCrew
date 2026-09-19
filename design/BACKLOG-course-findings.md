@@ -15805,7 +15805,7 @@ entries and 0 of 572 cheapest-store verdicts**:
   uncertain casualty is settled either way before it ships.
 - **C. Leave it**: the eggplant entry keeps publishing $1.82 each from a $1.82/lb capture; it is not a crown today.
 
-### I223 - Fareway's selector drops the sale end date, so sale dating never fires on the daily capture `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
+### I223 - Fareway's selector drops the sale end date, so sale dating never fires on the daily capture `PARTLY DONE - BUILT AND TESTED ON BRANCH claude/i223-fareway-sale, READY FOR BRAD TO MERGE` `run-0919` `1-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15813,6 +15813,67 @@ Found under I124. `grocery/select-fareway-shop.ps1:429` drops `sale_ends_days` a
 of 2,392 candidates carried a sale end and 0 of 44 selected rows kept it, so `build-fareway-regular.ps1:582`
 never fires. Fixing it changes sale dating on the board. Also: the newest Fareway storefront capture in the
 main checkout was from 2026-09-12 when read on 09-18.
+
+**Prepared 2026-09-18, not landed: it moves prices on the board, so the merge is Brad's.** Branch
+`claude/i223-fareway-sale` changes `grocery/select-fareway-shop.ps1` only (blob
+`08745cbd84fc1c0997d950c329dc3562293b0976` on that branch, base `4cff81643`). The selected row is built by a new
+pure `ConvertTo-ShopRow`, which copies the two fields only when the candidate carries them, so a candidate without
+one yields the same eleven keys as before; `build-fareway-regular` stays the one place that parses and bounds the
+value. Re-counted on the 09-11 raw capture: 143 of 2,392 candidates carry `sale_ends_days` (142 say 1 day, 1 says
+4), 338 carry a `sale_note`. Self-test 25 of 25, exit 0: MUST FIRE the frozen 09-11 cod row keeps
+`sale_ends_days` 1 and its note; CLEAN TWIN the frozen coconut row without one gives the pre-fix eleven keys in
+order; MUST FIRE end to end through the script as a child. With the two copy lines disabled both MUST FIRE cases
+went red (2 of 25, exit 1), restored md5-identical.
+
+**What Brad's merge changes on the board, measured.** Harness (scratch, described here): every real Fareway raw
+capture in the main checkout (`out\fareway\fareway-shop-*.jsonl`, 2026-08-22 to 2026-09-12, read-only) was
+re-selected by the origin/main selector and by the branch's, both with `-WaiveMissingStoreStamp` because every
+one predates the I124 stamp, then `build-fareway-regular -Today 2026-09-12 -NoCarry` built each arm into a temp
+OutDir. The two builds are 470 rows each and differ ONLY in the two fields: 41 of 470 rows gain them, 34 with a
+`sale_ends_days` and 7 with a note alone (5 "Add 2 to qualify for deal", 2 "Sale ends in N hrs M mins", which the
+builder keeps and nothing dates). 40 of the 41 are rows of the live `fareway-regular-2026-09-12.json` (837
+rows, blob `0762ef06`) at the same price and as_of, and those 40 were grafted onto a copy of it; `compare-deals
+-MinStores 1 -NoIdentity` then built the 2026-09-17 board (the newest ads file) once per arm from the seeded
+worktree. The OLD arm reproduced the live `comparison-2026-09-17.json` 572 of 572 commodity rows. The NEW arm
+changes **16 of 572 commodity rows, every one a Fareway cell, and 3 cheapest verdicts**. Each is a Fareway markdown
+the board dated with the 30-day TTL (or, twice, an ad window) whose own countdown says it ended on or before
+2026-09-12, so it expires and the reader sees the everyday price, or the next Fareway row:
+
+| commodity | before (reader sees) | after |
+|---|---|---|
+| almond-milk | Almond Breeze $4.88 SALE, ends 09-22 | $5.49 everyday, no badge |
+| batteries | Fareway AA 24pk $9.97 SALE, ends 09-24 | $10.99 everyday |
+| beef-broth | Fareway Fat Free $1.84 SALE, ends 09-22 | $2.68 everyday |
+| blackberries | $2.99 SALE, ends 09-25 | $4.99 everyday |
+| black-olives | Fareway Ripe Olives $2.00 SALE, ends 09-25 | $2.29 everyday |
+| black-pepper | Badia Ground $7.99 SALE, ends 09-22 | $9.99 everyday |
+| **black-peppercorns** | Badia Whole $7.99 SALE, ends 09-25, **CHEAPEST (Fareway $0.4994/oz)** | $9.99 everyday; **crown to Sam's Club $0.5118 everyday** |
+| caesar-salad-kit | Dole Classic $2.99 SALE, ends 09-19 (ad) | Dole Ultimate $3.88 SALE, ends 09-29 |
+| canned-black-beans | Fareway $0.99 SALE, ends 09-22 | $1.34 everyday |
+| **carrots** | Carrot $4.49 SALE, ends 09-29, **CHEAPEST (Fareway $0.898)** | $4.99 everyday; **crown to Sam's Club $0.912 everyday** |
+| clementines | $4.99 SALE, ends 10-09 | $5.99 everyday |
+| granola-bars | Sunbelt Banana Oat $2.88 SALE, ends 09-30 | Sunbelt Peanut Butter Chip $2.88 SALE, ends 09-19 (ad) |
+| refried-beans | Fareway Fat Free $0.99 SALE, ends 09-19 (ad) | $1.49 everyday |
+| **shredded-cheese** | Fareway Mozzarella $5.94 SALE, ends 09-30, **CHEAPEST (Fareway $0.1856/oz)** | Fareway Colby Jack $7.48 sale, no end date; **crown to Sam's Club $0.1866 everyday** |
+| strawberries | Reser's Strawberry Parfait $2.99 SALE, ends 09-30 | Strawberries $2.99 sale, no end date |
+| sweet-corn | $0.50 SALE, ends 09-30 | $1.00 everyday |
+
+No other store's cell moved and no commodity entered or left the board. Two readings Brad should have: (1) every
+change is the store's own answer replacing our guess, so each "after" is the more honest cell, but the everyday
+price it reverts to is from the same capture, 8 to 25 days old at the 09-17 board; (2) the size of the change is set by the capture
+stall below, because a fresh daily capture would re-price these terms. Three rows show the per-pound-versus-pack
+shape where the was-price is below the price (Banana $0.49 vs $0.23, Chicken Drumsticks $1.39 vs $0.75, Chuck
+Roast $7.88 vs $26.97): none of those three moved a board cell. **The one action:** merge
+`claude/i223-fareway-sale` to main (or say no, and this item closes as won't-fix).
+
+**Fareway capture HAS stalled since 2026-09-12, and the cause is visible.** The newest raw capture in the main
+checkout is still `fareway-shop-2026-09-12.jsonl` on 09-18. Every daily `capture-run` since (09-13, 09-14, 09-17,
+09-18 logs) queues "Fareway 42 term(s)", then the browser driver prints `Fareway ok skipped: worklist is empty -
+nothing owed today`, and Sam's Club says the same. `pull-browser-stores.py:read_worklist` reads the worklist's
+`terms` (and the navigate lane its parallel `commodities`), and `7e1c7d94e` (2026-09-12 11:58, the Walmart ruling
+terms) REPLACED the `terms` and `commodities` lines in `Write-CaptureWorklist` (`capture-policy-lib.ps1`) with
+`ruling_terms`: the 09-12 worklist has `terms` and `commodities`, every worklist from 09-13 on has only
+`rotation_terms`/`sale_terms`/`ruling_terms`. Filed as a separate finding; nothing was changed here.
 
 ### I224 - The price-alert email leaves an orphan draft on every failed send, and the alert state is unguarded `PARTLY DONE - BUILT AND TESTED ON BRANCH claude/i224-price-alerts, READY FOR BRAD TO MERGE` `run-0919` `1-WAY` `RUNG1 RULING`
 
