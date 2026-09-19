@@ -756,14 +756,15 @@ if ($SelfTest) {
       base_price=5.49; marked_down=$true; ad_from='2026-08-19'; ad_to='2026-08-26' })
   }
   $POP = $bkPrev.Count            # 480 rows
-  # THE ROTATION BUDGET FOR THIS POPULATION, FROM THE FRESHNESS RULE (2026-09-19): Get-RotationTermsPerRun, the
-  # same function Get-CapturePlan uses for every store, at Baker's one run a day. It was ceil(240 / QuarterDays)
-  # = 3 here until today, the quarterly drip the stale 2026-09-17 board was built on.
+  # THE ROTATION BUDGET FOR THIS POPULATION: Get-RotationTermsPerRun, the same function Get-CapturePlan uses for
+  # every store, at Baker's one run a day, over the rotation capture-policy-lib sets (the quarter).
   $bkBudget = Get-RotationTermsPerRun $NT_TERMS "Baker's"
   $bkWant = [int][math]::Ceiling($NT_TERMS / [double]$script:RotationDays / [double](Get-StoreRunsPerDay "Baker's"))
   B "CLEAN TWIN  the daily slice is ceil($NT_TERMS terms / $($script:RotationDays)d / $(Get-StoreRunsPerDay "Baker's") run) = $bkBudget term(s), not the whole list" (($bkBudget -eq $bkWant) -and ($bkBudget -lt $NT_TERMS) -and ($bkBudget -gt 0))
   $bkQuarter = [int][math]::Ceiling($NT_TERMS / [double](Get-PolicyQuarterDays))
-  B "MUST FIRE  the quarter rate ($bkQuarter a day, ceil($NT_TERMS / $(Get-PolicyQuarterDays))) is NOT the slice any more ($bkBudget)" ($bkQuarter -ne $bkBudget)
+  # BRAD'S STANDING RULE (restated 2026-09-19): an everyday price is re-read about once every 90 days, so the slice IS
+  # the quarter rate. This case said the opposite for one morning, after RotationDays was set to 14 without the rule.
+  B "LIVE  the slice is the quarter rate ($bkQuarter a day, ceil($NT_TERMS / $(Get-PolicyQuarterDays))), Brad's everyday-price rule ($bkBudget)" ($bkQuarter -eq $bkBudget)
   # THE LIVE LANE READS THE SAME RULE: Get-CapturePlan for Baker's over the tracked term list, and the ask plan the
   # run builds from it, never over the call cap.
   $bkLivePlan = Get-CapturePlan -Store "Baker's" -Today '2026-09-19'

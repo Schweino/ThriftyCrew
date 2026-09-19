@@ -789,14 +789,16 @@ if ($SelfTest) {
   }
 
   # --- the budget number itself: ASKABLE PRODUCTS / RotationDays, capped at the call cap -------------
-  # THE FOUNDING NUMBER (2026-09-19): ceil(1554 / 90) = 18 a day, a 90-day cycle, is what left 202 of 462
-  # Hy-Vee board cells on the retired store. RotationDays is capture-policy-lib's, read here, never typed.
-  $fixRot = [int]$script:RotationDays
+  # The LIVE lane reads RotationDays from capture-policy-lib, never typed, and by Brad's standing rule (restated
+  # 2026-09-19) that is the quarter: an everyday price is re-read about once every 90 days. The slice MECHANICS below
+  # run in a FIXTURE regime of 14 days so their arithmetic stays as written whatever the live window is.
+  _T "LIVE: the lane's rotation is capture-policy-lib's, and it is the quarter ($([int]$script:RotationDays) = $([int](Get-PolicyQuarterDays)))" ([int]$script:RotationDays -eq [int](Get-PolicyQuarterDays))
+  $fixRot = 14
   $fixCap = [int](Get-StoreCallCap 'Hy-Vee')
-  _T "the fixture reads the FRESHNESS RULE from capture-policy-lib (RotationDays 14, Hy-Vee cap 120)" (($fixRot -eq 14) -and ($fixCap -eq 120))
+  _T "the fixture's Hy-Vee cap is capture-policy-lib's (120)" ($fixCap -eq 120)
   $fixBudget = Get-HyVeeProductBudget -Population $POP -RotationDays $fixRot -Cap $fixCap
   _T "budget comes from this lane's own ASKABLE population over RotationDays (240/14 = 18 a day)" ($fixBudget -eq 18)
-  _T 'MUST FIRE: the live 1,554 products get 111 a day, not the 18 the 90-day quarter produced' ((Get-HyVeeProductBudget -Population 1554 -RotationDays 14 -Cap 120) -eq 111)
+  _T 'MUST FIRE: at a 14-day rotation 1,554 products get 111 a day (ceil 1554/14), never a typed figure' ((Get-HyVeeProductBudget -Population 1554 -RotationDays 14 -Cap 120) -eq 111)
   _T 'moving RotationDays moves the budget with it (7 days -> 223, clamped at the 120 cap)' ((Get-HyVeeProductBudget -Population 1554 -RotationDays 7 -Cap 120) -eq 120)
   _T 'expiring sales take only the ROOM LEFT under the cap (111 rotation + 9 of 30 expiries = 120)' ((Get-HyVeeProductBudget -Population 1554 -RotationDays 14 -Cap 120 -Expiries 30) -eq 120)
   _T 'CLEAN TWIN: with room, an expiring sale is still extra on top (111 + 2 = 113)' ((Get-HyVeeProductBudget -Population 1554 -RotationDays 14 -Cap 120 -Expiries 2) -eq 113)
@@ -855,7 +857,7 @@ if ($SelfTest) {
   $ordSkip = Get-HyVeeAskOrder -Work $fixWorkB -Budget $fixBudget -TargetStoreId '1466'
   _T '(d) MUST FIRE: a day with no run changes nothing - the next run asks exactly the products the missed one would have' (
       (@($ordSkip.Order) -join ',') -eq (@($ordB.Order) -join ','))
-  _T '(d) and after 240/18 = 14 runs every product has had its turn (the 14-day rotation, not a quarter)' (
+  _T '(d) and after 240/18 = 14 runs every product has had its turn (inside the fixture''s 14-day rotation)' (
       [int][math]::Ceiling($POP / [double]$fixBudget) -le $fixRot)
 
   # --- (d) THE DAILY STEP: the cursor file is still stepped once a day, never on a replay --------------
