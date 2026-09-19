@@ -145,6 +145,15 @@ meal-prep/db/recipes/bbq-chicken-rice-bowls.json meal-prep/db/recipes/bbq-chicke
 bbq-chicken-rice-bowls,bbq-chicken-burrito,chicken-enchilada-rice-bowls,fajita-chicken-rice-bowl,hot-honey-chicken-bowls,high-protein-chicken-alfredo-lasagna,chimichurri-steak-sheet-pan,greek-turkey-fasolakia-rice-bowls,ground-beef-teriyaki-bowls,honey-bbq-chicken-mac-and-cheese
 ```
 
+**APPLIED 2026-09-19 on Brad's go-ahead in chat.** Specs landed on main at 244ecd89b. From that commit:
+`audit-ghost-drift -Recipes` exit 0 (583 match, 0 drift, 0 blind); `build-cards` built 10/10, errors 0;
+`audit-allergen-line` exit 0, clean over 10; `publish.ps1 -Slugs <the 10>` exit 0, published and verified 10 of 10,
+0 skipped. The publish journal gained exactly these 10 keys (583 before and after), and a second drift run read
+583 match, 0 drift. A logged-out fetch of bbq-chicken-rice-bowls, hot-honey-chicken-bowls and
+chimichurri-steak-sheet-pan read the new title, no "lean", and no "What This Batch Costs" section served free.
+Only words changed, with no layout change, so no 375px check was run. The pot-pie footer below was NOT run: it is
+outside the approved batch and carries drift of its own.
+
 Optional, after batch 1 is live: `build-cards.ps1 -Slugs chicken-pot-pie-biscuit-casserole`, then `audit-allergen-line.ps1` and `publish.ps1` with the same slug, so its footer stops naming the old title. That card carries its own pending drift too; run the probe on it first.
 
 
