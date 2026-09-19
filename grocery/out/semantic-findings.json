@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-19 08:30",
+    "generated":  "2026-09-19 16:42",
     "board":  "comparison-2026-09-17.json",
-    "sidecar_generated":  "2026-09-19 08:30:33",
+    "sidecar_generated":  "2026-09-19 16:42:41",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,52 +9,252 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3188,
-                     "corpus":  41841,
-                     "rule_invisible":  7991
+                     "board_pairs":  2639,
+                     "corpus":  43729,
+                     "rule_invisible":  8605
                  },
     "identity_count":  0,
-    "coverage_count":  1,
+    "coverage_count":  9,
     "identity":  [
 
                  ],
     "coverage":  [
                      {
                          "kind":  "coverage",
-                         "id":  "pie-pumpkins",
-                         "commodity":  "Pie Pumpkins",
+                         "id":  "wild-rice-blend",
+                         "commodity":  "Wild Rice Blend",
+                         "store":  "Walmart",
+                         "product":  "Lundberg Sustainable Wild Blend Rice - Gluten Free, Vegan, 1lb Resealable Bag",
+                         "cos":  0.6484,
+                         "score":  0.994209,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "wild-rice-blend",
+                         "commodity":  "Wild Rice Blend",
+                         "store":  "Baker\u0027s",
+                         "product":  "Lundberg Family Farms Sustainable Wild Blend Rice",
+                         "cos":  0.6926,
+                         "score":  0.993964,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "wild-rice",
+                         "commodity":  "Wild Rice",
+                         "store":  "Walmart",
+                         "product":  "Wild Black Rice by Gerbs - 2 LBS - Top 14 Food Allergen Free \u0026 NON GMO - Product of Canada",
+                         "cos":  0.6574,
+                         "score":  0.978304,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "laundry-detergent",
+                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
                          "store":  "Family Fare",
-                         "product":  "Jj\u0027s Bakery Pie, Pumpkin Spice, Ligthly Glazed 4 Oz",
-                         "cos":  0.682,
-                         "score":  0.908096,
+                         "product":  "Arm \u0026 Hammer Detergent, Clean Meadow 100.5 Fl Oz",
+                         "cos":  0.6621,
+                         "score":  0.976464,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "taco-seasoning",
+                         "commodity":  "Taco Seasoning (packet)",
+                         "store":  "Walmart",
+                         "product":  "McCormick Street Taco Carne Asada Seasoning Mix, 0.87 oz Packet",
+                         "cos":  0.6742,
+                         "score":  0.941827,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "onion-soup-mix",
+                         "commodity":  "Onion Soup Mix (dry packets)",
+                         "store":  "Walmart",
+                         "product":  "Lipton Recipe Secrets Onion Dry Recipe Soup and Dip Mix, 2 O",
+                         "cos":  0.7626,
+                         "score":  0.923981,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "feminine-pads",
+                         "commodity":  "Feminine Pads",
+                         "store":  "Baker\u0027s",
+                         "product":  "Stayfree Classic Pads Without Wings Super Long Unscented",
+                         "cos":  0.6266,
+                         "score":  0.918782,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "feminine-pads",
+                         "commodity":  "Feminine Pads",
+                         "store":  "Walmart",
+                         "product":  "Stayfree Classic Pads Super Long without Wings, Unscented, 22 Ct",
+                         "cos":  0.578,
+                         "score":  0.915721,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "vegetable-soup",
+                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "store":  "Baker\u0027s",
+                         "product":  "Progresso Protein Hearty Grain Vegetable Vegetarian Canned Soup",
+                         "cos":  0.7932,
+                         "score":  0.909784,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ],
-    "coverage_excluded_count":  2,
+    "coverage_excluded_count":  12,
     "coverage_excluded":  [
                               {
                                   "kind":  "coverage",
-                                  "id":  "baby-formula",
-                                  "commodity":  "Baby Formula",
-                                  "store":  "Family Fare",
-                                  "product":  "Similac Infant Formula, With Iron, Hypoallergenic, Ready To Feed, 0 12 Months 6 Ea",
-                                  "cos":  0.6843,
-                                  "score":  0.93355,
+                                  "id":  "cumin-seeds",
+                                  "commodity":  "Cumin seeds",
+                                  "store":  "Walmart",
+                                  "product":  "Soeos Cumin Seeds, 8oz (227g), Whole Cumin Powder, Resealable Bag",
+                                  "cos":  0.6671,
+                                  "score":  0.986137,
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027(?:infant|baby)\\s+formula\u0027 matched, exclude \u0027ready[\\s-]?to[\\s-]?feed\u0027 killed it"
+                                  "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bpowder\\b\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "cumin-seeds",
+                                  "commodity":  "Cumin seeds",
+                                  "store":  "Walmart",
+                                  "product":  "Frontier Co-op Certified Organic Cumin Seed, Ground, 16 oz. Bag",
+                                  "cos":  0.6967,
+                                  "score":  0.984558,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bground\\b\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "wild-rice",
+                                  "commodity":  "Wild Rice",
+                                  "store":  "Walmart",
+                                  "product":  "Gourmet House Cultivated Rice, Long Grain Wild Rice, 1 lb Bag",
+                                  "cos":  0.6688,
+                                  "score":  0.982831,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027long\\s+grain\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "laundry-detergent",
+                                  "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
+                                  "store":  "Walmart",
+                                  "product":  "ARM \u0026 HAMMER Plus the Power of ODOR BLASTERS Odor Fighters 2-in-1 Laundry  Detergent Powder, Fresh Rush Scent, 10 lb",
+                                  "cos":  0.7998,
+                                  "score":  0.966532,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)\u0027 matched, exclude \u0027\\bpowder\\b\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "cumin-seeds",
+                                  "commodity":  "Cumin seeds",
+                                  "store":  "Walmart",
+                                  "product":  "Simply Organic Ground Cumin Seed, Shelf-Stable, 2.31 oz Bottle",
+                                  "cos":  0.6799,
+                                  "score":  0.966045,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bground\\b\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "cumin-seeds",
+                                  "commodity":  "Cumin seeds",
+                                  "store":  "Walmart",
+                                  "product":  "Spice Islands Ground Cumin Seed, Kosher, 1.9 oz",
+                                  "cos":  0.6818,
+                                  "score":  0.958278,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bground\\b\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "wild-rice",
+                                  "commodity":  "Wild Rice",
+                                  "store":  "Family Fare",
+                                  "product":  "Ben\u0027s Original Long Grain \u0026 Wild Rice, Fast Cook 6.2 Oz",
+                                  "cos":  0.6816,
+                                  "score":  0.944374,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027long\\s+grain\\s+(?:\u0026|and)\\s+wild\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "wild-rice",
+                                  "commodity":  "Wild Rice",
+                                  "store":  "Walmart",
+                                  "product":  "Minnesota Cultivated Long Grain Wild Rice (16oz)",
+                                  "cos":  0.6994,
+                                  "score":  0.921954,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027long\\s+grain\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "canned-butter-beans",
+                                  "commodity":  "Canned Butter Beans",
+                                  "store":  "Walmart",
+                                  "product":  "Glory Foods Canned Seasoned Butter Beans, 15.5 oz Can",
+                                  "cos":  0.6813,
+                                  "score":  0.92039,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027\\bbutter\\s+beans?\\b\u0027 matched, exclude \u0027\\b(?:baked|refried|seasoned|soup|chili|salad|dip|hummus|entree)\\b\u0027 killed it"
                               },
                               {
                                   "kind":  "coverage",
                                   "id":  "ground-beef-8020",
                                   "commodity":  "80/20 Ground Beef",
-                                  "store":  "Aldi",
-                                  "product":  "Family Pack 80 Lean 20 Fat Ground Beef Patties 2.5 LB",
-                                  "cos":  0.7068,
-                                  "score":  0.900264,
+                                  "store":  "Baker\u0027s",
+                                  "product":  "Ground Beef And Pork Blend Patties 80% Lean 20% Fat",
+                                  "cos":  0.6918,
+                                  "score":  0.918981,
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
-                                  "detail":  "include \u002780%?\\s*lean[^.]*20%?\\s*fat\u0027 matched, exclude \u0027patties\u0027 killed it"
+                                  "detail":  "include \u0027ground\\s+beef[^.]*80\u0027 matched, exclude \u0027patties\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "wild-rice",
+                                  "commodity":  "Wild Rice",
+                                  "store":  "Family Fare",
+                                  "product":  "Canoe White\u0027n Wild Rice 6 Oz",
+                                  "cos":  0.6822,
+                                  "score":  0.912208,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027\\bwhite\\b\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "cumin-seeds",
+                                  "commodity":  "Cumin seeds",
+                                  "store":  "Walmart",
+                                  "product":  "Pride of India Ground Cumin Seed, 8 oz Dual Sifter Bottle",
+                                  "cos":  0.6362,
+                                  "score":  0.906948,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bground\\b\u0027 killed it"
                               }
                           ]
 }

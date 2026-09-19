@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-09-19T08:25:21",
+    "updated":  "2026-09-19T16:38:31",
     "price_table":  "price-table-2026-09-17.json",
     "note":  "Prices captured somewhere in the codebase that do not appear in the price table. compare-deals reads six input classes and the table is derived from the same rows the ranker uses, so a capture path either writes into one of those six or its prices do not exist. Advisory: \"captured, adjudicated, waiting on a commodity id\" is a legitimate state; \"captured and forgotten because nothing counts it\" is not.",
     "stores":  [
@@ -8,15 +8,95 @@
                        "what":  "Recipe Hunter pricing agent (ingredient-queue.ps1 -Record -Price)",
                        "expected":  "reach",
                        "captured":  520,
-                       "reached":  20,
-                       "missing":  500,
+                       "reached":  7,
+                       "missing":  513,
                        "missing_rows":  [
+                                            {
+                                                "key":  "cumin-seeds",
+                                                "store":  "Family Fare",
+                                                "price":  2.29,
+                                                "size":  "2 oz",
+                                                "item":  "Sugar \u0027N Spice Cumin Whole",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "cumin-seeds",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.69,
+                                                "size":  "1 oz",
+                                                "item":  "Tampico Cumin Whole",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "chipotle-powder",
+                                                "store":  "Baker\u0027s",
+                                                "price":  14.49,
+                                                "size":  "2.3 oz",
+                                                "item":  "Spice Islands Ground Chipotle Chile",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "fennel",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.99,
+                                                "size":  "1 ct",
+                                                "item":  "Fresh Fennel",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "brown-lentils",
+                                                "store":  "Family Fare",
+                                                "price":  2.69,
+                                                "size":  "1 lb",
+                                                "item":  "Our Family Lentils",
+                                                "commodity_known":  true
+                                            },
+                                            {
+                                                "key":  "brown-lentils",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.99,
+                                                "size":  "16 oz",
+                                                "item":  "Goya Lentils",
+                                                "commodity_known":  true
+                                            },
                                             {
                                                 "key":  "bean-sprouts",
                                                 "store":  "Family Fare",
                                                 "price":  2.79,
                                                 "size":  "14.5 oz",
                                                 "item":  "Geisha Bean Sprouts, In Water",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "bean-sprouts",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.19,
+                                                "size":  "14 oz",
+                                                "item":  "La Choy Bean Sprouts",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "coconut",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.49,
+                                                "size":  "1 ct",
+                                                "item":  "Fresh Brown Coconuts",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "dried-guajillo-chiles",
+                                                "store":  "Family Fare",
+                                                "price":  2.49,
+                                                "size":  "3 oz",
+                                                "item":  "Guajillo Chili",
+                                                "commodity_known":  true
+                                            },
+                                            {
+                                                "key":  "dried-guajillo-chiles",
+                                                "store":  "Baker\u0027s",
+                                                "price":  4.29,
+                                                "size":  "2 oz",
+                                                "item":  "Tampico Guajillo Chili Pods",
                                                 "commodity_known":  true
                                             },
                                             {
@@ -114,6 +194,30 @@
                                                 "size":  "500 ml",
                                                 "item":  "Vendange Pinot Grigio White Wine",
                                                 "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "brandy",
+                                                "store":  "Fareway",
+                                                "price":  11.99,
+                                                "size":  "750 ml",
+                                                "item":  "Christian Brothers VS Brandy",
+                                                "commodity_known":  true
+                                            },
+                                            {
+                                                "key":  "brandy",
+                                                "store":  "Hy-Vee",
+                                                "price":  13.99,
+                                                "size":  "750 ml",
+                                                "item":  "Christian Brothers Brandy",
+                                                "commodity_known":  true
+                                            },
+                                            {
+                                                "key":  "brandy",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  19.28,
+                                                "size":  "1.75 L",
+                                                "item":  "Christian Brothers VS Grape Brandy",
+                                                "commodity_known":  true
                                             },
                                             {
                                                 "key":  "thai chiles",
@@ -1505,110 +1609,6 @@
                                                 "price":  3.49,
                                                 "size":  "4 oz",
                                                 "item":  "Lawry\u0027s Seasoned Salt",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "parmesan cheese",
-                                                "store":  "Walmart",
-                                                "price":  5.48,
-                                                "size":  "16 oz",
-                                                "item":  "Great Value Grated Parmesan Cheese, 16 oz Bottle",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "parmesan cheese",
-                                                "store":  "Fareway",
-                                                "price":  2.99,
-                                                "size":  "8 oz",
-                                                "item":  "Fareway Grated Parmesan Cheese",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "parmesan cheese",
-                                                "store":  "Family Fare",
-                                                "price":  6.79,
-                                                "size":  "8 oz",
-                                                "item":  "Kraft Grated Cheese, Parmesan Cheese, 8 Oz",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "parmesan cheese",
-                                                "store":  "Hy-Vee",
-                                                "price":  3.49,
-                                                "size":  "8 oz",
-                                                "item":  "Hy Vee Grated Parmesan Cheese",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "parmesan cheese",
-                                                "store":  "Sam\u0027s Club",
-                                                "price":  7.42,
-                                                "size":  "24 oz",
-                                                "item":  "Member\u0027s Mark Grated Parmesan Cheese, 24 oz.",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "parmesan cheese",
-                                                "store":  "Aldi",
-                                                "price":  2.79,
-                                                "size":  "8 oz",
-                                                "item":  "Reggano Grated Parmesan Romano Cheese 8 OZ",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "parmesan cheese",
-                                                "store":  "Baker\u0027s",
-                                                "price":  5.99,
-                                                "size":  "8 oz",
-                                                "item":  "Private Selection Parmesan Cheese Wedge",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "bourbon",
-                                                "store":  "Fareway",
-                                                "price":  17.99,
-                                                "size":  "750 ml",
-                                                "item":  "Jim Beam Bourbon Whiskey",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "bourbon",
-                                                "store":  "Family Fare",
-                                                "price":  21.99,
-                                                "size":  "750 ml",
-                                                "item":  "Jim Beam Kentucky Straight Bourbon Whiskey 750 Ml",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "bourbon",
-                                                "store":  "Sam\u0027s Club",
-                                                "price":  16.94,
-                                                "size":  "750 ml",
-                                                "item":  "Member\u0027s Mark Kentucky Straight Bourbon Whiskey, 750 ml",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "bourbon",
-                                                "store":  "Baker\u0027s",
-                                                "price":  18.99,
-                                                "size":  "750 ml",
-                                                "item":  "Jim Beam Bourbon Whiskey",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "mozzarella cheese",
-                                                "store":  "Fareway",
-                                                "price":  2.48,
-                                                "size":  "8 oz",
-                                                "item":  "Fareway Low-Moisture Part-Skim Mozzarella Cheese",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "mozzarella cheese",
-                                                "store":  "Family Fare",
-                                                "price":  2.59,
-                                                "size":  "8 oz",
-                                                "item":  "Our Family Part Skim Low Moisture Natural Mozzarella Cheese 8 Oz",
                                                 "commodity_known":  false
                                             }
                                         ]

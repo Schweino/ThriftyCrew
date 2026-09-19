@@ -1,13 +1,13 @@
 ﻿{
     "no_taxonomy_rows":  0,
-    "judged":  4996,
+    "judged":  5002,
     "unknown_departments":  [
 
                             ],
     "sources":  [
-                    "Family Fare: canonical_url from 29 file(s) within 30d -\u003e 5453 product(s) with a department (newest family-fare-regular-2026-09-19.json)",
+                    "Family Fare: canonical_url from 29 file(s) within 30d -\u003e 5456 product(s) with a department (newest family-fare-regular-2026-09-19.json)",
                     "Hy-Vee: row field store_department in hyvee-regular-2026-09-19.json -\u003e 477 product(s) with a department",
-                    "Baker\u0027s: row field store_category in bakers-regular-2026-09-19.json -\u003e 6721 product(s) with a department"
+                    "Baker\u0027s: row field store_category in bakers-regular-2026-09-19.json -\u003e 6791 product(s) with a department"
                 ],
     "note":  "The store said one thing about this product and our include regex said another. A LIVE CELL entry is on the board right now. A candidate entry has not won a cell but proves the rule matches the wrong product. This is a REVIEW QUEUE, not a gate - see the header.",
     "date":  "2026-09-19",
@@ -146,6 +146,16 @@
                                         "taxonomy_src":  "family-fare-regular-2026-09-19.json"
                                     },
                                     {
+                                        "subcategory":  "skin_care",
+                                        "item":  "Top Care Foaming Pink Grapefruit Acne Scrub 4.2 Fl Oz",
+                                        "id":  "grapefruit",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-09-19.json"
+                                    },
+                                    {
                                         "subcategory":  "dog",
                                         "item":  "Iams Puppy\u003c1 Healthy Puppy Chicken \u0026 Whole Grain Recipe Puppy Food 5 Lb",
                                         "id":  "whole-chicken",
@@ -164,16 +174,6 @@
                                         "store":  "Family Fare",
                                         "department":  "pets_wildlife",
                                         "taxonomy_src":  "family-fare-regular-2026-09-04.json"
-                                    },
-                                    {
-                                        "subcategory":  "skin_care",
-                                        "item":  "Top Care Foaming Pink Grapefruit Acne Scrub 4.2 Fl Oz",
-                                        "id":  "grapefruit",
-                                        "unit_price":  null,
-                                        "rankable":  false,
-                                        "store":  "Family Fare",
-                                        "department":  "health_beauty",
-                                        "taxonomy_src":  "family-fare-regular-2026-09-19.json"
                                     }
                                 ]
 }

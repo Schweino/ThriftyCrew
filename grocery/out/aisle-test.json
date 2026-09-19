@@ -414,6 +414,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "canned-white-beans",
+        "store":  "Family Fare",
+        "product":  "Delallo Cannellini Beans, White Kidney 15.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "carrots",
         "store":  "Family Fare",
         "product":  "Our Family Whole Carrots 32 Oz",
@@ -603,6 +612,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
+        "id":  "corned-beef-hash",
+        "store":  "Family Fare",
+        "product":  "Our Family Corned Beef Hash",
+        "dept":  "meat",
+        "aisle":  "meat/beef",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is a reviewed exception department for \u0027corned-beef-hash\u0027"
+    },
+    {
         "id":  "cornstarch",
         "store":  "Family Fare",
         "product":  "100% Pure Corn Starch Our Family",
@@ -655,6 +673,15 @@
         "aisle":  "bakery/breakfast_sweet_breads",
         "verdict":  "ALLOW",
         "reason":  "\u0027bakery\u0027 is an allowed department for category \u0027bakery\u0027"
+    },
+    {
+        "id":  "crushed-tomatoes",
+        "store":  "Family Fare",
+        "product":  "Contadina Crushed Tomatoes 28 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
         "id":  "cucumbers",
@@ -1251,6 +1278,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
+        "id":  "kidney-beans",
+        "store":  "Family Fare",
+        "product":  "Our Family Beans, Kidney, Dark Red 15.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "kielbasa",
         "store":  "Family Fare",
         "product":  "Eckrich Polska Kielbasa Skinless Smoked Sausage Rope 14 Oz",
@@ -1278,6 +1314,15 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
+        "id":  "lemon-juice",
+        "store":  "Family Fare",
+        "product":  "Our Family Lemon 100% Juice 32 Fl Oz",
+        "dept":  "beverages",
+        "aisle":  "beverages/fruit_vegetable_beverages",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is a reviewed exception department for \u0027lemon-juice\u0027"
+    },
+    {
         "id":  "lemonade",
         "store":  "Family Fare",
         "product":  "Minute Maid Lemonade Carton 59 Fl Oz",
@@ -1294,6 +1339,15 @@
         "aisle":  "fresh_fruits_vegetables/lettuce_cabbage_greens",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "lime-juice",
+        "store":  "Family Fare",
+        "product":  "Rea Lime Lime Juice 15 Fl Oz",
+        "dept":  "beverages",
+        "aisle":  "beverages/fruit_vegetable_beverages",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is a reviewed exception department for \u0027lime-juice\u0027"
     },
     {
         "id":  "mangoes",
@@ -1474,6 +1528,15 @@
         "aisle":  "fresh_fruits_vegetables/other_vegetables",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "pasta-sauce",
+        "store":  "Family Fare",
+        "product":  "Our Family Pasta Sauce, Tomato, Basil \u0026 Garlic 24 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/pasta_sauces",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
         "id":  "peanut-butter",
@@ -1755,6 +1818,15 @@
         "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
+        "id":  "soy-sauce",
+        "store":  "Family Fare",
+        "product":  "Soy Sauce Our Family",
+        "dept":  "pantry",
+        "aisle":  "pantry/condiments_dressing",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
         "id":  "sparkling-water",
         "store":  "Family Fare",
         "product":  "Sparkling Ice Zero Sugar Fruit Punch Sparkling Water 17 Fl Oz",
@@ -1908,6 +1980,24 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
+        "id":  "tomato-paste",
+        "store":  "Family Fare",
+        "product":  "Our Family Tomato Paste 12 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "tomato-sauce",
+        "store":  "Family Fare",
+        "product":  "Our Family Tomato Sauce 29 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "tomato-soup",
         "store":  "Family Fare",
         "product":  "Our Family Condensed Soup, Tomato, Classic 26 Fl Oz",
@@ -1971,6 +2061,15 @@
         "reason":  "\u0027freezer\u0027 is a reviewed exception department for \u0027whipped-cream\u0027"
     },
     {
+        "id":  "white-vinegar",
+        "store":  "Family Fare",
+        "product":  "That\u0027s Smart! Vinegar, White Distilled 1 Gal",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
         "id":  "watermelon",
         "store":  "Family Fare",
         "product":  "Fresh Watermelons, Seedless",
@@ -2016,6 +2115,15 @@
         "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
     },
     {
+        "id":  "sugar-free-bbq-sauce",
+        "store":  "Family Fare",
+        "product":  "Ray\u0027s No Sugar Added Barbecue Sauce , Sweet \u0026 Smoky 18.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/condiments_dressing",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
         "id":  "frozen-broccoli-florets",
         "store":  "Family Fare",
         "product":  "Frozen Broccoli Florets Our Family Steamable",
@@ -2054,29 +2162,38 @@
     {
         "id":  "canned-sweet-corn",
         "store":  "Family Fare",
-        "product":  "Our Family Sweet Whole Kernel Corn 15.25 Oz",
+        "product":  "Our Family No Salt Added Super Sweet Whole Kernel Corn 15.25 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
+        "id":  "zero-sugar-soda-2l",
+        "store":  "Family Fare",
+        "product":  "Squirt Soda, Grapefruit, Diet 2 L",
+        "dept":  "beverages",
+        "aisle":  "beverages/soda_other_carbonated_beverages",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
+        "id":  "pork-loin",
+        "store":  "Family Fare",
+        "product":  "Open Acres Half Portion Boneless Pork Loin",
+        "dept":  "meat",
+        "aisle":  "meat/pork",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
         "id":  "smoked-paprika",
         "store":  "Family Fare",
-        "product":  "Sugar N Spice Paprika Smoked Pp",
+        "product":  "Sugar \u0027N Spice Smoked Paprika",
         "dept":  "fresh_fruits_vegetables",
         "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is a reviewed exception department for \u0027smoked-paprika\u0027"
-    },
-    {
-        "id":  "mozzarella-cheese",
-        "store":  "Family Fare",
-        "product":  "Our Family Part Skim Mozzarella Shredded Cheese 16 Oz",
-        "dept":  "deli",
-        "aisle":  "deli/cheese",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
     },
     {
         "id":  "apple-cider",
@@ -2086,6 +2203,15 @@
         "aisle":  "beverages/fruit_vegetable_beverages",
         "verdict":  "ALLOW",
         "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
+        "id":  "cilantro-lime-rice",
+        "store":  "Family Fare",
+        "product":  "Rice A Roni Cilantro Lime Rice 5.6 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/dry_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
     },
     {
         "id":  "mexican-cheese-blend",

@@ -1,18 +1,18 @@
 ﻿{
-    "generated":  "2026-09-19T08:27:36",
+    "generated":  "2026-09-19T16:40:29",
     "board":  "comparison-2026-09-17",
-    "cells":  530,
-    "coverage_pct":  90.2,
+    "cells":  510,
+    "coverage_pct":  100,
     "counts":  {
-                   "SHELF":  477,
+                   "SHELF":  509,
                    "SHIP_ONLY":  0,
                    "THIRD_PARTY":  1,
-                   "UNKNOWN":  52
+                   "UNKNOWN":  0
                },
     "flagged":  [
                     {
                         "id":  "bottled-water",
-                        "crown":  false,
+                        "crown":  true,
                         "verdict":  "THIRD-PARTY",
                         "per_unit":  0.1033,
                         "item":  "Niagara Purified Drinking Water, 16.9 fl. oz., 24 Count, Bottle",
