@@ -309,6 +309,14 @@ def _child_env(base=None):
     """The environment a dispatched agent runs in. Pure, so it is testable."""
     e = dict(os.environ if base is None else base)
     e.setdefault("TC_STAGE_WRITES", os.path.join(REPO, "ops", "staged-writes.jsonl"))
+    # TC_HEADLESS=1 (Brad approved 2026-09-19). The user-level Stop hook
+    # ~/.claude/skills/recall-consulted-hook.py refuses a reply with no `Consulted:` line, and under
+    # `claude -p` that refusal is a SECOND TURN whose text replaces the verdict this call exists to
+    # read. The hook skips when this is set. It is FORCED, never setdefault: the dispatched call is
+    # headless whatever the parent was, and the CLI's own CLAUDE_CODE_ENTRYPOINT cannot say so,
+    # because it is inherited unchanged (measured: `claude-desktop` in a child started from a
+    # desktop session).
+    e["TC_HEADLESS"] = "1"
     return e
 
 
@@ -786,6 +794,11 @@ def selftest():
       _child_env({"TC_STAGE_WRITES": "X:/mine.jsonl"})["TC_STAGE_WRITES"] == "X:/mine.jsonl")
     T("CLEAN TWIN the rest of the environment travels through untouched",
       _child_env({"PATH": "/zzz", "TC_FOO": "1"}).get("PATH") == "/zzz")
+    T("MUST FIRE  a dispatched agent is marked headless, so the Stop hook's footer refusal cannot "
+      "turn its verdict into a second turn",
+      e_arm.get("TC_HEADLESS") == "1", repr(e_arm.get("TC_HEADLESS")))
+    T("MUST FIRE  TC_HEADLESS is forced, not inherited - a parent that set it to 0 still gets 1",
+      _child_env({"TC_HEADLESS": "0"}).get("TC_HEADLESS") == "1")
 
     # ---- the frontmatter is the authority, and it is READ, never restated ------------------------
     tmp = tempfile.mkdtemp(prefix="agentdefs-")
