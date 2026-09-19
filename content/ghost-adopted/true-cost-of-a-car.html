@@ -1,0 +1,93 @@
+
+<!--kg-card-begin: html-->
+<style>
+.hmca{max-width:620px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2rem 1.8rem;font-family:-apple-system,Segoe UI,Roboto,sans-serif}
+.hmca h3{font-size:1.9rem;color:#16263F;margin:0 0 .3rem}
+.hmca .hmca-sub{font-size:1.45rem;color:#64748b;margin:0 0 1.6rem;line-height:1.5}
+.hmca-field{margin-bottom:1.15rem}
+.hmca-field label{display:block;font-size:1.35rem;font-weight:600;color:#16263F;margin-bottom:.4rem}
+.hmca-field .hmca-hint{font-weight:400;color:#94a3b8}
+.hmca-in{position:relative}
+.hmca-in .pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:1.5rem}
+.hmca input{width:100%;box-sizing:border-box;padding:.85rem 1rem .85rem 2.1rem;font-size:1.55rem;border:1px solid #cbd5e1;border-radius:9px;background:#fbfcfe;color:#16263F}
+.hmca input:focus{outline:none;border-color:#1E3A5F;box-shadow:0 0 0 3px rgba(30,58,95,.12)}
+.hmca-out{margin-top:1.6rem;background:#16263F;border-radius:14px;padding:1.8rem 1.6rem;text-align:center;color:#F6F1E7}
+.hmca-out .lbl{font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;color:#c9b071;margin-bottom:.3rem}
+.hmca-out .big{font-size:3.4rem;font-weight:800;color:#fff;line-height:1.1}
+.hmca-out .pay{font-size:1.5rem;color:#e2e8f0;margin-top:.5rem}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.3rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+</style>
+
+<p>The price on the windshield is the smallest number you will ever pay for a car. Depreciation, insurance, gas, and repairs are the real bill, and they run quietly in the background for years. Here is what a car actually costs you.</p>
+
+<div class="hmca">
+  <h3>The True Cost of a Car</h3>
+  <p class="hmca-sub">Add up the whole picture, not just the sticker price. Rough numbers are fine.</p>
+
+  <div class="hmca-field">
+    <label>Purchase price</label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="tcPrice" min="0" step="500" inputmode="decimal" placeholder="25,000"></div>
+  </div>
+  <div class="hmca-field">
+    <label>Years you will keep it</label>
+    <div class="hmca-in"><span class="pfx" style="font-size:1.3rem">yrs</span><input type="number" id="tcYears" min="1" step="1" inputmode="decimal" placeholder="5" style="padding-left:3.2rem"></div>
+  </div>
+  <div class="hmca-field">
+    <label>Insurance <span class="hmca-hint">(per month)</span></label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="tcIns" min="0" step="10" inputmode="decimal" placeholder="140"></div>
+  </div>
+  <div class="hmca-field">
+    <label>Gas <span class="hmca-hint">(per month)</span></label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="tcGas" min="0" step="10" inputmode="decimal" placeholder="150"></div>
+  </div>
+  <div class="hmca-field">
+    <label>Maintenance & repairs <span class="hmca-hint">(per year)</span></label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="tcMaint" min="0" step="50" inputmode="decimal" placeholder="800"></div>
+  </div>
+  <div class="hmca-field">
+    <label>What it will be worth when you sell <span class="hmca-hint">(resale)</span></label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="tcResale" min="0" step="500" inputmode="decimal" placeholder="9,000"></div>
+  </div>
+
+  <div class="hmca-out">
+    <div class="lbl">This car really costs you</div>
+    <div class="big" id="tcTotal">$0</div>
+    <div class="pay" id="tcPer">Enter your numbers above</div>
+  </div>
+
+  <p class="hmca-note"><strong>Depreciation is usually the biggest line.</strong> The money the car quietly loses in value often beats gas and insurance combined. Buying a lightly used car lets someone else eat that first, steepest drop.</p>
+</div>
+
+<h2>Why the sticker price lies</h2>
+<p>A $25,000 car is not a $25,000 decision. Over five years it can easily cost you $40,000 or more once you add insurance, fuel, upkeep, and the value it bleeds off every year. That is not a reason to never own a car. It is a reason to know the real number before you fall in love with a payment.</p>
+
+<h2>The cheat code: buy used, keep it longer</h2>
+<p>Two moves cut a car's true cost more than anything else. First, buy a used car a few years old, so the first owner absorbs the steepest depreciation. Second, keep it well past the loan payoff, because the cheapest car you will ever own is the paid-off one sitting in your driveway.</p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and lesson? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var ids=['tcPrice','tcYears','tcIns','tcGas','tcMaint','tcResale'].map(function(i){return document.getElementById(i);});
+  var totalEl=document.getElementById('tcTotal'),perEl=document.getElementById('tcPer');
+  function money(n){return '$'+Math.round(n).toLocaleString('en-US');}
+  function calc(){
+    var price=parseFloat(ids[0].value)||0, years=parseFloat(ids[1].value)||0,
+        ins=parseFloat(ids[2].value)||0, gas=parseFloat(ids[3].value)||0,
+        maint=parseFloat(ids[4].value)||0, resale=parseFloat(ids[5].value)||0;
+    if(price<=0||years<=0){totalEl.textContent='$0';perEl.textContent='Enter your numbers above';return;}
+    var depreciation=Math.max(0,price-resale);
+    var running=(ins*12 + gas*12 + maint)*years;
+    var total=depreciation+running;
+    var perMonth=total/(years*12);
+    totalEl.textContent=money(total);
+    perEl.textContent='over '+years+' years. That is about '+money(perMonth)+'/month, all in.';
+  }
+  ids.forEach(function(el){el.addEventListener('input',calc);el.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+
+<!--kg-card-end: html-->
+

@@ -1,0 +1,87 @@
+
+<!--kg-card-begin: html-->
+<style>
+.hmca{max-width:640px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2rem 1.8rem;font-family:-apple-system,Segoe UI,Roboto,sans-serif}
+.hmca h3{font-size:1.9rem;color:#16263F;margin:0 0 .3rem}
+.hmca .hmca-sub{font-size:1.45rem;color:#64748b;margin:0 0 1.4rem;line-height:1.5}
+.nw-sec{font-size:1.35rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase;margin:1.2rem 0 .7rem;padding-bottom:.35rem;border-bottom:2px solid #e2e8f0}
+.nw-assets{color:#2f7d5b;border-color:#2f7d5b}
+.nw-liab{color:#c0492f;border-color:#c0492f}
+.nw-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.6rem}
+.nw-row label{font-size:1.35rem;color:#16263F;flex:1}
+.nw-in{position:relative;width:170px;flex:none}
+.nw-in .pfx{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:1.35rem}
+.nw-in input{width:100%;box-sizing:border-box;padding:.55rem .6rem .55rem 1.7rem;font-size:1.4rem;border:1px solid #cbd5e1;border-radius:8px;background:#fbfcfe;color:#16263F;text-align:right}
+.nw-in input:focus{outline:none;border-color:#1E3A5F;box-shadow:0 0 0 3px rgba(30,58,95,.12)}
+.nw-sub{display:flex;justify-content:space-between;font-size:1.4rem;font-weight:700;margin-top:.5rem;padding-top:.6rem;border-top:1px dashed #cbd5e1;color:#334155}
+.hmca-out{margin-top:1.6rem;background:#16263F;border-radius:14px;padding:1.7rem 1.6rem;text-align:center;color:#F6F1E7}
+.hmca-out .lbl{font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;color:#c9b071;margin-bottom:.3rem}
+.hmca-out .big{font-size:3.3rem;font-weight:800;color:#fff;line-height:1.1}
+.hmca-out .pay{font-size:1.4rem;color:#e2e8f0;margin-top:.5rem}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.3rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+</style>
+
+<p>Your net worth is the single truest scoreboard in personal finance. It is everything you own minus everything you owe, in one honest number. Income tells you what flows in. Net worth tells you what you are actually keeping. Fill in what you can and watch it add up.</p>
+
+<div class="hmca">
+  <h3>The Net Worth Calculator</h3>
+  <p class="hmca-sub">Add up your assets, subtract your debts, and see where you really stand today.</p>
+
+  <div class="nw-sec nw-assets">What you own (assets)</div>
+  <div class="nw-row"><label>Cash and savings</label><div class="nw-in"><span class="pfx">$</span><input type="number" class="nwA" min="0" step="100" inputmode="decimal" placeholder="0"></div></div>
+  <div class="nw-row"><label>Investments (401k, IRA, brokerage)</label><div class="nw-in"><span class="pfx">$</span><input type="number" class="nwA" min="0" step="100" inputmode="decimal" placeholder="0"></div></div>
+  <div class="nw-row"><label>Home value</label><div class="nw-in"><span class="pfx">$</span><input type="number" class="nwA" min="0" step="1000" inputmode="decimal" placeholder="0"></div></div>
+  <div class="nw-row"><label>Vehicles</label><div class="nw-in"><span class="pfx">$</span><input type="number" class="nwA" min="0" step="500" inputmode="decimal" placeholder="0"></div></div>
+  <div class="nw-row"><label>Other assets</label><div class="nw-in"><span class="pfx">$</span><input type="number" class="nwA" min="0" step="100" inputmode="decimal" placeholder="0"></div></div>
+  <div class="nw-sub"><span>Total assets</span><span id="nwTotA" style="color:#2f7d5b">$0</span></div>
+
+  <div class="nw-sec nw-liab">What you owe (debts)</div>
+  <div class="nw-row"><label>Mortgage balance</label><div class="nw-in"><span class="pfx">$</span><input type="number" class="nwL" min="0" step="1000" inputmode="decimal" placeholder="0"></div></div>
+  <div class="nw-row"><label>Car loans</label><div class="nw-in"><span class="pfx">$</span><input type="number" class="nwL" min="0" step="500" inputmode="decimal" placeholder="0"></div></div>
+  <div class="nw-row"><label>Student loans</label><div class="nw-in"><span class="pfx">$</span><input type="number" class="nwL" min="0" step="500" inputmode="decimal" placeholder="0"></div></div>
+  <div class="nw-row"><label>Credit card debt</label><div class="nw-in"><span class="pfx">$</span><input type="number" class="nwL" min="0" step="100" inputmode="decimal" placeholder="0"></div></div>
+  <div class="nw-row"><label>Other debts</label><div class="nw-in"><span class="pfx">$</span><input type="number" class="nwL" min="0" step="100" inputmode="decimal" placeholder="0"></div></div>
+  <div class="nw-sub"><span>Total debts</span><span id="nwTotL" style="color:#c0492f">$0</span></div>
+
+  <div class="hmca-out">
+    <div class="lbl">Your net worth</div>
+    <div class="big" id="nwNet">$0</div>
+    <div class="pay" id="nwMsg">Fill in the numbers above</div>
+  </div>
+
+  <p class="hmca-note"><strong>A negative number is a starting point, not a verdict.</strong> Plenty of people with big incomes have a net worth in the red, and plenty of quiet, steady savers are millionaires. What matters is the direction. Check this number every few months. As long as the trend is up, you are winning.</p>
+</div>
+
+<h2>Why net worth beats income</h2>
+<p>It is easy to look rich and be broke. A big paycheck spent on big payments leaves you with nothing to show for it. Net worth cuts through the noise. It does not care what you make or what you drive. It only asks one question: after everything you owe, what is actually yours? That is the number the wealthy quietly watch, and it is the one to start watching too.</p>
+
+<h2>How to make it grow</h2>
+<p>There are only two levers. Grow the assets side by saving and investing consistently, and shrink the debt side by paying down what you owe. Do both at once and your net worth climbs from both directions. You do not need a windfall. You need a small, steady gap between what you earn and what you spend, pointed at these two jobs, month after month.</p>
+
+<p><em>This is general education, not personal advice, so check with a licensed professional about your situation.</em></p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and lesson? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var A=document.querySelectorAll('.nwA'), L=document.querySelectorAll('.nwL'),
+      totA=document.getElementById('nwTotA'), totL=document.getElementById('nwTotL'),
+      net=document.getElementById('nwNet'), msg=document.getElementById('nwMsg');
+  function money(n){var s=n<0?'-':'';return s+'$'+Math.abs(Math.round(n)).toLocaleString('en-US');}
+  function sum(list){var t=0;list.forEach(function(el){t+=parseFloat(el.value)||0;});return t;}
+  function calc(){
+    var a=sum(A), l=sum(L), n=a-l;
+    totA.textContent=money(a); totL.textContent=money(l); net.textContent=money(n);
+    if(a===0&&l===0){msg.textContent='Fill in the numbers above';return;}
+    if(n>0){ net.style.color='#7ff0b8'; msg.textContent='In the black. Keep the trend pointed up.'; }
+    else if(n<0){ net.style.color='#ffb4a2'; msg.textContent='In the red for now. Chip at the debt and this climbs fast.'; }
+    else { net.style.color='#fff'; msg.textContent='Right at zero. The next dollar saved puts you ahead.'; }
+  }
+  [].concat([].slice.call(A),[].slice.call(L)).forEach(function(el){el.addEventListener('input',calc);el.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+
+<!--kg-card-end: html-->
+

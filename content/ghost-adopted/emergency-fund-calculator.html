@@ -1,0 +1,105 @@
+
+<!--kg-card-begin: html-->
+<style>
+.hmca{max-width:620px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2rem 1.8rem;font-family:-apple-system,Segoe UI,Roboto,sans-serif}
+.hmca h3{font-size:1.9rem;color:#16263F;margin:0 0 .3rem}
+.hmca .hmca-sub{font-size:1.45rem;color:#64748b;margin:0 0 1.6rem;line-height:1.5}
+.hmca-field{margin-bottom:1.15rem}
+.hmca-field label{display:block;font-size:1.35rem;font-weight:600;color:#16263F;margin-bottom:.4rem}
+.hmca-field .hmca-hint{font-weight:400;color:#94a3b8}
+.hmca-in{position:relative}
+.hmca-in .pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:1.5rem}
+.hmca input,.hmca select{width:100%;box-sizing:border-box;padding:.85rem 1rem;font-size:1.55rem;border:1px solid #cbd5e1;border-radius:9px;background:#fbfcfe;color:#16263F}
+.hmca input.pad{padding-left:2.1rem}
+.hmca input:focus,.hmca select:focus{outline:none;border-color:#1E3A5F;box-shadow:0 0 0 3px rgba(30,58,95,.12)}
+.hmca-out{margin-top:1.6rem;background:#16263F;border-radius:14px;padding:1.8rem 1.6rem;text-align:center;color:#F6F1E7}
+.hmca-out .lbl{font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;color:#c9b071;margin-bottom:.3rem}
+.hmca-out .big{font-size:3.1rem;font-weight:800;color:#fff;line-height:1.15}
+.hmca-out .pay{font-size:1.5rem;color:#e2e8f0;margin-top:.5rem}
+.hmca-bar{margin-top:1rem;height:16px;background:#0d1a2e;border-radius:10px;overflow:hidden}
+.hmca-bar .fill{height:100%;background:#3f9d6b;width:0%;transition:width .25s}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.3rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+</style>
+
+<p>An emergency fund is the difference between a bad day and a financial disaster. The car breaks, the tooth cracks, the hours get cut, and the people with a cushion handle it with a shrug while everyone else reaches for a credit card. This tool shows you your target number and exactly how long it takes to get there.</p>
+
+<div class="hmca">
+  <h3>The Emergency Fund Calculator</h3>
+  <p class="hmca-sub">Find your target, see how many months of cushion you already have, and get a real timeline to fully funded.</p>
+
+  <div class="hmca-field">
+    <label>Your essential monthly expenses <span class="hmca-hint">(rent, food, utilities, minimums, gas)</span></label>
+    <div class="hmca-in"><span class="pfx">$</span><input class="pad" type="number" id="efExp" min="0" step="50" inputmode="decimal" placeholder="2,800"></div>
+  </div>
+  <div class="hmca-field">
+    <label>Months of cushion you want</label>
+    <select id="efMonths">
+      <option value="1">1 month (a starter buffer)</option>
+      <option value="3" selected>3 months (a solid base)</option>
+      <option value="6">6 months (very secure)</option>
+      <option value="9">9 months (extra cautious)</option>
+      <option value="12">12 months (self-employed or one income)</option>
+    </select>
+  </div>
+  <div class="hmca-field">
+    <label>Saved so far</label>
+    <div class="hmca-in"><span class="pfx">$</span><input class="pad" type="number" id="efHave" min="0" step="100" inputmode="decimal" placeholder="800"></div>
+  </div>
+  <div class="hmca-field">
+    <label>You can add each month</label>
+    <div class="hmca-in"><span class="pfx">$</span><input class="pad" type="number" id="efMonthly" min="0" step="25" inputmode="decimal" placeholder="250"></div>
+  </div>
+
+  <div class="hmca-out">
+    <div class="lbl">Your target emergency fund</div>
+    <div class="big" id="efTarget">$0</div>
+    <div class="hmca-bar"><div class="fill" id="efFill"></div></div>
+    <div class="pay" id="efDetail">Enter your numbers above</div>
+  </div>
+
+  <p class="hmca-note"><strong>Start with $1,000, then build.</strong> A full three to six month fund can feel impossible, so do not aim there on day one. Get your first $1,000 saved fast, because that alone stops most small emergencies from becoming credit card debt. Then keep stacking toward the bigger number at your own pace.</p>
+</div>
+
+<h2>Why this is the first thing to fund</h2>
+<p>Before you invest, before you throw extra at low-interest debt, before almost anything else, you want a cash cushion. Here is the logic. Without one, a single surprise sends you straight to a credit card at 20 plus percent, and now you are paying interest on the emergency for months. The emergency fund is not about growth. It is insurance you pay yourself, and it keeps every other part of your plan from getting knocked over.</p>
+
+<h2>Where to keep it</h2>
+<p>Your emergency fund should be boring and reachable. A high-yield savings account is the sweet spot. It is separate from your checking so you are not tempted to spend it, it earns a few percent while it waits, and you can move it to your checking in a day when you actually need it. Do not invest this money in stocks. The whole point is that it holds steady and shows up on your worst day.</p>
+
+<p><em>This is general education, not personal advice, so check with a licensed professional about your situation.</em></p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and lesson? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var exp=document.getElementById('efExp'),months=document.getElementById('efMonths'),
+      have=document.getElementById('efHave'),monthly=document.getElementById('efMonthly'),
+      targetEl=document.getElementById('efTarget'),detEl=document.getElementById('efDetail'),fillEl=document.getElementById('efFill');
+  function money(n){return '$'+Math.round(n).toLocaleString('en-US');}
+  function dur(m){var y=Math.floor(m/12),mo=m%12;var s=[];if(y)s.push(y+(y===1?' year':' years'));if(mo)s.push(mo+(mo===1?' month':' months'));return s.join(' ')||'0 months';}
+  function calc(){
+    var e=parseFloat(exp.value)||0, mo=parseInt(months.value,10)||3,
+        h=parseFloat(have.value)||0, m=parseFloat(monthly.value)||0;
+    if(e<=0){targetEl.textContent='$0';detEl.textContent='Enter your numbers above';fillEl.style.width='0%';return;}
+    var target=e*mo, gap=target-h;
+    targetEl.textContent=money(target);
+    var pct=Math.max(0,Math.min(100,(h/target)*100));
+    fillEl.style.width=pct.toFixed(0)+'%';
+    if(gap<=0){
+      var cushion=h/e;
+      detEl.textContent='You are fully funded. That is '+cushion.toFixed(1)+' months of cushion in the bank. Well done.';
+      return;
+    }
+    var line='You have '+money(h)+' ('+Math.round(pct)+'% of the way). You need '+money(gap)+' more';
+    if(m>0){ var mNeeded=Math.ceil(gap/m); line+=', about '+dur(mNeeded)+' at '+money(m)+'/month.'; }
+    else { line+='. Add a monthly amount to see your timeline.'; }
+    detEl.textContent=line;
+  }
+  [exp,months,have,monthly].forEach(function(el){el.addEventListener('input',calc);el.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+
+<!--kg-card-end: html-->
+

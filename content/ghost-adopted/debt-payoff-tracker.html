@@ -1,0 +1,70 @@
+
+<!--kg-card-begin: html-->
+<style>
+.dpt{max-width:720px;margin:0 auto;font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#16263F}
+.dpt-bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.dpt-print{background:#1E3A5F;color:#fff;border:none;border-radius:9px;font-size:1.4rem;font-weight:700;padding:.7rem 1.4rem;cursor:pointer}
+.dpt-print:hover{background:#16263F}
+.dpt-controls{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1rem}
+.dpt-controls .fld{flex:1;min-width:180px}
+.dpt-controls label{display:block;font-size:1.25rem;font-weight:600;margin-bottom:.3rem}
+.dpt-controls input{width:100%;box-sizing:border-box;padding:.6rem .7rem;font-size:1.45rem;border:1px solid #cbd5e1;border-radius:8px}
+.dpt-controls input:focus{outline:none;border-color:#1E3A5F}
+.dpt-sheet{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:1.6rem}
+.dpt-head{text-align:center;border-bottom:3px solid #16263F;padding-bottom:.7rem;margin-bottom:1rem}
+.dpt-head .t{font-size:1.95rem;font-weight:800;display:block}
+.dpt-head .s{font-size:1.35rem;color:#64748b}
+.dpt-head .s b{color:#16263F}
+.dpt-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:.35rem;margin:0 auto;max-width:520px}
+.dpt-box{aspect-ratio:1/1;border:2px solid #1E3A5F;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#c9d3e0}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.4rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+@media print{.dpt-bar,.dpt-controls,.hmca-note,.dpt-noprint{display:none !important}.dpt-sheet{border:none;padding:0}.dpt-box{border-color:#333}}
+</style>
+
+<p class="dpt-noprint">There is a reason debt payoff charts work. Watching a wall of boxes fill in, one paid-off chunk at a time, turns a boring spreadsheet number into something you can actually feel. Put in what you owe, print it, and color a box every time you knock out another slice.</p>
+
+<div class="dpt">
+  <div class="dpt-bar dpt-noprint">
+    <span style="font-size:1.35rem;color:#64748b">Enter your debt, then print and color a box for every chunk you pay off.</span>
+    <button class="dpt-print" onclick="window.print()">Print this tracker</button>
+  </div>
+
+  <div class="dpt-controls dpt-noprint">
+    <div class="fld"><label>What is this debt?</label><input type="text" id="dptName" placeholder="Credit card"></div>
+    <div class="fld"><label>Total you owe</label><input type="number" id="dptTotal" min="0" step="100" inputmode="decimal" placeholder="5,000"></div>
+  </div>
+
+  <div class="dpt-sheet">
+    <div class="dpt-head">
+      <span class="t" id="dptTitle">Debt Payoff Tracker</span>
+      <span class="s">Each box paid off = <b id="dptPer">a chunk of the total</b>. Color one in every time you pay it down.</span>
+    </div>
+    <div class="dpt-grid" id="dptGrid"></div>
+  </div>
+
+  <p class="hmca-note"><strong>Two boxes at a time beats zero.</strong> Every extra dollar above the minimum fills these boxes faster, and every filled box is interest you will never pay again. Pair this with the debt snowball (smallest balance first) and the wall fills up quick enough to keep you hooked.</p>
+</div>
+
+<h2>How to use it</h2>
+<p>This grid has 50 boxes, so each one is one fiftieth of your total debt. Owe $5,000? Every box is $100. Owe $12,000? Every box is $240. Print the sheet, keep it somewhere you will see it every day, and color in a box each time your balance drops by that amount. It sounds almost too simple to matter, but seeing the finish line get closer is exactly the fuel most people need to keep going.</p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and lesson? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var name=document.getElementById('dptName'),total=document.getElementById('dptTotal'),
+      title=document.getElementById('dptTitle'),per=document.getElementById('dptPer'),grid=document.getElementById('dptGrid');
+  var html='';for(var i=0;i<50;i++){html+='<div class="dpt-box"></div>';}grid.innerHTML=html;
+  function money(n){return '$'+Math.round(n).toLocaleString('en-US');}
+  function upd(){
+    title.textContent = name.value ? (name.value+' Payoff Tracker') : 'Debt Payoff Tracker';
+    var t=parseFloat(total.value)||0;
+    per.textContent = t>0 ? (money(t/50)+' paid off') : 'a chunk of the total';
+  }
+  name.addEventListener('input',upd); total.addEventListener('input',upd); upd();
+})();
+</script>
+
+<!--kg-card-end: html-->
+

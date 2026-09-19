@@ -1,0 +1,100 @@
+
+<!--kg-card-begin: html-->
+<style>
+.upc{max-width:640px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2rem 1.8rem;font-family:-apple-system,Segoe UI,Roboto,sans-serif}
+.upc h3{font-size:1.9rem;color:#16263F;margin:0 0 .3rem}
+.upc .upc-sub{font-size:1.45rem;color:#64748b;margin:0 0 1.5rem;line-height:1.5}
+.upc-item{border:1px solid #e2e8f0;border-radius:11px;padding:1rem 1.1rem;margin-bottom:.9rem;transition:border-color .2s,background .2s}
+.upc-item.win{border-color:#2f7d5b;background:#f2fbf6}
+.upc-item .upc-name{font-size:1.35rem;font-weight:700;color:#16263F;margin-bottom:.55rem;display:flex;justify-content:space-between;align-items:center}
+.upc-name .tag{font-size:1.1rem;font-weight:800;color:#2f7d5b;background:#d7f5e6;border-radius:20px;padding:.15rem .7rem;display:none}
+.upc-item.win .tag{display:inline}
+.upc-row{display:flex;gap:.7rem}
+.upc-fld{flex:1}
+.upc-fld label{display:block;font-size:1.15rem;color:#64748b;margin-bottom:.25rem}
+.upc-in{position:relative}
+.upc-in .pfx{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:1.3rem}
+.upc-in input{width:100%;box-sizing:border-box;padding:.6rem .6rem .6rem 1.6rem;font-size:1.45rem;border:1px solid #cbd5e1;border-radius:8px;background:#fbfcfe;color:#16263F}
+.upc-fld.nounit input{padding-left:.6rem}
+.upc-in input:focus{outline:none;border-color:#1E3A5F;box-shadow:0 0 0 3px rgba(30,58,95,.12)}
+.upc-unit{font-size:1.6rem;font-weight:800;color:#16263F;text-align:right;margin-top:.6rem}
+.upc-unit span{font-size:1.2rem;font-weight:400;color:#94a3b8}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.3rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+</style>
+
+<p>The bigger package is not always the better deal. Stores count on you assuming it is. This tool does the one bit of math that cuts through the packaging games: the price per unit. Punch in two or three options and it tells you which one actually saves you money, and by how much.</p>
+
+<div class="upc">
+  <h3>The Unit Price Comparison</h3>
+  <p class="upc-sub">Enter the price and the size (ounces, pounds, count, whatever, just keep it the same for each). The cheapest per unit wins.</p>
+
+  <div class="upc-item" id="upcA">
+    <div class="upc-name">Option A <span class="tag">Best deal</span></div>
+    <div class="upc-row">
+      <div class="upc-fld"><label>Price</label><div class="upc-in"><span class="pfx">$</span><input type="number" class="upcP" min="0" step="0.01" inputmode="decimal" placeholder="3.98"></div></div>
+      <div class="upc-fld nounit"><label>Size (oz, lb, count...)</label><div class="upc-in"><input type="number" class="upcS" min="0" step="0.1" inputmode="decimal" placeholder="32"></div></div>
+    </div>
+    <div class="upc-unit" id="upcUA">&mdash;</div>
+  </div>
+
+  <div class="upc-item" id="upcB">
+    <div class="upc-name">Option B <span class="tag">Best deal</span></div>
+    <div class="upc-row">
+      <div class="upc-fld"><label>Price</label><div class="upc-in"><span class="pfx">$</span><input type="number" class="upcP" min="0" step="0.01" inputmode="decimal" placeholder="6.98"></div></div>
+      <div class="upc-fld nounit"><label>Size</label><div class="upc-in"><input type="number" class="upcS" min="0" step="0.1" inputmode="decimal" placeholder="64"></div></div>
+    </div>
+    <div class="upc-unit" id="upcUB">&mdash;</div>
+  </div>
+
+  <div class="upc-item" id="upcC">
+    <div class="upc-name">Option C <span style="font-weight:400;color:#94a3b8;font-size:1.1rem">(optional)</span> <span class="tag">Best deal</span></div>
+    <div class="upc-row">
+      <div class="upc-fld"><label>Price</label><div class="upc-in"><span class="pfx">$</span><input type="number" class="upcP" min="0" step="0.01" inputmode="decimal" placeholder=""></div></div>
+      <div class="upc-fld nounit"><label>Size</label><div class="upc-in"><input type="number" class="upcS" min="0" step="0.1" inputmode="decimal" placeholder=""></div></div>
+    </div>
+    <div class="upc-unit" id="upcUC">&mdash;</div>
+  </div>
+
+  <p class="hmca-note" id="upcMsg"><strong>Same unit for each.</strong> Compare ounces to ounces or count to count, not ounces to pounds. Once the winner lights up green, you will see how much you save by grabbing the right one.</p>
+</div>
+
+<h2>Why the shelf tag is not enough</h2>
+<p>Most stores print a unit price on the shelf tag, which is great, right up until two products use different units. One lists price per ounce, the next per 100 sheets, the next per load. That is where people get fooled into thinking the giant size is automatically cheaper. Run your own quick comparison and you will regularly find the medium size, or the one on sale, beats the bulk buy.</p>
+
+<h2>Where this saves the most</h2>
+<p>The biggest wins hide in the stuff you buy every single week: rice, chicken, cheese, coffee, laundry detergent, diapers. A few cents per unit does not sound like much, but multiplied across a year of groceries it adds up to real money. Get in the habit of a five-second check on your top ten repeat buys, and you will trim your grocery bill without clipping a single coupon.</p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and meal-prep recipe? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var items=[{box:'upcA',out:'upcUA'},{box:'upcB',out:'upcUB'},{box:'upcC',out:'upcUC'}];
+  var P=document.querySelectorAll('.upcP'), S=document.querySelectorAll('.upcS'), msg=document.getElementById('upcMsg');
+  function money(n){return '$'+(Math.round(n*1000)/1000).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:3});}
+  function calc(){
+    var units=[];
+    items.forEach(function(it,i){
+      var p=parseFloat(P[i].value)||0, s=parseFloat(S[i].value)||0;
+      var box=document.getElementById(it.box), out=document.getElementById(it.out);
+      box.classList.remove('win');
+      if(p>0&&s>0){ var u=p/s; units[i]=u; out.innerHTML=money(u)+' <span>per unit</span>'; }
+      else { units[i]=null; out.innerHTML='&mdash;'; }
+    });
+    var valid=units.map(function(u,i){return {u:u,i:i};}).filter(function(x){return x.u!=null;});
+    if(valid.length<2){ msg.innerHTML='<strong>Same unit for each.</strong> Compare ounces to ounces or count to count, not ounces to pounds. Once the winner lights up green, you will see how much you save by grabbing the right one.'; return; }
+    valid.sort(function(a,b){return a.u-b.u;});
+    var best=valid[0], worst=valid[valid.length-1];
+    document.getElementById(items[best.i].box).classList.add('win');
+    var names=['A','B','C'];
+    if(best.u===worst.u){ msg.innerHTML='<strong>It is a tie.</strong> These cost the same per unit, so grab whichever is more convenient.'; return; }
+    var pct=Math.round((1-best.u/worst.u)*100);
+    msg.innerHTML='<strong>Option '+names[best.i]+' is the better deal</strong> at '+money(best.u)+' per unit, about '+pct+'% cheaper than the priciest option here. That is the one to buy.';
+  }
+  [].concat([].slice.call(P),[].slice.call(S)).forEach(function(el){el.addEventListener('input',calc);el.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+
+<!--kg-card-end: html-->
+

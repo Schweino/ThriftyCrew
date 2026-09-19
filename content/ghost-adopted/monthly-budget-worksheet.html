@@ -1,0 +1,116 @@
+
+<!--kg-card-begin: html-->
+<style>
+.pbw{max-width:720px;margin:0 auto;font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#16263F}
+.pbw-bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.pbw-print{background:#1E3A5F;color:#fff;border:none;border-radius:9px;font-size:1.4rem;font-weight:700;padding:.7rem 1.4rem;cursor:pointer}
+.pbw-print:hover{background:#16263F}
+.pbw-sheet{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:1.8rem}
+.pbw-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:3px solid #16263F;padding-bottom:.6rem;margin-bottom:1.2rem}
+.pbw-head .t{font-size:1.9rem;font-weight:800}
+.pbw-head .m{font-size:1.35rem;color:#64748b}
+.pbw-head .m input{border:none;border-bottom:1px solid #cbd5e1;font-size:1.35rem;width:130px;text-align:center}
+.pbw-sec{margin:1.2rem 0}
+.pbw-sec h4{font-size:1.4rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em;margin:0 0 .5rem;padding:.35rem .6rem;border-radius:6px;color:#fff}
+.pbw-inc h4{background:#2f7d5b}.pbw-fix h4{background:#1E3A5F}.pbw-var h4{background:#7c6f9c}.pbw-sav h4{background:#c9902f}
+.pbw-line{display:flex;justify-content:space-between;align-items:center;gap:.8rem;padding:.28rem 0;border-bottom:1px dotted #d7dde5}
+.pbw-line label{flex:1;font-size:1.35rem;color:#334155}
+.pbw-line label input.lbl{border:none;border-bottom:1px solid transparent;font-size:1.35rem;width:100%;color:#16263F}
+.pbw-line label input.lbl:focus{outline:none;border-bottom-color:#cbd5e1}
+.pbw-amt{position:relative;width:130px;flex:none}
+.pbw-amt .pfx{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:1.3rem}
+.pbw-amt input{width:100%;box-sizing:border-box;padding:.35rem .4rem .35rem 1.5rem;font-size:1.35rem;border:1px solid #e2e8f0;border-radius:6px;text-align:right;color:#16263F}
+.pbw-amt input:focus{outline:none;border-color:#1E3A5F}
+.pbw-sub{display:flex;justify-content:space-between;font-size:1.4rem;font-weight:800;margin-top:.5rem;padding-top:.4rem;border-top:2px solid #16263F}
+.pbw-final{margin-top:1.4rem;background:#16263F;color:#fff;border-radius:12px;padding:1.1rem 1.4rem;display:flex;justify-content:space-between;align-items:center}
+.pbw-final .k{font-size:1.5rem;font-weight:700;color:#c9b071}
+.pbw-final .v{font-size:2.3rem;font-weight:800}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.4rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+@media print{
+  .pbw-bar,.hmca-note,.pbw-noprint{display:none !important}
+  .pbw-sheet{border:none;padding:0}
+  .pbw-amt input,.pbw-line label input.lbl{border-color:#999}
+  a[href]:after{content:""}
+}
+</style>
+
+<p class="pbw-noprint">Here is the one page that ends the guesswork. Fill it in on your screen and it adds up as you go, or hit print and fill it in by hand at the kitchen table. Either way, the goal is the number at the very bottom: what is left after every dollar has a job.</p>
+
+<div class="pbw">
+  <div class="pbw-bar pbw-noprint">
+    <span style="font-size:1.35rem;color:#64748b">Fill it in below (it totals automatically), or print a blank copy.</span>
+    <button class="pbw-print" onclick="window.print()">Print this worksheet</button>
+  </div>
+
+  <div class="pbw-sheet">
+    <div class="pbw-head">
+      <span class="t">Monthly Budget Worksheet</span>
+      <span class="m">Month: <input type="text" placeholder="__________"></span>
+    </div>
+
+    <div class="pbw-sec pbw-inc">
+      <h4>Income (take-home)</h4>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Paycheck 1"></label><div class="pbw-amt"><span class="pfx">$</span><input class="inc" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Paycheck 2"></label><div class="pbw-amt"><span class="pfx">$</span><input class="inc" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Side income"></label><div class="pbw-amt"><span class="pfx">$</span><input class="inc" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Other"></label><div class="pbw-amt"><span class="pfx">$</span><input class="inc" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-sub"><span>Total income</span><span id="pbwInc" style="color:#2f7d5b">$0</span></div>
+    </div>
+
+    <div class="pbw-sec pbw-fix">
+      <h4>Fixed bills</h4>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Rent or mortgage"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Utilities"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Phone and internet"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Insurance"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Car payment"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Subscriptions"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+    </div>
+
+    <div class="pbw-sec pbw-var">
+      <h4>Everyday spending</h4>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Groceries"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Gas and transport"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Dining out"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Fun and hobbies"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Other"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+    </div>
+
+    <div class="pbw-sec pbw-sav">
+      <h4>Savings and debt payoff</h4>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Emergency fund"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Extra debt payment"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-line"><label><input class="lbl" type="text" value="Investing"></label><div class="pbw-amt"><span class="pfx">$</span><input class="exp" type="number" inputmode="decimal"></div></div>
+      <div class="pbw-sub"><span>Total out (bills, spending, savings)</span><span id="pbwExp" style="color:#c0492f">$0</span></div>
+    </div>
+
+    <div class="pbw-final"><span class="k">Left to assign</span><span class="v" id="pbwLeft">$0</span></div>
+  </div>
+
+  <p class="hmca-note"><strong>The goal is zero left to assign.</strong> That does not mean spend it all. It means every dollar already has a name, including the ones going to savings and debt. If the bottom number is positive, send it to your top goal. If it is negative, something up top has to come down. That is the whole game, one month at a time.</p>
+</div>
+
+<h2>How to use it</h2>
+<p>Start with your take-home income at the top, the amount that actually hits your account. Then give every dollar a job on the way down: fixed bills first, everyday spending next, and savings and debt payoff as real line items, not leftovers. When the bottom shows zero left to assign, you have a plan for the whole month. Print a fresh copy each month, or bookmark this page and fill it in on your screen.</p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and lesson? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var inc=document.querySelectorAll('.inc'), exp=document.querySelectorAll('.exp'),
+      oInc=document.getElementById('pbwInc'), oExp=document.getElementById('pbwExp'), oLeft=document.getElementById('pbwLeft');
+  function money(n){var s=n<0?'-':'';return s+'$'+Math.abs(Math.round(n)).toLocaleString('en-US');}
+  function sum(list){var t=0;list.forEach(function(el){t+=parseFloat(el.value)||0;});return t;}
+  function calc(){
+    var i=sum(inc), e=sum(exp), left=i-e;
+    oInc.textContent=money(i); oExp.textContent=money(e); oLeft.textContent=money(left);
+    oLeft.style.color = left<0 ? '#ffb4a2' : (left>0 ? '#c9b071' : '#7ff0b8');
+  }
+  [].concat([].slice.call(inc),[].slice.call(exp)).forEach(function(el){el.addEventListener('input',calc);el.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+
+<!--kg-card-end: html-->
+

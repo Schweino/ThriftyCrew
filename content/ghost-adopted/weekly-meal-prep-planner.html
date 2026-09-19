@@ -1,0 +1,91 @@
+
+<!--kg-card-begin: html-->
+<style>
+.mpp{max-width:760px;margin:0 auto;font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#16263F}
+.mpp-bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.mpp-print{background:#1E3A5F;color:#fff;border:none;border-radius:9px;font-size:1.4rem;font-weight:700;padding:.7rem 1.4rem;cursor:pointer}
+.mpp-print:hover{background:#16263F}
+.mpp-sheet{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:1.7rem}
+.mpp-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:3px solid #16263F;padding-bottom:.6rem;margin-bottom:1.1rem}
+.mpp-head .t{font-size:1.95rem;font-weight:800}
+.mpp-head .w{font-size:1.35rem;color:#64748b}
+.mpp-head .w input{border:none;border-bottom:1px solid #cbd5e1;font-size:1.35rem;width:140px;text-align:center}
+.mpp-sec h4{font-size:1.35rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em;margin:1.2rem 0 .6rem;color:#fff;padding:.35rem .7rem;border-radius:6px}
+.mpp-meals h4{background:#2f7d5b}.mpp-groc h4{background:#1E3A5F}.mpp-plan h4{background:#c9902f}
+.mpp-mrow{display:flex;align-items:center;gap:.7rem;padding:.4rem 0;border-bottom:1px dotted #d7dde5}
+.mpp-mrow .num{width:26px;font-weight:800;color:#94a3b8;font-size:1.3rem;flex:none}
+.mpp-mrow input.recipe{flex:1;border:none;border-bottom:1px solid transparent;font-size:1.4rem;padding:.2rem}
+.mpp-mrow input.recipe:focus{outline:none;border-bottom-color:#cbd5e1}
+.mpp-mrow .svg{width:120px;flex:none}
+.mpp-mrow .svg input{width:100%;box-sizing:border-box;border:1px solid #e2e8f0;border-radius:6px;font-size:1.25rem;padding:.3rem .4rem;text-align:center}
+.mpp-groc-grid{column-count:2;column-gap:2rem}
+@media(max-width:520px){.mpp-groc-grid{column-count:1}}
+.mpp-gline{display:flex;align-items:center;gap:.5rem;padding:.32rem 0;break-inside:avoid}
+.mpp-gline .box{width:15px;height:15px;border:2px solid #1E3A5F;border-radius:4px;flex:none}
+.mpp-gline input{flex:1;border:none;border-bottom:1px solid #e2e8f0;font-size:1.3rem;padding:.15rem}
+.mpp-gline input:focus{outline:none;border-bottom-color:#1E3A5F}
+.mpp-plan ol{margin:.3rem 0 0;padding-left:1.6rem}
+.mpp-plan li{font-size:1.35rem;color:#334155;line-height:1.7;margin-bottom:.2rem}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.4rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+@media print{.mpp-bar,.hmca-note,.mpp-noprint{display:none !important}.mpp-sheet{border:none;padding:0}.mpp-mrow input,.mpp-gline input{border-color:#999}.mpp-gline .box{border-color:#333}}
+</style>
+
+<p class="mpp-noprint">A good meal-prep week is decided before you turn on the stove. Pick your recipes, build the grocery list off them, and give your prep day a plan. Fill this in on screen or print it blank and stick it on the fridge. It is the difference between a smooth Sunday and a chaotic one.</p>
+
+<div class="mpp">
+  <div class="mpp-bar mpp-noprint">
+    <span style="font-size:1.35rem;color:#64748b">Plan your recipes, list your groceries, map your prep. Fill it in or print it blank.</span>
+    <button class="mpp-print" onclick="window.print()">Print this planner</button>
+  </div>
+
+  <div class="mpp-sheet">
+    <div class="mpp-head">
+      <span class="t">Weekly Meal Prep Planner</span>
+      <span class="w">Week of <input type="text" placeholder="__________"></span>
+    </div>
+
+    <div class="mpp-sec mpp-meals">
+      <h4>Recipes I'm prepping this week</h4>
+      <div class="mpp-mrow"><span class="num">1</span><input class="recipe" type="text" placeholder="Recipe name"><span class="svg"><input type="text" placeholder="servings"></span></div>
+      <div class="mpp-mrow"><span class="num">2</span><input class="recipe" type="text" placeholder="Recipe name"><span class="svg"><input type="text" placeholder="servings"></span></div>
+      <div class="mpp-mrow"><span class="num">3</span><input class="recipe" type="text" placeholder="Recipe name"><span class="svg"><input type="text" placeholder="servings"></span></div>
+      <div class="mpp-mrow"><span class="num">4</span><input class="recipe" type="text" placeholder="Recipe name"><span class="svg"><input type="text" placeholder="servings"></span></div>
+    </div>
+
+    <div class="mpp-sec mpp-groc">
+      <h4>Grocery list</h4>
+      <div class="mpp-groc-grid" id="mppGroc"></div>
+    </div>
+
+    <div class="mpp-sec mpp-plan">
+      <h4>Prep day plan</h4>
+      <ol>
+        <li>Weigh your empty pots and write the numbers down (for portioning later).</li>
+        <li>Start the longest cook first (rice, oven proteins, anything that simmers).</li>
+        <li>Chop and prep vegetables while that cooks.</li>
+        <li>Cook the quick proteins and sauces.</li>
+        <li>Combine, then weigh and divide evenly into containers.</li>
+        <li>Cool, label with the date, and stack them in the fridge.</li>
+      </ol>
+    </div>
+  </div>
+
+  <p class="hmca-note"><strong>Build the grocery list from the recipes, not the other way around.</strong> Write down every recipe first, then list only what those recipes need. That one habit is what stops the impulse buys and the "what do I even make" wandering that blows up a grocery budget.</p>
+</div>
+
+<h2>How to run your prep day</h2>
+<p>The whole game is doing it in the right order so nothing sits idle. Start whatever takes longest, usually rice or an oven protein, and let it run while you knock out everything else. Prep your vegetables and mix your sauces during that window. By the time the slow stuff is done, the fast stuff is ready to combine. A focused two hours on the weekend buys you a week of dinners you do not have to think about.</p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and meal-prep recipe? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var g=document.getElementById('mppGroc'); if(!g)return;
+  var html='';for(var i=0;i<16;i++){ html+='<div class="mpp-gline"><span class="box"></span><input type="text"></div>'; }
+  g.innerHTML=html;
+})();
+</script>
+
+<!--kg-card-end: html-->
+

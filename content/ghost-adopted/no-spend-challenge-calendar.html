@@ -1,0 +1,66 @@
+
+<!--kg-card-begin: html-->
+<style>
+.nsp{max-width:720px;margin:0 auto;font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#16263F}
+.nsp-bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.nsp-print{background:#1E3A5F;color:#fff;border:none;border-radius:9px;font-size:1.4rem;font-weight:700;padding:.7rem 1.4rem;cursor:pointer}
+.nsp-print:hover{background:#16263F}
+.nsp-sheet{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:1.6rem}
+.nsp-head{text-align:center;border-bottom:3px solid #16263F;padding-bottom:.7rem;margin-bottom:1rem}
+.nsp-head .t{font-size:2rem;font-weight:800;display:block}
+.nsp-head .s{font-size:1.35rem;color:#64748b}
+.nsp-head .s input{border:none;border-bottom:1px solid #cbd5e1;font-size:1.35rem;width:150px;text-align:center}
+.nsp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.4rem}
+.nsp-dow{text-align:center;font-size:1.1rem;font-weight:800;text-transform:uppercase;color:#64748b;padding:.2rem 0}
+.nsp-day{aspect-ratio:1/1;border:1.5px solid #e2e8f0;border-radius:7px;padding:.35rem;display:flex;flex-direction:column}
+.nsp-day .n{font-size:1.15rem;font-weight:700;color:#94a3b8}
+.nsp-day .ring{margin:auto;width:24px;height:24px;border:2px solid #2f7d5b;border-radius:50%}
+.nsp-day.empty{border:none}
+.nsp-legend{display:flex;justify-content:center;gap:1.4rem;margin-top:1rem;font-size:1.25rem;color:#334155}
+.nsp-legend .ring{display:inline-block;width:16px;height:16px;border:2px solid #2f7d5b;border-radius:50%;vertical-align:middle;margin-right:.3rem}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.4rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+@media print{.nsp-bar,.hmca-note,.nsp-noprint{display:none !important}.nsp-sheet{border:none;padding:0}.nsp-day{border-color:#999}}
+</style>
+
+<p class="nsp-noprint">A no-spend challenge is exactly what it sounds like. You cover the true essentials, food, housing, gas, bills, and you say a hard no to everything else for a set stretch of days. It resets your spending reflexes fast, and it is a little bit addictive once the circles start filling in. Print the calendar and color a ring for every no-spend day you win.</p>
+
+<div class="nsp">
+  <div class="nsp-bar nsp-noprint">
+    <span style="font-size:1.35rem;color:#64748b">Circle every no-spend day. Aim to fill the whole month.</span>
+    <button class="nsp-print" onclick="window.print()">Print this calendar</button>
+  </div>
+
+  <div class="nsp-sheet">
+    <div class="nsp-head">
+      <span class="t">No-Spend Challenge</span>
+      <span class="s">Month: <input type="text" placeholder="__________"> &nbsp; Goal: <input type="text" placeholder="__ days"></span>
+    </div>
+    <div class="nsp-grid" id="nspGrid"></div>
+    <div class="nsp-legend"><span><span class="ring"></span>Color the ring on every no-spend day</span></div>
+  </div>
+
+  <p class="hmca-note"><strong>Set your rules before you start.</strong> Decide up front what counts as an essential (groceries yes, takeout no) and write it down, because the hardest part is the in-the-moment negotiation with yourself. Most people are shocked how much they normally spend on autopilot. A single no-spend month can free up a few hundred dollars for your emergency fund or debt.</p>
+</div>
+
+<h2>How the no-spend challenge works</h2>
+<p>Pick a length that scares you a little but not a lot. A no-spend weekend is a fine warm-up. A no-spend week is where it gets interesting. A full no-spend month is the big one. During the challenge you pay your normal bills and buy genuine necessities, and you skip everything else: the coffee out, the impulse cart, the just-this-once takeout. Every day you make it, color in that day's ring. The goal is not perfection, it is a fuller calendar than you thought you could manage.</p>
+
+<h2>Where the money goes</h2>
+<p>The point is not just to not spend. It is to catch the money you free up and send it somewhere that matters before it drifts back into everyday life. At the end of the challenge, move what you saved straight into your emergency fund, your smallest debt, or a specific goal. That way the discipline turns into something you can actually see.</p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and lesson? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var grid=document.getElementById('nspGrid'); if(!grid)return;
+  var dows=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var html='';
+  dows.forEach(function(d){html+='<div class="nsp-dow">'+d+'</div>';});
+  for(var d=1;d<=31;d++){ html+='<div class="nsp-day"><span class="n">'+d+'</span><span class="ring"></span></div>'; }
+  grid.innerHTML=html;
+})();
+</script>
+
+<!--kg-card-end: html-->
+

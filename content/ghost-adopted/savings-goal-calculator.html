@@ -1,0 +1,92 @@
+
+<!--kg-card-begin: html-->
+<style>
+.hmca{max-width:620px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2rem 1.8rem;font-family:-apple-system,Segoe UI,Roboto,sans-serif}
+.hmca h3{font-size:1.9rem;color:#16263F;margin:0 0 .3rem}
+.hmca .hmca-sub{font-size:1.45rem;color:#64748b;margin:0 0 1.6rem;line-height:1.5}
+.hmca-field{margin-bottom:1.15rem}
+.hmca-field label{display:block;font-size:1.35rem;font-weight:600;color:#16263F;margin-bottom:.4rem}
+.hmca-field .hmca-hint{font-weight:400;color:#94a3b8}
+.hmca-in{position:relative}
+.hmca-in .pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:1.5rem}
+.hmca input{width:100%;box-sizing:border-box;padding:.85rem 1rem .85rem 2.1rem;font-size:1.55rem;border:1px solid #cbd5e1;border-radius:9px;background:#fbfcfe;color:#16263F}
+.hmca input:focus{outline:none;border-color:#1E3A5F;box-shadow:0 0 0 3px rgba(30,58,95,.12)}
+.hmca-out{margin-top:1.6rem;background:#16263F;border-radius:14px;padding:1.8rem 1.6rem;text-align:center;color:#F6F1E7}
+.hmca-out .lbl{font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;color:#c9b071;margin-bottom:.3rem}
+.hmca-out .big{font-size:3.1rem;font-weight:800;color:#fff;line-height:1.15}
+.hmca-out .pay{font-size:1.5rem;color:#e2e8f0;margin-top:.5rem}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.3rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+</style>
+
+<p>A goal without a number and a date is just a wish. This tool turns "I want to save up" into "I will have it by then." Tell it what you are saving for, what you can set aside each month, and it will show you the finish line. Then all you have to do is keep going.</p>
+
+<div class="hmca">
+  <h3>The Savings Goal Calculator</h3>
+  <p class="hmca-sub">See exactly how long it takes to reach your goal, and how much a higher savings rate speeds it up.</p>
+
+  <div class="hmca-field">
+    <label>What you are saving for <span class="hmca-hint">(the goal amount)</span></label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="sgGoal" min="0" step="100" inputmode="decimal" placeholder="5,000"></div>
+  </div>
+  <div class="hmca-field">
+    <label>Saved so far</label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="sgHave" min="0" step="100" inputmode="decimal" placeholder="500"></div>
+  </div>
+  <div class="hmca-field">
+    <label>You can save each month</label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="sgMonthly" min="0" step="25" inputmode="decimal" placeholder="300"></div>
+  </div>
+  <div class="hmca-field">
+    <label>Interest rate on your savings <span class="hmca-hint">(APY, optional. A good online bank pays around 4%)</span></label>
+    <div class="hmca-in"><input type="number" id="sgApy" min="0" step="0.25" inputmode="decimal" placeholder="4" style="padding-left:1rem;padding-right:2.4rem"><span class="pfx" style="left:auto;right:14px">%</span></div>
+  </div>
+
+  <div class="hmca-out">
+    <div class="lbl">You reach your goal in</div>
+    <div class="big" id="sgTime">Enter your numbers</div>
+    <div class="pay" id="sgDetail"></div>
+  </div>
+
+  <p class="hmca-note"><strong>Park it where it earns.</strong> A goal you will reach in a year or two belongs in a high-yield savings account, not a checking account earning nothing and not the stock market where it could dip right when you need it. Safe, boring, and earning a little beats exciting and risky for short-term money.</p>
+</div>
+
+<h2>Why naming the date changes everything</h2>
+<p>Vague goals lose to specific ones every time. "Save for a car" drifts for years. "Have $5,000 by next March, at $300 a month" gets done, because now you can see it and measure it. The moment your goal has a real finish line, every $300 deposit feels like progress instead of sacrifice. That shift is most of the battle.</p>
+
+<h2>The two dials you control</h2>
+<p>Only two things move your finish line closer: saving more each month, or starting with more already set aside. Interest helps a little on short goals and a lot on long ones, but your monthly deposit is the engine. Bump the monthly number in the box above by even $50 and watch the timeline shrink. That is the fastest lever you have.</p>
+
+<p><em>This is general education, not personal advice, so check with a licensed professional about your situation.</em></p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and lesson? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var goal=document.getElementById('sgGoal'),have=document.getElementById('sgHave'),
+      monthly=document.getElementById('sgMonthly'),apy=document.getElementById('sgApy'),
+      timeEl=document.getElementById('sgTime'),detEl=document.getElementById('sgDetail');
+  function money(n){return '$'+Math.round(n).toLocaleString('en-US');}
+  function dur(m){var y=Math.floor(m/12),mo=m%12;var s=[];if(y)s.push(y+(y===1?' year':' years'));if(mo)s.push(mo+(mo===1?' month':' months'));return s.join(' ')||'0 months';}
+  function calc(){
+    var g=parseFloat(goal.value)||0, h=parseFloat(have.value)||0,
+        m=parseFloat(monthly.value)||0, r=(parseFloat(apy.value)||0)/100/12;
+    detEl.textContent='';
+    if(g<=0){timeEl.style.fontSize='';timeEl.textContent='Enter your numbers';return;}
+    if(h>=g){timeEl.style.fontSize='2rem';timeEl.textContent='You are already there';detEl.textContent='You have hit this goal. Time to set the next one.';return;}
+    if(m<=0 && r<=0){timeEl.style.fontSize='1.9rem';timeEl.textContent='Add a monthly amount';detEl.textContent='With nothing going in and no interest, the goal never arrives. Try a monthly deposit.';return;}
+    var bal=h, months=0, contributed=0;
+    while(bal<g && months<1200){ bal+=m; contributed+=m; bal+=bal*r; months++; }
+    if(months>=1200){timeEl.style.fontSize='1.9rem';timeEl.textContent='Over 100 years';detEl.textContent='Raise the monthly amount to reach it in a realistic time.';return;}
+    timeEl.style.fontSize='';
+    timeEl.textContent=dur(months);
+    var earned=Math.max(0,bal-h-contributed);
+    detEl.textContent='You set aside '+money(contributed)+' of your own'+(earned>=1?', and interest adds about '+money(earned)+' on top.':'.');
+  }
+  [goal,have,monthly,apy].forEach(function(el){el.addEventListener('input',calc);el.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+
+<!--kg-card-end: html-->
+

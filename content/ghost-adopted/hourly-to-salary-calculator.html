@@ -1,0 +1,100 @@
+
+<!--kg-card-begin: html-->
+<style>
+.hmca{max-width:620px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2rem 1.8rem;font-family:-apple-system,Segoe UI,Roboto,sans-serif}
+.hmca h3{font-size:1.9rem;color:#16263F;margin:0 0 .3rem}
+.hmca .hmca-sub{font-size:1.45rem;color:#64748b;margin:0 0 1.6rem;line-height:1.5}
+.hmca-field{margin-bottom:1.15rem}
+.hmca-field label{display:block;font-size:1.35rem;font-weight:600;color:#16263F;margin-bottom:.4rem}
+.hmca-field .hmca-hint{font-weight:400;color:#94a3b8}
+.hmca-in{position:relative}
+.hmca-in .pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:1.5rem}
+.hmca input,.hmca select{width:100%;box-sizing:border-box;padding:.85rem 1rem;font-size:1.55rem;border:1px solid #cbd5e1;border-radius:9px;background:#fbfcfe;color:#16263F}
+.hmca input.pad{padding-left:2.1rem}
+.hmca input:focus,.hmca select:focus{outline:none;border-color:#1E3A5F;box-shadow:0 0 0 3px rgba(30,58,95,.12)}
+.hs-grid{display:flex;gap:.8rem}
+.hs-grid .hmca-field{flex:1}
+.hmca-out{margin-top:1.6rem;background:#16263F;border-radius:14px;padding:1.4rem 1.2rem;color:#F6F1E7}
+.hmca-out .lbl{font-size:1.25rem;letter-spacing:.04em;text-transform:uppercase;color:#c9b071;text-align:center;margin-bottom:.8rem}
+.hs-out-row{display:flex;justify-content:space-between;align-items:baseline;padding:.6rem .4rem;border-bottom:1px solid rgba(255,255,255,.12)}
+.hs-out-row:last-child{border-bottom:none}
+.hs-out-row .k{font-size:1.4rem;color:#e2e8f0}
+.hs-out-row .v{font-size:1.9rem;font-weight:800;color:#fff}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.3rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+</style>
+
+<p>Job listings love to hide the ball. One posts an hourly rate, the next posts a yearly salary, and comparing them in your head is a mess. This converter turns any wage into all the others in a blink, so you can see what an offer really means and compare apples to apples.</p>
+
+<div class="hmca">
+  <h3>The Hourly to Salary Converter</h3>
+  <p class="hmca-sub">Enter what you know and see your pay by the hour, week, month, and year.</p>
+
+  <div class="hmca-field">
+    <label>Your pay</label>
+    <div class="hmca-in"><span class="pfx">$</span><input class="pad" type="number" id="hsAmt" min="0" step="0.5" inputmode="decimal" placeholder="20"></div>
+  </div>
+  <div class="hmca-field">
+    <label>is per</label>
+    <select id="hsUnit">
+      <option value="hour" selected>Hour</option>
+      <option value="year">Year</option>
+    </select>
+  </div>
+  <div class="hs-grid">
+    <div class="hmca-field">
+      <label>Hours per week</label>
+      <input type="number" id="hsHours" min="1" max="168" step="1" inputmode="decimal" placeholder="40">
+    </div>
+    <div class="hmca-field">
+      <label>Weeks per year <span class="hmca-hint">(paid)</span></label>
+      <input type="number" id="hsWeeks" min="1" max="52" step="1" inputmode="decimal" placeholder="52">
+    </div>
+  </div>
+
+  <div class="hmca-out">
+    <div class="lbl">Your pay, every which way</div>
+    <div class="hs-out-row"><span class="k">Hourly</span><span class="v" id="hsHourly">$0</span></div>
+    <div class="hs-out-row"><span class="k">Weekly</span><span class="v" id="hsWeekly">$0</span></div>
+    <div class="hs-out-row"><span class="k">Monthly</span><span class="v" id="hsMonthly">$0</span></div>
+    <div class="hs-out-row"><span class="k">Yearly</span><span class="v" id="hsYearly">$0</span></div>
+  </div>
+
+  <p class="hmca-note"><strong>This is your gross pay, before taxes.</strong> Your take-home will be lower once taxes and deductions come out, usually somewhere in the range of 20 to 30 percent for most workers. Handy for comparing offers, but budget off your actual take-home pay, not this number.</p>
+</div>
+
+<h2>The 2,080 hour shortcut</h2>
+<p>A standard full-time year is about 2,080 hours, which is 40 hours a week across 52 weeks. That is why a quick way to turn an hourly wage into a yearly salary is to multiply by 2,000 and round up a little. Fifteen dollars an hour is roughly $31,000 a year. Thirty dollars an hour is roughly $62,000. It is a rough shortcut, but it gets you close enough to size up an offer on the spot.</p>
+
+<h2>Why the weeks matter</h2>
+<p>If you are paid hourly and take unpaid time off, your real yearly pay drops, because you only earn while the clock runs. A salaried worker usually gets paid the same whether they take a vacation week or not. That is one of the quiet differences between hourly and salaried work, and it is worth doing the math on before you compare two offers that look similar on paper.</p>
+
+<p><em>This is general education, not personal advice, so check with a licensed professional about your situation.</em></p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and lesson? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var amt=document.getElementById('hsAmt'),unit=document.getElementById('hsUnit'),
+      hours=document.getElementById('hsHours'),weeks=document.getElementById('hsWeeks'),
+      oH=document.getElementById('hsHourly'),oW=document.getElementById('hsWeekly'),
+      oM=document.getElementById('hsMonthly'),oY=document.getElementById('hsYearly');
+  function money(n){return '$'+(Math.round(n*100)/100).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:2});}
+  function money0(n){return '$'+Math.round(n).toLocaleString('en-US');}
+  function calc(){
+    var a=parseFloat(amt.value)||0, h=parseFloat(hours.value)||40, w=parseFloat(weeks.value)||52;
+    if(h<=0)h=40; if(w<=0)w=52;
+    var hourly, yearly;
+    if(unit.value==='hour'){ hourly=a; yearly=a*h*w; }
+    else { yearly=a; hourly=(h*w>0)? a/(h*w) : 0; }
+    var weekly=hourly*h, monthly=yearly/12;
+    oH.textContent=money(hourly); oW.textContent=money0(weekly);
+    oM.textContent=money0(monthly); oY.textContent=money0(yearly);
+  }
+  [amt,unit,hours,weeks].forEach(function(el){el.addEventListener('input',calc);el.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+
+<!--kg-card-end: html-->
+

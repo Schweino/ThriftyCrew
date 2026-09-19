@@ -12977,7 +12977,7 @@ it is not zero, that is an incident and not a backlog item.
 **Not claimed:** I did not run that scan. I am not asserting a secret is committed; I am asserting
 that nothing in the gate set would tell you.
 
-### I167 - Ghost's own surface is checked at two fixed lists, never censused `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+### I167 - Ghost's own surface is checked at two fixed lists, never censused `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 BLOCKED`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** The post half is partly REFUTED: `ops/audit-ghost-drift.ps1 -Discover` ALREADY paginates every post Ghost holds and then discards every unmatched one without listing it, so the census exists and throws away its own denominator. The manifest is 16 tools generated 2026-08-08, 35 days stale. The integrations and webhooks half genuinely needs one live Admin API GET, which was deliberately NOT made; the exact call is written out in the lane report. The item predicted a 403, and that prediction is unsupported - the memory it cites records 403 on `/stats/` and `/settings/` and says nothing about `/integrations/`.
 
@@ -13099,6 +13099,60 @@ when the question can recur, and this one can. Under options 1 and 2 the census 
 committed with its fixtures and run on a schedule, so a scratch copy committed today would be a second
 harness to retire. Under options 3 and 4 it should be committed as an `ops/` probe. Either way it waits
 for the ruling rather than guessing at its shape.
+
+**Brad ruled option 1 (ADOPT) in chat on 2026-09-19.**
+
+**Partly done 2026-09-19. The pages are adopted and the census is built; what remains is Brad's one browser look at
+Settings, Integrations.** Every Ghost call was a GET through `lib/ghost-lib.ps1` (`Invoke-GhostApi`,
+`Invoke-TcGhostPaged`, `Accept-Version: v5.0`, write journal cleared), from a worktree based on d5f567178. Nothing a
+reader sees changed.
+
+- **The set is 197 pages, not 196: 196 posts and the refunds page.** Re-read live on 2026-09-19: 1,585 objects, the
+  same 1,065 published posts, 496 drafts, 5 sent and 19 pages as the day before. Recomputed with the strict
+  whole-token test over the tree at 237422ef6, the unnamed live set is 202: 196 published public posts (94 from
+  2026-07-04, 102 from 2026-07-05), the refunds page and the 5 sent posts. The item's loose test counted one post as
+  named, `debt-payoff-calculator`, because those letters appear, case-insensitively, inside the workbook file name
+  `Simple-Money-Playbook-Debt-Payoff-Calculator.xlsx` in `site\build\build-debt-calculator.ps1`, which builds a
+  spreadsheet and never that post. It is adopted with the rest.
+- **Exported** to `content\ghost-adopted\`: for each page `<slug>.html` (the html Ghost returns) and `<slug>.json`
+  (slug, title, status, visibility, published, updated and created dates, url, excerpt and meta fields, tag slugs,
+  code injection, the lexical body, and sha256 of both bodies). No authors and no member data. 394 files, 2.2 MB of
+  text (2,265,918 bytes), LF, UTF-8 without BOM, 0 CR bytes. All 197 are `public`, recorded exactly. 15 carry a
+  calculator script. The one email address in the set is the public contact address on the refunds page.
+- **Declared** in `ops\ghost-page-estate.json`, the `ops\cloudflare-estate.json` shape: per slug the kind, visibility,
+  published date and why; the export directory; `exported_from_base` d5f567178; and how to find the export commit
+  (`git log --diff-filter=A -- content/ghost-adopted`), which is not written in because push-main renames it.
+- **Census:** `ops\audit-ghost-page-census.ps1`, a new file rather than a mode of `grocery\audit-ghost-drift.ps1`
+  (474 lines, a per-tool byte comparison; this is a set comparison). It fails on UNDECLARED (a published page no
+  tracked file names as a whole token, excluding its own registry and export directory, and not declared),
+  DECLARED-NOT-LIVE, VISIBILITY-MOVED (either direction) and EDITED-SINCE-EXPORT, and is BLIND (exit 3) on no key,
+  a Ghost read that fails, a registry that does not parse or a scan that read no text. `-Export` refreshes the copies
+  and writes nothing unless every declared page was read. Its header states SCOPE OF A CLEAN REPORT (UNSOUND: a
+  mention counts as produced) and it ends with `GHOST-PAGE-CENSUS-COMPLETE`. Daily in `grocery\check-ad-cycles.ps1`
+  next to the Cloudflare estate check, advisory, never holding the board; two alert types registered in
+  `grocery\alert-registry.json` (blind pages, findings go to review). run-gates discovers only its `-SelfTest`.
+- **Verified.** Self-test 16 of 16, exit 0, against a stubbed Ghost with no network: MUST FIRE an undeclared live page
+  is UNDECLARED, MUST NOT FIRE a declared page, CLEAN TWIN a page a tracked source names counts as produced, plus
+  must-fires for a slug seen only inside a longer token, case, a binary file, visibility moved, edited since export,
+  no export, declared-not-live and a pager that does not advance. **Broken once**: with the named-slug test removed
+  (every page counted as produced) it went red, 3 of 16 including the MUST FIRE, exit 1; restored md5-identical,
+  16 of 16, exit 0. **Live**, with the files staged: exit 0, 1,084 published pages, 887 named by a tracked file, 197
+  declared, 0 findings, 5 email-only counted; 8,588 text files scanned, 35 binary, 0 unreadable, of 8,623 listed;
+  about 26 s.
+- **The 5 email-only price alerts** (status `sent`, `email_only` true, paid, 2026-07-12 to 2026-09-11, all Boneless
+  Skinless Chicken Breast alerts from `grocery\send-price-alerts.ps1` with generated slugs) are counted and listed by
+  the census and never failed or adopted: a sent post is never published to the web, and the public URL of the
+  2026-09-11 one answered 404 on 2026-09-19. The rule is written into the registry's `email_only` block.
+- **Integrations: not done here.** The token cannot read them (the 403 measured 2026-09-18) and webhooks have no
+  read endpoint.
+
+**RE-CHECK:** Brad opens Ghost Admin, Settings, Integrations in the browser and writes here the count of custom
+integrations, Admin API keys and webhooks beside the key id the repo uses (the part of `meal-prep\.ghostkey` before
+the colon). A key or webhook the repo does not know is a follow-up; removing one is 1-WAY and his. That look closes
+this item.
+
+Follow-ups filed in `design\backlog-inbox\run0919-ghost-pages.md`: the first checks on the adopted calculators, and
+the other half of the July bulk set that the census counts as produced only because some tracked file mentions it.
 
 ### I168 - Confirmed and NOT filed `DONE` `queue-7` `2-WAY` `RUNG1 DOC`
 

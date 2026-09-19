@@ -1,0 +1,64 @@
+
+<!--kg-card-begin: html-->
+<style>
+.f52{max-width:760px;margin:0 auto;font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#16263F}
+.f52-bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.f52-print{background:#1E3A5F;color:#fff;border:none;border-radius:9px;font-size:1.4rem;font-weight:700;padding:.7rem 1.4rem;cursor:pointer}
+.f52-print:hover{background:#16263F}
+.f52-sheet{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:1.6rem}
+.f52-head{text-align:center;border-bottom:3px solid #16263F;padding-bottom:.7rem;margin-bottom:1rem}
+.f52-head .t{font-size:2rem;font-weight:800;display:block}
+.f52-head .s{font-size:1.35rem;color:#64748b}
+.f52-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem}
+@media(max-width:600px){.f52-grid{grid-template-columns:repeat(2,1fr)}}
+.f52-cell{display:flex;align-items:center;gap:.5rem;border:1px solid #e2e8f0;border-radius:7px;padding:.4rem .5rem;font-size:1.25rem}
+.f52-cell .wk{color:#94a3b8;font-size:1.05rem;width:34px;flex:none}
+.f52-cell .amt{font-weight:800;color:#16263F;flex:1}
+.f52-cell .box{width:17px;height:17px;border:2px solid #1E3A5F;border-radius:4px;flex:none}
+.f52-tot{margin-top:1.2rem;background:#16263F;color:#fff;border-radius:12px;padding:1.1rem 1.4rem;display:flex;justify-content:space-between;align-items:center}
+.f52-tot .k{font-size:1.45rem;font-weight:700;color:#c9b071}
+.f52-tot .v{font-size:2.3rem;font-weight:800}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.4rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+@media print{.f52-bar,.hmca-note,.f52-noprint{display:none !important}.f52-sheet{border:none;padding:0}.f52-cell{border-color:#999}.f52-cell .box{border-color:#333}}
+</style>
+
+<p class="f52-noprint">This is the savings challenge that sneaks up on you in the best way. You start with just one dollar in week one, add a dollar more each week, and by the last week of the year you have quietly stacked up $1,378. Print it, stick it on the fridge, and check off a box every week.</p>
+
+<div class="f52">
+  <div class="f52-bar f52-noprint">
+    <span style="font-size:1.35rem;color:#64748b">Check off a week as you save it. It totals $1,378 by week 52.</span>
+    <button class="f52-print" onclick="window.print()">Print this tracker</button>
+  </div>
+
+  <div class="f52-sheet">
+    <div class="f52-head">
+      <span class="t">The 52-Week Savings Challenge</span>
+      <span class="s">Save the week number in dollars, every week, for a year.</span>
+    </div>
+    <div class="f52-grid" id="f52grid"></div>
+    <div class="f52-tot"><span class="k">Total saved by week 52</span><span class="v">$1,378</span></div>
+  </div>
+
+  <p class="hmca-note"><strong>Hate the big weeks at the end?</strong> Flip it. Do the challenge in reverse, saving $52 in the cold, broke first week of January and winding down to a single dollar during the busy holidays in December. Same $1,378, easier finish. Or just save a flat $26.50 every week and land in the exact same place. The best version is the one you actually finish.</p>
+</div>
+
+<h2>Why this one works</h2>
+<p>Big savings goals fail because they feel impossible on day one. This challenge does the opposite. Week one asks for a single dollar, which nobody can talk themselves out of. By the time the weekly amount gets real, saving is already a habit and the momentum carries you. That is the quiet trick here. It is not about the dollar amounts, it is about showing up 52 times in a row.</p>
+
+<h2>Make it automatic</h2>
+<p>If checking off a box feels like one more chore, let a machine do it. Set a small automatic transfer to a separate savings account, or bump a flat $26.50 a week into it and forget the escalating amounts entirely. Pair this tracker with a high-yield savings account and your $1,378 even earns a little extra while it sits there waiting for you.</p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and lesson? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var grid=document.getElementById('f52grid'); if(!grid)return;
+  var html='';
+  for(var w=1;w<=52;w++){ html+='<div class="f52-cell"><span class="wk">'+w+'</span><span class="amt">$'+w+'</span><span class="box"></span></div>'; }
+  grid.innerHTML=html;
+})();
+</script>
+
+<!--kg-card-end: html-->
+

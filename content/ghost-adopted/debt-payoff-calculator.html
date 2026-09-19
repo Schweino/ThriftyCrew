@@ -1,0 +1,109 @@
+
+<!--kg-card-begin: html-->
+<style>
+.hmca{max-width:620px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2rem 1.8rem;font-family:-apple-system,Segoe UI,Roboto,sans-serif}
+.hmca h3{font-size:1.9rem;color:#16263F;margin:0 0 .3rem}
+.hmca .hmca-sub{font-size:1.45rem;color:#64748b;margin:0 0 1.6rem;line-height:1.5}
+.hmca-field{margin-bottom:1.15rem}
+.hmca-field label{display:block;font-size:1.35rem;font-weight:600;color:#16263F;margin-bottom:.4rem}
+.hmca-field .hmca-hint{font-weight:400;color:#94a3b8}
+.hmca-in{position:relative}
+.hmca-in .pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:1.5rem}
+.hmca input{width:100%;box-sizing:border-box;padding:.85rem 1rem .85rem 2.1rem;font-size:1.55rem;border:1px solid #cbd5e1;border-radius:9px;background:#fbfcfe;color:#16263F}
+.hmca input:focus{outline:none;border-color:#1E3A5F;box-shadow:0 0 0 3px rgba(30,58,95,.12)}
+.hmca-out{margin-top:1.6rem;background:#16263F;border-radius:14px;padding:1.8rem 1.6rem;text-align:center;color:#F6F1E7}
+.hmca-out .lbl{font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;color:#c9b071;margin-bottom:.3rem}
+.hmca-out .big{font-size:3.1rem;font-weight:800;color:#fff;line-height:1.15}
+.hmca-out .pay{font-size:1.5rem;color:#e2e8f0;margin-top:.5rem}
+.hmca-save{margin-top:1rem;background:#123a2b;border:1px solid #2f7d5b;border-radius:12px;padding:1.1rem 1.3rem;color:#d7f5e6;font-size:1.4rem;line-height:1.5}
+.hmca-save strong{color:#7ff0b8}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.3rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+</style>
+
+<p>Credit card companies love the minimum payment, because it keeps you paying for years and hands them a fortune in interest. This tool shows you the truth: how long your debt really takes to clear, what it costs you, and how much a little extra each month saves. Punch in your numbers.</p>
+
+<div class="hmca">
+  <h3>The Debt Payoff Calculator</h3>
+  <p class="hmca-sub">See your real payoff date, the total interest, and what one extra payment does to both.</p>
+
+  <div class="hmca-field">
+    <label>What you owe <span class="hmca-hint">(balance)</span></label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="dpBal" min="0" step="100" inputmode="decimal" placeholder="6,000"></div>
+  </div>
+  <div class="hmca-field">
+    <label>Interest rate <span class="hmca-hint">(APR)</span></label>
+    <div class="hmca-in"><input type="number" id="dpApr" min="0" step="0.5" inputmode="decimal" placeholder="22" style="padding-left:1rem;padding-right:2.4rem"><span class="pfx" style="left:auto;right:14px">%</span></div>
+  </div>
+  <div class="hmca-field">
+    <label>What you pay each month</label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="dpPay" min="0" step="10" inputmode="decimal" placeholder="200"></div>
+  </div>
+  <div class="hmca-field">
+    <label>Extra you could add each month <span class="hmca-hint">(optional)</span></label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="dpExtra" min="0" step="10" inputmode="decimal" placeholder="50"></div>
+  </div>
+
+  <div class="hmca-out">
+    <div class="lbl">Debt-free in</div>
+    <div class="big" id="dpTime">Enter your numbers</div>
+    <div class="pay" id="dpInt"></div>
+  </div>
+  <div class="hmca-save" id="dpSave" style="display:none"></div>
+
+  <p class="hmca-note"><strong>Order of attack matters.</strong> Got several debts? List them smallest balance to largest, throw every extra dollar at the top one, and pay minimums on the rest. Each one you clear frees up its payment for the next. That is the snowball, and it works because finishing feels good enough to keep you going.</p>
+</div>
+
+<h2>Why the minimum payment is a trap</h2>
+<p>On most credit cards the minimum is built to cover the interest plus a sliver of the balance. Pay only that, and a $6,000 balance at 22% can take well over a decade to clear and cost you thousands in interest on top of what you borrowed. The card company is not being cruel. That is simply how the math is designed to work in their favor. The good news is the same math flips hard in your favor the moment you pay extra.</p>
+
+<h2>The extra payment is the cheat code</h2>
+<p>Every dollar above your minimum goes straight at the balance, which means less interest next month, which means even more of your next payment attacks the balance. It snowballs. Try adding $25, then $50, then $100 in the box above and watch the payoff date and the interest total drop. For most people, a modest extra payment cuts years and four figures of interest off the total.</p>
+
+<p><em>This is general education, not personal advice, so check with a licensed professional about your situation.</em></p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and lesson? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var bal=document.getElementById('dpBal'),apr=document.getElementById('dpApr'),
+      pay=document.getElementById('dpPay'),extra=document.getElementById('dpExtra'),
+      timeEl=document.getElementById('dpTime'),intEl=document.getElementById('dpInt'),saveEl=document.getElementById('dpSave');
+  function money(n){return '$'+Math.round(n).toLocaleString('en-US');}
+  function dur(m){var y=Math.floor(m/12),mo=m%12;var s=[];if(y)s.push(y+(y===1?' year':' years'));if(mo)s.push(mo+(mo===1?' month':' months'));return s.join(' ')||'0 months';}
+  // returns {months, interest} or null if never pays off
+  function sim(balance,monthlyRate,payment){
+    var interestPaid=0,months=0;
+    while(balance>0.005 && months<1200){
+      var i=balance*monthlyRate; interestPaid+=i; balance+=i;
+      var p=Math.min(payment,balance);
+      if(p<=i){ return null; } // payment cannot cover interest
+      balance-=payment; months++;
+    }
+    return {months:months,interest:interestPaid};
+  }
+  function calc(){
+    var b=parseFloat(bal.value)||0, a=(parseFloat(apr.value)||0)/100/12, p=parseFloat(pay.value)||0, x=parseFloat(extra.value)||0;
+    saveEl.style.display='none';
+    if(b<=0||p<=0){timeEl.textContent='Enter your numbers';intEl.textContent='';return;}
+    var base=sim(b,a,p);
+    if(!base){timeEl.style.fontSize='2rem';timeEl.textContent='That payment is too low';intEl.textContent='It does not even cover the monthly interest. Raise the payment to start shrinking the balance.';return;}
+    timeEl.style.fontSize='';
+    timeEl.textContent=dur(base.months);
+    intEl.textContent='You pay '+money(base.interest)+' in interest, '+money(b+base.interest)+' all in.';
+    if(x>0){
+      var fast=sim(b,a,p+x);
+      if(fast){
+        var mSaved=base.months-fast.months, iSaved=base.interest-fast.interest;
+        saveEl.style.display='block';
+        saveEl.innerHTML='Add <strong>'+money(x)+'/month</strong> and you are debt-free in <strong>'+dur(fast.months)+'</strong> instead. That saves you <strong>'+money(iSaved)+'</strong> in interest and <strong>'+dur(mSaved)+'</strong>.';
+      }
+    }
+  }
+  [bal,apr,pay,extra].forEach(function(el){el.addEventListener('input',calc);el.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+
+<!--kg-card-end: html-->
+

@@ -1,0 +1,62 @@
+
+<!--kg-card-begin: html-->
+<style>
+.hmca{max-width:620px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2rem 1.8rem;font-family:-apple-system,Segoe UI,Roboto,sans-serif}
+.hmca h3{font-size:1.9rem;color:#16263F;margin:0 0 .3rem}
+.hmca .hmca-sub{font-size:1.45rem;color:#64748b;margin:0 0 1.6rem;line-height:1.5}
+.hmca-field{margin-bottom:1.15rem}
+.hmca-field label{display:block;font-size:1.35rem;font-weight:600;color:#16263F;margin-bottom:.4rem}
+.hmca-in{position:relative}
+.hmca-in .pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:1.5rem}
+.hmca input{width:100%;box-sizing:border-box;padding:.85rem 1rem .85rem 2.1rem;font-size:1.55rem;border:1px solid #cbd5e1;border-radius:9px;background:#fbfcfe;color:#16263F}
+.hmca input:focus{outline:none;border-color:#1E3A5F;box-shadow:0 0 0 3px rgba(30,58,95,.12)}
+.b3row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.15rem 1.3rem;border-radius:12px;margin-top:.8rem;color:#fff}
+.b3row .b3l{font-size:1.5rem;font-weight:700}
+.b3row .b3p{font-size:1.25rem;opacity:.85;font-weight:400}
+.b3row .b3v{font-size:2.1rem;font-weight:800;white-space:nowrap}
+.b3needs{background:#1E3A5F}.b3wants{background:#3f7d6b}.b3save{background:#c9902f}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.4rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+</style>
+
+<p>The 50/30/20 rule is the simplest budget that actually works. You split your take-home pay three ways and stop overthinking it. Put in your monthly number and see exactly where the lines fall.</p>
+
+<div class="hmca">
+  <h3>The 50/30/20 Budget Splitter</h3>
+  <p class="hmca-sub">Half to needs, a third to wants, the rest to savings and debt. Enter your monthly take-home pay.</p>
+
+  <div class="hmca-field">
+    <label>Monthly take-home pay <span style="font-weight:400;color:#94a3b8">(after taxes)</span></label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="b3pay" min="0" step="50" inputmode="decimal" placeholder="3,500"></div>
+  </div>
+
+  <div class="b3row b3needs"><div><div class="b3l">Needs</div><div class="b3p">50% &middot; rent, food, utilities, minimums</div></div><div class="b3v" id="b3needs">$0</div></div>
+  <div class="b3row b3wants"><div><div class="b3l">Wants</div><div class="b3p">30% &middot; fun, dining out, extras</div></div><div class="b3v" id="b3wants">$0</div></div>
+  <div class="b3row b3save"><div><div class="b3l">Savings &amp; debt</div><div class="b3p">20% &middot; emergency fund, investing, extra payoff</div></div><div class="b3v" id="b3save">$0</div></div>
+
+  <p class="hmca-note"><strong>It is a starting line, not a straitjacket.</strong> If your rent alone eats more than 50%, that is the number to work on, not a reason to quit. Even 50/30/20 aimed at slightly is miles ahead of no plan at all.</p>
+</div>
+
+<h2>What goes in each bucket</h2>
+<p><strong>Needs (50%)</strong> are the things you truly cannot skip: housing, groceries, utilities, transportation to work, insurance, and the minimum payments on your debts. <strong>Wants (30%)</strong> are everything that makes life nicer but you could live without: dining out, streaming, hobbies, the upgraded phone. <strong>Savings and debt (20%)</strong> is the bucket that builds your future: your emergency fund first, then investing, then any extra debt payoff beyond the minimums.</p>
+
+<h2>Why this works when fancier budgets fail</h2>
+<p>Most budgets die because they have forty tiny categories and one bad week wrecks the whole thing. The 50/30/20 rule only asks you to keep three numbers in your head. It is loose enough to actually follow and tight enough to keep you moving forward. Start here, and once it is a habit, you can always get more detailed.</p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and lesson? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var pay=document.getElementById('b3pay'),
+      n=document.getElementById('b3needs'),w=document.getElementById('b3wants'),s=document.getElementById('b3save');
+  function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
+  function calc(){
+    var p=parseFloat(pay.value)||0;
+    n.textContent=money(p*0.50); w.textContent=money(p*0.30); s.textContent=money(p*0.20);
+  }
+  pay.addEventListener('input',calc); pay.addEventListener('change',calc); calc();
+})();
+</script>
+
+<!--kg-card-end: html-->
+

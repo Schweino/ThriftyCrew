@@ -3493,6 +3493,32 @@ try {
   }
 } catch { Log ('cloudflare-estate weekly threw: ' + $_.Exception.Message) }
 
+# ---- DAILY: is every live Ghost page produced by a tracked source or declared? (2026-09-19, backlog I167) ----
+# ops\audit-ghost-page-census.ps1 reads every published post and page with read-only GETs and fails on a live
+# page no tracked file names and ops\ghost-page-estate.json does not declare, on a declared page that left, whose
+# visibility moved, or that was edited in Ghost after its copy under content\ghost-adopted\ was exported. The
+# 197 pages that census found unowned on 2026-09-18 were adopted on Brad's ruling; this keeps the set closed.
+# run-gates runs only its -SelfTest, because a push must not wait on the live site. ADVISORY: it never holds
+# the board. About 25 s (a dozen list GETs and a scan of the tracked tree), so it runs every day, not weekly.
+try {
+  $gpc = (& powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'ops\audit-ghost-page-census.ps1') | ForEach-Object { [string]$_ }) -join "`n"
+  $gpcRc = $LASTEXITCODE
+  if ($gpcRc -eq 3) {
+    Log ('ghost-page-census: BLIND (rc=3) - the live Ghost pages went uncensused today')
+    $summary += 'REVIEW    ghost page census could not evaluate - an unowned live page would not be seen today'
+    if (-not $NoAlert) { Send-Alert -Subject 'Ops: the Ghost page census could not evaluate' -Body ("ops\audit-ghost-page-census.ps1 exited 3: no key, Ghost unreadable, the registry did not parse, or the tracked-file scan read nothing. Nothing was proven.`n`n" + $gpc) | Out-Null }
+  } elseif ($gpc -notmatch '(?m)^GHOST-PAGE-CENSUS-COMPLETE') {
+    Log ('ghost-page-census DID NOT RUN TO THE END (rc=' + $gpcRc + ') - no completion marker')
+    $summary += 'REVIEW    ghost page census did not finish - the live Ghost pages went uncensused today'
+  } elseif ($gpcRc -eq 0) {
+    Log 'ghost-page-census: every live Ghost page is named by a tracked file or declared in ops\ghost-page-estate.json'
+  } else {
+    Log ('ghost-page-census rc=' + $gpcRc)
+    $summary += 'REVIEW    a live Ghost page is unowned, or a declared page moved (see the ghost page census)'
+    if (-not $NoAlert) { Send-Alert -Subject 'Ops: a live Ghost page is neither produced by the repo nor declared' -Body ("ops\audit-ghost-page-census.ps1 compares every published Ghost post and page with the tracked tree and ops\ghost-page-estate.json. Exit " + $gpcRc + ". UNDECLARED: find what made the page and commit its source, or declare it with why and run -Export. EDITED-SINCE-EXPORT: read what changed, then run -Export. VISIBILITY-MOVED and DECLARED-NOT-LIVE: someone changed the live site; decide, then record the new state.`n`n" + $gpc) | Out-Null }
+  }
+} catch { Log ('ghost-page-census threw: ' + $_.Exception.Message) }
+
 # ---- WEEKLY: do the store SEARCH templates still resolve? ----
 # The all-3 rule guarantees every priced chip carries a link; nothing guaranteed the link WORKED. Family
 # Fare's search template 404'd on 20 live chips in public/board.json (2026-08-02) and no guard could see it,

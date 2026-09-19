@@ -1,0 +1,102 @@
+
+<!--kg-card-begin: html-->
+<style>
+.hmca{max-width:620px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2rem 1.8rem;font-family:-apple-system,Segoe UI,Roboto,sans-serif}
+.hmca h3{font-size:1.9rem;color:#16263F;margin:0 0 .3rem}
+.hmca .hmca-sub{font-size:1.45rem;color:#64748b;margin:0 0 1.6rem;line-height:1.5}
+.hmca-field{margin-bottom:1.15rem}
+.hmca-field label{display:block;font-size:1.35rem;font-weight:600;color:#16263F;margin-bottom:.4rem}
+.hmca-field .hmca-hint{font-weight:400;color:#94a3b8}
+.hmca-in{position:relative}
+.hmca-in .pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:1.5rem}
+.hmca input{width:100%;box-sizing:border-box;padding:.85rem 1rem .85rem 2.1rem;font-size:1.55rem;border:1px solid #cbd5e1;border-radius:9px;background:#fbfcfe;color:#16263F}
+.hmca input:focus{outline:none;border-color:#1E3A5F;box-shadow:0 0 0 3px rgba(30,58,95,.12)}
+.hmca-out{margin-top:1.6rem;background:#16263F;border-radius:14px;padding:1.8rem 1.6rem;text-align:center;color:#F6F1E7}
+.hmca-out .lbl{font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;color:#c9b071;margin-bottom:.3rem}
+.hmca-out .big{font-size:3.4rem;font-weight:800;color:#fff;line-height:1.1}
+.hmca-bars{margin-top:1.1rem;display:flex;gap:.6rem}
+.hmca-bars .seg{border-radius:8px;padding:.9rem .7rem;text-align:center;color:#fff;line-height:1.3}
+.hmca-bars .s1{background:#3f7d6b}.hmca-bars .s2{background:#c9902f}
+.hmca-bars .segv{font-size:1.7rem;font-weight:800;white-space:nowrap}
+.hmca-bars .segl{font-size:1.15rem;opacity:.9}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.3rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+</style>
+
+<p>Compound growth is the closest thing to magic in all of money. Your money earns money, then that money earns money too, and given enough time the snowball gets absurd. The catch is that time does most of the heavy lifting, so the best day to start was years ago and the second best day is today. Run your numbers.</p>
+
+<div class="hmca">
+  <h3>The Compound Growth Calculator</h3>
+  <p class="hmca-sub">See what steady investing could grow into, and how much of it is pure growth versus your own deposits.</p>
+
+  <div class="hmca-field">
+    <label>Starting amount <span class="hmca-hint">(what you have now)</span></label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="cgStart" min="0" step="100" inputmode="decimal" placeholder="1,000"></div>
+  </div>
+  <div class="hmca-field">
+    <label>Added each month</label>
+    <div class="hmca-in"><span class="pfx">$</span><input type="number" id="cgMonthly" min="0" step="25" inputmode="decimal" placeholder="200"></div>
+  </div>
+  <div class="hmca-field">
+    <label>Years you will let it grow</label>
+    <div class="hmca-in"><span class="pfx" style="font-size:1.3rem">yrs</span><input type="number" id="cgYears" min="1" max="70" step="1" inputmode="decimal" placeholder="30" style="padding-left:3.2rem"></div>
+  </div>
+  <div class="hmca-field">
+    <label>Average yearly return <span class="hmca-hint">(7% is a common long-run stock estimate)</span></label>
+    <div class="hmca-in"><input type="number" id="cgRate" min="0" step="0.5" inputmode="decimal" placeholder="7" style="padding-left:1rem;padding-right:2.4rem"><span class="pfx" style="left:auto;right:14px">%</span></div>
+  </div>
+
+  <div class="hmca-out">
+    <div class="lbl">Could grow to about</div>
+    <div class="big" id="cgTotal">Enter your numbers</div>
+    <div class="hmca-bars" id="cgBars" style="display:none">
+      <div class="seg s1" style="flex:1"><div class="segv" id="cgIn">$0</div><div class="segl">you put in</div></div>
+      <div class="seg s2" style="flex:1"><div class="segv" id="cgGrow">$0</div><div class="segl">growth on top</div></div>
+    </div>
+  </div>
+
+  <p class="hmca-note"><strong>The returns are an estimate, not a promise.</strong> Real markets bounce up and down and some years lose money. This tool assumes a steady average to show the shape of compounding. It is not a guarantee, and it is not personal advice.</p>
+</div>
+
+<h2>Why the growth bar eventually dwarfs your deposits</h2>
+<p>In the early years, almost all of your balance is money you put in yourself. That feels slow, and it is where most people quit. But keep going and something flips. The growth starts earning its own growth, and after a couple of decades the "growth on top" bar can tower over everything you actually deposited. That crossover is the whole game. Your only job is to start early, keep feeding it, and refuse to touch it.</p>
+
+<h2>Small numbers, long time, big result</h2>
+<p>Two hundred dollars a month does not feel life-changing. But at a 7% average over 30 years, those steady deposits can grow into a genuinely serious number, and most of it is growth you never worked a single hour for. That is why we say time is the real superpower here, not the size of your paycheck. Change the years in the box above from 10 to 20 to 30 and watch how the ending number does not just double, it explodes.</p>
+
+<p><em>This is general education, not personal advice, so check with a licensed financial professional about your situation.</em></p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and lesson? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var start=document.getElementById('cgStart'),monthly=document.getElementById('cgMonthly'),
+      years=document.getElementById('cgYears'),rate=document.getElementById('cgRate'),
+      totalEl=document.getElementById('cgTotal'),bars=document.getElementById('cgBars'),
+      inEl=document.getElementById('cgIn'),growEl=document.getElementById('cgGrow');
+  function money(n){return '$'+Math.round(n).toLocaleString('en-US');}
+  function calc(){
+    var P=parseFloat(start.value)||0, PMT=parseFloat(monthly.value)||0,
+        y=parseFloat(years.value)||0, ar=(parseFloat(rate.value)||0)/100;
+    if(y<=0||(P<=0&&PMT<=0)){totalEl.style.fontSize='';totalEl.textContent='Enter your numbers';bars.style.display='none';return;}
+    var r=ar/12, n=Math.round(y*12), fv;
+    if(r>0){ fv=P*Math.pow(1+r,n) + PMT*((Math.pow(1+r,n)-1)/r); }
+    else { fv=P+PMT*n; }
+    var contributed=P+PMT*n, growth=Math.max(0,fv-contributed);
+    totalEl.style.fontSize='';
+    totalEl.textContent=money(fv);
+    inEl.textContent=money(contributed);
+    growEl.textContent=money(growth);
+    // weight the bars by value so the growth bar visibly takes over
+    var tot=contributed+growth || 1;
+    document.querySelector('#cgBars .s1').style.flex=Math.max(0.25,contributed/tot).toFixed(3);
+    document.querySelector('#cgBars .s2').style.flex=Math.max(0.25,growth/tot).toFixed(3);
+    bars.style.display='flex';
+  }
+  [start,monthly,years,rate].forEach(function(el){el.addEventListener('input',calc);el.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+
+<!--kg-card-end: html-->
+

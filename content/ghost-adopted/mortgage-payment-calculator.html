@@ -1,0 +1,117 @@
+
+<!--kg-card-begin: html-->
+<style>
+.hmca{max-width:620px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2rem 1.8rem;font-family:-apple-system,Segoe UI,Roboto,sans-serif}
+.hmca h3{font-size:1.9rem;color:#16263F;margin:0 0 .3rem}
+.hmca .hmca-sub{font-size:1.45rem;color:#64748b;margin:0 0 1.6rem;line-height:1.5}
+.hmca-field{margin-bottom:1.1rem}
+.hmca-field label{display:block;font-size:1.35rem;font-weight:600;color:#16263F;margin-bottom:.4rem}
+.hmca-field .hmca-hint{font-weight:400;color:#94a3b8}
+.hmca-in{position:relative}
+.hmca-in .pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:1.5rem}
+.hmca input,.hmca select{width:100%;box-sizing:border-box;padding:.85rem 1rem;font-size:1.55rem;border:1px solid #cbd5e1;border-radius:9px;background:#fbfcfe;color:#16263F}
+.hmca input.pad{padding-left:2.1rem}
+.hmca input:focus,.hmca select:focus{outline:none;border-color:#1E3A5F;box-shadow:0 0 0 3px rgba(30,58,95,.12)}
+.hmca-grid{display:flex;gap:.8rem}
+.hmca-grid .hmca-field{flex:1}
+.hmca-out{margin-top:1.6rem;background:#16263F;border-radius:14px;padding:1.7rem 1.6rem;text-align:center;color:#F6F1E7}
+.hmca-out .lbl{font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;color:#c9b071;margin-bottom:.3rem}
+.hmca-out .big{font-size:3.2rem;font-weight:800;color:#fff;line-height:1.1}
+.hmca-out .pay{font-size:1.45rem;color:#e2e8f0;margin-top:.5rem}
+.mp-break{margin-top:1rem;text-align:left;border-top:1px solid rgba(255,255,255,.13);padding-top:.8rem}
+.mp-break .r{display:flex;justify-content:space-between;font-size:1.35rem;padding:.22rem 0;color:#dbe4ee}
+.mp-break .r b{color:#fff}
+.hmca-note{font-size:1.3rem;color:#64748b;line-height:1.55;margin-top:1.3rem;background:#fdf7ec;border-left:4px solid #E2A43C;border-radius:8px;padding:1rem 1.1rem}
+.hmca-note strong{color:#16263F}
+</style>
+
+<p>Before you fall in love with a house, find out what it actually costs to own each month. The loan payment is only part of it. Taxes and insurance ride along too. Put in the numbers and see the real monthly payment, not the one a listing hints at.</p>
+
+<div class="hmca">
+  <h3>The Mortgage Payment Calculator</h3>
+  <p class="hmca-sub">Get your true monthly payment: principal, interest, taxes, and insurance.</p>
+
+  <div class="hmca-field">
+    <label>Home price</label>
+    <div class="hmca-in"><span class="pfx">$</span><input class="pad" type="number" id="mpPrice" min="0" step="1000" inputmode="decimal" placeholder="320,000"></div>
+  </div>
+  <div class="hmca-grid">
+    <div class="hmca-field">
+      <label>Down payment</label>
+      <div class="hmca-in"><span class="pfx">$</span><input class="pad" type="number" id="mpDown" min="0" step="1000" inputmode="decimal" placeholder="64,000"></div>
+    </div>
+    <div class="hmca-field">
+      <label>Interest rate (APR)</label>
+      <div class="hmca-in"><input type="number" id="mpRate" min="0" step="0.1" inputmode="decimal" placeholder="6.5" style="padding-left:1rem;padding-right:2.4rem"><span class="pfx" style="left:auto;right:14px">%</span></div>
+    </div>
+  </div>
+  <div class="hmca-field">
+    <label>Loan term</label>
+    <select id="mpTerm">
+      <option value="30" selected>30 years</option>
+      <option value="20">20 years</option>
+      <option value="15">15 years</option>
+      <option value="10">10 years</option>
+    </select>
+  </div>
+  <div class="hmca-grid">
+    <div class="hmca-field">
+      <label>Property tax <span class="hmca-hint">(per year)</span></label>
+      <div class="hmca-in"><span class="pfx">$</span><input class="pad" type="number" id="mpTax" min="0" step="100" inputmode="decimal" placeholder="3,600"></div>
+    </div>
+    <div class="hmca-field">
+      <label>Home insurance <span class="hmca-hint">(per year)</span></label>
+      <div class="hmca-in"><span class="pfx">$</span><input class="pad" type="number" id="mpIns" min="0" step="100" inputmode="decimal" placeholder="1,600"></div>
+    </div>
+  </div>
+
+  <div class="hmca-out">
+    <div class="lbl">Your monthly payment</div>
+    <div class="big" id="mpTotal">$0</div>
+    <div class="mp-break" id="mpBreak" style="display:none">
+      <div class="r"><span>Principal and interest</span><b id="mpPI">$0</b></div>
+      <div class="r"><span>Property tax</span><b id="mpTaxM">$0</b></div>
+      <div class="r"><span>Home insurance</span><b id="mpInsM">$0</b></div>
+    </div>
+    <div class="pay" id="mpMsg">Enter a price and rate above</div>
+  </div>
+
+  <p class="hmca-note"><strong>A rule of thumb: keep the whole payment near 28% of your gross monthly income or less.</strong> And remember the extras a mortgage does not show: maintenance runs about 1% of the home's value a year, and with less than 20% down you usually pay PMI on top until you build enough equity.</p>
+</div>
+
+<h2>The payment is only half the story</h2>
+<p>Two houses at the same price can cost wildly different amounts to own, because property taxes and insurance swing a lot by location. That is why a real monthly number matters more than the sticker price. Run a few scenarios here. Bump the down payment, shorten the term, nudge the rate, and watch how each one moves the payment. It is the fastest way to see what you can truly afford.</p>
+
+<h2>Why a bigger down payment does double duty</h2>
+<p>Putting more down shrinks the loan, which lowers the payment, and once you cross 20% down it usually kills PMI, which saves you more on top. If a stretch to 20% is possible without draining your emergency fund, it is often one of the best-value moves in the whole home-buying process.</p>
+
+<p><em>This is general education, not personal or lending advice, so check with a licensed professional about your situation.</em></p>
+
+<p><em>Want the full playbook, plus every calculator, budget tool, and meal-prep recipe? Membership is just $1 a month.</em></p>
+
+<script>
+(function(){
+  var ids=['mpPrice','mpDown','mpRate','mpTerm','mpTax','mpIns'].map(function(i){return document.getElementById(i);});
+  var totalEl=document.getElementById('mpTotal'),brk=document.getElementById('mpBreak'),msg=document.getElementById('mpMsg'),
+      piEl=document.getElementById('mpPI'),taxEl=document.getElementById('mpTaxM'),insEl=document.getElementById('mpInsM');
+  function money(n){return '$'+Math.round(n).toLocaleString('en-US');}
+  function calc(){
+    var price=parseFloat(ids[0].value)||0, down=parseFloat(ids[1].value)||0,
+        rate=(parseFloat(ids[2].value)||0)/100/12, term=parseInt(ids[3].value,10)||30,
+        tax=parseFloat(ids[4].value)||0, ins=parseFloat(ids[5].value)||0;
+    var loan=Math.max(0,price-down), n=term*12, pi;
+    if(loan<=0||price<=0){totalEl.textContent='$0';brk.style.display='none';msg.textContent='Enter a price and rate above';return;}
+    if(rate>0){ pi=loan*rate*Math.pow(1+rate,n)/(Math.pow(1+rate,n)-1); } else { pi=loan/n; }
+    var taxM=tax/12, insM=ins/12, total=pi+taxM+insM;
+    totalEl.textContent=money(total);
+    piEl.textContent=money(pi); taxEl.textContent=money(taxM); insEl.textContent=money(insM);
+    brk.style.display='block';
+    msg.textContent='on a '+money(loan)+' loan over '+term+' years';
+  }
+  ids.forEach(function(el){el.addEventListener('input',calc);el.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+
+<!--kg-card-end: html-->
+
