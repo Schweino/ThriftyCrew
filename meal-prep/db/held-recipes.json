@@ -1,0 +1,41 @@
+{
+    "_doc":  "Recipes deliberately taken down to a Ghost draft. engine\\publish.ps1 REFUSES to publish a slug listed here, which is the only thing stopping an ordinary publish run from silently ending a hold - it sets status=published unconditionally on update. Remove an entry with hold-recipe.ps1 -Release, then publish it on purpose.",
+    "held":  [
+                 {
+                     "slug":  "ethiopian-doro-wat-chicken-bowls",
+                     "reason":  "not carried in store by any Omaha store (carriage.json, verified live 2026-09-19); Brad: a recipe is discarded if an ingredient is not carried by any Omaha store",
+                     "held":  "2026-09-19",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
+                     "slug":  "ethiopian-minchet-abish-berbere-beef-bowls",
+                     "reason":  "not carried in store by any Omaha store (carriage.json, verified live 2026-09-19); Brad: a recipe is discarded if an ingredient is not carried by any Omaha store",
+                     "held":  "2026-09-19",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
+                     "slug":  "harissa-chicken-rice-bowls",
+                     "reason":  "not carried in store by any Omaha store (carriage.json, verified live 2026-09-19); Brad: a recipe is discarded if an ingredient is not carried by any Omaha store",
+                     "held":  "2026-09-19",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
+                     "slug":  "pakistani-chapli-kebab-rice-bowls",
+                     "reason":  "not carried in store by any Omaha store (carriage.json, verified live 2026-09-19); Brad: a recipe is discarded if an ingredient is not carried by any Omaha store",
+                     "held":  "2026-09-19",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
+                     "slug":  "persian-fesenjan-chicken-bowls",
+                     "reason":  "not carried in store by any Omaha store (carriage.json, verified live 2026-09-19); Brad: a recipe is discarded if an ingredient is not carried by any Omaha store",
+                     "held":  "2026-09-19",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
+                     "slug":  "tunisian-harissa-coconut-beef-meatballs",
+                     "reason":  "not carried in store by any Omaha store (carriage.json, verified live 2026-09-19); Brad: a recipe is discarded if an ingredient is not carried by any Omaha store",
+                     "held":  "2026-09-19",
+                     "by":  "hold-recipe.ps1"
+                 }
+             ]
+}
