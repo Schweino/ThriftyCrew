@@ -5787,7 +5787,9 @@ else { Bad 'capture-depth-lib no longer counts distinct products - the everyday/
 # without that field for months, which is exactly why the eviction class went unseen.
 # prod_key joined src_date in the projection on 2026-09-05 for the same reason: the supersession rule turns
 # on it, so an artifact without it cannot be audited against the rule the engine ran. Both are asserted.
-if ($cdSrc2 -match 'price_type,src_date' -and $cdSrc2 -match 'src_date,prod_key\)') { Ok 'compare-deals still emits src_date AND prod_key into candidates (the two fields the per-store ranking turns on)' }
+# Fields may follow prod_key (as_of joined on 2026-09-19 for the provenance contract); what is asserted is that
+# the two the ranking turns on are both still projected, adjacent as they always were.
+if ($cdSrc2 -match 'price_type,src_date' -and $cdSrc2 -match 'src_date,prod_key(,\w+)*\)') { Ok 'compare-deals still emits src_date AND prod_key into candidates (the two fields the per-store ranking turns on)' }
 else { Bad 'compare-deals no longer emits src_date into candidates-*.json - audit-capture-eviction goes BLIND and an eviction becomes invisible again' }
 
 # ROSTER CURRENCY (2026-08-06, triage plan-2026-08-06-2). A guard nothing RUNS is not a guard. This one

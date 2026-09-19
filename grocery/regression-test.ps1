@@ -45,7 +45,14 @@ New-Item -ItemType Directory -Force -Path $scratch | Out-Null
     -ExtraDir $fz `
     -CommoditiesFile (Join-Path $fz 'commodities.json') `
     -BandsFile (Join-Path $fz 'price-bands.json') `
-    -OutDir $scratch -MinStores 2 | Out-Null
+    -OutDir $scratch -MinStores 2 -NoProvenanceContract | Out-Null
+# -NoProvenanceContract (2026-09-19): the contract is a PUBLISHING policy over where and when a row was read, and
+# these rows were frozen in July, before captures stamped a store id or a channel. With it on they are refused as
+# UNPROVEN-STORE and UNPROVEN-CHANNEL - 17 commodities moved and 6 vanished - which is the 2026-07-29 in-store
+# contract case above over again: a policy correctly refusing a frozen capture that predates it, read as a code
+# change. This guard keeps its one question, the pricing math. The contract is proved by
+# provenance-contract-lib.ps1 -SelfTest and compare-deals.ps1 -SelfTest, and guards.ps1 refuses a LIVE board built
+# without it, so switching it off here cannot reach a published board.
 if ($LASTEXITCODE -ne 0) { Write-Output 'REGRESSION FAIL  -  engine crashed on the frozen inputs'; exit 1 }
 
 $base = (Read-JsonFile $baseFile).commodities
