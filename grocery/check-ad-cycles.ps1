@@ -292,6 +292,7 @@ if (-not $NoCommit) {
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native / Invoke-NativeScript: the ONLY safe redirect under EAP=Stop
 . (Join-Path $root 'capture-policy-lib.ps1')   # Test-BrowserCaptureOwned: a store deferred to a browser owner under 24h ago is an OWNED gap, not an unowned one (2026-09-09-e60137). Declares no param() block, so it cannot reset this script's switches
 . (Join-Path $root 'fanout-lib.ps1')   # Invoke-Fanout / Get-FanoutRecord / Test-FanoutComplete: the inspect fan-out
+. (Join-Path (Split-Path $root -Parent) 'meal-prep\lib\gated-republish-lib.ps1')   # Invoke-TcGatedRepublish: the close-the-loop republish, per slug (I234). No param() block, so it cannot reset this script's switches
 . (Join-Path $root 'ad-schedule-backing-lib.ps1')   # Get-AdScheduleBacking / Get-AdScheduleAlertText: schedule vs the capture that ADVANCED it (2026-09-18, de39ec)
 
 # ---- THE CADENCE GATE, WHICH WAS CALLED EIGHT TIMES AND NEVER EXISTED (2026-08-23) --------------------
@@ -1158,22 +1159,42 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             $pendPath = Join-Path $mp 'meal-prep\pipeline\republish-pending.txt'
             if (Test-Path $pendPath) { $stale = @(@($stale) + @(Get-Content $pendPath | Where-Object { $_.Trim() -ne '' }) | Select-Object -Unique) }
             $stale | Out-File $pendPath -Encoding utf8
-            $pubOk = $false
+            # A SLUG WHOSE REBUILD FAILED IS NOT PUBLISHED, AND NEITHER IS A CARD WITH A WRONG ALLERGEN LINE
+            # (backlog I234, 2026-09-18). This ran publish over the whole list whatever build-cards returned, and
+            # build-cards keeps going past a card that throws, so a failed rebuild shipped its OLD card to the live
+            # page. It also bypassed propagate, so the allergen check that sits between build and publish there
+            # never ran here. Invoke-TcGatedRepublish (meal-prep\lib\gated-republish-lib.ps1) builds, keeps only
+            # what build-cards reports as built, runs the same audit-allergen-line over those cards, and publishes
+            # the survivors once. What it holds stays pending, by name, and is re-reported every run.
+            $pubOk = $false; $rp = $null
             try {
               Push-Location (Join-Path $mp 'meal-prep')
               try {
-                & '.\engine\build-cards.ps1' -Slugs $stale | Select-Object -Last 1 | ForEach-Object { Log ('build-cards: ' + $_) }
-                $bcRc = $LASTEXITCODE
-                $pubOut = & '.\engine\publish.ps1' -Slugs $stale
-                $pubRc  = $LASTEXITCODE
-                foreach ($l in (@($pubOut) | Select-Object -Last 1)) { Log ('publish: ' + $l) }
-                $pubOk = ($bcRc -eq 0 -and $pubRc -eq 0 -and @($pubOut).Count -gt 0)
-                if (-not $pubOk) { Log ("publish did NOT succeed: build-cards rc=$bcRc, publish rc=$pubRc, " + @($pubOut).Count + ' output line(s)') }
+                $rp = Invoke-TcGatedRepublish -Slugs $stale `
+                  -Build { param($s) & '.\engine\build-cards.ps1' -Slugs $s } -Publish { param($s) & '.\engine\publish.ps1' -Slugs $s }
+                foreach ($l in (@($rp.BuildLines) | Select-Object -Last 1)) { Log ('build-cards: ' + $l) }
+                foreach ($l in (@($rp.PublishOut) | Select-Object -Last 1)) { Log ('publish: ' + $l) }
+                $pubOk = ($rp.PublishInvoked -and $rp.PublishRc -eq 0 -and @($rp.PublishOut).Count -gt 0)
+                if ($rp.PublishInvoked -and -not $pubOk) { Log ("publish did NOT succeed: build-cards rc=$($rp.BuildRc), publish rc=$($rp.PublishRc), " + @($rp.PublishOut).Count + ' output line(s)') }
               } finally { Pop-Location }   # without this a throw leaks CWD to meal-prep for the rest of the run
             } catch { Log ('build/publish threw: ' + $_.Exception.Message) }
+            $heldRows = if ($rp) { @($rp.Held) } else { @() }
+            if ($heldRows.Count) {
+              $heldBuild = @($heldRows | Where-Object { $_.stage -eq 'build' })
+              $heldAllergen = @($heldRows | Where-Object { $_.stage -eq 'allergen' })
+              foreach ($h in $heldRows) { Log ("republish HELD $($h.slug) ($($h.stage)): $($h.why)") }
+              $heldNames = ((@($heldRows | ForEach-Object { $_.slug }) | Select-Object -First 12) -join ', ') + $(if ($heldRows.Count -gt 12) { ", and $($heldRows.Count - 12) more" } else { '' })
+              Log ("republish held $($heldRows.Count) of $($stale.Count) card(s) back from publish: build failed $($heldBuild.Count), allergen line refused $($heldAllergen.Count)")
+              $summary += "REVIEW    $($heldRows.Count) of $($stale.Count) recipe card(s) were NOT republished because they did not rebuild ($($heldBuild.Count)) or their allergen line was wrong ($($heldAllergen.Count)): $heldNames - the live pages keep their previous version (meal-prep\pipeline\republish-pending.txt)"
+              if (-not $NoAlert) { try { Send-Alert -Subject "Recipe cards held back from republish: $($heldRows.Count)" -Body ("The daily loop did not republish $($heldRows.Count) of $($stale.Count) re-anchored card(s), because publishing them would have sent a card that did not rebuild (its OLD version) or one whose allergen line disagrees with its ingredients. They stay in meal-prep\pipeline\republish-pending.txt and are retried every run.`n`n" + ((@($heldRows | ForEach-Object { $_.slug + ' (' + $_.stage + '): ' + $_.why }) | Select-Object -First 40) -join "`n")) | Out-Null } catch {} }
+            }
             if ($pubOk) {
-              Remove-Item $pendPath -ErrorAction SilentlyContinue
-              Log ("loop closed: $($stale.Count) card(s) re-anchored and republished")
+              # Only the held slugs stay pending: everything else just published.
+              if ($heldRows.Count) { @($heldRows | ForEach-Object { $_.slug }) | Out-File $pendPath -Encoding utf8 }
+              else { Remove-Item $pendPath -ErrorAction SilentlyContinue }
+              Log ("loop closed: $(@($rp.Eligible).Count) of $($stale.Count) card(s) re-anchored and republished")
+            } elseif ($rp -and -not $rp.PublishInvoked) {
+              Log ("loop NOT closed: none of the $($stale.Count) card(s) could be republished - every one was held (see the HELD lines) and all stay in republish-pending.txt")
             } else {
               Log ("loop NOT closed: $($stale.Count) card(s) rebuilt but the publish failed - slugs held in republish-pending.txt for the next run")
               $summary += "REVIEW    $($stale.Count) recipe card(s) were rebuilt but did NOT publish - the live pages still show the old cost (meal-prep\pipeline\republish-pending.txt)"

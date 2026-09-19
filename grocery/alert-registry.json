@@ -53,6 +53,7 @@
     { "id": "reanchor-incomplete", "match": "exact", "key": "re anchor did not complete cards not republished", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
     { "id": "cards-over-cap", "match": "exact", "key": "recipe cards moved over the daily cap", "class": "page", "condition": "4 live-cell-moved-unexplained", "emitter": "grocery/check-ad-cycles.ps1" },
     { "id": "cards-publish-failed", "match": "exact", "key": "recipe cards rebuilt but publish failed", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
+    { "id": "cards-held-from-republish", "match": "exact", "key": "recipe cards held back from republish", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
     { "id": "recipes-superseded-board", "match": "exact", "key": "recipes priced off a superseded board", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
     { "id": "card-comparison-backwards", "match": "exact", "key": "a live card s price comparison is now backwards", "class": "page", "condition": "4 live-cell-moved-unexplained", "emitter": "grocery/check-ad-cycles.ps1" },
     { "id": "surfaces-disagree", "match": "exact", "key": "price surfaces disagree with the manifest", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
