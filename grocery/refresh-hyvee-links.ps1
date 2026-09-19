@@ -20,6 +20,8 @@ param([switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
+. (Join-Path $root 'hyvee-store-lib.ps1')
+$verifiedStamp = Get-HyVeeVerifiedLabel -Root $root
 
 $regF = (Get-ChildItem (Join-Path $root 'out\regular\hyvee-regular-*.json') |
   Where-Object { $_.BaseName -match '^hyvee-regular-\d{4}-\d{2}-\d{2}$' } |
@@ -95,7 +97,10 @@ foreach ($p in $doc.items.PSObject.Properties) {
   if (-not $WhatIf) {
     $e | Add-Member -NotePropertyName price -NotePropertyValue $newPrice -Force
     $e | Add-Member -NotePropertyName size  -NotePropertyValue $newSize  -Force
-    $e | Add-Member -NotePropertyName verified -NotePropertyValue ((Get-Date -Format 'yyyy-MM-dd') + ' Hy-Vee GraphQL (storeId 1465, current shelf price)') -Force
+    # FROM THE STORE LIBRARY, never typed: this line carried a literal Omaha #01 id for four weeks after
+    # the board moved to #02, so every refreshed link claimed the retired store while carrying the new
+    # one's price. pull-regular-hyvee's self-test fails if a literal store id comes back here.
+    $e | Add-Member -NotePropertyName verified -NotePropertyValue $verifiedStamp -Force
   }
   $upd++
 }

@@ -54,15 +54,22 @@
 # select different halves of the response and a mismatched pair grades one store's price against another
 # store's shelf tag. That mismatch reported 11 of 21 Omaha #02 rows as wrong on 2026-08-21 when the real
 # number was zero, so the two are deliberately awkward to move apart.
-param([string]$OutDir = "", [int]$StoreId = 0, [string]$LocationId = "", [switch]$Quick, [switch]$SelfTest)
+# -DryRun (2026-09-19) builds the work list, recovers product ids, orders and budgets today's asks and runs the
+# pass against a stub store that answers nothing - so every count below is printed - then exits 0 before the
+# first request, the cursor, the coverage ledger or any file write. It is how a change to this lane is checked
+# against real seeded data without touching the store or grocery\out.
+param([string]$OutDir = "", [int]$StoreId = 0, [string]$LocationId = "", [switch]$Quick, [switch]$DryRun, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'omaha-time.ps1')
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $regDir = Join-Path $OutDir 'regular'
-if (-not (Test-Path $regDir)) { New-Item -ItemType Directory -Path $regDir -Force | Out-Null }
+if ((-not $DryRun) -and (-not $SelfTest) -and (-not (Test-Path $regDir))) { New-Item -ItemType Directory -Path $regDir -Force | Out-Null }
 $todayS = Get-OmahaDateKey
 . (Join-Path $root 'pu-lib.ps1')   # shared per-unit math - used to prove a productId really is our row's size
+# The store identity AND Get-HyVeeRowStoreId, loaded here rather than beside the first request so the carry row
+# and the fixtures below read the same store-stamp rule the run does.
+. (Join-Path $root 'hyvee-store-lib.ps1')
 
 # THE CARRY-FORWARD ROW, AS ONE PURE FUNCTION (2026-08-22). A product we could not re-verify keeps its last
 # known price - but the last known price has a SHAPE, not just a number. The old carry copied ad_price and
@@ -77,12 +84,21 @@ $todayS = Get-OmahaDateKey
 # one whose window is still open, or that carries no window at all (Hy-Vee markdowns are undated), keeps
 # every discount field so the split can type it as the markdown it is. The key list mirrors Family Fare's
 # Norm-Row so the two lanes preserve the same contract fields.
+# requeued / requeued_on / product_id_recovered_from (2026-09-19) travel with the carry so a shelf-tag re-queue
+# and a recovered product id survive every day the product is not re-asked; see Invoke-HyVeeWorkPass.
 $script:HvCarryKeys = @('current_price', 'base_price', 'marked_down', 'product_id', 'price_multiple',
-                        'ad_from', 'ad_to', 'store_department', 'store_department_group', 'store_category')
+                        'ad_from', 'ad_to', 'store_department', 'store_department_group', 'store_category',
+                        'requeued', 'requeued_on', 'product_id_recovered_from')
 function Get-HyVeeCarryRow($prow, [string]$name, [string]$asOf, [string]$today) {
+  # store_id: THE STORE THE PRICE WAS READ AT, NEVER THE STORE THIS RUN ASKS. The carry used to copy source_ad
+  # and nothing else about the store, so 202 of 462 Hy-Vee cells on the 2026-09-17 board still spoke for
+  # Omaha #01 four weeks after the switch to #02, with no field anything could refuse on. A carried row keeps
+  # its own stamp; a pre-stamp row gets the storeId its source_ad text names, or '' (unknown) - see
+  # Get-HyVeeRowStoreId. Nothing here drops a row for its store: compare-deals' admission gate refuses a
+  # store_id that is not the pinned identity, and the re-verify order asks those products first.
   $row = [ordered]@{
     store='Hy-Vee'; item=$name; ad_price=[string]$prow.ad_price; size=[string]$prow.size; regular=$prow.regular
-    source_ad=[string]$prow.source_ad; as_of=$asOf; not_reverified=$true
+    source_ad=[string]$prow.source_ad; store_id=(Get-HyVeeRowStoreId $prow); as_of=$asOf; not_reverified=$true
   }
   foreach ($k in $script:HvCarryKeys) { if ($null -ne $prow.$k) { $row[$k] = $prow.$k } }
   $to = [string]$prow.ad_to
@@ -192,27 +208,177 @@ function Get-HyVeeProductBudget {
       the starvation the 90-day carry was raised to prevent (capture-policy-lib: MaxCarryDays "MUST be
       >= QuarterDays or a term's rows die before the rotation comes back to them").
 
-      So the budget is derived from THIS lane's own population, with the quarter read from the policy so
-      the two can never drift apart: ceil(1554 / 90) = 18 a day, and moving QuarterDays moves this with it.
-      Expiring sales are EXTRA on top, exactly as Get-CapturePlan adds them to TermBudget - they are
-      events, not part of the daily drip.
+      THE SECOND DEFECT (2026-09-19, PLAN-board-accuracy). That repair derived the budget from the
+      QUARTER: ceil(1554 / 90) = 18 a day, a 90-day cycle, and the carry kept a row alive for exactly as
+      long. Nothing measured what a 90-day-old price does to accuracy; the blind verification of the
+      2026-09-17 board found the defect rate climbing with the age of the price, and on that board 202 of
+      462 Hy-Vee cells still came from the store retired on 2026-08-21, because at 18 a day the switch
+      would have taken a full quarter to reach every product.
+
+      So the budget now comes from the FRESHNESS RULE in capture-policy-lib: every product this lane can
+      ask about is re-read inside RotationDays (14), so the drip is ceil(askable / RotationDays), capped
+      by the store's call cap (Get-StoreCallCap 'Hy-Vee', 120 product ids). Population is the ASKABLE
+      count - products holding a product id - because a product with no id costs no request and can never
+      be re-read however big the budget is; counting it would spend slots on nothing.
+
+      Expiring sales take only the ROOM LEFT under the cap once the rotation is reserved. They used to be
+      extra on top, which was harmless at 18 a day; at 111 a day an uncapped expiry list would push the
+      rotation off the end of the cap, and the oldest-first order (Get-HyVeeAskOrder) is what makes a
+      squeezed day recoverable, not a reason to squeeze it.
 
       MaxAskable is the wall-clock ceiling. The run stops ASKING at $MAXMIN minutes whatever the budget
       says, so a budget bigger than that is a budget that lies: it would report N products asked and
-      quietly carry the tail. Passing the ceiling in keeps the two numbers arguing here, once, rather than
-      in the loop every day. At today's population the budget is 18 and the ceiling ~1,400, so this
-      clamps nothing - it exists so a future 100k-product population cannot silently promise a pull the
-      clock cannot serve.
+      quietly carry the tail. At ~0.6 s a product the ceiling is ~1,400, so it clamps nothing at 120.
   #>
-  param([int]$Population, [int]$QuarterDays = 90, [int]$Expiries = 0, [int]$MaxAskable = 0)
+  param([int]$Population, [int]$RotationDays = 14, [int]$Cap = 0, [int]$Expiries = 0, [int]$MaxAskable = 0)
   if ($Population -le 0) { return 0 }
-  if ($QuarterDays -le 0) { $QuarterDays = 90 }
-  $b = [int][math]::Ceiling($Population / [double]$QuarterDays)
-  if ($b -lt 1) { $b = 1 }
-  if ($Expiries -gt 0) { $b += $Expiries }
+  if ($RotationDays -le 0) { throw "RotationDays must be positive (got $RotationDays): it comes from capture-policy-lib's FRESHNESS RULE" }
+  $rot = [int][math]::Ceiling($Population / [double]$RotationDays)
+  if ($rot -lt 1) { $rot = 1 }
+  $b = $rot
+  if ($Expiries -gt 0) {
+    $room = if ($Cap -gt 0) { [math]::Max(0, $Cap - $rot) } else { $Expiries }
+    $b += [int][math]::Min($Expiries, $room)
+  }
+  if ($Cap -gt 0 -and $b -gt $Cap) { $b = $Cap }
   if ($MaxAskable -gt 0 -and $b -gt $MaxAskable) { $b = $MaxAskable }
   if ($b -gt $Population) { $b = $Population }
   return $b
+}
+
+function Test-HyVeeCapacity {
+  <#
+    .SYNOPSIS Can this lane re-read every askable product inside RotationDays without passing its call cap?
+    .DESCRIPTION The same arithmetic test-capture-policy.ps1 asserts for the term-rotation stores, for the one
+                 store that rotates by PRODUCT ID and therefore is not in that table. Ok = Need <= Cap. A
+                 shortfall is SPOKEN with its arithmetic every run; it is never silently clamped, because a
+                 clamped budget is a rotation slower than the publish limit wearing a normal day's numbers.
+  #>
+  param([int]$Population, [int]$RotationDays = 14, [int]$Cap = 120)
+  $need = if ($Population -le 0) { 0 } else { [int][math]::Ceiling($Population / [double]$RotationDays) }
+  $over = [math]::Max(0, $need - $Cap)
+  [pscustomobject]@{
+    Population = $Population; RotationDays = $RotationDays; Need = $need; Cap = $Cap; Over = $over
+    Ok = ($need -le $Cap)
+    Why = if ($need -le $Cap) { '' } else { "$Population askable products / $RotationDays days = $need a day, $over over the Hy-Vee call cap of $($Cap): the tail cannot be re-read inside the publish limit" }
+  }
+}
+
+function Get-HyVeeAskOrder {
+  <#
+    .SYNOPSIS Which products does today's run ask about, in what order? OLDEST FIRST, the wrong store first.
+    .DESCRIPTION
+      THE CURSOR THIS REPLACES (2026-09-19). The lane walked a rotation cursor: today's slice was the next N
+      positions in work-list order. A missed day did not heal - every product's turn was simply pushed back
+      one day - and the order had no idea which prices were oldest or which were read at the store the board
+      no longer speaks for. After the 2026-08-21 switch it re-read Omaha #01 rows in whatever order the file
+      happened to hold them, 18 a day.
+
+      Ranks, lowest first; within a rank the OLDEST as_of first ('' - a product never priced - is oldest of
+      all), then work order so two runs over the same list pick the same products:
+        0  a product whose commodity has a sale reverting today (Brad: "reprice whenever an ad price ...
+           drops off"), exactly as the old expiry-first slice did
+        1  a row whose store_id is not the pinned store, or unstamped, or never priced; and a row
+           re-queued by a shelf-tag refusal. These are the rows the board's admission gate refuses, so
+           asking them first is what completes the Omaha #02 migration in days instead of a quarter
+        2  every other product, oldest first
+      A product with no product id is never in the order: it cannot be asked (see the -DryRun report for
+      how many there are). Pure: no disk, no network, so the fixtures below drive this exact text.
+    .OUTPUTS Index (hashtable work index -> $true, the AskIndex Invoke-HyVeeWorkPass takes), Order (the
+             chosen indices in ask order), and the rank counts inside the slice.
+  #>
+  param([Parameter(Mandatory)][AllowEmptyCollection()]$Work, [int]$Budget, [string]$TargetStoreId,
+        [hashtable]$ExpiringIdx = @{})
+  $cands = New-Object System.Collections.Generic.List[object]
+  $i = -1
+  foreach ($w in $Work) {
+    $i++
+    if ([int]$w.pid -le 0) { continue }
+    $asOf = ''; $sid = ''; $req = $false
+    if ($w.prow) {
+      $asOf = [string]$w.prow.as_of
+      $sid = Get-HyVeeRowStoreId $w.prow
+      $req = [bool]([string]$w.prow.requeued)
+    }
+    $rank = 2
+    if ($ExpiringIdx.ContainsKey($i)) { $rank = 0 }
+    elseif ($req -or (-not $sid) -or (-not [string]::Equals($sid, $TargetStoreId, [StringComparison]::Ordinal))) { $rank = 1 }
+    [void]$cands.Add([pscustomobject]@{ i = $i; rank = $rank; asOf = $asOf; off = (-not [string]::Equals($sid, $TargetStoreId, [StringComparison]::Ordinal)) })
+  }
+  # Ordinal-safe: as_of is yyyy-MM-dd or '', and '' sorts first under any comparer.
+  $sorted = @($cands.ToArray() | Sort-Object -Property @{ Expression = { $_.rank } }, @{ Expression = { $_.asOf } }, @{ Expression = { $_.i } })
+  $take = [math]::Min([math]::Max(0, $Budget), $sorted.Count)
+  $idx = @{}; $order = New-Object System.Collections.Generic.List[int]
+  $nExp = 0; $nOff = 0
+  for ($k = 0; $k -lt $take; $k++) {
+    $c = $sorted[$k]
+    $idx[[int]$c.i] = $true; [void]$order.Add([int]$c.i)
+    if ($c.rank -eq 0) { $nExp++ }
+    if ($c.off) { $nOff++ }
+  }
+  $offAll = @($sorted | Where-Object { $_.off }).Count
+  return [pscustomobject]@{ Index = $idx; Order = $order.ToArray(); Askable = $sorted.Count
+    ExpiringInSlice = $nExp; OffTargetInSlice = $nOff; OffTargetAskable = $offAll }
+}
+
+function Get-HyVeeHistoryProductIds {
+  <#
+    .SYNOPSIS Recover a product id for a row that lost its own, from this lane's own earlier files.
+    .DESCRIPTION
+      WHY (2026-09-19). 1,006 of 1,541 rows in the 2026-09-18 file had no product id to ask with, so no
+      budget, however large, could ever re-read them. 744 of them are the same name and size as a row an
+      EARLIER hyvee-regular file priced by product id through this lane's own GraphQL; the id was lost by
+      the pre-2026-08-22 carry, which copied ad_price and nothing else (see Get-HyVeeCarryRow's header).
+      This hands those ids back. It is not a search: the id is the one this lane itself already asked the
+      store with, for a row of the same name AND size.
+      A key that two files give DIFFERENT ids is not recovered - two ids for one name and size means we
+      cannot say which one the row is, and guessing writes one product's price onto another. Counted, never
+      guessed. The size cross-check in Invoke-HyVeeWorkPass still judges every recovered id when it is asked.
+    .PARAMETER Files  the hyvee-regular files to read, newest first (the caller bounds them to MaxCarryDays)
+    .PARAMETER Needed hashtable of 'name-lowercased|size' -> $true
+    .OUTPUTS Map (key -> @{ pid; file_date }), Conflicts (keys with two ids), Scanned (files read), Unreadable
+  #>
+  param($Files, [hashtable]$Needed)
+  $map = @{}; $seenIds = @{}; $scanned = 0; $unreadable = 0
+  if ($Needed.Count -gt 0) {
+    foreach ($f in @($Files)) {
+      $fd = ''
+      if ([string]$f.Name -match '(\d{4}-\d{2}-\d{2})') { $fd = $Matches[1] }
+      $doc = $null
+      try { $doc = ConvertFrom-Json ([IO.File]::ReadAllText([string]$f.FullName)) } catch { $unreadable++; continue }
+      $scanned++
+      foreach ($r in @($doc.deals)) {
+        if (-not $r -or -not $r.product_id) { continue }
+        $k = ([string]$r.item).ToLower().Trim() + '|' + ([string]$r.size).Trim()
+        if (-not $Needed.ContainsKey($k)) { continue }
+        $rp = 0
+        if (-not [int]::TryParse(([string]$r.product_id), [ref]$rp) -or $rp -le 0) { continue }
+        if (-not $seenIds.ContainsKey($k)) { $seenIds[$k] = @{} }
+        $seenIds[$k][[string]$rp] = $true
+        if (-not $map.ContainsKey($k)) { $map[$k] = [pscustomobject]@{ pid = $rp; file_date = $fd } }
+      }
+    }
+  }
+  $conflicts = 0
+  foreach ($k in @($seenIds.Keys)) {
+    if ($seenIds[$k].Count -gt 1) { $conflicts++; if ($map.ContainsKey($k)) { $map.Remove($k) } }
+  }
+  return [pscustomobject]@{ Map = $map; Conflicts = $conflicts; Scanned = $scanned; Unreadable = $unreadable }
+}
+
+function Test-HyVeeCarryExpired {
+  <#
+    .SYNOPSIS Is a carried row past MaxCarryDays? Age strictly greater than the limit expires, as in every
+              other lane (pull-regular-bakers-api, pull-regular-familyfare): exactly 90 days is kept.
+    .DESCRIPTION This lane never expired a carried row at all, so rows read 2026-07-14 were still being written
+                 on 2026-09-18. An unparseable date is not judged here (returns $false) and is counted by the
+                 caller; the board's publish-age gate withholds it either way.
+  #>
+  param([string]$AsOf, [string]$Today, [int]$MaxCarryDays)
+  if ($MaxCarryDays -le 0) { return $false }
+  $a = $null; $t = $null
+  try { $a = [datetime]::ParseExact($AsOf, 'yyyy-MM-dd', $null); $t = [datetime]::ParseExact($Today, 'yyyy-MM-dd', $null) } catch { return $false }
+  return (($t - $a).TotalDays -gt $MaxCarryDays)
 }
 
 function Get-HyVeeAskableCount {
@@ -270,7 +436,7 @@ function Invoke-HyVeeWorkPass {
       passes Get-HyVeeStoreProduct; the fixtures pass a stub), so the fixtures below exercise this exact
       text rather than a transcription of it.
 
-    .PARAMETER Work       the full work list, every product, in rotation order
+    .PARAMETER Work       the full work list, every product (the order asked is Get-HyVeeAskOrder's, via AskIndex)
     .PARAMETER AskIndex   hashtable of WORK INDEX -> $true for the products we may ask about today.
                           $null means unbudgeted: ask about all of them.
     .PARAMETER Fetch      scriptblock: productId -> the store-product object, or $null
@@ -286,11 +452,17 @@ function Invoke-HyVeeWorkPass {
     [string]$PrevDate = '',
     [hashtable]$Units = @{},
     [string]$SourceLabel = '',
+    # THE STORE THAT ANSWERS $Fetch, stamped on every fresh row as store_id. Mandatory and non-empty: a fresh
+    # row that cannot say where it was read is the defect this stamp exists to end.
+    [Parameter(Mandatory)][ValidateNotNullOrEmpty()][string]$StoreId,
+    # Carried rows whose as_of is more than this many days before -Today are DROPPED and counted (0 = never).
+    [int]$MaxCarryDays = 0,
     [double]$MaxMinutes = 14,
     $StartTime = $null,
     [int]$SleepMs = 0
   )
   if ($null -eq $StartTime) { $StartTime = Get-Date }
+  $expired = 0; $undatedCarry = 0; $requeued = 0; $pidRecoveredStamped = 0
   $deals = New-Object System.Collections.ArrayList
   $captureTerms = New-Object System.Collections.ArrayList
   $sizeConflicts = New-Object System.Collections.Generic.List[string]
@@ -319,6 +491,7 @@ function Invoke-HyVeeWorkPass {
     $workKey = ('product-{0:d4}-{1}' -f $workOrdinal, $(if ([int]$w.pid -gt 0) { [string][int]$w.pid } else { 'unidentified' }))
     $asked = $false
     $workReason = ''
+    $tagRequeue = $false
     $overCap = (((Get-Date) - $StartTime).TotalMinutes -gt $MaxMinutes)
     # Warn ONCE. This used to sit bare inside the loop, so it re-fired for every remaining product - hundreds
     # of identical lines that say nothing about scale, which is its own kind of silence.
@@ -423,8 +596,17 @@ function Invoke-HyVeeWorkPass {
 
           # THE SHELF-TAG CROSS-CHECK. A price BELOW the store's own tag is refused outright rather than
           # published and flagged: this is the one failure mode where the row looks perfect from every
-          # angle we already measure, so a warning nobody reads would be the same as shipping it. The
-          # commodity falls through to another store, which is what a shopper should have been seeing.
+          # angle we already measure, so a warning nobody reads would be the same as shipping it.
+          # THE REFUSAL MUST NOT DELETE THE PRODUCT (2026-09-19). It used to `continue` here with no row at
+          # all, and the work list is rebuilt from yesterday's file, so a refused product left the catalogue
+          # for good unless a link happened to name it: Hy-Vee's own 100% apple juice (productId 24371) went
+          # that way and the cell fell to a dearer product. What a refusal proves is that TODAY'S answer is
+          # untrustworthy, not that the product is gone. So the refused answer is discarded, the row is
+          # CARRIED at its last trusted read (its own as_of and store_id, so the board's age and store gates
+          # still judge it honestly), and it is marked requeued so Get-HyVeeAskOrder asks it again FIRST next
+          # run instead of waiting for its turn. A product with no earlier row has nothing to carry; it
+          # re-enters from the link or the catalogue addition that put it in today's work list, and is
+          # counted as requeued all the same.
           $tagWhy = Test-HyVeeTagAgreement -Price $price -Mult $mult -TagPrice $got.tagPrice -EcomTagPrice $got.ecomTagPrice -TagQty $got.tagQty
           if ($tagWhy) {
             $tagRefused++
@@ -432,10 +614,12 @@ function Invoke-HyVeeWorkPass {
             # refusal line printed a blank tag, on the one report whose whole purpose is to show the tag
             # the price disagreed with. Found while extracting this loop, 2026-08-22.
             [void]$tagRefusedRows.Add([ordered]@{ item = [string]$w.name; product_id = [int]$w.pid; price = $price; tag = $(if ($null -ne $got.ecomTagPrice) { $got.ecomTagPrice } else { $got.tagPrice }); why = $tagWhy })
-            [void]$captureTerms.Add([ordered]@{ term = $workKey; ordinal = $workOrdinal; outcome = 'refused-below-shelf-tag'; row_count = 0 })
-            $workOrdinal++
-            continue
+            $tagRequeue = $true
+            $workReason = 'refused-below-shelf-tag'
+            $got = $null   # fall through to the carry below, never to a deletion
           }
+        }
+        if ($got) {
           $isDown = ([bool]$sp.onSale) -and ($null -ne $base) -and ($price -lt $base)
           if ($isDown) { $markdown++ }
 
@@ -447,6 +631,9 @@ function Invoke-HyVeeWorkPass {
             # guard goes blind - which is exactly the state Baker's, Fareway, Sam's and Walmart are still in.
             current_price=[double]$sp.price
             source_ad=$SourceLabel
+            # THE STORE THAT ANSWERED, as a field the board's admission gate compares with stores.json's
+            # pinned identity. From -StoreId, which the run takes from hyvee-store-lib, never a literal.
+            store_id=$StoreId
             as_of=$Today; product_id=[int]$w.pid
           }
           # THE STORE'S OWN SHELF, RECORDED AT LAST. The persisted GraphQL document in hyvee\query-b64.txt has
@@ -489,14 +676,45 @@ function Invoke-HyVeeWorkPass {
 
     # could not re-verify: keep the last known price, but SAY SO with an honest as_of rather than passing it off
     # as today's number. A price we cannot check is not a price we get to call fresh.
+    $carriedRow = $false
     if ($w.prow) {
       $asOf = if ($w.prow.as_of) { [string]$w.prow.as_of } elseif ($PrevDate) { $PrevDate } else { $Today }
+      if (Test-HyVeeCarryExpired -AsOf $asOf -Today $Today -MaxCarryDays $MaxCarryDays) {
+        # AGE EXPIRY (2026-09-19). Every other lane drops a carried row past MaxCarryDays; this one never did,
+        # so rows read 2026-07-14 were still written on 2026-09-18. Dropped, counted, and named in
+        # capture_terms. A product still holding an id is asked long before this under the 14-day rotation,
+        # so what reaches here is a product the store stopped answering for, or one with no id to ask with.
+        $expired++
+        [void]$captureTerms.Add([ordered]@{ term = $workKey; ordinal = $workOrdinal; outcome = 'expired'; row_count = 0
+          reason = ("carried row read $asOf is past the $MaxCarryDays-day carry - dropped, not published stale") })
+        $workOrdinal++
+        continue
+      }
+      if ($MaxCarryDays -gt 0 -and $asOf -notmatch '^\d{4}-\d{2}-\d{2}$') { $undatedCarry++ }
       # Through Get-HyVeeCarryRow, never an inline key list: see its header for the markdown that was being
       # laundered into an everyday price here, and Brad's ruling on what an ended sale must revert to.
       $row = Get-HyVeeCarryRow $w.prow $w.name $asOf $Today
+      # A product id RECOVERED from this lane's own history (Get-HyVeeHistoryProductIds) is written onto the
+      # carried row with where it came from, so the recovery survives into tomorrow's file instead of being
+      # re-derived forever - and so a reader can tell a recovered id from one the row was priced with.
+      if ([string]$w.pidFrom -eq 'history' -and [int]$w.pid -gt 0 -and -not $row.Contains('product_id')) {
+        $row['product_id'] = [int]$w.pid
+        $row['product_id_recovered_from'] = ('hyvee-regular-' + [string]$w.pidFile)
+        $pidRecoveredStamped++
+      }
+      if ($tagRequeue) { $row['requeued'] = 'below-shelf-tag'; $row['requeued_on'] = $Today }
       [void]$deals.Add($row)
       $stale++
-    } else { $fail++ }
+      $carriedRow = $true
+    } elseif (-not $tagRequeue) { $fail++ }
+    if ($tagRequeue) {
+      $requeued++
+      [void]$captureTerms.Add([ordered]@{ term = $workKey; ordinal = $workOrdinal; outcome = 'refused-below-shelf-tag'
+        row_count = $(if ($carriedRow) { 1 } else { 0 }); requeued = $true
+        reason = $(if ($carriedRow) { 'answer below the shelf tag discarded; last trusted read carried and re-queued first for tomorrow' } else { 'answer below the shelf tag discarded; no earlier read to carry, re-asked from its link or catalogue addition' }) })
+      $workOrdinal++
+      continue
+    }
     if (-not $asked) {
       $reason = if ($overCap) { 'wall-clock cap before request' } elseif (-not $mayAsk) { 'outside today''s capture-policy slice - carried at its last known price' } elseif ([int]$w.pid -le 0) { 'worklist product has no retailer product id' } else { 'request not attempted' }
       [void]$captureTerms.Add([ordered]@{ term = $workKey; ordinal = $workOrdinal; outcome='not_attempted'; row_count=0; reason=$reason })
@@ -513,6 +731,7 @@ function Invoke-HyVeeWorkPass {
     Mismatch = $mismatch; CapSkipped = $capSkipped; BudgetSkipped = $budgetSkipped
     TagRefused = $tagRefused; MultRefused = $multRefused; MultDescriptive = $multDescriptive
     Attempted = $attempted; Answered = $answered; SliceSize = $sliceSize; SliceUnaskable = $sliceUnaskable
+    Expired = $expired; UndatedCarry = $undatedCarry; Requeued = $requeued; PidRecoveredStamped = $pidRecoveredStamped
   }
 }
 
@@ -569,24 +788,31 @@ if ($SelfTest) {
     }
   }
 
-  # --- the budget number itself: PRODUCTS / QUARTER, not the search-term count ----------------------
-  $fixBudget = Get-HyVeeProductBudget -Population $POP -QuarterDays 90
-  _T "budget comes from this lane's own PRODUCT population (240/90 = 3 a day)" ($fixBudget -eq 3)
-  _T 'the live population gets 18 a day, not the 7 the TERM count produced (222-day rotation vs a 90-day carry)' ((Get-HyVeeProductBudget -Population 1554 -QuarterDays 90) -eq 18)
-  _T 'moving the quarter moves the budget with it (the carry and the rotation cannot drift apart)' ((Get-HyVeeProductBudget -Population 1554 -QuarterDays 45) -eq 35)
-  _T 'an expiring sale is EXTRA on top of the daily drip' ((Get-HyVeeProductBudget -Population 1554 -QuarterDays 90 -Expiries 2) -eq 20)
-  # 1,000,000 / 90 = 11,112 a day, which 14 minutes at ~0.6s a product cannot serve; the ceiling wins.
-  # At today's 1,554 it clamps nothing (18 << 1,400) - it exists so a future population cannot silently
-  # promise a pull the clock stops halfway through.
-  _T 'the wall-clock ceiling clamps a budget the 14-minute cap could never serve' ((Get-HyVeeProductBudget -Population 1000000 -QuarterDays 90 -MaxAskable 1400) -eq 1400)
-  _T 'and it clamps nothing at the real population (18 a day, ceiling ~1,400)' ((Get-HyVeeProductBudget -Population 1554 -QuarterDays 90 -MaxAskable 1400) -eq 18)
+  # --- the budget number itself: ASKABLE PRODUCTS / RotationDays, capped at the call cap -------------
+  # THE FOUNDING NUMBER (2026-09-19): ceil(1554 / 90) = 18 a day, a 90-day cycle, is what left 202 of 462
+  # Hy-Vee board cells on the retired store. RotationDays is capture-policy-lib's, read here, never typed.
+  $fixRot = [int]$script:RotationDays
+  $fixCap = [int](Get-StoreCallCap 'Hy-Vee')
+  _T "the fixture reads the FRESHNESS RULE from capture-policy-lib (RotationDays 14, Hy-Vee cap 120)" (($fixRot -eq 14) -and ($fixCap -eq 120))
+  $fixBudget = Get-HyVeeProductBudget -Population $POP -RotationDays $fixRot -Cap $fixCap
+  _T "budget comes from this lane's own ASKABLE population over RotationDays (240/14 = 18 a day)" ($fixBudget -eq 18)
+  _T 'MUST FIRE: the live 1,554 products get 111 a day, not the 18 the 90-day quarter produced' ((Get-HyVeeProductBudget -Population 1554 -RotationDays 14 -Cap 120) -eq 111)
+  _T 'moving RotationDays moves the budget with it (7 days -> 223, clamped at the 120 cap)' ((Get-HyVeeProductBudget -Population 1554 -RotationDays 7 -Cap 120) -eq 120)
+  _T 'expiring sales take only the ROOM LEFT under the cap (111 rotation + 9 of 30 expiries = 120)' ((Get-HyVeeProductBudget -Population 1554 -RotationDays 14 -Cap 120 -Expiries 30) -eq 120)
+  _T 'CLEAN TWIN: with room, an expiring sale is still extra on top (111 + 2 = 113)' ((Get-HyVeeProductBudget -Population 1554 -RotationDays 14 -Cap 120 -Expiries 2) -eq 113)
+  _T 'the wall-clock ceiling still clamps a budget the 14-minute cap could never serve' ((Get-HyVeeProductBudget -Population 1000000 -RotationDays 14 -Cap 0 -MaxAskable 1400) -eq 1400)
+  # THE CAPACITY BAR, AT IT AND ONE PRODUCT PAST IT (I196): 1,680 / 14 = 120 exactly = the cap; 1,681 needs 121.
+  $capAt = Test-HyVeeCapacity -Population 1680 -RotationDays 14 -Cap 120
+  $capPast = Test-HyVeeCapacity -Population 1681 -RotationDays 14 -Cap 120
+  _T 'MUST NOT FIRE at the bar: 1,680 askable / 14 days = 120 = the 120 cap is OK' ($capAt.Ok -and $capAt.Need -eq 120 -and $capAt.Over -eq 0)
+  _T 'MUST FIRE one product past the bar: 1,681 / 14 = 121, over the 120 cap by 1, and says so' ((-not $capPast.Ok) -and $capPast.Over -eq 1 -and ($capPast.Why -match '121 a day, 1 over'))
+  _T 'and the budget at 1,681 is clamped to the cap, never above it (the shortfall is spoken, not hidden in a bigger number)' ((Get-HyVeeProductBudget -Population 1681 -RotationDays 14 -Cap 120) -eq 120)
+  _T 'RotationDays 0 is refused loudly rather than dividing into a nonsense budget' ($(try { [void](Get-HyVeeProductBudget -Population 10 -RotationDays 0 -Cap 120); $false } catch { $true }))
 
   # --- (a) a budget smaller than the population still yields a row for EVERY product ----------------
-  $fixSlots = New-Object System.Collections.Generic.List[object]
-  for ($i = 0; $i -lt $POP; $i++) { [void]$fixSlots.Add([pscustomobject]@{ i = $i; w = $fixWork[$i] }) }
-  $sliceA = Select-ExpiryFirstSlice -Items $fixSlots.ToArray() -Expiring @() -Budget $fixBudget -CursorStart 0 -KeyOf { param($s) @([string]$s.w.cid) }
-  $askA = @{}; foreach ($s in @($sliceA.Items)) { $askA[[int]$s.i] = $true }
-  $passA = Invoke-HyVeeWorkPass -Work $fixWork -AskIndex $askA -Fetch $fixFetch -Today '2026-08-22' -PrevDate '2026-08-21' -Units $fixUnits -SourceLabel 'fixture' -SleepMs 0
+  $ordA = Get-HyVeeAskOrder -Work $fixWork -Budget $fixBudget -TargetStoreId '1466'
+  $askA = $ordA.Index
+  $passA = Invoke-HyVeeWorkPass -Work $fixWork -AskIndex $askA -Fetch $fixFetch -Today '2026-08-22' -PrevDate '2026-08-21' -Units $fixUnits -SourceLabel 'fixture' -StoreId '1466' -SleepMs 0
   _T "MUST-FIRE (a): a budget of $fixBudget against $POP products still writes a row for EVERY product" (@($passA.Deals).Count -eq $POP)
   _T "(a) the budget limited ASKING only: $($passA.Fresh) fresh + $($passA.BudgetSkipped) carried outside the slice = $POP" (($passA.Fresh -eq $fixBudget) -and ($passA.BudgetSkipped -eq ($POP - $fixBudget)) -and ($passA.Stale -eq ($POP - $fixBudget)))
   _T "(a) the run asked about exactly its budget and no more ($($passA.Attempted) request(s))" (($passA.Attempted -eq $fixBudget) -and ($passA.Answered -eq $fixBudget))
@@ -614,45 +840,48 @@ if ($SelfTest) {
   _T '(c) the guard itself is untouched: a genuinely collapsed run is still refused' (
       (Test-HyVeeWipeout -RowCount 60 -PrevMax 240) -and (-not (Test-HyVeeWipeout -RowCount 121 -PrevMax 240)))
 
-  # --- (d) the cursor moves, so tomorrow asks about DIFFERENT products ------------------------------
-  $sliceB = Select-ExpiryFirstSlice -Items $fixSlots.ToArray() -Expiring @() -Budget $fixBudget -CursorStart ([int]$sliceA.CursorNext) -KeyOf { param($s) @([string]$s.w.cid) }
-  $askB = @{}; foreach ($s in @($sliceB.Items)) { $askB[[int]$s.i] = $true }
-  $passB = Invoke-HyVeeWorkPass -Work $fixWork -AskIndex $askB -Fetch $fixFetch -Today '2026-08-23' -PrevDate '2026-08-22' -Units $fixUnits -SourceLabel 'fixture' -SleepMs 0
-  _T "(d) the next run asks a DIFFERENT slice (cursor 0 -> $($sliceA.CursorNext) -> $($sliceB.CursorNext))" (
-      ([int]$sliceA.CursorNext -eq $fixBudget) -and (@($askA.Keys | Where-Object { $askB.ContainsKey([int]$_) }).Count -eq 0))
+  # --- (d) OLDEST FIRST: tomorrow asks the products today did not, and a missed day heals ------------
+  # Tomorrow's work list is built from today's file, exactly as the run builds it from the previous file.
+  $fixWorkB = New-Object System.Collections.ArrayList
+  foreach ($r in $passA.Deals) { [void]$fixWorkB.Add([pscustomobject]@{ name=[string]$r['item']; size=[string]$r['size']; prow=$r; pid=[int]$r['product_id']; cid=('fix-' + ([int]$r['product_id'] - 9000)) }) }
+  $ordB = Get-HyVeeAskOrder -Work $fixWorkB -Budget $fixBudget -TargetStoreId '1466'
+  $askB = $ordB.Index
+  _T "(d) the next run asks a DIFFERENT slice: none of today's $fixBudget fresh products is asked again tomorrow" (
+      (@($askA.Keys | Where-Object { $askB.ContainsKey([int]$_) }).Count -eq 0) -and ($askB.Count -eq $fixBudget))
+  $passB = Invoke-HyVeeWorkPass -Work $fixWorkB -AskIndex $askB -Fetch $fixFetch -Today '2026-08-23' -PrevDate '2026-08-22' -Units $fixUnits -SourceLabel 'fixture' -StoreId '1466' -SleepMs 0
   _T '(d) and the second run also writes every product' ((@($passB.Deals).Count -eq $POP) -and ($passB.Fresh -eq $fixBudget))
+  # A MISSED DAY HEALS. The cursor pushed every product's turn back a day when a run did not happen; oldest
+  # first asks the very same products the day after, because they are still the oldest.
+  $ordSkip = Get-HyVeeAskOrder -Work $fixWorkB -Budget $fixBudget -TargetStoreId '1466'
+  _T '(d) MUST FIRE: a day with no run changes nothing - the next run asks exactly the products the missed one would have' (
+      (@($ordSkip.Order) -join ',') -eq (@($ordB.Order) -join ','))
+  _T '(d) and after 240/18 = 14 runs every product has had its turn (the 14-day rotation, not a quarter)' (
+      [int][math]::Ceiling($POP / [double]$fixBudget) -le $fixRot)
 
-  # --- (d) WHEN the cursor may move: on what the run ASKED, not on what it managed to write ---------
+  # --- (d) THE DAILY STEP: the cursor file is still stepped once a day, never on a replay --------------
   _T '(d) a run that asked and was answered advances - even if the write is refused afterwards' (
       (Test-HyVeeCursorAdvance -Attempted 3 -Answered 3 -SliceSize 3 -SliceUnaskable 0).Advance)
-  _T '(d) MUST-FIRE: a slice with NOTHING to ask advances past itself (the live deadlock: 7 unlinked products, re-picked every day since 2026-08-20)' (
-      (Test-HyVeeCursorAdvance -Attempted 0 -Answered 0 -SliceSize 7 -SliceUnaskable 7).Advance)
-  _T '(d) a run whose every request failed does NOT burn its slice (a dead endpoint is not a day of work)' (
+  _T '(d) a run whose every request failed does NOT record a day of work (a dead endpoint is not a day of work)' (
       -not (Test-HyVeeCursorAdvance -Attempted 5 -Answered 0 -SliceSize 5 -SliceUnaskable 0).Advance)
-  _T '(d) an askable slice we never got to (the wall-clock cap) is still owed its turn' (
-      -not (Test-HyVeeCursorAdvance -Attempted 0 -Answered 0 -SliceSize 5 -SliceUnaskable 0).Advance)
-
-  # --- (d) the cursor FILE: created on the first run, one advance a day, never on a replay ----------
   $ctmp = Join-Path ([IO.Path]::GetTempPath()) ('hvcur-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
-  New-Item -ItemType Directory -Path $ctmp -Force | Out-Null
+  New-Item -ItemType Directory -Path $ctmp -Force -ErrorAction Stop | Out-Null
   try {
     $realToday = (Get-Date).ToString('yyyy-MM-dd')
     $c1 = Step-HyVeeProductCursor -Next $fixBudget -From 0 -Today $realToday -OutDir $ctmp -Attempted $fixBudget -Answered $fixBudget -SliceSize $fixBudget -SliceUnaskable 0
     $cFile = Join-Path $ctmp 'hyvee-rotation-cursor.json'
     $onDisk = -1
     if (Test-Path $cFile) { $onDisk = [int](ConvertFrom-Json ([IO.File]::ReadAllText($cFile))).next_index }
-    _T "(d) the cursor file is CREATED and carries the next index ($fixBudget) - it had never existed on the live tree" (
-        ($c1.Advanced) -and ($onDisk -eq $fixBudget))
-    $c2 = Step-HyVeeProductCursor -Next 99 -From $fixBudget -Today $realToday -OutDir $ctmp -Attempted $fixBudget -Answered $fixBudget -SliceSize $fixBudget -SliceUnaskable 0
+    _T "(d) the daily step is CREATED and records the products asked ($fixBudget)" (($c1.Advanced) -and ($onDisk -eq $fixBudget))
+    $c2 = Step-HyVeeProductCursor -Next 99 -From 0 -Today $realToday -OutDir $ctmp -Attempted $fixBudget -Answered $fixBudget -SliceSize $fixBudget -SliceUnaskable 0
     $stillDisk = [int](ConvertFrom-Json ([IO.File]::ReadAllText($cFile))).next_index
-    _T '(d) a second run the same day does not rotate again (one product slice per day)' ((-not $c2.Advanced) -and ($stillDisk -eq $fixBudget))
+    _T '(d) a second run the same day does not step again (one record per day)' ((-not $c2.Advanced) -and ($stillDisk -eq $fixBudget))
     $c3 = Step-HyVeeProductCursor -Next 500 -From 0 -Today '2026-01-01' -OutDir $ctmp -Attempted 5 -Answered 5 -SliceSize 5 -SliceUnaskable 0
-    _T '(d) a REPLAY (or a self-test on a frozen date) never moves the live rotation' (
+    _T '(d) a REPLAY (or a self-test on a frozen date) never steps the live record' (
         (-not $c3.Advanced) -and ([int](ConvertFrom-Json ([IO.File]::ReadAllText($cFile))).next_index -eq $fixBudget))
   } finally { Remove-Item -LiteralPath $ctmp -Recurse -Force -ErrorAction SilentlyContinue }
 
   # --- the unbudgeted pass is unchanged: ask about everything ---------------------------------------
-  $passU = Invoke-HyVeeWorkPass -Work $fixWork -AskIndex $null -Fetch $fixFetch -Today '2026-08-22' -PrevDate '2026-08-21' -Units $fixUnits -SourceLabel 'fixture' -SleepMs 0
+  $passU = Invoke-HyVeeWorkPass -Work $fixWork -AskIndex $null -Fetch $fixFetch -Today '2026-08-22' -PrevDate '2026-08-21' -Units $fixUnits -SourceLabel 'fixture' -StoreId '1466' -SleepMs 0
   _T 'unbudgeted (no capture policy loaded): every product is asked about and every product is written' (
       (@($passU.Deals).Count -eq $POP) -and ($passU.Fresh -eq $POP) -and ($passU.BudgetSkipped -eq 0))
 
@@ -680,6 +909,157 @@ if ($SelfTest) {
   # it is the no-discovery-path problem (1,064 of 1,554 rows carry no link) in its actionable form.
   _T '(e) a slice holding no linkable product is ZERO eligible, not a 98% collapse' (
       (Get-HyVeeAskableCount -Work $mixWork -AskIndex $mixNone) -eq 0)
+
+
+  # ==================================================================================================
+  # 2026-09-19, PLAN-board-accuracy: THE STORE STAMP, OLDEST FIRST, AGE EXPIRY, THE SHELF-TAG RE-QUEUE,
+  # AND PRODUCT IDS RECOVERED FROM HISTORY. Founding bugs, each measured on the 2026-09-17/18 files:
+  # 202 of 462 Hy-Vee board cells from the retired store; rows dated 2026-07-14 still written; Hy-Vee
+  # 100% apple juice (productId 24371) deleted by a shelf-tag refusal; 1,006 of 1,541 rows with no id.
+  # ==================================================================================================
+
+  # --- THE STORE STAMP ---------------------------------------------------------------------------------
+  $old1465 = [pscustomobject]@{ item='Hy-Vee Large Eggs'; ad_price='$2.99'; size='dozen'; regular=2.99; current_price=2.99; source_ad='Aisles Online current shelf price (storeId 1465, Omaha #01)'; as_of='2026-08-10'; product_id=4401 }
+  $cOld = Get-HyVeeCarryRow $old1465 $old1465.item '2026-08-10' '2026-09-19'
+  _T "MUST FIRE: a carried pre-stamp row read at storeId 1465 is stamped store_id '1465' - never relabelled as the store this run asks" ([string]$cOld['store_id'] -eq '1465')
+  $stamped = [pscustomobject]@{ item='Hy-Vee Olives'; ad_price='$1.99'; size='6 oz'; regular=1.99; source_ad='Aisles Online current shelf price (storeId 1466, Omaha #02)'; store_id='1465'; as_of='2026-09-01'; product_id=77 }
+  _T "CLEAN TWIN: a row that already carries store_id keeps IT, even where its source_ad text names another store" ([string](Get-HyVeeCarryRow $stamped $stamped.item '2026-09-01' '2026-09-19')['store_id'] -eq '1465')
+  $noStore = [pscustomobject]@{ item='Gold Potatoes'; ad_price='$3.49'; size='3 lb'; regular=3.49; source_ad='everyday shelf price'; as_of='2026-07-14' }
+  _T "a legacy row whose text names no storeId is stamped '' (unknown), never guessed" ([string](Get-HyVeeCarryRow $noStore $noStore.item '2026-07-14' '2026-09-19')['store_id'] -eq '')
+  $labelOnly = [pscustomobject]@{ item='X'; source_ad='Aisles Online (Omaha #1, staples300)' }
+  _T "MUST NOT FIRE on a store NAME: 'Omaha #1' is not an id, so the row stays unstamped" ((Get-HyVeeRowStoreId $labelOnly) -eq '')
+  $dictRow = [ordered]@{ item='Y'; source_ad='Aisles Online current shelf price (storeId 1465, Omaha #01)'; store_id='' }
+  _T "a PRESENT but empty store_id wins over the text (the field is the stamp, the text is history)" ((Get-HyVeeRowStoreId $dictRow) -eq '')
+  _T "Get-HyVeeRowStoreId reads an ordered row and a JSON row the same way" (((Get-HyVeeRowStoreId ([ordered]@{ source_ad='(storeId 1466, Omaha #02)' })) -eq '1466') -and ((Get-HyVeeRowStoreId $old1465) -eq '1465'))
+  $stWork = New-Object System.Collections.ArrayList
+  [void]$stWork.Add([pscustomobject]@{ name='Hy-Vee Large Eggs'; size='dozen'; prow=$old1465; pid=4401; cid='eggs' })
+  $stFetch = { param($productId) [pscustomobject]@{ sp = [pscustomobject]@{ price=3.19; basePrice=3.19; priceMultiple=1; basePriceMultiple=1; onSale=$false; isWeighted=$false }; soldBy='EA'; rawSize='12 ct'; tagPrice=3.19; ecomTagPrice=3.19; tagQty=1 } }
+  $stPass = Invoke-HyVeeWorkPass -Work $stWork -AskIndex $null -Fetch $stFetch -Today '2026-09-19' -Units @{} -SourceLabel 'fixture' -StoreId '1466' -SleepMs 0
+  $stRow = @($stPass.Deals)[0]
+  _T "MUST FIRE: a row READ from the API is stamped with the storeId that answered (1466), and re-reading a 1465 row moves it to 1466" (($stPass.Fresh -eq 1) -and ([string]$stRow['store_id'] -eq '1466') -and ($stRow['as_of'] -eq '2026-09-19'))
+  _T 'a fresh row cannot be written without a store: -StoreId is mandatory and non-empty' ($(try { [void](Invoke-HyVeeWorkPass -Work $stWork -AskIndex $null -Fetch $stFetch -Today '2026-09-19' -Units @{} -SourceLabel 'x' -StoreId '' -SleepMs 0); $false } catch { $true }))
+
+  # --- OLDEST FIRST, THE WRONG STORE FIRST -------------------------------------------------------------
+  $ow = New-Object System.Collections.ArrayList
+  function _OW([string]$n, [string]$asOf, [string]$sid, [int]$wpid, [string]$req = '') {
+    $pr = [ordered]@{ item = $n; ad_price = '$1.00'; size = '1 ct'; source_ad = 'x'; store_id = $sid; as_of = $asOf }
+    if ($req) { $pr['requeued'] = $req }
+    [void]$ow.Add([pscustomobject]@{ name = $n; size = '1 ct'; prow = [pscustomobject]$pr; pid = $wpid; cid = '' })
+  }
+  _OW 'on-target old'       '2026-09-01' '1466' 1          # 0
+  _OW 'on-target newest'    '2026-09-18' '1466' 2          # 1
+  _OW 'off-target NEWER'    '2026-09-10' '1465' 3          # 2
+  _OW 'unstamped'           '2026-09-12' ''     4          # 3
+  _OW 'no id, oldest of all' '2026-07-14' '1465' 0         # 4
+  _OW 'on-target requeued'  '2026-09-17' '1466' 6 'below-shelf-tag'  # 5
+  _OW 'on-target oldest'    '2026-08-20' '1466' 7          # 6
+  [void]$ow.Add([pscustomobject]@{ name = 'never priced'; size = ''; prow = $null; pid = 8; cid = '' })   # 7
+  $o1 = Get-HyVeeAskOrder -Work $ow -Budget 3 -TargetStoreId '1466'
+  _T "MUST FIRE: an off-target row (1465, read 09-10) is asked BEFORE an on-target row read three weeks earlier (08-20)" ($o1.Index.ContainsKey(2) -and -not $o1.Index.ContainsKey(6))
+  _T "the first bucket is off-target, unstamped, never-priced and re-queued, oldest first: order 7,2,3 at a budget of 3" ((@($o1.Order) -join ',') -eq '7,2,3')
+  $o2 = Get-HyVeeAskOrder -Work $ow -Budget 7 -TargetStoreId '1466'
+  _T "a shelf-tag re-queue comes ahead of every plain on-target row, then on-target OLDEST first (08-20, 09-01, 09-18)" ((@($o2.Order) -join ',') -eq '7,2,3,5,6,0,1')
+  _T "MUST NOT FIRE: a product with no id is never in the order, whatever its age (it cannot be asked)" ((-not $o2.Index.ContainsKey(4)) -and ($o2.Askable -eq 7))
+  _T "the slice reports how many of its asks were off target or unstamped (3 of 7; 3 askable in all)" (($o2.OffTargetInSlice -eq 3) -and ($o2.OffTargetAskable -eq 3))
+  $o3 = Get-HyVeeAskOrder -Work $ow -Budget 2 -TargetStoreId '1466' -ExpiringIdx @{ 1 = $true }
+  _T "an expiring sale still goes first of all (the 2026-08-22 rule survives the new order)" ((@($o3.Order) -join ',') -eq '1,7' -and $o3.ExpiringInSlice -eq 1)
+  $o4 = Get-HyVeeAskOrder -Work $ow -Budget 0 -TargetStoreId '1466'
+  _T "a budget of 0 asks nothing (and an empty order is not an error)" ($o4.Index.Count -eq 0)
+
+  # --- AGE EXPIRY: exactly MaxCarryDays is kept, one day past it is dropped ------------------------------
+  $fixCarry = [int](Get-PolicyMaxCarryDays)
+  _T "the carry limit is read from capture-policy-lib ($fixCarry days)" ($fixCarry -eq 90)
+  _T "MUST NOT FIRE at the bar: a row read exactly 90 days ago (2026-06-21 on 2026-09-19) is KEPT" (-not (Test-HyVeeCarryExpired -AsOf '2026-06-21' -Today '2026-09-19' -MaxCarryDays 90))
+  _T "MUST FIRE one day past the bar: a row read 91 days ago (2026-06-20) is EXPIRED" (Test-HyVeeCarryExpired -AsOf '2026-06-20' -Today '2026-09-19' -MaxCarryDays 90)
+  _T "an unparseable date is not judged here (the caller counts it; the board's age gate withholds it)" (-not (Test-HyVeeCarryExpired -AsOf 'last week' -Today '2026-09-19' -MaxCarryDays 90))
+  $ew = New-Object System.Collections.ArrayList
+  foreach ($d in @('2026-06-20', '2026-06-21', '2026-09-18')) {
+    $pr = [pscustomobject]@{ item = "aged $d"; ad_price = '$1.00'; size = '1 ct'; regular = 1.0; source_ad = 'x'; as_of = $d }
+    [void]$ew.Add([pscustomobject]@{ name = "aged $d"; size = '1 ct'; prow = $pr; pid = 0; cid = '' })
+  }
+  $ePass = Invoke-HyVeeWorkPass -Work $ew -AskIndex @{} -Fetch $stFetch -Today '2026-09-19' -Units @{} -SourceLabel 'x' -StoreId '1466' -MaxCarryDays 90 -SleepMs 0
+  $eNames = @($ePass.Deals | ForEach-Object { [string]$_['item'] })
+  _T "MUST FIRE: the pass DROPS the 91-day row, keeps the 90-day and the 1-day rows, and counts the drop" (($ePass.Expired -eq 1) -and ($eNames -notcontains 'aged 2026-06-20') -and ($eNames -contains 'aged 2026-06-21') -and ($eNames -contains 'aged 2026-09-18'))
+  _T "the drop is named in capture_terms, not silent" (@($ePass.CaptureTerms | Where-Object { $_['outcome'] -eq 'expired' }).Count -eq 1)
+  $e0 = Invoke-HyVeeWorkPass -Work $ew -AskIndex @{} -Fetch $stFetch -Today '2026-09-19' -Units @{} -SourceLabel 'x' -StoreId '1466' -MaxCarryDays 0 -SleepMs 0
+  _T "CLEAN TWIN: -MaxCarryDays 0 (the old behaviour, never used by the run) still writes all three" (@($e0.Deals).Count -eq 3)
+  $agedAsked = New-Object System.Collections.ArrayList
+  [void]$agedAsked.Add([pscustomobject]@{ name = 'Hy-Vee Large Eggs'; size = 'dozen'; prow = ([pscustomobject]@{ item = 'Hy-Vee Large Eggs'; ad_price = '$2.99'; size = 'dozen'; regular = 2.99; source_ad = 'x'; as_of = '2026-05-01' }); pid = 4401; cid = 'eggs' })
+  $aPass = Invoke-HyVeeWorkPass -Work $agedAsked -AskIndex $null -Fetch $stFetch -Today '2026-09-19' -Units @{} -SourceLabel 'x' -StoreId '1466' -MaxCarryDays 90 -SleepMs 0
+  _T "CLEAN TWIN: an old row the store ANSWERS for today is re-read, not expired" (($aPass.Fresh -eq 1) -and ($aPass.Expired -eq 0))
+
+  # --- THE SHELF-TAG REFUSAL RE-QUEUES, IT NEVER DELETES ---------------------------------------------
+  # The founding row: Hy-Vee's own 100% apple juice, productId 24371, deleted from the file by a refusal.
+  $aj = [pscustomobject]@{ item='Hy-Vee 100% Apple Juice'; ad_price='$2.79'; size='64 fl oz'; regular=2.79; current_price=2.79; source_ad='Aisles Online current shelf price (storeId 1466, Omaha #02)'; store_id='1466'; as_of='2026-09-10'; product_id=24371 }
+  $ajWork = New-Object System.Collections.ArrayList
+  [void]$ajWork.Add([pscustomobject]@{ name=$aj.item; size='64 fl oz'; prow=$aj; pid=24371; cid='apple-juice' })
+  $belowTag = { param($productId) [pscustomobject]@{ sp = [pscustomobject]@{ price=1.99; basePrice=2.79; priceMultiple=1; basePriceMultiple=1; onSale=$true; isWeighted=$false }; soldBy='EA'; rawSize='64 fl oz'; tagPrice=2.79; ecomTagPrice=2.79; tagQty=1 } }
+  $tPass = Invoke-HyVeeWorkPass -Work $ajWork -AskIndex $null -Fetch $belowTag -Today '2026-09-19' -Units @{} -SourceLabel 'x' -StoreId '1466' -MaxCarryDays 90 -SleepMs 0
+  $tRow = @($tPass.Deals | Where-Object { [int]$_['product_id'] -eq 24371 })
+  _T "MUST FIRE: a shelf-tag refusal on productId 24371 keeps the product IN the file (the refusal used to delete it)" ($tRow.Count -eq 1)
+  _T "the refused answer is discarded: the row is the last trusted read (2.79, as_of 2026-09-10, not_reverified), never the 1.99 below the tag" (($tRow.Count -eq 1) -and ($tRow[0]['ad_price'] -eq '$2.79') -and ($tRow[0]['as_of'] -eq '2026-09-10') -and ([bool]$tRow[0]['not_reverified']))
+  _T "it is RE-QUEUED and counted: requeued=below-shelf-tag, requeued_on today, TagRefused 1, Requeued 1, not a failure" (($tRow.Count -eq 1) -and ($tRow[0]['requeued'] -eq 'below-shelf-tag') -and ($tRow[0]['requeued_on'] -eq '2026-09-19') -and ($tPass.TagRefused -eq 1) -and ($tPass.Requeued -eq 1) -and ($tPass.Fail -eq 0) -and ($tPass.Fresh -eq 0))
+  _T "the refusal is still named in capture_terms, with the re-queue" (@($tPass.CaptureTerms | Where-Object { $_['outcome'] -eq 'refused-below-shelf-tag' -and $_['requeued'] -and $_['row_count'] -eq 1 }).Count -eq 1)
+  $rqWork = New-Object System.Collections.ArrayList
+  [void]$rqWork.Add([pscustomobject]@{ name='plain on-target, older'; size='1 ct'; prow=([pscustomobject]@{ item='p'; store_id='1466'; as_of='2026-09-01' }); pid=11; cid='' })
+  [void]$rqWork.Add([pscustomobject]@{ name=$aj.item; size='64 fl oz'; prow=([pscustomobject]$tRow[0]); pid=24371; cid='apple-juice' })
+  _T "and the NEXT run asks it FIRST, ahead of an older on-target product" ((@((Get-HyVeeAskOrder -Work $rqWork -Budget 1 -TargetStoreId '1466').Order) -join ',') -eq '1')
+  $tCarry = Get-HyVeeCarryRow ([pscustomobject]$tRow[0]) $aj.item '2026-09-10' '2026-09-20'
+  _T "the re-queue survives a day it is not asked (the carry keeps requeued)" ($tCarry['requeued'] -eq 'below-shelf-tag')
+  $okTag = { param($productId) [pscustomobject]@{ sp = [pscustomobject]@{ price=2.59; basePrice=2.79; priceMultiple=1; basePriceMultiple=1; onSale=$true; isWeighted=$false }; soldBy='EA'; rawSize='64 fl oz'; tagPrice=2.59; ecomTagPrice=2.59; tagQty=1 } }
+  $rqWork2 = New-Object System.Collections.ArrayList
+  [void]$rqWork2.Add([pscustomobject]@{ name=$aj.item; size='64 fl oz'; prow=([pscustomobject]$tRow[0]); pid=24371; cid='apple-juice' })
+  $okPass = Invoke-HyVeeWorkPass -Work $rqWork2 -AskIndex $null -Fetch $okTag -Today '2026-09-20' -Units @{} -SourceLabel 'x' -StoreId '1466' -SleepMs 0
+  _T "CLEAN TWIN: once the store's answer agrees with its tag the row is fresh again and the re-queue mark is gone" (($okPass.Fresh -eq 1) -and (-not @($okPass.Deals)[0].Contains('requeued')) -and (@($okPass.Deals)[0]['ad_price'] -eq '$2.59'))
+  $newWork = New-Object System.Collections.ArrayList
+  [void]$newWork.Add([pscustomobject]@{ name='brand new product'; size=''; prow=$null; pid=555; cid='apple-juice' })
+  $nPass = Invoke-HyVeeWorkPass -Work $newWork -AskIndex $null -Fetch $belowTag -Today '2026-09-19' -Units @{} -SourceLabel 'x' -StoreId '1466' -SleepMs 0
+  _T "a never-priced product refused below its tag writes no row (nothing trusted to carry) but is counted re-queued, not failed" ((@($nPass.Deals).Count -eq 0) -and ($nPass.Requeued -eq 1) -and ($nPass.Fail -eq 0))
+
+  # --- PRODUCT IDS RECOVERED FROM THIS LANE'S OWN HISTORY -------------------------------------------
+  $htmp = Join-Path ([IO.Path]::GetTempPath()) ('hvhist-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $htmp -Force -ErrorAction Stop | Out-Null
+  try {
+    $h1 = [ordered]@{ deals = @(
+      [ordered]@{ item = 'Hy-Vee Mild Green Chiles'; size = '7 oz'; product_id = 3301 },
+      [ordered]@{ item = 'Dinty Moore Beef Stew'; size = '38 oz'; product_id = 5501 },
+      [ordered]@{ item = 'Twin Name'; size = '16 oz'; product_id = 7001 }) }
+    $h2 = [ordered]@{ deals = @(
+      [ordered]@{ item = 'Twin Name'; size = '16 oz'; product_id = 7002 },
+      [ordered]@{ item = 'Dinty Moore Beef Stew'; size = '15 oz'; product_id = 5500 }) }
+    [IO.File]::WriteAllText((Join-Path $htmp 'hyvee-regular-2026-08-12.json'), ($h1 | ConvertTo-Json -Depth 5))
+    [IO.File]::WriteAllText((Join-Path $htmp 'hyvee-regular-2026-08-10.json'), ($h2 | ConvertTo-Json -Depth 5))
+    [IO.File]::WriteAllText((Join-Path $htmp 'hyvee-regular-2026-08-01.json'), '{ not json')
+    $hFiles = @(Get-ChildItem (Join-Path $htmp 'hyvee-regular-*.json') | Sort-Object Name -Descending)
+    $need = @{ 'hy-vee mild green chiles|7 oz' = $true; 'dinty moore beef stew|38 oz' = $true; 'twin name|16 oz' = $true; 'never had one|1 ct' = $true }
+    $hr = Get-HyVeeHistoryProductIds -Files $hFiles -Needed $need
+    _T "MUST FIRE: an id-less row is given back the id this lane priced its SAME NAME AND SIZE with (3301, from the 08-12 file)" ($hr.Map.ContainsKey('hy-vee mild green chiles|7 oz') -and $hr.Map['hy-vee mild green chiles|7 oz'].pid -eq 3301 -and $hr.Map['hy-vee mild green chiles|7 oz'].file_date -eq '2026-08-12')
+    _T "the SIZE is part of the key: Dinty Moore 38 oz gets 5501, never the 15 oz's 5500" ($hr.Map['dinty moore beef stew|38 oz'].pid -eq 5501)
+    _T "MUST NOT FIRE on a disagreement: two files naming two ids for one name and size recover NOTHING, and it is counted" ((-not $hr.Map.ContainsKey('twin name|16 oz')) -and ($hr.Conflicts -eq 1))
+    _T "a key no file ever priced stays unrecovered, and an unreadable file is counted, not fatal (2 read, 1 unreadable)" ((-not $hr.Map.ContainsKey('never had one|1 ct')) -and ($hr.Scanned -eq 2) -and ($hr.Unreadable -eq 1))
+    $hr0 = Get-HyVeeHistoryProductIds -Files $hFiles -Needed @{}
+    _T "nothing needed, nothing read" ($hr0.Scanned -eq 0)
+  } finally { Remove-Item -LiteralPath $htmp -Recurse -Force -ErrorAction SilentlyContinue }
+  $recW = New-Object System.Collections.ArrayList
+  [void]$recW.Add([pscustomobject]@{ name='Hy-Vee Mild Green Chiles'; size='7 oz'; prow=([pscustomobject]@{ item='Hy-Vee Mild Green Chiles'; ad_price='$1.29'; size='7 oz'; regular=1.29; source_ad='Aisles Online current shelf price (storeId 1465, Omaha #01)'; as_of='2026-08-12' }); pid=3301; cid=''; pidFrom='history'; pidFile='2026-08-12' })
+  $recP = Invoke-HyVeeWorkPass -Work $recW -AskIndex @{} -Fetch $stFetch -Today '2026-09-19' -Units @{} -SourceLabel 'x' -StoreId '1466' -MaxCarryDays 90 -SleepMs 0
+  $recRow = @($recP.Deals)[0]
+  _T "a recovered id is written onto the carried row with where it came from, so tomorrow's file holds it" (($recRow['product_id'] -eq 3301) -and ($recRow['product_id_recovered_from'] -eq 'hyvee-regular-2026-08-12') -and ($recP.PidRecoveredStamped -eq 1))
+  _T "CLEAN TWIN: the recovered row keeps its OWN store (1465), so the board's store gate still refuses it until it is re-read" ([string]$recRow['store_id'] -eq '1465')
+
+  # --- refresh-hyvee-links.ps1 STAMPS THE STORE FROM THE LIBRARY -------------------------------------
+  $lnkTmp = Join-Path ([IO.Path]::GetTempPath()) ('hvlnk-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $lnkTmp -Force -ErrorAction Stop | Out-Null
+  try {
+    $sj = [ordered]@{ stores = @([ordered]@{ name = 'Hy-Vee'; store_identity = [ordered]@{ store_id = 1466; location_id = 'loc'; label = 'Omaha #02' } }) }
+    [IO.File]::WriteAllText((Join-Path $lnkTmp 'stores.json'), ($sj | ConvertTo-Json -Depth 5))
+    _T "the link snapshot's verified stamp names the store the library names (1466)" ((Get-HyVeeVerifiedLabel -Root $lnkTmp -Date '2026-09-19') -eq '2026-09-19 Hy-Vee GraphQL (storeId 1466, current shelf price)')
+  } finally { Remove-Item -LiteralPath $lnkTmp -Recurse -Force -ErrorAction SilentlyContinue }
+  # The needle is built by concatenation so this file can never match itself (rules: a self-test that greps its
+  # own source cannot fail). It reads the OTHER file, the one that carried the literal.
+  $lnkSrc = [IO.File]::ReadAllText((Join-Path $root 'refresh-hyvee-links.ps1'))
+  $needle = 'store' + 'Id 14' + '65'
+  _T "MUST FIRE on the founding literal: refresh-hyvee-links.ps1 no longer types a storeId and takes its stamp from Get-HyVeeVerifiedLabel" ((-not $lnkSrc.Contains($needle)) -and ($lnkSrc -match 'Get-HyVeeVerifiedLabel'))
 
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
@@ -811,21 +1191,22 @@ foreach ($r in $prevRows) {
   # written out not_reverified - carrying yesterday's price with no way to check it. The link is not the only
   # place a product identity lives; the row stamped one when it was last priced. Absence of a link is not
   # absence of knowledge (same lesson as the Family Fare carry-forward).
-  if ($r.product_id) { $wpid = [int]$r.product_id }
+  $wfrom = ''
+  if ($r.product_id) { $wpid = [int]$r.product_id; $wfrom = 'row' }
   # a stored link still WINS: it is the product we publish a "See item" chip for, so it is what the price must
   # describe. Only the exact name+size link, or an unambiguous name, may override the row's own id.
-  if ($idByName.ContainsKey($k)) { $wpid = [int]$idByName[$k].pid; $wcid = [string]$idByName[$k].cid }
+  if ($idByName.ContainsKey($k)) { $wpid = [int]$idByName[$k].pid; $wcid = [string]$idByName[$k].cid; $wfrom = 'link' }
   else {
     $byNm = @($idByName.Values | Where-Object { $_.nm -eq $kn })
-    if ($byNm.Count -eq 1) { $wpid = [int]$byNm[0].pid; $wcid = [string]$byNm[0].cid }
+    if ($byNm.Count -eq 1) { $wpid = [int]$byNm[0].pid; $wcid = [string]$byNm[0].cid; $wfrom = 'link' }
   }
-  [void]$work.Add([pscustomobject]@{ name=$nm; size=[string]$r.size; prow=$r; pid=$wpid; cid=$wcid })
+  [void]$work.Add([pscustomobject]@{ name=$nm; size=[string]$r.size; prow=$r; pid=$wpid; cid=$wcid; pidFrom=$wfrom; pidFile='' })
 }
 foreach ($k in $idByName.Keys) {
   if ($seenName.ContainsKey($idByName[$k].nm)) { continue }
   $seenName[$idByName[$k].nm] = $true
   $e = $pd.($idByName[$k].cid).'Hy-Vee'
-  [void]$work.Add([pscustomobject]@{ name=[string]$e.name; size=''; prow=$null; pid=$idByName[$k].pid; cid=$idByName[$k].cid })
+  [void]$work.Add([pscustomobject]@{ name=[string]$e.name; size=''; prow=$null; pid=$idByName[$k].pid; cid=$idByName[$k].cid; pidFrom='link'; pidFile='' })
 }
 
 # ---- THIRD SOURCE: ADJUDICATED CATALOGUE ADDITIONS -------------------------------------------------
@@ -865,7 +1246,7 @@ if (Test-Path $addF) {
       if ($seenPid.ContainsKey([string]$apid) -or ($anm -ne '' -and $seenName.ContainsKey($anm.ToLower()))) { $addDup++; continue }
       $seenPid[[string]$apid] = $true
       if ($anm -ne '') { $seenName[$anm.ToLower()] = $true }
-      [void]$work.Add([pscustomobject]@{ name=$anm; size=''; prow=$null; pid=$apid; cid=[string]$a.commodity })
+      [void]$work.Add([pscustomobject]@{ name=$anm; size=''; prow=$null; pid=$apid; cid=[string]$a.commodity; pidFrom='catalog-add'; pidFile='' })
       $addWork++
     }
   }
@@ -873,9 +1254,46 @@ if (Test-Path $addF) {
 if ($addWork -gt 0 -or $addDup -gt 0) {
   Write-Output ("Hy-Vee: {0} adjudicated catalogue addition(s) joined the work list ({1} already covered by the refresh)" -f $addWork, $addDup)
 }
+# ---- FOURTH SOURCE OF A PRODUCT ID: THIS LANE'S OWN HISTORY (2026-09-19) ----------------------------
+# A row with no product id can never be re-asked, however big the budget, and the board's 14-day publish
+# limit withholds it once its last read ages out - so every such row is a Hy-Vee cell the board will lose.
+# Most of them had an id once: the pre-2026-08-22 carry copied ad_price and dropped product_id. The files
+# that still hold it are this lane's own outputs, so the id is the one this lane itself asked the store with
+# for a row of the SAME NAME AND SIZE. Get-HyVeeHistoryProductIds refuses any key two files disagree on, and
+# the size cross-check in the pass still judges the id the day it is asked. Bounded to files inside
+# MaxCarryDays: a row older than that is expiring anyway. Measured on the 2026-09-18 file: 744 of 1,006
+# id-less rows recovered, 0 conflicts, 65 files parsed in about 2 s.
+$hvPidRecovered = 0; $hvPidConflicts = 0
+try {
+  $hvHistDays = 90
+  try { . (Join-Path $root 'capture-policy-lib.ps1'); $hvHistDays = [int](Get-PolicyMaxCarryDays) } catch { }
+  $hvNeed = @{}
+  foreach ($w in $work) {
+    if ([int]$w.pid -gt 0 -or -not $w.prow) { continue }
+    $hvNeed[([string]$w.name).ToLower().Trim() + '|' + ([string]$w.size).Trim()] = $true
+  }
+  if ($hvNeed.Count -gt 0) {
+    $hvFloor = ([datetime]::ParseExact($todayS, 'yyyy-MM-dd', $null)).AddDays(-$hvHistDays).ToString('yyyy-MM-dd')
+    $hvHistFiles = @(Get-ChildItem (Join-Path $regDir 'hyvee-regular-*.json') -EA SilentlyContinue |
+      Where-Object { $_.BaseName -match '^hyvee-regular-(\d{4}-\d{2}-\d{2})$' -and $Matches[1] -ge $hvFloor } | Sort-Object Name -Descending)
+    $hvHist = Get-HyVeeHistoryProductIds -Files $hvHistFiles -Needed $hvNeed
+    $hvPidConflicts = [int]$hvHist.Conflicts
+    foreach ($w in $work) {
+      if ([int]$w.pid -gt 0 -or -not $w.prow) { continue }
+      $hk = ([string]$w.name).ToLower().Trim() + '|' + ([string]$w.size).Trim()
+      if ($hvHist.Map.ContainsKey($hk)) {
+        $w.pid = [int]$hvHist.Map[$hk].pid; $w.pidFrom = 'history'; $w.pidFile = [string]$hvHist.Map[$hk].file_date
+        $hvPidRecovered++
+      }
+    }
+    Write-Output ("Hy-Vee: product ids recovered from this lane's own history: " + $hvPidRecovered + " of " + $hvNeed.Count + " id-less row key(s), over " + $hvHist.Scanned + " file(s) since " + $hvFloor + " (" + $hvPidConflicts + " key(s) refused: two files gave two different ids; " + $hvHist.Unreadable + " file(s) unreadable)")
+  }
+} catch {
+  Write-Warning ("Hy-Vee: product-id recovery from history did not run (" + $_.Exception.Message + ") - those rows stay un-askable this run, exactly as before")
+}
 if ($Quick) { $work = @($work | Where-Object { $_.pid -gt 0 } | Select-Object -First 10) }
 
-# ---- HOW MUCH WE MAY ASK THE STORE FOR TODAY --------------------------------------------------------
+# ---- HOW MUCH WE MAY ASK THE STORE FOR TODAY, AND WHICH PRODUCTS --------------------------------------
 # The wall-clock cap is hoisted above the budget so the two numbers can argue with each other in ONE
 # place. 14 minutes at roughly 0.6s a product (one request plus the 120ms courtesy sleep) is about 1,400
 # products: the real ceiling on any budget, whatever the policy computes. A budget above it would be a
@@ -883,98 +1301,111 @@ if ($Quick) { $work = @($work | Where-Object { $_.pid -gt 0 } | Select-Object -F
 $MAXMIN = 14
 $HV_SEC_PER_PRODUCT = 0.6
 
-# CAPTURE POLICY BUDGET (added 2026-08-20, repaired 2026-08-22). Hy-Vee re-verified 1010 products a run
-# at baseline and the coverage ledger has it REGRESSED to 356 - a lane pulling as hard as it can until
-# something upstream pushes back. Family Fare showed what that eventually costs: Freshop now answers its
-# search with HTTP 400 / error_code 429. Asking for less, on a schedule, is the fix.
+# THE BUDGET HISTORY, SHORT. 2026-08-20: a budget was added and REPLACED the work list with the slice, so
+# the file collapsed to 7 rows (fixed 2026-08-22: the slice is a set of indices; every product is still
+# written). 2026-08-22: it took the SEARCH-TERM count; fixed to this lane's own PRODUCT count over the
+# 90-day quarter, 18 a day. 2026-09-19: 18 a day was the defect - see Get-HyVeeProductBudget's header and
+# design\PLAN-board-accuracy-2026-09-19.md. The budget is now ceil(askable / RotationDays) capped by the
+# store's call cap, and the products asked are chosen OLDEST FIRST by Get-HyVeeAskOrder, off-target and
+# re-queued rows ahead of the rest, instead of by a rotation cursor.
 #
-# TWO THINGS WERE WRONG WITH THE FIRST VERSION, AND BOTH ARE FIXED HERE.
-#
-#   1. IT LIMITED WRITING, NOT ASKING. It ended with `$work = @($hvSlice.Items)`, replacing the work list
-#      with today's slice - and every row of the output file is built by looping over $work, so the ~1,547
-#      products outside the slice were dropped from the FILE, not merely left unasked. 7 rows against
-#      1,554; the THROTTLE-WIPEOUT guard quarantined the file and exited 2, which is exactly what it is
-#      for. The principle this broke was already written down twelve lines further on, about the
-#      wall-clock cap: THE CAP IS MEANT TO STOP US ASKING, NOT STOP US WRITING. A budget is the same kind
-#      of thing. So the slice is now a set of INDICES into an unchanged work list, and a product outside
-#      it is carried forward exactly as a capped product is - through Get-HyVeeCarryRow, in the file,
-#      marked not_reverified.
-#
-#   2. IT WAS THE WRONG NUMBER. It took Get-CapturePlan's TermBudget, which counts SEARCH TERMS
-#      (596/90 = 7 a day). This lane rotates by PRODUCT ID. See Get-HyVeeProductBudget: 7 a day is a
-#      222-day rotation against a 90-day carry, so ~60% of rows would expire before their turn - the very
-#      starvation the 90-day carry exists to prevent. The budget now comes from this lane's own
-#      population with the quarter read from the policy: ceil(1554/90) = 18 a day, plus any expiring sale.
+# THE ROTATION CURSOR (hyvee-rotation-cursor.json) NO LONGER CHOOSES ANYTHING. Oldest-first needs no
+# position: the as_of on each row IS the queue, and a missed day heals because the products it did not ask
+# stay the oldest. Nothing else reads the cursor's index (commit-capture-cursor.ps1 only names the file in a
+# comment). It is still STEPPED once a day through Step-HyVeeProductCursor, from 0 to the number of products
+# asked, because that call keeps its guards (no replay, one advance a day, no advance when every request
+# failed) and writes the daily Hy-Vee line in capture-cursor-log.jsonl, which is the log the board-accuracy
+# triage counted "days the cursor moved" from.
 $askIndex = $null       # $null = unbudgeted, ask about everything
 $hvBudget = 0
+$hvOrder = $null
+$hvCap = $null
+$hvPlan = $null
+$askablePop = @($work | Where-Object { [int]$_.pid -gt 0 }).Count
 if (-not $Quick) {
   try {
     . (Join-Path $root 'capture-policy-lib.ps1')
     $hvPlan = Get-CapturePlan -Store 'Hy-Vee' -Today $todayS
-    $hvAll = @($work); $hvN = $hvAll.Count
+    $hvRotDays = [int]$hvPlan.RotationDays
+    $hvCallCap = [int](Get-StoreCallCap 'Hy-Vee')
     $hvMaxAskable = [int][math]::Floor(($MAXMIN * 60.0) / $HV_SEC_PER_PRODUCT)
-    $hvBudget = Get-HyVeeProductBudget -Population $hvN -QuarterDays ([int]$hvPlan.QuarterDays) -Expiries (@($hvPlan.SaleExpiries).Count) -MaxAskable $hvMaxAskable
-    if ($hvBudget -gt 0 -and $hvN -gt $hvBudget) {
-      # Rotate rather than always taking the head of the list, or the tail is never
-      # re-verified and ages out silently - the exact shape of the Sam's 19-day file.
-      $hvCur = 0
-      $hvCurFile = Join-Path $OutDir 'hyvee-rotation-cursor.json'
-      if (Test-Path $hvCurFile) { try { $hvCur = [int](ConvertFrom-Json ([IO.File]::ReadAllText($hvCurFile))).next_index } catch { } }
-      # THE EXPIRING SALES GO FIRST (2026-08-22). The budget above counts one slot per sale reverting
-      # today, but the slot was spent on whatever sat at the cursor; the product whose sale just ended
-      # waited its quarter. A product answers to its commodity id (from product-urls) - and, for a row
-      # with no stored link, to the commodity whose product-urls name matches its name. Brad's rule:
-      # "reprice whenever an ad price / sale price / rollback price / instant-savings price drops off."
-      $hvExpNames = @{}
-      foreach ($xid in @($hvPlan.SaleExpiries)) {
-        $xe = $pd.$xid.'Hy-Vee'
-        if ($xe -and $xe.name) { $hvExpNames[([string]$xe.name).ToLower().Trim()] = [string]$xid }
-      }
-      # SLICE OVER POSITIONS, NOT OVER THE ITEMS THEMSELVES. Select-ExpiryFirstSlice returns the chosen
-      # items, and the old code used that array AS the work list. Wrapping each product with its index
-      # means the slice can only ever answer "which products do we ASK about today"; it is structurally
-      # incapable of answering "which products EXIST", which is the question the founding bug let it
-      # answer by accident.
-      $hvSlots = New-Object System.Collections.Generic.List[object]
-      for ($i = 0; $i -lt $hvN; $i++) { [void]$hvSlots.Add([pscustomobject]@{ i = $i; w = $hvAll[$i] }) }
-      $hvSlice = Select-ExpiryFirstSlice -Items $hvSlots.ToArray() -Expiring @($hvPlan.SaleExpiries) -Budget $hvBudget -CursorStart $hvCur -KeyOf {
-        param($s)
-        $ks = @()
-        if ($s.w.cid) { $ks += [string]$s.w.cid }
-        $nk = ([string]$s.w.name).ToLower().Trim()
-        if ($hvExpNames.ContainsKey($nk)) { $ks += $hvExpNames[$nk] }
-        return $ks
-      }
-      $askIndex = @{}
-      foreach ($s in @($hvSlice.Items)) { $askIndex[[int]$s.i] = $true }
-      if ($hvSlice.Prepended -gt 0) {
-        Write-Output ("Hy-Vee: " + $hvSlice.Prepended + " product(s) for " + @($hvPlan.SaleExpiries).Count + " expiring sale(s) placed at the FRONT of today's slice: " + ((@($hvSlice.Items | Select-Object -First $hvSlice.Prepended) | ForEach-Object { $_.w.name }) -join '; '))
-      }
-      # Advance by the rotation positions actually walked, not the whole budget: the expiry
-      # products at the front were not rotation positions (Select-ExpiryFirstSlice reports it).
-      # The COMMIT is below, beside the run's own account of what it asked - see there for why it no
-      # longer waits for the file to land.
-      $script:HvCursorNext = [int]$hvSlice.CursorNext
-      $script:HvCursorFile = $hvCurFile
-      $script:HvCursorFrom = $hvCur
-      Write-Output ("Hy-Vee: capture-policy budget = $hvBudget product(s) to ASK about today (rotation $hvCur/$hvN; quarter $($hvPlan.QuarterDays)d; every one of the $hvN products is still written)")
+    $hvCap = Test-HyVeeCapacity -Population $askablePop -RotationDays $hvRotDays -Cap $hvCallCap
+    if (-not $hvCap.Ok) {
+      # SPOKEN, NEVER SILENTLY CLAMPED. The cap is capture-policy-lib's to move, with evidence; this lane
+      # says by how much it is short every run so the shortfall cannot hide behind a normal-looking day.
+      Write-Warning ("Hy-Vee: CAPACITY SHORTFALL - " + $hvCap.Why + ". Raising the cap is a capture-policy-lib change with evidence behind it (this lane re-verified 1,010 products in one run at baseline with no refusal).")
     }
+    $hvBudget = Get-HyVeeProductBudget -Population $askablePop -RotationDays $hvRotDays -Cap $hvCallCap -Expiries (@($hvPlan.SaleExpiries).Count) -MaxAskable $hvMaxAskable
+    # THE EXPIRING SALES GO FIRST (2026-08-22). A product answers to its commodity id (from product-urls) -
+    # and, for a row with no stored link, to the commodity whose product-urls name matches its name. Brad's
+    # rule: "reprice whenever an ad price / sale price / rollback price / instant-savings price drops off."
+    $hvExpIds = @{}
+    foreach ($xid in @($hvPlan.SaleExpiries)) { $hvExpIds[[string]$xid] = $true }
+    $hvExpNames = @{}
+    foreach ($xid in @($hvPlan.SaleExpiries)) {
+      $xe = $pd.$xid.'Hy-Vee'
+      if ($xe -and $xe.name) { $hvExpNames[([string]$xe.name).ToLower().Trim()] = [string]$xid }
+    }
+    $hvExpIdx = @{}
+    $wi = -1
+    foreach ($w in $work) {
+      $wi++
+      if (($w.cid -and $hvExpIds.ContainsKey([string]$w.cid)) -or $hvExpNames.ContainsKey(([string]$w.name).ToLower().Trim())) { $hvExpIdx[$wi] = $true }
+    }
+    $hvOrder = Get-HyVeeAskOrder -Work $work -Budget $hvBudget -TargetStoreId ([string]$StoreId) -ExpiringIdx $hvExpIdx
+    $askIndex = $hvOrder.Index
+    Write-Output ("Hy-Vee: capture-policy budget = $hvBudget product(s) to ASK about today = ceil($askablePop askable / $hvRotDays days), cap $hvCallCap, " +
+      "$(@($hvPlan.SaleExpiries).Count) expiring sale(s); chosen OLDEST FIRST: $($hvOrder.ExpiringInSlice) for an expiring sale, " +
+      "$($hvOrder.OffTargetInSlice) read at another store or unstamped (of $($hvOrder.OffTargetAskable) askable), every one of the $(@($work).Count) products is still written")
   } catch {
     Write-Warning ("Hy-Vee: capture-policy did not load (" + $_.Exception.Message + ") - running unbudgeted this pass")
+    $askIndex = $null
   }
 }
 
 $refreshable = @($work | Where-Object { $_.pid -gt 0 }).Count
 $askableToday = Get-HyVeeAskableCount -Work $work -AskIndex $askIndex
-Write-Output ("Hy-Vee: " + @($work).Count + " products (" + $refreshable + " refreshable via GraphQL; " + (@($work).Count - $refreshable) + " have no link so their price cannot be re-verified; " + $askableToday + " will be asked about today)")
+Write-Output ("Hy-Vee: " + @($work).Count + " products (" + $refreshable + " refreshable via GraphQL, " + $hvPidRecovered + " of them by a product id recovered from this lane's own history; " + (@($work).Count - $refreshable) + " hold no product id so their price cannot be re-verified; " + $askableToday + " will be asked about today)")
 
 # THE PASS ITSELF LIVES IN Invoke-HyVeeWorkPass, ABOVE -SelfTest. It was inline here until 2026-08-22,
 # which meant the code that decides what the FILE contains had no fixtures at all - and that is exactly
 # where the budget wipeout hid for two days. -Fetch is the only door to the network, so the fixtures
 # drive this exact text with a stub.
+$hvCarryDays = 90
+try { . (Join-Path $root 'capture-policy-lib.ps1'); $hvCarryDays = [int](Get-PolicyMaxCarryDays) } catch { }
+
+if ($DryRun) {
+  # NO REQUEST, NO WRITE. The pass runs against a store that answers nothing, so every product that would
+  # have been asked is counted as asked-and-unanswered and carried; the point is the shape of the file the
+  # carry, the expiry and the store stamp produce, and the order and budget above.
+  $dry = Invoke-HyVeeWorkPass -Work $work -AskIndex $askIndex -Today $todayS -PrevDate $prevDate `
+    -Units $units -SourceLabel $SRC_LABEL -StoreId ([string]$StoreId) -MaxCarryDays $hvCarryDays -MaxMinutes 1000 -SleepMs 0 `
+    -Fetch { param($productId) $null }
+  $dryRows = @($dry.Deals)
+  $byStoreDry = @{}
+  foreach ($r in $dryRows) { $k = [string]$r['store_id']; if (-not $k) { $k = 'unstamped' }; if (-not $byStoreDry.ContainsKey($k)) { $byStoreDry[$k] = 0 }; $byStoreDry[$k]++ }
+  $noIdRows = @($dryRows | Where-Object { -not $_.Contains('product_id') }).Count
+  $pubLimit = if ($hvPlan) { [int]$hvPlan.MaxPublishAgeDays } else { 14 }
+  $withinPub = 0
+  foreach ($r in $dryRows) { if (-not (Test-HyVeeCarryExpired -AsOf ([string]$r['as_of']) -Today $todayS -MaxCarryDays $pubLimit)) { $withinPub++ } }
+  Write-Output ("HYVEE-DRYRUN products=" + @($work).Count + " askable=" + $askablePop + " pid_recovered=" + $hvPidRecovered + " pid_conflicts=" + $hvPidConflicts +
+    " budget=" + $hvBudget + " need=" + $(if ($hvCap) { $hvCap.Need } else { 'n/a' }) + " cap=" + $(if ($hvCap) { $hvCap.Cap } else { 'n/a' }) +
+    " over=" + $(if ($hvCap) { $hvCap.Over } else { 'n/a' }))
+  $byStoreTxt = (($byStoreDry.Keys | Sort-Object) | ForEach-Object { "$_=$($byStoreDry[$_])" }) -join ' '
+  Write-Output ("HYVEE-DRYRUN rows_written=" + $dryRows.Count + " expired_past_" + $hvCarryDays + "d=" + $dry.Expired + " undated_carried=" + $dry.UndatedCarry +
+    " rows_without_product_id=" + $noIdRows + " rows_within_" + $pubLimit + "d_publish_limit=" + $withinPub + " of " + $dryRows.Count +
+    " by_store_id=" + $byStoreTxt)
+  if ($hvOrder) {
+    $firstTen = @($hvOrder.Order | Select-Object -First 10 | ForEach-Object { $w = $work[$_]; ('[' + $w.pid + '] ' + $w.name + ' (' + $(if ($w.prow) { [string]$w.prow.as_of + ', store ' + (Get-HyVeeRowStoreId $w.prow) } else { 'never priced' }) + ')') })
+    Write-Output ("HYVEE-DRYRUN first asks: " + ($firstTen -join '; '))
+  }
+  Write-Output 'HYVEE-DRYRUN-COMPLETE no request issued, nothing written'
+  exit 0
+}
+
 $startT = Get-Date
 $pass = Invoke-HyVeeWorkPass -Work $work -AskIndex $askIndex -Today $todayS -PrevDate $prevDate `
-  -Units $units -SourceLabel $SRC_LABEL -MaxMinutes $MAXMIN -StartTime $startT -SleepMs 120 `
+  -Units $units -SourceLabel $SRC_LABEL -StoreId ([string]$StoreId) -MaxCarryDays $hvCarryDays -MaxMinutes $MAXMIN -StartTime $startT -SleepMs 120 `
   -Fetch { param($productId) Get-HyVeeStoreProduct ([int]$productId) }
 
 $deals = $pass.Deals
@@ -986,29 +1417,21 @@ $newProd = $pass.NewProd; $mismatch = $pass.Mismatch; $capSkipped = $pass.CapSki
 $budgetSkipped = $pass.BudgetSkipped; $tagRefused = $pass.TagRefused
 $multRefused = $pass.MultRefused; $multDescriptive = $pass.MultDescriptive
 
-Write-Output ("Hy-Vee: " + $fresh + " refreshed today (" + $markdown + " marked down), " + $newProd + " newly priced, " + $stale + " not re-verified, " + $mismatch + " REFUSED (productId is a different size than our row), " + $capSkipped + " never asked (wall-clock cap), " + $budgetSkipped + " outside today's budget slice (carried, not dropped), " + $fail + " failed")
+Write-Output ("Hy-Vee: " + $fresh + " refreshed today (" + $markdown + " marked down), " + $newProd + " newly priced, " + $stale + " not re-verified, " + $mismatch + " REFUSED (productId is a different size than our row), " + $capSkipped + " never asked (wall-clock cap), " + $budgetSkipped + " outside today's budget slice (carried, not dropped), " + $pass.Expired + " carried row(s) past the " + $hvCarryDays + "-day carry DROPPED, " + $pass.Requeued + " re-queued after a shelf-tag refusal, " + $fail + " failed")
 
-# THE ROTATION COMMIT, AND IT NOW HAPPENS HERE - BEFORE THE WRITE, NOT AFTER IT (2026-08-22).
-# It used to be the last thing the run did, on the rule that "the cursor is a promise that those products
-# were actually re-verified, so it must never be written by a run that did not finish". That rule is right
-# about the direction of the danger and wrong about the event to hang it on, and the difference cost two
-# days of frozen Hy-Vee prices: the budget bug collapsed the file, the THROTTLE-WIPEOUT guard quarantined
-# it and exited 2 twelve lines before the commit, so the cursor was NEVER CREATED. Every run then re-read
-# 0, took the same seven products, and reported "0 refreshed, 7 not re-verified" forever. A refused write
-# refused the rotation as well, and that is what turned a bad day into a deadlock.
-# So the cursor now hangs on WHAT THE RUN ASKED, which is the thing the cursor is actually about, and the
-# judgement lives in Test-HyVeeCursorAdvance in capture-policy-lib beside the term-cursor guards: a run
-# that issued requests and got nothing back does NOT burn its slice, while a run whose whole slice had
-# nothing to ask does advance past it. Replay and one-per-day are enforced there too.
-if ($null -ne $script:HvCursorNext) {
+# THE DAILY CURSOR STEP (see the note above the budget: it no longer chooses products). It hangs on WHAT THE
+# RUN ASKED, never on the write, for the reason written 2026-08-22: a refused write that also refused the
+# rotation froze this lane for two days. Replay, one-per-day and "every request failed" are judged in
+# capture-policy-lib (Step-HyVeeProductCursor / Test-HyVeeCursorAdvance).
+if ($null -ne $hvOrder) {
   try {
     . (Join-Path $root 'capture-policy-lib.ps1')
-    $cs = Step-HyVeeProductCursor -Next $script:HvCursorNext -From $script:HvCursorFrom -Today $todayS -OutDir $OutDir `
+    $cs = Step-HyVeeProductCursor -Next ([int]$pass.Attempted) -From 0 -Today $todayS -OutDir $OutDir `
       -Attempted $pass.Attempted -Answered $pass.Answered -SliceSize $pass.SliceSize -SliceUnaskable $pass.SliceUnaskable
-    if ($cs.Advanced) { Write-Output ("Hy-Vee: rotation cursor advanced #$($cs.From) -> #$($cs.To) ($($cs.Reason))") }
-    else { Write-Warning ("Hy-Vee: rotation cursor HELD at #$($script:HvCursorFrom) - " + $cs.Reason) }
+    if ($cs.Advanced) { Write-Output ("Hy-Vee: daily step recorded ($($cs.To) product(s) asked; $($cs.Reason))") }
+    else { Write-Warning ("Hy-Vee: daily step NOT recorded - " + $cs.Reason) }
   } catch {
-    Write-Warning ("Hy-Vee: the rotation cursor could not be written (" + $_.Exception.Message + ") - the next run re-verifies this same slice; nothing is lost.")
+    Write-Warning ("Hy-Vee: the daily step could not be recorded (" + $_.Exception.Message + ") - the order is oldest-first, so nothing is lost.")
   }
 }
 # Reported on its own line, and only when non-zero, so the divisor class stays VISIBLE. The bug it guards
@@ -1016,12 +1439,16 @@ if ($null -ne $script:HvCursorNext) {
 # looked; a silent counter would recreate exactly that.
 if ($multDescriptive -gt 0 -or $multRefused -gt 0) {
   Write-Output ("Hy-Vee: priceMultiple reconciliation - " + $multDescriptive + " row(s) treated the multiple as DESCRIPTIVE (price already per-item, price == basePrice), " + $multRefused + " row(s) REFUSED (divided price landed under 40% of the regular price, so the divisor is more likely wrong than the promo is deep)")
+}
 # THE SHELF-TAG REFUSALS, NAMED. A count alone would have hidden what made this worth building: the two
 # rows it caught first were the same brand, both phantom markdowns of 40%+ off a tag that had not moved.
-Write-Output ("Hy-Vee: shelf-tag cross-check - " + $tagRefused + " row(s) REFUSED for pricing BELOW the store's own tagPrice (a price the till will not honour)")
-foreach ($x in $tagRefusedRows) {
-  Write-Output ("  below-tag: [{0}] '{1}' price {2} vs shelf tag {3}" -f $x.product_id, $x.item, $x.price, $x.tag)
-}
+# Printed on its own since 2026-09-19: it sat inside the priceMultiple `if` above, so a day with tag
+# refusals and no multibuy reconciliation printed nothing about them at all.
+if ($tagRefused -gt 0) {
+  Write-Output ("Hy-Vee: shelf-tag cross-check - " + $tagRefused + " row(s) REFUSED for pricing BELOW the store's own tagPrice (a price the till will not honour); " + $pass.Requeued + " re-queued to be asked first next run, their last trusted read carried")
+  foreach ($x in $tagRefusedRows) {
+    Write-Output ("  below-tag: [{0}] '{1}' price {2} vs shelf tag {3}" -f $x.product_id, $x.item, $x.price, $x.tag)
+  }
 }
 
 # COVERAGE. THE DENOMINATOR CHANGED ON 2026-08-22 AND THE NUMBERS BELOW ARE NOT COMPARABLE TO THE OLD ONES.
@@ -1038,7 +1465,8 @@ foreach ($x in $tagRefusedRows) {
 # THE HONEST DENOMINATOR FOR A BUDGETED LANE IS TODAY'S SLICE:
 #     Eligible = the products this run was ALLOWED to ask about today and holds an id to ask with
 #     Examined = the ones Aisles Online actually came back with a usable offer for
-# so a healthy budgeted day records 3 of 3, not 3 of 535. The two numbers separate only when something
+# so a healthy budgeted day records 3 of 3, not 3 of 535. (Since 2026-09-19 the slice is ~92 products a day, oldest
+# first, every one holding an id, so a healthy day reads about 92 of 92; the pair is unchanged.) The two numbers separate only when something
 # stopped us ASKING (the wall-clock cap) or stopped the store ANSWERING (GraphQL refusing), which is
 # precisely the truncation the ledger was put on this puller to catch. Because the slice legitimately
 # swings 0-18 from one day to the next, that separation is watched as a RATIO - min_ratio in
@@ -1116,6 +1544,10 @@ $out = [ordered]@{
   # present" must never be the same number again - that conflation is what froze this file for two days.
   budget_skipped=$budgetSkipped; ask_budget=$hvBudget; asked=$pass.Attempted; answered=$pass.Answered
   multiple_descriptive=$multDescriptive; multiple_refused=$multRefused
+  # 2026-09-19, additive like cap_skipped: the carry's age expiry, the shelf-tag re-queue, the history id
+  # recovery and the store every fresh row in this file was read at.
+  expired_past_carry=$pass.Expired; max_carry_days=$hvCarryDays; requeued_below_tag=$pass.Requeued
+  product_ids_recovered=$hvPidRecovered; product_id_conflicts=$hvPidConflicts; read_at_store_id=[string]$StoreId
   capture_terms=$captureTerms.ToArray()
   deals=$deals.ToArray()
 }

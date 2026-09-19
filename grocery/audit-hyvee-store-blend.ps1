@@ -45,13 +45,15 @@ $rows = @($doc.deals)
 $want = Get-HyVeeStore -Root $root
 $wantId = [int]$want.store_id
 
-# A row states its store in source_ad, written by the puller from the identity it actually queried.
-# Reading the row's OWN claim rather than inferring from the file date is what makes this honest: a
-# file named today can hold rows captured across 31 different days, and it does.
+# A row states its store in `store_id` (stamped by the puller from 2026-09-19) or, on an older row, in
+# source_ad, written from the identity the puller actually queried. Get-HyVeeRowStoreId reads both, so this
+# audit and the puller's re-verify ordering cannot disagree about which rows are off target. Reading the
+# row's OWN claim rather than inferring from the file date is what makes this honest: a file named today
+# can hold rows captured across 31 different days, and it does.
 $byStore = @{}
 foreach ($r in $rows) {
-  $m = [regex]::Match([string]$r.source_ad, 'storeId\s+(\d+)')
-  $k = if ($m.Success) { $m.Groups[1].Value } else { 'unstated' }
+  $sid = Get-HyVeeRowStoreId $r
+  $k = if ($sid) { $sid } else { 'unstated' }
   if (-not $byStore.ContainsKey($k)) { $byStore[$k] = 0 }
   $byStore[$k]++
 }
@@ -72,7 +74,7 @@ $doc2 = [ordered]@{
   unstated = $unstated
   migrated_pct = $pct
   by_store_id = ($byStore.Keys | Sort-Object | ForEach-Object { "$_=$($byStore[$_])" }) -join ' '
-  note = 'A row states its own store in source_ad. off_target rows were captured at a store the board no longer speaks for and are NOT wrong in themselves - they are simply another store''s prices. Measured 2026-08-21: the two Omaha stores disagree on ~35% of everyday rows and most sale rows, so off_target is a direct count of how many cells are likely wrong for the claimed store. unstated rows predate source_ad carrying an id and cannot be attributed either way.'
+  note = 'A row states its own store in store_id (or, before 2026-09-19, in source_ad). off_target rows were captured at a store the board no longer speaks for and are NOT wrong in themselves - they are simply another store''s prices. Measured 2026-08-21: the two Omaha stores disagree on ~35% of everyday rows and most sale rows, so off_target is a direct count of how many cells are likely wrong for the claimed store. unstated rows predate source_ad carrying an id and cannot be attributed either way.'
 }
 $out = Join-Path $OutDir 'hyvee-store-blend.json'
 [IO.File]::WriteAllText($out, ($doc2 | ConvertTo-Json -Depth 4), (New-Object System.Text.UTF8Encoding($false)))

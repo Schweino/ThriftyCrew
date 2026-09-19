@@ -110,6 +110,45 @@ function Get-HyVeeSourceLabel {
   return ("Aisles Online $Kind (storeId $($s.store_id), $($s.label))")
 }
 
+function Get-HyVeeVerifiedLabel {
+  <#
+    .SYNOPSIS The `verified` stamp a link snapshot carries, built from the identity like the source label.
+    .DESCRIPTION refresh-hyvee-links.ps1 wrote a literal "storeId 1465" into every link it refreshed for four
+                 weeks after the board moved to storeId 1466 (found 2026-09-19, PLAN-board-accuracy). The price
+                 in those snapshots came from 1466; the stamp said 1465. Derived here so it cannot drift again.
+  #>
+  param([string]$Root = '', [string]$Date = '')
+  if (-not $Date) { $Date = (Get-Date).ToString('yyyy-MM-dd') }
+  $s = Get-HyVeeStore -Root $Root
+  return ("$Date Hy-Vee GraphQL (storeId $($s.store_id), current shelf price)")
+}
+
+function Get-HyVeeRowStoreId {
+  <#
+    .SYNOPSIS Which Hy-Vee storeId a row was READ at, as a string, or '' when nothing on the row says.
+    .DESCRIPTION
+      THE STORE STAMP (2026-09-19, PLAN-board-accuracy section 4c). From that date pull-regular-hyvee writes
+      `store_id` on every row it reads from the API, set to the storeId that answered, and a carried row keeps
+      the one it already has. A row written before the stamp existed has only its source_ad text, which the
+      puller built from the identity it queried ("... (storeId 1465, Omaha #01)"), so the digits after
+      "storeId" are the same fact in an older spelling. A row whose text names no storeId ("everyday shelf
+      price", "Aisles Online (Omaha #1, staples300)") answers '' - UNKNOWN, never guessed from a store name,
+      because the id is the discriminator and a label is not (the Walmart 3153 lesson in rules/grocery.md).
+      A present store_id wins over the text, even when it is '': the field is the stamp, the text is history.
+  #>
+  param($Row)
+  if ($null -eq $Row) { return '' }
+  $has = $false; $v = $null
+  if ($Row -is [System.Collections.IDictionary]) {
+    if ($Row.Contains('store_id')) { $has = $true; $v = $Row['store_id'] }
+  } elseif ($Row.PSObject.Properties['store_id']) { $has = $true; $v = $Row.store_id }
+  if ($has) { if ($null -eq $v) { return '' } else { return ([string]$v).Trim() } }
+  $src = if ($Row -is [System.Collections.IDictionary]) { [string]$Row['source_ad'] } else { [string]$Row.source_ad }
+  $m = [regex]::Match($src, 'storeId\s+(\d+)')
+  if ($m.Success) { return $m.Groups[1].Value }
+  return ''
+}
+
 function Test-HyVeeStoreDrift {
   <#
     .SYNOPSIS Do the registry and the seeded fallback still name the same store?
