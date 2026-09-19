@@ -11614,7 +11614,7 @@ CONFLICT / UNFOUND) and a free-text note, which is provenance, not precision. Th
 prove the capture process already refuses to write on disagreement, so the discipline exists; it just
 has no notion of a number being rounded rather than wrong.
 
-### I143 - Reader-facing recipe prose uses FDA-defined nutrient content claim terms 767 times with no numeric bar behind any of them `PARTLY DONE` `queue-7` `1-WAY` `RUNG1 RULING`
+### I143 - Reader-facing recipe prose uses FDA-defined nutrient content claim terms 767 times with no numeric bar behind any of them `PARTLY DONE - READY FOR BRAD: THE SWEEP IS FIVE BATCHES ON claude/i143-sweep` `queue-7` `1-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\q7-foodlabel-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11664,6 +11664,8 @@ global list plus a check, not designing.
 - **Verified:** `audit-nutrient-claims -SelfTest` 26 of 26, exit 0. Broken once by neutering the protein bar: 2 MUST FIREs went red, exit 2; restored md5-identical, 26 of 26. `build-v2-spec -SelfTest` PASS with 6 new cases; `wave-preaudit -SelfTest` 79 cases exit 0 blind=0 with 4 new; `audit-forbidden-prose` self-test 24 of 24 and live 0 findings, unchanged by the walker's new `-Skip` parameter.
 
 **What remains is Brad's:** whether to sweep the 76 non-passing live uses, and in what order. The report lists each with its number; a sweep goes through the normal publish gates.
+
+**Sweep prepared 2026-09-19, awaiting Brad batch by batch.** Brad ruled the same day: fix all 76, in batches he approves. All 76 are rewritten in the recipe specs on the pushed branch `claude/i143-sweep` (71 phrase replacements over 53 specs, one of them the title "Lean BBQ Chicken and Rice Bowls", which becomes "BBQ Chicken and Rice Bowls" with `recipes-db.json` carrying the rename). The specs are deliberately NOT on main, because a spec on main reaches the live page through the daily republish and `propagate` without a batch approval. `design\ready-for-brad\I143-sweep.md` holds the five batches (10, 11, 11, 11 and 10 recipes; batches 1 and 2 carry all 21 FAIL uses), every old and new phrase, and the exact commands per batch: a 3-way patch from the branch, the claim audit, `probe-allergen-backfill.ps1 -Slugs` as the dry run, then `build-cards`, `audit-allergen-line` and `publish.ps1`, each `-Slugs`. Not `propagate`: its dry run lists 461 dirty specs of 584. **Verified** at branch base `7695b84c1`: `audit-nutrient-claims` over 584 specs exit 0, 670 uses, 670 pass, 0 fail, 0 not computable (was 746, 670, 21, 55); `audit-forbidden-prose` and `audit-ghost-field-limits` 0 findings; every changed spec rendered twice offline through the real `build-card2.ps1`, and 53 of 53 cards equal the base render with only the phrase pairs substituted (a pairs file missing one pair left that slug red); the branch push ran `run-gates` pass=438 fail=0. The drift already pending on these cards (allergen line on all 53, footer, paywall claim, cost bar, and I138's changes on 4) ships with them and is named per batch.
 
 ### I144 - Nothing in our own files carries any allergen information, and we sell recipes `DONE` `queue-7`
 
