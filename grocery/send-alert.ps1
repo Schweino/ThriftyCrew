@@ -158,8 +158,19 @@ function Get-BirthDisposition([string]$Escalates) {
 # The lane an item is born with. 'weekly' is stamped; 'daily' (the default) and anything else stamp NOTHING,
 # so every other alert in the estate writes a byte-identical queue item to the one it wrote before this.
 # triage-due.ps1 reads the field; the account of why the lane exists is there.
-function Get-BirthLane([string]$Lane) {
+# A REVIEW-CLASS ALERT IS BORN IN THE WEEKLY LANE TOO (Brad's ruling, 2026-09-20). The registry already splits
+# the estate's alerts by whether a human has to act NOW: 'page' is the four conditions that are emailed, and
+# 'review' is queued and deliberately never emailed. A review item still made the daily triage run DUE, so the
+# cheapest half of the queue set the pace of the most expensive lane. Measured that morning from
+# grocery\triage-plans\cost-ledger.jsonl and out\alert-census.jsonl: 5.8M agent tokens over the four recorded
+# days, and of the 139 alerts in the prior 14 days the eight top types were 47%, four of them review class
+# firing on 5 to 10 days each. Nothing is silenced: a review item queues exactly as it did, keeps its count as
+# the same condition re-fires, and the weekly lane works it - and a live daily page that is its symptom still
+# pulls it forward the same day. This is the duration knob, not the cutoff
+# (skills\data-quality-craft\checks-and-thresholds.md 7): a condition true every day is not news every day.
+function Get-BirthLane([string]$Lane, [string]$Class) {
   if ($Lane -eq 'weekly') { return 'weekly' }
+  if ($Class -eq 'review') { return 'weekly' }
   return $null
 }
 
@@ -311,7 +322,15 @@ if ($SelfTest) {
   } finally { Remove-Item $mDir -Recurse -Force -ErrorAction SilentlyContinue }
   # ---- A TRIAGE-CREATED ITEM IS BORN IN THE WEEKLY LANE (2026-09-10) ----
   # MUST FIRE: a residual filed with -Lane weekly carries the lane triage-due.ps1 reads.
-  _T 'a -Lane weekly alert is born in the weekly lane' (Get-BirthLane 'weekly') 'weekly'
+  _T 'a -Lane weekly alert is born in the weekly lane' (Get-BirthLane 'weekly' 'review') 'weekly'
+  # MUST FIRE (Brad, 2026-09-20): a review-class alert is born weekly without anyone passing -Lane.
+  _T 'MUST FIRE a review-class alert with no -Lane is born in the weekly lane' (Get-BirthLane '' 'review') 'weekly'
+  # MUST NOT FIRE: a page-class alert is untouched, so the daily lane still wakes for every emailed condition.
+  _T 'MUST NOT FIRE a page-class alert carries no lane and stays daily' ([bool]($null -eq (Get-BirthLane '' 'page'))) 'True'
+  _T 'MUST NOT FIRE a digest-class alert carries no lane either' ([bool]($null -eq (Get-BirthLane '' 'digest'))) 'True'
+  # MUST NOT FIRE: an unregistered type fails toward page, so an alert with no class at all is born daily,
+  # exactly as it was before this rule. The registry being unreadable must never move work off the daily lane.
+  _T 'MUST NOT FIRE an unclassifiable alert (empty class) is born daily, as it was before this rule' ([bool]($null -eq (Get-BirthLane '' ''))) 'True'
   # MUST NOT FIRE: an ordinary alert, and one that names the default, carry no lane field at all.
   _T 'an ordinary alert with no -Lane carries no lane' ([bool]($null -eq (Get-BirthLane ''))) 'True'
   _T 'an alert passing -Lane daily carries no lane' ([bool]($null -eq (Get-BirthLane 'daily'))) 'True'
@@ -695,7 +714,7 @@ try {
       } catch { $emitterRel = '' }
       if ($emitterRel) { $newItem | Add-Member -NotePropertyName emitter -NotePropertyValue $emitterRel }
       # -Lane weekly (a triage-created residual or finding): stamped on NEW items only, like the emitter.
-      $birthLane = Get-BirthLane $Lane
+      $birthLane = Get-BirthLane $Lane ([string]$delivery.class)
       if ($birthLane) { $newItem | Add-Member -NotePropertyName lane -NotePropertyValue $birthLane }
       # ruling 1: an unregistered type says so on its record, and a review item records that it was not mailed.
       # A registered page item stamps neither, so its record is the one it always was.

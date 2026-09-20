@@ -130,3 +130,88 @@ function Get-AlertCensusTypeDays {
   }
   return ,$out.ToArray()
 }
+
+# --- A RETURN SKIPS THE REVIEWER (Brad's ruling, 2026-09-20) ------------------------------------------------
+# Measured that morning over the four days grocery\triage-plans\cost-ledger.jsonl covers (2026-09-10, 09-11,
+# 09-18, 09-19): 5.8M agent tokens, and 116 of the 323 alerts in 30 days (36%) were a type triage had already
+# closed. A returning type paid full diagnosis price a second and a third time, at about 317k tokens a reviewer
+# run, to re-derive a root cause a committed plan already holds.
+# THE ROUTE IS A POINTER, NOT A VERDICT. It names where the last answer is written. The lane still re-measures
+# the alert against today's board (the RE-MEASURE FIRST rule above), which is what keeps a wrong prior diagnosis
+# costing one lane's re-measurement instead of becoming the new answer.
+function Get-TriageRouteLane {
+  <# .SYNOPSIS Pure. The lane a plan item belongs to: its own field, else the SKILL's money test, else ops. #>
+  param($Item)
+  if (-not $Item) { return 'ops' }
+  $lane = ''
+  try { if ($Item.PSObject.Properties['lane']) { $lane = ([string]$Item.lane).Trim().ToLowerInvariant() } } catch { $lane = '' }
+  if ($lane -eq 'money' -or $lane -eq 'ops') { return $lane }
+  # The SKILL's money test in the order it states it: a publish, then the three money classifications.
+  $batch = 0
+  try { if ($Item.PSObject.Properties['publish_batch']) { $batch = [int]$Item.publish_batch } } catch { $batch = 0 }
+  if ($batch -ge 1) { return 'money' }
+  $cls = ''
+  try { $cls = ([string]$Item.classification).Trim().ToLowerInvariant() } catch { $cls = '' }
+  if ($cls -eq 'wrong-product' -or $cls -eq 'parse-basis-bug' -or $cls -eq 'real-economics') { return 'money' }
+  return 'ops'
+}
+function Get-TriageReturnRoute {
+  <# .SYNOPSIS Pure. Where a returning item's last answer is written: the newest prior id any plan record holds. #>
+  param($PriorIds, $PlanRecords)
+  $r = [pscustomobject]@{ found = $false; prior_id = ''; plan = ''; lane = ''; status = ''; why = '' }
+  $ids = @($PriorIds)
+  if ($ids.Count -eq 0) { $r.why = 'no prior closes'; return $r }
+  $plans = @($PlanRecords)
+  if ($plans.Count -eq 0) { $r.why = 'no plan file could be read'; return $r }
+  # Priors arrive oldest first, so walk backwards: the NEWEST close is the one whose fix is on disk today.
+  for ($k = $ids.Count - 1; $k -ge 0; $k--) {
+    $id = [string]$ids[$k]
+    foreach ($p in $plans) {
+      if (-not $p) { continue }
+      foreach ($it in @($p.items)) {
+        if (-not $it) { continue }
+        $qid = ''
+        try { $qid = ([string]$it.queue_id).Trim() } catch { $qid = '' }
+        if (-not [string]::Equals($qid, $id, [StringComparison]::Ordinal)) { continue }
+        $r.found = $true
+        $r.prior_id = $id
+        $r.plan = [string]$p.path
+        $r.lane = Get-TriageRouteLane $it
+        try { $r.status = ([string]$it.status).Trim() } catch { $r.status = '' }
+        return $r
+      }
+    }
+  }
+  $r.why = ('no committed plan holds ' + ($ids -join ', '))
+  return $r
+}
+function Format-TriageRouteLine {
+  <# .SYNOPSIS Pure. The ROUTE line under a RETURN, or $null when there is nothing to point at. #>
+  param([string]$Id, $Route)
+  if (-not $Route -or -not $Route.found) { return $null }
+  $st = ''
+  try { $st = [string]$Route.status } catch { $st = '' }
+  if (-not $st) { $st = 'unrecorded' }
+  return ('    ROUTE: ' + $Id + ' - give it to the ' + [string]$Route.lane + ' lane seeded with ' + [string]$Route.plan +
+          ' item ' + [string]$Route.prior_id + ' (prior status ' + $st + '), no fresh reviewer diagnosis. Re-measure it against today''s board first.')
+}
+function Read-TriagePlanRecords {
+  <# .SYNOPSIS Plan files as {path, items}, newest name first. Never throws: an unreadable plan is skipped. #>
+  param([string]$PlansDir, [int]$Newest = 40)
+  $out = New-Object System.Collections.Generic.List[object]
+  if (-not $PlansDir -or -not (Test-Path -LiteralPath $PlansDir)) { return ,$out.ToArray() }
+  $files = @()
+  try { $files = @(Get-ChildItem -LiteralPath $PlansDir -Filter 'plan-*.json' -File -ErrorAction Stop | Sort-Object Name -Descending) } catch { return ,$out.ToArray() }
+  $kept = 0
+  foreach ($f in $files) {
+    if ($kept -ge $Newest) { break }
+    if ($f.Name -like '*.routing.json') { continue }
+    try {
+      $j = ((Get-Content -LiteralPath $f.FullName -Raw -ErrorAction Stop) + '') | ConvertFrom-Json
+      if ($null -eq $j -or -not $j.items) { continue }
+      [void]$out.Add([pscustomobject]@{ path = ('grocery/triage-plans/' + $f.Name); items = @($j.items) })
+      $kept++
+    } catch { continue }
+  }
+  return ,$out.ToArray()
+}

@@ -93,6 +93,12 @@ function Get-LaneSplit {
     if (-not $i) { continue }
     $lane = ''
     if ($i.PSObject.Properties['lane']) { $lane = ([string]$i.lane).Trim() }
+    # A REVIEW-CLASS ITEM IS WEEKLY EVEN WITHOUT THE STAMP (Brad's ruling, 2026-09-20). send-alert stamps the
+    # lane at birth, so this reads the same rule one step later for the items already sitting in the queue when
+    # it landed. Both are the registry's own split: 'review' is queued and never emailed, so nobody is waiting
+    # on it today. Without this the change would only reach alerts fired after it, and a queue of advisory
+    # items born daily would keep waking the daily lane for weeks.
+    if ($lane -ne 'weekly' -and $i.PSObject.Properties['alert_class'] -and ([string]$i.alert_class).Trim() -eq 'review') { $lane = 'weekly' }
     if ($lane -ne 'weekly') { [void]$daily.Add($i); continue }   # no lane field = every item written before 2026-09-10
     [void]$weekly.Add($i)
     $its = $null
@@ -215,6 +221,19 @@ if ($SelfTest) {
   # CLEAN TWIN: every item written before this change has no lane field and is still daily work.
   $s5 = Get-LaneSplit @($plain, $wk) ([datetime]'2026-09-15T10:00:00') $now
   _T 'CLEAN TWIN an item with no lane field is still daily work beside a weekly one' (@($s5.Daily).Count -eq 1 -and [string]@($s5.Daily)[0].id -eq '2026-09-17-eeeeee') "daily=$(@($s5.Daily).Count)"
+  # ---- A REVIEW-CLASS ITEM IS WEEKLY (Brad's ruling, 2026-09-20) ------------------------------------------
+  # send-alert stamps the lane from today on, so these pin the reader's half: the advisory items already in the
+  # queue when the rule landed, and the page items that must go on waking the daily lane.
+  $rev = [pscustomobject]@{ id = '2026-09-19-4f01f6'; ts = '2026-09-19T08:32:39'; count = 1; alert_class = 'review'; subject = 'Grocery: semantic sweep' }
+  $s6 = Get-LaneSplit @($rev) ([datetime]'2026-09-15T10:00:00') $now
+  _T 'MUST-FIRE a review-class item with no lane field is weekly work, not daily' (@($s6.Daily).Count -eq 0 -and @($s6.Weekly).Count -eq 1) "daily=$(@($s6.Daily).Count) weekly=$(@($s6.Weekly).Count)"
+  # MUST NOT FIRE: a page-class item is the daily lane's whole job and this rule must never touch it.
+  $pg = [pscustomobject]@{ id = '2026-09-17-eeeeee'; ts = '2026-09-17T08:11:12'; count = 1; alert_class = 'page'; subject = 'Grocery: GUARDS FAILED' }
+  $s7 = Get-LaneSplit @($pg) ([datetime]'2026-09-15T10:00:00') $now
+  _T 'MUST-NOT-FIRE a page-class item stays daily work' (@($s7.Daily).Count -eq 1 -and @($s7.Weekly).Count -eq 0) "daily=$(@($s7.Daily).Count) weekly=$(@($s7.Weekly).Count)"
+  # CLEAN TWIN: an item with no alert_class at all (every item written before the registry) is still daily.
+  $s8 = Get-LaneSplit @($plain) ([datetime]'2026-09-15T10:00:00') $now
+  _T 'CLEAN TWIN an item carrying no alert_class is still daily work' (@($s8.Daily).Count -eq 1) "daily=$(@($s8.Daily).Count)"
   $stF = Join-Path $env:TEMP ('triagedue-stamp-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.txt')
   try {
     # MUST FIRE: an unreadable stamp reads as never worked, never as "just ran".
@@ -268,6 +287,28 @@ if ($SelfTest) {
     $rl5 = @($rl5)
     $want5 = '  RETURN: 2026-09-10-ccccc1 - grocery guards failed board not published was closed 1 time(s) in 30 days (2026-09-05-aaaaa2)'
     _T 'CLEAN TWIN a returned type counts exactly its own in-window closes' ($rl5.Count -eq 1 -and $rl5[0] -eq $want5) (($rl5 -join ' | '))
+
+    # ---- A RETURN SKIPS THE REVIEWER (Brad's ruling, 2026-09-20) --------------------------------------
+    # The route is a POINTER at the committed plan that last answered this type. Its failure mode is
+    # pointing at the WRONG answer, so the cases pin which prior wins and what happens with no plan at all.
+    $recOps = [pscustomobject]@{ path = 'grocery/triage-plans/plan-2026-09-05.json'; items = @(
+      [pscustomobject]@{ queue_id = '2026-09-05-aaaaa2'; lane = 'ops'; status = 'done'; classification = 'infra' }) }
+    $recNew = [pscustomobject]@{ path = 'grocery/triage-plans/plan-2026-09-08.json'; items = @(
+      [pscustomobject]@{ queue_id = '2026-09-08-aaaaa9'; lane = 'money'; status = 'deviated'; classification = 'wrong-product' }) }
+    # MUST FIRE: the newest prior wins, and the line names its lane, its plan and that no reviewer is needed.
+    $rt1 = Get-TriageReturnRoute @('2026-09-05-aaaaa2', '2026-09-08-aaaaa9') @($recOps, $recNew)
+    $ln1 = Format-TriageRouteLine '2026-09-10-ccccc1' $rt1
+    _T 'MUST-FIRE the ROUTE names the NEWEST prior close, its lane and its plan' ($rt1.found -and $rt1.prior_id -eq '2026-09-08-aaaaa9' -and $rt1.lane -eq 'money' -and $ln1 -match 'plan-2026-09-08\.json' -and $ln1 -match 'no fresh reviewer diagnosis') ([string]$ln1)
+    # CLEAN TWIN: with only the older prior on disk, the route still points somewhere rather than giving up.
+    $rt2 = Get-TriageReturnRoute @('2026-09-05-aaaaa2', '2026-09-08-aaaaa9') @($recOps)
+    _T 'CLEAN TWIN the older prior is used when no plan holds the newest' ($rt2.found -and $rt2.prior_id -eq '2026-09-05-aaaaa2' -and $rt2.lane -eq 'ops') ($rt2.prior_id + '/' + $rt2.lane)
+    # MUST NOT FIRE: no committed plan holds either prior, so there is nothing to point at and no line is printed.
+    $rt3 = Get-TriageReturnRoute @('2026-09-05-aaaaa2') @()
+    _T 'MUST-NOT-FIRE no plan records means no ROUTE line at all' ((-not $rt3.found) -and ($null -eq (Format-TriageRouteLine 'x' $rt3))) ([string]$rt3.why)
+    # The money test, AT its bar and one step past it: publish_batch 1 is money, 0 with an ops-ish class is ops.
+    _T 'the money test AT the bar: publish_batch 1 with no lane field routes to money' ((Get-TriageRouteLane ([pscustomobject]@{ queue_id = 'x'; publish_batch = 1; classification = 'infra' })) -eq 'money') 'bar publish_batch=1'
+    _T 'the money test a step PAST the bar: publish_batch 0 and an infra class routes to ops' ((Get-TriageRouteLane ([pscustomobject]@{ queue_id = 'x'; publish_batch = 0; classification = 'infra' })) -eq 'ops') 'publish_batch=0'
+    _T 'a wrong-product item with no lane and no batch is still money' ((Get-TriageRouteLane ([pscustomobject]@{ queue_id = 'x'; classification = 'wrong-product' })) -eq 'money') 'classification only'
   } catch {
     _T 'the RETURN rule loads and runs (triage-return-lib.ps1)' $false $_.Exception.Message
   }
@@ -358,9 +399,29 @@ try { foreach ($l in (Get-RemeasureLines $open (Split-Path -Parent $root))) { Wr
 # queue's 30-day window is a fix that did not hold. The orchestrator pastes these lines into the reviewer's
 # dispatch, and validate-triage-plan.ps1 derives the same status from the queue and demands prior_closes,
 # prevention at the source and a fixture from every occurrence. Advisory here, and never fatal, like RE-MEASURE.
+# A RETURN SKIPS THE REVIEWER (Brad's ruling, 2026-09-20, after reading the cost ledger): under each RETURN,
+# the ROUTE line names the lane that closed this type last and the committed plan item holding that answer, so
+# the run starts from it instead of buying the same diagnosis again. Same wrapping, same reason: a route is
+# provenance, and an unreadable plan directory must cost the route and never the tick.
 try {
   $retLines = Get-TriageReturnLines $open $q.items (Get-Date)
-  foreach ($l in @($retLines)) { if ($l) { Write-Output $l } }
+  $planRecs = @()
+  try { $planRecs = Read-TriagePlanRecords (Join-Path $root 'triage-plans') } catch { $planRecs = @() }
+  foreach ($l in @($retLines)) {
+    if (-not $l) { continue }
+    Write-Output $l
+    try {
+      $rid = ''
+      if ($l -match 'RETURN:\s+(\S+)\s') { $rid = $Matches[1] }
+      $item = @($open | Where-Object { [string]$_.id -eq $rid })
+      if ($item.Count -eq 1) {
+        $priors = Get-TriageReturnPriors $q.items $item[0] (Get-Date)
+        $route = Get-TriageReturnRoute $priors $planRecs
+        $rl = Format-TriageRouteLine $rid $route
+        if ($rl) { Write-Output $rl }
+      }
+    } catch { }
+  }
 } catch { }
 
 # ---------------------------------------------------------------- BOARD GENERATION, pinned for both stages

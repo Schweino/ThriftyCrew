@@ -135,6 +135,14 @@ PREVENTION DUE (2026-09-10, ruling 6) is the one exception to stopping on IDLE. 
 `PREVENTION DUE` line, after IDLE or after DUE, run STEP 3.5 today even if no weekly-lane item is open: the
 weekly lane plans prevention for the scoreboard's top recurring class every week, whether or not anything is
 queued, and a clean week is exactly the week it must not skip. With no weekly ids, that run is prevention only.
+**THE DAILY LANE IS THE PAGE-CLASS LANE (Brad's ruling, 2026-09-20).** A `review`-class alert - queued for
+triage and deliberately never emailed - is now born in the WEEKLY lane and read as weekly even when it was
+queued before that rule (`send-alert.ps1` Get-BirthLane, `triage-due.ps1` Get-LaneSplit). Measured that
+morning: of 139 alerts in 14 days the top eight types were 47% of them, four of those review class firing on 5
+to 10 days each, and a condition that is true every day is not news every day. Nothing is silenced: the item
+queues, keeps its count as the condition re-fires, and PULL FORWARD still applies, so when a page-class alert
+today is the live symptom of a weekly item, work both today. What this changes is that the daily lane wakes
+for the four page conditions and for nothing else.
 TWO LANES (2026-09-10). The guard lists the daily lane under `DUE` and weekly-lane items under `WEEKLY LANE`.
 `WEEKLY LANE DUE`, or a first line reading `DUE  WEEKLY LANE`, means run STEP 3.5 after the daily lane. A
 `WEEKLY LANE ... wait for <date>` line means those items are NOT today's work except by PULL FORWARD, and
@@ -220,6 +228,17 @@ always the bare `plan-<today>.json`), that round = 1, and a per-item effort ceil
 PER ITEM AND PER CLASS, not one number for the run: name the short wall budget from STEP 0.75 on the items
 it applies to, and a real ceiling on the substantive ones. A single ceiling quoted for a mixed dispatch is
 how a wall alert ends up costing what a wrong-product alert should.
+**A RETURN SKIPS THE REVIEWER (Brad's ruling, 2026-09-20, after reading the cost ledger.)** 116 of the 323
+alerts in 30 days were a type triage had already closed, and each was paying full diagnosis price again at
+about 317k tokens a reviewer run to re-derive a root cause a committed plan already holds. So a RETURN item is
+NOT a Class A id: `triage-due.ps1` prints a `ROUTE:` line under each `RETURN:` naming the lane that closed that
+type last and the plan item holding the answer, and the item goes straight to that lane in STEP 3, seeded with
+that item, with no reviewer stage. The lane RE-MEASURES it against today's board first and treats "this no
+longer reproduces" as a finding - that re-measurement is what keeps a wrong prior diagnosis costing one lane's
+budget instead of becoming the new answer. It still needs a plan item (the gate reads the whole queue), so
+transcribe it the way STEP 0.9 transcribes an inline item, carrying the prior plan's root cause forward. A
+RETURN with NO route line (no committed plan holds its priors) is Class A as before, and so is one the lane
+hands back. The RETURN fields below are unchanged and the gate still demands them.
 RETURNS ARE FAILURES (Brad's ruling 5, 2026-09-10). Paste every `RETURN:` line `triage-due.ps1` printed in
 STEP 0 into the dispatch, verbatim. Each names a type triage already closed in the last 30 days and its prior
 ids, and the reviewer needs them because the gate derives RETURN status from the QUEUE: a RETURN code item must
