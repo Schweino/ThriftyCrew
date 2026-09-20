@@ -34,6 +34,10 @@ $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 . (Join-Path $mp 'lib\json-db-io.ps1')
+# Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage, and both files the partial-cost
+# gate reads below are written BOM-less. Loaded unconditionally so the gate cannot fail open on a mangled
+# slug name. grocery\audit-json-readers.ps1 is the ratchet that holds this estate-wide.
+if (-not (Get-Command Read-JsonFile -ErrorAction SilentlyContinue)) { . (Join-Path (Split-Path $mp -Parent) 'lib\json-io.ps1') }
 
 # The six numbers recipes-db keeps its own copy of, in the order update-recipes-db.ps1 writes them.
 $script:COST_FIELDS = @('cost_per_serving','cost_batch','cost_batch_true','cost_per_serving_true','cost_pantry_add','cost_first_run')
@@ -88,19 +92,49 @@ function Get-SpecCostMap {
     return $map
 }
 
+function Test-PartialCostSyncable {
+    <#
+      THE FIRST-PUBLISH RULE, MADE STANDING (2026-09-20, queue 2026-09-19-d240fd).
+      Returns '' when this slug's cost may be carried, else the reason it may not.
+
+      meal-prep\pipeline\wave-preaudit.ps1:243-244 already refuses a WAVE recipe whose costed row has
+      lines_unpriced != 0, because "the published cost EXCLUDES an ingredient the reader must buy". It runs
+      at FIRST publish and nothing re-applied it to a recipe that is ALREADY LIVE when a later recost loses a
+      line. On 2026-09-20 turkey-wild-rice-casserole - live, paid, visible - recosted with its TITLE
+      ingredient missing: $2.21 a serving against a true $3.42, a 35% understatement on the reader's number.
+      It stayed off the page only by an accident of composition (compute-v2-perserving skipped the recipe,
+      which is itself an alert, and sync/propagate are hand runs). An accident is not a gate.
+
+      PURE, so every refusal is self-testable. A slug that is NOT published is not refused: it is not on a
+      page, and wave-preaudit owns it at first publish. A slug with no costed row is not refused either -
+      absence of evidence is not evidence of a partial cost, and the sync's job is the six authored numbers.
+    #>
+    param([string]$Slug, $Published, $UnpricedBySlug)
+    if (-not $Published -or -not $Published.ContainsKey($Slug)) { return '' }
+    if (-not $UnpricedBySlug -or -not $UnpricedBySlug.ContainsKey($Slug)) { return '' }
+    $n = [int]$UnpricedBySlug[$Slug]
+    if ($n -le 0) { return '' }
+    return ("lines_unpriced is $n - a LIVE recipe's cost that excludes an ingredient the reader must buy may not sync (wave-preaudit's first-publish rule, now standing)")
+}
+
 function Sync-RecipesDbCost {
     <# Pure text in, text out, so the self-test drives the same splice path the live run does. #>
     param(
         [Parameter(Mandatory)][string]$Raw,
-        [Parameter(Mandatory)][hashtable]$SpecCost
+        [Parameter(Mandatory)][hashtable]$SpecCost,
+        $Published = $null,
+        $UnpricedBySlug = $null
     )
     $db = $Raw | ConvertFrom-Json
     $changes = New-Object System.Collections.Generic.List[object]
     $drift = New-Object System.Collections.Generic.List[string]
     $absent = New-Object System.Collections.Generic.List[string]
+    $refused = New-Object System.Collections.Generic.List[string]
     foreach ($r in @($db.recipes)) {
         $slug = [string]$r.slug
         if (-not $SpecCost.ContainsKey($slug)) { $drift.Add("$slug : in recipes-db but has no spec"); continue }
+        $partial = Test-PartialCostSyncable -Slug $slug -Published $Published -UnpricedBySlug $UnpricedBySlug
+        if ($partial) { $refused.Add("$slug : $partial"); continue }
         $want = $SpecCost[$slug]
         $why = Test-CostBlockCoherent $want
         if ($why) { $drift.Add("$slug : the SPEC cost block is not self-consistent ($why) - refusing to carry it"); continue }
@@ -115,7 +149,7 @@ function Sync-RecipesDbCost {
             $changes.Add([pscustomobject]@{ Slug = $slug; Field = $k; Old = $have; New = $target })
         }
     }
-    if ($changes.Count -eq 0) { return @{ changed = 0; text = $Raw; drift = @($drift.ToArray()); changes = @(); absent = @($absent.ToArray()) } }
+    if ($changes.Count -eq 0) { return @{ changed = 0; text = $Raw; drift = @($drift.ToArray()); changes = @(); absent = @($absent.ToArray()); refused = @($refused.ToArray()) } }
 
     $text = $Raw
     # Group by slug: find the recipe row ONCE per slug via the brace walk Remove-RecipeRow uses, patch
@@ -155,7 +189,7 @@ function Sync-RecipesDbCost {
         $null = $row | ConvertFrom-Json    # the patched row must still parse on its own
         $text = $text.Substring(0, $rowStart) + $row + $text.Substring($rowEnd + 1)
     }
-    return @{ changed = $changes.Count; text = $text; drift = @($drift.ToArray()); changes = @($changes.ToArray()); absent = @($absent.ToArray()) }
+    return @{ changed = $changes.Count; text = $text; drift = @($drift.ToArray()); changes = @($changes.ToArray()); absent = @($absent.ToArray()); refused = @($refused.ToArray()) }
 }
 
 if ($SelfTest) {
@@ -229,6 +263,27 @@ if ($SelfTest) {
     Chk 'every change names a slug that had a real disagreement' ((@($r.changes | Group-Object Slug).Count -eq 3) -and (@($r.changes | Where-Object { $_.Slug -eq 'broken' }).Count -eq 0)) ((@($r.changes | Group-Object Slug | ForEach-Object { $_.Name }) -join ','))
     $r2 = Sync-RecipesDbCost -Raw $r.text -SpecCost $specCost
     Chk 'idempotent - a second pass changes nothing' ($r2.changed -eq 0) ("changed=" + $r2.changed)
+    # ---- THE STANDING PARTIAL-COST RULE (2026-09-20, queue 2026-09-19-d240fd) ------------------------
+    # MUST FIRE, built from the real row: turkey-wild-rice-casserole is LIVE (published-hashes) and its
+    # 2026-09-20 costed row reads lines_unpriced 1 because the engine dropped Wild Rice - 855 g, $16.94 a
+    # batch, $1.21 a serving, costing it at $2.21 against a true $3.42. That cost may not reach the card.
+    $pubFx = @{ 'stamped-a' = $true; 'panang' = $true }
+    $unFx  = @{ 'stamped-a' = 1; 'panang' = 0 }
+    $rp = Sync-RecipesDbCost -Raw $fx -SpecCost $specCost -Published $pubFx -UnpricedBySlug $unFx
+    $rpRef = @($rp.refused | Where-Object { $_ })
+    Chk 'MUST FIRE  a LIVE slug whose costed row has lines_unpriced 1 is REFUSED, named, and none of its six fields is written' (($rpRef.Count -eq 1) -and (($rpRef -join '|') -match 'stamped-a') -and (($rpRef -join '|') -match 'lines_unpriced is 1') -and (@($rp.changes | Where-Object { $_.Slug -eq 'stamped-a' }).Count -eq 0)) (($rpRef -join '|') + ' changes=' + @($rp.changes | Where-Object { $_.Slug -eq 'stamped-a' }).Count)
+    # AT THE BAR AND ONE PAST IT (backlog I196): 0 is the bar, 1 is one unit of the comparison's resolution.
+    $rb = Sync-RecipesDbCost -Raw $fx -SpecCost $specCost -Published $pubFx -UnpricedBySlug @{ 'stamped-a' = 0 }
+    Chk 'MUST NOT FIRE lines_unpriced exactly 0 - the bar itself - is not a refusal, and the row still syncs' ((@($rb.refused | Where-Object { $_ }).Count -eq 0) -and (@($rb.changes | Where-Object { $_.Slug -eq 'stamped-a' }).Count -gt 0)) ('refused=' + @($rb.refused | Where-Object { $_ }).Count)
+    # MUST NOT FIRE: an UNPUBLISHED slug with an unpriced line is not on a page; wave-preaudit owns it at
+    # first publish, and refusing it here would block a wave the estate deliberately gates elsewhere.
+    $ru = Sync-RecipesDbCost -Raw $fx -SpecCost $specCost -Published @{} -UnpricedBySlug @{ 'stamped-a' = 1 }
+    Chk 'MUST NOT FIRE an UNPUBLISHED slug with an unpriced line is not refused here (wave-preaudit owns first publish)' ((@($ru.refused | Where-Object { $_ }).Count -eq 0) -and (@($ru.changes | Where-Object { $_.Slug -eq 'stamped-a' }).Count -gt 0)) ('refused=' + @($ru.refused | Where-Object { $_ }).Count)
+    # CLEAN TWIN: the adjacent behaviour this change was most likely to break - every OTHER published slug
+    # with a clean costed row still syncs exactly as before, and the refusal does not leak into drift.
+    Chk 'CLEAN TWIN a published slug with lines_unpriced 0 still syncs all its fields, and no refusal lands in drift' ((@($rp.changes | Where-Object { $_.Slug -eq 'stamped-b' }).Count -gt 0) -and (($rp.drift -join '|') -notmatch 'lines_unpriced')) ('b=' + @($rp.changes | Where-Object { $_.Slug -eq 'stamped-b' }).Count + ' drift=' + ($rp.drift -join '|'))
+    # CLEAN TWIN: with NEITHER map supplied (the shape every existing caller uses) nothing is refused.
+    Chk 'CLEAN TWIN with no published/unpriced maps at all, the sync refuses nothing - existing callers are unchanged' (@($r.refused | Where-Object { $_ }).Count -eq 0) ('refused=' + @($r.refused | Where-Object { $_ }).Count)
     # A row with no spec must be reported, never zeroed - [double]$null is 0 and would print $0.00 a bowl.
     $fx2 = '{"recipes":[{"slug":"orphan","name":"Orphan","cost_per_serving":3.10,"cost_batch":43.40,"cost_batch_true":50.00,"cost_per_serving_true":3.57,"cost_pantry_add":0,"cost_first_run":50.00}]}'
     $r3 = Sync-RecipesDbCost -Raw $fx2 -SpecCost $specCost
@@ -241,7 +296,19 @@ $dbPath = Join-Path $mp 'recipes-db.json'
 $specCost = Get-SpecCostMap (Join-Path $mp 'db\recipes')
 Write-Output ("specs read: {0}" -f $specCost.Count)
 $raw = [System.IO.File]::ReadAllText($dbPath)
-$res = Sync-RecipesDbCost -Raw $raw -SpecCost $specCost
+# THE TWO INPUTS THE STANDING RULE NEEDS (2026-09-20, queue 2026-09-19-d240fd): which slugs are LIVE, and
+# which costed rows exclude a line the reader must buy. Both are read through Read-JsonFile, and a file this
+# script cannot read leaves its map EMPTY - which refuses nothing and is stated, never silently assumed
+# clean. A could-not-look must not settle the question, so the line below says which of the two it read.
+$published = @{}
+$unpriced = @{}
+$phPath = Join-Path $mp 'db\published-hashes.json'
+$cdPath = Join-Path $mp 'db\costed.json'
+$phRead = $false; $cdRead = $false
+try { $ph = Read-JsonFile $phPath; foreach ($p in $ph.PSObject.Properties) { $published[[string]$p.Name] = $true }; $phRead = $true } catch { $phRead = $false }
+try { foreach ($c in @(Read-JsonFile $cdPath)) { if ($c -and $c.slug) { $unpriced[[string]$c.slug] = [int]$c.lines_unpriced } }; $cdRead = $true } catch { $cdRead = $false }
+Write-Output ("partial-cost gate inputs: published-hashes {0} ({1} slug(s)), costed {2} ({3} row(s))" -f $(if ($phRead) { 'read' } else { 'COULD NOT READ' }), $published.Count, $(if ($cdRead) { 'read' } else { 'COULD NOT READ' }), $unpriced.Count)
+$res = Sync-RecipesDbCost -Raw $raw -SpecCost $specCost -Published $published -UnpricedBySlug $unpriced
 $rowsTouched = @($res.changes | Group-Object Slug).Count
 Write-Output ("recipes-db cost sync: {0} field(s) across {1} row(s){2}" -f $res.changed, $rowsTouched, $(if ($Apply) { '' } else { '  [read-only - pass -Apply]' }))
 foreach ($g in ($res.changes | Group-Object Field | Sort-Object Name)) { Write-Output ("    field {0,-24} {1}" -f $g.Name, $g.Count) }
@@ -265,4 +332,14 @@ if ($Apply -and $res.changed -gt 0) {
     [System.IO.File]::WriteAllText($dbPath, $res.text)
     Write-Output ("  written (backup -> recipes-db.json.bak-costsync)")
 }
+# THE REFUSAL IS SPOKEN AND IT IS NON-ZERO. A run that declined to act must not be indistinguishable from a
+# run with nothing to do - and a partial cost reaching a live card is a wrong number on a paid page.
+$refusedList = @($res.refused | Where-Object { $_ })
+if ($refusedList.Count -gt 0) {
+    Write-Output ("  PARTIAL-COST REFUSED ({0} live recipe(s)) - their cost was NOT synced; the page keeps its last full cost:" -f $refusedList.Count)
+    foreach ($x in $refusedList) { Write-Output ('    ' + $x) }
+    Write-Output ("sync-recipesdb-cost: REFUSED {0} live slug(s) whose costed row excludes a line the reader must buy. Fix the price basis (or hold the recipe); do not sync around it." -f $refusedList.Count)
+    exit 2
+}
+Write-Output 'sync-recipesdb-cost: OK - no live recipe was carrying a partial cost'
 exit 0

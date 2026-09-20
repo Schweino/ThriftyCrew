@@ -1,0 +1,480 @@
+{
+  "generated": "2026-09-20T10:15:00",
+  "round": 1,
+  "board_week": "2026-09-20",
+  "board_note": "comparison-2026-09-20 built 08:06:58 (triage-due BOARD line, 110 min before this plan); guards HELD it at 08:14:45 on two hard fails, so the live page is still the 2026-09-19 18:05 hand publish (out/deals-page.sig 5BF6ADE91EA2AE3FFBD5B1074A96BCB0 equals the md5 of out/deals-page-embed.html built 18:05:09). Every measurement below names which of those two boards it read.",
+  "queue_ids_seen": [
+    "2026-09-19-ae9df2",
+    "2026-09-19-bb10f1",
+    "2026-09-19-d240fd",
+    "2026-09-19-3a0a09",
+    "2026-09-19-b66b54",
+    "2026-09-19-4fc24c"
+  ],
+  "routing_artifact": null,
+  "routing_artifact_note": "no item changes a matching rule, an include, an exclude or an engine branch that routes a name; every blast_radius is measured as routing and reports zero names moved over the one corpus (comparison-2026-09-20 + out/recipe-board.json, 2806 priced cells).",
+  "knowledge_consulted": {
+    "searched": [
+      "live twin verdict",
+      "summary line exit code",
+      "ledger price basis",
+      "recost live recipe gate",
+      "guard hard fail publish held (orchestrator)",
+      "ghost upsert retry (orchestrator)",
+      "unit basis outlier (orchestrator)",
+      "guard blind fixture live twin (orchestrator)"
+    ],
+    "used": [
+      "memory C--Codex/guard-blindness-family.md - sorted ae9df2 into Arm 3 (it fired, and said the wrong thing)",
+      "memory C--Codex/one-tally-two-verdicts.md - the exact class of ae9df2 and the reusable fix shape (a tally per verdict kind, a pure verdict function, a marked routing region the test executes, fail closed on the tier, the quiet tier still sends, the wording is load-bearing); the 2026-09-04 fix it records covered hygiene and left the live-board kind in the blind tally",
+      "memory C--Codex/recipe-cost-basis-map.md - which surface reads which of the four per-serving numbers; site surfaces read the manifest first and the index copy as fallback, which is why the manifest SKIP (3a0a09) is what kept the understated cost off the page",
+      "skills software-craft/applies-here.md 'A rendered value is a second read' and 'The fixture vocabulary is RULED now' - bb10f1's summary-line shape and the three labels every proof below uses",
+      "skills database-craft/changing-a-schema.md 7 idempotency - why no Ghost retry is proposed in bb10f1",
+      "skills data-quality-craft/applies-here.md 'The silent semantic change' - carried into b66b54 for the money lane",
+      "skills agent-workflow-craft/applies-here.md 'Inspection: three layers, and the exit code is the verdict' - the summary line must be derived from the exit code it reports on (bb10f1)",
+      "C:/Codex/ThriftyCrew/.claude/rules/ops-and-gates.md - 'State whether a retried operation is IDEMPOTENT' (lib/ghost-lib.ps1 header, I198) and the three fixture labels",
+      "searched 'recost live recipe gate' and 'ledger price basis': nothing applicable in the store beyond the basis map memo; the cost-recipes basis order was read from the source (meal-prep/engine/cost-recipes.ps1:200-247)"
+    ]
+  },
+  "items": [
+    {
+      "queue_id": "2026-09-19-ae9df2",
+      "subject": "Grocery: a GUARD has gone blind (test-auditors failed)",
+      "classification": "infra",
+      "premise": "FALSE as stated. No watcher went blind on 2026-09-19. The single failing case of 742 was a LIVE-TWIN that reads the live board, the board really did carry a wrong-class cell at that hour, the watcher fired on it, and guards held the board. The alert text ('any quiet report from that guard is unproven - including a clean board') was the opposite of the truth: the watchers were the one thing that run proved.",
+      "evidence": [
+        "ad-cycle-log 2026-09-19 16:36:36: guards HARD FAIL 'no food commodity matched a wrong-class product (beverage/baby/pet/household/carrier/candy) (see audit-food-category.ps1)' beside the unit-basis-outlier and band-censorship hard fails; GUARDS FAILED: 3 hard invariant(s); board NOT republished. 16:59:00 test-auditors 560 s rc=2. out/test-auditors-fail-2026-09-19.txt line 100, the ONLY FAIL of 742: 'LIVE-TWIN food-category failed (rc=2) - this case reads the LIVE board, so open the board before the code'. 17:47:46 test-auditors rc=0 (742). 2026-09-20 08:42:50 test-auditors rc=0 (743): 'watchers ok: every guard still fires on its own founding bug'.",
+        "THE LIVE CELL (commit 201fadc9a, 2026-09-19 18:09:35, 'The board publishes again'): almond-butter | Baker's | 'Nutty Blends Stage 2 Organic Bananas & Almond Butter Baby Food Pouch' | class babyfood. 'Its rule in recipe-commodities.json carried none of the baby-food excludes 500+ of its neighbours carry. Added the standard block.' That commit touched grocery/recipe-commodities.json (+7) and grocery/commodities.json. Guards read hard=0 at 17:22:52 in that session's checkout before the commit landed, and test-auditors read rc=0 at 17:47:46.",
+        "IS IT STILL ON THE BOARD TODAY: no. out/recipe-board.json (this morning's build) almond-butter cells: Aldi 'Simply Nature Creamy Almond Butter 12 OZ' 12 oz 0.2992/oz; Family Fare 'Our Family Creamy Almond Butter 16 oz' 0.4369/oz; no Baker's row. comparison-2026-09-20 carries no almond-butter staple row. The baby-food pouch is gone because its rule now excludes it, not because the capture aged.",
+        "PASS-BY-NOT-LOOKING, measured over comparison-2026-09-20 (08:06:58) + out/recipe-board.json with category-excludes.json's own patterns: 2806 priced cells = 2481 in the audit's scope + 325 no-class; the 325 are ALL cells whose category IS the class (Household 190, Personal Care 87, Pet 25, Baby 23), which audit-food-category.ps1:44 skips by design. Scanning all 2806 cells with EVERY class regardless of scope: 0 in-scope hits. The only two universal-class token hits outside the scope are 'Coffee mate Half and Half Liquid Creamer Singles, 0.3 fl. oz., 180 ct.' (half-and-half | Sam's Club | 0.2367/fl oz, beverage token) and 'Beaumont Cocoa Hot Cocoa Drink Mix With Marshmallows 10 CT' (hot-cocoa | Aldi | 0.279/each, beverage token), and both ARE their commodity. The audit passed today because the board is clean, not because it stopped looking.",
+        "WHY 'examined' FELL 3081 -> 2518 -> 2481 (coverage-ledger-history.jsonl, audit-food-category): 3081 at 09-19 08:19 and 09:17, 3107 at 11:03/11:23/11:35, 2375 at 12:57/13:04/13:09, 2518 at 16:36, 2516 at 17:22, 2527 at 20:54, 2481 at 09-20 08:14. The fall is at the 12:57 build, the first after d7d58face (14:38, quarter restored) / 8b51ba94a (07:10, 14-day budgets) and the provenance contract 201fadc9a describes: 'live board after publish: 2,840 priced cells, against 2,700 before and 3,507 on the 12:05 pre-contract board ... 15,131 rows are withheld for provenance'. The skipped-for-no-class count moved 324 -> 325. The population fell; the audit's reach over it did not. guards/4-factor's own population note says the same (2652 -> 2142 -> 2146, 'this is NOT a coverage regression').",
+        "THE CLASS: test-auditors.ps1 keeps four tallies (Ok/Bad/Hygiene/Skip, lines 129-139) and Get-AuditorsVerdict (176-186) returns rc 2 for ANY Bad; the LIVE-TWIN case at 1276-1278 reports through Bad; check-ad-cycles.ps1:3292-3326 (the WATCHERS-DECISION region) routes every rc other than 0 and 1 to subject 'Grocery: a GUARD has gone blind (test-auditors failed)' with the 'unproven - including a clean board' body. Eight cases in that file read live data on purpose (LIVE-TWIN at 1155-1156, 1277-1278, 1591, 6753-6754 and the labelled inline reads), so any of them going red pages the wrong sentence.",
+        "PRIOR OCCURRENCES OF THE SAME SHAPE (saved fail files): 2026-08-28 and 2026-08-29 'food-category clean twin failed (rc=2) - either live data is broken (page-worthy) or the edit broke the healthy path' (the same case under its pre-ruling label), and 2026-09-19. Three blind-watcher pages in 30 days that were live-board reds; zero of them a blind watcher. The 2026-09-04 page (prompt-backup drift, queue 2026-09-04-0b63d3) was the hygiene arm of the same tally, fixed then by adding the Hygiene tier.",
+        "THE OTHER READER ALREADY DISTINGUISHES: ops/prepush-test-auditors.ps1 (561aa14af, 2026-09-19 'Teach the gate') reads the marker '# live-board-ruling-case audit=audit-food-category.ps1' on that Bad line and pair-runs the audit at base and tip, accepting EXPECTED-LIVE-RED. The daily chain reads only the rc. Two readers of one fact, one of them taught.",
+        "VOCABULARY: 'LIVE-TWIN' is an INPUT label (ops/audit-fixture-inputs.ps1, 2026-09-11: the case reads live data on purpose), not one of the three ruled assertion labels. Read by its assertion it is a CLEAN TWIN (a positive claim that the live board still passes), but its SUBJECT is the board, not the watcher, and that is exactly why its red cannot share the watcher-blind verdict channel."
+      ],
+      "surface_fix": {
+        "what": "nothing on the board: the almond-butter cell was corrected in 201fadc9a and is off the board today; the item's only defect is the verdict routing",
+        "files": [],
+        "exact_change": "none on data"
+      },
+      "root_cause": "one-tally-two-verdicts, second arm. test-auditors asks two questions of one run - can each watcher still see its founding bug, and does the LIVE board still pass the watchers - and keeps one failure tally for both, so a LIVE-TWIN red (the watcher WORKING on a real bad cell) exits 2 and check-ad-cycles pages it as 'a GUARD has gone blind ... any quiet report from that guard is unproven'. The 2026-09-04 fix (queue 2026-09-04-0b63d3) split the hygiene kind out of that tally and left the live-board kind in it, so the class it named ('more finding KINDS than exit codes') was covered for one of its two remaining kinds. The cost is the trust ordering of the whole day: a blind-watcher page says trust nothing, a live-board red says the watchers are the ONE proven thing, and the page inverts them.",
+      "root_fix": {
+        "what": "a third tally and a third tier, in the exact shape the 2026-09-04 fix used: Live() in test-auditors for every case whose subject is live data, Get-AuditorsVerdict returns rc 4 when failed=0 and live>0 (rc 2 still wins whenever failed>0), and the WATCHERS-DECISION region routes rc 4 to its own subject, body and evidence file; everything not in (0,1,4) still fails closed to the blind page",
+        "files": [
+          "grocery/test-auditors.ps1",
+          "grocery/check-ad-cycles.ps1",
+          "ops/prepush-test-auditors.ps1"
+        ],
+        "exact_change": "test-auditors.ps1: add a function Live($m) that writes '  LIVE-RED  ' + $m and increments $script:live, beside Hygiene (139), with $script:live = 0 among the other tallies; convert every Bad whose case reads live data on purpose to Live - at minimum 1156 (price-mode), 1278 (food-category, keep its '# live-board-ruling-case audit=' marker on the same line so prepush-test-auditors still finds it), 6754 (pull-profiles) and the other sites the developer finds with grep -n 'LIVE-TWIN' - and leave the 'examined nothing' / BLIND reds as Bad; Get-AuditorsVerdict([int]$failed,[int]$hygiene,[int]$pass,[int]$skipped,[int]$live=0): failed>0 -> rc 2 unchanged; then live>0 -> rc 4 with line 'test-auditors LIVE-RED ($live live case(s) failed, $pass passed$hygNote$skipNote) - every watcher still sees its own founding bug; the LIVE board failed a watcher, open the board before the code.' (must contain neither 'gone blind' nor 'unproven'); then hygiene; then 0. Print live= in the -COMPLETE summary at line 37. check-ad-cycles.ps1 WATCHERS-DECISION region (3305-3326): add elseif ($taRc -eq 4) before the else with taKind 'LIVE', taSubject 'Grocery: the LIVE board failed a watcher (watchers intact)', taLog 'test-auditors LIVE-RED: every watcher still fires on its own founding bug; a live-board case is red - a cell is page-worthy, not a guard', taSummary 'LIVE-RED  a live-board case failed; the watchers are intact - see the LIVE-RED lines in the saved output', taFileTag 'test-auditors-live', taLookFor 'LIVE-RED', taHeader stating that EVERY FIXTURE FIRED and naming that the red is about the board; the final else (blind) is unchanged. ops/prepush-test-auditors.ps1: its record path keys on 'exit 2' (line 1209 region) and its RECORD NOT WRITTEN branch reads the rc - the developer confirms rc 4 is treated as a failing verdict there (it must never read as a pass) and that its EXPECTED-LIVE-RED pairing still triggers off the marker, not the rc. Any other consumer of test-auditors' rc (grep -rn 'test-auditors' ops grocery, filtered on rc or exit) is checked the same way."
+      },
+      "leaves_open": "f90ba6's carried-forward residual, and only that: 20 of the 21 non-drink 'Snacks & Drinks' commodities still carry no beverage class (apply_ids reaches pistachios only), so audit-food-category cannot see a beverage crowning one of them. The three coverage-ledger REGRESSED warns are NOT listed here - they are b66b54 (c) and are owned there, because that is the item that rebuilt the board and re-read the population. The LIVE-TWIN conversion itself leaves nothing open: all 8 LIVE-TWIN sites were read and the 3 that report a live-data verdict were converted; the other 5 are presence probes and Copy-Item lines with no verdict to route.",
+      "leaves_open_occurrences": "0",
+      "leaves_open_followup": "watch:grocery/audit-food-category.ps1",
+      "prior_closes": [],
+      "prior_closes_note": "the queue holds no resolved item of this type inside 30 days (triage-due printed no RETURN line for it); the same shape paged on 08-28, 08-29 and 09-04 under earlier ids and the 09-04 one (2026-09-04-0b63d3) shipped the Hygiene tier this fix extends",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule, include, exclude or engine branch changes; routing before == after over the one corpus (comparison-2026-09-20 + out/recipe-board.json, 2806 priced cells, 2481 in the audit's scope); the change is a verdict tier in a harness and one elseif in the chain's routing region",
+        "affected_now": 0,
+        "names": [],
+        "risk": "a new tier is a place for unknown verdicts to go quiet; the fail-closed loop keeps 3, 5, 124, 255 and -1 on the blind page and rc 4 is the only new mapping. A LIVE red that coincides with a blind fixture red still pages as blind (failed>0 outranks live>0). The wording is load-bearing: a reader and a grep sort on 'gone blind' and 'unproven', so the rc-4 body carries neither.",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against comparison-2026-09-20 built 08:06:58 (guards HELD it, so it is not the live page) and out/recipe-board.json from the same run; the coverage numbers are the 08:14 and 08:43 rows of coverage-ledger-history.jsonl; the 09-19 cell is quoted from commit 201fadc9a because audit-food-category writes no json report and guards.ps1 logged only its HARD FAIL line, so the 16:36 finding text survives nowhere else",
+      "proof": {
+        "guard_or_fixture": "grocery/test-auditors.ps1 u071-k3 (Get-AuditorsVerdict frozen cases, line ~3430) and u072 (the WATCHERS-DECISION region extracted from check-ad-cycles.ps1 and executed against frozen rc values, 3450-3492)",
+        "must_fire_case": "MUST FIRE u071: Get-AuditorsVerdict 0 0 741 0 -live 1 returns rc 4 and a line that matches 'LIVE' and matches neither 'gone blind' nor 'unproven'; Get-AuditorsVerdict 1 0 741 0 -live 1 returns rc 2 (a blind watcher outranks a live red). MUST FIRE u072: WdRun 4 selects subject 'Grocery: the LIVE board failed a watcher (watchers intact)', fileTag 'test-auditors-live', a header matching 'watchers intact' and matching neither 'unproven' nor 'gone blind', a non-empty summary starting 'LIVE-RED', and lookFor 'LIVE-RED'. MUST FIRE, the founding run replayed: the 09-19 shape (742 cases, one LIVE-TWIN red, zero fixture reds) must produce failed=0 live=1 -> rc 4 - build it by running the u029-d LIVE-TWIN case against a scratch OutDir holding a frozen copy of the 09-19 recipe-board row (almond-butter | Baker's | 'Nutty Blends Stage 2 Organic Bananas & Almond Butter Baby Food Pouch') and reading which tally it lands in. MUST NOT FIRE: WdRun 2 still selects the blind page word for word (existing case, unchanged).",
+        "clean_twin": "CLEAN TWIN u072: the fail-closed loop over @(3, 5, 124, 255, -1) still lands every one on the blind page with the 'unproven' header (4 leaves that list because it is now a known verdict; 5 replaces it so the loop still holds a value one past the known set); WdRun 1 still selects the hygiene page with its own subject and file; a run with the rc-4 branch present still SENDS (subject and summary non-empty, the 'routed, never silenced' assertion at 3489). CLEAN TWIN u029-d: on today's board the LIVE-TWIN food-category case still passes (rc 0, 'priced cells scanned') through the new Live() path, so the rename did not break the healthy path.",
+        "commands": [
+          "powershell -File grocery/test-auditors.ps1",
+          "powershell -File grocery/audit-food-category.ps1",
+          "powershell -File ops/prepush-test-auditors.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "revert the three files; rc 4 is never emitted again and the chain's rc-2 routing resumes exactly as today. No data touched.",
+      "do_not_touch": [
+        "audit-food-category.ps1's scope (categories.json classes, apply_ids) - it is right and it is f90ba6's ground",
+        "the coverage-ledger baselines (no -Accept in this item)",
+        "the rc-2 subject, body and file name (readers and the dated-evidence convention depend on them)",
+        "the '# live-board-ruling-case audit=' marker on line 1278"
+      ],
+      "resolution_note": "Not a blind guard. The one red of 742 was the LIVE-TWIN food-category case: the 16:36 board really carried 'Nutty Blends Stage 2 ... Baby Food Pouch' on almond-butter at Baker's, the watcher fired, guards held the board, and 201fadc9a fixed the rule at 18:09. Today's pass is a real pass: every one of 2806 priced cells scanned with every class, 0 wrong-class products; the 18% coverage fall is the provenance contract's withheld rows (population), not the audit's reach. The class defect - a live-board red sharing the blind-watcher verdict and paging the sentence that inverts the day's trust ordering (3rd time in 30 days) - gets its own tally, rc 4 and its own page. SHIPPED: a third tally (Live), a third verdict (rc 4, ordered below rc 2 so a blind watcher still outranks a live red), a WATCHERS-DECISION rc-4 branch with its own subject 'Grocery: the LIVE board failed a watcher (watchers intact)', its own evidence file test-auditors-live-<date>.txt and a body carrying neither 'gone blind' nor 'unproven', and live= on the -COMPLETE marker. test-auditors exits 0 with live=0 on today's board.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "ONE deviation, and it WIDENS the fix. The plan named three files; a fourth consumer had to change or the new tier would have silently broken the push gate. ops/prepush-test-auditors.ps1 reads test-auditors' rc in FOUR places, and all four were keyed on the set (0,1,2): Get-PushVerdict would have called rc 4 'not one of its verdicts' and refused every push as COULD NOT EVALUATE; the -Record path had the same test; Get-HarnessSummary's TEST-AUDITORS-COMPLETE regex required pass/failed/hygiene/skipped in that order and would have read found=false, cases=-1 against the new live= token; and Get-FailLines matched only a FAIL prefix, so the food-category live-twin red would have stopped being a failing line at all, silently retiring the EXPECTED-LIVE-RED pairing that Brad's 2026-09-19 'Teach the gate' ruling added. All four were taught: LIVE-RED lines are failing lines to the PUSH gate (so its behaviour is byte-for-byte what it is today), while the DAILY CHAIN routes rc 4 to its own page. Also, the u072 fail-closed loop moved from 3,4,124,255,-1 to 3,5,124,255,-1 as the plan specified, so it still holds a value one past the known set.",
+      "shipped_commit": "batch 1 commit (grocery/test-auditors.ps1, grocery/check-ad-cycles.ps1, ops/prepush-test-auditors.ps1)",
+      "premise_verified_note": "VERIFIED. The plan's premise is that the alert text was FALSE and no watcher went blind, and it holds: audit-food-category.ps1 on today's rebuilt board exits 0 with 'no food commodity matched a beverage/baby-food/pet/household/bakery-carrier/dairy-carrier/candy product (2481 priced cells scanned)'. The 18% coverage fall is population, not reach, and the coverage ledger re-states it as REGRESSED on every run.",
+      "leaves_open_followup_note": "(2) is the only residual of the three with anything left to catch, and its occurrence count is 0 today (2,806 priced cells scanned, 0 wrong-class products). audit-food-category.ps1 is a guards.ps1 hard invariant, so the first wrong-class product on any of those 20 commodities holds the publish on its first occurrence - no queue item is honest here. (1) is the same coverage-ledger condition b66b54 (c) owns through watch:grocery/audit-coverage-ledger.ps1. (3) is 0 and closed.",
+      "leaves_open_occurrences_note": "0 wrong-class products on those 20 commodities, measured this run over comparison-2026-09-20 and out/recipe-board.json: 2,806 priced cells, 2,481 in the audit's scope, audit-food-category.ps1 exit 0 with 'no food commodity matched a beverage/baby-food/pet/household/bakery-carrier/dairy-carrier/candy product (2481 priced cells scanned)'. 1 in f90ba6's prior window (the pistachio beverage), closed there. The bare 0 above is the field the closing gate parses."
+    },
+    {
+      "queue_id": "2026-09-19-bb10f1",
+      "subject": "Grocery publish FAILED (rc=1) - 2026-09-19",
+      "classification": "infra",
+      "evidence": [
+        "ad-cycle-log 2026-09-19 17:22:52 guards: GUARDS OK (hard=0 warn=19); 17:23:18 'publish-deals-page: 25 s (rc=1) - 3 Ghost calls, 30 s timeout each, no retries'; 17:23:18 'publish-stage: publish-deals-page printed NO timing table'; 17:23:18 'AUTO-PUBLISH ERROR (rc=1) - Ghost upsert or build failed; live page NOT updated'; 17:23:21 '---- SHIP PATH COMPLETE in 726 s (12.1 min): the board, the feed and the cards are published. ----'. The same morning, 08:21:38: publish-deals-page 150 s rc=0 with a full timing table (build-deals-page 26.8 s, audit-match-soundness 92.2 s, ghost-board-upsert 2.5 s).",
+        "(a) WHAT FAILED: the page build, not Ghost. publish-deals-page.ps1 has three rc-1 exits: 156 (build-deals-page rc != 0), 157 (embed missing/short) and 294 (Ghost upsert rc != 0). A 25 s run is shorter than that morning's build alone (26.8 s) and the timing table is printed only at the end, so the run died inside or just after the build, before the Ghost leg. Commit 201fadc9a (18:09:35) states it: 'Guards then passed (hard=0 warn=19) and the publish still failed, at build-deals-page: one recipe row, boneless-pork-chops, had no category ... build-deals-page renders recipe rows into categories.json's sections and THROWS on any row it cannot place'. Fixed there: recipe-overlay.ps1 resolves a build-only row's category and SKIPS an unplaceable row into recipe_price_source.unplaced; boneless-pork-chops registered in out/recipe-board-everyday.json.",
+        "THE REASON IS NOT IN THE LOG: check-ad-cycles.ps1:1423-1432 captures publish-deals-page's stdout into $pubOut and logs only lines matching the timing-table shape ('publish-deals-page timings' or four-space stage lines); the 'ERROR: page build FAILED (rc=N) - not publishing' line the script printed was discarded. local-daily-log.txt has no 17:2x entry. The failing stage above is known only because the session that fixed it wrote it into a commit message.",
+        "(b) RETRY: not proposed. The Ghost leg did not run. It is publish-resource.ps1: Invoke-GhostApi GET posts/slug/<slug> then create-or-update (lines 46, 52), so its create branch is a POST; lib/ghost-lib.ps1's header (backlog I198, 2026-09-19) records per HTTP method that a replayed POST is not idempotent. A retry wrapped around the whole publish would, on a lost reply after a successful create, run the create again. The change gate (publish-deals-page.ps1:262-275, Test-UpsertNeeded, 'fail toward doing the work') already makes the NEXT RUN the safe retry: a failed upsert leaves out/deals-page.sig unstamped (296-298) so the next chain run republishes.",
+        "(c) THE LOG LIES BY CONSTRUCTION: check-ad-cycles.ps1:1576-1588 prints the ship-path summary from $guardsBlocked alone. The comment above it (1578-1581, queue 2026-09-07-e9edb9) records that this line 'USED TO LIE' when it printed unconditionally after 'GUARDS FAILED' on 2026-09-07 (and 2026-09-03 08:09:18 shows the same pair); that fix added the HELD branch and left the publish outcome unread, so rc 1 (this run) and rc 2 (coverage HELD, line 1434) both print 'the board, the feed and the cards are published'. $pubrc is set at 1424 inside the board-changed block and never read after 1439.",
+        "(d) SELF-HEAL: yes, by hand, not by the chain. out/deals-page-embed.html was rebuilt 2026-09-19 18:05:09 and out/last-visibility.txt written 18:05:14 (a publish-deals-page run reading the live post), the embed's md5 5bf6ade91ea2ae3ffbd5b1074a96bcb0 equals out/deals-page.sig (stamped only after a confirmed upsert, line 298), and 201fadc9a reports 'Live board after publish: 2,840 priced cells'. The 08:21:38 rc=0 run was BEFORE the failure, not after it. No chain publish has succeeded since: today's 08:14:45 run was HELD by guards (b66b54), so the live page is the 18:05 board. Occurrences of the lying summary on a publish-outcome branch: 1 in the whole ad-cycle-log (AUTO-PUBLISH ERROR/HELD lines followed by the 'published' summary: exactly this one); the guards branch lied twice before its 09-07 fix."
+      ],
+      "surface_fix": {
+        "what": "log publish-deals-page's own verdict lines (ERROR/HELD/WARN/CURRENT/PUBLISHED and the price-mode/name-drift notes) beside the timing table, whatever the rc, so the failed stage is in the log the next time",
+        "files": [
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "exact_change": "after line 1432: $pubVerdict = @($pubOut | Where-Object { $_ -match '^(ERROR|HELD|WARN|CURRENT|PUBLISHED|price-mode|name-drift)' }); foreach ($v in $pubVerdict) { Log ('publish-verdict: ' + ([string]$v).Trim()) }; if ($pubrc -ne 0 -and $pubVerdict.Count -eq 0) { Log the last 5 lines of $pubOut as 'publish-tail: ...' } - assign then wrap, never @(pipe) inline (the ps-json-array-collapse trap the block's own comment names)"
+      },
+      "root_cause": "the ship-path summary at check-ad-cycles.ps1:1582-1588 is derived from one input ($guardsBlocked) while the outcome it describes has three (the guard verdict, whether a publish was attempted, and the publish's exit code). The 2026-09-07 fix covered the guards-held branch of the class 'the summary describes an outcome that did not happen' and left the publish-outcome branches (rc 1 error, rc 2 coverage HELD) printing 'the board, the feed and the cards are published'. And the one line that said WHICH stage failed was in $pubOut, which the chain keeps only for timing-table lines, so every publish failure's reason is discarded at the moment it is known. Both are the 'rendered value is a second read' shape: the summary is rendered from a different variable than the control path used.",
+      "root_fix": {
+        "what": "the summary reads the publish outcome, in a marked region a test can execute against frozen values (the WATCHERS-DECISION convention), and the publish's own verdict lines are logged",
+        "files": [
+          "grocery/check-ad-cycles.ps1",
+          "grocery/test-auditors.ps1"
+        ],
+        "exact_change": "check-ad-cycles.ps1: declare $pubAttempted = $false and $pubrc = $null in the scope the summary reads (before the block at 1345) and set $pubAttempted = $true beside $pubrc = $LASTEXITCODE at 1424; wrap 1582-1588 in '# <<SHIP-SUMMARY-BEGIN>>' / '# <<SHIP-SUMMARY-END>>' and make it five-way: (1) $guardsBlocked -> the existing HELD wording, unchanged; (2) $pubAttempted -and $pubrc -eq 0 -> the existing 'the board, the feed and the cards are published' wording, unchanged; (3) $pubAttempted -and $pubrc -eq 2 -> 'the board was rebuilt and the live page was HELD by the coverage gate (publish rc 2); the page is at its last good state - see the publish-verdict lines above'; (4) $pubAttempted -and any other rc -> 'the board was rebuilt but the live page was NOT updated (publish rc N: build or Ghost upsert failed); the page is at its last good state - see the publish-verdict lines above'; (5) not attempted -> 'no price change since the last publish; the live page stands as last published'. Each branch writes its own $summary line with the same distinction. Do NOT claim in (3)/(4) what else shipped unless the developer reads which steps precede the publish in the chain and names them exactly. test-auditors.ps1 u060-a Test-CacInspectGating: add a finding when the source's SHIP-SUMMARY region does not read $pubrc ('the SHIP PATH COMPLETE log does not read the publish return code'), and a u072-style region test that extracts SHIP-SUMMARY and runs it against frozen ($guardsBlocked, $pubAttempted, $pubrc) triples with a stub Log that captures its argument."
+      },
+      "leaves_open": "recipe-overlay.ps1 still ships with no -SelfTest, and a homeless recipe row is SKIPPED into recipe_price_source.unplaced rather than throwing, with nothing paging on that list. Read on this run's build: recipe-overlay reported 'RECIPE-PRICE-SOURCE recipe_build=68 withheld=0 snapshot_undated=0' and 68 recipe-only rows remain, so the unplaced list is EMPTY today - boneless-pork-chops was registered in out/recipe-board-everyday.json by 201fadc9a and no new homeless row appeared on the rebuild.",
+      "leaves_open_occurrences": "1 in the window (boneless-pork-chops, 2026-09-19 17:23, the founding instance, already fixed at the cause); 0 unplaced rows on this run's build (2026-09-20 10:4x), which is the number the plan left for the developer to read.",
+      "leaves_open_followup": "2026-09-20-ca2591",
+      "prior_closes": [],
+      "prior_closes_note": "the queue holds no resolved item of type 'grocery publish failed' in 30 days; triage-due printed no RETURN line",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule changes; routing before == after over comparison-2026-09-20 + out/recipe-board.json (2806 priced cells); the change is log text and a summary branch in the chain plus two harness cases",
+        "affected_now": 0,
+        "names": [],
+        "risk": "the 'the board, the feed and the cards are published' string may be grepped by other readers (health-heartbeat, run-log claims audits): the rc-0 branch keeps it byte for byte and the developer greps for readers before shipping (grep -rn 'are published' grocery ops lib). The publish-verdict lines add 1-5 log lines per run.",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against ad-cycle-log.txt as of 10:00 2026-09-20, check-ad-cycles.ps1 at 6e26438be/f9d65159d (19:27 and 20:04 on 09-19, after the alert; the summary block at 1576-1588 and the publish block at 1422-1439 were read at that revision), publish-deals-page.ps1 and publish-resource.ps1 at HEAD; the 18:05 artefacts are mtimes in out/ read at 10:00",
+      "proof": {
+        "guard_or_fixture": "grocery/test-auditors.ps1 u060-a (Test-CacInspectGating over the live source and over a stripped fixture built from it) plus a new frozen-value region test in the u072 style",
+        "must_fire_case": "MUST FIRE: the SHIP-SUMMARY region run with guardsBlocked=$false, pubAttempted=$true, pubrc=1 logs a line containing 'NOT updated' and 'rc 1' and NOT containing 'the board, the feed and the cards are published'; with pubrc=2 it logs 'HELD by the coverage gate'; a fixture source built from the live source by replacing the pubrc test with $true (the u060-a .Replace shape, never a transcription) makes Test-CacInspectGating add 'the SHIP PATH COMPLETE log does not read the publish return code'; and a frozen $pubOut of @('ERROR: page build FAILED (rc=2) - not publishing') with pubrc=1 must be logged as 'publish-verdict: ERROR: page build FAILED (rc=2) - not publishing'. MUST NOT FIRE: with guardsBlocked=$true the region never prints the 'published' wording (u060-a's existing assertion, unchanged).",
+        "clean_twin": "CLEAN TWIN: guardsBlocked=$false, pubAttempted=$true, pubrc=0 still logs exactly 'the board, the feed and the cards are published' and the summary line 'the board published before any advisory audit ran'; guardsBlocked=$true still logs the HELD wording u060-a asserts today; the three Ghost publishers in INSPECT are still gated on -not $guardsBlocked (u060-a's stripped-fixture case still finds all three).",
+        "commands": [
+          "powershell -File grocery/test-auditors.ps1",
+          "powershell -File grocery/check-ad-cycles.ps1 -SelfTest (if it has one; otherwise the harness cases above are the whole proof)"
+        ]
+      },
+      "rollback": "revert check-ad-cycles.ps1 and the two harness cases; the summary goes back to reading $guardsBlocked only. No data touched.",
+      "do_not_touch": [
+        "publish-deals-page.ps1's change gate and sig stamping (it is what makes the next run the safe retry)",
+        "publish-resource.ps1 (no retry loop around a POST)",
+        "the HELD wording and the INSPECT gating u060-a asserts",
+        "the 30 s Ghost timeouts"
+      ],
+      "resolution_note": "The 17:23 publish died in build-deals-page (a build-only recipe row, boneless-pork-chops, had no category and the renderer throws on a row it cannot place), fixed at the cause in 201fadc9a and republished by hand at 18:05 (embed md5 == deals-page.sig). No Ghost retry: the Ghost leg never ran, its create branch is a POST, and the change gate already makes the next chain run the safe retry. The class defect is the log: the ship-path summary read only the guard verdict, so it announced 'the board, the feed and the cards are published' three seconds after 'AUTO-PUBLISH ERROR (rc=1)', and the chain discarded the one line that named the failing stage. The summary now reads the publish outcome in a tested region and the publish's verdict lines are logged.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": "batch 1 commit (grocery/check-ad-cycles.ps1, grocery/test-auditors.ps1)",
+      "premise_verified_note": "VERIFIED from ad-cycle-log.txt. The guards-held branch of the summary is honest today - the 08:14:50 line reads 'the board was HELD (guards blocked it), so neither the board nor the feed nor the recipe cards were published', which is the 2026-09-07 fix. The publish-outcome branches were the half still missing: pubrc was set at the publish call and never read again, so rc 1 and rc 2 both printed the published wording. Confirmed by executing the region itself against frozen values."
+    },
+    {
+      "queue_id": "2026-09-19-d240fd",
+      "subject": "Recipe pricing: 28 unpriced ingredient line(s)",
+      "classification": "infra",
+      "evidence": [
+        "(a) THE 28, VERIFIED: meal-prep/db/cost-flags.txt (foreign, rewritten 08:26 today) holds 27 lines; today's log line reads 'cost-flags: 27 unpriced recipe line(s)'; the 28th on 09-19 was 'ALLOWLIST :: no-board-price-ok.json :: BID REFUSED, NO CARRIAGE EVIDENCE dried-guajillo-chiles [UNKNOWN: no feed price and no ledger entry]' (cost-recipes.ps1:197), which is not a recipe line and is absent today. Grouped by refusal (27 + 1): MAPPED BID NOT ON ANY BOARD 14 lines over 5 bids - five-spice-powder 7 recipes (Five Spice Turkey Noodle Bowls, Ghanaian Shoko, Hong Kong-Style Baked Pork Chop Rice, Sichuan Dan Dan Noodles, Slow Cooker Char Siu Pork Bowls, Taiwanese Lu Rou Fan, Vietnamese Bo Kho), berbere-seasoning 2, harissa-paste 2, pomegranate-molasses 2, wild-rice 1; LABEL PRICE REFUSED, CARRIAGE NOT-CARRIED 6 lines (berbere 2, harissa 2, pomegranate molasses 2); NO PRICE BASIS 7 lines (berbere 2, harissa 2, pomegranate molasses 2, wild rice 1); ALLOWLIST 1. The 7 NO PRICE BASIS lines are exactly the 7 recipes compute-v2-perserving SKIPPED (3a0a09): doro wat, minchet abish, harissa chicken, chapli kebab, fesenjan, tunisian meatballs, turkey wild rice. The five-spice recipes are priced (label fallback) and are advisory only.",
+        "(b) WHAT IS LIVE: 6 of the 7 skipped recipes are in meal-prep/db/held-recipes.json with reason 'not carried in store by any Omaha store (carriage.json, verified live 2026-09-19); Brad: a recipe is discarded if an ingredient is not carried by any Omaha store' - the carriage gate did its job and they are NOT reader-facing. The seventh, turkey-wild-rice-casserole, is LIVE (meal-prep/db/published-hashes.json, visibility paid) and its ingredient is CARRIED: grocery/carriage.json wild-rice = CARRIED | Hy-Vee | 'Quality Wild Rice' | '16 oz (1 lb stand up bag)' | $8.99 | productId 36825 | as_of 2026-09-19 | read live at Hy-Vee Omaha #02 (storeId 1466). That is the reader-facing money line.",
+        "THE MONEY: the recipe uses Wild Rice 855 g over 14 servings (meal-prep/db/recipes/turkey-wild-rice-casserole.json). At the ledger's $8.99 per 453.6 g = $0.01982/g the line is $16.94 per batch, $1.21 per serving. meal-prep/db/costed.json (foreign, today's recost) prices the recipe from 17 lines with Wild Rice ABSENT: cost_batch 31.00, cost_per_serving 2.21, cost_batch_true 53.15, cost_per_serving_true 3.80, lines_priced 17, lines_unpriced 1. With the line: utilization 47.94 / 3.42 per serving (+55%), whole-package 71.13 / 5.08 (two 16 oz bags). The costed number understates by $1.21 per serving on the title ingredient.",
+        "IS THE UNDERSTATED NUMBER ON THE PAGE TODAY: no. meal-prep/db/recipes/turkey-wild-rice-casserole.json (working copy, git-clean) still says cost_batch 51.72 / cost_batch_true 75.23 (last written 26c2b0e08, 09-02, when wild-rice had a board price); meal-prep/recipes-db.json copy says cost_per_serving 3.69 / cost_per_serving_true 5.37; meal-prep/pipeline/v2-perserving.json carries NO entry for the slug (the 3a0a09 skip), so every site surface (build-hub-grid, build-card2, dinner-data, top5, rotation: manifest first, index fallback) reads the wild-rice-inclusive 5.37; public/smp-feed.json working copy per_serving 5.37 (HEAD 4.70). The $2.21 exists only in costed.json. The only thing between it and the page is the manifest skip that is itself an alert, plus the fact that the daily chain runs cost-recipes and compute-v2-perserving (check-ad-cycles.ps1:988, 994, 1088, 1130, 1147) but not sync-recipesdb-cost or propagate-recipes, which are hand runs.",
+        "WHY A CARRIED, PRICED INGREDIENT HAS NO PRICE BASIS: cost-recipes.ps1:213-247 tries board (comparison + recipe board), then the feed, then the no-board allowlist, then a label price from db/label-prices.json gated on carriage; the carriage ledger is read at 205-207 for its VERDICT only. wild-rice is in grocery/commodities.json (id at line 57396) and commodity-search.json ('wild rice') but no store capture holds a matching row today (comparison-2026-09-20 has no wild-rice id at all; pull-regular-hyvee examined 0 of 15 today, BLIND), it has no label-prices.json entry, so it falls to NO PRICE BASIS while the ledger beside it holds a live-read price, size, product id and date. five-spice-powder has the same ledger shape (McCormick Gourmet 1.75 oz $9.99, CARRIED) and IS priced, only because db/label-prices.json carries a Five-Spice Powder label at $8.13 / 1.75 oz (a Walmart buy-box read 2026-07-18) - 19% under the Hy-Vee shelf read. Berbere, harissa paste and pomegranate molasses also have label prices (Frontier $7.74/2.3 oz; Mina $4.98/10 oz; Cortas $8.25/10 oz) and are correctly REFUSED because carriage is NOT-CARRIED.",
+        "(c) THE GATE THAT EXISTS: meal-prep/pipeline/wave-preaudit.ps1:243-244 refuses a wave recipe whose costed row has lines_unpriced != 0 ('the published cost EXCLUDES an ingredient the reader must buy'), with a MUST FIRE at 583-585. It runs at FIRST publish. Nothing re-applies it to a recipe that is already live when a later recost loses a line: sync-recipesdb-cost.ps1 checks arithmetic consistency of the six cost fields (lines 64-71) and never reads lines_unpriced; propagate-recipes.ps1 does not either. Since 2026-09-19 (Brad's ruling) a hand propagate refuses without -SlugsFile, which is what has kept this slug from being republished at 2.21 so far.",
+        "no-board-price-ok.json is a deliberate allowlist ('may this bid skip board pricing', cost-recipes.ps1:169-176) and is not made to fail here; its dried-guajillo-chiles refusal on 09-19 was the allowlist doing exactly what its 2026-09-19 change says (refuse the bid, not the catalogue) and it is gone from today's file."
+      ],
+      "surface_fix": {
+        "what": "give the engine the price it already holds: a ledger basis for a CARRIED bid-keyed carriage entry carrying price and size, after the label fallback so no currently-priced line changes basis",
+        "files": [
+          "meal-prep/engine/cost-recipes.ps1"
+        ],
+        "exact_change": "after the label block (cost-recipes.ps1:233-243) and before the NO PRICE BASIS flag at 245: if ($null -eq $ppg -and $lineBid -and $CARRLEDGER.ContainsKey($lineBid)) { $le = $CARRLEDGER[$lineBid]; if ([string]$le.verdict -eq 'CARRIED' -and [double]$le.price -gt 0 -and $le.size) { $lg = SizeToGrams ([string]$le.size); $age = (Get-Date) - [datetime]$le.as_of; if ($lg -gt 0 -and $age.TotalDays -le 90) { $ppg = [double]$le.price / $lg; $basis = ('ledger:' + $lineBid + ':' + [string]$le.store + ':' + [string]$le.as_of) } } } - 90 is the quarter (capture-policy-lib QuarterDays), read from there not written as a literal; SizeToGrams already parses '16 oz (1 lb stand up bag)' as 16 oz because it matches the first oz token. A size that does not parse (Beef Stew Meat '' shape, 'priced per pound' shapes) stays NO PRICE BASIS."
+      },
+      "root_cause": "Two mechanisms. (1) cost-recipes has three price bases (board, feed, label) and the carriage ledger, which is the one place a live in-store read of price + size + product id + date is recorded for an ingredient no capture reaches, is consulted for its verdict only; so an ingredient PROVEN carried at a KNOWN price drops out of the recipe and the cost reads lower, while the same ingredient with a stale hand-typed label price would have priced. (2) The lines_unpriced=0 rule is enforced once, at first publish (wave-preaudit); a LIVE recipe whose recost later loses a line is only advisory (the cost-flags alert) and the surfaces are protected today by an accident of composition (compute-v2-perserving SKIPS the recipe, which is itself an alert, and sync/propagate are hand runs). One capture gap (Hy-Vee's pull examined 0 of 15 today) turned a carried ingredient into a silently cheaper recipe.",
+      "root_fix": {
+        "what": "(1) the ledger price is a basis (surface fix); (2) the first-publish rule becomes a standing rule: a published slug whose costed row has lines_unpriced > 0 is refused by sync-recipesdb-cost (exit 2, names the slugs) so no live surface can take a partial cost, and the cost-flags alert body says which lines are LIVE recipes and which are HELD, so the reader-facing subset is the first thing on the page",
+        "files": [
+          "meal-prep/engine/cost-recipes.ps1",
+          "meal-prep/pipeline/sync-recipesdb-cost.ps1",
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "exact_change": "(1) as surface_fix. (2) sync-recipesdb-cost.ps1: in the per-slug consistency check (lines 60-72), before writing any cost field for a slug present in meal-prep/db/published-hashes.json, if ([int]$C.lines_unpriced -gt 0) return 'lines_unpriced is N - a live cost that excludes an ingredient may not sync (wave-preaudit's first-publish rule, standing)'; the refusal is counted and named like the existing disagreements and the script exits 2 when any published slug was refused. (3) check-ad-cycles.ps1 COST-FLAG ALERT (2279-2293): split $cfLines by whether the recipe's slug is in published-hashes.json and lead the body with 'LIVE recipe(s) affected: N - <names>' then 'HELD/draft: M', keeping the same subject and signature so dedup is unchanged; the reviewer's count today would read LIVE 1 (turkey-wild-rice-casserole), advisory-priced 7 (five-spice), HELD 6."
+      },
+      "leaves_open": "(1) wild-rice and five-spice-powder price on NO board because no capture holds a matching Hy-Vee row (pull-regular-hyvee examined 0 of 15 eligible today, coverage-cycle BLIND). The ledger basis is the interim; the board is the fix, and the owner is the Hy-Vee pull, not this item. (2) five-spice-powder still prices from a 2026-07-18 Walmart label at 8.13 per 1.75 oz while Hy-Vee's live read says 9.99 - 7 recipes carry a 19% understatement on a line worth cents per serving. The ledger is ordered AFTER label by design so nothing moves without Q1's ruling. (3) 71 CARRIED ledger entries keyed item:<name> are not reachable by this bid-keyed basis; 0 of today's NO PRICE BASIS lines is one of them. (4) propagate-recipes.ps1 and the hunter's wave publish did not get the lines_unpriced refusal; sync-recipesdb-cost is the road the spec and index copies take and wave-preaudit already guards the wave. (5) NEW: costed.json and cost-flags.txt were regenerated on the live path by the fallthrough in (b), against today's published board. They are pipeline output, not committed by this run, and the chain regenerates them next cycle - but the plan's coordination asked for a scratch path and did not get one.",
+      "leaves_open_occurrences": "(1) pull-regular-hyvee BLIND: 2 (09-20 08:43 and this run's coverage read); (2) 7 recipes on today's cost-flags, 0 reader-visible cents measured; (3) 0 lines today; (4) 0 known propagations of a partial cost to a live page - the spec, the index copy and the feed all still carry the wild-rice-inclusive numbers; (5) 1, this run.",
+      "leaves_open_followup": "Q1-2026-09-20-partial-cost",
+      "prior_closes": [],
+      "prior_closes_note": "no RETURN line from triage-due for this type; the alert fired 09-19 16:48 and today 08:26 (x3 on one id)",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no grocery matching rule changes; routing before == after over comparison-2026-09-20 + out/recipe-board.json (2806 priced cells). Cost-side blast radius measured over grocery/carriage.json (122 entries, 115 CARRIED with a price, 73 of them priced on no board today, 7 of those keyed by bid: ground-sumac, parmesan-cheese, green-bell-pepper, penne-pasta, pine-nuts, five-spice-powder, wild-rice) against meal-prep/db/cost-flags.txt (27 lines): with the ledger basis placed AFTER label, exactly ONE line changes basis - Wild Rice in turkey-wild-rice-casserole (NO PRICE BASIS -> ledger:wild-rice:Hy-Vee:2026-09-19). Every currently-priced line keeps its basis by construction.",
+        "affected_now": 1,
+        "names": [
+          "turkey-wild-rice-casserole :: Wild Rice :: 855 g at $8.99 / 16 oz Hy-Vee 'Quality Wild Rice' (as_of 2026-09-19)"
+        ],
+        "risk": "a ledger price is a hand-recorded live read, the same evidence class as db/label-prices.json but stronger (store, product id, date); the 90-day bound is the estate's everyday re-read policy. Ordering it after label means a stale label still beats a fresh shelf read (leaves_open 2). The sync refusal cannot understate anything: it only stops a partial cost reaching the spec and index; it can leave a live recipe on an OLD full cost, which is the current de-facto behaviour made explicit.",
+        "cell_effects": [],
+        "recipe_effects": [
+          {
+            "slug": "turkey-wild-rice-casserole",
+            "field": "cost_batch (utilization)",
+            "before": 31.0,
+            "after": 47.94
+          },
+          {
+            "slug": "turkey-wild-rice-casserole",
+            "field": "cost_per_serving (utilization, /14)",
+            "before": 2.21,
+            "after": 3.42
+          },
+          {
+            "slug": "turkey-wild-rice-casserole",
+            "field": "cost_batch_true (whole package, 2 x 16 oz)",
+            "before": 53.15,
+            "after": 71.13
+          },
+          {
+            "slug": "turkey-wild-rice-casserole",
+            "field": "cost_per_serving_true",
+            "before": 3.8,
+            "after": 5.08
+          }
+        ]
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against meal-prep/db/costed.json and cost-flags.txt as rewritten by today's 08:26 recost (both FOREIGN, uncommitted), grocery/carriage.json at HEAD, meal-prep/db/recipes/turkey-wild-rice-casserole.json (git-clean at 26c2b0e08), meal-prep/recipes-db.json working copy, public/smp-feed.json working copy (foreign) and HEAD, comparison-2026-09-20 built 08:06:58. The recost re-runs every chain cycle, so the developer re-reads costed.json's row for the slug before acting.",
+      "coordination": "meal-prep/db/costed.json, meal-prep/ingredient-map.json, meal-prep/pipeline/v2-perserving.json and public/smp-feed.json are on the FOREIGN uncommitted list: nothing here edits them by hand; the chain regenerates costed.json and the manifest on its next cycle after the engine change lands, and the developer verifies the wild-rice row from THAT run's output. If a hand recost is needed to prove the fixture, run cost-recipes.ps1 -Slugs turkey-wild-rice-casserole against a scratch -FlagsFile and a scratch costed path, never the live db.",
+      "proof": {
+        "guard_or_fixture": "meal-prep/engine/cost-recipes.ps1's own fixture lane (its regression inputs live at meal-prep/engine/regression-inputs/golden/inputs/db; if the engine has no -SelfTest the developer adds one in a shape lib/selftest-lib.ps1's census can find) plus meal-prep/pipeline/sync-recipesdb-cost.ps1's cases and meal-prep/pipeline/wave-preaudit.ps1:583-585 (the existing lines_unpriced MUST FIRE stays green)",
+        "must_fire_case": "MUST FIRE (engine): a frozen spec with the line 'Wild Rice' 855 g, an ingredients.json row bid=wild-rice gpu 28.3495 unit oz, an EMPTY board and feed, NO label entry, and a carriage.json fixture holding wild-rice = { verdict CARRIED, store Hy-Vee, item 'Quality Wild Rice', size '16 oz (1 lb stand up bag)', price 8.99, as_of <today minus 1 day> } must price the line at 8.99/453.592 = 0.01982 $/g with basis 'ledger:wild-rice:Hy-Vee:<as_of>' and write NO cost-flags line for it. MUST NOT FIRE: the same entry with verdict NOT-CARRIED, or as_of 91 days old (one day past the quarter - name the bar in the case text), or size '', each leaves the line at NO PRICE BASIS with its flag. MUST FIRE (sync): a costed row for a slug present in a fixture published-hashes.json with lines_unpriced 1 is refused, named, and the six cost fields are NOT written; the script exits 2.",
+        "clean_twin": "CLEAN TWIN (engine): a spec line 'Five-Spice Powder' with the label-prices.json entry ($8.13, '1.75 oz') AND the ledger entry ($9.99, '1.75 oz') keeps basis 'label:McCormick Gourmet 1.75 oz' - label still wins over ledger, so no currently-priced line moved. CLEAN TWIN (sync): a costed row with lines_unpriced 0 for a published slug still syncs all six fields exactly as today, and a HELD (unpublished) slug with lines_unpriced 1 is not refused by this rule (it is not on a page). CLEAN TWIN (alert): the 09-19 cost-flags lines split into LIVE 1 / HELD 6 / advisory 7 with the same subject and signature.",
+        "commands": [
+          "powershell -File meal-prep/engine/cost-recipes.ps1 -SelfTest",
+          "powershell -File meal-prep/pipeline/sync-recipesdb-cost.ps1 -SelfTest",
+          "powershell -File meal-prep/pipeline/wave-preaudit.ps1 -SelfTest",
+          "powershell -File grocery/test-auditors.ps1"
+        ]
+      },
+      "rollback": "revert cost-recipes.ps1 (the line returns to NO PRICE BASIS and the flag), sync-recipesdb-cost.ps1 and the alert-body split; costed.json is regenerated by the next chain cycle either way. No spec or index copy is written by this item.",
+      "do_not_touch": [
+        "meal-prep/db/no-board-price-ok.json (the allowlist is deliberate and its 2026-09-19 refuse-the-bid behaviour is correct)",
+        "grocery/carriage.json verdicts (the 09-19 carriage work is done and correct; do not redo the seven-store reads)",
+        "meal-prep/db/held-recipes.json (the six holds are Brad's standing rule applied correctly)",
+        "meal-prep/db/label-prices.json precedence (Q1)",
+        "the foreign files named in coordination"
+      ],
+      "resolution_note": "27 lines today (28 on 09-19 incl. a one-off allowlist refusal), 5 bids. Six of the seven skipped recipes are HELD as not carried - correct, not reader-facing. The one LIVE recipe, turkey-wild-rice-casserole, lost its title ingredient in the recost: wild rice is CARRIED at Hy-Vee ($8.99 / 16 oz, read 09-19) but reaches no board and has no label price, so the engine dropped 855 g ($16.94 a batch, $1.21 a serving) and costed it at $2.21 a serving instead of $3.42. The page still shows the wild-rice-inclusive number only because the per-serving manifest skipped the recipe (3a0a09). The engine now prices a CARRIED ledger entry (after label, within the quarter), and a live recipe with an unpriced line can no longer sync a partial cost; the alert leads with the live subset. MEASURED AFTER THE FIX on the live db: the Wild Rice line prices at basis 'ledger:wild-rice:Hy-Vee:2026-09-19', util_cost 16.95 over 855 g, and the recipe reads 47.95 / 3.42 / 71.15 / 5.08 with lines_priced 18 and lines_unpriced 0. cost-flags fell from 27 lines to 26. The spec and recipes-db.json were NOT written.",
+      "publish_batch": 2,
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "THREE deviations. (a) THE PLAN'S MONEY FIGURE WAS ONE CENT LOW, measured not transcribed: 8.99 divided by (16 x 28.3495) is 0.0198197 per gram, and 855 g is 16.95 a batch, not 16.94 (the plan used a truncated 0.01982). Per serving over 14 it is 1.21, as the plan said. The live recost after the fix reads cost_batch 47.95 (plan predicted 47.94), cost_per_serving 3.42 (exact), cost_batch_true 71.15 (plan 71.13), cost_per_serving_true 5.08 (exact), lines_priced 18, lines_unpriced 0, and the Wild Rice line carries basis 'ledger:wild-rice:Hy-Vee:2026-09-19' with util_cost 16.95. (b) THE ENGINE HAD NO -SelfTest AND NO WAY TO GET ONE, so the new logic was extracted into a pure function Get-LedgerBasis and a -SelfTest block added that drives it. This matters twice over: cost-recipes.ps1 had no SelfTest switch parameter at all, so the first -SelfTest run fell into args and ran the LIVE engine end to end - the arg-silently-ignored trap plus a self-test fallthrough in one. The switch is now declared and the block exits on every path. (c) THE SYNC REFUSAL COULD NOT BE WRITTEN WHERE THE PLAN PUT IT. The plan put it in Test-CostBlockCoherent, whose input is the SPEC's six cost fields; lines_unpriced lives in costed.json and is not one of them. It is instead a new pure function Test-PartialCostSyncable, given published-hashes.json and a slug-to-lines_unpriced map read through Read-JsonFile, called per slug before any field is written; the script names every refusal and exits 2. Same rule, a place it can actually read its inputs.",
+      "shipped_commit": "batch 2 commit (meal-prep/engine/cost-recipes.ps1, meal-prep/pipeline/sync-recipesdb-cost.ps1, grocery/check-ad-cycles.ps1)",
+      "premise_verified_note": "VERIFIED at HEAD and on today's data. grocery/carriage.json holds wild-rice = CARRIED | Hy-Vee | 'Quality Wild Rice' | '16 oz (1 lb stand up bag)' | 8.99 | product_id 36825 | as_of 2026-09-19. meal-prep/db/costed.json (08:26 run) held cost_batch 31, cost_per_serving 2.21, lines_priced 17, lines_unpriced 1 with no Wild Rice line. The spec meal-prep/db/recipes/turkey-wild-rice-casserole.json is git-clean and still carries 51.72 / 75.23, and recipes-db.json still carries 3.69 / 5.37, so the understated number was NOT on any page. published-hashes.json (577 entries) contains the slug, so the recipe is LIVE. Every number the plan asserted reproduced.",
+      "leaves_open_followup_note": "(2) is the only residual that can move a reader-facing number and it is a RULING, not a defect: label versus ledger precedence, which Q1-2026-09-20-partial-cost asks directly. (1) is owned by the Hy-Vee pull and restated by the coverage cycle on every chain run (watch:grocery/audit-coverage-gaps.ps1). (3) and (4) are 0 occurrences and already gated by meal-prep/pipeline/wave-preaudit.ps1's lines_unpriced MUST FIRE. (5) is pipeline-regenerated output this run does not commit and the next cycle rewrites."
+    },
+    {
+      "queue_id": "2026-09-19-3a0a09",
+      "subject": "Recipe per-serving manifest: skipped recipe(s)",
+      "classification": "superseded",
+      "superseded_by": "2026-09-19-d240fd",
+      "evidence": [
+        "body: SKIPPED 7 recipe(s) with bad cost data: ethiopian-doro-wat-chicken-bowls (no costed line 'Berbere Seasoning'), ethiopian-minchet-abish-berbere-beef-bowls (Berbere Seasoning), harissa-chicken-rice-bowls (Harissa Paste), pakistani-chapli-kebab-rice-bowls (Pomegranate Molasses), persian-fesenjan-chicken-bowls (Pomegranate Molasses), tunisian-harissa-coconut-beef-meatballs (Harissa Paste), turkey-wild-rice-casserole (Wild Rice) - the same seven recipes as d240fd's seven NO PRICE BASIS lines, one condition; the skip is what has kept the understated wild-rice cost OFF the site surfaces so far (v2-perserving.json carries no entry for the slug; the surfaces fall back to the index copy at 5.37)."
+      ],
+      "root_cause": "the same seven NO PRICE BASIS lines as d240fd; the manifest's skip is the downstream symptom and, today, the accidental protection",
+      "resolution_note": "Superseded by 2026-09-19-d240fd: the seven skipped recipes are exactly the seven NO PRICE BASIS lines there (six held as not carried, one live wild-rice recipe whose ledger price the engine now uses). The skip clears when the wild-rice line prices and the six held recipes leave the costed set.",
+      "status": "superseded",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": "batch 2 commit (closes with d240fd)",
+      "premise_verified_note": "VERIFIED: the 7 skipped recipes are exactly d240fd's 7 NO PRICE BASIS lines. meal-prep/pipeline/v2-perserving.json still carries no entry for turkey-wild-rice-casserole, which is why no site surface ever read the understated 2.21. Closes with d240fd; not reported as work performed."
+    },
+    {
+      "queue_id": "2026-09-19-b66b54",
+      "subject": "Grocery: GUARDS FAILED - board not published - 2026-09-19",
+      "lane": "money",
+      "classification": "parse-basis-bug",
+      "transcribed": "TRANSCRIBED ONLY, per Brad's 2026-09-20 ruling: a RETURN with a ROUTE line skips the reviewer and goes to the lane that closed it last, seeded with the prior plan item. Nothing below was re-investigated; the prior root cause is carried forward verbatim and today's second hard fail is flagged as NOT covered by it.",
+      "route": "MONEY lane, seeded with grocery/triage-plans/plan-2026-09-18.json item 2026-09-18-f90ba6 (prior status: needs-more-time). The board has NOT published today - this is the most valuable item in the run.",
+      "evidence": [
+        "ad-cycle-log 2026-09-19 16:36:36: GUARDS FAILED: 3 hard invariant(s) - audit-food-category (the almond-butter baby-food pouch, fixed 201fadc9a; see ae9df2), audit-unit-basis-outlier (honey-mustard: 12 oz mustard jars on one row with 16-24 fl oz dressings, split into two commodities in 201fadc9a), audit-band-censorship RATCHET 15 vs 13 (energy-drinks floor 0.08 -> 0.07; canned-pineapple cup pack excluded; both in 201fadc9a). 17:22:52 guards OK in that session's checkout. 20:40 and 20:54 publish-phase ledger rows show two more guard runs that evening.",
+        "ad-cycle-log 2026-09-20 08:14:45: HARD FAIL 'no cell wins a row while measured in a different KIND of quantity than the row (volume among weights) (see audit-unit-basis-outlier.ps1)' AND HARD FAIL 'no NEW script reads JSON in a way PS 5.1 decodes with the ANSI codepage (RATCHET, may only go down) (see audit-json-readers.ps1)'; GUARDS FAILED: 2 hard invariant(s); board NOT republished; SHIP PATH: the board was HELD. The kind-mismatch crown for today is in out/basis-outliers.json (written 08:14) and was NOT opened by this reviewer.",
+        "WHY IT RETURNED (for the lane): f90ba6's own must_fire_case named 'the frozen pistachios crown row (Baker's, 42 fl oz, 0.1426/oz, row_kind weight) must make audit-unit-basis-outlier exit 2 as kind_mismatch_crown', the item was left needs-more-time, and the unit-basis-outlier hard fail came straight back on 09-19 (honey-mustard) and 09-20 (a row the lane must read from basis-outliers.json). Same guard, a different commodity each time: the class is 'one commodity carries rows of two quantity KINDS', not any one product.",
+        "NOT COVERED BY THE PRIOR DIAGNOSIS: today's second hard fail is audit-json-readers (ops ratchet: a NEW script reads JSON without lib/json-io.ps1's Read-JsonFile and PS 5.1 decodes a BOM-less file with the ANSI codepage). f90ba6 says nothing about it. It was OK at 16:35:17 on 09-19 ('no NEW script reads JSON ...' ok), so a script committed between 16:35 on 09-19 and 08:14 today added a bare JSON read: candidates from git log are 2630da4f1 (build-aldi-regular), 201fadc9a (recipe-overlay), 6e26438be (L1 wall clock), f9d65159d (L2 accessor), f45081af3 (global exclude). The lane runs ops/audit-json-readers.ps1 for the file name rather than guessing, and fixes the reader (Read-JsonFile), never the ratchet."
+      ],
+      "root_cause": "CARRIED FORWARD VERBATIM from plan-2026-09-18.json item 2026-09-18-f90ba6: Three mechanisms, one per failure. (a) Get-ItemPrice's cents branch reads the first cents-shaped token anywhere in an ad line and the parser only knows the savings shapes it has been taught one at a time (PERKS, FUEL SAVER on 09-07, SAVE 50c today): measured over every ads-*.json on disk, 145 distinct lines carry a cents token AND a dollar token and in ALL 145 the cents token is a reward or a savings, never the price (139 fuel-saver, 4 SAVE-cents, 2 '50c off with digital coupon'), while the 60 cents-only lines are all fuel-saver lines with no price. (b) The wrong-class library scopes on the deals page's display taxonomy, so a display bucket that mixes nuts with drinks ('Snacks & Drinks', 39 commodities, 21 non-drink) can never carry the beverage class, and audit-food-category is structurally blind to a beverage crowning any of those 21; 400 of 592 commodities carry no per-commodity beverage exclude at all. (c) compare-deals refuses on price before it refuses on definition, so the band-censorship ratchet counts definitional refusals as price censorship, and its cell count moves when a PEER's sale moves the median, not when anything new is refused. [Reviewer 2026-09-20: (a) and (c) shipped and were closed by the developer's deviation notes; (b)'s apply_ids block shipped; the RETURNING half is the unit-basis-outlier crown, whose founding fixture f90ba6 named but left needs-more-time, plus the new audit-json-readers ratchet fail above.]",
+      "root_fix": {
+        "what": "CARRIED FORWARD from f90ba6 and narrowed to what returned: (i) the kind-mismatch crown fixture f90ba6 named (deviation 4 placed it in audit-unit-basis-outlier's own -SelfTest, run by test-auditors u111) must exist and fire; today's crown row is read from out/basis-outliers.json and either split by form (the honey-mustard shape: two commodities, one per quantity kind) or refused at the row, never allowlisted through basis-kind-allowlist when the margin is thinner than the label question (201fadc9a's own rule); (ii) the audit-json-readers finding is fixed at the reader, with Read-JsonFile from lib/json-io.ps1",
+        "files": [
+          "grocery/audit-unit-basis-outlier.ps1",
+          "grocery/commodities.json",
+          "grocery/compare-deals.ps1",
+          "ops/audit-json-readers.ps1 (read for the file name only)",
+          "<the script audit-json-readers names>"
+        ],
+        "exact_change": "the lane derives it from out/basis-outliers.json (kind_mismatch_crown rows) and ops/audit-json-readers.ps1's output on today's tree; the reviewer did not open either, by instruction"
+      },
+      "leaves_open": "(b) CARRIED FORWARD from f90ba6: 20 of the 21 non-drink 'Snacks & Drinks' commodities still carry no beverage class (apply_ids reaches pistachios only). 0 wrong-class products on those 20 today. (c) NEW, from this run: the coverage-ledger REGRESSED warns (audit-food-category 2481 vs 3037, audit-everyday-mismatch 2211 vs 2598, build-rescue-worklist 1219 vs 1364) are UNCHANGED by the republish and were deliberately NOT accepted: their own cause - the provenance contract's withheld rows plus a BLIND Hy-Vee pull (examined 0 of 15 eligible today) - has not refilled yet, so accepting a lower floor now would ratchet the guard's sensitivity down against a population expected to recover. (d) NEW, found while running the chain: wave-preaudit's END-TO-END CLEAN TWIN 'a live, unmodified spec passes every per-slug check' is RED, and it is red at HEAD too - one spec reads cost_batch 25.13 against an engine 25. Proven pre-existing by running the suite against HEAD's own costed.json, which reproduces the identical numbers. Not caused by this plan; the case's own message names the repair (recost-spec-cost-block.ps1), which rewrites spec cost blocks estate-wide and is far outside this plan's blast radius.",
+      "leaves_open_occurrences": "(b) 0 wrong-class products on those 20 commodities over comparison-2026-09-20 (2,806 priced cells scanned); 1 in f90ba6's prior window. (c) 4 runs now: 09-19 16:36, 09-19 17:22, 09-20 08:14 and this run's guards pass. (d) 1 spec, reproduced twice this run (against this run's costed.json and against HEAD's), window = today's tree at 2f2922497.",
+      "leaves_open_followup": "2026-09-20-588caa",
+      "prior_closes": [
+        "2026-09-18-f90ba6"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/pricing-math-lib.ps1",
+          "grocery/apply-category-excludes.ps1",
+          "grocery/audit-food-category.ps1",
+          "grocery/compare-deals.ps1",
+          "grocery/audit-unit-basis-outlier.ps1"
+        ],
+        "what": "CARRIED FORWARD from f90ba6: the ingest parser stops reading any cents token as a price when a dollar amount is present; the class library can scope a class by commodity id so the wrong-class guard can see a beverage on a nut commodity; the engine orders definitional refusals before sanity refusals. FLAGGED FOR THE LANE: the half that returned is the unit-basis crown, so the prevention that closes this RETURN is at the engine/audit (a commodity whose rows span two quantity kinds is split or refused at build, and the kind-mismatch fixture fires), not another commodity's exclude list",
+        "exact_change": "as root_fix (i) and (ii); the lane records what it actually changed"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "0 names moved by THIS PLAN, which ships no rule change for this item; routing before == after over comparison-2026-09-20 + out/recipe-board.json (2806 priced cells). The lane's own split or exclude is NOT measured here (transcription only): before it ships, the lane measures routing before/after over comparison-2026-09-20 + out/regular + out/sams + out/bakers + out/fareway, writes plan-2026-09-20-2.routing.json with a positive control (the crown row it splits), and fills cell_effects from audit-capture-eviction.ps1",
+        "affected_now": 0,
+        "names": [],
+        "risk": "unmeasured here; a form split moves every row of the split kind off the row (201fadc9a: 20 dressings dropped when honey-mustard was split) and match-soundness will report them as DROPPED - read every entry before -Accept",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "transcribed against ad-cycle-log 08:14:45 today and plan-2026-09-18.json (f90ba6 status needs-more-time); out/basis-outliers.json (08:14 today) and ops/audit-json-readers.ps1's output were NOT read; the lane re-measures against comparison-2026-09-20 first, as triage-due's RE-MEASURE line says",
+      "proof": {
+        "guard_or_fixture": "grocery/audit-unit-basis-outlier.ps1 -SelfTest (run by test-auditors u111), grocery/test-guards.ps1, ops/audit-json-readers.ps1 -SelfTest, compare-deals.ps1 -SelfTest",
+        "must_fire_case": "CARRIED FORWARD from f90ba6 (b): the frozen pistachios crown row (Baker's, 42 fl oz, 0.1426/oz, row_kind weight) must make audit-unit-basis-outlier exit 2 as kind_mismatch_crown; ADDED FOR THE RETURN: today's kind_mismatch_crown row from out/basis-outliers.json (08:14) frozen beside it must exit 2 the same way, and after the split/refusal a rebuilt board must make the audit exit 0 on that commodity; audit-json-readers: the offending file's bare read, frozen as a fixture line, must be counted, and the ratchet must read at or below its committed mark after the fix",
+        "clean_twin": "CARRIED FORWARD: 'Southern Grove Pistachios 16 OZ' still routes to pistachios; a same-kind row set (all weight) on a commodity stays exit 0; a script reading JSON through Read-JsonFile is not counted by audit-json-readers",
+        "fixture_occurrences": [
+          "2026-09-18-f90ba6",
+          "2026-09-19-b66b54"
+        ],
+        "commands": [
+          "powershell -File grocery/audit-unit-basis-outlier.ps1 -SelfTest",
+          "powershell -File ops/audit-json-readers.ps1",
+          "powershell -File grocery/guards.ps1",
+          "powershell -File grocery/test-auditors.ps1"
+        ]
+      },
+      "rollback": "per the lane; a commodity split reverts as two json hunks plus the match-soundness baseline accept",
+      "do_not_touch": [
+        "any guard threshold",
+        "basis-kind-allowlist.json for a crown whose margin is thinner than the label question",
+        "the audit-json-readers ratchet mark (fix the reader)"
+      ],
+      "resolution_note": "Both hard fails closed honestly and the board is republished. (1) The kind-mismatch crown was coffee | Family Fare | 'Bolthouse Farms Mocha Cappuccino Coffee Beverage 15.2 Fl Oz' (15.2 fl oz, 0.2303/oz, volume on a weight row), and behind it Aldi's 'Barissimo Caramel Coffee Syrup 12.7 FL OZ' at 0.2748 - two liquid products undercutting four real ground-coffee cells. Refused at the row by extending the commodity's existing ready-to-drink exclude family with a beverage token and a syrup token; measured over 77,829 names, 13 coffee-matching names carry those tokens and none is ground coffee or beans. audit-unit-basis-outlier now reads crown=0 (scanned=565 ratio=6 kind=59 reviewed=8). The row is six real ground-coffee cells, crown Aldi 'Beaumont Medium Classic Roast 100 Pure Coffee 30.5 OZ' at 0.4030/oz. (2) audit-json-readers named grocery/triage-return-lib.ps1:210; fixed at the reader with Read-JsonFile from lib/json-io.ps1, ratchet back to 0 site(s) against a baseline of 0. The mark was not touched. match-soundness: MOVED=0, DROPPED=3 - the three Barissimo coffee syrups, every one an intended drop, read line by line before -Accept. guards.ps1: 'GUARDS OK: every hard invariant holds. Safe to publish.' hard=0 warn=19. publish-deals-page rc=0, PUBLISHED omaha-grocery-prices, 565 commodities, week 2026-09-20.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "THREE deviations. (a) A SECOND WRONG PRODUCT SAT BEHIND THE FIRST. The plan measured only the crown. The coffee row's number two was 'Barissimo Caramel Coffee Syrup 12.7 FL OZ' (Aldi, 0.2748/oz, a volume product carded as weight): refusing only the crown would have handed the row to a coffee-flavouring syrup and the same guard would have fired again on the next build. Same CLASS the plan understands (a liquid coffee product on a commodity labelled 'Coffee (ground/beans)'), a new DETAIL, so it was fixed in the same change and noted. (b) REFUSED AT THE ROW, NOT SPLIT BY FORM. The commodity is definitionally ground coffee or beans, and its exclude list already refuses iced coffee, ready-to-drink, RTD, cold brew, frappuccino, latte, instant and concentrates - the RTD family was simply missing the two tokens these products use. So this extends an existing refusal rather than creating a second commodity; basis-kind-allowlist.json was not touched. Two tokens added to commodities.json coffee.exclude, matching the word beverage(s) and the word syrup(s). MEASURED BEFORE THE CHANGE over every product name in grocery/out (1,770 files parsed, 77,829 distinct names): 1,363 names contain 'coffee', and 13 of those carry beverage or syrup. Not one is ground coffee or beans - 5 are already refused by 'instant', the rest are a cinnamon-stick listing, a sugar-packet listing, a maple syrup and a brown sugar. Zero legitimate coffee names are touched. (c) THE JSON-READER PATH IN THE PLAN WAS WRONG (ops/audit-json-readers.ps1 does not exist; it is grocery/). The reader was fixed at the reader as instructed: grocery/triage-return-lib.ps1 now dot-sources lib/json-io.ps1 and calls Read-JsonFile. The ratchet mark was NOT touched.",
+      "shipped_commit": "batch 1 commit (see git log for grocery/commodities.json + grocery/triage-return-lib.ps1)",
+      "premise_verified_note": "VERIFIED against today's tree before acting. (1) out/basis-outliers.json (08:13:23, the 08:14 guards run) carries exactly ONE kind_mismatch_crown: coffee | Family Fare | 'Bolthouse Farms Mocha Cappuccino Coffee Beverage 15.2 Fl Oz' | 15.2 fl oz | 0.2303/oz | kind volume, row_kind weight, holds_crown true. So today's first hard fail IS a kind-mismatch crown, as the RETURN said. (2) grocery/audit-json-readers.ps1 (NOT ops/, the plan's path was wrong) exited 2: 329 scripts scanned, 1 bare JSON read, grocery/triage-return-lib.ps1 line 210, RATCHET BROKEN 1 over a baseline of 0. Neither premise had to be re-derived from the corpus.",
+      "leaves_open_followup_note": "(d) is the live one and it owns this line: weekly queue item 2026-09-20-588caa, enqueued with the measurement (1 spec, cost_batch 25.13 vs engine 25, reproduced against HEAD's own committed costed.json). (b) is owned by watch:grocery/audit-food-category.ps1 - 0 occurrences today over 2,806 priced cells, and that guard is a guards.ps1 HARD invariant, so the first wrong-class product on any of those 20 commodities holds the publish on its first occurrence. (c) is owned by watch:grocery/audit-coverage-ledger.ps1, which re-states the three REGRESSED rows on every chain run; it deliberately gets no queue item, because accepting the floor is the thing that must NOT happen until the withheld rows refill."
+    },
+    {
+      "queue_id": "2026-09-19-4fc24c",
+      "subject": "The knowledge store's nightly pass went RED",
+      "lane": "ops",
+      "classification": "infra",
+      "transcribed": "TRANSCRIBED ONLY, per Brad's 2026-09-20 ruling. Prior plan item 2026-09-18-35e0f5 shipped 'done' on 2026-09-18 (claude-store 1fd6f85) and the type RETURNED on 09-19 and again 09-20 (x2 on this id): that is a failed prevention and the ops lane treats it as one.",
+      "route": "OPS lane, seeded with grocery/triage-plans/plan-2026-09-18.json item 2026-09-18-35e0f5 (prior status: done).",
+      "evidence": [
+        "body 2026-09-20 04:39:09: '3 of 30 step(s) failed: reflex fire rates (exit 1), memory clusters (exit 1), gate (exit 1) | waiting on a judgement: memory clusters | broke: reflex fire rates, gate | Report: C:/Users/Owner/.claude/recall-sleep-latest.md'.",
+        "prior item's own evidence: the gate (check-skills.py) had exited 1 at 04:38 on 09-11, 09-12, 09-13, 09-14, 09-17 and 09-18 on the path recognition floor ('path holdout 37 of 148 fired 25.0% TOO LOUD' against RATE_BAND (0.03, 0.20)); the prior fix persisted each failing step's tail and kept the itemised FAIL lines in the digest, and left HOW the floor is judged to Brad (Q3). It returned the next night: the prevention made the failure legible and did not stop it, which the prior plan itself predicted by parking the floor question.",
+        "NEW since the prior item, not diagnosed here: 'reflex fire rates' and 'memory clusters' are steps the 09-18 item did not name; their tails should now be in recall-sleep-log.jsonl (the prior root_fix), which is the first thing the lane reads."
+      ],
+      "root_cause": "CARRIED FORWARD VERBATIM from plan-2026-09-18.json item 2026-09-18-35e0f5: the sleep report is a keyword digest and the run log stores exit codes without output, so a failure's explanation survives only if it happens to contain a keyword and is otherwise gone by morning; separately, the 04:38 gate judges recognition floors on a store that the same pass just re-derived and that sessions move all day, so its floor verdict is not the verdict a re-run gives",
+      "root_fix": {
+        "what": "CARRIED FORWARD from 35e0f5, with the lane owning the returned half: the digest and tail changes shipped; what returned is the gate's floor verdict, which the prior item parked as Q3 for Brad. The lane reads the persisted tails for the three failed steps, and either (a) Brad has ruled Q3 and the lane implements the ruling, or (b) the lane presents Q3 again with the options the prior item wrote (a frozen snapshot for the gate, a minimum probe count per kind, or TOO LOUD as advisory under that count) and the alert stays needs-brad until then",
+        "files": [
+          "C:/Users/Owner/.claude/skills/recall-sleep.py",
+          "C:/Users/Owner/.claude/skills/check-skills.py"
+        ],
+        "exact_change": "the lane derives it from the tails in recall-sleep-log.jsonl for steps 'reflex fire rates', 'memory clusters' and 'gate' at 04:38-04:39 on 09-19 and 09-20; the reviewer did not open the report, by instruction"
+      },
+      "leaves_open": "CARRIED FORWARD from 35e0f5: the path recognition floor reading TOO LOUD at 04:38 on consecutive nights and in band by mid-morning (Q3); and the approvals-server.py hook self-test that exits 1 with its last case reading ok (another session's in-flight work)",
+      "leaves_open_occurrences": "floor: 8 nights now (09-11, 12, 13, 14, 17, 18, 19, 20) if tonight's gate failure is the floor again - the lane confirms from the tail; hook self-test: 1 observed run (09-18 10:10)",
+      "leaves_open_followup": "2026-09-19-4fc24c",
+      "prior_closes": [
+        "2026-09-18-35e0f5"
+      ],
+      "prevention": {
+        "source": [
+          "C:/Users/Owner/.claude/skills/recall-sleep.py",
+          "C:/Users/Owner/.claude/skills/check-skills.py"
+        ],
+        "what": "CARRIED FORWARD from 35e0f5 ('the emitter of the alert keeps and persists the failure lines it is reporting') and FLAGGED AS A FAILED PREVENTION: it shipped done on 09-18 and the type returned on 09-19 and 09-20. The prevention that closes the RETURN is at the gate's floor judgement (check-skills.py / recall_floors.py), which the prior item explicitly did not change because its own text forbids moving the target without a ruling",
+        "exact_change": "as root_fix; the lane records what it actually changed and, if it is a ruling, the alert is parked needs-brad with Q3 restated"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no grocery matching rule changes; routing before == after over comparison-2026-09-20 + out/recipe-board.json (2806 priced cells); the change is confined to the knowledge store's nightly pass",
+        "affected_now": 0,
+        "names": [],
+        "risk": "a floor moved to make the gate pass is the 'wider tolerance' repair the estate refuses; the prior item's options are a frozen snapshot, a minimum probe count, or advisory status, none of which moves the target",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "transcribed against the queue body of 04:39:09 today and plan-2026-09-18.json item 35e0f5 (status done, shipped claude-store 1fd6f85); recall-sleep-latest.md and recall-sleep-log.jsonl were NOT opened",
+      "proof": {
+        "guard_or_fixture": "C:/Users/Owner/.claude/skills/recall-sleep.py --selftest (the digest cases, lines ~440-512) and check-skills.py's own gate cases",
+        "must_fire_case": "CARRIED FORWARD from 35e0f5: a gate result whose output ends 'FAIL (2):' followed by two indented failure lines carrying no keyword must render both lines under the gate step; a failing step must leave a 'tail' in its log record. ADDED FOR THE RETURN: the 09-19 and 09-20 04:38 runs' tails for 'reflex fire rates', 'memory clusters' and 'gate' must be present in recall-sleep-log.jsonl (if they are not, the prior fix did not land on the path the scheduled task runs, and THAT is the returned defect)",
+        "clean_twin": "CARRIED FORWARD: the existing MUST NOT FIRE 'the word FAILURES in prose does not read as a FAIL' and the CLEAN TWIN 'a real FAIL line is still kept' stay green; a passing step writes no tail",
+        "fixture_occurrences": [
+          "2026-09-18-35e0f5",
+          "2026-09-19-4fc24c"
+        ],
+        "commands": [
+          "C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/recall-sleep.py --selftest"
+        ]
+      },
+      "rollback": "per the lane, in the knowledge store's own git (it has a remote; the prior item pushed there)",
+      "do_not_touch": [
+        "TARGET_FIRE_RATE and RATE_BAND in recall_floors.py without Brad's Q3 ruling",
+        "the approvals-server.py hook self-test (another session's in-flight work)"
+      ],
+      "resolution_note": "the lane writes it; it must say whether the tails were present, what each of the three steps actually failed on, and whether the close is a fix or a needs-brad park on Q3",
+      "publish_batch": "n/a (knowledge store, not the board)",
+      "status": "needs-more-time",
+      "premise_verified": false,
+      "deviation": "Not worked by this lane. The money lane took b66b54, ae9df2, bb10f1 and d240fd (plus 3a0a09 as superseded); 4fc24c is the ops lane's and its own queue id carries it. No new queue item was minted for it.",
+      "shipped_commit": null,
+      "premise_verified_note": "NOT VERIFIED BY THIS RUN. 2026-09-19-4fc24c is routed to the OPS lane and this is the MONEY lane; its dispatch named four items and this is not one of them. Nothing here was read, run or changed, and its queue id stays OPEN for the ops lane. Recorded as needs-more-time rather than closed so the closing gate reads the true state."
+    }
+  ],
+  "ship_sequence": [
+    "BATCH 1 (money lane, board): b66b54 - read out/basis-outliers.json (08:14) and ops/audit-json-readers.ps1's finding; fix the JSON reader at the reader; split or refuse the kind-mismatch crown; then the chain as check-ad-cycles.ps1 runs it: repair-multipack-sizes.ps1 -Apply, stamp-ad-as-of.ps1 -Apply, compare-deals.ps1 (with the newest Baker's/Fareway files), audit-food-category.ps1 (expect 0), audit-name-drift / prune-bad-links / audit-name-drift again / generate-board-overrides / build-deals-page, audit-match-soundness.ps1 -> read every DROPPED/MOVED -> -Accept, guards.ps1 (MUST be hard=0) + audit-basis-reconcile + audit-pack-basis, publish-deals-page.ps1, test-auditors.ps1 (MUST be 0)",
+    "BATCH 1 (same publish, chain code): ae9df2 - Live() tally, Get-AuditorsVerdict rc 4, WATCHERS-DECISION rc-4 branch, u071/u072 cases; bb10f1 - SHIP-SUMMARY region, publish-verdict logging, u060-a finding and region test. Both are chain/harness edits with no board effect; ship them in the same push as b66b54 so tomorrow's 08:00 run carries them. run-gates must be green (ops/push-main.ps1)",
+    "VERIFY LIVE (batch 1): one fixed cell on the live board with a cache-busting query; ad-cycle-log's next SHIP PATH COMPLETE line must match the publish rc it follows; test-auditors' -COMPLETE line prints live=0",
+    "BATCH 2 (recipes, after batch 1 lands): d240fd - cost-recipes.ps1 ledger basis + fixture; sync-recipesdb-cost.ps1 lines_unpriced refusal + cases; check-ad-cycles cost-flag body split; wave-preaudit -SelfTest still green; then let the chain's next cycle regenerate costed.json and read the turkey-wild-rice-casserole row (lines_unpriced 0, Wild Rice basis ledger:wild-rice); commit the plan with the fixes; 3a0a09 closes as superseded when d240fd closes",
+    "VERIFY LIVE (batch 2): meal-prep/recipes-db.json and the spec for turkey-wild-rice-casserole are UNCHANGED by the chain (no partial cost synced); the next per-serving manifest carries the slug again; the live card still reads the whole-package figure it reads today until a full recost syncs",
+    "OPS lane (independent of the board): 4fc24c per its route; needs-brad park on Q3 if no ruling exists",
+    "Both lanes: close each queue item with the resolution_note above, run validate-triage-plan.ps1 -Plan grocery/triage-plans/plan-2026-09-20-2.json -Closing, and push through ops/push-main.ps1 with a Store: line naming one-tally-two-verdicts, recipe-cost-basis-map and guard-blindness-family"
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q1-2026-09-20-partial-cost",
+      "from_item": "2026-09-19-d240fd",
+      "ask": "When a LIVE recipe's recost cannot price one of its ingredients (carried, but no board, feed, label or ledger price), what does the page show? Today the manifest silently skips the recipe and the page keeps the last full cost, unmarked, indefinitely. Options: (A) keep the last fully-built cost and badge the card 'price being re-checked' with the date of that cost - accurate about what it is, honest about its age; (B) take the recipe down until every line prices, as the not-carried rule already does - turkey-wild-rice-casserole would come down today over a Hy-Vee capture gap; (C) publish the partial cost with an 'excludes wild rice' note - refused by the accuracy rule, listed only to close it. The defect half (the engine ignoring a ledger price it holds; a partial cost being syncable) ships regardless. Related and cheaper: should a fresh in-store ledger read ($9.99 Hy-Vee, 2026-09-19) outrank a two-month-old Walmart label ($8.13, 2026-07-18) for five-spice-powder and its 7 recipes? The plan orders ledger AFTER label so nothing moves without this answer.",
+      "recommendation": "A, with the badge; and yes to ledger-before-label once the ledger basis has run clean for a week"
+    },
+    {
+      "id": "Q3-2026-09-18-recall-floor (carried forward)",
+      "from_item": "2026-09-19-4fc24c",
+      "ask": "CARRIED FORWARD from plan-2026-09-18.json item 35e0f5, unanswered and now the cause of a returning nightly RED: how should the 04:38 gate judge the path recognition floor when the same pass just re-derived it and sessions move the store all day? Options the prior item wrote: a frozen snapshot for the gate, a minimum probe count per kind (path has 148 holdout probes against 300 for command and edit), or TOO LOUD as advisory for a kind under that count. The calibrator's own text forbids moving the target.",
+      "recommendation": "the minimum probe count, with TOO LOUD advisory below it"
+    }
+  ],
+  "not_proven": [
+    "The 17:23 failing stage (build-deals-page) is inferred from timing and from 201fadc9a's commit message, not from the run's own output, because check-ad-cycles discarded it - which is the bb10f1 defect.",
+    "The 16:36 food-category finding text (the almond-butter pouch) is quoted from 201fadc9a; audit-food-category writes no json and guards logged only the HARD FAIL line.",
+    "Whether any rc-4 consumer exists outside check-ad-cycles and prepush-test-auditors was grepped, not executed; the developer confirms prepush-test-auditors treats rc 4 as failing before shipping ae9df2.",
+    "Today's kind-mismatch crown row and the audit-json-readers file were not opened (b66b54 is transcribe-only by instruction)."
+  ]
+}

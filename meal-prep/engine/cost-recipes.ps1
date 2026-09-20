@@ -17,7 +17,7 @@
 #     to a temp dir; see grocery\test-auditors.ps1 for the same lesson learned the hard way);
 #   - the -Slugs splice reads the file it is about to WRITE ($OutFile), not a hardcoded db\costed.json,
 #     so a targeted recost against a fixture splices the fixture's own baseline.
-param([string[]]$Slugs,[string]$DbRoot,[string]$GroceryOut,[string]$OutFile,[string]$FlagsFile)
+param([string[]]$Slugs,[string]$DbRoot,[string]$GroceryOut,[string]$OutFile,[string]$FlagsFile,[switch]$SelfTest)
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
@@ -153,6 +153,89 @@ if($DRAINED.Count -gt 0){
 # feed); $CARRLEDGER is the adjudicated remainder.
 $repoRoot = Split-Path $mp -Parent
 . (Join-Path $repoRoot 'lib\carriage-lib.ps1')
+# THE QUARTER IS READ, NOT WRITTEN (Brad's standing rule: an everyday price is re-read about once every 90
+# days, at every store). capture-policy-lib.ps1 has no top-level param() block, so dot-sourcing it cannot
+# reset this script's own parameters. If it cannot be reached, the ledger basis refuses rather than guessing
+# a bound - a could-not-look must not settle the question.
+$script:LedgerMaxAgeDays = -1
+try {
+  . (Join-Path $repoRoot 'grocery\capture-policy-lib.ps1')
+  if ($null -ne $script:QuarterDays -and [int]$script:QuarterDays -gt 0) { $script:LedgerMaxAgeDays = [int]$script:QuarterDays }
+} catch { $script:LedgerMaxAgeDays = -1 }
+
+function Get-LedgerBasis {
+  <#
+    THE CARRIAGE LEDGER AS A PRICE (2026-09-20, queue 2026-09-19-d240fd). Returns @{ ppg; basis } when a
+    CARRIED ledger entry may price a line, else $null. PURE apart from Test-CarriageEvidence and
+    SizeToGrams, so the cases below drive the same decision the engine takes - the whole reason this is a
+    function and not five lines inside a 40-line loop body nothing can reach.
+
+    The ledger is the ONE place a live in-store read of price + size + product id + date is recorded for an
+    ingredient no capture reaches, and it was consulted for its VERDICT alone. So an ingredient PROVEN
+    carried at a KNOWN price dropped out of the recipe and the cost read LOWER, while the same ingredient
+    with a stale hand-typed label price would have priced.
+    Test-CarriageEvidence is the estate's one rule for whether a CARRIED entry is supported; a ledger anyone
+    can hand-edit into a pardon is not a gate, so the check is not re-implemented here.
+  #>
+  param($Entry, [string]$Bid, [double]$MaxAgeDays, [datetime]$Now)
+  if ($null -eq $Entry -or -not $Bid) { return $null }
+  if ($MaxAgeDays -le 0) { return $null }   # the quarter could not be read: refuse rather than guess a bound
+  $ev = Test-CarriageEvidence -Entry $Entry
+  if (-not $ev.ok) { return $null }
+  if ([string]$Entry.verdict -ne 'CARRIED') { return $null }
+  if (-not $Entry.size) { return $null }
+  $g = SizeToGrams ([string]$Entry.size)
+  if ($null -eq $g -or $g -le 0) { return $null }
+  $ageDays = $null
+  try { $ageDays = ($Now - [datetime]([string]$Entry.as_of)).TotalDays } catch { return $null }
+  if ($null -eq $ageDays -or $ageDays -gt $MaxAgeDays) { return $null }
+  return @{ ppg = ([double]$Entry.price / $g); basis = ('ledger:' + $Bid + ':' + [string]$Entry.store + ':' + [string]$Entry.as_of) }
+}
+
+if ($SelfTest) {
+  # Nothing above this point writes a file; the engine's work starts below. This block EXITS on every path
+  # (ops\audit-selftest-fallthrough.ps1), and its last line is its verdict and says it is a self-test
+  # (lib\selftest-verdict.ps1) - exit 0 without that is scored 3, never ok.
+  $cfail = 0
+  function CChk([string]$label, [bool]$cond, [string]$got) {
+    if ($cond) { Write-Output ('ok    ' + $label) } else { Write-Output ('FAIL  ' + $label + '   got: ' + $got); $script:cfail++ }
+  }
+  $now = [datetime]'2026-09-20T12:00:00'
+  # THE FOUNDING ROW, FROZEN VERBATIM from grocery\carriage.json as read on 2026-09-20. Every number real.
+  $wild = [pscustomobject]@{ verdict = 'CARRIED'; store = 'Hy-Vee'; item = 'Quality Wild Rice'; size = '16 oz (1 lb stand up bag)'; price = 8.99; product_id = '36825'; as_of = '2026-09-19' }
+  $lb = Get-LedgerBasis -Entry $wild -Bid 'wild-rice' -MaxAgeDays 90 -Now $now
+  # 8.99 / (16 * 28.3495) = 0.0198196.../g. 855 g of it is $16.94 a batch, $1.21 of the reader's serving.
+  CChk 'MUST FIRE  the wild-rice ledger row prices at 8.99 / 453.592 g with a ledger: basis naming bid, store and date' (($null -ne $lb) -and ([math]::Abs($lb.ppg - (8.99 / (16 * 28.3495))) -lt 0.0000001) -and ($lb.basis -eq 'ledger:wild-rice:Hy-Vee:2026-09-19')) ("ppg=$(if($lb){$lb.ppg}else{'null'}) basis=$(if($lb){$lb.basis}else{'null'})")
+  # $16.95, NOT the $16.94 the plan carried: 8.99 / 453.592 = 0.019819... and 855 g of it is 16.9489, which
+  # rounds UP. The plan's figure came from the truncated 0.01982. Measured here, not transcribed.
+  CChk 'MUST FIRE  855 g of that line is $16.95 a batch and $1.21 a serving over 14 - the money the recost dropped' (([math]::Round(855 * $lb.ppg, 2) -eq 16.95) -and ([math]::Round(855 * $lb.ppg / 14, 2) -eq 1.21)) ('batch=' + [string][math]::Round(855 * $lb.ppg, 2) + ' serving=' + [string][math]::Round(855 * $lb.ppg / 14, 2))
+  # MUST NOT FIRE - each of the four ways an entry is not evidence for a price.
+  $nc = [pscustomobject]@{ verdict = 'NOT-CARRIED'; store = 'Hy-Vee'; item = 'Quality Wild Rice'; size = '16 oz'; price = 8.99; as_of = '2026-09-19' }
+  CChk 'MUST NOT FIRE a NOT-CARRIED entry never prices a line, whatever price it records' ($null -eq (Get-LedgerBasis -Entry $nc -Bid 'wild-rice' -MaxAgeDays 90 -Now $now)) 'priced'
+  # AT THE BAR AND ONE STEP PAST IT (backlog I196). The bar is the quarter, 90 days; the resolution is a day.
+  $atBar = [pscustomobject]@{ verdict = 'CARRIED'; store = 'Hy-Vee'; item = 'Quality Wild Rice'; size = '16 oz'; price = 8.99; as_of = $now.AddDays(-90).ToString('yyyy-MM-ddTHH:mm:ss') }
+  CChk 'MUST NOT FIRE the case exactly AT the 90-day quarter still prices (the bar itself is inside it)' ($null -ne (Get-LedgerBasis -Entry $atBar -Bid 'wild-rice' -MaxAgeDays 90 -Now $now)) 'refused at the bar'
+  $pastBar = [pscustomobject]@{ verdict = 'CARRIED'; store = 'Hy-Vee'; item = 'Quality Wild Rice'; size = '16 oz'; price = 8.99; as_of = $now.AddDays(-91).ToString('yyyy-MM-ddTHH:mm:ss') }
+  CChk 'MUST NOT FIRE one day PAST the quarter is refused - a stale shelf read is not a price' ($null -eq (Get-LedgerBasis -Entry $pastBar -Bid 'wild-rice' -MaxAgeDays 90 -Now $now)) 'priced a 91-day-old read'
+  $noSize = [pscustomobject]@{ verdict = 'CARRIED'; store = 'Hy-Vee'; item = 'Beef Stew Meat'; size = ''; price = 8.99; as_of = '2026-09-19' }
+  CChk 'MUST NOT FIRE an entry with no size stays NO PRICE BASIS - a price with no size is not a rate' ($null -eq (Get-LedgerBasis -Entry $noSize -Bid 'beef-stew-meat' -MaxAgeDays 90 -Now $now)) 'priced'
+  $unparse = [pscustomobject]@{ verdict = 'CARRIED'; store = 'Hy-Vee'; item = 'Beef'; size = 'priced per pound'; price = 8.99; as_of = '2026-09-19' }
+  CChk 'MUST NOT FIRE a size that does not parse to grams is refused, never guessed' ($null -eq (Get-LedgerBasis -Entry $unparse -Bid 'beef' -MaxAgeDays 90 -Now $now)) 'priced'
+  $noPrice = [pscustomobject]@{ verdict = 'CARRIED'; store = 'Hy-Vee'; item = 'Quality Wild Rice'; size = '16 oz'; price = 0; as_of = '2026-09-19' }
+  CChk 'MUST NOT FIRE a CARRIED entry with no price fails Test-CarriageEvidence and prices nothing' ($null -eq (Get-LedgerBasis -Entry $noPrice -Bid 'wild-rice' -MaxAgeDays 90 -Now $now)) 'priced'
+  CChk 'MUST NOT FIRE an unreadable quarter (MaxAgeDays -1) refuses rather than guessing a bound' ($null -eq (Get-LedgerBasis -Entry $wild -Bid 'wild-rice' -MaxAgeDays -1 -Now $now)) 'priced with no bound'
+  # CLEAN TWIN - the adjacent behaviour this change was most likely to break: the label fallback still runs
+  # FIRST, so a line that prices from a label today keeps that basis. five-spice-powder is the real pair:
+  # a McCormick Gourmet 1.75 oz label at $8.13 beside a Hy-Vee ledger read of $9.99 for the same size.
+  # Ordering by POSITION, not by a regex window: the gap between the two blocks is prose, and a window wide
+  # enough to span it proves nothing about order. The label fallback must come first in the engine's body.
+  $srcSelf = (Get-Content $PSCommandPath -Raw) -replace "`r", ''
+  $iLabel = $srcSelf.IndexOf('if($null -eq $ppg -and $labels.ContainsKey($ing.item)){')
+  $iLedger = $srcSelf.IndexOf('$lb = Get-LedgerBasis -Entry $CARRLEDGER[$lineBid]')
+  CChk 'CLEAN TWIN the ledger sits AFTER the label in the engine, so a label-priced line keeps its label basis' (($iLabel -gt 0) -and ($iLedger -gt 0) -and ($iLabel -lt $iLedger)) ("label@$iLabel ledger@$iLedger")
+  CChk 'CLEAN TWIN SizeToGrams still reads the real ledger size text as 16 oz, not as the 1 lb inside its parenthesis' ([math]::Abs((SizeToGrams '16 oz (1 lb stand up bag)') - (16 * 28.3495)) -lt 0.0001) ([string](SizeToGrams '16 oz (1 lb stand up bag)'))
+  if ($cfail -eq 0) { Write-Output 'cost-recipes self-test: PASS'; exit 0 } else { Write-Output ("cost-recipes self-test: FAIL ($cfail case(s))"); exit 1 }
+}
 $FEEDCARRIED = Get-FeedCarriedSet $feed
 # THE LEDGER FOLLOWS -GroceryOut, exactly as the feed does. A fixture run supplies its own grocery-out and
 # must get that fixture's carriage too: reading the LIVE ledger while costing FIXTURE prices mixes two
@@ -240,6 +323,24 @@ foreach($r in $computed){
       } else {
         $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: LABEL PRICE REFUSED, CARRIAGE ' + $carr.verdict + ' (' + $carr.why + ')'))
       }
+    }
+    # THE CARRIAGE LEDGER IS A PRICE, NOT JUST A VERDICT (2026-09-20, queue 2026-09-19-d240fd).
+    # The ledger is the ONE place a live in-store read of price + size + product id + date is recorded for
+    # an ingredient no capture reaches, and until today it was consulted for its verdict alone (line 215).
+    # So an ingredient PROVEN carried at a KNOWN price dropped out of the recipe and the cost read LOWER,
+    # while the same ingredient with a stale hand-typed label price would have priced. Measured that day:
+    # turkey-wild-rice-casserole, a LIVE recipe, lost its TITLE ingredient - wild rice is CARRIED at Hy-Vee
+    # ($8.99 / 16 oz, read 2026-09-19, productId 36825) but reaches no board and has no label entry, so the
+    # engine dropped 855 g ($16.94 a batch, $1.21 a serving) and costed it at $2.21 a serving against $3.42.
+    # AFTER THE LABEL FALLBACK, DELIBERATELY: placed here, exactly ONE line in the whole catalogue changes
+    # basis and every currently-priced line keeps the basis it has today. Whether a fresh shelf read should
+    # outrank a two-month-old label is a RULING, not a defect (Q1-2026-09-20-partial-cost), so nothing moves
+    # until it is answered.
+    # Test-CarriageEvidence is the estate's one rule for whether a CARRIED entry is supported: a ledger
+    # anyone can hand-edit into a pardon is not a gate, so the check is not re-implemented here.
+    if($null -eq $ppg -and $lineBid -and $CARRLEDGER.ContainsKey($lineBid)){
+      $lb = Get-LedgerBasis -Entry $CARRLEDGER[$lineBid] -Bid $lineBid -MaxAgeDays $script:LedgerMaxAgeDays -Now (Get-Date)
+      if($null -ne $lb){ $ppg = $lb.ppg; $basis = $lb.basis }
     }
     if($null -eq $ppg){
       $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: NO PRICE BASIS')); continue
