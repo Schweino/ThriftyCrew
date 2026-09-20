@@ -201,6 +201,69 @@ function Format-TriageRouteLine {
   return ('    ROUTE: ' + $Id + ' - give it to the ' + [string]$Route.lane + ' lane seeded with ' + [string]$Route.plan +
           ' item ' + [string]$Route.prior_id + ' (prior status ' + $st + '), no fresh reviewer diagnosis. Re-measure it against today''s board first.')
 }
+# --- UNFINISHED WORK IS DUE WORK (Brad's ruling, 2026-09-20, design\PLAN-alert-quiet-2026-09-20.md) ---------
+# FOUNDING MEASUREMENT, from this estate's own plan files over 2026-09-10 to 2026-09-20: of 52 real work
+# outcomes only 20 are a clean `done`. 17 are `deviated` and 9 are `needs-more-time`, and both mean the root
+# fix as specified did not fully land. Four of the five traced return chains start at one of those two
+# statuses. The founding case is queue 2026-09-18-f90ba6, closed `needs-more-time` in plan-2026-09-18.json,
+# which returned the next day as 2026-09-19-b66b54 and paid a fresh reviewer diagnosis (408,197 tokens that
+# day) to re-derive an answer the committed plan already held.
+# THE CLOSE IS DELIBERATELY NOT BLOCKED. The queue's `disposition` answers "was the ALERT RIGHT"
+# (triage-lib.ps1's header: confirmed / false-alarm / superseded / by-design / wont-fix) and exists so a
+# detector's live precision becomes knowable. Whether the FIX FINISHED is a different axis and lives in the
+# plan item's `status`. Blocking a close on plan status would jam the two axes together and corrupt the
+# precision measure. So unfinished work becomes VISIBLE and DUE instead: triage-due.ps1 prints a RESUME
+# section above its DUE list, and RESUME work alone makes the run due.
+function Get-TriageUnfinished {
+  <# .SYNOPSIS Pure. One record per queue item whose NEWEST plan item closed `deviated` or `needs-more-time`:
+     id, subject, plan, status (the plan item's) and lane. Never throws; a plan it cannot read is skipped. #>
+  param($Items, $PlanRecords)
+  $out = New-Object System.Collections.Generic.List[object]
+  $plans = @($PlanRecords)
+  if ($plans.Count -eq 0) { return ,$out.ToArray() }
+  foreach ($i in @($Items)) {
+    if (-not $i) { continue }
+    $id = ''
+    try { $id = ([string]$i.id).Trim() } catch { $id = '' }
+    if (-not $id) { continue }
+    $qs = ''
+    try { $qs = ([string]$i.status).Trim().ToLowerInvariant() } catch { $qs = '' }
+    # An OPEN item is today's work and triage-due lists it as DUE already; counting it here double-counts it.
+    # A needs-brad item is PARKED on a ruling of Brad's and is never re-triaged (send-alert.ps1's escalation).
+    if ($qs -eq 'open' -or $qs -eq 'needs-brad') { continue }
+    # NEWEST PLAN WINS, and the rule is Get-TriageReturnRoute's rather than a second copy of it: two copies of
+    # "which plan is newest" is how they diverge. One id in, so the route it finds is this item's own newest.
+    $route = $null
+    try { $route = Get-TriageReturnRoute @($id) $plans } catch { $route = $null }
+    if (-not $route -or -not $route.found) { continue }
+    $ps = ''
+    try { $ps = ([string]$route.status).Trim().ToLowerInvariant() } catch { $ps = '' }
+    # done and superseded finished; needs-brad is a ruling and blocked is waiting on something outside triage.
+    if ($ps -ne 'deviated' -and $ps -ne 'needs-more-time') { continue }
+    $subj = ''
+    try { if ($i.PSObject.Properties['subject']) { $subj = ([string]$i.subject).Trim() } } catch { $subj = '' }
+    [void]$out.Add([pscustomobject]@{
+      id = $id; subject = $subj; plan = [string]$route.plan
+      status = ([string]$route.status).Trim(); lane = [string]$route.lane })
+  }
+  return ,$out.ToArray()
+}
+function Format-TriageResumeLines {
+  <# .SYNOPSIS Pure. The RESUME block triage-due.ps1 prints ABOVE its DUE list, or no lines at all. #>
+  param($Unfinished)
+  $lines = New-Object System.Collections.Generic.List[string]
+  $u = @($Unfinished)
+  if ($u.Count -eq 0) { return ,$lines.ToArray() }
+  [void]$lines.Add('DUE  RESUME ' + $u.Count + ' unfinished root fix(es). Each of these closed its queue item with the class' +
+                   ' still open, so it is the next run''s FIRST work: resume from the named plan item, do not re-diagnose it.')
+  foreach ($r in $u) {
+    $s = [string]$r.subject
+    if ($s) { $s = ' - ' + $s }
+    [void]$lines.Add('  RESUME: ' + [string]$r.id + ' - ' + [string]$r.plan + ' closed it ' + [string]$r.status +
+                     ', lane ' + [string]$r.lane + $s)
+  }
+  return ,$lines.ToArray()
+}
 function Read-TriagePlanRecords {
   <# .SYNOPSIS Plan files as {path, items}, newest name first. Never throws: an unreadable plan is skipped. #>
   param([string]$PlansDir, [int]$Newest = 40)

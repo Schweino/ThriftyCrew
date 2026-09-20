@@ -135,6 +135,18 @@ function Test-PreventionDue {
   param($StampTime, [datetime]$Now)
   return (($null -eq $StampTime) -or (($Now - [datetime]$StampTime).TotalDays -ge $script:WeeklyEveryDays))
 }
+# ---- UNFINISHED WORK IS DUE WORK (Brad's ruling, 2026-09-20) ------------------------------------------------
+# The rule that decides IDLE, in one pure place so a fixture can reach it. RESUME work is an unfinished root
+# fix (a plan item closed `deviated` or `needs-more-time`, Get-TriageUnfinished in triage-return-lib.ps1) whose
+# queue item closed anyway, so nothing else in this report can see it. It makes the run DUE on its own: an
+# unfinished root fix is exactly the thing that must not wait, and it is why 121 of 360 alerts in 30 days were
+# a type triage had already closed. IDLE keeps its meaning otherwise - test-auditors pins "IDLE only when the
+# queue is really clear", and a clear queue with no unfinished plan item is still IDLE.
+function Test-TriageIdle {
+  <# .SYNOPSIS Pure. Is this run IDLE? Only with no daily item open, no weekly lane due and nothing to resume. #>
+  param([int]$DailyCount, [bool]$WeeklyDue, [int]$ResumeCount)
+  return ($DailyCount -eq 0 -and (-not $WeeklyDue) -and $ResumeCount -eq 0)
+}
 function Format-PreventionDueLine {
   <# .SYNOPSIS The one line the SKILL's STEP 0 reads. Pure. #>
   param($StampTime)
@@ -309,6 +321,76 @@ if ($SelfTest) {
     _T 'the money test AT the bar: publish_batch 1 with no lane field routes to money' ((Get-TriageRouteLane ([pscustomobject]@{ queue_id = 'x'; publish_batch = 1; classification = 'infra' })) -eq 'money') 'bar publish_batch=1'
     _T 'the money test a step PAST the bar: publish_batch 0 and an infra class routes to ops' ((Get-TriageRouteLane ([pscustomobject]@{ queue_id = 'x'; publish_batch = 0; classification = 'infra' })) -eq 'ops') 'publish_batch=0'
     _T 'a wrong-product item with no lane and no batch is still money' ((Get-TriageRouteLane ([pscustomobject]@{ queue_id = 'x'; classification = 'wrong-product' })) -eq 'money') 'classification only'
+
+    # ---- UNFINISHED WORK IS DUE WORK (Brad's ruling, 2026-09-20) --------------------------------------
+    # FOUNDING BUG: queue 2026-09-18-f90ba6 closed `needs-more-time` in plan-2026-09-18.json. Its queue item
+    # closed anyway, nothing brought the unfinished root fix back, and it returned the next day as
+    # 2026-09-19-b66b54 at full reviewer diagnosis price. The plan records are FROZEN here rather than read
+    # off disk, because the live plan directory gains a file most days.
+    $uPlanNew = [pscustomobject]@{ path = 'grocery/triage-plans/plan-2026-09-19.json'; items = @(
+      [pscustomobject]@{ queue_id = '2026-09-19-d240fd'; lane = 'ops'; status = 'deviated' }) }
+    $uPlanOld = [pscustomobject]@{ path = 'grocery/triage-plans/plan-2026-09-18.json'; items = @(
+      [pscustomobject]@{ queue_id = '2026-09-18-f90ba6'; status = 'needs-more-time'; classification = 'parse-basis-bug' },
+      [pscustomobject]@{ queue_id = '2026-09-18-35e0f5'; status = 'done'; classification = 'infra' },
+      [pscustomobject]@{ queue_id = '2026-09-18-777777'; status = 'needs-brad'; classification = 'infra' },
+      [pscustomobject]@{ queue_id = '2026-09-18-888888'; status = 'needs-more-time'; classification = 'infra' },
+      [pscustomobject]@{ queue_id = '2026-09-20-999999'; status = 'deviated'; classification = 'infra' }) }
+    $uPlans = @($uPlanNew, $uPlanOld)   # Read-TriagePlanRecords' order: newest plan NAME first
+    $qF90  = [pscustomobject]@{ id = '2026-09-18-f90ba6'; status = 'resolved'; subject = 'Grocery: new price flag(s)' }
+    $qDev  = [pscustomobject]@{ id = '2026-09-19-d240fd'; status = 'resolved'; subject = 'Grocery: capture watchdog' }
+    $qDone = [pscustomobject]@{ id = '2026-09-18-35e0f5'; status = 'resolved'; subject = 'Grocery: guards failed' }
+    $qPark = [pscustomobject]@{ id = '2026-09-18-777777'; status = 'resolved'; subject = 'Grocery: a ruling for Brad' }
+    $qHeld = [pscustomobject]@{ id = '2026-09-18-888888'; status = 'needs-brad'; subject = 'Grocery: parked at birth' }
+    $qOpen = [pscustomobject]@{ id = '2026-09-20-999999'; status = 'open'; subject = 'Grocery: today''s alert' }
+    # MUST FIRE: a queue item whose newest plan item closed `deviated` is unfinished work and comes back as RESUME.
+    $u1 = Get-TriageUnfinished @($qDev) $uPlans
+    $u1 = @($u1)
+    _T 'MUST-FIRE a resolved item whose newest plan item is deviated is RESUME work' `
+      ($u1.Count -eq 1 -and $u1[0].id -eq '2026-09-19-d240fd' -and $u1[0].status -eq 'deviated' -and $u1[0].plan -eq 'grocery/triage-plans/plan-2026-09-19.json' -and $u1[0].lane -eq 'ops') `
+      ("count=$($u1.Count)")
+    # MUST FIRE: the same for `needs-more-time`, and this IS the founding case, named.
+    $u2 = Get-TriageUnfinished @($qF90) $uPlans
+    $u2 = @($u2)
+    _T 'MUST-FIRE the founding case 2026-09-18-f90ba6, closed needs-more-time in plan-2026-09-18.json, is RESUME work (it returned as 2026-09-19-b66b54)' `
+      ($u2.Count -eq 1 -and $u2[0].id -eq '2026-09-18-f90ba6' -and $u2[0].status -eq 'needs-more-time' -and $u2[0].plan -eq 'grocery/triage-plans/plan-2026-09-18.json' -and $u2[0].lane -eq 'money') `
+      ("count=$($u2.Count)")
+    # CLEAN TWIN: the printed line names the id, the plan, the prior status and the lane, which is what a
+    # lane needs to resume from the plan item instead of re-diagnosing.
+    $ul = Format-TriageResumeLines $u2
+    $ul = @($ul)
+    $wantU = '  RESUME: 2026-09-18-f90ba6 - grocery/triage-plans/plan-2026-09-18.json closed it needs-more-time, lane money - Grocery: new price flag(s)'
+    _T 'CLEAN TWIN the RESUME block leads with DUE and names the plan item to resume from' `
+      ($ul.Count -eq 2 -and $ul[0] -match '^DUE  RESUME 1 unfinished root fix' -and $ul[0] -match 'do not re-diagnose' -and $ul[1] -eq $wantU) `
+      (($ul -join ' | '))
+    # MUST FIRE: RESUME work alone makes the run DUE, with nothing else open at all.
+    _T 'MUST-FIRE one item to RESUME makes the run DUE with no daily item and no weekly lane due' `
+      (-not (Test-TriageIdle 0 $false 1)) 'read as IDLE'
+    # MUST NOT FIRE: a plan item that closed `done` shipped its root fix. Nothing to resume.
+    $u3 = Get-TriageUnfinished @($qDone) $uPlans
+    _T 'MUST-NOT-FIRE a plan item with status done produces no RESUME line' ((@($u3)).Count -eq 0) 'a record was returned'
+    # MUST NOT FIRE: `needs-brad` is a RULING, parked on Brad. Never re-triaged, from either side.
+    $u4 = Get-TriageUnfinished @($qPark, $qHeld) $uPlans
+    _T 'MUST-NOT-FIRE a needs-brad item is PARKED, never RESUME - neither the plan status nor the queue status' `
+      ((@($u4)).Count -eq 0) 'a record was returned'
+    # MUST NOT FIRE: an item still OPEN is today's work, listed as DUE below. Counting it here double-counts it.
+    $u5 = Get-TriageUnfinished @($qOpen) $uPlans
+    _T 'MUST-NOT-FIRE an item still open is today''s work, not RESUME work' ((@($u5)).Count -eq 0) 'a record was returned'
+    # MUST NOT FIRE: no plan record holds this item, so there is no resume point to name.
+    $u6 = Get-TriageUnfinished @($qF90) @()
+    # Assign, THEN wrap, both times: @(Format-... ) inline counts 1 over an empty comma-returned array, and
+    # that is exactly how this case read green against a formatter returning nothing ([[ps-json-array-collapse]]).
+    $ul6 = Format-TriageResumeLines $u6
+    _T 'MUST-NOT-FIRE with no plan records there is no RESUME line and no throw' ((@($u6)).Count -eq 0 -and (@($ul6)).Count -eq 0) 'a record was returned'
+    # CLEAN TWIN: a clear queue with no unfinished plan item is still IDLE - test-auditors pins that meaning.
+    _T 'CLEAN TWIN a clear queue with nothing to resume is still IDLE' (Test-TriageIdle 0 $false 0) 'read as DUE'
+    # CLEAN TWIN: the RETURN and ROUTE lines still print exactly as they did, with resolved unfinished items
+    # sitting in the same queue array. This is the adjacent behaviour the RESUME read was most likely to break.
+    $rl6 = Get-TriageReturnLines @($rCur) @($rP1, $rP2, $rCur, $rOther, $qF90, $qDev, $qDone) $rNow
+    $rl6 = @($rl6)
+    $rt6 = Get-TriageReturnRoute @('2026-09-05-aaaaa2', '2026-09-08-aaaaa9') @($recOps, $recNew)
+    $ln6 = Format-TriageRouteLine '2026-09-10-ccccc1' $rt6
+    _T 'CLEAN TWIN the RETURN line and its ROUTE line are unchanged beside unfinished plan items in the same queue' `
+      ($rl6.Count -eq 1 -and $rl6[0] -eq $want -and $ln6 -eq $ln1) (($rl6 -join ' | ') + ' // ' + [string]$ln6)
   } catch {
     _T 'the RETURN rule loads and runs (triage-return-lib.ps1)' $false $_.Exception.Message
   }
@@ -365,13 +447,24 @@ $split = Get-LaneSplit $open $laneStamp (Get-Date)
 $daily = @($split.Daily)
 $weekly = @($split.Weekly)
 $overdueIds = @($split.Overdue | ForEach-Object { [string]$_.id })
-if ($daily.Count -eq 0 -and -not $split.WeeklyDue) {
+# UNFINISHED WORK IS DUE WORK (2026-09-20). Read the committed plans once, here, and share them with the ROUTE
+# lines below. Wrapped: a plan directory that cannot be read costs the RESUME section and never the triage tick.
+$planRecs = @()
+try { $planRecs = Read-TriagePlanRecords (Join-Path $root 'triage-plans') } catch { $planRecs = @() }
+$resume = @()
+# Assign, THEN wrap: a comma-returned array read as @(Get-Thing ...) counts 1 ([[ps-json-array-collapse]]).
+try { $resume = Get-TriageUnfinished $q.items $planRecs; $resume = @($resume) } catch { $resume = @() }
+if ((Test-TriageIdle $daily.Count ([bool]$split.WeeklyDue) $resume.Count)) {
   if ($spools.Count -gt 0) { exit 0 }   # spool lines above already said DUE
   $nb = ''; if ($needsBrad.Count) { $nb = ' (' + $needsBrad.Count + ' item(s) parked needs-brad - do not re-triage, they are his)' }
   $wl = ''; if ($weekly.Count) { $wl = ' (' + $weekly.Count + ' weekly-lane item(s) wait for ' + $split.NextDue.ToString('yyyy-MM-dd') + ')' }
   Write-Output ('IDLE  triage queue clear' + $wl + $nb)
   if (Test-PreventionDue $laneStamp (Get-Date)) { Write-Output (Format-PreventionDueLine $laneStamp) }
   exit 0
+}
+# RESUME comes ABOVE the DUE list: an unfinished root fix is the next run's first work, ahead of a new alert.
+if ($resume.Count) {
+  try { foreach ($l in (Format-TriageResumeLines $resume)) { Write-Output $l } } catch { }
 }
 if ($daily.Count) {
   Write-Output ("DUE  " + $daily.Count + " open alert(s) to triage:")
@@ -405,8 +498,7 @@ try { foreach ($l in (Get-RemeasureLines $open (Split-Path -Parent $root))) { Wr
 # provenance, and an unreadable plan directory must cost the route and never the tick.
 try {
   $retLines = Get-TriageReturnLines $open $q.items (Get-Date)
-  $planRecs = @()
-  try { $planRecs = Read-TriagePlanRecords (Join-Path $root 'triage-plans') } catch { $planRecs = @() }
+  # $planRecs was read once above, for the RESUME section; one read, one ordering, no second copy of it.
   foreach ($l in @($retLines)) {
     if (-not $l) { continue }
     Write-Output $l
