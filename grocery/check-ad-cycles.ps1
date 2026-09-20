@@ -1339,6 +1339,14 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       $sigAfter = BoardSignature
       $sigFile  = Join-Path $OutDir 'published-board.sig'
       $prevPub  = if (Test-Path $sigFile) { ((Get-Content $sigFile -Raw) + '').Trim() } else { '' }
+      # DECLARED HERE SO THE SHIP-PATH SUMMARY CAN READ THEM (2026-09-20, queue 2026-09-19-bb10f1). The
+      # summary at SHIP-SUMMARY below described an outcome with THREE inputs - the guard verdict, whether a
+      # publish was attempted, and the publish's exit code - from ONE of them. On 2026-09-19 it printed
+      # 'the board, the feed and the cards are published' three seconds after 'AUTO-PUBLISH ERROR (rc=1)'.
+      # $pubrc is set inside the board-changed block below; these two make its absence meaningful rather
+      # than merely undefined.
+      $pubAttempted = $false
+      $pubrc = $null
       # republish when the price/type/ad-window signature moved OR a new ad window flipped (belt-and-suspenders)
       $boardChanged = ($sigAfter -ne $sigBefore) -or ($sigAfter -ne $prevPub) -or (@($flips).Count -gt 0)
       if (@($flips).Count -gt 0) { Log ("downstream refreshed after flips: " + ($flips -join ',')) }
@@ -1422,6 +1430,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $pubSw = [Diagnostics.Stopwatch]::StartNew()
         $pubOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')
         $pubrc = $LASTEXITCODE
+        $pubAttempted = $true
         $pubOut = @($pubOut)
         $pubSw.Stop(); $pubSecs = [int]$pubSw.Elapsed.TotalSeconds
         Log ("publish-deals-page: {0} s (rc={1}) - 3 Ghost calls, 30 s timeout each, no retries" -f $pubSecs, $pubrc)
@@ -1430,6 +1439,25 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $pubStages = @($pubOut | Where-Object { $_ -match 'publish-deals-page timings' -or $_ -match '^\s{4}\S.*\ss$' })
         if ($pubStages.Count) { $pubStages | ForEach-Object { Log ('publish-stage: ' + ([string]$_).Trim()) } }
         else { Log 'publish-stage: publish-deals-page printed NO timing table - it ran, but where its time went is unrecorded' }
+        # THE REASON WAS BEING DISCARDED AT THE MOMENT IT WAS KNOWN (2026-09-20, queue 2026-09-19-bb10f1).
+        # On 2026-09-19 17:23 the publish died in build-deals-page - a build-only recipe row, boneless-pork-chops,
+        # had no category and the renderer throws on a row it cannot place - and publish-deals-page said so, on
+        # stdout, in one line: 'ERROR: page build FAILED (rc=N) - not publishing'. This block kept only lines
+        # matching the TIMING TABLE, so that line went in the bin and the failing stage survived nowhere but a
+        # commit message somebody happened to write that evening. Whatever the rc: log the publish's own verdict.
+        # ASSIGN, THEN WRAP - never @(pipe) inline, the trap this block's own comment names above.
+        # AND THE WRAP DROPS NULLS, because @($null).Count is 1 in PS 5.1: a pipeline that matched nothing
+        # assigns $null, and a naive @() around it would count ONE empty verdict line and never take the
+        # tail branch below - the exact shape [[ps-null-count-is-one]] records.
+        $pubVerdictRaw = $pubOut | Where-Object { $_ -match '^(ERROR|HELD|WARN|CURRENT|PUBLISHED|price-mode|name-drift)' }
+        $pubVerdict = @($pubVerdictRaw | Where-Object { $null -ne $_ })
+        foreach ($v in $pubVerdict) { Log ('publish-verdict: ' + ([string]$v).Trim()) }
+        if ($pubrc -ne 0 -and $pubVerdict.Count -eq 0) {
+          # A failure that named itself in none of the shapes above still has to leave evidence.
+          $tailRaw = $pubOut | Where-Object { $null -ne $_ } | Select-Object -Last 5
+          $tail = @($tailRaw | Where-Object { $null -ne $_ })
+          foreach ($t in $tail) { Log ('publish-tail: ' + ([string]$t).Trim()) }
+        }
         if ($pubrc -eq 0)     { Set-Content -Path $sigFile -Value $sigAfter -Encoding ASCII; Log ('AUTO-PUBLISH: live page updated (price change' + $(if (@($flips).Count -gt 0) { '/new ad' } else { ' mid-cycle' }) + ')'); $summary += 'PUBLISHED live page updated (price change detected)' }
         elseif ($pubrc -eq 2) {
           Log 'AUTO-PUBLISH HELD: coverage gate failed - live page NOT updated'
@@ -1579,13 +1607,32 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # 2026-09-07 it announced 'the board, the feed and the cards are published' FOUR SECONDS after
       # 'GUARDS FAILED - board NOT republished'. A log a human reads to decide whether to intervene must
       # not describe an outcome that did not happen.
+      # <<SHIP-SUMMARY-BEGIN>> test-auditors.ps1 extracts this region and runs it against frozen values.
+      # FIVE OUTCOMES, NOT TWO (2026-09-20, queue 2026-09-19-bb10f1). The 2026-09-07 fix above covered the
+      # GUARDS-HELD branch of the class 'the summary describes an outcome that did not happen' and left the
+      # PUBLISH-OUTCOME branches printing 'the board, the feed and the cards are published'. So on 2026-09-19
+      # at 17:23:21 this line said exactly that, three seconds after 'AUTO-PUBLISH ERROR (rc=1) - Ghost upsert
+      # or build failed; live page NOT updated'. Same shape both times: the summary is rendered from a
+      # different variable than the control path used, so the screen cannot confirm what the machine did.
+      # The rc-0 wording is kept BYTE FOR BYTE - other readers grep 'are published'.
+      $shipMin = [math]::Round($shipSecs/60.0,1)
       if ($guardsBlocked) {
-        Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + [math]::Round($shipSecs/60.0,1) + ' min): the board was HELD (guards blocked it), so neither the board nor the feed nor the recipe cards were published. INSPECT (advisory audits) starts now. ----')
-        $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + [math]::Round($shipSecs/60.0,1) + ' min) - board HELD by guards, nothing was published')
+        Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + $shipMin + ' min): the board was HELD (guards blocked it), so neither the board nor the feed nor the recipe cards were published. INSPECT (advisory audits) starts now. ----')
+        $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + $shipMin + ' min) - board HELD by guards, nothing was published')
+      } elseif ($pubAttempted -and $pubrc -eq 0) {
+        Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + $shipMin + ' min): the board, the feed and the cards are published. INSPECT (advisory audits) starts now and cannot change what shipped. ----')
+        $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + $shipMin + ' min) - the board published before any advisory audit ran')
+      } elseif ($pubAttempted -and $pubrc -eq 2) {
+        Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + $shipMin + ' min): the board was rebuilt and the live page was HELD by the coverage gate (publish rc 2); the page is at its last good state - see the publish-verdict lines above. INSPECT (advisory audits) starts now. ----')
+        $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + $shipMin + ' min) - board rebuilt, live page HELD by the coverage gate (publish rc 2)')
+      } elseif ($pubAttempted) {
+        Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + $shipMin + ' min): the board was rebuilt but the live page was NOT updated (publish rc ' + $pubrc + ': build or Ghost upsert failed); the page is at its last good state - see the publish-verdict lines above. INSPECT (advisory audits) starts now. ----')
+        $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + $shipMin + ' min) - board rebuilt, live page NOT updated (publish rc ' + $pubrc + ')')
       } else {
-        Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + [math]::Round($shipSecs/60.0,1) + ' min): the board, the feed and the cards are published. INSPECT (advisory audits) starts now and cannot change what shipped. ----')
-        $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + [math]::Round($shipSecs/60.0,1) + ' min) - the board published before any advisory audit ran')
+        Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + $shipMin + ' min): no price change since the last publish, so the live page stands as last published. INSPECT (advisory audits) starts now. ----')
+        $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + $shipMin + ' min) - no price change, live page stands as last published')
       }
+      # <<SHIP-SUMMARY-END>>
 
       # ---------------------------------------------------------------------------------------------
       # INSPECT PATH - ADVISORY ONLY. Nothing below may hold, change or unpublish today's board. Several
@@ -2290,7 +2337,28 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           $cfSigF = Join-Path $OutDir 'cost-flags-alert.sig'
           $cfPrev = if (Test-Path $cfSigF) { ((Get-Content $cfSigF -Raw) + '').Trim() } else { '' }
           if ($cfSig -ne $cfPrev -and (-not $NoAlert)) {
-            try { Send-Alert -Subject "Recipe pricing: $($cfLines.Count) unpriced ingredient line(s)" -Body ("engine\cost-recipes.ps1 could not price some recipe ingredient lines this run - each dropped line makes that recipe's cost read LOWER than reality (usually a bid pointing at a renamed/removed board commodity). Fix the bid in db\ingredients.json or register the commodity. Lines: " + (($cfLines | Select-Object -First 15) -join ' | ')) | Out-Null; if ($LASTEXITCODE -eq 0) { Set-Content $cfSigF -Value $cfSig -Encoding ASCII } } catch {}
+            # LEAD WITH THE READER-FACING SUBSET (2026-09-20, queue 2026-09-19-d240fd). On 2026-09-19 this
+            # alert said "28 unpriced ingredient line(s)" and the reader had to open the file and cross it
+            # against held-recipes.json to learn that 6 of the 7 affected recipes are HELD as not carried -
+            # correct, not on any page - and exactly ONE, turkey-wild-rice-casserole, is LIVE and understated
+            # by $1.21 a serving on its title ingredient. Same subject and same signature, so dedup is
+            # unchanged; only the body is ordered by what a reader can actually act on.
+            $cfLive = @(); $cfHeld = @()
+            try {
+              $cfPub = @{}
+              $cfPh = Join-Path (Split-Path $root -Parent) 'meal-prep\db\published-hashes.json'
+              if (Test-Path $cfPh) { foreach ($p in (Read-JsonFile $cfPh).PSObject.Properties) { $cfPub[[string]$p.Name] = $true } }
+              $cfSlugMap = @{}
+              foreach ($k in $cfPub.Keys) { $cfSlugMap[($k -replace '-', ' ')] = $k }
+              foreach ($l in $cfLines) {
+                $nm = (([string]$l -split ' :: ')[0]).Trim().ToLower()
+                if ($cfSlugMap.ContainsKey($nm)) { $cfLive += $cfSlugMap[$nm] } else { $cfHeld += $nm }
+              }
+              $cfLive = @($cfLive | Sort-Object -Unique); $cfHeld = @($cfHeld | Sort-Object -Unique)
+            } catch { $cfLive = @(); $cfHeld = @() }
+            $cfLead = if ($cfLive.Count -gt 0) { "LIVE recipe(s) affected: $($cfLive.Count) - " + ($cfLive -join ', ') + ". " } else { 'LIVE recipe(s) affected: 0 (every flagged line belongs to a HELD or unpublished recipe). ' }
+            $cfLead += "HELD/draft or advisory: $($cfHeld.Count). "
+            try { Send-Alert -Subject "Recipe pricing: $($cfLines.Count) unpriced ingredient line(s)" -Body ($cfLead + "engine\cost-recipes.ps1 could not price some recipe ingredient lines this run - each dropped line makes that recipe's cost read LOWER than reality (usually a bid pointing at a renamed/removed board commodity). Fix the bid in db\ingredients.json or register the commodity. Lines: " + (($cfLines | Select-Object -First 15) -join ' | ')) | Out-Null; if ($LASTEXITCODE -eq 0) { Set-Content $cfSigF -Value $cfSig -Encoding ASCII } } catch {}
           }
         } elseif (Test-Path (Join-Path $OutDir 'cost-flags-alert.sig')) { Remove-Item (Join-Path $OutDir 'cost-flags-alert.sig') -ErrorAction SilentlyContinue }
       } catch { Log ('cost-flag alert threw: ' + $_.Exception.Message) }
@@ -3315,6 +3383,22 @@ try {
       # with the words in it.
       $taHeader  = "test-auditors.ps1 replays each watcher's founding bug against a frozen fixture. EVERY FIXTURE FIRED on this run: every watcher still sees the bug it was written for, and nothing here puts the board in doubt." +
                    "`n`nWhat it found is ops HYGIENE - the estate's own housekeeping (a stale prompt mirror, an uncommitted artefact, a census gap). Fix it deliberately; do NOT reach for a -Sync style remedy quoted inside a finding without reading what it writes."
+    } elseif ($taRc -eq 4) {
+      # FOUR OUTCOMES NOW (2026-09-20, queue 2026-09-19-ae9df2). test-auditors keeps eight LIVE-TWIN cases
+      # that read live data ON PURPOSE. When one of those goes red the watcher WORKED: it found a bad cell on
+      # the live board. Until today that shared the rc-2 channel and paged "any quiet report from that guard
+      # is unproven - including a clean board", which is the exact inverse of the truth - on a live red the
+      # watchers are the ONE thing the run proved. Three such pages in 30 days (08-28, 08-29, 09-19) and none
+      # of them was a blind watcher. rc 4 is the only new mapping; everything else still fails closed below.
+      $taKind    = 'LIVE'
+      $taSubject = 'Grocery: the LIVE board failed a watcher (watchers intact)'
+      $taLog     = 'test-auditors LIVE-RED: every watcher still fires on its own founding bug; a live-board case is red - a cell is page-worthy, not a guard'
+      $taSummary = 'LIVE-RED  a live-board case failed; the watchers are intact - see the LIVE-RED lines in the saved output'
+      $taFileTag = 'test-auditors-live'
+      $taLookFor = 'LIVE-RED'
+      # THE WORDING IS LOAD-BEARING, exactly as in the hygiene tier: neither "unproven" nor "gone blind".
+      $taHeader  = "test-auditors.ps1 replays each watcher's founding bug against a frozen fixture. EVERY FIXTURE FIRED on this run: every watcher still sees the bug it was written for." +
+                   "`n`nWhat is red is a LIVE-TWIN case - one that reads the LIVE board or the LIVE registry on purpose. So the finding is about a CELL, not about a guard: open the board before the code. The watchers held, and guards will have held the publish if the same condition is a hard invariant."
     } else {
       $taKind    = 'WATCHERS'
       $taSubject = 'Grocery: a GUARD has gone blind (test-auditors failed)'

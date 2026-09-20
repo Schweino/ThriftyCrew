@@ -18,6 +18,12 @@
 # alerts) nothing is a return, which is the right answer, not a blind one.
 $script:TriageReturnWindowDays = 30
 
+# Read-JsonFile, not Get-Content -Raw | ConvertFrom-Json (2026-09-20, queue 2026-09-19-b66b54). PS 5.1
+# decodes a BOM-less file with the ANSI codepage, and the plan files this lib reads are written by tools
+# that emit BOM-less UTF-8 - so a bare read mangles every non-ASCII character in a resolution_note or an
+# item title and the RETURN rule then compares mojibake. grocery\audit-json-readers.ps1 is the ratchet.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')
+
 function Get-TriageReturnPriors {
   <# .SYNOPSIS Pure. Ids of EARLIER same-type queue items closed as resolved within the window, oldest first. Never throws on bad data. #>
   param($QueueItems, $Item, [datetime]$Now, [int]$WindowDays = $script:TriageReturnWindowDays)
@@ -207,7 +213,7 @@ function Read-TriagePlanRecords {
     if ($kept -ge $Newest) { break }
     if ($f.Name -like '*.routing.json') { continue }
     try {
-      $j = ((Get-Content -LiteralPath $f.FullName -Raw -ErrorAction Stop) + '') | ConvertFrom-Json
+      $j = Read-JsonFile $f.FullName
       if ($null -eq $j -or -not $j.items) { continue }
       [void]$out.Add([pscustomobject]@{ path = ('grocery/triage-plans/' + $f.Name); items = @($j.items) })
       $kept++

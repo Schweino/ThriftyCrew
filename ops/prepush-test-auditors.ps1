@@ -180,7 +180,13 @@ function Get-CaseKey([string]$Line) {
 }
 
 function Get-FailLines($Lines) {
-  return @(@($Lines) | ForEach-Object { [string]$_ } | Where-Object { $_ -match '^\s{0,4}FAIL\s{2}' } | ForEach-Object { $_.Trim() })
+  # LIVE-RED COUNTS AS A FAILING LINE HERE, AND DELIBERATELY (2026-09-20, queue 2026-09-19-ae9df2).
+  # test-auditors split its live-board reds out of the FAIL tally so the DAILY CHAIN stops paging them as
+  # "a GUARD has gone blind". That is a routing change for the alert, not a licence for a push: a live red
+  # is still a red this gate must judge, and the whole EXPECTED-LIVE-RED pairing below keys on these lines
+  # (the '# live-board-ruling-case audit=' marker sits on the very line that now calls Live()). Reading only
+  # FAIL here would have silently retired that pairing and let a new live red through unexamined.
+  return @(@($Lines) | ForEach-Object { [string]$_ } | Where-Object { $_ -match '^\s{0,4}(FAIL|LIVE-RED)\s{2}' } | ForEach-Object { $_.Trim() })
 }
 
 function Get-AuditorInputs([string]$Text, [string]$SelfRel) {
@@ -330,8 +336,11 @@ function Get-PushVerdict([int]$Rc, [bool]$Complete, [string[]]$FailLines, $Known
   $fails = @($FailLines | Where-Object { $_ })
   $v = [pscustomobject]@{ code = 3; verdict = 'COULD NOT EVALUATE'; detail = ''; newLines = @(); oldLines = @() }
   if (-not $Complete) { $v.detail = 'test-auditors did not end with its completion marker (it crashed, timed out, or was killed)'; return $v }
-  if (@(0, 1, 2) -notcontains $Rc) { $v.detail = ('test-auditors exited ' + $Rc + ', which is not one of its verdicts (0, 1, 2)'); return $v }
-  if (($Rc -eq 2) -ne ($fails.Count -gt 0)) { $v.detail = ('test-auditors exited ' + $Rc + ' with ' + $fails.Count + ' FAIL line(s); the FAIL format this check reads no longer matches its exit code'); return $v }
+  # 4 IS A VERDICT SINCE 2026-09-20 (queue 2026-09-19-ae9df2): every watcher fired, a LIVE-TWIN case found a
+  # bad cell on the live board. It is never a pass here - it carries LIVE-RED lines, which Get-FailLines
+  # collects, so it lands in the same REFUSED/ALLOWED/EXPECTED-LIVE-RED machinery rc 2 always did.
+  if (@(0, 1, 2, 4) -notcontains $Rc) { $v.detail = ('test-auditors exited ' + $Rc + ', which is not one of its verdicts (0, 1, 2, 4)'); return $v }
+  if ((@(2, 4) -contains $Rc) -ne ($fails.Count -gt 0)) { $v.detail = ('test-auditors exited ' + $Rc + ' with ' + $fails.Count + ' FAIL/LIVE-RED line(s); the FAIL format this check reads no longer matches its exit code'); return $v }
   if ($fails.Count -eq 0) {
     $v.code = 0
     if ($Selective) { $v.verdict = 'SELECTED CASES PASSED'; $v.detail = ('the ' + $RanNote + ' exited ' + $Rc + ' with no failing case. The units this push cannot reach did not run, so this is not a pass for the suite') }
@@ -358,11 +367,16 @@ function Get-PushVerdict([int]$Rc, [bool]$Complete, [string[]]$FailLines, $Known
 function Get-HarnessSummary($Lines) {
   $s = [pscustomobject]@{ found = $false; cases = -1; selective = $false; unitsRan = -1; unitsSkipped = -1 }
   foreach ($l in @($Lines)) {
-    $m = [regex]::Match([string]$l, '^TEST-AUDITORS-COMPLETE\s+pass=(\d+)\s+failed=(\d+)\s+hygiene=(\d+)\s+skipped=(\d+)(.*)$')
+    # live= is OPTIONAL in this pattern (2026-09-20, queue 2026-09-19-ae9df2). The harness added a third
+    # tally to its marker; a required token would have made every run read found=$false and cases=-1, which
+    # is a could-not-evaluate wearing a pass's clothes. An older marker with no live= still parses, and the
+    # case total picks the new tally up so a live red is never counted out of the suite.
+    $m = [regex]::Match([string]$l, '^TEST-AUDITORS-COMPLETE\s+pass=(\d+)\s+failed=(\d+)(?:\s+live=(\d+))?\s+hygiene=(\d+)\s+skipped=(\d+)(.*)$')
     if (-not $m.Success) { continue }
     $s.found = $true
-    $s.cases = [int]$m.Groups[1].Value + [int]$m.Groups[2].Value + [int]$m.Groups[3].Value + [int]$m.Groups[4].Value
-    $tail = $m.Groups[5].Value
+    $liveN = 0; if ($m.Groups[3].Success) { $liveN = [int]$m.Groups[3].Value }
+    $s.cases = [int]$m.Groups[1].Value + [int]$m.Groups[2].Value + $liveN + [int]$m.Groups[4].Value + [int]$m.Groups[5].Value
+    $tail = $m.Groups[6].Value
     $s.selective = ($tail -match '(^|\s)selective=1(\s|$)')
     $mr = [regex]::Match($tail, 'units_ran=(\d+)'); if ($mr.Success) { $s.unitsRan = [int]$mr.Groups[1].Value }
     $ms = [regex]::Match($tail, 'units_skipped=(\d+)'); if ($ms.Success) { $s.unitsSkipped = [int]$ms.Groups[1].Value }
@@ -1010,7 +1024,8 @@ function Get-Selection([string[]]$Paths, [string[]]$GuardPaths, $Model, $Inputs,
 #          reason: arm 1 green and arm 2 red proves the push's rule files caused the red, not that a RULING did. A
 #          removed food-class-allowlist exception or a categories.json relabel is not a ruling, and telling which
 #          finding each produced by re-implementing the audits' matching here would be a second copy of their rules)
-# A case is EXPECTED only when test-auditors itself saw exit 2, arm 1 exits 0, arm 2 exits 2 with at least one finding
+# A case is EXPECTED only when test-auditors itself saw exit 2 (or, since 2026-09-20, exit 4 - the LIVE-RED tier, whose
+# lines Get-FailLines collects exactly as it collects FAIL lines), arm 1 exits 0, arm 2 exits 2 with at least one finding
 # that names a (commodity, store, product), every arm-2 finding is absent from arm 1 AND present in arm 3, and the
 # working tree's rule files are the tip's (the red came from the working tree), compared as git blob ids. An exit 3 in
 # any arm is never accepted. Red on arm 1 too is a live defect this push did not cause: refused unless the record
@@ -1704,7 +1719,8 @@ if ($Record) {
   $lines = [IO.File]::ReadAllText($OutputFile, [Text.Encoding]::UTF8) -split "`r?`n"
   $complete = Test-GuardComplete -Output $lines -Name 'test-auditors'
   $fl = Get-FailLines $lines
-  if (-not $complete -or (@(0, 1, 2) -notcontains $ExitCode) -or (($ExitCode -eq 2) -ne ($fl.Count -gt 0))) {
+  # 4 is a verdict since 2026-09-20 (queue 2026-09-19-ae9df2), and its LIVE-RED lines are failing lines here.
+  if (-not $complete -or (@(0, 1, 2, 4) -notcontains $ExitCode) -or ((@(2, 4) -contains $ExitCode) -ne ($fl.Count -gt 0))) {
     "prepush-test-auditors: RECORD NOT WRITTEN - that run did not complete as a verdict (rc=$ExitCode, marker=$complete, FAIL lines=$($fl.Count)); the previous record is kept and ages out"
     Exit-Guard -Name $script:GuardName -Code 3 -Summary 'record=incomplete-run'
   }

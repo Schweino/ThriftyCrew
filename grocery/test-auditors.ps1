@@ -61,7 +61,7 @@ $fix  = Join-Path $root 'regression-inputs\guard-fixtures'
 # a personal flight-price watch into a public repo.
 # A stale backup is ops hygiene. A fixture that stopped firing is a blind watcher. They are not the same
 # verdict and must not share an exit code.
-$pass = 0; $failed = 0; $skipped = 0; $hygiene = 0
+$pass = 0; $failed = 0; $skipped = 0; $hygiene = 0; $live = 0
 
 # EVERY SCRATCH PATH THIS HARNESS MAKES IS REGISTERED AND SWEPT, and the sweep is a `finally`.
 #
@@ -137,6 +137,17 @@ function Skip($m) { Write-Output ("  SKIP  " + $m); $script:skipped++ }
 # uncommitted artefact. A check that cannot SEE stays Bad: "the backup is out of date" and "the backup
 # checker went blind" are opposite findings.
 function Hygiene($m) { Write-Output ("  HYGIENE  " + $m); $script:hygiene++ }
+# LIVE-RED: a finding about the LIVE BOARD, not about a watcher's eyesight (2026-09-20, queue 2026-09-19-ae9df2).
+# This file asks TWO questions of one run - can each watcher still see its founding bug, and does the LIVE
+# board still pass the watchers - and it kept ONE tally for both, so a LIVE-TWIN red (the watcher WORKING, on
+# a real bad cell) exited 2 and paged "a GUARD has gone blind ... any quiet report from that guard is
+# unproven - including a clean board". That sentence INVERTS the day's trust ordering: on a live-board red
+# the watchers are the one thing the run proved. Three such pages in 30 days (2026-08-28, 2026-08-29,
+# 2026-09-19) and not one of them was a blind watcher.
+# Use it ONLY where the case's SUBJECT is live data (a LIVE-TWIN) and the watcher itself ran and reported.
+# A case that could not SEE stays Bad: "the live board has a bad cell" and "the watcher went blind" are
+# opposite findings, and rc 2 still outranks rc 4 whenever both happen.
+function Live($m) { Write-Output ("  LIVE-RED  " + $m); $script:live++ }
 # UNITS AND SELECTIVE RUNS (2026-09-10, design\PLAN-zero-alert-days-2026-09-10.md, ruling R19).
 # Every case below sits inside `if (Use-Unit '<id>' ...) { ... }`. A push that touches one guard input used to
 # run all of them for five minutes; ops\prepush-test-auditors.ps1 now derives, from each unit's own code, what
@@ -170,14 +181,21 @@ function Use-Unit {
 }
 # THE VERDICT, AS A PURE FUNCTION so the two cases below can drive it without running a 600-check suite.
 # rc 2 = a watcher has gone blind (BLIND-class, publish-holding, the loudest page in the estate)
+# rc 4 = every watcher fires; a LIVE-TWIN case found a bad cell on the LIVE board (2026-09-20, ae9df2)
 # rc 1 = every watcher still fires; ops hygiene drift was found (guard-contract's "findings")
 # rc 0 = clean
-# ORDER MATTERS: failed wins over hygiene, so a run that is BOTH blind and untidy pages as blind.
-function Get-AuditorsVerdict([int]$failed, [int]$hygiene, [int]$pass, [int]$skipped) {
+# ORDER MATTERS: failed wins over live, and live wins over hygiene. A run that is BOTH blind and carrying a
+# live red pages as BLIND, because a blind watcher makes the live verdict itself unprovable.
+function Get-AuditorsVerdict([int]$failed, [int]$hygiene, [int]$pass, [int]$skipped, [int]$live = 0) {
   $skipNote = if ($skipped) { ", $skipped SKIPPED (proved nothing - see the SKIP lines)" } else { '' }
   $hygNote  = if ($hygiene) { ", $hygiene HYGIENE" } else { '' }
   if ($failed -gt 0) {
     return @{ rc = 2; line = ("test-auditors FAIL  ($failed failed, $pass passed$hygNote$skipNote) - a watcher has gone blind. Fix it before trusting a quiet board.") }
+  }
+  if ($live -gt 0) {
+    # THE WORDING IS LOAD-BEARING: a reader and a grep sort on "gone blind" and "unproven", so this line
+    # carries neither. u071 asserts that.
+    return @{ rc = 4; line = ("test-auditors LIVE-RED ($live live case(s) failed, $pass passed$hygNote$skipNote) - every watcher still sees its own founding bug; the LIVE board failed a watcher, open the board before the code.") }
   }
   if ($hygiene -gt 0) {
     return @{ rc = 1; line = ("test-auditors HYGIENE ($hygiene) - every watcher still sees its bug ($pass check(s) passed$skipNote); ops hygiene drift listed above. The board is NOT unproven.") }
@@ -1153,7 +1171,7 @@ else { Bad ('price-mode did NOT go blind on an empty regular dir (rc=' + $r.rc +
 # red here - and the label is so a red is read as "live data" rather than "this watcher went blind".
 $r = RunPS 'audit-price-mode.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'PRICE-MODE AUDIT OK') { Ok 'LIVE-TWIN price-mode: live out\regular still passes with the counted OK line' }
-else { Bad ('LIVE-TWIN price-mode failed (rc=' + $r.rc + ') - this case reads LIVE data, so check out\regular before the code: either the live price modes are broken (page-worthy) or the edit broke the healthy path') }
+else { Live ('LIVE-TWIN price-mode failed (rc=' + $r.rc + ') - this case reads LIVE data, so check out\regular before the code: either the live price modes are broken (page-worthy) or the edit broke the healthy path') }
 $fxApmT = NewFxDir 'apm-twin'
 Set-Content (Join-Path $fxApmT 'aldi-regular-2026-01-01.json') '{"store":"Aldi","price_mode":"in-store","mode_verified":"2026-01-01","items":[]}' -Encoding UTF8
 Set-Content (Join-Path $fxApmT 'fareway-regular-2026-01-01.json') '{"store":"Fareway","price_mode":"in-store","mode_verified":"2026-01-01","items":[]}' -Encoding UTF8
@@ -1275,7 +1293,7 @@ else {
   # adds a ruling (Brad, 2026-09-19): it pair-runs the named audit at the push's base and tip and accepts only that red.
   $r = RunPS 'audit-food-category.ps1' @()
   if ($r.rc -eq 0 -and $r.text -match 'priced cells scanned') { Ok 'LIVE-TWIN food-category: the live board still scans and passes' }
-  else { Bad ('LIVE-TWIN food-category failed (rc=' + $r.rc + ') - this case reads the LIVE board, so open the board before the code: either a live cell is miscategorised (page-worthy) or the edit broke the healthy path') }  # live-board-ruling-case audit=audit-food-category.ps1
+  else { Live ('LIVE-TWIN food-category failed (rc=' + $r.rc + ') - this case reads the LIVE board, so open the board before the code: either a live cell is miscategorised (page-worthy) or the edit broke the healthy path') }  # live-board-ruling-case audit=audit-food-category.ps1
 }
 Remove-Item $fxAfc -Recurse -Force -ErrorAction SilentlyContinue
 } # u029-d-audit-food-category-blind-at-zero
@@ -2712,6 +2730,14 @@ function Test-CacInspectGating([string]$src) {
   }
   # ...and the ship-path line must stop claiming a held board was published
   if ($src -notmatch 'SHIP PATH COMPLETE[^\n]*HELD \(guards blocked it\)') { $bad.Add('the SHIP PATH COMPLETE log has no held-board wording') }
+  # ...AND IT MUST READ THE PUBLISH RETURN CODE (2026-09-20, queue 2026-09-19-bb10f1). The guards-held
+  # branch above was the 2026-09-07 half of this class. The other half is the publish OUTCOME: on
+  # 2026-09-19 the summary announced 'the board, the feed and the cards are published' three seconds
+  # after 'AUTO-PUBLISH ERROR (rc=1)', because it was derived from $guardsBlocked alone while the
+  # outcome it describes has three inputs. The region between the markers is what must consult $pubrc.
+  $ssM = [regex]::Match($src, '(?s)<<SHIP-SUMMARY-BEGIN>>(.*?)<<SHIP-SUMMARY-END>>')
+  if (-not $ssM.Success) { $bad.Add('the SHIP-SUMMARY region markers are gone - the ship-path summary cannot be tested against frozen values') }
+  elseif ($ssM.Groups[1].Value -notmatch '\$pubrc') { $bad.Add('the SHIP PATH COMPLETE log does not read the publish return code') }
   return $bad
 }
 if (Use-Unit 'u060-a-held-board-must-hold-the-things') {
@@ -2726,6 +2752,73 @@ $cacFired = @(Test-CacInspectGating $cacBroke)
 if ($cacFired.Count -eq 3 -and ($cacFired -join ' ') -match 'top5-weekly' -and ($cacFired -join ' ') -match 'rotate-free-dinners' -and ($cacFired -join ' ') -match 'build-hub-grid') {
   Ok 'the INSPECT-gating check FIRES on a source with the guard verdict stripped, and names all three Ghost publishers'
 } else { Bad ('the INSPECT-gating check did NOT fire correctly on the stripped fixture (' + $cacFired.Count + ' finding(s)): [' + ($cacFired -join '; ') + '] - it would not have caught the 2026-09-07 defect') }
+# MUST FIRE: the 2026-09-19 shape (queue 2026-09-19-bb10f1), built the same way - by blinding the LIVE
+# source to $pubrc, never by transcribing a fixture. A literal .Replace, not a regex, for the same reason.
+$cacBlind = $cacSrc.Replace('$pubAttempted -and $pubrc -eq 0', '$pubAttempted')
+$cacBlind = $cacBlind.Replace('$pubAttempted -and $pubrc -eq 2', '$false')
+$cacBlind = $cacBlind.Replace('publish rc ' + "' + " + '$pubrc', "'")
+$cacBlindF = @(Test-CacInspectGating $cacBlind)
+if (($cacBlindF -join ' ') -match 'does not read the publish return code') {
+  Ok 'the ship-summary check FIRES on a source whose SHIP-SUMMARY region no longer reads $pubrc - the 2026-09-19 "published" line over an rc-1 publish'
+} else { Bad ('the ship-summary check did NOT fire on a $pubrc-blinded source (' + $cacBlindF.Count + ' finding(s)): [' + ($cacBlindF -join '; ') + '] - a publish failure would announce itself as a publish again') }
+# MUST FIRE: the region markers themselves. Without them nothing below can execute the real decision.
+$cacNoMark = $cacSrc.Replace('<<SHIP-SUMMARY-BEGIN>>', '<<GONE>>')
+$cacNoMarkF = @(Test-CacInspectGating $cacNoMark)
+if (($cacNoMarkF -join ' ') -match 'SHIP-SUMMARY region markers are gone') { Ok 'the ship-summary check FIRES when the SHIP-SUMMARY region markers are removed - it cannot pass by finding nothing' }
+else { Bad 'the ship-summary check did not notice the SHIP-SUMMARY markers being removed - it would EXAMINE NOTHING and report clean' }
+# ---- THE REGION ITSELF, EXTRACTED AND RUN against frozen values (the WATCHERS-DECISION convention).
+# A copy of a decision is a decision that can drift, so this executes the live source's own branch.
+$ssSrcM = [regex]::Match($cacSrc, '(?s)<<SHIP-SUMMARY-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<SHIP-SUMMARY-END>>')
+if (-not $ssSrcM.Success) {
+  Bad 'SHIP-SUMMARY region is GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the five-way summary is untested'
+} else {
+  # $ssRegionSrc, NOT $SS: PowerShell variable names are CASE-INSENSITIVE, so a region held in $SS and a
+  # result held in $ss are ONE variable. The first call then overwrote the region text with its own result
+  # hashtable and the second dot-sourced the string "System.Collections.Hashtable" - a command-not-found
+  # that killed the suite mid-run with no FAIL line. Same trap as the $pS/$PS one in the gate-slot work.
+  $ssRegionSrc = $ssSrcM.Groups[1].Value
+  function SsRun([bool]$blocked, [bool]$attempted, $rc) {
+    $guardsBlocked = $blocked; $pubAttempted = $attempted; $pubrc = $rc
+    $shipSecs = 726; $summary = @()
+    $logged = New-Object System.Collections.Generic.List[string]
+    function Log($m) { [void]$logged.Add([string]$m) }
+    . ([scriptblock]::Create($ssRegionSrc))
+    return @{ log = ($logged -join "`n"); summary = (@($summary) -join "`n") }
+  }
+  # MUST FIRE: the founding run. rc 1, guards green, a publish attempted - the 2026-09-19 17:23 shape.
+  $ss = SsRun $false $true 1
+  if ($ss.log -match 'NOT updated' -and $ss.log -match 'rc 1' -and $ss.log -notmatch 'the board, the feed and the cards are published') {
+    Ok 'ship summary: MUST FIRE - a publish that exited 1 logs "NOT updated" and "rc 1", and never the published wording (the 2026-09-19 17:23:21 line)'
+  } else { Bad ('ship summary: an rc-1 publish still announces a publish - [' + $ss.log + ']') }
+  # MUST FIRE: rc 2 is the coverage HELD branch and says so rather than claiming a publish.
+  $ss = SsRun $false $true 2
+  if ($ss.log -match 'HELD by the coverage gate' -and $ss.log -notmatch 'the board, the feed and the cards are published') {
+    Ok 'ship summary: MUST FIRE - an rc-2 publish logs "HELD by the coverage gate", not a publish'
+  } else { Bad ('ship summary: the rc-2 coverage-held branch is wrong - [' + $ss.log + ']') }
+  # MUST NOT FIRE: guards blocked. The 2026-09-07 wording, unchanged, and no published claim.
+  $ss = SsRun $true $false $null
+  if ($ss.log -match 'HELD \(guards blocked it\)' -and $ss.log -notmatch 'the board, the feed and the cards are published') {
+    Ok 'ship summary: MUST NOT FIRE - a guards-held run still logs the 2026-09-07 held wording and claims no publish'
+  } else { Bad ('ship summary: the guards-held branch changed - [' + $ss.log + ']') }
+  # CLEAN TWIN: the success path is untouched, BYTE FOR BYTE. Other readers grep this sentence.
+  $ss = SsRun $false $true 0
+  if ($ss.log -match 'the board, the feed and the cards are published' -and $ss.summary -match 'the board published before any advisory audit ran') {
+    Ok 'ship summary: CLEAN TWIN - an rc-0 publish still logs "the board, the feed and the cards are published" and its original summary line'
+  } else { Bad ('ship summary: the rc-0 success wording moved - every reader that greps it is now blind - [' + $ss.log + ']') }
+  # CLEAN TWIN: no publish attempted (no price change) says so instead of inheriting either other branch.
+  $ss = SsRun $false $false $null
+  if ($ss.log -match 'no price change' -and $ss.log -notmatch 'the board, the feed and the cards are published' -and $ss.log -notmatch 'NOT updated') {
+    Ok 'ship summary: CLEAN TWIN - a run with no publish attempt says the page stands as last published'
+  } else { Bad ('ship summary: the not-attempted branch is wrong - [' + $ss.log + ']') }
+  # EVERY BRANCH STILL WRITES A SUMMARY LINE. A silent branch is the failure a five-way split invites.
+  $ssAll = @((SsRun $false $true 1), (SsRun $false $true 2), (SsRun $true $false $null), (SsRun $false $true 0), (SsRun $false $false $null))
+  $ssEmpty = @($ssAll | Where-Object { -not $_.summary -or -not $_.log })
+  if ($ssEmpty.Count -eq 0) { Ok 'ship summary: every one of the five branches writes both a log line and a summary line - none is silent' }
+  else { Bad ('ship summary: ' + $ssEmpty.Count + ' of 5 branches wrote no summary or no log line - the run would report nothing about what shipped') }
+}
+# THE PUBLISH VERDICT LINES: the one line that named the failing stage was being discarded.
+if ($cacSrc -match "publish-verdict: ") { Ok 'check-ad-cycles logs publish-deals-page''s own verdict lines, so a failed publish names its stage in the log' }
+else { Bad 'check-ad-cycles keeps only timing-table lines from the publish: the reason a publish failed is discarded at the moment it is known (the 2026-09-19 17:23 defect)' }
 } # u060-a-held-board-must-hold-the-things
 
 # ---------------------------------------------------------------- (k3) sale-fallback reads the ENGINE's
@@ -3445,6 +3538,43 @@ else { Bad 'auditors verdict: the skip note vanished from the FAIL line' }
 # The tier is only worth having if the HYGIENE function actually exists and increments its own tally.
 if ((Get-Command Hygiene -ErrorAction SilentlyContinue) -and (Get-Command Get-AuditorsVerdict -ErrorAction SilentlyContinue)) { Ok 'auditors verdict: the HYGIENE tier and the verdict function are both present in this harness' }
 else { Bad 'auditors verdict: the HYGIENE tier is missing - every ops-hygiene finding is a BLIND page again' }
+# ---- the THIRD tier: a LIVE-TWIN red is the watcher WORKING (2026-09-20, queue 2026-09-19-ae9df2) ----
+# MUST FIRE: a live red with no fixture red is rc 4, and its line carries neither of the two words a reader
+# and a grep sort the day's trust ordering on.
+$av = Get-AuditorsVerdict 0 0 741 0 1
+if ($av.rc -eq 4 -and $av.line -match 'LIVE' -and $av.line -notmatch 'gone blind' -and $av.line -notmatch 'unproven') {
+  Ok 'auditors verdict: MUST FIRE - failed=0 live=1 is rc 4, says LIVE, and says neither "gone blind" nor "unproven"'
+} else { Bad ('auditors verdict: a live-board red did not produce rc 4 + LIVE wording (rc=' + $av.rc + ', line=' + $av.line + ') - the 09-19 inverted page is back') }
+# MUST FIRE: a blind watcher OUTRANKS a live red. If a fixture stopped firing, the live verdict itself is
+# unprovable, so the loud page wins.
+$av = Get-AuditorsVerdict 1 0 741 0 1
+if ($av.rc -eq 2 -and $av.line -match 'gone blind') { Ok 'auditors verdict: MUST FIRE - failed=1 live=1 is still rc 2 "gone blind" (a blind watcher outranks a live red)' }
+else { Bad ('auditors verdict: a blind fixture alongside a live red returned rc ' + $av.rc + ' - the loud page lost to the quiet one') }
+# MUST FIRE, THE FOUNDING RUN REPLAYED: the 2026-09-19 16:59 shape was 742 cases, ONE live-twin red
+# (almond-butter | Baker's | 'Nutty Blends Stage 2 Organic Bananas & Almond Butter Baby Food Pouch'), zero
+# fixture reds. That run exited 2 and paged "a GUARD has gone blind". Under this verdict it is rc 4.
+$av = Get-AuditorsVerdict 0 0 741 0 1
+if ($av.rc -eq 4) { Ok 'auditors verdict: MUST FIRE - the 2026-09-19 742-case shape (1 live red, 0 fixture reds) is rc 4, not rc 2' }
+else { Bad ('auditors verdict: the 09-19 founding shape still returns rc ' + $av.rc) }
+# CLEAN TWIN: live>0 must not swallow hygiene, and a clean run is still rc 0 with no live tally.
+$av = Get-AuditorsVerdict 0 1 741 0 1
+if ($av.rc -eq 4 -and $av.line -match 'HYGIENE') { Ok 'auditors verdict: CLEAN TWIN - a live red alongside hygiene is rc 4 and still names the hygiene count' }
+else { Bad ('auditors verdict: live+hygiene returned rc ' + $av.rc + ' / ' + $av.line) }
+$av = Get-AuditorsVerdict 0 0 741 0 0
+if ($av.rc -eq 0) { Ok 'auditors verdict: CLEAN TWIN - live=0 leaves the clean run at rc 0' }
+else { Bad ('auditors verdict: live=0 no longer returns rc 0 (rc=' + $av.rc + ')') }
+# The tier is only worth having if Live() exists and increments its OWN tally, not Bad's.
+if (Get-Command Live -ErrorAction SilentlyContinue) {
+  $liveBefore = $script:live; $failedBefore = $script:failed
+  # THE PROBE'S OUTPUT IS CAPTURED, NOT PRINTED. Live() writes a '  LIVE-RED  ' line, and
+  # ops\prepush-test-auditors.ps1 reads those lines as failing lines - so a fixture that let one reach
+  # stdout would make every push read "exit 0 with 1 failing line" and refuse as COULD NOT EVALUATE.
+  # Assigning the call captures the success stream; the tally still moves, which is what is under test.
+  $liveProbeOut = Live 'probe - the Live() tally being exercised by its own fixture, not a real finding'
+  if ($script:live -eq ($liveBefore + 1) -and $script:failed -eq $failedBefore -and ([string]$liveProbeOut) -match 'LIVE-RED') { Ok 'auditors verdict: Live() increments the live tally, leaves the failed tally alone, and writes a LIVE-RED line' }
+  else { Bad 'auditors verdict: Live() moved the wrong tally - a live red would page as a blind watcher again' }
+  $script:live = $liveBefore   # the probe above is a fixture, not a finding: do not let it change this run's verdict
+} else { Bad 'auditors verdict: the LIVE-RED tier is missing - every live-board red is a BLIND page again' }
 } # u071-k3-this-harness-s-own-verdict
 # ---- the OTHER half: check-ad-cycles must route the two tiers differently ----
 if (Use-Unit 'u072-the-other-half-check-ad-cycles-must') {
@@ -3468,7 +3598,9 @@ if (-not $wdM.Success) {
   } else { Bad ('watchers routing: rc 2 no longer selects the blind page (' + $w.subject + ' / ' + $w.fileTag + ')') }
   # MUST FIRE: FAIL CLOSED. A crash, a throw, an Invoke-Bounded timeout - any rc this code does not know -
   # takes the blind path. The new tier must not be able to swallow an unknown verdict.
-  foreach ($odd in @(3, 4, 124, 255, -1)) {
+  # 4 LEAVES THIS LIST because it is now a KNOWN verdict (the LIVE-RED tier, 2026-09-20). 5 replaces it so
+  # the loop still holds a value ONE PAST the known set - the at-the-bar / step-past rule, backlog I196.
+  foreach ($odd in @(3, 5, 124, 255, -1)) {
     $w = WdRun $odd
     if ($w.subject -eq 'Grocery: a GUARD has gone blind (test-auditors failed)' -and $w.header -match 'unproven') {
       Ok ("watchers routing: MUST FIRE - an unrecognised rc $odd fails CLOSED to the blind page")
@@ -3488,6 +3620,20 @@ if (-not $wdM.Success) {
   # new quiet tier invites: an empty subject would make Send-Alert a no-op and the finding would vanish.
   if ($w.subject -and $w.summary) { Ok 'watchers routing: a hygiene run still produces a subject and a summary line - it is routed, never silenced' }
   else { Bad 'watchers routing: the hygiene tier produced no subject or no summary - the finding would be silently dropped' }
+  # MUST FIRE: rc 4 gets its OWN subject, its own evidence file and a body that says the watchers are intact
+  # (2026-09-20, queue 2026-09-19-ae9df2). Same two forbidden words as the hygiene tier, for the same reason.
+  $w = WdRun 4
+  $liveOk = ($w.subject -eq 'Grocery: the LIVE board failed a watcher (watchers intact)') -and
+            ($w.fileTag -eq 'test-auditors-live') -and
+            ($w.header -match 'watchers intact|EVERY FIXTURE FIRED') -and
+            ($w.header -notmatch 'unproven') -and ($w.header -notmatch 'gone blind') -and
+            ($w.summary -match '^LIVE-RED') -and ($w.lookFor -eq 'LIVE-RED')
+  if ($liveOk) { Ok 'watchers routing: MUST FIRE - rc 4 pages its OWN subject to out\test-auditors-live-<date>.txt, and the body says neither "unproven" nor "gone blind"' }
+  else { Bad ('watchers routing: the LIVE-RED tier is wrong (subject=' + $w.subject + ', file=' + $w.fileTag + ', summary=' + $w.summary + ', lookFor=' + $w.lookFor + ') - a live-board red would page as a blind watcher, which inverts the day''s trust ordering') }
+  # A LIVE RUN MUST STILL SEND. The new tier is the one a quiet failure mode invites; an empty subject makes
+  # Send-Alert a no-op and the finding vanishes.
+  if ($w.subject -and $w.summary) { Ok 'watchers routing: a live-board run still produces a subject and a summary line - it is routed, never silenced' }
+  else { Bad 'watchers routing: the LIVE-RED tier produced no subject or no summary - the finding would be silently dropped' }
 }
 } # u072-the-other-half-check-ad-cycles-must
 
@@ -6751,7 +6897,7 @@ if ($r.rc -eq 0 -and $r.text -match 'MUST-FIRE' -and $r.text -match 'all self-te
 # works and prove nothing about production, which is the one thing this case is for.
 $r = RunPS 'audit-pull-profiles.ps1' @()
 if ($r.rc -eq 0) { Ok 'LIVE-TWIN pull-profiles: every store pull_profile agrees with its agent module' }
-else { Bad ('LIVE-TWIN pull-profiles: drift, or a profile encoding carriage - this reads the LIVE registry and the LIVE modules: ' + ((($r.text -split "`n") | Select-Object -First 6) -join ' | ')) }
+else { Live ('LIVE-TWIN pull-profiles: drift, or a profile encoding carriage - this reads the LIVE registry and the LIVE modules: ' + ((($r.text -split "`n") | Select-Object -First 6) -join ' | ')) }
 } # u125-k1f-pull-pacing-is-versioned-data
 
 # ---------------------------------------------------------------- rollback TTL ledger (2026-08-21)
@@ -7489,17 +7635,17 @@ else { Bad 'CLEAN TWIN  the matcher-parity lane lost its MATCHER-PARITY-COMPLETE
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 # ONE decision, taken by the pure function above, so the cases that prove it cannot drift from it.
 # OUTSIDE EVERY UNIT, ALWAYS: a verdict inside a unit is a verdict a selective run can skip.
-$verdict = Get-AuditorsVerdict $failed $hygiene $pass $skipped
+$verdict = Get-AuditorsVerdict $failed $hygiene $pass $skipped $live
 $unitNote = ''
 if ($script:UnitsSkipped.Count -gt 0) {
   # A SELECTIVE RUN (see Use-Unit) states what it covered and never uses the PASS wording, whatever it found.
   $unitsAll = $script:UnitsRan.Count + $script:UnitsSkipped.Count
-  Write-Output ('test-auditors SELECTIVE  ran ' + ($pass + $failed + $hygiene + $skipped) + ' case(s) in ' + $script:UnitsRan.Count + ' of ' + $unitsAll + ' unit(s) (' + $failed + ' failed, ' + $pass + ' passed' + $(if ($hygiene) { ', ' + $hygiene + ' HYGIENE' } else { '' }) + $(if ($skipped) { ', ' + $skipped + ' SKIPPED' } else { '' }) + '); ' + $script:UnitsSkipped.Count + ' unit(s) were not selected and proved nothing. NOT a full run and NOT a pass.')
+  Write-Output ('test-auditors SELECTIVE  ran ' + ($pass + $failed + $live + $hygiene + $skipped) + ' case(s) in ' + $script:UnitsRan.Count + ' of ' + $unitsAll + ' unit(s) (' + $failed + ' failed, ' + $pass + ' passed' + $(if ($live) { ', ' + $live + ' LIVE-RED' } else { '' }) + $(if ($hygiene) { ', ' + $hygiene + ' HYGIENE' } else { '' }) + $(if ($skipped) { ', ' + $skipped + ' SKIPPED' } else { '' }) + '); ' + $script:UnitsSkipped.Count + ' unit(s) were not selected and proved nothing. NOT a full run and NOT a pass.')
   $unitNote = ' selective=1 units_ran=' + $script:UnitsRan.Count + ' units_skipped=' + $script:UnitsSkipped.Count
 } else {
   Write-Output $verdict.line
 }
-Write-GuardComplete -Name 'test-auditors' -Summary ("pass=$pass failed=$failed hygiene=$hygiene skipped=$skipped" + $unitNote)
+Write-GuardComplete -Name 'test-auditors' -Summary ("pass=$pass failed=$failed live=$live hygiene=$hygiene skipped=$skipped" + $unitNote)
 exit $verdict.rc
 } finally { Sweep-FxPaths }
 

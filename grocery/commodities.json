@@ -5717,6 +5717,8 @@
                         "ready\\s+to\\s+drink",
                         "\\brtd\\b",
                         "cold\\s+brew\\s+can",
+                        "\\bbeverages?\\b",
+                        "\\bsyrups?\\b",
                         "instant",
                         "\\bcups?\\b",
                         "beech\\s*nut",
