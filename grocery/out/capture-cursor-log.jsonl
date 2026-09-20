@@ -188,3 +188,12 @@
 {"at":"2026-09-19T08:00:24","store":"Hy-Vee (products)","from":572,"to":590,"day":"2026-09-19","caller":"pull-regular-hyvee.ps1","pid":26220}
 {"at":"2026-09-19T08:01:13","store":"Family Fare","from":343,"to":350,"day":"2026-09-19","caller":"pull-regular-familyfare.ps1","pid":632}
 {"at":"2026-09-19T08:07:03","store":"Fareway","from":168,"to":175,"day":"2026-09-19","caller":"build-fareway-regular.ps1","pid":32996}
+{"at":"2026-09-19T09:47:57","store":"Sam\u0027s Club","from":154,"to":197,"day":"2026-09-19","caller":"build-sams-deals.ps1","pid":33308}
+{"at":"2026-09-19T09:48:05","store":"Aldi","from":119,"to":162,"day":"2026-09-19","caller":"build-aldi-regular.ps1","pid":50168}
+{"at":"2026-09-19T09:59:44","store":"Walmart","from":119,"to":162,"day":"2026-09-19","caller":"build-walmart-deals.ps1","pid":44792}
+{"at":"2026-09-19T10:36:47","store":"Family Fare","from":350,"to":365,"day":"2026-09-19","caller":"pull-regular-familyfare.ps1","pid":33012}
+{"at":"2026-09-20T06:28:59","store":"Walmart","from":162,"to":170,"day":"2026-09-20","caller":"build-walmart-deals.ps1","pid":11632}
+{"at":"2026-09-20T06:29:11","store":"Aldi","from":162,"to":170,"day":"2026-09-20","caller":"build-aldi-regular.ps1","pid":22968}
+{"at":"2026-09-20T06:40:59","store":"Sam\u0027s Club","from":197,"to":205,"day":"2026-09-20","caller":"build-sams-deals.ps1","pid":32680}
+{"at":"2026-09-20T06:57:51","store":"Fareway","from":175,"to":183,"day":"2026-09-20","caller":"build-fareway-regular.ps1","pid":42804}
+{"at":"2026-09-20T07:03:24","store":"Family Fare","from":365,"to":368,"day":"2026-09-20","caller":"pull-regular-familyfare.ps1","pid":18376}
