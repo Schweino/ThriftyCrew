@@ -1,5 +1,5 @@
 {
- "readme": "THE ALERT REGISTRY (Brad, ruling 1, 2026-09-10; design/PLAN-zero-alert-days-2026-09-10.md section 7). Every alert type is exactly one class. page = emailed AND queued, for four conditions only: (1) the live board or feed is wrong or held, (2) a guard or watcher cannot see, (3) scheduled work did not run or did not land, (4) a live cell moved in a way automatic adjudication could not explain; escalations to Brad (send-alert -Escalates, Your call asks) are page too. review = queued for triage, NEVER emailed (triage-created residuals and findings, send-alert -Lane weekly, are review). digest = emailed, NEVER queued. send-alert.ps1 resolves the class through grocery/alert-registry-lib.ps1. An alert whose type matches NO entry is never dropped: it queues with unregistered=true AND is emailed with its subject prefixed 'UNREGISTERED ALERT TYPE: '. A registry that is missing or unparseable makes EVERY alert page. MATCHING: send-alert derives a type key from the subject (lower case, dates, rc=N and every number removed, every run of non-letters collapsed to one space); 'key' is compared to that type key. match 'exact' = equal; 'prefix' = the type key starts with key at a word boundary; 'regex' = .NET regex over the type key. When several entries match, exact beats prefix and regex; several that still tie are AMBIGUOUS and resolve to the most severe class. TO ADD A TYPE: add one entry here (id, match, key, class, condition, emitter), then run powershell -File grocery/audit-alert-registry.ps1, which must exit 0. condition for page is one of the values in page_conditions (grocery/alert-registry-lib.ps1 enforces the same list and the check fails if the two disagree); for review and digest it is one line saying why.",
+ "readme": "THE ALERT REGISTRY (Brad, ruling 1, 2026-09-10; design/PLAN-zero-alert-days-2026-09-10.md section 7). Every alert type is exactly one class. page = emailed AND queued, for four conditions only: (1) the live board or feed is wrong or held, (2) a guard or watcher cannot see, (3) scheduled work did not run or did not land, (4) a live cell moved in a way automatic adjudication could not explain; escalations to Brad (send-alert -Escalates, Your call asks) are page too. review = queued for triage, NEVER emailed (triage-created residuals and findings, send-alert -Lane weekly, are review). digest = emailed, NEVER queued. send-alert.ps1 resolves the class through grocery/alert-registry-lib.ps1. An alert whose type matches NO entry is never dropped: it queues with unregistered=true AND is emailed with its subject prefixed 'UNREGISTERED ALERT TYPE: '. A registry that is missing or unparseable makes EVERY alert page. MATCHING: send-alert derives a type key from the subject (lower case, dates, rc=N and every number removed, every run of non-letters collapsed to one space); 'key' is compared to that type key. match 'exact' = equal; 'prefix' = the type key starts with key at a word boundary; 'regex' = .NET regex over the type key. When several entries match, exact beats prefix and regex; several that still tie are AMBIGUOUS and resolve to the most severe class. TO ADD A TYPE: add one entry here (id, match, key, class, condition, emitter), then run powershell -File grocery/audit-alert-registry.ps1, which must exit 0. condition for page is one of the values in page_conditions (grocery/alert-registry-lib.ps1 enforces the same list and the check fails if the two disagree); for review and digest it is one line saying why. HOW LONG BEFORE IT MAILS (Brad, 2026-09-20): an entry may carry hold_observations, the number of observations a condition must reach before it is EMAILED. It defaults to 1 - email on the first observation - which is what every entry without the field does, so nothing changes for a type until it opts in. A firing check is not yet an alert: a rule is inactive while the condition is false, PENDING from the moment it becomes true, and firing only once it has stayed true for its declared duration. THE DURABLE QUEUE WRITE IS NOT HELD: a held condition still queues on its first observation and triage still sees it, so this is a DELIVERY duration and never a silence, and it is a different knob from any cutoff - no band, ratchet or guard threshold moves for it. Guards, a held board, a failed publish, a wrong price and anything reader-facing carry NO hold and must page on their first observation, always. ROUTING REVIEW 2026-09-20: every page-class type that fired on 3 or more of the last 30 days was re-tested against 'alert only where a human has to act', and NONE was moved to review - each one is a guard, a board-or-feed condition, or page condition 3 (scheduled work did not run or land), where a human does have to act. The noise in that set is duration rather than routing, which is why capture-watchdog took hold_observations 2 instead of a new class.",
  "page_conditions": [
   "1 board-or-feed-wrong-or-held",
   "2 watcher-cannot-see",
@@ -175,7 +175,9 @@
    "key": "grocery capture watchdog issue s",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/capture-watchdog.ps1"
+   "emitter": "grocery/capture-watchdog.ps1",
+   "hold_observations": 2,
+   "hold_note": "A recurring standing state: fired on 20 of the 30 days ending 2026-09-20. Pending on its first observation, emailed on the second (Brad, 2026-09-20). It still QUEUES on the first observation, so triage sees every occurrence; only the mail waits."
   },
   {
    "id": "capture-watchdog-held",
@@ -644,7 +646,9 @@
    "key": "grocery matching soundness review needed",
    "class": "review",
    "condition": "review intake: a data change that needs a reader's judgement, not a failure (plan section 3, bucket 1)",
-   "emitter": "grocery/audit-match-soundness.ps1"
+   "emitter": "grocery/audit-match-soundness.ps1",
+   "hold_observations": 2,
+   "hold_note": "A recurring standing state: fired on 18 of the 30 days ending 2026-09-20. Review class is already never emailed, so the hold changes no delivery today; it is declared so the duration travels with the type if it is ever promoted to page (Brad, 2026-09-20)."
   },
   {
    "id": "new-price-flags",
@@ -653,7 +657,9 @@
    "class": "review",
    "condition": "review intake: flagged cells still published and ask to be verified (plan section 3, bucket 1)",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "note": "Borders page condition 4. Confirmed review by Brad, ruling R13 (2026-09-10)."
+   "note": "Borders page condition 4. Confirmed review by Brad, ruling R13 (2026-09-10).",
+   "hold_observations": 2,
+   "hold_note": "The estate's most recurrent type: fired on 22 of the 30 days ending 2026-09-20. Review class is already never emailed, so the hold changes no delivery today; it is declared so the duration travels with the type if it is ever promoted to page (Brad, 2026-09-20)."
   },
   {
    "id": "semantic-sweep",
@@ -661,7 +667,9 @@
    "key": "grocery semantic sweep found product s no rule can see",
    "class": "review",
    "condition": "review intake: candidate products for a rule, not a live wrong cell (plan section 3, bucket 1)",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "hold_observations": 2,
+   "hold_note": "A recurring standing state: fired on 19 of the 30 days ending 2026-09-20. Review class is already never emailed, so the hold changes no delivery today; it is declared so the duration travels with the type if it is ever promoted to page (Brad, 2026-09-20)."
   },
   {
    "id": "stores-dropped",
