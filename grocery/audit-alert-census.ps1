@@ -2,9 +2,17 @@
   audit-alert-census.ps1 - the scoreboard for design\PLAN-zero-alert-days-2026-09-10.md.
 
   WHAT IT ANSWERS: how many days had no alerts, how many alerts a day, which alert types keep coming back,
-  and how often a type came back after triage had already closed it. Brad's targets (2026-09-10, ruling 4):
-  3 alert-free days a week by 2026-10-08, 5 by 2026-11-05, and zero returns within 30 days for a class that
-  shipped a prevention fix.
+  and how often a type came back after triage had already closed it.
+
+  THE SCOREBOARD NUMBER IS THE RETURN RATE (Brad, 2026-09-20, design\PLAN-alert-quiet-2026-09-20.md section
+  3). Ruling 4's quiet-day dates (3 alert-free days a week by 2026-10-08, 5 by 2026-11-05) are still printed
+  and are still worth reading, but they are an OBSERVATION and no longer the target: they measure VOLUME,
+  which is not the complaint, and with 103 active types a quiet day needs all 103 silent. The complaint is
+  that we pay to resolve an alert and it comes back - 121 of 360 alerts in 30 days were a type triage had
+  already closed - so RETURN RATE is what the scoreboard aims at. NO NUMERIC TARGET IS STATED for it: an SLO
+  declared before the data exists is a wish, and the change that should move it landed the same day, so
+  today's figure is a baseline pending two weeks of data. Zero returns within 30 days for a class that
+  shipped a prevention fix (ruling 4) still stands.
 
   WHY IT KEEPS A FILE: send-alert.ps1 keeps only 30 days of resolved queue history, so any trend older than
   that disappears. Every run merges one row per day per alert type into out\alert-census.jsonl. Inside the
@@ -111,6 +119,26 @@ function Get-CensusCutoff {
   return $cut.ToString('yyyy-MM-dd')
 }
 
+# RETURN RATE IS THE SCOREBOARD NUMBER (Brad, 2026-09-20, design\PLAN-alert-quiet-2026-09-20.md section 3).
+# Quiet days measure VOLUME, which is not the complaint, and with 103 active types a quiet day needs all 103
+# silent, which back-solves to a per-type daily fire rate of about 2.6 percent. The complaint is that we spend
+# heavily resolving an alert and it comes back: 121 of 360 alerts in 30 days were a type triage had already
+# closed. That number is already computed here, so this states it as a RATE with its denominator.
+# NO NUMERIC TARGET IS DECLARED. An SLO declared before the data exists is a wish
+# (reliability-craft/applies-here.md, The scoreboard), and the RESUME change that should move this rate
+# landed the same day, so today's rate is a BASELINE pending two weeks of data under it.
+function Get-CensusReturnRate {
+  <# .SYNOPSIS Pure. The return rate with its denominator: returns over alerts in the window. A window with no
+     alerts has NO rate (measured $false and the reason in text), never 0% and never a divide by zero. #>
+  param([int]$Returns, [int]$Alerts)
+  $r = [pscustomobject]@{ returns = $Returns; alerts = $Alerts; measured = $false; pct = 0.0; text = '' }
+  if ($Alerts -le 0) { $r.text = 'no alert(s) in the window, so there is no rate to state'; return $r }
+  $r.measured = $true
+  $r.pct = [Math]::Round((100.0 * $Returns / $Alerts), 1)
+  $r.text = ('{0} of {1} alert(s) ({2:N1}%)' -f $Returns, $Alerts, $r.pct)
+  return $r
+}
+
 function Get-CensusSummary {
   <# .SYNOPSIS Pure. Merged rows + today -> the numbers the report prints, each with its denominator. #>
   param($Rows, [datetime]$Today)
@@ -206,6 +234,19 @@ if ($SelfTest) {
   $badReset = $false; try { $null = Get-CensusCutoff ([datetime]'2026-09-17') 30 'Sept 17' } catch { $badReset = $true }
   # MUST FIRE: a reset date nobody can read is a refusal, never a silent fall back to the window that deletes history.
   _T 'MUST-FIRE an unreadable reset date throws instead of merging' $badReset 'did not throw'
+  # ---- RETURN RATE IS THE SCOREBOARD NUMBER (Brad, 2026-09-20) --------------------------------------------
+  # The founding reading: 121 of 360 alerts over 30 days were a type triage had already closed.
+  $rr = Get-CensusReturnRate 121 360
+  _T 'MUST-FIRE the return rate is computed from returns over alerts and prints its denominator' `
+    ($rr.measured -and $rr.pct -eq 33.6 -and $rr.text -eq '121 of 360 alert(s) (33.6%)') ("pct=" + $rr.pct + " text=" + $rr.text)
+  # MUST FIRE: the rate is read off the summary's own returns and 30-day alerts, not a second count of either.
+  $rr2 = Get-CensusReturnRate $sum.Returns $sum.W30.alerts
+  _T 'MUST-FIRE the summary''s own returns and 30-day alerts give the rate (1 of 4 = 25.0%)' `
+    ($rr2.measured -and $rr2.pct -eq 25.0 -and $rr2.alerts -eq 4 -and $rr2.returns -eq 1) ("pct=" + $rr2.pct + " " + $rr2.returns + "/" + $rr2.alerts)
+  # CLEAN TWIN: a window with no alerts at all. The rate is not 0%, it is absent, and it states why.
+  $rz = Get-CensusReturnRate 0 0
+  _T 'CLEAN TWIN a window with no alerts states that there is no rate rather than dividing by zero' `
+    ($rz.measured -eq $false -and $rz.pct -eq 0 -and $rz.text -match 'no rate to state') ("text=" + $rz.text)
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail of $ran case(s)"; exit 1 }
   Write-Output "SELF-TEST PASS ($ran alert-census cases)"
@@ -236,13 +277,16 @@ $json = @($merged | ForEach-Object { $_ | ConvertTo-Json -Depth 4 -Compress })
 
 $s = Get-CensusSummary $merged $now
 Write-Output ("alert-census: read " + $items.Count + " queue item(s); history " + $s.First + " to " + $now.ToString('yyyy-MM-dd') + "; " + $merged.Count + " day/type row(s) in " + $OutFile)
-Write-Output ("  QUIET DAYS   last 7: {0} of {1}   last 30: {2} of {3} (days with data)" -f $s.W7.quiet, $s.W7.days, $s.W30.quiet, $s.W30.days)
+$rate = Get-CensusReturnRate $s.Returns $s.W30.alerts
+Write-Output ("  QUIET DAYS   last 7: {0} of {1}   last 30: {2} of {3} (days with data) - an OBSERVATION, not the target" -f $s.W7.quiet, $s.W7.days, $s.W30.quiet, $s.W30.days)
 Write-Output ("  ALERTS       last 7: {0} ({1:N1} a day)   last 30: {2} ({3:N1} a day)" -f $s.W7.alerts, ($s.W7.alerts / [Math]::Max(1, $s.W7.days)), $s.W30.alerts, ($s.W30.alerts / [Math]::Max(1, $s.W30.days)))
 foreach ($t in $script:Targets) {
   $state = if ($s.W7.days -lt 7) { 'NOT YET MEASURABLE (fewer than 7 days of data)' } elseif ($s.W7.quiet -ge $t.quiet_per_week) { 'MET' } else { 'NOT MET' }
-  Write-Output ("  TARGET       {0} quiet day(s) a week by {1}: last 7 days had {2} of {3} - {4}" -f $t.quiet_per_week, $t.by, $s.W7.quiet, $s.W7.days, $state)
+  Write-Output ("  QUIET AIM    {0} quiet day(s) a week by {1} (ruling 4, kept as an OBSERVATION): last 7 days had {2} of {3} - {4}" -f $t.quiet_per_week, $t.by, $s.W7.quiet, $s.W7.days, $state)
 }
 Write-Output ("  RETURNS      last 30: {0} alert(s) were a type triage had already closed, across {1} of {2} type(s). Per-prevention tracking arrives with ruling 5." -f $s.Returns, $s.ReturnTypes, $s.Types.Count)
+Write-Output ("  RETURN RATE  last 30: {0} - THE SCOREBOARD NUMBER (Brad, 2026-09-20)." -f $rate.text)
+Write-Output "               No numeric target is stated: this is a BASELINE pending two weeks of data under the RESUME change, because an SLO declared before the data exists is a wish."
 Write-Output ("  RECURRING    {0} of {1} type(s) raised on 3 or more of the last {2} day(s). Top 10 by days:" -f $s.Recurring.Count, $s.Types.Count, $s.W30.days)
 foreach ($t in @($s.Recurring | Select-Object -First 10)) {
   $sub = $t.subject; if ($sub.Length -gt 80) { $sub = $sub.Substring(0, 80) }
@@ -250,4 +294,6 @@ foreach ($t in @($s.Recurring | Select-Object -First 10)) {
 }
 $dTxt = (@($s.Dispositions.Keys | Sort-Object | ForEach-Object { $_ + '=' + $s.Dispositions[$_] })) -join ' '
 Write-Output ("  CLOSES       last 30 by disposition: " + $(if ($dTxt) { $dTxt } else { 'none dated' }))
-Exit-Guard -Name 'ALERT-CENSUS' -Code 0 -Summary ("quiet7={0}/{1} quiet30={2}/{3} alerts30={4} returns30={5} recurring={6}" -f $s.W7.quiet, $s.W7.days, $s.W30.quiet, $s.W30.days, $s.W30.alerts, $s.Returns, $s.Recurring.Count)
+# The marker contract is unchanged and returnrate30 is ADDED to it, never a replacement: a reader keyed on
+# quiet7 or returns30 goes on working, and the scoreboard number is on the line a gate log keeps.
+Exit-Guard -Name 'ALERT-CENSUS' -Code 0 -Summary ("quiet7={0}/{1} quiet30={2}/{3} alerts30={4} returns30={5} recurring={6} returnrate30={7}" -f $s.W7.quiet, $s.W7.days, $s.W30.quiet, $s.W30.days, $s.W30.alerts, $s.Returns, $s.Recurring.Count, $(if ($rate.measured) { ('{0:N1}%' -f $rate.pct) } else { 'none' }))
