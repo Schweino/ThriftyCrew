@@ -17,7 +17,7 @@
 #     to a temp dir; see grocery\test-auditors.ps1 for the same lesson learned the hard way);
 #   - the -Slugs splice reads the file it is about to WRITE ($OutFile), not a hardcoded db\costed.json,
 #     so a targeted recost against a fixture splices the fixture's own baseline.
-param([string[]]$Slugs,[string]$DbRoot,[string]$GroceryOut,[string]$OutFile,[string]$FlagsFile,[switch]$SelfTest)
+param([string[]]$Slugs,[string]$DbRoot,[string]$GroceryOut,[string]$OutFile,[string]$FlagsFile,[switch]$SelfTest,[int]$LedgerMaxAgeDays = 0)
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
@@ -153,15 +153,18 @@ if($DRAINED.Count -gt 0){
 # feed); $CARRLEDGER is the adjudicated remainder.
 $repoRoot = Split-Path $mp -Parent
 . (Join-Path $repoRoot 'lib\carriage-lib.ps1')
-# THE QUARTER IS READ, NOT WRITTEN (Brad's standing rule: an everyday price is re-read about once every 90
-# days, at every store). capture-policy-lib.ps1 has no top-level param() block, so dot-sourcing it cannot
-# reset this script's own parameters. If it cannot be reached, the ledger basis refuses rather than guessing
-# a bound - a could-not-look must not settle the question.
-$script:LedgerMaxAgeDays = -1
-try {
-  . (Join-Path $repoRoot 'grocery\capture-policy-lib.ps1')
-  if ($null -ne $script:QuarterDays -and [int]$script:QuarterDays -gt 0) { $script:LedgerMaxAgeDays = [int]$script:QuarterDays }
-} catch { $script:LedgerMaxAgeDays = -1 }
+# THE QUARTER IS SUPPLIED BY THE CALLER, NOT REACHED FOR (2026-09-20, queue 2026-09-19-d240fd).
+# The bound on a carriage-ledger price is Brad's standing rule - an everyday price is re-read about once
+# every 90 days, at every store - and its ONE canonical copy is $QuarterDays in grocery\capture-policy-lib.ps1.
+# This engine first dot-sourced that file directly and ops\audit-cross-module-reach.ps1 was right to refuse it:
+# meal-prep reaching into grocery's internals is exactly what that ratchet exists to stop, and writing 90 here
+# instead would be the hard-coded band the grocery rules forbid. So the policy stays where it lives and the
+# CALLER hands it over: grocery\check-ad-cycles.ps1 already dot-sources capture-policy-lib in its own module
+# and passes -LedgerMaxAgeDays $script:QuarterDays. Nobody crosses a module boundary and there is no second
+# copy of the number.
+# UNSET MEANS REFUSE, never guess: at 0 the ledger basis prices nothing and the line stays NO PRICE BASIS with
+# its flag, so a hand run that forgets the flag UNDERSTATES nothing - it simply declines to use the ledger.
+$script:LedgerMaxAgeDays = [int]$LedgerMaxAgeDays
 
 function Get-LedgerBasis {
   <#

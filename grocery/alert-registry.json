@@ -1,129 +1,943 @@
 {
-  "readme": "THE ALERT REGISTRY (Brad, ruling 1, 2026-09-10; design/PLAN-zero-alert-days-2026-09-10.md section 7). Every alert type is exactly one class. page = emailed AND queued, for four conditions only: (1) the live board or feed is wrong or held, (2) a guard or watcher cannot see, (3) scheduled work did not run or did not land, (4) a live cell moved in a way automatic adjudication could not explain; escalations to Brad (send-alert -Escalates, Your call asks) are page too. review = queued for triage, NEVER emailed (triage-created residuals and findings, send-alert -Lane weekly, are review). digest = emailed, NEVER queued. send-alert.ps1 resolves the class through grocery/alert-registry-lib.ps1. An alert whose type matches NO entry is never dropped: it queues with unregistered=true AND is emailed with its subject prefixed 'UNREGISTERED ALERT TYPE: '. A registry that is missing or unparseable makes EVERY alert page. MATCHING: send-alert derives a type key from the subject (lower case, dates, rc=N and every number removed, every run of non-letters collapsed to one space); 'key' is compared to that type key. match 'exact' = equal; 'prefix' = the type key starts with key at a word boundary; 'regex' = .NET regex over the type key. When several entries match, exact beats prefix and regex; several that still tie are AMBIGUOUS and resolve to the most severe class. TO ADD A TYPE: add one entry here (id, match, key, class, condition, emitter), then run powershell -File grocery/audit-alert-registry.ps1, which must exit 0. condition for page is one of the values in page_conditions (grocery/alert-registry-lib.ps1 enforces the same list and the check fails if the two disagree); for review and digest it is one line saying why.",
-  "page_conditions": [
-    "1 board-or-feed-wrong-or-held",
-    "2 watcher-cannot-see",
-    "3 scheduled-work-did-not-run-or-land",
-    "4 live-cell-moved-unexplained",
-    "5 private-data-exposure",
-    "escalation"
-  ],
-  "entries": [
-    { "id": "guards-failed", "match": "exact", "key": "grocery guards failed board not published", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "page-held-coverage", "match": "exact", "key": "grocery page held coverage", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "compare-failed", "match": "exact", "key": "grocery compare failed", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "publish-failed", "match": "exact", "key": "grocery publish failed", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "board-feed-different-weeks", "match": "exact", "key": "grocery board and feed on different weeks", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "store-dropped-off-tile", "match": "exact", "key": "grocery a store dropped off a commodity tile", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "board-names-mangled", "match": "exact", "key": "grocery board product name s are mangled encoding", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/audit-board-mojibake.ps1" },
-    { "id": "board-prices-aging", "match": "exact", "key": "board prices aging inside a fresh file", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "board-freshness-store-stopped", "match": "exact", "key": "board freshness a store stopped refreshing", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "board-freshness-aging", "match": "exact", "key": "board freshness prices aging past the publish limit", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "feed-edge-stale", "match": "exact", "key": "smp feed edge did not pick up today s push", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/capture-run.ps1" },
-    { "id": "feed-edge-bytes", "match": "exact", "key": "smp feed edge bytes do not match the push", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/capture-run.ps1" },
-    { "id": "board-edge-stale", "match": "exact", "key": "board json edge did not pick up today s push", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/capture-run.ps1" },
-    { "id": "feed-not-refreshed", "match": "exact", "key": "grocery pipeline feed did not truly refresh", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/capture-run.ps1" },
-    { "id": "pipeline-could-not-push", "match": "exact", "key": "grocery pipeline could not push", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/capture-run.ps1" },
-    { "id": "pipeline-moved-untracked-blocker", "match": "exact", "key": "grocery pipeline moved an untracked file out of the rebase s way", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/capture-run.ps1" },
-    { "id": "commit-refused", "match": "exact", "key": "daily pipeline commit refused", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/capture-run.ps1" },
-    { "id": "served-files-uncommitted", "match": "exact", "key": "daily chain left served files uncommitted", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/capture-run.ps1" },
-    { "id": "pipeline-did-not-commit", "match": "prefix", "key": "daily pipeline ran but did not commit", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "none in the tree on 2026-09-10 (fired 2026-08-24; kept so the queue history maps)" },
-    { "id": "capture-watchdog", "match": "exact", "key": "grocery capture watchdog issue s", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/capture-watchdog.ps1" },
-    { "id": "capture-watchdog-held", "match": "exact", "key": "grocery capture watchdog held by guards", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/capture-watchdog.ps1 (sent with -CausedBy guards-hold, so it is absorbed into the open GUARDS FAILED item when there is one)" },
-    { "id": "recipe-prices-from-snapshot", "match": "exact", "key": "recipe prices still from the undated snapshot", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "recipe-recost-failed", "match": "exact", "key": "recipe recost failed", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "server-pull-failed", "match": "exact", "key": "grocery pull failed server stores", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "ad-window-no-capture", "match": "regex", "key": "^([a-z ]+ )?ad window advanced with no capture behind it$", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "captured-field-blank", "match": "exact", "key": "grocery a captured field went blank", "class": "page", "condition": "2 watcher-cannot-see", "emitter": "grocery/capture-run.ps1" },
-    { "id": "ff-catalog-degrading", "match": "exact", "key": "grocery family fare catalog is degrading signal s", "class": "review", "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10): 11 of 20 days fired, and its close notes mostly read miscalibrated, healthy store", "emitter": "grocery/pull-regular-familyfare.ps1" },
-    { "id": "union-store-no-captures", "match": "exact", "key": "grocery a union store has no captures in its window", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "automation-silent-death", "match": "exact", "key": "automation silent death issue s", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/health-heartbeat.ps1" },
-    { "id": "bakers-scan-failed", "match": "exact", "key": "bakers daily scan failed", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/bakers-daily-scan.ps1" },
-    { "id": "bakers-scan-push-failed", "match": "exact", "key": "baker s daily scan push data failed", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/bakers-daily-scan.ps1" },
-    { "id": "bakers-scan-autostash", "match": "exact", "key": "bakers daily scan autostash not restored", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/bakers-daily-scan.ps1" },
-    { "id": "run-blocked-bot-wall", "match": "regex", "key": "^grocery run blocked [a-z ]+ bot wall$", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/notify-desktop.ps1 (-AlsoEmail, title composed from -Store)" },
-    { "id": "run-needs-you", "match": "exact", "key": "grocery run needs you", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/notify-desktop.ps1 (-AlsoEmail, default title)" },
-    { "id": "guard-gone-blind", "match": "exact", "key": "grocery a guard has gone blind test auditors failed", "class": "page", "condition": "2 watcher-cannot-see", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "test-guards-could-not-evaluate", "match": "exact", "key": "grocery test guards could not evaluate guards already red on the unmutated board", "class": "page", "condition": "2 watcher-cannot-see", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "test-guards-did-not-run", "match": "exact", "key": "grocery test guards weekly did not run hermetic copy failed", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "test-guards-scan-only", "match": "exact", "key": "grocery test guards weekly a source scan case failed every invariant still fails", "class": "review", "condition": "review: a source-scan case (the empty-stamp idiom) failed while every mutation case still exited 2, so no guard is blind and none of the four page conditions holds (queue 2026-09-19-a1c25d); the pre-commit path refuses the idiom since the same change", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "invariant-cannot-fail", "match": "exact", "key": "grocery a blocking invariant can no longer fail test guards weekly", "class": "page", "condition": "2 watcher-cannot-see", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "invariant-not-proven", "match": "exact", "key": "grocery no blocking guard invariant proven in over days test guards weekly", "class": "page", "condition": "2 watcher-cannot-see", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "ghost-drift-blind", "match": "exact", "key": "tools ghost drift could not evaluate no key or a page could not be read", "class": "page", "condition": "2 watcher-cannot-see", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "memory-store-unchecked", "match": "exact", "key": "ops the agent memory store could not be checked", "class": "page", "condition": "2 watcher-cannot-see", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "memory-public-exposure", "match": "exact", "key": "ops private memory notes reached the public repo", "class": "page", "condition": "5 private-data-exposure", "emitter": "grocery/check-ad-cycles.ps1", "note": "Brad ruling R16 (2026-09-10): a memory file tracked by the public repo, or a memory git remote that answers publicly, emails. Split out of 'the agent memory store has a finding', which stays review for the hygiene findings." },
-    { "id": "prompt-not-backed-up", "match": "exact", "key": "ops an agent prompt is not backed up", "class": "page", "condition": "2 watcher-cannot-see", "emitter": "grocery/check-ad-cycles.ps1", "note": "One subject carries both exit 2 (drift) and exit 3 (BLIND). Classed page for the BLIND half; splitting the subject would let the drift half become review." },
-    { "id": "sidecar-down", "match": "exact", "key": "semantic sidecar is down and would not restart", "class": "page", "condition": "2 watcher-cannot-see", "emitter": "ops/sidecar-watchdog.ps1" },
-    { "id": "runaway-process-reaped", "match": "exact", "key": "ops a runaway process was reaped", "class": "review", "condition": "review: the process was orphaned, read-only and spinning, this script killed it and the core is back, so no human has to act - which is the page test. The line exists so a kill can never be silent and so a rising rate of them shows up as the estate leaking sessions", "emitter": "ops/reap-runaway-processes.ps1", "note": "Born 2026-09-20 with the reaper. Its twin, runaway-process-unowned, is the half that pages." },
-    { "id": "runaway-process-unowned", "match": "exact", "key": "ops a process is burning a core and nothing owns it", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "ops/reap-runaway-processes.ps1", "note": "A process nothing owns is burning CPU and the reaper deliberately refused to kill it, because it is not a read-only git command and a kill could leave a lock or a half-written file. Only a person can decide, and until one does it keeps the core. The founding case wasted 28.8 CPU-hours over 29.2 hours before a human noticed it by eye. Split from runaway-process-reaped the day both were written (Brad, 2026-09-20): one subject for both would have let the quiet half set the class for the urgent one, leaving a burning core in the weekly lane for up to a week." },
-    { "id": "manifest-refused-stale-feed", "match": "exact", "key": "recipe per serving manifest refused stale price feed", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "meal-prep/pipeline/compute-v2-perserving.ps1" },
-    { "id": "manifest-skipped", "match": "exact", "key": "recipe per serving manifest skipped recipe s", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "reanchor-incomplete", "match": "exact", "key": "re anchor did not complete cards not republished", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "cards-over-cap", "match": "exact", "key": "recipe cards moved over the daily cap", "class": "page", "condition": "4 live-cell-moved-unexplained", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "cards-publish-failed", "match": "exact", "key": "recipe cards rebuilt but publish failed", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "cards-held-from-republish", "match": "exact", "key": "recipe cards held back from republish", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "recipes-superseded-board", "match": "exact", "key": "recipes priced off a superseded board", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "card-comparison-backwards", "match": "exact", "key": "a live card s price comparison is now backwards", "class": "page", "condition": "4 live-cell-moved-unexplained", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "surfaces-disagree", "match": "exact", "key": "price surfaces disagree with the manifest", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "golden-test-failed", "match": "exact", "key": "cost engine golden test failed", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "pricing-rule-guard-failed", "match": "exact", "key": "recipe cards pricing rule guard failed", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "db-constraint-refused", "match": "exact", "key": "database constraint refused a write", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "batch-stalled", "match": "exact", "key": "recipe batch stalled with stages unfinished", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "ingredient-stores-disagree", "match": "exact", "key": "ingredient stores disagree hard finding s", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "unpriced-lines", "match": "exact", "key": "recipe pricing unpriced ingredient line s", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "dedup-evidence-stale", "match": "exact", "key": "recipe pool the dedup evidence has gone stale", "class": "page", "condition": "2 watcher-cannot-see", "emitter": "meal-prep/pipeline/harvest-crawl.ps1" },
-    { "id": "live-without-review", "match": "regex", "key": "is live without post publish review$", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "agent (recipe hunter session; no call site in the tree)" },
-    { "id": "site-down", "match": "prefix", "key": "site down", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "agent (no call site in the tree)" },
-    { "id": "paywall-leak", "match": "exact", "key": "paywall leak paid recipe s served free", "class": "review", "condition": "Brad ruling R14 (2026-09-10): a paid page served free goes to the review list, not email", "emitter": "meal-prep/pipeline/audit-paid-not-public.ps1", "note": "Recommended page because it loses money on a live page; Brad chose review." },
-    { "id": "needs-brad", "match": "prefix", "key": "needs brad", "class": "page", "condition": "escalation", "emitter": "meal-prep/set-recipe-visibility.ps1 and triage agents" },
-    { "id": "price-alerts-held", "match": "prefix", "key": "price alerts", "class": "page", "condition": "escalation", "emitter": "grocery/send-price-alerts.ps1" },
-    { "id": "friday-email-refused", "match": "exact", "key": "friday email refused a send for this week may already have gone out", "class": "page", "condition": "escalation", "emitter": "grocery/send-friday-email.ps1" },
-    { "id": "your-call", "match": "prefix", "key": "your call", "class": "page", "condition": "escalation", "emitter": "triage agents (send-alert -Escalates)" },
-    { "id": "grocery-your-call", "match": "prefix", "key": "grocery your call", "class": "page", "condition": "escalation", "emitter": "triage agents (send-alert -Escalates)" },
-    { "id": "needs-elevation", "match": "prefix", "key": "needs elevation", "class": "page", "condition": "escalation", "emitter": "triage agents (send-alert -Escalates)" },
-    { "id": "triage-report", "match": "prefix", "key": "grocery triage", "class": "page", "condition": "escalation", "emitter": "triage developer agent (a run report that asks Brad for a decision)" },
-    { "id": "board-decision", "match": "prefix", "key": "board decision", "class": "page", "condition": "escalation", "emitter": "triage agents" },
-    { "id": "who-runs", "match": "prefix", "key": "grocery who runs the", "class": "page", "condition": "escalation", "emitter": "triage agents" },
-    { "id": "ship-or-drop-ruling", "match": "regex", "key": "need a ship or drop ruling", "class": "page", "condition": "escalation", "emitter": "triage agents" },
-    { "id": "correction", "match": "prefix", "key": "correction", "class": "page", "condition": "escalation", "emitter": "agent (a correction must reach the inbox the wrong page reached)" },
-
-    { "id": "match-soundness", "match": "exact", "key": "grocery matching soundness review needed", "class": "review", "condition": "review intake: a data change that needs a reader's judgement, not a failure (plan section 3, bucket 1)", "emitter": "grocery/audit-match-soundness.ps1" },
-    { "id": "new-price-flags", "match": "exact", "key": "grocery new price flag s", "class": "review", "condition": "review intake: flagged cells still published and ask to be verified (plan section 3, bucket 1)", "emitter": "grocery/check-ad-cycles.ps1", "note": "Borders page condition 4. Confirmed review by Brad, ruling R13 (2026-09-10)." },
-    { "id": "semantic-sweep", "match": "exact", "key": "grocery semantic sweep found product s no rule can see", "class": "review", "condition": "review intake: candidate products for a rule, not a live wrong cell (plan section 3, bucket 1)", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "stores-dropped", "match": "exact", "key": "grocery store s dropped from a commodity they carry", "class": "review", "condition": "review intake: include rules that may be too strict (plan section 3, bucket 1)", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "wrong-department", "match": "exact", "key": "grocery board cell s sit in the wrong store department", "class": "review", "condition": "review intake: an aisle judgement to adjudicate (plan section 3, bucket 1)", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "store-registry-drift", "match": "exact", "key": "grocery store registry drift issue s", "class": "review", "condition": "source hygiene: a hardcoded store list out of step with stores.json, nothing live is wrong", "emitter": "grocery/audit-store-registry.ps1" },
-    { "id": "sale-no-fallback", "match": "exact", "key": "grocery on sale item s have no everyday fallback", "class": "review", "condition": "work for the browser agent: a rolling condition by design, owned by the research worklist", "emitter": "grocery/check-ad-cycles.ps1 (retired wording; kept so the queue history maps)" },
-    { "id": "sale-no-fallback-unworked", "match": "exact", "key": "grocery on sale item s have no everyday fallback and no one is working them", "class": "review", "condition": "an ownership gap on a still-published sale cell; triage assigns an owner", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "ff-carry", "match": "exact", "key": "grocery family fare pull dropped a carried item review", "class": "review", "condition": "review intake: a carried item left the pull, the 90-day carry still covers the cell", "emitter": "grocery/audit-ff-carry.ps1" },
-    { "id": "no-category", "match": "exact", "key": "grocery a commodity is in no category no filter review", "class": "review", "condition": "a filter hygiene gap, nothing priced wrong", "emitter": "grocery/audit-category-coverage.ps1" },
-    { "id": "test-auditors-hygiene", "match": "exact", "key": "grocery test auditors hygiene finding s watchers intact", "class": "review", "condition": "ops housekeeping drift while every watcher still fires on its founding bug", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "ghost-drift", "match": "exact", "key": "tools a live page has drifted from its local source", "class": "review", "condition": "a tool page differs from its local source; the board and feed are not involved", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "recipe-db-drift", "match": "exact", "key": "recipe db drift index vs specs", "class": "review", "condition": "index and spec disagree; a consistency repair, not a live price", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "spec-contradictions", "match": "exact", "key": "recipe spec contradictions got worse", "class": "review", "condition": "a content contradiction ratchet moved; a writing repair, not a price", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "published-macros-moved", "match": "exact", "key": "recipe macros moved off their ingredients", "class": "review", "condition": "a published stat or an index ingredient weight left the recompute of the spec ingredients, past the recorded baseline; a data repair where restating the wrong side is the risk, not a live price", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "cross-store-integrity", "match": "exact", "key": "a write broke cross store integrity", "class": "review", "condition": "reference violations past a recorded baseline; a data repair, not a proven live price", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "price-inversion", "match": "exact", "key": "recipe price inversion clamped", "class": "review", "condition": "the engine already clamped the inversion; review why it happened", "emitter": "meal-prep/pipeline/compute-v2-perserving.ps1" },
-    { "id": "walmart-capture-aging", "match": "exact", "key": "grocery walmart full capture aging", "class": "review", "condition": "early warning, nothing is broken yet; routed to the browser agent", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "board-link-drift", "match": "exact", "key": "grocery board link price drift chips", "class": "review", "condition": "auto-repair already hid the drifted links; no misleading link is shown", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "alerts-closed-unexplained", "match": "exact", "key": "alerts closed without saying what they meant", "class": "review", "condition": "triage bookkeeping: a close with no disposition", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "ingredient-not-carried", "match": "exact", "key": "live recipe s with an ingredient omaha does not carry", "class": "review", "condition": "an editorial repair on a recipe; no price is wrong", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "memory-store-finding", "match": "exact", "key": "ops the agent memory store has a finding", "class": "review", "condition": "memory store hygiene (versioning, remotes, routing); not one of the four page conditions", "emitter": "grocery/check-ad-cycles.ps1", "note": "Split by Brad ruling R16 (2026-09-10): the public-repo exposure half now sends 'Ops: private memory notes reached the public repo', which is page." },
-    { "id": "cloudflare-estate-drift", "match": "exact", "key": "ops the cloudflare estate drifted from its declaration", "class": "review", "condition": "infrastructure drift from ops/cloudflare-estate.json; the live board and feed are verified by the edge checks", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "ghost-page-census-blind", "match": "exact", "key": "ops the ghost page census could not evaluate", "class": "page", "condition": "2 watcher-cannot-see", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "ghost-page-census", "match": "exact", "key": "ops a live ghost page is neither produced by the repo nor declared", "class": "review", "condition": "a live Ghost page has no tracked source and no declaration in ops/ghost-page-estate.json, or a declared page moved; the board and feed are not involved", "emitter": "grocery/check-ad-cycles.ps1" },
-    { "id": "search-link-dead", "match": "exact", "key": "grocery a store search link is dead template s", "class": "review", "condition": "a Find at store search template is broken; prices are right, a link is not", "emitter": "grocery/audit-search-links.ps1" },
-    { "id": "bakers-adflip", "match": "regex", "key": "^baker s ad rolled adflip on a( [a-z]+)? flyer capture needed$", "class": "review", "condition": "work for the weekly agent: prices are refreshed headlessly, the flyer read is owed", "emitter": "grocery/bakers-daily-scan.ps1" },
-    { "id": "triage-residual", "match": "prefix", "key": "triage residual", "class": "review", "condition": "a triage-created residual (send-alert -Lane weekly), ruling 1", "emitter": "triage agents" },
-    { "id": "triage-finding", "match": "prefix", "key": "triage finding", "class": "review", "condition": "a triage-created finding (send-alert -Lane weekly), ruling 1", "emitter": "triage agents" },
-    { "id": "macro-copy-stale", "match": "prefix", "key": "recipe index macro copy stale", "class": "review", "condition": "a one-off defect finding filed by an agent", "emitter": "agent (no call site in the tree)" },
-    { "id": "make-it-single-step", "match": "exact", "key": "twelve live cards render the whole method as step one", "class": "review", "condition": "a one-off defect finding filed by an agent", "emitter": "agent (no call site in the tree)" },
-    { "id": "scaler-unit-word", "match": "prefix", "key": "serving scaler leaves the unit word", "class": "review", "condition": "a one-off defect finding filed by an agent", "emitter": "agent (no call site in the tree)" },
-    { "id": "mutexprobe", "match": "exact", "key": "mutexprobe", "class": "review", "condition": "a test artifact from the 2026-08-23 mutex verification, never a real alert", "emitter": "none (hand-run probe)" },
-    { "id": "recall-sleep-red", "match": "exact", "key": "the knowledge store s nightly pass went red", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "skills/recall-sleep.py (local store, via grocery/send-alert.ps1)", "note": "Registered 2026-09-11, queue 2026-09-11-18da92: it had been mailing unregistered. This subject now means a step BROKE or timed out - the mechanical half of the pass did not land. A night that is red only on a judgement ratchet raises 'is waiting on a judgement' instead." },
-    { "id": "recall-sleep-judgement-waiting", "match": "exact", "key": "the knowledge store s nightly pass is waiting on a judgement", "class": "review", "condition": "a person owes a ruling on the forgetting or clustering queue; nothing broke and the mechanical outputs committed", "emitter": "skills/recall-sleep.py (local store, via grocery/send-alert.ps1)" },
-
-    { "id": "verify-rate-above-last", "match": "exact", "key": "board verification defect rate is above the last measured", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/record-sample-verdict.ps1", "note": "Registered 2026-09-19 (backlog I232): the 14-day out-of-band verification measured a higher whole-board defect rate than the last run. Brad's ruling is that this mails him. It paged as UNREGISTERED ALERT TYPE on its first firing, 2026-09-19, because audit-alert-registry lists the call site UNREADABLE: the subject is built with -f inside Invoke-RateAlert and handed through a scriptblock." },
-    { "id": "brain-digest", "match": "exact", "key": "brain digest the night the weakest link and what is waiting", "class": "digest", "condition": "a nightly digest mailed only when a stage is red (ruling 8b); information, not triage work", "emitter": "ops/brain-digest.ps1" }
-  ]
+ "readme": "THE ALERT REGISTRY (Brad, ruling 1, 2026-09-10; design/PLAN-zero-alert-days-2026-09-10.md section 7). Every alert type is exactly one class. page = emailed AND queued, for four conditions only: (1) the live board or feed is wrong or held, (2) a guard or watcher cannot see, (3) scheduled work did not run or did not land, (4) a live cell moved in a way automatic adjudication could not explain; escalations to Brad (send-alert -Escalates, Your call asks) are page too. review = queued for triage, NEVER emailed (triage-created residuals and findings, send-alert -Lane weekly, are review). digest = emailed, NEVER queued. send-alert.ps1 resolves the class through grocery/alert-registry-lib.ps1. An alert whose type matches NO entry is never dropped: it queues with unregistered=true AND is emailed with its subject prefixed 'UNREGISTERED ALERT TYPE: '. A registry that is missing or unparseable makes EVERY alert page. MATCHING: send-alert derives a type key from the subject (lower case, dates, rc=N and every number removed, every run of non-letters collapsed to one space); 'key' is compared to that type key. match 'exact' = equal; 'prefix' = the type key starts with key at a word boundary; 'regex' = .NET regex over the type key. When several entries match, exact beats prefix and regex; several that still tie are AMBIGUOUS and resolve to the most severe class. TO ADD A TYPE: add one entry here (id, match, key, class, condition, emitter), then run powershell -File grocery/audit-alert-registry.ps1, which must exit 0. condition for page is one of the values in page_conditions (grocery/alert-registry-lib.ps1 enforces the same list and the check fails if the two disagree); for review and digest it is one line saying why.",
+ "page_conditions": [
+  "1 board-or-feed-wrong-or-held",
+  "2 watcher-cannot-see",
+  "3 scheduled-work-did-not-run-or-land",
+  "4 live-cell-moved-unexplained",
+  "5 private-data-exposure",
+  "escalation"
+ ],
+ "entries": [
+  {
+   "id": "guards-failed",
+   "match": "exact",
+   "key": "grocery guards failed board not published",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "page-held-coverage",
+   "match": "exact",
+   "key": "grocery page held coverage",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "compare-failed",
+   "match": "exact",
+   "key": "grocery compare failed",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "publish-failed",
+   "match": "exact",
+   "key": "grocery publish failed",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "board-feed-different-weeks",
+   "match": "exact",
+   "key": "grocery board and feed on different weeks",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "store-dropped-off-tile",
+   "match": "exact",
+   "key": "grocery a store dropped off a commodity tile",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "board-names-mangled",
+   "match": "exact",
+   "key": "grocery board product name s are mangled encoding",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/audit-board-mojibake.ps1"
+  },
+  {
+   "id": "board-prices-aging",
+   "match": "exact",
+   "key": "board prices aging inside a fresh file",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "board-freshness-store-stopped",
+   "match": "exact",
+   "key": "board freshness a store stopped refreshing",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "board-freshness-aging",
+   "match": "exact",
+   "key": "board freshness prices aging past the publish limit",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "feed-edge-stale",
+   "match": "exact",
+   "key": "smp feed edge did not pick up today s push",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-run.ps1"
+  },
+  {
+   "id": "feed-edge-bytes",
+   "match": "exact",
+   "key": "smp feed edge bytes do not match the push",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-run.ps1"
+  },
+  {
+   "id": "board-edge-stale",
+   "match": "exact",
+   "key": "board json edge did not pick up today s push",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-run.ps1"
+  },
+  {
+   "id": "feed-not-refreshed",
+   "match": "exact",
+   "key": "grocery pipeline feed did not truly refresh",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-run.ps1"
+  },
+  {
+   "id": "pipeline-could-not-push",
+   "match": "exact",
+   "key": "grocery pipeline could not push",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-run.ps1"
+  },
+  {
+   "id": "pipeline-moved-untracked-blocker",
+   "match": "exact",
+   "key": "grocery pipeline moved an untracked file out of the rebase s way",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-run.ps1"
+  },
+  {
+   "id": "commit-refused",
+   "match": "exact",
+   "key": "daily pipeline commit refused",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-run.ps1"
+  },
+  {
+   "id": "served-files-uncommitted",
+   "match": "exact",
+   "key": "daily chain left served files uncommitted",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-run.ps1"
+  },
+  {
+   "id": "pipeline-did-not-commit",
+   "match": "prefix",
+   "key": "daily pipeline ran but did not commit",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "none in the tree on 2026-09-10 (fired 2026-08-24; kept so the queue history maps)"
+  },
+  {
+   "id": "capture-watchdog",
+   "match": "exact",
+   "key": "grocery capture watchdog issue s",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-watchdog.ps1"
+  },
+  {
+   "id": "capture-watchdog-held",
+   "match": "exact",
+   "key": "grocery capture watchdog held by guards",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-watchdog.ps1 (sent with -CausedBy guards-hold, so it is absorbed into the open GUARDS FAILED item when there is one)"
+  },
+  {
+   "id": "recipe-prices-from-snapshot",
+   "match": "exact",
+   "key": "recipe prices still from the undated snapshot",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "recipe-recost-failed",
+   "match": "exact",
+   "key": "recipe recost failed",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "server-pull-failed",
+   "match": "exact",
+   "key": "grocery pull failed server stores",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "ad-window-no-capture",
+   "match": "regex",
+   "key": "^([a-z ]+ )?ad window advanced with no capture behind it$",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "captured-field-blank",
+   "match": "exact",
+   "key": "grocery a captured field went blank",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/capture-run.ps1"
+  },
+  {
+   "id": "ff-catalog-degrading",
+   "match": "exact",
+   "key": "grocery family fare catalog is degrading signal s",
+   "class": "review",
+   "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10): 11 of 20 days fired, and its close notes mostly read miscalibrated, healthy store",
+   "emitter": "grocery/pull-regular-familyfare.ps1"
+  },
+  {
+   "id": "union-store-no-captures",
+   "match": "exact",
+   "key": "grocery a union store has no captures in its window",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "automation-silent-death",
+   "match": "exact",
+   "key": "automation silent death issue s",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/health-heartbeat.ps1"
+  },
+  {
+   "id": "bakers-scan-failed",
+   "match": "exact",
+   "key": "bakers daily scan failed",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/bakers-daily-scan.ps1"
+  },
+  {
+   "id": "bakers-scan-push-failed",
+   "match": "exact",
+   "key": "baker s daily scan push data failed",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/bakers-daily-scan.ps1"
+  },
+  {
+   "id": "bakers-scan-autostash",
+   "match": "exact",
+   "key": "bakers daily scan autostash not restored",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/bakers-daily-scan.ps1"
+  },
+  {
+   "id": "run-blocked-bot-wall",
+   "match": "regex",
+   "key": "^grocery run blocked [a-z ]+ bot wall$",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/notify-desktop.ps1 (-AlsoEmail, title composed from -Store)"
+  },
+  {
+   "id": "run-needs-you",
+   "match": "exact",
+   "key": "grocery run needs you",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/notify-desktop.ps1 (-AlsoEmail, default title)"
+  },
+  {
+   "id": "guard-gone-blind",
+   "match": "exact",
+   "key": "grocery a guard has gone blind test auditors failed",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "test-guards-could-not-evaluate",
+   "match": "exact",
+   "key": "grocery test guards could not evaluate guards already red on the unmutated board",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "test-guards-did-not-run",
+   "match": "exact",
+   "key": "grocery test guards weekly did not run hermetic copy failed",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "test-guards-scan-only",
+   "match": "exact",
+   "key": "grocery test guards weekly a source scan case failed every invariant still fails",
+   "class": "review",
+   "condition": "review: a source-scan case (the empty-stamp idiom) failed while every mutation case still exited 2, so no guard is blind and none of the four page conditions holds (queue 2026-09-19-a1c25d); the pre-commit path refuses the idiom since the same change",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "invariant-cannot-fail",
+   "match": "exact",
+   "key": "grocery a blocking invariant can no longer fail test guards weekly",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "invariant-not-proven",
+   "match": "exact",
+   "key": "grocery no blocking guard invariant proven in over days test guards weekly",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "ghost-drift-blind",
+   "match": "exact",
+   "key": "tools ghost drift could not evaluate no key or a page could not be read",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "memory-store-unchecked",
+   "match": "exact",
+   "key": "ops the agent memory store could not be checked",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "memory-public-exposure",
+   "match": "exact",
+   "key": "ops private memory notes reached the public repo",
+   "class": "page",
+   "condition": "5 private-data-exposure",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "note": "Brad ruling R16 (2026-09-10): a memory file tracked by the public repo, or a memory git remote that answers publicly, emails. Split out of 'the agent memory store has a finding', which stays review for the hygiene findings."
+  },
+  {
+   "id": "prompt-not-backed-up",
+   "match": "exact",
+   "key": "ops an agent prompt is not backed up",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "note": "One subject carries both exit 2 (drift) and exit 3 (BLIND). Classed page for the BLIND half; splitting the subject would let the drift half become review."
+  },
+  {
+   "id": "sidecar-down",
+   "match": "exact",
+   "key": "semantic sidecar is down and would not restart",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "ops/sidecar-watchdog.ps1"
+  },
+  {
+   "id": "runaway-process-reaped",
+   "match": "exact",
+   "key": "ops a runaway process was reaped",
+   "class": "review",
+   "condition": "review: the process was orphaned, read-only and spinning, this script killed it and the core is back, so no human has to act - which is the page test. The line exists so a kill can never be silent and so a rising rate of them shows up as the estate leaking sessions",
+   "emitter": "ops/reap-runaway-processes.ps1",
+   "note": "Born 2026-09-20 with the reaper. Its twin, runaway-process-unowned, is the half that pages."
+  },
+  {
+   "id": "runaway-process-unowned",
+   "match": "exact",
+   "key": "ops a process is burning a core and nothing owns it",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "ops/reap-runaway-processes.ps1",
+   "note": "A process nothing owns is burning CPU and the reaper deliberately refused to kill it, because it is not a read-only git command and a kill could leave a lock or a half-written file. Only a person can decide, and until one does it keeps the core. The founding case wasted 28.8 CPU-hours over 29.2 hours before a human noticed it by eye. Split from runaway-process-reaped the day both were written (Brad, 2026-09-20): one subject for both would have let the quiet half set the class for the urgent one, leaving a burning core in the weekly lane for up to a week."
+  },
+  {
+   "id": "manifest-refused-stale-feed",
+   "match": "exact",
+   "key": "recipe per serving manifest refused stale price feed",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "meal-prep/pipeline/compute-v2-perserving.ps1"
+  },
+  {
+   "id": "manifest-skipped",
+   "match": "exact",
+   "key": "recipe per serving manifest skipped recipe s",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "reanchor-incomplete",
+   "match": "exact",
+   "key": "re anchor did not complete cards not republished",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "cards-over-cap",
+   "match": "exact",
+   "key": "recipe cards moved over the daily cap",
+   "class": "page",
+   "condition": "4 live-cell-moved-unexplained",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "cards-publish-failed",
+   "match": "exact",
+   "key": "recipe cards rebuilt but publish failed",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "cards-held-from-republish",
+   "match": "exact",
+   "key": "recipe cards held back from republish",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "recipes-superseded-board",
+   "match": "exact",
+   "key": "recipes priced off a superseded board",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "card-comparison-backwards",
+   "match": "exact",
+   "key": "a live card s price comparison is now backwards",
+   "class": "page",
+   "condition": "4 live-cell-moved-unexplained",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "surfaces-disagree",
+   "match": "exact",
+   "key": "price surfaces disagree with the manifest",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "golden-test-failed",
+   "match": "exact",
+   "key": "cost engine golden test failed",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "pricing-rule-guard-failed",
+   "match": "exact",
+   "key": "recipe cards pricing rule guard failed",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "db-constraint-refused",
+   "match": "exact",
+   "key": "database constraint refused a write",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "batch-stalled",
+   "match": "exact",
+   "key": "recipe batch stalled with stages unfinished",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "ingredient-stores-disagree",
+   "match": "exact",
+   "key": "ingredient stores disagree hard finding s",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "unpriced-lines",
+   "match": "exact",
+   "key": "recipe pricing unpriced ingredient line s",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "dedup-evidence-stale",
+   "match": "exact",
+   "key": "recipe pool the dedup evidence has gone stale",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "meal-prep/pipeline/harvest-crawl.ps1"
+  },
+  {
+   "id": "live-without-review",
+   "match": "regex",
+   "key": "is live without post publish review$",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "agent (recipe hunter session; no call site in the tree)"
+  },
+  {
+   "id": "site-down",
+   "match": "prefix",
+   "key": "site down",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "agent (no call site in the tree)"
+  },
+  {
+   "id": "paywall-leak",
+   "match": "exact",
+   "key": "paywall leak paid recipe s served free",
+   "class": "review",
+   "condition": "Brad ruling R14 (2026-09-10): a paid page served free goes to the review list, not email",
+   "emitter": "meal-prep/pipeline/audit-paid-not-public.ps1",
+   "note": "Recommended page because it loses money on a live page; Brad chose review."
+  },
+  {
+   "id": "needs-brad",
+   "match": "prefix",
+   "key": "needs brad",
+   "class": "page",
+   "condition": "escalation",
+   "emitter": "meal-prep/set-recipe-visibility.ps1 and triage agents"
+  },
+  {
+   "id": "price-alerts-held",
+   "match": "prefix",
+   "key": "price alerts",
+   "class": "page",
+   "condition": "escalation",
+   "emitter": "grocery/send-price-alerts.ps1"
+  },
+  {
+   "id": "friday-email-refused",
+   "match": "exact",
+   "key": "friday email refused a send for this week may already have gone out",
+   "class": "page",
+   "condition": "escalation",
+   "emitter": "grocery/send-friday-email.ps1"
+  },
+  {
+   "id": "your-call",
+   "match": "prefix",
+   "key": "your call",
+   "class": "page",
+   "condition": "escalation",
+   "emitter": "triage agents (send-alert -Escalates)"
+  },
+  {
+   "id": "grocery-your-call",
+   "match": "prefix",
+   "key": "grocery your call",
+   "class": "page",
+   "condition": "escalation",
+   "emitter": "triage agents (send-alert -Escalates)"
+  },
+  {
+   "id": "needs-elevation",
+   "match": "prefix",
+   "key": "needs elevation",
+   "class": "page",
+   "condition": "escalation",
+   "emitter": "triage agents (send-alert -Escalates)"
+  },
+  {
+   "id": "triage-report",
+   "match": "prefix",
+   "key": "grocery triage",
+   "class": "page",
+   "condition": "escalation",
+   "emitter": "triage developer agent (a run report that asks Brad for a decision)"
+  },
+  {
+   "id": "board-decision",
+   "match": "prefix",
+   "key": "board decision",
+   "class": "page",
+   "condition": "escalation",
+   "emitter": "triage agents"
+  },
+  {
+   "id": "who-runs",
+   "match": "prefix",
+   "key": "grocery who runs the",
+   "class": "page",
+   "condition": "escalation",
+   "emitter": "triage agents"
+  },
+  {
+   "id": "ship-or-drop-ruling",
+   "match": "regex",
+   "key": "need a ship or drop ruling",
+   "class": "page",
+   "condition": "escalation",
+   "emitter": "triage agents"
+  },
+  {
+   "id": "correction",
+   "match": "prefix",
+   "key": "correction",
+   "class": "page",
+   "condition": "escalation",
+   "emitter": "agent (a correction must reach the inbox the wrong page reached)"
+  },
+  {
+   "id": "match-soundness",
+   "match": "exact",
+   "key": "grocery matching soundness review needed",
+   "class": "review",
+   "condition": "review intake: a data change that needs a reader's judgement, not a failure (plan section 3, bucket 1)",
+   "emitter": "grocery/audit-match-soundness.ps1"
+  },
+  {
+   "id": "new-price-flags",
+   "match": "exact",
+   "key": "grocery new price flag s",
+   "class": "review",
+   "condition": "review intake: flagged cells still published and ask to be verified (plan section 3, bucket 1)",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "note": "Borders page condition 4. Confirmed review by Brad, ruling R13 (2026-09-10)."
+  },
+  {
+   "id": "semantic-sweep",
+   "match": "exact",
+   "key": "grocery semantic sweep found product s no rule can see",
+   "class": "review",
+   "condition": "review intake: candidate products for a rule, not a live wrong cell (plan section 3, bucket 1)",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "stores-dropped",
+   "match": "exact",
+   "key": "grocery store s dropped from a commodity they carry",
+   "class": "review",
+   "condition": "review intake: include rules that may be too strict (plan section 3, bucket 1)",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "wrong-department",
+   "match": "exact",
+   "key": "grocery board cell s sit in the wrong store department",
+   "class": "review",
+   "condition": "review intake: an aisle judgement to adjudicate (plan section 3, bucket 1)",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "store-registry-drift",
+   "match": "exact",
+   "key": "grocery store registry drift issue s",
+   "class": "review",
+   "condition": "source hygiene: a hardcoded store list out of step with stores.json, nothing live is wrong",
+   "emitter": "grocery/audit-store-registry.ps1"
+  },
+  {
+   "id": "sale-no-fallback",
+   "match": "exact",
+   "key": "grocery on sale item s have no everyday fallback",
+   "class": "review",
+   "condition": "work for the browser agent: a rolling condition by design, owned by the research worklist",
+   "emitter": "grocery/check-ad-cycles.ps1 (retired wording; kept so the queue history maps)"
+  },
+  {
+   "id": "sale-no-fallback-unworked",
+   "match": "exact",
+   "key": "grocery on sale item s have no everyday fallback and no one is working them",
+   "class": "review",
+   "condition": "an ownership gap on a still-published sale cell; triage assigns an owner",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "ff-carry",
+   "match": "exact",
+   "key": "grocery family fare pull dropped a carried item review",
+   "class": "review",
+   "condition": "review intake: a carried item left the pull, the 90-day carry still covers the cell",
+   "emitter": "grocery/audit-ff-carry.ps1"
+  },
+  {
+   "id": "no-category",
+   "match": "exact",
+   "key": "grocery a commodity is in no category no filter review",
+   "class": "review",
+   "condition": "a filter hygiene gap, nothing priced wrong",
+   "emitter": "grocery/audit-category-coverage.ps1"
+  },
+  {
+   "id": "test-auditors-hygiene",
+   "match": "exact",
+   "key": "grocery test auditors hygiene finding s watchers intact",
+   "class": "review",
+   "condition": "ops housekeeping drift while every watcher still fires on its founding bug",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "test-auditors-live-red",
+   "match": "exact",
+   "key": "grocery the live board failed a watcher watchers intact",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "note": "Queue 2026-09-19-ae9df2 (2026-09-20). test-auditors' third verdict, rc 4: every fixture fired, and a LIVE-TWIN case - one that reads the live board or the live registry on purpose - went red. So the finding is about a CELL, not a guard, which is why it is class page under condition 1 and not under 2 watcher-cannot-see: the watchers are the one thing that run proved. It is deliberately a separate subject from guard-gone-blind, whose body says a quiet report is unproven - that sentence inverts the day's trust ordering when the watcher actually worked, and it had gone out three times in 30 days (2026-08-28, 2026-08-29, 2026-09-19) with not one blind watcher among them."
+  },
+  {
+   "id": "ghost-drift",
+   "match": "exact",
+   "key": "tools a live page has drifted from its local source",
+   "class": "review",
+   "condition": "a tool page differs from its local source; the board and feed are not involved",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "recipe-db-drift",
+   "match": "exact",
+   "key": "recipe db drift index vs specs",
+   "class": "review",
+   "condition": "index and spec disagree; a consistency repair, not a live price",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "spec-contradictions",
+   "match": "exact",
+   "key": "recipe spec contradictions got worse",
+   "class": "review",
+   "condition": "a content contradiction ratchet moved; a writing repair, not a price",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "published-macros-moved",
+   "match": "exact",
+   "key": "recipe macros moved off their ingredients",
+   "class": "review",
+   "condition": "a published stat or an index ingredient weight left the recompute of the spec ingredients, past the recorded baseline; a data repair where restating the wrong side is the risk, not a live price",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "cross-store-integrity",
+   "match": "exact",
+   "key": "a write broke cross store integrity",
+   "class": "review",
+   "condition": "reference violations past a recorded baseline; a data repair, not a proven live price",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "price-inversion",
+   "match": "exact",
+   "key": "recipe price inversion clamped",
+   "class": "review",
+   "condition": "the engine already clamped the inversion; review why it happened",
+   "emitter": "meal-prep/pipeline/compute-v2-perserving.ps1"
+  },
+  {
+   "id": "walmart-capture-aging",
+   "match": "exact",
+   "key": "grocery walmart full capture aging",
+   "class": "review",
+   "condition": "early warning, nothing is broken yet; routed to the browser agent",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "board-link-drift",
+   "match": "exact",
+   "key": "grocery board link price drift chips",
+   "class": "review",
+   "condition": "auto-repair already hid the drifted links; no misleading link is shown",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "alerts-closed-unexplained",
+   "match": "exact",
+   "key": "alerts closed without saying what they meant",
+   "class": "review",
+   "condition": "triage bookkeeping: a close with no disposition",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "ingredient-not-carried",
+   "match": "exact",
+   "key": "live recipe s with an ingredient omaha does not carry",
+   "class": "review",
+   "condition": "an editorial repair on a recipe; no price is wrong",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "memory-store-finding",
+   "match": "exact",
+   "key": "ops the agent memory store has a finding",
+   "class": "review",
+   "condition": "memory store hygiene (versioning, remotes, routing); not one of the four page conditions",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "note": "Split by Brad ruling R16 (2026-09-10): the public-repo exposure half now sends 'Ops: private memory notes reached the public repo', which is page."
+  },
+  {
+   "id": "cloudflare-estate-drift",
+   "match": "exact",
+   "key": "ops the cloudflare estate drifted from its declaration",
+   "class": "review",
+   "condition": "infrastructure drift from ops/cloudflare-estate.json; the live board and feed are verified by the edge checks",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "ghost-page-census-blind",
+   "match": "exact",
+   "key": "ops the ghost page census could not evaluate",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "ghost-page-census",
+   "match": "exact",
+   "key": "ops a live ghost page is neither produced by the repo nor declared",
+   "class": "review",
+   "condition": "a live Ghost page has no tracked source and no declaration in ops/ghost-page-estate.json, or a declared page moved; the board and feed are not involved",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
+   "id": "search-link-dead",
+   "match": "exact",
+   "key": "grocery a store search link is dead template s",
+   "class": "review",
+   "condition": "a Find at store search template is broken; prices are right, a link is not",
+   "emitter": "grocery/audit-search-links.ps1"
+  },
+  {
+   "id": "bakers-adflip",
+   "match": "regex",
+   "key": "^baker s ad rolled adflip on a( [a-z]+)? flyer capture needed$",
+   "class": "review",
+   "condition": "work for the weekly agent: prices are refreshed headlessly, the flyer read is owed",
+   "emitter": "grocery/bakers-daily-scan.ps1"
+  },
+  {
+   "id": "triage-residual",
+   "match": "prefix",
+   "key": "triage residual",
+   "class": "review",
+   "condition": "a triage-created residual (send-alert -Lane weekly), ruling 1",
+   "emitter": "triage agents"
+  },
+  {
+   "id": "triage-finding",
+   "match": "prefix",
+   "key": "triage finding",
+   "class": "review",
+   "condition": "a triage-created finding (send-alert -Lane weekly), ruling 1",
+   "emitter": "triage agents"
+  },
+  {
+   "id": "macro-copy-stale",
+   "match": "prefix",
+   "key": "recipe index macro copy stale",
+   "class": "review",
+   "condition": "a one-off defect finding filed by an agent",
+   "emitter": "agent (no call site in the tree)"
+  },
+  {
+   "id": "make-it-single-step",
+   "match": "exact",
+   "key": "twelve live cards render the whole method as step one",
+   "class": "review",
+   "condition": "a one-off defect finding filed by an agent",
+   "emitter": "agent (no call site in the tree)"
+  },
+  {
+   "id": "scaler-unit-word",
+   "match": "prefix",
+   "key": "serving scaler leaves the unit word",
+   "class": "review",
+   "condition": "a one-off defect finding filed by an agent",
+   "emitter": "agent (no call site in the tree)"
+  },
+  {
+   "id": "mutexprobe",
+   "match": "exact",
+   "key": "mutexprobe",
+   "class": "review",
+   "condition": "a test artifact from the 2026-08-23 mutex verification, never a real alert",
+   "emitter": "none (hand-run probe)"
+  },
+  {
+   "id": "recall-sleep-red",
+   "match": "exact",
+   "key": "the knowledge store s nightly pass went red",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "skills/recall-sleep.py (local store, via grocery/send-alert.ps1)",
+   "note": "Registered 2026-09-11, queue 2026-09-11-18da92: it had been mailing unregistered. This subject now means a step BROKE or timed out - the mechanical half of the pass did not land. A night that is red only on a judgement ratchet raises 'is waiting on a judgement' instead."
+  },
+  {
+   "id": "recall-sleep-judgement-waiting",
+   "match": "exact",
+   "key": "the knowledge store s nightly pass is waiting on a judgement",
+   "class": "review",
+   "condition": "a person owes a ruling on the forgetting or clustering queue; nothing broke and the mechanical outputs committed",
+   "emitter": "skills/recall-sleep.py (local store, via grocery/send-alert.ps1)"
+  },
+  {
+   "id": "verify-rate-above-last",
+   "match": "exact",
+   "key": "board verification defect rate is above the last measured",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/record-sample-verdict.ps1",
+   "note": "Registered 2026-09-19 (backlog I232): the 14-day out-of-band verification measured a higher whole-board defect rate than the last run. Brad's ruling is that this mails him. It paged as UNREGISTERED ALERT TYPE on its first firing, 2026-09-19, because audit-alert-registry lists the call site UNREADABLE: the subject is built with -f inside Invoke-RateAlert and handed through a scriptblock."
+  },
+  {
+   "id": "brain-digest",
+   "match": "exact",
+   "key": "brain digest the night the weakest link and what is waiting",
+   "class": "digest",
+   "condition": "a nightly digest mailed only when a stage is red (ruling 8b); information, not triage work",
+   "emitter": "ops/brain-digest.ps1"
+  }
+ ]
 }

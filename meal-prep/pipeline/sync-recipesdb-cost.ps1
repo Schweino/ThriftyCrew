@@ -283,7 +283,7 @@ if ($SelfTest) {
     # with a clean costed row still syncs exactly as before, and the refusal does not leak into drift.
     Chk 'CLEAN TWIN a published slug with lines_unpriced 0 still syncs all its fields, and no refusal lands in drift' ((@($rp.changes | Where-Object { $_.Slug -eq 'stamped-b' }).Count -gt 0) -and (($rp.drift -join '|') -notmatch 'lines_unpriced')) ('b=' + @($rp.changes | Where-Object { $_.Slug -eq 'stamped-b' }).Count + ' drift=' + ($rp.drift -join '|'))
     # CLEAN TWIN: with NEITHER map supplied (the shape every existing caller uses) nothing is refused.
-    Chk 'CLEAN TWIN with no published/unpriced maps at all, the sync refuses nothing - existing callers are unchanged' (@($r.refused | Where-Object { $_ }).Count -eq 0) ('refused=' + @($r.refused | Where-Object { $_ }).Count)
+    Chk 'MUST NOT FIRE with no published/unpriced maps at all, the sync refuses nothing - existing callers are unchanged' (@($r.refused | Where-Object { $_ }).Count -eq 0) ('refused=' + @($r.refused | Where-Object { $_ }).Count)
     # A row with no spec must be reported, never zeroed - [double]$null is 0 and would print $0.00 a bowl.
     $fx2 = '{"recipes":[{"slug":"orphan","name":"Orphan","cost_per_serving":3.10,"cost_batch":43.40,"cost_batch_true":50.00,"cost_per_serving_true":3.57,"cost_pantry_add":0,"cost_first_run":50.00}]}'
     $r3 = Sync-RecipesDbCost -Raw $fx2 -SpecCost $specCost

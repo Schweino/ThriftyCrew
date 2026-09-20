@@ -985,7 +985,14 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # died, leaving every recipe priced off the previous board with nothing said. Still non-fatal: a failed
       # recost is not a reason to withhold a correct board, the same reasoning as the freshness check below.
       try {
-        $crRun = Invoke-NativeScript (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\cost-recipes.ps1')
+        # -LedgerMaxAgeDays: the engine may price an ingredient from a CARRIED carriage-ledger read (a live
+        # in-store price + size + product id + date for something no capture reaches), bounded by the quarter.
+        # That bound is Brad's standing re-read rule and its one canonical copy is $QuarterDays in
+        # capture-policy-lib.ps1, which THIS script already dot-sources at line 320 - its own module. Handing it
+        # over as an argument is what keeps meal-prep from reaching into grocery for it (queue 2026-09-19-d240fd,
+        # refused by ops\audit-cross-module-reach.ps1) without writing a second copy of 90 anywhere. The engine
+        # treats an absent bound as REFUSE, so a hand run that omits this simply does not use the ledger.
+        $crRun = Invoke-NativeScript (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\cost-recipes.ps1') @('-LedgerMaxAgeDays', [string]$script:QuarterDays)
         $crRc = $crRun.ExitCode
         if ($crRc -eq 0) { Log 'engine cost-recipes refreshed db\costed' }
         else {
@@ -2337,28 +2344,15 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           $cfSigF = Join-Path $OutDir 'cost-flags-alert.sig'
           $cfPrev = if (Test-Path $cfSigF) { ((Get-Content $cfSigF -Raw) + '').Trim() } else { '' }
           if ($cfSig -ne $cfPrev -and (-not $NoAlert)) {
-            # LEAD WITH THE READER-FACING SUBSET (2026-09-20, queue 2026-09-19-d240fd). On 2026-09-19 this
-            # alert said "28 unpriced ingredient line(s)" and the reader had to open the file and cross it
-            # against held-recipes.json to learn that 6 of the 7 affected recipes are HELD as not carried -
-            # correct, not on any page - and exactly ONE, turkey-wild-rice-casserole, is LIVE and understated
-            # by $1.21 a serving on its title ingredient. Same subject and same signature, so dedup is
-            # unchanged; only the body is ordered by what a reader can actually act on.
-            $cfLive = @(); $cfHeld = @()
-            try {
-              $cfPub = @{}
-              $cfPh = Join-Path (Split-Path $root -Parent) 'meal-prep\db\published-hashes.json'
-              if (Test-Path $cfPh) { foreach ($p in (Read-JsonFile $cfPh).PSObject.Properties) { $cfPub[[string]$p.Name] = $true } }
-              $cfSlugMap = @{}
-              foreach ($k in $cfPub.Keys) { $cfSlugMap[($k -replace '-', ' ')] = $k }
-              foreach ($l in $cfLines) {
-                $nm = (([string]$l -split ' :: ')[0]).Trim().ToLower()
-                if ($cfSlugMap.ContainsKey($nm)) { $cfLive += $cfSlugMap[$nm] } else { $cfHeld += $nm }
-              }
-              $cfLive = @($cfLive | Sort-Object -Unique); $cfHeld = @($cfHeld | Sort-Object -Unique)
-            } catch { $cfLive = @(); $cfHeld = @() }
-            $cfLead = if ($cfLive.Count -gt 0) { "LIVE recipe(s) affected: $($cfLive.Count) - " + ($cfLive -join ', ') + ". " } else { 'LIVE recipe(s) affected: 0 (every flagged line belongs to a HELD or unpublished recipe). ' }
-            $cfLead += "HELD/draft or advisory: $($cfHeld.Count). "
-            try { Send-Alert -Subject "Recipe pricing: $($cfLines.Count) unpriced ingredient line(s)" -Body ($cfLead + "engine\cost-recipes.ps1 could not price some recipe ingredient lines this run - each dropped line makes that recipe's cost read LOWER than reality (usually a bid pointing at a renamed/removed board commodity). Fix the bid in db\ingredients.json or register the commodity. Lines: " + (($cfLines | Select-Object -First 15) -join ' | ')) | Out-Null; if ($LASTEXITCODE -eq 0) { Set-Content $cfSigF -Value $cfSig -Encoding ASCII } } catch {}
+            # NOT SPLIT LIVE-vs-HELD HERE, and the reason is a boundary (2026-09-20, queue 2026-09-19-d240fd).
+            # The plan asked this body to lead with the reader-facing subset: on 2026-09-19 six of the seven
+            # affected recipes were HELD as not carried and exactly ONE was on a page. Telling them apart needs
+            # meal-prep\db\published-hashes.json, and a grocery script reading it is a NEW cross-module reach -
+            # ops\audit-cross-module-reach.ps1 counted it and refused the push, correctly. Computing that path
+            # from the cost-flags path beside it would dodge the detector rather than answer it. The right home
+            # for the split is the ENGINE, which owns published-hashes and writes these lines: it should stamp
+            # each flag LIVE or HELD at the point it knows. Left as its own weekly item rather than reached for.
+            try { Send-Alert -Subject "Recipe pricing: $($cfLines.Count) unpriced ingredient line(s)" -Body ("engine\cost-recipes.ps1 could not price some recipe ingredient lines this run - each dropped line makes that recipe's cost read LOWER than reality (usually a bid pointing at a renamed/removed board commodity). Fix the bid in db\ingredients.json or register the commodity. Lines: " + (($cfLines | Select-Object -First 15) -join ' | ')) | Out-Null; if ($LASTEXITCODE -eq 0) { Set-Content $cfSigF -Value $cfSig -Encoding ASCII } } catch {}
           }
         } elseif (Test-Path (Join-Path $OutDir 'cost-flags-alert.sig')) { Remove-Item (Join-Path $OutDir 'cost-flags-alert.sig') -ErrorAction SilentlyContinue }
       } catch { Log ('cost-flag alert threw: ' + $_.Exception.Message) }

@@ -1040,7 +1040,12 @@ function Get-Selection([string[]]$Paths, [string[]]$GuardPaths, $Model, $Inputs,
 # is judged as it stands: gc-fence's first dry run read its 08:12 seed, which still carried a product main's own
 # rules already flag, and was refused as red at the base; re-seed a worktree before pushing a ruling.
 $script:RulingFiles = @('known-wrong.json', 'category-excludes.json', 'commodities.json')
-$script:LiveCaseRx = "Bad\s+\(\s*'((?:[^']|'')+)'.*#\s*live-board-ruling-case\s+audit=([\w.\-]+\.ps1)\s*$"
+# Bad OR Live (2026-09-20, queue 2026-09-19-ae9df2). test-auditors now reports a live-board red through its own
+# Live() tally so the DAILY CHAIN stops paging it as a blind watcher; the case, its text and its marker are
+# unchanged. This regex keyed on the reporting FUNCTION, so the rename alone took food-category out of the
+# ruling-case set and the whole EXPECTED-LIVE-RED pairing went with it - four of this suite's own MUST FIREs
+# went red and said so. The marker is what makes a case a ruling case, not which tally it lands in.
+$script:LiveCaseRx = "(?:Bad|Live)\s+\(\s*'((?:[^']|'')+)'.*#\s*live-board-ruling-case\s+audit=([\w.\-]+\.ps1)\s*$"
 $script:ArmBoardGlobs = @('comparison-*.json', 'recipe-board.json', 'regular\*-regular-*.json')
 
 # The live-board ruling cases test-auditors declares, as { prefix; audit }: the Bad message's leading literal, which a
