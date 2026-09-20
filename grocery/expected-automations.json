@@ -40,6 +40,12 @@
                               "proves":  "ops/out/sidecar-watchdog-stamp.json"
                           },
                           {
+                              "name":  "TC Process Reaper",
+                              "max_age_hours":  2,
+                              "why":  "every 15 min: kills an ORPHANED, SPINNING, READ-ONLY git command and reports any other orphan past a core-hour (ops/reap-runaway-processes.ps1 -Reap -Alert). Brad's ruling 2026-09-20: a git range-diff left by a dead session held one core for 29.2 hours and 28.8 CPU-hours, and nothing in the estate watches PROCESSES - heartbeat watches tasks and outputs, gate-slots bounds gate workers, cpu-load bounds deliberate load - so a human found it in Task Manager. proves = the run log, which is appended on EVERY run including a quiet one; the reap ledger would have been the wrong proof because a healthy week never writes one.",
+                              "proves":  "ops/out/logs/reap-runaway-processes-*.log"
+                          },
+                          {
                               "name":  "TC Recall Sleep 0435",
                               "max_age_hours":  30,
                               "why":  "the knowledge store\u0027s nightly offline pass: harvest, join reflex outcomes from the transcripts, re-derive floors and weights, refresh drafts and failure classes, run the forgetting and clustering queues, finish with the gate. It ran as a Claude scheduled AGENT until 2026-09-09, against Brad\u0027s 2026-08-22 rule that Windows tasks are the only routines that fire - one more failure mode between the schedule and the work. The pass now stamps on every path, red or green, because a stamp written only on success reads as \u0027never ran\u0027 on exactly the mornings somebody needs to know it did.",

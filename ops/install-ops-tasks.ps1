@@ -38,6 +38,9 @@ $XMLDIR = Join-Path $repo 'ops\scheduled-tasks'
 # The tasks this file OWNS. One row per task; the XML is the truth about what it runs.
 $OWNED = @(
   [pscustomobject]@{ Name = 'TC Sidecar Watchdog';   File = 'tc-sidecar-watchdog.xml' }
+  # 2026-09-20, Brad's ruling after a git range-diff orphaned by a dead session held one core for 29.2
+  # hours: nothing in the estate watches PROCESSES, so it was found by a human looking at Task Manager.
+  [pscustomobject]@{ Name = 'TC Process Reaper';     File = 'tc-process-reaper.xml' }
   [pscustomobject]@{ Name = 'TC Recall Sleep 0435';  File = 'tc-recall-sleep-0435.xml' }
   [pscustomobject]@{ Name = 'TC Brain Digest 0645';  File = 'tc-brain-digest-0645.xml' }
   [pscustomobject]@{ Name = 'TC Daemon Battery 0230'; File = 'tc-daemon-battery-0230.xml' }
