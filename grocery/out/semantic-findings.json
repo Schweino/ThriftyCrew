@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-19 17:29",
+    "generated":  "2026-09-19 21:33",
     "board":  "comparison-2026-09-17.json",
-    "sidecar_generated":  "2026-09-19 17:29:31",
+    "sidecar_generated":  "2026-09-19 21:33:46",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,36 +9,16 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2638,
+                     "board_pairs":  2649,
                      "corpus":  43729,
                      "rule_invisible":  8639
                  },
     "identity_count":  0,
-    "coverage_count":  9,
+    "coverage_count":  7,
     "identity":  [
 
                  ],
     "coverage":  [
-                     {
-                         "kind":  "coverage",
-                         "id":  "wild-rice-blend",
-                         "commodity":  "Wild Rice Blend",
-                         "store":  "Walmart",
-                         "product":  "Lundberg Sustainable Wild Blend Rice - Gluten Free, Vegan, 1lb Resealable Bag",
-                         "cos":  0.6484,
-                         "score":  0.994209,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "wild-rice-blend",
-                         "commodity":  "Wild Rice Blend",
-                         "store":  "Baker\u0027s",
-                         "product":  "Lundberg Family Farms Sustainable Wild Blend Rice",
-                         "cos":  0.6926,
-                         "score":  0.993964,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
                      {
                          "kind":  "coverage",
                          "id":  "wild-rice",
@@ -110,7 +90,7 @@
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ],
-    "coverage_excluded_count":  12,
+    "coverage_excluded_count":  14,
     "coverage_excluded":  [
                               {
                                   "kind":  "coverage",
@@ -174,6 +154,18 @@
                               },
                               {
                                   "kind":  "coverage",
+                                  "id":  "wild-rice",
+                                  "commodity":  "Wild Rice",
+                                  "store":  "Baker\u0027s",
+                                  "product":  "Lundberg Family Farms Sustainable Wild Blend Rice",
+                                  "cos":  0.6398,
+                                  "score":  0.965538,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "REFUSED-BY-EXCLUDE",
+                                  "detail":  "no admit pattern matches, and exclude \u0027\\bblend\\b\u0027 would refuse it anyway"
+                              },
+                              {
+                                  "kind":  "coverage",
                                   "id":  "cumin-seeds",
                                   "commodity":  "Cumin seeds",
                                   "store":  "Walmart",
@@ -231,6 +223,18 @@
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
                                   "detail":  "include \u0027ground\\s+beef[^.]*80\u0027 matched, exclude \u0027patties\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "southern-mixed-greens",
+                                  "commodity":  "Southern-Style Mixed Greens",
+                                  "store":  "Walmart",
+                                  "product":  "Glory Foods Seasoned Southern Style Mustard Greens, 27 oz., Can",
+                                  "cos":  0.8081,
+                                  "score":  0.912668,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "REFUSED-BY-EXCLUDE",
+                                  "detail":  "no admit pattern matches, and exclude \u0027\\b(?:collard|turnip|mustard|kale|spinach)\\s+greens?\\b(?!.*\\bmixed\\b)\u0027 would refuse it anyway"
                               },
                               {
                                   "kind":  "coverage",
