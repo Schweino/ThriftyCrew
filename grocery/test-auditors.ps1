@@ -4492,7 +4492,13 @@ else { Bad ('audit-ff-carry is only reachable on the pull path every scheduled c
 # MUST-FIRE: the same file with the block put back where it was must fail this case. A structural check
 # that has never been shown to go red is an assertion about a string, not a guard.
 $ffcLs = $cacSrc -split "`r?`n"
-$ffcBs = -1; for ($i = 0; $i -lt $ffcLs.Count; $i++) { if ($ffcLs[$i] -match '^\s*# ---- REACHABILITY \(2026-09-02') { $ffcBs = $i; break } }
+# The block moved BELOW the publish on 2026-09-19 (it re-probes Freshop live and was costing the ship
+# path 118 s of 726 s), so the mutation splices it from its new header. Matching the old
+# '# ---- REACHABILITY (2026-09-02' marker still finds a line - the historical note stayed behind at the
+# old site - but that line is now ~2,500 lines above the code, so the splice swallowed half the file and
+# the case went INERT while reporting itself green. A mutation built from a marker that no longer bounds
+# the thing it names proves nothing, which is what this very case exists to say.
+$ffcBs = -1; for ($i = 0; $i -lt $ffcLs.Count; $i++) { if ($ffcLs[$i] -match '^\s*# ---- FF PULL-COMPLETENESS GUARD, AFTER THE PUBLISH') { $ffcBs = $i; break } }
 $ffcBe = -1; for ($i = [Math]::Max($ffcBs, 0); $i -lt $ffcLs.Count; $i++) { if ($ffcLs[$i] -match "^\s*\} catch \{ Log \('ff-carry guard threw:") { $ffcBe = $i; break } }
 if ($ffcBs -lt 0 -or $ffcBe -lt $ffcBs -or $ffcReach.close -lt 0 -or $ffcReach.close -ge $ffcBs) {
   Bad 'could not build the must-fire mutation for ff-carry reachability - this case proved NOTHING'

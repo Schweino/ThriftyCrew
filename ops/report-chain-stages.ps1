@@ -6,10 +6,12 @@
   two sessions in a row reasoned about "the slow part" from a profile taken in August against code that had
   since been made 17x faster. A number nobody can attribute is a number nobody can optimise.
 
-  It needs no instrumentation: every line the chain logs is timestamped, so the silence BETWEEN two lines is
-  the work that happened after the first one spoke. That is an attribution by ADJACENCY, not a measurement of
-  a stage - see SCOPE below - but it is exact about the wall clock and it costs nothing to run over any past
-  run still in the log.
+  TWO SOURCES, AND IT SAYS WHICH IT USED. Since 2026-09-19 check-ad-cycles' own Log writes a stage clock to
+  grocery\out\logs\chain-stages-<date>.jsonl - one row per logged line, carrying the gap before it. When that
+  file covers the run, this reads it. When it does not (any run before that change, or a day whose file was
+  pruned), it falls back to the log's own timestamps: every line is stamped, so the silence BETWEEN two lines
+  is the work after the first one spoke. Both give the same arithmetic; the JSONL is simply not guessing about
+  lines the log never wrote.
 
   SCOPE OF A CLEAN REPORT: this is UNSOUND as a profiler. It attributes a gap to the stage that spoke LAST,
   which is wrong whenever a stage logs nothing at its start, spawns children that log on their own, or runs
@@ -30,6 +32,30 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+
+function Get-StageClockGaps {
+  # Rows are check-ad-cycles' own stage clock: one JSON object per logged line, `secs` being the gap BEFORE
+  # that line. A gap therefore belongs to whatever spoke previously, which is the same charging rule the
+  # adjacency reader uses - so the two sources are directly comparable and the report can say which it used.
+  param([string[]]$Rows, [datetime]$From, [datetime]$To)
+  $parsed = New-Object System.Collections.Generic.List[object]
+  foreach ($l in $Rows) {
+    if (-not ("$l").Trim()) { continue }
+    try { $o = $l | ConvertFrom-Json } catch { continue }
+    if (-not $o.at) { continue }
+    $t = [datetime]::Parse([string]$o.at)
+    if ($t -lt $From -or $t -gt $To) { continue }
+    $head = [string]$o.head
+    $tag = if ($head -match '^([^:]{1,44}):') { $matches[1].Trim() } else { ($head -split '\s+' | Select-Object -First 4) -join ' ' }
+    $parsed.Add([pscustomobject]@{ at = $t; tag = $tag; secs = [double]$o.secs })
+  }
+  $out = New-Object System.Collections.Generic.List[object]
+  for ($i = 1; $i -lt $parsed.Count; $i++) {
+    if ($parsed[$i].secs -le 0) { continue }
+    $out.Add([pscustomobject]@{ seconds = [math]::Round($parsed[$i].secs); at = $parsed[$i-1].at; after = $parsed[$i-1].tag; before = $parsed[$i].tag })
+  }
+  return ,$out.ToArray()
+}
 
 function Get-ChainStageGaps {
   param([string[]]$Lines, [datetime]$From, [datetime]$To)
@@ -75,6 +101,22 @@ if ($SelfTest) {
   $g2 = Get-ChainStageGaps -Lines $fix -From ([datetime]'2026-09-19T17:00:05') -To ([datetime]'2026-09-19T17:00:20')
   T 'a window that holds one line yields no gaps' ($g2.Count -eq 0)
 
+  # MUST FIRE, the stage-clock reader: the same 300s silence, read from check-ad-cycles' own rows rather than
+  # guessed from adjacency, lands on the same stage with the same number - which is what lets the report claim
+  # the two sources are comparable.
+  $clk = @(
+    '{"at":"2026-09-19T17:00:00","secs":0,"head":"alpha: started"}',
+    '{"at":"2026-09-19T17:00:10","secs":10,"head":"beta: started"}',
+    '{"at":"2026-09-19T17:05:10","secs":300,"head":"gamma: started"}'
+  )
+  $gc = Get-StageClockGaps -Rows $clk -From ([datetime]'2026-09-19T16:00:00') -To ([datetime]'2026-09-19T18:00:00')
+  $gcBig = $gc | Sort-Object seconds -Descending | Select-Object -First 1
+  T 'stage clock: the 300s gap is charged to beta, exactly as adjacency charges it' ($gcBig.seconds -eq 300 -and $gcBig.after -eq 'beta')
+  T 'stage clock: a malformed row is skipped rather than killing the read' ((Get-StageClockGaps -Rows (@('not json') + $clk) -From ([datetime]'2026-09-19T16:00:00') -To ([datetime]'2026-09-19T18:00:00')).Count -eq 2)
+
+  # MUST NOT FIRE: rows outside the window contribute nothing, so yesterday's clock cannot inflate today's run.
+  T 'stage clock: rows outside the run window are ignored' ((Get-StageClockGaps -Rows $clk -From ([datetime]'2026-09-19T17:00:05') -To ([datetime]'2026-09-19T17:00:20')).Count -eq 0)
+
   # CLEAN TWIN: an unstamped line (a child`s own multi-line output) is skipped, not mis-parsed into a zero-time stage.
   $fix2 = @('[2026-09-19T17:00:00] alpha: started', 'continuation of alpha with no timestamp', '[2026-09-19T17:00:30] beta: started')
   $g3 = Get-ChainStageGaps -Lines $fix2 -From ([datetime]'2026-09-19T16:00:00') -To ([datetime]'2026-09-19T18:00:00')
@@ -106,9 +148,23 @@ if (-not $runs.Count) { Write-Output "report-chain-stages: no run complete line 
 $pick = if ($Run -gt 0) { if ($Run -gt $runs.Count) { Write-Output "report-chain-stages: asked for run $Run of $($runs.Count)"; exit 3 }; $runs[$Run-1] } else { $runs[-1] }
 
 $from = $pick.end.AddSeconds(-1 * $pick.total)
-$gaps = Get-ChainStageGaps -Lines $lines -From $from -To $pick.end
+
+# PREFER THE STAGE CLOCK when it covers this run (see the header). It is the same arithmetic without the
+# adjacency guess, and it is only a preference: a run older than the clock still reports from the log.
+$source = 'log adjacency'
+$gaps = $null
+$clockPath = Join-Path (Split-Path $LogFile -Parent) ('out\logs\chain-stages-' + $pick.date + '.jsonl')
+if (Test-Path $clockPath) {
+  $clockRows = @(Get-Content $clockPath -ErrorAction SilentlyContinue)
+  $fromClock = Get-StageClockGaps -Rows $clockRows -From $from -To $pick.end
+  if (@($fromClock).Count -gt 0) {
+    $gaps = $fromClock
+    $source = "stage clock ($([IO.Path]::GetFileName($clockPath)))"
+  }
+}
+if (-not $gaps) { $gaps = Get-ChainStageGaps -Lines $lines -From $from -To $pick.end }
 Write-Output ("run ending {0}, total {1}s ({2:N1} min), window {3} -> {4}" -f $pick.end.ToString('yyyy-MM-dd HH:mm:ss'), $pick.total, ($pick.total/60), $from.ToString('HH:mm:ss'), $pick.end.ToString('HH:mm:ss'))
-Write-Output ("{0} stamped line(s) in the window; ATTRIBUTION IS BY ADJACENCY - a gap is charged to the stage that spoke before it (see this file's SCOPE line)" -f (@($gaps).Count + 1))
+Write-Output ("source: {0}; {1} stamped point(s) in the window. A gap is charged to the stage that spoke BEFORE it (see this file's SCOPE line)" -f $source, (@($gaps).Count + 1))
 Write-Output ''
 $byStage = $gaps | Group-Object after | ForEach-Object {
   [pscustomobject]@{ seconds = [int](($_.Group | Measure-Object seconds -Sum).Sum); stage = $_.Name; gaps = $_.Count }

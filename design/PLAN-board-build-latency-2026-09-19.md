@@ -62,13 +62,48 @@ which is how a thin board sat live from 13:10 to 18:30 on 2026-09-19.
 |---|---|---|
 | **L0 (done)** | `ops\report-chain-stages.ps1`, committed with fixtures | attributes >= 90% of a run's wall clock. Measured: 2,093 of 2,211s (94.7%) |
 | **L1** | Split the publish path: `guards` + render + upsert stay inline; the unit suite, the advisory audits and the repair sweeps move to their own schedule or to an async pass over the PUBLISHED artefact | a publish that changes only prices completes in <= 180s wall clock, measured the same way, with guards still run inline and no audit deleted - each must be running somewhere and named in `expected-automations.json` |
-| **L2** | De-duplicate the excludes into `global-exclude-lib.ps1`'s shared list; per-commodity lists keep only what is genuinely theirs | the board is byte-identical before and after on the same inputs (this is the gate, not a count), and the pattern total falls from 71,693 to under 6,000 |
+| **L2** | Category-aware exclude BUNDLES referenced by id, replacing the copied blocks; a shared resolver expands them for every reader | **set equality per commodity**: the expanded exclude set equals today's, exactly, for all 592 - and the board is byte-identical on the same inputs. The pattern total falls from 71,693 to under 6,000 |
 | **L3** | P0+P1 of the parity road: scope the gate to staple rows, then make "newest surviving row per (store, product)" the crown rule | `board_parity.py` agreement >= 0.94 at coverage >= 0.94, both reported separately as that file already insists |
 | **L4** | The cutover: `compare-deals` reads `price_observations` for candidate rows instead of walking `out\regular\*.json`; the capture files stay as the audit trail and a full re-derivation stays available as an explicit command | `board_parity.py` >= 0.99 agreement, AND a rebuild from the database reproduces the file-derived board cell for cell on the same day's inputs, AND a board build completes in <= 120s |
 
-L1 is the big latency win and touches no pricing rule. L2 is the correctness win: two of the four
-blockers on 2026-09-19 (almond butter matching a baby-food pouch; honey mustard mixing jars with
-dressings) were the duplication class. L3/L4 are the model Brad described and need his phase order.
+L2 is the correctness win: two of the four blockers on 2026-09-19 (almond butter matching a baby-food
+pouch; honey mustard mixing jars with dressings) were the duplication class. L3/L4 are the model Brad
+described and need his phase order.
+
+**L2 IS NOT A HOIST INTO THE EXISTING GLOBAL LIST, and the first version of this plan said it was.**
+Measured 2026-09-19 against `Get-TcGlobalExclude`: of the 71,693 per-commodity exclude entries, only
+**1,887 are exact copies of a global pattern** (0 of them conflicting with a `relax_global`, so those
+1,887 are a safe no-op removal). The other ~66,000 copies are patterns the global list does NOT hold -
+`\bwipes\b` and `detergent` in 534 commodities each - and they cannot be hoisted there, because
+`baby-wipes`, `dish-soap` and `bar-soap` are themselves commodities that need those very words. What the
+data is really saying is that every FOOD commodity carries the household block, every household one
+carries the food block, and so on: the bundles are per CATEGORY, and `categories.json`'s 16 categories
+already name them. Hence the set-equality gate above - a bundle scheme that changes one commodity's
+effective rules by one pattern is a wrong-product risk, and only per-commodity set equality can prove it
+did not.
+
+**AND THERE IS A PREREQUISITE: the one accessor that exists is used by four scripts of thirty-three.**
+`match-lib.ps1`'s `New-CommodityMatcher` does compose a commodity's rules, and it is the precompiled
+matcher behind the 2026-08-22 speed-up - but it takes `-GlobalExclude` as a PARAMETER rather than owning
+the composition, and its callers are `compare-deals`, `pull-bakers-ad-list`, `test-match-lib` and the lib
+itself. Everyone else composes by hand or not at all.
+Measured 2026-09-19 over the 80 scripts that read `commodities.json`: 33 read `.exclude` directly, and
+**17 of those 33 never apply the global list** - `select-fareway-shop`, `discover-hyvee`,
+`build-deals-page`, `audit-sale-fallback`, `promote-verdicts`, `register-batch` and eleven more. So the
+"effective rules of a commodity" are composed differently depending on which script is asking, and the
+1,887 duplicate entries are load-bearing for the seventeen: delete them and those scripts silently stop
+excluding baby food, soda and the rest, while `compare-deals` behaves identically. That is the same
+two-implementations-of-one-fact shape as prices-versus-links, one level down.
+
+So L2 gains a phase 0: **one resolver, `Get-TcCommodityExclude`, composing own + global (minus
+relax_global), adopted by all 33 readers**, each conversion verified by comparing the composed set
+against what that script computed before. Only after that is removing a duplicate a no-op anywhere, and
+only then can bundles be introduced safely. The set-equality gate must run per SCRIPT, not just per
+commodity.
+
+**The other reason L2 is not primarily a latency fix:** measured the same day, `compare-deals` itself is
+266 s of the 726 s ship path. Cutting the pattern count helps that term and nothing else, so L2 should be
+justified as the correctness and maintainability change it is, and L4 remains the latency lever.
 
 ## 4. What must not be lost, and the risk to respect
 

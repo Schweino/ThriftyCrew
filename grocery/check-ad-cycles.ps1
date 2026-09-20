@@ -204,6 +204,16 @@ $script:CadenceDir  = Join-Path $OutDir 'cadence'
 if (-not (Test-Path $script:CadenceDir)) { try { New-Item -ItemType Directory -Path $script:CadenceDir -Force | Out-Null } catch { } }
 if (-not $ScheduleFile) { $ScheduleFile = Join-Path $root 'ad-schedule.json' }
 $LogFile = Join-Path $root 'ad-cycle-log.txt'
+# Where the stage clock writes (see Log). One file per day, gitignored like the other out\logs\ scratch,
+# appended to by every run that day - each row carries its own timestamp, so two runs interleave readably
+# and report-chain-stages bounds a run by its own window rather than by the file.
+$script:StageClockPath = $null
+try {
+  $scDir = Join-Path $root 'out\logs'
+  if (-not (Test-Path $scDir)) { New-Item -ItemType Directory -Path $scDir -Force | Out-Null }
+  $script:StageClockPath = Join-Path $scDir ('chain-stages-' + (Get-Date -Format 'yyyy-MM-dd') + '.jsonl')
+} catch { $script:StageClockPath = $null }
+$script:StageClockLast = $null
 $asof = if ($Today) { ([datetime]$Today).Date } else { (Get-Date).Date }
 $asofS = $asof.ToString('yyyy-MM-dd')
 function DT([string]$s) { try { return ([datetime]$s).Date } catch { return $null } }
@@ -223,6 +233,23 @@ function DT([string]$s) { try { return ([datetime]$s).Date } catch { return $nul
 $script:EchoLog = ($env:GITHUB_ACTIONS -eq 'true' -or $env:CI -eq 'true')
 function Log([string]$m) {
   $line = ("[" + (Get-Date).ToString('s') + "] ") + $m
+  # STAGE CLOCK (2026-09-19). The chain prints one total for the ship path and one for the advisory
+  # fan-out, and nothing else, so 19 minutes of a 37-minute run were unattributable and two sessions in a
+  # row argued about "the slow part" from a profile taken in August against code since made 17x faster.
+  # This records the gap before each line in its OWN file: ad-cycle-log.txt keeps its exact bytes, because
+  # eleven scripts parse it and a suffix on a line is a change to every one of their regexes.
+  # ops\report-chain-stages.ps1 reads this when it exists and falls back to log adjacency when it does not.
+  # Never fatal and never retried: a timing row is worth strictly less than the line it measures, so a
+  # failure here must not cost the log entry below, and a lock must not pay a retry ladder per line.
+  try {
+    $nowTick = Get-Date
+    if ($script:StageClockPath) {
+      $prev = if ($script:StageClockLast) { $script:StageClockLast } else { $nowTick }
+      $row = [ordered]@{ at = $nowTick.ToString('s'); secs = [math]::Round(($nowTick - $prev).TotalSeconds, 1); head = $m.Substring(0, [Math]::Min(80, $m.Length)) }
+      Add-Content -Path $script:StageClockPath -Value ($row | ConvertTo-Json -Compress) -Encoding utf8 -ErrorAction Stop
+    }
+    $script:StageClockLast = $nowTick
+  } catch { }
   if ($script:EchoLog) { try { Write-Host $line } catch {} }
   # RIDE OUT A TRANSIENT LOCK ONCE; DO NOT PAY FOR A PERSISTENT ONE ON EVERY LINE (2026-08-23).
   # The retry ladder below is 5 x 120 ms, and it was written for a lock that clears - a backup, a
@@ -654,35 +681,21 @@ if ($serverDue) {
   # (45 of 558 on 2026-08-29, capped by the script), so it belongs on the cycle path beside every other
   # downstream check. It stays inside `if ($serverDue)`, which is unconditionally true whenever any store
   # is method=server (:334-335) - i.e. every run.
-  # Pinned structurally by test-auditors.ps1: the $fcArgs line must sit AFTER this block's closing brace.
-  # FF PULL-COMPLETENESS GUARD: catch a term the Freshop pull silently dropped (rate-limit -> 0 items) for a
-  # product FF actually carries (the 2026-07-13 ground-pork bug; coverage-gaps can't see a never-pulled item).
-  try {
-    $fcArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-ff-carry.ps1'),'-OutDir',$OutDir)
-    if (-not $NoAlert) { $fcArgs += '-Alert' }
-    # CAPTURE, THEN LOG, THEN CHECK THE EXIT CODE. Piping the child straight into Log means a child that
-    # dies before its first Write-Output logs NOTHING - and a guard that says nothing is indistinguishable
-    # from one that was never wired up. That is not hypothetical: audit-ff-carry threw on its report line
-    # on every run from 2026-07-13, and the string 'ff-carry' appears 0 times in 2,716 lines of
-    # ad-cycle-log.txt. A native child's crash is not a PowerShell exception, so the catch below never saw
-    # it either. This guard prints exactly one line whenever it completes, so zero lines IS the failure.
-    # No 2>&1: $ErrorActionPreference is 'Stop' here, and redirecting a native child's stderr under Stop
-    # turns its first stderr line into a terminating throw that would skip this very check.
-    $fcOut = & powershell @fcArgs
-    $fcRc  = $LASTEXITCODE
-    foreach ($l in @($fcOut)) { Log ('ff-carry: ' + $l) }
-    # Exit 3 is the estate's could-not-evaluate code and must NOT be reported as a crash. ff-carry returns
-    # it when Freshop answered none of the terms it needed to probe: the script ran fine and said so, it
-    # just proved nothing. Both cases leave the watch blind for the cycle, but only one of them means
-    # "go read stderr", and sending someone to an empty stderr is how a real crash stops being believed.
-    if ($fcRc -eq 3) {
-      $summary += 'REVIEW    audit-ff-carry could not evaluate (Freshop refused every probe) - FF pull-drop victims went unchecked this cycle'
-    }
-    elseif ($fcRc -ne 0 -or @($fcOut).Count -eq 0) {
-      Log ("ff-carry: DID NOT RUN - exit $fcRc with " + @($fcOut).Count + ' output line(s); the FF pull-drop watch is blind this cycle (see stderr)')
-      $summary += 'REVIEW    audit-ff-carry did not complete - FF pull-drop victims went unchecked this cycle'
-    }
-  } catch { Log ('ff-carry guard threw: ' + $_.Exception.Message) }
+  # Pinned structurally by test-auditors.ps1: the audit-ff-carry argument line must sit AFTER this block's
+  # closing brace. DO NOT WRITE THAT VARIABLE'S NAME IN A COMMENT: two of that file's cases find the caller
+  # by searching the source for the literal token and reading the text that follows it, so a mention here
+  # captures the search and both cases then read prose instead of code. That is exactly what happened when
+  # this note was first written on 2026-09-19 - the suite went red with "ff-carry caller is blind again"
+  # and "MUST-FIRE inert" while the caller below was perfectly correct.
+  # MOVED OFF THE SHIP PATH 2026-09-19. The call itself now runs after the publish - search this file for
+  # 'FF PULL-COMPLETENESS GUARD'. It is an ADVISORY watch that re-probes Freshop live for the terms the FF
+  # pull returned empty, and it sat above the SHIP/INSPECT boundary, so the live board waited on it: measured
+  # that day it took 118 s of a 726 s ship path, before the board build had even started. Nothing between
+  # here and the publish reads ff-carry-report.json (checked: guards' and capture-policy-lib's mentions are
+  # both commentary), and it still runs ahead of audit-coverage-ledger, which is what would otherwise report
+  # its row stale. It keeps its own `if ($serverDue)` so it runs on exactly the days it ran on before -
+  # moving it INSIDE the downstream block would have made it conditional on the board build succeeding too,
+  # which is how a watch quietly stops watching on the days that need it most.
   # read verification from TODAY's file (real runs); in -NoPull test mode fall back to the newest ads file
   if (Test-Path $adsToday) { $verif = @((Read-JsonFile $adsToday).verification) }
   elseif ($NoPull) { $af = Get-ChildItem (Join-Path $OutDir 'ads-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1; if ($af) { $verif = @((Read-JsonFile $af.FullName).verification) } }
@@ -3148,6 +3161,45 @@ try {
     }
   }
 } catch { Log ('rescue-worklist threw: ' + $_.Exception.Message) }
+
+# ---- FF PULL-COMPLETENESS GUARD, AFTER THE PUBLISH (moved off the ship path 2026-09-19) ------------
+# Catch a term the Freshop pull silently dropped (rate-limit -> 0 items) for a product FF actually carries
+# (the 2026-07-13 ground-pork bug; coverage-gaps cannot see a never-pulled item). It re-probes Freshop LIVE,
+# which is why it belongs here: measured 2026-09-19 it spent 118 s of a 726 s ship path holding the live
+# board behind an advisory watch that can never block a publish. It keeps its own `if ($serverDue)` so the
+# days it runs on are exactly the days it ran on before, and it stays AHEAD of audit-coverage-ledger
+# (below), which is the check that would call its row stale. The argument line below still sits after the
+# -NoPull block's closing brace, which is the property test-auditors pins structurally - and this comment
+# deliberately does not spell that variable's name, because two of those cases locate the caller by
+# searching the source for the literal token and would read this prose instead of the code.
+if ($serverDue) {
+  try {
+    $fcArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-ff-carry.ps1'),'-OutDir',$OutDir)
+    if (-not $NoAlert) { $fcArgs += '-Alert' }
+    # CAPTURE, THEN LOG, THEN CHECK THE EXIT CODE. Piping the child straight into Log means a child that
+    # dies before its first Write-Output logs NOTHING - and a guard that says nothing is indistinguishable
+    # from one that was never wired up. That is not hypothetical: audit-ff-carry threw on its report line
+    # on every run from 2026-07-13, and the string 'ff-carry' appears 0 times in 2,716 lines of
+    # ad-cycle-log.txt. A native child's crash is not a PowerShell exception, so the catch below never saw
+    # it either. This guard prints exactly one line whenever it completes, so zero lines IS the failure.
+    # No 2>&1: $ErrorActionPreference is 'Stop' here, and redirecting a native child's stderr under Stop
+    # turns its first stderr line into a terminating throw that would skip this very check.
+    $fcOut = & powershell @fcArgs
+    $fcRc  = $LASTEXITCODE
+    foreach ($l in @($fcOut)) { Log ('ff-carry: ' + $l) }
+    # Exit 3 is the estate's could-not-evaluate code and must NOT be reported as a crash. ff-carry returns
+    # it when Freshop answered none of the terms it needed to probe: the script ran fine and said so, it
+    # just proved nothing. Both cases leave the watch blind for the cycle, but only one of them means
+    # "go read stderr", and sending someone to an empty stderr is how a real crash stops being believed.
+    if ($fcRc -eq 3) {
+      $summary += 'REVIEW    audit-ff-carry could not evaluate (Freshop refused every probe) - FF pull-drop victims went unchecked this cycle'
+    }
+    elseif ($fcRc -ne 0 -or @($fcOut).Count -eq 0) {
+      Log ("ff-carry: DID NOT RUN - exit $fcRc with " + @($fcOut).Count + ' output line(s); the FF pull-drop watch is blind this cycle (see stderr)')
+      $summary += 'REVIEW    audit-ff-carry did not complete - FF pull-drop victims went unchecked this cycle'
+    }
+  } catch { Log ('ff-carry guard threw: ' + $_.Exception.Message) }
+}
 
 # ---- RETENTION, AFTER EVERY READER OF "THE NEWEST comparison-*" HAS RUN ----------------------------
 # Moved here 2026-08-22 with the ship/inspect split. prune-out and prune-intermediates DELETE dated files;
