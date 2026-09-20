@@ -6828,6 +6828,17 @@ $r = Get-Early 'early:match-lib' (Join-Path $root 'test-match-lib.ps1') @('-Quie
 if ($r.rc -eq 0 -and $r.text -match 'MATCH-LIB PASSED') { Ok 'match-lib decides identically to the original Match-Category on every distinct product name (compiled path and fallback)' }
 else { Bad ('test-match-lib FAILED (rc=' + $r.rc + ') - the fast matcher has drifted from the reference, so the board may be assigning products to the wrong commodity: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL|diverg' } | Select-Object -First 4) -join ' | ')) }
 
+# THE SECOND COPY OF THE EXCLUDE RULE, PROVEN AGAINST THE FIRST (2026-09-19, plan L2 phase 0).
+# commodity-rules-lib composes "own + global minus relaxed" so the 33 scripts that read .exclude can stop
+# each composing it by hand - 17 of them by not composing it at all. A rule that exists twice drifts
+# silently, so the accessor is checked against match-lib's own matcher over live capture names: the same
+# discipline this file applies to the matcher's second copy just above. Read the exit code AND the
+# verdict, because a suite that dies before printing exits non-zero with no verdict line and either test
+# alone would pass it.
+$r = RunPS 'test-commodity-rules-lib.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'test-commodity-rules-lib self-test: PASS') { Ok 'commodity-rules-lib composes the same effective excludes match-lib enforces, over the live commodity set' }
+else { Bad ('test-commodity-rules-lib FAILED (rc=' + $r.rc + ') - the exclude accessor disagrees with the engine, so any caller converted to it would apply different rules from the board: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -Last 1) -join ' ')) }
+
 $r = RunPS 'test-price-split.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'PRICE-SPLIT PASSED') { Ok 'price split: ad never becomes everyday, everyday never becomes an ad, and a stated countdown does not drift with the clock' }
 else { Bad ('price-split fixtures FAILED (rc=' + $r.rc + ') - the everyday/ad separation or the stated sale window is wrong: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }

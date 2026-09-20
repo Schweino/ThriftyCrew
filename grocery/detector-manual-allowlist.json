@@ -57,6 +57,12 @@
                        "reason":  "A FIXTURE TEST covering two frozen Hy-Vee rules: a price below the store shelf tag is refused, a real promotion is not, and no script is pinned to the retired Omaha #01 store. Fixtures only - it reads no live capture. It IS run: test-auditors calls it. The live half is enforced in production by the Hy-Vee puller and the shelf-tag guard."
                    },
                    {
+                       "name":  "test-commodity-rules-lib.ps1",
+                       "recorded":  "2026-09-19",
+                       "recorded_by":  "claude (board-latency plan, L2 phase 0)",
+                       "reason":  "A PARITY SUITE for commodity-rules-lib, not a detector of the estate. Four fixtures pin the composition rule (own excludes + global minus relax_global), and the fifth builds match-lib's own matcher and demands the same refuse/allow verdict for all 592 commodities over live capture names - the discipline test-match-lib applies to the matcher's second copy, applied to the exclude accessor's. It detects nothing about today's board, so a production caller would re-assert the same agreement every morning. It IS run: test-auditors calls it and reads both its exit code and its verdict line. What it protects - that a script converted onto the accessor applies the SAME rules the engine does - is enforced in production by match-lib itself, which compare-deals calls on every build."
+                   },
+                   {
                        "name":  "test-price-split.ps1",
                        "recorded":  "2026-08-25",
                        "recorded_by":  "claude",
