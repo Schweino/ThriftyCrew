@@ -761,6 +761,12 @@ if ($Accept -or $ForceAccept) {
   Set-Content $baseF -Value ($obj | ConvertTo-Json -Depth 4) -Encoding UTF8
   Write-Output ("match-soundness: baseline ACCEPTED ($($cf.names.Count) product names, $($cf.contested.Count) contested) at rules_hash $rulesHash. drift-vs-engine=$drift")
   Write-Output ("  of those, $($names.Count) names and $($contest.Count) contested were SEEN TODAY; $($cf.carried_names) name(s) and $($cf.carried_contested) contested entry(ies) were CARRIED FORWARD as absent-not-gone; $($cf.expired) expired after 30 days absent")
+  # AN ACCEPT THAT NEVER REACHES A COMMIT IS NOT AN ACCEPT (2026-09-20, queue 2026-09-20-417020). This
+  # baseline is a TRACKED file, so it lives in the working tree until somebody commits it: on 2026-09-20 a
+  # triage run reviewed three intended drops, accepted them, published, and then a `git reset --hard` in the
+  # same tree restored HEAD's baseline. The accept was gone, the drops came back, and the 12:13 chain build
+  # was held by this gate again with nothing in the log saying why. Say it here, where the mistake is made.
+  Write-Output ("  NOT DONE YET: $baseF is TRACKED. Commit it with the rule change or the next checkout restores the old baseline and this gate holds the next build again.")
   Exit-Guard -Name 'match-soundness' -Code 0
 }
 

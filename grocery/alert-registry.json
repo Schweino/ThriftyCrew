@@ -26,6 +26,14 @@
    "emitter": "grocery/check-ad-cycles.ps1"
   },
   {
+   "id": "page-held-gate",
+   "match": "prefix",
+   "key": "grocery page held",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
    "id": "compare-failed",
    "match": "exact",
    "key": "grocery compare failed",
@@ -505,8 +513,8 @@
    "id": "unpriced-lines",
    "match": "exact",
    "key": "recipe pricing unpriced ingredient line s",
-   "class": "page",
-   "condition": "1 board-or-feed-wrong-or-held",
+   "class": "review",
+   "condition": "review, not page (2026-09-20, queue 2026-09-20-fb37b9, on Brad's 2026-09-20 daily-lane ruling: a condition that is true every day is not news every day). This alert cannot reach condition 1, because the reader-facing half is held by a BLOCKING gate rather than by this email: wave-preaudit refuses a first publish whose costed row has lines_unpriced > 0, and since 2026-09-20 sync-recipesdb-cost refuses to write a partial cost for a slug in published-hashes.json (exit 2, names the slugs) - both page through their own emitters. Measured on 2026-09-20: 26 flagged lines over 6 recipes, all six unpublished and HELD as not carried in Omaha, 0 live recipes with an unpriced line. What is left is the standing five-spice label-vs-ledger precedence question (Q1-2026-09-20-partial-cost), which is a ruling and not news.",
    "emitter": "grocery/check-ad-cycles.ps1"
   },
   {

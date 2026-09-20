@@ -2768,6 +2768,49 @@ if (($cacNoMarkF -join ' ') -match 'SHIP-SUMMARY region markers are gone') { Ok 
 else { Bad 'the ship-summary check did not notice the SHIP-SUMMARY markers being removed - it would EXAMINE NOTHING and report clean' }
 # ---- THE REGION ITSELF, EXTRACTED AND RUN against frozen values (the WATCHERS-DECISION convention).
 # A copy of a decision is a decision that can drift, so this executes the live source's own branch.
+# ---- PUBLISH-HELD-GATE: ONE EXIT CODE, FOUR GATES (2026-09-20, queue 2026-09-20-417020).
+# publish-deals-page.ps1 exits 2 from four different hard gates and the chain named the first of them for all
+# four, so the 2026-09-20 12:15 match-soundness hold paged as "Grocery page HELD (coverage) ... a store's pull
+# produced too few commodities. Check the store pulls." The store pulls were fine. The founding lines below are
+# copied from publish-deals-page.ps1's own Write-Output calls, so a reworded gate makes these go red on purpose.
+$phgSrcM = [regex]::Match($cacSrc, '(?s)<<PUBLISH-HELD-GATE-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<PUBLISH-HELD-GATE-END>>')
+if (-not $phgSrcM.Success) {
+  Bad 'PUBLISH-HELD-GATE region is GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the held-gate naming is untested'
+} else {
+  $phgRegionSrc = $phgSrcM.Groups[1].Value
+  . ([scriptblock]::Create($phgRegionSrc))
+  # MUST FIRE: the founding hold, verbatim from publish-deals-page.ps1:224 and ad-cycle-log 2026-09-20 12:15:39.
+  $phgMs = 'HELD: commodity matching changed vs the reviewed baseline (see out\audit\soundness-report.json). A product MOVED/DROPPED commodity. Review, then `audit-match-soundness.ps1 -Accept` (or -Force to override).'
+  $phg = Get-PublishHeldGate @($phgMs)
+  if ($phg.gate -eq 'match-soundness' -and $phg.why -notmatch "store's pull" -and $phg.why -match '(?i)match-baseline') {
+    Ok 'publish-held-gate: MUST FIRE - the 2026-09-20 12:15 hold is named match-soundness and its body sends the reader to the baseline, never to the store pulls'
+  } else { Bad ('publish-held-gate: the match-soundness hold is still mis-named - gate=' + $phg.gate + ' why=' + $phg.why) }
+  # MUST FIRE: the other two gates that shared the coverage wording.
+  $phg = Get-PublishHeldGate @('HELD: a staple commodity is missing a store tile (see out\store-coverage-report.json). NOT publishing (run -Force to override once the render is fixed).')
+  if ($phg.gate -eq 'store-coverage') { Ok 'publish-held-gate: MUST FIRE - a store-tile hold is named store-coverage' }
+  else { Bad ('publish-held-gate: the store-coverage hold reads as ' + $phg.gate) }
+  $phg = Get-PublishHeldGate @('HELD: a commodity is not in exactly one category (see out\category-coverage-report.json) - it would render in no filter. Add it to a category in categories.json (or -Force to override).')
+  if ($phg.gate -eq 'category-coverage') { Ok 'publish-held-gate: MUST FIRE - a category hold is named category-coverage' }
+  else { Bad ('publish-held-gate: the category-coverage hold reads as ' + $phg.gate) }
+  # MUST NOT FIRE: an rc 2 this reader cannot place must NOT assert a gate. Fail closed, in words.
+  $phg = Get-PublishHeldGate @('HELD: some gate nobody has written yet refused the page')
+  if ($phg.gate -eq 'unnamed' -and $phg.why -match '(?i)does not recognise') {
+    Ok 'publish-held-gate: MUST NOT FIRE - an unrecognised HELD line names no gate and says so, instead of guessing coverage'
+  } else { Bad ('publish-held-gate: an unrecognised HELD line was assigned gate=' + $phg.gate) }
+  $phg = Get-PublishHeldGate @()
+  if ($phg.gate -eq 'unnamed' -and -not $phg.held) { Ok 'publish-held-gate: MUST NOT FIRE - rc 2 with no verdict line at all names no gate' }
+  else { Bad ('publish-held-gate: an empty verdict list produced gate=' + $phg.gate) }
+  # CLEAN TWIN: the behaviour that already worked. The real coverage hold still reads coverage, and still
+  # sends the reader to the store pulls - that sentence was RIGHT for this one gate and must survive.
+  $phg = Get-PublishHeldGate @('HELD: coverage gate failed - only 300 commodities (need >= 400). NOT publishing (a store''s pull likely failed; run -Force to override).')
+  if ($phg.gate -eq 'coverage' -and $phg.why -match "store's pull") {
+    Ok 'publish-held-gate: CLEAN TWIN - a real coverage hold is still named coverage and still sends the reader to the store pulls'
+  } else { Bad ('publish-held-gate: the coverage branch broke on its way past - gate=' + $phg.gate + ' why=' + $phg.why) }
+  # CLEAN TWIN: the HELD line is picked out of a real stdout mixed with the other verdict shapes.
+  $phg = Get-PublishHeldGate @('price-mode: in-store', 'name-drift: 0 suppressed', $phgMs)
+  if ($phg.gate -eq 'match-soundness') { Ok 'publish-held-gate: CLEAN TWIN - the HELD line is found among the price-mode and name-drift verdict lines around it' }
+  else { Bad ('publish-held-gate: a HELD line below other verdict lines was missed - gate=' + $phg.gate) }
+}
 $ssSrcM = [regex]::Match($cacSrc, '(?s)<<SHIP-SUMMARY-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<SHIP-SUMMARY-END>>')
 if (-not $ssSrcM.Success) {
   Bad 'SHIP-SUMMARY region is GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the five-way summary is untested'

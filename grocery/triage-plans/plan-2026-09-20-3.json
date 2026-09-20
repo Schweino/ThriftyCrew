@@ -1,0 +1,213 @@
+{
+  "generated": "2026-09-20T13:40:00",
+  "round": 2,
+  "board_week": "2026-09-20",
+  "board_note": "comparison-2026-09-20. The live page is round 1's board, published about 11:00 and verified live there. A LATER chain run built a fresh board at 12:02, guards passed it at 12:13:04 (GUARDS OK, hard=0 warn=19), and publish-deals-page returned 2 at 12:15:39, so that refreshed board was HELD and the live page stayed at round 1's. Nothing on the live page is wrong; it is a few hours old. Every measurement below names which board or which log line it read.",
+  "queue_ids_seen": [
+    "2026-09-20-417020",
+    "2026-09-20-fb37b9"
+  ],
+  "routing_artifact": null,
+  "routing_artifact_note": "no item changes a matching rule, an include, an exclude or an engine branch that routes a name. The match-soundness baseline is the audit's REFERENCE, not a rule: accepting it changes what the audit compares against and moves no product between commodities. Routing before == after over the one corpus (comparison-2026-09-20), and audit-match-soundness re-run after the accept reads drift-vs-engine=0, which is the engine and the matcher agreeing on that same corpus.",
+  "knowledge_consulted": {
+    "searched": [
+      "exit code two verdicts",
+      "accept baseline commit",
+      "publish held gate label",
+      "guard hard fail publish held (dispatch)",
+      "unit basis outlier (dispatch)",
+      "guard blind fixture live twin (dispatch)"
+    ],
+    "used": [
+      "skills data-quality-craft/applies-here.md 'Baselines and ratchets' - the mechanism is a JSON snapshot raised only by an explicit -Accept, which is exactly the artifact that was lost here; it is also why the coverage ledger is NOT accepted in this round",
+      "skills software-craft/applies-here.md 'A guard that exists and reads green while its defect is live' (pasted in the dispatch) - read before deciding whether to -Accept the coverage ledger. A HELD gate is the healthy failure; ratcheting its floor down against a population expected to recover is how a guard goes blind. That is the whole argument for the refusal recorded in 417020 leaves_open.",
+      "skills agent-workflow-craft/applies-here.md 'Inspection: three layers, and the exit code is the verdict' - read the verdict LINE, which is what found this item's real cause: publish-deals-page printed 'HELD: commodity matching changed vs the reviewed baseline' and the chain printed 'coverage gate failed' over the top of it",
+      "skills software-craft/applies-here.md 'The fixture vocabulary is RULED now' (pasted in the dispatch) - the new cases are labelled by ASSERTION: MUST FIRE for the four gates, MUST NOT FIRE for the unrecognised and empty inputs (absence assertions), CLEAN TWIN only for the two positive assertions that adjacent behaviour still works (the coverage branch keeps its store-pull wording; the HELD line is still found among the other verdict lines)",
+      "memory C--Codex/one-tally-two-verdicts.md (via round 1's plan, which is this round's brief) - the class 417020 turned out to be, third arm: publish rc 2 has FOUR causes and the chain named one",
+      "grocery/alert-registry.json readme and grocery/send-alert.ps1 Get-BirthLane (lines 171-172, 324-336) - Brad's 2026-09-20 rule that a review-class alert is born in the WEEKLY lane with nobody passing -Lane. That mechanism, not a new one, is fb37b9's prevention.",
+      "searched 'accept baseline commit': nothing in the store covers an accepted baseline being lost to a checkout, so the prevention was written at the point of the mistake (audit-match-soundness's own ACCEPT output) rather than lifted"
+    ]
+  },
+  "items": [
+    {
+      "queue_id": "2026-09-20-417020",
+      "subject": "Grocery page HELD (coverage) - 2026-09-20",
+      "classification": "infra",
+      "lane": "money",
+      "premise": "FALSE as stated. No coverage gate failed on 2026-09-20 and no store's pull produced too few commodities. The 12:15:39 hold was the MATCH-SOUNDNESS gate, and it fired because round 1's reviewed -Accept was written to a TRACKED file and never committed, then undone by a git reset --hard in the same tree at 11:43. The alert body sent the reader to the store pulls, which were fine.",
+      "evidence": [
+        "THE ALERT IS A MIS-MAPPED VERDICT. publish-deals-page.ps1 exits 2 from FOUR separate hard gates: line 122 the coverage gate (too few commodities or a thin store), line 216 store-coverage (a staple renders no tile for some store), line 224 match-soundness (a product MOVED or DROPPED commodity vs the reviewed baseline), line 233 category-coverage (a commodity in no category). check-ad-cycles.ps1's rc-2 branch logged 'AUTO-PUBLISH HELD: coverage gate failed' and mailed 'Grocery page HELD (coverage) ... a store's pull produced too few commodities ... Check the store pulls' for all four.",
+        "WHICH GATE ACTUALLY HELD IT, in the chain's own log and in words: ad-cycle-log 2026-09-20 12:13:04 'guards: GUARDS OK: every hard invariant holds. Safe to publish.'; 12:15:39 'publish-deals-page: 155 s (rc=2)'; 12:15:39 'publish-verdict: HELD: commodity matching changed vs the reviewed baseline (see out\\audit\\soundness-report.json). A product MOVED/DROPPED commodity. Review, then `audit-match-soundness.ps1 -Accept` (or -Force to override).'; 12:15:39 'AUTO-PUBLISH HELD: coverage gate failed'. The two lines are three seconds apart and disagree. That publish-verdict line exists only because round 1 shipped it this morning (queue 2026-09-19-bb10f1); without it this item would have been a day of reading store pulls.",
+        "THE COVERAGE GATE DEMONSTRABLY PASSED. Its refusal is at publish-deals-page.ps1:120-122, well above the match-soundness call at 222-224, and it exits immediately. A run that printed the match-soundness HELD line had already passed the commodity count and the thin-store check. Board-freshness at 12:27:53 reads all seven stores present on the held board: Aldi 380 cells, Baker's 525, Family Fare 400, Fareway 159, Hy-Vee 231, Sam's Club 294, Walmart 514.",
+        "WHY MATCH-SOUNDNESS FIRED, which is the whole item: out/audit/match-baseline.json is a TRACKED file (audit-match-soundness.ps1:500, and its own line 653 says so). Round 1 reviewed three drops, ran -Accept, and did not commit it. Read at 13:0x today, BEFORE this round's accept: mtime 2026-09-20 11:43:10 but 'generated' 2026-09-19 20:50, git status clean for that path, last commit touching it f45081af3 and NOT one of round 1's three commits (5d42fb944, affeb7254, 748967ad4). A file whose mtime is today and whose content is yesterday's, matching HEAD exactly, is a checkout: the git reset --hard round 1's developer ran at 11:43 restored HEAD's baseline and the accept was gone. The dispatch records that same reset reverting 33 files.",
+        "THE DROPS, READ LINE BY LINE (out/audit/soundness-report.json generated 12:18): MOVED = 0. DROPPED = 3, every one from commodity 'coffee': 'Barissimo Caramel Coffee Syrup 12.7 FL OZ', 'Barissimo Coffee Syrups Vanilla 12.7 OZ', 'Barissimo Coffee Syrups Sugarfree Vanil 12.7 OZ'. All three are coffee SYRUPS, not ground coffee or beans, and all three are exactly the drops round 1's coffee exclude change intended (its deviation (b) added a beverage token and a syrup token to commodities.json coffee.exclude after measuring 77,829 distinct names: 13 coffee names carry those tokens and not one is ground coffee or beans). Zero unexplained MOVES, so no needs-brad park.",
+        "THE HY-VEE PULL IS REAL AND IS NOT THIS. coverage-cycle 08:43:23 and this round's own read: 'BLIND pull-regular-hyvee - examined 0 of 15 eligible row(s) ... budget 15, asked 15, answered 0', and board-freshness reads Hy-Vee newest 2026-09-19, one day behind the other six stores. That is a store pull answering zero. It did not hold the page, it holds the coverage-ledger population, and it is round 1 item 2026-09-19-b66b54's leaves_open (c)."
+      ],
+      "surface_fix": {
+        "what": "restore the reviewed baseline the reset undid, and COMMIT it this time so a checkout cannot silently undo it again",
+        "files": [
+          "grocery/out/audit/match-baseline.json"
+        ],
+        "exact_change": "audit-match-soundness.ps1 -Accept after reading the three drops line by line, then commit the tracked baseline in the same commit as the code"
+      },
+      "root_cause": "TWO mechanisms, and only the second is a code defect. (1) A reviewed -Accept writes a TRACKED artifact and nothing in the accept said so, so the review lived only in a working tree that another step reverted. The estate already has the rule for this shape ('write the pointed-to object before the object that points to it'; 'commit the source WITH the artifact') and had no place that said it at the moment the mistake is made. (2) ONE EXIT CODE, FOUR VERDICTS, third arm of the class round 1 fixed twice today: publish-deals-page exits 2 from four different gates, the chain read only the number, and its log line, its ship summary and its alert all named the FIRST gate. The cost is the whole diagnosis, not a cosmetic wording: the alert names a subsystem that is healthy ('Check the store pulls') and never names the one that is not, so the item opens on the wrong evidence.",
+      "root_fix": {
+        "what": "the chain reads the gate's own HELD line instead of assuming which gate it was, in a marked region a test executes against frozen values; the accept says at the point of the mistake that its output is tracked and must be committed; the four possible subjects are registered",
+        "files": [
+          "grocery/check-ad-cycles.ps1",
+          "grocery/test-auditors.ps1",
+          "grocery/audit-match-soundness.ps1",
+          "grocery/alert-registry.json"
+        ],
+        "exact_change": "check-ad-cycles.ps1: a pure function Get-PublishHeldGate([string[]]$VerdictLines) inside '# <<PUBLISH-HELD-GATE-BEGIN>>' / '# <<PUBLISH-HELD-GATE-END>>' (the SHIP-SUMMARY and WATCHERS-DECISION convention), taking the $pubVerdict lines the chain already captures, returning gate/why/held by matching the four HELD texts publish-deals-page prints, and returning gate 'unnamed' with a why that says so for anything else; the rc-2 branch logs, summarises and mails that gate and quotes the gate's own line. The function is defined ABOVE the if/elseif chain, because a statement between a closing brace and an elseif is a parse error. audit-match-soundness.ps1: one Write-Output after the ACCEPT summary naming the baseline path, that it is TRACKED, and that an uncommitted accept is undone by the next checkout. alert-registry.json: one new PREFIX entry page-held-gate (key 'grocery page held', class page, condition 1 board-or-feed-wrong-or-held) so the three new subjects resolve; the exact entry page-held-coverage is untouched and still wins for the coverage case, because exact beats prefix.",
+        "rank": 1,
+        "why_not_top": null
+      },
+      "prevention": {
+        "source": "grocery/audit-match-soundness.ps1 ACCEPT path, and grocery/check-ad-cycles.ps1 rc-2 branch",
+        "what": "an accept that has not reached a commit says so out loud, and a held publish names the gate that held it",
+        "exact_change": "as root_fix.exact_change"
+      },
+      "leaves_open": "The coverage ledger is still REGRESSED on three checks and BLIND on one, and this round deliberately did NOT accept it: audit-food-category examined 2481 of baseline 3037 (81.7%), audit-everyday-mismatch 2212 of 2598 (85.1%), build-rescue-worklist 1219 of 1364 (89.4%), and pull-regular-hyvee examined 0 of 15 eligible (budget 15, asked 15, answered 0). All three are below the 90% bar round 1 set, but the other half of its condition is not met: Fareway and Sam's captures landed today, Hy-Vee's did not (newest read 2026-09-19, its pull answered zero), so the population has not refilled and accepting a lower floor now would ratchet the guard down against a population expected to recover.",
+      "leaves_open_occurrences": "5 chain runs in the window 2026-09-19 16:36 to 2026-09-20 13:xx: 09-19 16:36, 09-19 17:22, 09-20 08:14, 09-20 12:13 and this round's own read of audit-coverage-ledger.ps1. The BLIND Hy-Vee pull is on 3 of those (09-20 08:43, 09-20 12:xx and this round).",
+      "leaves_open_followup": "2026-09-20-588caa",
+      "prior_closes": [],
+      "prior_closes_note": "triage-due printed no RETURN line for this type and the queue holds no resolved 'page held' item inside 30 days. This is the first occurrence of the mis-named hold that anyone has looked at, because until round 1 shipped the publish-verdict logging this morning there was nothing in the log to look at.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule, include, exclude or engine branch changes. Routing before == after over comparison-2026-09-20: audit-match-soundness re-run after the accept reads MOVED=0 DROPPED=0 new-contested=0 drift-vs-engine=0, so the matcher and the engine agree on every one of 35,931 baselined names and no product moved commodity. The code change is a verdict-naming function in the chain, one output line in an audit, six cases in the harness and one registry entry.",
+        "affected_now": 0,
+        "names": [],
+        "risk": "A new alert subject shape is a place for an alert to go UNREGISTERED and get mailed with a prefix. Closed by the prefix entry, and audit-alert-registry.ps1 exits 0 reading 116 entries and 94 readable call-site subjects each mapping to exactly one entry. The gate itself is untouched and still fails closed: -Force was never used, the coverage gate's own wording is preserved byte for byte for the one case it was right about, and an rc 2 this reader cannot place reports 'unnamed' rather than guessing.",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against ad-cycle-log.txt as of 13:30 2026-09-20 (the 12:13 and 12:15 lines), out/audit/soundness-report.json generated 12:18, out/audit/match-baseline.json read at 13:0x before the accept and re-read after it, publish-deals-page.ps1 and check-ad-cycles.ps1 at HEAD 748967ad4, and a live read of audit-coverage-ledger.ps1 run in this round.",
+      "proof": {
+        "guard_or_fixture": "grocery/test-auditors.ps1, a new PUBLISH-HELD-GATE region test in the SHIP-SUMMARY style: it extracts the marked region from check-ad-cycles.ps1's live source, dot-sources it, and calls Get-PublishHeldGate against frozen verdict lines copied from publish-deals-page.ps1's own Write-Output calls. A missing region is a Bad, so the case cannot pass by finding nothing.",
+        "must_fire_case": "MUST FIRE: the founding line, verbatim from publish-deals-page.ps1:224 and from ad-cycle-log 2026-09-20 12:15:39, resolves to gate 'match-soundness' with a body that does NOT contain \"store's pull\" and DOES name match-baseline. MUST FIRE: the store-tile line resolves to 'store-coverage' and the category line to 'category-coverage'. MUST NOT FIRE: an unrecognised HELD line resolves to 'unnamed' and says it does not recognise the line; an empty verdict list resolves to 'unnamed' with no held line. Verified standalone this round: 7 of 7 cases give the asserted answer.",
+        "clean_twin": "CLEAN TWIN: a real coverage hold ('HELD: coverage gate failed - only 300 commodities (need >= 400) ... a store's pull likely failed') is still named 'coverage' AND still sends the reader to the store pulls, so the one gate the old wording was right about is unchanged. CLEAN TWIN: the HELD line is still found when it sits below the price-mode and name-drift verdict lines in a real stdout.",
+        "fixture_occurrences": [
+          "2026-09-20-417020"
+        ],
+        "commands": [
+          "powershell -File grocery/audit-match-soundness.ps1 -Accept",
+          "powershell -File grocery/audit-match-soundness.ps1",
+          "powershell -File grocery/audit-alert-registry.ps1",
+          "powershell -File grocery/audit-coverage-ledger.ps1",
+          "powershell -File grocery/test-auditors.ps1"
+        ]
+      },
+      "rollback": "revert the four files and the baseline; the chain returns to calling every rc 2 a coverage failure and the gate holds the next build again. No board, no cell and no price is touched by any of it.",
+      "do_not_touch": [
+        "the coverage baselines (grocery/coverage-baseline.json) - NOT accepted in this round, on purpose, and the reason is in leaves_open",
+        "publish-deals-page.ps1's four gates and their -Force overrides",
+        "the exact registry entry page-held-coverage and the 'Grocery page HELD (coverage)' subject, which readers and the dedup signature depend on",
+        "grocery/commodities.json - round 1's coffee excludes are correct and were only re-read here"
+      ],
+      "resolution_note": "Not the coverage gate, and no store pull was thin. The 12:15:39 hold was MATCH-SOUNDNESS: round 1 reviewed three intended drops (the three Barissimo coffee SYRUPS its exclude change refuses), ran -Accept, and never committed the result, and a git reset --hard in the same tree at 11:43 restored HEAD's baseline. Re-read the report line by line this round (MOVED=0, DROPPED=3, every one a coffee syrup), re-accepted, and COMMITTED the tracked baseline; a plain re-run now reads MOVED=0 DROPPED=0 drift-vs-engine=0, exit 0, so the next chain run publishes. The board was NOT republished in this round and did not need to be: the live page is round 1's correct 2026-09-20 board, a few hours old and honest. The class defect is fixed at the cause: publish-deals-page exits 2 from four different gates and the chain named the first of them for all four, so an alert about matching sent the reader to the store pulls. The chain now reads the gate's own HELD line, in a marked region six harness cases execute. The coverage ledger was re-read after the republish, as round 1's b66b54 instructed, and deliberately NOT accepted: all three checks are below the 90% bar but the Hy-Vee capture has not landed, so the population has not refilled.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "premise_verified_note": "VERIFIED, and the plan's premise is that the ALERT's premise is false. Both halves checked. (1) The coverage gate did not fail: its refusal at publish-deals-page.ps1:120-122 exits before the match-soundness call at 222-224, and the run printed the match-soundness HELD line, so it passed the commodity count and the thin-store check; all seven stores are on the held board in board-freshness at 12:27:53. (2) The real gate is named in the chain's own publish-verdict line at 12:15:39. (3) The cause was verified from the artifact rather than inferred: match-baseline.json had mtime 2026-09-20 11:43:10 with content generated 2026-09-19 20:50, matched HEAD, and its last commit is f45081af3, none of round 1's three.",
+      "leaves_open_followup_note": "NOT a new queue item, deliberately. This is the same condition round 1's item 2026-09-19-b66b54 leaves_open (c) already describes and already assigned to weekly item 2026-09-20-588caa, which is open. Minting a second item for one condition is the cost the 2026-09-10 measurement recorded. What this round adds to it is the re-read b66b54 asked for and did not get, with the post-republish numbers and the reason the accept was refused, which is in leaves_open above."
+    },
+    {
+      "queue_id": "2026-09-20-fb37b9",
+      "subject": "Recipe pricing: 26 unpriced ingredient line(s)",
+      "classification": "infra",
+      "lane": "money",
+      "route": "RETURN. money lane, seeded with grocery/triage-plans/plan-2026-09-20-2.json item 2026-09-19-d240fd (prior status: deviated). No fresh diagnosis; re-measured against today's board first.",
+      "premise": "TRUE, and it is the EXPECTED STEADY STATE of round 1's fix rather than a defect. The alert fires on a real count, the count fell exactly as round 1's change predicts, and not one of the 26 lines belongs to a live recipe whose published cost is understated.",
+      "evidence": [
+        "THE COUNT, FROM THE SOURCE AND NOT FROM THE ALERT BODY: meal-prep/db/cost-flags.txt holds 26 lines today against 28 on 2026-09-19. Grouped by refusal: MAPPED BID NOT ON ANY BOARD 14 (five-spice-powder 7, berbere-seasoning 2, harissa-paste 2, pomegranate-molasses 2, wild-rice 1); LABEL PRICE REFUSED, CARRIAGE NOT-CARRIED 6 (berbere 2, harissa 2, pomegranate 2); NO PRICE BASIS 6 (berbere 2, harissa 2, pomegranate 2). The two that left are exactly the two round 1 accounts for: the wild-rice NO PRICE BASIS line (7 NO PRICE BASIS on 09-19, 6 today) and the one-off dried-guajillo-chiles allowlist refusal.",
+        "THE SKIPPED RECIPES, FROM meal-prep/db/costed.json AND NOT FROM THE ALERT: exactly 6 of 584 costed rows have lines_unpriced > 0 - ethiopian-doro-wat-chicken-bowls, ethiopian-minchet-abish-berbere-beef-bowls, harissa-chicken-rice-bowls, pakistani-chapli-kebab-rice-bowls, persian-fesenjan-chicken-bowls, tunisian-harissa-coconut-beef-meatballs - one unpriced line each, and ALL SIX read LIVE=False against meal-prep/db/published-hashes.json (577 published slugs). 7 on 09-19, 6 today. The one that left the list is turkey-wild-rice-casserole, which is the one live recipe round 1 fixed.",
+        "NO LIVE RECIPE IS UNDERSTATED, which is the question that decides this item: the ONLY one of the 26 lines naming a live recipe is 'Turkey Wild Rice Casserole :: Wild Rice :: MAPPED BID NOT ON ANY BOARD (wild-rice)', and that line IS priced. costed.json reads turkey-wild-rice-casserole lines_priced 18, lines_unpriced 0, cost_batch 47.95, cost_per_serving 3.42, cost_batch_true 71.15, cost_per_serving_true 5.08, LIVE=True - the exact numbers round 1's blast_radius predicted (47.94 / 3.42 / 71.13 / 5.08, to a cent of rounding). 'MAPPED BID NOT ON ANY BOARD' is advisory: it says no store capture holds the row, which is true and is the Hy-Vee pull's problem, not a missing price.",
+        "THE SIX REMAINING BIDS ARE PROVEN NOT-CARRIED and were established with live evidence on 2026-09-19: the flag lines themselves carry the finding, that all seven Omaha stores answered on two or more wordings and none shelves berbere, harissa paste or pomegranate molasses. Walmart ships all three from FC, Marketplace and third-party sellers only. The carriage gate held the six recipes off the site. This is a correctly HELD state, not a defect.",
+        "WHAT IS ACTUALLY WRONG HERE IS THE PAGING, NOT THE PRICING. grocery/alert-registry.json classed unpriced-lines as class 'page' under condition '1 board-or-feed-wrong-or-held'. It cannot reach that condition: the reader-facing half is held by BLOCKING gates that page through their own emitters - wave-preaudit refuses a first publish whose costed row has lines_unpriced > 0 (its MUST FIRE at 583-585), and since round 1 sync-recipesdb-cost refuses to write a partial cost for a published slug (exit 2, names the slugs). So a true-every-day held state was emailing every day, which is Brad's 2026-09-20 daily-lane ruling verbatim."
+      ],
+      "surface_fix": {
+        "what": "nothing. The condition does not reproduce as a defect: the live recipe is priced, the six unpriced recipes are unpublished, and no number on any page is wrong.",
+        "files": [],
+        "exact_change": "none on data"
+      },
+      "root_cause": "The pricing half was already fixed by round 1 (the carriage ledger became a cost basis, so a CARRIED bid with a live-read price and size no longer drops out of a recipe). What returned is not the defect, it is the alert: the type was registered as a PAGE, so a condition that is true every day and is already held by two blocking gates mailed every day. A page-class alert for a state nobody can act on is how a real page stops being read.",
+      "root_fix": {
+        "what": "re-class the alert type so it is queued for triage and born in the WEEKLY lane instead of emailed daily, using the mechanism Brad shipped on 2026-09-20 rather than a new one",
+        "files": [
+          "grocery/alert-registry.json"
+        ],
+        "exact_change": "entry unpriced-lines: class 'page' -> 'review', and condition replaced with the one-line reason review requires, naming the two blocking gates that own the reader-facing half and the measurement taken today (26 lines over 6 recipes, all six unpublished, 0 live recipes with an unpriced line). send-alert.ps1's Get-BirthLane then stamps a review-class alert into the weekly lane with nobody passing -Lane (its own MUST FIRE at line 327). Nothing is silenced: the item still reaches the triage queue, and a LIVE recipe that ever does lose a line is refused by sync-recipesdb-cost (exit 2) and by wave-preaudit, each of which pages on its own.",
+        "rank": 1,
+        "why_not_top": null
+      },
+      "prevention": {
+        "source": "grocery/alert-registry.json entry unpriced-lines",
+        "what": "a known held state awaiting a ruling stops paging daily and is born in the weekly lane instead, while the two gates that would catch a real reader-facing case keep their own daily pages",
+        "exact_change": "class 'page' -> 'review' with the condition line stating why it cannot reach page condition 1, verified by audit-alert-registry.ps1 exit 0 (116 entries, page 77, review 38, digest 1; 94 readable call-site subjects each mapping to exactly one entry)"
+      },
+      "leaves_open": "five-spice-powder still prices from a 2026-07-18 Walmart label at $8.13 per 1.75 oz while the Hy-Vee carriage ledger reads $9.99 per 1.75 oz, on 7 recipes, because the ledger basis is deliberately ordered AFTER label until the ruling lands. Carried forward from round 1 and NOT re-derived here; round 1 measured 0 reader-visible cents.",
+      "leaves_open_occurrences": "7 recipes, on both runs of the window (2026-09-19 and 2026-09-20 cost-flags), unchanged. 0 reader-visible cents, measured by round 1 and not re-measured in this round.",
+      "leaves_open_followup": "Q1-2026-09-20-partial-cost",
+      "prior_closes": [
+        "2026-09-19-d240fd"
+      ],
+      "prior_closes_note": "triage-due routed this as a RETURN seeded with plan-2026-09-20-2.json item 2026-09-19-d240fd, whose status was deviated. That item is what produced today's numbers, and today's numbers are what it predicted.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule, include, exclude or engine branch changes; routing before == after over comparison-2026-09-20. The only change is one alert type's class in a registry, which moves no product and prices nothing. Cost-side reach re-read over all 584 costed rows: 6 rows have lines_unpriced > 0, all 6 unpublished, 0 published rows affected.",
+        "affected_now": 0,
+        "names": [],
+        "risk": "A review-class alert is queued and never emailed, so if the two blocking gates were ever removed this condition would stop reaching an inbox. That is why the condition line names both of them: wave-preaudit's lines_unpriced MUST FIRE at 583-585 and sync-recipesdb-cost's published-slug refusal, each of which exits non-zero and pages through its own emitter. The item still lands in the triage queue every run, so nothing goes unseen.",
+        "cell_effects": [],
+        "recipe_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against meal-prep/db/cost-flags.txt and meal-prep/db/costed.json as rewritten by today's recost (both FOREIGN, uncommitted, read at 13:1x), meal-prep/db/published-hashes.json at HEAD (577 slugs), and grocery/alert-registry.json at HEAD 748967ad4.",
+      "proof": {
+        "guard_or_fixture": "grocery/audit-alert-registry.ps1 (the registry's own gate) plus grocery/send-alert.ps1's Get-BirthLane MUST FIRE at line 327, 'a review-class alert with no -Lane is born in the weekly lane', which is the mechanism this change relies on and which already ships frozen",
+        "must_fire_case": "MUST FIRE, already in send-alert.ps1:327 and unchanged by this item: Get-BirthLane '' 'review' returns 'weekly'. That is the assertion the re-class turns on, so a change that broke the weekly birth would go red there rather than here. MUST FIRE, run this round: audit-alert-registry.ps1 exits 0 over the edited registry with 94 readable call-site subjects each mapping to exactly one entry, so the re-classed type is still reachable and still unambiguous.",
+        "clean_twin": "CLEAN TWIN, already in send-alert.ps1:329-330 and unchanged: a page-class alert still carries no lane and stays daily, so re-classing one type did not move the others. CLEAN TWIN, measured this round: the cost-flags emitter, its subject, its signature dedup and its log line are untouched, so the item is still queued every run and its count is still stated with its denominator.",
+        "fixture_occurrences": [
+          "2026-09-19-d240fd",
+          "2026-09-20-fb37b9"
+        ],
+        "commands": [
+          "powershell -File grocery/audit-alert-registry.ps1",
+          "powershell -File grocery/send-alert.ps1 -SelfTest",
+          "powershell -File grocery/test-auditors.ps1"
+        ]
+      },
+      "rollback": "set the unpriced-lines entry back to class page / condition 1 and the alert emails daily again. No data, no price and no recipe is touched by this item.",
+      "do_not_touch": [
+        "meal-prep/engine/cost-recipes.ps1 and the ledger basis round 1 shipped - it is working and today's numbers prove it",
+        "the label-before-ledger ordering, which is Q1-2026-09-20-partial-cost's to rule on",
+        "meal-prep/db/held-recipes.json - the six holds are Brad's standing carriage rule applied correctly",
+        "the cost-flags subject and signature dedup, which the queue's history keys on",
+        "grocery/carriage.json - the 2026-09-19 seven-store reads are done and correct"
+      ],
+      "resolution_note": "This no longer reproduces as a defect; it is the expected steady state of round 1's fix. Measured from the source files and not from the alert body: cost-flags 28 lines on 09-19 to 26 today, NO PRICE BASIS 7 to 6, recipes with an unpriced line 7 to 6. The one that left is turkey-wild-rice-casserole, the one live recipe round 1 fixed, which now reads lines_priced 18 / lines_unpriced 0 and 47.95 / 3.42 / 71.15 / 5.08 - round 1's predicted numbers to a cent. All 6 remaining unpriced recipes are unpublished (LIVE=False against 577 published slugs) and their three bids are proven not carried by any Omaha store on two or more wordings. Not one of the 26 lines belongs to a live recipe with an understated cost. What was actually wrong was the paging: a true-every-day held state, already held by two blocking gates, was registered as a page-class alert and emailed daily. It is now review class, so it is born in the WEEKLY lane through the mechanism Brad ruled on 2026-09-20, still queued every run, still caught daily by sync-recipesdb-cost and wave-preaudit if a LIVE recipe ever loses a line. The residue is the standing ruling Q1-2026-09-20-partial-cost, carried forward and not re-asked.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "premise_verified_note": "VERIFIED from the source artifacts, not the alert body, and the delta is exactly the one the dispatch predicted: 28 -> 26 lines and 7 -> 6 recipes, with turkey-wild-rice-casserole the recipe that left. The decisive check was the one that could have made this a real defect: every costed row with lines_unpriced > 0 was listed and tested against published-hashes.json, and all 6 are unpublished, while the single live recipe named in the flags has lines_unpriced 0. If any of those 6 had read LIVE=True this would have been a live understatement and worked as one.",
+      "leaves_open_followup_note": "A RULING, not a defect and not a queue item. Q1-2026-09-20-partial-cost already stands for Brad from round 1 and is carried forward in open_questions_for_brad below rather than re-asked. Nothing else is left: the six held recipes are correct, the live recipe is priced, and the paging is fixed in this round."
+    }
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q1-2026-09-20-partial-cost",
+      "carried_from": "grocery/triage-plans/plan-2026-09-20-2.json (round 1, item 2026-09-19-d240fd)",
+      "question": "CARRIED FORWARD, NOT RE-ASKED. When a live cost cannot be fully built from the board, which basis wins and what does the page show? Today the order is board, then feed, then a hand-typed label price, then the carriage ledger, so a stale label beats a fresh in-store shelf read: five-spice-powder prices from a 2026-07-18 Walmart label at $8.13 per 1.75 oz across 7 recipes while the Hy-Vee ledger holds a live 2026-09-19 read of $9.99 per 1.75 oz, a 19% understatement on a line worth cents per serving.",
+      "options": [
+        "Leave the order as it is: nothing moves, 7 recipes keep a 19% understatement on a spice line, and the ledger stays a last resort.",
+        "Order the ledger BEFORE the label when the ledger entry is CARRIED, inside the quarter, and names a store, a product id and a date: the freshest evidence wins, 7 recipe costs rise by cents, and every hand-typed label older than a live read stops deciding a price.",
+        "Expire a label price at the quarter like everything else, so an out-of-date label simply stops being a basis and the ledger takes over by default."
+      ],
+      "consequence": "Understating is exactly as wrong as overstating on a paid site. The amount here is cents per serving on 7 recipes, so this is a correctness ruling rather than an urgent one, which is why it is a question and not a fix.",
+      "status": "open"
+    }
+  ]
+}

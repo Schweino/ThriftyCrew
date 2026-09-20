@@ -1465,11 +1465,41 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           $tail = @($tailRaw | Where-Object { $null -ne $_ })
           foreach ($t in $tail) { Log ('publish-tail: ' + ([string]$t).Trim()) }
         }
+        # <<PUBLISH-HELD-GATE-BEGIN>>
+        # ONE EXIT CODE, FOUR GATES, AND THIS BRANCH NAMED THE FIRST OF THEM (2026-09-20, queue 2026-09-20-417020).
+        # publish-deals-page.ps1 exits 2 from FOUR separate hard gates: the coverage gate (its line 122, too few
+        # commodities / a thin store), store-coverage (216, a staple renders no tile for some store),
+        # match-soundness (224, a product MOVED or DROPPED commodity vs the reviewed baseline) and
+        # category-coverage (233, a commodity is in no category). Until today all four paged as
+        # "Grocery page HELD (coverage) ... a store's pull produced too few commodities. Check the store pulls."
+        # On 2026-09-20 12:15 the real hold was match-soundness, and a triage round opened on store pulls that
+        # were fine. Same class as the rc-1/rc-2 ship summary (2026-09-19-bb10f1) and the blind-vs-live
+        # test-auditors tally (2026-09-19-ae9df2): several verdicts share one code and one of them gets printed.
+        # THE GATE NAMES ITSELF ON STDOUT and $pubVerdict above already holds that line - so read it instead of
+        # assuming. FAIL CLOSED: an rc 2 whose HELD line this reader does not recognise reports 'unnamed' and
+        # says so; it must never assert a gate it did not read.
+        function Get-PublishHeldGate([string[]]$VerdictLines) {
+          $held = ''
+          foreach ($l in @($VerdictLines)) { $s = ([string]$l).Trim(); if ($s -like 'HELD:*') { $held = $s; break } }
+          $gate = 'unnamed'
+          $why  = 'publish-deals-page returned 2 with a HELD line this reader does not recognise, or with none at all - read the publish-verdict lines in ad-cycle-log.txt before assuming which gate held it.'
+          if     ($held -match '(?i)coverage gate failed')       { $gate = 'coverage';           $why = "a store's pull produced too few commodities, or a store is thin/missing. Check the store pulls." }
+          elseif ($held -match '(?i)missing a store tile')       { $gate = 'store-coverage';     $why = 'a staple commodity rendered no tile for one of the seven stores (out\store-coverage-report.json). The board would hide a store; fix the render, do not force it.' }
+          elseif ($held -match '(?i)commodity matching changed') { $gate = 'match-soundness';    $why = 'a product MOVED or DROPPED commodity against the reviewed baseline (out\audit\soundness-report.json). Read the moved/dropped list line by line, then run audit-match-soundness.ps1 -Accept AND COMMIT grocery\out\audit\match-baseline.json, which is a TRACKED file: an accept left uncommitted is undone by the next checkout and this gate holds the next build again.' }
+          elseif ($held -match '(?i)not in exactly one category'){ $gate = 'category-coverage'; $why = 'a commodity is not filed in exactly one category (out\category-coverage-report.json), so it would render in no filter. File it in categories.json.' }
+          [pscustomobject]@{ gate = $gate; why = $why; held = $held }
+        }
+        # <<PUBLISH-HELD-GATE-END>>
         if ($pubrc -eq 0)     { Set-Content -Path $sigFile -Value $sigAfter -Encoding ASCII; Log ('AUTO-PUBLISH: live page updated (price change' + $(if (@($flips).Count -gt 0) { '/new ad' } else { ' mid-cycle' }) + ')'); $summary += 'PUBLISHED live page updated (price change detected)' }
         elseif ($pubrc -eq 2) {
-          Log 'AUTO-PUBLISH HELD: coverage gate failed - live page NOT updated'
-          $summary += 'HELD      coverage gate failed - live page NOT updated (a store pull is thin/missing)'
-          if (-not $NoAlert) { try { Send-Alert -Subject "Grocery page HELD (coverage) - $asofS" -Body "A refreshed board failed the coverage gate on $asofS (a store's pull produced too few commodities), so the live page was NOT updated - nothing bad was published. Check the store pulls." | Out-Null } catch { Log ('held-alert threw: ' + $_.Exception.Message) } }
+          $heldGate = Get-PublishHeldGate $pubVerdict
+          Log ('AUTO-PUBLISH HELD: the ' + $heldGate.gate + ' gate held the page - live page NOT updated')
+          $summary += ('HELD      the ' + $heldGate.gate + ' gate held the page - live page NOT updated')
+          if (-not $NoAlert) {
+            $heldLine = if ($heldGate.held) { $heldGate.held } else { '(publish-deals-page printed no HELD line)' }
+            $heldBody = 'A refreshed board was held by the ' + $heldGate.gate + " gate on $asofS, so the live page was NOT updated - nothing bad was published. " + $heldGate.why + " The gate's own line was: " + $heldLine
+            try { Send-Alert -Subject ('Grocery page HELD (' + $heldGate.gate + ") - $asofS") -Body $heldBody | Out-Null } catch { Log ('held-alert threw: ' + $_.Exception.Message) }
+          }
         }
         else { Log "AUTO-PUBLISH ERROR (rc=$pubrc) - Ghost upsert or build failed; live page NOT updated"; $summary += 'ERROR     auto-publish failed (page NOT updated) - see ad-cycle-log.txt'; if (-not $NoAlert) { try { Send-Alert -Subject "Grocery publish FAILED (rc=$pubrc) - $asofS" -Body "publish-deals-page.ps1 returned $pubrc on $asofS (Ghost upsert or page build failed). The live page was NOT updated with today's price change. Check ad-cycle-log.txt." | Out-Null } catch {} } }
       }
