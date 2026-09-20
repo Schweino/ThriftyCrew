@@ -1,0 +1,143 @@
+{
+  "lane": "weekly",
+  "generated": "2026-09-20T07:50:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-17 (the newest board the 07:26 heartbeat read, 10.7h old at that moment)",
+  "head_at_dispatch": "cf1ca6fe9",
+  "routing_artifact": null,
+  "queue_ids_seen": [
+    "2026-09-18-8491bf", "2026-09-18-a0c785", "2026-09-18-ceab00",
+    "2026-09-19-4fc24c", "2026-09-19-405c73", "2026-09-19-4f01f6", "2026-09-19-dc1b5b",
+    "2026-09-19-8a3090", "2026-09-19-3a0a09", "2026-09-19-0b2f1e", "2026-09-19-b66b54",
+    "2026-09-19-2a0748", "2026-09-19-c9f0f3", "2026-09-19-d240fd", "2026-09-19-2c96d8",
+    "2026-09-19-fccb69", "2026-09-19-ae9df2", "2026-09-19-bb10f1", "2026-09-19-6f90ee",
+    "prevention:automation silent death issue s",
+    "2026-09-20-1b8544"
+  ],
+  "scope_note": "PREVENTION ONLY, by this run's dispatch. The 19 open queue ids above are seen and recorded, none is worked, and none is closed. No new queue item is minted for any of them.",
+
+  "knowledge_consulted": [
+    "searched: 'alert fatigue duration', 'recurring alert prevention', 'scheduled task missed occurrence' (knowledge-search --multi, 2287 sections indexed, 46 matched)",
+    "data-quality-craft/checks-and-thresholds.md section 7, 'A firing check is not yet an alert' - USED, and it is the design of this fix: an alert rule has three states, not two, and a condition has to hold for a DURATION before it fires. Its four named causes of alert fatigue include 'alerts written directly on a raw metric that legitimately fluctuates' and 'alerts on spikes that never reached anything a downstream consumer could notice'. Its warning that the duration knob is a DIFFERENT knob from the cutoff is why this item subtracts measured downtime from the age instead of widening max_age_hours, which the heartbeat's own CONTENT-CURRENCY block already refuses for the same reason.",
+    "reliability-craft/MAP.md section 4, 'An alert is not a check that fired' - USED as the acceptance test: 'alert only where a human has to act. A condition that is real, correctly detected and needs nothing is a panel or a log line, not a page.' Seven of the ten issues on the founding day were real, correctly detected, and required nothing: Windows' own StartWhenAvailable was about to run every one of them. They are now held lines in the report, which is exactly the panel the section describes.",
+    "reliability-craft/rca-and-chaos.md section 2, 'Corrective actions come in three kinds' - USED to classify this item. It is PREVENTIVE (the false page stops being produced) plus DETECTIVE (the run stamp is new evidence, and every held line prints its arithmetic so a downtime claim can be read and disputed). What still detects the class if the prevention fails: health-heartbeat itself, unchanged. The grace lasts one run, the next run grades with no outage to subtract, and the four safety twins in the self-test prove an age that downtime does NOT explain still pages.",
+    "reliability-craft/toil-runbooks-and-recovery.md section 1, 'Toil has a definition' - USED to rank what to aim at. 'The same ticket arriving repeatedly' and 'recurring checks (eyeballing a routine alert)' are both on its detection list, and the founding day is the purest example in the window: ten tickets, one cause, zero engineering value in reading any of them.",
+    "reliability-craft/applies-here.md section 9 - READ, not acted on: it names grocery/health-heartbeat.ps1 as one of this estate's two absence checks and says a liveness probe reads a brown-out as healthy. True, and untouched here; this item narrows a FALSE POSITIVE and adds no false negative."
+  ],
+
+  "last_week_target_measured": "plan-2026-09-18-3.json targeted 'grocery capture watchdog issue s' and recorded days_fired 9, rank 2, over the 14 days ending 2026-09-18. Its item prevention:grocery capture watchdog issue s is status needs-more-time with shipped_commit null, so NOTHING SHIPPED and there is no after-window to measure. Recomputed today through Get-AlertCensusTypeDays over the 14 days ending 2026-09-20, that type is still 9 days, now rank 1 (tied). Both counts stated: 9 before, 9 after, no fix in between, which is the expected reading of an unshipped target and not evidence about prevention. The week before that, plan-2026-09-11-2.json's 'grocery new price flag s' DID ship (3e3969ec4) and its half-elapsed measurement is recorded in plan-2026-09-18-3.json.",
+
+  "prevention_target": {
+    "type": "automation silent death issue s",
+    "window_days": 14,
+    "days_fired": 9,
+    "rank": 1,
+    "why_not_top": "Rank 1 is a three-way tie at 9 days over the 14 ending 2026-09-20: 'automation silent death issue s', 'grocery capture watchdog issue s' and 'grocery new price flag s'. The other two are already owned, so this is the highest-ranked type with no prevention item shipped or open. 'grocery new price flag s' has prevention:grocery new price flag s in plan-2026-09-11-2.json, status done, shipped 3e3969ec4. 'grocery capture watchdog issue s' has prevention:grocery capture watchdog issue s in plan-2026-09-18-3.json, status needs-more-time, which is OPEN and stays with that plan. Rank 4 ('the knowledge store s nightly pass went red', 8 days) is unowned and is the natural target for the next lane."
+  },
+
+  "new_source_check": "no row contract exists yet (build step 8 of design/PLAN-zero-alert-days-2026-09-10.md), so this is a record, not a validation. Went live since the last lane run (git log since grocery/triage-weekly-lane-stamp.txt, 2026-09-18T16:52:08, over grocery/stores.json, grocery/commodities.json and the capture builders): NO new store and NO new feed. The 7-store roster in grocery/stores.json is unchanged in membership; 5cb4198ba touched it so the three real store rosters read it rather than their own copies. grocery/commodities.json moved in a large batch on 2026-09-19 - f45081af3 (five commodities a global exclude had made unpriceable), c997ca144 (seven uncelled commodities get a reaching term), e438ce71f, 117315d9c, ee218cf06, 0a82cedc8, 42056585e - i.e. term and exclude work on EXISTING commodities, not a new batch of commodities. Capture builders moved for Walmart (fd6afd08a, 2502e2b3a store_id and channel), Sam's (af5e22baf), Hy-Vee (9f5059eec) and Family Fare (c0de652aa). When step 8 lands, this step runs its validator over exactly that list instead of naming it.",
+
+  "items": [
+    {
+      "queue_id": "prevention:automation silent death issue s",
+      "subject": "Automation silent-death: the first heartbeat after a machine outage pages for work Windows is about to do by itself",
+      "classification": "infra",
+
+      "evidence": [
+        "census, through Get-AlertCensusTypeDays over grocery/out/alert-census.jsonl, 14 days ending 2026-09-20: 'automation silent death issue s' fired on 9 days, rank 1 (tied). Over 30 days: 12 alerts on 12 days, 6 of them RETURNS.",
+        "grocery/out/logs/ has NO capture-watchdog log for 2026-09-15 or 2026-09-16, and one for every other weekday in the window. The box was not running on those two days.",
+        "capture-watchdog-2026-09-17.log opens 'Start time: 20260917051220' and carries exactly ONE heartbeat section, 'health-heartbeat  2026-09-17 05:12'. The 10:30 task made up its missed occurrence under StartWhenAvailable and ran 12 minutes after the box came back.",
+        "grocery/alert-log.txt: [2026-09-17T05:12:35] SENT 'Automation silent-death: 10 issue(s)'. Every other firing in the window went out at 10:30.",
+        "the ten issues of that page, from the log: TASK STALE 'TC Grocery Ad Pulls 0700' 64.2h (>30h); TASK STALE 'TC Grocery Daily Capture 0800' 63.2h (>30h); TASK STALE 'TC Produce Intraday Probe' 57.2h (>14h); TASK UNWATCHED 'TC Approvals Page'; OUTPUT STALE smp-feed.json 69.1h (>30h); OUTPUT STALE smp-feed.json (served) 68.2h; OUTPUT NOT CURRENT free-dinners.json week_of=2026-09-11; OUTPUT STALE v2-perserving.json 68.2h; OUTPUT STALE ingredient-map.json 68.2h; OUTPUT STALE comparison-2026-09-14.json 69.1h.",
+        "arithmetic on those rows: the previous heartbeat ran 2026-09-14 10:30, so the gap was 66.7h on a 24h schedule and about 42.7h of it was machine downtime. Subtract it and seven of the ten are inside their own tolerance (21.5h, 20.5h, 26.4h, 25.5h, 25.5h, 25.5h, 26.4h against 30h). Three are not, and all three are real: the produce probe at 14.5h adjusted against 14h, the free-dinners week_of (a content-currency row, not an age), and the unwatched task.",
+        "ten of the eleven committed task definitions under ops/scheduled-tasks/ set StartWhenAvailable true, so Windows was already going to run the missed occurrences within the hour. The daily capture did run that morning and the whole set was fresh again by the 07:26 heartbeat of 2026-09-20 (HEALTHY: 20 automation(s)/output(s) all fresh)."
+      ],
+
+      "surface_fix": {
+        "what": "the heartbeat measures how long the MACHINE was unavailable since its own previous run and subtracts exactly that from an age before comparing it to the row's tolerance",
+        "files": ["grocery/health-heartbeat.ps1", ".gitignore"],
+        "exact_change": "a RESUME-GRACE block: Write-HbRunStamp stamps grocery/out/health-heartbeat-run.json at the end of every live run (healthy, issues, and the BLIND exit that ran but refused to grade); Read-HbRunStamp plus Get-HbMachineOutage turn the gap between two stamps into hours of downtime (gap minus the 24h period, capped at 96h); Test-HbOutageExplainsAge holds a TASK STALE or OUTPUT STALE line when age minus downtime is still inside tolerance. Held lines print their arithmetic. .gitignore gains the stamp, which is per-box state."
+      },
+
+      "root_cause": "health-heartbeat grades liveness on wall-clock age with no notion of whether the machine was available to run anything. Its own task carries StartWhenAvailable, so after an outage the heartbeat is one of the FIRST things to make up its missed occurrence - 12 minutes after resume on 2026-09-17 - and it then grades every sibling task and output before any of them has had its own make-up run. Everything it names is stale, every line is true, and the correct human action is to wait an hour. The class is not 'the heartbeat is too sensitive': it is that an age is being read as evidence about a task's health when the interval it spans contains time no task could have run in.",
+
+      "root_fix": {
+        "what": "make the outage a measured quantity the check subtracts, rather than something the reader is expected to know. The duration knob, not the cutoff: an age that downtime does NOT explain pages exactly as it always did, including on the same morning.",
+        "files": ["grocery/health-heartbeat.ps1"],
+        "exact_change": "Get-HbMachineOutage(prev stamp, now, period 24h, cap 96h) and Test-HbOutageExplainsAge(ageH, maxH, outage) wired into the windows_tasks loop (after the dormant and expired verdicts, so neither changes) and into Check-Age. Eligible classes are TASK STALE and OUTPUT STALE only. TASK MISSING, TASK DISABLED, TASK NEVER RAN, TASK FAILED, TASK UNWATCHED, RUN DID NOT LAND, OUTPUT MISSING and OUTPUT NOT CURRENT are not ages and are untouched, which is asserted by a self-test case."
+      },
+
+      "prevention": {
+        "source": ["grocery/health-heartbeat.ps1"],
+        "what": "the upstream producer of every alert of this type is health-heartbeat.ps1 itself: it is the sole emitter of the subject 'Automation silent-death: N issue(s)' (one Send-Alert call site). The condition it misreports is produced by Windows Task Scheduler's make-up behaviour after an outage, which this estate does not own; what it owns is the grading, and the grading is where the false page is made.",
+        "exact_change": "the emitter stops manufacturing a staleness issue out of an interval the machine was not running in. It keeps emitting the same issue the moment that interval no longer explains the age, which is the next run at the latest."
+      },
+
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule, no commodity, no band and no board input is touched; this is health-heartbeat.ps1's own grading plus one .gitignore line. Verified by running the live heartbeat before and after on the main checkout: 20 ok lines, HEALTHY, exit 0 both times, with no run stamp present on the first run and one present on the second.",
+        "affected_now": 0,
+        "names": [],
+        "risk": "on a morning that follows a real machine outage, a task or output that was ALREADY over tolerance before the box went down still pages (proved by the 120h twin), but one that went over tolerance only because of the outage is held for one run. If such an item is genuinely dead, it is named one run later than before - at the next heartbeat, with no outage left to subtract. That is the cost, it is bounded to a single run, and it is paid only on the rare morning after an outage.",
+        "cell_effects": []
+      },
+
+      "proof": {
+        "guard_or_fixture": "grocery/health-heartbeat.ps1 -SelfTest, which grew from 35 to 50 frozen cases. It is hermetic: no scheduler, no mail, no clock reads in the new cases.",
+        "must_fire_case": "the founding page of 2026-09-17 05:12, numbers frozen from the alert log. A 66.7h gap on a 24h schedule must read as 42.7h of downtime; 'TC Grocery Ad Pulls 0700' at 64.2h against a 30h tolerance must be HELD and its detail must say 21.5h adjusted; smp-feed.json at 69.1h against 30h must be HELD; and a 96h cap must hold when the stamp is a month old. Plus four wiring cases, needles built by concatenation so the assertions are not their own matches: the task loop and Check-Age each call Test-HbOutageExplainsAge, the outage is read before any grading, and all three live exits write the stamp.",
+        "clean_twin": "six, and they are the ones that keep the guard from passing by being too broad. On that same 2026-09-17 morning the produce probe at 57.2h against 14h must STILL PAGE (14.5h adjusted is over). An output already stale before the outage (120h, 77.3h adjusted) must still page. An ordinary morning (a 24h gap) must excuse nothing, so 64.2h/30h pages exactly as it did before this change. No run stamp at all must excuse nothing. A future-dated stamp must excuse nothing. And the boundary is <=, not <: 30.0h adjusted is held and 30.1h is not.",
+        "commands": [
+          "powershell -NoProfile -File grocery\\health-heartbeat.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\health-heartbeat.ps1",
+          "powershell -NoProfile -File ops\\run-gates.ps1"
+        ],
+        "fixture_occurrences": []
+      },
+
+      "rollback": "revert the health-heartbeat.ps1 hunks and the .gitignore line, then delete grocery/out/health-heartbeat-run.json. No data migration, no scheduler change, no board effect. Reverted, the check behaves exactly as it did at cf1ca6fe9, because with no stamp on disk the grace is already inert.",
+
+      "do_not_touch": [
+        "max_age_hours on any row of grocery/expected-automations.json - widening a tolerance is the wrong knob and the file's own CONTENT-CURRENCY block says so",
+        "the exit codes: 0 healthy, 2 one or more silently dead, 3 could-not-evaluate",
+        "Test-HeldWithBoard and the CONTENT-CURRENCY rule, which own a different held reason",
+        "Get-HeartbeatAlertSignature and the per-key dedup (backlog I225)"
+      ],
+
+      "freshness": "measured 2026-09-20 between 07:26 and 07:50 against origin/main cf1ca6fe9: the census file as rebuilt by audit-alert-census.ps1 at 07:20 (exit 0, ALERT-CENSUS-COMPLETE), grocery/alert-log.txt, the capture-watchdog logs of 2026-09-12 to 2026-09-19, and a live heartbeat run. The frozen numbers come from the 2026-09-17 alert and cannot move. If a lane re-runs this after another outage, the live heartbeat output will differ; the self-test will not.",
+
+      "leaves_open": "the other half of the type, which downtime does not explain: on 4 of the 9 firing days in this window the issues were genuinely broken automations - 'TC Recall Sleep 0435' result 1 on 09-11, 09-12, 09-13 and 09-14, 'TC Graph Nightly Matching' commit refused on 09-13 and 09-14, 'TC Daemon Battery 0230' rc 2 on 09-13 and 09-14. Each is a real failure in its own job, each still pages exactly as before, and none is touched here. The recall-sleep half is separately ranked 4 in this census ('the knowledge store s nightly pass went red', 8 days) and is the natural next prevention target.",
+      "leaves_open_occurrences": 4,
+      "leaves_open_followup": "2026-09-20-1b8544",
+
+      "resolution_note": "Prevention for the top recurring type. The largest single firing in the 14-day window (2026-09-17, ten issues) was one cause wearing ten faces: the box did not run on 09-15 or 09-16, the heartbeat's own task made up its missed 10:30 occurrence 12 minutes after resume, and it graded every sibling before any of them had had their make-up run. Seven of the ten needed nothing from a human. health-heartbeat now stamps every live run, measures the gap between two stamps as machine downtime, and subtracts exactly that from an age before comparing it to tolerance; the other three issues of that morning still page, and so does anything that was stale before the box went down. Fifteen new frozen self-test cases, six of them clean twins.",
+
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "true, and every leg of it was checked rather than taken from the dispatch. (a) The census was rebuilt first: audit-alert-census.ps1 exit 0, verdict line ALERT-CENSUS-COMPLETE quiet7=2/7 alerts30=338 returns30=118 recurring=30. (b) The ranking came from Get-AlertCensusTypeDays, not a count of mine: three types tie at rank 1 on 9 days. (c) The two co-rank-1 types were checked for prevention items by reading plan-*.json: one done, one needs-more-time, so both are owned. (d) The outage itself was verified from the absence of capture-watchdog logs for 09-15 and 09-16 and the 05:12:20 transcript start on 09-17, not inferred from the alert. (e) StartWhenAvailable was read out of the committed XMLs rather than assumed.",
+      "deviation": "one, and it NARROWS nothing: the run stamp is written on the BLIND exit too, which was not in the first cut. Without it a run that exits 3 on an unreadable registry would leave no stamp although the box was up, and the next run would read that blind day as downtime and could hold a real staleness for one run. Closing it moved Write-HbRunStamp and the stamp path up beside that exit, so there is one writer of the file rather than two shapes of the same fact. The one unstamped path left is deliberate and documented: a copy run from a LINKED WORKTREE exits BLIND before it can name a production root and must not write the production box's stamp; the production task writes its own that day. Second, smaller: the StartWhenAvailable element is absent from ops/scheduled-tasks/tc-approvals-page.xml (1 of 11 definitions, the newest, added 7f7af2e99 on 2026-09-18), so that one task will not make up a missed occurrence. It is NOT fixed here because changing a committed definition without re-registering the live task creates two copies of a fact about the scheduler, and re-registering is a live-scheduler change outside this item's blast radius. It is recorded in open_questions_for_brad as a ruling on whether the lane may touch the registered tasks.",
+      "shipped_commit": "the commit subject-lined 'Weekly lane 2026-09-20 prevention: a staleness the machine could not have avoided is held, not paged' on main"
+    }
+  ],
+
+  "ship_sequence": [
+    "audit-alert-census.ps1 (exit 0, verdict line read) and the 14-day ranking through Get-AlertCensusTypeDays",
+    "read the two co-rank-1 types' prevention items out of grocery/triage-plans/plan-*.json before choosing",
+    "verify the founding outage from the capture-watchdog logs and the alert log, not from the alert text",
+    "edit grocery/health-heartbeat.ps1 (RESUME-GRACE block, the two wiring sites, the three stamp writes) and .gitignore",
+    "grocery\\health-heartbeat.ps1 -SelfTest (MUST be 0, and the count must have grown by the new cases)",
+    "grocery\\health-heartbeat.ps1 live on the main checkout (reads the real scheduler; expect the same verdict as before the change)",
+    "commit health-heartbeat.ps1, .gitignore and this plan by explicit pathspec, never git add -A: another session has graph/** and two grocery/out files STAGED in this checkout",
+    "push; the pre-push hook runs ops\\run-gates.ps1",
+    "validate-triage-plan.ps1 -Plan <this> -OpenIds prevention:... then -Closing (both MUST be 0)",
+    "write grocery/triage-weekly-lane-stamp.txt only after -Closing exits 0"
+  ],
+
+  "open_questions_for_brad": [
+    {
+      "id": "Q-2026-09-20-task-settings",
+      "question": "May the weekly lane change a REGISTERED scheduled task's settings, or only its committed definition? ops/scheduled-tasks/tc-approvals-page.xml is the one of eleven committed definitions with no StartWhenAvailable element, so that task alone will never make up an occurrence it misses to an outage - the exact failure this week's prevention is about. Editing the XML alone leaves the file and the live task disagreeing, which is this estate's own two-copies-of-a-fact trap; making them agree means running ops/install-ops-tasks.ps1 -Only 'TC Approvals Page', which re-registers a live task. Nothing in the lane's rules says whether that is inside it.",
+      "why_it_is_a_ruling": "not a technical unknown. The change is one element and the installer already exists; the question is whether a budgeted single-agent lane with no reviewer may alter the live scheduler, which is a preference about blast radius and has no measurement that settles it.",
+      "measurement": "1 of 11 committed definitions affected. Occurrences of the consequence measured so far: 0 - no page has been traced to TC Approvals Page missing an occurrence."
+    }
+  ]
+}

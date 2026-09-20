@@ -69,9 +69,22 @@ $cfg  = Read-JsonFile (Join-Path $root 'expected-automations.json')
 # Read-JsonFile now THROWS on a missing or unreadable file, which closes half of it. The other half is a
 # file that parses and declares nothing - a truncated edit, a merge that lost the arrays - and no throw
 # can catch that. So count what was declared, and refuse to grade an empty exam.
+# THE RUN STAMP (RESUME-GRACE, see the block further down). Declared here because the BLIND exit below must
+# stamp as well: that run DID execute on this box and only refused to GRADE, so leaving it unstamped would
+# let the next run read a blind day as machine downtime. One writer for the file, no second shape of the fact.
+$hbStampFile = Join-Path $root 'out\health-heartbeat-run.json'
+function Write-HbRunStamp {
+  param([string]$Path, [datetime]$Now, [string]$Note = 'health-heartbeat run stamp; the gap between two of these is how RESUME-GRACE measures machine downtime')
+  try {
+    $dir = Split-Path -Parent $Path
+    if ($dir -and -not (Test-Path -LiteralPath $dir)) { New-Item -ItemType Directory -Path $dir -Force -ErrorAction Stop | Out-Null }
+    [IO.File]::WriteAllText($Path, (@{ ran = $Now.ToString('o'); note = $Note } | ConvertTo-Json -Compress), (New-Object Text.UTF8Encoding($false)))
+  } catch { }
+}
 $declared = @($cfg.windows_tasks).Count + @($cfg.output_files).Count + @($cfg.output_globs).Count
 if ($declared -eq 0) {
   Write-Output 'health-heartbeat: BLIND - expected-automations.json declares no tasks, files or globs, so a clean report here would mean nothing. Exit 3 (could-not-evaluate), never 0.'
+  Write-HbRunStamp -Path $hbStampFile -Now $now
   exit 3
 }
 $issues = New-Object System.Collections.Generic.List[string]
@@ -83,7 +96,9 @@ function Add-HbIssue([string]$Class, [string]$Subject, [string]$Text) {
   $issues.Add($o.text); $issueObjs.Add($o)
 }
 $okLines = New-Object System.Collections.Generic.List[string]
-$TASK_NOT_YET_RUN = 267011   # 0x00041303 SCHED_S_TASK_HAS_NOT_RUN
+# Declared here, not beside the output loop, because the task loop holds lines too (see RESUME-GRACE).
+$heldLines = New-Object System.Collections.Generic.List[string]
+$TASK_NOT_YET_RUN = 267011  # 0x00041303 SCHED_S_TASK_HAS_NOT_RUN
 $TASK_RUNNING     = 267009   # 0x00041301 SCHED_S_TASK_RUNNING (transient: reported as LastTaskResult while a run is in flight)
 
 # >>> PROOF-FRESHNESS  (test-proof-freshness.ps1 extracts and executes THIS text verbatim - keep the sentinels)
@@ -401,6 +416,72 @@ function Get-HeartbeatAlertSignature([object[]]$Issues) {
 }
 # <<< ALERT-SIGNATURE
 
+# >>> RESUME-GRACE  (2026-09-20, weekly-lane prevention for the "Automation silent-death" class)
+# A STALENESS CONDITION IS NOT A DEATH WHEN THE MACHINE WAS NOT RUNNING, AND THE FIRST RUN BACK IS THE
+# WORST MOMENT TO GRADE ONE. Founding case 2026-09-17: the box was not running on 09-15 or 09-16 (no
+# capture-watchdog log exists for either day), it came back at 05:12 on 09-17, and this heartbeat's own
+# missed 10:30 occurrence made itself up at 05:12:20 under StartWhenAvailable - minutes after resume, and
+# BEFORE any of the daily tasks and outputs it grades had had their own make-up run. It paged TEN issues,
+# every one of them "63 to 69 hours stale", and the correct human action for seven of them was to wait an
+# hour. A condition that is real, correctly detected and requires nothing is not a page.
+#
+# THE KNOB IS DURATION, NOT THE CUTOFF. Widening max_age_hours would hide a real outage on every ordinary
+# morning, permanently, to buy quiet on the rare one. Instead the run measures how long the MACHINE was
+# unavailable and subtracts exactly that from the age before comparing, so an item whose age MINUS the
+# outage is still over tolerance was already stale before the box went down and pages exactly as it always
+# did. Nothing is suppressed: a held item prints its own line with the arithmetic, and the next run - by
+# which time the make-up runs have happened - grades it with no outage to subtract.
+#
+# WHERE THE OUTAGE COMES FROM. This script stamps out\health-heartbeat-run.json at the END of every live
+# run (never under -SelfTest, and last, so a run that died half way through does not claim the box was up).
+# The heartbeat is a daily task under StartWhenAvailable, so a gap materially wider than its own period is
+# time the machine was not running. NO STAMP MEANS NO GRACE: an absent, unreadable or future-dated stamp
+# grades every row exactly as it did before this block existed, which is the fail-closed direction. The
+# excused outage is capped, so a stamp that stopped being written cannot excuse an unbounded age.
+# THE INVERSE RISK IS CLOSED, NOT NAMED: a run that exits BLIND on an empty registry ran on this box and only
+# refused to GRADE, so it stamps too (see the declaration beside that exit), and the next run does not read a
+# blind day as downtime. The ONE unstamped path left is deliberate - a copy run from a linked worktree exits
+# BLIND before it can name a production root, and it must not write the production box's stamp. The production
+# task runs from the main checkout and writes its own stamp that same day.
+#
+# ONLY WALL-CLOCK STALENESS IS ELIGIBLE. TASK MISSING, TASK DISABLED, TASK NEVER RAN, TASK FAILED,
+# TASK UNWATCHED, RUN DID NOT LAND, OUTPUT MISSING and OUTPUT NOT CURRENT are not ages: none of them is
+# explained by downtime, and none of them is touched here. On the founding day this leaves the three
+# issues a human actually had to act on and removes the seven that Windows was about to fix by itself.
+$HB_PERIOD_HOURS = 24.0
+$HB_MAX_EXCUSED_OUTAGE_HOURS = 96.0
+function Read-HbRunStamp {
+  param([string]$Path)
+  if (-not $Path -or -not (Test-Path -LiteralPath $Path)) { return $null }
+  try {
+    $o = ([IO.File]::ReadAllText($Path)) | ConvertFrom-Json
+    $s = [string]$o.ran
+    if (-not $s) { return $null }
+    return [datetime]::Parse($s, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::RoundtripKind)
+  } catch { return $null }
+}
+# Write-HbRunStamp and $hbStampFile are declared ABOVE, beside the BLIND exit, because that exit has to stamp
+# too and it happens before this block runs. One writer, so the note and the shape cannot drift apart.
+function Get-HbMachineOutage {
+  param($PrevRan, [datetime]$Now, [double]$PeriodHours = 24.0, [double]$CapHours = 96.0)
+  if (-not $PrevRan) { return [pscustomobject]@{ known = $false; hours = 0.0; prev = $null; why = 'no previous run stamp, so no age is excused' } }
+  $prev = [datetime]$PrevRan
+  if ($prev -gt $Now) { return [pscustomobject]@{ known = $false; hours = 0.0; prev = $prev; why = 'the run stamp is dated in the future, so it is not evidence' } }
+  $gapH = [math]::Round(($Now - $prev).TotalHours, 1)
+  $outH = [math]::Round($gapH - $PeriodHours, 1)
+  if ($outH -le 0) { return [pscustomobject]@{ known = $true; hours = 0.0; prev = $prev; why = '' } }
+  if ($outH -gt $CapHours) { $outH = $CapHours }
+  return [pscustomobject]@{ known = $true; hours = $outH; prev = $prev; why = ("first heartbeat since {0}, a {1}h gap on a {2}h schedule, so the machine was unavailable for about {3}h" -f $prev.ToString('yyyy-MM-ddTHH:mm'), $gapH, $PeriodHours, $outH) }
+}
+function Test-HbOutageExplainsAge {
+  param([double]$AgeH, [double]$MaxH, $Outage)
+  if (-not $Outage -or -not $Outage.known -or $Outage.hours -le 0) { return [pscustomobject]@{ held = $false; detail = '' } }
+  $adj = [math]::Round($AgeH - $Outage.hours, 1)
+  if ($adj -gt $MaxH) { return [pscustomobject]@{ held = $false; detail = '' } }
+  return [pscustomobject]@{ held = $true; detail = ("{0}h old, of which {1}h is machine downtime ({2}h adjusted, tolerance {3}h) - {4}" -f $AgeH, $Outage.hours, $adj, $MaxH, $Outage.why) }
+}
+# <<< RESUME-GRACE
+
 if ($SelfTest) {
   # HERMETIC. Frozen transcripts under regression-inputs\, no scheduler, no mail. The two live reads at the end are
   # labelled. Every case runs under Stop inside a try whose catch is a counted failure.
@@ -530,12 +611,47 @@ if ($SelfTest) {
       HbCase 'CLEAN TWIN the main checkout grades itself' ((-not $pr3.linked) -and (-not $pr3.blind) -and $pr3.repo -eq $wtMain) ($pr3.repo)
     } finally { Remove-Item -LiteralPath $wtBase -Recurse -Force -ErrorAction SilentlyContinue }
     HbCase 'MUST FIRE  the live task loop ages a stale task through Get-HbTriggerVerdict' ($hbSrc.Contains('$tv = Get-Hb' + 'TriggerVerdict -Triggers $task.Triggers'))
+    # ---- RESUME-GRACE. Numbers FROZEN from the founding page of 2026-09-17 05:12 (ten issues, seven of them
+    #      nothing but "the box was off on 09-15 and 09-16"). The previous heartbeat ran 2026-09-14 10:30.
+    $rgNow = [datetime]'2026-09-17T05:12:00'
+    $rgPrev = [datetime]'2026-09-14T10:30:00'
+    $rgOut = Get-HbMachineOutage -PrevRan $rgPrev -Now $rgNow -PeriodHours 24.0 -CapHours 96.0
+    HbCase 'MUST FIRE  a 66.7h gap on a 24h schedule reads as about 42.7h of machine downtime' ($rgOut.known -and $rgOut.hours -eq 42.7) ('known=' + $rgOut.known + ' hours=' + $rgOut.hours)
+    $rgAd = Test-HbOutageExplainsAge -AgeH 64.2 -MaxH 30 -Outage $rgOut
+    HbCase 'MUST FIRE  TC Grocery Ad Pulls 0700 at 64.2h/30h is HELD, because 21.5h of it is inside tolerance' ($rgAd.held -and $rgAd.detail -match '21\.5h adjusted') ($rgAd.detail)
+    $rgFeed = Test-HbOutageExplainsAge -AgeH 69.1 -MaxH 30 -Outage $rgOut
+    HbCase 'MUST FIRE  smp-feed.json at 69.1h/30h is HELD by the same outage' ($rgFeed.held) ($rgFeed.detail)
+    $rgProbe = Test-HbOutageExplainsAge -AgeH 57.2 -MaxH 14 -Outage $rgOut
+    HbCase 'CLEAN TWIN the produce probe at 57.2h/14h still PAGES on that same morning: 14.5h adjusted is over its tolerance' (-not $rgProbe.held) ($rgProbe.detail)
+    $rgOld = Test-HbOutageExplainsAge -AgeH 120.0 -MaxH 30 -Outage $rgOut
+    HbCase 'CLEAN TWIN an output already stale BEFORE the outage (120h, 77.3h adjusted) still pages' (-not $rgOld.held) ($rgOld.detail)
+    $rgNoOut = Get-HbMachineOutage -PrevRan ($rgNow.AddHours(-24)) -Now $rgNow -PeriodHours 24.0 -CapHours 96.0
+    HbCase 'CLEAN TWIN an ordinary morning (24h gap) excuses nothing, so 64.2h/30h pages exactly as before' ($rgNoOut.known -and $rgNoOut.hours -eq 0.0 -and -not (Test-HbOutageExplainsAge -AgeH 64.2 -MaxH 30 -Outage $rgNoOut).held) ('hours=' + $rgNoOut.hours)
+    $rgNoStamp = Get-HbMachineOutage -PrevRan $null -Now $rgNow -PeriodHours 24.0 -CapHours 96.0
+    HbCase 'CLEAN TWIN no run stamp means NO grace: every age is graded exactly as it was before this block' ((-not $rgNoStamp.known) -and -not (Test-HbOutageExplainsAge -AgeH 64.2 -MaxH 30 -Outage $rgNoStamp).held) ($rgNoStamp.why)
+    $rgFuture = Get-HbMachineOutage -PrevRan ($rgNow.AddHours(5)) -Now $rgNow -PeriodHours 24.0 -CapHours 96.0
+    HbCase 'CLEAN TWIN a future-dated stamp is not evidence and excuses nothing' ((-not $rgFuture.known) -and $rgFuture.hours -eq 0.0) ($rgFuture.why)
+    $rgCap = Get-HbMachineOutage -PrevRan ($rgNow.AddDays(-30)) -Now $rgNow -PeriodHours 24.0 -CapHours 96.0
+    HbCase 'MUST FIRE  a stamp that stopped being written cannot excuse an unbounded age: the outage is capped at 96h' ($rgCap.hours -eq 96.0) ('hours=' + $rgCap.hours)
+    $rgRound = Test-HbOutageExplainsAge -AgeH 72.7 -MaxH 30 -Outage $rgOut
+    HbCase 'CLEAN TWIN 30.0h adjusted is inside tolerance and 30.1h is not, so the boundary is <= not <' ($rgRound.held -and -not (Test-HbOutageExplainsAge -AgeH 72.8 -MaxH 30 -Outage $rgOut).held) ($rgRound.detail)
+    # ---- THE WIRING, needles built by concatenation so these lines are not their own matches.
+    HbCase 'MUST FIRE  the task loop holds a stale task the outage explains instead of paging it' ($hbSrc.Contains('$og = Test-HbOutage' + 'ExplainsAge -AgeH $ageH -MaxH ([double]$t.max_age_hours)'))
+    HbCase 'MUST FIRE  Check-Age holds a stale OUTPUT the outage explains instead of paging it' ($hbSrc.Contains('$og = Test-HbOutage' + 'ExplainsAge -AgeH $ageH -MaxH ([double]$maxH)'))
+    HbCase 'MUST FIRE  the outage is read from the stamp BEFORE any grading' ($hbSrc.Contains('$hbOutage = Get-HbMachine' + 'Outage -PrevRan (Read-HbRunStamp $hbStampFile)'))
+    $rgStamps = ([regex]::Matches($hbSrc, [regex]::Escape('Write-HbRun' + 'Stamp -Path $hbStampFile'))).Count
+    HbCase 'MUST FIRE  all THREE live exits write the run stamp - healthy, issues, and BLIND, which ran on this box and only refused to grade' ($rgStamps -eq 3) ($rgStamps.ToString())
+    HbCase 'MUST FIRE  OUTPUT NOT CURRENT, TASK MISSING and TASK UNWATCHED are NOT eligible for the grace' (-not ($hbSrc -match 'Add-HbIssue ''OUTPUT NOT CURRENT''[^\r\n]*\$og') -and -not ($hbSrc -match 'Add-HbIssue ''TASK UNWATCHED''[^\r\n]*\$og'))
   } catch { HbCase ('a case threw: ' + $_.Exception.Message) $false }
 
   Write-Output ("health-heartbeat self-test: {0} case(s), {1} failed" -f $hbCases, $hbFail)
   if ($hbFail) { exit 1 }
   exit 0
 }
+
+# How long was this machine unavailable since the last heartbeat? Read BEFORE any grading, written after
+# all of it (RESUME-GRACE). A missing stamp leaves $hbOutage.known false and nothing is excused.
+$hbOutage = Get-HbMachineOutage -PrevRan (Read-HbRunStamp $hbStampFile) -Now $now -PeriodHours $HB_PERIOD_HOURS -CapHours $HB_MAX_EXCUSED_OUTAGE_HOURS
 
 # ---- Windows scheduled tasks (silent death = deleted / disabled / long-since-run) ----
 foreach ($t in @($cfg.windows_tasks)) {
@@ -564,8 +680,10 @@ foreach ($t in @($cfg.windows_tasks)) {
   if ([string]$task.State -eq 'Running' -or $res -eq $TASK_RUNNING) { $okLines.Add(("{0,-38} currently running (OK)" -f $name)) }
   elseif ($ageH -gt [double]$t.max_age_hours) {
     $tv = Get-HbTriggerVerdict -Triggers $task.Triggers -LastRunTime $last -Now $now
+    $og = Test-HbOutageExplainsAge -AgeH $ageH -MaxH ([double]$t.max_age_hours) -Outage $hbOutage
     if ($tv.state -eq 'dormant') { $okLines.Add(("{0,-38} ok dormant until {1} (every enabled trigger starts after its last run, {2}h ago)" -f $name, ([datetime]$tv.until).ToString('yyyy-MM-ddTHH:mm'), $ageH)) }
     elseif ($tv.state -eq 'expired') { Add-HbIssue 'TASK STALE' $name ((Format-HbTaskStale $name $ageH $t.max_age_hours $t.why) + (' - trigger window expired ' + ([datetime]$tv.ended).ToString('yyyy-MM-ddTHH:mm') + ' and no trigger starts in the future')) }
+    elseif ($og.held) { $heldLines.Add(("{0,-38} {1}" -f $name, $og.detail)) }
     else { Add-HbIssue 'TASK STALE' $name (Format-HbTaskStale $name $ageH $t.max_age_hours $t.why) }
   }
   elseif ($res -ne 0 -and $t.allow_nonzero_exit) {
@@ -645,7 +763,12 @@ if (@($cfg.queues).Count) {
 function Check-Age($path, $maxH, $why, $label, $subject = $label) {
   if (-not (Test-Path $path)) { Add-HbIssue 'OUTPUT MISSING' $subject "OUTPUT MISSING: $label ($path) does not exist - $why"; return }
   $ageH = [math]::Round(($now - (Get-Item $path).LastWriteTime).TotalHours, 1)
-  if ($ageH -gt [double]$maxH) { Add-HbIssue 'OUTPUT STALE' $subject (Format-HbOutputStale $label $ageH $maxH $why) }
+  if ($ageH -gt [double]$maxH) {
+    # RESUME-GRACE: an age that is entirely explained by machine downtime is held, not paged.
+    $og = Test-HbOutageExplainsAge -AgeH $ageH -MaxH ([double]$maxH) -Outage $hbOutage
+    if ($og.held) { $heldLines.Add(("{0,-38} {1}" -f $label, $og.detail)) }
+    else { Add-HbIssue 'OUTPUT STALE' $subject (Format-HbOutputStale $label $ageH $maxH $why) }
+  }
   else { $okLines.Add(("{0,-38} {1}h fresh" -f $label, $ageH)) }
 }
 # A row that declares currency_field proves its currency from its own CONTENT and the mtime rule is not
@@ -657,7 +780,6 @@ $boardWeek = Get-BoardWeek $repo
 # verdict excuses nothing, so every week-behind row pages exactly as it did before (Test-HeldWithBoard).
 $hbVerdict = $null
 try { $ErrorActionPreference = 'Stop'; . (Join-Path $repo 'lib\chain-verdict-lib.ps1'); $hbVerdict = Read-ChainVerdictRecord -Repo $repo } catch { $hbVerdict = $null } finally { $ErrorActionPreference = 'Continue' }
-$heldLines = New-Object System.Collections.Generic.List[string]
 foreach ($f in @($cfg.output_files)) {
   $fPath  = Join-Path $repo ([string]$f.path)
   $fLabel = [IO.Path]::GetFileName([string]$f.path)
@@ -702,11 +824,12 @@ Write-Output ("health-heartbeat  " + $now.ToString('yyyy-MM-dd HH:mm'))
 $okLines | ForEach-Object { Write-Output ("  ok    " + $_) }
 $heldLines | ForEach-Object { Write-Output ("  held  " + $_) }
 if ($issues.Count -eq 0) {
-  $heldNote = if ($heldLines.Count) { " {0} more held with a board guards refused today (not dead; see the held lines)." -f $heldLines.Count } else { '' }
+  $heldNote = if ($heldLines.Count) { " {0} more held, by a board guards refused today or by machine downtime (not dead; see the held lines)." -f $heldLines.Count } else { '' }
   Write-Output ("HEALTHY: {0} automation(s)/output(s) all fresh.{1}" -f $okLines.Count, $heldNote)
   # A healthy -Alert run forgets the last outage, so the same outage coming back later pages again (ALERT-SIGNATURE).
   $sigF = Join-Path $root 'out\health-heartbeat.sig'
   if ($Alert -and (Test-Path $sigF)) { Remove-Item -LiteralPath $sigF -Force -ErrorAction SilentlyContinue }
+  Write-HbRunStamp -Path $hbStampFile -Now $now   # LAST, so a run that died half way does not claim the box was up
   exit 0
 }
 Write-Output ("SILENT-DEATH / STALE: {0} issue(s):" -f $issues.Count)
@@ -722,4 +845,5 @@ if ($Alert) {
     } catch {}
   }
 }
+Write-HbRunStamp -Path $hbStampFile -Now $now   # LAST, so a run that died half way does not claim the box was up
 exit 2

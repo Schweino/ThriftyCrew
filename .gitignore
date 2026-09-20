@@ -230,6 +230,11 @@ __pycache__/
 # without this line every daily and weekly run would commit a churning derived file that nothing reads back -
 # the same regenerable-output rule that already covers name-drift.json and link-audit.json directly above.
 /grocery/out/arrivals-docket.json
+# health-heartbeat's run stamp (RESUME-GRACE, 2026-09-20): per-BOX state, written at the end of every live
+# run, and the gap between two of them is how the next run measures machine downtime. A committed copy would
+# travel between checkouts and describe a machine it was never written on, which is exactly the fact this
+# file is supposed to carry. Same per-box rule as capture-evictions-stamp.json above.
+/grocery/out/health-heartbeat-run.json
 /grocery/out/url-worklist.json
 # the walled-store rescue worklists: build-rescue-worklist.ps1 rewrites all four from scratch on every ad
 # cycle out of the comparison boards (ignored above) plus the capture files, and their whole job is to be
