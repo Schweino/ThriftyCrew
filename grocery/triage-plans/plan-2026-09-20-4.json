@@ -1,0 +1,397 @@
+{
+ "generated": "2026-09-20T13:55:00",
+ "round": 3,
+ "board_week": "2026-09-20",
+ "queue_ids_seen": [
+  "2026-09-18-37ac63",
+  "2026-09-18-55b7aa",
+  "2026-09-18-8491bf",
+  "2026-09-18-a0c785",
+  "2026-09-18-ceab00",
+  "2026-09-18-de39ec",
+  "2026-09-18-f90ba6",
+  "2026-09-19-0b2f1e",
+  "2026-09-19-2a0748",
+  "2026-09-19-2c96d8",
+  "2026-09-19-405c73",
+  "2026-09-19-4f01f6",
+  "2026-09-19-4fc24c",
+  "2026-09-19-6f90ee",
+  "2026-09-19-8a3090",
+  "2026-09-19-b66b54",
+  "2026-09-19-c9f0f3",
+  "2026-09-19-dc1b5b",
+  "2026-09-19-fccb69",
+  "2026-09-20-1b8544",
+  "2026-09-20-588caa",
+  "2026-09-20-6c14f6",
+  "2026-09-20-7bac4b",
+  "2026-09-20-bff4ef",
+  "2026-09-20-ca2591"
+ ],
+ "routing_artifact": "plan-2026-09-20-4.routing.json",
+ "note": "RESUME RUN, money lane, no reviewer. Every item here was already diagnosed and had most of its root fix shipped; each root_cause is carried forward VERBATIM from the plan that first wrote it. The run's instruction was to re-measure each against comparison-2026-09-20 before acting, and that is what changed the outcome: two of the three threads no longer reproduce, and the one that does reproduces worse.",
+ "items": [
+  {
+   "queue_id": "2026-09-18-f90ba6",
+   "subject": "Grocery: GUARDS FAILED - board not published - 2026-09-18 (RESUME: the beverage-class widening half)",
+   "classification": "wrong-product",
+   "evidence": [
+    "DISPATCHED PREMISE (from b66b54.leaves_open (b), itself carried verbatim from f90ba6): '20 of the 21 non-drink Snacks & Drinks commodities still carry no beverage class (apply_ids reaches pistachios only)'. RE-MEASURED 2026-09-20 against the live files: FALSE.",
+    "grocery/category-excludes.json apply_ids[0].ids lists 25 ids, not 1: the 21 non-drink 'Snacks & Drinks' commodities (tortilla-chips, potato-chips, crackers, cheese-crackers, pretzels, microwave-popcorn, cookies, sandwich-cookies, granola-bars, protein-bars, fruit-snacks, toaster-pastries, granola, rice-cakes, beef-jerky, fruit-cups, pudding-cups, gelatin, gingersnaps, corn-chips, pistachios) PLUS the four nuts that sit in 'Coffee, Oils & Spreads' (peanuts, almonds, walnuts, mixed-nuts). Shipped 2026-09-18 in commit bec35ff4e under queue 2026-09-18-55b7aa.",
+    "THE BAKE IS LIVE: all 25 ids carry all 30 tokens of classes.beverage in commodities.json (checked token by token, 30/30 on every id); apply-category-excludes.ps1 -WhatIf reports 'category-exclude library: +0 patterns across 0 commodities', so the baked state and the library agree.",
+    "ALL THREE READERS union the block: apply-category-excludes.ps1:40, audit-food-category.ps1:50, build-vet-sheet.ps1:41.",
+    "protein-bars IS in scope. The dispatch asked whether to release the gatorade token or leave protein-bars out; the question is already answered on main: classes.beverage carries the gatorade token with a negative lookahead for protein bar (narrowed, not excluded) and classes.snack_carrier gained its own protein-bar token so Fruit/Vegetables/Meat lost no reach.",
+    "BOARD TODAY (comparison-2026-09-20): the 25 commodities hold 143 priced cells and 0 of them matches any of the 30 beverage tokens. audit-food-category exits 0: 'ok - no food commodity matched a beverage/baby-food/pet/household/bakery-carrier/dairy-carrier/candy product (2481 priced cells scanned)'.",
+    "THE RETURN MECHANISM, which is the only thing still live: apply_ids[0].note still read 'Widening to all 21 non-drink Snacks & Drinks commodities (variant B3) was measured and REJECTED', directly contradicting the 25 ids beside it. plan-2026-09-19.json and plan-2026-09-20-2.json both quoted that prose as the open residual instead of reading the data, which is how one closed condition reopened on three consecutive days."
+   ],
+   "surface_fix": {
+    "what": "correct the stale apply_ids note so it records what actually shipped, and warn the next reader off quoting the superseded B3 rejection",
+    "files": [
+     "grocery/category-excludes.json"
+    ],
+    "exact_change": "replace the trailing sentence of apply_ids[0].note (the 'Widening to all 21 ... REJECTED' claim) with the record of the 2026-09-18 widening, the narrowed-token release that unblocked it, and the 2026-09-20 re-measurement. PROSE ONLY: no id, class or token is touched, and the bake re-reads +0."
+   },
+   "root_cause": "CARRIED FORWARD VERBATIM from plan-2026-09-18.json item 2026-09-18-f90ba6, clause (b): The wrong-class library scopes on the deals page's display taxonomy, so a display bucket that mixes nuts with drinks ('Snacks & Drinks', 39 commodities, 21 non-drink) can never carry the beverage class, and audit-food-category is structurally blind to a beverage crowning any of those 21; 400 of 592 commodities carry no per-commodity beverage exclude at all. [money lane 2026-09-20: clauses (a) the cents-token parse and (c) the definitional-before-sanity refusal order were closed by the developer's 2026-09-18 deviation and are not reopened here.]",
+   "root_fix": {
+    "what": "id-scoped classes (apply_ids) so the beverage class reaches a commodity the display taxonomy cannot express - ALREADY SHIPPED 2026-09-18 and verified live today; today's change is to stop the file's own prose asserting the opposite of its data",
+    "files": [
+     "grocery/category-excludes.json"
+    ],
+    "exact_change": "as surface_fix. The mechanism (apply_ids + the three readers + the narrowed gatorade token + snack_carrier's protein-bar token) needed no further code: it was complete before this run started."
+   },
+   "leaves_open": "241 non-drink commodities in five OTHER display buckets (Dairy & Eggs 25, Canned & Soup 59, Sauces & Condiments 61, Baking & Spices 78, Coffee, Oils & Spreads 14) still carry no beverage class, so audit-food-category cannot see a beverage on them; each bucket needs its own routing measurement before a widening.",
+   "leaves_open_occurrences": "0 beverage-token hits on those 241 commodities today, and 0 on the 2026-09-18 whole-board scan. The class has happened once in this estate (the pistachio beverage, 2026-09-13..09-18, closed by f90ba6). SEPARATELY MEASURED TODAY and NOT part of this residual: audit-food-category skips 325 of 2,806 priced cells for 'no class list', and all 325 are Household 190 / Personal Care 87 / Pet 25 / Baby 23 - categories the audit skips by design because the category IS the class. That is not hidden blindness.",
+   "leaves_open_followup": "2026-09-18-a0c785",
+   "prior_closes": [
+    "2026-09-19-b66b54"
+   ],
+   "prevention": {
+    "source": [
+     "grocery/apply-category-excludes.ps1",
+     "grocery/audit-food-category.ps1",
+     "grocery/build-vet-sheet.ps1",
+     "grocery/category-excludes.json"
+    ],
+    "what": "the producers of the class scope already union apply_ids and are verified live; what returned was the FILE'S OWN PROSE outliving its data, so the prevention is to make the note state the shipped state and forbid quoting the superseded rejection",
+    "exact_change": "apply_ids[0].note now records the 2026-09-18 widening, names the narrowed-token release, carries the 2026-09-20 re-measurement (25 ids, 30/30 tokens, +0 bake, 143 cells, 0 beverages) and says in terms: DO NOT READ THAT REJECTION AS STILL LIVE, re-measure this list before quoting it. A bake-drift check was considered and REJECTED as decorative: apply-category-excludes -WhatIf already reads +0, so a drift gate could never have fired on this bug."
+   },
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "the change is a JSON note string; apply-category-excludes.ps1 -WhatIf re-read after the edit reports '+0 patterns across 0 commodities', so no commodity's include or exclude list changed and no name can route differently. audit-food-category re-run over comparison-2026-09-20 + recipe-board: exit 0, 2,481 priced cells scanned, identical to before the edit.",
+    "affected_now": 0,
+    "names": [],
+    "risk": "none: no pattern, id or class was added, removed or altered. The only bytes that changed are inside a note field no reader parses as a rule.",
+    "cell_effects": []
+   },
+   "claimed_by_earlier": [],
+   "freshness": "measured 2026-09-20 13:00-13:40 against comparison-2026-09-20.json (built 12:06, week_of 2026-09-20), grocery/category-excludes.json and grocery/commodities.json at HEAD 9a2a80b2e plus today's money-lane commit 5d42fb944. The board republished once earlier today; this item changes no rule so a further rebuild cannot move it.",
+   "proof": {
+    "guard_or_fixture": "grocery/test-auditors.ps1 unit u143b-d5d-must-fire-for-the-widened-beverage-scope (shipped 2026-09-18 with this widening) and audit-food-category.ps1 over the live board",
+    "must_fire_case": "u143b-d5d: a Gatorade drink placed on protein-bars AND on tortilla-chips must make audit-food-category exit 2 as class=beverage, and 'Special K Protein Bars, Strawberry, 18 ct.' on strawberries as class=snack_carrier. Both commodities are members of the widening this item was asked to perform, so the fixture cannot pass if apply_ids loses the 20 snack ids.",
+    "clean_twin": "u143b's MUST NOT FIRE arm: ten real snack cells frozen off the 2026-09-18 board plus the Special K bar on protein-bars stay at exit 0; and on the old Fruit scope a Gatorade drink still fires as beverage while a Gatorade protein bar now fires as snack_carrier, so narrowing the token cost no reach.",
+    "fixture_occurrences": [
+     "2026-09-18-f90ba6",
+     "2026-09-18-55b7aa",
+     "2026-09-19-b66b54"
+    ],
+    "commands": [
+     "powershell -File grocery\\apply-category-excludes.ps1 -WhatIf",
+     "powershell -File grocery\\audit-food-category.ps1",
+     "powershell -File grocery\\test-auditors.ps1"
+    ]
+   },
+   "rollback": "revert the single note hunk in category-excludes.json; no data, no rule and no board artifact is involved",
+   "do_not_touch": [
+    "apply_ids[0].ids and apply_ids[0].classes",
+    "classes.beverage and classes.snack_carrier token lists",
+    "out\\band-censorship-baseline.json",
+    "the coverage-ledger baselines"
+   ],
+   "resolution_note": "Does not reproduce. The widening this item was reopened for had already shipped on 2026-09-18 (commit bec35ff4e): apply_ids carries all 21 non-drink Snacks & Drinks commodities plus the 4 nuts, all 25 carry all 30 beverage tokens, all three readers union the block, and comparison-2026-09-20 has 0 beverage products across their 143 priced cells with audit-food-category at exit 0. What was still live was the block's own note, which still said the widening had been REJECTED; two later plans quoted that prose as the open residual, which is why one closed condition reopened three days running. Note corrected; no rule changed and the board was not rebuilt.",
+   "publish_batch": 1,
+   "status": "done",
+   "premise_verified": "FALSE, and this is the finding. The dispatched premise 'apply_ids reaches pistachios only, 20 of 21 still carry no beverage class' was stale by two days. Checked 2026-09-20: category-excludes.json apply_ids lists 25 ids; each carries 30/30 beverage tokens in commodities.json; apply-category-excludes -WhatIf bakes +0; audit-food-category exits 0 over 2,481 cells; the 25 commodities hold 143 priced cells with 0 beverage-token hits. The protein-bars/gatorade question the dispatch left to my judgement was likewise already settled on main by narrowing the class token rather than dropping protein-bars.",
+   "deviation": null,
+   "shipped_commit": "the commit titled 'Triage 2026-09-20-4 money lane: two of three resumed threads no longer reproduce, and the prose that kept one alive is corrected' (its hash is fixed only when the push lands: git log -1 --format=%H --grep='Triage 2026-09-20-4 money lane' origin/main)"
+  },
+  {
+   "queue_id": "2026-09-18-55b7aa",
+   "subject": "Grocery: beverage wrong-class guard still blind on 20 non-drink Snacks & Drinks commodities (residual of 2026-09-18-f90ba6)",
+   "classification": "superseded",
+   "evidence": [
+    "Same unresolved condition as 2026-09-18-f90ba6 in this plan: this id IS the widening, and it shipped on 2026-09-18 in commit bec35ff4e. Verified live today under f90ba6 (25 ids, 30/30 tokens each, three readers, 0 beverage products across 143 priced cells)."
+   ],
+   "root_cause": "see 2026-09-18-f90ba6 in this plan",
+   "resolution_note": "Superseded by 2026-09-18-f90ba6 in this plan, which carries the re-measurement of the widening this id shipped. No separate work performed.",
+   "status": "superseded",
+   "publish_batch": 1,
+   "leaves_open": "nothing",
+   "leaves_open_occurrences": 0,
+   "leaves_open_followup": null,
+   "premise_verified": "true: the queue already records this id resolved, and the widening it shipped is present and live in category-excludes.json today.",
+   "deviation": null,
+   "shipped_commit": "no separate change: superseded by 2026-09-18-f90ba6 in this plan"
+  },
+  {
+   "queue_id": "2026-09-19-b66b54",
+   "subject": "Grocery: GUARDS FAILED - board not published - 2026-09-19 (RESUME: the coverage-ledger half)",
+   "classification": "capture-gap",
+   "evidence": [
+    "RE-MEASURED 2026-09-20 13:01:09 by running grocery/audit-coverage-ledger.ps1. Verdict line: 'coverage-ledger: 4 coverage finding(s) across 16 rostered check(s); 16 row(s) evaluated.' COVERAGE-LEDGER-COMPLETE, exit 1.",
+    "REGRESSED audit-food-category - examined 2481, baseline 3037 (18.3% fewer, tolerance 10%). b66b54 recorded 2481 vs 3037. UNCHANGED.",
+    "REGRESSED audit-everyday-mismatch - examined 2212, baseline 2598 (14.9% fewer, tolerance 10%). b66b54 recorded 2211 vs 2598. Moved by one row.",
+    "REGRESSED build-rescue-worklist - examined 1219, baseline 1364 (10.6% fewer). b66b54 recorded 1219 vs 1364. UNCHANGED.",
+    "BLIND pull-regular-hyvee - examined 0 of 15 eligible. Detail: 'budget 15, asked 15, answered 0, 0 never asked (wall-clock cap)'. The population the three REGRESSED rows are measured against has NOT refilled.",
+    "INDEPENDENT CONFIRMATION, and the cheapest honest owner: open queue item 2026-09-20-7bac4b (capture watchdog, minted 10:34 today) already names this exact cause in its own body - 'NO FRESH ROWS: Hy-Vee has a headless lane and the 08:00 capture ran, but it contributed ZERO rows dated 2026-09-20 (newest 2026-09-19, 1d old). Its puller ran and saw nothing - check that lane before trusting its cells.'",
+    "audit-food-category's 325 skipped cells were checked in case they were hiding the shrink: they are Household 190, Personal Care 87, Pet 25, Baby 23, all skipped by design. The shrink is population, not scope."
+   ],
+   "surface_fix": {
+    "what": "REFUSE the -Accept, again. No file is written.",
+    "files": [],
+    "exact_change": "audit-coverage-ledger.ps1 -Accept is NOT run and the baselines are NOT lowered. Round 2 of today refused it for the same reason; this is the third refusal and the reason is unchanged."
+   },
+   "root_cause": "the coverage ledger grades each check against a frozen baseline of how many rows it examined, so when the POPULATION shrinks the ledger reads as a coverage regression even though every check read every row it had. Today's shrink is a capture gap, not a guard defect: Hy-Vee's Aisles Online lane ran, asked its whole 15-product budget and was answered 0 times, so the board carries fewer priced Hy-Vee cells for every downstream check to examine. Accepting a lower floor now would ratchet the guard's sensitivity down against a population expected to recover, which is the 'guard reads green while its defect ships' shape this estate has recorded 21 times.",
+   "root_fix_none_because": "the correct action for a coverage floor whose population has not refilled is to leave it failing, and it is already owned upstream: 2026-09-20-7bac4b names the Hy-Vee zero-rows lane. Lowering the floor IS the defect here, so there is no code change this item should make.",
+   "leaves_open": "the three REGRESSED coverage floors stay red until the Hy-Vee lane answers again (audit-food-category 2481 vs 3037, audit-everyday-mismatch 2212 vs 2598, build-rescue-worklist 1219 vs 1364); 1 of 16 rostered checks is BLIND at 0 of 15.",
+   "leaves_open_occurrences": "5 runs: 2026-09-19 16:36, 2026-09-19 17:22, 2026-09-20 08:14, today's round-2 guards pass, and this run's 13:01:09 read. Window: 2026-09-19 to 2026-09-20.",
+   "leaves_open_followup": "2026-09-20-7bac4b",
+   "prior_closes": [
+    "2026-09-18-f90ba6"
+   ],
+   "prevention": {
+    "source": [
+     "grocery/audit-coverage-ledger.ps1",
+     "grocery/capture-watchdog.ps1"
+    ],
+    "what": "the condition is detected correctly and already pages daily through two emitters, so prevention is to leave both firing and route the repair to the capture lane rather than to the floor",
+    "exact_change": "no change. audit-coverage-ledger keeps its baselines (no -Accept) and keeps exiting 1; capture-watchdog keeps paging the Hy-Vee zero-rows lane as 2026-09-20-7bac4b. Explicitly NOT changed: the three baselines and the BLIND row's denominator."
+   },
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "no rule, pattern or threshold was changed, so no product can route differently. Confirmed by re-running audit-food-category (exit 0, 2,481 cells) and audit-known-wrong (exit 0) after the read.",
+    "affected_now": 0,
+    "names": [],
+    "risk": "none: this item deliberately writes nothing. The risk it avoids is the measured one - accepting 3 lower floors would permanently reduce what three guards examine.",
+    "cell_effects": []
+   },
+   "claimed_by_earlier": [],
+   "freshness": "measured 2026-09-20 13:01:09 by a live run of audit-coverage-ledger.ps1 against out/coverage-ledger.json updated 13:01:09, whose pull-regular-hyvee row is stamped 12:01:13 today.",
+   "proof": {
+    "guard_or_fixture": "grocery/audit-coverage-ledger.ps1 itself, run live",
+    "must_fire_case": "with the population still short the three REGRESSED rows and the BLIND row must still be printed and the run must still exit non-zero: observed, 4 findings, exit 1, verdict line 'coverage-ledger: 4 coverage finding(s) across 16 rostered check(s)'.",
+    "clean_twin": "the 12 checks whose population is intact must still read ok and must NOT be dragged into the finding count: observed, 12 ok rows including guards/11-bakers-provenance 7382 of 7382 against baseline 7295, plus 4 POPULATION SHRANK notes correctly separated from the REGRESSED rows.",
+    "fixture_occurrences": [
+     "2026-09-18-f90ba6",
+     "2026-09-19-b66b54"
+    ],
+    "commands": [
+     "powershell -File grocery\\audit-coverage-ledger.ps1"
+    ]
+   },
+   "rollback": "nothing to roll back: no file was written",
+   "do_not_touch": [
+    "out\\coverage-baseline.json",
+    "the three REGRESSED baselines",
+    "audit-coverage-ledger.ps1 -Accept",
+    "the pull-regular-hyvee denominator"
+   ],
+   "resolution_note": "Re-measured and REFUSED for the third time, correctly. The three REGRESSED coverage floors (audit-food-category 2481 vs 3037, audit-everyday-mismatch 2212 vs 2598, build-rescue-worklist 1219 vs 1364) are unchanged, and their cause has not refilled: pull-regular-hyvee is still BLIND at 0 of 15 answered. No -Accept was run and no baseline was lowered. The repair belongs to the Hy-Vee capture lane, which open item 2026-09-20-7bac4b already names in its own body, so no new queue item was minted.",
+   "publish_batch": 1,
+   "status": "done",
+   "premise_verified": "true, re-verified today rather than assumed. The dispatch said to refuse again unless the captures had landed; they have not. Live run at 13:01:09 reproduces all three REGRESSED lines within one row of b66b54's numbers and reproduces the BLIND Hy-Vee row at 0 of 15.",
+   "deviation": null,
+   "shipped_commit": "no code change: the condition does not reproduce / the correct action was to write nothing. the commit titled 'Triage 2026-09-20-4 money lane: two of three resumed threads no longer reproduce, and the prose that kept one alive is corrected' (its hash is fixed only when the push lands: git log -1 --format=%H --grep='Triage 2026-09-20-4 money lane' origin/main) carries this plan file."
+  },
+  {
+   "queue_id": "2026-09-18-de39ec",
+   "subject": "Baker's ad window advanced with no capture behind it",
+   "classification": "infra",
+   "evidence": [
+    "RE-MEASURED 2026-09-20. ad-schedule.json Baker's current window = 2026-09-16..2026-09-22, next_pull 2026-09-23.",
+    "Get-BakersAdCaptureState (grocery/capture-policy-lib.ps1:716) over out/ for 2026-09-22 returns: Captured true, HasList true, List 'bakers-ad-list-2026-09-16.json', AdFrom 2026-09-16, AdTo 2026-09-22, Owed 0, Total 85, Blind false, Why 'bakers-ad-list-2026-09-16.json (2026-09-16..2026-09-22): all 85 routed ad term(s) asked'.",
+    "That is exactly the shipped MUST NOT FIRE case: check-ad-cycles.ps1 -SelfTest 'a list covering 09-22 with every routed term asked does not page, and is backed by the ad list', asserting (-not page) and backed_by -eq 'ad-list'. So the check does not page today.",
+    "check-ad-cycles.ps1 -SelfTest run live: 19 of 19 cases PASS. Verdict line: 'check-ad-cycles SELF-TEST PASSED (19 of 19 case(s) ...)', exit 0. de39ec shipped 15; the suite has since grown to 19.",
+    "THE BACKING SOURCE MOVED ON since de39ec closed: the check no longer compares Baker's calendar against the retired browser flyer at all. It compares it against the Baker's AD LIST, with an owed-terms arm ('the list landed but its asks did not (12 of 85 routed terms owed): pages') and a BLIND arm, and the alert text now names 'pull-bakers-ad-list.ps1 -AdId' as the recovery. grocery/pull-bakers-ad-list.ps1 exists, so the remedy line names a routine that does exist.",
+    "de39ec's own leaves_open (1) was the flyer lane having no scheduled producer. That is what the ad-list lane replaced; its remaining work is open queue item 2026-09-18-ceab00 (weekly), '15 brand-only offers name tracked goods through multi-commodity brands', measured against the frozen 2026-09-16 Baker's ad."
+   ],
+   "surface_fix": {
+    "what": "none required: the condition does not reproduce",
+    "files": [],
+    "exact_change": "no file changed"
+   },
+   "root_cause": "CARRIED FORWARD VERBATIM from plan-2026-09-18.json item 2026-09-18-de39ec: the schedule-vs-data check compares a calendar that one producer advances (the daily Kroger API scan, bakers-daily-scan 06:00) against a supplement that a different, unscheduled producer writes (a browser flyer read that no task has owned since the Wednesday agent was retired on 08-22), so it pages on every Baker's ad turnover whether or not the board is harmed, and its remedy line ('run the browser agent') names a routine that does not exist.",
+   "root_fix": {
+    "what": "compare like with like - the Baker's calendar against the capture that actually advances it - and give the flyer/ad-list gap a producer that exists. SHIPPED 2026-09-18 (ad-schedule-backing-lib.ps1) and since superseded by a better source: the ad list, with an owed-terms arm and a BLIND arm.",
+    "files": [
+     "grocery/ad-schedule-backing-lib.ps1",
+     "grocery/check-ad-cycles.ps1",
+     "grocery/capture-policy-lib.ps1",
+     "grocery/pull-bakers-ad-list.ps1"
+    ],
+    "exact_change": "no further change today. Get-AdScheduleBacking now takes -AdListName/-AdListTo/-AdOwed/-AdTotal/-AdBlind from Get-BakersAdCaptureState and reports backed_by='ad-list'; Get-AdScheduleAlertText names pull-bakers-ad-list.ps1 -AdId and pull-regular-bakers-api.ps1 and neither the retired Wednesday Chrome agent nor the stale-price claim. Verified by the live self-test."
+   },
+   "leaves_open": "nothing",
+   "leaves_open_occurrences": 0,
+   "leaves_open_followup": null,
+   "prior_closes": [],
+   "prevention": {
+    "source": [
+     "grocery/ad-schedule-backing-lib.ps1",
+     "grocery/capture-policy-lib.ps1",
+     "grocery/check-ad-cycles.ps1"
+    ],
+    "what": "the decision and its alert text live in one pure library with its own frozen cases, so the check cannot silently go back to grading a producer nobody schedules",
+    "exact_change": "already shipped: 19 frozen cases in check-ad-cycles.ps1 -SelfTest, including MUST FIRE (rolled over with no ad list; list landed but 12 of 85 asks owed; a list for last week), MUST NOT FIRE (a covering list with 0 owed; a BLIND ask count), two WORDING cases and the Fareway CLEAN TWIN."
+   },
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "no file changed, so no product can route differently. Read-only: Get-BakersAdCaptureState and Get-AdScheduleBacking were called in-process and check-ad-cycles.ps1 was run only with -SelfTest, which its own first-statement guard proves can never start the chain.",
+    "affected_now": 0,
+    "names": [],
+    "risk": "none: read-only verification",
+    "cell_effects": []
+   },
+   "claimed_by_earlier": [],
+   "freshness": "measured 2026-09-20 against ad-schedule.json as written today, out/bakers-ad-list-2026-09-16.json covering 09-16..09-22, and the newest API capture bakers-regular-2026-09-20.json (1,450 rows carrying an ad_to). Baker's next turnover is 2026-09-23, so the next real test of this check is that date.",
+   "proof": {
+    "guard_or_fixture": "grocery/check-ad-cycles.ps1 -SelfTest, the SCHEDULE-AHEAD-OF-DATA cases",
+    "must_fire_case": "'the ad rolled over (09-16..09-22) and NO ad list landed: pages, even though 520 API promo rows reach 09-22', 'the list landed but its asks did not (12 of 85 routed terms owed): pages', and 'a list for LAST week (window ends 09-15) does not back this week's calendar: pages' - all three PASS live.",
+    "clean_twin": "'Fareway (calendar and deals file share one producer) still pages as before: 08-02..08-08 over a deals file that closed 08-01' PASSES, so narrowing Baker's to its own producer cost Fareway nothing; and 'a covered Fareway window does not page, whatever API rows are passed' PASSES.",
+    "fixture_occurrences": [
+     "2026-09-18-de39ec"
+    ],
+    "commands": [
+     "powershell -File grocery\\check-ad-cycles.ps1 -SelfTest"
+    ]
+   },
+   "rollback": "nothing to roll back: no file changed",
+   "do_not_touch": [
+    "ad-schedule.json",
+    "out\\bakers-ad-list-*.json",
+    "the Fareway arm of Get-AdScheduleBacking"
+   ],
+   "resolution_note": "Does not reproduce. Baker's current ad window 2026-09-16..2026-09-22 IS backed: bakers-ad-list-2026-09-16.json covers it with all 85 routed terms asked and 0 owed, so Get-AdScheduleBacking returns backed_by='ad-list' and does not page. check-ad-cycles -SelfTest passes 19 of 19 live. The root fix shipped on 2026-09-18 and has since been improved past the flyer entirely: the check grades the ad list, and the remedy names pull-bakers-ad-list.ps1, which exists. Residual (1), the flyer lane with no producer, is closed by that ad-list lane and its remaining work is open item 2026-09-18-ceab00; residual (2), the 09-15/09-16 missed pipeline runs, stays with its child 2026-09-18-8491bf in the weekly lane and was not disturbed.",
+   "publish_batch": 1,
+   "status": "done",
+   "premise_verified": "true that the item was left unfinished, FALSE that work remained. The dispatch said to find out what was left rather than assume; what was left is nothing in code. Checked live: the ad-list state for the current window (85 of 85 asked, 0 owed, not blind), the 19-case self-test at exit 0, and the existence of grocery/pull-bakers-ad-list.ps1 that the corrected remedy text names.",
+   "deviation": null,
+   "shipped_commit": "no code change: the condition does not reproduce / the correct action was to write nothing. the commit titled 'Triage 2026-09-20-4 money lane: two of three resumed threads no longer reproduce, and the prose that kept one alive is corrected' (its hash is fixed only when the push lands: git log -1 --format=%H --grep='Triage 2026-09-20-4 money lane' origin/main) carries this plan file."
+  },
+  {
+   "queue_id": "2026-09-18-37ac63",
+   "subject": "Grocery: semantic sweep found 7 product(s) no rule can see - 2026-09-18",
+   "classification": "wrong-product",
+   "evidence": [
+    "RE-MEASURED 2026-09-20: audit-semantic-identity.ps1 run live, exit 0, SEMANTIC-IDENTITY-COMPLETE. 'examined 2629 shipped pair(s) and 8676 rule-invisible product(s) in 1.5s on cuda'. COVERAGE: 8 product(s) across 6 commodities.",
+    "THE ROOT FIX IS WORKING. The same run printed 'semantic-identity: 13 finding(s) suppressed as EXCLUDED (a rule saw and refused them; explain-coverage-gap lists them)' and 'semantic-identity: 1 coverage finding(s) suppressed as TRUNCATION ARTEFACTS'. 14 of 22 findings suppressed by the classifier 37ac63 shipped; on 2026-09-18 that suppression did not exist and every one of them would have paged.",
+    "explain-coverage-gap.ps1 over today's findings: 'explained 21 coverage finding(s): EXCLUDED 11, NO-INCLUDE 8, REFUSED-BY-EXCLUDE 2'.",
+    "THE 8 NO-INCLUDE, adjudicated one by one. FOUR ARE CORRECT REFUSALS (a different product): cooked-jasmine-rice | Baker's | 'Ben's Original Ready Rice Cilantro Lime Flavored Rice' and | 'Ben's Original Ready Rice Roasted Chicken Flavored Rice' (the commodity's include requires the word jasmine; these are not jasmine); laundry-detergent | Family Fare | 'Arm & Hammer Detergent, Clean Meadow 100.5 Fl Oz' (the commodity is Arm & Hammer OxiClean / Odor Blasters specifically); wild-rice | Walmart | 'Wild Black Rice by Gerbs - 2 LBS' (black rice is a different grain).",
+    "FOUR ARE REAL PRODUCTS OF THEIR COMMODITY that the include is simply too narrow to see: feminine-pads | Walmart and | Baker's | 'Stayfree Classic Pads ... Super Long' (the include knows maxi/feminine/overnight/always/ultra-thin pads, not 'Classic Pads'); maple-syrup | Baker's | 'Pearl Milling Company Syrup Original' (the include HAS an 'original syrup' pattern and the store wrote the words in the other order); onion-soup-mix | Walmart | 'Lipton Recipe Secrets Onion Dry Recipe Soup and Dip Mix' (the include needs 'onion recipe soup' adjacent and the store put 'Dry' between them).",
+    "AND THE WIDENING BUYS NOTHING TODAY, measured by the estate's own gated tool. apply-coverage-batch.ps1 -WhatIfOnly over those three patterns: 'crown changes: 0'; feminine-pads 6 -> 6 cells, maple-syrup 5 -> 5, onion-soup-mix 3 -> 3; 'value: +0 cell(s), -0 cell(s), 0 commodit(y/ies) got a cheaper real price'; reveals 2, 3 and 2 previously-invisible rows; 'theft check: OK'. Each admitted product is DEARER than the cell its own store already holds: 0.1818/each vs Baker's 0.1408, 0.1663/floz vs Baker's 0.0912, 0.9358/oz vs Walmart's 0.49 crown.",
+    "THE GATE THEN REFUSED THE BATCH and reverted it: 'tile-integrity failed: 2 hard fault(s) on BATCH commodities, 223 pre-existing elsewhere' -> 'unrepaired: feminine-pads [Sam's Club] PRICE-DRIFT', 'unrepaired: feminine-pads [Fareway] PRICE-DRIFT' -> 'REVERTED: audit-tile-integrity: 2 batch commodit(y/ies) still disagree with their tile after repair - this is the cheese collision shape', exit 2. commodities.json verified byte-identical to HEAD afterwards.",
+    "THE CLASS 37ac63 LEFT OPEN HAS NOW HAPPENED. Its leaves_open said a per-name ruling cannot suppress the next SKU of the same shape and recorded 0 occurrences with a watch. Today two further Ben's Original Ready Rice FLAVOUR SKUs and a further Stayfree SKU paged for the first time, so the watch fired exactly as designed and the count is no longer 0."
+   ],
+   "surface_fix": {
+    "what": "rule the four products that are genuinely a different product, so the sweep stops paging them and the ruling is enforced at publish",
+    "files": [
+     "grocery/known-wrong.json"
+    ],
+    "exact_change": "four add-known-wrong.ps1 entries: cooked-jasmine-rice|Bakers|bens-original-ready-rice-cilantro-lime-flavored, cooked-jasmine-rice|Bakers|bens-original-ready-rice-roasted-chicken-flavore, laundry-detergent|FamilyFare|arm-hammer-detergent-clean-meadow-100-5-fl-oz, wild-rice|Walmart|wild-black-rice-by-gerbs-2-lbs-top-14-food-aller. known-wrong.json 322 -> 326 entries."
+   },
+   "root_cause": "CARRIED FORWARD VERBATIM from plan-2026-09-18.json item 2026-09-18-37ac63: the sweep's alert cannot tell 'no include matches' from 'an exclude refused it', so every product a rule correctly refuses is re-paged as invisible; and the only suppressor it honours is a per-name ruling, which a store defeats by listing the next SKU (4-count after 12-count) and which the -File comma trap can silently turn into a ruling that matches nothing.",
+   "root_fix": {
+    "what": "clause 1 (the classifier) and clause 3 (the comma trap) shipped on 2026-09-18 and are demonstrably working today - 14 of 22 findings suppressed. Clause 2, that a per-name ruling cannot cover the next SKU of a shape, is the half still open and is what returned today.",
+    "files": [
+     "grocery/coverage-explain-lib.ps1",
+     "grocery/audit-semantic-identity.ps1",
+     "grocery/add-known-wrong.ps1",
+     "grocery/known-wrong.json"
+    ],
+    "exact_change": "no change to the classifier or the comma guard: both verified live. Today's change is the four rulings. The shape-scoped ruling that would close clause 2 is NOT invented here - no reviewer has measured what a pattern-keyed known-wrong entry would suppress across 326 existing rulings, and guessing it is exactly the structural change this lane is told not to invent. It is raised as Q1."
+   },
+   "leaves_open": "8 of today's sweep findings are adjudicated but only 4 are closed: 4 ruled, and 4 real products (feminine-pads x2, maple-syrup x1, onion-soup-mix x1) stay rule-invisible because the gated widening that fixes them was REFUSED by audit-tile-integrity on 2 pre-existing feminine-pads PRICE-DRIFT faults (Sam's Club, Fareway) out of 223 board-wide. Separately, clause 2 of the root cause (a per-name ruling cannot cover the next SKU of a shape) is still open.",
+   "leaves_open_occurrences": "the sweep has paged on 3 days in the 30-day window (2026-09-18 seven findings, 2026-09-19 one, 2026-09-20 eight) and open item 2026-09-19-4f01f6 carries count 3 with today's 8 as its recorded recurrence. The next-SKU class fired 3 times today (two Ben's flavour SKUs, one Stayfree SKU), up from the 0 occurrences 37ac63 recorded.",
+   "leaves_open_followup": "2026-09-19-4f01f6",
+   "prior_closes": [],
+   "prevention": {
+    "source": [
+     "grocery/audit-semantic-identity.ps1",
+     "grocery/coverage-explain-lib.ps1",
+     "grocery/apply-coverage-batch.ps1"
+    ],
+    "what": "the emitting check classifies every finding with explain-coverage-gap's own classifier before it pages, so only genuinely rule-invisible products reach a human, and any widening they imply goes through the gated batch rather than a hand edit",
+    "exact_change": "already shipped and verified live today: 13 EXCLUDED and 1 TRUNCATION suppressed of 22, and apply-coverage-batch refused this run's widening rather than letting it past on a clean crown-diff. Today's addition is the four rulings, which remove four products from the alerted set permanently."
+   },
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "the four rulings are name-keyed known-wrong entries on products that NO include pattern matches (explain-coverage-gap classified all four NO-INCLUDE before the ruling), so not one of them is priced on any board and no routing can change. audit-known-wrong re-run after all four: 'KNOWN-WRONG AUDIT OK: 0 of 326 adjudicated-wrong products are priced on the board (311 entries evaluable against 2806 named priced cells; 0 near-match(es) for review)', exit 0. The three include patterns were measured by apply-coverage-batch -WhatIfOnly (crowns 0, cells +0/-0, theft OK) and then NOT shipped.",
+    "affected_now": 0,
+    "names": [],
+    "risk": "the wild-rice ruling is NAME-scoped, not brand-scoped, so it cannot hand the cell to the next bulk seller; audit-known-wrong reports it UNEVALUABLE because wild-rice holds no named priced cell on any loaded board, which is expected for a product no rule matches.",
+    "cell_effects": []
+   },
+   "claimed_by_earlier": [],
+   "freshness": "measured 2026-09-20 13:20-13:50 against out/semantic-findings.json regenerated by this run's own sweep over comparison-2026-09-20 (2,629 shipped pairs, 8,676 rule-invisible products), and capture rows from bakers-regular-2026-09-20.json and walmart-regular-2026-09-19.json. The sweep re-runs daily, so the finding count moves with the captures.",
+   "proof": {
+    "guard_or_fixture": "grocery/audit-known-wrong.ps1 (which guards.ps1 delegates to), run after each ruling; grocery/explain-coverage-gap.ps1 as the adjudication record; grocery/apply-coverage-batch.ps1 as the gate on the widening",
+    "must_fire_case": "each of the four rulings was written and audit-known-wrong re-run immediately: entries went 323, 324, 325, 326 and the audit named each new key on write ('ADDING cooked-jasmine-rice|Bakers|bens-original-ready-rice-cilantro-lime-flavored' and the other three), so the ruling is enforced rather than merely recorded. For the widening the must-fire is the gate itself: audit-tile-integrity DID fire on the batch and apply-coverage-batch reverted it (exit 2).",
+    "clean_twin": "audit-known-wrong stayed at exit 0 across all four writes with 0 adjudicated-wrong products priced on the board, so no ruling took a live cell; and the three refused patterns had already passed verify-no-regression ('theft check: OK - no other commodity lost a cell or was re-priced') with crown changes 0, so the revert cost the board nothing.",
+    "fixture_occurrences": [
+     "2026-09-18-37ac63",
+     "2026-09-19-4f01f6"
+    ],
+    "commands": [
+     "powershell -File grocery\\audit-semantic-identity.ps1",
+     "powershell -File grocery\\explain-coverage-gap.ps1",
+     "powershell -File grocery\\audit-known-wrong.ps1"
+    ]
+   },
+   "rollback": "the four rulings reverse individually with add-known-wrong.ps1 -Reverse -Key <key>, which is the only supported way out and keeps the reversal auditable. Nothing else to undo: the widening was reverted by its own gate.",
+   "do_not_touch": [
+    "the 223 pre-existing tile-integrity faults (they are not this item's to heal)",
+    "audit-tile-integrity thresholds",
+    "the existing 322 known-wrong entries",
+    "commodities.json include lists"
+   ],
+   "resolution_note": "Re-measured: the root fix shipped on 2026-09-18 is working - 14 of today's 22 findings were suppressed by its own classifier (13 EXCLUDED, 1 truncation) where on 09-18 all of them would have paged. The 8 that remain were adjudicated one by one: 4 are genuinely a different product and are now RULED via add-known-wrong (known-wrong 322 -> 326, audit exit 0, none of them priced on any board); 4 are real products their commodity's include is too narrow to see. The widening for those 4 was measured with apply-coverage-batch -WhatIfOnly (0 crown changes, +0/-0 cells, theft clean, 7 invisible rows revealed) and then REFUSED by audit-tile-integrity on 2 pre-existing feminine-pads PRICE-DRIFT faults, so the batch reverted itself and no rule shipped. That gate was left closed. The board was NOT rebuilt or republished: nothing here moves a cell or a crown.",
+   "publish_batch": 1,
+   "status": "deviated",
+   "premise_verified": "true, and the condition still reproduces - worse than the dispatch assumed. The dispatch expected a remainder to find; the sweep reports 8 findings today against 7 on 2026-09-18 and 1 on 2026-09-19. Verified live: the classifier suppresses (13 EXCLUDED + 1 truncation of 22), explain-coverage-gap reproduces the split (EXCLUDED 11 / NO-INCLUDE 8 / REFUSED-BY-EXCLUDE 2), and each of the 8 was read against its commodity's own include and exclude lists before being called wrong or real.",
+   "deviation": "TWO departures, same gates. (1) NARROWED: the plan's shape was to clear the sweep, and only half of it shipped. The four correct refusals were ruled; the three include patterns that would admit the other four products were measured green on crowns, cells and theft and were then REFUSED by audit-tile-integrity because feminine-pads carries 2 pre-existing PRICE-DRIFT faults at Sam's Club and Fareway (of 223 board-wide). apply-coverage-batch reverted the batch itself and I did not override it, re-run it with the gate disabled, or split feminine-pads out to sneak the other two through - a gate that fails on correct data is a finding, not an obstacle. leaves_open is rewritten to what actually remains. (2) NOT PULLED FORWARD: the dispatch said to close 2026-09-19-4f01f6 too if finishing this item resolved it. It does not - 4 of its 8 findings survive - so 4f01f6 stays open and is named as this item's owner instead, with the measurement and the exact unblocking step recorded in plan-2026-09-20-4.routing.json so the next run does not re-derive any of it.",
+   "shipped_commit": "the commit titled 'Triage 2026-09-20-4 money lane: two of three resumed threads no longer reproduce, and the prose that kept one alive is corrected' (its hash is fixed only when the push lands: git log -1 --format=%H --grep='Triage 2026-09-20-4 money lane' origin/main)"
+  }
+ ],
+ "ship_sequence": [
+  "re-measure each dispatched premise against comparison-2026-09-20 BEFORE editing anything, and record the answer in premise_verified",
+  "f90ba6/55b7aa: read category-excludes.json apply_ids + the baked commodities.json tokens + the three readers; apply-category-excludes.ps1 -WhatIf (expect +0); audit-food-category.ps1 (expect 0)",
+  "f90ba6: correct the stale apply_ids note (prose only), then re-run apply-category-excludes.ps1 -WhatIf (expect +0 again) and audit-food-category.ps1 (expect 0)",
+  "b66b54: audit-coverage-ledger.ps1 read-only; REFUSE -Accept while pull-regular-hyvee is BLIND",
+  "de39ec: Get-BakersAdCaptureState for the current window, then check-ad-cycles.ps1 -SelfTest (expect 19 of 19, exit 0)",
+  "37ac63: audit-semantic-identity.ps1, then explain-coverage-gap.ps1, then adjudicate each NO-INCLUDE against its commodity's include/exclude",
+  "37ac63: add-known-wrong.ps1 for each genuinely different product, re-running audit-known-wrong.ps1 after each (expect exit 0)",
+  "37ac63: apply-coverage-batch.ps1 -WhatIfOnly for the widening, then the real batch; accept whatever its gates say and never -Force",
+  "NO compare-deals, NO publish, NO feed: nothing in this plan moves a cell or a crown, and the board already republished today at 5d42fb944",
+  "commit category-excludes.json + known-wrong.json + the plan + the routing artifact by explicit pathspec, then push through the pre-push hook"
+ ],
+ "open_questions_for_brad": [
+  {
+   "id": "Q1-shape-scoped-rulings",
+   "question": "known-wrong is keyed on commodity|store|normalised NAME, so every new SKU of an already-adjudicated shape pages again. 37ac63 recorded this at 0 occurrences on 2026-09-18; it fired 3 times today (two Ben's Original Ready Rice flavour SKUs, one Stayfree SKU). Should a ruling be allowed to carry a PATTERN as well as a name? It is a real change to how 326 rulings are enforced and no reviewer has measured what a pattern-keyed entry would suppress, so this lane did not invent it.",
+   "recommendation": "measure first: run every existing ruling's stored name against the full corpus as a pattern and report how many extra rows each would suppress, before any schema change."
+  },
+  {
+   "id": "Q2-feminine-pads-tile-drift",
+   "question": "audit-tile-integrity reports 223 pre-existing hard faults board-wide, 2 of them PRICE-DRIFT on feminine-pads at Sam's Club and Fareway. Those two are now blocking a correct, measured, zero-risk coverage widening. Who heals them, and is 223 board-wide faults itself a condition someone owns?",
+   "recommendation": "heal the two feminine-pads links via the script's own named path (check-ad-cycles for headless stores, withdraw-stale-link for the rest), then re-run the batch recorded in plan-2026-09-20-4.routing.json unchanged."
+  }
+ ],
+ "gates_run": {
+  "validate-triage-plan -OpenIds": "exit 0, 'PLAN OK - complete, hand it to the developer'",
+  "validate-triage-plan -Closing": "exit 0, 'PLAN CLOSED OK - every item has an outcome and every open residual has an owner that resolves'",
+  "audit-match-soundness": "exit 0, 'MOVED=0  DROPPED=0  new-contested=0  drift-vs-engine=0'; then -Accept at rules_hash 5f0bb1238ad1, baseline committed with the change",
+  "audit-tile-integrity": "exit 0 after audit-name-drift refreshed its verdicts, 'ACCURACY OK - all 2147 price-graded links (of 2404 linked tiles) open the product the board names, at the price it shows'",
+  "guards": "exit 0, 'GUARDS OK: every hard invariant holds. Safe to publish.' GUARDS-COMPLETE hard=0 warn=21",
+  "note_on_the_first_guards_run": "the first guards run of this session read hard=1 on audit-tile-integrity. Its own verdict line was 'HELD: name-drift.json is stale' - a COULD-NOT-EVALUATE, not a proven defect - because this run's apply-coverage-batch rebuilt comparison-2026-09-20 and restored product-urls.json, leaving out/name-drift.json older than both. The remedy the tool prints (run audit-name-drift.ps1, then re-run) was followed. Nothing was forced and no threshold moved."
+ }
+}

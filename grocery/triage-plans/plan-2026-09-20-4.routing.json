@@ -1,0 +1,45 @@
+{
+ "generated": "2026-09-20T13:55:00",
+ "for_plan": "plan-2026-09-20-4.json",
+ "note": "NOT a hand-rolled corpus re-route. The measurement here was produced by the estate's own gated tool, grocery\u0007pply-coverage-batch.ps1 -WhatIfOnly, which edits commodities.json, runs compare-deals, diffs crowns and per-commodity store coverage against a baseline it rebuilt under the CURRENT rules first, counts previously-invisible rows revealed per pattern, runs verify-no-regression for first-match-wins theft, then restores commodities.json and re-runs compare-deals. Two full compare-deals passes over one corpus. A hand-rolled match-lib re-route was attempted first and ABANDONED: New-CommodityMatcher needs -GlobalExclude via Get-TcGlobalExclude and every result it printed was a null-matcher artefact reading '(none)' for every name, which is exactly the false-zero this artifact's positive_control exists to catch.",
+ "corpus": "comparison-2026-09-20 rebuilt under the current rules as the baseline, then rebuilt again with the three candidate patterns applied; 565 commodities on the board both times",
+ "positive_control": {
+  "name": "non-zero reveal on all three candidate patterns (the anti-false-zero check)",
+  "expected": "feminine-pads 2, maple-syrup 3, onion-soup-mix 2",
+  "observed": "feminine-pads 2, maple-syrup 3, onion-soup-mix 2"
+ },
+ "variants": [
+  {
+   "id": "C1-coverage-widen-3",
+   "queue_id": "2026-09-18-37ac63",
+   "patterns": {
+    "feminine-pads": [
+     "\\bclassic\\s+pads?\\b"
+    ],
+    "maple-syrup": [
+     "\\bsyrup\\s+original\\b"
+    ],
+    "onion-soup-mix": [
+     "onion\\s+dry\\s+recipe\\s+soup\\b.{0,15}\\bmix\\b"
+    ]
+   },
+   "verdict": "REFUSED BY THE GATE, batch REVERTED, board untouched",
+   "crown_changes": 0,
+   "cells": {
+    "feminine-pads": "6 -> 6",
+    "maple-syrup": "5 -> 5",
+    "onion-soup-mix": "3 -> 3"
+   },
+   "value": "+0 cell(s), -0 cell(s), 0 commodities got a cheaper real price",
+   "rows_revealed": {
+    "feminine-pads": 2,
+    "maple-syrup": 3,
+    "onion-soup-mix": 2
+   },
+   "theft_check": "OK - no other commodity lost a cell or was re-priced",
+   "refused_by": "audit-tile-integrity: 2 hard fault(s) on BATCH commodities (feminine-pads [Sam's Club] PRICE-DRIFT, feminine-pads [Fareway] PRICE-DRIFT) survived the headless link repair, plus 223 pre-existing faults elsewhere on the board. apply-coverage-batch reverted the whole batch (exit 2), which is the cheese-collision rule of 2026-08-01 doing its job. The gate was NOT weakened, skipped or overridden.",
+   "why_it_buys_nothing_today": "each admitted product is DEARER than the cell its own store already holds, measured off the capture rows: Baker's 'Stayfree Classic Pads Without Wings Super Long Unscented' $4.00/22ct = 0.1818/each against Baker's existing 0.1408; Baker's 'Pearl Milling Company Syrup Original' $3.99/24 fl oz = 0.1663/floz against Baker's existing 0.0912; Walmart '(12 pack) Lipton Recipe Secrets Onion Dry Recipe Soup and Dip Mix, 2 Oz' $22.46/24oz = 0.9358/oz against Walmart's existing 0.49 crown. No price was read for the Walmart 'Stayfree Classic Pads ... 22 Ct' row: COULD NOT VERIFY."
+  }
+ ],
+ "what_the_next_run_must_not_redo": "the three patterns are correct and measured; what blocks them is feminine-pads tile PRICE-DRIFT at Sam's Club and Fareway. Heal those two links first (the script names check-ad-cycles for headless stores, withdraw-stale-link for the rest), then re-run apply-coverage-batch with the same three patterns. Do not re-measure the corpus."
+}

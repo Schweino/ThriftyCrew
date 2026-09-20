@@ -4863,6 +4863,66 @@
                         "ruled_on":  "2026-09-19",
                         "ruled_by":  "Brad (via orchestrator, 2026-09-19)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cooked-jasmine-rice|Bakers|bens-original-ready-rice-cilantro-lime-flavored",
+                        "commodity":  "cooked-jasmine-rice",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Ben\u0027s Original Ready Rice Cilantro Lime Flavored Rice, Easy Dinner Side, 8.5 oz Pouch"
+                                  ],
+                        "product_id":  "0005480042344",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Flavoured ready rice, not jasmine. commodity cooked-jasmine-rice is jasmine specifically (its include requires the word jasmine); this is the cilantro-lime variant. Semantic sweep 2026-09-20, NO-INCLUDE, score 0.9434.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-20",
+                        "ruled_by":  "triage-money-lane 2026-09-20 (plan-2026-09-20-4.json, 37ac63/4f01f6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cooked-jasmine-rice|Bakers|bens-original-ready-rice-roasted-chicken-flavore",
+                        "commodity":  "cooked-jasmine-rice",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Ben\u0027s Original Ready Rice Roasted Chicken Flavored Rice, Easy Dinner Side, 8.8 oz Pouch"
+                                  ],
+                        "product_id":  "0005480042330",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Flavoured ready rice, not jasmine. Roasted-chicken variant. Semantic sweep 2026-09-20, NO-INCLUDE, score 0.9078.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-20",
+                        "ruled_by":  "triage-money-lane 2026-09-20 (plan-2026-09-20-4.json, 37ac63/4f01f6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|FamilyFare|arm-hammer-detergent-clean-meadow-100-5-fl-oz",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Arm \u0026 Hammer Detergent, Clean Meadow 100.5 Fl Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Commodity is Arm \u0026 Hammer OxiClean / Odor Blasters specifically; Clean Meadow is neither variant. Semantic sweep 2026-09-20, NO-INCLUDE, score 0.9765.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-20",
+                        "ruled_by":  "triage-money-lane 2026-09-20 (plan-2026-09-20-4.json, 37ac63/4f01f6)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "wild-rice|Walmart|wild-black-rice-by-gerbs-2-lbs-top-14-food-aller",
+                        "commodity":  "wild-rice",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Wild Black Rice by Gerbs - 2 LBS - Top 14 Food Allergen Free \u0026 NON GMO - Product of Canada"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Black rice, not wild rice - a different grain. Name-scoped ruling, not a brand ruling. Semantic sweep 2026-09-20, NO-INCLUDE, score 0.9783.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-20",
+                        "ruled_by":  "triage-money-lane 2026-09-20 (plan-2026-09-20-4.json, 37ac63/4f01f6)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
