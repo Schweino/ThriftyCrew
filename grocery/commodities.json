@@ -27988,7 +27988,8 @@
                         "original\\s+syrup",
                         "butter(?:\\s+rich|\\s+flavor)?\\s+syrup",
                         "pancake\\s*(?:\u0026|and)\\s*waffle\\s+syrup",
-                        "\\b(?:table|sugar\\s+free|maple\\s+flavor)\\s+syrup\\b"
+                        "\\b(?:table|sugar\\s+free|maple\\s+flavor)\\s+syrup\\b",
+                        "\\bsyrup\\s+original\\b"
                     ],
         "exclude":  [
                         "\\boat",
@@ -40679,7 +40680,8 @@
                         "maxi\\b.{0,15}pads?",
                         "ultra\\s*thin\\b.{0,25}pads?",
                         "maxi\\b.{0,30}pads?",
-                        "pads,\\s*maxi"
+                        "pads,\\s*maxi",
+                        "\\bclassic\\s+pads?\\b"
                     ],
         "exclude":  [
                         "pupp",
@@ -46933,7 +46935,8 @@
                         "onion\\s+recipe\\s+soup\\b.{0,20}\\bmix\\b",
                         "onion\\s+dip\\s+mix",
                         "recipe\\s+soup\\s*\u0026\\s*dip\\s+mix,\\s*(?:\\w+\\s+)?onion",
-                        "onion\\s+recipe\\s+secrets\\s+soup\\b.{0,20}\\bmix\\b"
+                        "onion\\s+recipe\\s+secrets\\s+soup\\b.{0,20}\\bmix\\b",
+                        "onion\\s+dry\\s+recipe\\s+soup\\b.{0,15}\\bmix\\b"
                     ],
         "exclude":  [
                         "\\bbeefy\\b",

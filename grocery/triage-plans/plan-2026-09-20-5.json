@@ -1,0 +1,408 @@
+{
+ "generated": "2026-09-20T18:35:00",
+ "round": 4,
+ "board_week": "2026-09-20",
+ "lane": null,
+ "queue_ids_seen": [
+  "2026-09-18-37ac63",
+  "2026-09-18-8491bf",
+  "2026-09-18-a0c785",
+  "2026-09-18-ceab00",
+  "2026-09-19-0b2f1e",
+  "2026-09-19-2a0748",
+  "2026-09-19-2c96d8",
+  "2026-09-19-405c73",
+  "2026-09-19-4f01f6",
+  "2026-09-19-4fc24c",
+  "2026-09-19-641ec6",
+  "2026-09-19-6f90ee",
+  "2026-09-19-8a3090",
+  "2026-09-19-ae9df2",
+  "2026-09-19-c9f0f3",
+  "2026-09-19-d240fd",
+  "2026-09-19-dc1b5b",
+  "2026-09-19-fccb69",
+  "2026-09-20-1b8544",
+  "2026-09-20-588caa",
+  "2026-09-20-6c14f6",
+  "2026-09-20-7bac4b",
+  "2026-09-20-bec597",
+  "2026-09-20-bff4ef",
+  "2026-09-20-ca2591"
+ ],
+ "routing_artifact": "plan-2026-09-20-5.routing.json",
+ "note": "RESUME RUN, money lane, no reviewer. Four threads that were each diagnosed, mostly fixed and then closed 'deviated' with a class left open. Every leaves_open sentence was treated as a claim to test against today's data BEFORE anything was built, because two hours earlier the previous money lane found 2026-09-18-f90ba6 had returned for three days over a condition fixed on day one - the fix was right and the returns were prose. That discipline paid again here: one of these four (ae9df2) does not reproduce and is closed with counts, and item 1's two blocking faults turned out not to be what the plan called them.",
+ "items": [
+  {
+   "queue_id": "2026-09-18-37ac63",
+   "subject": "Grocery: semantic sweep found 7 product(s) no rule can see - 2026-09-18 (resumed; 8 on 2026-09-20)",
+   "classification": "wrong-product",
+   "evidence": [
+    "RE-MEASURED FIRST, AND THE TWO BLOCKING FAULTS ARE NOT WHAT THE PLAN CALLED THEM. plan-2026-09-20-4 recorded them as '2 pre-existing feminine-pads PRICE-DRIFT faults'. Read off out/tile-integrity.json at 16:47 they are: feminine-pads [Sam's Club] 'board $0.1683 vs link $0.1357 (24.1% off)' and feminine-pads [Fareway] 'board $0.2081 vs link $0.1942 (7.2% off)', BOTH with board name == link name. Neither is a wrong product and neither is a reader-facing lie about which product the tile opens: what is stale is OUR RECORD of the link's price, which is the only thing audit-tile-integrity can compare.",
+    "FAREWAY, AND THE BOARD IS RIGHT. The row carries ad_price $6.99 AND regular $7.49. sale-windows.json window 275 records the $6.99 as a sale with sale_start 2026-09-14, sale_end 2026-09-19, refresh_on 2026-09-20, so on 2026-09-20 the cell correctly fell back to the store's own posted everyday price, $7.49 / 36 ct = 0.2081. The stored link still carried 6.99, derived while the sale was running. Every Fareway capture from 2026-07-23 to 2026-09-20 carries the same pair, so this is not a capture gap.",
+    "SAM'S CLUB, AND THE BOARD IS RIGHT THERE TOO. Board $15.48 / 92 ct = 0.1683, as_of 2026-09-19, corroborated by the EXTERNAL REFERENT on the same row: Sam's own published sams_unit_price '$0.17/ea'. The stored link carried $12.48, which is the price in sams-deals-2026-08-15.json and sams-deals-2026-07-29.json, and it was stamped 'verified: 2026-09-19 DERIVED from the price row (same record the board priced)'. That stamp is false, and how it got written is the defect.",
+    "THE MECHANISM, PROVEN IN THE SOURCE. derive-links-from-prices.ps1 decided an entry needed no work with `if ($cur -and ([string]$cur.url) -eq $url) { $already++; continue }` - the URL alone. The URL is the identity; the price is the fact; only the identity was ever compared. So a store repricing the SAME product page, or a sale expiring, left the snapshot untouched forever. That is Fareway. And the entry it WRITES took its price from $r.ad_price, so even a forced rewrite would have re-written 6.99 against a board publishing 7.49.",
+    "AND THE SAM'S HALF IS AN UNANNOUNCED SOURCE CHANGE. All 2,802 rows in sams-deals-2026-09-19.json carry an ALPHANUMERIC sams_item_id ('4YKF09SXNTK8'); Get-RowUrl builds a Sam's URL only from '^\\d+$', because bare /ip/<numeric> is the only shape this estate has proven. So the fresh row was rejected as having no identity, and the index's 'a row carrying identity beats one that does not' fallback substituted the 2026-07-29 row - carrying its July price - and the writer then stamped today's date on it. That is the two-pipeline bug this script exists to kill, reappearing inside the script.",
+    "THE WIDENING, RE-RUN LIVE AND ACCEPTED. With both faults healed, apply-coverage-batch.ps1 over the same three patterns: 'crown changes: 0'; feminine-pads 6 -> 6, maple-syrup 5 -> 5, onion-soup-mix 3 -> 3; 'value: +0 cell(s), -0 cell(s)'; reveals 2, 3 and 2; 'theft check: OK'; then 'tile-integrity failed: 0 hard fault(s) on BATCH commodities, 198 pre-existing elsewhere' and 'BATCH ACCEPTED'. Every number reproduces plan-2026-09-20-4.routing.json exactly, so the contract was diffed and not rebuilt.",
+    "THE LINK LAYER, BEFORE AND AFTER, ON ONE BOARD. audit-tile-integrity over comparison-2026-09-20: PRICE-DRIFT 225 -> 198 (Fareway 26 -> 0), NO-LINK 225 -> 219, ACCURACY 0 of 2,410 linked tiles both times, exit 0 with TILE-INTEGRITY-COMPLETE. A global dry run of the fixed script reports 144 further refreshable entries and 82 it refuses (Sam's Club 81, Baker's 1).",
+    "THE SWEEP ITSELF, RE-RUN AFTER THE WIDENING LANDED. audit-semantic-identity.ps1 exit 0, SEMANTIC-IDENTITY-COMPLETE: 'examined 2629 shipped pair(s) and 8669 rule-invisible product(s) in 1.5s on cuda' and 'COVERAGE (real products no rule can see): 0 product(s) across 0 commodit(y/ies)'. This morning's file (out/semantic-findings.json, 15:59) carried 8 across 6 commodities: wild-rice 1, laundry-detergent 1, cooked-jasmine-rice 2 (ruled on 2026-09-19) and maple-syrup 1, onion-soup-mix 1, feminine-pads 2 (admitted by the three patterns shipped today). 8 -> 0, which is what closes 2026-09-19-4f01f6 as well."
+   ],
+   "surface_fix": {
+    "what": "heal the two faults that refused the batch, each at its own cause, then land the three measured include patterns through the gate that refused them",
+    "files": [
+     "grocery/product-urls.json",
+     "grocery/commodities.json"
+    ],
+    "exact_change": "derive-links-from-prices.ps1 -Store Fareway -Apply (33 link snapshots refreshed; feminine-pads Fareway 6.99 -> $7.49, the price the board published and the row's own posted regular); withdraw-stale-link.ps1 -Pairs feminine-pads/Sam's Club (a 2026-07-29 price we cannot re-verify without a browser; the tile keeps its correct price, SeeLink falls back to a store search and resolve-worklist re-queues the cell); then apply-coverage-batch.ps1 -Patterns feminine-pads '\\bclassic\\s+pads?\\b', maple-syrup '\\bsyrup\\s+original\\b', onion-soup-mix 'onion\\s+dry\\s+recipe\\s+soup\\b.{0,15}\\bmix\\b'"
+   },
+   "root_cause": "CARRIED FORWARD VERBATIM from plan-2026-09-18.json item 2026-09-18-37ac63: the sweep's alert cannot tell 'no include matches' from 'an exclude refused it', so every product a rule correctly refuses is re-paged as invisible; and the only suppressor it honours is a per-name ruling, which a store defeats by listing the next SKU (4-count after 12-count) and which the -File comma trap can silently turn into a ruling that matches nothing. WHAT BLOCKED THE REMEDY, one level down and found today: the link record that audit-tile-integrity grades is written by derive-links-from-prices, which treated URL equality as proof the whole record was current, and took its price from the row's ad_price rather than from the price the board actually published - so a repriced page and an expired sale both left a snapshot the audit correctly flagged and the script structurally could not repair.",
+   "root_fix": {
+    "what": "make the link record mean what the script's own header claims - one record, so the price and its link cannot drift apart - by comparing the FACT and not only the identity, and by writing only a price that both the board published and the row observed",
+    "files": [
+     "grocery/derive-links-from-prices.ps1"
+    ],
+    "exact_change": "(1) `already` now requires same URL AND Test-EntryStale false, graded through the same pu-lib Get-LinkPerUnit and the same 2% / half-cent bar audit-tile-integrity uses, everyday cells only. (2) the written price is the board cell's own published price, accepted only after it is proved equal (to half a cent) to the row's ad_price or its regular; otherwise NO link is written and the refusal is COUNTED and named per store ('board price not observed on the row: 82, Sam's Club 81'). (3) -ProductUrlsFile and -SelfTest added so the write rules can be driven on frozen fixtures instead of the live link layer."
+   },
+   "leaves_open": "TWO, both measured. (a) 198 tiles still record a price the board no longer publishes: 144 of them the fixed script can refresh store by store, and 81 Sam's Club cells it structurally cannot, because all 2,802 rows of the current capture carry an alphanumeric sams_item_id and no Sam's URL shape but bare /ip/<numeric> has been proven here. (b) clause 2 of the root cause is untouched: known-wrong is keyed on commodity|store|normalised NAME, so the next SKU of an already-adjudicated shape pages again - it fired 3 times on 2026-09-20 (two Ben's Original Ready Rice flavour SKUs, one Stayfree SKU).",
+   "leaves_open_occurrences": "(a) 225 tiles on the 2026-09-20 board before this run and 198 after, and the class blocked a gated batch twice in 30 days (2026-09-20 13:50 and 2026-09-20 18:05 before the repair); the Sam's half is 81 cells on that one board. (b) 3 occurrences on 2026-09-20 against the 0 that 37ac63 recorded on 2026-09-18, over the 30-day queue window.",
+   "leaves_open_followup": "2026-09-20-bec597",
+   "prior_closes": [
+    "2026-09-18-37ac63"
+   ],
+   "prevention": {
+    "source": [
+     "grocery/derive-links-from-prices.ps1",
+     "grocery/audit-semantic-identity.ps1",
+     "grocery/coverage-explain-lib.ps1"
+    ],
+    "what": "the producer of the link record stops asserting freshness it has not checked: an entry is refreshed when the FACT moved, not only when the identity did, and a price the row never observed is refused and counted instead of being taken from whichever older row happened to carry a linkable id. Upstream of that, the emitting check classifies every finding with explain-coverage-gap's own classifier before it pages, so only genuinely rule-invisible products reach a human.",
+    "exact_change": "derive-links-from-prices.ps1: the `already` short-circuit gains Test-EntryStale (same lib, same bar as the grading audit); the written price becomes the board's published price proved against the row's own ad_price or regular, with a per-store counter for every refusal; -ProductUrlsFile and -SelfTest make both rules testable. The classifier and the -File comma guard shipped 2026-09-18 and were verified working again today (13 EXCLUDED + 1 truncation suppressed of 22 on 2026-09-20)."
+   },
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "apply-coverage-batch.ps1 over comparison-2026-09-20 rebuilt under the current rules as its own baseline and again with the three patterns applied, 565 commodities both times - the same contract plan-2026-09-20-4.routing.json froze, re-run live and reproduced field for field (crowns 0; 6->6 / 5->5 / 3->3 cells; +0/-0 value; reveals 2/3/2; theft OK). The link-layer change routes no product: it writes no commodity rule and can only alter grocery/product-urls.json, measured separately as audit-tile-integrity PRICE-DRIFT 225 -> 198 and NO-LINK 225 -> 219 over 2,629 priced tiles.",
+    "affected_now": 7,
+    "names": [
+     "Stayfree Classic Pads Without Wings Super Long Unscented (Baker's)",
+     "Stayfree Classic Pads ... 22 Ct (Walmart)",
+     "Pearl Milling Company Syrup Original (Baker's)",
+     "(12 pack) Lipton Recipe Secrets Onion Dry Recipe Soup and Dip Mix, 2 Oz (Walmart)",
+     "Always Ultra Thin Pads with Wings (Fareway, link snapshot only)",
+     "Always Ultra Thin Long Super Pads with Wings, Size 2, 92 ct. (Sam's Club, link withdrawn)",
+     "the 2 further maple-syrup and 1 further onion-soup-mix rows the reveal counted"
+    ],
+    "risk": "no crown and no cell moved, measured twice by the gated tool over the same board. Each admitted product is DEARER than the cell its own store already holds, so first-match-wins cannot make any of them cheapest. The link change can only make a stored snapshot agree with the tile or refuse to write at all; it never invents a price and never re-points a URL, and prune-bad-links dropped 0 links afterwards.",
+    "cell_effects": []
+   },
+   "claimed_by_earlier": [
+    {
+     "name": "Stayfree Classic Pads Without Wings Super Long Unscented",
+     "claimed_by": "nothing - explain-coverage-gap classified it NO-INCLUDE, so no commodity at any array index matches it",
+     "index": -1,
+     "release_needed": "none"
+    },
+    {
+     "name": "Pearl Milling Company Syrup Original",
+     "claimed_by": "nothing - NO-INCLUDE; the commodity's existing 'original\\s+syrup' pattern needs the words in the other order",
+     "index": -1,
+     "release_needed": "none"
+    },
+    {
+     "name": "Lipton Recipe Secrets Onion Dry Recipe Soup and Dip Mix",
+     "claimed_by": "nothing - NO-INCLUDE; the existing 'onion\\s+recipe\\s+secrets\\s+soup\\b.{0,20}\\bmix\\b' cannot span the store's 'Dry'",
+     "index": -1,
+     "release_needed": "none"
+    },
+    {
+     "name": "ALL SEVEN revealed rows, checked as a set",
+     "claimed_by": "no earlier commodity - apply-coverage-batch's verify-no-regression theft check reported 'OK - no other commodity lost a cell or was re-priced', which is the first-match-wins question asked over the whole board rather than per name",
+     "index": -1,
+     "release_needed": "no release exclude is needed on any commodity"
+    }
+   ],
+   "freshness": "measured 2026-09-20 16:45 to 18:20 against comparison-2026-09-20 (built_at 16:30:02, week_of 2026-09-20), out/tile-integrity.json regenerated three times during the run, sams-deals-2026-09-19.json, fareway-regular-2026-09-20.json and sale-windows.json window 275. The board rebuilds daily and the Fareway sale window has already rolled off, so the $7.49 everyday fallback is the state a later run will also see; the Sam's id shape is a property of the capture format, not of one day.",
+   "proof": {
+    "guard_or_fixture": "grocery/derive-links-from-prices.ps1 -SelfTest (new, 7 frozen cases, out of process on a per-run temp tree), plus the existing chain as the live proof: audit-tile-integrity, audit-match-soundness, guards",
+    "must_fire_case": "TWO founding rows, frozen from the 2026-09-20 board. (1) the Fareway pads entry (stored 6.99, board everyday $7.49 / 36 ct, row ad_price $6.99 + regular $7.49, URL unchanged) must NOT count as already-correct and must be rewritten to $7.49, after which Test-EntryStale reads false. (2) the Sam's pads entry (stored $12.48 on the numeric-id row, board $15.48 from the alphanumeric-id row) must NOT be rewritten, and the refusal must be COUNTED and named per store. Mutation-probed from a temp mirror, original md5 identical afterwards: restoring the URL-only `already` killed 5 of 7 cases, restoring the ad_price write killed 2, and removing the refusal killed the counting case - 3 of 3 mutants died in their own named cases.",
+    "clean_twin": "an adjacent entry that STILL prices to its cell (paper-towels at Fareway, $6.00 / 6 ct against per_unit 1.0) is still counted already-correct, is left byte-identical including its 2026-09-01 verified stamp, and the file around it is not rewritten wholesale - the churn avoidance this script has always had, which the new staleness test was most likely to break.",
+    "fixture_occurrences": [
+     "2026-09-18-37ac63",
+     "2026-09-19-4f01f6"
+    ],
+    "commands": [
+     "powershell -File grocery\\derive-links-from-prices.ps1 -SelfTest",
+     "powershell -File grocery\\audit-tile-integrity.ps1",
+     "powershell -File grocery\\audit-match-soundness.ps1",
+     "powershell -File grocery\\guards.ps1"
+    ]
+   },
+   "rollback": "three independent undos. The include patterns: delete the three lines from grocery/commodities.json (the file is otherwise byte-identical to its parent commit, verified by a semantic diff of all 592 commodities). The Fareway link refresh and the Sam's withdrawal: git checkout grocery/product-urls.json. The script: git revert the derive-links-from-prices hunk; the daily chain then behaves exactly as it did on 2026-09-19.",
+   "do_not_touch": [
+    "audit-tile-integrity thresholds and its coverage ratchet baseline",
+    "apply-coverage-batch's revert rule - a batch-attributable fault still reverts the whole batch",
+    "the 198 pre-existing tile faults outside Fareway (owned by 2026-09-20-bec597)",
+    "Get-RowUrl's proven Sam's URL shape - no unverified /ip/<alphanumeric> may be invented"
+   ],
+   "resolution_note": "FINISHED. The two faults that refused the widening were read before being repaired and were not what the plan called them: both are the right product with a stale price SNAPSHOT in our own link record, and in both cases the BOARD is right (Fareway's sale expired 2026-09-19 so the cell correctly fell back to the row's posted $7.49; Sam's $15.48 is corroborated by Sam's own unit price of $0.17/ea). The cause is that derive-links-from-prices compared the URL alone and took its price from the row's ad_price, so a repriced page and an expired sale both left a record it could never repair - and for Sam's it silently substituted a 2026-07-29 row because every row of the current capture carries an alphanumeric id that Get-RowUrl rejects. Both rules are fixed with a 7-case self-test and a 3-of-3 mutation probe; Fareway's 33 snapshots were refreshed and the unverifiable Sam's link was withdrawn through the sanctioned tool. The three measured include patterns then went through apply-coverage-batch UNMODIFIED and were ACCEPTED (0 hard faults on batch commodities), reproducing the frozen artifact field for field. Link drift 225 -> 198, Fareway 26 -> 0, accuracy 0 of 2,410, guards exit 0. The sweep re-run afterwards reports COVERAGE 0 products across 0 commodities, down from 8 this morning, which also closes 2026-09-19-4f01f6. The board was NOT republished: the widening moves no cell and no crown.",
+   "publish_batch": 1,
+   "status": "done",
+   "premise_verified": "true in its shape and false in its wording, and the wording mattered. The premise 'the widening is blocked by 2 pre-existing feminine-pads PRICE-DRIFT faults' held exactly: apply-coverage-batch refused the identical batch on those two rows. The plan's description of them did not: they are not wrong products and not a lie about which product a tile opens, they are our own stale record of the link's price, with the board correct on both cells. Reading them first is what found the cause, because 'the board is wrong' and 'our link record is stale' have opposite repairs.",
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-19-ae9df2",
+   "subject": "Grocery: a GUARD has gone blind (test-auditors failed)",
+   "classification": "infra",
+   "evidence": [
+    "THE RESIDUAL SENTENCE IS FALSE, AND THE DATA BESIDE IT ALREADY SAID SO. plan-2026-09-20-2 left this item open on '20 of the 21 non-drink Snacks & Drinks commodities still carry no beverage class (apply_ids reaches pistachios only)'. grocery/category-excludes.json carries apply_ids as a TOP-LEVEL key (not nested under apply, which is deliberate and its note explains why), holding ONE block of 25 ids with classes ['beverage'].",
+    "COUNTED, NOT ASSERTED. categories.json 'Snacks & Drinks' (key snacks, order 11) holds 39 commodities, of which 18 are drinks (soda, bottled-water, the five juices, lemonade, fruit-punch, sports-drinks, energy-drinks, sparkling-water, iced-tea, tea-bags, hot-cocoa, coffee-pods, instant-coffee, white-wine, red-wine, brandy) and 21 are not. 21 of 21 non-drink members are in apply_ids. The other 4 ids are almonds, peanuts, walnuts and mixed-nuts, which sit in 'Coffee, Oils & Spreads' beside coffee. So the claim '1 of 21' is wrong by 20 commodities.",
+    "AND THE GUARD SEES THEM. audit-food-category.ps1 run live: exit 0, 'ok - no food commodity matched a beverage/baby-food/pet/household/bakery-carrier/dairy-carrier/candy product (2481 priced cells scanned)'. It is one of the three readers that union this block (with apply-category-excludes.ps1 and build-vet-sheet.ps1).",
+    "THE SENTENCE'S OWN HISTORY IS THE LESSON. The note inside apply_ids records that this is the third return of the same prose: 'plan-2026-09-19 and plan-2026-09-20-2 both carried the claim that apply_ids reaches pistachios only forward from prose the data beside it had already overtaken'. The previous money lane corrected that note on 2026-09-20 (commit 2cb9865d0); this item is the last plan still quoting the uncorrected version.",
+    "THE ITEM'S OWN HALF WAS NEVER IN DOUBT AND IS UNCHANGED. The rc-4 live-board tier shipped: a third tally, a WATCHERS-DECISION rc-4 branch with its own subject 'Grocery: the LIVE board failed a watcher (watchers intact)', its own evidence file and live= on the -COMPLETE marker, with five consumers in ops/prepush-test-auditors.ps1 taught to read it."
+   ],
+   "surface_fix": {
+    "what": "nothing to change: the residual this item was held open on does not reproduce, and the item's own fix shipped on 2026-09-19",
+    "files": [],
+    "exact_change": "none. The one artefact that was wrong was the stale prose, and it was corrected in category-excludes.json's own note by the previous lane on 2026-09-20 in the same change that measured it."
+   },
+   "root_cause": "CARRIED FORWARD VERBATIM from plan-2026-09-20-2.json item 2026-09-19-ae9df2: one-tally-two-verdicts, second arm. test-auditors asks two questions of one run - can each watcher still see its founding bug, and does the LIVE board still pass the watchers - and keeps one failure tally for both, so a LIVE-TWIN red (the watcher WORKING on a real bad cell) exits 2 and check-ad-cycles pages it as 'a GUARD has gone blind ... any quiet report from that guard is unproven'. The 2026-09-04 fix (queue 2026-09-04-0b63d3) split the hygiene kind out of that tally and left the live-board kind in it, so the class it named ('more finding KINDS than exit codes') was covered for one of its two remaining kinds. The cost is the trust ordering of the whole day: a blind-watcher page says trust nothing, a live-board red says the watchers are the ONE proven thing, and the page inverts them.",
+   "root_fix_none_because": "the class fix for that root cause - a third tally, a third verdict (rc 4, ordered below rc 2 so a blind watcher still outranks a live red), its own WATCHERS-DECISION branch, subject, evidence file and live= marker, with five consumers taught - shipped in full on 2026-09-19 and is not in question. What kept the item open was a residual belonging to a DIFFERENT item (f90ba6), and that residual is disproved above rather than fixed, so there is nothing left for a root fix to reach.",
+   "leaves_open": "nothing",
+   "leaves_open_occurrences": 0,
+   "leaves_open_followup": null,
+   "prior_closes": [
+    "2026-09-19-ae9df2"
+   ],
+   "prevention": {
+    "source": [
+     "grocery/category-excludes.json",
+     "grocery/test-auditors.ps1",
+     "grocery/audit-food-category.ps1"
+    ],
+    "what": "the recurrence this item suffered was not a defect recurring but a SENTENCE recurring: a note that disagreed with the data beside it was quoted forward by three consecutive plans. The prevention already shipped in the data itself - the apply_ids block's note now carries its own re-measurement, the date it was taken, the commit, and the instruction 'Re-measure this list before quoting it' - and the guard that would catch a real regression (audit-food-category, blocking, run in guards.ps1) is wired and green.",
+    "exact_change": "no code change in this round. The note correction landed at 2cb9865d0 on 2026-09-20; this plan adds the independent count (21 of 21 non-drink Snacks & Drinks members present, 25 ids total) so the next reader can check the claim in one command rather than trusting either sentence."
+   },
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "no rule, exclude, include or threshold was changed by this item, so no product's routing can move. Stated as a checkable claim rather than an omission: grocery/category-excludes.json, grocery/commodities.json and grocery/test-auditors.ps1 are byte-identical to their parent commit for this item, and audit-food-category over comparison-2026-09-20 scanned 2,481 priced cells and found 0 wrong-class products.",
+    "affected_now": 0,
+    "names": [],
+    "risk": "none: nothing shipped for this item.",
+    "cell_effects": []
+   },
+   "claimed_by_earlier": [],
+   "freshness": "measured 2026-09-20 18:10 against grocery/category-excludes.json and grocery/categories.json at HEAD 2cb9865d0, and audit-food-category run live over comparison-2026-09-20 (built_at 16:30:02).",
+   "proof": {
+    "guard_or_fixture": "grocery/audit-food-category.ps1 (blocking, delegated to by guards.ps1) plus the apply_ids membership count over categories.json",
+    "must_fire_case": "the founding bug is the Whole Moon Pistachio Plant Beverage holding the pistachios crown at 0.1426/oz against real nuts at 0.4056 while audit-food-category read OK; it is frozen in test-auditors' food-category cases, and the live arm of the same watcher fired for real on 2026-09-19 on 'Nutty Blends Stage 2 Baby Food Pouch' at almond-butter, which is what this queue item was paging about.",
+    "clean_twin": "the same guard over today's board stays SILENT on 2,481 priced cells with every class applied - exit 0 - so the 25-id block is not so broad that it condemns ordinary snack rows.",
+    "fixture_occurrences": [
+     "2026-09-19-ae9df2",
+     "2026-09-18-f90ba6"
+    ],
+    "commands": [
+     "powershell -File grocery\\audit-food-category.ps1",
+     "C:\\Codex\\Python312\\python.exe -c \"import json;ce=json.load(open('grocery/category-excludes.json',encoding='utf-8-sig'));print(len(ce['apply_ids'][0]['ids']))\""
+    ]
+   },
+   "rollback": "nothing to roll back - no file changed for this item.",
+   "do_not_touch": [
+    "grocery/category-excludes.json apply_ids",
+    "the rc-4 live tier in test-auditors.ps1 and its five consumers in ops/prepush-test-auditors.ps1"
+   ],
+   "resolution_note": "DOES NOT REPRODUCE, with numbers. The residual this was held open on - '20 of the 21 non-drink Snacks & Drinks commodities still carry no beverage class (apply_ids reaches pistachios only)' - is false: category-excludes.json's top-level apply_ids block carries 25 ids, and 21 of the 21 non-drink members of the Snacks & Drinks category (39 members, 18 of them drinks) are in it, plus the 4 nut ids from Coffee, Oils & Spreads. audit-food-category exits 0 over 2,481 priced cells with 0 wrong-class products. The claim was stale prose quoted forward by three consecutive plans while the data beside it already said otherwise; the note itself was corrected at 2cb9865d0. The item's own fix - the rc-4 live-board tier and its five taught consumers - shipped on 2026-09-19 and was never in question. leaves_open is nothing.",
+   "publish_batch": 1,
+   "status": "done",
+   "premise_verified": "false, and that is the finding. The premise was the leaves_open sentence, and it is wrong by 20 commodities: apply_ids carries 25 ids covering 21 of 21 non-drink Snacks & Drinks commodities, counted from categories.json rather than read out of any note. Checked independently of the note that was corrected on 2026-09-20, and confirmed by running the guard.",
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-19-641ec6",
+   "subject": "Board verification: defect rate 37.1% is above the last measured 18.2%",
+   "classification": "capture-gap",
+   "evidence": [
+    "THE CLASS FIX IS IN THE CODE AND I RAN IT. record-sample-verdict.ps1 now records a rubric per run (the sha256 of the BODY of its notes' 'Adjudication standard' section, plus version and counted subclasses) and compares two whole-board rates ONLY when both runs carry the same rules_sha.",
+    "VERIFIED LIVE ON THE TWO RUNS THAT CAUSED THIS ALERT. 'powershell -File grocery\\record-sample-verdict.ps1 -Report -CompareLast' exits 0 and prints: 'RATE-VS-LAST verdict=rubric-changed why=not-recorded scope=whole-board new=2026-09-17 37.1% ... last=2026-08-15 18.2% ... like_for_like=not-computable (the last run recorded no rubric, so which subclasses it counted is unknown) intervals=overlap new_rubric=none last_rubric=none (measured under different rules: the two whole-board rates are NOT compared)'. Before the fix this same pair produced the subject 'defect rate 37.1% is above the last measured 18.2%'.",
+    "IT FAILS CLOSED, WHICH IS THE HARDER HALF. Both runs pre-date rubric recording, so the verdict is 'not-recorded' rather than 'differs', and the restricted like-for-like rate is declared not computable rather than guessed. An unknown is reported as an unknown.",
+    "AND IT IS FIXTURED. The suite carries the case headed 'a rate is compared only with a rate adjudicated under the same rubric (2026-09-19, queue 641ec6)', with fixture runs that differ in rules_sha and in which subclasses they counted.",
+    "RESIDUAL OWNERSHIP CHECKED RATHER THAN ASSUMED. Queue item 2026-09-19-dc1b5b is OPEN in the weekly lane and its subject names all six live classes - 'aging, channel, not-cheapest, Fareway ranges, contested routing, Sam's pack total' - with each section carrying its own count and window in the body. The seventh, the online-multipack rubric, is the standing ruling q-2026-09-19-multipack."
+   ],
+   "surface_fix": {
+    "what": "nothing to change: the comparison that produced this alert is already refused as a cross-rubric comparison, and every residual class already has a live owner",
+    "files": [],
+    "exact_change": "none. Re-measured and confirmed rather than rebuilt."
+   },
+   "root_cause": "CARRIED FORWARD VERBATIM from plan-2026-09-19.json item 2026-09-19-641ec6: the alert compares two point estimates as if they measured the same thing: -CompareLast reads verdict counts out of verification-history.json, which carries no record of the adjudication rules a run applied, and the 2026-09-17 adjudicator wrote five rules the 2026-08-15 notes do not state that account for 24 of the 36 defects. Those 24 are real reader-facing defects newly COUNTED, not newly created; under the shared rubric the board scored 12/100 against 20/100.",
+   "root_fix_none_because": "the class fix already shipped and was verified live in this run rather than inferred: the recorder stores each run's rubric and each defect's subclass, refuses to compare across rubrics, prints the like-for-like rate when it can and says why it cannot when it cannot, and the alert subject says 'rubric changed' or 'rubric not recorded' instead of 'is above the last measured'. There is nothing left of this root cause to reach, and inventing a further structural change would be exactly the change no reviewer measured.",
+   "leaves_open": "the six residual defect classes of the 2026-09-17 verification (price aging 12 of 36, channel 7 of 36, not-cheapest 7 of 36, Fareway size ranges, contested-name routing, and Test-PieceSize reading a Sam's pack total as the piece weight), all owned with their counts by open weekly item 2026-09-19-dc1b5b; plus the online-multipack adjudication rubric, which is a ruling for Brad carried here as q-2026-09-19-multipack.",
+   "leaves_open_occurrences": "42 defect-cell occurrences counted over the 2026-09-17 verification (100 cells) and the 2026-09-19 rebuild, split across the six classes exactly as plan-2026-09-19 recorded them; re-checked today only for ownership, not re-derived.",
+   "leaves_open_followup": "2026-09-19-dc1b5b",
+   "prior_closes": [
+    "2026-09-19-641ec6"
+   ],
+   "prevention": {
+    "source": [
+     "grocery/record-sample-verdict.ps1"
+    ],
+    "what": "the emitting check can no longer page a movement between two numbers that were not measured the same way: the producer of the comparison records the rubric each run used and refuses a cross-rubric comparison outright, with its own verdict and its own subject line.",
+    "exact_change": "already shipped at 1dc717183 and after: a rubric block per run (notes body sha256, version, counted subclasses), a 'rubric-changed' verdict with a like-for-like restricted rate, a subject that says 'rubric changed' / 'rubric not recorded', and self-test fixtures whose runs differ in rules_sha. Verified live today on the exact pair that fired this alert."
+   },
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "no rule, include, exclude, band or threshold was changed by this item, so no product's routing can move. Stated as a checkable claim: nothing under grocery/ changed for this item, and the only command run was a read-only -Report -CompareLast.",
+    "affected_now": 0,
+    "names": [],
+    "risk": "none: nothing shipped for this item.",
+    "cell_effects": []
+   },
+   "claimed_by_earlier": [],
+   "freshness": "measured 2026-09-20 18:15 against grocery/out/verification-history.json as it stands at HEAD 2cb9865d0 (the 2026-09-17 and 2026-08-15 runs), and grocery/triage-queue.json for dc1b5b's status and scope.",
+   "proof": {
+    "guard_or_fixture": "grocery/record-sample-verdict.ps1 -SelfTest, case 'a rate is compared only with a rate adjudicated under the same rubric (2026-09-19, queue 641ec6)'",
+    "must_fire_case": "the founding pair itself: 2026-09-17 at 37.1% against 2026-08-15 at 18.2%, adjudicated under different rules, must NOT produce 'is above the last measured'. Run live today, it produces verdict=rubric-changed and the two rates are printed side by side explicitly NOT compared.",
+    "clean_twin": "two fixture runs carrying the SAME rules_sha still compare as they always did - the rates are stated against each other and the trigger still fires on a genuine rise - so the refusal is not so broad that it silences a real regression.",
+    "fixture_occurrences": [
+     "2026-09-19-641ec6",
+     "2026-09-19-dc1b5b"
+    ],
+    "commands": [
+     "powershell -File grocery\\record-sample-verdict.ps1 -Report -CompareLast"
+    ]
+   },
+   "rollback": "nothing to roll back - no file changed for this item.",
+   "do_not_touch": [
+    "grocery/out/verification-history.json",
+    "the rubric block written by record-sample-verdict.ps1",
+    "the six residual classes owned by 2026-09-19-dc1b5b"
+   ],
+   "resolution_note": "Re-measured, not rebuilt. The root cause was that -CompareLast compared two point estimates measured under different adjudication rules; that is fixed and was verified live on the very pair that fired this alert - it now prints 'verdict=rubric-changed why=not-recorded ... (measured under different rules: the two whole-board rates are NOT compared)' and exits 0, where it used to page '37.1% is above the last measured 18.2%'. It fails closed: with neither run carrying a rubric, the like-for-like rate is declared not computable rather than guessed. The six residual defect classes are carried with their counts by open weekly item 2026-09-19-dc1b5b, checked in the queue rather than assumed, and the seventh is the standing multipack ruling. No code shipped for this item and none was needed.",
+   "publish_batch": 1,
+   "status": "done",
+   "premise_verified": "true. The dispatch's premise was that the root-cause half worth confirming is whether -CompareLast still compares two rubrics as if they were one. It does not: run live on the 2026-09-17 / 2026-08-15 pair it returns verdict=rubric-changed and refuses the comparison. The second premise, that dc1b5b really carries residual classes 1 to 6, was checked against the queue rather than taken on trust: the item is open, weekly, and its subject and body name all six with counts.",
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-19-d240fd",
+   "subject": "Recipe pricing: 28 unpriced ingredient line(s)",
+   "classification": "needs-brad",
+   "evidence": [
+    "THE SHIPPED HALF HOLDS. meal-prep/db/cost-flags.txt as regenerated on 2026-09-20 at 12:09 carries 26 lines, down from the 27 the previous lane measured and the 28 that fired this alert. Turkey Wild Rice Casserole appears once, as the informational 'MAPPED BID NOT ON ANY BOARD (wild-rice)' note, not as a dropped line: the recipe prices its title ingredient from basis ledger:wild-rice:Hy-Vee:2026-09-19 and reads 3.42 a serving against the 2.21 it read before the fix.",
+    "RESIDUAL (2) IS THE ONLY ONE WITH MONEY IN IT AND IT IS A RULING, NOT A FIX. five-spice-powder still shows 'MAPPED BID NOT ON ANY BOARD (five-spice-powder)' on 5 recipes in today's cost-flags (7 recipes carry the line) and still prices from the 2026-07-18 Walmart label at $8.13 per 1.75 oz while the Hy-Vee carriage ledger reads $9.99. The ledger basis is ordered AFTER label BY DESIGN until the ruling lands, so changing that ordering on my own initiative is exactly what this lane must not do. It stays with Q1-2026-09-20-partial-cost.",
+    "RESIDUAL (1) STILL TRUE, AND ITS OWNER IS LIVE. wild-rice and five-spice reach no board because no capture holds a matching Hy-Vee row. Re-measured in this run's own guards.ps1: 'BLIND pull-regular-hyvee - examined 0 of 15 eligible row(s) ... budget 15, asked 15, answered 0'. Open queue item 2026-09-20-7bac4b names exactly this lane: 'NO FRESH ROWS: Hy-Vee has a headless lane and the 08:00 capture ran, but it contributed ZERO rows dated 2026-09-20 (newest 2026-09-19, 1d old). Its puller ran and saw nothing - check that lane before trusting its cells.'",
+    "RESIDUAL (3) MEASURES ZERO TODAY. The 71 CARRIED ledger entries keyed item:<name> are still unreachable by the bid-keyed basis, and 0 of today's 26 cost-flags lines is one of them - the same count the previous lane measured, re-read on today's file.",
+    "RESIDUAL (4) IS CLOSED BY COMPOSITION, AND THE ROAD THAT MATTERS IS GUARDED WITH FIXTURES. meal-prep/pipeline/sync-recipesdb-cost.ps1 carries the lines_unpriced refusal at line 117 ('a LIVE recipe's cost that excludes an ingredient the reader must buy may not sync') with a MUST FIRE on a live slug at lines_unpriced 1, a MUST NOT FIRE exactly AT the bar (lines_unpriced 0), and a CLEAN TWIN that a published slug at 0 still syncs every field. wave-preaudit guards the wave; propagate-recipes carries no copy and needs none, because sync is the road the spec and index copies take.",
+    "RESIDUAL (5) WAS A ONE-OFF AND IS GONE. costed.json and cost-flags.txt are pipeline output, regenerated by the chain and not committed by any triage run; today's file is the chain's own 12:09 regeneration.",
+    "RESIDUAL (6) HAS AN OWNER THAT IS OPEN. The cost-flags alert still leads with a bare count and cannot say which affected recipes are LIVE; weekly item 2026-09-20-6c14f6 is open and holds it.",
+    "RESIDUAL (7) IS ZERO-OCCURRENCE AND FAILS CLOSED. A hand run of cost-recipes.ps1 with no -LedgerMaxAgeDays prices no ledger line; check-ad-cycles is the only production caller and it passes the flag."
+   ],
+   "surface_fix": {
+    "what": "no code change: the one residual with money in it is a precedence question that only a ruling may answer, and every other residual is either measured to zero today or held by a live owner",
+    "files": [],
+    "exact_change": "none. Deliberately: reordering the carriage ledger ahead of the label price would change the published per-serving cost of 7 recipes and is the subject of Q1-2026-09-20-partial-cost."
+   },
+   "root_cause": "CARRIED FORWARD VERBATIM from plan-2026-09-20-2.json item 2026-09-19-d240fd: Two mechanisms. (1) cost-recipes has three price bases (board, feed, label) and the carriage ledger, which is the one place a live in-store read of price + size + product id + date is recorded for an ingredient no capture reaches, is consulted for its verdict only; so an ingredient PROVEN carried at a KNOWN price drops out of the recipe and the cost reads lower, while the same ingredient with a stale hand-typed label price would have priced. (2) The lines_unpriced=0 rule is enforced once, at first publish (wave-preaudit); a LIVE recipe whose recost later loses a line is only advisory (the cost-flags alert) and the surfaces are protected today by an accident of composition (compute-v2-perserving SKIPS the recipe, which is itself an alert, and sync/propagate are hand runs). One capture gap (Hy-Vee's pull examined 0 of 15 today) turned a carried ingredient into a silently cheaper recipe.",
+   "root_fix_none_because": "both halves of that root cause already shipped and were re-measured here rather than re-derived: the engine now prices a CARRIED ledger entry (after label, within the quarter) and a live recipe with an unpriced line can no longer sync a partial cost, with must-fire, at-the-bar and clean-twin cases on the sync road. What remains of mechanism (1) is not a missing fix but an unanswered ORDERING question - label before ledger - which moves the published cost of 7 live recipes and is therefore a ruling, not an implementation.",
+   "leaves_open": "TWO. (a) five-spice-powder prices from a 2026-07-18 Walmart label at $8.13 per 1.75 oz while the Hy-Vee carriage ledger reads $9.99, on 7 recipes, because the ledger basis is ordered AFTER label by design until the ruling lands - a 19% understatement on a line worth cents a serving, unchanged today. (b) wild-rice and five-spice still reach no board at all because the Hy-Vee pull answered 0 of 15 eligible rows again today.",
+   "leaves_open_occurrences": "(a) 7 recipes on today's cost-flags, 0 reader-visible cents measured, unchanged from 2026-09-19 and 2026-09-20; (b) pull-regular-hyvee BLIND on 3 measured occasions now - 2026-09-20 08:43, the previous lane's coverage read, and this run's own guards.ps1 pass - with 2026-09-20-7bac4b independently recording zero fresh Hy-Vee rows today.",
+   "leaves_open_followup": "Q1-2026-09-20-partial-cost",
+   "prior_closes": [
+    "2026-09-19-d240fd",
+    "2026-09-20-fb37b9"
+   ],
+   "prevention": {
+    "source": [
+     "meal-prep/engine/cost-recipes.ps1",
+     "meal-prep/pipeline/sync-recipesdb-cost.ps1"
+    ],
+    "what": "the producer of the published per-serving cost can no longer emit one that silently excludes an ingredient the reader must buy: the engine prices a carriage-ledger entry instead of dropping the line, and the road the spec and index copies travel refuses to sync a LIVE recipe whose costed row has lines_unpriced above zero.",
+    "exact_change": "already shipped 2026-09-20: cost-recipes gains the ledger basis (after label, within the quarter, gated on -LedgerMaxAgeDays so a hand run fails closed); sync-recipesdb-cost.ps1:117 refuses a live slug at lines_unpriced != 0 and names it, with a MUST FIRE at 1, a MUST NOT FIRE exactly at the bar of 0, and a CLEAN TWIN that a clean published slug still syncs all six fields. No further code change in this round: the remaining question is the label-versus-ledger precedence and it is Brad's."
+   },
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "no rule, include, exclude, band, bid or precedence was changed by this item, so no product's routing and no recipe's cost can move. Stated as a checkable claim: nothing under meal-prep/ or grocery/ changed for this item, and meal-prep/db/cost-flags.txt is the chain's own 12:09 regeneration, not this run's.",
+    "affected_now": 0,
+    "names": [],
+    "risk": "none: nothing shipped for this item. The risk of the change NOT made is stated instead - reordering ledger ahead of label would move the published per-serving cost of 7 live recipes, which is why it is a ruling.",
+    "cell_effects": []
+   },
+   "claimed_by_earlier": [],
+   "freshness": "measured 2026-09-20 18:20 against meal-prep/db/cost-flags.txt (regenerated by the chain at 12:09 today, 26 lines), this run's own guards.ps1 coverage-ledger output for pull-regular-hyvee, and grocery/triage-queue.json for the status of 2026-09-20-7bac4b and 2026-09-20-6c14f6. cost-flags regenerates every cycle, so the 26 will move; the label-versus-ledger ordering will not until the ruling lands.",
+   "proof": {
+    "guard_or_fixture": "meal-prep/pipeline/sync-recipesdb-cost.ps1 -SelfTest (the lines_unpriced refusal), plus meal-prep/db/cost-flags.txt as the live record",
+    "must_fire_case": "the founding row, frozen: a LIVE slug whose costed row reads lines_unpriced 1 because the engine dropped Wild Rice (855 g, $16.94 a batch) is REFUSED, named, and none of its six fields is written.",
+    "clean_twin": "a published slug with lines_unpriced 0 still syncs all its fields and no refusal lands in drift - the publishing path the refusal was most likely to break - with a separate MUST NOT FIRE case exactly AT the bar of 0.",
+    "fixture_occurrences": [
+     "2026-09-19-d240fd",
+     "2026-09-20-fb37b9"
+    ],
+    "commands": [
+     "powershell -File meal-prep\\pipeline\\sync-recipesdb-cost.ps1 -SelfTest"
+    ]
+   },
+   "rollback": "nothing to roll back - no file changed for this item.",
+   "do_not_touch": [
+    "the label-before-ledger basis ordering in meal-prep/engine/cost-recipes.ps1 (Q1-2026-09-20-partial-cost)",
+    "the lines_unpriced refusal in sync-recipesdb-cost.ps1 and its three fixture cases",
+    "meal-prep/db/cost-flags.txt and costed.json - pipeline output, regenerated by the chain"
+   ],
+   "resolution_note": "Re-measured all seven residuals on today's data; six are closed or owned and the seventh is a ruling. Closed: (3) 0 of today's 26 cost-flags lines is an item-keyed ledger entry; (4) the sync road carries the lines_unpriced refusal with a must-fire, an at-the-bar must-not-fire and a clean twin, and wave-preaudit guards the wave; (5) costed.json and cost-flags.txt are the chain's own regeneration and are committed by nobody; (7) a hand run without -LedgerMaxAgeDays fails closed and has 0 production callers. Owned: (6) by open weekly item 2026-09-20-6c14f6, (b) the Hy-Vee pull by open item 2026-09-20-7bac4b, which independently recorded zero fresh Hy-Vee rows today while this run's guards read 'examined 0 of 15 eligible'. Parked with its evidence: five-spice-powder still prices from a 2026-07-18 Walmart label at $8.13/1.75 oz against a ledger reading $9.99, on 7 recipes, because label is ordered before ledger by design - that ordering is Q1-2026-09-20-partial-cost and only a ruling may move it. The wild-rice fix is live and holds: basis ledger:wild-rice:Hy-Vee:2026-09-19, 3.42 a serving against 2.21. No code shipped for this item.",
+   "publish_batch": 1,
+   "status": "done",
+   "premise_verified": "true. The dispatch's premise - that the wild-rice fix shipped and is live, that seven residuals remain, and that the five-spice one is the one with money in it and is blocked on Q1-2026-09-20-partial-cost - holds on today's data: cost-flags carries 26 lines with Turkey Wild Rice Casserole present only as the informational no-board note, and five-spice still prices from the 2026-07-18 label on 7 recipes. What I checked rather than assumed: that 2026-09-20-6c14f6 and 2026-09-20-7bac4b are both OPEN and that 7bac4b's body really names the Hy-Vee lane, and that the lines_unpriced refusal on the sync road carries all three fixture kinds.",
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-19-4f01f6",
+   "subject": "Grocery: semantic sweep found 1 product(s) no rule can see - 2026-09-19 (8 on 2026-09-20)",
+   "classification": "superseded",
+   "evidence": [
+    "SAME CONDITION AS 2026-09-18-37ac63, SAME EMITTER, SAME ADJUDICATION. Both are grocery/check-ad-cycles.ps1 paging audit-semantic-identity's coverage findings; 4f01f6 carries count 3 with the 2026-09-20 sweep of 8 recorded as its own recurrence, and those 8 are precisely the findings item 2026-09-18-37ac63 adjudicated (4 ruled into known-wrong on 2026-09-19, 4 admitted by the three include patterns landed today).",
+    "AND THE SWEEP NOW REPORTS ZERO. audit-semantic-identity.ps1 re-run after the widening: exit 0, 'COVERAGE (real products no rule can see): 0 product(s) across 0 commodit(y/ies)', against the 8 across 6 commodities in out/semantic-findings.json at 15:59 today.",
+    "ITS ORIGINAL 2026-09-19 FINDING, pie-pumpkins, IS NOT IN TODAY'S SWEEP AND I DID NOT ADJUDICATE IT. It is absent from the 15:59 findings file and from the post-widening run, so it is not reported by any current sweep. COULD NOT VERIFY whether a rule change or a capture change removed it; the honest statement is that no sweep over comparison-2026-09-20 reports it."
+   ],
+   "root_cause": "the same root cause as 2026-09-18-37ac63, carried forward verbatim there: the sweep's alert cannot tell 'no include matches' from 'an exclude refused it', so every product a rule correctly refuses is re-paged as invisible; and the only suppressor it honours is a per-name ruling, which a store defeats by listing the next SKU and which the -File comma trap can silently turn into a ruling that matches nothing.",
+   "leaves_open": "nothing",
+   "leaves_open_occurrences": 0,
+   "leaves_open_followup": null,
+   "resolution_note": "SUPERSEDED by 2026-09-18-37ac63 in this same plan, which adjudicated every finding this item carries: 4 ruled into known-wrong on 2026-09-19 and 4 admitted today by three include patterns that went through apply-coverage-batch and were ACCEPTED. The sweep re-run afterwards reports COVERAGE 0 products across 0 commodities against 8 this morning. Not reported as separate work. Its own 2026-09-19 finding, pie-pumpkins, is absent from every sweep over today's board and was not adjudicated by this run: could not verify why it stopped being reported.",
+   "publish_batch": 1,
+   "status": "superseded",
+   "premise_verified": "true. Checked rather than assumed: the emitter, the type key and the recurrence body are identical to 37ac63's, and the 8 findings 4f01f6 recorded as its 2026-09-20 recurrence are the same 8 rows 37ac63 adjudicated. The post-widening sweep reads 0.",
+   "deviation": null,
+   "shipped_commit": null
+  }
+ ],
+ "ship_sequence": [
+  "read the two blocking tile faults off out/tile-integrity.json and trace each to its source row BEFORE repairing (they were not what the prior plan called them)",
+  "fix derive-links-from-prices.ps1: the staleness test on `already`, the board-published-price write rule, -ProductUrlsFile and -SelfTest",
+  "derive-links-from-prices.ps1 -SelfTest (7 cases), then a mutation probe from a temp mirror (3 mutants, original md5 verified unchanged)",
+  "derive-links-from-prices.ps1 (global DRY RUN, read the counts), then -Store Fareway (dry run), then -Store Fareway -Apply",
+  "withdraw-stale-link.ps1 -Pairs feminine-pads/Sam's Club, in-process with splatting (an array argument does not survive powershell -File)",
+  "audit-name-drift.ps1, then audit-tile-integrity.ps1 to confirm both blocking faults are gone",
+  "apply-coverage-batch.ps1 -Patterns (the three frozen patterns, unmodified) - expect BATCH ACCEPTED",
+  "restore commodities.json to its parent bytes and re-apply the three patterns surgically (the batch's writer adds a BOM and re-escapes every apostrophe), then verify the result is SEMANTICALLY identical to the gated output",
+  "audit-match-soundness.ps1 (expect MOVED=0 DROPPED=0, so no -Accept and no baseline move)",
+  "audit-name-drift / prune-bad-links / audit-name-drift AGAIN / generate-board-overrides / build-deals-page",
+  "audit-tile-integrity.ps1 (expect 0), guards.ps1 (MUST be 0), audit-basis-reconcile.ps1, audit-pack-basis.ps1",
+  "re-measure ae9df2, 641ec6 and d240fd against today's data; mint the one residual owner through send-alert.ps1 -Force -Lane weekly -BodyFile",
+  "test-auditors.ps1 (MUST be 0), validate-triage-plan -OpenIds then -Closing, commit with a pathspec, push"
+ ],
+ "open_questions_for_brad": [
+  {
+   "id": "Q1-shape-scoped-rulings",
+   "question": "CARRIED FORWARD from plan-2026-09-20-4.json, unchanged and still unanswered. known-wrong is keyed on commodity|store|normalised NAME, so every new SKU of an already-adjudicated shape pages again. 37ac63 recorded this at 0 occurrences on 2026-09-18; it fired 3 times on 2026-09-20 (two Ben's Original Ready Rice flavour SKUs, one Stayfree SKU). Should a ruling be able to name a SHAPE rather than a name, and if so what stops a shape-keyed ruling from silently suppressing a product nobody adjudicated? Nobody has measured what a pattern-keyed known-wrong entry would suppress across the 326 existing rulings, and this lane will not invent that."
+  },
+  {
+   "id": "Q1-2026-09-20-partial-cost",
+   "question": "CARRIED FORWARD from plan-2026-09-20-2.json. cost-recipes orders the price bases board, then feed, then hand-typed LABEL, then the carriage ledger. five-spice-powder therefore prices from a 2026-07-18 Walmart label at $8.13 per 1.75 oz while the Hy-Vee carriage ledger - a live in-store read of price, size, product id and date - says $9.99, a 19% understatement on 7 live recipes. Should a carriage-ledger read inside the quarter outrank a hand-typed label price older than it? The money is cents a serving; the principle is which evidence wins when both are real and one is newer. Changing the ordering moves the published per-serving cost of 7 live recipes, so it is a ruling and not an implementation detail."
+  },
+  {
+   "id": "Q2-feminine-pads-tile-drift",
+   "question": "ANSWERED BY THIS RUN, recorded so it is not asked a fourth time. plan-2026-09-20-4 asked who heals the 2 feminine-pads tile faults and whether 223 board-wide faults is acceptable. Answer: they were healed at their cause today, and the cause was ours - derive-links-from-prices compared the URL alone and wrote the row's ad_price rather than the price the board published. Board-wide drift fell 225 to 198 and the remaining 198 are measured and owned by 2026-09-20-bec597, of which 81 Sam's Club cells need ONE browser probe (does an alphanumeric sams_item_id resolve under /ip/<id> or /p/<slug>/<id>?) before they can be linked at all. No ruling needed unless Brad wants the global refresh run sooner than the weekly lane."
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+{
+  "generated": "2026-09-20T18:35:00",
+  "for_plan": "plan-2026-09-20-5.json",
+  "note": "NOT a hand-rolled corpus re-route, and NOT a re-derivation. The include-widening half is the SAME contract plan-2026-09-20-4.routing.json froze, re-run today by the estate's own gated tool (grocery\\apply-coverage-batch.ps1, no -WhatIfOnly) once the two faults that refused it were healed. Every number below was read off that run's own output, and each one reproduces the frozen artifact exactly, which is what makes it a diff rather than a rebuild. The link-layer half is a before/after of grocery\\audit-tile-integrity.ps1 over one board, because a link record's impact is which tile disagrees with its link, and that is what that audit counts.",
+  "corpus": "comparison-2026-09-20 (built_at 2026-09-20T16:30:02, week_of 2026-09-20), rebuilt by apply-coverage-batch under the CURRENT rules as its own baseline and then again with the three candidate patterns applied; 565 commodities on the board both times, 2,629 priced tiles and 2,410 linked tiles graded by audit-tile-integrity on the same board.",
+  "positive_control": {
+    "name": "non-zero reveal on all three candidate patterns, re-run live today (the anti-false-zero check)",
+    "expected": "feminine-pads 2, maple-syrup 3, onion-soup-mix 2",
+    "observed": "feminine-pads 2, maple-syrup 3, onion-soup-mix 2"
+  },
+  "variants": [
+    {
+      "id": "C1-coverage-widen-3",
+      "queue_id": "2026-09-18-37ac63",
+      "patterns": {
+        "feminine-pads": ["\\bclassic\\s+pads?\\b"],
+        "maple-syrup": ["\\bsyrup\\s+original\\b"],
+        "onion-soup-mix": ["onion\\s+dry\\s+recipe\\s+soup\\b.{0,15}\\bmix\\b"]
+      },
+      "verdict": "ACCEPTED BY THE GATE on 2026-09-20 at 18:05. Same three patterns, same corpus, same tool; the only thing that changed is that the two faults the gate refused on were fixed at their cause first. Gate output verbatim: 'tile-integrity failed: 0 hard fault(s) on BATCH commodities, 198 pre-existing elsewhere' then 'BATCH ACCEPTED, BOARD NOT PUBLISHABLE YET (pre-existing link churn)', exit 1. The gate was NOT weakened, skipped, overridden or -Accept'ed.",
+      "crown_changes": 0,
+      "cells": { "feminine-pads": "6 -> 6", "maple-syrup": "5 -> 5", "onion-soup-mix": "3 -> 3" },
+      "value": "+0 cell(s), -0 cell(s), 0 commodities got a cheaper real price",
+      "rows_revealed": { "feminine-pads": 2, "maple-syrup": 3, "onion-soup-mix": 2 },
+      "theft_check": "OK - no other commodity lost a cell or was re-priced",
+      "reproduces_prior_artifact": "every field above is byte-for-byte the verdict plan-2026-09-20-4.routing.json froze on 2026-09-20 at 13:55, so the contract was diffed and not rebuilt",
+      "why_it_buys_nothing_today": "unchanged from the frozen artifact: each admitted product is DEARER than the cell its own store already holds (Baker's Stayfree Classic Pads 0.1818/each against 0.1408; Baker's Pearl Milling Syrup Original 0.1663/floz against 0.0912; Walmart Lipton Onion Dry Recipe Soup and Dip Mix 0.9358/oz against a 0.49 crown). The value is that four real products stop being invisible to every FUTURE week's board, and stop paging the semantic sweep."
+    },
+    {
+      "id": "L1-link-snapshot-refresh",
+      "queue_id": "2026-09-18-37ac63",
+      "what": "grocery\\derive-links-from-prices.ps1: `already` now means same URL AND a stored snapshot that still re-prices to its cell; and an entry's price is the price the BOARD published, written only after proving that number is one the row itself observed.",
+      "measured_as": "tiles whose stored link price disagrees with the price the board publishes (audit-tile-integrity PRICE-DRIFT), one board, before and after",
+      "before": { "total": 225, "by_store": { "Sam's Club": 70, "Aldi": 48, "Hy-Vee": 42, "Walmart": 30, "Fareway": 26, "Baker's": 8, "Family Fare": 1 }, "no_link": 225, "accuracy": 0 },
+      "after": { "total": 198, "by_store_changed": { "Fareway": 0 }, "no_link": 219, "accuracy": 0 },
+      "applied_scope": "Fareway only (33 links written), plus ONE withdrawal: feminine-pads [Sam's Club] via withdraw-stale-link.ps1",
+      "not_applied": "a GLOBAL dry run of the fixed script reports 144 further entries it can refresh and 82 it refuses (Sam's Club 81, Baker's 1). Not applied here: plan-2026-09-20-4 put the pre-existing faults in do_not_touch, and a global -Apply once re-pointed about 40 Fareway links onto pack prices. Owner: queue item 2026-09-20-bec597 (weekly).",
+      "coverage_cost_paid_deliberately": "Sam's Club NO-LINK 52 -> 53, which is audit-tile-integrity's own stated trade ('a wrong link is strictly worse than no link, so ACCURACY is bought by spending COVERAGE, and this split is what lets that trade be made deliberately instead of accidentally'). Fareway NO-LINK 8 -> 1 and the board total 225 -> 219, so the net coverage movement is an IMPROVEMENT of 6.",
+      "gates_after": "audit-name-drift 0, prune-bad-links 0 (0 links dropped), audit-name-drift 0, generate-board-overrides 0, build-deals-page 0, audit-tile-integrity 0 (TILE-INTEGRITY-COMPLETE, ACCURACY 0 of 2410), audit-match-soundness 0 (MOVED=0 DROPPED=0), guards 0 (GUARDS-COMPLETE hard=0 warn=21), audit-basis-reconcile 0 (checked=52 findings=0), audit-pack-basis 0"
+    }
+  ],
+  "what_the_next_run_must_not_redo": "The three include patterns are shipped and the two blocking faults are healed at their cause; neither needs re-measuring. What is left is measured and owned: 144 refreshable link snapshots and 81 Sam's cells that no current capture can link at all, both in queue item 2026-09-20-bec597, with the one browser probe that unblocks the Sam's half written out there. Do not re-route the corpus and do not re-run apply-coverage-batch for these three patterns."
+}
