@@ -82,6 +82,21 @@ queue means less budget per item; less budget per item means more unfinished ite
 
 ### 1. An item whose root fix did not land does not CLOSE
 
+> **REVERSED BY BRAD BEFORE IT WAS BUILT, 2026-09-20, and what SHIPPED is below this box.** The section
+> as written is wrong and is kept so the reasoning is on the record. The queue's `disposition` answers
+> "was the ALERT RIGHT" (confirmed / false-alarm / superseded / by-design / wont-fix, `grocery/triage-lib.ps1`'s
+> own header) and exists so a detector's live precision becomes knowable. Whether the FIX FINISHED is a
+> different axis and lives in the plan item's `status`. Blocking a close on plan status would jam the two
+> axes together and corrupt the precision measure that field exists for.
+>
+> **What shipped instead: the close is unchanged, and unfinished work becomes VISIBLE and DUE.**
+> `Get-TriageUnfinished` in `grocery/triage-return-lib.ps1` returns one record per queue item whose NEWEST
+> plan item closed `deviated` or `needs-more-time` (newest wins by `Get-TriageReturnRoute`'s own walk, and
+> the lane by `Get-TriageRouteLane`). `grocery/triage-due.ps1` prints them as a `RESUME` section ABOVE the
+> DUE list, and RESUME work alone makes the run DUE. An item still `open` is today's work, not unfinished
+> work; a `needs-brad` item is parked on a ruling and is never re-triaged. IDLE keeps its meaning otherwise.
+> On the day it landed the live run named 9 unfinished root fixes that nothing else in the report could see.
+
 Today `deviated` and `needs-more-time` still close the queue item. They should not.
 
 A queue item closes only on `done`, `superseded`, `by-design`, `false-alarm` or `needs-brad`. On
