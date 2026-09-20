@@ -148,7 +148,7 @@
    "status": "done",
    "premise_verified": "true in its shape and false in its wording, and the wording mattered. The premise 'the widening is blocked by 2 pre-existing feminine-pads PRICE-DRIFT faults' held exactly: apply-coverage-batch refused the identical batch on those two rows. The plan's description of them did not: they are not wrong products and not a lie about which product a tile opens, they are our own stale record of the link's price, with the board correct on both cells. Reading them first is what found the cause, because 'the board is wrong' and 'our link record is stale' have opposite repairs.",
    "deviation": null,
-   "shipped_commit": null
+   "shipped_commit": "0072c7586d6bbfb88739fb219abdac5426276588  (the commit titled 'Triage 2026-09-20-5 money lane: the link record compared its URL and never its price, so a gate refused a correct widening for two days', read back off origin/main after the push landed; that commit is also the one that CREATED this plan file, so git log --diff-filter=A on this path finds it whatever a rebase does to the hash)"
   },
   {
    "queue_id": "2026-09-19-ae9df2",
@@ -216,7 +216,7 @@
    "status": "done",
    "premise_verified": "false, and that is the finding. The premise was the leaves_open sentence, and it is wrong by 20 commodities: apply_ids carries 25 ids covering 21 of 21 non-drink Snacks & Drinks commodities, counted from categories.json rather than read out of any note. Checked independently of the note that was corrected on 2026-09-20, and confirmed by running the guard.",
    "deviation": null,
-   "shipped_commit": null
+   "shipped_commit": "0072c7586d6bbfb88739fb219abdac5426276588  (the commit titled 'Triage 2026-09-20-5 money lane: the link record compared its URL and never its price, so a gate refused a correct widening for two days', read back off origin/main after the push landed; that commit is also the one that CREATED this plan file, so git log --diff-filter=A on this path finds it whatever a rebase does to the hash)"
   },
   {
    "queue_id": "2026-09-19-641ec6",
@@ -282,7 +282,7 @@
    "status": "done",
    "premise_verified": "true. The dispatch's premise was that the root-cause half worth confirming is whether -CompareLast still compares two rubrics as if they were one. It does not: run live on the 2026-09-17 / 2026-08-15 pair it returns verdict=rubric-changed and refuses the comparison. The second premise, that dc1b5b really carries residual classes 1 to 6, was checked against the queue rather than taken on trust: the item is open, weekly, and its subject and body name all six with counts.",
    "deviation": null,
-   "shipped_commit": null
+   "shipped_commit": "0072c7586d6bbfb88739fb219abdac5426276588  (the commit titled 'Triage 2026-09-20-5 money lane: the link record compared its URL and never its price, so a gate refused a correct widening for two days', read back off origin/main after the push landed; that commit is also the one that CREATED this plan file, so git log --diff-filter=A on this path finds it whatever a rebase does to the hash)"
   },
   {
    "queue_id": "2026-09-19-d240fd",
@@ -353,7 +353,7 @@
    "status": "done",
    "premise_verified": "true. The dispatch's premise - that the wild-rice fix shipped and is live, that seven residuals remain, and that the five-spice one is the one with money in it and is blocked on Q1-2026-09-20-partial-cost - holds on today's data: cost-flags carries 26 lines with Turkey Wild Rice Casserole present only as the informational no-board note, and five-spice still prices from the 2026-07-18 label on 7 recipes. What I checked rather than assumed: that 2026-09-20-6c14f6 and 2026-09-20-7bac4b are both OPEN and that 7bac4b's body really names the Hy-Vee lane, and that the lines_unpriced refusal on the sync road carries all three fixture kinds.",
    "deviation": null,
-   "shipped_commit": null
+   "shipped_commit": "0072c7586d6bbfb88739fb219abdac5426276588  (the commit titled 'Triage 2026-09-20-5 money lane: the link record compared its URL and never its price, so a gate refused a correct widening for two days', read back off origin/main after the push landed; that commit is also the one that CREATED this plan file, so git log --diff-filter=A on this path finds it whatever a rebase does to the hash)"
   },
   {
    "queue_id": "2026-09-19-4f01f6",
@@ -373,7 +373,7 @@
    "status": "superseded",
    "premise_verified": "true. Checked rather than assumed: the emitter, the type key and the recurrence body are identical to 37ac63's, and the 8 findings 4f01f6 recorded as its 2026-09-20 recurrence are the same 8 rows 37ac63 adjudicated. The post-widening sweep reads 0.",
    "deviation": null,
-   "shipped_commit": null
+   "shipped_commit": "0072c7586d6bbfb88739fb219abdac5426276588  (the commit titled 'Triage 2026-09-20-5 money lane: the link record compared its URL and never its price, so a gate refused a correct widening for two days', read back off origin/main after the push landed; that commit is also the one that CREATED this plan file, so git log --diff-filter=A on this path finds it whatever a rebase does to the hash)"
   }
  ],
  "ship_sequence": [
