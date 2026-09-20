@@ -73271,6 +73271,10 @@
         "id":  "cornmeal",
         "label":  "Cornmeal",
         "unit":  "oz",
+        "_note_relax":  "2026-09-19: the same class as 15-bean-soup-mix and frozen-mixed-peppers, with one twist that hid it from the zero-survivor sweep. The global \\bmeal\\b refuses every product spelled 'Corn Meal' as two words, which is nearly all of them - Pearl Milling 80 oz $4.37, Quaker 24 oz $3.17, Great Value, Martha White, GOYA, Dixie Lily, PAN - leaving exactly ONE survivor, Bob's Red Mill Organic 'Cornmeal' one word at $11.71/24 oz = 0.488/oz, which its own 0.03-0.39 band then refuses as too dear. So the commodity had a survivor and still no cell, and only the band kept it off the board. The commodity's own include is '\\bcorn\\s*meal\\b', i.e. it expects the spelling the global kills. Pearl Milling at 4.37/80 oz = 0.0546/oz is what should hold this cell.",
+        "relax_global":  [
+                             "\\bmeal\\b"
+                         ],
         "include":  [
                         "\\bcorn\\s*meal\\b",
                         "\\bcornmeal\\b"
@@ -74089,6 +74093,11 @@
         "id":  "15-bean-soup-mix",
         "label":  "15 Bean Soup Mix",
         "unit":  "oz",
+        "_note_relax":  "2026-09-19: this commodity could never be priced ANYWHERE, because its own defining words are on the global exclude list and killed every product its includes claim - 'Hurst's HamBeens 15 Bean Dry Soup Mix with Seasoning, 20 oz' at Walmart $2.87 and the same product at Family Fare $3.99, both refused by \\bsoup\\b and \\bmix\\b. It has been sitting in store-coverage's 'staple not on board' list because of it. The globals exist to keep prepared soups and drink mixes out of food rows; a 15-bean soup MIX is the commodity itself, which is what relax_global is for. $2.87/20 oz = 0.1435/oz, inside its own 0.06-0.53 band.",
+        "relax_global":  [
+                             "\\bsoup\\b",
+                             "\\bmix\\b(?!\\s*(?:&|and)\\s*match)"
+                         ],
         "include":  [
                         "\\b15[- ]?bean\\b.*\\bsoup\\b(?:\\s+mix)?\\b",
                         "\\bhambeens?\\b.*\\b15[- ]?bean\\b",
@@ -74201,6 +74210,11 @@
         "id":  "southern-mixed-greens",
         "label":  "Southern-Style Mixed Greens",
         "unit":  "oz",
+        "_note_relax":  "2026-09-19: unpriceable anywhere for the same reason as 15-bean-soup-mix. Its own include pattern begins '(?:seasoned\\s+)?southern', so the word the global `seasoned` refuses is one this commodity expects, and the product is sold canned: 'Glory Foods Seasoned Southern Style Mixed Greens, Canned Vegetables, 27 oz' at Walmart $2.52 and at Baker's $3.29 were the only two claimed, killed by `seasoned` and \\bcanned\\b. $2.52/27 oz = 0.0933/oz, inside its 0.04-0.37 band.",
+        "relax_global":  [
+                             "seasoned",
+                             "\\bcanned\\b"
+                         ],
         "include":  [
                         "\\b(?:seasoned\\s+)?southern(?:\\s+style)?\\s+mixed\\s+greens\\b",
                         "\\bmixed\\s+greens\\b.*\\b(?:turnip|mustard)\\b"
@@ -74867,6 +74881,11 @@
         "id":  "frozen-mixed-peppers",
         "label":  "Frozen Sliced Mixed Peppers",
         "unit":  "oz",
+        "_note_relax":  "2026-09-19: a FROZEN commodity refused by the global \\bfrozen\\b, so it could never be priced anywhere - every include pattern it has names 'frozen' itself. All five claimed products were killed: Great Value Pepper & Onion Mixed Vegetable Blend 20 oz $2.84 and Pictsweet 3 Pepper & Onion 22 oz $3.86 at Walmart, Kroger Frozen 3 Pepper & Onion Blend 12 oz $1.59 and Kroger Frozen Fajita Blend 48 oz $6.29 at Baker's, Birds Eye Pepper Stir Fry 14.4 oz $1.99 at Fareway. \\bmix\\b is relaxed too for the Kroger fajita blend, whose name says Mix. $1.59/12 oz = 0.1325/oz, inside its 0.04-0.4 band.",
+        "relax_global":  [
+                             "\\bfrozen\\b",
+                             "\\bmix\\b(?!\\s*(?:&|and)\\s*match)"
+                         ],
         "include":  [
                         "\\b(frozen|fresh frozen)\\b.*\\b(3|three|tri[- ]?colou?red|mixed)\\b.*\\b(bell\\s+)?peppers?\\b",
                         "\\b(frozen|fresh frozen)\\b.*\\b(bell\\s+)?peppers?\\b.*\\b(onions?|blend|medley|stir[- ]?fry)\\b",
@@ -78960,6 +78979,10 @@
         "id":  "wild-rice-blend",
         "label":  "Wild Rice Blend",
         "unit":  "lb",
+        "_note_relax":  "2026-09-19: the include is '\\bwild\\s+rice\\s+(?:blend|mix)\\b' - the commodity admits the word MIX by name - while the global \\bmix\\b refused every product it claimed: the three Earthly Grains Long Grain Wild Rice Mixes at Aldi, 5.9-6.3 oz, $1.99 each. Unpriceable anywhere until now, and on store-coverage's 'staple not on board' list. It carries no band, so the guards' basis checks are what judge the new cell.",
+        "relax_global":  [
+                             "\\bmix\\b(?!\\s*(?:&|and)\\s*match)"
+                         ],
         "include":  [
                         "\\bwild\\s+rice\\s+(?:blend|mix)\\b"
                     ],
