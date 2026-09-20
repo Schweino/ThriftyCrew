@@ -411,8 +411,8 @@
    "id": "manifest-skipped",
    "match": "exact",
    "key": "recipe per serving manifest skipped recipe s",
-   "class": "page",
-   "condition": "3 scheduled-work-did-not-run-or-land",
+   "class": "review",
+   "condition": "review until Brad rules Q1-2026-09-20-partial-cost (2026-09-20): the manifest RAN and LANDED for 578 of 584 recipes; the 6 it skips are all LIVE=False and their ingredients (Berbere, Harissa, Pomegranate Molasses) are recorded in meal-prep/db/cost-flags.txt as CARRIAGE NOT-CARRIED at all seven Omaha stores on two or more wordings. Condition 3 does not hold and there is nothing for a reader to do until the ruling says what a page shows when a cost cannot be fully built, so it pages daily for a state that is true every day",
    "emitter": "grocery/check-ad-cycles.ps1"
   },
   {

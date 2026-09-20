@@ -52,10 +52,29 @@ function Invoke-Native {
     It NEVER throws on child stderr and NEVER throws on a non-zero exit code -
     callers decide what a failure means by reading .ExitCode.
   #>
-  param(
-    [Parameter(Mandatory, Position = 0)][string]$Command,
-    [Parameter(ValueFromRemainingArguments = $true)][object[]]$Arguments = @()
-  )
+  # *** NO param() BLOCK, AND THAT ABSENCE IS LOAD-BEARING (2026-09-20). ***
+  # This used to declare [string]$Command plus a ValueFromRemainingArguments $Arguments, and
+  # PowerShell matches a parameter name by any unambiguous PREFIX. So a native flag that is a
+  # prefix of "Command" was never an argument at all - the BINDER took it:
+  #     Invoke-Native git -C $repo -c rebase.autoStash=true rebase -X theirs origin/main
+  # bound -C to -Command, then hit -c and threw "Cannot bind parameter because parameter
+  # 'Command' is specified more than once". The throw happens at BINDING time, before one line
+  # of this function runs, so nothing inside could have caught it. It killed capture-run's push
+  # stage on 2026-09-20 (grocery\out\logs\capture-run-ad-2026-09-20.log): the day's prices were
+  # committed and never pushed, and the run exited 1 - the same shape as the three 2026-08 outages
+  # this file was written to end, one layer up. `git -C <dir>` is the commonest git form there is.
+  # With no param() block the binder declares nothing, so EVERY token arrives in $args verbatim
+  # and no flag of any child can be stolen. Quoting the flag at the call site fixes one call;
+  # this fixes every call that will ever be written.
+  # Named-form callers would now break, so they are refused LOUDLY rather than silently mis-read.
+  # Census at this commit over grocery\, ops\, lib\, meal-prep\: zero named-form call sites.
+  if ($args.Count -eq 0) { throw 'Invoke-Native needs a command: Invoke-Native <command> [args...]' }
+  if (([string]$args[0]) -eq '-Command' -or ([string]$args[0]) -eq '-Arguments') {
+    throw ('Invoke-Native takes its command POSITIONALLY (Invoke-Native <command> [args...]); ' +
+           'the -Command/-Arguments parameters were removed so a child flag like git -C can never bind to them.')
+  }
+  $Command = [string]$args[0]
+  $Arguments = @(if ($args.Count -gt 1) { $args[1..($args.Count - 1)] } else { @() })
   # THE ENTIRE POINT OF THIS FUNCTION IS THIS ONE ASSIGNMENT. EAP is scoped, so setting
   # it here makes the redirect below non-terminating no matter what the caller set, and
   # the finally restores the caller's value even if the child crashes the runspace.
@@ -106,10 +125,15 @@ function Invoke-NativeScript {
     The common case in this estate: run a .ps1 as a fresh powershell child and read it
     back. Same contract as Invoke-Native.
   #>
-  param(
-    [Parameter(Mandatory, Position = 0)][string]$Path,
-    [Parameter(ValueFromRemainingArguments = $true)][object[]]$Arguments = @()
-  )
-  $argv = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $Path) + @($Arguments)
-  return Invoke-Native 'powershell' @argv
+  # No param() block, for the reason Invoke-Native's own comment gives: [string]$Path would be
+  # bound by any unambiguous prefix, so an unquoted child flag -P / -Pa / -Pat / -Path would be
+  # eaten by the binder instead of reaching the script being run.
+  if ($args.Count -eq 0) { throw 'Invoke-NativeScript needs a script path: Invoke-NativeScript <path> [args...]' }
+  if (([string]$args[0]) -eq '-Path' -or ([string]$args[0]) -eq '-Arguments') {
+    throw 'Invoke-NativeScript takes its script path POSITIONALLY (Invoke-NativeScript <path> [args...]).'
+  }
+  $Path = [string]$args[0]
+  $rest = @(if ($args.Count -gt 1) { $args[1..($args.Count - 1)] } else { @() })
+  $argv = @('powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $Path) + $rest
+  return Invoke-Native @argv
 }

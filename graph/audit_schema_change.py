@@ -58,6 +58,31 @@ def normalise(sql: str) -> str:
     return re.sub(r"\s+", " ", sql).strip().rstrip(";")
 
 
+# SQLITE'S OWN OBJECTS ARE NOT AUTHORED SCHEMA, AND `ANALYZE` MAKES SOME OF THEM (2026-09-20).
+# The filter here read only sqlite_autoindex. Then backlog I212 put one FULL `ANALYZE` at the end of
+# the nightly import (graph/import/import_all.py, graph/lib/graphdb.py), and ANALYZE CREATES the
+# sqlite_stat1 table. So from the first nightly run afterwards, this audit reported
+#     "THE SCHEMA MOVED AND NOTHING RECORDED IT.  added: table:sqlite_stat1"
+# every single day, and the capture watchdog paged it every single day, for a change no human
+# authored and none can act on. That is the alert-fatigue defect in its textbook form: a real
+# condition, correctly detected, that needs nothing (data-quality-craft/checks-and-thresholds.md
+# section 7 - alert only where a human has to act).
+#
+# THE LINE IS DRAWN AT "WHO WROTE IT", NOT AT "sqlite_". sqlite_stat1..4 are written by ANALYZE and
+# hold query-planner statistics: their CONTENT changes on most runs and their existence says nothing
+# about the shape of the data. sqlite_sequence is DELIBERATELY NOT excluded - SQLite creates it, but
+# only because an authored table said AUTOINCREMENT, so its appearance IS an authored schema change
+# and this audit must keep seeing it.
+_SQLITE_INTERNAL_PREFIXES = ("sqlite_autoindex", "sqlite_stat")
+
+
+def is_sqlite_internal(name: str) -> bool:
+    """True for objects SQLite creates for its own bookkeeping, which no one authored and which
+    must therefore never read as an unrecorded schema change. See the block above for why
+    sqlite_sequence is not in this set."""
+    return any(name.startswith(p) for p in _SQLITE_INTERNAL_PREFIXES)
+
+
 def read_schema(db_path: str) -> dict:
     """{name: normalised sql} for every table, view and index. Read-only, and it opens the database
     read-only on purpose: an audit of the thing with no undo must not be able to write to it."""
@@ -71,8 +96,8 @@ def read_schema(db_path: str) -> dict:
         con.close()
     out = {}
     for typ, name, sql in rows:
-        if name.startswith("sqlite_autoindex"):
-            continue          # SQLite invents these; they are not authored schema
+        if is_sqlite_internal(name):
+            continue
         out["%s:%s" % (typ, name)] = normalise(sql or "")
     return out
 
@@ -129,8 +154,54 @@ def _selftest() -> int:
       not (d["added"] or d["removed"] or d["changed"]), d)
 
     # MUST NOT FIRE: SQLite's own auto-indexes are not authored schema, so they must not appear.
+    # This case used to assert `"sqlite_autoindex".startswith("sqlite_autoindex")`, which is a
+    # tautology about a string literal and could not fail whatever read_schema did. It now calls the
+    # predicate read_schema actually uses.
     T("MUST NOT FIRE  a sqlite_autoindex name is excluded by read_schema's filter",
-      "sqlite_autoindex".startswith("sqlite_autoindex"))
+      is_sqlite_internal("sqlite_autoindex_nodes_1"))
+
+    # MUST FIRE: the founding bug of 2026-09-20, driven through read_schema against a REAL database.
+    # The nightly import runs one full ANALYZE; ANALYZE creates sqlite_stat1; the fingerprint moved
+    # and the watchdog paged "THE SCHEMA MOVED AND NOTHING RECORDED IT" for a change nobody authored.
+    import sqlite3 as _sq3
+    import tempfile as _tf
+    import os as _os
+    _dir = _tf.mkdtemp(prefix="schema-change-selftest-")
+    _db = _os.path.join(_dir, "probe.db")
+    try:
+        _con = _sq3.connect(_db)
+        _con.execute("CREATE TABLE nodes (id TEXT PRIMARY KEY, kind TEXT)")
+        _con.execute("INSERT INTO nodes VALUES ('a','x')")
+        _con.commit()
+        _before = fingerprint(read_schema(_db))
+        _con.execute("ANALYZE")
+        _con.commit()
+        _after = fingerprint(read_schema(_db))
+        _names = sorted(
+            r[0] for r in _con.execute(
+                "select name from sqlite_master where name like 'sqlite_stat%'").fetchall())
+        T("MUST FIRE  a full ANALYZE writes sqlite_stat1 and the fingerprint does NOT move",
+          _names == ["sqlite_stat1"] and _before == _after,
+          "stat tables=%s before=%s after=%s" % (_names, _before, _after))
+
+        # CLEAN TWIN - the behaviour this exclusion was most likely to have broken: a REAL schema
+        # change on the same database, after the same ANALYZE, is still seen.
+        _con.execute("CREATE TABLE edges (src TEXT, dst TEXT)")
+        _con.commit()
+        _real = fingerprint(read_schema(_db))
+        T("CLEAN TWIN  a genuinely added table on the same database still moves the fingerprint",
+          _real != _after and diff_schema(read_schema(_db), read_schema(_db))["added"] == [],
+          "after=%s real=%s" % (_after, _real))
+        _con.close()
+    finally:
+        import shutil as _sh
+        _sh.rmtree(_dir, ignore_errors=True)
+
+    # MUST NOT FIRE the other way: sqlite_sequence is created by SQLite but ONLY because an authored
+    # table said AUTOINCREMENT, so it is authored schema and must stay visible. This is the negative
+    # assertion that keeps the exclusion above from widening into blindness.
+    T("MUST NOT FIRE  sqlite_sequence is NOT treated as internal - it means a table said AUTOINCREMENT",
+      not is_sqlite_internal("sqlite_sequence"))
 
     # CLEAN TWIN - the behaviour normalisation was most likely to break: two GENUINELY different
     # schemas must still differ after whitespace collapsing. A positive assertion.
@@ -142,7 +213,7 @@ def _selftest() -> int:
     if bad:
         print("schema-change SELF-TEST FAIL (%d)" % bad)
         return 2
-    print("schema-change SELF-TEST PASS: 9 case(s) resolved")
+    print("schema-change SELF-TEST PASS: 12 case(s) resolved")
     return 0
 
 

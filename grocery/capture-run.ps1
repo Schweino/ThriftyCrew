@@ -1105,7 +1105,11 @@ try {
       # Invoke-Native (native-lib.ps1): git prints the untracked-file refusal on STDERR, and reading stderr under this
       # script's EAP=Stop by any redirect would make its first line a terminating throw. Invoke-Native never throws.
       if (-not (Get-Command Invoke-Native -ErrorAction SilentlyContinue)) { . (Join-Path $root 'native-lib.ps1') }
-      $rbRes = Invoke-Native git -C $repo -c rebase.autoStash=true rebase -X theirs origin/main
+      # EVERY FLAG QUOTED. Unquoted, -C and -c were parsed as parameter NAMES of Invoke-Native itself
+      # (see native-lib.ps1's header): both prefix-match -Command, so this line threw at binding time on
+      # 2026-09-20 and took the push stage with it. native-lib.ps1 now takes its arguments through $args
+      # so no flag can bind; quoting here is the belt beside that brace, and reads as what it is - data.
+      $rbRes = Invoke-Native 'git' '-C' $repo '-c' 'rebase.autoStash=true' 'rebase' '-X' 'theirs' 'origin/main'
       $rbLines = @($rbRes.Lines | ForEach-Object { [string]$_ })
       $rbRc = [int]$rbRes.ExitCode
       foreach ($l in $rbLines) { Write-Output ("rebase[$attempt]: " + $l) }

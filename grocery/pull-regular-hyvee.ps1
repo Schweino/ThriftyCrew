@@ -735,6 +735,45 @@ function Invoke-HyVeeWorkPass {
   }
 }
 
+function Resolve-HyVeeLookupOutcome {
+  <#
+    WHICH OF THE WAYS A STORE-PRODUCT LOOKUP ENDED, so a TRANSPORT failure can never be filed as
+    "this store does not carry it" (2026-09-20).
+
+    On 2026-09-20 the 08:00 Hy-Vee lane wrote asked=15, answered=0 and the capture watchdog paged
+    "NO FRESH ROWS ... its puller ran and saw nothing". It was impossible to tell from the file
+    which of four causes that was, because Get-HyVeeStoreProduct's `catch { Start-Sleep }` returned
+    exactly the same $null for a throw, a timeout, an empty response and a genuine absence - the
+    fail-open-reads-as-empty shape, and "UNCHECKED IS NEVER NOT-CARRIED" is this estate's own rule
+    about it. Re-measured by hand at 13:20 the same day, 11 of the 15 oldest Hy-Vee product ids
+    answered live at storeId 1466, so "saw nothing" was not delisting and not a wall, and the file
+    could not say what it was.
+
+    This is a PURE function of a response, which is what lets the fixtures below reach it: the
+    counters it feeds turn one silent zero into four countable outcomes.
+      answered     the target store's own offer is in the response
+      other-store  the response carried offers, but none for the store we asked as
+      empty        a well-formed response with no storeProducts at all (the only honest not-carried)
+      threw        the call raised or returned nothing: a could-not-look, never an absence
+  #>
+  param([AllowNull()]$Response, [string]$LastError = '', [int]$TargetStoreId = 0)
+  if ($LastError) { return [pscustomobject]@{ Outcome = 'threw'; Offer = $null; Detail = $LastError } }
+  if ($null -eq $Response) { return [pscustomobject]@{ Outcome = 'threw'; Offer = $null; Detail = 'no response object' } }
+  $all = @($Response.data.storeProducts.storeProducts)
+  $hit = @($all | Where-Object { [int]$_.storeId -eq $TargetStoreId }) | Select-Object -First 1
+  if ($hit) { return [pscustomobject]@{ Outcome = 'answered'; Offer = $hit; Detail = '' } }
+  # @($null).Count is 1 in PowerShell, so an absent storeProducts list must be judged on its
+  # CONTENT rather than on a count that scores 1 for nothing at all.
+  $real = @($all | Where-Object { $null -ne $_ })
+  if ($real.Count -gt 0) {
+    return [pscustomobject]@{
+      Outcome = 'other-store'; Offer = $null
+      Detail  = ('offers came back for storeId(s) ' + ((@($real | ForEach-Object { [string]$_.storeId }) | Sort-Object -Unique) -join ',') + ' but not for ' + $TargetStoreId)
+    }
+  }
+  return [pscustomobject]@{ Outcome = 'empty'; Offer = $null; Detail = 'well-formed response, no storeProducts' }
+}
+
 if ($SelfTest) {
   # Pure, no network, no writes - placed above the store registry and every request so nothing can skip it.
   . (Join-Path $root 'price-split-lib.ps1')
@@ -1063,6 +1102,31 @@ if ($SelfTest) {
   $needle = 'store' + 'Id 14' + '65'
   _T "MUST FIRE on the founding literal: refresh-hyvee-links.ps1 no longer types a storeId and takes its stamp from Get-HyVeeVerifiedLabel" ((-not $lnkSrc.Contains($needle)) -and ($lnkSrc -match 'Get-HyVeeVerifiedLabel'))
 
+  # ---- A COULD-NOT-LOOK IS NOT AN ABSENCE (2026-09-20) --------------------------------------------
+  # The founding output: asked 15, answered 0, and nothing in the file or the alert could say which of
+  # four causes that was. Re-measured by hand the same afternoon, 11 of those 15 product ids answered
+  # live at storeId 1466, so the silent zero had been hiding a could-not-look inside a not-carried.
+  $hvThrewOut = Resolve-HyVeeLookupOutcome -Response $null -LastError 'The operation has timed out.' -TargetStoreId 1466
+  _T 'MUST FIRE  a lookup that THREW resolves to threw, never to empty - a transport failure is not an absence' (
+    ($hvThrewOut.Outcome -eq 'threw') -and ($null -eq $hvThrewOut.Offer) -and ($hvThrewOut.Detail -match 'timed out'))
+  $hvNoResp = Resolve-HyVeeLookupOutcome -Response $null -LastError '' -TargetStoreId 1466
+  _T 'MUST FIRE  no response object at all is threw, not empty (@($null).Count is 1, so a count cannot decide this)' (
+    $hvNoResp.Outcome -eq 'threw')
+  $hvWrongStore = [pscustomobject]@{ data = [pscustomobject]@{ storeProducts = [pscustomobject]@{ storeProducts = @([pscustomobject]@{ storeId = 1465; price = 2.49 }) } } }
+  $hvWrongOut = Resolve-HyVeeLookupOutcome -Response $hvWrongStore -LastError '' -TargetStoreId 1466
+  _T 'MUST FIRE  offers for ANOTHER store are other-store and name the storeId that answered, never a silent absence' (
+    ($hvWrongOut.Outcome -eq 'other-store') -and ($null -eq $hvWrongOut.Offer) -and ($hvWrongOut.Detail -match '1465'))
+  $hvEmptyResp = [pscustomobject]@{ data = [pscustomobject]@{ storeProducts = [pscustomobject]@{ storeProducts = @() } } }
+  _T 'the only honest not-carried: a well-formed response with no storeProducts resolves to empty' (
+    (Resolve-HyVeeLookupOutcome -Response $hvEmptyResp -LastError '' -TargetStoreId 1466).Outcome -eq 'empty')
+  # CLEAN TWIN - the behaviour the classification was most likely to have broken on its way past: a
+  # normal answer from the store we asked as still comes back WITH ITS OFFER, priced.
+  $hvGoodResp = [pscustomobject]@{ data = [pscustomobject]@{ storeProducts = [pscustomobject]@{ storeProducts = @(
+    [pscustomobject]@{ storeId = 1465; price = 9.99 }, [pscustomobject]@{ storeId = 1466; price = 3.19 }) } } }
+  $hvGoodOut = Resolve-HyVeeLookupOutcome -Response $hvGoodResp -LastError '' -TargetStoreId 1466
+  _T 'CLEAN TWIN  a real answer from the target store still resolves answered and carries that store''s own offer ($3.19, not $9.99)' (
+    ($hvGoodOut.Outcome -eq 'answered') -and ([double]$hvGoodOut.Offer.price -eq 3.19))
+
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
@@ -1071,6 +1135,12 @@ if (-not (Test-Path $qFile)) { throw "missing $qFile (the persisted GraphQL docu
 $QUERY = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(((Get-Content $qFile -Raw) -replace '\s','')))
 
 $EP  = 'https://www.hy-vee.com/aisles-online/api/graphql/two-legged/getProductDetailsWithPrice'
+# THE FOUR OUTCOMES OF A STORE-PRODUCT LOOKUP, COUNTED SEPARATELY (2026-09-20). answered=0 used to be
+# one number covering a wall, a throttle, a wrong-store response and a genuine absence. See
+# Resolve-HyVeeLookupOutcome's header for the 2026-09-20 measurement that bought these.
+$script:HvAskThrew = 0
+$script:HvAskEmpty = 0
+$script:HvAskOtherStore = 0
 # THE STORE, FROM THE ONE PLACE THAT KNOWS IT. Both identifiers move together or neither does.
 . (Join-Path $root 'hyvee-store-lib.ps1')
 $drift = Test-HyVeeStoreDrift -Root $root
@@ -1105,10 +1175,17 @@ function Get-HyVeeStoreProduct([int]$productId) {
       targeted = $false; foodHealthScoreEnabled = $false
     }
   } | ConvertTo-Json -Depth 6 -Compress
+  $lastErr = ''
   for ($a = 1; $a -le 2; $a++) {
     try {
       $r = Invoke-RestMethod -Uri $EP -Method Post -Headers $HDR -Body $body -TimeoutSec 20
-      $sp = @($r.data.storeProducts.storeProducts) | Where-Object { [int]$_.storeId -eq $StoreId } | Select-Object -First 1
+      $lastErr = ''
+      # COUNT WHICH OF THE FOUR WAYS THIS ENDED. Every branch below used to return the same bare
+      # $null, so a throttled endpoint and a discontinued product were the same byte in the file.
+      $oc = Resolve-HyVeeLookupOutcome -Response $r -LastError '' -TargetStoreId $StoreId
+      $sp = $oc.Offer
+      if ($oc.Outcome -eq 'other-store') { $script:HvAskOtherStore++ }
+      elseif ($oc.Outcome -eq 'empty') { $script:HvAskEmpty++ }
       if ($sp) {
         $ri = @($r.data.product.item.retailItems) | Select-Object -First 1
         # THE SHELF TAG, CARRIED OUT ALONGSIDE THE PRICE (2026-08-21). It comes from retailItems, which
@@ -1125,7 +1202,14 @@ function Get-HyVeeStoreProduct([int]$productId) {
         }
       }
       return $null
-    } catch { Start-Sleep -Milliseconds 500 }
+    } catch { $lastErr = $_.Exception.Message; Start-Sleep -Milliseconds 500 }
+  }
+  # A COULD-NOT-LOOK IS COUNTED AS ONE, AND SAID OUT LOUD ONCE PER PRODUCT. Both attempts raising is
+  # the transport failing, not Hy-Vee answering "no". Without this the summary's answered=0 is
+  # indistinguishable from fifteen genuinely absent products.
+  if ($lastErr) {
+    $script:HvAskThrew++
+    Write-Warning ('Hy-Vee: lookup for product ' + $productId + ' could not be performed (' + $lastErr + ') - counted as a could-not-look, NOT as not-carried')
   }
   return $null
 }
@@ -1494,6 +1578,9 @@ try {
     $covDetail = ("Hy-Vee products in TODAY'S capture-policy slice that Aisles Online answered for: budget " +
       $hvBudget + ", asked " + $pass.Attempted + ", answered " + $covExamined + ", " + $capSkipped +
       " never asked (wall-clock cap), " + $budgetSkipped + " outside today's slice and carried forward. " +
+      "Of the asks that returned no offer: " + $script:HvAskThrew + " could not be performed at all (transport), " +
+      $script:HvAskEmpty + " came back well-formed and empty, " + $script:HvAskOtherStore +
+      " carried offers for another store only. A could-not-look is NEVER a not-carried. " +
       $refreshable + " of " + @($work).Count + " products hold an id at all - that whole-catalogue number is " +
       "NOT the denominator any more; see coverage-baseline.json for why.")
     if ($covExamined -le 0 -and $askableToday -gt 0) {
@@ -1550,6 +1637,7 @@ $out = [ordered]@{
   # recovery and the store every fresh row in this file was read at.
   expired_past_carry=$pass.Expired; max_carry_days=$hvCarryDays; requeued_below_tag=$pass.Requeued
   product_ids_recovered=$hvPidRecovered; product_id_conflicts=$hvPidConflicts; read_at_store_id=[string]$StoreId
+  ask_threw=$script:HvAskThrew; ask_empty=$script:HvAskEmpty; ask_other_store=$script:HvAskOtherStore
   capture_terms=$captureTerms.ToArray()
   deals=$deals.ToArray()
 }

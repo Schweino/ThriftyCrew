@@ -686,6 +686,62 @@ if ($scan.Scanned -lt $ScanFloor -or $missingTops.Count) {
   }
 }
 
+# --- THE PREFIX-BINDING CASES (2026-09-20) ------------------------------------------------------
+# Invoke-Native declared [string]$Command, and PowerShell binds a parameter by any unambiguous
+# PREFIX, so `Invoke-Native git -C $repo -c ... ` never reached the function: -C bound to -Command
+# and -c threw "specified more than once" at BINDING time. That killed capture-run's push stage on
+# 2026-09-20 - the day's prices were committed and never pushed. The repair is that neither function
+# declares parameters any more, so these cases drive the REAL functions with real child flags.
+# The subject of these cases is native-lib.ps1 itself, so it is loaded under Stop inside a try for the
+# reason the header block at the top of this file gives: a library that will not load is exit 3, never a
+# run over nothing, and under 'Continue' these five cases would otherwise "fail" for the wrong reason.
+try {
+  $prevEapNl = $ErrorActionPreference
+  $ErrorActionPreference = 'Stop'
+  . (Join-Path $root 'native-lib.ps1')      # Invoke-Native / Invoke-NativeScript: the subject of the cases below
+  $ErrorActionPreference = $prevEapNl
+} catch {
+  $ErrorActionPreference = 'Continue'
+  Write-Output ('  FAIL  native-lib.ps1 would not load, so the prefix-binding cases could not be evaluated: ' + $_.Exception.Message)
+  Write-Output 'NATIVE-STDERR-EAP-TEST-COMPLETE cases=0 failed=1 blind=lib-load'
+  exit 3
+}
+$tgitDir = Join-Path $tmp ('prefixbind-' + $PID)
+New-Item -ItemType Directory -Force -Path $tgitDir | Out-Null
+$pbThrew = ''
+$pbRes = $null
+try { $pbRes = Invoke-Native 'git' '-C' $tgitDir 'rev-parse' '--is-inside-work-tree' } catch { $pbThrew = $_.Exception.Message }
+Check 'MUST FIRE  the founding call shape: Invoke-Native git -C <dir> ... reaches git instead of binding -C to a parameter' (
+  ($pbThrew -eq '') -and ($null -ne $pbRes) -and ($pbRes.ExitCode -ne -1)
+) ('threw=' + $pbThrew + ' rc=' + $(if ($pbRes) { $pbRes.ExitCode } else { 'none' }))
+# The same line UNQUOTED is the exact text of the 2026-09-20 failure, and it must behave identically
+# now: with no param() block there is nothing for -C to bind to.
+$pbThrew2 = ''
+$pbRes2 = $null
+try { $pbRes2 = Invoke-Native git -C $tgitDir rev-parse --is-inside-work-tree } catch { $pbThrew2 = $_.Exception.Message }
+Check 'MUST FIRE  the UNQUOTED form from capture-run.ps1 no longer throws "parameter Command is specified more than once"' (
+  ($pbThrew2 -notmatch 'specified more than once') -and ($pbThrew2 -eq '')
+) ('threw=' + $pbThrew2)
+# CLEAN TWIN: the behaviour the fix was most likely to have broken on its way past - a normal
+# positional call still returns the child's real exit code, its stdout and its stderr, separately.
+$pbTwin = Invoke-Native 'powershell' '-NoProfile' '-Command' "[Console]::Error.WriteLine('e1'); Write-Output 'o1'; exit 7"
+Check 'CLEAN TWIN  a plain positional call still separates stdout from stderr and reports the real exit code (rc 7)' (
+  ($pbTwin.ExitCode -eq 7) -and ((@($pbTwin.Output) -join '|') -match 'o1') -and ((@($pbTwin.Error) -join '|') -match 'e1')
+) ('rc=' + $pbTwin.ExitCode + ' out=' + (@($pbTwin.Output) -join '|') + ' err=' + (@($pbTwin.Error) -join '|'))
+# CLEAN TWIN: Invoke-NativeScript still runs a .ps1 child and reads its exit code back.
+$pbScript = Join-Path $tgitDir 'child.ps1'
+Set-Content -Path $pbScript -Value "param([string]`$Note) Write-Output ('note=' + `$Note); exit 4" -Encoding UTF8
+$pbSr = Invoke-NativeScript $pbScript '-Note' 'hello'
+Check 'CLEAN TWIN  Invoke-NativeScript still runs a .ps1 child, passes its arguments through and reports rc 4' (
+  ($pbSr.ExitCode -eq 4) -and ((@($pbSr.Output) -join '|') -match 'note=hello')
+) ('rc=' + $pbSr.ExitCode + ' out=' + (@($pbSr.Output) -join '|'))
+# A caller that still writes the removed named form must be REFUSED, not silently mis-read.
+$pbNamed = ''
+try { $null = Invoke-Native '-Command' 'git' } catch { $pbNamed = $_.Exception.Message }
+Check 'MUST FIRE  the removed named form is refused out loud rather than run as a command called -Command' (
+  $pbNamed -match 'POSITIONALLY'
+) ('threw=' + $pbNamed)
+
 Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue
 Write-Output ("NATIVE-STDERR-EAP-TEST-COMPLETE cases={0} failed={1} scanned={2} sites={3}{4}" -f $n, $fail, $scan.Scanned, $sites.Count, $(if ($blind) { ' blind=' + $blind } else { '' }))
 if ($blind) { exit 3 }
