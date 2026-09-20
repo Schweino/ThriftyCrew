@@ -1,117 +1,218 @@
 ﻿{
-    "generated":  "2026-09-19 17:29",
+    "generated":  "2026-09-20 08:19",
     "drift_vs_engine":  0,
     "drift_products":  [
 
                        ],
     "moved":  [
-                  {
-                      "name":  "Dole Fruit Bowls Pineapple Tidbits In 100% Fruit Juice Cups",
-                      "from":  "canned-pineapple",
-                      "to":  "fruit-cups"
-                  },
-                  {
-                      "name":  "Dole Fruit Bowls Pineapple Tidbits in 100% Fruit Juice, 4 oz Cups (4 Pack)",
-                      "from":  "canned-pineapple",
-                      "to":  "fruit-cups"
-                  },
-                  {
-                      "name":  "Dole Fruit Bowls Pineapple Tidbits With No Sugar Added Cups",
-                      "from":  "canned-pineapple",
-                      "to":  "fruit-cups"
-                  }
+
               ],
     "dropped":  [
-                    {
-                        "name":  "Newman\u0027s Own Honey Mustard Dressing 16 Fl Oz",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Lunch Buddies Pineapple Tidbits IN 100% Fruit Juice, 4 Pack",
-                        "from":  "canned-pineapple"
-                    },
-                    {
-                        "name":  "Ken\u0027s Steak House Honey Mustard Dressing, Topping \u0026 Spread 710 Ml",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Ken\u0027s Steak House® Honey Mustard Salad Dressing, Topping \u0026 Spread 24 fl oz",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Kraft Honey Mustard Liquid Dressing 16 fl oz.",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Ken\u0027s Steak House® Lite Honey Mustard Salad Dressing 16 fl oz",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Ken\u0027s Steak House Honey Mustard Dressing 16 Fl Oz",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Ken\u0027s Steak House® Lite Honey Mustard Salad Dressing 24 fl oz",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Kraft Honey Mustard Dressing, 16 fl oz Bottle",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Ken\u0027s Steak House Honey Mustard Salad Dressing",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Hy-Vee Honey Mustard Dressing",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Ken\u0027s Steak House Honey Mustard Dressing, Topping \u0026 Spread 24 Fl Oz",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Skinnygirl Honey Dijon Fat Free/Sugar Free Salad Dressing",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Marzetti Dressing Dijon Honey Mustard, Gluten Free",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Kroger Honey Mustard Salad Dressing",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "(2 pack) Ken\u0027s Steak House® Lite Honey Mustard Salad Dressing 16 fl oz",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Primal Kitchen Dressing \u0026 Marinade, Honey Mustard",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Johnny Fleeman\u0027s Gourmet Honey Mustard Salad Dressing 12 fl. oz. Jar",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Kraft Honey Mustard Dressing 16 Fl Oz",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Ken\u0027s Steak House® Honey Mustard Salad Dressing 16 fl oz",
-                        "from":  "honey-mustard"
-                    },
-                    {
-                        "name":  "Tuscan Garden Honey Mustard Dressing 16 OZ",
-                        "from":  "honey-mustard"
-                    }
+
                 ],
     "new_contested":  [
-
+                          {
+                              "name":  "Ben\u0027s Original Fried Rice With Peas \u0026 Carrots 8.5 Oz",
+                              "chain":  "carrots (lb) \u003e frozen-vegetables (oz)",
+                              "form":  true,
+                              "winner":  "carrots",
+                              "verdict":  "OUT-OF-BAND",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Ben\u0027s Original Rice, Coconut Jasmine 8.5 Oz",
+                              "chain":  "rice (lb) \u003e coconut (each)",
+                              "form":  true,
+                              "winner":  "rice",
+                              "verdict":  "OUT-OF-BAND",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Clancy S Coconut Oil Himalayan Pink Salt Popcorn 4.6 OZ",
+                              "chain":  "salt (oz) \u003e coconut-oil (oz)",
+                              "form":  false,
+                              "winner":  "salt",
+                              "verdict":  "OUT-OF-BAND",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Cloverdale Brown Sugar Bacon",
+                              "chain":  "bacon (lb) \u003e brown-sugar (lb)",
+                              "form":  false,
+                              "winner":  "bacon",
+                              "verdict":  "size 1 lb = 6.99/lb",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Deli Sliced Turkey Breast, sun-dried tomato or cajun",
+                              "chain":  "turkey-lunchmeat (oz) \u003e sun-dried-tomatoes (oz)",
+                              "form":  false,
+                              "winner":  "turkey-lunchmeat",
+                              "verdict":  "not in the newest candidates file",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Dried Rotelle Pasta Creamette",
+                              "chain":  "pasta (oz) \u003e tomatoes-green-chilies (oz)",
+                              "form":  false,
+                              "winner":  "pasta",
+                              "verdict":  "size 16 oz = 0.0833/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Fresh \u0026 Finest By Our Family Salsa, Poblano, Medium 16 Oz",
+                              "chain":  "salsa (oz) \u003e poblano-peppers (lb)",
+                              "form":  true,
+                              "winner":  "salsa",
+                              "verdict":  "size 16 oz = 0.2494/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Fresh \u0026 Finest Pickle Bacon Pinsa",
+                              "chain":  "bacon (lb) \u003e pickles (oz)",
+                              "form":  true,
+                              "winner":  "bacon",
+                              "verdict":  "UNPRICED",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Giovanni Rana Lasagna or Party Pack Tortellini",
+                              "chain":  "frozen-lasagna (oz) \u003e cheese-tortellini (oz)",
+                              "form":  false,
+                              "winner":  "frozen-lasagna",
+                              "verdict":  "not in the newest candidates file",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Good Thins Rice Snacks, Gluten Free, Simply Salt 3.5 Oz",
+                              "chain":  "rice (lb) \u003e salt (oz)",
+                              "form":  true,
+                              "winner":  "rice",
+                              "verdict":  "OUT-OF-BAND",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Kraft Sponge Bob Square Pants Mac \u0026 Cheese 5.5 Oz",
+                              "chain":  "mac-and-cheese (each) \u003e sponges (each)",
+                              "form":  false,
+                              "winner":  "mac-and-cheese",
+                              "verdict":  "per-each = 1/each",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Nabisco Party Size Snack Crackers, Chips Ahoy or Oreo Cookies",
+                              "chain":  "crackers (oz) \u003e sandwich-cookies (oz)",
+                              "form":  false,
+                              "winner":  "crackers",
+                              "verdict":  "not in the newest candidates file",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Nathan\u0027s Famous Cheddar Cheese Beef Franks 8 Ea",
+                              "chain":  "shredded-cheese (oz) \u003e hot-dogs (oz)",
+                              "form":  false,
+                              "winner":  "shredded-cheese",
+                              "verdict":  "UNPRICED",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Quaker Protein Banana Nut Instant Oatmeal 6 Ea",
+                              "chain":  "bananas (lb) \u003e oatmeal (oz)",
+                              "form":  true,
+                              "winner":  "bananas",
+                              "verdict":  "UNPRICED",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Red Cactus Salsa or Queso",
+                              "chain":  "salsa (oz) \u003e queso (oz)",
+                              "form":  false,
+                              "winner":  "salsa",
+                              "verdict":  "not in the newest candidates file",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Star Kist Cracked Pepper With Roasted Garlic Tuna 2.6 Oz",
+                              "chain":  "canned-tuna (oz) \u003e garlic (each)",
+                              "form":  true,
+                              "winner":  "canned-tuna",
+                              "verdict":  "size 2.6 oz = 0.3846/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Star Kist Pasta \u0026 Beans, With Tuna, Mediterranean Style 4.5 Oz",
+                              "chain":  "canned-tuna (oz) \u003e pasta (oz)",
+                              "form":  false,
+                              "winner":  "canned-tuna",
+                              "verdict":  "size 4.5 oz = 0.2222/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Star Kist Rice \u0026 Beans, With Tuna, Jambalaya 4.5 Oz",
+                              "chain":  "canned-tuna (oz) \u003e rice (lb)",
+                              "form":  true,
+                              "winner":  "canned-tuna",
+                              "verdict":  "size 4.5 oz = 0.2222/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Star Kist Wild Caught Premium Herb \u0026 Garlic Tuna 2.6 Oz",
+                              "chain":  "canned-tuna (oz) \u003e garlic (each)",
+                              "form":  true,
+                              "winner":  "canned-tuna",
+                              "verdict":  "size 2.6 oz = 0.3846/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Star Kist Zesty Lemon Pasta \u0026 Beans With Tuna 4.5 Oz",
+                              "chain":  "canned-tuna (oz) \u003e lemons (each) \u003e pasta (oz)",
+                              "form":  true,
+                              "winner":  "canned-tuna",
+                              "verdict":  "size 4.5 oz = 0.2222/oz",
+                              "cell":  "",
+                              "crown":  false
+                          }
                       ],
     "new_contested_names":  [
-
+                                "Ben\u0027s Original Fried Rice With Peas \u0026 Carrots 8.5 Oz",
+                                "Ben\u0027s Original Rice, Coconut Jasmine 8.5 Oz",
+                                "Clancy S Coconut Oil Himalayan Pink Salt Popcorn 4.6 OZ",
+                                "Cloverdale Brown Sugar Bacon",
+                                "Deli Sliced Turkey Breast, sun-dried tomato or cajun",
+                                "Dried Rotelle Pasta Creamette",
+                                "Fresh \u0026 Finest By Our Family Salsa, Poblano, Medium 16 Oz",
+                                "Fresh \u0026 Finest Pickle Bacon Pinsa",
+                                "Giovanni Rana Lasagna or Party Pack Tortellini",
+                                "Good Thins Rice Snacks, Gluten Free, Simply Salt 3.5 Oz",
+                                "Kraft Sponge Bob Square Pants Mac \u0026 Cheese 5.5 Oz",
+                                "Nabisco Party Size Snack Crackers, Chips Ahoy or Oreo Cookies",
+                                "Nathan\u0027s Famous Cheddar Cheese Beef Franks 8 Ea",
+                                "Quaker Protein Banana Nut Instant Oatmeal 6 Ea",
+                                "Red Cactus Salsa or Queso",
+                                "Star Kist Cracked Pepper With Roasted Garlic Tuna 2.6 Oz",
+                                "Star Kist Pasta \u0026 Beans, With Tuna, Mediterranean Style 4.5 Oz",
+                                "Star Kist Rice \u0026 Beans, With Tuna, Jambalaya 4.5 Oz",
+                                "Star Kist Wild Caught Premium Herb \u0026 Garlic Tuna 2.6 Oz",
+                                "Star Kist Zesty Lemon Pasta \u0026 Beans With Tuna 4.5 Oz"
                             ],
     "cell_by_contest":  [
 

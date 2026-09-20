@@ -5,48 +5,46 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "no weekly ad cycle",
-    "cursor_start":  162,
-    "cursor_next":  170,
+    "cursor_start":  170,
+    "cursor_next":  178,
     "total_terms":  639,
     "rotation_terms":  [
-                           "coconut milk canned",
-                           "coconut oil",
-                           "cod fillets",
-                           "ground coffee",
-                           "coffee creamer",
-                           "coffee k cups",
-                           "colby jack cheese",
-                           "coleslaw mix"
+                           "collard greens",
+                           "french onion soup",
+                           "sweetened condensed milk",
+                           "hair conditioner",
+                           "cooked jasmine rice",
+                           "cooked quinoa",
+                           "cooked shredded chicken",
+                           "chocolate chip cookies"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "fresh artichokes",
-                  "coconut milk canned",
-                  "coconut oil",
-                  "cod fillets",
-                  "ground coffee",
-                  "coffee creamer",
-                  "coffee k cups",
-                  "colby jack cheese",
-                  "coleslaw mix"
+                  "collard greens",
+                  "french onion soup",
+                  "sweetened condensed milk",
+                  "hair conditioner",
+                  "cooked jasmine rice",
+                  "cooked quinoa",
+                  "cooked shredded chicken",
+                  "chocolate chip cookies"
               ],
     "commodities":  [
-                        "artichokes",
-                        "coconut-milk-canned",
-                        "coconut-oil",
-                        "cod",
-                        "coffee",
-                        "coffee-creamer",
-                        "coffee-pods",
-                        "colby-jack-cheese",
-                        "coleslaw-mix"
+                        "collard-greens",
+                        "condensed-french-onion-soup",
+                        "condensed-milk",
+                        "conditioner",
+                        "cooked-jasmine-rice",
+                        "cooked-quinoa",
+                        "cooked-shredded-chicken",
+                        "cookies"
                     ],
     "ruling_terms":  [
-                         "fresh artichokes"
+
                      ],
-    "ruling_owed_total":  1,
+    "ruling_owed_total":  0,
     "ruling_of":  23,
     "ruling_deferred":  0,
     "ruling_blind":  false,

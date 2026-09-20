@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-19 17:29",
-    "board":  "comparison-2026-09-17.json",
-    "sidecar_generated":  "2026-09-19 17:29:31",
+    "generated":  "2026-09-20 08:22",
+    "board":  "comparison-2026-09-20.json",
+    "sidecar_generated":  "2026-09-20 08:22:28",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,36 +9,16 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2638,
-                     "corpus":  43729,
-                     "rule_invisible":  8639
+                     "board_pairs":  2629,
+                     "corpus":  43802,
+                     "rule_invisible":  8672
                  },
     "identity_count":  0,
-    "coverage_count":  9,
+    "coverage_count":  8,
     "identity":  [
 
                  ],
     "coverage":  [
-                     {
-                         "kind":  "coverage",
-                         "id":  "wild-rice-blend",
-                         "commodity":  "Wild Rice Blend",
-                         "store":  "Walmart",
-                         "product":  "Lundberg Sustainable Wild Blend Rice - Gluten Free, Vegan, 1lb Resealable Bag",
-                         "cos":  0.6484,
-                         "score":  0.994209,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "wild-rice-blend",
-                         "commodity":  "Wild Rice Blend",
-                         "store":  "Baker\u0027s",
-                         "product":  "Lundberg Family Farms Sustainable Wild Blend Rice",
-                         "cos":  0.6926,
-                         "score":  0.993964,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
                      {
                          "kind":  "coverage",
                          "id":  "wild-rice",
@@ -61,12 +41,22 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "taco-seasoning",
-                         "commodity":  "Taco Seasoning (packet)",
-                         "store":  "Walmart",
-                         "product":  "McCormick Street Taco Carne Asada Seasoning Mix, 0.87 oz Packet",
-                         "cos":  0.6742,
-                         "score":  0.941827,
+                         "id":  "cooked-jasmine-rice",
+                         "commodity":  "Cooked Jasmine Rice",
+                         "store":  "Baker\u0027s",
+                         "product":  "Ben\u0027s Original Ready Rice Cilantro Lime Flavored Rice, Easy Dinner Side, 8.5 oz Pouch",
+                         "cos":  0.6961,
+                         "score":  0.943442,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "maple-syrup",
+                         "commodity":  "Syrup (pancake / maple)",
+                         "store":  "Baker\u0027s",
+                         "product":  "Pearl Milling Company Syrup Original",
+                         "cos":  0.5788,
+                         "score":  0.940803,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -101,16 +91,16 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "vegetable-soup",
-                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "id":  "cooked-jasmine-rice",
+                         "commodity":  "Cooked Jasmine Rice",
                          "store":  "Baker\u0027s",
-                         "product":  "Progresso Protein Hearty Grain Vegetable Vegetarian Canned Soup",
-                         "cos":  0.7932,
-                         "score":  0.909784,
+                         "product":  "Ben\u0027s Original Ready Rice Roasted Chicken Flavored Rice, Easy Dinner Side, 8.8 oz Pouch",
+                         "cos":  0.6721,
+                         "score":  0.907827,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ],
-    "coverage_excluded_count":  12,
+    "coverage_excluded_count":  13,
     "coverage_excluded":  [
                               {
                                   "kind":  "coverage",
@@ -174,6 +164,18 @@
                               },
                               {
                                   "kind":  "coverage",
+                                  "id":  "wild-rice",
+                                  "commodity":  "Wild Rice",
+                                  "store":  "Baker\u0027s",
+                                  "product":  "Lundberg Family Farms Sustainable Wild Blend Rice",
+                                  "cos":  0.6398,
+                                  "score":  0.965538,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "REFUSED-BY-EXCLUDE",
+                                  "detail":  "no admit pattern matches, and exclude \u0027\\bblend\\b\u0027 would refuse it anyway"
+                              },
+                              {
+                                  "kind":  "coverage",
                                   "id":  "cumin-seeds",
                                   "commodity":  "Cumin seeds",
                                   "store":  "Walmart",
@@ -183,6 +185,18 @@
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
                                   "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bground\\b\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "wild-rice",
+                                  "commodity":  "Wild Rice",
+                                  "store":  "Walmart",
+                                  "product":  "Zatarain\u0027s No Artificial Flavors Gluten Free Long Grain \u0026 Wild Rice, 7.0 oz Box",
+                                  "cos":  0.6033,
+                                  "score":  0.95473,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027long\\s+grain\\s+(?:\u0026|and)\\s+wild\u0027 killed it"
                               },
                               {
                                   "kind":  "coverage",
@@ -210,27 +224,15 @@
                               },
                               {
                                   "kind":  "coverage",
-                                  "id":  "canned-butter-beans",
-                                  "commodity":  "Canned Butter Beans",
+                                  "id":  "southern-mixed-greens",
+                                  "commodity":  "Southern-Style Mixed Greens",
                                   "store":  "Walmart",
-                                  "product":  "Glory Foods Canned Seasoned Butter Beans, 15.5 oz Can",
-                                  "cos":  0.6813,
-                                  "score":  0.92039,
+                                  "product":  "Glory Foods Seasoned Southern Style Mustard Greens, 27 oz., Can",
+                                  "cos":  0.8081,
+                                  "score":  0.912668,
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027\\bbutter\\s+beans?\\b\u0027 matched, exclude \u0027\\b(?:baked|refried|seasoned|soup|chili|salad|dip|hummus|entree)\\b\u0027 killed it"
-                              },
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "ground-beef-8020",
-                                  "commodity":  "80/20 Ground Beef",
-                                  "store":  "Baker\u0027s",
-                                  "product":  "Ground Beef And Pork Blend Patties 80% Lean 20% Fat",
-                                  "cos":  0.6918,
-                                  "score":  0.918981,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027ground\\s+beef[^.]*80\u0027 matched, exclude \u0027patties\u0027 killed it"
+                                  "verdict":  "REFUSED-BY-EXCLUDE",
+                                  "detail":  "no admit pattern matches, and exclude \u0027\\b(?:collard|turnip|mustard|kale|spinach)\\s+greens?\\b(?!.*\\bmixed\\b)\u0027 would refuse it anyway"
                               },
                               {
                                   "kind":  "coverage",

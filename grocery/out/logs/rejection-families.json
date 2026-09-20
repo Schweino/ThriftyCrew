@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-10T23:01:27",
+  "generated_at": "2026-09-18T21:44:55",
   "source": "question_verdicts status IN (llm_rejected, known_wrong)",
   "rejections_labelled": 600,
   "batches": 34,
-  "elapsed_s": 156.0,
+  "elapsed_s": 147.4,
   "known_families_seeded": [
     "dried-herb-for-fresh",
     "prepared-meal-for-ingredient",
@@ -22,127 +22,140 @@
     "flavoring-for-the-food"
   ],
   "new_families": [
-    "canned-for-fresh",
-    "beverage-for-condiment",
     "wrong-form",
-    "wrong-form-factor",
-    "frozen-for-canned",
-    "beverage-for-food",
-    "missing-ingredient-version",
-    "flavored-juice-for-pure-juice",
-    "raw-dough-for-baked-good",
-    "wrong-product-category",
-    "whole-for-ground",
-    "stain-remover-for-bleach",
-    "laundry-sanitizer-for-bleach",
-    "dip-for-dressing",
-    "meat-for-marinade",
-    "patty-for-sausage",
-    "fresh-for-frozen",
-    "whole-animal-for-part",
-    "breaded-product-for-raw-meat",
-    "whole-pepper-for-powder",
-    "seasoning-mix-for-single-spice",
-    "ingredient-for-prepared-meal",
-    "raw-meat-for-prepared-meal",
-    "specialty-tool-for-general-use",
-    "mixed-juice-for-single-fruit",
-    "beverage-additive-for-dairy",
-    "processed-sauce-for-raw-ingredient",
-    "prepared-spread-for-ingredient",
-    "underwear-for-diaper",
-    "whole-cut-for-diced",
-    "processed-luncheon-meat-for-fresh-ham",
-    "machine-use-for-hand-use",
-    "spray-for-wipes",
-    "wrong-target-surface",
-    "added-ingredient-version",
-    "blend-for-single-herb",
-    "dry-for-fresh",
-    "dishwasher-detergent-for-laundry-deterg",
-    "powder-detergent-for-pods",
-    "tile-detergent-for-pods",
-    "chocolate-chips-for-marshmallows",
-    "sandwich-spread-for-dressing",
+    "fresh-for-canned",
+    "beverage-for-condiment",
+    "chili-sauce-for-paste",
+    "whole-muscle-for-ground",
+    "canned-for-fresh",
+    "wrong-form-for-ingredient",
+    "soup-for-pasta",
+    "cream-substitute-for-dairy",
+    "wrong-form-for-product",
+    "pie-for-donut",
+    "liquid-for-pods",
     "dried-fruit-for-fresh",
-    "snack-for-condiment",
-    "sweetener-for-sugar",
-    "baked-good-for-dough"
+    "wrong-form-factor",
+    "fruit-for-beverage",
+    "beverage-for-ingredient",
+    "wrong-form-for-block-cheese",
+    "wrong-pack-size",
+    "frozen-for-canned",
+    "breaded-for-plain",
+    "sauce-for-pasta",
+    "bulk-bean-for-pod",
+    "multi-purpose-treatment-for-conditioner",
+    "liquid-oil-for-spray",
+    "wrong-form-for-prepared-food",
+    "flavored-beverage-for-pure-juice",
+    "dietary-variant-for-standard-food",
+    "broth-for-soup",
+    "filled-pastry-for-baked-good",
+    "sauce-for-crushed-tomatoes",
+    "single-spice-for-blend",
+    "whole-cut-for-diced",
+    "whole-for-diced",
+    "bun-for-roll",
+    "spray-for-liquid",
+    "fabric-refresher-for-disinfectant",
+    "bagel-for-donut",
+    "dessert-for-donut",
+    "sliced-for-ground",
+    "fruit-for-juice",
+    "whole-cut-for-portioned",
+    "cooked-for-fresh",
+    "raw-ingredient-for-prepared-dip",
+    "pasta-sauce-for-dip",
+    "salsa-for-cheese-dip",
+    "liquid-dressing-for-seasoning-packet",
+    "whole-form-for-cut",
+    "fresh-for-dried",
+    "canned-for-dried",
+    "dry-mix-for-sauce",
+    "seasoning-for-paste",
+    "beverage-for-brewing-ingredient",
+    "accessory-for-product",
+    "whole-for-paste",
+    "juice-for-soup",
+    "potato-chips-for-corn-chips",
+    "ham-for-bacon",
+    "whole-bean-for-extract",
+    "olive-oil-for-vegetable-oil"
   ],
   "families": [
     {
       "family": "wrong-variety",
       "already_known": true,
-      "members": 241,
-      "distinct_commodities": 153,
+      "members": 254,
+      "distinct_commodities": 169,
       "top_commodities": [
-        "Half & Half",
-        "Ricotta Cheese",
-        "Rye Bread (loaf)",
-        "Walnuts",
-        "Artichoke Hearts (canned/jarred)"
+        "Cheese Tortellini",
+        "Buttermilk",
+        "Blue Cheese Dressing",
+        "Frozen Breakfast Sandwiches",
+        "Brown Sugar"
       ],
       "examples": [
         {
           "commodity": "Buffalo Wing Sauce",
-          "product": "Buffalo Wild Wings Southwestern Ranch Sauce, 12 fl. oz."
+          "product": "Buffalo Wild Wings Parmesan Garlic Sauce, 12 fl oz"
         },
         {
           "commodity": "Fajita Seasoning Packet",
-          "product": "(6 pack) La Tiara Original Taco Seasoning Mix, Spices and Seasonings, 1 oz"
+          "product": "La Tiara Original Taco Seasoning Mix, Spices and Seasonings, 1 oz"
         },
         {
-          "commodity": "Fajita Seasoning Packet",
-          "product": "Member’s Mark Taco Seasoning, 23 oz."
+          "commodity": "Hot Italian Sausage",
+          "product": "Johnsonville Firecracker Spicy Pork Sausage Links, 19 oz, (5 Count) Refrigerated"
         },
         {
-          "commodity": "Hot Honey",
-          "product": "Local Hive Honey Hot Habanero Hot Sauce 6 Oz"
+          "commodity": "Part-Skim Mozzarella, Shredded",
+          "product": "Kraft Natural Signature Mozzarella Blend Thick Shredded Cheese, 8 oz Bag"
         }
       ]
     },
     {
       "family": "prepared-meal-for-ingredient",
       "already_known": true,
-      "members": 73,
-      "distinct_commodities": 58,
+      "members": 72,
+      "distinct_commodities": 60,
       "top_commodities": [
+        "Brown Rice",
         "Canned Chicken Breast",
         "Chili Beans (in sauce)",
-        "Doubanjiang (Chili Bean Paste)",
-        "15 Bean Soup Mix",
-        "Chuck Roast"
+        "Canned Beef Stew",
+        "Bouillon (cubes / granules / base)"
       ],
       "examples": [
         {
-          "commodity": "Jasmine Rice (Dry)",
-          "product": "Great Value Ready to Heat Jasmine Rice Cups, 8.8 oz, 2 Count"
-        },
-        {
-          "commodity": "15 Bean Soup Mix",
-          "product": "Campbell's Cream of Mushroom Soup 10.5 oz., 8 pk."
+          "commodity": "Hot Italian Sausage",
+          "product": "The Bearded Butchers Hot Italian Sausage DIY Kit, up to 25 lbs of Meat, Includes Fennel, Garlic, Red Pepper Flakes, Seasoning & Natural Hog Casings"
         },
         {
           "commodity": "15 Bean Soup Mix",
           "product": "Member's Mark Loaded Baked Potato Soup, 32 oz., 2 pk."
         },
         {
-          "commodity": "Acorn Squash",
-          "product": "Terra Verde Stuffed Cherry Peppers, 22.2 oz."
+          "commodity": "Anaheim Peppers",
+          "product": "La Costeña Pickled Jalapeño Nacho Slices, 64 oz."
+        },
+        {
+          "commodity": "Avocados",
+          "product": "Fresh Craving's Mexicali Dip, 24 oz."
         }
       ]
     },
     {
       "family": "flavoring-for-the-food",
       "already_known": true,
-      "members": 63,
-      "distinct_commodities": 43,
+      "members": 40,
+      "distinct_commodities": 37,
       "top_commodities": [
-        "Poultry Seasoning",
-        "Fish Sauce",
-        "Steak Sauce (A.1. style)",
-        "Adobo seasoning",
-        "Vanilla Extract"
+        "Chili Powder",
+        "Garlic Powder",
+        "Pizza Sauce",
+        "Buffalo Wing Sauce",
+        "Baking Powder"
       ],
       "examples": [
         {
@@ -150,16 +163,16 @@
           "product": "Buffalo Wild Wings Asian Zing Sauce 12 Fl Oz"
         },
         {
-          "commodity": "Buffalo Wing Sauce",
-          "product": "Buffalo Wild Wings Mango Habanero Sauce 12 Fl Oz"
+          "commodity": "Baking Powder",
+          "product": "Sweet Additions Sucralose NO Calorie Sweetener 9.7 OZ"
         },
         {
-          "commodity": "Hot Honey",
-          "product": "Watkins Hot Honey Seasoning, 8.1 oz"
+          "commodity": "Baking Soda",
+          "product": "McCormick Maple Extract With Other Natural Flavors, 1.0 fl oz Box"
         },
         {
-          "commodity": "Achiote Paste",
-          "product": "EZ Bombs Birria Bomb Seasoning, 1 Pack  Authentic Mexican Spice Mix for Tacos, Burritos, Nachos, and Quesadillas  Made with Real Chiles, Herbs, and Spices"
+          "commodity": "Meat Marinade (bottled)",
+          "product": "Member's Mark Italian Basil Pesto, 22 oz."
         }
       ]
     },
@@ -167,137 +180,199 @@
       "family": "snack-carrier-for-ingredient",
       "already_known": true,
       "members": 39,
-      "distinct_commodities": 30,
+      "distinct_commodities": 31,
       "top_commodities": [
-        "Chocolate Milk",
         "Hot Honey",
+        "Meat Marinade (bottled)",
         "Rice Cakes",
-        "Hot Dog Buns",
-        "Sugar-Free BBQ Sauce"
+        "Bagels",
+        "Queso / Cheese Dip"
       ],
       "examples": [
         {
-          "commodity": "Hot Honey",
-          "product": "Blue Diamond Hot Honey Almonds 6 Oz"
+          "commodity": "Canned Sweet Corn",
+          "product": "Clancy S Original Corn Chips 9.25 OZ"
         },
         {
           "commodity": "Hot Honey",
-          "product": "Hampton Farms Hot Honey Super XL Peanuts, 48 oz."
+          "product": "Bush's Best Hot Honey Grillin' Beans 21.7 Oz"
         },
         {
           "commodity": "Hot Honey",
-          "product": "Stonefire Hot Honey Flavored Naan 2 Ea"
+          "product": "Kind Honey Hot Breakfast Bars 6 Ea"
         },
         {
-          "commodity": "Sugar-Free BBQ Sauce",
-          "product": "Cookies Original Sweet & Smoky Bar \"B\" \"Q\" Sauce, 26 oz, Gluten-Free"
-        }
-      ]
-    },
-    {
-      "family": "wrong-cut-or-grade",
-      "already_known": true,
-      "members": 34,
-      "distinct_commodities": 23,
-      "top_commodities": [
-        "Chicken Livers",
-        "80/20 Ground Beef",
-        "Sirloin Steak",
-        "Chicken Thighs / Drumsticks",
-        "Crushed Tomatoes (canned)"
-      ],
-      "examples": [
-        {
-          "commodity": "Part-Skim Mozzarella, Shredded",
-          "product": "Great Value Whole Milk Mozzarella Cheese, 16 oz"
-        },
-        {
-          "commodity": "Baby Back Ribs",
-          "product": "Prairie Fresh Natural Fresh Pork Spareribs, Bone-in, 4.0-5.5 lb, 19g Protein per 4oz Serving"
-        },
-        {
-          "commodity": "Brown Gravy Mix (dry packet)",
-          "product": "Pioneer Country Gravy Mix, Rich & Creamy, Southern Style, 2.75 oz Pouch (Yields 8 Servings)"
-        },
-        {
-          "commodity": "Canned Salmon",
-          "product": "Chicken of the Sea Wild Caught Alaskan Red Sockeye Salmon, Traditional Style 14.75 oz"
+          "commodity": "Hot Honey",
+          "product": "Stonefire Hot Honey Flavored Naan Dippers 7.05 Oz"
         }
       ]
     },
     {
       "family": "household-nonfood",
       "already_known": true,
-      "members": 31,
-      "distinct_commodities": 25,
+      "members": 27,
+      "distinct_commodities": 19,
       "top_commodities": [
+        "Baby Wipes",
+        "Canned Pumpkin (100% puree)",
         "Sandwich Bags",
         "All-Purpose Cleaner",
-        "Baby Wipes",
-        "Baking Powder",
-        "Dish Sponges"
+        "Baking Powder"
       ],
       "examples": [
         {
           "commodity": "Air Freshener",
-          "product": "Clorox Clean Breeze Fabric & Carpet Spray 26 Fl Oz"
+          "product": "Fabuloso Multi Purpose Cleaner Lavender 56 FL OZ"
         },
         {
           "commodity": "All-Purpose Cleaner",
-          "product": "Mr. Clean 2 In 1 Built In Bath Lemon Cleaner 3 Ea"
+          "product": "Clorox Bathroom Bleach Foamer, Ocean Mist, 3 ct., 90 fl. oz."
         },
         {
           "commodity": "All-Purpose Cleaner",
-          "product": "Sprayway Liquid Glass Cleaner"
+          "product": "OdoBan Disinfectant Spray, 14.6 oz./can, 6 pk., Choose Scent"
         },
         {
-          "commodity": "Baby Wipes",
-          "product": "(3 pack) Parent's Choice Flushable Melon Berry Scented Wipes (Choose Your Count)"
+          "commodity": "Avocado Oil",
+          "product": "Member's Mark Distilled White Vinegar, 1 gal., 2 pk."
+        }
+      ]
+    },
+    {
+      "family": "wrong-cut-or-grade",
+      "already_known": true,
+      "members": 25,
+      "distinct_commodities": 18,
+      "top_commodities": [
+        "Baby Back Ribs",
+        "Frozen Chicken Nuggets",
+        "Sirloin Steak",
+        "Part-Skim Mozzarella, Shredded",
+        "Turkey Pepperoni"
+      ],
+      "examples": [
+        {
+          "commodity": "Part-Skim Mozzarella, Shredded",
+          "product": "Great Value Low-Moisture Part-Skim Mozzarella Block Cheese, 32 oz Chunk"
+        },
+        {
+          "commodity": "Turkey Pepperoni",
+          "product": "Marketside Cubed Pepperoni, 6 oz, Plastic Cup and Lid, Refrigerated"
+        },
+        {
+          "commodity": "Asparagus",
+          "product": "Great Value Asparagus Cut Spears, 14.5 oz"
+        },
+        {
+          "commodity": "Baby Back Ribs",
+          "product": "Appleton Farms Thick Sliced Hickory Bacon 24 OZ"
         }
       ]
     },
     {
       "family": "variety-pack-for-single-food",
       "already_known": true,
-      "members": 28,
-      "distinct_commodities": 24,
+      "members": 16,
+      "distinct_commodities": 14,
       "top_commodities": [
-        "Zero-Sugar Soda (2 L)",
         "Cheese Crackers",
-        "Frozen Peas",
-        "Raisins",
-        "Part-Skim Mozzarella, Shredded"
+        "Corn Chips (Fritos class)",
+        "Baby Food (jars/pouches)",
+        "Buckwheat Soba Noodles",
+        "Cantaloupe"
       ],
       "examples": [
         {
-          "commodity": "Part-Skim Mozzarella, Shredded",
-          "product": "Great Value Low-Moisture Part-Skim Mozzarella & Provolone Finely Shredded Cheese, 16 oz Bag"
+          "commodity": "Baby Food (jars/pouches)",
+          "product": "GoGo Dairy Protein Pouches, Variety Pack, 4.2 oz., 16 pk."
         },
         {
-          "commodity": "Zero-Sugar Soda (2 L)",
-          "product": "A&W Zero Sugar Root Beer Soda Pop, 16.9 fl oz, 6 Pack Bottles"
+          "commodity": "Buckwheat Soba Noodles",
+          "product": "Barilla Pasta Variety Pack 1 lb., 6 pk."
         },
         {
-          "commodity": "Zero-Sugar Soda (2 L)",
-          "product": "Pepsi Zero Sugar Mini Cans, 7.5 fl. oz., 30 pk."
+          "commodity": "Cantaloupe",
+          "product": "Member's Mark Fruit and Cheese Tray, priced per pound"
         },
         {
-          "commodity": "Canned Beef Stew",
-          "product": "(4 pack) Nalley Chunky Beef Stew With Vegetables in a Hearty Gravy, 9g Protein Per Serving, 38 oz. Can"
+          "commodity": "Cat Food (dry)",
+          "product": "Purina Friskies lil’ Lickables With Chicken, Tuna or Ocean Whitefish Variety Pack Lickable"
+        }
+      ]
+    },
+    {
+      "family": "dry-for-canned",
+      "already_known": true,
+      "members": 10,
+      "distinct_commodities": 9,
+      "top_commodities": [
+        "Canned Potatoes",
+        "Frozen Cut Green Beans",
+        "BBQ Sauce",
+        "Beef Broth / Stock",
+        "Brown Gravy Mix (dry packet)"
+      ],
+      "examples": [
+        {
+          "commodity": "Frozen Cut Green Beans",
+          "product": "Del Monte Cut Green Beans, Canned Vegetables, 14.5 oz Can"
+        },
+        {
+          "commodity": "BBQ Sauce",
+          "product": "Jack Stack Kansas City Barbeque Seasoning, 12.8 oz."
+        },
+        {
+          "commodity": "Beef Broth / Stock",
+          "product": "Kinder's Au Jus Bone Broth Gravy Mix, 1.1 oz Packet"
+        },
+        {
+          "commodity": "Brown Gravy Mix (dry packet)",
+          "product": "Campbell’s Beef Gravy, 10.5 oz Can"
+        }
+      ]
+    },
+    {
+      "family": "concentrate-for-ready-to-serve",
+      "already_known": true,
+      "members": 10,
+      "distinct_commodities": 10,
+      "top_commodities": [
+        "Jasmine Rice (Dry)",
+        "Beef Broth / Stock",
+        "Bottled Water (24-pack)",
+        "Canned Chili",
+        "Canned Mixed Vegetables"
+      ],
+      "examples": [
+        {
+          "commodity": "Jasmine Rice (Dry)",
+          "product": "Minute Ready-to-Eat Jasmine Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count"
+        },
+        {
+          "commodity": "Beef Broth / Stock",
+          "product": "Campbell's® Beef Consomme 10.500 Oz"
+        },
+        {
+          "commodity": "Bottled Water (24-pack)",
+          "product": "Puraqua Tropical Fusion Energy Liquid Water Enhancer 1.62 FL OZ"
+        },
+        {
+          "commodity": "Canned Chili",
+          "product": "Member's Mark Chicken Base, 16 oz."
         }
       ]
     },
     {
       "family": "supplement-for-food",
       "already_known": true,
-      "members": 8,
+      "members": 7,
       "distinct_commodities": 7,
       "top_commodities": [
-        "Powdered Sugar",
         "Apple Cider Vinegar",
-        "Baby Formula",
-        "Baking Soda",
-        "Brown Sugar"
+        "Buttermilk",
+        "Chocolate Milk",
+        "Energy Drinks",
+        "Ice Cream"
       ],
       "examples": [
         {
@@ -305,108 +380,237 @@
           "product": "Spring Valley Weight Management Vegetarian Gummy for Metabolism Support, Chromium Picolinate 400mcg, 60ct Natural Apple Flavor"
         },
         {
-          "commodity": "Baby Formula",
-          "product": "Enfagrow Premium Toddler Nutritional Drink, Milk-Flavored, 36.6 oz."
+          "commodity": "Buttermilk",
+          "product": "Baker S Corner Fast Rising Yeast 0.75 OZ"
         },
         {
-          "commodity": "Baking Soda",
-          "product": "Sal De Uvas Picot Effervescent Antacid Powder Solution for Indigestion, 8 Count"
+          "commodity": "Chocolate Milk",
+          "product": "Carnation Malted Milk, Chocolate"
         },
         {
-          "commodity": "Brown Sugar",
-          "product": "Great Value Organic Raw Amber Blue Agave Sweetener Sugar Substitute, 23.5 oz Bottle"
+          "commodity": "Energy Drinks",
+          "product": "Liquid I.V. Sugar-Free Hydration + Energy Electrolyte Powder Drink Mix, Fruit Punch & Stra"
+        }
+      ]
+    },
+    {
+      "family": "wrong-form",
+      "already_known": false,
+      "members": 7,
+      "distinct_commodities": 2,
+      "top_commodities": [
+        "Powdered Sugar",
+        "Popsicles / Ice Pops"
+      ],
+      "examples": [
+        {
+          "commodity": "Popsicles / Ice Pops",
+          "product": "Fat Boy Ice Cream Sandwich Pops, Birthday Cake 4 Ea"
+        },
+        {
+          "commodity": "Popsicles / Ice Pops",
+          "product": "Luigi's Lemon & Strawberry Real Italian Ice, 6 fl oz, 6 Count, (Frozen)"
+        },
+        {
+          "commodity": "Popsicles / Ice Pops",
+          "product": "Sundae Shoppe Lime Fruit Bars 18 FL OZ"
+        },
+        {
+          "commodity": "Powdered Sugar",
+          "product": "C&H Pure Cane Sugar Cubes, 126 ct"
+        }
+      ]
+    },
+    {
+      "family": "candy-for-fruit",
+      "already_known": true,
+      "members": 5,
+      "distinct_commodities": 4,
+      "top_commodities": [
+        "Chocolate Milk",
+        "Blueberries",
+        "Chocolate Chips",
+        "Whipped Cream / Topping"
+      ],
+      "examples": [
+        {
+          "commodity": "Blueberries",
+          "product": "Gushers Blueberry Grape/Sour Blue Raspberry Fruit Flavored Snacks 6 Ea"
+        },
+        {
+          "commodity": "Chocolate Chips",
+          "product": "M&M's Minis Semi-Sweet Chocolate Baking Candy - 10 oz Bag"
+        },
+        {
+          "commodity": "Chocolate Milk",
+          "product": "Ghirardelli Squares Sea Salt Caramel Milk Chocolate 5.3 Oz"
+        },
+        {
+          "commodity": "Chocolate Milk",
+          "product": "Kit Kat Count & Witch Crisp Wafers In Milk Chocolate 1.5 Oz"
+        }
+      ]
+    },
+    {
+      "family": "fresh-for-canned",
+      "already_known": false,
+      "members": 5,
+      "distinct_commodities": 3,
+      "top_commodities": [
+        "Canned Chicken Breast",
+        "Canned Pasta (Ravioli / SpaghettiOs)",
+        "Canned Mixed Vegetables"
+      ],
+      "examples": [
+        {
+          "commodity": "Canned Chicken Breast",
+          "product": "Kirkwood Fresh Boneless Skinless Chicken Thighs Per LB"
+        },
+        {
+          "commodity": "Canned Chicken Breast",
+          "product": "Perdue Fresh Antibiotic Free Thin Sliced Chicken Breasts 1 Each"
+        },
+        {
+          "commodity": "Canned Mixed Vegetables",
+          "product": "Peeled Organic Baby Carrots Bag 16 OZ"
+        },
+        {
+          "commodity": "Canned Pasta (Ravioli / SpaghettiOs)",
+          "product": "Marketside Italian Style Beef Ravioli, Fresh Artisanal Pasta, 9 oz"
+        }
+      ]
+    },
+    {
+      "family": "dried-herb-for-fresh",
+      "already_known": true,
+      "members": 4,
+      "distinct_commodities": 3,
+      "top_commodities": [
+        "Fresh Rosemary",
+        "Aji Amarillo Paste",
+        "Fresh Dill"
+      ],
+      "examples": [
+        {
+          "commodity": "Aji Amarillo Paste",
+          "product": "Member's Mark Parsley Flakes, 3.2 oz"
+        },
+        {
+          "commodity": "Fresh Dill",
+          "product": "Dan's Dill Weed"
+        },
+        {
+          "commodity": "Fresh Rosemary",
+          "product": "Great Value Organic Crushed Rosemary, 1 oz"
+        },
+        {
+          "commodity": "Fresh Rosemary",
+          "product": "Simply Organic Rosemary Leaf, Shelf-Stable, 1.23 oz Bottle"
         }
       ]
     },
     {
       "family": "beverage-for-fruit",
       "already_known": true,
-      "members": 8,
-      "distinct_commodities": 8,
-      "top_commodities": [
-        "Blueberries",
-        "Canned Beets",
-        "Chipotle Powder",
-        "Grape Juice",
-        "Lemon Juice"
-      ],
-      "examples": [
-        {
-          "commodity": "Blueberries",
-          "product": "Vitaminwater Acai Blueberry Pomegranate Flavored Water Bottle 20 Fl Oz"
-        },
-        {
-          "commodity": "Canned Beets",
-          "product": "Member's Mark Fruit Mix in Extra Light Syrup, 104 oz."
-        },
-        {
-          "commodity": "Chipotle Powder",
-          "product": "Country Time Pink Lemonade Naturally Flavored Powdered Drink Mix, 5.16 lbs."
-        },
-        {
-          "commodity": "Grape Juice",
-          "product": "Member's Mark Strawberry Lemonade, 52 fl. oz., 2 pk."
-        }
-      ]
-    },
-    {
-      "family": "concentrate-for-ready-to-serve",
-      "already_known": true,
-      "members": 8,
-      "distinct_commodities": 7,
-      "top_commodities": [
-        "Instant Coffee",
-        "Brown Gravy Mix (dry packet)",
-        "Crushed Tomatoes (canned)",
-        "Hot Cocoa Mix",
-        "Steak Sauce (A.1. style)"
-      ],
-      "examples": [
-        {
-          "commodity": "Brown Gravy Mix (dry packet)",
-          "product": "Campbell’s Beef Gravy, 10.5 oz Can"
-        },
-        {
-          "commodity": "Crushed Tomatoes (canned)",
-          "product": "Contadina Tomato Puree, 29 oz Can"
-        },
-        {
-          "commodity": "Hot Cocoa Mix",
-          "product": "Molina Mexican Vanilla Blend, 33.3 fl. oz."
-        },
-        {
-          "commodity": "Instant Coffee",
-          "product": "Green Mountain Coffee Roasters Coffee, Original Black, Instant, Cold Brew, Iced 10 Ea"
-        }
-      ]
-    },
-    {
-      "family": "dry-for-canned",
-      "already_known": true,
       "members": 4,
       "distinct_commodities": 4,
       "top_commodities": [
-        "Corn Muffin Mix",
-        "Onion Soup Mix (dry packets)",
-        "Spinach (fresh)",
-        "Sugar Snap Peas"
+        "Caesar Dressing",
+        "Chocolate Milk",
+        "Grape Juice",
+        "Orange Juice"
       ],
       "examples": [
         {
-          "commodity": "Corn Muffin Mix",
-          "product": "Pearl Milling Company Self-Rising White Corn Meal Mix, 80 oz"
+          "commodity": "Caesar Dressing",
+          "product": "Silk Dairy Free, Gluten Free, Caramel Almond Creamer, 32 fl oz Carton"
         },
         {
-          "commodity": "Onion Soup Mix (dry packets)",
-          "product": "Campbell's Condensed French Onion Soup, 10.5 oz Can"
+          "commodity": "Chocolate Milk",
+          "product": "Yoo-hoo Chocolate Drink 6.5 fl. oz., 40 pk."
         },
         {
-          "commodity": "Spinach (fresh)",
-          "product": "Del Monte Chopped Spinach"
+          "commodity": "Grape Juice",
+          "product": "Nesquik  Chocolate Milk Beverage 8 fl. oz., 15 pk."
         },
         {
-          "commodity": "Sugar Snap Peas",
-          "product": "Del Monte Sweet Peas 15 oz Can (Pack of 4), Canned Vegetables"
+          "commodity": "Orange Juice",
+          "product": "Our Family Mandarin Oranges In 100% Juice 4 Ea"
+        }
+      ]
+    },
+    {
+      "family": "beverage-for-condiment",
+      "already_known": false,
+      "members": 4,
+      "distinct_commodities": 2,
+      "top_commodities": [
+        "Pomegranate Molasses",
+        "Coconut Aminos"
+      ],
+      "examples": [
+        {
+          "commodity": "Coconut Aminos",
+          "product": "Vita Coco Coconut Water 11.1 fl. oz., 18 pk."
+        },
+        {
+          "commodity": "Pomegranate Molasses",
+          "product": "Great Value Zero Sugar Cherry Pomegranate Juice, 64 fl oz"
+        },
+        {
+          "commodity": "Pomegranate Molasses",
+          "product": "POM Wonderful Antioxidant Superpower 100% Pomegranate Juice, 48 fl oz"
+        },
+        {
+          "commodity": "Pomegranate Molasses",
+          "product": "V8 Pomegranate Blueberry 100% Fruit and Vegetable Juice, 46 fl oz Bottle"
+        }
+      ]
+    },
+    {
+      "family": "chili-sauce-for-paste",
+      "already_known": false,
+      "members": 3,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Doubanjiang (Chili Bean Paste)"
+      ],
+      "examples": [
+        {
+          "commodity": "Doubanjiang (Chili Bean Paste)",
+          "product": "Bush's Best Chili Beans Mild Chili Sauce Pinto Beans 16 Oz"
+        },
+        {
+          "commodity": "Doubanjiang (Chili Bean Paste)",
+          "product": "Great Value Chili Sauce, 12 oz"
+        },
+        {
+          "commodity": "Doubanjiang (Chili Bean Paste)",
+          "product": "Wolf Brand \"No Bean\" Chili 15oz., 6pk."
+        }
+      ]
+    },
+    {
+      "family": "whole-muscle-for-ground",
+      "already_known": false,
+      "members": 3,
+      "distinct_commodities": 2,
+      "top_commodities": [
+        "80/20 Ground Beef",
+        "Ground Pork"
+      ],
+      "examples": [
+        {
+          "commodity": "80/20 Ground Beef",
+          "product": "Member’s Mark USDA Choice Angus Beef Boneless Chuck Roast, priced per pound"
+        },
+        {
+          "commodity": "80/20 Ground Beef",
+          "product": "USDA Choice Beef Cheek Meat, Case, priced per pound"
+        },
+        {
+          "commodity": "Ground Pork",
+          "product": "Member's Mark Thick-Cut Bone-In Pork Chops, priced per pound"
         }
       ]
     },
@@ -416,422 +620,331 @@
       "members": 3,
       "distinct_commodities": 3,
       "top_commodities": [
-        "Corned Beef Brisket (raw)",
         "Poblano Peppers (fresh)",
-        "Red Potatoes"
+        "Sugar Snap Peas",
+        "Tomatillos (fresh)"
       ],
       "examples": [
-        {
-          "commodity": "Corned Beef Brisket (raw)",
-          "product": "Libby's Corned Beef, 14g Protein Per Serving, Canned Meat, 25% Less Sodium, 12 oz. Can"
-        },
         {
           "commodity": "Poblano Peppers (fresh)",
-          "product": "San Marcos Shelf Stable Whole Jalapeno Peppers, 26 oz Can"
+          "product": "Ortega Fire Roasted Mild Diced Green Chiles, Kosher, 4 oz"
         },
         {
-          "commodity": "Red Potatoes",
-          "product": "(6 pack) Great Value Whole New Potatoes, 15 oz"
+          "commodity": "Sugar Snap Peas",
+          "product": "Del Monte No Salt Added Sweet Peas, Canned Vegetables, 15 oz Can"
+        },
+        {
+          "commodity": "Tomatillos (fresh)",
+          "product": "RO*TEL Xtra Hot Diced Tomatoes With Ghost Peppers, 10 oz."
         }
       ]
     },
     {
-      "family": "beverage-for-condiment",
-      "already_known": false,
-      "members": 3,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Pomegranate Molasses"
-      ],
-      "examples": [
-        {
-          "commodity": "Pomegranate Molasses",
-          "product": "Great Value Organic Pomegranate Juice, 32 fl oz"
-        },
-        {
-          "commodity": "Pomegranate Molasses",
-          "product": "R.W. Knudsen Family Organic Cranberry Pomegranate Juice, 32 oz, Glass Bottle, Shelf-Stable"
-        },
-        {
-          "commodity": "Pomegranate Molasses",
-          "product": "V8 Energy Pomegranate Blueberry Energy Drink, 8 fl oz Can, 6 Pack"
-        }
-      ]
-    },
-    {
-      "family": "wrong-form",
+      "family": "wrong-form-for-ingredient",
       "already_known": false,
       "members": 3,
       "distinct_commodities": 3,
       "top_commodities": [
-        "Powdered Sugar",
-        "Red Pepper Flakes",
-        "Rice Noodles"
+        "Ranch Seasoning Mix (packet)",
+        "Rice Noodles",
+        "Ricotta Cheese"
       ],
       "examples": [
         {
-          "commodity": "Powdered Sugar",
-          "product": "Zulka Pure Cane Sugar, 4 lb, Contains No Allergens"
-        },
-        {
-          "commodity": "Red Pepper Flakes",
-          "product": "Great Value Organic Ground Cayenne Pepper in Glass Jar, 1.7 oz"
+          "commodity": "Ranch Seasoning Mix (packet)",
+          "product": "McCormick Ranch Finishing Salt, 4.03 oz Bottle"
         },
         {
           "commodity": "Rice Noodles",
-          "product": "Jovial 100% Organic Gluten-Free Brown Rice Fusilli Pasta, 12oz"
+          "product": "Jovial 100% Organic Gluten-Free Brown Rice Spaghetti Pasta, 12oz"
+        },
+        {
+          "commodity": "Ricotta Cheese",
+          "product": "The Laughing Cow Creamy Light Spreadable Cheese Wedges, 5.4 oz"
+        }
+      ]
+    },
+    {
+      "family": "soup-for-pasta",
+      "already_known": false,
+      "members": 2,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Canned Pasta (Ravioli / SpaghettiOs)"
+      ],
+      "examples": [
+        {
+          "commodity": "Canned Pasta (Ravioli / SpaghettiOs)",
+          "product": "Campbell S Chunky Healthy Request Chicken Noodle Soup 18.6 OZ"
+        },
+        {
+          "commodity": "Canned Pasta (Ravioli / SpaghettiOs)",
+          "product": "Pacific Organic Roasted Red Pepper and Tomato Soup, 32 fl. oz., 4 pk."
+        }
+      ]
+    },
+    {
+      "family": "cream-substitute-for-dairy",
+      "already_known": false,
+      "members": 2,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Sweetened Condensed Milk"
+      ],
+      "examples": [
+        {
+          "commodity": "Sweetened Condensed Milk",
+          "product": "Coffee mate Italian Sweet Crme Gluten Free Liquid Coffee Creamer, 64 fl oz"
+        },
+        {
+          "commodity": "Sweetened Condensed Milk",
+          "product": "Silk Dairy Free, Gluten Free, Sweet and Creamy Almond Creamer, 32 fl oz Carton"
+        }
+      ]
+    },
+    {
+      "family": "wrong-form-for-product",
+      "already_known": false,
+      "members": 2,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Cotton Swabs"
+      ],
+      "examples": [
+        {
+          "commodity": "Cotton Swabs",
+          "product": "Equate Exfoliating Cotton Ovals, 50 Count"
+        },
+        {
+          "commodity": "Cotton Swabs",
+          "product": "Swisspers Premium Ultra-Soft Cleansing 100% Pure Natural Cotton Pads, Larger & Thicker Rectangular Design, Strong, Absorbent, Versatile, Vegan, Cruelty-Free, 50 Pads"
+        }
+      ]
+    },
+    {
+      "family": "pie-for-donut",
+      "already_known": false,
+      "members": 2,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Donuts"
+      ],
+      "examples": [
+        {
+          "commodity": "Donuts",
+          "product": "Baker S Treat Apple Pie 4 OZ"
+        },
+        {
+          "commodity": "Donuts",
+          "product": "Member's Mark 12\" Honeycrisp Apple Lattice Pie, 72 oz."
+        }
+      ]
+    },
+    {
+      "family": "liquid-for-pods",
+      "already_known": false,
+      "members": 2,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Laundry Detergent Pods"
+      ],
+      "examples": [
+        {
+          "commodity": "Laundry Detergent Pods",
+          "product": "Gain + Oxi Liquid Laundry Detergent, Moonlight Breeze, 159 Loads, 170 fl. oz."
+        },
+        {
+          "commodity": "Laundry Detergent Pods",
+          "product": "Tide Ultra Oxi Boost Liquid Laundry Detergent, 100 loads, 128 fl. oz."
+        }
+      ]
+    },
+    {
+      "family": "dried-fruit-for-fresh",
+      "already_known": false,
+      "members": 2,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Plums"
+      ],
+      "examples": [
+        {
+          "commodity": "Plums",
+          "product": "Great Value Pitted Prunes Reclosable Pouch, 8 oz (226g)"
+        },
+        {
+          "commodity": "Plums",
+          "product": "Sunsweet, Amazin, Pitted Prunes, 24, oz"
         }
       ]
     },
     {
       "family": "wrong-form-factor",
       "already_known": false,
-      "members": 2,
-      "distinct_commodities": 2,
+      "members": 1,
+      "distinct_commodities": 1,
       "top_commodities": [
-        "Aluminum Foil",
-        "Dish Soap (liquid)"
+        "Aluminum Foil"
       ],
       "examples": [
         {
           "commodity": "Aluminum Foil",
-          "product": "EZ Foil Disposable Oven Liner Trays, 18.25 x 15.75 in., 2 Count"
-        },
-        {
-          "commodity": "Dish Soap (liquid)",
-          "product": "Dawn Heavy Duty Dish Spray 16 Fl Oz"
+          "product": "Mainstays 2 lb. Aluminum Foil Loaf Pans, 3 Count, Disposable, Easy Cleaning"
         }
       ]
     },
     {
-      "family": "candy-for-fruit",
-      "already_known": true,
-      "members": 2,
-      "distinct_commodities": 2,
+      "family": "fruit-for-beverage",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
       "top_commodities": [
-        "Blueberries",
-        "Fruit Snacks"
+        "Apple Juice"
       ],
       "examples": [
         {
-          "commodity": "Blueberries",
-          "product": "Gushers Blueberry Grape/Sour Blue Raspberry Fruit Flavored Snacks 6 Ea"
-        },
+          "commodity": "Apple Juice",
+          "product": "Pink Lady Cripps Apple Bag 3 Lbs"
+        }
+      ]
+    },
+    {
+      "family": "beverage-for-ingredient",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Baby Formula"
+      ],
+      "examples": [
         {
-          "commodity": "Fruit Snacks",
-          "product": "Del Monte Fruit Cup Snacks No Sugar Added Diced Peaches Family Pack 12 Ea"
+          "commodity": "Baby Formula",
+          "product": "Friendly Farms Vitamin D Milk 1 Gal"
+        }
+      ]
+    },
+    {
+      "family": "wrong-form-for-block-cheese",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Block Cheese"
+      ],
+      "examples": [
+        {
+          "commodity": "Block Cheese",
+          "product": "El Mexicano Grating Cheese, Part Skim, Cotija Queso 10 Oz"
+        }
+      ]
+    },
+    {
+      "family": "wrong-pack-size",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Bottled Water (24-pack)"
+      ],
+      "examples": [
+        {
+          "commodity": "Bottled Water (24-pack)",
+          "product": "Great Value Hydrate Alkaline Water Bottle, 23.7 fl oz, 15 Count"
         }
       ]
     },
     {
       "family": "frozen-for-canned",
       "already_known": false,
-      "members": 2,
-      "distinct_commodities": 2,
-      "top_commodities": [
-        "Canned Diced Green Chilies",
-        "Canned Mushrooms"
-      ],
-      "examples": [
-        {
-          "commodity": "Canned Diced Green Chilies",
-          "product": "Young Guns Diced Green Hatch Chile, Medium Heat, Frozen 16oz Bag"
-        },
-        {
-          "commodity": "Canned Mushrooms",
-          "product": "Great Value Frozen Sliced Mushrooms, 10 oz"
-        }
-      ]
-    },
-    {
-      "family": "beverage-for-food",
-      "already_known": false,
-      "members": 2,
-      "distinct_commodities": 2,
-      "top_commodities": [
-        "Breakfast Cereal",
-        "Tomato Soup (canned)"
-      ],
-      "examples": [
-        {
-          "commodity": "Breakfast Cereal",
-          "product": "Simply Orange Juice, 46 fl oz or Post Large Size Cereal, 13.5-20.5 oz"
-        },
-        {
-          "commodity": "Tomato Soup (canned)",
-          "product": "Campbell's® 100% Tomato Juice 64.000 Fl Oz"
-        }
-      ]
-    },
-    {
-      "family": "missing-ingredient-version",
-      "already_known": false,
-      "members": 2,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Chili Beans (in sauce)"
-      ],
-      "examples": [
-        {
-          "commodity": "Chili Beans (in sauce)",
-          "product": "Hormel Chili No Beans Chili Share Size 25 Oz"
-        },
-        {
-          "commodity": "Chili Beans (in sauce)",
-          "product": "Wolf Brand Chili Without Beans 15 Oz"
-        }
-      ]
-    },
-    {
-      "family": "flavored-juice-for-pure-juice",
-      "already_known": false,
-      "members": 2,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Cranberry Juice"
-      ],
-      "examples": [
-        {
-          "commodity": "Cranberry Juice",
-          "product": "Great Value White Cranberry Peach Juice Cocktail, 64 fl oz"
-        },
-        {
-          "commodity": "Cranberry Juice",
-          "product": "Ocean Spray Juice Drink, Cranberry Raspberry Flavored 101.4 Fl Oz"
-        }
-      ]
-    },
-    {
-      "family": "raw-dough-for-baked-good",
-      "already_known": false,
-      "members": 2,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Croissants"
-      ],
-      "examples": [
-        {
-          "commodity": "Croissants",
-          "product": "Great Value Flaky & Buttery Crescent Rolls, 8 oz, 8 Count"
-        },
-        {
-          "commodity": "Croissants",
-          "product": "Pillsbury Crescent Rolls, Original Refrigerated Canned Pastry Dough, Value 2-Pack, 16 Rolls, 16 oz"
-        }
-      ]
-    },
-    {
-      "family": "baby-food-for-ingredient",
-      "already_known": true,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Almond Milk"
+        "Canned Chicken Breast"
       ],
       "examples": [
         {
-          "commodity": "Almond Milk",
-          "product": "Ripple Kids Plant-Based Milk, Original Unsweetened, Refrigerated, 48 fl oz Bottle  Dairy-Free Kids Milk Alternative with Pea Protein, DHA, Choline, and Prebiotics"
+          "commodity": "Canned Chicken Breast",
+          "product": "Great Value Fully Cooked Grilled Chicken Breast, 22 oz (Frozen)"
         }
       ]
     },
     {
-      "family": "wrong-product-category",
+      "family": "breaded-for-plain",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Baby Wipes"
+        "Canned Chicken Breast"
       ],
       "examples": [
         {
-          "commodity": "Baby Wipes",
-          "product": "Huggies Disney Baby Newborn Diapers (Up To 10 Lbs (4.5 Kg)) 84 Ea"
+          "commodity": "Canned Chicken Breast",
+          "product": "Nature Raised Farms Fully Cooked Lightly Breaded Chicken Breast Strips, Frozen, 2.5 lbs."
         }
       ]
     },
     {
-      "family": "whole-for-ground",
+      "family": "sauce-for-pasta",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Black Pepper (ground)"
+        "Canned Pasta (Ravioli / SpaghettiOs)"
       ],
       "examples": [
         {
-          "commodity": "Black Pepper (ground)",
-          "product": "McCormick Pepper Black Whole, 7.0 oz Bottle"
+          "commodity": "Canned Pasta (Ravioli / SpaghettiOs)",
+          "product": "Reggano Meat Pasta Sauce 24 OZ"
         }
       ]
     },
     {
-      "family": "stain-remover-for-bleach",
+      "family": "bulk-bean-for-pod",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Bleach"
+        "Coffee Pods (K-Cups)"
       ],
       "examples": [
         {
-          "commodity": "Bleach",
-          "product": "Clorox 2 for Colors Max Performance Stain Remover, 4 in 1, 112.75 fl. oz."
+          "commodity": "Coffee Pods (K-Cups)",
+          "product": "Barissimo French Vanilla Light Roast 100 Arabica Coffee 12 OZ"
         }
       ]
     },
     {
-      "family": "laundry-sanitizer-for-bleach",
+      "family": "multi-purpose-treatment-for-conditioner",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Bleach"
+        "Hair Conditioner"
       ],
       "examples": [
         {
-          "commodity": "Bleach",
-          "product": "Lysol Laundry Sanitizer Additive, Crisp Linen 150 fl. oz."
+          "commodity": "Hair Conditioner",
+          "product": "Not Your Mother's 10 In 1 Hair Perfector 6 Fl Oz"
         }
       ]
     },
     {
-      "family": "dip-for-dressing",
+      "family": "liquid-oil-for-spray",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Blue Cheese Dressing"
+        "Cooking Spray"
       ],
       "examples": [
         {
-          "commodity": "Blue Cheese Dressing",
-          "product": "Hidden Valley Blue Cheese Ranch Dip Sauce Condiment & Dressing, 20 fl oz Squeeze Bottle"
+          "commodity": "Cooking Spray",
+          "product": "Graza Frizzle High Heat Cooking Oil 25.3 Fl Oz"
         }
       ]
     },
     {
-      "family": "meat-for-marinade",
-      "already_known": false,
-      "members": 1,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Meat Marinade (bottled)"
-      ],
-      "examples": [
-        {
-          "commodity": "Meat Marinade (bottled)",
-          "product": "Member's Mark USDA Choice Angus Beef London Broil Steak, priced per pound"
-        }
-      ]
-    },
-    {
-      "family": "patty-for-sausage",
-      "already_known": false,
-      "members": 1,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Bratwurst"
-      ],
-      "examples": [
-        {
-          "commodity": "Bratwurst",
-          "product": "Johnsonville Patties, Cheddar Cheese & Bacon Flavor 6 Ea"
-        }
-      ]
-    },
-    {
-      "family": "fresh-for-frozen",
-      "already_known": false,
-      "members": 1,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Frozen Chicken Nuggets"
-      ],
-      "examples": [
-        {
-          "commodity": "Frozen Chicken Nuggets",
-          "product": "Marketside Chicken Breast Breaded and Seasoned with Dijon and Parmesan, 18.72 oz (Fresh)"
-        }
-      ]
-    },
-    {
-      "family": "whole-animal-for-part",
-      "already_known": false,
-      "members": 1,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Chicken Thighs / Drumsticks"
-      ],
-      "examples": [
-        {
-          "commodity": "Chicken Thighs / Drumsticks",
-          "product": "Tyson All Natural, Fresh, Premium Young Whole Chicken, 5.0 - 6.5 lb"
-        }
-      ]
-    },
-    {
-      "family": "breaded-product-for-raw-meat",
-      "already_known": false,
-      "members": 1,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Chicken Wings"
-      ],
-      "examples": [
-        {
-          "commodity": "Chicken Wings",
-          "product": "Just Bare Lightly Breaded Chicken Breast Original Bites, Frozen, 3 lbs."
-        }
-      ]
-    },
-    {
-      "family": "whole-pepper-for-powder",
-      "already_known": false,
-      "members": 1,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Chili Powder"
-      ],
-      "examples": [
-        {
-          "commodity": "Chili Powder",
-          "product": "Great Value Chipotle Chili Pepper, 2.12 oz"
-        }
-      ]
-    },
-    {
-      "family": "seasoning-mix-for-single-spice",
-      "already_known": false,
-      "members": 1,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Chili Powder"
-      ],
-      "examples": [
-        {
-          "commodity": "Chili Powder",
-          "product": "Yellowstone Cowboy Chili Seasoning 1.25 oz"
-        }
-      ]
-    },
-    {
-      "family": "ingredient-for-prepared-meal",
-      "already_known": false,
-      "members": 1,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Clam Chowder (canned)"
-      ],
-      "examples": [
-        {
-          "commodity": "Clam Chowder (canned)",
-          "product": "Snow's Wild Caught Minced Clams in Clam Juice, Gluten Free, 5g Protein per Serving, 99% Fat Free, Shelf Stable Can, 6.5 oz"
-        }
-      ]
-    },
-    {
-      "family": "raw-meat-for-prepared-meal",
+      "family": "wrong-form-for-prepared-food",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
@@ -846,22 +959,7 @@
       ]
     },
     {
-      "family": "specialty-tool-for-general-use",
-      "already_known": false,
-      "members": 1,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Cotton Swabs"
-      ],
-      "examples": [
-        {
-          "commodity": "Cotton Swabs",
-          "product": "Eosera Stickeeze Ear Wax Grabbing Antimicrobial Adhesive Swabs, 30 Count"
-        }
-      ]
-    },
-    {
-      "family": "mixed-juice-for-single-fruit",
+      "family": "flavored-beverage-for-pure-juice",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
@@ -876,22 +974,52 @@
       ]
     },
     {
-      "family": "beverage-additive-for-dairy",
+      "family": "dietary-variant-for-standard-food",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Cream Cheese"
+        "Cranberry Juice"
       ],
       "examples": [
         {
-          "commodity": "Cream Cheese",
-          "product": "International Delight Liquid Non-Dairy Refrigerated Coffee Creamer, Caramel Macchiato, 68"
+          "commodity": "Cranberry Juice",
+          "product": "Ocean Spray Juice, Cranberry, Diet 5 Cals 64 Fl Oz"
         }
       ]
     },
     {
-      "family": "processed-sauce-for-raw-ingredient",
+      "family": "broth-for-soup",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Cream of Chicken Soup"
+      ],
+      "examples": [
+        {
+          "commodity": "Cream of Chicken Soup",
+          "product": "(4 pack) Campbell's Condensed Chicken Broth, 10.5 oz Can"
+        }
+      ]
+    },
+    {
+      "family": "filled-pastry-for-baked-good",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Croissants"
+      ],
+      "examples": [
+        {
+          "commodity": "Croissants",
+          "product": "Pillsbury Filled Crescents, with Apple Filling and Icing, 8 Ct, 13.51 oz"
+        }
+      ]
+    },
+    {
+      "family": "sauce-for-crushed-tomatoes",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
@@ -901,12 +1029,12 @@
       "examples": [
         {
           "commodity": "Crushed Tomatoes (canned)",
-          "product": "Red Gold Tomato Sauce, 29 oz Can"
+          "product": "(12 pack) Great Value Tomato Sauce, 8 oz Can"
         }
       ]
     },
     {
-      "family": "prepared-spread-for-ingredient",
+      "family": "single-spice-for-blend",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
@@ -916,22 +1044,7 @@
       "examples": [
         {
           "commodity": "Curry Powder",
-          "product": "bettergoods Expertly Blended Curry Aioli, 12 fl oz Bottle"
-        }
-      ]
-    },
-    {
-      "family": "underwear-for-diaper",
-      "already_known": false,
-      "members": 1,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Diapers"
-      ],
-      "examples": [
-        {
-          "commodity": "Diapers",
-          "product": "Goodnites Nighttime Bedwetting Underwear for Boys, Sizes Extra Small - Extra Extra Large"
+          "product": "McCormick Gourmet Kosher Organic Ground Coriander, 1.25 oz Bottle"
         }
       ]
     },
@@ -946,27 +1059,42 @@
       "examples": [
         {
           "commodity": "Diced / Cubed Ham",
-          "product": "Extra Lean Premium Ham, 1.25 lbs each., 2 pk."
+          "product": "Great Value Cooked Ham, 16 oz"
         }
       ]
     },
     {
-      "family": "processed-luncheon-meat-for-fresh-ham",
+      "family": "whole-for-diced",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Diced / Cubed Ham"
+        "Canned Diced Tomatoes"
       ],
       "examples": [
         {
-          "commodity": "Diced / Cubed Ham",
-          "product": "SPAM Hot and Spicy, Shelf-Stable, 12 oz Aluminum Can"
+          "commodity": "Canned Diced Tomatoes",
+          "product": "Cento Italian Style Peeled Tomatoes, Whole, 28 oz"
         }
       ]
     },
     {
-      "family": "machine-use-for-hand-use",
+      "family": "bun-for-roll",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Dinner Rolls"
+      ],
+      "examples": [
+        {
+          "commodity": "Dinner Rolls",
+          "product": "Lakeland Hamburger Buns 24oz"
+        }
+      ]
+    },
+    {
+      "family": "spray-for-liquid",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
@@ -976,67 +1104,52 @@
       "examples": [
         {
           "commodity": "Dish Soap (liquid)",
-          "product": "Radiance Citrus Automatic Dishwashing Gel"
+          "product": "Dawn Fresh Scent Ultra Platinum Powerwash Dish Spray"
         }
       ]
     },
     {
-      "family": "spray-for-wipes",
+      "family": "fabric-refresher-for-disinfectant",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Disinfecting Wipes"
+        "Disinfectant Spray"
       ],
       "examples": [
         {
-          "commodity": "Disinfecting Wipes",
-          "product": "LYSOL Disinfecting Spray, Crisp Linen, Early Morning Breeze, & Mango Hibiscus, 3 pk. 19 oz"
+          "commodity": "Disinfectant Spray",
+          "product": "Febreze Professional Sanitizing Fabric Refresher, 1 Gal."
         }
       ]
     },
     {
-      "family": "wrong-target-surface",
+      "family": "bagel-for-donut",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Drain Cleaner"
+        "Donuts"
       ],
       "examples": [
         {
-          "commodity": "Drain Cleaner",
-          "product": "Glisten Disposer Care Cleaner, Lemon Scent, 4 Packets"
+          "commodity": "Donuts",
+          "product": "L Oven Fresh Cinnamon Raisin Bagels 20 OZ"
         }
       ]
     },
     {
-      "family": "added-ingredient-version",
+      "family": "dessert-for-donut",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Dried Cranberries"
+        "Donuts"
       ],
       "examples": [
         {
-          "commodity": "Dried Cranberries",
-          "product": "Great Value Dried Sweetened Cranberries & Honey Roasted Almonds Salad Topper, 3 oz"
-        }
-      ]
-    },
-    {
-      "family": "blend-for-single-herb",
-      "already_known": false,
-      "members": 1,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Oregano (dried)"
-      ],
-      "examples": [
-        {
-          "commodity": "Oregano (dried)",
-          "product": "Great Value Organic Italian Seasoning, 0.6 oz"
+          "commodity": "Donuts",
+          "product": "Raymundo's Caramel Flan 4 oz., 12 pk."
         }
       ]
     },
@@ -1056,167 +1169,317 @@
       ]
     },
     {
-      "family": "dried-herb-for-fresh",
-      "already_known": true,
-      "members": 1,
-      "distinct_commodities": 1,
-      "top_commodities": [
-        "Fresh Dill"
-      ],
-      "examples": [
-        {
-          "commodity": "Fresh Dill",
-          "product": "Litehouse Dill 0.35 Oz"
-        }
-      ]
-    },
-    {
-      "family": "dry-for-fresh",
+      "family": "sliced-for-ground",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Green Onions (bunch)"
+        "Ground Turkey"
       ],
       "examples": [
         {
-          "commodity": "Green Onions (bunch)",
-          "product": "French's Kosher Original Crispy Fried Onions, 6.0 oz Can"
+          "commodity": "Ground Turkey",
+          "product": "Great Value Fat-Free Turkey Breast, 16 oz Bag, Sliced"
         }
       ]
     },
     {
-      "family": "dishwasher-detergent-for-laundry-deterg",
+      "family": "fruit-for-juice",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Laundry Detergent (Arm & Hammer OxiClean)"
+        "Lemon Juice"
       ],
       "examples": [
         {
-          "commodity": "Laundry Detergent (Arm & Hammer OxiClean)",
-          "product": "Cascade Total Clean Shine Boost ActionPacs Dishwasher Detergent, Fresh Scent, 103 ct."
+          "commodity": "Lemon Juice",
+          "product": "Lemons, 3 lbs."
         }
       ]
     },
     {
-      "family": "powder-detergent-for-pods",
+      "family": "whole-cut-for-portioned",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Laundry Detergent Pods"
+        "Pork Chops"
       ],
       "examples": [
         {
-          "commodity": "Laundry Detergent Pods",
-          "product": "Gain Powder Laundry Detergent, Original, 195 loads, 180 oz."
+          "commodity": "Pork Chops",
+          "product": "Member's Mark Whole Bone In Pork Loin, Vacuum Pack, priced per pound"
         }
       ]
     },
     {
-      "family": "tile-detergent-for-pods",
+      "family": "cooked-for-fresh",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Laundry Detergent Pods"
+        "Pork Tenderloin"
       ],
       "examples": [
         {
-          "commodity": "Laundry Detergent Pods",
-          "product": "Tide evo Laundry Detergent Fiber Tiles, Original, 66 ct."
+          "commodity": "Pork Tenderloin",
+          "product": "Smithfield Anytime Favorites Sliced Hickory Boneless Ham, 1.5lbs"
         }
       ]
     },
     {
-      "family": "chocolate-chips-for-marshmallows",
+      "family": "raw-ingredient-for-prepared-dip",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Marshmallows"
+        "Queso / Cheese Dip"
       ],
       "examples": [
         {
-          "commodity": "Marshmallows",
-          "product": "LILY'S Milk Chocolate Style No Sugar Added Baking Chips Bag"
+          "commodity": "Queso / Cheese Dip",
+          "product": "Happy Farms Colby Jack Cheese Cubes 8 OZ"
         }
       ]
     },
     {
-      "family": "sandwich-spread-for-dressing",
+      "family": "pasta-sauce-for-dip",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Miracle Whip (Salad Dressing Spread)"
+        "Queso / Cheese Dip"
       ],
       "examples": [
         {
-          "commodity": "Miracle Whip (Salad Dressing Spread)",
-          "product": "Kraft America's Favorite Sandwich Spread, 15 fl oz Jar, Shelf-Stable"
+          "commodity": "Queso / Cheese Dip",
+          "product": "RAGU Double Cheddar Cheese Sauce, 16 oz, for Pasta Sauce and More"
         }
       ]
     },
     {
-      "family": "dried-fruit-for-fresh",
+      "family": "salsa-for-cheese-dip",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Plums"
+        "Queso / Cheese Dip"
       ],
       "examples": [
         {
-          "commodity": "Plums",
-          "product": "Sunsweet, Amazin, Pitted Prunes, 24, oz"
+          "commodity": "Queso / Cheese Dip",
+          "product": "Simply Nature Organic Hot Salsa 16 OZ"
         }
       ]
     },
     {
-      "family": "snack-for-condiment",
+      "family": "liquid-dressing-for-seasoning-packet",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Pomegranate Molasses"
+        "Ranch Seasoning Mix (packet)"
       ],
       "examples": [
         {
-          "commodity": "Pomegranate Molasses",
-          "product": "Member's Mark Milk Chocolate Sea Salt Caramel Thins, 50 ct."
+          "commodity": "Ranch Seasoning Mix (packet)",
+          "product": "Hidden Valley Original Ranch Condiment and Dressing, America 250 Limited Edition Easy Squeeze Bottle, 16 fl. oz."
         }
       ]
     },
     {
-      "family": "sweetener-for-sugar",
+      "family": "whole-form-for-cut",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Powdered Sugar"
+        "String Cheese"
       ],
       "examples": [
         {
-          "commodity": "Powdered Sugar",
-          "product": "Splenda Sweetener with Sugar Baking Blend (2 lb) Resealable Pouch"
+          "commodity": "String Cheese",
+          "product": "Cello Domestic Romano Cheese Wheel approx. 18 lbs."
         }
       ]
     },
     {
-      "family": "baked-good-for-dough",
+      "family": "fresh-for-dried",
       "already_known": false,
       "members": 1,
       "distinct_commodities": 1,
       "top_commodities": [
-        "Refrigerated Biscuit Dough"
+        "Sun-Dried Tomatoes"
       ],
       "examples": [
         {
-          "commodity": "Refrigerated Biscuit Dough",
-          "product": "Sweet Loren's Breakfast Biscuits, Cinnamon Sugar, Gluten Free, 15 Count, 1.6 oz (45g) Each"
+          "commodity": "Sun-Dried Tomatoes",
+          "product": "Cocktail Tomatoes On The Vine, 2 lbs."
+        }
+      ]
+    },
+    {
+      "family": "canned-for-dried",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Sun-Dried Tomatoes"
+      ],
+      "examples": [
+        {
+          "commodity": "Sun-Dried Tomatoes",
+          "product": "Hunt's Fire Roasted Diced Tomatoes, 14.5 oz., 8 pk."
+        }
+      ]
+    },
+    {
+      "family": "dry-mix-for-sauce",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Taco Sauce"
+      ],
+      "examples": [
+        {
+          "commodity": "Taco Sauce",
+          "product": "Cholula Original Taco   Medium Recipe Mix 1 Oz"
+        }
+      ]
+    },
+    {
+      "family": "seasoning-for-paste",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Tahini (Sesame Paste)"
+      ],
+      "examples": [
+        {
+          "commodity": "Tahini (Sesame Paste)",
+          "product": "Tajin Clasico Seasoning, 14oz"
+        }
+      ]
+    },
+    {
+      "family": "beverage-for-brewing-ingredient",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Tea Bags"
+      ],
+      "examples": [
+        {
+          "commodity": "Tea Bags",
+          "product": "Gold Peak Tea Zero Sugar Sweet Tea 16.9 fl. oz., 18 pk."
+        }
+      ]
+    },
+    {
+      "family": "accessory-for-product",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Toilet Bowl Cleaner"
+      ],
+      "examples": [
+        {
+          "commodity": "Toilet Bowl Cleaner",
+          "product": "Clorox ToiletWand Toilet Cleaning Refills, Disinfecting Scrubbing Pads, 10 Count"
+        }
+      ]
+    },
+    {
+      "family": "whole-for-paste",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Tomato Paste"
+      ],
+      "examples": [
+        {
+          "commodity": "Tomato Paste",
+          "product": "Great Value Sliced Stewed Tomatoes, 14.5 oz"
+        }
+      ]
+    },
+    {
+      "family": "juice-for-soup",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Tomato Soup (canned)"
+      ],
+      "examples": [
+        {
+          "commodity": "Tomato Soup (canned)",
+          "product": "Campbell's® Low Sodium 100% Tomato Juice 64.000 Fl Oz"
+        }
+      ]
+    },
+    {
+      "family": "potato-chips-for-corn-chips",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Tortilla Chips"
+      ],
+      "examples": [
+        {
+          "commodity": "Tortilla Chips",
+          "product": "Clancy S Original Kettle Chips 8 OZ"
+        }
+      ]
+    },
+    {
+      "family": "ham-for-bacon",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Turkey Bacon"
+      ],
+      "examples": [
+        {
+          "commodity": "Turkey Bacon",
+          "product": "Oscar Mayer Kit with Extra Lean Honey Ham Extra Lean Honey Smoked Turkey Sliced Lunch Meat 16 oz Tray"
+        }
+      ]
+    },
+    {
+      "family": "whole-bean-for-extract",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Vanilla Extract"
+      ],
+      "examples": [
+        {
+          "commodity": "Vanilla Extract",
+          "product": "Great Value Organic Vanilla Beans, 2 Count"
+        }
+      ]
+    },
+    {
+      "family": "olive-oil-for-vegetable-oil",
+      "already_known": false,
+      "members": 1,
+      "distinct_commodities": 1,
+      "top_commodities": [
+        "Vegetable / Canola Oil"
+      ],
+      "examples": [
+        {
+          "commodity": "Vegetable / Canola Oil",
+          "product": "Partanna Organic Extra Virgin Olive Oil - Premium 100% Castelvetrano Oil - High Polyphenol - First Cold Pressed - Early Harvest in Sicily - Award Winning Italian EVOO -Monovarietal - 25.5oz (750 ML)"
         }
       ]
     }

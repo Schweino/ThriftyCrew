@@ -1,1 +1,1 @@
-﻿clam-chowder|Family Fare;vegetable-soup|Family Fare
+﻿canned-pumpkin|Hy-Vee

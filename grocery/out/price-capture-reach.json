@@ -1,6 +1,6 @@
 {
-    "updated":  "2026-09-19T17:26:30",
-    "price_table":  "price-table-2026-09-17.json",
+    "updated":  "2026-09-20T08:16:53",
+    "price_table":  "price-table-2026-09-20.json",
     "note":  "Prices captured somewhere in the codebase that do not appear in the price table. compare-deals reads six input classes and the table is derived from the same rows the ranker uses, so a capture path either writes into one of those six or its prices do not exist. Advisory: \"captured, adjudicated, waiting on a commodity id\" is a legitimate state; \"captured and forgotten because nothing counts it\" is not.",
     "stores":  [
                    {
@@ -8,8 +8,8 @@
                        "what":  "Recipe Hunter pricing agent (ingredient-queue.ps1 -Record -Price)",
                        "expected":  "reach",
                        "captured":  520,
-                       "reached":  7,
-                       "missing":  513,
+                       "reached":  9,
+                       "missing":  511,
                        "missing_rows":  [
                                             {
                                                 "key":  "cumin-seeds",
@@ -101,27 +101,11 @@
                                             },
                                             {
                                                 "key":  "cornmeal",
-                                                "store":  "Fareway",
-                                                "price":  2.99,
-                                                "size":  "24 oz",
-                                                "item":  "Quaker Corn Meal, Yellow",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "cornmeal",
                                                 "store":  "Family Fare",
                                                 "price":  2.29,
                                                 "size":  "32 oz",
                                                 "item":  "Our Family Yellow Enriched Pre Sifted Corn Meal 32 Oz",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "cornmeal",
-                                                "store":  "Baker\u0027s",
-                                                "price":  2.29,
-                                                "size":  "24 oz",
-                                                "item":  "Kroger Yellow Corn Meal",
-                                                "commodity_known":  false
+                                                "commodity_known":  true
                                             },
                                             {
                                                 "key":  "bacon bits",
@@ -1609,6 +1593,22 @@
                                                 "price":  3.49,
                                                 "size":  "4 oz",
                                                 "item":  "Lawry\u0027s Seasoned Salt",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "parmesan cheese",
+                                                "store":  "Walmart",
+                                                "price":  5.48,
+                                                "size":  "16 oz",
+                                                "item":  "Great Value Grated Parmesan Cheese, 16 oz Bottle",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "parmesan cheese",
+                                                "store":  "Fareway",
+                                                "price":  2.99,
+                                                "size":  "8 oz",
+                                                "item":  "Fareway Grated Parmesan Cheese",
                                                 "commodity_known":  false
                                             }
                                         ]
