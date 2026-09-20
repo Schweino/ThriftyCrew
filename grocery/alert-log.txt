@@ -246,3 +246,15 @@
 [2026-09-20T08:26:56] REVIEW 'Recipe db drift (index vs specs)' [type: recipe db drift index vs specs] - queued, NOT emailed (registry entry recipe-db-drift)
 [2026-09-20T08:27:45] QUEUE ABSORBED into open item 2026-09-19-fccb69 (day 1 of this condition, count now 2) - no new id minted
 [2026-09-20T08:27:45] REVIEW 'Grocery: 9 NEW price flag(s) - 2026-09-20' [type: grocery new price flag s] - queued, NOT emailed (registry entry new-price-flags)
+[2026-09-20T11:51:10] REVIEW 'cost-flags alert cannot tell a LIVE recipe from a HELD one; the split belongs in the engine' [type: cost flags alert cannot tell a live recipe from a held one the split belongs in the engine] - queued, NOT emailed (a triage-created item (-Lane weekly) is review by ruling 1)
+[2026-09-20T12:10:07] SUPPRESSED (already sent this type today) 'Recipe per-serving manifest: skipped recipe(s)' [type: recipe per serving manifest skipped recipe s]
+[2026-09-20T12:15:41] SENT 'Grocery page HELD (coverage) - 2026-09-20' -> schweino68@gmail.com (id 1a0bfd0fb5b0907b)
+[2026-09-20T12:18:57] QUEUE ABSORBED into open item 2026-09-19-6f90ee (day 1 of this condition, count now 3) - no new id minted
+[2026-09-20T12:18:57] REVIEW 'Grocery matching soundness - review needed' [type: grocery matching soundness review needed] - queued, NOT emailed (registry entry match-soundness)
+[2026-09-20T12:24:58] QUEUE ABSORBED into open item 2026-09-19-2a0748 (day 1 of this condition, count now 4) - no new id minted
+[2026-09-20T12:24:58] REVIEW 'Grocery: 490 store(s) dropped from a commodity they carry - 2026-09-20' [type: grocery store s dropped from a commodity they carry] - queued, NOT emailed (registry entry stores-dropped)
+[2026-09-20T12:27:52] SUPPRESSED (already sent this type today) 'Recipe pricing: 26 unpriced ingredient line(s)' [type: recipe pricing unpriced ingredient line s]
+[2026-09-20T12:27:52] QUEUE ABSORBED into open item 2026-09-19-2c96d8 (day 1 of this condition, count now 4) - no new id minted
+[2026-09-20T12:27:52] REVIEW 'Recipe db drift (index vs specs)' [type: recipe db drift index vs specs] - queued, NOT emailed (registry entry recipe-db-drift)
+[2026-09-20T12:28:36] QUEUE ABSORBED into open item 2026-09-19-fccb69 (day 1 of this condition, count now 3) - no new id minted
+[2026-09-20T12:28:37] REVIEW 'Grocery: 1 NEW price flag(s) - 2026-09-20' [type: grocery new price flag s] - queued, NOT emailed (registry entry new-price-flags)

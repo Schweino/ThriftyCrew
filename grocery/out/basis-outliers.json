@@ -267,20 +267,6 @@
                               "agrees_with_engine_divisor":  true
                           },
                           {
-                              "id":  "coffee",
-                              "commodity":  "Coffee (ground/beans)",
-                              "unit":  "oz",
-                              "store":  "Family Fare",
-                              "per_unit":  0.2303,
-                              "size":  "15.2 fl oz",
-                              "item":  "Bolthouse Farms Mocha Cappuccino Coffee Beverage 15.2 Fl Oz",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  true,
-                              "unit_kind":  "weight",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
                               "id":  "coffee-creamer",
                               "commodity":  "Coffee Creamer",
                               "unit":  "floz",
@@ -866,20 +852,6 @@
                                                      "per_unit":  0.1319,
                                                      "size":  "18.8 fl oz",
                                                      "item":  "Campbell S Chunky New England Clam Chowder 18.8 OZ",
-                                                     "kind":  "volume",
-                                                     "row_kind":  "weight",
-                                                     "holds_crown":  true,
-                                                     "unit_kind":  "weight",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
-                                                     "id":  "coffee",
-                                                     "commodity":  "Coffee (ground/beans)",
-                                                     "unit":  "oz",
-                                                     "store":  "Family Fare",
-                                                     "per_unit":  0.2303,
-                                                     "size":  "15.2 fl oz",
-                                                     "item":  "Bolthouse Farms Mocha Cappuccino Coffee Beverage 15.2 Fl Oz",
                                                      "kind":  "volume",
                                                      "row_kind":  "weight",
                                                      "holds_crown":  true,
@@ -1574,23 +1546,10 @@
                      }
                  ],
     "kind_mismatch_crown":  [
-                                {
-                                    "id":  "coffee",
-                                    "commodity":  "Coffee (ground/beans)",
-                                    "unit":  "oz",
-                                    "store":  "Family Fare",
-                                    "per_unit":  0.2303,
-                                    "size":  "15.2 fl oz",
-                                    "item":  "Bolthouse Farms Mocha Cappuccino Coffee Beverage 15.2 Fl Oz",
-                                    "kind":  "volume",
-                                    "row_kind":  "weight",
-                                    "holds_crown":  true,
-                                    "unit_kind":  "weight",
-                                    "agrees_with_engine_divisor":  false
-                                }
+
                             ],
     "ratio":  4,
-    "generated":  "2026-09-20T08:13:23",
+    "generated":  "2026-09-20T12:12:01",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "coconut-oil",

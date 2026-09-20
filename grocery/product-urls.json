@@ -6880,13 +6880,6 @@
                                                  "size":  "40.3 oz",
                                                  "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
                                              },
-                                 "Aldi":  {
-                                              "url":  "https://www.aldi.us/store/aldi/products/133414530-barissimo-caramel-coffee-syrup-12-7-fl-oz",
-                                              "name":  "Barissimo Caramel Coffee Syrup 12.7 FL OZ",
-                                              "price":  "$3.49",
-                                              "size":  "12.7 oz",
-                                              "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                          },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/13626705840",
                                                          "name":  "Folgers Classic Medium Roast Ground Coffee, 43.5 oz.",
@@ -6900,7 +6893,14 @@
                                                 "price":  "$14.47",
                                                 "size":  "27.5 oz",
                                                 "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                            }
+                                            },
+                                 "Aldi":  {
+                                              "url":  "https://www.aldi.us/store/aldi/products/18647685-beaumont-medium-classic-roast-100-pure-coffee-30-5-oz",
+                                              "name":  "Beaumont Medium Classic Roast 100 Pure Coffee 30.5 OZ",
+                                              "price":  "$12.29",
+                                              "size":  "30.5 oz",
+                                              "verified":  "2026-09-20 DERIVED from the price row (same record the board priced)"
+                                          }
                              },
                   "coffee-creamer":  {
                                          "commodity":  "coffee-creamer",
@@ -12729,7 +12729,14 @@
                                                                "price":  "$21.99",
                                                                "size":  "48 oz",
                                                                "verified":  "2026-09-20 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                           },
+                                           "Fareway":  {
+                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389124-80-lean-20-fat-ground-beef-10lb-tube",
+                                                           "name":  "80% Lean 20% Fat Ground Beef Bulk",
+                                                           "price":  "$3.99",
+                                                           "size":  "lb",
+                                                           "verified":  "2026-09-20 DERIVED from the price row (same record the board priced)"
+                                                       }
                                        },
                   "ground-beef-9010":  {
                                            "commodity":  "Ground Beef 90/10",
@@ -17054,10 +17061,10 @@
                                                  "verified":  "2026-09-19 price-pull self-capture"
                                              },
                                  "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/15299767129",
-                                                         "name":  "Organic Yellow Onions, 5 lbs.",
-                                                         "price":  "$4.92",
-                                                         "size":  "5 lb",
+                                                         "url":  "https://www.samsclub.com/ip/13604862865",
+                                                         "name":  "Sweet Onions, 6 lbs.",
+                                                         "price":  "$4.96",
+                                                         "size":  "6 lb",
                                                          "verified":  "2026-09-20 DERIVED from the price row (same record the board priced)"
                                                      }
                              },

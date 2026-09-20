@@ -1,10 +1,6 @@
 ﻿{
-    "count":  1,
+    "count":  0,
     "findings":  [
-                     {
-                         "file":  "triage-return-lib.ps1",
-                         "line":  210,
-                         "text":  "$j = ((Get-Content -LiteralPath $f.FullName -Raw -ErrorAction Stop) + \u0027\u0027) | ConvertFrom-Json"
-                     }
+
                  ]
 }

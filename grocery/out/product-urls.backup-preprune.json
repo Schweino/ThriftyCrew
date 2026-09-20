@@ -784,12 +784,6 @@
                                                 "size":  "lb",
                                                 "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                             },
-                                 "Family Fare":  {
-                                                     "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/apples/gala_apples/p/78538",
-                                                     "name":  "Gala Apples",
-                                                     "price":  "$1.79",
-                                                     "size":  "lb"
-                                                 },
                                  "Fareway":  {
                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16345945-ginger-gold-apple-each",
                                                  "name":  "Ginger Gold Apple",
@@ -3902,13 +3896,6 @@
                                                                    "size":  "15 oz",
                                                                    "verified":  "2026-09-18"
                                                                },
-                                              "Family Fare":  {
-                                                                  "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/our_family_butter_beans_15_5_oz/p/1564405684689268174",
-                                                                  "name":  "Our Family Butter Beans 15.5 Oz",
-                                                                  "price":  "$1.39",
-                                                                  "size":  "15.5 oz",
-                                                                  "verified":  "2026-08-14 DERIVED from the price row (same record the board priced)"
-                                                              },
                                               "Walmart":  {
                                                               "url":  "https://www.walmart.com/ip/20525237",
                                                               "price":  "1.16",
@@ -4734,14 +4721,6 @@
                                                                   "verified":  "2026-09-18",
                                                                   "board_pu":  0.0645
                                                               },
-                                             "Family Fare":  {
-                                                                 "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/delallo_cannellini_beans_white_kidney_15_5_oz/p/2207363",
-                                                                 "name":  "Delallo Cannellini Beans, White Kidney 15.5 Oz",
-                                                                 "price":  "$2.19",
-                                                                 "size":  "15.5 oz",
-                                                                 "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
-                                                                 "board_pu":  0.1413
-                                                             },
                                              "Fareway":  {
                                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25806653-fareway-great-northern-beans-155-oz",
                                                              "price":  0.99,
@@ -5701,13 +5680,6 @@
                                                                   "size":  "2 lb",
                                                                   "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
                                                               },
-                                          "Family Fare":  {
-                                                              "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/grape_tomatoes_our_family/p/1564405684712559777",
-                                                              "name":  "Grape Tomatoes Our Family",
-                                                              "price":  "$3.99",
-                                                              "size":  "1 pt",
-                                                              "verified":  "2026-09-13 DERIVED from the price row (same record the board priced)"
-                                                          },
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2720020-naturesweet-cherubs-salad-tomatoes-24-oz",
                                                           "name":  "NatureSweet Cherubs Fresh Heavenly Salad Grape Tomatoes",
@@ -5976,13 +5948,6 @@
                                                          "size":  "lb",
                                                          "verified":  "2026-09-13 DERIVED from the price row (same record the board priced)"
                                                      },
-                                         "Aldi":  {
-                                                      "url":  "https://www.aldi.us/store/aldi/products/20363180-fresh-chicken-thighs-family-pack-per-lb",
-                                                      "name":  "Fresh Chicken Thighs Family Pack Per LB",
-                                                      "price":  "$1.55",
-                                                      "size":  "lb",
-                                                      "verified":  "2026-09-18 DERIVED from the price row (same record the board priced)"
-                                                  },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/13610718601",
                                                                  "name":  "Member\u0027s Mark Chicken Drumsticks, priced per pound",
@@ -6915,20 +6880,6 @@
                                                  "size":  "40.3 oz",
                                                  "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
                                              },
-                                 "Family Fare":  {
-                                                     "url":  "https://www.shopfamilyfare.com/shop/beverages/coffee/ground/maxwell_house_original_roast_ground_coffee_c/p/1564405684715640947",
-                                                     "name":  "Maxwell House Original Roast Ground Coffee C",
-                                                     "price":  "$13.99",
-                                                     "size":  "27.5 oz",
-                                                     "verified":  "2026-09-03 DERIVED from the price row (same record the board priced)"
-                                                 },
-                                 "Aldi":  {
-                                              "url":  "https://www.aldi.us/store/aldi/products/133414530-barissimo-caramel-coffee-syrup-12-7-fl-oz",
-                                              "name":  "Barissimo Caramel Coffee Syrup 12.7 FL OZ",
-                                              "price":  "$3.49",
-                                              "size":  "12.7 oz",
-                                              "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                          },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/13626705840",
                                                          "name":  "Folgers Classic Medium Roast Ground Coffee, 43.5 oz.",
@@ -6942,7 +6893,14 @@
                                                 "price":  "$14.47",
                                                 "size":  "27.5 oz",
                                                 "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                            }
+                                            },
+                                 "Aldi":  {
+                                              "url":  "https://www.aldi.us/store/aldi/products/18647685-beaumont-medium-classic-roast-100-pure-coffee-30-5-oz",
+                                              "name":  "Beaumont Medium Classic Roast 100 Pure Coffee 30.5 OZ",
+                                              "price":  "$12.29",
+                                              "size":  "30.5 oz",
+                                              "verified":  "2026-09-20 DERIVED from the price row (same record the board priced)"
+                                          }
                              },
                   "coffee-creamer":  {
                                          "commodity":  "coffee-creamer",
@@ -9531,13 +9489,7 @@
                                                "price":  "$1.65",
                                                "size":  "dozen",
                                                "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                           },
-                               "Family Fare":  {
-                                                   "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
-                                                   "name":  "Large Eggs, Grade A Our Family",
-                                                   "price":  "$2.39",
-                                                   "size":  "12 ct"
-                                               }
+                                           }
                            },
                   "egg-whites":  {
                                      "commodity":  "egg-whites",
@@ -10783,13 +10735,6 @@
                                                         "verified":  "2026-09-18",
                                                         "board_pu":  0.1244
                                                     },
-                                   "Family Fare":  {
-                                                       "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/cake_frostings/pillsbury_frosting_vanilla_creamy_supreme_16_oz/p/1564405684709823946",
-                                                       "name":  "Pillsbury Frosting, Vanilla, Creamy Supreme 16 Oz",
-                                                       "price":  "$2.29",
-                                                       "size":  "16 oz",
-                                                       "verified":  "2026-08-18 DERIVED from the price row (same record the board priced)"
-                                                   },
                                    "Fareway":  {
                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21855740-pillsbury-frosting-vanilla-16-oz",
                                                    "price":  1.99,
@@ -12757,12 +12702,6 @@
                                                                 "size":  "3 pk 16 oz",
                                                                 "verified":  "2026-09-18"
                                                             },
-                                           "Fareway":  {
-                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389124-80-lean-20-fat-ground-beef-10lb-tube",
-                                                           "price":  5.99,
-                                                           "size":  "lb",
-                                                           "name":  "80% Lean 20% Fat Ground Beef Bulk"
-                                                       },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/42645/ground-beef-roll-80-lean-20-fat",
                                                           "price":  6.83,
@@ -12790,7 +12729,14 @@
                                                                "price":  "$21.99",
                                                                "size":  "48 oz",
                                                                "verified":  "2026-09-20 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                           },
+                                           "Fareway":  {
+                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389124-80-lean-20-fat-ground-beef-10lb-tube",
+                                                           "name":  "80% Lean 20% Fat Ground Beef Bulk",
+                                                           "price":  "$3.99",
+                                                           "size":  "lb",
+                                                           "verified":  "2026-09-20 DERIVED from the price row (same record the board priced)"
+                                                       }
                                        },
                   "ground-beef-9010":  {
                                            "commodity":  "Ground Beef 90/10",
@@ -13756,13 +13702,6 @@
                                                       "verified":  "2026-09-18",
                                                       "board_pu":  0.0426
                                                   },
-                                 "Family Fare":  {
-                                                     "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/vegetables/la_preferida_white_hominy_29_oz/p/2002800",
-                                                     "price":  2.99,
-                                                     "size":  "29 oz",
-                                                     "name":  "La Preferida White Hominy 29 Oz",
-                                                     "recipe_pu":  0.1031
-                                                 },
                                  "Fareway":  {
                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/70208-bush-s-best-white-hominy-15-5-onz",
                                                  "price":  1.5,
@@ -15590,14 +15529,6 @@
                                                       "size":  "1 ct",
                                                       "verified":  "2026-09-18"
                                                   },
-                                 "Family Fare":  {
-                                                     "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/citrus_fruits/fresh_lemons_large/p/111455",
-                                                     "name":  "Fresh Lemons, Large",
-                                                     "price":  "$0.99",
-                                                     "size":  "1 ct",
-                                                     "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)",
-                                                     "board_pu":  0.99
-                                                 },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/37192/lemons",
                                                 "price":  0.99,
@@ -15898,12 +15829,6 @@
                                                               "size":  "5 pk 7.25 oz",
                                                               "verified":  "2026-09-18"
                                                           },
-                                         "Family Fare":  {
-                                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/mac_cheese/annie_s_shells_white_cheddar_macaroni_cheese_4_ea/p/8201473",
-                                                             "name":  "Annie\u0027s Shells \u0026 White Cheddar Macaroni \u0026 Cheese 4 Ea",
-                                                             "price":  "$6.19",
-                                                             "size":  "4 ea"
-                                                         },
                                          "Fareway":  {
                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69966184-fareway-original-macaroni-cheese-dinner-725-oz",
                                                          "name":  "Fareway Original Macaroni \u0026 Cheese Dinner",
@@ -17136,10 +17061,10 @@
                                                  "verified":  "2026-09-19 price-pull self-capture"
                                              },
                                  "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/15299767129",
-                                                         "name":  "Organic Yellow Onions, 5 lbs.",
-                                                         "price":  "$4.92",
-                                                         "size":  "5 lb",
+                                                         "url":  "https://www.samsclub.com/ip/13604862865",
+                                                         "name":  "Sweet Onions, 6 lbs.",
+                                                         "price":  "$4.96",
+                                                         "size":  "6 lb",
                                                          "verified":  "2026-09-20 DERIVED from the price row (same record the board priced)"
                                                      }
                              },
@@ -18183,13 +18108,7 @@
                                                    "price":  "$2.99",
                                                    "size":  "6 oz",
                                                    "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                               },
-                                    "Family Fare":  {
-                                                        "url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_sausage/armour_family_pack_pepperoni_slices_12_oz/p/1564405684689262102",
-                                                        "name":  "Armour Family Pack Pepperoni Slices 12 Oz",
-                                                        "price":  "$5.99",
-                                                        "size":  "12 oz"
-                                                    }
+                                               }
                                 },
                   "pesto":  {
                                 "commodity":  "Pesto (jarred)",
@@ -22471,13 +22390,6 @@
                                                                 "size":  "480 fl oz",
                                                                 "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                             },
-                                        "Family Fare":  {
-                                                            "url":  "https://www.shopfamilyfare.com/shop/beverages/sport_energy/sport/gatorade_advanced_rehydration_fruit_punch_thirst_quencher_28_fl_oz/p/571727",
-                                                            "name":  "Gatorade Advanced Rehydration Fruit Punch Thirst Quencher 28 Fl Oz",
-                                                            "price":  "$2.19",
-                                                            "size":  "28 fl oz",
-                                                            "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                        },
                                         "Baker\u0027s":  {
                                                              "url":  "https://www.bakersplus.com/p/gatorade-cool-blue-sports-drink-multipack-bottles/0005200012206",
                                                              "name":  "Gatorade Cool Blue Sports Drink Multipack Bottles",
@@ -23019,13 +22931,6 @@
                                                           "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)",
                                                           "board_pu":  0.4988
                                                       },
-                                             "Family Fare":  {
-                                                                 "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/california_sun_dry_sun_dried_tomatoes_julienne_ct/p/1764405684715566620",
-                                                                 "name":  "California Sun Dry Sun Dried Tomatoes Julienne Ct",
-                                                                 "price":  "$5.99",
-                                                                 "size":  "8 oz",
-                                                                 "verified":  "2026-08-18 DERIVED from the price row (same record the board priced)"
-                                                             },
                                              "Fareway":  {
                                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24845-mezzetta-tomatoes-8-oz",
                                                              "price":  4.97,
@@ -23900,13 +23805,6 @@
                                                         "size":  "lb",
                                                         "verified":  "2026-09-18"
                                                     },
-                                   "Family Fare":  {
-                                                       "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/fresh_tomato_on_the_vine_sold_individually_not_by_bunch/p/2310683",
-                                                       "name":  "Fresh Tomato On The Vine (Sold Individually, Not By Bunch)",
-                                                       "price":  "$2.99",
-                                                       "size":  "lb",
-                                                       "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
-                                                   },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/8657/roma-tomatoes",
                                                   "name":  "Roma Tomatoes",
@@ -25424,13 +25322,6 @@
                                                  "size":  "32 oz",
                                                  "name":  "Yoplait Original Smooth Style Vanilla Low Fat Yogurt Tub"
                                              },
-                                 "Family Fare":  {
-                                                     "url":  "https://www.shopfamilyfare.com/shop/dairy/yogurt/individual_size/yoplait_low_fat_mountain_blueberry_yogurt_6_oz/p/95939",
-                                                     "name":  "Yoplait Low Fat Mountain Blueberry Yogurt 6 Oz",
-                                                     "price":  "$0.79",
-                                                     "size":  "6 oz",
-                                                     "verified":  "2026-09-06 DERIVED from the price row (same record the board priced)"
-                                                 },
                                  "Baker\u0027s":  {
                                                       "url":  "https://www.bakersplus.com/p/yoplait-original-low-fat-strawberry-and-harvest-peach-yogurt-cups/0007047040389",
                                                       "name":  "Yoplait Original Low Fat Strawberry and Harvest Peach Yogurt Cups",

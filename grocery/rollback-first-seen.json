@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-09-20T08:06:59",
+    "updated":  "2026-09-20T12:01:23",
     "ttl_days":  30,
     "note":  "When each Walmart / Sam\u0027s / Fareway rollback was FIRST observed. first_seen is the as_of of the capture that first showed the cut price (detection = the capture, not the day this ledger met the row - Brad, 2026-08-22) and is NEVER advanced - re-observing a rollback moves last_seen only, because an anchor that moves makes a 30-day TTL infinite; it may move EARLIER when a capture proves the price was already there. A CHANGED rolled-back price is a new promotion and re-anchors, counted in price_changed. Keyed by the store\u0027s own item id, never the name, so a re-listing cannot restart the clock.",
     "entries":  [
@@ -7597,6 +7597,15 @@
                         "price":  51.98,
                         "first_seen":  "2026-09-19",
                         "last_seen":  "2026-09-19",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Sam\u0027s Club|415YZ10V62DW",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "415YZ10V62DW",
+                        "price":  5.74,
+                        "first_seen":  "2026-09-20",
+                        "last_seen":  "2026-09-20",
                         "price_changed":  0
                     },
                     {

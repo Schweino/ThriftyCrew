@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-20 08:26",
+    "generated":  "2026-09-20 12:27",
     "board":  "comparison-2026-09-20.json",
     "note":  "Cells whose winning row cannot prove it is an in-store shelf row. Since 2026-09-01 the engine REFUSES this shape (instore-lib.ps1), so a cell here is either a REVIEWED exception someone verified on the live product page, or a cell the refusal did not reach - which is a defect in the refusal, not a question for the store. Still advisory, still drops nothing.",
     "doubt_count":  1,
@@ -740,7 +740,7 @@
                        {
                            "store":  "Baker\u0027s",
                            "file":  "bakers-regular-2026-09-20.json",
-                           "rows":  7381,
+                           "rows":  7382,
                            "with_field":  0,
                            "field_bearing":  false
                        },
@@ -1916,6 +1916,13 @@
                        {
                            "store":  "Sam\u0027s Club",
                            "file":  "sams-deals-2026-09-20.json",
+                           "rows":  19,
+                           "with_field":  13,
+                           "field_bearing":  true
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-09-20.pre-rescue-bak.json",
                            "rows":  12,
                            "with_field":  9,
                            "field_bearing":  true

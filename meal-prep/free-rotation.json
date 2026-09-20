@@ -1,7 +1,7 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
-    "week_of":  "2026-09-17",
-    "rotated_at":  "2026-09-19T17:23:52",
+    "week_of":  "2026-09-20",
+    "rotated_at":  "2026-09-20T12:16:06",
     "free":  [
                  {
                      "slug":  "chicken-pot-pie-biscuit-casserole",
@@ -11,32 +11,32 @@
                      "per_serving":  1.96
                  },
                  {
-                     "slug":  "chicken-bulgogi-rice-bowls",
-                     "protein":  "chicken",
-                     "rank":  2,
-                     "name":  "Chicken Bulgogi Rice Bowls",
-                     "per_serving":  1.99
-                 },
-                 {
                      "slug":  "chicken-fried-rice-skillet",
                      "protein":  "chicken",
-                     "rank":  3,
+                     "rank":  2,
                      "name":  "Chicken Fried Rice",
                      "per_serving":  1.99
                  },
                  {
                      "slug":  "buffalo-chicken-pasta-bake",
                      "protein":  "chicken",
-                     "rank":  4,
+                     "rank":  3,
                      "name":  "Buffalo Chicken Pasta Bake",
                      "per_serving":  2
                  },
                  {
                      "slug":  "slow-cooker-salsa-chicken-bowl",
                      "protein":  "chicken",
-                     "rank":  5,
+                     "rank":  4,
                      "name":  "Slow Cooker Salsa Chicken Burrito Bowl",
                      "per_serving":  2.05
+                 },
+                 {
+                     "slug":  "chicken-bulgogi-rice-bowls",
+                     "protein":  "chicken",
+                     "rank":  5,
+                     "name":  "Chicken Bulgogi Rice Bowls",
+                     "per_serving":  2.08
                  },
                  {
                      "slug":  "turkey-biscuit-pot-pie-casserole",
@@ -88,25 +88,25 @@
                      "per_serving":  2.32
                  },
                  {
-                     "slug":  "keto-cheeseburger-skillet",
-                     "protein":  "beef",
-                     "rank":  3,
-                     "name":  "Keto Cheeseburger Casserole Skillet",
-                     "per_serving":  2.36
-                 },
-                 {
                      "slug":  "million-dollar-baked-spaghetti",
                      "protein":  "beef",
-                     "rank":  4,
+                     "rank":  3,
                      "name":  "Million Dollar Baked Spaghetti",
                      "per_serving":  2.41
                  },
                  {
                      "slug":  "pakistani-chapli-kebab-rice-bowls",
                      "protein":  "beef",
-                     "rank":  5,
+                     "rank":  4,
                      "name":  "Pakistani Chapli Kebab Rice Bowls",
                      "per_serving":  2.41
+                 },
+                 {
+                     "slug":  "keto-cheeseburger-skillet",
+                     "protein":  "beef",
+                     "rank":  5,
+                     "name":  "Keto Cheeseburger Casserole Skillet",
+                     "per_serving":  2.42
                  },
                  {
                      "slug":  "orecchiette-italian-sausage-broccoli",
