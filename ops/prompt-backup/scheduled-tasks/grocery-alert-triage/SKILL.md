@@ -100,11 +100,28 @@ WHO and HOW MUCH, never WHAT: every item still gets its root cause and its class
    an item has waited 21 days. A LIVE condition behind a weekly item still pages daily through its own emitter
    (test-auditors, the capture watchdog, guards), so PULL FORWARD: when a daily alert is the live symptom of an
    open weekly item, work the two together today in the daily lane and close both.
+**THE RUN TAKES THE FEWEST ITEMS IT CAN FINISH, NOT THE MOST IT CAN TOUCH (Brad's ruling, 2026-09-20).**
+Measured over the 5 triage days to that date: 6,691,421 tokens, 86 items worked, 26 that changed the board,
+so 257,362 tokens per board change - and 121 of 360 alerts in 30 days were a type triage had ALREADY CLOSED.
+Of 52 real work outcomes in the plan files only 20 were a clean `done`: 17 were `deviated` and 9
+`needs-more-time`, and four of five traced return chains start at one of those two. So the ceiling was not
+reducing work, it was FRAGMENTING it. Six items each 80% done produce six conditions that can return at full
+diagnosis price; two items fully done produce none.
+**So the ceilings below are a CAP, never a target, and the ordering rule outranks them:** take items in the
+STEP 0.75 order, and STOP TAKING ON ANOTHER as soon as the remaining budget cannot finish the one in hand.
+A run that closes two items completely and leaves four `open` for tomorrow has done better than one that
+closes six as `deviated`, and the report says which it did. Finishing means the root fix SHIPPED, not that it
+was described: an item you cannot finish is left `needs-more-time` ON PURPOSE and early, not discovered at
+the ceiling.
 **RUN CEILINGS, in tool calls, named in every dispatch:** money lane 200 for the run; ops lane 100; weekly
 lane 40 per item and 150 for the lane. Past a ceiling an item becomes `needs-more-time` and its own queue id
 stays open; no new queue item is ever minted for work a run ran out of budget on. These are first plausible
 numbers, not the survivors of a sweep, and the harness cannot enforce them: the agent counts its own calls,
 and the ledger shows whether it did.
+**AN UNFINISHED ITEM IS NOT LOST ANY MORE, WHICH IS WHY STOPPING EARLY IS NOW SAFE.** Since 2026-09-20
+`triage-due.ps1` prints a `RESUME` block above the DUE list naming every queue item whose newest plan item
+closed `deviated` or `needs-more-time`, with the plan path and lane to resume from, and RESUME work alone
+makes the run DUE. On the day it landed it named 9 unfinished root fixes nothing else could see.
 **THE COST LEDGER.** After every agent spawn, append one line to `grocery\triage-plans\cost-ledger.jsonl` from
 the harness usage block (date, plan, lane, agent, model, effort, tokens, tool_uses, duration_ms, items_worked,
 items_transcribed, items_board_changing, note) and commit it with the plan. The report gives the run's totals
@@ -131,6 +148,17 @@ is exactly what it measures, so skipping it on IDLE days would blind the scorebo
 (design\PLAN-zero-alert-days-2026-09-10.md, ruling 4). Exit 3 means it could not read the queue: say so.
 IDLE means report one line and STOP (no agents, no plan, no cost). DUE means proceed. Items with status
 'needs-brad' are PARKED - never re-triage them.
+**A `RESUME` BLOCK IS THE RUN'S FIRST WORK, AHEAD OF EVERY NEW ALERT (2026-09-20).** Each RESUME line names a
+queue item whose root fix did NOT land - its newest plan item closed `deviated` or `needs-more-time` - plus
+the plan file and the lane that holds the answer. Those items are the reason a third of our alerts are
+repeats, so they are worked before anything that fired today. **A RESUME item NEVER goes to the reviewer**:
+it is routed straight to its named lane, seeded with its named plan item, exactly as a RETURN with a ROUTE
+line is, and the lane re-measures against today's board first and treats "this no longer reproduces" as a
+finding. A RESUME item still needs a plan item in today's plan (the gate reads the whole queue), transcribed
+the way STEP 0.9 transcribes an inline item and carrying the prior plan's root cause forward.
+RESUME work alone makes the run DUE, so a day whose queue is otherwise clear is a day for finishing what the
+last run started. If there is more RESUME work than the run can finish, finish the ones you take and leave
+the rest listed - they stay RESUME until their fix actually lands, which is the whole point of the block.
 PREVENTION DUE (2026-09-10, ruling 6) is the one exception to stopping on IDLE. When the guard prints a
 `PREVENTION DUE` line, after IDLE or after DUE, run STEP 3.5 today even if no weekly-lane item is open: the
 weekly lane plans prevention for the scoreboard's top recurring class every week, whether or not anything is
