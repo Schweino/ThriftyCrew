@@ -1,7 +1,7 @@
 ﻿{
     "_doc":  "What the pipeline has learned about recipe publishers. Written automatically on every fetch outcome; read by sourcers before searching and before fetching. Replaces the prose blocked-domain lists that used to live, duplicated, in two agent prompts.",
     "_rule":  "One failure is `unreliable`, not `blocked` - a 404 is a fact about one URL. Only a repeated pattern with no successes earns `blocked`. Counts stay visible so the judgment is auditable.",
-    "updated":  "2026-09-17T08:30:48",
+    "updated":  "2026-09-20T18:03:17",
     "count":  45,
     "domains":  [
                     {
@@ -116,14 +116,14 @@
                     },
                     {
                         "domain":  "thereciperebel.com",
-                        "ok":  782,
+                        "ok":  842,
                         "fail":  142,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "unreliable",
                         "note":  "fetch-recipe: The remote server returned an error: (429) Too Many Requests.",
-                        "updated":  "2026-09-17T08:04:07"
+                        "updated":  "2026-09-20T18:03:15"
                     },
                     {
                         "domain":  "orgasmicchef.com",
@@ -182,14 +182,14 @@
                     },
                     {
                         "domain":  "lecremedelacrumb.com",
-                        "ok":  896,
+                        "ok":  925,
                         "fail":  28,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "unreliable",
                         "note":  "fetch-recipe: The remote server returned an error: (429) Too Many Requests.",
-                        "updated":  "2026-09-17T07:56:42"
+                        "updated":  "2026-09-20T18:01:47"
                     },
                     {
                         "domain":  "thecleaneatingcouple.com",
@@ -204,14 +204,14 @@
                     },
                     {
                         "domain":  "fitfoodiefinds.com",
-                        "ok":  805,
+                        "ok":  855,
                         "fail":  50,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "unreliable",
                         "note":  "fetch-recipe: The remote server returned an error: (429) Too Many Requests.",
-                        "updated":  "2026-09-17T07:57:53"
+                        "updated":  "2026-09-20T18:02:52"
                     },
                     {
                         "domain":  "lemonsandzest.com",
@@ -314,14 +314,14 @@
                     },
                     {
                         "domain":  "healthyfitnessmeals.com",
-                        "ok":  871,
+                        "ok":  931,
                         "fail":  138,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "unreliable",
                         "note":  "fetch-recipe: The remote server returned an error: (429) Too Many Requests.",
-                        "updated":  "2026-09-17T08:03:46"
+                        "updated":  "2026-09-20T18:03:17"
                     },
                     {
                         "domain":  "theproteinplayground.com",
