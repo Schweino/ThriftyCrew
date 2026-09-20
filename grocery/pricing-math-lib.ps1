@@ -528,6 +528,67 @@ function Get-SplitPartSizeText([string]$part, [string]$fileSize) {
   return $tail
 }
 # ---------------------------------------------------------------------------------------------------
+# READING A SAM'S PRINTED UNIT PRICE, AND THE PRECISION IT WAS PRINTED TO (2026-09-20).
+#
+# Sam's prints a unit price two ways, and on 2026-09-20 it started using the second one:
+#     "$1.66/lb"     at or above $1.00 per unit
+#     "92.8 <cent>/lb"  below $1.00 per unit
+# Over 29 capture files and 25,434 rows the split is mechanical and had ZERO exceptions on the day it
+# changed; the same item ids read the other way the day before, so this is a RENDERING change by Sam's.
+# grocery/probe-sams-unit-price-shapes.ps1 is the committed harness for that question.
+#
+# WHY THIS RETURNS A BOUND AND NOT JUST A NUMBER, which is the whole reason it exists. The cents form is
+# not a re-spelling, it is a MORE PRECISE number: "$0.25/oz" became "24.8 <cent>/oz" and "$0.99/ea" became
+# "99.2 <cent>/ea". Everything downstream of here back-solves a pack size out of linePrice / unitPrice, so
+# the rounding in the unit price IS the error bar on the derived size, and the whole builder was written
+# around one hard-coded 0.005 because until 2026-09-20 every Sam's unit price on disk - all 24,073 of them -
+# carried exactly two decimal places. A cents-form price is rounded to a TENTH of a cent. Carrying 0.005
+# for it would state an error bar TEN TIMES too wide, which is not a cosmetic overstatement: it is the
+# window inside which a name's stated size is accepted as reproducing Sam's own arithmetic, so too wide a
+# window accepts a size that is simply wrong and publishes a per-unit price to match. .claude/rules/grocery.md
+# calls a wrong per-unit basis the hardest defect in this estate to find later.
+#
+# halfUlp is half of the LAST PRINTED DIGIT, expressed in dollars, which makes the old constant a special
+# case of the new rule rather than a parallel path: two-decimal dollars gives exactly 0.005, so every one of
+# those 24,073 historical rows reads identically to before. Only the cents form, and a dollar form printed
+# to more than two decimals, get a tighter bound - and tightening can only ever REJECT an ambiguous size
+# (which falls back to Sam's own arithmetic, or to a NAME CONFLICT reject), never mis-price one.
+#
+# THE GLYPH IS ANCHORED, deliberately unlike walmart-row-lib.ps1, which accepts any 1-3 non-digit characters
+# in that position. The loose form reads a hypothetical "0.20 USD/oz" as $0.0020/oz - a silent hundredfold
+# basis error on a live paid board. Returning $null here is an ordinary per-row reject: a row we decline to
+# price, never a row we price wrongly. U+00A2 is what arrives today, read off the 2026-09-20 capture
+# codepoint by codepoint; U+00C2 U+00A2 is the cp1252-mangled spelling walmart-row-lib.ps1's header records
+# the capture sink producing; a bare "c" is unambiguous in this position.
+#
+# Returns @{ value; halfUlp; unit; decimals; form } in DOLLARS per unit, or $null if the text is not a unit
+# price this estate knows how to read.
+function Get-SamsUnitPriceReading([string]$Text) {
+  $t = ("" + $Text).Trim()
+  if (-not $t) { return $null }
+
+  $m = [regex]::Match($t, '^\$\s*([\d,]+(?:\.(\d{1,4}))?)\s*/\s*(.+)$')
+  $form = 'dollar'
+  if (-not $m.Success) {
+    # Built from codepoints, never typed: a cent glyph as a literal puts non-ASCII bytes in a .ps1 that
+    # PowerShell 5.1 reads as ANSI, and the script then fails to PARSE.
+    $centClass = '(?:' + ([string][char]0x00C2) + '?' + ([string][char]0x00A2) + '|[cC])'
+    $m = [regex]::Match($t, ('^([\d,]+(?:\.(\d{1,4}))?)\s*' + $centClass + '\s*/\s*(.+)$'))
+    $form = 'cents'
+  }
+  if (-not $m.Success) { return $null }
+
+  $v = 0.0
+  if (-not [double]::TryParse(($m.Groups[1].Value -replace ',', ''), [ref]$v)) { return $null }
+  $dec = $m.Groups[2].Value.Length
+  # In dollars: a cents figure printed to N decimals is a dollar figure printed to N+2.
+  $dollarDec = if ($form -eq 'cents') { $dec + 2 } else { $dec }
+  if ($form -eq 'cents') { $v = $v / 100.0 }
+  return @{ value = $v; halfUlp = (0.5 * [math]::Pow(10, -1 * $dollarDec)); unit = $m.Groups[3].Value.Trim()
+            decimals = $dec; form = $form }
+}
+
+# ---------------------------------------------------------------------------------------------------
 # THE ERROR BAR ON A SAM'S DERIVED SIZE (2026-09-11, queue 2026-09-10-c8eb72).
 # build-sams-deals derives every pack size Sam's did not state in its priced unit as linePrice / unitPrice,
 # and Sam's prints unitPrice rounded to the CENT, so that size carries a relative error of 0.005/unitPrice -
@@ -537,15 +598,22 @@ function Get-SplitPartSizeText([string]$part, [string]$fileSize) {
 # 6% margin over Walmart's $0.0743 with a 7.1% error bar on its own size. Pure, so the pricing library owns
 # it and both the builder and the board compute the same number from the same two fields.
 # Returns $null for anything that is not a derived row - absent means "no quotient here", never "no error".
+# READS THE CENTS FORM TOO, AND TAKES ITS BOUND FROM THE PRINTED PRECISION (2026-09-20). Until that day
+# this required a '$' and hard-coded 0.005. Both halves were load-bearing and both were about to be wrong:
+# a cents-form unit price does not match a dollars-only regex, so this returned $null - and $null here does
+# not mean "a wide band", it means NO BAND AT ALL. Get-CellRoundingPct then reports no uncertainty,
+# Get-RoundingBandTies returns empty, and THE CROWN TEST IS SILENTLY SKIPPED: the board would have crowned
+# a store cheapest on a back-solved size while stating that size had no error in it. That is the quiet
+# failure mode, and it would have arrived on the same day the capture stopped being rejected.
+# The bound now comes from the number's own printed precision (Get-SamsUnitPriceReading), which leaves all
+# 24,073 historical two-decimal dollar rows computing exactly 0.005 as before.
 function Get-DerivedRoundingPct([string]$qtyBasis, [string]$samsUnitPrice) {
   if (-not $qtyBasis) { return $null }
   if (("" + $qtyBasis) -notmatch '(?i)derived\s+lp\s*/\s*up') { return $null }
-  $m = [regex]::Match(("" + $samsUnitPrice), '\$\s*([\d,]+(?:\.\d{1,4})?)')
-  if (-not $m.Success) { return $null }
-  $up = 0.0
-  if (-not [double]::TryParse(($m.Groups[1].Value -replace ',', ''), [ref]$up)) { return $null }
-  if ($up -le 0) { return $null }
-  return [math]::Round(100.0 * 0.005 / $up, 2)
+  $r = Get-SamsUnitPriceReading $samsUnitPrice
+  if ($null -eq $r) { return $null }
+  if ($r.value -le 0) { return $null }
+  return [math]::Round(100.0 * $r.halfUlp / $r.value, 2)
 }
 # Which CELLS that error bar actually describes, and it is one copy of the rule. A Sam's row whose qty_basis
 # says 'derived lp/up' had its size back-solved out of a rounded unit price - but a cell the engine priced from

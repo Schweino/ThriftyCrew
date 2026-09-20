@@ -63,6 +63,7 @@ param([string]$CompareFile = "", [string]$RawDir = "", [double]$Factor = 1.5, [s
 # this script and stay unstrict under every other caller. Remove this line to leave the pilot.
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'pricing-math-lib.ps1')   # Get-SamsUnitPriceReading: the two notations a store prints a unit price in
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -201,9 +202,17 @@ foreach ($r in $doc.comparison) {
     if ($storeUnit.ContainsKey($k)) {
       $pick = PickRow $storeUnit[$k] ([string]$s.size)
       if ($pick) {
-        $m = [regex]::Match($pick.raw, '\$?\s*([\d.]+)\s*/\s*([a-zA-Z\s]+)')
-        if ($m.Success) {
-          $their = ToUnit ([double]$m.Groups[1].Value) ($m.Groups[2].Value) $unit
+        # THE CENTS FORM IS A UNIT PRICE TOO (2026-09-20). Sam's began printing any unit price below $1.00
+        # as "92.8 c/lb", and this regex wants a slash straight after the number, so it simply did not
+        # match: $their stayed null and the row lost its independent store-declared cross-check. Silently -
+        # this guard's whole job is to compare our per-unit against the store's own, and an absent proof
+        # must never read as an agreeing one. Projected over the last full Sam's sweep that is 71.0% of
+        # priced rows, so the guard would have gone from checking most Sam's rows to checking almost none
+        # while reporting nothing about it.
+        # Read through the shared reader, which also carries the precision: pricing-math-lib owns the rule.
+        $rd = Get-SamsUnitPriceReading $pick.raw
+        if ($rd) {
+          $their = ToUnit ([double]$rd.value) ($rd.unit) $unit
           $says = $pick.raw; $src = $pick.file
         }
       }

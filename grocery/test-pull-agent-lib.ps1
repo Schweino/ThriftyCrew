@@ -775,5 +775,85 @@ try {
   if ($LASTEXITCODE -ne 0) { $bad++ }
 } finally { Remove-Item $tmpR -Force -ErrorAction SilentlyContinue }
 
+# --- 7. the SAM'S ROW CONTRACT: what it must fire on, and the three shapes it must stay silent for ----
+# THIS GUARD HAS NOW OVER-FIRED TWICE AND HAD NO CASE THAT COULD CATCH IT EITHER TIME. Its own header
+# records the first: treating a blank `up` as a violation marked whole terms UNUSABLE. It was loosened for
+# the blank and not for the cents form, so on 2026-09-20 the same defect recurred in a new spelling and cost
+# 6 of 8 terms - `creme fraiche`, `croissants`, `crushed tomatoes`, `cumin seeds`, `whole cumin`,
+# `curry powder` - on a day when 0 terms settled EMPTY and the store answered fine.
+#
+# Both regressions were OVER-firing, so what was missing both times is the MUST NOT FIRE - the negative
+# assertion (.claude/rules/ops-and-gates.md: "a legal input. The detector is SILENT, or it is crying
+# wolf"). There is one per legal shape of `up`, which is the only way a third spelling cannot repeat this.
+# The MUST FIRE is kept sharp on the failure the guard actually exists for: `lp` as a bare number, which is
+# what an extractor reading node.price instead of node.priceInfo.linePrice produces.
+#
+# The rows are the REAL 2026-09-20 rows, and the function is READ OUT OF THE SHIPPED FILE rather than
+# copied - a test carrying its own copy proves the copy works.
+$jsS = @'
+const fs = require('fs');
+const src = fs.readFileSync(process.argv[2], 'utf8');
+const m = src.match(/function assertSamsRowContract\(row\) \{[\s\S]*?\n\}/);
+if (!m) { console.log('  X     assertSamsRowContract is not defined in pull-sams-instore.js'); process.exit(1); }
+eval(m[0]);
+
+let bad = 0, ran = 0;
+function T(n, ok, got) { ran++; if (ok) console.log('  ok    ' + n); else { console.log('  X     ' + n + '   got: ' + got); bad++; } }
+// Returns the thrown message, or null when the guard stayed silent.
+const fired = row => { try { assertSamsRowContract(row); return null; } catch (e) { return e.message; } };
+const R = up => ({ n: 'Sweet Onions, 6 lbs.', lp: '$5.57', up: up, id: '586190K8GLVK' });
+// BUILT FROM ITS CODEPOINT, so this .ps1 stays pure ASCII. A literal glyph in a PowerShell here-string is
+// read as ANSI by PS 5.1 and re-encoded UTF-8 on the way to node, which DOUBLE-mangles it: the cp1252 case
+// below went red against a shipped regex that was perfectly correct.
+const CENT = String.fromCharCode(0x00A2);
+const CENT_MANGLED = String.fromCharCode(0x00C2) + CENT;
+
+// ---- MUST FIRE: the systematic extractor failure this guard is FOR ----
+T('MUST FIRE  lp as a BARE NUMBER is a contract violation', fired({ n: 'x', lp: '5.57', up: '$0.93/lb', id: '1' }) !== null, 'silent');
+T('MUST FIRE  ...and the message names lp and what it wanted', (fired({ n: 'x', lp: '5.57', up: '$0.93/lb', id: '1' }) || '').indexOf('$14.98') >= 0, fired({ n: 'x', lp: '5.57', up: '$0.93/lb', id: '1' }));
+T('MUST FIRE  lp as a NUMBER, not a string, is a violation', fired({ n: 'x', lp: 5.57, up: '', id: '1' }) !== null, 'silent');
+T('MUST FIRE  lp missing entirely is a violation', fired({ n: 'x', lp: null, up: '', id: '1' }) !== null, 'silent');
+T('MUST FIRE  lp carrying a unit ("$5.57/lb") is a violation - that is a UNIT price in the line-price slot', fired({ n: 'x', lp: '$5.57/lb', up: '', id: '1' }) !== null, 'silent');
+
+// ---- MUST NOT FIRE: every legal shape of `up`. The negative assertion. ----
+T('MUST NOT FIRE  the DOLLAR form, every Sam\'s row before 2026-09-20', fired(R('$0.93/lb')) === null, fired(R('$0.93/lb')));
+T('MUST NOT FIRE  the CENTS form, how Sam\'s prints a sub-dollar unit price since 2026-09-20', fired(R('92.8 ' + CENT + '/lb')) === null, fired(R('92.8 ' + CENT + '/lb')));
+T('MUST NOT FIRE  a BLANK up - real Sam\'s data; the builder rejects that ROW and nothing more', fired(R('')) === null, fired(R('')));
+T('MUST NOT FIRE  an ABSENT up is the same legal case', fired(R(null)) === null, fired(R(null)));
+
+// Every distinct cents-form row on the real 2026-09-20 capture, which is the corpus this cost us.
+// The whole point is that NONE of these may settle a term UNUSABLE.
+const REAL_2026_09_20 = ['86.0 ' + CENT + '/ea', '20.0 ' + CENT + '/oz', '24.8 ' + CENT + '/oz',
+                         '45.2 ' + CENT + '/oz', '78.8 ' + CENT + '/ea', '92.8 ' + CENT + '/lb', '99.2 ' + CENT + '/ea'];
+const stillFiring = REAL_2026_09_20.filter(up => fired(R(up)) !== null);
+T('MUST NOT FIRE  all 7 real cents-form rows from the 2026-09-20 capture pass', stillFiring.length === 0, JSON.stringify(stillFiring));
+T('MUST NOT FIRE  a whole-cent cents form ("86 ' + CENT + '/ea") passes too', fired(R('86 ' + CENT + '/ea')) === null, fired(R('86 ' + CENT + '/ea')));
+T('MUST NOT FIRE  the cp1252-mangled cent glyph passes', fired(R('24.8 ' + CENT_MANGLED + '/oz')) === null, fired(R('24.8 ' + CENT_MANGLED + '/oz')));
+
+// ---- the guard must not accept a shape build-sams-deals will REFUSE to price ----
+// It anchors on the cent glyph family and refuses anything else rather than dividing by 100, because
+// "0.20 USD/oz" read as $0.0020/oz is a silent hundredfold basis error on a live paid board. A guard that
+// waved that through would hand the builder a capture it cannot use - the exact mismatch this guard exists
+// to prevent, pointing the other way.
+T('MUST FIRE  a bare number with a unit but NO currency mark at all', fired(R('0.93/lb')) !== null, 'silent');
+T('MUST FIRE  a three-letter currency token is not a cent sign', fired(R('0.20 USD/oz')) !== null, 'silent');
+T('MUST FIRE  a cents value with no unit after the slash', fired(R('92.8 ' + CENT + '/')) !== null, 'silent');
+
+// The lp check is UNCHANGED and still strict - nothing above was allowed to soften it.
+T('CLEAN TWIN  a well-formed lp with commas still passes', fired({ n: 'x', lp: '$1,299.98', up: '', id: '1' }) === null, fired({ n: 'x', lp: '$1,299.98', up: '', id: '1' }));
+T('CLEAN TWIN  the ordinary real row - dollar up, dollar lp - is silent', fired({ n: 'Tomatoes on the Vine, 3 lbs.', lp: '$4.97', up: '$1.66/lb', id: '4WQ0DM58Y18Y' }) === null, 'fired');
+
+// A literal case list knows its own number, so a shortfall is a defect rather than a smaller tree.
+T('the literal case list ran every case above this one', ran === 17, 'ran=' + ran);
+process.exit(bad === 0 ? 0 : 1);
+'@
+$sams = Join-Path $here 'pull-sams-instore.js'
+$tmpS = Join-Path ([IO.Path]::GetTempPath()) ('samscontract-' + [guid]::NewGuid().ToString('N') + '.js')
+[IO.File]::WriteAllText($tmpS, $jsS, (New-Object System.Text.UTF8Encoding($false)))
+try {
+  & $node $tmpS $sams
+  if ($LASTEXITCODE -ne 0) { $bad++ }
+} finally { Remove-Item $tmpS -Force -ErrorAction SilentlyContinue }
+
 if ($bad -eq 0) { Write-Output 'test-pull-agent-lib SELF-TEST PASS'; exit 0 }
 Write-Output ("test-pull-agent-lib SELF-TEST FAIL: {0} case(s)" -f $bad); exit 1

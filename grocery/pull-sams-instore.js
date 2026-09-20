@@ -211,15 +211,64 @@ function assertSamsRowContract(row) {
 
     The systematic failure this gate is FOR is `lp` arriving as a bare number instead of "$14.98",
     which is what happens when the extractor reads node.price instead of node.priceInfo.linePrice.
-    So: lp must be a "$n" string. up may be absent, blank, or a well-formed "$n/unit".
+    So: lp must be a "$n" string. up may be absent, blank, or a well-formed unit price.
+
+    AND THE DOCUMENTED DEFECT RECURRED IN A NEW SPELLING (2026-09-20). The paragraph above was written
+    for a blank `up`; the cents form is the same mistake wearing different clothes, and it cost more.
+    On 2026-09-20 Sam's changed how it renders a SUB-DOLLAR unit price: "$0.93/lb" became "92.8 c/lb",
+    with the cent glyph. That shape failed the dollars-only test here, the guard threw on the term's
+    FIRST priced row, and 6 of 8 terms settled UNUSABLE - `creme fraiche`, `croissants`,
+    `crushed tomatoes`, `cumin seeds`, `whole cumin`, `curry powder`. Nothing was wrong with the store:
+    0 terms settled EMPTY, there was no wall, no 403 and no 429.
+    It is NOT the failure this guard exists for, and the guard's own justification is false for it:
+    build-sams-deals ran to exit 0 on that capture and rejected the cents rows INDIVIDUALLY with
+    err='no unitPrice', exactly as it already does for a blank one. So the guard converted a per-row
+    reject into a whole-term UNUSABLE, which is the state that means "we never got to look".
+
+    THE SIZE OF IT, because the 6 terms undersell it. Measured over 29 capture files and 25,434 rows
+    (grocery/probe-sams-unit-price-shapes.ps1, which is committed for this): the split on 2026-09-20 is
+    mechanical, with ZERO exceptions over that day's 20 priced rows - every unit price under $1.00 in
+    cents, every one at or above $1.00 in dollars - and the SAME item ids read the other way the day
+    before. Project that rule onto the 2026-09-19 sweep, the last full one: 5,264 of its 7,410 priced
+    rows (71.0%) would arrive in cents form, and 251 of its 382 terms (65.7%) carry a sub-dollar unit
+    price on their FIRST priced row and would therefore settle UNUSABLE. This was a two-thirds capture
+    outage at Sam's, not an eight-term incident.
+
+    AND AN UNUSABLE IS NOT FREE. runPacedSweep treats a thrown probe as a wall: it retries 3 times
+    behind 20s/40s/80s of backoff, so each falsely-UNUSABLE term costs about 140 seconds, and three
+    CONSECUTIVE ones trip wallLimit and hand off to Brad for a CAPTCHA that does not exist.
   */
   const lpOk = typeof row.lp === 'string' && /^\$\s*[\d,]+(\.\d{1,3})?$/.test(row.lp);
+  /*
+    The three legal shapes of `up`, each with a MUST NOT FIRE case in test-pull-agent-lib.ps1:
+      dollar   "$0.09/ea"      priced at or above $1.00/unit, and every row before 2026-09-20
+      cents    "92.8 <cent>/lb"     priced below $1.00/unit, since 2026-09-20
+      blank    "" or null      real Sam's data; the builder rejects that ROW and nothing more
+    The cent glyph family, and why it is not "any punctuation": U+00A2 is what arrives today, read off
+    the 2026-09-20 capture codepoint by codepoint; U+00C2 U+00A2 is the cp1252-mangled spelling the capture
+    sink used to produce (walmart-row-lib.ps1's header records it); a bare "c" is unambiguous in this
+    position. build-sams-deals anchors on exactly this family and REFUSES anything else rather than
+    dividing it by 100 - a "0.20 USD/oz" read as $0.0020/oz is a silent hundredfold basis error, and
+    this guard must not accept a shape the builder will not price.
+    `lp` is deliberately UNCHANGED: that check is the one doing real work and nothing here implicates it.
+  */
+  // THE CENT SIGN IS BUILT FROM ITS CODEPOINT, NEVER TYPED, and this file stays pure ASCII. A literal
+  // glyph here is a non-ASCII byte in a source that gets read by a PowerShell 5.1 fixture as ANSI and
+  // re-encoded on the way to node, which double-mangles it: the cp1252 case below then failed against a
+  // regex that was correct, for a reason entirely outside the code under test.
+  // Built INSIDE the function on purpose - test-pull-agent-lib.ps1 extracts this function alone and evals
+  // it, so anything it leaned on at module scope would be undefined there.
+  const cent = String.fromCharCode(0x00A2);
+  const centClass = '(?:' + String.fromCharCode(0x00C2) + '?' + cent + '|[cC])';
+  const upCentsRx = new RegExp('^[\\d,]+(\\.\\d{1,3})?\\s*' + centClass + '\\s*/\\s*.+$');
   const upOk = row.up == null || row.up === '' ||
-               (typeof row.up === 'string' && /^\$\s*[\d,]+(\.\d{1,3})?\s*\/\s*.+$/.test(row.up));
+               (typeof row.up === 'string' &&
+                (/^\$\s*[\d,]+(\.\d{1,3})?\s*\/\s*.+$/.test(row.up) || upCentsRx.test(row.up)));
   if (!lpOk || !upOk) {
     throw new Error(
       'ROW CONTRACT VIOLATED - build-sams-deals would reject this capture wholesale. ' +
-      `lp=${JSON.stringify(row.lp)} (want "$14.98"), up=${JSON.stringify(row.up)} (want "$0.09/ea", "" or null). ` +
+      `lp=${JSON.stringify(row.lp)} (want "$14.98"), up=${JSON.stringify(row.up)} ` +
+      `(want "$0.09/ea", "92.8 ${cent}/ea", "" or null). ` +
       'Fix the extractor before sweeping; a whole run of this shape publishes nothing.'
     );
   }

@@ -314,18 +314,34 @@ function Get-NameStatedTotal([string]$name) {
 # -WaiveMissingStoreLine. It names the row's store_id and source_ad - never a literal (2026-09-19).
 function Build-Row($raw, [string]$Club = '') {
   $lpm = [regex]::Match(("" + $raw.lp), '\$\s*([\d,]+(?:\.\d{1,2})?)')
-  $upm = [regex]::Match(("" + $raw.up), '\$\s*([\d,]+(?:\.\d{1,3})?)\s*/\s*(.+)$')
   if (-not $lpm.Success) { return @{ err='no linePrice' } }
-  if (-not $upm.Success) { return @{ err='no unitPrice' } }
-  $lp = [double]($lpm.Groups[1].Value -replace ',','')
-  $up = [double]($upm.Groups[1].Value -replace ',','')
-  if ($lp -le 0 -or $up -le 0) { return @{ err='zero price' } }
-  $u = Resolve-Unit $upm.Groups[2].Value
-  if (-not $u) { return @{ err=('unknown unit "' + $upm.Groups[2].Value + '"') } }
 
-  # unitPrice is rounded to the cent, so lp/up is only as good as that rounding: a $0.09/ea item can be off by
-  # 0.005/0.09 = 5.6% before anything is wrong, and at $0.01/ea it is off by up to 50%.
-  $roundErr = (0.005 / $up)
+  # SAM'S PRINTS A SUB-DOLLAR UNIT PRICE IN CENTS SINCE 2026-09-20: "92.8 c/lb", not "$0.93/lb". A
+  # dollars-only regex here rejected every one of them as 'no unitPrice' - and upstream the capture agent's
+  # row contract threw on the shape, so 6 of 8 terms that day never reached this file at all. Projected
+  # onto the last full sweep, the cents form is 5,264 of 7,410 priced rows (71.0%).
+  # ONE COPY OF THE ARITHMETIC: pricing-math-lib owns the reading, because compare-deals must read the same
+  # string the same way when it recomputes the rounding band on the way onto the board.
+  # $upRead.halfUlp is the ROUNDING BOUND THIS PARTICULAR NUMBER WAS PRINTED TO, not a constant. It is
+  # 0.005 for the two-decimal dollar form every historical row uses, and 0.0005 for the one-decimal cents
+  # form - and it must be carried, because every use of it below is a window inside which a size is
+  # believed. See the long note in pricing-math-lib.ps1.
+  $upRead = Get-SamsUnitPriceReading ("" + $raw.up)
+  if ($null -eq $upRead) { return @{ err='no unitPrice' } }
+  $lp = [double]($lpm.Groups[1].Value -replace ',','')
+  $up = [double]$upRead.value
+  if ($lp -le 0 -or $up -le 0) { return @{ err='zero price' } }
+  $u = Resolve-Unit $upRead.unit
+  if (-not $u) { return @{ err=('unknown unit "' + $upRead.unit + '"') } }
+
+  # The unit price is rounded to its last printed digit, so lp/up is only as good as that rounding: a
+  # $0.09/ea item can be off by 0.005/0.09 = 5.6% before anything is wrong, and at $0.01/ea it is off by up
+  # to 50%. A cents-form price is printed a digit finer, so its bound is a tenth of that.
+  $roundErr = ($upRead.halfUlp / $up)
+  # The absolute window a candidate size's implied unit price must land inside to "display as" the unit
+  # price Sam's printed. The +0.000001 is the epsilon the hard-coded 0.005001 carried; keeping it means the
+  # two-decimal dollar form compares against exactly 0.005001, byte for byte what it did before.
+  $upDisplayTol = $upRead.halfUlp + 0.000001
 
   # WHICH QUANTITY TO BELIEVE - the name's, or lp/up?
   # Do NOT compare them by "percent drift": the quotient's own error explodes as up gets small, so no drift
@@ -367,7 +383,7 @@ function Build-Row($raw, [string]$Club = '') {
       break
     }
     $hErr = [math]::Abs(($lp / $hv) - $up)
-    if ($hErr -le 0.005001) { $hintQty = $hv }
+    if ($hErr -le $upDisplayTol) { $hintQty = $hv }
     else {
       [void]$script:SamsHintNotes.Add([pscustomobject]@{ name=[string]$raw.n; lp=[string]$raw.lp; up=[string]$raw.up; reason=('BAD HINT: ' + $hf[0] + '=' + $hv + ' gives ' + [math]::Round($lp / $hv, 4) + '/' + [string]$u.tok + ", which does not display as Sam's " + $up + ' - keeping the derived size ' + (Format-Qty $derived)) })
     }
@@ -387,7 +403,10 @@ function Build-Row($raw, [string]$Club = '') {
   foreach ($c in $cands) {
     if ($c -le 0) { continue }
     $err = [math]::Abs(($lp / $c) - $up)
-    if ($err -le 0.005001 -and $err -lt $bestErr) { $best = $c; $bestErr = $err }   # would display as Sam's up
+    # would display as Sam's up - to the precision Sam's actually PRINTED it to, which is a tenth of a cent
+    # on the cents form. A cent-wide window there would accept a size ten times further out than the printed
+    # number can justify, and publish a per-unit price off by that much.
+    if ($err -le $upDisplayTol -and $err -lt $bestErr) { $best = $c; $bestErr = $err }
   }
   if ($best -and $null -ne $statedTotal) { $qty = $best; $basis = 'name stated total (reproduces Sam''s unit price)' }
   elseif ($best) { $qty = $best; $basis = 'name (reproduces Sam''s unit price)' }
@@ -427,6 +446,8 @@ function Build-Row($raw, [string]$Club = '') {
   # $0.16/ea item carries up to 0.005/0.16 = 3.1% of pure rounding error. Scale the tolerance to it, or cheap
   # per-unit items get rejected for being correct. (A real basis error - a tray price read as a per-lb price -
   # is off by hundreds of percent and is still caught.)
+  # $roundErr already scales to the precision the unit price was printed to, so the cents form tightens this
+  # too. The 0.02 floor is unchanged and dominates for anything but a very cheap per-unit row.
   $tol = [math]::Max(0.02, $roundErr + 0.005)
 
   # THE NAME'S VOLUME, DECLARED AT INGEST (2026-09-10, queue 2026-09-10-d9e085). A derived row whose name
@@ -464,7 +485,9 @@ function Build-Row($raw, [string]$Club = '') {
     # written from now on states its own error bar, so anything reading these files directly can see it
     # without re-deriving the rule. ONE copy of the arithmetic: pricing-math-lib owns it.
     # Absent on a row whose size is not a quotient - a name-stated or hinted size has no rounding in it.
-    $szRound = Get-DerivedRoundingPct ($t.shape + '; qty ' + $basis) ($upm.Groups[0].Value.Trim())
+    # The unit price AS SAM'S PRINTED IT, cents spelling and all - Get-DerivedRoundingPct reads the notation
+    # to know the precision, so normalising it to dollars here would throw away the very thing it needs.
+    $szRound = Get-DerivedRoundingPct ($t.shape + '; qty ' + $basis) (("" + $raw.up).Trim())
     $chan = Get-SamsChannel ([string]$raw.ful)
     return @{ row = [pscustomobject]@{
       store     = "Sam's Club"
@@ -495,7 +518,9 @@ function Build-Row($raw, [string]$Club = '') {
       # Preserve the actual club checkout total independently from the legacy engine-shaped ad/current basis.
       # Per-unit fallback rows still need to bind to Chrome's captured linePrice in the V3 observation model.
       source_checkout_price = ('${0:N2}' -f $lp)
-      sams_unit_price = $upm.Groups[0].Value.Trim()   # kept for audit; the engine ignores unknown fields
+      # Kept for audit; the engine ignores unknown fields. VERBATIM, in the notation Sam's used - this is
+      # the field compare-deals re-reads to recompute the rounding band, and the notation IS the precision.
+      sams_unit_price = ("" + $raw.up).Trim()
       sams_item_id    = [string]$raw.id
       found_by_term   = [string]$raw.q
       qty_basis       = ($t.shape + '; qty ' + $basis)
@@ -725,6 +750,79 @@ if ($SelfTest) {
   $r8e = Build-Row (_R "Member's Mark 2% Reduced Fat Milk 1 gal." '$3.72' '$0.03/foz')
   if ($r8e.row -and ($r8e.row.size -eq '128 fl oz') -and -not $r8e.row.PSObject.Properties['name_volume_floz']) { Write-Output 'ok    CLEAN TWIN  the milk gallon priced per foz snaps to 128 fl oz from the name and needs no extra field' }
   else { Write-Output ("FAIL  milk 1 gal. size='" + $r8e.row.size + "'"); $fail++ }
+
+  # 8h. SAM'S PRINTS A SUB-DOLLAR UNIT PRICE IN CENTS SINCE 2026-09-20 ------------------------------------
+  # "$0.93/lb" became "92.8 c/lb". The capture agent's row contract threw on the shape, so 6 of 8 terms that
+  # day settled UNUSABLE; this builder, reached with the rows anyway, rejected every one of them as
+  # 'no unitPrice'. Both halves had to move. These are the REAL 2026-09-20 rows.
+  # The cent sign is built from its codepoint: a literal glyph in this .ps1 is a non-ASCII byte in a file
+  # PS 5.1 reads as ANSI, and the script then fails to PARSE.
+  $CentSign = [string][char]0x00A2
+  $r8h1 = Build-Row (_R 'Sweet Onions, 6 lbs.' '$5.57' ('92.8 ' + $CentSign + '/lb'))
+  if ($r8h1.row -and $r8h1.row.size -eq '6 lb' -and $r8h1.row.ad_price -eq '$5.57') { Write-Output "ok    8h MUST FIRE  the cents form prices at all: sweet onions -> 6 lb (was 'no unitPrice')" }
+  else { Write-Output ("FAIL  8h cents form still rejected: err='" + $r8h1.err + "' size='" + $r8h1.row.size + "'"); $fail++ }
+  # The unit price is kept VERBATIM, in Sam's own notation - compare-deals re-reads this field to recompute
+  # the rounding band, and the notation IS the precision. Normalising it here would throw that away.
+  if ($r8h1.row -and $r8h1.row.sams_unit_price -eq ('92.8 ' + $CentSign + '/lb')) { Write-Output 'ok    8h the row keeps the printed unit price verbatim, cents spelling and all' }
+  else { Write-Output ("FAIL  8h sams_unit_price was rewritten: '" + $r8h1.row.sams_unit_price + "'"); $fail++ }
+  # MUST FIRE on the quiet half. A cents-form unit price used to return NO rounding band at all from
+  # Get-DerivedRoundingPct - not a wide one, NONE - which makes Get-CellRoundingPct null, Get-RoundingBandTies
+  # empty, and THE CROWN TEST silently skipped: the board would rank a back-solved size as an exact number.
+  # 0.0005/0.452 = 0.11%, where the old hard-coded cent would have claimed 1.11%.
+  $r8h2 = Build-Row (_R "Member's Mark by FujiSan Cucumber Avocado Roll, 15 pcs." '$5.74' ('45.2 ' + $CentSign + '/oz'))
+  $h2pct = if ($r8h2.row) { $r8h2.row.size_rounding_pct } else { $null }
+  if ($r8h2.row -and $r8h2.row.qty_basis -match 'derived lp/up' -and $null -ne $h2pct -and [math]::Abs([double]$h2pct - 0.11) -lt 0.005) {
+    Write-Output ("ok    8h MUST FIRE  a DERIVED cents row states its rounding band (" + $h2pct + "%), so the crown test is not skipped")
+  } else { Write-Output ("FAIL  8h derived cents row band: err='" + $r8h2.err + "' basis='" + $r8h2.row.qty_basis + "' pct='" + $h2pct + "'"); $fail++ }
+  # CLEAN TWIN: the same row printed the OLD way keeps the cent-wide band it always had. This is what proves
+  # the precision is read from the NOTATION rather than applied to everything.
+  $r8h3 = Build-Row (_R "Member's Mark by FujiSan Cucumber Avocado Roll, 15 pcs." '$5.74' '$0.45/oz')
+  $h3pct = if ($r8h3.row) { $r8h3.row.size_rounding_pct } else { $null }
+  if ($null -ne $h3pct -and [math]::Abs([double]$h3pct - 1.11) -lt 0.005) { Write-Output ("ok    8h CLEAN TWIN  the dollar form still carries its cent-wide band (" + $h3pct + "%)") }
+  else { Write-Output ("FAIL  8h dollar-form band moved: pct='" + $h3pct + "'"); $fail++ }
+
+  # 8i. THE BAR ITSELF, AND ONE STEP PAST IT (Brad's ruling, 2026-09-19, backlog I196) ----------------------
+  # The bar is "does the name's size reproduce the unit price Sam's PRINTED, to the precision it printed it
+  # to" - half of the last printed digit, which is 0.0005 for a one-decimal cents price and 0.005 for the
+  # two-decimal dollar form. A threshold detector's suite owes a case exactly AT the bar and one a step PAST
+  # it, and names the bar in the case text.
+  # ALL THREE CASES ARE ONE REAL ROW off the 2026-09-20 capture - Taylor Farms Sweet Kale Chopped Salad Kit,
+  # 12 oz. at $2.97 - with nothing changing but the NOTATION Sam's printed its unit price in. That is what
+  # makes the trio a statement about the rule rather than about three unrelated fixtures.
+  # The numbers land exactly, which the same ruling insists on after a case that failed by 8e-16: 2.97/12 is
+  # 0.2475, and 0.2475 sits EXACTLY HALFWAY between the two printable tenth-cent values 24.7 and 24.8, so
+  # the miss against either is exactly 0.0005 - the bar - and the +0.000001 epsilon leaves 1e-6 of headroom
+  # against a double error of order 1e-17.
+  $kaleName = 'Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.'
+  $r8i1 = Build-Row (_R $kaleName '$2.97' ('24.8 ' + $CentSign + '/oz'))
+  if ($r8i1.row -and $r8i1.row.size -eq '12 oz' -and $r8i1.row.qty_basis -match 'name') { Write-Output 'ok    8i AT THE BAR  2.97/12 = 0.2475 misses the printed 0.248 by exactly 0.0005 = the bar: ACCEPTED' }
+  else { Write-Output ("FAIL  8i at-the-bar case: err='" + $r8i1.err + "' size='" + $r8i1.row.size + "' basis='" + $r8i1.row.qty_basis + "'"); $fail++ }
+  # ONE STEP PAST, where the step is one unit of the comparison's own resolution - one tenth of a cent on the
+  # printed value. 24.9 puts the miss at 0.0015. The name states a size in the priced unit and no reading of
+  # it reproduces Sam's number, so the Sazon rule applies: REJECTED, never published on an ambiguous size.
+  $r8i2 = Build-Row (_R $kaleName '$2.97' ('24.9 ' + $CentSign + '/oz'))
+  if (-not $r8i2.row -and ([string]$r8i2.err) -match 'NAME CONFLICT') { Write-Output 'ok    8i A STEP PAST  one tenth-cent further out, the miss is 0.0015 > 0.0005: refused as a NAME CONFLICT' }
+  else { Write-Output ("FAIL  8i step-past case was accepted: err='" + $r8i2.err + "' size='" + $r8i2.row.size + "'"); $fail++ }
+  # AND THE BAR FOLLOWS THE NOTATION, WHICH IS THE WHOLE RULE. Printed the OLD way the very same row misses
+  # by 0.0025 - FIVE times the cents-form bar - and is accepted, because a two-decimal dollar price only
+  # claims to be right to the cent. Without this case a revert to the hard-coded 0.005 would leave the
+  # at-the-bar case green and redden only the step-past one, which reads as a bad fixture rather than a
+  # lost rule.
+  $r8i3 = Build-Row (_R $kaleName '$2.97' '$0.25/oz')
+  if ($r8i3.row -and $r8i3.row.size -eq '12 oz' -and $r8i3.row.qty_basis -match 'name') { Write-Output 'ok    8i CLEAN TWIN  the SAME row printed as $0.25/oz misses by 0.0025 and is accepted: the bar is the notation''s' }
+  else { Write-Output ("FAIL  8i dollar-form bar tightened: err='" + $r8i3.err + "' basis='" + $r8i3.row.qty_basis + "'"); $fail++ }
+
+  # 8j. A SHAPE WE CANNOT READ IS A PER-ROW REJECT, NEVER A GUESS -------------------------------------------
+  # walmart-row-lib.ps1 accepts any 1-3 non-digit characters where the cent sign goes, which would read this
+  # as $0.0020/oz - a silent hundredfold basis error on a live paid board. Refusing costs one row.
+  $r8j = Build-Row (_R 'Fixture Thing, 1 ct.' '$1.00' '0.20 USD/oz')
+  if (-not $r8j.row -and ([string]$r8j.err) -eq 'no unitPrice') { Write-Output 'ok    8j MUST FIRE  an unknown currency token is rejected per-row, never divided by 100' }
+  else { Write-Output ("FAIL  8j unknown currency token was priced: err='" + $r8j.err + "' size='" + $r8j.row.size + "'"); $fail++ }
+  # CLEAN TWIN: a blank unit price is still the ordinary per-row reject it always was, unchanged.
+  $r8k = Build-Row (_R 'Fixture Thing, 1 ct.' '$1.00' '')
+  if (-not $r8k.row -and ([string]$r8k.err) -eq 'no unitPrice') { Write-Output 'ok    8j CLEAN TWIN  a blank unit price is still the same per-row reject' }
+  else { Write-Output ("FAIL  8j blank up changed behaviour: err='" + $r8k.err + "'"); $fail++ }
+
   # CLEAN TWIN of build-walmart-deals.ps1's wrong-store assertion (2026-07-30). The Walmart fork inherited this
   # file's store noun into its published qty_basis; the fix there was to name Walmart. This proves the correction
   # is store-specific rather than a blanket scrub - THIS builder must go on crediting Sam's. $r7f (above) is the
