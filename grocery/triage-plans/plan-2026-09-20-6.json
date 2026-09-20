@@ -24,9 +24,15 @@
       "leaves_open": "nothing",
       "leaves_open_occurrences": 0,
       "leaves_open_followup": null,
-      "prior_closes": ["2026-09-19-a1c25d"],
+      "prior_closes": [
+        "2026-09-19-a1c25d"
+      ],
       "prevention": {
-        "source": ["ops/verify-bulk-edit.ps1", "ops/hooks/pre-commit", "grocery/check-ad-cycles.ps1"],
+        "source": [
+          "ops/verify-bulk-edit.ps1",
+          "ops/hooks/pre-commit",
+          "grocery/check-ad-cycles.ps1"
+        ],
         "what": "the idiom scan moved UPSTREAM of the weekly runner to the pre-commit hook, so a new instance cannot reach main at all, and the rc-1 subject is decided by Test-TestGuardsMutationFailed, which fails closed",
         "exact_change": "already shipped 2026-09-19: verify-bulk-edit.ps1 adds a STAMP IDIOM finding on any staged .ps1 carrying the throwing idiom; check-ad-cycles.ps1 adds Test-TestGuardsMutationFailed and passes -MutationFailed to Get-TestGuardsSubject. No further change this run."
       },
@@ -43,11 +49,18 @@
         "guard_or_fixture": "grocery/test-cadence.ps1 -SelfTest",
         "must_fire_case": "test-cadence.ps1:85 - rc 1 with a MUTATION case failing still sends 'a BLOCKING invariant can no longer fail'",
         "clean_twin": "test-cadence.ps1:86 - rc 1 with only the empty-stamp source scan failing sends the scan-only subject (the 2026-09-19 founding output)",
-        "fixture_occurrences": ["2026-09-19-a1c25d"],
-        "commands": ["powershell -NoProfile -ExecutionPolicy Bypass -File grocery\\test-cadence.ps1 -SelfTest"]
+        "fixture_occurrences": [
+          "2026-09-19-a1c25d"
+        ],
+        "commands": [
+          "powershell -NoProfile -ExecutionPolicy Bypass -File grocery\\test-cadence.ps1 -SelfTest"
+        ]
       },
       "rollback": "nothing to roll back; no file changed for this item",
-      "do_not_touch": ["grocery/guards.ps1", "the weekly runner's exit-code vocabulary"],
+      "do_not_touch": [
+        "grocery/guards.ps1",
+        "the weekly runner's exit-code vocabulary"
+      ],
       "resolution_note": "Nothing was outstanding. Re-measured both halves against HEAD: the empty-stamp idiom scan now runs at COMMIT time (ops/verify-bulk-edit.ps1:411-413 through ops/hooks/pre-commit), not only inside the weekly hermetic runner, so a new instance can no longer live 7 days; and Get-TestGuardsSubject no longer collapses every rc 1, because Test-TestGuardsMutationFailed (check-ad-cycles.ps1:3509-3519, fails closed) separates a scan-only rc 1 from a real blind invariant, with a must-fire and a clean twin in test-cadence.ps1. test-cadence.ps1 -SelfTest exit 0. The item's own leaves_open already read 'nothing' and that was correct.",
       "publish_batch": 1,
       "status": "done",
@@ -67,21 +80,35 @@
       ],
       "surface_fix": {
         "what": "quote every flag on the failing Invoke-Native call so it reads as data rather than as parameter names",
-        "files": ["grocery/capture-run.ps1"],
+        "files": [
+          "grocery/capture-run.ps1"
+        ],
         "exact_change": "capture-run.ps1:1108 becomes Invoke-Native 'git' '-C' $repo '-c' 'rebase.autoStash=true' 'rebase' '-X' 'theirs' 'origin/main'"
       },
       "root_cause": "three independent defects, each of which makes an alert say less than it knows. (1) grocery/native-lib.ps1 declared [string]$Command and [object[]]$Arguments, and PowerShell binds a parameter by any unambiguous PREFIX, so ANY child flag that is a prefix of Command is taken by the binder before the function runs - 'git -C <dir>' is the commonest git form there is, and it killed capture-run's push stage. (2) graph/audit_schema_change.py's internal-object filter knew about sqlite_autoindex but not about the sqlite_stat tables that ANALYZE writes, so after backlog I212 added a nightly full ANALYZE the audit reported an unrecorded schema change every day for something no human authored - a real, correctly detected condition that needs nothing, which is alert fatigue by design rather than by volume. (3) grocery/pull-regular-hyvee.ps1's Get-HyVeeStoreProduct returned the same bare $null for a throw, a timeout, a response carrying only another store's offers and a genuine absence, so 'asked 15, answered 0' could not say which of the four it was - the fail-open-reads-as-empty shape, and UNCHECKED IS NEVER NOT-CARRIED is this estate's own rule about it.",
       "root_fix": {
         "what": "(1) remove the param() block from Invoke-Native and Invoke-NativeScript so every token arrives through $args and no child flag can ever bind, and refuse the removed named form out loud; (2) draw the schema audit's exclusion at 'who authored it' with a named predicate, excluding sqlite_stat* and deliberately NOT sqlite_sequence; (3) classify every Hy-Vee lookup through a pure Resolve-HyVeeLookupOutcome and count answered / other-store / empty / threw separately in the summary file and the coverage detail line",
-        "files": ["grocery/native-lib.ps1", "graph/audit_schema_change.py", "grocery/pull-regular-hyvee.ps1", "grocery/capture-run.ps1"],
+        "files": [
+          "grocery/native-lib.ps1",
+          "graph/audit_schema_change.py",
+          "grocery/pull-regular-hyvee.ps1",
+          "grocery/capture-run.ps1"
+        ],
         "exact_change": "native-lib.ps1: both functions take $args, throw on an empty call and throw a named refusal on a leading -Command/-Path/-Arguments. audit_schema_change.py: _SQLITE_INTERNAL_PREFIXES = ('sqlite_autoindex','sqlite_stat') behind is_sqlite_internal(), used by read_schema. pull-regular-hyvee.ps1: Resolve-HyVeeLookupOutcome above the self-test gate, used by Get-HyVeeStoreProduct, feeding $script:HvAskThrew / HvAskEmpty / HvAskOtherStore into the summary fields ask_threw / ask_empty / ask_other_store and into the coverage detail line, plus a warning per could-not-look."
       },
       "leaves_open": "the Hy-Vee everyday lane still cannot re-read 588 of the 612 rows older than 2026-08-01, because they hold no product id, and the 2026-09-20 08:00 answered=0 itself is unexplained and did not reproduce - today's fix makes the NEXT occurrence name its cause, it does not price those rows",
       "leaves_open_occurrences": 588,
       "leaves_open_followup": "2026-09-20-cb8f30",
-      "prior_closes": ["2026-09-18-d23cfd", "2026-09-19-fc46c7"],
+      "prior_closes": [
+        "2026-09-18-d23cfd",
+        "2026-09-19-fc46c7"
+      ],
       "prevention": {
-        "source": ["grocery/native-lib.ps1", "graph/audit_schema_change.py", "grocery/pull-regular-hyvee.ps1"],
+        "source": [
+          "grocery/native-lib.ps1",
+          "graph/audit_schema_change.py",
+          "grocery/pull-regular-hyvee.ps1"
+        ],
         "what": "each fix is at the PRODUCER of the condition, not at the watchdog that reports it: the library whose parameter declaration stole the flag, the emitting check whose exclusion list was incomplete, and the puller whose single $null erased the difference between a could-not-look and an absence. No rule or exclusion data file is involved, which matters because this type has now returned twice.",
         "exact_change": "native-lib.ps1 declares no parameters at all, so the binder cannot take a child flag from any caller that will ever be written; audit_schema_change.py excludes SQLite's own ANALYZE output by a named predicate while keeping sqlite_sequence visible; pull-regular-hyvee.ps1 resolves four named outcomes and reports each count."
       },
@@ -98,7 +125,11 @@
         "guard_or_fixture": "grocery/test-native-stderr-eap.ps1, graph/audit_schema_change.py --selftest, grocery/pull-regular-hyvee.ps1 -SelfTest",
         "must_fire_case": "test-native-stderr-eap.ps1: the founding call shape 'Invoke-Native git -C <dir> rev-parse --is-inside-work-tree' must reach git, and the UNQUOTED form from capture-run.ps1 must no longer throw 'parameter Command is specified more than once' (that exact throw is in grocery/out/logs/capture-run-ad-2026-09-20.log); plus the removed named form must be refused out loud. audit_schema_change.py: a full ANALYZE on a real temp database writes sqlite_stat1 and the fingerprint must NOT move. pull-regular-hyvee.ps1: a lookup that THREW must resolve to 'threw' and never to 'empty', and offers for another store must resolve to 'other-store' naming the storeId that answered.",
         "clean_twin": "test-native-stderr-eap.ps1: a plain positional Invoke-Native still separates stdout from stderr and reports rc 7, and Invoke-NativeScript still runs a .ps1 child and reports rc 4. audit_schema_change.py: a genuinely added table on the same database after the same ANALYZE still moves the fingerprint, and sqlite_sequence is still NOT treated as internal. pull-regular-hyvee.ps1: a real answer from the target store still resolves 'answered' and carries that store's own offer ($3.19, not the other store's $9.99).",
-        "fixture_occurrences": ["2026-09-18-d23cfd", "2026-09-19-fc46c7", "2026-09-20-7bac4b"],
+        "fixture_occurrences": [
+          "2026-09-18-d23cfd",
+          "2026-09-19-fc46c7",
+          "2026-09-20-7bac4b"
+        ],
         "commands": [
           "powershell -NoProfile -ExecutionPolicy Bypass -File grocery\\test-native-stderr-eap.ps1",
           "C:\\Codex\\Python312\\python.exe graph\\audit_schema_change.py --selftest",
@@ -107,13 +138,19 @@
         ]
       },
       "rollback": "revert the four files; nothing was migrated and no data file was rewritten. The schema baseline graph/schema-baseline.json was NOT touched - the audit now agrees with the baseline it already had.",
-      "do_not_touch": ["grocery/guards.ps1", "grocery/compare-deals.ps1", "grocery/commodities.json", "graph/schema-baseline.json", "the Hy-Vee ask budget and rotation window"],
+      "do_not_touch": [
+        "grocery/guards.ps1",
+        "grocery/compare-deals.ps1",
+        "grocery/commodities.json",
+        "graph/schema-baseline.json",
+        "the Hy-Vee ask budget and rotation window"
+      ],
       "resolution_note": "All three issues were real and all three had a producer-side cause. (1) capture-run's push stage died at PowerShell parameter-binding time because Invoke-Native declared a -Command parameter that 'git -C' prefix-matched; native-lib.ps1 now declares no parameters at all, so no child flag from any future caller can be stolen, and the failing line is quoted too. (2) The graph schema 'moved' because backlog I212's nightly full ANALYZE creates sqlite_stat1 and the audit's internal-object filter knew only about sqlite_autoindex; it now excludes sqlite_stat* by a named predicate and keeps sqlite_sequence visible. Before: exit 2, added table:sqlite_stat1. After: exit 0, 'schema unchanged at fingerprint 014da3370767862b'. (3) Hy-Vee asked 15 and answered 0 at 08:00; re-probed live at 13:20, 11 of the 15 oldest product ids answered at storeId 1466, so it was neither a wall nor delisting. The lane now classifies each lookup into answered / other-store / empty / threw and reports the counts, so the next zero names its cause. The 588 rows that hold no product id at all are left open under 2026-09-20-cb8f30.",
       "publish_batch": 1,
       "status": "done",
       "premise_verified": "true, and it CORRECTED the dispatch's premise on issue 3. The dispatch described pull-regular-hyvee's 0 of 15 as a capture failure whose consequence is that wild-rice and five-spice-powder price on no board. Re-measured live: the endpoint answers 11 of those same 15 oldest ids and 3 of 3 fresh ones, so the lane is healthy now and the 08:00 zero did not reproduce. Issues 1 and 2 were verified from the run log and by running the audit before and after.",
       "deviation": "The dispatch expected this item to be where the pull-regular-hyvee coverage debt landed and finished. It is not finished: the live probe showed the lane works today, so there was no lane failure left to repair. What shipped instead is the fix for the thing that made the alert unanswerable - the single $null that erased four different causes - which is why the item's leaves_open names the 588 unreadable rows and hands them to 2026-09-20-cb8f30 rather than claiming the class is closed.",
-      "shipped_commit": null
+      "shipped_commit": "cc053f374 (read back off origin/main; subject: Triage 2026-09-20-6 ops lane: a git flag bound to Invoke-Native own parameter and took the push stage with it; resolver: git log --diff-filter=A -- grocery/triage-plans/plan-2026-09-20-6.json)"
     },
     {
       "queue_id": "2026-09-20-bff4ef",
@@ -128,15 +165,21 @@
       "root_cause": "the alert is classed as a PAGE under condition 3 (scheduled work did not run or land), but the work does run and does land; what it reports is a held state that is true every day and is waiting on Brad's open ruling Q1-2026-09-20-partial-cost about what a page shows when a cost cannot be fully built. A condition that is real, correctly detected and needs nothing is a panel or a log line, not a page, so this type pages daily for something nobody can act on",
       "root_fix": {
         "what": "re-class the type from page to review in the alert registry, with the reason and the measurement in its condition line, exactly as its sibling ff-catalog-degrading was re-classed under Brad ruling R15",
-        "files": ["grocery/alert-registry.json"],
+        "files": [
+          "grocery/alert-registry.json"
+        ],
         "exact_change": "entry manifest-skipped: class page -> review, and condition '3 scheduled-work-did-not-run-or-land' -> a line naming Q1-2026-09-20-partial-cost, the 578-of-584 measurement and the CARRIAGE NOT-CARRIED evidence in cost-flags.txt"
       },
       "leaves_open": "the 6 recipes still carry no per-serving cost, and what a page shows when a cost cannot be fully built is Brad's open ruling Q1-2026-09-20-partial-cost, not this lane's call",
       "leaves_open_occurrences": 6,
       "leaves_open_followup": "Q1-2026-09-20-partial-cost",
-      "prior_closes": ["2026-09-19-3a0a09"],
+      "prior_closes": [
+        "2026-09-19-3a0a09"
+      ],
       "prevention": {
-        "source": ["grocery/alert-registry.json"],
+        "source": [
+          "grocery/alert-registry.json"
+        ],
         "what": "the type is routed to review rather than page, so the condition stops paging daily while the ruling is open; the emitter still reports it and it still reaches a weekly lane",
         "exact_change": "manifest-skipped: class review, condition states why - the work landed for 578 of 584, the 6 remaining ingredients are recorded NOT-CARRIED at all seven stores, and the decision is Brad's open ruling"
       },
@@ -144,7 +187,9 @@
         "measured_as": "routing",
         "measured_by": "grocery/audit-alert-registry.ps1 over 672 tracked scripts, 41 that name send-alert, 87 call sites and 94 readable subjects; the diff is 2 lines in one registry entry. No matching or pricing rule is touched, no product routes differently, no cell moves, and no display rule was invented - label-versus-ledger precedence is untouched.",
         "affected_now": 1,
-        "names": ["recipe per serving manifest skipped recipe s"],
+        "names": [
+          "recipe per serving manifest skipped recipe s"
+        ],
         "risk": "the type stops arriving as a page. It is still emitted, still registered and still lands in the weekly lane, and the day the ruling lands this line is the place that says so. The sibling entry manifest-refused-stale-feed, which IS a real did-not-land condition, is deliberately left as a page.",
         "cell_effects": []
       },
@@ -153,17 +198,27 @@
         "guard_or_fixture": "grocery/audit-alert-registry.ps1",
         "must_fire_case": "the audit's own contract: every readable call-site subject must map to exactly ONE registry entry, so an entry edited into an unparseable or duplicate state fails it. Run after the edit: exit 0, 'PASSED - 94 readable call-site subject(s) ... each map to exactly one entry', ALERT-REGISTRY-COMPLETE findings=0.",
         "clean_twin": "the sibling entry manifest-refused-stale-feed keeps class page and condition 3, so the re-class did not widen into the neighbouring type; the audit still resolves both keys to one entry each.",
-        "fixture_occurrences": ["2026-09-19-3a0a09", "2026-09-20-bff4ef"],
-        "commands": ["powershell -NoProfile -ExecutionPolicy Bypass -File grocery\\audit-alert-registry.ps1"]
+        "fixture_occurrences": [
+          "2026-09-19-3a0a09",
+          "2026-09-20-bff4ef"
+        ],
+        "commands": [
+          "powershell -NoProfile -ExecutionPolicy Bypass -File grocery\\audit-alert-registry.ps1"
+        ]
       },
       "rollback": "revert the two changed lines in grocery/alert-registry.json; the type pages again the next morning",
-      "do_not_touch": ["label-versus-ledger precedence", "any display rule for a partial cost", "meal-prep/pipeline/compute-v2-perserving.ps1's skip logic", "meal-prep/db/cost-flags.txt"],
+      "do_not_touch": [
+        "label-versus-ledger precedence",
+        "any display rule for a partial cost",
+        "meal-prep/pipeline/compute-v2-perserving.ps1's skip logic",
+        "meal-prep/db/cost-flags.txt"
+      ],
       "resolution_note": "Closed on re-measurement, as expected, plus the routing fix. cost-flags.txt is down to 26 lines from 28 and the 6 remaining skips are all LIVE=False recipes whose ingredients (Berbere, Harissa, Pomegranate Molasses) are recorded CARRIAGE NOT-CARRIED at all seven Omaha stores on two or more wordings. The manifest itself ran and landed for 578 of 584 recipes, so the registry's condition 3 (scheduled work did not run or land) is simply not what happened. The type is re-classed page -> review with that measurement in its condition line, so it stops paging daily for a state that is true every day and waiting on Brad's ruling Q1-2026-09-20-partial-cost. No display rule and no precedence was changed.",
       "publish_batch": 1,
       "status": "done",
       "premise_verified": "true: the dispatch's expectation that this would close on re-measurement was checked rather than assumed. cost-flags.txt read at 26 lines and the three ingredients read as proven not-carried at all seven stores, so the remainder is a held state awaiting a ruling.",
       "deviation": null,
-      "shipped_commit": null
+      "shipped_commit": "cc053f374 (read back off origin/main; subject: Triage 2026-09-20-6 ops lane: a git flag bound to Invoke-Native own parameter and took the push stage with it; resolver: git log --diff-filter=A -- grocery/triage-plans/plan-2026-09-20-6.json)"
     },
     {
       "queue_id": "2026-09-19-4fc24c",
