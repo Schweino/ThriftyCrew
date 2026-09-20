@@ -174,6 +174,53 @@ function Get-BirthLane([string]$Lane, [string]$Class) {
   return $null
 }
 
+# ---- A FIRING CHECK IS NOT YET AN ALERT (Brad, 2026-09-20, design\PLAN-alert-quiet-2026-09-20.md change 4a) --
+# An alert rule has THREE states, not two: inactive while the condition is false, PENDING from the moment it
+# becomes true, and firing only once it has stayed true for the rule's declared duration. A condition that
+# clears before the duration elapses reaches pending, goes back to inactive, and notifies nobody.
+# (skills\data-quality-craft\checks-and-thresholds.md section 7.)
+# THIS IS THE DURATION KNOB AND IT IS NOT THE CUTOFF. No band, ratchet or guard threshold moves anywhere for
+# this: widening a band to stop a transient firing is the wrong repair for the wrong knob, and it costs real
+# sensitivity to permanently silence something that only needed to be waited out. Nothing here is silenced.
+# THE DURABLE QUEUE WRITE STAYS WHERE IT IS, ABOVE THIS. A missed email is an annoyance; a suppressed one is a
+# watcher gone quiet, and this estate has paid for the second kind. Triage sees EVERY condition on its first
+# observation, whatever the hold says. This is a DELIVERY hold, never a queue hold.
+# OPT-IN ONLY: `hold_observations` defaults to 1, which is exactly today's behaviour, so nothing changes for a
+# type until its registry entry declares otherwise. Guards, a held board, a failed publish, a wrong price and
+# anything reader-facing must page on their FIRST observation and carry no hold at all.
+function Get-AlertHoldObservations {
+  <# .SYNOPSIS Pure. How many observations a type must reach before it is EMAILED, from its registry entry.
+     1 unless the entry says otherwise, and EVERY unreadable shape is 1: this knob can only ever DELAY a mail,
+     so each failure has to fall back to mailing now. Never throws. #>
+  param($Registry, [string]$EntryId)
+  if (-not $EntryId -or $null -eq $Registry) { return 1 }
+  try {
+    foreach ($e in @($Registry.entries)) {
+      if (-not $e) { continue }
+      if (-not [string]::Equals(([string]$e.id).Trim(), $EntryId, [StringComparison]::Ordinal)) { continue }
+      if (-not $e.PSObject.Properties['hold_observations']) { return 1 }
+      $n = 0
+      try { $n = [int]$e.hold_observations } catch { return 1 }
+      if ($n -lt 1) { return 1 }
+      return $n
+    }
+  } catch { return 1 }
+  return 1
+}
+function Test-AlertHeldPending {
+  <# .SYNOPSIS Pure. Is this observation still PENDING - true, durable in the queue, and not yet worth a mail?
+     Held ONLY when the type declares a hold above 1, the queue write SUCCEEDED (an alert this script could not
+     record must page, never wait), it is not an escalation to Brad, and the observations so far are below the
+     hold. $Observations is the queue item's own count after this write, so it is the durable record and not a
+     second tally: a condition that fired once and never came back never reaches the hold and never mails. #>
+  param([int]$Hold, [int]$Observations, [bool]$Queued, [string]$Escalates)
+  if ($Hold -le 1) { return $false }
+  if (-not $Queued) { return $false }
+  if ($Escalates) { return $false }
+  if ($Observations -le 0) { return $false }
+  return ($Observations -lt $Hold)
+}
+
 # ---- IS THIS ALERT A CONSEQUENCE OF AN OPEN INCIDENT? (2026-09-10, plan Phase 1) ---------------------------------
 # Pure, so -SelfTest drives it with frozen verdicts. On 2026-09-10 one guard hold produced four queue items: GUARDS
 # FAILED, then the capture watchdog, board prices aging and the feed edge, each describing the same held board from
@@ -415,6 +462,44 @@ if ($SelfTest) {
     Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
     $c7 = _SA 'Grocery matching soundness - review needed' @('-Escalates', '2026-09-10-abcdef')
     _T 'CLEAN TWIN -Escalates still parks the item at needs-brad and always takes the mail leg' ([bool]($c7.items.Count -eq 1 -and $c7.items[0].status -eq 'needs-brad' -and $c7.out -match 'alert MUTED')) 'True'
+    # ---- A FIRING CHECK IS NOT YET AN ALERT (Brad, 2026-09-20, change 4a) ----
+    # Driven through the REAL script against a frozen registry: an entry declaring hold_observations 2 reaches
+    # PENDING on its first observation and fires on its second. The durable queue write is above the gate and
+    # must be untouched by it, so one case asserts the queue item on observation ONE.
+    $saRegHold = '{ "readme": "frozen fixture", "entries": [' +
+      '{ "id": "watchdog", "match": "exact", "key": "grocery capture watchdog issue s", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x", "hold_observations": 2 },' +
+      '{ "id": "held", "match": "exact", "key": "grocery page held coverage", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
+      '{ "id": "publish", "match": "exact", "key": "grocery publish failed", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x", "hold_observations": 1 } ] }'
+    [IO.File]::WriteAllText($saReg, $saRegHold, $utf8)
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $h1 = _SA 'Grocery capture watchdog: 3 issue(s) 2026-09-20'
+    # MUST NOT FIRE: a condition true once and then absent reaches pending, returns to inactive, and mails nobody.
+    _T 'MUST NOT FIRE a condition true ONCE under hold_observations 2 is PENDING and never takes the mail leg' ([bool]($h1.out -match 'alert PENDING' -and $h1.out -notmatch 'alert MUTED')) 'True'
+    # CLEAN TWIN: the durable queue write still happens for a held condition - triage sees it on observation one.
+    _T 'CLEAN TWIN a held condition still lands its queue item on the FIRST observation, with its type and count' ([bool]($h1.items.Count -eq 1 -and [int]$h1.items[0].count -eq 1 -and [string]$h1.items[0].type -eq 'grocery capture watchdog issue s')) 'True'
+    # MUST FIRE: observed a second time, the condition has reached its declared duration, so it mails.
+    $h2 = _SA 'Grocery capture watchdog: 3 issue(s) 2026-09-20'
+    _T 'MUST FIRE a condition true TWICE under hold_observations 2 takes the mail leg on the second observation' ([bool]($h2.out -match 'alert MUTED' -and $h2.items.Count -eq 1 -and [int]$h2.items[0].count -eq 2)) 'True'
+    # CLEAN TWIN: hold_observations 1, stated outright, is exactly the behaviour this script had before the knob.
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $h3 = _SA 'Grocery publish FAILED (rc=2) - 2026-09-20'
+    _T 'CLEAN TWIN hold_observations 1 mails on the first observation, exactly as before the knob existed' ([bool]($h3.out -match 'alert MUTED' -and $h3.items.Count -eq 1)) 'True'
+    # CLEAN TWIN: an entry carrying no hold_observations field at all is every other type in the registry.
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $h4 = _SA 'Grocery page HELD (coverage) - 2026-09-20'
+    _T 'CLEAN TWIN an entry with no hold_observations field mails on the first observation' ([bool]($h4.out -match 'alert MUTED' -and $h4.items.Count -eq 1)) 'True'
+    # The pure rule, AT its bar and one step before it, plus the three shapes that must never hold a mail.
+    $holdReg = $saRegHold | ConvertFrom-Json
+    _T 'the hold AT its bar: observation 2 of 2 is not pending' ([bool](-not (Test-AlertHeldPending 2 2 $true ''))) 'True'
+    _T 'one step BEFORE the bar: observation 1 of 2 is pending' (Test-AlertHeldPending 2 1 $true '') 'True'
+    _T 'MUST NOT FIRE a queue write that FAILED is never held - an alert this script could not record must page' ([bool](-not (Test-AlertHeldPending 2 1 $false ''))) 'True'
+    _T 'MUST NOT FIRE an escalation to Brad is never held' ([bool](-not (Test-AlertHeldPending 2 1 $true '2026-09-10-abcdef'))) 'True'
+    _T 'MUST NOT FIRE a type with no queue item of its own (a digest) is never held' ([bool](-not (Test-AlertHeldPending 2 0 $true ''))) 'True'
+    _T 'an entry with no hold_observations reads as 1' (Get-AlertHoldObservations $holdReg 'held') 1
+    _T 'a declared hold reads as the number it declares' (Get-AlertHoldObservations $holdReg 'watchdog') 2
+    _T 'an id no entry carries reads as 1' (Get-AlertHoldObservations $holdReg 'no-such-entry') 1
+    _T 'an unreadable registry reads as 1, because this knob may only ever DELAY a mail' (Get-AlertHoldObservations $null 'watchdog') 1
+    [IO.File]::WriteAllText($saReg, $saRegJson, $utf8)
     # ---- ONE INCIDENT, ONE ALERT (2026-09-10, plan Phase 1) ----
     $tdy = Get-Date -Format 'yyyy-MM-dd'
     $saRegInc = '{ "readme": "frozen fixture", "entries": [' +
@@ -561,6 +646,9 @@ if ($CausedBy) {
   } catch { $incVerdict = $null; Log ("-CausedBy " + $CausedBy + ": the chain verdict could not be read (" + $_.Exception.Message + "), so '" + $Subject + "' is NOT absorbed") }
 }
 $absorbedBy = ''
+# How many observations of this condition the queue holds AFTER this write - the durable record, not a second
+# tally. 0 means "no queue item of my own" (a digest, or a write that failed), which never holds a mail.
+$observations = 0
 
 $sentFile = Join-Path $root ("alert-sent-$today.txt")
 # purge prior days' sent-files: yesterday's suppressions are irrelevant, and the cloud job's `git add -A`
@@ -647,6 +735,7 @@ try {
     'same-day' {
       foreach ($d in @($items | Where-Object { $_.type -eq $typeKey -and $_.date -eq $today })) {
         $d.count = [int]$d.count + 1
+        if ([int]$d.count -gt $observations) { $observations = [int]$d.count }   # the pending hold reads this
         # same upgrade rule as the cross-day branch below: a truncated or thin first occurrence must not
         # outrank a later one that actually carries the evidence.
         $oldLen = ([string]$d.body).Length
@@ -664,6 +753,7 @@ try {
       # changed item list is still visible.
       $t = $route.target
       $t.count = [int]$t.count + 1
+      $observations = [int]$t.count   # the pending hold reads this
       # A LATER OCCURRENCE MAY CARRY BETTER EVIDENCE THAN THE FIRST. Keeping the original body is right
       # when the recurrences are the same alert repeating, and WRONG when the first one was truncated or
       # thin: the whole value of a queue entry is that triage can classify it without hunting the data.
@@ -695,6 +785,7 @@ try {
         body = $bodyStored
         status = $birth.status; count = 1; resolved_ts = $null; notes = $birth.notes
       }
+      $observations = 1   # the first observation of this condition; the pending hold reads this
       if ($Escalates) { Log ("QUEUE PARKED AT BIRTH: '" + $Subject + "' is the escalation email for " + $Escalates + ", so it is written needs-brad rather than open - triage-due will not list it as work.") }
       # WHICH CODE SAID SO (2026-09-05, queue 2026-09-04-bf1642). Stamped on NEW items only: an absorbed
       # recurrence belongs to the incident the first occurrence opened, and re-stamping it would overwrite
@@ -782,6 +873,22 @@ if (-not $delivery.mail) {
     exit 0
   }
   Log ("REVIEW '" + $Subject + "' could not reach the queue, so it is EMAILED instead - a review alert this script could not record must page, never vanish")
+}
+
+# PENDING? (2026-09-20) A type whose registry entry declares hold_observations above 1 must be observed that
+# many times before it is EMAILED. The queue entry is already durable above, so triage sees this condition on
+# its first observation exactly as before - only the mail waits. Read ABOVE the mute so the state is visible in
+# the log and in this script's own output whether or not mail is switched off. Every failure path here resolves
+# to a hold of 1, which is the behaviour this script had before the knob existed.
+$holdN = 1
+try { if ($regState -and $regState.ok) { $holdN = Get-AlertHoldObservations $regState.registry ([string]$delivery.entry_id) } } catch { $holdN = 1 }
+if (Test-AlertHeldPending $holdN $observations $queued $Escalates) {
+  Log ("PENDING '" + $Subject + "' [type: " + $typeKey + "] - observation " + $observations + " of the " + $holdN +
+       " this type must reach before it mails (registry entry " + [string]$delivery.entry_id +
+       ", hold_observations). Queued and visible to triage; only the mail waits.")
+  Write-Output ("alert PENDING - queued to triage-queue.json, not emailed: observation " + $observations + " of " + $holdN +
+                " (registry hold_observations for '" + [string]$delivery.entry_id + "'). It mails when the condition is still true on the next observation.")
+  exit 0
 }
 
 # MUTED? The queue entry is already durable at this point, so triage still sees and works this alert; we
