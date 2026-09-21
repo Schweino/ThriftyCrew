@@ -1291,7 +1291,9 @@ $foodDb = @{}
 try { foreach ($i in @((Read-JsonFile $foodDbPath).items)) { $foodDb[[string]$i.item] = $i } }
 catch { Block ("food-macros-db does not parse: " + $_.Exception.Message) }
 $costedRows = @{}
-try { foreach ($r in @(Read-JsonFile $costedPath)) { $costedRows[[string]$r.slug] = $r } }
+# ASSIGN, THEN ITERATE (2026-09-21): `@(Read-JsonFile x)` hands the loop the whole array as ONE row, so this map held a
+# single key and every $costedRows[$slug] lookup came back empty. ops\audit-readjson-inline-wrap.ps1 holds it at zero.
+try { $crRows = Read-JsonFile $costedPath; foreach ($r in $crRows) { $costedRows[[string]$r.slug] = $r } }
 catch { Block ("db\costed.json does not parse: " + $_.Exception.Message) }
 # THE INDEPENDENT STATEMENT OF EACH ITEM'S PACKAGE, for widget-count-basis check (b). Deliberately not
 # the costed row: the whole point of (b) is to compare the block's implied package against a source the
@@ -1299,7 +1301,8 @@ catch { Block ("db\costed.json does not parse: " + $_.Exception.Message) }
 $ingRows = @{}
 $ingPath = Join-Path $mp 'db\ingredients.json'
 if (Test-Path $ingPath) {
-  try { foreach ($r in @(Read-JsonFile $ingPath)) { $ingRows[[string]$r.item] = $r } }
+  # assign, then iterate - see $crRows above
+  try { $igRows = Read-JsonFile $ingPath; foreach ($r in $igRows) { $ingRows[[string]$r.item] = $r } }
   catch { Block ("db\ingredients.json does not parse: " + $_.Exception.Message) }
 } else { Block ("required input missing: " + $ingPath) }
 if ($script:blocked.Count) { Write-GuardComplete -Name 'wave-preaudit' -Summary 'blocked: unparseable input'; exit 2 }

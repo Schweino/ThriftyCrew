@@ -640,7 +640,7 @@ else { Bad ("the PS 5.1 no-unroll trap is back in " + $offenders.Count + " place
 # and prove the trap is real, so nobody "fixes" the check by deleting it
 $probe = Register-Fx (Join-Path $env:TEMP ('arr-' + [guid]::NewGuid().ToString('N').Substring(0,6) + '.json'))
 '[{"a":1},{"a":2},{"a":3}]' | Set-Content $probe -Encoding UTF8
-$wrapped = @(Read-JsonFile $probe)
+$wrapped = @(Read-JsonFile $probe)   # readjson-wrap:allow deliberate probe proving the trap still behaves as documented
 $assigned = Read-JsonFile $probe
 Remove-Item $probe -Force -ErrorAction SilentlyContinue
 if ($wrapped.Count -eq 1 -and @($assigned).Count -eq 3) { Ok 'the no-unroll trap still behaves as documented (wrapped=1, assigned-then-wrapped=3)' }

@@ -118,6 +118,19 @@ function Write-TcCardText([string]$Path, [string]$Text) {
   [IO.File]::WriteAllText($Path, $Text, (New-Object System.Text.UTF8Encoding($bom)))
 }
 
+# WHAT A PUBLISH DID NOT SHIP (2026-09-21). engine\publish.ps1 exits 0 whether or not every slug went out: a slug it
+# refused, could not create, staged or HELD (the live-price rollout) is named only on its machine line
+# `PUBLISH-UNSTAMPABLE: a,b`. The daily chain read exit 0 as "every eligible card republished", logged "loop closed"
+# and dropped the held slugs from republish-pending.txt, so the log said a card shipped that never left. Returns
+# { Known; Unshipped }: Known is false when the machine line is missing, and then NOTHING may be counted as shipped.
+function Get-TcPublishUnshipped {
+  param([string[]]$Lines, [string[]]$Eligible)
+  $m = @($Lines | Where-Object { [string]$_ -match '^PUBLISH-UNSTAMPABLE:' })
+  if (-not $m.Count) { return [pscustomobject]@{ Known = $false; Unshipped = @($Eligible) } }
+  $named = @(([string]$m[-1]).Substring('PUBLISH-UNSTAMPABLE:'.Length).Split(',') | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+  return [pscustomobject]@{ Known = $true; Unshipped = @($Eligible | Where-Object { $named -contains $_ }) }
+}
+
 function Invoke-TcGatedRepublish {
   param(
     [string[]]$Slugs,
@@ -463,6 +476,17 @@ if ($__gatedRepublishSelfTest) {
 
     # ---- SOURCE PINS: the parser reads build-cards' real output shape, and the chain uses this path ---------
     # Needles by concatenation, so this file cannot satisfy them by quoting them.
+    # ---- WHAT A PUBLISH DID NOT SHIP (2026-09-21) ----------------------------------------------------------
+    $u = Get-TcPublishUnshipped -Lines @('HELD  b  - live-price rollout ...', 'published+verified OK: 1 / 2', 'PUBLISH-UNSTAMPABLE: b') -Eligible @('a', 'b')
+    Test-GrCase 'MUST FIRE  a slug publish HELD (exit 0) is reported as NOT shipped, not as republished' ($u.Known -and @($u.Unshipped).Count -eq 1 -and $u.Unshipped[0] -eq 'b') (@($u.Unshipped) -join ',')
+    $u = Get-TcPublishUnshipped -Lines @('published+verified OK: 2 / 2', 'PUBLISH-UNSTAMPABLE: ') -Eligible @('a', 'b')
+    Test-GrCase 'MUST NOT FIRE  an empty machine line means every eligible slug shipped' ($u.Known -and @($u.Unshipped).Count -eq 0) (@($u.Unshipped) -join ',')
+    $u = Get-TcPublishUnshipped -Lines @('published+verified OK: 2 / 2') -Eligible @('a', 'b')
+    Test-GrCase 'MUST FIRE  no machine line at all: nothing may be counted as shipped' ((-not $u.Known) -and @($u.Unshipped).Count -eq 2) (@($u.Unshipped) -join ',')
+    $u = Get-TcPublishUnshipped -Lines @('PUBLISH-UNSTAMPABLE: z,b') -Eligible @('a', 'b')
+    Test-GrCase 'CLEAN TWIN  a named slug that was never eligible is ignored, the eligible one is kept' ($u.Known -and @($u.Unshipped).Count -eq 1 -and $u.Unshipped[0] -eq 'b') (@($u.Unshipped) -join ',')
+    $cacSrc0 = [IO.File]::ReadAllText((Join-Path $repo 'grocery\check-ad-cycles.ps1'))
+    Test-GrCase 'MUST FIRE  check-ad-cycles reads the unshipped slugs before it says the loop closed' ($cacSrc0.Contains('Get-TcPublish' + 'Unshipped -Lines')) 'the daily chain no longer asks what publish did not ship'
     $bcSrc = [IO.File]::ReadAllText((Join-Path $mp 'engine\build-cards.ps1'))
     Test-GrCase 'MUST FIRE  engine\build-cards.ps1 still prints the summary and X lines this parser reads' `
       ($bcSrc.Contains('"built {0}/{1}  errors ' + '{2}"') -and $bcSrc.Contains('("  X " + ' + '$_)') -and $bcSrc.Contains('"{0} :: ' + '{1}"')) 'build-cards output shape moved'

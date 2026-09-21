@@ -306,7 +306,11 @@ $phPath = Join-Path $mp 'db\published-hashes.json'
 $cdPath = Join-Path $mp 'db\costed.json'
 $phRead = $false; $cdRead = $false
 try { $ph = Read-JsonFile $phPath; foreach ($p in $ph.PSObject.Properties) { $published[[string]$p.Name] = $true }; $phRead = $true } catch { $phRead = $false }
-try { foreach ($c in @(Read-JsonFile $cdPath)) { if ($c -and $c.slug) { $unpriced[[string]$c.slug] = [int]$c.lines_unpriced } }; $cdRead = $true } catch { $cdRead = $false }
+# ASSIGN, THEN ITERATE (2026-09-21). This read `foreach ($c in @(Read-JsonFile $cdPath))`: Read-JsonFile returns its
+# array comma-wrapped, so @() handed the loop ONE element - the whole 584-row array - and [int]$c.lines_unpriced
+# threw on 584 ints. The catch emptied the map, so every run printed "costed COULD NOT READ" and the partial-cost
+# gate refused nothing. ops\audit-readjson-inline-wrap.ps1 now holds this shape at zero.
+try { $cdRows = Read-JsonFile $cdPath; foreach ($c in $cdRows) { if ($c -and $c.slug) { $unpriced[[string]$c.slug] = [int]$c.lines_unpriced } }; $cdRead = $true } catch { $cdRead = $false }
 Write-Output ("partial-cost gate inputs: published-hashes {0} ({1} slug(s)), costed {2} ({3} row(s))" -f $(if ($phRead) { 'read' } else { 'COULD NOT READ' }), $published.Count, $(if ($cdRead) { 'read' } else { 'COULD NOT READ' }), $unpriced.Count)
 $res = Sync-RecipesDbCost -Raw $raw -SpecCost $specCost -Published $published -UnpricedBySlug $unpriced
 $rowsTouched = @($res.changes | Group-Object Slug).Count

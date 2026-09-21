@@ -1250,10 +1250,18 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
               if (-not $NoAlert) { try { Send-Alert -Subject "Recipe cards held back from republish: $($heldRows.Count)" -Body ("The daily loop did not republish $($heldRows.Count) of $($stale.Count) re-anchored card(s), because publishing them would have sent a card that did not rebuild (its OLD version), one whose allergen line disagrees with its ingredients, or one that would change more than the cost (pending changes such as the allergen line wait for the catalogue republish). They stay in meal-prep\pipeline\republish-pending.txt and are retried every run.`n`n" + ((@($heldRows | ForEach-Object { $_.slug + ' (' + $_.stage + '): ' + $_.why }) | Select-Object -First 40) -join "`n")) | Out-Null } catch {} }
             }
             if ($pubOk) {
-              # Only the held slugs stay pending: everything else just published.
-              if ($heldRows.Count) { @($heldRows | ForEach-Object { $_.slug }) | Out-File $pendPath -Encoding utf8 }
+              # EXIT 0 IS NOT "EVERY CARD SHIPPED" (2026-09-21). publish names what it refused, staged or HELD only on its
+              # PUBLISH-UNSTAMPABLE line; this used to log every eligible card as republished and drop the held ones from
+              # the pending file. Unshipped slugs stay pending beside the held rows, and the log says how many went out.
+              $un = Get-TcPublishUnshipped -Lines @($rp.PublishOut) -Eligible @($rp.Eligible)
+              $pend = @(@($heldRows | ForEach-Object { $_.slug }) + @($un.Unshipped) | Select-Object -Unique)
+              if ($pend.Count) { $pend | Out-File $pendPath -Encoding utf8 }
               else { Remove-Item $pendPath -ErrorAction SilentlyContinue }
-              Log ("loop closed: $(@($rp.Eligible).Count) of $($stale.Count) card(s) re-anchored and republished")
+              $shipped = @($rp.Eligible).Count - @($un.Unshipped).Count
+              if (@($un.Unshipped).Count) {
+                Log ("loop NOT fully closed: $shipped of $($stale.Count) card(s) republished; publish did not ship $(@($un.Unshipped).Count)" + $(if ($un.Known) { ' (named on its PUBLISH-UNSTAMPABLE line): ' } else { ' (its machine line is MISSING, so none is counted as shipped): ' }) + ((@($un.Unshipped) | Select-Object -First 12) -join ', '))
+                $summary += "REVIEW    $(@($un.Unshipped).Count) re-anchored recipe card(s) did not ship from publish (held, refused or failed) and stay in meal-prep\pipeline\republish-pending.txt"
+              } else { Log ("loop closed: $shipped of $($stale.Count) card(s) re-anchored and republished") }
             } elseif ($rp -and -not $rp.PublishInvoked) {
               Log ("loop NOT closed: none of the $($stale.Count) card(s) could be republished - every one was held (see the HELD lines) and all stay in republish-pending.txt")
             } else {
@@ -1857,6 +1865,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         # and runs each post's OWN script against the DEPLOYED feed in jsdom, and pages by itself on a mismatch, a
         # missing script or a missing feed (grocery\alert-registry.json, prefix 'live recipe prices').
         New-FanoutLane -Name 'live-price-contract' -File (Join-Path $mealPrep 'pipeline\audit-live-price-contract.ps1') -TimeoutSec 600 -Marker 'LIVE-PRICE-CONTRACT-COMPLETE'
+        New-FanoutLane -Name 'live-price-completeness' -File (Join-Path $mealPrep 'pipeline\audit-live-price-contract.ps1') -TimeoutSec 600 -Arguments @('-LivePosts') -Marker 'LIVE-PRICE-COMPLETENESS-COMPLETE'
         New-FanoutLane -Name 'live-recipe-prices'  -File (Join-Path $mealPrep 'pipeline\monitor-live-recipe-prices.ps1') -TimeoutSec 900 -Arguments $(if ($NoAlert) { @('-NoAlert') } else { @() }) -Marker 'LIVE-RECIPE-PRICES-COMPLETE'
         New-FanoutLane -Name 'db-agreement'        -File (Join-Path $mealPrep 'engine\audit-db-agreement.ps1') -Marker 'DB-AGREEMENT-COMPLETE'
         New-FanoutLane -Name 'published-macros'    -File (Join-Path $mealPrep 'engine\audit-published-macros.ps1') -Marker 'PUBLISHED-MACROS-COMPLETE'
@@ -2454,6 +2463,14 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if (-not $NoAlert) { try { Send-Alert -Subject 'Live recipe prices: a placeholder names something the feed does not carry' -Body ('meal-prep\pipeline\audit-live-price-contract.ps1 found built recipe cards whose live price placeholder cannot be filled from the feed, so those pages would show only their build-time fallback:' + "`n`n" + ((@($lpc.Output) | Where-Object { $_ -match '^  ' }) -join "`n")) -What 'LIVE-PRICE-CONTRACT' } catch {} }
         } elseif ($lpc.ExitCode -ne 0) { Log ('live-price-contract BLIND (exit ' + $lpc.ExitCode + '): ' + ((@($lpc.Output) | Select-Object -Last 1) -join '')) }
         else { Log ('live-price-contract: ' + ((@($lpc.Output) | Select-Object -Last 1) -join '')) }
+        # COMPLETENESS (stage 2, 2026-09-21): every published recipe post carries the stand-alone fill. A post back on the
+        # old injection-dependent fill is a live defect: its prices blank the day the site injection changes.
+        $lpx = Get-FanoutRecord 'live-price-completeness' $fanRecs
+        Log ('live-price-completeness exit ' + $lpx.ExitCode + ': ' + ((@($lpx.Output) | Select-Object -Last 1) -join ''))
+        if ($lpx.ExitCode -eq 1) {
+          $summary += 'REVIEW    live-price-completeness: a published recipe post is not on the stand-alone live-price fill - run meal-prep\pipeline\audit-live-price-contract.ps1 -LivePosts'
+          if (-not $NoAlert) { try { Send-Alert -Subject 'Live recipe prices: a published post is not on the stand-alone fill' -Body ('meal-prep\pipeline\audit-live-price-contract.ps1 -LivePosts found published recipe posts whose prices depend on the site-wide injection or carry an unstamped placeholder:' + "`n`n" + ((@($lpx.Output) | Where-Object { $_ -match '^  ' } | Select-Object -First 40) -join "`n")) -What 'LIVE-PRICE-COMPLETENESS' } catch {} }
+        } elseif ($lpx.ExitCode -ne 0) { $summary += ('REVIEW    live-price-completeness BLIND (exit ' + $lpx.ExitCode + ')') }
         $lrp = Get-FanoutRecord 'live-recipe-prices' $fanRecs
         Log ('live-recipe-prices exit ' + $lrp.ExitCode + ': ' + ((@($lrp.Output) | Select-Object -Last 1) -join ''))
         if ($lrp.ExitCode -ne 0) { $summary += ('REVIEW    live-recipe-prices exit ' + $lrp.ExitCode + ' - run meal-prep\pipeline\monitor-live-recipe-prices.ps1') }

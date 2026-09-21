@@ -63,8 +63,10 @@ the named memory or file.
   publish with `-RequireAsOf` before sending; allowlist is two exact membership phrases), the FEED CONTRACT
   `meal-prep/pipeline/audit-live-price-contract.ps1`, the LIVE MONITOR `meal-prep/pipeline/monitor-live-recipe-prices.ps1` (runs each
   live post's own script in jsdom against the deployed feed, daily in `check-ad-cycles`, pages as `live recipe
-  prices`), and the rollout hold `meal-prep/db/live-price-rollout.json` (stage `canary` holds every other new-shape republish
-  until Brad's browser check; stage 2 sets it to `catalogue`). A new live field needs a registry entry in
+  prices`), and the rollout hold `meal-prep/db/live-price-rollout.json` (stage `catalogue` since Brad approved stage 2 the same day: nothing is held, and a legacy placeholder is a
+  finding everywhere). **COMPLETENESS is checked daily**: `audit-live-price-contract.ps1 -LivePosts` reads every
+  published post from the Admin API and fails one without `fillLivePrices()`, still on the old fill behind
+  `if(!bar) return;`, or with an unstamped placeholder (lane `live-price-completeness`). A new live field needs a registry entry in
   `meal-prep/lib/render-tokens.ps1`, a branch in `fillLivePrices()` and a feed key, or all three checks refuse it.
   `design/PLAN-live-recipe-prices-2026-09-21.md`.
 

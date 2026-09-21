@@ -21,10 +21,16 @@
 #   A card still carrying the pre-2026-09-21 placeholder (no slug, no field) is LEGACY: counted, and a finding
 #   only once db\live-price-rollout.json reaches stage "catalogue" - so the contract tightens itself at stage 2.
 #
+# -LivePosts: THE COMPLETENESS CHECK (stage 2, 2026-09-21). Reads EVERY published recipe post (db\published-hashes.json)
+#   from the Ghost Admin API - the html Ghost serves a member, so both halves of the paywall - and FAILS a post that
+#   lacks the stand-alone fill (fillLivePrices), still carries the old fill that sat behind `if(!bar) return;` on the
+#   site-injected .mts-recipe-stats, or carries a placeholder with no slug, field or as-of stamp. A post the API does
+#   not return is a finding too. This is what keeps "every live recipe price fills without the site injection" true
+#   after the rollout; it prints live posts on the new fill OF how many are published.
 # WHICH FEED: grocery\out\smp-feed.json (what the next deploy ships) by default; -Live reads the deployed URL.
 # Exit: 0 clean, 1 findings, 3 could not evaluate. Last line: LIVE-PRICE-CONTRACT-COMPLETE.
 # Self-test: powershell -File meal-prep\pipeline\audit-live-price-contract.ps1 -SelfTest
-param([string]$Slugs = '', [string]$FeedPath = '', [switch]$Live, [string]$BuiltDir = '', [switch]$SelfTest)
+param([string]$Slugs = '', [string]$FeedPath = '', [switch]$Live, [string]$BuiltDir = '', [switch]$LivePosts, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $SelfTestLpc = $SelfTest.IsPresent       # before the dot-source: the gate lib's param block rebinds $SelfTest
 $lpcSlugs = $Slugs
@@ -82,6 +88,21 @@ function Test-TcLivePriceContract { param([string]$Html, [string]$Slug, $Feed, [
   return @{ legacy = $legacy; warnings = $warn; findings = $f }
 }
 
+# THE COMPLETENESS VERDICT for one live post's html. Pure, so the self-test drives it with the real old shape.
+$script:OLD_FILL = "forEach(function(live){live.textContent='~$'+(tev/nn2)"
+function Test-TcLivePostFill { param([string]$Html, [string]$Slug)
+  $f = @()
+  if ([string]::IsNullOrEmpty($Html)) { return @('the post has no html at all') }
+  if ($Html.IndexOf('function fillLivePrices') -lt 0) { $f += 'no stand-alone fill: fillLivePrices() is missing, so its prices depend on the site-wide injection or never fill' }
+  if ($Html.IndexOf($script:OLD_FILL) -ge 0) { $f += 'still carries the OLD fill behind if(!bar) return; on the site-injected .mts-recipe-stats' }
+  $spans = Get-TcLivePriceSpans (Remove-TcCode $Html)
+  if (-not $spans.Count) { $f += 'no live price placeholder' }
+  foreach ($sp in $spans) {
+    if ($sp.slug -ne $Slug -or -not $sp.field -or $sp.asof -notmatch '^\d{4}-\d{2}-\d{2}T') { $f += ('a placeholder is not the stamped stand-alone form: ' + $sp.raw); break }
+  }
+  return ,$f
+}
+
 if ($SelfTestLpc) {
   $script:fl = 0; $script:n = 0
   function T($m, $c, $g) { $script:n++; if ($c) { Write-Output ('ok    ' + $m) } else { Write-Output ('FAIL  ' + $m + '   got: ' + $g); $script:fl++ } }
@@ -114,8 +135,45 @@ if ($SelfTestLpc) {
   T 'MUST FIRE  the same legacy placeholder once the rollout reaches the catalogue' ($r.findings.Count -eq 1) ($r.findings -join ' | ')
   $r = Test-TcLivePriceContract -Html ((& $data $ok2) + '<p>no price here</p>') -Slug 'bowl' -Feed $feed -LegacyIsFinding $true
   T 'MUST FIRE  a card with no placeholder at all shows no price' ($r.findings.Count -eq 1) ($r.findings -join ' | ')
+  # ---- THE COMPLETENESS CHECK (-LivePosts) ----
+  $newSp = Format-TcLivePriceSpan -Slug 'bowl' -Value '2.10' -AsOf '2026-09-21T05:22:59'
+  $newPost = '<script>function fillLivePrices(){ /* ... */ }</script><p>' + $newSp + '</p>'
+  $r = Test-TcLivePostFill -Html $newPost -Slug 'bowl'
+  T 'MUST NOT FIRE  a live post with fillLivePrices and a stamped placeholder' ($r.Count -eq 0) ($r -join ' | ')
+  $oldPost = '<script>if(stat&&tev!==null){ stat.innerHTML=x; [].slice.call(document.querySelectorAll(''[data-tc-live-price]''))' + '.' + $script:OLD_FILL.Substring(0) + '.toFixed(2);}); }</script><p><span data-tc-live-price>current price loading</span></p>'
+  $r = Test-TcLivePostFill -Html $oldPost -Slug 'bowl'
+  T 'MUST FIRE  a live post still on the OLD injection-dependent fill (the pre-2026-09-21 card, verbatim shape)' ($r.Count -ge 2 -and ($r -join ' ') -match 'OLD fill' -and ($r -join ' ') -match 'no stand-alone fill') ($r -join ' | ')
+  $r = Test-TcLivePostFill -Html ('<script>function fillLivePrices(){}</script><p><span data-tc-live-price>current price loading</span></p>') -Slug 'bowl'
+  T 'MUST FIRE  the new fill beside a legacy placeholder (a half-migrated post)' ($r.Count -eq 1 -and $r[0] -match 'stamped') ($r -join ' | ')
+  $r = Test-TcLivePostFill -Html '' -Slug 'bowl'
+  T 'MUST FIRE  a post with no html' ($r.Count -eq 1) ($r -join ' | ')
   T 'CLEAN TWIN  the registry still carries cost_ps on its basis' ($script:TC_LIVE_PRICE_BASIS['cost_ps'] -eq 'feed-everyday-whole-package') $script:TC_LIVE_PRICE_BASIS['cost_ps']
   if ($script:fl -eq 0) { Write-Output ("audit-live-price-contract self-test PASS ($script:n cases)"); exit 0 } else { Write-Output ("audit-live-price-contract self-test FAIL ($script:fl of $script:n)"); exit 1 }
+}
+
+# ---------------- the completeness check over LIVE posts ----------------
+if ($LivePosts) {
+  . (Join-Path $repo 'lib\ghost-lib.ps1')
+  try { $pubL = Get-Content (Join-Path $mp 'db\published-hashes.json') -Raw -Encoding UTF8 | ConvertFrom-Json } catch { Write-Output 'LIVE-PRICE-COMPLETENESS: BLIND - db\published-hashes.json unreadable'; Exit-Guard -Name 'live-price-completeness' -Summary 'posts=0 blind=published' -Code 3 }
+  $want = @($pubL.PSObject.Properties.Name | Sort-Object)
+  $html = @{}
+  try {
+    $key = Get-GhostKey
+    for ($i = 0; $i -lt $want.Count; $i += 25) {
+      $batch = $want[$i..([math]::Min($i + 24, $want.Count - 1))]
+      $jwt = Get-GhostJWT -Key $key
+      $u = 'https://map-to-success.ghost.io/ghost/api/admin/posts/?filter=' + [uri]::EscapeDataString('slug:[' + ($batch -join ',') + ']') + '&formats=html&fields=slug,html,status&limit=50'
+      foreach ($p in (Invoke-GhostApi -Uri $u -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) }).posts) { $html[[string]$p.slug] = [string]$p.html }
+    }
+  } catch { Write-Output ('LIVE-PRICE-COMPLETENESS: BLIND - the Ghost Admin API could not be read: ' + $_.Exception.Message); Exit-Guard -Name 'live-price-completeness' -Summary ('posts=' + $want.Count + ' blind=ghost') -Code 3 }
+  $okN = 0; $bad = 0
+  foreach ($s in $want) {
+    if (-not $html.ContainsKey($s)) { $bad++; Write-Output ("  $s  published per the journal but the Admin API returned no post"); continue }
+    $r = Test-TcLivePostFill -Html $html[$s] -Slug $s
+    if ($r.Count) { $bad++; foreach ($x in $r) { Write-Output ("  $s  $x") } } else { $okN++ }
+  }
+  Write-Output ("live-price-completeness: {0} of {1} published recipe post(s) are on the stand-alone fill with stamped placeholders; {2} are not" -f $okN, $want.Count, $bad)
+  Exit-Guard -Name 'live-price-completeness' -Summary ("posts={0} on_new_fill={1} not={2}" -f $want.Count, $okN, $bad) -Code $(if ($bad) { 1 } else { 0 })
 }
 
 # ---------------- the audit ----------------

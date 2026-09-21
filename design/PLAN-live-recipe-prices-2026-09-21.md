@@ -190,6 +190,27 @@ reported 0 fields). Live, cache-busted: placeholders shipped with stamped fallba
 casserole spans at ~$5.87 against an Everyday tab of $82.13 / 14; 375px (Browser pane emulation) no horizontal
 scroll, stat line and intro read "~$5.87".
 
+## Stage 2 (2026-09-21, Brad approved: "Yes")
+
+- Rebuilt and stamped all 577 published cards. The strict build gate then REFUSED 5 of them for frozen price
+  claims the stage-1 corpus scan could not see (it read the legacy cards, where only `$` forms had been rewritten):
+  shop-smart tips "20 to 30 cents less per can", "near 90 cents a can", "under 70 cents a can", "under 70 cents a
+  pound", "about 30 cents each", live on john-wayne-casserole, johnny-marzetti-casserole,
+  slow-cooker-bbq-pulled-chicken-bowls, slow-cooker-kalua-pork-bowls and slow-cooker-teriyaki-pork-bowls.
+  Reworded in the spec without any figure (only `shop_smart` changed, verified per file).
+- Classified 574 non-canary posts, live lexical against the new card with the old-to-new template diff as the
+  known set: (a) 569 carry only the live-price change plus the composition bar and related footer; (b) 5, and
+  all five are the tip rewrites above. The ~375 specs `propagate` calls dirty change nothing a reader sees.
+- Published in waves of 40 through `engine\publish.ps1 -Slugs`, the live monitor run over each wave cache-busted,
+  stop on first failure. Rollout stage set to `catalogue`.
+- Completeness: `audit-live-price-contract.ps1 -LivePosts`, daily lane `live-price-completeness`.
+- Stage-1 defects fixed: (1) the daily chain logged "loop closed" for cards publish HELD, because publish exits 0
+  and names unshipped slugs only on `PUBLISH-UNSTAMPABLE`; `Get-TcPublishUnshipped` (gated-republish-lib, 5 cases)
+  now keeps them pending and says so. (2) `sync-recipesdb-cost` printed "costed COULD NOT READ" because
+  `foreach ($c in @(Read-JsonFile ...))` handed the loop the whole array as one row, so the partial-cost gate
+  had refused nothing on every run; the same trap sat twice in wave-preaudit. All three fixed, and
+  `ops\audit-readjson-inline-wrap.ps1` holds the shape at zero in `run-gates`.
+
 ## Residuals (owners)
 
 - R1 homepage "$2.40 each" quote in site-wide code injection (Ghost settings, browser-only write): Brad.
