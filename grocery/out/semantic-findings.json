@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-20 12:22",
+    "generated":  "2026-09-20 21:33",
     "board":  "comparison-2026-09-20.json",
-    "sidecar_generated":  "2026-09-20 12:22:21",
+    "sidecar_generated":  "2026-09-20 21:33:26",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -11,94 +11,15 @@
     "examined":  {
                      "board_pairs":  2629,
                      "corpus":  43803,
-                     "rule_invisible":  8676
+                     "rule_invisible":  8669
                  },
     "identity_count":  0,
-    "coverage_count":  8,
+    "coverage_count":  0,
     "identity":  [
 
                  ],
     "coverage":  [
-                     {
-                         "kind":  "coverage",
-                         "id":  "wild-rice",
-                         "commodity":  "Wild Rice",
-                         "store":  "Walmart",
-                         "product":  "Wild Black Rice by Gerbs - 2 LBS - Top 14 Food Allergen Free \u0026 NON GMO - Product of Canada",
-                         "cos":  0.6574,
-                         "score":  0.978304,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
-                         "store":  "Family Fare",
-                         "product":  "Arm \u0026 Hammer Detergent, Clean Meadow 100.5 Fl Oz",
-                         "cos":  0.6621,
-                         "score":  0.976464,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "cooked-jasmine-rice",
-                         "commodity":  "Cooked Jasmine Rice",
-                         "store":  "Baker\u0027s",
-                         "product":  "Ben\u0027s Original Ready Rice Cilantro Lime Flavored Rice, Easy Dinner Side, 8.5 oz Pouch",
-                         "cos":  0.6961,
-                         "score":  0.943442,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "maple-syrup",
-                         "commodity":  "Syrup (pancake / maple)",
-                         "store":  "Baker\u0027s",
-                         "product":  "Pearl Milling Company Syrup Original",
-                         "cos":  0.5788,
-                         "score":  0.940803,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "onion-soup-mix",
-                         "commodity":  "Onion Soup Mix (dry packets)",
-                         "store":  "Walmart",
-                         "product":  "Lipton Recipe Secrets Onion Dry Recipe Soup and Dip Mix, 2 O",
-                         "cos":  0.7626,
-                         "score":  0.923981,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "feminine-pads",
-                         "commodity":  "Feminine Pads",
-                         "store":  "Baker\u0027s",
-                         "product":  "Stayfree Classic Pads Without Wings Super Long Unscented",
-                         "cos":  0.6266,
-                         "score":  0.918782,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "feminine-pads",
-                         "commodity":  "Feminine Pads",
-                         "store":  "Walmart",
-                         "product":  "Stayfree Classic Pads Super Long without Wings, Unscented, 22 Ct",
-                         "cos":  0.578,
-                         "score":  0.915721,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "cooked-jasmine-rice",
-                         "commodity":  "Cooked Jasmine Rice",
-                         "store":  "Baker\u0027s",
-                         "product":  "Ben\u0027s Original Ready Rice Roasted Chicken Flavored Rice, Easy Dinner Side, 8.8 oz Pouch",
-                         "cos":  0.6721,
-                         "score":  0.907827,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     }
+
                  ],
     "coverage_excluded_count":  13,
     "coverage_excluded":  [

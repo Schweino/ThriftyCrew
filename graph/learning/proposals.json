@@ -228,6 +228,18 @@
     "target_id": "commodity:staple:dog-treats"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-09-20T21:37:33",
+    "id": "lp:10b096a1c6c1ec45ec0b",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cranberry\\\\s+cocktail\"}",
+    "queue_hash": "bee2e4752926dfe7dbfd4bcad563f8fd4756afff9cd5bd72566769535285019f",
+    "rationale": "Simply Cranberry Cocktail is a standard cranberry juice product (often 100% juice or cocktail). The word order 'Cranberry Cocktail' is distinct enough to avoid matching other berry cocktails.",
+    "status": "proposed",
+    "target_id": "cranberry-juice"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T18:29:19",
     "id": "lp:146ad8271ca09a7bef1d",
@@ -250,6 +262,18 @@
     "rationale": "Matches 'California Sun-Dried', 'Seedless', and 'California' raisins. These are commonly sold as golden or standard raisins. Anchors on 'raisins'.",
     "status": "rejected",
     "target_id": "golden-raisins"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-19T22:43:18",
+    "id": "lp:14cfd3c7c20feb33dafa",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"summit\\\\s+gridlock\\\\s+sunrise\"}",
+    "queue_hash": "e4f78a5c92e8e01ad8224f33efa925c3151029498817a86014b0563f5df25c58",
+    "rationale": "Matches Summit Gridlock Sunrise energy drink.",
+    "status": "proposed",
+    "target_id": "energy-drinks"
   },
   {
     "confidence": 0.9,
@@ -361,6 +385,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-19T22:43:18",
+    "id": "lp:20e530fe3823196939ff",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"premium\\\\s+dry\\\\s+doog\\\\s+food\"}",
+    "queue_hash": "e4f78a5c92e8e01ad8224f33efa925c3151029498817a86014b0563f5df25c58",
+    "rationale": "Matches the specific 'Premium Dry Doog Food' listing (noting the typo 'Doog').",
+    "status": "proposed",
+    "target_id": "dog-food-dry"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:210e1311bf6565e1b84a",
     "kind": "add_alias",
@@ -370,6 +406,18 @@
     "rationale": "the '<type> Beans, Refried' comma order, generalising the existing black-bean branch",
     "status": "applied",
     "target_id": "commodity:staple:refried-beans"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-20T21:37:33",
+    "id": "lp:216a2a237c6d05ad6e83",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"rib\\\\s+rack\\\\s+cajun\"}",
+    "queue_hash": "bee2e4752926dfe7dbfd4bcad563f8fd4756afff9cd5bd72566769535285019f",
+    "rationale": "Rib Rack Cajun Spice Rub is a Cajun seasoning.",
+    "status": "proposed",
+    "target_id": "cajun-creole-seasoning"
   },
   {
     "confidence": 0.9,
@@ -828,6 +876,18 @@
     "target_id": "commodity:staple:lotion"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-09-19T22:43:18",
+    "id": "lp:41be3a74cd035b85b7c4",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"dr\\\\s+pepper\\\\s+soda,?\\\\s*zero\\\\s+sugar\\\\s+2\\\\s*l\"}",
+    "queue_hash": "e4f78a5c92e8e01ad8224f33efa925c3151029498817a86014b0563f5df25c58",
+    "rationale": "Matches the specific Dr Pepper Zero Sugar 2L listing. Anchors on brand and size to ensure it maps to the correct commodity variant.",
+    "status": "proposed",
+    "target_id": "zero-sugar-soda-2l"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-24T21:32:21",
     "id": "lp:41c8f5a0f04aabf6a2f2",
@@ -850,6 +910,18 @@
     "rationale": "Matches 'Pineapple Tidbits'. Tidbits are a form of chunks/pieces. Anchors on 'pineapple' and 'tidbits'.",
     "status": "rejected",
     "target_id": "pineapple-chunks"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-19T22:43:18",
+    "id": "lp:433681471edd4acbcd4e",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"power\\\\s+force\\\\s+original\\\\s+blue\\\\s+dishwashing\\\\s+detergent\"}",
+    "queue_hash": "e4f78a5c92e8e01ad8224f33efa925c3151029498817a86014b0563f5df25c58",
+    "rationale": "Matches Power Force Original Blue Dishwashing Detergent.",
+    "status": "proposed",
+    "target_id": "dish-soap-liquid"
   },
   {
     "confidence": 0.9,
@@ -1045,6 +1117,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-20T21:37:33",
+    "id": "lp:5329341582e3a421d38f",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"brown\\\\s+jasmine\"}",
+    "queue_hash": "bee2e4752926dfe7dbfd4bcad563f8fd4756afff9cd5bd72566769535285019f",
+    "rationale": "Brown Jasmine rice is a type of brown rice.",
+    "status": "proposed",
+    "target_id": "brown-rice"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-09-18T21:41:24",
     "id": "lp:5376e132c72cd921fad5",
     "kind": "add_alias",
@@ -1054,6 +1138,18 @@
     "rationale": "Matches 'Dr Pepper Soda, Zero Sugar 2 L' specifically for the 2L size commodity.",
     "status": "proposed",
     "target_id": "zero-sugar-soda-2l"
+  },
+  {
+    "confidence": 0.8,
+    "created_at": "2026-09-20T21:37:33",
+    "id": "lp:538cfe7150b27b67ade5",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"gotham\\\\s+greens\\\\s+caesar\\\\s+salad\"}",
+    "queue_hash": "bee2e4752926dfe7dbfd4bcad563f8fd4756afff9cd5bd72566769535285019f",
+    "rationale": "Gotham Greens Caesar Salad is a pre-made salad kit/box.",
+    "status": "proposed",
+    "target_id": "caesar-salad-kit"
   },
   {
     "confidence": 0.95,
@@ -1261,6 +1357,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-19T22:43:18",
+    "id": "lp:60843341260ca535a20b",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"radiance\\\\s+automatic\\\\s+dishwashing\\\\s+gel\"}",
+    "queue_hash": "e4f78a5c92e8e01ad8224f33efa925c3151029498817a86014b0563f5df25c58",
+    "rationale": "Matches Radiance Automatic Dishwashing Gel.",
+    "status": "proposed",
+    "target_id": "dish-soap-liquid"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:6097fd8e553239a60153",
     "kind": "add_alias",
@@ -1342,6 +1450,18 @@
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
     "status": "applied",
     "target_id": "commodity:staple:maple-syrup"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-20T21:37:33",
+    "id": "lp:63eae68cd941c468121c",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"artichokes?\\\\s+h(rts|earts)\"}",
+    "queue_hash": "bee2e4752926dfe7dbfd4bcad563f8fd4756afff9cd5bd72566769535285019f",
+    "rationale": "Matches 'ARTICHOKES HRTS' and similar abbreviations for artichoke hearts.",
+    "status": "proposed",
+    "target_id": "artichoke-hearts-canned-jarred"
   },
   {
     "confidence": 0.85,
@@ -1488,6 +1608,18 @@
     "target_id": "frozen-cut-green-beans"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-09-20T21:37:33",
+    "id": "lp:6f3db405b2c39a07ccb1",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cento\\\\s+artichokes\"}",
+    "queue_hash": "bee2e4752926dfe7dbfd4bcad563f8fd4756afff9cd5bd72566769535285019f",
+    "rationale": "Cento Artichokes in Brine are typically hearts or whole artichokes intended for heart consumption. Given the commodity is 'Hearts', this is a likely match if the store lists them under that category.",
+    "status": "proposed",
+    "target_id": "artichoke-hearts-canned-jarred"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-27T21:32:30",
     "id": "lp:6f8834729c0dc143e588",
@@ -1594,6 +1726,18 @@
     "rationale": "Matches 'Great Value Canned Pineapple Tidbits' and 'Our Family Pineapple, Tidbits'. Tidbits are a form of chunks.",
     "status": "rejected",
     "target_id": "pineapple-chunks"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-20T21:37:33",
+    "id": "lp:775af2a2422cb1f24566",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"tony's\\\\s+cajun\"}",
+    "queue_hash": "bee2e4752926dfe7dbfd4bcad563f8fd4756afff9cd5bd72566769535285019f",
+    "rationale": "Tony's Cajun Kick Seasoning is a Cajun seasoning.",
+    "status": "proposed",
+    "target_id": "cajun-creole-seasoning"
   },
   {
     "confidence": 0.95,
@@ -1705,6 +1849,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-19T22:43:18",
+    "id": "lp:7d9e272d276c8e152afa",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"budget\\\\s+\\\\$aver\\\\s+assorted\\\\s+twin\\\\s+pops\"}",
+    "queue_hash": "e4f78a5c92e8e01ad8224f33efa925c3151029498817a86014b0563f5df25c58",
+    "rationale": "Matches the specific Budget $aver Assorted Twin Pops listing.",
+    "status": "proposed",
+    "target_id": "popsicles-ice-pops"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:7e4bc0627f8a41dc7f36",
     "kind": "add_alias",
@@ -1765,6 +1921,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-19T22:43:18",
+    "id": "lp:80f767dfd5da68733ac9",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"power\\\\s+force\\\\s+citrus\\\\s+dishwashing\\\\s+detergent\"}",
+    "queue_hash": "e4f78a5c92e8e01ad8224f33efa925c3151029498817a86014b0563f5df25c58",
+    "rationale": "Matches Power Force Citrus Dishwashing Detergent.",
+    "status": "proposed",
+    "target_id": "dish-soap-liquid"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-22T21:41:16",
     "id": "lp:81a977c15bd7b56bc4bc",
     "kind": "add_alias",
@@ -1786,6 +1954,18 @@
     "rationale": "the reduced-sugar dried-cranberry title that omits the word 'dried'",
     "status": "applied",
     "target_id": "commodity:staple:dried-cranberries"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-19T22:43:18",
+    "id": "lp:8241a2b2a83b920fdbad",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"dawn\\\\s+plat\\\\s+ezs\\\\s+fresh\\\\s+rain\"}",
+    "queue_hash": "e4f78a5c92e8e01ad8224f33efa925c3151029498817a86014b0563f5df25c58",
+    "rationale": "Matches the specific Dawn dish soap listing.",
+    "status": "proposed",
+    "target_id": "dish-soap-liquid"
   },
   {
     "confidence": 0.9,
@@ -1849,6 +2029,30 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-20T21:37:33",
+    "id": "lp:882e3f5247cd55ba67ca",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"organic\\\\s+gold\\\\s+grim\\\\s+beet\"}",
+    "queue_hash": "bee2e4752926dfe7dbfd4bcad563f8fd4756afff9cd5bd72566769535285019f",
+    "rationale": "Specific variety of fresh beet.",
+    "status": "proposed",
+    "target_id": "beets-fresh"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-20T21:37:33",
+    "id": "lp:8837f83dc1d3aa711d8e",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"hidden\\\\s+valley\\\\s+blue\\\\s+cheese\"}",
+    "queue_hash": "bee2e4752926dfe7dbfd4bcad563f8fd4756afff9cd5bd72566769535285019f",
+    "rationale": "Hidden Valley Blue Cheese Ranch is a dressing/dip that fits the Blue Cheese Dressing commodity.",
+    "status": "proposed",
+    "target_id": "blue-cheese-dressing"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:89f33f3a09173a97b4a9",
     "kind": "add_alias",
@@ -1858,6 +2062,18 @@
     "rationale": "the 'Seasoning Blend, [attribute,] Garlic & Herb' comma order; salt/marinade/sauce excludes remain",
     "status": "applied",
     "target_id": "commodity:staple:garlic-herb-seasoning"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-20T21:37:33",
+    "id": "lp:8b44d6f798e2c733f283",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cajun's\\\\s+choice\\\\s+cajun\"}",
+    "queue_hash": "bee2e4752926dfe7dbfd4bcad563f8fd4756afff9cd5bd72566769535285019f",
+    "rationale": "Cajun's Choice is a brand of Cajun seasoning.",
+    "status": "proposed",
+    "target_id": "cajun-creole-seasoning"
   },
   {
     "confidence": 0.9,
@@ -2062,6 +2278,18 @@
     "rationale": "'Air Spray' is the second retail name for a room air freshener",
     "status": "applied",
     "target_id": "commodity:staple:air-freshener"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-20T21:37:33",
+    "id": "lp:9a69a3450e0ac9a41b81",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"kinder's\\\\s+classic\\\\s+beef\\\\s+gravy\"}",
+    "queue_hash": "bee2e4752926dfe7dbfd4bcad563f8fd4756afff9cd5bd72566769535285019f",
+    "rationale": "Kinder's Classic Beef Gravy Mix is a dry packet brown gravy.",
+    "status": "proposed",
+    "target_id": "brown-gravy-mix-dry-packet"
   },
   {
     "confidence": 0.85,
@@ -2820,6 +3048,18 @@
     "target_id": "commodity:staple:kosher-salt"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-09-19T22:43:18",
+    "id": "lp:d5e49bfa4372cced5929",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"sweet\\\\s+baby\\\\s+ray's?\\\\s+buffalo\\\\s+wing\\\\s+sauce\"}",
+    "queue_hash": "e4f78a5c92e8e01ad8224f33efa925c3151029498817a86014b0563f5df25c58",
+    "rationale": "Matches Sweet Baby Ray's Buffalo Wing Sauce. Anchors on brand and specific product name.",
+    "status": "proposed",
+    "target_id": "buffalo-wing-sauce"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T18:29:19",
     "id": "lp:d5f1116494b0673bb6c5",
@@ -3144,6 +3384,18 @@
     "target_id": "commodity:staple:bratwurst"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-09-19T22:43:18",
+    "id": "lp:eff3f0f44fec69ee9f32",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"dole\\\\s+shredded\\\\s+carrot\"}",
+    "queue_hash": "e4f78a5c92e8e01ad8224f33efa925c3151029498817a86014b0563f5df25c58",
+    "rationale": "Matches Dole Shredded Carrot. Anchors on brand and food type.",
+    "status": "proposed",
+    "target_id": "shredded-carrots"
+  },
+  {
     "confidence": 0.85,
     "created_at": "2026-09-17T05:23:54",
     "id": "lp:f16c7165062308010606",
@@ -3298,6 +3550,18 @@
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
     "status": "applied",
     "target_id": "commodity:staple:lasagna-noodles"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-20T21:37:33",
+    "id": "lp:fa630ab681d5f81c2db6",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"amy's\\\\s+organic.*chili\"}",
+    "queue_hash": "bee2e4752926dfe7dbfd4bcad563f8fd4756afff9cd5bd72566769535285019f",
+    "rationale": "Amy's Organic Chili products are canned chili.",
+    "status": "proposed",
+    "target_id": "canned-chili"
   },
   {
     "confidence": 0.9,
