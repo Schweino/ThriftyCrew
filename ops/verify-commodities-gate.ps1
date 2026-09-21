@@ -14,9 +14,12 @@
   this shape once: ops/verify-bulk-edit.ps1 existed, was correct, and was flagged DEAD because
   nothing called it, so it became a pre-commit hook. Same repair lane, same reason.
 
-  WHAT IT ASKS, precisely: does grocery\out\audit\match-baseline.json record the rules_hash that the
-  STAGED rule files produce? Get-IdentityRulesHash is the same hash the identity table and guard 13
-  key on, so a single number answers "were these rules reviewed" for all three at once.
+  WHAT IT ASKS, precisely: does the grocery\out\audit\match-baseline.json THIS COMMIT CARRIES (the index
+  entry, not the file on disk) record the rules_hash that the STAGED rule files produce?
+  Get-IdentityRulesHash is the same hash the identity table and guard 13 key on, so a single number
+  answers "were these rules reviewed" for all three at once. Until 2026-09-21 it read the working-tree
+  baseline, so an accept nobody staged passed and the rules committed without it: 5 authored rule
+  commits in 11 days (plan-2026-09-21-7.json). Review and commit are one step now.
 
   IT HASHES THE STAGED BYTES, NOT THE WORKING TREE. A partial `git add -p` of commodities.json
   commits something the working tree does not contain, and hashing the file on disk would bless a
@@ -92,6 +95,31 @@ function Save-GitBlob {
   return ($p.ExitCode -eq 0)
 }
 
+function Get-RulesHashFromBaselineText {
+  <# Pure. The rules_hash a baseline records, read from its text ('' when it records none). The field sits at the
+     top of a 1.7 MB file, so a regex is enough and a full parse is not needed. #>
+  param([string]$Text)
+  if (-not $Text) { return '' }
+  $m = [regex]::Match($Text, '"rules_hash"\s*:\s*"([0-9A-Fa-f]*)"')
+  if ($m.Success) { return $m.Groups[1].Value }
+  return ''
+}
+
+function Get-IndexBaselineHash {
+  <# THE BASELINE AS IT WILL BE COMMITTED (2026-09-21, grocery/triage-plans/plan-2026-09-21-7.json). The index entry
+     - under pre-commit that is the index being committed, a pathspec commit's temporary one included - and never the
+     working-tree file. Until 2026-09-21 this gate read the WORKING TREE, so an -Accept that was never staged passed
+     it and the rules committed alone: measured over origin/main, 5 authored rule commits between 2026-09-10 and
+     2026-09-20 left the committed baseline behind the committed rules (a3952ca0f, 5d1968736, 6cd089c56, 469873e4d,
+     5d42fb944), and the last of them held the 2026-09-20 12:13 build and re-opened queue 2026-09-19-6f90ee. #>
+  param([string]$Repo, [string]$Rel, [string]$TmpDir)
+  $dst = Join-Path $TmpDir ('baseline-index-' + [guid]::NewGuid().ToString('N').Substring(0, 6) + '.json')
+  try {
+    if (-not (Save-GitBlob -Repo $Repo -Spec (':' + $Rel) -Dst $dst)) { return '' }
+    return (Get-RulesHashFromBaselineText ([IO.File]::ReadAllText($dst)))
+  } finally { Remove-Item -LiteralPath $dst -Force -ErrorAction SilentlyContinue }
+}
+
 if ($SelfTest) {
   # The byte-fidelity case below builds a temp repo, so the repository environment goes first - HERE and never on
   # the live path, which runs under pre-commit and judges the staged set through GIT_INDEX_FILE (lib\git-repo-env.ps1).
@@ -154,6 +182,28 @@ if ($SelfTest) {
     $missing = Save-GitBlob -Repo $g -Spec ':nosuchfile.json' -Dst (Join-Path $g 'x.json')
     T 'CLEAN TWIN  a file that is not staged reports failure rather than writing an empty one that hashes as real' `
       (-not $missing) 'reported success on a missing blob'
+    # ---- THE BASELINE THE COMMIT CARRIES, NOT THE ONE ON DISK (2026-09-21, plan-2026-09-21-7.json) --------------
+    # The 2026-09-20 shape, 5d42fb944: the author ran -Accept (the working-tree baseline records the new rules),
+    # never staged it, and committed the rules alone. The old gate read the working tree and passed it.
+    $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try {
+      [void](New-Item -ItemType Directory -Path (Join-Path $g 'grocery\out\audit') -Force)
+      [IO.File]::WriteAllText((Join-Path $g 'grocery\out\audit\match-baseline.json'), "{`n  ""generated"":  ""2026-09-19 20:55"",`n  ""rules_hash"":  ""725c4708c23a"",`n  ""names"":  {}`n}")
+      & git -C $g add grocery/out/audit/match-baseline.json 2>&1 | Out-Null
+      & git -C $g commit -q -m base 2>&1 | Out-Null
+      [IO.File]::WriteAllText((Join-Path $g 'grocery\out\audit\match-baseline.json'), "{`n  ""generated"":  ""2026-09-20 11:39"",`n  ""rules_hash"":  ""71d6567e44c4"",`n  ""names"":  {}`n}")
+    } finally { $ErrorActionPreference = $prevEap }
+    $ixUnstaged = Get-IndexBaselineHash -Repo $g -Rel 'grocery/out/audit/match-baseline.json' -TmpDir $g
+    $wtText = [IO.File]::ReadAllText((Join-Path $g 'grocery\out\audit\match-baseline.json'))
+    T 'MUST FIRE  an accept on disk that was never staged is refused: the gate reads the INDEX baseline (725c...), not the working tree (71d6...), so the rules 71d6... cannot commit alone (5d42fb944, 2026-09-20)' `
+      ((-not (Test-BaselineCoversRules '71d6567e44c4' $ixUnstaged)) -and ((Get-RulesHashFromBaselineText $wtText) -eq '71d6567e44c4')) ("index=$ixUnstaged")
+    $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try { & git -C $g add grocery/out/audit/match-baseline.json 2>&1 | Out-Null } finally { $ErrorActionPreference = $prevEap }
+    $ixStaged = Get-IndexBaselineHash -Repo $g -Rel 'grocery/out/audit/match-baseline.json' -TmpDir $g
+    T 'CLEAN TWIN  the same accept, STAGED with the rules, passes: review and commit are one step' `
+      (Test-BaselineCoversRules '71d6567e44c4' $ixStaged) ("index=$ixStaged")
+    T 'MUST FIRE  a baseline text that records no rules_hash yields none, so it is refused rather than read as covering anything' `
+      ((Get-RulesHashFromBaselineText '{"generated":"x","names":{}}') -eq '') (Get-RulesHashFromBaselineText '{"generated":"x","names":{}}')
   } finally { Remove-Item -LiteralPath $g -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($bad -eq 0) { Write-Output 'COMMODITIES-GATE SELF-TEST PASS'; Write-GuardComplete -Name 'commodities-gate' -Summary 'selftest ok'; exit 0 }
@@ -193,23 +243,34 @@ try {
   }
   . (Join-Path $repo 'grocery\identity-lib.ps1')
   try { $stagedHash = Get-IdentityRulesHash -GroceryRoot $tmpG } catch { $stagedHash = '' }
+  # THE BASELINE THIS COMMIT CARRIES (2026-09-21): the index entry, never the working-tree file. See Get-IndexBaselineHash.
+  $baseHash = Get-IndexBaselineHash -Repo $repo -Rel 'grocery/out/audit/match-baseline.json' -TmpDir $tmp
 } finally {
   Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-$baseHash = ''
+# The working-tree baseline is read only to NAME the commonest refusal: accepted on disk, never staged.
+$wtHash = ''
 $baseF = Join-Path $repo 'grocery\out\audit\match-baseline.json'
 if (Test-Path -LiteralPath $baseF) {
-  try { $baseHash = [string]((Get-Content $baseF -Raw | ConvertFrom-Json).rules_hash) } catch { $baseHash = '' }
+  try { $wtHash = Get-RulesHashFromBaselineText ([IO.File]::ReadAllText($baseF)) } catch { $wtHash = '' }
 }
 $sh = if ($stagedHash) { $stagedHash.Substring(0, [Math]::Min(12, $stagedHash.Length)) } else { '(unhashable)' }
 $bh = if ($baseHash) { $baseHash.Substring(0, [Math]::Min(12, $baseHash.Length)) } else { '(none recorded)' }
-Write-Output ("  staged rules_hash   : $sh")
-Write-Output ("  baseline rules_hash : $bh")
+Write-Output ("  staged rules_hash            : $sh")
+Write-Output ("  baseline rules_hash (staged) : $bh")
 
 if (Test-BaselineCoversRules $stagedHash $baseHash) {
-  Write-Output '  ok - the soundness baseline was accepted against exactly these rules'
+  Write-Output '  ok - the baseline this commit carries was accepted against exactly these rules'
   Exit-Guard -Name 'commodities-gate' -Summary "staged=$sh baseline=$bh ok" -Code 0
+}
+if (Test-BaselineCoversRules $stagedHash $wtHash) {
+  Write-Output ''
+  Write-Output 'commodities-gate: BLOCKED. You accepted these rules but did not STAGE the baseline, so the rules would commit'
+  Write-Output '  without their review and the next build would hold on the diff you already read (2026-09-20, 5d42fb944). Run:'
+  Write-Output '    git add grocery\out\audit\match-baseline.json'
+  Write-Output '  and commit it WITH the rules (a pathspec commit names it too: git commit -F <msg> -- <rules> grocery/out/audit/match-baseline.json).'
+  Exit-Guard -Name 'commodities-gate' -Summary "staged=$sh baseline=$bh accepted-not-staged BLOCKED" -Code 1
 }
 Write-Output ''
 Write-Output 'commodities-gate: BLOCKED. These matching rules have not been reviewed.'

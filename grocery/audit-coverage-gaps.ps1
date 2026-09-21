@@ -13,7 +13,10 @@
   Every gap now carries the REASON the engine itself gives for the store's absence (CLAIMED-BY /
   RULE-INVISIBLE / BASIS-NULL / BAND-DROPPED) - see the long note at the classification step for why the
   blanket "too-strict include" headline was false for 29 of 36 gaps on 2026-08-02.
-  Exit 2 if any ACTIONABLE gap (CLAIMED-BY / RULE-INVISIBLE / PRICED / unclassifiable); 3 = BLIND (zero raw
+  Since 2026-09-21 an engine REFUSAL is read as one (Get-EngineVerdictReason): WITHHELD (the provenance
+  contract), ENGINE-REFUSED (a named engine gate), RULED-WRONG, BASIS-NULL and BAND-DROPPED are quiet; a row
+  is PRICED only when the engine gave it a unit price; a refusal this audit does not know is UNKNOWN-VERDICT.
+  Exit 2 if any ACTIONABLE gap (CLAIMED-BY / RULE-INVISIBLE / PRICED / UNKNOWN-VERDICT / unclassifiable); 3 = BLIND (zero raw
   products for every store). A gap the engine explains with its own basis or band gate is reported and
   counted but does not page.
   This is what makes "a store that carries an item
@@ -86,6 +89,35 @@ function Note-Timeout($Rx, [string]$Name, [string]$Ctx) {
 }
 function Live-Probes($Probes) { @($Probes | Where-Object { $_ -and ([int]$reDead[$_.ToString()] -lt $MAXPATTERNTIMEOUTS) }) }
 
+# ---- AN ENGINE REFUSAL IS READ AS A REFUSAL, NEVER AS A PRICE (2026-09-21, grocery/triage-plans/plan-2026-09-21-7.json) ----
+# Classify knew two of the engine's refusals (UNPRICED, OUT-OF-BAND) and read EVERY other basis as "the engine
+# priced this row", actionable, under an alert that said "usually a too-strict include regex". The provenance
+# contract (2026-09-19) added the WITHHELD-* refusals, and on 2026-09-21 at 11:00, 397 of the 476 actionable gaps
+# were rows whose every candidate the contract had withheld (WITHHELD-UNPROVEN-STORE, -WRONG-STORE,
+# -UNPROVEN-CHANNEL, -SELF-SOURCED, -SHIP-ONLY, -WRONG-FORM): correct refusals, paged as rule problems. It is the
+# class of this alert's earlier closes too (NOT-INGESTED 09-06, AD-LINE and RULED-WRONG 09-07): a verdict the
+# auditor did not know fell through to actionable. So the read is POSITIVE now. compare-deals sets unit_price to
+# null on EVERY refusal (its basis block, 'UNPRICED' .. 'NOT-IN-STORE'), so a row is PRICED only when it carries a
+# unit price; a null price with a refusal named here gets that refusal's own quiet reason; a null price with one
+# this function does NOT know is UNKNOWN-VERDICT, still actionable, and says the AUDITOR needs teaching, never that
+# an include is too strict.
+function Get-EngineVerdictReason {
+  param([string]$Basis, $UnitPrice)
+  if ($null -ne $UnitPrice -and ([string]$UnitPrice) -ne '') {
+    return [pscustomobject]@{ reason = 'PRICED'; detail = ("the engine priced this row (basis '" + $Basis + "') yet the store is absent from the board - look downstream of matching"); actionable = $true }
+  }
+  if ($Basis -like 'WITHHELD-*') {
+    return [pscustomobject]@{ reason = 'WITHHELD'; detail = ("the provenance contract withheld this row ('" + $Basis + "': it cannot prove the store, channel, date or source it claims), so the store falls through to a row that can prove itself. The absence is the contract working; a fresh in-store read at the right store is capture work, never an include edit"); actionable = $false }
+  }
+  if ($Basis -eq 'UNPRICED') { return [pscustomobject]@{ reason = 'BASIS-NULL'; detail = "the engine matched it and could not express a price in this commodity's unit"; actionable = $false } }
+  if ($Basis -eq 'OUT-OF-BAND') { return [pscustomobject]@{ reason = 'BAND-DROPPED'; detail = 'the engine matched and priced it; the sanity band refused the number'; actionable = $false } }
+  if ($Basis -eq 'KNOWN-WRONG') { return [pscustomobject]@{ reason = 'RULED-WRONG'; detail = 'the engine refused it through known-wrong.json: a reasoner ruled this product wrong for this commodity'; actionable = $false } }
+  if (@('WRONG-PIECE-FORM', 'WRONG-PACK-FORM', 'IMPLAUSIBLE-LOW', 'WRONG-AISLE', 'NOT-IN-STORE') -contains $Basis) {
+    return [pscustomobject]@{ reason = 'ENGINE-REFUSED'; detail = ("the engine refused this row on purpose at its '" + $Basis + "' gate, so the store falls through to its next real row - not a rule gap"); actionable = $false }
+  }
+  return [pscustomobject]@{ reason = 'UNKNOWN-VERDICT'; detail = ("the engine refused this row with a verdict this audit does not know ('" + $Basis + "'), so it cannot say whether the absence is a rule gap: teach Get-EngineVerdictReason the verdict. This is not evidence of a too-strict include"); actionable = $true }
+}
+
 if ($SelfTest) {
   # Hermetic: reads no board, no capture, no commodities file. The founding bug is FROZEN here as the
   # must-fire fixture - the exact loosened shape of the quinoa-uncooked include that burned 829 CPU-minutes
@@ -135,6 +167,21 @@ if ($SelfTest) {
   if (-not (Test-Probe $rxOk 'Simple Truth Organic Quinoa' 'selftest|clean')) { Write-Output '  X clean twin failed to match real quinoa'; $bad++ }
   if (Test-Probe $rxOk $VICTIM 'selftest|clean') { Write-Output '  X clean twin matched a chicken breast'; $bad++ }
   if ($reTimeouts.Count -ne $beforeClean) { Write-Output '  X clean twin recorded a timeout'; $bad++ }
+  # ---- ENGINE REFUSALS ARE READ POSITIVELY (2026-09-21, plan-2026-09-21-7.json, queue 2026-09-19-2a0748) ----------
+  # FROZEN from the 2026-09-21 11:00 report: 'eggs @ Hy-Vee' and 'chicken-breast @ Fareway' carried only withheld
+  # candidates and paged as actionable PRICED under "usually a too-strict include regex".
+  $evCases = @(
+    @{ n = 'MUST NOT FIRE  a WITHHELD-WRONG-STORE row (Hy-Vee store 1465, retired 2026-08-21) is the contract working, not a rule gap'; b = 'WITHHELD-WRONG-STORE'; p = $null; r = 'WITHHELD'; a = $false },
+    @{ n = 'MUST NOT FIRE  a WITHHELD-UNPROVEN-STORE row (the chicken-breast @ Fareway shape) does not page'; b = 'WITHHELD-UNPROVEN-STORE'; p = $null; r = 'WITHHELD'; a = $false },
+    @{ n = 'MUST NOT FIRE  an engine gate refusal (NOT-IN-STORE) is engine-explained'; b = 'NOT-IN-STORE'; p = $null; r = 'ENGINE-REFUSED'; a = $false },
+    @{ n = 'MUST FIRE  a refusal this audit does not know pages as UNKNOWN-VERDICT, never as PRICED and never as a too-strict include'; b = 'SOME-NEW-GATE'; p = $null; r = 'UNKNOWN-VERDICT'; a = $true },
+    @{ n = 'CLEAN TWIN  a row the engine really priced still pages as PRICED (a real price absent from the board is still a finding)'; b = 'size 28 oz'; p = 0.2104; r = 'PRICED'; a = $true }
+  )
+  foreach ($ev in $evCases) {
+    $got = Get-EngineVerdictReason $ev.b $ev.p
+    if (([string]$got.reason -eq $ev.r) -and ([bool]$got.actionable -eq $ev.a)) { Write-Output ('  ok    ' + $ev.n) }
+    else { Write-Output ('  X     ' + $ev.n + '   got: ' + $got.reason + ' actionable=' + $got.actionable); $bad++ }
+  }
   if ($bad -eq 0) { Write-Output 'audit-coverage-gaps SELF-TEST PASS (founding ReDoS times out at the configured bound, breaker quarantines it, clean twin still decides)'; exit 0 }
   Write-Output ("audit-coverage-gaps SELF-TEST FAIL ({0} problem(s))" -f $bad); exit 1
 }
@@ -523,7 +570,9 @@ function Classify([string]$id, [string]$store, [string]$name) {
     }
     if ($b -eq 'UNPRICED')    { return [pscustomobject]@{ reason='BASIS-NULL';   detail=("the engine matched it and could not express a price in this commodity's unit (size '" + [string]$engineRow[$k].size_text + "')"); actionable=$false } }
     if ($b -eq 'OUT-OF-BAND') { return [pscustomobject]@{ reason='BAND-DROPPED'; detail=("the engine matched and priced it; the sanity band refused the number (ad " + [string]$engineRow[$k].price_text + ", size '" + [string]$engineRow[$k].size_text + "')"); actionable=$false } }
-    return [pscustomobject]@{ reason='PRICED'; detail=("the engine priced this row (basis '" + $b + "') yet the store is absent from the board - look downstream of matching"); actionable=$true }
+    # Everything else is read POSITIVELY by the engine's own unit price (see Get-EngineVerdictReason, 2026-09-21):
+    # it used to fall through to PRICED here whatever the basis said, including every provenance withhold.
+    return (Get-EngineVerdictReason $b $engineRow[$k].unit_price)
   }
   $ok = $store + '|' + (CgNorm $name)
   if ($engineOwner.ContainsKey($ok)) {
@@ -544,6 +593,13 @@ function Classify([string]$id, [string]$store, [string]$name) {
       $ownerBasis = if ($adLineOwner) { [string]$engineRow[(([string]$others[0]) + '|' + $store + '|' + (CgNorm $name))].basis } else { '' }
       if (($name -match '(?i),\s*[^,]+\s+or\s+') -and ($ownerBasis -eq 'UNPRICED')) {
         return [pscustomobject]@{ reason='AD-LINE'; detail=("this is an ad LINE naming several products, not a product: first-match-wins gave it to '" + ($others -join "', '") + "' and the engine could not price it there either (basis UNPRICED), so no commodity can price it whoever owns it"); actionable=$false }
+      }
+      # WITHHELD WHEREVER IT ROUTES (2026-09-21, plan-2026-09-21-7.json). The owner's row for this very name at this
+      # very store was withheld by the provenance contract, so moving the claim could not put the store on either
+      # cell: the absence is the contract's. The claim itself is kept in the detail, and a routing contest between
+      # two rules is audit-match-soundness's NEW CONTESTED condition, not a coverage gap.
+      if ($ownerBasis -like 'WITHHELD-*') {
+        return [pscustomobject]@{ reason='WITHHELD'; detail=("first-match-wins gave this name to '" + ($others -join "', '") + "', and the provenance contract withheld that row there ('" + $ownerBasis + "'), so no routing could publish it at this store until a provable read arrives"); actionable=$false }
       }
       return [pscustomobject]@{ reason='CLAIMED-BY'; detail=("first-match-wins gave this name to '" + ($others -join "', '") + "'"); actionable=$true }
     }

@@ -1460,7 +1460,8 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bscrub\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bplant[\\s-]*based\\b"
                     ]
     },
     {
@@ -4350,7 +4351,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\beau\\s+de\\s+(?:parfum|toilette|cologne)\\b"
                     ]
     },
     {
@@ -7707,7 +7709,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\bseasoning\\b"
                     ]
     },
     {
@@ -25785,7 +25788,8 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bcascade\\b",
-                        "arnold\\s+palmer"
+                        "arnold\\s+palmer",
+                        "\\bplant[\\s-]*based\\b"
                     ],
         "relax_global":  [
                              "\\bcreamer\\b"
@@ -73975,7 +73979,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\beau\\s+de\\s+(?:parfum|toilette|cologne)\\b"
                     ]
     },
     {

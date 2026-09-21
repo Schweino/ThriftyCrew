@@ -2048,11 +2048,13 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           $cgSig = (@($cgAct | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object) -join ';')
           $cgF = Join-Path $OutDir 'coverage-gap-alert.sig'
           $cgPrev = if (Test-Path $cgF) { ((Get-Content $cgF -Raw) + '').Trim() } else { '' }
-          $cgList = (@($cgAct | ForEach-Object { $_.commodity + ' @ ' + $_.store }) -join '; ')
+          # EACH GAP CARRIES ITS REASON (2026-09-21, plan-2026-09-21-7.json, queue 2026-09-19-2a0748). The body used to
+          # say "usually a too-strict include regex" about every row; on 2026-09-21 that was true of 5 of 476.
+          $cgList = (@($cgAct | ForEach-Object { $_.commodity + ' @ ' + $_.store + ' [' + [string]$_.reason + ']' }) -join '; ')
           Log ("coverage-gaps: $($cgAll.Count) gap(s), $($cgAct.Count) actionable - $cgList")
           $summary += "REVIEW    coverage gaps: $($cgAct.Count) actionable of $($cgAll.Count) store(s) dropped despite carrying the item - see coverage-gaps.json"
           if ($cgSig -ne $cgPrev -and (-not $NoAlert)) {
-            try { Send-Alert -Subject "Grocery: $($cgAct.Count) store(s) dropped from a commodity they carry - $asofS" -Body "audit-coverage-gaps found stores that HAVE a matching product but are missing from the board (usually a too-strict include regex): $cgList. Fix that commodity's include in commodities.json (or add a reviewed exception to coverage-gap-allowlist.json). $($cgAll.Count - $cgAct.Count) further gap(s) are engine-explained (BASIS-NULL / BAND-DROPPED) and are listed in the report without paging. Details: grocery/out/coverage-gaps.json." | Out-Null
+            try { Send-Alert -Subject "Grocery: $($cgAct.Count) store(s) dropped from a commodity they carry - $asofS" -Body "audit-coverage-gaps found $($cgAct.Count) store(s) missing from a commodity whose product they appear to carry, each tagged with WHY: [RULE-INVISIBLE] no include matches the name, so widen that commodity's include; [CLAIMED-BY] first-match-wins gave the name to another commodity, so add a release exclude or confirm the claim; [PRICED] the engine priced a row the board does not show, so look downstream of matching, not at a rule; [UNKNOWN-VERDICT] the engine refused the row with a verdict the audit does not know, so teach Get-EngineVerdictReason in audit-coverage-gaps.ps1 (not a rule gap). $cgList. A reviewed exception goes in coverage-gap-allowlist.json. $($cgAll.Count - $cgAct.Count) further gap(s) are engine-explained (withheld by the provenance contract, refused by an engine gate, BASIS-NULL, BAND-DROPPED, RULED-WRONG, AD-LINE) and are counted in the report without paging. Details: grocery/out/coverage-gaps.json." | Out-Null
                   if ($LASTEXITCODE -eq 0) { Set-Content -Path $cgF -Value $cgSig -Encoding UTF8; Log 'coverage-gap alert sent' } } catch { Log ('coverage-gap alert threw: ' + $_.Exception.Message) }
           } else { Log 'coverage-gaps unchanged since last alert - not re-alerting' }
         }

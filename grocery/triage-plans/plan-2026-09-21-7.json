@@ -1,0 +1,248 @@
+{
+  "generated": "2026-09-21T14:10:00",
+  "round": 1,
+  "lane": "money",
+  "board_week": "2026-09-21",
+  "queue_ids_seen": [
+    "2026-09-19-6f90ee",
+    "2026-09-19-2a0748"
+  ],
+  "note": "Item 3 of Brad's 'Do 1-3 in order' (2026-09-21): root-cause two of the most recurrent alert types, matching soundness first, then stores-dropped. Written and implemented by the money-lane developer in one pass (no separate reviewer round). The other 22 open queue ids are outside this dispatch and were not read as work. The daily scheduled triage is paused until 2026-09-24 and its two scheduled tasks were not touched. RETURN note: every prior close of BOTH types in the 30-day window sits in grocery/out/archive/triage-queue.archived-2026-09-17.json and none in grocery/triage-queue.json, so the queue-reading RETURN gate (triage-return-lib.ps1) sees neither item as a RETURN: the under-count plan-2026-09-21-6.json filed as weekly 2026-09-21-594c27. Both items carry prior_closes, prevention and fixture_occurrences anyway.",
+  "knowledge_consulted": [
+    "searched (knowledge-search --multi) 'match soundness baseline', 'coverage gaps withheld', 'rule change review accept', 'auditor input missing', 'provenance withheld rows'. Most hits were not applicable; used: data-quality-craft/applies-here.md 'Baselines and ratchets' (a baseline is raised only by an explicit -Accept, so an accept that never reaches the committed file is not a baseline move at all).",
+    "the dispatch's excerpts: data-quality-craft/applies-here.md 'First-match-wins and freshness ranking' (only an exclude releases a product; routing must be measured where names END UP), data-quality-craft/checks-and-thresholds.md section 7 (alert only where a human has to act: a change-review that pages the author about their own in-flight edit is the defect), .claude/rules/measurement.md (every rate with its denominator; one row per case).",
+    "memory audit-classifies-by-elimination (read in full): a classifier with no verdict for a state maps it onto the verdict at the end of its chain; audit-coverage-gaps was its founding row (NOT-INGESTED, 2026-09-06). Item B is the same class a third time, with the provenance contract's WITHHELD-* refusals as the unknown state.",
+    "memory triage-rebuild-reads-late-captures (read in full): diff crowns and cells against HEAD's public/board.json before publishing any triage rebuild.",
+    "prior plans read in full: plan-2026-09-21-5.json (per-condition alerts through Send-AlertConditions, retired aggregate registry entries) and plan-2026-09-21-6.json (the archive under-count; Q-fccb69-unit-of-triage)."
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-19-6f90ee",
+      "subject": "Grocery matching soundness - review needed",
+      "classification": "infra",
+      "claimed_by_earlier": [
+        {
+          "name": "GOYA Adobo All Purpose Seasoning with Bitter Orange, 16.5 oz",
+          "claimed_by": "oranges",
+          "index": 44,
+          "release_needed": "oranges.exclude += '\\bseasoning\\b' (in this change). The contest chain was exactly 'oranges > adobo-seasoning', so nothing between index 44 and adobo-seasoning at 544 claims it; the 8 oz sibling routes the same way"
+        }
+      ],
+      "claimed_by_earlier_note": "no include is widened in this item (the gate trips on the word 'include' in the prose); the only admits are the two Goya bitter-orange adobos reaching their existing owner through a release exclude, recorded above",
+      "evidence": [
+        "CENSUS (grocery/out/alert-census.jsonl): the type fired on 18 of the 30 days ending 2026-09-21 (19 counting 2026-08-22). Per-day condition, read from the counts line of every item and recurrence body in grocery/triage-queue.json plus both archives: MOVED/DROPPED on 6 of 18 days (08-27, 08-28, 08-29, 09-06, 09-19, 09-20); NEW-CONTESTED alone on 12 of 18 (08-25, 08-26, 08-30, 08-31, 09-01, 09-02, 09-03, 09-04, 09-05, 09-07, 09-08, 09-21); drift on 0 of 18.",
+        "BY CONSTRUCTION a MOVED/DROPPED line is a rule change: the audit's matcher (Get-Eligible) is a pure function of the name, commodities.json and global-exclude-lib.ps1, and a name absent today is skipped ('product no longer pulled this week - not a regression'), so new data can only ADD names; it can never move one.",
+        "EVERY MOVED/DROPPED DAY TRACED TO AN AUTHORED RULE EDIT whose review had not reached a commit (6 of 6): 08-27..08-29 the pork ruling (2676e46eb) and the 08-28 mints (c461daf4d onward), none carrying the baseline, accepted at be1623d20 on 08-29 15:01 after holding publish three days; 09-06 b28788fa4 at 05:45 with no accept (the gate's founding case), accepted a3762c41f 11:08; 09-19 17:29 the 20 honey-mustard dressings and Lunch Buddies pineapple are exactly 201fadc9a's dressing split and cup-pack exclude, which committed at 18:21 WITH its baseline, so at 17:29 the edit was uncommitted in the checkout the audit read; 09-20 12:18 the 3 Barissimo coffee syrups are 5d42fb944 (11:40, rules only), accepted and committed at 9b0565629 12:53 after the 12:13 build was held.",
+        "THE COMMIT GATE READ THE WRONG FILE. ops/verify-commodities-gate.ps1 compared the staged rules hash with Get-Content of the WORKING-TREE grocery/out/audit/match-baseline.json, so an -Accept on disk that was never staged passed it. MEASURED over origin/main (scratch sync-timeline.ps1: each commit's rule files and identity-lib.ps1 materialised from git, Get-IdentityRulesHash against the committed baseline's rules_hash): 39 commits touched a rule input or the baseline between the gate going live (f80162c00, 2026-09-07 16:06) and 2026-09-21; after 6 of them the committed baseline did not cover the committed rules: a3952ca0f (09-10 12:05, swept up the same minute by the bot's 98abb732f from the working tree), 5d1968736 and 6cd089c56 and the compare-deals-only 9c44c3a37 inside one 23-hour gap (09-11 13:21 to 09-12 12:31, closed by 484e04994), 469873e4d (09-19 11:58, a rebase merge the pre-commit hook never sees, re-accepted at 79ec9c355 the same minute) and 5d42fb944 (09-20). Positive control: all 33 commits that carried a baseline read IN-SYNC with the per-commit hash.",
+        "NEW-CONTESTED IS A REAL DEFECT DETECTOR, not noise: of the 9 new-contested-only days closed with notes (2026-08-30 to 2026-09-08), 6 found a misroute (09-02 bacon/broccoli/frozen-fruit/eggs fences, 09-03 Fareway Diced Mixed Vegetables, 09-04 four wrong products one -Accept from being baselined, 09-05 Honey Boy Pink Salmon on honey, 09-07 the BELVITA biscuit bar holding the breakfast-sandwiches CROWN, 09-08 a frozen Steamables bag holding a fresh cell), 2 of them live on the board.",
+        "TODAY'S 11 NEW-CONTESTED (soundness-report.json 11:34, none holding a cell, cell_by_contest=0), each read: 8 correct or ad lines (Alexia fries/tots ad line, Aloha Shoyu beef jerky, Bar X green chile beef jerky, the Bounce/Tide/Gain ad line OUT-OF-BAND, Bounty/Charmin ad line, Grapery Cherry Crush grapes, the Gustare Vita fuel-saver line, the Haagen-Dazs/Frollies line); 3 MISROUTES: 'Apple Brandy on the Rocks by Kilian Eau de Parfum, 1.7 fl. oz.' (a perfume) on apples, WITHHELD-UNPROVEN-CHANNEL; 'GOYA Adobo All Purpose Seasoning with Bitter Orange, 16.5 oz' on oranges ahead of its owner adobo-seasoning, WITHHELD-SHIP-ONLY; 'Califia plant-based half & half ... or milk 48 fl. oz.' on dairy milk, UNPRICED. Routing then found a baselined sibling ('Goya Adobo All Purpose Seasoning, Bitter Orange, 8 Oz' accepted onto oranges) and 4 'Ripple Kids Plant-Based Milk ... Dairy-Free Kids Milk Alternative with Pea Protein' rows on milk in the engine's 90-day candidates. None held a cell on comparison-2026-09-21 (every apples, oranges, milk, half-and-half and brandy cell is the genuine product).",
+        "REBUILD (check-ad-cycles.ps1 -NoPull -NoCommit -NoPublish -NoAlert from 13:29): guards exit 4, 'GUARDS QUARANTINED: 1 cell(s) held' (the known vegetable-oil / Sam's Club cell), every other hard invariant holds; audit-match-soundness on the rebuilt engine output: MOVED=0 DROPPED=0 new-contested=8 drift=0, the 3 misroutes gone from the contest list and the 8 remaining each re-read. POSITIVE CONTROL: the engine's candidates-2026-09-21.json (13:33) routes both Goya bitter-orange adobos to adobo-seasoning (expected adobo-seasoning, observed adobo-seasoning) and no candidate list carries the perfume, the Califia line or the four Ripple rows. -Accept: 36,783 names, 666 contested, rules_hash 8aa2a07a5f30, of which 14,685 names carried forward as absent-not-gone."
+      ],
+      "surface_fix": {
+        "what": "rule the three misroutes and their siblings with class-token release excludes, then review and accept the rest of today's new-contested set and commit the baseline WITH the rules",
+        "files": [
+          "grocery/commodities.json",
+          "grocery/out/audit/match-baseline.json"
+        ],
+        "exact_change": "apples.exclude += '\\beau\\s+de\\s+(?:parfum|toilette|cologne)\\b'; brandy.exclude += the same (the next claimant in the contest chain); oranges.exclude += '\\bseasoning\\b' (releases both Goya bitter-orange adobos to adobo-seasoning, index 544); milk.exclude and half-and-half.exclude += '\\bplant[\\s-]*based\\b'. Then audit-match-soundness.ps1, read every MOVED/DROPPED and NEW-CONTESTED line, -Accept, and one pathspec commit carrying commodities.json and match-baseline.json together."
+      },
+      "root_cause": "a rule edit and its matching review were two steps that could drift apart, and one alert type hid which of three conditions had fired. The commit gate compared the staged rules with the WORKING-TREE baseline, so an accept that never reached a commit passed it (5 authored rule commits in 11 days left the committed baseline behind the committed rules), and the daily audit read whatever state its checkout held (an in-flight edit on 2026-09-19). The same subject carried the rule-change diff, the arrival review (NEW-CONTESTED) and the matcher self-check (drift), so 12 arrival days scored as RETURNs of rule-review closes and no reader could tell an authored edit from a drift nobody authored",
+      "root_fix": {
+        "what": "make review and commit one step at the gate, and make the alert say which condition fired and why. The gate reads the baseline THIS COMMIT CARRIES (the index entry, a pathspec commit's temporary index included) and names the commonest refusal (accepted on disk, not staged). The audit files each condition as its own type through Send-AlertConditions, and a MOVED/DROPPED diff carries its cause read from git and the rules hash: RULE EDIT IN PROGRESS (the rule files differ from HEAD), RULE CHANGE UNREVIEWED (HEAD's rules hash is not the baseline's, or cannot be read), MOVED WITH NO RULE CHANGE (equal hashes: the matcher code or the baseline file moved, the one drift nobody authored). NEW CONTESTED and MATCHER DRIFT are their own types. Each is re-sent only when its own findings change.",
+        "files": [
+          "ops/verify-commodities-gate.ps1",
+          "grocery/audit-match-soundness.ps1",
+          "grocery/alert-registry.json"
+        ],
+        "exact_change": "verify-commodities-gate.ps1: Get-RulesHashFromBaselineText and Get-IndexBaselineHash (Save-GitBlob of ':grocery/out/audit/match-baseline.json'); the live verdict is Test-BaselineCoversRules(staged rules hash, INDEX baseline hash); an 'accepted but not staged' branch when the working-tree hash would have covered them; header rewritten. audit-match-soundness.ps1: pure Get-RegressionCause, Get-SoundnessConditions, Select-ChangedConditions, Read-SoundnessSigs; a CAUSE line on the console whenever MOVED/DROPPED > 0; the -Alert block sends Send-AlertConditions -SubjectPrefix 'Grocery matching soundness' with per-label signatures in soundness-alert-sig.txt (the old one-hash file reads as empty, so each current condition is sent once under its new type); exit codes unchanged (2 still holds publish). alert-registry.json: five review-class entries split_from plan-2026-09-21-7.json, the aggregate entry kept with a 'retired' line."
+      },
+      "leaves_open": "a rebase that merges two sessions' rule edits, or a --no-verify commit, can still land committed rules the committed baseline does not cover, because pre-commit never sees a rebase. The daily audit now pages that on its first occurrence under its own type ('grocery matching soundness rule change unreviewed'), but nothing refuses it at push",
+      "leaves_open_occurrences": "1 in the 39 rule-or-baseline commits on origin/main from 2026-09-07 16:06 to 2026-09-21 (469873e4d, a rebase result re-accepted by its author at 79ec9c355 the same minute, so it never paged)",
+      "leaves_open_followup": "2026-09-21-a25dc0",
+      "prior_closes": [
+        "2026-08-22-6827cf",
+        "2026-08-30-208089",
+        "2026-08-31-a9f51f",
+        "2026-09-01-e17a88",
+        "2026-09-02-4dfb1d",
+        "2026-09-03-7423a0",
+        "2026-09-04-2cd17a",
+        "2026-09-05-368c61",
+        "2026-09-06-4025dc",
+        "2026-09-07-0b232c",
+        "2026-09-08-2e59b3"
+      ],
+      "prior_closes_note": "all 11 found in grocery/out/archive/triage-queue.archived-2026-09-17.json and none in grocery/triage-queue.json. The archive also holds 2026-08-17-83c542 (this type, archived while still OPEN, outside the window).",
+      "prevention": {
+        "source": [
+          "ops/verify-commodities-gate.ps1",
+          "grocery/audit-match-soundness.ps1"
+        ],
+        "what": "the fix is at the rule-commit gate and at the emitting check, not in any rule file: a matching-rule commit now cannot pass pre-commit unless the baseline it carries was accepted against exactly the staged rules, so review happens at the author's desk; and the daily audit only files a MOVED/DROPPED diff with its cause, under a type of its own, so the arrival review and an authored in-flight edit can no longer return as each other",
+        "exact_change": "as root_fix.exact_change: Get-IndexBaselineHash in verify-commodities-gate.ps1 (the hook calls the script from the repo, so no hook reinstall is needed); Get-RegressionCause and Send-AlertConditions in audit-match-soundness.ps1"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "the five release excludes routed over three corpora: today's audit sweep (match-sweep-cache.json, 22,098 names), the accepted baseline (35,931 names, 30-day carry-forward) and the engine's candidates-2026-09-21.json 90-day union (the five commodities' 590 candidates), taking every name currently routed to apples, brandy, oranges, milk or half-and-half and testing the new token (an added exclude can change routing only where its commodity is the current winner); then the real audit after the rebuild. Verified after the rebuild: drift 0 and the positive control above; cell_effects [] checked on comparison-2026-09-21 and on origin/main's public/board.json (apples, brandy, oranges, milk and half-and-half cells all hold genuine products, e.g. oranges @ Fareway 'Navel Oranges' 0.99/lb)",
+        "affected_now": 8,
+        "names": [
+          "Apple Brandy on the Rocks by Kilian Eau de Parfum, 1.7 fl. oz. (apples -> unmatched)",
+          "GOYA Adobo All Purpose Seasoning with Bitter Orange, 16.5 oz (oranges -> adobo-seasoning)",
+          "Goya Adobo All Purpose Seasoning, Bitter Orange, 8 Oz (oranges -> adobo-seasoning; in the baseline, so a reviewed MOVED)",
+          "Califia plant-based half & half, 16 fl. oz., barista blend 32 fl. oz. or milk 48 fl. oz., $3.49 (milk -> unmatched)",
+          "Ripple Kids Plant-Based Milk ... (4 rows in the engine union, milk -> unmatched)"
+        ],
+        "risk": "the tokens are class words that no genuine product of those five commodities carries: 0 other names in any of the three corpora matched them. 'seasoning' on oranges would also release a real orange-flavoured seasoning, which belongs on a seasoning commodity anyway. brandy and half-and-half matched 0 names today; their excludes exist so the released names cannot fall to the next claimant.",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-21 12:50 to 13:40 against origin/main eb862af58, the queue and both archives, soundness-report.json of 11:34, candidates-2026-09-21.json of 10:50 and comparison-2026-09-21.json; the rebuild at 13:29 (check-ad-cycles -NoPull -NoCommit -NoPublish -NoAlert) re-measures the routing on the engine's own output before any accept",
+      "proof": {
+        "guard_or_fixture": "grocery/audit-match-soundness.ps1 -SelfTest (a frozen table with one row per occurrence of this type, plus cause, condition and signature cases) and ops/verify-commodities-gate.ps1 -SelfTest (a temp-repo case for the index read)",
+        "must_fire_case": "verify-commodities-gate: an accept on disk that was never staged (working tree 71d6567e44c4, index 725c4708c23a, the 5d42fb944 hashes) is REFUSED. audit-match-soundness: occurrence 6f90ee@09-19 (the honey-mustard drops with the rule files dirty) lands under exactly RULE EDIT IN PROGRESS; 6f90ee@09-20 (coffee drops, rules 71d6567e44c4 against baseline 725c4708c23a) under RULE CHANGE UNREVIEWED and NEW CONTESTED; 6827cf and 4025dc (baselines with no rules_hash) under RULE CHANGE UNREVIEWED; equal hashes read MOVED WITH NO RULE CHANGE; an unreadable rules hash holds as RULE CHANGE UNREVIEWED; every label derives a registered type key",
+        "clean_twin": "verify-commodities-gate: the same accept STAGED passes. audit-match-soundness: a DROPPED line still names its product and old commodity under the cause label after a cause line naming both hashes; a per-label signature map reads back. MUST NOT FIRE beside them: the nine new-contested-only occurrences (208089 .. 2e59b3, 6f90ee@09-21) land under NEW CONTESTED alone, never a rule-change label; an unchanged NEW CONTESTED set is not re-sent when a rule-change finding appears beside it",
+        "fixture_occurrences": [
+          "2026-08-22-6827cf",
+          "2026-08-30-208089",
+          "2026-08-31-a9f51f",
+          "2026-09-01-e17a88",
+          "2026-09-02-4dfb1d",
+          "2026-09-03-7423a0",
+          "2026-09-04-2cd17a",
+          "2026-09-05-368c61",
+          "2026-09-06-4025dc",
+          "2026-09-07-0b232c",
+          "2026-09-08-2e59b3",
+          "2026-09-19-6f90ee"
+        ],
+        "commands": [
+          "powershell -NoProfile -File grocery\\audit-match-soundness.ps1 -SelfTest",
+          "powershell -NoProfile -File ops\\verify-commodities-gate.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\audit-match-soundness.ps1",
+          "powershell -NoProfile -File grocery\\test-auditors.ps1 (pre-push leg)"
+        ]
+      },
+      "rollback": "revert the three script/registry hunks (the old gate and the one-type alert come back exactly) and the five exclude lines in commodities.json with the baseline commit that accepted them; no data migration. soundness-alert-sig.txt in the new map format reads as a changed signature to the old code, so a revert re-sends once, the fail-loud direction.",
+      "do_not_touch": [
+        "the MOVED/DROPPED exit 2 that holds publish",
+        "the -Accept verdict gate and -ForceAccept",
+        "Merge-BaselineCarryForward",
+        "any guard threshold or band",
+        "the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"
+      ],
+      "resolution_note": "Root cause measured over the 18 days this type fired in 30: 6 carried a MOVED/DROPPED diff and all 6 were authored rule edits whose review had not reached a commit (the commit gate read the working-tree baseline, so an unstaged accept passed it: 5 authored rule commits in 11 days left the committed baseline behind); the other 12 were the NEW-CONTESTED arrival review, a real defect detector that found a misroute on 6 of its 9 noted closes. Fixed at the gate (it reads the baseline the commit carries) and at the emitter (one type per condition, and a diff names its cause). Today's 11 new-contested were read: 8 correct, 3 misroutes ruled with class excludes (a perfume on apples, a bitter-orange adobo seasoning on oranges, plant-based milks on dairy milk), none holding a cell; the baseline accepted and committed with the rules. NEW CONTESTED will keep firing on arrival days and its returns are new arrivals by construction; whether a review intake's return should count as a failure is Brad's open Q-fccb69-unit-of-triage (plan-2026-09-21-6.json), not a new question.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "partly true, checked 2026-09-21. TRUE for the MOVED/DROPPED half: 6 of 6 such days were an authored rule edit whose review had not reached a commit, and by construction nothing else can move a name; the 21 honey-mustard dressings were exactly 201fadc9a's deliberate split, read uncommitted at 17:29. FALSE for the rest of the type: 12 of its 18 days were NEW-CONTESTED alone, the arrival review, which is a real defect detector (a misroute on 6 of its 9 noted closes), not a rule change firing; and 'accepted in the same change' needs the COMMIT to carry the baseline, which the gate never checked.",
+      "deviation": "(i) Narrower than 'the daily alert only fires on a drift nobody authored': the gate makes a rule COMMIT carry its review, but a rebase or a --no-verify commit can still land out-of-sync rules (1 of 39 commits, 469873e4d), so the daily audit names that cause instead of refusing it; leaves_open and its weekly owner say so. (ii) A cause the plan did not measure, found on this plan's own -Accept: 14,685 names are carried forward with the route they had when last seen (the 8 oz Goya adobo among them), so equal rules hashes do not prove nobody authored a move; Get-RegressionCause now counts carried-forward names and files them under RULE CHANGE UNREVIEWED, fixtured. (iii) No republish: the rule change moves no cell (all 8 affected names checked against the rebuilt board and the live one) and the rebuild's other differences are late captures no plan measured (memory triage-rebuild-reads-late-captures); the 08:00 chain publishes them through its own gates. The two public files the rebuild's export-feed rewrote (public/smp-feed.json, public/share/omaha-drops.png) were restored to HEAD so no bot commit can ship them unread.",
+      "shipped_commit": "this plan's own commit; resolver: git log --diff-filter=A --format=%h -- grocery/triage-plans/plan-2026-09-21-7.json",
+      "queue_close": "2026-09-19-6f90ee closed through triage-close.ps1 as confirmed at 2026-09-21T14:04:09"
+    },
+    {
+      "queue_id": "2026-09-19-2a0748",
+      "subject": "Grocery: 517 store(s) dropped from a commodity they carry - 2026-09-19",
+      "classification": "infra",
+      "claimed_by_earlier": [],
+      "claimed_by_earlier_note": "no matching rule changes in this item: the word 'include' appears only because the alert's reasons describe include repairs",
+      "evidence": [
+        "CENSUS: fired on 15 of the 30 days ending 2026-09-21; this item's own run: 517 (09-19 16:45), 489 and 490 (09-20), 476 (09-21 08:20). The count jumped to 517 on the afternoon the provenance contract landed (a95c6fed4, 2026-09-19 10:07).",
+        "THE CLASSIFIER READ EVERY ENGINE REFUSAL IT DID NOT KNOW AS A PRICE. audit-coverage-gaps.ps1 Classify knew UNPRICED (BASIS-NULL) and OUT-OF-BAND (BAND-DROPPED) and ended in 'return PRICED ... the engine priced this row ... actionable=$true' for any other basis. compare-deals sets unit_price to null on EVERY refusal (UNPRICED, WITHHELD-<why>, KNOWN-WRONG, WRONG-PIECE-FORM, OUT-OF-BAND, IMPLAUSIBLE-LOW, WRONG-PACK-FORM, WRONG-AISLE, NOT-IN-STORE), so the auditor told the reader 'the engine priced this row' about rows the engine had refused, and the alert body called all of them 'usually a too-strict include regex'.",
+        "MEASURED on out/coverage-gaps.json of 11:00 (497 gaps, 476 actionable = the 08:20 alert's 476), candidate by candidate: WITHHELD-UNPROVEN-STORE 398, WITHHELD-WRONG-STORE 371, WITHHELD-UNPROVEN-CHANNEL 93, WITHHELD-SELF-SOURCED 22, WITHHELD-SHIP-ONLY 1, WITHHELD-WRONG-FORM 1, WRONG-AISLE 1; 397 of the 454 PRICED gaps had EVERY candidate withheld.",
+        "PAIRED RE-CLASSIFICATION of the same 497 gaps under the new rule (scratch cg-before-after-1100.json, one row per gap per arm): actionable 476 -> 41. By WHY each of the 476 was absent: withheld by the provenance contract 414 (87.0 percent); refused by another engine gate the auditor misread 21 (4.4 percent: BASIS-NULL 14, RULED-WRONG 3, BAND-DROPPED 2, AD-LINE 1, ENGINE-REFUSED 1); refused by a rule 41 (8.6 percent: CLAIMED-BY 36, first-match gave the name to another commodity, and RULE-INVISIBLE 5, the only genuinely too-strict includes, 1.1 percent); unexplained 0 (0 PRICED with a real price, 0 unknown verdicts). The 435 that leave paging by store: Fareway 225, Hy-Vee 145, Sam's Club 50, Family Fare 7, Baker's 6, Walmart 2.",
+        "SAME CLASS AS THE EARLIER CLOSES: 2026-09-06-39933e ('the audit read not ingested as no rule can see it', NOT-INGESTED added) and 2026-09-07-0e9482 (multi-product ad lines and a product a reasoner had ruled wrong, AD-LINE and RULED-WRONG added). Each close taught the classifier one more verdict by name and left the fall-through actionable, so the next new engine verdict paged again.",
+        "PER-CONDITION PATTERN (plan-2026-09-21-5.json), measured and NOT applied: after the fix every paging gap on the 11:00 set is a matching-rule question for commodities.json (CLAIMED-BY or RULE-INVISIBLE), one repair lane and one review act; the one reason with a different owner (UNKNOWN-VERDICT, the auditor needs teaching) paged 0 times. The body now tags every gap with its reason and its repair, which is what the split would have bought a reader, without minting new types.",
+        "REBUILD 13:44 (the new classifier in the chain's own coverage lane): 497 gaps, 24 actionable (18 CLAIMED-BY, 6 RULE-INVISIBLE, 0 PRICED, 0 UNKNOWN-VERDICT), 473 quiet (WITHHELD 431: Fareway 224, Hy-Vee 138, Sam's Club 55, Family Fare 6, Baker's 6, Walmart 2; BASIS-NULL 27; BAND-DROPPED 10; RULED-WRONG 3; AD-LINE 1; ENGINE-REFUSED 1). The owner-withheld branch took CLAIMED-BY from 36 in the paired simulation to 18. None of the 24 claimed or unmatched names holds a cell on comparison-2026-09-21 or on origin/main's public/board.json."
+      ],
+      "surface_fix": {
+        "what": "the alert says which: each gap in the body carries its reason tag and the body names each reason's repair, instead of 'usually a too-strict include regex'",
+        "files": [
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "exact_change": "the COVERAGE-GAP-ALERT region builds $cgList as 'commodity @ store [REASON]'; the Send-Alert body lists what RULE-INVISIBLE, CLAIMED-BY, PRICED and UNKNOWN-VERDICT each mean and which engine-explained reasons are counted without paging. Subject, type key and the actionable-pairs signature are unchanged, so test-auditors u073 still runs the real region."
+      },
+      "root_cause": "the auditor classified by elimination: it named two of the engine's nine refusal verdicts and read every other basis as 'the engine priced this row', actionable, so each new engine verdict (NOT-INGESTED 09-06, AD-LINE and RULED-WRONG 09-07, the provenance contract's WITHHELD-* on 09-19) paged as a too-strict include until a close taught it that one verdict by name",
+      "root_fix": {
+        "what": "read the engine's verdict POSITIVELY: a row is PRICED only when the engine gave it a unit price; a null price with a known refusal gets that refusal's own quiet reason (WITHHELD for any WITHHELD-* verdict, ENGINE-REFUSED for the named engine gates, RULED-WRONG for KNOWN-WRONG, BASIS-NULL, BAND-DROPPED); a null price with a verdict the audit does not know is UNKNOWN-VERDICT, still actionable, and says the AUDITOR needs teaching, never that an include is too strict. A CLAIMED-BY whose owner row at that store is itself withheld is WITHHELD too, because moving the claim could not publish it",
+        "files": [
+          "grocery/audit-coverage-gaps.ps1"
+        ],
+        "exact_change": "new pure Get-EngineVerdictReason([string]$Basis, $UnitPrice) above the self-test; Classify's fall-through returns Get-EngineVerdictReason $b $engineRow[$k].unit_price; the CLAIMED-BY branch returns WITHHELD when $ownerBasis is WITHHELD-*; header lists the new reasons; five self-test cases"
+      },
+      "leaves_open": "the corrected audit pages 24 genuine rule questions on the 13:44 rebuild (18 CLAIMED-BY, 6 RULE-INVISIBLE), none holding a wrong cell; several are the claim being right and the rest are latent misroutes (a pork tenderloin and a tomato paste on garlic, cherry frosting on cherries, Puffs Plus Lotion on lotion, gochujang on mac-and-cheese, sun-dried tomatoes on turkey-lunchmeat) held off the board by band or unit",
+      "leaves_open_occurrences": "24 gaps on the 2026-09-21 13:44 rebuild (476 before the fix on the same day)",
+      "leaves_open_followup": "2026-09-21-b96f21",
+      "prior_closes": [
+        "2026-08-22-14416d",
+        "2026-08-31-ad3b81",
+        "2026-09-01-4a481e",
+        "2026-09-02-995502",
+        "2026-09-06-39933e",
+        "2026-09-07-0e9482"
+      ],
+      "prior_closes_note": "all 6 found in grocery/out/archive/triage-queue.archived-2026-09-17.json and none in grocery/triage-queue.json. The archive also holds 2026-09-12-a214ad of this type, archived while still OPEN (count 2), so it is an occurrence and not a close.",
+      "prevention": {
+        "source": [
+          "grocery/audit-coverage-gaps.ps1",
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "what": "the fix is at the emitting check's classifier and its alert, not in any rule file: an engine refusal can no longer read as a price, a verdict the audit does not know says so in its own words instead of accusing an include, and the page names each gap's reason",
+        "exact_change": "as root_fix.exact_change and surface_fix.exact_change"
+      },
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "the 497 gaps of out/coverage-gaps.json 2026-09-21 11:00 re-classified pairwise under the new rule from each candidate's recorded engine basis; then the real audit on the 13:29 rebuild",
+        "affected_now": 435,
+        "names": [
+          "435 of 476 actionable gaps stop paging: 414 WITHHELD, 14 BASIS-NULL, 3 RULED-WRONG, 2 BAND-DROPPED, 1 AD-LINE, 1 ENGINE-REFUSED; 41 still page (36 CLAIMED-BY, 5 RULE-INVISIBLE)"
+        ],
+        "risk": "a withheld row stops paging here, so a store whose rows are all withheld is no longer named by THIS alert; the provenance side still watches it (coverage-cycle's withheld-row checks, Hy-Vee's pull asking first for rows withheld only for its store). A real price absent from the board still pages as PRICED, and an unknown refusal still pages. No board cell, rule or feed moves: the audit is advisory and runs after the board is built.",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-21 13:30 to 13:45 against out/coverage-gaps.json of 11:00 and candidates-2026-09-21.json of 10:50; the 13:29 rebuild's coverage lane runs the new classifier on the fresh board",
+      "proof": {
+        "guard_or_fixture": "grocery/audit-coverage-gaps.ps1 -SelfTest (five frozen verdict cases beside the ReDoS cases) and grocery/test-auditors.ps1 u073 (runs the real COVERAGE-GAP-ALERT region against a frozen gap file)",
+        "must_fire_case": "a refusal the audit does not know ('SOME-NEW-GATE', null price) pages as UNKNOWN-VERDICT, never PRICED and never a too-strict include",
+        "clean_twin": "a row the engine really priced ('size 28 oz', 0.2104) still pages as PRICED. MUST NOT FIRE beside it: WITHHELD-WRONG-STORE (the Hy-Vee store-1465 shape), WITHHELD-UNPROVEN-STORE (chicken-breast @ Fareway) and NOT-IN-STORE rows do not page",
+        "fixture_occurrences": [
+          "2026-08-22-14416d",
+          "2026-08-31-ad3b81",
+          "2026-09-01-4a481e",
+          "2026-09-02-995502",
+          "2026-09-06-39933e",
+          "2026-09-07-0e9482",
+          "2026-09-19-2a0748"
+        ],
+        "commands": [
+          "powershell -NoProfile -File grocery\\audit-coverage-gaps.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\test-auditors.ps1 (pre-push leg; u073)"
+        ]
+      },
+      "rollback": "revert the audit-coverage-gaps.ps1 and check-ad-cycles.ps1 hunks; the report and the alert return to the old reasons with no migration",
+      "do_not_touch": [
+        "commodities.json for this item",
+        "the coverage-gap allowlist",
+        "the actionable-pairs signature and the region markers test-auditors extracts",
+        "the provenance contract"
+      ],
+      "resolution_note": "Root cause measured on the 476 actionable gaps of 2026-09-21: 414 (87 percent) were rows the provenance contract had correctly withheld and 21 more were other engine refusals, all read as 'the engine priced this row' because the audit's classifier fell through to PRICED for any verdict it did not know; only 5 (1.1 percent) were genuinely too-strict includes. The classifier now reads the engine's own unit price: refusals get their own quiet reason, an unknown verdict says the audit needs teaching, a claim whose row is withheld anyway is withheld, and the page tags every gap with its reason. On the rebuild the same 497 gaps page 24, not 476; those 24 genuine rule questions are filed weekly as 2026-09-21-b96f21.",
+      "publish_batch": "none",
+      "status": "deviated",
+      "premise_verified": "true, checked 2026-09-21 on the 11:00 gap set and the 13:44 rebuild: 414 of 476 actionable gaps (87.0 percent) were rows the provenance contract had withheld (WITHHELD-UNPROVEN-STORE, -WRONG-STORE, -UNPROVEN-CHANNEL, -SELF-SOURCED, -SHIP-ONLY, -WRONG-FORM), 21 (4.4 percent) other engine refusals the audit misread, 41 (8.6 percent) rule questions of which 5 (1.1 percent) genuinely too-strict includes, 0 unexplained. The dispatch's facts held: Hy-Vee's rows are dominated by WITHHELD-WRONG-STORE (store 1465) and Fareway's by WITHHELD-UNPROVEN-STORE.",
+      "deviation": "(i) The per-condition split of plan-2026-09-21-5.json was measured and not applied (evidence, PER-CONDITION PATTERN): after the fix every paging gap is a commodities.json question with one repair lane, so the page tags each gap with its reason and its repair instead of minting new types. (ii) Beyond the first measurement: a CLAIMED-BY whose owner row at that store is itself withheld is WITHHELD, because moving the claim could not publish it (CLAIMED-BY 36 -> 18 on the rebuild). (iii) The residual is filed under this alert's own type on purpose, so the next chain's page of the same 24 gaps absorbs into 2026-09-21-b96f21 instead of minting a duplicate.",
+      "shipped_commit": "this plan's own commit; resolver: git log --diff-filter=A --format=%h -- grocery/triage-plans/plan-2026-09-21-7.json",
+      "queue_close": "2026-09-19-2a0748 closed through triage-close.ps1 as false-alarm at 2026-09-21T14:04:10"
+    }
+  ],
+  "ship_sequence": [
+    "measure first: per-day condition of the soundness type from the queue and both archives; the committed-baseline sync timeline over origin/main; the 11:00 coverage-gap set candidate by candidate",
+    "edit audit-match-soundness.ps1, alert-registry.json, verify-commodities-gate.ps1; their -SelfTest (MUST be 0)",
+    "read today's 11 new-contested; add the five release excludes to commodities.json after routing them over the sweep, the baseline and the engine union",
+    "edit audit-coverage-gaps.ps1 (Get-EngineVerdictReason) and check-ad-cycles.ps1 (the body); audit-coverage-gaps -SelfTest (MUST be 0)",
+    "check-ad-cycles.ps1 -NoPull -NoCommit -NoPublish -NoAlert (the daily chain in its own order: repair-multipack-sizes -Apply, compare-deals, links, name-drift, prune, overrides, guards, quarantine, export-feed), then read guards' verdict (0 or 4)",
+    "audit-match-soundness.ps1: read every MOVED/DROPPED/NEW-CONTESTED line, then -Accept",
+    "crown and cell diff of the rebuilt board against origin/main:public/board.json (memory triage-rebuild-reads-late-captures) before any publish decision",
+    "validate-triage-plan.ps1 -OpenIds, commit by pathspec (rules + baseline together, scripts, registry, plan), push through the pre-push gate (test-auditors leg)",
+    "publish only if the crown diff is clean; verify one cell on the LIVE board with a cache-busting query",
+    "close both queue ids through triage-close.ps1, mint the residual owners weekly, validate-triage-plan.ps1 -Closing, commit the closed plan"
+  ],
+  "open_questions_for_brad": []
+}

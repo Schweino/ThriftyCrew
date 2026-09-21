@@ -188,6 +188,129 @@ function Get-SoundnessItems {
   return ,($a.ToArray())
 }
 
+# ---- ONE CONDITION PER CAUSE (2026-09-21, grocery/triage-plans/plan-2026-09-21-7.json, queue 2026-09-19-6f90ee) ----
+# This audit used to file three different things under ONE alert type, 'Grocery matching soundness - review
+# needed': a MOVED/DROPPED diff (a rule change nobody had accepted), NEW-CONTESTED names (products arriving
+# that two rules both admit) and DRIFT (this matcher against the engine). Measured over the 18 days it fired
+# in the 30 ending 2026-09-21: 6 carried MOVED/DROPPED and all 6 traced to an AUTHORED rule edit whose accept
+# had not reached a commit (08-27..08-29 the pork ruling and the 08-28 mints, 09-06 b28788fa4, 09-19 201fadc9a
+# still uncommitted in the checkout the chain read, 09-20 5d42fb944 committed without its baseline); 12
+# carried NEW-CONTESTED alone, a real arrival review that found a misroute on 6 of the 9 of those days closed
+# with notes (two live on the board: the 09-07 BELVITA crown, the 09-08 Steamables cell); DRIFT fired on 0.
+# One type for all three scored every arrival day as a RETURN of a rule-review close, and told the reader
+# nothing about which of the three had happened. So each is its own condition now (Send-AlertConditions in
+# alert-lib.ps1), and a MOVED/DROPPED diff names its CAUSE, read from git and the rules hash, never assumed.
+function Get-RegressionCause {
+  <# Pure. Why did names move or drop against the reviewed baseline? The matcher is a pure function of the
+     name, commodities.json and global-exclude-lib.ps1 (a name absent today is skipped), so a MOVED/DROPPED
+     line can only come from a rule edit, a matcher-code edit, or a baseline that is not the one accepted
+     against these rules. $RulesDirty = the rule files in this checkout differ from HEAD. #>
+  # $CarriedCount = how many of the moved or dropped names the baseline CARRIED FORWARD (last_seen before its own
+  # accept date): Merge-BaselineCarryForward keeps an absent name with the route it had when last seen, so a rule
+  # change made while it was absent is one no accept ever reviewed for it, even when the two hashes agree. Found
+  # 2026-09-21 on this plan's own accept: 'Goya Adobo All Purpose Seasoning, Bitter Orange, 8 Oz' stayed recorded
+  # as oranges after the rules that route it to adobo-seasoning were accepted, because it was absent that day.
+  param([bool]$RulesDirty, [string]$RulesHash, [string]$BaselineHash, [int]$CarriedCount = 0)
+  $rs = ([string]$RulesHash); if ($rs.Length -gt 12) { $rs = $rs.Substring(0, 12) }
+  $bs = ([string]$BaselineHash); if ($bs.Length -gt 12) { $bs = $bs.Substring(0, 12) }
+  if ($RulesDirty) {
+    return [pscustomobject]@{ label = 'RULE EDIT IN PROGRESS'; why = 'the matching-rule files in this checkout differ from HEAD, so these lines are the effect of an edit nobody has committed yet (the 2026-09-19 17:29 shape: 201fadc9a''s dressing split, committed with its baseline at 18:21). Its author reviews them and runs -Accept; ops/verify-commodities-gate.ps1 refuses the commit until the accepted baseline is STAGED with the rules. Publish holds meanwhile, which is right: these rules are unreviewed.' }
+  }
+  if (-not $RulesHash) {
+    return [pscustomobject]@{ label = 'RULE CHANGE UNREVIEWED'; why = 'the rules hash could not be computed here (identity-lib.ps1 unreadable), so the cause could not be read; treated as an unreviewed rule change, the reading that holds publish.' }
+  }
+  if (-not $BaselineHash) {
+    return [pscustomobject]@{ label = 'RULE CHANGE UNREVIEWED'; why = 'the baseline records no rules_hash, so it cannot say which rules it reviewed. Review the lines, -Accept, and commit grocery\out\audit\match-baseline.json.' }
+  }
+  if ($RulesHash -ne $BaselineHash) {
+    return [pscustomobject]@{ label = 'RULE CHANGE UNREVIEWED'; why = ('the committed rules (rules_hash ' + $rs + ') were never accepted: the baseline was accepted against ' + $bs + '. A rule change reached this checkout without its reviewed baseline (the 2026-09-20 5d42fb944 shape): a commit that bypassed the gate, a rebase that merged two rule edits, or a baseline restored over an accept. Review the lines, -Accept, and commit grocery\out\audit\match-baseline.json.') }
+  }
+  if ($CarriedCount -gt 0) {
+    return [pscustomobject]@{ label = 'RULE CHANGE UNREVIEWED'; why = ([string]$CarriedCount + ' of these names were absent when the baseline was last accepted and were carried forward with the route they had when last seen, so the rules they now route under (rules_hash ' + $rs + ') were never reviewed for them. Review the lines and -Accept.') }
+  }
+  return [pscustomobject]@{ label = 'MOVED WITH NO RULE CHANGE'; why = ('the rules hash (' + $rs + ') equals the one the baseline was accepted against and every moved name was seen at that accept, so no rule moved these names: the matcher code in this script changed, or the baseline file was edited. This is the one drift nobody authored.') }
+}
+
+function Get-SoundnessConditions {
+  <# Pure. The report as labelled findings for Send-AlertConditions: MOVED/DROPPED under the cause's label,
+     NEW-CONTESTED and CELL-BY-CONTEST under 'NEW CONTESTED', DRIFT under 'MATCHER DRIFT'. One line per finding,
+     because a condition body is one line per finding. Report fields go through Get-SoundnessItems, never @(). #>
+  param($Report, $Cause)
+  $out = New-Object System.Collections.Generic.List[object]
+  $drs = Get-SoundnessItems $Report.dropped
+  $mvs = Get-SoundnessItems $Report.moved
+  if (($drs.Count + $mvs.Count) -gt 0) {
+    $lbl = [string]$Cause.label
+    if (-not $lbl) { $lbl = 'RULE CHANGE UNREVIEWED' }
+    [void]$out.Add([pscustomobject]@{ Label = $lbl; Text = ('MOVED=' + $mvs.Count + ' DROPPED=' + $drs.Count + ' against the reviewed baseline. Cause: ' + [string]$Cause.why) })
+    foreach ($d in $drs) { [void]$out.Add([pscustomobject]@{ Label = $lbl; Text = ('DROPPED ' + $d.from + ': ' + $d.name) }) }
+    foreach ($mv in $mvs) { [void]$out.Add([pscustomobject]@{ Label = $lbl; Text = ('MOVED ' + $mv.from + '->' + $mv.to + ': ' + $mv.name) }) }
+  }
+  foreach ($n in (Get-SoundnessItems $Report.new_contested)) {
+    $t = 'NEW-CONTESTED'
+    if ($n.form) { $t += ' [FORM]' }
+    $t += (' ' + $n.name + ' | chain: ' + $n.chain + ' | engine: ' + $n.verdict)
+    if ([string]$n.cell) { $hl = 'CELL'; if ($n.crown) { $hl = 'CROWN' }; $t += (' | holds a ' + $hl + ': ' + $n.cell) }
+    [void]$out.Add([pscustomobject]@{ Label = 'NEW CONTESTED'; Text = $t })
+  }
+  foreach ($cb in (Get-SoundnessItems $Report.cell_by_contest)) {
+    $hl = 'CELL'; if ($cb.crown) { $hl = 'CROWN' }
+    [void]$out.Add([pscustomobject]@{ Label = 'NEW CONTESTED'; Text = ($hl + '-BY-CONTEST ' + $cb.name + ' | cell ' + $cb.cell + ' | claimed by: ' + $cb.claimed_by) })
+  }
+  $dps = Get-SoundnessItems $Report.drift_products
+  foreach ($dr in ($dps | Select-Object -First 25)) {
+    [void]$out.Add([pscustomobject]@{ Label = 'MATCHER DRIFT'; Text = ('DRIFT engine=' + $dr.engine + ' matcher=' + $dr.matcher + ': ' + $dr.name) })
+  }
+  if ([int]$Report.drift_vs_engine -gt 0 -and $dps.Count -eq 0) {
+    [void]$out.Add([pscustomobject]@{ Label = 'MATCHER DRIFT'; Text = ('drift=' + [int]$Report.drift_vs_engine + ' products where this matcher and the engine disagree (names in out\audit\soundness-report.json)') })
+  }
+  return ,($out.ToArray())
+}
+
+function Select-ChangedConditions {
+  <# Pure. Which labelled findings to send: those of a label whose finding set differs from what was last sent
+     for THAT label. The signature used to cover the whole issue set, so one new arrival re-sent an unchanged
+     rule-change finding and scored a fire day for its type; per label, an unchanged condition stays quiet.
+     $PrevSigs is a hashtable label -> signature (empty when the old one-hash file is all there is). #>
+  param($Conditions, $PrevSigs)
+  # A plain hashtable plus an order list, never an [ordered] dictionary indexed by a variable: PS 5.1 can bind
+  # that indexer to the this[int] overload (the soundness-report literal below says how that went).
+  $byLabel = @{}
+  $order = New-Object System.Collections.Generic.List[string]
+  foreach ($c in $Conditions) {
+    if ($null -eq $c) { continue }
+    $lb = [string]$c.Label
+    if (-not $byLabel.ContainsKey($lb)) { $byLabel[$lb] = New-Object System.Collections.Generic.List[object]; [void]$order.Add($lb) }
+    [void]$byLabel[$lb].Add($c)
+  }
+  $sigs = @{}
+  $send = New-Object System.Collections.Generic.List[object]
+  $sha = New-Object Security.Cryptography.SHA256Managed
+  foreach ($lb in $order) {
+    $txts = New-Object System.Collections.Generic.List[string]
+    foreach ($c in $byLabel[$lb]) { [void]$txts.Add([string]$c.Text) }
+    $arr = $txts.ToArray(); [Array]::Sort($arr, [StringComparer]::Ordinal)
+    $sg = [BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes(($arr -join "`n")))).Replace('-', '').Substring(0, 16)
+    $sigs[$lb] = $sg
+    $same = ($null -ne $PrevSigs -and $PrevSigs.ContainsKey($lb) -and [string]$PrevSigs[$lb] -eq $sg)
+    if (-not $same) { foreach ($c in $byLabel[$lb]) { [void]$send.Add($c) } }
+  }
+  return [pscustomobject]@{ send = $send.ToArray(); sigs = $sigs }
+}
+
+function Read-SoundnessSigs {
+  # The per-label signature map. The file held ONE 16-hex hash until 2026-09-21; that reads as an empty map,
+  # so the first run after the split sends each current condition once under its own new type.
+  param([string]$Path)
+  $m = @{}
+  if (-not (Test-Path -LiteralPath $Path)) { return $m }
+  try {
+    $o = ConvertFrom-Json ([IO.File]::ReadAllText($Path))
+    if ($o -is [System.Management.Automation.PSCustomObject]) { foreach ($p in $o.PSObject.Properties) { $m[[string]$p.Name] = [string]$p.Value } }
+  } catch { }
+  return $m
+}
+
 function New-SoundnessAlertBody {
   <#
     THE ALERT BODY, AS A FUNCTION (2026-09-08, queue 2026-09-08-2e59b3).
@@ -490,6 +613,94 @@ if ($SelfTest) {
   T 'CLEAN TWIN  no previous baseline at all is not a crash and carries nothing' `
     (((Merge-BaselineCarryForward @{ 'A'='honey' } @{} $null '2026-09-08' 30).names.Count -eq 1)) `
     ([string](Merge-BaselineCarryForward @{ 'A'='honey' } @{} $null '2026-09-08' 30).names.Count)
+  # ---- ONE CONDITION PER CAUSE, FROM EVERY OCCURRENCE (2026-09-21, plan-2026-09-21-7.json) -------------------
+  # One row per queue item this alert type raised in the 30 days ending 2026-09-21 (the prior closes sit in
+  # grocery\out\archive\triage-queue.archived-2026-09-17.json) plus 6f90ee's three observations. Each carries the
+  # counts and a real line of its founding body, the git state the chain read, and the condition labels it must
+  # land under. FROZEN: transcribed from the queue bodies and git, never rebuilt from a live run.
+  $ocRows = @(
+    @{ id = '2026-08-22-6827cf'; dr = @('pork-chops|Private Selection Loin Pork Chops Boneless'); mv = @(); nc = @('x'); dirty = $false; rh = 'e91af7dd6fixture'; bh = ''; want = 'NEW CONTESTED|RULE CHANGE UNREVIEWED' },
+    @{ id = '2026-08-30-208089'; dr = @(); mv = @(); nc = @('x', 'y', 'z'); dirty = $false; rh = 'r'; bh = 'r'; want = 'NEW CONTESTED' },
+    @{ id = '2026-08-31-a9f51f'; dr = @(); mv = @(); nc = @('x'); dirty = $false; rh = 'r'; bh = 'r'; want = 'NEW CONTESTED' },
+    @{ id = '2026-09-01-e17a88'; dr = @(); mv = @(); nc = @('x'); dirty = $false; rh = 'r'; bh = 'r'; want = 'NEW CONTESTED' },
+    @{ id = '2026-09-02-4dfb1d'; dr = @(); mv = @(); nc = @('x'); dirty = $false; rh = 'r'; bh = 'r'; want = 'NEW CONTESTED' },
+    @{ id = '2026-09-03-7423a0'; dr = @(); mv = @(); nc = @('Fareway Diced Mixed Vegetables'); dirty = $false; rh = 'r'; bh = 'r'; want = 'NEW CONTESTED' },
+    @{ id = '2026-09-04-2cd17a'; dr = @(); mv = @(); nc = @('x'); dirty = $false; rh = 'r'; bh = 'r'; want = 'NEW CONTESTED' },
+    @{ id = '2026-09-05-368c61'; dr = @(); mv = @(); nc = @('Honey Boy Pink Salmon'); dirty = $false; rh = 'r'; bh = 'r'; want = 'NEW CONTESTED' },
+    @{ id = '2026-09-06-4025dc'; dr = @('aluminum-foil|Kroger Aluminum Pre-cut Foil Sheets'); mv = @('pickles|bread|Mt. Olive fixture'); nc = @(); dirty = $false; rh = 'b28788fa4fixture'; bh = ''; want = 'RULE CHANGE UNREVIEWED' },
+    @{ id = '2026-09-07-0b232c'; dr = @(); mv = @(); nc = @('BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz'); dirty = $false; rh = 'r'; bh = 'r'; want = 'NEW CONTESTED' },
+    @{ id = '2026-09-08-2e59b3'; dr = @(); mv = @(); nc = @('Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans & Rosemary'); dirty = $false; rh = 'r'; bh = 'r'; want = 'NEW CONTESTED' },
+    @{ id = '2026-09-19-6f90ee@09-19'; dr = @('honey-mustard|Kraft Honey Mustard Dressing, 16 fl oz Bottle', 'canned-pineapple|Lunch Buddies Pineapple Tidbits IN 100% Fruit Juice, 4 Pack'); mv = @(); nc = @(); dirty = $true; rh = 'ce45db84be91'; bh = 'ce45db84be91'; want = 'RULE EDIT IN PROGRESS' },
+    @{ id = '2026-09-19-6f90ee@09-20'; dr = @('coffee|Barissimo Caramel Coffee Syrup 12.7 FL OZ'); mv = @(); nc = @('x'); dirty = $false; rh = '71d6567e44c4'; bh = '725c4708c23a'; want = 'NEW CONTESTED|RULE CHANGE UNREVIEWED' },
+    @{ id = '2026-09-19-6f90ee@09-21'; dr = @(); mv = @(); nc = @('Apple Brandy on the Rocks by Kilian Eau de Parfum, 1.7 fl. oz.'); dirty = $false; rh = '11649d693cc1'; bh = '11649d693cc1'; want = 'NEW CONTESTED' }
+  )
+  foreach ($oc in $ocRows) {
+    $ocDr = New-Object System.Collections.Generic.List[object]
+    foreach ($x in $oc.dr) { $p = $x -split '\|', 2; [void]$ocDr.Add([pscustomobject]@{ from = $p[0]; name = $p[1] }) }
+    $ocMv = New-Object System.Collections.Generic.List[object]
+    foreach ($x in $oc.mv) { $p = $x -split '\|', 3; [void]$ocMv.Add([pscustomobject]@{ from = $p[0]; to = $p[1]; name = $p[2] }) }
+    $ocNc = New-Object System.Collections.Generic.List[object]
+    foreach ($x in $oc.nc) { [void]$ocNc.Add([pscustomobject]@{ name = $x; chain = 'a (lb) > b (oz)'; form = $true; winner = 'a'; verdict = 'UNPRICED'; cell = ''; crown = $false }) }
+    $ocRep = [ordered]@{ generated = 'x'; drift_vs_engine = 0; drift_products = $null; moved = $ocMv; dropped = $ocDr; new_contested = $ocNc; cell_by_contest = $null }
+    $ocCause = $null
+    if (($ocDr.Count + $ocMv.Count) -gt 0) { $ocCause = Get-RegressionCause $oc.dirty $oc.rh $oc.bh }
+    $ocConds = Get-SoundnessConditions $ocRep $ocCause
+    $ocLabels = (@($ocConds | ForEach-Object { $_.Label } | Sort-Object -Unique) -join '|')
+    $ocKind = 'MUST NOT FIRE'
+    if ($oc.want -match 'RULE|MOVED WITH') { $ocKind = 'MUST FIRE ' }
+    T ($ocKind + ' occurrence ' + $oc.id + ' lands under exactly [' + $oc.want + ']') ($ocLabels -eq $oc.want) $ocLabels
+  }
+  $cfCause = Get-RegressionCause $false '8aa2a07a5f30aa' '8aa2a07a5f30aa' 1
+  T 'MUST FIRE  equal hashes but a moved name the baseline CARRIED FORWARD (the 8 oz Goya adobo, absent at the 2026-09-21 accept) reads as RULE CHANGE UNREVIEWED, never as a drift nobody authored' `
+    (($cfCause.label -eq 'RULE CHANGE UNREVIEWED') -and ($cfCause.why -like '*carried forward*')) ($cfCause.label + ' / ' + $cfCause.why)
+  $eqCause = Get-RegressionCause $false '11649d693cc1aa' '11649d693cc1aa'
+  T 'MUST FIRE  equal rules and baseline hashes with a moved name reads as MOVED WITH NO RULE CHANGE, the one drift nobody authored' ($eqCause.label -eq 'MOVED WITH NO RULE CHANGE') $eqCause.label
+  T 'MUST FIRE  an unreadable rules hash is never read as clean: it holds as RULE CHANGE UNREVIEWED and says it could not read the cause' `
+    (((Get-RegressionCause $false '' 'abc').label -eq 'RULE CHANGE UNREVIEWED') -and ((Get-RegressionCause $false '' 'abc').why -like '*could not be computed*')) (Get-RegressionCause $false '' 'abc').why
+  $twCause = Get-RegressionCause $false '71d6567e44c4' '725c4708c23a'
+  $twConds = Get-SoundnessConditions ([ordered]@{ drift_vs_engine = 0; moved = $null; new_contested = $null; cell_by_contest = $null; drift_products = $null
+                                                 dropped = @([pscustomobject]@{ from = 'coffee'; name = 'Barissimo Caramel Coffee Syrup 12.7 FL OZ' }) }) $twCause
+  T 'CLEAN TWIN  a DROPPED line still names its product and its old commodity, under the cause label, after a cause line naming both hashes' `
+    ((@($twConds | Where-Object { $_.Label -eq 'RULE CHANGE UNREVIEWED' -and $_.Text -eq 'DROPPED coffee: Barissimo Caramel Coffee Syrup 12.7 FL OZ' }).Count -eq 1) -and ([string]$twConds[0].Text -like '*71d6567e44c4*725c4708c23a*')) `
+    ((@($twConds | ForEach-Object { $_.Label + '=' + $_.Text }) -join ' || '))
+  $drConds = Get-SoundnessConditions ([ordered]@{ drift_vs_engine = 1; moved = $null; dropped = $null; new_contested = $null; cell_by_contest = $null
+                                                 drift_products = @([pscustomobject]@{ name = 'Honey Boy Pink Salmon'; engine = 'honey'; matcher = 'canned-salmon' }) }) $null
+  T 'MUST FIRE  a matcher-vs-engine disagreement is its own condition, MATCHER DRIFT, and names the product' `
+    ((@($drConds).Count -eq 1) -and ($drConds[0].Label -eq 'MATCHER DRIFT') -and ($drConds[0].Text -like '*Honey Boy Pink Salmon*')) ((@($drConds | ForEach-Object { $_.Label + '=' + $_.Text }) -join ' || '))
+  # ---- ONLY A CHANGED CONDITION IS RE-SENT ----------------------------------------------------------------
+  $scConds = @([pscustomobject]@{ Label = 'NEW CONTESTED'; Text = 'NEW-CONTESTED a' }, [pscustomobject]@{ Label = 'RULE CHANGE UNREVIEWED'; Text = 'DROPPED coffee: b' })
+  $scFirst = Select-ChangedConditions $scConds @{}
+  T 'MUST FIRE  with no signatures recorded (the old one-hash file) every condition is sent' ($scFirst.send.Count -eq 2) ([string]$scFirst.send.Count)
+  $scPrev = @{ 'NEW CONTESTED' = [string]$scFirst.sigs['NEW CONTESTED'] }
+  $scNext = Select-ChangedConditions $scConds $scPrev
+  T 'MUST NOT FIRE  an unchanged NEW CONTESTED set is not re-sent when a rule-change finding appears beside it (the whole-set signature re-sent both)' `
+    (($scNext.send.Count -eq 1) -and ($scNext.send[0].Label -eq 'RULE CHANGE UNREVIEWED')) ((@($scNext.send | ForEach-Object { $_.Label }) -join ','))
+  $scTmp = Join-Path $env:TEMP ('ms-sig-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.txt')
+  try {
+    [IO.File]::WriteAllText($scTmp, '0123456789ABCDEF')
+    $scOld = Read-SoundnessSigs $scTmp
+    [IO.File]::WriteAllText($scTmp, '{"NEW CONTESTED":"aaaa","RULE CHANGE UNREVIEWED":"bbbb"}')
+    $scNew = Read-SoundnessSigs $scTmp
+    T 'MUST NOT FIRE  the pre-split one-hash signature file yields no per-label signature, so nothing is wrongly held back as already sent' `
+      ($scOld.Count -eq 0) ("old=$($scOld.Count)")
+    T 'CLEAN TWIN  a per-label signature map reads back label by label' `
+      (($scNew.Count -eq 2) -and ($scNew['RULE CHANGE UNREVIEWED'] -eq 'bbbb') -and ($scNew['NEW CONTESTED'] -eq 'aaaa')) ("new=$($scNew.Count)")
+  } finally { Remove-Item -LiteralPath $scTmp -Force -ErrorAction SilentlyContinue }
+  # ---- EVERY LABEL HAS A REGISTRY ENTRY ---------------------------------------------------------------------
+  # audit-alert-registry's source half reads Send-Alert subjects only and cannot see a Send-AlertConditions call
+  # (plan-2026-09-21-5.json's residual), so this suite checks its own five labels against the registry file.
+  try {
+    . (Join-Path $root 'alert-registry-lib.ps1')
+    $rgDoc = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'alert-registry.json')))
+    $rgKeys = @{}
+    foreach ($e in $rgDoc.entries) { if ([string]$e.match -eq 'exact' -and -not $e.PSObject.Properties['retired']) { $rgKeys[[string]$e.key] = [string]$e.class } }
+    $rgMiss = @()
+    foreach ($lb in @('RULE EDIT IN PROGRESS', 'RULE CHANGE UNREVIEWED', 'MOVED WITH NO RULE CHANGE', 'NEW CONTESTED', 'MATCHER DRIFT')) {
+      $k = Get-AlertTypeKey ('Grocery matching soundness: ' + $lb)
+      if (-not $rgKeys.ContainsKey($k)) { $rgMiss += $k }
+    }
+    T 'MUST FIRE  every condition this audit can send derives a type key that alert-registry.json registers (an unregistered one pages as UNREGISTERED)' ($rgMiss.Count -eq 0) ($rgMiss -join ', ')
+  } catch { T 'the registry check could load alert-registry-lib.ps1 and alert-registry.json' $false $_.Exception.Message }
   if ($bad -eq 0) { Write-Output 'match-soundness SELF-TEST PASS'; exit 0 }
   Write-Output ("match-soundness SELF-TEST FAIL: $bad case(s)"); exit 2
 }
@@ -875,17 +1086,54 @@ foreach ($cbc in $cellContest) {
   Write-Output ("  $cbcLbl-BY-CONTEST  a NEW contested name is holding a $cbcLbl : '" + $cbc + "'  cell " + $cellNames[[string]$cbc].text + "  claimed by: " + $contest[[string]$cbc] + " - two rules both admit this name and array order picked the winner; if the winner is the wrong product then a reader prices a shop off it (the 2026-09-07 BELVITA crown, and the 2026-09-08 Fareway Steamables cell the crown-only reader could not see)")
 }
 
-if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
-  $sig = ([string]$drift + '|' + (($dropped | ForEach-Object { $_.name }) -join ';') + '|' + (($moved | ForEach-Object { $_.name }) -join ';') + '|' + ($newContest -join ';'))
-  $sigHash = [BitConverter]::ToString((New-Object Security.Cryptography.SHA256Managed).ComputeHash([Text.Encoding]::UTF8.GetBytes($sig))).Replace('-', '').Substring(0, 16)
-  $sigF = Join-Path $audDir 'soundness-alert-sig.txt'
-  $last = if (Test-Path $sigF) { (Get-Content $sigF -Raw).Trim() } else { '' }
-  if ($sigHash -ne $last) {
-    # ONE body builder, driven by the report object, so the email and the console cannot disagree and
-    # -SelfTest can assert what the reader will actually receive. See New-SoundnessAlertBody.
-    $body = New-SoundnessAlertBody $report
-    try { Send-Alert -Subject "Grocery matching soundness - review needed" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
+# ---- WHY DID THEY MOVE (2026-09-21, plan-2026-09-21-7.json) -------------------------------------------------
+# Read, not assumed: are the rule files in this checkout mid-edit (differ from HEAD), and were the rules the
+# baseline was accepted against the rules here? See Get-RegressionCause. The rule-file list is the rules hash's
+# own input list (identity-lib.ps1 Get-IdentityRulesHash; ops\verify-commodities-gate.ps1 names the same files).
+$regCause = $null
+if ($regr -gt 0) {
+  $rcDirty = $false
+  $rcRepo = Split-Path $root -Parent
+  $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+  try {
+    $rcSt = @(& git -C $rcRepo status --porcelain -- 'grocery/commodities.json' 'grocery/recipe-commodities.json' 'grocery/category-excludes.json' 'grocery/product-classes.json' 'grocery/global-exclude-lib.ps1' 2>$null)
+    if ($LASTEXITCODE -eq 0 -and $rcSt.Count -gt 0) { $rcDirty = $true }
+  } catch { } finally { $ErrorActionPreference = $prevEap }
+  $rcHash = ''
+  $rcLib = Join-Path $root 'identity-lib.ps1'
+  if (Test-Path -LiteralPath $rcLib) { try { . $rcLib; $rcHash = Get-IdentityRulesHash -GroceryRoot $root } catch { $rcHash = '' } }
+  # How many moved/dropped names were CARRIED FORWARD rather than seen at the last accept (see Get-RegressionCause).
+  $rcCarried = 0
+  $rcAcceptDay = ([string]$base.generated); if ($rcAcceptDay.Length -ge 10) { $rcAcceptDay = $rcAcceptDay.Substring(0, 10) }
+  if ($base.PSObject.Properties['last_seen'] -and $base.last_seen -and $rcAcceptDay) {
+    foreach ($rcx in @(@($moved | ForEach-Object { [string]$_.name }) + @($dropped | ForEach-Object { [string]$_.name }))) {
+      $rcp = $base.last_seen.PSObject.Properties[$rcx]
+      if ($rcp -and ([string]::CompareOrdinal([string]$rcp.Value, $rcAcceptDay) -lt 0)) { $rcCarried++ }
+    }
   }
+  $regCause = Get-RegressionCause $rcDirty $rcHash ([string]$base.rules_hash) $rcCarried
+  Write-Output ('  CAUSE [' + $regCause.label + ']: ' + $regCause.why)
+}
+
+if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
+  # ONE CONDITION PER CAUSE (see Get-RegressionCause): each label is its own queue type through
+  # Send-AlertConditions, and each is re-sent only when ITS findings change (Select-ChangedConditions).
+  # Every condition is review class, as the one type was, so no delivery changes.
+  $sigF = Join-Path $audDir 'soundness-alert-sig.txt'
+  $conds = Get-SoundnessConditions $report $regCause
+  $pick = Select-ChangedConditions $conds (Read-SoundnessSigs $sigF)
+  $keep = @{}
+  foreach ($k in @($pick.sigs.Keys)) { $keep[[string]$k] = [string]$pick.sigs[$k] }
+  if ($pick.send.Count -gt 0) {
+    try {
+      $sres = Send-AlertConditions -SubjectPrefix 'Grocery matching soundness' -Conditions $pick.send -ReportPointer ('Full report: grocery\out\audit\soundness-report.json. After review: audit-match-soundness.ps1 -Accept, then commit grocery\out\audit\match-baseline.json WITH the rule change; ops\verify-commodities-gate.ps1 refuses a rule commit whose staged baseline does not cover it.')
+      foreach ($fl in @($sres.failed)) { if ($fl) { [void]$keep.Remove([string]$fl) } }
+    } catch {
+      Write-Output ('match-soundness: the alert send threw, so no signature is recorded and the next run retries: ' + $_.Exception.Message)
+      $keep = $null
+    }
+  }
+  if ($null -ne $keep) { try { Set-Content $sigF -Value ($keep | ConvertTo-Json -Compress) -Encoding UTF8 } catch { } }
 }
 # regressions (moved/dropped of an existing product) HOLD the publish until reviewed+accepted
 # EXIT: 2 stays the REGRESSION verdict (a moved/dropped product holds the publish). CELL-BY-CONTEST is

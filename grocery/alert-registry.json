@@ -660,7 +660,53 @@
    "condition": "review intake: a data change that needs a reader's judgement, not a failure (plan section 3, bucket 1)",
    "emitter": "grocery/audit-match-soundness.ps1",
    "hold_observations": 2,
-   "hold_note": "A recurring standing state: fired on 18 of the 30 days ending 2026-09-20. Review class is already never emailed, so the hold changes no delivery today; it is declared so the duration travels with the type if it is ever promoted to page (Brad, 2026-09-20)."
+   "hold_note": "A recurring standing state: fired on 18 of the 30 days ending 2026-09-20. Review class is already never emailed, so the hold changes no delivery today; it is declared so the duration travels with the type if it is ever promoted to page (Brad, 2026-09-20).",
+   "retired": "2026-09-21 (plan-2026-09-21-7.json): three conditions under one type. Of the 18 days it fired in the 30 ending 2026-09-21, 6 carried a MOVED/DROPPED diff (every one an authored rule edit whose accept had not reached a commit) and 12 carried only NEW-CONTESTED arrivals, so each arrival day scored as a RETURN of a rule-review close. The audit now sends one type per condition (the entries whose split_from names plan-2026-09-21-7.json), and a MOVED/DROPPED diff names its cause. The entry stays so the queue history it owns still resolves."
+  },
+  {
+   "id": "match-soundness-rule-edit-in-progress",
+   "match": "exact",
+   "key": "grocery matching soundness rule edit in progress",
+   "class": "review",
+   "condition": "review intake: the matching-rule files in the checkout the chain read differ from HEAD, so the MOVED/DROPPED lines are an uncommitted edit's own effect (the 2026-09-19 17:29 shape). Publish holds until the author accepts and commits.",
+   "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-7.json"
+  },
+  {
+   "id": "match-soundness-rule-change-unreviewed",
+   "match": "exact",
+   "key": "grocery matching soundness rule change unreviewed",
+   "class": "review",
+   "condition": "review intake: committed matching rules the baseline was never accepted against (a gate bypass, a rebase that merged two rule edits, or a baseline restored over an accept; the 2026-09-20 5d42fb944 shape). Publish holds until someone reviews the lines, runs -Accept and commits the baseline.",
+   "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-7.json"
+  },
+  {
+   "id": "match-soundness-moved-no-rule-change",
+   "match": "exact",
+   "key": "grocery matching soundness moved with no rule change",
+   "class": "review",
+   "condition": "review intake: names moved although the rules hash equals the baseline's, so the matcher code or the baseline file changed; the one drift nobody authored. Publish holds.",
+   "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-7.json"
+  },
+  {
+   "id": "match-soundness-new-contested",
+   "match": "exact",
+   "key": "grocery matching soundness new contested",
+   "class": "review",
+   "condition": "review intake: products arriving in the captures that two or more rules admit, resolved by array order. A real defect detector: 6 of the 9 new-contested-only days closed with notes from 2026-08-30 to 2026-09-08 found a misroute, two of them live on the board. Its returns are new arrivals by construction.",
+   "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-7.json"
+  },
+  {
+   "id": "match-soundness-matcher-drift",
+   "match": "exact",
+   "key": "grocery matching soundness matcher drift",
+   "class": "review",
+   "condition": "review intake: this audit's matcher and the engine's candidates disagree on named products, so the audit may no longer mirror the engine. Fired on 0 of the 18 days of the old type.",
+   "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-7.json"
   },
   {
    "id": "new-price-flags",
