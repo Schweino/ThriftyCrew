@@ -954,7 +954,9 @@ if ($runSelfTest) {
   # 14 -> 16 on 2026-09-18 (backlog I173): two END-TO-END MUST FIREs for the allergen-line check.
   # 16 -> 17 the same day: those two became CLEAN TWINs when the gate moved after propagate's build, and an
   # END-TO-END MUST FIRE for an unclassifiable ingredient joined them.
-  $DRILL_BLIND_CASES = 17
+  # 17 -> 18 on 2026-09-21 (queue 2026-09-20-588caa): an END-TO-END case that the twin's cost block was re-rendered
+  # from the drill's own costed row, so the CLEAN TWIN stops depending on whether the board moved since its build.
+  $DRILL_BLIND_CASES = 18
   $casesBeforeDrill = $cases
   $canDrill = ((Test-Path $srcSpec) -and (Test-Path $srcCost) -and (Test-Path $srcFood) -and (Test-Path $srcIng) -and (Test-Path $srcRef))
   if (-not $canDrill) {
@@ -988,6 +990,26 @@ if ($runSelfTest) {
     $pristine = [IO.File]::ReadAllText($srcSpec, [Text.Encoding]::UTF8)
     $dSpecPath = Join-Path $dMp ("db\recipes\{0}.json" -f $dSlug)
     [IO.File]::WriteAllText($dSpecPath, $pristine, $UTF8)
+    # THE TWIN IS A WAVE RECIPE, SO ITS COST BLOCK IS RE-RENDERED FROM THE ROW IT IS AUDITED AGAINST (2026-09-21,
+    # queue 2026-09-20-588caa). A live spec's cost block is a SNAPSHOT frozen at its last build while db\costed.json
+    # is re-priced daily - recost-spec-cost-block.ps1's own header: on 2026-08-05 all 513 specs disagreed with it,
+    # "that is not drift to repair, it is what the field means". So the CLEAN TWIN below went red at HEAD whenever
+    # the board moved keto-cheeseburger-skillet by a cent (2026-09-20: spec 25.13 vs engine 25), and run-gates
+    # refused every push for a condition no push introduced. A wave recipe is built and costed the same day, so the
+    # honest twin is the live spec with its cost block re-rendered, by the REAL renderer, from the costed row this
+    # drill audits it against. cost-reconcile stays exactly as strict; only the date dependency goes. The live spec
+    # is never touched: the renderer runs from a mirror under the drill root, where its $mp is the drill's
+    # meal-prep, with the WHOLE meal-prep\lib beside it, and a renderer that fails is a counted FAIL, never a skip.
+    New-Item -ItemType Directory -Force (Join-Path $dMp 'pipeline'), (Join-Path $dMp 'lib') | Out-Null
+    Copy-Item (Join-Path $here 'recost-spec-cost-block.ps1'), (Join-Path $here 'cost-render-lib.ps1') (Join-Path $dMp 'pipeline') -Force
+    Copy-Item (Join-Path $mp 'lib\*.ps1') (Join-Path $dMp 'lib') -Force
+    $dSlugFile = Join-Path $T 'drill-slugs.txt'
+    [IO.File]::WriteAllText($dSlugFile, $dSlug, $UTF8)
+    $rsOut = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dMp 'pipeline\recost-spec-cost-block.ps1') -SlugFile $dSlugFile -Apply | ForEach-Object { [string]$_ })
+    $rsRc = $LASTEXITCODE
+    T 'END-TO-END the twin''s cost block is re-rendered from the drill''s own costed row by the real renderer, run from a mirror' `
+      (($rsRc -eq 0) -and (@($rsOut | Where-Object { $_ -match [regex]::Escape($dSlug) }).Count -ge 1)) ("rc=$rsRc " + (@($rsOut | Select-Object -Last 3) -join ' | '))
+    $pristine = [IO.File]::ReadAllText($dSpecPath, [Text.Encoding]::UTF8)
     $manPathD = Join-Path $dRun 'waves\wave-1.json'
     [IO.File]::WriteAllText($manPathD, ('{"wave":1,"run":"drill","batch":"drill-w1","slugs":["' + $dSlug + '"]}'), $UTF8)
     # A CURRENT BUILT CARD in the drill's db\built (backlog I173), rendered by the real build-card2 against the

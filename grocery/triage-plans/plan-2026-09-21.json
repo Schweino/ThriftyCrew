@@ -4,7 +4,8 @@
   "board_week": "2026-09-20",
   "queue_ids_seen": [
     "2026-09-20-6c14f6",
-    "2026-09-19-0b2f1e"
+    "2026-09-19-0b2f1e",
+    "2026-09-20-588caa"
   ],
   "note": "Money lane, written by the developer from the orchestrator's verified diagnosis (Brad approved 'Yes fix' on 2026-09-21; his rule: a recipe page should ALWAYS be able to be costed). No reviewer round: the diagnosis was in the dispatch, re-verified here, and two of its premises were false on measurement (see premise_verified on 2026-09-19-0b2f1e). No board rule, commodity or board input changes in this plan, so no board republish rides it.",
   "knowledge_consulted": [
@@ -144,6 +145,59 @@
       "premise_verified": "false, twice. (1) 'The publish gate lets UNKNOWN carriage through' is false today: engine/publish.ps1:126 refuses any slug whose costed row lists an uncarried line, UNKNOWN or NOT-CARRIED, on create and republish, before any Ghost call, and wave-publish and propagate-recipes both publish only through it; the six held recipes predate that gate (2026-08-22). (2) 'The live instance is 25 recipes' is false today: audit-carriage -Live on 2026-09-21 read 577 published recipes, 0 findings, exit 0; all 12 named slugs read LIVE with uncarried=[]; the four named ingredients are each proven CARRIED by an in-store board cell (Family Fare caraway $4.59/0.9 oz 2026-08-20, ancho $8.99/1 lb 2026-08-17, arbol $2.49/3 oz 2026-08-20; Walmart 68137 guajillo $7.24/12 oz 2026-08-31, seller Walmart.com, fulfillment STORE). Nothing is PROVEN NOT-CARRIED, so nothing was held, and no store needed asking because nothing is UNKNOWN",
       "deviation": "from the DISPATCH, not the plan: part 2 as written (add the refusal at publish) was already true, so the class fix went where measurement put the gap - the watch that paged a takedown for 25 recipes that were all UNKNOWN now splits PROVEN NOT-CARRIED ('  X ', takedown alert unchanged) from UNKNOWN ('  ? ', a new REVIEW alert that says resolve, do not take down, registered in grocery/alert-registry.json), and wave-preaudit gains check 'carriage-proven' so the GO decision refuses an unproven ingredient before publish does. Part 3 found nothing to hold or resolve; no Ghost write was made, so there is no held page to verify live",
       "shipped_commit": "pending - recorded after the push lands"
+    },
+    {
+      "queue_id": "2026-09-20-588caa",
+      "subject": "wave-preaudit END-TO-END clean twin is red at HEAD (one spec vs engine cost drift)",
+      "classification": "infra",
+      "evidence": [
+        "git push of 165949e80 on 2026-09-21, pre-push run-gates: 'RUN-GATES-COMPLETE pass=448 fail=1 noverdict=0', the one failure meal-prep/pipeline/wave-preaudit.ps1 'SELF-TEST FAIL: 1 of 85' = END-TO-END CLEAN TWIN 'a live, unmodified spec passes every per-slug check': cost-reconcile cost_batch spec 25.13 vs engine 25, cost_per_serving spec 1.8 vs engine 1.79 (keto-cheeseburger-skillet); byte-identical to the pre-edit baseline run at 31bf690b4",
+        "meal-prep/db/recipes/keto-cheeseburger-skillet.json last committed 2026-09-07 (d66dd9641); meal-prep/db/costed.json re-priced daily, last bot commit 584f986e2 2026-09-20T13:19; the drill copies both verbatim into its temp root and audits one against the other",
+        "meal-prep/pipeline/recost-spec-cost-block.ps1 header: a spec's cost block is a SNAPSHOT frozen at its last build, and on 2026-08-05 all 513 specs disagreed with costed.json on cost_batch by up to $14.17 - 'not drift to repair, it is what the field means'"
+      ],
+      "root_cause": "The drill's CLEAN TWIN audits a LIVE spec against TODAY's recost, and a live spec's cost block is a snapshot by design, so the twin goes red on any day the board has moved that recipe since its build: a fixture whose verdict depends on the date rather than the code. It refused every push from a checkout that runs the drill.",
+      "root_fix": {
+        "what": "the drill re-renders its temp copy of the spec's cost block from the drill's own costed row with the REAL renderer (recost-spec-cost-block.ps1 run from a mirror under the drill root, whole meal-prep/lib beside it), which is the state a wave recipe is in at audit time; the live spec is never touched and cost-reconcile is unchanged",
+        "files": [
+          "meal-prep/pipeline/wave-preaudit.ps1"
+        ],
+        "exact_change": "after the drill writes the pristine spec: copy recost-spec-cost-block.ps1 + cost-render-lib.ps1 to <drill>/meal-prep/pipeline and meal-prep/lib/*.ps1 to <drill>/meal-prep/lib, run it -SlugFile <drill slug> -Apply, a new counted END-TO-END case asserts rc 0 and the slug named, then $pristine is re-read from the re-rendered file; $DRILL_BLIND_CASES 17 -> 18"
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule, commodity or board input changes; the edit is inside wave-preaudit's -SelfTest drill and writes only under its per-run temp root, so every board name routes as before by construction",
+        "affected_now": 0,
+        "names": [],
+        "risk": "the fix must not weaken cost-reconcile: the drill's MUST FIRE 'a spec printing a stale price is caught to the cent' must still fire",
+        "cell_effects": []
+      },
+      "freshness": "reproduced at HEAD 31bf690b4 and at 165949e80 on 2026-09-21 against costed.json of the 2026-09-20T12:09:49 recost; the fix removes the date dependency, so it holds after any recost",
+      "proof": {
+        "guard_or_fixture": "meal-prep/pipeline/wave-preaudit.ps1 -SelfTest (the END-TO-END drill runs in any seeded checkout, including the main one and every pre-push there)",
+        "must_fire_case": "the drill's existing 'MUST FIRE a spec printing a stale price is caught to the cent' still fires after the twin is synced, so cost-reconcile is exactly as strict",
+        "clean_twin": "'END-TO-END CLEAN TWIN a live, unmodified spec passes every per-slug check' passes, and 'CLEAN TWIN the drill ran exactly the case count a BLIND checkout reports as not covered' holds at 18",
+        "fixture_occurrences": [
+          "2026-09-20-588caa"
+        ],
+        "commands": [
+          "powershell -NoProfile -File meal-prep/pipeline/wave-preaudit.ps1 -SelfTest"
+        ],
+        "observed": "before: exit 1, 1 of 85 FAIL (the twin); after: exit 0, 'wave-preaudit SELF-TEST PASS (86 cases)', WAVE-PREAUDIT-SELFTEST-COMPLETE cases=86 blind=0; git status of the live spec and costed.json empty afterwards"
+      },
+      "rollback": "revert the drill hunk and the constant; nothing outside the drill's temp root is written",
+      "do_not_touch": [
+        "the live spec's cost block (re-rendering it would be a price update wearing a repair's clothes)",
+        "Test-CostSpecVsEngine / cost-reconcile tolerance"
+      ],
+      "resolution_note": "The drill's clean twin audited a live spec's frozen cost snapshot against today's recost, so it was red whenever the board moved. The drill now re-renders its temp copy's cost block from its own costed row with the real renderer, as a wave recipe is at audit time; cost-reconcile is unchanged and still fires on a stale price.",
+      "publish_batch": "none - no board publish",
+      "status": "done",
+      "premise_verified": "true: reproduced at HEAD 31bf690b4 before any edit (wave-preaudit 1 of 79 FAIL, spec 25.13 vs engine 25) and again as the only red of the 165949e80 push (run-gates pass=448 fail=1)",
+      "deviation": "not in the dispatch: taken because it was the one gate refusing this plan's push and the repair keeps cost-reconcile as strict; recorded here so it is reviewable, closed in the queue with its own disposition",
+      "shipped_commit": "pending - recorded after the push lands"
     }
   ],
   "ship_sequence": [
@@ -152,6 +206,7 @@
     "edit audit-carriage.ps1, check-ad-cycles.ps1 carriage branch, wave-preaudit.ps1 (0b2f1e)",
     "self-tests + golden-test -Frozen (must stay byte-identical) + audit-carriage -Live + a live-input, temp-output engine run to read the new flag split on today's data; audit-alert-registry for the new subject",
     "no compare-deals / guards / publish-deals-page: no board input changes in this plan, so the gated board chain does not run and the board is not republished",
+    "the push of 165949e80 was refused by run-gates pass=448 fail=1, the one red the pre-existing wave-preaudit drill twin (2026-09-20-588caa); fix the drill (item 3), re-run its self-test, commit, push both",
     "commit by pathspec with a Store: line, push (pre-push run-gates + test-auditors), close the two queue items, validate-triage-plan -Closing"
   ],
   "open_questions_for_brad": []
