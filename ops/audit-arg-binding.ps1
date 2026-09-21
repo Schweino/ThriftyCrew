@@ -6,6 +6,8 @@
     the ones it reads it uses the real parser, so a finding is real for a reason of its own (it is COMPLETE on
     that set): a script param() block with no [CmdletBinding()] IS the defect, since the attribute is the only
     thing that turns an unknown argument into an error. A clean report proves nothing about the rest of the tree.
+    Rule 2 (DEAD-AT-BIND) reads EVERY .ps1 in the same ops\ and grocery\ walk since 2026-09-21, whatever its name;
+    meal-prep\ and the rest of the tree are outside it (a census of all 810 tracked scripts read 0 that day).
 
   WHY THIS EXISTS (2026-09-07). During the 09-07 triage an operator ran
 
@@ -268,6 +270,27 @@ if ($SelfTest) {
     $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltRise
     $rc3 = $LASTEXITCODE
     T 'CLEAN TWIN  a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+    # RULE 2 OUTSIDE THE CHECKING CLASS (2026-09-21). The founding file is grocery\capture-sink.ps1, a LISTENER, so
+    # the class filter skipped it: its interpolated default lost $PSScriptRoot and captures went to C:\out. The
+    # fixture is its own param shape under a name no checking-class pattern admits, in a tree of its own.
+    $sinkTree = Join-Path $lt 'sinktree'
+    [void][IO.Directory]::CreateDirectory((Join-Path $sinkTree 'grocery'))
+    [void][IO.Directory]::CreateDirectory((Join-Path $sinkTree 'ops'))
+    # One BOUND checking script, so rule 1 has something to examine and the run is not BLIND (exit 3).
+    [IO.File]::WriteAllText((Join-Path $sinkTree 'ops\audit-ok.ps1'), $fixed, (New-Object Text.UTF8Encoding($false)))
+    $sinkFx = Join-Path $sinkTree 'grocery\capture-fx.ps1'
+    $sinkBad = '[CmdletBinding()]' + "`n" + 'param([int] $Port = 8791, [string] $OutDir = "$PSScriptRoot\out\captures\_sink")' + "`n"
+    [IO.File]::WriteAllText($sinkFx, $sinkBad, (New-Object Text.UTF8Encoding($false)))
+    $o4 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $sinkTree -BaselineFile (Join-Path $lt 'bl-sink.json'))
+    $rc4 = $LASTEXITCODE
+    T 'MUST FIRE  a NON-checking script (the capture-sink shape: an interpolated $PSScriptRoot default under [CmdletBinding()]) is DEAD-AT-BIND, exit 2' `
+      ($rc4 -eq 2 -and (($o4 -join "`n") -match 'DEAD-AT-BIND\s+grocery\\capture-fx\.ps1')) ("rc=$rc4")
+    $sinkGood = '[CmdletBinding()]' + "`n" + 'param([int] $Port = 8791, [string] $OutDir = '''')' + "`n" + 'if (-not $OutDir) { $OutDir = Join-Path $PSScriptRoot ''out\captures\_sink'' }' + "`n"
+    [IO.File]::WriteAllText($sinkFx, $sinkGood, (New-Object Text.UTF8Encoding($false)))
+    $o5 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $sinkTree -BaselineFile (Join-Path $lt 'bl-sink.json'))
+    $rc5 = $LASTEXITCODE
+    T 'CLEAN TWIN  the same script resolving its default BELOW the block exits 0 with no DEAD-AT-BIND line' `
+      ($rc5 -eq 0 -and -not (($o5 -join "`n") -match 'DEAD-AT-BIND\s+grocery')) ("rc=$rc5")
   } finally {
     Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
   }
@@ -283,15 +306,23 @@ $findings = New-Object System.Collections.Generic.List[string]
 # Rule 2 is a HARD failure, not a ratchet entry. It is not a backlog: a script in this state cannot
 # run at all, so there is nothing to work down and nothing to grandfather.
 $broken = New-Object System.Collections.Generic.List[string]
+# RULE 2 READS EVERY SCRIPT IN THE WALK, NOT ONLY THE CHECKING CLASS (2026-09-21). The class is about who
+# reads a PASS; rule 2 is about a script that cannot find its own directory, which is just as wrong in a
+# builder or a listener. grocery\capture-sink.ps1 is not a checking script, so this rule never read it, and its
+# default "$PSScriptRoot\out\captures\_sink" became "\out\captures\_sink": an interpolated default does not
+# throw, it silently loses the root, and a morning of captures landed in C:\out\captures\_sink. Census before
+# widening: 0 of 810 tracked .ps1 carry the shape once that file was fixed, so this is not red on day one.
+$scannedAll = 0
 foreach ($f in @(Get-AbCandidateFiles -RootDir $rootFull)) {
-  if (-not (Test-IsCheckingScript $f.Name)) { continue }
-  $scanned++
   $p = $f.FullName
   $txt = ''
   try { $txt = [IO.File]::ReadAllText($p) } catch { continue }
+  $scannedAll++
   $rel = (Get-TcPathBelowRoot $p $rootFull).TrimStart('\', '/')
-  if (Test-NeedsCmdletBinding $txt) { [void]$findings.Add($rel) }
   if (Test-BindingBreaksScriptRootDefault $txt) { [void]$broken.Add($rel) }
+  if (-not (Test-IsCheckingScript $f.Name)) { continue }
+  $scanned++
+  if (Test-NeedsCmdletBinding $txt) { [void]$findings.Add($rel) }
 }
 if ($scanned -eq 0) {
   Write-Output 'arg-binding: BLIND - zero checking scripts reached the scan, so a clean result would prove nothing'
@@ -302,10 +333,10 @@ $n = @($findings).Count
 Write-Output ("arg-binding: examined {0} checking script(s) under ops\ and grocery\; {1} declare param() with no [CmdletBinding()], so an undeclared argument is silently dropped" -f $scanned, $n)
 foreach ($w in $findings) { Write-Output ('  UNBOUND  ' + $w) }
 $nBroken = @($broken).Count
-Write-Output ("arg-binding: {0} of the same {1} carry [CmdletBinding()] AND an automatic script-location variable inside a param default, which is empty at bind time under PS 5.1" -f $nBroken, $scanned)
+Write-Output ("arg-binding: {0} of {1} script(s) under ops\ and grocery\ (every one, not only the checking class) carry [CmdletBinding()] AND an automatic script-location variable inside a param default, which is empty at bind time under PS 5.1" -f $nBroken, $scannedAll)
 foreach ($w in $broken) { Write-Output ('  DEAD-AT-BIND  ' + $w + '  (resolve the default below the param block)') }
 if ($nBroken -gt 0) {
-  Write-Output 'arg-binding: HARD FAIL - a script in this state throws before its first statement, and the symptom surfaces somewhere else entirely (on 2026-09-07 it read as a guards coverage-regression HARD FAIL).'
+  Write-Output 'arg-binding: HARD FAIL - a script in this state throws before its first statement, or (an interpolated default) silently loses its root, and the symptom surfaces somewhere else entirely (2026-09-07 a guards coverage-regression HARD FAIL; 2026-09-21 captures written to C:\out\captures\_sink).'
   Exit-Guard -Name 'arg-binding' -Summary "unbound=$n dead_at_bind=$nBroken examined=$scanned" -Code 2
 }
 
