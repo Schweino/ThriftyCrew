@@ -816,13 +816,6 @@
                                                          "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                          "board_pu":  0.0894
                                                      },
-                                     "Hy-Vee":  {
-                                                    "url":  "https://www.hy-vee.com/aisles-online/p/57641/hy-vee-unsweetened-applesauce",
-                                                    "price":  3.68,
-                                                    "size":  "46 oz",
-                                                    "name":  "Hy-Vee Unsweetened Applesauce",
-                                                    "board_pu":  0.0767
-                                                },
                                      "Fareway":  {
                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24303014-fareway-applesauce-cinnamon-48-oz",
                                                      "name":  "Fareway Cinnamon Applesauce",
@@ -13248,13 +13241,6 @@
                                                         "size":  "16 oz",
                                                         "name":  "Fareway Ground Turkey"
                                                     },
-                                        "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/1852363/jennie-o-lean-ground-turkey-93-lean-7-fat",
-                                                       "price":  4.69,
-                                                       "size":  "16 oz",
-                                                       "name":  "Jennie O Ground Turkey 85 Lean 15 Fat",
-                                                       "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                   },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/44419698",
                                                         "name":  "Honeysuckle White 85% Lean / 15% Fat Ground Turkey Tray, Fresh, 1.25 lbs.",
@@ -13528,14 +13514,7 @@
                                                         }
                                 },
                   "harissa-paste":  {
-                                        "commodity":  "Harissa Paste",
-                                        "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2345453/morton-bassett-harissa",
-                                                       "price":  11.99,
-                                                       "size":  "1.9 oz",
-                                                       "name":  "Morton \u0026 Bassett Harissa",
-                                                       "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                   }
+                                        "commodity":  "Harissa Paste"
                                     },
                   "hash-browns":  {
                                       "commodity":  "hash-browns",

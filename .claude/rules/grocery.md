@@ -106,6 +106,12 @@ is one copy of every rule and nothing here can drift from it.
   cursor can never advance over a term a prepend displaced. A file built under `-WaiveMissingStoreLine`
   discharges NOTHING - its own stamp says the store was never recorded.
 - **No hard-coded bands** (Brad, 2026-09-04). [[no-hardcoded-bands]]
+- **EVERY PRICE IS FETCHED FROM AN OMAHA STORE'S AD OR WEBSITE BY THE PIPELINE, never typed or agent-captured**
+  (Brad's standing ruling, 2026-09-21; the full rule is in `.claude/rules/meal-prep.md`). The fix that day
+  landed here: `pull-regular-hyvee.ps1` asks FIRST for a row the newest board withheld only for its store on a
+  commodity it prices nowhere (`Get-HyVeeUncoveredIds`), and builds its lookup from `$script:HvRequest*` by name,
+  because a bare `$StoreId` inside the fetch resolved by dynamic scope to `Invoke-HyVeeWorkPass`'s `[string]`
+  parameter and Hy-Vee answered every lookup HTTP 400 (0 of 93 on 2026-09-21). `grocery/triage-plans/plan-2026-09-21-2.json`.
 - **AN EVERYDAY PRICE IS RE-READ ABOUT ONCE EVERY 90 DAYS, AT EVERY STORE** (Brad's standing rule, restated
   2026-09-19). The rotation and the publish limit are both the quarter (`capture-policy-lib.ps1`,
   `RotationDays = MaxPublishAgeDays = QuarterDays`); sale prices follow their ad windows instead. A session

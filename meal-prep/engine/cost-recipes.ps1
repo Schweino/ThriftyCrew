@@ -4,7 +4,7 @@
 #   recipes ............ db\recipes\<slug>.json specs (scaler.ing: canon||item + grams)
 #   item knowledge ..... db\ingredients.json (bid/gpu/unit, buy + pantry packages, bulk flag, macros)
 #   drained yields ..... db\densities.json ('can' = drained grams; drained basis derived, not hardcoded)
-#   label prices ....... db\label-prices.json (agent-captured; SizeToGrams + canon folds applied here)
+#   label macros ....... db\label-prices.json - MACROS ONLY since 2026-09-21 (Brad's ruling); no price is read from it
 #   allowlist .......... db\no-board-price-ok.json
 #   prices ............. grocery\out comparison-*.json (weekly board) -> recipe-board.json -> smp-feed.json
 # Output: db\costed.json (one file, whole catalog) + db\cost-flags.txt. Takes -Slugs for a targeted
@@ -115,20 +115,50 @@ function SizeToGrams([string]$s){
   if($s -match '([\d.]+)\s*g\b'){ return [double]$Matches[1] }
   return $null
 }
-$labels=@{}
-# name folds live in db\label-folds.json (data, not code - 2026-07-26)
+# ---- db\label-prices.json: MACROS ONLY. NO PRICE IS READ FROM IT (2026-09-21) ----
+# Brad's standing ruling, 2026-09-21: "We should never have hand-typed pricing. The pricing must be fetched from a
+# store always." and "Pricing should always come from Ads or websites from stores directly." This file's 59 prices
+# were read ONCE, by an agent in a browser, off walmart.com in July, riding along with the NUTRITION label it was
+# really capturing; 13 of them were walmart.com MARKETPLACE third-party sellers the board had already stripped under
+# the in-store rule, and the file was never refreshed. Until 2026-09-21 its price was this engine's fallback after
+# the board and the feed. It is not any more: the file stays because its macros are real (calories, protein_g,
+# carbs_g, fat_g, the label image they were read from), and Import-LabelMacros copies ONLY those fields, so nothing
+# below can price from a label because no label price is ever loaded. An ingredient the board, the feed and the
+# carriage ledger cannot price stays NO PRICE BASIS and pages: the repair is a store fetch, never a label.
+# (db\label-folds.json only ever mapped label NAMES onto recipe names for that price lookup, so it is not read.)
+# The engine also REFUSES to write costed.json while any line carries a label: basis (Get-LabelBasisLines).
+function Import-LabelMacros($Rows) {
+  $m = [ordered]@{}   # file order, so the package map below keeps first-row-wins exactly as it did
+  foreach ($r in @($Rows)) {
+    if ($null -eq $r -or -not [string]$r.item) { continue }
+    $nm = [string]$r.item
+    if ($m.Contains($nm)) { continue }
+    $m[$nm] = [pscustomobject]@{
+      item = $nm; brand = [string]$r.brand; package_size = [string]$r.package_size
+      serving_grams = $r.serving_grams; calories = $r.calories; protein_g = $r.protein_g; carbs_g = $r.carbs_g; fat_g = $r.fat_g
+      label_source_url = [string]$r.label_source_url
+    }
+  }
+  return $m
+}
+$LABELMACROS = Import-LabelMacros (Get-Content (Join-Path $db 'label-prices.json') -Raw | ConvertFrom-Json)
+if (-not $SelfTest) { Write-Output ('label-prices.json: ' + $LABELMACROS.Count + ' label row(s) loaded for MACROS ONLY; no price read from it (Brad''s ruling, 2026-09-21)') }
+# THE LABEL'S PACKAGE SIZE IS STILL A PURCHASE PACKAGE, NEVER A PRICE. An item with no buy package in
+# db\ingredients.json is still told to buy the label's package (its grams and its brand + size text) further down,
+# exactly as before; the price of that package comes from the store like every other line. Name folds from
+# db\label-folds.json apply to this lookup as they always did.
+$LABELPKG = @{}
 $labelFolds = @()
 $lfFile = Join-Path $db 'label-folds.json'
 if(Test-Path $lfFile){ $labelFolds = @((Get-Content $lfFile -Raw | ConvertFrom-Json).folds) }
-foreach($r in (Get-Content (Join-Path $db 'label-prices.json') -Raw | ConvertFrom-Json)){
-  $nm = $r.item
+foreach($lmRow in $LABELMACROS.Values){
+  $nm = [string]$lmRow.item
   foreach($fold in $labelFolds){ if($nm -match [string]$fold.match){ $nm = [string]$fold.to; break } }
-  if($null -eq $r.package_price_usd -or $r.package_price_usd -le 0){ continue }
-  $g = SizeToGrams ([string]$r.package_size)
+  $g = SizeToGrams ([string]$lmRow.package_size)
   if(-not $g){ continue }
-  if(-not $labels.ContainsKey($nm)){ $labels[$nm] = @{ pkg_g=$g; pkg_price=[double]$r.package_price_usd; desc=($r.brand + ' ' + $r.package_size) } }
-  $rawNm = [string]$r.item
-  if($rawNm -ne $nm -and -not $labels.ContainsKey($rawNm)){ $labels[$rawNm] = $labels[$nm] }
+  if(-not $LABELPKG.ContainsKey($nm)){ $LABELPKG[$nm] = @{ pkg_g=$g; desc=($lmRow.brand + ' ' + $lmRow.package_size) } }
+  $rawNm = [string]$lmRow.item
+  if($rawNm -ne $nm -and -not $LABELPKG.ContainsKey($rawNm)){ $LABELPKG[$rawNm] = $LABELPKG[$nm] }
 }
 
 # ---- drained-basis items (derived from db: buy package net grams vs densities 'can' drained yield) ----
@@ -233,6 +263,22 @@ function Split-CostFlags {
   return [pscustomobject]@{ lines = $page.ToArray(); held = $heldL.ToArray(); advisory = $advL.ToArray(); live = $liveL.Count }
 }
 
+function Get-LabelBasisLines($Recipes) {
+  # Every costed line priced from a label, as '<slug> :: <item> :: <basis>'. The engine refuses to write
+  # costed.json while this is non-empty (2026-09-21, Brad's ruling): a label price reaching a recipe again is a
+  # regression, never a fallback. Returned with a leading comma so an EMPTY answer is an empty array, not $null
+  # (@($null).Count is 1): callers assign first, then count.
+  $hits = New-Object System.Collections.Generic.List[string]
+  foreach ($r in @($Recipes)) {
+    if ($null -eq $r) { continue }
+    foreach ($l in @($r.lines)) {
+      if ($null -eq $l) { continue }
+      if (([string]$l.basis).StartsWith('label:', [StringComparison]::Ordinal)) { $hits.Add(([string]$r.slug + ' :: ' + [string]$l.item + ' :: ' + [string]$l.basis)) }
+    }
+  }
+  return ,$hits.ToArray()
+}
+
 if ($SelfTest) {
   # Nothing above this point writes a file; the engine's work starts below. This block EXITS on every path
   # (ops\audit-selftest-fallthrough.ps1), and its last line is its verdict and says it is a self-test
@@ -265,15 +311,23 @@ if ($SelfTest) {
   $noPrice = [pscustomobject]@{ verdict = 'CARRIED'; store = 'Hy-Vee'; item = 'Quality Wild Rice'; size = '16 oz'; price = 0; as_of = '2026-09-19' }
   CChk 'MUST NOT FIRE a CARRIED entry with no price fails Test-CarriageEvidence and prices nothing' ($null -eq (Get-LedgerBasis -Entry $noPrice -Bid 'wild-rice' -MaxAgeDays 90 -Now $now)) 'priced'
   CChk 'MUST NOT FIRE an unreadable quarter (MaxAgeDays -1) refuses rather than guessing a bound' ($null -eq (Get-LedgerBasis -Entry $wild -Bid 'wild-rice' -MaxAgeDays -1 -Now $now)) 'priced with no bound'
-  # CLEAN TWIN - the adjacent behaviour this change was most likely to break: the label fallback still runs
-  # FIRST, so a line that prices from a label today keeps that basis. five-spice-powder is the real pair:
-  # a McCormick Gourmet 1.75 oz label at $8.13 beside a Hy-Vee ledger read of $9.99 for the same size.
-  # Ordering by POSITION, not by a regex window: the gap between the two blocks is prose, and a window wide
-  # enough to span it proves nothing about order. The label fallback must come first in the engine's body.
-  $srcSelf = (Get-Content $PSCommandPath -Raw) -replace "`r", ''
-  $iLabel = $srcSelf.IndexOf('if($null -eq $ppg -and $labels.ContainsKey($ing.item)){')
-  $iLedger = $srcSelf.IndexOf('$lb = Get-LedgerBasis -Entry $CARRLEDGER[$lineBid]')
-  CChk 'CLEAN TWIN the ledger sits AFTER the label in the engine, so a label-priced line keeps its label basis' (($iLabel -gt 0) -and ($iLedger -gt 0) -and ($iLabel -lt $iLedger)) ("label@$iLabel ledger@$iLedger")
+  # ---- NO LINE PRICES FROM A LABEL (2026-09-21, Brad's ruling) ----------------------------------------------
+  # These replace the 2026-09-20 CLEAN TWIN that held the label fallback AHEAD of the ledger. That ordering was
+  # Q1-2026-09-20-partial-cost, and Brad answered it on 2026-09-21 by retiring the label as a price altogether.
+  # FROZEN: the real Five-Spice row of db\label-prices.json, and the real costed lines of 2026-09-21 before and
+  # after the board priced five spice from Hy-Vee.
+  $fsLabelRows = ConvertFrom-Json '[{"item":"Five-Spice Powder","brand":"McCormick Gourmet","product":"McCormick Gourmet Chinese Five Spice Blend, 1.75 oz bottle","package_size":"1.75 oz","package_price_usd":8.13,"serving_grams":0.5,"calories":0,"protein_g":0,"carbs_g":0,"fat_g":0,"label_source_url":"https://www.mccormick.com/cdn/shop/files/25_MKC_GOURMET_GENERIC_NUTRITIONAL_FACTS-2026-04-06.png"}]'
+  $lm = Import-LabelMacros $fsLabelRows
+  $lmFs = $lm['Five-Spice Powder']
+  CChk 'CLEAN TWIN macros still load from label-prices.json: the real Five-Spice row gives calories 0, protein 0, a 0.5 g serving and its McCormick label URL' (($null -ne $lmFs) -and ($lmFs.calories -eq 0) -and ($lmFs.protein_g -eq 0) -and ($lmFs.serving_grams -eq 0.5) -and ($lmFs.label_source_url -like 'https://www.mccormick.com/*')) ((@($lm.Keys)) -join ',')
+  $lmPriceProps = @(@($lmFs.PSObject.Properties.Name) | Where-Object { $_ -like '*price*' })
+  CChk 'MUST NOT FIRE the loaded label carries NO price field, so nothing below can price from it' (($null -ne $lmFs) -and ($lmPriceProps.Count -eq 0)) ($lmPriceProps -join ',')
+  $lblRecipe = [pscustomobject]@{ slug = 'five-spice-turkey-noodle-bowls'; lines = @([pscustomobject]@{ item = 'Five-Spice Powder'; basis = 'label:McCormick Gourmet 1.75 oz' }, [pscustomobject]@{ item = 'Ground Turkey'; basis = 'board:ground-turkey:walmart' }) }
+  $lblHits = Get-LabelBasisLines @($lblRecipe)
+  CChk 'MUST FIRE  the engine refuses the real 2026-09-21 label line (Five-Spice Powder, label:McCormick Gourmet 1.75 oz) and only that line' ((@($lblHits).Count -eq 1) -and (@($lblHits)[0] -eq 'five-spice-turkey-noodle-bowls :: Five-Spice Powder :: label:McCormick Gourmet 1.75 oz')) (@($lblHits) -join ' | ')
+  $okRecipe = [pscustomobject]@{ slug = 'turkey-wild-rice-casserole'; lines = @([pscustomobject]@{ item = 'Five-Spice Powder'; basis = 'board:five-spice-powder:nomem:Hy-Vee' }, [pscustomobject]@{ item = 'Wild Rice'; basis = 'ledger:wild-rice:Hy-Vee:2026-09-19' }, [pscustomobject]@{ item = 'Salt'; basis = 'feed:salt' }) }
+  $okHits = Get-LabelBasisLines @($okRecipe)
+  CChk 'MUST NOT FIRE a board-priced, a ledger-priced and a feed-priced line are not refused' (@($okHits).Count -eq 0) (@($okHits) -join ' | ')
   CChk 'CLEAN TWIN SizeToGrams still reads the real ledger size text as 16 oz, not as the 1 lb inside its parenthesis' ([math]::Abs((SizeToGrams '16 oz (1 lb stand up bag)') - (16 * 28.3495)) -lt 0.0001) ([string](SizeToGrams '16 oz (1 lb stand up bag)'))
   # ---- WHICH FLAG LINES PAGE (2026-09-21, queue 2026-09-20-6c14f6) -------------------------------------------
   # The four real shapes of 2026-09-21's db\cost-flags.txt, one line each: a catalogue-level allowlist refusal, a
@@ -317,6 +371,13 @@ if ($SelfTest) {
     CChk 'END-TO-END MUST NOT FIRE a HELD recipe''s six flag lines are not in cost-flags.txt' (@($eF | Where-Object { $_ -like '*ZZ Synthetic Flag Cases*' }).Count -eq 0) ($eF -join ' | ')
     CChk 'END-TO-END CLEAN TWIN the held recipe is REPORTED: a HELD count line, and its 6 lines kept in costed.stamp.json' ((@($eLog | Where-Object { $_ -like 'cost-recipes: HELD 1 recipe(s)*' }).Count -eq 1) -and ($null -ne $eS) -and ([int]$eS.flags_set_aside.held_recipes -eq 1) -and (@($eS.flags_set_aside.held_lines).Count -eq 6)) ("held-lines=$(if($eS){@($eS.flags_set_aside.held_lines).Count}else{'no stamp'}) log=$((@($eLog | Where-Object { $_ -like 'cost-recipes: HELD*' })) -join ' | ')")
     CChk 'END-TO-END CLEAN TWIN the held recipe is still COSTED: costed.json is byte-identical to the frozen golden baseline' ((Test-Path $eOut) -and ((Get-FileHash $eOut).Hash -eq (Get-FileHash (Join-Path $gfx 'expected\costed.json')).Hash)) 'costed.json moved'
+    # The fixture's db\label-prices.json still carries PRICED rows (it is frozen), so this is the end-to-end proof that
+    # the engine reads none of them: not one costed line may carry a label: basis, and the run must still exit 0.
+    $fxLab = Get-Content (Join-Path $edb 'label-prices.json') -Raw | ConvertFrom-Json
+    $fxPriced = @(@($fxLab) | Where-Object { $null -ne $_ -and $_.package_price_usd -gt 0 }).Count
+    $eDoc = $null; if (Test-Path $eOut) { $eDoc = Get-Content $eOut -Raw | ConvertFrom-Json }
+    $eLbl = Get-LabelBasisLines @($eDoc)
+    CChk ('END-TO-END MUST FIRE  with ' + $fxPriced + ' priced label row(s) in the fixture, not one costed line carries a label: basis') (($fxPriced -gt 0) -and ($eRc -eq 0) -and ($null -ne $eDoc) -and (@($eLbl).Count -eq 0)) (@($eLbl) -join ' | ')
     # RUN 2: nothing held or published; a CARRIED ledger read prices the synthetic off-board bid, so its MAPPED BID
     # line becomes ADVISORY while a genuinely unpriced line of the same recipe keeps paging.
     Remove-Item (Join-Path $edb 'held-recipes.json'), (Join-Path $edb 'published-hashes.json') -Force
@@ -433,18 +494,11 @@ foreach($r in $computed){
       elseif($noBoardOk.ContainsKey($bid)){ $script:registerEst++ }
       else { $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: MAPPED BID NOT ON ANY BOARD (' + $bid + ')')); $mappedIdx = $costFlags.Count - 1 }
     }
-    # THE LABEL FALLBACK PRICES ONLY WHAT OMAHA IS PROVEN TO STOCK. Until 2026-08-22 these two
-    # statements ran unconditionally, directly after the 'MAPPED BID NOT ON ANY BOARD' flag above - so
-    # the engine noticed no store prices the ingredient, wrote an advisory line nothing gates on, and
-    # then priced it from a hard-coded label anyway. A recipe costed out normally and published. That is
-    # the exact route Sumac took, and doubanjiang after it.
-    if($null -eq $ppg -and $labels.ContainsKey($ing.item)){
-      if($carr.verdict -eq 'CARRIED'){
-        $L=$labels[$ing.item]; $ppg = $L.pkg_price/$L.pkg_g; $basis=('label:'+$L.desc)
-      } else {
-        $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: LABEL PRICE REFUSED, CARRIAGE ' + $carr.verdict + ' (' + $carr.why + ')'))
-      }
-    }
+    # THE LABEL FALLBACK IS RETIRED (2026-09-21, Brad's ruling; see Import-LabelMacros). It stood here, after the
+    # feed and before the carriage ledger, and priced a line from db\label-prices.json when Omaha was proven to
+    # stock the item. On the day it was retired exactly 7 live lines used it, all Five-Spice Powder at a July
+    # walmart.com $8.13, and all 7 had moved to the board's store-fetched Hy-Vee cell ($9.99 / 1.75 oz, read
+    # 2026-09-21) before this line was removed: plan-2026-09-21-2.json measured zero live label lines first.
     # THE CARRIAGE LEDGER IS A PRICE, NOT JUST A VERDICT (2026-09-20, queue 2026-09-19-d240fd).
     # The ledger is the ONE place a live in-store read of price + size + product id + date is recorded for
     # an ingredient no capture reaches, and until today it was consulted for its verdict alone (line 215).
@@ -497,7 +551,7 @@ foreach($r in $computed){
     } else {
       $pg=$null
       if($row -and (Has $row 'buy_pkg_g')){ $pg=@{g=[double]$row.buy_pkg_g; label=[string]$row.buy_pkg_label} }
-      elseif($labels.ContainsKey($ing.item)){ $pg=@{g=$labels[$ing.item].pkg_g; label=$labels[$ing.item].desc} }
+      elseif($LABELPKG.ContainsKey($ing.item)){ $pg=@{g=$LABELPKG[$ing.item].pkg_g; label=$LABELPKG[$ing.item].desc} }
       # COVERED_BY: this line's material comes out of a unit ANOTHER line already buys.
       #
       # A lemon yields juice AND zest. The casserole used 70 g of juice and 5 g of zest, and the engine
@@ -597,6 +651,16 @@ if($Slugs){
   foreach($r in $out){ if(-not $replaced.ContainsKey([string]$r.slug)){ $merged += $r; $appended++ } }
   $out = $merged
   Write-Output ("targeted recost: spliced into {0} total ({1} replaced, {2} newly added)" -f $out.Count, $replaced.Count, $appended)
+}
+# NO LINE PRICES FROM A LABEL, EVER AGAIN (2026-09-21, Brad's ruling). Nothing above loads a label price, so this
+# can only fire if a label fallback creeps back in, or a -Slugs splice carries an old row forward. Either way the
+# costs are NOT written: a recipe page priced off a July walmart.com read is the defect this closes, and failing
+# loud here pages the chain ("Recipe recost failed") instead of publishing it.
+$labelBased = Get-LabelBasisLines $out
+if (@($labelBased).Count -gt 0) {
+  Write-Output ('cost-recipes: REFUSED - ' + @($labelBased).Count + ' line(s) priced from a label: basis, which Brad ruled out on 2026-09-21 ("The pricing must be fetched from a store always"). costed.json was NOT written:')
+  foreach ($x in @($labelBased)) { Write-Output ('  ' + $x) }
+  exit 2
 }
 $out | ConvertTo-Json -Depth 7 | Out-File $costedPath -Encoding utf8
 

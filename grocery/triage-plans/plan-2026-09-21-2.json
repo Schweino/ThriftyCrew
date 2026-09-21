@@ -1,0 +1,115 @@
+{
+  "generated": "2026-09-21T05:30:00",
+  "round": 1,
+  "board_week": "2026-09-20",
+  "lane": "money",
+  "queue_ids_seen": ["discovered:label-pricing-2026-09-21"],
+  "routing_artifact": null,
+  "note": "Brad's direct instruction of 2026-09-21, no queue item. His standing rulings that day, verbatim: \"We should never have hand-typed pricing. The pricing must be fetched from a store always.\" / \"Pricing should always come from Ads or websites from stores directly.\" / \"a recipe page should ALWAYS be able to be costed. We should never have a situation that it can't be.\" The last fixes the ORDER: nothing is retired until what replaces it is live. Written and implemented by the money-lane developer in one run, so this plan is also the record of what shipped.",
+  "knowledge_consulted": {
+    "searched": "knowledge-search --multi \"carriage ledger\" \"hyvee capture rotation\" \"commodity never priced\" \"label price\": 77 sections matched; data-quality-craft/applies-here.md 'First-match-wins and freshness ranking let the wrong row take a board cell' was the only near hit and does not apply (no row won a cell here; the rows were withheld).",
+    "used": [
+      "memory:recipe-cost-basis-map (from the brief): four per-serving numbers legitimately disagree; costed.json is utilization, the card reads the feed",
+      "memory:price-mode-in-store: the 13 walmart.com MARKETPLACE label prices were never Omaha shelf prices",
+      "memory:conformance-guard-cannot-see-rule-bug: checked and ruled OUT for five spice and wild rice (no band refused either; the store gate withheld them correctly), ruled IN for ground-sumac (OUT-OF-BAND on a CARRIED product), left as a residual",
+      "memory:recost-needs-sync-recipesdb-cost-and-the-slugs-trap (read in full): sync before propagate; recost-spec-cost-block is NOT a price update tool",
+      "memory:ps-null-count-is-one and .claude/rules/ops-and-gates.md: every new count assigns first, and a comparison row with stores null is judged on content",
+      ".claude/rules/ops-and-gates.md fixture vocabulary: MUST FIRE / MUST NOT FIRE / CLEAN TWIN used by assertion",
+      ".claude/rules/meal-prep.md and grocery.md: set-board-cell is the recipe-board corrector and was NOT used; no hard-coded bands"
+    ]
+  },
+  "items": [
+    {
+      "queue_id": "discovered:label-pricing-2026-09-21",
+      "subject": "Brad 2026-09-21: every price fetched from a store. Five spice and wild rice had a rule, a search term and a CARRIED Omaha shelf, and no board cell; seven live recipes priced five spice off a July walmart.com label",
+      "classification": "capture-gap",
+      "evidence": [
+        "candidates-2026-09-20.json five-spice-powder: 9 candidates, ALL withheld. Hy-Vee 'McCormick Gourmet Chinese Five Spice Blend, 1.75 oz' $9.99 prod 400543 as_of 2026-08-21 = WITHHELD-WRONG-STORE; every Walmart row WITHHELD-SHIP-ONLY (FC or marketplace) or WITHHELD-UNPROVEN-CHANNEL. No band refused anything.",
+        "candidates-2026-09-20.json wild-rice: 4 candidates. Hy-Vee 'Hy-Vee Select Wild Rice' 16 oz $10.99 prod 1517940 as_of 2026-08-21 = WITHHELD-WRONG-STORE; Fareway Lundberg WITHHELD-UNPROVEN-STORE; Hy-Vee 'Bulk Wild Rice Salad' UNPRICED; Walmart Lundberg WITHHELD-SHIP-ONLY.",
+        "hyvee-regular-2026-09-20.json: both rows stamped store_id 1465 (Omaha #01, retired 2026-08-21), not_reverified. 1,541 rows: 970 at 1465, 308 at 1466, 263 unstamped. Header: ask_budget 15, asked 15, answered 0, failed 8.",
+        "Ask order (Get-HyVeeAskOrder, age only): 920 of 1,228 askable rows off-target; 400543 at position 879 and 1517940 at 895. At the quarter's 15 asks a day, their turn was about day 59, the week their 90-day carry expires (2026-11-19).",
+        "The lane was also BLIND: run by hand 2026-09-21 05:01, 93 asked, 0 answered, every lookup 'The remote server returned an error: (400) Bad Request'. Probe of the same persisted query for 400543: body with \"storeId\":1466 -> HTTP 200 and the McCormick offer; the same body with \"storeId\":\"1466\" -> HTTP 400, empty body.",
+        "Cause of the string: 9f5059eec (2026-09-19 06:44) gave Invoke-HyVeeWorkPass a mandatory [string]$StoreId. The -Fetch scriptblock runs inside it, so Get-HyVeeStoreProduct's bare $StoreId resolved by PowerShell DYNAMIC SCOPE to the pass's string '1466'. The 2026-09-19 file (written 09:20) still answered 9 of 10; 2026-09-20 answered 0 of 15; 2026-09-21 0 of 93.",
+        "costed.json before the fix (live = published-hashes, 577 of 584): board 7,524, feed 227, label 7 (all 'Five-Spice Powder' label:McCormick Gourmet 1.75 oz, $8.13 walmart.com 2026-07-18), ledger 1 (Wild Rice, ledger:wild-rice:Hy-Vee:2026-09-19)."
+      ],
+      "surface_fix": {
+        "what": "re-read the two withheld Hy-Vee rows at the pinned store through the lane itself, rebuild, publish",
+        "files": ["grocery/out/regular/hyvee-regular-2026-09-21.json (pipeline output)"],
+        "exact_change": "pull-regular-hyvee.ps1 run by hand at 05:0x after the fixes below: asked 15, answered 15; 400543 -> $9.99 / 1.75 oz at 1466 as_of 2026-09-21, 1517940 -> $10.99 / 16 oz at 1466 as_of 2026-09-21. No price or cell was typed anywhere; set-board-cell.ps1 was not used."
+      },
+      "root_cause": "Two defects in the one lane that could supply these cells, and a precedence that hid them. (1) Since 2026-09-20 every Hy-Vee product lookup was refused HTTP 400 because the fetch read $StoreId by dynamic scope and got a caller's [string] parameter, so the retired-store migration stopped dead and nothing Hy-Vee-only could ever price. (2) Even answering, the ask order ranked off-target rows by age alone, blind to whether a row was the ONLY store evidence for a commodity the board prices nowhere, so the two load-bearing rows sat about 59 days back in a 90-day carry. (3) Because cost-recipes fell back to db/label-prices.json, the missing cell never paged: seven live recipes priced five spice at a July walmart.com label and read as costed.",
+      "root_fix": {
+        "what": "(1) Build the Hy-Vee lookup body from script-scoped values by name and refuse a body Hy-Vee will reject; (2) read the board's own verdict back and ask first for a row withheld only for its store on a commodity with no cell; (3) retire label-prices.json as a price source, fail closed on any label: basis, and write the ruling into the repo rules",
+        "files": ["grocery/pull-regular-hyvee.ps1", "meal-prep/engine/cost-recipes.ps1", "meal-prep/engine/regression-inputs/golden/expected/costed.json", "meal-prep/engine/regression-inputs/golden/expected/cost-flags.txt", "meal-prep/engine/regression-inputs/golden/MANIFEST.json", ".claude/rules/meal-prep.md", ".claude/rules/grocery.md"],
+        "exact_change": "pull-regular-hyvee.ps1: Test-HyVeeLookupBody + Get-HyVeeLookupBody (storeId cast [int] from $script:HvRequestStoreId, set beside $LOC); Get-HyVeeStoreProduct and Resolve-HyVeeLookupOutcome use them; Get-HyVeeUncoveredIds + Read-HyVeeBoardVerdict (newest comparison + same-date candidates; Hy-Vee candidates WITHHELD-WRONG-STORE or WITHHELD-UNPROVEN-STORE on a commodity with no cell); Get-HyVeeAskOrder takes -UncoveredIds as rank 1 (after expiring sales, before other off-target rows, INSIDE the same budget). cost-recipes.ps1: Import-LabelMacros loads label-prices.json macros only (no price field copied); the label fallback removed; the label package SIZE still sizes a purchase package as before; Get-LabelBasisLines + a refusal (exit 2, costed.json not written) before the write. Golden re-baselined for the two fixture lines that priced from a label (Bulgur Wheat, Aji Amarillo Paste now NO PRICE BASIS)."
+      },
+      "leaves_open": "20 of 577 search-termed commodities still have no board cell (23 before), 0 of 577 live recipes depend on them; within them 1 CARRIED product is refused by a band (ground-sumac, Baker's Morton & Bassett Sumac OUT-OF-BAND) and the Hy-Vee lane cannot ask about a cheaper wild rice it has never held (Quality Wild Rice 36825, $8.99 vs the $10.99 board cell); and the carriage ledger is a one-time read nothing re-reads (0 live lines on it now).",
+      "leaves_open_occurrences": "band-refused CARRIED product: 1 (ground-sumac, board of 2026-09-20/21); un-askable cheaper Hy-Vee product: 1 (wild rice, 2026-09-21); no-cell commodities: 20 on the 2026-09-21 board; ledger aging a live line out: 0 since the ledger basis began on 2026-09-20",
+      "leaves_open_followup": "2026-09-21-149497",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule changed (commodities.json untouched), so routing is unchanged by construction; audit-match-soundness MOVED=0 DROPPED=0 new-contested=0. The CELL effect was measured as a full diff of comparison-2026-09-20 built 2026-09-20T17:26:38 (565 rows) against the rebuild of 2026-09-21T05:08:20 (568 rows), and crowns against HEAD's public/board.json.",
+        "affected_now": 7,
+        "names": [
+          "McCormick Gourmet Chinese Five Spice Blend, 1.75 oz",
+          "Hy-Vee Select Wild Rice",
+          "Bud by Dole 12oz Vegetable Stir Fry",
+          "That's Smart! Unsweetened Apple Sauce 6-4 oz",
+          "Hiland Premium Chocolate Milk, Pint, 16 Fl Oz",
+          "Hormel Ground Pork 80% Lean 20% Fat",
+          "Jennie O Ground Turkey 85 Lean 15 Fat"
+        ],
+        "risk": "every added cell is a Hy-Vee Omaha #02 read of 2026-09-21 on the right product by name; 0 crowns changed. The rescue also re-read Morton & Bassett Harissa (2345453), a DRY blend carriage.json already ruled is not harissa paste: adjudicated known-wrong for harissa-paste and its curated link withdrawn BEFORE the rebuild, so harissa-paste stays uncovered, as its NOT-CARRIED ruling says.",
+        "cell_effects": [
+          { "commodity": "five-spice-powder", "store": "Hy-Vee", "before": null, "after": 5.7086 },
+          { "commodity": "wild-rice", "store": "Hy-Vee", "before": null, "after": 0.6869 },
+          { "commodity": "fresh-stir-fry-blend", "store": "Hy-Vee", "before": null, "after": 0.2492 },
+          { "commodity": "applesauce", "store": "Hy-Vee", "before": null, "after": 0.0829 },
+          { "commodity": "chocolate-milk", "store": "Hy-Vee", "before": null, "after": 0.0625 },
+          { "commodity": "ground-pork", "store": "Hy-Vee", "before": null, "after": 3.49 },
+          { "commodity": "ground-turkey", "store": "Hy-Vee", "before": null, "after": 6.99 }
+        ],
+        "recipe_effects": "8 live recipes moved (utilization per serving, costed.json): five-spice-turkey-noodle-bowls 2.78 -> 2.83; ghanaian-shoko-beef-spinach-stew 4.39 -> 4.40; hong-kongstyle-baked-pork-chop-rice 1.55 -> 1.55 (batch 21.66 -> 21.70); sichuan-dan-dan-noodles-with-pork 3.20 -> 3.21; slow-cooker-char-siu-pork-bowls 1.66 -> 1.67; taiwanese-lu-rou-fan-pork-rice-bowls 1.57 -> 1.58; vietnamese-bo-kho-lemongrass-beef-stew 3.93 -> 3.96; turkey-wild-rice-casserole 3.42 -> 3.69 (ledger $8.99 Quality Wild Rice -> board $10.99 Hy-Vee Select Wild Rice). After: live lines board 7,532, feed 227, label 0, ledger 0."
+      },
+      "freshness": "measured against comparison-2026-09-20 (built 2026-09-20 17:26), candidates of the same build and hyvee-regular-2026-09-20 (12:01); the fix was verified on the rebuild of 2026-09-21 05:08 and the costed.json of 2026-09-21 05:2x. The 08:00 Hy-Vee lane will re-read another budget; its base file is today's, so the 1466 rows carry.",
+      "proof": {
+        "guard_or_fixture": "pull-regular-hyvee.ps1 -SelfTest (99 cases), cost-recipes.ps1 -SelfTest (end-to-end over the golden fixture), golden-test.ps1 (13 cases)",
+        "must_fire_case": "Hy-Vee: the founding body with \"storeId\":\"1466\" is refused by Test-HyVeeLookupBody; the real 400543 and 1517940 rows (WITHHELD-WRONG-STORE, no cell) are named by Get-HyVeeUncoveredIds and asked FIRST at a budget of 1, ahead of an off-target row 11 days older. Engine: Get-LabelBasisLines refuses the real 2026-09-21 line 'Five-Spice Powder :: label:McCormick Gourmet 1.75 oz'; END-TO-END, the fixture's 19 priced label rows produce 0 label: lines and exit 0.",
+        "clean_twin": "Hy-Vee: built inside a caller holding [string]$StoreId='1466', the real body still carries storeId 1466 as a JSON number and the pinned #02 location; with no uncovered ids the order is still oldest off-target first. Engine: macros still load from label-prices.json (real Five-Spice row: calories 0, protein 0, 0.5 g serving, McCormick label URL). MUST NOT FIRE twins: board, ledger and feed lines are not refused; a withheld row on a PRICED commodity, a ship-only row and an UNPRICED row are not promoted; a row already read at 1466 is not promoted.",
+        "commands": [
+          "powershell -File grocery\\pull-regular-hyvee.ps1 -SelfTest   -> SELF-TEST PASS, 99 ok, exit 0",
+          "powershell -File grocery\\pull-regular-hyvee.ps1 -DryRun     -> 4 uncovered-commodity asks in slice (400543, 1517940, 4249169, 2345453)",
+          "powershell -File grocery\\pull-regular-hyvee.ps1             -> asked 15, answered 15, daily step recorded",
+          "powershell -File meal-prep\\engine\\cost-recipes.ps1 -SelfTest -> PASS, exit 0",
+          "powershell -File meal-prep\\engine\\golden-test.ps1           -> GOLDEN: 13 passed, 0 failed, exit 0",
+          "powershell -File grocery\\guards.ps1                          -> GUARDS-COMPLETE hard=0 warn=20, exit 0"
+        ]
+      },
+      "rollback": "git revert the commit: pull-regular-hyvee.ps1, cost-recipes.ps1 and the golden expected files return together. Reverting the lane alone re-breaks every Hy-Vee lookup (HTTP 400). Reverting the engine alone re-opens the label fallback; with five spice on the board no live line would use it. The known-wrong ruling reverses with add-known-wrong.ps1 -Reverse.",
+      "do_not_touch": ["the Hy-Vee budget (the quarter decides HOW MANY; this decides WHICH)", "capture-policy-lib RotationDays / QuarterDays", "any band", "set-board-cell.ps1 and recipe-board-everyday.json", "label-prices.json's price fields (kept, unread)", "recost-spec-cost-block.ps1 (a daily price move is not a repair)"],
+      "resolution_note": "Five spice and wild rice now price on the board from Hy-Vee Omaha #02 reads of 2026-09-21 ($9.99 / 1.75 oz, $10.99 / 16 oz). Cause: every Hy-Vee lookup had been refused HTTP 400 since 2026-09-20 (a dynamic-scope string storeId) and the ask order could not see which withheld rows were a commodity's only store evidence. Both fixed with fixtures; label-prices.json is macros only and the engine refuses any label: basis; ruling recorded in .claude/rules. Board and feed republished.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "true on every measured premise, with one narrowing. Re-measured: label-prices.json has 59 rows and one commit (92dd24454); live dependence over costed.json x published-hashes was label 7 (all Five-Spice Powder) and ledger 1 (Wild Rice) exactly as the brief said, over 577 live recipes. Both commodities have include rules and a search term; both are CARRIED at Hy-Vee 1466 in carriage.json; neither was in comparison-2026-09-20 (the brief said 0 mentions in the comparison, true) though BOTH were in candidates-2026-09-20.json, withheld. The brief's candidate causes: rotation never reached them = TRUE (positions 879 and 895 of 1,228); band refusal = FALSE for both (no OUT-OF-BAND candidate); dropped for a missing field = FALSE; Hy-Vee lane BLIND = TRUE and it was the decisive one, a code defect not a wall. Class count re-derived: 23 of 577 search-termed commodities had no cell, 2 with live dependence.",
+      "deviation": "(1) The brief expected wild rice at the carriage read's $8.99 Quality Wild Rice; the pipeline's own fetch prices Hy-Vee Select Wild Rice at $10.99, because the lane can only re-read products it already holds and 36825 can enter only through a human-adjudicated catalogue add. turkey-wild-rice-casserole therefore moved from the ledger's $3.42 to $3.69 a serving; recorded in leaves_open, not papered over. (2) The rescue re-read surfaced a latent wrong product (Morton & Bassett Harissa, a DRY blend, on harissa-paste, already on the board on 2026-08-29 per its curated link): adjudicated known-wrong and the link withdrawn before the rebuild. (3) Part 2's card road is the feed: export-feed re-run after the recost; spec cost snapshots were NOT re-rendered (recost-spec-cost-block's own header forbids using it for a price move), so each spec's stat.cost_ps follows on the next propagate. (4) The Hy-Vee lane ran twice by hand this morning (05:01 blind, before the body fix; 05:2x answered 15 of 15), ahead of its 08:00 slot.",
+      "shipped_commit": "the origin/main commit that carries this file (git log -1 -- grocery/triage-plans/plan-2026-09-21-2.json); not cited by hash because a rebase before the push would rewrite it"
+    }
+  ],
+  "ship_sequence": [
+    "measure: candidates + comparison + hyvee-regular for both commodities; the 23-of-577 class count; the live dependence (costed.json x published-hashes)",
+    "pull-regular-hyvee.ps1: uncovered-commodity rank, then the lookup-body fix; -SelfTest, -DryRun, then the real lane run",
+    "add-known-wrong.ps1 harissa-paste / Hy-Vee / Morton & Bassett Harissa (2345453), withdraw-stale-link.ps1 harissa-paste/Hy-Vee",
+    "repair-multipack-sizes.ps1 -Apply, stamp-ad-as-of.ps1 -Apply (both BEFORE compare-deals)",
+    "compare-deals.ps1 -MinStores 1 -IdentityNamespace staple -BakersFile out/bakers/bakers-deals-2026-09-09.json -FarewayFile out/fareway/fareway-deals-2026-09-20.json",
+    "diff the rebuilt comparison against the pre-change one and HEAD's board.json (3 commodities added, 4 Hy-Vee cells added, 0 crowns moved)",
+    "audit-name-drift / prune-bad-links -Tol 0.32 / audit-name-drift AGAIN (prune rewrote product-urls.json) / generate-board-overrides / build-deals-page",
+    "audit-food-category (0), audit-match-soundness (MOVED=0 DROPPED=0, no -Accept), guards.ps1 (hard=0), audit-basis-reconcile (0 findings), audit-pack-basis (ok)",
+    "publish-deals-page.ps1, export-feed.ps1",
+    "cost-recipes.ps1 -LedgerMaxAgeDays 90 (engine unchanged): confirm 0 live label lines",
+    "retire the label price in cost-recipes.ps1; -SelfTest; golden-test -Frozen, read the diff (2 fixture label lines only), -Rebaseline, golden-test (13/13)",
+    "cost-recipes.ps1 -LedgerMaxAgeDays 90 again (byte-identical costed.json), export-feed.ps1 again",
+    "rules bullets in .claude/rules/meal-prep.md and grocery.md; residual owner via send-alert.ps1 -Force -Lane weekly",
+    "test-auditors.ps1, validate-triage-plan -OpenIds then -Closing, commit with a pathspec, push, verify live board + feed"
+  ],
+  "open_questions_for_brad": []
+}

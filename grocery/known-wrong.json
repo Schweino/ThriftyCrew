@@ -4923,6 +4923,21 @@
                         "ruled_on":  "2026-09-20",
                         "ruled_by":  "triage-money-lane 2026-09-20 (plan-2026-09-20-4.json, 37ac63/4f01f6)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "harissa-paste|HyVee|morton-bassett-harissa",
+                        "commodity":  "harissa-paste",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Morton \u0026 Bassett Harissa"
+                                  ],
+                        "product_id":  "2345453",
+                        "verdict":  "wrong-product",
+                        "evidence":  "The DRY spice blend, not harissa paste. Hy-Vee Omaha #02 (storeId 1466) search 2026-09-19, recorded in grocery\\carriage.json harissa-paste: Morton \u0026 Bassett Harissa 1.9 oz $11.99, productId 2345453, department Herbs, Spices \u0026 Seasoning. Its 1465 row was withheld WRONG-STORE, so it never reached the board; the 2026-09-21 uncovered-commodity re-read (pull-regular-hyvee Get-HyVeeUncoveredIds) asks it at 1466, which would have admitted a dry blend to the paste cell.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-21",
+                        "ruled_by":  "triage-developer money lane 2026-09-21 (plan-2026-09-21-2), on the carriage read of 2026-09-19",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

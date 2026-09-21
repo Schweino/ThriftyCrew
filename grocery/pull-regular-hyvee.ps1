@@ -288,7 +288,12 @@ function Get-HyVeeAskOrder {
              chosen indices in ask order), and the rank counts inside the slice.
   #>
   param([Parameter(Mandatory)][AllowEmptyCollection()]$Work, [int]$Budget, [string]$TargetStoreId,
-        [hashtable]$ExpiringIdx = @{})
+        [hashtable]$ExpiringIdx = @{}, [hashtable]$UncoveredIds = @{})
+  # RANK 1 (2026-09-21): an off-target or unstamped row whose product id the newest board named as the only
+  # thing standing between a commodity and its first cell (Get-HyVeeUncoveredIds). It is asked ahead of the
+  # plain off-target rows, INSIDE the same budget: the quarter decides how many products are asked, this decides
+  # which. A row already read at the pinned store is never promoted, whatever the board says, because the
+  # re-read that would release it has already happened and only the next build is missing.
   $cands = New-Object System.Collections.Generic.List[object]
   $i = -1
   foreach ($w in $Work) {
@@ -300,25 +305,96 @@ function Get-HyVeeAskOrder {
       $sid = Get-HyVeeRowStoreId $w.prow
       $req = [bool]([string]$w.prow.requeued)
     }
-    $rank = 2
+    $offT = (-not [string]::Equals($sid, $TargetStoreId, [StringComparison]::Ordinal))
+    $rank = 3
     if ($ExpiringIdx.ContainsKey($i)) { $rank = 0 }
-    elseif ($req -or (-not $sid) -or (-not [string]::Equals($sid, $TargetStoreId, [StringComparison]::Ordinal))) { $rank = 1 }
-    [void]$cands.Add([pscustomobject]@{ i = $i; rank = $rank; asOf = $asOf; off = (-not [string]::Equals($sid, $TargetStoreId, [StringComparison]::Ordinal)) })
+    elseif ($offT -and $UncoveredIds.ContainsKey([string][int]$w.pid)) { $rank = 1 }
+    elseif ($req -or (-not $sid) -or $offT) { $rank = 2 }
+    [void]$cands.Add([pscustomobject]@{ i = $i; rank = $rank; asOf = $asOf; off = $offT; unc = ($offT -and $UncoveredIds.ContainsKey([string][int]$w.pid)) })
   }
   # Ordinal-safe: as_of is yyyy-MM-dd or '', and '' sorts first under any comparer.
   $sorted = @($cands.ToArray() | Sort-Object -Property @{ Expression = { $_.rank } }, @{ Expression = { $_.asOf } }, @{ Expression = { $_.i } })
   $take = [math]::Min([math]::Max(0, $Budget), $sorted.Count)
   $idx = @{}; $order = New-Object System.Collections.Generic.List[int]
-  $nExp = 0; $nOff = 0
+  $nExp = 0; $nOff = 0; $nUnc = 0
   for ($k = 0; $k -lt $take; $k++) {
     $c = $sorted[$k]
     $idx[[int]$c.i] = $true; [void]$order.Add([int]$c.i)
     if ($c.rank -eq 0) { $nExp++ }
+    if ($c.rank -eq 1) { $nUnc++ }
     if ($c.off) { $nOff++ }
   }
   $offAll = @($sorted | Where-Object { $_.off }).Count
+  $uncAll = @($sorted | Where-Object { $_.unc }).Count
   return [pscustomobject]@{ Index = $idx; Order = $order.ToArray(); Askable = $sorted.Count
-    ExpiringInSlice = $nExp; OffTargetInSlice = $nOff; OffTargetAskable = $offAll }
+    ExpiringInSlice = $nExp; OffTargetInSlice = $nOff; OffTargetAskable = $offAll
+    UncoveredInSlice = $nUnc; UncoveredAskable = $uncAll }
+}
+
+function Get-HyVeeUncoveredIds {
+  <#
+    .SYNOPSIS Which Hy-Vee product ids does the newest board need RE-READ to price a commodity it prices NOWHERE?
+    .DESCRIPTION
+      THE SILENT GAP THIS CLOSES (2026-09-21; Brad, the same day: "The pricing must be fetched from a store
+      always"). five-spice-powder and wild-rice each had an include rule, a search term, and a CARRIED verdict
+      read live at Hy-Vee Omaha #02 on 2026-09-19, and each had a Hy-Vee row in this lane's own file, with its
+      product id - and neither had a board cell. Both rows were read at the RETIRED store (1465) on 2026-08-21,
+      so compare-deals withheld them as WITHHELD-WRONG-STORE, which is correct, and the only thing that could
+      release them was a re-read at the pinned store. Get-HyVeeAskOrder ranked every off-target row by AGE
+      alone: on the 2026-09-20 file 920 of 1,228 askable rows were off-target, the two sat at positions 879 and
+      895, and at the quarter's 15 asks a day their turn came about day 59 - the week their 90-day carry
+      expires. Nothing paged: the row existed, the store gate was right to withhold it, and the seven live
+      recipes that needed five spice fell back to a July walmart.com label price nobody refreshed.
+      So the board's OWN verdict is read back. A commodity with NO cell on the newest comparison, whose Hy-Vee
+      candidate was withheld only for WHERE it was read (WITHHELD-WRONG-STORE, WITHHELD-UNPROVEN-STORE), is the
+      highest-value ask this lane can make: one request turns an unpriced commodity into a store-fetched cell.
+      A row withheld for anything else (SHIP-ONLY, UNPRICED, OUT-OF-BAND, a known-wrong ruling) is NOT named,
+      because a re-read cannot release it. Pure: no disk, no network; Read-HyVeeBoardVerdict does the reading.
+    .OUTPUTS hashtable, product id (decimal string) -> the commodity id whose cell it would supply
+  #>
+  param($Candidates, $Comparison, [string]$Store = 'Hy-Vee')
+  $out = @{}
+  if ($null -eq $Candidates -or $null -eq $Comparison) { return $out }
+  $priced = @{}
+  foreach ($row in @($Comparison.comparison)) {
+    if ($null -eq $row) { continue }
+    # @($null).Count is 1, so a row whose stores field is null or absent must be judged on its CONTENT.
+    $cells = @(@($row.stores) | Where-Object { $null -ne $_ })
+    if ($cells.Count -gt 0) { $priced[[string]$row.id] = $true }
+  }
+  foreach ($c in @($Candidates.commodities)) {
+    if ($null -eq $c) { continue }
+    $cid = [string]$c.id
+    if ((-not $cid) -or $priced.ContainsKey($cid)) { continue }
+    foreach ($k in @($c.candidates)) {
+      if ($null -eq $k) { continue }
+      if (-not [string]::Equals([string]$k.store, $Store, [StringComparison]::Ordinal)) { continue }
+      $b = [string]$k.basis
+      $storeOnly = [string]::Equals($b, 'WITHHELD-WRONG-STORE', [StringComparison]::Ordinal) -or [string]::Equals($b, 'WITHHELD-UNPROVEN-STORE', [StringComparison]::Ordinal)
+      if (-not $storeOnly) { continue }
+      $pk = ([string]$k.prod_key).Trim()
+      if ($pk -notmatch '^\d{1,9}$') { continue }
+      $pk = [string][int]$pk
+      if (-not $out.ContainsKey($pk)) { $out[$pk] = $cid }
+    }
+  }
+  return $out
+}
+
+function Read-HyVeeBoardVerdict([string]$BoardDir) {
+  # The newest comparison and the candidates file compare-deals wrote beside it UNDER THE SAME DATE. A pair
+  # from two different builds is refused rather than mixed. Every could-not-read is SAID (Why), never an
+  # empty set that reads like "every commodity is priced".
+  $none = @{}
+  $cmpF = Get-ChildItem (Join-Path $BoardDir 'comparison-*.json') -ErrorAction SilentlyContinue |
+    Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+  if (-not $cmpF) { return [pscustomobject]@{ Ids = $none; Board = ''; Why = ('no comparison-*.json under ' + $BoardDir) } }
+  $cndF = Join-Path $BoardDir ('candidates-' + $cmpF.BaseName.Substring(11) + '.json')
+  if (-not (Test-Path -LiteralPath $cndF)) { return [pscustomobject]@{ Ids = $none; Board = $cmpF.Name; Why = ('no ' + (Split-Path $cndF -Leaf) + ' beside ' + $cmpF.Name) } }
+  $cmpDoc = ConvertFrom-Json ([IO.File]::ReadAllText($cmpF.FullName))
+  $cndDoc = ConvertFrom-Json ([IO.File]::ReadAllText($cndF))
+  $ids = Get-HyVeeUncoveredIds -Candidates $cndDoc -Comparison $cmpDoc
+  return [pscustomobject]@{ Ids = $ids; Board = $cmpF.Name; Why = '' }
 }
 
 function Get-HyVeeHistoryProductIds {
@@ -774,6 +850,49 @@ function Resolve-HyVeeLookupOutcome {
   return [pscustomobject]@{ Outcome = 'empty'; Offer = $null; Detail = 'well-formed response, no storeProducts' }
 }
 
+function Test-HyVeeLookupBody([string]$Body) {
+  <#
+    Returns '' when a getProductDetailsWithPrice body is one Hy-Vee will answer, or the reason it is not.
+    The document declares `$productId: Int!` and `$storeId: Int`, and GraphQL does not coerce a JSON STRING into
+    an Int variable: Hy-Vee answers HTTP 400 with an EMPTY body, which the lane can only log as a could-not-look.
+    Measured 2026-09-21 on productId 400543: "storeId":1466 -> HTTP 200 and the McCormick five-spice offer;
+    "storeId":"1466", everything else byte-identical -> HTTP 400.
+  #>
+  if (-not $Body) { return 'empty body' }
+  if ($Body -notmatch '"productId":\d+[,}]') { return 'productId is not a JSON number' }
+  if ($Body -notmatch '"storeId":\d+[,}]') { return 'storeId is not a JSON number (Hy-Vee answers HTTP 400 to a quoted storeId)' }
+  return ''
+}
+
+function Get-HyVeeLookupBody([int]$ProductId) {
+  <#
+    THE REQUEST BODY, BUILT FROM VALUES NAMED IN SCRIPT SCOPE, NEVER FOUND BY DYNAMIC SCOPE (2026-09-21).
+    From 9f5059eec (2026-09-19 06:44) to this change EVERY Hy-Vee product lookup was refused with HTTP 400:
+    asked 15 answered 0 on 2026-09-20, asked 93 answered 0 on 2026-09-21. That commit gave Invoke-HyVeeWorkPass
+    a mandatory [string]$StoreId to stamp rows with, and the -Fetch scriptblock runs INSIDE that function, so
+    Get-HyVeeStoreProduct's bare `$StoreId` resolved - by PowerShell's dynamic scoping - to the pass's STRING
+    '1466' instead of the script's [int] 1466, and the body carried "storeId":"1466". Nothing about the store,
+    the query or the network had changed, and the 2026-09-20 hand re-read that answered 11 of 15 built its
+    body separately, which is why it could not see this. The store id is now read from $script:HvRequestStoreId
+    by name, cast to [int] here, and the finished body is checked before it is sent: a body Hy-Vee will refuse
+    is a THROW in this lane, never 93 silent could-not-looks.
+  #>
+  $sid = [int]$script:HvRequestStoreId
+  if ($sid -le 0) { throw 'Get-HyVeeLookupBody: $script:HvRequestStoreId is unset - refusing to send a lookup that names no store' }
+  $body = @{
+    operationName = 'getProductDetailsWithPrice'
+    query         = [string]$script:HvRequestQuery
+    variables     = @{
+      productId = [int]$ProductId; storeId = $sid; locationIds = @([string]$script:HvRequestLocation)
+      pickupLocationHasLocker = $false; retailItemEnabled = $true
+      targeted = $false; foodHealthScoreEnabled = $false
+    }
+  } | ConvertTo-Json -Depth 6 -Compress
+  $bad = Test-HyVeeLookupBody $body
+  if ($bad) { throw ('Get-HyVeeLookupBody: refusing to send a body Hy-Vee will reject - ' + $bad) }
+  return $body
+}
+
 if ($SelfTest) {
   # Pure, no network, no writes - placed above the store registry and every request so nothing can skip it.
   . (Join-Path $root 'price-split-lib.ps1')
@@ -1007,6 +1126,48 @@ if ($SelfTest) {
   $o4 = Get-HyVeeAskOrder -Work $ow -Budget 0 -TargetStoreId '1466'
   _T "a budget of 0 asks nothing (and an empty order is not an error)" ($o4.Index.Count -eq 0)
 
+  # --- A COMMODITY THE BOARD PRICES NOWHERE IS RE-READ FIRST (2026-09-21) ---------------------------------
+  # FROZEN from out\candidates-2026-09-20.json and out\comparison-2026-09-20.json as read on 2026-09-21: the
+  # real five-spice and wild-rice Hy-Vee rows (read at the retired store 1465 on 2026-08-21, withheld
+  # WRONG-STORE, no cell for either commodity anywhere), a Walmart ship-only row, an UNPRICED Hy-Vee row, and an
+  # eggs row withheld the same way on a commodity that IS priced. Never regenerate this from a live board.
+  $fsCand = ConvertFrom-Json '{"commodities":[{"id":"five-spice-powder","candidates":[{"store":"Hy-Vee","name":"McCormick Gourmet Chinese Five Spice Blend, 1.75 oz","basis":"WITHHELD-WRONG-STORE","prod_key":"400543","as_of":"2026-08-21"},{"store":"Walmart","name":"McCormick Gourmet Kosher Chinese Five Spice Blend, 1.75 oz Bottle","basis":"WITHHELD-SHIP-ONLY","prod_key":"39340086","as_of":"2026-09-19"}]},{"id":"wild-rice","candidates":[{"store":"Hy-Vee","name":"Hy-Vee Select Wild Rice","basis":"WITHHELD-WRONG-STORE","prod_key":"1517940","as_of":"2026-08-21"},{"store":"Hy-Vee","name":"Bulk Wild Rice Salad 1 Gallon (Serves 20 - 25 people)","basis":"UNPRICED","prod_key":"4254442","as_of":"2026-08-21"}]},{"id":"eggs","candidates":[{"store":"Hy-Vee","name":"Hy-Vee Large Eggs","basis":"WITHHELD-WRONG-STORE","prod_key":"4401","as_of":"2026-08-10"}]}]}'
+  $fsCmp = ConvertFrom-Json '{"comparison":[{"id":"eggs","stores":[{"store":"Walmart","per_unit":0.2}]}]}'
+  $fsU = Get-HyVeeUncoveredIds -Candidates $fsCand -Comparison $fsCmp
+  _T "MUST FIRE: the real five-spice (400543) and wild-rice (1517940) rows, withheld WRONG-STORE on commodities with no cell, are named for a re-read" (($fsU['400543'] -eq 'five-spice-powder') -and ($fsU['1517940'] -eq 'wild-rice'))
+  _T "MUST NOT FIRE: a withheld row on a commodity priced elsewhere (eggs), a Walmart ship-only row and an UNPRICED row are not named (2 named, not 5)" ((-not $fsU.ContainsKey('4401')) -and (-not $fsU.ContainsKey('39340086')) -and (-not $fsU.ContainsKey('4254442')) -and ($fsU.Count -eq 2))
+  $fsNull = ConvertFrom-Json '{"comparison":[{"id":"five-spice-powder","stores":null}]}'
+  _T "a comparison row whose stores is null is NOT a priced cell (the @(`$null) count of 1 is judged on content)" ((Get-HyVeeUncoveredIds -Candidates $fsCand -Comparison $fsNull).ContainsKey('400543'))
+  _T "MUST NOT FIRE: no candidates or no comparison names nothing and does not throw" (((Get-HyVeeUncoveredIds -Candidates $null -Comparison $fsCmp).Count -eq 0) -and ((Get-HyVeeUncoveredIds -Candidates $fsCand -Comparison $null).Count -eq 0))
+  $uw = New-Object System.Collections.ArrayList
+  [void]$uw.Add([pscustomobject]@{ name = 'Hy-Vee Large Eggs'; size = 'dozen'; prow = ([pscustomobject]@{ item = 'Hy-Vee Large Eggs'; store_id = '1465'; as_of = '2026-08-10' }); pid = 4401; cid = '' })   # 0 the OLDEST off-target row
+  [void]$uw.Add([pscustomobject]@{ name = 'McCormick Gourmet Chinese Five Spice Blend, 1.75 oz'; size = '1.75 oz'; prow = ([pscustomobject]@{ item = 'McCormick Gourmet Chinese Five Spice Blend, 1.75 oz'; store_id = '1465'; as_of = '2026-08-21' }); pid = 400543; cid = '' })   # 1
+  [void]$uw.Add([pscustomobject]@{ name = 'on-target'; size = '1 ct'; prow = ([pscustomobject]@{ item = 'on-target'; store_id = '1466'; as_of = '2026-07-01' }); pid = 9; cid = '' })   # 2
+  $u1 = Get-HyVeeAskOrder -Work $uw -Budget 1 -TargetStoreId '1466' -UncoveredIds $fsU
+  _T "MUST FIRE: at a budget of 1 the five-spice row (read 08-21) is asked BEFORE an off-target row read 11 days earlier, because the board prices five spice nowhere" (((@($u1.Order) -join ',') -eq '1') -and ($u1.UncoveredInSlice -eq 1) -and ($u1.UncoveredAskable -eq 1))
+  $u0 = Get-HyVeeAskOrder -Work $uw -Budget 1 -TargetStoreId '1466'
+  _T "CLEAN TWIN: with no uncovered ids the order is still oldest off-target first (eggs, 08-10), exactly as before" (((@($u0.Order) -join ',') -eq '0') -and ($u0.OffTargetInSlice -eq 1))
+  $u3 = Get-HyVeeAskOrder -Work $uw -Budget 3 -TargetStoreId '1466' -UncoveredIds $fsU
+  _T "the promotion takes a slot INSIDE the budget and adds none: 3 of 3 asked, order 1,0,2" (((@($u3.Order) -join ',') -eq '1,0,2') -and ($u3.Index.Count -eq 3))
+  $u4 = Get-HyVeeAskOrder -Work $uw -Budget 1 -TargetStoreId '1466' -UncoveredIds @{ '9' = 'some-commodity' }
+  _T "MUST NOT FIRE: a row already read at the pinned store is not promoted, whatever the board says" (((@($u4.Order) -join ',') -eq '0') -and ($u4.UncoveredInSlice -eq 0))
+  $u5 = Get-HyVeeAskOrder -Work $uw -Budget 2 -TargetStoreId '1466' -ExpiringIdx @{ 2 = $true } -UncoveredIds $fsU
+  _T "an expiring sale still goes first of all, the uncovered commodity second (order 2,1)" ((@($u5.Order) -join ',') -eq '2,1')
+
+  # --- THE LOOKUP BODY NAMES ITS STORE AS A JSON NUMBER, WHOEVER CALLS IT (2026-09-21) ----------------------
+  # FOUNDING BODY, the variables exactly as the lane sent them from 9f5059eec to this fix (asked 93, answered 0
+  # on 2026-09-21): "storeId":"1466" is HTTP 400; the same body with "storeId":1466 is HTTP 200.
+  $foundingBody = '{"operationName":"getProductDetailsWithPrice","query":"q","variables":{"targeted":false,"storeId":"1466","locationIds":["09e8f4f0-e614-4b86-9285-c9c3dbff0d85"],"productId":400543,"pickupLocationHasLocker":false,"foodHealthScoreEnabled":false,"retailItemEnabled":true}}'
+  _T "MUST FIRE: the founding body (storeId sent as the STRING '1466') is refused before it is sent" ((Test-HyVeeLookupBody $foundingBody) -like 'storeId is not a JSON number*')
+  $script:HvRequestStoreId = 1466; $script:HvRequestLocation = '09e8f4f0-e614-4b86-9285-c9c3dbff0d85'; $script:HvRequestQuery = 'query q { x }'
+  # The shadow the bug came from: a caller holding a [string]$StoreId (Invoke-HyVeeWorkPass's own parameter).
+  function _HvShadowCaller([string]$StoreId, [string]$LOC) { Get-HyVeeLookupBody -ProductId 400543 }
+  $shBody = _HvShadowCaller -StoreId '1466' -LOC 'adcb2ae1-f440-4512-bfe8-9624832c72a9'
+  _T "CLEAN TWIN: built inside a caller holding [string]`$StoreId='1466', the real body still carries storeId 1466 as a NUMBER and the pinned #02 location" (($shBody -match '"storeId":1466[,}]') -and ($shBody -match '09e8f4f0-e614-4b86-9285-c9c3dbff0d85') -and ($shBody -notmatch 'adcb2ae1'))
+  _T "MUST NOT FIRE: that body passes the check (a JSON-number store and product)" ((Test-HyVeeLookupBody $shBody) -eq '')
+  $script:HvRequestStoreId = 0
+  _T "a lookup with no request store is a THROW, never a body naming no store" ($(try { [void](Get-HyVeeLookupBody -ProductId 400543); $false } catch { $_.Exception.Message -like '*unset*' }))
+
   # --- AGE EXPIRY: exactly MaxCarryDays is kept, one day past it is dropped ------------------------------
   $fixCarry = [int](Get-PolicyMaxCarryDays)
   _T "the carry limit is read from capture-policy-lib ($fixCarry days)" ($fixCarry -eq 90)
@@ -1153,6 +1314,11 @@ elseif (-not $LocationId) {
          "false disagreements (11 of 21 on 2026-08-21). Pass both, or pass neither and take the registry's.")
 }
 $LOC = if ($LocationId) { $LocationId } else { [string]$HVSTORE.location_id }
+# WHAT EVERY LOOKUP SENDS, NAMED IN SCRIPT SCOPE (2026-09-21). Get-HyVeeLookupBody reads these by their script:
+# names because the fetch runs inside Invoke-HyVeeWorkPass, whose [string]$StoreId shadows the bare name.
+$script:HvRequestStoreId = [int]$StoreId
+$script:HvRequestLocation = [string]$LOC
+$script:HvRequestQuery = [string]$QUERY
 $STORE_LABEL = [string]$HVSTORE.label
 # DERIVED, NEVER TYPED. Every row records which store it came from, and that label used to be a string
 # literal sitting next to the request rather than built from it - so a store switch could move the query
@@ -1166,15 +1332,9 @@ $HDR = @{
 }
 
 function Get-HyVeeStoreProduct([int]$productId) {
-  $body = @{
-    operationName = 'getProductDetailsWithPrice'
-    query         = $QUERY
-    variables     = @{
-      productId = $productId; storeId = $StoreId; locationIds = @($LOC)
-      pickupLocationHasLocker = $false; retailItemEnabled = $true
-      targeted = $false; foodHealthScoreEnabled = $false
-    }
-  } | ConvertTo-Json -Depth 6 -Compress
+  # Built by Get-HyVeeLookupBody from $script:HvRequest*, NEVER from a bare $StoreId: this function runs inside
+  # Invoke-HyVeeWorkPass, whose own [string]$StoreId parameter a bare read picks up (see that function's header).
+  $body = Get-HyVeeLookupBody -ProductId $productId
   $lastErr = ''
   for ($a = 1; $a -le 2; $a++) {
     try {
@@ -1182,7 +1342,7 @@ function Get-HyVeeStoreProduct([int]$productId) {
       $lastErr = ''
       # COUNT WHICH OF THE FOUR WAYS THIS ENDED. Every branch below used to return the same bare
       # $null, so a throttled endpoint and a discontinued product were the same byte in the file.
-      $oc = Resolve-HyVeeLookupOutcome -Response $r -LastError '' -TargetStoreId $StoreId
+      $oc = Resolve-HyVeeLookupOutcome -Response $r -LastError '' -TargetStoreId ([int]$script:HvRequestStoreId)
       $sp = $oc.Offer
       if ($oc.Outcome -eq 'other-store') { $script:HvAskOtherStore++ }
       elseif ($oc.Outcome -eq 'empty') { $script:HvAskEmpty++ }
@@ -1405,6 +1565,7 @@ $HV_SEC_PER_PRODUCT = 0.6
 $askIndex = $null       # $null = unbudgeted, ask about everything
 $hvBudget = 0
 $hvOrder = $null
+$hvUnc = @{}            # product id -> commodity the board prices nowhere (Get-HyVeeUncoveredIds); empty = none promoted
 $hvCap = $null
 $hvPlan = $null
 $askablePop = @($work | Where-Object { [int]$_.pid -gt 0 }).Count
@@ -1438,8 +1599,21 @@ if (-not $Quick) {
       $wi++
       if (($w.cid -and $hvExpIds.ContainsKey([string]$w.cid)) -or $hvExpNames.ContainsKey(([string]$w.name).ToLower().Trim())) { $hvExpIdx[$wi] = $true }
     }
-    $hvOrder = Get-HyVeeAskOrder -Work $work -Budget $hvBudget -TargetStoreId ([string]$StoreId) -ExpiringIdx $hvExpIdx
+    # THE BOARD'S OWN VERDICT, READ BACK (2026-09-21): see Get-HyVeeUncoveredIds. Its own try, so a board that
+    # cannot be read costs only the promotion - never the budget, which the catch below would drop to UNBUDGETED.
+    $hvUncBoard = ''
+    try {
+      $hvVerdict = Read-HyVeeBoardVerdict $OutDir
+      $hvUnc = $hvVerdict.Ids; $hvUncBoard = [string]$hvVerdict.Board
+      if ($hvVerdict.Why) { Write-Warning ('Hy-Vee: uncovered-commodity asks NOT promoted - ' + $hvVerdict.Why + '; the order is oldest-first as before') }
+    } catch {
+      Write-Warning ('Hy-Vee: uncovered-commodity asks NOT promoted - the board could not be read (' + $_.Exception.Message + '); the order is oldest-first as before')
+      $hvUnc = @{}
+    }
+    $hvOrder = Get-HyVeeAskOrder -Work $work -Budget $hvBudget -TargetStoreId ([string]$StoreId) -ExpiringIdx $hvExpIdx -UncoveredIds $hvUnc
     $askIndex = $hvOrder.Index
+    Write-Output ("Hy-Vee: $($hvOrder.UncoveredInSlice) of today's asks re-read a row the board withheld for its store on a commodity it prices NOWHERE " +
+      "($($hvOrder.UncoveredAskable) such row(s) askable; $($hvUnc.Count) product id(s) named by $(if ($hvUncBoard) { $hvUncBoard } else { 'no readable board' }))")
     Write-Output ("Hy-Vee: capture-policy budget = $hvBudget product(s) to ASK about today = ceil($askablePop askable / $hvRotDays days), cap $hvCallCap, " +
       "$(@($hvPlan.SaleExpiries).Count) expiring sale(s); chosen OLDEST FIRST: $($hvOrder.ExpiringInSlice) for an expiring sale, " +
       "$($hvOrder.OffTargetInSlice) read at another store or unstamped (of $($hvOrder.OffTargetAskable) askable), every one of the $(@($work).Count) products is still written")
@@ -1484,6 +1658,8 @@ if ($DryRun) {
   if ($hvOrder) {
     $firstTen = @($hvOrder.Order | Select-Object -First 10 | ForEach-Object { $w = $work[$_]; ('[' + $w.pid + '] ' + $w.name + ' (' + $(if ($w.prow) { [string]$w.prow.as_of + ', store ' + (Get-HyVeeRowStoreId $w.prow) } else { 'never priced' }) + ')') })
     Write-Output ("HYVEE-DRYRUN first asks: " + ($firstTen -join '; '))
+    $uncAsked = @(@($hvOrder.Order) | Where-Object { $hvUnc.ContainsKey([string][int]$work[$_].pid) } | ForEach-Object { '[' + $work[$_].pid + '] ' + $work[$_].name + ' -> ' + $hvUnc[[string][int]$work[$_].pid] })
+    Write-Output ("HYVEE-DRYRUN uncovered-commodity asks in slice=" + $hvOrder.UncoveredInSlice + " askable=" + $hvOrder.UncoveredAskable + " named=" + $hvUnc.Count + ": " + ($uncAsked -join '; '))
   }
   Write-Output 'HYVEE-DRYRUN-COMPLETE no request issued, nothing written'
   exit 0

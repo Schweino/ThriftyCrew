@@ -35,6 +35,18 @@ the named memory or file.
   [[recipe-paywall-split]]
 - **A spec's mtime is not evidence of a recost** - reanchor rewrites every spec daily.
   [[spec-mtime-is-not-evidence-of-a-recost]]
+- **EVERY PRICE IS FETCHED FROM AN OMAHA STORE, BY THE PIPELINE** (Brad's standing ruling, 2026-09-21: *"We
+  should never have hand-typed pricing. The pricing must be fetched from a store always."* and *"Pricing should
+  always come from Ads or websites from stores directly."*). A pricing input is a store's ad or a store's own
+  site, read by the capture pipeline onto the board. **No hand-typed, one-off, agent-captured or walmart.com
+  MARKETPLACE price is a pricing input**, and `set-board-cell.ps1` writing a number nobody fetched is a
+  hand-typed price by another name. **`db/label-prices.json` is MACROS ONLY**: `engine/cost-recipes.ps1` loads
+  its nutrition fields and never its `package_price_usd` (still in the file, unread), and the engine REFUSES to
+  write `costed.json` while any line carries a `label:` basis (`Get-LabelBasisLines`, fixtured). An ingredient the
+  board cannot price stays NO PRICE BASIS and pages: the repair is a store fetch, never a label. The carriage
+  ledger's `ledger:` basis is the one interim road, because it is an in-store read, and it is a ONE-TIME read
+  bounded by the quarter. Brad's same-day rule binds the order of any such change: *"a recipe page should ALWAYS
+  be able to be costed"*, so nothing is retired until what replaces it is live. `grocery/triage-plans/plan-2026-09-21-2.json`.
 
 - **THE PANEL IS READ IN FULL AND THE FOOD DB KEEPS FOUR FIELDS OF IT** (2026-09-12, backlog I145).
   `db/food-label-captures.json` carries `sodium_mg` and populates it - the Great Value chicken broth
