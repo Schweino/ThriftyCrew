@@ -89,11 +89,11 @@
                     },
                     {
                         "id":  "donuts",
-                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "french-bread",
-                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "frosting",
@@ -213,6 +213,6 @@
                     }
                 ],
     "worked":  52,
-    "generated":  "2026-09-20 12:11",
-    "board":  "comparison-2026-09-20.json"
+    "generated":  "2026-09-21 08:10",
+    "board":  "comparison-2026-09-21.json"
 }

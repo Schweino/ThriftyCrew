@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-20 21:33",
-    "board":  "comparison-2026-09-20.json",
-    "sidecar_generated":  "2026-09-20 21:33:26",
+    "generated":  "2026-09-21 08:17",
+    "board":  "comparison-2026-09-21.json",
+    "sidecar_generated":  "2026-09-21 08:17:46",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,19 +9,48 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2629,
-                     "corpus":  43803,
-                     "rule_invisible":  8669
+                     "board_pairs":  2705,
+                     "corpus":  43831,
+                     "rule_invisible":  8680
                  },
     "identity_count":  0,
-    "coverage_count":  0,
+    "coverage_count":  3,
     "identity":  [
 
                  ],
     "coverage":  [
-
+                     {
+                         "kind":  "coverage",
+                         "id":  "ready-to-serve-long-grain-wild-rice-pouch",
+                         "commodity":  "Ready-to-Serve Long Grain \u0026 Wild Rice Pouch",
+                         "store":  "Aldi",
+                         "product":  "Long Grain Wild Ready TO Serve Rice",
+                         "cos":  0.6164,
+                         "score":  0.989546,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "frozen-waffles",
+                         "commodity":  "Frozen Waffles",
+                         "store":  "Family Fare",
+                         "product":  "Eggo Frozen Pancakes, Buttermilk 14.8 Oz",
+                         "cos":  0.6349,
+                         "score":  0.92068,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "shredded-cheese",
+                         "commodity":  "Shredded / Block Cheese",
+                         "store":  "Aldi",
+                         "product":  "Happy Farms Shredded Mild Cheddar",
+                         "cos":  0.6514,
+                         "score":  0.90962,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     }
                  ],
-    "coverage_excluded_count":  13,
+    "coverage_excluded_count":  9,
     "coverage_excluded":  [
                               {
                                   "kind":  "coverage",
@@ -49,18 +78,6 @@
                               },
                               {
                                   "kind":  "coverage",
-                                  "id":  "wild-rice",
-                                  "commodity":  "Wild Rice",
-                                  "store":  "Walmart",
-                                  "product":  "Gourmet House Cultivated Rice, Long Grain Wild Rice, 1 lb Bag",
-                                  "cos":  0.6688,
-                                  "score":  0.982831,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027long\\s+grain\u0027 killed it"
-                              },
-                              {
-                                  "kind":  "coverage",
                                   "id":  "laundry-detergent",
                                   "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
                                   "store":  "Walmart",
@@ -85,18 +102,6 @@
                               },
                               {
                                   "kind":  "coverage",
-                                  "id":  "wild-rice",
-                                  "commodity":  "Wild Rice",
-                                  "store":  "Baker\u0027s",
-                                  "product":  "Lundberg Family Farms Sustainable Wild Blend Rice",
-                                  "cos":  0.6398,
-                                  "score":  0.965538,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "REFUSED-BY-EXCLUDE",
-                                  "detail":  "no admit pattern matches, and exclude \u0027\\bblend\\b\u0027 would refuse it anyway"
-                              },
-                              {
-                                  "kind":  "coverage",
                                   "id":  "cumin-seeds",
                                   "commodity":  "Cumin seeds",
                                   "store":  "Walmart",
@@ -109,39 +114,15 @@
                               },
                               {
                                   "kind":  "coverage",
-                                  "id":  "wild-rice",
-                                  "commodity":  "Wild Rice",
-                                  "store":  "Walmart",
-                                  "product":  "Zatarain\u0027s No Artificial Flavors Gluten Free Long Grain \u0026 Wild Rice, 7.0 oz Box",
-                                  "cos":  0.6033,
-                                  "score":  0.95473,
+                                  "id":  "ground-pork",
+                                  "commodity":  "Ground Pork",
+                                  "store":  "Baker\u0027s",
+                                  "product":  "Ground Beef And Pork Blend Patties 80% Lean 20% Fat",
+                                  "cos":  0.7,
+                                  "score":  0.926,
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027long\\s+grain\\s+(?:\u0026|and)\\s+wild\u0027 killed it"
-                              },
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "wild-rice",
-                                  "commodity":  "Wild Rice",
-                                  "store":  "Family Fare",
-                                  "product":  "Ben\u0027s Original Long Grain \u0026 Wild Rice, Fast Cook 6.2 Oz",
-                                  "cos":  0.6816,
-                                  "score":  0.944374,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027long\\s+grain\\s+(?:\u0026|and)\\s+wild\u0027 killed it"
-                              },
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "wild-rice",
-                                  "commodity":  "Wild Rice",
-                                  "store":  "Walmart",
-                                  "product":  "Minnesota Cultivated Long Grain Wild Rice (16oz)",
-                                  "cos":  0.6994,
-                                  "score":  0.921954,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027long\\s+grain\u0027 killed it"
+                                  "verdict":  "REFUSED-BY-EXCLUDE",
+                                  "detail":  "no admit pattern matches, and exclude \u0027patt\u0027 would refuse it anyway"
                               },
                               {
                                   "kind":  "coverage",
@@ -157,15 +138,15 @@
                               },
                               {
                                   "kind":  "coverage",
-                                  "id":  "wild-rice",
-                                  "commodity":  "Wild Rice",
+                                  "id":  "baby-formula",
+                                  "commodity":  "Baby Formula",
                                   "store":  "Family Fare",
-                                  "product":  "Canoe White\u0027n Wild Rice 6 Oz",
-                                  "cos":  0.6822,
-                                  "score":  0.912208,
+                                  "product":  "Similac Infant Formula, With Iron, Hypoallergenic, Ready To Feed, 0 12 Months 6 Ea",
+                                  "cos":  0.7041,
+                                  "score":  0.909211,
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027\\bwhite\\b\u0027 killed it"
+                                  "detail":  "include \u0027(?:infant|baby)\\s+formula\u0027 matched, exclude \u0027ready[\\s-]?to[\\s-]?feed\u0027 killed it"
                               },
                               {
                                   "kind":  "coverage",

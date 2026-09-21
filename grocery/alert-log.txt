@@ -258,3 +258,29 @@
 [2026-09-20T12:27:52] REVIEW 'Recipe db drift (index vs specs)' [type: recipe db drift index vs specs] - queued, NOT emailed (registry entry recipe-db-drift)
 [2026-09-20T12:28:36] QUEUE ABSORBED into open item 2026-09-19-fccb69 (day 1 of this condition, count now 3) - no new id minted
 [2026-09-20T12:28:37] REVIEW 'Grocery: 1 NEW price flag(s) - 2026-09-20' [type: grocery new price flag s] - queued, NOT emailed (registry entry new-price-flags)
+[2026-09-20T17:41:03] REVIEW 'Grocery: 198 tile links record a price the board no longer publishes; 81 Sam's cells cannot be relinked at all (37ac63 residual)' [type: grocery tile links record a price the board no longer publishes sam s cells cannot be relinked at all ac residual] - queued, NOT emailed (a triage-created item (-Lane weekly) is review by ruling 1)
+[2026-09-20T18:25:22] REVIEW 'Grocery pipeline alert' [type: grocery pipeline alert] - queued, NOT emailed (a triage-created item (-Lane weekly) is review by ruling 1)
+[2026-09-21T04:38:40] QUEUE ABSORBED into open item 2026-09-19-4fc24c (day 2 of this condition, count now 3) - no new id minted
+[2026-09-21T04:38:41] SENT 'The knowledge store's nightly pass went RED' -> schweino68@gmail.com (id 1a0c354f6cad5c16)
+[2026-09-21T05:25:42] REVIEW 'Grocery: 20 of 577 search-termed commodities have no board cell after the store-fetch fix (0 live recipes affected); a band-refused CARRIED sumac and an un-askable cheaper Hy-Vee wild rice' [type: grocery of search termed commodities have no board cell after the store fetch fix live recipes affected a band refused carried sumac and an un askable cheaper hy vee wild rice] - queued, NOT emailed (a triage-created item (-Lane weekly) is review by ruling 1)
+[2026-09-21T06:46:16] DIGEST 'Brain digest: the night, the weakest link, and what is waiting' [type: brain digest the night the weakest link and what is waiting] - registry entry brain-digest is digest class, so it is mailed and NOT queued
+[2026-09-21T06:46:17] SENT 'Brain digest: the night, the weakest link, and what is waiting' -> schweino68@gmail.com (id 1a0c3c9c7734566e)
+[2026-09-21T07:13:25] SENT 'Grocery pipeline could not push - 2026-09-21' -> schweino68@gmail.com (id 1a0c3e29f0599a43)
+[2026-09-21T07:57:42] SENT 'Grocery: the live board failed a watcher (watchers intact)' -> schweino68@gmail.com (id 1a0c40b27614e91f)
+[2026-09-21T08:12:07] SENT 'Grocery: GUARDS FAILED - board not published - 2026-09-21' -> schweino68@gmail.com (id 1a0c4185b5c67774)
+[2026-09-21T08:14:17] QUEUE ABSORBED into open item 2026-09-19-405c73 (day 2 of this condition, count now 2) - no new id minted
+[2026-09-21T08:14:17] REVIEW 'Grocery: store-registry drift - 1 issue(s)' [type: grocery store registry drift issue s] - queued, NOT emailed (registry entry store-registry-drift)
+[2026-09-21T08:16:35] QUEUE ABSORBED into open item 2026-09-19-6f90ee (day 2 of this condition, count now 4) - no new id minted
+[2026-09-21T08:16:35] REVIEW 'Grocery matching soundness - review needed' [type: grocery matching soundness review needed] - queued, NOT emailed (registry entry match-soundness)
+[2026-09-21T08:20:29] QUEUE ABSORBED into open item 2026-09-19-2a0748 (day 2 of this condition, count now 5) - no new id minted
+[2026-09-21T08:20:29] REVIEW 'Grocery: 476 store(s) dropped from a commodity they carry - 2026-09-21' [type: grocery store s dropped from a commodity they carry] - queued, NOT emailed (registry entry stores-dropped)
+[2026-09-21T08:20:30] REVIEW 'Grocery: semantic sweep found 3 product(s) no rule can see - 2026-09-21' [type: grocery semantic sweep found product s no rule can see] - queued, NOT emailed (registry entry semantic-sweep)
+[2026-09-21T08:22:22] -CausedBy 2026-09-21-e291a1 did not absorb 'Grocery: Sam's derived sizes the density band cannot see - 4 oil jugs 3-4.5% off, 141 rows with no referent, Walmart builder not refusing (residual of 2026-09-21-e291a1)': unknown incident key '2026-09-21-e291a1' - it goes out as a normal alert
+[2026-09-21T08:22:23] REVIEW 'Grocery: Sam's derived sizes the density band cannot see - 4 oil jugs 3-4.5% off, 141 rows with no referent, Walmart builder not refusing (residual of 2026-09-21-e291a1)' [type: grocery sam s derived sizes the density band cannot see oil jugs off rows with no referent walmart builder not refusing residual of ea] - queued, NOT emailed (a triage-created item (-Lane weekly) is review by ruling 1)
+[2026-09-21T08:22:23] -CausedBy 2026-09-21-e291a1 did not absorb 'Grocery: Sam's began printing unit prices per 'fluid ounce (us)' / 'gallon (us)' / 'gl' on 2026-09-21 - 55 capture rows refused as unknown unit (found by 2026-09-21-e291a1)': unknown incident key '2026-09-21-e291a1' - it goes out as a normal alert
+[2026-09-21T08:22:23] REVIEW 'Grocery: Sam's began printing unit prices per 'fluid ounce (us)' / 'gallon (us)' / 'gl' on 2026-09-21 - 55 capture rows refused as unknown unit (found by 2026-09-21-e291a1)' [type: grocery sam s began printing unit prices per fluid ounce us gallon us gl on capture rows refused as unknown unit found by ea] - queued, NOT emailed (a triage-created item (-Lane weekly) is review by ruling 1)
+[2026-09-21T08:23:11] QUEUE ABSORBED into open item 2026-09-19-2c96d8 (day 2 of this condition, count now 5) - no new id minted
+[2026-09-21T08:23:11] REVIEW 'Recipe db drift (index vs specs)' [type: recipe db drift index vs specs] - queued, NOT emailed (registry entry recipe-db-drift)
+[2026-09-21T08:23:55] QUEUE ABSORBED into open item 2026-09-19-fccb69 (day 2 of this condition, count now 4) - no new id minted
+[2026-09-21T08:23:55] REVIEW 'Grocery: 5 NEW price flag(s) - 2026-09-21' [type: grocery new price flag s] - queued, NOT emailed (registry entry new-price-flags)
+[2026-09-21T08:42:49] REVIEW 'Tools: a live page has drifted from its local source' [type: tools a live page has drifted from its local source] - queued, NOT emailed (registry entry ghost-drift)

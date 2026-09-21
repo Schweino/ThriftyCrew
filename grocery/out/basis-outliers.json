@@ -4,6 +4,20 @@
                               "id":  "all-purpose-cleaner",
                               "commodity":  "All-Purpose Cleaner",
                               "unit":  "floz",
+                              "store":  "Sam\u0027s Club",
+                              "per_unit":  0.074,
+                              "size":  "139.73 oz",
+                              "item":  "Simple Green All-Purpose Cleaner, 172 fl. oz., Spray Bottle + Refill",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
+                              "id":  "all-purpose-cleaner",
+                              "commodity":  "All-Purpose Cleaner",
+                              "unit":  "floz",
                               "store":  "Family Fare",
                               "per_unit":  0.1247,
                               "size":  "32 oz",
@@ -78,6 +92,20 @@
                               "per_unit":  0.0416,
                               "size":  "96 oz",
                               "item":  "Our Family Apple Juice",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
+                              "id":  "apple-juice",
+                              "commodity":  "Apple Juice",
+                              "unit":  "floz",
+                              "store":  "Sam\u0027s Club",
+                              "per_unit":  0.0574,
+                              "size":  "24 ct 10 oz",
+                              "item":  "Apple \u0026 Eve 100% Apple Juice 10 oz., 24 pk.",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false,
@@ -277,6 +305,20 @@
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  true,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
+                              "id":  "coffee-creamer",
+                              "commodity":  "Coffee Creamer",
+                              "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.1075,
+                              "size":  "64 oz",
+                              "item":  "Coffee-Mate Creamer",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
                               "unit_kind":  "volume",
                               "agrees_with_engine_divisor":  false
                           },
@@ -519,6 +561,20 @@
                               "agrees_with_engine_divisor":  false
                           },
                           {
+                              "id":  "iced-tea",
+                              "commodity":  "Iced Tea (bottled/gallon)",
+                              "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.0689,
+                              "size":  "6 pk .5 L btls",
+                              "item":  "Pure Leaf Tea",
+                              "kind":  "count",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
                               "id":  "insect-spray",
                               "commodity":  "Insect / Bug Spray (home)",
                               "unit":  "oz",
@@ -561,6 +617,20 @@
                               "agrees_with_engine_divisor":  false
                           },
                           {
+                              "id":  "lemonade",
+                              "commodity":  "Lemonade",
+                              "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.0385,
+                              "size":  "52 oz",
+                              "item":  "Minute Maid Zero Sugar Lemonade or Fruit Punch or Gold Peak Tea (2/$4)",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
                               "id":  "egg-whites",
                               "commodity":  "Liquid Egg Whites",
                               "unit":  "floz",
@@ -579,8 +649,8 @@
                               "commodity":  "Mayonnaise",
                               "unit":  "oz",
                               "store":  "Sam\u0027s Club",
-                              "per_unit":  0.12,
-                              "size":  "124.833 oz",
+                              "per_unit":  0.117,
+                              "size":  "128.034 oz",
                               "item":  "Kraft Real Mayo Creamy and Smooth Real Mayonnaise, 1 gal.",
                               "kind":  "weight",
                               "row_kind":  "volume",
@@ -624,6 +694,20 @@
                               "per_unit":  0.4406,
                               "size":  "17 oz",
                               "item":  "Hy Vee Extra Virgin Olive Oil",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
+                              "id":  "olive-oil",
+                              "commodity":  "Olive Oil",
+                              "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.8272,
+                              "size":  "8.45 oz",
+                              "item":  "Bertolli Extra Virgin Olive Oil",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false,
@@ -715,6 +799,34 @@
                               "agrees_with_engine_divisor":  false
                           },
                           {
+                              "id":  "soda",
+                              "commodity":  "Soda (12-pack)",
+                              "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.0447,
+                              "size":  "24 pk 12 oz cans",
+                              "item":  "Pepsi or Mountain Dew",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
+                              "id":  "soy-sauce",
+                              "commodity":  "Soy Sauce",
+                              "unit":  "floz",
+                              "store":  "Sam\u0027s Club",
+                              "per_unit":  0.1153,
+                              "size":  "64 oz",
+                              "item":  "Kikkoman Traditionally Brewed Soy Sauce, 64 oz.",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
                               "id":  "relish",
                               "commodity":  "Sweet Relish",
                               "unit":  "oz",
@@ -746,29 +858,43 @@
                               "id":  "teriyaki-sauce",
                               "commodity":  "Teriyaki Sauce / Marinade",
                               "unit":  "floz",
-                              "store":  "Baker\u0027s",
-                              "per_unit":  0.1667,
-                              "size":  "12 fl oz",
-                              "item":  "Kroger Teriyaki Pineapple Marinade",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  true,
+                              "store":  "Sam\u0027s Club",
+                              "per_unit":  0.2102,
+                              "size":  "27.5 oz",
+                              "item":  "Kinder\u0027s Teriyaki Marinade Sauce, 27.5 oz.",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
                               "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  true
+                              "agrees_with_engine_divisor":  false
                           },
                           {
                               "id":  "teriyaki-sauce",
                               "commodity":  "Teriyaki Sauce / Marinade",
                               "unit":  "floz",
-                              "store":  "Walmart",
-                              "per_unit":  0.1687,
-                              "size":  "15 fl oz",
-                              "item":  "Great Value Teriyaki Sauce, 15 fl oz, 1 Count",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
+                              "store":  "Family Fare",
+                              "per_unit":  0.229,
+                              "size":  "10 oz",
+                              "item":  "Teriyaki Sauce Our Family",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
                               "holds_crown":  false,
                               "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  true
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
+                              "id":  "teriyaki-sauce",
+                              "commodity":  "Teriyaki Sauce / Marinade",
+                              "unit":  "floz",
+                              "store":  "Aldi",
+                              "per_unit":  0.7494,
+                              "size":  "3.99 oz",
+                              "item":  "Park Street Deli Chicken Bites With Sauce Teriyaki 3.99 OZ",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
                           },
                           {
                               "id":  "tomato-soup",
@@ -799,6 +925,34 @@
                               "agrees_with_engine_divisor":  false
                           },
                           {
+                              "id":  "vegetable-oil",
+                              "commodity":  "Vegetable / Canola Oil",
+                              "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.0741,
+                              "size":  "128 oz",
+                              "item":  "Fareway Vegetable Oil",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
+                              "id":  "vegetable-broth",
+                              "commodity":  "Vegetable Broth / Stock",
+                              "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.0619,
+                              "size":  "32 fl oz",
+                              "item":  "Swanson\u0027s Vegetable broth",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  true
+                          },
+                          {
                               "id":  "vegetable-broth",
                               "commodity":  "Vegetable Broth / Stock",
                               "unit":  "floz",
@@ -827,7 +981,7 @@
                               "agrees_with_engine_divisor":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-09-20.json",
+    "compare_file":  "comparison-2026-09-21.json",
     "min_stores":  4,
     "kind_mismatch_label_vs_declared_unit":  [
                                                  {
@@ -929,6 +1083,20 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
+                                                     "id":  "all-purpose-cleaner",
+                                                     "commodity":  "All-Purpose Cleaner",
+                                                     "unit":  "floz",
+                                                     "store":  "Sam\u0027s Club",
+                                                     "per_unit":  0.074,
+                                                     "size":  "139.73 oz",
+                                                     "item":  "Simple Green All-Purpose Cleaner, 172 fl. oz., Spray Bottle + Refill",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
                                                      "id":  "almond-milk",
                                                      "commodity":  "Almond Milk",
                                                      "unit":  "floz",
@@ -978,6 +1146,20 @@
                                                      "per_unit":  0.0416,
                                                      "size":  "96 oz",
                                                      "item":  "Our Family Apple Juice",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
+                                                     "id":  "apple-juice",
+                                                     "commodity":  "Apple Juice",
+                                                     "unit":  "floz",
+                                                     "store":  "Sam\u0027s Club",
+                                                     "per_unit":  0.0574,
+                                                     "size":  "24 ct 10 oz",
+                                                     "item":  "Apple \u0026 Eve 100% Apple Juice 10 oz., 24 pk.",
                                                      "kind":  "weight",
                                                      "row_kind":  "volume",
                                                      "holds_crown":  false,
@@ -1052,6 +1234,20 @@
                                                      "row_kind":  "weight",
                                                      "holds_crown":  false,
                                                      "unit_kind":  "weight",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
+                                                     "id":  "coffee-creamer",
+                                                     "commodity":  "Coffee Creamer",
+                                                     "unit":  "floz",
+                                                     "store":  "Fareway",
+                                                     "per_unit":  0.1075,
+                                                     "size":  "64 oz",
+                                                     "item":  "Coffee-Mate Creamer",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
@@ -1279,6 +1475,20 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
+                                                     "id":  "iced-tea",
+                                                     "commodity":  "Iced Tea (bottled/gallon)",
+                                                     "unit":  "floz",
+                                                     "store":  "Fareway",
+                                                     "per_unit":  0.0689,
+                                                     "size":  "6 pk .5 L btls",
+                                                     "item":  "Pure Leaf Tea",
+                                                     "kind":  "count",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
                                                      "id":  "laundry-detergent",
                                                      "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
                                                      "unit":  "floz",
@@ -1307,6 +1517,20 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
+                                                     "id":  "lemonade",
+                                                     "commodity":  "Lemonade",
+                                                     "unit":  "floz",
+                                                     "store":  "Fareway",
+                                                     "per_unit":  0.0385,
+                                                     "size":  "52 oz",
+                                                     "item":  "Minute Maid Zero Sugar Lemonade or Fruit Punch or Gold Peak Tea (2/$4)",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
                                                      "id":  "bottled-marinade",
                                                      "commodity":  "Meat Marinade (bottled)",
                                                      "unit":  "floz",
@@ -1328,6 +1552,20 @@
                                                      "per_unit":  0.0885,
                                                      "size":  "33.8 oz",
                                                      "item":  "Top Care Everyday Mouthwash, Freshening, Mint",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
+                                                     "id":  "olive-oil",
+                                                     "commodity":  "Olive Oil",
+                                                     "unit":  "floz",
+                                                     "store":  "Fareway",
+                                                     "per_unit":  0.8272,
+                                                     "size":  "8.45 oz",
+                                                     "item":  "Bertolli Extra Virgin Olive Oil",
                                                      "kind":  "weight",
                                                      "row_kind":  "volume",
                                                      "holds_crown":  false,
@@ -1391,6 +1629,34 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
+                                                     "id":  "soda",
+                                                     "commodity":  "Soda (12-pack)",
+                                                     "unit":  "floz",
+                                                     "store":  "Fareway",
+                                                     "per_unit":  0.0447,
+                                                     "size":  "24 pk 12 oz cans",
+                                                     "item":  "Pepsi or Mountain Dew",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
+                                                     "id":  "soy-sauce",
+                                                     "commodity":  "Soy Sauce",
+                                                     "unit":  "floz",
+                                                     "store":  "Sam\u0027s Club",
+                                                     "per_unit":  0.1153,
+                                                     "size":  "64 oz",
+                                                     "item":  "Kikkoman Traditionally Brewed Soy Sauce, 64 oz.",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
                                                      "id":  "maple-syrup",
                                                      "commodity":  "Syrup (pancake / maple)",
                                                      "unit":  "floz",
@@ -1398,6 +1664,48 @@
                                                      "per_unit":  0.1059,
                                                      "size":  "64 oz",
                                                      "item":  "Pearl Milling Company Original Syrup, 64 oz.",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
+                                                     "id":  "teriyaki-sauce",
+                                                     "commodity":  "Teriyaki Sauce / Marinade",
+                                                     "unit":  "floz",
+                                                     "store":  "Aldi",
+                                                     "per_unit":  0.7494,
+                                                     "size":  "3.99 oz",
+                                                     "item":  "Park Street Deli Chicken Bites With Sauce Teriyaki 3.99 OZ",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
+                                                     "id":  "teriyaki-sauce",
+                                                     "commodity":  "Teriyaki Sauce / Marinade",
+                                                     "unit":  "floz",
+                                                     "store":  "Family Fare",
+                                                     "per_unit":  0.229,
+                                                     "size":  "10 oz",
+                                                     "item":  "Teriyaki Sauce Our Family",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
+                                                     "id":  "teriyaki-sauce",
+                                                     "commodity":  "Teriyaki Sauce / Marinade",
+                                                     "unit":  "floz",
+                                                     "store":  "Sam\u0027s Club",
+                                                     "per_unit":  0.2102,
+                                                     "size":  "27.5 oz",
+                                                     "item":  "Kinder\u0027s Teriyaki Marinade Sauce, 27.5 oz.",
                                                      "kind":  "weight",
                                                      "row_kind":  "volume",
                                                      "holds_crown":  false,
@@ -1433,6 +1741,20 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
+                                                     "id":  "vegetable-oil",
+                                                     "commodity":  "Vegetable / Canola Oil",
+                                                     "unit":  "floz",
+                                                     "store":  "Fareway",
+                                                     "per_unit":  0.0741,
+                                                     "size":  "128 oz",
+                                                     "item":  "Fareway Vegetable Oil",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
                                                      "id":  "worcestershire",
                                                      "commodity":  "Worcestershire Sauce",
                                                      "unit":  "floz",
@@ -1448,22 +1770,7 @@
                                                  }
                                              ],
     "rounding_band_crown":  [
-                                {
-                                    "id":  "chicken-thighs",
-                                    "commodity":  "Chicken Thighs / Drumsticks",
-                                    "unit":  "lb",
-                                    "store":  "Sam\u0027s Club",
-                                    "per_unit":  0.98,
-                                    "rounding_pct":  0.51,
-                                    "band_low":  0.975,
-                                    "band_high":  0.985,
-                                    "tie_with":  [
-                                                     "Walmart"
-                                                 ],
-                                    "item":  "Member\u0027s Mark Chicken Drumsticks, priced per pound",
-                                    "size":  "lb",
-                                    "basis":  "per-lb marker"
-                                }
+
                             ],
     "findings":  [
                      {
@@ -1480,17 +1787,17 @@
                          "size_shape_mismatch":  true
                      },
                      {
-                         "id":  "granola-bars",
-                         "commodity":  "Granola Bars",
-                         "unit":  "each",
-                         "store":  "Hy-Vee",
-                         "per_unit":  0.9983,
-                         "median":  0.2222,
-                         "mult":  4.49,
-                         "size":  "",
-                         "item":  "KIND granola bars, 6 ct., $5.99",
-                         "peers_packed":  "3 of 6",
-                         "size_shape_mismatch":  true
+                         "id":  "bouillon",
+                         "commodity":  "Bouillon (cubes / granules / base)",
+                         "unit":  "oz",
+                         "store":  "Family Fare",
+                         "per_unit":  1.1969,
+                         "median":  0.1766,
+                         "mult":  6.78,
+                         "size":  "3.25 oz",
+                         "item":  "Our Family Bouillon Cubes, Chicken Flavor, Instant 3.25 Oz",
+                         "peers_packed":  "1 of 4",
+                         "size_shape_mismatch":  false
                      },
                      {
                          "id":  "dried-basil",
@@ -1502,6 +1809,19 @@
                          "mult":  6.44,
                          "size":  "200 ml",
                          "item":  "Litehouse Herb, Freeze  Dried Basil 0.28 Oz",
+                         "peers_packed":  "0 of 4",
+                         "size_shape_mismatch":  false
+                     },
+                     {
+                         "id":  "green-olives",
+                         "commodity":  "Green Olives (stuffed)",
+                         "unit":  "oz",
+                         "store":  "Hy-Vee",
+                         "per_unit":  1.4975,
+                         "median":  0.28,
+                         "mult":  5.35,
+                         "size":  "4 oz",
+                         "item":  "FreeStyle Snacks Original Green Olives",
                          "peers_packed":  "0 of 4",
                          "size_shape_mismatch":  false
                      },
@@ -1532,16 +1852,16 @@
                          "size_shape_mismatch":  false
                      },
                      {
-                         "id":  "gruyere",
-                         "commodity":  "Gruyere Cheese",
-                         "unit":  "oz",
-                         "store":  "Fareway",
-                         "per_unit":  1.7488,
-                         "median":  0.4362,
-                         "mult":  4.01,
-                         "size":  "8 oz",
-                         "item":  "Grand Suisse Le Gruyere Cheese",
-                         "peers_packed":  "0 of 4",
+                         "id":  "cat-food",
+                         "commodity":  "Cat Food (dry)",
+                         "unit":  "lb",
+                         "store":  "Hy-Vee",
+                         "per_unit":  4.598,
+                         "median":  1.1359,
+                         "mult":  4.05,
+                         "size":  "",
+                         "item":  "Blue Buffalo cat food, 5 lb. bag, $22.99",
+                         "peers_packed":  "0 of 5",
                          "size_shape_mismatch":  false
                      }
                  ],
@@ -1549,7 +1869,7 @@
 
                             ],
     "ratio":  4,
-    "generated":  "2026-09-20T12:12:01",
+    "generated":  "2026-09-21T08:11:00",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "coconut-oil",
@@ -1577,20 +1897,6 @@
                                                        "row_kind":  "volume",
                                                        "holds_crown":  true,
                                                        "unit_kind":  "weight",
-                                                       "agrees_with_engine_divisor":  true
-                                                   },
-                                                   {
-                                                       "id":  "teriyaki-sauce",
-                                                       "commodity":  "Teriyaki Sauce / Marinade",
-                                                       "unit":  "floz",
-                                                       "store":  "Baker\u0027s",
-                                                       "per_unit":  0.1667,
-                                                       "size":  "12 fl oz",
-                                                       "item":  "Kroger Teriyaki Pineapple Marinade",
-                                                       "kind":  "volume",
-                                                       "row_kind":  "weight",
-                                                       "holds_crown":  true,
-                                                       "unit_kind":  "volume",
                                                        "agrees_with_engine_divisor":  true
                                                    },
                                                    {
@@ -1696,8 +2002,8 @@
                                                        "commodity":  "Mayonnaise",
                                                        "unit":  "oz",
                                                        "store":  "Sam\u0027s Club",
-                                                       "per_unit":  0.12,
-                                                       "size":  "124.833 oz",
+                                                       "per_unit":  0.117,
+                                                       "size":  "128.034 oz",
                                                        "item":  "Kraft Real Mayo Creamy and Smooth Real Mayonnaise, 1 gal.",
                                                        "kind":  "weight",
                                                        "row_kind":  "volume",
@@ -1734,13 +2040,13 @@
                                                        "agrees_with_engine_divisor":  true
                                                    },
                                                    {
-                                                       "id":  "teriyaki-sauce",
-                                                       "commodity":  "Teriyaki Sauce / Marinade",
+                                                       "id":  "vegetable-broth",
+                                                       "commodity":  "Vegetable Broth / Stock",
                                                        "unit":  "floz",
-                                                       "store":  "Walmart",
-                                                       "per_unit":  0.1687,
-                                                       "size":  "15 fl oz",
-                                                       "item":  "Great Value Teriyaki Sauce, 15 fl oz, 1 Count",
+                                                       "store":  "Family Fare",
+                                                       "per_unit":  0.0809,
+                                                       "size":  "32 fl oz",
+                                                       "item":  "Our Family Vegetable Stock 32 Fl Oz",
                                                        "kind":  "volume",
                                                        "row_kind":  "weight",
                                                        "holds_crown":  false,
@@ -1751,10 +2057,10 @@
                                                        "id":  "vegetable-broth",
                                                        "commodity":  "Vegetable Broth / Stock",
                                                        "unit":  "floz",
-                                                       "store":  "Family Fare",
-                                                       "per_unit":  0.0809,
+                                                       "store":  "Fareway",
+                                                       "per_unit":  0.0619,
                                                        "size":  "32 fl oz",
-                                                       "item":  "Our Family Vegetable Stock 32 Fl Oz",
+                                                       "item":  "Swanson\u0027s Vegetable broth",
                                                        "kind":  "volume",
                                                        "row_kind":  "weight",
                                                        "holds_crown":  false,

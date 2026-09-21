@@ -1,11 +1,6 @@
 ﻿{
-    "generated":  "2026-09-20 12:27",
+    "generated":  "2026-09-21 08:15",
     "items":  [
-                  {
-                      "commodity":  "baked-beans",
-                      "store":  "Hy-Vee",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
                   {
                       "commodity":  "bar-soap",
                       "store":  "Hy-Vee",
@@ -17,12 +12,7 @@
                       "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
                   },
                   {
-                      "commodity":  "pecorino-romano",
-                      "store":  "Hy-Vee",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "pork-shoulder",
+                      "commodity":  "red-wine",
                       "store":  "Hy-Vee",
                       "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
                   },
@@ -30,11 +20,6 @@
                       "commodity":  "white-wine",
                       "store":  "Hy-Vee",
                       "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "pasta",
-                      "store":  "Sam\u0027s Club",
-                      "reason":  "channel doubt (BLANK-IN-FIELD-BEARING-CAPTURE) - check the SHELF BADGE for \u0027Member\u0027s Mark Spaghetti Pasta Pantry Pack, 1 lb., 6 pk.\u0027: is it actually stocked in the Omaha store, or is this an online-only listing? its row in sams-deals-2026-09-19.json has an EMPTY fulfillment while that capture populates the field, so the channel was never recorded rather than never collected"
                   }
               ]
 }

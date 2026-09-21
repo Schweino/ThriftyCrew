@@ -7,27 +7,27 @@
     "coverage_mode":  "partial",
     "source":  "Hy-Vee Aisles Online GraphQL storeProducts.price - the CURRENT shelf price at storeId 1466 (Omaha #02), cross-checked against retailItems.ecommerceTagPrice at the matching pickup location. NOT basePrice (the regular price) and NOT ssrPricing (a different store).",
     "size_policy":  "sizes are OUR verified ones, not Hy-Vee\u0027s - their size field mixes totals, single units of a multipack, and mislabelled units",
-    "deal_count":  1544,
-    "refreshed_today":  9,
+    "deal_count":  1545,
+    "refreshed_today":  5,
     "marked_down":  2,
-    "newly_priced":  8,
-    "not_reverified":  1535,
+    "newly_priced":  5,
+    "not_reverified":  1540,
     "cap_skipped":  0,
     "failed":  0,
     "budget_skipped":  1272,
     "ask_budget":  15,
     "asked":  15,
-    "answered":  15,
+    "answered":  14,
     "multiple_descriptive":  0,
     "multiple_refused":  0,
     "expired_past_carry":  0,
     "max_carry_days":  90,
-    "requeued_below_tag":  5,
+    "requeued_below_tag":  4,
     "product_ids_recovered":  0,
     "product_id_conflicts":  0,
     "read_at_store_id":  "1466",
     "ask_threw":  0,
-    "ask_empty":  0,
+    "ask_empty":  1,
     "ask_other_store":  0,
     "capture_terms":  [
                           {
@@ -138,8 +138,9 @@
                           {
                               "term":  "product-0015-1852363",
                               "ordinal":  15,
-                              "outcome":  "success",
-                              "row_count":  1
+                              "outcome":  "not_attempted",
+                              "row_count":  0,
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0016-unidentified",
@@ -3315,8 +3316,9 @@
                           {
                               "term":  "product-0469-2976165",
                               "ordinal":  469,
-                              "outcome":  "success",
-                              "row_count":  1
+                              "outcome":  "not_attempted",
+                              "row_count":  0,
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0470-56919",
@@ -4903,9 +4905,9 @@
                           {
                               "term":  "product-0696-11342",
                               "ordinal":  696,
-                              "outcome":  "not_attempted",
+                              "outcome":  "rejected",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "source product size conflicts with the worklist variant"
                           },
                           {
                               "term":  "product-0697-11342",
@@ -5071,9 +5073,9 @@
                           {
                               "term":  "product-0720-47144",
                               "ordinal":  720,
-                              "outcome":  "not_attempted",
+                              "outcome":  "rejected",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "source product size conflicts with the worklist variant"
                           },
                           {
                               "term":  "product-0721-47144",
@@ -5638,9 +5640,8 @@
                           {
                               "term":  "product-0801-9273",
                               "ordinal":  801,
-                              "outcome":  "not_attempted",
-                              "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "outcome":  "success",
+                              "row_count":  1
                           },
                           {
                               "term":  "product-0802-3515788",
@@ -6695,9 +6696,8 @@
                           {
                               "term":  "product-0952-450942",
                               "ordinal":  952,
-                              "outcome":  "not_attempted",
-                              "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "outcome":  "success",
+                              "row_count":  1
                           },
                           {
                               "term":  "product-0953-3923785",
@@ -7031,9 +7031,8 @@
                           {
                               "term":  "product-1000-41736",
                               "ordinal":  1000,
-                              "outcome":  "not_attempted",
-                              "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "outcome":  "success",
+                              "row_count":  1
                           },
                           {
                               "term":  "product-1001-3304437",
@@ -7346,9 +7345,9 @@
                           {
                               "term":  "product-1045-444508",
                               "ordinal":  1045,
-                              "outcome":  "not_attempted",
+                              "outcome":  "rejected",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "source product size conflicts with the worklist variant"
                           },
                           {
                               "term":  "product-1046-19214",
@@ -7528,9 +7527,9 @@
                           {
                               "term":  "product-1071-3796212",
                               "ordinal":  1071,
-                              "outcome":  "not_attempted",
+                              "outcome":  "rejected",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "store product lookup returned no usable offer"
                           },
                           {
                               "term":  "product-1072-2974934",
@@ -7563,9 +7562,9 @@
                           {
                               "term":  "product-1076-19478",
                               "ordinal":  1076,
-                              "outcome":  "not_attempted",
+                              "outcome":  "rejected",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "source product size conflicts with the worklist variant"
                           },
                           {
                               "term":  "product-1077-19483",
@@ -7668,9 +7667,8 @@
                           {
                               "term":  "product-1091-4124425",
                               "ordinal":  1091,
-                              "outcome":  "not_attempted",
-                              "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "outcome":  "success",
+                              "row_count":  1
                           },
                           {
                               "term":  "product-1092-3794446",
@@ -8158,8 +8156,9 @@
                           {
                               "term":  "product-1161-2345453",
                               "ordinal":  1161,
-                              "outcome":  "success",
-                              "row_count":  1
+                              "outcome":  "not_attempted",
+                              "row_count":  0,
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-1162-35932",
@@ -8549,8 +8548,9 @@
                           {
                               "term":  "product-1217-400543",
                               "ordinal":  1217,
-                              "outcome":  "success",
-                              "row_count":  1
+                              "outcome":  "not_attempted",
+                              "row_count":  0,
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-1218-17445",
@@ -9675,8 +9675,9 @@
                           {
                               "term":  "product-1378-1517940",
                               "ordinal":  1378,
-                              "outcome":  "success",
-                              "row_count":  1
+                              "outcome":  "not_attempted",
+                              "row_count":  0,
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-1379-4254442",
@@ -10640,8 +10641,9 @@
                           {
                               "term":  "product-1516-4249169",
                               "ordinal":  1516,
-                              "outcome":  "success",
-                              "row_count":  1
+                              "outcome":  "not_attempted",
+                              "row_count":  0,
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-1517-286474",
@@ -10812,39 +10814,34 @@
                               "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
-                              "term":  "product-1541-31956",
+                              "term":  "product-1541-11405",
                               "ordinal":  1541,
-                              "outcome":  "refused-below-shelf-tag",
+                              "outcome":  "not_attempted",
                               "row_count":  0,
-                              "requeued":  true,
-                              "reason":  "answer below the shelf tag discarded; no earlier read to carry, re-asked from its link or catalogue addition"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
-                              "term":  "product-1542-52837",
+                              "term":  "product-1542-55167",
                               "ordinal":  1542,
-                              "outcome":  "refused-below-shelf-tag",
+                              "outcome":  "not_attempted",
                               "row_count":  0,
-                              "requeued":  true,
-                              "reason":  "answer below the shelf tag discarded; no earlier read to carry, re-asked from its link or catalogue addition"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
-                              "term":  "product-1543-8652",
+                              "term":  "product-1543-26953",
                               "ordinal":  1543,
-                              "outcome":  "refused-below-shelf-tag",
+                              "outcome":  "not_attempted",
                               "row_count":  0,
-                              "requeued":  true,
-                              "reason":  "answer below the shelf tag discarded; no earlier read to carry, re-asked from its link or catalogue addition"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
-                              "term":  "product-1544-90791",
+                              "term":  "product-1544-31956",
                               "ordinal":  1544,
-                              "outcome":  "refused-below-shelf-tag",
-                              "row_count":  0,
-                              "requeued":  true,
-                              "reason":  "answer below the shelf tag discarded; no earlier read to carry, re-asked from its link or catalogue addition"
+                              "outcome":  "success",
+                              "row_count":  1
                           },
                           {
-                              "term":  "product-1545-24848",
+                              "term":  "product-1545-52837",
                               "ordinal":  1545,
                               "outcome":  "refused-below-shelf-tag",
                               "row_count":  0,
@@ -10852,22 +10849,28 @@
                               "reason":  "answer below the shelf tag discarded; no earlier read to carry, re-asked from its link or catalogue addition"
                           },
                           {
-                              "term":  "product-1546-11405",
+                              "term":  "product-1546-8652",
                               "ordinal":  1546,
-                              "outcome":  "success",
-                              "row_count":  1
+                              "outcome":  "refused-below-shelf-tag",
+                              "row_count":  0,
+                              "requeued":  true,
+                              "reason":  "answer below the shelf tag discarded; no earlier read to carry, re-asked from its link or catalogue addition"
                           },
                           {
-                              "term":  "product-1547-55167",
+                              "term":  "product-1547-90791",
                               "ordinal":  1547,
-                              "outcome":  "success",
-                              "row_count":  1
+                              "outcome":  "refused-below-shelf-tag",
+                              "row_count":  0,
+                              "requeued":  true,
+                              "reason":  "answer below the shelf tag discarded; no earlier read to carry, re-asked from its link or catalogue addition"
                           },
                           {
-                              "term":  "product-1548-26953",
+                              "term":  "product-1548-24848",
                               "ordinal":  1548,
-                              "outcome":  "success",
-                              "row_count":  1
+                              "outcome":  "refused-below-shelf-tag",
+                              "row_count":  0,
+                              "requeued":  true,
+                              "reason":  "answer below the shelf tag discarded; no earlier read to carry, re-asked from its link or catalogue addition"
                           }
                       ],
     "deals":  [
@@ -11054,15 +11057,16 @@
                       "ad_price":  "$6.99",
                       "size":  "16 oz",
                       "regular":  6.99,
-                      "current_price":  6.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
                       "store_id":  "1466",
                       "as_of":  "2026-09-21",
+                      "not_reverified":  true,
+                      "current_price":  6.99,
+                      "base_price":  6.99,
                       "product_id":  1852363,
                       "store_department":  "Meat \u0026 Seafood",
                       "store_department_group":  "Fresh",
-                      "store_category":  "Chicken \u0026 Poultry",
-                      "base_price":  6.99
+                      "store_category":  "Chicken \u0026 Poultry"
                   },
                   {
                       "store":  "Hy-Vee",
@@ -17293,15 +17297,16 @@
                       "ad_price":  "$1.99",
                       "size":  "6 pk 4 oz",
                       "regular":  1.99,
-                      "current_price":  1.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
                       "store_id":  "1466",
                       "as_of":  "2026-09-21",
+                      "not_reverified":  true,
+                      "current_price":  1.99,
+                      "base_price":  1.99,
                       "product_id":  2976165,
                       "store_department":  "Canned \u0026 Jarred Foods",
                       "store_department_group":  "Pantry",
-                      "store_category":  "Fruits",
-                      "base_price":  1.99
+                      "store_category":  "Fruits"
                   },
                   {
                       "store":  "Hy-Vee",
@@ -22336,15 +22341,19 @@
                   {
                       "store":  "Hy-Vee",
                       "item":  "Del Monte® Lite Bartlett Pear Halves In Extra Light Syrup",
-                      "ad_price":  "$2.41",
+                      "ad_price":  "$2.44",
                       "size":  "15 oz",
-                      "regular":  2.41,
-                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
-                      "store_id":  "1465",
-                      "as_of":  "2026-07-17",
-                      "not_reverified":  true,
+                      "regular":  2.44,
+                      "current_price":  2.44,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
+                      "store_id":  "1466",
+                      "as_of":  "2026-09-21",
                       "product_id":  9273,
-                      "product_id_recovered_from":  "hyvee-regular-2026-07-17"
+                      "store_department":  "Canned \u0026 Jarred Foods",
+                      "store_department_group":  "Pantry",
+                      "store_category":  "Fruits",
+                      "base_price":  2.99,
+                      "marked_down":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -24357,12 +24366,15 @@
                       "ad_price":  "$6.99",
                       "size":  "20 fl oz",
                       "regular":  6.99,
-                      "source_ad":  "Aisles Online search current price (batch primer, storeId 1465, Omaha #01)",
-                      "store_id":  "1465",
-                      "as_of":  "2026-07-15",
-                      "not_reverified":  true,
+                      "current_price":  6.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
+                      "store_id":  "1466",
+                      "as_of":  "2026-09-21",
                       "product_id":  450942,
-                      "product_id_recovered_from":  "hyvee-regular-2026-07-15"
+                      "store_department":  "Condiments \u0026 Salad Dressing",
+                      "store_department_group":  "Pantry",
+                      "store_category":  "Salad Dressing \u0026 Topping",
+                      "base_price":  6.99
                   },
                   {
                       "store":  "Hy-Vee",
@@ -24999,12 +25011,15 @@
                       "ad_price":  "$2.98",
                       "size":  "12 fl oz",
                       "regular":  2.98,
-                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
-                      "store_id":  "1465",
-                      "as_of":  "2026-07-17",
-                      "not_reverified":  true,
+                      "current_price":  2.98,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
+                      "store_id":  "1466",
+                      "as_of":  "2026-09-21",
                       "product_id":  41736,
-                      "product_id_recovered_from":  "hyvee-regular-2026-07-17"
+                      "store_department":  "Condiments \u0026 Salad Dressing",
+                      "store_department_group":  "Pantry",
+                      "store_category":  "Condiments",
+                      "base_price":  2.98
                   },
                   {
                       "store":  "Hy-Vee",
@@ -26224,12 +26239,15 @@
                       "ad_price":  "$5.99",
                       "size":  "4 oz",
                       "regular":  5.99,
-                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
-                      "store_id":  "1465",
-                      "as_of":  "2026-07-17",
-                      "not_reverified":  true,
+                      "current_price":  5.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
+                      "store_id":  "1466",
+                      "as_of":  "2026-09-21",
                       "product_id":  4124425,
-                      "product_id_recovered_from":  "hyvee-regular-2026-07-17"
+                      "store_department":  "Canned \u0026 Jarred Foods",
+                      "store_department_group":  "Pantry",
+                      "store_category":  "Olives",
+                      "base_price":  5.99
                   },
                   {
                       "store":  "Hy-Vee",
@@ -27183,15 +27201,16 @@
                       "ad_price":  "$11.99",
                       "size":  "1.9 oz",
                       "regular":  11.99,
-                      "current_price":  11.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
                       "store_id":  "1466",
                       "as_of":  "2026-09-21",
+                      "not_reverified":  true,
+                      "current_price":  11.99,
+                      "base_price":  11.99,
                       "product_id":  2345453,
                       "store_department":  "Cooking \u0026 Baking",
                       "store_department_group":  "Pantry",
-                      "store_category":  "Herbs, Spices \u0026 Seasoning",
-                      "base_price":  11.99
+                      "store_category":  "Herbs, Spices \u0026 Seasoning"
                   },
                   {
                       "store":  "Hy-Vee",
@@ -27916,15 +27935,16 @@
                       "ad_price":  "$9.99",
                       "size":  "1.75 oz",
                       "regular":  9.99,
-                      "current_price":  9.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
                       "store_id":  "1466",
                       "as_of":  "2026-09-21",
+                      "not_reverified":  true,
+                      "current_price":  9.99,
+                      "base_price":  9.99,
                       "product_id":  400543,
                       "store_department":  "Cooking \u0026 Baking",
                       "store_department_group":  "Pantry",
-                      "store_category":  "Herbs, Spices \u0026 Seasoning",
-                      "base_price":  9.99
+                      "store_category":  "Herbs, Spices \u0026 Seasoning"
                   },
                   {
                       "store":  "Hy-Vee",
@@ -30064,15 +30084,16 @@
                       "ad_price":  "$10.99",
                       "size":  "16 oz",
                       "regular":  10.99,
-                      "current_price":  10.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
                       "store_id":  "1466",
                       "as_of":  "2026-09-21",
+                      "not_reverified":  true,
+                      "current_price":  10.99,
+                      "base_price":  10.99,
                       "product_id":  1517940,
                       "store_department":  "Packaged Meals \u0026 Sides",
                       "store_department_group":  "Pantry",
-                      "store_category":  "Sides",
-                      "base_price":  10.99
+                      "store_category":  "Sides"
                   },
                   {
                       "store":  "Hy-Vee",
@@ -31910,15 +31931,16 @@
                       "ad_price":  "$2.99",
                       "size":  "12 oz",
                       "regular":  2.99,
-                      "current_price":  2.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
                       "store_id":  "1466",
                       "as_of":  "2026-09-21",
+                      "not_reverified":  true,
+                      "current_price":  2.99,
+                      "base_price":  2.99,
                       "product_id":  4249169,
                       "store_department":  "Produce",
                       "store_department_group":  "Fresh",
-                      "store_category":  "Fresh Vegetables",
-                      "base_price":  2.99
+                      "store_category":  "Fresh Vegetables"
                   },
                   {
                       "store":  "Hy-Vee",
@@ -32260,16 +32282,17 @@
                       "ad_price":  "$3.49",
                       "size":  "1 lb",
                       "regular":  3.49,
-                      "current_price":  3.49,
                       "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
                       "store_id":  "1466",
                       "as_of":  "2026-09-21",
+                      "not_reverified":  true,
+                      "current_price":  3.49,
+                      "base_price":  3.99,
+                      "marked_down":  true,
                       "product_id":  11405,
                       "store_department":  "Meat \u0026 Seafood",
                       "store_department_group":  "Fresh",
-                      "store_category":  "Beef",
-                      "base_price":  3.99,
-                      "marked_down":  true
+                      "store_category":  "Beef"
                   },
                   {
                       "store":  "Hy-Vee",
@@ -32277,16 +32300,17 @@
                       "ad_price":  "$1",
                       "size":  "16 fl oz",
                       "regular":  1,
-                      "current_price":  1,
                       "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
                       "store_id":  "1466",
                       "as_of":  "2026-09-21",
+                      "not_reverified":  true,
+                      "current_price":  1,
+                      "base_price":  1.89,
+                      "marked_down":  true,
                       "product_id":  55167,
                       "store_department":  "Dairy, Cheese \u0026 Eggs",
                       "store_department_group":  "Fresh",
-                      "store_category":  "Milk \u0026 Cream",
-                      "base_price":  1.89,
-                      "marked_down":  true
+                      "store_category":  "Milk \u0026 Cream"
                   },
                   {
                       "store":  "Hy-Vee",
@@ -32294,15 +32318,33 @@
                       "ad_price":  "$2.99",
                       "size":  "16 fl oz",
                       "regular":  2.99,
-                      "current_price":  2.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
                       "store_id":  "1466",
                       "as_of":  "2026-09-21",
+                      "not_reverified":  true,
+                      "current_price":  2.99,
+                      "base_price":  2.99,
                       "product_id":  26953,
                       "store_department":  "Cooking \u0026 Baking",
                       "store_department_group":  "Pantry",
-                      "store_category":  "Vinegar \u0026 Cooking Wine",
-                      "base_price":  2.99
+                      "store_category":  "Vinegar \u0026 Cooking Wine"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Fresh Pork Shoulder Blade Boston Butt Roast",
+                      "ad_price":  "$2.68",
+                      "size":  "lb",
+                      "regular":  2.68,
+                      "current_price":  2.68,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
+                      "store_id":  "1466",
+                      "as_of":  "2026-09-21",
+                      "product_id":  31956,
+                      "store_department":  "Meat \u0026 Seafood",
+                      "store_department_group":  "Fresh",
+                      "store_category":  "Pork",
+                      "base_price":  2.99,
+                      "marked_down":  true
                   }
               ]
 }

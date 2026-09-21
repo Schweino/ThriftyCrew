@@ -99,6 +99,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
+        "id":  "artichoke-hearts",
+        "store":  "Family Fare",
+        "product":  "Del Monte Quartered Artichoke Hearts 14 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "asparagus",
         "store":  "Family Fare",
         "product":  "Fresh Green Asparagus",
@@ -288,6 +297,15 @@
         "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
+        "id":  "bouillon",
+        "store":  "Family Fare",
+        "product":  "Our Family Bouillon Cubes, Chicken Flavor, Instant 3.25 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/broth_soups_stews_chili",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "bratwurst",
         "store":  "Family Fare",
         "product":  "Bratwurst, Cheddar Our Family",
@@ -417,6 +435,15 @@
         "id":  "canned-corn",
         "store":  "Family Fare",
         "product":  "Our Family No Salt Added Super Sweet Whole Kernel Corn 15.25 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "canned-green-chilies",
+        "store":  "Family Fare",
+        "product":  "Our Family Green Chiles, Mild, Diced 4 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -799,6 +826,15 @@
         "aisle":  "health_beauty/baby_child",
         "verdict":  "ALLOW",
         "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027baby\u0027"
+    },
+    {
+        "id":  "tomatoes-green-chilies",
+        "store":  "Family Fare",
+        "product":  "Our Family Tomatoes, With Green Chiles, Diced 14.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
         "id":  "dinner-rolls",
@@ -1476,15 +1512,6 @@
         "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027personal\u0027"
     },
     {
-        "id":  "muffins",
-        "store":  "Family Fare",
-        "product":  "Little Bites Blueberry Muffins 5 Ea",
-        "dept":  "pantry",
-        "aisle":  "pantry/snacks",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027bakery\u0027"
-    },
-    {
         "id":  "oatmeal",
         "store":  "Family Fare",
         "product":  "Maple \u0026 Brown Sugar Instant Oatmeal",
@@ -2140,6 +2167,15 @@
         "aisle":  "pantry/baking",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
+        "id":  "vegetable-broth",
+        "store":  "Family Fare",
+        "product":  "Our Family Vegetable Stock 32 Fl Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/broth_soups_stews_chili",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
         "id":  "whipped-cream",

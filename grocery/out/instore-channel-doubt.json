@@ -1,11 +1,11 @@
 ﻿{
-    "generated":  "2026-09-20 12:27",
-    "board":  "comparison-2026-09-20.json",
+    "generated":  "2026-09-21 08:23",
+    "board":  "comparison-2026-09-21.json",
     "note":  "Cells whose winning row cannot prove it is an in-store shelf row. Since 2026-09-01 the engine REFUSES this shape (instore-lib.ps1), so a cell here is either a REVIEWED exception someone verified on the live product page, or a cell the refusal did not reach - which is a defect in the refusal, not a question for the store. Still advisory, still drops nothing.",
-    "doubt_count":  1,
-    "crown_count":  1,
+    "doubt_count":  0,
+    "crown_count":  0,
     "reviewed_count":  0,
-    "unreached_count":  1,
+    "unreached_count":  0,
     "allowlist_file":  "instore-channel-allowlist.json",
     "allowlist_keys":  4,
     "files_read":  [
@@ -286,6 +286,13 @@
                            "store":  "Fareway",
                            "file":  "fareway-regular-2026-09-20.json",
                            "rows":  856,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-09-21.json",
+                           "rows":  875,
                            "with_field":  0,
                            "field_bearing":  false
                        },
@@ -745,6 +752,13 @@
                            "field_bearing":  false
                        },
                        {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-09-21.json",
+                           "rows":  7380,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
                            "store":  "Walmart",
                            "file":  "walmart-regular-2026-07-05.json",
                            "rows":  27,
@@ -1004,6 +1018,13 @@
                            "field_bearing":  true
                        },
                        {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-09-21.json",
+                           "rows":  438,
+                           "with_field":  436,
+                           "field_bearing":  true
+                       },
+                       {
                            "store":  "Aldi",
                            "file":  "aldi-regular-2026-07-06.json",
                            "rows":  30,
@@ -1210,6 +1231,13 @@
                            "store":  "Aldi",
                            "file":  "aldi-regular-2026-09-20.json",
                            "rows":  3821,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-09-21.json",
+                           "rows":  3837,
                            "with_field":  0,
                            "field_bearing":  false
                        },
@@ -1669,6 +1697,13 @@
                            "field_bearing":  false
                        },
                        {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-09-21.json",
+                           "rows":  5514,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
                            "store":  "Sam\u0027s Club",
                            "file":  "sams-deals-2026-07-05.json",
                            "rows":  19,
@@ -1926,6 +1961,13 @@
                            "rows":  12,
                            "with_field":  9,
                            "field_bearing":  true
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-09-21.json",
+                           "rows":  1030,
+                           "with_field":  503,
+                           "field_bearing":  false
                        },
                        {
                            "store":  "Hy-Vee",
@@ -2395,23 +2437,16 @@
                            "rows":  1541,
                            "with_field":  0,
                            "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-09-21.json",
+                           "rows":  1545,
+                           "with_field":  0,
+                           "field_bearing":  false
                        }
                    ],
     "doubt":  [
-                  {
-                      "commodity":  "pasta",
-                      "store":  "Sam\u0027s Club",
-                      "item":  "Member\u0027s Mark Spaghetti Pasta Pantry Pack, 1 lb., 6 pk.",
-                      "per_unit":  0.0571,
-                      "ad":  "$5.48",
-                      "size":  "6 lb",
-                      "is_crown":  true,
-                      "why":  "BLANK-IN-FIELD-BEARING-CAPTURE",
-                      "detail":  "its row in sams-deals-2026-09-19.json has an EMPTY fulfillment while that capture populates the field, so the channel was never recorded rather than never collected",
-                      "source_file":  "sams-deals-2026-09-19.json",
-                      "item_id":  "",
-                      "attribution":  "price-match",
-                      "reviewed":  ""
-                  }
+
               ]
 }
