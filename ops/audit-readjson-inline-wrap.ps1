@@ -17,6 +17,7 @@
 
   Exit 0 clean, 1 findings. Last line READJSON-INLINE-WRAP-COMPLETE. Self-test: -SelfTest.
 #>
+[CmdletBinding()]
 param([switch]$SelfTest, [string]$Root = '')
 $ErrorActionPreference = 'Stop'
 $repo = if ($Root) { $Root } else { Split-Path -Parent $PSScriptRoot }

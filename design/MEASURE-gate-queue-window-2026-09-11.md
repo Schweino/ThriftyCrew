@@ -95,6 +95,8 @@ one comment line in the script's header, the `blind=no-gate-worker-slot` descrip
 machine-wide slots, to match the budget Brad raised in 39be9900e. No code, no gate entry, no pool or slot logic
 moved. Every total below still reads as measured.
 
+**Re-read at harness blob `cc2b3396bf0e` (`ops/run-gates.ps1`, `git rev-parse HEAD:<path>`): every verdict below stands as measured.** `ops/run-gates.ps1` gains one static audit entry (2026-09-21, the readjson inline-wrap gate at zero over inline-wrapped JSON reads). It adds one hermetic source scan to the list and changes nothing in slot admission, the queue, discovery or verdict reuse, which is all this file measured.
+
 **Re-read at harness blob `97c0f6d6d9ed` (`ops/run-gates.ps1`, `git rev-parse HEAD:<path>`):** backlog I166 adds one
 static audit entry, the secret scan, on every push (about 20 s of git grep over the tracked tree). It is one more
 unit of gate work per run, the same direction as the earlier single-entry additions recorded above; no pool, slot or
