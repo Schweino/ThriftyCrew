@@ -88,6 +88,12 @@ real one, which is both fuller and more restricted.
      grocery\capture-sink.ps1 is the local file drop. Start it as a BACKGROUND command (a
      PowerShell Start-Job dies with its shell):
          powershell -NoProfile -ExecutionPolicy Bypass -File grocery\capture-sink.ps1 -OutDir <dir>
+     ALWAYS PASS -OutDir AS AN ABSOLUTE PATH (2026-09-21): with no -OutDir the sink's default resolved to
+     C:\out\captures\_sink, outside the repo, because $PSScriptRoot is empty in a CmdletBinding param
+     default. It still replies AGREE, so nothing on the page side shows it.
+     BUNDLING pull-agent-lib.js WITH A STORE AGENT IN ONE SCOPE: pull-aldi-instore.js re-declares
+     `const sleep`, so put the store file in its own nested { } block inside the wrapper, or it is a
+     SyntaxError before anything runs.
      It binds localhost ONLY, writes each POST to <OutDir>\<name>.txt, and echoes char and line
      counts back to the page so you can confirm both sides agree BEFORE running a builder. It
      also exits on its own after 30 idle minutes, and -Stop shuts it down.
@@ -337,6 +343,11 @@ actually touching. The parts that cost a whole day to rediscover on 2026-08-22:
     ON 2026-09-19 THE SESSION WAS SITTING ON PICKUP, at the right store. The store id alone did not
     catch it: read the fulfilment mode the page shows and switch it to In-Store in the page's own
     picker before the first term, then assert again. Pickup prices are not shelf prices.
+    WAIT FOR A SETTLED COUNT BEFORE EXTRACTING (2026-09-21). The results page paints ~9 items, pauses
+    several seconds, then fills the rest. An extract taken at first paint read 1-14 candidates per term
+    where the settled page held 13-109 - partial rows that look like success. Wait for the page's own
+    "Results for" heading, then scroll every ~2.5 s until the item count holds for four reads, THEN
+    call farewayShopExtract. 19-27 s per term. A capture whose terms cluster at 9 is this defect.
     Emit JSONL {id,term,candidates:[...]} -> out\fareway\fareway-shop-<date>.jsonl
     Then: select-fareway-shop.ps1 -In <that> -Today <date>
           build-fareway-regular.ps1 -Today <date> -ModeVerified <date>
