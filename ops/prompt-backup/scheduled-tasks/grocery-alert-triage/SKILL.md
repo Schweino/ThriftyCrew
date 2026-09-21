@@ -275,7 +275,11 @@ carry `prior_closes` (every id on its line), `prevention` (the upstream `source`
 exclude files as its source. A Class C/D item you work inline that is a RETURN carries the same fields.
 
 STEP 2 - GATE THE HANDOFF, DETERMINISTICALLY. Do not eyeball the plan; run:
-  powershell -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <plan> -OpenIds <every open id>
+  powershell -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <plan> -OpenIds <id1>,<id2>,<id3>
+**JOIN THE IDS WITH COMMAS, NO SPACES** (2026-09-21). Under `-File` a space-separated list binds the SECOND id as the next
+positional parameter (the queue path), and the gate exits 3 BLIND - failing closed, correctly, but costing a run. The
+script splits a single argument on `,` and `;` (validate-triage-plan.ps1 line 86). Every dispatch that names this command
+for an agent writes the ids the same way.
 Exit 0 = hand it over. Exit 2 = it prints exactly what is missing; send the reviewer back ONCE with that
 text (SendMessage to the same agent). Exit 3 = BLIND (no plan, unparseable, zero items): treat like a
 second failure.
