@@ -47,6 +47,9 @@ $repo = Split-Path $here -Parent
 $script:CG_RULE_FILES = @('grocery/commodities.json', 'grocery/recipe-commodities.json',
                           'grocery/category-excludes.json', 'grocery/product-classes.json',
                           'grocery/compare-deals.ps1', 'grocery/global-exclude-lib.ps1')
+# The ONE spelling of the baseline's path in this gate (2026-09-21): the live read, the fixture and the messages all
+# use it, so this ops script names grocery's internals once (ops\audit-cross-module-reach.ps1 ratchets each literal).
+$script:CG_BASELINE_REL = 'grocery/out/audit/match-baseline.json'
 
 function Test-StagedTouchesRules {
   <# Pure over a list of staged paths, so the fixture drives the live rule.
@@ -187,19 +190,20 @@ if ($SelfTest) {
     # never staged it, and committed the rules alone. The old gate read the working tree and passed it.
     $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
     try {
-      [void](New-Item -ItemType Directory -Path (Join-Path $g 'grocery\out\audit') -Force)
-      [IO.File]::WriteAllText((Join-Path $g 'grocery\out\audit\match-baseline.json'), "{`n  ""generated"":  ""2026-09-19 20:55"",`n  ""rules_hash"":  ""725c4708c23a"",`n  ""names"":  {}`n}")
-      & git -C $g add grocery/out/audit/match-baseline.json 2>&1 | Out-Null
+      $fxBase = Join-Path $g ($script:CG_BASELINE_REL -replace '/', '\')
+      [void](New-Item -ItemType Directory -Path (Split-Path $fxBase -Parent) -Force)
+      [IO.File]::WriteAllText($fxBase, "{`n  ""generated"":  ""2026-09-19 20:55"",`n  ""rules_hash"":  ""725c4708c23a"",`n  ""names"":  {}`n}")
+      & git -C $g add $script:CG_BASELINE_REL 2>&1 | Out-Null
       & git -C $g commit -q -m base 2>&1 | Out-Null
-      [IO.File]::WriteAllText((Join-Path $g 'grocery\out\audit\match-baseline.json'), "{`n  ""generated"":  ""2026-09-20 11:39"",`n  ""rules_hash"":  ""71d6567e44c4"",`n  ""names"":  {}`n}")
+      [IO.File]::WriteAllText($fxBase, "{`n  ""generated"":  ""2026-09-20 11:39"",`n  ""rules_hash"":  ""71d6567e44c4"",`n  ""names"":  {}`n}")
     } finally { $ErrorActionPreference = $prevEap }
-    $ixUnstaged = Get-IndexBaselineHash -Repo $g -Rel 'grocery/out/audit/match-baseline.json' -TmpDir $g
-    $wtText = [IO.File]::ReadAllText((Join-Path $g 'grocery\out\audit\match-baseline.json'))
+    $ixUnstaged = Get-IndexBaselineHash -Repo $g -Rel $script:CG_BASELINE_REL -TmpDir $g
+    $wtText = [IO.File]::ReadAllText($fxBase)
     T 'MUST FIRE  an accept on disk that was never staged is refused: the gate reads the INDEX baseline (725c...), not the working tree (71d6...), so the rules 71d6... cannot commit alone (5d42fb944, 2026-09-20)' `
       ((-not (Test-BaselineCoversRules '71d6567e44c4' $ixUnstaged)) -and ((Get-RulesHashFromBaselineText $wtText) -eq '71d6567e44c4')) ("index=$ixUnstaged")
     $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
-    try { & git -C $g add grocery/out/audit/match-baseline.json 2>&1 | Out-Null } finally { $ErrorActionPreference = $prevEap }
-    $ixStaged = Get-IndexBaselineHash -Repo $g -Rel 'grocery/out/audit/match-baseline.json' -TmpDir $g
+    try { & git -C $g add $script:CG_BASELINE_REL 2>&1 | Out-Null } finally { $ErrorActionPreference = $prevEap }
+    $ixStaged = Get-IndexBaselineHash -Repo $g -Rel $script:CG_BASELINE_REL -TmpDir $g
     T 'CLEAN TWIN  the same accept, STAGED with the rules, passes: review and commit are one step' `
       (Test-BaselineCoversRules '71d6567e44c4' $ixStaged) ("index=$ixStaged")
     T 'MUST FIRE  a baseline text that records no rules_hash yields none, so it is refused rather than read as covering anything' `
@@ -244,14 +248,14 @@ try {
   . (Join-Path $repo 'grocery\identity-lib.ps1')
   try { $stagedHash = Get-IdentityRulesHash -GroceryRoot $tmpG } catch { $stagedHash = '' }
   # THE BASELINE THIS COMMIT CARRIES (2026-09-21): the index entry, never the working-tree file. See Get-IndexBaselineHash.
-  $baseHash = Get-IndexBaselineHash -Repo $repo -Rel 'grocery/out/audit/match-baseline.json' -TmpDir $tmp
+  $baseHash = Get-IndexBaselineHash -Repo $repo -Rel $script:CG_BASELINE_REL -TmpDir $tmp
 } finally {
   Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
 }
 
 # The working-tree baseline is read only to NAME the commonest refusal: accepted on disk, never staged.
 $wtHash = ''
-$baseF = Join-Path $repo 'grocery\out\audit\match-baseline.json'
+$baseF = Join-Path $repo ($script:CG_BASELINE_REL -replace '/', '\')
 if (Test-Path -LiteralPath $baseF) {
   try { $wtHash = Get-RulesHashFromBaselineText ([IO.File]::ReadAllText($baseF)) } catch { $wtHash = '' }
 }
@@ -268,8 +272,8 @@ if (Test-BaselineCoversRules $stagedHash $wtHash) {
   Write-Output ''
   Write-Output 'commodities-gate: BLOCKED. You accepted these rules but did not STAGE the baseline, so the rules would commit'
   Write-Output '  without their review and the next build would hold on the diff you already read (2026-09-20, 5d42fb944). Run:'
-  Write-Output '    git add grocery\out\audit\match-baseline.json'
-  Write-Output '  and commit it WITH the rules (a pathspec commit names it too: git commit -F <msg> -- <rules> grocery/out/audit/match-baseline.json).'
+  Write-Output ('    git add ' + $script:CG_BASELINE_REL)
+  Write-Output ('  and commit it WITH the rules (a pathspec commit names it too: git commit -F <msg> -- <rules> ' + $script:CG_BASELINE_REL + ').')
   Exit-Guard -Name 'commodities-gate' -Summary "staged=$sh baseline=$bh accepted-not-staged BLOCKED" -Code 1
 }
 Write-Output ''
@@ -279,5 +283,5 @@ Write-Output '  unreviewed at 05:45 stopped the board by 08:14. Run, in this ord
 Write-Output '    powershell -File grocery\audit-match-soundness.ps1            (read MOVED and DROPPED)'
 Write-Output '    powershell -File grocery\audit-match-soundness.ps1 -Accept    (only once you agree with them)'
 Write-Output '    powershell -File grocery\guards.ps1                           (must exit 0)'
-Write-Output '    git add grocery\out\audit\match-baseline.json'
+Write-Output ('    git add ' + $script:CG_BASELINE_REL)
 Exit-Guard -Name 'commodities-gate' -Summary "staged=$sh baseline=$bh BLOCKED" -Code 1
