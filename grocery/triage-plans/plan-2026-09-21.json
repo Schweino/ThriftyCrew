@@ -75,7 +75,7 @@
       "status": "done",
       "premise_verified": "true, with one detail wider than the queue measured: cost-recipes.ps1 and compute-v2-perserving.ps1 carried 0 references to held-recipes.json or published-hashes.json (grep 2026-09-21); compute-v2 at 2026-09-20T12:10 skipped exactly the six held slugs; today's cost-flags.txt was 26 lines = 18 on held recipes + 8 MAPPED BID lines whose ingredient went on to PRICE (7 five-spice from the McCormick label, 1 wild rice from the Hy-Vee ledger read), so 0 of 26 was an unpriced line on a live page. Proof run: the patched engine over today's LIVE inputs with temp outputs (-LedgerMaxAgeDays 90, as the chain passes it) wrote 0 paging lines, set aside 18 HELD (6 recipes) and 8 ADVISORY lines, and still costed all 584 recipes including the 6 held",
       "deviation": "from the DISPATCH, not the plan: (1) held recipes are still COSTED (their costed.json rows stay current) because the dispatch also said do not delete held recipes' cost data; what they lose is being counted or paged as live, and the printed line says 'not costed as live, by design ... still costed'. (2) the engine also sets aside ADVISORY lines (MAPPED BID NOT ON ANY BOARD where the line then priced), because they were 8 of the 26 lines paging as 'unpriced' and after the held split they would have been the whole next page - with none of them unpriced. (3) the held and advisory lines are kept in costed.stamp.json (flags_set_aside) rather than a new file, so no new tracked path appears and the chain reads nothing new across the module boundary (audit-cross-module-reach code=118 base=118)",
-      "shipped_commit": "pending - recorded after the push lands"
+      "shipped_commit": "165949e80 (read back off origin/main)"
     },
     {
       "queue_id": "2026-09-19-0b2f1e",
@@ -144,7 +144,7 @@
       "status": "done",
       "premise_verified": "false, twice. (1) 'The publish gate lets UNKNOWN carriage through' is false today: engine/publish.ps1:126 refuses any slug whose costed row lists an uncarried line, UNKNOWN or NOT-CARRIED, on create and republish, before any Ghost call, and wave-publish and propagate-recipes both publish only through it; the six held recipes predate that gate (2026-08-22). (2) 'The live instance is 25 recipes' is false today: audit-carriage -Live on 2026-09-21 read 577 published recipes, 0 findings, exit 0; all 12 named slugs read LIVE with uncarried=[]; the four named ingredients are each proven CARRIED by an in-store board cell (Family Fare caraway $4.59/0.9 oz 2026-08-20, ancho $8.99/1 lb 2026-08-17, arbol $2.49/3 oz 2026-08-20; Walmart 68137 guajillo $7.24/12 oz 2026-08-31, seller Walmart.com, fulfillment STORE). Nothing is PROVEN NOT-CARRIED, so nothing was held, and no store needed asking because nothing is UNKNOWN",
       "deviation": "from the DISPATCH, not the plan: part 2 as written (add the refusal at publish) was already true, so the class fix went where measurement put the gap - the watch that paged a takedown for 25 recipes that were all UNKNOWN now splits PROVEN NOT-CARRIED ('  X ', takedown alert unchanged) from UNKNOWN ('  ? ', a new REVIEW alert that says resolve, do not take down, registered in grocery/alert-registry.json), and wave-preaudit gains check 'carriage-proven' so the GO decision refuses an unproven ingredient before publish does. Part 3 found nothing to hold or resolve; no Ghost write was made, so there is no held page to verify live",
-      "shipped_commit": "pending - recorded after the push lands"
+      "shipped_commit": "165949e80 (read back off origin/main)"
     },
     {
       "queue_id": "2026-09-20-588caa",
@@ -197,7 +197,7 @@
       "status": "done",
       "premise_verified": "true: reproduced at HEAD 31bf690b4 before any edit (wave-preaudit 1 of 79 FAIL, spec 25.13 vs engine 25) and again as the only red of the 165949e80 push (run-gates pass=448 fail=1)",
       "deviation": "not in the dispatch: taken because it was the one gate refusing this plan's push and the repair keeps cost-reconcile as strict; recorded here so it is reviewable, closed in the queue with its own disposition",
-      "shipped_commit": "pending - recorded after the push lands"
+      "shipped_commit": "413c25085 (read back off origin/main)"
     }
   ],
   "ship_sequence": [
@@ -209,5 +209,14 @@
     "the push of 165949e80 was refused by run-gates pass=448 fail=1, the one red the pre-existing wave-preaudit drill twin (2026-09-20-588caa); fix the drill (item 3), re-run its self-test, commit, push both",
     "commit by pathspec with a Store: line, push (pre-push run-gates + test-auditors), close the two queue items, validate-triage-plan -Closing"
   ],
-  "open_questions_for_brad": []
+  "open_questions_for_brad": [],
+  "verification": {
+    "tree": "main checkout C:/Codex/ThriftyCrew (git rev-parse --show-toplevel), not a worktree; HEAD == origin/main 31bf690b4 at start",
+    "push_1": "165949e80 alone: pre-push run-gates RUN-GATES-COMPLETE pass=448 fail=1 noverdict=0, the one red wave-preaudit's pre-existing drill twin (2026-09-20-588caa); refused, nothing landed",
+    "push_2": "165949e80 + 413c25085: pre-push run-gates RUN-GATES-COMPLETE pass=449 fail=0 noverdict=0; prepush-test-auditors selective 209 of 767 cases in 29 of 143 units passed; landed 31bf690b4..413c25085, a fast-forward, so both ids are unchanged on origin/main",
+    "test_auditors_full": "grocery/test-auditors.ps1 at 413c25085, main checkout: exit 0, 'test-auditors PASS (767 check(s))', TEST-AUDITORS-COMPLETE pass=767 failed=0 live=0 hygiene=0 skipped=0, 798 s",
+    "closing": "triage-close: 6c14f6 confirmed, 0b2f1e false-alarm, 588caa confirmed (each exit 0); validate-triage-plan -Closing exit 0 'PLAN CLOSED OK'",
+    "board": "not republished: no board rule or input changed in this plan, so the feed was not re-exported and no board cell moved",
+    "live_site": "no Ghost write was made; cache-busted fetch 2026-09-21: beef-birria-burrito and hungarian-beef-goulash (two of the 25 formerly UNKNOWN) HTTP 200, harissa-chicken-rice-bowls (held 2026-09-19) HTTP 404"
+  }
 }
