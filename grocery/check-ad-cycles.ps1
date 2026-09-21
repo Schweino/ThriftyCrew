@@ -2839,6 +2839,43 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # but all three before THIS block, which is the single consumer of all of their reports.
       $null = (Get-FanoutRecord 'sanity-check' $fanRecs).ExitCode
 
+      # ---- PRICE-FLAG VERIFICATION (2026-09-21, grocery/triage-plans/plan-2026-09-21-8.json; Brad's design) ----------
+      # Every paging sanity flag is put to the STORE: verify-price-flags.ps1 compares the published claim with the store's
+      # own LATER read of the same product and keeps out\flag-verification.json. match closes a flag with no page;
+      # wrong-price / wrong-product pages ONE alert per cell here, and audit-flag-verification.ps1 (a delegated guards
+      # audit) quarantines that cell at the next guards run; could-not-look stays PENDING and leads that store's next
+      # worklist, and pages only once it is older than the capture-policy quarter. $flagVerifyOk gates the SANITY-PAGER
+      # region below: only a verifier that COMPLETED over today's guards file takes a flag off the batch alert. No marker,
+      # an exit 3 or a throw leaves every flag paging exactly as it did before this existed.
+      $flagVerifyOk = $false
+      try {
+        $vfOut = @(& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'verify-price-flags.ps1'))
+        $vfRc = $LASTEXITCODE
+        foreach ($vfl in $vfOut) { Log ('verify: ' + $vfl) }
+        if ($vfRc -eq 0 -and @($vfOut | Where-Object { ([string]$_).StartsWith('VERIFY-PRICE-FLAGS-COMPLETE', [StringComparison]::Ordinal) }).Count -gt 0) { $flagVerifyOk = $true }
+        else { Log ('flag verification did NOT complete (rc ' + $vfRc + ') - every sanity flag pages the old way this run') }
+      } catch { Log ('verify-price-flags threw: ' + $_.Exception.Message + ' - every sanity flag pages the old way this run') }
+      if ($flagVerifyOk) {
+        try {
+          if (-not (Get-Command Invoke-TcDisagreementAlerts -ErrorAction SilentlyContinue)) { . (Join-Path $root 'flag-verify-lib.ps1') }
+          if (-not (Get-Command Write-TcAtomicFile -ErrorAction SilentlyContinue)) { . (Join-Path (Split-Path $root -Parent) 'lib\atomic-write.ps1') }
+          $vfLedF = Join-Path $OutDir 'flag-verification.json'
+          $vfLed = Read-JsonFile $vfLedF
+          $vfSend = { param($s, $b) Send-Alert -Subject $s -Body $b | Out-Null; return ($LASTEXITCODE -eq 0) }
+          $vfA = Invoke-TcDisagreementAlerts -Ledger $vfLed -Send $vfSend -NoAlert:$NoAlert -Today ((Get-Date).ToString('yyyy-MM-dd'))
+          if ($vfA.sent -gt 0) { [void](Write-TcAtomicFile -Path $vfLedF -Text ($vfLed | ConvertTo-Json -Depth 12)) }
+          if ($vfA.due -gt 0) {
+            Log ("price disagreements: $($vfA.due) due, $($vfA.sent) paged, $($vfA.failed) failed" + $(if ($NoAlert) { ' (-NoAlert: left DUE for the next alerting run)' } else { '' }))
+            $summary += ("PRICE     $($vfA.due) flagged cell(s) contradicted by their own store (one alert per cell) - see flag-verification.json")
+          }
+          $vfSum = $vfLed.summary
+          if ($null -ne $vfSum -and [int]$vfSum.pending_overdue -gt 0 -and -not $NoAlert) {
+            $vfOld = @(@(ConvertTo-TcLedgerEntries $vfLed).Values | Where-Object { [string]$_.status -eq 'pending' } | Sort-Object first_flagged | Select-Object -First 10 | ForEach-Object { [string]$_.key + ' since ' + [string]$_.first_flagged + ': ' + [string]$_.reason })
+            Send-Alert -Subject ("Grocery: " + [int]$vfSum.pending_overdue + " price flag verification(s) overdue past the quarter") -Body ([string]$vfSum.pending_overdue + " flagged price(s) have waited longer than the " + [int]$vfSum.quarter_days + "-day capture-policy quarter for their store to re-read the product. A pending verification leads its store's worklist, so this means that lane has not re-read it: a wall, a throttle, a product the store no longer lists, or a lane that is not asking. Oldest first:`n`n" + ($vfOld -join "`n") + "`n`nLedger: grocery/out/flag-verification.json.") | Out-Null
+          }
+        } catch { Log ('price disagreement alerts threw: ' + $_.Exception.Message) }
+      }
+
       # ---- REVIEW FLAGS: a likely-wrong in-band price (sanity outlier / WoW) or an unpriced tracked BOGO is
       #      advisory (we still publish so the board stays current) but must NOT be silent. Alert Brad ONCE per
       #      distinct flag-set (de-duped via alerted-flags.sig) so a daily re-run doesn't spam. ----
@@ -2874,14 +2911,23 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       $SANITY_QUIET = @('outlier-verified','unit-changed','wow-explained')
       $sanityQuiet = 0
       $sanityQuietBy = [ordered]@{}
+      # VERIFIED, NOT PAGED (2026-09-21, plan-2026-09-21-8.json): when the flag verifier COMPLETED over today's flags
+      # ($flagVerifyOk, set above; undefined and so false in any caller that never ran it), an outlier, wow or
+      # native-mismatch that names its cell has been put to its store, and only a store disagreement pages - one alert per
+      # cell, above. A flag with no cell, a type this list does not name, or any flag on a run whose verifier did not
+      # complete pages exactly as before.
+      $SANITY_VERIFIED = @('outlier','wow','native-mismatch')
+      $sanityVerified = 0
       if ($gf) {
         $gj = Read-JsonFile $gf.FullName
         foreach ($x in @($gj)) {
           if ($SANITY_QUIET -contains ([string]$x.type)) { $sanityQuiet++; $sanityQuietBy[[string]$x.type] = 1 + [int]$sanityQuietBy[[string]$x.type]; continue }
+          if ($flagVerifyOk -and ($SANITY_VERIFIED -contains ([string]$x.type)) -and $x.PSObject.Properties['store'] -and [string]$x.store) { $sanityVerified++; continue }
           $flagParts += ('SANITY|' + $x.commodity + '|' + $x.type + '|' + $x.detail); $flagKeys += ('SANITY|' + $x.commodity + '|' + $x.type)
         }
       }
       # <<SANITY-PAGER-END>>
+      if ($sanityVerified -gt 0) { Log ("review flags: $sanityVerified sanity flag(s) put to their own store by verify-price-flags.ps1 instead of paged (only a store disagreement pages)") }
       if ($sanityQuiet -gt 0) { Log ("review flags: $sanityQuiet quiet flag(s) recorded in guards-*.json, not paged (" + (@($sanityQuietBy.Keys | ForEach-Object { [string]$sanityQuietBy[$_] + ' ' + $_ }) -join ', ') + "; outlier-verified = the store's own published unit price reproduces ours, wow-explained = the previous board accounts for the move)") }
       $ff = Get-ChildItem (Join-Path $OutDir 'flagged-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
       if ($ff) { $mb = @((Read-JsonFile $ff.FullName).multibuy_unpriced); foreach ($m in $mb) { $flagParts += ('MULTIBUY|' + $m.store + '|' + $m.label); $flagKeys += ('MULTIBUY|' + $m.store + '|' + $m.id) } }

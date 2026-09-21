@@ -1033,7 +1033,18 @@ elseif (-not $Full -and $script:PolicyOk) {
     # window has asked yet, and Get-BakersAskPlan puts them first, out of the allowance the expiries get (cap 250
     # minus the rotation drip, 207 at 43 terms), so the rotation cursor below advances exactly as it would with no ad at all.
     $bkAd = Get-BakersAdOwed -OutDir $out -Date $today
-    $bkAsk = Get-BakersAskPlan -AllTerms $allTerms -Plan $bkPlan -CursorStart $bkCur -AdOwed @($bkAd.Owed)
+    # PRICE-FLAG VERIFICATIONS OWED A RE-READ LEAD THE AD TERMS (2026-09-21, grocery/triage-plans/plan-2026-09-21-8.json).
+    # A flagged Baker's cell stays PENDING until this lane re-reads its product (verify-price-flags.ps1). Its commodity's
+    # terms go FIRST through the same -AdOwed door, so Get-BakersAskPlan asks whole commodities INSIDE the same allowance
+    # and defers what does not fit. They are counted with the ad terms in this file's ad_terms_asked.
+    $bkVerify = @()
+    try {
+      if (-not (Get-Command Get-TcFlagVerifyOwed -ErrorAction SilentlyContinue)) { . (Join-Path $PSScriptRoot 'flag-verify-lib.ps1') }
+      $bkVo = Get-TcFlagVerifyOwed -OutDir $out -Store "Baker's"
+      $bkVerify = @(@($allTerms) | Where-Object { @($bkVo.Ids) -contains [string]$_.id } | ForEach-Object { [string]$_.term })
+      if ($bkVerify.Count -gt 0 -or $bkVo.Blind) { Write-Output ("Baker's: price-flag verifications owed a re-read: " + @($bkVo.Ids).Count + ' commodity(ies), ' + $bkVerify.Count + ' term(s) lead the ad terms' + $(if ($bkVo.Blind) { ' (BLIND: ' + $bkVo.Why + ')' } else { '' })) }
+    } catch { Write-Output ("Baker's: price-flag verification terms NOT promoted (" + $_.Exception.Message + ')'); $bkVerify = @() }
+    $bkAsk = Get-BakersAskPlan -AllTerms $allTerms -Plan $bkPlan -CursorStart $bkCur -AdOwed @(@($bkVerify) + @($bkAd.Owed))
     $bkSlice = $bkAsk.Slice
     $script:BkAd = $bkAd; $script:BkAsk = $bkAsk
     $sliceTerms = @($bkAsk.Terms)

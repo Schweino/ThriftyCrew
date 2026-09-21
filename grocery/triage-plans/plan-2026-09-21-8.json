@@ -1,0 +1,191 @@
+{
+ "generated": "2026-09-21T15:40:00",
+ "round": 1,
+ "lane": null,
+ "board_week": "2026-09-21",
+ "queue_ids_seen": [
+  "2026-09-18-8491bf",
+  "2026-09-18-a0c785",
+  "2026-09-18-ceab00",
+  "2026-09-19-4fc24c",
+  "2026-09-19-dc1b5b",
+  "2026-09-19-8a3090",
+  "2026-09-19-c9f0f3",
+  "2026-09-19-2c96d8",
+  "2026-09-20-1b8544",
+  "2026-09-20-ca2591",
+  "2026-09-20-bec597",
+  "2026-09-20-cb8f30",
+  "2026-09-21-149497",
+  "2026-09-21-7d64a6",
+  "2026-09-21-85c3b7",
+  "2026-09-21-dca1a1",
+  "2026-09-21-115180",
+  "2026-09-21-6b17b1",
+  "2026-09-21-d16398",
+  "2026-09-21-de4f72",
+  "2026-09-21-57e5ae",
+  "2026-09-21-594c27",
+  "2026-09-21-a25dc0",
+  "2026-09-21-b96f21",
+  "discovered:auto-verify-flags-2026-09-21"
+ ],
+ "note": "Written by the money-lane developer on Brad's approved design (chat, 2026-09-21: 'Yes', after rejecting three narrower options with 'I feel like none of these choices are right ones'). THIS DESIGN SUPERSEDES open question Q-fccb69-unit-of-triage in grocery/triage-plans/plan-2026-09-21-6.json: Brad rejected its options A/B/C. The price-flag alert handed a PERSON homework and could never stop firing; the system now verifies each flagged price against the store itself and only a disagreement pages. The daily scheduled triage is paused until 2026-09-24 by Brad; the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924 are not touched.",
+ "supersedes_question": {
+  "plan": "grocery/triage-plans/plan-2026-09-21-6.json",
+  "id": "Q-fccb69-unit-of-triage",
+  "ruling": "Brad rejected A (a queue item per flagged cell), B (exempt the type from RETURN) and C (leave it) in favour of automatic verification against the store (this plan)."
+ },
+ "knowledge_consulted": "Searched 'price flag verify', 'could not look', 'quarantine cell', 'owed worklist', 'sale window ended', 'carried row stale' (knowledge-search --multi). USED: memory a-could-not-look-must-not-settle-the-question (the RETRY PREDICATE is what settles: only a real verdict closes a verification; 'pending' is re-selected every run and leads the next capture's asks); data-quality-craft/applies-here.md 'The silent semantic change' (a basis error moves a price by a FACTOR; the remedy is an EXTERNAL REFERENT - here the store's own later read of the same product, with its shelf price and the size its NAME states); data-quality-craft/detecting-anomalies.md section 1 (a point anomaly is not a change point: a real price move re-reads as match); reliability-craft/MAP.md section 4 (alert only where a human has to act: only a store disagreement pages). Nothing else applicable: the owed-terms pattern is .claude/rules/grocery.md 'A STANDING RULING'S OWED TERMS ARE DERIVED AND LEAD THE WORKLIST' and grocery/capture-policy-lib.ps1 Get-WalmartRulingOwed, reused as written.",
+ "acceptance_bar_written_first": {
+  "written": "2026-09-21T15:40:00, before any verifier run",
+  "bar_1_defects_stop_ship": "every frozen confirmed defect reaches wrong-price or wrong-product in a fixture built from its REAL rows, and the guard audit names its cell QUARANTINE-CELL so the real apply-cell-quarantine holds it at its last verified value or withholds it: laundry pods (Hy-Vee fuel-saver $0.10 each, re-read inside its ad window), Whole Coconut (Fareway 'KIND Almond & Coconut', whose own product URL says kind-bars-almond-coconut), Shrimp (Sam's 'Shrimp and Corn Chowder'), Bouillon (Walmart 'Knorr Select ... 1.82 pounds' published at $0.0813/oz), and a store back at an OLDER price. 0 misses or the item does not ship.",
+  "bar_2_no_false_close_stop_ship": "a throttled, walled, absent, carried (as_of not later than the claim) or not_reverified re-read never produces match, and a sale claim re-read after its window never produces match on price. 0 exceptions.",
+  "bar_3_today": "the paging flags of guards-2026-09-21.json are resolved and reported per store with denominators (match / wrong-price / wrong-product / could-not-look). Not a threshold: every wrong-* verdict is read by hand against its rows before any cell ships quarantined, and one false wrong-* stops the ship.",
+  "bar_4_days_paging": "over the 30 days ending 2026-09-21 the census has the price-flag type firing on 22 days. Replaying the real verifier over the real guards-<date>.json and capture files day by day, the days on which the price channel would page must FALL. A replay that cannot run is reported as could-not-evaluate, never as a number."
+ },
+ "items": [
+  {
+   "queue_id": "discovered:auto-verify-flags-2026-09-21",
+   "subject": "Grocery: a flagged price is verified against the store itself; only a disagreement pages (Brad's design, 2026-09-21)",
+   "classification": "infra",
+   "price_verdict": "no board cell changes by construction: a cell is quarantined only when the store's own later read of the same product disagrees with what the board publishes, through the existing per-cell quarantine (plan-2026-09-21-4.json).",
+   "evidence": [
+    "EMITTER: grocery/sanity-check.ps1 writes flags as prose: $flags.Add([ordered]@{ commodity=...; type=...; detail=... }) (lines ~211-252). A flag names its store only inside 'detail', so nothing downstream can resolve it to a cell without parsing prose.",
+    "TODAY: out/guards-2026-09-21.json holds 58 flags, 26 of them paging types (25 outlier + 1 wow; quiet: 30 outlier-verified, 2 wow-explained). Cheapest store on the 25 outliers: Aldi 9, Baker's 6, Walmart 4, Family Fare 3, Sam's Club 2, Fareway 1, Hy-Vee 0.",
+    "CAPTURE ROWS ARE THE STORE'S ANSWER: each out/regular/<store>-regular-<date>.json row carries item, ad_price, size, as_of, current_price and, at Baker's, Family Fare and Hy-Vee, a product_id and the store's own category; Fareway, Aldi and Baker's rows carry link_url, the store's own canonical product name. A carried row keeps its original as_of (Hy-Vee 2026-09-21: 244 rows as_of 2026-07-15) and Hy-Vee marks an unrefreshed row not_reverified=true, so 'a later read' is decided on as_of AND those flags, never on the file date.",
+    "THE FOUR CONFIRMED DEFECTS, AS PUBLISHED (out/comparison-2026-09-05..09.json) AND AS THE STORE ANSWERS (captures): laundry pods / Hy-Vee: published per_unit 0.1 'per-each', type sale 2026-08-31..2026-09-06, ad and item = 'Gain Flings, EARN 10c OFF PER GALLON, -3.00 off with manufacturer's digital coupon, $12.94', size EMPTY; Hy-Vee's product 3786246 'Gain flings! Laundry Detergent Pacs, Original, 31 Count' answers $9.94 / 31 ct = $0.3206 each. Whole Coconut / Fareway: 'KIND Almond & Coconut' $7.98 / 6 ct ($1.33 each); its link_url is .../products/20002358-kind-bars-almond-coconut-6-ea, and coconut's own exclude '\\bbars?\\b' refuses that name (the matcher still ADMITS the display name: the fix of 2026-09-10 was a known-wrong entry). Shrimp / Sam's Club: 'Member's Mark Shrimp and Corn Chowder, 24 oz., 2 pk.' $10.47 / 48 oz; shrimp's exclude '\\bchowder\\b' refuses it today. Bouillon / Walmart: 'Knorr Select Vegetable Base, Shelf Stable Granulated Bouillon, 1.82 pounds' $17.97 with size '10.891 lb' derived from Walmart's own wm_unit_price '$1.65/lb'; the NAME says 1.82 lb, so the store's own figures give $0.6171/oz (name) and $0.1031/oz (unit price), and the board published $0.0813/oz, which NEITHER reading reproduces.",
+    "PIECES THAT ALREADY EXIST: cell-quarantine-lib.ps1 (Get-TcChildQuarantineScope: a delegated audit that prints QUARANTINE-CELL <id>|<store>|<kind> and QUARANTINE-SCOPE complete is cell scoped by guards.ps1, then apply-cell-quarantine.ps1 holds each cell at its last verified published value or withholds it); capture-policy-lib.ps1 Get-CaptureWorklist with two owed-term lanes that lead inside the allowance (Walmart ruling terms, Baker's ad terms); pull-regular-hyvee.ps1 Get-HyVeeAskOrder, which asks priority product ids first INSIDE the lane's budget; match-lib.ps1 New-CommodityMatcher / Resolve-Commodity; pu-lib.ps1 Get-LinkPerUnit (the one per-unit implementation).",
+    "WHY NOT A DIRECT LOOKUP: Get-HyVeeStoreProduct (pull-regular-hyvee.ps1:1334) reads $EP, $HDR and $script:HvRequest* set at lines 1298-1333 of that script, the Kroger path lives in pull-regular-bakers-api.ps1 (Get-KrogerToken/Get-KrogerJson over term searches) and Freshop's in pull-regular-familyfare.ps1 (a session token, then Get-FreshopItems by term). A verifier calling any of them would spend lookups OUTSIDE each lane's budget, which the rate-limit rule forbids, and Freshop answered HTTP 400 carrying error_code 429 to 102-115 lookups a day this week. So the re-read is the lane's own next read of that product, which comes out of its budget by construction, and a pending verification leads that lane's asks."
+   ],
+   "root_cause": "The detector (sanity-check) is right to be sensitive and prices move every day, but its only consumer was a human: every flag became homework ('these still published; verify they are real'), so the channel fired on 22 of the 30 days ending 2026-09-21 however good each close was. Nothing in the estate turned a flag into the question it actually asks - is this the store's price for this product - although the pipeline re-reads every product it prices, and the store is the source of truth (Brad's standing ruling, .claude/rules/meal-prep.md 'EVERY PRICE IS FETCHED').",
+   "root_fix": {
+    "what": "verify each paging flag against the store's own LATER read of the same product and page only a disagreement. match closes the flag with no alert; wrong-price or wrong-product quarantines that ONE cell through the existing per-cell quarantine and pages ONE alert naming the cell, both prices and the store's product; could-not-look keeps it pending and the product leads that store's next capture inside the store's budget.",
+    "files": [
+     "grocery/sanity-check.ps1",
+     "grocery/flag-verify-lib.ps1",
+     "grocery/verify-price-flags.ps1",
+     "grocery/audit-flag-verification.ps1",
+     "grocery/test-flag-verification.ps1",
+     "grocery/guards.ps1",
+     "grocery/check-ad-cycles.ps1",
+     "grocery/alert-registry.json",
+     "grocery/capture-policy-lib.ps1"
+    ],
+    "exact_change": "sanity-check: every flag also carries id, store, item, per_unit, unit, row_type, ad_from, ad_to, as_of of the cell it is about (outlier: the cheapest row; wow: the current cheapest row; native-mismatch: that row), detail unchanged. flag-verify-lib (pure): Get-TcFlagSubjects, Find-TcStoreReread (newest capture row of the same product - same product_id/item_id where the claim's source row carries one, else the same name - whose as_of is strictly later than the claim's read date and which is not carried/not_reverified), Resolve-TcRereadVerdict (identity: the commodity's OWN matcher entry over the store's item and its link-slug name, a name the commodity's own pattern admits and its own exclude then refuses is wrong-product; basis: every store reading of per-unit - shelf price over the size field, shelf price over the size the NAME states, the store's printed unit price - compared on integer keys, none agreeing with ours is wrong-price, some agreeing and some not is could-not-look; price: an everyday claim against the store's current shelf price in integer cents; a SALE claim is compared on price only when the store's read falls inside the claim's own ad window, and a read after the window can never be match), Update-TcFlagLedger (keyed <id>|<store> with the claim's key; only match settles; a claim that leaves the board or changes closes as left-board/claim-changed and is counted, never matched), Get-TcFlagVerifyOwed. verify-price-flags.ps1 writes out/flag-verification.json and prints the resolution per store with denominators and VERIFY-PRICE-FLAGS-COMPLETE. audit-flag-verification.ps1 prints QUARANTINE-CELL <id>|<store>|value for every open disagreement whose claim is still the board's cell and exits 2 (0 clean, 3 blind), wired into guards.ps1's delegated list. check-ad-cycles: runs the verifier after sanity-check; outlier/wow/native-mismatch stop feeding the batch alert only when the verifier completed over TODAY's guards file; one Send-Alert per new disagreement ('Grocery: price disagreement - <commodity> at <store>'); a daily log line with the pending backlog and its oldest age; a page only when a pending verification is older than the capture-policy quarter. capture-policy-lib: Get-CaptureWorklist puts VerifyTerms (pending commodities of that store) at the head inside the allowance, like RulingTerms, and they empty themselves as the ledger closes."
+   },
+   "leaves_open": "R1 the pending drain is unmeasured (26 of 26 of today's paging flags pending; the leads first run 2026-09-22; Baker's and Family Fare lead call sites unfixtured); R2 a live wrong price under both detector bars is never flagged, so never verified (the 2026-09-07 laundry pods); R3 the batch alert still pages MULTIBUY/MATCHBLIND/BASIS/PACKBASIS (3 to 6 of 30 days); R4 an ad-flyer sale cell has no product-level re-read (15 of 21 replayed sale claims got no verdict)",
+   "leaves_open_occurrences": "R1 0 (new, 2026-09-21); R2 1 of the 5 confirmed defects of 2026-08-22..2026-09-21; R3 3 to 6 of the 30 days 2026-08-23..2026-09-21 (queue bodies); R4 15 of 21 sale claims in the 2026-08-23..2026-09-21 replay",
+   "leaves_open_followup": "2026-09-21-4b973e",
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "no matching rule changes: the verifier READS commodities.json through match-lib to route the store's own names and writes no rule. cell_effects is empty: today's run quarantined nothing (26 of 26 pending), and guards over the live board still exits 4 with the one cell it held this morning (vegetable-oil / Sam's Club).",
+    "affected_now": 0,
+    "names": [],
+    "risk": "a false wrong-* verdict would quarantine a correct cell: every wrong-* on today's run is read by hand before any publish (bar 3)",
+    "cell_effects": []
+   },
+   "freshness": "measured against comparison-2026-09-21.json, guards-2026-09-21.json and the out/regular captures of 2026-09-19..21 at 15:00; the Hy-Vee lane, the FF sweep and the browser driver can land new captures during the run, which only adds re-reads",
+   "proof": {
+    "guard_or_fixture": "grocery/test-flag-verification.ps1 -SelfTest (discovered by run-gates); test-capture-policy.ps1 (worklist lead); test-auditors.ps1 full run (guards.ps1 touched)",
+    "must_fire_case": "frozen real rows: laundry pods Hy-Vee $0.10 each (sale 08-31..09-06) against Hy-Vee's own $9.94 / 31 ct read inside the window -> wrong-price; Whole Coconut Fareway 'KIND Almond & Coconut' with its real link slug -> wrong-product; Shrimp Sam's chowder -> wrong-product; Bouillon Walmart $0.0813/oz against $17.97 for '1.82 pounds' with wm_unit_price $1.65/lb -> wrong-price; a store back at an OLDER price (0.25 published, the store's later read 0.50) -> wrong-price. Each: the audit prints QUARANTINE-CELL for it and the real apply-cell-quarantine.ps1 (temp OutDir, -LastPublishedFile) holds or withholds it. And a store disagreement produces ONE alert body naming the cell, both prices and the store's product.",
+    "must_not_fire_case": "a flag the store confirms (same product, same shelf cents, same size) raises nothing and closes as match; a throttled/absent/carried/not_reverified re-read and a sale read after its window never produce match and stay pending",
+    "clean_twin": "a pending Walmart flag's commodity terms appear at the HEAD of Get-CaptureWorklist's Terms, and once the ledger closes it the next worklist no longer carries them; AT THE BAR: our 0.0935 against a printed 9.3 cents/oz agrees (5 of 5 ten-thousandths), ONE STEP PAST: 0.0936 disagrees; a computed reading 1 ten-thousandth from ours agrees, 2 does not (integer keys, binary-exact)",
+    "commands": [
+     "powershell -NoProfile -File grocery\\test-flag-verification.ps1 -SelfTest",
+     "powershell -NoProfile -File grocery\\test-capture-policy.ps1",
+     "powershell -NoProfile -File grocery\\audit-alert-registry.ps1",
+     "powershell -NoProfile -File grocery\\test-auditors.ps1"
+    ]
+   },
+   "rollback": "revert the commit: the ledger file is pipeline state and nothing reads it once the audit is out of guards' list; sanity-check's new fields are additive",
+   "do_not_touch": [
+    "any guard threshold or the quarantine circuit breaker (2% board, 10% store)",
+    "sanity-check's bars (-OutlierFrac 0.35, -WowFrac 0.40) and every existing detail string",
+    "the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924",
+    "commodities.json, category-excludes.json, known-wrong.json (no rule file changes)"
+   ],
+   "resolution_note": "Built Brad's design: a flagged price is verified against the store itself. verify-price-flags.ps1 puts every paging sanity flag to the store's own later read of the same product (ledger out/flag-verification.json): match closes it silently, wrong-price or wrong-product pages ONE alert naming the cell, both prices and the store's product, and audit-flag-verification.ps1 quarantines that cell through guards; could-not-look stays pending and leads that store's next capture inside its budget, paging only past the quarter. 33 frozen cases pass, including the laundry pods, KIND bar, chowder, bouillon and an older price reaching wrong-price or wrong-product and being held or withheld by the real apply. Today 26 of 26 flags are pending; the 30-day replay reached a verdict on 10 of 200 claims (all match). Residuals 2026-09-21-4b973e. No board or feed change, no republish.",
+   "publish_batch": 1,
+   "status": "deviated",
+   "premise_verified": "true - read: sanity-check.ps1 lines 180-277 (a flag names its store only in detail prose); out/regular/<store>-regular-2026-09-21.json rows (item, ad_price, size, as_of, current_price, product ids, link_url, not_reverified on Hy-Vee); the four defect rows as published (out/comparison-2026-09-05..09.json) and as the stores answer (captures); cell-quarantine-lib.ps1 Get-TcChildQuarantineScope and apply-cell-quarantine.ps1; pull-regular-hyvee.ps1 1298-1375 (the one-product fetch depends on script-scope state). One premise of the dispatch table narrowed: the headless one-product re-read is not called directly, see deviation.",
+   "deviation": "Narrower than the dispatch in three places, each on measurement. (i) No direct store lookup: the re-read is each lane's own next read of the product, because Get-HyVeeStoreProduct depends on the pull's script-scope endpoint, headers and request state and a verifier calling the lanes' fetches would spend lookups outside their budgets; instead a pending verification leads each lane's own asks inside its budget (Hy-Vee rank 0, Baker's -AdOwed, the Family Fare front, VerifyTerms at the head of Get-CaptureWorklist for the browser stores), so today's 26 flags resolve on the next captures, not today. (ii) The 'N NEW price flag(s)' type does not fully retire: the sanity kinds leave it whenever the verifier completed over that day's flags (fail closed otherwise), and its MULTIBUY, MATCHBLIND, BASIS and PACKBASIS lines still page there. (iii) The quarantine lands at the next guards run, not the same run: the verifier runs in the review unit after publish, a disagreement pages at once, and audit-flag-verification.ps1 names the cell to guards at the next build.",
+   "shipped_commit": "the commit that adds grocery/triage-plans/plan-2026-09-21-8.json (git log --diff-filter=A -- grocery/triage-plans/plan-2026-09-21-8.json); a hash is not cited because the push rebases"
+  },
+  {
+   "queue_id": "2026-09-21-57e5ae",
+   "subject": "Grocery: 18 price moves cannot be explained because price-history disagrees with the previous board, and price flags still fire most days (fccb69 residual)",
+   "classification": "infra",
+   "price_verdict": "no board cell is wrong because of this item; it is the price-flag channel's residual from plan-2026-09-21-6.json.",
+   "evidence": [
+    "plan-2026-09-21-6.json leaves_open: '(2) is not closed: over the 17 simulated board versions the type still pages on 15 ... and 18 of the 124 wow flags stay unexplained because price-history's entry for the previous week and that week's comparison file disagree about its cheapest row'. Census: 22 of the 30 days ending 2026-09-21.",
+    "Open question Q-fccb69-unit-of-triage (options A/B/C) was answered by Brad in chat on 2026-09-21 by rejecting all three for automatic verification, which is the discovered item in this plan."
+   ],
+   "root_cause": "(2) a flag's only consumer was a person, so any day with a new flag re-opened the type; (1) price-history.json keeps a second record of each board that a later rebuild does not rewrite, so a move can look unexplained against it.",
+   "root_fix": {
+    "what": "(2) is closed by discovered:auto-verify-flags-2026-09-21 in this plan: a flag is verified against the store and pages only on a disagreement. (1) no longer pages, because an unexplained move is verified against the store like any other flag instead of paging a person.",
+    "files": [
+     "grocery/check-ad-cycles.ps1",
+     "grocery/verify-price-flags.ps1"
+    ],
+    "exact_change": "as discovered:auto-verify-flags-2026-09-21"
+   },
+   "leaves_open": "(1) price-history.json still disagrees with a rebuilt comparison file about the cheapest row (no longer pages: an unexplained move is verified against the store); (2) the price-flag type still fires on its non-sanity kinds, owned by 2026-09-21-4b973e R3",
+   "leaves_open_occurrences": "(1) 71 of 7,401 commodity-weeks and 18 wow flags over 2026-08-23..2026-09-21; (2) 3 to 6 of 30 days",
+   "leaves_open_followup": "2026-09-21-274e4b",
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "no matching rule changes",
+    "affected_now": 0,
+    "names": [],
+    "risk": "none beyond discovered:auto-verify-flags-2026-09-21",
+    "cell_effects": []
+   },
+   "freshness": "as discovered:auto-verify-flags-2026-09-21",
+   "proof": {
+    "guard_or_fixture": "as discovered:auto-verify-flags-2026-09-21",
+    "must_fire_case": "as discovered:auto-verify-flags-2026-09-21",
+    "must_not_fire_case": "as discovered:auto-verify-flags-2026-09-21",
+    "clean_twin": "as discovered:auto-verify-flags-2026-09-21",
+    "commands": [
+     "powershell -NoProfile -File grocery\\test-flag-verification.ps1 -SelfTest"
+    ]
+   },
+   "rollback": "as discovered:auto-verify-flags-2026-09-21",
+   "do_not_touch": [
+    "any guard threshold or the quarantine circuit breaker (2% board, 10% store)",
+    "sanity-check's bars (-OutlierFrac 0.35, -WowFrac 0.40) and every existing detail string",
+    "the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924",
+    "commodities.json, category-excludes.json, known-wrong.json (no rule file changes)"
+   ],
+   "resolution_note": "Residual of fccb69 closed at its root by plan-2026-09-21-8.json: a price flag is verified against the store's own later read and only a store disagreement pages, one alert per cell, so the daily 'these still published; verify they are real' homework is gone for the sanity kinds. price-history's second record of each board (71 of 7,401 commodity-weeks disagree) no longer pages; its repair is weekly 2026-09-21-274e4b. The batch alert's remaining MULTIBUY/MATCHBLIND/BASIS/PACKBASIS kinds are 2026-09-21-4b973e.",
+   "publish_batch": 1,
+   "status": "done",
+   "premise_verified": "true - read plan-2026-09-21-6.json's leaves_open and measurement (22 of 30 days; 18 of 124 wow flags unexplained by the price-history disagreement, 71 of 7,401 commodity-weeks) and the queue item's body; Brad's answer to Q-fccb69-unit-of-triage is as the dispatch records it (options A/B/C rejected for automatic verification)",
+   "deviation": null,
+   "shipped_commit": "the commit that adds grocery/triage-plans/plan-2026-09-21-8.json (git log --diff-filter=A -- grocery/triage-plans/plan-2026-09-21-8.json); a hash is not cited because the push rebases"
+  }
+ ],
+ "ship_sequence": [
+  "1 sanity-check.ps1: each flag carries structured fields naming its cell (id, store, item, per_unit, unit, row_type, ad_from, ad_to, as_of); every detail string stays byte-identical",
+  "2 flag-verify-lib.ps1 (pure rules) + verify-price-flags.ps1 (runner, ledger out/flag-verification.json) + audit-flag-verification.ps1 (delegated guard audit, QUARANTINE-CELL protocol) + test-flag-verification.ps1 -SelfTest",
+  "3 guards.ps1 runs audit-flag-verification.ps1 as a delegated audit (cell scoped through Get-TcChildQuarantineScope, circuit breaker unchanged)",
+  "4 check-ad-cycles.ps1 review unit: run the verifier after sanity-check; the sanity kinds the verifier owns leave the batch alert only when the verifier COMPLETED over today's guards file (fail closed); one alert per disagreeing cell; pending size logged daily; page only when a pending verification ages past the capture-policy quarter",
+  "5 alert-registry.json: 'grocery price disagreement' (page, 1) and 'grocery price flag verification overdue' (page, 2); audit-alert-registry.ps1 exit 0 findings=0",
+  "6 headless leads: pending Hy-Vee product ids join the Hy-Vee ask priority inside its budget; pending Baker's and Family Fare commodities' terms lead those lanes inside their budgets",
+  "7 browser half: capture-policy-lib Get-CaptureWorklist puts VerifyTerms at the head inside the allowance (Walmart, Sam's Club, Aldi, Fareway), emptying itself as built captures re-read them",
+  "8 measure: verifier over today's flags (per store, denominators) and the 30-day replay against bar 4",
+  "9 if any cell is quarantined: the gated chain as check-ad-cycles runs it (repair-multipack-sizes -Apply, stamp-ad-as-of -Apply, compare-deals -MinStores 1 pinned, audit-name-drift, prune-bad-links, audit-name-drift, generate-board-overrides, build-deals-page, guards exit 0 or 4 through apply-cell-quarantine, publish-deals-page, export-feed), live check with a cache-busting query, 375px look if the page changed",
+  "10 test-auditors.ps1 exit 0 (guards touched), audit-alert-registry exit 0, validate-triage-plan -Closing exit 0, pathspec commit with a Store: line, push"
+ ],
+ "open_questions_for_brad": [],
+ "measurement": {
+  "harness": "the REAL grocery/verify-price-flags.ps1 over the real out/ (comparison boards, guards files, out/regular and out/sams captures), at blobs 902195c6e423f05847f092a6587ac9640b6242e3 (verify-price-flags.ps1) and 56e7d575326c62603e3d60d53555f0bf23ac320e (flag-verify-lib.ps1) as they stood when the replay ran; the committed flag-verify-lib adds Invoke-TcDisagreementAlerts and an Items field on Get-TcFlagVerifyOwed after that, and changes no verdict or ledger function. Scratch: replay_prep.py attaches each old flag to its board cell (old guards files predate the cell fields; 1 of 811 paging flags could not be attached), replay_run.ps1 runs the verifier day by day with -Today and -CapturesUpTo set to that day and one persistent scratch ledger. Frozen fixtures: grocery/test-flag-verification.ps1 -SelfTest.",
+  "bar_1_defects": "MET IN FIXTURES: laundry pods (inside its window) wrong-price, KIND bar wrong-product, chowder wrong-product, bouillon wrong-price, older price wrong-price; the audit names all 5 cells in the QUARANTINE-CELL protocol, guards' own disposition is quarantine (5 of 431 priced cells, under the breaker), and the real apply-cell-quarantine.ps1 holds 4 at their last verified published price and withholds laundry pods, which has none. NOT SEEN ON REAL HISTORY: in the replay none of the four reached a verdict, because each was fixed by hand within 1 to 2 days and its board row carried no as_of (the KIND bar's Fareway capture of 2026-09-10 did re-read it, with the kind-bars URL, one day after its flag). The laundry pods were never flagged while live (33 percent under, below both bars): see leaves_open.",
+  "bar_2_no_false_close": "MET: a throttled/absent read, a carried row, a not_reverified row, a sale read after its window (including one reproducing the bad $0.10) and a store whose own figures disagree each stay could-not-look; none is a match (test-flag-verification.ps1, 7 cases).",
+  "bar_3_today": "guards-2026-09-21.json: 26 paging flags, 26 name a cell, per store: Aldi 0 of 9 match, 0 wrong-price, 0 wrong-product, 9 could-not-look; Baker's 0/0/0/6; Walmart 0/0/0/5; Family Fare 0/0/0/3; Sam's Club 0/0/0/2; Fareway 0/0/0/1; Hy-Vee none flagged. 26 of 26 pending: no capture has re-read any flagged product since the read the board published (5 of them are carried rows last read 2026-08-05..2026-08-31). No wrong-* to read by hand, nothing quarantined, no republish owed.",
+  "bar_4_days_paging": "BEFORE: the type fired on 22 of the 30 days ending 2026-09-21 (census). AFTER, estimated from recorded data: per-cell disagreement pages 0 of the 17 replayed board days; overdue pages 0 (the quarter is 90 days); the batch alert's remaining non-sanity kinds 3 to 6 days (a MULTIBUY line on 3 of 13 queue item-days, 3 more bodies truncated). So 3 to 6 of 30 days against 22: MET numerically, and QUALIFIED - the replay reached a verdict on 10 of 200 claims (5 percent; 103 closed with none, 87 still pending), so on history the fall is mostly the sanity kinds leaving the batch alert while their flags wait, not flags verified. The forward drain is residual 1.",
+  "variants_tried": "1. A direct re-read through each lane's fetch was considered and not built: Get-HyVeeStoreProduct reads script-scope $EP/$HDR/$script:HvRequest*, and a verifier calling the lanes' fetches would spend lookups outside their budgets. The shipped rule had two corrections before any number was used: the per-unit readings and the shelf price are separate tests (the bouillon's shelf price agrees while every per-unit reading disagrees), and a sale is compared on price only inside its own ad window.",
+  "not_run": "no mutation probe was run against the verdict function; test-auditors.ps1 full run is recorded in the ship line"
+ }
+}

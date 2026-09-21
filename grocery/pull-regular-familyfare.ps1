@@ -1145,8 +1145,18 @@ try {
     if ($victimFront.Count -eq 0) { Write-Output ('Family Fare: no pull-drop victim promoted (' + $ffcV.reason + ')') }
   }
 } catch { Write-Output ('Family Fare: could not read ff-carry-report.json (' + $_.Exception.Message + ') - no victims promoted, which is not the same as none existing') }
+# PRICE-FLAG VERIFICATIONS OWED A RE-READ LEAD THE FRONT (2026-09-21, grocery/triage-plans/plan-2026-09-21-8.json). A
+# flagged Family Fare cell stays PENDING until this lane re-reads its product (verify-price-flags.ps1); its commodity's
+# terms go first, and Get-FfWindowBudget below counts them inside the Freshop window like every other front term.
+$verifyFront = @()
+try {
+  if (-not (Get-Command Get-TcFlagVerifyOwed -ErrorAction SilentlyContinue)) { . (Join-Path $PSScriptRoot 'flag-verify-lib.ps1') }
+  $ffVo = Get-TcFlagVerifyOwed -OutDir $OutDir -Store 'Family Fare'
+  foreach ($vid in @($ffVo.Ids)) { foreach ($tp in $termPairs) { if ([string]$tp.id -eq [string]$vid) { $verifyFront += [string]$tp.term } } }
+  if ($verifyFront.Count -gt 0 -or $ffVo.Blind) { Write-Output ('Family Fare: price-flag verifications owed a re-read: ' + @($ffVo.Ids).Count + ' commodity(ies), ' + $verifyFront.Count + ' term(s) lead the front' + $(if ($ffVo.Blind) { ' (BLIND: ' + $ffVo.Why + ')' } else { '' })) }
+} catch { Write-Output ('Family Fare: price-flag verification terms NOT promoted (' + $_.Exception.Message + ')'); $verifyFront = @() }
 $frontWanted = New-Object System.Collections.Generic.List[string]
-foreach ($t in @($expiryFront.ToArray()) + @($victimFront)) { if ($t -and ($termList -contains [string]$t) -and -not $frontWanted.Contains([string]$t)) { [void]$frontWanted.Add([string]$t) } }
+foreach ($t in @($verifyFront) + @($expiryFront.ToArray()) + @($victimFront)) { if ($t -and ($termList -contains [string]$t) -and -not $frontWanted.Contains([string]$t)) { [void]$frontWanted.Add([string]$t) } }
 # THE WINDOW: rotation reserved first, the front shares what is left under the ceiling, and nothing past it.
 $ffWin = Get-FfWindowBudget -RotationTerms ([int]$plan.RotationTerms) -FrontTerms $frontWanted.Count -CallCap ([int]$plan.CallCap) -AttemptCap $ATTEMPT_CAP
 if (-not $ffWin.Ok) { Write-Warning ('Family Fare: ' + $ffWin.Why + ' - asking the ceiling (' + $ffWin.Ceiling + ') this window; test-capture-policy.ps1 fails this policy at push') }

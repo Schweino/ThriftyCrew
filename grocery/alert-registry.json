@@ -709,6 +709,24 @@
    "split_from": "plan-2026-09-21-7.json"
   },
   {
+   "id": "price-disagreement",
+   "match": "prefix",
+   "key": "grocery price disagreement",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "note": "2026-09-21, Brad's design (grocery/triage-plans/plan-2026-09-21-8.json): a sanity flag is verified against the store's own LATER read of the same product (verify-price-flags.ps1) and only a DISAGREEMENT pages, ONE per cell, subject 'Grocery: price disagreement - <commodity> at <store>', so the queue keys the type by cell and a return means that very cell came back. The body names both prices and the store's product; the cell is quarantined by audit-flag-verification.ps1 at the next guards run. A store that confirms the price closes the flag with no alert. It takes the sanity kinds off new-price-flags whenever the verifier completed over that day's flags."
+  },
+  {
+   "id": "price-flag-verification-overdue",
+   "match": "exact",
+   "key": "grocery price flag verification s overdue past the quarter",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "note": "2026-09-21 (plan-2026-09-21-8.json): a PENDING verification is an owed re-read that leads its store's next worklist, so one older than the capture-policy quarter means that lane has not re-read the product (a wall, a throttle, a delisting, or a lane not asking). The backlog's size and oldest age are logged every run; this pages only past the quarter, so a pending backlog cannot grow unseen."
+  },
+  {
    "id": "new-price-flags",
    "match": "exact",
    "key": "grocery new price flag s",

@@ -190,6 +190,27 @@ function Test-NativeComparable($StoreRow, [string]$CommodityUnit) {
 
 $flags = New-Object System.Collections.Generic.List[object]
 $notComparable = 0
+# THE CELL A FLAG IS ABOUT, AS FIELDS (2026-09-21, grocery/triage-plans/plan-2026-09-21-8.json). A flag used to name
+# its store only inside 'detail', which is prose, so nothing downstream could resolve a flag to a board cell without
+# parsing English. verify-price-flags.ps1 re-reads exactly this cell against the store's own later read of the same
+# product. The first three keys and every 'detail' string are unchanged byte for byte; the rest is additive.
+function Add-SanityFlag([string]$Type, [string]$Detail, $R, $Row) {
+  $o = [ordered]@{ commodity = $R.commodity; type = $Type; detail = $Detail; id = [string]$R.id; unit = [string]$R.unit }
+  foreach ($k in @('store', 'item', 'per_unit', 'type', 'ad', 'size', 'ad_from', 'ad_to', 'as_of')) {
+    $v = $null
+    if ($null -ne $Row -and $Row.PSObject.Properties[$k]) { $v = $Row.$k }
+    $o[$(if ($k -eq 'type') { 'row_type' } else { $k })] = $v
+  }
+  $flags.Add($o)
+}
+# The row a week-over-week move is about is the CURRENT cheapest: the one cheapest_store/cheapest_price name.
+function Get-SanityCheapestRow($R, $Ranked) {
+  foreach ($s in @($R.stores)) {
+    if ($null -ne $s -and [string]$s.store -eq [string]$R.cheapest_store -and [double]$s.per_unit -eq [double]$R.cheapest_price) { return $s }
+  }
+  if (@($Ranked).Count -gt 0) { return @($Ranked)[0] }
+  return $null
+}
 foreach ($r in $doc.comparison) {
   $ranked = @($r.stores | Sort-Object per_unit)
   $cUnit = [string]$r.unit
@@ -208,9 +229,9 @@ foreach ($r in $doc.comparison) {
       $v0 = $ranked[0]
       if ((Test-NativeComparable $v0 $cUnit) -and (Test-NativeAgrees $c0 ([double]$v0.native_unit_price))) {
         $nv = [double]$v0.native_unit_price
-        $flags.Add([ordered]@{ commodity=$r.commodity; type='outlier-verified'; detail=("$($v0.store) `$$('{0:N4}' -f $c0)/$cUnit is $pct% below runner-up $($ranked[1].store) `$$('{0:N4}' -f $c1)/$cUnit, and the store publishes `$$('{0:N4}' -f $nv)/$cUnit - our arithmetic agrees with the store's own, so the price is real (product identity is NOT judged here)") })
+        Add-SanityFlag -Type 'outlier-verified' -R $r -Row $v0 -Detail ("$($v0.store) `$$('{0:N4}' -f $c0)/$cUnit is $pct% below runner-up $($ranked[1].store) `$$('{0:N4}' -f $c1)/$cUnit, and the store publishes `$$('{0:N4}' -f $nv)/$cUnit - our arithmetic agrees with the store's own, so the price is real (product identity is NOT judged here)")
       } else {
-        $flags.Add([ordered]@{ commodity=$r.commodity; type='outlier'; detail=("$($ranked[0].store) `$$('{0:N2}' -f $c0) is $pct% below runner-up $($ranked[1].store) `$$('{0:N2}' -f $c1) - verify the price/size parse") })
+        Add-SanityFlag -Type 'outlier' -R $r -Row $ranked[0] -Detail ("$($ranked[0].store) `$$('{0:N2}' -f $c0) is $pct% below runner-up $($ranked[1].store) `$$('{0:N2}' -f $c1) - verify the price/size parse")
       }
     }
   }
@@ -225,7 +246,7 @@ foreach ($r in $doc.comparison) {
       # check-ad-cycles' $SANITY_QUIET so it does not page a human to verify arithmetic that is correct.
       # The OUTLIER detector still runs on the same row and is unit-free, so a genuine crash on the same
       # day is still caught by the peer comparison - this cannot buy a week of silence on a real move.
-      $flags.Add([ordered]@{ commodity=$r.commodity; type='unit-changed'; detail=("unit changed " + $puRaw + " -> " + [string]$r.unit + "; not comparable (last week `$$('{0:N4}' -f $p) per " + $puRaw + ", this week `$$('{0:N4}' -f $cur) per " + [string]$r.unit + ")") })
+      Add-SanityFlag -Type 'unit-changed' -R $r -Row $ranked[0] -Detail ("unit changed " + $puRaw + " -> " + [string]$r.unit + "; not comparable (last week `$$('{0:N4}' -f $p) per " + $puRaw + ", this week `$$('{0:N4}' -f $cur) per " + [string]$r.unit + ")")
     }
     elseif ($p -gt 0 -and ([math]::Abs($cur - $p)/$p -gt $WowFrac)) {
       $dir = if ($cur -lt $p) { 'down' } else { 'up' }
@@ -236,7 +257,7 @@ foreach ($r in $doc.comparison) {
       $pe = $priorEntry[[string]$r.id]
       $ex = Get-WowExplanation $r $pe (Get-PriorBoardRow ([string]$pe.week_of) ([string]$r.id)) $storeLast[[string]$r.id]
       $wType = if ($ex.explained) { 'wow-explained' } else { 'wow' }
-      $flags.Add([ordered]@{ commodity=$r.commodity; type=$wType; detail=("cheapest moved $dir " + [math]::Round([math]::Abs($cur-$p)/$p*100) + "% vs last week (`$$('{0:N2}' -f $p) -> `$$('{0:N2}' -f $cur))" + $unk + ' - ' + $ex.reason) })
+      Add-SanityFlag -Type $wType -R $r -Row (Get-SanityCheapestRow $r $ranked) -Detail ("cheapest moved $dir " + [math]::Round([math]::Abs($cur-$p)/$p*100) + "% vs last week (`$$('{0:N2}' -f $p) -> `$$('{0:N2}' -f $cur))" + $unk + ' - ' + $ex.reason)
     }
   }
   # native unit-price cross-check (activates when a pull captures the store's own per-unit number)
@@ -249,7 +270,7 @@ foreach ($r in $doc.comparison) {
       if (-not (Test-NativeComparable $s $cUnit)) { $script:notComparable++; continue }
       $nu = [double]$s.native_unit_price; $ou = [double]$s.per_unit
       if (-not (Test-NativeAgrees $ou $nu)) {
-        $flags.Add([ordered]@{ commodity=$r.commodity; type='native-mismatch'; detail=("$($s.store): our `$$('{0:N4}' -f $ou)/$cUnit vs store-published `$$('{0:N4}' -f $nu)/$cUnit on '$($s.item)' - one of the two is reading a different pack") })
+        Add-SanityFlag -Type 'native-mismatch' -R $r -Row $s -Detail ("$($s.store): our `$$('{0:N4}' -f $ou)/$cUnit vs store-published `$$('{0:N4}' -f $nu)/$cUnit on '$($s.item)' - one of the two is reading a different pack")
       }
     }
   }

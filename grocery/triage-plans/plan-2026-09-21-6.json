@@ -100,7 +100,8 @@
     {
       "id": "Q-fccb69-unit-of-triage",
       "question": "The price-flag alert is a daily review intake, so the RETURN rule scores every day that brings a new flagged cell as a failed fix of yesterday's close, and it will keep firing on most days (15 of 17 simulated versions after today's fix). Pick one: (A) one queue item per flagged cell, each its own type ('grocery price flag <commodity> <kind>' under one prefix registry entry), so a RETURN means that very cell came back after a close; cost measured over 2026-08-24..2026-09-21: a mean of 7.6 new review items a day, 26 on the worst day, against 1 today. (B) keep one item a day and exempt this review-class type from the RETURN rule, since its returns are new cells by construction. (C) leave it as it is.",
-      "measured": "simulated NEW flags per board version after the fix: 1, 0, 17, 7, 19, 5, 6, 16, 2, 0, 5, 7, 3, 2, 26, 10, 3 (129 over 17 versions)"
+      "measured": "simulated NEW flags per board version after the fix: 1, 0, 17, 7, 19, 5, 6, 16, 2, 0, 5, 7, 3, 2, 26, 10, 3 (129 over 17 versions)",
+      "superseded_by": {"plan": "grocery/triage-plans/plan-2026-09-21-8.json", "date": "2026-09-21", "ruling": "Brad rejected options A, B and C in chat ('I feel like none of these choices are right ones') and approved automatic verification: each flagged price is re-read from its store, a match closes itself, a disagreement quarantines that one cell and pages one alert naming it, a could-not-look stays pending."}
     }
   ]
 }

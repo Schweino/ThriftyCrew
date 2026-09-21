@@ -1610,6 +1610,22 @@ if (-not $Quick) {
       Write-Warning ('Hy-Vee: uncovered-commodity asks NOT promoted - the board could not be read (' + $_.Exception.Message + '); the order is oldest-first as before')
       $hvUnc = @{}
     }
+    # PRICE-FLAG VERIFICATIONS OWED A RE-READ ARE ASKED FIRST (2026-09-21, grocery/triage-plans/plan-2026-09-21-8.json). A
+    # flagged Hy-Vee cell stays PENDING until this lane re-reads its product (verify-price-flags.ps1), so that product joins
+    # rank 0 beside the reverting sales, INSIDE the same budget: matched by the flagged claim's own name, or by its
+    # commodity when the work item carries one. Its own try, like the board verdict above: an unreadable ledger costs only
+    # the promotion, never the budget.
+    try {
+      if (-not (Get-Command Get-TcFlagVerifyOwed -ErrorAction SilentlyContinue)) { . (Join-Path $root 'flag-verify-lib.ps1') }
+      $hvVo = Get-TcFlagVerifyOwed -OutDir $OutDir -Store 'Hy-Vee'
+      $hvVoNames = @{}; foreach ($vn in @($hvVo.Items)) { $hvVoNames[([string]$vn).ToLower().Trim()] = $true }
+      $hvVoN = 0; $wi = -1
+      foreach ($w in $work) {
+        $wi++
+        if ($hvVoNames.ContainsKey(([string]$w.name).ToLower().Trim()) -or ($w.cid -and @($hvVo.Ids) -contains [string]$w.cid)) { if (-not $hvExpIdx.ContainsKey($wi)) { $hvExpIdx[$wi] = $true; $hvVoN++ } }
+      }
+      if (@($hvVo.Ids).Count -gt 0 -or $hvVo.Blind) { Write-Output ('Hy-Vee: price-flag verifications owed a re-read: ' + @($hvVo.Ids).Count + ' commodity(ies), ' + $hvVoN + ' product(s) promoted to rank 0 of the ask order' + $(if ($hvVo.Blind) { ' (BLIND: ' + $hvVo.Why + ')' } else { '' })) }
+    } catch { Write-Warning ('Hy-Vee: price-flag verification asks NOT promoted (' + $_.Exception.Message + '); the order is as before') }
     $hvOrder = Get-HyVeeAskOrder -Work $work -Budget $hvBudget -TargetStoreId ([string]$StoreId) -ExpiringIdx $hvExpIdx -UncoveredIds $hvUnc
     $askIndex = $hvOrder.Index
     Write-Output ("Hy-Vee: $($hvOrder.UncoveredInSlice) of today's asks re-read a row the board withheld for its store on a commodity it prices NOWHERE " +

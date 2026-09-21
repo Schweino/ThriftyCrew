@@ -63,6 +63,11 @@ $script:PolicyRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Par
 . (Join-Path (Split-Path -Parent $script:PolicyRoot) 'lib\atomic-write.ps1')
 # Enter-TcLedgerLock: the same lanes also WRITE those two files side by side - see lib\ledger-lock.ps1.
 . (Join-Path (Split-Path -Parent $script:PolicyRoot) 'lib\ledger-lock.ps1')
+# A pending price-flag verification is an owed re-read (2026-09-21, plan-2026-09-21-8.json; Get-CaptureWorklist below).
+# Loaded only when present: this lib's own self-tests re-load it from a copied root that need not carry it, and there a
+# worklist says VerifyBlind rather than the whole lib failing to load.
+$script:FlagVerifyLib = Join-Path $script:PolicyRoot 'flag-verify-lib.ps1'
+if (Test-Path -LiteralPath $script:FlagVerifyLib) { . $script:FlagVerifyLib }
 # -SelfTest drives both ledgers from concurrent processes (the block at the end of this file). Read from $args,
 # because this file declares no parameters - see the header.
 $__cplSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
@@ -857,6 +862,38 @@ function Get-CaptureWorklist {
     }
   }
 
+  # A PENDING PRICE-FLAG VERIFICATION IS AN OWED RE-READ AND LEADS THE SAME WAY (2026-09-21, plan-2026-09-21-8.json).
+  # verify-price-flags.ps1 puts every paging price flag to the store's own LATER read of the same product, and until a
+  # capture re-reads that product the flag stays PENDING - it must not wait its turn in the 90-day rotation. Its
+  # commodity's terms lead, INSIDE the allowance the ruling and the expiries share (so the rotation keeps its drip and
+  # the cursor never advances over a term a prepend displaced), right after the ruling. The list EMPTIES ITSELF: an entry
+  # leaves 'pending' only when a capture re-read the product or its claim left the board (Get-TcFlagVerifyOwed), so it
+  # is never edited by hand. Expiries give way to it exactly as they do to the ruling, and stay owed in sale-windows.json.
+  $vo = $null
+  if (Get-Command Get-TcFlagVerifyOwed -ErrorAction SilentlyContinue) { $vo = Get-TcFlagVerifyOwed -OutDir $OutDir -Store $Store }
+  else { $vo = [pscustomobject]@{ Ids = @(); Blind = $true; Why = 'flag-verify-lib.ps1 is not beside capture-policy-lib.ps1, so what the price-flag verifier owes is unknown' } }
+  $verifyTerms = New-Object System.Collections.Generic.List[object]
+  $verifyDeferred = 0
+  $saleDeferredByVerify = 0
+  $vRoom = $allowance - $ruleTerms.Count
+  if ($vRoom -lt 0) { $vRoom = 0 }
+  foreach ($vid in @($vo.Ids)) {
+    $hits = @($all | Where-Object { [string]$_.id -eq [string]$vid })
+    if ($hits.Count -eq 0) { continue }          # a pending commodity the search catalogue does not carry
+    if (($verifyTerms.Count + $hits.Count) -gt $vRoom) { $verifyDeferred++; continue }
+    foreach ($hit in $hits) { [void]$verifyTerms.Add($hit) }
+  }
+  if ($verifyTerms.Count -gt 0) {
+    $saleRoomV = $vRoom - $verifyTerms.Count
+    if ($saleRoomV -lt 0) { $saleRoomV = 0 }
+    if ($sale.Count -gt $saleRoomV) {
+      $saleDeferredByVerify = $sale.Count - $saleRoomV
+      $keepV = New-Object System.Collections.Generic.List[object]
+      for ($i = 0; $i -lt $saleRoomV; $i++) { [void]$keepV.Add($sale[$i]) }
+      $sale = $keepV
+    }
+  }
+
   # BAKER'S WEEKLY AD TERMS LEAD THE SAME WAY (2026-09-18). Derived from the current ad list minus what a
   # bakers-regular file inside the window proves was asked (Get-BakersAdOwed), inside the same allowance, so the
   # rotation keeps its drip. The Baker's lane itself composes its asks with Get-BakersAskPlan; this is the
@@ -866,7 +903,7 @@ function Get-CaptureWorklist {
   $adDeferred = 0
   $saleDeferredByAd = 0
   if ($ad -and @($ad.Owed).Count -gt 0) {
-    $adRoom = $allowance - $ruleTerms.Count
+    $adRoom = $allowance - $ruleTerms.Count - $verifyTerms.Count
     if ($adRoom -lt 0) { $adRoom = 0 }
     foreach ($t in @($ad.Owed)) {
       $hits = @($all | Where-Object { [string]$_.term -eq [string]$t })
@@ -906,6 +943,13 @@ function Get-CaptureWorklist {
     RulingBlind   = if ($rule) { [bool]$rule.Blind } else { $false }
     RulingWhy     = if ($rule) { [string]$rule.Why } else { '' }
     SaleDeferredByRuling = $saleDeferredByRuling
+    # Price-flag verifications owed a re-read (2026-09-21). Empty once every pending flag of this store is re-read.
+    VerifyTerms   = $verifyTerms.ToArray()
+    VerifyOwed    = @($vo.Ids)
+    VerifyDeferred = $verifyDeferred
+    VerifyBlind   = [bool]$vo.Blind
+    VerifyWhy     = [string]$vo.Why
+    SaleDeferredByVerify = $saleDeferredByVerify
     # Baker's weekly ad terms owed an ask (2026-09-18). Empty for every other store, and empty for Baker's
     # once every routed term of the current ad list has a receipt inside the ad window.
     AdTerms       = $adTerms.ToArray()
@@ -923,7 +967,7 @@ function Get-CaptureWorklist {
     # THE RULING'S TERMS COME FIRST here, because Group-Object keeps first-seen order and this list is
     # fetched in order: a run that is cut short must have spent its requests on the owed ones. The ad terms
     # come next for the same reason.
-    Terms         = @(@($ruleTerms.ToArray()) + @($adTerms.ToArray()) + @($rot.ToArray()) + @($sale.ToArray()) |
+    Terms         = @(@($ruleTerms.ToArray()) + @($verifyTerms.ToArray()) + @($adTerms.ToArray()) + @($rot.ToArray()) + @($sale.ToArray()) |
                       Group-Object -Property term | ForEach-Object { $_.Group[0] })
     QuarterDays   = $plan.QuarterDays
     MaxCarryDays  = $plan.MaxCarryDays
