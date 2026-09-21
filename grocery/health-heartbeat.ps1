@@ -840,7 +840,11 @@ if ($Alert) {
   $prev = if (Test-Path $sigF) { (Get-Content $sigF -Raw).Trim() } else { '' }
   if ($sig -ne $prev) {
     try {
-      Send-Alert -Subject ("Automation silent-death: " + $issues.Count + " issue(s)") -Body ("health-heartbeat.ps1 found automations/outputs that stopped WITHOUT a loud failure (a task got deleted/disabled or an output went stale). This is the class the GitHub-failure email + local-watchdog do not cover. Issues: " + (($issues | Select-Object -First 12) -join ' | ') + ". Fix the task/trigger or the job that writes the output.") | Out-Null
+      # ONE CONDITION, ONE ALERT TYPE (2026-09-21, plan-2026-09-21-5.json): each issue class (TASK STALE, RUN DID NOT
+      # LAND, OUTPUT MISSING, ...) is its own type and queue item; 8 distinct classes filed under one "N issue(s)" type
+      # over the 30 days ending 2026-09-21. One message per run still lists whichever are due.
+      $hbConds = @($issueObjs.ToArray() | ForEach-Object { [pscustomobject]@{ Label = ([string]$_.key -split '\|')[0]; Text = [string]$_.text } })
+      Send-AlertConditions -SubjectPrefix 'Automation silent-death' -Conditions $hbConds -ReportPointer ('health-heartbeat.ps1 found automations/outputs that stopped WITHOUT a loud failure. Fix the task/trigger or the job that writes the output. Full report, healthy rows included: powershell -NoProfile -File grocery\health-heartbeat.ps1') | Out-Null
       if ($LASTEXITCODE -eq 0) { Set-Content $sigF -Value $sig -Encoding ASCII }
     } catch {}
   }

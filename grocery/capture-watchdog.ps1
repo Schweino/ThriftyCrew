@@ -718,7 +718,7 @@ try {
   } else {
     [void]$ok.Add("reached main: last pipeline commit $lastBot, served files clean in git")
   }
-} catch { [void]$findings.Add("could not ask git whether today's prices reached main ($($_.Exception.Message)) - the one check that speaks for the READER is unavailable") }
+} catch { [void]$findings.Add("REACHED-MAIN CHECK FAILED: could not ask git whether today's prices reached main ($($_.Exception.Message)) - the one check that speaks for the READER is unavailable") }
 
 # ---- 5. ad health ------------------------------------------------------------
 $adsc = Join-Path $root 'audit-ad-status.ps1'
@@ -1142,7 +1142,12 @@ if ($sidecars.Count) {
 #     it can never finish a quarter. Seven days without a single fresh row means its rotation has stalled.
 #     On the day this shipped that was true of Sam's Club (19d) and Walmart (9d) - both real, both already
 #     carrying rescue worklists. It is not a quiet start; it is an accurate one.
-$HEADLESS_LANES = @('Hy-Vee', "Baker's", 'Family Fare')
+# The headless lanes come from stores.json (pull_profile.surface 'server...'), never a copy here: convert on touch (Brad,
+# 2026-09-19, backlog I192; plan-2026-09-21-5.json). The complement of Get-BrowserSurfaceStores above. An unreadable
+# registry names no lane, and that is said as a finding rather than read as "every lane is fine".
+$HEADLESS_LANES = @()
+try { $HEADLESS_LANES = @(@((ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'stores.json')))).stores) | Where-Object { $_.pull_profile -and ([string]$_.pull_profile.surface) -match '^server' } | ForEach-Object { [string]$_.name }) } catch { $HEADLESS_LANES = @() }
+if ($HEADLESS_LANES.Count -eq 0) { [void]$findings.Add('HEADLESS LANES UNKNOWN: stores.json named no server-surface store (or could not be read), so no headless lane was checked for fresh rows. That is not a pass.') }
 
 # THE RULER WAS WRONG (Brad, 2026-08-22: "state is not a bad thing"). This check used a flat
 # $BROWSER_STALE_DAYS = 7 and called a store STALLED the moment it went a week without a fresh row.
@@ -1382,7 +1387,8 @@ foreach ($f in $findings) { Write-Output "  FIND  $f" }
 foreach ($s in $heldSub) { Write-Output "          - $s" }
 
 if ($findings.Count -and $Alert) {
-  $okLines = "`n`nHealthy checks:`n" + (($ok | ForEach-Object { " - $_" }) -join "`n")
+  # healthy checks are the transcript's, never the alert's (2026-09-21): the body names what is wrong and points here
+  $okLines = if ($runLog) { "`n`nFull watchdog report, healthy checks included: $runLog" } else { '' }
   $hTextNow = ''
   if ($heldNow) { $hTextNow = $hText }
   $plan = Get-WatchdogAlertPlan -Findings $findings -Held ([bool]$heldNow) -HeldText $hTextNow
@@ -1393,9 +1399,13 @@ if ($findings.Count -and $Alert) {
     try { Send-Alert -Subject "Grocery capture watchdog: held by guards $todayS" -Body $holdBody -CausedBy 'guards-hold' | Out-Null } catch { }
   }
   if ($plan.independent.Count) {
-    $body = "Capture watchdog found $($plan.independent.Count) issue(s) on $todayS.`n`n" +
-            (($plan.independent | ForEach-Object { " - $_" }) -join "`n") + $okLines
-    try { Send-Alert -Subject "Grocery capture watchdog: $($plan.independent.Count) issue(s) $todayS" -Body $body | Out-Null } catch { }
+    # ONE CONDITION, ONE ALERT TYPE (2026-09-21, plan-2026-09-21-5.json). This was one "N issue(s)" alert per run, so
+    # a dozen unrelated causes over 30 days (RUN RECORD, AD STALE, NO FRESH ROWS, GRAPH SCHEMA, ...) all filed as
+    # returns of one type no single fix could close. Each finding's leading label is now its own type, queue item and
+    # dedupe key; Send-AlertConditions still sends ONE message per run listing whichever of them are due. The healthy
+    # checks stay in this run's transcript, which every body points at, and no longer ride in the alert.
+    $rlNote = if ($runLog) { "Full watchdog report for $todayS, healthy checks included: $runLog" } else { 'Full watchdog report: run grocery\capture-watchdog.ps1 (no transcript was written this run).' }
+    try { Send-AlertConditions -SubjectPrefix 'Grocery capture watchdog' -Conditions @($plan.independent) -ReportPointer $rlNote -DateStamp $todayS | Out-Null } catch { }
   }
 }
 

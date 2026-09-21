@@ -1524,7 +1524,20 @@ try {
               "Expiry classes: STARVED means the row's own search term has returned nothing for the whole carry window and the sweep genuinely cannot replace that product. CHURN means the term is being bought fine and only the NAME left the store's top-25 (a rename, a ranking shift, a delisting, or the multi-buy skip) - the catalog is a name-keyed union, so a trickle of those is the healthy steady state and does NOT page on its own. UNKNOWN means the row predates the found_by_term field, so it cannot be classified yet; it never pages and the class empties itself within $MaxCarryDays days.`n`n" +
               "Throttled diagnostics written on $($recent.Count) of the last 4 days - that alone is NORMAL under the 3-hourly sharded sweep (capture-policy buys RotationTerms per window by design, $ffRotation of $($termList.Count) today) and is no longer what this alert keys on. It fires only when the merged catalog is actually losing ground.`n`n" +
               "Freshop rate-limits several hundred sequential terms from one IP. The fix is fewer requests per window (shard the term list across the day), NOT slower pacing - a 2026-07-28 probe showed 20 terms at 200ms all succeed while a second burst all came back empty, so the budget is per-window request COUNT."
-      Send-Alert -Subject ("Grocery: Family Fare catalog is degrading - " + $ffState.reasons.Count + " signal(s)") -Body $body | Out-Null
+      # ONE CONDITION, ONE ALERT TYPE (2026-09-21, plan-2026-09-21-5.json): each signal is its own type and queue item
+      # (it was one "N signal(s)" type), and the explanatory prose above stays in this script's run output, not the
+      # alert. $body is still printed to the host so the run transcript keeps the whole account.
+      Write-Host $body
+      $ffConds = @($ffState.reasons | ForEach-Object {
+        $t = [string]$_
+        $lb = if ($t -match 'STARVED') { 'starved terms aging out' }
+              elseif ($t -match 'mass loss') { 'mass expiry in one run' }
+              elseif ($t -match 'bought in the last 48h') { 'sweep is not buying' }
+              elseif ($t -match 'shrank') { 'merged catalog shrank' }
+              else { Get-AlertConditionKey $t }
+        if ($lb -eq 'starved terms aging out' -and $starvedLine) { $t = $t + "`n" + $starvedLine.Trim() }
+        [pscustomobject]@{ Label = $lb; Text = $t } })
+      Send-AlertConditions -SubjectPrefix 'Grocery: Family Fare catalog is degrading' -Conditions $ffConds -ReportPointer ("Merged catalog: $(@($deals).Count) items, $expired expired past $MaxCarryDays days, $recentVerified re-verified in 48h, against a best-of-recent of $prevMax. File: $file. The expiry classes and the throttle background are in this run's own output (pull-regular-familyfare.ps1).") | Out-Null
       # stamp only on a SENT alert: a failed send must be free to try again on the next run, or a transient
       # mail error would buy the whole day's silence.
       if ($LASTEXITCODE -eq 0) { Set-Content -Path $alertStamp -Value $todayS -Encoding ASCII }

@@ -64,6 +64,14 @@ param(
   # branch is reached without a 10 s pause per case.
   [string]$QueueMutexName = 'Global\smp-grocery-triage-queue',
   [int]$QueueLockTimeoutMs = 10000,
+  # ONE CONDITION, ONE ALERT TYPE (2026-09-21, plan-2026-09-21-5.json). alert-lib.ps1's Send-AlertConditions sends each
+  # condition of one emitter run as its own alert with -DeferMail: queue, class, hold and the once-per-type-per-day gate
+  # all run exactly as for any alert, and where this script would have mailed it prints `MAIL-DUE <type>` and exits 0
+  # instead. The caller then sends ONE digest-class message listing every due condition, through this same script,
+  # passing their types as -MarkSentTypes (pipe-separated) so each counts as mailed today once that message goes out.
+  # The mute switch is applied to that one message, not per condition. Both default off: every other caller is unchanged.
+  [switch]$DeferMail,
+  [string]$MarkSentTypes = '',
   # exercises the queue-routing decision against temp fixtures and exits. Sends nothing, touches no live file.
   [switch]$SelfTest
 )
@@ -608,6 +616,47 @@ if ($SelfTest) {
     $mfMiss = _LibLoadFailures ($mfLogText.Substring([Math]::Min($saLogText.Length, $mfLogText.Length)))
     _T 'MUST FIRE with lib\atomic-write.ps1 missing from the sandbox, the run logs that library, and only it, as not loaded' ([bool](@($mfMiss).Count -eq 1 -and [string]@($mfMiss)[0] -match 'atomic-write\.ps1 DID NOT LOAD')) 'True'
     _T 'CLEAN TWIN and that send still reaches the queue through the fallback, which is why no other case sees it' ([bool]($null -ne $mf -and [Convert]::ToBase64String([IO.File]::ReadAllBytes($saQ)) -ne $qBeforeMf)) 'True'
+    # ---- ONE CONDITION, ONE ALERT TYPE (2026-09-21, plan-2026-09-21-5.json) ----
+    # alert-lib's Send-AlertConditions driven against THIS sandbox's real send-alert.ps1: per-condition queue items, one
+    # digest message per run. The mute file is still ON, so the digest reaching the MUTED branch is the proof it was sent.
+    Copy-Item -LiteralPath (Join-Path (Split-Path -Parent $PSScriptRoot) 'lib\atomic-write.ps1') -Destination (Join-Path $saL 'atomic-write.ps1') -Force
+    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'alert-lib.ps1') -Destination (Join-Path $saG 'alert-lib.ps1')
+    $saRegCond = '{ "readme": "frozen fixture", "entries": [' +
+      '{ "id": "fx-run-record", "match": "exact", "key": "fixture emitter run record", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x" },' +
+      '{ "id": "fx-no-fresh-rows", "match": "exact", "key": "fixture emitter no fresh rows", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x" },' +
+      '{ "id": "fx-graph-shape", "match": "exact", "key": "fixture emitter graph shape", "class": "review", "condition": "review", "emitter": "x" },' +
+      '{ "id": "fx-digest", "match": "exact", "key": "fixture emitter condition s need action", "class": "digest", "condition": "information", "emitter": "x" } ] }'
+    [IO.File]::WriteAllText($saReg, $saRegCond, $utf8)
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    . (Join-Path $saG 'alert-lib.ps1')
+    $cxArgs = @('-QueueMutexName', $saMutex)
+    $cxRun1 = 'RUN RECORD: capture-run [ad] completed with exit 1 - see grocery\out\logs\capture-run-ad-2026-09-21.log'
+    $cxRun2 = 'NO FRESH ROWS: Hy-Vee contributed ZERO rows dated 2026-09-20 (newest 2026-09-19, 1d old)'
+    $cxPtr = 'Full report, healthy checks included: grocery\out\logs\fixture-2026-09-21.log'
+    $cx1 = Send-AlertConditions -SubjectPrefix 'Fixture emitter' -Conditions @($cxRun1, $cxRun2) -ReportPointer $cxPtr -DateStamp '2026-09-21' -SenderArgs $cxArgs
+    $cxQ1 = @((Get-Content -LiteralPath $saQ -Raw -Encoding UTF8 | ConvertFrom-Json).items)
+    $cxTypes = @($cxQ1 | ForEach-Object { [string]$_.type } | Sort-Object)
+    _T 'MUST FIRE two distinct conditions from one emitter run become two queue items with two type keys' ($cxTypes -join ',') 'fixture emitter no fresh rows,fixture emitter run record'
+    _T 'MUST FIRE and the run sends ONE message, a digest listing both, under the digest subject' ([bool]($cx1.due.Count -eq 2 -and [string]$cx1.digest_out -match 'alert MUTED' -and [string]$cx1.digest_out -match [regex]::Escape("mail subject 'Fixture emitter: 2 condition(s) need action 2026-09-21'"))) 'True'
+    $cxRr = @($cxQ1 | Where-Object { $_.type -eq 'fixture emitter run record' })
+    _T 'CLEAN TWIN a condition body carries its problem line and the pointer to the full report' ([bool]($cxRr.Count -eq 1 -and ([string]$cxRr[0].body).Contains('RUN RECORD: capture-run [ad] completed with exit 1') -and ([string]$cxRr[0].body).Contains($cxPtr))) 'True'
+    _T 'MUST NOT FIRE a condition body carries no other condition''s line and no healthy line' ([bool]($cxRr.Count -eq 1 -and ([string]$cxRr[0].body) -cnotmatch 'NO FRESH ROWS|Healthy checks:')) 'True'
+    $cxRrId = ''
+    if ($cxRr.Count) { $cxRrId = [string]$cxRr[0].id }
+    $cx2 = Send-AlertConditions -SubjectPrefix 'Fixture emitter' -Conditions @($cxRun1) -ReportPointer $cxPtr -DateStamp '2026-09-21' -SenderArgs $cxArgs
+    $cxQ2 = @((Get-Content -LiteralPath $saQ -Raw -Encoding UTF8 | ConvertFrom-Json).items)
+    $cxRr2 = @($cxQ2 | Where-Object { $_.type -eq 'fixture emitter run record' })
+    $cxNf2 = @($cxQ2 | Where-Object { $_.type -eq 'fixture emitter no fresh rows' })
+    _T 'MUST FIRE a re-firing condition absorbs into its own existing id (still 2 items, same id, count 2)' ([bool]($cxQ2.Count -eq 2 -and $cxRr2.Count -eq 1 -and [string]$cxRr2[0].id -eq $cxRrId -and [int]$cxRr2[0].count -eq 2 -and $cx2.due.Count -eq 1)) 'True'
+    _T 'MUST NOT FIRE and the condition that did not re-fire keeps count 1' ([bool]($cxNf2.Count -eq 1 -and [int]$cxNf2[0].count -eq 1)) 'True'
+    $cxQb = [Convert]::ToBase64String([IO.File]::ReadAllBytes($saQ))
+    $cx3 = Send-AlertConditions -SubjectPrefix 'Fixture emitter' -Conditions @() -ReportPointer $cxPtr -SenderArgs $cxArgs
+    _T 'MUST NOT FIRE a run with only healthy lines raises nothing: no condition, no message, the queue byte-identical' ([bool]($cx3.conditions -eq 0 -and $cx3.digest_rc -eq -1 -and [Convert]::ToBase64String([IO.File]::ReadAllBytes($saQ)) -eq $cxQb)) 'True'
+    $cx4 = Send-AlertConditions -SubjectPrefix 'Fixture emitter' -Conditions @('GRAPH SHAPE: structural orphans rose by 3') -ReportPointer $cxPtr -SenderArgs $cxArgs
+    $cxQ4 = @((Get-Content -LiteralPath $saQ -Raw -Encoding UTF8 | ConvertFrom-Json).items)
+    _T 'MUST NOT FIRE a review-class condition is queued as its own item and sends no message at all' ([bool]($cxQ4.Count -eq 3 -and $cx4.due.Count -eq 0 -and $cx4.digest_rc -eq -1)) 'True'
+    _T 'the condition key is the leading label, dashes and all' (Get-AlertConditionKey 'GIT HOOKS NOT LIVE - pushes are ungated: hook missing') 'GIT HOOKS NOT LIVE - pushes are ungated'
+    _T 'a line with no short label keeps its first four words' (Get-AlertConditionKey 'could not ask git whether today''s prices reached main (x)') 'could not ask git'
   } finally {
     Stop-TcMutexHold
     Remove-Item -LiteralPath $saDir -Recurse -Force -ErrorAction SilentlyContinue
@@ -891,6 +940,22 @@ if (Test-AlertHeldPending $holdN $observations $queued $Escalates) {
   exit 0
 }
 
+# DEFERRED (2026-09-21): the queue entry is durable and the hold has passed. Answer the once-per-type-per-day question
+# here, then hand the mail back to the caller's one digest message. Read without the sent-file lock on purpose: the
+# worst a race does is list a condition twice in one day, and a duplicate is an annoyance where a suppression is not.
+if ($DeferMail) {
+  $dfSent = $false
+  try { $dfSent = ((-not $Force) -and (Test-Path $sentFile) -and ((Get-Content $sentFile -Encoding UTF8) -contains $typeKey)) } catch { $dfSent = $false }
+  if ($dfSent) {
+    Log ("SUPPRESSED (already sent this type today) '$Subject' [type: $typeKey] - deferred condition, not listed again")
+    Write-Output ("alert suppressed - '$typeKey' already emailed today")
+    exit 0
+  }
+  Log ("MAIL DEFERRED '" + $Subject + "' [type: " + $typeKey + "] - queued; listed in the caller's one digest message")
+  Write-Output ('MAIL-DUE ' + $typeKey)
+  exit 0
+}
+
 # MUTED? The queue entry is already durable at this point, so triage still sees and works this alert; we
 # just do not mail it. -Force does NOT punch through: -Force exists to beat the once-a-day gate for a new
 # incident, and "stop all email alerts" outranks "this one is urgent enough to repeat today".
@@ -944,6 +1009,8 @@ try {
   $resp = Invoke-RestMethod -Uri "https://gmail.googleapis.com/gmail/v1/users/me/messages/send" -Method Post `
             -Headers @{ Authorization = "Bearer $token" } -ContentType "application/json" -Body (@{ raw = $b64 } | ConvertTo-Json) -TimeoutSec 30
   Add-Content -Path $sentFile -Value $typeKey   # record the type so the rest of today's runs stay quiet
+  # the conditions this one message listed count as mailed too (Send-AlertConditions, 2026-09-21)
+  foreach ($mk in @(([string]$MarkSentTypes) -split '\|' | Where-Object { $_ -and $_.Trim() })) { Add-Content -Path $sentFile -Value $mk.Trim() }
   Log ("SENT '" + $delivery.mail_subject + "' -> $To (id " + $resp.id + ")")
   Write-Output ("alert emailed to $To (id " + $resp.id + ")")
 } catch {

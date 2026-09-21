@@ -186,7 +186,8 @@
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/capture-watchdog.ps1",
    "hold_observations": 2,
-   "hold_note": "A recurring standing state: fired on 20 of the 30 days ending 2026-09-20. Pending on its first observation, emailed on the second (Brad, 2026-09-20). It still QUEUES on the first observation, so triage sees every occurrence; only the mail waits."
+   "hold_note": "A recurring standing state: fired on 20 of the 30 days ending 2026-09-20. Pending on its first observation, emailed on the second (Brad, 2026-09-20). It still QUEUES on the first observation, so triage sees every occurrence; only the mail waits.",
+   "retired": "2026-09-21 (plan-2026-09-21-5.json): a catch-all bucket, not a condition. Every unrelated cause its emitter found filed under this one type, so each new cause counted as a RETURN and no single fix could close it. The emitter now sends one type per condition (the entries whose split_from names plan-2026-09-21-5.json) plus one digest message per run, so no new alert carries this key. The entry stays so the queue history it owns still resolves."
   },
   {
    "id": "capture-watchdog-held",
@@ -242,7 +243,8 @@
    "key": "grocery family fare catalog is degrading signal s",
    "class": "review",
    "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10): 11 of 20 days fired, and its close notes mostly read miscalibrated, healthy store",
-   "emitter": "grocery/pull-regular-familyfare.ps1"
+   "emitter": "grocery/pull-regular-familyfare.ps1",
+   "retired": "2026-09-21 (plan-2026-09-21-5.json): a catch-all bucket, not a condition. Every unrelated cause its emitter found filed under this one type, so each new cause counted as a RETURN and no single fix could close it. The emitter now sends one type per condition (the entries whose split_from names plan-2026-09-21-5.json) plus one digest message per run, so no new alert carries this key. The entry stays so the queue history it owns still resolves."
   },
   {
    "id": "union-store-no-captures",
@@ -258,7 +260,8 @@
    "key": "automation silent death issue s",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/health-heartbeat.ps1"
+   "emitter": "grocery/health-heartbeat.ps1",
+   "retired": "2026-09-21 (plan-2026-09-21-5.json): a catch-all bucket, not a condition. Every unrelated cause its emitter found filed under this one type, so each new cause counted as a RETURN and no single fix could close it. The emitter now sends one type per condition (the entries whose split_from names plan-2026-09-21-5.json) plus one digest message per run, so no new alert carries this key. The entry stays so the queue history it owns still resolves."
   },
   {
    "id": "bakers-scan-failed",
@@ -702,7 +705,8 @@
    "key": "grocery store registry drift issue s",
    "class": "review",
    "condition": "source hygiene: a hardcoded store list out of step with stores.json, nothing live is wrong",
-   "emitter": "grocery/audit-store-registry.ps1"
+   "emitter": "grocery/audit-store-registry.ps1",
+   "retired": "2026-09-21 (plan-2026-09-21-5.json): a catch-all bucket, not a condition. Every unrelated cause its emitter found filed under this one type, so each new cause counted as a RETURN and no single fix could close it. The emitter now sends one type per condition (the entries whose split_from names plan-2026-09-21-5.json) plus one digest message per run, so no new alert carries this key. The entry stays so the queue history it owns still resolves."
   },
   {
    "id": "sale-no-fallback",
@@ -987,6 +991,687 @@
    "class": "page",
    "condition": "2 watcher-cannot-see",
    "emitter": "meal-prep/pipeline/monitor-live-recipe-prices.ps1"
+  },
+  {
+   "id": "watchdog-no-board-at-all",
+   "match": "exact",
+   "key": "grocery capture watchdog no board at all",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-board-is-stale",
+   "match": "exact",
+   "key": "grocery capture watchdog board is stale",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-not-published",
+   "match": "exact",
+   "key": "grocery capture watchdog not published",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-failed",
+   "match": "exact",
+   "key": "grocery capture watchdog failed",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-never-reached-main",
+   "match": "exact",
+   "key": "grocery capture watchdog never reached main",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-computed-but-not-shipped",
+   "match": "exact",
+   "key": "grocery capture watchdog computed but not shipped",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-rollback-not-reverting",
+   "match": "exact",
+   "key": "grocery capture watchdog rollback not reverting",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-cells-expiring-now",
+   "match": "exact",
+   "key": "grocery capture watchdog cells expiring now",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-input-assert",
+   "match": "exact",
+   "key": "grocery capture watchdog input assert",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "A watcher is blind: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-store-freshness-blind",
+   "match": "exact",
+   "key": "grocery capture watchdog store freshness blind",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "A watcher is blind: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-visibility-sweep-missing",
+   "match": "exact",
+   "key": "grocery capture watchdog visibility sweep missing",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "A watcher is blind: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-visibility-sweep-did-not-complete",
+   "match": "exact",
+   "key": "grocery capture watchdog visibility sweep did not complete",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "A watcher is blind: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-visibility-sweep-threw",
+   "match": "exact",
+   "key": "grocery capture watchdog visibility sweep threw",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "A watcher is blind: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-reached-main-check-failed",
+   "match": "exact",
+   "key": "grocery capture watchdog reached main check failed",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "A watcher is blind: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-headless-lanes-unknown",
+   "match": "exact",
+   "key": "grocery capture watchdog headless lanes unknown",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "A watcher is blind: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-git-hooks-not-live-pushes-are-ungated",
+   "match": "exact",
+   "key": "grocery capture watchdog git hooks not live pushes are ungated",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "note": "A watcher is blind: pages on its first observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-run-log-held-mute",
+   "match": "exact",
+   "key": "grocery capture watchdog run log held mute",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "hold_observations": 2,
+   "note": "A standing state (a locked sidecar) that a later fold usually clears: mailed on the second observation.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-missing-task",
+   "match": "exact",
+   "key": "grocery capture watchdog missing task",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "hold_observations": 2,
+   "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-disabled",
+   "match": "exact",
+   "key": "grocery capture watchdog disabled",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "hold_observations": 2,
+   "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-never-ran",
+   "match": "exact",
+   "key": "grocery capture watchdog never ran",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "hold_observations": 2,
+   "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-did-not-run",
+   "match": "exact",
+   "key": "grocery capture watchdog did not run",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "hold_observations": 2,
+   "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-run-record",
+   "match": "exact",
+   "key": "grocery capture watchdog run record",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "hold_observations": 2,
+   "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-browser-capture-missing-today",
+   "match": "exact",
+   "key": "grocery capture watchdog browser capture missing today",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "hold_observations": 2,
+   "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-no-fresh-rows",
+   "match": "exact",
+   "key": "grocery capture watchdog no fresh rows",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "hold_observations": 2,
+   "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-browser-work-stale",
+   "match": "exact",
+   "key": "grocery capture watchdog browser work stale",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "hold_observations": 2,
+   "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-missing-window",
+   "match": "exact",
+   "key": "grocery capture watchdog missing window",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "hold_observations": 2,
+   "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-ad-stale",
+   "match": "exact",
+   "key": "grocery capture watchdog ad stale",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "hold_observations": 2,
+   "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-ad-forecast",
+   "match": "exact",
+   "key": "grocery capture watchdog ad forecast",
+   "class": "review",
+   "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-ad-forecast-could-not-be-evaluated",
+   "match": "exact",
+   "key": "grocery capture watchdog ad forecast could not be evaluated",
+   "class": "review",
+   "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-python-pins",
+   "match": "exact",
+   "key": "grocery capture watchdog python pins",
+   "class": "review",
+   "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-python-pins-could-not-be-evaluated",
+   "match": "exact",
+   "key": "grocery capture watchdog python pins could not be evaluated",
+   "class": "review",
+   "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-graph-shape",
+   "match": "exact",
+   "key": "grocery capture watchdog graph shape",
+   "class": "review",
+   "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-graph-shape-could-not-be-evaluated",
+   "match": "exact",
+   "key": "grocery capture watchdog graph shape could not be evaluated",
+   "class": "review",
+   "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-graph-schema",
+   "match": "exact",
+   "key": "grocery capture watchdog graph schema",
+   "class": "review",
+   "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-graph-schema-could-not-be-evaluated",
+   "match": "exact",
+   "key": "grocery capture watchdog graph schema could not be evaluated",
+   "class": "review",
+   "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-promotion-holds-could-not-be-re-checked",
+   "match": "exact",
+   "key": "grocery capture watchdog promotion holds could not be re checked",
+   "class": "review",
+   "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-git-hooks-could-not",
+   "match": "exact",
+   "key": "grocery capture watchdog git hooks could not",
+   "class": "review",
+   "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-member-cohorts-refused-to-write",
+   "match": "exact",
+   "key": "grocery capture watchdog member cohorts refused to write",
+   "class": "review",
+   "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-member-cohort-series",
+   "match": "exact",
+   "key": "grocery capture watchdog member cohort series",
+   "class": "review",
+   "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-approaching-carry-cliff",
+   "match": "exact",
+   "key": "grocery capture watchdog approaching carry cliff",
+   "class": "review",
+   "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-paid-content-served-free",
+   "match": "exact",
+   "key": "grocery capture watchdog paid content served free",
+   "class": "review",
+   "condition": "Brad ruling R14 (2026-09-10): a paid page served free goes to the review list, not email (as paywall-leak)",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-task-missing",
+   "match": "exact",
+   "key": "automation silent death task missing",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-task-disabled",
+   "match": "exact",
+   "key": "automation silent death task disabled",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-task-never-ran",
+   "match": "exact",
+   "key": "automation silent death task never ran",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-task-stale",
+   "match": "exact",
+   "key": "automation silent death task stale",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-task-failed",
+   "match": "exact",
+   "key": "automation silent death task failed",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-run-did-not-land",
+   "match": "exact",
+   "key": "automation silent death run did not land",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-output-missing",
+   "match": "exact",
+   "key": "automation silent death output missing",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-output-not-current",
+   "match": "exact",
+   "key": "automation silent death output not current",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-output-stale",
+   "match": "exact",
+   "key": "automation silent death output stale",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-external-output-missing",
+   "match": "exact",
+   "key": "automation silent death external output missing",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-queue-stuck",
+   "match": "exact",
+   "key": "automation silent death queue stuck",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-queue-unmeasured",
+   "match": "exact",
+   "key": "automation silent death queue unmeasured",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "note": "The heartbeat cannot measure a queue: a watcher is blind.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-queues-unmeasured",
+   "match": "exact",
+   "key": "automation silent death queues unmeasured",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "note": "The heartbeat cannot measure a queue: a watcher is blind.",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-task-unwatched",
+   "match": "exact",
+   "key": "automation silent death task unwatched",
+   "class": "review",
+   "condition": "review: registry hygiene, a task or queue exists that expected-automations.json does not watch; nothing has stopped",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-queues-unwatched",
+   "match": "exact",
+   "key": "automation silent death queues unwatched",
+   "class": "review",
+   "condition": "review: registry hygiene, a task or queue exists that expected-automations.json does not watch; nothing has stopped",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "store-registry-hardcoded-store-list",
+   "match": "exact",
+   "key": "grocery store registry drift hardcoded store list",
+   "class": "review",
+   "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
+   "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "store-registry-orphaned-store-subset-exemption",
+   "match": "exact",
+   "key": "grocery store registry drift orphaned store subset exemption",
+   "class": "review",
+   "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
+   "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "store-registry-duplicate-registry-name",
+   "match": "exact",
+   "key": "grocery store registry drift duplicate registry name",
+   "class": "review",
+   "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
+   "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "store-registry-board-and-registry-disagree",
+   "match": "exact",
+   "key": "grocery store registry drift board and registry disagree",
+   "class": "review",
+   "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
+   "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "store-registry-unregistered-capture-file-prefix",
+   "match": "exact",
+   "key": "grocery store registry drift unregistered capture file prefix",
+   "class": "review",
+   "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
+   "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "store-registry-ad-schedule-names-an-unregistered-store",
+   "match": "exact",
+   "key": "grocery store registry drift ad schedule names an unregistered store",
+   "class": "review",
+   "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
+   "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "ff-catalog-starved-terms-aging-out",
+   "match": "exact",
+   "key": "grocery family fare catalog is degrading starved terms aging out",
+   "class": "review",
+   "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10), kept per signal",
+   "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "ff-catalog-mass-expiry-in-one-run",
+   "match": "exact",
+   "key": "grocery family fare catalog is degrading mass expiry in one run",
+   "class": "review",
+   "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10), kept per signal",
+   "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "ff-catalog-sweep-is-not-buying",
+   "match": "exact",
+   "key": "grocery family fare catalog is degrading sweep is not buying",
+   "class": "review",
+   "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10), kept per signal",
+   "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "ff-catalog-merged-catalog-shrank",
+   "match": "exact",
+   "key": "grocery family fare catalog is degrading merged catalog shrank",
+   "class": "review",
+   "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10), kept per signal",
+   "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "watchdog-digest",
+   "match": "exact",
+   "key": "grocery capture watchdog condition s need action",
+   "class": "digest",
+   "condition": "information: the ONE message per emitter run that lists its due conditions; every condition is already its own queue item, so this is mailed and never queued",
+   "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "silent-death-digest",
+   "match": "exact",
+   "key": "automation silent death condition s need action",
+   "class": "digest",
+   "condition": "information: the ONE message per emitter run that lists its due conditions; every condition is already its own queue item, so this is mailed and never queued",
+   "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "store-registry-digest",
+   "match": "exact",
+   "key": "grocery store registry drift condition s need action",
+   "class": "digest",
+   "condition": "information: the ONE message per emitter run that lists its due conditions; every condition is already its own queue item, so this is mailed and never queued",
+   "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "ff-catalog-digest",
+   "match": "exact",
+   "key": "grocery family fare catalog is degrading condition s need action",
+   "class": "digest",
+   "condition": "information: the ONE message per emitter run that lists its due conditions; every condition is already its own queue item, so this is mailed and never queued",
+   "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-21-5.json"
   }
  ]
 }

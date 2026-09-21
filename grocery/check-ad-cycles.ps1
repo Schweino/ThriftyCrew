@@ -662,7 +662,11 @@ if ($serverDue) {
       $hardFail = $true
       Log "HARD FAILURE: server pull returned no current TODAY data after 2 attempts -> alerting, downstream skipped"
       if (-not $NoAlert) {
-        $bdy = "The daily server-side grocery pull (Hy-Vee / Aldi / Family Fare) returned NO current ad data after 2 attempts on $asofS. Likely an API or network issue. The board was left at its last good state - nothing was republished. Check pull-grocery-ads.ps1 and ad-cycle-log.txt on the machine."
+        # the server-pull stores from stores.json (capture 'server ...'), never a copy here: convert on touch (Brad,
+        # 2026-09-19, backlog I192; plan-2026-09-21-5.json)
+        $adSrv = 'the server-pull stores (stores.json unreadable)'
+        try { $adSrv = (@(@((ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'stores.json')))).stores) | Where-Object { ([string]$_.capture) -match '^server' } | ForEach-Object { [string]$_.name }) -join ' / ') } catch { }
+        $bdy = "The daily server-side grocery pull ($adSrv) returned NO current ad data after 2 attempts on $asofS. Likely an API or network issue. The board was left at its last good state - nothing was republished. Check pull-grocery-ads.ps1 and ad-cycle-log.txt on the machine."
         try { Send-Alert -Subject "Grocery pull FAILED (server stores) - $asofS" -Body $bdy | Out-Null } catch { Log ("alert send threw: " + $_.Exception.Message) }
       }
     }
@@ -1367,7 +1371,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if ($carrUnk.Count) {
           Log ('CARRIAGE: ' + $carrUnk.Count + ' LIVE recipe(s) have an ingredient whose carriage is UNKNOWN - a could-not-look, never a takedown')
           $summary += ('REVIEW    ' + $carrUnk.Count + ' live recipe(s) have an ingredient whose Omaha carriage is UNKNOWN - resolve it by asking the stores, do not take them down (audit-carriage.ps1)')
-          if (-not $NoAlert) { try { Send-Alert -Subject ("Live recipe(s) whose Omaha carriage is UNKNOWN - resolve, do not take down") -Body (("The standing carriage watch found {0} PUBLISHED recipe(s) with an ingredient whose carriage is UNKNOWN: no Omaha store is proven to carry it and none is proven not to. Usually the board lost the in-store cell that proved it, or no store was ever asked the right wording.`n`nUNKNOWN is a could-not-look, never an answer, so NOTHING comes down for it (UNCHECKED IS NEVER NOT-CARRIED). Resolve each ingredient by asking the stores: Hy-Vee, Family Fare and Baker's answer headlessly, and ONE store proven to carry it settles it. Record a proven answer in grocery\carriage.json. Only an ingredient proven NOT-CARRIED at all seven stores takes a recipe down, and that arrives as its own alert.`n`n{1}" -f $carrUnk.Count, (($carrUnk | Select-Object -First 12) -join "`n"))) | Out-Null } catch {} }
+          # the headless stores from stores.json (pull_profile.surface 'server ...'), never a copy here: convert on touch
+          # (Brad, 2026-09-19, backlog I192; queue 2026-09-19-405c73, plan-2026-09-21-5.json)
+          $carrHl = 'the server-API stores (stores.json unreadable)'
+          try { $carrHl = (@(@((ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'stores.json')))).stores) | Where-Object { $_.pull_profile -and ([string]$_.pull_profile.surface) -match '^server' } | ForEach-Object { [string]$_.name }) -join ', ') } catch { }
+          if (-not $NoAlert) { try { Send-Alert -Subject ("Live recipe(s) whose Omaha carriage is UNKNOWN - resolve, do not take down") -Body (("The standing carriage watch found {0} PUBLISHED recipe(s) with an ingredient whose carriage is UNKNOWN: no Omaha store is proven to carry it and none is proven not to. Usually the board lost the in-store cell that proved it, or no store was ever asked the right wording.`n`nUNKNOWN is a could-not-look, never an answer, so NOTHING comes down for it (UNCHECKED IS NEVER NOT-CARRIED). Resolve each ingredient by asking the stores: {2} answer headlessly, and ONE store proven to carry it settles it. Record a proven answer in grocery\carriage.json. Only an ingredient proven NOT-CARRIED at all seven stores takes a recipe down, and that arrives as its own alert.`n`n{1}" -f $carrUnk.Count, (($carrUnk | Select-Object -First 12) -join "`n"), $carrHl)) | Out-Null } catch {} }
         }
         if ($carrRev.Count) {
           Log ('CARRIAGE: ' + $carrRev.Count + ' drafted recipe(s) are now unblocked')

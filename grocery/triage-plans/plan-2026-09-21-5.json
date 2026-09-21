@@ -1,0 +1,267 @@
+{
+  "generated": "2026-09-21T12:40:00",
+  "round": 1,
+  "board_week": "2026-09-21",
+  "queue_ids_seen": [
+    "2026-09-21-3e07eb",
+    "2026-09-19-405c73",
+    "discovered:catch-all-alerts-2026-09-21"
+  ],
+  "note": "OPS LANE, JOB 1, single agent, no reviewer, approved directly by Brad ('Do 1-3 in order', item 1 of 3). The daily scheduled triage is paused until 2026-09-24. Brad's question: 'we aren't actually resolving the holistic issue (Why do these types of alerts keep firing?) and instead resolving the specific issue.' The measured answer for two of the four suspected catch-all types is that the TYPE was a bucket: the capture watchdog filed 16 distinct conditions under one type key in 30 days, and every new cause counted as a RETURN no fix could close. Knowledge consulted: searched 'alert per condition', 'dedupe key', 'catch-all alert' (knowledge-search --multi). Used data-quality-craft/checks-and-thresholds.md section 7 ('A firing check is not yet an alert': alert fatigue is a design defect; alert only where a human has to act), reliability-craft/MAP.md section 4 ('An alert is not a check that fired': an alert names what, where, impact, actions; a condition that needs nothing is a log line), and software-craft/applies-here.md on the ruled fixture vocabulary (MUST FIRE, MUST NOT FIRE, CLEAN TWIN as a positive assertion).",
+  "items": [
+    {
+      "queue_id": "discovered:catch-all-alerts-2026-09-21",
+      "subject": "Four recurring alert types are catch-all buckets ('N issue(s)'), not conditions, so a cause can never be closed",
+      "classification": "infra",
+      "evidence": [
+        "MEASURED over the 30 days ending 2026-09-21 from grocery/triage-queue.json plus grocery/out/archive/triage-queue.archived-2026-09-17.json (every item and every recurrence of the four types dated 2026-08-22 or later), splitting each body into its issue lines and keying each line by its leading label (Get-AlertConditionKey). Bodies were truncated at 1,500 characters and recurrences at 400, so every count below is a LOWER bound.",
+        "Grocery capture watchdog: N issue(s) - 21 days with a readable body, 16 DISTINCT conditions: RUN RECORD 18 days, FAILED 10, AD STALE 4, COMPUTED BUT NOT SHIPPED 4, NO BOARD FOR TODAY 4, NOT PUBLISHED 3, BROWSER WORK STALE 2, ROLLBACK PAST TTL 2, NO FRESH ROWS 2, and DID NOT RUN, BOARD IS STALE, GRAPH SCHEMA, MISSING-WINDOW, NEVER REACHED MAIN, GRAPH SHAPE and HELD BY GUARDS once each. The finding is PROVEN for this type.",
+        "Automation silent-death: N issue(s) - 12 days, 8 DISTINCT conditions: TASK STALE 4 days, TASK FAILED 3, RUN DID NOT LAND 3, TASK MISSING 2, TASK UNWATCHED 2, OUTPUT NOT CURRENT 1, OUTPUT MISSING 1, OUTPUT STALE 1. PROVEN.",
+        "Grocery: store-registry drift - N issue(s) - 12 days, 2 conditions: a hardcoded store list in a script (9 days, 22 lines) and an unregistered out/regular file prefix (4 days, 16 lines, all 2026-08-22 to 08-26). WEAK: it is mostly ONE condition re-firing on new sites, so its returns were mostly real returns.",
+        "Grocery: Family Fare catalog is degrading - N signal(s) - 12 days: 11 days carried ONE signal ('only N row(s) re-verified', an arm the current code no longer emits), 1 day 'sweep is not buying', 1 day unreadable. DISPROVEN for this type: it was one miscalibrated signal, already review-class under ruling R15, not a bucket.",
+        "The census row for the capture watchdog (20 days fired, 12 returns) is therefore a count of a dozen unrelated causes. Its bodies were mostly healthy lines: the 2026-09-21 body carried 1 problem line and 14 'Healthy checks' lines."
+      ],
+      "root_cause": "the four emitters each sent ONE alert per run whose subject was '<emitter>: N issue(s)', and send-alert.ps1 derives the queue type, dedupe key and return count from the subject with the number stripped. So the unit of triage was the emitter, not the condition: unrelated causes shared one id lineage, each new cause was scored as a RETURN of a type triage had already closed, no single cause's fix could ever close the type, and the body buried the one problem line among healthy lines",
+      "root_fix": {
+        "what": "make the unit of triage ONE condition: each finding's leading label becomes its own subject, type key, registry entry (class and hold chosen per condition), queue item and return count; the old aggregate types retire. The inbox does not multiply: each condition goes through the real send-alert.ps1 with a new -DeferMail switch that runs the queue write, class, hold and daily gate and prints MAIL-DUE instead of mailing, and the emitter run then sends ONE digest-class message listing every due condition through the same send-alert.ps1 (-MarkSentTypes records each listed condition as mailed today). Healthy lines leave the bodies and stay in the emitter's own transcript or report, which each body points at.",
+        "files": [
+          "grocery/alert-lib.ps1",
+          "grocery/send-alert.ps1",
+          "grocery/capture-watchdog.ps1",
+          "grocery/health-heartbeat.ps1",
+          "grocery/audit-store-registry.ps1",
+          "grocery/pull-regular-familyfare.ps1",
+          "grocery/alert-registry.json"
+        ],
+        "exact_change": "alert-lib.ps1 adds Get-AlertConditionKey (leading label up to ': ', else the first four words) and Send-AlertConditions (groups findings by label, one send-alert.ps1 -DeferMail call per condition, then one -Force digest send listing the MAIL-DUE ones plus any condition whose sender failed). send-alert.ps1 adds -DeferMail (after the hold gate, before the mute: a daily-gate check, then 'MAIL-DUE <type>' and exit 0) and -MarkSentTypes (appended to the sent-file after a successful send). The four emitters call Send-AlertConditions instead of one Send-Alert; the watchdog's hold body and condition bodies carry a pointer to the run transcript instead of 14 healthy lines; 'could not ask git ...' is labelled REACHED-MAIN CHECK FAILED. alert-registry.json gains 66 condition entries and 4 digest entries (split_from plan-2026-09-21-5.json), and the four aggregate entries carry a 'retired' line and stay so their 30 days of queue history still resolve."
+      },
+      "leaves_open": "grocery/audit-alert-registry.ps1's SOURCE half follows Send-Alert subjects only, so it cannot read a Send-AlertConditions call site: a condition label added to an emitter tomorrow is not checked at push time. It has happened 0 times; send-alert.ps1 pages an unmapped condition as 'UNREGISTERED ALERT TYPE' on its first firing, and the audit's -Queue half, run daily by check-ad-cycles' alert-registry lane, fails on it the same day",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/audit-alert-registry.ps1",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no board, price, match or display rule is touched. The change routes ALERTS: 4 emitter call sites, one new send-alert.ps1 path behind two default-off switches (every other caller is byte-for-byte the old path), and 70 new registry entries. grocery/audit-alert-registry.ps1 (source half) exit 0: 190 entries, 88 call sites, 97 readable subjects, findings=0. Its -Queue half exits 2 on 21 queue types that are all pre-existing weekly-lane residual subjects and none of them one of these four types.",
+        "affected_now": 4,
+        "names": [
+          "grocery capture watchdog issue s",
+          "automation silent death issue s",
+          "grocery store registry drift issue s",
+          "grocery family fare catalog is degrading signal s"
+        ],
+        "risk": "the census groups by type key, so each new condition key starts with no history and the four old keys stop growing: that is the point (a return now means the SAME condition came back), and it is said here so nobody reads the drop as an improvement. A condition label an emitter adds later is unregistered until someone registers it, and pages with the UNREGISTERED marker meanwhile. The heartbeat's once-per-change signature still gates its whole run, so its conditions keep hold 1 (a held condition there would never be observed twice).",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-21 between 11:45 and 12:40 against origin/main 01f6067fc and the queue as it stood then. If a new catch-all subject appears (a subject carrying a bare count of issues, signals or findings), measure its conditions the same way before splitting it.",
+      "proof": {
+        "guard_or_fixture": "grocery/send-alert.ps1 -SelfTest (the sandbox cases under 'ONE CONDITION, ONE ALERT TYPE', driving alert-lib's Send-AlertConditions against the sandbox's real send-alert.ps1, frozen registry, fixture queue lock and mute on)",
+        "must_fire_case": "MUST FIRE two distinct conditions from one emitter run become two queue items with two type keys (RUN RECORD and NO FRESH ROWS, the 2026-09-20 founding pair); MUST FIRE and the run sends ONE message, a digest listing both, under 'Fixture emitter: 2 condition(s) need action 2026-09-21'; MUST FIRE a re-firing condition absorbs into its own existing id (still 2 items, same id, count 2)",
+        "clean_twin": "CLEAN TWIN a condition body carries its problem line and the pointer to the full report. Beside it: MUST NOT FIRE a run with only healthy lines raises nothing (no condition, no message, the queue byte-identical); MUST NOT FIRE a condition body carries no other condition's line and no healthy line; MUST NOT FIRE the condition that did not re-fire keeps count 1; MUST NOT FIRE a review-class condition is queued as its own item and sends no message at all",
+        "fixture_occurrences": [
+          "2026-09-20-7bac4b",
+          "2026-09-21-3e07eb"
+        ],
+        "commands": [
+          "powershell -NoProfile -File grocery\\send-alert.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\alert-lib.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\capture-watchdog.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\health-heartbeat.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\audit-store-registry.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\audit-alert-registry.ps1"
+        ]
+      },
+      "rollback": "revert the seven files. No queue item is rewritten and nothing is migrated; the aggregate registry entries were kept, so a revert pages the old types exactly as before.",
+      "do_not_touch": [
+        "grocery/guards.ps1",
+        "grocery/compare-deals.ps1",
+        "grocery/commodities.json",
+        "grocery/price-bands.json",
+        "the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"
+      ],
+      "resolution_note": "The finding held for the two types that actually were buckets and failed for the other two, and both results are recorded. The capture watchdog carried 16 distinct conditions under one type in 30 days and the heartbeat 8; store-registry drift was mostly one condition (a hardcoded store list) and Family Fare was one miscalibrated signal on 11 of 12 days. All four now emit one type per condition anyway, because the unit of triage should be a condition whether or not a given emitter happened to mix them. Inbox decision: one message per emitter run, not one per condition, through the same send-alert.ps1 and only after every condition's queue write; the tradeoff is that a mute now applies to that one message rather than per condition, and a digest send that fails leaves its conditions queued but unmailed, which is logged loudly as ALERT FAILED TO SEND. Per-condition holds: board-or-feed-wrong conditions and blind-watcher conditions page on the first observation; scheduled-work conditions that can clear on the next run keep the watchdog's hold of 2; hygiene, forecast and advance-notice conditions are review. The census starts fresh history for every new key, which is the point.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "partly true: the dispatch's premise that the four types were catch-all buckets was measured type by type. True for the capture watchdog (16 conditions) and silent-death (8); weak for store-registry drift (2 conditions, one dominant) and false for Family Fare (one signal on 11 of 12 days).",
+      "deviation": "Family Fare and store-registry drift were split too although the measurement shows they were not really buckets: the split costs them nothing (both stay review-class, so no mail changes) and keeps one rule for every emitter.",
+      "shipped_commit": "this plan's own commit; resolver: git log --diff-filter=A --format=%h -- grocery/triage-plans/plan-2026-09-21-5.json"
+    },
+    {
+      "queue_id": "2026-09-21-3e07eb",
+      "subject": "Grocery capture watchdog: 1 issue(s) 2026-09-21",
+      "classification": "infra",
+      "evidence": [
+        "The one problem line: 'RUN RECORD: capture-run [ad] completed with exit 1 - see grocery\\out\\logs\\capture-run-ad-2026-09-21.log'. That log ends 'FAILED LANES: push', 'elapsed 804 s', 'run-log: finished 2026-09-21T07:13:25 rc=1'. The push was the one the pre-push gate refused over the Sam's 35 lb oil jugs.",
+        "That cause was fixed at its source in plan-2026-09-21-3.json: 965fff1a9 'Sam's builder refuses a back-computed size the product cannot physically have' landed on origin/main at 08:24.",
+        "PROOF THAT PUSHES FLOW AGAIN: the pipeline bot's own commit 5d842a7f8 'Daily pipeline: refresh prices + feed (2026-09-21) [daily]' is on origin/main at 08:44, twenty minutes after the fix, and df1d6429e (the [ad] run's commit) is on origin/main too; seven more pushes landed through the same pre-push gate by 11:37.",
+        "The other 14 lines of the body were healthy checks, the catch-all shape the discovered item removes."
+      ],
+      "surface_fix": {
+        "what": "none needed today: the refused push's cause was fixed in plan-2026-09-21-3.json and the pipeline has pushed since",
+        "files": [],
+        "exact_change": "no change for the instance; re-measured only"
+      },
+      "root_cause": "a fourth unrelated cause filed under the catch-all type 'grocery capture watchdog issue s', which is why it registered as a RETURN (third in three days) of a type whose earlier closes each fixed a different cause",
+      "root_fix": {
+        "what": "the watchdog now emits one type per condition (see discovered:catch-all-alerts-2026-09-21), so the next occurrence of this cause is 'grocery capture watchdog run record' with its own return count, and no longer a return of GRAPH SCHEMA's or NO FRESH ROWS' close",
+        "files": [
+          "grocery/capture-watchdog.ps1",
+          "grocery/alert-lib.ps1",
+          "grocery/send-alert.ps1",
+          "grocery/alert-registry.json"
+        ],
+        "exact_change": "capture-watchdog.ps1 sends @($plan.independent) through Send-AlertConditions with the prefix 'Grocery capture watchdog' and a pointer to the run transcript; RUN RECORD is registered page, condition 3, hold_observations 2"
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "prior_closes": [
+        "2026-09-18-d23cfd",
+        "2026-09-19-fc46c7",
+        "2026-09-20-7bac4b"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/capture-watchdog.ps1",
+          "grocery/alert-lib.ps1",
+          "grocery/send-alert.ps1"
+        ],
+        "what": "the fix is at the emitting check: the watchdog no longer files unrelated causes under one type, so a close of one cause can no longer be scored as failing when a different cause fires the next day",
+        "exact_change": "Send-AlertConditions in alert-lib.ps1, -DeferMail and -MarkSentTypes in send-alert.ps1, and the watchdog's send block, as in the discovered item"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "same change as the discovered item; no board, price or match rule touched",
+        "affected_now": 1,
+        "names": [
+          "grocery capture watchdog issue s"
+        ],
+        "risk": "as in the discovered item",
+        "cell_effects": []
+      },
+      "freshness": "origin/main read at 12:30 on 2026-09-21; if a later capture-run log ends 'FAILED LANES: push' again, the cause is new and gets its own RUN RECORD item",
+      "proof": {
+        "guard_or_fixture": "grocery/send-alert.ps1 -SelfTest",
+        "must_fire_case": "MUST FIRE two distinct conditions from one emitter run become two queue items with two type keys (RUN RECORD, the condition this item carried, and NO FRESH ROWS, from 2026-09-20-7bac4b)",
+        "clean_twin": "CLEAN TWIN a condition body carries its problem line and the pointer to the full report",
+        "fixture_occurrences": [
+          "2026-09-18-d23cfd",
+          "2026-09-19-fc46c7",
+          "2026-09-20-7bac4b",
+          "2026-09-21-3e07eb"
+        ],
+        "commands": [
+          "powershell -NoProfile -File grocery\\send-alert.ps1 -SelfTest",
+          "git log origin/main --since=2026-09-21T07:00 --format=%h %ci %an %s"
+        ]
+      },
+      "rollback": "as in the discovered item",
+      "do_not_touch": [
+        "grocery/guards.ps1",
+        "grocery/build-sams-deals.ps1 (fixed in plan-2026-09-21-3.json)"
+      ],
+      "resolution_note": "Closed on re-measurement. The refused ad push (FAILED LANES: push at 07:13) was the Sam's oil-jug refusal fixed at cause in plan-2026-09-21-3.json (965fff1a9, 08:24); the pipeline bot's [daily] commit 5d842a7f8 reached origin/main at 08:44 and seven more pushes landed through the same gate by 11:37, so pushes flow. The reason this counted as a RETURN is fixed at the emitter: the watchdog now files each condition as its own type. Noted for whoever reads that type next, not left open here: RUN RECORD was the watchdog's most frequent condition (18 of 21 days) because capture-run exits 1 for any failed lane, so after the split its returns are real returns of capture-run failures, each with its own cause in the run log.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "true: the capture-run log names the push lane, and origin/main carries the pipeline's own commit after the fix",
+      "deviation": null,
+      "shipped_commit": "this plan's own commit; resolver: git log --diff-filter=A --format=%h -- grocery/triage-plans/plan-2026-09-21-5.json"
+    },
+    {
+      "queue_id": "2026-09-19-405c73",
+      "subject": "Grocery: store-registry drift - 2 issue(s)",
+      "classification": "infra",
+      "evidence": [
+        "Re-measured with powershell -File grocery\\audit-store-registry.ps1 before any change: exit 2, 'store-registry: 1 drift issue(s): code: check-ad-cycles.ps1:1370 names 3 store(s) but is missing Aldi, Fareway, Sam's Club, Walmart'. The item's first two issues (test-auditors.ps1:1431 and test-capture-policy.ps1:503, both fixtures) and its 2026-09-21 recurrence at check-ad-cycles.ps1:1320 no longer fire.",
+        "check-ad-cycles.ps1:1370 is the carriage-UNKNOWN alert body, which named 'Hy-Vee, Family Fare and Baker's' as the stores that answer headlessly: a live copy of a fact stores.json already holds (pull_profile.surface 'server API' on exactly those three).",
+        "Brad's rule (2026-09-19, backlog I192, .claude/rules/grocery.md): a script you touch that holds its own copy of the store list reads stores.json instead, in the same change. This change touches check-ad-cycles.ps1 and capture-watchdog.ps1, and each held one more copy under an allowed_subsets exemption: check-ad-cycles.ps1:665 '(Hy-Vee / Aldi / Family Fare)' (the stores whose capture is 'server ...') and capture-watchdog.ps1's $HEADLESS_LANES = @('Hy-Vee', \"Baker's\", 'Family Fare')."
+      ],
+      "surface_fix": {
+        "what": "derive the headless-store names in the carriage-UNKNOWN body from stores.json",
+        "files": [
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "exact_change": "$carrHl = the names of stores whose pull_profile.surface starts 'server', joined; the body's '{2} answer headlessly' reads it"
+      },
+      "root_cause": "store lists copied by hand into scripts and alert prose; each copy is a second record of a fact stores.json owns, and each new one fires this audit",
+      "root_fix": {
+        "what": "convert every copy this change touches to read stores.json, and drop the two allowed_subsets exemptions that covered them, so the exemption list cannot hide a re-hardcoded list at those sites",
+        "files": [
+          "grocery/check-ad-cycles.ps1",
+          "grocery/capture-watchdog.ps1",
+          "grocery/stores.json"
+        ],
+        "exact_change": "check-ad-cycles.ps1:665 builds $adSrv from stores whose capture starts 'server'; capture-watchdog.ps1 builds $HEADLESS_LANES from stores whose pull_profile.surface starts 'server' and adds a HEADLESS LANES UNKNOWN finding when that read names none; stores.json loses the allowed_subsets entries for check-ad-cycles.ps1 'The daily server-side grocery pull' and capture-watchdog.ps1 '$HEADLESS_LANES'"
+      },
+      "leaves_open": "nothing for this item: audit-store-registry.ps1 exits 0 after the change. Copies in scripts nobody has touched stay under check 5 of that audit, by the convert-on-touch rule",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/audit-store-registry.ps1",
+      "prior_closes": [
+        "2026-08-22-2c3e88",
+        "2026-08-31-6e6335",
+        "2026-09-03-494974",
+        "2026-09-05-17ebe3",
+        "2026-09-09-34557a"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/audit-store-registry.ps1",
+          "grocery/check-ad-cycles.ps1",
+          "grocery/capture-watchdog.ps1"
+        ],
+        "what": "the copies are removed at their producers (the scripts that held them) rather than exempted in data, and the audit's alert now files each kind of drift as its own type, so a hardcoded list and an unregistered file prefix no longer return as each other",
+        "exact_change": "three store-list copies read stores.json; audit-store-registry.ps1 sends its issues through Send-AlertConditions with six named labels"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "the changed lines build alert prose and the watchdog's list of lanes to indict for zero fresh rows; the stores.json read yields Hy-Vee, Family Fare and Baker's (pull_profile.surface 'server API') and Hy-Vee, Aldi and Family Fare (capture 'server ...'), the same sets the literals held. No pull, price or board rule reads these.",
+        "affected_now": 3,
+        "names": [
+          "grocery/check-ad-cycles.ps1:665",
+          "grocery/check-ad-cycles.ps1:1370",
+          "grocery/capture-watchdog.ps1 $HEADLESS_LANES"
+        ],
+        "risk": "if stores.json cannot be read the prose says so and the watchdog adds a HEADLESS LANES UNKNOWN finding instead of silently indicting no lane",
+        "cell_effects": []
+      },
+      "freshness": "audit-store-registry.ps1 run at 12:05 and again after the change on 2026-09-21",
+      "proof": {
+        "guard_or_fixture": "grocery/audit-store-registry.ps1 (live run) and its -SelfTest",
+        "must_fire_case": "before the change the live run exits 2 naming check-ad-cycles.ps1:1370 (this item's founding line shape, a hardcoded store list); the audit's own -SelfTest carries its frozen must-fire cases and exits 0",
+        "clean_twin": "after the change the live run exits 0: 'store-registry: OK 7 stores; board, files, schedule and live scripts all agree'",
+        "fixture_occurrences": [
+          "2026-08-22-2c3e88",
+          "2026-08-31-6e6335",
+          "2026-09-03-494974",
+          "2026-09-05-17ebe3",
+          "2026-09-09-34557a",
+          "2026-09-19-405c73"
+        ],
+        "commands": [
+          "powershell -NoProfile -File grocery\\audit-store-registry.ps1",
+          "powershell -NoProfile -File grocery\\audit-store-registry.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "revert grocery/check-ad-cycles.ps1, grocery/capture-watchdog.ps1 and grocery/stores.json together (the exemptions come back with the literals)",
+      "do_not_touch": [
+        "grocery/commodities.json",
+        "stores.json store rows (only two allowed_subsets entries were removed)"
+      ],
+      "resolution_note": "Real drift, fixed at cause. The one live finding was check-ad-cycles.ps1:1370, the carriage-UNKNOWN alert naming the three headless stores by hand; it now reads them from stores.json. By the convert-on-touch rule the two other copies in files this change touched (check-ad-cycles.ps1:665 and the watchdog's $HEADLESS_LANES) read stores.json too, and their two exemptions are gone. audit-store-registry.ps1: exit 2 before, exit 0 after.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "true: re-measured before acting; one real drift remained of the item's four lines",
+      "deviation": null,
+      "shipped_commit": "this plan's own commit; resolver: git log --diff-filter=A --format=%h -- grocery/triage-plans/plan-2026-09-21-5.json"
+    }
+  ],
+  "ship_sequence": [
+    "discovered:catch-all-alerts-2026-09-21: measure the conditions per catch-all type from the queue and the archive (scratch harness, keyed by Get-AlertConditionKey)",
+    "discovered:catch-all-alerts-2026-09-21: alert-lib.ps1 Send-AlertConditions + send-alert.ps1 -DeferMail/-MarkSentTypes, then send-alert.ps1 -SelfTest and alert-lib.ps1 -SelfTest (MUST be 0)",
+    "discovered:catch-all-alerts-2026-09-21: the four emitters, then each emitter's -SelfTest (MUST be 0)",
+    "discovered:catch-all-alerts-2026-09-21: alert-registry.json entries, then audit-alert-registry.ps1 (MUST be 0, findings=0)",
+    "2026-09-19-405c73: check-ad-cycles.ps1, capture-watchdog.ps1 and stores.json store-list copies, then audit-store-registry.ps1 (MUST be 0)",
+    "2026-09-21-3e07eb: re-measure only (capture-run log, origin/main after 965fff1a9)",
+    "validate-triage-plan.ps1 -Plan <this> -OpenIds <the three>, then -Closing, then triage-close.ps1 for the two queue ids",
+    "commit by pathspec + push (the pre-push hook runs ops/run-gates.ps1)"
+  ],
+  "open_questions_for_brad": []
+}

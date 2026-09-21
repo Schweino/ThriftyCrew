@@ -309,11 +309,6 @@
       "reason": "deliberately excludes Family Fare - the only store whose gaps self-heal headless"
     },
     {
-      "file": "check-ad-cycles.ps1",
-      "contains": "The daily server-side grocery pull",
-      "reason": "alert body names only the three server-pull stores"
-    },
-    {
       "file": "build-deals-page.ps1",
       "contains": "neither posts everyday brand prices online",
       "reason": "site copy for the everyday-brand section, which by design excludes Aldi/Fareway"
@@ -401,12 +396,6 @@
       "file": "capture-run.ps1",
       "contains": "$BROWSER_DRIVER_KEYS",
       "reason": "the three lanes pull-browser-stores.py drives over CDP (Walmart, Sam's Club, Fareway). The headless stores have no driver key by design. Confirmed 2026-08-30.",
-      "reviewed": "2026-08-30"
-    },
-    {
-      "file": "capture-watchdog.ps1",
-      "contains": "$HEADLESS_LANES",
-      "reason": "the three server-pull lanes, deliberately the complement of the bot-walled browser lanes, which are judged on row AGE instead because zero rows on a given day is normal for them. Confirmed 2026-08-30.",
       "reviewed": "2026-08-30"
     },
     {

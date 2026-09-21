@@ -174,6 +174,121 @@ function Send-Alert {
   }
 }
 
+# ---- ONE CONDITION, ONE ALERT TYPE (2026-09-21, plan-2026-09-21-5.json) ------------------------------------------
+# Four emitters used to page as one catch-all type per run: "Grocery capture watchdog: N issue(s)", "store-registry
+# drift - N issue(s)", "Family Fare catalog is degrading - N signal(s)", "Automation silent-death: N issue(s)". The type
+# key strips the number, so every unrelated cause filed under one name: measured over the 30 days ending 2026-09-21 the
+# capture watchdog alone carried 7 distinct conditions under one type (RUN RECORD, AD STALE, NO FRESH ROWS, GRAPH
+# SCHEMA, ...), each new cause counted as a RETURN of a type triage had already closed, and no one cause's fix could
+# ever close the type. The unit of triage is now ONE CONDITION: its own subject, registry entry, dedupe key and return
+# count. The body carries the condition's own lines and a pointer to the emitter's full report; healthy lines stay in
+# that report.
+#
+# THE INBOX DOES NOT MULTIPLY. Each condition goes through the real send-alert.ps1 with -DeferMail: the durable queue
+# write, the registry class, hold_observations and the once-per-type-per-day gate all run per condition exactly as for
+# any alert, and a condition that would have mailed prints MAIL-DUE instead of sending. Then ONE digest-class message
+# per emitter run lists every due condition, sent through the same send-alert.ps1 (the only delivery path) with
+# -MarkSentTypes so each listed condition counts as mailed today. Every queue write happens before that one send.
+# A condition whose sender failed outright is listed in the digest anyway: a condition this lib could not record pages.
+
+function Get-AlertConditionKey {
+  # The condition a finding line reports: its leading label up to the first ': ' ("RUN RECORD: capture-run ..." ->
+  # "RUN RECORD"). A line with no short label keeps its first four words, so it is still its own condition.
+  param([string]$Line)
+  $t = ([string]$Line).Trim()
+  $m = [regex]::Match($t, '^([A-Za-z][A-Za-z \-\\.'']{0,60}?):\s')
+  if ($m.Success) { return $m.Groups[1].Value.Trim() }
+  return ((@($t -split '\s+') | Select-Object -First 4) -join ' ')
+}
+
+function Send-AlertConditions {
+  param(
+    # The emitter's name, e.g. 'Grocery capture watchdog'. Each condition's subject is '<prefix>: <label>'.
+    [Parameter(Mandatory = $true)][string]$SubjectPrefix,
+    # Finding lines. A string is keyed by Get-AlertConditionKey; an object carrying Label and Text keeps its Label.
+    [object[]]$Conditions = @(),
+    # One line under every condition body: where the full report (healthy checks included) lives.
+    [string]$ReportPointer = '',
+    # Appended to each subject, e.g. today's date. The type key strips it.
+    [string]$DateStamp = '',
+    # Fixture seams: passed to every send-alert.ps1 call (a self-test passes its own -QueueMutexName).
+    [string[]]$SenderArgs = @()
+  )
+  $res = [pscustomobject]@{ conditions = 0; due = @(); failed = @(); digest_rc = -1; rc = 0 }
+  $groups = [ordered]@{}
+  foreach ($c in @($Conditions)) {
+    if ($null -eq $c) { continue }
+    $label = ''; $text = ''
+    if ($c -is [string]) { $text = $c; $label = Get-AlertConditionKey $c }
+    else { $text = [string]$c.Text; $label = [string]$c.Label; if (-not $label) { $label = Get-AlertConditionKey $text } }
+    if (-not $text.Trim()) { continue }
+    if (-not $groups.Contains($label)) { $groups[$label] = New-Object System.Collections.Generic.List[string] }
+    [void]$groups[$label].Add($text.Trim())
+  }
+  $res.conditions = $groups.Count
+  if ($groups.Count -eq 0) { $global:LASTEXITCODE = 0; return $res }
+  $saPick = Get-AlertSenderPath -LibDir $script:ALERT_LIB_DIR
+  $emArgs = @()
+  try {
+    $frames = @(Get-PSCallStack | Where-Object { $_.ScriptName -and ($_.ScriptName -notmatch '[\\/]alert-lib\.ps1$') })
+    if ($frames.Count) { $emArgs = @('-Emitter', [string]$frames[0].ScriptName) }
+  } catch { $emArgs = @() }
+  $spoolDir = if ($env:TEMP -and (Test-Path $env:TEMP)) { $env:TEMP } else { $script:ALERT_LIB_DIR }
+  $due = New-Object System.Collections.Generic.List[object]
+  $tmps = New-Object System.Collections.Generic.List[string]
+  try {
+    foreach ($label in $groups.Keys) {
+      $subj = ($SubjectPrefix + ': ' + $label + $(if ($DateStamp) { ' ' + $DateStamp } else { '' }))
+      $body = (($groups[$label] | ForEach-Object { ' - ' + $_ }) -join "`n")
+      if ($ReportPointer) { $body += "`n`n" + $ReportPointer }
+      $bf = Join-Path $spoolDir ('smp-alert-cond-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '.txt')
+      [void]$tmps.Add($bf)
+      [IO.File]::WriteAllText($bf, $body, (New-Object Text.UTF8Encoding($false)))
+      $out = @()
+      $rc = 9
+      try {
+        $out = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $saPick.Path -Subject $subj -BodyFile $bf -DeferMail @emArgs @SenderArgs)
+        $rc = $LASTEXITCODE
+      } catch { $out = @('send-alert.ps1 NEVER RAN: ' + $_.Exception.Message); $rc = 9 }
+      $dueLine = @($out | Where-Object { ([string]$_) -match '^MAIL-DUE ' })
+      if ($dueLine.Count) { [void]$due.Add([pscustomobject]@{ label = $label; subject = $subj; type = ([string]$dueLine[0]).Substring(9).Trim(); body = $body; note = '' }) }
+      elseif ($rc -ne 0) {
+        # fail toward page: this condition may not be in the queue at all, so it goes in the one message
+        $res.failed += $label
+        [void]$due.Add([pscustomobject]@{ label = $label; subject = $subj; type = ''; body = $body; note = ('send-alert.ps1 exited ' + $rc + ' for this condition, so its queue item may not exist') })
+        Write-AlertLog ('ALERT FAILED TO SEND [' + $subj + '] - send-alert.ps1 exited ' + $rc + '; it is listed in the digest instead. ' + (($out | Select-Object -Last 2) -join ' | '))
+      }
+    }
+    $res.due = @($due.ToArray())
+    if ($due.Count -eq 0) { $global:LASTEXITCODE = 0; return $res }
+    $dSubj = ($SubjectPrefix + ': ' + $due.Count + ' condition(s) need action' + $(if ($DateStamp) { ' ' + $DateStamp } else { '' }))
+    $dBody = ($SubjectPrefix + ' - ' + $due.Count + " condition(s). Each is its own triage-queue item with its own type.`n")
+    foreach ($d in $due) {
+      $dBody += "`n[" + $d.label + "]`n" + $d.body + "`n"
+      if ($d.note) { $dBody += '   (' + $d.note + ")`n" }
+    }
+    $dbf = Join-Path $spoolDir ('smp-alert-digest-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '.txt')
+    [void]$tmps.Add($dbf)
+    [IO.File]::WriteAllText($dbf, $dBody, (New-Object Text.UTF8Encoding($false)))
+    $mark = (@($due | Where-Object { $_.type } | ForEach-Object { $_.type }) -join '|')
+    $mArgs = @()
+    if ($mark) { $mArgs = @('-MarkSentTypes', $mark) }
+    $dOut = @()
+    try {
+      $dOut = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $saPick.Path -Subject $dSubj -BodyFile $dbf -Force @mArgs @emArgs @SenderArgs)
+      $res.digest_rc = $LASTEXITCODE
+    } catch { $res.digest_rc = 9; $dOut = @($_.Exception.Message) }
+    $res | Add-Member -NotePropertyName digest_out -NotePropertyValue (($dOut | ForEach-Object { [string]$_ }) -join ' | ')
+    if ($res.digest_rc -ne 0) { Write-AlertLog ('ALERT FAILED TO SEND [' + $dSubj + '] - send-alert.ps1 exited ' + $res.digest_rc + '. The conditions are queued; the one message listing them did not go out.') }
+    $res.rc = $res.digest_rc
+    if ($res.failed.Count -and $res.rc -eq 0) { $res.rc = 1 }
+    $global:LASTEXITCODE = $res.rc
+    return $res
+  } finally {
+    foreach ($t in $tmps) { try { Remove-Item -LiteralPath $t -Force -ErrorAction SilentlyContinue } catch {} }
+  }
+}
+
 # Use the caller's own logger when it has one (check-ad-cycles, run-daily-local and bakers-daily-scan each
 # define a lock-tolerant Log), so a failed send lands in the same file as the failure that triggered it.
 # Scripts with no logger are report-style: their stdout IS the record, and a dead page belongs in it.

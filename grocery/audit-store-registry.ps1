@@ -517,7 +517,20 @@ if ($Alert) {
   $sigH = [BitConverter]::ToString([Security.Cryptography.MD5]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes($sig))) -replace '-',''
   if ($sigH -ne $prev) {
     try {
-      Send-Alert -Subject ("Grocery: store-registry drift - " + $issues.Count + " issue(s)") -Body ("audit-store-registry.ps1 found hardcoded store lists or data out of lockstep with stores.json: " + (($issues | Select-Object -First 12) -join ' | ') + ". Fix the listed script/data or document a legitimate subset in stores.json allowed_subsets.") | Out-Null
+      # ONE CONDITION, ONE ALERT TYPE (2026-09-21, plan-2026-09-21-5.json): each kind of drift is its own type and
+      # queue item, so a hardcoded list in a script and a store missing from the board never file as returns of each
+      # other. Measured over the 30 days ending 2026-09-21: 2 distinct kinds under the one "N issue(s)" type.
+      $srConds = @($issues | ForEach-Object {
+        $t = [string]$_
+        $lb = if ($t -match '^code:') { 'hardcoded store list' }
+              elseif ($t -match '^(ORPHANED EXEMPTION|allowed_subsets:)') { 'orphaned store-subset exemption' }
+              elseif ($t -match '^registry:') { 'duplicate registry name' }
+              elseif ($t -match '^board:') { 'board and registry disagree' }
+              elseif ($t -match '^out\\regular:') { 'unregistered capture file prefix' }
+              elseif ($t -match '^ad-schedule\.json:') { 'ad schedule names an unregistered store' }
+              else { Get-AlertConditionKey $t }
+        [pscustomobject]@{ Label = $lb; Text = $t } })
+      Send-AlertConditions -SubjectPrefix 'Grocery: store-registry drift' -Conditions $srConds -ReportPointer 'Fix the listed script or data to read stores.json, or document a legitimate subset in stores.json allowed_subsets. Full report: powershell -NoProfile -File grocery\audit-store-registry.ps1' | Out-Null
       if ($LASTEXITCODE -eq 0) { Set-Content $sigF -Value $sigH -Encoding ASCII }
     } catch {}
   }
