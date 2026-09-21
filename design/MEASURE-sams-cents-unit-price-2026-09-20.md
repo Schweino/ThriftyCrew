@@ -317,3 +317,13 @@ unifying them is a cross-lane change with its own blast radius - recorded, not d
   not waiting for the rotation.
 - **Nothing here may become a `not-carried` ruling.** The 6 terms are UNUSABLE, never EMPTY:
   `UNCHECKED IS NEVER NOT-CARRIED`.
+
+**Re-read at harness blob `bd299bc63f0d` (`grocery/build-sams-deals.ps1`, `git rev-parse HEAD:<path>`):**
+2026-09-21, queue 2026-09-21-e291a1 (`grocery/triage-plans/plan-2026-09-21-3.json`). Build-Row now refuses a
+DERIVED size the product cannot physically have, as a per-row `DENSITY CONFLICT`, through
+`derived-size-density-lib.ps1`. Nothing this document measured moved: the cents reading, the half-ulp bound,
+`$upDisplayTol` and the crown band are untouched. The 2026-09-20 counts (19 deals, 12 rejects) hold, because
+that slice has no derived row the density rule can judge. The 2026-09-19 A/B would now read 2,800 deals in
+BOTH arms rather than 2,802: that file carries the two 35 lb oil jugs at 799.6 and 799.429 fl oz (0.671 and
+0.672 g/mL), and the new rule refuses both. The arms still differ in exactly the two files named above, so
+the byte-identity finding stands.
