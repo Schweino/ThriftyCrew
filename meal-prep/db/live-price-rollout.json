@@ -1,0 +1,11 @@
+{
+  "_what": "Rollout of the 2026-09-21 live recipe price placeholder (design/PLAN-live-recipe-prices-2026-09-21.md). engine/publish.ps1 reads this before REPUBLISHING an existing post whose built card carries the new stamped placeholder (data-tc-asof). stage=canary: only the slugs in canary may be republished in the new shape; any other such republish is HELD (not failed, not stamped, reported). Creating a new recipe is never held. stage=catalogue: nothing is held.",
+  "_why": "The working tree is shared with the daily chain, which rebuilds and republishes up to 150 cost-moved cards a day. Without this, the new card shape would reach the catalogue through ordinary daily republishes before Brad verified the canary in a browser.",
+  "_to_release": "After Brad's browser check of the canary, set stage to \"catalogue\" in the stage-2 change. Do not add slugs here by hand to get around the hold.",
+  "stage": "canary",
+  "canary": [
+    "turkey-wild-rice-casserole",
+    "chicken-fried-rice-skillet",
+    "beef-birria-burrito"
+  ]
+}

@@ -1,0 +1,1079 @@
+{
+ "_fixture": "FROZEN 2026-09-21 subset of grocery/out/smp-feed.json (generated 2026-09-21T05:22:59) covering the 18 bids of turkey-wild-rice-casserole. Read by stamp-live-price-fallback.ps1 and monitor-live-recipe-prices.ps1 self-tests so their end-to-end cases never move with the daily feed.",
+ "schema": 2,
+ "generated": "2026-09-21T05:22:59",
+ "week_of": "2026-09-20",
+ "ingredients": {
+  "black-pepper": {
+   "unit": "oz",
+   "cheapest": 0.4433,
+   "store": "Sam's Club",
+   "type": "everyday",
+   "url": "https://www.samsclub.com/ip/13623460491",
+   "n": 5,
+   "stores": {
+    "Sam's Club": 0.4433,
+    "Baker's": 0.5556,
+    "Family Fare": 0.695,
+    "Walmart": 0.9878,
+    "Aldi": 1.15
+   }
+  },
+  "butter": {
+   "unit": "lb",
+   "cheapest": 2.89,
+   "store": "Aldi",
+   "type": "everyday",
+   "url": "https://www.aldi.us/store/aldi/products/18648084-countryside-creamery-butter-quarters-16-oz",
+   "n": 6,
+   "stores": {
+    "Aldi": 2.89,
+    "Walmart": 2.976,
+    "Baker's": 3.49,
+    "Hy-Vee": 3.99,
+    "Family Fare": 4.49,
+    "Sam's Club": 8.1467
+   }
+  },
+  "celery": {
+   "unit": "each",
+   "cheapest": 1.99,
+   "store": "Family Fare",
+   "type": "sale",
+   "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/celery/fresh_celery/p/2311267",
+   "n": 4,
+   "stores": {
+    "Family Fare": 1.99,
+    "Walmart": 2.37,
+    "Aldi": 2.59,
+    "Baker's": 2.59
+   },
+   "sale_end": "2026-09-26"
+  },
+  "chicken-broth": {
+   "unit": "floz",
+   "cheapest": 0.0373,
+   "store": "Aldi",
+   "type": "everyday",
+   "url": "https://www.aldi.us/store/aldi/products/25530497-chef-s-cupboard-chicken-broth-48-oz",
+   "n": 5,
+   "stores": {
+    "Aldi": 0.0373,
+    "Sam's Club": 0.0416,
+    "Walmart": 0.045,
+    "Baker's": 0.0477,
+    "Family Fare": 0.0528
+   }
+  },
+  "garlic": {
+   "unit": "each",
+   "cheapest": 0.498,
+   "store": "Baker's",
+   "type": "everyday",
+   "url": "https://www.bakersplus.com/p/kroger-whole-garlic-bulbs/0001111002824",
+   "n": 6,
+   "stores": {
+    "Baker's": 0.498,
+    "Aldi": 0.5633,
+    "Walmart": 0.58,
+    "Fareway": 0.6633,
+    "Family Fare": 0.79,
+    "Hy-Vee": 0.79
+   }
+  },
+  "garlic-powder": {
+   "unit": "oz",
+   "cheapest": 0.3173,
+   "store": "Aldi",
+   "type": "everyday",
+   "url": "",
+   "n": 6,
+   "stores": {
+    "Aldi": 0.3173,
+    "Walmart": 0.3176,
+    "Fareway": 0.3329,
+    "Sam's Club": 0.3608,
+    "Family Fare": 0.556,
+    "Baker's": 0.5935
+   }
+  },
+  "ground-nutmeg": {
+   "unit": "oz",
+   "cheapest": 1.245,
+   "store": "Fareway",
+   "type": "everyday",
+   "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/258047-badia-spices-nutmeg-ground-2-oz",
+   "n": 5,
+   "stores": {
+    "Fareway": 1.245,
+    "Aldi": 1.3267,
+    "Walmart": 1.64,
+    "Baker's": 2.3189,
+    "Family Fare": 3.0613
+   }
+  },
+  "heavy-cream": {
+   "unit": "floz",
+   "cheapest": 0.1434,
+   "store": "Aldi",
+   "type": "everyday",
+   "url": "https://www.aldi.us/store/aldi/products/23804214-friendly-farms-heavy-whipping-cream-32-fl-oz",
+   "n": 5,
+   "stores": {
+    "Aldi": 0.1434,
+    "Walmart": 0.1475,
+    "Baker's": 0.1716,
+    "Family Fare": 0.2184,
+    "Hy-Vee": 0.2184
+   }
+  },
+  "milk": {
+   "unit": "gallon",
+   "cheapest": 2.75,
+   "store": "Aldi",
+   "type": "everyday",
+   "url": "https://www.aldi.us/store/aldi/products/18647971-friendly-farms-1-low-fat-milk-1-gal",
+   "n": 6,
+   "stores": {
+    "Aldi": 2.75,
+    "Walmart": 2.816,
+    "Baker's": 2.99,
+    "Family Fare": 3.49,
+    "Sam's Club": 3.77,
+    "Hy-Vee": 4.99
+   }
+  },
+  "mushrooms": {
+   "unit": "oz",
+   "cheapest": 0.1612,
+   "store": "Aldi",
+   "type": "everyday",
+   "url": "https://www.aldi.us/store/aldi/products/17327058-crimini-brown-mushroom-package-8-oz",
+   "n": 6,
+   "stores": {
+    "Aldi": 0.1612,
+    "Sam's Club": 0.1862,
+    "Walmart": 0.2356,
+    "Family Fare": 0.2492,
+    "Hy-Vee": 0.2494,
+    "Baker's": 0.25
+   }
+  },
+  "onion-powder": {
+   "unit": "oz",
+   "cheapest": 0.3323,
+   "store": "Walmart",
+   "type": "everyday",
+   "url": "https://www.walmart.com/ip/705601418",
+   "n": 5,
+   "stores": {
+    "Walmart": 0.3323,
+    "Aldi": 0.3779,
+    "Sam's Club": 0.4276,
+    "Baker's": 0.7143,
+    "Family Fare": 0.7511
+   }
+  },
+  "onions": {
+   "unit": "lb",
+   "cheapest": 0.7467,
+   "store": "Walmart",
+   "type": "everyday",
+   "url": "https://www.walmart.com/ip/10447842",
+   "n": 6,
+   "stores": {
+    "Walmart": 0.7467,
+    "Aldi": 0.7967,
+    "Sam's Club": 0.9283,
+    "Family Fare": 0.998,
+    "Baker's": 1.1633,
+    "Hy-Vee": 1.33
+   }
+  },
+  "parmesan": {
+   "unit": "oz",
+   "cheapest": 0.3117,
+   "store": "Sam's Club",
+   "type": "everyday",
+   "url": "https://www.samsclub.com/ip/15176922436",
+   "n": 6,
+   "stores": {
+    "Sam's Club": 0.3117,
+    "Baker's": 0.3333,
+    "Walmart": 0.3425,
+    "Aldi": 0.3488,
+    "Family Fare": 0.4056,
+    "Hy-Vee": 0.4362
+   }
+  },
+  "salt": {
+   "unit": "oz",
+   "cheapest": 0.0304,
+   "store": "Aldi",
+   "type": "everyday",
+   "url": "https://www.aldi.us/store/aldi/products/18647588-stonemill-iodized-salt-26-oz",
+   "n": 6,
+   "stores": {
+    "Aldi": 0.0304,
+    "Walmart": 0.0362,
+    "Family Fare": 0.0381,
+    "Sam's Club": 0.0384,
+    "Baker's": 0.0385,
+    "Hy-Vee": 0.0608
+   }
+  },
+  "smoked-paprika": {
+   "unit": "oz",
+   "cheapest": 0.9986,
+   "store": "Family Fare",
+   "type": "everyday",
+   "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_paprika_smoked_pp/p/1564405684701720143",
+   "n": 4,
+   "stores": {
+    "Family Fare": 0.9986,
+    "Aldi": 1.2438,
+    "Walmart": 2.0114,
+    "Baker's": 2.9259
+   }
+  },
+  "swiss-cheese": {
+   "unit": "oz",
+   "cheapest": 0.2088,
+   "store": "Walmart",
+   "type": "everyday",
+   "url": "https://www.walmart.com/ip/152351343",
+   "n": 3,
+   "stores": {
+    "Walmart": 0.2088,
+    "Aldi": 0.2129,
+    "Family Fare": 0.3238
+   }
+  },
+  "turkey-breast": {
+   "unit": "lb",
+   "cheapest": 3.9967,
+   "store": "Baker's",
+   "type": "sale",
+   "url": "https://www.bakersplus.com/p/butterball-all-natural-frozen-turkey-breast-roast-38-oz/0002265527487",
+   "n": 4,
+   "stores": {
+    "Baker's": 3.9967,
+    "Aldi": 4.33,
+    "Walmart": 4.8133,
+    "Family Fare": 11.99
+   },
+   "sale_end": "2026-10-13"
+  },
+  "wild-rice": {
+   "unit": "oz",
+   "cheapest": 0.6869,
+   "store": "Hy-Vee",
+   "type": "everyday",
+   "url": "https://www.hy-vee.com/aisles-online/p/1517940/hy-vee-select-wild-rice",
+   "n": 1,
+   "stores": {
+    "Hy-Vee": 0.6869
+   }
+  }
+ },
+ "pricing_inputs": {
+  "black-pepper": {
+   "current": {
+    "store": "Sam's Club",
+    "unit": "oz",
+    "perUnitMicros": 443300,
+    "variableWeight": false,
+    "packageBasisUnits": 18,
+    "purchasePriceMinor": 798,
+    "url": "https://www.samsclub.com/ip/13623460491"
+   },
+   "stores": {
+    "Sam's Club": {
+     "perUnitMicros": 443300,
+     "variableWeight": false,
+     "packageBasisUnits": 18,
+     "purchasePriceMinor": 798
+    },
+    "Baker's": {
+     "perUnitMicros": 555600,
+     "variableWeight": false,
+     "packageBasisUnits": 2.25,
+     "purchasePriceMinor": 125
+    },
+    "Family Fare": {
+     "perUnitMicros": 695000,
+     "variableWeight": false,
+     "packageBasisUnits": 2,
+     "purchasePriceMinor": 139
+    },
+    "Walmart": {
+     "perUnitMicros": 987800,
+     "variableWeight": false,
+     "packageBasisUnits": 18,
+     "purchasePriceMinor": 1778
+    },
+    "Aldi": {
+     "perUnitMicros": 1150000,
+     "variableWeight": false,
+     "packageBasisUnits": 3,
+     "purchasePriceMinor": 345
+    }
+   }
+  },
+  "butter": {
+   "current": {
+    "store": "Aldi",
+    "unit": "lb",
+    "perUnitMicros": 2890000,
+    "variableWeight": false,
+    "packageBasisUnits": 1,
+    "purchasePriceMinor": 289,
+    "url": "https://www.aldi.us/store/aldi/products/18648084-countryside-creamery-butter-quarters-16-oz"
+   },
+   "stores": {
+    "Aldi": {
+     "perUnitMicros": 2890000,
+     "variableWeight": false,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 289
+    },
+    "Walmart": {
+     "perUnitMicros": 2976000,
+     "variableWeight": false,
+     "packageBasisUnits": 2.003,
+     "purchasePriceMinor": 596
+    },
+    "Baker's": {
+     "perUnitMicros": 3490000,
+     "variableWeight": false,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 349
+    },
+    "Hy-Vee": {
+     "perUnitMicros": 3990000,
+     "variableWeight": false,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 399
+    },
+    "Family Fare": {
+     "perUnitMicros": 4490000,
+     "variableWeight": false,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 449
+    },
+    "Sam's Club": {
+     "perUnitMicros": 8146700,
+     "variableWeight": false,
+     "packageBasisUnits": 1.5,
+     "purchasePriceMinor": 1222
+    }
+   }
+  },
+  "celery": {
+   "current": {
+    "store": "Family Fare",
+    "unit": "each",
+    "perUnitMicros": 1990000,
+    "variableWeight": false,
+    "sale": true,
+    "packageBasisUnits": 1,
+    "purchasePriceMinor": 199,
+    "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/celery/fresh_celery/p/2311267"
+   },
+   "everyday": {
+    "store": "Walmart",
+    "unit": "each",
+    "perUnitMicros": 2370000,
+    "variableWeight": false,
+    "url": "https://www.walmart.com/ip/51259411"
+   },
+   "stores": {
+    "Family Fare": {
+     "perUnitMicros": 1990000,
+     "variableWeight": false,
+     "sale": true,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 199
+    },
+    "Walmart": {
+     "perUnitMicros": 2370000,
+     "variableWeight": false
+    },
+    "Aldi": {
+     "perUnitMicros": 2590000,
+     "variableWeight": false
+    },
+    "Baker's": {
+     "perUnitMicros": 2590000,
+     "variableWeight": false,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 259
+    }
+   }
+  },
+  "chicken-broth": {
+   "current": {
+    "store": "Aldi",
+    "unit": "floz",
+    "perUnitMicros": 37300,
+    "variableWeight": false,
+    "packageBasisUnits": 48,
+    "purchasePriceMinor": 179,
+    "url": "https://www.aldi.us/store/aldi/products/25530497-chef-s-cupboard-chicken-broth-48-oz"
+   },
+   "stores": {
+    "Aldi": {
+     "perUnitMicros": 37300,
+     "variableWeight": false,
+     "packageBasisUnits": 48,
+     "purchasePriceMinor": 179
+    },
+    "Sam's Club": {
+     "perUnitMicros": 41600,
+     "variableWeight": false,
+     "packageBasisUnits": 192,
+     "purchasePriceMinor": 798
+    },
+    "Walmart": {
+     "perUnitMicros": 45000,
+     "variableWeight": false,
+     "packageBasisUnits": 48,
+     "purchasePriceMinor": 216
+    },
+    "Baker's": {
+     "perUnitMicros": 47700,
+     "variableWeight": false,
+     "packageBasisUnits": 48,
+     "purchasePriceMinor": 229
+    },
+    "Family Fare": {
+     "perUnitMicros": 52800,
+     "variableWeight": false,
+     "packageBasisUnits": 32,
+     "purchasePriceMinor": 169
+    }
+   }
+  },
+  "garlic": {
+   "current": {
+    "store": "Baker's",
+    "unit": "each",
+    "perUnitMicros": 498000,
+    "variableWeight": false,
+    "packageBasisUnits": 5,
+    "purchasePriceMinor": 249,
+    "url": "https://www.bakersplus.com/p/kroger-whole-garlic-bulbs/0001111002824"
+   },
+   "stores": {
+    "Baker's": {
+     "perUnitMicros": 498000,
+     "variableWeight": false,
+     "packageBasisUnits": 5,
+     "purchasePriceMinor": 249
+    },
+    "Aldi": {
+     "perUnitMicros": 563300,
+     "variableWeight": false,
+     "packageBasisUnits": 3,
+     "purchasePriceMinor": 169
+    },
+    "Walmart": {
+     "perUnitMicros": 580000,
+     "variableWeight": false,
+     "packageBasisUnits": 3,
+     "purchasePriceMinor": 174
+    },
+    "Fareway": {
+     "perUnitMicros": 663300,
+     "variableWeight": false,
+     "packageBasisUnits": 3,
+     "purchasePriceMinor": 199
+    },
+    "Family Fare": {
+     "perUnitMicros": 790000,
+     "variableWeight": false,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 79
+    },
+    "Hy-Vee": {
+     "perUnitMicros": 790000,
+     "variableWeight": false,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 79
+    }
+   }
+  },
+  "garlic-powder": {
+   "current": {
+    "store": "Aldi",
+    "unit": "oz",
+    "perUnitMicros": 317300,
+    "variableWeight": false,
+    "packageBasisUnits": 3.12,
+    "purchasePriceMinor": 99
+   },
+   "stores": {
+    "Aldi": {
+     "perUnitMicros": 317300,
+     "variableWeight": false,
+     "packageBasisUnits": 3.12,
+     "purchasePriceMinor": 99
+    },
+    "Walmart": {
+     "perUnitMicros": 317600,
+     "variableWeight": false,
+     "packageBasisUnits": 3.4,
+     "purchasePriceMinor": 108
+    },
+    "Fareway": {
+     "perUnitMicros": 332900,
+     "variableWeight": false,
+     "sale": true,
+     "packageBasisUnits": 24,
+     "purchasePriceMinor": 799
+    },
+    "Sam's Club": {
+     "perUnitMicros": 360800,
+     "variableWeight": false,
+     "packageBasisUnits": 26,
+     "purchasePriceMinor": 938
+    },
+    "Family Fare": {
+     "perUnitMicros": 556000,
+     "variableWeight": false,
+     "packageBasisUnits": 2.5,
+     "purchasePriceMinor": 139
+    },
+    "Baker's": {
+     "perUnitMicros": 593500,
+     "variableWeight": false,
+     "packageBasisUnits": 9.25,
+     "purchasePriceMinor": 549
+    }
+   }
+  },
+  "ground-nutmeg": {
+   "current": {
+    "store": "Fareway",
+    "unit": "oz",
+    "perUnitMicros": 1245000,
+    "variableWeight": false,
+    "packageBasisUnits": 2,
+    "purchasePriceMinor": 249,
+    "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/258047-badia-spices-nutmeg-ground-2-oz"
+   },
+   "stores": {
+    "Fareway": {
+     "perUnitMicros": 1245000,
+     "variableWeight": false,
+     "packageBasisUnits": 2,
+     "purchasePriceMinor": 249
+    },
+    "Aldi": {
+     "perUnitMicros": 1326700,
+     "variableWeight": false,
+     "packageBasisUnits": 1.5,
+     "purchasePriceMinor": 199
+    },
+    "Walmart": {
+     "perUnitMicros": 1640000,
+     "variableWeight": false,
+     "packageBasisUnits": 1.5,
+     "purchasePriceMinor": 246
+    },
+    "Baker's": {
+     "perUnitMicros": 2318900,
+     "variableWeight": false,
+     "packageBasisUnits": 1.85,
+     "purchasePriceMinor": 429
+    },
+    "Family Fare": {
+     "perUnitMicros": 3061300,
+     "variableWeight": false,
+     "packageBasisUnits": 2.12,
+     "purchasePriceMinor": 649
+    }
+   }
+  },
+  "heavy-cream": {
+   "current": {
+    "store": "Aldi",
+    "unit": "floz",
+    "perUnitMicros": 143400,
+    "variableWeight": false,
+    "packageBasisUnits": 32,
+    "purchasePriceMinor": 459,
+    "url": "https://www.aldi.us/store/aldi/products/23804214-friendly-farms-heavy-whipping-cream-32-fl-oz"
+   },
+   "stores": {
+    "Aldi": {
+     "perUnitMicros": 143400,
+     "variableWeight": false,
+     "packageBasisUnits": 32,
+     "purchasePriceMinor": 459
+    },
+    "Walmart": {
+     "perUnitMicros": 147500,
+     "variableWeight": false,
+     "packageBasisUnits": 64,
+     "purchasePriceMinor": 944
+    },
+    "Baker's": {
+     "perUnitMicros": 171600,
+     "variableWeight": false,
+     "packageBasisUnits": 32,
+     "purchasePriceMinor": 549
+    },
+    "Family Fare": {
+     "perUnitMicros": 218400,
+     "variableWeight": false,
+     "packageBasisUnits": 32,
+     "purchasePriceMinor": 699
+    },
+    "Hy-Vee": {
+     "perUnitMicros": 218400,
+     "variableWeight": false,
+     "packageBasisUnits": 32,
+     "purchasePriceMinor": 699
+    }
+   }
+  },
+  "milk": {
+   "current": {
+    "store": "Aldi",
+    "unit": "gallon",
+    "perUnitMicros": 2750000,
+    "variableWeight": false,
+    "packageBasisUnits": 1,
+    "purchasePriceMinor": 275,
+    "url": "https://www.aldi.us/store/aldi/products/18647971-friendly-farms-1-low-fat-milk-1-gal"
+   },
+   "stores": {
+    "Aldi": {
+     "perUnitMicros": 2750000,
+     "variableWeight": false,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 275
+    },
+    "Walmart": {
+     "perUnitMicros": 2816000,
+     "variableWeight": false,
+     "packageBasisUnits": 1.016,
+     "purchasePriceMinor": 286
+    },
+    "Baker's": {
+     "perUnitMicros": 2990000,
+     "variableWeight": false,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 299
+    },
+    "Family Fare": {
+     "perUnitMicros": 3490000,
+     "variableWeight": false,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 349
+    },
+    "Sam's Club": {
+     "perUnitMicros": 3770000,
+     "variableWeight": false,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 377
+    },
+    "Hy-Vee": {
+     "perUnitMicros": 4990000,
+     "variableWeight": false,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 499
+    }
+   }
+  },
+  "mushrooms": {
+   "current": {
+    "store": "Aldi",
+    "unit": "oz",
+    "perUnitMicros": 161200,
+    "variableWeight": false,
+    "packageBasisUnits": 8,
+    "purchasePriceMinor": 129,
+    "url": "https://www.aldi.us/store/aldi/products/17327058-crimini-brown-mushroom-package-8-oz"
+   },
+   "stores": {
+    "Aldi": {
+     "perUnitMicros": 161200,
+     "variableWeight": false,
+     "packageBasisUnits": 8,
+     "purchasePriceMinor": 129
+    },
+    "Sam's Club": {
+     "perUnitMicros": 186200,
+     "variableWeight": false,
+     "packageBasisUnits": 24,
+     "purchasePriceMinor": 447
+    },
+    "Walmart": {
+     "perUnitMicros": 235600,
+     "variableWeight": false,
+     "packageBasisUnits": 16,
+     "purchasePriceMinor": 377
+    },
+    "Family Fare": {
+     "perUnitMicros": 249200,
+     "variableWeight": false,
+     "packageBasisUnits": 12,
+     "purchasePriceMinor": 299
+    },
+    "Hy-Vee": {
+     "perUnitMicros": 249400,
+     "variableWeight": false,
+     "sale": true,
+     "packageBasisUnits": 16,
+     "purchasePriceMinor": 399
+    },
+    "Baker's": {
+     "perUnitMicros": 250000,
+     "variableWeight": false,
+     "packageBasisUnits": 24,
+     "purchasePriceMinor": 600
+    }
+   }
+  },
+  "onion-powder": {
+   "current": {
+    "store": "Walmart",
+    "unit": "oz",
+    "perUnitMicros": 332300,
+    "variableWeight": false,
+    "packageBasisUnits": 3.25,
+    "purchasePriceMinor": 108,
+    "url": "https://www.walmart.com/ip/705601418"
+   },
+   "stores": {
+    "Walmart": {
+     "perUnitMicros": 332300,
+     "variableWeight": false,
+     "packageBasisUnits": 3.25,
+     "purchasePriceMinor": 108
+    },
+    "Aldi": {
+     "perUnitMicros": 377900,
+     "variableWeight": false,
+     "packageBasisUnits": 2.62,
+     "purchasePriceMinor": 99
+    },
+    "Sam's Club": {
+     "perUnitMicros": 427600,
+     "variableWeight": false,
+     "packageBasisUnits": 21,
+     "purchasePriceMinor": 898
+    },
+    "Baker's": {
+     "perUnitMicros": 714300,
+     "variableWeight": false,
+     "packageBasisUnits": 1.75,
+     "purchasePriceMinor": 125
+    },
+    "Family Fare": {
+     "perUnitMicros": 751100,
+     "variableWeight": false,
+     "packageBasisUnits": 2.25,
+     "purchasePriceMinor": 169
+    }
+   }
+  },
+  "onions": {
+   "current": {
+    "store": "Walmart",
+    "unit": "lb",
+    "perUnitMicros": 746700,
+    "variableWeight": false,
+    "packageBasisUnits": 3,
+    "purchasePriceMinor": 224,
+    "url": "https://www.walmart.com/ip/10447842"
+   },
+   "stores": {
+    "Walmart": {
+     "perUnitMicros": 746700,
+     "variableWeight": false,
+     "packageBasisUnits": 3,
+     "purchasePriceMinor": 224
+    },
+    "Aldi": {
+     "perUnitMicros": 796700,
+     "variableWeight": false,
+     "packageBasisUnits": 3,
+     "purchasePriceMinor": 239
+    },
+    "Sam's Club": {
+     "perUnitMicros": 928300,
+     "variableWeight": false,
+     "packageBasisUnits": 6,
+     "purchasePriceMinor": 557
+    },
+    "Family Fare": {
+     "perUnitMicros": 998000,
+     "variableWeight": false,
+     "packageBasisUnits": 5,
+     "purchasePriceMinor": 499
+    },
+    "Baker's": {
+     "perUnitMicros": 1163300,
+     "variableWeight": false,
+     "packageBasisUnits": 3,
+     "purchasePriceMinor": 349
+    },
+    "Hy-Vee": {
+     "perUnitMicros": 1330000,
+     "variableWeight": false,
+     "packageBasisUnits": 3,
+     "purchasePriceMinor": 399
+    }
+   }
+  },
+  "parmesan": {
+   "current": {
+    "store": "Sam's Club",
+    "unit": "oz",
+    "perUnitMicros": 311700,
+    "variableWeight": false,
+    "packageBasisUnits": 24,
+    "purchasePriceMinor": 748,
+    "url": "https://www.samsclub.com/ip/15176922436"
+   },
+   "stores": {
+    "Sam's Club": {
+     "perUnitMicros": 311700,
+     "variableWeight": false,
+     "packageBasisUnits": 24,
+     "purchasePriceMinor": 748
+    },
+    "Baker's": {
+     "perUnitMicros": 333300,
+     "variableWeight": false,
+     "packageBasisUnits": 6,
+     "purchasePriceMinor": 200
+    },
+    "Walmart": {
+     "perUnitMicros": 342500,
+     "variableWeight": false,
+     "packageBasisUnits": 16,
+     "purchasePriceMinor": 548
+    },
+    "Aldi": {
+     "perUnitMicros": 348800,
+     "variableWeight": false,
+     "packageBasisUnits": 8,
+     "purchasePriceMinor": 279
+    },
+    "Family Fare": {
+     "perUnitMicros": 405600,
+     "variableWeight": false,
+     "packageBasisUnits": 16,
+     "purchasePriceMinor": 649
+    },
+    "Hy-Vee": {
+     "perUnitMicros": 436200,
+     "variableWeight": false,
+     "packageBasisUnits": 8,
+     "purchasePriceMinor": 349
+    }
+   }
+  },
+  "salt": {
+   "current": {
+    "store": "Aldi",
+    "unit": "oz",
+    "perUnitMicros": 30400,
+    "variableWeight": false,
+    "packageBasisUnits": 26,
+    "purchasePriceMinor": 79,
+    "url": "https://www.aldi.us/store/aldi/products/18647588-stonemill-iodized-salt-26-oz"
+   },
+   "stores": {
+    "Aldi": {
+     "perUnitMicros": 30400,
+     "variableWeight": false,
+     "packageBasisUnits": 26,
+     "purchasePriceMinor": 79
+    },
+    "Walmart": {
+     "perUnitMicros": 36200,
+     "variableWeight": false,
+     "packageBasisUnits": 26,
+     "purchasePriceMinor": 94
+    },
+    "Family Fare": {
+     "perUnitMicros": 38100,
+     "variableWeight": false,
+     "packageBasisUnits": 26,
+     "purchasePriceMinor": 99
+    },
+    "Sam's Club": {
+     "perUnitMicros": 38400,
+     "variableWeight": false,
+     "packageBasisUnits": 64,
+     "purchasePriceMinor": 246
+    },
+    "Baker's": {
+     "perUnitMicros": 38500,
+     "variableWeight": false,
+     "packageBasisUnits": 26,
+     "purchasePriceMinor": 100
+    },
+    "Hy-Vee": {
+     "perUnitMicros": 60800,
+     "variableWeight": false,
+     "packageBasisUnits": 26,
+     "purchasePriceMinor": 158
+    }
+   }
+  },
+  "smoked-paprika": {
+   "current": {
+    "store": "Family Fare",
+    "unit": "oz",
+    "perUnitMicros": 998600,
+    "variableWeight": false,
+    "packageBasisUnits": 7,
+    "purchasePriceMinor": 699,
+    "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_paprika_smoked_pp/p/1564405684701720143"
+   },
+   "stores": {
+    "Family Fare": {
+     "perUnitMicros": 998600,
+     "variableWeight": false,
+     "packageBasisUnits": 7,
+     "purchasePriceMinor": 699
+    },
+    "Aldi": {
+     "perUnitMicros": 1243800,
+     "variableWeight": false,
+     "packageBasisUnits": 1.6,
+     "purchasePriceMinor": 199
+    },
+    "Walmart": {
+     "perUnitMicros": 2011400,
+     "variableWeight": false,
+     "packageBasisUnits": 1.75,
+     "purchasePriceMinor": 352
+    },
+    "Baker's": {
+     "perUnitMicros": 2925900,
+     "variableWeight": false,
+     "sale": true,
+     "packageBasisUnits": 1.62,
+     "purchasePriceMinor": 474
+    }
+   }
+  },
+  "swiss-cheese": {
+   "current": {
+    "store": "Walmart",
+    "unit": "oz",
+    "perUnitMicros": 208800,
+    "variableWeight": false,
+    "packageBasisUnits": 8,
+    "purchasePriceMinor": 167,
+    "url": "https://www.walmart.com/ip/152351343"
+   },
+   "stores": {
+    "Walmart": {
+     "perUnitMicros": 208800,
+     "variableWeight": false,
+     "packageBasisUnits": 8,
+     "purchasePriceMinor": 167
+    },
+    "Aldi": {
+     "perUnitMicros": 212900,
+     "variableWeight": false,
+     "packageBasisUnits": 7,
+     "purchasePriceMinor": 149
+    },
+    "Family Fare": {
+     "perUnitMicros": 323800,
+     "variableWeight": false,
+     "packageBasisUnits": 8,
+     "purchasePriceMinor": 259
+    }
+   }
+  },
+  "turkey-breast": {
+   "current": {
+    "store": "Baker's",
+    "unit": "lb",
+    "perUnitMicros": 3996700,
+    "variableWeight": false,
+    "sale": true,
+    "packageBasisUnits": 3,
+    "purchasePriceMinor": 1199,
+    "url": "https://www.bakersplus.com/p/butterball-all-natural-frozen-turkey-breast-roast-38-oz/0002265527487"
+   },
+   "everyday": {
+    "store": "Aldi",
+    "unit": "lb",
+    "perUnitMicros": 4330000,
+    "variableWeight": false,
+    "packageBasisUnits": 3,
+    "purchasePriceMinor": 1299,
+    "url": "https://www.aldi.us/store/aldi/products/73490-butterball-turkey-breast-roast-boneless-breast-meat-48-oz"
+   },
+   "stores": {
+    "Baker's": {
+     "perUnitMicros": 3996700,
+     "variableWeight": false,
+     "sale": true,
+     "packageBasisUnits": 3,
+     "purchasePriceMinor": 1199
+    },
+    "Aldi": {
+     "perUnitMicros": 4330000,
+     "variableWeight": false,
+     "packageBasisUnits": 3,
+     "purchasePriceMinor": 1299
+    },
+    "Walmart": {
+     "perUnitMicros": 4813300,
+     "variableWeight": false,
+     "packageBasisUnits": 3,
+     "purchasePriceMinor": 1444
+    },
+    "Family Fare": {
+     "perUnitMicros": 11990000,
+     "variableWeight": false,
+     "packageBasisUnits": 1,
+     "purchasePriceMinor": 1199
+    }
+   }
+  },
+  "wild-rice": {
+   "current": {
+    "store": "Hy-Vee",
+    "unit": "oz",
+    "perUnitMicros": 686900,
+    "variableWeight": false,
+    "packageBasisUnits": 16,
+    "purchasePriceMinor": 1099,
+    "url": "https://www.hy-vee.com/aisles-online/p/1517940/hy-vee-select-wild-rice"
+   },
+   "stores": {
+    "Hy-Vee": {
+     "perUnitMicros": 686900,
+     "variableWeight": false,
+     "packageBasisUnits": 16,
+     "purchasePriceMinor": 1099
+    }
+   }
+  }
+ },
+ "recipes": {
+  "turkey-wild-rice-casserole": {
+   "name": "Turkey Wild Rice Casserole",
+   "servings": 14,
+   "week_cost": 75.74,
+   "per_serving": 5.41,
+   "calories": 579,
+   "sale_items": [
+    "Smoked Paprika"
+   ]
+  }
+ }
+}

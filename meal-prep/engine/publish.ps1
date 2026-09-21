@@ -38,6 +38,12 @@ $pubBase = 'https://www.thriftycrew.com'
 # has never completed a full run, and this is one of the reasons it would not have.
 $adminKey = Get-GhostKey
 . (Join-Path $PSScriptRoot '..\lib\render-tokens.ps1')  # Expand-SpecProse: {{stat}} tokens -> this spec's numbers
+# Test-TcBuiltPriceLiterals: no price literal leaves this script outside a live placeholder (2026-09-21). Its corpus
+# parameters are Corpus-prefixed so this dot-source cannot rebind $Slugs.
+. (Join-Path $PSScriptRoot '..\lib\price-literal-gate.ps1')
+# THE ROLLOUT HOLD for the 2026-09-21 live price placeholder: db\live-price-rollout.json. Read once.
+$liveRollout = $null
+try { $liveRollout = Get-Content (Join-Path $root 'db\live-price-rollout.json') -Raw -Encoding UTF8 | ConvertFrom-Json } catch { $liveRollout = $null }
 function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 function Get-ContentHash([string]$s){ $sha=[System.Security.Cryptography.SHA1]::Create(); return ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($s))) -replace '-','') }
 
@@ -108,7 +114,7 @@ if(Test-Path $costedFile){
 }
 if(-not $carriageKnown){ Write-Output 'PUBLISH: WARNING - db\costed.json unreadable, so carriage could not be checked. Recost before publishing.' }
 
-$ok=0; $skipped=0; $failed=@(); $refusedCreate=@(); $refusedCarriage=@(); $refusedHeld=@(); $orphaned=@(); $staged=@()
+$ok=0; $skipped=0; $failed=@(); $refusedCreate=@(); $refusedCarriage=@(); $refusedHeld=@(); $orphaned=@(); $staged=@(); $rolloutHeld=@()
 foreach($slug in $Slugs){
   # THE HOLD, checked first and not overridable by -Force. -Force exists to overwrite a live body that
   # drifted; it has nothing to say about whether a page should be live at all, and letting it end a
@@ -150,6 +156,17 @@ foreach($slug in $Slugs){
   $body = [IO.File]::ReadAllText((Join-Path $root "db\built\$slug.body.html"), [Text.Encoding]::UTF8)
   $head = [IO.File]::ReadAllText((Join-Path $root "db\built\$slug.head.html"), [Text.Encoding]::UTF8)
   $desc = [string]$spec.head.description
+  # ---- THE PRICE-LITERAL GATE, AT THE DOOR (2026-09-21, Brad: a recipe page fetches its pricing) ----------
+  # build-card2 asked the same question before it wrote the card; this asks again of the bytes about to leave,
+  # because a card can be edited, copied or built by an older script after that. -RequireAsOf: every live
+  # price span must carry the stamp engine\build-cards.ps1 writes when it replaces build-card2's provisional
+  # fallback with the value the card's own script filled, so no span ships a fallback on another basis.
+  $priceFindings = Test-TcBuiltPriceLiterals -Body $body -Head $head -Slug $slug -RequireAsOf
+  if ($priceFindings.Count) {
+    $failed += $slug
+    Write-Output ("REFUSING  $slug  - PRICE-LITERAL GATE: " + $priceFindings.Count + ' finding(s): ' + (($priceFindings | Select-Object -First 2) -join ' || '))
+    continue
+  }
   $contentHash = Get-ContentHash ($body + "`0" + $head + "`0" + [string]$spec.name + "`0" + $desc)
 
   $existing = $null
@@ -175,6 +192,14 @@ foreach($slug in $Slugs){
     # CHANGE GATE: an existing post whose content bytes match the last verified publish is skipped
     # (visibility is deliberately NOT in the hash - the rotation owns it and its flip is not a content change).
     if($existing -and (-not $Force) -and ($pubHashes[$slug] -eq $contentHash)){ $skipped++; Write-Output ("UNCHANGED  $slug"); continue }
+    # ROLLOUT HOLD (2026-09-21, stage 1 of 2). The daily chain rebuilds and republishes cost-moved cards from
+    # this shared tree, so without a hold the new placeholder would reach the catalogue before Brad checked
+    # the canary in a browser. A REPUBLISH of a new-shape card outside the canary is HELD: not failed, not
+    # stamped, named below. A create is never held. An unreadable rollout file holds everything (fail closed).
+    if($existing -and $body -match 'data-tc-asof="'){
+      $stageOk = ($liveRollout -and [string]$liveRollout.stage -eq 'catalogue') -or ($liveRollout -and [string]$liveRollout.stage -eq 'canary' -and (@($liveRollout.canary) -contains $slug))
+      if(-not $stageOk){ $rolloutHeld += $slug; Write-Output ("HELD  $slug  - live-price rollout is at stage '" + $(if($liveRollout){[string]$liveRollout.stage}else{'UNREADABLE'}) + "' and this slug is not in it (db\live-price-rollout.json)"); continue }
+    }
 
     # ---- PRE-FLIGHT: never overwrite a live body that no longer matches what we published (2026-08-08) ----
     # This PUT replaces the whole card. The change gate above compares LOCAL to the ledger; it says nothing
@@ -338,6 +363,7 @@ if($orphaned){
   Write-Output ("ORPHAN CARDS (" + $orphaned.Count + " built card(s) with no spec in db\recipes - delete them or restore the spec): " + ($orphaned -join ', '))
 }
 if($failed){ Write-Output ("FAILED (" + $failed.Count + "): " + ($failed -join ', ')) }
+if($rolloutHeld){ Write-Output ("HELD BY LIVE-PRICE ROLLOUT (" + $rolloutHeld.Count + " slug(s), not published, live page unchanged; released when db\live-price-rollout.json reaches stage catalogue): " + ($rolloutHeld -join ', ')) }
 if($refusedHeld){
   Write-Output ("REFUSED HELD (" + $refusedHeld.Count + " slug(s) deliberately drafted via hold-recipe.ps1; release before publishing): " + ($refusedHeld -join ', '))
 }
@@ -361,5 +387,5 @@ if($refusedCreate){
 # STAGED SLUGS ARE UNSTAMPABLE. They did not publish, so a caller must withhold their stamps exactly as
 # it does for a failure or a refused create - otherwise propagate marks them clean and they are never
 # published at all, which is the silent-skip failure this line already exists to prevent.
-$unstampable = @(@($failed) + @($refusedCreate) + @($staged) | Sort-Object -Unique)
+$unstampable = @(@($failed) + @($refusedCreate) + @($staged) + @($rolloutHeld) | Sort-Object -Unique)
 Write-Output ("PUBLISH-UNSTAMPABLE: " + ($unstampable -join ','))

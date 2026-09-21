@@ -1852,6 +1852,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         New-FanoutLane -Name 'alert-registry'      -File (Join-Path $root 'audit-alert-registry.ps1') -Arguments @('-Queue') -Marker 'ALERT-REGISTRY-COMPLETE'
         New-FanoutLane -Name 'golden-test'         -File (Join-Path $mealPrep 'engine\golden-test.ps1')         -TimeoutSec 600 -Marker 'GOLDEN-TEST-COMPLETE'
         New-FanoutLane -Name 'scaler-pricing'      -File (Join-Path $mealPrep 'pipeline\run-scaler-pricing-test.ps1') -TimeoutSec 600 -Arguments @('-Quiet')
+        # LIVE RECIPE PRICES (2026-09-21, Brad: a recipe page fetches its pricing from the feed, and it "can't ever
+        # break again"). The contract reads the built cards against the canonical feed; the monitor fetches live pages
+        # and runs each post's OWN script against the DEPLOYED feed in jsdom, and pages by itself on a mismatch, a
+        # missing script or a missing feed (grocery\alert-registry.json, prefix 'live recipe prices').
+        New-FanoutLane -Name 'live-price-contract' -File (Join-Path $mealPrep 'pipeline\audit-live-price-contract.ps1') -TimeoutSec 600 -Marker 'LIVE-PRICE-CONTRACT-COMPLETE'
+        New-FanoutLane -Name 'live-recipe-prices'  -File (Join-Path $mealPrep 'pipeline\monitor-live-recipe-prices.ps1') -TimeoutSec 900 -Arguments $(if ($NoAlert) { @('-NoAlert') } else { @() }) -Marker 'LIVE-RECIPE-PRICES-COMPLETE'
         New-FanoutLane -Name 'db-agreement'        -File (Join-Path $mealPrep 'engine\audit-db-agreement.ps1') -Marker 'DB-AGREEMENT-COMPLETE'
         New-FanoutLane -Name 'published-macros'    -File (Join-Path $mealPrep 'engine\audit-published-macros.ps1') -Marker 'PUBLISHED-MACROS-COMPLETE'
         New-FanoutLane -Name 'spec-contradictions' -File (Join-Path $mealPrep 'pipeline\audit-spec-contradictions.ps1') -TimeoutSec 600 -Arguments @('-Quiet') -Marker 'SPEC-CONTRADICTIONS-COMPLETE'
@@ -2438,6 +2444,20 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           try { Send-Alert -Subject "Recipe cards: pricing rule guard failed" -Body ("meal-prep\pipeline\run-scaler-pricing-test.ps1 failed. This guard pins the rule that each ingredient is priced at the store where the PACKAGE YOU HAVE TO BUY costs least, not the store with the lowest per-unit price - the defect that once billed `$10.22 for 20 cents of butter and `$40.00 for a 50 lb sack of rice. A POSITIVE-lane failure means tpl2-scaler-prefix.html no longer satisfies the fixture. A NEGATIVE-lane failure means the fixture has stopped reproducing the founding bug, so it is no longer testing anything. Lines: " + (($sp | Select-Object -First 15) -join ' | ')) | Out-Null } catch {}
         } else { Log 'scaler-pricing: clean' }
       } catch { Log ('scaler-pricing threw: ' + $_.Exception.Message) }
+      # live price contract + live monitor (2026-09-21). The monitor alerts by itself; the contract's findings page
+      # here. Exit 3 from either is BLIND and is logged as such, never as clean.
+      try {
+        $lpc = Get-FanoutRecord 'live-price-contract' $fanRecs
+        if ($lpc.ExitCode -eq 1) {
+          Log ('live-price-contract FAILED: ' + ((@($lpc.Output) | Select-Object -Last 3) -join ' | '))
+          $summary += 'REVIEW    live-price-contract: a recipe price placeholder names something the feed does not carry - run meal-prep\pipeline\audit-live-price-contract.ps1'
+          if (-not $NoAlert) { try { Send-Alert -Subject 'Live recipe prices: a placeholder names something the feed does not carry' -Body ('meal-prep\pipeline\audit-live-price-contract.ps1 found built recipe cards whose live price placeholder cannot be filled from the feed, so those pages would show only their build-time fallback:' + "`n`n" + ((@($lpc.Output) | Where-Object { $_ -match '^  ' }) -join "`n")) -What 'LIVE-PRICE-CONTRACT' } catch {} }
+        } elseif ($lpc.ExitCode -ne 0) { Log ('live-price-contract BLIND (exit ' + $lpc.ExitCode + '): ' + ((@($lpc.Output) | Select-Object -Last 1) -join '')) }
+        else { Log ('live-price-contract: ' + ((@($lpc.Output) | Select-Object -Last 1) -join '')) }
+        $lrp = Get-FanoutRecord 'live-recipe-prices' $fanRecs
+        Log ('live-recipe-prices exit ' + $lrp.ExitCode + ': ' + ((@($lrp.Output) | Select-Object -Last 1) -join ''))
+        if ($lrp.ExitCode -ne 0) { $summary += ('REVIEW    live-recipe-prices exit ' + $lrp.ExitCode + ' - run meal-prep\pipeline\monitor-live-recipe-prices.ps1') }
+      } catch { Log ('live-price lanes threw: ' + $_.Exception.Message) }
       # drift guard: recipes-db index vs db\recipes specs vs db\ingredients (2026-07-26). Non-fatal; alerts.
       try {
         if ((Get-FanoutRecord 'db-agreement' $fanRecs).ExitCode -ne 0) {

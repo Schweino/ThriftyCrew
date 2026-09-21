@@ -962,6 +962,22 @@
    "class": "digest",
    "condition": "a nightly digest mailed only when a stage is red (ruling 8b); information, not triage work",
    "emitter": "ops/brain-digest.ps1"
+  },
+  {
+   "id": "live-recipe-prices",
+   "match": "prefix",
+   "key": "live recipe prices",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "meal-prep/pipeline/monitor-live-recipe-prices.ps1"
+  },
+  {
+   "id": "live-recipe-price-monitor-blind",
+   "match": "exact",
+   "key": "live recipe price monitor could not look",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "meal-prep/pipeline/monitor-live-recipe-prices.ps1"
   }
  ]
 }

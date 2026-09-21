@@ -48,6 +48,26 @@ the named memory or file.
   bounded by the quarter. Brad's same-day rule binds the order of any such change: *"a recipe page should ALWAYS
   be able to be costed"*, so nothing is retired until what replaces it is live. `grocery/triage-plans/plan-2026-09-21-2.json`.
 
+- **A PRICE IN A RECIPE POST RENDERS FROM THE FEED AT VIEW TIME; NO PRICE LITERAL SHIPS IN A BUILT CARD**
+  (Brad's instruction, 2026-09-21: *"The recipe pages should be fetching the pricing from our database. That should
+  be a constant and we shouldn't need to 'republish'. If a pricing updates in the DB its automatically updated on all
+  recipe pages."* and *"Be thorough so this can't ever 'break' again."*). A price is a
+  `<span data-tc-live-price data-tc-slug data-tc-field="cost_ps" data-tc-basis="feed-everyday-whole-package"
+  data-tc-fallback data-tc-asof>`, written ONLY by `Format-TcLivePriceSpan` (`meal-prep/lib/render-tokens.ps1`) and filled by
+  the card script's `fillLivePrices()` (`meal-prep/pipeline/tpl2-scaler-prefix.html`), which depends on nothing the theme
+  injects and refuses a non-finite or non-positive value, keeping the fallback. **The fallback is on the FILL's
+  basis, never `stat.cost_ps`**: that is the recipe board's everyday at the recipe's package, and it disagreed with
+  the fill by up to 33 cents a serving on the canary. `meal-prep/engine/build-cards.ps1` runs each card's own script against
+  the canonical feed (`meal-prep/pipeline/stamp-live-price-fallback.ps1`) and stamps the result, and a card it cannot stamp is
+  a build error. Four checks hold it: the BUILD GATE `meal-prep/lib/price-literal-gate.ps1` (build-card2 before writing,
+  publish with `-RequireAsOf` before sending; allowlist is two exact membership phrases), the FEED CONTRACT
+  `meal-prep/pipeline/audit-live-price-contract.ps1`, the LIVE MONITOR `meal-prep/pipeline/monitor-live-recipe-prices.ps1` (runs each
+  live post's own script in jsdom against the deployed feed, daily in `check-ad-cycles`, pages as `live recipe
+  prices`), and the rollout hold `meal-prep/db/live-price-rollout.json` (stage `canary` holds every other new-shape republish
+  until Brad's browser check; stage 2 sets it to `catalogue`). A new live field needs a registry entry in
+  `meal-prep/lib/render-tokens.ps1`, a branch in `fillLivePrices()` and a feed key, or all three checks refuse it.
+  `design/PLAN-live-recipe-prices-2026-09-21.md`.
+
 - **THE PANEL IS READ IN FULL AND THE FOOD DB KEEPS FOUR FIELDS OF IT** (2026-09-12, backlog I145).
   `db/food-label-captures.json` carries `sodium_mg` and populates it - the Great Value chicken broth
   capture records 830 mg, the beef broth 810. `food-macros-db.json` has **no sodium field on any of

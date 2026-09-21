@@ -709,19 +709,39 @@ var k=variable?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-0.02
         else if(/^servings$/i.test(l)){ b.textContent=String(nn); }
       });
     }catch(e){}
-    // The bold "Makes N servings ... per serving (at everyday cost)" line and the Portion It
-    // "divide by N" instruction follow the scaler too (idempotent regex rewrites of the numbers).
+  }
+  // LIVE PRICES IN THE PROSE (2026-09-21, Brad: "If a pricing updates in the DB its automatically updated on
+  // all recipe pages"). Every [data-tc-live-price] span - stat line, intro, cost closing, upsell, in EITHER
+  // half of the paywall split - is filled here from the feed this script already fetched, on the same basis
+  // as the receipt's Everyday tab: whole packages at each line's everyday (non-sale) cell, per serving at the
+  // scaler's servings. One computation, so the prose and the receipt can never quote two numbers.
+  // THIS USED TO LIVE AT THE END OF updateStats(), after `if(!bar) return;` on .mts-recipe-stats - an element
+  // the SITE-WIDE code injection creates, not this post. So every prose price on the site filled only because
+  // another piece of code, edited through Ghost settings, happened to run first. Run on its own it never
+  // filled at all (65 of 65 cards, jsdom, 2026-09-21). It now depends on nothing outside this card.
+  // A FILL IS REFUSED unless the value is a finite price above zero from a loaded feed, and unless the span
+  // names a field this script knows. A refused span shows its build-time fallback (data-tc-fallback, the
+  // same basis), never a blank, NaN, undefined or $0.00. data-tc-filled marks a real fill for the monitor.
+  function fillLivePrices(){
     try{
-      var nn2=nServ(), tev=totalAt(nn2,'everyday',false);
+      var nn2=nServ(), tev=(feedData&&!feedFailed)?totalAt(nn2,'everyday',false):null;
+      var v=(tev===null||typeof tev!=='number')?NaN:tev/nn2;
+      var good=isFinite(v)&&v>0&&Math.round(v*100)>0;
       var stat=document.querySelector('.smp-stat');
-      if(stat&&tev!==null){ stat.innerHTML=stat.innerHTML.replace(/Makes \d+ servings/,'Makes '+nn2+' servings');
-        [].slice.call(document.querySelectorAll('[data-tc-live-price]')).forEach(function(live){live.textContent='~$'+(tev/nn2).toFixed(2);}); }
+      if(stat&&good){ stat.innerHTML=stat.innerHTML.replace(/Makes \d+ servings/,'Makes '+nn2+' servings'); }
+      [].slice.call(document.querySelectorAll('[data-tc-live-price]')).forEach(function(live){
+        var f=live.getAttribute('data-tc-field');
+        if(good&&(!f||f==='cost_ps')){ var s2=v.toFixed(2); live.textContent='~$'+s2; live.setAttribute('data-tc-filled',s2); return; }
+        var fb=parseFloat(live.getAttribute('data-tc-fallback'));
+        if(isFinite(fb)&&fb>0){ live.textContent='~$'+fb.toFixed(2); }
+        live.removeAttribute('data-tc-filled');
+      });
       var por=document.querySelector('.smp-portion');
       if(por){ por.innerHTML=por.innerHTML.replace(/divide by \d+/,'divide by '+nn2); }
       var mn=document.querySelector('.smp-mini-n'); if(mn) mn.textContent=String(nn2);
     }catch(e){}
   }
-  function renderAll(anim){ renderIngredients(); renderTabs(anim); updateStats(); renderSave(); }
+  function renderAll(anim){ renderIngredients(); renderTabs(anim); updateStats(); fillLivePrices(); renderSave(); }
   function bump(d){
     num.value=(parseInt(num.value)||data.base)+d;
     if(!rm()){ num.classList.remove('smp-pop'); void num.offsetWidth; num.classList.add('smp-pop'); }
@@ -738,7 +758,7 @@ var k=variable?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-0.02
       var sv=document.querySelector('.smp-ct-save');
       if(sv){ sv.innerHTML='Showing everyday prices. This week’s live store prices would not load.'; sv.hidden=false; }
     }
-    lastTotal=null; renderTabs(false); updateStats(); renderSave();
+    lastTotal=null; renderTabs(false); updateStats(); fillLivePrices(); renderSave();
   });
 
   // ---------- STICKY MINI-SCALER: the servings control follows you down a 5,000px page ----------

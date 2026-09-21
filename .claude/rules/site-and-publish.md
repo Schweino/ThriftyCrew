@@ -23,6 +23,15 @@ real cost to a real person, and understating is exactly as wrong as overstating.
   ships BEFORE the post. [[board-json-carries-structured-rows]]
 - **`build-deals-page` clobbers `public/` artifacts** - restore `public/` from git after any local
   build. [[build-deals-page-clobbers-public-artifacts]]
+- **A RECIPE POST CARRIES NO PRICE LITERAL; EVERY PRICE RENDERS FROM THE FEED AT VIEW TIME** (Brad's instruction,
+  2026-09-21: *"If a pricing updates in the DB its automatically updated on all recipe pages."*). So a price move
+  never needs a republish. `meal-prep/engine/publish.ps1` refuses a card with a money figure outside a stamped live
+  placeholder (`meal-prep/lib/price-literal-gate.ps1`; allowed literals: exactly `$1 a month` and `$10 a year`), the feed
+  contract (`meal-prep/pipeline/audit-live-price-contract.ps1`) fails a placeholder the feed cannot fill, and the
+  daily live monitor (`meal-prep/pipeline/monitor-live-recipe-prices.ps1`) runs each live post's own script against
+  the deployed feed and pages on a mismatch, a missing script or a missing feed. **Site-wide code injection is out of
+  its reach**: the homepage's "Fourteen servings at about $2.40 each" quote lives there, frozen, and is a ruling for
+  Brad. Full account in `.claude/rules/meal-prep.md` and `design/PLAN-live-recipe-prices-2026-09-21.md`.
 - **A Ghost 422 is a field length**, and `custom_excerpt` is 300 chars AFTER token expansion.
   [[ghost-422-is-a-field-length]]
 - **Check the paywall in the direction that loses money.** Every visibility guard here once checked

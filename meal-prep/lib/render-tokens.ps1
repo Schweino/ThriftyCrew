@@ -79,14 +79,49 @@ function Expand-SpecProse { param($Spec)
 # old static cost token with a live hydration target in HTML fields, and remove
 # it from non-hydratable metadata. The $1 membership sentence is intentionally
 # untouched because it is not a grocery price and does not equal stat.cost_ps.
+# THE LIVE PRICE PLACEHOLDER, AND THE ONLY PLACE ITS BYTES ARE WRITTEN (2026-09-21, Brad: "The recipe pages
+# should be fetching the pricing from our database ... If a pricing updates in the DB its automatically
+# updated on all recipe pages"). The card script (tpl2-scaler-prefix.html, fillLivePrices) replaces the
+# TEXT at view time from the feed; the text shipped here is the FALLBACK a search engine, a no-script
+# reader and a reader whose feed failed will see, so it is a real price on the SAME basis the fill
+# computes - never "loading" copy, which read as "for about current release price loading a serving".
+#   field  cost_ps                  the only live field today; a new one needs a registry entry in
+#                                   lib\price-literal-gate.ps1 AND a branch in fillLivePrices, or the
+#                                   feed-contract audit refuses the card
+#   basis  feed-everyday-whole-package   what the card script computes: totalAt(n,'everyday')/n, every line
+#          billed whole packages at its cheapest NON-SALE store cell in the feed's pricing_inputs, at the
+#          store's own package. This is the receipt's Everyday tab. It is NOT stat.cost_ps and NOT
+#          v2-perserving everyday_ps: those bill the recipe board's everyday cell at the RECIPE's package
+#          (costed.json), and measured 2026-09-21 on the canary they disagree with this by -$0.33 to
+#          +$0.24 a serving. So the fallback is never taken from them - that would ship one basis as a
+#          stand-in for another. build-card2 writes stat.cost_ps as a PROVISIONAL fallback only, and
+#          engine\build-cards.ps1 replaces it (pipeline\stamp-live-price-fallback.ps1) with the value the
+#          card's own script fills against the canonical feed, stamping data-tc-asof with that feed's
+#          `generated`. publish refuses a span with no data-tc-asof.
+$script:TC_LIVE_PRICE_BASIS = @{ 'cost_ps' = 'feed-everyday-whole-package' }
+function Format-TcLivePriceSpan { param([string]$Slug, [string]$Field = 'cost_ps', [string]$Value, [string]$AsOf = '')
+  if ([string]::IsNullOrEmpty($Slug)) { throw 'Format-TcLivePriceSpan: no slug - a placeholder that does not name its recipe cannot be checked against the feed' }
+  if (-not $script:TC_LIVE_PRICE_BASIS.ContainsKey($Field)) { throw ("Format-TcLivePriceSpan: unknown field '{0}'" -f $Field) }
+  $d = 0.0
+  if (-not [double]::TryParse($Value, [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$d) -or -not ($d -gt 0) -or [double]::IsInfinity($d)) {
+    throw ("Format-TcLivePriceSpan: fallback '{0}' for {1} is not a positive price - a placeholder must never fall back to a blank, NaN or `$0.00" -f $Value, $Slug)
+  }
+  $v = $d.ToString('0.00', [Globalization.CultureInfo]::InvariantCulture)
+  if ($AsOf -and $AsOf -notmatch '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$') { throw ("Format-TcLivePriceSpan: as-of '{0}' is not a feed generated stamp" -f $AsOf) }
+  $asofAttr = if ($AsOf) { ' data-tc-asof="' + $AsOf + '"' } else { '' }
+  return ('<span data-tc-live-price data-tc-slug="{0}" data-tc-field="{1}" data-tc-basis="{2}" data-tc-fallback="{3}"{4}>~${3}</span>' -f $Slug, $Field, $script:TC_LIVE_PRICE_BASIS[$Field], $v, $asofAttr)
+}
+
 function Move-SpecPriceToReleaseHydration { param($Spec)
   $cost = [string]$Spec.stat.cost_ps
   if ([string]::IsNullOrEmpty($cost)) { return $Spec }
   $pattern = '\$' + [regex]::Escape($cost)
-  $markup = '<span data-tc-live-price>current release price loading</span>'
+  $markup = Format-TcLivePriceSpan -Slug ([string]$Spec.slug) -Field 'cost_ps' -Value $cost
   foreach ($k in $script:TOKEN_FIELDS) {
     $v = [string]$Spec.$k
-    if ($v) { $Spec.$k = [regex]::Replace($v, $pattern, $markup) }
+    # An EVALUATOR, not a replacement string: the markup carries "~$6.20", and in a .NET replacement
+    # string "$6" is a group reference.
+    if ($v) { $Spec.$k = [regex]::Replace($v, $pattern, [System.Text.RegularExpressions.MatchEvaluator] { param($m) $markup }) }
   }
   if ($Spec.head -and $Spec.head.PSObject.Properties['description']) {
     $description = [string]$Spec.head.description
@@ -124,6 +159,13 @@ function Remove-GhostStaticCurrencyClaims { param([string]$Text)
     cannot eat half of their match.
   #>
   if ([string]::IsNullOrEmpty($Text) -or $Text -notmatch '\$\d') { return $Text }
+  # SHIELD THE LIVE PRICE SPANS FIRST (2026-09-21). Their text is now the build-time fallback "~$6.20",
+  # the card's OWN price on the feed's basis, and every rule below would otherwise rewrite it into
+  # "restaurant money". Shielded by position, restored verbatim after the rules run.
+  $live = New-Object System.Collections.Generic.List[string]
+  $Text = [regex]::Replace($Text, '<span data-tc-live-price\b[^>]*>[^<]*</span>', [System.Text.RegularExpressions.MatchEvaluator] {
+    param($m) $live.Add($m.Value); return ('__TC_LIVE_PRICE_' + ($live.Count - 1) + '__')
+  })
   $membership = '__TC_MEMBERSHIP_PRICE__'
   $out = $Text.Replace('$1 a month', $membership)
   $amount = '\$\d+(?:\.\d+)?'
@@ -167,7 +209,9 @@ function Remove-GhostStaticCurrencyClaims { param([string]$Text)
   # PER-PHRASE. "$12 a plate" is one noun phrase; replacing only the figure strands the unit.
   $out = [regex]::Replace($out, '(?i)' + $amount + '\s+(?:a|per|each)\s+[a-z]+', 'restaurant prices')
   $out = [regex]::Replace($out, $amount, 'restaurant money')
-  return $out.Replace($membership, '$1 a month')
+  $out = $out.Replace($membership, '$1 a month')
+  for ($i = 0; $i -lt $live.Count; $i++) { $out = $out.Replace(('__TC_LIVE_PRICE_' + $i + '__'), $live[$i]) }
+  return $out
 }
 
 if ($SelfTest) {
@@ -199,23 +243,48 @@ if ($SelfTest) {
   T 'MUST FIRE  a token resolving to an empty stat throws' $threw2 'rendered "about $ a bowl"'
 
   # Expand-SpecProse touches all five surfaces including head.description.
-  $full = '{"stat":{"cal":610,"protein":57,"cost_ps":"3.58"},"intro_html":"x {{protein}}g","portion_html":"{{cal}} cal","cost_closing_html":"${{cost_ps}}","upsell_html":"${{cost_ps}} a bowl","head":{"description":"about ${{cost_ps}} each","costPerServing":3.58}}' | ConvertFrom-Json
+  $full = '{"slug":"fixture-bowl","stat":{"cal":610,"protein":57,"cost_ps":"3.58"},"intro_html":"x {{protein}}g","portion_html":"{{cal}} cal","cost_closing_html":"${{cost_ps}}","upsell_html":"${{cost_ps}} a bowl","head":{"description":"about ${{cost_ps}} each","costPerServing":3.58}}' | ConvertFrom-Json
   $e = Expand-SpecProse $full
   T 'Expand-SpecProse expands all four prose fields + head.description' `
     ($e.intro_html -eq 'x 57g' -and $e.portion_html -eq '610 cal' -and $e.upsell_html -eq '$3.58 a bowl' -and $e.head.description -eq 'about $3.58 each') `
     ($e.head.description)
 
+  # 2026-09-21: the placeholder names its recipe, field and basis, and its TEXT is the build-time price on
+  # that basis - the fallback a reader keeps when the feed does not load.
+  $span358 = '<span data-tc-live-price data-tc-slug="fixture-bowl" data-tc-field="cost_ps" data-tc-basis="feed-everyday-whole-package" data-tc-fallback="3.58">~$3.58</span>'
   $h = Move-SpecPriceToReleaseHydration $e
-  T 'Ghost prose price becomes a live release hydration target while membership pricing is untouched' `
-    ($h.upsell_html -eq '<span data-tc-live-price>current release price loading</span> a bowl' -and $h.head.description -notmatch '\$3\.58') `
+  T 'Ghost prose price becomes a live placeholder carrying slug, field, basis and a numeric fallback' `
+    ($h.upsell_html -eq ($span358 + ' a bowl') -and $h.head.description -notmatch '\$3\.58') `
     ($h.upsell_html + ' / ' + $h.head.description)
-  $h2 = '{"stat":{"cost_ps":"5.91"},"head":{"description":"678 calories, 37g protein, about $5.91 a serving (at everyday cost). Takeout, dethroned."}}' | ConvertFrom-Json
+  $h2 = '{"slug":"fixture-bowl","stat":{"cost_ps":"5.91"},"head":{"description":"678 calories, 37g protein, about $5.91 a serving (at everyday cost). Takeout, dethroned."}}' | ConvertFrom-Json
   $h2 = Move-SpecPriceToReleaseHydration $h2
   T 'metadata removes the price clause as a grammatical sentence' `
     ($h2.head.description -eq '678 calories, 37g protein, with live pricing shown on the page. Takeout, dethroned.') $h2.head.description
   T 'non-release currency claims become qualitative while membership pricing remains' `
     ((Remove-GhostStaticCurrencyClaims 'runs $14 to $17, saves around $12, members pay $1 a month') -eq 'runs far more, saves restaurant money, members pay $1 a month') `
     (Remove-GhostStaticCurrencyClaims 'runs $14 to $17, saves around $12, members pay $1 a month')
+
+  # MUST FIRE - the founding hazard of the numeric fallback. Without the shield, the hedge rule reads
+  # "about ~$3.58 a bowl" and rewrites the card's OWN live price into "restaurant money".
+  $withSpan = 'About <strong>' + $span358 + ' a bowl</strong> (at everyday cost), instead of $12 delivery.'
+  $wantSpan = 'About <strong>' + $span358 + ' a bowl</strong> (at everyday cost), instead of restaurant-priced delivery.'
+  T 'MUST FIRE  a live span''s numeric fallback survives the static-claim rewrite byte for byte' `
+    ((Remove-GhostStaticCurrencyClaims $withSpan) -eq $wantSpan) (Remove-GhostStaticCurrencyClaims $withSpan)
+  # MUST FIRE - a fallback that is not a price is refused at build time, never rendered.
+  foreach ($badV in @('', '0', '0.00', 'NaN', 'abc', '-1.50')) {
+    T ('MUST FIRE  a placeholder refuses the fallback [' + $badV + ']') `
+      (& { $t = $false; try { Format-TcLivePriceSpan -Slug 'x' -Value $badV | Out-Null } catch { $t = $true }; $t }) 'rendered a non-price'
+  }
+  T 'MUST FIRE  a placeholder refuses a field with no basis in the registry' `
+    (& { $t = $false; try { Format-TcLivePriceSpan -Slug 'x' -Field 'cost_batch' -Value '3.00' | Out-Null } catch { $t = $true }; $t }) 'accepted cost_batch'
+  T 'MUST FIRE  a placeholder refuses to render without the slug it belongs to' `
+    (& { $t = $false; try { Format-TcLivePriceSpan -Slug '' -Value '3.00' | Out-Null } catch { $t = $true }; $t }) 'rendered an anonymous span'
+  # AT THE BAR (the bar is "greater than zero"; resolution is one cent): 0.01 is the smallest price the span
+  # may carry and renders; 0.00, one cent below, is refused above.
+  T 'AT BAR  a fallback of exactly 0.01 (one cent above the > 0 bar) renders' `
+    ((Format-TcLivePriceSpan -Slug 'x' -Value '0.01') -match '>~\$0\.01</span>$') (Format-TcLivePriceSpan -Slug 'x' -Value '0.01')
+  T 'CLEAN TWIN  a fallback is always written at two decimals, so "6.2" renders as ~$6.20' `
+    ((Format-TcLivePriceSpan -Slug 'x' -Value '6.2') -match 'data-tc-fallback="6\.20">~\$6\.20</span>$') (Format-TcLivePriceSpan -Slug 'x' -Value '6.2')
 
   # ================================================================================================
   # THE GRAMMAR CASES, 2026-09-01. Every `buy` string below is lifted VERBATIM off the spec that was

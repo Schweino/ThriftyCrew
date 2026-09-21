@@ -426,7 +426,9 @@ $L.Add($scalerBlock)
 # (Brad, 2026-09-12, backlog I140; docs\HEADLINE-METRIC.md). Price words only here - a cheaper recipe is
 # never presented as a better one on this number, and this line is not a nutrition verdict.
 $st = $spec.stat
-$L.Add(('<p class="smp-stat"><strong>Makes 14 servings &middot; ~{0} cal &middot; {1}g protein &middot; {2}g carbs &middot; {3}g fat &middot; <span data-tc-live-price>current price loading</span>.</strong></p>' -f $st.cal,$st.protein,$st.carbs,$st.fat))
+# The price is a live placeholder whose text is the build-time fallback (2026-09-21): the one emitter is
+# Format-TcLivePriceSpan, so this line and the prose spans can never disagree on shape, field or basis.
+$L.Add(('<p class="smp-stat"><strong>Makes 14 servings &middot; ~{0} cal &middot; {1}g protein &middot; {2}g carbs &middot; {3}g fat &middot; {4}.</strong></p>' -f $st.cal,$st.protein,$st.carbs,$st.fat,(Format-TcLivePriceSpan -Slug ([string]$spec.slug) -Field 'cost_ps' -Value ([string]$st.cost_ps))))
 $L.Add('')
 # JUMP NAV: these are 10-minute-read pages and cooks arrive mid-task. Cook mode is a button, not a link,
 # because it builds itself from the Make It list at tap time (zero nodes until asked).
@@ -609,12 +611,16 @@ if (-not $isFreeNow) {
   $paywallJson = $paywall | ConvertTo-Json -Depth 6 -Compress
   $head += "<script type=`"application/ld+json`">`n" + $paywallJson + "`n</script>`n"
 }
-if($staticRecipeCost -and ($body -match $staticRecipeCostPattern -or $head -match $staticRecipeCostPattern)){
-  throw ("static recipe price escaped promoted-release hydration for " + $spec.slug)
-}
-$nonMembershipBody = $body.Replace('$1 a month','')
-if($nonMembershipBody -match '\$\d' -or $head -match '\$\d'){
-  throw ("non-authoritative numeric price escaped Ghost narrative cleanup for " + $spec.slug)
+# THE BUILD GATE (2026-09-21, Brad: a recipe page fetches its pricing; nothing is frozen into the post).
+# No price literal ships outside a live placeholder, and every placeholder names this card, a registered
+# field, its basis and a positive fallback. It replaces the two checks that stood here: "$<cost_ps>
+# anywhere" and "$<digit> anywhere but '$1 a month'", which could not tell a placeholder's own fallback from
+# a frozen figure and would have refused every card once spans carried a real price. The rule and its
+# allowlist live in lib\price-literal-gate.ps1; engine\publish.ps1 asks it again before anything leaves.
+. (Join-Path $here '..\lib\price-literal-gate.ps1')
+$priceFindings = Test-TcBuiltPriceLiterals -Body $body -Head $head -Slug ([string]$spec.slug)
+if($priceFindings.Count){
+  throw ("PRICE-LITERAL GATE refused " + $spec.slug + ": " + (($priceFindings | Select-Object -First 3) -join ' || '))
 }
 
 if(-not (Test-Path $OutDir)){ New-Item -ItemType Directory -Force $OutDir | Out-Null }
