@@ -72,7 +72,11 @@
 [CmdletBinding()]
 param(
     [int]    $Port           = 8791,
-    [string] $OutDir         = "$PSScriptRoot\out\captures\_sink",
+    # EMPTY, resolved below by Resolve-CaptureSinkOutDir. Under [CmdletBinding()] PS 5.1 evaluates a
+    # param default where $PSScriptRoot is EMPTY, so "$PSScriptRoot\out\captures\_sink" was the string
+    # "\out\captures\_sink" - drive-relative, which IsPathRooted calls rooted - and every capture the
+    # 2026-09-21 06:17 browser-stores run posted landed in C:\out\captures\_sink, where no builder looks.
+    [string] $OutDir         = '',
     [int]    $MaxIdleMinutes = 30,
     [switch] $Stop,
     # NO SPACE after [switch], against the alignment of every line above it, because ops\run-gates.ps1
@@ -239,6 +243,21 @@ function Get-MismatchAdvice {
     return 'The sink holds FEWER characters than the page built, so suspect the COUNT, not the payload - a decoding fault cannot remove characters. Most likely the page sent the old wire-length workaround (csv.replace(/\n/g,''\r\n'').length + 2) instead of a plain csv.length; the sink already undoes that envelope.'
 }
 
+# WHERE THE SINK WRITES (2026-09-21). No -OutDir means grocery\out\captures\_sink beside this script,
+# resolved here in the body because a param default cannot see $PSScriptRoot under [CmdletBinding()].
+# A path counts as rooted only when it names its drive AND starts at that drive's root, or is UNC:
+# IsPathRooted also says yes to '\out\x' (the current drive's root, which is how the empty-root default
+# reached C:\out) and to 'C:x' (relative to C:'s current directory), and neither is where a caller meant.
+# Anything else resolves against this script's directory, never the current one (see the 2026-09-09
+# note below). A drive-relative 'C:x' has no sane anchor, so it is left for New-Item to reject or place.
+function Resolve-CaptureSinkOutDir {
+    param([string] $OutDir, [string] $ScriptRoot)
+    if ([string]::IsNullOrWhiteSpace($OutDir)) { return (Join-Path $ScriptRoot 'out\captures\_sink') }
+    if ($OutDir -match '^[A-Za-z]:[\\/]' -or $OutDir -match '^[\\/]{2}') { return $OutDir }
+    if ($OutDir -match '^[A-Za-z]:') { return $OutDir }
+    return (Join-Path $ScriptRoot ($OutDir.TrimStart('\', '/')))
+}
+
 # ---------------------------------------------------------------------------
 if ($SelfTest) {
     # A guard ships a frozen fixture of the bug that created it plus a clean twin, so the test can
@@ -398,7 +417,7 @@ if ($SelfTest) {
     # MUST NOT FIRE, and this half is the one the first cut of this guard got wrong: it refused every
     # unrooted path, which would have cost a capture the first morning the scheduled task passed the
     # relative directory its own SKILL.md documents.
-    $legit = @("C:\Codex\ThriftyCrew\grocery\out\captures\_sink", $OutDir, '\\server\share\sink',
+    $legit = @("C:\Codex\ThriftyCrew\grocery\out\captures\_sink", (Resolve-CaptureSinkOutDir -OutDir '' -ScriptRoot $PSScriptRoot), '\\server\share\sink',
                'out\captures\_sink', 'out/captures/_sink', '..\out\_sink', 'sink', '_sink')
     $wrongly = @($legit | Where-Object { $_ -match $collapseRe })
     if ($wrongly.Count) {
@@ -407,11 +426,91 @@ if ($SelfTest) {
         Write-Output ('ok    MUST NOT FIRE  ' + $legit.Count + ' real path(s) pass - absolute, UNC, relative with separators, and a bare name')
     }
     # CLEAN TWIN: a relative path is anchored to THIS script, never to whatever the caller's CWD is.
-    $anchored = Join-Path $PSScriptRoot 'out\captures\_sink'
-    if ([System.IO.Path]::IsPathRooted($anchored) -and $anchored -like "*grocery*") {
+    $expectedSink = Join-Path $PSScriptRoot 'out\captures\_sink'
+    $anchored = Resolve-CaptureSinkOutDir -OutDir 'out\captures\_sink' -ScriptRoot $PSScriptRoot
+    if ([string]::Equals($anchored, $expectedSink, [StringComparison]::OrdinalIgnoreCase)) {
         Write-Output 'ok    CLEAN TWIN  a relative -OutDir resolves under grocery\, not under the current directory'
     } else {
         Write-Output ('FAIL  a relative -OutDir no longer anchors to the script: ' + $anchored); $fail++
+    }
+
+    # ---- THE DEFAULT -OutDir, frozen against 2026-09-21 06:17 (the browser-stores refresh posted a
+    # morning of captures into C:\out\captures\_sink and read AGREE on every one). Pure half first: the
+    # exact string the empty-root default produced is drive-relative, and must anchor to the script.
+    $driveRel = '\' + 'out\captures\_sink'
+    $gotRel = Resolve-CaptureSinkOutDir -OutDir $driveRel -ScriptRoot $PSScriptRoot
+    if ([string]::Equals($gotRel, $expectedSink, [StringComparison]::OrdinalIgnoreCase)) {
+        Write-Output 'ok    MUST FIRE   a drive-relative \out\captures\_sink is anchored to grocery\, not to the drive root'
+    } else {
+        Write-Output ('FAIL  a drive-relative -OutDir resolved to ' + $gotRel + ', expected ' + $expectedSink); $fail++
+    }
+    $keep = @('C:\sink', 'D:/sinks/x', '\\server\share\sink')
+    $moved = @($keep | Where-Object { -not [string]::Equals((Resolve-CaptureSinkOutDir -OutDir $_ -ScriptRoot $PSScriptRoot), $_, [StringComparison]::Ordinal) })
+    if ($moved.Count) {
+        Write-Output ('FAIL  a fully qualified -OutDir was re-anchored: ' + ($moved -join ', ')); $fail++
+    } else {
+        Write-Output ('ok    MUST NOT FIRE  ' + $keep.Count + ' fully qualified path(s) (drive, forward-slash drive, UNC) are left alone')
+    }
+
+    # The live half: run THIS script as a child the way the scheduled task did, and read where it says
+    # it is writing off its own LISTENING line. The param default is the thing under test, and only a
+    # real bind exercises it - a function call cannot see what [CmdletBinding()] does to a default.
+    # One scratch directory per run (concurrent pushes run this suite side by side), removed in finally;
+    # a free port from the OS; the child's CWD is the scratch directory, so an answer anchored to the
+    # current directory cannot pass by accident. The clock is only a hang guard.
+    function Get-ChildListeningDir {
+        param([string] $Scratch, [string[]] $Extra)
+        $probe = New-Object System.Net.Sockets.TcpListener ([System.Net.IPAddress]::Loopback), 0
+        $probe.Start(); $port = ([System.Net.IPEndPoint]$probe.LocalEndpoint).Port; $probe.Stop()
+        $outFile = Join-Path $Scratch ('child-' + [guid]::NewGuid().ToString('N') + '.txt')
+        $argv = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $PSCommandPath + '"'),
+                  '-Port', [string]$port, '-MaxIdleMinutes', '1') + $Extra
+        $child = Start-Process powershell.exe -ArgumentList $argv -WorkingDirectory $Scratch `
+                     -RedirectStandardOutput $outFile -WindowStyle Hidden -PassThru
+        $null = $child.Handle
+        $line = $null
+        $deadline = (Get-Date).AddSeconds(90)
+        try {
+            while ((Get-Date) -lt $deadline) {
+                if (Test-Path -LiteralPath $outFile) {
+                    $line = Get-Content -LiteralPath $outFile -ErrorAction SilentlyContinue |
+                                Where-Object { $_ -match 'LISTENING|FAILED to bind|REFUSING' } | Select-Object -First 1
+                    if ($line) { break }
+                }
+                if ($child.HasExited) { break }
+                Start-Sleep -Milliseconds 200
+            }
+        } finally {
+            if (-not $child.HasExited) { Stop-Process -Id $child.Id -Force -ErrorAction SilentlyContinue }
+            $null = $child.WaitForExit(15000)
+        }
+        if ($line -match '^capture-sink LISTENING on localhost:\d+ -> (.+) \(idle timeout') { return $Matches[1] }
+        return ('NO LISTENING LINE: ' + [string]$line)
+    }
+    $scratch = Join-Path $env:TEMP ('cs-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+    try {
+        New-Item -ItemType Directory -Path $scratch -ErrorAction Stop | Out-Null
+
+        # MUST FIRE: no -OutDir at all. Before the fix this line read '-> \out\captures\_sink'.
+        $dflt = Get-ChildListeningDir -Scratch $scratch -Extra @()
+        if ([string]::Equals($dflt, $expectedSink, [StringComparison]::OrdinalIgnoreCase)) {
+            Write-Output 'ok    MUST FIRE   a sink started with no -OutDir listens into grocery\out\captures\_sink'
+        } else {
+            Write-Output ('FAIL  a sink started with no -OutDir writes to ' + $dflt + ', expected ' + $expectedSink); $fail++
+        }
+
+        # CLEAN TWIN: an explicit absolute -OutDir still wins over the default, and is created.
+        $explicit = Join-Path $scratch 'explicit sink'
+        $given = Get-ChildListeningDir -Scratch $scratch -Extra @('-OutDir', ('"' + $explicit + '"'))
+        if ([string]::Equals($given, $explicit, [StringComparison]::OrdinalIgnoreCase) -and (Test-Path -LiteralPath $explicit)) {
+            Write-Output 'ok    CLEAN TWIN  an explicit absolute -OutDir still wins, and the sink creates it'
+        } else {
+            Write-Output ('FAIL  an explicit -OutDir ' + $explicit + ' was not honoured: the sink said ' + $given); $fail++
+        }
+    } catch {
+        Write-Output ('FAIL  the default -OutDir child run could not complete: ' + $_.Exception.Message); $fail++
+    } finally {
+        Remove-Item -LiteralPath $scratch -Recurse -Force -ErrorAction SilentlyContinue
     }
 
     # ---- WHICH PROCESSES -Stop KILLS, frozen against the 2026-09-11 reproduction. Pids are the ones
@@ -580,7 +679,7 @@ if ($OutDir -match '^[A-Za-z][A-Za-z0-9_]{15,}$') {
     Write-Output '  directory. Check the layer that mangled it; do not pass this through.'
     exit 2
 }
-if (-not [System.IO.Path]::IsPathRooted($OutDir)) { $OutDir = Join-Path $PSScriptRoot $OutDir }
+$OutDir = Resolve-CaptureSinkOutDir -OutDir $OutDir -ScriptRoot $PSScriptRoot
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 $listener = New-Object System.Net.HttpListener
