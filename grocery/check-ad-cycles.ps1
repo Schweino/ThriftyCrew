@@ -2864,17 +2864,23 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # another is NOT a price move, and last week's number is not comparable to this week's. It is
       # recorded in guards-<week>.json like every other flag; it just does not page a human to verify
       # arithmetic that is already correct. The unit-free OUTLIER detector still runs on the same row.
-      $SANITY_QUIET = @('outlier-verified','unit-changed')
+      # 'wow-explained' (2026-09-21, queue 2026-09-19-fccb69, plan-2026-09-21-6.json): a week-over-week move the
+      # PREVIOUS BOARD accounts for at both ends - the new cheapest is a price the board already carried and the
+      # old cheapest was undercut, or left the cell as an EVERYDAY row. It is a change in which rows are on the
+      # cell, not an event about any price, and it was most of the wow flags this block paged. sanity-check
+      # decides it (Get-WowExplanation); a sale row leaving is deliberately NOT explained and still pages.
+      $SANITY_QUIET = @('outlier-verified','unit-changed','wow-explained')
       $sanityQuiet = 0
+      $sanityQuietBy = [ordered]@{}
       if ($gf) {
         $gj = Read-JsonFile $gf.FullName
         foreach ($x in @($gj)) {
-          if ($SANITY_QUIET -contains ([string]$x.type)) { $sanityQuiet++; continue }
+          if ($SANITY_QUIET -contains ([string]$x.type)) { $sanityQuiet++; $sanityQuietBy[[string]$x.type] = 1 + [int]$sanityQuietBy[[string]$x.type]; continue }
           $flagParts += ('SANITY|' + $x.commodity + '|' + $x.type + '|' + $x.detail); $flagKeys += ('SANITY|' + $x.commodity + '|' + $x.type)
         }
       }
       # <<SANITY-PAGER-END>>
-      if ($sanityQuiet -gt 0) { Log ("review flags: $sanityQuiet store-verified outlier(s) recorded in guards-*.json, not paged (the store's own published unit price reproduces ours)") }
+      if ($sanityQuiet -gt 0) { Log ("review flags: $sanityQuiet quiet flag(s) recorded in guards-*.json, not paged (" + (@($sanityQuietBy.Keys | ForEach-Object { [string]$sanityQuietBy[$_] + ' ' + $_ }) -join ', ') + "; outlier-verified = the store's own published unit price reproduces ours, wow-explained = the previous board accounts for the move)") }
       $ff = Get-ChildItem (Join-Path $OutDir 'flagged-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
       if ($ff) { $mb = @((Read-JsonFile $ff.FullName).multibuy_unpriced); foreach ($m in $mb) { $flagParts += ('MULTIBUY|' + $m.store + '|' + $m.label); $flagKeys += ('MULTIBUY|' + $m.store + '|' + $m.id) } }
       # MATCHER COULD-NOT-LOOK (2026-09-19, backlog I183/I209): names compare-deals left off the board because a
@@ -3090,7 +3096,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if ($ackReArmed) { $extra += ", $ackReArmed RE-ARMED the day their ack expired" }
         if ($ackExpired) { $extra += ", $ackExpired ack(s) EXPIRED" }
         if ($rearmHeld)  { $extra += ", $rearmHeld re-arm(s) HELD to ride the next page day (still due)" }
-        if ($sanityQuiet) { $extra += ", $sanityQuiet store-verified outlier(s) recorded, not paged" }
+        if ($sanityQuiet) { $extra += (", $sanityQuiet quiet flag(s) recorded, not paged (" + (@($sanityQuietBy.Keys | ForEach-Object { [string]$sanityQuietBy[$_] + ' ' + $_ }) -join ', ') + ")") }
         $summary += ("REVIEW    $($flagParts.Count) price flag(s) on the board ($($newIdx.Count) new, $stillOpen already seen$extra) - see guards-/flagged- json")
         if ($newIdx.Count -gt 0 -and -not $NoAlert) {
           $newLines = @($newIdx | ForEach-Object { $flagParts[$_] })

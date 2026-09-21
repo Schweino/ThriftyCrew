@@ -7,9 +7,27 @@
     * a big WEEK-OVER-WEEK move: cheapest changed > 40% vs last week's price-history (dormant until >=2 weeks).
   Also cross-checks any entry that carries a store-published native_unit_price (>3% disagreement -> flag).
   Flags are ROUTED TO REVIEW (never auto-deleted) -> guards-<date>.json + console. Exit 1 if anything flags.
+
+  A WEEK-OVER-WEEK MOVE THE BOARD ITSELF EXPLAINS IS 'wow-explained', NOT 'wow' (2026-09-21, queue
+  2026-09-19-fccb69, grocery/triage-plans/plan-2026-09-21-6.json). The cheapest price moves when ONE PRICE
+  CHANGES or when the SET OF ROWS on the cell changes, and only the first is an event about a price. Measured
+  over the 18 board versions of 2026-08-23..2026-09-21, most wow flags were the second: a store dropping off
+  the cell and a standing price taking the crown (adobo 2026-09-17: Sam's left, Baker's $0.3113 unchanged).
+  A move is explained only when BOTH ends are accounted for by the previous board (-PriorBoardDir):
+    * the NEW cheapest is not a new price: the same store carried the same item at the same per-unit on the
+      previous board, or (a store back after an absence) its LAST recorded per-unit on this cell, to 4 dp; and
+    * the OLD cheapest is still on the cell at the same per-unit (undercut), or has left the cell AND was an
+      EVERYDAY row. A SALE row leaving is deliberately NOT an explanation: a sale ending is also how a wrong ad
+      price leaves the board, and it was the only trace of the Hy-Vee fuel-saver price that held laundry pods
+      at $0.10 from 2026-08-31 to 2026-09-06 (queue 2026-09-07-05e4c3, a confirmed defect).
+  A new price at the cheapest store, a price change on the same item, and anything the previous board cannot
+  answer stay 'wow' and say why. No threshold moved: this changes which flags are EXPLAINED, never how big a
+  move must be to flag, and the outlier arm is untouched.
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([string]$CompareFile = "", [string]$OutDir = "", [double]$OutlierFrac = 0.35, [double]$WowFrac = 0.40, [string]$HistoryFile = "")
+param([string]$CompareFile = "", [string]$OutDir = "", [double]$OutlierFrac = 0.35, [double]$WowFrac = 0.40, [string]$HistoryFile = "",
+      # Where comparison-<week>.json of the PREVIOUS board lives. Default: beside -CompareFile (grocery\out keeps them).
+      [string]$PriorBoardDir = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -38,6 +56,13 @@ function Get-UnitKey([string]$u) {
 # price history for WoW (prior week's cheapest per commodity)
 $prior = @{}
 $priorUnit = @{}
+$priorEntry = @{}   # id -> the prior history entry itself (week_of, cheapest_store), for the explanation below
+$storeLast = @{}    # id -> @{ store -> the LAST per-unit that store carried on this cell }, newest entry first
+# The look-back is bounded by the board's own publish window: a price older than that could not be on the board.
+$lookDays = 90
+if ($doc.PSObject.Properties['max_publish_age_days'] -and [int]$doc.max_publish_age_days -gt 0) { $lookDays = [int]$doc.max_publish_age_days }
+$lookCut = ''
+try { $lookCut = ([datetime]::ParseExact($week, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)).AddDays(-$lookDays).ToString('yyyy-MM-dd') } catch { $lookCut = '' }
 if (-not $HistoryFile) { $HistoryFile = Join-Path $root 'price-history.json' }
 $histFile = $HistoryFile
 if (Test-Path $histFile) {
@@ -52,8 +77,90 @@ if (Test-Path $histFile) {
       $pu = ''
       if ($last.PSObject.Properties['unit']) { $pu = [string]$last.unit }
       $priorUnit[[string]$c.id] = $pu
+      $priorEntry[[string]$c.id] = $last
+      $sl = @{}
+      for ($hi = $past.Count - 1; $hi -ge 0; $hi--) {
+        $he = $past[$hi]
+        if ($lookCut -and [string]::CompareOrdinal([string]$he.week_of, $lookCut) -lt 0) { break }
+        if (-not $he.PSObject.Properties['per_store'] -or $null -eq $he.per_store) { continue }
+        foreach ($hp in $he.per_store.PSObject.Properties) { if (-not $sl.ContainsKey([string]$hp.Name)) { $sl[[string]$hp.Name] = [double]$hp.Value } }
+      }
+      $storeLast[[string]$c.id] = $sl
     }
   }
+}
+
+# ---- THE EXPLANATION FILTER FOR A WEEK-OVER-WEEK MOVE (2026-09-21, see the header) ----------------------
+if (-not $PriorBoardDir) { $PriorBoardDir = Split-Path -Parent $CompareFile }
+$script:priorBoards = @{}
+function Get-PriorBoardRow([string]$PriorWeek, [string]$Id) {
+  # The previous board version, read once per week_of and indexed by commodity id. The current week is never
+  # its own previous board, and an unreadable file is an empty index: the move then stays unexplained.
+  if (-not $PriorWeek -or $PriorWeek -eq $script:week) { return $null }
+  if (-not $script:priorBoards.ContainsKey($PriorWeek)) {
+    $ix = @{}
+    $pf = Join-Path $script:PriorBoardDir ('comparison-' + $PriorWeek + '.json')
+    if (Test-Path -LiteralPath $pf) {
+      try { foreach ($pr in @((Read-JsonFile $pf).comparison)) { if ($pr) { $ix[[string]$pr.id] = $pr } } } catch { $ix = @{} }
+    }
+    $script:priorBoards[$PriorWeek] = $ix
+  }
+  $pix = $script:priorBoards[$PriorWeek]
+  if ($pix.ContainsKey($Id)) { return $pix[$Id] }
+  return $null
+}
+function ConvertTo-PerUnitKey($v) {
+  # Per-unit prices are published to 4 dp, so "the same price" is the same integer count of 0.0001s. Rounding
+  # to an integer first keeps the comparison exact whatever binary value 0.3113 happens to be stored as.
+  return [long][math]::Round(([double]$v) * 10000)
+}
+function Get-CellStoreRow($Row, [string]$Store, $Item = $null) {
+  # The store's cheapest row on the cell (ordinal names), optionally only rows of one item. $Item is UNTYPED on
+  # purpose: a [string] parameter turns a $null default into '' under PS 5.1, which then filters on an empty item
+  # name and matches nothing - the first run of this filter explained 0 of 124 moves for exactly that reason.
+  $best = $null
+  foreach ($s in @($Row.stores)) {
+    if (-not $s -or -not [string]::Equals([string]$s.store, $Store, [StringComparison]::Ordinal)) { continue }
+    if ($null -ne $Item -and -not [string]::Equals([string]$s.item, $Item, [StringComparison]::Ordinal)) { continue }
+    if (-not $best -or [double]$s.per_unit -lt [double]$best.per_unit) { $best = $s }
+  }
+  return $best
+}
+function Get-WowExplanation($Row, $PriorEntry, $PriorRow, $StoreLast) {
+  <# .SYNOPSIS Pure. Does the previous board account for this move? Returns explained (bool) and reason (words). #>
+  $c = [double]$Row.cheapest_price; $sc = [string]$Row.cheapest_store
+  $p = [double]$PriorEntry.cheapest_price; $sp = [string]$PriorEntry.cheapest_store
+  $no = { param([string]$why) [pscustomobject]@{ explained = $false; reason = ('unexplained: ' + $why) } }
+  if (-not $PriorRow) { return (& $no ('the previous board (week ' + [string]$PriorEntry.week_of + ') cannot be read, so nothing accounts for this move')) }
+  $cur = Get-CellStoreRow $Row $sc
+  if (-not $cur) { return (& $no ('the cheapest store ' + $sc + ' has no row on this cell')) }
+  # 1. THE NEW CHEAPEST: is it a price the board already carried?
+  $how = ''
+  $prevSame = Get-CellStoreRow $PriorRow $sc
+  if ($prevSame) {
+    if ([string]::Equals([string]$prevSame.item, [string]$cur.item, [StringComparison]::Ordinal) -and (ConvertTo-PerUnitKey $prevSame.per_unit) -eq (ConvertTo-PerUnitKey $c)) { $how = 'carried the same item at the same price on the previous board' }
+  } elseif ($StoreLast -and $StoreLast.ContainsKey($sc) -and (ConvertTo-PerUnitKey $StoreLast[$sc]) -eq (ConvertTo-PerUnitKey $c)) {
+    $how = 'is back at the last price it carried on this cell'
+  }
+  if (-not $how) {
+    $was = if ($prevSame) { ("'" + [string]$prevSame.item + "' `$" + ('{0:N4}' -f [double]$prevSame.per_unit)) } elseif ($StoreLast -and $StoreLast.ContainsKey($sc)) { ('last $' + ('{0:N4}' -f [double]$StoreLast[$sc])) } else { 'not on the cell before' }
+    return (& $no ('a NEW price at the cheapest store: ' + $sc + " '" + [string]$cur.item + "' `$" + ('{0:N4}' -f $c) + ' (was ' + $was + ')'))
+  }
+  # 2. THE OLD CHEAPEST: undercut, or gone and everyday. Located by store AND the price the history recorded.
+  $prevCrown = $null
+  foreach ($s in @($PriorRow.stores)) {
+    if ($s -and [string]::Equals([string]$s.store, $sp, [StringComparison]::Ordinal) -and (ConvertTo-PerUnitKey $s.per_unit) -eq (ConvertTo-PerUnitKey $p)) { $prevCrown = $s; break }
+  }
+  if (-not $prevCrown) { return (& $no ('the previous board has no ' + $sp + ' row at the $' + ('{0:N4}' -f $p) + ' the history recorded')) }
+  $nowOld = Get-CellStoreRow $Row $sp ([string]$prevCrown.item)
+  if ($nowOld -and (ConvertTo-PerUnitKey $nowOld.per_unit) -eq (ConvertTo-PerUnitKey $prevCrown.per_unit)) {
+    return [pscustomobject]@{ explained = $true; reason = ('explained: ' + $sc + ' ' + $how + ", and the old cheapest (" + $sp + " '" + [string]$prevCrown.item + "') is still there at the same price") }
+  }
+  if ($nowOld) { return (& $no ('the old cheapest item is still on the cell but its price moved: ' + $sp + " '" + [string]$prevCrown.item + "' `$" + ('{0:N4}' -f [double]$prevCrown.per_unit) + ' -> $' + ('{0:N4}' -f [double]$nowOld.per_unit))) }
+  if (-not [string]::Equals([string]$prevCrown.type, 'everyday', [StringComparison]::Ordinal)) {
+    return (& $no ('the old cheapest was a ' + $(if ($prevCrown.type) { [string]$prevCrown.type } else { 'untyped' }) + ' row (' + $sp + " '" + [string]$prevCrown.item + "'" + $(if ($prevCrown.ad_to) { ', ad to ' + [string]$prevCrown.ad_to } else { '' }) + ') and it left the cell; a sale ending is also how a wrong ad price leaves the board, so it is not explained'))
+  }
+  return [pscustomobject]@{ explained = $true; reason = ('explained: ' + $sc + ' ' + $how + ", and the old cheapest (" + $sp + " '" + [string]$prevCrown.item + "', everyday) has left the cell") }
 }
 
 # THE STORE'S OWN ARITHMETIC, AND HOW CLOSE COUNTS AS AGREEING (2026-09-04, queue 2026-09-04-def37c).
@@ -123,7 +230,13 @@ foreach ($r in $doc.comparison) {
     elseif ($p -gt 0 -and ([math]::Abs($cur - $p)/$p -gt $WowFrac)) {
       $dir = if ($cur -lt $p) { 'down' } else { 'up' }
       $unk = if ($pu) { '' } else { ' (prior unit unrecorded)' }
-      $flags.Add([ordered]@{ commodity=$r.commodity; type='wow'; detail=("cheapest moved $dir " + [math]::Round([math]::Abs($cur-$p)/$p*100) + "% vs last week (`$$('{0:N2}' -f $p) -> `$$('{0:N2}' -f $cur))" + $unk) })
+      # SAME BAR, THEN THE EXPLANATION (2026-09-21). Every move past $WowFrac is still written to guards-<week>.json;
+      # one the previous board fully accounts for carries the quiet type 'wow-explained' (check-ad-cycles'
+      # $SANITY_QUIET), and every other one stays 'wow' and says what is unexplained about it.
+      $pe = $priorEntry[[string]$r.id]
+      $ex = Get-WowExplanation $r $pe (Get-PriorBoardRow ([string]$pe.week_of) ([string]$r.id)) $storeLast[[string]$r.id]
+      $wType = if ($ex.explained) { 'wow-explained' } else { 'wow' }
+      $flags.Add([ordered]@{ commodity=$r.commodity; type=$wType; detail=("cheapest moved $dir " + [math]::Round([math]::Abs($cur-$p)/$p*100) + "% vs last week (`$$('{0:N2}' -f $p) -> `$$('{0:N2}' -f $cur))" + $unk + ' - ' + $ex.reason) })
     }
   }
   # native unit-price cross-check (activates when a pull captures the store's own per-unit number)
@@ -151,6 +264,9 @@ foreach ($r in $doc.comparison) {
 # field it reads. The count is printed on every run, including a clean one.
 $nVerified = @($flags.ToArray() | Where-Object { $_.type -eq 'outlier-verified' }).Count
 Write-Output ("sanity: store-published unit price - $nVerified outlier(s) verified against the store's own arithmetic, $script:notComparable row(s) priced in a unit that is not comparable with their commodity's (reported, not flagged)")
+$nWowAll = @($flags.ToArray() | Where-Object { $_.type -eq 'wow' -or $_.type -eq 'wow-explained' }).Count
+$nWowEx = @($flags.ToArray() | Where-Object { $_.type -eq 'wow-explained' }).Count
+Write-Output ("sanity: week-over-week - $nWowEx of $nWowAll move(s) past the bar are explained by the previous board (recorded as wow-explained, not paged); the rest stay wow and say why")
 if ($flags.Count -eq 0) {
   Write-Output ("SANITY OK  -  week ${week}: no outliers, no big week-over-week moves.")
   Exit-Guard -Name 'sanity-check' -Code 0
