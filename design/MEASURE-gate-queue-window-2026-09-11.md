@@ -150,3 +150,5 @@ ruling, recorded in `docs/CONTROL-CONSTANTS.md` and untouched here.
 The queue drained on its own by 18:00 as the afternoon's sessions finished: per-run cost fell to 825 s in the 17h
 hour and 698 s at 18h, and live runs fell from 39 to 12. This was transient overload against a fixed ceiling, and
 it will recur the next time several sessions push at once - which is what the harness is kept for.
+
+Re-read at harness blob `7441d63dacbf70f59c1a44ead4d9340eb9e36a48` (ops/run-gates.ps1): the only change since the last re-read is one more static detector in its list, the bare-JSON-reader ratchet, moved there from the board-publish guard on 2026-09-21 (plan-2026-09-21-4) because a source defect must stop the push that adds it, not hold a board. One job among about 457 that ran in about a second, so every queue, slot and wait figure in this file stands as written.

@@ -251,3 +251,5 @@ Both are deliberate choices there, not oversights, and neither is proposed here 
   alternative is to pass over a ticket nobody has touched for some time and keep the line moving, which trades a
   loud refusal for continued throughput. Which is right depends on whether a frozen waiter is a bug worth
   stopping for; that is a ruling, not a measurement.
+
+Re-read at harness blob `7441d63dacbf70f59c1a44ead4d9340eb9e36a48` (ops/run-gates.ps1): the only change since the last re-read is one more static detector in its list, the bare-JSON-reader ratchet, moved there from the board-publish guard on 2026-09-21 (plan-2026-09-21-4) because a source defect must stop the push that adds it, not hold a board. One job among about 457 that ran in about a second, so every queue, slot and wait figure in this file stands as written.
