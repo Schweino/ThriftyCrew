@@ -1,0 +1,92 @@
+{
+  "generated": "2026-09-21T08:25:00",
+  "round": 1,
+  "board_week": "2026-09-21",
+  "lane": "money",
+  "queue_ids_seen": ["2026-09-21-e291a1"],
+  "routing_artifact": null,
+  "note": "Written and implemented by the money-lane developer in one run (no separate reviewer), so this file is both the plan and the record of what shipped. The brief's premise that no board has consumed today's Sam's capture is half right: the 08:00 daily run built comparison-2026-09-21.json at 08:05 FROM it, but guards held that board at 08:12 on an unrelated band-censorship finding (queue 2026-09-21-da5011), so nothing built from it is live, and neither flagged row reaches a cell on it either way.",
+  "knowledge_consulted": {
+    "searched": "knowledge-search --multi \"derived size density\" \"weight volume density\" \"store unit price wrong\": 54 sections matched; the density hits are rag-craft clustering (mean shift, DBSCAN) and do not apply. From the brief: \"unit basis outlier\", \"guard hard fail publish held\".",
+    "used": [
+      "data-quality-craft/applies-here.md 'The silent semantic change, and what actually catches one here': the meaning (the printed precision) of Sam's unit-price field changed on 2026-09-20 and every derived size moved with it. The external referent it names, Sam's own unit price, is here the number that is WRONG: the derived size IS that unit price divided into the line price, so the only independent referent left on the row is the NAME's stated weight, bound to volume by density.",
+      "grocery/derived-size-density-lib.ps1 header (the rule, the 0.75-1.65 g/mL band derived from measured grocery-liquid densities, the multipack and coarse-rounding abstentions): reused whole, not copied. It calls itself 'the cross-measure half of the Sazon rule' and until today only a watcher ran it.",
+      "memory:grocery-method-sams (read in full): Sam's is a unit-price feed normalised at ingest; linePrice and unitPrice are both captured and the capture has no size field of its own, so a derived size is lp/up by construction.",
+      "memory:no-hardcoded-bands (read in full): Brad's 2026-09-04 ruling is about per-run MACRO bands. The density band is a stated physical property of grocery liquids already named once in the lib; this change adds no constant and moves no threshold.",
+      ".claude/rules/ops-and-gates.md: fixture vocabulary (MUST FIRE / MUST NOT FIRE / CLEAN TWIN by assertion); a frozen fixture is never regenerated from the live tree; the at-the-bar rule applies to a NEW threshold and this adds none (the band's edges are the lib's, pinned in test-auditors u134).",
+      ".claude/rules/grocery.md: right prices in the wrong basis is the hardest defect to find later; the Sazon rule refuses, never guesses."
+    ]
+  },
+  "items": [
+    {
+      "queue_id": "2026-09-21-e291a1",
+      "subject": "Grocery: the live board failed a watcher (watchers intact)",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "test-auditors (pre-push leg, 07:56, tc-prepush-ta-43492-0cb3dc22.out): 766 pass, 1 FAIL, derived-size-density live arm: 2 unruled capture rows, both in out/sams/sams-deals-2026-09-21.json (df1d6429e, blob f5f72285).",
+        "Row 1: Member's Mark Pure Soybean Oil, 35 lbs. | $29.98 | sams_unit_price '3.6 c/fl oz' (cent glyph) | size 832.778 fl oz | qty_basis 'package; qty derived lp/up' | 29.98/0.036 = 832.778 | 35 lb = 15,876 g -> 0.645 g/mL.",
+        "Row 2 (the second row the alert did not name): Member's Mark Peanut Oil, 35 lbs. | $55.96 | '6.6 c/fl oz' | 847.879 fl oz | derived lp/up | 55.96/0.066 = 847.879 -> 0.633 g/mL. SAME cause as row 1.",
+        "Both products were flagged and RULED on 2026-08-30 at their dollar-form sizes (peanut 799.429 fl oz from $0.07/foz, soybean 799.6 fl oz from $39.98 at $0.05/foz). The rulings pin the SIZE and say retire_when 'the derived size changes'. Sam's cents notation (since 2026-09-20, taught to the builder in e5d0a00a1) re-derived both, and the soybean price also moved $39.98 -> $29.98, so the watcher fired exactly as designed.",
+        "Board: 0 occurrences of 'soybean' or 'Peanut Oil, 35' in comparison-2026-09-20.json (05:08, live) or comparison-2026-09-21.json (08:05, HELD by guards on band-censorship, queue 2026-09-21-da5011). peanut-oil|SamsClub is blocked by known-wrong (2026-08-30); soybean matches no commodity.",
+        "CLASS COUNT, today (sams-deals-2026-09-21, 1,032 rows): 147 carry a size derived from lp/up (14.2%); the capture has no size field, so the rest are name-stated. Of the 147 the name states: nothing 101, a count only 25, a volume 13, a weight only 8. The density rule can JUDGE 6 of 147 (weight on the label, volume in the size): 2 flagged (the rows above), 4 in band at 0.875-0.886 g/mL (Canola Salad Oil 35 lbs 0.875; Clear Frying Oil 35 lbs x2 0.886; Creamy Liquid Shortening 35lbs 0.886), each 3-4.5% under an edible oil's 0.91-0.93 against a rounding band of 0.76-0.88%, so Sam's per-fl-oz price is off on all 6 of the 6 weight-labelled jugs, by 30-44% on 2 and 3-4.5% on 4. The other 141 have no physical referent at all.",
+        "CLASS COUNT, previous full generation (sams-deals-2026-09-19, 2,802 rows): 322 derived (11.5%); judged 4, flagged 2 (the same two products at 799.6 and 799.429, ruled), in band 2 (frying oil at 571.143 fl oz from '$0.07/foz' = 0.940, inside that print's +/-7.1%). 2026-09-20 was an outage slice: 19 rows, 2 derived, 0 judgeable.",
+        "ROUNDING, every derived row: size_rounding_pct is stamped on 147 of 147 today (median 0.15%, p90 0.72%, max 12.5%; 8 over 1%, 2 over 5%) and 322 of 322 on 2026-09-19 (median 0.26%, p90 7.14%, max 50%). compare-deals recomputes it and applies it in the crown test (Get-RoundingBandTies, compare-deals.ps1:3091; Get-CellRoundingPct :3125). A derived row's per-unit price is Sam's printed unit price exactly, so the rounding error is carried as an error bar on every row, not only the ones the band catches."
+      ],
+      "surface_fix": {
+        "what": "rebuild today's Sam's capture through build-sams-deals once the builder refuses the class, so the two rows are rejected rather than written; no capture is hand-edited and no ruling is added",
+        "files": ["grocery/out/sams/sams-deals-2026-09-21.json (builder output)", "grocery/out/sams/sams-rejects-2026-09-21.json (builder output)"],
+        "exact_change": "powershell -File grocery/build-sams-deals.ps1 -In grocery/out/captures/sams-capture-2026-09-21.csv -Date 2026-09-21 (the capture-run invocation; the cursor is already advanced for today and refuses a second step)"
+      },
+      "root_cause": "build-sams-deals' Build-Row decides a row's size by comparing the NAME's quantities with Sam's printed unit price in the same UNIT TOKEN (the Sazon rule). A name that states pounds against a price per fluid ounce is 'silent in the priced unit', so lp/up is taken as the size with nothing checking it, and every error in Sam's own unit price becomes a size error of the same factor. The one referent that CAN check it, density binding the label weight to the derived volume, lived only in a downstream watcher, so each occurrence was written first and ruled by hand afterwards (four rulings since 2026-08-30), and a ruling pins one size, so any movement in Sam's number or notation reopens it.",
+      "root_fix": {
+        "what": "apply the density rule AT INGEST: Build-Row runs derived-size-density-lib's Test-DerivedSizeDensity on every derived size and REFUSES a row the rule flags (a per-row reject 'DENSITY CONFLICT', the same answer the Sazon rule gives inside one unit). One copy of the rule: the builder dot-sources the same lib compare-deals and test-auditors do. Abstentions and out-of-scope rows keep their path. The watcher stays as the downstream check over every capture on disk.",
+        "files": ["grocery/build-sams-deals.ps1", "grocery/test-auditors.ps1"],
+        "exact_change": "build-sams-deals.ps1: dot-source derived-size-density-lib.ps1 beside pricing-math-lib; in Build-Row, after the package size is formed and before the shape tries, when $basis is 'derived lp/up' build a probe {item, size, qty_basis, sams_unit_price} and return err 'DENSITY CONFLICT: <the lib's Why> - Sam's <up> was computed against a volume this package cannot hold' on Status 'flag'. Self-test 8k: two MUST FIRE (today's real rows), one CLEAN TWIN (same jug at the unit price its weight implies, still derived and published), one MUST NOT FIRE (a pack-shaped ratio abstains, not refused). test-auditors.ps1 u134: the two cents-form rows frozen verbatim as MUST FIRE for the watcher; an additive correction on the frying-oil CLEAN TWIN's claim that 0.940 was 'right'."
+      },
+      "leaves_open": "Sam's per-fl-oz price is off INSIDE the 0.75-1.65 band on 4 of today's 6 weight-labelled 35 lb oil jugs (0.875-0.886 g/mL, 3-4.5% under an edible oil, 0 board cells); 141 of 147 derived Sam's rows have no physical referent; and the Walmart builder (walmart-row-lib.ps1) still writes density-flagged derived sizes (2 rows in the capture tree today, both ruled, both off the board)",
+      "leaves_open_occurrences": "4 in-band rows on 2026-09-21 and 2 on 2026-09-19 (the same jugs); 2 Walmart flagged rows ruled 2026-08-30 and 2026-09-19; window: every sams-deals and walmart-regular file on disk",
+      "leaves_open_followup": null,
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "where every row of the same raw capture ENDS UP, before and after: sams-capture-2026-09-21.csv built by the pre-fix builder (df1d6429e) against the fixed builder, diffed row by row; plus the density verdict of every derived row in every out/sams/sams-deals-*.json on disk, which is the set the new refusal can ever touch",
+        "affected_now": 2,
+        "names": ["Member's Mark Pure Soybean Oil, 35 lbs.", "Member's Mark Peanut Oil, 35 lbs."],
+        "risk": "the refusal reaches exactly the rows the watcher flags: 2 today, and the same 2 products at their older sizes in the 2026-09-19 and earlier files (already ruled; not rebuilt). A pack-shaped ratio, a two-weight name and a too-coarse unit price abstain and are not refused (self-test 8k MUST NOT FIRE). No name-sized, hinted or weight/count-priced row can reach the new branch.",
+        "cell_effects": []
+      },
+      "freshness": "measured against sams-deals-2026-09-21.json (blob f5f72285, df1d6429e, rebuilt identically by the 08:00 daily at 08:01), sams-deals-2026-09-19/-20, comparison-2026-09-20.json (05:08, the live board) and comparison-2026-09-21.json (08:05, held). The Sam's capture is one file a day; if a later slice lands before the rebuild, re-run the class count over it.",
+      "proof": {
+        "guard_or_fixture": "build-sams-deals.ps1 -SelfTest case 8k; test-auditors.ps1 unit u134 (frozen cents-form rows) and u137 (the live arm over every capture on disk)",
+        "must_fire_case": "Build-Row on the real 2026-09-21 rows ($29.98 at 3.6 c/fl oz; $55.96 at 6.6 c/fl oz, names '35 lbs.') returns no row and err '^DENSITY CONFLICT: ' naming 0.645 and 0.633 g/mL; the watcher flags both frozen rows at 0.645 and 0.633. The pre-fix builder WROTE both rows (the committed capture is that run), so the builder case is red on the old code.",
+        "clean_twin": "the same soybean jug at 5.1 c/fl oz derives 587.843 fl oz = 0.913 g/mL and is published at that derived size (the refusal keys on the arithmetic, not the product); MUST NOT FIRE: at 2.7 c/fl oz it derives 1110.37 fl oz, 1.98x the stated 35 lb, abstains as pack-shaped and is published; every pre-existing builder case unchanged.",
+        "commands": [
+          "powershell -File grocery/build-sams-deals.ps1 -SelfTest",
+          "powershell -File grocery/test-auditors.ps1 -SkipUnitsFile <all but u134-u137>   (the four density units)",
+          "powershell -File grocery/build-sams-deals.ps1 -In grocery/out/captures/sams-capture-2026-09-21.csv -Date 2026-09-21",
+          "powershell -File grocery/test-auditors.ps1   (full, via the pre-push leg)",
+          "powershell -File grocery/guards.ps1"
+        ]
+      },
+      "rollback": "git revert the code commit (build-sams-deals.ps1 and test-auditors.ps1 return together) and rebuild the day's capture; the rebuilt capture then carries the two rows again and the watcher goes red again, which is the correct state for the old code.",
+      "do_not_touch": ["the density band (0.75 / 1.65) and MAX_ROUND_ERR in derived-size-density-lib.ps1", "derived-size-density-rulings.json (no new ruling)", "the prepush known-failures record", "known-wrong.json", "walmart-row-lib.ps1 (its own lane: two callers and a cross-family doctrine of its own)", "price-bands.json and the vegetable-oil band-censorship finding (queue 2026-09-21-da5011)"],
+      "resolution_note": "Sam's two 35 lb oil jugs (soybean 832.778 fl oz, peanut 847.879 fl oz, implied 0.645 and 0.633 g/mL) carried sizes back-computed from Sam's own per-fl-oz price, which is wrong for them; the cents notation of 2026-09-20 moved the sizes out from under their 2026-08-30 rulings. Fixed at the builder: build-sams-deals now refuses a derived size the product cannot physically have (the watcher's own rule, one lib), with frozen fixtures. Today's capture rebuilt; the watcher is green and still fires on the frozen rows. Neither row ever reached a board cell.",
+      "publish_batch": 1,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    }
+  ],
+  "ship_sequence": [
+    "measure: the watcher's two rows, the class over sams-deals 2026-09-21 / -20 / -19, both boards for the products, the rounding band on every derived row",
+    "build-sams-deals.ps1: dot-source the density lib, refuse a flagged derived size in Build-Row, self-test 8k; run -SelfTest",
+    "test-auditors.ps1 u134: frozen cents-form MUST FIRE rows; run the four density units selectively",
+    "after the 08:00 daily run's readers finish: rebuild sams-deals-2026-09-21 through build-sams-deals (capture-run's arguments), diff it row by row against the pre-fix file",
+    "test-auditors density units again: the live arm green over every capture on disk",
+    "when the daily run has exited: the chain as check-ad-cycles runs it (repair-multipack-sizes -Apply, stamp-ad-as-of -Apply, compare-deals -MinStores 1 -IdentityNamespace staple, name-drift / prune-bad-links / name-drift / generate-board-overrides / build-deals-page), guards.ps1, audit-basis-reconcile, audit-pack-basis; diff the cells against comparison-2026-09-21 (08:05)",
+    "publish ONLY if guards exit 0; the 08:12 hold is band-censorship on vegetable-oil at Sam's (queue 2026-09-21-da5011), which this item does not touch",
+    "commit with a pathspec (code + plan), push with a plain git push (full test-auditors leg), confirm git log origin/main..HEAD is empty",
+    "residual owner via send-alert.ps1 -Force -Lane weekly, validate-triage-plan -Closing, close the queue item"
+  ],
+  "open_questions_for_brad": []
+}

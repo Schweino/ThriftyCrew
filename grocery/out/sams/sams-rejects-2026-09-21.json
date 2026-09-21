@@ -588,6 +588,12 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Member\u0027s Mark Pure Soybean Oil, 35 lbs.",
+        "lp":  "$29.98",
+        "up":  "3.6 ¢/fl oz",
+        "reason":  "DENSITY CONFLICT: the name states 35 lbs = 15876 g but the derived size is 832.778 fl oz = 24628 mL, an implied density of 0.645 g/mL - outside 0.75-1.65 g/mL, which no grocery liquid is - Sam\u0027s 3.6 ¢/fl oz was computed against a volume this package cannot hold, so no per-unit price from it is publishable"
+    },
+    {
         "name":  "Superb Canola Clear Fry Oil, 35 lb.",
         "lp":  "$36.98",
         "up":  "6.1 ¢/oz",
@@ -3070,6 +3076,12 @@
         "lp":  "$8.18",
         "up":  "6.8 ¢/oz",
         "reason":  "NAME CONFLICT: name states 15 oz but none reproduces Sam\u0027s 0.068/oz (lp/up derives 120.294)"
+    },
+    {
+        "name":  "Member\u0027s Mark Peanut Oil, 35 lbs.",
+        "lp":  "$55.96",
+        "up":  "6.6 ¢/fl oz",
+        "reason":  "DENSITY CONFLICT: the name states 35 lbs = 15876 g but the derived size is 847.879 fl oz = 25075 mL, an implied density of 0.633 g/mL - outside 0.75-1.65 g/mL, which no grocery liquid is - Sam\u0027s 6.6 ¢/fl oz was computed against a volume this package cannot hold, so no per-unit price from it is publishable"
     },
     {
         "name":  "Member\u0027s Mark Pure Olive Oil, 101 fl. oz.",

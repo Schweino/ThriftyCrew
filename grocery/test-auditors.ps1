@@ -7310,6 +7310,22 @@ $dsV = Test-DerivedSizeDensity (New-DsRow "Member's Mark Pure Soybean Oil, 35 lb
 if ($dsV.Status -eq 'flag') { Ok ("derived-size-density: the soybean oil twin is flagged at " + [math]::Round([double]$dsV.Density, 3) + " g/mL - the row the rule found and the hand did not") }
 else { Bad ("derived-size-density: the soybean oil twin was NOT caught (status [" + $dsV.Status + "]) - the rule only reproduces the one case it was written from") }
 
+# MUST FIRE - THE CENTS NOTATION (2026-09-21, queue 2026-09-21-e291a1). Since 2026-09-20 Sam's prints a sub-dollar
+# unit price in cents to a tenth of a cent, so the same two jugs re-derived to new sizes and walked out from under
+# their size-pinned rulings, exactly as those rulings' retire_when said they would, and this watcher refused every
+# push on the box. Frozen verbatim from sams-deals-2026-09-21.json as df1d6429e committed it, BEFORE
+# build-sams-deals learned to refuse such a row at ingest (its self-test case 8k): a fixture regenerated from the
+# capture tree would now find nothing, because the rebuilt file no longer holds either row. The cent sign is
+# built from its code point, because PS 5.1 reads this file as ANSI.
+$dsCent = [string][char]0x00A2
+foreach ($dsC in @(
+    @{ n = "Member's Mark Pure Soybean Oil, 35 lbs."; s = '832.778 fl oz'; ad = '$29.98'; up = ('3.6 ' + $dsCent + '/fl oz'); d = 0.645 },
+    @{ n = "Member's Mark Peanut Oil, 35 lbs.";       s = '847.879 fl oz'; ad = '$55.96'; up = ('6.6 ' + $dsCent + '/fl oz'); d = 0.633 })) {
+  $dsV = Test-DerivedSizeDensity (New-DsRow $dsC.n $dsC.s $dsC.ad $dsC.up "Sam's Club") $dsMk
+  if ($dsV.Status -eq 'flag' -and [math]::Abs([double]$dsV.Density - [double]$dsC.d) -lt 0.001) { Ok ("derived-size-density: the 2026-09-21 cents-form row " + $dsC.n + " is flagged at " + [math]::Round([double]$dsV.Density, 3) + " g/mL - the tenth-cent notation is read and judged, not abstained on") }
+  else { Bad ("derived-size-density: the 2026-09-21 cents-form row " + $dsC.n + " was NOT caught (status [" + $dsV.Status + "], density [" + $dsV.Density + "]) - " + $dsV.Why) }
+}
+
 # MUST FIRE - the OTHER direction, a derived size three times too SMALL. It cannot steal a crown (a small
 # size makes the per-unit price too high), but a check that only looks down would call it clean.
 $dsV = Test-DerivedSizeDensity (New-DsRow "Melinda's Jalapeo Ketchup, Spicy and Tangy, All Natural, 12 Ounce" '4 fl oz' '$1.08' '$0.27/foz' 'Walmart') $dsMk
@@ -7328,6 +7344,12 @@ else { Bad ("derived-size-density: the floor has been widened to " + $dsBand.Flo
 # SAME 35 lb oil-jug name, on the same capture days. Its quotient derives 571.143 fl oz, which is
 # 0.940 g/mL and right. If this ever fires, the check has become an argument that Sam's is wrong about
 # every jug it sells.
+# CORRECTED 2026-09-21 (queue 2026-09-21-e291a1): "0.940 and right" was the dollar form's coarseness, not a
+# measurement - "$0.07/foz" is +/-7.1% of itself. The same jug printed in cents on 2026-09-21 ("6.6 c/fl oz",
+# +/-0.76%) derives 605.758 fl oz = 0.886 g/mL, about 4% under an edible oil's 0.91-0.93 and inside this band.
+# That day 4 of the 6 weight-labelled 35 lb oil jugs read 0.875-0.886 and the other 2 are the cents-form rows
+# above, so Sam's per-fl-oz price was off on all 6. This case still asserts exactly what it can: an in-band row
+# stays silent. The in-band residual is measured and owned in grocery/triage-plans/plan-2026-09-21-3.json.
 $dsV = Test-DerivedSizeDensity (New-DsRow "Member's Mark Clear Frying Oil 35 lbs." '571.143 fl oz' '$39.98' '$0.07/foz' "Sam's Club") $dsMk
 if ($dsV.Status -eq 'ok') { Ok ("derived-size-density: the correctly-sized 35 lb frying oil jug stays silent at " + [math]::Round([double]$dsV.Density, 3) + " g/mL - the control for the two flagged jugs is in the same store on the same day") }
 else { Bad ("derived-size-density: the CORRECT 35 lb frying oil row was called " + $dsV.Status + " (" + $dsV.Why + ") - the check is too eager and would condemn real rows") }

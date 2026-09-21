@@ -79,6 +79,13 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocer
 # (0 non-ASCII bytes on 2026-09-10), so that costs nothing today; a non-ASCII literal added to it
 # needs a BOM or a code-point escape.
 
+# ---- THE DENSITY RULE: the same library test-auditors' derived-size-density watcher runs ----
+# Build-Row refuses a DERIVED size the product cannot physically have (see THE CROSS-MEASURE HALF OF THE
+# SAZON RULE in Build-Row). ONE copy of the rule: compare-deals and test-auditors dot-source this file too,
+# so the builder, the engine and the watcher cannot disagree about the band. It also brings lib\json-io.ps1
+# (Read-JsonFile); no function name in either collides with one defined here (checked 2026-09-21).
+. (Join-Path $root 'derived-size-density-lib.ps1')
+
 # unit token as Sam's prints it -> (engine size token, engine category unit for the invariant check)
 # Sam's abbreviates FLUID OUNCE as "foz" ("$0.16/foz"). Missing that silently drops every liquid in the
 # catalog - ~190 rows in a full pull - so it is spelled out here rather than left to a generic oz match,
@@ -440,6 +447,33 @@ function Build-Row($raw, [string]$Club = '') {
   if ($u.tok -eq 'ct' -and $qty -gt 1) {
     $np = Get-NamePack $raw.n
     if ($np -and [math]::Abs($np.count - $qty) -lt 0.5) { $pkgSize = (Format-Qty $qty) + ' ct ' + $np.measure }
+  }
+
+  # THE CROSS-MEASURE HALF OF THE SAZON RULE, AT INGEST (2026-09-21, queue 2026-09-21-e291a1).
+  # The Sazon rule above compares UNIT TOKENS, so a name that states POUNDS against a price per FLUID OUNCE is
+  # "silent in the priced unit" and lp/up is taken as the size with nothing checking it. Weight and volume are
+  # not independent: density binds them, and derived-size-density-lib owns that binding. Until today the rule
+  # ran only AFTER this file had written the row, in test-auditors' derived-size-density watcher, so every
+  # row it caught was written, then ruled by hand in derived-size-density-rulings.json - four rulings since
+  # 2026-08-30 - and a ruling pins the SIZE, so it stops covering the day Sam's number moves. It moved on
+  # 2026-09-20, when Sam's began printing sub-dollar unit prices in cents to a tenth of a cent:
+  #     Member's Mark Pure Soybean Oil, 35 lbs.  $29.98 at 3.6 c/fl oz -> 832.778 fl oz, 0.645 g/mL
+  #     Member's Mark Peanut Oil, 35 lbs.        $55.96 at 6.6 c/fl oz -> 847.879 fl oz, 0.633 g/mL
+  # 35 lb of an edible oil (0.91-0.93 g/mL) fills about 585 fl oz. Sam's unit price for these jugs is computed
+  # against a volume they cannot hold, so the per-unit price the row would publish is wrong by the same factor
+  # (about 30% too cheap), which is the direction that wins a crown. The name states the contents, the
+  # quotient is an inference from a number shown wrong here, and the two contradict each other physically:
+  # REFUSED, never published - the same answer the Sazon rule gives when the two disagree in one unit.
+  # Only a FLAG refuses. An abstention (a pack-shaped ratio, a name stating two weights, a unit price too
+  # coarse to judge) and an out-of-scope row (not a volume, no stated weight) keep exactly the path they had.
+  # The watcher stays: it reads every capture on disk, the Walmart builder's included, and this is not it.
+  if ($basis -eq 'derived lp/up') {
+    $dsUp = ("" + $raw.up).Trim()
+    $dsProbe = [pscustomobject]@{ item = [string]$raw.n; size = $pkgSize; qty_basis = ('package; qty ' + $basis); sams_unit_price = $dsUp }
+    $dsVerdict = Test-DerivedSizeDensity $dsProbe $basis
+    if ($dsVerdict.Status -eq 'flag') {
+      return @{ err=('DENSITY CONFLICT: ' + $dsVerdict.Why + ' - Sam''s ' + $dsUp + ' was computed against a volume this package cannot hold, so no per-unit price from it is publishable') }
+    }
   }
 
   # unitPrice is rounded to the cent, so the invariant can only be as tight as that rounding allows: a
@@ -822,6 +856,32 @@ if ($SelfTest) {
   $r8k = Build-Row (_R 'Fixture Thing, 1 ct.' '$1.00' '')
   if (-not $r8k.row -and ([string]$r8k.err) -eq 'no unitPrice') { Write-Output 'ok    8j CLEAN TWIN  a blank unit price is still the same per-row reject' }
   else { Write-Output ("FAIL  8j blank up changed behaviour: err='" + $r8k.err + "'"); $fail++ }
+
+  # 8k. THE CROSS-MEASURE HALF OF THE SAZON RULE, AT INGEST (2026-09-21, queue 2026-09-21-e291a1) ---------------
+  # The REAL rows of the 2026-09-21 capture, frozen from out\sams\sams-deals-2026-09-21.json as the daily
+  # pipeline committed it in df1d6429e. The name states 35 lbs, Sam's prices per fluid ounce, and lp/up derives
+  # a volume 35 lb of oil cannot fill. Before this rule both rows were WRITTEN, and test-auditors'
+  # derived-size-density watcher went red on them and refused every push on the box.
+  $dsSoy = "Member's Mark Pure Soybean Oil, 35 lbs."
+  $rDen1 = Build-Row (_R $dsSoy '$29.98' ('3.6 ' + $CentSign + '/fl oz'))
+  if (-not $rDen1.row -and ([string]$rDen1.err) -match '^DENSITY CONFLICT: ' -and ([string]$rDen1.err) -match '0\.645 g/mL') { Write-Output 'ok    8k MUST FIRE  the 2026-09-21 soybean oil row (35 lbs at 3.6 c/fl oz -> 832.778 fl oz, 0.645 g/mL) is REFUSED, not written' }
+  else { Write-Output ("FAIL  8k soybean oil row was not refused: err='" + $rDen1.err + "' size='" + $rDen1.row.size + "'"); $fail++ }
+  $rDen2 = Build-Row (_R "Member's Mark Peanut Oil, 35 lbs." '$55.96' ('6.6 ' + $CentSign + '/fl oz'))
+  if (-not $rDen2.row -and ([string]$rDen2.err) -match '^DENSITY CONFLICT: ' -and ([string]$rDen2.err) -match '0\.633 g/mL') { Write-Output 'ok    8k MUST FIRE  the 2026-09-21 peanut oil row (35 lbs at 6.6 c/fl oz -> 847.879 fl oz, 0.633 g/mL) is REFUSED, not written' }
+  else { Write-Output ("FAIL  8k peanut oil row was not refused: err='" + $rDen2.err + "' size='" + $rDen2.row.size + "'"); $fail++ }
+  # CLEAN TWIN: the SAME name at the SAME price, with the unit price its 35 lb actually implies. 29.98 / 0.051 =
+  # 587.843 fl oz = 0.913 g/mL, an edible oil. Still derived, and still published at the derived size: the
+  # refusal keys on the arithmetic, never on the product.
+  $rDen3 = Build-Row (_R $dsSoy '$29.98' ('5.1 ' + $CentSign + '/fl oz'))
+  if ($rDen3.row -and $rDen3.row.size -eq '587.843 fl oz' -and $rDen3.row.qty_basis -match 'derived lp/up') { Write-Output 'ok    8k CLEAN TWIN  the same jug at 5.1 c/fl oz derives 587.843 fl oz (0.913 g/mL) and is published at that size' }
+  else { Write-Output ("FAIL  8k an in-band derived oil row was lost: err='" + $rDen3.err + "' size='" + $rDen3.row.size + "'"); $fail++ }
+  # MUST NOT FIRE: an ABSTENTION is not a refusal. At 2.7 c/fl oz the jug derives 1110.37 fl oz, 1.98x the 560
+  # nominal oz its name states, which is the shape of a 2-pack, so the rule abstains and the row keeps the path
+  # it always had. That is the rule's documented cost (a defect of exactly 2x reads as a 2-pack), and a builder
+  # that refused on anything but 'flag' would drop every multipack whose name states one unit's weight.
+  $rDen4 = Build-Row (_R $dsSoy '$29.98' ('2.7 ' + $CentSign + '/fl oz'))
+  if ($rDen4.row -and $rDen4.row.qty_basis -match 'derived lp/up') { Write-Output ('ok    8k MUST NOT FIRE  a pack-shaped derived size (2.7 c/fl oz -> ' + $rDen4.row.size + ', 1.98x the stated 35 lbs) is abstained on, not refused') }
+  else { Write-Output ("FAIL  8k a pack-shaped derived size was refused: err='" + $rDen4.err + "'"); $fail++ }
 
   # CLEAN TWIN of build-walmart-deals.ps1's wrong-store assertion (2026-07-30). The Walmart fork inherited this
   # file's store noun into its published qty_basis; the fix there was to name Walmart. This proves the correction
