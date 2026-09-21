@@ -1,0 +1,146 @@
+{
+  "generated": "2026-09-21T10:05:00",
+  "round": 1,
+  "board_week": "2026-09-21",
+  "lane": "daily",
+  "queue_ids_seen": ["2026-09-18-8491bf", "2026-09-18-a0c785", "2026-09-18-ceab00", "2026-09-19-4fc24c", "2026-09-19-405c73", "2026-09-19-dc1b5b", "2026-09-19-8a3090", "2026-09-19-2a0748", "2026-09-19-c9f0f3", "2026-09-19-2c96d8", "2026-09-19-fccb69", "2026-09-19-6f90ee", "2026-09-20-1b8544", "2026-09-20-ca2591", "2026-09-20-bec597", "2026-09-20-cb8f30", "2026-09-21-149497", "2026-09-21-da5011", "2026-09-21-7d64a6", "2026-09-21-85c3b7", "2026-09-21-dca1a1", "2026-09-21-115180", "discovered:per-cell-quarantine-2026-09-21"],
+  "routing_artifact": null,
+  "note": "MONEY LANE, one round, written and implemented by the developer on Brad's instruction of 2026-09-21: 'The ENTIRE board shouldn't be held hostage because of one (or a few) bad items. Each item is unique/individual.' His ruling on Q1 of design/PLAN-per-cell-quarantine-2026-09-21.md: 'A' - a quarantined cell shows its last verified published price, with that price's date. Only two of the 22 open ids are in scope (da5011 and the class); the other 20 were seen and are other lanes' work. No matching rule changes, so there is no routing artifact: routing is unchanged by construction (commodities.json untouched) and the outcome measured is the cell.",
+  "knowledge_consulted": {
+    "searched": "knowledge-search --multi \"exit code tier readers\" \"circuit breaker threshold\" \"last known good fallback\": 60 sections matched; the circuit-breaker hits are the API-middleware layer in claude-api-craft and do not apply to a publish gate, and nothing names a last-known-good cell. From the brief: \"guard hard fail publish held\", \"unit basis outlier\", \"guard blind fixture live twin\".",
+    "used": [
+      "memory price-mode-in-store: compare-deals' price-mode gate DROPS a non-in-store Aldi/Fareway file at load and the board still publishes - the precedent for family 2; and the 2026-07-14 Aldi markup (293 of 364 cells 11% high, no single cell failing) that no per-cell mechanism can see, which is why price-mode stays board scope here.",
+      "data-quality-craft/applies-here.md, 'A guard that exists and reads green while its defect is live', and memory guard-blindness-family (read before finishing the fixtures): every quarantine MUST FIRE asserts the cell is held at its last verified value AND does not carry the bad value, and every CLEAN TWIN asserts the other cells unchanged value by value. That arm also drove the second-run rule that a VALUE finding against the HELD price is not covered (a covered failure that condemns the held number holds).",
+      "memory conformance-guard-cannot-see-rule-bug: guards check the board against the engine's own rule; the band-censorship finding on vegetable-oil/Sam's is the rule-bug class (a round floor refusing a consistent row), so the cell is quarantined and the finding is left open for a band ruling rather than suppressed.",
+      ".claude/rules/ops-and-gates.md: read the verdict line, three exit-code vocabularies; a control constant records first-plausible vs swept and what it does when the producer stops (docs/CONTROL-CONSTANTS.md rows added); a bar case at the bar and one step past on binary-exact integers; MUST FIRE / MUST NOT FIRE / CLEAN TWIN; a switch on data refuses its default; never wrap a function call inline in @().",
+      "memory triage-rebuild-reads-late-captures: the crown diff against origin/main's public/board.json was read before the publish (see item da5011 premise_verified)."
+    ]
+  },
+  "items": [
+    {
+      "queue_id": "2026-09-21-da5011",
+      "subject": "Grocery: GUARDS FAILED - board not published - 2026-09-21",
+      "classification": "infra",
+      "evidence": [
+        "ad-cycle-log 2026-09-21 08:12:05: 'guards: HARD FAIL: no NEW cell publishes a dearer price because the band refused a near-floor row that was cheaper (RATCHET against out/band-censorship-baseline.json, may only go down) (see audit-band-censorship.ps1)' then 'GUARDS FAILED: 1 hard invariant(s) violated.' - the whole board (2,705 priced cells) held on one.",
+        "out/band-censorship.json (08:55:43, comparison-2026-09-21.json built 08:49:37): vegetable-oil | Sam's Club | board 0.0723/floz 'Member's Mark Vegetable Oil, 192 oz.' ($13.88) | refused 0.0373/floz 'Member's Mark Canola Oil, 192 fl. oz.' $7.16 / 192 fl oz | band_min 0.04 (93% of the floor).",
+        "PREMISE TESTED, and FALSE: the brief's hypothesis that the refused row is a 35 lb oil jug sized from Sam's wrong unit price. out/sams/sams-deals-2026-09-21.json (rebuilt 08:20:32 after e291a1): 'Member's Mark Canola Oil, 192 fl. oz.' ad_price $7.16, current_price $7.16, source_checkout_price $7.16, sams_unit_price '3.7 cents/fl oz', size 192 fl oz, qty_basis 'package; qty name (reproduces Sam's unit price)', channel in-store. Three independent statements agree (7.16 / 192 = 0.0373). No density conflict, and 0 of 23 band-censorship findings are named by any of the 327 known-wrong.json rulings.",
+        "guards.ps1 (new) over that same board, 2026-09-21 ~09:45: rc 2, 'scope vegetable-oil / Sam's Club [selection] named by audit-band-censorship.ps1', 'GUARDS QUARANTINE-REQUIRED: 1 hard failure(s), every one scoped to 1 cell(s) and 0 store(s), under the circuit breaker (1 of 2705 priced cells)', GUARDS-COMPLETE hard=1 warn=19 disposition=quarantine.",
+        "last published value: origin/main:public/board.json @ aa53973d5 (committed 2026-09-21, the 05:08 board): __rows['vegetable-oil'].p holds [5, 0.0723, 2, '7 cents/fl oz'] - store index 5 is Sam's Club in __meta.stores."
+      ],
+      "surface_fix": {
+        "what": "publish today's board with ONLY vegetable-oil / Sam's Club quarantined: held at its last verified published price (0.0723/floz) with that price's date (2026-09-21), no See-item link, every other cell publishing today's price",
+        "files": ["grocery/out/comparison-2026-09-21.json", "public/board.json", "public/smp-feed.json", "public/free-dinners.json"],
+        "exact_change": "check-ad-cycles.ps1 -NoPull -NoCommit -NoPublish (the whole daily chain; its Invoke-GuardsGate runs guards, apply-cell-quarantine.ps1, guards again, then export-feed), crown diff read against origin/main's board, build-deals-page, commit public/board.json + the feed by explicit path and push, THEN publish-deals-page (board.json ships before the post)"
+      },
+      "root_cause": "guards.ps1 had ONE scope for every hard failure - the whole board - so a finding about one commodity at one store held about 2,700 correct cells with it. Measured over ad-cycle-log.txt since 2026-08-22: 12 guards hold runs on 11 days, and in 11 of the 12 every hard failure was a CELL-level finding (band-censorship, unit-basis-outlier kind crowns, ad-line provenance, food-category) or the SOURCE-code json-readers ratchet, which has no board cell behind it at all.",
+      "root_fix": {
+        "what": "scope every hard failure: a bad cell quarantines itself, a bad store drops itself, only a board-scoped failure or the circuit breaker holds - built as item discovered:per-cell-quarantine-2026-09-21",
+        "files": ["grocery/cell-quarantine-lib.ps1", "grocery/guards.ps1", "grocery/apply-cell-quarantine.ps1", "grocery/check-ad-cycles.ps1"],
+        "exact_change": "see item discovered:per-cell-quarantine-2026-09-21"
+      },
+      "leaves_open": "the band-censorship finding itself: vegetable-oil/Sam's stays quarantined at 0.0723 while the vegetable-oil band floor 0.04 refuses the consistent $7.16/192 fl oz canola row (0.0373) - 1 occurrence, today",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-21-6b17b1",
+      "prior_closes": ["2026-09-18-f90ba6", "2026-09-19-b66b54"],
+      "prevention": {
+        "source": ["grocery/guards.ps1", "grocery/cell-quarantine-lib.ps1", "grocery/check-ad-cycles.ps1", "grocery/audit-band-censorship.ps1", "grocery/audit-food-category.ps1", "grocery/audit-unit-basis-outlier.ps1"],
+        "what": "the EMITTING CHECK no longer turns a one-cell finding into a whole-board hold: guards scopes each failure, check-ad-cycles applies the quarantine and re-verifies, and the three delegated audits behind 11 of the last 12 holds name their own cells",
+        "exact_change": "guards.ps1: Add-ScopedFail / Add-RowFail at guards 3, 4, 5, 6, 8, 9, 10, 10b and the delegated loop; Get-TcGuardsDisposition decides pass (0) / quarantine required (2) / quarantined (4) / hold (2); audit-json-readers removed from guards. cell-quarantine-lib.ps1: the disposition, the 2% / 10% breaker, the last-published reader, the applier. check-ad-cycles.ps1: Invoke-GuardsGate on both ship paths, the three-tier chain verdict, one page per quarantine set under 'grocery board cells quarantined'. audit-band-censorship / audit-food-category / audit-unit-basis-outlier: QUARANTINE-CELL + QUARANTINE-SCOPE complete lines before their exit."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule changed (commodities.json, category-excludes.json and every band untouched), so every product routes exactly as the 08:49 build routed it; the outcome measured is the CELL: guards' disposition over comparison-2026-09-21.json named 1 of 2,705 priced cells",
+        "affected_now": 1,
+        "names": ["Member's Mark Vegetable Oil, 192 oz."],
+        "risk": "the held cell shows the same number it shows live today (0.0723, the last verified published price) plus an 'as of' date and no link; nothing else on the board is held",
+        "cell_effects": [
+          { "commodity": "vegetable-oil", "store": "Sam's Club", "before": 0.0723, "after": 0.0723 }
+        ]
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against comparison-2026-09-21.json built 08:49:37 and origin/main aa53973d5; the chain run rebuilds the board, so the disposition is re-read off the rebuilt board before publishing (see premise_verified)",
+      "proof": {
+        "guard_or_fixture": "grocery/test-cell-quarantine.ps1 -SelfTest (run-gates discovers it); grocery/refresh-chain-verdict.ps1 -SelfTest (the QUARANTINE tier)",
+        "must_fire_case": "FOUNDING CASE frozen from the real rows: vegetable-oil's 7 comparison cells + the published __rows p list; the band-censorship QUARANTINE-CELL line scopes Sam's, the disposition is quarantine, the applier holds Sam's at 0.0723 dated 2026-09-21, and the second run over the JSON round trip exits 4",
+        "clean_twin": "the other six vegetable-oil cells publish unchanged and Walmart still wins the row at 0.0686; a clean board passes with exit 0 and the byte-identical GUARDS OK line",
+        "fixture_occurrences": [
+          { "queue_id": "2026-09-18-f90ba6", "class": "ad-line price provenance (Hy-Vee SAVE 50c) + food-category (pistachio milk) + unit-basis-outlier crown", "covered_by": "guard 10b now Add-ScopedFail; audit-food-category and audit-unit-basis-outlier print QUARANTINE-CELL lines; test-cell-quarantine cases 'two cell-scoped failures', 'VALUE finding ... withholds it'" },
+          { "queue_id": "2026-09-19-b66b54", "class": "food-category (almond-butter pouch) + unit-basis-outlier (honey-mustard, coffee kind crowns) + json-readers (source lint)", "covered_by": "the same child protocol; json-readers moved to ops/run-gates.ps1; test-cell-quarantine case 'guards.ps1 ... no longer runs the json-readers source ratchet' and test-auditors' encoding-pair pin" },
+          { "queue_id": "2026-09-21-da5011", "class": "band-censorship ratchet, one new cell", "covered_by": "test-cell-quarantine FOUNDING CASE (vegetable-oil / Sam's Club)" }
+        ],
+        "commands": ["powershell -File grocery/test-cell-quarantine.ps1 -SelfTest", "powershell -File grocery/refresh-chain-verdict.ps1 -SelfTest", "powershell -File grocery/guards.ps1", "powershell -File grocery/test-auditors.ps1"]
+      },
+      "rollback": "revert the source commit; guards then scopes nothing and holds on any failure exactly as before. A board already published with a held cell is simply rebuilt by the next chain run.",
+      "do_not_touch": ["any guard threshold or band", "out/band-censorship-baseline.json (no -Accept)", "commodities.json", "the scheduled task grocery-alert-triage (paused by the orchestrator)"],
+      "resolution_note": "The board is no longer held hostage by one cell. guards scoped today's only failure (band-censorship, vegetable-oil / Sam's Club) to that cell, the chain held it at its last verified published price with its date, and the rest of the board published. The refused Sam's row was NOT a 35 lb jug: it is an internally consistent $7.16 / 192 fl oz canola oil, so the censorship finding stands and is queued for a band ruling.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "false for the brief's hypothesis, true for the rest. FALSE: the refused vegetable-oil/Sam's row is not a 35 lb jug sized from Sam's wrong unit price - out/sams/sams-deals-2026-09-21.json (rebuilt after e291a1) carries 'Member's Mark Canola Oil, 192 fl. oz.' at $7.16 with current_price, checkout price and Sam's own 3.7 cents/fl oz all agreeing on 192 fl oz, no density conflict, and no known-wrong ruling names it (0 of 23 findings). So it is a real refusal by a round floor, not a correct one, and the cell publishes QUARANTINED rather than clean. TRUE: the ratchet broke on exactly that one new cell (guards scoped it: 1 of 2,705), and origin/main:public/board.json @ aa53973d5 (committed 2026-09-21) shows the cell at 0.0723. Crown diff of the rebuilt board against that file, read before publishing: 36 crowns moved, 2 more than 25% cheaper (caraway-seeds -> Walmart 'Great Value Organic Caraway Seed, 1.8 oz' 2.4222; vanilla-extract -> Sam's 'Rising Star Baking Supply Pure Vanilla Extract, 8 fl. oz.' 1.1225), both the right product; 82 new cells, every name read.",
+      "deviation": "Three things the plan did not foresee, each handled in the same run. (1) THE FIRST LIVE RUN OF THE GATE HELD (10:01:41): the apply rewrote comparison-*.json after name-drift ran, so audit-tile-integrity refused to grade against an older drift table (its staleness precondition) and the second guards run held. Invoke-GuardsGate now re-derives name-drift after the apply, as the ship path already does after prune-bad-links; the second live run (10:35) and third (10:57) each exited 4. That held run also sent one more 'GUARDS FAILED' page, absorbed into this item. (2) The first build refused itself ('ALL-3 VIOLATION: 1 priced chip(s) rendered without any link') because the held chip carried no link at all; it now carries the store search for the commodity, which vouches for no product's price. (3) The crown diff found one WRONG PRODUCT among the new cells: tomatoes | Fareway | 'Dei Fratelli Tomatoes, Whole' $2.68 / 28 oz - a CAN priced into Tomatoes (fresh) at 1.5314/lb. Ruled in known-wrong.json with add-known-wrong.ps1 and the chain re-run; the cell is now 'On The Vine Tomatoes' at 2.49/lb.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "discovered:per-cell-quarantine-2026-09-21",
+      "subject": "A bad cell holds itself, not the board (Brad, 2026-09-21)",
+      "classification": "infra",
+      "evidence": [
+        "ad-cycle-log.txt since 2026-08-22, every 'guards: HARD FAIL' line classified under the new scoping: 2026-09-03, 09-06, 09-13 unit-basis-outlier; 09-07 band-censorship; 09-10 band-censorship + unit-basis-outlier; 09-14, 09-17 ad-line provenance + unit-basis-outlier; 09-18 08:13 ad-line + band-censorship + unit-basis-outlier; 09-18 14:53 capture-encoding + band-censorship; 09-19 16:36 band-censorship + food-category + unit-basis-outlier; 09-20 unit-basis-outlier + json-readers; 09-21 band-censorship. 12 hold runs: 11 carry only scoped classes (or the moved source ratchet), 1 (09-18 14:53, audit-capture-encoding) still holds.",
+        "CONSUMER CENSUS of guards.ps1's exit code, its GUARDS OK / GUARDS FAILED lines and its GUARDS-COMPLETE marker (code readers, not comments): (1) grocery/check-ad-cycles.ps1 morning ship path - read rc -ne 0 as blocked; (2) check-ad-cycles consistency auto-repair - published only on rc 0; (3) lib/chain-verdict-lib.ps1 Write-ChainVerdict - guards_blocked = rc -ne 0; (4) Read-ChainVerdictStatus - PASS/BLOCKED only, read by (5) grocery/capture-run.ps1 and (6) grocery/push-data.ps1 through ship_ok; (7) grocery/refresh-chain-verdict.ps1 - runs guards and writes the verdict; (8) grocery/capture-watchdog.ps1 and (9) grocery/health-heartbeat.ps1 - guards_blocked; (10) grocery/send-alert.ps1 Get-IncidentAbsorbTarget - guards_blocked; (11) check-ad-cycles Get-TestGuardsWeeklyPlan - defers test-guards on guards_rc -ne 0; (12) grocery/run-test-guards-weekly.ps1 and (13) grocery/test-guards.ps1 - baseline must be exit 0, each mutation must be exit 2 with its own HARD FAIL text; (14) grocery/weekly-post-capture.ps1 - 2 held, any other non-0 threw; (15) grocery/apply-coverage-batch.ps1 - reverts on non-0; (16) graph/learning/promote_aliases.py - refuses a non-0 baseline; (17) grocery/alert-registry.json + audit-alert-precision / alert-tuning - the 'grocery guards failed board not published' type; (18) grocery/triage-due.ps1 - RETURN lines by that type; (19) test-auditors.ps1 - source pins on guards.ps1. graph/agentic/plan.py and executor_selftest.py name the path only; .github/workflows/daily.yml is dispatch-only and does not run guards.",
+        "NEW CONTRACT: 0 GUARDS OK (clean); 2 not publishable AS IT STANDS - 'GUARDS FAILED' (hold) or 'GUARDS QUARANTINE-REQUIRED' (every failure scoped, under the breaker, out/cell-quarantine.json names the cells); 4 'GUARDS QUARANTINED' (applied and verified on this board: publishable). Exit 2 keeps its old meaning for every reader, so test-guards' 31 expect-2 mutation cases, weekly-post-capture, apply-coverage-batch and promote_aliases read a quarantine-required board exactly as before (not publishable as it stands). Readers of 4 were taught it: check-ad-cycles both paths publish on 0 or 4; the chain verdict records verdict=quarantine, guards_blocked=false, quarantined=N; Read-ChainVerdictStatus returns QUARANTINE with ship_ok (capture-run / push-data ship; watchdog, heartbeat and send-alert see not-blocked; the test-guards deferral reads 4 as not clean and defers); weekly-post-capture continues on 4. No reader reads 4 as 'all clean': the status word, the verdict word and the alert type all name it. A reader never taught 4 reads it as not-0, which holds - fail closed."
+      ],
+      "surface_fix": {
+        "what": "the mechanism, the three families and the breaker",
+        "files": ["grocery/cell-quarantine-lib.ps1", "grocery/apply-cell-quarantine.ps1", "grocery/guards.ps1", "grocery/check-ad-cycles.ps1", "lib/chain-verdict-lib.ps1", "grocery/build-deals-page.ps1", "grocery/export-feed.ps1", "grocery/weekly-post-capture.ps1", "grocery/audit-band-censorship.ps1", "grocery/audit-food-category.ps1", "grocery/audit-unit-basis-outlier.ps1", "grocery/alert-registry.json", "ops/run-gates.ps1"],
+        "exact_change": "FAMILY 1 cell: guards 3, 4, 8, 10b by their own cell; 5 and 10 by the published cells carrying the failing capture row (none carries it: board scope, holds); delegated audits by QUARANTINE-CELL lines closed with QUARANTINE-SCOPE complete (taught: band-censorship, food-category, unit-basis-outlier). FAMILY 2 store: guards 6 and 9 by store; the applier withholds that store's EVERYDAY cells and keeps its live ad cells. FAMILY 3 board: everything else, unchanged. BREAKER: more than 2% of priced cells or more than 10% of one store's cells holds (integers). WHAT A CELL SHOWS (ruling A): its value on origin/main:public/board.json with that commit's date (carried through __rows q), or WITHHELD when there is none, it was a sale, it is past max_publish_age_days, or a VALUE guard condemned that same number; withholding a row's only priced cell refuses the apply (hold). The feed: export-feed skips pins and links on a held cell and is re-run after the apply. The page: the chip says 'as of <date>' and carries no See-item link; build-deals-page skips pins on a held cell. ALERT: 'Grocery: board cells quarantined - <date>' registered as page / condition 1, one page per distinct set; GUARDS FAILED reserved for a hold."
+      },
+      "root_cause": "the publish gate conflated three scopes of defect into one verdict, so its only available answer to one bad cell was to withhold every cell; the precision of the 'GUARDS FAILED' alert and the freshness of the whole board were both paying for it (15 of 30 alert days).",
+      "root_fix": {
+        "what": "the scope travels with each failure from the check that found it to the verdict, and teaching a guard to scope is a per-guard change with its own fixture, never a default: an unscoped failure holds",
+        "files": ["grocery/cell-quarantine-lib.ps1", "grocery/guards.ps1", ".claude/rules/grocery.md"],
+        "exact_change": "New-TcGuardFailure / ConvertTo-TcGuardFailures (an unscoped $fail entry is BOARD family) and Get-TcChildQuarantineScope (no 'complete' affirmation, no scope); the rule recorded in .claude/rules/grocery.md naming Brad's instruction and date"
+      },
+      "leaves_open": "8 delegated audits still hold on any finding because they do not yet name their cells (capture-encoding, household-in-food, known-wrong, pack-basis, asof-evidence, tile-integrity, board-mojibake, coverage-regression); price-mode stays board scope by design",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-21-d16398",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule changed, so routing is identical by construction; measured instead as the outcome over the real board: guards over comparison-2026-09-21.json scoped 1 of 2,705 priced cells, and over the 12 hold runs since 2026-08-22, 11 would have scoped",
+        "affected_now": 1,
+        "names": ["Member's Mark Vegetable Oil, 192 oz."],
+        "risk": "a guard that scopes is weaker ONLY if the held value can be wrong: every bad value is withheld or replaced by the last value that passed guards and went live, the second run verifies the held values and holds on a VALUE finding against the held price, and a failure that cannot be scoped holds as before",
+        "cell_effects": [
+          { "commodity": "vegetable-oil", "store": "Sam's Club", "before": 0.0723, "after": 0.0723 }
+        ]
+      },
+      "claimed_by_earlier": [],
+      "freshness": "census taken over the tree at 6dd87e5eb plus this change; log classification over ad-cycle-log.txt up to 2026-09-21 08:44",
+      "proof": {
+        "guard_or_fixture": "grocery/test-cell-quarantine.ps1 -SelfTest (37 cases, hermetic, discovered by run-gates) + grocery/refresh-chain-verdict.ps1 -SelfTest (QUARANTINE tier, unknown rc held) + test-auditors' encoding-pair pin + the live chain run",
+        "must_fire_case": "a cell-scoped failure quarantines exactly that cell and publishes its last good value with its date; a cell with no prior published value is withheld; one cell past the 2% board bar and one past the 10% store bar hold (at-the-bar twins quarantine); a store-scoped failure drops only that store's everyday cells; a board-scoped failure holds; a tampered held cell, a new failure on a quarantined board, and a VALUE finding at the held price all hold",
+        "clean_twin": "every other cell of a board with quarantined cells publishes unchanged (98 of 98; 80 of 80 after a store drop); a clean board passes with the byte-identical GUARDS OK line and no block",
+        "commands": ["powershell -File grocery/test-cell-quarantine.ps1 -SelfTest", "powershell -File grocery/refresh-chain-verdict.ps1 -SelfTest", "powershell -File grocery/test-auditors.ps1", "powershell -File ops/run-gates.ps1"]
+      },
+      "rollback": "revert the commit: guards returns to one scope and exit 2 on any failure; the chain verdict's extra fields are ignored by older readers; a board carrying a quarantine block is rebuilt by the next compare-deals",
+      "do_not_touch": ["any guard threshold, band or baseline", "the price-mode gate in compare-deals.ps1", "test-guards' expect-2 mutation cases (exit 2 keeps its meaning)"],
+      "resolution_note": "Per-cell quarantine shipped: a bad cell quarantines itself (held at its last verified published price with its date, or withheld), a bad store drops its everyday cells, and only a board-scoped failure or the 2% / 10% circuit breaker holds the board. guards exits 0 / 2 / 4; every reader of its verdict was censused and taught the new tier. audit-json-readers moved to run-gates.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "true: every reader in the census was read at its call site before the contract was chosen; the three delegated audits behind 11 of the 12 holds since 2026-08-22 print per-cell findings that map to (id, store); the chain verdict's two ship readers (capture-run, push-data) key on ship_ok, so a QUARANTINE status that ships needed no change there; test-guards' mutation cases all expect 2, so keeping 2 for 'not publishable as it stands' left all of them valid. Proven live: check-ad-cycles -NoPull -NoCommit -NoPublish at 10:26 and 10:47 ran guards (QUARANTINE-REQUIRED, 1 of 2705), apply-cell-quarantine (held at 0.0723, last verified 2026-09-21), name-drift, guards again (GUARDS QUARANTINED, exit 4), export-feed, wrote chain-verdict {guards_rc 4, guards_blocked false, verdict quarantine, quarantined 1}, and paged once then 'quarantine set unchanged since the last page - not re-paging'.",
+      "deviation": "Narrower than the spec in three places, each written into leaves_open or measured to zero. (a) FAMILY 2 was built at the post-guard seam (withhold the store's EVERYDAY cells, keep its live ad cells) instead of inside compare-deals' price-mode loader, because a store drop found by guards would need compare-deals re-run and the whole identity and link chain after it; the loader's price-mode drop is untouched and price-mode stays board scope. No store-scoped hold happened in the 30-day window (0 of 12 hold runs). (b) Of the delegated audits only band-censorship, food-category and unit-basis-outlier were taught to scope (they are 11 of the 12 holds); 8 others still hold (leaves_open, owner 2026-09-21-d16398). household-in-food, named in the spec, reads capture ROWS not board cells, so scoping it honestly needs the row-to-cell map guards 5 and 10 use - left with the other 7. (c) The censorship-ratchet exclusion was not built: 0 of 23 findings are proven wrong by another guard, so there was no case to build it from. ADDED beyond the spec: a VALUE finding on the second run against the HELD price holds (the last verified price is condemned too), and Invoke-GuardsGate re-derives name-drift after the apply (found live, see da5011).",
+      "shipped_commit": null
+    }
+  ],
+  "ship_sequence": [
+    "write cell-quarantine-lib.ps1 + apply-cell-quarantine.ps1 + test-cell-quarantine.ps1; wire guards.ps1, check-ad-cycles.ps1, chain-verdict-lib.ps1, build-deals-page.ps1, export-feed.ps1, weekly-post-capture.ps1, the three delegated audits, alert-registry.json, run-gates.ps1",
+    "test-cell-quarantine.ps1 -SelfTest, refresh-chain-verdict -SelfTest, the touched scripts' own -SelfTest",
+    "guards.ps1 over the 08:49 board: expect rc 2 and QUARANTINE-REQUIRED naming vegetable-oil / Sam's Club only",
+    "check-ad-cycles.ps1 -NoPull -NoCommit -NoPublish: the daily chain in its own order (repair-multipack-sizes -Apply, compare-deals -MinStores 1 -IdentityNamespace staple, the recipe lane and export-feed, links, audit-name-drift, prune-bad-links -Tol 0.32, name-drift again, generate-board-overrides, Invoke-GuardsGate = guards, apply-cell-quarantine, guards again (must exit 4), export-feed again)",
+    "crown diff against origin/main:public/board.json (memory triage-rebuild-reads-late-captures) before any publish",
+    "build-deals-page; restore public/ artifacts except board.json and the feed; 375px check of the held chip",
+    "test-auditors.ps1 (must exit 0); commit source + plan + public/board.json + public/smp-feed.json + public/free-dinners.json by pathspec; push through ops/push-main.ps1",
+    "after the feed deploys: publish-deals-page.ps1; verify the held cell and one ordinary cell on the LIVE board with a cache-busting query; read week_of and generated off feed.thriftycrew.com",
+    "close: queue da5011 resolved, residuals owned, validate-triage-plan -Closing exit 0, commit the closed plan"
+  ],
+  "open_questions_for_brad": []
+}

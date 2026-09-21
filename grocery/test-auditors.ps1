@@ -3153,9 +3153,12 @@ if ($abmR -match 'RATCHET BROKEN' -and $abmR -match 'board-mojibake-baseline') {
   Ok 'audit-board-mojibake is a RATCHET - a name that was clean and is now mangled hard-fails rather than being filed as backlog'
 } else { Bad 'audit-board-mojibake lost its ratchet - it is advisory again, and a live reader bug will publish' }
 $gSrcEnc = Get-Content (Join-Path $root 'guards.ps1') -Raw
-if ($gSrcEnc -match 'audit-json-readers' -and $gSrcEnc -match 'audit-board-mojibake') {
-  Ok 'guards.ps1 runs BOTH ends of the encoding pair - the cause (bare readers) and the outcome (mangled board names)'
-} else { Bad 'guards.ps1 is missing one end of the encoding pair - either half alone leaves the other unguarded' }
+# BOTH ENDS STILL RUN, IN TWO PLACES SINCE 2026-09-21: the OUTCOME (mangled board names, board data) in the publish
+# gate, the CAUSE (bare readers, source code) at push time in ops\run-gates.ps1, where a source defect belongs.
+$rgSrcEnc = Get-Content (Join-Path (Split-Path $root -Parent) 'ops\run-gates.ps1') -Raw
+if ($gSrcEnc -match "'audit-board-mojibake\.ps1'" -and $gSrcEnc -notmatch "Register-Kid\s+'json-readers'" -and $rgSrcEnc -match "f = 'grocery\\audit-json-readers\.ps1'") {
+  Ok 'the encoding pair still runs at both ends - board-mojibake in guards.ps1, json-readers at push time in run-gates'
+} else { Bad 'one end of the encoding pair is missing (board-mojibake must stay in guards.ps1, json-readers must run in ops\run-gates.ps1 and not hold the board) - either half alone leaves the other unguarded' }
 
 # audit-pack-basis could not be quieted by a ruling (2026-09-05). It reported every ambiguous pack on every
 # run with no way to mark one reviewed, so the hummus row sat unruled for weeks and a genuine

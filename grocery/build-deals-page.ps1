@@ -30,6 +30,10 @@ if (-not $Out) { $Out = Join-Path $OutDir 'deals-page.html' }
 # lib\board-drops.ps1 was dot-sourced here for the masthead's biggest-drop chip. The chip went with the
 # masthead on 2026-08-09; the Friday email is now the ranking's only caller, so the lib stays and this
 # dot-source goes.
+# cell-quarantine-lib: Test-TcCellQuarantined (a cell guards held at its last verified price) and Update-TcRowWinners
+# (the ONE winner recompute, shared with apply-cell-quarantine). Brad's ruling Q1 = A, 2026-09-21: a quarantined cell
+# shows its last verified published price WITH that price's date, and no pin may overwrite it.
+. (Join-Path $root 'cell-quarantine-lib.ps1')
 $doc  = Read-JsonFile $CompareFile
 $cats = (Read-JsonFile (Join-Path $root 'categories.json')).categories | Sort-Object order
 $week = [string]$doc.week_of
@@ -49,20 +53,15 @@ function Apply-Overrides($rows) {
     $id=[string]$r.id; if (-not $ovr.ContainsKey($id)) { continue }
     foreach ($s in $r.stores) {
       if (([string]$s.type) -ne 'everyday') { continue }         # never clobber a live sale
+      # never clobber a QUARANTINED cell either: it is held at its last verified published price, and a pin may be
+      # the very number guards condemned (guard 3). export-feed skips it the same way.
+      if (Test-TcCellQuarantined $s) { continue }
       $st=[string]$s.store; if (-not $ovr[$id].ContainsKey($st)) { continue }
       $new=[double]$ovr[$id][$st]; if ($new -le 0) { continue }
       if ([math]::Abs([double]$s.per_unit - $new) -gt 0.0001) { $s.per_unit = $new; $n++ }
     }
-    # recompute winners so cheapest_*/nomem_* stay consistent with the overridden per_units
-    $live = @($r.stores | Where-Object { [double]$_.per_unit -gt 0 })
-    if ($live.Count) {
-      $w = $live | Sort-Object { [double]$_.per_unit } | Select-Object -First 1
-      if ($r.PSObject.Properties.Name -contains 'cheapest_price') { $r.cheapest_price=[double]$w.per_unit; $r.cheapest_store=[string]$w.store; if ($r.PSObject.Properties.Name -contains 'cheapest_type') { $r.cheapest_type=[string]$w.type } }
-      if ($r.PSObject.Properties.Name -contains 'nomem_price') {
-        $nm = @($live | Where-Object { -not $_.membership }) | Sort-Object { [double]$_.per_unit } | Select-Object -First 1
-        if ($nm) { $r.nomem_price=[double]$nm.per_unit; $r.nomem_store=[string]$nm.store; if ($r.PSObject.Properties.Name -contains 'nomem_type') { $r.nomem_type=[string]$nm.type } }
-      }
-    }
+    # recompute winners so cheapest_*/nomem_* stay consistent with the overridden per_units (one shared rule)
+    Update-TcRowWinners $r
   }
   return $n
 }
@@ -697,6 +696,7 @@ $boardRows = [ordered]@{}
 # flattens the inner array into the outer one and every row becomes a flat list of numbers.
 function RowStruct([string]$id, [string]$unit, $ranked, [string]$mode) {
   $p = @()
+  $q = @()
   $have = @{}
   foreach ($s in @($ranked)) {
     $st = [string]$s.store
@@ -714,6 +714,9 @@ function RowStruct([string]$id, [string]$unit, $ranked, [string]$mode) {
     # entity: "6&cent;/oz" rendered literally on the live board. The same string is also the mailto and
     # share payload, where an entity is just as wrong. The plain-text twin exists for exactly this.
     $p += , @($storeIx[$st], [math]::Round([double]$s.per_unit, 4), $fl, (Fmt-PriceText ([double]$s.per_unit) $unit))
+    # q: cells this board holds at a last verified price, with that price's date (2026-09-21). The NEXT quarantine of
+    # the same cell reads this date back (Get-TcLastPublishedCells), so the date is carried, never refreshed.
+    if (Test-TcCellQuarantined $s) { $q += , @($storeIx[$st], [string]$s.quarantine.since) }
   }
   $x = @()
   if ($mode -eq 'all') {
@@ -724,6 +727,7 @@ function RowStruct([string]$id, [string]$unit, $ranked, [string]$mode) {
   # [ordered] is not a real type accelerator: PS 5.1 only honours it on the right of an ASSIGNMENT, and
   # `return [ordered]@{...}` throws "Argument types do not match". Assign first, then return.
   $out = [ordered]@{ u = $unit; p = @($p); x = @($x) }
+  if ($q.Count -gt 0) { $out['q'] = @($q) }   # only on a row that holds a quarantined cell, so no other row's bytes move
   return $out
 }
 # Bar length for the ranked-bar panel, computed HERE and stamped as a css custom property on the chip.
@@ -834,9 +838,23 @@ foreach ($c in $cats) {
       if ($isBest) { [void]$cb.Append("<span class='pg-best'>Cheapest</span>") }
       [void]$cb.Append("<span class='pg-store'>" + (HtmlEnc $shortName[[string]$s.store]) + "</span>")
       [void]$cb.Append("<span class='pg-price'>" + (Fmt-Price ([double]$s.per_unit) $unit) + "</span>")
-      [void]$cb.Append("<span class='pg-meta'>" + $typeTag + ($(if ($notes.Count) { " <span class='pg-note2'>" + (HtmlEnc ($notes -join ', ')) + "</span>" } else { '' })) + "</span>")
+      # A QUARANTINED cell (guards held it at its last verified published price, Brad's ruling Q1 = A) says so, with
+      # that price's DATE, and carries no "See item" link: the link opens today's product, whose price we are not
+      # vouching for, and a tile whose link disagrees with its price is the lie this board's link rules exist to stop.
+      $isHeld = Test-TcCellQuarantined $s
+      $heldTag = ''
+      if ($isHeld) {
+        $hd = ConvertTo-TcDay ([string]$s.quarantine.since)
+        $hdTxt = if ($hd) { $hd.ToString('MMM d', [Globalization.CultureInfo]::InvariantCulture) } else { [string]$s.quarantine.since }
+        $heldTag = " <span class='pg-qd' title='Last verified price, shown while this store&#39;s price is re-checked'>as of " + (HtmlEnc $hdTxt) + "</span>"
+      }
+      [void]$cb.Append("<span class='pg-meta'>" + $typeTag + ($(if ($notes.Count) { " <span class='pg-note2'>" + (HtmlEnc ($notes -join ', ')) + "</span>" } else { '' })) + $heldTag + "</span>")
       [void]$cb.Append((SaleBadge $s ([string]$s.store)))
-      [void]$cb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type)))
+      # A held cell still owes the ALL-3 rule a link, so it gets the STORE SEARCH for the commodity: something to click
+      # that vouches for no particular product's price. (The first build without it refused itself, correctly:
+      # "ALL-3 VIOLATION: 1 priced chip(s) rendered without any link", 2026-09-21.)
+      if ($isHeld) { [void]$cb.Append((SearchLink ([string]$s.store) (([string]$r.id) -replace '-', ' '))) }
+      else { [void]$cb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type))) }
       [void]$cb.Append("</div>")
       $i++
     }
@@ -1107,6 +1125,7 @@ html.tc-member .pg-bar,html.tc-member .pg-capture{display:none !important}
 .pg-tag{font-size:.64em;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
 .pg-tag-sale{color:#b23b2e;font-weight:700}
 .pg-note2{font-size:.62em;color:var(--amber);background:var(--amber-t);padding:1px 6px;border-radius:5px;font-weight:600}
+.pg-qd{font-size:.62em;color:#4a5751;background:#eef1ef;padding:1px 6px;border-radius:5px;font-weight:600;white-space:nowrap}
 .pg-sale{display:inline-block;align-self:flex-start;margin-top:4px;font-size:.62em;font-weight:700;color:#b23b2e;background:rgba(178,59,46,.09);border:1px solid rgba(178,59,46,.22);padding:1px 6px;border-radius:5px;white-space:nowrap}
 .pg-see{margin-top:5px;font-size:.68em;font-weight:700;color:var(--green-d);text-decoration:none;border-top:1px dotted var(--bd);padding-top:5px}
 .pg-see-search{color:var(--mut);font-weight:600}.pg-see-search:hover{color:var(--green-d)}

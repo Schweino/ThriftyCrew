@@ -499,6 +499,56 @@ function Invoke-Bounded([string]$Name, [string[]]$Arguments, [int]$TimeoutSec = 
 # Price signature of the current board: sorted id|store|per_unit|type over the latest comparison, hashed.
 # Used to re-publish only when a price actually changed (a new ad, a flash sale ending, a mid-cycle fix),
 # so the daily pull can run every day without needlessly re-pushing an unchanged page.
+# ---- THE GUARDS GATE, WITH PER-CELL QUARANTINE (2026-09-21) -------------------------------------------------------
+# Brad: "The ENTIRE board shouldn't be held hostage because of one (or a few) bad items. Each item is unique/individual."
+# guards.ps1 exits 2 for a board that must not publish AS IT STANDS. When every failure is scoped to cells or stores
+# under the circuit breaker it says so in out\cell-quarantine.json (action=quarantine); this applies that quarantine -
+# each named cell held at its last verified published price with that price's date, or withheld (Brad's ruling Q1 = A) -
+# and runs guards AGAIN over the rewritten board, which must exit 4 (QUARANTINED, verified on that board). Anything else
+# holds, exactly as a guards failure always did. The rules are in cell-quarantine-lib.ps1; this is only the sequence,
+# and both ship paths (the morning gate and the consistency auto-repair) call it, so there is one sequence, not two.
+# THE FEED IS RE-EXPORTED after a quarantine: export-feed ran in the recipe lane BEFORE this gate, from the board as it
+# stood, and the feed must carry the same held values the board does (recipes cost from it).
+function Invoke-GuardsGate([switch]$Silent) {
+  $res = [pscustomobject]@{ rc = 2; runs = 0; applied = $false; quarantined = 0; why = '' }
+  $gPath = Join-Path $root 'guards.ps1'
+  try {
+    if ($Silent) { & powershell -ExecutionPolicy Bypass -File $gPath -Quiet | Out-Null }
+    else { & powershell -ExecutionPolicy Bypass -File $gPath | ForEach-Object { Log ('guards: ' + $_) } }
+    $res.rc = $LASTEXITCODE
+  } catch { $res.rc = 2; Log ('guards threw: ' + $_.Exception.Message) }
+  $res.runs = 1
+  if ($res.rc -ne 2) { if ($res.rc -eq 4) { $res.why = 'the board already carries a verified quarantine' }; return $res }
+  $plan = $null; try { $plan = Read-JsonFile (Join-Path $OutDir 'cell-quarantine.json') } catch { $plan = $null }
+  if ($null -eq $plan -or [string]$plan.action -ne 'quarantine') { $res.why = 'guards held the board'; return $res }
+  Log ('guards asked for a QUARANTINE of ' + @($plan.cells).Count + ' cell(s) and ' + @($plan.stores).Count + ' store(s) - applying it, then running guards again over the quarantined board')
+  $apRc = 2
+  try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'apply-cell-quarantine.ps1') -OutDir $OutDir | ForEach-Object { Log ('quarantine: ' + $_) }; $apRc = $LASTEXITCODE } catch { Log ('apply-cell-quarantine threw: ' + $_.Exception.Message) }
+  if ($apRc -ne 0) { $res.why = ('the quarantine could not be applied (rc ' + $apRc + ')'); Log ('QUARANTINE NOT APPLIED (rc ' + $apRc + ') - the board is held, as a guards failure always held it'); return $res }
+  $res.applied = $true
+  # RE-DERIVE THE DRIFT VERDICTS OVER THE QUARANTINED BOARD before guards reads it again. The apply rewrote
+  # comparison-*.json, which makes out\name-drift.json older than the board it describes, and audit-tile-integrity
+  # then HOLDS on purpose rather than grade today's tiles against stale flags. Found by the first live run of this
+  # gate (2026-09-21 10:01:41: tile-integrity HELD the second run after a clean apply). Same rule, same reason, as
+  # the name-drift re-run after prune-bad-links on the ship path.
+  try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null; Log 'name-drift re-derived over the quarantined board (the apply rewrote the board tile-integrity grades against)' } catch { Log ('name-drift re-derive after the quarantine threw: ' + $_.Exception.Message) }
+  try {
+    if ($Silent) { & powershell -ExecutionPolicy Bypass -File $gPath -Quiet | Out-Null }
+    else { & powershell -ExecutionPolicy Bypass -File $gPath | ForEach-Object { Log ('guards: ' + $_) } }
+    $res.rc = $LASTEXITCODE
+  } catch { $res.rc = 2; Log ('guards threw on the quarantined board: ' + $_.Exception.Message) }
+  $res.runs = 2
+  if ($res.rc -eq 4) {
+    try {
+      $qb = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+      $qd = Read-JsonFile $qb.FullName
+      if ($qd.PSObject.Properties['quarantine'] -and $qd.quarantine) { $res.quarantined = @(@($qd.quarantine.cells) | Where-Object { $_ }).Count }
+    } catch { Log ('could not count the quarantined cells: ' + $_.Exception.Message) }
+    try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'export-feed.ps1') | Out-Null; Log 'smp-feed re-exported over the quarantined board, so the feed carries the same held values the board does' } catch { Log ('export-feed threw after the quarantine: ' + $_.Exception.Message) }
+  } else { $res.why = ('guards exited ' + $res.rc + ' over the quarantined board') }
+  return $res
+}
+
 function BoardSignature() {
   $cf = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   if (-not $cf) { return '' }
@@ -1399,11 +1449,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # wrong-basis pins the guards never saw. Publish now only APPLIES the pins file.)
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'generate-board-overrides.ps1') | ForEach-Object { Log ('pins: ' + $_) } } catch { Log ('WARN generate-board-overrides threw: ' + $_.Exception.Message) }
       $guardsRc = 0
-      try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') | ForEach-Object { Log ('guards: ' + $_) }
-        $guardsRc = $LASTEXITCODE
-      } catch { $guardsRc = 2; Log ('guards threw: ' + $_.Exception.Message) }
-      $guardsBlocked = ($guardsRc -ne 0)
+      # guards, and the per-cell quarantine it may ask for (Invoke-GuardsGate, above BoardSignature). rc 4 is a board
+      # whose bad cells are held at their last verified price, verified on that board: it is NOT blocked and it is
+      # NOT all clean, and it publishes.
+      $gGate = Invoke-GuardsGate
+      $guardsRc = $gGate.rc
+      $guardsBlocked = ($guardsRc -ne 0 -and $guardsRc -ne 4)
       # ---- THE VERDICT AS A VALUE, NOT A SIDE EFFECT (2026-08-22) --------------------------------------
       # Guards holding the Ghost publish is only half a gate: export-feed has ALREADY written
       # public\smp-feed.json by this point (it runs in the recipe lane above), and capture-run's publish
@@ -1416,8 +1467,36 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # which a same-day verdict says nothing about whether guards ever saw THIS board. $guardsRc is the
       # exit code observed four lines above; nothing here can name a verdict it did not measure.
       try {
-        [void](Write-ChainVerdict -Repo (Split-Path $root -Parent) -OutDir $OutDir -Date $asofS -GuardsRc $guardsRc -WrittenBy 'check-ad-cycles')
+        [void](Write-ChainVerdict -Repo (Split-Path $root -Parent) -OutDir $OutDir -Date $asofS -GuardsRc $guardsRc -WrittenBy 'check-ad-cycles' -Quarantined $gGate.quarantined)
       } catch { Log ('chain-verdict write threw: ' + $_.Exception.Message) }
+      if ($guardsRc -eq 4) {
+        # A PUBLISHED BOARD WITH QUARANTINED CELLS PAGES ONCE, naming every cell and why (its own registered type in
+        # alert-registry.json). "GUARDS FAILED" stays reserved for a real hold, so its alert precision keeps meaning.
+        # ONCE per distinct set: a cell held on consecutive days does not re-page; a changed set does.
+        Log ('QUARANTINED - ' + $gGate.quarantined + ' cell(s) held at their last verified published price or withheld; every other cell publishes')
+        $summary += ('QUARANTINE ' + $gGate.quarantined + ' cell(s) held at their last verified price (or withheld) - the rest of the board publishes; see out\cell-quarantine.json')
+        try {
+          $qbF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+          $qBlk = (Read-JsonFile $qbF.FullName).quarantine
+          $qLines = @(); $qKeys = @()
+          foreach ($qe in @($qBlk.cells)) {
+            if ($null -eq $qe) { continue }
+            $qKeys += ([string]$qe.id + '|' + [string]$qe.store + '|' + [string]$qe.action)
+            if ([string]$qe.action -eq 'last-good') { $qLines += ('- ' + $qe.id + ' / ' + $qe.store + ': held at ' + $qe.per_unit + ' (its last verified published price, ' + $qe.since + '); today''s candidate was ' + $qe.bad_per_unit + '. Why: ' + (@($qe.reasons) -join ' | ')) }
+            else { $qLines += ('- ' + $qe.id + ' / ' + $qe.store + ': WITHHELD (' + $qe.why + '); today''s candidate was ' + $qe.bad_per_unit + '. Why: ' + (@($qe.reasons) -join ' | ')) }
+          }
+          foreach ($qs in @($qBlk.stores)) { if ($qs) { $qKeys += ('store|' + [string]$qs.store); $qLines += ('- store ' + $qs.store + ': ' + $qs.cells + ' everyday cell(s) withheld. Why: ' + (@($qs.reasons) -join ' | ')) } }
+          $qSig = (@($qKeys | Sort-Object) -join ';')
+          $qSigF = Join-Path $OutDir 'quarantine-alert.sig'
+          $qPrev = if (Test-Path $qSigF) { ((Get-Content $qSigF -Raw -Encoding UTF8) + '').Trim() } else { '' }
+          if ($qSig -ne $qPrev -and -not $NoAlert) {
+            $qBody = ("guards.ps1 found hard failures on " + $asofS + " that were each scoped to a single cell, so ONLY those cells were quarantined and the rest of the board was published (Brad, 2026-09-21: the entire board is not held hostage by one bad item). A held cell shows its last verified published price with that price's date; a cell with no such value is withheld, never invented.`n`n" + ($qLines -join "`n") + "`n`nThe record is grocery/out/cell-quarantine.json and the board's own quarantine block. Fix the cell at its cause; it clears itself on the next build that passes.")
+            Send-Alert -Subject ("Grocery: board cells quarantined - " + $asofS) -Body $qBody | Out-Null
+            Set-Content -Path $qSigF -Value $qSig -Encoding UTF8
+            Log 'quarantine alert sent (one page for the whole set)'
+          } else { Log 'quarantine set unchanged since the last page - not re-paging' }
+        } catch { Log ('quarantine alert threw: ' + $_.Exception.Message) }
+      }
       if ($guardsBlocked) {
         # Do NOT reuse $boardChanged here: that would log "no price change today", which is a lie -
         # the board DID change, we refused to ship it. A misleading log is how an outage goes unnoticed.
@@ -1617,8 +1696,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
               # Links just changed, so pins derived from them must be re-minted BEFORE guards re-check
               # (same publish-never-mints rule as the main gate above).
               try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'generate-board-overrides.ps1') | Out-Null } catch {}
-              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') -Quiet | Out-Null
-              if ($LASTEXITCODE -eq 0) {
+              # the same gate as the morning path, quarantine included (Invoke-GuardsGate): 0 and 4 both publish
+              $gRepair = Invoke-GuardsGate -Silent
+              if ($gRepair.rc -eq 0 -or $gRepair.rc -eq 4) {
                 & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')   | Out-Null
               } else {
                 Log 'GUARDS FAILED after consistency auto-repair - NOT republished (left at last good)'

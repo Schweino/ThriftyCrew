@@ -30,7 +30,18 @@
 
   ADVISORY (logged, never blocks): ordinary link/board price drift, and order-dependent match rows.
 
-  Exit codes: 0 = safe to publish. 2 = HARD FAIL. (Advisory-only findings still exit 0.)
+  Exit codes: 0 = safe to publish. 2 = HARD FAIL: the board AS IT STANDS must not publish. 4 = QUARANTINED: the board
+  carries cells held at their last verified price, each verified here, and is safe to publish. (Advisory-only
+  findings still exit 0.)
+
+  A BAD CELL QUARANTINES ITSELF (Brad, 2026-09-21: "The ENTIRE board shouldn't be held hostage because of one (or a
+  few) bad items. Each item is unique/individual."). Every hard failure below is one of three families: CELL (one
+  commodity at one store: guards 3, 4, 5, 8, 10, 10b and a delegated audit that names its cells), STORE (a store's
+  everyday prices: guards 6 and 9), or BOARD (everything else, including every failure nobody taught to name its
+  scope - an unscoped failure holds exactly as it always did). When every failure is cell or store scoped and under
+  the circuit breaker, this exits 2 with GUARDS QUARANTINE-REQUIRED and writes out\cell-quarantine.json;
+  apply-cell-quarantine.ps1 holds those cells at their last verified published price, and this runs again and must
+  exit 4. The decision, the breaker and the contract are in cell-quarantine-lib.ps1.
 #>
 # -NoIdentityGate: switch off the board-vs-identity parity check (guard 13). It ships ADVISORY and is
 # promoted to blocking by Brad, not by the builder (PLAN section 10.17); this flag plus dropping
@@ -46,6 +57,24 @@ $root = $PSScriptRoot
 $fail = New-Object System.Collections.ArrayList
 $warn = New-Object System.Collections.ArrayList
 function Say($s) { if (-not $Quiet) { Write-Output $s } }
+# THE SCOPE OF EACH HARD FAILURE (2026-09-21). $fail keeps every message exactly as before, because fixtures and
+# readers match that text; $script:FailScope is its structured twin, one entry per cell or store a failure names,
+# keyed to the failure's index. A $fail entry with no twin is BOARD scoped and holds the board.
+. (Join-Path $root 'cell-quarantine-lib.ps1')
+$script:FailScope = New-Object System.Collections.ArrayList
+function Add-ScopedFail([string]$Message, [string]$Family, $Cells, $Stores, [string]$Kind = 'value', $BadPerUnit = $null, [string]$BadItem = '', [string]$Check = '') {
+  $ix = $fail.Add($Message)
+  foreach ($c in @($Cells)) { if ($null -eq $c) { continue }; [void]$script:FailScope.Add((New-TcGuardFailure -Message $Message -Family 'cell' -Id ([string]$c.id) -Store ([string]$c.store) -Kind $(if ($c.kind) { [string]$c.kind } else { $Kind }) -BadPerUnit $BadPerUnit -BadItem $BadItem -Check $Check -Ix $ix)) }
+  foreach ($s in @($Stores)) { if (-not $s) { continue }; [void]$script:FailScope.Add((New-TcGuardFailure -Message $Message -Family 'store' -Store ([string]$s) -Check $Check -Ix $ix)) }
+}
+function Add-RowFail([string]$Message, [string]$Store, [string]$Item, [string]$Check) {
+  # Guards 5 and 10 judge a CAPTURE ROW. Scope it to every published cell carrying that product at that store; a row
+  # no published cell carries cannot be scoped, so it stays BOARD scoped and holds, exactly as before.
+  $ks = (Find-TcBoardCellKeys -Board $cmp -Store $Store -Item $Item).keys
+  if (@($ks).Count -eq 0) { [void]$fail.Add($Message); return }
+  $cells = @(@($ks) | ForEach-Object { $p = ([string]$_) -split '\|', 2; [pscustomobject]@{ id = $p[0]; store = $p[1]; kind = 'value' } })
+  Add-ScopedFail -Message $Message -Family 'cell' -Cells $cells -BadItem $Item -Check $Check
+}
 
 # THE SAME FILE SET THE ENGINE PRICES FROM. See regular-fileset-lib.ps1 for why this is shared rather than
 # re-derived here: guards used to answer "which files does the board price from?" with "the newest per store",
@@ -304,7 +333,8 @@ $null = Register-Kid 'cell-drops'           'audit-cell-drops.ps1'           @()
 $null = Register-Kid 'coverage-regression'  'audit-coverage-regression.ps1'  @()
 $null = Register-Kid 'pack-basis'           'audit-pack-basis.ps1'           @()
 $null = Register-Kid 'band-censorship'      'audit-band-censorship.ps1'      @()
-$null = Register-Kid 'json-readers'        'audit-json-readers.ps1'         @()
+# audit-json-readers LEFT this gate on 2026-09-21: it reads SOURCE CODE, not the board, and on 2026-09-20 it held a
+# board with no board cell behind it. It runs at push time in ops\run-gates.ps1, where a source defect belongs.
 $null = Register-Kid 'board-mojibake'      'audit-board-mojibake.ps1'       @('-Quiet')
 $null = Register-Kid 'capture-encoding'    'audit-capture-encoding.ps1'     @()
 $null = Register-Kid 'st-walmart-deals'     'build-walmart-deals.ps1'        @('-SelfTest')
@@ -527,12 +557,13 @@ foreach ($g in @(
     #   json-readers   = the CAUSE. Counts bare `Get-Content | ConvertFrom-Json` sites; 553 on day one,
     #                    so a ratchet, and a NEW one hard-fails. It cannot see a read split over two
     #                    lines - a floor on what it proves, not a claim the rest is clean.
+    #                    MOVED 2026-09-21 to ops\run-gates.ps1 (push time): it reads source, and a source
+    #                    defect must stop the PUSH that introduces it, not hold a board with no bad cell.
     #   board-mojibake = the OUTCOME, where every variant converges regardless of which half failed, and
     #                    the only one that can catch a reader nobody has enumerated. Baseline 0, so any
     #                    newly mangled name blocks. Not cosmetic: audit-name-drift compares the board
     #                    name against the stored link name WORD BY WORD, so one side mangled and the
-    #                    other not reads as a WRONG PRODUCT in a different guard.
-    @{ f='audit-json-readers.ps1';      n='no NEW script reads JSON in a way PS 5.1 decodes with the ANSI codepage (RATCHET, may only go down)'; k='json-readers' },
+    #                    other not reads as a WRONG PRODUCT in a different guard. It reads BOARD DATA, so it stays.
     @{ f='audit-board-mojibake.ps1';    n='no NEW mangled product name reaches the board (RATCHET at 0 - a clean name that is now corrupted means a reader is mangling input right now)'; k='board-mojibake' },
     #   capture-encoding = the INPUT, and the third side of the same triangle. json-readers polices our
     #                    readers and board-mojibake catches the outcome, but neither can see a capture file
@@ -578,8 +609,20 @@ foreach ($g in @(
   # the console below, which is what the paragraph above asks for AND is immune to the NativeCommandError
   # trap by construction - a captured string is never an ErrorRecord, so it can never terminate this file.
   $o = (Wait-Kid $g.k).out
-  if ($LASTEXITCODE -eq 3) { [void]$warn.Add($g.n + ' could NOT be evaluated, so it proves nothing this run: ' + ((@($o) | Where-Object { $_ }) -join ' ')) }
-  elseif ($LASTEXITCODE -ne 0) { [void]$fail.Add(("HARD FAIL: " + $g.n + " (see " + $g.f + ")")) }
+  $kidRc = $LASTEXITCODE
+  if ($kidRc -eq 3) { [void]$warn.Add($g.n + ' could NOT be evaluated, so it proves nothing this run: ' + ((@($o) | Where-Object { $_ }) -join ' ')) }
+  elseif ($kidRc -ne 0) {
+    # A CHILD THAT NAMES ITS OWN CELLS IS SCOPED TO THEM (2026-09-21). The protocol is Get-TcChildQuarantineScope's:
+    # QUARANTINE-CELL / QUARANTINE-STORE lines closed by "QUARANTINE-SCOPE complete". Only an exit 2 is ever scoped -
+    # a crash (1, or anything else) proves nothing about which cell is bad - and a child that does not affirm a
+    # complete scope stays BOARD scoped and holds, as every delegated audit did before.
+    $kidScope = $null; if ($kidRc -eq 2) { $kidScope = Get-TcChildQuarantineScope $o }
+    $kidMsg = ("HARD FAIL: " + $g.n + " (see " + $g.f + ")")
+    if ($kidScope) {
+      Add-ScopedFail -Message $kidMsg -Family 'cell' -Cells $kidScope.cells -Stores $kidScope.stores -Check $g.k
+      foreach ($kc in @($kidScope.cells)) { Say ("  scope {0} / {1} [{2}] named by {3}" -f $kc.id, $kc.store, $kc.kind, $g.f) }
+    } else { [void]$fail.Add($kidMsg) }
+  }
   else { Say ("  ok    " + $g.n) }
 }
 
@@ -734,14 +777,17 @@ if (Test-Path $ovrF) {
     $unit = $unitById[$id]
     if (-not $unit) { $pinSkipped++; continue }          # id on neither board -> nothing to price against
     $lnk = $pu.$id.$st
+    # Guard 3's failures are CELL scoped (the pin's own id/store). A pin on a recipe-board-only id is not a cell of
+    # the staple board, so the disposition cannot scope it and it holds, as before.
+    $pinCell = @([pscustomobject]@{ id = $id; store = $st; kind = 'value' })
     if (-not $lnk -or -not $lnk.price) {
       $rogue++
-      [void]$fail.Add(("HARD FAIL: pin has NO LINK to derive from  {0} / {1}  pin={2} - a pin beats the engine, so one that cannot be re-derived is an unsourced number nothing can correct" -f $id, $st, $c.per_unit))
+      Add-ScopedFail -Message ("HARD FAIL: pin has NO LINK to derive from  {0} / {1}  pin={2} - a pin beats the engine, so one that cannot be re-derived is an unsourced number nothing can correct" -f $id, $st, $c.per_unit) -Family 'cell' -Cells $pinCell -BadPerUnit ([double]$c.per_unit) -Check 'guard 3'
       continue
     }
     if ($pinDrift.ContainsKey($id + '|' + $st)) {
       $rogue++
-      [void]$fail.Add(("HARD FAIL: pin derived from a WRONG-PRODUCT link  {0} / {1}  [{2}]  link='{3}' - name-drift flags this link, so its price must not be pinned onto the board" -f $id, $st, $pinDrift[$id + '|' + $st], [string]$lnk.name))
+      Add-ScopedFail -Message ("HARD FAIL: pin derived from a WRONG-PRODUCT link  {0} / {1}  [{2}]  link='{3}' - name-drift flags this link, so its price must not be pinned onto the board" -f $id, $st, $pinDrift[$id + '|' + $st], [string]$lnk.name) -Family 'cell' -Cells $pinCell -BadPerUnit ([double]$c.per_unit) -Check 'guard 3'
       continue
     }
     $sp = 0.0; [void][double]::TryParse((([string]$lnk.price) -replace '[^0-9.]', ''), [ref]$sp)
@@ -751,7 +797,7 @@ if (Test-Path $ovrF) {
     $pinChecked++
     if ([math]::Abs($lpu - $pin) / $lpu -gt 0.02) {
       $rogue++
-      [void]$fail.Add(("HARD FAIL: pin does NOT match its own link  {0} / {1}  pin={2} link={3} ('{4}') - a derived pin must equal the link it came from; this one was hand-edited or its link moved" -f $id, $st, [math]::Round($pin, 4), [math]::Round($lpu, 4), [string]$lnk.name))
+      Add-ScopedFail -Message ("HARD FAIL: pin does NOT match its own link  {0} / {1}  pin={2} link={3} ('{4}') - a derived pin must equal the link it came from; this one was hand-edited or its link moved" -f $id, $st, [math]::Round($pin, 4), [math]::Round($lpu, 4), [string]$lnk.name) -Family 'cell' -Cells $pinCell -BadPerUnit $pin -Check 'guard 3'
     }
   }
   # ZERO-ROWS RULE, applied to this guard's OTHER half. The WRONG-PRODUCT clause above only has an opinion on
@@ -841,7 +887,9 @@ foreach ($row in $cmp.comparison) {
     if ($null -eq $lpu) { $unpriceable++; continue }
     # the EFFECTIVE per-unit: what build-deals-page will actually publish for this cell
     $k = [string]$row.id + '|' + [string]$s.store
-    $bpu = if ($pin.ContainsKey($k)) { $pinned++; $pin[$k] } else { [double]$s.per_unit }
+    # A QUARANTINED cell prints its held last verified price and build-deals-page applies no pin to it (2026-09-21),
+    # so it is graded at the held price - which is what lets the disposition see a finding against the held value.
+    $bpu = if ($pin.ContainsKey($k) -and -not (Test-TcCellQuarantined $s)) { $pinned++; $pin[$k] } else { [double]$s.per_unit }
     if ($bpu -le 0 -or $lpu -le 0) { continue }
     # Counted HERE, past every silent `continue`, so it is the number of cells actually compared - not the
     # number looked at. That distinction is the whole point of the rule.
@@ -849,7 +897,7 @@ foreach ($row in $cmp.comparison) {
     $ratio = $lpu / $bpu
     if ($ratio -ge 1.5 -or $ratio -le 0.67) {
       $factorBugs++
-      [void]$fail.Add(("HARD FAIL: {0}x factor  {1} / {2}  board={3} link={4}  [{5}]" -f [math]::Round($ratio,2), $row.id, $s.store, [math]::Round($bpu,4), [math]::Round($lpu,4), $e.name))
+      Add-ScopedFail -Message ("HARD FAIL: {0}x factor  {1} / {2}  board={3} link={4}  [{5}]" -f [math]::Round($ratio,2), $row.id, $s.store, [math]::Round($bpu,4), [math]::Round($lpu,4), $e.name) -Family 'cell' -Cells @([pscustomobject]@{ id = [string]$row.id; store = [string]$s.store; kind = 'value' }) -BadPerUnit $bpu -BadItem ([string]$s.item) -Check 'guard 4'
     } elseif ([math]::Abs($ratio - 1) -gt 0.02) { $drift++ }
   }
 }
@@ -926,7 +974,7 @@ foreach ($f in (RegFiles)) {
     # full names are NOT recoverable locally (0 of 109 can be prefix-matched against any name we hold), and the
     # only real fix is a fresh Walmart capture. The slice was fixed anyway - it was the same mistake, smaller.
     $mp++; $mpSeen++
-    [void]$fail.Add(("HARD FAIL: multipack size  [{0}] '{1}' size=[{2}] records ONE unit (name says a pack count and its stated weight does not reconcile with the size)" -f $doc.store, $name, $size))
+    Add-RowFail -Message ("HARD FAIL: multipack size  [{0}] '{1}' size=[{2}] records ONE unit (name says a pack count and its stated weight does not reconcile with the size)" -f $doc.store, $name, $size) -Store ([string]$doc.store) -Item $name -Check 'guard 5'
   }
 }
 # ZERO-ROWS RULE. $mpSeen counts rows this guard formed an actual VERDICT about, not rows it looped over
@@ -1013,7 +1061,8 @@ foreach ($p in $prefixes.Keys) {
   if ((Get-CollapseVerdict $files.Count 0 0) -eq 'no-history') { [void]$g6NoHistory.Add($p); continue }
   $newest = $files[0]
   $curr = 0
-  try { $curr = @((Read-JsonFile $newest.FullName).deals).Count } catch {}
+  $g6Store = ''   # the store's display name, so a collapse is STORE scoped (2026-09-21); '' leaves it board scoped
+  try { $g6Doc = Read-JsonFile $newest.FullName; $curr = @($g6Doc.deals).Count; $g6Store = [string]$g6Doc.store } catch {}
   $best = 0
   foreach ($old in ($files | Select-Object -Skip 1 -First 4)) {
     try { $c = @((Read-JsonFile $old.FullName).deals).Count; if ($c -gt $best) { $best = $c } } catch {}
@@ -1053,10 +1102,12 @@ foreach ($p in $prefixes.Keys) {
   if ((Get-CollapseVerdict $files.Count $curr $best) -eq 'collapsed') {
     $thin++
     if ($isUnion) {
-      [void]$fail.Add(("HARD FAIL: store data collapsed  [{0}] the UNION across its window holds {1} distinct item(s) vs {2} in a single recent capture - an everyday-only store is priced from the union, so a union thinner than one of its own files means captures have been lost, not merely throttled" -f $p, $curr, $best))
+      $g6Msg = ("HARD FAIL: store data collapsed  [{0}] the UNION across its window holds {1} distinct item(s) vs {2} in a single recent capture - an everyday-only store is priced from the union, so a union thinner than one of its own files means captures have been lost, not merely throttled" -f $p, $curr, $best)
     } else {
-      [void]$fail.Add(("HARD FAIL: store data collapsed  [{0}] newest file '{1}' has {2} rows vs {3} recently - a throttled/partial pull must not become the source of truth" -f $p, $newest.Name, $curr, $best))
+      $g6Msg = ("HARD FAIL: store data collapsed  [{0}] newest file '{1}' has {2} rows vs {3} recently - a throttled/partial pull must not become the source of truth" -f $p, $newest.Name, $curr, $best)
     }
+    # STORE scoped: that store's everyday prices are untrustworthy, nobody else's are. No name, no scope: it holds.
+    if ($g6Store) { Add-ScopedFail -Message $g6Msg -Family 'store' -Stores @($g6Store) -Check 'guard 6' } else { [void]$fail.Add($g6Msg) }
   }
 }
 if ($thin -eq 0) {
@@ -1122,7 +1173,7 @@ if ($exF) {
         $bAd = 0.0; [void][double]::TryParse((([string]$s.ad) -replace '[^0-9.]',''), [ref]$bAd)
         if ($bAd -gt 0 -and ([math]::Abs($bAd - $suspect[$k]) -lt 0.005)) {
           $staleSale++
-          [void]$fail.Add(("HARD FAIL: stale undated discount published as a live sale  {0} / {1}  `${2}  (from {3}, no end date - a sale we cannot date is a sale we cannot stand behind)" -f $row.id, $s.store, $bAd, $exF.Name))
+          Add-ScopedFail -Message ("HARD FAIL: stale undated discount published as a live sale  {0} / {1}  `${2}  (from {3}, no end date - a sale we cannot date is a sale we cannot stand behind)" -f $row.id, $s.store, $bAd, $exF.Name) -Family 'cell' -Cells @([pscustomobject]@{ id = [string]$row.id; store = [string]$s.store; kind = 'value' }) -BadPerUnit ([double]$s.per_unit) -BadItem ([string]$s.item) -Check 'guard 8'
         }
       }
     }
@@ -1292,7 +1343,9 @@ foreach ($f in (RegFiles)) {
   # capture-policy-lib), so the gate and the policy cannot drift apart again.
   if ($age -gt $staleCliffDays) {
     $stale++
-    [void]$fail.Add(("HARD FAIL: {0} price data is {1} days old - past the {2}-day capture-policy carry, a stale price is a wrong price" -f $store, $age, $staleCliffDays))
+    $g9Msg = ("HARD FAIL: {0} price data is {1} days old - past the {2}-day capture-policy carry, a stale price is a wrong price" -f $store, $age, $staleCliffDays)
+    # STORE scoped (2026-09-21): one store's clock is past the carry, the other six are not.
+    if ($store) { Add-ScopedFail -Message $g9Msg -Family 'store' -Stores @($store) -Check 'guard 9' } else { [void]$fail.Add($g9Msg) }
   }
 }
 # The $stale -eq 0 wrapper STAYS: OkUnlessBlind prints ok whenever the count is non-zero, so dropping it would
@@ -1363,7 +1416,7 @@ foreach ($f in (RegFiles)) {
     if ([math]::Abs($apTotal - $cp) -gt ([math]::Max(0.005, $cp * 0.001))) {
       $mismatch++
       $mtxt = if ($mult -gt 1) { (" (x" + $mult + " multibuy -> `$" + [math]::Round($apTotal,2) + ")") } else { '' }
-      [void]$fail.Add(("HARD FAIL: publishing a price the store is NOT charging  [{0}] {1}  we publish `${2}{3}, the store charges `${4} - the puller took the wrong price field (this is the basePrice bug)" -f $store, [string]$d.item, $ap, $mtxt, $cp))
+      Add-RowFail -Message ("HARD FAIL: publishing a price the store is NOT charging  [{0}] {1}  we publish `${2}{3}, the store charges `${4} - the puller took the wrong price field (this is the basePrice bug)" -f $store, [string]$d.item, $ap, $mtxt, $cp) -Store $store -Item ([string]$d.item) -Check 'guard 10'
     }
   }
   if ($any) { $hasContract[$store] = $true }
@@ -1474,8 +1527,9 @@ foreach ($row in $cmp.comparison) {
     $implied = [double]$s.per_unit * $mult
     if ([math]::Abs($implied - $lastTok) -gt ([math]::Max(0.01, $lastTok * 0.005))) {
       $alBad++
-      [void]$fail.Add(("HARD FAIL: ad-line price provenance  [{0}] {1} @ {2}  we publish {3}/{4} (basis '{5}'), which works out to `${6} for the package - but the line's own last price is `${7}. The engine took a number that is not the price this ad quotes.`n           line: {8}" -f `
-        [string]$s.store, [string]$row.id, [string]$s.store, [string]$s.per_unit, [string]$row.unit, [string]$s.basis, [math]::Round($implied,2), $lastTok, $adTxt))
+      $alMsg = ("HARD FAIL: ad-line price provenance  [{0}] {1} @ {2}  we publish {3}/{4} (basis '{5}'), which works out to `${6} for the package - but the line's own last price is `${7}. The engine took a number that is not the price this ad quotes.`n           line: {8}" -f `
+        [string]$s.store, [string]$row.id, [string]$s.store, [string]$s.per_unit, [string]$row.unit, [string]$s.basis, [math]::Round($implied,2), $lastTok, $adTxt)
+      Add-ScopedFail -Message $alMsg -Family 'cell' -Cells @([pscustomobject]@{ id = [string]$row.id; store = [string]$s.store; kind = 'value' }) -BadPerUnit ([double]$s.per_unit) -BadItem ([string]$s.item) -Check 'guard 10b'
     }
   }
 }
@@ -1642,14 +1696,26 @@ try {
 
 Say ''
 foreach ($w in $warn) { Say ("  warn  " + $w) }
+# ---------------------------------------------------------------- the disposition (2026-09-21)
+# ONE decision over every hard failure, in cell-quarantine-lib.ps1: pass (0), quarantine required (2), quarantined
+# and verified on this board (4), or hold (2). out\cell-quarantine.json records it against this board's bytes on
+# EVERY run, so the applier can only ever act on the board this run saw. A plan that cannot be written holds.
+$gdFailures = (ConvertTo-TcGuardFailures -Messages $fail -Scoped $script:FailScope).failures
+$gd = Get-TcGuardsDisposition -Failures $gdFailures -Board $cmp
+try { $null = Write-TcQuarantinePlan -OutDir (Join-Path $root 'out') -Disposition $gd -BoardPath $cmpF.FullName }
+catch {
+  if ($gd.action -eq 'quarantine') { $gd.action = 'hold'; $gd.reasons = @($gd.reasons) + @('the quarantine plan could not be written, so nothing can apply it: ' + $_.Exception.Message) }
+}
+$gv = Get-TcGuardsVerdictLines -Disposition $gd -FailCount $fail.Count
 if ($fail.Count -gt 0) {
   Write-Output ''
-  foreach ($f in $fail) { Write-Output ("  " + $f) }
+  # On a verified quarantined board every failure left is ON a held cell; it is printed without the HARD FAIL token
+  # so a log reader counting hard failures does not count a cell that is already held at its last good price.
+  if ($gd.action -eq 'quarantined') { foreach ($f in $fail) { Write-Output ("  covered by the quarantine: " + (([string]$f) -replace '^HARD FAIL: ', '')) } }
+  else { foreach ($f in $fail) { Write-Output ("  " + $f) } }
   Write-Output ''
-  Write-Output ("GUARDS FAILED: " + $fail.Count + " hard invariant(s) violated. Board NOT safe to publish.")
-  Exit-Guard -Name 'guards' -Summary ("hard=" + $fail.Count + " warn=" + $warn.Count) -Code 2
 }
-Write-Output 'GUARDS OK: every hard invariant holds. Safe to publish.'
+foreach ($l in @($gv.lines)) { Write-Output $l }
 # COMPLETION MARKER: the exit code says whether the board may publish; this line says the guard reached the
 # end. A crash partway through 40+ invariants would otherwise exit 1 and read like an ordinary verdict.
-Exit-Guard -Name 'guards' -Summary ("hard=0 warn=" + $warn.Count) -Code 0
+Exit-Guard -Name 'guards' -Summary ("hard=" + $fail.Count + " warn=" + $warn.Count + " disposition=" + $gd.action) -Code $gv.code

@@ -201,6 +201,10 @@ $static = @(
   @{ f = 'grocery\audit-cloud-readiness.ps1';  n = 'every credential consumer in the chain can run on a runner' }
   @{ f = 'grocery\audit-script-census.ps1';    n = 'no script is unreachable and unrecorded' }
   @{ f = 'grocery\audit-json-encoding.ps1';    n = 'the matching rules are still in the encoding they were written in' }
+  # MOVED HERE FROM guards.ps1 on 2026-09-21: a bare JSON reader is a SOURCE defect, so it stops the push that adds it
+  # instead of holding a board with no bad cell (it held the 2026-09-20 board that way). Its baseline is tracked, so a
+  # clean checkout can read it; its report is rewritten only when its findings change.
+  @{ f = 'grocery\audit-json-readers.ps1';     n = 'no NEW script reads JSON in a way PS 5.1 decodes with the ANSI codepage (RATCHET, may only go down)' }
   @{ f = 'grocery\audit-instore-shutout.ps1';  n = 'no NEW commodity has quietly lost every shelf row at a store' }
   # BOTH HALVES, for the reason spelled out under audit-twin-drift below: the discovery pass proves the
   # matcher can still tell a sweep from an ownership list, and THIS entry runs it over the real tree,

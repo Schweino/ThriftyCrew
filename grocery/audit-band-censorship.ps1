@@ -596,6 +596,14 @@ if ($verdict -eq 'break') {
   $newCells = @($counted | Where-Object { $known -notcontains $_ })
   Write-Output ("band-censorship: RATCHET BROKEN - $nCounted cell(s) now, baseline $base. A cell that was not being censored yesterday is being censored today, which is a live regression rather than the known backlog.")
   if ($known.Count) { foreach ($nc in $newCells) { Write-Output ("    new      $nc") } }
+  # THE QUARANTINE PROTOCOL (2026-09-21, grocery\cell-quarantine-lib.ps1 Get-TcChildQuarantineScope). The regression
+  # is exactly the cells the baseline did not know, so this names each one for guards.ps1 to quarantine, and
+  # affirms the list is complete. With no recorded set there is nothing to name: no scope line, and guards holds
+  # the whole board as it always did. 'selection' because censorship condemns the ROW CHOSEN, not the number shown.
+  if ($known.Count -and $newCells.Count) {
+    foreach ($nc in $newCells) { Write-Output ('QUARANTINE-CELL ' + $nc + '|selection') }
+    Write-Output ('QUARANTINE-SCOPE complete cells=' + $newCells.Count + ' stores=0')
+  }
   Exit-Guard -Name 'band-censorship' -Summary ("$nCounted cell(s) over a baseline of $base") -Code 2
 }
 if ($verdict -eq 'tighten') {

@@ -17,6 +17,9 @@
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# Test-TcCellQuarantined: a cell guards held at its last verified published price (2026-09-21). The feed carries the
+# SAME held value the board shows - no pin may overwrite it and no link rides with it, exactly as on the board.
+. (Join-Path $root 'cell-quarantine-lib.ps1')
 $out  = Join-Path $root 'out'
 $mp   = Join-Path (Split-Path $root -Parent) 'meal-prep'
 
@@ -164,7 +167,7 @@ function New-PricingEntry($s, [double]$perUnit, [string]$rowUnit, [string]$id, [
     if ($adMinor -gt 0 -and $derived -gt 0 -and ([math]::Abs($adMinor - $derived) / [double]$derived) -le 0.02) { $e['purchasePriceMinor'] = $adMinor }
     else { $e['purchasePriceMinor'] = $derived; if ($adMinor -gt 0) { $script:pinDiverged++ } }
   } else { $script:pinNoBasis++ }
-  if (($Full -or $PER_STORE_URLS) -and $purl.ContainsKey($id) -and $purl[$id].ContainsKey([string]$s.store)) { $e['url'] = $purl[$id][[string]$s.store] }
+  if (($Full -or $PER_STORE_URLS) -and -not (Test-TcCellQuarantined $s) -and $purl.ContainsKey($id) -and $purl[$id].ContainsKey([string]$s.store)) { $e['url'] = $purl[$id][[string]$s.store] }
   return $e
 }
 
@@ -180,7 +183,7 @@ function AddBoard($rows) {
     $pinSt = [ordered]@{}      # per-store WHOLE-PACKAGE inputs, same cells, same override, same loop
     foreach ($s in $r.stores) {
       $p = [double]$s.per_unit
-      if (([string]$s.type) -eq 'everyday' -and $ovr.ContainsKey($id) -and $ovr[$id].ContainsKey([string]$s.store)) { $ov=[double]$ovr[$id][[string]$s.store]; if ($ov -gt 0) { $p = $ov } }
+      if (([string]$s.type) -eq 'everyday' -and -not (Test-TcCellQuarantined $s) -and $ovr.ContainsKey($id) -and $ovr[$id].ContainsKey([string]$s.store)) { $ov=[double]$ovr[$id][[string]$s.store]; if ($ov -gt 0) { $p = $ov } }
       if ($p -le 0) { continue }
       $nStores++; $st[[string]$s.store] = [math]::Round($p,4)
       # ONE LOOP, ONE WINNER. The cheapest chip and the card's `current` pricing basis are picked here
@@ -191,7 +194,7 @@ function AddBoard($rows) {
       if ((([string]$s.type) -eq 'everyday') -and ($null -eq $evLo -or $p -lt $evLo)) { $evLo = $p; $evStore = [string]$s.store; $evCell = $s }
     }
     if ($null -eq $lo) { continue }
-    $u = if ($purl.ContainsKey($id) -and $purl[$id].ContainsKey($los)) { $purl[$id][$los] } else { '' }
+    $u = if (-not (Test-TcCellQuarantined $loCell) -and $purl.ContainsKey($id) -and $purl[$id].ContainsKey($los)) { $purl[$id][$los] } else { '' }
     # n = how many of the 6 stores actually have a price for this ingredient - so the UI never overclaims
     # "checked at 6 stores" for an item only 1-2 stores have been priced at yet (new adds, or an item some
     # stores simply don't carry).

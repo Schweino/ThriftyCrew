@@ -657,6 +657,16 @@ $outFile = Join-Path $OutDir 'basis-outliers.json'
    rounding_band_crown = @($bandCrowns) } |
   ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
 Write-Output ("  -> $outFile   ($(@($nearInt).Count) with the pack-shape mismatch, which is the pack-price-on-a-unit-size fingerprint)")
+# THE QUARANTINE PROTOCOL (2026-09-21, grocery\cell-quarantine-lib.ps1 Get-TcChildQuarantineScope). The only hard
+# finding is an unreviewed crown held by a cell measured in a different KIND, and each is one published cell: name
+# each for guards.ps1 to quarantine and affirm the list is complete, so the rest of the board publishes. 'value':
+# the cell's per-unit is in the wrong currency for its row. If the next cheapest cell is ALSO the wrong kind, the
+# second guards run finds a new failure on a quarantined board and holds, so a whole mismatched row cannot slip by.
+if (@($kindCrown).Count) {
+  $kcKeys = @($kindCrown | ForEach-Object { [string]$_.id + '|' + [string]$_.store } | Sort-Object -Unique)
+  foreach ($k in $kcKeys) { Write-Output ('QUARANTINE-CELL ' + $k + '|value') }
+  Write-Output ('QUARANTINE-SCOPE complete cells=' + $kcKeys.Count + ' stores=0')
+}
 Write-GuardComplete -Name 'unit-basis-outlier' -Summary ("scanned={0} ratio={1} kind={2} crown={3} reviewed={4} rounding_band={5}" -f $rows.Count, @($findings).Count, @($kinds).Count, @($kindCrown).Count, @($kindReviewed).Count, @($bandCrowns).Count)
 # EXIT 2 (hard) only for an UNREVIEWED crown mismatch, never for the ratio findings, which stay advisory as
 # this file was always designed to be. The distinction is what makes it safe to gate on: a ratio outlier is a

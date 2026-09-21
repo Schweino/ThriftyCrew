@@ -17,6 +17,22 @@ Loaded only when you touch a file under `grocery/`. These are the traps that hav
 estate a day; each names the memory or file holding the full account rather than restating it, so there
 is one copy of every rule and nothing here can drift from it.
 
+- **A BAD CELL QUARANTINES ITSELF; A BAD STORE DROPS ITSELF; ONLY A BOARD-SCOPED FAILURE OR THE CIRCUIT BREAKER HOLDS
+  THE BOARD** (Brad, 2026-09-21: *"The ENTIRE board shouldn't be held hostage because of one (or a few) bad items. Each
+  item is unique/individual."*, and his ruling on what a held cell shows: *"A"* - its last verified published price,
+  with that price's date). `guards.ps1` sorts every hard failure into CELL, STORE or BOARD scope; a failure nobody
+  taught to name its scope is BOARD scope and holds exactly as before. When every failure is scoped and under the
+  breaker (more than 2% of priced cells, or more than 10% of one store's, holds), guards exits 2 with
+  `GUARDS QUARANTINE-REQUIRED`, `apply-cell-quarantine.ps1` holds each named cell at its value on `public/board.json` at
+  origin/main (the true record of what was last live) or WITHHOLDS it (no prior value, a prior sale, older than the
+  publish window, or the very value a VALUE guard condemned), and guards runs again and must exit 4
+  (`GUARDS QUARANTINED`). **Exit 4 is neither clean nor held**: the chain verdict records `verdict: quarantine`, the
+  served paths ship, and the page pages once under `grocery board cells quarantined`, never `GUARDS FAILED`. A
+  delegated audit scopes itself by printing `QUARANTINE-CELL <id>|<store>|<value|selection>` lines and
+  `QUARANTINE-SCOPE complete cells=N stores=M` before its marker; without the complete line it holds. **Teaching a
+  guard to scope is a per-guard change with its own fixture, never a default.** The rules and every consumer of the
+  exit code are in `grocery/cell-quarantine-lib.ps1` and `grocery/triage-plans/plan-2026-09-21-4.json`; the fixtures are
+  `grocery/test-cell-quarantine.ps1`. `design/PLAN-per-cell-quarantine-2026-09-21.md` is the spec.
 - **`known-wrong.json` is the MAIN-board corrector, and `comparison-*.json` is rebuilt daily.** A fresh
   ruling reads as red until the next build. That is on purpose, not a bug to chase.
   [[known-wrong-is-the-main-board-corrector]]

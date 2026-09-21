@@ -133,6 +133,13 @@ if ($find.Count) {
   Write-Output ("FOOD-CLASS AUDIT FAILED: " + $find.Count + " cell(s) publish a wrong-class product:")
   foreach ($x in $find) { Write-Output ("  BUG  {0,-22} [{1,-12}] class={2,-14} '{3}'" -f $x.id, $x.store, $x.class, $x.item) }
   Write-Output "Fix the match (include/exclude in commodities.json + re-run compare-deals), or add a REVIEWED exception to food-class-allowlist.json."
+  # THE QUARANTINE PROTOCOL (2026-09-21, grocery\cell-quarantine-lib.ps1 Get-TcChildQuarantineScope). Every finding
+  # here IS one published cell, so name each for guards.ps1 to quarantine and affirm the list is complete: the rest
+  # of the board publishes. 'value': a wrong-class product's number is not this commodity's price at all. A cell on
+  # a recipe-only row is not a staple cell, so guards cannot scope it and still holds the board, as before.
+  $qcKeys = @($find | ForEach-Object { [string]$_.id + '|' + [string]$_.store } | Sort-Object -Unique)
+  foreach ($k in $qcKeys) { Write-Output ('QUARANTINE-CELL ' + $k + '|value') }
+  Write-Output ('QUARANTINE-SCOPE complete cells=' + $qcKeys.Count + ' stores=0')
   exit 2
 }
 if ($scanned -eq 0) {

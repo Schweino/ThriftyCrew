@@ -85,15 +85,24 @@ function Write-ChainVerdict {
     [Parameter(Mandatory = $true)][string]$OutDir,
     [Parameter(Mandatory = $true)][string]$Date,
     [Parameter(Mandatory = $true)][int]$GuardsRc,
-    [string]$WrittenBy = 'check-ad-cycles'
+    [string]$WrittenBy = 'check-ad-cycles',
+    [int]$Quarantined = 0
   )
   $hashes = Get-ChainVerdictInputHashes -Repo $Repo
+  # THREE TIERS SINCE 2026-09-21 (grocery\cell-quarantine-lib.ps1): guards exits 0 (clean), 4 (QUARANTINED: some cells
+  # held at their last verified price, verified on this board, publishable) or anything else (not publishable as it
+  # stands). A quarantined board is neither clean nor held, so `verdict` names it and `guards_blocked` is false: the
+  # served paths ship, and every reader that reports state says "quarantined", never "all clean".
+  $verdictWord = 'hold'
+  if ($GuardsRc -eq 0) { $verdictWord = 'pass' } elseif ($GuardsRc -eq 4) { $verdictWord = 'quarantine' }
   $doc = [ordered]@{
     date            = $Date
     written         = (Get-Date).ToString('s')
     written_by      = $WrittenBy
     guards_rc       = $GuardsRc
-    guards_blocked  = [bool]($GuardsRc -ne 0)
+    guards_blocked  = [bool]($GuardsRc -ne 0 -and $GuardsRc -ne 4)
+    verdict         = $verdictWord
+    quarantined     = $Quarantined
     inputs_fingerprint = (Get-ChainVerdictFingerprint -Repo $Repo -Hashes $hashes)
     inputs          = $hashes
     note            = 'Written after guards ran. Readers must go through lib\chain-verdict-lib.ps1: a verdict for another day, or one whose inputs_fingerprint no longer matches the tree, is treated as ABSENT and never ships public\** or meal-prep\**.'
@@ -155,6 +164,20 @@ function Read-ChainVerdictStatus {
   }
   if ([bool]$v.guards_blocked) {
     $res.status = 'BLOCKED'; $res.why = "guards BLOCKED today's board"; $res.guards_blocked = $true
+    return $res
+  }
+  # QUARANTINE ships, under its own name (2026-09-21). guards_rc 4 is a board whose bad cells are held at their last
+  # verified price and verified so on this board; readers key on ship_ok, and anything that reports the state reads
+  # the status word, so a quarantined board is never described as a clean pass.
+  if ($v.PSObject.Properties.Name -contains 'guards_rc' -and [int]$v.guards_rc -eq 4) {
+    $nq = 0; if ($v.PSObject.Properties.Name -contains 'quarantined') { $nq = [int]$v.quarantined }
+    $res.status = 'QUARANTINE'; $res.why = ("guards passed today's board with " + $nq + " cell(s) quarantined at their last verified price"); $res.guards_blocked = $false
+    $res.ship_ok = $true
+    return $res
+  }
+  if (-not ($v.PSObject.Properties.Name -contains 'guards_rc') -or [int]$v.guards_rc -ne 0) {
+    # A verdict that says not-blocked with an rc that is neither 0 nor 4 is one nothing here knows how to read: held.
+    $res.status = 'BLOCKED'; $res.why = ('the chain verdict records guards_rc ' + [string]$v.guards_rc + ', which is not a pass'); $res.guards_blocked = $true
     return $res
   }
   $res.status = 'PASS'; $res.why = "guards passed today's board"; $res.guards_blocked = $false

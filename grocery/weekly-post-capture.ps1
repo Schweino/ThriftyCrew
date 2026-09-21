@@ -155,7 +155,11 @@ try {
       $null = RunChild (Join-Path $root 'audit-name-drift.ps1') @() 3 'pre-gate-drift' -NonFatal
       $gc = RunChild (Join-Path $root 'guards.ps1') @() 4 'guards' -NonFatal
       if($gc -eq 2){ Log 'publish HELD by guards.ps1 - a HARD invariant is violated (see the guards lines above). Fix the data, then re-run -Phase publish.'; exit 2 }
-      if($gc -ne 0){ throw "guards.ps1 exited $gc" }
+      # 4 = QUARANTINED (2026-09-21): the board carries cells held at their last verified price, verified by guards
+      # on this board, and publishes. This lane does not APPLY a quarantine itself - a board that still needs one
+      # exits 2 above and holds, as it always did; only check-ad-cycles' Invoke-GuardsGate applies one.
+      if($gc -eq 4){ Log 'guards: QUARANTINED board (cells held at their last verified price) - publishable, continuing' }
+      elseif($gc -ne 0){ throw "guards.ps1 exited $gc" }
       $rc = RunChild (Join-Path $root 'publish-deals-page.ps1') @() 3 'publish' -NonFatal
       if($rc -eq 2){ Log 'publish HELD by coverage gate - fix the thin store, then re-run -Phase publish.'; exit 2 }
       if($rc -ne 0){ throw "publish-deals-page exited $rc" }
@@ -187,7 +191,8 @@ try {
       $null = RunChild (Join-Path $root 'audit-name-drift.ps1') @() 3 'name-drift' -NonFatal
       $lg = RunChild (Join-Path $root 'guards.ps1') @() 4 'guards' -NonFatal
       if($lg -eq 2){ Log 'links HELD by guards.ps1 - the link merge broke a hard invariant. The live board is UNCHANGED (last good). Fix the links, then re-run -Phase links.'; exit 2 }
-      if($lg -ne 0){ throw "guards.ps1 exited $lg" }
+      if($lg -eq 4){ Log 'guards: QUARANTINED board (cells held at their last verified price) - publishable, continuing' }
+      elseif($lg -ne 0){ throw "guards.ps1 exited $lg" }
       $rc = RunChild (Join-Path $root 'publish-deals-page.ps1') @() 3 'republish' -NonFatal
       if($rc -eq 2){ Log 'republish HELD by coverage gate (unusual at this stage) - investigate.'; exit 2 }
       if($rc -ne 0){ throw "publish-deals-page exited $rc" }

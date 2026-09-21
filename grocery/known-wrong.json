@@ -4938,6 +4938,21 @@
                         "ruled_on":  "2026-09-21",
                         "ruled_by":  "triage-developer money lane 2026-09-21 (plan-2026-09-21-2), on the carriage read of 2026-09-19",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "tomatoes|Fareway|dei-fratelli-tomatoes-whole",
+                        "commodity":  "tomatoes",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Dei Fratelli Tomatoes, Whole"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A 28 oz CAN of whole peeled tomatoes (Dei Fratelli is a canning brand; shop.fareway.com weekly ad, 2.68 for 28 oz) priced into Tomatoes (fresh) at 1.5314/lb as a new Fareway sale cell. Read in the crown and new-cell diff of the 2026-09-21 rebuild against origin/main public/board.json, before publishing.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-21",
+                        "ruled_by":  "triage-developer plan-2026-09-21-4",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

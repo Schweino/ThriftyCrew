@@ -58,6 +58,20 @@ if ($SelfTest) {
     if ($st.status -eq 'BLOCKED' -and -not $st.ship_ok) { Write-Output '  PASS  MUST FIRE: a fresh blocking verdict blocks' }
     else { Write-Output ('  FAIL  a blocking verdict did not block (' + $st.status + ')'); $fail++ }
 
+    # ---- MUST FIRE: guards rc 4, the QUARANTINED tier (2026-09-21, grocery\cell-quarantine-lib.ps1). The board carries
+    # cells held at their last verified price, verified by guards on this board: it SHIPS, and it reads as QUARANTINE,
+    # never as a clean PASS and never as BLOCKED - a board with three held cells is neither.
+    [void](Write-ChainVerdict -Repo $tmp -OutDir $fxOut -Date $today -GuardsRc 4 -WrittenBy 'selftest' -Quarantined 3)
+    $st = Read-ChainVerdictStatus -Repo $tmp -OutDir $fxOut -Today $today
+    $rec = Read-ChainVerdictRecord -Repo $tmp -OutDir $fxOut
+    if ($st.status -eq 'QUARANTINE' -and $st.ship_ok -and -not $st.guards_blocked -and $st.why -match '3 cell' -and [string]$rec.verdict -eq 'quarantine' -and -not [bool]$rec.guards_blocked) { Write-Output '  PASS  MUST FIRE: a QUARANTINED verdict (guards rc 4) ships, reads QUARANTINE with its cell count, and is recorded not-blocked' }
+    else { Write-Output ('  FAIL  a quarantined verdict read ' + $st.status + ' ship_ok=' + $st.ship_ok + ' (' + $st.why + ')'); $fail++ }
+    # ---- MUST FIRE: an rc nothing here knows how to read is held, never a pass
+    [void](Write-ChainVerdict -Repo $tmp -OutDir $fxOut -Date $today -GuardsRc 5 -WrittenBy 'selftest')
+    $st = Read-ChainVerdictStatus -Repo $tmp -OutDir $fxOut -Today $today
+    if ($st.status -eq 'BLOCKED' -and -not $st.ship_ok) { Write-Output '  PASS  MUST FIRE: an unknown guards rc (5) is BLOCKED, never read as a pass' }
+    else { Write-Output ('  FAIL  an unknown guards rc read ' + $st.status); $fail++ }
+
     # ---- MUST FIRE: yesterday's verdict is not today's ----------------------------------------------
     [void](Write-ChainVerdict -Repo $tmp -OutDir $fxOut -Date '2026-09-06' -GuardsRc 0 -WrittenBy 'selftest')
     $st = Read-ChainVerdictStatus -Repo $tmp -OutDir $fxOut -Today $today
@@ -89,7 +103,7 @@ if ($SelfTest) {
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }
   if ($fail) { Write-Output "SELF-TEST FAILED ($fail)"; exit 2 }
-  Write-Output 'SELF-TEST PASS - 5 must-fire (stale PASS after an input moved, a blocking verdict, another day, a fingerprint-less verdict, a missing file) and 3 clean twins'
+  Write-Output 'SELF-TEST PASS - 7 must-fire (stale PASS after an input moved, a blocking verdict, a quarantined verdict that ships as QUARANTINE, an unknown rc held, another day, a fingerprint-less verdict, a missing file) and 3 clean twins'
   exit 0
 }
 

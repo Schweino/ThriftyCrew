@@ -18,6 +18,15 @@
    "emitter": "grocery/check-ad-cycles.ps1"
   },
   {
+   "id": "board-cells-quarantined",
+   "match": "exact",
+   "key": "grocery board cells quarantined",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "note": "2026-09-21, Brad: the entire board is not held hostage by one bad item. guards.ps1 quarantined some cells (held at their last verified published price with its date, or withheld) and the rest of the board published. One page per distinct set of cells; GUARDS FAILED stays reserved for a real hold (board-scoped failure or the circuit breaker)."
+  },
+  {
    "id": "page-held-coverage",
    "match": "exact",
    "key": "grocery page held coverage",
