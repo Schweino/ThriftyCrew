@@ -30,6 +30,19 @@ Add-Type -AssemblyName System.Web -ErrorAction SilentlyContinue
 # scar from (the covered_by skip below).
 . (Join-Path $mp 'lib\package-cost-lib.ps1')
 
+# HELD IS NOT SKIPPED (2026-09-21, queue 2026-09-20-6c14f6). A recipe in db\held-recipes.json was taken down to a
+# draft on purpose - on 2026-09-19 six of them, because an ingredient is carried by no Omaha store - so the
+# manifest cannot price it, and until today that failure landed in the SKIPPED list, made the run exit 1 and paged
+# "Recipe per-serving manifest: skipped recipe(s)" every day about recipes nobody can see. Pure, so -SelfTest (which
+# returns long before the live loop) reaches the same decision the loop takes. A held recipe that DOES price stays in
+# the manifest exactly as before: its cost data is not deleted, it is just not counted as a failure.
+function Get-SkipBucket([string]$Slug, [hashtable]$Held){ if($Slug -and $Held -and $Held.ContainsKey($Slug)){ return 'held' }; return 'skipped' }
+function Format-HeldLine([string[]]$Held){
+  if(-not $Held -or $Held.Count -eq 0){ return $null }
+  # UNINDENTED and never the word the chain greps for a skip, so check-ad-cycles' detail filter cannot list it as one.
+  return ("HELD {0} recipe(s) not in the manifest, by design (db\held-recipes.json) - taken down to a draft, so a price the manifest cannot compute for one is not a failure: {1}" -f $Held.Count, ($Held -join '; '))
+}
+
 # BLOCK-BEFORE-SHIP (2026-07-27, overhaul-1): a 'cheapest' HIGHER than 'everyday' is nonsensical on every
 # manifest surface (rankings, top5, meal-planner), so we CLAMP the shipped cheapest to everyday - the valid
 # bound: never inverted, never overstated. Both numbers are real shopping plans, so min() of them is
@@ -170,6 +183,18 @@ if($SelfTest){
   $kZero  = Get-BlockPkgCount 1148 0 298
   $staleOk = ($kStale -eq 5) -and ($kPlain -eq 1) -and ($kZero -eq 0)
 
+  # HELD IS NOT SKIPPED (2026-09-21, queue 2026-09-20-6c14f6). Frozen from the 2026-09-20T12:10 run's own SKIPPED line.
+  $hfail = 0
+  function HChk([string]$label, [bool]$cond, [string]$got){ if($cond){ Write-Output ('ok    ' + $label) } else { Write-Output ('FAIL  ' + $label + '   got: ' + $got); $script:hfail++ } }
+  $heldFx = @{ 'harissa-chicken-rice-bowls' = $true }
+  $bLive = Get-SkipBucket 'keto-cheeseburger-skillet' $heldFx
+  $bHeld = Get-SkipBucket 'harissa-chicken-rice-bowls' $heldFx
+  $hLine = Format-HeldLine @('harissa-chicken-rice-bowls: no costed line ''Harissa Paste''')
+  HChk 'MUST FIRE  a LIVE recipe the manifest cannot price is SKIPPED, so the run still exits 1 and pages' ($bLive -eq 'skipped') $bLive
+  HChk 'MUST NOT FIRE a HELD recipe the manifest cannot price is not SKIPPED' ($bHeld -ne 'skipped') $bHeld
+  HChk 'CLEAN TWIN the held recipe is still REPORTED: a HELD count line naming it and why' ($hLine -like 'HELD 1 recipe(s)*harissa-chicken-rice-bowls: no costed line*') ([string]$hLine)
+  HChk 'MUST NOT FIRE that HELD line is not indented and never says SKIPPED, so the chain cannot list it as a skip' (($hLine -notmatch '^\s') -and ($hLine -notmatch 'SKIPPED')) ([string]$hLine)
+  if($hfail){ Write-Output ("SELFTEST FAIL: held-vs-skipped ({0} case(s))" -f $hfail); exit 1 }
   if(-not ($tautOk -and $basisOk -and $staleOk)){
     Write-Output ("SELFTEST FAIL: widget-count basis - block count shipped={0}/fixed={1} (both want 4), basis shipped={2}/fixed={3} (want fired/null), stale={4} (want 5), non-drained={5} (want 1), gpu 0={6} (want 0)" -f `
       $kShipped,$kFixed,$(if($mmShipped){'fired'}else{'null'}),$(if($mmFixed){'fired'}else{'null'}),$kStale,$kPlain,$kZero)
@@ -233,6 +258,15 @@ function Slugify([string]$s){ (($s.ToLower() -replace "[^a-z0-9]+","-").Trim('-'
 # any catalog size. db\costed.json is produced by engine\cost-recipes.ps1.
 $dbCosted = @{}
 foreach($c in (Read-JsonFile (Join-Path $mp 'db\costed.json'))){ $dbCosted[[string]$c.slug]=$c }
+# HELD SLUGS (Get-SkipBucket above). An unreadable list treats nothing as held, so a held failure is reported as a
+# SKIP and pages: the loud direction, and said out loud.
+$heldV2 = @{}
+$heldV2Path = Join-Path $mp 'db\held-recipes.json'
+if(Test-Path $heldV2Path){
+  try { foreach($hv in @((Read-JsonFile $heldV2Path).held)){ if($hv -and $hv.slug){ $heldV2[[string]$hv.slug] = $true } } }
+  catch { $heldV2 = @{}; Write-Output 'WARNING: db\held-recipes.json could not be parsed - no recipe is treated as held this run' }
+}
+$heldSkipped = @()
 # COLLECT-AND-REPORT (2026-07-26 scale hardening): a single malformed spec/costed line used to `throw`
 # and kill the WHOLE manifest (all 513, soon 1500), which then went stale while top5/rotation/surfaces
 # silently served yesterday's numbers. Now a bad recipe is skipped and named; the manifest is still
@@ -300,7 +334,8 @@ foreach($run in @('db')){
         cheapest_ps=[math]::Round($ch/14,2)
       }
     } catch {
-      $bad += ("{0}: {1}" -f $sf.BaseName, $_.Exception.Message)
+      $why = ("{0}: {1}" -f $sf.BaseName, $_.Exception.Message)
+      if((Get-SkipBucket $sf.BaseName $heldV2) -eq 'held'){ $heldSkipped += $why } else { $bad += $why }
     }
   }
 }
@@ -499,6 +534,8 @@ if($CrossCheck){
     exit 2
   }
 }
+$heldLine = Format-HeldLine $heldSkipped
+if($heldLine){ Write-Output $heldLine }
 if($bad.Count){
   Write-Output ("SKIPPED {0} recipe(s) with bad cost data (manifest still written for the other {1}):" -f $bad.Count, $rows.Count)
   $bad | ForEach-Object { Write-Output ("  " + $_) }

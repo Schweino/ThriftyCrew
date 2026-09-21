@@ -195,6 +195,44 @@ function Get-LedgerBasis {
   return @{ ppg = ([double]$Entry.price / $g); basis = ('ledger:' + $Bid + ':' + [string]$Entry.store + ':' + [string]$Entry.as_of) }
 }
 
+function Split-CostFlags {
+  <#
+    WHICH FLAG LINES PAGE (2026-09-21, queue 2026-09-20-6c14f6). db\cost-flags.txt is the file the chain pages
+    on, and until today every line in it paged alike: on 2026-09-19 it held 28 lines, 1 of them on a live page,
+    and the reader had to cross it against db\held-recipes.json by hand to learn that. Hold and publication
+    state live in THIS module (db\held-recipes.json, db\published-hashes.json), so the split is made here, where
+    the lines are written. The chain cannot read either file without a new cross-module reach, which
+    ops\audit-cross-module-reach.ps1 refused on 2026-09-20 (118 -> 119), correctly.
+    PURE: $Entries is @{ slug; line } in engine order (slug '' for a catalogue-level line such as a refused
+    allowlist bid), so the cases below drive the same decision the engine takes.
+      * a HELD recipe's lines leave the paging file. It was taken down by design; it is still costed (its
+        costed.json row stays current for a release) and it is reported as a count, never silently dropped;
+      * an ADVISORY line leaves it: the bid is on no board but the line still PRICED from a label or the
+        carriage ledger, so it is not an unpriced line, and calling it one is how 8 of the 26 lines on
+        2026-09-21 read as money a reader was missing when none was;
+      * a LIVE recipe's lines LEAD the file with a 'LIVE :: ' prefix: the one kind a reader can act on;
+      * every other line keeps its bytes and its order, so a catalogue with nothing held, nothing published and
+        nothing advisory writes exactly what it wrote before (the golden fixture is that catalogue).
+  #>
+  param([object[]]$Entries, [hashtable]$Held, [hashtable]$Live)
+  $liveL = New-Object System.Collections.Generic.List[string]
+  $restL = New-Object System.Collections.Generic.List[string]
+  $heldL = New-Object System.Collections.Generic.List[string]
+  $advL  = New-Object System.Collections.Generic.List[string]
+  foreach ($e in $Entries) {
+    if ($null -eq $e) { continue }
+    $s = [string]$e.slug; $ln = [string]$e.line
+    if ($s -and $Held.ContainsKey($s)) { $heldL.Add($ln) }
+    elseif ($ln -like '* :: ADVISORY, *') { $advL.Add($ln) }
+    elseif ($s -and $Live.ContainsKey($s)) { $liveL.Add('LIVE :: ' + $ln) }
+    else { $restL.Add($ln) }
+  }
+  $page = New-Object System.Collections.Generic.List[string]
+  foreach ($x in $liveL) { $page.Add($x) }
+  foreach ($x in $restL) { $page.Add($x) }
+  return [pscustomobject]@{ lines = $page.ToArray(); held = $heldL.ToArray(); advisory = $advL.ToArray(); live = $liveL.Count }
+}
+
 if ($SelfTest) {
   # Nothing above this point writes a file; the engine's work starts below. This block EXITS on every path
   # (ops\audit-selftest-fallthrough.ps1), and its last line is its verdict and says it is a self-test
@@ -237,6 +275,68 @@ if ($SelfTest) {
   $iLedger = $srcSelf.IndexOf('$lb = Get-LedgerBasis -Entry $CARRLEDGER[$lineBid]')
   CChk 'CLEAN TWIN the ledger sits AFTER the label in the engine, so a label-priced line keeps its label basis' (($iLabel -gt 0) -and ($iLedger -gt 0) -and ($iLabel -lt $iLedger)) ("label@$iLabel ledger@$iLedger")
   CChk 'CLEAN TWIN SizeToGrams still reads the real ledger size text as 16 oz, not as the 1 lb inside its parenthesis' ([math]::Abs((SizeToGrams '16 oz (1 lb stand up bag)') - (16 * 28.3495)) -lt 0.0001) ([string](SizeToGrams '16 oz (1 lb stand up bag)'))
+  # ---- WHICH FLAG LINES PAGE (2026-09-21, queue 2026-09-20-6c14f6) -------------------------------------------
+  # The four real shapes of 2026-09-21's db\cost-flags.txt, one line each: a catalogue-level allowlist refusal, a
+  # HELD recipe's refused label, a LIVE recipe's unpriced title ingredient (turkey-wild-rice-casserole on 09-19,
+  # before the ledger priced it) and a priced five-spice line marked ADVISORY.
+  $sfLive = 'Turkey Wild Rice Casserole :: Wild Rice :: NO PRICE BASIS'
+  $sfHeld = 'Harissa Chicken Rice Bowls :: Harissa Paste :: NO PRICE BASIS'
+  $sfAdv  = 'Hong Kong-Style Baked Pork Chop Rice :: Five-Spice Powder :: MAPPED BID NOT ON ANY BOARD (five-spice-powder) :: ADVISORY, the line priced from label:McCormick Gourmet 1.75 oz'
+  $sfCat  = 'ALLOWLIST :: no-board-price-ok.json :: BID REFUSED, NO CARRIAGE EVIDENCE x-bid [UNKNOWN: none]'
+  $sfEntries = @(
+    [pscustomobject]@{ slug = ''; line = $sfCat },
+    [pscustomobject]@{ slug = 'harissa-chicken-rice-bowls'; line = $sfHeld },
+    [pscustomobject]@{ slug = 'turkey-wild-rice-casserole'; line = $sfLive },
+    [pscustomobject]@{ slug = 'hong-kong-style-baked-pork-chop-rice'; line = $sfAdv }
+  )
+  $sf = Split-CostFlags -Entries $sfEntries -Held @{ 'harissa-chicken-rice-bowls' = $true } -Live @{ 'turkey-wild-rice-casserole' = $true; 'hong-kong-style-baked-pork-chop-rice' = $true }
+  CChk 'MUST FIRE  a LIVE recipe''s unpriced line still pages, FIRST and labelled LIVE (the line that must never go quiet)' ((@($sf.lines).Count -ge 1) -and ($sf.lines[0] -eq ('LIVE :: ' + $sfLive)) -and ($sf.live -eq 1)) ($sf.lines -join ' | ')
+  CChk 'MUST NOT FIRE a HELD recipe''s unpriced line does not page' (@($sf.lines | Where-Object { $_ -like '*Harissa Chicken*' }).Count -eq 0) ($sf.lines -join ' | ')
+  CChk 'MUST NOT FIRE an ADVISORY line (the bid is on no board but the line PRICED) does not page as unpriced' (@($sf.lines | Where-Object { $_ -like '*ADVISORY*' }).Count -eq 0) ($sf.lines -join ' | ')
+  CChk 'CLEAN TWIN the held line and the advisory line are each KEPT, word for word, in their own set-aside list' ((@($sf.held).Count -eq 1) -and ($sf.held[0] -eq $sfHeld) -and (@($sf.advisory).Count -eq 1) -and ($sf.advisory[0] -eq $sfAdv)) ("held=$(@($sf.held) -join ' | ') advisory=$(@($sf.advisory) -join ' | ')")
+  CChk 'CLEAN TWIN a catalogue-level line with no recipe keeps its exact bytes and still pages, after the LIVE lines' ((@($sf.lines).Count -eq 2) -and ($sf.lines[1] -eq $sfCat)) ($sf.lines -join ' | ')
+
+  # END TO END. A pure split proves nothing about what reaches the file the chain pages on, so the REAL engine runs
+  # as a child over a temp copy of the golden fixture (never the live db, never the fixture in place), twice.
+  $gfx = Join-Path $here 'regression-inputs\golden'
+  $e2e = Join-Path $env:TEMP ('crst-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    $null = New-Item -ItemType Directory $e2e -ErrorAction Stop
+    Copy-Item (Join-Path $gfx 'inputs') (Join-Path $e2e 'inputs') -Recurse -Force -ErrorAction Stop
+    $edb = Join-Path $e2e 'inputs\db'; $egout = Join-Path $e2e 'inputs\grocery-out'
+    $eOut = Join-Path $e2e 'costed.json'; $eFlags = Join-Path $e2e 'cost-flags.txt'; $eStamp = Join-Path $e2e 'costed.stamp.json'
+    $noBom = New-Object Text.UTF8Encoding($false)
+    # RUN 1: zz-synthetic-flag-cases HELD (6 flag lines), ants-climbing-a-tree-pork-noodles PUBLISHED (unpriced Doubanjiang)
+    [IO.File]::WriteAllText((Join-Path $edb 'held-recipes.json'), '{"held":[{"slug":"zz-synthetic-flag-cases","reason":"self-test"}]}', $noBom)
+    [IO.File]::WriteAllText((Join-Path $edb 'published-hashes.json'), '{"ants-climbing-a-tree-pork-noodles":"SELFTEST"}', $noBom)
+    $eLog = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -DbRoot $edb -GroceryOut $egout -OutFile $eOut -FlagsFile $eFlags | ForEach-Object { [string]$_ })
+    $eRc = $LASTEXITCODE
+    $eF = @(); if (Test-Path $eFlags) { $eF = @(Get-Content $eFlags | Where-Object { $_ }) }
+    $eS = $null; if (Test-Path $eStamp) { $eS = Get-Content $eStamp -Raw | ConvertFrom-Json }
+    CChk 'END-TO-END MUST FIRE  a PUBLISHED recipe''s unpriced Doubanjiang line is in cost-flags.txt, first, labelled LIVE' (($eRc -eq 0) -and ($eF.Count -ge 1) -and ($eF[0] -like 'LIVE :: Ants Climbing a Tree Pork Noodles :: Doubanjiang :: *') -and ($eF -contains 'LIVE :: Ants Climbing a Tree Pork Noodles :: Doubanjiang :: NO PRICE BASIS')) ("rc=$eRc first=$(if($eF.Count){$eF[0]}else{'(empty)'})")
+    CChk 'END-TO-END MUST NOT FIRE a HELD recipe''s six flag lines are not in cost-flags.txt' (@($eF | Where-Object { $_ -like '*ZZ Synthetic Flag Cases*' }).Count -eq 0) ($eF -join ' | ')
+    CChk 'END-TO-END CLEAN TWIN the held recipe is REPORTED: a HELD count line, and its 6 lines kept in costed.stamp.json' ((@($eLog | Where-Object { $_ -like 'cost-recipes: HELD 1 recipe(s)*' }).Count -eq 1) -and ($null -ne $eS) -and ([int]$eS.flags_set_aside.held_recipes -eq 1) -and (@($eS.flags_set_aside.held_lines).Count -eq 6)) ("held-lines=$(if($eS){@($eS.flags_set_aside.held_lines).Count}else{'no stamp'}) log=$((@($eLog | Where-Object { $_ -like 'cost-recipes: HELD*' })) -join ' | ')")
+    CChk 'END-TO-END CLEAN TWIN the held recipe is still COSTED: costed.json is byte-identical to the frozen golden baseline' ((Test-Path $eOut) -and ((Get-FileHash $eOut).Hash -eq (Get-FileHash (Join-Path $gfx 'expected\costed.json')).Hash)) 'costed.json moved'
+    # RUN 2: nothing held or published; a CARRIED ledger read prices the synthetic off-board bid, so its MAPPED BID
+    # line becomes ADVISORY while a genuinely unpriced line of the same recipe keeps paging.
+    Remove-Item (Join-Path $edb 'held-recipes.json'), (Join-Path $edb 'published-hashes.json') -Force
+    $cj = Join-Path $egout 'carriage.json'
+    $cdoc = Get-Content $cj -Raw | ConvertFrom-Json
+    $cdoc.bids | Add-Member -NotePropertyName 'zz-not-on-any-board' -NotePropertyValue ([pscustomobject]@{ verdict = 'CARRIED'; store = 'Hy-Vee'; item = 'ZZ self-test shelf read'; size = '16 oz'; price = 1.6; product_id = '0'; as_of = (Get-Date).ToString('yyyy-MM-dd') })
+    [IO.File]::WriteAllText($cj, ($cdoc | ConvertTo-Json -Depth 10), $noBom)
+    $eLog2 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -DbRoot $edb -GroceryOut $egout -OutFile $eOut -FlagsFile $eFlags -LedgerMaxAgeDays 90 | ForEach-Object { [string]$_ })
+    $eRc2 = $LASTEXITCODE
+    $eF2 = @(); if (Test-Path $eFlags) { $eF2 = @(Get-Content $eFlags | Where-Object { $_ }) }
+    $eS2 = $null; if (Test-Path $eStamp) { $eS2 = Get-Content $eStamp -Raw | ConvertFrom-Json }
+    CChk 'END-TO-END MUST FIRE  a genuinely unpriced line on that recipe still pages, unlabelled (nothing is published this run)' (($eRc2 -eq 0) -and ($eF2 -contains 'ZZ Synthetic Flag Cases :: ZZ Unpriced Item :: NO PRICE BASIS') -and (@($eF2 | Where-Object { $_ -like 'LIVE :: *' }).Count -eq 0)) ("rc=$eRc2 " + ($eF2 -join ' | '))
+    CChk 'END-TO-END MUST NOT FIRE the MAPPED BID line of a bid the ledger PRICED does not page' (@($eF2 | Where-Object { $_ -like '*ZZ Offboard Bid :: MAPPED BID*' }).Count -eq 0) ($eF2 -join ' | ')
+    $advKept = @(); if ($eS2) { $advKept = @($eS2.flags_set_aside.advisory_lines) }
+    CChk 'END-TO-END CLEAN TWIN that line is KEPT as ADVISORY in the stamp, naming the ledger basis that priced it' (($advKept.Count -eq 1) -and ($advKept[0] -like 'ZZ Synthetic Flag Cases :: ZZ Offboard Bid :: MAPPED BID NOT ON ANY BOARD (zz-not-on-any-board) :: ADVISORY, the line priced from ledger:zz-not-on-any-board:Hy-Vee:*')) ($advKept -join ' | ')
+  } catch {
+    CChk 'END-TO-END the engine child runs completed' $false $_.Exception.Message
+  } finally {
+    if (Test-Path $e2e) { Remove-Item $e2e -Recurse -Force -ErrorAction SilentlyContinue }
+  }
   if ($cfail -eq 0) { Write-Output 'cost-recipes self-test: PASS'; exit 0 } else { Write-Output ("cost-recipes self-test: FAIL ($cfail case(s))"); exit 1 }
 }
 $FEEDCARRIED = Get-FeedCarriedSet $feed
@@ -278,10 +378,27 @@ if($nbBad.Count){
          ". This list may only excuse BOARD PRICING for a food an Omaha store is proven to stock. " +
          "Either record store evidence in grocery\carriage.json or remove the bid.")
 }
+# HELD AND LIVE, read where they are owned (2026-09-21, queue 2026-09-20-6c14f6). Both files belong to this
+# module - engine\publish.ps1 writes published-hashes.json and refuses any slug held-recipes.json names - so the
+# engine reads them to label its own flag lines (Split-CostFlags above). A file that cannot be parsed is not an
+# empty one: an unreadable held list treats NOTHING as held, so every line pages (the loud direction), and says so.
+$HELDSLUGS = @{}; $LIVESLUGS = @{}
+$heldPath = Join-Path $db 'held-recipes.json'
+if(Test-Path $heldPath){
+  try { foreach($h in @((Get-Content $heldPath -Raw | ConvertFrom-Json).held)){ if($h -and $h.slug){ $HELDSLUGS[[string]$h.slug] = $true } } }
+  catch { $HELDSLUGS = @{}; Write-Output 'cost-recipes: WARNING - db\held-recipes.json could not be parsed, so NO recipe is treated as held this run and every flag line pages' }
+}
+$livePath = Join-Path $db 'published-hashes.json'
+if(Test-Path $livePath){
+  try { foreach($lp in (Get-Content $livePath -Raw | ConvertFrom-Json).PSObject.Properties){ $LIVESLUGS[[string]$lp.Name] = $true } }
+  catch { $LIVESLUGS = @{}; Write-Output 'cost-recipes: WARNING - db\published-hashes.json could not be parsed, so no flag line is labelled LIVE this run' }
+}
 $script:registerEst=0
 $out=@(); $costFlags=New-Object System.Collections.Generic.List[string]
+$flagOwner = @{}   # index into $costFlags -> the slug of the recipe that wrote it; catalogue-level lines have none
 foreach($b in $nbBad){ $costFlags.Add(('ALLOWLIST :: no-board-price-ok.json :: BID REFUSED, NO CARRIAGE EVIDENCE ' + $b)) }
 foreach($r in $computed){
+  $flagStart = $costFlags.Count   # every flag this recipe writes lands at or after here; tagged at the end of the body
   $lines=@(); $batch=0.0; $trueCost=0.0; $bulkUtil=0.0; $starterOutlay=0.0
   $uncarried=@()   # item names whose carriage is not CARRIED; survives the `continue` paths below
   foreach($ing in $r.ingredients){
@@ -292,6 +409,7 @@ foreach($r in $computed){
     # inside the non-bulk branch would leak the PREVIOUS ingredient's value onto a bulk line rather
     # than erroring. That is the quiet-wrong-answer shape this engine has been bitten by before.
     $coveredBy = ''
+    $mappedIdx = -1   # where THIS ingredient's MAPPED BID flag sits, if it wrote one (same every-path rule as above)
     $row = Resolve-ItemRow ([string]$ing.item)
     $ppg=$null; $basis=''
     # CARRIAGE is judged from the ITEM ROW's bid, not from the basis the line ends up with. That
@@ -313,7 +431,7 @@ foreach($r in $computed){
         $ppg = $feedMap[$bid].per_unit / $eg; $basis=('feed:'+$bid)
       }
       elseif($noBoardOk.ContainsKey($bid)){ $script:registerEst++ }
-      else { $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: MAPPED BID NOT ON ANY BOARD (' + $bid + ')')) }
+      else { $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: MAPPED BID NOT ON ANY BOARD (' + $bid + ')')); $mappedIdx = $costFlags.Count - 1 }
     }
     # THE LABEL FALLBACK PRICES ONLY WHAT OMAHA IS PROVEN TO STOCK. Until 2026-08-22 these two
     # statements ran unconditionally, directly after the 'MAPPED BID NOT ON ANY BOARD' flag above - so
@@ -345,6 +463,11 @@ foreach($r in $computed){
       $lb = Get-LedgerBasis -Entry $CARRLEDGER[$lineBid] -Bid $lineBid -MaxAgeDays $script:LedgerMaxAgeDays -Now (Get-Date)
       if($null -ne $lb){ $ppg = $lb.ppg; $basis = $lb.basis }
     }
+    # ADVISORY, NOT UNPRICED (2026-09-21, queue 2026-09-20-6c14f6). The MAPPED BID flag is written before the label
+    # and ledger fallbacks run, so it cannot know whether the line went on to price. When it did, the flag is kept
+    # WITH the basis that priced it, and Split-CostFlags sets it aside rather than paging it as an unpriced line:
+    # on 2026-09-21 eight such lines (seven five-spice, one wild rice) read as unpriced, and every one had priced.
+    if($null -ne $ppg -and $mappedIdx -ge 0){ $costFlags[$mappedIdx] = $costFlags[$mappedIdx] + ' :: ADVISORY, the line priced from ' + $basis }
     if($null -eq $ppg){
       $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: NO PRICE BASIS')); continue
     }
@@ -455,6 +578,7 @@ foreach($r in $computed){
     lines_uncarried=@($uncarried).Count; uncarried=@($uncarried)
     lines=@($lines)
   }
+  for($fk = $flagStart; $fk -lt $costFlags.Count; $fk++){ $flagOwner[$fk] = [string]$r.slug }
 }
 if($Slugs){
   $existingCost = Get-Content $costedPath -Raw | ConvertFrom-Json
@@ -475,6 +599,19 @@ if($Slugs){
   Write-Output ("targeted recost: spliced into {0} total ({1} replaced, {2} newly added)" -f $out.Count, $replaced.Count, $appended)
 }
 $out | ConvertTo-Json -Depth 7 | Out-File $costedPath -Encoding utf8
+
+# WHICH FLAG LINES PAGE (2026-09-21, queue 2026-09-20-6c14f6). Each line carries the recipe that wrote it, and
+# Split-CostFlags decides: HELD and ADVISORY lines are set aside (kept in the stamp below, counted here), LIVE lines
+# lead cost-flags.txt. The counts print on every run that has any, so nothing set aside can vanish silently.
+$flagEntries = @()
+for($fk = 0; $fk -lt $costFlags.Count; $fk++){
+  $flagEntries += [pscustomobject]@{ slug = $(if($flagOwner.ContainsKey($fk)){ $flagOwner[$fk] } else { '' }); line = $costFlags[$fk] }
+}
+$flagSplit = Split-CostFlags -Entries $flagEntries -Held $HELDSLUGS -Live $LIVESLUGS
+$heldInRun = @($computed | Where-Object { $HELDSLUGS.ContainsKey([string]$_.slug) }).Count
+if($HELDSLUGS.Count -gt 0){ Write-Output ("cost-recipes: HELD {0} recipe(s) not costed as live, by design (db\held-recipes.json) - still costed, and their {1} flag line(s) are set aside in costed.stamp.json, not paged" -f $heldInRun, @($flagSplit.held).Count) }
+if(@($flagSplit.advisory).Count -gt 0){ Write-Output ("cost-recipes: ADVISORY {0} flag line(s) set aside - the bid is on no board but the line priced from a label or the carriage ledger" -f @($flagSplit.advisory).Count) }
+if($flagSplit.live -gt 0){ Write-Output ("cost-recipes: LIVE {0} flag line(s) on published recipe(s) lead cost-flags.txt" -f $flagSplit.live) }
 
 # WHICH BOARD THIS RECOST PRICED FROM (2026-09-07). On 2026-09-06 guards blocked the 08:00 publish, so
 # the run staged inputs only. Triage unblocked the guard and rebuilt the board at 11:55, the feed was
@@ -506,12 +643,19 @@ try {
     $stamp['partial_slugs'] = @($Slugs)
     $stamp['partial_priced_from'] = [string]$cmpDoc.built_at
   }
+  $stamp['flags_set_aside'] = [ordered]@{
+    held_recipes   = $heldInRun
+    held_lines     = @($flagSplit.held)
+    advisory_lines = @($flagSplit.advisory)
+    live_lines     = $flagSplit.live
+    note           = 'Flag lines this recost wrote and deliberately kept OUT of cost-flags.txt, the file the chain pages on: a HELD recipe''s lines (taken down by design, still costed) and ADVISORY lines (bid on no board, the line still priced). The rule is Split-CostFlags in engine\cost-recipes.ps1.'
+  }
   ($stamp | ConvertTo-Json -Depth 5) | Set-Content $stampPath -Encoding UTF8
 } catch {
   # Never kill a cost run over its own stamp. A recost with no stamp is degraded; a recost KILLED BY
   # its stamp is a lost board - the same rule run-log-lib states for logging.
   Write-Output ('cost-recipes: could not write the board stamp (not fatal): ' + $_.Exception.Message)
 }
-$costFlags | Out-File $flagsPath -Encoding utf8
+$flagSplit.lines | Out-File $flagsPath -Encoding utf8
 if($script:registerEst -gt 0){ Write-Output ("register-estimate lines (allowlisted): " + $script:registerEst) }
 Write-Output ("costed {0} recipes; flags {1}" -f @($out).Count, $costFlags.Count)

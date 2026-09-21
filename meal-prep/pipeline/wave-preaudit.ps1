@@ -261,6 +261,42 @@ function Test-CostEngineConsistency {
   return , @($p)
 }
 
+function Test-RowCarriage {
+  <#
+    IS EVERY INGREDIENT PROVEN CARRIED IN AN OMAHA STORE? (2026-09-21, queue 2026-09-19-0b2f1e) Brad's standing
+    rule: one ingredient no Omaha store is proven to stock and the recipe cannot be used. engine\publish.ps1 has
+    refused such a slug at the door since 2026-08-22 (REFUSED CARRIAGE, create and republish alike), but THIS audit
+    decides GO and never read carriage, so a wave with an unproven ingredient read GO and was refused only at
+    publish. PROOF is the engine's verdict (lib\carriage-lib.ps1, recorded by cost-recipes.ps1 in the row's
+    uncarried list and on each line's carriage): an in-store board or feed price, or a carriage.json CARRIED entry
+    with its evidence. UNKNOWN is a could-not-look and never proof, and neither is a hand-typed label price: the
+    engine never lets a label make an ingredient carried, so a label-priced line reads CARRIED here only when the
+    ledger proved it. A row carrying no verdict at all refuses too, for the same reason.
+  #>
+  param($Row)
+  $p = New-Object System.Collections.Generic.List[string]
+  if (-not $Row.PSObject.Properties['uncarried']) {
+    $p.Add('the costed row carries no carriage verdict (no uncarried list) - recost with engine\cost-recipes.ps1 before auditing; carriage that was never judged is not carriage that passed')
+    return , @($p)
+  }
+  $named = @{}
+  foreach ($u in @($Row.uncarried)) {
+    if (-not $u) { continue }
+    $named[[string]$u] = $true
+    $p.Add(("not proven carried in any Omaha store: {0}" -f [string]$u))
+  }
+  foreach ($l in @($Row.lines)) {
+    if ($null -eq $l -or -not $l.PSObject.Properties['carriage']) { continue }
+    $v = [string]$l.carriage
+    if (-not $v -or $v -eq 'CARRIED') { continue }
+    $key = ('{0} [{1}]' -f [string]$l.item, $v)
+    if ($named.ContainsKey($key)) { continue }
+    $named[$key] = $true
+    $p.Add(("not proven carried in any Omaha store: {0}, yet priced from {1}" -f $key, [string]$l.basis))
+  }
+  return , @($p)
+}
+
 function Test-CostSpecVsEngine {
   <#
     Does the SPEC print the numbers the engine computed? Six fields, to the cent.
@@ -560,6 +596,33 @@ if ($runSelfTest) {
   $rcMiss = Get-MacroRecompute (@($rows) + @([pscustomobject]@{ item = 'Sumac'; grams = 62 })) $db 14
   T 'MUST FIRE  an ingredient with no food-DB row is NAMED, never silently skipped' `
     (@($rcMiss.missing) -contains 'Sumac') ('missing=' + (@($rcMiss.missing) -join ','))
+
+  # ---- carriage (2026-09-21, queue 2026-09-19-0b2f1e) -------------------------------------------------
+  # Brad's standing rule: one ingredient no Omaha store is proven to stock and the recipe cannot be used.
+  $crBoard = [pscustomobject]@{ item = 'Chicken Breast'; basis = 'board:chicken-breast:walmart'; carriage = 'CARRIED'; util_cost = 9.1 }
+  $crRice  = [pscustomobject]@{ item = 'Long Grain White Rice'; basis = 'feed:long-grain-white-rice'; carriage = 'CARRIED'; util_cost = 1.2 }
+  $pCrU = Test-RowCarriage ([pscustomobject]@{ uncarried = @('Dried Guajillo Chiles [UNKNOWN]'); lines = @($crBoard) })
+  T 'MUST FIRE  an ingredient whose carriage is UNKNOWN refuses the wave row, naming it' `
+    (($pCrU.Count -ge 1) -and (($pCrU -join ' ') -match 'Dried Guajillo Chiles \[UNKNOWN\]')) ($pCrU -join ' | ')
+  $pCrL = Test-RowCarriage ([pscustomobject]@{ uncarried = @(); lines = @($crBoard, [pscustomobject]@{ item = 'Five-Spice Powder'; basis = 'label:McCormick Gourmet 1.75 oz'; carriage = 'UNKNOWN'; util_cost = 0.4 }) })
+  T 'MUST FIRE  a line priced only from a hand-typed label, carriage unproven, refuses even with an empty uncarried list' `
+    (($pCrL.Count -ge 1) -and (($pCrL -join ' ') -match 'Five-Spice Powder')) ($pCrL -join ' | ')
+  $pCrN = Test-RowCarriage ([pscustomobject]@{ lines = @($crBoard) })
+  T 'MUST FIRE  a costed row that carries no carriage verdict at all refuses (never judged is not passed)' ($pCrN.Count -ge 1) ($pCrN -join ' | ')
+  $pCrC = Test-RowCarriage ([pscustomobject]@{ uncarried = @(); lines = @($crBoard, $crRice) })
+  T 'MUST NOT FIRE a row priced from in-store board and feed cells (chicken, rice) passes with no carriage.json entry' `
+    ($pCrC.Count -eq 0) ($pCrC -join ' | ')
+  $crSumac = [pscustomobject]@{ item = 'Sumac'; basis = 'label:Morton & Bassett All Natural Sumac'; carriage = 'CARRIED'; util_cost = 0.8 }
+  $pCrM = Test-RowCarriage ([pscustomobject]@{ uncarried = @('Dried Ancho Chiles [UNKNOWN]'); lines = @($crBoard, $crSumac) })
+  T 'CLEAN TWIN a ledger-proven label line (the sumac shape) still passes: the refusal names exactly its UNKNOWN sibling' `
+    (($pCrM.Count -eq 1) -and ($pCrM[0] -match 'Dried Ancho Chiles')) ($pCrM -join ' | ')
+  # The door this sits in front of. Needle by concatenation, so it cannot match this block's own text.
+  $crPub = [IO.File]::ReadAllText((Join-Path (Split-Path $PSScriptRoot -Parent) ('engine\' + 'publish.ps1')))
+  $crNeedle = 'if($uncarried' + 'Map.ContainsKey($slug)){'
+  $crAt = $crPub.IndexOf($crNeedle)
+  $crBranch = if ($crAt -ge 0) { $crPub.Substring($crAt, [Math]::Min(420, $crPub.Length - $crAt)) } else { '' }
+  T 'CLEAN TWIN publish.ps1 still refuses an uncarried slug at the door, create and republish alike, with continue' `
+    (($crAt -ge 0) -and ($crBranch -match ('REFUSED ' + 'CARRIAGE')) -and ($crBranch -match '\bcontinue\b')) ("at=$crAt")
 
   # ---- cost ---------------------------------------------------------------------------------------
   # A real row, keto-cheeseburger-skillet's shape, reduced to three lines that sum exactly.
@@ -1450,6 +1513,12 @@ foreach ($slug in $target) {
         lines = @($row.lines).Count; lines_unpriced = [int]$row.lines_unpriced
       }) `
       $(if ($ecp.Count -eq 0) { 'the engine row is internally coherent: utils sum to the batch, both per-serving tiers derive, first run is true + pantry, nothing unpriced' } else { ($ecp -join '; ') })))
+
+    $crp = Test-RowCarriage $row
+    $checks.Add((New-Check 'carriage-proven' ($crp.Count -eq 0) ([ordered]@{
+        uncarried = $(if ($row.PSObject.Properties['uncarried']) { @($row.uncarried) } else { 'no verdict on the row' })
+      }) `
+      $(if ($crp.Count -eq 0) { 'every ingredient is proven carried in an Omaha store (the engine''s verdict: an in-store board or feed price, or a carriage.json CARRIED entry)' } else { (($crp -join '; ') + '. Brad''s rule: one ingredient no Omaha store is proven to stock and the recipe cannot be used; engine\publish.ps1 would refuse it (REFUSED CARRIAGE). UNKNOWN is a could-not-look: resolve it by asking the stores, never by assuming either way.') })))
 
     $scp = Test-CostSpecVsEngine $spec $row $script:CENT
     $specMtime = (Get-Item $specPath).LastWriteTime

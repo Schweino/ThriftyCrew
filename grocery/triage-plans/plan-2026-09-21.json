@@ -1,0 +1,158 @@
+{
+  "generated": "2026-09-21T10:30:00",
+  "round": 1,
+  "board_week": "2026-09-20",
+  "queue_ids_seen": [
+    "2026-09-20-6c14f6",
+    "2026-09-19-0b2f1e"
+  ],
+  "note": "Money lane, written by the developer from the orchestrator's verified diagnosis (Brad approved 'Yes fix' on 2026-09-21; his rule: a recipe page should ALWAYS be able to be costed). No reviewer round: the diagnosis was in the dispatch, re-verified here, and two of its premises were false on measurement (see premise_verified on 2026-09-19-0b2f1e). No board rule, commodity or board input changes in this plan, so no board republish rides it.",
+  "knowledge_consulted": [
+    "searched \"held recipe cost alert\", \"publish gate carriage\", \"fixture must fire clean twin\" (knowledge-search --multi): software-craft/applies-here.md section 'The fixture vocabulary is RULED now' used for every fixture label below; the other hits (agent tool gate, search-position, 2PC readiness) not applicable",
+    "memory a-could-not-look-must-not-settle-the-question (excerpt in the dispatch): governs 0b2f1e - UNKNOWN is never a takedown",
+    "memory recipe-cost-basis-map (excerpt in the dispatch): no per-serving number is re-derived here; costed.json rows for held recipes are kept, not deleted",
+    ".claude/rules/grocery.md 'UNCHECKED IS NEVER NOT-CARRIED'; .claude/rules/ops-and-gates.md 'Three fixture labels, three jobs'; .claude/rules/meal-prep.md (golden-tested engine)"
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-20-6c14f6",
+      "subject": "cost-flags alert cannot tell a LIVE recipe from a HELD one; the split belongs in the engine",
+      "classification": "infra",
+      "evidence": [
+        "meal-prep/db/cost-flags.txt read 2026-09-21: 26 lines = 18 on the six HELD recipes (3 each: MAPPED BID NOT ON ANY BOARD, LABEL PRICE REFUSED CARRIAGE NOT-CARRIED, NO PRICE BASIS) + 7 'Five-Spice Powder :: MAPPED BID NOT ON ANY BOARD (five-spice-powder)' + 1 'Turkey Wild Rice Casserole :: Wild Rice :: MAPPED BID NOT ON ANY BOARD (wild-rice)'. None of the last 8 is followed by NO PRICE BASIS, so each of those lines PRICED (label or carriage ledger): 0 of 26 lines is an unpriced line on a live page",
+        "grocery/ad-cycle-log.txt 2026-09-20T12:27:51 'cost-flags: 26 unpriced recipe line(s)'; 2026-09-20T12:10:07 'compute-v2 SKIPPED 6 recipe(s) with bad cost data' naming ethiopian-doro-wat-chicken-bowls, ethiopian-minchet-abish-berbere-beef-bowls, harissa-chicken-rice-bowls ... = exactly the six slugs in meal-prep/db/held-recipes.json",
+        "grep 2026-09-21: meal-prep/engine/cost-recipes.ps1 and meal-prep/pipeline/compute-v2-perserving.ps1 carry 0 references to held-recipes.json and 0 to published-hashes.json; meal-prep/engine/publish.ps1:62 and meal-prep/pipeline/hold-recipe.ps1 read held-recipes.json",
+        "grocery/check-ad-cycles.ps1:2367-2385 counts every line of cost-flags.txt as 'unpriced' and cannot split them: the split needs publication state, and a grocery read of it was refused by ops/audit-cross-module-reach.ps1 on 2026-09-20 (118 -> 119)"
+      ],
+      "root_cause": "Hold state and publication state live in meal-prep/db (held-recipes.json, published-hashes.json) and the two scripts that cost the catalogue never read them, so every flag they emit is state-free: a recipe deliberately taken down pages exactly like a live one, and the chain can only count lines. The same state-free file also counts a line that PRICED (a bid on no board, then priced from a label or the ledger) as 'unpriced'. The chain cannot add the state without a new grocery-to-meal-prep read, so the only honest home is the engine, which sits in the module that owns both files.",
+      "root_fix": {
+        "what": "the engine labels its own flag lines: a HELD recipe's lines and an ADVISORY line (bid on no board but the line priced) leave cost-flags.txt and are recorded with their counts in costed.stamp.json and printed; a LIVE recipe's lines lead cost-flags.txt with a 'LIVE :: ' prefix; compute-v2 reports a held recipe it cannot price as HELD, not SKIPPED, and exits 0 when only held recipes failed; the chain logs both scripts' disposition lines from their own stdout (no new path)",
+        "files": [
+          "meal-prep/engine/cost-recipes.ps1",
+          "meal-prep/pipeline/compute-v2-perserving.ps1",
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "exact_change": "cost-recipes.ps1: read db/held-recipes.json held[].slug and db/published-hashes.json keys (unreadable -> WARNING and nothing treated as held, so everything pages: the loud direction); tag each flag line with its recipe slug; mark a 'MAPPED BID NOT ON ANY BOARD' line ' :: ADVISORY, the line priced from <basis>' when that ingredient went on to price; new pure Split-CostFlags writes LIVE lines first (prefixed), then the rest unchanged, and returns held/advisory lines set aside; costed.stamp.json gains flags_set_aside {held_recipes, held_lines, advisory_lines}; stdout 'cost-recipes: HELD n recipe(s) not costed as live, by design ...'. compute-v2-perserving.ps1: a held slug that throws goes to a HELD list printed as 'HELD n recipe(s) not in the manifest, by design (...)' with no leading whitespace; exit 1 only for non-held skips. check-ad-cycles.ps1: Log the engine's 'cost-recipes: (HELD|ADVISORY|LIVE|WARNING)' lines from $crRun.Lines and compute-v2's '^HELD ' line from $cv2."
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule, commodity, board input or price changes: the edits are to flag labelling in the recipe cost engine, the skip classification in compute-v2 and two log lines in the chain, so every board name routes exactly as before by construction (commodities.json, categories.json, commodity-search.json untouched). The engine's priced output is pinned byte-identical by golden-test -Frozen (costed.json and cost-flags.txt SHA over the frozen fixture, which has no held and no published recipe)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "costed.json must stay byte-identical for an unheld, unpublished catalogue (golden) and must still carry a row for every held recipe (no cost data deleted); a LIVE unpriced line must never leave the paging file",
+        "cell_effects": []
+      },
+      "freshness": "measured against meal-prep/db/cost-flags.txt and costed.json of the 2026-09-20T12:09:49 full recost (board comparison-2026-09-20.json) and held-recipes.json as read 2026-09-21; if a recipe is held or released before the next recost the counts move, the rule does not",
+      "proof": {
+        "guard_or_fixture": "meal-prep/engine/cost-recipes.ps1 -SelfTest (pure Split-CostFlags cases plus an END-TO-END child engine run over a temp copy of the golden fixture with a held and a published recipe injected) + meal-prep/pipeline/compute-v2-perserving.ps1 -SelfTest + meal-prep/engine/golden-test.ps1 -Frozen",
+        "must_fire_case": "end to end: ants-climbing-a-tree-pork-noodles PUBLISHED, its Doubanjiang line unpriced (NO PRICE BASIS) - it is still in cost-flags.txt, first, as 'LIVE :: Ants Climbing a Tree Pork Noodles :: Doubanjiang :: NO PRICE BASIS' (the turkey-wild-rice-casserole shape: the line that must never go quiet)",
+        "must_not_fire_case": "same run, zz-synthetic-flag-cases HELD: no 'ZZ Synthetic Flag Cases' line is in cost-flags.txt; compute-v2: a held slug that throws is not in the SKIPPED list and does not make the run exit 1",
+        "clean_twin": "same run: the held recipe is still REPORTED - stdout 'cost-recipes: HELD 1 recipe(s)' and costed.stamp.json flags_set_aside.held_lines carries its 6 lines - and costed.json is byte-identical to the frozen baseline (the held recipe is still costed); compute-v2 prints 'HELD 1 recipe(s)' naming it",
+        "fixture_occurrences": [
+          "2026-09-20-6c14f6"
+        ],
+        "commands": [
+          "powershell -NoProfile -File meal-prep/engine/cost-recipes.ps1 -SelfTest",
+          "powershell -NoProfile -File meal-prep/pipeline/compute-v2-perserving.ps1 -SelfTest",
+          "powershell -NoProfile -File meal-prep/engine/golden-test.ps1 -Frozen",
+          "powershell -NoProfile -File meal-prep/engine/cost-recipes.ps1 -LedgerMaxAgeDays 90 -OutFile <temp>/costed.json -FlagsFile <temp>/cost-flags.txt (live inputs, temp outputs)"
+        ],
+        "observed": "cost-recipes -SelfTest exit 0, 12 new cases ok incl. 7 END-TO-END over a temp copy of the golden fixture; golden-test -Frozen exit 0, 6/6, costed.json and cost-flags.txt byte-identical; compute-v2 -SelfTest exit 0, 4 new cases ok; static: cross-module-reach code=118 base=118, fixture-vocabulary mislabelled=0 (782 files), typed-param-shadow sites=0, list-array-wrap sites=0, fixed-temp-names 6=baseline 6, cmdlet-shadow new=0, selftest-fallthrough sites=0; all five touched scripts parse with 0 errors"
+      },
+      "rollback": "revert the three script hunks; cost-flags.txt returns to state-free lines on the next recost. No data migration: costed.json rows are untouched and the stamp's new field is additive",
+      "do_not_touch": [
+        "the engine's pricing arithmetic and basis order (label before ledger)",
+        "costed.json row shape and the rows of held recipes",
+        "grocery/check-ad-cycles.ps1 reading any new meal-prep path (ops/audit-cross-module-reach.ps1)",
+        "engine/publish.ps1's held refusal"
+      ],
+      "resolution_note": "The engine now labels its own flag lines: HELD recipes' lines and ADVISORY lines (bid on no board, line still priced) leave cost-flags.txt with their counts in costed.stamp.json and in the chain log; LIVE recipes' lines lead the file. compute-v2 reports held recipes as HELD, not SKIPPED. No cross-module read added.",
+      "publish_batch": "none - no board publish",
+      "status": "done",
+      "premise_verified": "true, with one detail wider than the queue measured: cost-recipes.ps1 and compute-v2-perserving.ps1 carried 0 references to held-recipes.json or published-hashes.json (grep 2026-09-21); compute-v2 at 2026-09-20T12:10 skipped exactly the six held slugs; today's cost-flags.txt was 26 lines = 18 on held recipes + 8 MAPPED BID lines whose ingredient went on to PRICE (7 five-spice from the McCormick label, 1 wild rice from the Hy-Vee ledger read), so 0 of 26 was an unpriced line on a live page. Proof run: the patched engine over today's LIVE inputs with temp outputs (-LedgerMaxAgeDays 90, as the chain passes it) wrote 0 paging lines, set aside 18 HELD (6 recipes) and 8 ADVISORY lines, and still costed all 584 recipes including the 6 held",
+      "deviation": "from the DISPATCH, not the plan: (1) held recipes are still COSTED (their costed.json rows stay current) because the dispatch also said do not delete held recipes' cost data; what they lose is being counted or paged as live, and the printed line says 'not costed as live, by design ... still costed'. (2) the engine also sets aside ADVISORY lines (MAPPED BID NOT ON ANY BOARD where the line then priced), because they were 8 of the 26 lines paging as 'unpriced' and after the held split they would have been the whole next page - with none of them unpriced. (3) the held and advisory lines are kept in costed.stamp.json (flags_set_aside) rather than a new file, so no new tracked path appears and the chain reads nothing new across the module boundary (audit-cross-module-reach code=118 base=118)",
+      "shipped_commit": "pending - recorded after the push lands"
+    },
+    {
+      "queue_id": "2026-09-19-0b2f1e",
+      "subject": "Live recipe(s) with an ingredient Omaha does not carry",
+      "classification": "capture-gap",
+      "evidence": [
+        "grocery/ad-cycle-log.txt 2026-09-19T16:33:13 'CARRIAGE: 25 LIVE recipe(s) have an ingredient no Omaha store is proven to carry'; the queue body names 12 of the 25, every named ingredient tagged [UNKNOWN], none [NOT-CARRIED]",
+        "grocery/audit-carriage.ps1 -Live run 2026-09-21: 'CARRIAGE: 577 published recipe(s) checked / ok every published recipe is fully carried / CARRIAGE-COMPLETE 0 live uncarried finding(s)', exit 0",
+        "the four named ingredients now, Get-Carriage over grocery/out/smp-feed.json (week_of 2026-09-20) and grocery/carriage.json: Caraway Seeds CARRIED feed (Family Fare 'mc_cormick_whole_caraway_seed_0_9_oz' $4.59 / 0.9 oz, as_of 2026-08-20); Dried Ancho Chiles CARRIED feed (Family Fare 'Zamora Ancho Chile Peppers' $8.99 / 1 lb, as_of 2026-08-17); Dried Arbol Chiles CARRIED feed (Family Fare 'Chile de Arbol' $2.49 / 3 oz, as_of 2026-08-20); Dried Guajillo Chiles CARRIED feed (Walmart 'Dried Guajillo Chile, 12 oz Package' item 226282476 $7.24, seller Walmart.com, fulfillment STORE, captured at the Omaha L St Supercenter 68137, as_of 2026-08-31)",
+        "all 12 named slugs (andong-jjimdak-braised-chicken ... hungarian-beef-goulash) read LIVE with uncarried=[] in costed.json of the 2026-09-20T12:09:49 full recost",
+        "meal-prep/engine/publish.ps1:95-130 refuses any slug whose costed row lists an uncarried line (REFUSED CARRIAGE, create and republish alike, before any Ghost call); meal-prep/pipeline/wave-publish.ps1 and propagate-recipes.ps1 both publish only through it; lib/carriage-lib.ps1 Get-Carriage returns CARRIED only from a live feed store price or a carriage.json CARRIED entry that passes Test-CarriageEvidence, and cost-recipes.ps1 never lets a label price make an ingredient carried",
+        "grocery/audit-carriage.ps1:145-151 prints every non-CARRIED verdict alike as 'no Omaha store is proven to carry' and totals them 'LIVE recipe(s) sell a dish nobody can shop for. These come down'; grocery/check-ad-cycles.ps1:1293 pages 'these should come down' for all 25 - every one UNKNOWN"
+      ],
+      "root_cause": "The standing carriage watch treats UNKNOWN exactly like NOT-CARRIED: a could-not-look (nobody proved it either way, or the proof left the board for a day) is printed as 'no store carries it' and paged as a takedown. On 2026-09-19 all 25 were UNKNOWN, none NOT-CARRIED, and by 2026-09-20 every named ingredient was back on the board from an in-store shelf read - following the alert would have taken 25 live recipes down over a one-day proof gap. The dispatch's premise that the PUBLISH gate lets UNKNOWN through is false today (publish.ps1 refuses it at the door since 2026-08-22); the door that did not look is the wave pre-audit, which decides GO without reading carriage, so an uncarried wave recipe read GO and was refused only at publish.",
+      "root_fix": {
+        "what": "(a) the watch splits NOT-CARRIED (proven absent at all seven stores: Brad's rule, these come down) from UNKNOWN (a could-not-look: resolve by asking the stores, never a takedown) and the chain's alert says which; (b) wave-preaudit refuses a wave row with an ingredient not proven carried, naming it, at the audit that decides GO; a pin asserts publish.ps1 still refuses an uncarried slug and takes nothing down",
+        "files": [
+          "grocery/audit-carriage.ps1",
+          "grocery/check-ad-cycles.ps1",
+          "meal-prep/pipeline/wave-preaudit.ps1"
+        ],
+        "exact_change": "audit-carriage.ps1: new pure Split-LiveUncarried; -Live prints '  X <slug>  PROVEN not carried ...' only for a recipe with a [NOT-CARRIED] item and '  ? <slug>  carriage UNKNOWN ...' otherwise, with separate totals; -Json gains live_not_carried and live_unknown beside live_uncarried. check-ad-cycles.ps1: the takedown alert keeps '^\\s+X ' (now NOT-CARRIED only); a new '^\\s+\\? ' branch logs, adds a REVIEW line and sends 'Live recipe(s) whose Omaha carriage is UNKNOWN - resolve, do not take down'. wave-preaudit.ps1: new Test-RowCarriage (costed row's uncarried list, plus any line whose carriage is not CARRIED, plus a row with no carriage verdict at all) added as check 'carriage-proven' beside cost-engine-consistency."
+      },
+      "surface_fix": {
+        "what": "resolve the 25 live recipes: re-measure, hold only what is PROVEN NOT-CARRIED, ask the headless stores about anything still UNKNOWN",
+        "files": [
+          "meal-prep/db/held-recipes.json (only if a hold is proven)"
+        ],
+        "exact_change": "none made: the re-measure read 0 UNKNOWN and 0 NOT-CARRIED ingredients on live recipes, so no hold and no carriage.json entry"
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule, commodity or board input changes; the watch and the pre-audit only read costed.json, so every board name routes as before by construction. The pre-audit check runs on wave slugs only and publishes or unpublishes nothing; the watch stays read-only",
+        "affected_now": 0,
+        "names": [],
+        "risk": "the new pre-audit check must pass ordinary recipes (board- or feed-priced chicken and rice have carriage CARRIED with no carriage.json entry) and a ledger-proven label line (the sumac shape); the watch must still page a PROVEN NOT-CARRIED live recipe as a takedown",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-21 against costed.json of the 2026-09-20T12:09:49 full recost, smp-feed.json week_of 2026-09-20 and comparison-2026-09-20.json (built 2026-09-20T17:26:38); a later board that drops one of the four cells turns its recipes UNKNOWN again, which the split watch then reports as a resolve task",
+      "proof": {
+        "guard_or_fixture": "grocery/audit-carriage.ps1 -SelfTest + meal-prep/pipeline/wave-preaudit.ps1 -SelfTest",
+        "must_fire_case": "wave-preaudit: a row whose uncarried lists 'Dried Guajillo Chiles [UNKNOWN]' is refused naming it; a row with a label-priced line whose carriage is UNKNOWN is refused naming it even with an empty uncarried list. audit-carriage: a live recipe with a [NOT-CARRIED] item is a takedown line",
+        "must_not_fire_case": "wave-preaudit: a row priced from in-store board cells (chicken, rice: carriage CARRIED, no carriage.json entry) passes. audit-carriage: a live recipe whose only uncarried items are [UNKNOWN] is NOT a takedown line",
+        "clean_twin": "wave-preaudit: a ledger-proven label line (Sumac, label basis, CARRIED) beside an UNKNOWN sibling - the refusal names exactly the sibling; publish.ps1 still refuses an uncarried slug with 'continue' before any Ghost call (create and republish), so an existing live recipe is never taken down by the gate. audit-carriage: the UNKNOWN recipe is still REPORTED, named, in the resolve list",
+        "fixture_occurrences": [
+          "2026-09-19-0b2f1e"
+        ],
+        "commands": [
+          "powershell -NoProfile -File grocery/audit-carriage.ps1 -SelfTest",
+          "powershell -NoProfile -File meal-prep/pipeline/wave-preaudit.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery/audit-carriage.ps1 -Live"
+        ],
+        "observed": "audit-carriage -SelfTest exit 0, 4 new cases ok, SELF-TEST PASS; wave-preaudit -SelfTest 85 cases, the 6 new ones ok, 1 FAIL = the pre-existing END-TO-END CLEAN TWIN of open weekly item 2026-09-20-588caa (keto-cheeseburger-skillet cost block 25.13 vs engine 25, byte-identical to the pre-edit baseline); audit-alert-registry exit 0, 95 subjects, findings=0; audit-carriage -Live exit 0, 577 checked, 0 findings"
+      },
+      "rollback": "revert the three script hunks; no data changed",
+      "do_not_touch": [
+        "engine/publish.ps1 (already correct: it refuses UNKNOWN and NOT-CARRIED at the door)",
+        "grocery/carriage.json (nothing proven this run needs recording)",
+        "any live recipe's Ghost status unless an ingredient is PROVEN NOT-CARRIED at all seven stores"
+      ],
+      "resolution_note": "Re-measured: 0 of 577 live recipes has an uncarried ingredient today; all four named ingredients are proven by in-store board cells (Family Fare caraway/ancho/arbol, Walmart 68137 guajillo), so nothing was held. The watch now splits PROVEN NOT-CARRIED (takedown) from UNKNOWN (resolve, never a takedown), and the wave pre-audit refuses an unproven ingredient before publish.",
+      "publish_batch": "none - no board publish",
+      "status": "done",
+      "premise_verified": "false, twice. (1) 'The publish gate lets UNKNOWN carriage through' is false today: engine/publish.ps1:126 refuses any slug whose costed row lists an uncarried line, UNKNOWN or NOT-CARRIED, on create and republish, before any Ghost call, and wave-publish and propagate-recipes both publish only through it; the six held recipes predate that gate (2026-08-22). (2) 'The live instance is 25 recipes' is false today: audit-carriage -Live on 2026-09-21 read 577 published recipes, 0 findings, exit 0; all 12 named slugs read LIVE with uncarried=[]; the four named ingredients are each proven CARRIED by an in-store board cell (Family Fare caraway $4.59/0.9 oz 2026-08-20, ancho $8.99/1 lb 2026-08-17, arbol $2.49/3 oz 2026-08-20; Walmart 68137 guajillo $7.24/12 oz 2026-08-31, seller Walmart.com, fulfillment STORE). Nothing is PROVEN NOT-CARRIED, so nothing was held, and no store needed asking because nothing is UNKNOWN",
+      "deviation": "from the DISPATCH, not the plan: part 2 as written (add the refusal at publish) was already true, so the class fix went where measurement put the gap - the watch that paged a takedown for 25 recipes that were all UNKNOWN now splits PROVEN NOT-CARRIED ('  X ', takedown alert unchanged) from UNKNOWN ('  ? ', a new REVIEW alert that says resolve, do not take down, registered in grocery/alert-registry.json), and wave-preaudit gains check 'carriage-proven' so the GO decision refuses an unproven ingredient before publish does. Part 3 found nothing to hold or resolve; no Ghost write was made, so there is no held page to verify live",
+      "shipped_commit": "pending - recorded after the push lands"
+    }
+  ],
+  "ship_sequence": [
+    "baseline (before any edit): golden-test -Frozen, cost-recipes / compute-v2 / audit-carriage / wave-preaudit -SelfTest",
+    "edit cost-recipes.ps1, compute-v2-perserving.ps1, check-ad-cycles.ps1 (6c14f6)",
+    "edit audit-carriage.ps1, check-ad-cycles.ps1 carriage branch, wave-preaudit.ps1 (0b2f1e)",
+    "self-tests + golden-test -Frozen (must stay byte-identical) + audit-carriage -Live + a live-input, temp-output engine run to read the new flag split on today's data; audit-alert-registry for the new subject",
+    "no compare-deals / guards / publish-deals-page: no board input changes in this plan, so the gated board chain does not run and the board is not republished",
+    "commit by pathspec with a Store: line, push (pre-push run-gates + test-auditors), close the two queue items, validate-triage-plan -Closing"
+  ],
+  "open_questions_for_brad": []
+}

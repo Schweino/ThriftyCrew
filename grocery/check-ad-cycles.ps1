@@ -994,7 +994,13 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         # treats an absent bound as REFUSE, so a hand run that omits this simply does not use the ledger.
         $crRun = Invoke-NativeScript (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\cost-recipes.ps1') @('-LedgerMaxAgeDays', [string]$script:QuarterDays)
         $crRc = $crRun.ExitCode
-        if ($crRc -eq 0) { Log 'engine cost-recipes refreshed db\costed' }
+        if ($crRc -eq 0) {
+          Log 'engine cost-recipes refreshed db\costed'
+          # THE ENGINE LABELS ITS OWN FLAG LINES (2026-09-21, queue 2026-09-20-6c14f6). Held-recipe and advisory
+          # lines are kept out of the flags file this script alerts on below, and COUNTED on the engine's own stdout,
+          # so the counts reach this log without this script reading one more file across the module boundary.
+          foreach ($crL in @(@($crRun.Lines) | ForEach-Object { [string]$_ } | Where-Object { $_ -match '^cost-recipes: (HELD|ADVISORY|LIVE|WARNING)' })) { Log ('  ' + $crL) }
+        }
         else {
           $crTail = @(@($crRun.Lines) | ForEach-Object { [string]$_ } | Select-Object -Last 8) -join "`n"
           Log ("engine cost-recipes FAILED rc=$crRc - db\costed.json was NOT refreshed: " + ($crTail -replace "`n", ' | '))
@@ -1137,6 +1143,8 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $cv2   = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\compute-v2-perserving.ps1') -FeedPath (Join-Path $OutDir 'smp-feed.json')
         $cv2Rc = $LASTEXITCODE
         $cv2Ok = ($cv2Rc -eq 0)
+        # A HELD recipe the manifest cannot price is reported by compute-v2 as HELD, not SKIPPED (queue 2026-09-20-6c14f6).
+        foreach ($cvL in @(@($cv2) | ForEach-Object { [string]$_ } | Where-Object { $_ -match '^HELD \d+ recipe' })) { Log ('compute-v2: ' + $cvL) }
         # rc 2 is the 2026-08-15 staleness refusal, NOT a bad-recipe skip. It has to read as itself: the
         # manifest was deliberately NOT rewritten (so the surfaces keep their previous numbers instead of
         # gaining wrong ones), and the fix is upstream in the feed, not in any recipe's cost data. Reporting
@@ -1288,9 +1296,20 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $carrBad = @($carrOut | Where-Object { $_ -match '^\s+X ' })
         $carrRev = @($carrOut | Where-Object { $_ -match '^\s+\+ ' })
         if ($carrBad.Count) {
-          Log ('CARRIAGE: ' + $carrBad.Count + ' LIVE recipe(s) have an ingredient no Omaha store is proven to carry')
+          Log ('CARRIAGE: ' + $carrBad.Count + ' LIVE recipe(s) have an ingredient PROVEN not carried by any Omaha store')
           $summary += ('ACT       ' + $carrBad.Count + ' live recipe(s) sell a dish nobody can shop for - see audit-carriage.ps1')
-          if (-not $NoAlert) { try { Send-Alert -Subject ("Live recipe(s) with an ingredient Omaha does not carry") -Body (("The standing carriage watch found {0} PUBLISHED recipe(s) whose ingredient no Omaha store is proven to stock. Brad's standing rule is that one uncarried ingredient means we cannot use the recipe, so these should come down.`n`n{1}`n`nThis is read-only: nothing was unpublished. Take them down with the same path used on 2026-08-22 (unpublish to DRAFT, not delete, so a later capture can revive them).`n`nIf an ingredient is actually carried and the board simply cannot price it, record the store evidence in grocery\carriage.json instead - that is what ground-sumac's row is." -f $carrBad.Count, (($carrBad | Select-Object -First 12) -join "`n"))) | Out-Null } catch {} }
+          if (-not $NoAlert) { try { Send-Alert -Subject ("Live recipe(s) with an ingredient Omaha does not carry") -Body (("The standing carriage watch found {0} PUBLISHED recipe(s) with an ingredient PROVEN not carried: all seven Omaha stores have answered and none shelves it. Brad's standing rule is that one uncarried ingredient means we cannot use the recipe, so these should come down.`n`n{1}`n`nThis is read-only: nothing was unpublished. Take them down with the same path used on 2026-08-22 (unpublish to DRAFT, not delete, so a later capture can revive them).`n`nIf an ingredient is actually carried and the board simply cannot price it, record the store evidence in grocery\carriage.json instead - that is what ground-sumac's row is." -f $carrBad.Count, (($carrBad | Select-Object -First 12) -join "`n"))) | Out-Null } catch {} }
+        }
+        # UNKNOWN IS NOT NOT-CARRIED (2026-09-21, queue 2026-09-19-0b2f1e). Until today every '  X ' line above was
+        # any non-CARRIED verdict, and on 2026-09-19 this alert told Brad to take down 25 live recipes that were ALL
+        # UNKNOWN - the board had lost the cells that proved them for a day, and by 2026-09-20 every named
+        # ingredient was back from an in-store shelf read. audit-carriage now prints PROVEN absences as '  X ' (the
+        # takedown above, unchanged) and could-not-looks as '  ? ', which are a resolve task and never a takedown.
+        $carrUnk = @($carrOut | Where-Object { $_ -match '^\s+\? ' })
+        if ($carrUnk.Count) {
+          Log ('CARRIAGE: ' + $carrUnk.Count + ' LIVE recipe(s) have an ingredient whose carriage is UNKNOWN - a could-not-look, never a takedown')
+          $summary += ('REVIEW    ' + $carrUnk.Count + ' live recipe(s) have an ingredient whose Omaha carriage is UNKNOWN - resolve it by asking the stores, do not take them down (audit-carriage.ps1)')
+          if (-not $NoAlert) { try { Send-Alert -Subject ("Live recipe(s) whose Omaha carriage is UNKNOWN - resolve, do not take down") -Body (("The standing carriage watch found {0} PUBLISHED recipe(s) with an ingredient whose carriage is UNKNOWN: no Omaha store is proven to carry it and none is proven not to. Usually the board lost the in-store cell that proved it, or no store was ever asked the right wording.`n`nUNKNOWN is a could-not-look, never an answer, so NOTHING comes down for it (UNCHECKED IS NEVER NOT-CARRIED). Resolve each ingredient by asking the stores: Hy-Vee, Family Fare and Baker's answer headlessly, and ONE store proven to carry it settles it. Record a proven answer in grocery\carriage.json. Only an ingredient proven NOT-CARRIED at all seven stores takes a recipe down, and that arrives as its own alert.`n`n{1}" -f $carrUnk.Count, (($carrUnk | Select-Object -First 12) -join "`n"))) | Out-Null } catch {} }
         }
         if ($carrRev.Count) {
           Log ('CARRIAGE: ' + $carrRev.Count + ' drafted recipe(s) are now unblocked')

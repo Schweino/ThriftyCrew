@@ -80,6 +80,26 @@ function Get-RevivableRecipes {
   return @($out)
 }
 
+# UNKNOWN IS NOT NOT-CARRIED (2026-09-21, queue 2026-09-19-0b2f1e). The engine lists every non-CARRIED line in a
+# recipe's `uncarried`, tagged with its verdict ('Harissa Paste [NOT-CARRIED]', 'Dried Guajillo Chiles [UNKNOWN]'),
+# and until today -Live printed them all alike as 'no Omaha store is proven to carry' under 'These come down'. On
+# 2026-09-19 that paged a takedown of 25 live recipes, every one UNKNOWN and none NOT-CARRIED; a day later each
+# named ingredient was back on the board from an in-store shelf read. A PROVEN absence (all seven stores answered,
+# Test-CarriageEvidence rule B) is Brad's takedown; an UNKNOWN is a could-not-look and a resolve task, never one.
+function Split-LiveUncarried {
+  param($Rows)
+  $nc = @(); $unk = @()
+  foreach ($r in @($Rows)) {
+    if ($null -eq $r) { continue }
+    $items = @(@($r.uncarried) | Where-Object { $_ })
+    if (-not $items.Count) { continue }
+    $proven = @($items | Where-Object { [string]$_ -match '\[NOT-CARRIED\]$' })
+    if ($proven.Count) { $nc += [pscustomobject]@{ slug = [string]$r.slug; uncarried = $items; proven_absent = $proven } }
+    else { $unk += [pscustomobject]@{ slug = [string]$r.slug; uncarried = $items } }
+  }
+  return [pscustomobject]@{ not_carried = @($nc); unknown = @($unk) }
+}
+
 if ($SelfTest) {
   $bad = 0
   function T([string]$n, [bool]$ok, [string]$got) { if ($ok) { Write-Output "  ok  $n" } else { Write-Output "  X   $n  ($got)"; $script:__b++ } }
@@ -110,6 +130,19 @@ if ($SelfTest) {
              'b-bid' = [pscustomobject]@{ verdict='UNKNOWN'; parked_recipes=@('two-blocker-dish') } }
   $rev2 = Get-RevivableRecipes -Ledger $led2 -FeedCarried @{ 'a-bid' = $true }
   T 'MUST FIRE  one of two blockers resolving does not revive the recipe' (-not $rev2[0].revivable) 'revived on a partial fix'
+
+  # UNKNOWN IS NOT NOT-CARRIED. Rows frozen from the 2026-09-19 alert (beef-birria-burrito) and a held recipe's row.
+  $lu = Split-LiveUncarried @(
+    [pscustomobject]@{ slug = 'beef-birria-burrito'; uncarried = @('Dried Guajillo Chiles [UNKNOWN]', 'Dried Ancho Chiles [UNKNOWN]') },
+    [pscustomobject]@{ slug = 'harissa-chicken-rice-bowls'; uncarried = @('Harissa Paste [NOT-CARRIED]') },
+    [pscustomobject]@{ slug = 'mixed-dish'; uncarried = @('Caraway Seeds [UNKNOWN]', 'Pomegranate Molasses [NOT-CARRIED]') },
+    [pscustomobject]@{ slug = 'carried-dish'; uncarried = @() }
+  )
+  T 'MUST FIRE  a live recipe with an ingredient PROVEN not carried is a takedown' (@($lu.not_carried | Where-Object { $_.slug -eq 'harissa-chicken-rice-bowls' }).Count -eq 1) 'not a takedown'
+  T 'MUST FIRE  one PROVEN absence beside an UNKNOWN still makes the recipe a takedown' (@($lu.not_carried | Where-Object { $_.slug -eq 'mixed-dish' }).Count -eq 1) 'mixed row lost'
+  T 'MUST NOT FIRE  a live recipe whose only gaps are UNKNOWN is never a takedown (UNCHECKED IS NEVER NOT-CARRIED)' (@($lu.not_carried | Where-Object { $_.slug -eq 'beef-birria-burrito' }).Count -eq 0) 'called a could-not-look an absence'
+  $luB = @($lu.unknown | Where-Object { $_.slug -eq 'beef-birria-burrito' })
+  T 'CLEAN TWIN  that UNKNOWN recipe is still REPORTED, named, with both ingredients, as a resolve task' (($luB.Count -eq 1) -and (@($luB[0].uncarried).Count -eq 2)) ('unknown=' + (@($lu.unknown | ForEach-Object { $_.slug }) -join ','))
 
   Write-Output ("audit-carriage SELF-TEST " + $(if ($script:__b -eq 0) { 'PASS' } else { "FAILED ($($script:__b))" }))
   exit $(if ($script:__b -eq 0) { 0 } else { 1 })
@@ -143,13 +176,17 @@ $report = [ordered]@{}
 
 if ($all -or $Live) {
   $bad = @($costed | Where-Object { $published.ContainsKey([string]$_.slug) -and @($_.uncarried).Count })
+  $liveSplit = Split-LiveUncarried $bad
   $report['live_uncarried'] = @($bad | ForEach-Object { [pscustomobject]@{ slug = $_.slug; uncarried = @($_.uncarried) } })
+  $report['live_not_carried'] = @($liveSplit.not_carried)
+  $report['live_unknown'] = @($liveSplit.unknown)
   if (-not $Json) {
     Write-Output ("CARRIAGE: {0} published recipe(s) checked" -f @($costed | Where-Object { $published.ContainsKey([string]$_.slug) }).Count)
-    if ($bad.Count) {
-      foreach ($b in $bad) { Write-Output ("  X {0}  no Omaha store is proven to carry: {1}" -f $b.slug, (@($b.uncarried) -join ', ')) }
-      Write-Output ("CARRIAGE: {0} LIVE recipe(s) sell a dish nobody can shop for. These come down." -f $bad.Count)
-    } else { Write-Output '  ok  every published recipe is fully carried' }
+    foreach ($b in @($liveSplit.not_carried)) { Write-Output ("  X {0}  PROVEN not carried by any Omaha store: {1}" -f $b.slug, (@($b.uncarried) -join ', ')) }
+    foreach ($b in @($liveSplit.unknown)) { Write-Output ("  ? {0}  carriage UNKNOWN, nobody has proven it either way: {1}" -f $b.slug, (@($b.uncarried) -join ', ')) }
+    if (@($liveSplit.not_carried).Count) { Write-Output ("CARRIAGE: {0} LIVE recipe(s) have an ingredient PROVEN not carried at all seven Omaha stores. Brad's rule: these come down." -f @($liveSplit.not_carried).Count) }
+    if (@($liveSplit.unknown).Count) { Write-Output ("CARRIAGE: {0} LIVE recipe(s) have an ingredient whose carriage is UNKNOWN. That is a could-not-look, never a takedown: resolve it by asking the stores." -f @($liveSplit.unknown).Count) }
+    if (-not $bad.Count) { Write-Output '  ok  every published recipe is fully carried' }
   }
   $findings += $bad.Count
 }

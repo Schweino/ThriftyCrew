@@ -825,6 +825,14 @@
    "emitter": "grocery/check-ad-cycles.ps1"
   },
   {
+   "id": "ingredient-carriage-unknown",
+   "match": "exact",
+   "key": "live recipe s whose omaha carriage is unknown resolve do not take down",
+   "class": "review",
+   "condition": "a could-not-look on a live recipe's ingredient (queue 2026-09-19-0b2f1e): resolve carriage by asking the stores; never a takedown, and no price is wrong",
+   "emitter": "grocery/check-ad-cycles.ps1"
+  },
+  {
    "id": "memory-store-finding",
    "match": "exact",
    "key": "ops the agent memory store has a finding",
