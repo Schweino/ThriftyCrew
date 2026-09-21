@@ -18,6 +18,12 @@
       "name": "walmart-headed-probe-once",
       "reason": "a one-time probe (Brad ruling R12, 2026-09-10) that disables itself after its single run on 2026-09-11; its instructions and result are recorded in design\\PLAN-zero-alert-days-2026-09-10.md section 7 and design\\PROBE-store-direct-data-2026-09-10.md, so a mirror would be an orphan the day after it is written",
       "added": "2026-09-10"
+    },
+    {
+      "kind": "scheduled-task",
+      "name": "resume-grocery-alert-triage-0924",
+      "reason": "a one-time task (fires once, 2026-09-24 09:00) whose only job is to re-enable the grocery-alert-triage task Brad paused on 2026-09-21 'until 9/24', changing nothing else about it; the same shape as walmart-headed-probe-once, so a mirror would be an orphan the day after it runs. Its whole instruction is this sentence. Exempted by the ops lane (plan-2026-09-21-5.json) when this NO BACKUP line refused an unrelated push",
+      "added": "2026-09-21"
     }
   ]
 }
