@@ -403,6 +403,19 @@ function Get-HbExitClass {
   return 'nonzero'
 }
 
+function Get-HbDeclaredExit {
+  <# Pure. A row's DECLARED exit semantics (2026-09-22, post-landing review F2, plan-2026-09-22-10): 'ok' when the exit
+     is in its ok_exits, 'fail' when it is in its fail_exits, '' when the row declares nothing about it (the existing
+     path, proves-fresh excuse included). A declared fail is never excused by a fresh output: TC Process Reaper's exit 3
+     (could not read the process table) read as healthy through proves-fresh while its by-design exit 1 did too. #>
+  param($Row, [int64]$Res)
+  if ($null -eq $Row) { return '' }
+  $okP = $Row.PSObject.Properties['ok_exits']
+  if ($null -ne $okP -and $null -ne $okP.Value) { foreach ($x in @($okP.Value)) { if ([int64]$x -eq $Res) { return 'ok' } } }
+  $failP = $Row.PSObject.Properties['fail_exits']
+  if ($null -ne $failP -and $null -ne $failP.Value) { foreach ($x in @($failP.Value)) { if ([int64]$x -eq $Res) { return 'fail' } } }
+  return ''
+}
 function New-HbIssue([string]$Class, [string]$Subject, [string]$Text) {
   return [pscustomobject]@{ key = ($Class + '|' + $Subject); text = $Text }
 }
@@ -557,6 +570,13 @@ if ($SelfTest) {
     if ($c) { Write-Output ('  ok    ' + $n) } else { Write-Output ('  FAIL  ' + $n + '   got: ' + $got); $script:hbFail++ }
   }
   function HbShow($v) { return ('landed=' + $v.landed + ' rc=' + $v.rc + ' outcome=' + $v.outcome + ' started=' + $v.started + ' ageH=' + $v.ageH + ' reasons=' + (@($v.reasons) -join ' | ')) }
+# DECLARED EXIT SEMANTICS (2026-09-22, post-landing review F2), read off the COMMITTED rows in expected-automations.json.
+$hbReaper = @($cfg.windows_tasks | Where-Object { $_ -and [string]$_.name -eq 'TC Process Reaper' })
+$hbDaily = @($cfg.windows_tasks | Where-Object { $_ -and [string]$_.name -eq 'TC Grocery Daily Capture 0800' })
+HbCase 'MUST FIRE  TC Process Reaper exit 3 (could not read the process table) is FAILED, never excused by a fresh log' ($hbReaper.Count -eq 1 -and (Get-HbDeclaredExit $hbReaper[0] 3) -eq 'fail') ('rows=' + $hbReaper.Count)
+HbCase 'MUST NOT FIRE  TC Process Reaper exit 1 (it has findings, by design) is healthy' ($hbReaper.Count -eq 1 -and (Get-HbDeclaredExit $hbReaper[0] 1) -eq 'ok') ('rows=' + $hbReaper.Count)
+HbCase 'MUST NOT FIRE  TC Grocery Daily Capture 0800 exit 1 (a failed lane, paged by its own step or the RUN RECORD fold) is not paged again' ($hbDaily.Count -eq 1 -and (Get-HbDeclaredExit $hbDaily[0] 1) -eq 'ok' -and (Get-HbDeclaredExit $hbDaily[0] 3) -eq 'fail') ('rows=' + $hbDaily.Count)
+HbCase 'CLEAN TWIN  a row that declares nothing keeps the existing path (proves-fresh excuse included)' ((Get-HbDeclaredExit ([pscustomobject]@{ name = 'x'; proves = 'y' }) 1) -eq '') 'declared'
   try {
     $ErrorActionPreference = 'Stop'
     if (-not (Get-Command Get-PipelineCommitOutcome -ErrorAction SilentlyContinue)) { throw 'lib\pipeline-commit.ps1 did not load, so Get-PipelineCommitOutcome is missing' }
@@ -809,6 +829,12 @@ foreach ($t in @($cfg.windows_tasks)) {
     } else {
       $okLines.Add(("{0,-38} REVIEW exit {1}: nothing broke, a decision is waiting (night {2} of {3} before it counts as failed; resolver {4})" -f $name, $res, $rvNights, $rvEsc, $rvRes))
     }
+  }
+  elseif ($res -ne 0 -and (Get-HbDeclaredExit $t $res) -eq 'ok') {
+    $okLines.Add(("{0,-38} result {1} (declared ok by the row's ok_exits: {2})" -f $name, $res, [string]$t.exit_note))
+  }
+  elseif ($res -ne 0 -and (Get-HbDeclaredExit $t $res) -eq 'fail') {
+    Add-HbIssue 'TASK FAILED' $name ("TASK FAILED: '{0}' last result {1}, which its row declares a failure (fail_exits); a fresh output does not excuse it - {2}" -f $name, $res, $t.why)
   }
   elseif ($res -ne 0 -and $t.allow_nonzero_exit) {
     # SOME TASKS REPORT FINDINGS THROUGH THEIR EXIT CODE (2026-08-22). capture-watchdog exits 1 whenever it

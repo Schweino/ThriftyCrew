@@ -793,7 +793,13 @@ if ($SelfTest) {
     if ($null -eq $savedBy) { Remove-Item Env:\TC_NO_REHEARSAL -ErrorAction SilentlyContinue } else { $env:TC_NO_REHEARSAL = $savedBy }
     Remove-Item -LiteralPath $st -Recurse -Force -ErrorAction SilentlyContinue
   }
-  $want = 24
+  # THE MANIFEST NAMES ONLY THE HOOK A REHEARSAL EXERCISES (2026-09-22, post-landing review F4, plan-2026-09-22-10).
+  # Stage 7 commits through the tree's own pre-commit; nothing here runs commit-msg or pre-push, whose proof is
+  # ops/test-prepush-hook.ps1. Read off the committed manifest at HEAD, the tree this self-test is gating.
+  $hkSet = Get-RhManifestSet $script:RhRoot 'HEAD'
+  Test-RhCase 'MUST FIRE  a pre-commit edit is a manifest change (the rehearsal commits through that hook)' { ($hkSet.Ok -and $hkSet.Set.ContainsKey('ops/hooks/pre-commit')), ('ok=' + $hkSet.Ok + ' why=' + $hkSet.Why) }
+  Test-RhCase 'MUST NOT FIRE  a pre-push or commit-msg edit demands no rehearsal it cannot exercise' { ($hkSet.Ok -and -not $hkSet.Set.ContainsKey('ops/hooks/pre-push') -and -not $hkSet.Set.ContainsKey('ops/hooks/commit-msg')), ('ok=' + $hkSet.Ok) }
+  $want = 26
   if ($script:rhCases -ne $want) { Write-Output ('rehearse-chain self-test FAIL: ran {0} case(s), the suite lists {1}' -f $script:rhCases, $want); exit 1 }
   if ($script:rhFail) { Write-Output ('rehearse-chain self-test FAIL: {0} of {1} case(s)' -f $script:rhFail, $script:rhCases); exit 1 }
   Write-Output ('rehearse-chain self-test PASS: {0} of {0} cases - led by the founding defect (an empty cost-flags.txt refused by the 09-05 hook) and a manifest change with no verdict being refused' -f $script:rhCases)

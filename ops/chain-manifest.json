@@ -23,15 +23,16 @@
     "lib/chain-verdict-lib.ps1",
     "lib/git-blob-lib.ps1",
     "ops/chain-manifest.json",
-    "ops/rehearse-chain.ps1"
+    "ops/rehearse-chain.ps1",
+    "ops/hooks/pre-commit"
   ],
   "globs": [
     "grocery/build-*.ps1",
     "grocery/verify-*.ps1",
     "grocery/publish-*.ps1",
-    "ops/hooks/*",
     "ops/verify-*.ps1"
   ],
+  "hooks_note": "2026-09-22 (post-landing review F4, plan-2026-09-22-10): only ops/hooks/pre-commit is here. The rehearsal installs the rehearsed tree's own pre-commit in its clone and makes the bot commit through it (stage 7), so a pre-commit edit is exactly what it exercises. It never runs commit-msg or pre-push, so the old ops/hooks/* glob demanded a rehearsal that could not reach the edit; ops/test-prepush-hook.ps1 is what proves those hooks.",
   "derive_from": [
     "grocery/guards.ps1",
     "grocery/compare-deals.ps1",

@@ -6,13 +6,19 @@
                               "max_age_hours":  30,
                               "why":  "07:00 weekly-ad pull for every store whose ad rolled over (capture-run -Kind ad; captures only, no chain). proves = the ads file itself: a run-log exists the moment the process starts, so proving with it downgraded a killed run (0xC000013A) to \u0027work landed\u0027.",
                               "allow_pending":  true,
-                              "proves":  "grocery/out/ads-*.json"
+                              "proves":  "grocery/out/ads-*.json",
+                              "ok_exits":  [0, 1],
+                              "fail_exits":  [3],
+                              "exit_note":  "capture-run exits 1 when a lane failed; each failed lane is paged by its own step or, when it did not page, by the watchdog RUN RECORD fold (plan-2026-09-22-10 item 2026-09-22-7c932a), so the heartbeat does not page it again. 3 is could-not-evaluate and is never excused by a fresh output (post-landing review F2)."
                           },
                           {
                               "name":  "TC Grocery Daily Capture 0800",
                               "max_age_hours":  30,
                               "why":  "08:00 quarterly-rotation capture + the ONE daily chain: compare -\u003e guards -\u003e publish -\u003e recipes -\u003e commit",
-                              "proves":  "grocery/out/comparison-*.json"
+                              "proves":  "grocery/out/comparison-*.json",
+                              "ok_exits":  [0, 1],
+                              "fail_exits":  [3],
+                              "exit_note":  "capture-run exits 1 when a lane failed; each failed lane is paged by its own step or, when it did not page, by the watchdog RUN RECORD fold (plan-2026-09-22-10 item 2026-09-22-7c932a), so the heartbeat does not page it again. 3 is could-not-evaluate and is never excused by a fresh output (post-landing review F2)."
                           },
                           {
                               "name":  "TC Grocery Capture Watchdog 1030",
@@ -49,7 +55,10 @@
                               "name":  "TC Process Reaper",
                               "max_age_hours":  2,
                               "why":  "every 15 min: kills an ORPHANED, SPINNING, READ-ONLY git command and reports any other orphan past a core-hour (ops/reap-runaway-processes.ps1 -Reap -Alert). Brad's ruling 2026-09-20: a git range-diff left by a dead session held one core for 29.2 hours and 28.8 CPU-hours, and nothing in the estate watches PROCESSES - heartbeat watches tasks and outputs, gate-slots bounds gate workers, cpu-load bounds deliberate load - so a human found it in Task Manager. proves = the run log, which is appended on EVERY run including a quiet one; the reap ledger would have been the wrong proof because a healthy week never writes one.",
-                              "proves":  "ops/out/logs/reap-runaway-processes-*.log"
+                              "proves":  "ops/out/logs/reap-runaway-processes-*.log",
+                              "ok_exits":  [0, 1],
+                              "fail_exits":  [3],
+                              "exit_note":  "ops/reap-runaway-processes.ps1 exits 0 clean, 1 when it has findings (its header), 3 when it could not read the process table. 1 is it working; 3 is a blind reaper and is never excused by a fresh log (2026-09-22 post-landing review F2, plan-2026-09-22-10)."
                           },
                           {
                               "name":  "TC Recall Sleep 0435",
