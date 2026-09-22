@@ -35,6 +35,10 @@ param(
   # STOP AT THE SHIP BOUNDARY (2026-09-22, plan-2026-09-22-7): ops\rehearse-chain.ps1 rehearses the ship path, about 14 of the
   # chain's ~40 minutes, and the INSPECT path below it is advisory by construction. Refused without -NoCommit.
   [switch]$ShipOnly,
+  # -DeferPost (2026-09-22, queue 2026-09-22-81d955): the CALLER ships the served data (public\board.json, public\smp-feed.json)
+  # and publishes the post only after the edge serves them, so the post can never point at a board that did not ship.
+  # This chain then writes out\post-deferred.json instead of upserting the post. capture-run passes it.
+  [switch]$DeferPost,
   [string]$ScheduleFile = "",
   # ---- THE INSPECT FAN-OUT (2026-08-23, PLAN-use-the-cores phase 1) --------------------------------------
   # The advisory audits below the ship boundary are independent read-only children. They ran one after
@@ -1586,6 +1590,20 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       } elseif (-not $boardChanged) {
         Log 'no price change today - board already current, nothing republished'
         $summary += 'CURRENT   no price change today - live page already current'
+      } elseif ($DeferPost -and -not $NoPublish) {
+        # THE POINTED-TO OBJECT SHIPS FIRST (2026-09-22, queue 2026-09-22-81d955). The post carries board.json?v=<hash of
+        # this board>, and public\board.json reaches readers only when the caller's commit lands and the edge serves it.
+        # On 2026-09-22 the post shipped at 08:17 and that commit was refused, so readers got yesterday's board under
+        # today's post for five hours (.claude\rules\ops-and-gates.md: write the POINTED-TO object before the object that
+        # points to it). So under -DeferPost the post is NOT upserted here: the decision to publish, with the signature
+        # this board would record, is handed to the caller in out\post-deferred.json, and capture-run publishes it only
+        # after the edge serves the committed board.json and smp-feed.json byte for byte (Get-DeferredPostDecision).
+        try {
+          $pdDoc = [ordered]@{ date = $asofS; sig = $sigAfter; sig_file = $sigFile; written = (Get-Date).ToString('yyyy-MM-ddTHH:mm:ss'); flips = @($flips); guards_rc = $guardsRc }
+          [IO.File]::WriteAllText((Join-Path $OutDir 'post-deferred.json'), ($pdDoc | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
+          Log 'POST DEFERRED to the caller: it publishes after the served data it points at is live (out\post-deferred.json)'
+          $summary += 'DEFERRED  the board post publishes after capture-run confirms board.json and smp-feed.json are live'
+        } catch { Log ('post-deferred write threw: ' + $_.Exception.Message + ' - the post was NOT published and will not be by the caller either') }
       } elseif (-not $NoPublish) {
         # TIME THE PUBLISH, BECAUSE NOBODY COULD (2026-08-23). PLAN-use-the-cores §7 books this step at
         # "60-449 s, 7x day-to-day variance" and calls it network-bound. That number cannot be read off
@@ -1768,7 +1786,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
               try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'generate-board-overrides.ps1') | Out-Null } catch {}
               # the same gate as the morning path, quarantine included (Invoke-GuardsGate): 0 and 4 both publish
               $gRepair = Invoke-GuardsGate -Silent
-              if ($gRepair.rc -eq 0 -or $gRepair.rc -eq 4) {
+              if (($gRepair.rc -eq 0 -or $gRepair.rc -eq 4) -and $DeferPost) {
+                Log 'consistency repair re-gated clean; the post stays DEFERRED to the caller (it ships the repaired board first)'
+              } elseif ($gRepair.rc -eq 0 -or $gRepair.rc -eq 4) {
                 & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')   | Out-Null
               } else {
                 Log 'GUARDS FAILED after consistency auto-repair - NOT republished (left at last good)'

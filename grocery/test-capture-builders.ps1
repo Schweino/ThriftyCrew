@@ -185,6 +185,20 @@ T 'E  CLEAN TWIN (pointer): shipped AND the commit landed -> ok, so an ordinary 
   ((Test-PointerShippedWithoutObject -ShipServed $true -ObjectLanded $true -ObjectDirty $false) -eq 'ok')
 T 'E  MUST-NOT-FIRE (pointer): shipped, commit not landed, but the served files are CLEAN -> ok, because nothing this run built is missing' `
   ((Test-PointerShippedWithoutObject -ShipServed $true -ObjectLanded $false -ObjectDirty $false) -eq 'ok')
+# THE POST SHIPS AFTER ITS DATA (2026-09-22, queue 2026-09-22-81d955): the PREVENTIVE half. check-ad-cycles -DeferPost
+# leaves the post to capture-run, which publishes it only when the served files landed and the edge serves both.
+T 'E  MUST-FIRE (deferred post): 2026-09-22 - commit REFUSED, so the post is HELD rather than pointing at a board that did not ship' `
+  ((Get-DeferredPostDecision -Deferred $true -ObjectLanded $false -EdgeBoard '' -EdgeFeed '') -like 'hold:*did not land*')
+T 'E  MUST-FIRE (deferred post): pushed, but the edge still serves the OLD board.json -> held' `
+  ((Get-DeferredPostDecision -Deferred $true -ObjectLanded $true -EdgeBoard 'stale' -EdgeFeed 'ok') -like 'hold:*board.json*')
+T 'E  MUST-FIRE (deferred post): pushed, board live, smp-feed could not be read -> held (a could-not-look never ships the pointer)' `
+  ((Get-DeferredPostDecision -Deferred $true -ObjectLanded $true -EdgeBoard 'ok' -EdgeFeed 'blind') -like 'hold:*smp-feed*')
+T 'E  CLEAN TWIN (deferred post): landed and both files byte-identical at the edge -> publish' `
+  ((Get-DeferredPostDecision -Deferred $true -ObjectLanded $true -EdgeBoard 'ok' -EdgeFeed 'ok') -eq 'publish')
+T 'E  MUST-NOT-FIRE (deferred post): nothing deferred today -> none, so a run with no post owed publishes nothing' `
+  ((Get-DeferredPostDecision -Deferred $false -ObjectLanded $true -EdgeBoard 'ok' -EdgeFeed 'ok') -eq 'none')
+T 'E  the daily chain is called WITH -DeferPost, so the post is never upserted ahead of the commit' ($src -match '-File \$cac -NoPull -NoCommit -DeferPost')
+T 'E  and the pointer watcher is told the post was deferred, so a held post is not paged as pointer-without-object' ($src -match 'Test-PointerShippedWithoutObject -ShipServed \(\[bool\]\(\$shipServed -and -not \$postDeferred\)\)')
 # THE TWO ADJACENT BLOCKS MUST STAY IN STEP. The served-dirty block was already gated on $shipServed and is
 # the reason it stayed correctly quiet on 2026-09-03; the edge check was written before it and never picked
 # up the same predicate. If a future editor un-syncs them, this is where it shows.

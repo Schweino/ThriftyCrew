@@ -756,7 +756,7 @@ if ($runDownstream) {
     # transcript that says how far it got. Verified: with no 2>&1 the child's stderr passes straight
     # through untouched (no NativeCommandError, no throw) and $LASTEXITCODE still reads the child's
     # real exit code through the pipeline.
-    & powershell -NoProfile -ExecutionPolicy Bypass -File $cac -NoPull -NoCommit | ForEach-Object { Write-Output ("  " + $_) }
+    & powershell -NoProfile -ExecutionPolicy Bypass -File $cac -NoPull -NoCommit -DeferPost | ForEach-Object { Write-Output ("  " + $_) }
     $dsRc = $LASTEXITCODE
     Write-Output ("downstream rc=$dsRc")
     if ($dsRc -ne 0) { Add-FailedLane 'downstream' }
@@ -1301,13 +1301,34 @@ function Test-PointerShippedWithoutObject {
   if ($ObjectDirty)     { return 'pointer-without-object' }
   return 'ok'
 }
+function Get-DeferredPostDecision {
+  <#
+    THE POST SHIPS AFTER THE DATA IT POINTS AT IS LIVE (2026-09-22, queue 2026-09-22-81d955). The PREVENTIVE half of
+    Test-PointerShippedWithoutObject above: check-ad-cycles -DeferPost no longer upserts the post, and this decides whether
+    capture-run publishes it now. 'publish' only when the served files landed (committed AND pushed) and the edge serves
+    the committed board.json AND smp-feed.json byte for byte; every other state is 'hold:<why>', which leaves readers on
+    yesterday's post over yesterday's board (a LEAK the next run repairs), never today's post over yesterday's board
+    (CORRUPTION, which is what 2026-09-22 shipped for five hours). A could-not-look on either edge read is a hold.
+  #>
+  param([bool]$Deferred, [bool]$ObjectLanded, [string]$EdgeBoard, [string]$EdgeFeed)
+  if (-not $Deferred) { return 'none' }
+  if (-not $ObjectLanded) { return 'hold:the served files did not land (commit refused or push failed), so the post would point at a board readers cannot get' }
+  if ($EdgeBoard -ne 'ok') { return ('hold:the edge does not serve the committed board.json (' + $(if ($EdgeBoard) { $EdgeBoard } else { 'not read' }) + ')') }
+  if ($EdgeFeed -ne 'ok') { return ('hold:the edge does not serve the committed smp-feed.json (' + $(if ($EdgeFeed) { $EdgeFeed } else { 'not read' }) + ')') }
+  return 'publish'
+}
 # <<< EDGE-DECISION <<<
-
 # ---- READ-AFTER-WRITE: prove the EDGE serves what we just pushed (was run-daily-local's check) ---------
 # A successful push is NOT a successful deploy: if the Cloudflare build fails afterwards the edge keeps
 # serving the OLD feed indefinitely and nothing in the estate notices. Cache-busted on purpose - the
 # response carries max-age=1800, and reading through the edge cache would only confirm the cache. Only
 # after a run that actually SHIPPED the served files, and never fatal: this is a watcher, not a gate.
+# The post is DEFERRED when check-ad-cycles wrote today's out\post-deferred.json (Get-DeferredPostDecision).
+$postDeferredF = Join-Path $root 'out\post-deferred.json'
+$postDeferred = $false
+$postDeferredDoc = $null
+try { if (Test-Path -LiteralPath $postDeferredF) { $postDeferredDoc = Read-JsonFile $postDeferredF; $postDeferred = ([string]$postDeferredDoc.date -eq $today) } } catch { $postDeferred = $false }
+$fv = ''; $bv = ''
 if ($shipServed -and $pushed) {
   try {
     # THE COMMITTED BLOB, not the working tree: that is the only copy the edge could possibly be serving.
@@ -1410,7 +1431,7 @@ if ($shipServed -and $pushed) {
   # 2026-09-22-972de2). See Test-PointerShippedWithoutObject above for the whole account. The reassurance is
   # kept ONLY for the run that shipped nothing, which is the case it was written for.
   $servedDirtyNow = @(& git -C $repo status --porcelain -- 'public/board.json' 'public/smp-feed.json' | Where-Object { $_ })
-  $pointerState = Test-PointerShippedWithoutObject -ShipServed ([bool]$shipServed) -ObjectLanded ([bool]($botCommitted -and $pushed)) -ObjectDirty ([bool]$servedDirtyNow.Count)
+  $pointerState = Test-PointerShippedWithoutObject -ShipServed ([bool]($shipServed -and -not $postDeferred)) -ObjectLanded ([bool]($botCommitted -and $pushed)) -ObjectDirty ([bool]$servedDirtyNow.Count)
   Write-Output ('edge check skipped: ' + (Test-EdgeServesPushed -ShipServed $edgeVerifiable -CommittedGenerated 'n/a' -LiveGenerated 'n/a') +
                 (' - shipServed={0} botCommitted={1} pushed={2}: {3}.' -f $shipServed, $botCommitted, $pushed, $edgeWhy))
   if ($pointerState -eq 'pointer-without-object') {
@@ -1423,6 +1444,24 @@ if ($shipServed -and $pushed) {
   }
 }
 
+# ---- THE DEFERRED POST (2026-09-22, queue 2026-09-22-81d955): the pointer is written only after the object is live -----
+$postDecision = Get-DeferredPostDecision -Deferred ([bool]$postDeferred) -ObjectLanded ([bool]($shipServed -and $botCommitted -and $pushed)) -EdgeBoard ([string]$bv) -EdgeFeed ([string]$fv)
+if ($postDecision -eq 'publish') {
+  $pdOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')
+  $pdRc = $LASTEXITCODE
+  foreach ($l in @(@($pdOut) | Where-Object { $null -ne $_ -and ([string]$_) -match '^(ERROR|HELD|WARN|CURRENT|PUBLISHED)' })) { Write-Output ('  publish-verdict: ' + ([string]$l).Trim()) }
+  if ($pdRc -eq 0) {
+    Write-Output 'POST PUBLISHED after its data: board.json and smp-feed.json were byte-identical at the edge first'
+    try { if ([string]$postDeferredDoc.sig_file -and [string]$postDeferredDoc.sig) { Set-Content -Path ([string]$postDeferredDoc.sig_file) -Value ([string]$postDeferredDoc.sig) -Encoding ASCII } } catch {}
+    try { Remove-Item -LiteralPath $postDeferredF -Force } catch {}
+  } else {
+    Write-Output ("POST NOT PUBLISHED: publish-deals-page rc=$pdRc after the data went live - readers keep yesterday's post over today's data, which names no board it cannot serve")
+    $failed += 'deferred-post-publish'
+    try { Send-Alert -Subject "Grocery page HELD after its data shipped - $today" -Body ("capture-run published today's board.json and smp-feed.json and confirmed them live, then publish-deals-page returned rc=$pdRc, so the board POST was not updated. Its verdict lines: " + ((@(@($pdOut) | Where-Object { $null -ne $_ -and ([string]$_) -match '^(ERROR|HELD|WARN)' }) -join ' | '))) | Out-Null } catch {}
+  }
+} elseif ($postDecision -like 'hold:*') {
+  Write-Output ('POST HELD (it ships after its data, never before): ' + $postDecision.Substring(5) + '. The deferral stays in out\post-deferred.json and the next run that ships its data publishes it.')
+}
 # ---- ASSERT THE FEED TRULY REFRESHED (was run-daily-local's assert) ------------------------------------
 # `generated` ALONE CANNOT DETECT THE FAILURE THIS EXISTS FOR: export-feed stamps that field itself, at the
 # moment it runs. Every recipe-lane stage upstream is non-fatal try/catch, so if one throws, export-feed
