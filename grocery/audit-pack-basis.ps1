@@ -1,4 +1,5 @@
 <#
+  HOLD SCOPE: board - not yet taught to name its cells (queue 2026-09-21-d16398)
   audit-pack-basis.ps1 - catches the MULTIPACK TOTAL read as an EACH-SIZE (2026-07-28).
 
   The engine's count-first idiom ("24 ct 16.9 fl oz") means 24 bottles OF 16.9 oz, so it multiplies to a

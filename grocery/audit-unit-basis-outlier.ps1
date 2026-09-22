@@ -1,4 +1,5 @@
 # audit-unit-basis-outlier.ps1 - catches a WRONG BASIS by arithmetic, when nothing in the row declares it.
+# HOLD SCOPE: cell - names each out-of-basis cell (QUARANTINE-CELL ... value)
 #
 # WHY THIS EXISTS (2026-07-31 Aldi finding, verified in-browser):
 #   pull-aldi-instore.js reads each product's PRODUCT PAGE and takes its "size" field. For a multipack

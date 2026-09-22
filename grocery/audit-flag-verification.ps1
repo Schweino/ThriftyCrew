@@ -1,4 +1,5 @@
 <#
+  HOLD SCOPE: cell - names each store-contradicted cell (QUARANTINE-CELL ... value)
   audit-flag-verification.ps1 - a cell whose price the STORE contradicted quarantines itself.
 
   A delegated guards audit (guards.ps1 runs it with the others). It reads out\flag-verification.json, which

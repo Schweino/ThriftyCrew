@@ -373,8 +373,20 @@ if ($dead.Count) {
   Write-Output ("  {0} with the reason it is a manual tool." -f (Split-Path $script:MANUAL_OK -Leaf))
 }
 if (-not (Test-Path $basePath)) { Write-Output '  (no baseline yet - run -Baseline once to arm the ratchet)' }
+# HOLD SCOPE (2026-09-22, queue 2026-09-21-d16398, gap F3): every audit guards.ps1 delegates to declares the unit it
+# holds at, and a cell/store declaration must be backed by the QUARANTINE-SCOPE line. hold-scope-lib.ps1 owns the rule;
+# test-hold-scope.ps1 owns the fixtures.
+$holdFindings = @()
+try {
+  . (Join-Path $root 'hold-scope-lib.ps1')
+  $hs = Test-TcHoldScopeContract -GuardsText ([IO.File]::ReadAllText((Join-Path $root 'guards.ps1'))) -ReadDelegate { param($f) $pp = Join-Path $root $f; if (Test-Path -LiteralPath $pp) { [IO.File]::ReadAllText($pp) } else { $null } }
+  $holdFindings = @($hs.findings)
+  Write-Output ("  hold scope: {0} delegated audit(s), {1} board-scoped against a mark of {2}" -f $hs.delegates, $hs.board, $hs.mark)
+} catch { $holdFindings = @('hold-scope contract could not be evaluated: ' + $_.Exception.Message) }
+foreach ($x in $holdFindings) { Write-Output ('  ! HOLD SCOPE: ' + $x) }
 
 . (Join-Path $repo 'lib\guard-contract.ps1')
-Write-GuardComplete -Name 'guard-contract' -Summary ("covered={0} backlog={1} regressed={2} half={3} dead={4}" -f `
-  $covered.Count, $uncovered.Count, ($regressed.Count + $newBare.Count), $halfCovered.Count, $dead.Count)
-exit $(if ($regressed.Count -or $newBare.Count -or $halfCovered.Count -or $dead.Count) { 1 } else { 0 })
+$gcSummary = ("covered={0} backlog={1} regressed={2} half={3} dead={4}" -f `
+  $covered.Count, $uncovered.Count, ($regressed.Count + $newBare.Count), $halfCovered.Count, $dead.Count) + (' hold=' + $holdFindings.Count)
+Write-GuardComplete -Name 'guard-contract' -Summary $gcSummary
+exit $(if ($regressed.Count -or $newBare.Count -or $halfCovered.Count -or $dead.Count -or $holdFindings.Count) { 1 } else { 0 })

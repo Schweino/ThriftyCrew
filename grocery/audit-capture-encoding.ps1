@@ -1,4 +1,5 @@
 <#
+  HOLD SCOPE: board - a capture FILE is refused; the file names one store, the next step (queue 2026-09-21-d16398)
   audit-capture-encoding.ps1 - can EVERY reader agree on what this capture file says?
 
   WHY THIS EXISTS (2026-09-05). Windows PowerShell 5.1's Get-Content decodes a file with NO byte-order

@@ -1,4 +1,5 @@
 ﻿<#
+  HOLD SCOPE: board - not yet taught; its BLOCKED lines already name commodity and store (queue 2026-09-21-d16398)
   audit-known-wrong.ps1 - THE BLOCKLIST GATE. "No crown a reasoner has ruled wrong is on the page."
 
   FOUNDING BUG (2026-07-29): audit findings lived as PROSE in .md files. honeydew was written up with the

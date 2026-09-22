@@ -1,4 +1,5 @@
 ﻿<#
+  HOLD SCOPE: board - not yet taught; needs the row-to-cell map guards 5 and 10 use (queue 2026-09-21-d16398)
   audit-household-in-food.ps1
 
   Bug class found 2026-07-14: "Lysol Mango & Hibiscus Bathroom Cleaner" was matching the MANGOES

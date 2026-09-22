@@ -1,4 +1,5 @@
 ﻿<#
+  HOLD SCOPE: board - not yet taught to name its cells (queue 2026-09-21-d16398)
   audit-asof-evidence.ps1 - "no published price may claim a date newer than the capture it came from."
 
   WHY THIS EXISTS (2026-08-02, found by the C3 out-of-band sample).

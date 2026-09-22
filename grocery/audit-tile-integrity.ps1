@@ -1,4 +1,5 @@
 ﻿<#
+  HOLD SCOPE: board - not yet taught; a wrong link is a cell but the coverage ratchet half is a store fact (d16398)
   audit-tile-integrity.ps1 - BRAD'S INVARIANT, as one number.
 
     "There should be no tile that has a price and item name and no link, and the price and item name need to

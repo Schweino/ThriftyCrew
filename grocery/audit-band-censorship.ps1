@@ -1,4 +1,5 @@
 # audit-band-censorship.ps1 - is the board publishing a DEARER price because the sanity band threw away a
+# HOLD SCOPE: cell - names each censored cell (QUARANTINE-CELL ... selection)
 # cheaper one that was almost certainly real?
 #
 # WHY THIS EXISTS (2026-09-05, found while working queue 521f1c's supersession residue).

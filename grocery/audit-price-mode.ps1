@@ -1,4 +1,5 @@
 <#
+  HOLD SCOPE: board - not yet taught to name its cells (queue 2026-09-21-d16398); a wrong-mode STORE is the natural unit
   audit-price-mode.ps1 - "never again" guard for the Aldi delivery-price bug (2026-07-14).
 
   THE BUG THIS PREVENTS

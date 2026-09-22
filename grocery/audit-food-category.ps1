@@ -1,4 +1,5 @@
 <#
+  HOLD SCOPE: cell - names each wrong-class cell (QUARANTINE-CELL ... selection)
   audit-food-category.ps1 - BLOCKING guard: no FOOD commodity may publish a cell whose matched product is a
   wrong-CLASS product (beverage / baby food / pet / household / flavored bakery carrier / flavored dairy /
   candy). This is the guard the blueberries bug proved we needed: Family Fare blueberries went LIVE priced as a

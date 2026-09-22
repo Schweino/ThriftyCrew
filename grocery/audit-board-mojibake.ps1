@@ -1,4 +1,5 @@
 # audit-board-mojibake.ps1 - does the PUBLISHED BOARD show a reader a mangled product name?
+# HOLD SCOPE: board - not yet taught; a mangled name is one cell (queue 2026-09-21-d16398)
 #
 # WHY THIS EXISTS (2026-09-05). The estate has had encoding defences for a while and every one of them
 # watches an INPUT: guards.ps1 check 0d pins commodities.json's encoding, capture-lib repairs on ingest,

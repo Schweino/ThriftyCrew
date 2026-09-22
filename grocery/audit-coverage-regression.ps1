@@ -1,4 +1,5 @@
 <#
+  HOLD SCOPE: board - a coverage ratchet is a whole-board fact (a store fell below its floor); store scope is the next step (d16398)
 audit-coverage-regression.ps1 - catch a store QUIETLY LOSING coverage between two boards.
 
 WHY THIS EXISTS
