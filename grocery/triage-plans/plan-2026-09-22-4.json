@@ -1,0 +1,190 @@
+{
+  "generated": "2026-09-22T14:39:39",
+  "round": 1,
+  "board_week": "2026-09-22",
+  "queue_ids_seen": [
+    "2026-09-18-8491bf",
+    "2026-09-18-a0c785",
+    "2026-09-18-ceab00",
+    "2026-09-19-4fc24c",
+    "2026-09-19-8a3090",
+    "2026-09-19-c9f0f3",
+    "2026-09-19-dc1b5b",
+    "2026-09-20-1b8544",
+    "2026-09-20-bec597",
+    "2026-09-20-ca2591",
+    "2026-09-20-cb8f30",
+    "2026-09-21-115180",
+    "2026-09-21-149497",
+    "2026-09-21-274e4b",
+    "2026-09-21-4b973e",
+    "2026-09-21-6b17b1",
+    "2026-09-21-7d64a6",
+    "2026-09-21-85c3b7",
+    "2026-09-21-b96f21",
+    "2026-09-21-d16398",
+    "2026-09-21-dca1a1",
+    "2026-09-21-de4f72",
+    "2026-09-22-175249",
+    "2026-09-22-2dae07",
+    "2026-09-22-43e8c0",
+    "2026-09-22-5d20b9",
+    "2026-09-22-7c932a",
+    "2026-09-22-81d955",
+    "2026-09-22-a2af45"
+  ],
+  "knowledge_consulted": "Searched 'reflex fire rate cap', 'memory cluster ruling gist', 'task exit verdict heartbeat'. Used: skills/course/CONSOLIDATE.md 'Rule on the memory clusters' (gist/distinct/defer/cued, rule every cluster, the unruled count is a mark that may only go down) and 'Rule on the reflex candidates' (a cap is raised only with a measurement; measure over the real-command corpus); course/reflex-routing.md on what earns a reflex; memory select-object-first-kills-the-script (the harm is to the UPSTREAM script); memory shared-tree-concurrent-publish (founding case: a whole-catalog build-cards under a publish -All in the ONE shared tree); memory scheduled-tasks-run-under-headless-conhost (I236, 2026-09-18); the MEMORY.md preamble (descriptions as triggers).",
+  "items": [
+    {
+      "queue_id": "2026-09-19-4fc24c",
+      "subject": "The knowledge store's nightly pass went RED",
+      "classification": "infra",
+      "evidence": [
+        "~/.claude/recall-sleep-latest.md 2026-09-22 05:49: reflex fire rates exit 1, forgetting exit 1, memory clusters exit 1, gate exit 1, VERDICT: FAIL with FAIL (10)",
+        "select-first-in-writing-pipeline 225 of 5588 real commands (4.03%) against a 3% cap; 224 of the 225 had a READER upstream (Select-String 77, Get-Content 48, git 35, a variable or assignment 41)",
+        "concurrent-publish-shared-tree 6 of 191 meal-prep commands (3.14%) against 2%; all 6 were publish.ps1 -Slugs / build-cards.ps1 -Slugs from session 97732561 in the private worktree .claude/worktrees/i143-b1 on 2026-09-19, one of them running the Win32_Process check the row asks for",
+        "clusters: 3 same-project unruled over a mark of 0 and 11 cross-project over a mark of 9 (7 and 11 by 14:10 as the store grew); forgetting: 2 unruled sections (synced/morning, synced/skill-creator)",
+        "the gate's recognition-floor check opened the LIVE index (recall_index.ready) two dozen steps after 'derive floors', after the pass itself had moved the store; the same gate also reported the lexical and semantic indexes out of step (2206 chunks against 1988 vectors)",
+        "Task Scheduler: TC Recall Sleep 0435 LastTaskResult 0 at 12:35 while ops/out/logs/run-once/recall-sleep-2026-09-22.stamp read rc=1; measured: conhost.exe --headless powershell.exe -Command 'exit 7' exits 0, the same child run directly exits 7",
+        "after: the whole pass run at 14:47 exited 0 on every one of 30 steps; check-skills exit 0, 64 of 64, select-first 11 of 5579 (0.20%), concurrent-publish 0 of 165, clusters 23 with 0 unruled and 12 cross-project with 0 unruled, recognition floors within band on the frozen snapshot"
+      ],
+      "root_cause": "The pass judged proxies and a moving target, and its exit could not carry the verdict. Two reflex patterns keyed on the wrong feature (select-first on a pipe DOWNSTREAM of -First, when the harm is to the script UPSTREAM; concurrent-publish on any publish/build-cards call, when the hazard is a whole-catalog run in the shared tree). The recognition floor was derived on one state of the index and judged on another, so a re-run gave a different verdict. The judgement ratchets sit at a mark over a store that grows daily and nothing had ruled on them since 2026-09-18. And since I236 (2026-09-18) the task ran under conhost.exe --headless, which returns 0 whatever its child returns, so the heartbeat read a failing pass as healthy (gap F4).",
+      "root_fix": {
+        "what": "Tighten both patterns and measure them over the same corpus; freeze the index and probe corpus the floors are derived on and judge them on that snapshot; rule every cluster and forgetting candidate by the store's procedure; make the exit carry the report's verdict and launch the task through a windowless launcher that returns its child's code.",
+        "files": [
+          "ops/scheduled-tasks/tc-recall-sleep-0435.xml",
+          "ops/run-once-a-day.ps1",
+          "~/.claude/skills/recall-reflexes.json",
+          "~/.claude/skills/recall_floors.py",
+          "~/.claude/skills/recall-hook-calibrate.py",
+          "~/.claude/skills/recall-sleep.py",
+          "~/.claude/skills/headless-exit.pyw",
+          "~/.claude/skills/recall-consolidate.py",
+          "~/.claude/skills/recall-consolidations.json",
+          "~/.claude/skills/recall-retirements.json",
+          "~/.claude/skills/software-craft/applies-here.md",
+          "~/.claude/skills/claude-code-craft/applies-here.md"
+        ],
+        "exact_change": "select-first fires only when an element UPSTREAM of -First in the same statement is a .ps1, & on a quoted script/interpreter/$variable, powershell/pwsh, python/py/node or cmd /c: 225 -> 11 of 5588 (0.20%), 10 of the 11 new fires the old pattern missed. concurrent-publish fires only on publish.ps1 -All and build-cards.ps1 with no -S(lugs): 6 -> 0 of 191, still firing on the draft's 3 real founding commands. recall_floors --calibrate refreshes the live index once, copies it with sqlite backup to ~/.claude/recall-floors-snapshot.sqlite3 with the probe corpus, derives on the copy and records it in _meta.snapshot; recall-hook-calibrate judges on that copy. 22 clusters ruled (2 gist, 11 cued, 9 distinct; 4 of the 22 were created by the gists' fades), CROSS_UNRULED_MARK 9 -> 0 after the count reached 0; 2 forgetting sections retired from the index. recall-sleep exits 1 on a broken step and 3 when nothing broke but the report says VERDICT: FAIL. The task runs pythonw.exe headless-exit.pyw --headless <the same powershell command>."
+      },
+      "prior_closes": [
+        "2026-09-11-18da92",
+        "2026-09-18-35e0f5"
+      ],
+      "prevention": {
+        "source": [
+          "ops/scheduled-tasks/tc-recall-sleep-0435.xml",
+          "~/.claude/skills/recall-sleep.py",
+          "~/.claude/skills/recall_floors.py",
+          "~/.claude/skills/recall-reflexes.json"
+        ],
+        "what": "the emitter's exit now carries its verdict to the scheduler, the floor verdict cannot move with the store, and the two reflex rows are measured on what they exist for; 2026-09-11-18da92 split a waiting judgement from a broken step but let the waiting night exit 0, which is the half this item reverses on Brad's ruling",
+        "exact_change": "task action pythonw.exe + headless-exit.pyw (child's exit code passes through); recall-sleep returns 1/3 on FAIL; floors derived and judged on one frozen snapshot; reflex patterns keyed on the upstream writer and the whole-catalog run"
+      },
+      "leaves_open": "1 residual: the judgement queues (clusters, forgetting) still grow with each day's memory writing and only a person rules on them, so a night with a new cluster reports VERDICT: FAIL and now exits 3, which health-heartbeat pages as TASK FAILED. Unruled clusters or candidates were the cause on 7 of the last 8 logged runs.",
+      "leaves_open_occurrences": 7,
+      "leaves_open_followup": "Q-4fc24c-1",
+      "blast_radius": {
+        "measured_as": "real-command fire rates, cluster counts, task results",
+        "measured_by": "recall_reflex row_search over the 5588-command probe corpus (old vs new pattern, same corpus); recall-consolidate before/after; Get-ScheduledTaskInfo before/after a Start-ScheduledTask",
+        "affected_now": 1,
+        "names": [
+          "TC Recall Sleep 0435"
+        ],
+        "risk": "select-first now stays silent on a reader piped to -First (by design) and on a ForEach-Object that writes upstream of -First (a case the old pattern also missed); concurrent-publish is silent on slug-scoped runs, which can still collide if two sessions publish the SAME slugs in the shared tree",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-22 14:00-15:00 against the probe corpus harvested at 05:49 and the memory stores as of 14:40",
+      "proof": {
+        "guard_or_fixture": "recall_reflex.py --selftest (47) and --rate; recall_floors.py --selftest (22); recall-sleep.py --selftest (27); headless-exit.pyw --selftest (6); run-once-a-day.ps1 -SelfTest (23)",
+        "must_fire_case": "select-first: '& .\\grocery\\add-commodity-rule.ps1 -Id hamburger-buns -Exclude ... | Select-Object -First 1' fires (the founding case, -First at the END of the pipeline); concurrent-publish: '& .\\meal-prep\\engine\\publish.ps1 -All' and the real '$o = & meal-prep\\engine\\build-cards.ps1 2>&1' fire; floors: a live-index write after the snapshot does not reach it; sleep: a judgement-only VERDICT: FAIL is nonzero (3); launcher: a child's exit 7 comes back as 7 where conhost --headless returns 0; live: Start-ScheduledTask on today's stamp rc=1 read LastTaskResult 1 at 14:32",
+        "clean_twin": "select-first: '$rows = Get-Content x; $rows | Select-Object -First 3' and 'git status --short | Select-Object -First 30' stay silent; concurrent-publish: 'publish.ps1 -Slugs $S' and 'build-cards.ps1 -Slugs $slugs' stay silent, -SelfTest stays silent; floors: the snapshot keeps its corpora and probe copy, and a missing snapshot is reported, never swapped for the live index; sleep: VERDICT: PASS stays 0; launcher: exit 0 stays 0",
+        "fixture_occurrences": [
+          "2026-09-11-18da92",
+          "2026-09-18-35e0f5",
+          "2026-09-19-4fc24c"
+        ],
+        "commands": [
+          "C:\\Codex\\Python312\\python.exe C:\\Users\\Owner\\.claude\\skills\\recall-sleep.py --cwd C:\\Codex\\ThriftyCrew"
+        ]
+      },
+      "rollback": "revert the ~/.claude commit and this repo's two-file commit, then re-register the task with ops/install-ops-tasks.ps1 -Install -Only 'TC Recall Sleep 0435'",
+      "do_not_touch": [
+        "any reflex cap",
+        "any cluster mark except to follow a count down",
+        "the grocery-alert-triage and resume-grocery-alert-triage-0924 tasks"
+      ],
+      "resolution_note": "Reflex patterns tightened (select-first 4.03% -> 0.20% of 5588, concurrent-publish 3.14% -> 0% of 191, must-fires kept), every cluster and forgetting candidate ruled, floors judged on a frozen snapshot, and the task now exits nonzero on VERDICT: FAIL (pythonw + headless-exit.pyw; conhost --headless was returning 0).",
+      "status": "done"
+    },
+    {
+      "queue_id": "2026-09-20-1b8544",
+      "subject": "Weekly lane residual: three automations that fail in their own right, which RESUME-GRACE does not touch",
+      "classification": "infra",
+      "evidence": [
+        "run-once stamps vs Task Scheduler, 2026-09-22: recall-sleep rc=1 on 09-20, 09-21, 09-22 while LastTaskResult read 0; daily-ratchets rc=1 on 09-20, 09-21, 09-22 while TC Daily Ratchets 0315 reads 0; capture-watchdog rc=1 (by design) reads 0",
+        "10 of 12 TC tasks run as conhost.exe --headless since 2026-09-18 (backlog I236, commit 3e203a3de); TC Approvals Page and now TC Recall Sleep 0435 run under pythonw.exe",
+        "measured: conhost.exe --headless powershell.exe -NoProfile -Command 'exit 7' -> 0; powershell.exe run directly -> 7"
+      ],
+      "root_cause": "The item's recall-sleep third stopped paging on 09-18 not because it recovered but because the conhost wrapper that I236 put on every TC task returns 0 whatever its child returns. From that day health-heartbeat's LastTaskResult read is blind on 10 of 12 tasks; rows with a green-only proves stamp or a run_log still page through those, rows that rely on the exit code do not.",
+      "root_fix": {
+        "what": "a windowless launcher that returns its child's exit code, applied to the task this lane owns",
+        "files": [
+          "~/.claude/skills/headless-exit.pyw",
+          "ops/scheduled-tasks/tc-recall-sleep-0435.xml",
+          "ops/run-once-a-day.ps1"
+        ],
+        "exact_change": "Command pythonw.exe, Arguments '\"...\\headless-exit.pyw\" --headless \"<powershell.exe>\" <the same arguments>'; the launcher hands on the rest of its raw command line verbatim with CREATE_NO_WINDOW and exits with the child's code; run-once-a-day's binding self-test peels it like conhost"
+      },
+      "leaves_open": "the other 9 conhost-wrapped TC tasks still report 0 whatever they return (TC Daily Ratchets 0315's rc=1 on 3 of the last 3 days reads 0), and the item's other two automations (Graph Nightly's refused commit, Daemon Battery's exit 2) are judged by run_log and a green-only stamp, which this item did not change. Rewrapping them touches every registrar and the conhost check in ops/install-grocery-tasks.ps1, outside this run's permission.",
+      "leaves_open_occurrences": 3,
+      "leaves_open_followup": "Q-1b8544-1",
+      "blast_radius": {
+        "measured_as": "task results",
+        "measured_by": "Get-ScheduledTaskInfo over every TC task beside ops/out/logs/run-once/*.stamp, 2026-09-22 14:35",
+        "affected_now": 1,
+        "names": [
+          "TC Recall Sleep 0435"
+        ],
+        "risk": "none to the other tasks: only this definition and the self-test's peel regex changed",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-22 14:32-14:35",
+      "proof": {
+        "guard_or_fixture": "headless-exit.pyw --selftest; ops/run-once-a-day.ps1 -SelfTest; ops/install-ops-tasks.ps1 -SelfTest; ops/install-grocery-tasks.ps1 -SelfTest",
+        "must_fire_case": "a child's exit 7 comes back through the launcher as 7 while conhost --headless turns it into 0; live Start-ScheduledTask on a day stamped rc=1 read LastTaskResult 1 (it read 0 at 12:35 under conhost)",
+        "clean_twin": "a child's exit 0 comes back as 0; a quoted -File path with a space reaches the child whole; tc-recall-sleep-0435.xml still hands run-once-a-day exactly its frozen pre-wrap command",
+        "commands": [
+          "pythonw.exe C:\\Users\\Owner\\.claude\\skills\\headless-exit.pyw --selftest",
+          "powershell -File ops\\run-once-a-day.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "restore the XML's conhost action and re-register with ops/install-ops-tasks.ps1 -Install -Only 'TC Recall Sleep 0435'",
+      "do_not_touch": [
+        "the other TC task definitions",
+        "grocery-alert-triage",
+        "resume-grocery-alert-triage-0924"
+      ],
+      "resolution_note": "Root of the recall-sleep third: conhost --headless (I236) returns 0 whatever the child does. TC Recall Sleep 0435 now runs through pythonw + headless-exit.pyw and read LastTaskResult 1 on a failing day. The other nine conhost tasks are Brad's call (Q-1b8544-1).",
+      "status": "done"
+    }
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q-4fc24c-1",
+      "question": "A night whose only failures are unruled clusters or forgetting candidates now exits 3 and health-heartbeat pages it as TASK FAILED, per your ruling that a FAIL report must not read healthy. Keep that, or have the heartbeat grade exit 3 as a REVIEW (the pass already raises 'waiting on a judgement' for it)?",
+      "options": [
+        "keep: exit 3 pages as a failure until someone rules",
+        "heartbeat reads 3 as REVIEW, 1 as FAILED"
+      ]
+    },
+    {
+      "id": "Q-1b8544-1",
+      "question": "conhost.exe --headless returns 0 whatever its child returns, so 9 more TC tasks read healthy on a failed run (TC Daily Ratchets 0315: rc=1 three days running, LastTaskResult 0). Rewrap all of them with the headless-exit.pyw launcher (touches each registrar and the conhost check in install-grocery-tasks.ps1)?",
+      "options": [
+        "rewrap all nine through one registrar change",
+        "leave them; proves and run_log rows cover the gap"
+      ]
+    }
+  ]
+}

@@ -38,8 +38,8 @@
   </Triggers>
   <Actions Context="Author">
     <Exec>
-      <Command>C:\WINDOWS\System32\conhost.exe</Command>
-      <Arguments>--headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-once-a-day.ps1" -Key recall-sleep -Exe "C:\Codex\Python312\python.exe" -ArgLine "\"C:\Users\Owner\.claude\skills\recall-sleep.py\" --cwd \"C:\Codex\ThriftyCrew\" --commit --push"</Arguments>
+      <Command>C:\Codex\Python312\pythonw.exe</Command>
+      <Arguments>"C:\Users\Owner\.claude\skills\headless-exit.pyw" --headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-once-a-day.ps1" -Key recall-sleep -Exe "C:\Codex\Python312\python.exe" -ArgLine "\"C:\Users\Owner\.claude\skills\recall-sleep.py\" --cwd \"C:\Codex\ThriftyCrew\" --commit --push"</Arguments>
     </Exec>
   </Actions>
 </Task>

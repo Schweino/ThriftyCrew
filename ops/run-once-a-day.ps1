@@ -225,6 +225,12 @@ if ($SelfTest) {
       # --headless "<powershell.exe>" <arguments>, and conhost hands powershell.exe exactly the <arguments> part, so
       # that part is what gets bound here. Only a wrapper naming a powershell.exe is peeled: anything else is left
       # whole and fails to bind, which is the red a definition wrapping some other program should get.
+      # THE headless-exit.pyw LAUNCHER IS PEELED THE SAME WAY (2026-09-22, queue 2026-09-19-4fc24c). conhost.exe
+      # --headless exits 0 whatever its child returns (measured that day: a child's exit 7 came back as 0), so TC
+      # Recall Sleep 0435 read LastTaskResult 0 while this wrapper's stamp said rc=1. That task now runs as
+      # pythonw.exe "<...>\headless-exit.pyw" --headless "<powershell.exe>" <arguments>, which hands on the same
+      # <arguments> verbatim and returns the child's code; `headless-exit.pyw --selftest` (in ~\.claude\skills) proves both.
+      $Arguments = [regex]::Replace($Arguments, '^"[^"]*\\headless-exit\.pyw"\s+(?=--headless\s)', '')
       $Arguments = [regex]::Replace($Arguments, '^--headless\s+"[^"]*\\?powershell\.exe"\s+', '')
       $swapped = [regex]::Replace($Arguments,'-File\s+"[^"]*\\run-once-a-day\.ps1"', ('-File "' + $echoPs1.Replace('$', '$$') + '"'))
       $e = Invoke-Hidden $psExe $swapped
