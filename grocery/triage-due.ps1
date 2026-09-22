@@ -381,6 +381,63 @@ if ($SelfTest) {
     # that is exactly how this case read green against a formatter returning nothing ([[ps-json-array-collapse]]).
     $ul6 = Format-TriageResumeLines $u6
     _T 'MUST-NOT-FIRE with no plan records there is no RESUME line and no throw' ((@($u6)).Count -eq 0 -and (@($ul6)).Count -eq 0) 'a record was returned'
+    # ---- THE QUEUE OWNS A RESIDUAL ONCE (2026-09-22, discovered:resume-double-count-2026-09-22) ----
+    # Founding: plan-2026-09-22.json closed 2026-09-22-a09096 deviated with leaves_open_followup 2026-09-22-43e8c0,
+    # which was OPEN, so the one RESUME line triage-due printed that day was the same work counted twice.
+    $oPlans = @([pscustomobject]@{ path = 'grocery/triage-plans/plan-fx-own.json'; items = @(
+      [pscustomobject]@{ queue_id = '2026-09-22-a09096'; status = 'deviated'; lane = 'money'; leaves_open_followup = '2026-09-22-43e8c0' },
+      [pscustomobject]@{ queue_id = '2026-09-19-fccb69'; status = 'deviated'; lane = 'money'; leaves_open_followup = '2026-09-21-57e5ae' },
+      [pscustomobject]@{ queue_id = '2026-09-19-d24000'; status = 'deviated'; lane = 'ops'; leaves_open_followup = 'watch:grocery/audit-food-category.ps1' }) })
+    $oA = [pscustomobject]@{ id = '2026-09-22-a09096'; status = 'resolved'; subject = 'Grocery: price disagreement - Hummus' }
+    $oOwner = [pscustomobject]@{ id = '2026-09-22-43e8c0'; status = 'open'; subject = 'Grocery: two size parsers disagree' }
+    $oF = [pscustomobject]@{ id = '2026-09-19-fccb69'; status = 'resolved'; subject = 'Grocery: NEW price flags' }
+    $oFOwner = [pscustomobject]@{ id = '2026-09-21-57e5ae'; status = 'resolved'; subject = 'Grocery: flag owner, closed' }
+    $oW = [pscustomobject]@{ id = '2026-09-19-d24000'; status = 'resolved'; subject = 'Grocery: a watch-owned residual' }
+    $uo = Get-TriageUnfinished @($oA, $oOwner) $oPlans
+    $uo = @($uo)
+    $uoDue = Get-TriageResumeDue $uo
+    $uoL = Format-TriageResumeLines $uo
+    $uoL = @($uoL)
+    _T 'MUST-FIRE a deviated item whose leftover an OPEN queue item owns prints RESUMED-BY that owner and is not RESUME work (a09096 -> 43e8c0)' `
+      ($uo.Count -eq 1 -and $uo[0].owned_by -eq '2026-09-22-43e8c0' -and (@($uoDue)).Count -eq 0 -and $uoL.Count -eq 2 -and $uoL[0] -match '^NOTE  1 unfinished' -and $uoL[1] -eq '  RESUMED-BY 2026-09-22-43e8c0: 2026-09-22-a09096 - grocery/triage-plans/plan-fx-own.json closed it deviated' -and -not ($uoL -match '^DUE  RESUME')) `
+      ($uoL -join ' | ')
+    $uf = Get-TriageUnfinished @($oF, $oFOwner) $oPlans
+    $uf = @($uf)
+    $ufDue = Get-TriageResumeDue $uf
+    _T 'MUST-FIRE a deviated item whose named owner is CLOSED is still RESUME work (the owner finished, the class did not)' `
+      ($uf.Count -eq 1 -and -not $uf[0].owned_by -and (@($ufDue)).Count -eq 1) ("owned_by=" + $uf[0].owned_by)
+    $uw = Get-TriageUnfinished @($oW, $oA, $oOwner) $oPlans
+    $uw = @($uw)
+    $uwL = Format-TriageResumeLines $uw
+    $uwL = @($uwL)
+    _T 'CLEAN TWIN a watch: followup is no queue owner, so it still RESUMEs, and it prints ahead of the RESUMED-BY note' `
+      ((@((Get-TriageResumeDue $uw))).Count -eq 1 -and $uwL.Count -eq 4 -and $uwL[0] -match '^DUE  RESUME 1 unfinished' -and $uwL[1] -match '^  RESUME: 2026-09-19-d24000 ' -and $uwL[2] -match '^NOTE  1 ' -and $uwL[3] -match '^  RESUMED-BY 2026-09-22-43e8c0: 2026-09-22-a09096') `
+      ($uwL -join ' | ')
+    # ---- THE ARCHIVE IS PART OF THE RECORD (2026-09-22, queue 2026-09-21-594c27) ----
+    $aRet = Join-TriageQueueWithArchive @($rCur) @($rP2)
+    $alA = Get-TriageReturnLines @($rCur) $aRet $rNow
+    $alA = @($alA)
+    _T 'MUST-FIRE a close that sits ONLY in the archive, inside 30 days, is a prior close and prints RETURN' `
+      ($alA.Count -eq 1 -and $alA[0] -match 'closed 1 time\(s\) in 30 days \(2026-09-05-aaaaa2\)') ($alA -join ' | ')
+    $aOld = Join-TriageQueueWithArchive @($rCur) @($rOld)
+    $alO = Get-TriageReturnLines @($rCur) $aOld $rNow
+    _T 'MUST-NOT-FIRE an archived close older than 30 days is not a return' ((@($alO)).Count -eq 0) ($alO -join ' | ')
+    $rP2Open = [pscustomobject]@{ id = '2026-09-05-aaaaa2'; ts = '2026-09-05T08:15:00'; type = $rType; status = 'open' }
+    $aTie = Join-TriageQueueWithArchive @($rP2Open, $rCur) @($rP2)
+    $aTie = @($aTie)
+    _T 'CLEAN TWIN when the queue and the archive hold one id, the queue''s copy wins and is counted once' `
+      ($aTie.Count -eq 2 -and [string]$aTie[0].status -eq 'open') ("count=" + $aTie.Count)
+    $aDir = Join-Path $env:TEMP ('td-arch-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+    New-Item -ItemType Directory -Path $aDir -ErrorAction Stop | Out-Null
+    try {
+      [IO.File]::WriteAllText((Join-Path $aDir 'triage-queue.archived-2026-09-17.json'), '{ "readme": "fx", "items": [ { "id": "2026-09-05-aaaaa2", "ts": "2026-09-05T08:15:00", "type": "t", "status": "resolved" } ] }', (New-Object Text.UTF8Encoding($false)))
+      [IO.File]::WriteAllText((Join-Path $aDir 'triage-queue.archived-broken.json'), '{ "items": [ torn', (New-Object Text.UTF8Encoding($false)))
+      $aRead = Read-TriageArchivedItems $aDir
+      $aRead = @($aRead)
+      $aNone = Read-TriageArchivedItems (Join-Path $aDir 'absent')
+      _T 'CLEAN TWIN the archive reader returns the readable file''s item, skips a torn file, and reads an absent directory as none' `
+        ($aRead.Count -eq 1 -and [string]$aRead[0].id -eq '2026-09-05-aaaaa2' -and (@($aNone)).Count -eq 0) ("read=" + $aRead.Count)
+    } finally { Remove-Item -LiteralPath $aDir -Recurse -Force -ErrorAction SilentlyContinue }
     # CLEAN TWIN: a clear queue with no unfinished plan item is still IDLE - test-auditors pins that meaning.
     _T 'CLEAN TWIN a clear queue with nothing to resume is still IDLE' (Test-TriageIdle 0 $false 0) 'read as DUE'
     # CLEAN TWIN: the RETURN and ROUTE lines still print exactly as they did, with resolved unfinished items
@@ -454,7 +511,10 @@ try { $planRecs = Read-TriagePlanRecords (Join-Path $root 'triage-plans') } catc
 $resume = @()
 # Assign, THEN wrap: a comma-returned array read as @(Get-Thing ...) counts 1 ([[ps-json-array-collapse]]).
 try { $resume = Get-TriageUnfinished $q.items $planRecs; $resume = @($resume) } catch { $resume = @() }
-if ((Test-TriageIdle $daily.Count ([bool]$split.WeeklyDue) $resume.Count)) {
+# A RESUME record whose leftover an OPEN queue item owns is that item's work, listed with it; only the rest make the run due.
+$resumeDue = @()
+try { $resumeDue = Get-TriageResumeDue $resume; $resumeDue = @($resumeDue) } catch { $resumeDue = @($resume) }
+if ((Test-TriageIdle $daily.Count ([bool]$split.WeeklyDue) $resumeDue.Count)) {
   if ($spools.Count -gt 0) { exit 0 }   # spool lines above already said DUE
   $nb = ''; if ($needsBrad.Count) { $nb = ' (' + $needsBrad.Count + ' item(s) parked needs-brad - do not re-triage, they are his)' }
   $wl = ''; if ($weekly.Count) { $wl = ' (' + $weekly.Count + ' weekly-lane item(s) wait for ' + $split.NextDue.ToString('yyyy-MM-dd') + ')' }
@@ -497,7 +557,10 @@ try { foreach ($l in (Get-RemeasureLines $open (Split-Path -Parent $root))) { Wr
 # the run starts from it instead of buying the same diagnosis again. Same wrapping, same reason: a route is
 # provenance, and an unreadable plan directory must cost the route and never the tick.
 try {
-  $retLines = Get-TriageReturnLines $open $q.items (Get-Date)
+  # the queue UNIONED with the archive (594c27): a close a hand run archived inside the window is still a close
+  $retItems = $q.items
+  try { $arch = Read-TriageArchivedItems (Join-Path $root 'out\archive'); $retItems = Join-TriageQueueWithArchive $q.items $arch } catch { $retItems = $q.items }
+  $retLines = Get-TriageReturnLines $open $retItems (Get-Date)
   # $planRecs was read once above, for the RESUME section; one read, one ordering, no second copy of it.
   foreach ($l in @($retLines)) {
     if (-not $l) { continue }
@@ -507,7 +570,7 @@ try {
       if ($l -match 'RETURN:\s+(\S+)\s') { $rid = $Matches[1] }
       $item = @($open | Where-Object { [string]$_.id -eq $rid })
       if ($item.Count -eq 1) {
-        $priors = Get-TriageReturnPriors $q.items $item[0] (Get-Date)
+        $priors = Get-TriageReturnPriors $retItems $item[0] (Get-Date)
         $route = Get-TriageReturnRoute $priors $planRecs
         $rl = Format-TriageRouteLine $rid $route
         if ($rl) { Write-Output $rl }

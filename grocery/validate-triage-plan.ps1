@@ -909,7 +909,10 @@ if (([string]$doc.lane).Trim() -eq 'weekly') {
   if (-not $census.ok) { Write-Output ("validate-triage-plan: BLIND - a weekly plan's prevention_target is recomputed from the alert census (ruling 6) and " + $census.why + " - run grocery\audit-alert-census.ps1 first"); exit 3 }
 }
 
-$res = Test-Plan $doc $OpenIds (Split-Path $Plan -Parent) -Closing:$Closing -QueueIds $queueIds -QueueItems $queueItems -Now (Get-Date) -Census $census
+# RETURN priors read the queue UNIONED with the archive (594c27); owner resolution ($queueIds) stays the live queue.
+$retQueueItems = $queueItems
+try { $archItems = Read-TriageArchivedItems (Join-Path $root 'out\archive'); $retQueueItems = Join-TriageQueueWithArchive $queueItems $archItems } catch { $retQueueItems = $queueItems }
+$res = Test-Plan $doc $OpenIds (Split-Path $Plan -Parent) -Closing:$Closing -QueueIds $queueIds -QueueItems $retQueueItems -Now (Get-Date) -Census $census
 $items = @($doc.items)
 $mode = if ($Closing) { 'closing' } else { 'handoff' }
 Write-Output ("validate-triage-plan: " + $Plan)

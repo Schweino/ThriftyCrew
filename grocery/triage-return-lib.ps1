@@ -52,6 +52,44 @@ function Get-TriageReturnPriors {
   return ,$out.ToArray()
 }
 
+# THE ARCHIVE IS PART OF THE RECORD (2026-09-22, queue 2026-09-21-594c27; F1 in design/RCA-holistic-2026-09-22.md).
+# The queue was the one record of every close for 30 days until a hand run moved 357 items, 169 of them resolved
+# inside the window, into grocery\out\archive\triage-queue.archived-2026-09-17.json. Nothing read that file, so
+# every "has this type been closed before" answer lost those closes and the RETURN scoreboard under-counted. Every
+# reader of the RETURN rule now takes the queue UNIONED with every archive file in that directory; the window is
+# applied after the union exactly as before, so an archived close older than 30 days still counts for nothing.
+# The directory is gitignored: a worktree without it reads the queue alone, which is the pre-2026-09-22 answer.
+function Read-TriageArchivedItems {
+  <# .SYNOPSIS Every item of every triage-queue*.json under the archive directory. Never throws: an unreadable file is skipped. #>
+  param([string]$ArchiveDir)
+  $out = New-Object System.Collections.Generic.List[object]
+  if (-not $ArchiveDir -or -not (Test-Path -LiteralPath $ArchiveDir)) { return ,$out.ToArray() }
+  $files = @()
+  try { $files = @(Get-ChildItem -LiteralPath $ArchiveDir -Filter 'triage-queue*.json' -File -ErrorAction Stop | Sort-Object Name) } catch { return ,$out.ToArray() }
+  foreach ($f in $files) {
+    try {
+      $j = Read-JsonFile $f.FullName
+      if ($null -eq $j -or -not $j.PSObject.Properties['items']) { continue }
+      foreach ($it in @($j.items)) { if ($it) { [void]$out.Add($it) } }
+    } catch { continue }
+  }
+  return ,$out.ToArray()
+}
+function Join-TriageQueueWithArchive {
+  <# .SYNOPSIS Pure. The queue's items plus every archived item whose id the queue does not hold (the queue wins a tie). #>
+  param($QueueItems, $ArchivedItems)
+  $out = New-Object System.Collections.Generic.List[object]
+  $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($i in @($QueueItems)) { if (-not $i) { continue }; [void]$out.Add($i); [void]$seen.Add([string]$i.id) }
+  foreach ($a in @($ArchivedItems)) {
+    if (-not $a) { continue }
+    $aid = [string]$a.id
+    if (-not $aid -or $seen.Contains($aid)) { continue }
+    [void]$seen.Add($aid); [void]$out.Add($a)
+  }
+  return ,$out.ToArray()
+}
+
 function Get-TriageReturnLines {
   <# .SYNOPSIS Pure. One '  RETURN:' line per open item whose type triage already closed inside the window. #>
   param($OpenItems, $QueueItems, [datetime]$Now)
@@ -164,7 +202,7 @@ function Get-TriageRouteLane {
 function Get-TriageReturnRoute {
   <# .SYNOPSIS Pure. Where a returning item's last answer is written: the newest prior id any plan record holds. #>
   param($PriorIds, $PlanRecords)
-  $r = [pscustomobject]@{ found = $false; prior_id = ''; plan = ''; lane = ''; status = ''; why = '' }
+  $r = [pscustomobject]@{ found = $false; prior_id = ''; plan = ''; lane = ''; status = ''; why = ''; item = $null }
   $ids = @($PriorIds)
   if ($ids.Count -eq 0) { $r.why = 'no prior closes'; return $r }
   $plans = @($PlanRecords)
@@ -184,6 +222,7 @@ function Get-TriageReturnRoute {
         $r.plan = [string]$p.path
         $r.lane = Get-TriageRouteLane $it
         try { $r.status = ([string]$it.status).Trim() } catch { $r.status = '' }
+        $r.item = $it
         return $r
       }
     }
@@ -221,6 +260,18 @@ function Get-TriageUnfinished {
   $out = New-Object System.Collections.Generic.List[object]
   $plans = @($PlanRecords)
   if ($plans.Count -eq 0) { return ,$out.ToArray() }
+  # THE QUEUE OWNS A RESIDUAL ONCE (2026-09-22, discovered:resume-double-count-2026-09-22; F1). A plan item that
+  # closed deviated or needs-more-time AND named its leftover's owner in leaves_open_followup, when that owner is
+  # a queue item still OPEN (or parked needs-brad), is already listed as that owner's own work. It is returned
+  # with owned_by set, printed as RESUMED-BY, and never counted as RESUME work. An owner that is CLOSED, absent or
+  # not a queue id leaves the item RESUME: the owner finished and the class did not.
+  $liveOwners = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($i in @($Items)) {
+    if (-not $i) { continue }
+    $st0 = ''
+    try { $st0 = ([string]$i.status).Trim().ToLowerInvariant() } catch { $st0 = '' }
+    if ($st0 -eq 'open' -or $st0 -eq 'needs-brad') { [void]$liveOwners.Add(([string]$i.id).Trim()) }
+  }
   foreach ($i in @($Items)) {
     if (-not $i) { continue }
     $id = ''
@@ -242,25 +293,46 @@ function Get-TriageUnfinished {
     if ($ps -ne 'deviated' -and $ps -ne 'needs-more-time') { continue }
     $subj = ''
     try { if ($i.PSObject.Properties['subject']) { $subj = ([string]$i.subject).Trim() } } catch { $subj = '' }
+    $owners = New-Object System.Collections.Generic.List[string]
+    $fu = ''
+    try { if ($route.item -and $route.item.PSObject.Properties['leaves_open_followup']) { $fu = [string]$route.item.leaves_open_followup } } catch { $fu = '' }
+    foreach ($m in [regex]::Matches($fu, '\d{4}-\d{2}-\d{2}-[0-9a-f]{6}')) {
+      if ($m.Value -ne $id -and $liveOwners.Contains($m.Value) -and -not $owners.Contains($m.Value)) { [void]$owners.Add($m.Value) }
+    }
     [void]$out.Add([pscustomobject]@{
       id = $id; subject = $subj; plan = [string]$route.plan
-      status = ([string]$route.status).Trim(); lane = [string]$route.lane })
+      status = ([string]$route.status).Trim(); lane = [string]$route.lane; owned_by = ($owners -join ', ') })
   }
   return ,$out.ToArray()
+}
+function Get-TriageResumeDue {
+  <# .SYNOPSIS Pure. The unfinished records that are RESUME work: those whose leftover no open queue item owns. #>
+  param($Unfinished)
+  return ,@(@($Unfinished) | Where-Object { $_ -and -not ($_.PSObject.Properties['owned_by'] -and [string]$_.owned_by) })
 }
 function Format-TriageResumeLines {
   <# .SYNOPSIS Pure. The RESUME block triage-due.ps1 prints ABOVE its DUE list, or no lines at all. #>
   param($Unfinished)
   $lines = New-Object System.Collections.Generic.List[string]
-  $u = @($Unfinished)
+  $all = @($Unfinished)
+  $u = @($all | Where-Object { $_ -and -not ($_.PSObject.Properties['owned_by'] -and [string]$_.owned_by) })
+  $owned = @($all | Where-Object { $_ -and $_.PSObject.Properties['owned_by'] -and [string]$_.owned_by })
+  if ($owned.Count -gt 0) {
+    [void]$lines.Add('NOTE  ' + $owned.Count + ' unfinished item(s) whose leftover already has its own open queue item - counted ONCE, under that owner, never as RESUME:')
+    foreach ($r in $owned) {
+      [void]$lines.Add('  RESUMED-BY ' + [string]$r.owned_by + ': ' + [string]$r.id + ' - ' + [string]$r.plan + ' closed it ' + [string]$r.status)
+    }
+  }
   if ($u.Count -eq 0) { return ,$lines.ToArray() }
-  [void]$lines.Add('DUE  RESUME ' + $u.Count + ' unfinished root fix(es). Each of these closed its queue item with the class' +
+  [void]$lines.Insert(0, 'DUE  RESUME ' + $u.Count + ' unfinished root fix(es). Each of these closed its queue item with the class' +
                    ' still open, so it is the next run''s FIRST work: resume from the named plan item, do not re-diagnose it.')
+  $at = 1
   foreach ($r in $u) {
     $s = [string]$r.subject
     if ($s) { $s = ' - ' + $s }
-    [void]$lines.Add('  RESUME: ' + [string]$r.id + ' - ' + [string]$r.plan + ' closed it ' + [string]$r.status +
+    [void]$lines.Insert($at, '  RESUME: ' + [string]$r.id + ' - ' + [string]$r.plan + ' closed it ' + [string]$r.status +
                      ', lane ' + [string]$r.lane + $s)
+    $at++
   }
   return ,$lines.ToArray()
 }
