@@ -100,10 +100,24 @@ function Expand-SpecProse { param($Spec)
 #          engine\build-cards.ps1 replaces it (pipeline\stamp-live-price-fallback.ps1) with the value the
 #          card's own script fills against the canonical feed, stamping data-tc-asof with that feed's
 #          `generated`. publish refuses a span with no data-tc-asof.
-$script:TC_LIVE_PRICE_BASIS = @{ 'cost_ps' = 'feed-everyday-whole-package' }
-function Format-TcLivePriceSpan { param([string]$Slug, [string]$Field = 'cost_ps', [string]$Value, [string]$AsOf = '')
-  if ([string]::IsNullOrEmpty($Slug)) { throw 'Format-TcLivePriceSpan: no slug - a placeholder that does not name its recipe cannot be checked against the feed' }
+#   field  unit_price (2026-09-22)  a BOARD COMMODITY's everyday price per a reader's unit, for pages that are not
+#          recipe cards (articles, the homepage quote). Names the commodity (data-tc-bid) and the unit the sentence
+#          reads in (data-tc-per: lb, oz, dozen, each, gal); tcFeedValue in tpl2-scaler-prefix.html reads
+#          feed.pricing_inputs[bid] (everyday cell, else current) and converts, refusing an unknown unit pair.
+#          A recipe card never carries one: the build gate requires every card span to name the card's own slug.
+#   A cost_ps span on a page that is NOT the recipe's own card reads feed.recipes[slug].everyday_ps (a feed key
+#   the landing adds; until it ships the span keeps its stamped fallback). Both fills run through the ONE script,
+#   public\tc-live-price.js, generated from the card template by pipeline\build-live-price-script.ps1.
+$script:TC_LIVE_PRICE_BASIS = @{ 'cost_ps' = 'feed-everyday-whole-package'; 'unit_price' = 'feed-everyday-per-unit' }
+$script:TC_LIVE_PRICE_PER = @('lb', 'oz', 'dozen', 'each', 'gal')
+function Format-TcLivePriceSpan { param([string]$Slug, [string]$Field = 'cost_ps', [string]$Value, [string]$AsOf = '', [string]$Bid = '', [string]$Per = '')
   if (-not $script:TC_LIVE_PRICE_BASIS.ContainsKey($Field)) { throw ("Format-TcLivePriceSpan: unknown field '{0}'" -f $Field) }
+  if ($Field -eq 'unit_price') {
+    if ([string]::IsNullOrEmpty($Bid)) { throw 'Format-TcLivePriceSpan: a unit_price placeholder names no commodity (data-tc-bid), so the feed cannot fill it' }
+    if ($script:TC_LIVE_PRICE_PER -notcontains $Per) { throw ("Format-TcLivePriceSpan: unit '{0}' is not one the fill converts to ({1})" -f $Per, ($script:TC_LIVE_PRICE_PER -join ', ')) }
+    $Slug = $Bid
+  }
+  if ([string]::IsNullOrEmpty($Slug)) { throw 'Format-TcLivePriceSpan: no slug - a placeholder that does not name its recipe cannot be checked against the feed' }
   $d = 0.0
   if (-not [double]::TryParse($Value, [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$d) -or -not ($d -gt 0) -or [double]::IsInfinity($d)) {
     throw ("Format-TcLivePriceSpan: fallback '{0}' for {1} is not a positive price - a placeholder must never fall back to a blank, NaN or `$0.00" -f $Value, $Slug)
@@ -111,6 +125,7 @@ function Format-TcLivePriceSpan { param([string]$Slug, [string]$Field = 'cost_ps
   $v = $d.ToString('0.00', [Globalization.CultureInfo]::InvariantCulture)
   if ($AsOf -and $AsOf -notmatch '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$') { throw ("Format-TcLivePriceSpan: as-of '{0}' is not a feed generated stamp" -f $AsOf) }
   $asofAttr = if ($AsOf) { ' data-tc-asof="' + $AsOf + '"' } else { '' }
+  if ($Field -eq 'unit_price') { return ('<span data-tc-live-price data-tc-bid="{0}" data-tc-per="{1}" data-tc-field="{2}" data-tc-basis="{3}" data-tc-fallback="{4}"{5}>~${4}</span>' -f $Bid, $Per, $Field, $script:TC_LIVE_PRICE_BASIS[$Field], $v, $asofAttr) }
   return ('<span data-tc-live-price data-tc-slug="{0}" data-tc-field="{1}" data-tc-basis="{2}" data-tc-fallback="{3}"{4}>~${3}</span>' -f $Slug, $Field, $script:TC_LIVE_PRICE_BASIS[$Field], $v, $asofAttr)
 }
 
@@ -279,6 +294,13 @@ if ($SelfTest) {
   }
   T 'MUST FIRE  a placeholder refuses a field with no basis in the registry' `
     (& { $t = $false; try { Format-TcLivePriceSpan -Slug 'x' -Field 'cost_batch' -Value '3.00' | Out-Null } catch { $t = $true }; $t }) 'accepted cost_batch'
+  T 'MUST FIRE  a unit_price placeholder that names no commodity is refused' `
+    (& { $t = $false; try { Format-TcLivePriceSpan -Field 'unit_price' -Per 'lb' -Value '1.99' | Out-Null } catch { $t = $true }; $t }) 'rendered a commodity span with no bid'
+  T 'MUST FIRE  a unit_price placeholder in a unit the fill cannot convert (kg) is refused' `
+    (& { $t = $false; try { Format-TcLivePriceSpan -Field 'unit_price' -Bid 'chicken-thighs' -Per 'kg' -Value '1.99' | Out-Null } catch { $t = $true }; $t }) 'rendered a kg span'
+  $up = Format-TcLivePriceSpan -Field 'unit_price' -Bid 'chicken-thighs' -Per 'lb' -Value '1.9' -AsOf '2026-09-22T08:14:34'
+  T 'CLEAN TWIN  a unit_price placeholder names bid, unit, field and basis, and its text is its fallback' `
+    ($up -eq '<span data-tc-live-price data-tc-bid="chicken-thighs" data-tc-per="lb" data-tc-field="unit_price" data-tc-basis="feed-everyday-per-unit" data-tc-fallback="1.90" data-tc-asof="2026-09-22T08:14:34">~$1.90</span>') $up
   T 'MUST FIRE  a placeholder refuses to render without the slug it belongs to' `
     (& { $t = $false; try { Format-TcLivePriceSpan -Slug '' -Value '3.00' | Out-Null } catch { $t = $true }; $t }) 'rendered an anonymous span'
   # AT THE BAR (the bar is "greater than zero"; resolution is one cent): 0.01 is the smallest price the span

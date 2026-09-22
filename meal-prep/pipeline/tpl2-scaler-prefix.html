@@ -722,6 +722,26 @@ var k=variable?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-0.02
   // A FILL IS REFUSED unless the value is a finite price above zero from a loaded feed, and unless the span
   // names a field this script knows. A refused span shows its build-time fallback (data-tc-fallback, the
   // same basis), never a blank, NaN, undefined or $0.00. data-tc-filled marks a real fill for the monitor.
+  // A placeholder that names a value the FEED carries, not this card's own scaler total (2026-09-22,
+  // design/RCA-holistic-2026-09-22.md F1). Every page that is not a recipe card - an article, the homepage
+  // quote, a tool - reaches this through public/tc-live-price.js, which pipeline/build-live-price-script.ps1
+  // GENERATES from this text, so there is one fill and never a second copy. Returns NaN for anything it cannot
+  // read, and the caller then keeps the fallback. Fields (registry: lib/render-tokens.ps1):
+  //   cost_ps     data-tc-slug  -> feed.recipes[slug].everyday_ps (the card fill's basis, stamped per recipe)
+  //   unit_price  data-tc-bid + data-tc-per -> feed.pricing_inputs[bid], everyday cell (else current, as the
+  //               card's Everyday tab reads it), per the reader's unit; an unknown unit pair is refused
+  function tcFeedValue(live){
+    if(!feedData||feedFailed) return NaN;
+    var f=live.getAttribute('data-tc-field');
+    if(f==='cost_ps'){ var r=feedData.recipes&&feedData.recipes[live.getAttribute('data-tc-slug')]; return r?Number(r.everyday_ps):NaN; }
+    if(f==='unit_price'){
+      var pi=feedData.pricing_inputs&&feedData.pricing_inputs[live.getAttribute('data-tc-bid')]; if(!pi) return NaN;
+      var c=pi.everyday||pi.current; if(!c||!(c.perUnitMicros>0)) return NaN;
+      var k={'lb|lb':1,'lb|oz':16,'oz|oz':1,'oz|lb':1/16,'dozen|dozen':1,'dozen|each':12,'each|each':1,'each|dozen':1/12,'gal|gallon':1,'gal|floz':128}[String(live.getAttribute('data-tc-per'))+'|'+String(c.unit)];
+      return k?c.perUnitMicros/1e6*k:NaN;
+    }
+    return NaN;
+  }
   function fillLivePrices(){
     try{
       var nn2=nServ(), tev=(feedData&&!feedFailed)?totalAt(nn2,'everyday',false):null;
@@ -731,7 +751,8 @@ var k=variable?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-0.02
       if(stat&&good){ stat.innerHTML=stat.innerHTML.replace(/Makes \d+ servings/,'Makes '+nn2+' servings'); }
       [].slice.call(document.querySelectorAll('[data-tc-live-price]')).forEach(function(live){
         var f=live.getAttribute('data-tc-field');
-        if(good&&(!f||f==='cost_ps')){ var s2=v.toFixed(2); live.textContent='~$'+s2; live.setAttribute('data-tc-filled',s2); return; }
+        var w=((typeof tcStandalone!=='undefined'&&tcStandalone)||live.hasAttribute('data-tc-bid'))?tcFeedValue(live):((good&&(!f||f==='cost_ps'))?v:NaN);
+        if(isFinite(w)&&w>0&&Math.round(w*100)>0){ var s2=w.toFixed(2); live.textContent='~$'+s2; live.setAttribute('data-tc-filled',s2); return; }
         var fb=parseFloat(live.getAttribute('data-tc-fallback'));
         if(isFinite(fb)&&fb>0){ live.textContent='~$'+fb.toFixed(2); }
         live.removeAttribute('data-tc-filled');

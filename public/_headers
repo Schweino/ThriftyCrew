@@ -36,3 +36,10 @@
   Access-Control-Allow-Origin: https://www.thriftycrew.com
   Cache-Control: private, no-store
   Content-Type: application/json; charset=utf-8
+
+# The live-price fill for every page that is not a recipe card (articles, the homepage quote, tools), GENERATED from the
+# recipe card template by meal-prep/pipeline/build-live-price-script.ps1. Same cache as the feed it reads.
+/tc-live-price.js
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=1800
+  Content-Type: application/javascript; charset=utf-8
