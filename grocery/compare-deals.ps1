@@ -499,6 +499,7 @@ function Format-TcNamelessByStore {
 # shared with audit-basis-reconcile, audit-pack-basis and the derived-size density rule, rather than a
 # second inline copy here - a shared-lib fix ships nothing while callers keep inline copies.
 . (Join-Path $PSScriptRoot 'derived-size-density-lib.ps1')
+. (Join-Path $PSScriptRoot 'derived-band-lib.ps1')   # Get-TcDerivedBands: the band is derived, never typed (6b17b1)
 
 # ---------------------------------------------------------------- THE STORE'S OWN PER-UNIT NUMBER
 # (2026-09-04, queue 2026-09-04-def37c, triage-plans\plan-2026-09-04.json)
@@ -2848,11 +2849,67 @@ $ProvJudged = @{}
 $IDENT_ON = ($IdentityNamespace -ne '') -and (-not $NoIdentity)
 $identityRows = $(if ($IDENT_ON) { New-Object System.Collections.Generic.List[object] } else { $null })
 $AisleCatMap = $(if ($NoAisleAdmission) { @{} } else { Get-AisleCategoryMap -Root $PSScriptRoot })
-foreach ($d in $deals) {
-  $c = Resolve-Commodity -Matcher $fastMatcher -Name $d.name
+# ---- THE BAND IS DERIVED FROM THIS BUILD'S OWN EVIDENCE (Brad's ruling "Derive from data", 2026-09-22, queue
+# 2026-09-21-6b17b1; derived-band-lib.ps1 has the rule and its constant). A PRE-PASS resolves and prices every row once,
+# collects each commodity's per-unit evidence across stores, derives the band, and the loop below reuses the pre-pass
+# answers (so the matcher and the pricing math still run once per row). The typed bands are still READ, into
+# $TYPED_BANDS, for ONE purpose: out\band-derivation-<date>.json states per commodity what the typed band would have
+# admitted and refused against the derived one, so the switch is measured on every build rather than asserted once.
+$prePass = New-Object System.Collections.ArrayList
+$bandEvidence = New-Object System.Collections.ArrayList
+foreach ($d0 in $deals) {
+  $c0 = Resolve-Commodity -Matcher $fastMatcher -Name $d0.name
+  $u0 = $null
+  if ($c0) {
+    $u0 = Get-UnitPrice $d0 $c0
+    if ($u0 -and [double]$u0.unit_price -gt 0) { [void]$bandEvidence.Add([pscustomobject]@{ id = [string]$c0.id; store = [string]$d0.store; per_unit = [math]::Round([double]$u0.unit_price, 4); name = [string]$d0.name }) }
+  }
+  [void]$prePass.Add([pscustomobject]@{ d = $d0; c = $c0; up = $u0 })
+}
+$TYPED_BANDS = @{}; foreach ($k0 in $BANDS.Keys) { $TYPED_BANDS[$k0] = $BANDS[$k0] }
+$evArr = $bandEvidence.ToArray()
+$DERIVED_BANDS = Get-TcDerivedBands -Rows $evArr
+# SHADOW MODE, NOT IN FORCE (2026-09-22). Measured on the first switch over comparison-2026-09-22 at K=5: 25 crowns moved,
+# and the typed bands turned out to be doing IDENTITY work the derived band cannot: salt | Aldi went to "Clancy's Coconut
+# Oil Himalayan Pink Salt Popcorn", jalapenos | Walmart to a jalapeno hummus, butter | Sam's to a butter seasoning,
+# cooked-quinoa | Baker's to a smoked-salmon bowl - wrong products the typed band refused by price - while real warehouse
+# bulk (Sam's bay leaves, curry powder, thyme, yeast, 50 lb rice) sits more than 5x under the median of small jars and was
+# newly REFUSED, the very class the ruling exists to stop. So the derivation runs and reports on every build
+# (out\band-derivation-<date>.json) and the typed bands stay in force until the two defects in that measurement have
+# owners: identity through excludes, not bands, and a bulk-aware reference. plan-2026-09-22-5, item 6b17b1.
+if ($env:TC_DERIVED_BANDS -eq 'enforce') { $BANDS = @{}; foreach ($k0 in $DERIVED_BANDS.Keys) { $BANDS[$k0] = $DERIVED_BANDS[$k0] } }
+try {
+  $sweep = [ordered]@{}
+  foreach ($kk in @(3.0, 4.0, 5.0, 6.0)) {
+    $dk = Get-TcDerivedBands -Rows $evArr -K $kk
+    $na = 0; $nr = 0
+    foreach ($e in $evArr) {
+      $inT = Test-TcInBand $TYPED_BANDS[[string]$e.id] ([double]$e.per_unit)
+      $inD = Test-TcInBand $dk[[string]$e.id] ([double]$e.per_unit)
+      if ($inD -and -not $inT) { $na++ }; if ($inT -and -not $inD) { $nr++ }
+    }
+    $sweep[('K=' + $kk)] = [ordered]@{ newly_admitted_rows = $na; newly_refused_rows = $nr }
+  }
+  $admitted = New-Object System.Collections.ArrayList; $refused = New-Object System.Collections.ArrayList
+  foreach ($e in $evArr) {
+    $tb = $TYPED_BANDS[[string]$e.id]; $db = $DERIVED_BANDS[[string]$e.id]
+    $inT = Test-TcInBand $tb ([double]$e.per_unit); $inD = Test-TcInBand $db ([double]$e.per_unit)
+    $rowRec = [ordered]@{ id = $e.id; store = $e.store; name = $e.name; per_unit = $e.per_unit; typed = $(if ($tb) { ('' + $tb.min + '-' + $tb.max) } else { 'none' }); derived = $(if ($db) { ('' + $db.min + '-' + $db.max) } else { 'none' }) }
+    if ($inD -and -not $inT) { [void]$admitted.Add($rowRec) }
+    if ($inT -and -not $inD) { [void]$refused.Add($rowRec) }
+  }
+  $bdoc = [ordered]@{ date = $today; rule = 'band = [ref / K, ref * K], ref = median of per-store median per-unit (>= 3 stores) else median of rows (>= 3 rows) else no band'; K = $script:TcBandK
+    evidence_rows = $evArr.Count; derived_commodities = $DERIVED_BANDS.Count; typed_commodities = $TYPED_BANDS.Count; k_sweep = $sweep
+    newly_admitted = $admitted.ToArray(); newly_refused = $refused.ToArray() }
+  [IO.File]::WriteAllText((Join-Path $OutDir ('band-derivation-' + $today + '.json')), ($bdoc | ConvertTo-Json -Depth 6), (New-Object Text.UTF8Encoding($false)))
+  Write-Output ('bands: derived for ' + $DERIVED_BANDS.Count + ' commodities from ' + $evArr.Count + ' priced rows (K=' + $script:TcBandK + '); against the typed bands ' + $admitted.Count + ' row(s) newly admitted, ' + $refused.Count + ' newly refused (out\band-derivation-' + $today + '.json)')
+} catch { Write-Warning ('band-derivation report failed (the derived bands are still in force): ' + $_.Exception.Message) }
+foreach ($pp in $prePass) {
+  $d = $pp.d
+  $c = $pp.c
   if ($IDENT_ON) { [void]$identityRows.Add($d) }
   if (-not $c) { continue }
-  $up = Get-UnitPrice $d $c
+  $up = $pp.up
   $uprice = $null; $basis = 'UNPRICED'; $note = ''
   if ($up) {
     $uprice = [math]::Round($up.unit_price,4); $basis = $up.basis; $note = $up.note
