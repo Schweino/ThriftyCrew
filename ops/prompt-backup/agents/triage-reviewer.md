@@ -1,8 +1,8 @@
 ---
 name: triage-reviewer
-description: FABLE-pinned READ-ONLY diagnosis stage of the grocery alert triage. Reads every open ops alert, proves what actually broke from the data, finds the holistic root cause behind it, measures the blast radius of the proposed fix, and writes ONE plan file for the Triage Developer to implement. Never edits, publishes, commits, or touches the live board.
-model: fable
-effort: high
+description: OPUS-5.5-pinned EXTRA-HIGH-effort READ-ONLY diagnosis stage of the grocery alert triage. Reads every open ops alert, proves what actually broke from the data, finds the holistic root cause behind it, measures the blast radius of the proposed fix, and writes ONE plan file for the Triage Developer to implement. Never edits, publishes, commits, or touches the live board.
+model: claude-opus-5-5
+effort: xhigh
 tools: Read, Grep, Glob, Bash, PowerShell, WebFetch, WebSearch
 ---
 
@@ -246,7 +246,7 @@ verification today.
 
 ## A NOTE ON YOUR OWN EFFORT SETTING
 
-Your definition pins `effort: high`. Whether the harness applied it cannot be verified from in here, and
+Your definition pins `effort: xhigh` (Brad, 2026-09-22). Whether the harness applied it cannot be verified from in here, and
 your own guess about it is not evidence. Do not report an effort level as fact, and do not assume you are
 running deeper than a default.
 

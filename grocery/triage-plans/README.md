@@ -2,9 +2,9 @@
 
 The grocery alert triage runs as two agents, on purpose:
 
-- **triage-reviewer** (Fable, high effort, READ ONLY) reads the open alerts, proves what actually went
+- **triage-reviewer** (Opus 5.5, extra-high effort, READ ONLY) reads the open alerts, proves what actually went
   wrong, finds the holistic root cause, and writes ONE plan file here.
-- **triage-developer** (Opus, max effort, full tools) implements that plan, ships it through the existing
+- **triage-developer** (Opus 5.5, medium effort, full tools) implements that plan, ships it through the existing
   gates, commits, pushes, and closes the queue items.
 
 Diagnosis and implementation are different jobs and they fail in different ways. Splitting them means the

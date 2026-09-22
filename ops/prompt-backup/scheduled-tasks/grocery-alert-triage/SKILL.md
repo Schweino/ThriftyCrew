@@ -28,13 +28,13 @@ searched first came out with a better design because of what it found.
 
 For SUBSTANTIVE alerts you do NOT diagnose and you do NOT implement. Subagents do that, on purpose,
 because diagnosis and implementation fail in different ways:
-- **triage-reviewer** (Fable, high effort, READ ONLY): reads the alerts, proves what broke from the data,
+- **triage-reviewer** (Opus 5.5, extra-high effort, READ ONLY): reads the alerts, proves what broke from the data,
   finds the root cause behind it, measures the blast radius of every proposed change, and writes ONE plan
   file.
-- **triage-developer** (Opus, max effort, full tools): the MONEY lane. Implements the plan items that
+- **triage-developer** (Opus 5.5, medium effort, full tools): the MONEY lane. Implements the plan items that
   publish the board, change a matching or pricing rule, or touch a blocking guard, ships them through the
   existing gated chain to a green board, commits, pushes, and closes those queue items.
-- **triage-ops-developer** (Opus, high effort, full tools, since 2026-09-10): the OPS lane. Implements the
+- **triage-ops-developer** (Opus 5.5, medium effort, full tools, since 2026-09-10): the OPS lane. Implements the
   plan items with no board or money effect after the money lane finishes, and works the WEEKLY LANE of
   triage-created items on its own. See COST CONTROLS below.
 
@@ -91,9 +91,11 @@ WHO and HOW MUCH, never WHAT: every item still gets its root cause and its class
    `leaves_open_occurrences: 0` and is owned by the existing check that would page on its first occurrence:
    `leaves_open_followup: "watch:<repo-relative path>"`. `validate-triage-plan.ps1 -Closing` accepts that only
    at 0 occurrences and only for a path that exists. If no check would notice it, it is a queue item after all.
-2. **Effort matches the class.** Board, price, matching-rule and blocking-guard items go to
-   `triage-developer` (max). Every other code item goes to `triage-ops-developer` (high), AFTER the money lane
+2. **Lane matches the class.** Board, price, matching-rule and blocking-guard items go to
+   `triage-developer` (money lane). Every other code item goes to `triage-ops-developer` (ops lane), AFTER the money lane
    returns and never alongside it, because both commit in one checkout.
+   Since 2026-09-22 (Brad) both lanes run Opus 5.5 at MEDIUM effort; the depth is spent in planning,
+   where triage-reviewer runs Opus 5.5 at extra-high (`xhigh`). The pins live in each agent's frontmatter.
 3. **Items triage creates go to a WEEKLY LANE.** Every residual or finding a run files goes through
    `send-alert.ps1 -Lane weekly`. `triage-due.ps1` lists weekly items every day but makes the run DUE for them
    only when the lane is: its stamp `grocery\triage-weekly-lane-stamp.txt` is missing or 7 or more days old, or
