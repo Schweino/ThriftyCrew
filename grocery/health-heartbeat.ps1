@@ -681,6 +681,7 @@ if ($SelfTest) {
     HbCase 'MUST NOT FIRE  exit 3 on 2 nights (one short of the bar) is a review, not FAILED' ((Get-HbExitClass -Res 3 -ReviewExit 3 -Nights 2 -EscalateAfter 3) -eq 'review')
     HbCase 'MUST NOT FIRE  exit 3 on 1 night is a review, not FAILED' ((Get-HbExitClass -Res 3 -ReviewExit 3 -Nights 1 -EscalateAfter 3) -eq 'review')
     HbCase 'CLEAN TWIN  exit 0 is healthy' ((Get-HbExitClass -Res 0 -ReviewExit 3 -Nights 0 -EscalateAfter 3) -eq 'healthy')
+    HbCase 'MUST FIRE  on a row with a review exit, a nonzero other exit is TASK FAILED without the fresh-output excuse' ($hbSrc.Contains('} elseif ($t.PSObject.Properties[''review_' + 'exit'']) {'))
     HbCase 'MUST FIRE  a row with no review_exit keeps every nonzero exit on the failure path' ((Get-HbExitClass -Res 3 -ReviewExit -1 -Nights 9 -EscalateAfter 3) -eq 'nonzero')
     $rvDir = Join-Path $env:TEMP ('hb-rv-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
     New-Item -ItemType Directory -Path $rvDir -ErrorAction Stop | Out-Null
@@ -765,6 +766,11 @@ foreach ($t in @($cfg.windows_tasks)) {
     if ($rv -and -not $rv.landed) {
       # A fresh proves output must not print "work landed" for a run whose own transcript says it did not; the RUN DID
       # NOT LAND issue below pages it with the reason. graph-nightly's stamp is written BEFORE its commit.
+    } elseif ($t.PSObject.Properties['review_exit']) {
+      # A ROW THAT SEPARATES "a decision is waiting" FROM "a step broke" HAS ALREADY SAID WHAT ITS OTHER EXITS MEAN
+      # (Q-4fc24c-1, 2026-09-22): exit 1 stays FAILED. The fresh-output excuse below is for a run killed after its work
+      # landed, and TC Recall Sleep 0435 writes its stamp on a failing night too, so the excuse would hide every break.
+      Add-HbIssue 'TASK FAILED' $name ("TASK FAILED: '{0}' last result {1} - a step broke (its review exit is {2}, a waiting decision; this is not that) - {3}" -f $name, $res, $t.review_exit, $t.why)
     } else {
       $glob = if ($t.PSObject.Properties['proves'] -and $t.proves) { [string]$t.proves } else { '' }
       $v = Test-ProofLanded -ProvesGlob $glob -RepoRoot $repo -MaxAgeHours ([double]$t.max_age_hours) -LastRunTime $last -Now $now
