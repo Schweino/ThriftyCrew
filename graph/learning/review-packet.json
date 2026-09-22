@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-20T21:37:55",
+  "generated_at": "2026-09-21T21:40:46",
   "reviewer": "claude-fable-medium",
   "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise. hold_clears are NOT proposals to rule on here: each names a promotion hold that has matched nothing on the board for 30 consecutive daily rechecks, with its readings. Clearing one means re-running the full guard suite (promote_aliases.py --gated) and stays with a person (ruling 2026-09-09, backlog I92).",
   "gates": {
@@ -1174,6 +1174,66 @@
       }
     },
     {
+      "proposal_id": "lp:682f22e7e4fce91ecd12",
+      "kind": "add_alias",
+      "target": "artichoke-hearts-canned-jarred",
+      "target_label": null,
+      "payload": "artichokes?\\s+in\\s+brine",
+      "stage1_confidence": 0.9,
+      "rationale": "'Artichokes in Brine' is a common canned/jarred artichoke heart product. Anchors on the food name and preservation method.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:9b89c2810b0821f7021a",
+      "kind": "add_alias",
+      "target": "beets-fresh",
+      "target_label": null,
+      "payload": "gold\\s+grim\\s+beet",
+      "stage1_confidence": 0.9,
+      "rationale": "'Gold Grim Beet' is a specific variety of fresh beet. Anchors on the variety name and food type.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:a708d4562ea51ab6dd42",
+      "kind": "add_alias",
+      "target": "brown-gravy-mix-dry-packet",
+      "target_label": null,
+      "payload": "beef\\s+gravy\\s+mix",
+      "stage1_confidence": 0.9,
+      "rationale": "'Beef Gravy Mix' is a standard brown gravy mix. Anchors on the meat type and product form.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:7c0d6d787b2b32964d71",
+      "kind": "add_alias",
+      "target": "canned-chili",
+      "target_label": null,
+      "payload": "(black\\s+bean|medium|spicy|light\\s+in\\s+sodium)\\s+chili",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches various canned chili variants (Black Bean, Medium, Spicy). Anchors on the product type 'Chili' and common descriptors.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:a1d4c521e4933305f347",
+      "kind": "add_alias",
+      "target": "canned-green-beans",
+      "target_label": null,
+      "payload": "wax\\s+beans?",
+      "stage1_confidence": 0.9,
+      "rationale": "'Wax Beans' are a type of green bean. Anchors on the variety name.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
       "proposal_id": "lp:4a3463ec5779e1cce86a",
       "kind": "add_alias",
       "target": "buffalo-wing-sauce",
@@ -1390,6 +1450,30 @@
       }
     },
     {
+      "proposal_id": "lp:73a9b5c1fdd9a683afc4",
+      "kind": "add_alias",
+      "target": "artichoke-hearts-canned-jarred",
+      "target_label": null,
+      "payload": "quartered\\s+artichokes?",
+      "stage1_confidence": 0.85,
+      "rationale": "'Quartered Artichokes' (e.g., Napoleon) are typically canned/jarred artichoke hearts cut into quarters. Anchors on the cut and food name.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:c68e055487ea96112ad7",
+      "kind": "add_alias",
+      "target": "cajun-creole-seasoning",
+      "target_label": null,
+      "payload": "cajun\\s+(shrimp|spice|kick)",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches specific Cajun seasoning variants like 'Cajun Shrimp', 'Cajun Spice Rub', and 'Cajun Kick'. Anchors on the flavor profile.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
       "proposal_id": "lp:2c32a05694b0a1fe1fd6",
       "kind": "add_alias",
       "target": "red-bell-pepper",
@@ -1481,6 +1565,30 @@
       "payload": "gotham\\s+greens\\s+caesar\\s+salad",
       "stage1_confidence": 0.8,
       "rationale": "Gotham Greens Caesar Salad is a pre-made salad kit/box.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:0f9255b67be3144ceccc",
+      "kind": "add_alias",
+      "target": "blue-cheese-dressing",
+      "target_label": null,
+      "payload": "blue\\s+cheese\\s+ranch",
+      "stage1_confidence": 0.8,
+      "rationale": "'Blue Cheese Ranch' is a specific dressing/dip variant. Anchors on the flavor profile and food type.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:6f55b85052f55a2672d4",
+      "kind": "add_alias",
+      "target": "caesar-salad-kit",
+      "target_label": null,
+      "payload": "caesar\\s+salad",
+      "stage1_confidence": 0.7,
+      "rationale": "'Gotham Greens Caesar Salad' is likely a pre-made salad kit or bagged salad. The pattern is broad but anchored on the specific salad name. Confidence is lower because 'Caesar Salad' could also refer to a dressing or a restaurant dish, but '",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }

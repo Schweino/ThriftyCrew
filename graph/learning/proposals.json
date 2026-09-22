@@ -228,6 +228,18 @@
     "target_id": "commodity:staple:dog-treats"
   },
   {
+    "confidence": 0.8,
+    "created_at": "2026-09-21T21:40:22",
+    "id": "lp:0f9255b67be3144ceccc",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"blue\\\\s+cheese\\\\s+ranch\"}",
+    "queue_hash": "cde1a12dc19a767a6555eca518abf6775452849fc419517a93c73f2c6436e8c9",
+    "rationale": "'Blue Cheese Ranch' is a specific dressing/dip variant. Anchors on the flavor profile and food type.",
+    "status": "proposed",
+    "target_id": "blue-cheese-dressing"
+  },
+  {
     "confidence": 0.95,
     "created_at": "2026-09-20T21:37:33",
     "id": "lp:10b096a1c6c1ec45ec0b",
@@ -1525,6 +1537,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-21T21:40:22",
+    "id": "lp:682f22e7e4fce91ecd12",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"artichokes?\\\\s+in\\\\s+brine\"}",
+    "queue_hash": "cde1a12dc19a767a6555eca518abf6775452849fc419517a93c73f2c6436e8c9",
+    "rationale": "'Artichokes in Brine' is a common canned/jarred artichoke heart product. Anchors on the food name and preservation method.",
+    "status": "proposed",
+    "target_id": "artichoke-hearts-canned-jarred"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T18:29:19",
     "id": "lp:69f88637e286534326cc",
     "kind": "add_alias",
@@ -1620,6 +1644,18 @@
     "target_id": "artichoke-hearts-canned-jarred"
   },
   {
+    "confidence": 0.7,
+    "created_at": "2026-09-21T21:40:22",
+    "id": "lp:6f55b85052f55a2672d4",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"caesar\\\\s+salad\"}",
+    "queue_hash": "cde1a12dc19a767a6555eca518abf6775452849fc419517a93c73f2c6436e8c9",
+    "rationale": "'Gotham Greens Caesar Salad' is likely a pre-made salad kit or bagged salad. The pattern is broad but anchored on the specific salad name. Confidence is lower because 'Caesar Salad' could also refer to a dressing or a restaurant dish, but '",
+    "status": "proposed",
+    "target_id": "caesar-salad-kit"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-27T21:32:30",
     "id": "lp:6f8834729c0dc143e588",
@@ -1690,6 +1726,18 @@
     "rationale": "Matches 'Smart Way Cut Green Beans'. Anchors on brand + cut to ensure it's the frozen/cut variety.",
     "status": "proposed",
     "target_id": "frozen-cut-green-beans"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-09-21T21:40:22",
+    "id": "lp:73a9b5c1fdd9a683afc4",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"quartered\\\\s+artichokes?\"}",
+    "queue_hash": "cde1a12dc19a767a6555eca518abf6775452849fc419517a93c73f2c6436e8c9",
+    "rationale": "'Quartered Artichokes' (e.g., Napoleon) are typically canned/jarred artichoke hearts cut into quarters. Anchors on the cut and food name.",
+    "status": "proposed",
+    "target_id": "artichoke-hearts-canned-jarred"
   },
   {
     "confidence": 0.9,
@@ -1810,6 +1858,18 @@
     "rationale": "allows a form/scent phrase between 'Bathroom' and 'Cleaner'",
     "status": "applied",
     "target_id": "commodity:staple:shower-cleaner"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-21T21:40:22",
+    "id": "lp:7c0d6d787b2b32964d71",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"(black\\\\s+bean|medium|spicy|light\\\\s+in\\\\s+sodium)\\\\s+chili\"}",
+    "queue_hash": "cde1a12dc19a767a6555eca518abf6775452849fc419517a93c73f2c6436e8c9",
+    "rationale": "Matches various canned chili variants (Black Bean, Medium, Spicy). Anchors on the product type 'Chili' and common descriptors.",
+    "status": "proposed",
+    "target_id": "canned-chili"
   },
   {
     "confidence": 0.8,
@@ -2292,6 +2352,18 @@
     "target_id": "brown-gravy-mix-dry-packet"
   },
   {
+    "confidence": 0.9,
+    "created_at": "2026-09-21T21:40:22",
+    "id": "lp:9b89c2810b0821f7021a",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"gold\\\\s+grim\\\\s+beet\"}",
+    "queue_hash": "cde1a12dc19a767a6555eca518abf6775452849fc419517a93c73f2c6436e8c9",
+    "rationale": "'Gold Grim Beet' is a specific variety of fresh beet. Anchors on the variety name and food type.",
+    "status": "proposed",
+    "target_id": "beets-fresh"
+  },
+  {
     "confidence": 0.85,
     "created_at": "2026-09-10T22:57:46",
     "id": "lp:9c2648c3983482d2fe12",
@@ -2413,6 +2485,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-21T21:40:22",
+    "id": "lp:a1d4c521e4933305f347",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"wax\\\\s+beans?\"}",
+    "queue_hash": "cde1a12dc19a767a6555eca518abf6775452849fc419517a93c73f2c6436e8c9",
+    "rationale": "'Wax Beans' are a type of green bean. Anchors on the variety name.",
+    "status": "proposed",
+    "target_id": "canned-green-beans"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:55:57",
     "id": "lp:a2a44955876e548b9ca9",
     "kind": "add_alias",
@@ -2470,6 +2554,18 @@
     "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans'. Note: 'Fresh' in frozen listings often means 'freshly frozen' or is a brand descriptor. This specific pattern avoids matching fresh green beans.",
     "status": "proposed",
     "target_id": "frozen-cut-green-beans"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-21T21:40:22",
+    "id": "lp:a708d4562ea51ab6dd42",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"beef\\\\s+gravy\\\\s+mix\"}",
+    "queue_hash": "cde1a12dc19a767a6555eca518abf6775452849fc419517a93c73f2c6436e8c9",
+    "rationale": "'Beef Gravy Mix' is a standard brown gravy mix. Anchors on the meat type and product form.",
+    "status": "proposed",
+    "target_id": "brown-gravy-mix-dry-packet"
   },
   {
     "confidence": 0.9,
@@ -2854,6 +2950,18 @@
     "rationale": "escalation-review round 2: Great Value's gummy fruit-snack line",
     "status": "applied",
     "target_id": "commodity:staple:fruit-snacks"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-09-21T21:40:22",
+    "id": "lp:c68e055487ea96112ad7",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cajun\\\\s+(shrimp|spice|kick)\"}",
+    "queue_hash": "cde1a12dc19a767a6555eca518abf6775452849fc419517a93c73f2c6436e8c9",
+    "rationale": "Matches specific Cajun seasoning variants like 'Cajun Shrimp', 'Cajun Spice Rub', and 'Cajun Kick'. Anchors on the flavor profile.",
+    "status": "proposed",
+    "target_id": "cajun-creole-seasoning"
   },
   {
     "confidence": 0.95,
