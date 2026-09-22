@@ -73,6 +73,10 @@ param(
   [switch]$DeferMail,
   [string]$MarkSentTypes = '',
   # exercises the queue-routing decision against temp fixtures and exits. Sends nothing, touches no live file.
+  # 2026-09-22 (queue 2026-09-19-8a3090): a deliberate send from a linked worktree, and the checkout the footer grades
+  # (default: this script's own checkout; the self-test points it at a fixture worktree).
+  [switch]$AllowWorktree,
+  [string]$GradedDir = '',
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -274,6 +278,46 @@ function ConvertTo-RepoRelative([string]$Path, [string]$RepoRoot) {
     if ($full.StartsWith($rr, [StringComparison]::OrdinalIgnoreCase)) { return ($full.Substring($rr.Length) -replace '\\', '/') }
   } catch { }
   return ''
+}
+
+# ---- WHICH TREE DID THIS ALERT GRADE? (2026-09-22, queue 2026-09-19-8a3090; F1 in design/RCA-holistic-2026-09-22.md) ----
+# An alert is a fact about PRODUCTION, and every emitter computes it from whatever checkout it runs in. 4 pages in 2 days
+# described a tree nobody serves: two heartbeats from .claude\worktrees\ba-land (2026-09-18-1dfd03, 2026-09-19-b1d371) and
+# two audits that graded main two hours behind origin (2026-09-19-405c73, 064845). Every emitter takes this one road, so
+# the road (1) names the graded tree on every alert and (2) refuses an automated send from a LINKED worktree. A
+# triage-authored residual (-Lane weekly) and an escalation (-Escalates) are authored, not graded off out\, so they pass;
+# -AllowWorktree is the explicit way to send anything else from one.
+function Get-GradedTree {
+  <# The checkout $Dir sits in: ok, top, head, behind (commits behind origin/main, '?' when unknown), linked. Never throws. #>
+  param([string]$Dir)
+  $g = [pscustomobject]@{ ok = $false; top = ''; head = ''; behind = '?'; linked = $false; common = '' }
+  $prevEapG = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $top = [string](& git -C $Dir rev-parse --show-toplevel 2>$null)
+    if ($LASTEXITCODE -ne 0 -or -not $top) { return $g }
+    $gd = [string](& git -C $Dir rev-parse --absolute-git-dir 2>$null)
+    $cd = [string](& git -C $Dir rev-parse --git-common-dir 2>$null)
+    $hd = [string](& git -C $Dir rev-parse --short HEAD 2>$null)
+    $bh = [string](& git -C $Dir rev-list --count HEAD..origin/main 2>$null)
+    if ($LASTEXITCODE -ne 0 -or -not $bh) { $bh = '?' }
+  } catch { return $g } finally { $ErrorActionPreference = $prevEapG }
+  if (-not [IO.Path]::IsPathRooted($cd)) { $cd = Join-Path $Dir $cd }
+  $gdF = ([IO.Path]::GetFullPath($gd.Replace('/', '\'))).TrimEnd('\')
+  $cdF = ([IO.Path]::GetFullPath($cd.Replace('/', '\'))).TrimEnd('\')
+  $g.ok = $true; $g.top = $top.Replace('/', '\'); $g.head = $hd.Trim(); $g.behind = $bh.Trim(); $g.common = $cdF
+  $g.linked = -not [string]::Equals($gdF, $cdF, [StringComparison]::OrdinalIgnoreCase)
+  return $g
+}
+function Format-GradedFooter($G, [string]$Dir) {
+  if (-not $G.ok) { return ('graded: not a git checkout (' + $Dir + ')') }
+  $wt = if ($G.linked) { 'linked' } else { 'main' }
+  return ('graded: ' + $G.head + ' at ' + $G.top + ', ' + $G.behind + ' commit(s) behind origin/main, worktree: ' + $wt)
+}
+function Test-WorktreeSendRefused($G, [bool]$Allow, [string]$Lane, [string]$Escalates) {
+  if (-not $G.ok -or -not $G.linked) { return $false }
+  if ($Allow -or $Lane -eq 'weekly' -or $Escalates) { return $false }
+  return $true
 }
 
 function Test-BodyThin([string]$Body) {
@@ -481,6 +525,40 @@ if ($SelfTest) {
     Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
     $c7 = _SA 'Grocery matching soundness - review needed' @('-Escalates', '2026-09-10-abcdef')
     _T 'CLEAN TWIN -Escalates still parks the item at needs-brad and always takes the mail leg' ([bool]($c7.items.Count -eq 1 -and $c7.items[0].status -eq 'needs-brad' -and $c7.out -match 'alert MUTED')) 'True'
+    # ---- WHICH TREE (2026-09-22, queue 2026-09-19-8a3090) ----
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $cg = _SA 'Grocery page HELD (coverage) - 2026-09-22'
+    _T 'CLEAN TWIN every queued alert now ends with the graded: footer naming the tree it graded' ([bool]($cg.items.Count -eq 1 -and [string]$cg.items[0].body -match 'graded: not a git checkout')) 'True'
+    . (Join-Path (Split-Path -Parent $PSScriptRoot) 'lib\git-repo-env.ps1'); Clear-TcGitRepoEnv
+    $gwRoot = Join-Path $env:TEMP ('sa-wt-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+    $gwMain = Join-Path $gwRoot 'main'; $gwLinked = Join-Path $gwRoot 'linked'
+    New-Item -ItemType Directory -Path $gwMain -Force -ErrorAction Stop | Out-Null
+    $prevEapW = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+      & git -C $gwMain init -q -b main . 2>$null | Out-Null
+      & git -C $gwMain config user.email t@t 2>$null | Out-Null
+      & git -C $gwMain config user.name T 2>$null | Out-Null
+      [IO.File]::WriteAllText((Join-Path $gwMain 'a.txt'), 'a')
+      & git -C $gwMain add a.txt 2>$null | Out-Null
+      & git -C $gwMain commit -q -m a 2>$null | Out-Null
+      & git -C $gwMain worktree add -q $gwLinked 2>$null | Out-Null
+    } finally { $ErrorActionPreference = $prevEapW }
+    try {
+      $gm = Get-GradedTree $gwMain
+      $gl = Get-GradedTree $gwLinked
+      _T 'MUST FIRE a linked worktree is recognised as linked, and an automated send from it is refused' ([bool]($gl.ok -and $gl.linked -and (Test-WorktreeSendRefused $gl $false 'daily' ''))) 'True'
+      _T 'MUST NOT FIRE the main checkout is not linked and sends' ([bool]($gm.ok -and -not $gm.linked -and -not (Test-WorktreeSendRefused $gm $false 'daily' ''))) 'True'
+      _T 'MUST NOT FIRE -AllowWorktree, a weekly-lane residual and an escalation still send from a linked worktree' ([bool](-not (Test-WorktreeSendRefused $gl $true 'daily' '') -and -not (Test-WorktreeSendRefused $gl $false 'weekly' '') -and -not (Test-WorktreeSendRefused $gl $false 'daily' '2026-09-22-abcdef'))) 'True'
+      _T 'CLEAN TWIN the footer names the fixture HEAD, its checkout, and main' ([bool]((Format-GradedFooter $gm $gwMain) -match ('^graded: [0-9a-f]{7,} at .*main, \? commit\(s\) behind origin/main, worktree: main$'))) 'True'
+      Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+      $cw = _SA 'Grocery page HELD (coverage) - 2026-09-22' @('-GradedDir', $gwLinked)
+      _T 'MUST FIRE end to end: the real script grading a linked worktree queues nothing, mails nothing, and names the production root' ([bool]((-not (Test-Path -LiteralPath $saQ)) -and $cw.out -match 'NOT SENT from linked worktree' -and $cw.out -notmatch 'alert MUTED')) 'True'
+    } finally {
+      $ErrorActionPreference = 'Continue'
+      try { & git -C $gwMain worktree remove --force $gwLinked 2>$null | Out-Null } finally { $ErrorActionPreference = $prevEapW }
+      Remove-Item -LiteralPath $gwRoot -Recurse -Force -ErrorAction SilentlyContinue
+    }
     # ---- A FIRING CHECK IS NOT YET AN ALERT (Brad, 2026-09-20, change 4a) ----
     # Driven through the REAL script against a frozen registry: an entry declaring hold_observations 2 reaches
     # PENDING on its first observation and fires on its second. The durable queue write is above the gate and
@@ -678,6 +756,18 @@ if ($SelfTest) {
   exit 0
 }
 
+# ---- WHICH TREE? (2026-09-22, queue 2026-09-19-8a3090) - see Get-GradedTree. Before the queue and the mail. -------------
+$gradedDirEff = if ($GradedDir) { $GradedDir } else { $root }
+$graded = Get-GradedTree $gradedDirEff
+$gradedFooter = "`r`n`r`n" + (Format-GradedFooter $graded $gradedDirEff)
+if (Test-WorktreeSendRefused $graded ([bool]$AllowWorktree) $Lane $Escalates) {
+  $prodRoot = Split-Path -Parent $graded.common
+  Log ("NOT SENT from linked worktree " + $graded.top + " ('" + $Subject + "'); production root is " + $prodRoot + " - an alert describes production, so it is sent from there, or with -AllowWorktree")
+  [Console]::Error.WriteLine("send-alert: NOT SENT from linked worktree " + $graded.top + "; production root is " + $prodRoot + " (pass -AllowWorktree to send from here on purpose)")
+  Write-Output ("alert NOT SENT from linked worktree " + $graded.top + " - production root is " + $prodRoot)
+  exit 0
+}
+
 # ---- WHICH CLASS IS THIS ALERT? (2026-09-10, Brad ruling 1) ------------------------------------------------
 # page = emailed and queued; review = queued, never emailed; digest = emailed, never queued. The class comes from
 # grocery\alert-registry.json through alert-registry-lib.ps1. EVERY failure here fails toward PAGE: a lib that will
@@ -773,7 +863,7 @@ try {
     $q = [pscustomobject]@{ readme = 'Durable ops-alert queue. Written by send-alert.ps1 on EVERY alert (even inbox-suppressed dupes). Drained by the grocery-alert-triage scheduled agent: investigate -> fix -> fix the ROOT cause -> CLOSE THROUGH grocery\triage-close.ps1 -Id <id> -Disposition <confirmed|false-alarm|superseded|by-design|wont-fix> -Notes "<what was established>". The disposition is what makes a per-alert LIVE precision computable (backlog E22); a hand-edited status=resolved records that somebody dealt with it and loses whether the alert was right. Do not hand-edit except to force a re-triage (set status back to open).'; items = @() }
   }
   $items = @($q.items)
-  $bodyStored = $(if ($Body.Length -gt 1500) { $Body.Substring(0,1500) + ' ...[truncated - full context in ad-cycle-log.txt / the source audit json]' } else { $Body })
+  $bodyStored = $(if ($Body.Length -gt 1500) { $Body.Substring(0,1500) + ' ...[truncated - full context in ad-cycle-log.txt / the source audit json]' } else { $Body }) + $gradedFooter
   $thin = Test-BodyThin $Body
   $incident = Get-IncidentAbsorbTarget -Items $items -CausedBy $CausedBy -Verdict $incVerdict -Today $today
   if ($incident.target) {
@@ -905,7 +995,7 @@ try {
   # reached the queue waits forever. Spool it beside the queue; triage-due.ps1 reports a spool as DUE.
   try {
     $spool = Join-Path $root ('triage-spool-' + $today + '.jsonl')
-    $line = ([pscustomobject]@{ ts=(Get-Date).ToString('s'); type=$typeKey; subject=$Subject; body=$Body; reason=$_.Exception.Message } | ConvertTo-Json -Depth 4 -Compress)
+    $line = ([pscustomobject]@{ ts=(Get-Date).ToString('s'); type=$typeKey; subject=$Subject; body=($Body + $gradedFooter); reason=$_.Exception.Message } | ConvertTo-Json -Depth 4 -Compress)
     # THROUGH lib\append-line.ps1 (2026-09-11). A bare Add-Content lands a line only while no other process is
     # appending: in a scratch harness two concurrent appenders landed 13 of 200 lines. A spool is written exactly when
     # senders are contending for the queue lock, so without this the refusal above would have moved the loss here.
@@ -1022,7 +1112,7 @@ try {
   # its parent.
   . (Join-Path (Split-Path -Parent $PSScriptRoot) '.claude\skills\lesson\google-token.ps1')
   $token = Get-GoogleAccessToken
-  $raw = "To: $To`r`nSubject: $($delivery.mail_subject)`r`nContent-Type: text/plain; charset=UTF-8`r`n`r`n$Body`r`n`r`n(Automated alert from the Omaha grocery pipeline.)"
+  $raw = "To: $To`r`nSubject: $($delivery.mail_subject)`r`nContent-Type: text/plain; charset=UTF-8`r`n`r`n$Body$gradedFooter`r`n`r`n(Automated alert from the Omaha grocery pipeline.)"
   $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($raw)).Replace('+','-').Replace('/','_').TrimEnd('=')
   $resp = Invoke-RestMethod -Uri "https://gmail.googleapis.com/gmail/v1/users/me/messages/send" -Method Post `
             -Headers @{ Authorization = "Bearer $token" } -ContentType "application/json" -Body (@{ raw = $b64 } | ConvertTo-Json) -TimeoutSec 30
