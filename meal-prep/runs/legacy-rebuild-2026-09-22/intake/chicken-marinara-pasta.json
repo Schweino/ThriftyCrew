@@ -1,0 +1,82 @@
+{
+    "name":  "Chicken Marinara Meal Prep",
+    "slug":  "chicken-marinara-pasta",
+    "protein":  "chicken",
+    "cuisine":  "Italian-American",
+    "visibility":  "paid",
+    "ingredients":  [
+                        {
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "grams":  2267
+                        },
+                        {
+                            "item":  "High Protein Pasta",
+                            "grams":  784,
+                            "display_name":  "Protein Penne Pasta"
+                        },
+                        {
+                            "item":  "Marinara Sauce",
+                            "grams":  2608
+                        },
+                        {
+                            "item":  "Fat Free Cottage Cheese",
+                            "grams":  226
+                        },
+                        {
+                            "item":  "Turkey Pepperoni",
+                            "grams":  426
+                        },
+                        {
+                            "item":  "Reduced Fat Mozzarella",
+                            "grams":  453
+                        }
+                    ],
+    "prose":  {
+                  "intro_html":  "Chicken, protein penne and marinara, finished with melted mozzarella and turkey pepperoni so it eats like a pizza pasta. A little blended cottage cheese in the sauce adds protein you will never taste. It comes in at about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost), with \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
+                  "shop_smart":  [
+                                     "Buy chicken on sale and freeze it. Same play as always: grab bulk family packs when it is marked down.",
+                                     "Store-brand marinara is the move. It costs a fraction of the name brands. Season it up if it needs a lift.",
+                                     "Watch for turkey pepperoni deals. It is the priciest add-on here, so stock up when it is on sale. It keeps a while.",
+                                     "Buy cheese in bulk and compare price per ounce on mozzarella and cottage cheese, and scan your local ads too."
+                                 ],
+                  "make_it":  [
+                                  "Weigh your empty pot first and write down the number. You need it to portion at the end.",
+                                  "Boil the penne until al dente, drain, and set it aside.",
+                                  "Cube and cook the chicken breast. Season it to your liking: salt, pepper, garlic, Italian seasoning.",
+                                  "Make the sauce: blend the cottage cheese into the marinara until smooth, then warm it through.",
+                                  "Combine the chicken, sauce and penne in the pot and stir to coat.",
+                                  "Stir in the shredded mozzarella and turkey pepperoni until the cheese melts through. No broiling needed."
+                              ],
+                  "portion_html":  "Set the full pot on your large scale, subtract the empty-pot weight you wrote down in step 1, and divide by 14. Scoop that amount into each glass container. Every meal lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
+                  "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost) for a pizza pasta with {{protein}} grams of protein in it.",
+                  "upsell_html":  "A cheesy chicken marinara for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full 52-week library of money, work, and life lessons. All for $1 a month.",
+                  "credit_html":  "One of our own recipes, first posted in June 2026 and rebuilt on live Omaha store pricing."
+              },
+    "head":  {
+                 "description":  "Chicken marinara meal prep: chicken, protein penne, marinara, mozzarella and turkey pepperoni, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
+                 "keywords":  "chicken marinara meal prep, pizza pasta, protein pasta, high protein meal prep, budget meal prep",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT45M",
+                 "steps":  [
+                               "Weigh the empty pot and write the number down.",
+                               "Boil the penne until al dente and drain.",
+                               "Cube, season and cook the chicken breast.",
+                               "Blend the cottage cheese into the marinara and warm it.",
+                               "Combine chicken, sauce and penne, then stir in the mozzarella and pepperoni.",
+                               "Weigh the full pot, subtract the pot and divide by 14."
+                           ]
+             },
+    "source_url":  "https://www.thriftycrew.com/chicken-marinara-pasta/",
+    "source_site":  "thriftycrew.com",
+    "macros_per_serving":  {
+                               "calories":  651,
+                               "protein_g":  70,
+                               "carbs_g":  55,
+                               "fat_g":  18
+                           },
+    "writer_notes":  [
+                         "LEGACY REBUILD (ruling A, 2026-09-21): pre-engine post rebuilt at its own URL; grams and method kept from the 2026-06/07 post, every typed price and hand-stated macro dropped."
+                     ]
+}

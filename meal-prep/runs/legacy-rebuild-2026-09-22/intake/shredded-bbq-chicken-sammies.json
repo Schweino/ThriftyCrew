@@ -1,0 +1,70 @@
+{
+    "name":  "Slow-Cooker BBQ Chicken Meal Prep",
+    "slug":  "shredded-bbq-chicken-sammies",
+    "protein":  "chicken",
+    "cuisine":  "American",
+    "visibility":  "paid",
+    "ingredients":  [
+                        {
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "grams":  2267
+                        },
+                        {
+                            "item":  "BBQ Sauce (Sugar Free)",
+                            "grams":  1536
+                        },
+                        {
+                            "item":  "Fries",
+                            "grams":  5950,
+                            "display_name":  "Crinkle-Cut Fries"
+                        }
+                    ],
+    "prose":  {
+                  "intro_html":  "Shredded BBQ chicken sandwiches with a pile of crinkle-cut fries, made the lazy way: the slow cooker does the work. The chicken freezes and reheats great, and the fries bake fresh when you eat. It comes in at about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost) for the chicken and fries, with \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
+                  "shop_smart":  [
+                                     "Buy chicken on sale and freeze it. Same play as always: bulk family packs when it is marked down.",
+                                     "Buy the big bag of fries. The larger bag is almost always the better deal per pound, and fries keep great in the freezer. Compare the price per pound on the shelf tag.",
+                                     "Pick your BBQ sauce by the label. The one in this recipe keeps the calories down; a regular store-brand bottle is usually cheaper and adds calories.",
+                                     "Buns are your choice, and they are not counted in the macros or the cost here. We use Bettergoods Keto buns, but get whatever is cost-effective for you."
+                                 ],
+                  "make_it":  [
+                                  "Season the chicken breast to your liking.",
+                                  "Add the seasoned chicken to your slow cooker and cook on HIGH for 4 hours.",
+                                  "Shred the cooked chicken and drain off any excess liquid.",
+                                  "Mix the BBQ sauce into the shredded chicken until it is evenly coated.",
+                                  "Bake the crinkle-cut fries per the bag.",
+                                  "Pile the BBQ chicken onto a bun and serve with the fries."
+                              ],
+                  "portion_html":  "Weigh the finished BBQ chicken and divide by 14 for your per-sandwich meat portion. Split the fries the same way, by weight, and bake each portion fresh when you eat. Together that is \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e a plate, before the bun.",
+                  "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a plate (at everyday cost) for the chicken and the fries. The bun is on you.",
+                  "upsell_html":  "BBQ chicken sandwiches and fries for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a plate (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full 52-week library of money, work, and life lessons. All for $1 a month.",
+                  "credit_html":  "One of our own recipes, first posted in June 2026 and rebuilt on live Omaha store pricing."
+              },
+    "head":  {
+                 "description":  "Slow-cooker BBQ chicken meal prep: shredded BBQ chicken with crinkle-cut fries, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
+                 "keywords":  "bbq chicken meal prep, slow cooker chicken, shredded chicken sandwiches, budget meal prep, high protein",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT4H",
+                 "totalTime":  "PT4H15M",
+                 "steps":  [
+                               "Season the chicken breast.",
+                               "Slow cook on HIGH for 4 hours.",
+                               "Shred and drain the chicken.",
+                               "Mix in the BBQ sauce.",
+                               "Bake the fries per the bag.",
+                               "Weigh and divide the chicken and fries by 14."
+                           ]
+             },
+    "source_url":  "https://www.thriftycrew.com/shredded-bbq-chicken-sammies/",
+    "source_site":  "thriftycrew.com",
+    "macros_per_serving":  {
+                               "calories":  789,
+                               "protein_g":  45,
+                               "carbs_g":  99,
+                               "fat_g":  29
+                           },
+    "writer_notes":  [
+                         "LEGACY REBUILD (ruling A, 2026-09-21): pre-engine post rebuilt at its own URL; grams and method kept from the 2026-06/07 post, every typed price and hand-stated macro dropped."
+                     ]
+}

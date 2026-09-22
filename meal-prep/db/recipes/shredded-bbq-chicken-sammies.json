@@ -1,0 +1,128 @@
+{
+    "name":  "Slow-Cooker BBQ Chicken Meal Prep",
+    "slug":  "shredded-bbq-chicken-sammies",
+    "cuisine":  "American",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.thriftycrew.com/shredded-bbq-chicken-sammies/",
+    "source_site":  "thriftycrew.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "LEGACY REBUILD (ruling A, 2026-09-21): pre-engine post rebuilt at its own URL; grams and method kept from the 2026-06/07 post, every typed price and hand-stated macro dropped."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  789,
+                 "protein":  45,
+                 "carbs":  99,
+                 "fat":  29,
+                 "cost_ps":  "2.48"
+             },
+    "intro_html":  "Shredded BBQ chicken sandwiches with a pile of crinkle-cut fries, made the lazy way: the slow cooker does the work. The chicken freezes and reheats great, and the fries bake fresh when you eat. It comes in at about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost) for the chicken and fries, with \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2267 g)",
+                                "\u003cstrong\u003eBBQ Sauce (Sugar Free) (Sweet Baby Ray\u0027s):\u003c/strong\u003e 5.75 cups (1536 g)",
+                                "\u003cstrong\u003eCrinkle-Cut Fries:\u003c/strong\u003e 210 oz (5950 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 5 lb: ~$11.15. \u003cstrong\u003eBuy 5 lbs: $11.15.\u003c/strong\u003e",
+                       "BBQ Sauce (Sugar Free), 5.75 cups: ~$9.58. \u003cstrong\u003ePantry staple; this batch alone uses about 3 18oz bottles.\u003c/strong\u003e",
+                       "Crinkle-Cut Fries, 210 oz: ~$14.06. \u003cstrong\u003eBuy 7 32oz bags: $15.00.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $34.79 across 14 servings, so roughly $2.48 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.73 across 14 servings, roughly $2.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a plate (at everyday cost) for the chicken and the fries. The bun is on you.",
+    "shop_smart":  [
+                       "Buy chicken on sale and freeze it. Same play as always: bulk family packs when it is marked down.",
+                       "Buy the big bag of fries. The larger bag is almost always the better deal per pound, and fries keep great in the freezer. Compare the price per pound on the shelf tag.",
+                       "Pick your BBQ sauce by the label. The one in this recipe keeps the calories down; a regular store-brand bottle is usually cheaper and adds calories.",
+                       "Buns are your choice, and they are not counted in the macros or the cost here. We use Bettergoods Keto buns, but get whatever is cost-effective for you."
+                   ],
+    "make_it":  [
+                    "Season the chicken breast to your liking.",
+                    "Add the seasoned chicken to your slow cooker and cook on HIGH for 4 hours.",
+                    "Shred the cooked chicken and drain off any excess liquid.",
+                    "Mix the BBQ sauce into the shredded chicken until it is evenly coated.",
+                    "Bake the crinkle-cut fries per the bag.",
+                    "Pile the BBQ chicken onto a bun and serve with the fries."
+                ],
+    "portion_html":  "Weigh the finished BBQ chicken and divide by 14 for your per-sandwich meat portion. Split the fries the same way, by weight, and bake each portion fresh when you eat. Together that is \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e a plate, before the bun.",
+    "credit_html":  "One of our own recipes, first posted in June 2026 and rebuilt on live Omaha store pricing.",
+    "upsell_html":  "BBQ chicken sandwiches and fries for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a plate (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full 52-week library of money, work, and life lessons. All for $1 a month.",
+    "cost_batch":  34.79,
+    "cost_batch_true":  35.73,
+    "cost_per_serving":  2.48,
+    "cost_per_serving_true":  2.55,
+    "cost_pantry_add":  0,
+    "cost_first_run":  35.73,
+    "scaler":  {
+                   "cost":  "35.73",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2267,
+                                   "buy":  "5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "BBQ Sauce (Sugar Free)",
+                                   "canon":  "BBQ Sauce (Sugar Free)",
+                                   "grams":  1536,
+                                   "buy":  "5.75 cups",
+                                   "bid":  "sugar-free-bbq-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Crinkle-Cut Fries",
+                                   "canon":  "Fries",
+                                   "grams":  5950,
+                                   "buy":  "210 oz",
+                                   "bid":  "fries",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Slow-cooker BBQ chicken meal prep: shredded BBQ chicken with crinkle-cut fries, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
+                 "keywords":  "bbq chicken meal prep, slow cooker chicken, shredded chicken sandwiches, budget meal prep, high protein",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT4H",
+                 "totalTime":  "PT4H15M",
+                 "costPerServing":  2.48,
+                 "recipeIngredient":  [
+                                          "Boneless Skinless Chicken Breast, 5 lb (2267 g)",
+                                          "BBQ Sauce (Sugar Free), 5.75 cups (1536 g)",
+                                          "Crinkle-Cut Fries, 210 oz (5950 g)"
+                                      ],
+                 "steps":  [
+                               "Season the chicken breast.",
+                               "Slow cook on HIGH for 4 hours.",
+                               "Shred and drain the chicken.",
+                               "Mix in the BBQ sauce.",
+                               "Bake the fries per the bag.",
+                               "Weigh and divide the chicken and fries by 14."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  2267
+                              },
+                              {
+                                  "item":  "BBQ Sauce (Sugar Free)",
+                                  "grams":  1536
+                              },
+                              {
+                                  "item":  "Fries",
+                                  "grams":  5950
+                              }
+                          ]
+}

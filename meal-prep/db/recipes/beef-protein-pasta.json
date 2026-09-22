@@ -1,0 +1,141 @@
+{
+    "name":  "Beef Protein Pasta Meal Prep",
+    "slug":  "beef-protein-pasta",
+    "cuisine":  "Italian-American",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.thriftycrew.com/beef-protein-pasta/",
+    "source_site":  "thriftycrew.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "LEGACY REBUILD (ruling A, 2026-09-21): pre-engine post rebuilt at its own URL; grams and method kept from the 2026-06/07 post, every typed price and hand-stated macro dropped."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  593,
+                 "protein":  59,
+                 "carbs":  53,
+                 "fat":  18,
+                 "cost_ps":  "3.47"
+             },
+    "intro_html":  "93/7 ground beef, protein penne and a pasta sauce blended with cottage cheese until it turns creamy. It eats like a rich meat sauce and carries a lot of protein for the money. It comes in at about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost), with \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2712 g)",
+                                "\u003cstrong\u003eTraditional Pasta Sauce (Great Value):\u003c/strong\u003e 72 oz dry (2040 g)",
+                                "\u003cstrong\u003eProtein Penne Pasta:\u003c/strong\u003e 27.75 oz dry (784 g)",
+                                "\u003cstrong\u003eCottage Cheese (Darigold):\u003c/strong\u003e 24 oz (678 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 6 lb: ~$36.89. \u003cstrong\u003eBuy 6 lbs: $37.02.\u003c/strong\u003e",
+                       "Traditional Pasta Sauce, 72 oz dry: ~$4.76. \u003cstrong\u003eBuy 3 24oz jars: $4.76.\u003c/strong\u003e",
+                       "Protein Penne Pasta, 27.75 oz dry: ~$4.18. \u003cstrong\u003eBuy 2 14.5oz boxes: $4.38.\u003c/strong\u003e",
+                       "Cottage Cheese, 24 oz: ~$2.72. \u003cstrong\u003eBuy 1 24oz tub: $2.73.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $48.55 across 14 servings, so roughly $3.47 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $48.89 across 14 servings, roughly $3.49 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost) for a meat-sauce pasta with {{protein}} grams of protein in it.",
+    "shop_smart":  [
+                       "Watch for ground beef sales and stock the freezer. 93/7 ground beef is one of the pricier proteins, so grab the big family packs when your store marks it down and freeze what you will not use that week. If you spot a great deal on 80/20, go for it, but know it adds calories and fat and takes a little protein away.",
+                       "Store-brand pasta sauce is the move. It costs a fraction of the name brands. Punch it up with garlic, Italian seasoning, or a pinch of red pepper.",
+                       "Pasta is flexible. We use Barilla Protein penne for the macros here, but store-brand penne is dirt cheap. Your macros will shift a little if you swap.",
+                       "Buy cottage cheese in the big tubs and compare price per ounce across stores, and scan your local weekly ads too."
+                   ],
+    "make_it":  [
+                    "Weigh your empty pot first and write down the number. You need it to portion at the end.",
+                    "Boil the penne until al dente, drain, and set it aside.",
+                    "Brown the ground beef and drain the excess fat. Season it to your liking: salt, pepper, garlic, Italian seasoning, a little red pepper if you want heat.",
+                    "Make the sauce: blend the pasta sauce with the cottage cheese until smooth and creamy, then warm it through. Depending on your blender, you may need two batches.",
+                    "Combine the beef, sauce and penne back in the pot and stir to coat."
+                ],
+    "portion_html":  "Set the full pot on your large scale, subtract the empty-pot weight you wrote down in step 1, and divide by 14. Scoop that amount into each glass container. Every meal lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "One of our own recipes, first posted in June 2026 and rebuilt on live Omaha store pricing.",
+    "upsell_html":  "A creamy beef pasta for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full 52-week library of money, work, and life lessons. All for $1 a month.",
+    "cost_batch":  48.55,
+    "cost_batch_true":  48.89,
+    "cost_per_serving":  3.47,
+    "cost_per_serving_true":  3.49,
+    "cost_pantry_add":  0,
+    "cost_first_run":  48.89,
+    "scaler":  {
+                   "cost":  "48.89",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  2712,
+                                   "buy":  "6 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Traditional Pasta Sauce",
+                                   "canon":  "Traditional Pasta Sauce",
+                                   "grams":  2040,
+                                   "buy":  "72 oz dry",
+                                   "bid":  "traditional-pasta-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Protein Penne Pasta",
+                                   "canon":  "High Protein Pasta",
+                                   "grams":  784,
+                                   "buy":  "27.75 oz dry",
+                                   "bid":  "protein-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cottage Cheese",
+                                   "canon":  "Cottage Cheese",
+                                   "grams":  678,
+                                   "buy":  "24 oz",
+                                   "bid":  "cottage-cheese",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Beef protein pasta meal prep: 93/7 ground beef, protein penne and a cottage cheese pasta sauce, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
+                 "keywords":  "beef pasta meal prep, protein pasta, cottage cheese pasta sauce, ground beef meal prep, budget meal prep",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  3.47,
+                 "recipeIngredient":  [
+                                          "93/7 Ground Beef, 6 lb (2712 g)",
+                                          "Traditional Pasta Sauce, 72 oz dry (2040 g)",
+                                          "Protein Penne Pasta, 27.75 oz dry (784 g)",
+                                          "Cottage Cheese, 24 oz (678 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty pot and write the number down.",
+                               "Boil the penne until al dente and drain.",
+                               "Brown, drain and season the ground beef.",
+                               "Blend the pasta sauce with the cottage cheese and warm it.",
+                               "Combine everything, weigh the full pot, subtract the pot and divide by 14."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  2712
+                              },
+                              {
+                                  "item":  "Traditional Pasta Sauce",
+                                  "grams":  2040
+                              },
+                              {
+                                  "item":  "High Protein Pasta",
+                                  "grams":  784
+                              },
+                              {
+                                  "item":  "Cottage Cheese",
+                                  "grams":  678
+                              }
+                          ]
+}

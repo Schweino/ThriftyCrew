@@ -1,0 +1,72 @@
+{
+    "name":  "Beef Protein Pasta Meal Prep",
+    "slug":  "beef-protein-pasta",
+    "protein":  "beef",
+    "cuisine":  "Italian-American",
+    "visibility":  "paid",
+    "ingredients":  [
+                        {
+                            "item":  "93/7 Ground Beef",
+                            "grams":  2712
+                        },
+                        {
+                            "item":  "Traditional Pasta Sauce",
+                            "grams":  2040
+                        },
+                        {
+                            "item":  "High Protein Pasta",
+                            "grams":  784,
+                            "display_name":  "Protein Penne Pasta"
+                        },
+                        {
+                            "item":  "Cottage Cheese",
+                            "grams":  678
+                        }
+                    ],
+    "prose":  {
+                  "intro_html":  "93/7 ground beef, protein penne and a pasta sauce blended with cottage cheese until it turns creamy. It eats like a rich meat sauce and carries a lot of protein for the money. It comes in at about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost), with \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
+                  "shop_smart":  [
+                                     "Watch for ground beef sales and stock the freezer. 93/7 ground beef is one of the pricier proteins, so grab the big family packs when your store marks it down and freeze what you will not use that week. If you spot a great deal on 80/20, go for it, but know it adds calories and fat and takes a little protein away.",
+                                     "Store-brand pasta sauce is the move. It costs a fraction of the name brands. Punch it up with garlic, Italian seasoning, or a pinch of red pepper.",
+                                     "Pasta is flexible. We use Barilla Protein penne for the macros here, but store-brand penne is dirt cheap. Your macros will shift a little if you swap.",
+                                     "Buy cottage cheese in the big tubs and compare price per ounce across stores, and scan your local weekly ads too."
+                                 ],
+                  "make_it":  [
+                                  "Weigh your empty pot first and write down the number. You need it to portion at the end.",
+                                  "Boil the penne until al dente, drain, and set it aside.",
+                                  "Brown the ground beef and drain the excess fat. Season it to your liking: salt, pepper, garlic, Italian seasoning, a little red pepper if you want heat.",
+                                  "Make the sauce: blend the pasta sauce with the cottage cheese until smooth and creamy, then warm it through. Depending on your blender, you may need two batches.",
+                                  "Combine the beef, sauce and penne back in the pot and stir to coat."
+                              ],
+                  "portion_html":  "Set the full pot on your large scale, subtract the empty-pot weight you wrote down in step 1, and divide by 14. Scoop that amount into each glass container. Every meal lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
+                  "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost) for a meat-sauce pasta with {{protein}} grams of protein in it.",
+                  "upsell_html":  "A creamy beef pasta for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full 52-week library of money, work, and life lessons. All for $1 a month.",
+                  "credit_html":  "One of our own recipes, first posted in June 2026 and rebuilt on live Omaha store pricing."
+              },
+    "head":  {
+                 "description":  "Beef protein pasta meal prep: 93/7 ground beef, protein penne and a cottage cheese pasta sauce, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
+                 "keywords":  "beef pasta meal prep, protein pasta, cottage cheese pasta sauce, ground beef meal prep, budget meal prep",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT45M",
+                 "steps":  [
+                               "Weigh the empty pot and write the number down.",
+                               "Boil the penne until al dente and drain.",
+                               "Brown, drain and season the ground beef.",
+                               "Blend the pasta sauce with the cottage cheese and warm it.",
+                               "Combine everything, weigh the full pot, subtract the pot and divide by 14."
+                           ]
+             },
+    "source_url":  "https://www.thriftycrew.com/beef-protein-pasta/",
+    "source_site":  "thriftycrew.com",
+    "macros_per_serving":  {
+                               "calories":  593,
+                               "protein_g":  59,
+                               "carbs_g":  53,
+                               "fat_g":  18
+                           },
+    "writer_notes":  [
+                         "LEGACY REBUILD (ruling A, 2026-09-21): pre-engine post rebuilt at its own URL; grams and method kept from the 2026-06/07 post, every typed price and hand-stated macro dropped."
+                     ]
+}

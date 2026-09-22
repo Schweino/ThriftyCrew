@@ -1,0 +1,158 @@
+{
+    "name":  "Budget Chicken Alfredo Meal Prep",
+    "slug":  "free-chicken-alfredo",
+    "cuisine":  "Italian-American",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "public",
+    "source_url":  "https://www.thriftycrew.com/free-chicken-alfredo/",
+    "source_site":  "thriftycrew.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "LEGACY REBUILD (ruling A, 2026-09-21): pre-engine post rebuilt at its own URL; grams and method kept from the 2026-06/07 post, every typed price and hand-stated macro dropped."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  533,
+                 "protein":  57,
+                 "carbs":  51,
+                 "fat":  12,
+                 "cost_ps":  "1.96"
+             },
+    "intro_html":  "A freezer-friendly, high-protein batch, and about two weeks of dinners from one cook session. Chicken, protein rotini, broccoli and a creamy alfredo with a quiet trick in it: blended cottage cheese, which bumps the protein up without changing the taste. It comes in at about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost), with \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e in every container.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2311 g)",
+                                "\u003cstrong\u003eCottage Cheese (Darigold):\u003c/strong\u003e 24 oz (678 g)",
+                                "\u003cstrong\u003eAlfredo Sauce (Great Value):\u003c/strong\u003e 5.5 cups (1362 g)",
+                                "\u003cstrong\u003eProtein Rotini Pasta:\u003c/strong\u003e 27.75 oz dry (784 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2.5 lb (1190 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 5 lb: ~$11.36. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
+                       "Cottage Cheese, 24 oz: ~$2.72. \u003cstrong\u003eBuy 1 24oz tub: $2.73.\u003c/strong\u003e",
+                       "Alfredo Sauce, 5.5 cups: ~$5.41. \u003cstrong\u003eBuy 4 15oz jars: $6.76.\u003c/strong\u003e",
+                       "Protein Rotini Pasta, 27.75 oz dry: ~$4.18. \u003cstrong\u003eBuy 2 14.5oz boxes: $4.38.\u003c/strong\u003e",
+                       "Broccoli Florets, 2.5 lb: ~$3.78. \u003cstrong\u003eBuy 4 12oz bags: $4.32.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.45 across 14 servings, so roughly $1.96 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.57 across 14 servings, roughly $2.26 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses."
+                   ],
+    "cost_closing_html":  "That is about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a meal (at everyday cost). Put it next to a single takeout dinner and it is not close.",
+    "shop_smart":  [
+                       "Buy chicken when it is on sale, then freeze it. Stores drop chicken to a sale price at random. We once grabbed 50 lbs on sale, a full dollar a pound under our usual price, and loaded up the deep freezer. That one buy saved us fifty bucks. At about 5 lbs per batch, 50 lbs makes 10 batches. That is 140 portions, or about 70 nights of dinner for two.",
+                       "Go store-brand on the alfredo sauce. It is a fraction of the name-brand price, and if it tastes a little bland, just season it up.",
+                       "Pasta is flexible. We use Barilla Protein pasta for the macros here, but store-brand pasta is dirt cheap. Just know your macros will shift a little if you swap.",
+                       "Buy cottage cheese in the big tubs and compare price per ounce across stores, and check your local weekly ads too. Price per ounce is the number that actually tells you the deal."
+                   ],
+    "make_it":  [
+                    "Weigh your empty pot first. Put the largest pot you will use to mix everything on your large scale and write down its weight. You need that number at the end to portion accurately.",
+                    "Boil the rotini in that pot until al dente, drain, and set it aside.",
+                    "Cube and cook the chicken breast. Season it however you like: salt, pepper, garlic, Italian seasoning, a little cayenne if you want heat. No wrong answer here, so go with what your taste buds love.",
+                    "Blend the cottage cheese until smooth, then stir it into the alfredo sauce and warm it through. The cottage cheese bumps the protein up without changing the creamy taste.",
+                    "Steam or roast the broccoli.",
+                    "Combine everything back in the pot and stir to coat."
+                ],
+    "portion_html":  "Set the full pot on your large scale and subtract the empty-pot weight you wrote down in step 1. That is your total food weight. Divide it by 14, then scoop that amount into each glass container. Every meal lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "One of our own recipes, first posted in June 2026 and rebuilt on live Omaha store pricing.",
+    "upsell_html":  "Like cooking two weeks of dinners for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a plate (at everyday cost)? This is one of many. Members get every recipe in the Meal Prep section, plus the full 52-week library of money, work, and life lessons. All for $1 a month.",
+    "cost_batch":  27.45,
+    "cost_batch_true":  31.57,
+    "cost_per_serving":  1.96,
+    "cost_per_serving_true":  2.26,
+    "cost_pantry_add":  0,
+    "cost_first_run":  31.57,
+    "scaler":  {
+                   "cost":  "31.57",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2311,
+                                   "buy":  "5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cottage Cheese",
+                                   "canon":  "Cottage Cheese",
+                                   "grams":  678,
+                                   "buy":  "24 oz",
+                                   "bid":  "cottage-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Alfredo Sauce",
+                                   "canon":  "Alfredo Sauce",
+                                   "grams":  1362,
+                                   "buy":  "5.5 cups",
+                                   "bid":  "alfredo-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Protein Rotini Pasta",
+                                   "canon":  "High Protein Pasta",
+                                   "grams":  784,
+                                   "buy":  "27.75 oz dry",
+                                   "bid":  "protein-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "canon":  "Broccoli Florets",
+                                   "grams":  1190,
+                                   "buy":  "2.5 lb",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Budget chicken alfredo meal prep: chicken, protein rotini, broccoli and a cottage cheese alfredo, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
+                 "keywords":  "chicken alfredo meal prep, budget meal prep, high protein pasta, cottage cheese alfredo, freezer meal prep",
+                 "image":  "",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  1.96,
+                 "recipeIngredient":  [
+                                          "Boneless Skinless Chicken Breast, 5 lb (2311 g)",
+                                          "Cottage Cheese, 24 oz (678 g)",
+                                          "Alfredo Sauce, 5.5 cups (1362 g)",
+                                          "Protein Rotini Pasta, 27.75 oz dry (784 g)",
+                                          "Broccoli Florets, 2.5 lb (1190 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty pot and write the number down.",
+                               "Boil the rotini until al dente and drain.",
+                               "Cube, season and cook the chicken breast.",
+                               "Blend the cottage cheese smooth and stir it into the warmed alfredo sauce.",
+                               "Steam or roast the broccoli.",
+                               "Combine everything, weigh the full pot, subtract the pot and divide by 14."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  2311
+                              },
+                              {
+                                  "item":  "Cottage Cheese",
+                                  "grams":  678
+                              },
+                              {
+                                  "item":  "Alfredo Sauce",
+                                  "grams":  1362
+                              },
+                              {
+                                  "item":  "High Protein Pasta",
+                                  "grams":  784
+                              },
+                              {
+                                  "item":  "Broccoli Florets",
+                                  "grams":  1190
+                              }
+                          ]
+}

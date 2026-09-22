@@ -1,0 +1,78 @@
+{
+    "name":  "Budget Chicken Alfredo Meal Prep",
+    "slug":  "free-chicken-alfredo",
+    "protein":  "chicken",
+    "cuisine":  "Italian-American",
+    "visibility":  "public",
+    "ingredients":  [
+                        {
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "grams":  2311
+                        },
+                        {
+                            "item":  "Cottage Cheese",
+                            "grams":  678
+                        },
+                        {
+                            "item":  "Alfredo Sauce",
+                            "grams":  1362
+                        },
+                        {
+                            "item":  "High Protein Pasta",
+                            "grams":  784,
+                            "display_name":  "Protein Rotini Pasta"
+                        },
+                        {
+                            "item":  "Broccoli Florets",
+                            "grams":  1190
+                        }
+                    ],
+    "prose":  {
+                  "intro_html":  "A freezer-friendly, high-protein batch, and about two weeks of dinners from one cook session. Chicken, protein rotini, broccoli and a creamy alfredo with a quiet trick in it: blended cottage cheese, which bumps the protein up without changing the taste. It comes in at about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost), with \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e in every container.",
+                  "shop_smart":  [
+                                     "Buy chicken when it is on sale, then freeze it. Stores drop chicken to a sale price at random. We once grabbed 50 lbs on sale, a full dollar a pound under our usual price, and loaded up the deep freezer. That one buy saved us fifty bucks. At about 5 lbs per batch, 50 lbs makes 10 batches. That is 140 portions, or about 70 nights of dinner for two.",
+                                     "Go store-brand on the alfredo sauce. It is a fraction of the name-brand price, and if it tastes a little bland, just season it up.",
+                                     "Pasta is flexible. We use Barilla Protein pasta for the macros here, but store-brand pasta is dirt cheap. Just know your macros will shift a little if you swap.",
+                                     "Buy cottage cheese in the big tubs and compare price per ounce across stores, and check your local weekly ads too. Price per ounce is the number that actually tells you the deal."
+                                 ],
+                  "make_it":  [
+                                  "Weigh your empty pot first. Put the largest pot you will use to mix everything on your large scale and write down its weight. You need that number at the end to portion accurately.",
+                                  "Boil the rotini in that pot until al dente, drain, and set it aside.",
+                                  "Cube and cook the chicken breast. Season it however you like: salt, pepper, garlic, Italian seasoning, a little cayenne if you want heat. No wrong answer here, so go with what your taste buds love.",
+                                  "Blend the cottage cheese until smooth, then stir it into the alfredo sauce and warm it through. The cottage cheese bumps the protein up without changing the creamy taste.",
+                                  "Steam or roast the broccoli.",
+                                  "Combine everything back in the pot and stir to coat."
+                              ],
+                  "portion_html":  "Set the full pot on your large scale and subtract the empty-pot weight you wrote down in step 1. That is your total food weight. Divide it by 14, then scoop that amount into each glass container. Every meal lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
+                  "cost_closing_html":  "That is about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a meal (at everyday cost). Put it next to a single takeout dinner and it is not close.",
+                  "upsell_html":  "Like cooking two weeks of dinners for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a plate (at everyday cost)? This is one of many. Members get every recipe in the Meal Prep section, plus the full 52-week library of money, work, and life lessons. All for $1 a month.",
+                  "credit_html":  "One of our own recipes, first posted in June 2026 and rebuilt on live Omaha store pricing."
+              },
+    "head":  {
+                 "description":  "Budget chicken alfredo meal prep: chicken, protein rotini, broccoli and a cottage cheese alfredo, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
+                 "keywords":  "chicken alfredo meal prep, budget meal prep, high protein pasta, cottage cheese alfredo, freezer meal prep",
+                 "image":  "",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "steps":  [
+                               "Weigh the empty pot and write the number down.",
+                               "Boil the rotini until al dente and drain.",
+                               "Cube, season and cook the chicken breast.",
+                               "Blend the cottage cheese smooth and stir it into the warmed alfredo sauce.",
+                               "Steam or roast the broccoli.",
+                               "Combine everything, weigh the full pot, subtract the pot and divide by 14."
+                           ]
+             },
+    "source_url":  "https://www.thriftycrew.com/free-chicken-alfredo/",
+    "source_site":  "thriftycrew.com",
+    "macros_per_serving":  {
+                               "calories":  533,
+                               "protein_g":  57,
+                               "carbs_g":  51,
+                               "fat_g":  12
+                           },
+    "writer_notes":  [
+                         "LEGACY REBUILD (ruling A, 2026-09-21): pre-engine post rebuilt at its own URL; grams and method kept from the 2026-06/07 post, every typed price and hand-stated macro dropped."
+                     ]
+}

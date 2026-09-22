@@ -1,0 +1,173 @@
+{
+    "name":  "Chicken Marinara Meal Prep",
+    "slug":  "chicken-marinara-pasta",
+    "cuisine":  "Italian-American",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.thriftycrew.com/chicken-marinara-pasta/",
+    "source_site":  "thriftycrew.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "LEGACY REBUILD (ruling A, 2026-09-21): pre-engine post rebuilt at its own URL; grams and method kept from the 2026-06/07 post, every typed price and hand-stated macro dropped."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  651,
+                 "protein":  70,
+                 "carbs":  55,
+                 "fat":  18,
+                 "cost_ps":  "2.46"
+             },
+    "intro_html":  "Chicken, protein penne and marinara, finished with melted mozzarella and turkey pepperoni so it eats like a pizza pasta. A little blended cottage cheese in the sauce adds protein you will never taste. It comes in at about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost), with \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2267 g)",
+                                "\u003cstrong\u003eProtein Penne Pasta:\u003c/strong\u003e 27.75 oz dry (784 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 10.5 cups (2608 g)",
+                                "\u003cstrong\u003eFat Free Cottage Cheese (Great Value):\u003c/strong\u003e 8 oz (226 g)",
+                                "\u003cstrong\u003eTurkey Pepperoni (Great Value):\u003c/strong\u003e 1 lb (426 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 16 oz (453 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 5 lb: ~$11.15. \u003cstrong\u003eBuy 5 lbs: $11.15.\u003c/strong\u003e",
+                       "Protein Penne Pasta, 27.75 oz dry: ~$4.18. \u003cstrong\u003eBuy 2 14.5oz boxes: $4.38.\u003c/strong\u003e",
+                       "Marinara Sauce, 10.5 cups: ~$6.09. \u003cstrong\u003eBuy 4 24oz jars: $6.35.\u003c/strong\u003e",
+                       "Fat Free Cottage Cheese, 8 oz: ~$0.91. \u003cstrong\u003eBuy 1 24oz tub: $2.73.\u003c/strong\u003e",
+                       "Turkey Pepperoni, 1 lb: ~$8.69. \u003cstrong\u003eBuy 3 5oz packs: $8.69.\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 16 oz: ~$3.48. \u003cstrong\u003eBuy 2 8oz bags: $3.48.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $34.50 across 14 servings, so roughly $2.46 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.78 across 14 servings, roughly $2.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost) for a pizza pasta with {{protein}} grams of protein in it.",
+    "shop_smart":  [
+                       "Buy chicken on sale and freeze it. Same play as always: grab bulk family packs when it is marked down.",
+                       "Store-brand marinara is the move. It costs a fraction of the name brands. Season it up if it needs a lift.",
+                       "Watch for turkey pepperoni deals. It is the priciest add-on here, so stock up when it is on sale. It keeps a while.",
+                       "Buy cheese in bulk and compare price per ounce on mozzarella and cottage cheese, and scan your local ads too."
+                   ],
+    "make_it":  [
+                    "Weigh your empty pot first and write down the number. You need it to portion at the end.",
+                    "Boil the penne until al dente, drain, and set it aside.",
+                    "Cube and cook the chicken breast. Season it to your liking: salt, pepper, garlic, Italian seasoning.",
+                    "Make the sauce: blend the cottage cheese into the marinara until smooth, then warm it through.",
+                    "Combine the chicken, sauce and penne in the pot and stir to coat.",
+                    "Stir in the shredded mozzarella and turkey pepperoni until the cheese melts through. No broiling needed."
+                ],
+    "portion_html":  "Set the full pot on your large scale, subtract the empty-pot weight you wrote down in step 1, and divide by 14. Scoop that amount into each glass container. Every meal lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "One of our own recipes, first posted in June 2026 and rebuilt on live Omaha store pricing.",
+    "upsell_html":  "A cheesy chicken marinara for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full 52-week library of money, work, and life lessons. All for $1 a month.",
+    "cost_batch":  34.5,
+    "cost_batch_true":  36.78,
+    "cost_per_serving":  2.46,
+    "cost_per_serving_true":  2.63,
+    "cost_pantry_add":  0,
+    "cost_first_run":  36.78,
+    "scaler":  {
+                   "cost":  "36.78",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2267,
+                                   "buy":  "5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Protein Penne Pasta",
+                                   "canon":  "High Protein Pasta",
+                                   "grams":  784,
+                                   "buy":  "27.75 oz dry",
+                                   "bid":  "protein-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Marinara Sauce",
+                                   "canon":  "Marinara Sauce",
+                                   "grams":  2608,
+                                   "buy":  "10.5 cups",
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fat Free Cottage Cheese",
+                                   "canon":  "Fat Free Cottage Cheese",
+                                   "grams":  226,
+                                   "buy":  "8 oz",
+                                   "bid":  "cottage-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Turkey Pepperoni",
+                                   "canon":  "Turkey Pepperoni",
+                                   "grams":  426,
+                                   "buy":  "1 lb",
+                                   "bid":  "turkey-pepperoni",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "canon":  "Reduced Fat Mozzarella",
+                                   "grams":  453,
+                                   "buy":  "16 oz",
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken marinara meal prep: chicken, protein penne, marinara, mozzarella and turkey pepperoni, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
+                 "keywords":  "chicken marinara meal prep, pizza pasta, protein pasta, high protein meal prep, budget meal prep",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  2.46,
+                 "recipeIngredient":  [
+                                          "Boneless Skinless Chicken Breast, 5 lb (2267 g)",
+                                          "Protein Penne Pasta, 27.75 oz dry (784 g)",
+                                          "Marinara Sauce, 10.5 cups (2608 g)",
+                                          "Fat Free Cottage Cheese, 8 oz (226 g)",
+                                          "Turkey Pepperoni, 1 lb (426 g)",
+                                          "Reduced Fat Mozzarella, 16 oz (453 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty pot and write the number down.",
+                               "Boil the penne until al dente and drain.",
+                               "Cube, season and cook the chicken breast.",
+                               "Blend the cottage cheese into the marinara and warm it.",
+                               "Combine chicken, sauce and penne, then stir in the mozzarella and pepperoni.",
+                               "Weigh the full pot, subtract the pot and divide by 14."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  2267
+                              },
+                              {
+                                  "item":  "High Protein Pasta",
+                                  "grams":  784
+                              },
+                              {
+                                  "item":  "Marinara Sauce",
+                                  "grams":  2608
+                              },
+                              {
+                                  "item":  "Fat Free Cottage Cheese",
+                                  "grams":  226
+                              },
+                              {
+                                  "item":  "Turkey Pepperoni",
+                                  "grams":  426
+                              },
+                              {
+                                  "item":  "Reduced Fat Mozzarella",
+                                  "grams":  453
+                              }
+                          ]
+}
