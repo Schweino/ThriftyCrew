@@ -698,6 +698,31 @@ try {
     $sfBkPast = Get-BakersAskPlan -AllTerms $sfAll -Plan ([pscustomobject]@{ CallCap = 3; RotationTerms = 1; SaleExpiries = @('apples'); SaleFallbacks = @('bacon', 'bread') }) -CursorStart 0
     if (@($sfBkAt.FallbackKept).Count -eq 0 -and (@($sfBkAt.ExpiringKept) -join ',') -eq 'apples' -and (@($sfBkPast.FallbackKept) -join ',') -eq 'bacon' -and (@($sfBkPast.ExpiringKept) -join ',') -eq 'apples') { Ok 'MUST FIRE  Baker''s AT THE BAR (allowance 1 = the expiry) asks no fallback; ONE PAST it asks exactly bacon, and the expiry is never displaced' }
     else { Bad "Baker's fallbacks: at=[$(@($sfBkAt.FallbackKept) -join ',')] exp=[$(@($sfBkAt.ExpiringKept) -join ',')]; past=[$(@($sfBkPast.FallbackKept) -join ',')]" }
+    # BAKER'S ROTATES ITS FALLBACKS THROUGH THE SAME ASK RECORD (coordinator, 2026-09-22). Two owed Baker's gaps, a
+    # room of ONE fallback a run; 'rice' is one Baker's never finds. The plan and Get-BakersAskPlan are the lane's own.
+    [IO.File]::WriteAllText((Join-Path $sfOut 'sale-fallback-gaps.json'), '{"gaps":[{"commodity":"rice","store":"Baker''s","first_seen":"2026-09-10"},{"commodity":"onions","store":"Baker''s","first_seen":"2026-09-12"}]}')
+    $bkCapWas = $script:StoreCallCap["Baker's"]
+    try {
+      $script:StoreCallCap["Baker's"] = @{ cap = 2; basis = 'fixture'; unit = 'search terms' }   # rotation 1 + room for 1
+      $bkAllT = @(@('rice','onions','milk') | ForEach-Object { [pscustomobject]@{ id = $_; term = $_ } })
+      $bkP1 = Get-CapturePlan -Store "Baker's" -Today '2026-09-20' -OutDir $sfOut
+      $bkA1 = Get-BakersAskPlan -AllTerms $bkAllT -Plan $bkP1 -CursorStart 2
+      # MUST FIRE: with no ask recorded, the never-found 'rice' is still first the next day - it would hold the head forever
+      $bkP2no = Get-CapturePlan -Store "Baker's" -Today '2026-09-21' -OutDir $sfOut
+      if ((@($bkA1.FallbackKept) -join ',') -eq 'rice' -and (@($bkP2no.SaleFallbacks) -join ',') -eq 'rice') { Ok 'MUST FIRE  Baker''s: without the ask record, the never-found fallback (rice) stays first the next day' }
+      else { Bad "Baker's without a record: kept=[$(@($bkA1.FallbackKept) -join ',')] next=[$(@($bkP2no.SaleFallbacks) -join ',')]" }
+      # CLEAN TWIN: the lane records what its ask plan kept, through the same Set-SaleFallbackAsked, and the next owed item is asked
+      $bkMk = Set-SaleFallbackAsked -Store "Baker's" -Today '2026-09-20' -OutDir $sfOut -Landed $true -Ids @($bkA1.FallbackKept) -AllowReplay
+      $bkP2 = Get-CapturePlan -Store "Baker's" -Today '2026-09-21' -OutDir $sfOut
+      $bkA2 = Get-BakersAskPlan -AllTerms $bkAllT -Plan $bkP2 -CursorStart 2
+      if ($bkMk.Marked -eq 1 -and (@($bkA2.FallbackKept) -join ',') -eq 'onions') { Ok 'CLEAN TWIN  Baker''s: with the ask recorded, the next run asks the next owed fallback (onions)' }
+      else { Bad "Baker's with a record: marked=$($bkMk.Marked) next kept=[$(@($bkA2.FallbackKept) -join ',')]" }
+      # and the lane really writes that record from its ask plan (needle built by concatenation, never a self-grep)
+      $bkSrc = [IO.File]::ReadAllText((Join-Path $root 'pull-regular-bakers-api.ps1'))
+      $bkNeedle = 'Set-SaleFallback' + 'Asked -Store "Baker''s"'
+      if ($bkSrc.Contains($bkNeedle) -and $bkSrc.Contains('BkAsk.' + 'FallbackKept')) { Ok 'MUST FIRE  pull-regular-bakers-api records the fallbacks its ask plan kept through Set-SaleFallbackAsked' }
+      else { Bad 'pull-regular-bakers-api no longer records its asked fallbacks - a never-found Baker''s fallback holds the head of the owed order again' }
+    } finally { $script:StoreCallCap["Baker's"] = $bkCapWas }
   } finally { $script:PolicyRoot = $sfRootWas; $script:StoreCallCap['Family Fare'] = $sfCapWas }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 

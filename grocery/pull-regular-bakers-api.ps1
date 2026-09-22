@@ -1025,7 +1025,7 @@ if ($Commodities -and $Commodities.Count) {
 # shared rotation cursor, exactly as the Family Fare and Hy-Vee lanes do.
 elseif (-not $Full -and $script:PolicyOk) {
   try {
-    $bkPlan = Get-CapturePlan -Store "Baker's" -Today $today
+    $bkPlan = Get-CapturePlan -Store "Baker's" -Today $today -OutDir $out
     $bkCur = Get-CaptureCursor -Store "Baker's" -OutDir $out
     # THE WEEKLY AD LEADS (2026-09-18, design\PLAN-bakers-weekly-ad-feed-2026-09-18.md). This lane can price a
     # sale only when it asks, and the rotation cannot know what newly went on sale. pull-bakers-ad-list.ps1 reads
@@ -1556,6 +1556,16 @@ if ((Test-Path $file) -and $script:PolicyOk -and $rotationMode -eq 'rotation') {
     }
     if ($mk -and $mk.Marked -gt 0) { Write-Output ("bakers-api: recorded " + $mk.Marked + " sale re-price(s) in sale-windows.json") }
   } catch { Write-Warning ("bakers-api: sale-expiry ledger not updated (" + $_.Exception.Message + ") - those re-prices stay owed and lead tomorrow's slice") }
+  # THE SALE FALLBACKS THIS RUN ASKED (2026-09-22, plan-2026-09-22-9, c9f0f3): the same ask record the Hy-Vee and Family
+  # Fare lanes write, so a fallback Baker's answers with nothing goes behind the unasked ones instead of holding the head.
+  try {
+    $bkFbKept = @()
+    if ($script:BkAsk -and $script:BkAsk.PSObject.Properties['FallbackKept']) { $bkFbKept = @(@($script:BkAsk.FallbackKept) | Where-Object { $_ }) }
+    if ($bkFbKept.Count -gt 0) {
+      $fbMk = Set-SaleFallbackAsked -Store "Baker's" -Today $today -OutDir $out -Landed $true -Ids $bkFbKept
+      if ($fbMk.Marked -gt 0) { Write-Output ("bakers-api: recorded " + $fbMk.Marked + " sale-fallback ask(s) in sale-fallback-asked.json") }
+    }
+  } catch { Write-Warning ("bakers-api: sale-fallback ask ledger not updated (" + $_.Exception.Message + ") - those fallbacks keep their place at the head of the owed order") }
 }
 
 # SIZE-HEAL IS STILL SKIPPED, and now for a stronger reason than "the pull is comprehensive".
