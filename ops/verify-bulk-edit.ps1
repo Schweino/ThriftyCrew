@@ -63,10 +63,36 @@ function Test-HasThrowingIdiom {
 function Test-BomUnchanged {
   # Reading with a BOM-stripping decoder and writing with one that does not restore it silently removes it.
   # On a .ps1 that is the very bug the sweep was fixing, aimed at our own source.
+  #
+  # AN EMPTY AFTER-FILE IS NOT A BOM CHANGE (2026-09-22, queue 2026-09-22-148d78). A zero-byte file holds no
+  # content, so it cannot hold a byte-order mark, and no read/write pair can be inferred from one: a strip
+  # KEEPS the content and loses three bytes (4392 -> 4389), it never yields 0. Judging the empty case by the
+  # same "does byte 0 start a BOM" test made a legitimate output read as a corrupted one. This is not a
+  # loosening and the bar is fixtured both ways below: at the bar (after length 0) exempt, one byte past it
+  # (after length 1) still reported.
+  #
+  # WHAT IT COST. meal-prep\db\cost-flags.txt is correctly empty on a day with no LIVE unpriced line (the
+  # 2026-09-21 split in engine\cost-recipes.ps1 sets held and advisory lines aside). On 2026-09-22 this
+  # finding refused the daily pipeline's whole commit, and public\board.json and public\smp-feed.json rode
+  # that refusal, so readers were served 2026-09-21 prices under a 2026-09-22 post for five hours.
+  #
+  # WHETHER THE EMPTYING ITSELF IS INTENDED IS A CONTENT QUESTION, and this file cannot answer it. It is not
+  # answered by silence either: Test-FileEmptied below makes the live path say EMPTIED out loud.
   param([byte[]]$Before, [byte[]]$After)
+  if ($null -eq $After -or $After.Length -eq 0) { return $true }
   $b = ($Before.Length -ge 3 -and $Before[0] -eq 0xEF -and $Before[1] -eq 0xBB -and $Before[2] -eq 0xBF)
   $a = ($After.Length  -ge 3 -and $After[0]  -eq 0xEF -and $After[1]  -eq 0xBB -and $After[2]  -eq 0xBF)
   return ($b -eq $a)
+}
+function Test-FileEmptied {
+  # A tracked file that HELD bytes at HEAD and holds none now. Not a finding - a legitimately empty output is
+  # this estate's normal (see cost-flags.txt above) - but never silent either, because "the writer chose to
+  # emit nothing" and "the writer fell over and emitted nothing" are the same bytes, and a check that goes
+  # quiet on an empty input is how fail-open-reads-as-empty gets in. The live path counts and names these.
+  param([byte[]]$Before, [byte[]]$After)
+  $hadBytes = (($null -ne $Before) -and $Before.Length -gt 0)
+  $hasBytes = (($null -ne $After) -and $After.Length -gt 0)
+  return ($hadBytes -and -not $hasBytes)
 }
 function Test-EolUnchanged {
   # Compared on BYTES. `git show` normalises line endings on the way out, so comparing a working file to a
@@ -199,6 +225,15 @@ if ($SelfTest) {
   $bom = [byte[]](0xEF,0xBB,0xBF,0x41); $nob = [byte[]](0x41)
   if (-not (Test-BomUnchanged -Before $bom -After $nob)) { Write-Output '  PASS  MUST FIRE: a stripped BOM is reported (defect 1, 44 files)' } else { Write-Output '  FAIL  a stripped BOM went unreported'; $fail++ }
   if (Test-BomUnchanged -Before $bom -After $bom) { Write-Output '  PASS  CLEAN TWIN: an unchanged BOM is not a finding' } else { Write-Output '  FAIL  an unchanged BOM was reported'; $fail++ }
+  # THE EMPTY BOUNDARY (2026-09-22, queue 2026-09-22-148d78). The bar is the AFTER file's length. Frozen from
+  # the real refusal: HEAD's meal-prep\db\cost-flags.txt was 4,392 bytes opening EF BB BF 45 ('E'), and the
+  # working copy was 0 bytes. Both sides of the bar are cased, one byte apart, because a bar with only one
+  # side cased cannot tell an exemption from a hole (backlog I196).
+  $bomLong = [byte[]](0xEF,0xBB,0xBF,0x45,0x74,0x68); $none = [byte[]]@()
+  if (Test-BomUnchanged -Before $bomLong -After $none) { Write-Output '  PASS  MUST NOT FIRE (AT THE BAR, after length 0): a BOM-carrying file emptied to zero bytes is not a BOM change - the 2026-09-22 cost-flags.txt refusal' } else { Write-Output '  FAIL  an emptied file was called a BOM change - the commit refusal that held today''s board can recur'; $fail++ }
+  if (-not (Test-BomUnchanged -Before $bomLong -After ([byte[]](0x45)))) { Write-Output '  PASS  MUST FIRE (ONE BYTE PAST THE BAR, after length 1): a real strip that keeps content is still reported' } else { Write-Output '  FAIL  the empty exemption swallowed a real BOM strip'; $fail++ }
+  if (Test-FileEmptied -Before $bomLong -After $none) { Write-Output '  PASS  MUST FIRE: an emptied tracked file is named as EMPTIED, so the exemption above is never silent' } else { Write-Output '  FAIL  an emptied file passed with nothing said about it'; $fail++ }
+  if (-not (Test-FileEmptied -Before $bomLong -After $bomLong)) { Write-Output '  PASS  MUST NOT FIRE: a file that still carries bytes is not EMPTIED' } else { Write-Output '  FAIL  EMPTIED fired on a file that has content'; $fail++ }
   if (-not (Test-EolUnchanged -BeforeText "a`r`nb" -AfterText "a`nb")) { Write-Output '  PASS  MUST FIRE: CRLF flipped to LF is reported' } else { Write-Output '  FAIL  an EOL flip went unreported'; $fail++ }
   if (Test-EolUnchanged -BeforeText "a`r`nb" -AfterText "a`r`nb`r`nc") { Write-Output '  PASS  CLEAN TWIN: adding lines in the SAME style is not an EOL flip' } else { Write-Output '  FAIL  a legitimate added line was called an EOL flip'; $fail++ }
   $g = Get-DependencyGaps -Text "`$x = Read-JsonFile `$p" -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
@@ -364,6 +399,7 @@ try {
   } finally { $ErrorActionPreference = $prevEap }
   if (-not $names.Count) { Write-Output 'BLIND: no modified tracked files to verify'; Write-GuardComplete -Name 'verify-bulk-edit' -Summary 'nothing to compare'; exit 3 }
   $findings = New-Object System.Collections.ArrayList
+  $emptied = New-Object System.Collections.ArrayList
   $checked = 0; $parsed = 0
   foreach ($n in $names) {
     $full = Join-Path $repo $n
@@ -386,6 +422,9 @@ try {
     $checked++
     if ((-not $isNew) -and (-not (Test-BomUnchanged -Before $beforeBytes -After $after))) {
       [void]$findings.Add("BOM CHANGED   $n - a read/write pair stripped or added a byte-order mark")
+    }
+    if ((-not $isNew) -and (Test-FileEmptied -Before $beforeBytes -After $after)) {
+      [void]$emptied.Add("$n ($($beforeBytes.Length) byte(s) at HEAD)")
     }
     # A MARKED FROZEN LITERAL MAY NOT CHANGE (2026-09-06). Decoded on both sides with the SAME decoder, so
     # a difference is a real difference - the estate's compare-bytes-not-decodings rule applies to the BOM
@@ -413,8 +452,14 @@ try {
       }
     }
   }
-  Write-Output ("verify-bulk-edit: $checked modified tracked file(s) compared against HEAD; $parsed .ps1 parsed clean; $($findings.Count) finding(s)")
+  Write-Output ("verify-bulk-edit: $checked modified tracked file(s) compared against HEAD; $parsed .ps1 parsed clean; $($findings.Count) finding(s); $($emptied.Count) emptied")
   $findings | ForEach-Object { Write-Output ("  " + $_) }
+  if ($emptied.Count) {
+    Write-Output ("  EMPTIED (not a finding): $($emptied.Count) tracked file(s) held bytes at HEAD and hold none now. An empty")
+    Write-Output ('  file carries no BOM and no line endings, so no bulk-edit invariant can be read off it. Whether the')
+    Write-Output ('  emptying is right is the WRITER''s question, not this one - check the writer if you did not expect it.')
+    $emptied | ForEach-Object { Write-Output ("    " + $_) }
+  }
   if (@($findings | Where-Object { $_ -like 'FROZEN LITERAL*' }).Count) {
     Write-Output '  A line marked `json-readers:allow` or `frozen-literal` is a fixture, not code: it is the BUG a'
     Write-Output '  guard detects, written out on purpose. Converting one makes the guard report 0 findings and PASS'
