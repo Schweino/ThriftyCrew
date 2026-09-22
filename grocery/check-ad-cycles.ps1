@@ -2633,9 +2633,13 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       } catch { Log ('live-price lanes threw: ' + $_.Exception.Message) }
       # drift guard: recipes-db index vs db\recipes specs vs db\ingredients (2026-07-26). Non-fatal; alerts.
       try {
-        if ((Get-FanoutRecord 'db-agreement' $fanRecs).ExitCode -ne 0) {
+        $dbaRec = Get-FanoutRecord 'db-agreement' $fanRecs
+        if ($dbaRec.ExitCode -ne 0) {
           Log 'db-agreement guard found DRIFT (see its output)'
-          try { Send-Alert -Subject "Recipe db drift (index vs specs)" -Body "meal-prep\engine\audit-db-agreement.ps1 found drift between recipes-db.json and db\recipes specs (or missing db\ingredients items). Run it for the list; fix the lagging side." | Out-Null } catch {}
+          # The page carries the audit's own findings (plan-2026-09-22-9): each fire so far was a different upstream
+          # defect, so the weekly triage lane diagnoses it from this list; a mechanical index sync is not the repair.
+          $dbaBody = Get-GuardFindingsAlertBody -Record $dbaRec -Script 'meal-prep\engine\audit-db-agreement.ps1' -Marker 'DB-AGREEMENT-COMPLETE'
+          try { Send-Alert -Subject "Recipe db drift (index vs specs)" -Body $dbaBody | Out-Null } catch {}
         } else { Log 'db-agreement guard: clean' }
       } catch { Log ('db-agreement guard threw: ' + $_.Exception.Message) }
       # published-macros ratchet (2026-09-12): each published stat against a recompute of the spec's OWN

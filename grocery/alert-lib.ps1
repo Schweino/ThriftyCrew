@@ -299,6 +299,28 @@ function Write-AlertLog([string]$m) {
   try { Write-Output $m } catch {}
 }
 
+# ---- A GUARD'S PAGE CARRIES ITS FINDINGS, NOT A COMMAND (2026-09-22, plan-2026-09-22-9 recipe-db-drift, RCA F5) -----
+# The recipe-db-drift page said "Run it for the list; fix the lagging side." and nothing else, so every fire cost a
+# person a re-run before anyone knew what had drifted. This builds the body from the fan-out record the chain already
+# holds: the guard's own output lines (the guard caps its issue list itself, so this cap is only a backstop) and its
+# <NAME>-COMPLETE marker line, which is always kept even past the cap. A record that exited 0 has nothing to page and
+# returns $null, so a clean run sends nothing, exactly as before.
+function Get-GuardFindingsAlertBody {
+  param($Record, [string]$Script, [string]$Marker, [int]$MaxLines = 60)
+  # no record at all is not a clean run: the caller pages on it (ExitCode $null -ne 0), so say what is missing
+  if ($null -eq $Record) { return ("{0}: no fan-out record came back, so its findings could not be read and nothing is proven." -f $Script) }
+  if ([int]$Record.ExitCode -eq 0) { return $null }
+  $lines = @(@($Record.Output) | ForEach-Object { ([string]$_).TrimEnd() } | Where-Object { $_ -ne '' })
+  $markerLine = $null
+  if ($Marker) { $markerLine = @($lines | Where-Object { $_ -match [regex]::Escape($Marker) }) | Select-Object -Last 1 }
+  $shown = @($lines | Select-Object -First $MaxLines)
+  $body = @(("{0} exited {1}. Its findings, as it printed them:" -f $Script, [int]$Record.ExitCode)) + $shown
+  if ($lines.Count -gt $MaxLines) { $body += ("... {0} more line(s) not shown" -f ($lines.Count - $MaxLines)) }
+  if ($markerLine -and -not ($shown -contains $markerLine)) { $body += $markerLine }
+  if (-not $markerLine) { $body += ("(no {0} line: the guard did not run to its end, so the list above may be partial)" -f $Marker) }
+  return ($body -join "`n")
+}
+
 # ---- SELF-TEST: which send-alert.ps1 runs (2026-09-19, backlog I232) ---------------------------------------------
 # Fixture checkouts in a per-run temp directory. The stub senders record that they ran and exit with a code of their
 # own, so the end-to-end cases prove WHICH sender Send-Alert launched and that its exit code comes back, and nothing
@@ -369,6 +391,25 @@ if ($__alertLibSelfTest) {
     $outP = @(Send-Alert -Subject 'fixture alert P' -Body 'body' -What 'ALIB-FIXTURE')
     $rcP = $outP[$outP.Count - 1]
     AlCase 'CLEAN TWIN Send-Alert from a plain fixture runs its own sender and returns its 0' ("$rcP" -eq '0' -and (Test-Path -LiteralPath (Join-Path $plain 'grocery\ran.txt'))) ('rc=' + $rcP)
+
+    # the guard-findings body (plan-2026-09-22-9, recipe-db-drift): frozen from the audit's real output shape
+    $gfDrift = '  ! GPU-DRIFT: chicken-florentine ''shallots'' spec gpu 28 != db gpu 30'
+    $gfMark = '[db-agreement] DB-AGREEMENT-COMPLETE recipes=584 issues=1'
+    $gfRec = [pscustomobject]@{ Name = 'db-agreement'; ExitCode = 1; Output = @('db-agreement: 1 drift issue(s)', $gfDrift, $gfMark) }
+    $gfBody = Get-GuardFindingsAlertBody -Record $gfRec -Script 'meal-prep\engine\audit-db-agreement.ps1' -Marker 'DB-AGREEMENT-COMPLETE'
+    AlCase 'MUST FIRE a db-agreement record with one drift line pages a body carrying that line and the marker counts' ($gfBody -and $gfBody.Contains($gfDrift.Trim()) -and $gfBody.Contains('recipes=584 issues=1') -and ($gfBody -notmatch '(?i)run it for the list|fix the lagging side')) ('body=' + $gfBody)
+    $gfClean = [pscustomobject]@{ Name = 'db-agreement'; ExitCode = 0; Output = @('db-agreement: CLEAN (584 recipes, index==specs; 6 held recipe line(s) reported, not scored)', '[db-agreement] DB-AGREEMENT-COMPLETE recipes=584 issues=0 held=6') }
+    AlCase 'MUST NOT FIRE a clean db-agreement record (exit 0, issues=0) has no body to send' ($null -eq (Get-GuardFindingsAlertBody -Record $gfClean -Script 'x' -Marker 'DB-AGREEMENT-COMPLETE')) 'a clean record produced a body'
+    # at the cap: exactly MaxLines output lines are all shown with no overflow line; one past it names the 1 hidden
+    $gfAt = [pscustomobject]@{ ExitCode = 1; Output = @('a1', 'a2', 'a3') }
+    $gfAtBody = Get-GuardFindingsAlertBody -Record $gfAt -Script 'x' -Marker 'NONE-COMPLETE' -MaxLines 3
+    $gfPast = [pscustomobject]@{ ExitCode = 1; Output = @('a1', 'a2', 'a3', 'a4') }
+    $gfPastBody = Get-GuardFindingsAlertBody -Record $gfPast -Script 'x' -Marker 'NONE-COMPLETE' -MaxLines 3
+    AlCase 'CLEAN TWIN AT THE BAR (MaxLines 3, 3 lines) every line shows; ONE PAST it (4 lines) names 1 more not shown' ($gfAtBody.Contains('a3') -and ($gfAtBody -notmatch 'more line') -and ($gfPastBody -match '1 more line\(s\) not shown') -and ($gfPastBody -notmatch 'a4')) ('at=' + $gfAtBody + ' || past=' + $gfPastBody)
+    # a marker past the cap is still kept, and a record with no marker says it may be partial
+    $gfLong = [pscustomobject]@{ ExitCode = 1; Output = @('b1', 'b2', 'b3', 'b4', '[x] X-COMPLETE issues=4') }
+    $gfLongBody = Get-GuardFindingsAlertBody -Record $gfLong -Script 'x' -Marker 'X-COMPLETE' -MaxLines 2
+    AlCase 'MUST FIRE a marker past the cap is still carried, and a missing marker is named as a partial list' ($gfLongBody.Contains('X-COMPLETE issues=4') -and ($gfAtBody -match 'no NONE-COMPLETE line')) ('long=' + $gfLongBody)
   } catch {
     $alFail++
     Write-Output ('  FAIL self-test threw: ' + $_.Exception.Message)
@@ -377,7 +418,7 @@ if ($__alertLibSelfTest) {
     Remove-Item -LiteralPath $alDir -Recurse -Force -ErrorAction SilentlyContinue
   }
   $alTotal = $alPass + $alFail
-  if ($alFail -eq 0 -and $alTotal -eq 8) { Write-Output ('alert-lib self-test: PASS (' + $alPass + ' of ' + $alTotal + ' cases)'); exit 0 }
-  Write-Output ('alert-lib self-test: FAIL (' + $alFail + ' failed, ' + $alPass + ' passed, ' + $alTotal + ' ran; 8 expected)')
+  if ($alFail -eq 0 -and $alTotal -eq 12) { Write-Output ('alert-lib self-test: PASS (' + $alPass + ' of ' + $alTotal + ' cases)'); exit 0 }
+  Write-Output ('alert-lib self-test: FAIL (' + $alFail + ' failed, ' + $alPass + ' passed, ' + $alTotal + ' ran; 12 expected)')
   exit 1
 }

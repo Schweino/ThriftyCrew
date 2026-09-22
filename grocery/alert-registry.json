@@ -881,7 +881,7 @@
    "class": "review",
    "condition": "work for the browser agent: a rolling condition by design, owned by the research worklist",
    "emitter": "grocery/check-ad-cycles.ps1 (retired wording; kept so the queue history maps)",
-   "resolver": "digest"
+   "retired": "2026-09-03 (c92b70a79): reworded to sale-no-fallback-unworked when paging moved to escalated gaps only; the entry stays so the queue history it owns still resolves. Its 8 census days all fall on or before 2026-09-03 and age out of the 30-day window on 2026-10-03."
   },
   {
    "id": "sale-no-fallback-unworked",
@@ -945,7 +945,8 @@
    "class": "review",
    "condition": "index and spec disagree; a consistency repair, not a live price",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "resolver": "digest"
+   "note": "Each fire so far (4 days in 30) was a different upstream defect, so no mechanical sync is safe: the weekly triage lane diagnoses it from the audit's findings, which the page now carries (plan-2026-09-22-9.json).",
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "spec-contradictions",
@@ -1769,7 +1770,7 @@
    "class": "page",
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
-   "note": "The heartbeat cannot measure a queue: a watcher is blind.",
+   "note": "The heartbeat cannot measure a queue: a watcher is blind. ONE named queue could not be read by queue-depth.ps1 (health-heartbeat.ps1:882, verdict 'unknown'); the scan itself ran, so the repair is that queue's source. Not a duplicate of silent-death-queues-unmeasured (verified plan-2026-09-22-9.json).",
    "split_from": "plan-2026-09-21-5.json",
    "resolver": "lane:grocery/triage-due.ps1"
   },
@@ -1780,7 +1781,7 @@
    "class": "page",
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
-   "note": "The heartbeat cannot measure a queue: a watcher is blind.",
+   "note": "The heartbeat cannot measure a queue: a watcher is blind. queue-depth.ps1 itself failed, so NO queue was read (health-heartbeat.ps1:886, the catch); the repair is the script. Not the plural of silent-death-queue-unmeasured, which is one queue unread while the scan ran (verified plan-2026-09-22-9.json).",
    "split_from": "plan-2026-09-21-5.json",
    "resolver": "lane:grocery/triage-due.ps1"
   },

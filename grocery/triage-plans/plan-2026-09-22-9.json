@@ -204,11 +204,11 @@
       "leaves_open": "nothing",
       "leaves_open_occurrences": 0,
       "publish_batch": 1,
-      "status": "planned",
+      "status": "deviated",
       "resolution_note": "recipe-db-drift fired 4 days in 30 for three different upstream defects, each already fixed at source (held recipes read as drift, fixed today in 33536eda0; a brand-strip rule, 09-01). A mechanical index sync would have closed none of them and corrupted specs once, so the lane is the weekly triage agent, and the page now carries the audit's findings instead of a command. Today the audit is clean over 584 recipes.",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "premise_verified": "yes: check-ad-cycles.ps1 (then :2638) sent only \"Run it for the list; fix the lagging side.\"; audit-db-agreement prints its capped issue lines and DB-AGREEMENT-COMPLETE into the fan-out record Output the chain already holds.",
+      "deviation": "the body is built by a new Get-GuardFindingsAlertBody in grocery/alert-lib.ps1 (not inline in check-ad-cycles) so the MUST FIRE and CLEAN TWIN run hermetically in alert-lib -SelfTest (12 of 12); the proof command is that self-test plus audit-alert-registry, not test-auditors. A record that is missing entirely still pages, now with a line saying no findings could be read.",
+      "shipped_commit": "branch worktree-agent-a0200afe02304d9f2, commit \"recipe-db-drift: the page carries the audit findings\" (hash assigned on integration)"
     },
     {
       "queue_id": "2026-09-21-115180",
@@ -379,11 +379,11 @@
       "leaves_open": "nothing",
       "leaves_open_occurrences": 0,
       "publish_batch": 1,
-      "status": "planned",
+      "status": "done",
       "resolution_note": "Verified both duplicate candidates. 'queue unmeasured' (one queue unread) and 'queues unmeasured' (the scan itself failed) are two conditions and both stay, now with registry notes saying so. The old sale-no-fallback wording has not fired since it was retired on 2026-09-03; its 8 days are history inside the 30-day window, and it is now marked retired where the registry audit reads it.",
-      "premise_verified": null,
+      "premise_verified": "yes: health-heartbeat.ps1:882 raises QUEUE UNMEASURED per named queue with verdict unknown (the scan ran), :886 raises QUEUES UNMEASURED in the catch when queue-depth.ps1 itself failed; audit-alert-registry.ps1:466 skips an entry carrying retired. Registry at 161b0ddf4: retired 5, digest 55.",
       "deviation": null,
-      "shipped_commit": null
+      "shipped_commit": "branch worktree-agent-a0200afe02304d9f2, commit \"registry: sale-no-fallback retired, the two queue-unmeasured types say why they are distinct\" (hash assigned on integration)"
     },
     {
       "queue_id": "2026-09-22-5d20b9",
