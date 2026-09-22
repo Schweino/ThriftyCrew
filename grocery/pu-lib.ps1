@@ -119,12 +119,14 @@ function Get-LinkPerUnit {
         $un = (($mf.Groups[3].Value -replace '\s','') -replace 'fl','') -replace '^(ltr|liters?|litres?)$','l'
       }
     }
-    $q = if ($null -eq $n) { [regex]::Match($s, '(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|lbs?|pound|ct|count|ea|pk|gal|gallon|qt|quart|dozen|doz|ml|ltr|liters?|litres?|l)\b') } else { $null }
+    $q = if ($null -eq $n) { [regex]::Match($s, '(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|lbs?|pound|ct|count|ea|pk|gal|gallon|qt|quart|dozen|doz|ml|ltr|liters?|litres?|l|sq\.?\s*ft|kg|grams?|g)\b') } else { $null }
     if ($null -ne $n) {
       # already resolved by the fractional branch
     } elseif ($q.Success) {
       $n = [double]$q.Groups[1].Value
-      $un = (($q.Groups[2].Value -replace '\s','') -replace 'fl','') -replace '^(ltr|liters?|litres?)$','l'
+      $un = (($q.Groups[2].Value -replace '\s','') -replace 'fl','') -replace '^(ltr|liters?|litres?)$','l' -replace '^sq\.?ft$','sqft' -replace '^grams?$','g'
+      # PARITY WITH THE ENGINE (2026-09-22, queue 2026-09-22-43e8c0): kg and g read as grams, as Get-SizeAmount does.
+      if ($un -eq 'kg') { $n = $n * 1000; $un = 'g' }
     } else {
       # 3. a BARE unit with no number ("lb", "per lb", "each", "dozen", "gal") means one of it.
       #
@@ -139,7 +141,9 @@ function Get-LinkPerUnit {
       # lb commodity `ea` matches no branch below and the row stays uncomputable - which is the honest
       # answer, not a guessed ounce count. Only 6 rows in the current captures use it; it is rare, not
       # absent, and a rare unreadable size is exactly the kind that goes unnoticed.
-      $bu = [regex]::Match($s, '\b(lbs?|pound|gal|gallon|dozen|doz|each|ea|bunch)\b')
+      # A BARE 'oz' IS ONE OUNCE (2026-09-22, queue 2026-09-22-43e8c0): Get-SizeAmount, which prices the board, has always
+      # read it that way (a per-ounce shelf price), and this reader returned $null, so two cells were priced and unauditable.
+      $bu = [regex]::Match($s, '\b(lbs?|pound|gal|gallon|dozen|doz|each|ea|bunch|oz)\b')
       if ($bu.Success) {
         $n = 1
         $un = $bu.Groups[1].Value -replace '^gallon$','gal' -replace '^doz$','dozen' -replace '^pound$','lb' -replace '^bunch$','ea'
@@ -187,12 +191,17 @@ function Get-LinkPerUnit {
                if ($un -eq 'ml' -and $n) { return $price / ($n * 0.033814) }
                return $null }
     'each'   { if ($un -match '^(ct|count|ea|pk)$' -and $n) { return $price / $n }
-               if ($un -match '^(dozen|doz)$') { return $price / 12 }
+               if ($un -match '^(dozen|doz)$') { if ($n) { return $price / (12 * $n) }; return $price / 12 }
                if ($n -eq 1) { return $price }
                return $null }
-    'dozen'  { if ($un -match '^(dozen|doz)$') { return $price }
+    # N DOZEN IS N DOZEN (2026-09-22, queue 2026-09-22-43e8c0): Sam's '15 dozen' eggs at $29.56 read as ONE dozen here
+    # (29.56/dozen) while the engine priced the board at 1.9707. The count was read and then ignored.
+    'dozen'  { if ($un -match '^(dozen|doz)$') { if ($n) { return $price / $n }; return $price }
                if ($un -match '^(ct|count|ea)$' -and $n) { return $price / ($n / 12) }
                if ($n -eq 1) { return $price }
+               return $null }
+    # sq_ft (2026-09-22, queue 2026-09-22-43e8c0): foil and wrap are priced per square foot by the engine; this reader had no arm.
+    'sq_ft'  { if ($un -eq 'sqft' -and $n) { return $price / $n }
                return $null }
     'gallon' { if ($un -eq 'gal' -and $n) { return $price / $n }
                if ($un -match '^(floz|oz)$' -and $n) { return $price / ($n / 128) }

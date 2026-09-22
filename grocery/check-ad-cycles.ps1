@@ -2058,6 +2058,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         New-FanoutLane -Name 'sanity-check'        -File (Join-Path $root 'sanity-check.ps1') -Marker 'SANITY-CHECK-COMPLETE'
         New-FanoutLane -Name 'basis-reconcile'     -File (Join-Path $root 'audit-basis-reconcile.ps1') -Marker 'BASIS-RECONCILE-COMPLETE'
         New-FanoutLane -Name 'pack-basis'          -File (Join-Path $root 'audit-pack-basis.ps1') -Marker 'PACK-BASIS-COMPLETE'
+        # THE TWO SIZE READERS MUST AGREE ON TODAY'S BOARD (2026-09-22, queue 2026-09-22-43e8c0). -Board was left unwired while it
+        # read 5 disagreements; pu-lib now reads those five the engine's way and the arm reads 0 over 2,583 comparable strings.
+        New-FanoutLane -Name 'size-parser-parity'  -File (Join-Path $root 'audit-size-parser-parity.ps1') -Arguments @('-Board') -Marker 'SIZE-PARSER-PARITY-COMPLETE'
         New-FanoutLane -Name 'walmart-fullpull'    -File (Join-Path $root 'audit-walmart-fullpull.ps1') -Marker 'WALMART-FULLPULL-COMPLETE'
         New-FanoutLane -Name 'capture-eviction'    -File (Join-Path $root 'audit-capture-eviction.ps1') -Marker 'CAPTURE-EVICTION-COMPLETE'
         # ADVISORY, and it reports COVERAGE before it reports findings (2026-08-29). Until the attended-Chrome
@@ -3081,6 +3084,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           }
         } catch { Log ('shelf-signal read threw: ' + $_.Exception.Message) }
         $null = (Get-FanoutRecord 'pack-basis' $fanRecs).ExitCode
+        try {
+          $sppRc = (Get-FanoutRecord 'size-parser-parity' $fanRecs).ExitCode
+          if ($sppRc -eq 2) { $summary += 'REVIEW    size-parser-parity: the engine (Get-SizeAmount) and the audit reader (Get-LinkPerUnit) disagree on a size string on today''s board - one rule has two answers; see ad-cycle-log / run audit-size-parser-parity.ps1 -Board' }
+          elseif ($sppRc -eq 3) { $summary += 'REVIEW    size-parser-parity could not evaluate (no board or a library missing) - reader agreement is UNKNOWN this cycle, not clean' }
+        } catch { Log ('size-parser-parity read threw: ' + $_.Exception.Message) }
         $pbF = Join-Path $OutDir 'pack-basis-audit.json'
         if (Test-Path $pbF) {
           $pbJ = Read-JsonFile $pbF

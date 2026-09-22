@@ -35,7 +35,10 @@
 # -Board widens the corpus to every size string on the newest comparison board and is the arm worth running
 # in the daily chain; with no board it says BLIND and exits 3, because a could-not-look is never a pass.
 #
-# -Board IS NOT WIRED INTO THE CHAIN YET, ON PURPOSE. Over comparison-2026-09-22, after the 'ct' fix that
+# -Board IS WIRED INTO THE DAILY CHAIN SINCE 2026-09-22 (queue 2026-09-22-43e8c0): check-ad-cycles runs it as the
+# size-parser-parity fanout lane and prints REVIEW on a 2 or a 3. The five below were fixed in pu-lib toward the engine, the
+# arm read 0 over 2,583 comparable of 2,673 strings on comparison-2026-09-22, and the five are frozen in the corpus.
+# HISTORY - it was not wired at first, on purpose. Over comparison-2026-09-22, after the 'ct' fix that
 # shipped with this file, it reads 5 disagreements over 2,584 comparable of 2,675 size strings: a bare 'oz'
 # twice, '30 sq ft', '200 g', and eggs|Sam's Club '15 dozen' where pu-lib says 29.5600 and the engine says
 # 1.9707. Every one is a real divergence and none is fixed here. Wiring it today would add a gate that is
@@ -119,6 +122,13 @@ function Get-TcSizeParityCorpus {
   [void]$rows.Add('4 pk 4 oz|each|2.38')
   [void]$rows.Add('12 pk 2 oz|dozen|3.48')
   [void]$rows.Add('6 ct 5.3 oz|each|5.94')
+  # the five the -Board arm read on comparison-2026-09-22 after the 'ct' fix, each fixed in pu-lib toward the engine
+  # (queue 2026-09-22-43e8c0): a bare oz is one ounce, grams are grams, N dozen is N dozen, and square feet have an arm
+  [void]$rows.Add('oz|oz|0.31')
+  [void]$rows.Add('oz|oz|0.47')
+  [void]$rows.Add('200 g|oz|7.99')
+  [void]$rows.Add('15 dozen|dozen|29.56')
+  [void]$rows.Add('30 sq ft|sq_ft|3.99')
   return ,$rows.ToArray()
 }
 
