@@ -206,8 +206,15 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
   if ($rng.Success -and ([double]$rng.Groups[1].Value -lt [double]$rng.Groups[2].Value)) {
     # ASCENDING pairs only: "24-12 oz cans" is the count-x-size print idiom (24 cans of 12 oz), not a range -
     # let it fall through to the multipack/first-number logic instead of misreading it as 24 oz total.
-    $hi = [double]$rng.Groups[2].Value; $tok = $rng.Groups[3].Value
-    $rc = Convert-ToUnit $hi $tok $unit; if ($rc -ne $null) { return $rc }
+    # THE LEAST FAVOURABLE READING (2026-09-22, plan-2026-09-22-5, on the coordinator's order after the laundry crown).
+    # The comment above was the rule until today: the larger size, as "the honest achievable price". It was not: the
+    # price names BOTH sizes and the board cannot know which one the store has on the shelf, so the larger reading
+    # promises the reader the best per-unit the line could possibly mean. "Xtra laundry detergent, 56 or 67.5 oz.,
+    # 3/ $10.00" took the laundry-detergent crown at 0.0494/fl oz on the larger size; at 56 oz it is 0.0595. A board
+    # that must be right in the direction that costs the reader reads the SMALLER size, so the per-unit is the most a
+    # shopper pays. Whether the two sizes are different PRODUCTS is not decidable from the line and is not attempted.
+    $lo = [double]$rng.Groups[1].Value; $tok = $rng.Groups[3].Value
+    $rc = Convert-ToUnit $lo $tok $unit; if ($rc -ne $null) { return $rc }
   }
   # first "<number> <unit-token>" occurrence
   # The AREA tokens lead the alternation, longest form first, so "200 square feet" cannot be clipped to the

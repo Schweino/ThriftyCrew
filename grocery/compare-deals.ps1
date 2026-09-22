@@ -612,6 +612,12 @@ if ($SelfTest) {
   # CLEAN TWIN: the price the engine computes for the founding row is still the effective per-unit, $1.00 each
   _Near 'deal: FF 10-for-10 still prices $1.00 each' (Get-UnitPrice (_D '10 for $10.00 with purchase of 10' 'Yellow Bell Pepper' $null '1 ea') (_C 'each')).unit_price 1.00 0.0001
 
+  # 10c. AN "A or B" SIZE READS THE SMALLER SIZE (2026-09-22, plan-2026-09-22-5)
+  $orXtra = Get-SizeAmount '56 or 67.5 oz' 'floz'
+  if ($null -ne $orXtra -and [math]::Abs([double]$orXtra - 56) -lt 0.0001) { Write-Output "ok    MUST FIRE 'Xtra laundry detergent, 56 or 67.5 oz' reads 56 fl oz, the least favourable size" } else { Write-Output ("FAIL  '56 or 67.5 oz' read as " + $orXtra + ", want 56"); $script:fail++ }
+  _Near 'or-size: Xtra 3/$10 at 56 oz /floz' (Get-UnitPrice (_D '3/ $10.00' 'Xtra laundry detergent, 56 or 67.5 oz.' $null '56 or 67.5 oz') (_C 'floz')).unit_price 0.0595 0.0001
+  $orOne = Get-SizeAmount '67.5 oz' 'floz'
+  if ($null -ne $orOne -and [math]::Abs([double]$orOne - 67.5) -lt 0.0001) { Write-Output "ok    CLEAN TWIN a single size '67.5 oz' still reads 67.5" } else { Write-Output ("FAIL  single size read as " + $orOne); $script:fail++ }
   # 11. the tightened GLOBAL_EXCLUDE 'mix' token must SKIP "mix & match" (a multibuy) but still catch "drink mix"
   $mixTok = '(?i)\bmix\b(?!\s*(?:&|and)\s*match)'
   if ('tyson chicken thighs, mix & match buy 1 get 2 free' -notmatch $mixTok) { Write-Output "ok    'mix & match' not excluded" } else { Write-Output "FAIL  'mix & match' wrongly excluded"; $script:fail++ }
@@ -2128,8 +2134,9 @@ if ($SelfTest) {
   # CLEAN TWIN - the SAME shape once it carries split_from prices normally off its own size
   $hv2 = [pscustomobject]@{ name='Post Large Size Cereal, 13.5-20.5 oz'; price_text='$4.49'; size_text='13.5-20.5 oz'; regular=$null; split_from='Simply Orange Juice, 46 fl oz or Post Large Size Cereal, 13.5-20.5 oz' }
   $hv2Got = Get-UnitPrice $hv2 ([pscustomobject]@{ unit='oz' })
-  if ($null -eq $hv2Got -or [math]::Abs([double]$hv2Got.unit_price - 0.219) -gt 0.0005) {
-    $script:fail++; Write-Output ("  FAIL split part: want 0.219/oz, got " + $(if ($null -eq $hv2Got) { 'null' } else { $hv2Got.unit_price }))
+  if ($null -eq $hv2Got -or [math]::Abs([double]$hv2Got.unit_price - 0.3326) -gt 0.0005) {
+    # 0.3326 = $4.49 / 13.5 oz since 2026-09-22 (plan-2026-09-22-5): an 'A-B oz' size reads its SMALLER size now; it was 0.219 at 20.5 oz
+    $script:fail++; Write-Output ("  FAIL split part: want 0.3326/oz, got " + $(if ($null -eq $hv2Got) { 'null' } else { $hv2Got.unit_price }))
   } else { Write-Output '  ok  split part: the cereal half prices 4.49 / 20.5 oz = 0.219/oz and can never be 0.0976' }
 
   # ---- ADD-NORM TAKES NAMED PARAMETERS ONLY (2026-09-19, backlog I191) ------------------------------------
