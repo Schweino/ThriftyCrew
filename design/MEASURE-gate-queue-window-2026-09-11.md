@@ -154,3 +154,5 @@ it will recur the next time several sessions push at once - which is what the ha
 Re-read at harness blob `7441d63dacbf70f59c1a44ead4d9340eb9e36a48` (ops/run-gates.ps1): the only change since the last re-read is one more static detector in its list, the bare-JSON-reader ratchet, moved there from the board-publish guard on 2026-09-21 (plan-2026-09-21-4) because a source defect must stop the push that adds it, not hold a board. One job among about 457 that ran in about a second, so every queue, slot and wait figure in this file stands as written.
 
 Re-read at harness blob 3d0fe2a6796b5681c2fdf62a6b77a5cdfa009298 (ops/run-gates.ps1): still holds. The 2026-09-22 change (queue 2026-09-21-a25dc0) only let a $static entry carry arguments and listed verify-commodities-gate -Head; slot acquisition, the ticket queue and the wait window this document measured are untouched.
+
+Re-read at harness blob 49ab5f7a7293fb82598c81272a9bd08ab9cc9658 (ops/run-gates.ps1): still holds. The 2026-09-22 change (queue 2026-09-22-175249) only listed grocery/audit-store-registry.ps1 -CodeOnly as one more static entry; slot acquisition, the ticket queue and the wait window are untouched.
