@@ -400,6 +400,13 @@ try {
     $tprc = $LASTEXITCODE
     if ($tprc -ne 0) { Write-Output ("trend pages: publisher exited $tprc - it could NOT write its weekly stamp, so the next publish will redo all of them (see publish-trend-pages output)") }
     else { Write-Output "trend pages built + published (weekly stamp armed)" }
+    # THE TRACKER INDEX RIDES THE SAME ROAD (2026-09-22, RCA F1): build-trend-index rewrote out\trend\index.html every run and
+    # nothing published it, so /omaha-price-tracker/ read 'the week of Sep 2' on 2026-09-22 while its 20 trend pages moved on.
+    # Published only when the trend pages were (same weekly cadence); a failure reports and never holds the board.
+    if ($tprc -eq 0) {
+      Invoke-Timed 'publish-trend-index' { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-trend-index.ps1') | Out-Null }
+      if ($LASTEXITCODE -ne 0) { Write-Output ("tracker index: publisher exited $LASTEXITCODE - /omaha-price-tracker/ keeps its last copy") } else { Write-Output 'tracker index published' }
+    }
   }
 } catch { Write-Output ("trend pages step threw: " + $_.Exception.Message + " - board publish unaffected") }
 

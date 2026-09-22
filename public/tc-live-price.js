@@ -42,6 +42,28 @@ function fillLivePrices(){
       var mn=document.querySelector('.smp-mini-n'); if(mn) mn.textContent=String(nn2);
     }catch(e){}
   }
-function go(){ fillLivePrices(); smpGetFeed().then(function(f){ feedData=f; if(!f){ feedFailed=true; } fillLivePrices(); }); }
+function tcRankLabel(li,text){ var l=li.querySelector('[data-tc-rank-label]'); if(!l){ l=document.createElement('span'); l.setAttribute('data-tc-rank-label',''); li.appendChild(l); } l.textContent=' ('+text+')'; }
+function tcRankLists(){
+  if(!feedData||feedFailed) return;
+  [].slice.call(document.querySelectorAll('[data-tc-rank]')).forEach(function(list){
+    var per=list.getAttribute('data-tc-rank-per');
+    var items=[].slice.call(list.children).filter(function(li){ return li.tagName==='LI'; });
+    var ranked=[],tail=[];
+    items.forEach(function(li,i){
+      var skip=li.getAttribute('data-tc-rank-skip');
+      if(skip){ if(!li.querySelector('[data-tc-rank-label]')) tcRankLabel(li,'not ranked: '+skip); tail.push(li); return; }
+      var sp=li.querySelector('[data-tc-live-price][data-tc-per="'+per+'"]');
+      var v=sp?parseFloat(sp.getAttribute('data-tc-filled')):NaN;
+      if(!(isFinite(v)&&v>0)){ tcRankLabel(li,'no live price this week, not ranked'); tail.push(li); return; }
+      ranked.push({li:li,v:v,i:i});
+    });
+    ranked.sort(function(a,b){ return (a.v-b.v)||(a.i-b.i); });
+    var order=ranked.map(function(x){ return x.li; }).concat(tail);
+    var same=order.every(function(li,k){ return items[k]===li; });
+    if(!same){ order.forEach(function(li){ list.appendChild(li); }); }
+  });
+  [].slice.call(document.querySelectorAll('[data-tc-rank-note][data-tc-rank-live]')).forEach(function(n){ n.textContent=n.getAttribute('data-tc-rank-live'); });
+}
+function go(){ fillLivePrices(); smpGetFeed().then(function(f){ feedData=f; if(!f){ feedFailed=true; } fillLivePrices(); tcRankLists(); }); }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
 })();

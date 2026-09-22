@@ -88,6 +88,8 @@ async function runCard(card) {
   }
   out.feedRequested = feedCalls.some((u) => u.split('?')[0] === FEED_URL);
   out.spans = readSpans(w.document);
+  // a ranked list's final order and labels (2026-09-22: /best-cheap-high-protein-foods/ sorts itself from the feed)
+  out.ranks = Array.from(w.document.querySelectorAll('[data-tc-rank]')).map(function (l) { return Array.from(l.children).filter(function (li) { return li.tagName === 'LI'; }).map(function (li) { var lb = li.querySelector('[data-tc-rank-label]'); return { id: li.getAttribute('data-tc-rank-id') || '', label: lb ? lb.textContent.trim() : '' }; }); });
   // THE WIDGET THE PROSE MUST AGREE WITH: the receipt's Everyday tab, read the way a reader reads it (click
   // the tab, read the grand total and the servings box). The spans are read BEFORE this, so the click
   // cannot change what they said.

@@ -81,6 +81,53 @@ function Get-ApeBase { param([string]$Slug)
   return $null
 }
 
+# RANK ORDER AT BUILD. A <ul|ol data-tc-rank="unit_price" data-tc-rank-per="lb"> is written in the order its stamped
+# fallbacks give (ties keep the writer's order), each item ranked by its first span in that unit. An item marked
+# data-tc-rank-skip, or with no span in the unit, goes to the end with a label. public\tc-live-price.js re-sorts from the
+# live feed on load; this is the order a no-script reader and a search engine see, dated by the note's {{rank-asof}}.
+function Set-ApeRankOrder { param([string]$Html)
+  $moves = @(); $out = [string]$Html
+  foreach ($m in [regex]::Matches([string]$Html, '(?s)(<(ul|ol)\b[^>]*\bdata-tc-rank="unit_price"[^>]*>)(.*?)(</\2>)')) {
+    $per = [regex]::Match($m.Groups[1].Value, 'data-tc-rank-per="([^"]+)"').Groups[1].Value
+    $items = [regex]::Matches($m.Groups[3].Value, '(?s)<li\b[^>]*>.*?</li>')
+    $ranked = @(); $tail = @(); $i = 0
+    foreach ($it in $items) {
+      $t = $it.Value; $skip = [regex]::Match($t, '^<li\b[^>]*\bdata-tc-rank-skip="([^"]*)"').Groups[1].Value
+      $sp = [regex]::Match($t, '<span data-tc-live-price\b[^>]*\bdata-tc-per="' + [regex]::Escape($per) + '"[^>]*\bdata-tc-fallback="([0-9.]+)"')
+      if ($skip -or -not $sp.Success) {
+        $why = if ($skip) { 'not ranked: ' + $skip } else { 'no live price in ' + $per + ', not ranked' }
+        if ($t -notmatch 'data-tc-rank-label') { $t = $t -replace '</li>$', ('<span data-tc-rank-label> (' + $why + ')</span></li>') }
+        $tail += $t
+      } else { $ranked += [pscustomobject]@{ t = $t; v = [double]::Parse($sp.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture); i = $i } }
+      $i++
+    }
+    $sorted = @($ranked | Sort-Object v, i | ForEach-Object { $_.t }) + $tail
+    $block = $m.Groups[1].Value + "`n" + ($sorted -join "`n") + "`n" + $m.Groups[4].Value
+    if (-not [string]::Equals($block, $m.Value, [StringComparison]::Ordinal)) { $moves += [pscustomobject]@{ find = $m.Value; replace = $block }; $out = $out.Replace($m.Value, $block) }
+  }
+  return @{ html = $out; moves = $moves }
+}
+
+# THE RESIDUE RULE (Brad, 2026-09-22, "Remove derived ones"). After the edits, every money mention left in an article -
+# a figure or an amount in words (Find-TcMoneyMentions) - must sit inside a KEPT entry of its decision file whose class
+# says why it may stay: restaurant, finance or non-food. The membership phrases stay by name. A total DERIVED from a
+# price the same article removed cannot be told from the text ("$150 a month" names none of its inputs), so this does
+# not detect one: it makes leaving one a stated, reviewable decision instead of a silence. Returns the findings.
+function Get-ApeResidueFindings { param([string]$Text, [object[]]$Kept)
+  $f = @(); $cov = @()
+  foreach ($k in @($Kept | Where-Object { $_ })) {
+    if (@('restaurant', 'finance', 'non-food') -notcontains [string]$k.class) { $f += ("kept '" + $k.match + "' is class '" + $k.class + "': only restaurant, finance and non-food figures stay"); continue }
+    $mt = [string]$k.match; if (-not $mt) { continue }
+    $p = 0; while (($p = $Text.IndexOf($mt, $p, [StringComparison]::Ordinal)) -ge 0) { $cov += ,@($p, ($p + $mt.Length)); $p += $mt.Length }
+  }
+  foreach ($ph in @('$1 a month', '$10 a year')) { $p = 0; while (($p = $Text.IndexOf($ph, $p, [StringComparison]::Ordinal)) -ge 0) { $cov += ,@($p, ($p + $ph.Length)); $p += $ph.Length } }
+  $mm = Find-TcMoneyMentions $Text
+  foreach ($x in $mm) {
+    $in = $false; foreach ($c in $cov) { if ($x.index -ge $c[0] -and ($x.index + $x.length) -le $c[1]) { $in = $true; break } }
+    if (-not $in) { $f += ('money left with no stated class (a derived total or a price in words goes; restaurant, finance and non-food stay under kept): "' + $x.context.Trim() + '"') }
+  }
+  return ,$f
+}
 # A live span for a decision token, with its fallback STAMPED on the fill's own basis.
 function Get-ApeRecipeSpan { param([string]$RecipeSlug)
   $b = Join-Path $mp ('db\built\' + $RecipeSlug + '.body.html')
@@ -123,6 +170,22 @@ if ($SelfTestApe) {
   T 'CLEAN TWIN  a lexical round trip keeps the single html card and changes only its html' ((Get-ApeHtmlOfLexical $lex2) -eq '<p>x</p>') $lex2
   $para = '{"root":{"children":[{"type":"paragraph","children":[]}],"type":"root","version":1}}'
   T 'MUST FIRE  a body that is not one html card is refused, never half-edited' ($null -eq (Get-ApeHtmlOfLexical $para)) ''
+  $r1 = Get-ApeResidueFindings 'Cook at home and that saves you $45 a week.' @()
+  T 'MUST FIRE  a total derived from removed prices ("saves you $45 a week") with no stated class is refused' ($r1.Count -eq 1) ($r1 -join ' | ')
+  $r2 = Get-ApeResidueFindings 'Takeout runs $25 a dinner, and membership is $1 a month.' @([pscustomobject]@{ match = 'Takeout runs $25 a dinner'; class = 'restaurant' })
+  T 'MUST NOT FIRE  a restaurant price kept by name, and the membership phrase, pass' ($r2.Count -eq 0) ($r2 -join ' | ')
+  $r3 = Get-ApeResidueFindings 'Pack your own for thirty or forty bucks a month.' @([pscustomobject]@{ match = 'thirty or forty bucks'; class = 'derived' })
+  T 'MUST FIRE  a price in words cannot be kept as "derived": the class is refused AND the mention stays unclassified (2 findings)' ($r3.Count -eq 2 -and $r3[0] -match 'only restaurant' -and $r3[1] -match 'no stated class') ($r3 -join ' | ')
+  $r4 = Get-ApeResidueFindings 'Soups that cost pennies a bowl.' @()
+  T 'MUST FIRE  "pennies a bowl" is a price in words' ($r4.Count -eq 1) ($r4 -join ' | ')
+  $sp1 = '<span data-tc-live-price data-tc-bid="p2" data-tc-per="lb" data-tc-field="unit_price" data-tc-basis="feed-everyday-per-unit" data-tc-fallback="2.00">~$2.00</span>'
+  $sp2 = '<span data-tc-live-price data-tc-bid="p1" data-tc-per="lb" data-tc-field="unit_price" data-tc-basis="feed-everyday-per-unit" data-tc-fallback="1.00">~$1.00</span>'
+  $ul = '<ul data-tc-rank="unit_price" data-tc-rank-per="lb">' + "`n" + '<li data-tc-rank-skip="sold by the egg">Eggs</li>' + "`n" + '<li>B ' + $sp1 + '</li>' + "`n" + '<li>A ' + $sp2 + '</li>' + "`n" + '</ul>'
+  $ro = Set-ApeRankOrder ('<p>x</p>' + $ul)
+  $order = @([regex]::Matches($ro.html, '<li\b[^>]*>(\w+)') | ForEach-Object { $_.Groups[1].Value }) -join ','
+  T 'MUST FIRE  the build-time order follows the stamped prices (A 1.00 before B 2.00) with the skipped item last and labelled' ($order -eq 'A,B,Eggs' -and $ro.html -match 'not ranked: sold by the egg' -and @($ro.moves).Count -eq 1) ($order + ' moves=' + @($ro.moves).Count)
+  $ro2 = Set-ApeRankOrder $ro.html
+  T 'CLEAN TWIN  an already-ranked list is left byte-identical, with no move recorded' ([string]::Equals($ro2.html, $ro.html, [StringComparison]::Ordinal) -and @($ro2.moves).Count -eq 0) (@($ro2.moves).Count)
   if ($script:fl -eq 0) { Write-Output ("prepare-article-price-edits self-test PASS ($script:n cases)"); exit 0 } else { Write-Output ("prepare-article-price-edits self-test FAIL ($script:fl of $script:n)"); exit 1 }
 }
 
@@ -156,6 +219,8 @@ if ($Prepare) {
   $refused = @(); $done = 0
   $pairs = @(); foreach ($d in $decs) { foreach ($e in @((Read-JsonFile $d.FullName).edits)) { foreach ($m in [regex]::Matches([string]$e.replace, '\{\{live-unit:([a-z0-9-]+):([a-z]+)\}\}')) { $pairs += @{ bid = $m.Groups[1].Value; per = $m.Groups[2].Value } } } }
   $unit = @{ values = @{}; asof = '' }; if ($pairs.Count) { $unit = Get-ApeUnitValues $pairs }
+  $fgen = [string](Read-JsonFile (Join-Path $repo 'grocery\out\smp-feed.json')).generated
+  $rankAsOf = ([datetime]::Parse($fgen, [Globalization.CultureInfo]::InvariantCulture)).ToString('MMMM d, yyyy', [Globalization.CultureInfo]::InvariantCulture)
   foreach ($d in $decs) {
     $dec = Read-JsonFile $d.FullName; $s = [string]$dec.slug
     $base = Read-JsonFile (Join-Path $editDir ($s + '.base.json'))
@@ -164,7 +229,7 @@ if ($Prepare) {
       $find = [string]$e.find
       $n = ([regex]::Matches($new, [regex]::Escape($find))).Count
       if ($n -ne 1) { $why += ("find occurs {0} times (must be 1): {1}" -f $n, $find.Substring(0, [Math]::Min(80, $find.Length))); continue }
-      $rep = [string]$e.replace
+      $rep = ([string]$e.replace).Replace('{{rank-asof}}', $rankAsOf)
       try {
         $rep = [regex]::Replace($rep, '\{\{live-recipe:([a-z0-9-]+)\}\}', [Text.RegularExpressions.MatchEvaluator] { param($m) Get-ApeRecipeSpan $m.Groups[1].Value })
         $rep = [regex]::Replace($rep, '\{\{live-unit:([a-z0-9-]+):([a-z]+)\}\}', [Text.RegularExpressions.MatchEvaluator] { param($m)
@@ -174,9 +239,17 @@ if ($Prepare) {
       } catch { $why += $_.Exception.Message; continue }
       $new = $new.Replace($find, $rep); $reps += [ordered]@{ find = $find; replace = $rep; class = [string]$e.class }
     }
-    if (@(Get-TcLivePriceSpans $new).Count -gt 0 -and -not $new.Contains($SCRIPT_TAG)) { $new = $new.TrimEnd() + "`n" + $SCRIPT_TAG + "`n"; $reps += [ordered]@{ find = '(end of body)'; replace = $SCRIPT_TAG; class = 'script' } }
+    # a RANKED list is written in the order its stamped prices give today, so a no-script reader sees a true, dated order
+    $rk = Set-ApeRankOrder $new
+    foreach ($mv in $rk.moves) { $reps += [ordered]@{ find = $mv.find; replace = $mv.replace; class = 'rank' } }
+    $new = $rk.html
+    $liveSpans = Get-TcLivePriceSpans $new   # assigned first: @() around the call counted an empty result as 1 and tagged every article
+    if ($liveSpans.Count -gt 0 -and -not $new.Contains($SCRIPT_TAG)) { $new = $new.TrimEnd() + "`n" + $SCRIPT_TAG + "`n"; $reps += [ordered]@{ find = '(end of body)'; replace = $SCRIPT_TAG; class = 'script' } }
     $left = Find-TcGroceryPriceLiterals (ConvertTo-TcReaderText $new)   # assigned, never @()-wrapped: an empty result would count 1
     if ($left.Count) { $why += ('still carries ' + $left.Count + ' literal(s) the monitor counts: ' + (($left | ForEach-Object { $_.context }) -join ' || ')) }
+    # EVERY OTHER MONEY MENTION needs a stated class (Brad 2026-09-22, "Remove derived ones"): see Get-ApeResidueFindings
+    $kept = @($dec.kept | Where-Object { $_ })
+    foreach ($x in (Get-ApeResidueFindings (ConvertTo-TcReaderText $new) $kept)) { $why += $x }
     $title = if ($dec.title_new) { [string]$dec.title_new } else { [string]$base.title }
     if ($title -match '\$\d') { $why += ('title still states a price: ' + $title) }
     # the stored text fields (custom_excerpt, meta/og/twitter) cannot hold a live span, so a figure there is removed by a field edit
@@ -184,7 +257,7 @@ if ($Prepare) {
     foreach ($x in $fe) { $l2 = Find-TcGroceryPriceLiterals ([string]$x.replace); if ($l2.Count) { $why += ('field edit still carries a literal: ' + $x.replace) } }
     if ($why.Count) { $refused += ("$s : " + ($why -join ' | ')); continue }
     $newLex = Set-ApeHtmlOfLexical ([string]$base.lexical) $new
-    $edit = [ordered]@{ slug = $s; id = $base.id; kind = $base.kind; base_updated_at = $base.updated_at; base_lexical_sha256 = (Get-ApeSha ([string]$base.lexical)); title_old = $base.title; title_new = $title; replacements = $reps; field_edits = $fe; new_lexical_sha256 = (Get-ApeSha $newLex); stamped_against_feed = $unit.asof; prepared = (Get-Date -Format s) }
+    $edit = [ordered]@{ slug = $s; id = $base.id; kind = $base.kind; base_updated_at = $base.updated_at; base_lexical_sha256 = (Get-ApeSha ([string]$base.lexical)); title_old = $base.title; title_new = $title; replacements = $reps; field_edits = $fe; kept = $kept; new_lexical_sha256 = (Get-ApeSha $newLex); stamped_against_feed = $unit.asof; prepared = (Get-Date -Format s) }
     [IO.File]::WriteAllText((Join-Path $editDir ($s + '.edit.json')), ($edit | ConvertTo-Json -Depth 6), (New-Object Text.UTF8Encoding($false)))
     $done++
   }
@@ -225,6 +298,7 @@ if ($Land) {
       foreach ($x in @($e.field_edits)) { if ($x) { $v = $v.Replace([string]$x.find, [string]$x.replace) } }
       $lf = Find-TcGroceryPriceLiterals $v
       if ($lf.Count) { $fbad += ("$fld still carries " + (($lf | ForEach-Object { $_.figure }) -join ', ')) }
+      foreach ($x in (Get-ApeResidueFindings $v @($e.kept | Where-Object { $_ }))) { $fbad += ("$fld " + $x) }
       if ($fld -eq 'custom_excerpt' -and $v.Length -gt 300) { $fbad += "custom_excerpt is $($v.Length) chars (Ghost 422 above 300)" }
       if (-not [string]::Equals($v, $v0, [StringComparison]::Ordinal)) { $upd[$fld] = $v }
     }

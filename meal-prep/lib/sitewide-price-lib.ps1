@@ -27,6 +27,33 @@ $script:TC_GROCERY_UNIT = '(?:(?:a|per|an|/)\s*(?:serving|servings|bowl|plate|me
 # finance ("100 shares at $50 each", "three overdraft fees at $35 each"), measured on the first live run 2026-09-22.
 $script:TC_GROCERY_PRICE_RE = '(?i)\$\d+(?:\.\d{1,2})?\s*' + $script:TC_GROCERY_UNIT + '|\bservings?\s+(?:at\s+)?(?:about\s+|around\s+|roughly\s+)?\$\d+(?:\.\d{1,2})?\s*each\b'
 
+# A PRICE IN A TITLE is the tight shape, OR any dollar figure in a title that also names a food or a meal (2026-09-22:
+# "Freezer Breakfast Burritos: A Week of Breakfasts for Under $1 Each", "Rotisserie Chicken Meal Prep: 5 Meals From One
+# $5 Bird"). The food word is the scope: a bare "each" in a title would take "10 Shares at $300 Each" with it, and a
+# savings title ("Save $500 on a Wedding") names no food. Titles only: in body text "each" stays finance's word.
+$script:TC_TITLE_FOOD_RE = '(?i)\b(?:breakfasts?|lunch(?:es)?|dinners?|meals?|snacks?|shakes?|smoothies?|recipes?|burritos?|bowls?|plates?|servings?|chicken|beef|pork|turkey|eggs?|bird|protein)\b'
+function Test-TcTitlePrice { param([string]$Title)
+  if ([regex]::IsMatch([string]$Title, $script:TC_GROCERY_PRICE_RE)) { return $true }
+  return ([regex]::IsMatch([string]$Title, '\$\d') -and [regex]::IsMatch([string]$Title, $script:TC_TITLE_FOOD_RE))
+}
+
+# EVERY MONEY MENTION, not only the grocery shape: a figure ("$18", "$1,299") or an amount in words ("thirty or forty
+# bucks", "six dollars", "a few cents", "pennies"). The article lane's residue gate reads this: after ruling C's edits,
+# every mention left in an article must carry a stated class (restaurant, finance, non-food) in its decision file, so a
+# total DERIVED from a removed price cannot pass silently. Whether a total was derived is not in the text - "$150 a
+# month" names none of the prices it was multiplied from - so that call is a person's, and this makes it unskippable.
+$script:TC_MONEY_WORDS_RE = '(?i)\b(?:(?:\d[\d,.]*|a|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|few|several)\s+(?:(?:or|to)\s+(?:\w+)\s+)?(?:hundred\s+|thousand\s+)?(?:dollars?|bucks|cents)|pennies)\b'
+function Find-TcMoneyMentions { param([string]$Text)
+  $out = New-Object System.Collections.Generic.List[object]
+  foreach ($re in @('\$\s?\d[\d,]*(?:\.\d+)?', $script:TC_MONEY_WORDS_RE)) {
+    foreach ($m in [regex]::Matches([string]$Text, $re)) {
+      $a = [Math]::Max(0, $m.Index - 60); $b = [Math]::Min($Text.Length, $m.Index + $m.Length + 40)
+      $out.Add([pscustomobject]@{ figure = $m.Value; index = $m.Index; length = $m.Length; context = $Text.Substring($a, $b - $a) })
+    }
+  }
+  return ,$out.ToArray()
+}
+
 # The reader-visible text of an HTML fragment: comments and live placeholders out, scripts and styles out unless
 # -KeepScripts (the homepage's site-wide injection writes its quote card FROM a script, so that one target reads
 # them), tags to spaces, entities decoded, whitespace collapsed.

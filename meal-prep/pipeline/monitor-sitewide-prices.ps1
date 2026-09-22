@@ -17,7 +17,8 @@
 # RATCHET set on the day this shipped (never a check red on day one): a finding is a literal that was not there
 # then - a new page, a page with more literals than its mark, a new title price, or more pages than the mark.
 #
-# SCOPE OF A CLEAN REPORT: UNSOUND. It knows the spellings in the lib and nothing else ("a $5 bird" passes), and it
+# SCOPE OF A CLEAN REPORT: UNSOUND. It knows the spellings in the lib and nothing else ("a $5 bird" passes in a BODY; in a TITLE or
+# og:title any dollar figure beside a food word counts, since 2026-09-22), and it
 # reads the anonymous page, so a figure behind a paywall is out of its reach. A clean run proves no NEW literal of a
 # known shape on a public page; it does not prove the site free of typed prices. A finding is complete for its
 # shape: the figure is on the live page, attached to a grocery unit.
@@ -48,7 +49,8 @@ function Measure-SwpPage { param([string]$Html, [switch]$IsHome)
   $title = [System.Net.WebUtility]::HtmlDecode([regex]::Match([string]$Html, '(?is)<title>(.*?)</title>').Groups[1].Value).Trim()
   $body = if ($IsHome) { [string]$Html } else { Get-TcPageBody $Html }
   $hits = Find-TcGroceryPriceLiterals (ConvertTo-TcReaderText $body -KeepScripts:$IsHome)
-  $tHit = [regex]::IsMatch($title, $script:TC_GROCERY_PRICE_RE)
+  $og = [System.Net.WebUtility]::HtmlDecode([regex]::Match([string]$Html, '(?is)<meta property="og:title" content="([^"]*)"').Groups[1].Value).Trim()
+  $tHit = (Test-TcTitlePrice $title) -or (Test-TcTitlePrice $og)
   return [pscustomobject]@{ title = $title; title_hit = $tHit; literals = @($hits).Count; hits = @($hits) }
 }
 
@@ -89,7 +91,19 @@ if ($SelfTestSwp) {
   $why = Get-TcSitewideExemption -Slug 'lentil-price-omaha' -Config $cfg -EngineSlugs $eng
   T 'MUST FIRE  a page NAMED like a generated one is not exempt (no pattern hole)' ($null -eq $why) $why
   $why = Get-TcSitewideExemption -Slug 'omaha-price-tracker' -Config $cfg -EngineSlugs $eng
-  T 'MUST FIRE  a generated page with no road that republishes it (omaha-price-tracker) is not exempt' ($null -eq $why) $why
+  T 'CLEAN TWIN  the tracker is exempt only through the road that now publishes it (publish-trend-index)' ($why -and $why -match 'publish-trend-index') $why
+  $t1 = '<html><head><title>Freezer Breakfast Burritos: A Week of Breakfasts for Under $1 Each | Thrifty Crew</title></head><body><article><p>x</p></article></body></html>'
+  $r = Measure-SwpPage $t1
+  T 'MUST FIRE  a title price in a food title ("Breakfasts for Under $1 Each") is a title hit' ($r.title_hit) $r.title
+  $t2 = '<html><head><title>x</title><meta property="og:title" content="Rotisserie Chicken Meal Prep: 5 Meals From One $5 Bird"></head><body><article><p>x</p></article></body></html>'
+  $r = Measure-SwpPage $t2
+  T 'MUST FIRE  the og:title is read too ("One $5 Bird")' ($r.title_hit) $r.title
+  foreach ($ft in @('Stock Split: 10 Shares at $300 Each', 'How to Save $500 on a Wedding', 'The $1,000 Emergency Fund')) {
+    $r = Measure-SwpPage ('<html><head><title>' + $ft + '</title></head><body><article><p>x</p></article></body></html>')
+    T ('MUST NOT FIRE  a finance title names no food: "' + $ft + '"') (-not $r.title_hit) $r.title
+  }
+  $r = Measure-SwpPage ('<html><head><title>You own 100 shares at $50 each</title></head><body><article><p>Breakfast is served.</p></article></body></html>')
+  T 'MUST NOT FIRE  the title scope does not reach body text: "shares at $50 each" with a food word in the BODY' (-not $r.title_hit -and $r.literals -eq 0) ($r.title + ' / ' + $r.literals)
   # ratchet: the bar is pages_max = 2 with two named pages; at the bar is silent, one page past it fires
   $rat = ('{"pages_max":2,"pages":{"a":{"literals":3,"title":false},"b":{"literals":1,"title":true}}}' | ConvertFrom-Json)
   $v = Get-TcSitewideRatchetVerdict -Measured @{ a = @{ literals = 3; title = $false }; b = @{ literals = 1; title = $true } } -Ratchet $rat

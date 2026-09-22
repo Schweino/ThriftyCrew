@@ -1,7 +1,7 @@
 {
   "_comment": "Read by meal-prep/pipeline/monitor-sitewide-prices.ps1 through meal-prep/lib/sitewide-price-lib.ps1. Two blocks. 'exempt' is the explicit, reasoned registry of live pages the monitor does not ask about, BY NAME, each naming its producer and the road that keeps its figures current; never a pattern. 'ratchet' is the day-one mark: the pages that stated a grocery price literal when the monitor shipped, with their counts. The mark may only FALL. A plain run never writes it; a run that measures fewer prints RATCHET CAN TIGHTEN and a person lowers the mark in a commit. Set 2026-09-22 for design/RCA-holistic-2026-09-22.md F1 (plan grocery/triage-plans/plan-2026-09-22-6.json).",
   "exempt": {
-    "_why": "A page is exempt only when the PIPELINE writes its figures from the board on a known cadence, so its copy of a board price has a road that regenerates it. A generated page with no such road is NOT exempt: /omaha-price-tracker/ is built daily by grocery/build-trend-index.ps1 and published by nothing (its header: 'Meant to be published manually'); the live copy was last modified 2026-09-05, so it stays in the monitored set until a road publishes it.",
+    "_why": "A page is exempt only when the PIPELINE writes its figures from the board on a known cadence, so its copy of a board price has a road that regenerates it. A generated page with no such road is NOT exempt: /omaha-price-tracker/ was built daily by grocery/build-trend-index.ps1 and published by nothing, its live copy reading the week of Sep 2 on 2026-09-22; it is exempt only because publish-deals-page.ps1 now publishes it with the trend pages.",
     "engine_recipes": {
       "membership": "meal-prep/recipes-db.json recipes[].slug",
       "why": "built by the recipe engine; meal-prep/lib/price-literal-gate.ps1 refuses a literal at build and at publish, audit-live-price-contract.ps1 -LivePosts reads every published post daily, and monitor-live-recipe-prices.ps1 runs each page's own fill against the deployed feed"
@@ -9,6 +9,7 @@
     "pages": {
       "meal-prep-recipes": { "producer": "meal-prep/build-hub-grid.ps1 -Publish", "why": "the recipe hub grid, rebuilt from the day's costs and republished daily by grocery/check-ad-cycles.ps1 (surface-hub); audit-surface-staleness.ps1 reads it" },
       "omaha-grocery-prices": { "producer": "grocery/publish-deals-page.ps1", "why": "the deals board itself, republished by the daily chain whenever the board changes" },
+      "omaha-price-tracker": { "producer": "grocery/publish-trend-index.ps1", "why": "the trend index, built by build-trend-index.ps1 and published by publish-deals-page.ps1 right after the trend pages it links to, on their weekly stamp (road added 2026-09-22; before that nothing published it and the live copy read the week of Sep 2)" },
       "shop-smart-at-your-store": { "producer": "grocery/publish-store-guide.ps1", "why": "the store guide, republished from the board by publish-deals-page.ps1 on every board publish" },
       "apples-price-omaha": { "producer": "grocery/publish-trend-pages.ps1", "why": "trend page built by build-trend-pages.ps1 from price-history.json; publish-deals-page.ps1 republishes the set when a new week lands (weekly stamp)" },
       "bread-price-omaha": { "producer": "grocery/publish-trend-pages.ps1", "why": "trend page, same road as apples-price-omaha (live copy modified 2026-09-22)" },
@@ -34,8 +35,8 @@
   },
   "ratchet": {
     "set": "2026-09-22",
-    "why": "Measured by the first live run of monitor-sitewide-prices.ps1 on 2026-09-22 (1,086 live URLs incl. the homepage: 600 exempt by name, 440 clean, 46 stating a grocery price, 0 unread). The 46 are the homepage injection, /omaha-price-tracker/ (generated, no publishing road) and 44 posts, including the four pre-engine recipe posts ruling A rebuilds. Not red on day one; each count may only fall.",
-    "pages_max": 46,
+    "why": "Re-taken 2026-09-22 when the counter changed (two changes, one re-take, before and after stated). BEFORE, first live run: 46 pages, 249 literals, 8 title prices. The title shape now also counts any dollar figure in a <title> or og:title that names a food (\"Under $1 Each\", \"One $5 Bird\", \"The $2 Bodybuilder Staple\"), and /omaha-price-tracker/ is exempt because publish-deals-page.ps1 now publishes it. AFTER, second live run over the same 1,086 URLs: 48 pages (46 - the tracker + 3 posts whose only price is a food title), 230 literals (249 - the tracker 19), 13 title prices (8 + those 3 + chicken-and-rice-meal-prep-guide + rotisserie-chicken-meal-prep); 601 exempt, 437 clean, 0 unread. No finance title reads as a hit. Not red on day one; each count may only fall.",
+    "pages_max": 48,
     "pages": {
       "(home)": { "literals": 3, "title": false },
       "50-simple-money-saving-tips": { "literals": 1, "title": false },
@@ -46,8 +47,9 @@
       "cheap-crockpot-meals": { "literals": 13, "title": false },
       "cheap-dinner-ideas": { "literals": 31, "title": true },
       "cheap-healthy-grocery-staples": { "literals": 10, "title": false },
+      "cheap-high-protein-snacks": { "literals": 0, "title": true },
       "cheap-lunch-ideas-for-work": { "literals": 18, "title": false },
-      "chicken-and-rice-meal-prep-guide": { "literals": 2, "title": false },
+      "chicken-and-rice-meal-prep-guide": { "literals": 2, "title": true },
       "chicken-marinara-pasta": { "literals": 0, "title": true },
       "free-chicken-alfredo": { "literals": 6, "title": true },
       "freezer-meal-prep-guide": { "literals": 5, "title": false },
@@ -55,6 +57,7 @@
       "ground-beef-meal-prep-ideas": { "literals": 5, "title": false },
       "high-protein-breakfast-meal-prep": { "literals": 6, "title": true },
       "high-protein-lunch-meal-prep": { "literals": 9, "title": true },
+      "high-protein-shake-recipes": { "literals": 0, "title": true },
       "high-volume-low-calorie-meal-prep": { "literals": 5, "title": false },
       "how-to-count-macros": { "literals": 1, "title": false },
       "how-to-meal-plan-for-a-family": { "literals": 1, "title": false },
@@ -70,6 +73,7 @@
       "low-carb-meal-prep-ideas": { "literals": 9, "title": false },
       "mason-jar-salads-meal-prep": { "literals": 1, "title": false },
       "meal-planning-to-save": { "literals": 1, "title": false },
+      "meal-prep-breakfast-burritos": { "literals": 0, "title": true },
       "meal-prep-for-a-family-of-four": { "literals": 6, "title": false },
       "meal-prep-for-the-gym": { "literals": 6, "title": false },
       "meal-prep-mistakes-to-avoid": { "literals": 1, "title": false },
@@ -77,8 +81,7 @@
       "meal-prep-soups-and-stews": { "literals": 1, "title": false },
       "money-rules-to-live-by": { "literals": 1, "title": false },
       "no-cook-meal-prep-ideas": { "literals": 5, "title": false },
-      "omaha-price-tracker": { "literals": 19, "title": false },
-      "rotisserie-chicken-meal-prep": { "literals": 4, "title": false },
+      "rotisserie-chicken-meal-prep": { "literals": 4, "title": true },
       "shredded-bbq-chicken-sammies": { "literals": 0, "title": true },
       "sunday-meal-prep-routine": { "literals": 4, "title": false },
       "vegetarian-meal-prep-on-a-budget": { "literals": 9, "title": false },

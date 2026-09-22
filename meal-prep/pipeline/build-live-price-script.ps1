@@ -56,8 +56,36 @@ function New-TcLivePriceScript { param([string]$Src)
     'var tcStandalone=true;',
     'function nServ(){ return 1; }',
     'function totalAt(){ return null; }')
-  $tail = @(
-    'function go(){ fillLivePrices(); smpGetFeed().then(function(f){ feedData=f; if(!f){ feedFailed=true; } fillLivePrices(); }); }',
+  # A RANKED LIST re-orders itself from the same feed the spans read (2026-09-22, Brad: "Rank it live"). The list names
+  # its basis (data-tc-rank="unit_price" data-tc-rank-per="lb") and each <li> is ranked by its own filled span in that
+  # unit, cheapest first, ties keeping the build order. An item marked data-tc-rank-skip (sold in another unit) and an
+  # item whose span the feed did not fill go to the END, labelled, never ranked as $0 or by a stale fallback. With no
+  # feed at all nothing moves: the build-time order and its dated note stand, which is what a no-script reader sees.
+  $rank = @(
+    'function tcRankLabel(li,text){ var l=li.querySelector(''[data-tc-rank-label]''); if(!l){ l=document.createElement(''span''); l.setAttribute(''data-tc-rank-label'',''''); li.appendChild(l); } l.textContent='' (''+text+'')''; }',
+    'function tcRankLists(){',
+    '  if(!feedData||feedFailed) return;',
+    '  [].slice.call(document.querySelectorAll(''[data-tc-rank]'')).forEach(function(list){',
+    '    var per=list.getAttribute(''data-tc-rank-per'');',
+    '    var items=[].slice.call(list.children).filter(function(li){ return li.tagName===''LI''; });',
+    '    var ranked=[],tail=[];',
+    '    items.forEach(function(li,i){',
+    '      var skip=li.getAttribute(''data-tc-rank-skip'');',
+    '      if(skip){ if(!li.querySelector(''[data-tc-rank-label]'')) tcRankLabel(li,''not ranked: ''+skip); tail.push(li); return; }',
+    '      var sp=li.querySelector(''[data-tc-live-price][data-tc-per="''+per+''"]'');',
+    '      var v=sp?parseFloat(sp.getAttribute(''data-tc-filled'')):NaN;',
+    '      if(!(isFinite(v)&&v>0)){ tcRankLabel(li,''no live price this week, not ranked''); tail.push(li); return; }',
+    '      ranked.push({li:li,v:v,i:i});',
+    '    });',
+    '    ranked.sort(function(a,b){ return (a.v-b.v)||(a.i-b.i); });',
+    '    var order=ranked.map(function(x){ return x.li; }).concat(tail);',
+    '    var same=order.every(function(li,k){ return items[k]===li; });',
+    '    if(!same){ order.forEach(function(li){ list.appendChild(li); }); }',
+    '  });',
+    '  [].slice.call(document.querySelectorAll(''[data-tc-rank-note][data-tc-rank-live]'')).forEach(function(n){ n.textContent=n.getAttribute(''data-tc-rank-live''); });',
+    '}')
+  $tail = $rank + @(
+    'function go(){ fillLivePrices(); smpGetFeed().then(function(f){ feedData=f; if(!f){ feedFailed=true; } fillLivePrices(); tcRankLists(); }); }',
     'if(document.readyState===''loading''){ document.addEventListener(''DOMContentLoaded'',go); } else { go(); }',
     '})();')
   return (($head + $parts + $tail) -join "`n") + "`n"
@@ -102,6 +130,32 @@ if ($SelfTest) {
       T 'CLEAN TWIN  a commodity span reads the EVERYDAY cell over a cheaper sale current (1.99/lb, not 1.49)' ($sp.Count -eq 6 -and $sp[2].text -eq '~$1.99') $txt
       T 'CLEAN TWIN  unit conversion: 0.0625/oz is 1.00/lb, 0.25 each is 3.00/dozen' ($sp.Count -eq 6 -and $sp[3].text -eq '~$1.00' -and $sp[3].filled -and $sp[4].text -eq '~$3.00') $txt
       T 'MUST FIRE  a unit pair the fill cannot convert (sq_ft to lb) is refused and keeps the fallback' ($sp.Count -eq 6 -and $sp[5].text -eq '~$4.44' -and -not $sp[5].filled) $txt
+      # RANKED LISTS: build order is by the stamped fallbacks; the live order must come from the feed
+      $li = { param($id, $bid, $fb, $extra) '<li data-tc-rank-id="' + $id + '"' + $extra + '><b>' + $id + '</b> <span data-tc-live-price data-tc-bid="' + $bid + '" data-tc-per="lb" data-tc-field="unit_price" data-tc-basis="feed-everyday-per-unit" data-tc-fallback="' + $fb + '">~$' + $fb + '</span> a pound</li>' }
+      $rfeed = '{"schema":2,"generated":"2026-09-22T08:14:34","recipes":{},"pricing_inputs":{"p1":{"current":{"unit":"lb","perUnitMicros":1000000}},"p2":{"current":{"unit":"lb","perUnitMicros":2000000}},"p3":{"current":{"unit":"lb","perUnitMicros":3000000}}}}'
+      [IO.File]::WriteAllText((Join-Path $tmp 'rfeed.json'), $rfeed)
+      $ul = { param($items) '<ul data-tc-rank="unit_price" data-tc-rank-per="lb">' + ($items -join '') + '</ul>' }
+      $l1 = & $ul @((& $li 'a' 'p1' '1.00' ''), (& $li 'b' 'p2' '2.00' ''), (& $li 'c' 'p3' '3.00' ''))
+      $l2 = & $ul @((& $li 'x' 'p2' '1.00' ''), (& $li 'y' 'p1' '2.00' ''))
+      $l3 = & $ul @((& $li 'm' 'gone' '0.50' ''), (& $li 'k' 'p3' '0.40' ' data-tc-rank-skip="sold by the egg"'), (& $li 'n' 'p2' '2.00' ''))
+      $rb = '<p><span data-tc-rank-note data-tc-rank-live="Sorted by today''s live price per pound.">Sorted by price per pound as of September 22, 2026.</span></p>' + $l1 + $l2 + $l3 + '<script>' + $js + '</script>'
+      [IO.File]::WriteAllText((Join-Path $tmp 'r.html'), $rb)
+      foreach ($mode in 'ok', 'fail') {
+        $job = @{ jsdom = $jsdom; feedPath = (Join-Path $tmp 'rfeed.json'); feedMode = $mode; waitMs = 1500; cards = @(@{ slug = 'rank-fixture'; htmlPath = (Join-Path $tmp 'r.html'); kind = 'body' }) }
+        [IO.File]::WriteAllText((Join-Path $tmp 'rjob.json'), ($job | ConvertTo-Json -Depth 5))
+        $lines = & (Join-Path $node.FullName 'node.exe') (Join-Path $here 'live-price-fill.js') (Join-Path $tmp 'rjob.json')
+        $rr = $null; foreach ($l in @($lines)) { if ($l -match '^\{') { $rr = $l | ConvertFrom-Json } }
+        $ranks = @(); if ($rr) { $ranks = @($rr.ranks) }
+        $ord = @($ranks | ForEach-Object { (@($_) | ForEach-Object { $_.id + $(if ($_.label) { '[' + $_.label + ']' } else { '' }) }) -join ',' })
+        $got = $ord -join ' | '
+        if ($mode -eq 'ok') {
+          T 'CLEAN TWIN  an already-ordered list (1.00, 2.00, 3.00) is unchanged and unlabelled' ($ord.Count -eq 3 -and $ord[0] -eq 'a,b,c') $got
+          T 'MUST FIRE  two prices swap in the feed (x 1.00->2.00, y 2.00->1.00): the order changes to y,x' ($ord.Count -eq 3 -and $ord[1] -eq 'y,x') $got
+          T 'MUST NOT FIRE  a missing price (m, fallback 0.50) is never ranked first as a price: it goes to the end, labelled; a skipped unit follows it, labelled' ($ord.Count -eq 3 -and $ord[2] -eq 'n,m[(no live price this week, not ranked)],k[(not ranked: sold by the egg)]') $got
+        } else {
+          T 'MUST NOT FIRE  with the feed down nothing moves: the build order and its dated note stand' ($ord.Count -eq 3 -and $ord[1] -eq 'x,y' -and $ord[2] -eq 'm,k,n') $got
+        }
+      }
     } finally { Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue }
   } else { Write-Output 'BLIND  node or jsdom missing under C:\Codex\tools: the generated script was not RUN (5 cases not covered)' }
   if ($script:fl -eq 0) { Write-Output ("build-live-price-script self-test PASS ($script:n cases)"); exit 0 } else { Write-Output ("build-live-price-script self-test FAIL ($script:fl of $script:n)"); exit 1 }
