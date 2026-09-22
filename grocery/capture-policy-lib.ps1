@@ -1796,6 +1796,12 @@ function Write-CaptureWorklist {
 # being late is one more day before a miss pages (see Get-BrowserCaptureVerdict's yesterday grading).
 $script:ProducerSlots = @{
   'grocery-browser-stores-refresh' = @{ start = '06:15'; end = '14:00'; source = 'SKILL.md 06:15 start; end = latest landing 13:15 (2026-09-11..22) + 45 min' }
+  # The 08:00 chain (TC Grocery Daily Capture 0800, capture-run.ps1), read by health-heartbeat's output rows that name it
+  # (2026-09-22, plan-2026-09-22-8). Start is the task's own trigger. The END is a first plausible number, not the
+  # survivor of a sweep: the four `[daily]` feed commits 2026-09-08..22 landed at 08:32, 09:20, 09:46 and 13:19
+  # (git log -- public/smp-feed.json), so the latest plus about 40 minutes. A small sample; if the chain lands later
+  # than 14:00, this moves, and the cost of it being early is a STALE page for a feed still on its way.
+  'grocery-daily-capture' = @{ start = '08:00'; end = '14:00'; source = 'TC Grocery Daily Capture 0800 trigger; end = latest [daily] feed landing 13:19 (4 landings 2026-09-08..22) + about 40 min' }
 }
 function Get-ProducerSlot {
   <# Pure. A named producer's slot on a day: start, end (datetimes), source. $null for a producer nobody declared,

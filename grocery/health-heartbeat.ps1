@@ -98,6 +98,7 @@ function Add-HbIssue([string]$Class, [string]$Subject, [string]$Text) {
 $okLines = New-Object System.Collections.Generic.List[string]
 # Declared here, not beside the output loop, because the task loop holds lines too (see RESUME-GRACE).
 $heldLines = New-Object System.Collections.Generic.List[string]
+$notYetLines = New-Object System.Collections.Generic.List[string]   # PRODUCER-SLOT: inside the producer's slot, not yet
 $TASK_NOT_YET_RUN = 267011  # 0x00041303 SCHED_S_TASK_HAS_NOT_RUN
 $TASK_RUNNING     = 267009   # 0x00041301 SCHED_S_TASK_RUNNING (transient: reported as LastTaskResult while a run is in flight)
 
@@ -515,6 +516,38 @@ function Test-HbOutageExplainsAge {
 }
 # <<< RESUME-GRACE
 
+# >>> PRODUCER-SLOT (2026-09-22, ops lane plan-2026-09-22-8, residual 2026-09-22-5d20b9; RCA F4)
+# An output row graded only against a wall-clock age reads STALE while its producer is still inside today's slot: the
+# file is yesterday's because today's run has not happened YET, not because it died. The capture watchdog was fixed for
+# that shape with Get-ProducerSlot (capture-policy-lib.ps1, the ONE slot table); a row here names its producer the same
+# way (`producer` in expected-automations.json) and is graded through that same function, never a second table.
+# Three states, never two: before today's slot ENDS, an output written at or after YESTERDAY's slot start is NOT YET
+# (counted on its own line, never ok and never paged); once the slot has ended it is STALE exactly as before; an output
+# older than yesterday's slot start means yesterday's run was missed too and is STALE even inside today's slot. A row
+# that names no producer, or a producer the table does not declare ($null slot), is graded exactly as before (fail
+# toward paging). THE BAR: NOT YET while Now < slot.end, so at slot.end itself the answer is STALE.
+function Test-HbOutputNotYet {
+  param([datetime]$LastWrite, [datetime]$Now, $Slot)
+  if ($null -eq $Slot) { return [pscustomobject]@{ notYet = $false; detail = '' } }
+  if ($Now -ge $Slot.end) { return [pscustomobject]@{ notYet = $false; detail = '' } }
+  $prevStart = $Slot.start.AddDays(-1)
+  if ($LastWrite -lt $prevStart) { return [pscustomobject]@{ notYet = $false; detail = '' } }
+  return [pscustomobject]@{ notYet = $true; detail = ("NOT YET: written {0}, in or after yesterday's {1} slot; today's slot runs to {2}" -f $LastWrite.ToString('yyyy-MM-dd HH:mm'), $Slot.producer, $Slot.end.ToString('HH:mm')) }
+}
+function Get-HbRowSlot {
+  <# The slot of the producer a registry row names, for the day of $Now; $null when it names none, the table does not
+     declare it, or capture-policy-lib could not be loaded (every one of those grades exactly as before). #>
+  param($Row, [datetime]$Now)
+  if ($null -eq $Row) { return $null }
+  $pp = $Row.PSObject.Properties['producer']
+  if ($null -eq $pp -or -not [string]$pp.Value) { return $null }
+  if (-not (Get-Command Get-ProducerSlot -ErrorAction SilentlyContinue)) { return $null }
+  return (Get-ProducerSlot ([string]$pp.Value) $Now)
+}
+$hbPrevEap = $ErrorActionPreference
+try { $ErrorActionPreference = 'Stop'; . (Join-Path $PSScriptRoot 'capture-policy-lib.ps1') } catch { } finally { $ErrorActionPreference = $hbPrevEap }
+# <<< PRODUCER-SLOT
+
 if ($SelfTest) {
   # HERMETIC. Frozen transcripts under regression-inputs\, no scheduler, no mail. The two live reads at the end are
   # labelled. Every case runs under Stop inside a try whose catch is a counted failure.
@@ -696,6 +729,33 @@ if ($SelfTest) {
     } finally { Remove-Item -LiteralPath $rvDir -Recurse -Force -ErrorAction SilentlyContinue }
   } catch { HbCase ('a case threw: ' + $_.Exception.Message) $false }
 
+  try {
+    # ---- PRODUCER-SLOT: the slot edge, through the ONE slot table (Get-ProducerSlot) ---------------------------------
+    $ErrorActionPreference = 'Stop'
+    $psDay = [datetime]'2026-09-22'
+    $psSlot = Get-ProducerSlot 'grocery-daily-capture' $psDay
+    HbCase 'CLEAN TWIN  the daily chain''s slot is read from capture-policy-lib''s table: 08:00 to 14:00' ($null -ne $psSlot -and $psSlot.start -eq $psDay.AddHours(8) -and $psSlot.end -eq $psDay.AddHours(14)) ([string]$psSlot)
+    $psYest = [datetime]'2026-09-21 08:40'   # yesterday's feed landed inside yesterday's slot
+    $psIn = Test-HbOutputNotYet -LastWrite $psYest -Now ([datetime]'2026-09-22 13:59') -Slot $psSlot
+    HbCase 'MUST NOT FIRE  13:59, one minute before the 14:00 slot end: a 29.3h-old feed from yesterday''s slot is NOT YET, never STALE' ($psIn.notYet) ($psIn.detail)
+    $psAt = Test-HbOutputNotYet -LastWrite $psYest -Now ([datetime]'2026-09-22 14:00') -Slot $psSlot
+    HbCase 'MUST FIRE  AT THE BAR: at 14:00 exactly the slot has ended and the same feed grades STALE again' (-not $psAt.notYet) ($psAt.detail)
+    $psPast = Test-HbOutputNotYet -LastWrite $psYest -Now ([datetime]'2026-09-22 14:01') -Slot $psSlot
+    HbCase 'MUST FIRE  ONE PAST THE BAR: 14:01 grades STALE' (-not $psPast.notYet) ($psPast.detail)
+    $psMissed = Test-HbOutputNotYet -LastWrite ([datetime]'2026-09-21 07:59') -Now ([datetime]'2026-09-22 10:00') -Slot $psSlot
+    HbCase 'MUST FIRE  inside today''s slot, an output older than YESTERDAY''s slot start (07:59 < 08:00) means yesterday was missed: STALE' (-not $psMissed.notYet) ($psMissed.detail)
+    $psEdge = Test-HbOutputNotYet -LastWrite ([datetime]'2026-09-21 08:00') -Now ([datetime]'2026-09-22 10:00') -Slot $psSlot
+    HbCase 'MUST NOT FIRE  AT THE OTHER EDGE: written at yesterday''s slot start exactly is NOT YET' ($psEdge.notYet) ($psEdge.detail)
+    $psNull = Test-HbOutputNotYet -LastWrite $psYest -Now ([datetime]'2026-09-22 10:00') -Slot $null
+    HbCase 'MUST FIRE  a producer nobody declared ($null slot) is graded as before: never NOT YET' (-not $psNull.notYet)
+    HbCase 'MUST FIRE  a row naming no producer has no slot' ($null -eq (Get-HbRowSlot -Row ([pscustomobject]@{ path = 'x' }) -Now $psDay))
+    HbCase 'MUST FIRE  a row naming an undeclared producer has no slot' ($null -eq (Get-HbRowSlot -Row ([pscustomobject]@{ path = 'x'; producer = 'nobody-declared-this' }) -Now $psDay))
+    $psRow = Get-HbRowSlot -Row ([pscustomobject]@{ path = 'x'; producer = 'grocery-daily-capture' }) -Now ([datetime]'2026-09-22 10:00')
+    HbCase 'CLEAN TWIN  a row naming grocery-daily-capture gets that slot for the day of Now' ($null -ne $psRow -and $psRow.end -eq $psDay.AddHours(14))
+    # THE WIRING: Check-Age consults the slot only after the age is past the bar, and before the outage grace.
+    HbCase 'MUST FIRE  Check-Age grades a past-age output through Test-HbOutputNotYet with the row''s slot' ($hbSrc.Contains('$ny = Test-HbOutput' + 'NotYet -LastWrite $lw -Now $now -Slot $slot'))
+  } catch { HbCase ('a producer-slot case threw: ' + $_.Exception.Message) $false }
+
   Write-Output ("health-heartbeat self-test: {0} case(s), {1} failed" -f $hbCases, $hbFail)
   if ($hbFail) { exit 1 }
   exit 0
@@ -829,10 +889,14 @@ if (@($cfg.queues).Count) {
 }
 
 # ---- critical output files (silent death = missing / stale) ----
-function Check-Age($path, $maxH, $why, $label, $subject = $label) {
+function Check-Age($path, $maxH, $why, $label, $subject = $label, $slot = $null) {
   if (-not (Test-Path $path)) { Add-HbIssue 'OUTPUT MISSING' $subject "OUTPUT MISSING: $label ($path) does not exist - $why"; return }
-  $ageH = [math]::Round(($now - (Get-Item $path).LastWriteTime).TotalHours, 1)
+  $lw = (Get-Item $path).LastWriteTime
+  $ageH = [math]::Round(($now - $lw).TotalHours, 1)
   if ($ageH -gt [double]$maxH) {
+    # PRODUCER-SLOT: its producer has not run YET today; counted as not yet, never paged and never ok.
+    $ny = Test-HbOutputNotYet -LastWrite $lw -Now $now -Slot $slot
+    if ($ny.notYet) { $notYetLines.Add(("{0,-38} {1}h old - {2}" -f $label, $ageH, $ny.detail)); return }
     # RESUME-GRACE: an age that is entirely explained by machine downtime is held, not paged.
     $og = Test-HbOutageExplainsAge -AgeH $ageH -MaxH ([double]$maxH) -Outage $hbOutage
     if ($og.held) { $heldLines.Add(("{0,-38} {1}" -f $label, $og.detail)) }
@@ -853,7 +917,7 @@ foreach ($f in @($cfg.output_files)) {
   $fPath  = Join-Path $repo ([string]$f.path)
   $fLabel = [IO.Path]::GetFileName([string]$f.path)
   $cc = Test-ContentCurrency -Row $f -Path $fPath -BoardWeek $boardWeek -Now $now
-  if (-not $cc.applies) { Check-Age $fPath $f.max_age_hours $f.why $fLabel ([string]$f.path); continue }
+  if (-not $cc.applies) { Check-Age $fPath $f.max_age_hours $f.why $fLabel ([string]$f.path) (Get-HbRowSlot -Row $f -Now $now); continue }
   if ($cc.current) { $okLines.Add(("{0,-38} {1}" -f $fLabel, $cc.detail)); continue }
   $hw = Test-HeldWithBoard -Cc $cc -Verdict $hbVerdict -BoardWeek $boardWeek -Today $now.ToString('yyyy-MM-dd')
   if ($hw.held) { $heldLines.Add(("{0,-38} {1}" -f $fLabel, $hw.detail)) }
@@ -862,7 +926,7 @@ foreach ($f in @($cfg.output_files)) {
 foreach ($g in @($cfg.output_globs)) {
   $newest = Get-ChildItem (Join-Path $repo ([string]$g.glob)) -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1
   if (-not $newest) { Add-HbIssue 'OUTPUT MISSING' ([string]$g.glob) "OUTPUT MISSING: no file matches $($g.glob) - $($g.why)" }
-  else { Check-Age $newest.FullName $g.max_age_hours $g.why $newest.Name ([string]$g.glob) }
+  else { Check-Age $newest.FullName $g.max_age_hours $g.why $newest.Name ([string]$g.glob) (Get-HbRowSlot -Row $g -Now $now) }
 }
 
 # EXTERNAL_FILES - outputs of automations that run on this box but write OUTSIDE the repo (2026-09-08,
@@ -885,15 +949,17 @@ foreach ($x in @($cfg.external_files)) {
     Add-HbIssue 'EXTERNAL OUTPUT MISSING' ([string]$x.path) ("EXTERNAL OUTPUT MISSING: {0} does not exist at {1} - {2}" -f $xLabel, $xPath, $x.why)
     continue
   }
-  Check-Age $xPath $x.max_age_hours $x.why $xLabel ([string]$x.path)
+  Check-Age $xPath $x.max_age_hours $x.why $xLabel ([string]$x.path) (Get-HbRowSlot -Row $x -Now $now)
 }
 
 # ---- report ----
 Write-Output ("health-heartbeat  " + $now.ToString('yyyy-MM-dd HH:mm'))
 $okLines | ForEach-Object { Write-Output ("  ok    " + $_) }
 $heldLines | ForEach-Object { Write-Output ("  held  " + $_) }
+$notYetLines | ForEach-Object { Write-Output ("  notyet " + $_) }
 if ($issues.Count -eq 0) {
   $heldNote = if ($heldLines.Count) { " {0} more held, by a board guards refused today or by machine downtime (not dead; see the held lines)." -f $heldLines.Count } else { '' }
+  if ($notYetLines.Count) { $heldNote += (" {0} not yet: the producer is still inside today's slot (see the notyet lines)." -f $notYetLines.Count) }
   Write-Output ("HEALTHY: {0} automation(s)/output(s) all fresh.{1}" -f $okLines.Count, $heldNote)
   # A healthy -Alert run forgets the last outage, so the same outage coming back later pages again (ALERT-SIGNATURE).
   $sigF = Join-Path $root 'out\health-heartbeat.sig'

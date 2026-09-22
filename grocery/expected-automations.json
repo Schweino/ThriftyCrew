@@ -91,11 +91,13 @@
     "output_files":  [
                          {
                              "path":  "grocery/out/smp-feed.json",
+                             "producer":  "grocery-daily-capture",
                              "max_age_hours":  30,
                              "why":  "public price feed every card fetches"
                          },
                          {
                              "path":  "public/smp-feed.json",
+                             "producer":  "grocery-daily-capture",
                              "max_age_hours":  30,
                              "why":  "the SERVED feed (Cloudflare)"
                          },
@@ -134,6 +136,7 @@
     "output_globs":  [
                          {
                              "glob":  "grocery/out/comparison-*.json",
+                             "producer":  "grocery-daily-capture",
                              "max_age_hours":  30,
                              "why":  "the daily cross-store board"
                          }
