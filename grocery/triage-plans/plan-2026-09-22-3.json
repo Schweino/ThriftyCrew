@@ -61,7 +61,7 @@
       "status": "done",
       "premise_verified": "true: ps51-bomless-read-is-cp1252.md present in C--Codex/memory, absent from C--Codex-ThriftyCrew/memory (ls, 15:10); store_citation.py:66 held the single path",
       "deviation": "The plan draft named ops/probe-queue2-triage.py:186 as a second copy of the path. Read, it is a different fact: it checks lesson/SKILL.md [[citations]], which the .claude/rules files define as resolving under the ThriftyCrew store specifically, so a single path is correct there and it was left alone.",
-      "shipped_commit": null
+      "shipped_commit": "b1fa54f65"
     },
     {
       "queue_id": "2026-09-22-c4495c",
@@ -109,7 +109,7 @@
       "status": "done",
       "premise_verified": "true: grep over ops/verify-bulk-edit.ps1 found Test-EolUnchanged only at its definition and two self-test cases; git ls-files --eol read 8,884 i/lf and 0 i/crlf",
       "deviation": null,
-      "shipped_commit": null
+      "shipped_commit": "a80a45758"
     }
   ],
   "ship_sequence": [
