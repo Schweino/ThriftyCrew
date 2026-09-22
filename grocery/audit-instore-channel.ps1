@@ -52,9 +52,8 @@
   Advisory: exit 0 even with findings, because the answer lives at the store and not here. A doubted cell
   that is ALSO the commodity crown prints a loud CROWN line so guards output carries it.
 
-  Output: out\instore-channel-doubt.json, plus APPENDED entries in out\research-worklist.json.
-  It APPENDS: audit-sale-fallback.ps1 rewrites that file wholesale, so this must run AFTER it in the chain
-  and must preserve what it wrote. Overwriting would silently drop the sale-fallback queue.
+  Output: out\instore-channel-doubt.json, plus out\research-worklist.json, which since 2026-09-22 this script
+  alone writes, whole, from today's unreached doubts (audit-sale-fallback's gaps moved into the capture plans).
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "", [string]$CompareFile = "", [string]$WorklistFile = "", [string]$AllowlistFile = "", [switch]$NoWorklist)
@@ -221,14 +220,11 @@ $rep | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $OutDir 'instore-channel
 # ---- APPEND to the worklist, never overwrite it -----------------------------------------------------
 # Only the UNREACHED ones. A reviewed exception has already had its shelf-badge check; sending it back to
 # the browser agent every morning is how a queue stops being read.
-if (-not $NoWorklist -and $unreached.Count) {
+# THIS SCRIPT IS NOW THE FILE'S ONLY WRITER (2026-09-22, plan-2026-09-22-9): audit-sale-fallback no longer rewrites it
+# wholesale each morning (its gaps are owed in the stores' capture plans), so an append would only ever grow. It is
+# written whole from TODAY's unreached doubts, and an empty day writes an empty list rather than leaving yesterday's.
+if (-not $NoWorklist) {
   $existing = New-Object System.Collections.Generic.List[object]
-  if (Test-Path $WorklistFile) {
-    try {
-      $wl = Get-Content $WorklistFile -Raw -Encoding UTF8 | ConvertFrom-Json
-      foreach ($e in @($wl.items)) { if ($e) { $existing.Add($e) } }
-    } catch { }
-  }
   $have = @{}
   foreach ($e in $existing) { $have[(("" + $e.commodity) + '|' + ("" + $e.store))] = $true }
   $added = 0

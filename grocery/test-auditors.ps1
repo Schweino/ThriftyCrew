@@ -2918,11 +2918,11 @@ Set-Content (Join-Path $fxSf 'regular\walmart-regular-2026-08-31.json') '{"store
 Remove-Item $sfLedger -Force -ErrorAction SilentlyContinue
 $r = RunPS 'audit-sale-fallback.ps1' @('-OutDir', $fxSf, '-CompareFile', (Join-Path $fxSf 'comparison-2026-09-02.json'))
 $sfg = try { Read-JsonFile (Join-Path $fxSf 'sale-fallback-gaps.json') } catch { $null }
-if ($sfg -and [int]$sfg.gap_count -eq 1 -and [int]$sfg.escalated_count -eq 0 -and [string]@($sfg.owned)[0].owner -eq 'weekly-browser-agent') { Ok 'sale-fallback clean twin: a first-seen browser gap is OWNED and does not escalate, while gap_count still reports it (b844ab noise gone, visibility kept)' }
+if ($sfg -and [int]$sfg.gap_count -eq 1 -and [int]$sfg.escalated_count -eq 0 -and [string]@($sfg.owned)[0].owner -eq 'capture-plan:Walmart') { Ok 'sale-fallback clean twin: a first-seen browser gap is OWNED by its store''s capture plan and does not escalate, while gap_count still reports it (b844ab noise gone, visibility kept)' }
 else { Bad ('sale-fallback did not route a fresh browser gap to its owner (gap_count=' + [int]$sfg.gap_count + ' escalated=' + [int]$sfg.escalated_count + ') - the b844ab alert is either back, or the gap has vanished from the report entirely: ' + ($r.text -replace "`n", ' ')) }
 # MUST-FIRE 1: the SAME gap, still unworked past the weekly agent's grace window, must escalate. This is the
 # whole reason the routing is safe. first_seen is 2026-07-01 against a 2026-09-02 board = 63d, grace 16d.
-'{"ground-beef-8020|Walmart":{"first_seen":"2026-07-01","owner":"weekly-browser-agent"}}' | Set-Content $sfLedger -Encoding UTF8
+'{"ground-beef-8020|Walmart":{"first_seen":"2026-07-01","owner":"capture-plan:Walmart"}}' | Set-Content $sfLedger -Encoding UTF8
 $r = RunPS 'audit-sale-fallback.ps1' @('-OutDir', $fxSf, '-CompareFile', (Join-Path $fxSf 'comparison-2026-09-02.json'))
 $sfg = try { Read-JsonFile (Join-Path $fxSf 'sale-fallback-gaps.json') } catch { $null }
 if ($sfg -and [int]$sfg.escalated_count -eq 1 -and [int]@($sfg.escalated)[0].age_days -gt 16) { Ok 'sale-fallback MUST-FIRE: a gap its owner has not cleared in 63d escalates past the 16d grace - ownership routing cannot become a permanent mute' }
@@ -2967,20 +2967,32 @@ Set-Content (Join-Path $fxOwn 'regular\hyvee-regular-2026-09-06.json') '{"store"
 $ownLedger = Join-Path $fxOwn 'sale-fallback-ownership.json'
 # MUST-FIRE: the phantom owner escalates on DAY 0. first_seen is the board's own date, so age is 0 - under
 # the old rule that is 0 of 3 days' grace and silent. It must be loud anyway, because the owner is fiction.
-'{"yukon-gold-potatoes|Family Fare":{"first_seen":"2026-09-06","owner":"daily-ff-selfheal"},"canned-pumpkin|Hy-Vee":{"first_seen":"2026-09-02","owner":"weekly-browser-agent"}}' | Set-Content $ownLedger -Encoding UTF8
+# SINCE 2026-09-22 (plan-2026-09-22-9, c9f0f3) the owner is the store's own capture plan, proven from the plan and
+# from stores.json, and the labels above are gone. The same two frozen rows now carry the plan owners.
+'{"yukon-gold-potatoes|Family Fare":{"first_seen":"2026-09-06","owner":"capture-plan:Family Fare"},"canned-pumpkin|Hy-Vee":{"first_seen":"2026-09-02","owner":"capture-plan:Hy-Vee"}}' | Set-Content $ownLedger -Encoding UTF8
 $r = RunPS 'audit-sale-fallback.ps1' @('-OutDir', $fxOwn, '-CompareFile', (Join-Path $fxOwn 'comparison-2026-09-06.json'), '-AutomationsFile', $ownRegF)
 $ofg = try { Read-JsonFile (Join-Path $fxOwn 'sale-fallback-gaps.json') } catch { $null }
 $ffRow = @($ofg.gaps | Where-Object { $_.commodity -eq 'yukon-gold-potatoes' })[0]
 $hvRow = @($ofg.gaps | Where-Object { $_.commodity -eq 'canned-pumpkin' })[0]
-if ($ffRow -and [bool]$ffRow.escalated -and [int]$ffRow.age_days -eq 0 -and [int]$ffRow.grace_days -eq 0 -and [string]$ffRow.owner -eq 'NONE' -and [string]$ffRow.claimed_owner -eq 'daily-ff-selfheal') { Ok 'sale-fallback MUST-FIRE: an owner naming no registered automation escalates on DAY 0, and the report still names who claimed it' }
-else { Bad ('sale-fallback still granted grace to an unregistered owner (owner=' + [string]$ffRow.owner + ' claimed=' + [string]$ffRow.claimed_owner + ' age=' + [int]$ffRow.age_days + ' grace=' + [int]$ffRow.grace_days + ' escalated=' + [bool]$ffRow.escalated + ') - a gap can again be silenced by a job that does not exist: ' + ($r.text -replace "`n", ' ')) }
-# CLEAN TWIN: the ROLE name is not a task name either, so this is the case that catches an over-broad fix.
-# canned-pumpkin|Hy-Vee is owned by weekly-browser-agent at age 4 of grace 16 and must stay SILENT.
-if ($hvRow -and -not [bool]$hvRow.escalated -and [string]$hvRow.owner -eq 'weekly-browser-agent' -and [int]$hvRow.grace_days -eq 16) { Ok 'sale-fallback CLEAN TWIN: a role mapped to a REGISTERED task keeps its grace, so validating owners did not page every owned gap' }
-else { Bad ('sale-fallback escalated a healthy owned gap (owner=' + [string]$hvRow.owner + ' grace=' + [int]$hvRow.grace_days + ' escalated=' + [bool]$hvRow.escalated + ') - the registry check is too broad and every owned gap now pages, which is worse than the assertion it replaced: ' + ($r.text -replace "`n", ' ')) }
-# ...and it says so out loud, naming the unregistered owner rather than silently downgrading it
-if ($r.text -match 'OWNER NOT REGISTERED' -and $r.text -match 'daily-ff-selfheal') { Ok 'sale-fallback names the unregistered owner on the run that demotes it' }
-else { Bad ('sale-fallback demoted an unregistered owner without saying which one - the next reader cannot tell why a gap escalated: ' + ($r.text -replace "`n", ' ')) }
+# CLEAN TWIN: a fresh Family Fare gap is owed by its own plan (never the phantom daily-ff-selfheal) and keeps its grace.
+if ($ffRow -and -not [bool]$ffRow.escalated -and [string]$ffRow.owner -eq 'capture-plan:Family Fare' -and [int]$ffRow.grace_days -eq 3 -and [int]$ffRow.age_days -eq 0) { Ok 'sale-fallback CLEAN TWIN: a fresh Family Fare gap is OWNED by capture-plan:Family Fare with a 3-day grace, so validating owners did not page every owned gap' }
+else { Bad ('sale-fallback did not give a fresh Family Fare gap to its plan (owner=' + [string]$ffRow.owner + ' grace=' + [int]$ffRow.grace_days + ' age=' + [int]$ffRow.age_days + ' escalated=' + [bool]$ffRow.escalated + '): ' + ($r.text -replace "`n", ' ')) }
+# MUST-FIRE: a Hy-Vee gap belongs to capture-plan:Hy-Vee, NEVER the browser agent (Hy-Vee is pulled headless), and one
+# its plan has owed for 4 days, past two of that daily lane's cycles (grace 3), escalates.
+if ($hvRow -and [bool]$hvRow.escalated -and [string]$hvRow.owner -eq 'capture-plan:Hy-Vee' -and [int]$hvRow.age_days -eq 4 -and [int]$hvRow.grace_days -eq 3) { Ok 'sale-fallback MUST-FIRE: a Hy-Vee gap is owned by capture-plan:Hy-Vee, never weekly-browser-agent, and escalates once its plan has owed it past two cycles' }
+else { Bad ('sale-fallback Hy-Vee gap wrong (owner=' + [string]$hvRow.owner + ' age=' + [int]$hvRow.age_days + ' grace=' + [int]$hvRow.grace_days + ' escalated=' + [bool]$hvRow.escalated + ') - either the browser label is back or a stale gap is silent: ' + ($r.text -replace "`n", ' ')) }
+# MUST-FIRE: the plan's lane must be a REGISTERED job. Without the daily capture task every plan owner is NONE on DAY 0,
+# and the report still names who claimed it (the 22b4dd property, kept).
+$ownRegNoCap = Join-Path $fxOwn 'expected-automations-nocap.json'
+Set-Content $ownRegNoCap '{"windows_tasks":[{"name":"TC Grocery Ad Pulls 0700"},{"name":"TC Graph Nightly Matching"}]}' -Encoding UTF8
+$r = RunPS 'audit-sale-fallback.ps1' @('-OutDir', $fxOwn, '-CompareFile', (Join-Path $fxOwn 'comparison-2026-09-06.json'), '-AutomationsFile', $ownRegNoCap)
+$ofg = try { Read-JsonFile (Join-Path $fxOwn 'sale-fallback-gaps.json') } catch { $null }
+$ffRow = @($ofg.gaps | Where-Object { $_.commodity -eq 'yukon-gold-potatoes' })[0]
+if ($ffRow -and [bool]$ffRow.escalated -and [int]$ffRow.grace_days -eq 0 -and [string]$ffRow.owner -eq 'NONE' -and [string]$ffRow.claimed_owner -eq 'capture-plan:Family Fare') { Ok 'sale-fallback MUST-FIRE: a plan owner whose lane is no registered automation escalates on DAY 0, and the report still names who claimed it' }
+else { Bad ('sale-fallback granted grace to an unregistered plan owner (owner=' + [string]$ffRow.owner + ' claimed=' + [string]$ffRow.claimed_owner + ' grace=' + [int]$ffRow.grace_days + ' escalated=' + [bool]$ffRow.escalated + '): ' + ($r.text -replace "`n", ' ')) }
+# ...and it says so out loud, naming the missing task rather than silently downgrading it
+if ($r.text -match 'OWNER NOT REGISTERED' -and $r.text -match 'TC Grocery Daily Capture 0800') { Ok 'sale-fallback names the unregistered owner''s task on the run that demotes it' }
+else { Bad ('sale-fallback demoted an unregistered owner without saying which task - the next reader cannot tell why a gap escalated: ' + ($r.text -replace "`n", ' ')) }
 # MUST-FIRE: a registry it cannot read FAILS CLOSED, exactly like the ledger above. Reading it as
 # "everything is registered" would restore the silence this whole item exists to remove.
 '{ not json at all' | Set-Content $ownRegF -Encoding UTF8

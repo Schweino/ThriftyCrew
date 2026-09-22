@@ -651,6 +651,54 @@ try {
   $rbC0 = Get-RebaseUntrackedBlockers @('CONFLICT (content): Merge conflict in grocery/x.json', 'error: could not apply abc123... msg'); $rbC = @($rbC0)
   if ($rbC.Count -eq 0) { Ok 'MUST NOT FIRE  an ordinary content conflict names no untracked blocker, so nothing is moved' }
   else { Bad "content conflict read as blockers [$($rbC -join ', ')]" }
+
+  # ---- SALE FALLBACKS ARE OWED IN THE STORE'S OWN PLAN (2026-09-22, plan-2026-09-22-9, queue 2026-09-19-c9f0f3) ----
+  # Frozen from c9f0f3's body: clam-chowder and vegetable-soup on sale at Family Fare with no everyday twin, owner NONE,
+  # 6 days unworked. Its own synthetic root, so nothing above leaks in: 13 one-term commodities (rotation 1 a run).
+  $sfRoot = Join-Path $tmp 'sfb'; $sfOut = Join-Path $sfRoot 'out'; [void][IO.Directory]::CreateDirectory($sfOut)
+  $sfTerms = [ordered]@{}; foreach ($c in @('apples','bacon','bananas','bread','butter','carrots','eggs','flour','milk','onions','rice','clam-chowder','vegetable-soup')) { $sfTerms[$c] = $c }
+  [IO.File]::WriteAllText((Join-Path $sfRoot 'commodity-search.json'), (@{ terms = $sfTerms } | ConvertTo-Json -Depth 4))
+  [IO.File]::WriteAllText((Join-Path $sfRoot 'sale-windows.json'), (@{ windows = @(
+      @{ store = 'Family Fare'; id = 'apples'; sale_end = '2026-09-18'; refresh_on = '2026-09-19' },
+      @{ store = 'Family Fare'; id = 'bacon';  sale_end = '2026-09-18'; refresh_on = '2026-09-19' }) } | ConvertTo-Json -Depth 4))
+  $sfGapsF = Join-Path $sfOut 'sale-fallback-gaps.json'
+  $sfGaps2 = '{"gaps":[{"commodity":"clam-chowder","store":"Family Fare","first_seen":"2026-09-13"},{"commodity":"vegetable-soup","store":"Family Fare","first_seen":"2026-09-13"},{"commodity":"canned-pumpkin","store":"Hy-Vee","first_seen":"2026-09-02"}]}'
+  [IO.File]::WriteAllText($sfGapsF, $sfGaps2)
+  $sfRootWas = $script:PolicyRoot; $sfCapWas = $script:StoreCallCap['Family Fare']
+  try {
+    $script:PolicyRoot = $sfRoot
+    $script:StoreCallCap['Family Fare'] = @{ cap = 40; basis = 'fixture'; unit = 'search terms' }
+    $sfP = Get-CapturePlan -Store 'Family Fare' -Today '2026-09-19' -OutDir $sfOut
+    if ((@($sfP.SaleFallbacks) -contains 'vegetable-soup') -and (@($sfP.SaleFallbacks) -contains 'clam-chowder') -and (@($sfP.SaleExpiries).Count -eq 2) -and $sfP.TermBudget -eq ($sfP.RotationTerms + 4)) { Ok 'MUST FIRE  vegetable-soup @ Family Fare, on sale with no everyday twin, is OWED in Get-CapturePlan(Family Fare).SaleFallbacks (c9f0f3), and the budget counts it' }
+    else { Bad "fallbacks not owed: fb=[$(@($sfP.SaleFallbacks) -join ',')] exp=[$(@($sfP.SaleExpiries) -join ',')] budget=$($sfP.TermBudget)" }
+    if (@($sfP.SaleFallbacks) -notcontains 'canned-pumpkin') { Ok 'MUST NOT FIRE  a Hy-Vee gap is never owed by the Family Fare plan' } else { Bad 'the Family Fare plan took a Hy-Vee gap' }
+    # AT THE BAR: cap 3 = rotation 1 + an allowance of exactly the 2 expiries -> 0 fallbacks. ONE PAST: cap 4 -> exactly 1.
+    $script:StoreCallCap['Family Fare'] = @{ cap = 3; basis = 'fixture'; unit = 'search terms' }
+    $sfAt = Get-CapturePlan -Store 'Family Fare' -Today '2026-09-19' -OutDir $sfOut
+    $script:StoreCallCap['Family Fare'] = @{ cap = 4; basis = 'fixture'; unit = 'search terms' }
+    $sfPast = Get-CapturePlan -Store 'Family Fare' -Today '2026-09-19' -OutDir $sfOut
+    if (@($sfAt.SaleFallbacks).Count -eq 0 -and @($sfAt.SaleExpiries).Count -eq 2 -and @($sfPast.SaleFallbacks).Count -eq 1 -and @($sfPast.SaleExpiries).Count -eq 2 -and $sfPast.SaleFallbackDeferred -eq 1) { Ok 'MUST FIRE  AT THE BAR (allowance = the 2 expiries, cap 3) 0 fallbacks are asked; ONE PAST it (cap 4) exactly 1, and both expiries keep their slots' }
+    else { Bad "the bar: at fb=$(@($sfAt.SaleFallbacks).Count) exp=$(@($sfAt.SaleExpiries).Count); past fb=$(@($sfPast.SaleFallbacks).Count) exp=$(@($sfPast.SaleExpiries).Count) deferred=$($sfPast.SaleFallbackDeferred)" }
+    # least-recently-asked first: a LANDED ask of clam-chowder puts vegetable-soup at the head; a blind run marks nothing
+    $sfBlind = Set-SaleFallbackAsked -Store 'Family Fare' -Today '2026-09-19' -OutDir $sfOut -Ids @('clam-chowder') -Landed $false -AllowReplay
+    $sfMk = Set-SaleFallbackAsked -Store 'Family Fare' -Today '2026-09-19' -OutDir $sfOut -Ids @('clam-chowder', 'bananas') -Landed $true -AllowReplay
+    $sfNext = Get-CapturePlan -Store 'Family Fare' -Today '2026-09-20' -OutDir $sfOut
+    if ($sfBlind.Marked -eq 0 -and $sfMk.Marked -eq 1 -and (@($sfMk.Ids) -join ',') -eq 'clam-chowder' -and @($sfNext.SaleFallbacks)[0] -eq 'vegetable-soup') { Ok 'CLEAN TWIN  only a LANDED ask is recorded, only for an id the plan owed (not bananas), and the asked fallback goes behind the unasked one next day' }
+    else { Bad "ask ledger: blind=$($sfBlind.Marked) marked=$($sfMk.Marked) [$(@($sfMk.Ids) -join ',')] next=[$(@($sfNext.SaleFallbacks) -join ',')]" }
+    # a gap whose everyday twin landed leaves the report, and so the plan, the next day
+    [IO.File]::WriteAllText($sfGapsF, '{"gaps":[{"commodity":"clam-chowder","store":"Family Fare","first_seen":"2026-09-13"}]}')
+    $sfGone = Get-CapturePlan -Store 'Family Fare' -Today '2026-09-20' -OutDir $sfOut
+    if ((@($sfGone.SaleFallbackPending) -join ',') -eq 'clam-chowder') { Ok 'CLEAN TWIN  a gap whose everyday twin landed leaves SaleFallbacks the next day' } else { Bad "a cleared gap stayed owed: [$(@($sfGone.SaleFallbackPending) -join ',')]" }
+    Remove-Item -LiteralPath $sfGapsF -Force
+    $sfNone = Get-CapturePlan -Store 'Family Fare' -Today '2026-09-20' -OutDir $sfOut
+    if ($sfNone.SaleFallbackBlind -and @($sfNone.SaleFallbacks).Count -eq 0 -and @($sfNone.SaleExpiries).Count -eq 2) { Ok 'CLEAN TWIN  no gaps file: the plan says BLIND, owes no fallback, and its expiries are unchanged' } else { Bad "no gaps file: blind=$($sfNone.SaleFallbackBlind) fb=$(@($sfNone.SaleFallbacks).Count) exp=$(@($sfNone.SaleExpiries).Count)" }
+    # Baker's ask plan: the fallbacks take only what the kept expiries left of the allowance
+    $sfAll = @(@('apples','bacon','bread') | ForEach-Object { [pscustomobject]@{ id = $_; term = $_ } })
+    $sfBkAt = Get-BakersAskPlan -AllTerms $sfAll -Plan ([pscustomobject]@{ CallCap = 2; RotationTerms = 1; SaleExpiries = @('apples'); SaleFallbacks = @('bacon') }) -CursorStart 0
+    $sfBkPast = Get-BakersAskPlan -AllTerms $sfAll -Plan ([pscustomobject]@{ CallCap = 3; RotationTerms = 1; SaleExpiries = @('apples'); SaleFallbacks = @('bacon', 'bread') }) -CursorStart 0
+    if (@($sfBkAt.FallbackKept).Count -eq 0 -and (@($sfBkAt.ExpiringKept) -join ',') -eq 'apples' -and (@($sfBkPast.FallbackKept) -join ',') -eq 'bacon' -and (@($sfBkPast.ExpiringKept) -join ',') -eq 'apples') { Ok 'MUST FIRE  Baker''s AT THE BAR (allowance 1 = the expiry) asks no fallback; ONE PAST it asks exactly bacon, and the expiry is never displaced' }
+    else { Bad "Baker's fallbacks: at=[$(@($sfBkAt.FallbackKept) -join ',')] exp=[$(@($sfBkAt.ExpiringKept) -join ',')]; past=[$(@($sfBkPast.FallbackKept) -join ',')]" }
+  } finally { $script:PolicyRoot = $sfRootWas; $script:StoreCallCap['Family Fare'] = $sfCapWas }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
 Write-Output ("CAPTURE-POLICY " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))

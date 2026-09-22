@@ -1572,7 +1572,7 @@ $askablePop = @($work | Where-Object { [int]$_.pid -gt 0 }).Count
 if (-not $Quick) {
   try {
     . (Join-Path $root 'capture-policy-lib.ps1')
-    $hvPlan = Get-CapturePlan -Store 'Hy-Vee' -Today $todayS
+    $hvPlan = Get-CapturePlan -Store 'Hy-Vee' -Today $todayS -OutDir $OutDir
     $hvRotDays = [int]$hvPlan.RotationDays
     $hvCallCap = [int](Get-StoreCallCap 'Hy-Vee')
     $hvMaxAskable = [int][math]::Floor(($MAXMIN * 60.0) / $HV_SEC_PER_PRODUCT)
@@ -1582,7 +1582,7 @@ if (-not $Quick) {
       # says by how much it is short every run so the shortfall cannot hide behind a normal-looking day.
       Write-Warning ("Hy-Vee: CAPACITY SHORTFALL - " + $hvCap.Why + ". Raising the cap is a capture-policy-lib change with evidence behind it (this lane re-verified 1,010 products in one run at baseline with no refusal).")
     }
-    $hvBudget = Get-HyVeeProductBudget -Population $askablePop -RotationDays $hvRotDays -Cap $hvCallCap -Expiries (@($hvPlan.SaleExpiries).Count) -MaxAskable $hvMaxAskable
+    $hvBudget = Get-HyVeeProductBudget -Population $askablePop -RotationDays $hvRotDays -Cap $hvCallCap -Expiries (@($hvPlan.SaleExpiries).Count + @($hvPlan.SaleFallbacks).Count) -MaxAskable $hvMaxAskable
     # THE EXPIRING SALES GO FIRST (2026-08-22). A product answers to its commodity id (from product-urls) -
     # and, for a row with no stored link, to the commodity whose product-urls name matches its name. Brad's
     # rule: "reprice whenever an ad price / sale price / rollback price / instant-savings price drops off."
@@ -1626,6 +1626,25 @@ if (-not $Quick) {
       }
       if (@($hvVo.Ids).Count -gt 0 -or $hvVo.Blind) { Write-Output ('Hy-Vee: price-flag verifications owed a re-read: ' + @($hvVo.Ids).Count + ' commodity(ies), ' + $hvVoN + ' product(s) promoted to rank 0 of the ask order' + $(if ($hvVo.Blind) { ' (BLIND: ' + $hvVo.Why + ')' } else { '' })) }
     } catch { Write-Warning ('Hy-Vee: price-flag verification asks NOT promoted (' + $_.Exception.Message + '); the order is as before') }
+    # SALE FALLBACKS OWED JOIN RANK 0 LAST (2026-09-22, plan-2026-09-22-9, queue 2026-09-19-c9f0f3): a commodity on sale
+    # here with no everyday twin, asked while the sale runs. Only while rank 0 still fits inside the budget minus the
+    # rotation's daily drip, so a fallback can never displace an expiring sale, a verification or the drip.
+    $script:HvFallbackAskedIds = @()
+    try {
+      $hvDrip = if ($hvRotDays -gt 0) { [int][math]::Ceiling($askablePop / [double]$hvRotDays) } else { 0 }
+      $hvFbRoom = [int]$hvBudget - $hvDrip - $hvExpIdx.Count
+      $hvFbAsked = New-Object System.Collections.Generic.List[string]
+      foreach ($fid in @($hvPlan.SaleFallbacks)) {
+        $fIdx = @(); $wi = -1
+        foreach ($w in $work) { $wi++; if ($w.cid -and [string]$w.cid -eq [string]$fid -and [int]$w.pid -gt 0 -and -not $hvExpIdx.ContainsKey($wi)) { $fIdx += $wi } }
+        if ($fIdx.Count -eq 0 -or $fIdx.Count -gt $hvFbRoom) { continue }
+        foreach ($x in $fIdx) { $hvExpIdx[$x] = $true }
+        $hvFbRoom -= $fIdx.Count
+        [void]$hvFbAsked.Add([string]$fid)
+      }
+      $script:HvFallbackAskedIds = $hvFbAsked.ToArray()
+      if (@($hvPlan.SaleFallbacks).Count -gt 0 -or $hvPlan.SaleFallbackBlind) { Write-Output ('Hy-Vee: sale fallbacks owed ' + @($hvPlan.SaleFallbackPending).Count + ', ' + @($hvPlan.SaleFallbacks).Count + ' in today''s plan, ' + $hvFbAsked.Count + ' promoted to rank 0 behind the expiries' + $(if ($hvPlan.SaleFallbackBlind) { ' (BLIND: ' + $hvPlan.SaleFallbackWhy + ')' } else { '' })) }
+    } catch { Write-Warning ('Hy-Vee: sale-fallback asks NOT promoted (' + $_.Exception.Message + '); the order is as before') }
     $hvOrder = Get-HyVeeAskOrder -Work $work -Budget $hvBudget -TargetStoreId ([string]$StoreId) -ExpiringIdx $hvExpIdx -UncoveredIds $hvUnc
     $askIndex = $hvOrder.Index
     Write-Output ("Hy-Vee: $($hvOrder.UncoveredInSlice) of today's asks re-read a row the board withheld for its store on a commodity it prices NOWHERE " +
@@ -1856,5 +1875,11 @@ if (Test-Path $file) {
     $mk = Set-SaleExpiryProcessed -Store 'Hy-Vee' -Today $todayS -OutDir $OutDir -Landed $true
     if ($mk.Marked -gt 0) { Write-Output ("Hy-Vee: recorded " + $mk.Marked + " sale re-price(s) in sale-windows.json") }
   } catch { Write-Warning ("Hy-Vee: sale-expiry ledger not updated (" + $_.Exception.Message + ") - those re-prices stay owed and lead tomorrow's slice") }
+  try {
+    if (@($script:HvFallbackAskedIds).Count -gt 0) {
+      $fbMk = Set-SaleFallbackAsked -Store 'Hy-Vee' -Today $todayS -OutDir $OutDir -Landed $true -Ids @($script:HvFallbackAskedIds)
+      if ($fbMk.Marked -gt 0) { Write-Output ("Hy-Vee: recorded " + $fbMk.Marked + " sale-fallback ask(s) in sale-fallback-asked.json") }
+    }
+  } catch { Write-Warning ("Hy-Vee: sale-fallback ask ledger not updated (" + $_.Exception.Message + ") - those fallbacks keep their place at the head of the owed order") }
 }
 

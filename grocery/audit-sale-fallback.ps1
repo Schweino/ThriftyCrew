@@ -22,9 +22,9 @@
   this rule for its own question ("outcome=not_attempted ... proves NOTHING"); this file did not.
   A gap whose terms were ALL not_attempted is now reported UNPROVEN, and does not escalate.
 
-  Browser-store gaps (Baker's/Hy-Vee/Aldi/Walmart/Sam's/Fareway) are
-  written to research-worklist.json for the weekly agent to research the next-cheapest everyday item, and the
-  daily job alerts. Output: out\sale-fallback-gaps.json + out\research-worklist.json; exit 2 if any gaps.
+  Since 2026-09-22 (plan-2026-09-22-9) every gap is OWED in its store's own capture plan
+  (Get-CapturePlan.SaleFallbacks, capture-policy-lib.ps1), and the daily job alerts only escalated gaps.
+  Output: out\sale-fallback-gaps.json (which the plans read); exit 2 if any gaps.
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "", [string]$CompareFile = "", [string]$AutomationsFile = "", [switch]$SelfTest)
@@ -74,7 +74,11 @@ $regPrefixToStore = @{
   'bakers'      = "Baker's"
   'fareway'     = 'Fareway'
 }
-$browser = @('Hy-Vee','Aldi','Walmart',"Baker's","Sam's Club",'Fareway')  # can't research headless -> weekly agent
+# WHO ASKS A STORE'S FALLBACKS COMES FROM THE CAPTURE PLAN AND stores.json (2026-09-22, plan-2026-09-22-9, c9f0f3).
+# A hard-coded six-store "can't research headless" list stood here and sent Hy-Vee (a headless API pull) and Baker's
+# (the Kroger API since 2026-07-24) to a browser agent, through research-worklist.json, which no script read. Each gap
+# is now owed by its store's own capture plan (Get-CapturePlan.SaleFallbacks); see Get-SaleFallbackConsumer.
+. (Join-Path $root 'capture-policy-lib.ps1')
 
 # cache each store's everyday product names, over the SAME files the engine priced from
 $everydayNames = @{}
@@ -166,8 +170,21 @@ if ($SelfTest) {
   # CLEAN TWIN - a term the file does not mention cannot make the gap unproven on its own.
   TSF 'CLEAN TWIN  a term the capture never listed is not evidence of anything either way' `
     (Test-TermsWereAttempted -CaptureTerms $ctNotAsked -Terms @('some term nobody planned')) 'an unlisted term silenced the gap'
+  # WHO OWNS A GAP (2026-09-22, plan-2026-09-22-9, c9f0f3), against the live stores.json: the literal list this
+  # replaced sent Hy-Vee, a headless API pull, to a browser agent.
+  $cHv = Get-SaleFallbackConsumer -Store 'Hy-Vee' -Root $root
+  TSF 'MUST FIRE  a Hy-Vee gap is owned by capture-plan:Hy-Vee (its headless lane), never the weekly browser agent (c9f0f3)' `
+    ([string]$cHv.Owner -eq 'capture-plan:Hy-Vee' -and [int]$cHv.GraceDays -eq 3 -and [string]$cHv.Via -notmatch 'browser') ('owner=' + $cHv.Owner + ' via=' + $cHv.Via)
+  $cFf = Get-SaleFallbackConsumer -Store 'Family Fare' -Root $root
+  TSF 'MUST FIRE  a Family Fare gap is owned by capture-plan:Family Fare, never the phantom daily-ff-selfheal (22b4dd, c9f0f3)' `
+    ([string]$cFf.Owner -eq 'capture-plan:Family Fare') ('owner=' + $cFf.Owner)
+  $cWm = Get-SaleFallbackConsumer -Store 'Walmart' -Root $root
+  TSF 'CLEAN TWIN  a browser store (pull_profile.surface in stores.json) is still owned, through the worklist, with the 16-day grace' `
+    ([string]$cWm.Owner -eq 'capture-plan:Walmart' -and [int]$cWm.GraceDays -eq 16 -and [string]$cWm.Via -match 'Get-CaptureWorklist') ('owner=' + $cWm.Owner + ' grace=' + $cWm.GraceDays)
+  $unkThrew = $false; try { $null = Get-SaleFallbackConsumer -Store 'Target' -Root $root } catch { $unkThrew = ($_.Exception.Message -match 'unknown store') }
+  TSF 'MUST FIRE  a store absent from stores.json REFUSES loudly instead of defaulting to a browser owner' $unkThrew 'no refusal'
   if ($sfBad) { Write-Output "SALE-FALLBACK SELF-TEST FAILED ($sfBad)"; exit 2 }
-  Write-Output 'SALE-FALLBACK SELF-TEST PASS - 1 must-fire, 2 must-not-fire, 3 clean twins'
+  Write-Output 'SALE-FALLBACK SELF-TEST PASS - 4 must-fire, 2 must-not-fire, 4 clean twins'
   Exit-Guard -Name 'sale-fallback' -Code 0
 }
 
@@ -195,7 +212,6 @@ try {
 
 $all = (Read-JsonFile $CompareFile).comparison
 $gaps = New-Object System.Collections.Generic.List[object]
-$work = New-Object System.Collections.Generic.List[object]
 foreach ($it in $all) {
   $c = $byId[[string]$it.id]; if (-not $c) { continue }
   foreach ($s in $it.stores) {
@@ -211,7 +227,6 @@ foreach ($it in $all) {
     if ($termsById.ContainsKey([string]$it.id)) { $myTerms = @($termsById[[string]$it.id]) }
     $asked = Test-TermsWereAttempted -CaptureTerms $ctForStore -Terms $myTerms
     $gaps.Add([pscustomobject]@{ commodity=[string]$it.id; store=[string]$s.store; sale_per_unit=[double]$s.per_unit; terms_attempted=$asked })
-    if ($browser -contains [string]$s.store) { $work.Add([pscustomobject]@{ commodity=[string]$it.id; store=[string]$s.store; reason='on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends' }) }
   }
 }
 # SAY WHAT WAS READ. A fallback pool built from zero files answers "no everyday twin" for every cell in
@@ -220,7 +235,8 @@ foreach ($it in $all) {
 # later in a worklist.
 $pool = (@($everydayNames.Keys) | Sort-Object | ForEach-Object { "{0}={1}f/{2}n" -f $_, ([int]$everydayFileCount[$_]), $everydayNames[$_].Count }) -join ' '
 Write-Output ("sale-fallback: everyday pool from the engine fileset (as-of {0:yyyy-MM-dd}, union {1}d): {2}" -f $asof, (Get-RegularUnionDays), $pool)
-([ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd HH:mm'); items=$work }) | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutDir 'research-worklist.json') -Encoding UTF8
+# research-worklist.json is no longer written from here (2026-09-22): the gaps are owed in each store's capture plan.
+# audit-instore-channel.ps1 still appends its own channel-doubt rows to that file (plan leaves_open).
 
 # ---- OWNERSHIP ROUTING (2026-09-03, queue 2026-09-03-b844ab) --------------------------------------
 # EVERY gap this auditor can find is already owned by another job the moment it is found: the six
@@ -241,7 +257,13 @@ Write-Output ("sale-fallback: everyday pool from the engine fileset (as-of {0:yy
 # first_seen that reset on a clean checkout would make the expiry permanently unreachable - a gate that
 # can never arm. Fixture runs (any -OutDir other than the real out\) keep their ledger beside the
 # fixture so a test can never write the estate's.
-$OWNER_GRACE = @{ 'weekly-browser-agent' = 16; 'daily-ff-selfheal' = 3 }
+#
+# OWNERSHIP IS PROVEN FROM THE PLAN (2026-09-22, plan-2026-09-22-9, queue 2026-09-19-c9f0f3). The two labels above
+# ('weekly-browser-agent', 'daily-ff-selfheal') are gone: a gap's owner is 'capture-plan:<store>', and only while
+# (a) Get-SaleFallbackConsumer names a lane that asks that store's fallbacks (stores.json decides which stores are
+# browser-driven; an unknown store refuses), (b) that store's plan, through the same Get-SaleFallbackOwedFromGaps the
+# plan uses, names the gap, and (c) the lane's task is registered. Grace is two of that store's own cycles.
+# The two labels above are kept in the prose only so the history reads.
 
 # ---- AN OWNER MUST BE A JOB THAT EXISTS (2026-09-06, queue 2026-09-06-22b4dd) ----------------------
 # The 2026-09-03 fix above gave ownership an EXPIRY but not PROOF. Ownership was ASSERTED from a
@@ -258,7 +280,9 @@ $OWNER_GRACE = @{ 'weekly-browser-agent' = 16; 'daily-ff-selfheal' = 3 }
 # by worklist membership and both correctly silent at age 4 of grace 16). So the mapping is declared
 # here, explicitly, and an owner is registry-backed only when the task it names is in the registry.
 # 'daily-ff-selfheal' is deliberately absent from this map: there is nothing to map it to.
-$OWNER_TASK = @{ 'weekly-browser-agent' = 'TC Grocery Daily Capture 0800' }
+# Every capture plan's lane (Hy-Vee, Family Fare and Baker's in capture-run, the browser stores' driver) runs under
+# the one daily capture task, so a plan owner is registry-backed only while that task is registered.
+$PLAN_OWNER_TASK = 'TC Grocery Daily Capture 0800'
 
 # FAILS CLOSED, like the ledger read below: a registry we cannot read leaves every owner unregistered
 # and every gap escalating. Reading an unreadable registry as "everything is registered" would restore
@@ -273,23 +297,31 @@ function Get-RegisteredAutomationNames([string]$Path) {
 $registered = @{}; $registryBroken = $false
 try { $registered = Get-RegisteredAutomationNames $AutomationsFile }
 catch { $registryBroken = $true; Write-Output ("sale-fallback: AUTOMATION REGISTRY UNREADABLE ($AutomationsFile) - no owner can be proven, every gap escalates: " + $_.Exception.Message) }
-$ownerRegistered = @{}
-foreach ($o in @($OWNER_GRACE.Keys)) {
-  $task = [string]$OWNER_TASK[$o]
-  $ownerRegistered[$o] = ((-not $registryBroken) -and $task -and $registered.ContainsKey($task))
-  if (-not $ownerRegistered[$o]) {
-    Write-Output ("sale-fallback: OWNER NOT REGISTERED - '{0}' names {1}, so it grants NO grace and any gap it claims escalates on day 0" -f $o, $(if ($task) { "the automation '$task', which is not in expected-automations.json" } else { 'no automation at all' }))
-  }
+$planOwnerRegistered = ((-not $registryBroken) -and $registered.ContainsKey($PLAN_OWNER_TASK))
+if (-not $planOwnerRegistered) {
+  Write-Output ("sale-fallback: OWNER NOT REGISTERED - every capture-plan:<store> owner names the automation '$PLAN_OWNER_TASK', which is not in expected-automations.json, so it grants NO grace and any gap it claims escalates on day 0")
 }
 
 function Get-NormPath([string]$p) { try { [System.IO.Path]::GetFullPath($p).TrimEnd('\') } catch { return $p } }
 $ledgerPath = if ((Get-NormPath $OutDir) -ieq (Get-NormPath (Join-Path $root 'out'))) { Join-Path $root 'sale-fallback-ownership.json' } else { Join-Path $OutDir 'sale-fallback-ownership.json' }
-$script:workKeys = New-Object System.Collections.Generic.HashSet[string]
-foreach ($w in $work) { [void]$script:workKeys.Add(($w.commodity + '|' + $w.store)) }
+# Each store's consumer, once (a store stores.json does not name throws here and the audit refuses: exit 3).
+$consumers = @{}
+$planNames = @{}
+try {
+  foreach ($stName in @($gaps | ForEach-Object { [string]$_.store } | Sort-Object -Unique)) {
+    $consumers[$stName] = Get-SaleFallbackConsumer -Store $stName -Root $root
+    $owedIds = Get-SaleFallbackOwedFromGaps -Store $stName -Gaps @($gaps.ToArray())
+    foreach ($oid in @($owedIds)) { $planNames[$stName + '|' + [string]$oid] = $true }
+  }
+} catch {
+  Write-Output ('sale-fallback: REFUSED - ' + $_.Exception.Message)
+  Exit-Guard -Name 'sale-fallback' -Code 3
+}
 function Get-GapOwner([string]$commodity, [string]$store) {
-  if ($store -eq 'Family Fare') { return 'daily-ff-selfheal' }
-  if ($script:workKeys.Contains($commodity + '|' + $store)) { return 'weekly-browser-agent' }
-  return 'NONE'
+  $c = $consumers[$store]
+  if (-not $c -or [string]$c.Owner -eq 'NONE') { return 'NONE' }
+  if (-not $planNames.ContainsKey($store + '|' + $commodity)) { return 'NONE' }
+  return [string]$c.Owner
 }
 # A ledger we cannot read fails CLOSED: every gap escalates. Resetting to empty on a parse error would
 # silently restart every clock and is exactly how an expiry stops existing.
@@ -306,8 +338,8 @@ foreach ($gp in $gaps) {
   $key   = $gp.commodity + '|' + $gp.store
   $claimed = Get-GapOwner $gp.commodity $gp.store
   # an owner naming no registered automation is NOT an owner: it collapses to NONE, grace 0, day-0 escalation
-  $owner = if ($claimed -eq 'NONE' -or $ownerRegistered[$claimed]) { $claimed } else { 'NONE' }
-  $grace = if ($OWNER_GRACE.ContainsKey($owner)) { [int]$OWNER_GRACE[$owner] } else { 0 }
+  $owner = if ($claimed -eq 'NONE' -or $planOwnerRegistered) { $claimed } else { 'NONE' }
+  $grace = if ($owner -ne 'NONE') { [int]$consumers[$gp.store].GraceDays } else { 0 }
   # first_seen survives only while the OWNER is unchanged; a gap that changes hands restarts its clock
   $first = $null
   if (-not $ledgerBroken -and $ledger.ContainsKey($key) -and ([string]$ledger[$key].owner -eq $owner)) { $first = [string]$ledger[$key].first_seen }

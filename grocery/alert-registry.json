@@ -890,7 +890,8 @@
    "class": "review",
    "condition": "an ownership gap on a still-published sale cell; triage assigns an owner",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "resolver": "digest"
+   "note": "Since plan-2026-09-22-9 every gap is owed in its store's own capture plan (Get-CapturePlan.SaleFallbacks), which every store pull reads; a page means a plan owed it past two of the store's cycles with no everyday row landing, or no lane asks that store.",
+   "resolver": "lane:grocery/capture-policy-lib.ps1"
   },
   {
    "id": "ff-carry",

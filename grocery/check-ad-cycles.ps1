@@ -2494,8 +2494,8 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         }
       } catch { Log ('store-taxonomy guard threw: ' + $_.Exception.Message) }
       # ---- SALE-FALLBACK GUARD: an on-sale cell with NO everyday item to revert to VANISHES when the sale ends.
-      # audit-sale-fallback flags them; FF self-heals daily (researched above), browser-store gaps go to
-      # research-worklist.json for the weekly agent to research the next-cheapest everyday item. De-duped alert.
+      # audit-sale-fallback flags them, and since 2026-09-22 (plan-2026-09-22-9) each gap is OWED in its store's own
+      # capture plan (Get-CapturePlan.SaleFallbacks), asked while the sale still runs. De-duped alert.
       # ALERTS ON ESCALATED GAPS ONLY (2026-09-03, queue 2026-09-03-b844ab). Every gap audit-sale-fallback
       # finds is routed to an owner by that same script, so alerting on gap_count raised a triage item whose
       # whole content was confirming work already queued elsewhere. audit-sale-fallback now proves ownership
@@ -2520,7 +2520,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             $sfSig  = (@($sfEsc | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object) -join ';')
             $sfEList = (@($sfEsc | ForEach-Object { $_.commodity + ' @ ' + $_.store + ' (owner=' + $_.owner + ', ' + [int]$_.age_days + 'd unworked, grace ' + [int]$_.grace_days + 'd)' }) -join '; ')
             if ($sfSig -ne $sfPrev -and (-not $NoAlert)) {
-              try { Send-Alert -Subject "Grocery: $($sfEsc.Count) on-sale item(s) have no everyday fallback and NO ONE IS WORKING THEM - $asofS" -Body "These commodity+store cells are on SALE with no everyday item to revert to, so the store DROPS OFF that commodity when the sale ends - and unlike the routine case these are NOT being worked: $sfEList. An owner of NONE means the cell is in no queue at all; an age past the grace window means the owning job (weekly browser agent, or the daily Family Fare self-heal) has had it that long and not cleared it. Routine owned gaps are deliberately not emailed and are listed in grocery/out/sale-fallback-gaps.json under 'owned'." | Out-Null
+              try { Send-Alert -Subject "Grocery: $($sfEsc.Count) on-sale item(s) have no everyday fallback and NO ONE IS WORKING THEM - $asofS" -Body "These commodity+store cells are on SALE with no everyday item to revert to, so the store DROPS OFF that commodity when the sale ends - and unlike the routine case these are NOT being worked: $sfEList. An owner of NONE means the cell is in no queue at all; an age past the grace window means the store's own capture plan (owner capture-plan:<store>) has owed it that long and no everyday item has landed. Routine owned gaps are deliberately not emailed and are listed in grocery/out/sale-fallback-gaps.json under 'owned'." | Out-Null
                     if ($LASTEXITCODE -eq 0) { Set-Content -Path $sfF -Value $sfSig -Encoding UTF8; Log 'sale-fallback ESCALATED alert sent' } } catch { Log ('sale-fallback alert threw: ' + $_.Exception.Message) }
             } else { Log 'sale-fallback escalated set unchanged - not re-alerting' }
           } else {
@@ -2532,8 +2532,8 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # Keep the product-URL worklist current: after prices move, flag any "See item" link whose board price
       # changed (stale) or whose linked product no longer matches (mismatch), so the weekly browser agent
       # re-resolves it. Headless-safe (detection only); the actual re-resolution needs Chrome. Non-fatal.
-      # ORDER: it reads research-worklist.json, which audit-sale-fallback directly above writes, and it must
-      # see TODAY's recipe board - recipe-overlay is on the ship path, so it is already applied by here.
+      # ORDER: it must see TODAY's recipe board - recipe-overlay is on the ship path, so it is already applied by
+      # here. (It never read research-worklist.json, whatever this comment said until 2026-09-22.)
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-worklist.ps1') | Out-Null } catch { Log ('resolve-worklist threw: ' + $_.Exception.Message) }
       # CHANNEL DOUBT on published cells (2026-09-01, queue 2026-09-01-b7da16). The in-store gate passes a
       # row whose fulfillment field is ABSENT, which is right for pre-field captures and wrong for two
@@ -2541,8 +2541,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # pre-field row still pricing the board while the SAME item id is refused as FC in a fresher one.
       # Advisory and drops nothing - the browser agent's shelf-badge check is the only instrument that can
       # answer, so each doubted cell is queued for it.
-      # ORDER: it APPENDS to research-worklist.json, which audit-sale-fallback rewrites wholesale, so it
-      # must stay AFTER that lane. Placed after resolve-worklist for the same reason.
+      # It is research-worklist.json's only writer since 2026-09-22 and writes it whole from today's doubts.
       try {
         # NO 2>&1: EAP is 'Stop' here and a native child's redirected stderr becomes a terminating throw.
         $icOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-instore-channel.ps1')

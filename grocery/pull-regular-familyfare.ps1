@@ -1117,7 +1117,8 @@ $streak = 0; $emptyRun = 0; $aborted = $false; $lastSuccessRot = -1
 $script:TermBudget = 0
 $ffPrepended = 0
 $script:FfExpiryFrontIds = @()
-$plan = Get-CapturePlan -Store 'Family Fare' -Today $todayS
+$plan = Get-CapturePlan -Store 'Family Fare' -Today $todayS -OutDir $OutDir
+$script:FfFallbackFrontIds = @()
 # Emit the worklist too, so this store's slice is recorded the same way the walled
 # stores' is. One shape for all seven means an audit can ask "what was this store
 # asked for on that day?" and get an answer regardless of how it was fetched.
@@ -1155,8 +1156,16 @@ try {
   foreach ($vid in @($ffVo.Ids)) { foreach ($tp in $termPairs) { if ([string]$tp.id -eq [string]$vid) { $verifyFront += [string]$tp.term } } }
   if ($verifyFront.Count -gt 0 -or $ffVo.Blind) { Write-Output ('Family Fare: price-flag verifications owed a re-read: ' + @($ffVo.Ids).Count + ' commodity(ies), ' + $verifyFront.Count + ' term(s) lead the front' + $(if ($ffVo.Blind) { ' (BLIND: ' + $ffVo.Why + ')' } else { '' })) }
 } catch { Write-Output ('Family Fare: price-flag verification terms NOT promoted (' + $_.Exception.Message + ')'); $verifyFront = @() }
+# SALE FALLBACKS OWED GO LAST IN THE FRONT (2026-09-22, plan-2026-09-22-9, queue 2026-09-19-c9f0f3). A commodity on sale
+# here with no everyday twin vanishes the day the sale ends; the plan owes its terms while the sale still runs, from the
+# allowance the expiries left, and they sit behind the expiries and victims so Join-FfFront can only ever trim THEM.
+$fallbackFront = New-Object System.Collections.Generic.List[string]
+foreach ($fid in @($plan.SaleFallbacks)) {
+  foreach ($tp in $termPairs) { if ([string]$tp.id -eq [string]$fid -and -not $fallbackFront.Contains([string]$tp.term)) { [void]$fallbackFront.Add([string]$tp.term) } }
+}
+if (@($plan.SaleFallbacks).Count -gt 0 -or $plan.SaleFallbackBlind) { Write-Output ('Family Fare: sale fallbacks owed ' + @($plan.SaleFallbackPending).Count + ', ' + @($plan.SaleFallbacks).Count + ' in this window''s plan (' + $fallbackFront.Count + ' term(s), behind the expiries)' + $(if ($plan.SaleFallbackBlind) { ' BLIND: ' + $plan.SaleFallbackWhy } else { '' })) }
 $frontWanted = New-Object System.Collections.Generic.List[string]
-foreach ($t in @($verifyFront) + @($expiryFront.ToArray()) + @($victimFront)) { if ($t -and ($termList -contains [string]$t) -and -not $frontWanted.Contains([string]$t)) { [void]$frontWanted.Add([string]$t) } }
+foreach ($t in @($verifyFront) + @($expiryFront.ToArray()) + @($victimFront) + @($fallbackFront.ToArray())) { if ($t -and ($termList -contains [string]$t) -and -not $frontWanted.Contains([string]$t)) { [void]$frontWanted.Add([string]$t) } }
 # THE WINDOW: rotation reserved first, the front shares what is left under the ceiling, and nothing past it.
 $ffWin = Get-FfWindowBudget -RotationTerms ([int]$plan.RotationTerms) -FrontTerms $frontWanted.Count -CallCap ([int]$plan.CallCap) -AttemptCap $ATTEMPT_CAP
 if (-not $ffWin.Ok) { Write-Warning ('Family Fare: ' + $ffWin.Why + ' - asking the ceiling (' + $ffWin.Ceiling + ') this window; test-capture-policy.ps1 fails this policy at push') }
@@ -1168,6 +1177,7 @@ $script:TermBudget = [int]$ffWin.Budget
 # if the term was actually attempted (see the sale-expiry ledger commit below).
 $frontSet = @{}; foreach ($t in @($ffFront.Front)) { $frontSet[[string]$t] = $true }
 $script:FfExpiryFrontIds = @(@($plan.SaleExpiries) | Where-Object { $eid = [string]$_; @($termPairs | Where-Object { [string]$_.id -eq $eid -and $frontSet.ContainsKey([string]$_.term) }).Count -gt 0 })
+$script:FfFallbackFrontIds = @(@($plan.SaleFallbacks) | Where-Object { $eid = [string]$_; @($termPairs | Where-Object { [string]$_.id -eq $eid -and $frontSet.ContainsKey([string]$_.term) }).Count -gt 0 })
 if ($ffPrepended -gt 0) {
   Write-Output ("Family Fare: " + $ffPrepended + " term(s) moved to the FRONT of this window (" + @($script:FfExpiryFrontIds).Count + " of " + @($plan.SaleExpiries).Count + " expiring sale(s), then pull-drop victims): " + (($termList | Select-Object -First $ffPrepended) -join ', '))
 }
@@ -1459,6 +1469,14 @@ if ($mergedOk) {
     if (@($plan.SaleExpiries).Count -gt @($ffAskedIds).Count) { Write-Output ("Family Fare: " + (@($plan.SaleExpiries).Count - @($ffAskedIds).Count) + " expiring sale(s) were not asked this window and stay OWED") }
     if ($mk -and $mk.Marked -gt 0) { Write-Output ("Family Fare: recorded " + $mk.Marked + " sale re-price(s) in sale-windows.json") }
   } catch { Write-Warning ('Family Fare: sale-expiry ledger not updated (' + $_.Exception.Message + ') - those re-prices stay owed and lead tomorrow''s slice') }
+  # the sale fallbacks this window actually asked (a front term that was attempted) go behind the unasked tomorrow
+  try {
+    $ffFbAsked = Get-FfExpiryIdsAsked -ExpiryIds @($script:FfFallbackFrontIds) -TermPairs $termPairs -Attempted $termAttempted
+    if (@($ffFbAsked).Count -gt 0) {
+      $fbMk = Set-SaleFallbackAsked -Store 'Family Fare' -Today $todayS -OutDir $OutDir -Landed $true -Ids @($ffFbAsked)
+      if ($fbMk.Marked -gt 0) { Write-Output ("Family Fare: recorded " + $fbMk.Marked + " sale-fallback ask(s) in sale-fallback-asked.json") }
+    }
+  } catch { Write-Warning ('Family Fare: sale-fallback ask ledger not updated (' + $_.Exception.Message + ') - those fallbacks keep their place at the head of the owed order') }
 }
 # The ledger is a full rewrite of a merged map, so a failed write costs the run's new dates and nothing else:
 # every term simply keeps its last honestly-earned date and re-earns today's on the next window.
