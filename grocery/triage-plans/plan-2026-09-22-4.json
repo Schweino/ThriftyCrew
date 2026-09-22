@@ -176,7 +176,10 @@
       "options": [
         "keep: exit 3 pages as a failure until someone rules",
         "heartbeat reads 3 as REVIEW, 1 as FAILED"
-      ]
+      ],
+      "status": "ruled",
+      "ruling": "Brad, 2026-09-22: \"Nothing broke, so it isn't reported as broken. The waiting groups come to you as decisions, one at a time, like today. After 3 nights with no decision it gets reported as a real failure, so it can't sit forever.\"",
+      "outcome": "Shipped 3005162d5 and 1a9250b3d (ops lane, plan-2026-09-22-3 round 2): grocery/health-heartbeat.ps1 reads TC Recall Sleep 0435's review_exit 3 as REVIEW until review_escalate_nights (3) consecutive nights, counted from its own run-once stamps (ops/out/logs/run-once/recall-sleep-<day>.stamp), then TASK FAILED; exit 1 is TASK FAILED with no fresh-output excuse. Resolver ruling:Q-4fc24c-knowledge-store; the pass itself files the review-class \"is waiting on a judgement\" item, which reaches Brad through the triage queue, never as a page. Fixtures: MUST FIRE exit 1, MUST FIRE 3 nights, MUST NOT FIRE 1 and 2 nights, CLEAN TWIN exit 0 (health-heartbeat -SelfTest 59 cases, exit 0)."
     },
     {
       "id": "Q-1b8544-1",
@@ -184,7 +187,9 @@
       "options": [
         "rewrap all nine through one registrar change",
         "leave them; proves and run_log rows cover the gap"
-      ]
+      ],
+      "status": "closed-as-defect",
+      "outcome": "Treated as a defect fix, not a ruling (coordinator, 2026-09-22: a task that reads success when it failed is simply wrong). Shipped 3005162d5: all 10 conhost definitions plus the new TC Grocery Browser Slot Close 1415 launch as pythonw.exe headless-exit.pyw --headless <program>; the class check install-grocery-tasks Test-HeadlessDefinition, which REQUIRED conhost since backlog I236, now refuses it at push; the two code registrars (graph nightly, recipe harvest) build the same shape. Re-registered live from the committed XML: 12 of 12 TC tasks run pythonw + headless-exit, 0 on conhost. Proven on TC Process Reaper: LastTaskResult 1 (its findings exit) where conhost read 0; the new 1415 task ran at 15:15 and read 0."
     }
   ]
 }

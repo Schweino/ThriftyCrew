@@ -259,7 +259,7 @@
         ],
         "exact_change": "one helper (Get-ProducerSlot) in capture-policy-lib returns start/end for a named producer from the task registry; the watchdog's browser check and the heartbeat's output-freshness checks call it, and the -COMPLETE marker prints 'not_yet=N' beside findings so a blind branch is counted, not hidden"
       },
-      "leaves_open": "(1) a real browser-capture miss now pages the next morning, not the same morning (the cost of never paging inside the slot); (2) the Fareway session sitting at a Des Moines store at 08:00, refused by the identity guard as designed, 1 occurrence today; (3) health-heartbeat's output-freshness checks are not yet slot-aware.",
+      "leaves_open": "(1) the Fareway session sitting at a Des Moines store at 08:00, refused by the identity guard as designed, 1 occurrence today; (2) health-heartbeat output-freshness checks are not yet slot-aware.",
       "leaves_open_occurrences": 1,
       "blast_radius": {
         "measured_as": "watchdog days",
@@ -292,7 +292,7 @@
       "publish_batch": 1,
       "status": "deviated",
       "premise_verified": "true: capture-watchdog.ps1 graded 'dated today' at its own 10:30; out/regular aldi/fareway/walmart landed 13:10-13:15",
-      "deviation": "The producer is a Claude Desktop task (grocery-browser-stores-refresh), not a registered Windows task, so Get-ProducerSlot is a constant with provenance (06:15 from its SKILL.md; end 14:00 = latest landing 13:15 over 2026-09-11..22 plus 45 minutes, a first plausible number). Because the watchdog runs once a day INSIDE that slot, NOT YET alone would mean a real miss never pages, so it also grades YESTERDAY's closed slot ('BROWSER CAPTURE MISSING YESTERDAY'): a miss pages one day later instead of never. The registry entry moved to prefix match so both wordings are one type. The capture-sink read and the heartbeat's output-freshness checks were not changed. not_yet= is on CAPTURE-WATCHDOG-COMPLETE.",
+      "deviation": "The producer is a Claude Desktop task (grocery-browser-stores-refresh), not a registered Windows task, so Get-ProducerSlot is a constant with provenance (06:15 from its SKILL.md; end 14:00 = latest landing 13:15 over 2026-09-11..22 plus 45 minutes, a first plausible number). Because the watchdog runs once a day INSIDE that slot, NOT YET alone would mean a real miss never pages, so it also grades YESTERDAY's closed slot ('BROWSER CAPTURE MISSING YESTERDAY'): a miss pages one day later instead of never. The registry entry moved to prefix match so both wordings are one type. The capture-sink read and the heartbeat's output-freshness checks were not changed. not_yet= is on CAPTURE-WATCHDOG-COMPLETE. ROUND 2 (3005162d5): the next-morning latency is gone. TC Grocery Browser Slot Close 1415 grades the slot when it closes and pages a miss the same day; the 10:30 run grades yesterday only when that run left no stamp.",
       "leaves_open_followup": "2026-09-22-5d20b9",
       "shipped_commit": "66f5d7840"
     },
@@ -398,10 +398,11 @@
       ],
       "resolution_note": "Every alert now names the HEAD and checkout it graded and how far behind origin/main it sat; a send from a linked worktree is refused unless asked for. 36 emitters covered by the one road they share; 4 pages in 2 days were this class.",
       "publish_batch": 1,
-      "status": "needs-more-time",
+      "status": "done",
       "premise_verified": "true at 16:50: grocery/send-alert.ps1 has no graded: footer and no -AllowWorktree refusal",
-      "deviation": "Not taken: the batch's 180-call budget could not finish it after items 1-6 (completion rule). Note for whoever takes it: send-alert's -SelfTest drives the real script from a sandbox, so the worktree refusal must not fire on its own fixture sandbox.",
-      "shipped_commit": null
+      "deviation": "Round 2 (plan-2026-09-22-3). Refusal exempts -Lane weekly and -Escalates (authored, not graded off out\\), because triage lanes run in worktrees and mint residuals; -GradedDir is the fixture seam.",
+      "shipped_commit": "8403f27b9",
+      "leaves_open_followup": "2026-09-22-5d20b9"
     },
     {
       "queue_id": "2026-09-19-c9f0f3",
@@ -568,10 +569,10 @@
       ],
       "resolution_note": "recipe-overlay now has a self-test that reaches the category resolution and a non-empty unplaced list pages as its own condition instead of dropping rows silently. Founding row frozen as the must-fire.",
       "publish_batch": 1,
-      "status": "needs-more-time",
+      "status": "done",
       "premise_verified": "true at 16:50: grocery/recipe-overlay.ps1 (257 lines) has 0 SelfTest occurrences; check-ad-cycles.ps1 has no read of recipe_price_source.unplaced (the overlay writes it at line 219)",
-      "deviation": "Not taken: the batch's 180-call budget could not finish it after items 1-6 (completion rule).",
-      "shipped_commit": null
+      "deviation": "Round 2 (plan-2026-09-22-3). check-ad-cycles files the unplaced condition with Send-Alert (type \"recipe overlay unplaced rows\", review, resolver lane:grocery/triage-due.ps1) rather than Send-AlertConditions; test-auditors gains no case: run-gates discovers the new -SelfTest, which is the registration.",
+      "shipped_commit": "c3b64c4d6"
     },
     {
       "queue_id": "2026-09-20-bec597",
@@ -1314,8 +1315,8 @@
         ],
         "exact_change": "audit-store-registry gains -CodeOnly (tracked source only, no board or capture read, hermetic) and run-gates lists it in $static with that argument; the data half stays in the daily chain"
       },
-      "leaves_open": "7 fixture literals in test-auditors.ps1 (6) and test-flag-verification.ps1 (1) that the inline register cannot reach, and the push-time -CodeOnly half not built. Next step: widen audit-store-registry's $isLiteral to a string-constant command argument and an @('...') array element, fixtured (MUST FIRE the same unmarked literal still reported; MUST NOT FIRE marked), then mark the 7 and add the run-gates entry with a = @('-CodeOnly').",
-      "leaves_open_occurrences": 7,
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
       "blast_radius": {
         "measured_as": "call sites",
         "measured_by": "audit-store-registry's 2026-09-22 daily run (8 findings in 2 files) and the run-gates $static list",
@@ -1351,10 +1352,10 @@
       ],
       "resolution_note": "Eight fixture store lists registered or converted, and the store-roster scan now runs at push (-CodeOnly, hermetic), which is the root fix 405c73 named on 09-19 and closed without building: a file with a hand-typed roster is refused at its own push instead of paged 17 hours later.",
       "publish_batch": 1,
-      "status": "needs-more-time",
+      "status": "done",
       "premise_verified": "true: audit-store-registry listed 8 sites (test-auditors 3583..3625, test-flag-verification 175, 246); at 16:40 it listed 13, the extra 5 from this batch's own item-4 fixture (fixed in the same batch: neutral store names)",
-      "deviation": "NOT SHIPPED as a push gate. The inline '# store-subset-ok:' register is honoured only when the audit reads the flagged line as a string literal ($isLiteral: a bare string AST or '= <quote>'), and 7 of the 8 sites are a command argument (the six test-auditors ERun lines) or an @(...) array ($want): a marker there registers nothing, so wiring -CodeOnly into run-gates would be red on day one and a -CodeOnly mode with no caller would be a half-built check. Shipped instead: the one site the register can reach (test-flag-verification $pgRows) and the 5 findings this batch introduced. Measured after: 7 findings (13 before, 8 at the plan).",
-      "shipped_commit": null
+      "deviation": "NOT SHIPPED as a push gate. The inline '# store-subset-ok:' register is honoured only when the audit reads the flagged line as a string literal ($isLiteral: a bare string AST or '= <quote>'), and 7 of the 8 sites are a command argument (the six test-auditors ERun lines) or an @(...) array ($want): a marker there registers nothing, so wiring -CodeOnly into run-gates would be red on day one and a -CodeOnly mode with no caller would be a half-built check. Shipped instead: the one site the register can reach (test-flag-verification $pgRows) and the 5 findings this batch introduced. Measured after: 7 findings (13 before, 8 at the plan). ROUND 2 (plan-2026-09-22-3): shipped. The literal test now counts a line whose store names all sit in string tokens (a command argument, a one-line @() array); the 7 sites carry the marker; -CodeOnly is in run-gates. Findings 7 -> 0.",
+      "shipped_commit": "2bd3a6fff"
     },
     {
       "queue_id": "discovered:free-chicken-alfredo-live-2026-09-21",

@@ -1,12 +1,17 @@
 {
   "generated": "2026-09-22T15:40:00",
-  "round": 1,
+  "round": 2,
   "kind": "ops-lane-batch-1-additions",
   "board_week": "comparison-2026-09-22 (built 08:13:10); neither item here reads or changes a board",
   "parent_plan": "grocery/triage-plans/plan-2026-09-22-2.json (batch 1 of design/RCA-holistic-2026-09-22.md); these two items were found after that plan was written and are recorded here so the reasoning ships with the change",
   "queue_ids_seen": [
     "2026-09-22-7d991c",
-    "2026-09-22-c4495c"
+    "2026-09-22-c4495c",
+    "2026-09-22-175249",
+    "2026-09-20-ca2591",
+    "2026-09-19-8a3090",
+    "2026-09-22-2000e1",
+    "2026-09-22-5d20b9"
   ],
   "routing_artifact": null,
   "routing_artifact_note": "No item changes a matching rule, a price or a board cell.",
@@ -110,11 +115,302 @@
       "premise_verified": "true: grep over ops/verify-bulk-edit.ps1 found Test-EolUnchanged only at its definition and two self-test cases; git ls-files --eol read 8,884 i/lf and 0 i/crlf",
       "deviation": null,
       "shipped_commit": "a80a45758"
+    },
+    {
+      "queue_id": "2026-09-22-175249",
+      "subject": "Store-roster scan at push; frozen store lists in command arguments and one-line arrays can register",
+      "family": "F2",
+      "classification": "infra",
+      "round": 2,
+      "evidence": [
+        "audit-store-registry live run 16:00: 7 findings, all fixture literals"
+      ],
+      "root_cause": "the code half of audit-store-registry ran only in the daily chain, and its literal test could not see a store list passed as a command argument or a one-line array, so 7 fixture sites could not be registered",
+      "root_fix": {
+        "what": "Test-StoreNamesAllInStrings widens the literal test; -CodeOnly runs checks 1, 5, 6 in run-gates",
+        "files": [
+          "grocery/audit-store-registry.ps1",
+          "ops/run-gates.ps1"
+        ],
+        "exact_change": "see 2bd3a6fff"
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "blast_radius": {
+        "measured_as": "files",
+        "measured_by": "git show --stat of the shipped commit",
+        "affected_now": 1,
+        "names": [],
+        "risk": "see the commit message",
+        "cell_effects": []
+      },
+      "freshness": "measured on 2026-09-22 between 15:00 and 16:30",
+      "proof": {
+        "guard_or_fixture": "powershell -File grocery/audit-store-registry.ps1 -SelfTest",
+        "must_fire_case": "an unmarked command-argument store list in a test- file is reported; bare-word store names outside strings cannot be registered",
+        "clean_twin": "a marked command-argument list and a marked one-line @() array register in place; a marker on a production roster is still reported",
+        "commands": [
+          "powershell -File grocery/audit-store-registry.ps1 -SelfTest",
+          "powershell -File grocery/audit-store-registry.ps1 -CodeOnly"
+        ]
+      },
+      "rollback": "revert the named commit",
+      "do_not_touch": [
+        "the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"
+      ],
+      "resolution_note": "Findings 7 -> 0; -CodeOnly exit 0 (scanned=295 findings=0); in run-gates, not red on day one.",
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": "2bd3a6fff"
+    },
+    {
+      "queue_id": "2026-09-20-ca2591",
+      "subject": "recipe-overlay self-test and the unplaced page",
+      "family": "F2",
+      "classification": "infra",
+      "round": 2,
+      "evidence": [
+        "recipe-overlay.ps1 had 0 SelfTest occurrences"
+      ],
+      "root_cause": "the placement rule had no reachable test and a silent skip replaced a throw",
+      "root_fix": {
+        "what": "Resolve-BuildOnlyRows is the one copy, driven by -SelfTest; check-ad-cycles reads unplaced",
+        "files": [
+          "grocery/recipe-overlay.ps1",
+          "grocery/check-ad-cycles.ps1",
+          "grocery/alert-registry.json"
+        ],
+        "exact_change": "see c3b64c4d6"
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "blast_radius": {
+        "measured_as": "files",
+        "measured_by": "git show --stat of the shipped commit",
+        "affected_now": 1,
+        "names": [],
+        "risk": "see the commit message",
+        "cell_effects": []
+      },
+      "freshness": "measured on 2026-09-22 between 15:00 and 16:30",
+      "proof": {
+        "guard_or_fixture": "powershell -File grocery/recipe-overlay.ps1 -SelfTest",
+        "must_fire_case": "the 2026-09-19 boneless-pork-chops row lands in unplaced",
+        "clean_twin": "a sectioned row and a staple-twin row are placed with their sections",
+        "commands": [
+          "powershell -File grocery/recipe-overlay.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "revert the named commit",
+      "do_not_touch": [
+        "the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"
+      ],
+      "resolution_note": "recipe-overlay self-test: PASS (4 cases); new type registered review with a lane resolver.",
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": "c3b64c4d6"
+    },
+    {
+      "queue_id": "2026-09-19-8a3090",
+      "subject": "Every alert names the tree it graded; automated sends from a linked worktree are refused",
+      "family": "F1",
+      "classification": "infra",
+      "round": 2,
+      "evidence": [
+        "4 pages in 2 days described an unserved tree"
+      ],
+      "root_cause": "an alert is a fact about production and 36 emitters computed it from whatever checkout they ran in",
+      "root_fix": {
+        "what": "send-alert (the one road) grades the tree, appends the footer, refuses linked-worktree automated sends",
+        "files": [
+          "grocery/send-alert.ps1"
+        ],
+        "exact_change": "see 8403f27b9"
+      },
+      "leaves_open": "the main checkout that could not rebase is still graded as production (it is production); the footer makes its lag legible",
+      "leaves_open_occurrences": 1,
+      "blast_radius": {
+        "measured_as": "files",
+        "measured_by": "git show --stat of the shipped commit",
+        "affected_now": 1,
+        "names": [],
+        "risk": "see the commit message",
+        "cell_effects": []
+      },
+      "freshness": "measured on 2026-09-22 between 15:00 and 16:30",
+      "proof": {
+        "guard_or_fixture": "powershell -File grocery/send-alert.ps1 -SelfTest",
+        "must_fire_case": "end to end through the real script with -GradedDir <linked worktree>: nothing queued, nothing mailed",
+        "clean_twin": "every queued alert ends with the graded: footer",
+        "commands": [
+          "powershell -File grocery/send-alert.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "revert the named commit",
+      "do_not_touch": [
+        "the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"
+      ],
+      "resolution_note": "send-alert -SelfTest exit 0 with 6 new cases over a real temp repo and worktree.",
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": "8403f27b9",
+      "leaves_open_followup": "2026-09-22-5d20b9"
+    },
+    {
+      "queue_id": "2026-09-22-2000e1",
+      "subject": "Round 2: grade the browser slot when it closes, so a miss pages the same day",
+      "family": "F4",
+      "classification": "infra",
+      "round": 2,
+      "evidence": [
+        "09-22 captures landed 13:09-13:15"
+      ],
+      "root_cause": "round 1 moved a real miss to the next morning because the only watchdog run sits inside the producer slot",
+      "root_fix": {
+        "what": "TC Grocery Browser Slot Close 1415 runs capture-watchdog -SlotClose; the 10:30 backstop reads its stamp",
+        "files": [
+          "grocery/capture-watchdog.ps1",
+          "grocery/capture-policy-lib.ps1",
+          "ops/scheduled-tasks/tc-grocery-browser-slot-close-1415.xml"
+        ],
+        "exact_change": "see 3005162d5"
+      },
+      "leaves_open": "the Fareway session at a Des Moines store at 08:00 (1 occurrence, refused by design); heartbeat output-freshness checks are not slot-aware",
+      "leaves_open_occurrences": 1,
+      "blast_radius": {
+        "measured_as": "files",
+        "measured_by": "git show --stat of the shipped commit",
+        "affected_now": 1,
+        "names": [],
+        "risk": "see the commit message",
+        "cell_effects": []
+      },
+      "freshness": "measured on 2026-09-22 between 15:00 and 16:30",
+      "proof": {
+        "guard_or_fixture": "powershell -File grocery/capture-watchdog.ps1 -SelfTest",
+        "must_fire_case": "-SlotClose over a fixture with 3 stores missing exits 1, names them, writes the stamp",
+        "clean_twin": "the stamp -SlotClose wrote stops the backstop paging the same miss",
+        "commands": [
+          "powershell -File grocery/capture-watchdog.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "revert the named commit",
+      "do_not_touch": [
+        "the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"
+      ],
+      "resolution_note": "Registered live; ran at 15:15 through headless-exit: result 0, stamp with 0 of 4 stores missing.",
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": "3005162d5",
+      "leaves_open_followup": "2026-09-22-5d20b9"
+    },
+    {
+      "queue_id": "discovered:conhost-exit-code-2026-09-22",
+      "subject": "Every TC task read success on a failed run: conhost --headless swallows the exit code",
+      "family": "F4",
+      "classification": "infra",
+      "round": 2,
+      "evidence": [
+        "coordinator Get-ScheduledTask: 10 tasks on conhost, all LastTaskResult 0"
+      ],
+      "root_cause": "conhost.exe --headless exits 0 whatever its child returns, and the one class check required conhost (backlog I236)",
+      "root_fix": {
+        "what": "headless-exit.pyw launcher on every definition and both code registrars; Test-HeadlessDefinition refuses conhost",
+        "files": [
+          "ops/install-grocery-tasks.ps1",
+          "ops/scheduled-tasks/",
+          "graph/pipeline/install-nightly-task.ps1",
+          "meal-prep/pipeline/install-harvest-task.ps1"
+        ],
+        "exact_change": "see 3005162d5"
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "blast_radius": {
+        "measured_as": "files",
+        "measured_by": "git show --stat of the shipped commit",
+        "affected_now": 1,
+        "names": [],
+        "risk": "see the commit message",
+        "cell_effects": []
+      },
+      "freshness": "measured on 2026-09-22 between 15:00 and 16:30",
+      "proof": {
+        "guard_or_fixture": "powershell -File ops/install-grocery-tasks.ps1 -SelfTest",
+        "must_fire_case": "the conhost --headless definition every TC task carried is refused",
+        "clean_twin": "the drift check still reads -WindowStyle Hidden behind the new launcher",
+        "commands": [
+          "powershell -File ops/install-grocery-tasks.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "revert the named commit",
+      "do_not_touch": [
+        "the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"
+      ],
+      "resolution_note": "12 of 12 TC tasks re-registered from committed XML, 0 on conhost; TC Process Reaper now reads 1 (its findings exit) where it read 0.",
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": "3005162d5"
+    },
+    {
+      "queue_id": "discovered:daily-ratchets-red-2026-09-22",
+      "subject": "TC Daily Ratchets 0315 failed three nights running and read success",
+      "family": "F4",
+      "classification": "infra",
+      "round": 2,
+      "evidence": [
+        "run-once stamps daily-ratchets-2026-09-20..22 rc=1; daily-ratchets-green.json last written 09-19"
+      ],
+      "root_cause": "drift from recent commits in 4 of 6 ratchets, invisible because the launcher returned 0",
+      "root_fix": {
+        "what": "two repaired, two recorded",
+        "files": [
+          "meal-prep/lib/price-literal-gate.ps1",
+          "ops/probe-queue2-triage.py"
+        ],
+        "exact_change": "see b453a01fb"
+      },
+      "leaves_open": "audit-fixture-inputs: grocery/test-match-lib.ps1 reads 4 live rule files (categories.json, category-excludes.json and two more), matching code outside this lane; audit-write-only-reports: 42 families against 41. The task will read rc=1 and page TASK FAILED at the next heartbeat until both are fixed, which is now a TRUE page.",
+      "leaves_open_occurrences": 2,
+      "blast_radius": {
+        "measured_as": "files",
+        "measured_by": "git show --stat of the shipped commit",
+        "affected_now": 1,
+        "names": [],
+        "risk": "see the commit message",
+        "cell_effects": []
+      },
+      "freshness": "measured on 2026-09-22 between 15:00 and 16:30",
+      "proof": {
+        "guard_or_fixture": "powershell -File ops/run-daily-ratchets.ps1",
+        "must_fire_case": "audit-source-control-bytes named the 0x08 byte",
+        "clean_twin": "audit-full-path-excludes reads 3 sites against a mark of 4 after the fix",
+        "commands": [
+          "powershell -File ops/run-daily-ratchets.ps1"
+        ]
+      },
+      "rollback": "revert the named commit",
+      "do_not_touch": [
+        "the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"
+      ],
+      "resolution_note": "run today: 4 of 6 red (fixture-inputs, source-control-bytes, write-only-reports, full-path-excludes); 2 repaired.",
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": "b453a01fb",
+      "leaves_open_followup": "2026-09-22-5d20b9"
     }
   ],
   "ship_sequence": [
     "2026-09-22-7d991c: store_citation.py + self-test, commit, push",
-    "2026-09-22-c4495c: verify-bulk-edit.ps1 + self-test, commit, push"
+    "2026-09-22-c4495c: verify-bulk-edit.ps1 + self-test, commit, push",
+    "round 2: 2bd3a6fff, c3b64c4d6, 8403f27b9, 3005162d5, b453a01fb, 1a9250b3d"
   ],
-  "open_questions_for_brad": []
+  "open_questions_for_brad": [],
+  "round_2": "Reopened 2026-09-22 by the coordinator: finish batch 1 (175249, ca2591, 8a3090), remove the next-morning latency of 2000e1, rewrap the conhost-launched TC tasks (Q-1b8544-1, treated as a defect) with the heartbeat ruling Q-4fc24c-1, then resolvers if budget remains. Budget 160 tool calls."
 }
