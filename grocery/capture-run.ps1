@@ -116,6 +116,21 @@ $runLog = Start-RunLog -Name ("capture-run-" + $Kind) -OutDir $OutDir -Today $to
 # never reaches 'complete', is a finding even when Task Scheduler says rc=0. Guarded: never fatal.
 $script:RunStart = Get-Date
 $script:StatusFile = Join-Path (Join-Path $OutDir 'logs') 'capture-run-status.json'
+# ---- EACH FAILED LANE, AND THE PAGE IT SENT (2026-09-22, plan-2026-09-22-10 item 2026-09-22-7c932a) ----------------
+# The record carried an exit code and not the lanes behind it, so capture-watchdog paged RUN RECORD on every failed
+# day, repeating a page the lane had already sent (4 of the 6 non-guard failure days in 2026-08-24..09-22 were double
+# pages). Every failed lane goes through Add-FailedLane; a lane that pages as itself calls Set-FailedLanePaged with the
+# subject only when Send-Alert returned 0, so a page that failed to send counts as no page and RUN RECORD still fires.
+# failed_lanes rides beside exit_code in capture-run-status.json; a record without it pages exactly as before.
+$script:FailedLaneRecs = @()
+function Add-FailedLane([string]$Name, [string]$PagedSubject = '') {
+  $script:failed += $Name
+  $script:FailedLaneRecs += ,([pscustomobject]@{ lane = $Name; paged = $PagedSubject })
+}
+function Set-FailedLanePaged([string]$Name, [string]$Subject, $SendRc) {
+  if ($null -eq $SendRc -or [string]$SendRc -ne '0') { return }
+  foreach ($x in $script:FailedLaneRecs) { if ([string]$x.lane -eq $Name -and -not [string]$x.paged) { $x.paged = $Subject; return } }
+}
 function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
   # A REHEARSAL MUST NOT WRITE THE RECORD OF A REAL RUN (2026-08-22). Two -WhatIf runs at 08:27 and 08:43
   # overwrote what the real 07:00 and 08:00 runs had written, and capture-watchdog then printed
@@ -128,6 +143,7 @@ function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
     $doc[$Kind] = [ordered]@{
       date = $todayS; pid = $PID; started = $script:RunStart.ToString('s'); updated = (Get-Date).ToString('s')
       stage = $Stage; exit_code = $ExitCode; log = [string]$runLog
+      failed_lanes = @($script:FailedLaneRecs | ForEach-Object { [ordered]@{ lane = [string]$_.lane; paged = [string]$_.paged } })
       # WHAT WAS ALREADY DIRTY WHEN THIS RUN STARTED (2026-09-10, queue 2026-09-10-3a9de4), recorded here so a
       # run that dies before its commit still leaves the foreign-held set legible. $null = no snapshot taken.
       dirty_at_start = $(if ($script:DirtyAtStart -and $script:DirtyAtStart.ok) { @($script:DirtyAtStart.files | ForEach-Object { [string]$_.path }) } else { $null })
@@ -333,12 +349,12 @@ foreach ($j in $jobs) {
   if ($j.State -eq 'Running') {
     Stop-Job $j -ErrorAction SilentlyContinue
     Write-Warning "$name : TIMED OUT after $TimeoutMinutes min - stopped"
-    $failed += $name
+    Add-FailedLane $name
   } else {
     $r = Receive-Job $j -ErrorAction SilentlyContinue
     $rc = if ($r -and $r.ExitCode -ne $null) { $r.ExitCode } else { 0 }
     $tail = if ($r) { ($r.Output -split "`n" | Where-Object { $_.Trim() } | Select-Object -Last 1) } else { '' }
-    if ($rc -ne 0 -and $rc -ne $null) { $failed += $name }
+    if ($rc -ne 0 -and $rc -ne $null) { Add-FailedLane $name }
     Write-Output ("  {0,-13} rc={1}  {2}" -f $name, $rc, ($tail -replace '\s+', ' ').Trim())
     # A one-line tail is enough to see that a lane WORKED; it is never enough to
     # see why one FAILED - the error is usually 20 lines above the last line.
@@ -520,7 +536,7 @@ if ($browser.Count) {
         $bOut = $rec.Output
         $bRc  = $rec.ExitCode
         foreach ($l in @($bOut)) { Write-Output ("    " + $l) }
-        if ($bRc -ne 0) { Write-Warning ("{0}: builder exited {1}" -f $s, $bRc); $failed += ("build-" + $key) }
+        if ($bRc -ne 0) { Write-Warning ("{0}: builder exited {1}" -f $s, $bRc); Add-FailedLane ("build-" + $key) }
 
         # SECOND STAGE, only if the first one worked. -ModeVerified is passed because the driver
         # already proved In-Store (see the note on $BROWSER_BUILDERS); without it every Fareway cell
@@ -551,7 +567,7 @@ if ($browser.Count) {
               Write-Output ("  {0}: {1} declined to rebuild (exit {2}) but today's file already holds {3} row(s) captured today - not a failure." -f $s, $BROWSER_BUILDERS[$key].Then, $b2Rc, $freshToday)
             } else {
               Write-Warning ("{0}: {1} exited {2} and no rows dated {3} are on disk" -f $s, $BROWSER_BUILDERS[$key].Then, $b2Rc, $todayS)
-              $failed += ("build2-" + $key)
+              Add-FailedLane ("build2-" + $key)
             }
           }
         }
@@ -737,10 +753,10 @@ if ($runDownstream) {
     & powershell -NoProfile -ExecutionPolicy Bypass -File $cac -NoPull -NoCommit | ForEach-Object { Write-Output ("  " + $_) }
     $dsRc = $LASTEXITCODE
     Write-Output ("downstream rc=$dsRc")
-    if ($dsRc -ne 0) { $failed += 'downstream' }
+    if ($dsRc -ne 0) { Add-FailedLane 'downstream' }
   } else {
     Write-Warning "check-ad-cycles.ps1 not found - captures landed but NOTHING WAS PUBLISHED"
-    $failed += 'downstream-missing'
+    Add-FailedLane 'downstream-missing'
   }
 }
 
@@ -824,7 +840,7 @@ $shipServed = $runDownstream -and $verdict.ship_ok
 if ($runDownstream -and -not $shipServed) {
   $why = $verdict.why
   Write-Output ("publish: staging INPUTS only - $why, so public\** and the recipe files are NOT shipped. Readers keep the last good board.")
-  $failed += 'guards-blocked'
+  Add-FailedLane 'guards-blocked'
 }
 $paths = @($inputPaths + $(if ($shipServed) { $servedPaths } else { @() })) | Where-Object { Test-Path (Join-Path $repo $_) }
 Write-RunStatus 'publishing'
@@ -1014,7 +1030,7 @@ try {
     Write-Output  '  If those files do NOT belong in git, add the family to .gitignore. If they do, re-run'
     Write-Output  '  capture-run with -ForceBigCommit once you have read the list above.'
     & git -C $repo reset -q -- $paths | Out-Null
-    $failed += 'commit-size-gate'
+    Add-FailedLane 'commit-size-gate'
   }
 
   & git -C $repo diff --cached --quiet
@@ -1056,14 +1072,15 @@ try {
       Write-Output ("commit: REFUSED (git exit " + $cRes.rc + ") - a hook or git itself rejected this commit. NOT pushing; the working tree is untouched.")
       foreach ($rl in $refusal.transcript) { Write-Output $rl }
       Write-Output ("commit: " + $refusal.summary)
-      $failed += 'commit-refused'
+      Add-FailedLane 'commit-refused'
       # WHAT IS ACTUALLY STALE, said accurately (2026-09-09). The old body claimed "the live board and feed
       # are STALE", and on 09-09 that was wrong for the Ghost page: publish-deals-page ships to Ghost
       # directly rather than through git, so the page was FRESH all morning. What a refused commit really
       # strands is what Cloudflare deploys FROM THE REPO - public\board.json (the per-store chips) and
       # public\smp-feed.json, which 583 recipe pages price off. Overstating is its own defect.
       try {
-        Send-Alert -Subject "Daily pipeline commit REFUSED - $today" -Body (
+        $crSubj = "Daily pipeline commit REFUSED - $today"
+        Send-Alert -Subject $crSubj -Body (
           "capture-run.ps1 [$Kind] staged today's refresh and the commit was REFUSED (see grocery\out\logs\capture-run-$Kind-$today.log).`n`n" +
           $refusal.summary + "`n`n" +
           $(if ($foreignHeldLine) { $foreignHeldLine + "`n`n" } else { '' }) +
@@ -1071,6 +1088,7 @@ try {
           "Nothing was pushed, so public\board.json (the board's per-store chips) and public\smp-feed.json are STALE at the edge until this lands; the Ghost page itself publishes directly and is not affected.`n" +
           "The pre-commit hook refuses a bot commit that stages a path outside lib\bot-paths.ps1, a staged file that fails a bulk-edit invariant, or a matching-rule change with no accepted soundness baseline."
         ) | Out-Null
+        Set-FailedLanePaged 'commit-refused' $crSubj $LASTEXITCODE
       } catch {}
     }
     # ---- RELEASE THE PRIVATE INDEX BEFORE ANY REBASE. rebase and push must run against the REAL index;
@@ -1140,12 +1158,12 @@ try {
     }
     if (-not $pushed) {
       Write-Output 'PUSH FAILED after 4 attempts - this run''s data is committed locally but NOT on main, so the live site still serves the previous board'
-      $failed += 'push'
-      try { Send-Alert -Subject "Grocery pipeline could not push - $today" -Body ("capture-run.ps1 [$Kind] committed today's refresh locally but could not push to main after 4 rebase attempts. Cloudflare deploys from the repo, so the live board and feed are STALE until this lands. Check for a rebase conflict in $repo (see grocery\out\logs\capture-run-$Kind-$today.log).") | Out-Null } catch {}
+      Add-FailedLane 'push'
+      try { Send-Alert -Subject "Grocery pipeline could not push - $today" -Body ("capture-run.ps1 [$Kind] committed today's refresh locally but could not push to main after 4 rebase attempts. Cloudflare deploys from the repo, so the live board and feed are STALE until this lands. Check for a rebase conflict in $repo (see grocery\out\logs\capture-run-$Kind-$today.log).") | Out-Null; Set-FailedLanePaged 'push' ("Grocery pipeline could not push - $today") $LASTEXITCODE } catch {}
     }
     }
   }
-} catch { Write-Output ("commit/push threw: " + $_.Exception.Message); $failed += 'push' }
+} catch { Write-Output ("commit/push threw: " + $_.Exception.Message); Add-FailedLane 'push' }
 finally {
   # A THROW MUST NOT LEAVE GIT_INDEX_FILE SET. It is process-wide, so every git command AFTER this stage -
   # the served-dirty check, the edge verification, anything a later lane runs - would read a temp index
@@ -1182,9 +1200,10 @@ if ($shipServed -and $botCommitted) {
   $servedDirty = @(& git -C $repo status --porcelain -- $servedPaths | Where-Object { $_ })
   if ($servedDirty.Count) {
     Write-Output ('served-dirty: ' + $servedDirty.Count + ' tracked served file(s) still dirty after the chain''s commit: ' + (($servedDirty | Select-Object -First 8) -join ' | '))
-    $failed += 'served-dirty'
+    Add-FailedLane 'served-dirty'
     try {
       Send-Alert -Subject "Daily chain left served files uncommitted - $today" -Body ("The chain ran, guards passed and the bot commit went out, but " + $servedDirty.Count + " tracked file(s) under `$servedPaths are still dirty afterwards. Something in the chain writes them after the staging list was built, so readers get a board and a feed that do not match the specs and tool pages in the repo. First few:`n`n" + (($servedDirty | Select-Object -First 20) -join "`n") + "`n`nAdd the writer's output to `$servedPaths in grocery\capture-run.ps1 (see the 2026-09-02 note there).") | Out-Null
+      Set-FailedLanePaged 'served-dirty' ("Daily chain left served files uncommitted - $today") $LASTEXITCODE
     } catch { Write-Output ('served-dirty alert threw: ' + $_.Exception.Message) }
   } else {
     Write-Output 'served-dirty: none - every tracked served path the chain wrote was committed'
@@ -1391,8 +1410,8 @@ if ($shipServed -and $pushed) {
   if ($pointerState -eq 'pointer-without-object') {
     $pm = "The ship path PUBLISHED THE POST and the board it points at never shipped. The live post carries board.json?v=<hash of the board this run built>, and public\board.json reaches readers only by being committed and pushed (committing that file IS the deploy). shipServed=$shipServed botCommitted=$botCommitted pushed=$pushed, and these are still dirty in the working tree:`n`n" + (($servedDirtyNow | Select-Object -First 8) -join "`n") + "`n`nSo readers are being served the PREVIOUS board.json underneath a post that advertises a different one, and the recipe cards are pricing off the previous smp-feed.json. This is the pointer-before-object ordering in .claude\rules\ops-and-gates.md. The repair is to land the commit: fix what the hook refused (its words are on the commit line above), then commit the served paths and push, and re-read week_of off feed.thriftycrew.com with a cache-busting query."
     Write-Output ('POINTER WITHOUT OBJECT: ' + ($pm -replace "`r?`n", ' '))
-    $failed += 'pointer-without-object'
-    try { Send-Alert -Subject "The post shipped and today's board did not - $today" -Body $pm | Out-Null } catch { Write-Output ('pointer-without-object alert threw: ' + $_.Exception.Message) }
+    Add-FailedLane 'pointer-without-object'
+    try { Send-Alert -Subject "The post shipped and today's board did not - $today" -Body $pm | Out-Null; Set-FailedLanePaged 'pointer-without-object' ("The post shipped and today's board did not - $today") $LASTEXITCODE } catch { Write-Output ('pointer-without-object alert threw: ' + $_.Exception.Message) }
   } else {
     Write-Output ('  readers keep the last good board: nothing this run built points at a board that did not ship (pointer state: ' + $pointerState + ')')
   }

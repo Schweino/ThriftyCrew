@@ -234,6 +234,62 @@ function Merge-HeldFindings {
   return [pscustomobject]@{ findings = $outF; sub = $outS }
 }
 
+function Get-FailedLanePaging {
+  <#
+    .SYNOPSIS Which of the daily run's failed lanes paged as themselves (2026-09-22, plan-2026-09-22-10 item 2026-09-22-7c932a).
+    .DESCRIPTION
+      Pure. capture-run writes failed_lanes [{lane, paged}] beside exit_code, and a lane's paged subject is recorded only
+      when its own Send-Alert returned 0. A record with NO failed_lanes field (an older capture-run), or one naming no
+      lane at all, answers known=$false, and RUN RECORD then pages exactly as it did before: a missing field fails
+      toward the page.
+  #>
+  param($Record)
+  $r = [pscustomobject]@{ known = $false; paged = @(); unpaged = @() }
+  if ($null -eq $Record) { return $r }
+  $p = $Record.PSObject.Properties['failed_lanes']
+  if ($null -eq $p -or $null -eq $p.Value) { return $r }
+  $pg = @(); $un = @()
+  foreach ($x in @($p.Value)) {
+    if ($null -eq $x -or -not [string]$x.lane) { continue }
+    if ([string]$x.paged) { $pg += ([string]$x.lane + ' (' + [string]$x.paged + ')') } else { $un += [string]$x.lane }
+  }
+  if ($pg.Count -eq 0 -and $un.Count -eq 0) { return $r }
+  $r.known = $true; $r.paged = $pg; $r.unpaged = $un
+  return $r
+}
+
+function Merge-PagedLaneFindings {
+  <#
+    .SYNOPSIS Fold RUN RECORD and its derivative findings under lanes that already paged as themselves.
+    .DESCRIPTION
+      Pure. Every failed lane paged: RUN RECORD, NOT PUBLISHED and COMPUTED BUT NOT SHIPPED leave the findings and come
+      back as sub-lines under one transcript line, and nothing is sent. Some lanes did not page: RUN RECORD is replaced
+      by a finding naming exactly those lanes, and it stays derivative. Unknown: everything returns as it came in.
+  #>
+  param($Findings, $Derivative, $Paging, [string]$RunRecordText, [string]$Kind = 'daily')
+  $outF = New-Object System.Collections.Generic.List[string]
+  $outS = New-Object System.Collections.Generic.List[string]
+  $outD = New-Object System.Collections.Generic.List[string]
+  $line = ''
+  if ($null -eq $Paging -or -not $Paging.known -or -not $RunRecordText) {
+    foreach ($x in $Findings) { [void]$outF.Add([string]$x) }
+    foreach ($d in $Derivative) { [void]$outD.Add([string]$d) }
+    return [pscustomobject]@{ findings = $outF; sub = $outS; derivative = $outD; line = $line }
+  }
+  if (@($Paging.unpaged).Count -eq 0) {
+    $derivSet = @{}
+    foreach ($d in $Derivative) { $derivSet[[string]$d] = $true }
+    foreach ($x in $Findings) { if ($derivSet.ContainsKey([string]$x)) { [void]$outS.Add([string]$x) } else { [void]$outF.Add([string]$x) } }
+    $line = ('RUN RECORD: capture-run [' + $Kind + '] exit 1 - every failed lane paged as itself: ' + (@($Paging.paged) -join '; ') + '. Nothing sent from here.')
+    return [pscustomobject]@{ findings = $outF; sub = $outS; derivative = $outD; line = $line }
+  }
+  $newRR = ('RUN RECORD: capture-run [' + $Kind + '] exit 1 - failed lane(s) with no page of their own: ' + (@($Paging.unpaged) -join ', '))
+  if (@($Paging.paged).Count) { $newRR += (' (paged as themselves: ' + (@($Paging.paged) -join '; ') + ')') }
+  foreach ($x in $Findings) { if ([string]$x -eq $RunRecordText) { [void]$outF.Add($newRR) } else { [void]$outF.Add([string]$x) } }
+  foreach ($d in $Derivative) { if ([string]$d -eq $RunRecordText) { [void]$outD.Add($newRR) } else { [void]$outD.Add([string]$d) } }
+  return [pscustomobject]@{ findings = $outF; sub = $outS; derivative = $outD; line = $line }
+}
+
 function Get-WatchdogAlertPlan {
   <#
     .SYNOPSIS Which alerts one watchdog run sends (2026-09-10, design\PLAN-zero-alert-days-2026-09-10.md Phase 1).
@@ -543,6 +599,46 @@ if ($SelfTest) {
     Write-Output 'ok    on a day with no hold the findings list is untouched (5 in, 5 out, 0 folded)'
   } else { Write-Output ("FAIL  the fold ran on a day with no guards hold: findings=" + $fPlain.findings.Count + " sub=" + $fPlain.sub.Count); $fail++ }
 
+  # ---- RUN RECORD PAGES ONLY A LANE THAT DID NOT PAGE AS ITSELF (2026-09-22, item 2026-09-22-7c932a) ----
+  $rrTxt = 'RUN RECORD: capture-run [daily] completed with exit 1 - see the log'
+  $rrCnsd = 'COMPUTED BUT NOT SHIPPED:  M public/board.json are modified in the working tree after today.'
+  # MUST FIRE: the 09-12 day. build-samsclub failed and paged nothing, so RUN RECORD pages and names it.
+  $rrF1 = New-Object System.Collections.Generic.List[string]; [void]$rrF1.Add($rrTxt)
+  $rrRec1 = [pscustomobject]@{ exit_code = 1; failed_lanes = @([pscustomobject]@{ lane = 'build-samsclub'; paged = '' }) }
+  $rrM1 = Merge-PagedLaneFindings $rrF1 $rrF1 (Get-FailedLanePaging $rrRec1) $rrTxt 'daily'
+  if ($rrM1.findings.Count -eq 1 -and $rrM1.findings[0] -match 'failed lane\(s\) with no page of their own: build-samsclub' -and -not $rrM1.line) {
+    Write-Output 'ok    MUST FIRE a failed lane with no page of its own (build-samsclub, 09-12) pages RUN RECORD naming it'
+  } else { Write-Output ('FAIL  MUST FIRE build-samsclub unpaged: findings=' + ($rrM1.findings -join ' | ')); $fail++ }
+  # MUST NOT FIRE: the 09-22 day. commit-refused paged as itself, so neither RUN RECORD nor COMPUTED BUT NOT SHIPPED is sent.
+  $rrF2 = New-Object System.Collections.Generic.List[string]; [void]$rrF2.Add($rrTxt); [void]$rrF2.Add($rrCnsd)
+  $rrRec2 = [pscustomobject]@{ exit_code = 1; failed_lanes = @([pscustomobject]@{ lane = 'commit-refused'; paged = 'Daily pipeline commit REFUSED - 2026-09-22' }) }
+  $rrM2 = Merge-PagedLaneFindings $rrF2 $rrF2 (Get-FailedLanePaging $rrRec2) $rrTxt 'daily'
+  if ($rrM2.findings.Count -eq 0 -and $rrM2.sub.Count -eq 2 -and $rrM2.line -match 'every failed lane paged as itself: commit-refused \(Daily pipeline commit REFUSED - 2026-09-22\)') {
+    Write-Output 'ok    MUST NOT FIRE every failed lane paged as itself (commit-refused, 09-22): RUN RECORD and COMPUTED BUT NOT SHIPPED fold into one transcript line, nothing sent'
+  } else { Write-Output ('FAIL  MUST NOT FIRE commit-refused paged: findings=' + ($rrM2.findings -join ' | ') + ' line=' + $rrM2.line); $fail++ }
+  # CLEAN TWIN: an older record with no failed_lanes pages RUN RECORD exactly as before.
+  $rrF3 = New-Object System.Collections.Generic.List[string]; [void]$rrF3.Add($rrTxt)
+  $rrM3 = Merge-PagedLaneFindings $rrF3 $rrF3 (Get-FailedLanePaging ([pscustomobject]@{ exit_code = 1 })) $rrTxt 'daily'
+  if ($rrM3.findings.Count -eq 1 -and $rrM3.findings[0] -eq $rrTxt) {
+    Write-Output 'ok    CLEAN TWIN a record with no failed_lanes field still pages RUN RECORD with its old text'
+  } else { Write-Output ('FAIL  CLEAN TWIN old record: findings=' + ($rrM3.findings -join ' | ')); $fail++ }
+  # MUST FIRE, the producer half: capture-run's own Add-FailedLane and Set-FailedLanePaged, lifted by AST and run. A page
+  # that did not send (rc 9) records no subject; one that did (rc 0) records it; and no lane bypasses Add-FailedLane.
+  $crPath = Join-Path $root 'capture-run.ps1'
+  $crAst = [System.Management.Automation.Language.Parser]::ParseFile($crPath, [ref]$null, [ref]$null)
+  $crFns = @($crAst.FindAll({ param($a) $a -is [System.Management.Automation.Language.FunctionDefinitionAst] -and @('Add-FailedLane', 'Set-FailedLanePaged') -contains $a.Name }, $true))
+  $failed = @(); $script:FailedLaneRecs = @()
+  foreach ($fn in $crFns) { . ([scriptblock]::Create($fn.Extent.Text)) }
+  Add-FailedLane 'commit-refused'; Set-FailedLanePaged 'commit-refused' 'Daily pipeline commit REFUSED - 2026-09-22' 9
+  Add-FailedLane 'push'; Set-FailedLanePaged 'push' 'Grocery pipeline could not push - 2026-09-22' 0
+  Add-FailedLane 'build-samsclub'
+  $crBypassPat = '\$' + 'failed \+= '
+  $crBypass = [regex]::Matches([IO.File]::ReadAllText($crPath), $crBypassPat).Count
+  $crRecs = @($script:FailedLaneRecs)
+  if ($crFns.Count -eq 2 -and $crRecs.Count -eq 3 -and -not $crRecs[0].paged -and $crRecs[1].paged -eq 'Grocery pipeline could not push - 2026-09-22' -and -not $crRecs[2].paged -and $crBypass -eq 0 -and (@($failed) -join ',') -eq 'commit-refused,push,build-samsclub') {
+    Write-Output 'ok    MUST FIRE capture-run records a page only when Send-Alert returned 0, and every failed lane goes through Add-FailedLane (0 bypasses)'
+  } else { Write-Output ('FAIL  capture-run lane record: fns=' + $crFns.Count + ' recs=' + $crRecs.Count + ' bypass=' + $crBypass + ' failed=' + (@($failed) -join ',')); $fail++ }
+
   # ---- ONE INCIDENT, ONE ALERT (2026-09-10, plan Phase 1): which alerts a run sends ----
   $hFx = 'HELD BY GUARDS: check-ad-cycles refused the 08:14 board (guards_rc 2) and nothing has shipped since.'
   # MUST FIRE: the founding four fold to the hold alone, sent caused by the hold, with no watchdog alert beside it.
@@ -698,6 +794,7 @@ try {
 # task verdict already defers to Test-RunSuperseded.
 $derivative = New-Object System.Collections.Generic.List[string]
 function Add-DerivativeFinding([string]$t) { [void]$findings.Add($t); [void]$derivative.Add($t) }
+$dailyRunRecord = $null; $dailyRunRecordText = ''   # the daily record and its RUN RECORD line, for the paged-lane fold
 
 $statusF = Join-Path $OutDir 'logs\capture-run-status.json'
 if (Test-Path $statusF) {
@@ -713,7 +810,7 @@ if (Test-Path $statusF) {
           # Only the DAILY run can be a symptom of a guards hold: the 07:00 ad run finishes before
           # check-ad-cycles ever runs guards, so its exit code is always its own news.
           $rrText = "RUN RECORD: capture-run [$kind] completed with exit $($r.exit_code) - see $($r.log)"
-          if ($kind -eq 'daily') { Add-DerivativeFinding $rrText } else { [void]$findings.Add($rrText) }
+          if ($kind -eq 'daily') { Add-DerivativeFinding $rrText; $dailyRunRecord = $r; $dailyRunRecordText = $rrText } else { [void]$findings.Add($rrText) }
         }
         else { [void]$ok.Add("capture-run [$kind] completed rc=0 at $($r.updated)") }
       } elseif (@('started','capturing','downstream','publishing') -notcontains [string]$r.stage) {
@@ -1477,6 +1574,17 @@ try {
 # deferral Test-RunSuperseded already uses. On any other day this is a no-op and the list is untouched.
 $heldSub = New-Object System.Collections.Generic.List[string]
 $heldNow = Test-HeldByGuards -Verdict $chainVerdict -Today $todayS -BoardWritten $boardW -PublishedWritten $pubW
+# ---- RUN RECORD PAGES ONLY WHAT DID NOT PAGE ITSELF (2026-09-22, item 2026-09-22-7c932a). A guards hold keeps its own
+# fold below, unchanged; on any other day the daily record's failed_lanes decide whether RUN RECORD is news.
+$rrFoldLine = ''
+if (-not $heldNow -and $dailyRunRecordText) {
+  $rrPaging = Get-FailedLanePaging $dailyRunRecord
+  $rrFold = Merge-PagedLaneFindings $findings $derivative $rrPaging $dailyRunRecordText 'daily'
+  $findings = $rrFold.findings
+  $derivative = $rrFold.derivative
+  $heldSub = $rrFold.sub
+  $rrFoldLine = $rrFold.line
+}
 if ($heldNow) {
   $hMin = if ($cmp -and (Test-Path $cmp) -and $pubW) { [int]((Get-Item $cmp).LastWriteTime - $pubW).TotalMinutes } else { 0 }
   # NOT `$x = try {...} catch {...}` - that is PS 7 syntax and a parse error in 5.1.
@@ -1492,6 +1600,7 @@ if ($heldNow) {
 Write-Output "CAPTURE WATCHDOG - $todayS"
 foreach ($o in $ok) { Write-Output "  ok    $o" }
 foreach ($f in $findings) { Write-Output "  FIND  $f" }
+if ($rrFoldLine) { Write-Output ("  FOLD  " + $rrFoldLine) }
 foreach ($s in $heldSub) { Write-Output "          - $s" }
 
 if ($findings.Count -and $Alert) {
