@@ -63,7 +63,7 @@
         "the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"
       ],
       "resolution_note": "before: audit-fixture-inputs exit 1 (4 new), audit-write-only-reports exit 2 (42 vs 41). after: 0 dependencies exit 0; 34 families exit 0 and baseline tightened to 34. test-match-lib output identical before and after (exit 0 both). No case passed only because of a live rule that it should not have: the 35 routing cases and 2 live class-reach checks are DEFINED over the live rules (the file's own contract since 2026-09-19), which is why they stay live and declared.",
-      "status": "shipped",
+      "status": "deviated",
       "premise_verified": true,
       "deviation": "The dispatch asked to freeze test-match-lib's inputs. Freezing categories.json and category-excludes.json alone, beside the live commodities.json the same check reads, would have blinded the check it carries (the next produce commodity added without the class would pass). So the MECHANISM is frozen and the INVARIANT stays live and declared. apply-coverage-batch has no self-test and every run of it edits commodities.json and rebuilds a board, so its 'routing check' was not run: could not verify it without a board rebuild; test-match-lib's 35 routing fixtures are the routing proof instead.",
       "shipped_commit": null
@@ -84,7 +84,7 @@
       },
       "leaves_open": "(1) FOUR types with no possible resolver today, left unassigned on purpose so the cap cannot reach 0 by pretending: run-needs-you and run-blocked-bot-wall (notify-desktop) and watchdog-browser-capture-missing-today and watchdog-browser-work-stale (capture-watchdog). Each needs a person at Brad's attended Chrome (a CAPTCHA or bot wall, or Walmart and Sam's needing an existing tab); the lane that would close them is an ATTENDED browser-capture lane, which does not exist. 0 fires each in 30 days. (2) EIGHT review types that FIRED with no lane consuming them, now digest: semantic-sweep 19 of 30 days (needs a lane that adjudicates candidates into include rules), stores-dropped 15 (a lane that runs explain-coverage-gap into apply-coverage-batch), sale-no-fallback 8 and sale-no-fallback-unworked 3 (a reader of out/research-worklist.json, which audit-write-only-reports lists as write-only), wrong-department 7 (an aisle adjudication lane over out/aisle-test.json), walmart-capture-aging 6 (the attended browser lane), recipe-db-drift 4 (a lane that reconciles index and specs), ghost-drift 4 (a lane that folds or deploys a drifted tool page). (3) Two same-check candidates NOT verified: silent-death-queue-unmeasured and silent-death-queues-unmeasured may be one check's singular and plural; sale-no-fallback is the retired wording of sale-no-fallback-unworked yet fired 8 of 30 days.",
       "leaves_open_occurrences": 12,
-      "leaves_open_owner": "(1) watch:grocery/audit-alert-registry.ps1 (the resolver ratchet at 4 fails any rise, and send-alert still pages these types by class); (2) and (3) open_questions_for_brad Q-5d20b9-lanes",
+      "leaves_open_followup": "Q-5d20b9-lanes",
       "blast_radius": {
         "measured_as": "registry entries",
         "measured_by": "Get-AlertResolverRatchet via audit-alert-registry after each group",
@@ -103,7 +103,7 @@
       "rollback": "revert the five registry commits; the cap returns to 176 with them",
       "do_not_touch": ["the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"],
       "resolution_note": "cap 176 -> 4 over five commits, by producing script. 52 of the 176 types fired at least one day in the 30-day census window. lane 125 (124 of them the triage lane, 1 verify-price-flags), ruling 10, digest 55. The count left (4) is the F5 finding itself, listed in leaves_open with the lane each needs.",
-      "status": "shipped",
+      "status": "deviated",
       "premise_verified": true,
       "deviation": "A resolver of lane:grocery/triage-due.ps1 on 124 types is honest only because the triage lane is an unattended agent lane that repairs code and data; it is NOT used for any type whose repair needs a person, an attended browser or a ruling. The dispatch's 'two types the same check, register one' found two candidates that were not verified inside the budget, so neither was merged.",
       "shipped_commit": "a06659b21"
@@ -126,7 +126,7 @@
       },
       "leaves_open": "v2-perserving.json, ingredient-map.json and the two external recall logs name no producer (their producer's slot was not verified inside the budget), so they grade exactly as before; windows_tasks rows (task last-run age) are not slot-aware. 0 false STALE pages from any of them are recorded.",
       "leaves_open_occurrences": 0,
-      "leaves_open_owner": "watch:grocery/health-heartbeat.ps1",
+      "leaves_open_followup": "watch:grocery/health-heartbeat.ps1",
       "blast_radius": {
         "measured_as": "output rows graded through a slot",
         "measured_by": "expected-automations.json rows carrying producer",
@@ -145,10 +145,10 @@
       "rollback": "revert the commit; rows without producer grade as before",
       "do_not_touch": ["the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"],
       "resolution_note": "Reuses Get-ProducerSlot and its table; no second copy of the slot table. heartbeat self-test exit 0 (70 of 70), capture-policy-lib self-test exit 0 (10 of 10), capture-watchdog self-test exit 0, audit-task-registry exit 0, audit-task-registration exit 0.",
-      "status": "shipped",
+      "status": "done",
       "premise_verified": true,
       "deviation": null,
-      "shipped_commit": null
+      "shipped_commit": "54eb1efa0"
     }
   ],
   "ship_sequence": [
@@ -159,7 +159,7 @@
   "open_questions_for_brad": [
     {
       "id": "Q-5d20b9-lanes",
-      "question": "Eight review alert types fire with no lane consuming them and now carry resolver digest (RCA F5's interim): semantic-sweep 19 of 30 days, stores-dropped 15, sale-no-fallback 8 plus its -unworked twin 3, wrong-department 7, walmart-capture-aging 6, recipe-db-drift 4, ghost-drift 4. Which gets a consuming lane built first?",
+      "question": "Eight review alert types fire with no lane consuming them and now carry resolver digest (RCA F5's interim): semantic-sweep 19 of 30 days, stores-dropped 15, sale-no-fallback 8 plus its -unworked twin 3, wrong-department 7, walmart-capture-aging 6, recipe-db-drift 4, ghost-drift 4. Which gets a consuming lane built first? And four more types have NO possible resolver today because each needs a person at an attended Chrome session (run-needs-you, run-blocked-bot-wall, watchdog-browser-capture-missing-today, watchdog-browser-work-stale, 0 fires each in 30 days, held unassigned at the registry cap of 4): is an attended browser lane worth building for them, or do they stay unassigned pages?",
       "options": [
         "A: stores-dropped first (the resolver scripts explain-coverage-gap and apply-coverage-batch exist; the missing piece is a lane that runs them)",
         "B: semantic-sweep first (the most frequent, 19 of 30 days)",
