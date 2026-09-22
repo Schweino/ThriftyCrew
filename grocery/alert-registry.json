@@ -9,8 +9,8 @@
   "escalation"
  ],
  "resolver_ratchet": {
-  "unassigned_max": 113,
-  "set": "2026-09-22 (185 at the contract; 176 after batch 1; 113 after ops lane plan-2026-09-22-8 group A, residual 2026-09-22-5d20b9)",
+  "unassigned_max": 73,
+  "set": "2026-09-22 (185 at the contract; 176 after batch 1; 73 after ops lane plan-2026-09-22-8 group B, residual 2026-09-22-5d20b9)",
   "why": "a ratchet, not a gate red on day one: the entries registered before the resolver contract are counted here and the count may only fall. audit-alert-registry fails a registry holding more, and says 'ratchet CAN tighten' when it holds fewer, without rewriting this number (a plain run never writes its mark)."
  },
  "entries": [
@@ -222,7 +222,7 @@
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-watchdog.ps1 (sent with -CausedBy guards-hold, so it is absorbed into the open GUARDS FAILED item when there is one)",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "recipe-prices-from-snapshot",
@@ -1202,7 +1202,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-board-is-stale",
@@ -1213,7 +1213,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-not-published",
@@ -1224,7 +1224,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-failed",
@@ -1235,7 +1235,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-never-reached-main",
@@ -1246,7 +1246,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-computed-but-not-shipped",
@@ -1257,7 +1257,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-rollback-not-reverting",
@@ -1268,7 +1268,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-cells-expiring-now",
@@ -1279,7 +1279,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-input-assert",
@@ -1290,7 +1290,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-store-freshness-blind",
@@ -1301,7 +1301,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-visibility-sweep-missing",
@@ -1312,7 +1312,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-visibility-sweep-did-not-complete",
@@ -1323,7 +1323,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-visibility-sweep-threw",
@@ -1334,7 +1334,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-reached-main-check-failed",
@@ -1345,7 +1345,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-headless-lanes-unknown",
@@ -1356,7 +1356,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-git-hooks-not-live-pushes-are-ungated",
@@ -1367,7 +1367,7 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-run-log-held-mute",
@@ -1379,7 +1379,7 @@
    "hold_observations": 2,
    "note": "A standing state (a locked sidecar) that a later fold usually clears: mailed on the second observation.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-missing-task",
@@ -1391,7 +1391,7 @@
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-disabled",
@@ -1403,7 +1403,7 @@
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-never-ran",
@@ -1415,7 +1415,7 @@
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-did-not-run",
@@ -1427,7 +1427,7 @@
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-run-record",
@@ -1439,7 +1439,7 @@
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-browser-capture-missing-today",
@@ -1463,7 +1463,7 @@
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-browser-work-stale",
@@ -1487,7 +1487,7 @@
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-ad-stale",
@@ -1499,7 +1499,7 @@
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-ad-forecast",
@@ -1509,7 +1509,7 @@
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-ad-forecast-could-not-be-evaluated",
@@ -1519,7 +1519,7 @@
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-python-pins",
@@ -1529,7 +1529,7 @@
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-python-pins-could-not-be-evaluated",
@@ -1539,7 +1539,7 @@
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-graph-shape",
@@ -1549,7 +1549,7 @@
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-graph-shape-could-not-be-evaluated",
@@ -1559,7 +1559,7 @@
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-graph-schema",
@@ -1569,7 +1569,7 @@
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-graph-schema-could-not-be-evaluated",
@@ -1579,7 +1579,7 @@
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-promotion-holds-could-not-be-re-checked",
@@ -1589,7 +1589,7 @@
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-git-hooks-could-not",
@@ -1599,7 +1599,7 @@
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-member-cohorts-refused-to-write",
@@ -1609,7 +1609,7 @@
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-member-cohort-series",
@@ -1619,7 +1619,7 @@
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-approaching-carry-cliff",
@@ -1629,7 +1629,7 @@
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-paid-content-served-free",
@@ -1639,7 +1639,7 @@
    "condition": "Brad ruling R14 (2026-09-10): a paid page served free goes to the review list, not email (as paywall-leak)",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-task-missing",
