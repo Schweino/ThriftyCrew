@@ -4983,6 +4983,21 @@
                         "ruled_on":  "2026-09-21",
                         "ruled_by":  "triage-developer plan-2026-09-21-4",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ranch-seasoning-mix|Walmart|suddenly-salad-ranch-bacon-pasta-salad-mix-with",
+                        "commodity":  "ranch-seasoning-mix",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Suddenly Salad Ranch \u0026 Bacon Pasta Salad Mix with Vegetable Blend \u0026 Seasoning, 7.5 oz Box"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A boxed pasta salad kit, not a ranch seasoning packet. Surfaced 2026-09-22 when ranch-seasoning-mix took its derived band (plan-2026-09-22-5, 6b17b1): the band refused it at 0.344/oz and audit-band-censorship read that as a censored bargain. It is an identity refusal, not a price one.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

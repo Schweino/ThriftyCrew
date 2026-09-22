@@ -2877,6 +2877,17 @@ $DERIVED_BANDS = Get-TcDerivedBands -Rows $evArr
 # newly REFUSED, the very class the ruling exists to stop. So the derivation runs and reports on every build
 # (out\band-derivation-<date>.json) and the typed bands stay in force until the two defects in that measurement have
 # owners: identity through excludes, not bands, and a bulk-aware reference. plan-2026-09-22-5, item 6b17b1.
+# THE MIGRATION ROAD, IN FORCE: a commodity with NO typed band takes its DERIVED band (before this it had no band at all,
+# only the universal floor). So a typed band leaves commodities.json one measured commodity at a time and the commodity
+# lands on the derived band, never on nothing. Measured on comparison-2026-09-22 before switching: 20 rows on untyped
+# commodities fall outside their derived bands, all on the HIGH side (e.g. "(6 Cans) Libby's Whole Kernel Sweet Corn" at
+# 7.90 per can, a pack price read per can). vegetable-oil's typed band was removed in the same change (Brad's founding cell).
+# MEASURED AND NARROWED THE SAME DAY: giving EVERY untyped commodity its derived band removed four real cells from the
+# rebuild (Sam's bay leaves, curry powder and thyme sit more than 5x under the median of small jars and were refused,
+# three crowns went dearer; Family Fare's freeze-dried basil was refused on the high side), so the derived band is in
+# force ONLY on a commodity that declares "band": "derived" in commodities.json. vegetable-oil is the first (Brad's
+# founding cell, its typed 0.04 floor removed). Every other commodity keeps exactly what it had: its typed band, or none.
+foreach ($c0 in $commodities) { if ($c0.PSObject.Properties['band'] -and [string]$c0.band -eq 'derived') { $BANDS.Remove([string]$c0.id); if ($DERIVED_BANDS.ContainsKey([string]$c0.id)) { $BANDS[[string]$c0.id] = $DERIVED_BANDS[[string]$c0.id] } } }
 if ($env:TC_DERIVED_BANDS -eq 'enforce') { $BANDS = @{}; foreach ($k0 in $DERIVED_BANDS.Keys) { $BANDS[$k0] = $DERIVED_BANDS[$k0] } }
 try {
   $sweep = [ordered]@{}
@@ -2901,7 +2912,7 @@ try {
   $bdoc = [ordered]@{ date = $today; rule = 'band = [ref / K, ref * K], ref = median of per-store median per-unit (>= 3 stores) else median of rows (>= 3 rows) else no band'; K = $script:TcBandK
     evidence_rows = $evArr.Count; derived_commodities = $DERIVED_BANDS.Count; typed_commodities = $TYPED_BANDS.Count; k_sweep = $sweep
     newly_admitted = $admitted.ToArray(); newly_refused = $refused.ToArray() }
-  [IO.File]::WriteAllText((Join-Path $OutDir ('band-derivation-' + $today + '.json')), ($bdoc | ConvertTo-Json -Depth 6), (New-Object Text.UTF8Encoding($false)))
+  [IO.File]::WriteAllText((Join-Path $OutDir ('band-derivation-' + $(if ((Split-Path $CommoditiesFile -Leaf) -eq 'commodities.json') { '' } else { [IO.Path]::GetFileNameWithoutExtension($CommoditiesFile) + '-' }) + $today + '.json')), ($bdoc | ConvertTo-Json -Depth 6), (New-Object Text.UTF8Encoding($false)))
   Write-Output ('bands: derived for ' + $DERIVED_BANDS.Count + ' commodities from ' + $evArr.Count + ' priced rows (K=' + $script:TcBandK + '); against the typed bands ' + $admitted.Count + ' row(s) newly admitted, ' + $refused.Count + ' newly refused (out\band-derivation-' + $today + '.json)')
 } catch { Write-Warning ('band-derivation report failed (the derived bands are still in force): ' + $_.Exception.Message) }
 foreach ($pp in $prePass) {

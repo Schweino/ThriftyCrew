@@ -12932,8 +12932,7 @@
         "id":  "vegetable-oil",
         "label":  "Vegetable / Canola Oil",
         "unit":  "floz",
-        "band_min":  0.04,
-        "band_max":  0.4,
+        "band":  "derived",
         "include":  [
                         "vegetable\\s+oil",
                         "canola\\s+oil"
