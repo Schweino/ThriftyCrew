@@ -234,6 +234,16 @@
    "resolver": "unassigned:2026-09-22"
   },
   {
+   "id": "recipe-overlay-unplaced",
+   "match": "exact",
+   "key": "recipe overlay unplaced rows",
+   "class": "review",
+   "condition": "review intake: a gated recipe price left off the recipe board for want of a categories.json section",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "note": "2026-09-22 (queue 2026-09-20-ca2591). Review, never emailed: the recipe board still publishes without the row. Resolver: the triage lane, which triage-due puts on its DUE list; the fix is a categories.json section entry, after which the next build places the row."
+  },
+  {
    "id": "recipe-recost-failed",
    "match": "exact",
    "key": "recipe recost failed",

@@ -1022,7 +1022,14 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           $rbDoc = Get-Content $rbPath -Raw -Encoding UTF8 | ConvertFrom-Json
           $rbSnap = @(@($rbDoc.recipe_price_source.snapshot_undated) | Where-Object { $_ })
           $rbWith = @(@($rbDoc.recipe_price_source.withheld) | Where-Object { $_ })
-          Log ("recipe price source: recipe_build=$($rbDoc.recipe_price_source.recipe_build) withheld=$($rbWith.Count) snapshot_undated=$($rbSnap.Count)")
+          $rbUnpl = @(@($rbDoc.recipe_price_source.unplaced) | Where-Object { $_ })
+          Log ("recipe price source: recipe_build=$($rbDoc.recipe_price_source.recipe_build) withheld=$($rbWith.Count) snapshot_undated=$($rbSnap.Count) unplaced=$($rbUnpl.Count)")
+          # AN UNPLACED ROW IS A REAL PRICE LEFT OFF THE BOARD (2026-09-22, queue 2026-09-20-ca2591). recipe-overlay skips a
+          # build-only row with no categories.json section rather than letting build-deals-page throw on it (2026-09-19),
+          # and until today nothing read that list, so a skipped price vanished with one log line nobody reads.
+          if ($rbUnpl.Count -gt 0) {
+            try { Send-Alert -Subject "Recipe overlay unplaced rows - $asofS" -Body ("recipe-overlay priced $($rbUnpl.Count) recipe ingredient(s) from today's gated build that have no section in grocery\categories.json, so they were left OFF the recipe board: " + ($rbUnpl -join ', ') + ". Each needs its id under a section in categories.json (or an id-map twin that has one); the next build then places it. Source: recipe_price_source.unplaced in out\recipe-board.json.") | Out-Null } catch { Log ('recipe overlay unplaced alert threw: ' + $_.Exception.Message) }
+          }
           if ($rbSnap.Count -gt 0) {
             try { Send-Alert -Subject "Recipe prices still from the undated snapshot - $asofS" -Body ("recipe-overlay priced $($rbSnap.Count) recipe ingredient(s) from recipe-board-everyday.json, a week_of 2026-07-06 table nothing re-reads, because no rule in commodities.json or recipe-commodities.json prices them from today's captures. Give each one a rule (or a recipe-floor-id-map entry to its staple twin) and it moves to the gated daily build. Ingredients: " + ($rbSnap -join ', ')) | Out-Null } catch {}
           }

@@ -10,8 +10,73 @@
   Auto-reverts: when a sale ends, the next run finds no sale for it and uses the everyday floor -> back to
   the baseline ranking. Run it in the daily job after compare-deals; it is headless + non-fatal.
 #>
+param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+# ---- WHERE A BUILD-ONLY ROW GOES (extracted 2026-09-22, queue 2026-09-20-ca2591) -----------------------------------
+# EVERY ROW NEEDS A HOME, AND A ROW WITH NONE MUST NOT COST THE WHOLE BOARD (2026-09-19). A recipe-rule commodity the
+# gated build priced but the snapshot never listed arrives with no `category`. build-deals-page renders recipe rows
+# INTO categories.json's sections and THROWS on a row it cannot place, so one unplaceable row refused every publish -
+# boneless-pork-chops did exactly that on the 2026-09-19 rebuild. So the category is resolved from categories.json by
+# id (or the staple twin's section, via the id map), and a row neither can place is SKIPPED AND NAMED in `unplaced`,
+# which check-ad-cycles reads and files as its own alert. Pure, so -SelfTest drives the code the live run executes:
+# until this function existed the rule had no test at all and the next production build was its only one (F2).
+function Resolve-BuildOnlyRows {
+  param($BuiltRows, $SeenIds, $StapleIds, $IdMap, $CategoryById)
+  $keptR = New-Object System.Collections.Generic.List[object]
+  $builtR = New-Object System.Collections.Generic.List[string]
+  $unplacedR = New-Object System.Collections.Generic.List[string]
+  foreach ($bid in @($BuiltRows.Keys | Sort-Object)) {
+    # the weekly board owns any id it also rules, exactly as the snapshot filter decides
+    if ($SeenIds.ContainsKey($bid) -or $StapleIds.ContainsKey($bid)) { continue }
+    if ($IdMap.ContainsKey($bid) -and $StapleIds.ContainsKey($IdMap[$bid])) { continue }
+    $nr = $BuiltRows[$bid]
+    if (-not $nr.PSObject.Properties['category'] -or -not ([string]$nr.category).Trim()) {
+      $cat = $null
+      if ($CategoryById.ContainsKey($bid)) { $cat = $CategoryById[$bid] }
+      elseif ($IdMap.ContainsKey($bid) -and $CategoryById.ContainsKey([string]$IdMap[$bid])) { $cat = $CategoryById[[string]$IdMap[$bid]] }
+      if ($cat) { $nr | Add-Member -NotePropertyName category -NotePropertyValue $cat -Force }
+      else { $unplacedR.Add($bid); continue }
+    }
+    $nr | Add-Member -NotePropertyName price_source -NotePropertyValue 'recipe-build' -Force
+    $keptR.Add($nr); $builtR.Add($bid)
+  }
+  return [pscustomobject]@{ kept = $keptR.ToArray(); built = $builtR.ToArray(); unplaced = $unplacedR.ToArray() }
+}
+
+if ($SelfTest) {
+  $stFail = 0; $stRan = 0
+  function _RO([string]$label, [bool]$ok, [string]$got) {
+    $script:stRan++
+    if ($ok) { Write-Output ('ok    ' + $label) } else { Write-Output ('FAIL  ' + $label + '   got: ' + $got); $script:stFail++ }
+  }
+  $cats = @{ 'pork-chops' = 'Meat & Seafood'; 'smoked-paprika' = 'Spices & Seasonings' }
+  # MUST FIRE: the founding row of 2026-09-19 - build-only, no category, no section, no staple twin.
+  $b1 = @{ 'boneless-pork-chops' = [pscustomobject]@{ id = 'boneless-pork-chops'; stores = @() } }
+  $r1 = Resolve-BuildOnlyRows -BuiltRows $b1 -SeenIds @{} -StapleIds @{} -IdMap @{} -CategoryById $cats
+  _RO 'MUST FIRE the 2026-09-19 boneless-pork-chops row (build-only, no section) lands in unplaced and is NOT kept' `
+    (@($r1.unplaced).Count -eq 1 -and $r1.unplaced[0] -eq 'boneless-pork-chops' -and @($r1.kept).Count -eq 0) ('unplaced=' + (@($r1.unplaced) -join ','))
+  # CLEAN TWIN: a build-only row with a section is placed and priced from the build; one placed through its staple twin too.
+  $b2 = @{ 'pork-chops' = [pscustomobject]@{ id = 'pork-chops'; stores = @() }; 'paprika-smoked' = [pscustomobject]@{ id = 'paprika-smoked'; stores = @() } }
+  $r2 = Resolve-BuildOnlyRows -BuiltRows $b2 -SeenIds @{} -StapleIds @{} -IdMap @{ 'paprika-smoked' = 'smoked-paprika' } -CategoryById $cats
+  $k2 = @($r2.kept)
+  _RO 'CLEAN TWIN a build-only row with a section, and one placed through its staple twin, are both kept with their sections' `
+    ($k2.Count -eq 2 -and @($r2.unplaced).Count -eq 0 -and (@($k2 | Where-Object { $_.id -eq 'pork-chops' })[0].category -eq 'Meat & Seafood') -and (@($k2 | Where-Object { $_.id -eq 'paprika-smoked' })[0].category -eq 'Spices & Seasonings') -and (@($k2 | Where-Object { $_.price_source -ne 'recipe-build' }).Count -eq 0)) ('kept=' + $k2.Count)
+  # CLEAN TWIN: a row that already carries a category keeps it and never needs the map.
+  $b3 = @{ 'odd-thing' = [pscustomobject]@{ id = 'odd-thing'; category = 'Pantry'; stores = @() } }
+  $r3 = Resolve-BuildOnlyRows -BuiltRows $b3 -SeenIds @{} -StapleIds @{} -IdMap @{} -CategoryById @{}
+  _RO 'CLEAN TWIN a build-only row that already carries a category is kept under it' (@($r3.kept).Count -eq 1 -and $r3.kept[0].category -eq 'Pantry') ('kept=' + @($r3.kept).Count)
+  # MUST NOT FIRE: a row the weekly board owns (a staple id, or a recipe id mapped to one) or the snapshot already
+  # listed is neither kept here nor reported unplaced.
+  $b4 = @{ 'eggs' = [pscustomobject]@{ id = 'eggs' }; 'large-eggs' = [pscustomobject]@{ id = 'large-eggs' }; 'rice' = [pscustomobject]@{ id = 'rice' } }
+  $r4 = Resolve-BuildOnlyRows -BuiltRows $b4 -SeenIds @{ 'rice' = $true } -StapleIds @{ 'eggs' = $true } -IdMap @{ 'large-eggs' = 'eggs' } -CategoryById @{}
+  _RO 'MUST NOT FIRE rows the weekly board owns, or the snapshot listed, are neither kept nor unplaced' (@($r4.kept).Count -eq 0 -and @($r4.unplaced).Count -eq 0) ('kept=' + @($r4.kept).Count + ' unplaced=' + @($r4.unplaced).Count)
+  if ($stRan -ne 4) { Write-Output ('FAIL  ran ' + $stRan + ' case(s), expected 4'); $stFail++ }
+  if ($stFail) { Write-Output ("recipe-overlay self-test: FAIL ($stFail of $stRan)"); exit 1 }
+  Write-Output ("recipe-overlay self-test: PASS ($stRan cases)")
+  exit 0
+}
+
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $out  = Join-Path $root 'out'
 $today = (Get-Date).ToString('yyyy-MM-dd')
@@ -167,12 +232,6 @@ try {
   }
 } catch { Write-Output ('recipe-overlay: WARNING - categories.json unreadable (' + $_.Exception.Message + '); build-only rows cannot be placed and will be reported unplaced') }
 
-function Get-CategoryForId([string]$id) {
-  if ($script:CategoryById.ContainsKey($id)) { return $script:CategoryById[$id] }
-  # a recipe id often mirrors a staple one (idMap); borrow that twin's section rather than inventing one
-  if ($idMap.ContainsKey($id) -and $script:CategoryById.ContainsKey([string]$idMap[$id])) { return $script:CategoryById[[string]$idMap[$id]] }
-  return $null
-}
 $kept = New-Object System.Collections.Generic.List[object]
 $seenIds = @{}
 foreach ($row in @($base.comparison)) {
@@ -191,28 +250,12 @@ foreach ($row in @($base.comparison)) {
     $kept.Add($row); $srcSnapshot.Add($id)
   }
 }
-# A recipe-rule commodity the build priced but the snapshot never listed is still a recipe price; the weekly board
-# owns any id it also rules, exactly as the filter above decides for snapshot rows.
-foreach ($bid in @($builtRows.Keys)) {
-  if ($seenIds.ContainsKey($bid) -or $stapleIds.ContainsKey($bid)) { continue }
-  if ($idMap.ContainsKey($bid) -and $stapleIds.ContainsKey($idMap[$bid])) { continue }
-  $nr = $builtRows[$bid]
-  # EVERY ROW NEEDS A HOME, AND A ROW WITH NONE MUST NOT COST THE WHOLE BOARD (2026-09-19).
-  # A row the snapshot never listed arrives here with no `category`: the merge above copies one from the OLD
-  # row, and there is no old row. build-deals-page renders recipe rows INTO categories.json's sections and
-  # THROWS on any row it cannot place, so one unplaceable row refused every publish - boneless-pork-chops did
-  # exactly that on the 2026-09-19 rebuild, after guards had already passed. So resolve the category here,
-  # from categories.json by id, and when that cannot answer, SKIP the row and NAME it rather than either
-  # publishing it homeless (the throw) or dropping it silently (a real price disappearing with no line in the
-  # log). The skipped ids ride in recipe_price_source so a caller can page on a count above zero.
-  if (-not $nr.PSObject.Properties['category'] -or -not ([string]$nr.category).Trim()) {
-    $cat = Get-CategoryForId $bid
-    if ($cat) { $nr | Add-Member -NotePropertyName category -NotePropertyValue $cat -Force }
-    else { $srcUnplaced.Add($bid); continue }
-  }
-  $nr | Add-Member -NotePropertyName price_source -NotePropertyValue 'recipe-build' -Force
-  $kept.Add($nr); $srcBuild.Add($bid)
-}
+# A recipe-rule commodity the build priced but the snapshot never listed is still a recipe price: placed, or named
+# unplaced, by Resolve-BuildOnlyRows above (the one copy of that rule, driven by -SelfTest).
+$bo = Resolve-BuildOnlyRows -BuiltRows $builtRows -SeenIds $seenIds -StapleIds $stapleIds -IdMap $idMap -CategoryById $script:CategoryById
+foreach ($k in @($bo.kept)) { $kept.Add($k) }
+foreach ($k in @($bo.built)) { $srcBuild.Add($k) }
+foreach ($k in @($bo.unplaced)) { $srcUnplaced.Add($k) }
 $base.comparison = $kept.ToArray()
 $base | Add-Member -NotePropertyName recipe_price_source -NotePropertyValue ([ordered]@{
   recipe_build = $srcBuild.Count; withheld = $srcWithheld.ToArray(); snapshot_undated = $srcSnapshot.ToArray()
