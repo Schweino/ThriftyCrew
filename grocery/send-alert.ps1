@@ -14,7 +14,11 @@
   than a swallowed exception. The whole account of the four-day silent outage is in alert-lib.ps1.
 #>
 param(
-  [string]$Subject = "Grocery pipeline alert",
+  # NO DEFAULT SUBJECT (2026-09-22, plan-2026-09-22-10 item 2026-09-20-cb8f30). The old default 'Grocery pipeline alert'
+  # matched no registry entry, and two unrelated residuals minted with no -Subject became ONE type. An empty subject is
+  # sent as '(no subject) from <emitter>' below, so two callers never share a key, and audit-alert-registry fails a call
+  # site with no -Subject at push time.
+  [string]$Subject = "",
   [string]$Body = "",
   # PASS A LONG OR QUOTED BODY BY FILE (2026-07-31). Every caller invokes this as
   # `& powershell -File send-alert.ps1 -Body $body`, and a body containing DOUBLE QUOTES breaks the
@@ -465,7 +469,8 @@ if ($SelfTest) {
       '{ "id": "soundness", "match": "exact", "key": "grocery matching soundness review needed", "class": "review", "condition": "review intake", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
       '{ "id": "digest", "match": "exact", "key": "brain digest the night", "class": "digest", "condition": "information", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
       '{ "id": "noresolver", "match": "exact", "key": "grocery a page type nobody closes", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
-      '{ "id": "lanefx", "match": "exact", "key": "grocery a page type a lane closes", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x", "resolver": "lane:grocery/verify-price-flags.ps1" } ] }'
+      '{ "id": "lanefx", "match": "exact", "key": "grocery a page type a lane closes", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x", "resolver": "lane:grocery/verify-price-flags.ps1" },' +
+      '{ "id": "triage-residual", "match": "prefix", "key": "triage residual", "class": "review", "condition": "review intake", "emitter": "x", "resolver": "lane:grocery/triage-due.ps1" } ] }'
     [IO.File]::WriteAllText($saReg, $saRegJson, $utf8)
     [IO.File]::WriteAllText((Join-Path $saG 'alerts-muted.json'), '{ "muted": true, "since": "2026-09-10", "until": null }', $utf8)
     $saQ = Join-Path $saG 'triage-queue.json'
@@ -475,8 +480,10 @@ if ($SelfTest) {
     # name on purpose, which must not make a real alert on this box wait.
     . (Join-Path (Split-Path -Parent $PSScriptRoot) 'lib\mutex-hold.ps1')
     $saMutex = New-TcFixtureMutexName 'smp-sa-selftest-queue'
-    function _SA([string]$subj, [string[]]$extra = @()) {
-      $o = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $saG 'send-alert.ps1') -Subject $subj -BodyFile $saBody -QueueMutexName $saMutex @extra
+    function _SA($subj, [string[]]$extra = @()) {
+      # $null subject = the call shape with NO -Subject at all (2026-09-20-cb8f30's own mint)
+      $subjArgs = @(); if ($null -ne $subj) { $subjArgs = @('-Subject', [string]$subj) }
+      $o = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $saG 'send-alert.ps1') @subjArgs -BodyFile $saBody -QueueMutexName $saMutex @extra
       $rc = $LASTEXITCODE
       $its = @()
       if (Test-Path -LiteralPath $saQ) { $qd = Get-Content -LiteralPath $saQ -Raw -Encoding UTF8 | ConvertFrom-Json; $its = @($qd.items) }
@@ -525,6 +532,26 @@ if ($SelfTest) {
     Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
     $c7 = _SA 'Grocery matching soundness - review needed' @('-Escalates', '2026-09-10-abcdef')
     _T 'CLEAN TWIN -Escalates still parks the item at needs-brad and always takes the mail leg' ([bool]($c7.items.Count -eq 1 -and $c7.items[0].status -eq 'needs-brad' -and $c7.out -match 'alert MUTED')) 'True'
+    # ---- NO DEFAULT SUBJECT, AND AN AGENT'S UNREGISTERED ALERT IS REFUSED (2026-09-22, item 2026-09-20-cb8f30; Brad's
+    # ruling Q-sender-refuses-unregistered: "Refuse agents only"). Pipeline alerts always get through, flagged.
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $cr1 = _SA 'Grocery: 198 tile links record a price the board no longer publishes' @('-Lane', 'weekly')
+    _T 'MUST FIRE an agent send (-Lane weekly) with an unregistered subject is REFUSED: exit 2, SEND-ALERT-REFUSED, no queue written' ([bool]($cr1.rc -eq 2 -and $cr1.out -match 'SEND-ALERT-REFUSED unregistered-type' -and -not (Test-Path -LiteralPath $saQ))) 'True'
+    [IO.File]::WriteAllText($saQ, '{ "items": [] }', $utf8)
+    $crHash = (Get-FileHash -LiteralPath $saQ).Hash
+    $cr2 = _SA $null @('-Lane', 'weekly', '-Force')
+    _T 'MUST FIRE the 1139c4/cb8f30 call shape (-Lane weekly -Force, no -Subject) is refused and the queue stays byte-identical' ([bool]($cr2.rc -eq 2 -and (Get-FileHash -LiteralPath $saQ).Hash -eq $crHash -and $cr2.out -notmatch 'grocery pipeline alert')) 'True'
+    $cr3 = _SA 'Grocery: a question nobody registered' @('-Escalates', '2026-09-22-abcdef')
+    _T 'MUST FIRE an agent escalation (-Escalates) with an unregistered subject is refused too' ([bool]($cr3.rc -eq 2 -and (Get-FileHash -LiteralPath $saQ).Hash -eq $crHash)) 'True'
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $cr4 = _SA 'Grocery: 198 tile links record a price the board no longer publishes'
+    _T 'MUST NOT FIRE a pipeline send with the same unregistered subject goes through: queued unregistered=true AND mailed with the marker' ([bool]($cr4.rc -eq 0 -and $cr4.items.Count -eq 1 -and $cr4.items[0].unregistered -eq $true -and $cr4.out -match [regex]::Escape("mail subject 'UNREGISTERED ALERT TYPE: Grocery: 198 tile links"))) 'True'
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $cr5 = _SA $null
+    _T 'MUST FIRE a pipeline call with no -Subject is never typed grocery pipeline alert: it queues as (no subject) from <emitter>, unregistered, and pages' ([bool]($cr5.items.Count -eq 1 -and [string]$cr5.items[0].type -match '^no subject from ' -and $cr5.items[0].unregistered -eq $true -and $cr5.out -match [regex]::Escape("mail subject 'UNREGISTERED ALERT TYPE: (no subject) from"))) 'True'
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $cr6 = _SA 'Triage residual: 198 tile links record a price the board no longer publishes' @('-Lane', 'weekly')
+    _T 'CLEAN TWIN an agent send with a registered subject passes: queued as review, lane weekly, no unregistered stamp' ([bool]($cr6.rc -eq 0 -and $cr6.items.Count -eq 1 -and $cr6.items[0].lane -eq 'weekly' -and -not $cr6.items[0].PSObject.Properties['unregistered'] -and $cr6.out -match 'queued as REVIEW')) 'True'
     # ---- WHICH TREE (2026-09-22, queue 2026-09-19-8a3090) ----
     Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
     $cg = _SA 'Grocery page HELD (coverage) - 2026-09-22'
@@ -768,6 +795,20 @@ if (Test-WorktreeSendRefused $graded ([bool]$AllowWorktree) $Lane $Escalates) {
   exit 0
 }
 
+# ---- NO SUBJECT IS NEVER A TYPE OF ITS OWN (2026-09-22, item 2026-09-20-cb8f30) ----------------------------------
+# The emitter's path goes into the subject, so the type key is per caller. Nothing is dropped: a pipeline call pages it
+# with the UNREGISTERED marker (ruling 1); an agent's (-Lane weekly or -Escalates) is refused below.
+if (-not ([string]$Subject).Trim()) {
+  $nsSrc = $Emitter
+  if (-not $nsSrc) { try { $nsF = @(Get-PSCallStack | Where-Object { $_.ScriptName -and ($_.ScriptName -ne $PSCommandPath) }); if ($nsF.Count) { $nsSrc = [string]$nsF[0].ScriptName } } catch { $nsSrc = '' } }
+  $nsRel = ''
+  try { $nsRel = ConvertTo-RepoRelative $nsSrc (Split-Path -Parent $root) } catch { $nsRel = '' }
+  if (-not $nsRel) { $nsRel = 'an unnamed caller' }
+  $Subject = '(no subject) from ' + $nsRel
+  $typeKey = ConvertTo-AlertTypeKey $Subject
+  Log ("NO SUBJECT: an alert arrived with no -Subject, sent as '" + $Subject + "' [type: " + $typeKey + "]")
+}
+
 # ---- WHICH CLASS IS THIS ALERT? (2026-09-10, Brad ruling 1) ------------------------------------------------
 # page = emailed and queued; review = queued, never emailed; digest = emailed, never queued. The class comes from
 # grocery\alert-registry.json through alert-registry-lib.ps1. EVERY failure here fails toward PAGE: a lib that will
@@ -785,6 +826,18 @@ if ($regLibOk) {
   } catch { Log ("ALERT REGISTRY could not be applied (" + $_.Exception.Message + ") - failing toward PAGE for '" + $Subject + "'") }
 }
 if ($delivery.unregistered) { Log ("UNREGISTERED ALERT TYPE '" + $Subject + "' [type: " + $typeKey + "] - no entry in grocery\alert-registry.json matches, so it queues AND pages as a registry defect. Register it and run grocery\audit-alert-registry.ps1.") }
+# AN AGENT'S UNREGISTERED ALERT IS REFUSED BEFORE ANY QUEUE WRITE (Brad's ruling Q-sender-refuses-unregistered,
+# 2026-09-22: "Refuse agents only"). The agent re-sends in the same turn under a registered type; a pipeline alert never
+# reaches this branch. Test-AgentSendRefused in alert-registry-lib.ps1 holds the rule and the ruling's words.
+$agentRefused = $false
+if ($regLibOk) { try { $agentRefused = Test-AgentSendRefused $delivery $Lane $Escalates } catch { $agentRefused = $false } }
+if ($agentRefused) {
+  $refMsg = ("SEND-ALERT-REFUSED unregistered-type '" + $typeKey + "': an agent's alert (-Lane weekly or -Escalates) must name a registered type. Mint it as 'Triage residual: <what>' or 'Triage finding: <what>', or register the type in grocery\alert-registry.json, and re-send now. Nothing was queued or mailed.")
+  Log ($refMsg + " Subject was '" + $Subject + "'.")
+  [Console]::Error.WriteLine($refMsg)
+  Write-Output $refMsg
+  exit 2
+}
 if ($delivery.resolverless) { Log ("RESOLVERLESS ALERT TYPE '" + $Subject + "' [type: " + $typeKey + "] - " + $delivery.note + ". Name its resolver in grocery\alert-registry.json (design/RCA-holistic-2026-09-22.md F5).") }
 
 # -CausedBy: read the incident's evidence now, outside the queue lock. An unreadable verdict is $null, and a $null

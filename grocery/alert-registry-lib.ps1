@@ -149,12 +149,21 @@ function Get-AlertResolverRatchet {
 
 function Get-AlertDelivery {
   <# Pure. What send-alert does with one alert: queue it, mail it, and under which subject.
-     -Escalates is page and -Lane weekly is review by ruling 1, whatever the subject says. #>
+     -Escalates is page and -Lane weekly is review by ruling 1, whatever the subject says.
+     THE TYPE IS RESOLVED FIRST, FOR EVERY ALERT (2026-09-22, plan-2026-09-22-10 item 2026-09-20-cb8f30). Until then a
+     weekly-lane alert returned before the registered check, so 34 of 54 agent mints over 2026-09-11..09-22 carried an
+     unregistered type and nothing stamped one. Now an unregistered agent alert is stamped exactly as a pipeline one is;
+     what the sender then DOES with it is Test-AgentSendRefused below (Brad's ruling Q-sender-refuses-unregistered). #>
   param($Resolution, [string]$Subject, [string]$Escalates = '', [string]$Lane = '')
   $d = [pscustomobject]@{ class = 'page'; queue = $true; mail = $true; mail_subject = $Subject; unregistered = $false; resolverless = $false; entry_id = ''; note = '' }
-  if ($Escalates) { $d.note = 'an escalation (-Escalates) is page by ruling 1'; return $d }
-  if ($Lane -eq 'weekly') { $d.class = 'review'; $d.mail = $false; $d.note = 'a triage-created item (-Lane weekly) is review by ruling 1'; return $d }
-  if ($null -eq $Resolution -or -not $Resolution.registry_ok) { $d.note = 'the alert registry could not be read, so this alert FAILS TOWARD PAGE'; return $d }
+  $readable = ($null -ne $Resolution -and $Resolution.registry_ok)
+  if ($Escalates -or $Lane -eq 'weekly') {
+    if ($readable -and -not $Resolution.registered) { $d.unregistered = $true }
+    if ($readable -and $Resolution.registered) { $d.entry_id = [string]$Resolution.entry.id }
+    if ($Escalates) { $d.note = 'an escalation (-Escalates) is page by ruling 1'; return $d }
+    $d.class = 'review'; $d.mail = $false; $d.note = 'a triage-created item (-Lane weekly) is review by ruling 1'; return $d
+  }
+  if (-not $readable) { $d.note = 'the alert registry could not be read, so this alert FAILS TOWARD PAGE'; return $d }
   if (-not $Resolution.registered) {
     $d.unregistered = $true
     $d.mail_subject = $script:AlertUnregisteredMarker + $Subject
@@ -174,6 +183,115 @@ function Get-AlertDelivery {
     $d.note = ('registry entry ' + $d.entry_id + ' names no resolver (lane:, ruling: or digest), so it is queued and NOT emailed until it does')
   }
   return $d
+}
+
+# ---- AN AGENT'S UNREGISTERED ALERT IS REFUSED (Brad's ruling Q-sender-refuses-unregistered, 2026-09-22) -------------
+# Brad's words: "Refuse agents only". The option he chose: an agent's alert with an unregistered title is refused on
+# the spot; the agent must register the type or use an existing one and re-send in the same turn; the closing check
+# (validate-triage-plan -Closing) refuses any leftover, so nothing is lost; alerts from the daily pipeline always get
+# through. An agent's send is one carrying -Lane weekly or -Escalates, the two flags only a triage agent passes. A
+# registry that cannot be read refuses NOTHING: ruling 1 fails toward delivery, and an unknown type is not a known one.
+function Test-AgentSendRefused {
+  <# Pure. $true when this send is an agent's (-Lane weekly or -Escalates) and its type is registered nowhere. #>
+  param($Delivery, [string]$Lane = '', [string]$Escalates = '')
+  if ($null -eq $Delivery) { return $false }
+  if (-not ($Lane -eq 'weekly' -or $Escalates)) { return $false }
+  return [bool]$Delivery.unregistered
+}
+
+# ---- A FAILURE CLASS OUTLIVES A SPLIT OR A RENAME (2026-09-22, plan-2026-09-22-10, the class-keyed return rate) ------
+# The return rate keyed a failure by the TEXT of its alert subject, so the 09-21 split (five catch-all types retired
+# into 75 successors) made every successor's first fire a brand-new type instead of the old class coming back. The
+# class of a type is its registry entry followed up lineage_parent to the root. An entry that split or replaced another
+# names it in lineage_parent; audit-alert-registry refuses a split_from with no lineage_parent, a parent that is not
+# there or not retired, and a retired entry nothing descends from and no no_successor reason explains.
+function Get-AlertLineageRoot {
+  <# Pure. The entry at the top of Entry's lineage_parent chain. A missing parent or a cycle stops at the last entry
+     reached, never throws (audit-alert-registry names both). $ById is an optional id -> entry dictionary. #>
+  param($Registry, $Entry, $ById = $null)
+  if ($null -eq $Entry) { return $null }
+  if ($null -eq $ById) {
+    $ById = New-Object 'System.Collections.Generic.Dictionary[string,object]' ([StringComparer]::Ordinal)
+    foreach ($e in @($Registry.entries)) { if ($e -and [string]$e.id -and -not $ById.ContainsKey([string]$e.id)) { $ById[[string]$e.id] = $e } }
+  }
+  $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  $cur = $Entry
+  while ($true) {
+    if (-not $seen.Add([string]$cur.id)) { break }
+    $lp = $cur.PSObject.Properties['lineage_parent']
+    if ($null -eq $lp -or -not [string]$lp.Value) { break }
+    if (-not $ById.ContainsKey([string]$lp.Value)) { break }
+    $cur = $ById[[string]$lp.Value]
+  }
+  return $cur
+}
+
+function Get-AlertClassKey {
+  <# Pure. A queue type key -> 'class:<root entry id>' through Resolve-AlertClass (the resolution send-alert uses) and
+     the lineage chain, or 'unregistered:<type key>' when no entry matches or the registry cannot be read, so an
+     unregistered type is counted apart and never merged into a class. $Cache is an optional hashtable reused across calls. #>
+  param($Registry, [string]$TypeKey, $Cache = $null)
+  if ($null -ne $Cache -and $Cache.ContainsKey('k|' + $TypeKey)) { return [string]$Cache['k|' + $TypeKey] }
+  $ById = $null
+  if ($null -ne $Cache) {
+    if (-not $Cache.ContainsKey('__byid')) {
+      $bi = New-Object 'System.Collections.Generic.Dictionary[string,object]' ([StringComparer]::Ordinal)
+      foreach ($e in @($Registry.entries)) { if ($e -and [string]$e.id -and -not $bi.ContainsKey([string]$e.id)) { $bi[[string]$e.id] = $e } }
+      $Cache['__byid'] = $bi
+    }
+    $ById = $Cache['__byid']
+  }
+  $res = Resolve-AlertClass $Registry $TypeKey
+  $out = 'unregistered:' + $TypeKey
+  if ($res.registry_ok -and $res.registered) {
+    $rootE = Get-AlertLineageRoot $Registry $res.entry $ById
+    $out = 'class:' + [string]$rootE.id
+  }
+  if ($null -ne $Cache) { $Cache['k|' + $TypeKey] = $out }
+  return $out
+}
+
+function Get-AlertLineageProblems {
+  <# Pure. The lineage rule: split_from needs a lineage_parent that exists and is retired; any lineage_parent must
+     exist; the chain must not cycle; a retired entry must be some entry's lineage_parent or say no_successor. #>
+  param($Registry)
+  $p = New-Object System.Collections.Generic.List[string]
+  $byId = New-Object 'System.Collections.Generic.Dictionary[string,object]' ([StringComparer]::Ordinal)
+  foreach ($e in @($Registry.entries)) { if ($e -and [string]$e.id -and -not $byId.ContainsKey([string]$e.id)) { $byId[[string]$e.id] = $e } }
+  $parents = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($e in @($Registry.entries)) {
+    if (-not $e) { continue }
+    $id = [string]$e.id
+    $lpP = $e.PSObject.Properties['lineage_parent']
+    $lp = if ($null -ne $lpP) { [string]$lpP.Value } else { '' }
+    if ($lp) { [void]$parents.Add($lp) }
+    if ($e.PSObject.Properties['split_from'] -and [string]$e.split_from -and -not $lp) {
+      [void]$p.Add('entry ' + $id + ': split_from ' + [string]$e.split_from + ' names no lineage_parent - name the retired entry it replaced, or its first fire counts as a new class')
+      continue
+    }
+    if (-not $lp) { continue }
+    if (-not $byId.ContainsKey($lp)) { [void]$p.Add('entry ' + $id + ": lineage_parent '" + $lp + "' is not an entry in the registry"); continue }
+    $par = $byId[$lp]
+    if ($e.PSObject.Properties['split_from'] -and [string]$e.split_from -and -not ($par.PSObject.Properties['retired'] -and [string]$par.retired)) {
+      [void]$p.Add('entry ' + $id + ": split_from with lineage_parent '" + $lp + "', which is not retired - a split retires its parent")
+    }
+    $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+    $cur = $e
+    while ($cur) {
+      if (-not $seen.Add([string]$cur.id)) { [void]$p.Add('entry ' + $id + ': lineage_parent chain cycles back to ' + [string]$cur.id); break }
+      $cp = $cur.PSObject.Properties['lineage_parent']
+      if ($null -eq $cp -or -not [string]$cp.Value -or -not $byId.ContainsKey([string]$cp.Value)) { break }
+      $cur = $byId[[string]$cp.Value]
+    }
+  }
+  foreach ($e in @($Registry.entries)) {
+    if (-not $e) { continue }
+    if (-not ($e.PSObject.Properties['retired'] -and [string]$e.retired)) { continue }
+    if ($parents.Contains([string]$e.id)) { continue }
+    if ($e.PSObject.Properties['no_successor'] -and [string]$e.no_successor) { continue }
+    [void]$p.Add('entry ' + [string]$e.id + ': retired, but no entry names it as lineage_parent and it carries no no_successor reason')
+  }
+  return ,$p
 }
 
 function Get-AlertRegistryEntryProblems {
@@ -215,6 +333,7 @@ function Get-AlertRegistryEntryProblems {
       elseif ($rk -eq 'invalid') { [void]$p.Add($tag + ": resolver '" + $rs + "' is not lane:<path>, ruling:<id>, digest or unassigned:<yyyy-MM-dd>") }
     }
   }
+  foreach ($lpx in (Get-AlertLineageProblems $Registry)) { [void]$p.Add($lpx) }
   $rat = Get-AlertResolverRatchet $Registry
   if ($null -eq $rat.mark -and $rat.unassigned -gt 0) { [void]$p.Add('resolver_ratchet.unassigned_max is missing, so the grandfathered unassigned count has no mark') }
   elseif ($rat.over) { [void]$p.Add('resolver_ratchet: ' + $rat.unassigned + " live entries are 'unassigned', above the mark " + $rat.mark + ' - a new type must name its resolver, never join the grandfathered set') }

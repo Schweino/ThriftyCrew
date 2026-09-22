@@ -34,13 +34,14 @@
   Self-test: powershell -File grocery\audit-alert-census.ps1 -SelfTest
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
-param([switch]$SelfTest, [string]$QueueFile = '', [string]$OutFile = '', [string]$Today = '')
+param([switch]$SelfTest, [string]$QueueFile = '', [string]$OutFile = '', [string]$Today = '', [string]$ArchiveDir = '', [string]$RegistryFile = '', [string]$ClassOutFile = '')
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path $root -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\json-io.ps1')
-. (Join-Path $root 'triage-return-lib.ps1')   # Get-AlertCensusTypeDays: the one copy of days fired per type (ruling 6)
+. (Join-Path $root 'triage-return-lib.ps1')   # Get-AlertCensusTypeDays: the one copy of days fired per type (ruling 6); Get-ClassReturnRows: the one return rule
+. (Join-Path $root 'alert-registry-lib.ps1')  # Get-AlertClassKey: a type's failure class through the registry and its lineage
 
 # Ruling 4, 2026-09-10. Dates and counts are Brad's; kept here once so the report and the plan cannot disagree.
 $script:Targets = @(
@@ -50,46 +51,86 @@ $script:Targets = @(
 $script:QueueWindowDays = 30   # send-alert.ps1 drops resolved items older than 30 days
 
 function Get-CensusRows {
-  <# .SYNOPSIS Pure. Queue items -> one row per (date, type). #>
+  <# Pure. Queue items -> one row per (date, type). THE RETURN RULE IS triage-return-lib.ps1's Get-ClassReturnRows
+     (2026-09-22, plan-2026-09-22-10): this file's own closedBefore loop was a second copy of the rule and is gone.
+     Keyed by the queue type with no window, over the queue alone, it is exactly that loop, so returnrate30 reads the
+     same for the same input. #>
   param($Items)
-  $rows = @{}
-  $get = {
-    param($d, $t, $s)
-    $k = $d + '|' + $t
-    if (-not $rows.ContainsKey($k)) {
-      $rows[$k] = [pscustomobject]@{ date = $d; type = $t; subject = $s; alerts = 0; new_ids = 0; recurrences = 0; closes = 0; dispositions = @{}; returns = 0 }
-    }
-    $rows[$k]
-  }
-  $list = @($Items | Where-Object { $_ -and [string]$_.type -and [string]$_.date })
-  foreach ($grp in ($list | Group-Object { [string]$_.type })) {
-    $closedBefore = $false
-    foreach ($i in @($grp.Group | Sort-Object { [string]$_.ts })) {
-      $t = [string]$i.type; $s = [string]$i.subject
-      $r = & $get ([string]$i.date) $t $s
-      $r.alerts++; $r.new_ids++
-      if ($closedBefore) { $r.returns++ }
-      foreach ($rec in @($i.recurrences)) {
-        if (-not $rec -or -not [string]$rec.date) { continue }
-        $rr = & $get ([string]$rec.date) $t $s
-        $rr.alerts++; $rr.recurrences++
-      }
-      if ([string]$i.status -eq 'resolved') {
-        $closedBefore = $true
-        $cd = ''
-        try { if ([string]$i.resolved_ts) { $cd = ([datetime][string]$i.resolved_ts).ToString('yyyy-MM-dd') } } catch { $cd = '' }
-        if ($cd) {
-          $cr = & $get $cd $t $s
-          $cr.closes++
-          $disp = if ($i.PSObject.Properties['disposition'] -and [string]$i.disposition) { [string]$i.disposition } else { 'undispositioned' }
-          if ($cr.dispositions.ContainsKey($disp)) { $cr.dispositions[$disp]++ } else { $cr.dispositions[$disp] = 1 }
-        }
-      }
-    }
-  }
-  return @($rows.Values)
+  $crRows = Get-ClassReturnRows $Items { param($i) [string]$i.type } 0 'type'
+  return @($crRows)
 }
 
+# ---- THE CLASS RETURN RATE, THE SCOREBOARD NUMBER (2026-09-22, plan-2026-09-22-10) --------------------------------
+# The subject-keyed returnrate30 moved whenever a type was renamed or split, missed every close the 2026-09-17 reset
+# archived, and counted triage's own work items, which never return. Measured the day it landed: 126 of 383 (32.9%)
+# under the old rule against 148 of 328 (45.1%) under this one, with nothing in the estate changed. So the census prints
+# the decomposition beside the number, one arm per adjustment, each with its denominator, and keeps returnrate30 on
+# the marker for any reader keyed on it. NO NUMERIC TARGET is declared (Brad, 2026-09-20).
+function Get-CensusClassMeasure {
+  <# Pure. Queue items, archived items, the registry and the legacy rows -> the class rows (one per date and class,
+     triage-created items under 'triage-created:<class>') and four arms over the WindowDays ending on Today. #>
+  param($QueueItems, $ArchivedItems, $Registry, $LegacyRows, [datetime]$Today, [int]$WindowDays = 30)
+  $ccReg = $Registry
+  $ccCache = @{}
+  $ccUnion = Join-TriageQueueWithArchive $QueueItems $ArchivedItems
+  $ccUnion = @($ccUnion)
+  $startK = $Today.AddDays(-($WindowDays - 1)).ToString('yyyy-MM-dd')
+  $endK = $Today.ToString('yyyy-MM-dd')
+  $ccClassOf = { param($it) Get-AlertClassKey $ccReg ([string]$it.type) $ccCache }
+  $triTypes = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  # arm 1 works on stored rows, which know only a type, so a type is triage-created there when EVERY item of it is:
+  # a real type an agent once minted under keeps its pipeline alerts (dropping the whole type removed 96 alerts, not 55).
+  $realTypes = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($it in $ccUnion) {
+    if (-not $it -or -not [string]$it.type) { continue }
+    if (Test-TriageCreatedItem $it (& $ccClassOf $it)) { [void]$triTypes.Add([string]$it.type) } else { [void]$realTypes.Add([string]$it.type) }
+  }
+  foreach ($rt0 in @($realTypes)) { [void]$triTypes.Remove($rt0) }
+  $ccSum = {
+    param($rs, [string]$kn, $skip)
+    $a = 0; $rt = 0
+    foreach ($r in @($rs)) {
+      if (-not $r) { continue }
+      $d = [string]$r.date
+      if ([string]::CompareOrdinal($d, $startK) -lt 0 -or [string]::CompareOrdinal($d, $endK) -gt 0) { continue }
+      if (& $skip ([string]$r.$kn)) { continue }
+      $a += [int]$r.alerts; $rt += [int]$r.returns
+    }
+    [pscustomobject]@{ returns = $rt; alerts = $a }
+  }
+  $none = { param($k) $false }
+  $isTri = { param($k) $k.StartsWith('triage-created:', [StringComparison]::Ordinal) }
+  $arm0 = & $ccSum $LegacyRows 'type' $none
+  $arm1 = & $ccSum $LegacyRows 'type' { param($k) $triTypes.Contains($k) }
+  $rows1b = Get-ClassReturnRows $ccUnion { param($it) $t = [string]$it.type; if (Test-TriageCreatedItem $it (& $ccClassOf $it)) { 'triage-created:' + $t } else { $t } } $WindowDays 'type'
+  $arm1b = & $ccSum $rows1b 'type' $isTri
+  $rowsC = Get-ClassReturnRows $ccUnion { param($it) $c = & $ccClassOf $it; if (Test-TriageCreatedItem $it $c) { 'triage-created:' + $c } else { $c } } $WindowDays 'class'
+  $arm2 = & $ccSum $rowsC 'class' $isTri
+  $mintA = 0; $mintK = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  $out = New-Object System.Collections.Generic.List[object]
+  foreach ($r in @($rowsC)) {
+    if (-not $r) { continue }
+    $tc = (& $isTri ([string]$r.class))
+    $r | Add-Member -NotePropertyName triage_created -NotePropertyValue ([bool]$tc) -Force
+    [void]$out.Add($r)
+    $d = [string]$r.date
+    if ($tc -and [string]::CompareOrdinal($d, $startK) -ge 0 -and [string]::CompareOrdinal($d, $endK) -le 0 -and [int]$r.alerts -gt 0) { $mintA += [int]$r.alerts; [void]$mintK.Add([string]$r.class) }
+  }
+  return [pscustomobject]@{
+    rows = $out.ToArray(); union = $ccUnion.Count; archived = @($ArchivedItems).Count
+    arm0 = $arm0; arm1 = $arm1; arm1b = $arm1b; arm2 = $arm2
+    minted_alerts = $mintA; minted_keys = $mintK.Count; triage_types = $triTypes.Count
+  }
+}
+
+function Merge-CensusClassRows {
+  <# Pure. Stored class rows older than Cutoff are kept as written; everything on or after it is the fresh measurement. #>
+  param($Existing, $Fresh, [string]$Cutoff)
+  $out = @{}
+  foreach ($e in @($Existing)) { if ($e -and [string]::CompareOrdinal([string]$e.date, $Cutoff) -lt 0) { $out[[string]$e.date + '|' + [string]$e.class] = $e } }
+  foreach ($f in @($Fresh)) { if ($f -and [string]::CompareOrdinal([string]$f.date, $Cutoff) -ge 0) { $out[[string]$f.date + '|' + [string]$f.class] = $f } }
+  return @($out.Values | Sort-Object { [string]$_.date }, { [string]$_.class })
+}
 function Merge-CensusRows {
   <# .SYNOPSIS Pure. Rows on or after $Cutoff come from the queue; older rows keep the stored version when one exists,
      unless the queue saw MORE alerts that day than the stored row (a post-reset alert on the reset day itself). #>
@@ -247,6 +288,50 @@ if ($SelfTest) {
   $rz = Get-CensusReturnRate 0 0
   _T 'CLEAN TWIN a window with no alerts states that there is no rate rather than dividing by zero' `
     ($rz.measured -eq $false -and $rz.pct -eq 0 -and $rz.text -match 'no rate to state') ("text=" + $rz.text)
+  # ---- THE CLASS RETURN RATE (2026-09-22, plan-2026-09-22-10) ----
+  $cxBase = [ordered]@{ class = 'page'; condition = '3 scheduled-work-did-not-run-or-land'; emitter = 'x.ps1'; resolver = 'digest' }
+  function _CxE([string]$id, [string]$mode, [string]$key, [hashtable]$extra) { $h = [ordered]@{ id = $id; match = $mode; key = $key } + $cxBase; foreach ($k in $extra.Keys) { $h[$k] = $extra[$k] }; [pscustomobject]$h }
+  $cxReg = [pscustomobject]@{ entries = @(
+    (_CxE 'capture-watchdog' 'exact' 'grocery capture watchdog issue s' @{ retired = '2026-09-21 split' }),
+    (_CxE 'watchdog-run-record' 'exact' 'grocery capture watchdog run record' @{ split_from = 'plan-2026-09-21-5.json'; lineage_parent = 'capture-watchdog' }),
+    (_CxE 'guards-failed' 'exact' 'grocery guards failed board not published' @{}),
+    (_CxE 'commit-refused' 'exact' 'daily pipeline commit refused' @{}),
+    (_CxE 'triage-residual' 'prefix' 'triage residual' @{ class = 'review' })) }
+  function _CxI([string]$id, [string]$type, [string]$day, [string]$status, [hashtable]$extra) {
+    $h = [ordered]@{ id = $id; type = $type; subject = $type; date = $day; ts = ($day + 'T08:00:00'); status = $status; count = 1 }
+    if ($status -eq 'resolved') { $h['resolved_ts'] = ($day + 'T12:00:00'); $h['disposition'] = 'confirmed' }
+    foreach ($k in $extra.Keys) { $h[$k] = $extra[$k] }
+    [pscustomobject]$h
+  }
+  # MUST FIRE: the 09-21 split. The parent closed on 09-21, the successor fired on 09-22: one return of the class, none of the subject.
+  $cxQ = @(
+    (_CxI 'p1' 'grocery capture watchdog issue s' '2026-09-21' 'resolved' @{}),
+    (_CxI 's1' 'grocery capture watchdog run record' '2026-09-22' 'open' @{}),
+    (_CxI 'g1' 'grocery guards failed board not published' '2026-09-21' 'resolved' @{}),
+    (_CxI 'c1' 'daily pipeline commit refused' '2026-09-22' 'open' @{}),
+    (_CxI 't1' 'triage residual a leftover' '2026-09-22' 'open' @{ lane = 'weekly' }))
+  $cxLegacy = @(Get-CensusRows $cxQ)
+  $cxM = Get-CensusClassMeasure $cxQ @() $cxReg $cxLegacy ([datetime]'2026-09-22') 30
+  _T 'MUST FIRE a retired parent closed 09-21 and its successor new 09-22 score 1 class return and 0 subject returns' `
+    ($cxM.arm2.returns -eq 1 -and $cxM.arm0.returns -eq 0) ("class=" + $cxM.arm2.returns + " subject=" + $cxM.arm0.returns)
+  # MUST NOT FIRE: two different classes, one closed and one new, are not a return of each other.
+  $cxGc = @($cxM.rows | Where-Object { [string]$_.class -eq 'class:guards-failed' -or [string]$_.class -eq 'class:commit-refused' })
+  _T 'MUST NOT FIRE guards-failed closed and commit-refused new score 0 returns between them' `
+    ($cxGc.Count -ge 2 -and ((@($cxGc | Measure-Object -Property returns -Sum).Sum) -eq 0)) ("rows=" + $cxGc.Count)
+  # CLEAN TWIN: the triage residual is on the minting line, and in neither the numerator nor the denominator.
+  _T 'CLEAN TWIN a triage-residual item is counted on the minting line (1) and the rate is 1 of 4, not 1 of 5' `
+    ($cxM.minted_alerts -eq 1 -and $cxM.arm2.alerts -eq 4 -and $cxM.arm0.alerts -eq 5) ("minted=" + $cxM.minted_alerts + " classalerts=" + $cxM.arm2.alerts + " legacyalerts=" + $cxM.arm0.alerts)
+  # CLEAN TWIN: returnrate30 is still the subject-keyed, queue-only rule, so a reader keyed on it reads the same number.
+  $cxSum = Get-CensusSummary $cxLegacy ([datetime]'2026-09-22')
+  _T 'CLEAN TWIN the legacy arm equals the summary''s own returns over 30-day alerts (returnrate30 unchanged)' `
+    ($cxM.arm0.returns -eq $cxSum.Returns -and $cxM.arm0.alerts -eq $cxSum.W30.alerts) ("arm0=" + $cxM.arm0.returns + "/" + $cxM.arm0.alerts + " summary=" + $cxSum.Returns + "/" + $cxSum.W30.alerts)
+  # MUST FIRE: a close that exists ONLY in an archive file makes the next same-class id a return.
+  $cxArch = @((_CxI 'a1' 'grocery guards failed board not published' '2026-09-15' 'resolved' @{}))
+  $cxQ2 = @((_CxI 'a2' 'grocery guards failed board not published' '2026-09-22' 'open' @{}))
+  $cxWith = Get-CensusClassMeasure $cxQ2 $cxArch $cxReg @(Get-CensusRows $cxQ2) ([datetime]'2026-09-22') 30
+  $cxWithout = Get-CensusClassMeasure $cxQ2 @() $cxReg @(Get-CensusRows $cxQ2) ([datetime]'2026-09-22') 30
+  _T 'MUST FIRE a close found only in the archive makes the next same-class id a return (1 with it, 0 without)' `
+    ($cxWith.arm2.returns -eq 1 -and $cxWithout.arm2.returns -eq 0) ("with=" + $cxWith.arm2.returns + " without=" + $cxWithout.arm2.returns)
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail of $ran case(s)"; exit 1 }
   Write-Output "SELF-TEST PASS ($ran alert-census cases)"
@@ -275,6 +360,26 @@ if (-not (Test-Path -LiteralPath $outDir)) { New-Item -ItemType Directory -Force
 $json = @($merged | ForEach-Object { $_ | ConvertTo-Json -Depth 4 -Compress })
 [IO.File]::WriteAllText($OutFile, (($json -join "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
 
+# ---- THE CLASS RATE (2026-09-22, plan-2026-09-22-10): queue UNIONED with the archive, keyed by registry class ----
+if (-not $ArchiveDir) { $ArchiveDir = Join-Path $root 'out\archive' }
+if (-not $RegistryFile) { $RegistryFile = Join-Path $root 'alert-registry.json' }
+if (-not $ClassOutFile) { $ClassOutFile = Join-Path $root 'out\alert-census-class.jsonl' }
+$archivedR = Read-TriageArchivedItems $ArchiveDir
+$archived = @($archivedR)
+$regSt = Read-AlertRegistry $RegistryFile
+$cm = $null
+if ($regSt.ok) {
+  $cm = Get-CensusClassMeasure $items $archived $regSt.registry $merged $now 30
+  # one row per (date, class), so any later rate is re-derived from rows, never re-typed (.claude/rules/measurement.md)
+  $cExisting = @()
+  if (Test-Path -LiteralPath $ClassOutFile) { foreach ($line in [IO.File]::ReadAllLines($ClassOutFile)) { if ($line.Trim()) { try { $cExisting += ($line | ConvertFrom-Json) } catch { } } } }
+  $cMerged = @(Merge-CensusClassRows $cExisting $cm.rows ($now.AddDays(-29).ToString('yyyy-MM-dd')))
+  $cDir = Split-Path -Parent $ClassOutFile
+  if (-not (Test-Path -LiteralPath $cDir)) { New-Item -ItemType Directory -Force -Path $cDir | Out-Null }
+  $cJson = @($cMerged | ForEach-Object { $_ | ConvertTo-Json -Depth 4 -Compress })
+  [IO.File]::WriteAllText($ClassOutFile, (($cJson -join "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
+}
+
 $s = Get-CensusSummary $merged $now
 Write-Output ("alert-census: read " + $items.Count + " queue item(s); history " + $s.First + " to " + $now.ToString('yyyy-MM-dd') + "; " + $merged.Count + " day/type row(s) in " + $OutFile)
 $rate = Get-CensusReturnRate $s.Returns $s.W30.alerts
@@ -287,6 +392,17 @@ foreach ($t in $script:Targets) {
 Write-Output ("  RETURNS      last 30: {0} alert(s) were a type triage had already closed, across {1} of {2} type(s). Per-prevention tracking arrives with ruling 5." -f $s.Returns, $s.ReturnTypes, $s.Types.Count)
 Write-Output ("  RETURN RATE  last 30: {0} - THE SCOREBOARD NUMBER (Brad, 2026-09-20)." -f $rate.text)
 Write-Output "               No numeric target is stated: this is a BASELINE pending two weeks of data under the RESUME change, because an SLO declared before the data exists is a wish."
+$classRate = $null
+if ($cm) {
+  $classRate = Get-CensusReturnRate $cm.arm2.returns $cm.arm2.alerts
+  $r1 = Get-CensusReturnRate $cm.arm1.returns $cm.arm1.alerts
+  $r1b = Get-CensusReturnRate $cm.arm1b.returns $cm.arm1b.alerts
+  Write-Output ("  RETURN RATE (class) last 30: {0} - keyed by failure class with lineage, over queue and archive ({1} archived item(s) read), triage's own items out. The number the next 14 days are compared against." -f $classRate.text, $cm.archived)
+  Write-Output ("    decomposition, one adjustment per step: subject-keyed queue rows {0} (returnrate30) -> triage-created out {1} -> plus archived closes, item-level, 30-day window {2} -> plus class key with lineage {3}. It moved by measurement, not by any change in the estate." -f $rate.text, $r1.text, $r1b.text, $classRate.text)
+  Write-Output ("  TRIAGE MINTED last 30: {0} alert(s) under {1} key(s) across {2} queue type(s) - triage's own work items, counted here and outside the rate" -f $cm.minted_alerts, $cm.minted_keys, $cm.triage_types)
+} else {
+  Write-Output ("  RETURN RATE (class): NOT MEASURED - " + $regSt.why + ". returnrate30 above is the subject-keyed number only.")
+}
 Write-Output ("  RECURRING    {0} of {1} type(s) raised on 3 or more of the last {2} day(s). Top 10 by days:" -f $s.Recurring.Count, $s.Types.Count, $s.W30.days)
 foreach ($t in @($s.Recurring | Select-Object -First 10)) {
   $sub = $t.subject; if ($sub.Length -gt 80) { $sub = $sub.Substring(0, 80) }
@@ -296,4 +412,4 @@ $dTxt = (@($s.Dispositions.Keys | Sort-Object | ForEach-Object { $_ + '=' + $s.D
 Write-Output ("  CLOSES       last 30 by disposition: " + $(if ($dTxt) { $dTxt } else { 'none dated' }))
 # The marker contract is unchanged and returnrate30 is ADDED to it, never a replacement: a reader keyed on
 # quiet7 or returns30 goes on working, and the scoreboard number is on the line a gate log keeps.
-Exit-Guard -Name 'ALERT-CENSUS' -Code 0 -Summary ("quiet7={0}/{1} quiet30={2}/{3} alerts30={4} returns30={5} recurring={6} returnrate30={7}" -f $s.W7.quiet, $s.W7.days, $s.W30.quiet, $s.W30.days, $s.W30.alerts, $s.Returns, $s.Recurring.Count, $(if ($rate.measured) { ('{0:N1}%' -f $rate.pct) } else { 'none' }))
+Exit-Guard -Name 'ALERT-CENSUS' -Code 0 -Summary ("quiet7={0}/{1} quiet30={2}/{3} alerts30={4} returns30={5} recurring={6} returnrate30={7} classreturns30={8} classalerts30={9} classreturnrate30={10} minted30={11}" -f $s.W7.quiet, $s.W7.days, $s.W30.quiet, $s.W30.days, $s.W30.alerts, $s.Returns, $s.Recurring.Count, $(if ($rate.measured) { ('{0:N1}%' -f $rate.pct) } else { 'none' }), $(if ($cm) { $cm.arm2.returns } else { 'none' }), $(if ($cm) { $cm.arm2.alerts } else { 'none' }), $(if ($classRate -and $classRate.measured) { ('{0:N1}%' -f $classRate.pct) } else { 'none' }), $(if ($cm) { $cm.minted_alerts } else { 'none' }))

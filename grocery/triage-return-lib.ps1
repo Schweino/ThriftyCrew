@@ -90,6 +90,86 @@ function Join-TriageQueueWithArchive {
   return ,$out.ToArray()
 }
 
+# --- THE SCOREBOARD'S RETURN RULE, ONE COPY (2026-09-22, plan-2026-09-22-10 item discovered:class-keyed-return-rate) ---
+# audit-alert-census.ps1 scored returns with its own closedBefore loop over the queue alone while this lib, read by
+# triage-due and the gate, already unioned the archive (F1 in design/RCA-holistic-2026-09-22.md: two copies of one rule
+# that disagreed). The census now calls this for BOTH of its numbers: the legacy returnrate30 (KeyOf = the queue type,
+# WindowDays 0, the queue alone, exactly the loop it replaced) and the class rate (KeyOf = Get-AlertClassKey, the 30-day
+# window, queue UNIONED with the archive through Join-TriageQueueWithArchive).
+function Test-TriageCreatedItem {
+  <# Pure. Triage's own work item, which can never return: -Lane weekly, or a type whose class is a triage residual or
+     finding entry. Counted on its own line, never in the rate's numerator or denominator. #>
+  param($Item, [string]$ClassKey = '')
+  if (-not $Item) { return $false }
+  if ($Item.PSObject.Properties['lane'] -and [string]$Item.lane -eq 'weekly') { return $true }
+  return ($ClassKey -ceq 'class:triage-residual' -or $ClassKey -ceq 'class:triage-finding')
+}
+function Get-ClassReturnRows {
+  <# Pure. Items -> one row per (date, key): alerts (new ids plus recurrences dated that day), new_ids, recurrences,
+     closes and dispositions (dated on the close), returns, and the first subject seen. KeyOf maps an item to its key.
+     A new id is a RETURN when an EARLIER item of its key (ordered by ts) was closed as resolved; with WindowDays above
+     0 that earlier item's ts must also lie within WindowDays before its own (the queue's retention, as
+     Get-TriageReturnPriors reads it). WindowDays 0 is the census's original rule, kept for returnrate30. Never throws
+     on a bad row: an item with no key, type or date is skipped. #>
+  param($Items, [scriptblock]$KeyOf, [int]$WindowDays = 0, [string]$KeyName = 'type')
+  $rows = New-Object 'System.Collections.Generic.Dictionary[string,object]' ([StringComparer]::Ordinal)
+  $get = {
+    param($d, $k, $s)
+    $rk = $d + '|' + $k
+    if (-not $rows.ContainsKey($rk)) {
+      $h = [ordered]@{ date = $d }; $h[$KeyName] = $k
+      $h['subject'] = $s; $h['alerts'] = 0; $h['new_ids'] = 0; $h['recurrences'] = 0; $h['closes'] = 0; $h['dispositions'] = @{}; $h['returns'] = 0
+      $rows[$rk] = [pscustomobject]$h
+    }
+    $rows[$rk]
+  }
+  $groups = New-Object 'System.Collections.Generic.Dictionary[string,object]' ([StringComparer]::Ordinal)
+  foreach ($i in @($Items)) {
+    if (-not $i -or -not [string]$i.type -or -not [string]$i.date) { continue }
+    $k = ''
+    try { $k = [string](& $KeyOf $i) } catch { $k = '' }
+    if (-not $k) { continue }
+    if (-not $groups.ContainsKey($k)) { $groups[$k] = New-Object System.Collections.Generic.List[object] }
+    [void]$groups[$k].Add($i)
+  }
+  foreach ($k in $groups.Keys) {
+    $closedBefore = $false
+    $closedTs = New-Object System.Collections.Generic.List[datetime]
+    foreach ($i in @($groups[$k].ToArray() | Sort-Object { [string]$_.ts })) {
+      $s = [string]$i.subject
+      $r = & $get ([string]$i.date) $k $s
+      $r.alerts++; $r.new_ids++
+      if ($WindowDays -le 0) { if ($closedBefore) { $r.returns++ } }
+      else {
+        $its = $null
+        try { $its = [datetime]::Parse([string]$i.ts, [Globalization.CultureInfo]::InvariantCulture) } catch { $its = $null }
+        if ($null -ne $its) {
+          $cut = $its.AddDays(-$WindowDays)
+          foreach ($c in $closedTs) { if ($c -ge $cut) { $r.returns++; break } }
+        }
+      }
+      foreach ($rec in @($i.recurrences)) {
+        if (-not $rec -or -not [string]$rec.date) { continue }
+        $rr = & $get ([string]$rec.date) $k $s
+        $rr.alerts++; $rr.recurrences++
+      }
+      if ([string]$i.status -eq 'resolved') {
+        $closedBefore = $true
+        try { [void]$closedTs.Add([datetime]::Parse([string]$i.ts, [Globalization.CultureInfo]::InvariantCulture)) } catch { }
+        $cd = ''
+        try { if ([string]$i.resolved_ts) { $cd = ([datetime][string]$i.resolved_ts).ToString('yyyy-MM-dd') } } catch { $cd = '' }
+        if ($cd) {
+          $cr = & $get $cd $k $s
+          $cr.closes++
+          $disp = if ($i.PSObject.Properties['disposition'] -and [string]$i.disposition) { [string]$i.disposition } else { 'undispositioned' }
+          if ($cr.dispositions.ContainsKey($disp)) { $cr.dispositions[$disp]++ } else { $cr.dispositions[$disp] = 1 }
+        }
+      }
+    }
+  }
+  return ,@($rows.Values)
+}
+
 function Get-TriageReturnLines {
   <# .SYNOPSIS Pure. One '  RETURN:' line per open item whose type triage already closed inside the window. #>
   param($OpenItems, $QueueItems, [datetime]$Now)

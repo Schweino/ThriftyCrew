@@ -219,7 +219,7 @@ function Get-AlertCallSites {
         if (-not $subjects.Contains($v)) { [void]$subjects.Add($v) }
       }
     }
-    [void]$sites.Add([pscustomobject]@{ file = $File; line = $c.Extent.StartLineNumber; subjects = $subjects.ToArray(); unreadable = ($subjects.Count -eq 0); partial = $partial })
+    [void]$sites.Add([pscustomobject]@{ file = $File; line = $c.Extent.StartLineNumber; subjects = $subjects.ToArray(); unreadable = ($subjects.Count -eq 0); partial = $partial; nosubject = ($null -eq $arg) })
   }
   return ,$sites
 }
@@ -233,6 +233,10 @@ function Get-RegistryVerdict {
   $subjN = 0; $typeN = 0; $resolved = @{}
   foreach ($s in $Sites) {   # never @($Sites): PS 5.1 throws 'Argument types do not match' on @(List[object])
     if (-not $s) { continue }
+    # A CALL WITH NO -Subject IS A FINDING, NOT AN UNREADABLE SITE (2026-09-22, plan-2026-09-22-10 item 2026-09-20-cb8f30). send-alert
+    # has no default subject any more, so such a call sends '(no subject) from <emitter>', which no entry can match. 0 production
+    # sites the day this landed, so it is a gate at zero, not a ratchet.
+    if ($s.PSObject.Properties['nosubject'] -and $s.nosubject) { [void]$find.Add('NO SUBJECT call site ' + $s.file + ':' + $s.line + ' - would send under no registered type; pass -Subject naming a registered type'); continue }
     if ($s.unreadable) { [void]$unread.Add($s.file + ':' + $s.line); continue }
     foreach ($subj in @($s.subjects)) {
       $subjN++
@@ -374,7 +378,8 @@ param([string]$Title = '')
   $rvOk = [pscustomobject]@{ entries = @((_RvE 'a' 'lane:grocery/verify-price-flags.ps1'), (_RvE 'b' 'ruling:Q-4fc24c-knowledge-store'), (_RvE 'c' 'digest')) }
   $rvp = @((Get-AlertRegistryEntryProblems $rvOk))
   _T 'MUST NOT FIRE a lane:, a ruling: and a digest resolver each pass, with no ratchet mark needed' ($rvp.Count -eq 0) ($rvp -join ' | ')
-  $rvRet = [pscustomobject]@{ entries = @(([pscustomobject](([ordered]@{ id = 'old'; key = 'k old'; retired = '2026-09-21 split' }) + $rvBase))) }
+  # no_successor since the lineage rule (2026-09-22): a retired entry with nothing descending from it must say why.
+  $rvRet = [pscustomobject]@{ entries = @(([pscustomobject](([ordered]@{ id = 'old'; key = 'k old'; retired = '2026-09-21 split'; no_successor = 'fixture: the condition stopped existing' }) + $rvBase))) }
   $rvp = @((Get-AlertRegistryEntryProblems $rvRet))
   _T 'MUST NOT FIRE a retired entry (it never fires) needs no resolver' ($rvp.Count -eq 0) ($rvp -join ' | ')
   # the ratchet: two grandfathered entries against a mark AT the count, one step PAST it, and one under it
@@ -399,6 +404,41 @@ param([string]$Title = '')
   $rvDig = [pscustomobject]@{ entries = @(([pscustomobject](([ordered]@{ id = 'dg'; key = 'k dg'; match = 'exact'; class = 'digest'; condition = 'information'; emitter = 'x.ps1' })))) }
   $dDig = Get-AlertDelivery -Resolution (Resolve-AlertClass $rvDig 'k dg') -Subject 's'
   _T 'MUST FIRE a digest-class type with no resolver is QUEUED (never lost) and not mailed' ($dDig.queue -and -not $dDig.mail) ('queue=' + $dDig.queue + ' mail=' + $dDig.mail)
+  # ---- LINEAGE (2026-09-22, plan-2026-09-22-10, the class-keyed return rate) ----
+  function _LnE([string]$id, [hashtable]$extra) { $h = [ordered]@{ id = $id; key = ('k ' + $id); resolver = 'digest' } + $rvBase; foreach ($k in $extra.Keys) { $h[$k] = $extra[$k] }; return [pscustomobject]$h }
+  $lnPar = _LnE 'watch' @{ retired = '2026-09-21 split' }
+  $lnNoLp = [pscustomobject]@{ entries = @($lnPar, (_LnE 'watch-run-record' @{ split_from = 'plan-2026-09-21-5.json' })) }
+  $lnp = @((Get-AlertRegistryEntryProblems $lnNoLp))
+  _T 'MUST FIRE a registry entry with split_from and no lineage_parent is a finding' (@($lnp | Where-Object { $_ -match 'watch-run-record: split_from plan-2026-09-21-5\.json names no lineage_parent' }).Count -eq 1) ($lnp -join ' | ')
+  _T 'MUST FIRE and its retired parent, named by nothing, is a finding too' (@($lnp | Where-Object { $_ -match 'entry watch: retired, but no entry names it' }).Count -eq 1) ($lnp -join ' | ')
+  $lnLive = [pscustomobject]@{ entries = @((_LnE 'watch' @{}), (_LnE 'watch-run-record' @{ split_from = 'plan-2026-09-21-5.json'; lineage_parent = 'watch' })) }
+  $lnp = @((Get-AlertRegistryEntryProblems $lnLive))
+  _T 'MUST FIRE a split_from whose lineage_parent is not retired is a finding' (@($lnp | Where-Object { $_ -match "lineage_parent 'watch', which is not retired" }).Count -eq 1) ($lnp -join ' | ')
+  $lnGone = [pscustomobject]@{ entries = @((_LnE 'watch-run-record' @{ lineage_parent = 'nobody' })) }
+  $lnp = @((Get-AlertRegistryEntryProblems $lnGone))
+  _T 'MUST FIRE a lineage_parent that is not an entry is a finding' (@($lnp | Where-Object { $_ -match "lineage_parent 'nobody' is not an entry" }).Count -eq 1) ($lnp -join ' | ')
+  $lnOk = [pscustomobject]@{ entries = @($lnPar, (_LnE 'watch-run-record' @{ split_from = 'plan-2026-09-21-5.json'; lineage_parent = 'watch' })) }
+  $lnp = @((Get-AlertRegistryEntryProblems $lnOk))
+  _T 'MUST NOT FIRE a split_from naming its retired parent passes' ($lnp.Count -eq 0) ($lnp -join ' | ')
+  _T 'CLEAN TWIN the successor and its retired parent share one class key' (((Get-AlertClassKey $lnOk 'k watch-run-record') -eq 'class:watch') -and ((Get-AlertClassKey $lnOk 'k watch') -eq 'class:watch')) ((Get-AlertClassKey $lnOk 'k watch-run-record') + ' / ' + (Get-AlertClassKey $lnOk 'k watch'))
+  _T 'CLEAN TWIN an unregistered type keeps its own key, counted apart' ((Get-AlertClassKey $lnOk 'k nobody knows') -eq 'unregistered:k nobody knows') (Get-AlertClassKey $lnOk 'k nobody knows')
+  # ---- NO SUBJECT (2026-09-22, plan-2026-09-22-10 item 2026-09-20-cb8f30): send-alert has no default subject ----
+  $srcNs = @'
+Send-Alert -Body $b | Out-Null
+'@
+  $vNs = Get-RegistryVerdict $fxReg (Get-AlertCallSites (ConvertTo-ParsedAst $srcNs) 'fxns.ps1') @()
+  _T 'MUST FIRE a Send-Alert call with no -Subject is a NO SUBJECT finding, not an unreadable site' ($vNs.findings.Count -eq 1 -and $vNs.findings[0] -match 'NO SUBJECT call site fxns\.ps1:1' -and $vNs.unreadable.Count -eq 0) ($vNs.findings -join ' | ')
+  # ---- AGENT REFUSAL (Brad's ruling Q-sender-refuses-unregistered, 2026-09-22: "Refuse agents only") ----
+  $dAgU = Get-AlertDelivery -Resolution (Resolve-AlertClass $fxReg 'grocery tile links record a price the board no longer publishes') -Subject 's' -Lane 'weekly'
+  _T 'MUST FIRE an agent send (-Lane weekly) with an unregistered subject is stamped unregistered and refused' ($dAgU.unregistered -and (Test-AgentSendRefused $dAgU 'weekly' '')) ('unregistered=' + $dAgU.unregistered)
+  $dAgE = Get-AlertDelivery -Resolution (Resolve-AlertClass $fxReg 'grocery a question for brad') -Subject 's' -Escalates '2026-09-22-abcdef'
+  _T 'MUST FIRE an agent escalation (-Escalates) with an unregistered subject is refused' (Test-AgentSendRefused $dAgE '' '2026-09-22-abcdef') ('unregistered=' + $dAgE.unregistered)
+  $dPiU = Get-AlertDelivery -Resolution (Resolve-AlertClass $fxReg 'grocery tile links record a price the board no longer publishes') -Subject 's'
+  _T 'MUST NOT FIRE a pipeline send with an unregistered subject is never refused, and is flagged' ((-not (Test-AgentSendRefused $dPiU 'daily' '')) -and $dPiU.unregistered -and $dPiU.queue -and $dPiU.mail) ('unregistered=' + $dPiU.unregistered)
+  $dAgR = Get-AlertDelivery -Resolution (Resolve-AlertClass $fxReg 'grocery page held coverage') -Subject 's' -Lane 'weekly'
+  _T 'CLEAN TWIN an agent send with a registered subject passes as review, stamped with its entry' ((-not (Test-AgentSendRefused $dAgR 'weekly' '')) -and $dAgR.class -eq 'review' -and $dAgR.entry_id -eq 'held' -and -not $dAgR.mail) ('class=' + $dAgR.class + ' entry=' + $dAgR.entry_id)
+  $dAgX = Get-AlertDelivery -Resolution (Resolve-AlertClass $null 'x') -Subject 's' -Lane 'weekly'
+  _T 'MUST NOT FIRE an unreadable registry refuses no agent send (fail toward delivery)' (-not (Test-AgentSendRefused $dAgX 'weekly' '')) ('unregistered=' + $dAgX.unregistered)
   # the queue half's homework census
   _T 'MUST FIRE a body that hands a person a command is counted as homework' (Test-AlertBodyHomework 'Run it for the list; fix the lagging side.') 'no'
   _T 'MUST NOT FIRE a body that states a measurement only is not homework' (-not (Test-AlertBodyHomework '6 recipes held under ruling Q1; 0 drift.')) 'yes'
