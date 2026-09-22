@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Task version="1.3" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo>
-    <Description>capture-run -Kind ad : concurrent weekly-ad pull for every store whose ad rolled over today, then compare/guards/publish/commit via check-ad-cycles -NoPull.</Description>
-    <URI>\TC Grocery Ad Pulls 0700</URI>
+    <Description>14:15 daily: grades the browser-capture slot (grocery-browser-stores-refresh, 06:15-14:00) the moment it closes, so a Walmart/Sam's/Aldi/Fareway capture that never landed pages the SAME day (capture-watchdog.ps1 -SlotClose). The 10:30 watchdog runs inside that slot and can only say NOT YET; this run writes outbrowser-slot-close-DATE.json, and the next 10:30 run grades the day only if that stamp is missing (the backstop). Queue 2026-09-22-2000e1.</Description>
+    <URI>\TC Grocery Browser Slot Close 1415</URI>
   </RegistrationInfo>
   <Principals>
     <Principal id="Author">
@@ -13,10 +13,9 @@
   <Settings>
     <DisallowStartIfOnBatteries>true</DisallowStartIfOnBatteries>
     <StopIfGoingOnBatteries>true</StopIfGoingOnBatteries>
-    <ExecutionTimeLimit>PT2H</ExecutionTimeLimit>
+    <ExecutionTimeLimit>PT30M</ExecutionTimeLimit>
     <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
     <StartWhenAvailable>true</StartWhenAvailable>
-    <WakeToRun>true</WakeToRun>
     <IdleSettings>
       <Duration>PT10M</Duration>
       <WaitTimeout>PT1H</WaitTimeout>
@@ -27,10 +26,10 @@
   </Settings>
   <Triggers>
     <CalendarTrigger>
-      <StartBoundary>2026-08-20T07:00:00-05:00</StartBoundary>
+      <StartBoundary>2026-09-22T14:15:00-05:00</StartBoundary>
       <Repetition>
         <Interval>PT1H</Interval>
-        <Duration>PT6H</Duration>
+        <Duration>PT3H</Duration>
       </Repetition>
       <ScheduleByDay>
         <DaysInterval>1</DaysInterval>
@@ -40,7 +39,7 @@
   <Actions Context="Author">
     <Exec>
       <Command>C:\Codex\Python312\pythonw.exe</Command>
-      <Arguments>"C:\Users\Owner\.claude\skills\headless-exit.pyw" --headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\grocery\capture-run.ps1" -Kind ad</Arguments>
+      <Arguments>"C:\Users\Owner\.claude\skills\headless-exit.pyw" --headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-once-a-day.ps1" -Key browser-slot-close -Exe "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -ArgLine "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"C:\Codex\ThriftyCrew\grocery\capture-watchdog.ps1\" -SlotClose -Alert"</Arguments>
     </Exec>
   </Actions>
 </Task>

@@ -89,11 +89,11 @@ function Test-TaskWatched {
 
 function Get-HarvestTaskArgument {
   <#
-    .SYNOPSIS The action's argument string: conhost --headless, powershell, the wrapper, and -Domains when given.
+    .SYNOPSIS The action's argument string: headless-exit.pyw --headless, powershell, the wrapper, and -Domains when given.
     .DESCRIPTION Pure, so the self-test can compare it with the committed definition's <Arguments> exactly.
   #>
   param([Parameter(Mandatory=$true)][string]$Script, [string]$Domains = '')
-  $a = '--headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "{0}"' -f $Script
+  $a = '"C:\Users\Owner\.claude\skills\headless-exit.pyw" --headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "{0}"' -f $Script
   $d = @(($Domains -split ',') | ForEach-Object { $_.Trim() } | Where-Object { $_ })
   if ($d.Count) { $a += ' -Domains ' + ($d -join ',') }
   return $a
@@ -205,7 +205,7 @@ if ($SelfTest) {
   $old = Get-HarvestTaskArgument -Script 'C:\x\harvest-crawl.ps1' -Domains ''
   $oldSp = Get-HarvestTriggerSpec -At '18:00' -StartDate '2026-08-24' -EndBoundary ''
   T 'CLEAN TWIN with no domains and no end it builds the all-publisher daily crawl with its hourly catch-up' `
-    ($old.EndsWith('-File "C:\x\harvest-crawl.ps1"') -and $old.StartsWith('--headless ') -and $oldSp.Repeat -and $oldSp.Start -eq [datetime]'2026-08-24 18:00') `
+    ($old.EndsWith('-File "C:\x\harvest-crawl.ps1"') -and $old.StartsWith('"C:\Users\Owner\.claude\skills\headless-exit.pyw" --headless ') -and $oldSp.Repeat -and $oldSp.Start -eq [datetime]'2026-08-24 18:00') `
     ("arg=[" + $old + "] repeat=" + $oldSp.Repeat + " start=" + $oldSp.Start.ToString('s'))
   # CLEAN TWIN: the registration reads the spec, so a trigger cannot be built beside it.
   $nSpec = '$spec    = Get-Harvest' + 'TriggerSpec -At $At -StartDate $StartDate -EndBoundary $EndBoundary'
@@ -260,7 +260,9 @@ Write-Output ("install-harvest-task: watch entry OK for '{0}'" -f $TASK)
 # for about a second under an Interactive logon. The live task was rewrapped that day; ops\install-grocery-tasks.ps1's
 # self-test fails any committed definition that launches powershell.exe directly, so a re-run exporting the old shape
 # cannot be pushed.
-$action  = New-ScheduledTaskAction -Execute 'C:\WINDOWS\System32\conhost.exe' `
+# pythonw.exe + headless-exit.pyw since 2026-09-22 (queue 2026-09-19-4fc24c): conhost.exe --headless exits 0 whatever its
+# child returns. headless-exit.pyw shows no console and returns the child's code.
+$action  = New-ScheduledTaskAction -Execute 'C:\Codex\Python312\pythonw.exe' `
                                    -Argument (Get-HarvestTaskArgument -Script $script -Domains $Domains)
 $spec    = Get-HarvestTriggerSpec -At $At -StartDate $StartDate -EndBoundary $EndBoundary
 $trigger = New-ScheduledTaskTrigger -Daily -At $spec.Start

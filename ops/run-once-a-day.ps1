@@ -215,6 +215,7 @@ if ($SelfTest) {
       'brain-digest'     = @{ Exe = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe'; ArgLine = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\brain-digest.ps1" -Alert -Quiet' }
       'recall-sleep'     = @{ Exe = 'C:\Codex\Python312\python.exe'; ArgLine = '"C:\Users\Owner\.claude\skills\recall-sleep.py" --cwd "C:\Codex\ThriftyCrew" --commit --push' }
       'capture-watchdog' = @{ Exe = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe'; ArgLine = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\grocery\capture-watchdog.ps1" -Alert' }
+      'browser-slot-close' = @{ Exe = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe'; ArgLine = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\grocery\capture-watchdog.ps1" -SlotClose -Alert' }
     }
     $echoPs1 = Join-Path $tmp 'echo-args.ps1'
     [IO.File]::WriteAllText($echoPs1, ('[CmdletBinding(PositionalBinding = $false)]' + "`r`n" +

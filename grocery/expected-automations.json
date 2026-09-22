@@ -21,6 +21,12 @@
                               "allow_nonzero_exit":  true
                           },
                           {
+                              "name":  "TC Grocery Browser Slot Close 1415",
+                              "max_age_hours":  30,
+                              "why":  "14:15 grade of the browser-capture slot (grocery-browser-stores-refresh, 06:15-14:00) at the moment it closes, so a browser store with no capture pages the SAME day (capture-watchdog.ps1 -SlotClose, queue 2026-09-22-2000e1). Exits 1 when it finds a miss, like the watchdog.",
+                              "allow_nonzero_exit":  true
+                          },
+                          {
                               "name":  "TC Graph Nightly Matching",
                               "max_age_hours":  30,
                               "why":  "21:30 nightly graph matching (graph/pipeline/nightly.ps1 -HardStop 06:30 -MaxMinutes 150). Registered 2026-08-22, AFTER Brad\u0027s three-task rule was written, and never added here - so from that day nothing would have noticed if it stopped: health-heartbeat flagged it as TASK UNWATCHED every morning and the drift check is what finally named it (2026-08-24). proves = its own status stamp, which says the chain RAN. It cannot say the work LANDED: the chain writes it in its finally block, BEFORE the commit. run_log (2026-09-11) is what does: health-heartbeat judges the last session of the newest grocery/out/logs/graph-nightly-\u003cdate\u003e.log on its rc stamp, its commit verdict and its age, whatever LastTaskResult says, because the hourly skip repetitions overwrite that with 0 by morning. Founding case: the lane\u0027s commit was refused on every night it ran from 2026-09-07 to 09-10 and nothing paged. Keep run_log\u0027s name equal to nightly.ps1\u0027s Start-RunLog and Invoke-PipelineCommit names; the heartbeat\u0027s -SelfTest checks both.",
@@ -49,7 +55,11 @@
                               "name":  "TC Recall Sleep 0435",
                               "max_age_hours":  30,
                               "why":  "the knowledge store\u0027s nightly offline pass: harvest, join reflex outcomes from the transcripts, re-derive floors and weights, refresh drafts and failure classes, run the forgetting and clustering queues, finish with the gate. It ran as a Claude scheduled AGENT until 2026-09-09, against Brad\u0027s 2026-08-22 rule that Windows tasks are the only routines that fire - one more failure mode between the schedule and the work. The pass now stamps on every path, red or green, because a stamp written only on success reads as \u0027never ran\u0027 on exactly the mornings somebody needs to know it did.",
-                              "proves":  "ops/out/recall-sleep-stamp.json"
+                              "proves":  "ops/out/recall-sleep-stamp.json",
+                              "review_exit":  3,
+                              "review_escalate_nights":  3,
+                              "run_once_key":  "recall-sleep",
+                              "review_resolver":  "ruling:Q-4fc24c-knowledge-store"
                           },
                           {
                               "name":  "TC Brain Digest 0645",

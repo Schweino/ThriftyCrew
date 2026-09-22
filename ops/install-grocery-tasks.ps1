@@ -63,6 +63,8 @@ $OWNED = @(
   # never migrated is noticed rather than ignored. The definition FILE kept the 0930 name until 2026-09-18 (backlog
   # I230), when it was renamed to match; nothing keys on the file name but this line, since every audit reads <URI>.
   [pscustomobject]@{ Name = 'TC Grocery Capture Watchdog 1030'; File = 'tc-grocery-capture-watchdog-1030.xml'; Legacy = 'TC Grocery Capture Watchdog 0930' }
+  # 2026-09-22 (queue 2026-09-22-2000e1): grades the browser-capture slot when it closes, so a miss pages the same day.
+  [pscustomobject]@{ Name = 'TC Grocery Browser Slot Close 1415'; File = 'tc-grocery-browser-slot-close-1415.xml' }
 )
 
 function Get-XmlField {
@@ -116,27 +118,33 @@ function Test-NameMatchesTime {
 }
 
 function Test-HeadlessDefinition {
-  <# Does a committed task definition launch its console program through `conhost.exe --headless`? Returns ''
-     when it does or when it runs no console program at all (pythonw.exe), or the reason it does not.
+  <# Does a committed task definition launch its console program with NO window AND with its exit code intact? Returns
+     '' when it does (pythonw.exe "<...>\headless-exit.pyw" --headless "<program>" <arguments>, or a pythonw.exe script,
+     which owns no console) or the reason it does not.
 
-     WHY (2026-09-18, backlog I236). Brad saw a console flash every 15 minutes: `powershell.exe -WindowStyle
-     Hidden` under an Interactive logon still shows a window for about a second before it hides. That day every
-     PowerShell TC task was rewrapped ON THE SCHEDULER as Execute = conhost.exe, Arguments = `--headless
-     "<powershell.exe>" <the original arguments>`, and the committed XML was not touched, so -Verify went red on
-     all three tasks this file owns, and a registrar re-run from its old definition would have silently brought the
-     flash back (memory scheduled-tasks-run-under-headless-conhost). This check reads the FILES, so it runs in the
-     gate on a bare checkout and fails the push that commits an unwrapped definition, whoever exported it.
-     The console programs named here are the ones a TC task has launched; a new one is added here, not guessed. #>
+     WHY TWO PROPERTIES (2026-09-18, backlog I236; 2026-09-22, queue 2026-09-19-4fc24c). `powershell.exe -WindowStyle
+     Hidden` under an Interactive logon flashes a console, so every TC task was rewrapped as `conhost.exe --headless`,
+     and this check REQUIRED that wrapper. conhost.exe --headless exits 0 WHATEVER ITS CHILD RETURNS (measured
+     2026-09-22: a child exiting 7 came back 0), so from that day every wrapped task read LastTaskResult 0 and
+     grocery\health-heartbeat.ps1, which pages on a nonzero result, read failing runs as healthy: TC Daily Ratchets 0315
+     stamped rc=1 on three straight nights and read 0 (F4 in design\RCA-holistic-2026-09-22.md). headless-exit.pyw keeps
+     the no-window half and returns the child's code. This reads the FILES, so it runs in the gate on a bare checkout
+     and fails the push that commits either shape. The console programs named here are the ones a TC task has launched. #>
   param([Parameter(Mandatory=$true)][string]$Xml)
   $cmd  = [System.Net.WebUtility]::HtmlDecode((Get-XmlField -Xml $Xml -Tag 'Command'))
   $argText = [System.Net.WebUtility]::HtmlDecode((Get-XmlField -Xml $Xml -Tag 'Arguments'))
   $leaf = ([IO.Path]::GetFileName($cmd.Trim('"'))).ToLowerInvariant()
   if ($leaf -eq 'conhost.exe') {
-    if ($argText -match '^--headless\s+"[^"]+"\s') { return '' }
-    return ("runs conhost.exe without '--headless ""<program>""' first, so it opens a console: '{0}'" -f $argText)
+    return ("runs conhost.exe, which exits 0 whatever its child returns, so a failed run reads as success; launch it as Command pythonw.exe, Arguments ""<...>\headless-exit.pyw"" --headless ""<program>"" <arguments>: '{0}'" -f $argText)
+  }
+  if ($leaf -eq 'pythonw.exe') {
+    if ($argText -match '^"[^"]*\\headless-exit\.pyw"\s' -and $argText -notmatch '^"[^"]*\\headless-exit\.pyw"\s+--headless\s+"[^"]+"\s') {
+      return ("runs headless-exit.pyw without '--headless ""<program>""' after it, so it has nothing to launch: '{0}'" -f $argText)
+    }
+    return ''
   }
   if (@('powershell.exe', 'pwsh.exe', 'python.exe', 'cmd.exe') -contains $leaf) {
-    return ("launches {0} directly, which flashes a console window even with -WindowStyle Hidden; wrap it: Command conhost.exe, Arguments --headless ""{1}"" <arguments>" -f $leaf, $cmd)
+    return ("launches {0} directly, which flashes a console window even with -WindowStyle Hidden; wrap it: Command pythonw.exe, Arguments ""<...>\headless-exit.pyw"" --headless ""{1}"" <arguments>" -f $leaf, $cmd)
   }
   return ''
 }
@@ -407,23 +415,29 @@ if ($SelfTest) {
   $bareNightly = '<Task><Actions><Exec><Command>powershell.exe</Command><Arguments>-WindowStyle Hidden -File "x.ps1"</Arguments></Exec></Actions></Task>'
   $h2 = Test-HeadlessDefinition -Xml $bareNightly
   T 'MUST FIRE  a bare powershell.exe with no path (the pre-wrap nightly file) is reported too' ($h2 -like '*launches powershell.exe directly*') $h2
-  $noFlag = '<Task><Actions><Exec><Command>C:\WINDOWS\System32\conhost.exe</Command><Arguments>"powershell.exe" -File "x.ps1"</Arguments></Exec></Actions></Task>'
+  $noFlag = '<Task><Actions><Exec><Command>C:\Codex\Python312\pythonw.exe</Command><Arguments>"C:\Users\Owner\.claude\skills\headless-exit.pyw" "powershell.exe" -File "x.ps1"</Arguments></Exec></Actions></Task>'
   $h3 = Test-HeadlessDefinition -Xml $noFlag
-  T 'MUST FIRE  conhost.exe without --headless opens a console and is reported' ($h3 -like '*without*--headless*') $h3
+  T 'MUST FIRE  headless-exit.pyw with no --headless "<program>" has nothing to launch and is reported' ($h3 -like '*without*--headless*') $h3
   $wrapped = '<Task><Actions><Exec><Command>C:\WINDOWS\System32\conhost.exe</Command><Arguments>--headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\grocery\capture-run.ps1" -Kind daily</Arguments></Exec></Actions></Task>'
   $h4 = Test-HeadlessDefinition -Xml $wrapped
-  T 'MUST NOT FIRE  the wrapped 0800 definition as the live scheduler runs it is silent' ($h4 -ceq '') $h4
+  T 'MUST FIRE  the conhost --headless definition every TC task carried from 2026-09-18 is refused: conhost exits 0 whatever its child returns (queue 2026-09-19-4fc24c)' ($h4 -like '*exits 0 whatever its child returns*') $h4
+  $hx = $wrapped.Replace('<Command>C:\WINDOWS\System32\conhost.exe</Command><Arguments>--headless ', '<Command>C:\Codex\Python312\pythonw.exe</Command><Arguments>"C:\Users\Owner\.claude\skills\headless-exit.pyw" --headless ')
+  $h4b = Test-HeadlessDefinition -Xml $hx
+  T 'MUST NOT FIRE  the same definition launched through headless-exit.pyw is the accepted shape' (($h4b -ceq '') -and ($hx -ne $wrapped)) $h4b
   $pyw = '<Task><Actions><Exec><Command>C:\Codex\Python312\pythonw.exe</Command><Arguments>"x.py"</Arguments></Exec></Actions></Task>'
   $h5 = Test-HeadlessDefinition -Xml $pyw
   T 'MUST NOT FIRE  pythonw.exe has no console, so an unwrapped pythonw definition is silent' ($h5 -ceq '') $h5
   # MUST NOT FIRE: the drift check this file already did still reads a wrapped definition - the wrapper moves the
   # -WindowStyle Hidden flag behind --headless "<exe>", and the lost-Hidden check must still see it there.
   $wLive = [pscustomobject]@{
-    Actions  = @([pscustomobject]@{ Execute = 'C:\WINDOWS\System32\conhost.exe'; Arguments = '--headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\grocery\capture-run.ps1" -Kind daily' })
+    Actions  = @([pscustomobject]@{ Execute = 'C:\Codex\Python312\pythonw.exe'; Arguments = '"C:\Users\Owner\.claude\skills\headless-exit.pyw" --headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\grocery\capture-run.ps1" -Kind daily' })
     Triggers = @()
   }
-  $wd = Compare-TaskToXml $wLive $wrapped
-  T 'MUST NOT FIRE  a live wrapped task matching its wrapped file compares equal, Hidden flag and all' ($wd.Count -eq 0) ($wd -join '; ')
+  $wd = Compare-TaskToXml $wLive $hx
+  T 'MUST NOT FIRE  a live headless-exit task matching its headless-exit file compares equal, Hidden flag and all' ($wd.Count -eq 0) ($wd -join '; ')
+  $hxLost = $hx.Replace(' -WindowStyle Hidden', '')
+  $wdLost = Compare-TaskToXml $wLive $hxLost
+  T 'CLEAN TWIN  the drift check still reads the arguments behind the new launcher: a file that lost -WindowStyle Hidden is reported against the live task' (@($wdLost).Count -ge 1) ('diffs=' + @($wdLost).Count)
   # MUST NOT FIRE against the REAL committed directory: every definition shipped in this tree is headless.
   $hFiles = @(Get-ChildItem -Path $XMLDIR -Filter '*.xml' -File -ErrorAction SilentlyContinue)
   $hFind = @()
@@ -431,7 +445,7 @@ if ($SelfTest) {
     $r = Test-HeadlessDefinition -Xml ([IO.File]::ReadAllText($hf.FullName))
     if ($r) { $hFind += ($hf.Name + ': ' + $r) }
   }
-  T ('MUST NOT FIRE  every committed definition in this tree runs headless (' + $hFiles.Count + ' read)') (($hFiles.Count -ge 5) -and ($hFind.Count -eq 0)) ('read=' + $hFiles.Count + ' ' + ($hFind -join '; '))
+  T ('MUST NOT FIRE  every committed definition in this tree runs headless with its exit code intact (' + $hFiles.Count + ' read)') (($hFiles.Count -ge 11) -and ($hFind.Count -eq 0)) ('read=' + $hFiles.Count + ' ' + ($hFind -join '; '))
 
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); Write-GuardComplete -Name 'grocery-tasks' -Summary ("selftest-fail={0}" -f $fail); exit 2 }
   Write-Output 'SELF-TEST PASS: drift on arguments and on time, the lost-Hidden case, the conhost --headless wrapper on every committed definition, the 0930 name lie and its twins, the committed definitions, the registrar-vs-registry agreement (frozen half-applied rename + the live tables), and the WIDENED set - a committed definition from another lane''s registrar that the registry does not name, frozen from the estate''s real 2026-08-22..08-25 state'

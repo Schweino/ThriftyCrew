@@ -38,8 +38,8 @@
   </Triggers>
   <Actions Context="Author">
     <Exec>
-      <Command>C:\WINDOWS\System32\conhost.exe</Command>
-      <Arguments>--headless "powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\graph\pipeline\nightly.ps1" -HardStop 06:30 -MaxMinutes 150</Arguments>
+      <Command>C:\Codex\Python312\pythonw.exe</Command>
+      <Arguments>"C:\Users\Owner\.claude\skills\headless-exit.pyw" --headless "powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\graph\pipeline\nightly.ps1" -HardStop 06:30 -MaxMinutes 150</Arguments>
     </Exec>
   </Actions>
 </Task>

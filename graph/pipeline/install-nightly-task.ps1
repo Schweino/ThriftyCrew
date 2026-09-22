@@ -245,7 +245,9 @@ $argLine = ('-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "{0}" 
 # for about a second under an Interactive logon. The live task was rewrapped that day; ops\install-grocery-tasks.ps1's
 # self-test fails any committed definition that launches powershell.exe directly, so a re-run exporting the old shape
 # cannot be pushed.
-$action    = New-ScheduledTaskAction -Execute 'C:\WINDOWS\System32\conhost.exe' -Argument ('--headless "powershell.exe" ' + $argLine)
+# THROUGH headless-exit.pyw since 2026-09-22 (queue 2026-09-19-4fc24c): conhost.exe --headless exits 0 whatever its child
+# returns, so a failed night read LastTaskResult 0. pythonw.exe shows no console and headless-exit.pyw returns the child's code.
+$action    = New-ScheduledTaskAction -Execute 'C:\Codex\Python312\pythonw.exe' -Argument ('"C:\Users\Owner\.claude\skills\headless-exit.pyw" --headless "powershell.exe" ' + $argLine)
 # THE IN-NIGHT CATCH-UP. See the header for why StartWhenAvailable is not enough and what else was
 # considered. Built by lifting the Repetition off a throwaway -Once trigger, which is the only way
 # PowerShell 5.1 exposes a repetition on a daily trigger.
@@ -294,5 +296,5 @@ Write-Output ("exported the live definition to {0} ({1} bytes)" -f $xmlOut, $exp
 Write-Output ("Installed {0} for {1} daily (hard stop {2}, budget {3} min)." -f $taskName, $At, $HardStop, $MaxMinutes)
 Write-Output ("  catch-up: every hour for {0} h from {1}, so the last occurrence is {2}" -f `
               $CatchUpHours, $At, ([datetime]::ParseExact($At, 'HH:mm', $null).AddHours($CatchUpHours).ToString('HH:mm')))
-Write-Output ("  {0} {1}" -f 'conhost.exe --headless "powershell.exe"', $argLine)
+Write-Output ("  {0} {1}" -f 'pythonw.exe headless-exit.pyw --headless "powershell.exe"', $argLine)
 Write-Output '  Status after each run: grocery\out\logs\graph-nightly-status.json'

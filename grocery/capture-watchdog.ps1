@@ -24,7 +24,7 @@
 
   Anything that fails is ONE email, not six. Exit 0 = healthy, 1 = findings.
 #>
-param([switch]$Alert, [string]$OutDir = '', [string]$Today = '', [switch]$SelfTest)
+param([switch]$Alert, [string]$OutDir = '', [string]$Today = '', [switch]$SelfTest, [switch]$SlotClose)
 
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
@@ -37,7 +37,64 @@ $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 # Runs hidden from a scheduled task, so its findings only existed in an email.
 # The transcript keeps the evidence even when the alert de-dup suppresses the mail.
 # -SelfTest is excluded: it is a foreground developer action, not a scheduled run.
-$runLog = if ($SelfTest) { $null } else { Start-RunLog -Name 'capture-watchdog' -OutDir $OutDir -Today $todayS }
+$runLog = if ($SelfTest) { $null } elseif ($SlotClose) { Start-RunLog -Name 'capture-watchdog-slotclose' -OutDir $OutDir -Today $todayS } else { Start-RunLog -Name 'capture-watchdog' -OutDir $OutDir -Today $todayS }
+
+# ---- THE BROWSER-CAPTURE CHECK, SHARED BY THE 10:30 RUN AND THE SLOT-CLOSE RUN (2026-09-22, queue 2026-09-22-2000e1) ----
+# One table of which file proves each browser store landed on a day, one stamp path, one finding text: the two runs that
+# grade the same fact read it the same way.
+function Get-BrowserCaptureFiles([string]$Dir, [string]$DateS) {
+  return @{
+    'Walmart'    = Join-Path $Dir "captures\walmart-capture-$DateS.csv"
+    "Sam's Club" = Join-Path $Dir "captures\sams-capture-$DateS.csv"
+    'Aldi'       = Join-Path $Dir "captures\aldi-capture-$DateS.csv"
+    'Fareway'    = Join-Path $Dir "fareway\fareway-shop-$DateS.jsonl"
+  }
+}
+function Get-BrowserSlotStampPath([string]$Dir, [string]$DateS) { return (Join-Path $Dir "browser-slot-close-$DateS.json") }
+function Get-BrowserCaptureFindings {
+  param($V, [string]$TodayS, [string]$YesterdayS, [string]$SlotTxt)
+  $o = @()
+  if (@($V.MissingToday).Count) { $o += ("BROWSER CAPTURE MISSING TODAY: " + (@($V.MissingToday) -join ', ') + " - no capture dated $TodayS with a data row, and the producer's $SlotTxt has closed. The morning Chrome task (grocery-browser-stores-refresh, Brad's Chrome) did not land them, and for Walmart and Aldi nothing else can.") }
+  if (@($V.MissingYesterday).Count) { $o += ("BROWSER CAPTURE MISSING YESTERDAY: " + (@($V.MissingYesterday) -join ', ') + " - no capture dated $YesterdayS with a data row, and that day's $SlotTxt closed with nothing landed and no slot-close run graded it (the backstop). The morning Chrome task (grocery-browser-stores-refresh, Brad's Chrome) did not land them.") }
+  return ,$o
+}
+
+# ---- -SlotClose: GRADE THE BROWSER SLOT THE MOMENT IT CLOSES (2026-09-22, queue 2026-09-22-2000e1) --------------------
+# The 10:30 run sits INSIDE the Chrome task's slot (06:15-14:00), so it can only say NOT YET for today. Without this run a
+# real miss paged the next morning. TC Grocery Browser Slot Close 1415 runs `capture-watchdog.ps1 -SlotClose -Alert`
+# after the slot ends, grades ONLY the browser check, pages a miss the same day, and writes a stamp so the next
+# morning's backstop does not page it again. Nothing else in this file runs in this mode.
+if ($SlotClose -and -not $SelfTest) {
+  if (-not (Get-Command Get-ProducerSlot -ErrorAction SilentlyContinue)) { . (Join-Path $root 'capture-policy-lib.ps1') }
+  $scDay = [datetime]::ParseExact($todayS, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
+  $scSlot = Get-ProducerSlot 'grocery-browser-stores-refresh' $scDay
+  # -Today pins the clock to 15 minutes after the slot end, the task's own offset, so a fixture run is deterministic.
+  $scNow = if ($Today -and $scSlot) { $scSlot.end.AddMinutes(15) } else { Get-Date }
+  $scTxt = if ($scSlot) { ('slot ' + $scSlot.start.ToString('HH:mm') + '-' + $scSlot.end.ToString('HH:mm')) } else { 'no declared slot' }
+  if ($scSlot -and $scNow -lt $scSlot.end) {
+    Write-Output ("capture-watchdog -SlotClose: the $scTxt is still open at " + $scNow.ToString('HH:mm') + " - nothing graded, no stamp written (NOT YET)")
+    Write-Output 'CAPTURE-WATCHDOG-COMPLETE findings=0 not_yet=1 mode=slot-close'
+    exit 0
+  }
+  $scStores = Get-BrowserSurfaceStores -Root $root
+  $scV = Get-BrowserCaptureVerdict -Stores $scStores -TodayFiles (Get-BrowserCaptureFiles $OutDir $todayS) -YesterdayFiles $null -Now $scNow -Slot $scSlot
+  $scFind = Get-BrowserCaptureFindings -V $scV -TodayS $todayS -YesterdayS '' -SlotTxt $scTxt
+  $scFind = @($scFind)
+  $stamp = [ordered]@{ date = $todayS; graded_at = $scNow.ToString('s'); slot = $scTxt; stores = @($scStores); missing = @($scV.MissingToday) }
+  [IO.File]::WriteAllText((Get-BrowserSlotStampPath $OutDir $todayS), ($stamp | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
+  if ($scFind.Count) {
+    foreach ($f in $scFind) { Write-Output ('  FIND  ' + $f) }
+    if ($Alert) {
+      . (Join-Path $root 'alert-lib.ps1')
+      $scPtr = if ($runLog) { "Slot-close report for $todayS : $runLog" } else { 'Slot-close report: run grocery\capture-watchdog.ps1 -SlotClose' }
+      try { Send-AlertConditions -SubjectPrefix 'Grocery capture watchdog' -Conditions $scFind -ReportPointer $scPtr -DateStamp $todayS | Out-Null } catch { Write-Output ('  alert threw: ' + $_.Exception.Message) }
+    }
+  } else {
+    Write-Output ('  ok    browser capture: every browser store (' + (@($scStores) -join ', ') + ') has a capture dated ' + $todayS + ' at its slot close')
+  }
+  Write-Output ("CAPTURE-WATCHDOG-COMPLETE findings={0} not_yet=0 mode=slot-close" -f $scFind.Count)
+  exit $(if ($scFind.Count) { 1 } else { 0 })
+}
 
 # How long a registered-but-never-fired task is still innocently "waiting for its trigger".
 # One full daily cycle plus a margin: a task registered AFTER today's slot (exactly how the
@@ -529,6 +586,19 @@ if ($SelfTest) {
     $bvAll = @{ 'Store W' = $bvSam; 'Store S' = $bvSam; 'Store A' = $bvYes }
     $v5 = Get-BrowserCaptureVerdict -Stores $bvStores -TodayFiles $bvAll -YesterdayFiles $bvYday -Now ([datetime]'2026-09-22 14:30') -Slot $bvSlot
     if (@($v5.MissingToday).Count -eq 0 -and @($v5.NotYet).Count -eq 0 -and $bvSlot.end -eq [datetime]'2026-09-22 14:00') { Write-Output 'PASS  CLEAN TWIN a day with every capture landed after the slot reads clean, and the declared slot ends 14:00 on the given day' } else { Write-Output 'FAIL  a fully landed day was not clean, or the slot end moved'; $fail++ }
+    $v6 = Get-BrowserCaptureVerdict -Stores $bvStores -TodayFiles $bvToday -YesterdayFiles $bvYday2 -Now ([datetime]'2026-09-22 10:30') -Slot $bvSlot -YesterdayGraded $true
+    if (@($v6.MissingYesterday).Count -eq 0 -and @($v6.NotYet).Count -eq 2) { Write-Output 'PASS  MUST NOT FIRE yesterday graded at its slot close (stamp present) is not paged again by the morning backstop' } else { Write-Output ('FAIL  a slot-close-graded yesterday was paged again: ' + (@($v6.MissingYesterday) -join ',')); $fail++ }
+    # END TO END through the real script: -SlotClose over a fixture out\ with one of the browser stores landed.
+    $scOut = Join-Path $bvDir 'out'
+    New-Item -ItemType Directory -Path (Join-Path $scOut 'captures') -Force -ErrorAction Stop | Out-Null
+    [IO.File]::WriteAllText((Join-Path $scOut 'captures\walmart-capture-2026-09-22.csv'), "#tc-store 5361`nsku|Milk|3.12`n")
+    $scRun = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -SlotClose -Today '2026-09-22' -OutDir $scOut)
+    $scRc = $LASTEXITCODE
+    $scTxt = ($scRun -join "`n")
+    $scStamp = Join-Path $scOut 'browser-slot-close-2026-09-22.json'
+    if ($scRc -eq 1 -and $scTxt -match 'BROWSER CAPTURE MISSING TODAY: ' -and $scTxt -notmatch 'MISSING TODAY: Walmart' -and $scTxt -match 'findings=1 not_yet=0 mode=slot-close' -and (Test-Path -LiteralPath $scStamp)) { Write-Output 'PASS  MUST FIRE -SlotClose at 14:15 pages the stores with no capture today, SAME DAY, and writes the stamp the backstop reads' } else { Write-Output ("FAIL  -SlotClose did not grade the closed slot: rc=$scRc stamp=" + (Test-Path -LiteralPath $scStamp)); $fail++ }
+    $scYes = Get-BrowserCaptureVerdict -Stores $bvStores -TodayFiles $bvToday -YesterdayFiles $bvYday2 -Now ([datetime]'2026-09-23 10:30') -Slot (Get-ProducerSlot 'grocery-browser-stores-refresh' ([datetime]'2026-09-23')) -YesterdayGraded (Test-Path -LiteralPath $scStamp)
+    if (@($scYes.MissingYesterday).Count -eq 0) { Write-Output 'PASS  CLEAN TWIN the stamp that -SlotClose wrote is the one that stops the next morning paging the same miss' } else { Write-Output 'FAIL  the -SlotClose stamp did not reach the backstop'; $fail++ }
   } finally { Remove-Item -LiteralPath $bvDir -Recurse -Force -ErrorAction SilentlyContinue }
   Write-Output ("SELFTEST " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
   exit $(if ($fail) { 1 } else { 0 })
@@ -1082,12 +1152,7 @@ foreach ($f in ($flags | Where-Object { ((Get-Date) - $_.LastWriteTime).TotalDay
 # same stretch. A same-morning check turns that into hours: at 10:30 every one of the four must have a capture DATED
 # TODAY holding at least one data row, or it is scheduled work that did not land. One finding naming the stores.
 if (-not (Get-Command Get-BrowserStoresToDrive -ErrorAction SilentlyContinue)) { . (Join-Path $root 'capture-policy-lib.ps1') }
-$bcFiles = @{
-  'Walmart'    = Join-Path $OutDir "captures\walmart-capture-$todayS.csv"
-  "Sam's Club" = Join-Path $OutDir "captures\sams-capture-$todayS.csv"
-  'Aldi'       = Join-Path $OutDir "captures\aldi-capture-$todayS.csv"
-  'Fareway'    = Join-Path $OutDir "fareway\fareway-shop-$todayS.jsonl"
-}
+$bcFiles = Get-BrowserCaptureFiles $OutDir $todayS
 # The four stores come from stores.json (pull_profile.surface 'browser...'), never a copy here (queue 2026-09-19-405c73).
 # NOT YET IS NOT MISSING (2026-09-22, queue 2026-09-22-2000e1): graded against the PRODUCER's slot, never this run's
 # own 10:30 clock. Inside the slot today's stores are NOT YET (counted on the marker) and YESTERDAY's closed slot is
@@ -1095,23 +1160,15 @@ $bcFiles = @{
 $bcStores = Get-BrowserSurfaceStores -Root $root
 $bcDay = [datetime]::ParseExact($todayS, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
 $bcYS = $bcDay.AddDays(-1).ToString('yyyy-MM-dd')
-$bcYFiles = @{
-  'Walmart'    = Join-Path $OutDir "captures\walmart-capture-$bcYS.csv"
-  "Sam's Club" = Join-Path $OutDir "captures\sams-capture-$bcYS.csv"
-  'Aldi'       = Join-Path $OutDir "captures\aldi-capture-$bcYS.csv"
-  'Fareway'    = Join-Path $OutDir "fareway\fareway-shop-$bcYS.jsonl"
-}
+$bcYFiles = Get-BrowserCaptureFiles $OutDir $bcYS
+$bcYGraded = Test-Path -LiteralPath (Get-BrowserSlotStampPath $OutDir $bcYS)
 $bcSlot = Get-ProducerSlot 'grocery-browser-stores-refresh' $bcDay
 $bcNow = if ($Today) { $bcDay.AddHours(10.5) } else { Get-Date }
-$bcV = Get-BrowserCaptureVerdict -Stores $bcStores -TodayFiles $bcFiles -YesterdayFiles $bcYFiles -Now $bcNow -Slot $bcSlot
+$bcV = Get-BrowserCaptureVerdict -Stores $bcStores -TodayFiles $bcFiles -YesterdayFiles $bcYFiles -Now $bcNow -Slot $bcSlot -YesterdayGraded $bcYGraded
 $bcSlotTxt = if ($bcSlot) { ('slot ' + $bcSlot.start.ToString('HH:mm') + '-' + $bcSlot.end.ToString('HH:mm')) } else { 'no declared slot' }
 $bcNotYet = @($bcV.NotYet)
-if (@($bcV.MissingToday).Count) {
-  [void]$findings.Add(("BROWSER CAPTURE MISSING TODAY: " + (@($bcV.MissingToday) -join ', ') + " - no capture dated $todayS with a data row, and the producer's $bcSlotTxt has closed. The morning Chrome task (grocery-browser-stores-refresh, Brad's Chrome) did not land them, and for Walmart and Aldi nothing else can."))
-}
-if (@($bcV.MissingYesterday).Count) {
-  [void]$findings.Add(("BROWSER CAPTURE MISSING YESTERDAY: " + (@($bcV.MissingYesterday) -join ', ') + " - no capture dated $bcYS with a data row, and that day's $bcSlotTxt closed with nothing landed (graded today because this run sits inside today's slot). The morning Chrome task (grocery-browser-stores-refresh, Brad's Chrome) did not land them."))
-}
+foreach ($bcF in @(Get-BrowserCaptureFindings -V $bcV -TodayS $todayS -YesterdayS $bcYS -SlotTxt $bcSlotTxt)) { if ($bcF) { [void]$findings.Add($bcF) } }
+if ($bcYGraded) { [void]$ok.Add(("browser capture $bcYS was graded at its slot close (" + (Get-BrowserSlotStampPath $OutDir $bcYS) + "), so it is not graded again here")) }
 if ($bcNotYet.Count) {
   [void]$ok.Add(("browser capture NOT YET: " + ($bcNotYet -join ', ') + " - nothing dated $todayS yet, and the producer's $bcSlotTxt is still open (grocery-browser-stores-refresh). Not missing and not ok: graded after the slot, at tomorrow's run if not before."))
 }

@@ -1815,13 +1815,16 @@ function Get-BrowserCaptureVerdict {
      producer's slot is open and MISSING once it has closed. While today's slot is open, YESTERDAY (whose slot has
      closed) is graded instead, because the watchdog runs once a day inside the slot: without it a real miss would
      never page at all. A $null slot (an undeclared producer) is treated as closed. #>
-  param([string[]]$Stores, [hashtable]$TodayFiles, [hashtable]$YesterdayFiles, [datetime]$Now, $Slot)
+  param([string[]]$Stores, [hashtable]$TodayFiles, [hashtable]$YesterdayFiles, [datetime]$Now, $Slot, [bool]$YesterdayGraded = $false)
   $t = Get-BrowserStoresToDrive -Stores $Stores -CaptureFiles $TodayFiles
   $open = ($null -ne $Slot -and $Now -lt $Slot.end)
   $v = [pscustomobject]@{ MissingToday = @(); NotYet = @(); MissingYesterday = @(); SlotOpen = $open }
   if ($open) {
     $v.NotYet = @($t.Drive)
-    if ($YesterdayFiles) { $y = Get-BrowserStoresToDrive -Stores $Stores -CaptureFiles $YesterdayFiles; $v.MissingYesterday = @($y.Drive) }
+    # The slot-close run (TC Grocery Browser Slot Close 1415) grades a day at the moment its slot closes and leaves a
+    # stamp; yesterday is graded here only when that stamp is absent, so a miss pages once, the same day, and this
+    # next-morning grading is the BACKSTOP for a slot-close run that did not happen (machine asleep, task missing).
+    if ($YesterdayFiles -and -not $YesterdayGraded) { $y = Get-BrowserStoresToDrive -Stores $Stores -CaptureFiles $YesterdayFiles; $v.MissingYesterday = @($y.Drive) }
   } else {
     $v.MissingToday = @($t.Drive)
   }

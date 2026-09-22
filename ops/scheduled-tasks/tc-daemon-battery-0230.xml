@@ -38,8 +38,8 @@
   </Triggers>
   <Actions Context="Author">
     <Exec>
-      <Command>C:\WINDOWS\System32\conhost.exe</Command>
-      <Arguments>--headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-once-a-day.ps1" -Key daemon-battery -Exe "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -ArgLine "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"C:\Codex\ThriftyCrew\ops\run-daemon-battery.ps1\""</Arguments>
+      <Command>C:\Codex\Python312\pythonw.exe</Command>
+      <Arguments>"C:\Users\Owner\.claude\skills\headless-exit.pyw" --headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-once-a-day.ps1" -Key daemon-battery -Exe "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -ArgLine "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"C:\Codex\ThriftyCrew\ops\run-daemon-battery.ps1\""</Arguments>
     </Exec>
   </Actions>
 </Task>

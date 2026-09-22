@@ -369,6 +369,39 @@ function Get-RunLogVerdict {
 # signature hashes the sorted distinct keys. The displayed text keeps every number. A new task, a new condition on
 # the same task, or a condition clearing still moves the signature and pages; the same outage an hour older does not.
 # A HEALTHY -Alert run clears the stored signature, so an outage that recovers and comes back pages again.
+# ---- A PENDING DECISION IS NOT A BREAK (Brad's ruling on Q-4fc24c-1, 2026-09-22) ----------------------------------------
+# "Nothing broke, so it isn't reported as broken. The waiting groups come to you as decisions, one at a time, like today.
+# After 3 nights with no decision it gets reported as a real failure, so it can't sit forever."
+# A task row may declare review_exit (TC Recall Sleep 0435: 3 = nothing broke, only unruled clusters or forgetting
+# candidates wait), review_escalate_nights and run_once_key. That exit is a REVIEW until it has repeated on
+# review_escalate_nights consecutive nights, then TASK FAILED. CONSECUTIVE IS READ FROM THE TASK'S OWN RUN RECORD, the
+# run-once-a-day stamps (ops\out\logs\run-once\<key>-<day>.stamp, 'rc=<n>'), never from a counter kept here (F1).
+# Any other nonzero exit takes the failure path exactly as before. Honest only since the same day's launcher fix: under
+# conhost.exe --headless every exit read 0 (queue 2026-09-19-4fc24c).
+function Get-HbReviewNights {
+  <# Consecutive days, ending on the last run's day, whose run-once stamp records rc=<ReviewExit>. Pure over the directory. #>
+  param([string]$StampDir, [string]$Key, [int]$ReviewExit, [datetime]$LastRun, [int]$MaxWalk = 30)
+  $n = 0
+  $d = $LastRun.Date
+  for ($k = 0; $k -lt $MaxWalk; $k++) {
+    $p = Join-Path $StampDir ($Key + '-' + $d.ToString('yyyy-MM-dd') + '.stamp')
+    if (-not (Test-Path -LiteralPath $p)) { break }
+    $m = [regex]::Match(([IO.File]::ReadAllText($p)), '(?:^|\s)rc=(-?\d+)(?=\s|$)')
+    if (-not $m.Success -or [int]$m.Groups[1].Value -ne $ReviewExit) { break }
+    $n++
+    $d = $d.AddDays(-1)
+  }
+  return $n
+}
+function Get-HbExitClass {
+  <# Pure. healthy (0) | review (the declared review exit, under the limit) | failed (the review exit at or past the limit)
+     | nonzero (anything else: the existing failure path). A row with no review_exit passes -ReviewExit -1. #>
+  param([int64]$Res, [int]$ReviewExit, [int]$Nights, [int]$EscalateAfter)
+  if ($Res -eq 0) { return 'healthy' }
+  if ($ReviewExit -ge 0 -and $Res -eq $ReviewExit) { if ($Nights -ge $EscalateAfter) { return 'failed' } else { return 'review' } }
+  return 'nonzero'
+}
+
 function New-HbIssue([string]$Class, [string]$Subject, [string]$Text) {
   return [pscustomobject]@{ key = ($Class + '|' + $Subject); text = $Text }
 }
@@ -642,6 +675,24 @@ if ($SelfTest) {
     $rgStamps = ([regex]::Matches($hbSrc, [regex]::Escape('Write-HbRun' + 'Stamp -Path $hbStampFile'))).Count
     HbCase 'MUST FIRE  all THREE live exits write the run stamp - healthy, issues, and BLIND, which ran on this box and only refused to grade' ($rgStamps -eq 3) ($rgStamps.ToString())
     HbCase 'MUST FIRE  OUTPUT NOT CURRENT, TASK MISSING and TASK UNWATCHED are NOT eligible for the grace' (-not ($hbSrc -match 'Add-HbIssue ''OUTPUT NOT CURRENT''[^\r\n]*\$og') -and -not ($hbSrc -match 'Add-HbIssue ''TASK UNWATCHED''[^\r\n]*\$og'))
+    # ---- Q-4fc24c-1: a pending decision is a REVIEW until 3 consecutive nights (Brad, 2026-09-22) ----
+    HbCase 'MUST FIRE  exit 1 (a step broke) is never a review: it takes the failure path as before' ((Get-HbExitClass -Res 1 -ReviewExit 3 -Nights 5 -EscalateAfter 3) -eq 'nonzero')
+    HbCase 'MUST FIRE  AT THE BAR: exit 3 on 3 consecutive nights is FAILED' ((Get-HbExitClass -Res 3 -ReviewExit 3 -Nights 3 -EscalateAfter 3) -eq 'failed')
+    HbCase 'MUST NOT FIRE  exit 3 on 2 nights (one short of the bar) is a review, not FAILED' ((Get-HbExitClass -Res 3 -ReviewExit 3 -Nights 2 -EscalateAfter 3) -eq 'review')
+    HbCase 'MUST NOT FIRE  exit 3 on 1 night is a review, not FAILED' ((Get-HbExitClass -Res 3 -ReviewExit 3 -Nights 1 -EscalateAfter 3) -eq 'review')
+    HbCase 'CLEAN TWIN  exit 0 is healthy' ((Get-HbExitClass -Res 0 -ReviewExit 3 -Nights 0 -EscalateAfter 3) -eq 'healthy')
+    HbCase 'MUST FIRE  a row with no review_exit keeps every nonzero exit on the failure path' ((Get-HbExitClass -Res 3 -ReviewExit -1 -Nights 9 -EscalateAfter 3) -eq 'nonzero')
+    $rvDir = Join-Path $env:TEMP ('hb-rv-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+    New-Item -ItemType Directory -Path $rvDir -ErrorAction Stop | Out-Null
+    try {
+      foreach ($pair in @(@('2026-09-19', 1), @('2026-09-20', 3), @('2026-09-21', 3), @('2026-09-22', 3))) {
+        [IO.File]::WriteAllText((Join-Path $rvDir ('recall-sleep-' + $pair[0] + '.stamp')), ('2026-09-22T05:49:00 rc=' + $pair[1] + ' exe=python.exe'))
+      }
+      $rn3 = Get-HbReviewNights -StampDir $rvDir -Key 'recall-sleep' -ReviewExit 3 -LastRun ([datetime]'2026-09-22 04:35')
+      HbCase 'MUST FIRE  consecutive nights are read off the run-once stamps and stop at the first other exit (3,3,3 after a 1 = 3)' ($rn3 -eq 3) ([string]$rn3)
+      $rn2 = Get-HbReviewNights -StampDir $rvDir -Key 'recall-sleep' -ReviewExit 3 -LastRun ([datetime]'2026-09-21 04:35')
+      HbCase 'MUST NOT FIRE  the night before the bar reads 2 from the same stamps' ($rn2 -eq 2) ([string]$rn2)
+    } finally { Remove-Item -LiteralPath $rvDir -Recurse -Force -ErrorAction SilentlyContinue }
   } catch { HbCase ('a case threw: ' + $_.Exception.Message) $false }
 
   Write-Output ("health-heartbeat self-test: {0} case(s), {1} failed" -f $hbCases, $hbFail)
@@ -685,6 +736,18 @@ foreach ($t in @($cfg.windows_tasks)) {
     elseif ($tv.state -eq 'expired') { Add-HbIssue 'TASK STALE' $name ((Format-HbTaskStale $name $ageH $t.max_age_hours $t.why) + (' - trigger window expired ' + ([datetime]$tv.ended).ToString('yyyy-MM-ddTHH:mm') + ' and no trigger starts in the future')) }
     elseif ($og.held) { $heldLines.Add(("{0,-38} {1}" -f $name, $og.detail)) }
     else { Add-HbIssue 'TASK STALE' $name (Format-HbTaskStale $name $ageH $t.max_age_hours $t.why) }
+  }
+  elseif ($t.PSObject.Properties['review_exit'] -and $res -eq [int64]$t.review_exit) {
+    $rvKey = [string]$t.run_once_key
+    $rvNights = Get-HbReviewNights -StampDir (Join-Path $repo 'ops\out\logs\run-once') -Key $rvKey -ReviewExit ([int]$t.review_exit) -LastRun $last
+    if ($rvNights -lt 1) { $rvNights = 1 }   # LastTaskResult itself is one night; a missing stamp never makes it zero
+    $rvEsc = [int]$t.review_escalate_nights
+    $rvRes = [string]$t.review_resolver
+    if ((Get-HbExitClass -Res $res -ReviewExit ([int]$t.review_exit) -Nights $rvNights -EscalateAfter $rvEsc) -eq 'failed') {
+      Add-HbIssue 'TASK FAILED' $name ("TASK FAILED: '{0}' exit {1} (nothing broke, a decision is waiting) on {2} consecutive night(s) by its run-once stamps, at or past the {3}-night limit Brad set on Q-4fc24c-1, so it now counts as a failure. Rule the waiting items ({4}) - {5}" -f $name, $res, $rvNights, $rvEsc, $rvRes, $t.why)
+    } else {
+      $okLines.Add(("{0,-38} REVIEW exit {1}: nothing broke, a decision is waiting (night {2} of {3} before it counts as failed; resolver {4})" -f $name, $res, $rvNights, $rvEsc, $rvRes))
+    }
   }
   elseif ($res -ne 0 -and $t.allow_nonzero_exit) {
     # SOME TASKS REPORT FINDINGS THROUGH THEIR EXIT CODE (2026-08-22). capture-watchdog exits 1 whenever it
