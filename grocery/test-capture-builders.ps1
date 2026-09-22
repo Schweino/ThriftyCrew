@@ -166,6 +166,21 @@ T 'E  CLEAN TWIN: shipServed TRUE and the values match -> ok, no alert' `
 # BLIND: could-not-run is not a failure.
 T 'E  could-not-read-the-committed-blob is BLIND, not stale - it must not alert' `
   ((Test-EdgeServesPushed -ShipServed $true -CommittedGenerated '' -LiveGenerated '2026-09-03T08:06:59') -eq 'blind')
+# THE POINTER SHIPPED AND THE OBJECT DID NOT (2026-09-22, queue 2026-09-22-972de2). Built from BOTH recorded
+# occurrences and not only today's: 2026-09-22 (guards passed, post published at 08:17, hook refused the
+# commit, public/board.json left dirty) and 2026-09-09 (guards passed, commit refused the same way). Until
+# this landed, the branch printed "Readers keep the last good board" on both of them, which is a claim it
+# never tested and which is false the moment the post is live.
+T 'E  MUST-FIRE (pointer): 2026-09-22 - shipped, commit REFUSED, board.json still dirty -> pointer-without-object' `
+  ((Test-PointerShippedWithoutObject -ShipServed $true -ObjectLanded $false -ObjectDirty $true) -eq 'pointer-without-object')
+T 'E  MUST-FIRE (pointer): 2026-09-09 - the same shape a year of silence covered, still pointer-without-object' `
+  ((Test-PointerShippedWithoutObject -ShipServed $true -ObjectLanded $false -ObjectDirty $true) -eq 'pointer-without-object')
+T 'E  MUST-NOT-FIRE (pointer): 2026-09-03 - guards blocked, so no post points at anything -> nothing-shipped, the quiet line is kept' `
+  ((Test-PointerShippedWithoutObject -ShipServed $false -ObjectLanded $false -ObjectDirty $true) -eq 'nothing-shipped')
+T 'E  CLEAN TWIN (pointer): shipped AND the commit landed -> ok, so an ordinary good day is never paged' `
+  ((Test-PointerShippedWithoutObject -ShipServed $true -ObjectLanded $true -ObjectDirty $false) -eq 'ok')
+T 'E  MUST-NOT-FIRE (pointer): shipped, commit not landed, but the served files are CLEAN -> ok, because nothing this run built is missing' `
+  ((Test-PointerShippedWithoutObject -ShipServed $true -ObjectLanded $false -ObjectDirty $false) -eq 'ok')
 # THE TWO ADJACENT BLOCKS MUST STAY IN STEP. The served-dirty block was already gated on $shipServed and is
 # the reason it stayed correctly quiet on 2026-09-03; the edge check was written before it and never picked
 # up the same predicate. If a future editor un-syncs them, this is where it shows.

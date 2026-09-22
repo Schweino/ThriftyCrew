@@ -1242,6 +1242,40 @@ function Test-EdgeServesPushedBytes {
   if ($CommittedHash -eq $LiveHash) { return 'ok' }
   return 'stale'
 }
+function Test-PointerShippedWithoutObject {
+  <#
+    THE POINTER SHIPPED AND THE OBJECT DID NOT (2026-09-22, queue 2026-09-22-972de2).
+    .claude\rules\ops-and-gates.md: "Write the POINTED-TO object before the object that points to it.
+    Every interruption then leaves an object nothing refers to yet, which is a LEAK, and never a reference
+    to an object that is not there, which is CORRUPTION." This chain does it the other way round. The Ghost
+    post is upserted inside check-ad-cycles' ship path and carries board.json?v=<hash of the board it just
+    built>; public\board.json reaches readers only through the commit BELOW, which can fail on its own.
+    .claude\rules\site-and-publish.md already says the right order in words and nothing enforced it.
+
+    WHAT IT COST. On 2026-09-22 the ship path published the post at 08:17 asking for board.json?v=56fb50a601
+    and the commit was refused eighteen minutes later. From then until a human looked, the live post said
+    "week of 2026-09-22" while feed.thriftycrew.com served origin/main's 2026-09-21 board (blob e266e0d45),
+    and 583 recipe pages priced off a 2026-09-21 smp-feed. The branch below printed
+    "edge check skipped: ... Readers keep the last good board." Readers did NOT: they kept the last good
+    board.json underneath a post advertising a different one, and the check had never tested the claim.
+
+    WHY THE OLD SILENCE WAS RIGHT ONCE AND WRONG HERE. The skip was scoped on 2026-09-03 to the
+    guards-blocked day, where the chain deliberately ships nothing AND publishes no post, so nothing points
+    at anything missing. On 2026-09-09 the refused-commit case was folded into the same branch. That was
+    correct for the served-dirty ALERT one block up, which would have prescribed an inert repair, and wrong
+    for the edge check, which is the only thing still asking a question that matters when a commit is
+    refused. So this decides on the POINTER, not on the reason the commit failed, and covers every reason:
+    a refused hook, a non-fast-forward rejection, a push lock, a network failure.
+
+    Measured over the 28 daily logs on disk (2026-08-24 to 2026-09-22): the branch below was reached on 3
+    days and all 3 had shipServed=True, so all 3 were reassurances about a state nobody had read.
+  #>
+  param([bool]$ShipServed, [bool]$ObjectLanded, [bool]$ObjectDirty)
+  if (-not $ShipServed) { return 'nothing-shipped' }
+  if ($ObjectLanded)    { return 'ok' }
+  if ($ObjectDirty)     { return 'pointer-without-object' }
+  return 'ok'
+}
 # <<< EDGE-DECISION <<<
 
 # ---- READ-AFTER-WRITE: prove the EDGE serves what we just pushed (was run-daily-local's check) ---------
@@ -1347,8 +1381,21 @@ if ($shipServed -and $pushed) {
   $edgeWhy = if (-not $shipServed) { 'the chain staged INPUTS only, so no served file was pushed to verify' }
              elseif (-not $botCommitted) { 'the bot commit was REFUSED, so public\** never reached HEAD and there is nothing at the edge to verify' }
              else { 'the push did not land, so the edge cannot be serving this run yet' }
+  # "READERS KEEP THE LAST GOOD BOARD" IS A CLAIM, AND IT IS FALSE WHEN THE POST SHIPPED (2026-09-22, queue
+  # 2026-09-22-972de2). See Test-PointerShippedWithoutObject above for the whole account. The reassurance is
+  # kept ONLY for the run that shipped nothing, which is the case it was written for.
+  $servedDirtyNow = @(& git -C $repo status --porcelain -- 'public/board.json' 'public/smp-feed.json' | Where-Object { $_ })
+  $pointerState = Test-PointerShippedWithoutObject -ShipServed ([bool]$shipServed) -ObjectLanded ([bool]($botCommitted -and $pushed)) -ObjectDirty ([bool]$servedDirtyNow.Count)
   Write-Output ('edge check skipped: ' + (Test-EdgeServesPushed -ShipServed $edgeVerifiable -CommittedGenerated 'n/a' -LiveGenerated 'n/a') +
-                (' - shipServed={0} botCommitted={1} pushed={2}: {3}. Readers keep the last good board.' -f $shipServed, $botCommitted, $pushed, $edgeWhy))
+                (' - shipServed={0} botCommitted={1} pushed={2}: {3}.' -f $shipServed, $botCommitted, $pushed, $edgeWhy))
+  if ($pointerState -eq 'pointer-without-object') {
+    $pm = "The ship path PUBLISHED THE POST and the board it points at never shipped. The live post carries board.json?v=<hash of the board this run built>, and public\board.json reaches readers only by being committed and pushed (committing that file IS the deploy). shipServed=$shipServed botCommitted=$botCommitted pushed=$pushed, and these are still dirty in the working tree:`n`n" + (($servedDirtyNow | Select-Object -First 8) -join "`n") + "`n`nSo readers are being served the PREVIOUS board.json underneath a post that advertises a different one, and the recipe cards are pricing off the previous smp-feed.json. This is the pointer-before-object ordering in .claude\rules\ops-and-gates.md. The repair is to land the commit: fix what the hook refused (its words are on the commit line above), then commit the served paths and push, and re-read week_of off feed.thriftycrew.com with a cache-busting query."
+    Write-Output ('POINTER WITHOUT OBJECT: ' + ($pm -replace "`r?`n", ' '))
+    $failed += 'pointer-without-object'
+    try { Send-Alert -Subject "The post shipped and today's board did not - $today" -Body $pm | Out-Null } catch { Write-Output ('pointer-without-object alert threw: ' + $_.Exception.Message) }
+  } else {
+    Write-Output ('  readers keep the last good board: nothing this run built points at a board that did not ship (pointer state: ' + $pointerState + ')')
+  }
 }
 
 # ---- ASSERT THE FEED TRULY REFRESHED (was run-daily-local's assert) ------------------------------------

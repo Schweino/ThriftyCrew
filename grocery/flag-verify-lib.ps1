@@ -129,7 +129,14 @@ function Get-TcNameSizeText([string]$Name) {
     else { $u = '' }   # a unit this reader does not know is no reading at all, never a guess
     if ($u) { $wt = $w.Groups[1].Value + ' ' + $u }
   }
-  if ($wt -and $c.Success -and $c.Groups[2].Value -match '^(pk|pack)') { return ($c.Groups[1].Value + ' pk ' + $wt) }
+  # A COUNT IS A PACK COUNT WHATEVER THE STORE SPELLS IT (2026-09-22, queue 2026-09-22-a09096). This read
+  # 'pk' and 'pack' as pack-first and dropped a 'ct' or 'count' on the floor, so Sam's
+  # "Member's Mark Classic Hummus Singles 2.5 oz., 16 ct." was read as 2.5 oz rather than 16 x 2.5 oz, and
+  # $5.58 over one cup gave 2.2320/oz against the 0.1395/oz we correctly publish. No reading agreed with
+  # ours, so the verdict was wrong-price and the cell was quarantined: a CORRECT price taken off the board
+  # by its own verifier. Sam's writes this shape both ways within one capture ("15 oz., 6 pk." beside
+  # "10.75 oz., 12 ct."), so the two spellings are one form and are read as one.
+  if ($wt -and $c.Success -and $c.Groups[2].Value -match '^(pk|pack|ct|count)') { return ($c.Groups[1].Value + ' pk ' + $wt) }
   if ($wt) { return $wt }
   if ($c.Success) { return ($c.Groups[1].Value + ' ct') }
   return ''

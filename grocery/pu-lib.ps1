@@ -56,8 +56,20 @@ function Get-LinkPerUnit {
   #    match below cannot read "12" followed by "x", so it slid to the SECOND number and returned 12 fl oz for
   #    a 144 fl oz case - a live 12x error on soda|Hy-Vee ($0.3933/floz published against a true $0.0328).
   #    Same bug family as the "6-pack 12 fl oz" hyphen case; only the separator differs.
+  #    'ct' AND 'count' ARE THE SAME FORM AND WERE MISSING (2026-09-22, queue 2026-09-22-a09096). The ENGINE's
+  #    own size reader, Get-SizeAmount in pricing-math-lib.ps1, has read '24 ct 16.9 oz' as count-times-size
+  #    since it was written; this list said pk|pack|x only. Two implementations of one rule, and nothing proved
+  #    they agreed - the estate's number one root cause ([[same-fact-published-twice]], [[two-copies-of-a-rule]]).
+  #    Measured over comparison-2026-09-22 before the change: 26 board cells carry a size of this shape, pu-lib
+  #    returned $null for all 26, and the engine priced every one. A $null here is not a wrong number, it is a
+  #    BLIND SPOT - the same blind spot this file's header was written about ("185 of 2,156 linked everyday cells
+  #    were never checked by the factor guard, while the guard reported 0 mismatches"). It surfaced as a wrong
+  #    VERDICT rather than a wrong price: verify-price-flags asks pu-lib for the store's own readings, got none
+  #    from the size field, fell back to a name reading that dropped the pack count, and condemned Sam's hummus
+  #    ($5.58 / 16 x 2.5 oz = $0.1395/oz, exactly what we publish) as wrong-price. The cell was quarantined.
+  #    ops\audit-size-parser-parity.ps1 is what now keeps the two readers agreeing.
   if ($unit -in @('oz','floz','lb','gallon')) {
-    $mp = [regex]::Match($s, '([0-9]+)\s*-?\s*(?:pk|pack|x|\u00d7)\s*-?\s*([0-9]+(?:\.[0-9]+)?|\.[0-9]+)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
+    $mp = [regex]::Match($s, '([0-9]+)\s*-?\s*(?:ct|count|pk|packs?|x|\u00d7)\s*-?\s*([0-9]+(?:\.[0-9]+)?|\.[0-9]+)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
     if ($mp.Success) {
       $n = [double]$mp.Groups[1].Value * [double]$mp.Groups[2].Value
       $un = ($mp.Groups[3].Value -replace '\s','') -replace 'fl','' -replace '^gallon$','gal' -replace '^quart$','qt' -replace '^pound$','lb' -replace '^(ltr|liters?|litres?)$','l'
@@ -70,7 +82,10 @@ function Get-LinkPerUnit {
     # null and the cell went unpriced. Resolved here, in the one block that owns pack-first semantics.
     # The trailing weight is REQUIRED by the regex, so a bare "2 pk" (two CARTONS, count-per-carton unknown)
     # can never match - that shape stays with the generic rules exactly as before.
-    $mp = [regex]::Match($s, '([0-9]+)\s*-?\s*(?:pk|pack|x|\u00d7)\s*-?\s*([0-9]+(?:\.[0-9]+)?|\.[0-9]+)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
+    # ct|count added 2026-09-22 with the branch above, so ONE token list answers both. On an 'each' commodity
+    # this lands on the answer the generic match already gave ($un='ct' -> price/N); on 'dozen' it closes the
+    # same gap 'pk' was added to close, and agrees with Convert-ToUnit's dozen branch in pricing-math-lib.
+    $mp = [regex]::Match($s, '([0-9]+)\s*-?\s*(?:ct|count|pk|packs?|x|\u00d7)\s*-?\s*([0-9]+(?:\.[0-9]+)?|\.[0-9]+)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
     if ($mp.Success) {
       $cnt = [double]$mp.Groups[1].Value
       if ($cnt -gt 0) {

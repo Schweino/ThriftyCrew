@@ -1,0 +1,297 @@
+{
+  "generated": "2026-09-22T13:10:00",
+  "round": 1,
+  "lane": "money",
+  "board_week": "2026-09-22",
+  "queue_ids_seen": [
+    "2026-09-18-8491bf", "2026-09-18-a0c785", "2026-09-18-ceab00",
+    "2026-09-19-4fc24c", "2026-09-19-dc1b5b", "2026-09-19-8a3090", "2026-09-19-c9f0f3", "2026-09-19-2c96d8",
+    "2026-09-20-1b8544", "2026-09-20-ca2591", "2026-09-20-bec597", "2026-09-20-cb8f30",
+    "2026-09-21-149497", "2026-09-21-7d64a6", "2026-09-21-85c3b7", "2026-09-21-dca1a1", "2026-09-21-115180",
+    "2026-09-21-6b17b1", "2026-09-21-d16398", "2026-09-21-de4f72", "2026-09-21-594c27", "2026-09-21-a25dc0",
+    "2026-09-21-b96f21", "2026-09-21-4b973e", "2026-09-21-274e4b",
+    "2026-09-22-2dae07", "2026-09-22-175249", "2026-09-22-a09096", "2026-09-22-a2af45", "2026-09-22-148d78",
+    "2026-09-22-7c932a", "2026-09-22-972de2", "2026-09-22-2000e1"
+  ],
+  "routing_artifact": null,
+  "routing_artifact_none_because": "no item here changes a matching rule. Nothing in this plan edits commodities.json, category-excludes.json, commodity-search.json or any include/exclude, so no product changes which commodity claims it and a before/after routing corpus would measure nothing. The two code items are measured where their impact actually lands: cells (a09096, the size readers over every size string on comparison-2026-09-22) and callers (148d78 and 972de2, the commit-time gate and the daily ship's end-state check).",
+
+  "the_standard_for_root_cause_on_this_run": "reliability-craft/rca-and-chaos.md, The four techniques: ask why of each answer until a CHANGEABLE CONDITION appears, and 'a root cause you can fix without changing how work is done is usually not the root cause yet'. data-quality-craft/diagnosing-a-failure.md section 3: fixing the one rule buys one correction; putting a check on the CLASS buys every future one. Each item below therefore carries instance, whys rung by rung, process_gap, class, and the check with its must-fire.",
+
+  "do_the_three_items_share_one_process_gap": "YES, and it is stated once here rather than three times below. EVERY ONE OF THE THREE IS A CLAIM VERIFIED AGAINST THE CLAIMANT'S OWN ARTIFACT INSTEAD OF AGAINST THE THING THE CLAIM IS ABOUT. engine/cost-recipes.ps1 proved its new output shape against the fixtures it chose, never against the commit-time gate that judges the file it writes (148d78). check-ad-cycles reported 'the board, the feed and the cards are published' from its own local export, never from the bytes an Omaha reader fetches, and the one check that does ask that question turns itself off in exactly the runs where the answer is bad (972de2). verify-price-flags asked whether the board's per-unit is real by DERIVING a per-unit a second time through a weaker copy of the engine's own rule, rather than by asking the engine (a09096). In all three the checking party substituted something it controls for the thing it is asserting, and in all three every stage reported success while the outcome was wrong. That is a pattern measured across three items on one day, not a single line of code: the corrective action is that a claim about an END STATE is checked against that end state, which is why the fixes below are an end-state check (972de2), a boundary the producer's real output can reach (148d78) and a parity assertion between two derivers (a09096), and not three repaired values.",
+
+  "items": [
+    {
+      "queue_id": "2026-09-22-148d78",
+      "subject": "Daily pipeline commit REFUSED - 2026-09-22",
+      "classification": "infra",
+
+      "evidence": [
+        "capture-run-daily-2026-09-22.log:211 | commit: REFUSED (git exit 1) - a hook or git itself rejected this commit. NOT pushing; the working tree is untouched.",
+        "capture-run-daily-2026-09-22.log:213 | commit:hook>   BOM CHANGED   meal-prep/db/cost-flags.txt - a read/write pair stripped or added a byte-order mark",
+        "capture-run-daily-2026-09-22.log:212 | verify-bulk-edit: 625 modified tracked file(s) compared against HEAD; 0 .ps1 parsed clean; 1 finding(s)",
+        "measured before the change: git cat-file -s HEAD:meal-prep/db/cost-flags.txt = 4392, and its first six bytes are EF BB BF 45 74 68 (a UTF-8 BOM, then 'Eth'). The working copy is 0 bytes.",
+        "meal-prep/db/costed.stamp.json for this run: flags_set_aside.held_recipes = 6, and no LIVE line, so the empty file is the CORRECT output of the 2026-09-21 Split-CostFlags change (queue 2026-09-20-6c14f6).",
+        "ops/verify-bulk-edit.ps1:67-68 (before the change): $b = (Before starts EF BB BF); $a = (After starts EF BB BF); return ($b -eq $a). With a 0-byte After, $a is false and $b is true, so a legitimately empty file scores as a stripped BOM."
+      ],
+
+      "instance": "A 0-byte meal-prep/db/cost-flags.txt scored as a stripped BOM, the pre-commit hook refused the whole 625-file daily commit, and public/board.json and public/smp-feed.json rode the refusal.",
+
+      "five_whys": [
+        "1. Why did the daily pipeline commit get refused? Pre-commit ops/verify-bulk-edit.ps1 reported BOM CHANGED on meal-prep/db/cost-flags.txt and the hook blocks on any finding.",
+        "2. Why did it report a BOM change? HEAD's copy is 4,392 bytes opening EF BB BF and the working copy is 0 bytes, and Test-BomUnchanged compares only 'does byte 0 begin a BOM' on each side.",
+        "3. Why does 0 bytes read as a stripped BOM? Because the predicate has no case for an EMPTY after-file. A real strip KEEPS the content and loses three bytes (4392 -> 4389); it can never yield 0. The check was simply undefined at that boundary and defaulted to its worst reading.",
+        "4. Why was the boundary never defined? The file was written on 2026-09-05 from the six defects of one bulk-edit sweep and its fixtures are those six. Every one had a non-empty after-file, so no case ever asked what the check should say about an input class that had not yet occurred.",
+        "5. Why did a never-before-seen input class reach a production gate untested? Because the change that creates it, Split-CostFlags in meal-prep/engine/cost-recipes.ps1 (2026-09-21, queue 2026-09-20-6c14f6), was verified against its own fixtures and its own end-to-end drill, and nothing ran its REAL output past the gates that judge the artifact it writes.",
+        "6. Why is nobody responsible for that? PROCESS GAP (below). The producer's evidence and the consumer's gate are written by different actors at different times and never meet, so the first integration test is the unattended 08:00 production run, where a refusal is a silent hold rather than a review."
+      ],
+      "process_gap": "A change is accepted on the evidence its AUTHOR chose. Nothing requires a writer's real output to be run past the commit-time gates that judge the file it writes, so the first time the two meet is the unattended production run. Same shape as 2026-09-21's matching-soundness finding (plan-2026-09-21-7.json, a rule edit reviewed at nobody's desk).",
+      "class": "Any writer change that produces a new OUTPUT SHAPE for an artifact a commit-time gate judges byte-wise: empty, absent, truncated, re-encoded, much larger. The gate has cases only for the shapes that existed on the day it was written, and its verdict on a shape it has no case for is arbitrary rather than absent.",
+      "check_that_closes_the_class": "ops/verify-bulk-edit.ps1: Test-BomUnchanged now cases the EMPTY boundary explicitly, and a new Test-FileEmptied names every tracked file that held bytes at HEAD and holds none now, as an EMPTIED note rather than a finding, so a legitimately empty output passes and an unexpected one is never silent. The hook's summary line now carries the emptied count beside the finding count.",
+
+      "surface_fix": {
+        "what": "an empty after-file is not a BOM change, and an emptying is stated out loud",
+        "files": ["ops/verify-bulk-edit.ps1"],
+        "exact_change": "Test-BomUnchanged returns $true when After is $null or zero length; new Test-FileEmptied returns true when Before had bytes and After has none; the live path adds an EMPTIED (not a finding) block and the summary line reports '$($emptied.Count) emptied'."
+      },
+
+      "root_cause": "verify-bulk-edit's byte invariants were fixtured from the six defects of one 2026-09-05 sweep, every one with a non-empty after-file, so the empty boundary was undefined; and nothing in this estate runs a changed WRITER's real output past the commit gate that judges its file before that run happens unattended in production.",
+
+      "root_fix": {
+        "what": "case the empty boundary on BOTH sides of the bar, one byte apart, and make an emptying visible on every commit so no future empty output is decided silently",
+        "files": ["ops/verify-bulk-edit.ps1"],
+        "exact_change": "MUST NOT FIRE at the bar (after length 0) and MUST FIRE one byte past it (after length 1, a real strip that keeps content) are both frozen fixtures built from the real refusal: HEAD 4,392 bytes opening EF BB BF 45, working copy 0 bytes. Test-FileEmptied adds a MUST FIRE and a MUST NOT FIRE of its own so the exemption cannot be silent."
+      },
+
+      "leaves_open": "the EMPTY shape only, and one dead invariant beside it: ops/verify-bulk-edit.ps1's Test-EolUnchanged (line 71) has ZERO production call sites - it is called only from its own -SelfTest - so the hook's advertised 'line-ending style' invariant has never once run on a staged file. 1 dead invariant. The general class (a gate with no case for any OTHER new output shape) is not closed by this fix.",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-22-c4495c",
+
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "every call site of ops/verify-bulk-edit.ps1: the pre-commit hook (ops/hooks/pre-commit, the only production caller, judging git diff --cached), ops/test-precommit-hook.ps1 and run-gates' discovery of its -SelfTest. The behaviour change is confined to modified tracked files whose working copy is zero bytes; every non-empty comparison is byte-for-byte what it was.",
+        "affected_now": 1,
+        "names": ["meal-prep/db/cost-flags.txt"],
+        "risk": "none measured that loses detection. A BOM strip preserves content, so it cannot produce a zero-byte after-file; the exemption is unreachable by the defect the check exists for. Proved end to end in a throwaway repo: arm 2, a BOM-carrying file whose content survives and whose BOM does not, still exits 1 with BOM CHANGED.",
+        "cell_effects": []
+      },
+
+      "freshness": "measured against the working tree at 2026-09-22 13:05 and HEAD 2ece9c5a2. cost-flags.txt was 0 bytes and HEAD's blob 4,392 bytes opening EF BB BF. If a later cost-recipes run writes flag lines, the file stops being empty and this item's instance stops reproducing; the fixtures are frozen bytes and are unaffected.",
+
+      "proof": {
+        "guard_or_fixture": "ops/verify-bulk-edit.ps1 -SelfTest (4 new cases) plus a two-arm end-to-end drill of the LIVE path in a throwaway git repo",
+        "must_fire_case": "ONE BYTE PAST THE BAR: Before = EF BB BF 45 74 68, After = 45. Test-BomUnchanged must still return false, and end to end the script must exit 1 printing 'BOM CHANGED'. Plus Test-FileEmptied must fire on the emptied file so the exemption is never silent.",
+        "clean_twin": "AT THE BAR: Before = EF BB BF 45 74 68, After = zero bytes. Test-BomUnchanged returns true and end to end the script exits 0 with an EMPTIED line naming the file and its HEAD size. And Test-FileEmptied must NOT fire on a file that still carries bytes, or the note would name every file.",
+        "commands": [
+          "powershell -File ops\\verify-bulk-edit.ps1 -SelfTest",
+          "throwaway repo, arm 1: a BOM-carrying tracked file emptied to 0 bytes, staged -> exit 0",
+          "throwaway repo, arm 2: a BOM-carrying tracked file keeps ABC and loses its BOM, staged -> exit 1"
+        ]
+      },
+
+      "rollback": "revert the one hunk in ops/verify-bulk-edit.ps1 and its four self-test cases. No data migration; the hook reverts to refusing an empty file.",
+      "do_not_touch": ["meal-prep/engine/cost-recipes.ps1 and Split-CostFlags - the empty file is its CORRECT output", "any other verify-bulk-edit invariant", "the pre-commit hook's blocking behaviour on a real finding"],
+      "resolution_note": "The daily commit was refused because verify-bulk-edit read a legitimately EMPTY meal-prep/db/cost-flags.txt as a stripped BOM: HEAD is 4,392 bytes opening EF BB BF, the working copy is 0 bytes, and the check had no case for an empty after-file. A BOM strip keeps the content and loses three bytes, so it can never produce 0. Cased at the bar (after length 0, exempt) and one byte past it (after length 1, still reported), with Test-FileEmptied naming every emptying so the exemption is never silent. Proved end to end in a throwaway repo, both arms. The refused 542-file commit then landed unchanged.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "PARTLY FALSE, and the false half matters. The dispatch stated 'HEAD's copy starts with E (no BOM)'. It does NOT: git cat-file -p HEAD:meal-prep/db/cost-flags.txt piped through od reads EF BB BF 45 74 68, a UTF-8 BOM and then 'Eth', and git cat-file -s reads 4392. Had HEAD genuinely carried no BOM, Test-BomUnchanged would have scored $b=false and $a=false, returned equal, and the finding could not have fired at all - so the premise as written contradicts the refusal it was offered to explain. TRUE as stated: the working tree copy is 0 bytes; verify-bulk-edit's pre-commit path judges only the staged set via git diff --cached (line 362); the empty file is the correct output of the 2026-09-21 Split-CostFlags change, confirmed against meal-prep/db/costed.stamp.json for this run (flags_set_aside.held_recipes 6, no LIVE line). Candidate rung (a) of the dispatch is CONFIRMED and is the mechanism.",
+      "deviation": null,
+      "shipped_commit": "c2b58ecad (rebased to ba13faba0)"
+    },
+
+    {
+      "queue_id": "2026-09-22-972de2",
+      "subject": "Grocery capture watchdog: COMPUTED BUT NOT SHIPPED 2026-09-22",
+      "classification": "infra",
+
+      "evidence": [
+        "live at 13:12, https://www.thriftycrew.com/omaha-grocery-prices/?cb=... | the post says 'week of 2026-09-22' and requests https://feed.thriftycrew.com/board.json?v=56fb50a601",
+        "git blob hashes at the same moment | origin/main:public/board.json = e266e0d45 (committed 2026-09-21 11:01, 5f4ab8c48); the local build the post points at = 4b31bca1c. The edge serves origin/main's copy.",
+        "live at 13:14, https://feed.thriftycrew.com/smp-feed.json?cb=... | week_of 2026-09-21, generated 2026-09-21T10:57:28. Local public/smp-feed.json: week_of 2026-09-22, generated 2026-09-22T08:14:34. 583 recipe pages price off that feed.",
+        "capture-run-daily-2026-09-22.log:174 | SHIP      ship path completed in 813 s (13.6 min) - the board published before any advisory audit ran",
+        "capture-run-daily-2026-09-22.log:173 | PUBLISHED live page updated (price change detected) - the Ghost post shipped, inside check-ad-cycles, at 08:17",
+        "capture-run-daily-2026-09-22.log:220 | edge check skipped: skipped - shipServed=True botCommitted=False pushed=False: the bot commit was REFUSED, so public\\** never reached HEAD and there is nothing at the edge to verify. Readers keep the last good board.",
+        "that last clause is false on this run and the check never tested it: the post shipped, so readers did NOT keep the last good board, they kept the last good board.json under a post advertising a different one.",
+        "measured over the 28 daily logs on disk (2026-08-24 to 2026-09-22): 3 runs printed 'edge check skipped' with shipServed=True - 2026-08-24, 2026-09-09 and 2026-09-22."
+      ],
+
+      "instance": "The Ghost post went live at 08:17 asking for board.json?v=56fb50a601 while the board.json it names never reached origin/main, so from 08:17 readers saw 2026-09-21 chip prices under a 2026-09-22 post, and 583 recipe pages priced off a four-day-old feed.",
+
+      "five_whys": [
+        "1. Why do readers get yesterday's chips under today's post? The edge serves origin/main's public/board.json (blob e266e0d45, committed 2026-09-21 11:01) while the live post requests board.json?v=56fb50a601, which is today's local build (blob 4b31bca1c).",
+        "2. Why is origin/main's board.json yesterday's? Today's chain rebuilt public/board.json and public/smp-feed.json locally and the git commit that ships them was refused (2026-09-22-148d78). Committing public/board.json IS the deploy (.claude/rules/site-and-publish.md).",
+        "3. Why did the POST ship pointing at a board that did not? Because the Ghost post is published inside check-ad-cycles' ship path at 08:17, and public/** reaches readers only through capture-run's git commit, which runs AFTER it and can fail independently. The pointer and the object have two different deploy mechanisms and no ordering between them.",
+        "4. Why is that ordering allowed? Nothing enforces it. .claude/rules/site-and-publish.md already states the rule in words - 'public/board.json ... committing that file IS the feed deploy. It ships BEFORE the post' - and ops-and-gates.md states the general form, 'write the POINTED-TO object before the object that points to it', whose whole purpose is that an interruption leaves a harmless LEAK rather than CORRUPTION. The chain does the opposite and always has.",
+        "5. Why did nothing notice for five hours? The one check that asks the reader-visible question, the edge read-after-write in capture-run.ps1, SKIPS whenever the commit did not land, and its skip line asserts 'Readers keep the last good board' - a claim it never tested and which is false precisely when the post shipped.",
+        "6. Why does that check skip in the case it exists for? It was scoped on 2026-09-03 to the guards-blocked day, where the chain deliberately ships nothing AND publishes no post, so the reassurance was true. On 2026-09-09 the refused-commit case was folded into the same branch without asking whether the POINTER had also been withheld. The 2026-09-09 repair was right about the served-dirty ALERT (which would have prescribed an inert fix) and wrong to extend that silence to the edge check, which is the only thing still asking a question that matters when the commit is refused.",
+        "7. PROCESS GAP (below). Every stage reported success and the reader-visible outcome was a failure, because no stage owns the end-to-end assertion and the one end-state check disables itself in exactly the failures that produce a wrong reader outcome."
+      ],
+      "process_gap": "'Published' is defined in this chain as 'my own stage's step returned 0', never as 'the bytes a reader fetches are the bytes I built'. No stage owns the end-to-end assertion, so each stage can truthfully report success while the reader sees a failure; and the single check that does read the end state turns itself off whenever the deploy did not land, which is the only time its answer is interesting.",
+      "class": "A reader-facing POINTER shipping while the OBJECT it points at does not, for any reason the commit or the push fails: a refused hook (today), a non-fast-forward rejection, a push lock, a network failure, or a guards-blocked run that still published a post. 3 occurrences in the 28 daily logs on disk.",
+      "check_that_closes_the_class": "grocery/capture-run.ps1: Test-PointerShippedWithoutObject, a pure decision lifted out so a fixture can reach it, and the skip branch now calls it. When the ship path ran (shipServed) and public/board.json or public/smp-feed.json did not reach HEAD, the run no longer prints a reassurance: it names the condition, sends one alert, and counts the lane failed. The reassuring 'Readers keep the last good board' is kept ONLY for the case where it is true, which is a run that shipped nothing.",
+
+      "surface_fix": {
+        "what": "today's already-built and already-gated board.json and smp-feed.json reach origin/main through the normal road, so the post and the board name the same week",
+        "files": ["public/board.json", "public/smp-feed.json", "public/free-dinners.json", "public/price-history.json"],
+        "exact_change": "fix what the hook was wrong about (item 2026-09-22-148d78), then commit the ship step's own served set by explicit pathspec exactly as capture-run would have, minus the foreign-held meal-prep/pipeline/v2-perserving.prev.json, and push."
+      },
+
+      "root_cause": "the POINTER (the Ghost post, carrying board.json?v=<hash>) is written by check-ad-cycles before the POINTED-TO object (public/board.json) is written by capture-run's commit, the two deploys can fail independently, and the only check that reads the resulting end state skips itself whenever the second one failed.",
+
+      "root_fix": {
+        "what": "the edge check stops going blind in the failure it exists for: a shipped post with an unshipped board is named and paged instead of being reported as 'Readers keep the last good board'",
+        "files": ["grocery/capture-run.ps1"],
+        "exact_change": "new pure function Test-PointerShippedWithoutObject -ShipServed -ObjectLanded -ObjectDirty returning 'pointer-without-object' | 'ok' | 'nothing-shipped'; the elseif ($runDownstream) branch calls it with the git status of public/board.json and public/smp-feed.json and, on pointer-without-object, prints the condition, sends one alert and adds the lane to $failed."
+      },
+
+      "leaves_open": "the fix is DETECTIVE, not preventive: the post still ships BEFORE the board.json it points at, so the ordering .claude/rules/site-and-publish.md and ops-and-gates.md both prescribe is still inverted in the one daily chain, and what changed is that the run now pages within its own log instead of reassuring. 1 chain (check-ad-cycles ship path + capture-run commit).",
+      "leaves_open_occurrences": 3,
+      "leaves_open_followup": "2026-09-22-81d955",
+
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "the one call site of the edge-check skip branch, grocery/capture-run.ps1:1333-1352, reached on a run where $runDownstream is true and ($shipServed -and $pushed) is false. Counted over the 28 daily logs on disk (2026-08-24 to 2026-09-22): the branch was reached on 3 days, all 3 with shipServed=True, so all 3 would now be named rather than reassured. No other caller, and the ok/stale/blind arms above it are untouched.",
+        "affected_now": 1,
+        "names": ["capture-run-daily-2026-09-22 (shipServed=True botCommitted=False pushed=False)"],
+        "risk": "the branch can now add 'pointer-without-object' to FAILED LANES and send one alert on a day the chain shipped a post and the commit did not land. That is the intended noise and it is one alert per run, not per file. A run that shipped nothing keeps its existing quiet skip verbatim.",
+        "cell_effects": []
+      },
+
+      "freshness": "measured against the live site and origin/main at 2026-09-22 13:12-13:14, and against capture-run-daily-2026-09-22.log written 08:45:48. If another session pushes public/board.json before this ships, the instance resolves itself and the root fix still stands; re-read the live week_of before re-asserting the instance.",
+
+      "proof": {
+        "guard_or_fixture": "grocery/test-capture-builders.ps1 (which already drives Test-EdgeServesPushed's skipped/stale/ok/blind arms as frozen cases)",
+        "must_fire_case": "the frozen 2026-09-22 state: ShipServed=$true, ObjectLanded=$false, ObjectDirty=$true must return 'pointer-without-object'. And the 2026-09-09 state, ShipServed=$true with the commit refused, must return the same, so both recorded occurrences are covered and not only today's.",
+        "clean_twin": "ShipServed=$false (the 2026-09-03 guards-blocked day, which ships no post) must return 'nothing-shipped' and keep its existing quiet line, or the fix pages on every held board. And ShipServed=$true with ObjectLanded=$true must return 'ok'.",
+        "commands": ["powershell -File grocery\\test-capture-builders.ps1"]
+      },
+
+      "rollback": "revert the one function and the one branch in grocery/capture-run.ps1 and its fixtures. The board and feed commit is a normal commit and is reverted by reverting it.",
+      "do_not_touch": ["the ok/stale/blind arms of the edge read-after-write", "the served-dirty block's deliberate silence on a refused commit (2026-09-09, it would prescribe an inert repair)", "the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"],
+      "resolution_note": "Today's board and feed were built and gated at 08:14 and never deployed, because committing public/board.json IS the deploy and the commit was refused. Readers got 2026-09-21 chips under a 2026-09-22 post for five hours and 583 recipe pages priced off a 2026-09-21 feed. The built artifacts shipped through the normal road once the hook was fixed. Root cause: the POINTER (the Ghost post and its ?v= hash) is written before the POINTED-TO object (public/board.json) by a different actor with no ordering between them, and the edge check skipped itself with 'Readers keep the last good board', a claim it never tested. The skip now names the condition and pages.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "TRUE, every clause, checked live before acting. The post at https://www.thriftycrew.com/omaha-grocery-prices/ (cache-busted) says 'week of 2026-09-22' and requests https://feed.thriftycrew.com/board.json?v=56fb50a601. origin/main:public/board.json was e266e0d45 and the local build 4b31bca1c, so the edge was serving origin/main's copy. feed.thriftycrew.com/smp-feed.json (cache-busted) read week_of 2026-09-21, generated 2026-09-21T10:57:28, against a local 2026-09-22T08:14:34. The chain log's own lines 173, 174 and 220 are quoted in evidence. ONE CORRECTION TO THE DISPATCH'S CANDIDATE (d): the chain does NOT simply count a local export as published. capture-run's OUTER log was accurate - 'commit: REFUSED', 'FAILED LANES: commit-refused', rc=1, and it minted 148d78. The false claim is check-ad-cycles' SHIP PATH COMPLETE line at 08:17, which is emitted by a stage running under -NoCommit and so is structurally unable to know whether a commit that has not happened yet will succeed. Candidate (c) is CONFIRMED: one non-reader file refused and the two files readers use were held with it.",
+      "deviation": null,
+      "shipped_commit": "c2b58ecad (rebased to ba13faba0) for the instance; the root fix ships with this plan"
+    },
+
+    {
+      "queue_id": "2026-09-22-a09096",
+      "subject": "Grocery: price disagreement - Hummus at Sam's Club",
+      "classification": "parse-basis-bug",
+
+      "evidence": [
+        "grocery/out/flag-verification.json before the change | hummus|Sam's Club | status wrong-price | 'no reading of the store's own figures gives our 0.1395/oz: name size 2.5 oz -> 2.2320' | readings: ['name size 2.5 oz -> 2.2320']",
+        "the same ledger entry's own answer block | item 'Member's Mark Classic Hummus Singles 2.5 oz., 16 ct.', current_price '$5.58', size '16 ct 2.5 oz'. The store's own size field ALREADY states the pack, and it produced no reading at all.",
+        "OUR PRICE IS RIGHT: 16 x 2.5 oz = 40 oz, $5.58 / 40 = $0.1395/oz exactly, which is what public/board.json publishes for hummus|Sam's Club.",
+        "measured before the change | Get-LinkPerUnit -size '16 ct 2.5 oz' -unit oz -price 5.58 -> $null; -size '16 pk 2.5 oz' -> 0.1395; -size '24 ct 16.9 oz' -> $null; -size '16 count 2.5 oz' -> $null",
+        "measured before the change | Get-SizeAmount -sizeText '16 ct 2.5 oz' -unit oz -> 40; '24 ct 16.9 oz' -> 405.6; '16 count 2.5 oz' -> 40. The ENGINE reads every one of them.",
+        "Get-TcNameSizeText 'Member's Mark Classic Hummus Singles 2.5 oz., 16 ct.' -> '2.5 oz' (the pack count dropped); the same name with '16 pk.' -> '16 pk 2.5 oz'.",
+        "whole-corpus measurement over comparison-2026-09-22 (570 rows, 2,655 cells carrying a size string): 30 cells are shaped 'N ct/count M <unit>', pu-lib returned $null for 26 of them and the engine priced all 26. Whole-corpus parity before the change: 31 of 2,564 comparable size strings disagree."
+      ],
+
+      "instance": "The verifier read one cup's size and ignored the pack count, found no reading that matched our correct $0.1395/oz, returned wrong-price, and audit-flag-verification quarantined a correct cell.",
+
+      "five_whys": [
+        "1. Why was Sam's hummus quarantined? verify-price-flags returned wrong-price: no reading of the store's own figures gave our 0.1395/oz.",
+        "2. Why was there only ONE reading, and that from the product NAME? Because the SIZE-FIELD reading produced nothing: Get-LinkPerUnit -size '16 ct 2.5 oz' -unit oz -price 5.58 returns $null, so Get-TcStoreReadings added no row for it. The name reader then dropped the pack count too, because Get-TcNameSizeText wrote pack-first only for pk|pack.",
+        "3. Why does Get-LinkPerUnit return $null on '16 ct 2.5 oz'? Its pack-first branch matched (?:pk|pack|x|U+00D7) and not ct|count, so the string fell through to the generic quantity match, which cannot read 'ct' against a weight commodity.",
+        "4. Why does pu-lib carry its own pack-token list at all? Because it is a SECOND implementation of 'what quantity does this size string state'. The engine's Get-SizeAmount in grocery/pricing-math-lib.ps1 has read '24 ct 16.9 oz' as count-times-size since it was written, and prices the board with it.",
+        "5. Why do two implementations of one rule exist and disagree? Because nothing compared them. pu-lib's own header records that it was created to collapse TWO earlier copies (LinkPU and Qty) into one, for exactly this reason, and the engine's reader was never folded in or checked against it. Its fixtures, 33 of 33, contained no multipack, and it was armed without being replayed against the live flag population (the replay reached a verdict on 10 of 200).",
+        "6. Why can a second derivation of an existing fact ship unchecked? PROCESS GAP (below). Nothing in this estate requires a second computation of a fact the estate already holds to be proved equal to the first, so the weaker copy silently decided whether the stronger copy's answer was allowed to publish."
+      ],
+      "process_gap": "A derived quantity here may be computed in more than one place and there is no requirement that a second computation be proved equal to the first. The same-fact-published-twice memory names this as the estate's most-repeated root cause and audit-board-reconciliation.ps1 covers it for board VALUES; it was never extended to the RULES that produce them. reliability-craft/metrics-storage-and-queries.md 5b states the shape the estate wants: one definition with a name, and everything downstream reads the name.",
+      "class": "Any pair of derivers of one fact drifting apart silently. Here specifically the size-to-quantity rule, where the board is PRICED by Get-SizeAmount and AUDITED by Get-LinkPerUnit, so a string only one of them can read is a cell the audits cannot judge, and a string they read differently is a guard finding nobody can act on. A $null in a shared reader is the worst version: it reads as 'no evidence' rather than as 'wrong'.",
+      "check_that_closes_the_class": "grocery/audit-size-parser-parity.ps1 runs both readers over a frozen 20-row corpus of real size strings and reports every disagreement, with -Board widening it to every size string on the newest comparison board. run-gates runs its hermetic -SelfTest on every push, so the ct/count divergence cannot return.",
+
+      "surface_fix": {
+        "what": "both size readers understand ct and count as pack-first, so the hummus cell verifies against its own store and leaves quarantine",
+        "files": ["grocery/pu-lib.ps1", "grocery/flag-verify-lib.ps1"],
+        "exact_change": "pu-lib Get-LinkPerUnit: both pack-first branches match (?:ct|count|pk|packs?|x|U+00D7), the engine's own token set. flag-verify-lib Get-TcNameSizeText: pack-first when the count token is pk|pack|ct|count, not only pk|pack."
+      },
+
+      "root_cause": "'what quantity does this size string state' is one rule with two implementations - the engine's Get-SizeAmount, which prices the board, and pu-lib's Get-LinkPerUnit, which every link, guard and the flag verifier decide through - and nothing proved they agreed. The weaker copy could not read ct/count multipacks at all, so it returned $null, which the verifier correctly treats as 'the store's figures do not support this price'.",
+
+      "root_fix": {
+        "what": "a parity check that fails whenever the two readers give different answers, so the next divergence is caught at push time rather than by a quarantined cell",
+        "files": ["grocery/audit-size-parser-parity.ps1"],
+        "exact_change": "new detector: Test-TcSizeParity scores agree / disagree / not-comparable, a frozen 20-row corpus of real size strings runs through BOTH live readers, -Board widens it to the newest board, and the -SelfTest arm run-gates discovers on every push carries the must-fires. Written with the SCOPE OF A CLEAN REPORT line, a SIZE-PARSER-PARITY-COMPLETE marker and a verdict line, per lib/guard-contract.ps1."
+      },
+
+      "leaves_open": "5 size-string shapes still read differently by the two parsers over comparison-2026-09-22, of 2,584 comparable strings: a bare 'oz' twice (deli-ham|Fareway, taco-seasoning|Walmart), '30 sq ft' (aluminum-foil|Fareway), '200 g' (instant-coffee|Family Fare), and eggs|Sam's Club '15 dozen' where pu-lib says 29.5600 and the engine says 1.9707. None is fixed here, so -Board is deliberately NOT wired into the daily chain: a gate that is red on day one teaches people to ignore red.",
+      "leaves_open_occurrences": 5,
+      "leaves_open_followup": "2026-09-22-43e8c0",
+
+      "blast_radius": {
+        "measured_as": "cells",
+        "measured_by": "before/after per-unit of every size string on comparison-2026-09-22: 570 rows, 2,655 cells carrying a size, 2,564 comparable by at least one reader. Both readers run over every one, before the change and after, and the two answers compared.",
+        "affected_now": 26,
+        "names": [
+          "hummus|Sam's Club '16 ct 2.5 oz'", "chicken-noodle-soup|Sam's Club '12 ct 10.75 oz'", "tomato-sauce|Sam's Club '12 ct 15 oz'",
+          "canned-peas|Sam's Club '8 ct 15 oz'", "apple-juice|Sam's Club '24 ct 10 oz'", "half-and-half|Sam's Club '180 ct 0.3 fl oz'",
+          "string-cheese|Sam's Club '48 ct 1 oz'", "tomatoes-green-chilies|Sam's Club '8 ct 10 oz'", "toothpaste|Fareway '2 ct 6 oz'",
+          "and 17 more, all Sam's Club, every one listed in the run record"
+        ],
+        "risk": "NO BOARD PRICE MOVES. The board is priced by the ENGINE, which already read all 26 correctly; pu-lib feeds LINKS and AUDITS. All 26 move from $null (unjudgeable, so silently skipped by the factor guard, everyday-mismatch and prune-bad-links) to the engine's own number, which is the exact blind spot pu-lib's header was written about. Verified after the change: the 26 disagreements are gone and 5 other-shape disagreements remain. The only board CELL affected is hummus|Sam's Club, which leaves quarantine.",
+        "cell_effects": [
+          { "commodity": "hummus", "store": "Sam's Club", "before": 0.1395, "after": 0.1395, "note": "the published number does not move. The quarantine held the cell AT its last verified price, which was already the correct 0.1395/oz, so the reader-visible harm was latent rather than live: the cell had stopped tracking Sam's price and was paging daily. What changes is that the verdict is now match and the cell is no longer held." }
+        ]
+      },
+
+      "freshness": "measured against comparison-2026-09-22.json (built 08:07:22, sha256 6efc39a2ae9e...) and grocery/out/flag-verification.json as rewritten by verify-price-flags at 13:30. The Chrome capture session was still running and landed aldi/walmart/bakers/hyvee/fareway regulars for 2026-09-22 AFTER the 08:07 build, so a rebuild from those captures would move cells no measurement here covers (memory triage-rebuild-reads-late-captures). The parity numbers are taken against the 08:07 board and nothing was rebuilt.",
+
+      "proof": {
+        "guard_or_fixture": "grocery/audit-size-parser-parity.ps1 -SelfTest (7 cases), plus grocery/verify-price-flags.ps1 re-run over the live ledger",
+        "must_fire_case": "Test-TcSizeParity -A $null -B 0.1395 must return 'disagree' - the exact 2026-09-22 hummus shape, one reader blind and the other pricing it. And -A 29.56 -B 1.9707 must return 'disagree' - the eggs|Sam's Club '15 dozen' shape, the next one of the class and one nobody has fixed.",
+        "clean_twin": "both LIVE readers price the founding string '16 ct 2.5 oz' at $5.58 as 0.1395/oz, and the two agree on all 20 rows of the frozen corpus, which includes the pk, pack, x and single-unit spellings that already worked - so a change that fixes ct by breaking pk goes red. Plus: two equal readings score agree, two nulls score not-comparable, and float noise is not a divergence.",
+        "commands": [
+          "powershell -File grocery\\audit-size-parser-parity.ps1 -SelfTest",
+          "powershell -File grocery\\audit-size-parser-parity.ps1 -Board",
+          "powershell -File grocery\\verify-price-flags.ps1"
+        ]
+      },
+
+      "rollback": "revert the two token lists in grocery/pu-lib.ps1 and the one in grocery/flag-verify-lib.ps1, and delete grocery/audit-size-parser-parity.ps1. The flag ledger re-derives on the next verify-price-flags run.",
+      "do_not_touch": ["grocery/pricing-math-lib.ps1 Get-SizeAmount - it is the reader that was RIGHT", "the verifier's rule that none-agreeing is wrong-price and some-agreeing is could-not-look", "2026-09-22-a2af45, the Family Fare yellow bell pepper multibuy, which is a ruling for Brad", "any band, threshold or tolerance"],
+      "resolution_note": "Our $0.1395/oz was right: 16 x 2.5 oz = 40 oz, $5.58 / 40 = $0.1395 exactly. The verifier condemned it because pu-lib's Get-LinkPerUnit could not read the store's own size field '16 ct 2.5 oz' at all (it matched pk|pack|x and not ct|count) and the name reader dropped the pack count, so no reading agreed with ours. The engine's Get-SizeAmount, which prices the board, has always read that shape: two implementations of one rule with nothing proving they agreed, over 26 board cells. Both readers now use the engine's token set, and grocery/audit-size-parser-parity.ps1 fails at push time whenever they disagree. The cell verifies as match and is no longer quarantined.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "TRUE on the arithmetic and the mechanism, FALSE on one word of the dispatch. Our $0.1395/oz is right (16 x 2.5 oz = 40 oz, 5.58 / 40 = 0.1395) and the ledger's own answer block carries size '16 ct 2.5 oz'. The dispatch says the verifier 'read one cup's size and ignored the pack count'; that is true of the NAME reader but understates it, because the SIZE-FIELD reader never produced a reading at all - Get-LinkPerUnit returned $null on the store's own '16 ct 2.5 oz', which is why only one reading appears in the ledger. Two defects, not one, and the null is the more serious because it reads as absence of evidence. The dispatch's candidate process gap ('the verifier RE-DERIVES the per-unit basis itself instead of asking the engine's own basis') is REPLACED rather than confirmed: the verifier MUST derive independently or it would be circular, and its header says so. What it may not do is derive through a SECOND, WEAKER COPY of the engine's own size rule, which is what pu-lib is. The gap is that nothing proved the two copies equal.",
+      "deviation": "THE BOARD WAS NOT REPUBLISHED, and the cell's published number never moved. Three findings changed the plan. (1) The quarantine had held hummus|Sam's Club AT its last verified published price, which was already the correct $0.1395/oz - verified in public/board.json, chip data-pu 0.1395 - so the reader-visible harm was LATENT (the cell had stopped tracking Sam's price and was paging daily) rather than a wrong number on the page. (2) grocery/verify-price-flags.ps1 re-run after the fix re-decides the ledger to 'match' with BOTH readings agreeing: 'size field 16 ct 2.5 oz -> 0.1395; name size 16 pk 2.5 oz -> 0.1395', and Sam's Club now reports 0 wrong-price. So the cell is out of quarantine at the next chain run with nothing further to do. (3) A republish is NOT POSSIBLE through the gates today and I did not force one: grocery/guards.ps1 exits 2, 'GUARDS FAILED: 3 hard invariant(s) violated. Board NOT safe to publish', disposition=hold. None of the three is mine, and I checked each: audit-tile-integrity is HELD (could-not-evaluate) because name-drift.json is older than product-urls.json, an mtime my own git rebase --autostash restore at 13:26 created and which the chain's own re-derive step clears; audit-band-censorship is RATCHET BROKEN at 14 against a baseline of 13 naming 'new vegetable-oil|Sam's Club', which is open queue item 2026-09-21-6b17b1 and not this item; audit-flag-verification now names yellow-bell-pepper|Family Fare, which is 2026-09-22-a2af45 and a ruling for Brad that this run was told not to resolve. Forcing past any of them would be weakening a gate to make a run pass. Separately, the morning Chrome capture session landed aldi, walmart, bakers, hyvee and fareway regulars for 2026-09-22 AFTER the 08:07 board build, so a rebuild would have ingested captures no measurement in this plan covers (memory triage-rebuild-reads-late-captures).",
+      "shipped_commit": null
+    }
+  ],
+
+  "ship_sequence": [
+    "1. ops/verify-bulk-edit.ps1 empty boundary + fixtures, and its -SelfTest, BEFORE anything else: no commit can land until the hook stops being wrong",
+    "2. commit the ship step's own served set by pathspec (Get-BotServedPaths minus the foreign-held v2-perserving.prev.json) and push - this is 148d78's instance and 972de2's instance together",
+    "3. grocery/pu-lib.ps1 + grocery/flag-verify-lib.ps1 ct/count, then grocery/verify-price-flags.ps1 to re-decide the ledger",
+    "4. grocery/audit-size-parser-parity.ps1 -SelfTest (0) and -Board (measure, do not wire)",
+    "5. grocery/capture-run.ps1 pointer-without-object + grocery/test-capture-builders.ps1 fixtures",
+    "6. guards.ps1 - READ ITS VERDICT before assuming a republish is possible",
+    "7. commit + push everything, then verify the live feed and board serve today's bytes"
+  ],
+
+  "knowledge_consulted": [
+    "searched 'root cause process gap', 'empty file boundary', 'duplicate derivation of a computed fact', 'single source of truth recomputed' via ~/.claude/skills/knowledge-search/search.py",
+    "reliability-craft/rca-and-chaos.md, 'The four techniques' - used as the standard for every five_whys chain above: ask why until a CHANGEABLE CONDITION appears, and a root cause you can fix without changing how work is done is usually not the root cause yet",
+    "data-quality-craft/diagnosing-a-failure.md section 3, 'Stopping at the cause instead of the class' - why each item ships a check on the class and not only a repaired value",
+    "reliability-craft/metrics-storage-and-queries.md 5b, 'Recording rules' - 'one standard definition of a derived quantity ... a ratio recomputed by hand in four dashboards and two alert rules is four-plus-two definitions that will drift'. This is the shape a09096's root fix converges on, and the reason the fix is a parity assertion rather than a third reader.",
+    "memory same-fact-published-twice (the HUB) and its child two-copies-of-a-rule - 'a rule with a second INLINE copy keeps shipping the bug after the shared library is fixed'. a09096 is that memo exactly, one level up: not a copy of a VALUE but a copy of a RULE.",
+    ".claude/rules/ops-and-gates.md, 'Write the POINTED-TO object before the object that points to it' - the whole of 972de2's root cause, and the rule already existed in words with nothing enforcing it",
+    ".claude/rules/site-and-publish.md, 'public/board.json ... committing that file IS the feed deploy. It ships BEFORE the post'",
+    ".claude/rules/ops-and-gates.md, 'Never wrap a function call inline as @(Get-Thing ...)' - hit while writing audit-size-parser-parity.ps1 and recorded in its source",
+    "memory triage-rebuild-reads-late-captures - why the board was NOT rebuilt from the captures that landed after 08:07",
+    "searched 'prompt backup stale mirror': nothing applicable"
+  ],
+
+  "open_questions_for_brad": [
+    {
+      "id": "brad-2026-09-22-multibuy",
+      "question": "Is a must-buy-N multibuy the price we publish? Family Fare advertises yellow bell peppers at '10 for $10.00 with purchase of 10' and $1.99 as a single. We publish $1.0000/each. The verifier calls that wrong-price and it is INTERNALLY CORRECT to do so: its only reading of the store's own figures is the shelf price $1.99 over the size field '1 ea', it never reads the claim's own ad string, and our 1.0000 matches no reading. So the verifier is not broken here; it is asking a question nobody has answered. The ruling needed is whether a price conditional on buying ten is the price a shopper sees, and if it is, whether the verifier should read the multibuy from the ad text or the board should publish $1.99. Queue item 2026-09-22-a2af45, left open on purpose.",
+      "raised_by": "2026-09-22-a2af45"
+    }
+  ],
+  "deliberately_not_asked_of_brad": "Whether the daily chain should ship public/board.json BEFORE it publishes the Ghost post is NOT on this list, and the reason is the rule about this list. Both .claude/rules/site-and-publish.md and .claude/rules/ops-and-gates.md ALREADY say the object ships before the pointer, so there is nothing to rule on: it is work nobody has done against a rule this estate already holds, and putting it here would turn a discovered defect into a sentence for Brad. It is queue item 2026-09-22-81d955 in the weekly lane, with the 3-occurrences-in-28-days measurement in its body."
+}
