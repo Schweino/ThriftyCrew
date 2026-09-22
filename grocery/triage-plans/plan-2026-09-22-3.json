@@ -1,0 +1,120 @@
+{
+  "generated": "2026-09-22T15:40:00",
+  "round": 1,
+  "kind": "ops-lane-batch-1-additions",
+  "board_week": "comparison-2026-09-22 (built 08:13:10); neither item here reads or changes a board",
+  "parent_plan": "grocery/triage-plans/plan-2026-09-22-2.json (batch 1 of design/RCA-holistic-2026-09-22.md); these two items were found after that plan was written and are recorded here so the reasoning ships with the change",
+  "queue_ids_seen": [
+    "2026-09-22-7d991c",
+    "2026-09-22-c4495c"
+  ],
+  "routing_artifact": null,
+  "routing_artifact_note": "No item changes a matching rule, a price or a board cell.",
+  "knowledge_consulted": "searched --multi \"memory store directory\" \"line ending index blob\" \"advertised check never runs\": nothing applicable in the skills store. Used: design/RCA-holistic-2026-09-22.md (F1 one fact in one place, F4 a check that never looks); memory compare-bytes-not-decodings (the EOL comparison must read two blobs git stores, never a working file against a blob); .gitattributes (text=auto eol=lf since 2026-09-06); .claude/rules/ops-and-gates.md fixture vocabulary.",
+  "items": [
+    {
+      "queue_id": "2026-09-22-7d991c",
+      "subject": "The commit-msg store-citation hook resolves memory in only one of the two stores and refuses from 2026-09-25",
+      "family": "F1",
+      "classification": "infra",
+      "evidence": [
+        "ops/store_citation.py:66 (at 6079095f5) resolved memory:<name> and [[<name>]] against ~/.claude/projects/C--Codex-ThriftyCrew/memory only",
+        "measured 2026-09-22 15:10: ~/.claude/projects/C--Codex/memory holds 199 memos and C--Codex-ThriftyCrew/memory 187; ps51-bomless-read-is-cp1252.md exists in C--Codex and is ABSENT from C--Codex-ThriftyCrew; no other projects/*/memory directory holds more than 5 files",
+        "REFUSE_FROM = 2026-09-25 in the same file: from that date an unresolvable citation refuses the commit"
+      ],
+      "root_cause": "Claude Code keys a session's memory directory on the directory it was launched from, so the estate has two live memory stores, and the resolver held one hard-coded path that is right only for sessions launched in C:\\Codex\\ThriftyCrew (F1: one fact, 'where the memory store is', held in one place that is wrong for half the sessions). The failure is selective: a memo that happens to exist in both stores resolves, so it looked like it worked.",
+      "root_fix": {
+        "what": "the list of memory stores lives in one named constant and every memory lookup goes through one function that walks it",
+        "files": [
+          "ops/store_citation.py"
+        ],
+        "exact_change": "MEMORY_PROJECTS = (\"C--Codex-ThriftyCrew\", \"C--Codex\") with a comment saying why there are two and that a third launch root is added there; home_store() returns memories = every store's path (memory keeps the first for compatibility); memory_dirs(store) returns that list; resolve() checks a memory: or [[ ]] citation against every store and the bare-path branch walks skills, its parent, then every memory store"
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "blast_radius": {
+        "measured_as": "memo files that now resolve",
+        "measured_by": "directory listing of both stores on 2026-09-22 15:10",
+        "affected_now": 199,
+        "names": [
+          "every memo in C--Codex/memory, e.g. ps51-bomless-read-is-cp1252"
+        ],
+        "risk": "a citation now resolves if it exists in EITHER store; a citation in neither is still refused (fixtured)",
+        "cell_effects": []
+      },
+      "freshness": "measured against the two directories at 15:10 on 2026-09-22",
+      "proof": {
+        "guard_or_fixture": "ops/store_citation.py --selftest (19 cases before, 24 after)",
+        "must_fire_case": "frozen: with only the first store listed (the 6079095f5 behaviour), 'Store: memory:ps51-bomless' whose file exists only in a second temp store is refused with that token unresolved; and with both stores listed, 'Store: memory:in-neither-store' is still refused",
+        "clean_twin": "with both stores listed, a memo held only by the second resolves in both spellings (memory: and [[ ]]), a memo in the first still resolves, and home_store() lists C--Codex-ThriftyCrew then C--Codex",
+        "commands": [
+          "C:\\Codex\\Python312\\python.exe ops/store_citation.py --selftest"
+        ]
+      },
+      "rollback": "revert ops/store_citation.py; no data touched",
+      "do_not_touch": [
+        "REFUSE_FROM",
+        "the plan-audit half of the file",
+        "the memory stores themselves (read-only for this lane)"
+      ],
+      "resolution_note": "Fixed before its 2026-09-25 deadline: a memo in C--Codex/memory now resolves (live check on the real stores: memory:ps51-bomless-read-is-cp1252 judged ok on the refuse date, a made-up name still unresolved). The two stores are one named constant.",
+      "status": "done",
+      "premise_verified": "true: ps51-bomless-read-is-cp1252.md present in C--Codex/memory, absent from C--Codex-ThriftyCrew/memory (ls, 15:10); store_citation.py:66 held the single path",
+      "deviation": "The plan draft named ops/probe-queue2-triage.py:186 as a second copy of the path. Read, it is a different fact: it checks lesson/SKILL.md [[citations]], which the .claude/rules files define as resolving under the ThriftyCrew store specifically, so a single path is correct there and it was left alone.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-22-c4495c",
+      "subject": "verify-bulk-edit's line-ending invariant has no production call site",
+      "family": "F4",
+      "classification": "infra",
+      "evidence": [
+        "ops/verify-bulk-edit.ps1 at 6079095f5: Test-EolUnchanged is defined at line 97 and called only from its own -SelfTest (two cases); the live path never calls it",
+        "ops/hooks/pre-commit refusal text advertises 'BOM state, line-ending style, a clean parse, or a call to a function the file cannot resolve'",
+        "git ls-files --eol on 2026-09-22 15:20: 8,884 i/lf, 39 i/-text, 333 i/none, 0 i/crlf, 0 i/mixed; .gitattributes has text=auto eol=lf since 2026-09-06, so git normalises every text file to LF in the index"
+      ],
+      "root_cause": "the invariant was written as a comparison of working-file text against HEAD, which cannot be run honestly (git normalises line endings, so a working CRLF file against an LF blob is not a flip: the 2026-09-05 false positive), so it was fixtured and never wired, and the hook's text kept advertising it (F4: a check that never looks reads the same as one that found nothing)",
+      "root_fix": {
+        "what": "the line-ending invariant reads what the commit will actually STORE: the index eol of each staged path, from git's own census, where a text blob that is not LF is the finding",
+        "files": [
+          "ops/verify-bulk-edit.ps1"
+        ],
+        "exact_change": "replace Test-EolUnchanged with Get-IndexEolFindings, a pure function over 'git ls-files --eol' lines that returns a finding for any i/crlf or i/mixed entry (i/lf, i/-text, i/none are clean); the live -Staged path runs git ls-files --eol over the staged names and adds 'EOL           <path> - stored <i/..>' findings; the summary line prints the eol-checked count; the working-tree mode says the eol check is staged-only"
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "blast_radius": {
+        "measured_as": "tracked text files stored with a non-LF blob",
+        "measured_by": "git ls-files --eol at 15:20 on 2026-09-22",
+        "affected_now": 0,
+        "names": [],
+        "risk": "a file marked -text (binary) must never be judged: i/-text is clean by construction and fixtured",
+        "cell_effects": []
+      },
+      "freshness": "measured 15:20 on 2026-09-22",
+      "proof": {
+        "guard_or_fixture": "ops/verify-bulk-edit.ps1 -SelfTest",
+        "must_fire_case": "frozen git ls-files --eol lines: 'i/crlf w/crlf attr/-text     x.ps1' and 'i/mixed w/mixed attr/                 y.txt' each produce one EOL finding naming the path",
+        "clean_twin": "'i/lf w/crlf attr/text=auto eol=lf  z.ps1' (the 2026-09-05 working-copy CRLF over an LF blob) produces none, and a binary 'i/-text w/-text attr/-text a.png' and an empty 'i/none w/none attr/text=auto eol=lf e.txt' produce none; the live path over a staged LF file reports eol_checked=1 and no finding",
+        "commands": [
+          "powershell -NoProfile -File ops/verify-bulk-edit.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "revert ops/verify-bulk-edit.ps1",
+      "do_not_touch": [
+        "Test-BomUnchanged and the money lane's empty-file exemption",
+        "ops/hooks/pre-commit"
+      ],
+      "resolution_note": "The line-ending invariant the pre-commit hook advertises now runs on every staged file, reading the index eol git will store; the dead working-file comparison is gone.",
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    }
+  ],
+  "ship_sequence": [
+    "2026-09-22-7d991c: store_citation.py + self-test, commit, push",
+    "2026-09-22-c4495c: verify-bulk-edit.ps1 + self-test, commit, push"
+  ],
+  "open_questions_for_brad": []
+}

@@ -49,6 +49,14 @@ import time
 PLAN_CUTOFF = "2026-09-20"   # plans named with an earlier date are not judged (first day after landing)
 REFUSE_FROM = "2026-09-25"   # Brad, 2026-09-18: one week of warnings, then refuse. First value, not a sweep.
 BACKING_HOURS = 24           # a search this recent in the same session backs a Store: line. First value.
+# THE MEMORY STORES A CITATION MAY NAME, in lookup order (2026-09-22, queue 2026-09-22-7d991c). Claude Code keys
+# a session's memory directory on the directory it was LAUNCHED from, so this estate has two live stores:
+# sessions opened in C:\Codex\ThriftyCrew write C--Codex-ThriftyCrew\memory (187 memos that day) and sessions
+# opened in C:\Codex write C--Codex\memory (199, e.g. ps51-bomless-read-is-cp1252, which is in no other).
+# Until this list existed the resolver read only the first, so every commit citing a real memo from the second
+# would have been REFUSED from REFUSE_FROM. This tuple is the one place that fact lives; a third launch root
+# with its own store is added here, never by a second copy of the path somewhere else.
+MEMORY_PROJECTS = ("C--Codex-ThriftyCrew", "C--Codex")
 
 CODE_EXT = {".ps1", ".psm1", ".py", ".js", ".ts", ".sql", ".sh"}
 NOT_CODE_PREFIX = ("grocery/out/", "archive/", "meal-prep/out/", "ops/prompt-backup/")
@@ -63,7 +71,8 @@ PATH_RE = re.compile(r"(?:memory:[\w.-]+|\[\[[\w.-]+\]\]|[\w.-]+(?:/[\w.-]+)*\.m
 def home_store():
     h = os.path.join(os.environ.get("USERPROFILE") or os.path.expanduser("~"), ".claude")
     return {"skills": os.path.join(h, "skills"),
-            "memory": os.path.join(h, "projects", "C--Codex-ThriftyCrew", "memory"),
+            "memory": os.path.join(h, "projects", MEMORY_PROJECTS[0], "memory"),
+            "memories": [os.path.join(h, "projects", p, "memory") for p in MEMORY_PROJECTS],
             "log": os.path.join(h, "store-citation-log.jsonl"),
             "recall_log": os.path.join(h, "recall-log.jsonl")}
 
@@ -112,15 +121,20 @@ def is_code(path):
     return os.path.splitext(p)[1].lower() in CODE_EXT or p.startswith("ops/hooks/")
 
 
+def memory_dirs(store):
+    """Every memory store a citation may resolve in: the list when given, else the one legacy key."""
+    return list(store.get("memories") or [store["memory"]])
+
+
 def resolve(token, store):
     """True when a cited token names a real store file."""
     t = token.strip()
     if t.startswith("memory:") or t.startswith("[["):
         name = t[7:] if t.startswith("memory:") else t[2:-2]
         name = name[:-3] if name.endswith(".md") else name
-        return os.path.isfile(os.path.join(store["memory"], name + ".md"))
+        return any(os.path.isfile(os.path.join(m, name + ".md")) for m in memory_dirs(store))
     rel = t.replace("\\", "/")
-    for base in (store["skills"], os.path.dirname(store["skills"]), store["memory"]):
+    for base in [store["skills"], os.path.dirname(store["skills"])] + memory_dirs(store):
         if os.path.isfile(os.path.join(base, rel)):
             return True
     return False
@@ -257,6 +271,23 @@ def selftest():
         case("MUST FIRE a cited file that does not exist is refused", d["verdict"] == "refuse" and d["unresolved"] == ["database-craft/nope.md"])
         d = judge_message("fix\n\nStore: memory:ghost\n", code, store, refuse_day, None)
         case("MUST FIRE a memory that does not exist is refused", d["verdict"] == "refuse")
+        store2 = dict(store, memories=[store["memory"], os.path.join(root, "mem2")])
+        os.makedirs(store2["memories"][1])
+        open(os.path.join(store2["memories"][1], "ps51-bomless.md"), "w").close()
+        d = judge_message("fix\n\nStore: memory:ps51-bomless\n", code, store, refuse_day, True)
+        case("MUST FIRE founding shape: with only the first store listed, a memo held only by the second is refused",
+             d["verdict"] == "refuse" and d["unresolved"] == ["memory:ps51-bomless"])
+        d = judge_message("fix\n\nStore: memory:ps51-bomless; [[ps51-bomless]]\n", code, store2, refuse_day, True)
+        case("MUST NOT FIRE a memo that exists only in the second store (C--Codex) resolves, both spellings",
+             d["verdict"] == "ok" and d["unresolved"] == [] and len(d["cited"]) == 2)
+        d = judge_message("fix\n\nStore: memory:in-neither-store\n", code, store2, refuse_day, True)
+        case("MUST FIRE with both stores listed, a memo in neither is still refused",
+             d["verdict"] == "refuse" and d["unresolved"] == ["memory:in-neither-store"])
+        d = judge_message("fix\n\nStore: memory:ps-null\n", code, store2, refuse_day, True)
+        case("CLEAN TWIN a memo in the FIRST store still resolves when two are listed", d["verdict"] == "ok" and d["cited"] == ["memory:ps-null"])
+        hs = home_store()
+        case("CLEAN TWIN home_store lists both launch-root stores, ThriftyCrew first",
+             [os.path.basename(os.path.dirname(m)) for m in hs["memories"]] == ["C--Codex-ThriftyCrew", "C--Codex"] and hs["memory"] == hs["memories"][0])
         d = judge_message("fix\n\nStore: I looked around\n", code, store, refuse_day, None)
         case("MUST FIRE a Store: line naming nothing and no search is refused", d["verdict"] == "refuse")
         d = judge_message("fix\n\nStore: database-craft/transactions.md (section 3); memory:ps-null\n", code, store, refuse_day, True)
@@ -301,7 +332,7 @@ def selftest():
 
     for f in fails:
         print("  FAIL  " + f)
-    expected = 19
+    expected = 24
     if n != expected:
         fails.append("ran %d cases, expected %d" % (n, expected))
         print("  FAIL  ran %d cases, expected %d" % (n, expected))
