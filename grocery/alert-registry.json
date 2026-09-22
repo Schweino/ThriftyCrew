@@ -9,8 +9,8 @@
   "escalation"
  ],
  "resolver_ratchet": {
-  "unassigned_max": 73,
-  "set": "2026-09-22 (185 at the contract; 176 after batch 1; 73 after ops lane plan-2026-09-22-8 group B, residual 2026-09-22-5d20b9)",
+  "unassigned_max": 58,
+  "set": "2026-09-22 (185 at the contract; 176 after batch 1; 58 after ops lane plan-2026-09-22-8 group C, residual 2026-09-22-5d20b9)",
   "why": "a ratchet, not a gate red on day one: the entries registered before the resolver contract are counted here and the count may only fall. audit-alert-registry fails a registry holding more, and says 'ratchet CAN tighten' when it holds fewer, without rewriting this number (a plain run never writes its mark)."
  },
  "entries": [
@@ -1650,7 +1650,7 @@
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-task-disabled",
@@ -1661,7 +1661,7 @@
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-task-never-ran",
@@ -1672,7 +1672,7 @@
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-task-stale",
@@ -1683,7 +1683,7 @@
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-task-failed",
@@ -1694,7 +1694,7 @@
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-run-did-not-land",
@@ -1705,7 +1705,7 @@
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-output-missing",
@@ -1716,7 +1716,7 @@
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-output-not-current",
@@ -1727,7 +1727,7 @@
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-output-stale",
@@ -1738,7 +1738,7 @@
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-external-output-missing",
@@ -1749,7 +1749,7 @@
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-queue-stuck",
@@ -1760,7 +1760,7 @@
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-queue-unmeasured",
@@ -1771,7 +1771,7 @@
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "The heartbeat cannot measure a queue: a watcher is blind.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-queues-unmeasured",
@@ -1782,7 +1782,7 @@
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "The heartbeat cannot measure a queue: a watcher is blind.",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "silent-death-task-unwatched",
@@ -1792,7 +1792,7 @@
    "condition": "review: registry hygiene, a task or queue exists that expected-automations.json does not watch; nothing has stopped",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "silent-death-queues-unwatched",
@@ -1802,7 +1802,7 @@
    "condition": "review: registry hygiene, a task or queue exists that expected-automations.json does not watch; nothing has stopped",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "store-registry-hardcoded-store-list",
