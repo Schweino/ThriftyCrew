@@ -38,9 +38,10 @@
 param(
   [hashtable]$Patterns = @{},
   [hashtable]$Excludes = @{},
-  [switch]$WhatIfOnly
+  [switch]$WhatIfOnly,
+  [switch]$SelfTest
 )
-if (@($Patterns.Keys).Count -eq 0 -and @($Excludes.Keys).Count -eq 0) {
+if (-not $SelfTest -and @($Patterns.Keys).Count -eq 0 -and @($Excludes.Keys).Count -eq 0) {
   Write-Output 'apply-coverage-batch: pass -Patterns (includes) and/or -Excludes. An empty batch would run every gate and prove nothing.'
   exit 1
 }
@@ -69,7 +70,45 @@ function Snapshot {
 }
 
 $comFile = Join-Path $root 'commodities.json'
-
+# THE GUARDS GATE JUDGES WHAT THE BATCH ADDED (2026-09-22, plan-2026-09-22-5, found on ceab00's batch). Since the per-cell
+# quarantine ruling (2026-09-21) guards exits 2 with 'GUARDS QUARANTINE-REQUIRED' when every hard failure is scoped to cells
+# under the circuit breaker. This gate read any non-zero as the batch's fault, so ONE pre-existing quarantined cell
+# (vegetable-oil | Sam's, a band floor, queue 2026-09-21-6b17b1) reverted every batch on the box, rule changes Brad had ruled
+# on included: the whole matching lane held hostage by one unrelated cell (gap F3). So: guards runs on the baseline board
+# too, and a batch fails only on a board-scoped failure, or on a quarantine cell the baseline did not already name.
+function Get-BatchQuarantineCells([string[]]$Lines) {
+  $set = @{}
+  foreach ($l in @($Lines)) { $m = [regex]::Match([string]$l, '^\s*QUARANTINE\s+(.+?)\s+\[(value|selection)\]'); if ($m.Success) { $set[$m.Groups[1].Value.Trim()] = $true } }
+  return $set
+}
+function Test-BatchGuardsVerdict([int]$Rc, [string[]]$Lines, [hashtable]$BaseCells) {
+  # 'pass' | 'fail:<why>'. rc 0 passes. rc 2 WITH the quarantine-required verdict passes only when every cell it names was
+  # already named on the baseline board; anything else (rc 1, 3, a board-scoped hold, a NEW cell) fails as before.
+  if ($Rc -eq 0) { return 'pass' }
+  $isQ = (@($Lines | Where-Object { [string]$_ -match 'GUARDS QUARANTINE-REQUIRED' })).Count -gt 0
+  if ($Rc -ne 2 -or -not $isQ) { return ('fail:guards exited ' + $Rc + ' without a cell-scoped quarantine verdict') }
+  $now = Get-BatchQuarantineCells $Lines
+  if ($now.Count -eq 0) { return 'fail:guards asked for a quarantine but named no cell' }
+  $new = @($now.Keys | Where-Object { -not $BaseCells.ContainsKey($_) })
+  if ($new.Count -gt 0) { return ('fail:the batch added quarantined cell(s): ' + ($new -join '; ')) }
+  return 'pass'
+}
+if ($SelfTest) {
+  $bad = 0; $n = 0
+  function _BT([string]$label, [bool]$ok) { $script:n++; if ($ok) { Write-Output ('  ok   ' + $label) } else { Write-Output ('  FAIL ' + $label); $script:bad++ } }
+  # frozen from guards.ps1 on the seeded comparison-2026-09-22 (08:13 generation), the founding run
+  $baseL = @('  QUARANTINE  vegetable-oil / Sam''s Club [selection]  HARD FAIL: no NEW cell publishes a dearer price because the band refused ...', 'GUARDS QUARANTINE-REQUIRED: 1 hard failure(s), every one scoped to 1 cell(s) and 0 store(s)')
+  $base = Get-BatchQuarantineCells $baseL
+  _BT 'MECHANISM  the baseline quarantine line is read as one cell' ($base.Count -eq 1 -and $base.ContainsKey('vegetable-oil / Sam''s Club'))
+  _BT 'MUST NOT FIRE  the founding run: the batch board names only the baseline''s cell, so the batch is not reverted' ((Test-BatchGuardsVerdict 2 $baseL $base) -eq 'pass')
+  $newL = @($baseL[0], '  QUARANTINE  laundry-detergent / Hy-Vee [value]  HARD FAIL: ...', 'GUARDS QUARANTINE-REQUIRED: 2 hard failure(s)')
+  _BT 'MUST FIRE  a quarantine cell the baseline did not name is the batch''s, and fails' ((Test-BatchGuardsVerdict 2 $newL $base) -like 'fail:*laundry-detergent*')
+  _BT 'MUST FIRE  a board-scoped hold (rc 2 with no quarantine verdict) still fails' ((Test-BatchGuardsVerdict 2 @('GUARDS FAILED: hard=1') $base) -like 'fail:*')
+  _BT 'MUST FIRE  rc 1 and rc 3 still fail' (((Test-BatchGuardsVerdict 1 @() $base) -like 'fail:*') -and ((Test-BatchGuardsVerdict 3 @() $base) -like 'fail:*'))
+  _BT 'CLEAN TWIN  a clean guards run (rc 0) passes' ((Test-BatchGuardsVerdict 0 @() @{}) -eq 'pass')
+  Write-Output ('apply-coverage-batch self-test ' + $(if ($bad -eq 0) { 'pass' } else { 'FAIL' }) + ': ' + ($n - $bad) + ' of ' + $n + ' case(s)')
+  exit $(if ($bad -eq 0) { 0 } else { 1 })
+}
 # ---- VALIDATE THE BATCH BEFORE DOING ANY WORK. Every check below is cheap and every failure is fatal, so
 # they run before the baseline rebuild rather than after it. A pattern that does not COMPILE would
 # otherwise silently match nothing and the batch would read as "bought nothing" - a rule that was never a
@@ -119,6 +158,10 @@ $baseCmp = Join-Path $OutDir '_baseline-batch.json'
 Copy-Item (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1).FullName $baseCmp -Force
 $before = Snapshot
 Write-Output ("before: {0} commodities on the board" -f $before.Count)
+# the baseline's own quarantine cells, so the guards gate below judges only what the batch ADDED (Test-BatchGuardsVerdict)
+$gBase = Invoke-NativeScript (Join-Path $root 'guards.ps1')
+$script:BatchBaseQuarantine = Get-BatchQuarantineCells @($gBase.Lines)
+Write-Output ("baseline guards: rc=" + $gBase.ExitCode + ", " + $script:BatchBaseQuarantine.Count + " cell(s) already quarantined before the edit")
 
 # ---- edit
 $coms = Get-Content $comFile -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -385,8 +428,10 @@ if ($tileRc -ne 0) {
     exit 1
   }
 }
-$childRc = Invoke-BatchChild 'guards.ps1'
-if ($childRc -ne 0) { Revert "guards failed ($childRc)" }
+$gAfter = Invoke-NativeScript (Join-Path $root 'guards.ps1')
+$gVerdict = Test-BatchGuardsVerdict ([int]$gAfter.ExitCode) @($gAfter.Lines) $script:BatchBaseQuarantine
+if ($gVerdict -ne 'pass') { Revert ("guards failed (" + $gAfter.ExitCode + "): " + $gVerdict.Substring(5)) }
+if ([int]$gAfter.ExitCode -eq 2) { Write-Output ('    guards: quarantine-required, but every cell it names was already quarantined on the baseline board (' + (@($script:BatchBaseQuarantine.Keys) -join '; ') + ') - not this batch''s') }
 
 Write-Output 'BATCH GREEN: crown-diff reviewed, coverage gained, known-wrong clean, tile-integrity clean, guards clean.'
 exit 0

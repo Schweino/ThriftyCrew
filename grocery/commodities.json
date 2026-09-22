@@ -5830,14 +5830,16 @@
     },
     {
         "id":  "laundry-detergent",
-        "label":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
+        "label":  "Laundry Detergent (liquid, any brand)",
         "unit":  "floz",
         "include":  [
                         "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)",
                         "(?:oxi\\s*-?\\s*clean|odor\\s*blasters?).{0,60}arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer",
                         "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}odor\\s*bl(?:asters?|st)\\b",
                         "\\blndry\\s+dtrgnt\\b.*\\bpls\\s+o\\b",
-                        "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}\\bplus\\s+oxi\\b"
+                        "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}\\bplus\\s+oxi\\b",
+                        "\\blaundry\\s+detergent\\b",
+                        "\\bliquid\\s+detergent\\b"
                     ],
         "exclude":  [
                         "\\bpods?\\b",
@@ -5851,7 +5853,10 @@
                         "in-?wash",
                         "\\bdish\\b",
                         "unit\\s*dose",
-                        "\\btabs?\\b"
+                        "\\btabs?\\b",
+                        "dishwash",
+                        "fabric\\s+softener",
+                        "\\btiles?\\b"
                     ],
         "relax_global":  [
                              "\\bscent(?:s|ed)?\\b",
@@ -33418,7 +33423,7 @@
         "unit":  "oz",
         "band_min":  0.04,
         "band_max":  0.3,
-        "_note_cup_packs":  "2026-09-19: single-serve fruit-cup multipacks are excluded below. They are the fruit-cups commodity's form, and Aldi's card states the PACK TOTAL for them ('4 pack' + card '16 oz') while stating ONE CUP for the sibling mandarin pack ('4 pack' + card '4 oz'), so build-aldi-regular's name-pack-count rule multiplies the pineapple one to 64 oz and prices it at 0.0342/oz against a real 2.19/16 = 0.1369 (checked on aldi.us, 'Aldi Pineapple Tidbits in 100% Fruit Juice, 4 pack', 16 oz, Canned Fruit). The size bug itself is filed separately; this keeps the 4x-cheap row out of the row it was censored from.",
+        "_note_cup_packs":  "2026-09-19: single-serve fruit-cup multipacks are excluded below. They are the fruit-cups commodity\u0027s form, and Aldi\u0027s card states the PACK TOTAL for them (\u00274 pack\u0027 + card \u002716 oz\u0027) while stating ONE CUP for the sibling mandarin pack (\u00274 pack\u0027 + card \u00274 oz\u0027), so build-aldi-regular\u0027s name-pack-count rule multiplies the pineapple one to 64 oz and prices it at 0.0342/oz against a real 2.19/16 = 0.1369 (checked on aldi.us, \u0027Aldi Pineapple Tidbits in 100% Fruit Juice, 4 pack\u0027, 16 oz, Canned Fruit). The size bug itself is filed separately; this keeps the 4x-cheap row out of the row it was censored from.",
         "relax_global":  [
                              "\\bcanned\\b",
                              "(?\u003c!orange\\s)\\bjuice\\b"
@@ -37299,7 +37304,7 @@
         "id":  "energy-drinks",
         "label":  "Energy Drinks",
         "unit":  "floz",
-        "_note_band_min":  "2026-09-19: floor lowered 0.08 -> 0.07. The old floor censored a real cheapest: 'Summit Berry Waves Blue Raspberry Energy Drink' 30 fl oz at $2.29 = 0.0763/fl oz, refused at 95% of the floor while the board published Aldi's own 16 fl oz can at 0.0931. Read live on aldi.us on 2026-09-19 (30 fl oz, $2.29, filed by Aldi under Functional Drinks & Ice Tea) and captured twice, 2026-08-15 and 2026-09-19, at the same price and size. 0.07 keeps a floor under the parse errors this band exists for (a 4x size slip on a 16 fl oz can reads 0.023) while admitting Aldi's large bottle, which is the cheapest energy drink in Omaha. First value tried; no sweep.",
+        "_note_band_min":  "2026-09-19: floor lowered 0.08 -\u003e 0.07. The old floor censored a real cheapest: \u0027Summit Berry Waves Blue Raspberry Energy Drink\u0027 30 fl oz at $2.29 = 0.0763/fl oz, refused at 95% of the floor while the board published Aldi\u0027s own 16 fl oz can at 0.0931. Read live on aldi.us on 2026-09-19 (30 fl oz, $2.29, filed by Aldi under Functional Drinks \u0026 Ice Tea) and captured twice, 2026-08-15 and 2026-09-19, at the same price and size. 0.07 keeps a floor under the parse errors this band exists for (a 4x size slip on a 16 fl oz can reads 0.023) while admitting Aldi\u0027s large bottle, which is the cheapest energy drink in Omaha. First value tried; no sweep.",
         "band_min":  0.07,
         "band_max":  0.4,
         "relax_global":  [
@@ -47289,7 +47294,7 @@
         "id":  "honey-mustard",
         "label":  "Honey Mustard",
         "unit":  "oz",
-        "_note_dressings":  "2026-09-19: salad dressings are excluded below. This commodity is the MUSTARD, priced in weight ounces beside mustard and dijon-mustard, and the dressings are their own floz commodities (ranch, italian, caesar, blue-cheese). Mixing them put 12 oz jars (Aldi, Walmart) on the same row as 16-24 fl oz bottles (Baker's, Hy-Vee, Family Fare) and audit-unit-basis-outlier hard-failed the crown: Aldi 0.1242 led Baker's 0.1244 by 0.16%, while reading the jar's 12 oz as weight rather than volume moves it about 10% (mustard is denser than water), so the cheapest verdict flipped on the label alone. Not allowlistable - that file is for a number that is right, and this margin is thinner than the question. Splitting the forms leaves two 12 oz jars, like for like, Aldi ahead of Walmart by 16%.",
+        "_note_dressings":  "2026-09-19: salad dressings are excluded below. This commodity is the MUSTARD, priced in weight ounces beside mustard and dijon-mustard, and the dressings are their own floz commodities (ranch, italian, caesar, blue-cheese). Mixing them put 12 oz jars (Aldi, Walmart) on the same row as 16-24 fl oz bottles (Baker\u0027s, Hy-Vee, Family Fare) and audit-unit-basis-outlier hard-failed the crown: Aldi 0.1242 led Baker\u0027s 0.1244 by 0.16%, while reading the jar\u0027s 12 oz as weight rather than volume moves it about 10% (mustard is denser than water), so the cheapest verdict flipped on the label alone. Not allowlistable - that file is for a number that is right, and this margin is thinner than the question. Splitting the forms leaves two 12 oz jars, like for like, Aldi ahead of Walmart by 16%.",
         "include":  [
                         "honey\\s+mustard",
                         "honey\\s+dijon"
@@ -49341,10 +49346,10 @@
                         "pickled\\s+jalape[n\\u00f1]os?",
                         "jalape[n\\u00f1]o\\s+(?:slices|rings|nacho)",
                         "(?:nacho|tamed|sliced|diced)\\s+(?:hot\\s+)?jalape[n\\u00f1]os?",
-                        "jalape[n\u00f1]o\\s+peppers,?\\s+pickled",
-                        "jalape[n\u00f1\u00c3\u00b1]{1,2}o\\s+peppers,?\\s+pickled",
-                        "jalape[n\u00f1]o\\s+peppers,?\\s+pickled",
-                        "jalape[n\u00f1\u00c3\u00b1]{1,2}o\\s+peppers,?\\s+pickled",
+                        "jalape[nñ]o\\s+peppers,?\\s+pickled",
+                        "jalape[nñÃ±]{1,2}o\\s+peppers,?\\s+pickled",
+                        "jalape[nñ]o\\s+peppers,?\\s+pickled",
+                        "jalape[nñÃ±]{1,2}o\\s+peppers,?\\s+pickled",
                         "jalape[n\\u00f1]o\\s+peppers,\\s*[^,]*pickled"
                     ],
         "exclude":  [
@@ -72290,7 +72295,7 @@
         "exclude":  [
                         "\\b(canned|can|dry|dried|dehydrated|soup|chili|baked|refried)\\b",
                         "\\b(edamame|fava|green beans?|black-?eyed peas?|mixed vegetables?)\\b",
-                        "\\b(meal|entree|entr\u00e9e|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b",
+                        "\\b(meal|entree|entrée|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -72369,7 +72374,7 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(meal|entree|entr\u00e9e|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b",
+                        "\\b(meal|entree|entrée|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b",
                         "\\bcough\\b",
                         "\\bthroat\\s+(?:drops?|relief|lozenges?)\\b",
                         "\\blozenges?\\b",
@@ -73280,7 +73285,7 @@
         "id":  "cornmeal",
         "label":  "Cornmeal",
         "unit":  "oz",
-        "_note_relax":  "2026-09-19: the same class as 15-bean-soup-mix and frozen-mixed-peppers, with one twist that hid it from the zero-survivor sweep. The global \\bmeal\\b refuses every product spelled 'Corn Meal' as two words, which is nearly all of them - Pearl Milling 80 oz $4.37, Quaker 24 oz $3.17, Great Value, Martha White, GOYA, Dixie Lily, PAN - leaving exactly ONE survivor, Bob's Red Mill Organic 'Cornmeal' one word at $11.71/24 oz = 0.488/oz, which its own 0.03-0.39 band then refuses as too dear. So the commodity had a survivor and still no cell, and only the band kept it off the board. The commodity's own include is '\\bcorn\\s*meal\\b', i.e. it expects the spelling the global kills. Pearl Milling at 4.37/80 oz = 0.0546/oz is what should hold this cell.",
+        "_note_relax":  "2026-09-19: the same class as 15-bean-soup-mix and frozen-mixed-peppers, with one twist that hid it from the zero-survivor sweep. The global \\bmeal\\b refuses every product spelled \u0027Corn Meal\u0027 as two words, which is nearly all of them - Pearl Milling 80 oz $4.37, Quaker 24 oz $3.17, Great Value, Martha White, GOYA, Dixie Lily, PAN - leaving exactly ONE survivor, Bob\u0027s Red Mill Organic \u0027Cornmeal\u0027 one word at $11.71/24 oz = 0.488/oz, which its own 0.03-0.39 band then refuses as too dear. So the commodity had a survivor and still no cell, and only the band kept it off the board. The commodity\u0027s own include is \u0027\\bcorn\\s*meal\\b\u0027, i.e. it expects the spelling the global kills. Pearl Milling at 4.37/80 oz = 0.0546/oz is what should hold this cell.",
         "relax_global":  [
                              "\\bmeal\\b"
                          ],
@@ -73623,12 +73628,12 @@
         "label":  "Creme Fraiche",
         "unit":  "oz",
         "include":  [
-                        "\\bcr[e\u00e8]me\\s+fra[i\u00ee]che\\b",
-                        "\\bcr[e\u00e8]me\\s+fra[i\u00ee]che\\b"
+                        "\\bcr[eè]me\\s+fra[iî]che\\b",
+                        "\\bcr[eè]me\\s+fra[iî]che\\b"
                     ],
         "exclude":  [
                         "\\bsour\\s+cream\\b",
-                        "\\bcrema\\s+(?:mexicana|salvadore[n\u00f1]a|agria)\\b",
+                        "\\bcrema\\s+(?:mexicana|salvadore[nñ]a|agria)\\b",
                         "\\btable\\s+cream\\b",
                         "\\bcream\\s+cheese\\b",
                         "\\bmascarpone\\b",
@@ -73716,7 +73721,7 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\bcrema\\s+(?:mexicana|salvadore[n\u00f1]a|agria)\\b",
+                        "\\bcrema\\s+(?:mexicana|salvadore[nñ]a|agria)\\b",
                         "\\bcough\\b",
                         "\\bthroat\\s+(?:drops?|relief|lozenges?)\\b",
                         "\\blozenges?\\b",
@@ -73749,9 +73754,9 @@
         "exclude":  [
                         "\\b(vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
                         "\\b(non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[e\u00e9]|pink|white\\s+zinfandel)\\b",
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel)\\b",
                         "\\b(cocktail|mimosa|sangria|hard\\s+seltzer|beer|cider|margarita|ready[- ]to[- ]drink|rtd)\\b",
-                        "\\b(frozen|entr[e\u00e9]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(frozen|entr[eé]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -73842,8 +73847,8 @@
                         "\\bbag\\s*in\\s*box\\b",
                         "vinaigrette",
                         "\\bdressing\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[e\u00e9]|pink|white\\s+zinfandel)\\b",
-                        "\\b(frozen|entr[e\u00e9]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel)\\b",
+                        "\\b(frozen|entr[eé]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "\\bcough\\b",
                         "\\bthroat\\s+(?:drops?|relief|lozenges?)\\b",
                         "\\blozenges?\\b",
@@ -73888,9 +73893,9 @@
                         "eau\\s+de\\s+vie",
                         "\\b(vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
                         "\\b(non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[e\u00e9]|pink|white\\s+zinfandel)\\b",
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel)\\b",
                         "\\b(cocktail|mimosa|sangria|hard\\s+seltzer|beer|cider|margarita|ready[- ]to[- ]drink|rtd)\\b",
-                        "\\b(frozen|entr[e\u00e9]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(frozen|entr[eé]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -73969,8 +73974,8 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[e\u00e9]|pink|white\\s+zinfandel)\\b",
-                        "\\b(frozen|entr[e\u00e9]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel)\\b",
+                        "\\b(frozen|entr[eé]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "\\bcough\\b",
                         "\\bthroat\\s+(?:drops?|relief|lozenges?)\\b",
                         "\\blozenges?\\b",
@@ -74103,10 +74108,10 @@
         "id":  "15-bean-soup-mix",
         "label":  "15 Bean Soup Mix",
         "unit":  "oz",
-        "_note_relax":  "2026-09-19: this commodity could never be priced ANYWHERE, because its own defining words are on the global exclude list and killed every product its includes claim - 'Hurst's HamBeens 15 Bean Dry Soup Mix with Seasoning, 20 oz' at Walmart $2.87 and the same product at Family Fare $3.99, both refused by \\bsoup\\b and \\bmix\\b. It has been sitting in store-coverage's 'staple not on board' list because of it. The globals exist to keep prepared soups and drink mixes out of food rows; a 15-bean soup MIX is the commodity itself, which is what relax_global is for. $2.87/20 oz = 0.1435/oz, inside its own 0.06-0.53 band.",
+        "_note_relax":  "2026-09-19: this commodity could never be priced ANYWHERE, because its own defining words are on the global exclude list and killed every product its includes claim - \u0027Hurst\u0027s HamBeens 15 Bean Dry Soup Mix with Seasoning, 20 oz\u0027 at Walmart $2.87 and the same product at Family Fare $3.99, both refused by \\bsoup\\b and \\bmix\\b. It has been sitting in store-coverage\u0027s \u0027staple not on board\u0027 list because of it. The globals exist to keep prepared soups and drink mixes out of food rows; a 15-bean soup MIX is the commodity itself, which is what relax_global is for. $2.87/20 oz = 0.1435/oz, inside its own 0.06-0.53 band.",
         "relax_global":  [
                              "\\bsoup\\b",
-                             "\\bmix\\b(?!\\s*(?:&|and)\\s*match)"
+                             "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
                          ],
         "include":  [
                         "\\b15[- ]?bean\\b.*\\bsoup\\b(?:\\s+mix)?\\b",
@@ -74220,7 +74225,7 @@
         "id":  "southern-mixed-greens",
         "label":  "Southern-Style Mixed Greens",
         "unit":  "oz",
-        "_note_relax":  "2026-09-19: unpriceable anywhere for the same reason as 15-bean-soup-mix. Its own include pattern begins '(?:seasoned\\s+)?southern', so the word the global `seasoned` refuses is one this commodity expects, and the product is sold canned: 'Glory Foods Seasoned Southern Style Mixed Greens, Canned Vegetables, 27 oz' at Walmart $2.52 and at Baker's $3.29 were the only two claimed, killed by `seasoned` and \\bcanned\\b. $2.52/27 oz = 0.0933/oz, inside its 0.04-0.37 band.",
+        "_note_relax":  "2026-09-19: unpriceable anywhere for the same reason as 15-bean-soup-mix. Its own include pattern begins \u0027(?:seasoned\\s+)?southern\u0027, so the word the global `seasoned` refuses is one this commodity expects, and the product is sold canned: \u0027Glory Foods Seasoned Southern Style Mixed Greens, Canned Vegetables, 27 oz\u0027 at Walmart $2.52 and at Baker\u0027s $3.29 were the only two claimed, killed by `seasoned` and \\bcanned\\b. $2.52/27 oz = 0.0933/oz, inside its 0.04-0.37 band.",
         "relax_global":  [
                              "seasoned",
                              "\\bcanned\\b"
@@ -74452,7 +74457,7 @@
                         "\\bsofrito\\b"
                     ],
         "exclude":  [
-                        "\\b(saz[o\u00f3]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b",
+                        "\\b(saz[oó]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b",
                         "\\b(beverage|drink|juice|cocktail|supplement|capsule|tablet|powder)\\b",
                         "\\b(prepared meal|meal kit|ready-to-eat|restaurant)\\b",
                         "beech\\s*nut",
@@ -74533,7 +74538,7 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(saz[o\u00f3]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b",
+                        "\\b(saz[oó]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b",
                         "\\bcough\\b",
                         "\\bthroat\\s+(?:drops?|relief|lozenges?)\\b",
                         "\\blozenges?\\b",
@@ -74891,10 +74896,10 @@
         "id":  "frozen-mixed-peppers",
         "label":  "Frozen Sliced Mixed Peppers",
         "unit":  "oz",
-        "_note_relax":  "2026-09-19: a FROZEN commodity refused by the global \\bfrozen\\b, so it could never be priced anywhere - every include pattern it has names 'frozen' itself. All five claimed products were killed: Great Value Pepper & Onion Mixed Vegetable Blend 20 oz $2.84 and Pictsweet 3 Pepper & Onion 22 oz $3.86 at Walmart, Kroger Frozen 3 Pepper & Onion Blend 12 oz $1.59 and Kroger Frozen Fajita Blend 48 oz $6.29 at Baker's, Birds Eye Pepper Stir Fry 14.4 oz $1.99 at Fareway. \\bmix\\b is relaxed too for the Kroger fajita blend, whose name says Mix. $1.59/12 oz = 0.1325/oz, inside its 0.04-0.4 band.",
+        "_note_relax":  "2026-09-19: a FROZEN commodity refused by the global \\bfrozen\\b, so it could never be priced anywhere - every include pattern it has names \u0027frozen\u0027 itself. All five claimed products were killed: Great Value Pepper \u0026 Onion Mixed Vegetable Blend 20 oz $2.84 and Pictsweet 3 Pepper \u0026 Onion 22 oz $3.86 at Walmart, Kroger Frozen 3 Pepper \u0026 Onion Blend 12 oz $1.59 and Kroger Frozen Fajita Blend 48 oz $6.29 at Baker\u0027s, Birds Eye Pepper Stir Fry 14.4 oz $1.99 at Fareway. \\bmix\\b is relaxed too for the Kroger fajita blend, whose name says Mix. $1.59/12 oz = 0.1325/oz, inside its 0.04-0.4 band.",
         "relax_global":  [
                              "\\bfrozen\\b",
-                             "\\bmix\\b(?!\\s*(?:&|and)\\s*match)"
+                             "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
                          ],
         "include":  [
                         "\\b(frozen|fresh frozen)\\b.*\\b(3|three|tri[- ]?colou?red|mixed)\\b.*\\b(bell\\s+)?peppers?\\b",
@@ -74905,8 +74910,8 @@
                     ],
         "exclude":  [
                         "\\b(sauce|sauced|seasoning|spice|powder|flakes?|pickled|canned|jarred|dried|dehydrated)\\b",
-                        "\\b(stuffed|pizza|meal|entr\u00e9e|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
-                        "\\b(roasted red pepper|green chiles?|jalape[n\u00f1]os?|banana peppers?|poblanos?|serranos?)\\b",
+                        "\\b(stuffed|pizza|meal|entrée|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
+                        "\\b(roasted red pepper|green chiles?|jalape[nñ]os?|banana peppers?|poblanos?|serranos?)\\b",
                         "\\b(broccoli|cauliflower|carrots?|corn|peas?|potatoes?|mushrooms?|celery)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
@@ -74986,8 +74991,8 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(stuffed|pizza|meal|entr\u00e9e|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
-                        "\\b(roasted red pepper|green chiles?|jalape[n\u00f1]os?|banana peppers?|poblanos?|serranos?)\\b",
+                        "\\b(stuffed|pizza|meal|entrée|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
+                        "\\b(roasted red pepper|green chiles?|jalape[nñ]os?|banana peppers?|poblanos?|serranos?)\\b",
                         "\\bcough\\b",
                         "\\bthroat\\s+(?:drops?|relief|lozenges?)\\b",
                         "\\blozenges?\\b",
@@ -75124,8 +75129,8 @@
         "label":  "Veggie Sausages",
         "unit":  "oz",
         "include":  [
-                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027\u2019]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027\u2019]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b",
-                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027\u2019]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027\u2019]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b"
+                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027’]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027’]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b",
+                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027’]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027’]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b"
                     ],
         "exclude":  [
                         "\\b(?:hot dog|veggie dog|smart dog|ground|crumble|meatball|burger|bacon|nugget|wing|pizza|burrito|bowl|sandwich|pasta sauce|supplement|protein powder|shake|beverage|drink)\\b",
@@ -76633,9 +76638,9 @@
         "exclude":  [
                         "\\b(?:vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
                         "\\b(?:non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
-                        "\\b(?:sparkling|champagne|prosecco|brut|ros[e\u00e9]|pink|white\\s+zinfandel|white\\s+wine)\\b",
+                        "\\b(?:sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel|white\\s+wine)\\b",
                         "\\b(?:sangria|sweet\\s+red|dessert\\s+wine|port|sherry|marsala|cocktail|margarita|ready[- ]to[- ]drink|rtd)\\b",
-                        "\\b(?:frozen|entr[e\u00e9]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(?:frozen|entr[eé]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -76724,8 +76729,8 @@
                         "\\bmustard\\b",
                         "vinaigrette",
                         "\\bdressing\\b",
-                        "\\b(?:sparkling|champagne|prosecco|brut|ros[e\u00e9]|pink|white\\s+zinfandel|white\\s+wine)\\b",
-                        "\\b(?:frozen|entr[e\u00e9]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(?:sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel|white\\s+wine)\\b",
+                        "\\b(?:frozen|entr[eé]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "\\bcough\\b",
                         "\\bthroat\\s+(?:drops?|relief|lozenges?)\\b",
                         "\\blozenges?\\b",
@@ -78989,9 +78994,9 @@
         "id":  "wild-rice-blend",
         "label":  "Wild Rice Blend",
         "unit":  "lb",
-        "_note_relax":  "2026-09-19: the include is '\\bwild\\s+rice\\s+(?:blend|mix)\\b' - the commodity admits the word MIX by name - while the global \\bmix\\b refused every product it claimed: the three Earthly Grains Long Grain Wild Rice Mixes at Aldi, 5.9-6.3 oz, $1.99 each. Unpriceable anywhere until now, and on store-coverage's 'staple not on board' list. It carries no band, so the guards' basis checks are what judge the new cell.",
+        "_note_relax":  "2026-09-19: the include is \u0027\\bwild\\s+rice\\s+(?:blend|mix)\\b\u0027 - the commodity admits the word MIX by name - while the global \\bmix\\b refused every product it claimed: the three Earthly Grains Long Grain Wild Rice Mixes at Aldi, 5.9-6.3 oz, $1.99 each. Unpriceable anywhere until now, and on store-coverage\u0027s \u0027staple not on board\u0027 list. It carries no band, so the guards\u0027 basis checks are what judge the new cell.",
         "relax_global":  [
-                             "\\bmix\\b(?!\\s*(?:&|and)\\s*match)"
+                             "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
                          ],
         "include":  [
                         "\\bwild\\s+rice\\s+(?:blend|mix)\\b"
@@ -79442,7 +79447,7 @@
                     ],
         "exclude":  [
                         "\\b(?:sauce|marinade|dip|salsa|seasoning)\\b",
-                        "\\b(?:vinaigrette|avocado|jalape[n\u00f1]o|ranch)\\b",
+                        "\\b(?:vinaigrette|avocado|jalape[nñ]o|ranch)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -79521,7 +79526,7 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(?:vinaigrette|avocado|jalape[n\u00f1]o|ranch)\\b",
+                        "\\b(?:vinaigrette|avocado|jalape[nñ]o|ranch)\\b",
                         "\\bcough\\b",
                         "\\bthroat\\s+(?:drops?|relief|lozenges?)\\b",
                         "\\blozenges?\\b",
@@ -79651,7 +79656,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bflavou?red\\b"
                     ]
     },
     {
