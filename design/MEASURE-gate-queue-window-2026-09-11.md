@@ -156,3 +156,5 @@ Re-read at harness blob `7441d63dacbf70f59c1a44ead4d9340eb9e36a48` (ops/run-gate
 Re-read at harness blob 3d0fe2a6796b5681c2fdf62a6b77a5cdfa009298 (ops/run-gates.ps1): still holds. The 2026-09-22 change (queue 2026-09-21-a25dc0) only let a $static entry carry arguments and listed verify-commodities-gate -Head; slot acquisition, the ticket queue and the wait window this document measured are untouched.
 
 Re-read at harness blob 49ab5f7a7293fb82598c81272a9bd08ab9cc9658 (ops/run-gates.ps1): still holds. The 2026-09-22 change (queue 2026-09-22-175249) only listed grocery/audit-store-registry.ps1 -CodeOnly as one more static entry; slot acquisition, the ticket queue and the wait window are untouched.
+
+Re-read at harness blob d40d289e988744cf6c502ab434c594747279e116 (grocery/audit-store-registry.ps1): still holds. The 2026-09-22 change (queue 2026-09-22-175249) widened its fixture literal test and added -CodeOnly; nothing this document measured about the gate queue reads it.
