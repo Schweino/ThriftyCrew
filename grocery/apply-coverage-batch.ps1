@@ -251,9 +251,26 @@ if (Test-Path $corpusFile) {
     foreach ($nm in ($names | Select-Object -First 12)) { Write-Output ("        - " + $nm) }
     if ($names.Count -gt 12) { Write-Output ("        ... and " + ($names.Count - 12) + " more (READ THEM: nothing here can tell you a suppressed row was really wrong)") }
   }
-  $deadEx = @($Excludes.Keys | Where-Object { @($suppressed[$_]).Count -eq 0 })
+  # A RECURRING WRONG-PRODUCT SHAPE IS AN EXCLUDE (Brad's ruling "B" on queue 2026-09-21-7d64a6, 2026-09-22). Such a shape
+  # is often one no include admits at all (Ben's Original Ready Rice flavours on cooked-jasmine-rice: the semantic sweep
+  # saw them, the jasmine include never did), so the suppression count above is 0 and this gate used to revert the very
+  # exclude the ruling asks for. Its value is a different, measured thing: the active known-wrong rulings on the SAME
+  # commodity whose names it refuses, i.e. the one-name-at-a-time rulings it replaces with one rule the sweep reads
+  # (coverage-explain-lib classifies a finding the exclude refuses as REFUSED-BY-EXCLUDE and stops paging it). Counted
+  # and printed per exclude; theft, crowns and every downstream gate still apply unchanged.
+  . (Join-Path $root 'coverage-explain-lib.ps1')   # Get-ExcludeAbsorbedRulings
+  $kwFile = Join-Path $root 'known-wrong.json'
+  $kwEntries = @(); if (Test-Path $kwFile) { $kwEntries = @((Read-JsonFile $kwFile).entries) }
+  $absorbed = Get-ExcludeAbsorbedRulings -Excludes $Excludes -Entries $kwEntries
+  foreach ($id in $Excludes.Keys) {
+    $keys = @($absorbed[$id])
+    if ($keys.Count -gt 0) {
+      Write-Output ("    {0,-24} absorbs {1} known-wrong ruling(s) on the same commodity (a recurring shape, ruling 7d64a6)" -f $id, $keys.Count)
+      foreach ($k in $keys) { Write-Output ("        - " + $k) }
+    }
+  }  $deadEx = @($Excludes.Keys | Where-Object { @($suppressed[$_]).Count -eq 0 -and @($absorbed[$_]).Count -eq 0 })
   if ($deadEx.Count -eq @($Excludes.Keys).Count -and @($Excludes.Keys).Count -gt 0 -and @($Patterns.Keys).Count -eq 0) {
-    Revert 'no exclude in the batch suppressed a single row its commodity actually matches - it bought nothing'
+    Revert 'no exclude in the batch suppressed a single row its commodity actually matches, or absorbed a known-wrong ruling of its shape - it bought nothing'
   }
   if ($deadEx.Count -gt 0) { Write-Output ("    NOTE: {0} exclude(s) suppressed nothing and should be dropped: {1}" -f $deadEx.Count, ($deadEx -join ', ')) }
 

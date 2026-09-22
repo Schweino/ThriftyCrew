@@ -80,3 +80,27 @@ function Split-CoverageFindings {
   }
   return [pscustomobject]@{ alert = $alert.ToArray(); excluded = $excluded.ToArray() }
 }
+
+# A RECURRING WRONG-PRODUCT SHAPE IS AN EXCLUDE (Brad's ruling "B" on queue 2026-09-21-7d64a6, 2026-09-22). What an exclude
+# for such a shape BUYS: the active known-wrong wrong-product rulings on the SAME commodity whose names it refuses, the
+# one-name-at-a-time rulings it replaces with one rule the matching gate measures and the sweep reads (Get-CoverageVerdict
+# classifies a finding it refuses REFUSED-BY-EXCLUDE). apply-coverage-batch keeps an exclude that absorbs at least one,
+# even when no include admits the shape, because that is the case the ruling exists for. Returns id -> string[] of keys.
+function Get-ExcludeAbsorbedRulings {
+  param([Parameter(Mandatory = $true)][hashtable]$Excludes, [object[]]$Entries)
+  $out = @{}
+  foreach ($id in @($Excludes.Keys)) {
+    $keys = [System.Collections.Generic.List[string]]::new()
+    foreach ($p in @($Excludes[$id])) {
+      if (-not $p) { continue }
+      $r = [regex]::new([string]$p, 'IgnoreCase')
+      foreach ($e in @($Entries)) {
+        if ($null -eq $e -or [string]$e.commodity -ne [string]$id -or [string]$e.verdict -ne 'wrong-product') { continue }
+        if ($e.PSObject.Properties['reversed_on'] -and ([string]$e.reversed_on).Trim()) { continue }
+        foreach ($nm in @($e.names)) { if ($r.IsMatch([string]$nm) -and -not $keys.Contains([string]$e.key)) { $keys.Add([string]$e.key) } }
+      }
+    }
+    $out[[string]$id] = $keys.ToArray()
+  }
+  return $out
+}

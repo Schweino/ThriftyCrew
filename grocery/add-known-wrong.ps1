@@ -45,6 +45,7 @@ param(
   [string]$ListFile,
   [string[]]$AlsoName,
   [switch]$AllowCommaInName,
+  [switch]$OneOffShape,
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -71,6 +72,34 @@ function Get-JoinedNameTrap([string[]]$Names) {
   return ''
 }
 
+# A RECURRING WRONG-PRODUCT SHAPE IS AN EXCLUDE, NEVER A SECOND RULING (Brad's ruling "B" on queue 2026-09-21-7d64a6,
+# 2026-09-22). known-wrong is keyed on ONE exact product name, so each new flavour or pack of a product already ruled pages
+# again (three times on 2026-09-20 alone: two Ben's Original Ready Rice flavours on cooked-jasmine-rice and a Stayfree
+# variant). A pattern here would be a SECOND pattern system beside the commodity excludes, which the matching gate
+# (apply-coverage-batch, the routing artifact) already measures: gap F1 of design/RCA-holistic-2026-09-22.md. So the
+# SECOND ruling for the same commodity and the same SHAPE is refused, and the author is pointed at the exclude.
+# SHAPE = the first three words of the product name, lower-cased, apostrophes dropped ("bens original ready"). Measured
+# over known-wrong.json on 2026-09-22: 14 of 258 active commodity|shape groups already hold a second ruling, and every
+# one of the 14 is a family of one product line (Prego Italian Sausage sauces, Maxwell House International cafes, Great
+# Value Classic Ranch). FIRST PLAUSIBLE NUMBER (three words), nothing else tried. -OneOffShape is the reviewed exit for a
+# genuinely different product that happens to share three leading words.
+function Get-KwShape([string]$Name) {
+  $w = [regex]::Matches((([string]$Name).ToLower() -replace "['’]", ''), '[a-z0-9]+')
+  if ($w.Count -lt 3) { return '' }
+  return ($w[0].Value + ' ' + $w[1].Value + ' ' + $w[2].Value)
+}
+function Find-KwShapeSibling($Entries, [string]$Commodity, [string[]]$Names) {
+  # The first ACTIVE wrong-product ruling on this commodity whose leading shape equals one of the new names', or $null.
+  $want = @{}
+  foreach ($n in @($Names)) { $s = Get-KwShape $n; if ($s) { $want[$s] = $true } }
+  if ($want.Count -eq 0) { return $null }
+  foreach ($e in @($Entries)) {
+    if ($null -eq $e -or [string]$e.commodity -ne $Commodity -or [string]$e.verdict -ne 'wrong-product') { continue }
+    if ($e.PSObject.Properties['reversed_on'] -and ([string]$e.reversed_on).Trim()) { continue }
+    foreach ($n in @($e.names)) { $s = Get-KwShape $n; if ($s -and $want.ContainsKey($s)) { return [pscustomobject]@{ key = [string]$e.key; shape = $s; name = [string]$n } } }
+  }
+  return $null
+}
 if ($SelfTest) {
   $bad = 0; $ran = 0
   function _Ok([string]$label, [bool]$cond) { $script:ran++; if ($cond) { Write-Output ('  ok   ' + $label) } else { Write-Output ('  FAIL ' + $label); $script:bad++ } }
@@ -103,7 +132,20 @@ if ($SelfTest) {
     $rc2 = $LASTEXITCODE
     $j2 = ($o2 -join "`n")
     _Ok ('CLEAN TWIN  under -File, one real name plus -AlsoName is accepted with TWO names (rc=' + $rc2 + ')') (($rc2 -eq 0) -and ($j2 -match 'ADDING') -and ($j2 -match 'Maple Biscuit Roll Ups') -and ($j2 -match 'Frozen Breakfast 8 Ct"'))
-  } catch { Write-Output ('  FAIL end-to-end cases could not run: ' + $_.Exception.Message); $bad++ }
+    # A RECURRING SHAPE IS AN EXCLUDE (Brad's ruling on 2026-09-21-7d64a6). The founding pair, frozen verbatim from
+    # known-wrong.json: the cilantro-lime ruling exists, and the roasted-chicken flavour is the SECOND of the same shape.
+    $benLedger = '{"entries":[{"key":"cooked-jasmine-rice|Bakers|bens-original-ready-rice-cilantro-lime-flavored","commodity":"cooked-jasmine-rice","store":"Baker''s","names":["Ben''s Original Ready Rice Cilantro Lime Flavored Rice, Easy Dinner Side, 8.5 oz Pouch"],"product_id":"0005480042344","verdict":"wrong-product","evidence":"Flavoured ready rice, not jasmine.","ruled_on":"2026-09-20","ruled_by":"triage-money-lane 2026-09-20","retire_when":"ruling-reversed"}]}'
+    [IO.File]::WriteAllText($stList, $benLedger, (New-Object System.Text.UTF8Encoding($false)))
+    $o3 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $me -Root $stRoot -Commodity 'cooked-jasmine-rice' -Store "Baker's" -Name 'Ben''s Original Ready Rice Roasted Chicken Flavored Rice, Easy Dinner Side, 8.8 oz Pouch' -Evidence $ev -RuledBy 'selftest' -DryRun)
+    $rc3 = $LASTEXITCODE
+    _Ok ('MUST FIRE  the SECOND Ben''s Original Ready Rice ruling on cooked-jasmine-rice is REFUSED and points at the exclude (rc=' + $rc3 + ')') (($rc3 -eq 1) -and (($o3 -join ' ') -match 'apply-coverage-batch') -and (($o3 -join ' ') -match 'bens original ready'))
+    $o4 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $me -Root $stRoot -Commodity 'cooked-jasmine-rice' -Store "Baker's" -Name 'Kroger Yellow Rice Mix 8 oz' -Evidence $ev -RuledBy 'selftest' -DryRun)
+    $rc4 = $LASTEXITCODE
+    _Ok ('MUST NOT FIRE  a first ruling of a DIFFERENT shape on the same commodity is accepted (rc=' + $rc4 + ')') (($rc4 -eq 0) -and (($o4 -join ' ') -match 'ADDING'))
+    $o5 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $me -Root $stRoot -Commodity 'cooked-jasmine-rice' -Store "Baker's" -Name 'Ben''s Original Ready Rice Roasted Chicken Flavored Rice, Easy Dinner Side, 8.8 oz Pouch' -Evidence $ev -RuledBy 'selftest' -DryRun -OneOffShape)
+    $rc5 = $LASTEXITCODE
+    _Ok ('CLEAN TWIN  -OneOffShape is the reviewed exit and still ADDS the ruling (rc=' + $rc5 + ')') (($rc5 -eq 0) -and (($o5 -join ' ') -match 'ADDING'))
+    _Ok 'MECHANISM  the shape is the first three words, apostrophes dropped' ((Get-KwShape 'Ben''s Original Ready Rice Cilantro Lime') -eq 'bens original ready')  } catch { Write-Output ('  FAIL end-to-end cases could not run: ' + $_.Exception.Message); $bad++ }
   finally { if (Test-Path -LiteralPath $stRoot) { Remove-Item -LiteralPath $stRoot -Recurse -Force -ErrorAction SilentlyContinue } }
   if ($bad -eq 0) { Write-Output ("add-known-wrong SELF-TEST PASS ($ran cases)") } else { Write-Output ("add-known-wrong SELF-TEST FAIL ($bad of $ran cases)") }
   exit $(if ($bad -eq 0) { 0 } else { 1 })
@@ -206,7 +248,12 @@ if ($Reverse) {
     $storeSlug = (($Store -replace "'", '') -replace '[^a-zA-Z0-9]+', '')
     $Key = $Commodity + '|' + $storeSlug + '|' + $slug
   }
-  foreach ($e in $entries) { if ([string]$e.key -eq $Key) { Die ("an entry with key '" + $Key + "' already exists - pass a different -Key, or -Reverse it if the old ruling was wrong") } }
+  if ($Verdict -eq 'wrong-product' -and -not $OneOffShape) {
+    $sib = Find-KwShapeSibling $entries $Commodity $useNames
+    if ($null -ne $sib) {
+      Die ("this is the SECOND wrong-product ruling on '" + $Commodity + "' for the shape '" + $sib.shape + "' (already ruled: " + $sib.key + "). A recurring shape is a commodity EXCLUDE, never another known-wrong line (Brad's ruling on 2026-09-21-7d64a6): measure it with  & .\apply-coverage-batch.ps1 -Excludes @{ '" + $Commodity + "' = @('<pattern for the shape>') }  so the matching gate routes it, then leave known-wrong for one-off products. If this really is a different product that shares three leading words, pass -OneOffShape.")
+    }
+  }  foreach ($e in $entries) { if ([string]$e.key -eq $Key) { Die ("an entry with key '" + $Key + "' already exists - pass a different -Key, or -Reverse it if the old ruling was wrong") } }
 
   $new = [ordered]@{
     key = $Key; commodity = $Commodity; store = $Store

@@ -243,7 +243,22 @@ if ($SelfTest) {
   if (($fxPieAlert -notcontains 'ground-beef-93-7') -or ($fxPieExcl -contains 'ground-beef-93-7') -or [string](Get-CoverageVerdict -Explainer $fxPieExplainer -Name ([string]$fxBeef.product) -WantId 'ground-beef-93-7').verdict -ne 'NO-INCLUDE') {
     Write-Output '  X CLEAN TWIN: the 73/27 ground beef (no admit, no exclude hit) must stay NO-INCLUDE in the alerted set'; $bad++
   }
-  # VRAM GUARD, fixtured. MUST-FIRE: llama-server up and the card nearly full -> BLIND, naming the holder.
+  # A RECURRING SHAPE IS AN EXCLUDE (Brad's ruling "B" on 2026-09-21-7d64a6). Frozen: the two Ben's Original Ready Rice
+  # rulings of 2026-09-20 on cooked-jasmine-rice and the exclude that replaces them.
+  $fxBenKw = @(
+    [pscustomobject]@{ key = 'cooked-jasmine-rice|Bakers|bens-original-ready-rice-cilantro-lime-flavored'; commodity = 'cooked-jasmine-rice'; verdict = 'wrong-product'; names = @('Ben''s Original Ready Rice Cilantro Lime Flavored Rice, Easy Dinner Side, 8.5 oz Pouch') },
+    [pscustomobject]@{ key = 'cooked-jasmine-rice|Bakers|bens-original-ready-rice-roasted-chicken-flavore'; commodity = 'cooked-jasmine-rice'; verdict = 'wrong-product'; names = @('Ben''s Original Ready Rice Roasted Chicken Flavored Rice, Easy Dinner Side, 8.8 oz Pouch') },
+    [pscustomobject]@{ key = 'cooked-jasmine-rice|Bakers|reversed-one'; commodity = 'cooked-jasmine-rice'; verdict = 'wrong-product'; reversed_on = '2026-09-21'; names = @('Some Flavored Rice') })
+  $fxAbs = Get-ExcludeAbsorbedRulings -Excludes @{ 'cooked-jasmine-rice' = @('\bflavou?red\b') } -Entries $fxBenKw
+  # MUST FIRE: the flavoured-rice exclude absorbs BOTH active rulings (and not the reversed one), which is what keeps it in the gate
+  if (@($fxAbs['cooked-jasmine-rice']).Count -ne 2) { Write-Output ('  X MUST-FIRE: the flavoured-rice exclude must absorb exactly the 2 active Ben''s rulings, got ' + @($fxAbs['cooked-jasmine-rice']).Count); $bad++ }
+  # MUST NOT FIRE: an exclude that refuses no ruled name absorbs nothing
+  $fxAbs2 = Get-ExcludeAbsorbedRulings -Excludes @{ 'cooked-jasmine-rice' = @('\bbrown\b') } -Entries $fxBenKw
+  if (@($fxAbs2['cooked-jasmine-rice']).Count -ne 0) { Write-Output '  X MUST-NOT-FIRE: an exclude naming no ruled product must absorb nothing'; $bad++ }
+  # CLEAN TWIN: with the exclude in the rule, the sweep's classifier reads the next flavour as REFUSED-BY-EXCLUDE, so it stops paging
+  $fxBenExp = New-CoverageExplainer -Commodities @([pscustomobject]@{ id = 'cooked-jasmine-rice'; include = @('jasmine'); exclude = @('\bflavou?red\b') })
+  $fxBenV = Get-CoverageVerdict -Explainer $fxBenExp -Name 'Ben''s Original Ready Rice Garlic Butter Flavored Rice, 8.5 oz Pouch' -WantId 'cooked-jasmine-rice'
+  if ([string]$fxBenV.verdict -ne 'REFUSED-BY-EXCLUDE') { Write-Output ('  X CLEAN TWIN: the next Ben''s flavour must classify REFUSED-BY-EXCLUDE under the shape exclude, got ' + [string]$fxBenV.verdict); $bad++ }  # VRAM GUARD, fixtured. MUST-FIRE: llama-server up and the card nearly full -> BLIND, naming the holder.
   $why = Test-SweepBlocked -FreeMiB 1092 -LlamaRunning $true
   if (-not $why) { Write-Output '  X MUST-FIRE: llama-server holding the card with 1092 MiB free must block the sweep'; $bad++ }
   elseif ($why -notmatch 'llama-server' -or $why -notmatch 'serve\.ps1') { Write-Output ("  X the BLIND reason must name the holder and the fix: " + $why); $bad++ }
