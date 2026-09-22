@@ -1,0 +1,89 @@
+{
+    "slug":  "no-cook-meal-prep-ideas",
+    "id":  "6a499cc550682b0001cd433b",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:52:37.000Z",
+    "base_lexical_sha256":  "d7e4d338f46572db76ddc6d9ea1e53e684709da27542f434c89c2cd78254e91d",
+    "title_old":  "No-Cook Meal Prep Ideas for Busy Weeks",
+    "title_new":  "No-Cook Meal Prep Ideas for Busy Weeks",
+    "replacements":  [
+                         {
+                             "find":  "A can of tuna is about $1, a can of chickpeas or black beans runs around $1 too, and both are already cooked and ready.",
+                             "replace":  "Canned tuna runs \u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.17\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.17\u003c/span\u003e an ounce, canned chickpeas \u003cspan data-tc-live-price data-tc-bid=\"chickpeas\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.05\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.05\u003c/span\u003e and black beans \u003cspan data-tc-live-price data-tc-bid=\"canned-black-beans\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.06\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.06\u003c/span\u003e an ounce, and all of them come already cooked and ready.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "rolled oats (about $3 for a big canister)",
+                             "replace":  "rolled oats (\u003cspan data-tc-live-price data-tc-bid=\"oatmeal\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.80\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.80\u003c/span\u003e a pound in a big canister)",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "A pouch of ready rice or quinoa costs about $2, needs no heating",
+                             "replace":  "A pouch of ready rice or quinoa is cheap, needs no heating",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "That whole bowl lands around $2.50 a serving and takes four minutes to build.",
+                             "replace":  "That whole bowl costs a fraction of a takeout lunch and takes four minutes to build.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "makes a tuna salad for roughly $1.50 a serving.",
+                             "replace":  "makes a cheap tuna salad.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "That jar costs about 60 cents and beats a $4 muffin every single day of the week.",
+                             "replace":  "That jar costs pocket change and beats a $4 muffin every single day of the week.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "does the same job for around $1.25.",
+                             "replace":  "does the same job for not much more.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "swapped a $10 morning habit for a $1 one,",
+                             "replace":  "swapped a $10 morning habit for a cheap homemade one,",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "It reads like a fancy bistro board and costs about $2.50 to put together.",
+                             "replace":  "It reads like a fancy bistro board and costs a fraction of one to put together.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "is a real meal for about $3.",
+                             "replace":  "is a real meal for very little money.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "is dinner in five minutes for roughly $4 a serving, which still beats almost anything you can order.",
+                             "replace":  "is dinner in five minutes, and it still costs less than almost anything you can order.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "you can run a full week of meals at $2 to $4 a serving without turning on a burner.",
+                             "replace":  "you can run a full week of cheap meals without turning on a burner.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "Build a full week of cheap, healthy meals at $2 to $4 a serving without turning on a single burner.",
+                            "replace":  "Build a full week of cheap, healthy meals without turning on a single burner."
+                        },
+                        {
+                            "find":  "loaded wraps at $2 to $4 a serving, with zero cooking required.",
+                            "replace":  "loaded wraps, with zero cooking required."
+                        }
+                    ],
+    "new_lexical_sha256":  "25ea976159491377b9b03c3c12cc3a2c85bf87d163a93f6ff8795e3c7fe03477",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

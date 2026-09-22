@@ -1,0 +1,316 @@
+{
+    "slug":  "cheap-dinner-ideas",
+    "title_new":  "25 Cheap Dinner Ideas",
+    "edits":  [
+                  {
+                      "find":  "Do that, and $3 a serving is not a stretch, it is the ceiling.",
+                      "replace":  "Do that, and a cheap dinner is not a stretch, it is the default.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$3"
+                                  ],
+                      "why":  "per-serving ceiling for a set of generic dishes; no engine recipe or single commodity"
+                  },
+                  {
+                      "find":  "Here are 25 dinners that land under $3 per serving. Prices assume a four-serving batch at typical 2026 grocery prices, and yes, they will drift a little depending on your store and your state.",
+                      "replace":  "Here are 25 dinners that keep the grocery bill low. And yes, what you pay will drift a little depending on your store and your state.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$3"
+                                  ],
+                      "why":  "per-serving bound over generic dishes; the typed-averages note goes with it"
+                  },
+                  {
+                      "find":  "A pound of dried red beans runs about $1.80 and a bag of rice pennies per serving. Add a little smoked sausage and you are eating like New Orleans for about \u003cstrong\u003e$1.15 a serving\u003c/strong\u003e.",
+                      "replace":  "A pound of dried red beans costs very little, and a bag of rice works out to pennies per serving. Add a little smoked sausage and you are eating like New Orleans \u003cstrong\u003eon a budget\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.80",
+                                      "$1.15"
+                                  ],
+                      "why":  "no dried red bean commodity (kidney-beans is not clearly dry); dish cost is a generic estimate"
+                  },
+                  {
+                      "find":  "Russets are one of the best deals in the store, roughly 60 cents a pound.",
+                      "replace":  "Russets are one of the best deals in the store, at {{live-unit:russet-potatoes:lb}} a pound.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "60 cents"
+                                  ],
+                      "why":  "russet potatoes per pound is the russet-potatoes cell (Russet Potatoes bags); typed as cents, same hand-typed price"
+                  },
+                  {
+                      "find":  "Dinner for the family at \u003cstrong\u003e$1.40 a serving\u003c/strong\u003e.",
+                      "replace":  "Dinner for the family \u003cstrong\u003eon a shoestring\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.40"
+                                  ],
+                      "why":  "generic baked potato bar per-serving estimate"
+                  },
+                  {
+                      "find":  "Fifteen minutes and about \u003cstrong\u003e$1.10 a serving\u003c/strong\u003e.",
+                      "replace":  "Fifteen minutes, \u003cstrong\u003echeap and done\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.10"
+                                  ],
+                      "why":  "generic egg fried rice estimate; not an engine title"
+                  },
+                  {
+                      "find":  "A pound of lentils is around $1.60 and cooks in half an hour.",
+                      "replace":  "A pound of lentils runs {{live-unit:brown-lentils:lb}} and cooks in half an hour.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.60"
+                                  ],
+                      "why":  "a pound of plain lentils is the brown-lentils cell, whose cheapest row is Great Value Lentils 1 lb"
+                  },
+                  {
+                      "find":  "you get a big warm pot for roughly \u003cstrong\u003e$1.00 a serving\u003c/strong\u003e.",
+                      "replace":  "you get a big warm pot \u003cstrong\u003eat a low cost per bowl\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.00"
+                                  ],
+                      "why":  "generic lentil soup per-serving estimate"
+                  },
+                  {
+                      "find":  "comes to about \u003cstrong\u003e$1.25 a serving\u003c/strong\u003e. Old faithful.",
+                      "replace":  "stays \u003cstrong\u003echeap per plate\u003c/strong\u003e. Old faithful.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.25"
+                                  ],
+                      "why":  "mixed-basket dish estimate (pasta, sauce, beans)"
+                  },
+                  {
+                      "find":  "Bone-in thighs are usually under $1.80 a pound, far cheaper than breast and more forgiving to cook. One pan with rice runs about \u003cstrong\u003e$2.10 a serving\u003c/strong\u003e.",
+                      "replace":  "Bone-in thighs are usually far cheaper than breast and more forgiving to cook. One pan with rice keeps it \u003cstrong\u003ebudget-friendly\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.80",
+                                      "$2.10"
+                                  ],
+                      "why":  "chicken-thighs cell is Thighs/Drumsticks and its cheapest row is a drumstick bag, so it would show a non-thigh price; dish cost is generic"
+                  },
+                  {
+                      "find":  "Taco night for around \u003cstrong\u003e$1.30 a serving\u003c/strong\u003e.",
+                      "replace":  "Taco night \u003cstrong\u003eon the cheap\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.30"
+                                  ],
+                      "why":  "generic black bean taco estimate"
+                  },
+                  {
+                      "find":  "and you are eating for about \u003cstrong\u003e$1.60 a serving\u003c/strong\u003e.",
+                      "replace":  "and you are eating \u003cstrong\u003efor very little\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.60"
+                                  ],
+                      "why":  "generic tuna melt estimate"
+                  },
+                  {
+                      "find":  "Hearty and about \u003cstrong\u003e$2.40 a serving\u003c/strong\u003e.",
+                      "replace":  "Hearty and \u003cstrong\u003eeasy on the wallet\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.40"
+                                  ],
+                      "why":  "generic sausage and peppers estimate; not an engine title"
+                  },
+                  {
+                      "find":  "Rich, filling, and roughly \u003cstrong\u003e$1.20 a serving\u003c/strong\u003e.",
+                      "replace":  "Rich, filling, and \u003cstrong\u003echeap\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.20"
+                                  ],
+                      "why":  "generic chana masala estimate"
+                  },
+                  {
+                      "find":  "At about 25 cents an egg,",
+                      "replace":  "At {{live-unit:eggs:each}} an egg,",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "25 cents"
+                                  ],
+                      "why":  "per-egg price is the eggs cell (Large Eggs) per each; typed as cents, same hand-typed price"
+                  },
+                  {
+                      "find":  "a plate of scramble and hash browns lands near \u003cstrong\u003e$1.15 a serving\u003c/strong\u003e.",
+                      "replace":  "a plate of scramble and hash browns \u003cstrong\u003ecomes in low\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.15"
+                                  ],
+                      "why":  "generic breakfast-for-dinner plate estimate"
+                  },
+                  {
+                      "find":  "A big pot for about \u003cstrong\u003e$1.10 a serving\u003c/strong\u003e.",
+                      "replace":  "A big pot \u003cstrong\u003efor small money\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.10"
+                                  ],
+                      "why":  "generic pasta e fagioli estimate; engine has only a slow cooker turkey version"
+                  },
+                  {
+                      "find":  "Makes six bowls at around \u003cstrong\u003e$2.00 a serving\u003c/strong\u003e, and it is better the next day.",
+                      "replace":  "Makes six \u003cstrong\u003ebudget bowls\u003c/strong\u003e, and it is better the next day.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.00"
+                                  ],
+                      "why":  "generic turkey chili estimate; not an engine title"
+                  },
+                  {
+                      "find":  "A head of cabbage is a dollar or two and feeds a crowd.",
+                      "replace":  "Green cabbage runs {{live-unit:cabbage:lb}} a pound, and one head feeds a crowd.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "a dollar or two"
+                                  ],
+                      "why":  "cabbage cell is green cabbage sold by the pound; per-head words become the per-pound price"
+                  },
+                  {
+                      "find":  "With noodles and a little sausage, about \u003cstrong\u003e$1.30 a serving\u003c/strong\u003e.",
+                      "replace":  "With noodles and a little sausage, it stays \u003cstrong\u003echeap per serving\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.30"
+                                  ],
+                      "why":  "generic cabbage and noodles estimate"
+                  },
+                  {
+                      "find":  "A skillet dinner for roughly \u003cstrong\u003e$1.50 a serving\u003c/strong\u003e.",
+                      "replace":  "A skillet dinner \u003cstrong\u003ethat barely dents the budget\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.50"
+                                  ],
+                      "why":  "generic shakshuka estimate"
+                  },
+                  {
+                      "find":  "Build-your-own bowls for about \u003cstrong\u003e$1.45 a serving\u003c/strong\u003e.",
+                      "replace":  "Build-your-own bowls \u003cstrong\u003eat a low cost\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.45"
+                                  ],
+                      "why":  "generic rice and bean bowl estimate"
+                  },
+                  {
+                      "find":  "make a thick, sticking-to-your-ribs pot for around \u003cstrong\u003e$1.05 a serving\u003c/strong\u003e.",
+                      "replace":  "make a thick, sticking-to-your-ribs pot \u003cstrong\u003eon a small budget\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.05"
+                                  ],
+                      "why":  "generic split pea soup estimate"
+                  },
+                  {
+                      "find":  "A pan that feeds eight at about \u003cstrong\u003e$1.90 a serving\u003c/strong\u003e.",
+                      "replace":  "A pan that feeds eight \u003cstrong\u003ewithout straining the budget\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.90"
+                                  ],
+                      "why":  "generic baked ziti; engine titles name ground beef or turkey versions, not this one"
+                  },
+                  {
+                      "find":  "Leg quarters go on sale for under a dollar a pound. Roast a sheet pan with cheap carrots and potatoes for about \u003cstrong\u003e$1.85 a serving\u003c/strong\u003e.",
+                      "replace":  "Leg quarters are a bargain when they go on sale. Roast a sheet pan with cheap carrots and potatoes and dinner stays \u003cstrong\u003elight on the wallet\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "under a dollar",
+                                      "$1.85"
+                                  ],
+                      "why":  "no leg quarter commodity; dish cost is a generic estimate"
+                  },
+                  {
+                      "find":  "A block of tofu is around $2 and a whole meal of protein.",
+                      "replace":  "Firm tofu runs {{live-unit:firm-tofu:lb}} a pound, and one block is a whole meal of protein.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$2"
+                                  ],
+                      "why":  "stir-fry tofu block is the firm-tofu cell; per-block price becomes per pound"
+                  },
+                  {
+                      "find":  "With broccoli and rice, about \u003cstrong\u003e$1.75 a serving\u003c/strong\u003e.",
+                      "replace":  "With broccoli and rice, \u003cstrong\u003eit stays cheap\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.75"
+                                  ],
+                      "why":  "generic stir-fry per-serving estimate"
+                  },
+                  {
+                      "find":  "Filling for roughly \u003cstrong\u003e$2.20 a serving\u003c/strong\u003e.",
+                      "replace":  "Filling, and \u003cstrong\u003ekind to the budget\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.20"
+                                  ],
+                      "why":  "generic beef and cabbage skillet estimate; not an engine title"
+                  },
+                  {
+                      "find":  "A creamy pot for about \u003cstrong\u003e$1.20 a serving\u003c/strong\u003e.",
+                      "replace":  "A creamy pot \u003cstrong\u003ethat costs little\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.20"
+                                  ],
+                      "why":  "generic chowder estimate"
+                  },
+                  {
+                      "find":  "Kids inhale them at about \u003cstrong\u003e$1.15 a serving\u003c/strong\u003e.",
+                      "replace":  "Kids inhale them, and \u003cstrong\u003eyour wallet barely notices\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.15"
+                                  ],
+                      "why":  "generic quesadilla estimate"
+                  },
+                  {
+                      "find":  "One pan, one cleanup, about \u003cstrong\u003e$2.10 a serving\u003c/strong\u003e.",
+                      "replace":  "One pan, one cleanup, \u003cstrong\u003eone small grocery bill\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.10"
+                                  ],
+                      "why":  "generic sheet-pan sausage estimate; not an engine title"
+                  },
+                  {
+                      "find":  "or a sweet one with banana and peanut butter, runs about \u003cstrong\u003e$0.75 a serving\u003c/strong\u003e.",
+                      "replace":  "or a sweet one with banana and peanut butter, costs \u003cstrong\u003every little\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.75"
+                                  ],
+                      "why":  "generic oatmeal bowl estimate, a mixed basket"
+                  },
+                  {
+                      "find":  "Cook in batches, keep the pantry stocked, and $3 a serving starts to feel expensive.",
+                      "replace":  "Cook in batches, keep the pantry stocked, and takeout starts to feel expensive.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$3"
+                                  ],
+                      "why":  "per-serving bound over generic dishes"
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "Twenty-five real dinners that land under $3 a serving, no sad noodle bowls allowed.",
+                            "replace":  "Twenty-five real dinners that cost very little per serving, no sad noodle bowls allowed."
+                        },
+                        {
+                            "find":  "25 cheap dinner ideas that come in under $3 a serving, with real per-serving prices.",
+                            "replace":  "25 cheap dinner ideas, with live Omaha store prices on the staples."
+                        }
+                    ]
+}

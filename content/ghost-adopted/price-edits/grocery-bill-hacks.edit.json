@@ -1,0 +1,27 @@
+{
+    "slug":  "grocery-bill-hacks",
+    "id":  "6a498b7c50682b0001cd3e50",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T22:38:52.000Z",
+    "base_lexical_sha256":  "78a10128623a6968b3efcae7285ac9b40f01e0a0c6f8adb8447b1292a13928e9",
+    "title_old":  "How to Cut Your Grocery Bill",
+    "title_new":  "How to Cut Your Grocery Bill",
+    "replacements":  [
+                         {
+                             "find":  "When chicken thighs drop to $0.99 a pound from $2.49, buy several packs and freeze them. You just locked in 60 percent off your main protein for weeks.",
+                             "replace":  "Chicken thighs often run \u003cspan data-tc-live-price data-tc-bid=\"chicken-thighs\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.98\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.98\u003c/span\u003e a pound, and when they drop on a deep sale, buy several packs and freeze them. You just locked in that sale price on your main protein for weeks.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "c17d496524001578a143ea433e0f1749261e0d3fbede30e8f33e41786f774aa5",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

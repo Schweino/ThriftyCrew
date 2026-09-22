@@ -1,0 +1,37 @@
+{
+    "slug":  "how-to-count-macros",
+    "id":  "6a499ae950682b0001cd42aa",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:44:41.000Z",
+    "base_lexical_sha256":  "7cb0d3efe3ec9ef9ef53d517cd81fd2caadd92793b854328442cc80186ed0158",
+    "title_old":  "How to Count Macros (A Simple Starter Guide)",
+    "title_new":  "How to Count Macros (A Simple Starter Guide)",
+    "replacements":  [
+                         {
+                             "find":  "about 6 grams each, roughly 20 cents an egg.",
+                             "replace":  "about 6 grams each, at \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e an egg.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "25 to 30 grams per cooked serving, often under $3 a pound on sale.",
+                             "replace":  "25 to 30 grams per cooked serving, with breast often \u003cspan data-tc-live-price data-tc-bid=\"chicken-breast\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.99\u003c/span\u003e a pound.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "about 20 grams a can for a dollar or so.",
+                             "replace":  "about 20 grams a can, at \u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.17\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.17\u003c/span\u003e an ounce.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "316496b501c67d0c288b29c7d09857fe33381727b7e66427a06124b4994094c2",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

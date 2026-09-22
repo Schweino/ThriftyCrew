@@ -1,0 +1,90 @@
+{
+    "slug":  "low-carb-meal-prep-ideas",
+    "id":  "6a49a0b650682b0001cd4432",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-05T00:09:26.000Z",
+    "base_lexical_sha256":  "7e3563000395d29ef0bb0e7cc1a75088de53e91039f912efecc4e4d4d1539ec9",
+    "title_old":  "10 Low-Carb Meal Prep Ideas That Actually Fill You Up",
+    "title_new":  "10 Low-Carb Meal Prep Ideas That Actually Fill You Up",
+    "replacements":  [
+                         {
+                             "find":  "with real per-serving costs and macros so you know exactly what you are getting into.",
+                             "replace":  "with real macros so you know exactly what you are getting into.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "About $0.90 per serving, with 20 grams of protein and 3 grams of net carbs.",
+                             "replace":  "Per serving: 20 grams of protein, 3 grams of net carbs.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Around $1.20 a cup, 17 grams of protein, 8 grams of net carbs.",
+                             "replace":  "Per cup: 17 grams of protein, 8 grams of net carbs.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "About $2.50 per bowl, 30 grams of protein, 6 grams of net carbs.",
+                             "replace":  "Per bowl: 30 grams of protein, 6 grams of net carbs.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Roughly $1.40 per serving, 24 grams of protein, 2 grams of net carbs.",
+                             "replace":  "Per serving: 24 grams of protein, 2 grams of net carbs.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "About $1.10 per serving, 18 grams of protein, 3 grams of net carbs.",
+                             "replace":  "Per serving: 18 grams of protein, 3 grams of net carbs.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Around $2.20 per serving, 22 grams of protein, 9 grams of net carbs.",
+                             "replace":  "Per serving: 22 grams of protein, 9 grams of net carbs.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "About $3.00 per serving, 28 grams of protein, 7 grams of net carbs.",
+                             "replace":  "Per serving: 28 grams of protein, 7 grams of net carbs.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Roughly $3.80 per serving, 34 grams of protein, 5 grams of net carbs.",
+                             "replace":  "Per serving: 34 grams of protein, 5 grams of net carbs.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "About $0.85 per pack, 9 grams of protein, 4 grams of net carbs.",
+                             "replace":  "Per pack: 9 grams of protein, 4 grams of net carbs.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Around $0.95 per serving, 12 grams of protein, 1 gram of net carbs.",
+                             "replace":  "Per serving: 12 grams of protein, 1 gram of net carbs.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Cost matters too. Add these up and the average serving lands near $1.90, which beats a drive-thru run and beats it badly over a full week.",
+                             "replace":  "Cost matters too. A serving of any of these beats a drive-thru run on price, and it beats it badly over a full week.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "you can eat low-carb all week for under $2 a serving without ever feeling shortchanged.",
+                             "replace":  "you can eat low-carb all week for less than the drive-thru charges without ever feeling shortchanged.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "Real per-serving costs and macros, all for under $2 a serving.",
+                            "replace":  "Real macros, all built on cheap staples."
+                        }
+                    ],
+    "new_lexical_sha256":  "6876e6991e305cde66bd23c86d92ec9765ae4fe31f74c010c2e2a2d6db3d0a3e",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

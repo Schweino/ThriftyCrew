@@ -1,0 +1,124 @@
+{
+    "slug":  "high-protein-lunch-meal-prep",
+    "id":  "6a499d9a50682b0001cd4387",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:56:10.000Z",
+    "base_lexical_sha256":  "5155215c92067af2c9ab1c03be27a6656348f5b0b0290a2922083cb095bfa884",
+    "title_old":  "High-Protein Lunch Meal Prep (Under $2.50 a Serving)",
+    "title_new":  "High-Protein Lunch Meal Prep",
+    "replacements":  [
+                         {
+                             "find":  "and it comes in under $2.50 a serving when you build it right.",
+                             "replace":  "and it costs a fraction of that salad when you build it right.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eChicken breast\u003c/strong\u003e, about $3.29 a pound,",
+                             "replace":  "\u003cstrong\u003eChicken breast\u003c/strong\u003e, \u003cspan data-tc-live-price data-tc-bid=\"chicken-breast\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.99\u003c/span\u003e a pound,",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eCanned tuna\u003c/strong\u003e, about $1.00 a can, 20 grams of protein.",
+                             "replace":  "\u003cstrong\u003eCanned tuna\u003c/strong\u003e, \u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.17\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.17\u003c/span\u003e an ounce, 20 grams of protein a can.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eEggs\u003c/strong\u003e, around $0.20 each,",
+                             "replace":  "\u003cstrong\u003eEggs\u003c/strong\u003e, \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e each,",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eBlack beans and lentils\u003c/strong\u003e, under $0.20 a cooked cup,",
+                             "replace":  "\u003cstrong\u003eBlack beans and lentils\u003c/strong\u003e, pennies a cooked cup,",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eGreek yogurt (plain)\u003c/strong\u003e, roughly $0.60 a cup, 17 grams of protein.",
+                             "replace":  "\u003cstrong\u003eGreek yogurt (plain)\u003c/strong\u003e, \u003cspan data-tc-live-price data-tc-bid=\"greek-yogurt\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e an ounce, 17 grams of protein a cup.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "you clear 40 grams of protein for well under a dollar of protein cost.",
+                             "replace":  "you clear 40 grams of protein without spending much.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Rice runs about $0.15 a serving.",
+                             "replace":  "Rice runs \u003cspan data-tc-live-price data-tc-bid=\"rice\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.46\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.46\u003c/span\u003e a pound, which is pennies a serving.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "roasted or frozen, about $0.40 a serving.",
+                             "replace":  "roasted or frozen, and cheap either way.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003ch2\u003eA Real Under-$2.50 Example\u003c/h2\u003e",
+                             "replace":  "\u003ch2\u003eA Real Budget Example\u003c/h2\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cli\u003e2 lbs chicken breast: $6.58\u003c/li\u003e",
+                             "replace":  "\u003cli\u003e2 lbs chicken breast, at \u003cspan data-tc-live-price data-tc-bid=\"chicken-breast\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.99\u003c/span\u003e a pound\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003e2.5 cups dry rice, cooked: $0.75\u003c/li\u003e",
+                             "replace":  "\u003cli\u003e2.5 cups dry rice, cooked, at \u003cspan data-tc-live-price data-tc-bid=\"rice\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.46\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.46\u003c/span\u003e a pound\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003e2 cans black beans: $2.00\u003c/li\u003e",
+                             "replace":  "\u003cli\u003e2 cans black beans, at \u003cspan data-tc-live-price data-tc-bid=\"canned-black-beans\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.06\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.06\u003c/span\u003e an ounce\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003e1 bag frozen peppers and onions: $1.50\u003c/li\u003e",
+                             "replace":  "\u003cli\u003e1 bag frozen peppers and onions, at \u003cspan data-tc-live-price data-tc-bid=\"frozen-mixed-peppers\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.10\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.10\u003c/span\u003e a pound\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eSalsa and spices: $1.50\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eSalsa and spices\u003c/li\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cli\u003eTotal batch: $12.33 for 5 servings\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eTotal batch: 5 servings\u003c/li\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "That is \u003cstrong\u003e$2.47 a serving.\u003c/strong\u003e",
+                             "replace":  "That is \u003cstrong\u003efive cheap lunches.\u003c/strong\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Swap half the chicken for an extra can of beans and you drop to about $1.95 a serving while keeping protein above 35 grams.",
+                             "replace":  "Swap half the chicken for an extra can of beans and the cost drops further while protein stays above 35 grams.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "and you land around $2.47 a serving with 40-plus grams of protein.",
+                             "replace":  "and you land a cheap lunch with 40-plus grams of protein.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "Build a week of 40-gram-protein lunches for under $2.50 each with one simple bowl formula",
+                            "replace":  "Build a week of cheap 40-gram-protein lunches with one simple bowl formula"
+                        },
+                        {
+                            "find":  "High-protein lunch meal prep for under $2.50 a serving. Hit 40g protein with a base-protein-veg-sauce formula, real costs, and a 45-minute batch plan.",
+                            "replace":  "Cheap high-protein lunch meal prep. Hit 40g protein with a base-protein-veg-sauce formula, live store prices, and a 45-minute batch plan."
+                        }
+                    ],
+    "new_lexical_sha256":  "0924ec19af91987ae575b06436b494200d04338abb137d0007cb64c296d41642",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

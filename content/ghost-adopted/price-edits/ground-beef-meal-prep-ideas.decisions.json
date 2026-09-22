@@ -1,0 +1,139 @@
+{
+    "slug":  "ground-beef-meal-prep-ideas",
+    "title_new":  null,
+    "edits":  [
+                  {
+                      "find":  "At around $4.50 a pound for 80/20,",
+                      "replace":  "At {{live-unit:ground-beef-8020:lb}} a pound for 80/20,",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$4.50"
+                                  ],
+                      "why":  "80/20 ground beef per pound is the ground-beef-8020 cell"
+                  },
+                  {
+                      "find":  "Leaner beef like 90/10 costs about a dollar more per pound and gives you less grease to drain.",
+                      "replace":  "Leaner beef like 90/10 costs more, often {{live-unit:ground-beef-9010:lb}} a pound, and gives you less grease to drain.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "a dollar more"
+                                  ],
+                      "why":  "90/10 ground beef is the ground-beef-9010 cell; the typed difference becomes its live per-pound price beside the live 80/20 price above"
+                  },
+                  {
+                      "find":  "Buy the family pack when it drops under $4 a pound and freeze half.",
+                      "replace":  "Buy the family pack when it goes on sale and freeze half.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$4"
+                                  ],
+                      "why":  "a buy-below target, not a price any cell carries"
+                  },
+                  {
+                      "find":  "Cost lands near \u003cstrong\u003e$1.05 a serving\u003c/strong\u003e at roughly 24 grams of protein each.",
+                      "replace":  "Cost stays \u003cstrong\u003elow per bowl\u003c/strong\u003e at roughly 24 grams of protein each.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.05"
+                                  ],
+                      "why":  "generic beef and bean chili; the engine title is Classic Beef and Bean Chili, not named here"
+                  },
+                  {
+                      "find":  "Six sandwiches at about \u003cstrong\u003e$1.15 each\u003c/strong\u003e, and the meat mix",
+                      "replace":  "Six \u003cstrong\u003echeap sandwiches\u003c/strong\u003e, and the meat mix",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.15"
+                                  ],
+                      "why":  "generic sloppy joes; engine titles are Sloppy Joe Rice Bowls and Turkey Sloppy Joe Bowls"
+                  },
+                  {
+                      "find":  "Four hearty servings near \u003cstrong\u003e$1.20 each\u003c/strong\u003e and 28 grams of protein.",
+                      "replace":  "Four hearty servings \u003cstrong\u003efor very little\u003c/strong\u003e and 28 grams of protein.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.20"
+                                  ],
+                      "why":  "generic beef and rice skillet; not an engine title"
+                  },
+                  {
+                      "find":  "Six servings at about \u003cstrong\u003e$1.30 each\u003c/strong\u003e.",
+                      "replace":  "Six servings from one pan, and our full Cottage Pie recipe runs \u003cstrong\u003e{{live-recipe:cottage-pie}} a serving\u003c/strong\u003e.",
+                      "class":  "backed-recipe",
+                      "figures":  [
+                                      "$1.30"
+                                  ],
+                      "why":  "the item is named Cottage pie, the exact engine title (cottage-pie, ground beef under mashed potato); the live figure is attributed to our recipe"
+                  },
+                  {
+                      "find":  "A pound makes about 16 baked meatballs for roughly \u003cstrong\u003e90 cents a serving\u003c/strong\u003e of four.",
+                      "replace":  "A pound makes about 16 baked meatballs, or four \u003cstrong\u003echeap servings\u003c/strong\u003e of four.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "90 cents"
+                                  ],
+                      "why":  "generic meatballs per-serving estimate, typed as cents"
+                  },
+                  {
+                      "find":  "Five bowls near \u003cstrong\u003e$1.40 each\u003c/strong\u003e at about 26 grams of protein.",
+                      "replace":  "Five \u003cstrong\u003elow-cost bowls\u003c/strong\u003e at about 26 grams of protein.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.40"
+                                  ],
+                      "why":  "generic taco bowls; not an engine title"
+                  },
+                  {
+                      "find":  "About \u003cstrong\u003e$1.10 a serving\u003c/strong\u003e and it holds five days in the fridge.",
+                      "replace":  "\u003cstrong\u003eCheap per serving\u003c/strong\u003e, and it holds five days in the fridge.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.10"
+                                  ],
+                      "why":  "generic beef and pasta cups estimate"
+                  },
+                  {
+                      "find":  "Six halves at roughly \u003cstrong\u003e$1.50 each\u003c/strong\u003e. Bell peppers are the priciest part, so buy them when they hit a dollar apiece.",
+                      "replace":  "Six \u003cstrong\u003ebudget-friendly halves\u003c/strong\u003e. Bell peppers are the priciest part, so buy them when they go on sale.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.50",
+                                      "a dollar apiece"
+                                  ],
+                      "why":  "generic stuffed peppers estimate plus a buy-below target in words"
+                  },
+                  {
+                      "find":  "This drops a chili or taco filling closer to \u003cstrong\u003e75 cents a serving\u003c/strong\u003e while adding protein.",
+                      "replace":  "This drops the cost of a chili or taco filling \u003cstrong\u003eeven lower per serving\u003c/strong\u003e while adding protein.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "75 cents"
+                                  ],
+                      "why":  "generic stretched filling per-serving estimate, typed as cents"
+                  },
+                  {
+                      "find":  "for around a dollar a serving.",
+                      "replace":  "for very little per serving.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "a dollar"
+                                  ],
+                      "why":  "per-serving cost across generic meals, typed in words"
+                  },
+                  {
+                      "find":  "These prices reflect typical 2026 grocery averages and will shift with your local store and sales,",
+                      "replace":  "Prices shift with your local store and sales,",
+                      "class":  "unbacked",
+                      "figures":  [
+
+                                  ],
+                      "why":  "coherence only: the note described typed averages that no longer appear"
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "Ten budget ground beef meal prep ideas with real per-serving costs and protein counts. Cook once, freeze smart, and feed the family for about $1 a serving.",
+                            "replace":  "Ten budget ground beef meal prep ideas with protein counts and live beef prices. Cook once, freeze smart, and feed the family for very little per serving."
+                        }
+                    ]
+}

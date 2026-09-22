@@ -1,0 +1,16 @@
+{
+  "slug": "grocery-bill-hacks",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "When chicken thighs drop to $0.99 a pound from $2.49, buy several packs and freeze them. You just locked in 60 percent off your main protein for weeks.",
+      "replace": "Chicken thighs often run {{live-unit:chicken-thighs:lb}} a pound, and when they drop on a deep sale, buy several packs and freeze them. You just locked in that sale price on your main protein for weeks.",
+      "class": "backed-commodity",
+      "figures": [
+        "$0.99",
+        "$2.49"
+      ],
+      "why": "chicken-thighs is a board commodity per lb; the typed sale and regular prices (and the 60 percent derived from them) give way to the live price"
+    }
+  ]
+}

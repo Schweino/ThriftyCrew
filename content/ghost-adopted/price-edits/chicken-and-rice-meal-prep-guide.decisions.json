@@ -1,0 +1,152 @@
+{
+    "slug":  "chicken-and-rice-meal-prep-guide",
+    "title_new":  "The Chicken and Rice Meal Prep Guide (The Bodybuilder Staple)",
+    "edits":  [
+                  {
+                      "find":  "\u003ch2\u003eBuy smart: where the $2 meal comes from\u003c/h2\u003e",
+                      "replace":  "\u003ch2\u003eBuy smart: where the cheap meal comes from\u003c/h2\u003e",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2"
+                                  ],
+                      "why":  "per-meal cost of a generic dish; no engine title named"
+                  },
+                  {
+                      "find":  "The famous \"$2 meal\" is real, but only if you shop like you mean it. Here is the shopping side, with prices I see regularly:",
+                      "replace":  "The famous budget meal is real, but only if you shop like you mean it. Here is the shopping side:",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2"
+                                  ],
+                      "why":  "per-meal cost of a generic dish; the prices below now come from the feed, not from what the writer sees"
+                  },
+                  {
+                      "find":  "about $2.29 a pound, more forgiving and flavorful than breast",
+                      "replace":  "boneless often run {{live-unit:boneless-skinless-chicken-thigh:lb}} a pound and bone-in usually less, both more forgiving and flavorful than breast",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$2.29"
+                                  ],
+                      "why":  "boneless thighs are the boneless-skinless-chicken-thigh feed row; bone-in stays in words because the chicken-thighs cell currently prices drumsticks"
+                  },
+                  {
+                      "find":  "around $2.99 a pound when you want it leaner",
+                      "replace":  "{{live-unit:chicken-breast:lb}} a pound when you want it leaner",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$2.99"
+                                  ],
+                      "why":  "chicken breast per pound is the chicken-breast cell"
+                  },
+                  {
+                      "find":  "a 10-pound bag runs about $8,",
+                      "replace":  "{{live-unit:rice:lb}} a pound,",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$8"
+                                  ],
+                      "why":  "dry white rice is the rice cell (White Rice); the bag price becomes the per-pound price"
+                  },
+                  {
+                      "find":  "which is roughly $0.12 a cooked cup",
+                      "replace":  "which is pennies a cooked cup",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.12"
+                                  ],
+                      "why":  "per cooked cup is not a unit any token prices"
+                  },
+                  {
+                      "find":  "This is the single move that turns a $5 meal into a $2 one.",
+                      "replace":  "This is the single move that turns a pricey meal into a cheap one.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$5",
+                                      "$2"
+                                  ],
+                      "why":  "per-meal costs of a generic dish"
+                  },
+                  {
+                      "find":  "so you can see the money and the macros side by side.",
+                      "replace":  "so you can see the shopping and the macros side by side.",
+                      "class":  "unbacked",
+                      "figures":  [
+
+                                  ],
+                      "why":  "coherence only: the batch list no longer carries typed totals"
+                  },
+                  {
+                      "find":  "\u003cstrong\u003eFive pounds of thighs:\u003c/strong\u003e about $11.50",
+                      "replace":  "\u003cstrong\u003eFive pounds of thighs:\u003c/strong\u003e buy the family pack",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$11.50"
+                                  ],
+                      "why":  "the batch does not say bone-in or boneless, and the chicken-thighs cell currently prices drumsticks"
+                  },
+                  {
+                      "find":  "\u003cstrong\u003eSix cups of cooked rice:\u003c/strong\u003e about $0.75",
+                      "replace":  "\u003cstrong\u003eSix cups of cooked rice:\u003c/strong\u003e two cups dry, at {{live-unit:rice:lb}} a pound",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$0.75"
+                                  ],
+                      "why":  "dry rice is the rice cell; the quantity total becomes the per-pound price"
+                  },
+                  {
+                      "find":  "\u003cstrong\u003eSeasoning and oil:\u003c/strong\u003e about $0.50",
+                      "replace":  "\u003cstrong\u003eSeasoning and oil:\u003c/strong\u003e pennies from the pantry",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.50"
+                                  ],
+                      "why":  "mixed pantry basket"
+                  },
+                  {
+                      "find":  "\u003cstrong\u003eBatch total:\u003c/strong\u003e roughly $12.75 for six meals",
+                      "replace":  "\u003cstrong\u003eBatch total:\u003c/strong\u003e six meals",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$12.75"
+                                  ],
+                      "why":  "batch total is a mixed basket"
+                  },
+                  {
+                      "find":  "That works out to \u003cstrong\u003eabout $2.13 per container\u003c/strong\u003e.",
+                      "replace":  "That works out to \u003cstrong\u003every little per container\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.13"
+                                  ],
+                      "why":  "per-container cost of a generic batch"
+                  },
+                  {
+                      "find":  "to each container for a dollar and you round",
+                      "replace":  "to each container for pocket change and you round",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "a dollar"
+                                  ],
+                      "why":  "a handful of frozen vegetables per container, typed in words; no per-container token"
+                  },
+                  {
+                      "find":  "for around $2 a container when you buy in bulk",
+                      "replace":  "for very little per container when you buy in bulk",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2"
+                                  ],
+                      "why":  "per-container cost of a generic dish"
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "for about $2 a container when you buy in bulk",
+                            "replace":  "for very little per container when you buy in bulk"
+                        },
+                        {
+                            "find":  "Make the $2 chicken and rice meal that built",
+                            "replace":  "Make the cheap chicken and rice meal that built"
+                        }
+                    ]
+}

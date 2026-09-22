@@ -1,0 +1,64 @@
+{
+    "slug":  "mason-jar-salads-meal-prep",
+    "id":  "6a49a18250682b0001cd4484",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-05T00:12:50.000Z",
+    "base_lexical_sha256":  "19aeda2859b87866b5f535ad7a182e21c7724e0c10f666a904fd51b9f9ceb97a",
+    "title_old":  "Mason Jar Salads: Grab-and-Go Lunches That Stay Crisp All Week",
+    "title_new":  "Mason Jar Salads: Grab-and-Go Lunches That Stay Crisp All Week",
+    "replacements":  [
+                         {
+                             "find":  "runs about 15 cents a serving and beats anything bottled.",
+                             "replace":  "costs next to nothing per serving and beats anything bottled.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Half a cup of canned chickpeas runs about 30 cents.",
+                             "replace":  "Canned chickpeas run \u003cspan data-tc-live-price data-tc-bid=\"chickpeas\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.05\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.05\u003c/span\u003e an ounce, and a jar takes half a cup.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "A cup of romaine and spinach is around 55 cents. A quarter cucumber, half a carrot, half a pepper, and a few tomatoes come to roughly 70 cents together.",
+                             "replace":  "A cup of romaine and spinach costs little, and a quarter cucumber, half a carrot, half a pepper, and a few tomatoes add only a little more.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "An ounce of feta is about 45 cents.",
+                             "replace":  "An ounce of feta runs \u003cspan data-tc-live-price data-tc-bid=\"feta\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.30\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.30\u003c/span\u003e.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Two tablespoons of homemade vinaigrette lands near 15 cents. Add it up and you are at about $2.15 a jar.",
+                             "replace":  "Two tablespoons of homemade vinaigrette barely register. Add it up and the whole jar costs a small fraction of that lunch-spot salad.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Build a chicken Cobb version instead and you might reach $3.25 with the chicken, egg, and a little cheese. Even at the high end, you are spending under a fourth of what takeout costs.",
+                             "replace":  "Build a chicken Cobb version instead and the chicken, egg, and a little cheese push the cost up a bit. Even at the high end, you are spending a fraction of what takeout costs.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Mason jar salads turn a $12 lunch into a $2 to $3 one,",
+                             "replace":  "Mason jar salads turn a $12 lunch into a homemade one at a fraction of the price,",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "turning a $12 lunch into a $2 one.",
+                            "replace":  "turning a $12 lunch into a homemade one at a fraction of the price."
+                        },
+                        {
+                            "find":  "turns a $12 lunch into a $2 one.",
+                            "replace":  "turns a $12 lunch into a homemade one at a fraction of the price."
+                        }
+                    ],
+    "new_lexical_sha256":  "03e0f39e9ffed4b11d888d7d40137813d1d7a2ccdfdc336b8e75c86a69743d63",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

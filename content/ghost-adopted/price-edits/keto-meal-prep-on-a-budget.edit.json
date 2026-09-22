@@ -1,0 +1,94 @@
+{
+    "slug":  "keto-meal-prep-on-a-budget",
+    "id":  "6a49a0b650682b0001cd442c",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-05T00:09:26.000Z",
+    "base_lexical_sha256":  "d40c313a608946335d144723b2f21dee6dfba380d741da37f7a5b4689f277440",
+    "title_old":  "Keto Meal Prep on a Budget (Cheap Low-Carb Made Easy)",
+    "title_new":  "Keto Meal Prep on a Budget (Cheap Low-Carb Made Easy)",
+    "replacements":  [
+                         {
+                             "find":  "A dozen large eggs runs about $3.00, which comes to $0.25 an egg.",
+                             "replace":  "A dozen large eggs runs \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"dozen\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.62\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.62\u003c/span\u003e, which comes to \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e an egg.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "almost zero carbs for $0.50.",
+                             "replace":  "almost zero carbs for very little money.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Whole chicken thighs, roughly $1.80 per pound, fattier",
+                             "replace":  "Whole chicken thighs, fattier",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Ground beef (80/20), around $4.50 per pound,",
+                             "replace":  "Ground beef (80/20), \u003cspan data-tc-live-price data-tc-bid=\"ground-beef-8020\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"3.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$3.99\u003c/span\u003e per pound,",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eCanned tuna, about $1.00 per can\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eCanned tuna, \u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.17\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.17\u003c/span\u003e an ounce\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Block cheese, near $4.00 per pound,",
+                             "replace":  "Block cheese, \u003cspan data-tc-live-price data-tc-bid=\"block-cheese\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.87\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.87\u003c/span\u003e per pound,",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eFrozen spinach and broccoli, roughly $1.50 per bag\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eFrozen spinach, \u003cspan data-tc-live-price data-tc-bid=\"frozen-chopped-spinach\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.11\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.11\u003c/span\u003e a pound, and frozen broccoli, \u003cspan data-tc-live-price data-tc-bid=\"frozen-broccoli\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.25\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.25\u003c/span\u003e a pound\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Cost lands near $6.50 for the batch, or about $0.54 per cup.",
+                             "replace":  "The whole batch is cheap to make.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Six servings for about $14.00 total, or $2.33 a bowl.",
+                             "replace":  "That makes six servings on a budget.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Four to five servings at about $8.00 total, or $1.70 per serving.",
+                             "replace":  "Four to five servings from one cheap sheet pan.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "you are looking at roughly $30 to $35 in groceries for one person. That is about $1.60 per meal.",
+                             "replace":  "you are looking at a small grocery bill for one person, and each meal costs very little.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A big pack of chicken thighs looks expensive at $12.00, but at $1.80 a pound it is",
+                             "replace":  "A big pack of chicken thighs looks expensive at the register, but by the pound it is",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "you can run a full low-carb week for around $30.",
+                             "replace":  "you can run a full low-carb week on a small grocery bill.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "run a full low-carb week for around $30.",
+                            "replace":  "run a full low-carb week on a budget."
+                        },
+                        {
+                            "find":  "Eat keto for around $30 a week. Budget fats and proteins, three batch recipes, and real per-serving costs and macros",
+                            "replace":  "Eat keto on a budget. Budget fats and proteins, three batch recipes, live store prices and real macros"
+                        }
+                    ],
+    "new_lexical_sha256":  "59d11887e28f83b373a4dc640a42873d8ec4be73221f5acc3dfb7874f33fc742",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

@@ -1,0 +1,87 @@
+{
+    "slug":  "how-to-meal-prep-on-a-budget",
+    "id":  "6a49991e50682b0001cd4240",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:37:02.000Z",
+    "base_lexical_sha256":  "40b410114c3fe083c24daf92c84a439d9ec692c822ceed57902906852658f13a",
+    "title_old":  "How to Meal Prep on a Tight Budget",
+    "title_new":  "How to Meal Prep on a Tight Budget",
+    "replacements":  [
+                         {
+                             "find":  "two pounds of chicken thighs (about $2.60),",
+                             "replace":  "two pounds of chicken thighs,",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "a pound of dry rice (about $0.80),",
+                             "replace":  "a pound of dry rice (\u003cspan data-tc-live-price data-tc-bid=\"rice\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.46\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.46\u003c/span\u003e),",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "a bag of frozen mixed vegetables (about $1.20).",
+                             "replace":  "a bag of frozen mixed vegetables (\u003cspan data-tc-live-price data-tc-bid=\"frozen-vegetables\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.29\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.29\u003c/span\u003e a pound).",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Total is around $4.60, and it makes five solid lunch portions. That is roughly $0.92 a serving for a hot, balanced meal.",
+                             "replace":  "It makes five solid lunch portions, and each one is a hot, balanced meal for very little money.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "dried beans and lentils (about $0.20 to $0.25 a serving),",
+                             "replace":  "dried beans and lentils (dirt cheap per serving),",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "eggs (about $0.35 for two),",
+                             "replace":  "eggs (\u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e apiece),",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "frozen vegetables (about $0.25 a serving),",
+                             "replace":  "frozen vegetables (\u003cspan data-tc-live-price data-tc-bid=\"frozen-vegetables\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.29\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.29\u003c/span\u003e a pound),",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "A pot of lentil chili feeds four for under three dollars and tastes better on day two.",
+                             "replace":  "A pot of lentil chili feeds four for very little and tastes better on day two.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "give you breakfast for the whole week for around four dollars total, or about $0.60 a morning.",
+                             "replace":  "give you cheap breakfasts for the whole week.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "One roasted chicken at about $6.50 can become",
+                             "replace":  "One roasted chicken, bought whole at \u003cspan data-tc-live-price data-tc-bid=\"whole-chicken\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.32\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.32\u003c/span\u003e a pound, can become",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "That is ten servings from a single bird, which lands under a dollar a serving.",
+                             "replace":  "That is ten servings from a single bird, and every one of them is cheap.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A single adult can eat this way on roughly $45 to $60 a week, which comes out to about two dollars a meal for real, filling food.",
+                             "replace":  "A single adult can eat this way on a small weekly grocery bill, with real, filling food at a low cost per meal.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "and you can eat well for around two dollars a plate.",
+                             "replace":  "and you can eat well for very little per plate.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "9b18784b592110a7fbaf05872495666b7e00b2977cdae962dd6131b46714e499",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

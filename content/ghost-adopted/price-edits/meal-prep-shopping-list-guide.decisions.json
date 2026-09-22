@@ -1,0 +1,76 @@
+{
+  "slug": "meal-prep-shopping-list-guide",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "<li>Dried beans and lentils, often under 20 cents a serving</li>",
+      "replace": "<li>Dried beans and lentils, with lentils at {{live-unit:brown-lentils:lb}} a pound dry</li>",
+      "class": "backed-commodity",
+      "figures": ["under 20 cents"],
+      "why": "A typed price in cents; brown-lentils is the board's lentils commodity, and the feed prices no plain dried beans, so only the lentils carry a price."
+    },
+    {
+      "find": "<li>Eggs, around 25 cents each</li>",
+      "replace": "<li>Eggs, {{live-unit:eggs:each}} each</li>",
+      "class": "backed-commodity",
+      "figures": ["25 cents"],
+      "why": "A typed price in cents; eggs are a board commodity and each is an allowed per."
+    },
+    {
+      "find": "<li>Whole chicken or leg quarters, roughly 15 to 20 cents an ounce</li>",
+      "replace": "<li>Whole chicken at {{live-unit:whole-chicken:lb}} a pound, or leg quarters</li>",
+      "class": "backed-commodity",
+      "figures": ["15 to 20 cents"],
+      "why": "A typed price in cents; whole-chicken is a board commodity, and leg quarters have no bid of their own, so they keep no price."
+    },
+    {
+      "find": "<li>Chicken breast on sale, about 30 cents an ounce</li>",
+      "replace": "<li>Chicken breast, {{live-unit:chicken-breast:lb}} a pound and less on sale</li>",
+      "class": "backed-commodity",
+      "figures": ["30 cents"],
+      "why": "A typed price in cents; chicken-breast is the board's boneless skinless breast commodity."
+    },
+    {
+      "find": "<li>Canned tuna, around 90 cents a can</li>",
+      "replace": "<li>Canned tuna, {{live-unit:canned-tuna:oz}} an ounce</li>",
+      "class": "backed-commodity",
+      "figures": ["90 cents"],
+      "why": "A typed price in cents; canned-tuna is priced per ounce and a can is not an allowed per."
+    },
+    {
+      "find": "Say you build a week around chicken thighs and a batch of lentils. Five pounds of thighs at $1.50 a pound is $7.50.",
+      "replace": "Say you build a week around bone-in chicken thighs or drumsticks and a batch of lentils. Five pounds of them at {{live-unit:chicken-thighs:lb}} a pound goes a long way.",
+      "class": "backed-commodity",
+      "figures": ["$1.50", "$7.50"],
+      "why": "chicken-thighs is the board's Chicken Thighs / Drumsticks commodity (today it prices a drumstick bag), so the sentence names both; the $7.50 total was derived from the typed price and goes."
+    },
+    {
+      "find": "A one-pound bag of dried lentils is about $1.50 and cooks up into eight servings. That is $9.00 in protein that carries you through ten meals or more, which lands well under a dollar a serving before you even add the rest.",
+      "replace": "A one-pound bag of dried lentils runs {{live-unit:brown-lentils:lb}} and cooks up into eight servings. Together that is protein for ten meals or more, at a low cost per serving before you even add the rest.",
+      "class": "backed-commodity",
+      "figures": ["$1.50", "$9.00", "under a dollar"],
+      "why": "A one-pound bag is exactly the per-pound price of brown-lentils; the $9.00 total and the per-serving bound were derived from typed prices and go."
+    },
+    {
+      "find": "<li>Rice, around 10 cents a cooked cup, the ultimate stretcher</li>",
+      "replace": "<li>Rice, {{live-unit:rice:lb}} a pound dry, the ultimate stretcher</li>",
+      "class": "backed-commodity",
+      "figures": ["10 cents"],
+      "why": "A typed price in cents; rice is the board's White Rice commodity, priced per pound."
+    },
+    {
+      "find": "<li>Oats for breakfast, well under 20 cents a bowl</li>",
+      "replace": "<li>Oats for breakfast, {{live-unit:oatmeal:lb}} a pound</li>",
+      "class": "backed-commodity",
+      "figures": ["under 20 cents"],
+      "why": "A typed price in cents; oatmeal is the board's Oats / Oatmeal commodity."
+    },
+    {
+      "find": "<li>Frozen vegetables, about $1.30 a bag and never spoil</li>",
+      "replace": "<li>Frozen mixed vegetables, {{live-unit:frozen-vegetables:lb}} a pound, and they never spoil</li>",
+      "class": "backed-commodity",
+      "figures": ["$1.30"],
+      "why": "frozen-vegetables is the board's Frozen Mixed Vegetables commodity, so the item now names mixed vegetables; the bag price becomes per pound."
+    }
+  ]
+}

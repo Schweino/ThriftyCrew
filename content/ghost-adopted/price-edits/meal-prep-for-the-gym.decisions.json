@@ -1,0 +1,121 @@
+{
+    "slug":  "meal-prep-for-the-gym",
+    "title_new":  null,
+    "edits":  [
+                  {
+                      "find":  "Here is the honest workhorse list, with rough prices I actually see week to week:",
+                      "replace":  "Here is the honest workhorse list, with prices that update live from our grocery board:",
+                      "class":  "backed-commodity",
+                      "figures":  [
+
+                                  ],
+                      "why":  "housekeeping for the live list below: the header no longer claims hand-seen weekly prices"
+                  },
+                  {
+                      "find":  "\u003cli\u003e\u003cstrong\u003eChicken thighs:\u003c/strong\u003e around $2.29 a pound, cheaper and juicier than breast\u003c/li\u003e",
+                      "replace":  "\u003cli\u003e\u003cstrong\u003eChicken thighs or drumsticks:\u003c/strong\u003e {{live-unit:chicken-thighs:lb}} a pound, cheaper and juicier than breast\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$2.29"
+                                  ],
+                      "why":  "the chicken-thighs commodity is Chicken Thighs / Drumsticks and its cheapest cell is currently a drumstick bag, so the label names both to stay true to the live number"
+                  },
+                  {
+                      "find":  "\u003cli\u003e\u003cstrong\u003eEggs:\u003c/strong\u003e roughly $0.25 each, about 6 grams of protein apiece\u003c/li\u003e",
+                      "replace":  "\u003cli\u003e\u003cstrong\u003eEggs:\u003c/strong\u003e {{live-unit:eggs:each}} each, about 6 grams of protein apiece\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$0.25"
+                                  ],
+                      "why":  "eggs are the eggs commodity, priced live per egg"
+                  },
+                  {
+                      "find":  "\u003cli\u003e\u003cstrong\u003eCanned tuna:\u003c/strong\u003e about $1.00 a can, 20 grams of protein\u003c/li\u003e",
+                      "replace":  "\u003cli\u003e\u003cstrong\u003eCanned tuna:\u003c/strong\u003e {{live-unit:canned-tuna:oz}} an ounce, 20 grams of protein a can\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.00"
+                                  ],
+                      "why":  "canned tuna is the canned-tuna commodity; a can is not an allowed unit, so the price is per ounce and the protein stays per can"
+                  },
+                  {
+                      "find":  "\u003cli\u003e\u003cstrong\u003eDry rice:\u003c/strong\u003e $0.10 to $0.15 per cooked cup\u003c/li\u003e",
+                      "replace":  "\u003cli\u003e\u003cstrong\u003eDry rice:\u003c/strong\u003e {{live-unit:rice:lb}} a pound\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$0.10",
+                                      "$0.15"
+                                  ],
+                      "why":  "dry rice is the rice commodity (White Rice); a cooked cup is not an allowed unit, so it renders per dry pound"
+                  },
+                  {
+                      "find":  "\u003cli\u003e\u003cstrong\u003eDry oats:\u003c/strong\u003e about $0.15 a serving\u003c/li\u003e",
+                      "replace":  "\u003cli\u003e\u003cstrong\u003eDry oats:\u003c/strong\u003e {{live-unit:oatmeal:lb}} a pound\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$0.15"
+                                  ],
+                      "why":  "dry oats are the oatmeal commodity (Oats / Oatmeal); a serving is not an allowed unit, so it renders per pound"
+                  },
+                  {
+                      "find":  "\u003cli\u003e\u003cstrong\u003eFrozen mixed vegetables:\u003c/strong\u003e $1.00 a pound and they never go bad on you\u003c/li\u003e",
+                      "replace":  "\u003cli\u003e\u003cstrong\u003eFrozen mixed vegetables:\u003c/strong\u003e {{live-unit:frozen-vegetables:lb}} a pound, and they never go bad on you\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.00"
+                                  ],
+                      "why":  "frozen mixed vegetables are the frozen-vegetables commodity (Frozen Mixed Vegetables)"
+                  },
+                  {
+                      "find":  "A 10-pound bag of rice runs a couple of cents more than a 2-pound box but lasts a month of training.",
+                      "replace":  "A 10-pound bag of rice costs a little more up front than a 2-pound box but lasts a month of training.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "a couple of cents more"
+                                  ],
+                      "why":  "a typed price comparison in words between two package sizes, and wrong as written; keeps the bulk point"
+                  },
+                  {
+                      "find":  "Frozen broccoli or a mixed bag does the job for a dollar.",
+                      "replace":  "Frozen broccoli or a mixed bag does the job for very little.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "a dollar"
+                                  ],
+                      "why":  "a typed package price in words for either of two products"
+                  },
+                  {
+                      "find":  "Let me give you the real cost on that. Five pounds of thighs at $2.29 runs about $11.50. Six cups of rice is under a dollar. Vegetables add maybe $2. That is roughly $14.50 for six full meals, or \u003cstrong\u003eabout $2.40 per container\u003c/strong\u003e.",
+                      "replace":  "Here is why that batch is so cheap. The thighs are the biggest spend, and the rice and frozen vegetables barely register. Split across six full meals, \u003cstrong\u003eeach container costs a fraction of a meal out\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.29",
+                                      "$11.50",
+                                      "under a dollar",
+                                      "$2",
+                                      "$14.50",
+                                      "$2.40"
+                                  ],
+                      "why":  "a mixed-basket batch cost and its per-container split; no engine recipe is named, and the feed does not price the batch as one thing"
+                  },
+                  {
+                      "find":  "you can feed your workouts for around $2.40 a meal while everyone else pays $12.",
+                      "replace":  "you can feed your workouts for a fraction of the $12 everyone else pays.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.40"
+                                  ],
+                      "why":  "the per-meal batch estimate again; the $12 restaurant price is out of scope and kept"
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "Feed your training for about $2.40 a meal by nailing",
+                            "replace":  "Feed your training for very little per meal by nailing"
+                        },
+                        {
+                            "find":  "Fuel your workouts for around $2.40 a meal.",
+                            "replace":  "Fuel your workouts for very little per meal."
+                        }
+                    ]
+}

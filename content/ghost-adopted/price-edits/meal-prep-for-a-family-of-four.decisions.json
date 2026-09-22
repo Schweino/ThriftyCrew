@@ -1,0 +1,128 @@
+{
+    "slug":  "meal-prep-for-a-family-of-four",
+    "title_new":  null,
+    "edits":  [
+                  {
+                      "find":  "\u003cstrong\u003eChicken thighs\u003c/strong\u003e, roughly $1.99 a pound. A 5-pound pack feeds a family of four across two dinners for about $10.",
+                      "replace":  "\u003cstrong\u003eChicken thighs\u003c/strong\u003e, often {{live-unit:chicken-thighs:lb}} a pound. A 5-pound pack feeds a family of four across two dinners.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.99",
+                                      "$10"
+                                  ],
+                      "why":  "chicken-thighs is a board commodity per lb; the 5 lb pack price is that same price times five"
+                  },
+                  {
+                      "find":  "\u003cstrong\u003eGround turkey or ground beef (93/7 or 80/20)\u003c/strong\u003e, $3.50 to $4.50 a pound.",
+                      "replace":  "\u003cstrong\u003eGround turkey or ground beef (93/7 or 80/20)\u003c/strong\u003e, with 93/7 turkey at {{live-unit:93-7-ground-turkey:lb}} a pound and 80/20 beef at {{live-unit:ground-beef-8020:lb}} a pound.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$3.50",
+                                      "$4.50"
+                                  ],
+                      "why":  "93/7 ground turkey and 80/20 ground beef are each a board commodity per lb; one shared range becomes two live prices"
+                  },
+                  {
+                      "find":  "\u003cstrong\u003eDried beans and lentils\u003c/strong\u003e, well under $0.20 per cooked cup.",
+                      "replace":  "\u003cstrong\u003eDried beans and lentils\u003c/strong\u003e, dirt cheap per cooked cup.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.20"
+                                  ],
+                      "why":  "two foods on a per-cooked-cup basis the feed does not price"
+                  },
+                  {
+                      "find":  "Here is what a batch of turkey-and-bean chili actually costs to feed a family of four with leftovers. Real numbers, real store prices:",
+                      "replace":  "Here is what goes into a batch of turkey-and-bean chili that feeds a family of four with leftovers:",
+                      "class":  "unbacked",
+                      "figures":  [
+
+                                  ],
+                      "why":  "coherence: the list below no longer carries prices, so the claim of real store prices has to go"
+                  },
+                  {
+                      "find":  "\u003cli\u003e2 lbs ground turkey: $8.00\u003c/li\u003e",
+                      "replace":  "\u003cli\u003e2 lbs ground turkey\u003c/li\u003e",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$8.00"
+                                  ],
+                      "why":  "line of a batch basket that no longer totals"
+                  },
+                  {
+                      "find":  "\u003cli\u003e2 cans beans: $2.00\u003c/li\u003e",
+                      "replace":  "\u003cli\u003e2 cans beans\u003c/li\u003e",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.00"
+                                  ],
+                      "why":  "line of a batch basket; beans unspecified"
+                  },
+                  {
+                      "find":  "\u003cli\u003e2 cans diced tomatoes: $2.00\u003c/li\u003e",
+                      "replace":  "\u003cli\u003e2 cans diced tomatoes\u003c/li\u003e",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.00"
+                                  ],
+                      "why":  "line of a batch basket that no longer totals"
+                  },
+                  {
+                      "find":  "\u003cli\u003eOnion, garlic, spices: $1.50\u003c/li\u003e",
+                      "replace":  "\u003cli\u003eOnion, garlic, spices\u003c/li\u003e",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.50"
+                                  ],
+                      "why":  "mixed line of a batch basket"
+                  },
+                  {
+                      "find":  "\u003cli\u003eTotal batch: $13.50 for 8 generous servings\u003c/li\u003e",
+                      "replace":  "\u003cli\u003eMakes 8 generous servings\u003c/li\u003e",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$13.50"
+                                  ],
+                      "why":  "batch basket total for a generic chili, not an engine recipe"
+                  },
+                  {
+                      "find":  "That is about \u003cstrong\u003e$1.69 a serving\u003c/strong\u003e.",
+                      "replace":  "Add up your receipt, divide by 8, and that is \u003cstrong\u003eyour real cost per serving\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.69"
+                                  ],
+                      "why":  "per-serving cost of a generic dish; the section\u0027s point (know your per-serving cost) is kept"
+                  },
+                  {
+                      "find":  "Serve it over a half cup of rice for another $0.15 and you have a filling dinner for under $2 a plate.",
+                      "replace":  "Serve it over a half cup of rice for very little more and you have a filling, cheap dinner.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.15",
+                                      "$2"
+                                  ],
+                      "why":  "per-portion rice cost and a per-plate bound for a generic dish"
+                  },
+                  {
+                      "find":  "mixing them into meals that come in around $1.75 to $2.00 a serving.",
+                      "replace":  "mixing them into meals that cost a fraction of takeout.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.75",
+                                      "$2.00"
+                                  ],
+                      "why":  "generic per-serving range"
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "Feed four people well for around $2 a serving by buying on purpose",
+                            "replace":  "Feed four people well for very little per serving by buying on purpose"
+                        },
+                        {
+                            "find":  "Meal prep for a family of four on $150 to $200 a week. Real per-serving costs, cheap anchor ingredients,",
+                            "replace":  "Meal prep for a family of four on a real budget. Live store prices, cheap anchor ingredients,"
+                        }
+                    ]
+}

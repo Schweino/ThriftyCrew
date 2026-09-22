@@ -1,0 +1,143 @@
+{
+    "slug":  "high-volume-low-calorie-meal-prep",
+    "title_new":  null,
+    "edits":  [
+                  {
+                      "find":  "Cabbage, at roughly 60 cents a pound,",
+                      "replace":  "Cabbage, at {{live-unit:cabbage:lb}} a pound,",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "60 cents"
+                                  ],
+                      "why":  "green cabbage per pound is the cabbage cell; typed as cents, same hand-typed price"
+                  },
+                  {
+                      "find":  "Frozen broccoli, cauliflower, and green beans, around $1.30 a pound and already prepped",
+                      "replace":  "Frozen broccoli ({{live-unit:frozen-broccoli:lb}} a pound), cauliflower ({{live-unit:frozen-cauliflower-florets:lb}}) and green beans ({{live-unit:frozen-green-beans:lb}}), already prepped",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.30"
+                                  ],
+                      "why":  "one typed price over three frozen vegetables, each its own feed row, so each gets its own live price"
+                  },
+                  {
+                      "find":  "Whole potatoes, about 70 cents a pound, extremely filling",
+                      "replace":  "Whole russet potatoes, {{live-unit:russet-potatoes:lb}} a pound, extremely filling",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "70 cents"
+                                  ],
+                      "why":  "a bagged whole potato is the russet-potatoes cell (the feed\u0027s generic potato is its alias); typed as cents"
+                  },
+                  {
+                      "find":  "Chicken breast, around $3 a pound on sale, your lean protein anchor",
+                      "replace":  "Chicken breast, often {{live-unit:chicken-breast:lb}} a pound, your lean protein anchor",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$3"
+                                  ],
+                      "why":  "chicken breast per pound is the chicken-breast cell; the sale claim goes because the token claims no week"
+                  },
+                  {
+                      "find":  "\u003cli\u003eTwo pounds chicken breast: about $6.00\u003c/li\u003e",
+                      "replace":  "\u003cli\u003eTwo pounds chicken breast, at {{live-unit:chicken-breast:lb}} a pound\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$6.00"
+                                  ],
+                      "why":  "chicken breast is the chicken-breast cell; the two-pound total becomes the per-pound price"
+                  },
+                  {
+                      "find":  "\u003cli\u003eOne head of cabbage: about $1.00\u003c/li\u003e",
+                      "replace":  "\u003cli\u003eOne head of cabbage, at {{live-unit:cabbage:lb}} a pound\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.00"
+                                  ],
+                      "why":  "cabbage is sold by the pound in the cabbage cell; per head becomes per pound"
+                  },
+                  {
+                      "find":  "\u003cli\u003eOne bag frozen mixed vegetables: about $1.30\u003c/li\u003e",
+                      "replace":  "\u003cli\u003eOne bag frozen mixed vegetables, at {{live-unit:frozen-vegetables:lb}} a pound\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.30"
+                                  ],
+                      "why":  "frozen mixed vegetables is the frozen-vegetables cell; per bag becomes per pound"
+                  },
+                  {
+                      "find":  "\u003cli\u003eOne can diced tomatoes plus seasonings: about $1.20\u003c/li\u003e",
+                      "replace":  "\u003cli\u003eOne can diced tomatoes, at {{live-unit:diced-tomatoes:oz}} an ounce, plus seasonings\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.20"
+                                  ],
+                      "why":  "canned diced tomatoes is the diced-tomatoes cell; the seasonings share of the figure has no token and is dropped"
+                  },
+                  {
+                      "find":  "That is $9.50 for six servings, which lands right around \u003cstrong\u003e$1.58 per serving\u003c/strong\u003e.",
+                      "replace":  "Add it up at those prices and you get six servings at \u003cstrong\u003ea low cost per serving\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$9.50",
+                                      "$1.58"
+                                  ],
+                      "why":  "batch total and per-serving cost of a mixed basket; not an engine title"
+                  },
+                  {
+                      "find":  "That is about $3.50 for the whole bag,",
+                      "replace":  "Russets run {{live-unit:russet-potatoes:lb}} a pound,",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$3.50"
+                                  ],
+                      "why":  "a five-pound potato bag is the russet-potatoes cell; the bag price becomes the per-pound price"
+                  },
+                  {
+                      "find":  "which breaks down to roughly 35 cents per large potato.",
+                      "replace":  "which breaks down to very little per large potato.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "35 cents"
+                                  ],
+                      "why":  "per-potato is not a unit the russet cell allows"
+                  },
+                  {
+                      "find":  "A bag of frozen cauliflower runs about $1.30 and makes four sides.",
+                      "replace":  "Frozen cauliflower runs {{live-unit:frozen-cauliflower-florets:lb}} a pound, and one bag makes four sides.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.30"
+                                  ],
+                      "why":  "frozen cauliflower is the frozen-cauliflower-florets cell; per bag becomes per pound"
+                  },
+                  {
+                      "find":  "a single bunch of cilantro or green onion for under a dollar can carry",
+                      "replace":  "a single bunch of cilantro ({{live-unit:cilantro:each}}) or green onions ({{live-unit:green-onions:each}}) can carry",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "under a dollar"
+                                  ],
+                      "why":  "cilantro and green-onions cells are each priced per bunch; typed in words"
+                  },
+                  {
+                      "find":  "A full week of it can run under $2 a meal and leave you fuller",
+                      "replace":  "A full week of it can cost very little per meal and leave you fuller",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2"
+                                  ],
+                      "why":  "per-meal bound over a mixed week"
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "and spend under $2 a meal doing it.",
+                            "replace":  "and spend very little doing it."
+                        },
+                        {
+                            "find":  "that keeps you full for under $2 a meal.",
+                            "replace":  "that keeps you full for very little per meal."
+                        }
+                    ]
+}

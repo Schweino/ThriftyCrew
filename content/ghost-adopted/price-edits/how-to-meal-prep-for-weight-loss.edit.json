@@ -1,0 +1,60 @@
+{
+    "slug":  "how-to-meal-prep-for-weight-loss",
+    "id":  "6a499ae750682b0001cd4292",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:44:39.000Z",
+    "base_lexical_sha256":  "08abe47e6a26c1946e101b042bc7f051f0acf8df0914acc49cf34ee7405ffb98",
+    "title_old":  "How to Meal Prep for Weight Loss (on a Budget)",
+    "title_new":  "How to Meal Prep for Weight Loss (on a Budget)",
+    "replacements":  [
+                         {
+                             "find":  "chicken thighs (often around $1.99 a pound on sale),",
+                             "replace":  "chicken thighs (cheap, especially on sale),",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A pound of dried lentils runs about $1.50 and makes six-plus servings.",
+                             "replace":  "A pound of dried lentils runs \u003cspan data-tc-live-price data-tc-bid=\"brown-lentils\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.92\u003c/span\u003e and makes six-plus servings.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Here is a real-dollar example.",
+                             "replace":  "Here is a real example.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Figure about $6 for a family pack of thighs,",
+                             "replace":  "Figure a family pack of thighs,",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "$1 worth of rice, and $2.50 for a bag of broccoli.",
+                             "replace":  "brown rice at \u003cspan data-tc-live-price data-tc-bid=\"brown-rice\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.88\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.88\u003c/span\u003e a pound, and frozen broccoli at \u003cspan data-tc-live-price data-tc-bid=\"frozen-broccoli\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.25\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.25\u003c/span\u003e a pound.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "That is roughly $9.50 for the batch, or about \u003cstrong\u003e$1.58 per serving\u003c/strong\u003e, at around 450 calories each.",
+                             "replace":  "That adds up to \u003cstrong\u003ea low cost per serving\u003c/strong\u003e, at around 450 calories each.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Around $1.58 a serving and a Sunday afternoon can carry you all week.",
+                             "replace":  "Cheap staples and a Sunday afternoon can carry you all week.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "and eat well for about $1.58 a serving.",
+                            "replace":  "and eat well for very little per serving."
+                        }
+                    ],
+    "new_lexical_sha256":  "e9624068e65c4e022dcd3d54b01a8e8c27eb0eca7870f2b0fd3da4781c470792",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

@@ -1,0 +1,48 @@
+{
+  "slug": "batch-cooking-chicken-guide",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "you will have a week of protein ready to go for a couple of bucks a serving.",
+      "replace": "you will have a week of protein ready to go for very little per serving.",
+      "class": "unbacked",
+      "figures": ["a couple of bucks"],
+      "why": "A per-serving price in words for a generic batch, not an engine recipe."
+    },
+    {
+      "find": "When breasts go on sale you can usually find them around $2.49 a pound. Thighs are often a little cheaper and they are far more forgiving",
+      "replace": "Boneless skinless breasts run {{live-unit:chicken-breast:lb}} a pound, and a sale can take that lower. Boneless thighs run {{live-unit:boneless-skinless-chicken-thigh:lb}} a pound and they are far more forgiving",
+      "class": "backed-commodity",
+      "figures": ["$2.49"],
+      "why": "Both cuts are board commodities; the typed sale price goes live, and 'thighs are often a little cheaper' becomes the thighs' own live price because today's feed has boneless thighs above breasts."
+    },
+    {
+      "find": "A three pound pack of breasts runs about $7.50 and yields roughly ten portions at four to five ounces cooked. That comes out to about 75 cents of protein per serving.",
+      "replace": "A three pound pack of breasts yields roughly ten portions at four to five ounces cooked, so each serving costs a fraction of the per-pound price.",
+      "class": "unbacked",
+      "figures": ["$7.50", "75 cents"],
+      "why": "The pack total and the per-serving cents were derived from a typed price; the per-pound price now shows live in the sentence before."
+    },
+    {
+      "find": "A whole box costs about a dollar and this uses pennies of it.",
+      "replace": "Table salt runs {{live-unit:salt:lb}} a pound, and this uses pennies of it.",
+      "class": "backed-commodity",
+      "figures": ["about a dollar"],
+      "why": "A typed price in words; salt is the board's Table Salt commodity, and a box is not an allowed per, so it reads per pound."
+    },
+    {
+      "find": "Three pounds of chicken for $7.50, a bag of rice for about $1.50 of usage, and a couple pounds of frozen vegetables for around $3.",
+      "replace": "Three pounds of chicken breast at {{live-unit:chicken-breast:lb}} a pound, rice at {{live-unit:rice:lb}} a pound, and a couple pounds of frozen mixed vegetables at {{live-unit:frozen-vegetables:lb}} a pound.",
+      "class": "backed-commodity",
+      "figures": ["$7.50", "$1.50", "$3"],
+      "why": "chicken-breast, rice (White Rice) and frozen-vegetables (Frozen Mixed Vegetables) are board commodities; package totals become per-pound prices."
+    },
+    {
+      "find": "That is roughly $12 for ten balanced meals, or about $1.20 a plate.",
+      "replace": "That covers ten balanced meals.",
+      "class": "unbacked",
+      "figures": ["$12", "$1.20"],
+      "why": "A mixed-basket total and a per-plate figure derived from typed prices; the drive-thru comparison in the next sentence keeps the point."
+    }
+  ]
+}

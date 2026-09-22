@@ -1,0 +1,77 @@
+{
+    "slug":  "how-to-meal-prep-for-weight-loss",
+    "title_new":  null,
+    "edits":  [
+                  {
+                      "find":  "chicken thighs (often around $1.99 a pound on sale),",
+                      "replace":  "chicken thighs (cheap, especially on sale),",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.99"
+                                  ],
+                      "why":  "chicken-thighs cell is Thighs/Drumsticks and its cheapest row is a drumstick bag, so it would show a non-thigh price"
+                  },
+                  {
+                      "find":  "A pound of dried lentils runs about $1.50 and makes six-plus servings.",
+                      "replace":  "A pound of dried lentils runs {{live-unit:brown-lentils:lb}} and makes six-plus servings.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.50"
+                                  ],
+                      "why":  "a pound of plain dried lentils is the brown-lentils cell, whose cheapest row is Great Value Lentils 1 lb"
+                  },
+                  {
+                      "find":  "Here is a real-dollar example.",
+                      "replace":  "Here is a real example.",
+                      "class":  "unbacked",
+                      "figures":  [
+
+                                  ],
+                      "why":  "coherence only: the example no longer carries typed dollar totals"
+                  },
+                  {
+                      "find":  "Figure about $6 for a family pack of thighs,",
+                      "replace":  "Figure a family pack of thighs,",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$6"
+                                  ],
+                      "why":  "package total with no token, and the chicken-thighs cell currently prices drumsticks"
+                  },
+                  {
+                      "find":  "$1 worth of rice, and $2.50 for a bag of broccoli.",
+                      "replace":  "brown rice at {{live-unit:brown-rice:lb}} a pound, and frozen broccoli at {{live-unit:frozen-broccoli:lb}} a pound.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1",
+                                      "$2.50"
+                                  ],
+                      "why":  "the tray uses brown rice (brown-rice cell) and frozen broccoli (frozen-broccoli cell); package amounts become per-pound prices"
+                  },
+                  {
+                      "find":  "That is roughly $9.50 for the batch, or about \u003cstrong\u003e$1.58 per serving\u003c/strong\u003e, at around 450 calories each.",
+                      "replace":  "That adds up to \u003cstrong\u003ea low cost per serving\u003c/strong\u003e, at around 450 calories each.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$9.50",
+                                      "$1.58"
+                                  ],
+                      "why":  "batch total and per-serving cost of a mixed basket; not an engine title"
+                  },
+                  {
+                      "find":  "Around $1.58 a serving and a Sunday afternoon can carry you all week.",
+                      "replace":  "Cheap staples and a Sunday afternoon can carry you all week.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.58"
+                                  ],
+                      "why":  "per-serving cost of a mixed basket"
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "and eat well for about $1.58 a serving.",
+                            "replace":  "and eat well for very little per serving."
+                        }
+                    ]
+}

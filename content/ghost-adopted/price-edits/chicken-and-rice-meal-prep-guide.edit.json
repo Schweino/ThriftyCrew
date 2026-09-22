@@ -1,0 +1,104 @@
+{
+    "slug":  "chicken-and-rice-meal-prep-guide",
+    "id":  "6a499d9950682b0001cd437b",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:56:09.000Z",
+    "base_lexical_sha256":  "b62e20ab71fa833fd0f67511dcf7044c35a1eeaf434c0121db901321bca0aaa4",
+    "title_old":  "The Chicken and Rice Meal Prep Guide (The $2 Bodybuilder Staple)",
+    "title_new":  "The Chicken and Rice Meal Prep Guide (The Bodybuilder Staple)",
+    "replacements":  [
+                         {
+                             "find":  "\u003ch2\u003eBuy smart: where the $2 meal comes from\u003c/h2\u003e",
+                             "replace":  "\u003ch2\u003eBuy smart: where the cheap meal comes from\u003c/h2\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "The famous \"$2 meal\" is real, but only if you shop like you mean it. Here is the shopping side, with prices I see regularly:",
+                             "replace":  "The famous budget meal is real, but only if you shop like you mean it. Here is the shopping side:",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "about $2.29 a pound, more forgiving and flavorful than breast",
+                             "replace":  "boneless often run \u003cspan data-tc-live-price data-tc-bid=\"boneless-skinless-chicken-thigh\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.43\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.43\u003c/span\u003e a pound and bone-in usually less, both more forgiving and flavorful than breast",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "around $2.99 a pound when you want it leaner",
+                             "replace":  "\u003cspan data-tc-live-price data-tc-bid=\"chicken-breast\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.99\u003c/span\u003e a pound when you want it leaner",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "a 10-pound bag runs about $8,",
+                             "replace":  "\u003cspan data-tc-live-price data-tc-bid=\"rice\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.46\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.46\u003c/span\u003e a pound,",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "which is roughly $0.12 a cooked cup",
+                             "replace":  "which is pennies a cooked cup",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "This is the single move that turns a $5 meal into a $2 one.",
+                             "replace":  "This is the single move that turns a pricey meal into a cheap one.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "so you can see the money and the macros side by side.",
+                             "replace":  "so you can see the shopping and the macros side by side.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eFive pounds of thighs:\u003c/strong\u003e about $11.50",
+                             "replace":  "\u003cstrong\u003eFive pounds of thighs:\u003c/strong\u003e buy the family pack",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eSix cups of cooked rice:\u003c/strong\u003e about $0.75",
+                             "replace":  "\u003cstrong\u003eSix cups of cooked rice:\u003c/strong\u003e two cups dry, at \u003cspan data-tc-live-price data-tc-bid=\"rice\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.46\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.46\u003c/span\u003e a pound",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eSeasoning and oil:\u003c/strong\u003e about $0.50",
+                             "replace":  "\u003cstrong\u003eSeasoning and oil:\u003c/strong\u003e pennies from the pantry",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eBatch total:\u003c/strong\u003e roughly $12.75 for six meals",
+                             "replace":  "\u003cstrong\u003eBatch total:\u003c/strong\u003e six meals",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "That works out to \u003cstrong\u003eabout $2.13 per container\u003c/strong\u003e.",
+                             "replace":  "That works out to \u003cstrong\u003every little per container\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "to each container for a dollar and you round",
+                             "replace":  "to each container for pocket change and you round",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "for around $2 a container when you buy in bulk",
+                             "replace":  "for very little per container when you buy in bulk",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "for about $2 a container when you buy in bulk",
+                            "replace":  "for very little per container when you buy in bulk"
+                        },
+                        {
+                            "find":  "Make the $2 chicken and rice meal that built",
+                            "replace":  "Make the cheap chicken and rice meal that built"
+                        }
+                    ],
+    "new_lexical_sha256":  "8d02a0cb9c958aaefaade71f4d09cfbaa03766d12300f70ace06f0fb7e9c4446",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

@@ -1,0 +1,219 @@
+{
+    "slug":  "budget-breakfast-ideas",
+    "title_new":  "20 Cheap Breakfast Ideas",
+    "edits":  [
+                  {
+                      "find":  "Almost every breakfast worth eating can be built for under a dollar a serving if you buy the base ingredients and portion them yourself. Below are twenty that clear that bar with room to spare. The per-serving figures assume everyday grocery prices, not sale prices, so you\u0027ll likely do even better.",
+                      "replace":  "Almost every breakfast worth eating costs a small fraction of the drive-thru version if you buy the base ingredients and portion them yourself. Below are twenty that prove it.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "under a dollar a serving"
+                                  ],
+                      "why":  "a typed per-serving bound written in words, plus a note about per-serving figures that no longer appear"
+                  },
+                  {
+                      "find":  "A big canister of rolled oats runs about $4 and gives you roughly 30 servings.",
+                      "replace":  "Rolled oats can run as little as {{live-unit:oatmeal:lb}} a pound, and a big canister gives you roughly 30 servings.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$4"
+                                  ],
+                      "why":  "rolled oats are the oatmeal commodity (Oats / Oatmeal); the canister price becomes the live per-pound price and the servings count stays"
+                  },
+                  {
+                      "find":  "you\u0027re eating a warm, filling bowl for about \u003cstrong\u003e$0.20 a serving\u003c/strong\u003e.",
+                      "replace":  "you\u0027re eating a warm, filling bowl for \u003cstrong\u003enext to nothing\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.20"
+                                  ],
+                      "why":  "per-serving estimate for oatmeal with cinnamon and brown sugar, a dish the feed does not price"
+                  },
+                  {
+                      "find":  "Even with eggs running higher than they used to, this lands around \u003cstrong\u003e$0.55 a serving\u003c/strong\u003e.",
+                      "replace":  "Even with eggs running higher than they used to, this costs \u003cstrong\u003ea fraction of a drive-thru sandwich\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.55"
+                                  ],
+                      "why":  "per-serving estimate for eggs on toast, a dish"
+                  },
+                  {
+                      "find":  "Filling and satisfying for about \u003cstrong\u003e$0.40 a serving\u003c/strong\u003e.",
+                      "replace":  "Filling and satisfying, and it \u003cstrong\u003ecosts very little\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.40"
+                                  ],
+                      "why":  "per-serving estimate for peanut butter banana toast, a dish"
+                  },
+                  {
+                      "find":  "Grab and go for roughly \u003cstrong\u003e$0.45 a serving\u003c/strong\u003e.",
+                      "replace":  "Grab and go, and \u003cstrong\u003echeap to make\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.45"
+                                  ],
+                      "why":  "per-serving estimate for overnight oats, a dish"
+                  },
+                  {
+                      "find":  "Batch them out and each one costs about \u003cstrong\u003e$0.80 a serving\u003c/strong\u003e, less than a quarter of what the frozen-aisle version costs.",
+                      "replace":  "Batch them out and each one comes in at \u003cstrong\u003ea fraction of what the frozen-aisle version costs\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.80"
+                                  ],
+                      "why":  "per-serving estimate for homemade burritos; the frozen-aisle comparison is kept without the ratio the typed price implied"
+                  },
+                  {
+                      "find":  "A cup of plain yogurt with a handful of oats runs about \u003cstrong\u003e$0.70 a serving\u003c/strong\u003e and keeps you full for hours.",
+                      "replace":  "A cup of plain yogurt with a handful of oats \u003cstrong\u003eis cheap\u003c/strong\u003e and keeps you full for hours.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.70"
+                                  ],
+                      "why":  "per-serving estimate for yogurt with oats, a dish"
+                  },
+                  {
+                      "find":  "make a stack for about \u003cstrong\u003e$0.35 a serving\u003c/strong\u003e.",
+                      "replace":  "make a stack for \u003cstrong\u003epocket change\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.35"
+                                  ],
+                      "why":  "per-serving estimate for banana pancakes, a dish"
+                  },
+                  {
+                      "find":  "each breakfast is about \u003cstrong\u003e$0.75 a serving\u003c/strong\u003e.",
+                      "replace":  "each breakfast is \u003cstrong\u003echeap and ready to grab\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.75"
+                                  ],
+                      "why":  "per-serving estimate for boiled eggs and an apple, a mixed plate"
+                  },
+                  {
+                      "find":  "A box makes a lot of bowls at roughly \u003cstrong\u003e$0.25 a serving\u003c/strong\u003e with a little milk and sugar.",
+                      "replace":  "A box makes a lot of bowls, and with a little milk and sugar \u003cstrong\u003eeach one barely dents the budget\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.25"
+                                  ],
+                      "why":  "per-serving estimate for cream of wheat; the feed prices no farina commodity"
+                  },
+                  {
+                      "find":  "Hot and cheesy for about \u003cstrong\u003e$0.45 a serving\u003c/strong\u003e.",
+                      "replace":  "Hot, cheesy, and \u003cstrong\u003eeasy on the wallet\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.45"
+                                  ],
+                      "why":  "per-serving estimate for broiled cheese toast, a dish"
+                  },
+                  {
+                      "find":  "Yogurt, frozen fruit, and a splash of milk make a smoothie for about \u003cstrong\u003e$0.85 a serving\u003c/strong\u003e.",
+                      "replace":  "Yogurt, frozen fruit, and a splash of milk make a smoothie for \u003cstrong\u003ea fraction of what a smoothie shop charges\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.85"
+                                  ],
+                      "why":  "per-serving estimate for a smoothie, a mixed drink"
+                  },
+                  {
+                      "find":  "so this comes in around \u003cstrong\u003e$0.60 a serving\u003c/strong\u003e.",
+                      "replace":  "so this \u003cstrong\u003estays cheap\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.60"
+                                  ],
+                      "why":  "per-serving estimate for egg and potato hash, a dish"
+                  },
+                  {
+                      "find":  "Half a bagel with peanut butter runs about \u003cstrong\u003e$0.50 a serving\u003c/strong\u003e and holds you until lunch.",
+                      "replace":  "Half a bagel with peanut butter \u003cstrong\u003ecosts little\u003c/strong\u003e and holds you until lunch.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.50"
+                                  ],
+                      "why":  "per-serving estimate for a bagel with peanut butter, a dish"
+                  },
+                  {
+                      "find":  "Old-school and about \u003cstrong\u003e$0.20 a serving\u003c/strong\u003e.",
+                      "replace":  "Old-school and \u003cstrong\u003edirt cheap\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.20"
+                                  ],
+                      "why":  "per-serving estimate for cinnamon sugar toast, a dish"
+                  },
+                  {
+                      "find":  "A big bag of grits makes dozens of bowls at roughly \u003cstrong\u003e$0.25 a serving\u003c/strong\u003e.",
+                      "replace":  "A big bag of grits makes dozens of bowls for \u003cstrong\u003every little money\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.25"
+                                  ],
+                      "why":  "per-serving estimate for grits with butter; a serving is not a unit the feed allows and the dish includes butter"
+                  },
+                  {
+                      "find":  "Cheap protein for about \u003cstrong\u003e$0.65 a serving\u003c/strong\u003e.",
+                      "replace":  "\u003cstrong\u003eCheap protein\u003c/strong\u003e to start the day.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.65"
+                                  ],
+                      "why":  "per-serving estimate for refried bean and egg tacos, a dish"
+                  },
+                  {
+                      "find":  "Granola over yogurt lands around \u003cstrong\u003e$0.80 a serving\u003c/strong\u003e, well under the boxed cereal it replaces.",
+                      "replace":  "Granola over yogurt comes in \u003cstrong\u003ewell under the boxed cereal it replaces\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.80"
+                                  ],
+                      "why":  "per-serving estimate for homemade granola over yogurt, a dish"
+                  },
+                  {
+                      "find":  "High protein for about \u003cstrong\u003e$0.75 a serving\u003c/strong\u003e when you buy the big container.",
+                      "replace":  "High protein, and \u003cstrong\u003echeap\u003c/strong\u003e when you buy the big container.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.75"
+                                  ],
+                      "why":  "per-serving estimate for cottage cheese with fruit, a mixed bowl"
+                  },
+                  {
+                      "find":  "Simple and filling for about \u003cstrong\u003e$0.45 a serving\u003c/strong\u003e.",
+                      "replace":  "Simple and filling, and \u003cstrong\u003eit won\u0027t dent your wallet\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.45"
+                                  ],
+                      "why":  "per-serving estimate for toast with a fried egg, a dish"
+                  },
+                  {
+                      "find":  "One of the cheapest hot breakfasts on earth at roughly \u003cstrong\u003e$0.30 a serving\u003c/strong\u003e.",
+                      "replace":  "\u003cstrong\u003eOne of the cheapest hot breakfasts on earth\u003c/strong\u003e.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.30"
+                                  ],
+                      "why":  "per-serving estimate for congee, a dish"
+                  },
+                  {
+                      "find":  "rotate through most of this list for under a dollar a serving without",
+                      "replace":  "rotate through most of this list for pocket change without",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "under a dollar a serving"
+                                  ],
+                      "why":  "a typed per-serving bound written in words"
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "20 cheap breakfast ideas under $1 a serving, from oatmeal",
+                            "replace":  "20 cheap breakfast ideas, from oatmeal"
+                        }
+                    ]
+}

@@ -1,0 +1,187 @@
+{
+    "slug":  "high-protein-lunch-meal-prep",
+    "title_new":  "High-Protein Lunch Meal Prep",
+    "edits":  [
+                  {
+                      "find":  "and it comes in under $2.50 a serving when you build it right.",
+                      "replace":  "and it costs a fraction of that salad when you build it right.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.50"
+                                  ],
+                      "why":  "per-serving bound over a generic bowl; the $14 salad before it is a restaurant price and stays"
+                  },
+                  {
+                      "find":  "\u003cstrong\u003eChicken breast\u003c/strong\u003e, about $3.29 a pound,",
+                      "replace":  "\u003cstrong\u003eChicken breast\u003c/strong\u003e, {{live-unit:chicken-breast:lb}} a pound,",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$3.29"
+                                  ],
+                      "why":  "chicken breast per pound is the chicken-breast cell (Boneless Skinless Chicken Breast)"
+                  },
+                  {
+                      "find":  "\u003cstrong\u003eCanned tuna\u003c/strong\u003e, about $1.00 a can, 20 grams of protein.",
+                      "replace":  "\u003cstrong\u003eCanned tuna\u003c/strong\u003e, {{live-unit:canned-tuna:oz}} an ounce, 20 grams of protein a can.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.00"
+                                  ],
+                      "why":  "canned tuna is the canned-tuna cell; per can is not an allowed unit, so per ounce"
+                  },
+                  {
+                      "find":  "\u003cstrong\u003eEggs\u003c/strong\u003e, around $0.20 each,",
+                      "replace":  "\u003cstrong\u003eEggs\u003c/strong\u003e, {{live-unit:eggs:each}} each,",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$0.20"
+                                  ],
+                      "why":  "per-egg price is the eggs cell per each"
+                  },
+                  {
+                      "find":  "\u003cstrong\u003eBlack beans and lentils\u003c/strong\u003e, under $0.20 a cooked cup,",
+                      "replace":  "\u003cstrong\u003eBlack beans and lentils\u003c/strong\u003e, pennies a cooked cup,",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.20"
+                                  ],
+                      "why":  "two foods under one bound, per cooked cup, which no token prices"
+                  },
+                  {
+                      "find":  "\u003cstrong\u003eGreek yogurt (plain)\u003c/strong\u003e, roughly $0.60 a cup, 17 grams of protein.",
+                      "replace":  "\u003cstrong\u003eGreek yogurt (plain)\u003c/strong\u003e, {{live-unit:greek-yogurt:oz}} an ounce, 17 grams of protein a cup.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$0.60"
+                                  ],
+                      "why":  "plain Greek yogurt is the greek-yogurt feed row (plain nonfat tubs); per cup becomes per ounce"
+                  },
+                  {
+                      "find":  "you clear 40 grams of protein for well under a dollar of protein cost.",
+                      "replace":  "you clear 40 grams of protein without spending much.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "under a dollar"
+                                  ],
+                      "why":  "a mixed meat-and-bean protein cost, typed in words"
+                  },
+                  {
+                      "find":  "Rice runs about $0.15 a serving.",
+                      "replace":  "Rice runs {{live-unit:rice:lb}} a pound, which is pennies a serving.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$0.15"
+                                  ],
+                      "why":  "rice is the rice cell (White Rice); per serving is not an allowed unit, so per pound"
+                  },
+                  {
+                      "find":  "roasted or frozen, about $0.40 a serving.",
+                      "replace":  "roasted or frozen, and cheap either way.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.40"
+                                  ],
+                      "why":  "generic vegetable, no single commodity"
+                  },
+                  {
+                      "find":  "\u003ch2\u003eA Real Under-$2.50 Example\u003c/h2\u003e",
+                      "replace":  "\u003ch2\u003eA Real Budget Example\u003c/h2\u003e",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.50"
+                                  ],
+                      "why":  "per-serving bound on a generic bowl; not an engine title"
+                  },
+                  {
+                      "find":  "\u003cli\u003e2 lbs chicken breast: $6.58\u003c/li\u003e",
+                      "replace":  "\u003cli\u003e2 lbs chicken breast, at {{live-unit:chicken-breast:lb}} a pound\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$6.58"
+                                  ],
+                      "why":  "chicken breast is the chicken-breast cell; the two-pound total becomes the per-pound price"
+                  },
+                  {
+                      "find":  "\u003cli\u003e2.5 cups dry rice, cooked: $0.75\u003c/li\u003e",
+                      "replace":  "\u003cli\u003e2.5 cups dry rice, cooked, at {{live-unit:rice:lb}} a pound\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$0.75"
+                                  ],
+                      "why":  "dry rice is the rice cell; the quantity total becomes the per-pound price"
+                  },
+                  {
+                      "find":  "\u003cli\u003e2 cans black beans: $2.00\u003c/li\u003e",
+                      "replace":  "\u003cli\u003e2 cans black beans, at {{live-unit:canned-black-beans:oz}} an ounce\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$2.00"
+                                  ],
+                      "why":  "canned black beans is the canned-black-beans cell; two cans become the per-ounce price"
+                  },
+                  {
+                      "find":  "\u003cli\u003e1 bag frozen peppers and onions: $1.50\u003c/li\u003e",
+                      "replace":  "\u003cli\u003e1 bag frozen peppers and onions, at {{live-unit:frozen-mixed-peppers:lb}} a pound\u003c/li\u003e",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.50"
+                                  ],
+                      "why":  "frozen-mixed-peppers rows are all pepper-and-onion blends; per bag becomes per pound"
+                  },
+                  {
+                      "find":  "\u003cli\u003eSalsa and spices: $1.50\u003c/li\u003e",
+                      "replace":  "\u003cli\u003eSalsa and spices\u003c/li\u003e",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.50"
+                                  ],
+                      "why":  "salsa plus spices is a mixed basket"
+                  },
+                  {
+                      "find":  "\u003cli\u003eTotal batch: $12.33 for 5 servings\u003c/li\u003e",
+                      "replace":  "\u003cli\u003eTotal batch: 5 servings\u003c/li\u003e",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$12.33"
+                                  ],
+                      "why":  "batch total is a mixed basket"
+                  },
+                  {
+                      "find":  "That is \u003cstrong\u003e$2.47 a serving.\u003c/strong\u003e",
+                      "replace":  "That is \u003cstrong\u003efive cheap lunches.\u003c/strong\u003e",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.47"
+                                  ],
+                      "why":  "per-serving cost of a generic burrito bowl; not an engine title"
+                  },
+                  {
+                      "find":  "Swap half the chicken for an extra can of beans and you drop to about $1.95 a serving while keeping protein above 35 grams.",
+                      "replace":  "Swap half the chicken for an extra can of beans and the cost drops further while protein stays above 35 grams.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.95"
+                                  ],
+                      "why":  "per-serving cost of a generic variant"
+                  },
+                  {
+                      "find":  "and you land around $2.47 a serving with 40-plus grams of protein.",
+                      "replace":  "and you land a cheap lunch with 40-plus grams of protein.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.47"
+                                  ],
+                      "why":  "per-serving cost of a generic bowl"
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "Build a week of 40-gram-protein lunches for under $2.50 each with one simple bowl formula",
+                            "replace":  "Build a week of cheap 40-gram-protein lunches with one simple bowl formula"
+                        },
+                        {
+                            "find":  "High-protein lunch meal prep for under $2.50 a serving. Hit 40g protein with a base-protein-veg-sauce formula, real costs, and a 45-minute batch plan.",
+                            "replace":  "Cheap high-protein lunch meal prep. Hit 40g protein with a base-protein-veg-sauce formula, live store prices, and a 45-minute batch plan."
+                        }
+                    ]
+}

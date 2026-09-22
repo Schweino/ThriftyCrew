@@ -1,0 +1,27 @@
+{
+  "slug": "how-to-count-macros",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "about 6 grams each, roughly 20 cents an egg.",
+      "replace": "about 6 grams each, at {{live-unit:eggs:each}} an egg.",
+      "class": "backed-commodity",
+      "figures": ["20 cents"],
+      "why": "per-egg price is the eggs cell per each; typed as cents, same hand-typed price"
+    },
+    {
+      "find": "25 to 30 grams per cooked serving, often under $3 a pound on sale.",
+      "replace": "25 to 30 grams per cooked serving, with breast often {{live-unit:chicken-breast:lb}} a pound.",
+      "class": "backed-commodity",
+      "figures": ["$3"],
+      "why": "breast is the chicken-breast cell; thighs stay unpriced because the chicken-thighs cell currently prices drumsticks"
+    },
+    {
+      "find": "about 20 grams a can for a dollar or so.",
+      "replace": "about 20 grams a can, at {{live-unit:canned-tuna:oz}} an ounce.",
+      "class": "backed-commodity",
+      "figures": ["a dollar or so"],
+      "why": "canned tuna is the canned-tuna cell; per can typed in words becomes per ounce"
+    }
+  ]
+}

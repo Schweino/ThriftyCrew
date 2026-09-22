@@ -1,0 +1,42 @@
+{
+    "slug":  "how-to-meal-prep-for-two",
+    "id":  "6a499e7950682b0001cd43eb",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:59:53.000Z",
+    "base_lexical_sha256":  "fb810d740eb616671107791522765e94803fc029f08c06d1e54c11158115a1ef",
+    "title_old":  "How to Meal Prep for Two Without Eating the Same Thing Every Day",
+    "title_new":  "How to Meal Prep for Two Without Eating the Same Thing Every Day",
+    "replacements":  [
+                         {
+                             "find":  "At roughly $3 a pound for chicken thighs and $5 a pound for ground turkey, a two-protein week for two people runs about $16 to $18 in protein.",
+                             "replace":  "Chicken thighs or drumsticks can run as little as \u003cspan data-tc-live-price data-tc-bid=\"chicken-thighs\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.98\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.98\u003c/span\u003e a pound and ground turkey as little as \u003cspan data-tc-live-price data-tc-bid=\"ground-turkey\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.66\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.66\u003c/span\u003e a pound, so a two-protein week for two people stays cheap.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Split across ten to twelve servings, that is well under $2 a serving before you add the cheap stuff like rice and beans.",
+                             "replace":  "Split across ten to twelve servings, the protein in each one costs very little before you add the cheap stuff like rice and beans.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Same base food, two happy people, and you spent maybe $8 on sauces that last a month.",
+                             "replace":  "Same base food, two happy people, and a handful of cheap sauces lasts a month.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "you will eat well all week for a couple of dollars a serving without either of you feeling stuck",
+                             "replace":  "you will eat well all week for a fraction of takeout prices without either of you feeling stuck",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "adf72ce9588951c6372bef417ce27032b138c2f044d213831866d820b6394183",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

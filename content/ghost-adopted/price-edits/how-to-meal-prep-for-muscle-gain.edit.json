@@ -1,0 +1,74 @@
+{
+    "slug":  "how-to-meal-prep-for-muscle-gain",
+    "id":  "6a499ae850682b0001cd4298",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:44:40.000Z",
+    "base_lexical_sha256":  "520d71453bea89b3dd20a3104f6a5e307cc1867f01e20f474adf5e6ac17c1915",
+    "title_old":  "How to Meal Prep for Muscle Gain Without Spending a Fortune",
+    "title_new":  "How to Meal Prep for Muscle Gain Without Spending a Fortune",
+    "replacements":  [
+                         {
+                             "find":  "a mountain of overpriced chicken breast and $60 tubs of powder.",
+                             "replace":  "a mountain of overpriced chicken breast and pricey tubs of powder.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eEggs:\u003c/strong\u003e around $3 a dozen, roughly 6 grams of protein each. That is about 72 grams of protein for $3.",
+                             "replace":  "\u003cstrong\u003eEggs:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"dozen\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.62\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.62\u003c/span\u003e a dozen, roughly 6 grams of protein each. That is about 72 grams of protein per carton.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eChicken thighs:\u003c/strong\u003e often $1.99 a pound,",
+                             "replace":  "\u003cstrong\u003eChicken thighs:\u003c/strong\u003e often \u003cspan data-tc-live-price data-tc-bid=\"chicken-thighs\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.98\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.98\u003c/span\u003e a pound,",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eCanned tuna and canned chicken:\u003c/strong\u003e often under a dollar a can for 15-plus grams of protein and a long shelf life.",
+                             "replace":  "\u003cstrong\u003eCanned tuna and canned chicken:\u003c/strong\u003e tuna runs \u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.17\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.17\u003c/span\u003e an ounce and chicken \u003cspan data-tc-live-price data-tc-bid=\"canned-chicken\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.17\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.17\u003c/span\u003e an ounce, with 15-plus grams of protein a can and a long shelf life.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eDried beans and lentils:\u003c/strong\u003e about $1.50 a pound, stacking protein and fiber for pennies a serving.",
+                             "replace":  "\u003cstrong\u003eDried beans and lentils:\u003c/strong\u003e a bag of dry lentils runs \u003cspan data-tc-live-price data-tc-bid=\"brown-lentils\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.92\u003c/span\u003e a pound, and both stack protein and fiber for pennies a serving.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "At roughly $25 for about 30 servings, that is under a dollar for 24 grams of protein, which is handy when you are short on time.",
+                             "replace":  "Bought in the big tub, each scoop brings 24 grams of protein for very little, which is handy when you are short on time.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Rough cost: about $6 for thighs, $1 in rice, $1 in beans, $2 for veggies, and $1 in oil. That is around $11 for the batch, or about \u003cstrong\u003e$1.83 per serving\u003c/strong\u003e, landing near 600 calories and 40 grams of protein each.",
+                             "replace":  "Every piece of that is a cheap staple, so the batch comes out \u003cstrong\u003echeap per serving\u003c/strong\u003e, landing near 600 calories and 40 grams of protein each.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "can hit 600 calories for about a dollar.",
+                             "replace":  "can hit 600 calories for very little money.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Around $1.83 a serving can deliver 600 calories and 40 grams of protein,",
+                             "replace":  "A cheap prepped serving can deliver 600 calories and 40 grams of protein,",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "no $60 powder tubs required.",
+                            "replace":  "no pricey powder tubs required."
+                        },
+                        {
+                            "find":  "prep 600-calorie meals for about $1.83 a serving.",
+                            "replace":  "prep cheap 600-calorie meals."
+                        }
+                    ],
+    "new_lexical_sha256":  "2bed910536e2abc1aee3ae9370a35987ee606df1ca20bd21b0e6ad9098d59a94",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

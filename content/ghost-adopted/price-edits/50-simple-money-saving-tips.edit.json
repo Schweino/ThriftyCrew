@@ -1,0 +1,32 @@
+{
+    "slug":  "50-simple-money-saving-tips",
+    "id":  "6a49a0b550682b0001cd4420",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-05T00:09:25.000Z",
+    "base_lexical_sha256":  "130ff0f90e27e6c952d2f930f8da4807f80e1eee157d2cd41172ddef14aa9ef7",
+    "title_old":  "50 Simple Money-Saving Tips That Actually Add Up",
+    "title_new":  "50 Simple Money-Saving Tips That Actually Add Up",
+    "replacements":  [
+                         {
+                             "find":  "At $18 a meal saved twice a week, that is roughly $150 a month.",
+                             "replace":  "At $18 saved on each meal, twice a week, that is roughly $150 a month.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A $10 lunch made at home costs about $3.",
+                             "replace":  "A $10 lunch bought out costs far more than the same lunch made at home.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "bc9cf3878ecdc17e91178a5c8aec3beeca86cb51e248a55ba9f1a7c433c7634e",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:37"
+}

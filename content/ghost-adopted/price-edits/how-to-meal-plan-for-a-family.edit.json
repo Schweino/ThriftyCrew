@@ -1,0 +1,37 @@
+{
+    "slug":  "how-to-meal-plan-for-a-family",
+    "id":  "6a4994d750682b0001cd41aa",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:18:47.000Z",
+    "base_lexical_sha256":  "dba6a8f7c04293abbe10c0711c7e4eaab99762f54cc9e10045db274dfbb9cd3e",
+    "title_old":  "How to Meal Plan for a Whole Family on a Budget",
+    "title_new":  "How to Meal Plan for a Whole Family on a Budget",
+    "replacements":  [
+                         {
+                             "find":  "Three \"cheap and mighty\" meals under $8 total to feed everyone (think",
+                             "replace":  "Three \"cheap and mighty\" meals that feed everyone for the least money (think",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Four solid weeknight standards ($12 to $18 to feed four), like",
+                             "replace":  "Four solid weeknight standards that still feed four for far less than takeout, like",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "When chicken thighs drop to $1.29 a pound or ground beef hits a real markdown, that is your green light",
+                             "replace":  "Bone-in chicken thighs and drumsticks often run \u003cspan data-tc-live-price data-tc-bid=\"chicken-thighs\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.98\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.98\u003c/span\u003e a pound, and when they go on sale or ground beef hits a real markdown, that is your green light",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "bf7cc25a8f068c9524b578028bfa81b46c3c4c1b5b1a26bda18d9feb852584a7",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

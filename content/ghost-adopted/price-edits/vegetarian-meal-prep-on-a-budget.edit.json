@@ -1,0 +1,94 @@
+{
+    "slug":  "vegetarian-meal-prep-on-a-budget",
+    "id":  "6a499d9b50682b0001cd438d",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:56:11.000Z",
+    "base_lexical_sha256":  "7618a949167bbde3ff9f9a5708c77369851bc3787599f5f792524ef75c716bc0",
+    "title_old":  "Vegetarian Meal Prep on a Budget (High Protein, No Meat)",
+    "title_new":  "Vegetarian Meal Prep on a Budget (High Protein, No Meat)",
+    "replacements":  [
+                         {
+                             "find":  "Fancy fake burgers, $9 protein powders,",
+                             "replace":  "Fancy fake burgers, pricey protein powders,",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Dried lentils run about $1.50 a pound and give you",
+                             "replace":  "Dried lentils run \u003cspan data-tc-live-price data-tc-bid=\"brown-lentils\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.92\u003c/span\u003e a pound and give you",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "land near $3.50 and deliver 6 grams of protein each.",
+                             "replace":  "run \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"dozen\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.62\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.62\u003c/span\u003e and deliver 6 grams of protein each.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "That is roughly 100 grams of protein for a buck and a half.",
+                             "replace":  "That is roughly 100 grams of protein for the price of that one pound.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003ch2\u003eSample Meals and What They Actually Cost\u003c/h2\u003e",
+                             "replace":  "\u003ch2\u003eSample Meals and the Protein They Deliver\u003c/h2\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Let me show you the real numbers, because that is where this gets convincing. These are honest per-serving estimates using average grocery prices, and yours will shift a bit by region and season.",
+                             "replace":  "Here is what a week of these can look like, with the protein each serving brings. Every one is built on the cheap staples above.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "About 22 grams of protein for roughly $1.40 a serving.",
+                             "replace":  "About 22 grams of protein a serving.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Around 15 grams of protein for about $1.25 a serving.",
+                             "replace":  "Around 15 grams of protein a serving.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Roughly 13 grams of protein for about $0.90 a serving.",
+                             "replace":  "Roughly 13 grams of protein a serving.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "About 18 grams of protein for around $1.60 a serving.",
+                             "replace":  "About 18 grams of protein a serving.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Around 14 grams of protein for about $1.30 a serving.",
+                             "replace":  "Around 14 grams of protein a serving.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Run those numbers across a full week and you are eating solid, filling, high-protein meals for under $2 a plate. That is the kind of math that adds up to real savings over a month.",
+                             "replace":  "Run those meals across a full week and you are eating solid, filling, high-protein food for a fraction of a restaurant lunch. That adds up to real savings over a month.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "so you never get bored eating well for under $2 a plate.",
+                             "replace":  "so you never get bored eating well on the cheap.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "carry you all week for under $2 a plate.",
+                            "replace":  "carry you all week for very little per plate."
+                        },
+                        {
+                            "find":  "eggs for under $2 a serving.",
+                            "replace":  "eggs for very little per serving."
+                        }
+                    ],
+    "new_lexical_sha256":  "349f500e7df95c061332bda5110172f4bdda50d75ffc55605ce2915ca6361b0a",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

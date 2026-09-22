@@ -1,0 +1,27 @@
+{
+    "slug":  "welcome",
+    "id":  "6a45507028dadd0001a04d8f",
+    "kind":  "page",
+    "base_updated_at":  "2026-07-03T10:53:38.000Z",
+    "base_lexical_sha256":  "0b6633389e0392e77c46de9fe0ced2479a55944c19c7034c4281057a9eef0ff0",
+    "title_old":  "Welcome - Start Here",
+    "title_new":  "Welcome - Start Here",
+    "replacements":  [
+                         {
+                             "find":  "14 dinners at about $2.40 a plate.",
+                             "replace":  "14 dinners at \u003cspan data-tc-live-price data-tc-slug=\"free-chicken-alfredo\" data-tc-field=\"cost_ps\" data-tc-basis=\"feed-everyday-whole-package\" data-tc-fallback=\"2.00\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.00\u003c/span\u003e a plate.",
+                             "class":  "backed-recipe"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "b79cb3187fe48d9085489dcfc783dbe017691b39977cfe91fd7ca76c2530b9bc",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

@@ -1,0 +1,56 @@
+{
+    "slug":  "freezer-meal-prep-guide",
+    "title_new":  null,
+    "edits":  [
+                  {
+                      "find":  "A batch cook that makes 24 servings for around $60 works out to $2.50 a meal. Compare that to a $12 takeout order and you can see where this is going.",
+                      "replace":  "Add up what the whole batch costs and divide it by the servings it makes. Compare that per-meal number to a $12 takeout order and you can see where this is going.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$60",
+                                      "$2.50"
+                                  ],
+                      "why":  "a mixed-basket batch cost and its per-meal split; the method stays and the $12 takeout price is out of scope and kept"
+                  },
+                  {
+                      "find":  "A 10-pound bag of chicken thighs at $1.79 a pound is $17.90.",
+                      "replace":  "A 10-pound bag of chicken thighs or drumsticks can run as little as {{live-unit:chicken-thighs:lb}} a pound.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.79",
+                                      "$17.90"
+                                  ],
+                      "why":  "$1.79 a pound is the chicken-thighs commodity (Chicken Thighs / Drumsticks, cheapest cell currently a 10 lb drumstick bag, so both are named); the $17.90 bag total is derived and removed"
+                  },
+                  {
+                      "find":  "The same weight in small trays at $3.49 a pound is $34.90. That is a $17 swing for the exact same chicken.",
+                      "replace":  "The same weight in small trays costs a good deal more per pound, for the exact same chicken.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$3.49",
+                                      "$34.90",
+                                      "$17"
+                                  ],
+                      "why":  "a small-tray price the feed does not carry (it renders one cheapest per-pound price per commodity) and the totals derived from it"
+                  },
+                  {
+                      "find":  "can stock a month of dinners at around $2.50 a serving, and that beats takeout every night of the week.",
+                      "replace":  "can stock a month of dinners that beat takeout on price every night of the week.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.50"
+                                  ],
+                      "why":  "the per-serving batch estimate again"
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "stock a full month of dinners at around $2.50 a serving.",
+                            "replace":  "stock a full month of cheap dinners."
+                        },
+                        {
+                            "find":  "freeze a month of meals at about $2.50 a serving.",
+                            "replace":  "freeze a month of cheap meals."
+                        }
+                    ]
+}

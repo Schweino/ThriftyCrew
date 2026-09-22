@@ -1,0 +1,83 @@
+{
+  "slug": "meal-prep-soups-and-stews",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "A pound of dry beans is around $1.50 and cooks up to the same as four or five cans that would run you $4 or more.",
+      "replace": "A pound of dry beans cooks up to the same as four or five cans and costs far less than they do.",
+      "class": "unbacked",
+      "figures": ["$1.50", "$4"],
+      "why": "generic dry beans (no dry-bean commodity in the feed) against an unspecified set of cans"
+    },
+    {
+      "find": "This is your flavor foundation and costs about 50 cents for a whole pot.",
+      "replace": "This is your flavor foundation and costs next to nothing for a whole pot.",
+      "class": "unbacked",
+      "figures": ["50 cents"],
+      "why": "a typed price for mixed aromatics (onion, carrot, celery), written in cents"
+    },
+    {
+      "find": "<h2>Three Pots and What They Cost Per Bowl</h2>",
+      "replace": "<h2>Three Pots Worth Learning</h2>",
+      "class": "unbacked",
+      "figures": [],
+      "why": "housekeeping: the heading promised per-bowl costs that are removed below"
+    },
+    {
+      "find": "Let me price out three workhorses.",
+      "replace": "Here are three workhorses.",
+      "class": "unbacked",
+      "figures": [],
+      "why": "housekeeping: the lead-in promised a price-out that is removed below"
+    },
+    {
+      "find": "A pound of dry lentils at $1.50,",
+      "replace": "A pound of dry lentils (they can run as little as {{live-unit:brown-lentils:lb}} a pound),",
+      "class": "backed-commodity",
+      "figures": ["$1.50"],
+      "why": "dry lentils are the brown-lentils commodity (its include matches any lentils), priced live per pound"
+    },
+    {
+      "find": " the aromatics at 50 cents, a can of tomatoes at 90 cents, a couple of potatoes and some spices at about $1.50. Call it $4.40 for the whole pot, or roughly 44 cents a bowl.",
+      "replace": " aromatics, a can of tomatoes, a couple of potatoes and some spices.",
+      "class": "unbacked",
+      "figures": ["50 cents", "90 cents", "$1.50", "$4.40", "44 cents a bowl"],
+      "why": "mixed or unspecified items (aromatics, an unnamed can of tomatoes, potatoes with spices) and a pot and per-bowl total no engine recipe backs"
+    },
+    {
+      "find": "A pound of dry white beans at $1.50, a half pound of sausage at $2.50, aromatics and greens at $1.50, broth base at 50 cents. That is around $6 a pot, or about 60 cents a bowl.",
+      "replace": "A pound of dry white beans, a half pound of sausage, aromatics and greens, and a little broth base. A little sausage goes a long way here, flavoring the whole pot.",
+      "class": "unbacked",
+      "figures": ["$1.50", "$2.50", "$1.50", "50 cents", "$6", "60 cents a bowl"],
+      "why": "the feed prices white beans canned only, the sausage is unspecified, and the pot total is a mixed basket (not the engine's Tuscan White Bean and Sausage Soup by title)"
+    },
+    {
+      "find": "A pound and a half of chuck at about $7,",
+      "replace": "A pound and a half of chuck roast (it can run as little as {{live-unit:chuck-roast:lb}} a pound),",
+      "class": "backed-commodity",
+      "figures": ["$7"],
+      "why": "chuck is the chuck-roast commodity (Chuck Roast); the package price becomes the live per-pound price"
+    },
+    {
+      "find": " a cup of barley at 50 cents, aromatics and potatoes at $2, broth at 50 cents. Around $10 a pot, or roughly $1 a bowl.",
+      "replace": " a cup of barley, aromatics and potatoes, and a little broth.",
+      "class": "unbacked",
+      "figures": ["50 cents", "$2", "50 cents", "$10", "$1"],
+      "why": "barley has no commodity, the rest are mixed items, and the pot and per-bowl totals are a mixed basket; the $8 restaurant bowl that follows is kept"
+    },
+    {
+      "find": "Even the priciest of the three lands at a dollar a serving. Swap in dry beans for meat on the weeks money is tight and you drop well under 50 cents.",
+      "replace": "Even the priciest of the three costs a fraction of that. Swap in dry beans for meat on the weeks money is tight and you drop lower still.",
+      "class": "unbacked",
+      "figures": ["a dollar a serving", "50 cents"],
+      "why": "typed per-serving bounds in words; 'that' now points at the restaurant bowl just before"
+    },
+    {
+      "find": "fills your freezer with ten meals for somewhere between 44 cents and a dollar a bowl, using the cheapest ingredients in the store.",
+      "replace": "fills your freezer with ten meals for a fraction of a restaurant bowl, using the cheapest ingredients in the store.",
+      "class": "unbacked",
+      "figures": ["44 cents", "a dollar a bowl"],
+      "why": "a typed per-bowl range in words"
+    }
+  ]
+}

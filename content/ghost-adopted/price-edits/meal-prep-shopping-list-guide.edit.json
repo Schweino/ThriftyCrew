@@ -1,0 +1,72 @@
+{
+    "slug":  "meal-prep-shopping-list-guide",
+    "id":  "6a49a57950682b0001cd45b0",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-05T00:29:45.000Z",
+    "base_lexical_sha256":  "8b47bdc0c36c801df6d84e98ef2035e08df6110d964745a600d2c7efd670a72c",
+    "title_old":  "How to Build a Meal Prep Shopping List (That Cuts Your Bill)",
+    "title_new":  "How to Build a Meal Prep Shopping List (That Cuts Your Bill)",
+    "replacements":  [
+                         {
+                             "find":  "\u003cli\u003eDried beans and lentils, often under 20 cents a serving\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eDried beans and lentils, with lentils at \u003cspan data-tc-live-price data-tc-bid=\"brown-lentils\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.92\u003c/span\u003e a pound dry\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eEggs, around 25 cents each\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eEggs, \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e each\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eWhole chicken or leg quarters, roughly 15 to 20 cents an ounce\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eWhole chicken at \u003cspan data-tc-live-price data-tc-bid=\"whole-chicken\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.32\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.32\u003c/span\u003e a pound, or leg quarters\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eChicken breast on sale, about 30 cents an ounce\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eChicken breast, \u003cspan data-tc-live-price data-tc-bid=\"chicken-breast\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.99\u003c/span\u003e a pound and less on sale\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eCanned tuna, around 90 cents a can\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eCanned tuna, \u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.17\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.17\u003c/span\u003e an ounce\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Say you build a week around chicken thighs and a batch of lentils. Five pounds of thighs at $1.50 a pound is $7.50.",
+                             "replace":  "Say you build a week around bone-in chicken thighs or drumsticks and a batch of lentils. Five pounds of them at \u003cspan data-tc-live-price data-tc-bid=\"chicken-thighs\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.98\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.98\u003c/span\u003e a pound goes a long way.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "A one-pound bag of dried lentils is about $1.50 and cooks up into eight servings. That is $9.00 in protein that carries you through ten meals or more, which lands well under a dollar a serving before you even add the rest.",
+                             "replace":  "A one-pound bag of dried lentils runs \u003cspan data-tc-live-price data-tc-bid=\"brown-lentils\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.92\u003c/span\u003e and cooks up into eight servings. Together that is protein for ten meals or more, at a low cost per serving before you even add the rest.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eRice, around 10 cents a cooked cup, the ultimate stretcher\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eRice, \u003cspan data-tc-live-price data-tc-bid=\"rice\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.46\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.46\u003c/span\u003e a pound dry, the ultimate stretcher\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eOats for breakfast, well under 20 cents a bowl\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eOats for breakfast, \u003cspan data-tc-live-price data-tc-bid=\"oatmeal\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.80\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.80\u003c/span\u003e a pound\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eFrozen vegetables, about $1.30 a bag and never spoil\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eFrozen mixed vegetables, \u003cspan data-tc-live-price data-tc-bid=\"frozen-vegetables\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.29\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.29\u003c/span\u003e a pound, and they never spoil\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "2b43cb9199c550f1efda930cc1ec479ee95d875ec896943d58556468e0e80cf3",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

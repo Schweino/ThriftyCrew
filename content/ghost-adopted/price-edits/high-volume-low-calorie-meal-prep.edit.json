@@ -1,0 +1,99 @@
+{
+    "slug":  "high-volume-low-calorie-meal-prep",
+    "id":  "6a49a57950682b0001cd45aa",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-05T00:29:45.000Z",
+    "base_lexical_sha256":  "477b64617cf9241a1d6c194c4221b9fc9ab34fe3c18de1ed6d00502c11d31e07",
+    "title_old":  "High-Volume, Low-Calorie Meal Prep (Eat More, Weigh Less)",
+    "title_new":  "High-Volume, Low-Calorie Meal Prep (Eat More, Weigh Less)",
+    "replacements":  [
+                         {
+                             "find":  "Cabbage, at roughly 60 cents a pound,",
+                             "replace":  "Cabbage, at \u003cspan data-tc-live-price data-tc-bid=\"cabbage\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.79\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.79\u003c/span\u003e a pound,",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Frozen broccoli, cauliflower, and green beans, around $1.30 a pound and already prepped",
+                             "replace":  "Frozen broccoli (\u003cspan data-tc-live-price data-tc-bid=\"frozen-broccoli\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.25\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.25\u003c/span\u003e a pound), cauliflower (\u003cspan data-tc-live-price data-tc-bid=\"frozen-cauliflower-florets\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.63\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.63\u003c/span\u003e) and green beans (\u003cspan data-tc-live-price data-tc-bid=\"frozen-green-beans\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.98\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.98\u003c/span\u003e), already prepped",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Whole potatoes, about 70 cents a pound, extremely filling",
+                             "replace":  "Whole russet potatoes, \u003cspan data-tc-live-price data-tc-bid=\"russet-potatoes\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.41\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.41\u003c/span\u003e a pound, extremely filling",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Chicken breast, around $3 a pound on sale, your lean protein anchor",
+                             "replace":  "Chicken breast, often \u003cspan data-tc-live-price data-tc-bid=\"chicken-breast\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.99\u003c/span\u003e a pound, your lean protein anchor",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eTwo pounds chicken breast: about $6.00\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eTwo pounds chicken breast, at \u003cspan data-tc-live-price data-tc-bid=\"chicken-breast\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.99\u003c/span\u003e a pound\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eOne head of cabbage: about $1.00\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eOne head of cabbage, at \u003cspan data-tc-live-price data-tc-bid=\"cabbage\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.79\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.79\u003c/span\u003e a pound\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eOne bag frozen mixed vegetables: about $1.30\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eOne bag frozen mixed vegetables, at \u003cspan data-tc-live-price data-tc-bid=\"frozen-vegetables\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.29\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.29\u003c/span\u003e a pound\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003eOne can diced tomatoes plus seasonings: about $1.20\u003c/li\u003e",
+                             "replace":  "\u003cli\u003eOne can diced tomatoes, at \u003cspan data-tc-live-price data-tc-bid=\"diced-tomatoes\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.06\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.06\u003c/span\u003e an ounce, plus seasonings\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "That is $9.50 for six servings, which lands right around \u003cstrong\u003e$1.58 per serving\u003c/strong\u003e.",
+                             "replace":  "Add it up at those prices and you get six servings at \u003cstrong\u003ea low cost per serving\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "That is about $3.50 for the whole bag,",
+                             "replace":  "Russets run \u003cspan data-tc-live-price data-tc-bid=\"russet-potatoes\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.41\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.41\u003c/span\u003e a pound,",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "which breaks down to roughly 35 cents per large potato.",
+                             "replace":  "which breaks down to very little per large potato.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A bag of frozen cauliflower runs about $1.30 and makes four sides.",
+                             "replace":  "Frozen cauliflower runs \u003cspan data-tc-live-price data-tc-bid=\"frozen-cauliflower-florets\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.63\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.63\u003c/span\u003e a pound, and one bag makes four sides.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "a single bunch of cilantro or green onion for under a dollar can carry",
+                             "replace":  "a single bunch of cilantro (\u003cspan data-tc-live-price data-tc-bid=\"cilantro\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.89\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.89\u003c/span\u003e) or green onions (\u003cspan data-tc-live-price data-tc-bid=\"green-onions\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.99\u003c/span\u003e) can carry",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "A full week of it can run under $2 a meal and leave you fuller",
+                             "replace":  "A full week of it can cost very little per meal and leave you fuller",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "and spend under $2 a meal doing it.",
+                            "replace":  "and spend very little doing it."
+                        },
+                        {
+                            "find":  "that keeps you full for under $2 a meal.",
+                            "replace":  "that keeps you full for very little per meal."
+                        }
+                    ],
+    "new_lexical_sha256":  "31ef2502aa455ccce075a8428eeddeac28e2615bd530ccfd484019e4f8b77f3e",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

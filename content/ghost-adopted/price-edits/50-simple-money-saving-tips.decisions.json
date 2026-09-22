@@ -1,0 +1,20 @@
+{
+  "slug": "50-simple-money-saving-tips",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "At $18 a meal saved twice a week, that is roughly $150 a month.",
+      "replace": "At $18 saved on each meal, twice a week, that is roughly $150 a month.",
+      "class": "unbacked",
+      "figures": ["$18"],
+      "why": "The $18 is takeout money saved per meal, savings arithmetic behind the $150 total and not a grocery price, so it stays; reworded so it no longer reads as a grocery price per meal to the monitor."
+    },
+    {
+      "find": "A $10 lunch made at home costs about $3.",
+      "replace": "A $10 lunch bought out costs far more than the same lunch made at home.",
+      "class": "unbacked",
+      "figures": ["$3"],
+      "why": "A generic homemade lunch is not a board commodity or an engine recipe; the $10 bought lunch is a restaurant price and stays."
+    }
+  ]
+}

@@ -1,20 +1,17 @@
 {
-    "generated":  "2026-09-22T14:56:18",
+    "generated":  "2026-09-22T15:13:39",
     "ruling":  "C (Brad, 2026-09-21): live where the article names something the pipeline prices, removed where it does not",
     "articles":  40,
     "figures":  626,
     "blind":  [
-                  "beef-protein-pasta : the body is not a single html card",
-                  "chicken-marinara-pasta : the body is not a single html card",
-                  "free-chicken-alfredo : the body is not a single html card",
-                  "shredded-bbq-chicken-sammies : the body is not a single html card"
+
               ],
     "rows":  [
                  {
                      "slug":  "50-simple-money-saving-tips",
                      "id":  "6a49a0b550682b0001cd4420",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "50 Simple Money-Saving Tips That Actually Add Up",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-05T00:09:25.000Z",
@@ -89,17 +86,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  14,
-                     "monitor_shape_count":  2
+                     "monitor_shape_count":  1
                  },
                  {
                      "slug":  "batch-cooking-chicken-guide",
                      "id":  "6a49a3cc50682b0001cd44c4",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "How to Batch Cook Chicken (Juicy, Not Dry, Every Time)",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-05T00:22:36.000Z",
@@ -144,17 +141,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  8,
-                     "monitor_shape_count":  3
+                     "monitor_shape_count":  2
                  },
                  {
                      "slug":  "best-cheap-high-protein-foods",
                      "id":  "6a49991e50682b0001cd423a",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "The Best Cheap High-Protein Foods (Ranked by Cost)",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:37:02.000Z",
@@ -224,7 +221,7 @@
                                      {
                                          "figure":  "$0.80",
                                          "sentence":  "A cup of cottage cheese gives you 24 grams for around $0.80, and it pairs with fruit for breakfast or tomatoes and pepper for a savory snack.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$0.55",
@@ -244,17 +241,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  17,
-                     "monitor_shape_count":  13
+                     "monitor_shape_count":  11
                  },
                  {
                      "slug":  "budget-breakfast-ideas",
                      "id":  "6a499cc450682b0001cd4329",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "20 Cheap Breakfast Ideas Under $1 a Serving",
                      "title_has_price":  true,
                      "base_updated_at":  "2026-07-04T23:52:36.000Z",
@@ -379,7 +376,7 @@
                      "slug":  "cheap-crockpot-meals",
                      "id":  "6a499d9b50682b0001cd4393",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "12 Cheap Crockpot Meals That Basically Cook Themselves",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:56:11.000Z",
@@ -454,17 +451,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  14,
-                     "monitor_shape_count":  14
+                     "monitor_shape_count":  13
                  },
                  {
                      "slug":  "cheap-dinner-ideas",
                      "id":  "6a499c0450682b0001cd42e3",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "25 Cheap Dinner Ideas Under $3 a Serving",
                      "title_has_price":  true,
                      "base_updated_at":  "2026-07-04T23:49:24.000Z",
@@ -484,7 +481,7 @@
                                      {
                                          "figure":  "$1.80",
                                          "sentence":  "Red Beans and Rice A pound of dried red beans runs about $1.80 and a bag of rice pennies per serving.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$1.15",
@@ -504,7 +501,7 @@
                                      {
                                          "figure":  "$1.60",
                                          "sentence":  "Lentil Soup A pound of lentils is around $1.60 and cooks in half an hour.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$1.00",
@@ -594,7 +591,7 @@
                                      {
                                          "figure":  "$2",
                                          "sentence":  "Tofu and Broccoli Stir-Fry A block of tofu is around $2 and a whole meal of protein.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$1.75",
@@ -634,17 +631,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  33,
-                     "monitor_shape_count":  33
+                     "monitor_shape_count":  29
                  },
                  {
                      "slug":  "cheap-healthy-grocery-staples",
                      "id":  "6a49a65c50682b0001cd45f0",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "25 Cheap, Healthy Grocery Staples to Always Keep Stocked",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-05T00:33:32.000Z",
@@ -674,7 +671,7 @@
                                      {
                                          "figure":  "$3",
                                          "sentence":  "Peanut butter: A $3 jar gives you 14-plus servings at around 20 cents each, with protein and healthy fat.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$1",
@@ -709,7 +706,7 @@
                                      {
                                          "figure":  "$1.50",
                                          "sentence":  "Frozen mixed vegetables: A $1.50 bag with no waste and nutrition locked in at the peak of freshness.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$1",
@@ -724,12 +721,12 @@
                                      {
                                          "figure":  "$3",
                                          "sentence":  "Frozen berries: A $3 bag beats fresh on price out of season and never spoils on you.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$3",
                                          "sentence":  "Flavor and healthy fats Vegetable or canola oil: About $3 for a bottle that lasts months and turns plain staples into real cooking.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$10",
@@ -759,17 +756,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  22,
-                     "monitor_shape_count":  15
+                     "monitor_shape_count":  10
                  },
                  {
                      "slug":  "cheap-lunch-ideas-for-work",
                      "id":  "6a499cc450682b0001cd432f",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "18 Cheap Lunch Ideas to Bring to Work",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:52:36.000Z",
@@ -869,17 +866,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  19,
-                     "monitor_shape_count":  19
+                     "monitor_shape_count":  18
                  },
                  {
                      "slug":  "chicken-and-rice-meal-prep-guide",
                      "id":  "6a499d9950682b0001cd437b",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "The Chicken and Rice Meal Prep Guide (The $2 Bodybuilder Staple)",
                      "title_has_price":  true,
                      "base_updated_at":  "2026-07-04T23:56:09.000Z",
@@ -889,12 +886,12 @@
                                      {
                                          "figure":  "$2",
                                          "sentence":  "Buy smart: where the $2 meal comes from The famous \"$2 meal\" is real, but only if you shop like you mean it.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$2",
                                          "sentence":  "Buy smart: where the $2 meal comes from The famous \"$2 meal\" is real, but only if you shop like you mean it.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$2.29",
@@ -924,7 +921,7 @@
                                      {
                                          "figure":  "$2",
                                          "sentence":  "This is the single move that turns a $5 meal into a $2 one.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$11.50",
@@ -954,7 +951,7 @@
                                      {
                                          "figure":  "$2",
                                          "sentence":  "Bottom line: Chicken and rice endures because it delivers a complete, high-protein meal for around $2 a container when you buy in bulk, cook with a little care, and rotate the seasoning so you do not get sick of it.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$1",
@@ -963,13 +960,13 @@
                                      }
                                  ],
                      "figure_count":  15,
-                     "monitor_shape_count":  6
+                     "monitor_shape_count":  2
                  },
                  {
                      "slug":  "freezer-meal-prep-guide",
                      "id":  "6a499ae850682b0001cd429e",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "The Freezer Meal Prep Guide (Cook Once, Eat for a Month)",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:44:40.000Z",
@@ -1024,17 +1021,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  10,
-                     "monitor_shape_count":  5
+                     "monitor_shape_count":  4
                  },
                  {
                      "slug":  "grocery-bill-hacks",
                      "id":  "6a498b7c50682b0001cd3e50",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "How to Cut Your Grocery Bill",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T22:38:52.000Z",
@@ -1184,7 +1181,7 @@
                      "slug":  "ground-beef-meal-prep-ideas",
                      "id":  "6a499e7950682b0001cd43df",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "10 Cheap Ground Beef Meal Prep Ideas",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:59:53.000Z",
@@ -1244,17 +1241,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  11,
-                     "monitor_shape_count":  6
+                     "monitor_shape_count":  5
                  },
                  {
                      "slug":  "high-protein-breakfast-meal-prep",
                      "id":  "6a49991e50682b0001cd4246",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "High-Protein Breakfast Meal Prep Ideas (Under $2 a Serving)",
                      "title_has_price":  true,
                      "base_updated_at":  "2026-09-19T11:23:09.000Z",
@@ -1359,7 +1356,7 @@
                                      {
                                          "figure":  "$2",
                                          "sentence":  "Add a piece of fruit and you are still under $2.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$0.20",
@@ -1374,12 +1371,12 @@
                                      {
                                          "figure":  "$0.60",
                                          "sentence":  "15, Greek yogurt about $0.60, and a spoon of peanut butter for another $0.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$0.20",
                                          "sentence":  "60, and a spoon of peanut butter for another $0.20.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$1.15",
@@ -1389,7 +1386,7 @@
                                      {
                                          "figure":  "$2",
                                          "sentence":  "Stir in a scoop of protein powder if you have it and you clear 30 grams easily while still sitting under $2.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$12",
@@ -1434,17 +1431,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  35,
-                     "monitor_shape_count":  10
+                     "monitor_shape_count":  5
                  },
                  {
                      "slug":  "high-protein-lunch-meal-prep",
                      "id":  "6a499d9a50682b0001cd4387",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "High-Protein Lunch Meal Prep (Under $2.50 a Serving)",
                      "title_has_price":  true,
                      "base_updated_at":  "2026-07-04T23:56:10.000Z",
@@ -1499,7 +1496,7 @@
                                      {
                                          "figure":  "$2.50",
                                          "sentence":  "A Real Under-$2.50 Example Here is a chicken burrito bowl that hits the protein target and the price target.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$6.58",
@@ -1549,17 +1546,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  20,
-                     "monitor_shape_count":  10
+                     "monitor_shape_count":  8
                  },
                  {
                      "slug":  "high-volume-low-calorie-meal-prep",
                      "id":  "6a49a57950682b0001cd45aa",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "High-Volume, Low-Calorie Meal Prep (Eat More, Weigh Less)",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-05T00:29:45.000Z",
@@ -1589,7 +1586,7 @@
                                      {
                                          "figure":  "$1.30",
                                          "sentence":  "00 One bag frozen mixed vegetables: about $1.30 One can diced tomatoes plus seasonings: about $1.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$1.20",
@@ -1614,7 +1611,7 @@
                                      {
                                          "figure":  "$1.30",
                                          "sentence":  "A bag of frozen cauliflower runs about $1.30 and makes four sides.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$2",
@@ -1624,17 +1621,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  12,
-                     "monitor_shape_count":  7
+                     "monitor_shape_count":  4
                  },
                  {
                      "slug":  "how-to-count-macros",
                      "id":  "6a499ae950682b0001cd42aa",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "How to Count Macros (A Simple Starter Guide)",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:44:41.000Z",
@@ -1664,7 +1661,7 @@
                      "slug":  "how-to-meal-plan-for-a-family",
                      "id":  "6a4994d750682b0001cd41aa",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "How to Meal Plan for a Whole Family on a Budget",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:18:47.000Z",
@@ -1744,17 +1741,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  15,
-                     "monitor_shape_count":  2
+                     "monitor_shape_count":  1
                  },
                  {
                      "slug":  "how-to-meal-prep-for-muscle-gain",
                      "id":  "6a499ae850682b0001cd4298",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "How to Meal Prep for Muscle Gain Without Spending a Fortune",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:44:40.000Z",
@@ -1774,7 +1771,7 @@
                                      {
                                          "figure":  "$3",
                                          "sentence":  "That is about 72 grams of protein for $3.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$1.99",
@@ -1799,12 +1796,12 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Rough cost: about $6 for thighs, $1 in rice, $1 in beans, $2 for veggies, and $1 in oil.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Rough cost: about $6 for thighs, $1 in rice, $1 in beans, $2 for veggies, and $1 in oil.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$2",
@@ -1814,7 +1811,7 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Rough cost: about $6 for thighs, $1 in rice, $1 in beans, $2 for veggies, and $1 in oil.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$11",
@@ -1834,17 +1831,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  15,
-                     "monitor_shape_count":  10
+                     "monitor_shape_count":  5
                  },
                  {
                      "slug":  "how-to-meal-prep-for-one",
                      "id":  "6a499ae950682b0001cd42a4",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "How to Meal Prep for One Person Without Wasting Food",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:44:41.000Z",
@@ -1864,17 +1861,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  3,
-                     "monitor_shape_count":  2
+                     "monitor_shape_count":  1
                  },
                  {
                      "slug":  "how-to-meal-prep-for-two",
                      "id":  "6a499e7950682b0001cd43eb",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "How to Meal Prep for Two Without Eating the Same Thing Every Day",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:59:53.000Z",
@@ -1929,7 +1926,7 @@
                      "slug":  "how-to-meal-prep-for-weight-loss",
                      "id":  "6a499ae750682b0001cd4292",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "How to Meal Prep for Weight Loss (on a Budget)",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:44:39.000Z",
@@ -1954,7 +1951,7 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Figure about $6 for a family pack of thighs, $1 worth of rice, and $2.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$2.50",
@@ -1984,17 +1981,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  10,
-                     "monitor_shape_count":  5
+                     "monitor_shape_count":  3
                  },
                  {
                      "slug":  "how-to-meal-prep-on-a-budget",
                      "id":  "6a49991e50682b0001cd4240",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "How to Meal Prep on a Tight Budget",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:37:02.000Z",
@@ -2079,7 +2076,7 @@
                      "slug":  "how-to-save-money-on-a-low-income",
                      "id":  "6a49a0b450682b0001cd4414",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "How to Save Money on a Low Income",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-05T00:09:24.000Z",
@@ -2249,7 +2246,7 @@
                      "slug":  "how-to-save-money-on-a-wedding",
                      "id":  "6a49916c50682b0001cd40ce",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "How to Save Money on a Wedding",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:04:12.000Z",
@@ -2359,7 +2356,7 @@
                      "slug":  "is-buying-in-bulk-worth-it",
                      "id":  "6a499c0650682b0001cd42fb",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "Is Buying in Bulk Actually Worth It?",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:49:26.000Z",
@@ -2464,7 +2461,7 @@
                      "slug":  "keto-meal-prep-on-a-budget",
                      "id":  "6a49a0b650682b0001cd442c",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "Keto Meal Prep on a Budget (Cheap Low-Carb Made Easy)",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-05T00:09:26.000Z",
@@ -2579,17 +2576,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  22,
-                     "monitor_shape_count":  10
+                     "monitor_shape_count":  9
                  },
                  {
                      "slug":  "low-carb-meal-prep-ideas",
                      "id":  "6a49a0b650682b0001cd4432",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "10 Low-Carb Meal Prep Ideas That Actually Fill You Up",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-05T00:09:26.000Z",
@@ -2659,17 +2656,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  13,
-                     "monitor_shape_count":  10
+                     "monitor_shape_count":  9
                  },
                  {
                      "slug":  "mason-jar-salads-meal-prep",
                      "id":  "6a49a18250682b0001cd4484",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "Mason Jar Salads: Grab-and-Go Lunches That Stay Crisp All Week",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-05T00:12:50.000Z",
@@ -2714,7 +2711,7 @@
                                      {
                                          "figure":  "$2",
                                          "sentence":  "Bottom line: Mason jar salads turn a $12 lunch into a $2 to $3 one, and they beat the wilt problem by keeping the dressing at the bottom and the greens up top.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$3",
@@ -2728,13 +2725,13 @@
                                      }
                                  ],
                      "figure_count":  10,
-                     "monitor_shape_count":  2
+                     "monitor_shape_count":  1
                  },
                  {
                      "slug":  "meal-planning-to-save",
                      "id":  "6a498b7d50682b0001cd3e56",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "Meal Planning That Actually Saves Money",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T22:38:53.000Z",
@@ -2799,17 +2796,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  12,
-                     "monitor_shape_count":  2
+                     "monitor_shape_count":  1
                  },
                  {
                      "slug":  "meal-prep-for-a-family-of-four",
                      "id":  "6a499d9a50682b0001cd4381",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "How to Meal Prep for a Family of Four on a Budget",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:56:10.000Z",
@@ -2874,12 +2871,12 @@
                                      {
                                          "figure":  "$2.00",
                                          "sentence":  "00 2 cans beans: $2.00 2 cans diced tomatoes: $2.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$2.00",
                                          "sentence":  "00 2 cans diced tomatoes: $2.00 Onion, garlic, spices: $1.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$1.50",
@@ -2924,17 +2921,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  22,
-                     "monitor_shape_count":  8
+                     "monitor_shape_count":  5
                  },
                  {
                      "slug":  "meal-prep-for-the-gym",
                      "id":  "6a499d9950682b0001cd4375",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "Meal Prep for the Gym: Fuel Your Workouts for Less",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:56:09.000Z",
@@ -2969,7 +2966,7 @@
                                      {
                                          "figure":  "$0.15",
                                          "sentence":  "10 to $0.15 per cooked cup Dry oats: about $0.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$0.15",
@@ -2984,7 +2981,7 @@
                                      {
                                          "figure":  "$2.29",
                                          "sentence":  "Five pounds of thighs at $2.29 runs about $11.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$11.50",
@@ -2994,7 +2991,7 @@
                                      {
                                          "figure":  "$2",
                                          "sentence":  "Vegetables add maybe $2.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$14.50",
@@ -3004,7 +3001,7 @@
                                      {
                                          "figure":  "$2.40",
                                          "sentence":  "50 for six full meals, or about $2.40 per container .",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$12",
@@ -3024,17 +3021,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  17,
-                     "monitor_shape_count":  10
+                     "monitor_shape_count":  5
                  },
                  {
                      "slug":  "meal-prep-mistakes-to-avoid",
                      "id":  "6a49991f50682b0001cd424c",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "9 Meal Prep Mistakes That Waste Your Time and Money",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:37:03.000Z",
@@ -3079,17 +3076,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  8,
-                     "monitor_shape_count":  2
+                     "monitor_shape_count":  1
                  },
                  {
                      "slug":  "meal-prep-shopping-list-guide",
                      "id":  "6a49a57950682b0001cd45b0",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "How to Build a Meal Prep Shopping List (That Cuts Your Bill)",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-05T00:29:45.000Z",
@@ -3109,7 +3106,7 @@
                                      {
                                          "figure":  "$1.50",
                                          "sentence":  "A one-pound bag of dried lentils is about $1.50 and cooks up into eight servings.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$9.00",
@@ -3144,17 +3141,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  10,
-                     "monitor_shape_count":  4
+                     "monitor_shape_count":  2
                  },
                  {
                      "slug":  "meal-prep-soups-and-stews",
                      "id":  "6a49a18350682b0001cd448a",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "Freezer Soups and Stews: Big-Batch Meal Prep for Pennies a Bowl",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-05T00:12:51.000Z",
@@ -3234,17 +3231,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  15,
-                     "monitor_shape_count":  2
+                     "monitor_shape_count":  1
                  },
                  {
                      "slug":  "money-rules-to-live-by",
                      "id":  "6a49a65b50682b0001cd45ea",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "20 Simple Money Rules to Live By",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-05T00:33:31.000Z",
@@ -3394,7 +3391,7 @@
                      "slug":  "no-cook-meal-prep-ideas",
                      "id":  "6a499cc550682b0001cd433b",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "No-Cook Meal Prep Ideas for Busy Weeks",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:52:37.000Z",
@@ -3409,7 +3406,7 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "A can of tuna is about $1, a can of chickpeas or black beans runs around $1 too, and both are already cooked and ready.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$3",
@@ -3439,7 +3436,7 @@
                                      {
                                          "figure":  "$4",
                                          "sentence":  "That jar costs about 60 cents and beats a $4 muffin every single day of the week.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$1.25",
@@ -3454,7 +3451,7 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Either way you have swapped a $10 morning habit for a $1 one, and over a five-day work week that is close to $45 back in your pocket.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$45",
@@ -3464,7 +3461,7 @@
                                      {
                                          "figure":  "$2.50",
                                          "sentence":  "It reads like a fancy bistro board and costs about $2.50 to put together.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$3",
@@ -3479,7 +3476,7 @@
                                      {
                                          "figure":  "$2",
                                          "sentence":  "Stock a no-cook pantry, master the base-protein-vegetable-sauce bowl, batch your breakfasts, and pre-build a few snack boxes, and you can run a full week of meals at $2 to $4 a serving without turning on a burner.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      },
                                      {
                                          "figure":  "$4",
@@ -3489,17 +3486,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  18,
-                     "monitor_shape_count":  10
+                     "monitor_shape_count":  4
                  },
                  {
                      "slug":  "rotisserie-chicken-meal-prep",
                      "id":  "6a49a0b750682b0001cd4438",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "Rotisserie Chicken Meal Prep: 5 Meals From One $5 Bird",
                      "title_has_price":  true,
                      "base_updated_at":  "2026-07-05T00:09:27.000Z",
@@ -3564,17 +3561,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  12,
-                     "monitor_shape_count":  5
+                     "monitor_shape_count":  4
                  },
                  {
                      "slug":  "sunday-meal-prep-routine",
                      "id":  "6a499cc550682b0001cd4335",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "The Sunday Meal Prep Routine (2 Hours, a Week of Dinners)",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:52:37.000Z",
@@ -3639,17 +3636,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  12,
-                     "monitor_shape_count":  4
+                     "monitor_shape_count":  3
                  },
                  {
                      "slug":  "vegetarian-meal-prep-on-a-budget",
                      "id":  "6a499d9b50682b0001cd438d",
                      "kind":  "post",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "Vegetarian Meal Prep on a Budget (High Protein, No Meat)",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-04T23:56:11.000Z",
@@ -3709,17 +3706,17 @@
                                      {
                                          "figure":  "$1",
                                          "sentence":  "Membership is just $1 a month.",
-                                         "monitor_shape":  true
+                                         "monitor_shape":  false
                                      }
                                  ],
                      "figure_count":  11,
-                     "monitor_shape_count":  9
+                     "monitor_shape_count":  8
                  },
                  {
                      "slug":  "welcome",
                      "id":  "6a45507028dadd0001a04d8f",
                      "kind":  "page",
-                     "visibility":  "public",
+                     "visibility":  null,
                      "title":  "Welcome - Start Here",
                      "title_has_price":  false,
                      "base_updated_at":  "2026-07-03T10:53:38.000Z",

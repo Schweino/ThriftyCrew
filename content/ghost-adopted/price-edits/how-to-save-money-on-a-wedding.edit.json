@@ -1,0 +1,27 @@
+{
+    "slug":  "how-to-save-money-on-a-wedding",
+    "id":  "6a49916c50682b0001cd40ce",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:04:12.000Z",
+    "base_lexical_sha256":  "7421cd0a71bb420f3c098ab167cf73f0daf8090eb372b619396d2674135b5ecf",
+    "title_old":  "How to Save Money on a Wedding",
+    "title_new":  "How to Save Money on a Wedding",
+    "replacements":  [
+                         {
+                             "find":  "If catering runs $75 per plate, then 120 guests is $9,000 and 60 guests is $4,500.",
+                             "replace":  "If catering runs $75 a guest, then 120 guests is $9,000 and 60 guests is $4,500.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "9f76626c75023e4b72986007ca748b4c5f8a717244b8148de086af54d569883d",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

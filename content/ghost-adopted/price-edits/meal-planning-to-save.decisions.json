@@ -1,0 +1,27 @@
+{
+  "slug": "meal-planning-to-save",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "A 5 pound pack of chicken thighs at $1.29 a pound costs about $6.45 and stretches across four dinners.",
+      "replace": "Chicken thighs or drumsticks can run as little as {{live-unit:chicken-thighs:lb}} a pound in a big pack, and a 5 pound pack stretches across four dinners.",
+      "class": "backed-commodity",
+      "figures": ["$1.29", "$6.45"],
+      "why": "$1.29 a pound is the chicken-thighs commodity (Chicken Thighs / Drumsticks, cheapest cell currently a drumstick bag, so both are named); the $6.45 pack total is derived from the typed price and removed"
+    },
+    {
+      "find": "That is a little over $1.60 of protein per meal.",
+      "replace": "That is cheap protein at every one of those meals.",
+      "class": "unbacked",
+      "figures": ["$1.60"],
+      "why": "a per-meal figure derived from the typed pack price"
+    },
+    {
+      "find": "A bag of dried beans can cost around $2 and yield a dozen servings.",
+      "replace": "A bag of dried beans costs very little and yields a dozen servings.",
+      "class": "unbacked",
+      "figures": ["$2"],
+      "why": "generic dried beans; the feed prices no dry-bean commodity"
+    }
+  ]
+}

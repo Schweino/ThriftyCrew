@@ -1,0 +1,165 @@
+{
+    "slug":  "cheap-crockpot-meals",
+    "title_new":  null,
+    "edits":  [
+                  {
+                      "find":  "Here are 12 meals that basically cook themselves, along with what they really cost per serving.",
+                      "replace":  "Here are 12 meals that basically cook themselves, every one built on cheap staples.",
+                      "class":  "unbacked",
+                      "figures":  [
+
+                                  ],
+                      "why":  "coherence: the per-serving costs this sentence promises are removed below"
+                  },
+                  {
+                      "find":  "\u003ch2\u003eHearty One-Pot Dinners Under $2 a Serving\u003c/h2\u003e",
+                      "replace":  "\u003ch2\u003eHearty One-Pot Dinners on a Budget\u003c/h2\u003e",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2"
+                                  ],
+                      "why":  "generic per-serving bound over several dishes"
+                  },
+                  {
+                      "find":  "Feeds six for about $1.60 a serving.",
+                      "replace":  "Feeds six.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.60"
+                                  ],
+                      "why":  "per-serving estimate for a generic chili, not an engine recipe"
+                  },
+                  {
+                      "find":  "carrots, and broth. Roughly $1.35 a serving.",
+                      "replace":  "carrots, and broth.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.35"
+                                  ],
+                      "why":  "per-serving estimate for a generic soup"
+                  },
+                  {
+                      "find":  "seasoning cooked in broth. About $1.50 a serving.",
+                      "replace":  "seasoning cooked in broth.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.50"
+                                  ],
+                      "why":  "per-serving estimate for a generic dish"
+                  },
+                  {
+                      "find":  "Around $1.10 a serving and completely meat-free.",
+                      "replace":  "Completely meat-free.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.10"
+                                  ],
+                      "why":  "per-serving estimate for a generic stew"
+                  },
+                  {
+                      "find":  "carrots, and celery. Roughly $1.20 a serving.",
+                      "replace":  "carrots, and celery.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.20"
+                                  ],
+                      "why":  "per-serving estimate for a generic soup"
+                  },
+                  {
+                      "find":  "About $1.75 a serving and it makes a mountain of sandwiches.",
+                      "replace":  "It makes a mountain of sandwiches.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.75"
+                                  ],
+                      "why":  "per-serving estimate for generic pulled pork, not an engine recipe"
+                  },
+                  {
+                      "find":  "Roughly $2.20 a serving for a full Sunday dinner.",
+                      "replace":  "A full Sunday dinner in one pot.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.20"
+                                  ],
+                      "why":  "per-serving estimate for a generic pot roast; no engine title or link is named"
+                  },
+                  {
+                      "find":  "shredded for tacos or bowls. About $1.40 a serving.",
+                      "replace":  "shredded for tacos or bowls.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.40"
+                                  ],
+                      "why":  "per-serving estimate for generic salsa chicken"
+                  },
+                  {
+                      "find":  "stretched with beans and rice. Around $1.30 a serving.",
+                      "replace":  "stretched with beans and rice.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.30"
+                                  ],
+                      "why":  "per-serving estimate for generic burritos"
+                  },
+                  {
+                      "find":  "About $0.95 a serving, one of the cheapest hot meals you can make.",
+                      "replace":  "One of the cheapest hot meals you can make.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.95"
+                                  ],
+                      "why":  "per-serving estimate for a generic chili"
+                  },
+                  {
+                      "find":  "Roughly $0.60 a serving for a warm breakfast waiting when you wake up.",
+                      "replace":  "A warm breakfast waiting when you wake up.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.60"
+                                  ],
+                      "why":  "per-serving estimate for generic oats"
+                  },
+                  {
+                      "find":  "Around $0.80 a serving with pasta included.",
+                      "replace":  "Cheap even with the pasta included.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.80"
+                                  ],
+                      "why":  "per-serving estimate for a generic sauce and pasta"
+                  },
+                  {
+                      "find":  "A bag of dried beans costs a couple bucks and stretches",
+                      "replace":  "A bag of dried beans costs little and stretches",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "a couple bucks"
+                                  ],
+                      "why":  "a price in words (not in figures.txt); dried beans in general have no commodity"
+                  },
+                  {
+                      "find":  "into tender, filling meals for a dollar or two a serving,",
+                      "replace":  "into tender, filling meals for very little per serving,",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "a dollar or two"
+                                  ],
+                      "why":  "a per-serving price in words (not in figures.txt)"
+                  },
+                  {
+                      "find":  "so treat these per-serving figures as ballpark estimates rather than promises, and adjust for what is on sale near you.",
+                      "replace":  "so build your week around what is on sale near you.",
+                      "class":  "unbacked",
+                      "figures":  [
+
+                                  ],
+                      "why":  "coherence: the note referred to per-serving figures that are now removed"
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "Twelve budget crockpot meals with real per-serving costs. Cheap cuts and dried beans turn into tender dinners for $1 to $2 a plate.",
+                            "replace":  "Twelve budget crockpot meals. Cheap cuts and dried beans turn into tender dinners that cost very little per plate."
+                        }
+                    ]
+}

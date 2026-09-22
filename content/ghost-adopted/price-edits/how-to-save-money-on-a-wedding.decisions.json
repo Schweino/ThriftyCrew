@@ -1,0 +1,13 @@
+{
+  "slug": "how-to-save-money-on-a-wedding",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "If catering runs $75 per plate, then 120 guests is $9,000 and 60 guests is $4,500.",
+      "replace": "If catering runs $75 a guest, then 120 guests is $9,000 and 60 guests is $4,500.",
+      "class": "unbacked",
+      "figures": ["$75"],
+      "why": "Catering is a vendor service price, not a grocery price, and $75 drives the out-of-scope $9,000 and $4,500 arithmetic, so the figure stays; only 'per plate' becomes 'a guest', which says the same thing without reading as a grocery unit to the monitor."
+    }
+  ]
+}

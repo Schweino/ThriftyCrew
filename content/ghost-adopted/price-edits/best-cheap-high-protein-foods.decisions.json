@@ -1,0 +1,139 @@
+{
+  "slug": "best-cheap-high-protein-foods",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "Prices are rough national averages as of mid-2026, and a \"serving\" here means",
+      "replace": "The prices below are live store prices, shown by the pound, ounce, egg or gallon, and a \"serving\" here means",
+      "class": "backed-commodity",
+      "figures": [],
+      "why": "No figure here, but the list below now carries live prices, so the line calling them mid-2026 national averages would be false."
+    },
+    {
+      "find": "<strong>Dried beans:</strong> about $0.20 per serving, roughly 15g protein per cooked cup.",
+      "replace": "<strong>Dried beans:</strong> roughly 15g protein per cooked cup.",
+      "class": "unbacked",
+      "figures": ["$0.20"],
+      "why": "The feed prices no plain dried beans (15-bean soup mix is a different product)."
+    },
+    {
+      "find": "<strong>Dried lentils:</strong> about $0.25 per serving, roughly 18g protein per cooked cup.",
+      "replace": "<strong>Dried lentils:</strong> {{live-unit:brown-lentils:lb}} a pound dry, roughly 18g protein per cooked cup.",
+      "class": "backed-commodity",
+      "figures": ["$0.25"],
+      "why": "brown-lentils is the board's lentils commodity; there is no per-serving token, so the item states the live price per dry pound."
+    },
+    {
+      "find": "<strong>Eggs:</strong> about $0.35 per serving (two large eggs), 12g protein.",
+      "replace": "<strong>Eggs:</strong> {{live-unit:eggs:each}} an egg, 12g protein for two large eggs.",
+      "class": "backed-commodity",
+      "figures": ["$0.35"],
+      "why": "Eggs are a board commodity and each is an allowed per; the two-egg serving keeps its protein figure."
+    },
+    {
+      "find": "<strong>Milk:</strong> about $0.30 per cup, 8g protein.",
+      "replace": "<strong>Milk:</strong> {{live-unit:milk:gal}} a gallon, 8g protein per cup.",
+      "class": "backed-commodity",
+      "figures": ["$0.30"],
+      "why": "milk is the board's gallon milk commodity; a cup is not an allowed per, so the item reads per gallon."
+    },
+    {
+      "find": "<strong>Peanut butter:</strong> about $0.30 per 2-tablespoon serving, 7g protein.",
+      "replace": "<strong>Peanut butter:</strong> {{live-unit:peanut-butter:lb}} a pound, 7g protein per 2-tablespoon serving.",
+      "class": "backed-commodity",
+      "figures": ["$0.30"],
+      "why": "peanut-butter is a board commodity; the per-serving price becomes per pound."
+    },
+    {
+      "find": "<strong>Canned tuna:</strong> about $0.90 per can, 20g protein.",
+      "replace": "<strong>Canned tuna:</strong> {{live-unit:canned-tuna:oz}} an ounce, 20g protein per can.",
+      "class": "backed-commodity",
+      "figures": ["$0.90"],
+      "why": "canned-tuna is priced per ounce; a can is not an allowed per."
+    },
+    {
+      "find": "<strong>Chicken (bone-in thighs or whole bird):</strong> about $0.90 per serving, 25g protein per 4 ounces.",
+      "replace": "<strong>Chicken (bone-in thighs or whole bird):</strong> a whole bird runs {{live-unit:whole-chicken:lb}} a pound, 25g protein per 4 ounces.",
+      "class": "backed-commodity",
+      "figures": ["$0.90"],
+      "why": "whole-chicken is a board commodity; the item names the whole bird so the live price is for exactly what it names."
+    },
+    {
+      "find": "<strong>Greek yogurt (large tub):</strong> about $0.75 per serving, 17g protein per two-thirds cup.",
+      "replace": "<strong>Greek yogurt (large tub):</strong> {{live-unit:greek-yogurt:lb}} a pound, 17g protein per two-thirds cup.",
+      "class": "backed-commodity",
+      "figures": ["$0.75"],
+      "why": "greek-yogurt is priced in the feed from 32 oz plain tubs, which is the large tub the item names."
+    },
+    {
+      "find": "<strong>Cottage cheese:</strong> about $0.80 per serving, 24g protein per cup.",
+      "replace": "<strong>Cottage cheese:</strong> {{live-unit:cottage-cheese:lb}} a pound, 24g protein per cup.",
+      "class": "backed-commodity",
+      "figures": ["$0.80"],
+      "why": "cottage-cheese is a board commodity; the per-serving price becomes per pound."
+    },
+    {
+      "find": "<strong>Ground turkey:</strong> about $1.25 per serving, 22g protein per 4 ounces. A bit more, but lean and easy to stretch.",
+      "replace": "<strong>Ground turkey:</strong> {{live-unit:ground-turkey:lb}} a pound, 22g protein per 4 ounces. Lean and easy to stretch.",
+      "class": "backed-commodity",
+      "figures": ["$1.25"],
+      "why": "ground-turkey is a board commodity; 'A bit more' compared it with the typed prices above and is dropped, since the live prices may not bear it out."
+    },
+    {
+      "find": "A one-pound bag of dried beans runs about $1.50 and cooks up into six generous cups. That is 90 grams of protein for a buck fifty, or about a penny and a half per gram. Compare that to a chicken breast at around six or seven cents per gram, and you can see why beans have fed families through hard times for centuries.",
+      "replace": "A one-pound bag of dried beans cooks up into six generous cups, which is 90 grams of protein from one cheap bag. That is why beans have fed families through hard times for centuries.",
+      "class": "unbacked",
+      "figures": ["$1.50", "a buck fifty", "a penny and a half per gram", "six or seven cents per gram"],
+      "why": "The feed prices no plain dried beans, and the per-gram figures for beans and chicken breast were built from typed prices."
+    },
+    {
+      "find": "feeds four people for under three dollars total. That works out to roughly $0.70 a bowl, and it reheats beautifully all week.",
+      "replace": "feeds four people for very little, and it reheats beautifully all week.",
+      "class": "unbacked",
+      "figures": ["under three dollars", "$0.70"],
+      "why": "A generic lentil soup batch is not an engine recipe or a single commodity."
+    },
+    {
+      "find": "you have a 20-gram protein lunch for about a dollar.",
+      "replace": "you have a cheap 20-gram protein lunch.",
+      "class": "unbacked",
+      "figures": ["about a dollar"],
+      "why": "A mixed lunch of tuna, yogurt and relish, priced in words; no single commodity."
+    },
+    {
+      "find": "A cup of cottage cheese gives you 24 grams for around $0.80, and it pairs with fruit",
+      "replace": "A cup of cottage cheese gives you 24 grams from a tub that runs {{live-unit:cottage-cheese:lb}} a pound, and it pairs with fruit",
+      "class": "backed-commodity",
+      "figures": ["$0.80"],
+      "why": "cottage-cheese is a board commodity; the per-cup price becomes per pound."
+    },
+    {
+      "find": "<strong>Peanut butter</strong> on whole-grain bread costs about $0.55 for the whole sandwich and travels anywhere without a cooler.",
+      "replace": "<strong>Peanut butter</strong> on whole-grain bread makes a cheap sandwich that travels anywhere without a cooler.",
+      "class": "unbacked",
+      "figures": ["$0.55"],
+      "why": "A whole sandwich is a mixed item, not one commodity."
+    },
+    {
+      "find": "A whole chicken at around $1.30 a pound gives you more meat per dollar than boneless breasts at $4.50 a pound, and the carcass makes free stock.",
+      "replace": "A whole chicken runs {{live-unit:whole-chicken:lb}} a pound against {{live-unit:chicken-breast:lb}} a pound for boneless breasts, so weigh the bones against the price, and remember the carcass makes free stock.",
+      "class": "backed-commodity",
+      "figures": ["$1.30", "$4.50"],
+      "why": "Both are board commodities; the 'more meat per dollar' claim is dropped because which one wins moves with the live prices (it rested on a typed $4.50 breast price, and today's feed has breasts well under that)."
+    },
+    {
+      "find": "these three keep your cost per serving under fifty cents no matter what the market is doing.",
+      "replace": "these three keep your cost per serving low no matter what the market is doing.",
+      "class": "unbacked",
+      "figures": ["under fifty cents"],
+      "why": "A per-serving bound in words across three foods; no single commodity or recipe backs it, and canned tuna by the can already sits above it in today's feed."
+    },
+    {
+      "find": "you can build almost every meal around them for well under a dollar a serving.",
+      "replace": "you can build almost every meal around them for very little per serving.",
+      "class": "unbacked",
+      "figures": ["under a dollar"],
+      "why": "A per-serving bound in words across a mixed basket."
+    }
+  ]
+}

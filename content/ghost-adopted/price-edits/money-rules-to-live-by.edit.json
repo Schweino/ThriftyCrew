@@ -1,0 +1,27 @@
+{
+    "slug":  "money-rules-to-live-by",
+    "id":  "6a49a65b50682b0001cd45ea",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-05T00:33:31.000Z",
+    "base_lexical_sha256":  "018bce0ec99c722ff208d2c5d1805853742c5ed2664e79524f1ee315fdf0c397",
+    "title_old":  "20 Simple Money Rules to Live By",
+    "title_new":  "20 Simple Money Rules to Live By",
+    "replacements":  [
+                         {
+                             "find":  "The same meal made at home often lands under $4 a serving.",
+                             "replace":  "The same meal made at home often costs a fraction of that.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "c15dadc74cc8ad33c5a39e70f6bc4310a3dcd52604c1243135cf8f1bd333ea4a",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

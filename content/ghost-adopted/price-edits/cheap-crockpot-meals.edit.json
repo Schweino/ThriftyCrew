@@ -1,0 +1,110 @@
+{
+    "slug":  "cheap-crockpot-meals",
+    "id":  "6a499d9b50682b0001cd4393",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:56:11.000Z",
+    "base_lexical_sha256":  "5a4af62f1cc03db3144cedec916f4690d59b2dcc9e01cdcf839b4975f21813e9",
+    "title_old":  "12 Cheap Crockpot Meals That Basically Cook Themselves",
+    "title_new":  "12 Cheap Crockpot Meals That Basically Cook Themselves",
+    "replacements":  [
+                         {
+                             "find":  "Here are 12 meals that basically cook themselves, along with what they really cost per serving.",
+                             "replace":  "Here are 12 meals that basically cook themselves, every one built on cheap staples.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003ch2\u003eHearty One-Pot Dinners Under $2 a Serving\u003c/h2\u003e",
+                             "replace":  "\u003ch2\u003eHearty One-Pot Dinners on a Budget\u003c/h2\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Feeds six for about $1.60 a serving.",
+                             "replace":  "Feeds six.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "carrots, and broth. Roughly $1.35 a serving.",
+                             "replace":  "carrots, and broth.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "seasoning cooked in broth. About $1.50 a serving.",
+                             "replace":  "seasoning cooked in broth.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Around $1.10 a serving and completely meat-free.",
+                             "replace":  "Completely meat-free.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "carrots, and celery. Roughly $1.20 a serving.",
+                             "replace":  "carrots, and celery.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "About $1.75 a serving and it makes a mountain of sandwiches.",
+                             "replace":  "It makes a mountain of sandwiches.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Roughly $2.20 a serving for a full Sunday dinner.",
+                             "replace":  "A full Sunday dinner in one pot.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "shredded for tacos or bowls. About $1.40 a serving.",
+                             "replace":  "shredded for tacos or bowls.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "stretched with beans and rice. Around $1.30 a serving.",
+                             "replace":  "stretched with beans and rice.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "About $0.95 a serving, one of the cheapest hot meals you can make.",
+                             "replace":  "One of the cheapest hot meals you can make.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Roughly $0.60 a serving for a warm breakfast waiting when you wake up.",
+                             "replace":  "A warm breakfast waiting when you wake up.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Around $0.80 a serving with pasta included.",
+                             "replace":  "Cheap even with the pasta included.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A bag of dried beans costs a couple bucks and stretches",
+                             "replace":  "A bag of dried beans costs little and stretches",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "into tender, filling meals for a dollar or two a serving,",
+                             "replace":  "into tender, filling meals for very little per serving,",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "so treat these per-serving figures as ballpark estimates rather than promises, and adjust for what is on sale near you.",
+                             "replace":  "so build your week around what is on sale near you.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "Twelve budget crockpot meals with real per-serving costs. Cheap cuts and dried beans turn into tender dinners for $1 to $2 a plate.",
+                            "replace":  "Twelve budget crockpot meals. Cheap cuts and dried beans turn into tender dinners that cost very little per plate."
+                        }
+                    ],
+    "new_lexical_sha256":  "72c08841b7bf712e06875d4222d8edd8e9c3d7c97af87d48e8165965ef852f9e",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

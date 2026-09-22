@@ -1,0 +1,27 @@
+{
+    "slug":  "meal-prep-mistakes-to-avoid",
+    "id":  "6a49991f50682b0001cd424c",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:37:03.000Z",
+    "base_lexical_sha256":  "2e1684d85dc07def99e844e75183ef765d97a2c6aed904ab0bc9929e5d855580",
+    "title_old":  "9 Meal Prep Mistakes That Waste Your Time and Money",
+    "title_new":  "9 Meal Prep Mistakes That Waste Your Time and Money",
+    "replacements":  [
+                         {
+                             "find":  "cost less per serving (often $1.00 to $1.50 a pound versus $2.00-plus fresh), and wait patiently",
+                             "replace":  "often cost less per pound than fresh, and wait patiently",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "3cee3980a610350f512b6e6bfec906aba7f560f02f391d703bfc669d21eee7d6",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

@@ -1,0 +1,95 @@
+{
+    "slug":  "ground-beef-meal-prep-ideas",
+    "id":  "6a499e7950682b0001cd43df",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:59:53.000Z",
+    "base_lexical_sha256":  "0f13091f10fc6cabab1c701db6decfd02be3a5d4b15f52407da608af5911e91f",
+    "title_old":  "10 Cheap Ground Beef Meal Prep Ideas",
+    "title_new":  "10 Cheap Ground Beef Meal Prep Ideas",
+    "replacements":  [
+                         {
+                             "find":  "At around $4.50 a pound for 80/20,",
+                             "replace":  "At \u003cspan data-tc-live-price data-tc-bid=\"ground-beef-8020\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"3.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$3.99\u003c/span\u003e a pound for 80/20,",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Leaner beef like 90/10 costs about a dollar more per pound and gives you less grease to drain.",
+                             "replace":  "Leaner beef like 90/10 costs more, often \u003cspan data-tc-live-price data-tc-bid=\"ground-beef-9010\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"5.86\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$5.86\u003c/span\u003e a pound, and gives you less grease to drain.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Buy the family pack when it drops under $4 a pound and freeze half.",
+                             "replace":  "Buy the family pack when it goes on sale and freeze half.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Cost lands near \u003cstrong\u003e$1.05 a serving\u003c/strong\u003e at roughly 24 grams of protein each.",
+                             "replace":  "Cost stays \u003cstrong\u003elow per bowl\u003c/strong\u003e at roughly 24 grams of protein each.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Six sandwiches at about \u003cstrong\u003e$1.15 each\u003c/strong\u003e, and the meat mix",
+                             "replace":  "Six \u003cstrong\u003echeap sandwiches\u003c/strong\u003e, and the meat mix",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Four hearty servings near \u003cstrong\u003e$1.20 each\u003c/strong\u003e and 28 grams of protein.",
+                             "replace":  "Four hearty servings \u003cstrong\u003efor very little\u003c/strong\u003e and 28 grams of protein.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Six servings at about \u003cstrong\u003e$1.30 each\u003c/strong\u003e.",
+                             "replace":  "Six servings from one pan, and our full Cottage Pie recipe runs \u003cstrong\u003e\u003cspan data-tc-live-price data-tc-slug=\"cottage-pie\" data-tc-field=\"cost_ps\" data-tc-basis=\"feed-everyday-whole-package\" data-tc-fallback=\"4.44\" data-tc-asof=\"2026-09-21T05:22:59\"\u003e~$4.44\u003c/span\u003e a serving\u003c/strong\u003e.",
+                             "class":  "backed-recipe"
+                         },
+                         {
+                             "find":  "A pound makes about 16 baked meatballs for roughly \u003cstrong\u003e90 cents a serving\u003c/strong\u003e of four.",
+                             "replace":  "A pound makes about 16 baked meatballs, or four \u003cstrong\u003echeap servings\u003c/strong\u003e of four.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Five bowls near \u003cstrong\u003e$1.40 each\u003c/strong\u003e at about 26 grams of protein.",
+                             "replace":  "Five \u003cstrong\u003elow-cost bowls\u003c/strong\u003e at about 26 grams of protein.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "About \u003cstrong\u003e$1.10 a serving\u003c/strong\u003e and it holds five days in the fridge.",
+                             "replace":  "\u003cstrong\u003eCheap per serving\u003c/strong\u003e, and it holds five days in the fridge.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Six halves at roughly \u003cstrong\u003e$1.50 each\u003c/strong\u003e. Bell peppers are the priciest part, so buy them when they hit a dollar apiece.",
+                             "replace":  "Six \u003cstrong\u003ebudget-friendly halves\u003c/strong\u003e. Bell peppers are the priciest part, so buy them when they go on sale.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "This drops a chili or taco filling closer to \u003cstrong\u003e75 cents a serving\u003c/strong\u003e while adding protein.",
+                             "replace":  "This drops the cost of a chili or taco filling \u003cstrong\u003eeven lower per serving\u003c/strong\u003e while adding protein.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "for around a dollar a serving.",
+                             "replace":  "for very little per serving.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "These prices reflect typical 2026 grocery averages and will shift with your local store and sales,",
+                             "replace":  "Prices shift with your local store and sales,",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "Ten budget ground beef meal prep ideas with real per-serving costs and protein counts. Cook once, freeze smart, and feed the family for about $1 a serving.",
+                            "replace":  "Ten budget ground beef meal prep ideas with protein counts and live beef prices. Cook once, freeze smart, and feed the family for very little per serving."
+                        }
+                    ],
+    "new_lexical_sha256":  "7bbf63e8d3d68f656dbc7885e2da6a980759724177043000a769e3dd942ee09f",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

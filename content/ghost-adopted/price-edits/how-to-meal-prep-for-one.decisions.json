@@ -1,0 +1,27 @@
+{
+  "slug": "how-to-meal-prep-for-one",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "A small tray of chicken can run a dollar or more per pound over the big bag.",
+      "replace": "A small tray of chicken can cost noticeably more per pound than the big bag.",
+      "class": "unbacked",
+      "figures": ["a dollar or more per pound"],
+      "why": "A typed price gap in words between two pack sizes; the feed prices the cheapest per pound, not a single-serve tray."
+    },
+    {
+      "find": "Grab the family pack of chicken thighs at $1.89 a pound instead of the single-serve tray at $3.29.",
+      "replace": "Bone-in chicken thighs and drumsticks often run {{live-unit:chicken-thighs:lb}} a pound, and the single-serve tray charges you more for the same meat, so grab the family pack instead.",
+      "class": "backed-commodity",
+      "figures": ["$1.89", "$3.29"],
+      "why": "chicken-thighs is the board's Chicken Thighs / Drumsticks commodity (today it prices a drumstick bag), so the sentence names both; the single-serve tray has no bid and loses its price."
+    },
+    {
+      "find": "A five-dollar plate of pasta and vegetables from the pantry beats a twenty-dollar delivery order with fees and a tip.",
+      "replace": "A plate of pasta and vegetables from the pantry costs a fraction of a twenty-dollar delivery order with fees and a tip.",
+      "class": "unbacked",
+      "figures": ["five-dollar"],
+      "why": "A generic pantry plate priced in words, not an engine recipe; the twenty-dollar delivery order is a restaurant price and stays."
+    }
+  ]
+}

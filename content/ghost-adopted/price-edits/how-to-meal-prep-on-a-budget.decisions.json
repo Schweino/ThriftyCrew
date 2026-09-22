@@ -1,0 +1,97 @@
+{
+  "slug": "how-to-meal-prep-on-a-budget",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "two pounds of chicken thighs (about $2.60),",
+      "replace": "two pounds of chicken thighs,",
+      "class": "unbacked",
+      "figures": ["$2.60"],
+      "why": "chicken-thighs cell is Thighs/Drumsticks and its cheapest row is a drumstick bag, so it would show a non-thigh price"
+    },
+    {
+      "find": "a pound of dry rice (about $0.80),",
+      "replace": "a pound of dry rice ({{live-unit:rice:lb}}),",
+      "class": "backed-commodity",
+      "figures": ["$0.80"],
+      "why": "a pound of dry rice is exactly the rice cell per pound"
+    },
+    {
+      "find": "a bag of frozen mixed vegetables (about $1.20).",
+      "replace": "a bag of frozen mixed vegetables ({{live-unit:frozen-vegetables:lb}} a pound).",
+      "class": "backed-commodity",
+      "figures": ["$1.20"],
+      "why": "frozen mixed vegetables is the frozen-vegetables cell (Frozen Mixed Vegetables); per bag becomes per pound"
+    },
+    {
+      "find": "Total is around $4.60, and it makes five solid lunch portions. That is roughly $0.92 a serving for a hot, balanced meal.",
+      "replace": "It makes five solid lunch portions, and each one is a hot, balanced meal for very little money.",
+      "class": "unbacked",
+      "figures": ["$4.60", "$0.92"],
+      "why": "batch total and per-serving cost of a mixed basket; the lunch-spot price and savings after it are out of scope and stay"
+    },
+    {
+      "find": "dried beans and lentils (about $0.20 to $0.25 a serving),",
+      "replace": "dried beans and lentils (dirt cheap per serving),",
+      "class": "unbacked",
+      "figures": ["$0.20", "$0.25"],
+      "why": "two foods under one per-serving range; per serving is not a token unit"
+    },
+    {
+      "find": "eggs (about $0.35 for two),",
+      "replace": "eggs ({{live-unit:eggs:each}} apiece),",
+      "class": "backed-commodity",
+      "figures": ["$0.35"],
+      "why": "eggs are the eggs cell; the price for two becomes the per-egg price"
+    },
+    {
+      "find": "frozen vegetables (about $0.25 a serving),",
+      "replace": "frozen vegetables ({{live-unit:frozen-vegetables:lb}} a pound),",
+      "class": "backed-commodity",
+      "figures": ["$0.25"],
+      "why": "frozen vegetables is the frozen-vegetables cell; per serving becomes per pound"
+    },
+    {
+      "find": "A pot of lentil chili feeds four for under three dollars and tastes better on day two.",
+      "replace": "A pot of lentil chili feeds four for very little and tastes better on day two.",
+      "class": "unbacked",
+      "figures": ["under three dollars"],
+      "why": "generic dish cost typed in words"
+    },
+    {
+      "find": "give you breakfast for the whole week for around four dollars total, or about $0.60 a morning.",
+      "replace": "give you cheap breakfasts for the whole week.",
+      "class": "unbacked",
+      "figures": ["four dollars", "$0.60"],
+      "why": "potatoes plus eggs is a mixed basket"
+    },
+    {
+      "find": "One roasted chicken at about $6.50 can become",
+      "replace": "One roasted chicken, bought whole at {{live-unit:whole-chicken:lb}} a pound, can become",
+      "class": "backed-commodity",
+      "figures": ["$6.50"],
+      "why": "the paragraph roasts a whole raw chicken, the whole-chicken cell; per bird becomes per pound"
+    },
+    {
+      "find": "That is ten servings from a single bird, which lands under a dollar a serving.",
+      "replace": "That is ten servings from a single bird, and every one of them is cheap.",
+      "class": "unbacked",
+      "figures": ["under a dollar"],
+      "why": "per-serving cost of a generic use of the bird, typed in words"
+    },
+    {
+      "find": "A single adult can eat this way on roughly $45 to $60 a week, which comes out to about two dollars a meal for real, filling food.",
+      "replace": "A single adult can eat this way on a small weekly grocery bill, with real, filling food at a low cost per meal.",
+      "class": "unbacked",
+      "figures": ["$45", "$60", "two dollars"],
+      "why": "a week of groceries for this plan is a mixed basket, not a budget illustration"
+    },
+    {
+      "find": "and you can eat well for around two dollars a plate.",
+      "replace": "and you can eat well for very little per plate.",
+      "class": "unbacked",
+      "figures": ["two dollars"],
+      "why": "per-plate cost of generic meals, typed in words"
+    }
+  ]
+}

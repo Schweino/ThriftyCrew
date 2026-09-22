@@ -1,0 +1,181 @@
+{
+  "slug": "cheap-healthy-grocery-staples",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "<strong>Dried beans:</strong> About $1.50 a pound and around 15 cents per half-cup cooked serving.",
+      "replace": "<strong>Dried beans:</strong> Among the cheapest protein in the store, and one bag cooks up into a lot of half-cup servings.",
+      "class": "unbacked",
+      "figures": ["$1.50", "15 cents"],
+      "why": "The feed prices no plain dried beans (15-bean soup mix is a different product), so both typed prices go."
+    },
+    {
+      "find": "<strong>Lentils:</strong> Roughly $1.80 a pound, cook in 20 minutes with no soaking, and land near 18 cents a serving.",
+      "replace": "<strong>Lentils:</strong> Run {{live-unit:brown-lentils:lb}} a pound dry, cook in 20 minutes with no soaking, and stretch into a lot of servings.",
+      "class": "backed-commodity",
+      "figures": ["$1.80", "18 cents"],
+      "why": "brown-lentils is the board's lentils commodity (its match takes plain lentils); the per-serving cents came from the typed pound price and go."
+    },
+    {
+      "find": "<strong>Eggs:</strong> Even at $3.50 a dozen, that is under 30 cents each for complete protein you can cook a dozen ways.",
+      "replace": "<strong>Eggs:</strong> At {{live-unit:eggs:dozen}} a dozen, that is {{live-unit:eggs:each}} an egg for complete protein you can cook a dozen ways.",
+      "class": "backed-commodity",
+      "figures": ["$3.50", "30 cents"],
+      "why": "Eggs are a board commodity priced by the dozen, and each is an allowed per for it, so both halves go live."
+    },
+    {
+      "find": "<strong>Canned tuna:</strong> About $1 a can for roughly 20 grams of protein.",
+      "replace": "<strong>Canned tuna:</strong> Runs {{live-unit:canned-tuna:oz}} an ounce, and a can gives you roughly 20 grams of protein.",
+      "class": "backed-commodity",
+      "figures": ["$1"],
+      "why": "canned-tuna is priced per ounce; a can is not an allowed per, so the price moves to the ounce and the can keeps its protein claim."
+    },
+    {
+      "find": "<strong>Peanut butter:</strong> A $3 jar gives you 14-plus servings at around 20 cents each, with protein and healthy fat.",
+      "replace": "<strong>Peanut butter:</strong> Runs {{live-unit:peanut-butter:lb}} a pound, and a jar gives you 14-plus servings with protein and healthy fat.",
+      "class": "backed-commodity",
+      "figures": ["$3", "20 cents"],
+      "why": "peanut-butter is a board commodity; the jar price becomes a per-pound price and the derived per-serving cents go."
+    },
+    {
+      "find": "<strong>Brown rice:</strong> Around $1 a pound and about 10 cents a cooked cup.",
+      "replace": "<strong>Brown rice:</strong> Runs {{live-unit:brown-rice:lb}} a pound dry, and a little goes a long way once it is cooked.",
+      "class": "backed-commodity",
+      "figures": ["$1", "10 cents"],
+      "why": "brown-rice is a board commodity priced per pound; the per-cooked-cup cents were derived and go."
+    },
+    {
+      "find": "<strong>Oats:</strong> A big canister runs $4 and covers 30 breakfasts at roughly 13 cents each.",
+      "replace": "<strong>Oats:</strong> Run {{live-unit:oatmeal:lb}} a pound, and a big canister covers 30 breakfasts.",
+      "class": "backed-commodity",
+      "figures": ["$4", "13 cents"],
+      "why": "oatmeal is the board's Oats / Oatmeal commodity (rolled, quick and old fashioned oats); the canister price becomes per pound."
+    },
+    {
+      "find": "<strong>Whole wheat pasta:</strong> About $1.30 a box for 8 servings, or 16 cents a plate before sauce.",
+      "replace": "<strong>Whole wheat pasta:</strong> One box covers 8 servings, a cheap plate before sauce.",
+      "class": "unbacked",
+      "figures": ["$1.30", "16 cents"],
+      "why": "The feed prices no whole wheat pasta (its pasta bids are regular spaghetti, penne and rotini)."
+    },
+    {
+      "find": "<strong>Potatoes:</strong> A 5-pound bag for $4 means 40 cents a potato, packed with potassium and easy to cook.",
+      "replace": "<strong>Potatoes:</strong> Russets run {{live-unit:russet-potatoes:lb}} a pound, packed with potassium and easy to cook.",
+      "class": "backed-commodity",
+      "figures": ["$4", "40 cents"],
+      "why": "A 5-pound bag of potatoes is russets, the board's russet-potatoes commodity; the bag price becomes per pound and the per-potato cents go."
+    },
+    {
+      "find": "<strong>Popcorn kernels:</strong> A $2 bag makes dozens of servings at a few cents each.",
+      "replace": "<strong>Popcorn kernels:</strong> One bag makes dozens of servings for next to nothing.",
+      "class": "unbacked",
+      "figures": ["$2"],
+      "why": "The feed prices microwave popcorn, a different product from loose kernels."
+    },
+    {
+      "find": "<strong>Onions:</strong> Around 80 cents a pound and the flavor base of almost everything.",
+      "replace": "<strong>Onions:</strong> Run {{live-unit:onions:lb}} a pound and make the flavor base of almost everything.",
+      "class": "backed-commodity",
+      "figures": ["80 cents"],
+      "why": "A typed price in cents; onions is the board's Yellow / Sweet Onions commodity in grocery/commodities.json (the reference list's 'Shallots' name for this bid does not match the board label or its price of about 75 cents a pound)."
+    },
+    {
+      "find": "<strong>Carrots:</strong> About $1 a pound, good raw or cooked",
+      "replace": "<strong>Carrots:</strong> Run {{live-unit:carrots:lb}} a pound, good raw or cooked",
+      "class": "backed-commodity",
+      "figures": ["$1"],
+      "why": "carrots is a board commodity priced per pound."
+    },
+    {
+      "find": "<strong>Cabbage:</strong> Roughly 60 cents a pound and one head makes many meals.",
+      "replace": "<strong>Cabbage:</strong> Runs {{live-unit:cabbage:lb}} a pound and one head makes many meals.",
+      "class": "backed-commodity",
+      "figures": ["60 cents"],
+      "why": "A typed price in cents; cabbage is the board's green cabbage commodity, priced per pound."
+    },
+    {
+      "find": "<strong>Frozen mixed vegetables:</strong> A $1.50 bag with no waste and nutrition locked in at the peak of freshness.",
+      "replace": "<strong>Frozen mixed vegetables:</strong> Run {{live-unit:frozen-vegetables:lb}} a pound with no waste and nutrition locked in at the peak of freshness.",
+      "class": "backed-commodity",
+      "figures": ["$1.50"],
+      "why": "frozen-vegetables is the board's Frozen Mixed Vegetables commodity; the bag price becomes per pound."
+    },
+    {
+      "find": "<strong>Canned tomatoes:</strong> About $1 a can and the start of soups, sauces, and chili all year round.",
+      "replace": "<strong>Canned tomatoes:</strong> Run {{live-unit:diced-tomatoes:lb}} a pound and are the start of soups, sauces, and chili all year round.",
+      "class": "backed-commodity",
+      "figures": ["$1"],
+      "why": "diced-tomatoes is the board's canned tomato commodity (its match takes diced, crushed and whole peeled); a can is not an allowed per, so it reads per pound."
+    },
+    {
+      "find": "<strong>Bananas:</strong> Around 25 cents each, perfect for snacks",
+      "replace": "<strong>Bananas:</strong> Run {{live-unit:bananas:lb}} a pound, perfect for snacks",
+      "class": "backed-commodity",
+      "figures": ["25 cents"],
+      "why": "A typed price in cents; bananas are a board commodity sold and priced by the pound, and each is not an allowed per for them."
+    },
+    {
+      "find": "<strong>Apples:</strong> About $1.50 a pound, they keep for weeks, and one makes a filling snack for under 40 cents.",
+      "replace": "<strong>Apples:</strong> Run {{live-unit:apples:lb}} a pound, they keep for weeks, and one makes a filling snack.",
+      "class": "backed-commodity",
+      "figures": ["$1.50", "40 cents"],
+      "why": "apples is a board commodity priced per pound; the per-apple cents were derived and go."
+    },
+    {
+      "find": "<strong>Frozen berries:</strong> A $3 bag beats fresh on price out of season and never spoils on you.",
+      "replace": "<strong>Frozen berries:</strong> A bag beats fresh on price out of season and never spoils on you.",
+      "class": "unbacked",
+      "figures": ["$3"],
+      "why": "The frozen-fruit bid covers fruit and berries together, so it can price something that is not berries; not clearly the same product."
+    },
+    {
+      "find": "<strong>Oranges:</strong> Roughly 50 cents each in a bag, full of vitamin C",
+      "replace": "<strong>Oranges:</strong> Run {{live-unit:oranges:lb}} a pound, full of vitamin C",
+      "class": "backed-commodity",
+      "figures": ["50 cents"],
+      "why": "A typed price in cents; oranges is the board's navel Oranges commodity priced per pound (the reference list's 'Orange Zest' name for this bid does not match the board label)."
+    },
+    {
+      "find": "<strong>Vegetable or canola oil:</strong> About $3 for a bottle that lasts months and turns plain staples into real cooking.",
+      "replace": "<strong>Vegetable or canola oil:</strong> Runs {{live-unit:vegetable-oil:gal}} a gallon, and a bottle lasts months and turns plain staples into real cooking.",
+      "class": "backed-commodity",
+      "figures": ["$3"],
+      "why": "vegetable-oil is the board's Vegetable / Canola Oil commodity; gal is its allowed per."
+    },
+    {
+      "find": "A one-time $10 investment that seasons hundreds of meals.",
+      "replace": "A small one-time buy that seasons hundreds of meals.",
+      "class": "unbacked",
+      "figures": ["$10"],
+      "why": "A mixed basket of salt, pepper and spices; no single commodity."
+    },
+    {
+      "find": "<strong>Vinegar:</strong> A $2 bottle for dressings, marinades, and brightening a dish for pennies per use.",
+      "replace": "<strong>Vinegar:</strong> Plain white vinegar runs {{live-unit:white-vinegar:gal}} a gallon and handles dressings, marinades, and brightening a dish for pennies per use.",
+      "class": "backed-commodity",
+      "figures": ["$2"],
+      "why": "white-vinegar is the board's distilled White Vinegar commodity; the sentence now names plain white vinegar so the live price is for exactly what it names."
+    },
+    {
+      "find": "<strong>Plain yogurt:</strong> A big tub for $4 beats single cups on price",
+      "replace": "<strong>Plain yogurt:</strong> A big tub beats single cups on price",
+      "class": "unbacked",
+      "figures": ["$4"],
+      "why": "The yogurt bid currently prices flavored single cups, not a plain big tub; not clearly the same product."
+    },
+    {
+      "find": "<strong>Milk or a shelf-stable alternative:</strong> Around $3.50 a gallon for calcium",
+      "replace": "<strong>Milk or a shelf-stable alternative:</strong> Milk runs {{live-unit:milk:gal}} a gallon for calcium",
+      "class": "backed-commodity",
+      "figures": ["$3.50"],
+      "why": "milk is the board's gallon milk commodity."
+    },
+    {
+      "find": "you can build a week of healthy meals for well under $50 while barely touching the fridge.",
+      "replace": "you can build a week of healthy meals on a small budget while barely touching the fridge.",
+      "class": "unbacked",
+      "figures": ["$50"],
+      "why": "The cost of a week of meals from the whole list is a mixed basket, not one commodity."
+    }
+  ]
+}

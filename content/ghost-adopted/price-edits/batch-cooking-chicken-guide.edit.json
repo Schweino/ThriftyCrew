@@ -1,0 +1,52 @@
+{
+    "slug":  "batch-cooking-chicken-guide",
+    "id":  "6a49a3cc50682b0001cd44c4",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-05T00:22:36.000Z",
+    "base_lexical_sha256":  "6e6236065384c68d5829c8d832020db66437a9b9b06ac2ee3aaf0c105ef06773",
+    "title_old":  "How to Batch Cook Chicken (Juicy, Not Dry, Every Time)",
+    "title_new":  "How to Batch Cook Chicken (Juicy, Not Dry, Every Time)",
+    "replacements":  [
+                         {
+                             "find":  "you will have a week of protein ready to go for a couple of bucks a serving.",
+                             "replace":  "you will have a week of protein ready to go for very little per serving.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "When breasts go on sale you can usually find them around $2.49 a pound. Thighs are often a little cheaper and they are far more forgiving",
+                             "replace":  "Boneless skinless breasts run \u003cspan data-tc-live-price data-tc-bid=\"chicken-breast\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.99\u003c/span\u003e a pound, and a sale can take that lower. Boneless thighs run \u003cspan data-tc-live-price data-tc-bid=\"boneless-skinless-chicken-thigh\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.43\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.43\u003c/span\u003e a pound and they are far more forgiving",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "A three pound pack of breasts runs about $7.50 and yields roughly ten portions at four to five ounces cooked. That comes out to about 75 cents of protein per serving.",
+                             "replace":  "A three pound pack of breasts yields roughly ten portions at four to five ounces cooked, so each serving costs a fraction of the per-pound price.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A whole box costs about a dollar and this uses pennies of it.",
+                             "replace":  "Table salt runs \u003cspan data-tc-live-price data-tc-bid=\"salt\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.49\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.49\u003c/span\u003e a pound, and this uses pennies of it.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Three pounds of chicken for $7.50, a bag of rice for about $1.50 of usage, and a couple pounds of frozen vegetables for around $3.",
+                             "replace":  "Three pounds of chicken breast at \u003cspan data-tc-live-price data-tc-bid=\"chicken-breast\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.99\u003c/span\u003e a pound, rice at \u003cspan data-tc-live-price data-tc-bid=\"rice\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.46\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.46\u003c/span\u003e a pound, and a couple pounds of frozen mixed vegetables at \u003cspan data-tc-live-price data-tc-bid=\"frozen-vegetables\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.29\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.29\u003c/span\u003e a pound.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "That is roughly $12 for ten balanced meals, or about $1.20 a plate.",
+                             "replace":  "That covers ten balanced meals.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "b4f82421fbee7d086bda3dcc4ab0f0079685c1ed398d6f45d9c9212abbf30e86",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

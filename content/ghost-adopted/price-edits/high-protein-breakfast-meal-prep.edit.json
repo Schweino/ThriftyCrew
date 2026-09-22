@@ -1,0 +1,84 @@
+{
+    "slug":  "high-protein-breakfast-meal-prep",
+    "id":  "6a49991e50682b0001cd4246",
+    "kind":  "post",
+    "base_updated_at":  "2026-09-19T11:23:09.000Z",
+    "base_lexical_sha256":  "3fa6e3e9676f1dd3212c81835343539a476e2ef1ee5888ad73b300534a0ee266",
+    "title_old":  "High-Protein Breakfast Meal Prep Ideas (Under $2 a Serving)",
+    "title_new":  "High-Protein Breakfast Meal Prep Ideas",
+    "replacements":  [
+                         {
+                             "find":  "Below are breakfast meal-prep ideas that land under $2 a serving, hit real protein numbers",
+                             "replace":  "Below are breakfast meal-prep ideas that cost a fraction of the drive-thru, hit real protein numbers",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Eggs, at roughly $0.25 to $0.35 each right now, give you about 6 grams of protein apiece.",
+                             "replace":  "Eggs run \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e each and give you about 6 grams of protein apiece.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Cottage cheese runs about $0.40 per half-cup serving and brings 12 to 14 grams.",
+                             "replace":  "Cottage cheese runs \u003cspan data-tc-live-price data-tc-bid=\"cottage-cheese\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.82\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.82\u003c/span\u003e a pound, and a half-cup serving brings 12 to 14 grams.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "And a big tub of plain Greek yogurt, around $5 for 32 ounces, breaks down to about $0.60 per serving with 17 grams of protein.",
+                             "replace":  "And a big tub of plain Greek yogurt runs \u003cspan data-tc-live-price data-tc-bid=\"greek-yogurt\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.24\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.24\u003c/span\u003e a pound, with 17 grams of protein per serving.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003ch2\u003eEgg Muffin Cups: The $1.16 Grab-and-Go\u003c/h2\u003e",
+                             "replace":  "\u003ch2\u003eEgg Muffin Cups: The Cheap Grab-and-Go\u003c/h2\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Here is the math on a solid version. A dozen eggs at $3.50, a cup of shredded cheese at $1.00, a half-pound of diced ham at $2.00, and a handful of frozen veggies at $0.50 comes to $7.00 for 12 muffins. That is about $0.58 per muffin.",
+                             "replace":  "Here is a solid version. A dozen eggs, a cup of shredded cheese, a half-pound of diced ham, and a handful of frozen veggies make 12 muffins.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Eat two for breakfast and you have a $1.16 meal delivering around 20 grams of protein. Add a piece of fruit and you are still under $2.",
+                             "replace":  "Eat two for breakfast and you have a cheap meal delivering around 20 grams of protein. Add a piece of fruit and it still costs a fraction of that drive-thru sandwich.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Cost per jar looks like this. Rolled oats run about $0.20 a serving from a big canister, milk about $0.15, Greek yogurt about $0.60, and a spoon of peanut butter for another $0.20. That is roughly $1.15 a jar for about 22 grams of protein.",
+                             "replace":  "Every piece of it is a cheap staple: rolled oats from a big canister, milk, Greek yogurt, and a spoon of peanut butter. Together they bring about 22 grams of protein a jar.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "you clear 30 grams easily while still sitting under $2.",
+                             "replace":  "you clear 30 grams easily while keeping it cheap.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A batch of 12 costs about $12 to $14 all in (eggs, a pound of sausage around $4, tortillas around $3, cheese, veggies). Call it $1.10 per burrito with about 25 grams of protein.",
+                             "replace":  "A batch of 12 is built from eggs, a pound of sausage, tortillas, cheese, and veggies, all cheap staples. Each burrito carries about 25 grams of protein.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A high-protein breakfast under $2 a serving is not a diet trick,",
+                             "replace":  "A cheap high-protein breakfast is not a diet trick,",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "Batch a week of high-protein breakfasts on Sunday for under $2 each and stop handing the drive-thru $25 or more a week.",
+                            "replace":  "Batch a week of high-protein breakfasts on Sunday and stop handing the drive-thru $25 or more a week."
+                        },
+                        {
+                            "find":  "High-protein breakfast meal prep under $2 a serving: egg muffins, overnight oats, and freezer burritos, with the cost and protein of each.",
+                            "replace":  "High-protein breakfast meal prep: egg muffins, overnight oats, and freezer burritos, with the protein in each."
+                        }
+                    ],
+    "new_lexical_sha256":  "151687a2a60538fdf7fd07134b6cf6494721ab74b0a6e4849aed94eecdedfb36",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

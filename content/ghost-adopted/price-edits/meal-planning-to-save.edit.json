@@ -1,0 +1,37 @@
+{
+    "slug":  "meal-planning-to-save",
+    "id":  "6a498b7d50682b0001cd3e56",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T22:38:53.000Z",
+    "base_lexical_sha256":  "16aa76eb58ab3027d436a64f9679b9e02108f4278f87dc82e935f9ba5e3d068a",
+    "title_old":  "Meal Planning That Actually Saves Money",
+    "title_new":  "Meal Planning That Actually Saves Money",
+    "replacements":  [
+                         {
+                             "find":  "A 5 pound pack of chicken thighs at $1.29 a pound costs about $6.45 and stretches across four dinners.",
+                             "replace":  "Chicken thighs or drumsticks can run as little as \u003cspan data-tc-live-price data-tc-bid=\"chicken-thighs\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.98\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.98\u003c/span\u003e a pound in a big pack, and a 5 pound pack stretches across four dinners.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "That is a little over $1.60 of protein per meal.",
+                             "replace":  "That is cheap protein at every one of those meals.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A bag of dried beans can cost around $2 and yield a dozen servings.",
+                             "replace":  "A bag of dried beans costs very little and yields a dozen servings.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "400c5ff02bcc62be936a79d2787d8417547149ccca889145e2871d66492da495",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

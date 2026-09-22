@@ -1,0 +1,194 @@
+{
+    "slug":  "cheap-dinner-ideas",
+    "id":  "6a499c0450682b0001cd42e3",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:49:24.000Z",
+    "base_lexical_sha256":  "61bb8cad50f760211c4c07d641825172cf2d4d8aeb30a3be2f7f7d560eddc5d9",
+    "title_old":  "25 Cheap Dinner Ideas Under $3 a Serving",
+    "title_new":  "25 Cheap Dinner Ideas",
+    "replacements":  [
+                         {
+                             "find":  "Do that, and $3 a serving is not a stretch, it is the ceiling.",
+                             "replace":  "Do that, and a cheap dinner is not a stretch, it is the default.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Here are 25 dinners that land under $3 per serving. Prices assume a four-serving batch at typical 2026 grocery prices, and yes, they will drift a little depending on your store and your state.",
+                             "replace":  "Here are 25 dinners that keep the grocery bill low. And yes, what you pay will drift a little depending on your store and your state.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A pound of dried red beans runs about $1.80 and a bag of rice pennies per serving. Add a little smoked sausage and you are eating like New Orleans for about \u003cstrong\u003e$1.15 a serving\u003c/strong\u003e.",
+                             "replace":  "A pound of dried red beans costs very little, and a bag of rice works out to pennies per serving. Add a little smoked sausage and you are eating like New Orleans \u003cstrong\u003eon a budget\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Russets are one of the best deals in the store, roughly 60 cents a pound.",
+                             "replace":  "Russets are one of the best deals in the store, at \u003cspan data-tc-live-price data-tc-bid=\"russet-potatoes\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.41\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.41\u003c/span\u003e a pound.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Dinner for the family at \u003cstrong\u003e$1.40 a serving\u003c/strong\u003e.",
+                             "replace":  "Dinner for the family \u003cstrong\u003eon a shoestring\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Fifteen minutes and about \u003cstrong\u003e$1.10 a serving\u003c/strong\u003e.",
+                             "replace":  "Fifteen minutes, \u003cstrong\u003echeap and done\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A pound of lentils is around $1.60 and cooks in half an hour.",
+                             "replace":  "A pound of lentils runs \u003cspan data-tc-live-price data-tc-bid=\"brown-lentils\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.92\u003c/span\u003e and cooks in half an hour.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "you get a big warm pot for roughly \u003cstrong\u003e$1.00 a serving\u003c/strong\u003e.",
+                             "replace":  "you get a big warm pot \u003cstrong\u003eat a low cost per bowl\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "comes to about \u003cstrong\u003e$1.25 a serving\u003c/strong\u003e. Old faithful.",
+                             "replace":  "stays \u003cstrong\u003echeap per plate\u003c/strong\u003e. Old faithful.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Bone-in thighs are usually under $1.80 a pound, far cheaper than breast and more forgiving to cook. One pan with rice runs about \u003cstrong\u003e$2.10 a serving\u003c/strong\u003e.",
+                             "replace":  "Bone-in thighs are usually far cheaper than breast and more forgiving to cook. One pan with rice keeps it \u003cstrong\u003ebudget-friendly\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Taco night for around \u003cstrong\u003e$1.30 a serving\u003c/strong\u003e.",
+                             "replace":  "Taco night \u003cstrong\u003eon the cheap\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "and you are eating for about \u003cstrong\u003e$1.60 a serving\u003c/strong\u003e.",
+                             "replace":  "and you are eating \u003cstrong\u003efor very little\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Hearty and about \u003cstrong\u003e$2.40 a serving\u003c/strong\u003e.",
+                             "replace":  "Hearty and \u003cstrong\u003eeasy on the wallet\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Rich, filling, and roughly \u003cstrong\u003e$1.20 a serving\u003c/strong\u003e.",
+                             "replace":  "Rich, filling, and \u003cstrong\u003echeap\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "At about 25 cents an egg,",
+                             "replace":  "At \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e an egg,",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "a plate of scramble and hash browns lands near \u003cstrong\u003e$1.15 a serving\u003c/strong\u003e.",
+                             "replace":  "a plate of scramble and hash browns \u003cstrong\u003ecomes in low\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A big pot for about \u003cstrong\u003e$1.10 a serving\u003c/strong\u003e.",
+                             "replace":  "A big pot \u003cstrong\u003efor small money\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Makes six bowls at around \u003cstrong\u003e$2.00 a serving\u003c/strong\u003e, and it is better the next day.",
+                             "replace":  "Makes six \u003cstrong\u003ebudget bowls\u003c/strong\u003e, and it is better the next day.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A head of cabbage is a dollar or two and feeds a crowd.",
+                             "replace":  "Green cabbage runs \u003cspan data-tc-live-price data-tc-bid=\"cabbage\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.79\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.79\u003c/span\u003e a pound, and one head feeds a crowd.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "With noodles and a little sausage, about \u003cstrong\u003e$1.30 a serving\u003c/strong\u003e.",
+                             "replace":  "With noodles and a little sausage, it stays \u003cstrong\u003echeap per serving\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A skillet dinner for roughly \u003cstrong\u003e$1.50 a serving\u003c/strong\u003e.",
+                             "replace":  "A skillet dinner \u003cstrong\u003ethat barely dents the budget\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Build-your-own bowls for about \u003cstrong\u003e$1.45 a serving\u003c/strong\u003e.",
+                             "replace":  "Build-your-own bowls \u003cstrong\u003eat a low cost\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "make a thick, sticking-to-your-ribs pot for around \u003cstrong\u003e$1.05 a serving\u003c/strong\u003e.",
+                             "replace":  "make a thick, sticking-to-your-ribs pot \u003cstrong\u003eon a small budget\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A pan that feeds eight at about \u003cstrong\u003e$1.90 a serving\u003c/strong\u003e.",
+                             "replace":  "A pan that feeds eight \u003cstrong\u003ewithout straining the budget\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Leg quarters go on sale for under a dollar a pound. Roast a sheet pan with cheap carrots and potatoes for about \u003cstrong\u003e$1.85 a serving\u003c/strong\u003e.",
+                             "replace":  "Leg quarters are a bargain when they go on sale. Roast a sheet pan with cheap carrots and potatoes and dinner stays \u003cstrong\u003elight on the wallet\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A block of tofu is around $2 and a whole meal of protein.",
+                             "replace":  "Firm tofu runs \u003cspan data-tc-live-price data-tc-bid=\"firm-tofu\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.70\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.70\u003c/span\u003e a pound, and one block is a whole meal of protein.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "With broccoli and rice, about \u003cstrong\u003e$1.75 a serving\u003c/strong\u003e.",
+                             "replace":  "With broccoli and rice, \u003cstrong\u003eit stays cheap\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Filling for roughly \u003cstrong\u003e$2.20 a serving\u003c/strong\u003e.",
+                             "replace":  "Filling, and \u003cstrong\u003ekind to the budget\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A creamy pot for about \u003cstrong\u003e$1.20 a serving\u003c/strong\u003e.",
+                             "replace":  "A creamy pot \u003cstrong\u003ethat costs little\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Kids inhale them at about \u003cstrong\u003e$1.15 a serving\u003c/strong\u003e.",
+                             "replace":  "Kids inhale them, and \u003cstrong\u003eyour wallet barely notices\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "One pan, one cleanup, about \u003cstrong\u003e$2.10 a serving\u003c/strong\u003e.",
+                             "replace":  "One pan, one cleanup, \u003cstrong\u003eone small grocery bill\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "or a sweet one with banana and peanut butter, runs about \u003cstrong\u003e$0.75 a serving\u003c/strong\u003e.",
+                             "replace":  "or a sweet one with banana and peanut butter, costs \u003cstrong\u003every little\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Cook in batches, keep the pantry stocked, and $3 a serving starts to feel expensive.",
+                             "replace":  "Cook in batches, keep the pantry stocked, and takeout starts to feel expensive.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "Twenty-five real dinners that land under $3 a serving, no sad noodle bowls allowed.",
+                            "replace":  "Twenty-five real dinners that cost very little per serving, no sad noodle bowls allowed."
+                        },
+                        {
+                            "find":  "25 cheap dinner ideas that come in under $3 a serving, with real per-serving prices.",
+                            "replace":  "25 cheap dinner ideas, with live Omaha store prices on the staples."
+                        }
+                    ],
+    "new_lexical_sha256":  "9b2afc9a6a64e5986cb4107a2269ca13f186ed1733156887d046ad6fa5028a28",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

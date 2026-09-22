@@ -1,0 +1,49 @@
+{
+    "slug":  "freezer-meal-prep-guide",
+    "id":  "6a499ae850682b0001cd429e",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:44:40.000Z",
+    "base_lexical_sha256":  "e3514b920e8cb10fbf813e9bbd760e33023e3e835132b0b81644eff58655bb00",
+    "title_old":  "The Freezer Meal Prep Guide (Cook Once, Eat for a Month)",
+    "title_new":  "The Freezer Meal Prep Guide (Cook Once, Eat for a Month)",
+    "replacements":  [
+                         {
+                             "find":  "A batch cook that makes 24 servings for around $60 works out to $2.50 a meal. Compare that to a $12 takeout order and you can see where this is going.",
+                             "replace":  "Add up what the whole batch costs and divide it by the servings it makes. Compare that per-meal number to a $12 takeout order and you can see where this is going.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A 10-pound bag of chicken thighs at $1.79 a pound is $17.90.",
+                             "replace":  "A 10-pound bag of chicken thighs or drumsticks can run as little as \u003cspan data-tc-live-price data-tc-bid=\"chicken-thighs\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.98\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.98\u003c/span\u003e a pound.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "The same weight in small trays at $3.49 a pound is $34.90. That is a $17 swing for the exact same chicken.",
+                             "replace":  "The same weight in small trays costs a good deal more per pound, for the exact same chicken.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "can stock a month of dinners at around $2.50 a serving, and that beats takeout every night of the week.",
+                             "replace":  "can stock a month of dinners that beat takeout on price every night of the week.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "stock a full month of dinners at around $2.50 a serving.",
+                            "replace":  "stock a full month of cheap dinners."
+                        },
+                        {
+                            "find":  "freeze a month of meals at about $2.50 a serving.",
+                            "replace":  "freeze a month of cheap meals."
+                        }
+                    ],
+    "new_lexical_sha256":  "044725c75e556604a86c91be23ec8504862b478449fca7e296d6c5f1d0168dcd",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

@@ -1,0 +1,37 @@
+{
+    "slug":  "how-to-meal-prep-for-one",
+    "id":  "6a499ae950682b0001cd42a4",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:44:41.000Z",
+    "base_lexical_sha256":  "995f10bc215e7623bdae3fecb28cf204fd2ea6c79903d7b2117944f5a6abd76d",
+    "title_old":  "How to Meal Prep for One Person Without Wasting Food",
+    "title_new":  "How to Meal Prep for One Person Without Wasting Food",
+    "replacements":  [
+                         {
+                             "find":  "A small tray of chicken can run a dollar or more per pound over the big bag.",
+                             "replace":  "A small tray of chicken can cost noticeably more per pound than the big bag.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Grab the family pack of chicken thighs at $1.89 a pound instead of the single-serve tray at $3.29.",
+                             "replace":  "Bone-in chicken thighs and drumsticks often run \u003cspan data-tc-live-price data-tc-bid=\"chicken-thighs\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.98\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.98\u003c/span\u003e a pound, and the single-serve tray charges you more for the same meat, so grab the family pack instead.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "A five-dollar plate of pasta and vegetables from the pantry beats a twenty-dollar delivery order with fees and a tip.",
+                             "replace":  "A plate of pasta and vegetables from the pantry costs a fraction of a twenty-dollar delivery order with fees and a tip.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "948ad1563dd97d8ed2594d5c0de364f2fdd1f36cce40159db18361111520f4af",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

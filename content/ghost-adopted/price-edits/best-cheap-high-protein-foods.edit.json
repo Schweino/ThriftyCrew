@@ -1,0 +1,117 @@
+{
+    "slug":  "best-cheap-high-protein-foods",
+    "id":  "6a49991e50682b0001cd423a",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:37:02.000Z",
+    "base_lexical_sha256":  "126c04301b5cfe6c9747dc9c2a3d44c2941fb96e5211ad98976b9bc9c367ae03",
+    "title_old":  "The Best Cheap High-Protein Foods (Ranked by Cost)",
+    "title_new":  "The Best Cheap High-Protein Foods (Ranked by Cost)",
+    "replacements":  [
+                         {
+                             "find":  "Prices are rough national averages as of mid-2026, and a \"serving\" here means",
+                             "replace":  "The prices below are live store prices, shown by the pound, ounce, egg or gallon, and a \"serving\" here means",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eDried beans:\u003c/strong\u003e about $0.20 per serving, roughly 15g protein per cooked cup.",
+                             "replace":  "\u003cstrong\u003eDried beans:\u003c/strong\u003e roughly 15g protein per cooked cup.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eDried lentils:\u003c/strong\u003e about $0.25 per serving, roughly 18g protein per cooked cup.",
+                             "replace":  "\u003cstrong\u003eDried lentils:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"brown-lentils\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.92\u003c/span\u003e a pound dry, roughly 18g protein per cooked cup.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eEggs:\u003c/strong\u003e about $0.35 per serving (two large eggs), 12g protein.",
+                             "replace":  "\u003cstrong\u003eEggs:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e an egg, 12g protein for two large eggs.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eMilk:\u003c/strong\u003e about $0.30 per cup, 8g protein.",
+                             "replace":  "\u003cstrong\u003eMilk:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"milk\" data-tc-per=\"gal\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.75\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.75\u003c/span\u003e a gallon, 8g protein per cup.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003ePeanut butter:\u003c/strong\u003e about $0.30 per 2-tablespoon serving, 7g protein.",
+                             "replace":  "\u003cstrong\u003ePeanut butter:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"peanut-butter\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.38\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.38\u003c/span\u003e a pound, 7g protein per 2-tablespoon serving.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eCanned tuna:\u003c/strong\u003e about $0.90 per can, 20g protein.",
+                             "replace":  "\u003cstrong\u003eCanned tuna:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.17\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.17\u003c/span\u003e an ounce, 20g protein per can.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eChicken (bone-in thighs or whole bird):\u003c/strong\u003e about $0.90 per serving, 25g protein per 4 ounces.",
+                             "replace":  "\u003cstrong\u003eChicken (bone-in thighs or whole bird):\u003c/strong\u003e a whole bird runs \u003cspan data-tc-live-price data-tc-bid=\"whole-chicken\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.32\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.32\u003c/span\u003e a pound, 25g protein per 4 ounces.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eGreek yogurt (large tub):\u003c/strong\u003e about $0.75 per serving, 17g protein per two-thirds cup.",
+                             "replace":  "\u003cstrong\u003eGreek yogurt (large tub):\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"greek-yogurt\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.24\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.24\u003c/span\u003e a pound, 17g protein per two-thirds cup.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eCottage cheese:\u003c/strong\u003e about $0.80 per serving, 24g protein per cup.",
+                             "replace":  "\u003cstrong\u003eCottage cheese:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"cottage-cheese\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.82\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.82\u003c/span\u003e a pound, 24g protein per cup.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eGround turkey:\u003c/strong\u003e about $1.25 per serving, 22g protein per 4 ounces. A bit more, but lean and easy to stretch.",
+                             "replace":  "\u003cstrong\u003eGround turkey:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"ground-turkey\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.66\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.66\u003c/span\u003e a pound, 22g protein per 4 ounces. Lean and easy to stretch.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "A one-pound bag of dried beans runs about $1.50 and cooks up into six generous cups. That is 90 grams of protein for a buck fifty, or about a penny and a half per gram. Compare that to a chicken breast at around six or seven cents per gram, and you can see why beans have fed families through hard times for centuries.",
+                             "replace":  "A one-pound bag of dried beans cooks up into six generous cups, which is 90 grams of protein from one cheap bag. That is why beans have fed families through hard times for centuries.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "feeds four people for under three dollars total. That works out to roughly $0.70 a bowl, and it reheats beautifully all week.",
+                             "replace":  "feeds four people for very little, and it reheats beautifully all week.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "you have a 20-gram protein lunch for about a dollar.",
+                             "replace":  "you have a cheap 20-gram protein lunch.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A cup of cottage cheese gives you 24 grams for around $0.80, and it pairs with fruit",
+                             "replace":  "A cup of cottage cheese gives you 24 grams from a tub that runs \u003cspan data-tc-live-price data-tc-bid=\"cottage-cheese\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.82\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.82\u003c/span\u003e a pound, and it pairs with fruit",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003ePeanut butter\u003c/strong\u003e on whole-grain bread costs about $0.55 for the whole sandwich and travels anywhere without a cooler.",
+                             "replace":  "\u003cstrong\u003ePeanut butter\u003c/strong\u003e on whole-grain bread makes a cheap sandwich that travels anywhere without a cooler.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A whole chicken at around $1.30 a pound gives you more meat per dollar than boneless breasts at $4.50 a pound, and the carcass makes free stock.",
+                             "replace":  "A whole chicken runs \u003cspan data-tc-live-price data-tc-bid=\"whole-chicken\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.32\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.32\u003c/span\u003e a pound against \u003cspan data-tc-live-price data-tc-bid=\"chicken-breast\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.99\u003c/span\u003e a pound for boneless breasts, so weigh the bones against the price, and remember the carcass makes free stock.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "these three keep your cost per serving under fifty cents no matter what the market is doing.",
+                             "replace":  "these three keep your cost per serving low no matter what the market is doing.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "you can build almost every meal around them for well under a dollar a serving.",
+                             "replace":  "you can build almost every meal around them for very little per serving.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "d69825751338cccc69bf82d9cf9a95f555d79c9d0b489580164b7fc78d12cb9e",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

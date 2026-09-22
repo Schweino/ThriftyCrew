@@ -1,0 +1,84 @@
+{
+    "slug":  "meal-prep-for-the-gym",
+    "id":  "6a499d9950682b0001cd4375",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:56:09.000Z",
+    "base_lexical_sha256":  "4fbb5053d0c9d4d90733d0849e72d99548d70178ef48c7f29503ca71dc088e45",
+    "title_old":  "Meal Prep for the Gym: Fuel Your Workouts for Less",
+    "title_new":  "Meal Prep for the Gym: Fuel Your Workouts for Less",
+    "replacements":  [
+                         {
+                             "find":  "Here is the honest workhorse list, with rough prices I actually see week to week:",
+                             "replace":  "Here is the honest workhorse list, with prices that update live from our grocery board:",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003e\u003cstrong\u003eChicken thighs:\u003c/strong\u003e around $2.29 a pound, cheaper and juicier than breast\u003c/li\u003e",
+                             "replace":  "\u003cli\u003e\u003cstrong\u003eChicken thighs or drumsticks:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"chicken-thighs\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.98\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.98\u003c/span\u003e a pound, cheaper and juicier than breast\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003e\u003cstrong\u003eEggs:\u003c/strong\u003e roughly $0.25 each, about 6 grams of protein apiece\u003c/li\u003e",
+                             "replace":  "\u003cli\u003e\u003cstrong\u003eEggs:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e each, about 6 grams of protein apiece\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003e\u003cstrong\u003eCanned tuna:\u003c/strong\u003e about $1.00 a can, 20 grams of protein\u003c/li\u003e",
+                             "replace":  "\u003cli\u003e\u003cstrong\u003eCanned tuna:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.17\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.17\u003c/span\u003e an ounce, 20 grams of protein a can\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003e\u003cstrong\u003eDry rice:\u003c/strong\u003e $0.10 to $0.15 per cooked cup\u003c/li\u003e",
+                             "replace":  "\u003cli\u003e\u003cstrong\u003eDry rice:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"rice\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.46\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.46\u003c/span\u003e a pound\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003e\u003cstrong\u003eDry oats:\u003c/strong\u003e about $0.15 a serving\u003c/li\u003e",
+                             "replace":  "\u003cli\u003e\u003cstrong\u003eDry oats:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"oatmeal\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.80\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.80\u003c/span\u003e a pound\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cli\u003e\u003cstrong\u003eFrozen mixed vegetables:\u003c/strong\u003e $1.00 a pound and they never go bad on you\u003c/li\u003e",
+                             "replace":  "\u003cli\u003e\u003cstrong\u003eFrozen mixed vegetables:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"frozen-vegetables\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.29\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.29\u003c/span\u003e a pound, and they never go bad on you\u003c/li\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "A 10-pound bag of rice runs a couple of cents more than a 2-pound box but lasts a month of training.",
+                             "replace":  "A 10-pound bag of rice costs a little more up front than a 2-pound box but lasts a month of training.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Frozen broccoli or a mixed bag does the job for a dollar.",
+                             "replace":  "Frozen broccoli or a mixed bag does the job for very little.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Let me give you the real cost on that. Five pounds of thighs at $2.29 runs about $11.50. Six cups of rice is under a dollar. Vegetables add maybe $2. That is roughly $14.50 for six full meals, or \u003cstrong\u003eabout $2.40 per container\u003c/strong\u003e.",
+                             "replace":  "Here is why that batch is so cheap. The thighs are the biggest spend, and the rice and frozen vegetables barely register. Split across six full meals, \u003cstrong\u003eeach container costs a fraction of a meal out\u003c/strong\u003e.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "you can feed your workouts for around $2.40 a meal while everyone else pays $12.",
+                             "replace":  "you can feed your workouts for a fraction of the $12 everyone else pays.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "Feed your training for about $2.40 a meal by nailing",
+                            "replace":  "Feed your training for very little per meal by nailing"
+                        },
+                        {
+                            "find":  "Fuel your workouts for around $2.40 a meal.",
+                            "replace":  "Fuel your workouts for very little per meal."
+                        }
+                    ],
+    "new_lexical_sha256":  "560fb1f73cdc81c5d83b2fdc71e18894b2fe317a0e759e68896cf161da726945",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

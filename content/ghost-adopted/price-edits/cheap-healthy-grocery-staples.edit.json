@@ -1,0 +1,147 @@
+{
+    "slug":  "cheap-healthy-grocery-staples",
+    "id":  "6a49a65c50682b0001cd45f0",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-05T00:33:32.000Z",
+    "base_lexical_sha256":  "3100efe145fef9947cfd5b4f95acf2ebb046811d0c7d0894a0beecac9f8f6a44",
+    "title_old":  "25 Cheap, Healthy Grocery Staples to Always Keep Stocked",
+    "title_new":  "25 Cheap, Healthy Grocery Staples to Always Keep Stocked",
+    "replacements":  [
+                         {
+                             "find":  "\u003cstrong\u003eDried beans:\u003c/strong\u003e About $1.50 a pound and around 15 cents per half-cup cooked serving.",
+                             "replace":  "\u003cstrong\u003eDried beans:\u003c/strong\u003e Among the cheapest protein in the store, and one bag cooks up into a lot of half-cup servings.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eLentils:\u003c/strong\u003e Roughly $1.80 a pound, cook in 20 minutes with no soaking, and land near 18 cents a serving.",
+                             "replace":  "\u003cstrong\u003eLentils:\u003c/strong\u003e Run \u003cspan data-tc-live-price data-tc-bid=\"brown-lentils\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.92\u003c/span\u003e a pound dry, cook in 20 minutes with no soaking, and stretch into a lot of servings.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eEggs:\u003c/strong\u003e Even at $3.50 a dozen, that is under 30 cents each for complete protein you can cook a dozen ways.",
+                             "replace":  "\u003cstrong\u003eEggs:\u003c/strong\u003e At \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"dozen\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.62\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.62\u003c/span\u003e a dozen, that is \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e an egg for complete protein you can cook a dozen ways.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eCanned tuna:\u003c/strong\u003e About $1 a can for roughly 20 grams of protein.",
+                             "replace":  "\u003cstrong\u003eCanned tuna:\u003c/strong\u003e Runs \u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.17\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.17\u003c/span\u003e an ounce, and a can gives you roughly 20 grams of protein.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003ePeanut butter:\u003c/strong\u003e A $3 jar gives you 14-plus servings at around 20 cents each, with protein and healthy fat.",
+                             "replace":  "\u003cstrong\u003ePeanut butter:\u003c/strong\u003e Runs \u003cspan data-tc-live-price data-tc-bid=\"peanut-butter\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.38\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.38\u003c/span\u003e a pound, and a jar gives you 14-plus servings with protein and healthy fat.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eBrown rice:\u003c/strong\u003e Around $1 a pound and about 10 cents a cooked cup.",
+                             "replace":  "\u003cstrong\u003eBrown rice:\u003c/strong\u003e Runs \u003cspan data-tc-live-price data-tc-bid=\"brown-rice\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.88\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.88\u003c/span\u003e a pound dry, and a little goes a long way once it is cooked.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eOats:\u003c/strong\u003e A big canister runs $4 and covers 30 breakfasts at roughly 13 cents each.",
+                             "replace":  "\u003cstrong\u003eOats:\u003c/strong\u003e Run \u003cspan data-tc-live-price data-tc-bid=\"oatmeal\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.80\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.80\u003c/span\u003e a pound, and a big canister covers 30 breakfasts.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eWhole wheat pasta:\u003c/strong\u003e About $1.30 a box for 8 servings, or 16 cents a plate before sauce.",
+                             "replace":  "\u003cstrong\u003eWhole wheat pasta:\u003c/strong\u003e One box covers 8 servings, a cheap plate before sauce.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003ePotatoes:\u003c/strong\u003e A 5-pound bag for $4 means 40 cents a potato, packed with potassium and easy to cook.",
+                             "replace":  "\u003cstrong\u003ePotatoes:\u003c/strong\u003e Russets run \u003cspan data-tc-live-price data-tc-bid=\"russet-potatoes\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.41\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.41\u003c/span\u003e a pound, packed with potassium and easy to cook.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003ePopcorn kernels:\u003c/strong\u003e A $2 bag makes dozens of servings at a few cents each.",
+                             "replace":  "\u003cstrong\u003ePopcorn kernels:\u003c/strong\u003e One bag makes dozens of servings for next to nothing.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eOnions:\u003c/strong\u003e Around 80 cents a pound and the flavor base of almost everything.",
+                             "replace":  "\u003cstrong\u003eOnions:\u003c/strong\u003e Run \u003cspan data-tc-live-price data-tc-bid=\"onions\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.75\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.75\u003c/span\u003e a pound and make the flavor base of almost everything.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eCarrots:\u003c/strong\u003e About $1 a pound, good raw or cooked",
+                             "replace":  "\u003cstrong\u003eCarrots:\u003c/strong\u003e Run \u003cspan data-tc-live-price data-tc-bid=\"carrots\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.94\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.94\u003c/span\u003e a pound, good raw or cooked",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eCabbage:\u003c/strong\u003e Roughly 60 cents a pound and one head makes many meals.",
+                             "replace":  "\u003cstrong\u003eCabbage:\u003c/strong\u003e Runs \u003cspan data-tc-live-price data-tc-bid=\"cabbage\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.79\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.79\u003c/span\u003e a pound and one head makes many meals.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eFrozen mixed vegetables:\u003c/strong\u003e A $1.50 bag with no waste and nutrition locked in at the peak of freshness.",
+                             "replace":  "\u003cstrong\u003eFrozen mixed vegetables:\u003c/strong\u003e Run \u003cspan data-tc-live-price data-tc-bid=\"frozen-vegetables\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.29\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.29\u003c/span\u003e a pound with no waste and nutrition locked in at the peak of freshness.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eCanned tomatoes:\u003c/strong\u003e About $1 a can and the start of soups, sauces, and chili all year round.",
+                             "replace":  "\u003cstrong\u003eCanned tomatoes:\u003c/strong\u003e Run \u003cspan data-tc-live-price data-tc-bid=\"diced-tomatoes\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.92\u003c/span\u003e a pound and are the start of soups, sauces, and chili all year round.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eBananas:\u003c/strong\u003e Around 25 cents each, perfect for snacks",
+                             "replace":  "\u003cstrong\u003eBananas:\u003c/strong\u003e Run \u003cspan data-tc-live-price data-tc-bid=\"bananas\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.48\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.48\u003c/span\u003e a pound, perfect for snacks",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eApples:\u003c/strong\u003e About $1.50 a pound, they keep for weeks, and one makes a filling snack for under 40 cents.",
+                             "replace":  "\u003cstrong\u003eApples:\u003c/strong\u003e Run \u003cspan data-tc-live-price data-tc-bid=\"apples\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.96\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.96\u003c/span\u003e a pound, they keep for weeks, and one makes a filling snack.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eFrozen berries:\u003c/strong\u003e A $3 bag beats fresh on price out of season and never spoils on you.",
+                             "replace":  "\u003cstrong\u003eFrozen berries:\u003c/strong\u003e A bag beats fresh on price out of season and never spoils on you.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eOranges:\u003c/strong\u003e Roughly 50 cents each in a bag, full of vitamin C",
+                             "replace":  "\u003cstrong\u003eOranges:\u003c/strong\u003e Run \u003cspan data-tc-live-price data-tc-bid=\"oranges\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.12\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.12\u003c/span\u003e a pound, full of vitamin C",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eVegetable or canola oil:\u003c/strong\u003e About $3 for a bottle that lasts months and turns plain staples into real cooking.",
+                             "replace":  "\u003cstrong\u003eVegetable or canola oil:\u003c/strong\u003e Runs \u003cspan data-tc-live-price data-tc-bid=\"vegetable-oil\" data-tc-per=\"gal\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"8.78\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$8.78\u003c/span\u003e a gallon, and a bottle lasts months and turns plain staples into real cooking.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "A one-time $10 investment that seasons hundreds of meals.",
+                             "replace":  "A small one-time buy that seasons hundreds of meals.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eVinegar:\u003c/strong\u003e A $2 bottle for dressings, marinades, and brightening a dish for pennies per use.",
+                             "replace":  "\u003cstrong\u003eVinegar:\u003c/strong\u003e Plain white vinegar runs \u003cspan data-tc-live-price data-tc-bid=\"white-vinegar\" data-tc-per=\"gal\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"3.00\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$3.00\u003c/span\u003e a gallon and handles dressings, marinades, and brightening a dish for pennies per use.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003ePlain yogurt:\u003c/strong\u003e A big tub for $4 beats single cups on price",
+                             "replace":  "\u003cstrong\u003ePlain yogurt:\u003c/strong\u003e A big tub beats single cups on price",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eMilk or a shelf-stable alternative:\u003c/strong\u003e Around $3.50 a gallon for calcium",
+                             "replace":  "\u003cstrong\u003eMilk or a shelf-stable alternative:\u003c/strong\u003e Milk runs \u003cspan data-tc-live-price data-tc-bid=\"milk\" data-tc-per=\"gal\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.75\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.75\u003c/span\u003e a gallon for calcium",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "you can build a week of healthy meals for well under $50 while barely touching the fridge.",
+                             "replace":  "you can build a week of healthy meals on a small budget while barely touching the fridge.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "6742d9c84be65d3e81e9fa2ce4ccb11d97816347d7ba593303e24362fc75588e",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

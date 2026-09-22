@@ -1,0 +1,77 @@
+{
+    "slug":  "meal-prep-soups-and-stews",
+    "id":  "6a49a18350682b0001cd448a",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-05T00:12:51.000Z",
+    "base_lexical_sha256":  "abe7750a362e2fdee15de53d7914ebd6564bda425de1d44dcb863f59ff795fc1",
+    "title_old":  "Freezer Soups and Stews: Big-Batch Meal Prep for Pennies a Bowl",
+    "title_new":  "Freezer Soups and Stews: Big-Batch Meal Prep for Pennies a Bowl",
+    "replacements":  [
+                         {
+                             "find":  "A pound of dry beans is around $1.50 and cooks up to the same as four or five cans that would run you $4 or more.",
+                             "replace":  "A pound of dry beans cooks up to the same as four or five cans and costs far less than they do.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "This is your flavor foundation and costs about 50 cents for a whole pot.",
+                             "replace":  "This is your flavor foundation and costs next to nothing for a whole pot.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003ch2\u003eThree Pots and What They Cost Per Bowl\u003c/h2\u003e",
+                             "replace":  "\u003ch2\u003eThree Pots Worth Learning\u003c/h2\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Let me price out three workhorses.",
+                             "replace":  "Here are three workhorses.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A pound of dry lentils at $1.50,",
+                             "replace":  "A pound of dry lentils (they can run as little as \u003cspan data-tc-live-price data-tc-bid=\"brown-lentils\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.92\u003c/span\u003e a pound),",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  " the aromatics at 50 cents, a can of tomatoes at 90 cents, a couple of potatoes and some spices at about $1.50. Call it $4.40 for the whole pot, or roughly 44 cents a bowl.",
+                             "replace":  " aromatics, a can of tomatoes, a couple of potatoes and some spices.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A pound of dry white beans at $1.50, a half pound of sausage at $2.50, aromatics and greens at $1.50, broth base at 50 cents. That is around $6 a pot, or about 60 cents a bowl.",
+                             "replace":  "A pound of dry white beans, a half pound of sausage, aromatics and greens, and a little broth base. A little sausage goes a long way here, flavoring the whole pot.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A pound and a half of chuck at about $7,",
+                             "replace":  "A pound and a half of chuck roast (it can run as little as \u003cspan data-tc-live-price data-tc-bid=\"chuck-roast\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"6.97\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$6.97\u003c/span\u003e a pound),",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  " a cup of barley at 50 cents, aromatics and potatoes at $2, broth at 50 cents. Around $10 a pot, or roughly $1 a bowl.",
+                             "replace":  " a cup of barley, aromatics and potatoes, and a little broth.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Even the priciest of the three lands at a dollar a serving. Swap in dry beans for meat on the weeks money is tight and you drop well under 50 cents.",
+                             "replace":  "Even the priciest of the three costs a fraction of that. Swap in dry beans for meat on the weeks money is tight and you drop lower still.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "fills your freezer with ten meals for somewhere between 44 cents and a dollar a bowl, using the cheapest ingredients in the store.",
+                             "replace":  "fills your freezer with ten meals for a fraction of a restaurant bowl, using the cheapest ingredients in the store.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+
+                    ],
+    "new_lexical_sha256":  "13dc4e4189388cff06bdce96512313ddc3eca78f3875fb2027a6e842dee2d2c6",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-22T15:18:38"
+}

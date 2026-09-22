@@ -1,0 +1,146 @@
+{
+  "slug": "cheap-lunch-ideas-for-work",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "each one landing well under what the deli charges. Per-serving figures assume normal grocery prices, so sales will push you lower.",
+      "replace": "each one landing well under what the deli charges.",
+      "class": "unbacked",
+      "figures": [],
+      "why": "housekeeping: the note described per-serving figures that no longer appear"
+    },
+    {
+      "find": "Portion it into containers and each lunch runs about <strong>$1.40 a serving</strong>.",
+      "replace": "Portion it into containers and each lunch costs <strong>a fraction of a lunch out</strong>.",
+      "class": "unbacked",
+      "figures": ["$1.40"],
+      "why": "per-serving estimate for big-batch chili, a generic dish (not an engine recipe title)"
+    },
+    {
+      "find": "a little salsa or cheese comes in around <strong>$0.90 a serving</strong>.",
+      "replace": "a little salsa or cheese <strong>costs next to nothing</strong>.",
+      "class": "unbacked",
+      "figures": ["$0.90"],
+      "why": "per-serving estimate for a rice and beans bowl, a dish"
+    },
+    {
+      "find": "Two slices of bread, peanut butter, and jam runs about <strong>$0.55 a serving</strong>, packs in ten seconds",
+      "replace": "Two slices of bread, peanut butter, and jam <strong>costs almost nothing</strong>, packs in ten seconds",
+      "class": "unbacked",
+      "figures": ["$0.55"],
+      "why": "per-serving estimate for a PB and J, a dish"
+    },
+    {
+      "find": "Keeps for days at about <strong>$1.10 a serving</strong> and is meant to be eaten cold.",
+      "replace": "Keeps for days, <strong>costs little</strong>, and is meant to be eaten cold.",
+      "class": "unbacked",
+      "figures": ["$1.10"],
+      "why": "per-serving estimate for pasta salad, a dish"
+    },
+    {
+      "find": "Cheap protein for roughly <strong>$0.95 a serving</strong>.",
+      "replace": "<strong>Cheap protein</strong> that fills you up.",
+      "class": "unbacked",
+      "figures": ["$0.95"],
+      "why": "per-serving estimate for an egg salad sandwich, a dish"
+    },
+    {
+      "find": "Filling for about <strong>$1.00 a serving</strong>.",
+      "replace": "Filling, and <strong>easy on the budget</strong>.",
+      "class": "unbacked",
+      "figures": ["$1.00"],
+      "why": "per-serving estimate for a loaded baked potato, a dish"
+    },
+    {
+      "find": "Turns a sad snack into a real lunch for about <strong>$0.85 a serving</strong>.",
+      "replace": "Turns a sad snack into a real lunch for <strong>very little money</strong>.",
+      "class": "unbacked",
+      "figures": ["$0.85"],
+      "why": "per-serving estimate for upgraded ramen, a dish"
+    },
+    {
+      "find": "Shelf-stable protein for roughly <strong>$1.20 a serving</strong>.",
+      "replace": "Shelf-stable protein <strong>at a low price</strong>.",
+      "class": "unbacked",
+      "figures": ["$1.20"],
+      "why": "per-serving estimate for a tuna sandwich, a dish"
+    },
+    {
+      "find": "The homemade version of the twelve-dollar fast-casual bowl, for about <strong>$1.30 a serving</strong>.",
+      "replace": "The homemade version of the twelve-dollar fast-casual bowl, for <strong>a fraction of the price</strong>.",
+      "class": "unbacked",
+      "figures": ["$1.30"],
+      "why": "per-serving estimate for a homemade burrito bowl (not an engine recipe title); the restaurant price stays"
+    },
+    {
+      "find": "With carrots and onion it's about <strong>$0.75 a serving</strong> and reheats better than most soups.",
+      "replace": "With carrots and onion it <strong>stays dirt cheap</strong> and reheats better than most soups.",
+      "class": "unbacked",
+      "figures": ["$0.75"],
+      "why": "per-serving estimate for lentil soup, a dish"
+    },
+    {
+      "find": "Bread and cheese for about <strong>$0.70 a serving</strong>.",
+      "replace": "Just bread and cheese, <strong>so it stays cheap</strong>.",
+      "class": "unbacked",
+      "figures": ["$0.70"],
+      "why": "per-serving estimate for grilled cheese, a dish"
+    },
+    {
+      "find": "Real meat lunch for about <strong>$1.60 a serving</strong> when you buy thighs, which are cheaper than breasts.",
+      "replace": "A real meat lunch <strong>on a small budget</strong> when you buy thighs, which are cheaper than breasts.",
+      "class": "unbacked",
+      "figures": ["$1.60"],
+      "why": "per-serving estimate for chicken and rice, a generic dish (not an engine recipe title)"
+    },
+    {
+      "find": "Reheats well and runs about <strong>$0.85 a serving</strong>.",
+      "replace": "Reheats well and <strong>costs very little</strong>.",
+      "class": "unbacked",
+      "figures": ["$0.85"],
+      "why": "per-serving estimate for a bean and cheese quesadilla, a dish"
+    },
+    {
+      "find": "About <strong>$1.00 a serving</strong> and no morning cooking.",
+      "replace": "<strong>Cheap to make</strong>, and no morning cooking.",
+      "class": "unbacked",
+      "figures": ["$1.00"],
+      "why": "per-serving estimate for an overnight noodle jar, a dish"
+    },
+    {
+      "find": "About <strong>$1.50 a serving</strong> and no reheating needed.",
+      "replace": "<strong>Far cheaper than a deli wrap</strong>, and no reheating needed.",
+      "class": "unbacked",
+      "figures": ["$1.50"],
+      "why": "per-serving estimate for turkey and cheese roll-ups, a dish; the deli comparison matches the article's own framing"
+    },
+    {
+      "find": "Light but filling for about <strong>$1.10 a serving</strong>. Make the hummus from canned chickpeas and it drops even lower.",
+      "replace": "Light but filling, and <strong>cheap</strong>. Make the hummus from canned chickpeas and it gets cheaper still.",
+      "class": "unbacked",
+      "figures": ["$1.10"],
+      "why": "per-serving estimate for a hummus wrap, a dish; the follow-on sentence referred to the removed figure"
+    },
+    {
+      "find": "A near-free way to use leftovers, about <strong>$0.95 a serving</strong>.",
+      "replace": "<strong>A near-free way to use leftovers</strong>.",
+      "class": "unbacked",
+      "figures": ["$0.95"],
+      "why": "per-serving estimate for leftover fried rice, a dish"
+    },
+    {
+      "find": "Around <strong>$1.35 a serving</strong> and genuinely lighter than the drive-thru.",
+      "replace": "<strong>Cheaper</strong> and genuinely lighter than the drive-thru.",
+      "class": "unbacked",
+      "figures": ["$1.35"],
+      "why": "per-serving estimate for a big salad with a protein topper, a dish"
+    },
+    {
+      "find": "so use these figures as a guide rather than a guarantee.",
+      "replace": "so use this list as a guide rather than a guarantee.",
+      "class": "unbacked",
+      "figures": [],
+      "why": "housekeeping: the caveat referred to per-serving figures that no longer appear"
+    }
+  ]
+}

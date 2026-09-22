@@ -1,0 +1,129 @@
+{
+    "slug":  "low-carb-meal-prep-ideas",
+    "title_new":  null,
+    "edits":  [
+                  {
+                      "find":  "with real per-serving costs and macros so you know exactly what you are getting into.",
+                      "replace":  "with real macros so you know exactly what you are getting into.",
+                      "class":  "unbacked",
+                      "figures":  [
+
+                                  ],
+                      "why":  "housekeeping: the intro promised per-serving costs that are removed below"
+                  },
+                  {
+                      "find":  "About $0.90 per serving, with 20 grams of protein and 3 grams of net carbs.",
+                      "replace":  "Per serving: 20 grams of protein, 3 grams of net carbs.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.90"
+                                  ],
+                      "why":  "per-serving estimate for a cottage cheese and egg bake, a dish; macros kept as written"
+                  },
+                  {
+                      "find":  "Around $1.20 a cup, 17 grams of protein, 8 grams of net carbs.",
+                      "replace":  "Per cup: 17 grams of protein, 8 grams of net carbs.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.20"
+                                  ],
+                      "why":  "per-cup estimate for yogurt and berry cups, a dish; macros kept"
+                  },
+                  {
+                      "find":  "About $2.50 per bowl, 30 grams of protein, 6 grams of net carbs.",
+                      "replace":  "Per bowl: 30 grams of protein, 6 grams of net carbs.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.50"
+                                  ],
+                      "why":  "per-bowl estimate for chicken and avocado bowls, a dish; macros kept"
+                  },
+                  {
+                      "find":  "Roughly $1.40 per serving, 24 grams of protein, 2 grams of net carbs.",
+                      "replace":  "Per serving: 24 grams of protein, 2 grams of net carbs.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.40"
+                                  ],
+                      "why":  "per-serving estimate for tuna lettuce wraps, a dish; macros kept"
+                  },
+                  {
+                      "find":  "About $1.10 per serving, 18 grams of protein, 3 grams of net carbs.",
+                      "replace":  "Per serving: 18 grams of protein, 3 grams of net carbs.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.10"
+                                  ],
+                      "why":  "per-serving estimate for egg salad plates, a dish; macros kept"
+                  },
+                  {
+                      "find":  "Around $2.20 per serving, 22 grams of protein, 9 grams of net carbs.",
+                      "replace":  "Per serving: 22 grams of protein, 9 grams of net carbs.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2.20"
+                                  ],
+                      "why":  "per-serving estimate for sheet-pan sausage and peppers, a dish; macros kept"
+                  },
+                  {
+                      "find":  "About $3.00 per serving, 28 grams of protein, 7 grams of net carbs.",
+                      "replace":  "Per serving: 28 grams of protein, 7 grams of net carbs.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$3.00"
+                                  ],
+                      "why":  "per-serving estimate for beef and broccoli stir fry, a generic dish (not an engine recipe title); macros kept"
+                  },
+                  {
+                      "find":  "Roughly $3.80 per serving, 34 grams of protein, 5 grams of net carbs.",
+                      "replace":  "Per serving: 34 grams of protein, 5 grams of net carbs.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$3.80"
+                                  ],
+                      "why":  "per-serving estimate for baked salmon with green beans, a dish; macros kept"
+                  },
+                  {
+                      "find":  "About $0.85 per pack, 9 grams of protein, 4 grams of net carbs.",
+                      "replace":  "Per pack: 9 grams of protein, 4 grams of net carbs.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.85"
+                                  ],
+                      "why":  "per-pack estimate for cheese and almond packs, a mix; macros kept"
+                  },
+                  {
+                      "find":  "Around $0.95 per serving, 12 grams of protein, 1 gram of net carbs.",
+                      "replace":  "Per serving: 12 grams of protein, 1 gram of net carbs.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$0.95"
+                                  ],
+                      "why":  "per-serving estimate for deviled eggs, a dish; macros kept"
+                  },
+                  {
+                      "find":  "Cost matters too. Add these up and the average serving lands near $1.90, which beats a drive-thru run and beats it badly over a full week.",
+                      "replace":  "Cost matters too. A serving of any of these beats a drive-thru run on price, and it beats it badly over a full week.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$1.90"
+                                  ],
+                      "why":  "an average of the removed per-serving estimates"
+                  },
+                  {
+                      "find":  "you can eat low-carb all week for under $2 a serving without ever feeling shortchanged.",
+                      "replace":  "you can eat low-carb all week for less than the drive-thru charges without ever feeling shortchanged.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$2"
+                                  ],
+                      "why":  "a typed per-serving bound"
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "Real per-serving costs and macros, all for under $2 a serving.",
+                            "replace":  "Real macros, all built on cheap staples."
+                        }
+                    ]
+}
