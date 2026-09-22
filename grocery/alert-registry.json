@@ -9,8 +9,8 @@
   "escalation"
  ],
  "resolver_ratchet": {
-  "unassigned_max": 58,
-  "set": "2026-09-22 (185 at the contract; 176 after batch 1; 58 after ops lane plan-2026-09-22-8 group C, residual 2026-09-22-5d20b9)",
+  "unassigned_max": 43,
+  "set": "2026-09-22 (185 at the contract; 176 after batch 1; 43 after ops lane plan-2026-09-22-8 group D, residual 2026-09-22-5d20b9)",
   "why": "a ratchet, not a gate red on day one: the entries registered before the resolver contract are counted here and the count may only fall. audit-alert-registry fails a registry holding more, and says 'ratchet CAN tighten' when it holds fewer, without rewriting this number (a plain run never writes its mark)."
  },
  "entries": [
@@ -130,7 +130,7 @@
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-run.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "feed-edge-bytes",
@@ -139,7 +139,7 @@
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-run.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "board-edge-stale",
@@ -148,7 +148,7 @@
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-run.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "feed-not-refreshed",
@@ -157,7 +157,7 @@
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-run.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "pipeline-could-not-push",
@@ -166,7 +166,7 @@
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/capture-run.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "pipeline-moved-untracked-blocker",
@@ -175,7 +175,7 @@
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/capture-run.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "commit-refused",
@@ -184,7 +184,7 @@
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/capture-run.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "served-files-uncommitted",
@@ -193,7 +193,7 @@
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/capture-run.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "pipeline-did-not-commit",
@@ -202,7 +202,7 @@
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "none in the tree on 2026-09-10 (fired 2026-08-24; kept so the queue history maps)",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "capture-watchdog",
@@ -277,7 +277,7 @@
    "class": "page",
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/capture-run.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "ff-catalog-degrading",
@@ -313,7 +313,7 @@
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/bakers-daily-scan.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "bakers-scan-push-failed",
@@ -322,7 +322,7 @@
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/bakers-daily-scan.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "bakers-scan-autostash",
@@ -331,7 +331,7 @@
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/bakers-daily-scan.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "run-blocked-bot-wall",
@@ -1081,7 +1081,7 @@
    "class": "review",
    "condition": "work for the weekly agent: prices are refreshed headlessly, the flyer read is owed",
    "emitter": "grocery/bakers-daily-scan.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "triage-residual",
@@ -1952,7 +1952,7 @@
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-run.ps1",
    "note": "2026-09-22, queue 2026-09-22-972de2. The ship path published the Ghost post, which carries board.json?v=<hash of the board that run built>, and the commit that deploys public/board.json did not land, so readers are served the PREVIOUS board underneath a post advertising a different one. Condition 1: the live board or feed is wrong. One page per run, never per file. The branch that raises it printed 'Readers keep the last good board' until this landed, a claim it had never tested.",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   }
  ]
 }
