@@ -61,6 +61,8 @@ if ($SelfTestSwp) {
   foreach ($c in @('$2.99/lb chicken thighs', 'eggs were $1.99 at Aldi', 'Fourteen servings at about $2.40 each', 'rice at $0.89 per pound')) {
     $r = Measure-SwpPage (& $wrap ('<p>' + $c + '</p>')); T ('MUST FIRE  "' + $c + '"') ($r.literals -eq 1) $r.literals
   }
+  $r = Measure-SwpPage (& $wrap '<p>Rice runs $1.50 a pound. Membership is $1 a month.</p>')
+  T 'MUST NOT FIRE  "$1.50 a pound" beside "$1 a month" counts ONE literal (regex matches never overlap; the ratchet was never inflated)' ($r.literals -eq 1) $r.literals
   $r = Measure-SwpPage (& $wrap '<p>The 15 year costs you about $617 more each month.</p>')
   T 'MUST NOT FIRE  finance arithmetic "$617 more each month" is not a grocery price' ($r.literals -eq 0) $r.literals
   $r = Measure-SwpPage (& $wrap '<p>You own 100 shares of a company trading at $50 each, and three overdraft fees at $35 each.</p>')

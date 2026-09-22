@@ -20,7 +20,7 @@
 #
 # Exit 0 ok, 1 a refused edit (named), 3 could not evaluate. Last line: ARTICLE-PRICE-EDITS-COMPLETE.
 [CmdletBinding()]
-param([switch]$Inventory, [switch]$Prepare, [switch]$Land, [switch]$Apply, [string]$Slugs = '', [switch]$SelfTest)
+param([switch]$Inventory, [switch]$Prepare, [switch]$Land, [switch]$Apply, [string]$Slugs = '', [switch]$Refresh, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $SelfTestApe = $SelfTest.IsPresent
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -51,13 +51,13 @@ function Set-ApeHtmlOfLexical { param([string]$Lexical, [string]$Html)
 function Get-ApeSha { param([string]$S) $b = [Text.Encoding]::UTF8.GetBytes($S); return (-join ([Security.Cryptography.SHA256]::Create().ComputeHash($b) | ForEach-Object { $_.ToString('x2') })) }
 function Get-ApeFigures { param([string]$Html)
   $t = ConvertTo-TcReaderText $Html
-  $tight = @(Find-TcGroceryPriceLiterals $t | ForEach-Object { $_.figure })
+  $tight = Find-TcGroceryPriceLiterals $t   # assigned, never wrapped inline: the comma return would read as ONE element.  SPANS: a figure is the monitor's shape only when it sits inside a literal's span
   $out = @()
   foreach ($m in [regex]::Matches($t, '\$\d[\d,]*(?:\.\d+)?')) {
     $a = [Math]::Max(0, $t.LastIndexOfAny([char[]]'.!?', [Math]::Max(0, $m.Index - 1)) + 1); $b = $t.IndexOfAny([char[]]'.!?', $m.Index + $m.Length)
     if ($b -lt 0 -or $b - $a -gt 400) { $b = [Math]::Min($t.Length, $m.Index + 160) }
     $sent = $t.Substring($a, [Math]::Max(0, $b - $a + 1)).Trim()
-    $isTight = @($tight | Where-Object { $_.Contains($m.Value) }).Count -gt 0
+    $isTight = @($tight | Where-Object { $m.Index -ge $_.index -and ($m.Index + $m.Length) -le ($_.index + $_.length) }).Count -gt 0
     $out += [pscustomobject]@{ figure = $m.Value; sentence = $sent; monitor_shape = $isTight }
   }
   return ,$out
@@ -66,7 +66,10 @@ function Get-ApeFigures { param([string]$Html)
 # the article's CURRENT base: the adopted export when present, else a read-only Admin API GET (posts, then pages)
 function Get-ApeBase { param([string]$Slug)
   $j = Join-Path $adopted ($Slug + '.json')
+  $pin0 = Join-Path $editDir ($Slug + '.base.json'); if ((Test-Path $pin0) -and -not $Refresh) { $o = Read-JsonFile $pin0; return [pscustomobject]@{ slug = $Slug; id = $o.id; kind = $o.kind; title = $o.title; visibility = $null; updated_at = $o.updated_at; lexical = [string]$o.lexical; source = [string]$o.source } }
   if (Test-Path $j) { $o = Read-JsonFile $j; return [pscustomobject]@{ slug = $Slug; id = $o.id; kind = $o.kind; title = $o.title; visibility = $o.visibility; updated_at = $o.updated_at; lexical = [string]$o.lexical; source = 'content/ghost-adopted/' + $Slug + '.json (exported ' + $o.exported_on + ')' } }
+  $pin = Join-Path $editDir ($Slug + '.base.json')
+  if ((Test-Path $pin) -and -not $Refresh) { $o = Read-JsonFile $pin; return [pscustomobject]@{ slug = $Slug; id = $o.id; kind = $o.kind; title = $o.title; visibility = $null; updated_at = $o.updated_at; lexical = [string]$o.lexical; source = [string]$o.source } }   # the PINNED base: decisions were written against it
   if (-not $script:gkey) { $script:gkey = Get-GhostKey }
   foreach ($res in 'posts', 'pages') {
     try {
@@ -82,7 +85,8 @@ function Get-ApeBase { param([string]$Slug)
 function Get-ApeRecipeSpan { param([string]$RecipeSlug)
   $b = Join-Path $mp ('db\built\' + $RecipeSlug + '.body.html')
   if (-not (Test-Path $b)) { throw "recipe '$RecipeSlug' has no built card, so there is no stamped fallback on the fill's basis" }
-  $sp = @(Get-TcLivePriceSpans ([IO.File]::ReadAllText($b)) | Where-Object { $_.asof })
+  $allSp = Get-TcLivePriceSpans ([IO.File]::ReadAllText($b))   # assigned first: a comma return piped straight on is ONE object
+  $sp = @($allSp | Where-Object { $_.asof })
   if ($sp.Count -eq 0) { throw "recipe '$RecipeSlug' has no stamped placeholder in its built card" }
   return (Format-TcLivePriceSpan -Slug $RecipeSlug -Field 'cost_ps' -Value $sp[0].fallback -AsOf $sp[0].asof)
 }
@@ -113,6 +117,8 @@ if ($SelfTestApe) {
   $h = Get-ApeHtmlOfLexical $lex
   $f = Get-ApeFigures $h
   T 'CLEAN TWIN  the inventory lists EVERY dollar figure, and marks only the grocery one as the monitor''s shape' ($f.Count -eq 2 -and $f[0].monitor_shape -and -not $f[1].monitor_shape) (($f | ForEach-Object { $_.figure + '=' + $_.monitor_shape }) -join ' ')
+  $f2 = Get-ApeFigures '<p>Rice runs $1.50 a pound. Membership is $1 a month, and a $4 coffee-shop muffin adds up.</p>'
+  T 'MUST NOT FIRE  "$1.50 a pound" is ONE figure, and "$1 a month" / "$4 muffin" beside it are not the monitor''s shape (the text-Contains over-mark)' ($f2.Count -eq 3 -and $f2[0].monitor_shape -and -not $f2[1].monitor_shape -and -not $f2[2].monitor_shape) (($f2 | ForEach-Object { $_.figure + '=' + $_.monitor_shape }) -join ' ')
   $lex2 = Set-ApeHtmlOfLexical $lex '<p>x</p>'
   T 'CLEAN TWIN  a lexical round trip keeps the single html card and changes only its html' ((Get-ApeHtmlOfLexical $lex2) -eq '<p>x</p>') $lex2
   $para = '{"root":{"children":[{"type":"paragraph","children":[]}],"type":"root","version":1}}'
@@ -169,13 +175,16 @@ if ($Prepare) {
       $new = $new.Replace($find, $rep); $reps += [ordered]@{ find = $find; replace = $rep; class = [string]$e.class }
     }
     if (@(Get-TcLivePriceSpans $new).Count -gt 0 -and -not $new.Contains($SCRIPT_TAG)) { $new = $new.TrimEnd() + "`n" + $SCRIPT_TAG + "`n"; $reps += [ordered]@{ find = '(end of body)'; replace = $SCRIPT_TAG; class = 'script' } }
-    $left = @(Find-TcGroceryPriceLiterals (ConvertTo-TcReaderText $new))
+    $left = Find-TcGroceryPriceLiterals (ConvertTo-TcReaderText $new)   # assigned, never @()-wrapped: an empty result would count 1
     if ($left.Count) { $why += ('still carries ' + $left.Count + ' literal(s) the monitor counts: ' + (($left | ForEach-Object { $_.context }) -join ' || ')) }
     $title = if ($dec.title_new) { [string]$dec.title_new } else { [string]$base.title }
     if ($title -match '\$\d') { $why += ('title still states a price: ' + $title) }
+    # the stored text fields (custom_excerpt, meta/og/twitter) cannot hold a live span, so a figure there is removed by a field edit
+    $fe = @($dec.field_edits | Where-Object { $_ })
+    foreach ($x in $fe) { $l2 = Find-TcGroceryPriceLiterals ([string]$x.replace); if ($l2.Count) { $why += ('field edit still carries a literal: ' + $x.replace) } }
     if ($why.Count) { $refused += ("$s : " + ($why -join ' | ')); continue }
     $newLex = Set-ApeHtmlOfLexical ([string]$base.lexical) $new
-    $edit = [ordered]@{ slug = $s; id = $base.id; kind = $base.kind; base_updated_at = $base.updated_at; base_lexical_sha256 = (Get-ApeSha ([string]$base.lexical)); title_old = $base.title; title_new = $title; replacements = $reps; new_lexical_sha256 = (Get-ApeSha $newLex); stamped_against_feed = $unit.asof; prepared = (Get-Date -Format s) }
+    $edit = [ordered]@{ slug = $s; id = $base.id; kind = $base.kind; base_updated_at = $base.updated_at; base_lexical_sha256 = (Get-ApeSha ([string]$base.lexical)); title_old = $base.title; title_new = $title; replacements = $reps; field_edits = $fe; new_lexical_sha256 = (Get-ApeSha $newLex); stamped_against_feed = $unit.asof; prepared = (Get-Date -Format s) }
     [IO.File]::WriteAllText((Join-Path $editDir ($s + '.edit.json')), ($edit | ConvertTo-Json -Depth 6), (New-Object Text.UTF8Encoding($false)))
     $done++
   }
@@ -186,6 +195,7 @@ if ($Prepare) {
 if ($Land) {
   $gkey = Get-GhostKey
   $hdr = { @{ Authorization = ('Ghost ' + (Get-GhostJWT -Key $gkey)); 'Accept-Version' = (Get-GhostAcceptVersion); 'Content-Type' = 'application/json' } }
+  $feedLive = Invoke-RestMethod -Uri ('https://feed.thriftycrew.com/smp-feed.json?cb=' + [guid]::NewGuid().ToString('N')) -TimeoutSec 60
   $edits = @(Get-ChildItem $editDir -Filter '*.edit.json' | Where-Object { -not $slugList.Count -or $slugList -contains ($_.Name -replace '\.edit\.json$', '') })
   $bad = @(); $ok = 0
   foreach ($f in $edits) {
@@ -197,9 +207,31 @@ if ($Land) {
     foreach ($r in @($e.replacements)) { if ($r.find -eq '(end of body)') { $h = $h.TrimEnd() + "`n" + $r.replace + "`n" } else { $h = $h.Replace([string]$r.find, [string]$r.replace) } }
     $newLex = Set-ApeHtmlOfLexical ([string]$live.lexical) $h
     if ((Get-ApeSha $newLex) -ne $e.new_lexical_sha256) { $bad += ("{0}: the applied lexical does not hash to the prepared one" -f $e.slug); continue }
-    $body = @{ $res = @(@{ lexical = $newLex; title = $e.title_new; updated_at = $live.updated_at }) } | ConvertTo-Json -Depth 6 -Compress
+    # every placeholder must be fillable by the DEPLOYED feed, or the article waits: a recipe span needs recipes[slug].everyday_ps
+    # (the landing's feed key) and the recipe itself live; a commodity span needs pricing_inputs[bid]
+    $unfill = @()
+    foreach ($m in [regex]::Matches($h, '<span data-tc-live-price\b([^>]*)>')) {
+      $a = $m.Groups[1].Value; $fld = Get-TcSpanAttr $a 'data-tc-field'
+      if ($fld -eq 'cost_ps') { $rs = Get-TcSpanAttr $a 'data-tc-slug'; $rv = if ($feedLive.recipes) { $feedLive.recipes.PSObject.Properties[$rs] } else { $null }; if (-not $rv -or -not ([double]$rv.Value.everyday_ps -gt 0)) { $unfill += "recipe $rs" } }
+      elseif ($fld -eq 'unit_price') { $bd = Get-TcSpanAttr $a 'data-tc-bid'; if (-not $feedLive.pricing_inputs.PSObject.Properties[$bd]) { $unfill += "commodity $bd" } }
+      else { $unfill += "field $fld" }
+    }
+    if ($unfill.Count) { $bad += ("{0}: the deployed feed cannot fill {1}; land it after the feed carries them" -f $e.slug, (($unfill | Select-Object -Unique) -join ', ')); continue }
+    $upd = [ordered]@{ lexical = $newLex; title = $e.title_new; updated_at = $live.updated_at }
+    $fbad = @()
+    foreach ($fld in 'custom_excerpt', 'meta_title', 'meta_description', 'og_title', 'og_description', 'twitter_title', 'twitter_description') {
+      $v = [string]$live.$fld; if (-not $v) { continue }; $v0 = $v
+      if ($e.title_old -and $e.title_new -and [string]$e.title_old -ne [string]$e.title_new) { $v = $v.Replace([string]$e.title_old, [string]$e.title_new) }
+      foreach ($x in @($e.field_edits)) { if ($x) { $v = $v.Replace([string]$x.find, [string]$x.replace) } }
+      $lf = Find-TcGroceryPriceLiterals $v
+      if ($lf.Count) { $fbad += ("$fld still carries " + (($lf | ForEach-Object { $_.figure }) -join ', ')) }
+      if ($fld -eq 'custom_excerpt' -and $v.Length -gt 300) { $fbad += "custom_excerpt is $($v.Length) chars (Ghost 422 above 300)" }
+      if (-not [string]::Equals($v, $v0, [StringComparison]::Ordinal)) { $upd[$fld] = $v }
+    }
+    if ($fbad.Count) { $bad += ("{0}: {1}" -f $e.slug, ($fbad -join '; ')); continue }
+    $body = @{ $res = @($upd) } | ConvertTo-Json -Depth 6 -Compress
     if ($Apply) { Invoke-GhostApi -Method PUT -Uri ("$API/ghost/api/admin/$res/$($e.id)/") -Headers (& $hdr) -Body ([Text.Encoding]::UTF8.GetBytes($body)) -TimeoutSec 90 | Out-Null; Write-Output ("LANDED  " + $e.slug) }
-    else { Write-Output ("WOULD PUT  {0} {1} title '{2}' ({3} replacement(s))" -f $res, $e.slug, $e.title_new, @($e.replacements).Count) }
+    else { Write-Output ("WOULD PUT  {0} {1} title '{2}' ({3} replacement(s); fields: {4})" -f $res, $e.slug, $e.title_new, @($e.replacements).Count, ((@($upd.Keys) | Where-Object { $_ -notin 'lexical','title','updated_at' }) -join ',')) }
     $ok++
   }
   foreach ($x in $bad) { Write-Output ('REFUSED  ' + $x) }

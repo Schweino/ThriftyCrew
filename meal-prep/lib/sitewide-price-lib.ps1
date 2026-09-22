@@ -48,12 +48,15 @@ function Get-TcPageBody { param([string]$Html)
   return [string]$Html
 }
 
-# Every literal in $Text, each with 60 characters before and 30 after so a reader sees what it prices.
+# Every literal in $Text, each with 60 characters before and 30 after so a reader sees what it prices, and its SPAN
+# (index, length). Regex matches never overlap, so the count is one per literal; a caller asking whether some other
+# figure is a literal compares SPANS, never text (2026-09-22: a text Contains marked "$1 a month" as a literal because
+# "$1.50 a pound" contains "$1"; the monitor's count was never affected).
 function Find-TcGroceryPriceLiterals { param([string]$Text)
   $out = New-Object System.Collections.Generic.List[object]
   foreach ($m in [regex]::Matches([string]$Text, $script:TC_GROCERY_PRICE_RE)) {
     $a = [Math]::Max(0, $m.Index - 60); $b = [Math]::Min($Text.Length, $m.Index + $m.Length + 30)
-    $out.Add([pscustomobject]@{ figure = $m.Value; context = $Text.Substring($a, $b - $a) })
+    $out.Add([pscustomobject]@{ figure = $m.Value; context = $Text.Substring($a, $b - $a); index = $m.Index; length = $m.Length })
   }
   return ,$out.ToArray()
 }
