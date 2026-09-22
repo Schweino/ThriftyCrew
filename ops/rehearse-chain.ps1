@@ -93,6 +93,8 @@ $script:RhRoot = Split-Path -Parent $PSScriptRoot
 . (Join-Path $script:RhRoot 'lib\git-repo-env.ps1')    # Clear-TcGitRepoEnv
 . (Join-Path $script:RhRoot 'lib\atomic-write.ps1')    # Write-TcAtomicFile
 . (Join-Path $script:RhRoot 'lib\append-line.ps1')     # Add-TcLine
+. (Join-Path $script:RhRoot 'lib\gate-slots.ps1')     # Enter-TcGateSlots / Exit-TcGateSlots: the rehearsal cap is a slot budget, not a second lock
+. (Join-Path $script:RhRoot 'lib\mutex-hold.ps1')     # Start-TcMutexHold: the self-test holds slots from ANOTHER process
 
 # Brad's F2 spec: "data no older than two days". The first number named, not a sweep. What it does when the producer
 # stops: no new board means the newest seeded board ages past it, every rehearsal is blind=stale-data, and every
@@ -106,7 +108,17 @@ $script:RhNoPublishCase = 'every reader-facing writer is reached only without -N
 # and the one that proves -ShipOnly stops at the ship boundary; a tree without it cannot be asked to stop there.
 $script:RhShipOnlyCase = '-ShipOnly exits after the last SHIP PATH COMPLETE line'
 $script:RhFull = [bool]$Full
-
+# AT MOST 6 REHEARSALS AT ONCE, machine-wide (Brad, 2026-09-22: "Can we cap at 6? I have a Ryzen 9 9950X CPU so I think
+# I have enough cores here to help with this and it shouldnt slow everything down?"). Brad's figure from a box of 32
+# logical processors and 61.6 GB RAM, NOT the survivor of a sweep; the per-rehearsal peak working set measured against it
+# is in plan-2026-09-22-7. Built on lib\gate-slots.ps1 (its own mutex prefix and queue, served in arrival order, exactly
+# as lib\push-lock.ps1 reuses it at a budget of one). A 7th WAITS and says so; it is never blind and never failed while
+# it waits. What it does when the producer stops: a slot holder that dies frees its mutex, and a queue that has not
+# moved for $RhSlotStallSec gives up with blind=no-rehearsal-slot, recorded nowhere (it says nothing about the content).
+$script:RhMaxConcurrent = 6
+$script:RhSlotPrefix = 'Global\tc-rehearsal-slot-'
+# The first plausible number: four ship-path rehearsals (~15 min each) in a row with no slot freed means a wedge.
+$script:RhSlotStallSec = 3600
 function Invoke-RhGit([string]$Repo, [string[]]$GitArgs) { return (Invoke-GitCaptured -Repo $Repo -GitArgs $GitArgs) }
 
 function Get-RhVerdictDir([string]$Override) {
@@ -467,10 +479,11 @@ function Invoke-RhRehearsal {
   <# Rehearse $Commit, pair a failure against the base, record the verdict, remove every scratch path. Returns the record. #>
   param([string]$Repo, [string]$Commit = 'HEAD', [string]$SourceRoot = '', [string]$Remote = 'origin', [string]$Branch = 'main',
         [string]$VerdictDir, [switch]$NoPair, [int]$TimeoutMin = 90, [datetime]$Today = (Get-Date),
-        [scriptblock]$Seeder = $script:RhDefaultSeeder, [scriptblock]$ChainRunner = $script:RhDefaultChainRunner)
+        [scriptblock]$Seeder = $script:RhDefaultSeeder, [scriptblock]$ChainRunner = $script:RhDefaultChainRunner,
+        [int]$SlotTotal = $script:RhMaxConcurrent, [string]$SlotPrefix = $script:RhSlotPrefix, [string]$SlotQueueRoot = $script:TcGateQueueRoot, [int]$SlotStallSec = $script:RhSlotStallSec)
   $t0 = [DateTime]::UtcNow
   $rec = [ordered]@{ result = 'blind'; blind = ''; key = ''; commit = ''; stage = ''; cause = ''; words = @(); data_date = ''; preexisting = @();
-    stages = $null; base = ''; scratch = ''; scope = $(if ($script:RhFull) { 'full' } else { 'ship-only' }); secs = 0; utc = ''; harness = 'ops\rehearse-chain.ps1'; harness_blob = '' }
+    stages = $null; base = ''; scratch = ''; scope = $(if ($script:RhFull) { 'full' } else { 'ship-only' }); slot_waited_s = 0; secs = 0; utc = ''; harness = 'ops\rehearse-chain.ps1'; harness_blob = '' }
   $hb = Invoke-RhGit $script:RhRoot @('hash-object', (Join-Path $script:RhRoot 'ops\rehearse-chain.ps1'))
   if ($hb.rc -eq 0) { $rec.harness_blob = ([string]$hb.stdout).Trim() }
   $finish = {
@@ -493,6 +506,19 @@ function Invoke-RhRehearsal {
   if (-not $srcDate) { $rec.blind = 'no-seed-board'; $rec.cause = ('the source checkout ' + $SourceRoot + ' holds no comparison board (comparison-*.json)'); return (& $finish) }
   $sd = [datetime]::ParseExact($srcDate, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
   if (($Today.Date - $sd).Days -gt $ms.MaxAge) { $rec.blind = 'stale-data'; $rec.data_date = $srcDate; $rec.cause = ('the newest board in ' + $SourceRoot + ' is ' + $srcDate + ', older than ' + $ms.MaxAge + ' day(s)'); return (& $finish) }
+  # THE CAP, taken before any clone exists. Waiting is not a verdict: nothing is recorded while this waits.
+  $slot = $null
+  try {
+    $slot = Enter-TcGateSlots -Want 1 -Total $SlotTotal -Prefix $SlotPrefix -QueueRoot $SlotQueueRoot -WaitSec $SlotStallSec -PollMs 500 `
+      -OnWait { param($ahead) Write-Host ('chain-rehearsal: WAITING for a rehearsal slot - all {0} are in use (Brad''s cap), {1} rehearsal(s) queued ahead of this one. This is a wait, not a failure.' -f $SlotTotal, $ahead) }
+  } catch { $slot = $null; Write-Host ('chain-rehearsal: the rehearsal slot queue could not be read (' + $_.Exception.Message + '); not rehearsing rather than exceeding the cap') }
+  if ($null -eq $slot -or $slot.TimedOut -or $slot.Count -lt 1) {
+    if ($slot) { Exit-TcGateSlots $slot }
+    $rec.blind = 'no-rehearsal-slot'; $rec.cause = ('no rehearsal slot came free: the queue of rehearsals did not move for ' + $SlotStallSec + ' s; nothing was recorded for this content, so rehearse again')
+    $rec.secs = [int]([DateTime]::UtcNow - $t0).TotalSeconds; $rec.utc = [DateTime]::UtcNow.ToString('o')
+    return [pscustomobject]$rec
+  }
+  $rec.slot_waited_s = [int]($slot.WaitedMs / 1000)
   $runRoot = Join-Path $env:TEMP ('tc-rh-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
   $null = New-Item -ItemType Directory -Path $runRoot -ErrorAction Stop
   $rec.scratch = $runRoot
@@ -517,6 +543,7 @@ function Invoke-RhRehearsal {
     return (& $finish)
   } finally {
     Remove-Item -LiteralPath $runRoot -Recurse -Force -ErrorAction SilentlyContinue
+    Exit-TcGateSlots $slot
     if (Test-Path -LiteralPath $runRoot) { Write-Host ('chain-rehearsal: LEFTOVER - the scratch root ' + $runRoot + ' could not be removed (a process may still hold a file in it); remove it by hand') }
   }
 }
@@ -727,12 +754,46 @@ if ($SelfTest) {
     Test-RhCase 'MUST FIRE  a seed that carries a live credential is never started: blind=credential-present' { ($cred.result -eq 'blind') -and ($cred.blind -eq 'credential-present'), ($cred.result + ' ' + $cred.blind) }
     $stale = Invoke-RhRehearsal -Repo $src -Commit 'HEAD' -SourceRoot $seedDir -VerdictDir $vd -Today ([datetime]'2026-09-24') -Seeder $fakeSeeder -ChainRunner (& $mkRunner $false) -NoPair
     Test-RhCase 'MUST FIRE  data older than the bar is not rehearsed over: blind=stale-data (09-21 board on 09-24)' { ($stale.result -eq 'blind') -and ($stale.blind -eq 'stale-data'), ($stale.result + ' ' + $stale.blind) }
-  } finally {
+
+    # ---- 4. BRAD'S CAP: at most 6 at once, through gate-slots with a private prefix and queue. Slots are held from
+    # OTHER processes (lib\mutex-hold.ps1), because a Windows mutex is reentrant on its owning thread.
+    $capPrefix = 'Global\tc-rhst-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '-'
+    $capQueue = Join-Path $st 'q'
+    $holds = New-Object Collections.ArrayList
+    try {
+      for ($i = 0; $i -lt 5; $i++) { [void]$holds.Add((Start-TcMutexHold -Name ($capPrefix + $i))) }
+      $sixth = Enter-TcGateSlots -Want 1 -Total $script:RhMaxConcurrent -Prefix $capPrefix -QueueRoot $capQueue -WaitSec 5 -PollMs 100 -OnWait { param($a) $script:rhSixthWaited = $true }
+      $script:rhSixthWaited = [bool]$script:rhSixthWaited
+      $sixthGot = $sixth.Count
+      Exit-TcGateSlots $sixth
+      Test-RhCase ('MUST NOT FIRE  with 5 of the ' + $script:RhMaxConcurrent + ' rehearsal slots held elsewhere, a 6th starts at once without waiting') {
+        (@($holds | Where-Object { $_.Held }).Count -eq 5) -and ($sixthGot -eq 1) -and (-not $script:rhSixthWaited), ('held=' + @($holds | Where-Object { $_.Held }).Count + ' got=' + $sixthGot + ' waited=' + $script:rhSixthWaited)
+      }
+      [void]$holds.Add((Start-TcMutexHold -Name ($capPrefix + 5)))
+      $vd2 = Join-Path $st 'verdicts-cap'
+      $capArgs = @{ Repo = $src; Commit = 'HEAD'; SourceRoot = $seedDir; VerdictDir = $vd2; Today = $today; Seeder = $fakeSeeder; ChainRunner = (& $mkRunner $false); NoPair = $true;
+        SlotTotal = $script:RhMaxConcurrent; SlotPrefix = $capPrefix; SlotQueueRoot = $capQueue }
+      $seventhOut = @(& { Invoke-RhRehearsal @capArgs -SlotStallSec 3 } 6>&1)
+      $seventh = @($seventhOut | Where-Object { $_ -is [pscustomobject] -and $_.PSObject.Properties['result'] })[0]
+      $waitLines = @($seventhOut | Where-Object { ([string]$_) -match 'WAITING for a rehearsal slot - all 6 are in use' })
+      Test-RhCase 'MUST FIRE  with all 6 slots held, a 7th rehearsal WAITS and says so, and runs no clone while it waits' {
+        ($waitLines.Count -ge 1) -and ($seventh.blind -eq 'no-rehearsal-slot') -and (-not $seventh.scratch), ('wait lines=' + $waitLines.Count + ' blind=' + $seventh.blind + ' scratch=' + $seventh.scratch)
+      }
+      $dWait = Get-RhPushDecision -Repo $src -RefLines @('refs/heads/main ' + $srcHead + ' refs/heads/main ' + (([string](Invoke-RhGit $src @('rev-parse', 'HEAD~1')).stdout).Trim())) -VerdictDir $vd2 -Today $today
+      Test-RhCase 'MUST NOT FIRE  the waiting 7th is never recorded as blind or failed: no verdict exists for its content, so the push reads no-verdict' {
+        ($null -eq (Read-RhVerdict $vd2 $seventh.key)) -and ($dWait.Outcome -eq 'no-verdict'), ('verdict=' + [bool](Read-RhVerdict $vd2 $seventh.key) + ' outcome=' + $dWait.Outcome)
+      }
+      Stop-TcMutexHold $holds[0]; $holds.RemoveAt(0)
+      $afterFree = Invoke-RhRehearsal @capArgs -SlotStallSec 30
+      Test-RhCase 'CLEAN TWIN  once one of the 6 slots frees, the same rehearsal runs and passes' { ($afterFree.result -eq 'pass'), ($afterFree.result + ' ' + $afterFree.blind + ' ' + $afterFree.cause) }
+    } finally {
+      foreach ($h in @($holds.ToArray())) { Stop-TcMutexHold $h }
+    }  } finally {
     if ($null -eq $savedVd) { Remove-Item Env:\TC_REHEARSAL_VERDICT_DIR -ErrorAction SilentlyContinue } else { $env:TC_REHEARSAL_VERDICT_DIR = $savedVd }
     if ($null -eq $savedBy) { Remove-Item Env:\TC_NO_REHEARSAL -ErrorAction SilentlyContinue } else { $env:TC_NO_REHEARSAL = $savedBy }
     Remove-Item -LiteralPath $st -Recurse -Force -ErrorAction SilentlyContinue
   }
-  $want = 20
+  $want = 24
   if ($script:rhCases -ne $want) { Write-Output ('rehearse-chain self-test FAIL: ran {0} case(s), the suite lists {1}' -f $script:rhCases, $want); exit 1 }
   if ($script:rhFail) { Write-Output ('rehearse-chain self-test FAIL: {0} of {1} case(s)' -f $script:rhFail, $script:rhCases); exit 1 }
   Write-Output ('rehearse-chain self-test PASS: {0} of {0} cases - led by the founding defect (an empty cost-flags.txt refused by the 09-05 hook) and a manifest change with no verdict being refused' -f $script:rhCases)
