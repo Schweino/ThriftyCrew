@@ -9,8 +9,8 @@
   "escalation"
  ],
  "resolver_ratchet": {
-  "unassigned_max": 43,
-  "set": "2026-09-22 (185 at the contract; 176 after batch 1; 43 after ops lane plan-2026-09-22-8 group D, residual 2026-09-22-5d20b9)",
+  "unassigned_max": 4,
+  "set": "2026-09-22 (185 at the contract; 176 after batch 1; 4 after ops lane plan-2026-09-22-8 group E, residual 2026-09-22-5d20b9)",
   "why": "a ratchet, not a gate red on day one: the entries registered before the resolver contract are counted here and the count may only fall. audit-alert-registry fails a registry holding more, and says 'ratchet CAN tighten' when it holds fewer, without rewriting this number (a plain run never writes its mark)."
  },
  "entries": [
@@ -94,7 +94,7 @@
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/audit-board-mojibake.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "board-prices-aging",
@@ -450,7 +450,7 @@
    "class": "page",
    "condition": "2 watcher-cannot-see",
    "emitter": "ops/sidecar-watchdog.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "runaway-process-reaped",
@@ -460,7 +460,7 @@
    "condition": "review: the process was orphaned, read-only and spinning, this script killed it and the core is back, so no human has to act - which is the page test. The line exists so a kill can never be silent and so a rising rate of them shows up as the estate leaking sessions",
    "emitter": "ops/reap-runaway-processes.ps1",
    "note": "Born 2026-09-20 with the reaper. Its twin, runaway-process-unowned, is the half that pages.",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "runaway-process-unowned",
@@ -470,7 +470,7 @@
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "ops/reap-runaway-processes.ps1",
    "note": "A process nothing owns is burning CPU and the reaper deliberately refused to kill it, because it is not a read-only git command and a kill could leave a lock or a half-written file. Only a person can decide, and until one does it keeps the core. The founding case wasted 28.8 CPU-hours over 29.2 hours before a human noticed it by eye. Split from runaway-process-reaped the day both were written (Brad, 2026-09-20): one subject for both would have let the quiet half set the class for the urgent one, leaving a burning core in the weekly lane for up to a week.",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "manifest-refused-stale-feed",
@@ -479,7 +479,7 @@
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "meal-prep/pipeline/compute-v2-perserving.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "manifest-skipped",
@@ -614,7 +614,7 @@
    "class": "page",
    "condition": "2 watcher-cannot-see",
    "emitter": "meal-prep/pipeline/harvest-crawl.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "live-without-review",
@@ -623,7 +623,7 @@
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "agent (recipe hunter session; no call site in the tree)",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "site-down",
@@ -632,7 +632,7 @@
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "agent (no call site in the tree)",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "paywall-leak",
@@ -642,7 +642,7 @@
    "condition": "Brad ruling R14 (2026-09-10): a paid page served free goes to the review list, not email",
    "emitter": "meal-prep/pipeline/audit-paid-not-public.ps1",
    "note": "Recommended page because it loses money on a live page; Brad chose review.",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "needs-brad",
@@ -651,7 +651,7 @@
    "class": "page",
    "condition": "escalation",
    "emitter": "meal-prep/set-recipe-visibility.ps1 and triage agents",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "ruling:open_questions_for_brad"
   },
   {
    "id": "price-alerts-held",
@@ -660,7 +660,7 @@
    "class": "page",
    "condition": "escalation",
    "emitter": "grocery/send-price-alerts.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "friday-email-refused",
@@ -669,7 +669,7 @@
    "class": "page",
    "condition": "escalation",
    "emitter": "grocery/send-friday-email.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "your-call",
@@ -741,7 +741,7 @@
    "class": "page",
    "condition": "escalation",
    "emitter": "agent (a correction must reach the inbox the wrong page reached)",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "match-soundness",
@@ -762,7 +762,7 @@
    "condition": "review intake: the matching-rule files in the checkout the chain read differ from HEAD, so the MOVED/DROPPED lines are an uncommitted edit's own effect (the 2026-09-19 17:29 shape). Publish holds until the author accepts and commits.",
    "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-7.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "match-soundness-rule-change-unreviewed",
@@ -772,7 +772,7 @@
    "condition": "review intake: committed matching rules the baseline was never accepted against (a gate bypass, a rebase that merged two rule edits, or a baseline restored over an accept; the 2026-09-20 5d42fb944 shape). Publish holds until someone reviews the lines, runs -Accept and commits the baseline.",
    "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-7.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "match-soundness-moved-no-rule-change",
@@ -782,7 +782,7 @@
    "condition": "review intake: names moved although the rules hash equals the baseline's, so the matcher code or the baseline file changed; the one drift nobody authored. Publish holds.",
    "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-7.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "match-soundness-new-contested",
@@ -792,7 +792,7 @@
    "condition": "review intake: products arriving in the captures that two or more rules admit, resolved by array order. A real defect detector: 6 of the 9 new-contested-only days closed with notes from 2026-08-30 to 2026-09-08 found a misroute, two of them live on the board. Its returns are new arrivals by construction.",
    "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-7.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "match-soundness-matcher-drift",
@@ -802,7 +802,7 @@
    "condition": "review intake: this audit's matcher and the engine's candidates disagree on named products, so the audit may no longer mirror the engine. Fired on 0 of the 18 days of the old type.",
    "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-7.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "price-disagreement",
@@ -899,7 +899,7 @@
    "class": "review",
    "condition": "review intake: a carried item left the pull, the 90-day carry still covers the cell",
    "emitter": "grocery/audit-ff-carry.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "no-category",
@@ -908,7 +908,7 @@
    "class": "review",
    "condition": "a filter hygiene gap, nothing priced wrong",
    "emitter": "grocery/audit-category-coverage.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "test-auditors-hygiene",
@@ -981,7 +981,7 @@
    "class": "review",
    "condition": "the engine already clamped the inversion; review why it happened",
    "emitter": "meal-prep/pipeline/compute-v2-perserving.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "walmart-capture-aging",
@@ -1072,7 +1072,7 @@
    "class": "review",
    "condition": "a Find at store search template is broken; prices are right, a link is not",
    "emitter": "grocery/audit-search-links.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "bakers-adflip",
@@ -1108,7 +1108,7 @@
    "class": "review",
    "condition": "a one-off defect finding filed by an agent",
    "emitter": "agent (no call site in the tree)",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "make-it-single-step",
@@ -1117,7 +1117,7 @@
    "class": "review",
    "condition": "a one-off defect finding filed by an agent",
    "emitter": "agent (no call site in the tree)",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "scaler-unit-word",
@@ -1126,7 +1126,7 @@
    "class": "review",
    "condition": "a one-off defect finding filed by an agent",
    "emitter": "agent (no call site in the tree)",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "mutexprobe",
@@ -1135,7 +1135,7 @@
    "class": "review",
    "condition": "a test artifact from the 2026-08-23 mutex verification, never a real alert",
    "emitter": "none (hand-run probe)",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "recall-sleep-red",
@@ -1164,7 +1164,7 @@
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/record-sample-verdict.ps1",
    "note": "Registered 2026-09-19 (backlog I232): the 14-day out-of-band verification measured a higher whole-board defect rate than the last run. Brad's ruling is that this mails him. It paged as UNREGISTERED ALERT TYPE on its first firing, 2026-09-19, because audit-alert-registry lists the call site UNREADABLE: the subject is built with -f inside Invoke-RateAlert and handed through a scriptblock.",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "brain-digest",
@@ -1182,7 +1182,7 @@
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "meal-prep/pipeline/monitor-live-recipe-prices.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "live-recipe-price-monitor-blind",
@@ -1191,7 +1191,7 @@
    "class": "page",
    "condition": "2 watcher-cannot-see",
    "emitter": "meal-prep/pipeline/monitor-live-recipe-prices.ps1",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "watchdog-no-board-at-all",
@@ -1812,7 +1812,7 @@
    "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
    "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "store-registry-orphaned-store-subset-exemption",
@@ -1822,7 +1822,7 @@
    "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
    "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "store-registry-duplicate-registry-name",
@@ -1832,7 +1832,7 @@
    "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
    "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "store-registry-board-and-registry-disagree",
@@ -1842,7 +1842,7 @@
    "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
    "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "store-registry-unregistered-capture-file-prefix",
@@ -1852,7 +1852,7 @@
    "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
    "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "store-registry-ad-schedule-names-an-unregistered-store",
@@ -1862,7 +1862,7 @@
    "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
    "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "ff-catalog-starved-terms-aging-out",
@@ -1872,7 +1872,7 @@
    "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10), kept per signal",
    "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "ff-catalog-mass-expiry-in-one-run",
@@ -1882,7 +1882,7 @@
    "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10), kept per signal",
    "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "ff-catalog-sweep-is-not-buying",
@@ -1892,7 +1892,7 @@
    "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10), kept per signal",
    "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "ff-catalog-merged-catalog-shrank",
@@ -1902,7 +1902,7 @@
    "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10), kept per signal",
    "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "digest"
   },
   {
    "id": "watchdog-digest",
