@@ -1,0 +1,101 @@
+{
+  "generated": "2026-09-22T17:30:00",
+  "round": 1,
+  "kind": "ops-lane-batch-4",
+  "board_week": "comparison-2026-09-22 (built 08:13:10 in the main checkout); the harness reads it through a seeded scratch clone and changes no board, price or matching rule",
+  "parent_plan": "grocery/triage-plans/plan-2026-09-22-2.json (batch 4 of design/RCA-holistic-2026-09-22.md, gap F2); Brad approved it with \"A\", including its cost",
+  "queue_ids_seen": [
+    "discovered:chain-rehearsal-2026-09-22"
+  ],
+  "routing_artifact": "",
+  "routing_artifact_note": "No item changes a matching rule, a price, a band or a board cell. grocery/check-ad-cycles.ps1 is touched only to make -NoPublish hold the seven reader-facing writers it did not hold; nothing on THE LINE is edited.",
+  "knowledge_consulted": "Searched \"rehearsal integration test real data\" (knowledge-search, 956 sections matched; top hit reliability-craft/rca-and-chaos.md 'Where it fits', chaos as a maturity stage with CI/CD integration). Used: reliability-craft/rca-and-chaos.md 'The four techniques' (a root cause you can fix without changing how work is done is usually not the root cause yet: this batch is the change to how work is done); repo CLAUDE.md 'The gate' (THE GATE MUST NOT RUN INSIDE THE LOCK, the exit-3 blind= token vocabulary, gate-verdict's per-content verdict); .claude/rules/ops-and-gates.md (fixture vocabulary, a self-test's last line names itself, a self-test block leaves on every path, per-run temp names removed in finally, a child a gate spawns writes no tracked path, a sandbox copies the whole lib, no upper wall-clock bar in a hermetic test, at-the-bar and one-past-the-bar cases, assign-then-wrap). Memory a-could-not-look-must-not-settle-the-question (the third outcome). searched \"gate verdict fingerprint\", \"push lock outside gate\": the repo CLAUDE.md sections above were the applicable text.",
+  "items": [
+    {
+      "queue_id": "discovered:chain-rehearsal-2026-09-22",
+      "subject": "A change to the daily chain is rehearsed over the real data before it pushes, so the production run is not its first integration test",
+      "family": "F2",
+      "classification": "infra",
+      "evidence": [
+        "capture-run-daily logs: 19 of the last 28 daily runs ended with a FAILED LANES line (dispatch measurement); plan-2026-09-22-2 counted 18 of 25 logged days since 08-24",
+        "8 of the defects of 2026-09-20 to 2026-09-22 passed run-gates and failed on the next real board (plan-2026-09-22-2, F2 evidence)",
+        "founder: ba13faba0 (money lane 148d78) records HEAD:meal-prep/db/cost-flags.txt 4392 bytes opening EF BB BF, the working tree 0 bytes, and verify-bulk-edit's Test-BomUnchanged reading BOM -> nothing as a stripped BOM; the refused daily commit held public/board.json for five hours",
+        "MEASURED WHILE BUILDING: check-ad-cycles -NoPublish held ONLY publish-deals-page. Under it the chain still ran Invoke-TcGatedRepublish (meal-prep/engine/publish.ps1 to Ghost), top5-weekly, rotate-free-dinners, build-hub-grid -Publish, send-price-alerts (member mail), send-friday-digest and notify-item-added (requester mail). A rehearsal built on the switch as named would have published cards and mailed members",
+        "MEASURED WHILE BUILDING: grocery/alert-lib.ps1 sends from a LINKED worktree through the MAIN checkout's send-alert.ps1, with the real credential and the real triage queue, so a rehearsal in a linked worktree would page for real; a standalone clone sends through its own sender and has no credential"
+      ],
+      "surface_fix": {
+        "what": "ops/rehearse-chain.ps1 rehearses one commit in a standalone scratch clone seeded with the real out/ and db/, and records its verdict per content key",
+        "files": [
+          "ops/rehearse-chain.ps1",
+          "ops/chain-manifest.json"
+        ],
+        "exact_change": "clone --shared --no-checkout into %TEMP%\\tc-rh-<id>\\<arm>, push URL set to a path that does not exist, ops/seed-worktree.ps1 -Target <clone> -Source <main checkout>, refuse (blind=credential-present) a seed carrying google-oauth-client.json, google-oauth-token.json or meal-prep/.ghostkey, run the tree's own check-ad-cycles -SelfTest and refuse (blind=nopublish-unproven) unless its -NoPublish case passes by name, run check-ad-cycles -NoPull -NoCommit -NoPublish -NoAlert -ShipOnly (new: stops at the ship boundary, refused without -NoCommit, required by name like the -NoPublish case; -Full runs the whole chain) in a child with a sentinel GHOST_ADMIN_KEY, sentinel Kroger credentials, TC_REHEARSAL=1 and no GIT_* variable, read grocery/out/chain-verdict.json written by this run, then stage lib/bot-paths.ps1's owned paths under a private index and commit as smp-pipeline-bot through the tree's own ops/hooks/pre-commit installed into the clone's own .git/hooks. Stages chain, guards, commit. Exit 0 pass, 1 fail, 3 blind=<cause>. A failure is paired against the merge-base with origin/main over a freshly seeded arm: a stage failing on the base too is PREEXISTING and does not refuse. Verdict JSON at %LOCALAPPDATA%\\ThriftyCrew\\chain-rehearsal\\<key>.json, key = SHA-256 of the manifest set's path+blob lines; the run root is removed in finally and a leftover is printed"
+      },
+      "root_cause": "the estate proves a change against fixtures at push and against reality the next morning, by a different actor (the bot); a fixture cannot contain yesterday's empty cost-flags.txt or yesterday's board, so a change whose inputs are the pipeline's own outputs met them for the first time in production (F2). And the one switch that would have let anyone rehearse safely, -NoPublish, did not mean what it said",
+      "root_fix": {
+        "what": "a push to main that changes a chain-manifest script carries a recorded rehearsal pass over data at most 2 days old, or pre-push refuses it; the rehearsal runs outside the push lock",
+        "files": [
+          "ops/hooks/pre-push",
+          "ops/push-main.ps1",
+          "ops/chain-manifest.json",
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "exact_change": "pre-push: after the test-auditors leg and BEFORE take_push_lock, `rehearse-chain.ps1 -CheckPush -RefsFromStdin` decides from the record in seconds (exit 1 no-verdict / rehearsed-fail / stale, exit 3 could-not-rehearse with its blind= cause, an exit 0 without the CHAIN-REHEARSAL-CHECK-COMPLETE marker is refused); TC_NO_REHEARSAL=<reason> is the loud bypass, printed and appended to bypass-log.jsonl beside the verdicts; a checkout with no rehearse-chain.ps1 says so and is not asked (the hold-push-lock older-checkout rule). push-main: after its gate and before Enter-TcPushLock, `rehearse-chain.ps1 -ForPush` rehearses HEAD when the push touches the manifest and no usable verdict exists, then refuses 1 or 3 before the queue; -NoRehearsal [-NoRehearsalReason] sets TC_NO_REHEARSAL. check-ad-cycles: the seven reader-facing writers now sit under -NoPublish, fixtured by the AST case 'MUST FIRE  every reader-facing writer is reached only without -NoPublish', which the harness requires by name before starting a tree. Manifest: files, globs, every .ps1 named by guards/compare-deals/capture-run, minus exclude_globs (tests, run-gates, prepush-*, the store pulls)"
+      },
+      "prevention": {
+        "source": "ops/hooks/pre-push",
+        "what": "the push path itself carries the chain's first real run, instead of the 07:00 bot",
+        "exact_change": "as root_fix; installed at landing by ops/install-hooks.ps1, never from this worktree"
+      },
+      "leaves_open": "(1) a failure that needs TODAY's data (a store rendering first seen the same morning, like Sam's on 09-21, e291a1) is still first met in production: 1 of the 8. (2) Stages behind -NoPull (the store pulls, now excluded from the manifest) and behind -NoPublish (publish-deals-page, the recipe republish, hub, member mail) are never rehearsed, by design. (3) capture-run's commit-size gate is not rehearsed; only the pre-commit hook judges the staged set. (4) The cost: see resolution_note; measured over origin/main 2026-09-19 to 2026-09-22, 58 of 193 non-bot commits touched the manifest set (about 14 a day; pushes batch commits, so fewer rehearsals than that). (5) Concurrent rehearsals are not bounded machine-wide: each is a full chain run and takes no gate slot. (6) The hook is not installed and nothing is pushed until the integrator lands it.",
+      "leaves_open_occurrences": 1,
+      "blast_radius": {
+        "measured_as": "commits",
+        "measured_by": "git log --first-parent origin/main 2026-09-19..2026-09-22, non-bot commits whose diff-tree touches the manifest set resolved at this branch's HEAD (130 files after exclude_globs; 148 before, when 72 of 193 were hit, test-auditors.ps1 alone 15)",
+        "affected_now": 58,
+        "names": [
+          "by day: 09-18 (late UTC) 4, 09-19 28, 09-20 8, 09-21 11, 09-22 7",
+          "most touched: grocery/check-ad-cycles.ps1 19, grocery/capture-policy-lib.ps1 8, grocery/compare-deals.ps1 6, meal-prep/engine/cost-recipes.ps1 6"
+        ],
+        "risk": "every session's push to main on the box changes once the hook is installed: a chain-touching push waits for a rehearsal (push-main runs it) or is refused until one is recorded. A rehearsal is a full chain run on the shared 32-core box and is not slot-bounded.",
+        "cell_effects": []
+      },
+      "freshness": "measured against origin/main at ad9463e14's parent and the main checkout's grocery/out on 2026-09-22 (newest board comparison-2026-09-22.json, 08:13:10)",
+      "proof": {
+        "guard_or_fixture": "ops/rehearse-chain.ps1 -SelfTest (20 cases) + ops/test-prepush-hook.ps1 (3 new cases through the real hook from a sandbox linked worktree) + ops/push-main.ps1 -SelfTest (4 new cases) + grocery/check-ad-cycles.ps1 -SelfTest (1 new case)",
+        "must_fire_case": "frozen: a fixture repo holding the 09-05 hook from its blobs (ops/verify-bulk-edit.ps1 08e1381de, ops/hooks/pre-commit at ba13faba0^) and a committed cost-flags.txt of EF BB BF + text, emptied to 0 bytes: the harness's commit stage is REFUSED with the hook's own 'BOM CHANGED ... cost-flags.txt'. And: a push to main changing a manifest script with no verdict is refused, by the harness's decision and by the real hook",
+        "clean_twin": "the same empty file through TODAY's hook is committed as smp-pipeline-bot; -NoRehearsal / TC_NO_REHEARSAL still lets a chain-touching push through, printed as *** REHEARSAL BYPASSED *** and logged with its reason; a push touching no manifest script is not asked (MUST NOT FIRE); a rehearsal that could not run is exit 3 naming blind=no-seed-board, never a pass (MUST NOT FIRE); pass AT the 2-day bar allowed, one day past refused",
+        "commands": [
+          "powershell -File ops/rehearse-chain.ps1 -SelfTest",
+          "powershell -File ops/test-prepush-hook.ps1",
+          "powershell -File ops/push-main.ps1 -SelfTest",
+          "powershell -File grocery/check-ad-cycles.ps1 -SelfTest",
+          "powershell -File ops/rehearse-chain.ps1 -Source C:\\Codex\\ThriftyCrew"
+        ]
+      },
+      "rollback": "remove the rehearse-chain clause from ops/hooks/pre-push (and re-run install-hooks) and the rehearsal call from push-main; the harness stays as a hand tool. The -NoPublish gating in check-ad-cycles stays: it is correct on its own.",
+      "do_not_touch": [
+        "run-gates' hermetic rule (the rehearsal is its own leg, like prepush-test-auditors)",
+        "the push lock order (the rehearsal runs outside the lock, before it; the hook only reads a record)",
+        ".git/hooks and ops/install-hooks.ps1 from this worktree (the hooks dir is shared by every checkout)"
+      ],
+      "resolution_note": "Built on branch worktree-agent-a70f6312ae6fb14fc and NOT landed (no push, no merge, hook not installed). REAL COST, measured on this box through ops/rehearse-chain.ps1 (blob 3db0eb363, the harness_blob its verdict records): the default ship-path rehearsal of the branch HEAD over the main checkout\u0027s 2026-09-22 data took 807 s wall (13.5 min) end to end - standalone clone, seed, the -SelfTest interlock, check-ad-cycles -ShipOnly, and the bot\u0027s commit through the tree\u0027s own pre-commit - and PASSED (chain ok, guards ok, commit ok; key 011e16bc4d3b; data 2026-09-22). The first live run, of the previous commit and the WHOLE chain (what -Full now asks for), took 2,957 s (49 min), its ship path 829 s of that, and ended exit 3 blind (commit stage: capture-run\u0027s owned path grocery/sale-windows.json is gitignored and untracked, so git add exits 1 after adding the rest); the harness now does what capture-run does there. That could-not-rehearse was reported as exit 3 with its cause, never as a pass. Both runs: the main checkout\u0027s git status identical before and after (147/148 entries; the one new file, grocery/out/browser-slot-close-2026-09-22.json, was written at 15:15:01 by the scheduled task TC Grocery Browser Slot Close 1415, not the rehearsal), no tc-rh-* directory or rh-index-* file left in %TEMP%. The pre-push decision over that verdict (-CheckPush, refs HEAD over origin/main) printed PASSED, exit 0. A failing rehearsal pays a second arm for the base pairing; neither live run failed a stage, so the pairing ran only in fixtures (stated, not measured).",
+      "publish_batch": 4,
+      "status": "deviated",
+      "premise_verified": "yes, with two corrections found while building: (a) check-ad-cycles -NoPublish held publish-deals-page only, so seven reader-facing writers were gated in this change before any rehearsal ran; (b) a linked worktree routes alerts through the main checkout's sender, so the scratch is a standalone clone, not a worktree. The founding defect reproduces from the old blobs: the 09-05 hook refuses the empty file, today's hook commits it.",
+      "deviation": "The spec's 'scratch worktree' became a standalone clone (reason: (b) above, plus its own index and hooks without touching the shared .git). The spec's 'seven builders, verify-*, guards and every delegated audit' became files + globs + a derive_from over guards, compare-deals and capture-run, minus exclude_globs (tests, run-gates, prepush-*, store pulls), because deriving from check-ad-cycles named ~150 advisory audits and, measured, the unexcluded set was hit by 72 of 193 non-bot commits in four days. A failed stage is paired against the base (not in the spec) so a data-caused guards hold (12 of 25 logged days) does not teach -NoRehearsal.",
+      "shipped_commit": "branch worktree-agent-a70f6312ae6fb14fc, pre-rebase commits ad9463e14 (harness, manifest, hook clause, push-main, -NoPublish gating) and 5d8201aa4 (-ShipOnly, exclude_globs, capture-run staging); cite blobs after landing, a rebase rewrites these ids",
+      "leaves_open_followup": "for the integrator at landing, not minted from this worktree: (1) the today's-data class has happened (e291a1), so it gets a weekly item through grocery/send-alert.ps1 -Force -Lane weekly with this measurement; (5) concurrency is open_questions_for_brad Q-rehearsal-concurrency; (2)(3) are stated limits by design; (4) is the approved cost; (6) is the landing itself"
+    }
+  ],
+  "ship_sequence": [
+    "BUILT on branch worktree-agent-a70f6312ae6fb14fc (not pushed, not merged, hook not installed).",
+    "LANDING (integrator, SECOND after batch 1): rebase the branch onto origin/main; re-run the four self-tests; rehearse the rebased HEAD once (powershell -File ops/rehearse-chain.ps1) because the landing push itself touches the manifest; land with ops/push-main.ps1 from the main checkout; THEN run powershell -File ops/install-hooks.ps1 in the main checkout so the shared .git/hooks/pre-push carries the clause, and ops/audit-hook-installed.ps1 to confirm it; batches 2 and 3 then land through it (each chain-touching one rehearsed, or -NoRehearsal with a reason)."
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q-rehearsal-concurrency",
+      "question": "A rehearsal is a full chain run and is not bounded machine-wide. With about 14 chain-touching commits a day (58 in four days), should rehearsals take gate worker slots (for example 8 of the 24) so that at most two or three run at once, at the price of queueing behind gates? Or leave them unbounded and watch the box?"
+    }
+  ]
+}

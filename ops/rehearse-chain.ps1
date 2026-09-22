@@ -136,7 +136,7 @@ function Get-RhTreeBlobs([string]$Repo, [string]$Rev) {
 
 function Get-RhManifestSet([string]$Repo, [string]$Rev) {
   <# The manifest set at $Rev: Ok, Absent (no manifest in that tree), Set (path -> blob), Key, MaxAge, Why. #>
-  $bad = { param($absent, $w) [pscustomobject]@{ Ok = $false; Absent = $absent; Set = $null; Key = ''; MaxAge = $script:RhMaxDataAgeDays; Why = $w } }
+  $bad = { param($absent, $w) [pscustomobject]@{ Ok = $false; Absent = $absent; Set = $null; Key = ''; MaxAge = $script:RhMaxDataAgeDays; BoardGlob = ''; VerdictPath = ''; Why = $w } }
   $tb = Get-RhTreeBlobs $Repo $Rev
   if (-not $tb.Ok) { return (& $bad $false $tb.Why) }
   $all = $tb.Map
@@ -187,7 +187,8 @@ function Get-RhManifestSet([string]$Repo, [string]$Rev) {
   finally { $sha.Dispose() }
   $maxAge = $script:RhMaxDataAgeDays
   if ($null -ne $doc.max_data_age_days) { $maxAge = [int]$doc.max_data_age_days }
-  return [pscustomobject]@{ Ok = $true; Absent = $false; Set = $set; Key = $key; MaxAge = $maxAge; Why = '' }
+  # WHERE THE CHAIN PUTS ITS OUTPUTS is declared by the manifest (the chain's contract), not spelled here.
+  return [pscustomobject]@{ Ok = $true; Absent = $false; Set = $set; Key = $key; MaxAge = $maxAge; BoardGlob = [string]$doc.board_glob; VerdictPath = [string]$doc.chain_verdict; Why = '' }
 }
 
 function Read-RhVerdict([string]$Dir, [string]$Key) {
@@ -283,12 +284,16 @@ function Get-RhPushDecision {
   return [pscustomobject]@{ Code = $code; Outcome = $outcome; Lines = @($lines) }
 }
 
-function Get-RhNewestBoardDate([string]$Root) {
-  $out = Join-Path $Root 'grocery\out'
+function Get-RhNewestBoardDate([string]$Root, [string]$BoardGlob) {
+  # $BoardGlob is the manifest's board_glob, one * standing for the board's yyyy-MM-dd.
+  if (-not $BoardGlob -or $BoardGlob -notmatch '^[^*]+/[^/*]*\*[^/*]*$') { return '' }
+  $out = Join-Path $Root ((Split-Path $BoardGlob -Parent) -replace '/', '\')
+  $leaf = Split-Path $BoardGlob -Leaf
   if (-not [IO.Directory]::Exists($out)) { return '' }
+  $rx = '^' + ([regex]::Escape($leaf) -replace '\\\*', '(\d{4}-\d{2}-\d{2})') + '$'
   $best = ''
-  foreach ($f in [IO.Directory]::GetFiles($out, 'comparison-*.json')) {
-    $m = [regex]::Match([IO.Path]::GetFileName($f), '^comparison-(\d{4}-\d{2}-\d{2})\.json$')
+  foreach ($f in [IO.Directory]::GetFiles($out, $leaf)) {
+    $m = [regex]::Match([IO.Path]::GetFileName($f), $rx)
     if ($m.Success -and [string]::CompareOrdinal($m.Groups[1].Value, $best) -gt 0) { $best = $m.Groups[1].Value }
   }
   return $best
@@ -406,7 +411,7 @@ $script:RhDefaultChainRunner = {
 function Invoke-RhArm {
   <# One rehearsal of one commit in its own clone. Result pass|fail|blind, Blind (cause), Stages (name -> ok|fail|blind),
      Failed (stage names), Why, Words, DataDate, Secs. The clone is left for the caller's finally to remove. #>
-  param([string]$Repo, [string]$Sha, [string]$SourceRoot, [string]$RunRoot, [string]$Arm, [scriptblock]$Seeder, [scriptblock]$ChainRunner, [int]$TimeoutMin)
+  param([string]$Repo, [string]$Sha, [string]$SourceRoot, [string]$RunRoot, [string]$Arm, [scriptblock]$Seeder, [scriptblock]$ChainRunner, [int]$TimeoutMin, $Manifest)
   $t0 = [DateTime]::UtcNow
   $stages = [ordered]@{ chain = 'not-run'; guards = 'not-run'; commit = 'not-run' }
   $mk = { param($result, $blind, $why, $words, $failed, $dd)
@@ -423,10 +428,10 @@ function Invoke-RhArm {
   foreach ($cp in $script:RhCredentialPaths) {
     if ([IO.File]::Exists((Join-Path $tree $cp))) { return (& $mk 'blind' 'credential-present' ('a live credential arrived in the scratch clone (' + $cp + '); a rehearsal must be unable to mail or publish, so it is not started') @() @() '') }
   }
-  $dd = Get-RhNewestBoardDate $tree
-  if (-not $dd) { return (& $mk 'blind' 'no-seed-board' 'the seed brought no grocery\out\comparison-*.json, so there is no real data to rehearse over' @() @() '') }
+  $dd = Get-RhNewestBoardDate $tree $Manifest.BoardGlob
+  if (-not $dd) { return (& $mk 'blind' 'no-seed-board' 'the seed brought no comparison board (comparison-*.json), so there is no real data to rehearse over' @() @() '') }
   $childEnv = @{ GHOST_ADMIN_KEY = $script:RhSentinelKey; KROGER_CLIENT_ID = 'tc-rehearsal-sentinel'; KROGER_CLIENT_SECRET = 'tc-rehearsal-sentinel'; TC_REHEARSAL = '1' }
-  $verdictPath = Join-Path $tree 'grocery\out\chain-verdict.json'
+  $verdictPath = Join-Path $tree ($Manifest.VerdictPath -replace '/', '\')
   $before = [DateTime]::UtcNow.AddSeconds(-2)
   $ch = & $ChainRunner $tree $TimeoutMin $childEnv
   if ($ch.Blind) { return (& $mk 'blind' $ch.Blind $ch.Why @() @() $dd) }
@@ -483,15 +488,16 @@ function Invoke-RhRehearsal {
   $rec.key = $ms.Key
   if (-not $SourceRoot) { $SourceRoot = Get-RhMainCheckout $Repo }
   if (-not $SourceRoot -or -not [IO.Directory]::Exists($SourceRoot)) { $rec.blind = 'no-source'; $rec.cause = 'no main checkout to seed from (pass -Source)'; return (& $finish) }
-  $srcDate = Get-RhNewestBoardDate $SourceRoot
-  if (-not $srcDate) { $rec.blind = 'no-seed-board'; $rec.cause = ('the source checkout ' + $SourceRoot + ' holds no grocery\out\comparison-*.json'); return (& $finish) }
+  if (-not $ms.BoardGlob -or -not $ms.VerdictPath) { $rec.blind = 'no-manifest-readable'; $rec.cause = 'the manifest at this commit declares no board_glob or chain_verdict, so there is nothing to seed-check or read'; return (& $finish) }
+  $srcDate = Get-RhNewestBoardDate $SourceRoot $ms.BoardGlob
+  if (-not $srcDate) { $rec.blind = 'no-seed-board'; $rec.cause = ('the source checkout ' + $SourceRoot + ' holds no comparison board (comparison-*.json)'); return (& $finish) }
   $sd = [datetime]::ParseExact($srcDate, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
   if (($Today.Date - $sd).Days -gt $ms.MaxAge) { $rec.blind = 'stale-data'; $rec.data_date = $srcDate; $rec.cause = ('the newest board in ' + $SourceRoot + ' is ' + $srcDate + ', older than ' + $ms.MaxAge + ' day(s)'); return (& $finish) }
   $runRoot = Join-Path $env:TEMP ('tc-rh-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
   $null = New-Item -ItemType Directory -Path $runRoot -ErrorAction Stop
   $rec.scratch = $runRoot
   try {
-    $a = Invoke-RhArm -Repo $Repo -Sha $sha -SourceRoot $SourceRoot -RunRoot $runRoot -Arm 'h' -Seeder $Seeder -ChainRunner $ChainRunner -TimeoutMin $TimeoutMin
+    $a = Invoke-RhArm -Repo $Repo -Sha $sha -SourceRoot $SourceRoot -RunRoot $runRoot -Arm 'h' -Seeder $Seeder -ChainRunner $ChainRunner -TimeoutMin $TimeoutMin -Manifest $ms
     $rec.stages = $a.Stages; $rec.data_date = $a.DataDate
     if ($a.Result -eq 'blind') { $rec.result = 'blind'; $rec.blind = $a.Blind; $rec.cause = $a.Why; return (& $finish) }
     if ($a.Result -eq 'pass') { $rec.result = 'pass'; $rec.cause = $a.Why; return (& $finish) }
@@ -501,7 +507,7 @@ function Invoke-RhRehearsal {
     $base = ([string]$mb.stdout).Trim()
     if ($mb.rc -ne 0 -or -not $base -or $base -eq $sha) { $rec.cause += ' (no distinct base to pair against, so the failure stands)'; return (& $finish) }
     $rec.base = $base
-    $b = Invoke-RhArm -Repo $Repo -Sha $base -SourceRoot $SourceRoot -RunRoot $runRoot -Arm 'b' -Seeder $Seeder -ChainRunner $ChainRunner -TimeoutMin $TimeoutMin
+    $b = Invoke-RhArm -Repo $Repo -Sha $base -SourceRoot $SourceRoot -RunRoot $runRoot -Arm 'b' -Seeder $Seeder -ChainRunner $ChainRunner -TimeoutMin $TimeoutMin -Manifest (Get-RhManifestSet $Repo $base)
     if ($b.Result -eq 'blind') { $rec.cause += (' (the base arm could not run, blind=' + $b.Blind + ', so the failure stands)'); return (& $finish) }
     $new = @($a.Failed | Where-Object { @($b.Failed) -notcontains $_ })
     $pre = @($a.Failed | Where-Object { @($b.Failed) -contains $_ })
@@ -576,21 +582,21 @@ if ($SelfTest) {
       Write-RhFile $d 'ops\verify-commodities-gate.ps1' "exit 0`n"
       # cost-flags.txt as HEAD held it on 2026-09-22: a BOM, then text.
       $bom = [byte[]](0xEF, 0xBB, 0xBF)
-      $null = [IO.Directory]::CreateDirectory((Join-Path $d 'meal-prep\db'))
-      [IO.File]::WriteAllBytes((Join-Path $d 'meal-prep\db\cost-flags.txt'), [byte[]]($bom + [Text.Encoding]::ASCII.GetBytes("Example flag line`n")))
+      $null = [IO.Directory]::CreateDirectory((Join-Path $d 'meal-prep\db'))   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
+      [IO.File]::WriteAllBytes((Join-Path $d 'meal-prep\db\cost-flags.txt'), [byte[]]($bom + [Text.Encoding]::ASCII.GetBytes("Example flag line`n")))   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
       $null = Save-RhCommit $d 'seed'
       return $d
     }
 
     # ---- 1. THE FOUNDING DEFECT: an EMPTY cost-flags.txt against the 09-05 hook ----
     $old = New-RhHookRepo 'o' $true
-    [IO.File]::WriteAllBytes((Join-Path $old 'meal-prep\db\cost-flags.txt'), [byte[]]@())
+    [IO.File]::WriteAllBytes((Join-Path $old 'meal-prep\db\cost-flags.txt'), [byte[]]@())   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
     $oc = Invoke-RhCommitStage -Repo $old
     Test-RhCase 'MUST FIRE  the founding defect: the bot''s commit of an EMPTY cost-flags.txt is REFUSED by the 09-05 hook, in its own words (BOM CHANGED)' {
       ($oc.Outcome -eq 'refused') -and ((@($oc.Words) -join "`n") -match 'BOM CHANGED') -and ((@($oc.Words) -join "`n") -match 'cost-flags\.txt'), ($oc.Outcome + ' | ' + ((@($oc.Words) | Select-Object -First 3) -join ' / '))
     }
     $new = New-RhHookRepo 'n' $false
-    [IO.File]::WriteAllBytes((Join-Path $new 'meal-prep\db\cost-flags.txt'), [byte[]]@())
+    [IO.File]::WriteAllBytes((Join-Path $new 'meal-prep\db\cost-flags.txt'), [byte[]]@())   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
     $nc = Invoke-RhCommitStage -Repo $new
     $nHead = ([string](Invoke-RhGit $new @('log', '-1', '--format=%an|%s')).stdout).Trim()
     Test-RhCase 'CLEAN TWIN  the same empty file through TODAY''S hook is committed, as smp-pipeline-bot, so the harness passes a fixed tree' {
@@ -680,20 +686,20 @@ if ($SelfTest) {
 
     # ---- 3. A WHOLE REHEARSAL over a fixture source, through the seams (the seeder and the chain are the only fakes) ----
     $src = New-RhHookRepo 's' $false
-    Write-RhFile $src 'ops\chain-manifest.json' '{"schema":1,"files":["grocery/check-ad-cycles.ps1","ops/chain-manifest.json"],"globs":[],"derive_from":[],"derive_dirs":[]}'
+    Write-RhFile $src 'ops\chain-manifest.json' '{"schema":1,"board_glob":"grocery/out/comparison-*.json","chain_verdict":"grocery/out/chain-verdict.json","files":["grocery/check-ad-cycles.ps1","ops/chain-manifest.json"],"globs":[],"derive_from":[],"derive_dirs":[]}'   # reach-fixture-ok: a fixture manifest in a throwaway repo; nothing opens the live module
     Write-RhFile $src 'grocery\check-ad-cycles.ps1' "'chain'`n"
     $null = Save-RhCommit $src 'manifest'
     Write-RhFile $src 'grocery\check-ad-cycles.ps1' "'chain v2'`n"
     $srcHead = Save-RhCommit $src 'chain change'
     $null = Invoke-RhGit $src @('update-ref', 'refs/remotes/origin/main', ($srcHead + '~1'))
     $seedDir = Join-Path $st 'seed'
-    Write-RhFile $seedDir 'grocery\out\comparison-2026-09-21.json' '{}'
+    Write-RhFile $seedDir 'grocery\out\comparison-2026-09-21.json' '{}'   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
     $fakeSeeder = { param($Tree, $SourceRoot) Copy-Item -Recurse -Force (Join-Path $SourceRoot 'grocery') $Tree; [pscustomobject]@{ Rc = 0; Tail = @() } }
     $mkRunner = { param([bool]$EmptyFlags)
       return { param($Tree, $TimeoutMin, $ChildEnv)
         # the chain's own outputs: a guard verdict, a bot-owned file, and an attempted push that must fail
-        [IO.File]::WriteAllText((Join-Path $Tree 'grocery\out\chain-verdict.json'), '{"guards_blocked":false,"verdict":"clean"}')
-        $cf = Join-Path $Tree 'meal-prep\db\cost-flags.txt'
+        [IO.File]::WriteAllText((Join-Path $Tree 'grocery\out\chain-verdict.json'), '{"guards_blocked":false,"verdict":"clean"}')   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
+        $cf = Join-Path $Tree 'meal-prep\db\cost-flags.txt'   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
         if ($EmptyFlags) { [IO.File]::WriteAllBytes($cf, [byte[]]@()) } else { [IO.File]::AppendAllText($cf, "second line`n") }
         $push = Invoke-RhGit $Tree @('push', '-q', 'origin', 'HEAD:refs/heads/rh-leak')
         [IO.File]::WriteAllText((Join-Path (Split-Path $Tree -Parent) ('push-rc-' + (Split-Path $Tree -Leaf) + '.txt')), [string]$push.rc)

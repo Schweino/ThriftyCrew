@@ -2,6 +2,9 @@
   "schema": 1,
   "why": "The scripts whose FIRST REAL RUN is the daily chain (RCA F2, design/RCA-holistic-2026-09-22.md). A push to main that changes one of them must carry a chain rehearsal verdict (ops/rehearse-chain.ps1) over data no older than max_data_age_days, or pre-push refuses it. -NoRehearsal on ops/push-main.ps1 (TC_NO_REHEARSAL for a plain git push) is the loud bypass.",
   "max_data_age_days": 2,
+  "board_glob": "grocery/out/comparison-*.json",
+  "chain_verdict": "grocery/out/chain-verdict.json",
+  "outputs_note": "Where the chain puts the board it is rehearsed over (the newest by its date decides freshness) and its own guard verdict. Declared here, the chain's contract, so the harness spells no other module's paths.",
   "files": [
     "grocery/check-ad-cycles.ps1",
     "grocery/capture-run.ps1",
