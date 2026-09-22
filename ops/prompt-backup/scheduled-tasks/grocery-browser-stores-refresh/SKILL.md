@@ -182,9 +182,14 @@ out\browser-capture-due-<date>.flag is a hint and it has been INCOMPLETE before 
      Every other store's ad is a server feed that needs no reading (Aldi/Hy-Vee/Family Fare via Flipp).
   C. RESCUE TERMS - out\rescue-terms-<store>.txt. Cells already DROPPED or about to EXPIRE off the
      board. These are known losses, so they come BEFORE ordinary rotation.
-  D. SALE-FALLBACK RESEARCH - out\research-worklist.json. A commodity on sale with no everyday item
-     to revert to: when the sale ends that store vanishes from the cell. Find the cheapest NON-sale
-     everyday item and add it to that store's out\regular\ file.
+  D. SALE FALLBACKS - now inside each store's own capture plan (since 2026-09-22, plan-2026-09-22-9,
+     commit 686d83d9c). A commodity on sale with no everyday item to revert to vanishes from the cell
+     when the sale ends, so the store owes its everyday price. Get-CapturePlan hands these out as
+     SaleFallbacks, from what the expiring sales leave and always after them, so they arrive in the
+     store's daily worklist with the other terms: find the cheapest NON-sale everyday item and add it
+     to that store's out\regular\ file like any rotation term. out\research-worklist.json is NO
+     LONGER the sale-fallback list (it holds only in-store channel-doubt entries); do not work it
+     for fallbacks.
   E. PRODUCT-URL CHIPS - out\url-worklist.json, the "See item" links, across ALL SEVEN stores
      (446 outstanding on 2026-08-22). Search the chip's exact `term`, confirm the price matches, and
      write {id,url,price,size,name} to out\url-inputs\store-<store>N-urls.json.
