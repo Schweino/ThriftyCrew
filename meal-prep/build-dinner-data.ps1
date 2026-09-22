@@ -11,8 +11,13 @@ $repo = Split-Path $dir -Parent
 $tool = Join-Path $repo 'site\tools\dinner-tonight-tool.html'
 $db  = Read-JsonFile "$dir\recipes-db.json"
 # v2 manifest: current-cheapest whole-package per serving per slug (2026-07-26 basis switch)
-$script:cheapPs=@{}
-try { (Read-JsonFile (Join-Path $dir 'pipeline\v2-perserving.json')) | ForEach-Object { $script:cheapPs[[string]$_.slug]=[math]::Round([double]$_.cheapest_ps,2) } } catch { Write-Warning 'v2-perserving.json unreadable - legacy cost fallback in effect' }
+# 2026-09-22 (queue 2026-09-21-115180, RCA F1): the fallback is the value the tool SHOWS. liveCost() reads
+# feed.recipes[slug].per_serving at view time, so the baked fallback is that same field from the canonical feed this build
+# read, stamped with the feed's generated time. It was v2-perserving cheapest_ps, a second producer that disagreed with the
+# feed on 100 of 577 recipes by a cent or more (max 49 cents) on 2026-09-22. v2 stays only for a slug the feed lacks.
+$script:cheapPs=@{}; $script:feedAsof=''; $script:fromV2=0
+try { $fd = Read-JsonFile (Join-Path (Split-Path $dir -Parent) 'grocery\out\smp-feed.json'); $script:feedAsof=[string]$fd.generated; foreach ($p in $fd.recipes.PSObject.Properties) { if ([double]$p.Value.per_serving -gt 0) { $script:cheapPs[$p.Name]=[math]::Round([double]$p.Value.per_serving,2) } } } catch { Write-Warning 'smp-feed.json unreadable - v2 fallback in effect' }
+try { (Read-JsonFile (Join-Path $dir 'pipeline\v2-perserving.json')) | ForEach-Object { if (-not $script:cheapPs.ContainsKey([string]$_.slug)) { $script:cheapPs[[string]$_.slug]=[math]::Round([double]$_.cheapest_ps,2); $script:fromV2++ } } } catch { Write-Warning 'v2-perserving.json unreadable - legacy cost fallback in effect' }
 $map = Read-JsonFile "$dir\ingredient-map.json"
 $raw = (Invoke-WebRequest -Uri "https://feed.thriftycrew.com/smp-feed.json" -UseBasicParsing -TimeoutSec 30).Content.TrimStart([char]0xFEFF)
 $feed = $raw | ConvertFrom-Json
