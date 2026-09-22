@@ -1871,11 +1871,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # board, while the live feed still read week_of 2026-09-06. Readers saw card prices from a board
       # they could not see. These three write to Ghost; a held board must hold them too.
       if ($guardsBlocked) { Log 'held: guards blocked - hub/rotation not republished from a refused board (top5-weekly, rotate-free-dinners, build-hub-grid -Publish all skipped)'; $summary += 'HELD      guards blocked the board, so the hub Top 5, the free rotation and the 591 recipe cards were NOT republished from it' }
-      if (-not $guardsBlocked -and -not $NoPublish) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') | Out-Null; Log 'top5-weekly refreshed' } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) } }
+      if (-not $guardsBlocked) { if (-not $NoPublish) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') | Out-Null; Log 'top5-weekly refreshed' } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) } } }
       # Free-dinner rotation (Brad, 2026-07-25): top 5 cheapest dinners per protein go FREE for the board
       # week; they revert to members-only when the week re-ranks them. Runs daily right after re-costing but
       # no-ops until the board week (or the set) changes, so flips happen on the ad flip. Non-fatal.
-      if (-not $guardsBlocked -and -not $NoPublish) { try { (Invoke-Bounded 'free-rotation' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1')) 900).Output | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) } }
+      if (-not $guardsBlocked) { if (-not $NoPublish) { try { (Invoke-Bounded 'free-rotation' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1')) 900).Output | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) } } }
       # DID THE PAYWALL SURVIVE THE ROTATION? (2026-08-29) Immediately after the only thing in the estate
       # that changes post visibility, ask the revenue question nobody was asking: is any recipe the
       # database calls PAID being served free to anonymous visitors? 22 were, found by accident during a
@@ -1908,10 +1908,10 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # one that carries -Publish. The three tools above only write their local source; publishing those
       # goes through publish-tool-post.ps1, which refuses to overwrite an unreviewed live body.
       # -Publish WRITES TO GHOST, so it is gated with its two siblings above - see the note at top5-weekly.
-      if (-not $guardsBlocked -and -not $NoPublish) {
+      if (-not $guardsBlocked) { if (-not $NoPublish) {
         try { (Invoke-Bounded 'surface-hub' @('-ExecutionPolicy','Bypass','-File',(Join-Path $mpRoot 'meal-prep\build-hub-grid.ps1'),'-Publish') 900).Output | Select-Object -Last 3 | ForEach-Object { Log ('surface-hub: ' + $_) } }
         catch { Log ('build-hub-grid threw: ' + $_.Exception.Message) }
-      }
+      } }
 
       # AND THEN ASK WHETHER IT WORKED. Rebuilding without checking is how this went unnoticed for weeks:
       # every builder above exits 0 whether or not the thing it wrote reached a reader.
@@ -3351,9 +3351,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
 
       # ---- Friday digest: the weekly board email the capture CTAs promise. Only when guards passed (never
       # email prices the gates would not publish), Fridays only, idempotent inside the script. Non-fatal.
-      if (-not $guardsBlocked -and -not $NoPublish) {
+      if (-not $guardsBlocked) { if (-not $NoPublish) {
         try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-friday-digest.ps1') | ForEach-Object { Log ('digest: ' + $_) } } catch { Log ('digest threw: ' + $_.Exception.Message) }
-      }
+      } }
 
       # ---- ALL-STORES-SHOWN MONITOR: re-assert on the freshly BUILT board that every staple commodity shows a
       # tile for all 7 stores (a price, or a "Doesn't carry / No price yet - See it? Let us know!" card). This is
