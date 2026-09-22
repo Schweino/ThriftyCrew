@@ -94,20 +94,32 @@ function Test-FileEmptied {
   $hasBytes = (($null -ne $After) -and $After.Length -gt 0)
   return ($hadBytes -and -not $hasBytes)
 }
-function Test-EolUnchanged {
-  # Compared on BYTES. `git show` normalises line endings on the way out, so comparing a working file to a
-  # git blob "found" a mass EOL rewrite that had never happened - measured and wrong on 2026-09-05.
-  # Both sides here come from the same decoder, so a difference is real. See [[compare-bytes-not-decodings]].
-  param([string]$BeforeText, [string]$AfterText)
-  $bc = ([regex]::Matches($BeforeText, "`r`n")).Count
-  $ac = ([regex]::Matches($AfterText,  "`r`n")).Count
-  $bl = ($BeforeText.Length - $BeforeText.Replace("`n",'').Length) - $bc
-  $al = ($AfterText.Length  - $AfterText.Replace("`n",'').Length)  - $ac
-  # allow line COUNT to change (an edit adds lines); require the STYLE not to flip
-  if ($bc -gt 0 -and $ac -eq 0) { return $false }
-  if ($bl -gt 0 -and $al -eq 0 -and $bc -eq 0) { return $false }
-  if ($bc -eq 0 -and $ac -gt 0 -and $bl -gt 0) { return $false }
-  return $true
+function Get-IndexEolFindings {
+  # THE LINE-ENDING INVARIANT, READ OFF WHAT THE COMMIT WILL STORE (2026-09-22, queue 2026-09-22-c4495c).
+  # Until that day this file carried Test-EolUnchanged, a comparison of working-file text against HEAD, and
+  # the live path never called it: the pre-commit hook advertised "line-ending style" and no staged file was
+  # ever judged for it (F4 in design/RCA-holistic-2026-09-22.md: a check that never looks reads the same as
+  # one that found nothing). It could not be switched on as written, because git normalises line endings
+  # between the working copy and the blob, so a CRLF working file over an LF blob is NOT a flip - the false
+  # "mass EOL rewrite" measured on 2026-09-05 ([[compare-bytes-not-decodings]]).
+  # So the check asks git's own census, `git ls-files --eol`, for the INDEX side (the i/ column): that is the
+  # line-ending state of exactly the bytes being committed, and one decoder reads both sides by construction.
+  # .gitattributes (text=auto eol=lf) stores every text file LF - 8,884 i/lf, 0 i/crlf, 0 i/mixed on
+  # 2026-09-22 - so a staged text blob that is i/crlf or i/mixed is a real defect: a file marked out of the
+  # normalisation, or an attribute change, is carrying CR bytes into the repository.
+  # Clean: i/lf, i/-text (binary, never judged), i/none (empty or no line ending). Input is the raw output
+  # lines; returns one finding string per offending path.
+  param([string[]]$Lines)
+  $out = @()
+  foreach ($ln in @($Lines)) {
+    if (-not $ln) { continue }
+    $tab = $ln.IndexOf("`t")
+    if ($tab -lt 0) { continue }
+    $path = $ln.Substring($tab + 1)
+    $idx = ($ln.Substring(0, $tab).Trim() -split '\s+')[0]
+    if ($idx -eq 'i/crlf' -or $idx -eq 'i/mixed') { $out += "EOL           $path - the index stores it $idx; this repo stores text LF (.gitattributes text=auto eol=lf)" }
+  }
+  return ,$out
 }
 function Get-FrozenLiteralBreaks {
   <# A line the author MARKED as frozen may not change. Returns the marked BEFORE lines that no longer
@@ -234,8 +246,20 @@ if ($SelfTest) {
   if (-not (Test-BomUnchanged -Before $bomLong -After ([byte[]](0x45)))) { Write-Output '  PASS  MUST FIRE (ONE BYTE PAST THE BAR, after length 1): a real strip that keeps content is still reported' } else { Write-Output '  FAIL  the empty exemption swallowed a real BOM strip'; $fail++ }
   if (Test-FileEmptied -Before $bomLong -After $none) { Write-Output '  PASS  MUST FIRE: an emptied tracked file is named as EMPTIED, so the exemption above is never silent' } else { Write-Output '  FAIL  an emptied file passed with nothing said about it'; $fail++ }
   if (-not (Test-FileEmptied -Before $bomLong -After $bomLong)) { Write-Output '  PASS  MUST NOT FIRE: a file that still carries bytes is not EMPTIED' } else { Write-Output '  FAIL  EMPTIED fired on a file that has content'; $fail++ }
-  if (-not (Test-EolUnchanged -BeforeText "a`r`nb" -AfterText "a`nb")) { Write-Output '  PASS  MUST FIRE: CRLF flipped to LF is reported' } else { Write-Output '  FAIL  an EOL flip went unreported'; $fail++ }
-  if (Test-EolUnchanged -BeforeText "a`r`nb" -AfterText "a`r`nb`r`nc") { Write-Output '  PASS  CLEAN TWIN: adding lines in the SAME style is not an EOL flip' } else { Write-Output '  FAIL  a legitimate added line was called an EOL flip'; $fail++ }
+  # EOL: frozen `git ls-files --eol` lines, the exact shape git prints (columns, then a TAB, then the path)
+  $eolCr    = 'i/crlf  w/crlf  attr/-text              ' + "`t" + 'ops/x.ps1'
+  $eolMixed = 'i/mixed w/mixed attr/                   ' + "`t" + 'docs/y.txt'
+  $eolLfWcr = 'i/lf    w/crlf  attr/text=auto eol=lf   ' + "`t" + 'grocery/z.ps1'
+  $eolBin   = 'i/-text w/-text attr/-text              ' + "`t" + 'site/a.png'
+  $eolNone  = 'i/none  w/none  attr/text=auto eol=lf   ' + "`t" + 'meal-prep/db/cost-flags.txt'
+  $ef = Get-IndexEolFindings -Lines @($eolCr, $eolMixed)
+  if ($ef.Count -eq 2 -and $ef[0] -like 'EOL*ops/x.ps1*i/crlf*' -and $ef[1] -like 'EOL*docs/y.txt*i/mixed*') { Write-Output '  PASS  MUST FIRE: a staged blob stored CRLF, and one stored mixed, are each reported by path' } else { Write-Output "  FAIL  a CRLF or mixed index blob went unreported (got $($ef.Count))"; $fail++ }
+  $ef = Get-IndexEolFindings -Lines @($eolLfWcr)
+  if ($ef.Count -eq 0) { Write-Output '  PASS  MUST NOT FIRE: a CRLF WORKING copy over an LF index blob is not a flip (the 2026-09-05 false positive)' } else { Write-Output '  FAIL  a working-copy CRLF over an LF blob was called an EOL flip'; $fail++ }
+  $ef = Get-IndexEolFindings -Lines @($eolBin, $eolNone, '')
+  if ($ef.Count -eq 0) { Write-Output '  PASS  MUST NOT FIRE: a binary (-text) blob and an empty blob are never judged' } else { Write-Output '  FAIL  a binary or empty blob was judged for line endings'; $fail++ }
+  $ef = Get-IndexEolFindings -Lines @($eolLfWcr, $eolCr, $eolBin)
+  if ($ef.Count -eq 1 -and $ef[0] -like '*ops/x.ps1*') { Write-Output '  PASS  CLEAN TWIN: in a mixed staged set exactly the CRLF blob is named and the clean ones pass through' } else { Write-Output "  FAIL  a mixed staged set was judged wrongly (got $($ef.Count))"; $fail++ }
   $g = Get-DependencyGaps -Text "`$x = Read-JsonFile `$p" -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
   if ($g) { Write-Output '  PASS  MUST FIRE: a call with no dot-source and no definition is reported (defect 3)' } else { Write-Output '  FAIL  an unresolvable call went unreported'; $fail++ }
   # CLEAN TWIN: the exact shape that fooled the sweep - the lib named only inside a STRING. Still a gap.
@@ -452,7 +476,18 @@ try {
       }
     }
   }
-  Write-Output ("verify-bulk-edit: $checked modified tracked file(s) compared against HEAD; $parsed .ps1 parsed clean; $($findings.Count) finding(s); $($emptied.Count) emptied")
+  # LINE ENDINGS, from the index (see Get-IndexEolFindings). Staged mode only: the working-tree mode has no
+  # index state for an unstaged edit, and comparing a working file with a blob is the false positive above.
+  $eolChecked = 'staged-only'
+  if ($Staged) {
+    $prevEap3 = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try { $eolLines = @(& git ls-files --eol -- @($names)) } finally { $ErrorActionPreference = $prevEap3 }
+    $eolChecked = @($eolLines | Where-Object { $_ }).Count
+    $eolFound = Get-IndexEolFindings -Lines $eolLines
+    foreach ($ef in @($eolFound)) { [void]$findings.Add($ef) }
+  }
+  Write-Output ("verify-bulk-edit: $checked modified tracked file(s) compared against HEAD; $parsed .ps1 parsed clean; eol_checked=$eolChecked; $($findings.Count) finding(s); $($emptied.Count) emptied")
   $findings | ForEach-Object { Write-Output ("  " + $_) }
   if ($emptied.Count) {
     Write-Output ("  EMPTIED (not a finding): $($emptied.Count) tracked file(s) held bytes at HEAD and hold none now. An empty")

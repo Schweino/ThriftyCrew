@@ -105,9 +105,9 @@
         "Test-BomUnchanged and the money lane's empty-file exemption",
         "ops/hooks/pre-commit"
       ],
-      "resolution_note": "The line-ending invariant the pre-commit hook advertises now runs on every staged file, reading the index eol git will store; the dead working-file comparison is gone.",
-      "status": "planned",
-      "premise_verified": null,
+      "resolution_note": "The line-ending invariant the pre-commit hook advertises now runs on every staged file, reading the index eol git will store; the dead working-file comparison is gone. Proof: -SelfTest exit 0 (4 new EOL cases); live -Staged run printed eol_checked=1, 0 findings; a throwaway repo with a -text CRLF blob fed real git ls-files --eol output and the function named exactly that path.",
+      "status": "done",
+      "premise_verified": "true: grep over ops/verify-bulk-edit.ps1 found Test-EolUnchanged only at its definition and two self-test cases; git ls-files --eol read 8,884 i/lf and 0 i/crlf",
       "deviation": null,
       "shipped_commit": null
     }
