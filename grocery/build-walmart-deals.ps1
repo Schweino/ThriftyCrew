@@ -203,7 +203,16 @@ if ($SelfTest) {
   #     fractional "210.889 ct" makes Get-PackCount read the pack as 889 and prices the bags 4x low.
   _Chk 'trash bags 200 ct (rounding-aware snap)' (_R "Member's Mark Power Flex 13-Gallon Tall Kitchen Trash Bags, Fresh Scent, 200 ct." '$18.98' '$0.09/ea') '200 ct' '$18.98'
   # 7e. no count anywhere in the name -> the count is derived, and must still be a whole number
-  $r7e = Build-Row (_R 'Member''s Mark Unnamed Count Bags' '$18.98' '$0.09/ea')
+  # 85c3b7 (2026-09-22): the density refusal now runs in Build-Row. Frozen from derived-size-density-rulings.json.
+$cDs = '93.7 ' + [string][char]0x00A2 + '/fl oz'
+$rDs = Build-Row (_R 'SPECTRUM NATURALS EXPELLER PRESSED PEANUT OIL, 32 OZ.' '$14.99' $cDs)
+if ($rDs.err -and $rDs.err -match 'DENSITY CONFLICT') { Write-Output "ok    MUST FIRE Walmart SPECTRUM peanut oil 32 OZ derived 15.998 fl oz is refused: DENSITY CONFLICT" } else { Write-Output ("FAIL  the SPECTRUM peanut-oil density row was not refused: " + ($rDs | ConvertTo-Json -Compress -Depth 4)); $script:fail++ }
+$cDk = '27.0 ' + [string][char]0x00A2 + '/fl oz'
+$rDk = Build-Row (_R 'Melinda''s Jalapeno Ketchup, Spicy and Tangy, All Natural, 12 Ounce' '$1.08' $cDk)
+if ($rDk.err -and $rDk.err -match 'DENSITY CONFLICT') { Write-Output "ok    MUST FIRE Walmart Melinda's ketchup 12 Ounce derived 4 fl oz is refused: DENSITY CONFLICT" } else { Write-Output ("FAIL  the Melinda's ketchup density row was not refused: " + ($rDk | ConvertTo-Json -Compress -Depth 4)); $script:fail++ }
+$cDo = '9.3 ' + [string][char]0x00A2 + '/fl oz'
+$rDo = Build-Row (_R 'Great Value Vegetable Oil, 48 fl oz' '$4.47' $cDo)
+if ($rDo.row) { Write-Output ("ok    CLEAN TWIN an oil whose name and unit price agree still builds (" + $rDo.row.size + ")") } else { Write-Output ("FAIL  a consistent oil row was refused: " + $rDo.err); $script:fail++ }$r7e = Build-Row (_R 'Member''s Mark Unnamed Count Bags' '$18.98' '$0.09/ea')
   if ($r7e.row -and $r7e.row.size -notmatch '\.') { Write-Output "ok    derived count is a whole number -> size='$($r7e.row.size)'" }
   else { Write-Output "FAIL  derived count not integral: $($r7e.row.size)$($r7e.err)"; $fail++ }
 

@@ -69,6 +69,8 @@
 # vocabulary for one commodity. A commodity's unit is Brad's call, so neither was done here.
 # It is not trivially each-able either: "Reynolds Wrap Aluminum Foil 200 sq. ft. Box" parses to size
 # "200 ct", which under unit=each reads as 200 boxes rather than one.
+. (Join-Path $PSScriptRoot 'derived-size-density-lib.ps1')   # Test-DerivedSizeDensity: both Walmart writers inherit the density refusal (85c3b7)
+
 function Resolve-Unit([string]$u) {
   switch -Regex (($u -replace '\.','').Trim().ToLower()) {
     '^(ea|each|ct|count)$'          { return @{ tok='ct';     unit='each'   } }
@@ -529,7 +531,18 @@ function Build-Row($raw) {
     $np = Get-NamePack $raw.n
     if ($np -and [math]::Abs($np.count - $qty) -lt 0.5) { $pkgSize = (Format-Qty $qty) + ' ct ' + $np.measure }
   }
-
+  # THE DENSITY RULE AT INGEST, AS SAM'S HAS IT (2026-09-22, queue 2026-09-21-85c3b7). One rule (a derived volume must
+  # agree with the weight the name states, within derived-size-density-lib's band) had one library and two builders, and
+  # only build-sams-deals called it; Walmart's derived rows were written and then ruled by hand afterwards (Melinda's
+  # Jalapeno Ketchup 12 Ounce derived 4 fl oz on 2026-08-30; SPECTRUM peanut oil 32 OZ derived 15.998 fl oz on
+  # 2026-09-19, both in derived-size-density-rulings.json). A density FLAG refuses; an abstention keeps its path.
+  if ([string]$basis -like 'derived lp/up*') {
+    $dsProbe = [pscustomobject]@{ item = [string]$raw.n; size = $pkgSize; qty_basis = ('package; qty ' + $basis); wm_unit_price = $upm.Groups[0].Value.Trim() }
+    $dsVerdict = Test-DerivedSizeDensity $dsProbe 'derived lp/up'
+    if ($dsVerdict.Status -eq 'flag') {
+      return @{ err = ('DENSITY CONFLICT: ' + $dsVerdict.Why + " - Walmart's " + $upm.Groups[0].Value.Trim() + ' was computed against a volume this package cannot hold, so no per-unit price from it is publishable') }
+    }
+  }
   # unitPrice is rounded to the cent, so the invariant can only be as tight as that rounding allows: a
   # $0.16/ea item carries up to 0.005/0.16 = 3.1% of pure rounding error. Scale the tolerance to it, or cheap
   # per-unit items get rejected for being correct. (A real basis error - a tray price read as a per-lb price -
