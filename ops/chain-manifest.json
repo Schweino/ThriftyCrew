@@ -34,6 +34,16 @@
     "grocery/compare-deals.ps1",
     "grocery/capture-run.ps1"
   ],
+  "exclude_globs": [
+    "grocery/test-*.ps1",
+    "meal-prep/pipeline/test-*.ps1",
+    "meal-prep/engine/test-*.ps1",
+    "ops/test-*.ps1",
+    "ops/run-gates.ps1",
+    "ops/prepush-*.ps1",
+    "grocery/pull-*.ps1"
+  ],
+  "exclude_note": "Excluded even when a derive_from script names them, because their first real run is NOT the chain or a rehearsal cannot exercise them: the test suites and the gate run at push time already (test-auditors has its own pre-push leg), and the store pulls sit behind -NoPull. Measured 2026-09-22 over origin/main 09-19..09-22: without these, 72 of 193 non-bot commits touched the set, test-auditors.ps1 alone 15 of them.",
   "derive_dirs": [
     "grocery/",
     "lib/",

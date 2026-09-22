@@ -32,6 +32,9 @@ param(
   [switch]$NoDownstream,
   [switch]$NoAlert,
   [switch]$NoPublish,
+  # STOP AT THE SHIP BOUNDARY (2026-09-22, plan-2026-09-22-7): ops\rehearse-chain.ps1 rehearses the ship path, about 14 of the
+  # chain's ~40 minutes, and the INSPECT path below it is advisory by construction. Refused without -NoCommit.
+  [switch]$ShipOnly,
   [string]$ScheduleFile = "",
   # ---- THE INSPECT FAN-OUT (2026-08-23, PLAN-use-the-cores phase 1) --------------------------------------
   # The advisory audits below the ship boundary are independent read-only children. They ran one after
@@ -176,6 +179,16 @@ if ($SelfTest) {
   Test-CacCase 'MUST FIRE  every reader-facing writer is reached only without -NoPublish' {
     ($cacWriterMissing.Count -eq 0) -and ($cacWriterSites.Count -ge 8) -and ($cacUnguarded.Count -eq 0)
   }
+  # -ShipOnly stops AFTER the ship summary and BEFORE the first INSPECT writer, and never without -NoCommit.
+  $cacShipIfs = @($cacAst.FindAll({ param($n) ($n -is [System.Management.Automation.Language.IfStatementAst]) -and ($n.Clauses.Count -ge 1) -and ($n.Clauses[0].Item1.Extent.Text.Trim() -like ('$Ship' + 'Only*')) }, $true) | Where-Object { -not (Test-CacInSelfTest $_) })
+  $cacShipStop = @($cacShipIfs | Where-Object { [string]::Equals($_.Clauses[0].Item1.Extent.Text.Trim(), ('$Ship' + 'Only'), [StringComparison]::Ordinal) -and ($_.Clauses[0].Item2.Extent.Text -match '\bexit 0\b') })
+  $cacShipRefuse = @($cacShipIfs | Where-Object { ($_.Clauses[0].Item1.Extent.Text -match ('-not \$No' + 'Commit')) -and ($_.Clauses[0].Item2.Extent.Text -match '\bexit 3\b') -and ($_.Parent -eq $cacAst.EndBlock) })
+  $cacShipSummary = @($cacAst.FindAll({ param($n) ($n -is [System.Management.Automation.Language.StringConstantExpressionAst]) -and ([string]$n.Value).StartsWith('---- SHIP PATH ' + 'COMPLETE') }, $true) | Sort-Object { $_.Extent.StartOffset })
+  $cacFirstInspect = @($cacAst.FindAll({ param($n) ($n -is [System.Management.Automation.Language.StringConstantExpressionAst]) -and ([string]$n.Value).EndsWith('\' + 'top5-weekly.ps1') }, $true) | Where-Object { -not (Test-CacInSelfTest $_) } | Sort-Object { $_.Extent.StartOffset })
+  Test-CacCase 'MUST FIRE  -ShipOnly exits after the last SHIP PATH COMPLETE line and before the first INSPECT writer, and is refused (3) without -NoCommit' {
+    ($cacShipStop.Count -eq 1) -and ($cacShipRefuse.Count -eq 1) -and ($cacShipSummary.Count -ge 1) -and ($cacFirstInspect.Count -ge 1) -and
+      ($cacShipStop[0].Extent.StartOffset -gt $cacShipSummary[$cacShipSummary.Count - 1].Extent.StartOffset) -and ($cacShipStop[0].Extent.StartOffset -lt $cacFirstInspect[0].Extent.StartOffset)
+  }
   if ($cacUnguarded.Count -or $cacWriterMissing.Count) { Write-Output ('      unguarded: ' + ($cacUnguarded -join ' | ') + '   not found: ' + ($cacWriterMissing -join ', ')) }
 
   # ---- SCHEDULE vs DATA, LIKE FOR LIKE (2026-09-18, queue 2026-09-18-de39ec) ------------------------------
@@ -232,6 +245,7 @@ if ($SelfTest) {
   Write-Output ("check-ad-cycles SELF-TEST PASSED ({0} of {0} case(s): the 2026-09-10 refused commit exits 1, a landed commit with a failed push exits 0, and this file's own tail wires that verdict only without -NoCommit)" -f $script:cacCases)
   exit 0
 }
+if ($ShipOnly -and -not $NoCommit) { Write-Output 'check-ad-cycles: REFUSED - -ShipOnly stops before this chain''s own commit, so it is only for a caller that commits itself or not at all (-NoCommit).'; exit 3 }
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
@@ -1833,6 +1847,10 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + $shipMin + ' min) - no price change, live page stands as last published')
       }
       # <<SHIP-SUMMARY-END>>
+      if ($ShipOnly) {
+        Log '---- SHIP-ONLY: stopping at the ship boundary; INSPECT (advisory audits) was NOT run (ops\rehearse-chain.ps1, plan-2026-09-22-7) ----'
+        exit 0
+      }
 
       # ---------------------------------------------------------------------------------------------
       # INSPECT PATH - ADVISORY ONLY. Nothing below may hold, change or unpublish today's board. Several

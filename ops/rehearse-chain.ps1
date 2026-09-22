@@ -21,8 +21,8 @@
     exit 0  pass     rehearsed and passed (or, at push time, no manifest script changed, or -NoRehearsal)
     exit 1  fail     rehearsed and a stage FAILED; the stage and its own words are printed
     exit 3  blind    COULD NOT REHEARSE, with blind=<cause>: no-source, no-seed-board, stale-data, clone-failed,
-                     checkout-failed, seed-failed, credential-present, chain-missing, nopublish-unproven,
-                     no-chain-verdict, no-hook, cannot-read-push, cannot-diff, no-manifest-readable. A 3 is never a
+                     checkout-failed, seed-failed, credential-present, chain-missing, nopublish-unproven, shiponly-unproven,
+                     no-chain-verdict, commit-stage, cannot-read-push, cannot-diff, no-manifest-readable. A 3 is never a
                      pass and never a silent refusal: the cause is on the line, as run-gates' blind= token is.
 
   WHAT ONE REHEARSAL IS (one ARM):
@@ -35,7 +35,8 @@
        then REFUSED (blind=credential-present) if the mail credential or the Ghost key file arrived with the seed.
     4. the rehearsed tree's own check-ad-cycles -SelfTest must pass its -NoPublish case, or it is not run
        (blind=nopublish-unproven): a tree whose -NoPublish does not hold every reader-facing writer is never started.
-    5. check-ad-cycles -NoPull -NoCommit -NoPublish -NoAlert, in a child whose environment carries a SENTINEL Ghost
+    5. check-ad-cycles -NoPull -NoCommit -NoPublish -NoAlert -ShipOnly (the ship path, ~14 of the chain's ~40 minutes;
+       -Full runs INSPECT too), in a child whose environment carries a SENTINEL Ghost
        key (every Ghost call answers 401), sentinel Kroger credentials, TC_REHEARSAL=1, and no GIT_* variable.
     6. the chain's own guard verdict (grocery\out\chain-verdict.json, written by THIS run or the stage is blind).
     7. THE COMMIT THE BOT WOULD MAKE: lib\bot-paths.ps1's owned paths staged under a private index and committed as
@@ -80,6 +81,8 @@ param(
   [switch]$RefsFromStdin,
   [string]$RefsFile = '',
   [switch]$NoPair,
+  # The whole chain, INSPECT included (about 40 minutes), instead of the ship path the chain's own -ShipOnly stops after.
+  [switch]$Full,
   [int]$ChainTimeoutMin = 90,
   [string]$VerdictDir = '',
   [switch]$SelfTest
@@ -100,6 +103,9 @@ $script:RhSentinelKey = ('0' * 24) + ':' + ('0' * 64)
 $script:RhCredentialPaths = @('.claude\skills\lesson\google-oauth-client.json', '.claude\skills\lesson\google-oauth-token.json', 'meal-prep\.ghostkey')
 # The check-ad-cycles -SelfTest case whose pass proves -NoPublish holds every reader-facing writer.
 $script:RhNoPublishCase = 'every reader-facing writer is reached only without -NoPublish'
+# and the one that proves -ShipOnly stops at the ship boundary; a tree without it cannot be asked to stop there.
+$script:RhShipOnlyCase = '-ShipOnly exits after the last SHIP PATH COMPLETE line'
+$script:RhFull = [bool]$Full
 
 function Invoke-RhGit([string]$Repo, [string[]]$GitArgs) { return (Invoke-GitCaptured -Repo $Repo -GitArgs $GitArgs) }
 
@@ -164,6 +170,14 @@ function Get-RhManifestSet([string]$Repo, [string]$Rev) {
     foreach ($m in [regex]::Matches([string]$dr.stdout, '[A-Za-z0-9_.-]+\.ps1')) {
       if ($byLeaf.ContainsKey($m.Value)) { foreach ($p in $byLeaf[$m.Value]) { $set[$p] = $all[$p] } }
     }
+  }
+  # EXCLUDED: a script whose first real run is NOT the chain, even when a derive_from script names it. Tests and the gate
+  # run at push time already; the store pulls are behind -NoPull, so a rehearsal would charge 14 minutes and exercise none
+  # of them. An explicit files[] entry is never excluded.
+  $ex = @(@($doc.exclude_globs) | Where-Object { $_ } | ForEach-Object { ConvertTo-RhGlobRegex ([string]$_) })
+  if ($ex.Count) {
+    $explicit = @(@($doc.files) | ForEach-Object { [string]$_ })
+    foreach ($p in @($set.Keys)) { if ($explicit -contains $p) { continue }; foreach ($x in $ex) { if ($p -match $x) { $set.Remove($p); break } } }
   }
   $set[$mp] = $all[$mp]
   $rows = @($set.Keys | ForEach-Object { $_ + ' ' + $set[$_] })
@@ -317,7 +331,10 @@ function Invoke-RhCommitStage {
   try {
     $null = Invoke-RhGit $Repo @('read-tree', 'HEAD')
     $a = Invoke-RhGit $Repo (@('add', '-A', '--') + $paths)
-    if ($a.rc -ne 0) { return (& $res 'blind' ('git add of the bot''s owned paths exited ' + $a.rc + ': ' + ([string]$a.stderr).Trim()) @()) }
+    # AS PRODUCTION DOES: capture-run's own add names an owned path that is gitignored and untracked (grocery/sale-windows.json
+    # on 2026-09-22), git adds everything else and exits 1 with an 'are ignored' notice, and capture-run carries on.
+    $ignoredOnly = ([string]$a.stderr -match 'are ignored by one of your \.gitignore files')
+    if ($a.rc -ne 0 -and -not ($a.rc -eq 1 -and $ignoredOnly)) { return (& $res 'blind' ('git add of the bot''s owned paths exited ' + $a.rc + ': ' + ([string]$a.stderr).Trim()) @()) }
     $q = Invoke-RhGit $Repo @('diff', '--cached', '--quiet')
     if ($q.rc -eq 0) { return (& $res 'nothing' 'the chain changed nothing under the bot''s owned paths' @()) }
     $c = Invoke-RhGit $Repo @('-c', 'user.name=smp-pipeline-bot', '-c', 'user.email=actions@users.noreply.github.com', 'commit', '-q', '-m', 'Daily pipeline: refresh prices + feed (chain rehearsal) [daily]')
@@ -376,7 +393,12 @@ $script:RhDefaultChainRunner = {
   if ($st.Rc -ne 0 -or $okLine.Count -ne 1) {
     return [pscustomobject]@{ Blind = 'nopublish-unproven'; Why = ('the rehearsed check-ad-cycles -SelfTest exited ' + $st.Rc + ' and passed ' + $okLine.Count + ' case(s) naming "' + $script:RhNoPublishCase + '", so its -NoPublish cannot be shown to hold the reader-facing writers; not started'); Rc = -1; TimedOut = $false; Tail = @() }
   }
-  $r = Invoke-RhProcess -File 'powershell.exe' -Arguments ('-NoProfile -ExecutionPolicy Bypass -File "' + $cac + '" -NoPull -NoCommit -NoPublish -NoAlert') -WorkDir (Split-Path $cac) -Env $ChildEnv -TimeoutSec ($TimeoutMin * 60)
+  $shipOk = @(($st.Out -split "`r?`n") | Where-Object { $_ -match '^\s*(ok|PASS)\s' -and $_.Contains($script:RhShipOnlyCase) })
+  if (-not $script:RhFull -and $shipOk.Count -ne 1) {
+    return [pscustomobject]@{ Blind = 'shiponly-unproven'; Why = ('the rehearsed check-ad-cycles -SelfTest passed ' + $shipOk.Count + ' case(s) naming "' + $script:RhShipOnlyCase + '", so it cannot be asked to stop at the ship boundary; rehearse with -Full'); Rc = -1; TimedOut = $false; Tail = @() }
+  }
+  $scopeArg = $(if ($script:RhFull) { '' } else { ' -ShipOnly' })
+  $r = Invoke-RhProcess -File 'powershell.exe' -Arguments ('-NoProfile -ExecutionPolicy Bypass -File "' + $cac + '" -NoPull -NoCommit -NoPublish -NoAlert' + $scopeArg) -WorkDir (Split-Path $cac) -Env $ChildEnv -TimeoutSec ($TimeoutMin * 60)
   $tail = @((($r.Out + "`n" + $r.Err) -split "`r?`n" | Where-Object { $_.Trim() }) | Select-Object -Last 12)
   return [pscustomobject]@{ Blind = ''; Why = ''; Rc = $r.Rc; TimedOut = $r.TimedOut; Tail = $tail }
 }
@@ -428,7 +450,7 @@ function Invoke-RhArm {
     'committed' { $stages.commit = 'ok' }
     'nothing'   { $stages.commit = 'ok' }
     'refused'   { $stages.commit = 'fail'; [void]$failed.Add('commit'); if (-not $why) { $why = $cm.Why }; foreach ($w in @($cm.Words | Select-Object -First 12)) { [void]$words.Add($w) } }
-    'blind'     { $stages.commit = 'blind'; if (-not $blind) { $blind = 'no-hook'; $why = $cm.Why } }
+    'blind'     { $stages.commit = 'blind'; if (-not $blind) { $blind = 'commit-stage'; $why = $cm.Why } }
     default     { throw ('unknown commit-stage outcome: ' + $cm.Outcome) }
   }
   if ($failed.Count) { return (& $mk 'fail' '' $why @($words) @($failed) $dd) }
@@ -443,7 +465,7 @@ function Invoke-RhRehearsal {
         [scriptblock]$Seeder = $script:RhDefaultSeeder, [scriptblock]$ChainRunner = $script:RhDefaultChainRunner)
   $t0 = [DateTime]::UtcNow
   $rec = [ordered]@{ result = 'blind'; blind = ''; key = ''; commit = ''; stage = ''; cause = ''; words = @(); data_date = ''; preexisting = @();
-    stages = $null; base = ''; scratch = ''; secs = 0; utc = ''; harness = 'ops\rehearse-chain.ps1'; harness_blob = '' }
+    stages = $null; base = ''; scratch = ''; scope = $(if ($script:RhFull) { 'full' } else { 'ship-only' }); secs = 0; utc = ''; harness = 'ops\rehearse-chain.ps1'; harness_blob = '' }
   $hb = Invoke-RhGit $script:RhRoot @('hash-object', (Join-Path $script:RhRoot 'ops\rehearse-chain.ps1'))
   if ($hb.rc -eq 0) { $rec.harness_blob = ([string]$hb.stdout).Trim() }
   $finish = {
@@ -584,10 +606,11 @@ if ($SelfTest) {
 
     # ---- 2. THE PUSH DECISION ----
     $p = New-RhFixtureRepo 'p'
-    $man = '{"schema":1,"max_data_age_days":2,"files":["grocery/check-ad-cycles.ps1","ops/chain-manifest.json"],"globs":["grocery/build-*.ps1"],"derive_from":["grocery/guards.ps1"],"derive_dirs":["grocery/","lib/"]}'
+    $man = '{"schema":1,"max_data_age_days":2,"files":["grocery/check-ad-cycles.ps1","ops/chain-manifest.json"],"globs":["grocery/build-*.ps1"],"derive_from":["grocery/guards.ps1"],"derive_dirs":["grocery/","lib/"],"exclude_globs":["grocery/test-*.ps1"]}'
     Write-RhFile $p 'ops\chain-manifest.json' $man
     Write-RhFile $p 'grocery\check-ad-cycles.ps1' "'chain'`n"
-    Write-RhFile $p 'grocery\guards.ps1' ". (Join-Path `$root 'audit-thing.ps1')`n"
+    Write-RhFile $p 'grocery\guards.ps1' ". (Join-Path `$root 'audit-thing.ps1')`n& (Join-Path `$root 'test-thing.ps1')`n"
+    Write-RhFile $p 'grocery\test-thing.ps1' "'a test'`n"
     Write-RhFile $p 'grocery\audit-thing.ps1' "'audit v1'`n"
     Write-RhFile $p 'grocery\audit-other.ps1' "'not named by guards'`n"
     Write-RhFile $p 'grocery\build-x.ps1' "'builder'`n"
@@ -616,9 +639,9 @@ if ($SelfTest) {
     Test-RhCase 'CLEAN TWIN  a doc-only commit after a rehearsal keeps the verdict key; a manifest change moves it' {
       ($k1 -eq $k2) -and ($k1 -ne (Get-RhManifestSet $p $c0).Key), ($k1 + ' ' + $k2)
     }
-    Test-RhCase 'MUST FIRE  derive_from: an audit NAMED by guards.ps1 is in the set, one it does not name is not, nor is README' {
+    Test-RhCase 'MUST FIRE  derive_from: an audit NAMED by guards.ps1 is in the set; one it does not name, a named test-*.ps1 under exclude_globs, and README are not' {
       $s = (Get-RhManifestSet $p $c1).Set
-      $s.ContainsKey('grocery/audit-thing.ps1') -and (-not $s.ContainsKey('grocery/audit-other.ps1')) -and $s.ContainsKey('grocery/build-x.ps1') -and (-not $s.ContainsKey('README.md')), (@($s.Keys) -join ',')
+      $s.ContainsKey('grocery/audit-thing.ps1') -and (-not $s.ContainsKey('grocery/audit-other.ps1')) -and $s.ContainsKey('grocery/build-x.ps1') -and (-not $s.ContainsKey('README.md')) -and (-not $s.ContainsKey('grocery/test-thing.ps1')), (@($s.Keys) -join ',')
     }
     function Set-RhVerdict([string]$Key, [string]$Result, [string]$DataDate, [string]$Blind = '', [string]$Stage = '') {
       Save-RhVerdict $vd ([pscustomobject]@{ result = $Result; blind = $Blind; key = $Key; stage = $Stage; cause = ('fixture ' + $Result); words = @('fixture words'); data_date = $DataDate; preexisting = @() })
@@ -678,16 +701,16 @@ if ($SelfTest) {
       }.GetNewClosure()
     }
     $statusBefore = ([string](Invoke-RhGit $script:RhRoot @('status', '--porcelain')).stdout)
-    $full = Invoke-RhRehearsal -Repo $src -Commit 'HEAD' -SourceRoot $seedDir -VerdictDir $vd -Today $today -Seeder $fakeSeeder -ChainRunner (& $mkRunner $false) -NoPair
+    $fullRun = Invoke-RhRehearsal -Repo $src -Commit 'HEAD' -SourceRoot $seedDir -VerdictDir $vd -Today $today -Seeder $fakeSeeder -ChainRunner (& $mkRunner $false) -NoPair
     $statusAfter = ([string](Invoke-RhGit $script:RhRoot @('status', '--porcelain')).stdout)
     $leak = Invoke-RhGit $src @('rev-parse', '--verify', '-q', 'refs/heads/rh-leak')
-    $scratchLeft = @(@($full.scratch) | Where-Object { $_ -and (Test-Path -LiteralPath $_) })
+    $scratchLeft = @(@($fullRun.scratch) | Where-Object { $_ -and (Test-Path -LiteralPath $_) })
     Test-RhCase 'CLEAN TWIN  a whole rehearsal over a fixture source passes, is RECORDED under its key with its data date, and the push it tried went nowhere' {
-      $v = Read-RhVerdict $vd $full.key
-      ($full.result -eq 'pass') -and ($null -ne $v) -and ($v.result -eq 'pass') -and ($v.data_date -eq '2026-09-21') -and ($leak.rc -ne 0), ($full.result + ' ' + $full.blind + ' ' + $full.cause + ' leak.rc=' + $leak.rc)
+      $v = Read-RhVerdict $vd $fullRun.key
+      ($fullRun.result -eq 'pass') -and ($null -ne $v) -and ($v.result -eq 'pass') -and ($v.data_date -eq '2026-09-21') -and ($leak.rc -ne 0), ($fullRun.result + ' ' + $fullRun.blind + ' ' + $fullRun.cause + ' leak.rc=' + $leak.rc)
     }
     Test-RhCase 'MUST NOT FIRE  it leaves nothing behind: no scratch clone of this commit under %TEMP%, and the launching checkout''s git status is unchanged' {
-      ($full.scratch -like '*tc-rh-*') -and ($scratchLeft.Count -eq 0) -and [string]::Equals($statusBefore, $statusAfter, [StringComparison]::Ordinal), ('left=' + $scratchLeft.Count)
+      ($fullRun.scratch -like '*tc-rh-*') -and ($scratchLeft.Count -eq 0) -and [string]::Equals($statusBefore, $statusAfter, [StringComparison]::Ordinal), ('left=' + $scratchLeft.Count)
     }
     $bad = Invoke-RhRehearsal -Repo $src -Commit 'HEAD' -SourceRoot (Join-Path $st 'no-such-source') -VerdictDir $vd -Today $today -Seeder $fakeSeeder -ChainRunner (& $mkRunner $false) -NoPair
     Test-RhCase 'MUST NOT FIRE  a rehearsal with no board to seed from reports blind=no-seed-board (exit 3), records it, and is never a pass' {
