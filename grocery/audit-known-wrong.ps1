@@ -492,6 +492,11 @@ if (Test-Path $purlPath) {
   # is preserved for the same reason - the report is ordered, and an order change is a diff nobody asked for.
   $kwByCid = @{}
   foreach ($e in $entries) {
+    # A REVERSED RULING IS HISTORY HERE TOO (2026-09-22, plan-2026-09-22-5). The board-cell check above skips an entry with
+    # reversed_on AND reversed_by ('a reversed ruling is history, not a gate'); this link index did not, so the first
+    # reversal of a ruling that had a curated link (the laundry-detergent policy rulings reversed on Brad's ruling B for
+    # ceab00) held the whole board as a BLOCKED-LINK to a product nobody rules wrong any more. Same test, same fields.
+    if ((@($e.PSObject.Properties.Name) -contains 'reversed_on') -and (@($e.PSObject.Properties.Name) -contains 'reversed_by') -and ([string]$e.reversed_on).Trim() -and ([string]$e.reversed_by).Trim()) { continue }
     # NOTE: an entry whose commodity normalises to '' is indexed under '' rather than dropped - the original
     # compared KwNorm(commodity) to KwNorm(cid) with no empty-string special case, so a degenerate id on both
     # sides matched. Keeping it means this index is equivalent on the edge cases too, not just the real ones.
