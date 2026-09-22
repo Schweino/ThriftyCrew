@@ -1,0 +1,484 @@
+{
+  "generated": "2026-09-22T17:30:00",
+  "round": 1,
+  "kind": "lanes-for-digest-types-and-proxy-pricing (Q-5d20b9-lanes)",
+  "board_week": "comparison-2026-09-22 (built 08:13:10, 494 min before this plan; triage-due BOARD line). The Chrome session landed Aldi, Fareway and Walmart captures 13:09 to 13:15 and a later partial run rewrote semantic-findings.json, aisle-test.json and research-worklist.json at 13:26, AFTER that build; every number below says which file it read.",
+  "parent_plan": "grocery/triage-plans/plan-2026-09-22-8.json item 2026-09-22-5d20b9 leaves_open (2) and (3); design/RCA-holistic-2026-09-22.md F5 and F1",
+  "depends_on": "batch 2 (plan-2026-09-22-5.json in worktree agent-a8dca88c6b2cde9e4) for item 2026-09-21-b96f21: its 7d64a6 changes to apply-coverage-batch.ps1 (gate 2b, Get-ExcludeAbsorbedRulings), coverage-explain-lib.ps1 and add-known-wrong.ps1 (second ruling of a shape refused) must be on main first, and its 81d955 edit to check-ad-cycles.ps1 is rebased under items b96f21, c9f0f3 and recipe-db-drift. Batch 3 (plan-2026-09-22-6.json in worktree agent-acc4db640d784b57b) for item discovered:ghost-drift-reconciler: its 115180 change (b174ba551, a tool's saved price is the feed value) must land first. Batch 4 (the rehearsal hook) applies to every chain-script change here.",
+  "queue_ids_seen": ["2026-09-22-5d20b9", "2026-09-21-b96f21", "2026-09-19-c9f0f3", "2026-09-21-7d64a6", "2026-09-21-115180"],
+  "queue_scope_note": "Scoped plan, not a daily triage. The other open ids triage-due printed (de4f72, a2af45, 7c932a and the other weekly-lane items) are owned by plan-2026-09-22-5 (batch 2), plan-2026-09-22-6 (batch 3) or the next daily run; this plan carries the five ids whose alert types are in its scope.",
+  "routing_artifact": null,
+  "routing_artifact_note": "No item in this plan edits a matching rule. Item b96f21 builds the lane that will, and each of that lane's batches measures its own routing and cell effects through apply-coverage-batch at run time. The two routing measurements taken here are embedded in the items: 348 recipe-vocabulary names routed through match-lib (positive control 'Shallots' expected shallots, observed shallots) and the chicken-thighs split option over 2,719 names (positive control 'Tyson Fresh Chicken Drumstick, 10 lb Bag' expected chicken-drumsticks, observed chicken-drumsticks). Scratch harnesses proxy-census.ps1 and facts3.ps1 in this session's scratchpad (not committed; the check item C1 builds is the durable harness). The dispatch asked for one file, so no separate routing artifact was written.",
+  "knowledge_consulted": "Searched --multi 'ingredient proxy substitute' 'verdict ledger re-ask' 'alert without resolver' 'two copies reconciler'. Used: reliability-craft/toil-runbooks-and-recovery.md section 4 ('drift is detected and corrected without a human noticing it first'; changes through commits, not by editing the running system) and its 'Two pieces the model above leaves out' (a dry run naming every create/update/destroy; the reconciler's state file), which shape the ghost-drift reconciler and the verdict ledger. From the dispatch: design/RCA-holistic-2026-09-22.md F5 ('this estate builds checks faster than it builds the lanes that act on them') and F1; memos ruling-recurring-shape-is-an-exclude, ruling-prices-fetched-by-pipeline, triage-cost-controls. Memos read in full here: recipe-r300-open-items (proxy item_ids were re-pointed by hand on 2026-07-25, 8 commodities, and no check was left behind), spec-bid-is-not-a-pricing-input (cost-recipes resolves the bid from db/ingredients.json while the card prices from the spec's scaler bid, so a repair touches both), recipe-cost-basis-map (the live card is whole-package, so whole-package is the reader-facing error). Exemplar: grocery/adjudicate-discovery.ps1's verdict ledger ('A RULED CANDIDATE NEVER COMES BACK'). Rules: .claude/rules/grocery.md (first include wins, only an exclude releases; stores.json on touch), .claude/rules/meal-prep.md (recost aftercare, propagate -SlugsFile), .claude/rules/ops-and-gates.md (fixture vocabulary, ratchet not red on day one, a case at the bar and one past).",
+  "untrusted_input_note": "No fetched page or tool output in this run addressed the reviewer; nothing to quote.",
+  "items": [
+    {
+      "queue_id": "2026-09-21-b96f21",
+      "subject": "ONE adjudication lane for the three matching detectors (stores-dropped, semantic-sweep, wrong-department): a shared worklist, a verdict ledger, and apply-coverage-batch -FromWorklist in the weekly lane",
+      "family": "F5",
+      "classification": "infra",
+      "evidence": [
+        "census 30 days ending 2026-09-22 (grocery/out/alert-census.jsonl): stores-dropped fired 15 days, semantic-sweep 19, wrong-department 8. Queue plus archive: 19 stores-dropped items, 18 semantic-sweep items, 9 wrong-department items. Commodities recurring across semantic items: ground-beef-8020 in 6, chicken-breast in 5, chicken-thighs 3, ground-beef-93-7 3, pork-tenderloin 3 (never adjudicated, so they came back whenever the set changed)",
+        "coverage-gaps.json 08:21: 453 gaps, 21 actionable (CLAIMED-BY 17, RULE-INVISIBLE 4); 392 WITHHELD, 25 BASIS-NULL, 10 BAND-DROPPED are engine-explained and not paged. All 21 target commodity+store pairs have NO cell at that store on comparison-2026-09-22",
+        "the reviewer's hand labels of the 21 (the fixture for the lane's classifier): 9 WRONG CLAIMS needing a release exclude on the claimer: 'Betty Crocker Rich and Creamy Cherry Frosting' held by cherries, 'Tostitos Medium Con Queso Salsa Dip' by salsa, 'Puffs Facial Tissue Plus Lotion' by lotion, 'Hunt's Tomato Paste with Basil Garlic and Oregano' by garlic, 'Chef Boyardee Mini Spaghetti Rings & Meatballs' by frozen-meatballs, 'Hy-Vee Korean Gochujang Sauce' by mac-and-cheese, 'Louisa Four Cheese Tortellini' by frozen-lasagna, 'Mezzetta Sun-Dried Tomatoes' by turkey-lunchmeat, 'Pictsweet ... Brussels Sprouts, Butternut Squash & Onions' by coconut; 1 WIDEN ('Old Orchard 100% Juice, Apple, Value Size' @ Fareway, no include matches); 5 CLAIM IS RIGHT ('Ginger Gold Apple' is an apple, 'Hy-Vee Chili With Beans' is canned chili, 'Birds Eye Steamfresh Mixed Vegetables' is frozen, 'Hy-Vee Mandarin Oranges ... 4-4 oz Bowls' is a fruit cup, 'Kroger ... Jumbo Raw Gulf Shrimp' is shrimp); 3 MULTI-PRODUCT AD LINES ('party cheese or cheese dip', 'apple or grape juice', 'fries, tots or onion rings'); 3 PACKAGING UNKNOWN ('12 Pack ... Diced Peaches in 100% Juice', 'Diced No Sugar Added Pears', 'Fareway Large Butter Beans')",
+        "semantic-findings.json 13:26 (examined 43,836 corpus names, 8,685 rule-invisible): 3 coverage rows. 'Eggo Frozen Pancakes, Buttermilk 14.8 Oz' as frozen-waffles @ Family Fare is a WRONG PRODUCT (the FF cell stays $0.2079/each 'Our Family Buttermilk Waffles 24 Ea'); 'Happy Farms Shredded Mild Cheddar' as shredded-cheese @ Aldi is a sibling of the row already in the Aldi cell ($0.2056/oz 'Happy Farms Shredded Mild Cheddar Cheese 16 OZ'); 'Long Grain Wild Ready TO Serve Rice' @ Aldi is a true include gap (Aldi has no cell; crown Walmart $0.15/oz). 2 of 3 real, 1 lookalike",
+        "aisle-test.json 13:26: 277 rows, 277 ALLOW, 0 BLOCK. Of its 8 fire days, 6 (08-24 to 09-02) re-paged a standing set of department-map false positives (black-peppercorns, cinnamon-stick, dried-ancho-chiles, dried-basil, pistachios, red-wine, whole-cloves, parmesan, white-wine) each time one member changed; 2 were single findings (gruyere 09-02; frozen-pizza 09-11, confirmed wrong product and fixed by the FF shelf-path admission in 5d1968736)",
+        "check-ad-cycles.ps1:2064, 2112, 2151: all three bodies hand a person a command ('Work them with explain-coverage-gap.ps1 ... then apply-coverage-batch.ps1', 'Fix by tightening that commodity's exclude'); each de-dup is a signature of the WHOLE set, so one new member re-pages every undecided old member",
+        "batch 2 (plan-2026-09-22-5) closed its b96f21 item needs-more-time ('dated worklist consumed by apply-coverage-batch', 'not started in this run'); the worklist design is plan-2026-09-22-2.json item b96f21's root_fix, carried here and widened to the two sibling detectors"
+      ],
+      "root_cause": "Three detectors find the same class of question (does this product belong to this commodity?) and write three files nobody reads: coverage-gaps.json, semantic-findings.json, aisle-test.json. The resolver scripts exist (explain-coverage-gap, apply-coverage-batch, add-known-wrong) but no lane consumes the findings and no ledger remembers a decision, so an undecided finding is re-paged whenever any member of its set changes (signature de-dup over the whole set). Measured: 0 of the 21 actionable gaps and 0 of the 3 semantic rows carry a recorded decision today, and 9 of the 21 are live wrong-product ROUTINGS (a claimer commodity holding a product that is not its food) that the page has described as 'a store dropped' for weeks.",
+      "root_fix": {
+        "what": "one worklist and one verdict ledger for all three detectors; the daily chain merges and decides, the weekly unattended lane applies decided rule changes through apply-coverage-batch in gated batches, and the three alert types page only NEW undecided keys under -Lane weekly",
+        "files": ["grocery/match-worklist-lib.ps1 (new)", "grocery/resolve-match-worklist.ps1 (new)", "grocery/match-verdicts.json (new, tracked)", "grocery/audit-coverage-gaps.ps1", "grocery/check-ad-cycles.ps1", "grocery/apply-coverage-batch.ps1", "grocery/test-match-worklist.ps1 (new)", "grocery/alert-registry.json"],
+        "exact_change": "(1) match-worklist-lib.ps1: Read-MatchFindings returns one row per kind|commodity|store|name from coverage-gaps.json (actionable only), semantic-findings.json (coverage rows) and aisle-test.json (BLOCK rows), each with the detector's own evidence (reason, claimer, cos/score, dept). Merge-MatchWorklist keeps first_seen/last_seen, drops a key the detector no longer reports, and skips any key in match-verdicts.json. (2) resolve-match-worklist.ps1 runs in the daily chain after the three detectors (fan-out lane, marker MATCH-WORKLIST-COMPLETE scanned= decided= undecided= new=): it classifies each undecided key as release (the claimer is not the product's food), widen (no rule admits the product's own food), confirm (the claim or refusal is right: written to match-verdicts.json at once), ad-line (the name offers two or more products), or undecided; the classifier is the sidecar identity score of product-vs-target against product-vs-claimer AND a head-noun check, and it DECIDES only when both agree. It writes grocery/out/match-worklist.json and never edits a rule. (3) apply-coverage-batch.ps1 -FromWorklist <n>: takes the n oldest release/widen keys, derives the release exclude or the widened pattern, runs its existing gates (routing, gate 2b from batch 2, its revert), and records each outcome (applied, reverted with the gate's reason, ruled known-wrong through add-known-wrong.ps1) in match-verdicts.json keyed as the worklist is. (4) check-ad-cycles.ps1: the three alert blocks read match-worklist.json and page, through Send-AlertConditions -Lane weekly, only keys whose first_seen is today and that are still undecided; the body lists them with the lane's classification and no command. (5) audit-coverage-gaps.ps1 carries the worklist's first_seen into coverage-gaps.json so the daily REVIEW line says how old each gap is. (6) alert-registry.json: semantic-sweep, stores-dropped and wrong-department resolver 'digest' -> 'lane:grocery/resolve-match-worklist.ps1', in the same commit. ACCEPTANCE BAR, written before the classifier is built: over the 24 frozen labels in the evidence (21 gaps + 3 semantic rows), 0 wrong decisions among the keys the classifier decides, with coverage printed beside it (decided of 24). If the bar is not met, the lane ships DOCKET-ONLY: it decides nothing, writes every key with its evidence, and the weekly lane (an unattended agent, lane:grocery/triage-due.ps1) adjudicates from the docket."
+      },
+      "prior_closes": ["2026-08-31-ad3b81", "2026-09-01-4a481e", "2026-09-02-995502", "2026-09-06-39933e", "2026-09-07-0e9482", "2026-09-19-2a0748"],
+      "prevention": {
+        "source": ["grocery/audit-coverage-gaps.ps1", "grocery/check-ad-cycles.ps1", "grocery/apply-coverage-batch.ps1"],
+        "what": "the emitting check stops re-paging a question already answered and stops handing the answer to a person: a decided key is written to match-verdicts.json and never pages again, an undecided key pages once (its first day), and the applier consumes the worklist instead of a person reading a body",
+        "exact_change": "audit-coverage-gaps.ps1 and the two sibling detectors' alert blocks in check-ad-cycles.ps1 read their finding set through Merge-MatchWorklist (verdict-ledger filter, first_seen); the whole-set signature files coverage-gap-alert.sig, semantic-alert.sig and aisle-alert.sig retire; apply-coverage-batch.ps1 gains -FromWorklist; as in root_fix"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "the routing verdicts audit-coverage-gaps recorded for each actionable candidate in coverage-gaps.json 08:21 (it routes every candidate through the live matcher; CLAIMED-BY names the first-match winner), the semantic sweep's rule_invisible set (8,685 of 43,836 names match no rule) in semantic-findings.json 13:26, and each target commodity+store looked up on comparison-2026-09-22",
+        "affected_now": 24,
+        "names": [
+          "21 coverage-gap keys and 3 semantic keys become worklist rows; 0 wrong-department keys today (0 BLOCK)",
+          "if the first weekly batch applied all 9 releases and the 1 widen: 10 products change routing (the 9 claimers each lose one product; frosting, queso, facial-tissues, tomato-paste, canned-pasta, gochujang, cheese-tortellini, sun-dried-tomatoes and apple-juice each gain one) and up to 9 NEW store cells appear where the target has no cell today; the coconut release admits nowhere (the Pictsweet vegetable mix is not butternut squash either)",
+          "5 confirm keys and today's pancakes lookalike go straight to match-verdicts.json and move nothing"
+        ],
+        "risk": "the lane edits no rule in the daily chain; a rule moves only inside apply-coverage-batch's existing gate, one batch a week, with routing and cell effects measured by that gate at that time. The decisive risk is the classifier deciding a lookalike: hence the written bar and the docket-only fallback. Crown effects of the 9 possible new store cells were NOT priced here (a candidate row's per-unit price is computed by the engine only when admitted).",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [
+        { "name": "Betty Crocker Rich and Creamy Cherry Frosting", "claimed_by": "cherries", "index": "not recorded here; apply-coverage-batch prints it", "release_needed": "cherries.exclude += frosting" },
+        { "name": "Tostitos Medium Con Queso Salsa Dip", "claimed_by": "salsa", "index": "not recorded", "release_needed": "salsa.exclude += con queso" },
+        { "name": "Puffs Facial Tissue Plus Lotion", "claimed_by": "lotion", "index": "not recorded", "release_needed": "lotion.exclude += tissue" },
+        { "name": "Hunt's Tomato Paste with Basil Garlic and Oregano", "claimed_by": "garlic", "index": "not recorded", "release_needed": "garlic.exclude += tomato paste" },
+        { "name": "Chef Boyardee Mini Spaghetti Rings & Meatballs", "claimed_by": "frozen-meatballs", "index": "not recorded", "release_needed": "frozen-meatballs.exclude += spaghetti rings" },
+        { "name": "Hy-Vee Korean Gochujang Sauce", "claimed_by": "mac-and-cheese", "index": "not recorded", "release_needed": "mac-and-cheese.exclude += gochujang (the batch first prints why mac-and-cheese matches it at all)" },
+        { "name": "Louisa Four Cheese Tortellini", "claimed_by": "frozen-lasagna", "index": "not recorded", "release_needed": "frozen-lasagna.exclude += tortellini" },
+        { "name": "Mezzetta Sun-Dried Tomatoes", "claimed_by": "turkey-lunchmeat", "index": "not recorded", "release_needed": "turkey-lunchmeat.exclude += sun-dried" },
+        { "name": "Pictsweet Farms Vegetables for Roasting Halved Brussels Sprouts, Butternut Squash & Onions - 18 oz", "claimed_by": "coconut", "index": "not recorded", "release_needed": "coconut.exclude += brussels sprouts; admit to no commodity" }
+      ],
+      "freshness": "coverage-gaps.json 08:21 and comparison-2026-09-22 (08:13:10 build); semantic-findings.json and aisle-test.json 13:26 (a later partial run, after the 13:09-13:15 browser captures). The developer re-reads all three after batch 2 lands and diffs the key set against the 24 labels before building the classifier.",
+      "proof": {
+        "guard_or_fixture": "grocery/test-match-worklist.ps1 (new, test-*.ps1 shape so the must-fire census finds it), plus apply-coverage-batch's existing gates for every applied batch",
+        "must_fire_case": "frozen from the real rows: 'Mezzetta Sun-Dried Tomatoes' claimed by turkey-lunchmeat is classified release (never confirm); 'Eggo Frozen Pancakes, Buttermilk 14.8 Oz' as frozen-waffles is NOT widen; a key decided yesterday that the detector reports again today does not page; a NEW undecided key pages exactly once, on its first_seen day, under -Lane weekly",
+        "clean_twin": "'Ginger Gold Apple' claimed by apples is confirm and lands in match-verdicts.json; 'Hy-Vee Chili With Beans' claimed by canned-chili is confirm; an ad line naming two products ('apple or grape juice') is ad-line and is never auto-applied; the lane's run over the frozen set leaves the commodity file byte-identical",
+        "fixture_occurrences": [
+          "2026-08-31-ad3b81: the gap set frozen from that item's queue body in the archive",
+          "2026-09-01-4a481e: the gap set frozen from that item's body",
+          "2026-09-02-995502: the gap set frozen from that item's body",
+          "2026-09-06-39933e: the gap set frozen from that item's body",
+          "2026-09-07-0e9482: the set closed false-alarm, frozen as confirm keys that must not page again",
+          "2026-09-19-2a0748: the 476-then-24 set; the 414 withheld rows are MUST NOT FIRE (not worklist rows)",
+          "2026-09-21-b96f21: the 21 labelled keys in this item's evidence"
+        ],
+        "commands": ["powershell -File grocery/test-match-worklist.ps1", "powershell -File grocery/audit-coverage-gaps.ps1 -SelfTest", "powershell -File grocery/test-auditors.ps1", "powershell -File grocery/audit-alert-registry.ps1"]
+      },
+      "rollback": "revert the commit: the three alert blocks return to whole-set signatures and match-verdicts.json is inert (nothing else reads it). A rule applied by a later -FromWorklist batch is reverted by that batch's own revert path.",
+      "leaves_open": "(1) the 3 multi-product ad lines ('A or B' offers at Hy-Vee) are a capture-ingest shape the lane can only park as ad-line; the ingest decision is Brad's (Q-adline-two-products); 3 keys today. (2) the classifier's precision is unmeasured until built; if it misses the bar the lane is docket-only and the weekly agent decides, which still ends the daily page. (3) crown effects of new store cells are measured per batch, not here.",
+      "leaves_open_occurrences": 3,
+      "leaves_open_followup": "Q-adline-two-products",
+      "publish_batch": 3,
+      "status": "planned",
+      "resolution_note": "Three matching detectors (stores dropped, semantic sweep, wrong department) now feed one worklist and one verdict ledger. The daily chain decides what it safely can and records it; the weekly lane applies release excludes and widenings through apply-coverage-batch's gates; a decided finding never pages again and an undecided one pages once. Today's 24 findings: 9 wrong-product routings to release, 1 rule gap, 5 correct claims recorded, 1 lookalike refused, 3 two-product ad lines parked for a ruling, 3 packaging questions and 2 semantic admits for the weekly lane.",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },    {
+      "queue_id": "2026-09-21-7d64a6",
+      "subject": "Semantic sweep RETURN (10 prior closes)",
+      "classification": "superseded",
+      "evidence": [
+        "batch 2 plan-2026-09-22-5.json item 2026-09-21-7d64a6 status done: a recurring wrong-product shape becomes a commodity exclude through apply-coverage-batch, and add-known-wrong refuses the second ruling of a shape",
+        "the lane that consumes the semantic findings is item 2026-09-21-b96f21 of this plan (today's 3 rows: 2 admits, 1 lookalike)"
+      ],
+      "root_cause": "as in item 2026-09-21-b96f21: no lane read semantic-findings.json and no ledger remembered a decision, so each changed set re-paged",
+      "resolution_note": "Superseded: the ruling half is batch 2's (plan-2026-09-22-5, done); the consuming lane is 2026-09-21-b96f21 in plan-2026-09-22-9."
+    },
+    {
+      "queue_id": "2026-09-19-c9f0f3",
+      "subject": "A sale with no everyday fallback becomes OWED WORK in the store's own capture plan; research-worklist.json and the owner labels retire",
+      "family": "F5",
+      "classification": "infra",
+      "evidence": [
+        "sale-fallback-gaps.json 08:20: 10 gaps, 9 'owned', 1 escalated. The 4 Hy-Vee gaps (bar-soap, canned-pumpkin, red-wine, white-wine) carry owner 'weekly-browser-agent'; canned-pumpkin is 20 days unworked against a 16-day grace. The 6 Family Fare gaps (cooked-jasmine-rice, frozen-fries, garden-salad, jumbo-pasta-shells, trash-bags, vegetable-soup) carry owner NONE, claimed_owner 'daily-ff-selfheal', terms_attempted false, unproven true",
+        "audit-sale-fallback.ps1:77 hard-codes $browser = Hy-Vee, Aldi, Walmart, Baker's, Sam's Club, Fareway with the comment 'can't research headless -> weekly agent'. Hy-Vee is a headless API pull (pull-regular-hyvee.ps1, Get-HyVeeUncoveredIds) and Baker's has been the Kroger API since 2026-07-24, so 4 of today's 10 gaps are routed to a browser agent for a store no browser is needed for",
+        "research-worklist.json (4 Hy-Vee rows) has no script reader: its writers are audit-sale-fallback.ps1:223 and audit-instore-channel.ps1; its only reader is prose, section D of the grocery-browser-stores-refresh SKILL (ops/prompt-backup/scheduled-tasks/grocery-browser-stores-refresh/SKILL.md:185); audit-write-only-reports lists it write-only",
+        "the owed-work mechanism already exists for the day AFTER a sale: Get-CapturePlan returns SaleExpiries, pull-regular-hyvee.ps1:1585-1634 and pull-regular-familyfare.ps1:1130-1172 put them at the front of the store's window oldest first, and Set-SaleExpiryProcessed marks them only after a landed capture. It has no notion of a sale still running with no everyday twin, which is the window in which the fallback can still be fetched",
+        "c9f0f3's own body: clam-chowder and vegetable-soup @ Family Fare, owner NONE, 6 days unworked; the prior close 2026-09-06-22b4dd was the same shape"
+      ],
+      "root_cause": "Ownership of a fallback gap is asserted by a LABEL ('weekly-browser-agent', 'daily-ff-selfheal') chosen from a hard-coded store list, and no owner's worklist actually contains the gap: the capture plans know sale EXPIRIES (after the store has already dropped) and not sale FALLBACKS (before), Family Fare's rotation of about 7 terms a window reaches a given term about once a quarter, and the browser agent's list is a JSON file only prose reads. So a gap is 'owned' until its grace runs out and then pages a person.",
+      "root_fix": {
+        "what": "the capture plan owes a fallback fetch for every on-sale cell with no everyday twin, at every store, through the same front allowance and landed-marker rule sale expiries use; audit-sale-fallback proves ownership from the plan, not from a label",
+        "files": ["grocery/capture-policy-lib.ps1", "grocery/audit-sale-fallback.ps1", "grocery/pull-regular-hyvee.ps1", "grocery/pull-regular-familyfare.ps1", "grocery/stores.json (read only, unless a capture-method field is missing)", "ops/prompt-backup/scheduled-tasks/grocery-browser-stores-refresh/SKILL.md (section D points at the worklist the lib now serves)"],
+        "exact_change": "capture-policy-lib.ps1: Get-CapturePlan returns SaleFallbacks (commodity ids from out/sale-fallback-gaps.json gaps for that store, oldest first_seen first) beside SaleExpiries; both draw from the SAME front allowance and an expiry is always taken before a fallback, so a fallback can never displace an expiry or the rotation's drip; Set-SaleFallbackAsked mirrors Set-SaleExpiryProcessed (marks only ids a landed capture asked); Get-CaptureWorklist appends sale_fallback_terms after ruling_terms and the expiries for the browser stores. pull-regular-hyvee.ps1 and pull-regular-familyfare.ps1 consume plan.SaleFallbacks exactly where they consume plan.SaleExpiries. audit-sale-fallback.ps1: delete the $browser literal and read each store's capture method from stores.json (convert on touch, rule I192); an owner is 'capture-plan:<store>' and a gap is OWNED only while the store's plan names it and it is inside two of that store's own cycles; stop writing research-worklist.json (audit-instore-channel.ps1 keeps its own appends, see leaves_open). check-ad-cycles.ps1 needs no change: it already pages escalated gaps only."
+      },
+      "prior_closes": ["2026-09-06-22b4dd"],
+      "prevention": {
+        "source": ["grocery/capture-policy-lib.ps1", "grocery/audit-sale-fallback.ps1"],
+        "what": "the producer of the owed-work plan learns the fallback class, and the emitting check stops accepting a label as proof of ownership",
+        "exact_change": "Get-CapturePlan.SaleFallbacks and Set-SaleFallbackAsked in capture-policy-lib.ps1; audit-sale-fallback.ps1's owner derived from the plan and its store capability from stores.json, as in root_fix"
+      },
+      "blast_radius": {
+        "measured_as": "owed terms and cells",
+        "measured_by": "sale-fallback-gaps.json 08:20 against comparison-2026-09-22; the stores' plan budgets as stated in pull-regular-hyvee.ps1 and pull-regular-familyfare.ps1",
+        "affected_now": 10,
+        "names": [
+          "Hy-Vee: 4 fallback asks (bar-soap, canned-pumpkin, red-wine, white-wine) enter its plan behind today's sale expiries",
+          "Family Fare: 6 fallback terms (cooked-jasmine-rice, frozen-fries, garden-salad, jumbo-pasta-shells, trash-bags, vegetable-soup) enter the front allowance behind today's expiries",
+          "0 board cells move today: a fallback row changes a cell only on the day its sale ends, when the store reverts to that row instead of dropping off"
+        ],
+        "risk": "Family Fare's front allowance is small (about 7 terms a window is the measured Freshop budget), so on a heavy expiry day fallbacks wait; they never displace an expiry and never the rotation's drip. Hy-Vee's asks share its daily call cap the same way. If the fixture shows a fallback displacing an expiry, the change is wrong.",
+        "cell_effects": []
+      },
+      "freshness": "sale-fallback-gaps.json 08:20 and research-worklist.json (generated 08:20, rewritten 13:26) against comparison-2026-09-22 08:13:10",
+      "proof": {
+        "guard_or_fixture": "grocery/capture-policy-lib.ps1 -SelfTest (new SaleFallbacks cases), grocery/audit-sale-fallback.ps1 -SelfTest, grocery/test-auditors.ps1 sale-fallback cases",
+        "must_fire_case": "frozen from c9f0f3: vegetable-soup @ Family Fare on sale with no everyday twin appears in Get-CapturePlan('Family Fare').SaleFallbacks; a Hy-Vee gap is owned by capture-plan:Hy-Vee, never 'weekly-browser-agent'; a gap the plan has not named for two of the store's cycles escalates; AT THE BAR a front allowance of exactly the expiry count asks 0 fallbacks, and ONE PAST it asks exactly 1",
+        "clean_twin": "sale expiries still come first and Set-SaleExpiryProcessed still marks only landed ids (existing cases pass unchanged); a gap whose everyday twin landed leaves SaleFallbacks the next day; a store absent from stores.json refuses loudly instead of defaulting to browser",
+        "fixture_occurrences": [
+          "2026-09-06-22b4dd: the unowned gap set of that day, frozen from its body",
+          "2026-09-19-c9f0f3: clam-chowder and vegetable-soup @ Family Fare, owner NONE"
+        ],
+        "commands": ["powershell -File grocery/capture-policy-lib.ps1 -SelfTest", "powershell -File grocery/audit-sale-fallback.ps1 -SelfTest", "powershell -File grocery/pull-regular-hyvee.ps1 -SelfTest", "powershell -File grocery/pull-regular-familyfare.ps1 -SelfTest", "powershell -File grocery/test-auditors.ps1"]
+      },
+      "rollback": "revert the commit; audit-sale-fallback returns to labels and research-worklist.json, and the plans return to expiries only. No data migration: sale-fallback-ownership.json is still read.",
+      "leaves_open": "audit-instore-channel.ps1 also appends channel-doubt cells to research-worklist.json, and that list keeps a prose-only reader (the browser SKILL's section D); its consumer is the attended browser run, which this item does not change. 0 escalations recorded from that writer in 30 days.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/audit-instore-channel.ps1",
+      "publish_batch": 2,
+      "status": "planned",
+      "resolution_note": "An on-sale cell with no everyday fallback is now owed work in that store's own capture plan (Hy-Vee, Family Fare, and the browser stores' worklist), fetched through the same front allowance as an expiring sale. The hard-coded browser-store list that sent Hy-Vee gaps to a browser agent is gone (stores.json decides), and ownership is proven from the plan instead of a label. Today's 10 gaps enter their stores' plans; 0 cells move until a sale ends.",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "discovered:walmart-capture-aging-2026-09-22",
+      "subject": "walmart-capture-aging: the detector was the defect, fixed 2026-08-31; the browser driver is already its resolver",
+      "classification": "no-code-change",
+      "evidence": [
+        "census: 6 fire days, 08-26 to 08-31, and 0 since. Every body quoted a comprehensive capture 10 to 20 days old against the 14-day window that ended 2026-08-20",
+        "b0eb124f2 2026-08-31 14:11 'The full-pull alarm was calibrated for a 14-day window that stopped existing in August': WarnAgeDays 10 -> 70 on the 90-day window read from Get-RegularUnionDays",
+        "audit-walmart-fullpull.ps1 run 2026-09-22 (it writes nothing): exit 0; Walmart comprehensive capture walmart-regular-2026-09-19.json (440 terms) 3 days old, warn at 70, cliff at 90; 0 of 513 attributed Walmart cells expire within 5 days; Sam's 384 terms, 3 days, 0 of 316"
+      ],
+      "root_cause": "a private 14-day window copy survived the 2026-08-20 move to the 90-day quarter, so the watch fired at 11% of the window; corrected at source in b0eb124f2",
+      "resolution_note": "No lane needed. All 6 fires were the stale 10-of-90 bar (fixed 08-31, 0 fires in the 22 days since). The part that closes unattended already runs: the 08:00 browser driver's full-worklist pull (last 2026-09-19, 440 terms). The alert is now a 20-day backstop for a driver that has been down for 70 days, and the heartbeat pages the driver's task first. Resolver stays digest. What cannot close unattended: a CAPTCHA or bot wall, which is the attended run-needs-you type."
+    },
+    {
+      "queue_id": "discovered:recipe-db-drift-2026-09-22",
+      "subject": "recipe-db-drift: no mechanical reconciler is safe here; the body stops handing out homework and carries the audit's list, resolver the weekly triage lane",
+      "family": "F5",
+      "classification": "infra",
+      "evidence": [
+        "census: 4 fire days (08-29, 09-01, 09-19, 09-21); 9 queue items over queue plus archive",
+        "three different causes, each fixed at source: 09-01 d65e8a, a brand-suffix strip disarmed by a food-db brand swap (plan-2026-09-01-2: 'the audit-prescribed repair would have written the stale brand into the authored specs and greened the audit by corruption'); 09-19 and 09-21 2c96d8 x10, six held recipes read as drift, fixed today in 33536eda0; 08-29 df2bbf (not re-diagnosed here)",
+        "meal-prep/engine/audit-db-agreement.ps1 run 2026-09-22 (its only writes are inside its self-test temp dir): exit 0, 'CLEAN (584 recipes, index==specs; 6 held recipe line(s) reported, not scored)', DB-AGREEMENT-COMPLETE recipes=584 issues=0 held=6",
+        "check-ad-cycles.ps1:2579 body: 'Run it for the list; fix the lagging side.' (the homework shape RCA F5 counts)"
+      ],
+      "root_cause": "the page carried no finding, only a command, so every fire cost a person a re-run; and the obvious lane (sync the index copy toward the spec) would have closed 0 of the 4 fires and made d65e8a worse, because a drift here is the symptom of a different upstream defect each time",
+      "root_fix": {
+        "what": "the alert body carries the audit's own issue lines and its marker counts; the registry names the weekly triage lane as the resolver (each fire needs diagnosis, not a sync)",
+        "files": ["grocery/check-ad-cycles.ps1", "grocery/alert-registry.json"],
+        "exact_change": "check-ad-cycles.ps1:2579: the Send-Alert body is the db-agreement fan-out record's output lines (the issues, capped as the audit caps them) plus its DB-AGREEMENT-COMPLETE line, and the sentence 'Run it for the list; fix the lagging side' goes. alert-registry.json recipe-db-drift resolver 'digest' -> 'lane:grocery/triage-due.ps1'."
+      },
+      "blast_radius": {
+        "measured_as": "alert bodies",
+        "measured_by": "check-ad-cycles.ps1 Send-Alert call sites for this type (1) and today's audit run",
+        "affected_now": 1,
+        "names": ["check-ad-cycles.ps1:2579"],
+        "risk": "none to data; a longer body only",
+        "cell_effects": []
+      },
+      "freshness": "audit-db-agreement run 2026-09-22 about 16:50 against the main checkout's specs and recipes-db.json",
+      "proof": {
+        "guard_or_fixture": "audit-alert-registry.ps1 queue half (a body with the homework shape is flagged) and test-auditors' alert-body cases",
+        "must_fire_case": "a db-agreement record with one drift line produces a body containing that line and the marker counts",
+        "clean_twin": "a clean record (issues=0) sends nothing, exactly as today",
+        "commands": ["powershell -File grocery/audit-alert-registry.ps1", "powershell -File grocery/test-auditors.ps1"]
+      },
+      "rollback": "revert the two hunks",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "publish_batch": 1,
+      "status": "planned",
+      "resolution_note": "recipe-db-drift fired 4 days in 30 for three different upstream defects, each already fixed at source (held recipes read as drift, fixed today in 33536eda0; a brand-strip rule, 09-01). A mechanical index sync would have closed none of them and corrupted specs once, so the lane is the weekly triage agent, and the page now carries the audit's findings instead of a command. Today the audit is clean over 584 recipes.",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-21-115180",
+      "subject": "Tools: a live page has drifted from its local source (cheap-dinners-right-now, STALE LIVE PAGE)",
+      "classification": "superseded",
+      "evidence": [
+        "batch 3 plan-2026-09-22-6.json item 2026-09-21-115180 status prepared; commit b174ba551 on its branch: 'a tool's saved price is the feed value it shows'",
+        "the body: live cheap-dinners-right-now +17 bytes, 'nothing has published this tool in 17 days', first difference a per-serving cost (c 2.48 local vs 2.54 live)"
+      ],
+      "root_cause": "F1: the tool page is a third copy of per-serving costs, written as literals and published by hand",
+      "resolution_note": "Superseded by batch 3 (plan-2026-09-22-6, b174ba551). The reconciler that closes the remaining ghost-drift class unattended is discovered:ghost-drift-reconciler-2026-09-22 in plan-2026-09-22-9."
+    },
+    {
+      "queue_id": "discovered:ghost-drift-reconciler-2026-09-22",
+      "subject": "ghost-drift closes itself: the direction of a drift is decided from git history; a stale live page is redeployed and an admin edit is folded into the local source by commit",
+      "family": "F5",
+      "classification": "infra",
+      "evidence": [
+        "census: 5 fire days (08-24, 08-29, 09-07, 09-14, 09-21). Bodies: 08-24 cheap-dinners-right-now +485, freezer-math -5, my-crew -53,596; 09-07 cheap-dinners +159, whats-for-dinner-tonight +286; 09-14 cheap-dinners +14, whats-for-dinner-tonight +14; 09-21 cheap-dinners +17 [STALE LIVE PAGE]. cheap-dinners-right-now is in all 4 bodies read",
+        "check-ad-cycles.ps1:3827 body: 'fold the change into the local source, or record it with -Accept <slug> and a reason' (a command for a person); publish-tool-post.ps1 already refuses to overwrite an unreviewed difference",
+        "batch 3 (b174ba551) removes the cost-literal copy behind the cheap-dinners and whats-for-dinner drifts; what remains is the direction question: is live OLD (redeploy) or live EDITED (fold)?"
+      ],
+      "root_cause": "the audit can see THAT two copies differ but not WHICH is newer, so every difference needs a person to decide the direction; the answer is in git: a live page whose bytes equal a committed earlier version of its local source is stale, and a live page whose bytes were never committed was edited in Ghost admin",
+      "root_fix": {
+        "what": "a reconciler that decides direction from the source's own history and acts on the two unambiguous cases",
+        "files": ["grocery/reconcile-ghost-drift.ps1 (new)", "grocery/audit-ghost-drift.ps1", "grocery/check-ad-cycles.ps1", "grocery/alert-registry.json"],
+        "exact_change": "audit-ghost-drift.ps1 writes grocery/out/ghost-drift.json (slug, local path, sha256 of the normalised live card, local sha256, live updated_at, first difference). reconcile-ghost-drift.ps1 reads it and, per drifted slug, hashes every committed version of the local source (git log --format=%H -- <path>, git show <sha>:<path>, the same normalisation): live equals an older committed version -> STALE: run publish-tool-post.ps1 for that slug (it prints its plan first; the reconciler records it); live equals no committed version and local is unchanged since live's updated_at -> ADMIN EDIT: write the live card into the local source and commit it with a pathspec (the fold); both moved -> CONFLICT: change nothing, page once under -Lane weekly with both diffs. check-ad-cycles runs it right after ghost-drift, honouring the chain's -NoPublish. alert-registry.json ghost-drift resolver 'digest' -> 'lane:grocery/reconcile-ghost-drift.ps1'."
+      },
+      "blast_radius": {
+        "measured_as": "tool pages",
+        "measured_by": "the 4 ghost-drift queue bodies over 30 days and the 16 mapped tools named in 115180's body (12 of 16 matched)",
+        "affected_now": 1,
+        "names": ["cheap-dinners-right-now (STALE LIVE PAGE: republished from local after batch 3 lands)"],
+        "risk": "a republish is reader-facing: the page's per-serving figures change to the feed's values (e.g. Beef Burrito Bowls 2.54 -> 2.48 in the 115180 diff). A wrong direction call would overwrite an admin edit; the CONFLICT branch and the 'local unchanged since live updated_at' condition are what stop that. 0 board cells.",
+        "cell_effects": []
+      },
+      "freshness": "queue and archive bodies read 2026-09-22 about 17:00; no live Ghost page was fetched by this reviewer (the direction of today's single drift is taken from its own body's STALE LIVE PAGE line)",
+      "proof": {
+        "guard_or_fixture": "grocery/reconcile-ghost-drift.ps1 -SelfTest over a temp git repo (Clear-TcGitRepoEnv first)",
+        "must_fire_case": "a live card equal to the source's previous commit is STALE and plans a publish; a live card never committed while local is unchanged since live's updated_at is ADMIN EDIT and writes the fold",
+        "clean_twin": "a slug whose live and local match does nothing; a slug where both moved is CONFLICT and neither publishes nor folds",
+        "commands": ["powershell -File grocery/reconcile-ghost-drift.ps1 -SelfTest", "powershell -File grocery/audit-ghost-drift.ps1 -SelfTest"]
+      },
+      "rollback": "revert the commit; ghost-drift pages as before",
+      "leaves_open": "the my-crew -53,596 byte drift of 08-24 is the shape the CONFLICT branch would page (both sides far apart); 1 occurrence in 30 days",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-22-5d20b9",
+      "publish_batch": 5,
+      "status": "planned",
+      "resolution_note": "A drifted tool page is now reconciled by direction: a stale live page is republished from its source, an edit made in Ghost admin is folded into the source by commit, and only a true two-sided conflict pages (weekly). Batch 3 removed the cost-literal copy that caused 4 of the 5 drift days.",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },    {
+      "queue_id": "discovered:recipe-ingredient-identity-2026-09-22",
+      "subject": "C: a recipe ingredient is priced by a hand-written commodity id that nothing reconciles with the board's own identity (shallots at the onion price, orange zest bought as 6.3 lb of oranges, pork chorizo at the ground-pork price)",
+      "family": "F1",
+      "classification": "money",
+      "evidence": [
+        "cost-recipes resolves a line's bid from meal-prep/db/ingredients.json (memo spec-bid-is-not-a-pricing-input); the card prices from the spec's scaler bid (chicken-florentine.json:139-143: item Shallots, bid onions)",
+        "census of the 348 ingredients.json rows with a bid, each name routed through grocery/match-lib.ps1 New-CommodityMatcher over the live commodity rules plus Get-TcGlobalExclude (positive control 'Shallots' expected shallots, observed shallots; 'Fresh Yellow Onions, 3 lb Bag' observed onions): same 230 rows / 5,739 costed lines; same but a UNION commodity 26 / 961; routes to ANOTHER commodity 9 / 44; routes nowhere 8 / 127; bid is a recipe-board-only id (not routable against the weekly rules) 75 / 968",
+        "the 9 that route elsewhere: 4 real proxies (Shallots bid onions routes to shallots, 3 lines; Pork Chorizo bid ground-pork routes to mexican-chorizo-fresh, 4; Tandoori Masala bid garam-masala routes to tandoori-seasoning, 1; Cheddar Cheese bid block-cheese routes to shredded-cheese, 0), 2 deliberate registrar rulings (Fresh Lemon Juice to lemons, Fresh Lime Juice to limes, 1 line each), 3 where the bid is MORE specific than the matcher (High Fiber Tortilla 29 lines, Butter Crackers 3, Pasta Shells jumbo 2)",
+        "union commodities whose pricing row names none of the ingredient's words (961 union lines checked on comparison-2026-09-22 at each line's own basis store): Zucchini priced by 'Fresh Yellow Squash, Each' 18 lines; Cherry Tomatoes by 'Fresh Grape Tomato, 10 oz Package' 17; Shallots by 'Fresh Yellow Onions, 3 lb Bag' 3; Panko Breadcrumbs by 'Great Value Italian Style Bread Crumbs, 15 oz' 3; Pepperoncini by 'Mezzetta Mild Banana Pepper Rings, 32 fl oz Jar' 3",
+        "Orange Zest row: bid oranges, unit lb, gpu 20.78 (zest grams per lb of oranges), buy_pkg_g 131, label 'each': 131 is one orange's FRUIT weight in a ZEST-gram field, so one 'each' is 131/20.78 = 6.30 lb of oranges. Costed line (slow-cooker-orange-chicken-rice-bowls): 8 g, util $0.48 (right), buy 1 x $7.86 'each' (Walmart $1.2475/lb x 6.30). The Lemon Zest row's own note (2026-08-31): 'On an each-priced fruit row buy_pkg_g must equal gpu' and 'The Orange Zest -> orange-juice row ... flagged separately'. Lemon Zest, Lime Zest and both fresh juices were corrected by hand that day and no check was left behind",
+        "board cells: onions Walmart $0.7467/lb; shallots Walmart $2.88/lb ('Fresh Whole Shallots 16oz Bag'), Baker's $3.99, Family Fare $5.99; ground-pork Walmart $3.9467/lb; mexican-chorizo-fresh Walmart $2.00/lb ('Cacique Beef Chorizo 12oz'); tandoori-seasoning has NO board cell",
+        "every affected recipe is live and paid (recipes-db.json published dates, 14 servings each): Shallots in chicken-florentine (2026-08-15), slow-cooker-tuscan-chicken-pasta (07-06), southwest-ground-turkey-cauliflower-rice-skillet (08-29); Orange Zest in slow-cooker-orange-chicken-rice-bowls (07-06); Pork Chorizo in chorizo-and-potato-bowls (07-19), creamy-ground-turkey-and-chorizo-pasta (07-19), mexican-chorizo-egg-casserole (08-16), panseared-pork-chops-with-cajun-dirty-rice (07-19); Tandoori Masala in sheet-pan-tandoori-chicken-cauliflower (08-16)",
+        "chicken thighs: 0 costed lines price at chicken-thighs today; meal-prep/db/ingredient-resolutions.json:1126 holds the mapper's standing REUSE 'bone-in skin-on chicken thighs' -> chicken-thighs (hunt-2026-08-27-ten, slug rosemary-chicken-thighs, not built), so the next recipe with that ingredient prices at a drumstick bag; batch 3 found the cell in 10 of its 40 prepared article edits and worded each around it"
+      ],
+      "recipe_effects": [
+        { "slug": "chicken-florentine", "line": "Shallots 99 g", "utilization_per_serving": "+0.034 (0.16 -> 0.63 a batch)", "whole_package_per_serving": "+0.15 (1 lb onions 0.75 -> 16 oz shallots 2.88)", "direction_today": "understated" },
+        { "slug": "slow-cooker-tuscan-chicken-pasta", "line": "Shallots 180 g", "utilization_per_serving": "+0.060 (0.30 -> 1.14)", "whole_package_per_serving": "+0.15", "direction_today": "understated" },
+        { "slug": "southwest-ground-turkey-cauliflower-rice-skillet", "line": "Shallots 150 g", "utilization_per_serving": "+0.050 (0.25 -> 0.95)", "whole_package_per_serving": "+0.15", "direction_today": "understated" },
+        { "slug": "slow-cooker-orange-chicken-rice-bowls", "line": "Orange Zest 8 g", "utilization_per_serving": "0 (0.48 is right)", "whole_package_per_serving": "-0.51 (7.86 -> 0.72: two 131 g oranges at 1.2475/lb, 6.0 g zest each, the one-fruit convention the Lemon and Lime Zest rows follow)", "direction_today": "overstated" },
+        { "slug": "chorizo-and-potato-bowls", "line": "Pork Chorizo 2,084 g", "utilization_per_serving": "about -0.64 (ratio estimate 2.00/3.9467 at Walmart)", "whole_package_per_serving": "re-measure with cost-recipes", "direction_today": "overstated" },
+        { "slug": "creamy-ground-turkey-and-chorizo-pasta", "line": "Pork Chorizo 308 g", "utilization_per_serving": "about -0.09", "whole_package_per_serving": "re-measure", "direction_today": "overstated" },
+        { "slug": "mexican-chorizo-egg-casserole", "line": "Pork Chorizo 624 g", "utilization_per_serving": "about -0.19", "whole_package_per_serving": "re-measure", "direction_today": "overstated" },
+        { "slug": "panseared-pork-chops-with-cajun-dirty-rice", "line": "Pork Chorizo 397 g", "utilization_per_serving": "about -0.12", "whole_package_per_serving": "re-measure", "direction_today": "overstated" }
+      ],
+      "root_cause": "The recipe vocabulary (ingredients.json 'bid', and the mapper's ingredient-resolutions.json 'item_id') is a second, hand-written statement of what a commodity IS, and nothing reconciles it with the first (the commodity's rules and the row that wins its cell). So three shapes pass silently: a DIFFERENT FOOD whose own commodity exists (shallots, chorizo, tandoori seasoning); a DERIVED yield row whose buy package is in the parent's grams (orange zest); and a UNION commodity whose winning row is the other member (drumsticks for thighs, yellow squash for zucchini, banana peppers for pepperoncini). The 2026-07-25 proxy re-point and the 2026-08-31 zest and juice corrections were each done by hand and left no check, which is why orange zest was 'flagged separately' and is still wrong three weeks later.",
+      "root_fix": {
+        "what": "every vocabulary row declares its relation to its bid, and one identity check reconciles the vocabulary with the board at push time, daily, and at the mapper's write",
+        "files": ["meal-prep/db/ingredients.json", "meal-prep/pipeline/audit-ingredient-identity.ps1 (new)", "meal-prep/pipeline/ingredient-resolutions.ps1", "meal-prep/engine/cost-recipes.ps1", "grocery/check-ad-cycles.ps1", "ops/out/ingredient-identity-baseline.json (new ratchet mark)"],
+        "exact_change": "(1) ingredients.json rows gain 'relation': same (default), derived (fields parent_units_per_purchase and yield_g_per_parent_unit; Orange Zest: one orange of 0.289 lb, 6.0 g) or substitute (field ruling: a question id; the card and receipt say 'priced as <commodity label>'). (2) audit-ingredient-identity.ps1: (a) routes each row's item name through grocery/match-lib.ps1 over the live commodity file; a 'same' row whose name routes to a DIFFERENT live commodity is a finding, and so is a row whose name routes nowhere unless it is substitute or carries a reviewed alias (the 3 more-specific bids: High Fiber Tortilla, Butter Crackers, Pasta Shells jumbo); (b) a derived row must satisfy buy_pkg_g == yield_g_per_parent_unit x parent_units_per_purchase (Orange Zest today: 131 against 6.0); (c) on the newest board, the row that prices each costed line at its basis store must name one of the ingredient's own words, or the line is a finding unless its row is substitute. Ratchet at today's count, falling only; a rise exits 2. MUST FIRE and CLEAN TWIN fixtures are frozen from the rows in this item's evidence. (3) ingredient-resolutions.ps1 runs (a) and (c) before it records a REUSE, so 'bone-in skin-on chicken thighs' -> chicken-thighs is refused while that cell's winning row is a drumstick bag. (4) cost-recipes.ps1 refuses a derived row whose basis fails (b), exactly as it refuses a label basis today (Get-LabelBasisLines is the exemplar). (5) check-ad-cycles runs the audit daily in the fan-out. INSTANCE REPAIRS under the check, same batch: Shallots bid onions -> shallots (REUSE, live at 3 stores); Orange Zest relation derived, buy_pkg_g 131 -> 6.0, label 'orange'; Pork Chorizo bid ground-pork -> mexican-chorizo-fresh (REUSE); Tandoori Masala stays garam-masala as relation substitute pending Q-declared-substitutes (tandoori-seasoning has no cell to price from). Each repair edits the matching spec scaler bid too, then recost aftercare: cost-recipes, sync-recipesdb-cost BEFORE propagate, propagate -SlugsFile naming exactly the 8 slugs."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "348 ingredients.json names routed through grocery/match-lib.ps1 (New-CommodityMatcher over the working-tree commodity file and Get-TcGlobalExclude) in the main checkout 2026-09-22 about 16:40, with a positive control; costed lines counted in meal-prep/db/costed.json 13:26:53; union check at each line's basis store on comparison-2026-09-22",
+        "affected_now": 8,
+        "names": [
+          "8 costed lines in 8 live paid recipes change bid or basis (3 Shallots, 1 Orange Zest, 4 Pork Chorizo); per-serving effects in recipe_effects",
+          "the check's day-one findings, ratcheted: 4 proxies, 5 declarations to write (2 derived juices, 3 more-specific aliases), 8 routes-nowhere rows to declare, 44 union lines whose row names another member, 1 derived basis"
+        ],
+        "risk": "No board cell moves: the grocery rules are read, never written. Recipe costs move on 8 live paid pages in both directions (shallots up, zest and chorizo down), which is the point; a wrong repair would misprice a live card, so each repair ships with its costed line printed before and after. The chorizo repoint prices pork chorizo from a cell whose Walmart row is BEEF chorizo (see leaves_open).",
+        "cell_effects": []
+      },
+      "freshness": "ingredients.json, the commodity file and costed.json as in the main checkout's working tree 2026-09-22 16:40 (costed.json written 13:26:53); board comparison-2026-09-22 (08:13:10 build). A rebuild before the developer starts changes the union-check counts only.",
+      "proof": {
+        "guard_or_fixture": "meal-prep/pipeline/audit-ingredient-identity.ps1 -SelfTest (in run-gates), the daily fan-out run, and cost-recipes' derived-basis refusal cases",
+        "must_fire_case": "frozen rows: Shallots with bid onions and relation same is a finding (routes to shallots); Orange Zest with buy_pkg_g 131, yield 6.0 per orange and 1 orange per purchase is a finding, and AT THE BAR buy_pkg_g exactly 6.0 is clean while ONE PAST it (6.5, a half-gram step, binary-exact) is a finding; a line priced by 'Tyson Fresh Chicken Drumstick, 10 lb Bag' for an ingredient named 'Bone-In Skin-On Chicken Thighs' is a finding; the mapper refuses the chicken-thighs REUSE",
+        "clean_twin": "Yellow Onion with bid onions stays clean; Fresh Lemon Juice declared derived from lemons stays clean and still prices 0.50 a lemon; Lemon Zest (buy_pkg_g 6 == gpu 6 on an each fruit) stays clean; the golden-test frozen lane's costs are unchanged for every recipe not in the 8",
+        "commands": ["powershell -File meal-prep/pipeline/audit-ingredient-identity.ps1 -SelfTest", "powershell -File meal-prep/pipeline/audit-ingredient-identity.ps1", "powershell -File meal-prep/engine/cost-recipes.ps1 -SelfTest", "powershell -File meal-prep/golden-test.ps1", "powershell -File ops/run-gates.ps1"]
+      },
+      "rollback": "revert the check commit and the vocabulary commit separately; the instance repairs revert with the vocabulary commit, followed by the same recost aftercare over the same 8 slugs",
+      "leaves_open": "(1) a qualifier mismatch inside one food class is invisible to a word test: pork chorizo priced from a beef chorizo row passes (a) and (c); 4 lines. (2) 75 rows whose bid is a recipe-board-only id (968 lines) are not routable against the weekly rules and get only checks (b) and (c). (3) the substitute rows (Tandoori Masala, Korean glass noodles, Lo Mein Noodles, Blackened Seasoning, Fresh Red Chili, Olives: 36 lines) wait on Q-declared-substitutes. (4) the union commodities themselves (47 labels with ' / ') are a board question, one of which is Q-chicken-thighs-meaning.",
+      "leaves_open_occurrences": 44,
+      "leaves_open_followup": "Q-declared-substitutes",
+      "publish_batch": 4,
+      "status": "planned",
+      "resolution_note": "Recipe ingredients were priced by hand-written commodity ids nothing checked against the board. Three shapes were live on 8 paid recipes: shallots at the onion price (understated about 0.15 a serving on the live card), orange zest bought as 6.3 lb of oranges (overstated 0.51 a serving), pork chorizo at the ground-pork price (overstated up to about 0.64). Every vocabulary row now declares whether it is the same food, a yield of a parent, or a declared substitute, and one identity check reconciles the vocabulary with the board at push, daily and when the mapper records a reuse. The 8 lines are repaired and recosted.",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "discovered:chicken-thighs-meaning-2026-09-22",
+      "subject": "C: chicken-thighs is 'Chicken Thighs / Drumsticks' and its crown is a Tyson 10 lb drumstick bag",
+      "classification": "needs-brad",
+      "evidence": [
+        "comparison-2026-09-22 chicken-thighs: Walmart $0.984/lb 'Tyson Fresh Chicken Drumstick, 10 lb Bag' (crown); Sam's $1.28 'Member's Mark Bone-In Chicken Thighs' (membership); Aldi $1.5495 bone-in skin-on thighs; Hy-Vee $1.88 sale 'Fresh chicken drumsticks or thighs'; Baker's and Family Fare $1.99 thighs; Fareway $1.99 'Chicken Drumsticks'",
+        "routing measured over 2,719 names (the newest capture file of each of 28 families under out/regular, out/sams, out/bakers, out/fareway, plus every comparison row): 7 names route to chicken-thighs today. Simulating a chicken-drumsticks commodity placed immediately before chicken-thighs moves exactly 3: the Tyson drumstick bag, the Hy-Vee 'drumsticks or thighs' ad line and Fareway 'Chicken Drumsticks'. Positive control: the Tyson bag expected chicken-drumsticks, observed chicken-drumsticks. CORPUS GAP, named: older files inside Walmart's 90-day union were not read, so whether Walmart keeps a thigh row after the split is unmeasured",
+        "a bone-in thigh priced at this crown is understated 23% against the cheapest thigh (Sam's, member) or 36.5% against the cheapest non-member thigh (Aldi)"
+      ],
+      "root_cause": "a union commodity serves two foods on the board, and any single-cut reader (a recipe line, an article sentence) is priced by whichever member is cheapest",
+      "resolution_note": "Needs Brad (Q-chicken-thighs-meaning): whether the board splits drumsticks into their own commodity, which the commodity-registrar must bless. Until ruled, the identity check (discovered:recipe-ingredient-identity) refuses any recipe REUSE of chicken-thighs for a single cut."
+    },
+    {
+      "queue_id": "discovered:declared-substitutes-2026-09-22",
+      "subject": "C: may a recipe line be priced as a DIFFERENT food when the board carries no cell for the real one?",
+      "classification": "needs-brad",
+      "evidence": [
+        "rows priced as another food today because the real food routes nowhere or has no cell: Tandoori Masala as garam-masala (tandoori-seasoning exists as a commodity with no board cell), Korean glass noodles (dangmyeon) as rice noodles (3 lines), Lo Mein Noodles as egg noodles (6), Blackened Seasoning as cajun seasoning (1), Fresh Red Chili as jalapenos (1), Olives as green olives (24)",
+        "Brad's 2026-09-21 rulings: every price is fetched from an Omaha store by the pipeline, and 'a recipe page should ALWAYS be able to be costed'; these two meet here"
+      ],
+      "root_cause": "the vocabulary has no way to say 'this is a stand-in', so a stand-in and an identity look the same to the engine and to the reader",
+      "resolution_note": "Needs Brad (Q-declared-substitutes). The identity check ships either way; the ruling decides whether a substitute row is allowed (and labelled to the reader) or refused until a store fetch lands."
+    },    {
+      "queue_id": "discovered:registry-duplicate-verdicts-2026-09-22",
+      "subject": "B: the two duplicate candidates, verified. The singular and plural queue types are two conditions; the retired sale-no-fallback wording does not still fire",
+      "family": "F5",
+      "classification": "infra",
+      "evidence": [
+        "health-heartbeat.ps1:882 raises 'QUEUE UNMEASURED' per named queue when queue-depth.ps1 ran and could not read THAT queue ('An unmeasured queue is not an empty one'); :886 raises 'QUEUES UNMEASURED' when queue-depth.ps1 itself threw, so NO queue was read. Send-AlertConditions keys each label as its own type. Different scope (one queue vs the whole scan), different repair (that queue's source vs the script), 0 fires each in the census window 08-22 to 09-22",
+        "sale-no-fallback: its 8 census days are 08-24, 08-26, 08-27, 08-30, 08-31, 09-01, 09-02, 09-03. The rewording to '... and NO ONE IS WORKING THEM' landed in c92b70a79 2026-09-03 13:38, and check-ad-cycles.ps1:2464 is the only sale-fallback Send-Alert left. 0 fires of the old wording in the 19 days since; the 30-day window simply still holds its history, which ages out 2026-10-03",
+        "alert-registry.json: the sale-no-fallback entry carries emitter '... (retired wording; kept so the queue history maps)' and resolver digest but no 'retired' field, so audit-alert-registry counts it as a live digest type; audit-alert-registry.ps1:466 already skips an entry with 'retired' ('MUST NOT FIRE a retired entry (it never fires) needs no resolver', :379)"
+      ],
+      "root_cause": "a retirement recorded in prose (the emitter string) instead of the field the registry audit reads, so the type is counted as live; and two sibling labels whose singular and plural spelling reads like a typo, with nothing in the registry saying why both exist",
+      "root_fix": {
+        "what": "record the retirement in the field the audit reads, and say in the registry why the two queue types are distinct",
+        "files": ["grocery/alert-registry.json"],
+        "exact_change": "sale-no-fallback: add retired '2026-09-03 (c92b70a79): reworded to sale-no-fallback-unworked when paging moved to escalated gaps only; the entry stays so the queue history it owns still resolves', and drop its resolver. silent-death-queue-unmeasured: note 'ONE named queue could not be read by queue-depth.ps1 (health-heartbeat.ps1:882); the scan itself ran'. silent-death-queues-unmeasured: note 'queue-depth.ps1 itself failed, so NO queue was read (health-heartbeat.ps1:886); not the plural of the one above'."
+      },
+      "blast_radius": {
+        "measured_as": "registry entries",
+        "measured_by": "grocery/alert-registry.json entries and audit-alert-registry's resolver tally",
+        "affected_now": 3,
+        "names": ["sale-no-fallback (retired +1, digest -1)", "silent-death-queue-unmeasured (note)", "silent-death-queues-unmeasured (note)"],
+        "risk": "none: Get-AlertDelivery reads class; a retired entry that somehow fired would still map, as the other retired entries do",
+        "cell_effects": []
+      },
+      "freshness": "alert-registry.json at a06659b21 in the main checkout; census 08-22 to 09-22",
+      "proof": {
+        "guard_or_fixture": "grocery/audit-alert-registry.ps1 (existing case :379, a retired entry needs no resolver)",
+        "must_fire_case": "a live (not retired) entry with no resolver is still a finding",
+        "clean_twin": "the retired sale-no-fallback entry needs no resolver and the tally prints retired +1",
+        "commands": ["powershell -File grocery/audit-alert-registry.ps1"]
+      },
+      "rollback": "revert the registry hunk",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "publish_batch": 1,
+      "status": "planned",
+      "resolution_note": "Verified both duplicate candidates. 'queue unmeasured' (one queue unread) and 'queues unmeasured' (the scan itself failed) are two conditions and both stay, now with registry notes saying so. The old sale-no-fallback wording has not fired since it was retired on 2026-09-03; its 8 days are history inside the 30-day window, and it is now marked retired where the registry audit reads it.",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-22-5d20b9",
+      "subject": "RESUME Q-5d20b9-lanes: each of the eight digest types names what closes it, flipped in the same commit as its lane",
+      "family": "F5",
+      "classification": "infra",
+      "evidence": [
+        "plan-2026-09-22-8.json item 5d20b9 leaves_open (2): eight review types that fired with no lane consuming them, all resolver digest at a06659b21",
+        "census over the 30 days ending 2026-09-22 (window from 08-24): semantic-sweep 19, stores-dropped 15, sale-no-fallback 8 (all before its 09-03 retirement), sale-no-fallback-unworked 3, wrong-department 8, walmart-capture-aging 6 (all before its 08-31 fix), recipe-db-drift 4, ghost-drift 5. Two of the dispatch's counts differ by one day (wrong-department 7, ghost-drift 4): a window-edge difference, stated",
+        "what each alert actually found, per item in this plan: stores-dropped 21 keys (9 wrong-product routings, 1 rule gap, 5 right claims, 6 needing judgement); semantic-sweep 3 (2 real, 1 lookalike); wrong-department 0 today, and 6 of its 8 fire days a standing false-positive set; sale-no-fallback-unworked 10 gaps with owner labels no worklist backs; walmart-capture-aging 6 of 6 a stale bar; recipe-db-drift 3 different upstream causes; ghost-drift 4 of 5 a cost-literal copy"
+      ],
+      "root_cause": "RCA F5: a type registered by condition and class, never by what closes it; for five of the eight the resolver script already existed and no lane read the finding, and for two the detector itself was the defect (walmart-capture-aging, already fixed; wrong-department's standing set, closed by the verdict ledger)",
+      "root_fix": {
+        "what": "each type's resolver moves from digest to the lane that closes it, in the same commit as that lane, never before",
+        "files": ["grocery/alert-registry.json"],
+        "exact_change": "semantic-sweep, stores-dropped, wrong-department -> lane:grocery/resolve-match-worklist.ps1 (with item 2026-09-21-b96f21). sale-no-fallback-unworked -> lane:grocery/capture-policy-lib.ps1 (with item 2026-09-19-c9f0f3; Get-CapturePlan is the consumer every store pull reads). recipe-db-drift -> lane:grocery/triage-due.ps1 (with discovered:recipe-db-drift). ghost-drift -> lane:grocery/reconcile-ghost-drift.ps1 (with discovered:ghost-drift-reconciler). sale-no-fallback -> retired (with discovered:registry-duplicate-verdicts). walmart-capture-aging stays digest (a backstop; see discovered:walmart-capture-aging)."
+      },
+      "blast_radius": {
+        "measured_as": "registry entries",
+        "measured_by": "grocery/alert-registry.json and audit-alert-registry's resolver tally after each flip",
+        "affected_now": 8,
+        "names": ["7 resolver flips or retirements across 5 commits", "1 unchanged (walmart-capture-aging) with its reason recorded"],
+        "risk": "a flip that lands before its lane names a script that does not yet consume the finding; audit-alert-registry checks that the lane path EXISTS, not that it reads the finding, so the same-commit rule is the whole protection",
+        "cell_effects": []
+      },
+      "freshness": "census and registry read 2026-09-22 about 16:30 at a06659b21",
+      "proof": {
+        "guard_or_fixture": "grocery/audit-alert-registry.ps1 resolver ratchet (lane paths exist, kinds parse)",
+        "must_fire_case": "a lane: resolver naming a path absent from the checkout is invalid (existing case)",
+        "clean_twin": "after each flip: missing 0, invalid 0, unassigned at its mark of 4",
+        "commands": ["powershell -File grocery/audit-alert-registry.ps1"]
+      },
+      "rollback": "revert the registry hunk with its lane's commit",
+      "leaves_open": "the four attended-browser types (run-needs-you, run-blocked-bot-wall, watchdog-browser-capture-missing-today, watchdog-browser-work-stale) stay unassigned: a CAPTCHA or bot wall cannot close unattended. 0 fires each in 30 days.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/capture-watchdog.ps1",
+      "publish_batch": 1,
+      "status": "planned",
+      "resolution_note": "Of the eight review types that fired with no consumer, five now have a lane that closes them (one matching worklist for three detectors, the capture plan for sale fallbacks, a ghost-drift reconciler), one is re-homed to the weekly triage agent with its findings in the body (recipe-db-drift), one was a retired wording that stopped firing on 09-03, and one (walmart-capture-aging) was a detector bug fixed 08-31 that now serves as a backstop.",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    }
+  ],
+  "ship_sequence": [
+    "0. PRECONDITION: batch 2 (plan-2026-09-22-5) is on origin/main (apply-coverage-batch gate 2b, coverage-explain-lib, add-known-wrong refusal, check-ad-cycles 81d955); batch 3's b174ba551 is on origin/main before step 5. Rebase on origin/main and re-run triage-due; if the BOARD line names a newer generation, re-read coverage-gaps.json, semantic-findings.json and sale-fallback-gaps.json and diff the key sets against this plan before building.",
+    "1. publish 1 (no board, no reader effect): discovered:registry-duplicate-verdicts-2026-09-22, then discovered:recipe-db-drift-2026-09-22 (body and its registry flip). audit-alert-registry exit 0.",
+    "2. publish 2 (chain; no cell moves): 2026-09-19-c9f0f3 with its registry flip. Rehearse the chain (batch 4's ops/rehearse-chain.ps1) because capture-policy-lib and both pull scripts are chain scripts; then read the next Hy-Vee and Family Fare plan lines for SaleFallbacks.",
+    "3. publish 3 (chain; no rule applied): 2026-09-21-b96f21 with its three registry flips. Rehearse the chain. Measure the classifier against the 24 frozen labels BEFORE the lane decides anything; below the bar, ship docket-only.",
+    "4. publish 4 (8 live recipe pages): discovered:recipe-ingredient-identity-2026-09-22: the check first (ratchet at the day-one count), then the vocabulary commit with the 8 instance repairs and their spec scaler bids, then cost-recipes, sync-recipesdb-cost, propagate -SlugsFile <the 8 slugs>, and the live-price monitor. Print each of the 8 costed lines before and after.",
+    "5. publish 5 (after batch 3 lands): discovered:ghost-drift-reconciler-2026-09-22 with its registry flip; its first live run reconciles cheap-dinners-right-now (expected STALE).",
+    "6. close 2026-09-22-5d20b9 when the last flip lands; audit-alert-registry exit 0 with lane +6, digest -7, retired +1.",
+    "7. LIVE VERIFICATION: fetch one live recipe page per repair class with a cache-busting query (chicken-florentine for shallots, slow-cooker-orange-chicken-rice-bowls for zest, chorizo-and-potato-bowls for chorizo), read the shallot, zest and chorizo line prices off the rendered card and compare them with costed.json; on the next morning's chain: 0 stores-dropped, semantic or aisle pages for keys decided in step 3, and the Hy-Vee and Family Fare plans naming today's fallback gaps.",
+    "no ship: 2026-09-21-7d64a6 (superseded by batch 2), 2026-09-21-115180 (superseded by batch 3), discovered:walmart-capture-aging-2026-09-22 (no-code-change), discovered:chicken-thighs-meaning-2026-09-22 and discovered:declared-substitutes-2026-09-22 (needs-brad)"
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q-chicken-thighs-meaning",
+      "question": "The board's chicken-thighs commodity is labelled 'Chicken Thighs / Drumsticks', and today its cheapest row is a Tyson 10 lb drumstick bag at $0.98/lb while the cheapest actual thigh is $1.28 (Sam's, member) or $1.55 (Aldi). Anything that means 'thighs' (a recipe line, an article sentence) is priced at the drumstick. Should drumsticks become their own commodity?",
+      "options": [
+        "A: split. A new chicken-drumsticks commodity (the commodity-registrar must bless the id) placed before chicken-thighs. Measured: 3 of the 7 names now routing to chicken-thighs move (Walmart's Tyson bag, Hy-Vee's 'drumsticks or thighs' ad line, Fareway's drumsticks); the thighs crown moves to $1.28 member / $1.55 non-member; Walmart may lose its thighs cell (unmeasured: older union files not read)",
+        "B: keep the union for the board, and forbid any single-cut reader from binding to it (recipes refuse the reuse, articles say 'thighs or drumsticks')",
+        "C: keep everything as it is (today's state)"
+      ],
+      "recommendation": "A: a reader who buys thighs is shown a drumstick price today, 23 to 37 percent low; the split is a 3-name routing change, and drumsticks keep their own honest cell",
+      "answered": "2026-09-22",
+      "answer": "A",
+      "answer_verbatim": "Split them (Recommended)"
+    },
+    {
+      "id": "Q-declared-substitutes",
+      "question": "When the board has no cell for an ingredient (tandoori masala, Korean glass noodles, lo mein noodles, blackened seasoning, fresh red chili, generic olives: 36 lines on live recipes), may the recipe be priced as a similar food the board does carry?",
+      "options": [
+        "A: never. The line shows NO PRICE BASIS and pages until a store fetch for the real food lands (the strictest reading of 'fetched from a store')",
+        "B: yes, as a DECLARED substitute: the row names this ruling, the card says 'priced as <that food>', and the substitute expires at the quarter unless a store fetch for the real food still fails",
+        "C: yes, silently (today's state)"
+      ],
+      "recommendation": "B: it keeps 'a recipe page should always be able to be costed' and tells the reader the truth about what was priced; the expiry stops it becoming permanent",
+      "answered": "2026-09-22",
+      "answer": "none of A/B/C as written: NO substitute of any kind, and the recipe is HELD (not live) until every ingredient is carried in Omaha with a pipeline-fetched price. First try to bring the missing ingredient onto the board (registrar + store capture); hold only if it is not carried. A yield from a parent food (zest by the orange's real weight) is the same food and stays allowed. Memo ruling-recipe-live-only-if-every-ingredient-priced.",
+      "answer_verbatim": "That recipe should not be live if an ingredient is not carried in Omaha with a price"
+    },
+    {
+      "id": "Q-adline-two-products",
+      "question": "Some weekly ad lines offer two or three products at one price ('Old Orchard apple or grape juice, 2 for $7', 'Alexia fries, tots or onion rings', 'party cheese or cheese dip'). Today first-match-wins hands the line to whichever commodity comes first. What should such a line price?",
+      "options": [
+        "A: every commodity it names (the ad price is genuinely available for each): split the line into one row per named product at ingest",
+        "B: none (refuse at ingest; the everyday rows cover those cells)",
+        "C: the first-named product only"
+      ],
+      "recommendation": "A: the price is real for each product named; if the ad attaches a quantity condition, the existing quantity-conditional ruling already says how it is shown",
+      "answered": "2026-09-22",
+      "answer": "A",
+      "answer_verbatim": "Split per product (Recommended)",
+      "note": "Distinct from alternative SIZES of one product ('56 or 67.5 oz'), which batch 2 prices at the least favourable size."
+    }
+  ]
+}
