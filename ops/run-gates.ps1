@@ -413,10 +413,11 @@ $static = @(
   # only, so a new Send-Alert call site with no registry entry fails the push instead of paging next morning as
   # UNREGISTERED ALERT TYPE. The queue half reads data and runs in the daily chain's alert-registry lane.
   @{ f = 'grocery\audit-alert-registry.ps1';   n = 'every Send-Alert call site whose subject can be read maps to exactly one class in grocery\alert-registry.json' }
-  # ops\verify-commodities-gate.ps1 is deliberately NOT listed here. A $static entry passes no
-  # arguments, which would run its LIVE check against a staged set that is empty during a gate run -
-  # a confident "not applicable" that proves nothing. It declares [switch]$SelfTest, so the discovery
-  # pass above already runs its fixtures, which is the half that can rot.
+  # ops\verify-commodities-gate.ps1 WITH NO ARGUMENT is deliberately not listed: that form judges a staged set, which is
+  # empty during a gate run - a confident "not applicable" that proves nothing. Its -Head form needs no staged set: it
+  # hashes HEAD's committed rule files against HEAD's committed match-baseline.json (2026-09-22, queue 2026-09-21-a25dc0),
+  # so rules that a rebase or a --no-verify commit landed without their review are refused at push. `a` = arguments.
+  @{ f = 'ops\verify-commodities-gate.ps1'; a = @('-Head'); n = 'the matching rules committed at HEAD are the ones HEAD''s committed match baseline reviewed (a rebase or --no-verify cannot land them apart)' }
 )
 # `daily = $true` MEANS "NOT ON EVERY PUSH" (Brad, 2026-09-12), and the mark lives on the entry rather than in a
 # second list, because a name carried in two files goes stale and this one decides what a push checks.
@@ -448,8 +449,11 @@ foreach ($g in $static) {
   $pp = Join-Path $repo $g.f
   if (-not (Test-Path $pp)) { continue }
   if ([bool]$g.daily) { $dailyDeferred++; continue }
-  [void]$staticKeys.Add([string]$g.f)
-  [void]$staticJobs.Add([pscustomobject]@{ Exe = $PSEXE; ArgList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $pp) })
+  # An entry may carry arguments (`a`, 2026-09-22); it is then keyed by file AND arguments, so one script can run in
+  # two forms without one result answering for both.
+  $gArgs = @(); if ($g.ContainsKey('a')) { $gArgs = @($g.a) }
+  [void]$staticKeys.Add(([string]$g.f + ' ' + ($gArgs -join ' ')).Trim())
+  [void]$staticJobs.Add([pscustomobject]@{ Exe = $PSEXE; ArgList = (@('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $pp) + $gArgs) })
 }
 # ---- PYTHON self-tests -----------------------------------------------------------------------------
 # THE DISCOVERY ABOVE READS *.ps1 AND NOTHING ELSE, so every Python suite in this estate was ungated.
@@ -916,7 +920,8 @@ foreach ($g in $static) {
   if ([bool]$g.daily) { continue }
   $p = Join-Path $repo $g.f
   if (-not (Test-Path $p)) { $fail += $g.f; Write-Output ("  FAIL  {0} is missing" -f $g.f); continue }
-  $gr = $staticBy[[string]$g.f]
+  $gArgs = @(); if ($g.ContainsKey('a')) { $gArgs = @($g.a) }
+  $gr = $staticBy[([string]$g.f + ' ' + ($gArgs -join ' ')).Trim()]
   $out = $gr.Out
   Add-TcGateTiming -Name ($g.f) -Ms $gr.Ms -SpawnMs 209
   $rc = $gr.ExitCode

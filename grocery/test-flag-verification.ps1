@@ -243,6 +243,7 @@ try {
   if (-not $spM.Success) { Bad 'the SANITY-PAGER region is gone from check-ad-cycles.ps1 - the pager cases examined nothing' }
   else {
     $pgDir = Join-Path $tmp 'pager'; New-Item -ItemType Directory -Path $pgDir -ErrorAction Stop | Out-Null
+    # store-subset-ok: frozen guards rows for the pager region; it routes by row type and never branches on which store (queue 2026-09-22-175249)
     $pgRows = '[{"commodity":"Oats / Oatmeal","type":"outlier-verified","detail":"store agrees"},{"commodity":"Anaheim Peppers","type":"outlier","detail":"x","id":"anaheim-peppers","store":"Baker''s"},{"commodity":"Cardamom","type":"wow","detail":"y","id":"cardamom","store":"Walmart"},{"commodity":"Old Flag","type":"outlier","detail":"a flag written before the cell fields"},{"commodity":"Mystery","type":"outlier-nonsense","detail":"z","id":"m","store":"Aldi"}]'
     [IO.File]::WriteAllText((Join-Path $pgDir 'guards-2026-09-21.json'), $pgRows, (New-Object Text.UTF8Encoding($false)))
     $gf = Get-Item (Join-Path $pgDir 'guards-2026-09-21.json')

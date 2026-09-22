@@ -36,7 +36,7 @@
         3 = could not evaluate (no git, no repo).
 #>
 [CmdletBinding()]
-param([switch]$SelfTest)
+param([switch]$SelfTest, [switch]$Head)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path $here -Parent
@@ -121,6 +121,32 @@ function Get-IndexBaselineHash {
     if (-not (Save-GitBlob -Repo $Repo -Spec (':' + $Rel) -Dst $dst)) { return '' }
     return (Get-RulesHashFromBaselineText ([IO.File]::ReadAllText($dst)))
   } finally { Remove-Item -LiteralPath $dst -Force -ErrorAction SilentlyContinue }
+}
+
+function Get-RevRulesVerdict {
+  <# THE COMMITTED PAIR, AT PUSH (2026-09-22, queue 2026-09-21-a25dc0; F1 in design/RCA-holistic-2026-09-22.md). The rule
+     files and match-baseline.json are two tracked records of one review. pre-commit binds them, but a rebase result and a
+     --no-verify commit never pass pre-commit: 469873e4d landed rules its committed baseline did not cover. Every road onto
+     origin/main passes pre-push, so run-gates runs this with -Head: the rule files and the baseline AS COMMITTED at a
+     revision, hashed from their blobs. No staged set is needed, which is what kept the no-argument form out of run-gates.
+     Returns rules_hash, baseline_hash and covers (Test-BaselineCoversRules, the same verdict pre-commit uses). #>
+  param([string]$Repo, [string]$Rev = 'HEAD')
+  $v = [pscustomobject]@{ rules_hash = ''; baseline_hash = ''; covers = $false }
+  $tmpR = Join-Path $env:TEMP ('cgrev-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  $tmpRG = Join-Path $tmpR 'grocery'
+  [void](New-Item -ItemType Directory -Path $tmpRG -Force -ErrorAction Stop)
+  try {
+    foreach ($rel in $script:CG_RULE_FILES) {
+      $dstR = Join-Path $tmpRG (Split-Path $rel -Leaf)
+      if (-not (Save-GitBlob -Repo $Repo -Spec ($Rev + ':' + $rel) -Dst $dstR)) { Remove-Item -LiteralPath $dstR -Force -ErrorAction SilentlyContinue }
+    }
+    if (-not (Get-Command Get-IdentityRulesHash -ErrorAction SilentlyContinue)) { . (Join-Path $repo 'grocery\identity-lib.ps1') }
+    try { $v.rules_hash = [string](Get-IdentityRulesHash -GroceryRoot $tmpRG) } catch { $v.rules_hash = '' }
+    $bDst = Join-Path $tmpR 'baseline.json'
+    if (Save-GitBlob -Repo $Repo -Spec ($Rev + ':' + $script:CG_BASELINE_REL) -Dst $bDst) { $v.baseline_hash = Get-RulesHashFromBaselineText ([IO.File]::ReadAllText($bDst)) }
+  } finally { Remove-Item -LiteralPath $tmpR -Recurse -Force -ErrorAction SilentlyContinue }
+  $v.covers = Test-BaselineCoversRules $v.rules_hash $v.baseline_hash
+  return $v
 }
 
 if ($SelfTest) {
@@ -208,6 +234,40 @@ if ($SelfTest) {
       (Test-BaselineCoversRules '71d6567e44c4' $ixStaged) ("index=$ixStaged")
     T 'MUST FIRE  a baseline text that records no rules_hash yields none, so it is refused rather than read as covering anything' `
       ((Get-RulesHashFromBaselineText '{"generated":"x","names":{}}') -eq '') (Get-RulesHashFromBaselineText '{"generated":"x","names":{}}')
+    # ---- -Head: THE COMMITTED PAIR (2026-09-22, a25dc0). The 469873e4d shape: rules committed without their baseline. ----
+    . (Join-Path $repo 'grocery\identity-lib.ps1')
+    $hr = Join-Path $g 'hashroot\grocery'
+    [void](New-Item -ItemType Directory -Path $hr -Force)
+    # identity-lib refuses to hash a rule set without global-exclude-lib.ps1, so both the hash root and the temp repo carry it
+    $gxl = [IO.File]::ReadAllBytes((Join-Path $repo 'grocery\global-exclude-lib.ps1'))
+    [IO.File]::WriteAllBytes((Join-Path $hr 'global-exclude-lib.ps1'), $gxl)
+    $cA = '[{"id":"salmon","label":"Salmon","unit":"lb","include":["salmon"]}]'
+    $cB = '[{"id":"salmon","label":"Salmon","unit":"lb","include":["salmon","lox"]}]'
+    [IO.File]::WriteAllText((Join-Path $hr 'commodities.json'), $cA); $hA = [string](Get-IdentityRulesHash -GroceryRoot $hr)
+    [IO.File]::WriteAllText((Join-Path $hr 'commodities.json'), $cB); $hB = [string](Get-IdentityRulesHash -GroceryRoot $hr)
+    $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try {
+      [void](New-Item -ItemType Directory -Path (Join-Path $g 'grocery') -Force)
+      [IO.File]::WriteAllText((Join-Path $g 'grocery\commodities.json'), $cA)
+      [IO.File]::WriteAllBytes((Join-Path $g 'grocery\global-exclude-lib.ps1'), $gxl)
+      [IO.File]::WriteAllText($fxBase, "{`n  ""rules_hash"":  ""$hA"",`n  ""names"":  {}`n}")
+      & git -C $g add grocery/commodities.json grocery/global-exclude-lib.ps1 $script:CG_BASELINE_REL 2>&1 | Out-Null
+      & git -C $g commit -q -m 'rules A with their baseline' 2>&1 | Out-Null
+    } finally { $ErrorActionPreference = $prevEap }
+    $hv1 = Get-RevRulesVerdict -Repo $g -Rev 'HEAD'
+    T 'CLEAN TWIN  -Head: rules committed WITH the baseline that reviewed them are covered, hashed from the blobs' `
+      ($hv1.covers -and $hv1.rules_hash -eq $hA -and $hA -ne $hB) ("rules=$($hv1.rules_hash) base=$($hv1.baseline_hash)")
+    $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try {
+      [IO.File]::WriteAllText((Join-Path $g 'grocery\commodities.json'), $cB)
+      & git -C $g add grocery/commodities.json 2>&1 | Out-Null
+      & git -C $g commit -q -m 'rules B alone, as a rebase or --no-verify lands them' 2>&1 | Out-Null
+    } finally { $ErrorActionPreference = $prevEap }
+    $hv2 = Get-RevRulesVerdict -Repo $g -Rev 'HEAD'
+    T 'MUST FIRE  -Head: rules committed WITHOUT their baseline (the 469873e4d shape) are not covered, naming both hashes' `
+      ((-not $hv2.covers) -and $hv2.rules_hash -eq $hB -and $hv2.baseline_hash -eq $hA) ("rules=$($hv2.rules_hash) base=$($hv2.baseline_hash)")
+    $hv3 = Get-RevRulesVerdict -Repo $g -Rev 'HEAD~1'
+    T 'CLEAN TWIN  -Head reads the revision it is given: the previous commit is still covered' ($hv3.covers) ("rules=$($hv3.rules_hash)")
   } finally { Remove-Item -LiteralPath $g -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($bad -eq 0) { Write-Output 'COMMODITIES-GATE SELF-TEST PASS'; Write-GuardComplete -Name 'commodities-gate' -Summary 'selftest ok'; exit 0 }
@@ -215,6 +275,20 @@ if ($SelfTest) {
 }
 
 # ---- live path -------------------------------------------------------------------------------------
+if ($Head) {
+  # run-gates' form: the committed pair at HEAD, no staged set (see Get-RevRulesVerdict).
+  $hv = Get-RevRulesVerdict -Repo $repo -Rev 'HEAD'
+  $hs12 = if ($hv.rules_hash) { $hv.rules_hash.Substring(0, [Math]::Min(12, $hv.rules_hash.Length)) } else { '(unhashable)' }
+  $bs12 = if ($hv.baseline_hash) { $hv.baseline_hash.Substring(0, [Math]::Min(12, $hv.baseline_hash.Length)) } else { '(none recorded)' }
+  if ($hv.covers) {
+    Write-Output ("commodities-gate -Head: HEAD's rule files hash $hs12 and HEAD's " + $script:CG_BASELINE_REL + " records the same - the committed review covers the committed rules")
+    Exit-Guard -Name 'commodities-gate' -Summary ("head covered rules=$hs12") -Code 0
+  }
+  Write-Output ("commodities-gate -Head: REFUSED - HEAD's rule files hash $hs12 but HEAD's " + $script:CG_BASELINE_REL + " records $bs12.")
+  Write-Output '  Committed matching rules that the committed baseline did not review (a rebase result or a --no-verify commit can land them apart).'
+  Write-Output '  Run powershell -File grocery\audit-match-soundness.ps1 -Accept after reviewing the drops, and commit the baseline.'
+  Exit-Guard -Name 'commodities-gate' -Summary ("head NOT covered rules=$hs12 baseline=$bs12") -Code 2
+}
 $staged = @()
 # 'Continue' around the redirect, not the catch alone. Under 'Stop' one git warning on stderr threw into the catch,
 # the staged set read EMPTY, and a rule change passed as "not applicable" (grocery\test-native-stderr-eap.ps1).

@@ -503,6 +503,7 @@ if ($SelfTest) {
 
 
   # ---- NOT YET IS NOT MISSING (2026-09-22, queue 2026-09-22-2000e1) ----
+  # Store names are neutral on purpose: Get-BrowserCaptureVerdict never branches on which store (audit-store-registry check 5).
   # Frozen: the 2026-09-22 morning. Aldi, Fareway and Walmart had no capture at 10:30 and landed at 13:09-13:15.
   $bvDir = Join-Path $env:TEMP ('wd-bcv-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
   New-Item -ItemType Directory -Path $bvDir -ErrorAction Stop | Out-Null
@@ -510,22 +511,22 @@ if ($SelfTest) {
     if (-not (Get-Command Get-BrowserCaptureVerdict -ErrorAction SilentlyContinue)) { . (Join-Path $root 'capture-policy-lib.ps1') }
     $bvSam = Join-Path $bvDir 'sams-today.csv'; [IO.File]::WriteAllText($bvSam, "#tc-store 15429`nsku|Great Value Milk|3.12`n")
     $bvYes = Join-Path $bvDir 'aldi-yday.csv'; [IO.File]::WriteAllText($bvYes, "#tc-store OLA-42`nsku|Milk|2.99`n")
-    $bvStores = @('Walmart', "Sam's Club", 'Aldi')
-    $bvToday = @{ 'Walmart' = (Join-Path $bvDir 'none-w.csv'); "Sam's Club" = $bvSam; 'Aldi' = (Join-Path $bvDir 'none-a.csv') }
-    $bvYday = @{ 'Walmart' = $bvSam; "Sam's Club" = $bvSam; 'Aldi' = $bvYes }
+    $bvStores = @('Store W', 'Store S', 'Store A')
+    $bvToday = @{ 'Store W' = (Join-Path $bvDir 'none-w.csv'); 'Store S' = $bvSam; 'Store A' = (Join-Path $bvDir 'none-a.csv') }
+    $bvYday = @{ 'Store W' = $bvSam; 'Store S' = $bvSam; 'Store A' = $bvYes }
     $bvSlot = Get-ProducerSlot 'grocery-browser-stores-refresh' ([datetime]'2026-09-22')
     $v1 = Get-BrowserCaptureVerdict -Stores $bvStores -TodayFiles $bvToday -YesterdayFiles $bvYday -Now ([datetime]'2026-09-22 10:30') -Slot $bvSlot
     if (@($v1.NotYet).Count -eq 2 -and @($v1.MissingToday).Count -eq 0 -and $v1.SlotOpen) { Write-Output 'PASS  MUST NOT FIRE the founding 10:30 morning: two stores with no capture inside the producer''s slot are NOT YET, never MISSING' } else { Write-Output ("FAIL  a store inside the producer's slot was graded MISSING: missing=" + @($v1.MissingToday).Count + " not_yet=" + @($v1.NotYet).Count); $fail++ }
     $v2 = Get-BrowserCaptureVerdict -Stores $bvStores -TodayFiles $bvToday -YesterdayFiles $bvYday -Now ([datetime]'2026-09-22 14:00') -Slot $bvSlot
-    if ((@($v2.MissingToday) -join ',') -eq 'Walmart,Aldi' -and @($v2.NotYet).Count -eq 0) { Write-Output 'PASS  MUST FIRE AT THE BAR: at exactly the slot end (14:00) the same two stores are MISSING' } else { Write-Output ("FAIL  the slot end did not close the slot: missing=" + (@($v2.MissingToday) -join ',')); $fail++ }
+    if ((@($v2.MissingToday) -join ',') -eq 'Store W,Store A' -and @($v2.NotYet).Count -eq 0) { Write-Output 'PASS  MUST FIRE AT THE BAR: at exactly the slot end (14:00) the same two stores are MISSING' } else { Write-Output ("FAIL  the slot end did not close the slot: missing=" + (@($v2.MissingToday) -join ',')); $fail++ }
     $v2b = Get-BrowserCaptureVerdict -Stores $bvStores -TodayFiles $bvToday -YesterdayFiles $bvYday -Now ([datetime]'2026-09-22 13:59') -Slot $bvSlot
     if (@($v2b.NotYet).Count -eq 2 -and @($v2b.MissingToday).Count -eq 0) { Write-Output 'PASS  MUST NOT FIRE ONE MINUTE BEFORE THE BAR (13:59): still NOT YET' } else { Write-Output 'FAIL  13:59 was graded as a closed slot'; $fail++ }
-    $bvYday2 = @{ 'Walmart' = (Join-Path $bvDir 'none-yw.csv'); "Sam's Club" = $bvSam; 'Aldi' = $bvYes }
+    $bvYday2 = @{ 'Store W' = (Join-Path $bvDir 'none-yw.csv'); 'Store S' = $bvSam; 'Store A' = $bvYes }
     $v3 = Get-BrowserCaptureVerdict -Stores $bvStores -TodayFiles $bvToday -YesterdayFiles $bvYday2 -Now ([datetime]'2026-09-22 10:30') -Slot $bvSlot
-    if ((@($v3.MissingYesterday) -join ',') -eq 'Walmart') { Write-Output 'PASS  MUST FIRE inside today''s slot, a store with no capture YESTERDAY (a closed slot) is MISSING YESTERDAY, so a real miss still pages' } else { Write-Output ("FAIL  yesterday's closed slot was not graded: " + (@($v3.MissingYesterday) -join ',')); $fail++ }
+    if ((@($v3.MissingYesterday) -join ',') -eq 'Store W') { Write-Output 'PASS  MUST FIRE inside today''s slot, a store with no capture YESTERDAY (a closed slot) is MISSING YESTERDAY, so a real miss still pages' } else { Write-Output ("FAIL  yesterday's closed slot was not graded: " + (@($v3.MissingYesterday) -join ',')); $fail++ }
     $v4 = Get-BrowserCaptureVerdict -Stores $bvStores -TodayFiles $bvToday -YesterdayFiles $bvYday -Now ([datetime]'2026-09-22 10:30') -Slot $null
-    if ((@($v4.MissingToday) -join ',') -eq 'Walmart,Aldi' -and @($v4.NotYet).Count -eq 0) { Write-Output 'PASS  MUST FIRE an undeclared producer (no slot) fails toward paging: MISSING, never NOT YET' } else { Write-Output 'FAIL  a producer with no declared slot was read as NOT YET'; $fail++ }
-    $bvAll = @{ 'Walmart' = $bvSam; "Sam's Club" = $bvSam; 'Aldi' = $bvYes }
+    if ((@($v4.MissingToday) -join ',') -eq 'Store W,Store A' -and @($v4.NotYet).Count -eq 0) { Write-Output 'PASS  MUST FIRE an undeclared producer (no slot) fails toward paging: MISSING, never NOT YET' } else { Write-Output 'FAIL  a producer with no declared slot was read as NOT YET'; $fail++ }
+    $bvAll = @{ 'Store W' = $bvSam; 'Store S' = $bvSam; 'Store A' = $bvYes }
     $v5 = Get-BrowserCaptureVerdict -Stores $bvStores -TodayFiles $bvAll -YesterdayFiles $bvYday -Now ([datetime]'2026-09-22 14:30') -Slot $bvSlot
     if (@($v5.MissingToday).Count -eq 0 -and @($v5.NotYet).Count -eq 0 -and $bvSlot.end -eq [datetime]'2026-09-22 14:00') { Write-Output 'PASS  CLEAN TWIN a day with every capture landed after the slot reads clean, and the declared slot ends 14:00 on the given day' } else { Write-Output 'FAIL  a fully landed day was not clean, or the slot end moved'; $fail++ }
   } finally { Remove-Item -LiteralPath $bvDir -Recurse -Force -ErrorAction SilentlyContinue }
