@@ -417,9 +417,11 @@ if ($SelfTest) {
     foreach ($saLibFile in @(Get-ChildItem -LiteralPath (Join-Path (Split-Path -Parent $PSScriptRoot) 'lib') -Filter '*.ps1' -File)) { Copy-Item -LiteralPath $saLibFile.FullName -Destination (Join-Path $saL $saLibFile.Name) }
     $saReg = Join-Path $saG 'alert-registry.json'
     $saRegJson = '{ "readme": "frozen fixture", "entries": [' +
-      '{ "id": "held", "match": "exact", "key": "grocery page held coverage", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
-      '{ "id": "soundness", "match": "exact", "key": "grocery matching soundness review needed", "class": "review", "condition": "review intake", "emitter": "x" },' +
-      '{ "id": "digest", "match": "exact", "key": "brain digest the night", "class": "digest", "condition": "information", "emitter": "x" } ] }'
+      '{ "id": "held", "match": "exact", "key": "grocery page held coverage", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
+      '{ "id": "soundness", "match": "exact", "key": "grocery matching soundness review needed", "class": "review", "condition": "review intake", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
+      '{ "id": "digest", "match": "exact", "key": "brain digest the night", "class": "digest", "condition": "information", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
+      '{ "id": "noresolver", "match": "exact", "key": "grocery a page type nobody closes", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
+      '{ "id": "lanefx", "match": "exact", "key": "grocery a page type a lane closes", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x", "resolver": "lane:grocery/verify-price-flags.ps1" } ] }'
     [IO.File]::WriteAllText($saReg, $saRegJson, $utf8)
     [IO.File]::WriteAllText((Join-Path $saG 'alerts-muted.json'), '{ "muted": true, "since": "2026-09-10", "until": null }', $utf8)
     $saQ = Join-Path $saG 'triage-queue.json'
@@ -455,6 +457,15 @@ if ($SelfTest) {
     $c4 = _SA 'Brain digest: the night'
     _T 'MUST NOT FIRE a digest-class alert writes no queue item' ([bool](-not (Test-Path -LiteralPath $saQ))) 'True'
     _T 'and it still takes the mail leg' ([bool]($c4.out -match 'alert MUTED')) 'True'
+    # THE RESOLVER CONTRACT (2026-09-22, F5): a registered type that names nothing that closes it is queued, stamped,
+    # and NEVER mailed - a registry finding, never a lost alert.
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $c4r = _SA 'Grocery: a page type nobody closes - 2026-09-22'
+    _T 'MUST FIRE a page type whose entry names no resolver is queued with resolverless=true' ([bool]($c4r.items.Count -eq 1 -and $c4r.items[0].PSObject.Properties['resolverless'] -and $c4r.items[0].resolverless -eq $true)) 'True'
+    _T 'MUST FIRE and it never reaches the mail leg, and says why' ([bool]($c4r.out -notmatch 'alert MUTED' -and $c4r.out -match 'queued as RESOLVERLESS')) 'True'
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $c4l = _SA 'Grocery: a page type a lane closes - 2026-09-22'
+    _T 'CLEAN TWIN a page type whose entry names a lane: resolver queues one item AND takes the mail leg' ([bool]($c4l.items.Count -eq 1 -and $c4l.out -match 'alert MUTED' -and -not $c4l.items[0].PSObject.Properties['resolverless'])) 'True'
     # MUST FIRE: no registry at all fails toward PAGE - the review-class subject from above is now queued AND mailed.
     Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
     Remove-Item -LiteralPath $saReg -Force
@@ -475,9 +486,9 @@ if ($SelfTest) {
     # PENDING on its first observation and fires on its second. The durable queue write is above the gate and
     # must be untouched by it, so one case asserts the queue item on observation ONE.
     $saRegHold = '{ "readme": "frozen fixture", "entries": [' +
-      '{ "id": "watchdog", "match": "exact", "key": "grocery capture watchdog issue s", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x", "hold_observations": 2 },' +
-      '{ "id": "held", "match": "exact", "key": "grocery page held coverage", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
-      '{ "id": "publish", "match": "exact", "key": "grocery publish failed", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x", "hold_observations": 1 } ] }'
+      '{ "id": "watchdog", "match": "exact", "key": "grocery capture watchdog issue s", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x", "resolver": "unassigned:2026-09-22", "hold_observations": 2 },' +
+      '{ "id": "held", "match": "exact", "key": "grocery page held coverage", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
+      '{ "id": "publish", "match": "exact", "key": "grocery publish failed", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x", "resolver": "unassigned:2026-09-22", "hold_observations": 1 } ] }'
     [IO.File]::WriteAllText($saReg, $saRegHold, $utf8)
     Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
     $h1 = _SA 'Grocery capture watchdog: 3 issue(s) 2026-09-20'
@@ -511,11 +522,11 @@ if ($SelfTest) {
     # ---- ONE INCIDENT, ONE ALERT (2026-09-10, plan Phase 1) ----
     $tdy = Get-Date -Format 'yyyy-MM-dd'
     $saRegInc = '{ "readme": "frozen fixture", "entries": [' +
-      '{ "id": "guards-failed", "match": "exact", "key": "grocery guards failed board not published", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
-      '{ "id": "watchdog", "match": "exact", "key": "grocery capture watchdog issue s", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x" },' +
-      '{ "id": "watchdog-held", "match": "exact", "key": "grocery capture watchdog held by guards", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
-      '{ "id": "aging", "match": "exact", "key": "board prices aging inside a fresh file", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
-      '{ "id": "feed-edge", "match": "exact", "key": "smp feed edge did not pick up today s push", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" } ] }'
+      '{ "id": "guards-failed", "match": "exact", "key": "grocery guards failed board not published", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
+      '{ "id": "watchdog", "match": "exact", "key": "grocery capture watchdog issue s", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
+      '{ "id": "watchdog-held", "match": "exact", "key": "grocery capture watchdog held by guards", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
+      '{ "id": "aging", "match": "exact", "key": "board prices aging inside a fresh file", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
+      '{ "id": "feed-edge", "match": "exact", "key": "smp feed edge did not pick up today s push", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x", "resolver": "unassigned:2026-09-22" } ] }'
     [IO.File]::WriteAllText($saReg, $saRegInc, $utf8)
     $saVerdict = Join-Path $saG 'out\chain-verdict.json'
     $gfId = $tdy + '-gf0001'
@@ -622,10 +633,10 @@ if ($SelfTest) {
     Copy-Item -LiteralPath (Join-Path (Split-Path -Parent $PSScriptRoot) 'lib\atomic-write.ps1') -Destination (Join-Path $saL 'atomic-write.ps1') -Force
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'alert-lib.ps1') -Destination (Join-Path $saG 'alert-lib.ps1')
     $saRegCond = '{ "readme": "frozen fixture", "entries": [' +
-      '{ "id": "fx-run-record", "match": "exact", "key": "fixture emitter run record", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x" },' +
-      '{ "id": "fx-no-fresh-rows", "match": "exact", "key": "fixture emitter no fresh rows", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x" },' +
-      '{ "id": "fx-graph-shape", "match": "exact", "key": "fixture emitter graph shape", "class": "review", "condition": "review", "emitter": "x" },' +
-      '{ "id": "fx-digest", "match": "exact", "key": "fixture emitter condition s need action", "class": "digest", "condition": "information", "emitter": "x" } ] }'
+      '{ "id": "fx-run-record", "match": "exact", "key": "fixture emitter run record", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
+      '{ "id": "fx-no-fresh-rows", "match": "exact", "key": "fixture emitter no fresh rows", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
+      '{ "id": "fx-graph-shape", "match": "exact", "key": "fixture emitter graph shape", "class": "review", "condition": "review", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
+      '{ "id": "fx-digest", "match": "exact", "key": "fixture emitter condition s need action", "class": "digest", "condition": "information", "emitter": "x", "resolver": "unassigned:2026-09-22" } ] }'
     [IO.File]::WriteAllText($saReg, $saRegCond, $utf8)
     Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
     . (Join-Path $saG 'alert-lib.ps1')
@@ -673,7 +684,7 @@ if ($SelfTest) {
 # not load, a registry that is missing or unparseable, or a type no entry matches all leave $delivery as page, and
 # the last of those also marks the mail subject so the registry gap is visible in the inbox. The default below IS
 # the behaviour this script had before the registry existed.
-$delivery = [pscustomobject]@{ class = 'page'; queue = $true; mail = $true; mail_subject = $Subject; unregistered = $false; entry_id = ''; note = '' }
+$delivery = [pscustomobject]@{ class = 'page'; queue = $true; mail = $true; mail_subject = $Subject; unregistered = $false; resolverless = $false; entry_id = ''; note = '' }
 $regLibOk = $false
 try { . (Join-Path $root 'alert-registry-lib.ps1'); $regLibOk = $true } catch { Log ("ALERT REGISTRY LIB DID NOT LOAD (" + $_.Exception.Message + ") - failing toward PAGE for '" + $Subject + "'") }
 if ($regLibOk) {
@@ -684,6 +695,7 @@ if ($regLibOk) {
   } catch { Log ("ALERT REGISTRY could not be applied (" + $_.Exception.Message + ") - failing toward PAGE for '" + $Subject + "'") }
 }
 if ($delivery.unregistered) { Log ("UNREGISTERED ALERT TYPE '" + $Subject + "' [type: " + $typeKey + "] - no entry in grocery\alert-registry.json matches, so it queues AND pages as a registry defect. Register it and run grocery\audit-alert-registry.ps1.") }
+if ($delivery.resolverless) { Log ("RESOLVERLESS ALERT TYPE '" + $Subject + "' [type: " + $typeKey + "] - " + $delivery.note + ". Name its resolver in grocery\alert-registry.json (design/RCA-holistic-2026-09-22.md F5).") }
 
 # -CausedBy: read the incident's evidence now, outside the queue lock. An unreadable verdict is $null, and a $null
 # verdict absorbs nothing, so every failure here sends the alert normally.
@@ -859,6 +871,7 @@ try {
       # ruling 1: an unregistered type says so on its record, and a review item records that it was not mailed.
       # A registered page item stamps neither, so its record is the one it always was.
       if ($delivery.unregistered) { $newItem | Add-Member -NotePropertyName unregistered -NotePropertyValue $true }
+      if ($delivery.resolverless) { $newItem | Add-Member -NotePropertyName resolverless -NotePropertyValue $true }
       if ($delivery.class -eq 'review') { $newItem | Add-Member -NotePropertyName alert_class -NotePropertyValue 'review' }
       # an alert nobody can classify from its own body is a bug in the ALERT - say so on the record
       if ($thin) {
@@ -916,6 +929,11 @@ if ($absorbedBy -and $queued) {
 if (-not $delivery.mail) {
   $revWhy = $delivery.note
   if ($delivery.entry_id) { $revWhy = ('registry entry ' + $delivery.entry_id) }
+  if ($queued -and $delivery.resolverless) {
+    Log ("RESOLVERLESS '" + $Subject + "' [type: " + $typeKey + "] - queued, NOT emailed (" + $delivery.note + ")")
+    Write-Output ("alert queued as RESOLVERLESS - not emailed (" + $delivery.note + ")")
+    exit 0
+  }
   if ($queued) {
     Log ("REVIEW '" + $Subject + "' [type: " + $typeKey + "] - queued, NOT emailed (" + $revWhy + ")")
     Write-Output ("alert queued as REVIEW - not emailed, by ruling 1 (" + $revWhy + ")")

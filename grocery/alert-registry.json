@@ -1,5 +1,5 @@
 {
- "readme": "THE ALERT REGISTRY (Brad, ruling 1, 2026-09-10; design/PLAN-zero-alert-days-2026-09-10.md section 7). Every alert type is exactly one class. page = emailed AND queued, for four conditions only: (1) the live board or feed is wrong or held, (2) a guard or watcher cannot see, (3) scheduled work did not run or did not land, (4) a live cell moved in a way automatic adjudication could not explain; escalations to Brad (send-alert -Escalates, Your call asks) are page too. review = queued for triage, NEVER emailed (triage-created residuals and findings, send-alert -Lane weekly, are review). digest = emailed, NEVER queued. send-alert.ps1 resolves the class through grocery/alert-registry-lib.ps1. An alert whose type matches NO entry is never dropped: it queues with unregistered=true AND is emailed with its subject prefixed 'UNREGISTERED ALERT TYPE: '. A registry that is missing or unparseable makes EVERY alert page. MATCHING: send-alert derives a type key from the subject (lower case, dates, rc=N and every number removed, every run of non-letters collapsed to one space); 'key' is compared to that type key. match 'exact' = equal; 'prefix' = the type key starts with key at a word boundary; 'regex' = .NET regex over the type key. When several entries match, exact beats prefix and regex; several that still tie are AMBIGUOUS and resolve to the most severe class. TO ADD A TYPE: add one entry here (id, match, key, class, condition, emitter), then run powershell -File grocery/audit-alert-registry.ps1, which must exit 0. condition for page is one of the values in page_conditions (grocery/alert-registry-lib.ps1 enforces the same list and the check fails if the two disagree); for review and digest it is one line saying why. HOW LONG BEFORE IT MAILS (Brad, 2026-09-20): an entry may carry hold_observations, the number of observations a condition must reach before it is EMAILED. It defaults to 1 - email on the first observation - which is what every entry without the field does, so nothing changes for a type until it opts in. A firing check is not yet an alert: a rule is inactive while the condition is false, PENDING from the moment it becomes true, and firing only once it has stayed true for its declared duration. THE DURABLE QUEUE WRITE IS NOT HELD: a held condition still queues on its first observation and triage still sees it, so this is a DELIVERY duration and never a silence, and it is a different knob from any cutoff - no band, ratchet or guard threshold moves for it. Guards, a held board, a failed publish, a wrong price and anything reader-facing carry NO hold and must page on their first observation, always. ROUTING REVIEW 2026-09-20: every page-class type that fired on 3 or more of the last 30 days was re-tested against 'alert only where a human has to act', and NONE was moved to review - each one is a guard, a board-or-feed condition, or page condition 3 (scheduled work did not run or land), where a human does have to act. The noise in that set is duration rather than routing, which is why capture-watchdog took hold_observations 2 instead of a new class.",
+ "readme": "THE ALERT REGISTRY (Brad, ruling 1, 2026-09-10; design/PLAN-zero-alert-days-2026-09-10.md section 7). Every alert type is exactly one class. page = emailed AND queued, for four conditions only: (1) the live board or feed is wrong or held, (2) a guard or watcher cannot see, (3) scheduled work did not run or did not land, (4) a live cell moved in a way automatic adjudication could not explain; escalations to Brad (send-alert -Escalates, Your call asks) are page too. review = queued for triage, NEVER emailed (triage-created residuals and findings, send-alert -Lane weekly, are review). digest = emailed, NEVER queued. send-alert.ps1 resolves the class through grocery/alert-registry-lib.ps1. An alert whose type matches NO entry is never dropped: it queues with unregistered=true AND is emailed with its subject prefixed 'UNREGISTERED ALERT TYPE: '. A registry that is missing or unparseable makes EVERY alert page. MATCHING: send-alert derives a type key from the subject (lower case, dates, rc=N and every number removed, every run of non-letters collapsed to one space); 'key' is compared to that type key. match 'exact' = equal; 'prefix' = the type key starts with key at a word boundary; 'regex' = .NET regex over the type key. When several entries match, exact beats prefix and regex; several that still tie are AMBIGUOUS and resolve to the most severe class. TO ADD A TYPE: add one entry here (id, match, key, class, condition, emitter), then run powershell -File grocery/audit-alert-registry.ps1, which must exit 0. condition for page is one of the values in page_conditions (grocery/alert-registry-lib.ps1 enforces the same list and the check fails if the two disagree); for review and digest it is one line saying why. HOW LONG BEFORE IT MAILS (Brad, 2026-09-20): an entry may carry hold_observations, the number of observations a condition must reach before it is EMAILED. It defaults to 1 - email on the first observation - which is what every entry without the field does, so nothing changes for a type until it opts in. A firing check is not yet an alert: a rule is inactive while the condition is false, PENDING from the moment it becomes true, and firing only once it has stayed true for its declared duration. THE DURABLE QUEUE WRITE IS NOT HELD: a held condition still queues on its first observation and triage still sees it, so this is a DELIVERY duration and never a silence, and it is a different knob from any cutoff - no band, ratchet or guard threshold moves for it. Guards, a held board, a failed publish, a wrong price and anything reader-facing carry NO hold and must page on their first observation, always. ROUTING REVIEW 2026-09-20: every page-class type that fired on 3 or more of the last 30 days was re-tested against 'alert only where a human has to act', and NONE was moved to review - each one is a guard, a board-or-feed condition, or page condition 3 (scheduled work did not run or land), where a human does have to act. The noise in that set is duration rather than routing, which is why capture-watchdog took hold_observations 2 instead of a new class. RESOLVER (2026-09-22, design/RCA-holistic-2026-09-22.md F5): every entry that is not retired names what CLOSES its findings in 'resolver': 'lane:<repo path of the script that reads the finding into a worklist>', 'ruling:<open question id>', or 'digest' (a weekly list, never a daily page). A detector registered only by its condition can be correct and unfinishable, handing a person a command every day. The types registered before that day carry 'unassigned:2026-09-22' and resolver_ratchet.unassigned_max counts them: the mark may only FALL, so a new type cannot join them. An entry with NO resolver fails audit-alert-registry, and send-alert QUEUES such a type but never emails it (a registry finding, never a lost alert). To give a type its resolver, replace its unassigned value and lower the mark in the same commit.",
  "page_conditions": [
   "1 board-or-feed-wrong-or-held",
   "2 watcher-cannot-see",
@@ -8,6 +8,11 @@
   "5 private-data-exposure",
   "escalation"
  ],
+ "resolver_ratchet": {
+  "unassigned_max": 185,
+  "set": "2026-09-22",
+  "why": "a ratchet, not a gate red on day one: the entries registered before the resolver contract are counted here and the count may only fall. audit-alert-registry fails a registry holding more, and says 'ratchet CAN tighten' when it holds fewer, without rewriting this number (a plain run never writes its mark)."
+ },
  "entries": [
   {
    "id": "guards-failed",
@@ -15,7 +20,8 @@
    "key": "grocery guards failed board not published",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "board-cells-quarantined",
@@ -24,7 +30,8 @@
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "note": "2026-09-21, Brad: the entire board is not held hostage by one bad item. guards.ps1 quarantined some cells (held at their last verified published price with its date, or withheld) and the rest of the board published. One page per distinct set of cells; GUARDS FAILED stays reserved for a real hold (board-scoped failure or the circuit breaker)."
+   "note": "2026-09-21, Brad: the entire board is not held hostage by one bad item. guards.ps1 quarantined some cells (held at their last verified published price with its date, or withheld) and the rest of the board published. One page per distinct set of cells; GUARDS FAILED stays reserved for a real hold (board-scoped failure or the circuit breaker).",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "page-held-coverage",
@@ -32,7 +39,8 @@
    "key": "grocery page held coverage",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "page-held-gate",
@@ -40,7 +48,8 @@
    "key": "grocery page held",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "compare-failed",
@@ -48,7 +57,8 @@
    "key": "grocery compare failed",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "publish-failed",
@@ -56,7 +66,8 @@
    "key": "grocery publish failed",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "board-feed-different-weeks",
@@ -64,7 +75,8 @@
    "key": "grocery board and feed on different weeks",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "store-dropped-off-tile",
@@ -72,7 +84,8 @@
    "key": "grocery a store dropped off a commodity tile",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "board-names-mangled",
@@ -80,7 +93,8 @@
    "key": "grocery board product name s are mangled encoding",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/audit-board-mojibake.ps1"
+   "emitter": "grocery/audit-board-mojibake.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "board-prices-aging",
@@ -88,7 +102,8 @@
    "key": "board prices aging inside a fresh file",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "board-freshness-store-stopped",
@@ -96,7 +111,8 @@
    "key": "board freshness a store stopped refreshing",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "board-freshness-aging",
@@ -104,7 +120,8 @@
    "key": "board freshness prices aging past the publish limit",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "feed-edge-stale",
@@ -112,7 +129,8 @@
    "key": "smp feed edge did not pick up today s push",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/capture-run.ps1"
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "feed-edge-bytes",
@@ -120,7 +138,8 @@
    "key": "smp feed edge bytes do not match the push",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/capture-run.ps1"
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "board-edge-stale",
@@ -128,7 +147,8 @@
    "key": "board json edge did not pick up today s push",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/capture-run.ps1"
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "feed-not-refreshed",
@@ -136,7 +156,8 @@
    "key": "grocery pipeline feed did not truly refresh",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/capture-run.ps1"
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "pipeline-could-not-push",
@@ -144,7 +165,8 @@
    "key": "grocery pipeline could not push",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/capture-run.ps1"
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "pipeline-moved-untracked-blocker",
@@ -152,7 +174,8 @@
    "key": "grocery pipeline moved an untracked file out of the rebase s way",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/capture-run.ps1"
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "commit-refused",
@@ -160,7 +183,8 @@
    "key": "daily pipeline commit refused",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/capture-run.ps1"
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "served-files-uncommitted",
@@ -168,7 +192,8 @@
    "key": "daily chain left served files uncommitted",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/capture-run.ps1"
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "pipeline-did-not-commit",
@@ -176,7 +201,8 @@
    "key": "daily pipeline ran but did not commit",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "none in the tree on 2026-09-10 (fired 2026-08-24; kept so the queue history maps)"
+   "emitter": "none in the tree on 2026-09-10 (fired 2026-08-24; kept so the queue history maps)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "capture-watchdog",
@@ -195,7 +221,8 @@
    "key": "grocery capture watchdog held by guards",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/capture-watchdog.ps1 (sent with -CausedBy guards-hold, so it is absorbed into the open GUARDS FAILED item when there is one)"
+   "emitter": "grocery/capture-watchdog.ps1 (sent with -CausedBy guards-hold, so it is absorbed into the open GUARDS FAILED item when there is one)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "recipe-prices-from-snapshot",
@@ -203,7 +230,8 @@
    "key": "recipe prices still from the undated snapshot",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "recipe-recost-failed",
@@ -211,7 +239,8 @@
    "key": "recipe recost failed",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "server-pull-failed",
@@ -219,7 +248,8 @@
    "key": "grocery pull failed server stores",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ad-window-no-capture",
@@ -227,7 +257,8 @@
    "key": "^([a-z ]+ )?ad window advanced with no capture behind it$",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "captured-field-blank",
@@ -235,7 +266,8 @@
    "key": "grocery a captured field went blank",
    "class": "page",
    "condition": "2 watcher-cannot-see",
-   "emitter": "grocery/capture-run.ps1"
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ff-catalog-degrading",
@@ -252,7 +284,8 @@
    "key": "grocery a union store has no captures in its window",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "automation-silent-death",
@@ -269,7 +302,8 @@
    "key": "bakers daily scan failed",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/bakers-daily-scan.ps1"
+   "emitter": "grocery/bakers-daily-scan.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "bakers-scan-push-failed",
@@ -277,7 +311,8 @@
    "key": "baker s daily scan push data failed",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/bakers-daily-scan.ps1"
+   "emitter": "grocery/bakers-daily-scan.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "bakers-scan-autostash",
@@ -285,7 +320,8 @@
    "key": "bakers daily scan autostash not restored",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/bakers-daily-scan.ps1"
+   "emitter": "grocery/bakers-daily-scan.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "run-blocked-bot-wall",
@@ -293,7 +329,8 @@
    "key": "^grocery run blocked [a-z ]+ bot wall$",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/notify-desktop.ps1 (-AlsoEmail, title composed from -Store)"
+   "emitter": "grocery/notify-desktop.ps1 (-AlsoEmail, title composed from -Store)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "run-needs-you",
@@ -301,7 +338,8 @@
    "key": "grocery run needs you",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/notify-desktop.ps1 (-AlsoEmail, default title)"
+   "emitter": "grocery/notify-desktop.ps1 (-AlsoEmail, default title)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "guard-gone-blind",
@@ -309,7 +347,8 @@
    "key": "grocery a guard has gone blind test auditors failed",
    "class": "page",
    "condition": "2 watcher-cannot-see",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "test-guards-could-not-evaluate",
@@ -317,7 +356,8 @@
    "key": "grocery test guards could not evaluate guards already red on the unmutated board",
    "class": "page",
    "condition": "2 watcher-cannot-see",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "test-guards-did-not-run",
@@ -325,7 +365,8 @@
    "key": "grocery test guards weekly did not run hermetic copy failed",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "test-guards-scan-only",
@@ -333,7 +374,8 @@
    "key": "grocery test guards weekly a source scan case failed every invariant still fails",
    "class": "review",
    "condition": "review: a source-scan case (the empty-stamp idiom) failed while every mutation case still exited 2, so no guard is blind and none of the four page conditions holds (queue 2026-09-19-a1c25d); the pre-commit path refuses the idiom since the same change",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "invariant-cannot-fail",
@@ -341,7 +383,8 @@
    "key": "grocery a blocking invariant can no longer fail test guards weekly",
    "class": "page",
    "condition": "2 watcher-cannot-see",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "invariant-not-proven",
@@ -349,7 +392,8 @@
    "key": "grocery no blocking guard invariant proven in over days test guards weekly",
    "class": "page",
    "condition": "2 watcher-cannot-see",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ghost-drift-blind",
@@ -357,7 +401,8 @@
    "key": "tools ghost drift could not evaluate no key or a page could not be read",
    "class": "page",
    "condition": "2 watcher-cannot-see",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "memory-store-unchecked",
@@ -365,7 +410,8 @@
    "key": "ops the agent memory store could not be checked",
    "class": "page",
    "condition": "2 watcher-cannot-see",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "memory-public-exposure",
@@ -374,7 +420,8 @@
    "class": "page",
    "condition": "5 private-data-exposure",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "note": "Brad ruling R16 (2026-09-10): a memory file tracked by the public repo, or a memory git remote that answers publicly, emails. Split out of 'the agent memory store has a finding', which stays review for the hygiene findings."
+   "note": "Brad ruling R16 (2026-09-10): a memory file tracked by the public repo, or a memory git remote that answers publicly, emails. Split out of 'the agent memory store has a finding', which stays review for the hygiene findings.",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "prompt-not-backed-up",
@@ -383,7 +430,8 @@
    "class": "page",
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "note": "One subject carries both exit 2 (drift) and exit 3 (BLIND). Classed page for the BLIND half; splitting the subject would let the drift half become review."
+   "note": "One subject carries both exit 2 (drift) and exit 3 (BLIND). Classed page for the BLIND half; splitting the subject would let the drift half become review.",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "sidecar-down",
@@ -391,7 +439,8 @@
    "key": "semantic sidecar is down and would not restart",
    "class": "page",
    "condition": "2 watcher-cannot-see",
-   "emitter": "ops/sidecar-watchdog.ps1"
+   "emitter": "ops/sidecar-watchdog.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "runaway-process-reaped",
@@ -400,7 +449,8 @@
    "class": "review",
    "condition": "review: the process was orphaned, read-only and spinning, this script killed it and the core is back, so no human has to act - which is the page test. The line exists so a kill can never be silent and so a rising rate of them shows up as the estate leaking sessions",
    "emitter": "ops/reap-runaway-processes.ps1",
-   "note": "Born 2026-09-20 with the reaper. Its twin, runaway-process-unowned, is the half that pages."
+   "note": "Born 2026-09-20 with the reaper. Its twin, runaway-process-unowned, is the half that pages.",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "runaway-process-unowned",
@@ -409,7 +459,8 @@
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "ops/reap-runaway-processes.ps1",
-   "note": "A process nothing owns is burning CPU and the reaper deliberately refused to kill it, because it is not a read-only git command and a kill could leave a lock or a half-written file. Only a person can decide, and until one does it keeps the core. The founding case wasted 28.8 CPU-hours over 29.2 hours before a human noticed it by eye. Split from runaway-process-reaped the day both were written (Brad, 2026-09-20): one subject for both would have let the quiet half set the class for the urgent one, leaving a burning core in the weekly lane for up to a week."
+   "note": "A process nothing owns is burning CPU and the reaper deliberately refused to kill it, because it is not a read-only git command and a kill could leave a lock or a half-written file. Only a person can decide, and until one does it keeps the core. The founding case wasted 28.8 CPU-hours over 29.2 hours before a human noticed it by eye. Split from runaway-process-reaped the day both were written (Brad, 2026-09-20): one subject for both would have let the quiet half set the class for the urgent one, leaving a burning core in the weekly lane for up to a week.",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "manifest-refused-stale-feed",
@@ -417,7 +468,8 @@
    "key": "recipe per serving manifest refused stale price feed",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "meal-prep/pipeline/compute-v2-perserving.ps1"
+   "emitter": "meal-prep/pipeline/compute-v2-perserving.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "manifest-skipped",
@@ -425,7 +477,8 @@
    "key": "recipe per serving manifest skipped recipe s",
    "class": "review",
    "condition": "review until Brad rules Q1-2026-09-20-partial-cost (2026-09-20): the manifest RAN and LANDED for 578 of 584 recipes; the 6 it skips are all LIVE=False and their ingredients (Berbere, Harissa, Pomegranate Molasses) are recorded in meal-prep/db/cost-flags.txt as CARRIAGE NOT-CARRIED at all seven Omaha stores on two or more wordings. Condition 3 does not hold and there is nothing for a reader to do until the ruling says what a page shows when a cost cannot be fully built, so it pages daily for a state that is true every day",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "reanchor-incomplete",
@@ -433,7 +486,8 @@
    "key": "re anchor did not complete cards not republished",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "cards-over-cap",
@@ -441,7 +495,8 @@
    "key": "recipe cards moved over the daily cap",
    "class": "page",
    "condition": "4 live-cell-moved-unexplained",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "cards-publish-failed",
@@ -449,7 +504,8 @@
    "key": "recipe cards rebuilt but publish failed",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "cards-held-from-republish",
@@ -457,7 +513,8 @@
    "key": "recipe cards held back from republish",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "recipes-superseded-board",
@@ -465,7 +522,8 @@
    "key": "recipes priced off a superseded board",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "card-comparison-backwards",
@@ -473,7 +531,8 @@
    "key": "a live card s price comparison is now backwards",
    "class": "page",
    "condition": "4 live-cell-moved-unexplained",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "surfaces-disagree",
@@ -481,7 +540,8 @@
    "key": "price surfaces disagree with the manifest",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "golden-test-failed",
@@ -489,7 +549,8 @@
    "key": "cost engine golden test failed",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "pricing-rule-guard-failed",
@@ -497,7 +558,8 @@
    "key": "recipe cards pricing rule guard failed",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "db-constraint-refused",
@@ -505,7 +567,8 @@
    "key": "database constraint refused a write",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "batch-stalled",
@@ -513,7 +576,8 @@
    "key": "recipe batch stalled with stages unfinished",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ingredient-stores-disagree",
@@ -521,7 +585,8 @@
    "key": "ingredient stores disagree hard finding s",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "unpriced-lines",
@@ -529,7 +594,8 @@
    "key": "recipe pricing unpriced ingredient line s",
    "class": "review",
    "condition": "review, not page (2026-09-20, queue 2026-09-20-fb37b9, on Brad's 2026-09-20 daily-lane ruling: a condition that is true every day is not news every day). This alert cannot reach condition 1, because the reader-facing half is held by a BLOCKING gate rather than by this email: wave-preaudit refuses a first publish whose costed row has lines_unpriced > 0, and since 2026-09-20 sync-recipesdb-cost refuses to write a partial cost for a slug in published-hashes.json (exit 2, names the slugs) - both page through their own emitters. Measured on 2026-09-20: 26 flagged lines over 6 recipes, all six unpublished and HELD as not carried in Omaha, 0 live recipes with an unpriced line. What is left is the standing five-spice label-vs-ledger precedence question (Q1-2026-09-20-partial-cost), which is a ruling and not news.",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "dedup-evidence-stale",
@@ -537,7 +603,8 @@
    "key": "recipe pool the dedup evidence has gone stale",
    "class": "page",
    "condition": "2 watcher-cannot-see",
-   "emitter": "meal-prep/pipeline/harvest-crawl.ps1"
+   "emitter": "meal-prep/pipeline/harvest-crawl.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "live-without-review",
@@ -545,7 +612,8 @@
    "key": "is live without post publish review$",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
-   "emitter": "agent (recipe hunter session; no call site in the tree)"
+   "emitter": "agent (recipe hunter session; no call site in the tree)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "site-down",
@@ -553,7 +621,8 @@
    "key": "site down",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "agent (no call site in the tree)"
+   "emitter": "agent (no call site in the tree)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "paywall-leak",
@@ -562,7 +631,8 @@
    "class": "review",
    "condition": "Brad ruling R14 (2026-09-10): a paid page served free goes to the review list, not email",
    "emitter": "meal-prep/pipeline/audit-paid-not-public.ps1",
-   "note": "Recommended page because it loses money on a live page; Brad chose review."
+   "note": "Recommended page because it loses money on a live page; Brad chose review.",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "needs-brad",
@@ -570,7 +640,8 @@
    "key": "needs brad",
    "class": "page",
    "condition": "escalation",
-   "emitter": "meal-prep/set-recipe-visibility.ps1 and triage agents"
+   "emitter": "meal-prep/set-recipe-visibility.ps1 and triage agents",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "price-alerts-held",
@@ -578,7 +649,8 @@
    "key": "price alerts",
    "class": "page",
    "condition": "escalation",
-   "emitter": "grocery/send-price-alerts.ps1"
+   "emitter": "grocery/send-price-alerts.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "friday-email-refused",
@@ -586,7 +658,8 @@
    "key": "friday email refused a send for this week may already have gone out",
    "class": "page",
    "condition": "escalation",
-   "emitter": "grocery/send-friday-email.ps1"
+   "emitter": "grocery/send-friday-email.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "your-call",
@@ -594,7 +667,8 @@
    "key": "your call",
    "class": "page",
    "condition": "escalation",
-   "emitter": "triage agents (send-alert -Escalates)"
+   "emitter": "triage agents (send-alert -Escalates)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "grocery-your-call",
@@ -602,7 +676,8 @@
    "key": "grocery your call",
    "class": "page",
    "condition": "escalation",
-   "emitter": "triage agents (send-alert -Escalates)"
+   "emitter": "triage agents (send-alert -Escalates)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "needs-elevation",
@@ -610,7 +685,8 @@
    "key": "needs elevation",
    "class": "page",
    "condition": "escalation",
-   "emitter": "triage agents (send-alert -Escalates)"
+   "emitter": "triage agents (send-alert -Escalates)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "triage-report",
@@ -618,7 +694,8 @@
    "key": "grocery triage",
    "class": "page",
    "condition": "escalation",
-   "emitter": "triage developer agent (a run report that asks Brad for a decision)"
+   "emitter": "triage developer agent (a run report that asks Brad for a decision)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "board-decision",
@@ -626,7 +703,8 @@
    "key": "board decision",
    "class": "page",
    "condition": "escalation",
-   "emitter": "triage agents"
+   "emitter": "triage agents",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "who-runs",
@@ -634,7 +712,8 @@
    "key": "grocery who runs the",
    "class": "page",
    "condition": "escalation",
-   "emitter": "triage agents"
+   "emitter": "triage agents",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ship-or-drop-ruling",
@@ -642,7 +721,8 @@
    "key": "need a ship or drop ruling",
    "class": "page",
    "condition": "escalation",
-   "emitter": "triage agents"
+   "emitter": "triage agents",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "correction",
@@ -650,7 +730,8 @@
    "key": "correction",
    "class": "page",
    "condition": "escalation",
-   "emitter": "agent (a correction must reach the inbox the wrong page reached)"
+   "emitter": "agent (a correction must reach the inbox the wrong page reached)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "match-soundness",
@@ -670,7 +751,8 @@
    "class": "review",
    "condition": "review intake: the matching-rule files in the checkout the chain read differ from HEAD, so the MOVED/DROPPED lines are an uncommitted edit's own effect (the 2026-09-19 17:29 shape). Publish holds until the author accepts and commits.",
    "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-7.json"
+   "split_from": "plan-2026-09-21-7.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "match-soundness-rule-change-unreviewed",
@@ -679,7 +761,8 @@
    "class": "review",
    "condition": "review intake: committed matching rules the baseline was never accepted against (a gate bypass, a rebase that merged two rule edits, or a baseline restored over an accept; the 2026-09-20 5d42fb944 shape). Publish holds until someone reviews the lines, runs -Accept and commits the baseline.",
    "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-7.json"
+   "split_from": "plan-2026-09-21-7.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "match-soundness-moved-no-rule-change",
@@ -688,7 +771,8 @@
    "class": "review",
    "condition": "review intake: names moved although the rules hash equals the baseline's, so the matcher code or the baseline file changed; the one drift nobody authored. Publish holds.",
    "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-7.json"
+   "split_from": "plan-2026-09-21-7.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "match-soundness-new-contested",
@@ -697,7 +781,8 @@
    "class": "review",
    "condition": "review intake: products arriving in the captures that two or more rules admit, resolved by array order. A real defect detector: 6 of the 9 new-contested-only days closed with notes from 2026-08-30 to 2026-09-08 found a misroute, two of them live on the board. Its returns are new arrivals by construction.",
    "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-7.json"
+   "split_from": "plan-2026-09-21-7.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "match-soundness-matcher-drift",
@@ -706,7 +791,8 @@
    "class": "review",
    "condition": "review intake: this audit's matcher and the engine's candidates disagree on named products, so the audit may no longer mirror the engine. Fired on 0 of the 18 days of the old type.",
    "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-7.json"
+   "split_from": "plan-2026-09-21-7.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "price-disagreement",
@@ -715,7 +801,8 @@
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "note": "2026-09-21, Brad's design (grocery/triage-plans/plan-2026-09-21-8.json): a sanity flag is verified against the store's own LATER read of the same product (verify-price-flags.ps1) and only a DISAGREEMENT pages, ONE per cell, subject 'Grocery: price disagreement - <commodity> at <store>', so the queue keys the type by cell and a return means that very cell came back. The body names both prices and the store's product; the cell is quarantined by audit-flag-verification.ps1 at the next guards run. A store that confirms the price closes the flag with no alert. It takes the sanity kinds off new-price-flags whenever the verifier completed over that day's flags."
+   "note": "2026-09-21, Brad's design (grocery/triage-plans/plan-2026-09-21-8.json): a sanity flag is verified against the store's own LATER read of the same product (verify-price-flags.ps1) and only a DISAGREEMENT pages, ONE per cell, subject 'Grocery: price disagreement - <commodity> at <store>', so the queue keys the type by cell and a return means that very cell came back. The body names both prices and the store's product; the cell is quarantined by audit-flag-verification.ps1 at the next guards run. A store that confirms the price closes the flag with no alert. It takes the sanity kinds off new-price-flags whenever the verifier completed over that day's flags.",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "price-flag-verification-overdue",
@@ -724,7 +811,8 @@
    "class": "page",
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "note": "2026-09-21 (plan-2026-09-21-8.json): a PENDING verification is an owed re-read that leads its store's next worklist, so one older than the capture-policy quarter means that lane has not re-read the product (a wall, a throttle, a delisting, or a lane not asking). The backlog's size and oldest age are logged every run; this pages only past the quarter, so a pending backlog cannot grow unseen."
+   "note": "2026-09-21 (plan-2026-09-21-8.json): a PENDING verification is an owed re-read that leads its store's next worklist, so one older than the capture-policy quarter means that lane has not re-read the product (a wall, a throttle, a delisting, or a lane not asking). The backlog's size and oldest age are logged every run; this pages only past the quarter, so a pending backlog cannot grow unseen.",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "new-price-flags",
@@ -735,7 +823,8 @@
    "emitter": "grocery/check-ad-cycles.ps1",
    "note": "Borders page condition 4. Confirmed review by Brad, ruling R13 (2026-09-10).",
    "hold_observations": 2,
-   "hold_note": "The estate's most recurrent type: fired on 22 of the 30 days ending 2026-09-20. Review class is already never emailed, so the hold changes no delivery today; it is declared so the duration travels with the type if it is ever promoted to page (Brad, 2026-09-20)."
+   "hold_note": "The estate's most recurrent type: fired on 22 of the 30 days ending 2026-09-20. Review class is already never emailed, so the hold changes no delivery today; it is declared so the duration travels with the type if it is ever promoted to page (Brad, 2026-09-20).",
+   "resolver": "lane:grocery/verify-price-flags.ps1"
   },
   {
    "id": "semantic-sweep",
@@ -745,7 +834,8 @@
    "condition": "review intake: candidate products for a rule, not a live wrong cell (plan section 3, bucket 1)",
    "emitter": "grocery/check-ad-cycles.ps1",
    "hold_observations": 2,
-   "hold_note": "A recurring standing state: fired on 19 of the 30 days ending 2026-09-20. Review class is already never emailed, so the hold changes no delivery today; it is declared so the duration travels with the type if it is ever promoted to page (Brad, 2026-09-20)."
+   "hold_note": "A recurring standing state: fired on 19 of the 30 days ending 2026-09-20. Review class is already never emailed, so the hold changes no delivery today; it is declared so the duration travels with the type if it is ever promoted to page (Brad, 2026-09-20).",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "stores-dropped",
@@ -753,7 +843,8 @@
    "key": "grocery store s dropped from a commodity they carry",
    "class": "review",
    "condition": "review intake: include rules that may be too strict (plan section 3, bucket 1)",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "wrong-department",
@@ -761,7 +852,8 @@
    "key": "grocery board cell s sit in the wrong store department",
    "class": "review",
    "condition": "review intake: an aisle judgement to adjudicate (plan section 3, bucket 1)",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "store-registry-drift",
@@ -778,7 +870,8 @@
    "key": "grocery on sale item s have no everyday fallback",
    "class": "review",
    "condition": "work for the browser agent: a rolling condition by design, owned by the research worklist",
-   "emitter": "grocery/check-ad-cycles.ps1 (retired wording; kept so the queue history maps)"
+   "emitter": "grocery/check-ad-cycles.ps1 (retired wording; kept so the queue history maps)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "sale-no-fallback-unworked",
@@ -786,7 +879,8 @@
    "key": "grocery on sale item s have no everyday fallback and no one is working them",
    "class": "review",
    "condition": "an ownership gap on a still-published sale cell; triage assigns an owner",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ff-carry",
@@ -794,7 +888,8 @@
    "key": "grocery family fare pull dropped a carried item review",
    "class": "review",
    "condition": "review intake: a carried item left the pull, the 90-day carry still covers the cell",
-   "emitter": "grocery/audit-ff-carry.ps1"
+   "emitter": "grocery/audit-ff-carry.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "no-category",
@@ -802,7 +897,8 @@
    "key": "grocery a commodity is in no category no filter review",
    "class": "review",
    "condition": "a filter hygiene gap, nothing priced wrong",
-   "emitter": "grocery/audit-category-coverage.ps1"
+   "emitter": "grocery/audit-category-coverage.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "test-auditors-hygiene",
@@ -810,7 +906,8 @@
    "key": "grocery test auditors hygiene finding s watchers intact",
    "class": "review",
    "condition": "ops housekeeping drift while every watcher still fires on its founding bug",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "test-auditors-live-red",
@@ -819,7 +916,8 @@
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "note": "Queue 2026-09-19-ae9df2 (2026-09-20). test-auditors' third verdict, rc 4: every fixture fired, and a LIVE-TWIN case - one that reads the live board or the live registry on purpose - went red. So the finding is about a CELL, not a guard, which is why it is class page under condition 1 and not under 2 watcher-cannot-see: the watchers are the one thing that run proved. It is deliberately a separate subject from guard-gone-blind, whose body says a quiet report is unproven - that sentence inverts the day's trust ordering when the watcher actually worked, and it had gone out three times in 30 days (2026-08-28, 2026-08-29, 2026-09-19) with not one blind watcher among them."
+   "note": "Queue 2026-09-19-ae9df2 (2026-09-20). test-auditors' third verdict, rc 4: every fixture fired, and a LIVE-TWIN case - one that reads the live board or the live registry on purpose - went red. So the finding is about a CELL, not a guard, which is why it is class page under condition 1 and not under 2 watcher-cannot-see: the watchers are the one thing that run proved. It is deliberately a separate subject from guard-gone-blind, whose body says a quiet report is unproven - that sentence inverts the day's trust ordering when the watcher actually worked, and it had gone out three times in 30 days (2026-08-28, 2026-08-29, 2026-09-19) with not one blind watcher among them.",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ghost-drift",
@@ -827,7 +925,8 @@
    "key": "tools a live page has drifted from its local source",
    "class": "review",
    "condition": "a tool page differs from its local source; the board and feed are not involved",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "recipe-db-drift",
@@ -835,7 +934,8 @@
    "key": "recipe db drift index vs specs",
    "class": "review",
    "condition": "index and spec disagree; a consistency repair, not a live price",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "spec-contradictions",
@@ -843,7 +943,8 @@
    "key": "recipe spec contradictions got worse",
    "class": "review",
    "condition": "a content contradiction ratchet moved; a writing repair, not a price",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "published-macros-moved",
@@ -851,7 +952,8 @@
    "key": "recipe macros moved off their ingredients",
    "class": "review",
    "condition": "a published stat or an index ingredient weight left the recompute of the spec ingredients, past the recorded baseline; a data repair where restating the wrong side is the risk, not a live price",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "cross-store-integrity",
@@ -859,7 +961,8 @@
    "key": "a write broke cross store integrity",
    "class": "review",
    "condition": "reference violations past a recorded baseline; a data repair, not a proven live price",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "price-inversion",
@@ -867,7 +970,8 @@
    "key": "recipe price inversion clamped",
    "class": "review",
    "condition": "the engine already clamped the inversion; review why it happened",
-   "emitter": "meal-prep/pipeline/compute-v2-perserving.ps1"
+   "emitter": "meal-prep/pipeline/compute-v2-perserving.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "walmart-capture-aging",
@@ -875,7 +979,8 @@
    "key": "grocery walmart full capture aging",
    "class": "review",
    "condition": "early warning, nothing is broken yet; routed to the browser agent",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "board-link-drift",
@@ -883,7 +988,8 @@
    "key": "grocery board link price drift chips",
    "class": "review",
    "condition": "auto-repair already hid the drifted links; no misleading link is shown",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "alerts-closed-unexplained",
@@ -891,7 +997,8 @@
    "key": "alerts closed without saying what they meant",
    "class": "review",
    "condition": "triage bookkeeping: a close with no disposition",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ingredient-not-carried",
@@ -899,7 +1006,8 @@
    "key": "live recipe s with an ingredient omaha does not carry",
    "class": "review",
    "condition": "an editorial repair on a recipe; no price is wrong",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ingredient-carriage-unknown",
@@ -907,7 +1015,8 @@
    "key": "live recipe s whose omaha carriage is unknown resolve do not take down",
    "class": "review",
    "condition": "a could-not-look on a live recipe's ingredient (queue 2026-09-19-0b2f1e): resolve carriage by asking the stores; never a takedown, and no price is wrong",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "memory-store-finding",
@@ -916,7 +1025,8 @@
    "class": "review",
    "condition": "memory store hygiene (versioning, remotes, routing); not one of the four page conditions",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "note": "Split by Brad ruling R16 (2026-09-10): the public-repo exposure half now sends 'Ops: private memory notes reached the public repo', which is page."
+   "note": "Split by Brad ruling R16 (2026-09-10): the public-repo exposure half now sends 'Ops: private memory notes reached the public repo', which is page.",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "cloudflare-estate-drift",
@@ -924,7 +1034,8 @@
    "key": "ops the cloudflare estate drifted from its declaration",
    "class": "review",
    "condition": "infrastructure drift from ops/cloudflare-estate.json; the live board and feed are verified by the edge checks",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ghost-page-census-blind",
@@ -932,7 +1043,8 @@
    "key": "ops the ghost page census could not evaluate",
    "class": "page",
    "condition": "2 watcher-cannot-see",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ghost-page-census",
@@ -940,7 +1052,8 @@
    "key": "ops a live ghost page is neither produced by the repo nor declared",
    "class": "review",
    "condition": "a live Ghost page has no tracked source and no declaration in ops/ghost-page-estate.json, or a declared page moved; the board and feed are not involved",
-   "emitter": "grocery/check-ad-cycles.ps1"
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "search-link-dead",
@@ -948,7 +1061,8 @@
    "key": "grocery a store search link is dead template s",
    "class": "review",
    "condition": "a Find at store search template is broken; prices are right, a link is not",
-   "emitter": "grocery/audit-search-links.ps1"
+   "emitter": "grocery/audit-search-links.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "bakers-adflip",
@@ -956,7 +1070,8 @@
    "key": "^baker s ad rolled adflip on a( [a-z]+)? flyer capture needed$",
    "class": "review",
    "condition": "work for the weekly agent: prices are refreshed headlessly, the flyer read is owed",
-   "emitter": "grocery/bakers-daily-scan.ps1"
+   "emitter": "grocery/bakers-daily-scan.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "triage-residual",
@@ -964,7 +1079,8 @@
    "key": "triage residual",
    "class": "review",
    "condition": "a triage-created residual (send-alert -Lane weekly), ruling 1",
-   "emitter": "triage agents"
+   "emitter": "triage agents",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "triage-finding",
@@ -972,7 +1088,8 @@
    "key": "triage finding",
    "class": "review",
    "condition": "a triage-created finding (send-alert -Lane weekly), ruling 1",
-   "emitter": "triage agents"
+   "emitter": "triage agents",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "macro-copy-stale",
@@ -980,7 +1097,8 @@
    "key": "recipe index macro copy stale",
    "class": "review",
    "condition": "a one-off defect finding filed by an agent",
-   "emitter": "agent (no call site in the tree)"
+   "emitter": "agent (no call site in the tree)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "make-it-single-step",
@@ -988,7 +1106,8 @@
    "key": "twelve live cards render the whole method as step one",
    "class": "review",
    "condition": "a one-off defect finding filed by an agent",
-   "emitter": "agent (no call site in the tree)"
+   "emitter": "agent (no call site in the tree)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "scaler-unit-word",
@@ -996,7 +1115,8 @@
    "key": "serving scaler leaves the unit word",
    "class": "review",
    "condition": "a one-off defect finding filed by an agent",
-   "emitter": "agent (no call site in the tree)"
+   "emitter": "agent (no call site in the tree)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "mutexprobe",
@@ -1004,7 +1124,8 @@
    "key": "mutexprobe",
    "class": "review",
    "condition": "a test artifact from the 2026-08-23 mutex verification, never a real alert",
-   "emitter": "none (hand-run probe)"
+   "emitter": "none (hand-run probe)",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "recall-sleep-red",
@@ -1013,7 +1134,8 @@
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "skills/recall-sleep.py (local store, via grocery/send-alert.ps1)",
-   "note": "Registered 2026-09-11, queue 2026-09-11-18da92: it had been mailing unregistered. This subject now means a step BROKE or timed out - the mechanical half of the pass did not land. A night that is red only on a judgement ratchet raises 'is waiting on a judgement' instead."
+   "note": "Registered 2026-09-11, queue 2026-09-11-18da92: it had been mailing unregistered. This subject now means a step BROKE or timed out - the mechanical half of the pass did not land. A night that is red only on a judgement ratchet raises 'is waiting on a judgement' instead.",
+   "resolver": "ruling:Q-4fc24c-knowledge-store"
   },
   {
    "id": "recall-sleep-judgement-waiting",
@@ -1021,7 +1143,8 @@
    "key": "the knowledge store s nightly pass is waiting on a judgement",
    "class": "review",
    "condition": "a person owes a ruling on the forgetting or clustering queue; nothing broke and the mechanical outputs committed",
-   "emitter": "skills/recall-sleep.py (local store, via grocery/send-alert.ps1)"
+   "emitter": "skills/recall-sleep.py (local store, via grocery/send-alert.ps1)",
+   "resolver": "ruling:Q-4fc24c-knowledge-store"
   },
   {
    "id": "verify-rate-above-last",
@@ -1030,7 +1153,8 @@
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/record-sample-verdict.ps1",
-   "note": "Registered 2026-09-19 (backlog I232): the 14-day out-of-band verification measured a higher whole-board defect rate than the last run. Brad's ruling is that this mails him. It paged as UNREGISTERED ALERT TYPE on its first firing, 2026-09-19, because audit-alert-registry lists the call site UNREADABLE: the subject is built with -f inside Invoke-RateAlert and handed through a scriptblock."
+   "note": "Registered 2026-09-19 (backlog I232): the 14-day out-of-band verification measured a higher whole-board defect rate than the last run. Brad's ruling is that this mails him. It paged as UNREGISTERED ALERT TYPE on its first firing, 2026-09-19, because audit-alert-registry lists the call site UNREADABLE: the subject is built with -f inside Invoke-RateAlert and handed through a scriptblock.",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "brain-digest",
@@ -1038,7 +1162,8 @@
    "key": "brain digest the night the weakest link and what is waiting",
    "class": "digest",
    "condition": "a nightly digest mailed only when a stage is red (ruling 8b); information, not triage work",
-   "emitter": "ops/brain-digest.ps1"
+   "emitter": "ops/brain-digest.ps1",
+   "resolver": "digest"
   },
   {
    "id": "live-recipe-prices",
@@ -1046,7 +1171,8 @@
    "key": "live recipe prices",
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
-   "emitter": "meal-prep/pipeline/monitor-live-recipe-prices.ps1"
+   "emitter": "meal-prep/pipeline/monitor-live-recipe-prices.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "live-recipe-price-monitor-blind",
@@ -1054,7 +1180,8 @@
    "key": "live recipe price monitor could not look",
    "class": "page",
    "condition": "2 watcher-cannot-see",
-   "emitter": "meal-prep/pipeline/monitor-live-recipe-prices.ps1"
+   "emitter": "meal-prep/pipeline/monitor-live-recipe-prices.ps1",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-no-board-at-all",
@@ -1064,7 +1191,8 @@
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-board-is-stale",
@@ -1074,7 +1202,8 @@
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-not-published",
@@ -1084,7 +1213,8 @@
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-failed",
@@ -1094,7 +1224,8 @@
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-never-reached-main",
@@ -1104,7 +1235,8 @@
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-computed-but-not-shipped",
@@ -1114,7 +1246,8 @@
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-rollback-not-reverting",
@@ -1124,7 +1257,8 @@
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-cells-expiring-now",
@@ -1134,7 +1268,8 @@
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "The live board or feed is wrong, stale or not shipped: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-input-assert",
@@ -1144,7 +1279,8 @@
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-store-freshness-blind",
@@ -1154,7 +1290,8 @@
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-visibility-sweep-missing",
@@ -1164,7 +1301,8 @@
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-visibility-sweep-did-not-complete",
@@ -1174,7 +1312,8 @@
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-visibility-sweep-threw",
@@ -1184,7 +1323,8 @@
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-reached-main-check-failed",
@@ -1194,7 +1334,8 @@
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-headless-lanes-unknown",
@@ -1204,7 +1345,8 @@
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-git-hooks-not-live-pushes-are-ungated",
@@ -1214,7 +1356,8 @@
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "note": "A watcher is blind: pages on its first observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-run-log-held-mute",
@@ -1225,7 +1368,8 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "hold_observations": 2,
    "note": "A standing state (a locked sidecar) that a later fold usually clears: mailed on the second observation.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-missing-task",
@@ -1236,7 +1380,8 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-disabled",
@@ -1247,7 +1392,8 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-never-ran",
@@ -1258,7 +1404,8 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-did-not-run",
@@ -1269,7 +1416,8 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-run-record",
@@ -1280,7 +1428,8 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-browser-capture-missing-today",
@@ -1291,7 +1440,8 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-no-fresh-rows",
@@ -1302,7 +1452,8 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-browser-work-stale",
@@ -1313,7 +1464,8 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-missing-window",
@@ -1324,7 +1476,8 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-ad-stale",
@@ -1335,7 +1488,8 @@
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
    "hold_observations": 2,
    "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-ad-forecast",
@@ -1344,7 +1498,8 @@
    "class": "review",
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-ad-forecast-could-not-be-evaluated",
@@ -1353,7 +1508,8 @@
    "class": "review",
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-python-pins",
@@ -1362,7 +1518,8 @@
    "class": "review",
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-python-pins-could-not-be-evaluated",
@@ -1371,7 +1528,8 @@
    "class": "review",
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-graph-shape",
@@ -1380,7 +1538,8 @@
    "class": "review",
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-graph-shape-could-not-be-evaluated",
@@ -1389,7 +1548,8 @@
    "class": "review",
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-graph-schema",
@@ -1398,7 +1558,8 @@
    "class": "review",
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-graph-schema-could-not-be-evaluated",
@@ -1407,7 +1568,8 @@
    "class": "review",
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-promotion-holds-could-not-be-re-checked",
@@ -1416,7 +1578,8 @@
    "class": "review",
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-git-hooks-could-not",
@@ -1425,7 +1588,8 @@
    "class": "review",
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-member-cohorts-refused-to-write",
@@ -1434,7 +1598,8 @@
    "class": "review",
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-member-cohort-series",
@@ -1443,7 +1608,8 @@
    "class": "review",
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-approaching-carry-cliff",
@@ -1452,7 +1618,8 @@
    "class": "review",
    "condition": "review: nothing live is wrong today; a hygiene, forecast or advance-notice finding for the triage list",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-paid-content-served-free",
@@ -1461,7 +1628,8 @@
    "class": "review",
    "condition": "Brad ruling R14 (2026-09-10): a paid page served free goes to the review list, not email (as paywall-leak)",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-task-missing",
@@ -1471,7 +1639,8 @@
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-task-disabled",
@@ -1481,7 +1650,8 @@
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-task-never-ran",
@@ -1491,7 +1661,8 @@
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-task-stale",
@@ -1501,7 +1672,8 @@
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-task-failed",
@@ -1511,7 +1683,8 @@
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-run-did-not-land",
@@ -1521,7 +1694,8 @@
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-output-missing",
@@ -1531,7 +1705,8 @@
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-output-not-current",
@@ -1541,7 +1716,8 @@
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-output-stale",
@@ -1551,7 +1727,8 @@
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-external-output-missing",
@@ -1561,7 +1738,8 @@
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-queue-stuck",
@@ -1571,7 +1749,8 @@
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "Scheduled work stopped without a loud failure: pages on its first observation, as the catch-all type did.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-queue-unmeasured",
@@ -1581,7 +1760,8 @@
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "The heartbeat cannot measure a queue: a watcher is blind.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-queues-unmeasured",
@@ -1591,7 +1771,8 @@
    "condition": "2 watcher-cannot-see",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
    "note": "The heartbeat cannot measure a queue: a watcher is blind.",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-task-unwatched",
@@ -1600,7 +1781,8 @@
    "class": "review",
    "condition": "review: registry hygiene, a task or queue exists that expected-automations.json does not watch; nothing has stopped",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "silent-death-queues-unwatched",
@@ -1609,7 +1791,8 @@
    "class": "review",
    "condition": "review: registry hygiene, a task or queue exists that expected-automations.json does not watch; nothing has stopped",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "store-registry-hardcoded-store-list",
@@ -1618,7 +1801,8 @@
    "class": "review",
    "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
    "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "store-registry-orphaned-store-subset-exemption",
@@ -1627,7 +1811,8 @@
    "class": "review",
    "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
    "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "store-registry-duplicate-registry-name",
@@ -1636,7 +1821,8 @@
    "class": "review",
    "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
    "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "store-registry-board-and-registry-disagree",
@@ -1645,7 +1831,8 @@
    "class": "review",
    "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
    "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "store-registry-unregistered-capture-file-prefix",
@@ -1654,7 +1841,8 @@
    "class": "review",
    "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
    "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "store-registry-ad-schedule-names-an-unregistered-store",
@@ -1663,7 +1851,8 @@
    "class": "review",
    "condition": "source hygiene: a store list or file out of step with stores.json, nothing live is wrong",
    "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ff-catalog-starved-terms-aging-out",
@@ -1672,7 +1861,8 @@
    "class": "review",
    "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10), kept per signal",
    "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ff-catalog-mass-expiry-in-one-run",
@@ -1681,7 +1871,8 @@
    "class": "review",
    "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10), kept per signal",
    "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ff-catalog-sweep-is-not-buying",
@@ -1690,7 +1881,8 @@
    "class": "review",
    "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10), kept per signal",
    "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "ff-catalog-merged-catalog-shrank",
@@ -1699,7 +1891,8 @@
    "class": "review",
    "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10), kept per signal",
    "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "unassigned:2026-09-22"
   },
   {
    "id": "watchdog-digest",
@@ -1708,7 +1901,8 @@
    "class": "digest",
    "condition": "information: the ONE message per emitter run that lists its due conditions; every condition is already its own queue item, so this is mailed and never queued",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "digest"
   },
   {
    "id": "silent-death-digest",
@@ -1717,7 +1911,8 @@
    "class": "digest",
    "condition": "information: the ONE message per emitter run that lists its due conditions; every condition is already its own queue item, so this is mailed and never queued",
    "emitter": "grocery/health-heartbeat.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "digest"
   },
   {
    "id": "store-registry-digest",
@@ -1726,7 +1921,8 @@
    "class": "digest",
    "condition": "information: the ONE message per emitter run that lists its due conditions; every condition is already its own queue item, so this is mailed and never queued",
    "emitter": "grocery/audit-store-registry.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "digest"
   },
   {
    "id": "ff-catalog-digest",
@@ -1735,7 +1931,8 @@
    "class": "digest",
    "condition": "information: the ONE message per emitter run that lists its due conditions; every condition is already its own queue item, so this is mailed and never queued",
    "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
-   "split_from": "plan-2026-09-21-5.json"
+   "split_from": "plan-2026-09-21-5.json",
+   "resolver": "digest"
   },
   {
    "id": "pointer-without-object",
@@ -1744,7 +1941,8 @@
    "class": "page",
    "condition": "1 board-or-feed-wrong-or-held",
    "emitter": "grocery/capture-run.ps1",
-   "note": "2026-09-22, queue 2026-09-22-972de2. The ship path published the Ghost post, which carries board.json?v=<hash of the board that run built>, and the commit that deploys public/board.json did not land, so readers are served the PREVIOUS board underneath a post advertising a different one. Condition 1: the live board or feed is wrong. One page per run, never per file. The branch that raises it printed 'Readers keep the last good board' until this landed, a claim it had never tested."
+   "note": "2026-09-22, queue 2026-09-22-972de2. The ship path published the Ghost post, which carries board.json?v=<hash of the board that run built>, and the commit that deploys public/board.json did not land, so readers are served the PREVIOUS board underneath a post advertising a different one. Condition 1: the live board or feed is wrong. One page per run, never per file. The branch that raises it printed 'Readers keep the last good board' until this landed, a claim it had never tested.",
+   "resolver": "unassigned:2026-09-22"
   }
  ]
 }

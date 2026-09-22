@@ -254,6 +254,12 @@ function Get-RegistryVerdict {
   return [pscustomobject]@{ findings = $find; unreadable = $unread; subjects = $subjN; types = $typeN; resolved = $resolved }
 }
 
+# THE HOMEWORK SHAPE (2026-09-22, F5): a queue body that hands a person a command to run. Measured that day over the
+# queue and its archive: 97 of 431 items across 18 of 169 types. A REPORT on the -Queue half, never a finding: the
+# enforcement is the resolver field and its ratchet above; this count is how the next reader sees the class shrink.
+$script:AlertHomeworkPattern = '(?i)\b(run it for the list|fix the lagging side|work them with|after review:? *-accept|fold the change into|check the task''s last run|register each type)'
+function Test-AlertBodyHomework([string]$Body) { return ([bool]($Body -match $script:AlertHomeworkPattern)) }
+
 function ConvertTo-ParsedAst([string]$Source) {
   $tok = $null; $err = $null
   return [System.Management.Automation.Language.Parser]::ParseInput($Source, [ref]$tok, [ref]$err)
@@ -266,10 +272,10 @@ if ($SelfTest) {
     if ($cond) { Write-Output "ok    $label" } else { Write-Output "FAIL  $label  - $detail"; $script:fail++ }
   }
   $fxReg = [pscustomobject]@{ entries = @(
-    [pscustomobject]@{ id = 'dropped'; match = 'prefix'; key = 'grocery store s dropped'; class = 'review'; condition = 'review intake'; emitter = 'x.ps1' },
-    [pscustomobject]@{ id = 'held'; match = 'exact'; key = 'grocery page held coverage'; class = 'page'; condition = '1 board-or-feed-wrong-or-held'; emitter = 'x.ps1' },
-    [pscustomobject]@{ id = 'tg-blind'; match = 'exact'; key = 'grocery test guards could not evaluate'; class = 'page'; condition = '2 watcher-cannot-see'; emitter = 'x.ps1' },
-    [pscustomobject]@{ id = 'tg-invariant'; match = 'exact'; key = 'grocery a blocking invariant can no longer fail'; class = 'page'; condition = '2 watcher-cannot-see'; emitter = 'x.ps1' }
+    [pscustomobject]@{ id = 'dropped'; match = 'prefix'; key = 'grocery store s dropped'; class = 'review'; condition = 'review intake'; emitter = 'x.ps1'; resolver = 'lane:x.ps1' },
+    [pscustomobject]@{ id = 'held'; match = 'exact'; key = 'grocery page held coverage'; class = 'page'; condition = '1 board-or-feed-wrong-or-held'; emitter = 'x.ps1'; resolver = 'lane:x.ps1' },
+    [pscustomobject]@{ id = 'tg-blind'; match = 'exact'; key = 'grocery test guards could not evaluate'; class = 'page'; condition = '2 watcher-cannot-see'; emitter = 'x.ps1'; resolver = 'lane:x.ps1' },
+    [pscustomobject]@{ id = 'tg-invariant'; match = 'exact'; key = 'grocery a blocking invariant can no longer fail'; class = 'page'; condition = '2 watcher-cannot-see'; emitter = 'x.ps1'; resolver = 'lane:x.ps1' }
   ) }
 
   # MUST FIRE: the founding gap. A call site whose subject has no entry is reported, with its type key.
@@ -335,13 +341,13 @@ param([string]$Title = '')
   _T 'MUST FIRE a queue type with no registry entry is reported UNMAPPED' ($v8.findings.Count -eq 1 -and $v8.findings[0] -match "UNMAPPED queue type 'grocery something nobody registered'") ($v8.findings -join ' | ')
 
   # MUST FIRE: two prefixes that both cover a type are AMBIGUOUS - "exactly one entry" is the bar.
-  $fxAmb = [pscustomobject]@{ entries = @(@($fxReg.entries) + [pscustomobject]@{ id = 'dropped-2'; match = 'prefix'; key = 'grocery store s'; class = 'page'; condition = '1 board-or-feed-wrong-or-held'; emitter = 'x.ps1' }) }
+  $fxAmb = [pscustomobject]@{ entries = @(@($fxReg.entries) + [pscustomobject]@{ id = 'dropped-2'; match = 'prefix'; key = 'grocery store s'; class = 'page'; condition = '1 board-or-feed-wrong-or-held'; emitter = 'x.ps1'; resolver = 'lane:x.ps1' }) }
   $v9 = Get-RegistryVerdict $fxAmb @() @('grocery store s dropped from a commodity they carry')
   _T 'MUST FIRE a type covered by two prefix entries is AMBIGUOUS' ($v9.findings.Count -eq 1 -and $v9.findings[0] -match 'AMBIGUOUS') ($v9.findings -join ' | ')
   _T 'and an ambiguous type resolves to the most severe class (page), failing toward paging' ((Resolve-AlertClass $fxAmb 'grocery store s dropped from a commodity they carry').class -eq 'page') 'not page'
 
   # MUST FIRE: an entry the mailer cannot apply (an unknown class) is reported, and resolves to page, not silence.
-  $fxBad = [pscustomobject]@{ entries = @([pscustomobject]@{ id = 'loud'; match = 'exact'; key = 'x y'; class = 'loud'; condition = 'c'; emitter = 'x.ps1' }) }
+  $fxBad = [pscustomobject]@{ entries = @([pscustomobject]@{ id = 'loud'; match = 'exact'; key = 'x y'; class = 'loud'; condition = 'c'; emitter = 'x.ps1'; resolver = 'lane:x.ps1' }) }
   $v10 = Get-RegistryVerdict $fxBad @() @()
   _T 'MUST FIRE an entry with a class outside page, review, digest is INVALID' ($v10.findings.Count -ge 1 -and $v10.findings[0] -match 'INVALID ENTRY') ($v10.findings -join ' | ')
   _T 'and that entry resolves to page' ((Resolve-AlertClass $fxBad 'x y').class -eq 'page') 'not page'
@@ -351,10 +357,51 @@ param([string]$Title = '')
   $dpRaw = Get-AlertRegistryEntryProblems $fxDrift   # assign, then wrap: a comma-returned list inside @() counts as one element
   $dp = @($dpRaw)
   _T 'MUST FIRE a registry file whose page_conditions differ from the lib is reported by name' (@($dp | Where-Object { $_ -match 'page_conditions: .*disagree' }).Count -eq 1) ($dp -join ' | ')
-  $fxAgree = [pscustomobject]@{ page_conditions = @($script:AlertPageConditions); entries = @([pscustomobject]@{ id = 'mem'; match = 'exact'; key = 'ops private memory notes reached the public repo'; class = 'page'; condition = '5 private-data-exposure'; emitter = 'grocery/check-ad-cycles.ps1' }) }
+  $fxAgree = [pscustomobject]@{ page_conditions = @($script:AlertPageConditions); entries = @([pscustomobject]@{ id = 'mem'; match = 'exact'; key = 'ops private memory notes reached the public repo'; class = 'page'; condition = '5 private-data-exposure'; emitter = 'grocery/check-ad-cycles.ps1'; resolver = 'lane:x.ps1' }) }
   $apRaw = Get-AlertRegistryEntryProblems $fxAgree
   $ap = @($apRaw)
   _T 'MUST NOT FIRE a page entry under condition 5 with agreeing lists is not reported' ($ap.Count -eq 0) ($ap -join ' | ')
+
+  # THE RESOLVER CONTRACT (2026-09-22, design/RCA-holistic-2026-09-22.md F5). Every entry names what closes it.
+  $rvBase = [ordered]@{ match = 'exact'; class = 'page'; condition = '1 board-or-feed-wrong-or-held'; emitter = 'x.ps1' }
+  function _RvE([string]$id, $res) { $h = [ordered]@{ id = $id; key = ('k ' + $id) } + $rvBase; if ($null -ne $res) { $h['resolver'] = $res }; return [pscustomobject]$h }
+  $rvNone = [pscustomobject]@{ entries = @((_RvE 'new-type' $null)) }
+  $rvp = @((Get-AlertRegistryEntryProblems $rvNone))
+  _T 'MUST FIRE a page entry with no resolver field is an INVALID ENTRY that names the three resolver kinds' (@($rvp | Where-Object { $_ -match 'new-type\): no resolver - name what closes it' }).Count -eq 1) ($rvp -join ' | ')
+  $rvBad = [pscustomobject]@{ entries = @((_RvE 'typo' 'lanes:grocery/x.ps1')) }
+  $rvp = @((Get-AlertRegistryEntryProblems $rvBad))
+  _T 'MUST FIRE a resolver outside lane:, ruling:, digest and unassigned:<date> is reported' (@($rvp | Where-Object { $_ -match "resolver 'lanes:grocery/x.ps1' is not" }).Count -eq 1) ($rvp -join ' | ')
+  $rvOk = [pscustomobject]@{ entries = @((_RvE 'a' 'lane:grocery/verify-price-flags.ps1'), (_RvE 'b' 'ruling:Q-4fc24c-knowledge-store'), (_RvE 'c' 'digest')) }
+  $rvp = @((Get-AlertRegistryEntryProblems $rvOk))
+  _T 'MUST NOT FIRE a lane:, a ruling: and a digest resolver each pass, with no ratchet mark needed' ($rvp.Count -eq 0) ($rvp -join ' | ')
+  $rvRet = [pscustomobject]@{ entries = @(([pscustomobject](([ordered]@{ id = 'old'; key = 'k old'; retired = '2026-09-21 split' }) + $rvBase))) }
+  $rvp = @((Get-AlertRegistryEntryProblems $rvRet))
+  _T 'MUST NOT FIRE a retired entry (it never fires) needs no resolver' ($rvp.Count -eq 0) ($rvp -join ' | ')
+  # the ratchet: two grandfathered entries against a mark AT the count, one step PAST it, and one under it
+  $rvG = @((_RvE 'g1' 'unassigned:2026-09-22'), (_RvE 'g2' 'unassigned:2026-09-22'))
+  $rvAt = [pscustomobject]@{ resolver_ratchet = [pscustomobject]@{ unassigned_max = 2 }; entries = $rvG }
+  $rvp = @((Get-AlertRegistryEntryProblems $rvAt)); $rr = Get-AlertResolverRatchet $rvAt
+  _T 'MUST NOT FIRE AT THE BAR: 2 unassigned entries against unassigned_max 2 pass and cannot tighten' ($rvp.Count -eq 0 -and $rr.unassigned -eq 2 -and -not $rr.over -and -not $rr.can_tighten) ($rvp -join ' | ')
+  $rvPast = [pscustomobject]@{ resolver_ratchet = [pscustomobject]@{ unassigned_max = 1 }; entries = $rvG }
+  $rvp = @((Get-AlertRegistryEntryProblems $rvPast))
+  _T 'MUST FIRE ONE PAST THE BAR: 2 unassigned entries against unassigned_max 1 is a ratchet finding' (@($rvp | Where-Object { $_ -match 'resolver_ratchet: 2 live entries .*above the mark 1' }).Count -eq 1) ($rvp -join ' | ')
+  $rvUnder = [pscustomobject]@{ resolver_ratchet = [pscustomobject]@{ unassigned_max = 3 }; entries = $rvG }
+  $rr = Get-AlertResolverRatchet $rvUnder
+  _T 'CLEAN TWIN under the mark the ratchet says it CAN tighten, and is not a finding' ($rr.can_tighten -and -not $rr.over -and @((Get-AlertRegistryEntryProblems $rvUnder)).Count -eq 0) ('unassigned=' + $rr.unassigned + ' mark=' + $rr.mark)
+  $rvNoMark = [pscustomobject]@{ entries = $rvG }
+  $rvp = @((Get-AlertRegistryEntryProblems $rvNoMark))
+  _T 'MUST FIRE grandfathered entries with no recorded mark are reported' (@($rvp | Where-Object { $_ -match 'unassigned_max is missing' }).Count -eq 1) ($rvp -join ' | ')
+  # delivery: the mailer queues a resolver-less type and mails nothing
+  $dNo = Get-AlertDelivery -Resolution (Resolve-AlertClass $rvNone 'k new-type') -Subject 's'
+  _T 'MUST FIRE a registered page type with no resolver is delivered queue=true mail=false resolverless=true' ($dNo.queue -and -not $dNo.mail -and $dNo.resolverless) ('queue=' + $dNo.queue + ' mail=' + $dNo.mail)
+  $dLane = Get-AlertDelivery -Resolution (Resolve-AlertClass $rvOk 'k a') -Subject 's'
+  _T 'CLEAN TWIN a page type with a lane: resolver is still queued AND mailed' ($dLane.queue -and $dLane.mail -and -not $dLane.resolverless) ('queue=' + $dLane.queue + ' mail=' + $dLane.mail)
+  $rvDig = [pscustomobject]@{ entries = @(([pscustomobject](([ordered]@{ id = 'dg'; key = 'k dg'; match = 'exact'; class = 'digest'; condition = 'information'; emitter = 'x.ps1' })))) }
+  $dDig = Get-AlertDelivery -Resolution (Resolve-AlertClass $rvDig 'k dg') -Subject 's'
+  _T 'MUST FIRE a digest-class type with no resolver is QUEUED (never lost) and not mailed' ($dDig.queue -and -not $dDig.mail) ('queue=' + $dDig.queue + ' mail=' + $dDig.mail)
+  # the queue half's homework census
+  _T 'MUST FIRE a body that hands a person a command is counted as homework' (Test-AlertBodyHomework 'Run it for the list; fix the lagging side.') 'no'
+  _T 'MUST NOT FIRE a body that states a measurement only is not homework' (-not (Test-AlertBodyHomework '6 recipes held under ruling Q1; 0 drift.')) 'yes'
 
   # MUST FIRE: a registry that is not there is not a registry; the check is blind and the mailer pages everything.
   $st = Read-AlertRegistry (Join-Path $env:TEMP ('no-such-alert-registry-' + [guid]::NewGuid().ToString('N') + '.json'))
@@ -413,6 +460,25 @@ if ($Queue) {
 }
 
 $v = Get-RegistryVerdict $reg.registry $sites $qTypes
+# RESOLVERS: the census, a lane that names a script that is not there, and the ratchet's direction (never written here).
+$rvCount = @{ lane = 0; ruling = 0; digest = 0; unassigned = 0; missing = 0; invalid = 0; retired = 0 }
+foreach ($e in @($reg.registry.entries | Where-Object { $_ })) {
+  if ($e.PSObject.Properties['retired'] -and [string]$e.retired) { $rvCount.retired = [int]$rvCount.retired + 1; continue }
+  $rs = Get-AlertEntryResolver $e
+  $rk = Get-AlertResolverKind $rs
+  $rvCount[$rk] = [int]$rvCount[$rk] + 1
+  if ($rk -eq 'lane') {
+    $lanePath = ($rs.Substring(5) -split ' ')[0]
+    if (-not (Test-Path -LiteralPath (Join-Path $repo $lanePath))) { [void]$v.findings.Add('RESOLVER entry ' + [string]$e.id + " names lane '" + $lanePath + "', which is not a file in this checkout") }
+  }
+}
+$rvRat = Get-AlertResolverRatchet $reg.registry
+$homeworkN = 0; $homeworkTypes = @{}
+if ($Queue) {
+  foreach ($it in @($q.items | Where-Object { $_ -and [string]$_.date -ge $cut })) {
+    if (Test-AlertBodyHomework ([string]$it.body)) { $homeworkN++; $homeworkTypes[[string]$it.type] = $true }
+  }
+}
 $entries = @($reg.registry.entries | Where-Object { $_ })
 $byClass = @{ page = 0; review = 0; digest = 0 }
 foreach ($e in $entries) {
@@ -421,10 +487,13 @@ foreach ($e in $entries) {
 }
 Write-Output ("alert-registry: {0} entries (page {1}, review {2}, digest {3}) in {4}" -f $entries.Count, $byClass.page, $byClass.review, $byClass.digest, $RegistryFile)
 Write-Output ("  scanned {0} tracked script(s), parsed {1} that name send-alert, found {2} call site(s)" -f $scanned, $parsed, $sites.Count)
+Write-Output ("  resolvers: lane {0}, ruling {1}, digest {2}, unassigned {3} (mark {4}), missing {5}, invalid {6}; retired {7}" -f $rvCount.lane, $rvCount.ruling, $rvCount.digest, $rvCount.unassigned, $rvRat.mark, $rvCount.missing, $rvCount.invalid, $rvCount.retired)
+if ($rvRat.can_tighten) { Write-Output ('  ratchet CAN tighten: ' + $rvRat.unassigned + ' unassigned against a mark of ' + $rvRat.mark + ' - lower resolver_ratchet.unassigned_max in grocery\alert-registry.json in the commit that assigned them (this run does not write it)') }
+if ($Queue) { Write-Output ('  homework: ' + $homeworkN + ' queue item(s) over ' + $Days + ' day(s), in ' + $homeworkTypes.Count + ' type(s), hand a person a command (a report, not a finding: the resolver field is the enforcement)') }
 foreach ($f in $v.findings) { Write-Output ('  ! ' + $f) }
 foreach ($u in $v.unreadable) { Write-Output ('  ? UNREADABLE call site ' + $u + ' - its subject is not built from anything this can follow, so it is not checked (send-alert pages it as UNREGISTERED if it fires unmapped)') }
 $qTxt = if ($Queue) { (' and ' + $v.types + ' queue type(s) over ' + $Days + ' day(s)') } else { ' (queue half not run: pass -Queue)' }
-$sum = ("files={0} sites={1} subjects={2} unreadable={3} queue_types={4} findings={5}" -f $parsed, $sites.Count, $v.subjects, $v.unreadable.Count, $v.types, $v.findings.Count)
+$sum = ("files={0} sites={1} subjects={2} unreadable={3} queue_types={4} unassigned={5} homework={6} findings={7}" -f $parsed, $sites.Count, $v.subjects, $v.unreadable.Count, $v.types, $rvCount.unassigned, $homeworkN, $v.findings.Count)
 if ($v.findings.Count) {
   Write-Output ('alert-registry: FAILED - ' + $v.findings.Count + ' finding(s) across ' + $v.subjects + ' readable call-site subject(s)' + $qTxt + '. Register each type in grocery\alert-registry.json.')
   Exit-Guard -Name 'ALERT-REGISTRY' -Code 2 -Summary $sum

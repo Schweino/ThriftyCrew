@@ -27,6 +27,10 @@ $script:AlertMatchModes = @('exact', 'prefix', 'regex')
 $script:AlertPageConditions = @('1 board-or-feed-wrong-or-held', '2 watcher-cannot-see', '3 scheduled-work-did-not-run-or-land', '4 live-cell-moved-unexplained', '5 private-data-exposure', 'escalation')
 $script:AlertClassRank = @{ page = 3; review = 2; digest = 1 }
 $script:AlertUnregisteredMarker = 'UNREGISTERED ALERT TYPE: '
+# THE RESOLVER CONTRACT (2026-09-22, design/RCA-holistic-2026-09-22.md F5). Every entry names what CLOSES its findings.
+# 'unassigned:<date>' is the grandfathered state of the types registered before the contract, counted by the ratchet
+# in the registry file (resolver_ratchet.unassigned_max) so the count may only fall.
+$script:AlertResolverKinds = @('lane', 'ruling', 'digest', 'unassigned')
 
 function Get-AlertTypeKey {
   <# The subject with dates, rc=N and every number removed, lower case, non-letters collapsed. Identical to
@@ -107,11 +111,47 @@ function Resolve-AlertClass {
   return $r
 }
 
+function Get-AlertResolverKind {
+  <# Pure. An entry's resolver string -> lane | ruling | digest | unassigned | missing | invalid.
+     lane:<repo path>, ruling:<question id>, the bare word digest, or unassigned:<yyyy-MM-dd>. #>
+  param([string]$Resolver)
+  if (-not $Resolver) { return 'missing' }
+  if ($Resolver -ceq 'digest') { return 'digest' }
+  if ($Resolver -cmatch '^lane:\S+$') { return 'lane' }
+  if ($Resolver -cmatch '^ruling:\S+$') { return 'ruling' }
+  if ($Resolver -cmatch '^unassigned:\d{4}-\d{2}-\d{2}$') { return 'unassigned' }
+  return 'invalid'
+}
+
+function Get-AlertEntryResolver {
+  <# Pure. The resolver string an entry declares, '' when the field is absent (a presence question, asked as one). #>
+  param($Entry)
+  if ($null -eq $Entry) { return '' }
+  $p = $Entry.PSObject.Properties['resolver']
+  if ($null -eq $p) { return '' }
+  return [string]$p.Value
+}
+
+function Get-AlertResolverRatchet {
+  <# Pure. How many live (not retired) entries are still 'unassigned', against the mark the registry records. #>
+  param($Registry)
+  $n = 0
+  foreach ($e in @($Registry.entries)) {
+    if (-not $e) { continue }
+    if ($e.PSObject.Properties['retired'] -and [string]$e.retired) { continue }
+    if ((Get-AlertResolverKind (Get-AlertEntryResolver $e)) -eq 'unassigned') { $n++ }
+  }
+  $mark = $null
+  $rr = $Registry.PSObject.Properties['resolver_ratchet']
+  if ($null -ne $rr -and $null -ne $rr.Value -and $rr.Value.PSObject.Properties['unassigned_max']) { $mark = [int]$rr.Value.unassigned_max }
+  return [pscustomobject]@{ unassigned = $n; mark = $mark; over = ($null -ne $mark -and $n -gt $mark); can_tighten = ($null -ne $mark -and $n -lt $mark) }
+}
+
 function Get-AlertDelivery {
   <# Pure. What send-alert does with one alert: queue it, mail it, and under which subject.
      -Escalates is page and -Lane weekly is review by ruling 1, whatever the subject says. #>
   param($Resolution, [string]$Subject, [string]$Escalates = '', [string]$Lane = '')
-  $d = [pscustomobject]@{ class = 'page'; queue = $true; mail = $true; mail_subject = $Subject; unregistered = $false; entry_id = ''; note = '' }
+  $d = [pscustomobject]@{ class = 'page'; queue = $true; mail = $true; mail_subject = $Subject; unregistered = $false; resolverless = $false; entry_id = ''; note = '' }
   if ($Escalates) { $d.note = 'an escalation (-Escalates) is page by ruling 1'; return $d }
   if ($Lane -eq 'weekly') { $d.class = 'review'; $d.mail = $false; $d.note = 'a triage-created item (-Lane weekly) is review by ruling 1'; return $d }
   if ($null -eq $Resolution -or -not $Resolution.registry_ok) { $d.note = 'the alert registry could not be read, so this alert FAILS TOWARD PAGE'; return $d }
@@ -126,6 +166,13 @@ function Get-AlertDelivery {
   if ($d.class -eq 'review') { $d.mail = $false }
   if ($d.class -eq 'digest') { $d.queue = $false }
   if ($Resolution.ambiguous) { $d.note = 'more than one registry entry matches; the most severe class wins' }
+  # A REGISTERED TYPE THAT NAMES NO RESOLVER IS QUEUED AND NEVER EMAILED (the resolver contract, F5). Queue is forced
+  # ON, so a digest-class entry without one is not lost either: the durable record comes first, the page does not.
+  $rk = Get-AlertResolverKind (Get-AlertEntryResolver $Resolution.entry)
+  if ($rk -eq 'missing' -or $rk -eq 'invalid') {
+    $d.resolverless = $true; $d.queue = $true; $d.mail = $false
+    $d.note = ('registry entry ' + $d.entry_id + ' names no resolver (lane:, ruling: or digest), so it is queued and NOT emailed until it does')
+  }
   return $d
 }
 
@@ -160,6 +207,16 @@ function Get-AlertRegistryEntryProblems {
     if (-not [string]$e.condition) { [void]$p.Add($tag + ': no condition') }
     elseif ([string]$e.class -eq 'page' -and $script:AlertPageConditions -notcontains [string]$e.condition) { [void]$p.Add($tag + ": page condition '" + [string]$e.condition + "' is not one of the page conditions") }
     if (-not [string]$e.emitter) { [void]$p.Add($tag + ': no emitter') }
+    $isRetired = ($e.PSObject.Properties['retired'] -and [string]$e.retired)
+    if (-not $isRetired) {
+      $rs = Get-AlertEntryResolver $e
+      $rk = Get-AlertResolverKind $rs
+      if ($rk -eq 'missing') { [void]$p.Add($tag + ': no resolver - name what closes it: lane:<script that reads the finding into a worklist>, ruling:<question id>, or digest') }
+      elseif ($rk -eq 'invalid') { [void]$p.Add($tag + ": resolver '" + $rs + "' is not lane:<path>, ruling:<id>, digest or unassigned:<yyyy-MM-dd>") }
+    }
   }
+  $rat = Get-AlertResolverRatchet $Registry
+  if ($null -eq $rat.mark -and $rat.unassigned -gt 0) { [void]$p.Add('resolver_ratchet.unassigned_max is missing, so the grandfathered unassigned count has no mark') }
+  elseif ($rat.over) { [void]$p.Add('resolver_ratchet: ' + $rat.unassigned + " live entries are 'unassigned', above the mark " + $rat.mark + ' - a new type must name its resolver, never join the grandfathered set') }
   return ,$p
 }
