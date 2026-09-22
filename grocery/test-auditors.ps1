@@ -5402,7 +5402,17 @@ else { Bad ('a REVIEW near-match turned the gate red (rc=' + $r.rc + ') - the lo
 # the same clean twin must still report WHAT IT EXAMINED, or "no listed product is priced" is unfalsifiable
 if ($r.text -match 'entries evaluable against \d+ named priced cells') { Ok 'known-wrong reports how many entries it could evaluate and how many cells it examined' }
 else { Bad 'known-wrong reported a clean result without saying what it examined - "ok" from an unknown sample size' }
-# BLIND: no board at all. Must be exit 3, never a clean 0.
+# THE LINK CHECK SKIPS A REVERSED RULING TOO (2026-09-22, plan-2026-09-22-5). The board-cell check above already did; the
+# curated-link index did not, so the first reversal of a ruling that had a curated link held the whole board
+# (BLOCKED-LINK Baker's laundry-detergent on the ceab00 reversals). Same clean-twin tree and ledger.
+$kwPurl = Join-Path $fxKw 'product-urls.json'
+Set-Content $kwPurl '{"items":{"parmesan":{"commodity":"parmesan","Aldi":{"url":"https://www.aldi.us/product/x","name":"Clancy''s Parmesan Garlic Pita Chips 7.33 OZ"}},"coffee":{"commodity":"coffee","Walmart":{"url":"https://www.walmart.com/ip/1","name":"Onyx Coffee Lab Salted Mocha Oat Milk Latte, 11 fl oz Can"}}}}' -Encoding UTF8
+$r = RunPS 'audit-known-wrong.ps1' @('-Root', $fxKw, '-ListFile', $kwList)
+if ($r.rc -eq 2 -and $r.text -match 'BLOCKED-LINK\s+\[Aldi\] parmesan') { Ok 'MUST FIRE  a curated link to a product under an ACTIVE ruling (parmesan / Aldi pita chips) is still a BLOCKED-LINK' }
+else { Bad ('known-wrong link check no longer fires on an active ruling (rc=' + $r.rc + '): ' + $r.text) }
+if ($r.text -notmatch 'BLOCKED-LINK\s+\[Walmart\] coffee') { Ok 'MUST NOT FIRE  a curated link to a product whose ruling was REVERSED (the coffee latte) is not a BLOCKED-LINK' }
+else { Bad 'known-wrong link check still enforces a REVERSED ruling - one reversal holds the whole board' }
+[IO.File]::Delete($kwPurl)# BLIND: no board at all. Must be exit 3, never a clean 0.
 $fxKwB = NewFxDir 'kw-blind'
 New-Item -ItemType Directory -Force (Join-Path $fxKwB 'out') | Out-Null
 Copy-Item $kwList (Join-Path $fxKwB 'known-wrong.json')

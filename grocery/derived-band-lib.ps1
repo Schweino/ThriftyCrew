@@ -16,12 +16,14 @@
        in compare-deals still applies);
     3. band = [ reference / K , reference * K ].
   K is a FIRST PLAUSIBLE NUMBER chosen by a small sweep over comparison-2026-09-22's evidence (K = 3, 4, 5, 6; the
-  counts are in the plan's routing of 6b17b1): 5 refuses every factor-of-10 basis error on both sides and newly refuses
-  the fewest rows the typed bands admitted. It is not a tuned optimum and nothing rules out a better value.
+  counts are in plan-2026-09-22-5 item 6b17b1): against the typed bands, rows newly refused were K=3 1,286, K=4 581,
+  K=5 280, K=6 150. 5 was taken as the widest band that still refuses a factor-of-10 basis error with margin on both sides;
+  6 refuses fewer real rows and admits a 6x error. It is not a tuned optimum and nothing rules out a better value.
   WHAT IT DOES WHEN THE PRODUCER STOPS: with no evidence there is no band, so a commodity with fewer than MinStores
   stores and rows is guarded only by the universal floor - the same as the 232 commodities that had no typed band.
 
   Pure: no disk, no clock. compare-deals computes the evidence in a pre-pass and calls Get-TcDerivedBands once.
+  Fixtures: grocery/test-derived-band.ps1 -SelfTest (run-gates runs it; run it by hand after any change here).
 #>
 
 $script:TcBandK = 5.0          # first plausible number, see header

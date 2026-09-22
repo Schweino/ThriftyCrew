@@ -161,10 +161,10 @@
       }
     },
     {
-      "leaves_open": "the new laundry crown (Hy-Vee 0.0494) rests on an ad line that states two sizes, 'Xtra laundry detergent, 56 or 67.5 oz., 3/ $10.00', priced at the LARGER size (the 56 oz reading is 0.0595); and audit-known-wrong's reversed-ruling skip has no frozen fixture. 2 findings, 1 live cell",
-      "leaves_open_occurrences": 1,
+      "leaves_open": "audit-known-wrong's reversed-ruling skip in the link check got its fixture in test-auditors (MUST FIRE active ruling, MUST NOT FIRE reversed); nothing else",
+      "leaves_open_occurrences": 0,
       "shipped_commit": null,
-      "deviation": "Three things the plan did not foresee, each measured in the routing artifact: (1) 10 of the 13 laundry-detergent known-wrong rulings existed only because of the one-line policy and blocked the widening, so they were reversed with Brad's ruling as the reason (3 form rulings kept); (2) apply-coverage-batch reverted EVERY batch while one unrelated cell (vegetable-oil | Sam's, 6b17b1) was quarantine-required, because its guards gate read rc 2 as the batch's fault; it now fails only on a board-scoped hold or a cell the baseline did not name (fixtured, 6 cases); (3) audit-known-wrong's curated-link check did not skip REVERSED rulings, so the first reversal of a ruling with a link held the board (BLOCKED-LINK Baker's 'ARM & HAMMER Liquid Laundry Detergent Clean Burst Scent'); it now skips them exactly as the board-cell check does. That fix ships WITHOUT its own frozen fixture (ceiling).",
+      "deviation": "Three things the plan did not foresee, each measured in the routing artifact: (1) 10 of the 13 laundry-detergent known-wrong rulings existed only because of the one-line policy and blocked the widening, so they were reversed with Brad's ruling as the reason (3 form rulings kept); (2) apply-coverage-batch reverted EVERY batch while one unrelated cell (vegetable-oil | Sam's, 6b17b1) was quarantine-required, because its guards gate read rc 2 as the batch's fault; it now fails only on a board-scoped hold or a cell the baseline did not name (fixtured, 6 cases); (3) audit-known-wrong's curated-link check did not skip REVERSED rulings, so the first reversal of a ruling with a link held the board (BLOCKED-LINK Baker's 'ARM & HAMMER Liquid Laundry Detergent Clean Burst Scent'); it now skips them exactly as the board-cell check does. That fix ships WITHOUT its own frozen fixture (ceiling). Found after: the new crown was an 'A or B' ad line priced at the larger size; fixed at the class (every range size now reads its smaller size), 37 of 2,708 cells carry such a size and 18 moved, laundry crown Hy-Vee 0.0494 -> Aldi 0.0549.",
       "queue_id": "2026-09-18-ceab00",
       "subject": "laundry-detergent is any liquid laundry detergent per fl oz; brand-only ad offers stay unpriced",
       "family": "F5",
@@ -219,7 +219,7 @@
         "claimed": {},
         "claimed_count": 0
       },
-      "leaves_open_followup": "enqueue weekly through send-alert.ps1 -Lane weekly at landing: 'laundry-detergent Hy-Vee crown priced from a two-size ad line (56 or 67.5 oz) at the larger size; and a fixture for audit-known-wrong skipping reversed rulings in the link check'"
+      "leaves_open_followup": "watch:grocery/audit-known-wrong.ps1"
     },
     {
       "leaves_open": "a HAND run of check-ad-cycles without -DeferPost (a human or a triage rebuild) still upserts the post before its own commit at the end of that script; and price-history.json, which the post also points at by ?v=, is not in the edge byte check. 2 paths, 0 recorded occurrences of either failing",
@@ -409,121 +409,162 @@
       "rollback": "nothing shipped for this item; nothing to roll back"
     },
     {
-      "leaves_open": "the vegetable-oil | Sam's cell stays quarantined at 0.0723 until its $7.16 / 192 fl oz read is verified by the store; 1 cell",
-      "leaves_open_occurrences": 1,
+      "leaves_open": "359 commodities still carry a typed band; each moves to band: derived once identity for its wrong products is carried by excludes/known-wrong and the reference is bulk-aware (warehouse packs more than 5x under small-jar medians). 359 typed bands",
+      "leaves_open_occurrences": 359,
       "shipped_commit": null,
-      "deviation": null,
+      "deviation": "The full switch (every commodity on its derived band) was built and measured, then held. At K=5 over 39,075 priced rows it newly admitted 2,404 rows and newly refused 280 against the typed bands; switched on, the rebuild moved 25 crowns and changed 37 cells, and two defects showed: (1) the typed bands were doing IDENTITY work (salt | Aldi became a Himalayan pink salt popcorn, jalapenos | Walmart a hummus, butter | Sam's a butter seasoning, cooked-quinoa | Baker's a smoked-salmon bowl, garlic | Sam's a pork tenderloin); (2) real warehouse bulk sits more than 5x under the median of small jars and was newly refused (Sam's bay leaves, curry powder, thyme, yeast, hand sanitizer, 50 lb rice). A second arm (untyped commodities take their derived band) removed four real cells and was also held. What ships: the derivation in shadow on every build, and vegetable-oil opted in with band: derived.",
       "queue_id": "2026-09-21-6b17b1",
-      "subject": "vegetable-oil / Sam's quarantined by a band floor",
+      "subject": "Band floors and ceilings are derived from each commodity's own price evidence (Brad: \"Derive from data\")",
       "family": "F5",
-      "classification": "batch-2 data item",
+      "classification": "ruling-implementation (Brad: derive from data)",
       "evidence": [
-        "measured: vegetable-oil band_min 0.04 / band_max 0.4 are TYPED inline in commodities.json (compare-deals.ps1:133 reads them as an override; no script derives them; new-commodity.ps1 takes -BandMin by hand). The memory no-hardcoded-bands is Brad's 2026-09-04 ruling on recipe MACRO bands, not grocery price sanity bands, so the plan's 'a typed floor breaks that rule' does not follow from it; whether price floors may be typed is a ruling, not a fix"
+        "vegetable-oil typed band_min 0.04 / band_max 0.4 inline in commodities.json; 360 of 592 commodities carried a typed band; no script derived any of them (compare-deals.ps1:133 read them as an override)",
+        "Sam's Club Member's Mark Canola Oil 192 fl oz at $7.16 = 0.0373/fl oz, refused by the 0.04 floor; the seven published vegetable-oil cells 0.0686 to 0.096"
       ],
-      "root_cause": "as in plan-2026-09-22-2.json",
+      "root_cause": "a sanity band is a conformance rule written by hand, so a typed floor stands against a store's own consistent price and nothing re-reads it as prices move (memory conformance-guard-cannot-see-rule-bug)",
       "root_fix": {
-        "what": "the verify road for band-censored rows (plan-2026-09-22-2)",
-        "files": [],
-        "exact_change": "not started in this run"
+        "what": "the band is derived per build from the commodity's own evidence, measured in shadow on every build, and in force on a commodity that declares band: derived",
+        "files": [
+          "grocery/derived-band-lib.ps1",
+          "grocery/compare-deals.ps1",
+          "grocery/commodities.json",
+          "grocery/test-derived-band.ps1"
+        ],
+        "exact_change": "ref = median of per-store median per-unit (>= 3 stores) else median of rows (>= 3 rows) else no band; band = [ref/5, ref*5], K=5 first plausible from a sweep of 3/4/5/6; compare-deals derives in a pre-pass and writes out/band-derivation-<date>.json (typed vs derived per row, K sweep); vegetable-oil declares band: derived and loses its typed band"
       },
       "blast_radius": {
-        "measured_as": "not measured in this run",
-        "measured_by": "-",
-        "affected_now": 0,
-        "names": [],
-        "risk": "-",
-        "cell_effects": []
+        "measured_as": "routing",
+        "measured_by": "audit-match-soundness after the vegetable-oil band edit: MOVED 0 DROPPED 0 new-contested 0 (routing unchanged; a band decides price admission, not which commodity owns a product); board diff of the rebuild: 1 cell, vegetable-oil | Sams Club 0.0723 -> 0.0373",
+        "affected_now": 1,
+        "names": [
+          "vegetable-oil | Sam's Club 0.0723 -> 0.0373, crown Walmart 0.0686 -> Sam's Club 0.0373"
+        ],
+        "risk": "none beyond the one cell in the shipped arm; the full switch is held (deviation)",
+        "cell_effects": [
+          {
+            "commodity": "vegetable-oil",
+            "store": "Sam's Club",
+            "before": 0.0723,
+            "after": 0.0373
+          }
+        ]
       },
-      "freshness": "-",
+      "freshness": "comparison-2026-09-22 08:13 generation plus the later captures seeded at 14:3x",
       "proof": {
-        "guard_or_fixture": "-",
-        "must_fire_case": "-",
-        "clean_twin": "-",
-        "commands": []
+        "guard_or_fixture": "grocery/test-derived-band.ps1 -SelfTest (9 of 9)",
+        "must_fire_case": "a factor-of-10 error both ways on the frozen vegetable-oil evidence, and the 2026-07-27 grits $0.0023/oz decimal-drop, are refused",
+        "clean_twin": "one store with 4 rows still derives a band (median of rows); BAR: exactly at ref/5 admitted, one step past refused",
+        "must_not_fire": "Sam's 0.0373 canola is inside the derived band",
+        "commands": [
+          "powershell -NoProfile -File grocery/test-derived-band.ps1 -SelfTest"
+        ]
       },
-      "resolution_note": "Not implemented in batch 2's run; its queue id stays open for the next money-lane run.",
-      "status": "needs-more-time",
-      "premise_verified": "measured: vegetable-oil band_min 0.04 / band_max 0.4 are TYPED inline in commodities.json (compare-deals.ps1:133 reads them as an override; no script derives them; new-commodity.ps1 takes -BandMin by hand). The memory no-hardcoded-bands is Brad's 2026-09-04 ruling on recipe MACRO bands, not grocery price sanity bands, so the plan's 'a typed floor breaks that rule' does not follow from it; whether price floors may be typed is a ruling, not a fix",
-      "leaves_open_followup": "its own queue id (left open)",
-      "rollback": "nothing shipped for this item; nothing to roll back"
+      "resolution_note": "Brad's ruling 'Derive from data' implemented as a derivation that runs on every build, in force for vegetable-oil (the founding cell, 0.0723 -> 0.0373, quarantine gone); the full switch is measured and held on two named defects, put to Brad as Q-6b17b1-bulk-and-identity.",
+      "status": "deviated",
+      "premise_verified": "true: the 0.04 floor was typed inline (commodities.json), read at compare-deals.ps1:133, derived nowhere",
+      "leaves_open_followup": "ruling:Q-6b17b1-bulk-and-identity",
+      "rollback": "revert the derived-band commits; restore vegetable-oil's band_min 0.04 / band_max 0.4",
+      "ruling": {
+        "id": "Q-6b17b1-band-derivation",
+        "by": "Brad",
+        "on": "2026-09-22",
+        "words": "Derive from data"
+      }
     },
     {
-      "leaves_open": "7 audits hold the board on any finding; 0 holds in 30 days",
-      "leaves_open_occurrences": 0,
+      "leaves_open": "9 delegated audits still hold the whole board on a finding; each is taught separately, and the ratchet mark falls with each. 9 audits",
+      "leaves_open_occurrences": 1,
       "shipped_commit": null,
       "deviation": null,
       "queue_id": "2026-09-21-d16398",
       "subject": "HOLD SCOPE contract for 8 delegated guard audits",
       "family": "F3",
-      "classification": "batch-2 data item",
+      "classification": "guard contract",
       "evidence": [
-        "not started"
+        "guards.ps1 delegates 13 hard audits (its f='audit-*.ps1' table); 4 print QUARANTINE-SCOPE complete, 9 do not (the plan said 8; 9 measured)"
       ],
-      "root_cause": "as in plan-2026-09-22-2.json",
+      "root_cause": "a gate's refusal scope defaulted to everything it was handed and nothing declared it (F3)",
       "root_fix": {
-        "what": "HOLD SCOPE header + audit-guard-contract ratchet",
-        "files": [],
-        "exact_change": "not started in this run"
+        "what": "every delegated audit declares HOLD SCOPE; audit-guard-contract enforces it with a ratchet on board scope",
+        "files": [
+          "grocery/hold-scope-lib.ps1",
+          "grocery/audit-guard-contract.ps1",
+          "grocery/test-hold-scope.ps1",
+          "the 13 delegated audits' headers"
+        ],
+        "exact_change": "HOLD SCOPE: cell|store|board - <reason> header; cell/store must print QUARANTINE-SCOPE complete; board needs a reason; board count ratcheted at 9"
       },
       "blast_radius": {
-        "measured_as": "not measured in this run",
-        "measured_by": "-",
-        "affected_now": 0,
-        "names": [],
-        "risk": "-",
+        "measured_as": "audits",
+        "measured_by": "guards.ps1 delegation table",
+        "affected_now": 13,
+        "names": [
+          "4 cell",
+          "9 board"
+        ],
+        "risk": "none on the board; a new board-scoped delegate now fails the contract audit",
         "cell_effects": []
       },
-      "freshness": "-",
+      "freshness": "guards.ps1 at branch base",
       "proof": {
-        "guard_or_fixture": "-",
-        "must_fire_case": "-",
-        "clean_twin": "-",
-        "commands": []
+        "guard_or_fixture": "test-hold-scope -SelfTest 8 of 8; audit-guard-contract live exit 0 (hold=0)",
+        "must_fire_case": "a delegate with no declaration; cell scope without the complete line; board without reason; one past the ratchet mark",
+        "clean_twin": "the live tree reads 13 delegates, 9 board, 0 findings",
+        "commands": [
+          "powershell -NoProfile -File grocery/test-hold-scope.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery/audit-guard-contract.ps1"
+        ]
       },
-      "resolution_note": "Not implemented in batch 2's run; its queue id stays open for the next money-lane run.",
-      "status": "needs-more-time",
-      "premise_verified": "not started",
-      "leaves_open_followup": "its own queue id (left open)",
-      "rollback": "nothing shipped for this item; nothing to roll back"
+      "resolution_note": "Every delegated guard audit declares its hold scope and the contract audit enforces it; board-scoped delegates are a ratchet at 9.",
+      "status": "done",
+      "premise_verified": "partly: 9 board-scoped delegates, not 8",
+      "leaves_open_followup": "its own queue id (left open) - d16398's residual is the nine audits' teaching",
+      "rollback": "revert the d16398 commit"
     },
     {
-      "leaves_open": "2 Walmart density-flagged rows, both already ruled off the board",
-      "leaves_open_occurrences": 2,
+      "leaves_open": "no push-time census stops a THIRD builder that derives a size from a unit price from shipping without the density rule; 0 third builders exist today",
+      "leaves_open_occurrences": 0,
       "shipped_commit": null,
-      "deviation": null,
+      "deviation": "The caller census (audit-derived-size-callers.ps1, a push-time ratchet naming every lp/up builder) was not built.",
       "queue_id": "2026-09-21-85c3b7",
       "subject": "Walmart row builder does not run the density refusal",
       "family": "F1",
-      "classification": "batch-2 data item",
+      "classification": "money (ingest)",
       "evidence": [
-        "not started"
+        "build-sams-deals called Test-DerivedSizeDensity since 2026-09-21; walmart-row-lib Build-Row did not",
+        "derived-size-density-rulings.json: Walmart Melinda's Jalapeno Ketchup 12 Ounce derived 4 fl oz (2026-08-30), SPECTRUM peanut oil 32 OZ derived 15.998 fl oz (2026-09-19)"
       ],
-      "root_cause": "as in plan-2026-09-22-2.json",
+      "root_cause": "one rule, one library, two builders, one caller (F1)",
       "root_fix": {
-        "what": "Build-Row calls Test-DerivedSizeDensity; a caller census",
-        "files": [],
-        "exact_change": "not started in this run"
+        "what": "Build-Row refuses a density flag on a derived size",
+        "files": [
+          "grocery/walmart-row-lib.ps1",
+          "grocery/build-walmart-deals.ps1"
+        ],
+        "exact_change": "walmart-row-lib dot-sources derived-size-density-lib; a 'derived lp/up' row whose Test-DerivedSizeDensity verdict is flag returns err 'DENSITY CONFLICT'"
       },
       "blast_radius": {
-        "measured_as": "not measured in this run",
-        "measured_by": "-",
+        "measured_as": "rows",
+        "measured_by": "the two ruled Walmart rows (both already off the board)",
         "affected_now": 0,
         "names": [],
-        "risk": "-",
+        "risk": "a correct derived Walmart row inside the density band is untouched (CLEAN TWIN)",
         "cell_effects": []
       },
-      "freshness": "-",
+      "freshness": "rulings file at branch base",
       "proof": {
-        "guard_or_fixture": "-",
-        "must_fire_case": "-",
-        "clean_twin": "-",
-        "commands": []
+        "guard_or_fixture": "build-walmart-deals -SelfTest",
+        "must_fire_case": "SPECTRUM peanut oil 32 OZ at 93.7 c/fl oz and Melinda's ketchup 12 Ounce at 27.0 c/fl oz are refused DENSITY CONFLICT; mutation with the branch disabled turned both red",
+        "clean_twin": "Great Value Vegetable Oil 48 fl oz at 9.3 c/fl oz builds 48 fl oz",
+        "commands": [
+          "powershell -NoProfile -File grocery/build-walmart-deals.ps1 -SelfTest"
+        ]
       },
-      "resolution_note": "Not implemented in batch 2's run; its queue id stays open for the next money-lane run.",
-      "status": "needs-more-time",
-      "premise_verified": "not started",
-      "leaves_open_followup": "its own queue id (left open)",
-      "rollback": "nothing shipped for this item; nothing to roll back"
+      "resolution_note": "The Walmart builder now refuses a density-contradicted derived size, as Sam's does.",
+      "status": "deviated",
+      "premise_verified": "true: walmart-row-lib had no call to Test-DerivedSizeDensity",
+      "leaves_open_followup": "watch:grocery/derived-size-density-lib.ps1",
+      "rollback": "revert the 85c3b7 commit"
     },
     {
       "leaves_open": "21 rule decisions",
@@ -562,7 +603,7 @@
           "2026-09-21-b96f21"
         ]
       },
-      "resolution_note": "Not implemented in batch 2's run; its queue id stays open for the next money-lane run.",
+      "resolution_note": "Not implemented in batch 2 (run ceiling); its queue id stays open for the next money-lane run.",
       "status": "needs-more-time",
       "premise_verified": "not started",
       "leaves_open_followup": "its own queue id (left open)",
@@ -610,7 +651,7 @@
         "clean_twin": "-",
         "commands": []
       },
-      "resolution_note": "Not implemented in batch 2's run; its queue id stays open for the next money-lane run.",
+      "resolution_note": "Not implemented in batch 2 (run ceiling); its queue id stays open for the next money-lane run.",
       "status": "needs-more-time",
       "premise_verified": "measured: update-history.ps1 already REPLACES a week's entry when it runs (prior = history where week_of -ne week); the gap is only that it runs once a day in check-ad-cycles while a hand rebuild does not run it",
       "leaves_open_followup": "its own queue id (left open)",
@@ -649,11 +690,67 @@
         "clean_twin": "-",
         "commands": []
       },
-      "resolution_note": "Not implemented in batch 2's run; its queue id stays open for the next money-lane run.",
+      "resolution_note": "Not implemented in batch 2 (run ceiling); its queue id stays open for the next money-lane run.",
       "status": "needs-more-time",
       "premise_verified": "not started; the Sam's half needs a browser probe",
       "leaves_open_followup": "its own queue id (left open)",
       "rollback": "nothing shipped for this item; nothing to roll back"
+    },
+    {
+      "queue_id": "discovered:or-size-least-favourable-2026-09-22",
+      "subject": "An 'A or B' / 'A-B' size reads the smaller size",
+      "family": "F1",
+      "classification": "money (basis ambiguity)",
+      "status": "done",
+      "evidence": [
+        "Xtra laundry detergent, 56 or 67.5 oz., 3/ $10.00 took the laundry crown at 0.0494/fl oz (67.5 oz); 0.0595 at 56 oz",
+        "pricing-math-lib Get-SizeAmount read every ascending range at its upper end by design"
+      ],
+      "root_cause": "the engine chose the flattering reading of a size the line leaves ambiguous",
+      "root_fix": {
+        "what": "the lower end of every ascending range size",
+        "files": [
+          "grocery/pricing-math-lib.ps1",
+          "grocery/compare-deals.ps1"
+        ],
+        "exact_change": "Get-SizeAmount range branch returns Convert-ToUnit on the lower number"
+      },
+      "blast_radius": {
+        "measured_as": "cells",
+        "measured_by": "worktree rebuild of comparison-2026-09-22 before/after",
+        "affected_now": 18,
+        "names": [
+          "laundry-detergent crown Hy-Vee -> Aldi",
+          "granola crown Hy-Vee 0.1863 -> Sam's Club 0.205",
+          "bacon | Hy-Vee 4.99 -> 8.5849/lb"
+        ],
+        "risk": "a real 'either size at one price' deal publishes its less favourable per-unit",
+        "cell_effects": [
+          {
+            "commodity": "laundry-detergent",
+            "store": "Hy-Vee",
+            "before": 0.0494,
+            "after": 0.0595
+          }
+        ]
+      },
+      "freshness": "comparison-2026-09-22",
+      "proof": {
+        "guard_or_fixture": "compare-deals -SelfTest 10c",
+        "must_fire_case": "'56 or 67.5 oz' reads 56; the Xtra line prices 0.0595",
+        "clean_twin": "a single '67.5 oz' reads 67.5",
+        "commands": [
+          "powershell -NoProfile -File grocery/compare-deals.ps1 -SelfTest"
+        ]
+      },
+      "resolution_note": "Range sizes read their smaller size; 18 cells, 2 crowns moved on today's board.",
+      "rollback": "revert the or-size commit",
+      "premise_verified": "true: reproduced on the rebuild",
+      "leaves_open": "whether the two sizes of an 'A or B' line are different PRODUCTS is not decided (not decidable from the line); 0 known wrong cells",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/audit-basis-reconcile.ps1",
+      "shipped_commit": null,
+      "deviation": null
     }
   ],
   "ship_sequence": [
@@ -671,11 +768,18 @@
     "2026-09-21-274e4b",
     "2026-09-20-bec597"
   ],
-  "open_questions_for_brad": [],
+  "open_questions_for_brad": [
+    {
+      "id": "Q-6b17b1-bulk-and-identity",
+      "question": "Derived bands are built and measured (out/band-derivation-<date>.json on every build). Switching all 360 typed commodities today would publish wrong products the typed floors were refusing (salt -> pink-salt popcorn, jalapenos -> hummus) and refuse real Sam's bulk (bay leaves, thyme, 50 lb rice). Options: (A) migrate commodity by commodity with band: derived, each after its wrong products get an exclude, as vegetable-oil did today; (B) make the reference bulk-aware (a separate reference for warehouse stores) and then switch all at once; (C) switch all now and let the censorship and identity guards page the fallout.",
+      "measured": "K=5: +2,404 / -280 rows vs typed; full switch 25 crowns, 37 cells changed, 17 added, 8 removed on comparison-2026-09-22"
+    }
+  ],
   "proof": {
     "tree": "worktree agent-a8dca88c6b2cde9e4, seeded from main at 14:3x",
     "chain_run": "check-ad-cycles -NoPull -NoCommit -NoPublish -NoAlert was STARTED at about 15:43 and STOPPED (process tree killed at 16:26) on the coordinator's order, because -NoPublish does not hold the recipe republish, top5-weekly, the free-dinner rotation, the hub grid, price alerts, the digest or item-request mail. Its own log: guards held the board at 16:13:57, so 'top5-weekly, rotate-free-dinners, build-hub-grid -Publish all skipped'; paywall-leak and notify-item-added had no Ghost key in this worktree; price-alerts REFUSED (linked checkout); no 'alert sent' line; alert-log.txt in the main checkout last written 14:41:31; the only main-queue write in the window (16:09:10) resolved 2026-09-22-5d20b9, a close by another session; no commit and no push (reflog shows only this lane's commits).",
-    "guards": "on the rebuilt board: rc 2 QUARANTINE-REQUIRED (vegetable-oil | Sam's, pre-existing) -> apply-cell-quarantine held 1 cell -> guards rc 2 GUARDS FAILED hard=2: audit-band-censorship (the same vegetable-oil ratchet, not cleared by the hold) and audit-tile-integrity (not attributed inside the ceiling; the product-urls.json the interrupted chain left was a mix of main's overlay and the chain's own link repair). NOT 0 and NOT 4: this proof is incomplete and the integrator must re-run the builders and guards on main's data after landing.",
-    "board_diff": "see the report: 3 crowns moved (laundry-detergent by this batch; all-purpose-cleaner and cumin-seeds by captures newer than the 08:13 board), 18 cells changed (4 laundry by this batch, 14 by newer captures and the Hy-Vee 2026-09-21 ad), 2 added (laundry Fareway, Sam's), 2 removed (cumin-seeds Baker's, red-wine-vinegar Hy-Vee, both input-side)"
+    "guards": "guards.ps1 on the final rebuild (compare-deals -IdentityNamespace staple, recipe-overlay, prune-bad-links, sync-browser-links, relink-drifted-cells, audit-name-drift, generate-board-overrides; check-ad-cycles NOT run, on the coordinator's order): exit 0, GUARDS OK hard=0. The link file under test was the main checkout's product-urls.json (the seed): the branch base's copy still carries the Fareway tomatoes link to 'Dei Fratelli Tomatoes, Whole' (ruled 2026-09-21), which main's copy has already dropped.",
+    "board_diff": "see the report: 3 crowns moved (laundry-detergent by this batch; all-purpose-cleaner and cumin-seeds by captures newer than the 08:13 board), 18 cells changed (4 laundry by this batch, 14 by newer captures and the Hy-Vee 2026-09-21 ad), 2 added (laundry Fareway, Sam's), 2 removed (cumin-seeds Baker's, red-wine-vinegar Hy-Vee, both input-side)",
+    "test_auditors": "grocery/test-auditors.ps1: exit 0, TEST-AUDITORS-COMPLETE pass=781 failed=0 skipped=1 (the sidecar venv sweep). The previous run read 3 failures, each fixed: test-derived-band named by no executable (now named in derived-band-lib's header), the branch-base Dei Fratelli link (input data, run against main's link file as guards was), and the capture-eviction stamp from before the rebuild (audit-capture-eviction re-run)."
   }
 }
