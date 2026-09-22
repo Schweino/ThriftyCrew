@@ -1433,8 +1433,8 @@
   },
   {
    "id": "watchdog-browser-capture-missing-today",
-   "match": "exact",
-   "key": "grocery capture watchdog browser capture missing today",
+   "match": "prefix",
+   "key": "grocery capture watchdog browser capture missing",
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",

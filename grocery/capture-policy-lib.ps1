@@ -1784,6 +1784,50 @@ function Write-CaptureWorklist {
 # its own smaller slice, and a day the Claude task missed (a usage limit, the app closed) still gets Fareway and
 # Sam's. Walmart and Aldi have no working fallback: they refuse the script driver.
 # A capture with no DATA row (only #tc-store / header lines, or empty) is not a landed capture.
+# ---- THE PRODUCER'S SLOT (2026-09-22, queue 2026-09-22-2000e1; F4 in design/RCA-holistic-2026-09-22.md) ----------
+# An absence check that grades against its OWN clock pages for work that is late but coming: the 10:30 watchdog paged
+# "BROWSER CAPTURE MISSING TODAY" on 2026-09-22 for Aldi, Fareway and Walmart captures that landed at 13:09 to 13:15.
+# So every absence check names its producer's slot: before the slot ENDS the answer is NOT YET (a could-not-look,
+# counted, never MISSING and never ok), after it the answer is MISSING or landed.
+# grocery-browser-stores-refresh is a Claude Desktop task, not a Windows task, so there is no task registry in this
+# repo to read its window from: the start is the 06:15 its own SKILL.md states; the END is a first plausible number,
+# not the survivor of a sweep: the latest landing over the 12 logged days 2026-09-11..22 (Walmart) was 13:15, plus
+# about 45 minutes for the build behind it. If captures start landing after 14:00, this moves, and the cost of it
+# being late is one more day before a miss pages (see Get-BrowserCaptureVerdict's yesterday grading).
+$script:ProducerSlots = @{
+  'grocery-browser-stores-refresh' = @{ start = '06:15'; end = '14:00'; source = 'SKILL.md 06:15 start; end = latest landing 13:15 (2026-09-11..22) + 45 min' }
+}
+function Get-ProducerSlot {
+  <# Pure. A named producer's slot on a day: start, end (datetimes), source. $null for a producer nobody declared,
+     which the caller must treat as a CLOSED slot (fail toward paging), never as NOT YET. #>
+  param([string]$Producer, [datetime]$Day)
+  if (-not $script:ProducerSlots.ContainsKey($Producer)) { return $null }
+  $p = $script:ProducerSlots[$Producer]
+  $d = $Day.Date
+  return [pscustomobject]@{
+    producer = $Producer
+    start = $d.Add([timespan]::Parse([string]$p.start))
+    end = $d.Add([timespan]::Parse([string]$p.end))
+    source = [string]$p.source }
+}
+function Get-BrowserCaptureVerdict {
+  <# Pure over its file tables. THREE states for today, never two: a store with no capture today is NOT YET while the
+     producer's slot is open and MISSING once it has closed. While today's slot is open, YESTERDAY (whose slot has
+     closed) is graded instead, because the watchdog runs once a day inside the slot: without it a real miss would
+     never page at all. A $null slot (an undeclared producer) is treated as closed. #>
+  param([string[]]$Stores, [hashtable]$TodayFiles, [hashtable]$YesterdayFiles, [datetime]$Now, $Slot)
+  $t = Get-BrowserStoresToDrive -Stores $Stores -CaptureFiles $TodayFiles
+  $open = ($null -ne $Slot -and $Now -lt $Slot.end)
+  $v = [pscustomobject]@{ MissingToday = @(); NotYet = @(); MissingYesterday = @(); SlotOpen = $open }
+  if ($open) {
+    $v.NotYet = @($t.Drive)
+    if ($YesterdayFiles) { $y = Get-BrowserStoresToDrive -Stores $Stores -CaptureFiles $YesterdayFiles; $v.MissingYesterday = @($y.Drive) }
+  } else {
+    $v.MissingToday = @($t.Drive)
+  }
+  return $v
+}
+
 function Get-BrowserStoresToDrive {
   param([string[]]$Stores, [hashtable]$CaptureFiles)
   $drive = New-Object System.Collections.Generic.List[string]
