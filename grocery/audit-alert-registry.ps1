@@ -387,7 +387,7 @@ param([string]$Title = '')
   _T 'MUST FIRE ONE PAST THE BAR: 2 unassigned entries against unassigned_max 1 is a ratchet finding' (@($rvp | Where-Object { $_ -match 'resolver_ratchet: 2 live entries .*above the mark 1' }).Count -eq 1) ($rvp -join ' | ')
   $rvUnder = [pscustomobject]@{ resolver_ratchet = [pscustomobject]@{ unassigned_max = 3 }; entries = $rvG }
   $rr = Get-AlertResolverRatchet $rvUnder
-  _T 'CLEAN TWIN under the mark the ratchet says it CAN tighten, and is not a finding' ($rr.can_tighten -and -not $rr.over -and @((Get-AlertRegistryEntryProblems $rvUnder)).Count -eq 0) ('unassigned=' + $rr.unassigned + ' mark=' + $rr.mark)
+  _T 'MUST NOT FIRE under the mark it is not a finding, and the ratchet says it CAN tighten' ($rr.can_tighten -and -not $rr.over -and @((Get-AlertRegistryEntryProblems $rvUnder)).Count -eq 0) ('unassigned=' + $rr.unassigned + ' mark=' + $rr.mark)
   $rvNoMark = [pscustomobject]@{ entries = $rvG }
   $rvp = @((Get-AlertRegistryEntryProblems $rvNoMark))
   _T 'MUST FIRE grandfathered entries with no recorded mark are reported' (@($rvp | Where-Object { $_ -match 'unassigned_max is missing' }).Count -eq 1) ($rvp -join ' | ')
