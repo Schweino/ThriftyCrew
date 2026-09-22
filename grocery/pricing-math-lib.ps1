@@ -950,6 +950,65 @@ function Get-UnitPrice($deal, $cat) {
 }
 function Test-IsMultibuy([string]$t) { return ((ConvertTo-DigitNumerals ("" + $t)) -match '(?i)buy\s*\d+\s*,?\s*get\s*\d+') }
 
+# ---------------------------------------------------------------- A QUANTITY-CONDITIONAL DEAL IS THE PRICE, AND ITS CONDITION IS SHOWN
+# (Brad's ruling, 2026-09-22, queue 2026-09-22-a2af45: "A - just make sure that we add this to the UI and also make
+# sure we handle this in other instances of this type of promo (When you buy 2, 3, 4 etc)").
+# "N for $X", "N for $X with purchase of N", "buy N get M" and BOGO price the cell at the effective per-unit (Get-ItemPrice
+# above already does, and writes its note), and the cell CARRIES the store's condition so the board can show it and the
+# price verifier can read it. THIS IS THE ONE READER OF THE CONDITION: the engine stamps deal_qty / deal_condition on the
+# row through Add-TcDealConditionFields at emit, build-deals-page renders deal_condition beside the price, and
+# flag-verify-lib reads deal_qty OFF THE ENGINE'S ROW (a verifier that re-derives the basis is gap F1 of
+# design/RCA-holistic-2026-09-22.md: it judged the Family Fare yellow pepper $1.00 "wrong-price" against the $1.99 single).
+# It reads the ENGINE'S NOTE, never the ad text alone: a condition exists only when the engine actually priced the row
+# through a deal branch, so a "2 for $5" row the engine priced some other way never claims a condition it did not use.
+# The ad text is read for ONE thing, the "with purchase of N" / "must buy N" qualifier, which the note does not carry.
+# BOGO is folded into the ruling as "when you buy N+M"; its displayed text keeps the store's own wording.
+function Format-TcDealMoney([double]$v) {
+  $ic = [Globalization.CultureInfo]::InvariantCulture
+  if ([math]::Abs($v - [math]::Round($v)) -lt 0.000001) { return ('$' + ([int64][math]::Round($v)).ToString($ic)) }
+  return ('$' + $v.ToString('0.00', $ic))
+}
+function Get-TcDealCondition([string]$PriceText, [string]$Note) {
+  # Returns $null (the engine priced no quantity condition) or [pscustomobject]@{ qty; text; kind }.
+  $n = ([string]$Note).Trim()
+  if (-not $n) { return $null }
+  $ic = [Globalization.CultureInfo]::InvariantCulture
+  $ad = ConvertTo-DigitNumerals ([string]$PriceText)
+  $m = [regex]::Match($n, '^(\d+) for \$([\d.]+)$')
+  if ($m.Success) {
+    $q = [int]$m.Groups[1].Value
+    if ($q -le 1) { return $null }   # "1 for $2" is a plain price, not a condition
+    $req = [regex]::Match([string]$ad, '(?i)(?:with\s+(?:the\s+)?purchase\s+of|must\s+buy|when\s+you\s+buy)\s*(\d+)')
+    if ($req.Success -and [int]$req.Groups[1].Value -gt 1) {
+      return [pscustomobject]@{ qty = [int]$req.Groups[1].Value; text = ('when you buy ' + $req.Groups[1].Value); kind = 'must-buy' }
+    }
+    return [pscustomobject]@{ qty = $q; text = ([string]$q + ' for ' + (Format-TcDealMoney ([double]::Parse($m.Groups[2].Value, $ic)))); kind = 'n-for' }
+  }
+  $m = [regex]::Match($n, '^BOGO buy (\d+) get (\d+) free')
+  if ($m.Success) {
+    $b = [int]$m.Groups[1].Value; $g = [int]$m.Groups[2].Value
+    return [pscustomobject]@{ qty = ($b + $g); text = ('buy ' + $b + ' get ' + $g + ' free'); kind = 'bogo' }
+  }
+  $m = [regex]::Match($n, '^buy (\d+) get (\d+) for \$([\d.]+)')
+  if ($m.Success) {
+    $b = [int]$m.Groups[1].Value; $g = [int]$m.Groups[2].Value
+    return [pscustomobject]@{ qty = ($b + $g); text = ('buy ' + $b + ' get ' + $g + ' for ' + (Format-TcDealMoney ([double]::Parse($m.Groups[3].Value, $ic)))); kind = 'buy-get' }
+  }
+  $m = [regex]::Match($n, '^buy (\d+) get (\d+) ([\d.]+)% off')
+  if ($m.Success) {
+    $b = [int]$m.Groups[1].Value; $g = [int]$m.Groups[2].Value
+    return [pscustomobject]@{ qty = ($b + $g); text = ('buy ' + $b + ' get ' + $g + ' ' + $m.Groups[3].Value + '% off'); kind = 'buy-get' }
+  }
+  return $null   # 'cents', '' and every non-deal note: the engine priced no quantity condition
+}
+function Add-TcDealConditionFields($Row, [string]$PriceText, [string]$Note) {
+  # The engine's emit calls this on every store row (compare-deals, the comparison 'stores' block), so the board's
+  # cell carries the condition it was priced under. Absent means the price holds for ONE unit.
+  $dc = Get-TcDealCondition $PriceText $Note
+  if ($null -ne $dc) { $Row['deal_qty'] = [int]$dc.qty; $Row['deal_condition'] = [string]$dc.text }
+  return $Row
+}
+
 function Get-RegularSrcDate([string]$store, [string]$baseName) {
   # WHICH out\regular ROWS CARRY THEIR CAPTURE DATE. src_date is what lets the ranker below keep, per
   # commodity, only the FRESHEST capture that covers it. A row with no src_date is exempt from that test

@@ -694,9 +694,20 @@ $boardRows = [ordered]@{}
 # list is EMPTY - and the same list built with ::new() wraps fine. The rows are 7 entries long, so the
 # `+= ,@(...)` form costs nothing and cannot hit it. The leading comma is load-bearing: without it PS
 # flattens the inner array into the outer one and every row becomes a flat list of numbers.
+# A QUANTITY-CONDITIONAL PRICE SHOWS ITS CONDITION (Brad's ruling on queue 2026-09-22-a2af45: "A - just make sure that we
+# add this to the UI"). The chip's amber note reads the ENGINE'S stamp (deal_condition, written by
+# Add-TcDealConditionFields in pricing-math-lib.ps1 at compare-deals' emit), never a re-parse of the ad text here, so the
+# board, the feed and the price verifier read one copy of the condition. Examples of what the note reads:
+# "when you buy 10" (10 for $10.00 with purchase of 10), "2 for $5", "buy 1 get 1 free". A cell without the field is
+# priced for one unit and shows nothing extra.
+function Get-TcChipDealCondition($s) {
+  if ($null -eq $s -or -not $s.PSObject.Properties['deal_condition']) { return '' }
+  return ([string]$s.deal_condition).Trim()
+}
 function RowStruct([string]$id, [string]$unit, $ranked, [string]$mode) {
   $p = @()
   $q = @()
+  $d = @()
   $have = @{}
   foreach ($s in @($ranked)) {
     $st = [string]$s.store
@@ -717,6 +728,9 @@ function RowStruct([string]$id, [string]$unit, $ranked, [string]$mode) {
     # q: cells this board holds at a last verified price, with that price's date (2026-09-21). The NEXT quarantine of
     # the same cell reads this date back (Get-TcLastPublishedCells), so the date is carried, never refreshed.
     if (Test-TcCellQuarantined $s) { $q += , @($storeIx[$st], [string]$s.quarantine.since) }
+    # d: the quantity condition a cell's price holds under (Brad's ruling on a2af45, 2026-09-22), as the engine stamped it.
+    $dc = Get-TcChipDealCondition $s
+    if ($dc) { $d += , @($storeIx[$st], $dc) }
   }
   $x = @()
   if ($mode -eq 'all') {
@@ -727,7 +741,8 @@ function RowStruct([string]$id, [string]$unit, $ranked, [string]$mode) {
   # [ordered] is not a real type accelerator: PS 5.1 only honours it on the right of an ASSIGNMENT, and
   # `return [ordered]@{...}` throws "Argument types do not match". Assign first, then return.
   $out = [ordered]@{ u = $unit; p = @($p); x = @($x) }
-  if ($q.Count -gt 0) { $out['q'] = @($q) }   # only on a row that holds a quarantined cell, so no other row's bytes move
+  if ($q.Count -gt 0) { $out['q'] = @($q) }
+  if ($d.Count -gt 0) { $out['d'] = @($d) }   # only on a row with a quantity-conditional price, so no other row's bytes move   # only on a row that holds a quarantined cell, so no other row's bytes move
   return $out
 }
 # Bar length for the ranked-bar panel, computed HERE and stamped as a css custom property on the chip.
@@ -833,6 +848,7 @@ foreach ($c in $cats) {
       $notes = @()
       if ($s.membership) { $notes += $(if ([string]$s.member_label) { [string]$s.member_label } else { 'membership' }) }
       if ($s.bulk) { $notes += 'bulk' }
+      $dcN = Get-TcChipDealCondition $s; if ($dcN) { $notes += $dcN }
       $typeTag = if ([string]$s.type -eq 'sale') { "<span class='pg-tag pg-tag-sale'>sale</span>" } else { "<span class='pg-tag'>everyday</span>" }
       [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "' style='--bar:" + (BarPct ([double]$s.per_unit) $maxPu) + "%'" + (MatchToken 'staple' ([string]$s.store) ([string]$s.item)) + ">")
       if ($isBest) { [void]$cb.Append("<span class='pg-best'>Cheapest</span>") }
@@ -893,6 +909,7 @@ foreach ($c in $cats) {
       $notes = @()
       if ([string]$s.store -eq "Sam's Club") { $notes += 'membership' }
       if ($s.bulk) { $notes += 'bulk' }
+      $dcN = Get-TcChipDealCondition $s; if ($dcN) { $notes += $dcN }
       [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "' style='--bar:" + (BarPct ([double]$s.per_unit) $maxPu) + "%'" + (MatchToken 'recipe' ([string]$s.store) ([string]$s.item)) + ">")
       if ($isBest) { [void]$cb.Append("<span class='pg-best'>Cheapest</span>") }
       [void]$cb.Append("<span class='pg-store'>" + (HtmlEnc $shortName[[string]$s.store]) + "</span>")

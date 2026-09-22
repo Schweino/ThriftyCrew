@@ -588,6 +588,30 @@ if ($SelfTest) {
   _Near 'word B2G1-free /each'   (Get-UnitPrice (_D 'buy two, get one free' 'bread loaf' 3.00 'each') (_C 'each')).unit_price 2.00 0.001
   # 10. classic word BOGO "buy one, get one free" reg $4.00/each -> (1*4)/2
   _Near 'word BOGO /each'        (Get-UnitPrice (_D 'buy one, get one free' 'bread loaf' 4.00 'each') (_C 'each')).unit_price 2.00 0.001
+  # 10b. A QUANTITY-CONDITIONAL DEAL IS THE PRICE AND CARRIES ITS CONDITION (Brad's ruling on a2af45, 2026-09-22).
+  # Reached through Add-TcDealConditionFields, the exact call the emit makes on every store row.
+  function _DC($label, $ad, $note, $wantQty, $wantText) {
+    $row = [ordered]@{ store = 'X' }
+    $null = Add-TcDealConditionFields $row $ad $note
+    $gq = if ($row.Contains('deal_qty')) { $row['deal_qty'] } else { $null }
+    $gt = if ($row.Contains('deal_condition')) { $row['deal_condition'] } else { $null }
+    if ([string]$gq -eq [string]$wantQty -and [string]$gt -eq [string]$wantText) { Write-Output ("ok    $label  qty=" + [string]$gq + " '" + [string]$gt + "'") }
+    else { Write-Output ("FAIL  $label  got qty=" + [string]$gq + " '" + [string]$gt + "' want qty=" + [string]$wantQty + " '" + [string]$wantText + "'"); $script:fail++ }
+  }
+  # MUST FIRE, the founding row (comparison-2026-09-22, yellow-bell-pepper | Family Fare): the engine's own note plus the ad's qualifier
+  _DC 'deal: FF "10 for $10.00 with purchase of 10" (founding row)' '10 for $10.00 with purchase of 10' '10 for $10' 10 'when you buy 10'
+  _DC 'deal: plain "2 for $5"' '2 for $5.00' '2 for $5' 2 '2 for $5'
+  _DC 'deal: "3 for $4.50" keeps its cents' '3 for $4.50' '3 for $4.5' 3 '3 for $4.50'
+  _DC 'deal: BOGO buy 1 get 1 free' 'Buy 1 Get 1 Free' 'BOGO buy 1 get 1 free (reg 3.99)' 2 'buy 1 get 1 free'
+  _DC 'deal: buy 2 get 1 for $1' 'Buy 2 Get 1 for $1' 'buy 2 get 1 for $1 (reg 2.5)' 3 'buy 2 get 1 for $1'
+  _DC 'deal: buy 2 get 1 50% off' 'Buy 2 Get 1 50% off' 'buy 2 get 1 50% off (reg 3)' 3 'buy 2 get 1 50% off'
+  # MUST NOT FIRE: a plain price, a cents price, and "1 for $2" carry no condition
+  _DC 'deal: plain $1.99 carries none' '$1.99' '' '' ''
+  _DC 'deal: cents price carries none' '49c lb' 'cents' '' ''
+  _DC 'deal: "1 for $2" carries none' '1 for $2.00' '1 for $2' '' ''
+  # CLEAN TWIN: the price the engine computes for the founding row is still the effective per-unit, $1.00 each
+  _Near 'deal: FF 10-for-10 still prices $1.00 each' (Get-UnitPrice (_D '10 for $10.00 with purchase of 10' 'Yellow Bell Pepper' $null '1 ea') (_C 'each')).unit_price 1.00 0.0001
+
   # 11. the tightened GLOBAL_EXCLUDE 'mix' token must SKIP "mix & match" (a multibuy) but still catch "drink mix"
   $mixTok = '(?i)\bmix\b(?!\s*(?:&|and)\s*match)'
   if ('tyson chicken thighs, mix & match buy 1 get 2 free' -notmatch $mixTok) { Write-Output "ok    'mix & match' not excluded" } else { Write-Output "FAIL  'mix & match' wrongly excluded"; $script:fail++ }
@@ -3119,6 +3143,9 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
       $nat = Resolve-NativeUnitPrice $_.native_up ([string]$_.native_up_unit) ([string]$f.unit)
       $row = [ordered]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; member_label=$_.member_label; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad; ad_from=$_.ad_from; ad_to=$_.ad_to; ad_basis=$_.ad_basis; as_of=[string]$_.as_of }
       if ($nat) { $row['native_unit_price'] = $nat.price; $row['native_unit'] = $nat.unit }
+      # deal_qty / deal_condition: the quantity condition this per-unit was priced under (Brad's ruling on a2af45,
+      # 2026-09-22: the deal IS the price and the condition is SHOWN). Absent means the price holds for one unit.
+      $null = Add-TcDealConditionFields $row ([string]$_.price_text) ([string]$_.note)
       # pu_rounding_pct: this cell's per-unit was divided by a size Sam's cent rounding produced, so it is
       # only exact to +/- this percent. Emitted ONLY where it is true of the number shown (see
       # Get-CellRoundingPct), and absent everywhere else - no other store's size is a quotient.

@@ -44,7 +44,8 @@ try {
                {"id":"shrimp","commodity":"Shrimp (frozen, raw)","unit":"lb","include":["shrimp"],"exclude":["breaded","\\bchowder\\b","\\bsushi\\b","\\bsoup\\b"]},
                {"id":"bouillon","commodity":"Bouillon (cubes / granules / base)","unit":"oz","include":["bouillon"],"exclude":["\\bcubes?\\s+of\\s+ice\\b"]},
                {"id":"long-grain-rice","commodity":"Long Grain Rice","unit":"oz","include":["long\\s+grain\\s+rice"],"exclude":["\\bmix\\b"]},
-               {"id":"15-bean-soup-mix","commodity":"15 Bean Soup Mix","unit":"oz","include":["15\\s*bean"],"exclude":["\\bcanned\\b"]}]'
+               {"id":"15-bean-soup-mix","commodity":"15 Bean Soup Mix","unit":"oz","include":["15\\s*bean"],"exclude":["\\bcanned\\b"]},
+               {"id":"yellow-bell-pepper","commodity":"Yellow Bell Pepper","unit":"each","include":["yellow\\s+(?:bell\\s+)?peppers?"],"exclude":["\\bstuffed\\b"]}]'
   $judge = New-TcIdentityJudge -Commodities $cat -GlobalExclude ([string[]]@('\bdog\s+food\b'))
   function Verdict($claim, $answer, [string]$id, [string]$unit) {
     $idv = $null; if ($null -ne $answer) { $idv = Test-TcStoreNameIdentity -Judge $judge -Id $id -Names (Get-TcStoreNames $answer) }
@@ -104,6 +105,23 @@ try {
   $cSelf = $cBouillon.PSObject.Copy(); $cSelf.per_unit = 0.6171; $cSelf.ad = ''
   $v = Verdict $cSelf $aBouillon 'bouillon' 'oz'
   if ($v.verdict -eq 'could-not-look') { Ok 'MUST NOT FIRE  when the store''s own figures disagree (the name says 1.82 lb, its size field and unit price say 10.891 lb) and one agrees with ours, that is could-not-look, never a match' } else { Bad ('a self-contradicting store read gave ' + $v.verdict) }
+  # ---- 1b. A QUANTITY-CONDITIONAL DEAL IS READ OFF THE ENGINE'S ROW (Brad's ruling on queue 2026-09-22-a2af45) --------------
+  # The founding row, frozen from comparison-2026-09-22 (yellow-bell-pepper | Family Fare) and the store's $1.99 single.
+  $cPep = Obj '{"item":"Yellow Bell Pepper","per_unit":1,"ad":"10 for $10.00 with purchase of 10","size":"1 ea","row_type":"sale","ad_from":"2026-09-20","ad_to":"2026-09-26","as_of":""}'
+  $aPep = Obj '{"item":"Yellow Bell Pepper","current_price":1.99,"size":"1 ea","as_of":"2026-09-22"}'
+  $pepBoard = [pscustomobject]@{ comparison = @([pscustomobject]@{ commodity = 'Yellow Bell Pepper'; id = 'yellow-bell-pepper'; unit = 'each'; stores = @([pscustomobject]@{ store = 'Family Fare'; per_unit = 1; unit = 'each'; type = 'sale'; item = 'Yellow Bell Pepper'; ad = '10 for $10.00 with purchase of 10'; size = '1 ea'; note = '10 for $10'; ad_from = '2026-09-20'; ad_to = '2026-09-26'; as_of = ''; deal_qty = 10; deal_condition = 'when you buy 10' }) }) }
+  $pepFlag = [pscustomobject]@{ commodity = 'Yellow Bell Pepper'; type = 'outlier'; id = 'yellow-bell-pepper'; unit = 'each'; store = 'Family Fare'; item = 'Yellow Bell Pepper'; per_unit = 1; row_type = 'sale'; ad = '10 for $10.00 with purchase of 10'; size = '1 ea'; ad_from = '2026-09-20'; ad_to = '2026-09-26'; as_of = '' }
+  $pepRes = Update-TcFlagLedger -Ledger (New-TcFlagLedger) -Flags @($pepFlag) -Board $pepBoard -Today '2026-09-22' -Resolve { param($e) Verdict $e.claim $aPep ([string]$e.id) ([string]$e.unit) }
+  $pepClosed = @(@($pepRes.ledger.closed) | Where-Object { [string]$_.key -eq 'yellow-bell-pepper|Family Fare' -and [string]$_.status -eq 'match' })
+  if ($pepClosed.Count -eq 1 -and [string]$pepClosed[0].reason -match 'when you buy 10') { Ok 'MUST NOT FIRE  founding row 2026-09-22: Family Fare yellow pepper "10 for $10.00 with purchase of 10" at $1.00 each, the condition read OFF THE ENGINE''S ROW by the ledger, is a match against the store''s $1.99 single (it was wrong-price)' } else { Bad ('the founding multibuy row was not closed as match: ' + (@($pepRes.ledger.closed) | ForEach-Object { [string]$_.status + ' ' + [string]$_.reason }) + ' / open ' + (@($pepRes.ledger.entries.Keys) | ForEach-Object { [string]$pepRes.ledger.entries[$_].status + ' ' + [string]$pepRes.ledger.entries[$_].reason })) }
+  $v = Verdict $cPep $aPep 'yellow-bell-pepper' 'each'
+  if ($v.verdict -eq 'wrong-price') { Ok 'MECHANISM  the same claim WITHOUT the engine''s deal_qty is wrong-price, so the engine''s row is what decides it (the verifier never re-derives the condition)' } else { Bad ('the deal claim without the engine''s fields gave ' + $v.verdict + ' - the mechanism case no longer isolates the row read') }
+  $cPep2 = $cPep.PSObject.Copy(); $cPep2.size = '2 ea'; $cPep2 | Add-Member -NotePropertyName deal_qty -NotePropertyValue 10 -Force; $cPep2 | Add-Member -NotePropertyName deal_condition -NotePropertyValue 'when you buy 10' -Force
+  $v = Verdict $cPep2 $aPep 'yellow-bell-pepper' 'each'
+  if ($v.verdict -eq 'wrong-price' -and $v.reason -match 'package size differs') { Ok 'MUST FIRE  a quantity deal whose package the store contradicts (we say 2 ea, the store 1 ea) is still wrong-price: a deal never changes a package size' } else { Bad ('a deal with a contradicted package gave ' + $v.verdict + ': ' + $v.reason) }
+  $cPep3 = $cPep.PSObject.Copy(); $cPep3.per_unit = 1.99; $cPep3.ad = '$1.99'; $cPep3.row_type = 'sale'
+  $v = Verdict $cPep3 $aPep 'yellow-bell-pepper' 'each'
+  if ($v.verdict -eq 'match') { Ok 'CLEAN TWIN  a plain single-unit sale claim ($1.99 each, no deal_qty) is still verified on its shelf price and matches' } else { Bad ('a plain single claim gave ' + $v.verdict + ': ' + $v.reason) }
 
   # ---- 2. THE RE-READ: only a LATER, FRESH read of the SAME product is an answer ---------------------------------------
   $rowsCarried = @((Obj '{"item":"KIND Almond & Coconut","ad_price":"$7.98","size":"6 ct","as_of":"2026-09-09","current_price":7.98}'))
@@ -274,6 +292,6 @@ try {
 catch { Bad ('the suite threw: ' + $_.Exception.Message + ' at ' + $_.InvocationInfo.PositionMessage) }
 finally { try { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction Stop } catch { } }
 $cases = $script:pass + $script:fail
-Write-Output ('flag-verification self-test ' + $(if ($script:fail -eq 0 -and $cases -eq 33) { 'pass' } else { 'FAIL' }) + ': ' + $script:pass + ' of ' + $cases + ' case(s) passed (33 expected)')
-if ($script:fail -eq 0 -and $cases -eq 33) { exit 0 }
+Write-Output ('flag-verification self-test ' + $(if ($script:fail -eq 0 -and $cases -eq 37) { 'pass' } else { 'FAIL' }) + ': ' + $script:pass + ' of ' + $cases + ' case(s) passed (37 expected)')
+if ($script:fail -eq 0 -and $cases -eq 37) { exit 0 }
 exit 1

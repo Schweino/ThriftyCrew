@@ -334,6 +334,35 @@ function Resolve-TcRereadVerdict {
     return (& $mk 'could-not-look' ("the sale window closed before the store re-read it (read " + [string]$Answer.as_of + ", sale " + [string]$Claim.ad_from + ".." + [string]$Claim.ad_to + "): a regular price can neither confirm nor condemn a sale price") $rdText)
   }
 
+  # A QUANTITY-CONDITIONAL DEAL, INSIDE ITS WINDOW (Brad's ruling on queue 2026-09-22-a2af45: the deal IS the price and
+  # its condition is shown). The condition is read OFF THE ENGINE'S OWN ROW (deal_qty / deal_condition, stamped by
+  # Add-TcDealConditionFields at compare-deals' emit and copied onto the claim by Update-TcFlagLedger), never re-derived
+  # here: this verifier re-deriving the basis from the size field is what judged the Family Fare yellow pepper
+  # "10 for $10.00 with purchase of 10" wrong-price against its $1.99 single (gap F1 of design/RCA-holistic-2026-09-22.md).
+  # The store's read of ONE unit is the unconditional price, so it can neither confirm nor condemn a per-unit that holds
+  # only when you buy N. What it CAN test is the package: a deal never changes a package size, so ours is compared with
+  # every size the store's own figures give. Size agrees: match, and the reason names the condition. Size differs:
+  # wrong-price. No size on both sides: could-not-look.
+  $dq = 0
+  if ($Claim.PSObject.Properties['deal_qty'] -and $null -ne $Claim.deal_qty -and [string]$Claim.deal_qty) { try { $dq = [int]$Claim.deal_qty } catch { $dq = 0 } }
+  if ($dq -gt 1) {
+    $dcText = if ($Claim.PSObject.Properties['deal_condition']) { [string]$Claim.deal_condition } else { '' }
+    $oq = $null
+    $o1 = Get-LinkPerUnit -size ([string]$Claim.size) -unit $Unit -price 1.0 -name ([string]$Claim.item)
+    if ($null -ne $o1 -and [double]$o1 -gt 0) { $oq = 1.0 / [double]$o1 }
+    $sq = @(@($readings) | ForEach-Object { ([double]$shelf / 100.0) / [double]$_.per_unit })
+    if ($null -eq $oq -or $sq.Count -eq 0) {
+      return (& $mk 'could-not-look' ("a quantity deal (" + $dcText + ") is priced from the store's ad, and there is no package size on both sides to compare against the store's single read of " + $shelfText) $rdText)
+    }
+    $oqk = [int64][math]::Round($oq * 1000, [MidpointRounding]::AwayFromZero)
+    $hit = @($sq | Where-Object { [math]::Abs(([int64][math]::Round($_ * 1000, [MidpointRounding]::AwayFromZero)) - $oqk) -le 1 })
+    if ($hit.Count -eq 0) {
+      return (& $mk 'wrong-price' ("the package size differs: we publish a basis of " + ('{0:0.###}' -f $oq) + ' ' + $Unit + ", the store's own figures give " + ((@($sq | ForEach-Object { '{0:0.###}' -f $_ })) -join ' / ') + ' ' + $Unit + ' (a quantity deal never changes a package size)') $rdText)
+    }
+    if ($idBlind) { return (& $mk 'could-not-look' 'the package agrees but identity could not be tested (matcher time bound)' $rdText) }
+    return (& $mk 'match' ("a quantity deal priced from the store's ad (" + $dcText + ", " + ('{0:0.0000}' -f $oursPu) + '/' + $Unit + " when you buy " + $dq + "); the store's single read of " + [string]$Answer.as_of + " (" + $shelfText + ") is the unconditional price and agrees on the package: " + ($rdText -join '; ')) $rdText)
+  }
+
   # INSIDE THE WINDOW, OR AN EVERYDAY CLAIM: the price, and every per-unit reading of the store's figures.
   $oursCents = ConvertTo-TcCents $Claim.ad
   if ($null -ne $oursCents -and $oursCents -ne $shelf) {
@@ -404,6 +433,8 @@ function New-TcFlagEntry($Flag, [string]$Today) {
   $claim = [pscustomobject]@{
     item = [string]$Flag.item; per_unit = $Flag.per_unit; ad = [string]$Flag.ad; size = [string]$Flag.size
     row_type = [string]$Flag.row_type; ad_from = [string]$Flag.ad_from; ad_to = [string]$Flag.ad_to; as_of = [string]$Flag.as_of
+    deal_qty = $(if ($Flag.PSObject.Properties['deal_qty']) { $Flag.deal_qty } else { $null })
+    deal_condition = $(if ($Flag.PSObject.Properties['deal_condition']) { [string]$Flag.deal_condition } else { '' })
   }
   return [pscustomobject]@{
     key = ([string]$Flag.id + '|' + [string]$Flag.store); id = [string]$Flag.id; commodity = [string]$Flag.commodity; store = [string]$Flag.store
@@ -467,6 +498,16 @@ function Update-TcFlagLedger {
   }
   foreach ($k in @($entries.Keys)) {
     $e = $entries[$k]
+    # THE CONDITION COMES FROM THE ENGINE'S OWN ROW (a2af45, 2026-09-22). The live board cell for this key carries the
+    # deal_qty / deal_condition compare-deals stamped when it priced it; copy them onto the claim so the verdict reads
+    # the engine's basis instead of re-deriving one. Only when the cell still publishes this very claim.
+    if ($ix.ContainsKey($k) -and $null -ne $ix[$k].cell -and [string]$ix[$k].published_key -eq [string]$e.claim_key -and $null -ne $e.claim) {
+      $cell = $ix[$k].cell
+      $cq = if ($cell.PSObject.Properties['deal_qty']) { $cell.deal_qty } else { $null }
+      $ct = if ($cell.PSObject.Properties['deal_condition']) { [string]$cell.deal_condition } else { '' }
+      $e.claim | Add-Member -NotePropertyName deal_qty -NotePropertyValue $cq -Force
+      $e.claim | Add-Member -NotePropertyName deal_condition -NotePropertyValue $ct -Force
+    }
     $v = & $Resolve $e
     $e.attempts = 1 + [int]$e.attempts; $e.last_attempt = $Today
     if ($null -eq $v) { continue }
