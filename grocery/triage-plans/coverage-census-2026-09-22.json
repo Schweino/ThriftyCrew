@@ -1,0 +1,3866 @@
+{
+ "generated": "2026-09-22T17:55:00-05:00",
+ "kind": "coverage-census",
+ "author": "read-only reviewer (triage-reviewer definition); writes this one file, nothing committed",
+ "question": "After everything shipped or in flight on 2026-09-22, which alert types that fired in the last 30 days still have NO owner that will stop them recurring?",
+ "answer_first": [
+  "126 types fired on 359 fire-days (383 alerts, 126 returns) over 2026-08-24..2026-09-22. By fire-day weight (split view): CLOSED 216, IN FLIGHT 67, RULING 19, DIGEST-ONLY 37, UNOWNED 20.",
+  "NO OWNER that stops recurrence, for types that actually recur: match-soundness NEW-CONTESTED (12 fire-days under the retired parent key, 1 under its own), ff-catalog-* (10), ff-carry (8), store-registry unregistered capture prefix (3), plus residuals inside partly closed types: the watchdog RUN RECORD double page, chain failures that need same-morning data (20fecf), and send-alert's default subject 'Grocery pipeline alert' (2). None of these is in plan-8 or plan-9. Plan-8 and plan-9 listed the digest types that fired under their CURRENT key, while 70 fire-days of history sit on the five keys retired on 09-21 (inferred from plan-9's evidence line, not from their scoping code). That explains ff-catalog-*; it does not fully explain match-soundness-new-contested (1 fire of its own on 09-22) or ff-carry (8 fires on an unchanged key), whose omission is not established.",
+  "Projection if every in-flight item lands: existing types 18 to 106 fire-days per 30 (observed 306 on the same types, triage-created excluded), of which 11 to 35 have no owner that stops them; plus new one-off detector types 14 to 29; plus triage-created residuals 53 to 122 (the triage lane's own work items, never emailed, but the census counts them). Risk R1 (the knowledge store's judgement nights) could add up to 26 and is unmeasured.",
+  "The RETURN RATE will fall for weeks for reasons that are NOT recurrence stopping: the 09-21 split created 75 successor keys whose first fire cannot be a return, each price disagreement is its own key, and 53 of the 383 alerts are triage-created residuals that can never return (0 of their 53 alerts were returns). Excluding them, today's rate is 126 of 330 (38.2%), not 32.9%."
+ ],
+ "freshness": {
+  "census": "grocery/audit-alert-census.ps1 run read-only at 17:46 on 2026-09-22 with -OutFile pointed at a scratch copy of out/alert-census.jsonl (the live file untouched); exit 0; ALERT-CENSUS-COMPLETE alerts30=383 returns30=126 returnrate30=32.9%; 80 queue items; history 2026-08-22..2026-09-22",
+  "window": "fire-days counted over 2026-08-24..2026-09-22 inclusive (30 days); plan-9 notes a one-day window-edge difference on two types, and the same edge applies here",
+  "origin_main": "161b0ddf4 (2026-09-22 17:05); main == origin/main after fetch",
+  "worktrees": "batch 2 agent-a8dca88c6b2cde9e4 head e3bbb4db5 and batch 3 agent-acc4db640d784b57b head cc1c990db, both verified NOT ancestors of origin/main",
+  "queue": "grocery/triage-queue.json (80 items, reset 2026-09-17) plus out/archive/triage-queue.archived-2026-08-22.json and -2026-09-17.json",
+  "board": "no price claim is made, so no board generation is pinned",
+  "foreign_uncommitted": "grocery/out/alert-census.jsonl shows M in git status; its mtime is 13:26, before this run, so the change belongs to another session and was left alone"
+ },
+ "scoreboard": {
+  "return_rate_30": "126 of 383 (32.9%)",
+  "before_today": "33.6 to 34.4 percent (dispatch)",
+  "delta_qualified": "moved -0.7 to -1.5 points over 383 alerts on the same day c74aa821b changed how returns are read (archive) and the 09-21 split changed type keys; the delta is UNQUALIFIED as an improvement",
+  "triage_created_share": {
+   "types": 52,
+   "fire_days": 53,
+   "alerts": 53,
+   "returns": 0,
+   "first_fire": "2026-09-10"
+  },
+  "return_rate_excluding_triage_created": "126 of 330 (38.2%)"
+ },
+ "method": [
+  "Per-type fire-days from the census rows (one row per date x type) joined to every queue and archive item by type key, and every item to the plans of 2026-09-22 (-1, -2, -3, -4, -5 from its worktree, -6 from its worktree, -7, -8, -9) by queue_id.",
+  "Each type got ONE primary class. CLOSED requires a root-cause commit that is an ancestor of origin/main (checked with git merge-base --is-ancestor); a fix in a worktree is IN FLIGHT; a fix planned in plan-9 is IN FLIGHT; a type waiting on a named Brad question is RULING; resolver digest with no lane and no plan is DIGEST-ONLY; everything else is UNOWNED.",
+  "41 recurring or high-impact types and 31 queue ids were classified by hand from bodies, close notes, registry notes and plans (how_classified type-rule / id-rule / special). The remaining 54 one-shot types were classified mechanically: resolved -> CLOSED with any commit hash in its close note verified on origin/main (prevents: 'unassessed'), ruling resolver -> RULING, open -> UNOWNED.",
+  "The five catch-all types retired on 09-21 (capture-watchdog, match-soundness, store-registry-drift, ff-catalog-degrading, automation-silent-death: 70 fire-days) were classified by the conditions in their bodies, because a split relabels future fires and stops none of them.",
+  "Projection: per type, a low and high fire-days per 30 AFTER every in-flight item lands, stated in each row with its basis. These are judgements, not measurements: no SLO is declared (reliability-craft: an SLO declared before the data exists is a wish)."
+ ],
+ "class_weights_primary": {
+  "CLOSED": {
+   "types": 72,
+   "fire_days": 214,
+   "alerts": 227,
+   "page_fire_days": 124,
+   "review_fire_days": 90,
+   "projected_low": 4,
+   "projected_high": 38
+  },
+  "IN FLIGHT": {
+   "types": 19,
+   "fire_days": 67,
+   "alerts": 72,
+   "page_fire_days": 3,
+   "review_fire_days": 64,
+   "projected_low": 6,
+   "projected_high": 35
+  },
+  "RULING": {
+   "types": 11,
+   "fire_days": 17,
+   "alerts": 19,
+   "page_fire_days": 8,
+   "review_fire_days": 9,
+   "projected_low": 0,
+   "projected_high": 6
+  },
+  "DIGEST-ONLY": {
+   "types": 5,
+   "fire_days": 41,
+   "alerts": 45,
+   "page_fire_days": 0,
+   "review_fire_days": 41,
+   "projected_low": 7,
+   "projected_high": 24
+  },
+  "UNOWNED": {
+   "types": 19,
+   "fire_days": 20,
+   "alerts": 20,
+   "page_fire_days": 2,
+   "review_fire_days": 18,
+   "projected_low": 1,
+   "projected_high": 3
+  }
+ },
+ "class_weights_split": {
+  "fire_days": {
+   "CLOSED": 216,
+   "IN FLIGHT": 67,
+   "RULING": 19,
+   "DIGEST-ONLY": 37,
+   "UNOWNED": 20
+  },
+  "moves": [
+   {
+    "type": "match-soundness",
+    "from": "DIGEST-ONLY",
+    "to": "CLOSED",
+    "fire_days": 6,
+    "why": "6 MOVED/DROPPED days closed at 2660cd919"
+   },
+   {
+    "type": "store-registry-drift",
+    "from": "CLOSED",
+    "to": "DIGEST-ONLY",
+    "fire_days": 3,
+    "why": "3 unregistered-prefix days have a digest-only successor"
+   },
+   {
+    "type": "ff-catalog-degrading",
+    "from": "DIGEST-ONLY",
+    "to": "RULING",
+    "fire_days": 1,
+    "why": "the 09-17 fire followed the dead-after-reboot tasks, ruling Q4"
+   },
+   {
+    "type": "automation-silent-death",
+    "from": "CLOSED",
+    "to": "RULING",
+    "fire_days": 1,
+    "why": "the 09-18 fire is ruling Q4 (8491bf)"
+   }
+  ]
+ },
+ "closed_prevents": {
+  "fire_days_by_prevention": {
+   "class": 89,
+   "class, partial": 47,
+   "instance": 41,
+   "unassessed (one-shot key)": 37
+  },
+  "reading": "'class' = the fix changes how work is done (a push-time check, a lane, a producer slot); 'class, partial' = changes it for part of the type's causes; 'instance' = the defect was repaired and the type went quiet; 'unassessed' = one-shot keys closed with a commit or a note, not judged individually"
+ },
+ "projection_per_30_after_in_flight": {
+  "existing_types": {
+   "low": 18,
+   "high": 106,
+   "observed_same_types_excluding_triage_created": 306,
+   "by_class": {
+    "CLOSED": [
+     4,
+     38
+    ],
+    "IN FLIGHT": [
+     6,
+     35
+    ],
+    "RULING": [
+     0,
+     6
+    ],
+    "DIGEST-ONLY": [
+     7,
+     24
+    ],
+    "UNOWNED": [
+     1,
+     3
+    ]
+   },
+   "with_no_owner_that_stops_them": {
+    "low": 11,
+    "high": 35,
+    "basis": "DIGEST-ONLY + UNOWNED rows, plus the capture-watchdog RUN RECORD residual carried on a CLOSED (class, partial) row"
+   }
+  },
+  "new_one_off_detector_types": {
+   "low": 14,
+   "high": 29,
+   "basis": "7 such types in the last 15 days (x2) against 29 in the full window; nothing planned changes their rate"
+  },
+  "triage_created_residuals": {
+   "low": 53,
+   "high": 122,
+   "basis": "53 fire-days on 52 one-shot types, all since 2026-09-10; low = the 30-day window count, high = the rate over those 13 days scaled to 30. Review class, never emailed, but counted by the census and by the RETURN RATE denominator"
+  },
+  "risks_not_summed": [
+   {
+    "id": "R1",
+    "what": "recall-sleep-judgement-waiting (review, ruling:Q-4fc24c) replaces recall-sleep-red by Brad's ruling",
+    "range": [
+     0,
+     26
+    ],
+    "basis": "plan-4: unruled clusters or forgetting candidates caused 7 of the last 8 logged runs; the type is registered but never queued in the window, so its real rate is unmeasured"
+   },
+   {
+    "id": "R2",
+    "what": "silent-death-task-failed rises because every TC task's exit code is now real (3005162d5)",
+    "range": null,
+    "basis": "TC Daily Ratchets 0315 read success on 3 of 3 failing nights before; two of its ratchets were repaired (b453a01fb, 574722dab), the rest unmeasured"
+   },
+   {
+    "id": "R3",
+    "what": "price-disagreement, one key per cell",
+    "range": [
+     0,
+     4
+    ],
+    "basis": "one live day: 2 disagreements, both engine or verifier basis defects that batch 2 fixes; the rate of GENUINE disagreements is unmeasured"
+   }
+  ],
+  "totals": {
+   "low": 85,
+   "high": 257,
+   "observed_30": 359,
+   "reading": "all three streams, risks R1-R3 excluded; without the triage-created stream the range is 32 to 135 against 306 observed"
+  }
+ },
+ "top_5_remaining": [
+  {
+   "rank": 1,
+   "source": "the matching detectors: semantic-sweep + stores-dropped + wrong-department",
+   "observed_fire_days_30": 42,
+   "projected_per_30": [
+    4,
+    21
+   ],
+   "class": "IN FLIGHT",
+   "root_cause": "F5: three correct detectors whose only consumer was a person, so the same undecided rule questions returned daily (semantic-sweep 11 RETURNS, stores-dropped 7)",
+   "owner": "plan-9 item 2026-09-21-b96f21 (one worklist + verdict ledger), which cannot start until batch 2 is on origin/main (its step 0)",
+   "what_is_missing": "batch 2 landing; a measured precision bar for the classifier (unmeasured, so the lane may ship docket-only and still queue each new undecided key); ruling Q-adline-two-products for the 3 two-product ad lines"
+  },
+  {
+   "rank": 2,
+   "source": "match-soundness NEW-CONTESTED arrivals (successor match-soundness-new-contested)",
+   "observed_fire_days_30": 12,
+   "projected_per_30": [
+    4,
+    12
+   ],
+   "class": "DIGEST-ONLY",
+   "root_cause": "F5: an arrival review whose only consumer is a person running audit-match-soundness -Accept; the 09-21 split separated it from the MOVED/DROPPED half (closed at 2660cd919) but gave it no lane",
+   "owner": "none: resolver digest, 0 mentions in plan-8 or plan-9; 2dae07 was closed no-code-change pointing at 'the resolver contract item', which then scoped by current-key fires and missed it",
+   "what_is_missing": "a lane that consumes an arrival (or a ruling that arrivals are digest-class and never queued); the routing verdict for each arrival already exists in 2dae07's own diagnosis"
+  },
+  {
+   "rank": 3,
+   "source": "board-cells-quarantined (where guards-failed's 15 fire-days now land)",
+   "observed_fire_days_30": 16,
+   "projected_per_30": [
+    2,
+    12
+   ],
+   "class": "CLOSED (class, partial) for the hold; IN FLIGHT for the cells",
+   "root_cause": "F3 closed at 5f4ab8c48: one bad cell no longer holds the board. The page remains because each new bad cell is a real finding; the producers of bad cells (wrong-product routing, typed band floors, pack and unit basis) are upstream",
+   "owner": "per event, the triage lane; upstream, batch 2 (6b17b1 derived bands, 85c3b7 density, dca1a1 Sam's units, d16398 HOLD SCOPE) and plan-9 b96f21",
+   "what_is_missing": "a measured rate: 1 quarantine page in the 2 days since the change; guards held 12 of 25 runs before, and how many of those were cell-scoped was not measured here. Whether capture-run exits nonzero on guards exit 4 (which would ALSO raise watchdog-run-record) was not checked"
+  },
+  {
+   "rank": 4,
+   "source": "capture-watchdog RUN RECORD (successor watchdog-run-record)",
+   "observed_fire_days_30": 17,
+   "projected_per_30": [
+    3,
+    8
+   ],
+   "class": "CLOSED (class, partial) with UNOWNED residuals",
+   "root_cause": "F2: the daily chain was its own first integration test (18 of 25 logged runs ended with a FAILED LANE). Rehearsal (a66ef0e94..9c4c5aebd), per-cell quarantine and 148d78 landed today",
+   "owner": "the F2 rehearsal for change-induced failures; nobody for the rest",
+   "what_is_missing": "(a) an owner for failures that need same-morning data (20fecf, a weekly queue item with no plan; RCA: 1 of 8); (b) RUN RECORD pages a failure the failing lane already paged (7c932a vs 148d78 on 09-22), so every chain failure is two ids and two census alerts, and nothing dedupes it"
+  },
+  {
+   "rank": 5,
+   "source": "ff-carry (Family Fare pull dropped a carried item)",
+   "observed_fire_days_30": 8,
+   "projected_per_30": [
+    2,
+    8
+   ],
+   "class": "DIGEST-ONLY",
+   "root_cause": "F5: the Family Fare pull drops items it carries (the 7-of-602 terms a day budget is deliberate); 45d65a81e carries a victim forward but 'the alert signature stays on fresh victims' and nothing consumes a fresh victim",
+   "owner": "none: resolver digest, 0 mentions in plan-8 or plan-9 (their list of eight digest types omits it although it fired 8 days with 5 RETURNS)",
+   "what_is_missing": "a consumer for a fresh victim, the way plan-9 hands sale-fallback gaps to the owning store's capture plan (c9f0f3)"
+  }
+ ],
+ "also_without_an_owner": [
+  "ff-catalog-* successors (11 fire-days under the retired parent; 1 since 09-05, and that one is ruling Q4's): all resolver digest, in no plan",
+  "store-registry-unregistered-capture-file-prefix (3 fire-days 08-24..08-26 under the parent): digest; the code half is closed at push (2bd3a6fff) but the data half is not",
+  "'Grocery pipeline alert': send-alert.ps1's DEFAULT subject (line 17) matches no registry entry, so two unrelated residuals share one type and the second scored as a RETURN; d625a4 named this on 09-12 and was archived open by the 09-17 reset",
+  "true browser-capture misses (watchdog-browser-capture-missing-today, watchdog-browser-work-stale): resolver unassigned:2026-09-22. Plan-8 records '0 fires each in 30 days', which counts only the new key: the parent fired the same condition on 09-19 and 09-20, and the new key fired on 09-22 (2000e1)",
+  "bec597 (198 stale tile-link prices) and 274e4b (price-history second record): planned in plan-2 batch 2, then marked needs-more-time by plan-5; no later plan names either",
+  "a0c785 (beverage class absent in five display buckets): needs-more-time with no dated owner",
+  "16 residuals archived OPEN by the 2026-09-17 reset (Brad: ignore every past alert): d67882, c8eb72, a86b87, 582032, c4a68f, b09671, 9fbafc, 935ce3, bfc110, 36f57d, d625a4, 915846, 139f58, 2bb198, 1139c4, 0bea21. Some overlap live work (582032 is b96f21's two-product ad lines; bfc110 is wrong-department's store-abbreviated names; 36f57d is the judgement-ratchet page behind R1), and none is owned by name"
+ ],
+ "rulings_that_gate_recurrence": [
+  "Q1-2026-09-20-partial-cost: manifest-skipped (4), unpriced-lines (4), and the six held recipes behind recipe-db-drift",
+  "Q4-tasks-dead-after-reboot (8491bf): the 09-15/16 dead tasks behind silent-death, ff-catalog and AD STALE fires",
+  "Q-adline-two-products: 3 keys the matching lane can only park",
+  "q-2026-09-19-multipack: dc1b5b's rubric",
+  "Q-4fc24c-knowledge-store: ruled; by design the judgement nights now come to Brad as decisions (R1)"
+ ],
+ "findings_for_the_program": [
+  "A SPLIT IS NOT A FIX. The five catch-alls retired on 09-21 held 70 of 359 fire-days (19.5%). Their successors are 75 new registry entries (70 from plan-2026-09-21-5, 5 from plan-2026-09-21-7): 30 are review class with resolver digest (queued, no lane), 4 are digest class, 2 are unassigned. Only 5 of them have fired in the window (match-soundness-new-contested, watchdog-computed-but-not-shipped, watchdog-run-record, watchdog-browser-capture-missing-today, store-registry-hardcoded-store-list). A scope that asks 'which digest types fired' over current keys cannot see the rest until each fires again: that explains the ff-catalog-* successors and plan-8's count of 0 for the attended-browser types. match-soundness-new-contested (1 fire of its own, 12 under the parent) and ff-carry (8 fires under an unchanged key) are also absent from both plans, for a reason not established here.",
+  "The RETURN RATE is about to improve for measurement reasons alone: new successor keys, one key per price-disagreement cell, and triage residuals are all structurally unable to score a return. A quiet type and a relabelled type look the same on the scoreboard.",
+  "The triage lane is the census's largest single source: 52 one-shot types in the 13 days since 2026-09-10, never emailed, each costing a triage read. Nothing measures or owns that minting rate, and 16 of them were abandoned open by the 09-17 reset.",
+  "Two emitters for one condition still stands in three places: watchdog-run-record beside each failing lane's own page; board-prices-aging beside ad-window-no-capture; cross-store-integrity beside db-constraint-refused (one audit). F1 in the RCA names the pattern for FACTS; nothing in today's plans applies it to ALERTS."
+ ],
+ "could_not_prove": [
+  "The 'RUN RECORD on about 17 of 20 days' figure reads the bodies of 15 capture-watchdog ids; a recurrence absorbed into an open id is dated but its body is not, so recurrence days were attributed to the parent id's conditions.",
+  "Whether capture-run exits nonzero when guards exit 4 (quarantine); if it does, every quarantine also raises watchdog-run-record and rank 3 and rank 4 are one source.",
+  "batch-stalled's 19 quiet days may mean no recipe batch ran, not that the class stopped.",
+  "walmart-capture-aging's 08-31 fix commit was not re-derived; the classification rests on plan-9's statement and 22 quiet days.",
+  "37 mechanically CLOSED one-shot types are marked prevents 'unassessed'; their close notes were not judged class vs instance.",
+  "Every projected range is a judgement with its basis in the row, not a measurement. The ranges for IN FLIGHT lanes depend on classifier precision nobody has measured yet.",
+  "Plan-4's items are marked done with no shipped_commit because the knowledge store lives outside the repo; the recall-sleep classification rests on 0879dd53f, 3005162d5 and 1a9250b3d on origin/main and on plan-4's own record."
+ ],
+ "knowledge_consulted": [
+  "design/RCA-holistic-2026-09-22.md (pasted in the brief, read in full here): F1-F5 and the test 'does it change how work is done', used for the prevents field",
+  "memory triage-cost-controls (C--Codex store, as pasted in the brief): zero-occurrence leftovers get a watch, triage-created items go weekly; used to separate the triage-created stream",
+  "global CLAUDE.md, pasted: 'a number that moved is not a number that improved'; used for the scoreboard delta",
+  "knowledge-search --multi 'alert resolver lane' 'return rate recurrence' 'catch-all split': reliability-craft/applies-here.md section 'The scoreboard' (an SLO declared before the data exists is a wish) used to keep the projection a range with no target; nothing else applicable"
+ ],
+ "untrusted_input_note": "Queue bodies, close notes and plan text were read as data. None addressed the reader or asked for an action.",
+ "types": [
+  {
+   "type": "grocery new price flag s",
+   "subject": "Grocery: 37 NEW price flag(s) - 2026-09-19",
+   "registry_id": "new-price-flags",
+   "registry_class": "review",
+   "resolver": "lane:grocery/verify-price-flags.ps1",
+   "fire_days": 22,
+   "alerts": 23,
+   "returns": 12,
+   "first": "2026-08-24",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-08-22-8360b4",
+    "2026-08-31-8018b5",
+    "2026-09-01-b7da16",
+    "2026-09-02-19e1c3",
+    "2026-09-04-def37c",
+    "2026-09-05-521f1c",
+    "2026-09-06-24ac66",
+    "2026-09-07-05e4c3",
+    "2026-09-09-9b1f92",
+    "2026-09-10-b91a0a",
+    "2026-09-11-3b246c",
+    "2026-09-12-c424f3",
+    "2026-09-18-61f76c",
+    "2026-09-19-fccb69"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "b52b39cc3 (2026-09-21, verify-price-flags: a flag is verified against the store's own later read; only a disagreement pages)",
+   "evidence": "fired 22 of 30 days as a homework list; 0 fires since the verifier shipped; RCA: 30 verified quietly on 09-22",
+   "residual": "successor type price-disagreement (one key PER CELL) carries what remains; 4b973e residuals R1 dated 2026-09-28",
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F5",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery capture watchdog issue s",
+   "subject": "Grocery capture watchdog: 1 issue(s) 2026-09-21",
+   "registry_id": "capture-watchdog",
+   "registry_class": "page",
+   "resolver": "RETIRED",
+   "fire_days": 20,
+   "alerts": 21,
+   "returns": 12,
+   "first": "2026-08-24",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-08-22-fe7b43",
+    "2026-08-30-40c75d",
+    "2026-08-31-fbba29",
+    "2026-08-31-980113",
+    "2026-09-03-011038",
+    "2026-09-06-246bb1",
+    "2026-09-07-e5efa6",
+    "2026-09-09-c2c10b",
+    "2026-09-10-3b35cb",
+    "2026-09-12-d7af0c",
+    "2026-09-18-d23cfd",
+    "2026-09-19-fc46c7",
+    "2026-09-20-7bac4b",
+    "2026-09-21-3e07eb"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class, partial",
+   "cite": "5f4ab8c48 (per-cell quarantine, 09-21); a66ef0e94..9c4c5aebd (F2 chain rehearsal, landed 09-22); ba13faba0 (148d78 empty-file commit refusal); 66f5d7840 + 3005162d5 (browser slot NOT YET)",
+   "evidence": "retired 2026-09-21 as a catch-all (plan-2026-09-21-5): the SPLIT relabels future fires, it stops none. Bodies: 'RUN RECORD: capture-run completed with exit 1' on about 17 of its 20 days, i.e. the daily chain's own lane failures (RCA: 18 of 25 logged runs ended with a FAILED LANE: guards-blocked 12, commit-refused 2, push 2, commit-size-gate 1, build-samsclub 1); also BROWSER CAPTURE MISSING, MISSING-WINDOW (FF), AD STALE, NO FRESH ROWS, GRAPH SCHEMA",
+   "residual": "UNOWNED: watchdog-run-record re-pages a failure the failing lane already paged (7c932a vs 148d78 on 09-22, 'one condition, two ids'); no plan dedupes it. UNOWNED: chain failures that need same-morning data (20fecf, weekly queue only)",
+   "projected_fire_days_per_30": [
+    3,
+    8
+   ],
+   "family": "F2/F3, residual F1",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery semantic sweep found product s no rule can see",
+   "subject": "Grocery: semantic sweep found 3 product(s) no rule can see - 2026-09-21",
+   "registry_id": "semantic-sweep",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 19,
+   "alerts": 19,
+   "returns": 11,
+   "first": "2026-08-25",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-08-22-51a5b6",
+    "2026-08-31-550b2a",
+    "2026-09-01-ff9801",
+    "2026-09-02-fd3f29",
+    "2026-09-03-f2abdb",
+    "2026-09-05-b08e51",
+    "2026-09-06-796030",
+    "2026-09-07-abae06",
+    "2026-09-10-20430e",
+    "2026-09-12-099302",
+    "2026-09-18-37ac63",
+    "2026-09-19-4f01f6",
+    "2026-09-21-7d64a6"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "plan-2026-09-22-9 item 2026-09-21-b96f21 (one matching worklist + verdict ledger, publish 3) + 7d64a6 ruling B in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main) (42eb17c00, 3ab82b8a7)",
+   "evidence": "18 items, 11 RETURNS; the same commodities recur because nothing adjudicates (ground-beef-8020 in 6 items)",
+   "residual": "classifier precision unmeasured; if below bar the lane is docket-only for the weekly agent (still a queue item per new undecided key)",
+   "projected_fire_days_per_30": [
+    2,
+    10
+   ],
+   "family": "F5",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery matching soundness review needed",
+   "subject": "Grocery matching soundness - review needed",
+   "registry_id": "match-soundness",
+   "registry_class": "review",
+   "resolver": "RETIRED",
+   "fire_days": 18,
+   "alerts": 19,
+   "returns": 10,
+   "first": "2026-08-25",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-08-22-6827cf",
+    "2026-08-30-208089",
+    "2026-08-31-a9f51f",
+    "2026-09-01-e17a88",
+    "2026-09-02-4dfb1d",
+    "2026-09-03-7423a0",
+    "2026-09-04-2cd17a",
+    "2026-09-05-368c61",
+    "2026-09-06-4025dc",
+    "2026-09-07-0b232c",
+    "2026-09-08-2e59b3",
+    "2026-09-19-6f90ee"
+   ],
+   "classification": "DIGEST-ONLY",
+   "prevents": null,
+   "cite": "MOVED/DROPPED part CLOSED at 2660cd919 (a25dc0: matching rules without their reviewed baseline are refused at push); NEW-CONTESTED part has successor match-soundness-new-contested, resolver digest, in NO plan",
+   "evidence": "retired 2026-09-21 (plan-2026-09-21-7): of its 18 days, 6 carried a MOVED/DROPPED diff (authored rule edits whose accept had not reached a commit) and 12 carried only NEW-CONTESTED arrivals",
+   "residual": "12 of 18 fire-days are arrival reviews whose only consumer is a person running audit-match-soundness -Accept (plan-2 item 2dae07: 'the cadence of arrival reviews is the resolver contract item'); plan-9 did not include it because the new key had 0 fires when it scoped",
+   "projected_fire_days_per_30": [
+    4,
+    12
+   ],
+   "family": "F5",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery store s dropped from a commodity they carry",
+   "subject": "Grocery: 24 store(s) dropped from a commodity they carry - 2026-09-21",
+   "registry_id": "stores-dropped",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 16,
+   "alerts": 18,
+   "returns": 7,
+   "first": "2026-08-26",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-08-22-14416d",
+    "2026-08-31-ad3b81",
+    "2026-09-01-4a481e",
+    "2026-09-02-995502",
+    "2026-09-06-39933e",
+    "2026-09-07-0e9482",
+    "2026-09-12-a214ad",
+    "2026-09-19-2a0748",
+    "2026-09-21-b96f21"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "plan-2026-09-22-9 item 2026-09-21-b96f21 (publish 3); classify-by-elimination fix already live 09-21 (476 actionable gaps -> 21)",
+   "evidence": "19 items, 7 RETURNS; the same 21 rule questions listed daily",
+   "residual": "3 two-product ad lines park on ruling Q-adline-two-products",
+   "projected_fire_days_per_30": [
+    2,
+    8
+   ],
+   "family": "F5",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery guards failed board not published",
+   "subject": "Grocery: GUARDS FAILED - board not published - 2026-09-21",
+   "registry_id": "guards-failed",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 15,
+   "alerts": 21,
+   "returns": 8,
+   "first": "2026-08-27",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-08-22-f00d92",
+    "2026-08-31-0465b5",
+    "2026-09-03-83b57e",
+    "2026-09-06-79fe01",
+    "2026-09-07-e9edb9",
+    "2026-09-10-d9e085",
+    "2026-09-13-76d263",
+    "2026-09-18-f90ba6",
+    "2026-09-19-b66b54",
+    "2026-09-21-da5011"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class, partial",
+   "cite": "5f4ab8c48 (2026-09-21 per-cell quarantine: a bad cell holds itself, GUARDS FAILED reserved for a real board hold) + d16398 HOLD SCOPE for the 8 delegated audits in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main)",
+   "evidence": "held the whole board on 12 of 25 logged runs; after 09-21: 1 cell quarantined, 2,707 published",
+   "residual": "fires MOVE to board-cells-quarantined (page, one per distinct cell set) rather than stop; the bad cells behind them are owned per event by the triage lane",
+   "projected_fire_days_per_30": [
+    0,
+    2
+   ],
+   "family": "F3",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery store registry drift issue s",
+   "subject": "Grocery: store-registry drift - 2 issue(s)",
+   "registry_id": "store-registry-drift",
+   "registry_class": "review",
+   "resolver": "RETIRED",
+   "fire_days": 11,
+   "alerts": 12,
+   "returns": 5,
+   "first": "2026-08-24",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-08-22-2c3e88",
+    "2026-08-31-6e6335",
+    "2026-09-03-494974",
+    "2026-09-05-17ebe3",
+    "2026-09-09-34557a",
+    "2026-09-12-e48834",
+    "2026-09-19-405c73"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "2bd3a6fff (175249: the store-roster code scan runs at push, and a frozen list in a command argument or one-line array registers)",
+   "evidence": "retired 2026-09-21 as a catch-all. In window: 8 fire-days were hard-coded store lists in code (mostly test-auditors fixtures, one capture-policy-lib), 3 (08-24..08-26) an unregistered hunter-* capture prefix",
+   "residual": "the data half (store-registry-unregistered-capture-file-prefix) is DIGEST-ONLY, 0 fires since 08-26",
+   "projected_fire_days_per_30": [
+    0,
+    1
+   ],
+   "family": "F1/F2",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery family fare catalog is degrading signal s",
+   "subject": "Grocery: Family Fare catalog is degrading - 1 signal(s)",
+   "registry_id": "ff-catalog-degrading",
+   "registry_class": "review",
+   "resolver": "RETIRED",
+   "fire_days": 11,
+   "alerts": 14,
+   "returns": 9,
+   "first": "2026-08-25",
+   "last": "2026-09-17",
+   "queue_ids": [
+    "2026-08-22-d913fc",
+    "2026-08-30-7adf1c",
+    "2026-08-31-225bc5",
+    "2026-09-01-056e6b",
+    "2026-09-02-a4236e",
+    "2026-09-02-reanch1",
+    "2026-09-02-corn05",
+    "2026-09-02-corn06",
+    "2026-09-05-12bd4a",
+    "2026-09-17-0bea21"
+   ],
+   "classification": "DIGEST-ONLY",
+   "prevents": null,
+   "cite": "none: successors ff-catalog-starved-terms-aging-out / mass-expiry / sweep-is-not-buying / merged-catalog-shrank are all resolver digest and appear in no plan",
+   "evidence": "retired 2026-09-21 as a catch-all. 10 of 11 fire-days 08-25..09-05 'the sweep is not buying terms'; the 11th (09-17, 0bea21, archived open) followed the 09-15/16 dead tasks (8491bf, ruling Q4)",
+   "residual": "no lane; 1 fire in the 17 days since 09-05, and that one is ruling Q4's",
+   "projected_fire_days_per_30": [
+    1,
+    3
+   ],
+   "family": "F5",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery a guard has gone blind test auditors failed",
+   "subject": "Grocery: a GUARD has gone blind (test-auditors failed)",
+   "registry_id": "guard-gone-blind",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 10,
+   "alerts": 10,
+   "returns": 5,
+   "first": "2026-08-25",
+   "last": "2026-09-19",
+   "queue_ids": [
+    "2026-08-22-7e1db7",
+    "2026-08-30-b9d48f",
+    "2026-08-31-4b2f47",
+    "2026-09-04-0b63d3",
+    "2026-09-07-76ec7f",
+    "2026-09-11-220094",
+    "2026-09-19-ae9df2"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "748967ad4 (2026-09-20, ae9df2: test-auditors rc 4 separates a live-board red from a blind watcher; successor type test-auditors-live-red)",
+   "evidence": "0 fires since 09-19; the conflation was the recurring cause",
+   "residual": "a genuinely blind watcher still pages (condition 2, correct)",
+   "projected_fire_days_per_30": [
+    0,
+    2
+   ],
+   "family": "F4",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "automation silent death issue s",
+   "subject": "Automation silent-death: 4 issue(s)",
+   "registry_id": "automation-silent-death",
+   "registry_class": "page",
+   "resolver": "RETIRED",
+   "fire_days": 10,
+   "alerts": 10,
+   "returns": 6,
+   "first": "2026-09-04",
+   "last": "2026-09-19",
+   "queue_ids": [
+    "2026-09-04-2feb5c",
+    "2026-09-07-dc7460",
+    "2026-09-09-d3e937",
+    "2026-09-11-d7dc8f",
+    "2026-09-12-34df27",
+    "2026-09-18-1dfd03",
+    "2026-09-19-b1d371"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class, partial",
+   "cite": "3005162d5 (every TC task launches through headless-exit.pyw so its exit is real), 54eb1efa0 (heartbeat output checks read NOT YET inside the producer slot), 8403f27b9 (8a3090: an emitter refuses to grade a worktree), 1a9250b3d (Q-4fc24c-1)",
+   "evidence": "retired 2026-09-21 as a catch-all. In window: TC Recall Sleep failing 09-11..09-17 (5 fd, now REVIEW), a worktree false alarm 09-19 (1), the 09-15/16 dead-after-reboot tasks 09-18 (1, ruling Q4), three one-off stale task/output pages 09-04/09-07/09-09",
+   "residual": "RULING Q4-tasks-dead-after-reboot (8491bf) still open; RISK: exit codes are now real, so failures conhost used to hide (TC Daily Ratchets rc 1 on 3 of 3 nights) will now page as silent-death-task-failed",
+   "projected_fire_days_per_30": [
+    1,
+    4
+   ],
+   "family": "F4",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "the knowledge store s nightly pass went red",
+   "subject": "The knowledge store's nightly pass went RED",
+   "registry_id": "recall-sleep-red",
+   "registry_class": "page",
+   "resolver": "ruling:Q-4fc24c-knowledge-store",
+   "fire_days": 10,
+   "alerts": 11,
+   "returns": 2,
+   "first": "2026-09-11",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-11-18da92",
+    "2026-09-12-87ca2f",
+    "2026-09-18-35e0f5",
+    "2026-09-19-4fc24c"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "plan-2026-09-22-4 done: 0879dd53f (task exits nonzero on a failing night), 3005162d5 + 1a9250b3d (exit 3 = waiting on a judgement reads REVIEW for 3 nights, then TASK FAILED); patterns tightened, clusters ruled",
+   "evidence": "fired 10 days; plan-4: unruled clusters or forgetting candidates were the cause on 7 of the last 8 logged runs",
+   "residual": "moves to recall-sleep-judgement-waiting (review, ruling:Q-4fc24c) by Brad's ruling; see risk R1",
+   "projected_fire_days_per_30": [
+    0,
+    1
+   ],
+   "family": "F5",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "board prices aging inside a fresh file",
+   "subject": "Board prices aging inside a fresh file",
+   "registry_id": "board-prices-aging",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 9,
+   "alerts": 9,
+   "returns": 4,
+   "first": "2026-08-25",
+   "last": "2026-09-09",
+   "queue_ids": [
+    "2026-08-22-83012e",
+    "2026-08-30-fec3dc",
+    "2026-09-02-c9c140",
+    "2026-09-06-6e08ed",
+    "2026-09-09-04e0af"
+   ],
+   "classification": "CLOSED",
+   "prevents": "instance",
+   "cite": "499c3fd0c (2026-09-18, de39ec Baker's ad capture) and the 09-09 rebuild; the close note: 'one condition seen by two emitters, this one from the consequence end'",
+   "evidence": "0 fires since 09-09",
+   "residual": "the two-emitters-one-condition design (this type + ad-window-no-capture) is unchanged, so a recurrence pages twice",
+   "projected_fire_days_per_30": [
+    0,
+    2
+   ],
+   "family": "F1",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "recipe batch stalled with stages unfinished",
+   "subject": "Recipe batch stalled with stages unfinished",
+   "registry_id": "batch-stalled",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 9,
+   "alerts": 9,
+   "returns": 4,
+   "first": "2026-08-26",
+   "last": "2026-09-03",
+   "queue_ids": [
+    "2026-08-22-c41c27",
+    "2026-08-31-cafc3e",
+    "2026-09-01-f2a554",
+    "2026-09-02-b00773",
+    "2026-09-03-4f6201"
+   ],
+   "classification": "CLOSED",
+   "prevents": "instance",
+   "cite": "9befcf70f (2026-09-03, batch-ledger close)",
+   "evidence": "0 fires since 09-03 (19 days); whether recipe batches ran in that time was not checked",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    2
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery on sale item s have no everyday fallback",
+   "subject": "Grocery: 5 on-sale item(s) have no everyday fallback - 2026-09-03",
+   "registry_id": "sale-no-fallback",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 8,
+   "alerts": 8,
+   "returns": 4,
+   "first": "2026-08-24",
+   "last": "2026-09-03",
+   "queue_ids": [
+    "2026-08-22-d004bf",
+    "2026-08-31-0f6963",
+    "2026-09-01-4ca656",
+    "2026-09-02-5df03f",
+    "2026-09-03-b844ab"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "c92b70a79 (2026-09-03: route sale-fallback alerts by proven ownership; the old wording retired)",
+   "evidence": "0 fires in the 19 days since; plan-9 marks the registry entry retired",
+   "residual": "successor sale-no-fallback-unworked is IN FLIGHT (c9f0f3)",
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F5",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery family fare pull dropped a carried item review",
+   "subject": "Grocery: Family Fare pull dropped a carried item - review",
+   "registry_id": "ff-carry",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 8,
+   "alerts": 8,
+   "returns": 5,
+   "first": "2026-09-03",
+   "last": "2026-09-18",
+   "queue_ids": [
+    "2026-09-03-9020b2",
+    "2026-09-05-18d67c",
+    "2026-09-06-e5a9c9",
+    "2026-09-07-72756b",
+    "2026-09-10-4de393",
+    "2026-09-12-91ec35",
+    "2026-09-18-0ac1cb"
+   ],
+   "classification": "DIGEST-ONLY",
+   "prevents": null,
+   "cite": "none: resolver digest; 45d65a81e (2026-09-18) only carries an unpriced victim forward, and the close note says 'the alert signature stays on fresh victims'. Appears in no plan (0 mentions in plan-8 or plan-9)",
+   "evidence": "fired 8 days, 5 RETURNS; the Family Fare pull drops items it carries (the 7-of-602/day term budget is deliberate)",
+   "residual": "no lane consumes a fresh victim; plan-8/-9's list of eight digest types omitted it",
+   "projected_fire_days_per_30": [
+    2,
+    8
+   ],
+   "family": "F5",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery board cell s sit in the wrong store department",
+   "subject": "Grocery: 1 board cell(s) sit in the wrong store department - 2026-09-11",
+   "registry_id": "wrong-department",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 7,
+   "alerts": 7,
+   "returns": 4,
+   "first": "2026-08-24",
+   "last": "2026-09-11",
+   "queue_ids": [
+    "2026-08-24-da64ee",
+    "2026-08-30-2611d3",
+    "2026-08-31-e6a93d",
+    "2026-09-02-1527d2",
+    "2026-09-11-62b248"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "plan-2026-09-22-9 b96f21 (publish 3); FF shelf-path admission refusal already live at 5d1968736 (09-11)",
+   "evidence": "plan-9: 6 of its 8 fire days were a standing false-positive set",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    3
+   ],
+   "family": "F5",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery walmart full capture aging",
+   "subject": "Grocery: Walmart full capture aging - 2026-08-31",
+   "registry_id": "walmart-capture-aging",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 6,
+   "alerts": 6,
+   "returns": 1,
+   "first": "2026-08-26",
+   "last": "2026-08-31",
+   "queue_ids": [
+    "2026-08-22-ca099c",
+    "2026-08-31-8dad9b"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "detector defect fixed 2026-08-31 (plan-2026-09-22-9 item discovered:walmart-capture-aging; commit not re-derived here)",
+   "evidence": "0 fires in 22 days; stays digest as a backstop",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    1
+   ],
+   "family": "F4",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "a write broke cross store integrity",
+   "subject": "A write broke cross-store integrity",
+   "registry_id": "cross-store-integrity",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 5,
+   "alerts": 5,
+   "returns": 0,
+   "first": "2026-08-24",
+   "last": "2026-08-28",
+   "queue_ids": [
+    "2026-08-22-ad9fdd"
+   ],
+   "classification": "CLOSED",
+   "prevents": "instance",
+   "cite": "6acea050 (2026-08-29, schema-constraints hard=0)",
+   "evidence": "0 fires in 25 days; the same condition also raised db-constraint-refused (two types, one audit)",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    1
+   ],
+   "family": "F1",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "database constraint refused a write",
+   "subject": "Database constraint refused a write",
+   "registry_id": "db-constraint-refused",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 5,
+   "alerts": 5,
+   "returns": 0,
+   "first": "2026-08-24",
+   "last": "2026-08-28",
+   "queue_ids": [
+    "2026-08-22-f25be9"
+   ],
+   "classification": "CLOSED",
+   "prevents": "instance",
+   "cite": "6acea050 (2026-08-29)",
+   "evidence": "0 fires in 25 days; same audit as cross-store-integrity",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    1
+   ],
+   "family": "F1",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "smp feed edge did not pick up today s push",
+   "subject": "smp-feed edge did not pick up today's push - 2026-09-03",
+   "registry_id": "feed-edge-stale",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 5,
+   "alerts": 5,
+   "returns": 2,
+   "first": "2026-08-27",
+   "last": "2026-09-03",
+   "queue_ids": [
+    "2026-08-27-60c48b",
+    "2026-08-31-92414e",
+    "2026-09-03-58057b"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "6f0fa6899 (2026-09-03: Test-EdgeServesPushed with a must-fire for the skipped arm) and a095f76e0 (972de2)",
+   "evidence": "0 fires in 19 days",
+   "residual": "81d955 post-after-edge ordering is in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main)",
+   "projected_fire_days_per_30": [
+    0,
+    1
+   ],
+   "family": "F4",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "recipe db drift index vs specs",
+   "subject": "Recipe db drift (index vs specs)",
+   "registry_id": "recipe-db-drift",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 5,
+   "alerts": 8,
+   "returns": 1,
+   "first": "2026-08-29",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-08-29-df2bbf",
+    "2026-09-01-d65e8a",
+    "2026-09-19-2c96d8"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "33536eda0 (2c96d8: held recipes read one way, landed) + plan-9 discovered:recipe-db-drift (body carries findings, resolver -> triage lane, publish 1)",
+   "evidence": "fired 5 days; 3 different upstream causes (plan-9)",
+   "residual": "six held recipes wait on RULING Q1-2026-09-20-partial-cost",
+   "projected_fire_days_per_30": [
+    0,
+    2
+   ],
+   "family": "F4/F5",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "tools a live page has drifted from its local source",
+   "subject": "Tools: a live page has drifted from its local source",
+   "registry_id": "ghost-drift",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 4,
+   "alerts": 4,
+   "returns": 2,
+   "first": "2026-08-24",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-08-24-39931a",
+    "2026-09-07-e7286e",
+    "2026-09-14-67e643",
+    "2026-09-21-115180"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "plan-9 discovered:ghost-drift-reconciler (publish 5, after batch 3) + 115180 tool live-price in batch 3 (plan-2026-09-22-6, worktree agent-acc4db640d784b57b, head cc1c990db, NOT on origin/main)",
+   "evidence": "4 of 5 fires a cost-literal copy (plan-9)",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    1
+   ],
+   "family": "F1",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "baker s ad window advanced with no capture behind it",
+   "subject": "Baker's ad window advanced with no capture behind it",
+   "registry_id": "ad-window-no-capture",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 4,
+   "alerts": 4,
+   "returns": 2,
+   "first": "2026-08-26",
+   "last": "2026-09-18",
+   "queue_ids": [
+    "2026-08-26-da256a",
+    "2026-09-02-68183c",
+    "2026-09-09-e60137",
+    "2026-09-18-de39ec"
+   ],
+   "classification": "CLOSED",
+   "prevents": "instance",
+   "cite": "499c3fd0c, cfa41bda0, ef1781cab (2026-09-18, de39ec)",
+   "evidence": "0 fires in 4 days; the remedy text named a routine retired 08-22 (F5)",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    2
+   ],
+   "family": "F5",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "recipe per serving manifest skipped recipe s",
+   "subject": "Recipe per-serving manifest: skipped recipe(s)",
+   "registry_id": "manifest-skipped",
+   "registry_class": "review",
+   "resolver": "ruling:Q1-2026-09-20-partial-cost",
+   "fire_days": 4,
+   "alerts": 5,
+   "returns": 2,
+   "first": "2026-08-27",
+   "last": "2026-09-20",
+   "queue_ids": [
+    "2026-08-27-216d2e",
+    "2026-09-01-b5b8e0",
+    "2026-09-19-3a0a09",
+    "2026-09-20-bff4ef"
+   ],
+   "classification": "RULING",
+   "prevents": null,
+   "cite": "ruling Q1-2026-09-20-partial-cost",
+   "evidence": "closed by-design 09-20 (bff4ef) once held state split in cost-recipes",
+   "residual": "waits on Brad",
+   "projected_fire_days_per_30": [
+    0,
+    3
+   ],
+   "family": "F4",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "recipe pricing unpriced ingredient line s",
+   "subject": "Recipe pricing: 28 unpriced ingredient line(s)",
+   "registry_id": "unpriced-lines",
+   "registry_class": "review",
+   "resolver": "ruling:Q1-2026-09-20-partial-cost",
+   "fire_days": 4,
+   "alerts": 5,
+   "returns": 1,
+   "first": "2026-08-27",
+   "last": "2026-09-20",
+   "queue_ids": [
+    "2026-08-22-636ff8",
+    "2026-09-19-d240fd",
+    "2026-09-20-fb37b9"
+   ],
+   "classification": "RULING",
+   "prevents": null,
+   "cite": "ruling Q1-2026-09-20-partial-cost",
+   "evidence": "closed by-design 09-20 (fb37b9)",
+   "residual": "waits on Brad",
+   "projected_fire_days_per_30": [
+    0,
+    3
+   ],
+   "family": "F4",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery test guards could not evaluate guards already red on the unmutated board",
+   "subject": "Grocery: test-guards could not evaluate (guards already red on the unmutated board)",
+   "registry_id": "test-guards-could-not-evaluate",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 3,
+   "alerts": 3,
+   "returns": 2,
+   "first": "2026-08-27",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-08-27-a0aeb1",
+    "2026-09-03-eb3bce",
+    "2026-09-10-267ba6"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "a3952ca0f + bcf0ed435 (2026-09-10: defers on a red verdict, stamps only evaluated runs)",
+   "evidence": "0 fires in 12 days",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F4",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "recipe price inversion clamped",
+   "subject": "Recipe price inversion: 2 clamped",
+   "registry_id": "price-inversion",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 3,
+   "alerts": 6,
+   "returns": 1,
+   "first": "2026-08-29",
+   "last": "2026-08-31",
+   "queue_ids": [
+    "2026-08-22-5a178d",
+    "2026-08-31-fdbd93"
+   ],
+   "classification": "CLOSED",
+   "prevents": "instance",
+   "cite": "root-cause fix under 2026-08-22-5a178d (commit not cited in the close note)",
+   "evidence": "0 fires in 22 days",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery test auditors hygiene finding s watchers intact",
+   "subject": "Grocery: test-auditors hygiene finding(s) - watchers intact",
+   "registry_id": "test-auditors-hygiene",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 3,
+   "alerts": 3,
+   "returns": 1,
+   "first": "2026-09-05",
+   "last": "2026-09-19",
+   "queue_ids": [
+    "2026-09-05-5650ce",
+    "2026-09-06-fdc73a",
+    "2026-09-19-064845"
+   ],
+   "classification": "CLOSED",
+   "prevents": "instance",
+   "cite": "0a53a0452 (2026-09-19)",
+   "evidence": "the 09-19 page came from a main tree that could not rebase",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    1
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "ops the agent memory store has a finding",
+   "subject": "Ops: the agent memory store has a finding",
+   "registry_id": "memory-store-finding",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 3,
+   "alerts": 3,
+   "returns": 2,
+   "first": "2026-09-05",
+   "last": "2026-09-08",
+   "queue_ids": [
+    "2026-09-05-e42efd",
+    "2026-09-07-4f672e",
+    "2026-09-08-231ef6"
+   ],
+   "classification": "DIGEST-ONLY",
+   "prevents": null,
+   "cite": "fix 2026-09-08 (231ef6) landed in the memory store's own local git, not origin/main; registry resolver digest",
+   "evidence": "0 fires in 14 days",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    1
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery on sale item s have no everyday fallback and no one is working them",
+   "subject": "Grocery: 2 on-sale item(s) have no everyday fallback and NO ONE IS WORKING THEM - 2026-09-19",
+   "registry_id": "sale-no-fallback-unworked",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 3,
+   "alerts": 3,
+   "returns": 0,
+   "first": "2026-09-06",
+   "last": "2026-09-20",
+   "queue_ids": [
+    "2026-09-06-22b4dd",
+    "2026-09-19-c9f0f3"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "plan-9 item 2026-09-19-c9f0f3 (capture plan owes the fallback fetch, publish 2)",
+   "evidence": "fired 3 days",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    1
+   ],
+   "family": "F5",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "daily pipeline commit refused",
+   "subject": "Daily pipeline commit REFUSED - 2026-09-22",
+   "registry_id": "commit-refused",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 2,
+   "alerts": 2,
+   "returns": 0,
+   "first": "2026-09-09",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-09-a95022",
+    "2026-09-22-148d78"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "ba13faba0 (148d78: the empty boundary cased on both sides) and the F2 rehearsal whose frozen must-fire is this defect (a66ef0e94..9c4c5aebd)",
+   "evidence": "fired 09-09 and 09-22",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    1
+   ],
+   "family": "F2",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery pipeline alert",
+   "subject": "Grocery pipeline alert",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 2,
+   "alerts": 2,
+   "returns": 0,
+   "first": "2026-09-11",
+   "last": "2026-09-20",
+   "queue_ids": [
+    "2026-09-11-1139c4",
+    "2026-09-20-cb8f30"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "send-alert.ps1 line 17: the DEFAULT subject; no registry entry matches it, so the resolver contract cannot see it; d625a4 named the defect on 09-12 and was archived open by the 2026-09-17 reset",
+   "evidence": "2 fire-days, two unrelated residuals (1139c4 Sam's rounding, cb8f30 Hy-Vee ids) keyed to one generic type",
+   "residual": "every residual minted without -Subject lands here and scores as a RETURN of an unrelated close",
+   "projected_fire_days_per_30": [
+    1,
+    3
+   ],
+   "family": "F5",
+   "triage_created": true,
+   "how_classified": "special"
+  },
+  {
+   "type": "grocery pipeline could not push",
+   "subject": "Grocery pipeline could not push - 2026-09-21",
+   "registry_id": "pipeline-could-not-push",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 2,
+   "alerts": 2,
+   "returns": 1,
+   "first": "2026-09-19",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-09-19-c7c57d",
+    "2026-09-21-5ac200"
+   ],
+   "classification": "CLOSED",
+   "prevents": "instance",
+   "cite": "e291a1 (plan-2026-09-21-3, build-sams-deals density refusal) for 09-21; 748967ad4 (rc-4 tier) for the live-red-blocks-every-push shape",
+   "evidence": "fired 09-19 and 09-21",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    2
+   ],
+   "family": "F3",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "daily pipeline ran but did not commit commit step or task changed around",
+   "subject": "Daily pipeline ran but did not commit (2026-08-24) - commit step or task changed around 08-19",
+   "registry_id": "pipeline-did-not-commit",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-08-24",
+   "last": "2026-08-24",
+   "queue_ids": [
+    "2026-08-24-c1935a"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites fd929d65, 9f609468 (verified on origin/main)",
+   "evidence": "resolved: 2026-08-24-c1935a",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "ingredient stores disagree hard finding s",
+   "subject": "Ingredient stores disagree: 1 hard finding(s)",
+   "registry_id": "ingredient-stores-disagree",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-08-27",
+   "last": "2026-08-27",
+   "queue_ids": [
+    "2026-08-27-efd23d"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites 6acea050 (verified on origin/main)",
+   "evidence": "resolved: 2026-08-27-efd23d",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "needs brad loaded chicken and potato casserole serves full paid recipe to anonymous visitors",
+   "subject": "NEEDS-BRAD: loaded-chicken-and-potato-casserole serves full paid recipe to anonymous visitors",
+   "registry_id": "needs-brad",
+   "registry_class": "page",
+   "resolver": "ruling:open_questions_for_brad",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-08-27",
+   "last": "2026-08-27",
+   "queue_ids": [
+    "2026-08-27-ab1d8f"
+   ],
+   "classification": "RULING",
+   "prevents": "n/a (a decision)",
+   "cite": "ruled and closed: 2026-08-27-ab1d8f",
+   "evidence": "a one-shot escalation to Brad",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "recipe index macro copy stale on recipes spec stat vs recipes db per serving no guard covers it",
+   "subject": "Recipe index macro copy stale on 126 recipes - spec.stat vs recipes-db per_serving, no guard covers it",
+   "registry_id": "macro-copy-stale",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-08-27",
+   "last": "2026-08-27",
+   "queue_ids": [
+    "2026-08-27-780dc9"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-08-27-780dc9",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "recipe spec contradictions got worse",
+   "subject": "Recipe spec contradictions got worse",
+   "registry_id": "spec-contradictions",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-08-28",
+   "last": "2026-08-28",
+   "queue_ids": [
+    "2026-08-28-4f0038"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites 0f1a70ae (verified on origin/main)",
+   "evidence": "resolved: 2026-08-28-4f0038",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "grocery a commodity is in no category no filter review",
+   "subject": "Grocery: a commodity is in no category (no filter) - review",
+   "registry_id": "no-category",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-08-29",
+   "last": "2026-08-29",
+   "queue_ids": [
+    "2026-08-29-97443c"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites 6acea050 (verified on origin/main)",
+   "evidence": "resolved: 2026-08-29-97443c",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "grocery pipeline feed did not truly refresh",
+   "subject": "Grocery pipeline: feed did not truly refresh - 2026-08-22",
+   "registry_id": "feed-not-refreshed",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-08-29",
+   "last": "2026-08-29",
+   "queue_ids": [
+    "2026-08-22-4d0937"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-08-22-4d0937",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "needs brad fajita seasoning pantry packet recorded as oz g every store on the board sells oz",
+   "subject": "NEEDS-BRAD: fajita-seasoning pantry packet recorded as 1oz/28g; every store on the board sells 1.12-1.27oz",
+   "registry_id": "needs-brad",
+   "registry_class": "page",
+   "resolver": "ruling:open_questions_for_brad",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-08-29",
+   "last": "2026-08-29",
+   "queue_ids": [
+    "2026-08-29-8399c6"
+   ],
+   "classification": "RULING",
+   "prevents": "n/a (a decision)",
+   "cite": "ruled and closed: 2026-08-29-8399c6",
+   "evidence": "a one-shot escalation to Brad",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "needs brad the paywall leak has a live generator of were freed after the rotation guard",
+   "subject": "NEEDS-BRAD: the paywall leak has a live generator - 3 of 22 were freed AFTER the 2026-08-01 rotation guard",
+   "registry_id": "needs-brad",
+   "registry_class": "page",
+   "resolver": "ruling:open_questions_for_brad",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-08-29",
+   "last": "2026-08-29",
+   "queue_ids": [
+    "2026-08-29-e7bb0b"
+   ],
+   "classification": "RULING",
+   "prevents": "n/a (a decision)",
+   "cite": "ruled and closed: 2026-08-29-e7bb0b",
+   "evidence": "a one-shot escalation to Brad",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "grocery who runs the attended walmart sams full pull blocks queue items",
+   "subject": "Grocery: who runs the attended Walmart/Sams full pull? (blocks 3 queue items)",
+   "registry_id": "who-runs",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-08-30",
+   "last": "2026-08-30",
+   "queue_ids": [
+    "2026-08-30-57b569"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-08-30-57b569",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "grocery your call do box and jug wine formats count as wine both crowns move",
+   "subject": "Grocery: your call - do box and jug wine formats count as wine? (both crowns move)",
+   "registry_id": "grocery-your-call",
+   "registry_class": "page",
+   "resolver": "ruling:open_questions_for_brad",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-08-30",
+   "last": "2026-08-30",
+   "queue_ids": [
+    "2026-08-30-855daa"
+   ],
+   "classification": "RULING",
+   "prevents": "n/a (a decision)",
+   "cite": "ruled and closed: 2026-08-30-855daa",
+   "evidence": "a one-shot escalation to Brad",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "recipes hunt ten w is live without post publish review",
+   "subject": "Recipes: hunt-2026-08-27-ten-w1 is LIVE without post-publish-review",
+   "registry_id": "live-without-review",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-08-30",
+   "last": "2026-08-30",
+   "queue_ids": [
+    "2026-08-30-fb0ab4"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-08-30-fb0ab4",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "board decision a product the store carries but is out of today keep the cell or drop it",
+   "subject": "Board decision: a product the store CARRIES but is out of today - keep the cell or drop it?",
+   "registry_id": "board-decision",
+   "registry_class": "page",
+   "resolver": "ruling:open_questions_for_brad",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-01",
+   "last": "2026-09-01",
+   "queue_ids": [
+    "2026-09-01-59c982"
+   ],
+   "classification": "RULING",
+   "prevents": "n/a (a decision)",
+   "cite": "ruled and closed: 2026-09-01-59c982",
+   "evidence": "a one-shot escalation to Brad",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "correction site is up earlier site down alert was wrong i tested the apex not www",
+   "subject": "CORRECTION: site is UP. Earlier SITE DOWN alert was wrong (I tested the apex, not www)",
+   "registry_id": "correction",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-01",
+   "last": "2026-09-01",
+   "queue_ids": [
+    "2026-09-01-6e2d01"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-01-6e2d01",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "site down thriftycrew com returning cloudflare sitewide error",
+   "subject": "SITE DOWN: thriftycrew.com returning Cloudflare 403 sitewide (Error 1000)",
+   "registry_id": "site-down",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-01",
+   "last": "2026-09-01",
+   "queue_ids": [
+    "2026-09-01-933bbc"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-01-933bbc",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "two built recipes need a ship or drop ruling closes the stalled batch ledger",
+   "subject": "Two built recipes need a ship-or-drop ruling (closes the stalled batch ledger)",
+   "registry_id": "ship-or-drop-ruling",
+   "registry_class": "page",
+   "resolver": "ruling:open_questions_for_brad",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-01",
+   "last": "2026-09-01",
+   "queue_ids": [
+    "2026-09-01-e982a5"
+   ],
+   "classification": "RULING",
+   "prevents": "n/a (a decision)",
+   "cite": "ruled and closed: 2026-09-01-e982a5",
+   "evidence": "a one-shot escalation to Brad",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "twelve live cards render the whole method as step one",
+   "subject": "Make It renders as a single step on 12 paid cards, and the writer path can still produce it",
+   "registry_id": "make-it-single-step",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-02",
+   "last": "2026-09-02",
+   "queue_ids": [
+    "2026-09-02-8647f1"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-02-8647f1",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "serving scaler leaves the unit word singular or plural as authored while the number moves tablespoon cups",
+   "subject": "Serving scaler leaves the unit word singular or plural as authored while the number moves (2 tablespoon, 1 cups)",
+   "registry_id": "scaler-unit-word",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-03",
+   "last": "2026-09-03",
+   "queue_ids": [
+    "2026-09-03-539ff0"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-03-539ff0",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "board json edge did not pick up today s push",
+   "subject": "board.json edge did not pick up today's push - 2026-09-04",
+   "registry_id": "board-edge-stale",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-04",
+   "last": "2026-09-04",
+   "queue_ids": [
+    "2026-09-04-4ec26c"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-04-4ec26c",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "recipe pool the dedup evidence has gone stale",
+   "subject": "Recipe pool: the dedup evidence has gone stale",
+   "registry_id": "dedup-evidence-stale",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-04",
+   "last": "2026-09-04",
+   "queue_ids": [
+    "2026-09-04-bf1642"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites bb8de6a0 (verified on origin/main)",
+   "evidence": "resolved: 2026-09-04-bf1642",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "grocery triage board is green and published one decision now pages daily",
+   "subject": "Grocery triage 2026-09-06: board is green and published; one decision now pages daily",
+   "registry_id": "triage-report",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-06",
+   "last": "2026-09-06",
+   "queue_ids": [
+    "2026-09-06-2e331b"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-06-2e331b",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "your call the memory store s private backup remote or a reviewed exception path in the security guard",
+   "subject": "Your call: the memory store's private backup remote, or a reviewed-exception path in the security guard",
+   "registry_id": "your-call",
+   "registry_class": "page",
+   "resolver": "ruling:open_questions_for_brad",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-07",
+   "last": "2026-09-07",
+   "queue_ids": [
+    "2026-09-07-285b1f"
+   ],
+   "classification": "RULING",
+   "prevents": "n/a (a decision)",
+   "cite": "ruled and closed: 2026-09-07-285b1f",
+   "evidence": "a one-shot escalation to Brad",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "daily chain left served files uncommitted",
+   "subject": "Daily chain left served files uncommitted - 2026-09-09",
+   "registry_id": "served-files-uncommitted",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-09",
+   "last": "2026-09-09",
+   "queue_ids": [
+    "2026-09-09-f0b5f2"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-09-f0b5f2",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "needs elevation enable the task scheduler operational log one command",
+   "subject": "Needs elevation: enable the Task Scheduler operational log (one command)",
+   "registry_id": "needs-elevation",
+   "registry_class": "page",
+   "resolver": "ruling:open_questions_for_brad",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-09",
+   "last": "2026-09-09",
+   "queue_ids": [
+    "2026-09-09-d09e89"
+   ],
+   "classification": "RULING",
+   "prevents": "n/a (a decision)",
+   "cite": "ruled and closed: 2026-09-09-d09e89",
+   "evidence": "a one-shot escalation to Brad",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "brain digest the night the weakest link and what is waiting",
+   "subject": "Brain digest: the night, the weakest link, and what is waiting",
+   "registry_id": "brain-digest",
+   "registry_class": "digest",
+   "resolver": "digest",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-04356a"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-10-04356a",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "price surfaces disagree with the manifest",
+   "subject": "Price surfaces disagree with the manifest",
+   "registry_id": "surfaces-disagree",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-1fa212"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites a3952ca0f (verified on origin/main)",
+   "evidence": "resolved: 2026-09-10-1fa212",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage finding family fare offers and circular paging read one page page is ignored by freshop",
+   "subject": "Triage finding: Family Fare offers and circular paging read one page, page= is ignored by Freshop",
+   "registry_id": "triage-finding",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-fa6ad6"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites 8253ded82 (verified on origin/main)",
+   "evidence": "resolved: 2026-09-10-fa6ad6",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage finding source domains record lost of concurrent writes and refused a push",
+   "subject": "Triage finding: source-domains -Record lost 1 of 8 concurrent writes and refused a push",
+   "registry_id": "triage-finding",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-c069fa"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites 9f3ca3cbd, 7107ce79e (verified on origin/main)",
+   "evidence": "resolved: 2026-09-10-c069fa",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage finding test auditors is red since aad the hy vee retired identity sweep fires on that commit s own must fire fixture",
+   "subject": "Triage finding: test-auditors is red since a77ad8734, the Hy-Vee retired-identity sweep fires on that commit's own must-fire fixture",
+   "registry_id": "triage-finding",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-4ac6ae"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-10-4ac6ae",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage finding the pipeline committers own path lists disagree with lib bot paths ps so the scope hook refuses their commits",
+   "subject": "Triage finding: the pipeline committers' own path lists disagree with lib/bot-paths.ps1, so the scope hook refuses their commits",
+   "registry_id": "triage-finding",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-47eafb"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-10-47eafb",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage residual a day with no sign in until after a task s catch up window is still lost and nothing reports it the next day",
+   "subject": "Triage residual: a day with no sign-in until after a task's catch-up window is still lost, and nothing reports it the next day",
+   "registry_id": "triage-residual",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-272117"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-10-272117",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage residual a foreign edit anywhere under grocery out still refuses the whole pipeline commit",
+   "subject": "Triage residual: a foreign edit anywhere under grocery/out still refuses the whole pipeline commit",
+   "registry_id": "triage-residual",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-3a9de4"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites bcf0ed435 (verified on origin/main)",
+   "evidence": "resolved: 2026-09-10-3a9de4",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage residual a session edit made during a pipeline run is still swept into that run s commit",
+   "subject": "Triage residual: a session edit made during a pipeline run is still swept into that run's commit",
+   "registry_id": "triage-residual",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-d67882"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset (Brad: ignore every past alert); no plan names it",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage residual of tc scheduled tasks are one shot interactive the reboot window miss is still open",
+   "subject": "Triage residual: 6 of 8 TC scheduled tasks are one-shot Interactive, the reboot-window miss is still open",
+   "registry_id": "triage-residual",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-2b79d3"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites bcf0ed435 (verified on origin/main)",
+   "evidence": "resolved: 2026-09-10-2b79d3",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage residual sam s gallon jugs on weight priced commodities still price off a cent rounded quotient size",
+   "subject": "Triage residual: Sam's gallon jugs on weight-priced commodities still price off a cent-rounded quotient size",
+   "registry_id": "triage-residual",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-c8eb72"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset (Brad: ignore every past alert); no plan names it",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage residual the fixture register marker cannot reach guard selftest fixtures",
+   "subject": "Triage residual: the fixture-register marker cannot reach guard -SelfTest fixtures",
+   "registry_id": "triage-residual",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-483a9c"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites bcf0ed435 (verified on origin/main)",
+   "evidence": "resolved: 2026-09-10-483a9c",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage residual the foreign held rule also holds back a non committing pipeline run s writes and graph nightly passes no start snapshot",
+   "subject": "Triage residual: the foreign-held rule also holds back a non-committing pipeline run's writes, and graph nightly passes no start snapshot",
+   "registry_id": "triage-residual",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-a86b87"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset (Brad: ignore every past alert); no plan names it",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage residual two product ad lines have no engine handler of baker s rows match the shape",
+   "subject": "Triage residual: two-product ad lines have no engine handler, 40 of 146 Baker's rows match the shape",
+   "registry_id": "triage-residual",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-10",
+   "last": "2026-09-10",
+   "queue_ids": [
+    "2026-09-10-582032"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset (Brad: ignore every past alert); no plan names it",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage finding the pre push gate cannot land a push under the push herd",
+   "subject": "Triage finding: the pre-push gate cannot land a push under the push herd",
+   "registry_id": "triage-finding",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-11",
+   "last": "2026-09-11",
+   "queue_ids": [
+    "2026-09-11-c4a68f"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset (Brad: ignore every past alert); no plan names it",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage residual family fare ad rows carry no shelf path and the offers loop is unmeasured from faad",
+   "subject": "Triage residual: Family Fare ad rows carry no shelf path, and the offers loop is unmeasured (from 2026-09-10-fa6ad6)",
+   "registry_id": "triage-residual",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-11",
+   "last": "2026-09-11",
+   "queue_ids": [
+    "2026-09-11-b09671"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset (Brad: ignore every past alert); no plan names it",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage residual one price event mints two sanity keys and the verified outlier path has no wow twin",
+   "subject": "Triage residual: one price event mints two sanity keys, and the verified-outlier path has no wow twin",
+   "registry_id": "triage-residual",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-11",
+   "last": "2026-09-11",
+   "queue_ids": [
+    "2026-09-11-9fbafc"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset (Brad: ignore every past alert); no plan names it",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage residual source text sweeps outside grocery still read fixture text",
+   "subject": "Triage residual: source-text sweeps outside grocery still read fixture text",
+   "registry_id": "triage-residual",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-11",
+   "last": "2026-09-11",
+   "queue_ids": [
+    "2026-09-11-935ce3"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset (Brad: ignore every past alert); no plan names it",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage residual store abbreviated wrong products at the six stores with no shelf path from b",
+   "subject": "Triage residual: store-abbreviated wrong products at the six stores with no shelf path (from 2026-09-11-62b248)",
+   "registry_id": "triage-residual",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-11",
+   "last": "2026-09-11",
+   "queue_ids": [
+    "2026-09-11-bfc110"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset (Brad: ignore every past alert); no plan names it",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "triage residual the knowledge store judgement ratchets page a review every growing day",
+   "subject": "Triage residual: the knowledge store judgement ratchets page a review every growing day",
+   "registry_id": "triage-residual",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-11",
+   "last": "2026-09-11",
+   "queue_ids": [
+    "2026-09-11-36f57d"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset (Brad: ignore every past alert); no plan names it",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "semantic sidecar is down and would not restart",
+   "subject": "Semantic sidecar is down and would not restart",
+   "registry_id": "sidecar-down",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-12",
+   "last": "2026-09-12",
+   "queue_ids": [
+    "2026-09-12-139f58"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset; no close recorded",
+   "evidence": "sidecar down and would not restart",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "triage finding a residual minted with no subject keys the queue on grocery pipeline alert",
+   "subject": "Triage finding: a residual minted with no -Subject keys the queue on 'Grocery pipeline alert'",
+   "registry_id": "triage-finding",
+   "registry_class": "review",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-12",
+   "last": "2026-09-12",
+   "queue_ids": [
+    "2026-09-12-d625a4"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset; no plan names it",
+   "evidence": "a residual minted with no -Subject keys to send-alert's default subject 'Grocery pipeline alert', which is unregistered",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F5",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "triage re open the bot paths ownership fix raises the cross module ratchet and blocks every push",
+   "subject": "Triage re-open: the bot-paths ownership fix raises the cross-module ratchet and blocks every push",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-12",
+   "last": "2026-09-12",
+   "queue_ids": [
+    "2026-09-12-915846"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset (Brad: ignore every past alert); no plan names it",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "ops an agent prompt is not backed up",
+   "subject": "Ops: an agent prompt is not backed up",
+   "registry_id": "prompt-not-backed-up",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-14",
+   "last": "2026-09-14",
+   "queue_ids": [
+    "2026-09-14-2bb198"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "archived open by the 2026-09-17 reset; 0a53a0452 (09-19) backed up one prompt, not verified to be this one",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "baker s ad list brand only offers name tracked goods through multi commodity brands residual of ee",
+   "subject": "Baker's ad list: 15 brand-only offers name tracked goods through multi-commodity brands (residual of 2026-09-18-2524ee)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-18",
+   "last": "2026-09-18",
+   "queue_ids": [
+    "2026-09-18-ceab00"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "ruling q-2026-09-18-4 (B) implemented, deviated, in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main) (3ab82b8a7)",
+   "evidence": null,
+   "residual": "brand-only offers stay unpriced by design",
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F5",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "baker s ad list brand only offers of tracked goods are unrouted e g pepsi tide doritos swanson",
+   "subject": "Baker's ad list: brand-only offers of tracked goods are unrouted (e.g. Pepsi, Tide, Doritos, Swanson)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-18",
+   "last": "2026-09-18",
+   "queue_ids": [
+    "2026-09-18-2524ee"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites bec35ff4e (verified on origin/main)",
+   "evidence": "resolved: 2026-09-18-2524ee",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "band censorship ratchet vs two new baker s cells from the ad asks tortillas corn on flour breakfast sandwiches",
+   "subject": "Band-censorship ratchet 31 vs 29: two new Baker's cells from the ad asks (tortillas corn-on-flour, breakfast-sandwiches)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-18",
+   "last": "2026-09-18",
+   "queue_ids": [
+    "2026-09-18-b1d8e3"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites 98ce9f136 (verified on origin/main)",
+   "evidence": "resolved: 2026-09-18-b1d8e3",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "grocery beverage class absent on non drink commodities in five display buckets residual of baa",
+   "subject": "Grocery: beverage class absent on 241 non-drink commodities in five display buckets (residual of 2026-09-18-55b7aa)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-18",
+   "last": "2026-09-18",
+   "queue_ids": [
+    "2026-09-18-a0c785"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "needs-more-time with no dated owner ('next money lane with a routing corpus')",
+   "evidence": "0 hits today over 1,284 cells, 1 historical occurrence",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F4",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery beverage wrong class guard still blind on non drink snacks drinks commodities residual of fba",
+   "subject": "Grocery: beverage wrong-class guard still blind on 20 non-drink Snacks & Drinks commodities (residual of 2026-09-18-f90ba6)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-18",
+   "last": "2026-09-18",
+   "queue_ids": [
+    "2026-09-18-55b7aa"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites bec35ff4e (verified on origin/main)",
+   "evidence": "resolved: 2026-09-18-55b7aa",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "grocery buttermilk claims donuts biscuits syrup and dressing by a flavour word found closing bde",
+   "subject": "Grocery: buttermilk claims donuts, biscuits, syrup and dressing by a flavour word (found closing 2026-09-18-b1d8e3)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-18",
+   "last": "2026-09-18",
+   "queue_ids": [
+    "2026-09-18-e6977b"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites bec35ff4e (verified on origin/main)",
+   "evidence": "resolved: 2026-09-18-e6977b",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "grocery daily pipeline did not run on or residual of deec",
+   "subject": "Grocery: daily pipeline did not run on 2026-09-15 or 2026-09-16 (residual of 2026-09-18-de39ec)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-18",
+   "last": "2026-09-18",
+   "queue_ids": [
+    "2026-09-18-8491bf"
+   ],
+   "classification": "RULING",
+   "prevents": null,
+   "cite": "ruling Q4-tasks-dead-after-reboot (options A-D, plan-2026-09-18)",
+   "evidence": "0 recurrences in 6 days; the absence detector cannot see the class until ruled",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F4",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "ops test auditors pre push leg still loses the ref race when a rebase moves an input residual of push livelock",
+   "subject": "Ops: test-auditors pre-push leg still loses the ref race when a rebase moves an input (residual of push-livelock)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-18",
+   "last": "2026-09-18",
+   "queue_ids": [
+    "2026-09-18-1139a0"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites 0a9a673bc (verified on origin/main)",
+   "evidence": "resolved: 2026-09-18-1139a0",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "board verification defect rate is above the last measured",
+   "subject": "Board verification: defect rate 37.1% is above the last measured 18.2%",
+   "registry_id": "verify-rate-above-last",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-19",
+   "last": "2026-09-19",
+   "queue_ids": [
+    "2026-09-19-641ec6"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-19-641ec6",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "grocery a blocking invariant can no longer fail test guards weekly",
+   "subject": "Grocery: a BLOCKING invariant can no longer fail (test-guards weekly)",
+   "registry_id": "invariant-cannot-fail",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-19",
+   "last": "2026-09-19",
+   "queue_ids": [
+    "2026-09-19-a1c25d"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-19-a1c25d",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "grocery board verification residuals after ec aging channel not cheapest fareway ranges contested routing sam s pack total",
+   "subject": "Grocery: board-verification residuals after 2026-09-19 (641ec6) - aging, channel, not-cheapest, Fareway ranges, contested routing, Sam's pack total",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-19",
+   "last": "2026-09-19",
+   "queue_ids": [
+    "2026-09-19-dc1b5b"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "dated re-measure 2026-10-03 with the rubric-stamped recorder; multipack rubric waits on q-2026-09-19-multipack",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F2",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery publish failed",
+   "subject": "Grocery publish FAILED (rc=1) - 2026-09-19",
+   "registry_id": "publish-failed",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-19",
+   "last": "2026-09-19",
+   "queue_ids": [
+    "2026-09-19-bb10f1"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "c3b64c4d6 (ca2591 recipe-overlay self-test) + F2 rehearsal",
+   "evidence": "RCA: the recipe-overlay throw at the 17:23 publish",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    1
+   ],
+   "family": "F2",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "live recipe s with an ingredient omaha does not carry",
+   "subject": "Live recipe(s) with an ingredient Omaha does not carry",
+   "registry_id": "ingredient-not-carried",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-19",
+   "last": "2026-09-19",
+   "queue_ids": [
+    "2026-09-19-0b2f1e"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites 165949e80 (verified on origin/main)",
+   "evidence": "resolved: 2026-09-19-0b2f1e",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": false,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "ops an emitter grades the tree it runs from not production bd residual",
+   "subject": "Ops: an emitter grades the tree it runs from, not production (b1d371 residual)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-19",
+   "last": "2026-09-19",
+   "queue_ids": [
+    "2026-09-19-8a3090"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "8403f27b9 (every alert names the tree it graded; a linked-worktree automated send is refused)",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F1",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "cost flags alert cannot tell a live recipe from a held one the split belongs in the engine",
+   "subject": "cost-flags alert cannot tell a LIVE recipe from a HELD one; the split belongs in the engine",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-20",
+   "last": "2026-09-20",
+   "queue_ids": [
+    "2026-09-20-6c14f6"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites 165949e80 (verified on origin/main)",
+   "evidence": "resolved: 2026-09-20-6c14f6",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "grocery page held coverage",
+   "subject": "Grocery page HELD (coverage) - 2026-09-20",
+   "registry_id": "page-held-coverage",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-20",
+   "last": "2026-09-20",
+   "queue_ids": [
+    "2026-09-20-417020"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "2660cd919 (a25dc0: a match baseline must be committed with its rules, refused at push)",
+   "evidence": "RCA: 417020 was an accept on disk never committed",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F1",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery tile links record a price the board no longer publishes sam s cells cannot be relinked at all ac residual",
+   "subject": "Grocery: 198 tile links record a price the board no longer publishes; 81 Sam's cells cannot be relinked at all (37ac63 residual)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-20",
+   "last": "2026-09-20",
+   "queue_ids": [
+    "2026-09-20-bec597"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "planned in plan-2 batch 2, then marked needs-more-time by plan-2026-09-22-5; no later plan names it",
+   "evidence": "198 tile links record a price the board no longer publishes; 81 Sam's cells cannot be relinked",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F1",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "recipe overlay has no self test and nothing pages on recipe price source unplaced",
+   "subject": "recipe-overlay has no self-test and nothing pages on recipe_price_source.unplaced",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-20",
+   "last": "2026-09-20",
+   "queue_ids": [
+    "2026-09-20-ca2591"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "c3b64c4d6",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F2",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "wave preaudit end to end clean twin is red at head one spec vs engine cost drift",
+   "subject": "wave-preaudit END-TO-END clean twin is red at HEAD (one spec vs engine cost drift)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-20",
+   "last": "2026-09-20",
+   "queue_ids": [
+    "2026-09-20-588caa"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "close note cites 413c25085 (verified on origin/main)",
+   "evidence": "resolved: 2026-09-20-588caa",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "weekly lane residual three automations that fail in their own right which resume grace does not touch",
+   "subject": "Weekly lane residual: three automations that fail in their own right, which RESUME-GRACE does not touch",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-20",
+   "last": "2026-09-20",
+   "queue_ids": [
+    "2026-09-20-1b8544"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "3005162d5 + 0879dd53f (every TC task's exit code is real)",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F4",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery a rebase or no verify commit can land matching rules the committed baseline does not cover and nothing refuses it at push fee residual",
+   "subject": "Grocery: a rebase or --no-verify commit can land matching rules the committed baseline does not cover, and nothing refuses it at push (6f90ee residual)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-21",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-09-21-a25dc0"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "2660cd919",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F1",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery board cells quarantined",
+   "subject": "Grocery: board cells quarantined - 2026-09-21",
+   "registry_id": "board-cells-quarantined",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-21",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-09-21-de4f72"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "6b17b1 derived bands (ca06ee40f, 5ed54fa82) and d16398 in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main)",
+   "evidence": "the quarantine is the designed replacement for a whole-board hold; one page per distinct cell set",
+   "residual": "each new bad cell pages once and is owned per event by the triage lane",
+   "projected_fire_days_per_30": [
+    2,
+    10
+   ],
+   "family": "F3",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery delegated guard audits still hold the whole board teach each to name its cells per cell quarantine residual",
+   "subject": "Grocery: 8 delegated guard audits still hold the whole board - teach each to name its cells (per-cell quarantine residual)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-21",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-09-21-d16398"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "HOLD SCOPE contract e3bbb4db5 in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main)",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F3",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery of search termed commodities have no board cell after the store fetch fix live recipes affected a band refused carried sumac and an un askable cheaper hy vee wild rice",
+   "subject": "Grocery: 20 of 577 search-termed commodities have no board cell after the store-fetch fix (0 live recipes affected); a band-refused CARRIED sumac and an un-askable cheaper Hy-Vee wild rice",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-21",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-09-21-149497"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "sumac half rides 6b17b1, wild-rice half rides cb8f30 (both batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main))",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F4",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery price flag verification residuals pending drain unmeasured live wrong prices under both bars never flagged batch alert still carries multibuy plan",
+   "subject": "Grocery: price-flag verification residuals - pending drain unmeasured, live wrong prices under both bars never flagged, batch alert still carries multibuy (plan-2026-09-21-8)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-21",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-09-21-4b973e"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "R1 dated measurement 2026-09-28 by its own plan",
+   "evidence": null,
+   "residual": "R2-R4 are 'designs owned by the weekly lane' with no plan",
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F5",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery price history keeps a second record of each board that a rebuild does not rewrite eae residual",
+   "subject": "Grocery: price-history keeps a second record of each board that a rebuild does not rewrite (57e5ae residual)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-21",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-09-21-274e4b"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "planned in plan-2 batch 2, then marked needs-more-time by plan-2026-09-22-5; no later plan names it",
+   "evidence": "price-history disagrees with the board on 71 of 7,401 commodity-weeks; 57e5ae (18 unexplained price moves) was its symptom",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F1",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery price moves cannot be explained because price history disagrees with the previous board and price flags still fire most days fccb residual",
+   "subject": "Grocery: 18 price moves cannot be explained because price-history disagrees with the previous board, and price flags still fire most days (fccb69 residual)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-21",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-09-21-57e5ae"
+   ],
+   "classification": "CLOSED",
+   "prevents": "unassessed (one-shot key)",
+   "cite": "closed with no commit cited in its close note (verified none on origin/main)",
+   "evidence": "resolved: 2026-09-21-57e5ae",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": null,
+   "triage_created": true,
+   "how_classified": "mechanical"
+  },
+  {
+   "type": "grocery resolved queue items were archived inside the day return window so the return gate under counts prior closes fccb finding",
+   "subject": "Grocery: resolved queue items were archived inside the 30-day RETURN window, so the RETURN gate under-counts prior closes (fccb69 finding)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-21",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-09-21-594c27"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "c74aa821b",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F1",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery sam s began printing unit prices per fluid ounce us gallon us gl on capture rows refused as unknown unit found by ea",
+   "subject": "Grocery: Sam's began printing unit prices per 'fluid ounce (us)' / 'gallon (us)' / 'gl' on 2026-09-21 - 55 capture rows refused as unknown unit (found by 2026-09-21-e291a1)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-21",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-09-21-dca1a1"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "Sam's unit spellings + per-piece guard, deviated, in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main)",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F4",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery sam s derived sizes the density band cannot see oil jugs off rows with no referent walmart builder not refusing residual of ea",
+   "subject": "Grocery: Sam's derived sizes the density band cannot see - 4 oil jugs 3-4.5% off, 141 rows with no referent, Walmart builder not refusing (residual of 2026-09-21-e291a1)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-21",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-09-21-85c3b7"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "e8da8d9e6 in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main)",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F1",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery the live board failed a watcher watchers intact",
+   "subject": "Grocery: the live board failed a watcher (watchers intact)",
+   "registry_id": "test-auditors-live-red",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-21",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-09-21-e291a1"
+   ],
+   "classification": "CLOSED",
+   "prevents": "instance",
+   "cite": "e291a1 (plan-2026-09-21-3: build-sams-deals refuses a density-conflict row); Walmart twin 85c3b7 in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main)",
+   "evidence": "fired 09-21",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    2
+   ],
+   "family": "F1",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery vegetable oil sam s quarantined band floor refuses a consistent canola row da residual",
+   "subject": "Grocery: vegetable-oil Sam's quarantined - band floor refuses a consistent canola row (da5011 residual)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-21",
+   "last": "2026-09-21",
+   "queue_ids": [
+    "2026-09-21-6b17b1"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "ca06ee40f, 5ed54fa82 in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main)",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F5",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "chain rehearsal residual a failure that needs same morning data is still first met in production f",
+   "subject": "Chain rehearsal residual: a failure that needs same-morning data is still first met in production (F2)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-22",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-22-20fecf"
+   ],
+   "classification": "UNOWNED",
+   "prevents": null,
+   "cite": "weekly queue item only; the F2 rehearsal plan names it as the residual owner (67eedddd9) but no plan fixes it",
+   "evidence": "RCA: 1 of 8 change-induced chain failures needs same-morning data a rehearsal cannot have",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F2",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery capture watchdog browser capture missing today",
+   "subject": "Grocery capture watchdog: BROWSER CAPTURE MISSING TODAY 2026-09-22",
+   "registry_id": "watchdog-browser-capture-missing-today",
+   "registry_class": "page",
+   "resolver": "unassigned:2026-09-22",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-22",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-22-2000e1"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "66f5d7840 + 3005162d5 (the check grades against the producer slot and closes it at 14:15)",
+   "evidence": "the false page (MISSING at 10:30 for captures that landed 13:09-13:15) is closed. Under the parent key the same condition fired on 09-19 and 09-20 as well (RCA: 2 of 3 proven)",
+   "residual": "a TRUE miss has resolver unassigned:2026-09-22 (a wall or CAPTCHA needs the attended browser); plan-8 says '0 fires each in 30 days', which counts only the new key",
+   "projected_fire_days_per_30": [
+    0,
+    2
+   ],
+   "family": "F4",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery capture watchdog computed but not shipped",
+   "subject": "Grocery capture watchdog: COMPUTED BUT NOT SHIPPED 2026-09-22",
+   "registry_id": "watchdog-computed-but-not-shipped",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-22",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-22-972de2"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "ba13faba0 + a095f76e0 (972de2: a shipped post with an unshipped board is named and paged)",
+   "evidence": "fired 09-22",
+   "residual": "81d955 (post only after the edge serves the board) is in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main)",
+   "projected_fire_days_per_30": [
+    0,
+    1
+   ],
+   "family": "F4",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery capture watchdog run record",
+   "subject": "Grocery capture watchdog: RUN RECORD 2026-09-22",
+   "registry_id": "watchdog-run-record",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-22",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-22-7c932a"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class, partial",
+   "cite": "superseded by 148d78 (ba13faba0); see capture-watchdog",
+   "evidence": "fired 09-22 for the same condition as commit-refused",
+   "residual": "UNOWNED double page: RUN RECORD repeats the failing lane's own page",
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F1",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery matching soundness new contested",
+   "subject": "Grocery matching soundness: NEW CONTESTED",
+   "registry_id": "match-soundness-new-contested",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-22",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-22-2dae07"
+   ],
+   "classification": "DIGEST-ONLY",
+   "prevents": null,
+   "cite": "none: resolver digest, in no plan (2dae07 closed no-code-change: 'the cadence of arrival reviews is the resolver contract item')",
+   "evidence": "first fire under the new key 09-22; its history is the parent's 12 NEW-CONTESTED days",
+   "residual": "projection carried on the parent row",
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F5",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery price disagreement hummus at sam s club",
+   "subject": "Grocery: price disagreement - Hummus at Sam's Club",
+   "registry_id": "price-disagreement",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-22",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-22-a09096"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "plan-2026-09-22 item deviated, no shipped commit; the parity arm 43e8c0 and the or-size reader (232ceb39f) are in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main)",
+   "evidence": "the verifier's first live verdict was a pack-count basis defect, not a price change",
+   "residual": "each disagreement is its own type key, so recurrence never scores as a RETURN",
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F1",
+   "triage_created": false,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery price disagreement yellow bell pepper at family fare",
+   "subject": "Grocery: price disagreement - Yellow Bell Pepper at Family Fare",
+   "registry_id": "price-disagreement",
+   "registry_class": "page",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-22",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-22-a2af45"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "ruling A implemented in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main)",
+   "evidence": "a ruling wearing a wrong-price label (RCA)",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F1",
+   "triage_created": false,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery size strings the two per unit readers still disagree on a residual",
+   "subject": "Grocery: 5 size strings the two per-unit readers still disagree on (a09096 residual)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-22",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-22-43e8c0"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "the two size readers agree and the parity arm runs daily, done in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main)",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F1",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery store registry drift hardcoded store list",
+   "subject": "Grocery: store-registry drift: hardcoded store list",
+   "registry_id": "store-registry-hardcoded-store-list",
+   "registry_class": "review",
+   "resolver": "digest",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-22",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-22-175249"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "2bd3a6fff (scan at push)",
+   "evidence": "fired 09-22 (175249)",
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F2",
+   "triage_created": false,
+   "how_classified": "type-rule"
+  },
+  {
+   "type": "grocery the daily ship still writes the post before the board it points at de residual",
+   "subject": "Grocery: the daily ship still writes the post before the board it points at (972de2 residual)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-22",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-22-81d955"
+   ],
+   "classification": "IN FLIGHT",
+   "prevents": null,
+   "cite": "post deferred until the edge serves the board, done in batch 2 (plan-2026-09-22-5, worktree agent-a8dca88c6b2cde9e4, head e3bbb4db5, NOT on origin/main)",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F2",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "grocery verify bulk edit s line ending invariant has no production call site d residual",
+   "subject": "Grocery: verify-bulk-edit's line-ending invariant has no production call site (148d78 residual)",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-22",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-22-c4495c"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "a80a45758",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F4",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "ops the commit msg store citation hook resolves memory in only one of the two stores and refuses from",
+   "subject": "Ops: the commit-msg store-citation hook resolves memory: in only one of the two stores, and REFUSES from 2026-09-25",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-22",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-22-7d991c"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class",
+   "cite": "b1fa54f65",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F1",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  },
+  {
+   "type": "weekly lane residual resolver contract worklist unassigned types and the browser capture slot leftovers",
+   "subject": "Weekly lane residual: resolver-contract worklist (185 unassigned types) and the browser-capture slot leftovers",
+   "registry_id": null,
+   "registry_class": "review",
+   "resolver": "UNREGISTERED",
+   "fire_days": 1,
+   "alerts": 1,
+   "returns": 0,
+   "first": "2026-09-22",
+   "last": "2026-09-22",
+   "queue_ids": [
+    "2026-09-22-5d20b9"
+   ],
+   "classification": "CLOSED",
+   "prevents": "class, partial",
+   "cite": "a06659b21 (the resolver cap fell 185 -> 4) + plan-9 flips pending",
+   "evidence": null,
+   "residual": null,
+   "projected_fire_days_per_30": [
+    0,
+    0
+   ],
+   "family": "F5",
+   "triage_created": true,
+   "how_classified": "id-rule"
+  }
+ ]
+}

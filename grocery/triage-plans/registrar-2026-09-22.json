@@ -1,0 +1,219 @@
+{
+  "registrar_ruling": "2026-09-22",
+  "ruled_by": "commodity-registrar (claude-fable-5-1), READ-ONLY; this file is the only artefact written",
+  "source_plan": "grocery/triage-plans/plan-2026-09-22-9.json (Q-chicken-thighs-meaning answer A 'Split them'; Q-declared-substitutes answer 'no substitute of any kind, hold the recipe'; discovered:recipe-ingredient-identity-2026-09-22)",
+  "namespaces_swept": {
+    "weekly": "grocery/commodities.json (592 ids, read in array order)",
+    "recipe_rules": "grocery/recipe-commodities.json (113 entries)",
+    "recipe_board": "grocery/out/recipe-board-everyday.json (185 rows, comparison[])",
+    "aliases": "grocery/recipe-floor-id-map.json",
+    "allowlist": "grocery/commodity-dupe-allowlist.json",
+    "live_feed": "grocery/out/smp-feed.json (ingredients + pricing_inputs)",
+    "vocabulary": "meal-prep/db/ingredients.json via meal-prep/pipeline/ingredient-vocab.ps1 -Query",
+    "captures_read": [
+      "grocery/out/regular/walmart-regular-2026-09-19.json (8263 deals; the 09-20/21/22 Walmart files carry 237-523 deals and none of these foods)",
+      "grocery/out/regular/aldi-regular-2026-09-22.json",
+      "grocery/out/regular/bakers-regular-2026-09-22.json",
+      "grocery/out/regular/fareway-regular-2026-09-22.json",
+      "grocery/out/regular/family-fare-regular-2026-09-22.json (+ every family-fare-regular 2026-08/09 file for drumsticks)",
+      "grocery/out/regular/hyvee-regular-2026-09-22.json",
+      "grocery/out/sams/sams-deals-2026-09-19.json and sams-deals-2026-09-21.json",
+      "grocery/out/ads-2026-09-20.json and ads-2026-09-22.json",
+      "grocery/out/comparison-2026-09-22.json (the published cells)",
+      "grocery/out/hyvee-discovery.json (a discovery pull, NOT a board input; cited only as evidence the store carries the food)",
+      "grocery/ingredient-queue.json (store probes of 2026-08-24 for 'chicken drumsticks' and the chorizo recipes)"
+    ]
+  },
+  "routing_measurement": "Proposed rules were simulated in Python (first include wins, exclude releases) over the 101 product names containing drumstick/thigh/chorizo/shallot/chicken leg across the capture files above. 18 names change route, every one intended and listed per candidate; 0 thigh, shallot or pork-chorizo rows move. Global excludes (Get-TcGlobalExclude) were not simulated; the caller re-runs apply-coverage-batch before shipping.",
+  "batch_cross_check": "The three proposals do not collide with each other: chicken-drumsticks, mexican-chorizo-fresh (reused) and shallots (reused) share no stem, prefix or label token set under audit-commodity-dupes.ps1 rules a-d.",
+  "candidates": [
+    {
+      "proposed_id": "chicken-drumsticks",
+      "verdict": "NEW id chicken-drumsticks in the WEEKLY namespace (grocery/commodities.json), inserted at array index 1: immediately AFTER chicken-breast (index 0) and BEFORE chicken-thighs (today index 1, becomes index 2). No allowlist pair is required: audit-commodity-dupes.ps1 normalizes to chickendrumsticks vs chickenthighs (no stem match, no <=3-char suffix, labels 'Chicken Drumsticks' vs 'Chicken Thighs' distinct), so the daily audit produces zero suspects. Do not add an allowlist entry without a finding.",
+      "mechanism": "Same food class (chicken), DIFFERENT CUT and different price: today the union crowns Walmart's Tyson 10 lb drumstick bag at $0.984/lb while the cheapest real thigh is $1.28 (Sam's member) / $1.55 (Aldi). A reader who buys thighs is shown a drumstick price 23-37 percent low. First-match-wins in array order is the only reason drumsticks must sit BEFORE chicken-thighs: the narrowed thighs rule no longer names drumstick, but placing the new rule first also protects any future thigh pattern from swallowing a mixed name.",
+      "evidence": {
+        "commodities_json": "no drumstick id. The string 'drumstick' occurs only inside chicken-thighs' own include (chicken\\s+(thigh|drumstick|leg)) and in ice-cream brand excludes (grocery/brands/brand-config.json:222).",
+        "recipe_commodities_json": "no drumstick id; the word appears only in the EXCLUDE lists of boneless-skinless-chicken-thigh and boneless-pork-chops.",
+        "recipe_board_everyday": "0 rows mention drumstick.",
+        "smp_feed": "no chicken-drumsticks key; chicken-thighs is priced n=7, cheapest 0.984 Walmart (the drumstick bag).",
+        "floor_id_map_and_allowlist": "no drumstick alias or pair. The allowlist already records boneless-skinless-chicken-thigh vs chicken-thighs as a form split; the floor map REJECTED boneless-skinless-chicken-thigh->chicken-thighs on 2026-07-23 with the note 'board=bone-in drumstick pricing', i.e. the estate has known the union crowns a drumstick for two months.",
+        "vocabulary": "ingredient-vocab.ps1 -Query 'chicken drumsticks' / 'drumsticks' = UNKNOWN NAME, genuine gap; -Query 'chicken thighs' = UNKNOWN (the only thigh row is 'Boneless Skinless Chicken Thigh' bid boneless-skinless-chicken-thigh).",
+        "recipe_blast_radius": "ZERO. meal-prep/recipes-db.json has 0 ingredient lines with item_id chicken-thighs and meal-prep/db/ingredients.json has 0 rows bidding chicken-thighs. grocery/ingredient-queue.json holds a resolved 'chicken drumsticks' term (2026-08-24) for turmeric-braised-chicken-with-golden-beets-and-leeks and hawaiian-chicken, neither of which exists in recipes-db.json (never published). The split is a board-only change today; any article sentence keyed on the label 'Chicken Thighs / Drumsticks' is outside this ruling and must be found by the caller.",
+        "fixture": "grocery/detector-manual-allowlist.json:75 records a 2026-08-24 fixture that asserts 'chicken drumsticks' routes to chicken-thighs (wired into test-auditors 2026-08-25). That fixture must be updated to assert chicken-drumsticks or it will fail the day this ships."
+      },
+      "omaha_data_already_shows_product": true,
+      "omaha_rows": [
+        {"store": "Walmart", "item": "Tyson Fresh Chicken Drumstick, 10 lb Bag", "price": "$9.84 (98.4 cents/lb)", "item_id": "14806857519", "as_of": "2026-09-19", "file": "grocery/out/regular/walmart-regular-2026-09-19.json", "note": "today's chicken-thighs crown"},
+        {"store": "Walmart", "item": "Freshness Guaranteed Fresh Chicken Drumsticks, 5 lb Bag", "price": "$5.94 ($1.19/lb)", "item_id": "613823324", "as_of": "2026-09-19", "file": "grocery/out/regular/walmart-regular-2026-09-19.json"},
+        {"store": "Walmart", "item": "Great Value All Natural Chicken Drumsticks, 4 lbs (Frozen)", "price": "$4.83 ($1.21/lb)", "item_id": "10414673", "as_of": "2026-09-19", "file": "grocery/out/regular/walmart-regular-2026-09-19.json"},
+        {"store": "Aldi", "item": "Fresh Fresh Chicken Drumsticks Family Pack Per LB", "price": "$1.09/lb", "as_of": "2026-09-22", "file": "grocery/out/regular/aldi-regular-2026-09-22.json"},
+        {"store": "Aldi", "item": "Kirkwood Fresh Chicken Drumsticks Per LB", "price": "$1.79/lb", "as_of": "2026-09-22", "file": "grocery/out/regular/aldi-regular-2026-09-22.json"},
+        {"store": "Baker's", "item": "Heritage Farm Bone In Skin On Chicken Drumsticks", "price": "$1.79/lb", "as_of": "2026-09-19", "file": "grocery/out/regular/bakers-regular-2026-09-22.json", "note": "also Smart Way Fresh Uncooked Chicken Drumsticks 4.5 lb $5.00 and Tyson All Natural Fresh Chicken Drumsticks $2.99/lb; grocery/carriage.json:111 already promoted this Heritage Farm row from the ingredient-queue term"},
+        {"store": "Fareway", "item": "Chicken Drumsticks", "price": "$1.99/lb", "as_of": "2026-09-19", "file": "grocery/out/regular/fareway-regular-2026-09-22.json"},
+        {"store": "Sam's Club", "item": "Member's Mark Chicken Drumsticks, priced per pound", "price": "$0.98/lb in-store", "as_of": "2026-09-19", "file": "grocery/out/sams/sams-deals-2026-09-19.json", "note": "ABSENT from sams-deals-2026-09-21.json (1030 deals), so whether Sam's gets a drumsticks cell depends on which dated file the comparison reads; do not assume the cell"},
+        {"store": "Hy-Vee", "item": "Fresh chicken drumsticks or thighs, 100% natural, value pack No antibiotics ever., $1.88 lb.", "price": "$1.88/lb sale", "as_of": "ad 2026-09-22", "file": "grocery/out/ads-2026-09-22.json", "note": "a two-cut ad at one price; first-match sends it to chicken-drumsticks, so chicken-thighs loses this Hy-Vee sale cell and falls back to the regular 'Hy-Vee 100% Natural Chicken Thighs Value Pack' $1.97 (as_of 2026-08-15, not_reverified) if within publish age. If Brad wants thighs to keep the $1.88 cell, the ad ingest must emit an 'or' line once per cut; that is an ingest change, not a registrar ruling"},
+        {"store": "Family Fare", "item": null, "price": null, "note": "NO drumstick row in any family-fare-regular 2026-08 or 2026-09 file. The 2026-08-24 queue probe saw 'Chicken Drumsticks' $2.49/lb and 'Gold N Plump family pack' $1.99/lb on Freshop store 6401, but no capture row exists on disk. Family Fare cell is absent until a capture lands; a capture miss is not not-carried."}
+      ],
+      "prescription": {
+        "id": "chicken-drumsticks",
+        "label": "Chicken Drumsticks",
+        "unit": "lb",
+        "namespace": "weekly staples: grocery/commodities.json + capture worklist; add to grocery/categories.json in the same meat list as chicken-thighs (line 19) and to grocery/commodity-search.json as \"chicken-drumsticks\": \"chicken drumsticks\" so term-driven pulls (Walmart, Family Fare Freshop, Fareway) actually search for it",
+        "array_position": "index 1 of commodities.json: after chicken-breast, before chicken-thighs",
+        "include": [
+          "chicken\\s+drumsticks?",
+          "drumsticks?\\b[^,]*\\bchicken",
+          "chicken\\s+legs?\\b(?!\\s*quarter)"
+        ],
+        "exclude_base": "copy chicken-thighs' full exclude list (155 patterns of beverage/pet/household/snack/prepared boilerplate) verbatim, then add the patterns below",
+        "exclude_add": [
+          "\\bthighs?\\s*(?:&|and|/)\\s*drumsticks?",
+          "\\bdrumsticks?\\s*(?:&|and|/)\\s*thighs?",
+          "leg\\s+quarters?",
+          "whole\\s+legs?",
+          "\\bnestle\\b",
+          "\\bcones?\\b",
+          "frozen\\s+dairy",
+          "ice\\s*cream",
+          "novelt",
+          "cake\\s+pop",
+          "kit\\s*kat",
+          "\\bdesserts?\\b",
+          "\\bseasoned\\b",
+          "\\bmarinated\\b",
+          "\\bbreaded\\b",
+          "\\bcooked\\b",
+          "\\bfried\\b",
+          "\\bsmoked\\b",
+          "\\bbbq\\b",
+          "\\bcold\\b",
+          "\\btoys?\\b",
+          "\\bhartz\\b",
+          "\\bbouillon\\b",
+          "\\bbroth\\b",
+          "\\bstock\\b",
+          "\\bwings?\\b",
+          "\\bbreasts?\\b",
+          "\\bboneless\\b",
+          "\\bturkey\\b",
+          "\\bduck\\b",
+          "plant[-\\s]?based",
+          "\\bvegan\\b",
+          "\\bdumplings?\\b",
+          "\\bnuggets?\\b",
+          "\\bpatt(?:y|ies)\\b",
+          "\\bmeal\\b",
+          "\\bkit\\b",
+          "\\bsoup\\b",
+          "\\bramen\\b",
+          "flavou?r(?:ed)?\\b"
+        ],
+        "exclude_rationale": "mixed thigh+drumstick packs route NOWHERE (neither cut's honest price); 'or' ad lines are deliberately NOT excluded (each cut is sold at that price); Nestle Drumstick cones and Drumstick cake pops are live in Baker's, Family Fare, Sam's and Hy-Vee captures; turkey drumsticks are a different bird; 'boneless' never describes a drumstick so it is a free thigh guard.",
+        "band": "none today, matching chicken-thighs (no band). If a band is wanted: band_min 0.49, band_max 4.99 per lb covers every observed row ($0.98 to $2.99).",
+        "note_for_entry": "Split from chicken-thighs 2026-09-22 (Brad: 'Split them'). The union crowned Walmart's Tyson 10 lb drumstick bag at $0.984/lb while the cheapest thigh was $1.28-$1.55. Sits before chicken-thighs so a drumstick name never reaches the thigh rule."
+      },
+      "chicken_thighs_edits": {
+        "label_becomes": "Chicken Thighs",
+        "label_note": "NOT 'Chicken Thighs (bone-in)': the weekly rule does not release boneless/skinless thighs (Family Fare 'Chicken Thighs, Boneless Gold N Plump', Aldi 'Kirkwood Boneless Skinless Chicken Thighs' still route here), so a bone-in label would lie. Bone-in wins every store's cell in practice because it is cheaper. Whether to release boneless rows to the recipe-only boneless-skinless-chicken-thigh is a SEPARATE question for Brad, not ruled here.",
+        "include_becomes": ["chicken\\s+thighs?", "thighs?\\b[^,]*\\bchicken"],
+        "exclude_add": ["\\bdrumsticks?\\b", "\\blegs?\\b", "\\bmarinated\\b"],
+        "exclude_do_not_add": "\\bseasoned\\b - measured: it releases 'USDA Teriyaki Seasoned Chicken Thighs' (Aldi) which then lands on teriyaki-sauce, a pre-existing first-match defect the union was hiding. Either leave seasoned thighs on chicken-thighs (they never crown) or fix teriyaki-sauce's exclude first.",
+        "post_split_cells_measured": "Sam's Member's Mark Bone-In Chicken Thighs $1.28/lb (2026-09-21, member) | Aldi Fresh Chicken Thighs Family Pack $1.55/lb (2026-09-22) | Baker's Heritage Farm Bone In Skin On Chicken Thighs $1.99/lb (2026-09-19) | Family Fare Chicken Thighs, Family Pack Gold N Plump $1.99/lb (2026-09-02) | Fareway Bone-In Chicken Thighs $1.49 for 0.75 lb (2026-08-15; per-lb is the engine's to compute) | Walmart Great Value All Natural Skin-on Chicken Thighs, 4 lb (Frozen) $8.67 = $2.17/lb (2026-09-19) - Walmart does NOT lose its cell, contrary to the plan's 'may lose' | Hy-Vee falls to the $1.97 regular row or no cell (see the 'or' ad note). Crown moves to $1.28 member / $1.55 non-member as the reviewer measured."
+      },
+      "routing_changes_measured": [
+        "Walmart: Tyson 10 lb bag, Freshness Guaranteed 5 lb, Great Value 4 lb frozen -> chicken-drumsticks",
+        "Aldi: Kirkwood Fresh Chicken Drumsticks, Fresh Chicken Drumsticks Family Pack -> chicken-drumsticks",
+        "Baker's: Heritage Farm drumsticks, Tyson drumsticks -> chicken-drumsticks; Smart Way Fresh Uncooked Chicken Drumsticks 4.5 lb goes from NOWHERE to chicken-drumsticks (the union's word order missed it)",
+        "Fareway: Chicken Drumsticks -> chicken-drumsticks",
+        "Sam's: Member's Mark Chicken Drumsticks -> chicken-drumsticks (when its dated file is read)",
+        "Hy-Vee ads: 'Fresh chicken drumsticks or thighs $1.88' and 'Smart Chicken drumsticks or thighs value pack $1.99' -> chicken-drumsticks; 'Fresh marinated chicken thighs $4.99' -> nowhere (marinated exclude)",
+        "no thigh row changes route; leg quarters stay nowhere; all Drumstick ice-cream rows stay nowhere"
+      ],
+      "follow_up_edits": [
+        "add-commodity-rule.ps1: insert chicken-drumsticks at index 1 with the include/exclude above",
+        "add-commodity-rule.ps1: chicken-thighs label 'Chicken Thighs', include narrowed, exclude += drumsticks?/legs?/marinated",
+        "grocery/categories.json: add chicken-drumsticks beside chicken-thighs (meat list)",
+        "grocery/commodity-search.json: \"chicken-drumsticks\": \"chicken drumsticks\"; then confirm the capture worklists pick the term up",
+        "grocery/detector-manual-allowlist.json:75 fixture (test-auditors): flip the drumsticks expectation from chicken-thighs to chicken-drumsticks",
+        "grocery/carriage.json:111 (Heritage Farm drumsticks promoted from the queue term): re-key to chicken-drumsticks if it is keyed on chicken-thighs",
+        "re-run apply-coverage-batch and audit-commodity-dupes.ps1 (expected: 0 suspects) before publish",
+        "NAME namespace: no vocabulary row is minted by this ruling. When a recipe needs it, mint row 'Chicken Drumsticks' bid chicken-drumsticks unit lb gpu 453.592 as a separate act; and 'Chicken Thighs' (bone-in) has NO vocabulary row today, so no live recipe prices from chicken-thighs at all"
+      ]
+    },
+    {
+      "proposed_id": "chorizo",
+      "verdict": "REUSE existing id mexican-chorizo-fresh (grocery/commodities.json index 530, weekly namespace; label 'Mexican Chorizo (Fresh)'). No new id. PREREQUISITE rule edit before any recipe binds to it: add \\bbeef\\b to mexican-chorizo-fresh's exclude and narrow its label to 'Mexican Pork Chorizo (Fresh)'. Pork chorizo vs beef chorizo are TWO purchases (different animal, different macros, the same split the estate holds for ground-beef vs ground-pork), but beef chorizo gets NO id today: no recipe calls for it, so it is released through the exclude per Brad's recurring-shape ruling (ruling-recurring-shape-is-an-exclude), not minted. Mint beef-chorizo with an allowlist pair only when a recipe needs it.",
+      "mechanism": "SAME FOOD, SAME FORM under a different spelling: 'Pork Chorizo' (vocabulary) vs 'mexican chorizo' (commodity-search term). The mechanical sweep cannot see it because the id carries 'mexican' and 'fresh' and the vocabulary row carries 'pork'. Today the row is a species UNION whose crown is Walmart's Cacique BEEF Chorizo 12 oz $1.50 = $2.00/lb; cost-recipes.ps1 (meal-prep/engine/cost-recipes.ps1:78-84) prices a bid from the WALMART cell first, so rebinding the recipes without the beef exclude would price pork chorizo at beef chorizo, the same silent species swap Brad forbade. With the exclude, Walmart's cell becomes Cacique Pork Chorizo 9 oz $1.50 = $2.68/lb.",
+      "what_the_recipes_call_for": [
+        {"slug": "mexican-chorizo-egg-casserole", "visibility": "paid", "line": "Pork Chorizo 624 g, buy '1 lb 6 oz Mexican pork chorizo', item_id ground-pork"},
+        {"slug": "chorizo-and-potato-bowls", "visibility": "paid", "line": "Pork Chorizo 2084 g, buy '4.5 lb', item_id ground-pork"},
+        {"slug": "creamy-ground-turkey-and-chorizo-pasta", "visibility": "paid", "line": "Pork Chorizo 308 g, buy '0.75 lb', item_id ground-pork"},
+        {"slug": "panseared-pork-chops-with-cajun-dirty-rice", "visibility": "paid", "line": "Pork Chorizo 397 g, buy '1 lb', item_id ground-pork"}
+      ],
+      "recipes_call_for_note": "All four say PORK chorizo (the macros row is Cacique Pork Chorizo, USDA FDC 2027889; meal-prep/canon-rules-standing.json maps 'chorizo' -> 'Pork Chorizo'). None calls for beef. The vocabulary row 'Pork Chorizo' has buy_pkg_g 255 / '9oz tube', which is exactly the Cacique 9 oz package Walmart and Hy-Vee sell.",
+      "evidence": {
+        "commodities_json": "mexican-chorizo-fresh index 530: include ^(?=.*\\bchorizo\\b)(?=.*\\b(?:mexican(?:[-\\s]+style)?|pork|beef|ground|sausage|cacique)\\b).*$ ; exclude already releases spanish/iberico/dry-cured/cured/smoked/fully cooked/rope/sliced/salami/soy/vegan/beans/soup/dip/cheese (so Spanish cured chorizo is a different form, correctly out); band 0.05-14.97/lb. grocery/category-excludes.json:400 lists it as a sausage_carrier. No other chorizo id exists.",
+        "recipe_commodities_json": "no chorizo entry.",
+        "recipe_board_everyday": "no chorizo row.",
+        "smp_feed": "mexican-chorizo-fresh IS PRICED: cheapest 2.00/lb Walmart, n=2 (Walmart 2.00, Baker's 3.5467), url walmart.com/ip/10451933 (the BEEF chorizo).",
+        "floor_id_map_and_allowlist": "no chorizo alias or pair.",
+        "vocabulary": "ingredient-vocab.ps1 -Query 'pork chorizo' RESOLVES -> row 'Pork Chorizo' bid=ground-pork unit=lb; -Query 'chorizo' = UNKNOWN with nearest 'Pork Chorizo'. The NAME already exists; only its bid is wrong.",
+        "escalation_queue": "grocery/escalation-queue.json:6075-6121, 15194: LLM UNSURE rows for Las Sevillanas, Goya, Reynaldo's Grillers, Chata Chilorio; all are ship-only marketplace sellers or cured product and route nowhere both before and after this ruling."
+      },
+      "pork_vs_beef_ruling": "Two purchases. Species is a form-level difference in this estate (ground-beef-8020 / ground-pork / ground-turkey are separate ids) and the recipe macros are the pork label's. One commodity today because only pork has a consumer; beef rows are released by exclude. If beef-chorizo is ever minted, record the pair beef-chorizo|mexican-chorizo-fresh in commodity-dupe-allowlist.json with this reason.",
+      "omaha_data_already_shows_product": true,
+      "omaha_rows": [
+        {"store": "Walmart", "item": "Cacique Pork Chorizo, 9 oz (Refrigerated)", "price": "$1.50 ($2.68/lb)", "item_id": "11027816", "seller": "Walmart.com (no ship-only channel flag)", "as_of": "2026-09-19", "file": "grocery/out/regular/walmart-regular-2026-09-19.json", "note": "becomes the Walmart cell once beef is excluded"},
+        {"store": "Walmart", "item": "V&V Supremo Authentic Mexican Style Original Picante Premium Pork Chorizo, 14 oz", "price": "$4.67 ($5.31/lb)", "item_id": "5140929935", "as_of": "2026-09-19", "file": "grocery/out/regular/walmart-regular-2026-09-19.json"},
+        {"store": "Walmart", "item": "Cacique Beef Chorizo 12oz", "price": "$1.50 ($2.00/lb)", "item_id": "10451933", "as_of": "2026-09-19", "file": "grocery/out/comparison-2026-09-22.json (today's crown)", "note": "BEEF; released to nowhere by the prescribed exclude, together with 'Cacique Gluten Free Beef Chorizo, 9 oz' and 'V&V Supremo Premium Beef Chorizo'"},
+        {"store": "Baker's", "item": "Kroger Mercado Chorizo Sausage Pork Links", "price": "$3.99 for 5 pk 3.6 oz (1.125 lb, $3.5467/lb)", "stock": "LOW", "as_of": "2026-09-19", "file": "grocery/out/regular/bakers-regular-2026-09-22.json", "note": "fresh Mexican-style pork chorizo in casings; same food and same fresh form as the tube (recipes remove casings). Ruled the same purchase; stays on the id"},
+        {"store": "Hy-Vee", "item": "Cacique Pork Chorizo 9 oz $2.49 ($4.43/lb); Hy-Vee Chorizo Pork Sausage 1 lb $4.48", "as_of": "hyvee-discovery.json mtime 2026-09-22", "file": "grocery/out/hyvee-discovery.json", "note": "DISCOVERY pull, not a comparison input (the feed's n=2 excludes Hy-Vee). Proves the store carries it; a Hy-Vee capture is needed for a cell"},
+        {"store": "Aldi / Fareway / Family Fare / Sam's Club", "item": null, "note": "no fresh chorizo row in any newest capture (Family Fare shows only La Preferida refried beans with chorizo; Baker's also lists a chorizo queso dip and chorizo-flavored beans, all correctly excluded). Not-captured, not not-carried."}
+      ],
+      "can_recipe_be_priced": "YES, from real Omaha data: Walmart Cacique Pork Chorizo (2026-09-19) and Baker's Kroger Mercado pork links (2026-09-19). The four recipes need NOT be held, provided the exclude lands before the rebid so the price is pork, not beef.",
+      "follow_up_edits": [
+        "add-commodity-rule.ps1: mexican-chorizo-fresh exclude += \\bbeef\\b (measured: releases exactly 3 Walmart beef rows, moves nothing else); label -> 'Mexican Pork Chorizo (Fresh)'; note the 2026-09-22 ruling in the entry",
+        "rebid-ingredient.ps1: vocabulary row 'Pork Chorizo' bid ground-pork -> mexican-chorizo-fresh (unit lb unchanged; buy_pkg 9 oz tube already matches Cacique); this is the ID half of the ruling, the NAME 'Pork Chorizo' is untouched",
+        "recost the 4 recipes (expect chorizo-and-potato-bowls to move most: 4.5 lb at $2.68 vs $3.29 ground pork); cards read from the feed after the next publish",
+        "grocery/commodity-search.json: consider 'pork chorizo' beside 'mexican chorizo' as the search term so Walmart/Fareway/Family Fare term pulls find the Cacique tube",
+        "audit-commodity-dupes.ps1: no new id, expected 0 suspects; no allowlist entry"
+      ]
+    },
+    {
+      "proposed_id": "shallots",
+      "verdict": "REUSE existing id shallots (grocery/commodities.json index 483, weekly namespace; label 'Shallots', unit lb). No new id, no alias: the vocabulary row is already named 'Shallots' and resolves; only its bid (onions) is wrong.",
+      "mechanism": "SAME FOOD, SAME FORM, already priced: the id exists, is live in the feed at $2.88/lb (Walmart, n=3), and the recipes were hand-bound to onions ($0.7467/lb Walmart) in meal-prep/db/ingredients.json. cost-recipes.ps1 never reads the spec's bid; it resolves the bid from ingredients.json (spec-bid-is-not-a-pricing-input), so the one edit is that row. onions' own exclude already contains shallots?\\b and white-onion excludes shallot, so no onion rule can claim a shallot row; nothing on the rules side needs to change.",
+      "what_the_recipes_call_for": [
+        {"slug": "slow-cooker-tuscan-chicken-pasta", "visibility": "paid", "line": "Shallots 180 g, buy '1/2 cup chopped', item_id onions"},
+        {"slug": "chicken-florentine", "visibility": "paid", "line": "Shallots 99 g, buy '3.5 oz, sliced (3 to 4 shallots)', item_id onions"},
+        {"slug": "southwest-ground-turkey-cauliflower-rice-skillet", "visibility": "paid", "line": "Shallots 150 g, buy '5 small shallots, finely diced', item_id onions"}
+      ],
+      "evidence": {
+        "commodities_json": "shallots index 483: include shallots?\\b ; exclude fried/crispy/dried/jar/minced + boilerplate (214 patterns). grocery/categories.json:206 lists it in produce; grocery/commodity-search.json:505 'shallots'.",
+        "recipe_commodities_json": "no shallot entry.",
+        "recipe_board_everyday": "no shallot row (the only hit is Boursin Shallot & Chive under garlic-herb-cheese-spread, correctly).",
+        "smp_feed": "shallots IS PRICED: cheapest 2.88/lb Walmart everyday, n=3 (Walmart 2.88, Baker's 3.99, Family Fare 5.99), url walmart.com/ip/17358255648.",
+        "floor_id_map_and_allowlist": "no shallot alias or pair; none needed.",
+        "vocabulary": "ingredient-vocab.ps1 -Query 'shallots' RESOLVES -> row 'Shallots' bid=onions unit=lb (board: recipe, buy_pkg 1 lb). NOTE: -Query 'shallot' (singular) returns UNKNOWN NAME / GENUINE GAP - a stemming false negative in the tool; do not quote it as a gap.",
+        "onions_rules": "onions (index 23) exclude contains shallots?\\b ; white-onion (index 560) excludes shallot. Verified by simulation: every shallot name in the captures routes to shallots before and after."
+      },
+      "omaha_data_already_shows_product": true,
+      "omaha_rows": [
+        {"store": "Walmart", "item": "Fresh Whole Shallots 16oz Bag", "price": "$2.88 ($2.88/lb)", "item_id": "17358255648", "as_of": "2026-09-19", "file": "grocery/out/regular/walmart-regular-2026-09-19.json", "note": "today's crown; the vocabulary row's 1 lb buy package matches this bag"},
+        {"store": "Baker's", "item": "Shallots", "price": "$3.99/lb", "stock": "HIGH", "as_of": "2026-09-19", "file": "grocery/out/regular/bakers-regular-2026-09-22.json", "note": "also Private Selection Shallots Sweet Onions 6 oz $2.99, which routes to shallots too and is a label worth a look (a sweet-onion pack named Shallots?)"},
+        {"store": "Family Fare", "item": "Shallots Onions", "price": "$5.99/lb", "as_of": "2026-08-22", "file": "grocery/out/regular/family-fare-regular-2026-09-22.json"},
+        {"store": "Fareway", "item": "Shallot $4.99/lb (2026-08-11); Spice World Fresh Shallots 3 oz $2.49 (2026-08-09)", "file": "grocery/out/regular/fareway-regular-2026-09-22.json", "note": "on disk but not in today's comparison row (n=3); presumably beyond publish age or lost to the newer file"},
+        {"store": "Hy-Vee", "item": "Shallots 0.15 lbs ($3.99/lb) $0.60 (2026-07-26, not_reverified); Melissa's Shallots 3 oz $3.99 (hyvee-discovery.json)", "note": "stale / discovery only; no cell today"},
+        {"store": "Aldi / Sam's Club", "item": null, "note": "no shallot row in the newest captures"}
+      ],
+      "can_recipe_be_priced": "YES, already priced on the board from Walmart (2026-09-19), Baker's (2026-09-19) and Family Fare (2026-08-22). The three recipes need NOT be held; they move from $0.7467/lb to $2.88/lb on the Walmart basis the cost engine uses.",
+      "follow_up_edits": [
+        "rebid-ingredient.ps1: vocabulary row 'Shallots' bid onions -> shallots (unit lb, gpu 453.592 unchanged). The row's 'board': 'recipe' flag is not read by cost-recipes.ps1; shallots is a weekly row present in comparison-*.json, so leave the flag unless the card builder is found to key on it - the caller should check build-v2-spec once",
+        "recost the 3 recipes",
+        "no rule edit, no allowlist, no alias; audit unchanged"
+      ]
+    }
+  ],
+  "knowledge_consulted": "memo ruling-recipe-live-only-if-every-ingredient-priced (ThriftyCrew store; read in full); memo spec-bid-is-not-a-pricing-input (ThriftyCrew store; cost-recipes resolves the bid from ingredients.json, confirmed at meal-prep/engine/cost-recipes.ps1:52-101); memo ruling-recurring-shape-is-an-exclude (C--Codex store; a recurring wrong-product shape is an exclude, measured over the corpus before it ships); .claude/rules/grocery.md first-match-wins as pasted by the caller; audit-commodity-dupes.ps1 header and Find-DupeSuspects rules a-d.",
+  "refusals": "none. Every ruling rests on captured Omaha rows read from disk with store, product, price and date; no price was invented."
+}
