@@ -112,9 +112,12 @@ function Resolve-Unit([string]$u) {
   switch -Regex (($u -replace '\.','').Trim().ToLower()) {
     '^(ea|each|ct|count)$'          { return @{ tok='ct';     unit='each'   } }
     '^(lb|lbs|pound|pounds)$'       { return @{ tok='lb';     unit='lb'     } }
-    '^(fl\s*oz|floz|foz)$'          { return @{ tok='fl oz';  unit='floz'   } }
+    # 'fluid ounce (us)' / 'gallon (us)' / 'gl' (2026-09-21, queue 2026-09-21-dca1a1): Sam's rendered these on 09-21 and 52 rows
+    # were refused as an unknown unit. The spelling alone is NOT safe: on the same day poppi's 15 pk printed $1.67/fluid ounce
+    # (us), which is the price of ONE 12 fl oz can, so the per-piece guard in Build-Row ships with it (Test-SamsPerPieceUnit).
+    '^(fl\s*oz|floz|foz|fluid\s+ounces?(\s*\(us\))?)$'          { return @{ tok='fl oz';  unit='floz'   } }
     '^(oz|ounce|ounces)$'           { return @{ tok='oz';     unit='oz'     } }
-    '^(gal|gallon|gallons)$'        { return @{ tok='gal';    unit='gallon' } }
+    '^(gal|gallon|gallons|gl|gallons?\s*\(us\))$'        { return @{ tok='gal';    unit='gallon' } }
     '^(dozen|doz|dz)$'              { return @{ tok='dozen';  unit='dozen'  } }
   }
   return $null
@@ -319,6 +322,21 @@ function Get-NameStatedTotal([string]$name) {
 # Build ONE engine-shaped row from a raw capture row. Returns @{row=..; err=..}
 # $Club is the club the capture's #tc-store line says the rows were read at (Read-SamsCapture); '' only under
 # -WaiveMissingStoreLine. It names the row's store_id and source_ad - never a literal (2026-09-19).
+# THE PER-PIECE GUARD (2026-09-21, queue 2026-09-21-dca1a1). A unit price Sam's prints for ONE piece of a multipack reads
+# as the size of one piece: poppi "12 fl. oz., 15 pk." at $19.98 printed $1.67/fluid ounce (us), lp/up = 11.96, and the
+# row would publish a 15-pack at $1.67 per fluid ounce, 15x its true $0.111. The test: the name states N > 1 pieces of V
+# in the priced unit, and the size we settled on is ONE piece (within 1%, a first plausible bar, nothing else tried).
+# Such a row is refused, never guessed: whether Sam's meant per piece or the name is wrong cannot be told apart.
+function Test-SamsPerPieceUnit([string]$Name, [string]$Tok, [double]$Qty) {
+  $np = Get-NamePack $Name
+  if (-not $np -or [double]$np.count -le 1) { return $false }
+  $mm = [regex]::Match([string]$np.measure, '^([0-9]+(?:\.[0-9]+)?)\s+(.+)$')
+  if (-not $mm.Success) { return $false }
+  $v = [double]$mm.Groups[1].Value; $mu = $mm.Groups[2].Value
+  $same = (($Tok -eq 'fl oz' -and ($mu -eq 'fl oz' -or $mu -eq 'oz')) -or ($Tok -eq 'oz' -and $mu -eq 'oz') -or ($Tok -eq 'lb' -and $mu -eq 'lb'))
+  if (-not $same -or $v -le 0) { return $false }
+  return ([math]::Abs($Qty - $v) -le (0.01 * $v))
+}
 function Build-Row($raw, [string]$Club = '') {
   $lpm = [regex]::Match(("" + $raw.lp), '\$\s*([\d,]+(?:\.\d{1,2})?)')
   if (-not $lpm.Success) { return @{ err='no linePrice' } }
@@ -436,6 +454,7 @@ function Build-Row($raw, [string]$Club = '') {
     if ($qty -lt 1) { $qty = 1 }
   }
   if ($qty -le 0) { return @{ err='bad qty' } }
+  if (Test-SamsPerPieceUnit ([string]$raw.n) ([string]$u.tok) ([double]$qty)) { return @{ err=('NAME CONFLICT: per-piece unit price - the name states a multipack and Sam''s ' + $up + '/' + $u.tok + ' prices ONE piece (lp/up derives ' + (Format-Qty $derived) + ')') } }
 
   # size = the quantity + its unit. qty 1 -> the bare unit token, which the engine reads as "priced per that unit".
   $bare = if ($u.tok -eq 'ct') { 'each' } else { $u.tok }
@@ -757,7 +776,15 @@ if ($SelfTest) {
   #    Sam's priced by and NEITHER reading reproduces Sam's $0.07/oz, so back-solving lp/up invented a
   #    65.429 oz package and published $0.07/oz - 8x under Aldi's $0.5633/oz - crowning the commodity and
   #    banking a record low. Such a row must now REJECT, never publish.
-  $r8 = Build-Row (_R 'Goya Sazon Seasoning 6.3 oz., 36 ct.' '$4.58' '$0.07/oz')
+  # dca1a1 (2026-09-21): the "(us)" spellings read, and the per-piece guard refuses the poppi shape. Frozen from sams-capture-2026-09-21.csv.
+$rP = Build-Row (_R 'poppi Prebiotic Soda Punch Pop 12 fl. oz., 15 pk.' '$19.98' '$1.67/fluid ounce (us)')
+if ($rP.err -and $rP.err -match 'per-piece') { Write-Output "ok    MUST FIRE poppi 15 pk at `$1.67/fluid ounce (us) is refused per-piece -> $($rP.err)" } else { Write-Output ("FAIL  poppi per-piece row was not refused: " + ($rP | ConvertTo-Json -Compress -Depth 4)); $script:fail++ }
+$rB = Build-Row (_R 'Bacardi Island Punch Rum Cocktail, 1.75 L' '$17.67' ('29.9 ' + [string][char]0x00A2 + '/fluid ounce (us)'))
+if ($rB.row -and [string]$rB.row.size -match 'fl oz') { Write-Output "ok    CLEAN TWIN 'fluid ounce (us)' now reads as fl oz (Bacardi 1.75 L -> $($rB.row.size))" } else { Write-Output ("FAIL  'fluid ounce (us)' still unread: " + ($rB | ConvertTo-Json -Compress -Depth 4)); $script:fail++ }
+$rG = Build-Row (_R 'Member''s Mark Distilled Water 1 gal.' '$1.28' '$1.28/gallon (us)')
+if ($rG.row -and [string]$rG.row.size -match 'gal') { Write-Output "ok    CLEAN TWIN 'gallon (us)' reads as gal -> $($rG.row.size)" } else { Write-Output ("FAIL  'gallon (us)' still unread: " + $rG.err); $script:fail++ }
+$rC = Build-Row (_R 'Thai Kitchen Unsweetened Coconut Milk 13.66 fl. oz. cans, 6 pk.' '$11.24' '$0.14/fl oz')
+if (-not ($rC.err -and $rC.err -match 'per-piece')) { Write-Output "ok    MUST NOT FIRE a multipack whose unit price covers the whole pack (6 x 13.66 fl oz) is not refused per-piece" } else { Write-Output ("FAIL  a whole-pack unit price was refused per-piece: " + $rC.err); $script:fail++ }$r8 = Build-Row (_R 'Goya Sazon Seasoning 6.3 oz., 36 ct.' '$4.58' '$0.07/oz')
   if ($r8.err -and $r8.err -match 'NAME CONFLICT') { Write-Output "ok    sazon conflict rejected -> $($r8.err)" }
   else { Write-Output "FAIL  sazon must reject, got ad=$($r8.row.ad_price) size='$($r8.row.size)'"; $fail++ }
   # 8b. the count flavor of the same conflict (before the Sazon rule this published via the lp/up fallback)
