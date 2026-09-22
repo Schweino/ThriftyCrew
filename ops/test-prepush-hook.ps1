@@ -727,6 +727,34 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
   Case 'MUST FIRE' 'a library that errors while loading is refused too, not printed past' `
     ($liHalfRc -eq 3 -and ($liHalf -join "`n") -match 'lib\\git-repo-env\.ps1 did not load \(half-loaded library\)') "rc=$liHalfRc $($liHalf -join ' | ')"
 
+  # ---- THE CHAIN REHEARSAL CLAUSE (2026-09-22, RCA F2, plan-2026-09-22-7), through the REAL hook from the linked worktree.
+  # The sandbox gets ops\rehearse-chain.ps1 only HERE, after every case above, because once it and the manifest are in the
+  # tree a push touching grocery\guards.ps1 needs a verdict. Verdicts and the bypass log go to a sandbox directory.
+  $env:TC_REHEARSAL_VERDICT_DIR = Join-Path $sb 'rh-verdicts'
+  $env:TC_PREPUSH_PROBE_EXIT = '0'
+  $env:TC_PREPUSH_TA_FAILS = ''; $env:TC_PREPUSH_TA_FAILS_BETA = ''
+  $null = G -C $linked reset -q --hard
+  $null = G -C $linked fetch -q origin
+  $null = G -C $linked checkout -q --detach origin/main
+  Copy-Item -LiteralPath (Join-Path $RepoRoot 'ops\rehearse-chain.ps1') -Destination (Join-Path $linked 'ops\rehearse-chain.ps1')
+  [IO.File]::WriteAllText((Join-Path $linked 'ops\chain-manifest.json'), '{"schema":1,"max_data_age_days":2,"files":["grocery/guards.ps1","ops/chain-manifest.json","ops/rehearse-chain.ps1"],"globs":[],"derive_from":[],"derive_dirs":[]}', $utf8)
+  $null = G -C $linked add -- 'ops/rehearse-chain.ps1' 'ops/chain-manifest.json'
+  $null = G -C $linked commit -q -m 'install the rehearsal harness'
+  $env:TC_NO_REHEARSAL = 'fixture: installing the harness'
+  $rhSetup = PushOut $linked 'main'
+  Remove-Item -LiteralPath 'Env:\TC_NO_REHEARSAL' -ErrorAction SilentlyContinue
+  Case 'CLEAN TWIN' 'TC_NO_REHEARSAL lets a chain-touching push to main through, and says so loudly' `
+    ($rhSetup.rc -eq 0 -and $rhSetup.remote -eq $rhSetup.head -and $rhSetup.text -match 'REHEARSAL BYPASSED') "rc=$($rhSetup.rc) $($rhSetup.text)"
+  CommitFile $linked 'grocery\guards.ps1' "# guard rehearsed`n"
+  $rhNo = PushOut $linked 'main'
+  Case 'MUST FIRE' 'a push to main changing a chain script with no rehearsal verdict is refused' `
+    ($rhNo.rc -ne 0 -and $rhNo.remote -ne $rhNo.head -and $rhNo.text -match 'no rehearsal verdict is recorded') "rc=$($rhNo.rc) $($rhNo.text)"
+  $null = G -C $linked reset -q --hard HEAD~1
+  CommitFile $linked 'design\note.md' "rehearsal-free doc`n"
+  $rhDoc = PushOut $linked 'main'
+  Case 'MUST NOT FIRE' 'a push to main touching no chain script is not asked for a rehearsal' `
+    ($rhDoc.rc -eq 0 -and $rhDoc.remote -eq $rhDoc.head -and $rhDoc.text -match 'no rehearsal needed') "rc=$($rhDoc.rc) $($rhDoc.text)"
+  Remove-Item -LiteralPath 'Env:\TC_REHEARSAL_VERDICT_DIR' -ErrorAction SilentlyContinue
   # MUST FIRE, STATIC: run-gates clears the same environment for EVERY caller, not only this hook - a session
   # shell or a scheduled task spawned from inside a git hook inherits it just the same. Since 2026-09-11 it does so
   # through lib\git-repo-env.ps1, whose behaviour ops\audit-git-fixture-env.ps1 drives in a child process; this
@@ -750,6 +778,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
     ($iRead -ge 0 -and $iRepo -gt $iRead -and $iUnset -gt $iRepo -and $iRun -gt $iUnset -and $iTa -gt $iUnset) "read@$iRead repo@$iRepo unset@$iUnset run@$iRun ta@$iTa"
 } finally {
   Remove-Item -LiteralPath 'Env:\TC_PREPUSH_PROBE', 'Env:\TC_PREPUSH_PROBE_EXIT', 'Env:\TC_PREPUSH_PROBE_SAY', 'Env:\TMPDIR', 'Env:\TC_PREPUSH_TA_FAILS', 'Env:\TC_PREPUSH_TA_FAILS_BETA' -ErrorAction SilentlyContinue
+  Remove-Item -LiteralPath 'Env:\TC_REHEARSAL_VERDICT_DIR', 'Env:\TC_NO_REHEARSAL' -ErrorAction SilentlyContinue
   if (Test-Path -LiteralPath $sb) {
     # The sandbox's own worktree first, through git, then the directory. No junctions are ever made here.
     if ($built) { $null = G -C $main worktree remove --force $linked }
@@ -761,7 +790,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
 # writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
 # and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
 # prepush-test-auditors -SelfTest pins its own count.
-$expectedCases = 48   # 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder; 48 with the two that read the slot budget from lib\gate-slots.ps1 (2026-09-18, backlog I237)
+$expectedCases = 51   # 51 since 2026-09-22 with the three chain-rehearsal cases; 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder; 48 with the two that read the slot budget from lib\gate-slots.ps1 (2026-09-18, backlog I237)
 if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''

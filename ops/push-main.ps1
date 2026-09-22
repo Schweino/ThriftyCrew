@@ -45,6 +45,10 @@ param(
   [string]$Branch = 'main',
   [int]$LockWaitSec = 1200,
   [switch]$DryRun,
+  # THE LOUD BYPASS OF THE CHAIN REHEARSAL (2026-09-22, plan-2026-09-22-7): sets TC_NO_REHEARSAL for this push, which the
+  # pre-push hook prints and ops\rehearse-chain.ps1 logs with the reason. Use it for an emergency, never as a habit.
+  [switch]$NoRehearsal,
+  [string]$NoRehearsalReason = '',
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -237,6 +241,21 @@ function Invoke-TcWarmTestAuditors {
   }
 }
 
+function Invoke-TcRehearsalForPush {
+  <# ops\rehearse-chain.ps1 -ForPush, outside the push lock: Code 0 allow, 1 refuse, 3 could not rehearse. A checkout older
+     than the harness has none and is not asked, as an older checkout without hold-push-lock pushes unlocked. An exit 0
+     without the completion marker as the last line decided nothing and is 3. #>
+  param([string]$Dir, [string]$Remote, [string]$Branch)
+  $rh = Join-Path $Dir 'ops\rehearse-chain.ps1'
+  if (-not (Test-Path -LiteralPath $rh)) { return [pscustomobject]@{ Code = 0; Why = 'this checkout has no ops\rehearse-chain.ps1, so no rehearsal is asked' } }
+  $out = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $rh -ForPush -Remote $Remote -Branch $Branch)
+  $code = $LASTEXITCODE
+  foreach ($l in $out) { Say ([string]$l) }
+  $last = [string]($out | Select-Object -Last 1)
+  if ($code -eq 0 -and $last -notmatch '^CHAIN-REHEARSAL-CHECK-COMPLETE') { $code = 3 }
+  return [pscustomobject]@{ Code = $code; Why = $last }
+}
+
 function Get-TcWarmRefLine {
   <# The ref line git hands pre-push for this push, as push-main will make it: the local HEAD over the remote ref's
      last-fetched sha. '' when either cannot be read, which the caller treats as could-not-evaluate. #>
@@ -250,7 +269,7 @@ function Get-TcWarmRefLine {
 }
 
 function Invoke-TcPushMain {
-  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '', [string]$SeedScript = '')
+  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '', [string]$SeedScript = '', [scriptblock]$RehearsalRunner = $null)
   # WHAT THE REMOTE HELD BEFORE THIS PUSH QUEUED. Read here and compared with what the fetch inside the lock returns,
   # it is this wrapper's own answer to "did the remote move while I waited" - the quantity that decides whether a
   # retry can ever converge, recorded per push in lib\push-ledger.ps1 rather than re-derived from %TEMP% afterwards.
@@ -307,6 +326,19 @@ function Invoke-TcPushMain {
     Say ("push-main: the gate did not settle outside the lock ({0}), so it is left to the hook inside the lock, gated exactly as before.{1}" -f $g.Code, $(if ($g.Why) { ' ' + $g.Why } else { '' }))
   } else {
     Say 'push-main: gate PASSED outside the lock, so the lock is taken only for the fetch, the rebase and the ref update.'
+  }
+
+  # ---- THE CHAIN REHEARSAL, ALSO BEFORE THE LOCK (2026-09-22, RCA F2, plan-2026-09-22-7) ----
+  # A push that changes a script in ops\chain-manifest.json must carry a rehearsal over recent real data, and the rehearsal
+  # takes the chain's own time (about 14 minutes), so it runs HERE, unlocked, for the reason the gate does. The hook inside
+  # the lock only reads the recorded verdict. 1 = rehearsed and failed (or no verdict could be made to pass), 3 = could not
+  # rehearse with its blind= cause; both refuse before the queue, and neither is ever read as a pass.
+  $rh = $(if ($RehearsalRunner) { & $RehearsalRunner $Dir } else { Invoke-TcRehearsalForPush -Dir $Dir -Remote $Remote -Branch $Branch })
+  if ($rh.Code -ne 0) {
+    Say ("push-main: REFUSED before the lock - {0}. The rehearsal lines above say which stage or cause. Rehearse again, or push with -NoRehearsal -NoRehearsalReason '<why>' to bypass loudly." -f $(if ($rh.Code -eq 3) { 'the chain rehearsal COULD NOT EVALUATE (exit 3), which is never a pass' } else { 'this push changes the daily chain and has no passing rehearsal (exit ' + $rh.Code + ')' }))
+    $outcome = $(if ($rh.Code -eq 3) { 'refused-rehearsal-blind' } else { 'refused-rehearsal' }); $ledgerState = 'not-taken'
+    & $writeRow
+    return $rh.Code
   }
 
   $lock = Enter-TcPushLock @enter
@@ -575,6 +607,21 @@ $m.Dispose()
     $rS3 = Invoke-TcPushMain -Dir $s3 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -SeedScript $sdFail
     T ($kCT + '  a seed that fails is best effort: the gate still runs and the push still proceeds') `
       ($rS3 -eq 0 -and $script:gateRuns -eq 1) ("rc={0} gateRuns={1}" -f $rS3, $script:gateRuns)
+    # THE CHAIN REHEARSAL LEG (2026-09-22, plan-2026-09-22-7): it runs after a green gate and before the lock, and a
+    # failed or could-not-run rehearsal refuses there with its own code; the runner is the seam, as the gate's is.
+    $rhRed = { param($d) [pscustomobject]@{ Code = 1; Why = 'fixture: the rehearsal failed at stage commit' } }
+    $rhBlind = { param($d) [pscustomobject]@{ Code = 3; Why = 'fixture: blind=no-seed-board' } }
+    $rhGreen = { param($d) [pscustomobject]@{ Code = 0; Why = 'fixture: rehearsed-pass' } }
+    $script:gateRuns = 0
+    $rR1 = Invoke-TcPushMain -Dir $s3 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -SeedScript $sdFail -RehearsalRunner $rhRed
+    T ($kMF + '  a push whose chain rehearsal FAILED is refused (1) before the lock, after its gate ran once') `
+      ($rR1 -eq 1 -and $script:gateRuns -eq 1) ("rc={0} gateRuns={1}" -f $rR1, $script:gateRuns)
+    $rR2 = Invoke-TcPushMain -Dir $s3 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -SeedScript $sdFail -RehearsalRunner $rhBlind
+    T ($kMNF + '  a rehearsal that could not run is exit 3, never a pass and never read as a red') ($rR2 -eq 3) ("rc={0}" -f $rR2)
+    $rR3 = Invoke-TcPushMain -Dir $s3 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -SeedScript $sdFail -RehearsalRunner $rhGreen
+    T ($kCT + '  a passing rehearsal lets the push go on to the lock exactly as before') ($rR3 -eq 0) ("rc={0}" -f $rR3)
+    $rR4 = Invoke-TcRehearsalForPush -Dir $s3 -Remote 'origin' -Branch 'main'
+    T ($kMNF + '  a checkout with no ops\rehearse-chain.ps1 is not asked for a rehearsal (the older-checkout rule)') ($rR4.Code -eq 0) ("code={0} why={1}" -f $rR4.Code, $rR4.Why)
 
     $a = New-Clone 'a'
     [IO.File]::WriteAllText((Join-Path $a 'a.txt'), 'a')
@@ -766,5 +813,9 @@ $m.Dispose()
   exit 0
 }
 
+if ($NoRehearsal) {
+  $env:TC_NO_REHEARSAL = $(if ($NoRehearsalReason) { $NoRehearsalReason } else { 'push-main -NoRehearsal, no reason given' })
+  Say ('push-main: *** -NoRehearsal *** this push skips the chain rehearsal; the hook will print it and the bypass is logged. Reason: ' + $env:TC_NO_REHEARSAL)
+}
 $rc = Invoke-TcPushMain -Dir $repo -Remote $Remote -Branch $Branch -LockWaitSec $LockWaitSec -DryRun ([bool]$DryRun)
 exit $rc

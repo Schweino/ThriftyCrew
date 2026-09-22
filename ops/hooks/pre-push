@@ -288,12 +288,50 @@ if [ "$rc" -eq 0 ]; then
   talog="${TMPDIR:-/tmp}/tc-prepush-ta-$$.log"
   powershell -NoProfile -ExecutionPolicy Bypass -File "$ta" -RefsFromStdin < "$refs" > "$talog" 2>/dev/null
   tarc=$?
+
+  # A CHAIN-TOUCHING PUSH CARRIES A REHEARSAL VERDICT (2026-09-22, RCA F2, grocery/triage-plans/plan-2026-09-22-7.json).
+  # 8 of the defects of 09-20 to 09-22 passed run-gates and failed on the next real board, because nothing ran the daily
+  # chain over real data before the bot did. ops/rehearse-chain.ps1 -CheckPush reads git's ref lines and, for a push to
+  # main that changes a script in ops/chain-manifest.json, ALLOWS only on a recorded rehearsal pass over data no older than
+  # two days. It never rehearses: it decides from the record in seconds, BEFORE the push lock below is taken, so the
+  # ~14-minute rehearsal itself runs outside the lock (ops/push-main.ps1 runs it there, or run the script by hand).
+  # Exit 1 is "rehearsed and failed" or "no verdict"; exit 3 is "could not rehearse" and names its blind= cause; neither is
+  # a pass. The loud bypass is TC_NO_REHEARSAL=<reason> (push-main -NoRehearsal sets it), which is printed and logged. A
+  # checkout that predates the script has nothing to check with and says so, as the push-lock holder does.
+  rh="$repo/ops/rehearse-chain.ps1"
+  rhrc=0
+  rhlog="${TMPDIR:-/tmp}/tc-prepush-rh-$$.log"
+  if [ -f "$rh" ]; then
+    powershell -NoProfile -ExecutionPolicy Bypass -File "$rh" -CheckPush -RefsFromStdin < "$refs" > "$rhlog" 2>/dev/null
+    rhrc=$?
+    if [ "$rhrc" -eq 0 ] && ! tail -n 1 "$rhlog" | grep -q -E "^CHAIN-REHEARSAL-CHECK-COMPLETE"; then
+      rhrc=4
+    fi
+  else
+    echo "pre-push: this checkout has no ops/rehearse-chain.ps1, so no chain rehearsal was asked of this push." > "$rhlog"
+  fi
   rm -f "$refs"
   grep -v -E "^PREPUSH-TEST-AUDITORS-COMPLETE" "$talog" >&2
   # An exit 0 counts only with the completion marker as the last line: a check that died early has
   # not decided anything.
+  if [ "$tarc" -eq 0 ] && tail -n 1 "$talog" | grep -q -E "^PREPUSH-TEST-AUDITORS-COMPLETE" && [ "$rhrc" -ne 0 ]; then
+    rm -f "$talog"
+    grep -v -E "^CHAIN-REHEARSAL-CHECK-COMPLETE" "$rhlog" >&2
+    echo "" >&2
+    case "$rhrc" in
+      3) echo "pre-push: BLOCKED - the chain rehearsal COULD NOT EVALUATE (exit 3). A could-not-rehearse is NEVER a pass; its blind= cause is above." >&2 ;;
+      4) echo "pre-push: BLOCKED - the chain rehearsal check exited 0 without its completion marker, so it decided nothing." >&2 ;;
+      *) echo "pre-push: BLOCKED - this push changes the daily chain and carries no passing rehearsal over recent data (exit $rhrc)." >&2 ;;
+    esac
+    echo "          Rehearse:  powershell -File ops/rehearse-chain.ps1   (or land with ops/push-main.ps1, which rehearses outside the lock)" >&2
+    echo "          Bypass loudly: ops/push-main.ps1 -NoRehearsal -NoRehearsalReason '<why>'  (a plain push: TC_NO_REHEARSAL='<why>')" >&2
+    echo "          full output kept at: $rhlog" >&2
+    exit 1
+  fi
   if [ "$tarc" -eq 0 ] && tail -n 1 "$talog" | grep -q -E "^PREPUSH-TEST-AUDITORS-COMPLETE"; then
     rm -f "$talog"
+    grep -v -E "^CHAIN-REHEARSAL-CHECK-COMPLETE" "$rhlog" >&2
+    rm -f "$rhlog"
     # EVERY CHECK HAS PASSED, so now take the lock and hold it across the ref update only. The trap is cleared
     # first: it exists to hand the lock back on every failing path, and on THIS path the holder must outlive the
     # hook, because git has not pushed yet. What ends the hold is git exiting, which the holder watches.
@@ -301,6 +339,7 @@ if [ "$rc" -eq 0 ]; then
     trap - EXIT
     exit 0
   fi
+  rm -f "$rhlog"
   echo "" >&2
   if [ "$tarc" -eq 0 ]; then
     echo "pre-push: BLOCKED - the test-auditors check exited 0 without its completion marker, so it decided nothing." >&2

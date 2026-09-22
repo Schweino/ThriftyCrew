@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "why": "The scripts whose FIRST REAL RUN is the daily chain (RCA F2, design/RCA-holistic-2026-09-22.md). A push to main that changes one of them must carry a chain rehearsal verdict (ops/rehearse-chain.ps1) over data no older than max_data_age_days, or pre-push refuses it. -NoRehearsal on ops/push-main.ps1 (TC_NO_REHEARSAL for a plain git push) is the loud bypass.",
+  "max_data_age_days": 2,
+  "files": [
+    "grocery/check-ad-cycles.ps1",
+    "grocery/capture-run.ps1",
+    "grocery/guards.ps1",
+    "grocery/compare-deals.ps1",
+    "grocery/export-feed.ps1",
+    "grocery/send-alert.ps1",
+    "grocery/alert-lib.ps1",
+    "meal-prep/engine/cost-recipes.ps1",
+    "meal-prep/engine/build-cards.ps1",
+    "meal-prep/engine/publish.ps1",
+    "meal-prep/pipeline/reanchor-all.ps1",
+    "meal-prep/lib/gated-republish-lib.ps1",
+    "lib/pipeline-commit.ps1",
+    "lib/bot-paths.ps1",
+    "lib/chain-verdict-lib.ps1",
+    "lib/git-blob-lib.ps1",
+    "ops/chain-manifest.json",
+    "ops/rehearse-chain.ps1"
+  ],
+  "globs": [
+    "grocery/build-*.ps1",
+    "grocery/verify-*.ps1",
+    "grocery/publish-*.ps1",
+    "ops/hooks/*",
+    "ops/verify-*.ps1"
+  ],
+  "derive_from": [
+    "grocery/guards.ps1",
+    "grocery/compare-deals.ps1",
+    "grocery/capture-run.ps1"
+  ],
+  "derive_dirs": [
+    "grocery/",
+    "lib/",
+    "meal-prep/engine/",
+    "meal-prep/lib/",
+    "meal-prep/pipeline/",
+    "ops/"
+  ],
+  "derive_note": "Every .ps1 NAMED in a derive_from script's text (its delegated audits, the libraries it dot-sources, the builders and lanes it launches) joins the set, resolved by file name under derive_dirs at the pushed commit. check-ad-cycles.ps1 is deliberately NOT a derive_from: it names about 150 advisory audits in its INSPECT fan-out, which run after the ship boundary and cannot hold the board or refuse the commit; deriving from it would ask a 14-minute rehearsal of nearly every push. Its own edits are rehearsed through files[]."
+}

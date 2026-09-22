@@ -142,6 +142,42 @@ if ($SelfTest) {
     ($cacCommit.Count -eq 1) -and (Test-CacUnderNoCommitGuard $cacCommit[0])
   }
 
+  # ---- -NoPublish MEANS NO READER-FACING WRITE (2026-09-22, plan-2026-09-22-7, RCA F2) ------------------------------------
+  # ops\rehearse-chain.ps1 runs this chain with -NoPublish over the real data and must be unable to reach a reader. Until
+  # today -NoPublish held publish-deals-page only: the recipe republish, top5-weekly, the free rotation, the hub grid's
+  # -Publish, the member price alerts, the Friday digest and the item-request mails all ran under it. The rehearsal harness
+  # refuses to start a tree unless THIS case passes, by its exact name, so do not rename it.
+  function Test-CacUnderNoPublish($Node) {
+    $child = $Node; $p = $Node.Parent
+    while ($null -ne $p) {
+      if ($p -is [System.Management.Automation.Language.IfStatementAst]) {
+        foreach ($cl in $p.Clauses) {
+          if (($cl.Item2 -eq $child) -and ($cl.Item1.Extent.Text -match ('-not \$No' + 'Publish\b'))) { return $true }
+        }
+        if (($null -ne $p.ElseClause) -and ($p.ElseClause -eq $child)) {
+          foreach ($cl in $p.Clauses) { if ([string]::Equals($cl.Item1.Extent.Text.Trim(), ('$No' + 'Publish'), [StringComparison]::Ordinal)) { return $true } }
+        }
+      }
+      $child = $p; $p = $p.Parent
+    }
+    return $false
+  }
+  $cacWriters = @(('publish-deals' + '-page.ps1'), ('top5' + '-weekly.ps1'), ('rotate-free' + '-dinners.ps1'), ('build-hub' + '-grid.ps1'),
+    ('send-price' + '-alerts.ps1'), ('send-friday' + '-digest.ps1'), ('notify-item' + '-added.ps1'))
+  $cacWriterSites = New-Object Collections.ArrayList
+  $cacWriterMissing = New-Object Collections.ArrayList
+  foreach ($w in $cacWriters) {
+    $hits = @($cacAst.FindAll({ param($n) ($n -is [System.Management.Automation.Language.StringConstantExpressionAst]) -and (([string]$n.Value -eq $w) -or ([string]$n.Value).EndsWith('\' + $w)) }.GetNewClosure(), $true) | Where-Object { -not (Test-CacInSelfTest $_) })
+    if ($hits.Count -eq 0) { [void]$cacWriterMissing.Add($w) }
+    foreach ($h in $hits) { [void]$cacWriterSites.Add($h) }
+  }
+  foreach ($h in (Get-CacCalls ('Invoke-TcGated' + 'Republish'))) { [void]$cacWriterSites.Add($h) }
+  $cacUnguarded = @($cacWriterSites | Where-Object { -not (Test-CacUnderNoPublish $_) } | ForEach-Object { 'line ' + $_.Extent.StartLineNumber + ' ' + $_.Extent.Text })
+  Test-CacCase 'MUST FIRE  every reader-facing writer is reached only without -NoPublish' {
+    ($cacWriterMissing.Count -eq 0) -and ($cacWriterSites.Count -ge 8) -and ($cacUnguarded.Count -eq 0)
+  }
+  if ($cacUnguarded.Count -or $cacWriterMissing.Count) { Write-Output ('      unguarded: ' + ($cacUnguarded -join ' | ') + '   not found: ' + ($cacWriterMissing -join ', ')) }
+
   # ---- SCHEDULE vs DATA, LIKE FOR LIKE (2026-09-18, queue 2026-09-18-de39ec) ------------------------------
   # Frozen from the 2026-09-18 state: ad-schedule.json Baker's current 09-16..09-22, the newest flyer
   # bakers-deals-2026-09-09.json closed 09-15 (146 rows), and bakers-regular-2026-09-18.json whose promo rows run
@@ -1267,6 +1303,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             Log ("loop NOT closed: $($stale.Count) cards moved, over the $CAP sanity cap - not republishing unattended")
             $summary += "REVIEW    $($stale.Count) recipe cards moved cost today (cap $CAP). Something systemic changed; review then run build-cards + publish for meal-prep\pipeline\reanchor-stale-cards.txt"
             if (-not $NoAlert) { try { Send-Alert -Subject "Recipe cards: $($stale.Count) moved, over the daily cap" -Body ("The daily chain re-anchored the specs but did NOT republish, because $($stale.Count) cards changed cost and the sanity cap is $CAP. A number this large usually means a shared row, a gpu, or a DB rename moved rather than ordinary price drift. Slug list: meal-prep\pipeline\reanchor-stale-cards.txt") | Out-Null } catch {} }
+          } elseif ($NoPublish) {
+            # -NoPublish MEANS NO READER-FACING WRITE (2026-09-22, plan-2026-09-22-7). This republish sends cards to Ghost, and
+            # until today -NoPublish held only publish-deals-page: ops\rehearse-chain.ps1 runs this chain with -NoPublish over
+            # real data and must be unable to reach a reader. The slugs stay unpublished; nothing is written to the pending file.
+            Log ("loop NOT closed under -NoPublish: $($stale.Count) card(s) moved cost and none was rebuilt or republished")
           } else {
             # A FAILED PUBLISH MUST SURVIVE THE RUN. Staleness is measured spec-vs-BUILT-card, and build-cards
             # runs first - so the moment the cards are rebuilt the spec and the card agree and tomorrow reports
@@ -1812,11 +1853,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # board, while the live feed still read week_of 2026-09-06. Readers saw card prices from a board
       # they could not see. These three write to Ghost; a held board must hold them too.
       if ($guardsBlocked) { Log 'held: guards blocked - hub/rotation not republished from a refused board (top5-weekly, rotate-free-dinners, build-hub-grid -Publish all skipped)'; $summary += 'HELD      guards blocked the board, so the hub Top 5, the free rotation and the 591 recipe cards were NOT republished from it' }
-      if (-not $guardsBlocked) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') | Out-Null; Log 'top5-weekly refreshed' } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) } }
+      if (-not $guardsBlocked -and -not $NoPublish) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') | Out-Null; Log 'top5-weekly refreshed' } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) } }
       # Free-dinner rotation (Brad, 2026-07-25): top 5 cheapest dinners per protein go FREE for the board
       # week; they revert to members-only when the week re-ranks them. Runs daily right after re-costing but
       # no-ops until the board week (or the set) changes, so flips happen on the ad flip. Non-fatal.
-      if (-not $guardsBlocked) { try { (Invoke-Bounded 'free-rotation' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1')) 900).Output | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) } }
+      if (-not $guardsBlocked -and -not $NoPublish) { try { (Invoke-Bounded 'free-rotation' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1')) 900).Output | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) } }
       # DID THE PAYWALL SURVIVE THE ROTATION? (2026-08-29) Immediately after the only thing in the estate
       # that changes post visibility, ask the revenue question nobody was asking: is any recipe the
       # database calls PAID being served free to anonymous visitors? 22 were, found by accident during a
@@ -1849,7 +1890,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # one that carries -Publish. The three tools above only write their local source; publishing those
       # goes through publish-tool-post.ps1, which refuses to overwrite an unreviewed live body.
       # -Publish WRITES TO GHOST, so it is gated with its two siblings above - see the note at top5-weekly.
-      if (-not $guardsBlocked) {
+      if (-not $guardsBlocked -and -not $NoPublish) {
         try { (Invoke-Bounded 'surface-hub' @('-ExecutionPolicy','Bypass','-File',(Join-Path $mpRoot 'meal-prep\build-hub-grid.ps1'),'-Publish') 900).Output | Select-Object -Last 3 | ForEach-Object { Log ('surface-hub: ' + $_) } }
         catch { Log ('build-hub-grid threw: ' + $_.Exception.Message) }
       }
@@ -2833,7 +2874,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         }
       } catch { Log ('alert-registry threw: ' + $_.Exception.Message) }
       # price alerts: email label:alert-<id> subscribers when an item hits a tracked low (self-gates via alert-state.json)
-      try { $paOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-price-alerts.ps1'); Log ('price-alerts: ' + (@($paOut)[-1])) } catch { Log ('send-price-alerts threw: ' + $_.Exception.Message) }
+      if (-not $NoPublish) { try { $paOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-price-alerts.ps1'); Log ('price-alerts: ' + (@($paOut)[-1])) } catch { Log ('send-price-alerts threw: ' + $_.Exception.Message) } }   # -NoPublish holds member mail too (plan-2026-09-22-7)
 
       # ---- THE REVIEW-FLAG UNIT: sanity-check -> basis-reconcile -> pack-basis -> the alert block. ----
       # These move together and in this order. sanity-check writes out\guards-<week>.json and the two basis
@@ -3292,7 +3333,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
 
       # ---- Friday digest: the weekly board email the capture CTAs promise. Only when guards passed (never
       # email prices the gates would not publish), Fridays only, idempotent inside the script. Non-fatal.
-      if (-not $guardsBlocked) {
+      if (-not $guardsBlocked -and -not $NoPublish) {
         try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-friday-digest.ps1') | ForEach-Object { Log ('digest: ' + $_) } } catch { Log ('digest threw: ' + $_.Exception.Message) }
       }
 
@@ -3323,12 +3364,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # requester who asked for it (one-off via the Worker's Gmail; requesters are NOT members). Driven purely
       # by the notify-known-ids.json state diff, so it is a no-op every day nothing new was added - and it runs
       # regardless of -NoAlert (these are requester-facing, not Brad-alerts). Never fatal to the pipeline.
-      try {
+      if (-not $NoPublish) { try {
         $niOut = (Invoke-Bounded 'notify-item-added' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'notify-item-added.ps1')) 300).Output
         foreach ($ln in @($niOut)) { Log ("notify-item-added: " + $ln) }
         $niSent = @($niOut | Where-Object { "$_" -match '^NOTIFIED ' }).Count
         if ($niSent -gt 0) { $summary += ("NOTIFIED  $niSent item-request follower(s) emailed - their suggested item is now on the board") }
-      } catch { Log ('notify-item-added threw: ' + $_.Exception.Message) }
+      } catch { Log ('notify-item-added threw: ' + $_.Exception.Message) } }   # -NoPublish holds requester mail too (plan-2026-09-22-7)
     }
   } catch {
     # AN ERROR WITH NO LOCATION IS A DAY OF GUESSING (2026-08-22). This caught
