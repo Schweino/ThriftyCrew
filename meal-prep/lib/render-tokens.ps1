@@ -144,7 +144,14 @@ function Move-SpecPriceToReleaseHydration { param($Spec)
     $description = [string]$Spec.head.description
     $priceClause = '(?i),?\s*(?:for\s+)?(?:about|roughly|around)\s+' + $pattern + '\s+(?:a|per|each\b)\s*[^.]*\.?'
     $description = [regex]::Replace($description, $priceClause, ', with live pricing shown on the page.')
-    $Spec.head.description = Remove-GhostStaticCurrencyClaims ([regex]::Replace($description, $pattern, 'current pricing shown on the page'))
+    # THE SHAPES WITH NO UNIT (2026-09-22): "about $5.87 (at everyday cost)." matched nothing above, fell to the bare rewrite
+    # below and shipped "about current pricing shown on the page (at everyday cost)." in the meta, og, twitter and excerpt
+    # of 43 of 588 built cards. They get the same clause.
+    $bareClause = '(?i),?\s*(?:(?:for|at)\s+)?(?:(?:about|roughly|around)\s+)?' + $pattern + '(?:\s+(?:a|per|each)\b[^.(]*)?\s*\(at everyday cost\)'
+    $description = [regex]::Replace($description, $bareClause, ', with live pricing shown on the page')
+    $description = Remove-GhostStaticCurrencyClaims ([regex]::Replace($description, $pattern, 'current pricing shown on the page'))
+    if ($description -match 'current pricing shown on the page') { throw ("Move-SpecPriceToReleaseHydration: " + [string]$Spec.slug + " head.description renders the fallback phrase into a sentence: '" + $description + "'. Write the price as 'about `${{cost_ps}} a serving.'") }
+    $Spec.head.description = $description
   }
   return $Spec
 }
@@ -292,6 +299,12 @@ if ($SelfTest) {
     T ('MUST FIRE  a placeholder refuses the fallback [' + $badV + ']') `
       (& { $t = $false; try { Format-TcLivePriceSpan -Slug 'x' -Value $badV | Out-Null } catch { $t = $true }; $t }) 'rendered a non-price'
   }
+  $dd = '{"slug":"d","stat":{"cost_ps":"2.00"},"head":{"description":"Chicken alfredo, 14 servings. 533 calories, 57g protein, about $2.00 (at everyday cost)."}}' | ConvertFrom-Json
+  $dd = Move-SpecPriceToReleaseHydration $dd
+  T 'MUST FIRE  "about $X (at everyday cost)." never renders the fallback phrase into the description' ($dd.head.description -eq 'Chicken alfredo, 14 servings. 533 calories, 57g protein, with live pricing shown on the page.') $dd.head.description
+  $de = '{"slug":"e","stat":{"cost_ps":"2.00"},"head":{"description":"Pasta bake. 590 calories, about $2.00 a serving (at everyday cost)."}}' | ConvertFrom-Json
+  $de = Move-SpecPriceToReleaseHydration $de
+  T 'CLEAN TWIN  "about $X a serving" still reads "with live pricing shown on the page."' ($de.head.description -eq 'Pasta bake. 590 calories, with live pricing shown on the page.') $de.head.description
   T 'MUST FIRE  a placeholder refuses a field with no basis in the registry' `
     (& { $t = $false; try { Format-TcLivePriceSpan -Slug 'x' -Field 'cost_batch' -Value '3.00' | Out-Null } catch { $t = $true }; $t }) 'accepted cost_batch'
   T 'MUST FIRE  a unit_price placeholder that names no commodity is refused' `

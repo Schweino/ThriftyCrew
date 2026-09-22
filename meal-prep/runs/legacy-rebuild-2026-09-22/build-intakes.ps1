@@ -51,7 +51,7 @@ $recipes = @(
       cost_closing_html = 'That is about <strong>${{cost_ps}}</strong> a meal (at everyday cost). Put it next to a single takeout dinner and it is not close.'
       upsell_html = ('Like cooking two weeks of dinners for about <strong>${{cost_ps}}</strong> a plate (at everyday cost)? ' + $upsellTail)
       credit_html = $credit }
-    head = [ordered]@{ description = 'Budget chicken alfredo meal prep: chicken, protein rotini, broccoli and a cottage cheese alfredo, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).'
+    head = [ordered]@{ description = 'Budget chicken alfredo meal prep: chicken, protein rotini, broccoli and a cottage cheese alfredo, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving.'
       keywords = 'chicken alfredo meal prep, budget meal prep, high protein pasta, cottage cheese alfredo, freezer meal prep'; image = ''; prepTime = 'PT20M'; cookTime = 'PT30M'; totalTime = 'PT50M'
       steps = @('Weigh the empty pot and write the number down.', 'Boil the rotini until al dente and drain.', 'Cube, season and cook the chicken breast.', 'Blend the cottage cheese smooth and stir it into the warmed alfredo sauce.', 'Steam or roast the broccoli.', 'Combine everything, weigh the full pot, subtract the pot and divide by 14.') } },
   [ordered]@{ name = 'Slow-Cooker BBQ Chicken Meal Prep'; slug = 'shredded-bbq-chicken-sammies'; protein = 'chicken'; cuisine = 'American'; visibility = 'paid'
@@ -77,7 +77,7 @@ $recipes = @(
       cost_closing_html = 'About <strong>${{cost_ps}}</strong> a plate (at everyday cost) for the chicken and the fries. The bun is on you.'
       upsell_html = ('BBQ chicken sandwiches and fries for about <strong>${{cost_ps}}</strong> a plate (at everyday cost). ' + $upsellTail)
       credit_html = $credit }
-    head = [ordered]@{ description = 'Slow-cooker BBQ chicken meal prep: shredded BBQ chicken with crinkle-cut fries, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).'
+    head = [ordered]@{ description = 'Slow-cooker BBQ chicken meal prep: shredded BBQ chicken with crinkle-cut fries, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving.'
       keywords = 'bbq chicken meal prep, slow cooker chicken, shredded chicken sandwiches, budget meal prep, high protein'; image = ''; prepTime = 'PT15M'; cookTime = 'PT4H'; totalTime = 'PT4H15M'
       steps = @('Season the chicken breast.', 'Slow cook on HIGH for 4 hours.', 'Shred and drain the chicken.', 'Mix in the BBQ sauce.', 'Bake the fries per the bag.', 'Weigh and divide the chicken and fries by 14.') } },
   [ordered]@{ name = 'Beef Protein Pasta Meal Prep'; slug = 'beef-protein-pasta'; protein = 'beef'; cuisine = 'Italian-American'; visibility = 'paid'
@@ -103,7 +103,7 @@ $recipes = @(
       cost_closing_html = 'About <strong>${{cost_ps}}</strong> a container (at everyday cost) for a meat-sauce pasta with {{protein}} grams of protein in it.'
       upsell_html = ('A creamy beef pasta for about <strong>${{cost_ps}}</strong> a container (at everyday cost). ' + $upsellTail)
       credit_html = $credit }
-    head = [ordered]@{ description = 'Beef protein pasta meal prep: 93/7 ground beef, protein penne and a cottage cheese pasta sauce, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).'
+    head = [ordered]@{ description = 'Beef protein pasta meal prep: 93/7 ground beef, protein penne and a cottage cheese pasta sauce, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving.'
       keywords = 'beef pasta meal prep, protein pasta, cottage cheese pasta sauce, ground beef meal prep, budget meal prep'; image = ''; prepTime = 'PT15M'; cookTime = 'PT30M'; totalTime = 'PT45M'
       steps = @('Weigh the empty pot and write the number down.', 'Boil the penne until al dente and drain.', 'Brown, drain and season the ground beef.', 'Blend the pasta sauce with the cottage cheese and warm it.', 'Combine everything, weigh the full pot, subtract the pot and divide by 14.') } },
   [ordered]@{ name = 'Chicken Marinara Meal Prep'; slug = 'chicken-marinara-pasta'; protein = 'chicken'; cuisine = 'Italian-American'; visibility = 'paid'
@@ -132,7 +132,7 @@ $recipes = @(
       cost_closing_html = 'About <strong>${{cost_ps}}</strong> a container (at everyday cost) for a pizza pasta with {{protein}} grams of protein in it.'
       upsell_html = ('A cheesy chicken marinara for about <strong>${{cost_ps}}</strong> a container (at everyday cost). ' + $upsellTail)
       credit_html = $credit }
-    head = [ordered]@{ description = 'Chicken marinara meal prep: chicken, protein penne, marinara, mozzarella and turkey pepperoni, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).'
+    head = [ordered]@{ description = 'Chicken marinara meal prep: chicken, protein penne, marinara, mozzarella and turkey pepperoni, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving.'
       keywords = 'chicken marinara meal prep, pizza pasta, protein pasta, high protein meal prep, budget meal prep'; image = ''; prepTime = 'PT15M'; cookTime = 'PT30M'; totalTime = 'PT45M'
       steps = @('Weigh the empty pot and write the number down.', 'Boil the penne until al dente and drain.', 'Cube, season and cook the chicken breast.', 'Blend the cottage cheese into the marinara and warm it.', 'Combine chicken, sauce and penne, then stir in the mozzarella and pepperoni.', 'Weigh the full pot, subtract the pot and divide by 14.') } }
 )

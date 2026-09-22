@@ -25,14 +25,14 @@
     "intro_html":  "93/7 ground beef, protein penne and a pasta sauce blended with cottage cheese until it turns creamy. It eats like a rich meat sauce and carries a lot of protein for the money. It comes in at about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost), with \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2712 g)",
-                                "\u003cstrong\u003eTraditional Pasta Sauce (Great Value):\u003c/strong\u003e 72 oz dry (2040 g)",
+                                "\u003cstrong\u003eTraditional Pasta Sauce (Great Value):\u003c/strong\u003e 8.25 cups (2040 g)",
                                 "\u003cstrong\u003eProtein Penne Pasta:\u003c/strong\u003e 27.75 oz dry (784 g)",
                                 "\u003cstrong\u003eCottage Cheese (Darigold):\u003c/strong\u003e 24 oz (678 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Beef, 6 lb: ~$36.89. \u003cstrong\u003eBuy 6 lbs: $37.02.\u003c/strong\u003e",
-                       "Traditional Pasta Sauce, 72 oz dry: ~$4.76. \u003cstrong\u003eBuy 3 24oz jars: $4.76.\u003c/strong\u003e",
+                       "Traditional Pasta Sauce, 8.25 cups: ~$4.76. \u003cstrong\u003eBuy 3 24oz jars: $4.76.\u003c/strong\u003e",
                        "Protein Penne Pasta, 27.75 oz dry: ~$4.18. \u003cstrong\u003eBuy 2 14.5oz boxes: $4.38.\u003c/strong\u003e",
                        "Cottage Cheese, 24 oz: ~$2.72. \u003cstrong\u003eBuy 1 24oz tub: $2.73.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $48.55 across 14 servings, so roughly $3.47 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
@@ -76,7 +76,7 @@
                                    "item":  "Traditional Pasta Sauce",
                                    "canon":  "Traditional Pasta Sauce",
                                    "grams":  2040,
-                                   "buy":  "72 oz dry",
+                                   "buy":  "8.25 cups",
                                    "bid":  "traditional-pasta-sauce",
                                    "gpu":  "28.350"
                                },
@@ -99,7 +99,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Beef protein pasta meal prep: 93/7 ground beef, protein penne and a cottage cheese pasta sauce, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
+                 "description":  "Beef protein pasta meal prep: 93/7 ground beef, protein penne and a cottage cheese pasta sauce, 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving.",
                  "keywords":  "beef pasta meal prep, protein pasta, cottage cheese pasta sauce, ground beef meal prep, budget meal prep",
                  "image":  "",
                  "prepTime":  "PT15M",
@@ -108,7 +108,7 @@
                  "costPerServing":  3.47,
                  "recipeIngredient":  [
                                           "93/7 Ground Beef, 6 lb (2712 g)",
-                                          "Traditional Pasta Sauce, 72 oz dry (2040 g)",
+                                          "Traditional Pasta Sauce, 8.25 cups (2040 g)",
                                           "Protein Penne Pasta, 27.75 oz dry (784 g)",
                                           "Cottage Cheese, 24 oz (678 g)"
                                       ],

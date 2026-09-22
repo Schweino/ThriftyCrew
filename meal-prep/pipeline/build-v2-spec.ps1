@@ -177,6 +177,10 @@ if($SelfTest){
     ($__bvsSrc -match '(?s)if\(\$script:specIsNew\)\{[\s\S]{0,400}?\}\s*else\s*\{[^}]{0,200}?WARNING') 'an existing spec would be refused'
   T 'newness is read BEFORE anything is written, or the -RunCost second write would see its own first' `
     ($__bvsSrc -match '(?m)^\$script:specIsNew\s*=\s*-not\s*\(Test-Path \$outFile\)') 'specIsNew is not captured at the existence check'
+  T 'MUST FIRE  a pasta SAUCE is never labelled dry pasta (founding line: "Traditional Pasta Sauce: 72 oz dry")' (-not (Test-FaDryPasta 'Traditional Pasta Sauce')) 'classed as dry pasta'
+  T 'MUST NOT FIRE  a shape word inside another word is not pasta ("Shellsfish" is not "Shells")' (-not (Test-FaDryPasta 'Shellsfish')) 'classed as dry pasta'
+  $fa2 = Get-FriendlyAmtCore 'Penne Pasta' 784
+  T 'CLEAN TWIN  real pasta is still classed and labelled "oz dry"' ((Test-FaDryPasta 'Penne Pasta') -and $fa2 -match 'oz dry$') $fa2
   if($script:f -eq 0){ Write-Output 'build-v2-spec SELF-TEST PASS'; exit 0 }
   Write-Output ("build-v2-spec SELF-TEST FAIL: " + $script:f + " case(s)"); exit 1
 }

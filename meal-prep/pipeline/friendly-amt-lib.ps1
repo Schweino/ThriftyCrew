@@ -31,6 +31,8 @@
 # So it lives here once and the repair reads it.
 $script:FA_USABLE = 0.25
 $script:FA_LB = 453.592
+$script:FA_DRY_PASTA = '(?i)\b(?:Pasta|Spaghetti|Ziti|Fettuccine|Orzo|Noodles|Gnocchi|Tortellini|Shells)\b'
+$script:FA_NOT_DRY_PASTA = '(?i)\b(?:Sauce|Salad)\b'
 $script:FA_OZ = 28.3495
 
 $__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
@@ -193,6 +195,8 @@ function Get-FriendlyAmt {
     return (Get-FriendlyAmtCore $item $g -PinnedRiceCup)
 }
 
+function Test-FaDryPasta([string]$item) { return ($item -match $script:FA_DRY_PASTA -and $item -notmatch $script:FA_NOT_DRY_PASTA) }
+
 function Get-FriendlyAmtCore([string]$item, [double]$g, [switch]$PinnedRiceCup) {
     if ($item -match 'Broth|Stock') {
         $cartons = Get-FaDen $item 'carton'
@@ -213,7 +217,9 @@ function Get-FriendlyAmtCore([string]$item, [double]$g, [switch]$PinnedRiceCup) 
         return ((Get-FaFrac ($g / $rc)) + ' cups dry')
     }
     if ($item -eq 'Eggs')  { return ([string][int][Math]::Round($g / 50.0) + ' large eggs') }
-    if ($item -match 'Pasta|Spaghetti|Ziti|Fettuccine|Orzo|Noodles|Gnocchi|Tortellini|Shells') { return ((Get-FaFrac ($g / $script:FA_OZ)) + ' oz dry') }
+    # DRY PASTA IS A SHAPE WORD, NEVER A SUBSTRING (2026-09-22): the substring test labelled "Traditional Pasta Sauce" as
+    # "72 oz dry" on a built card. A whole shape word, and never a sauce or a salad.
+    if (Test-FaDryPasta $item) { return ((Get-FaFrac ($g / $script:FA_OZ)) + ' oz dry') }
     if ($item -match 'Cheese|Mozzarella|Cheddar|Feta|Parmesan|Ricotta') { return ((Get-FaFrac ($g / $script:FA_OZ)) + ' oz') }
     $can = Get-FaDen $item 'can'
     if ($can -and $g -ge ($can * 0.85)) { $n = [Math]::Round($g / $can, 1); if ([Math]::Abs($n - [Math]::Round($n)) -lt 0.15) { $n = [Math]::Round($n) }; return ("$n can" + $(if ($n -ne 1) { 's' })) }

@@ -73,6 +73,14 @@ function Resolve-RecipeImage($img){
   return $img
 }
 
+function Get-TcCardIsFree { param($Db, [string]$Slug)
+  if (-not $Db -or -not $Db.recipes) { throw "build-card2: recipes-db.json could not be read, so the visibility of '$Slug' is unknown; refusing rather than guessing" }
+  $rows = @($Db.recipes | Where-Object { [string]$_.slug -eq $Slug })
+  if ($rows.Count -ne 1) { throw ("build-card2: '" + $Slug + "' has " + $rows.Count + " recipes-db row(s); its visibility is unknown, so the paywall claim cannot be written. Add its row with its real visibility.") }
+  $v = [string]$rows[0].visibility
+  if (@('public', 'paid', 'members') -notcontains $v) { throw ("build-card2: '" + $Slug + "' has visibility '" + $v + "', which is not public, paid or members") }
+  return ($v -eq 'public')
+}
 if($SelfTest){
   # =================================================================================================
   # THE DATA-BLOCK BASIS, frozen from the rows that were actually wrong on 2026-09-02.
@@ -159,6 +167,11 @@ if($SelfTest){
   T 'MUST FIRE  the Recipe node''s image is taken through Resolve-RecipeImage, not straight from the spec' `
     ($imgText -match ('^Resolve-' + 'RecipeImage\b')) $imgText
 
+  $vdb = [pscustomobject]@{ recipes = @([pscustomobject]@{ slug = 'free-one'; visibility = 'public' }, [pscustomobject]@{ slug = 'paid-one'; visibility = 'paid' }) }
+  $thr = $false; try { Get-TcCardIsFree $vdb 'no-row' | Out-Null } catch { $thr = $true }
+  T 'MUST FIRE  a slug with no recipes-db row refuses the build (never a silent paid default)' $thr 'no throw'
+  T 'CLEAN TWIN  a public row builds free (isAccessibleForFree true)' ((Get-TcCardIsFree $vdb 'free-one') -eq $true) 'not free'
+  T 'CLEAN TWIN  a paid row still builds paid' ((Get-TcCardIsFree $vdb 'paid-one') -eq $false) 'not paid'
   if($f -eq 0){ Write-Output 'build-card2 SELF-TEST PASS'; exit 0 }
   Write-Output "build-card2 SELF-TEST FAIL: $f case(s)"; exit 1
 }
@@ -582,11 +595,10 @@ $recipe = [ordered]@{
 # paid stays marked paid after it is freed. sync-paywall-schema.ps1 is what keeps this true between
 # builds, and the rotation calls it on every flip - exactly as it already republishes the hub for the
 # same reason. This build-time conditional is the other half: a freshly built card starts out correct.
-$isFreeNow = $false
-try {
-  $dbVis = Get-AuxJson $RecipesDb
-  if ($dbVis) { foreach ($rv in $dbVis.recipes) { if ([string]$rv.slug -eq [string]$spec.slug) { $isFreeNow = ([string]$rv.visibility -eq 'public') } } }
-} catch { $isFreeNow = $false }   # unknown visibility -> keep the paywall claim; understating access is the safe direction
+# A MISSING ROW IS NOT "PAID" (2026-09-22). This used to default an unreadable db or an absent row to paid, and the rebuilt
+# FREE /free-chicken-alfredo/ shipped isAccessibleForFree:false because it had no row: a paywall claim on an open page.
+# Unknown visibility now refuses the build by name (Get-TcCardIsFree); the fix is the row, never a default.
+$isFreeNow = Get-TcCardIsFree (Get-AuxJson $RecipesDb) ([string]$spec.slug)
 # THE PAYWALL CLAIM GOES ON THE RECIPE NODE, WHICH IS THE ONE GOOGLE READS (2026-09-07, backlog I44).
 # Until today it went only on the separate Article node below. Measured in Search Console: valid Recipe
 # rich results fell from ~40 in mid-July to ONE by 30 August, tracking the impression collapse. Fetched

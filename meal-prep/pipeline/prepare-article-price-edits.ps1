@@ -128,6 +128,26 @@ function Get-ApeResidueFindings { param([string]$Text, [object[]]$Kept)
   }
   return ,$f
 }
+# THE STORED FIELDS (custom_excerpt, meta_title, meta_description, og_*, twitter_*) cannot hold a live span. One function
+# applies the title change and the field edits to them and refuses what is left: a price literal, money with no stated
+# class, an excerpt over Ghost's 300. -Prepare runs it on the fields pinned at -Inventory, -Land on the live ones, so a
+# field is judged before the edit is written, not first at the PUT (the "$33,000," excerpt of 2026-09-22 was caught by
+# hand). Returns @{ updates = changed fields; findings }.
+$script:APE_FIELDS = @('custom_excerpt', 'meta_title', 'meta_description', 'og_title', 'og_description', 'twitter_title', 'twitter_description')
+function Get-ApeFieldResult { param($Fields, [string]$TitleOld, [string]$TitleNew, [object[]]$FieldEdits, [object[]]$Kept)
+  $upd = [ordered]@{}; $bad = @()
+  foreach ($fld in $script:APE_FIELDS) {
+    $v = [string]$Fields.$fld; if (-not $v) { continue }; $v0 = $v
+    if ($TitleOld -and $TitleNew -and $TitleOld -ne $TitleNew) { $v = $v.Replace($TitleOld, $TitleNew) }
+    foreach ($x in @($FieldEdits | Where-Object { $_ })) { $v = $v.Replace([string]$x.find, [string]$x.replace) }
+    $lf = Find-TcGroceryPriceLiterals $v
+    if ($lf.Count) { $bad += ("$fld still carries " + (($lf | ForEach-Object { $_.figure }) -join ', ')) }
+    foreach ($x in (Get-ApeResidueFindings $v @($Kept | Where-Object { $_ }))) { $bad += ("$fld " + $x) }
+    if ($fld -eq 'custom_excerpt' -and $v.Length -gt 300) { $bad += "custom_excerpt is $($v.Length) chars (Ghost 422 above 300)" }
+    if (-not [string]::Equals($v, $v0, [StringComparison]::Ordinal)) { $upd[$fld] = $v }
+  }
+  return @{ updates = $upd; findings = $bad }
+}
 # A live span for a decision token, with its fallback STAMPED on the fill's own basis.
 function Get-ApeRecipeSpan { param([string]$RecipeSlug)
   $b = Join-Path $mp ('db\built\' + $RecipeSlug + '.body.html')
@@ -186,6 +206,10 @@ if ($SelfTestApe) {
   T 'MUST FIRE  the build-time order follows the stamped prices (A 1.00 before B 2.00) with the skipped item last and labelled' ($order -eq 'A,B,Eggs' -and $ro.html -match 'not ranked: sold by the egg' -and @($ro.moves).Count -eq 1) ($order + ' moves=' + @($ro.moves).Count)
   $ro2 = Set-ApeRankOrder $ro.html
   T 'CLEAN TWIN  an already-ranked list is left byte-identical, with no move recorded' ([string]::Equals($ro2.html, $ro.html, [StringComparison]::Ordinal) -and @($ro2.moves).Count -eq 0) (@($ro2.moves).Count)
+  $fr1 = Get-ApeFieldResult ([pscustomobject]@{ custom_excerpt = 'Twenty-five real dinners that land under $3 a serving.' }) 'T' 'T' @() @()
+  T 'MUST FIRE  a price literal left in a stored field refuses (the same function -Prepare and -Land run)' ($fr1.findings.Count -ge 1 -and ($fr1.findings -join ' ') -match 'custom_excerpt still carries') ($fr1.findings -join ' | ')
+  $fr2 = Get-ApeFieldResult ([pscustomobject]@{ custom_excerpt = 'Twenty-five real dinners that land under $3 a serving.'; meta_title = 'Cheap Dinners Under $3 a Serving' }) 'Cheap Dinners Under $3 a Serving' 'Cheap Dinners' @([pscustomobject]@{ find = 'that land under $3 a serving'; replace = 'that cost very little' }) @()
+  T 'CLEAN TWIN  a field cleaned by its edit and a title change passes and is carried as an update' ($fr2.findings.Count -eq 0 -and $fr2.updates['custom_excerpt'] -eq 'Twenty-five real dinners that cost very little.' -and $fr2.updates['meta_title'] -eq 'Cheap Dinners') (($fr2.findings -join ' | ') + ' / ' + ($fr2.updates | ConvertTo-Json -Compress))
   if ($script:fl -eq 0) { Write-Output ("prepare-article-price-edits self-test PASS ($script:n cases)"); exit 0 } else { Write-Output ("prepare-article-price-edits self-test FAIL ($script:fl of $script:n)"); exit 1 }
 }
 
@@ -205,7 +229,9 @@ if ($Inventory) {
     $f = Get-ApeFigures $h
     $rows += [pscustomobject]@{ slug = $s; id = $b.id; kind = $b.kind; visibility = $b.visibility; title = $b.title; title_has_price = ([regex]::IsMatch([string]$b.title, '\$\d')); base_updated_at = $b.updated_at; base_source = $b.source; base_lexical_sha256 = (Get-ApeSha $b.lexical); figures = $f; figure_count = $f.Count; monitor_shape_count = @($f | Where-Object { $_.monitor_shape }).Count }
     $bf = Join-Path $editDir ($s + '.base.json')
-    [IO.File]::WriteAllText($bf, ([ordered]@{ slug = $s; id = $b.id; kind = $b.kind; title = $b.title; updated_at = $b.updated_at; source = $b.source; lexical = $b.lexical } | ConvertTo-Json -Depth 5), (New-Object Text.UTF8Encoding($false)))
+    $pinF = $null; if ((Test-Path $bf) -and -not $Refresh) { $pinF = (Read-JsonFile $bf).fields }
+    if (-not $pinF) { if (-not $script:gkey) { $script:gkey = Get-GhostKey }; $res = if ($b.kind -eq 'page') { 'pages' } else { 'posts' }; $lp = @((Invoke-GhostApi -Method GET -Uri ("$API/ghost/api/admin/$res/$($b.id)/") -Headers @{ Authorization = ('Ghost ' + (Get-GhostJWT -Key $script:gkey)); 'Accept-Version' = (Get-GhostAcceptVersion) } -TimeoutSec 60).$res)[0]; $pinF = [ordered]@{}; foreach ($k in $script:APE_FIELDS) { $pinF[$k] = [string]$lp.$k } }
+    [IO.File]::WriteAllText($bf, ([ordered]@{ slug = $s; id = $b.id; kind = $b.kind; title = $b.title; updated_at = $b.updated_at; source = $b.source; lexical = $b.lexical; fields = $pinF } | ConvertTo-Json -Depth 5), (New-Object Text.UTF8Encoding($false)))
   }
   $doc = [ordered]@{ generated = (Get-Date -Format s); ruling = 'C (Brad, 2026-09-21): live where the article names something the pipeline prices, removed where it does not'; articles = $rows.Count; figures = ($rows | Measure-Object figure_count -Sum).Sum; blind = $blind; rows = $rows }
   [IO.File]::WriteAllText((Join-Path $editDir 'inventory.json'), ($doc | ConvertTo-Json -Depth 6), (New-Object Text.UTF8Encoding($false)))
@@ -255,6 +281,8 @@ if ($Prepare) {
     # the stored text fields (custom_excerpt, meta/og/twitter) cannot hold a live span, so a figure there is removed by a field edit
     $fe = @($dec.field_edits | Where-Object { $_ })
     foreach ($x in $fe) { $l2 = Find-TcGroceryPriceLiterals ([string]$x.replace); if ($l2.Count) { $why += ('field edit still carries a literal: ' + $x.replace) } }
+    if (-not $base.fields) { $why += 'no pinned stored fields: run -Inventory to pin them' }
+    else { $fr = Get-ApeFieldResult $base.fields ([string]$base.title) $title $fe $kept; foreach ($x in $fr.findings) { $why += $x } }
     if ($why.Count) { $refused += ("$s : " + ($why -join ' | ')); continue }
     $newLex = Set-ApeHtmlOfLexical ([string]$base.lexical) $new
     $edit = [ordered]@{ slug = $s; id = $base.id; kind = $base.kind; base_updated_at = $base.updated_at; base_lexical_sha256 = (Get-ApeSha ([string]$base.lexical)); title_old = $base.title; title_new = $title; replacements = $reps; field_edits = $fe; kept = $kept; new_lexical_sha256 = (Get-ApeSha $newLex); stamped_against_feed = $unit.asof; prepared = (Get-Date -Format s) }
@@ -291,17 +319,8 @@ if ($Land) {
     }
     if ($unfill.Count) { $bad += ("{0}: the deployed feed cannot fill {1}; land it after the feed carries them" -f $e.slug, (($unfill | Select-Object -Unique) -join ', ')); continue }
     $upd = [ordered]@{ lexical = $newLex; title = $e.title_new; updated_at = $live.updated_at }
-    $fbad = @()
-    foreach ($fld in 'custom_excerpt', 'meta_title', 'meta_description', 'og_title', 'og_description', 'twitter_title', 'twitter_description') {
-      $v = [string]$live.$fld; if (-not $v) { continue }; $v0 = $v
-      if ($e.title_old -and $e.title_new -and [string]$e.title_old -ne [string]$e.title_new) { $v = $v.Replace([string]$e.title_old, [string]$e.title_new) }
-      foreach ($x in @($e.field_edits)) { if ($x) { $v = $v.Replace([string]$x.find, [string]$x.replace) } }
-      $lf = Find-TcGroceryPriceLiterals $v
-      if ($lf.Count) { $fbad += ("$fld still carries " + (($lf | ForEach-Object { $_.figure }) -join ', ')) }
-      foreach ($x in (Get-ApeResidueFindings $v @($e.kept | Where-Object { $_ }))) { $fbad += ("$fld " + $x) }
-      if ($fld -eq 'custom_excerpt' -and $v.Length -gt 300) { $fbad += "custom_excerpt is $($v.Length) chars (Ghost 422 above 300)" }
-      if (-not [string]::Equals($v, $v0, [StringComparison]::Ordinal)) { $upd[$fld] = $v }
-    }
+    $fr = Get-ApeFieldResult $live $e.title_old $e.title_new @($e.field_edits) @($e.kept)   # the SAME refusal -Prepare runs on the pinned fields
+    $fbad = $fr.findings; foreach ($k in $fr.updates.Keys) { $upd[$k] = $fr.updates[$k] }
     if ($fbad.Count) { $bad += ("{0}: {1}" -f $e.slug, ($fbad -join '; ')); continue }
     $body = @{ $res = @($upd) } | ConvertTo-Json -Depth 6 -Compress
     if ($Apply) { Invoke-GhostApi -Method PUT -Uri ("$API/ghost/api/admin/$res/$($e.id)/") -Headers (& $hdr) -Body ([Text.Encoding]::UTF8.GetBytes($body)) -TimeoutSec 90 | Out-Null; Write-Output ("LANDED  " + $e.slug) }
