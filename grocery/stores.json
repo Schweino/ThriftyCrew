@@ -304,11 +304,6 @@
       "reason": "the assertion of the same already-captured fixture (the expected drive list). Queue 2026-09-19-405c73"
     },
     {
-      "file": "audit-sale-fallback.ps1",
-      "contains": "$browser = @(",
-      "reason": "deliberately excludes Family Fare - the only store whose gaps self-heal headless"
-    },
-    {
       "file": "build-deals-page.ps1",
       "contains": "neither posts everyday brand prices online",
       "reason": "site copy for the everyday-brand section, which by design excludes Aldi/Fareway"
