@@ -1250,6 +1250,24 @@
    "resolver": "lane:grocery/triage-due.ps1"
   },
   {
+   "id": "sitewide-price-literals",
+   "match": "prefix",
+   "key": "sitewide price literals",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "meal-prep/pipeline/monitor-sitewide-prices.ps1",
+   "note": "A grocery price typed as a literal on a live page, not there when the 2026-09-22 mark was set (design/RCA-holistic-2026-09-22.md F1). Reader-facing, so no hold.", "resolver": "lane:meal-prep/pipeline/prepare-article-price-edits.ps1"
+  },
+  {
+   "id": "sitewide-price-monitor-blind",
+   "match": "exact",
+   "key": "sitewide price monitor could not look",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "meal-prep/pipeline/monitor-sitewide-prices.ps1",
+   "note": "A sitemap, the config or a page could not be read, so no page was judged. Closed by the monitor's own next run that sees.", "resolver": "lane:meal-prep/pipeline/monitor-sitewide-prices.ps1"
+  },
+  {
    "id": "watchdog-no-board-at-all",
    "match": "exact",
    "key": "grocery capture watchdog no board at all",

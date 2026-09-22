@@ -2070,6 +2070,10 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         # board prices (a proxy, a yield row bought in the parent's grams, a union row that is the other member). Keyed ratchet: exit 2 is a NEW finding.
         $iidBoard = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
     New-FanoutLane -Name 'ingredient-identity' -File (Join-Path $mealPrep 'pipeline\audit-ingredient-identity.ps1') -TimeoutSec 600 -Arguments $(if ($iidBoard) { @('-BoardFile', $iidBoard.FullName) } else { @() }) -Marker 'INGREDIENT-IDENTITY-COMPLETE'
+        # SITE-WIDE PRICES (2026-09-22, RCA F1): every live URL in Ghost's sitemaps plus the homepage, for a grocery price typed as a
+        # literal no feed backs. Ratcheted at the 2026-09-22 count (meal-prep\db\sitewide-price-monitor.json); pages by itself on a new
+        # literal (prefix 'sitewide price literals'), resolver meal-prep\pipeline\prepare-article-price-edits.ps1. About 1,090 GETs.
+        New-FanoutLane -Name 'sitewide-prices'     -File (Join-Path $mealPrep 'pipeline\monitor-sitewide-prices.ps1') -TimeoutSec 1500 -Arguments $(if ($NoAlert) { @('-NoAlert') } else { @() }) -Marker 'SITEWIDE-PRICES-COMPLETE'
         New-FanoutLane -Name 'db-agreement'        -File (Join-Path $mealPrep 'engine\audit-db-agreement.ps1') -Marker 'DB-AGREEMENT-COMPLETE'
         New-FanoutLane -Name 'published-macros'    -File (Join-Path $mealPrep 'engine\audit-published-macros.ps1') -Marker 'PUBLISHED-MACROS-COMPLETE'
         New-FanoutLane -Name 'spec-contradictions' -File (Join-Path $mealPrep 'pipeline\audit-spec-contradictions.ps1') -TimeoutSec 600 -Arguments @('-Quiet') -Marker 'SPEC-CONTRADICTIONS-COMPLETE'
@@ -2721,6 +2725,9 @@ The chain re-derives every store''s link prices from the rows the board priced, 
           $summary += 'REVIEW    ingredient-identity: a recipe ingredient is priced by a commodity that is not its food - run meal-prep\pipeline\audit-ingredient-identity.ps1'
           if (-not $NoAlert) { try { Send-Alert -Subject 'Recipe ingredient priced as a different food' -Body ('meal-prep\pipeline\audit-ingredient-identity.ps1 found a NEW identity finding (a keyed ratchet, so this is not yesterday''s list):' + "`n`n" + ((@($iid.Output) | Where-Object { $_ -match '^  (RISE|NEW)' } | Select-Object -First 40) -join "`n")) -What 'INGREDIENT-IDENTITY' } catch {} }
         } elseif ($iid.ExitCode -ne 0) { $summary += ('REVIEW    ingredient-identity BLIND (exit ' + $iid.ExitCode + ')') }
+        $swp = Get-FanoutRecord 'sitewide-prices' $fanRecs
+        Log ('sitewide-prices exit ' + $swp.ExitCode + ': ' + ((@($swp.Output) | Select-Object -Last 1) -join ''))
+        if ($swp.ExitCode -ne 0) { $summary += ('REVIEW    sitewide-prices exit ' + $swp.ExitCode + ' (paged by itself; worklist: meal-prep\pipeline\prepare-article-price-edits.ps1 -Inventory)') }
       } catch { Log ('live-price lanes threw: ' + $_.Exception.Message) }
       # drift guard: recipes-db index vs db\recipes specs vs db\ingredients (2026-07-26). Non-fatal; alerts.
       try {
