@@ -9,8 +9,8 @@
   "escalation"
  ],
  "resolver_ratchet": {
-  "unassigned_max": 185,
-  "set": "2026-09-22",
+  "unassigned_max": 176,
+  "set": "2026-09-22 (185 at the contract; lowered by 9 the same day, residual 2026-09-22-5d20b9)",
   "why": "a ratchet, not a gate red on day one: the entries registered before the resolver contract are counted here and the count may only fall. audit-alert-registry fails a registry holding more, and says 'ratchet CAN tighten' when it holds fewer, without rewriting this number (a plain run never writes its mark)."
  },
  "entries": [
@@ -678,7 +678,7 @@
    "class": "page",
    "condition": "escalation",
    "emitter": "triage agents (send-alert -Escalates)",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "ruling:open_questions_for_brad"
   },
   {
    "id": "grocery-your-call",
@@ -687,7 +687,7 @@
    "class": "page",
    "condition": "escalation",
    "emitter": "triage agents (send-alert -Escalates)",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "ruling:open_questions_for_brad"
   },
   {
    "id": "needs-elevation",
@@ -696,7 +696,7 @@
    "class": "page",
    "condition": "escalation",
    "emitter": "triage agents (send-alert -Escalates)",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "ruling:open_questions_for_brad"
   },
   {
    "id": "triage-report",
@@ -705,7 +705,7 @@
    "class": "page",
    "condition": "escalation",
    "emitter": "triage developer agent (a run report that asks Brad for a decision)",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "board-decision",
@@ -714,7 +714,7 @@
    "class": "page",
    "condition": "escalation",
    "emitter": "triage agents",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "ruling:open_questions_for_brad"
   },
   {
    "id": "who-runs",
@@ -723,7 +723,7 @@
    "class": "page",
    "condition": "escalation",
    "emitter": "triage agents",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "ship-or-drop-ruling",
@@ -732,7 +732,7 @@
    "class": "page",
    "condition": "escalation",
    "emitter": "triage agents",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "ruling:open_questions_for_brad"
   },
   {
    "id": "correction",
@@ -1090,7 +1090,7 @@
    "class": "review",
    "condition": "a triage-created residual (send-alert -Lane weekly), ruling 1",
    "emitter": "triage agents",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "triage-finding",
@@ -1099,7 +1099,7 @@
    "class": "review",
    "condition": "a triage-created finding (send-alert -Lane weekly), ruling 1",
    "emitter": "triage agents",
-   "resolver": "unassigned:2026-09-22"
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "macro-copy-stale",
