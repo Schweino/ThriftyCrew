@@ -155,20 +155,58 @@ if (-not $isShard) {
   $tdet = Resolve-CommodityDetail -Matcher $matcher -Name 'Coconut Aminos Teriyaki Sauce 10 fl oz'
   $tid = $(if ($tdet.commodity) { [string]$tdet.commodity.id } else { '<none>' })
   if ($tid -ne 'teriyaki-sauce' -or @($tdet.candidates) -contains 'coconut-aminos') { Write-Output ("  FAIL  MUST FIRE  D3 the teriyaki fence still holds after coconut-aminos relaxes sauce   got {0}, contested by {1}" -f $tid, (@($tdet.candidates) -join ',')); $rtBad++ }
+  # THE CLASS-REACH ARITHMETIC IS ONE PURE FUNCTION (2026-09-22, ops lane 5d20b9, F2/frozen inputs). It takes the three
+  # rule documents as arguments, so the same code runs over FROZEN slices below (the mechanism, proven whatever the live
+  # rules say) and over the LIVE files after that (the invariant, which is a property of the live rules by definition).
+  function Get-ProduceClassReach($CeLib, $Cats, $CmById) {
+    $cls = @($CeLib.classes.condiment_carrier); $exr = [string]$CeLib.exempt.condiment_carrier
+    $prod = @(); foreach ($cc in @($Cats.categories)) { if ([string]$cc.label -match '^(Fruit|Vegetables)$') { $prod += @($cc.commodities) } }
+    $r = 0; $w = 0; $miss = @()
+    foreach ($p in $prod) {
+      if ($exr -and ([string]$p -match $exr)) { continue }
+      $w++
+      $x = @($CmById[[string]$p].exclude)
+      if (@($cls | Where-Object { $x -notcontains $_ }).Count -eq 0) { $r++ } else { $miss += [string]$p }
+    }
+    $can = @($CeLib.classes.canned_carrier); $cm2 = @()
+    foreach ($p in $prod) {
+      $x = @($CmById[[string]$p].exclude)
+      if (($x -notcontains '\bstews?\b') -or @($can | Where-Object { $x -notcontains $_ }).Count -gt 0) { $cm2 += [string]$p }
+    }
+    return [pscustomobject]@{ classCount = $cls.Count; produce = $prod; reach = $r; want = $w; missing = $miss; canMiss = $cm2 }
+  }
+  # FROZEN SLICES: the smallest rule documents each mechanism case needs, copied in shape from category-excludes.json,
+  # categories.json and commodities.json. Nothing here moves when a ruling moves.
+  $fzBad = 0; $fzRan = 0
+  $fzCe = [pscustomobject]@{ classes = [pscustomobject]@{ condiment_carrier = @('\baioli\b', '\bmayo\b'); canned_carrier = @('\bcans?\b'); soup_carrier = @('\bsoups?\b', '\bstews?\b') }; exempt = [pscustomobject]@{ condiment_carrier = '^lemongrass-paste$' } }
+  $fzCats = [pscustomobject]@{ categories = @([pscustomobject]@{ label = 'Vegetables'; commodities = @('garlic', 'carrots', 'lemongrass-paste') }, [pscustomobject]@{ label = 'Condiments'; commodities = @('mayonnaise') }) }
+  $fzAll = @('\baioli\b', '\bmayo\b', '\bstews?\b', '\bcans?\b')
+  $fzFenced = @{ 'garlic' = [pscustomobject]@{ exclude = $fzAll }; 'carrots' = [pscustomobject]@{ exclude = $fzAll }; 'lemongrass-paste' = [pscustomobject]@{ exclude = @('\bstews?\b', '\bcans?\b') }; 'mayonnaise' = [pscustomobject]@{ exclude = @() } }
+  $fzOpen = @{ 'garlic' = [pscustomobject]@{ exclude = $fzAll }; 'carrots' = [pscustomobject]@{ exclude = @('\baioli\b', '\bstews?\b', '\bcans?\b') }; 'lemongrass-paste' = [pscustomobject]@{ exclude = @('\bstews?\b', '\bcans?\b') }; 'mayonnaise' = [pscustomobject]@{ exclude = @() } }
+  $fzR = Get-ProduceClassReach $fzCe $fzCats $fzOpen; $fzRan++
+  if (-not ($fzR.want -eq 2 -and $fzR.reach -eq 1 -and (@($fzR.missing) -join ',') -eq 'carrots')) { Write-Output ("  FAIL  MUST FIRE (frozen)  a produce commodity missing one condiment_carrier pattern is named: reach {0} of {1}, missing {2}" -f $fzR.reach, $fzR.want, (@($fzR.missing) -join ',')); $fzBad++ }
+  $fzR = Get-ProduceClassReach $fzCe $fzCats $fzFenced; $fzRan++
+  if (-not ($fzR.want -eq 2 -and $fzR.reach -eq 2 -and @($fzR.missing).Count -eq 0 -and @($fzR.canMiss).Count -eq 0)) { Write-Output ("  FAIL  MUST NOT FIRE (frozen)  the exempt lemongrass-paste and the non-produce mayonnaise are not asked for condiment_carrier: reach {0} of {1}, missing {2}" -f $fzR.reach, $fzR.want, (@($fzR.missing) -join ',')); $fzBad++ }
+  $fzOpen2 = @{ 'garlic' = [pscustomobject]@{ exclude = $fzAll }; 'carrots' = [pscustomobject]@{ exclude = @('\baioli\b', '\bmayo\b', '\bstews?\b') }; 'lemongrass-paste' = [pscustomobject]@{ exclude = @('\bstews?\b', '\bcans?\b') }; 'mayonnaise' = [pscustomobject]@{ exclude = @() } }
+  $fzR = Get-ProduceClassReach $fzCe $fzCats $fzOpen2; $fzRan++
+  if (-not ((@($fzR.canMiss) -join ',') -eq 'carrots' -and $fzR.reach -eq 2)) { Write-Output ("  FAIL  MUST FIRE (frozen)  a produce commodity missing the can word is named by the stew/can reach: missing {0}" -f (@($fzR.canMiss) -join ',')); $fzBad++ }
+  $fzR = Get-ProduceClassReach $fzCe $fzCats $fzFenced; $fzRan++
+  if (-not ((@($fzR.produce) -join ',') -eq 'garlic,carrots,lemongrass-paste' -and $fzR.classCount -eq 2)) { Write-Output ("  FAIL  CLEAN TWIN (frozen)  produce is read from the Fruit and Vegetables labels only: {0}" -f (@($fzR.produce) -join ',')); $fzBad++ }
+  if ($fzRan -ne 4) { Write-Output ("  FAIL  frozen class-reach fixtures ran {0} case(s), the list holds 4" -f $fzRan); $fzBad++ }
+  $rtBad += $fzBad
   # MUST FIRE on the MECHANISM: the class reaches every produce commodity outside its exempt, so the next fresh
   # commodity is born fenced. An aggregate route count could not see one commodity quietly missing it.
+  # LIVE-TWIN: this reads the live category-excludes.json on purpose. The assertion IS a property of the live rules
+  # (Brad's 2026-09-19 "Fix all produce" ruling: every produce commodity carries the class), so a frozen copy could
+  # never see the next commodity added without it. A red here means the live rules broke that ruling, not that the
+  # matcher code changed; the mechanism itself is proven over frozen slices just above.
   $ceLib = Read-JsonFile (Join-Path $root 'category-excludes.json')
-  $ceCls = @($ceLib.classes.condiment_carrier)
-  $ceEx = [string]$ceLib.exempt.condiment_carrier
-  $produce = @(); foreach ($cc in (Read-JsonFile (Join-Path $root 'categories.json')).categories) { if ([string]$cc.label -match '^(Fruit|Vegetables)$') { $produce += @($cc.commodities) } }
+  # LIVE-TWIN: the live categories.json, for the same reason: which commodities are produce is the live rules' answer.
+  $catsLive = Read-JsonFile (Join-Path $root 'categories.json')
   $cmById = @{}; foreach ($cm in $commodities) { $cmById[[string]$cm.id] = $cm }
-  $reach = 0; $want = 0; $missing = @()
-  foreach ($pid_ in $produce) {
-    if ($ceEx -and ([string]$pid_ -match $ceEx)) { continue }
-    $want++
-    $ex = @($cmById[[string]$pid_].exclude)
-    if (@($ceCls | Where-Object { $ex -notcontains $_ }).Count -eq 0) { $reach++ } else { $missing += [string]$pid_ }
-  }
+  $lr = Get-ProduceClassReach $ceLib $catsLive $cmById
+  $ceCls = @($ceLib.classes.condiment_carrier)
+  $produce = $lr.produce; $reach = $lr.reach; $want = $lr.want; $missing = $lr.missing
   $script:rtRan++
   if ($ceCls.Count -lt 6 -or $want -eq 0 -or $reach -ne $want) { Write-Output ("  FAIL  MUST FIRE  condiment_carrier reaches {0} of {1} non-exempt produce commodities ({2} patterns); missing: {3}" -f $reach, $want, $ceCls.Count, ($missing -join ',')); $rtBad++ }
   # MUST NOT FIRE - legal inputs the new fences and relaxes must leave where they are.
@@ -207,11 +245,7 @@ if (-not $isShard) {
   $script:rtRan++
   $stewRx = '\bstews?\b'
   $canCls = @($ceLib.classes.canned_carrier)
-  $canMiss = @()
-  foreach ($pid_ in $produce) {
-    $ex = @($cmById[[string]$pid_].exclude)
-    if (($ex -notcontains $stewRx) -or @($canCls | Where-Object { $ex -notcontains $_ }).Count -gt 0) { $canMiss += [string]$pid_ }
-  }
+  $canMiss = @($lr.canMiss)
   if (@($ceLib.classes.soup_carrier) -notcontains $stewRx -or $canCls -notcontains '\bcans?\b' -or $produce.Count -eq 0 -or $canMiss.Count -gt 0) { Write-Output ("  FAIL  MUST FIRE  stew and can reach {0} of {1} produce commodities; missing: {2}" -f ($produce.Count - $canMiss.Count), $produce.Count, ($canMiss -join ',')); $rtBad++ }
   _RT 'MUST NOT FIRE  a cantaloupe (the letters c-a-n, not the word) still prices cantaloupe' 'Large Cantaloupe, 1 ct.' 'cantaloupe'
   _RT 'MUST NOT FIRE  Mexican papayas (the letters c-a-n inside a word) still price papaya' 'Mexican Papayas' 'papaya'

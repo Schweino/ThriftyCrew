@@ -261,6 +261,8 @@ try {
 
   # ---- 7. THE NEW ALERTS RESOLVE THROUGH send-alert's OWN RESOLVER (the static audit cannot read a built subject) -------
   . (Join-Path $root 'alert-registry-lib.ps1')
+  # LIVE-TWIN (2026-09-22, ops lane 5d20b9): the question is whether send-alert's resolver, over the LIVE registry, pages
+  # these subjects under their own entries. A frozen copy could not see the live entry retired or reclassed.
   $rgd = Read-AlertRegistry (Join-Path $root 'alert-registry.json')
   $e5 = @(@((ConvertTo-TcLedgerEntries (Read-JsonFile $ledF)).Values) | Where-Object { [string]$_.key -eq 'bouillon|Walmart' })[0]
   $sub5 = (Format-TcDisagreementAlert $e5).subject

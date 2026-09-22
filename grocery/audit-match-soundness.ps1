@@ -691,6 +691,9 @@ if ($SelfTest) {
   # (plan-2026-09-21-5.json's residual), so this suite checks its own five labels against the registry file.
   try {
     . (Join-Path $root 'alert-registry-lib.ps1')
+    # LIVE-TWIN (2026-09-22, ops lane 5d20b9): this case asks whether the LIVE registry registers what this code sends,
+    # which is a contract between two tracked files that move in the same commit. A frozen registry copy would pass
+    # after the live entry was retired, and fail a label registered correctly after the copy was made.
     $rgDoc = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'alert-registry.json')))
     $rgKeys = @{}
     foreach ($e in $rgDoc.entries) { if ([string]$e.match -eq 'exact' -and -not $e.PSObject.Properties['retired']) { $rgKeys[[string]$e.key] = [string]$e.class } }

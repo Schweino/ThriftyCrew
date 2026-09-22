@@ -72,17 +72,29 @@ $repo = Split-Path $here -Parent
 #     So: a per-file alias pass first (which variable holds which family), then verbs resolved through it.
 # SINGLE-QUOTED, and it matters: in a PowerShell double-quoted string the escape character is a BACKTICK,
 # not a backslash, so the \" inside a character class terminates the string and the file will not parse.
+# A DATED FILE IS AN INSTANCE OF ITS FAMILY, NOT A FAMILY (2026-09-22, ops lane 5d20b9). The board is written as
+# out\comparison-<yyyy-MM-dd>.json and read everywhere as `Join-Path $OutDir 'comparison-*.json'`, which neither
+# pattern could name (`*` is outside the class), so every self-test that planted a dated fixture board minted a NEW
+# "write-only family" - six comparison-<date> names sat in the 41 baseline that way, and derive-not-carried's
+# 2026-09-18 fixture made the 42nd, turning TC Daily Ratchets 0315 red for a board read by dozens of scripts. So a
+# leaf ending in a date and a leaf ending in `-*` both fold to `<stem>-<date>`: one family, written by its dated
+# writes and read by its wildcard reads. A dated family with no wildcard or dated reader is still reported.
 $script:WOR_PATH_RX = @(
-  '(?i)[''"]?out[\\/]([A-Za-z0-9._-]+)\.json',
-  '(?i)Join-Path\s+\$(?:OutDir|outDir|out|OutRoot|audDir|AuditDir|ReportDir|reportDir|OutPath)\s+[''"]([A-Za-z0-9._-]+)\.json[''"]'
+  '(?i)[''"]?out[\\/]([A-Za-z0-9._-]+(?:-\*)?)\.json',
+  '(?i)Join-Path\s+\$(?:OutDir|outDir|out|OutRoot|audDir|AuditDir|ReportDir|reportDir|OutPath)\s+[''"]([A-Za-z0-9._-]+(?:-\*)?)\.json[''"]'
 )
 function Get-ReportFamilies {
   <# every out\<family>.json this line NAMES, however it spells the path. Naming is not using: the
-     caller decides whether the line also carries a read or a write verb. #>
+     caller decides whether the line also carries a read or a write verb. A dated leaf and a `-*` wildcard
+     leaf both name the family `<stem>-<date>`. #>
   param([string]$Line)
   $out = New-Object System.Collections.Generic.List[string]
   foreach ($rx in $script:WOR_PATH_RX) {
-    foreach ($m in [regex]::Matches($Line, $rx)) { [void]$out.Add($m.Groups[1].Value.ToLower()) }
+    foreach ($m in [regex]::Matches($Line, $rx)) {
+      $v = $m.Groups[1].Value.ToLower()
+      $v = $v -replace '-\d{4}-\d{2}-\d{2}$', '-<date>' -replace '-\*$', '-<date>'
+      [void]$out.Add($v)
+    }
   }
   return $out
 }
@@ -212,6 +224,21 @@ if ($SelfTest) {
                               'Write-Output ("full list in " + $outPath)') }
   $r7 = Find-WriteOnlyFamilies $fx7
   T 'MUST NOT FIRE  Write-Output naming a report path is not a write' ($r7.written -eq 0) ("written=$($r7.written)")
+  # DATED FAMILIES (2026-09-22). The founding shape: derive-not-carried's self-test plants a dated fixture board, and
+  # the board's readers spell it `Join-Path $OutDir 'comparison-*.json'`.
+  $dW = '[IO.File]::WriteAllText((Join-Path $tmp ' + "'out\comparison-2026-09-18.json'" + '), $j, $utf8)'
+  $dR = '$mf = Get-ChildItem (Join-Path $OutDir ' + "'comparison-*.json'" + ') | Sort-Object Name'
+  $r8 = Find-WriteOnlyFamilies @{ 'fixture.ps1' = @($dW); 'reader.ps1' = @($dR) }
+  T 'MUST NOT FIRE  a dated write (comparison-2026-09-18) is read by its family''s wildcard reader (comparison-*)' `
+    ((@($r8.write_only)).Count -eq 0 -and $r8.written -eq 1 -and $r8.read -eq 1) ("written=$($r8.written) read=$($r8.read) write_only=" + ($r8.write_only -join ', '))
+  $dW2 = 'Set-Content (Join-Path $OutDir ' + "'verify-verdicts-2026-07-17.json'" + ') -Value $x'
+  $dW3 = 'Set-Content (Join-Path $OutDir ' + "'verify-verdicts-2026-08-15.json'" + ') -Value $x'
+  $r9 = Find-WriteOnlyFamilies @{ 'w.ps1' = @($dW2, $dW3) }
+  T 'MUST FIRE  two dated writes with no reader are ONE write-only family, verify-verdicts-<date>' `
+    ((@($r9.write_only)).Count -eq 1 -and @($r9.write_only)[0] -eq 'verify-verdicts-<date>') ("write_only=" + ($r9.write_only -join ', '))
+  $r10 = Find-WriteOnlyFamilies @{ 'w.ps1' = @($wLine, $dW2) }
+  T 'CLEAN TWIN  an undated family keeps its own name beside a dated one (ff-carry-report, verify-verdicts-<date>)' `
+    ((@($r10.write_only) -join ',') -eq 'ff-carry-report,verify-verdicts-<date>') ("write_only=" + ($r10.write_only -join ', '))
   # MUST FIRE: an empty corpus must report BLIND-shaped zero, never a confident clean.
   $r3 = Find-WriteOnlyFamilies @{}
   T 'an empty corpus writes zero families, so the live path can tell "nothing scanned" from "nothing found"' `

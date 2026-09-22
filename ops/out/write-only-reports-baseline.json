@@ -1,7 +1,7 @@
 ﻿{
     "note":  "High-water mark for the write-only-report ratchet (queue 2026-09-07-72756b). This number may only go DOWN. A run above it means a NEW report family was written with no consumer.",
-    "generated":  "2026-09-07T13:01:30",
-    "families":  41,
+    "generated":  "2026-09-22T15:55:48",
+    "families":  34,
     "names":  [
                   "asof-evidence",
                   "band-censorship",
@@ -11,11 +11,6 @@
                   "candidates-500",
                   "category-coverage-report",
                   "commodity-dupes",
-                  "comparison-2026-01-01",
-                  "comparison-2026-01-02",
-                  "comparison-2026-01-08",
-                  "comparison-2026-08-26",
-                  "comparison-2026-09-02",
                   "coverage-gap-explained",
                   "coverage-ledger",
                   "everyday-mismatches",
@@ -41,8 +36,6 @@
                   "search-links-report",
                   "soundness-report",
                   "spec-contradictions",
-                  "unpriced-triage",
-                  "verify-verdicts-2026-07-17",
-                  "verify-verdicts-2026-08-15"
+                  "unpriced-triage"
               ]
 }

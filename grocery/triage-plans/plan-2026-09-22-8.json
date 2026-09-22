@@ -1,0 +1,138 @@
+{
+  "generated": "2026-09-22T16:00:00",
+  "round": 1,
+  "kind": "ops-lane-residual-5d20b9",
+  "board_week": "comparison-2026-09-22; no item here reads or changes a board, a price or a matching rule",
+  "parent_plan": "grocery/triage-plans/plan-2026-09-22-3.json (batch 1 round 2); design/RCA-holistic-2026-09-22.md F4 and F5",
+  "queue_ids_seen": [
+    "2026-09-22-5d20b9"
+  ],
+  "routing_artifact": null,
+  "routing_artifact_note": "No item changes a matching rule, a price or a board cell. Item 1 edits test-match-lib.ps1's HARNESS only; its matching output is byte-identical before and after (35 of 35 routing fixtures, 45,385 names, 0 divergences).",
+  "knowledge_consulted": "searched --multi \"write-only report dated family\" \"live rules self-test fixture\" \"alert resolver digest\" \"producer slot heartbeat\": nothing directly applicable in the skills store beyond data-quality-craft/checks-and-thresholds.md section 7 (a firing check is not yet an alert). Used: memo golden-test-frozen-inputs (freeze the INPUTS, never refresh the output); design/RCA-holistic-2026-09-22.md F5 (every alert type names what closes it) and F4 (a check that cannot tell not-yet from missing); global CLAUDE.md 'a number that moved is not a number that improved'; .claude/rules/ops-and-gates.md fixture vocabulary and 'compare the family NAMES against the committed baseline, not the count'.",
+  "items": [
+    {
+      "queue_id": "discovered:daily-ratchets-residual-2026-09-22",
+      "subject": "The two ratchets still red in TC Daily Ratchets 0315: audit-fixture-inputs (4 live rule reads) and audit-write-only-reports (42 against 41)",
+      "family": "F4",
+      "classification": "infra",
+      "evidence": [
+        "audit-fixture-inputs at cf5114d49: exit 1, 4 new against baseline 0: test-match-lib|categories.json, test-match-lib|category-excludes.json, audit-match-soundness|alert-registry.json, test-flag-verification|alert-registry.json (the dispatch's 'test-match-lib reads 4' was 2 there and 2 elsewhere)",
+        "audit-write-only-reports at cf5114d49: exit 2, 42 families against 41; the one new NAME was out/comparison-2026-09-18.json, written by grocery/derive-not-carried.ps1:76 into its self-test's temp tree",
+        "the board family is read by dozens of scripts as Join-Path $OutDir 'comparison-*.json' (audit-capture-eviction:233, audit-board-freshness:136, audit-band-censorship:501 ...); the detector's path class excluded '*', so every dated fixture board minted a new 'family': 6 comparison-<date> and 2 verify-verdicts-<date> names sat in the 41 baseline the same way, and verify-verdicts-*.json is read by promote-verdicts.ps1:153 and audit-match-soundness.ps1:911"
+      ],
+      "root_cause": "(a) test-match-lib's two class-reach checks computed their arithmetic inline over the live rule files, so the MECHANISM had no frozen proof and the audit could not tell the deliberate live invariant (Brad's 'Fix all produce' ruling is a property of the live rules) from an accidental dependency; the two alert-registry reads are code-versus-registry contracts that were never declared. (b) audit-write-only-reports keyed a family on its literal leaf, so a DATED instance was its own family and a wildcard reader named none: a detector defect, not a new report nobody reads.",
+      "root_fix": {
+        "what": "(a) the class-reach arithmetic is one pure function driven over frozen rule slices (MUST FIRE, MUST NOT FIRE, CLEAN TWIN) and then over the live files under a LIVE-TWIN declaration with its reason; the two registry contract reads are declared LIVE-TWIN with theirs. (b) a dated leaf and a '-*' wildcard leaf both fold to one '<stem>-<date>' family, fixtured, and the fall recorded with -Tighten by NAME.",
+        "files": [
+          "grocery/test-match-lib.ps1",
+          "grocery/audit-match-soundness.ps1",
+          "grocery/test-flag-verification.ps1",
+          "ops/audit-write-only-reports.ps1",
+          "ops/out/write-only-reports-baseline.json"
+        ],
+        "exact_change": "test-match-lib: Get-ProduceClassReach($CeLib,$Cats,$CmById) returns reach/want/missing/canMiss; 4 frozen cases over inline slices; the live assertions and rtWant=35 unchanged. audit-write-only-reports: WOR_PATH_RX admits a trailing '-*', Get-ReportFamilies folds -yyyy-MM-dd and -* to -<date>; 3 new self-test cases. Baseline 41 -> 34, names removed: comparison-2026-01-01/01-02/01-08/08-26/09-02, verify-verdicts-2026-07-17/08-15; names added: none."
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "blast_radius": {
+        "measured_as": "ratchet entries and matching output",
+        "measured_by": "audit-fixture-inputs, audit-write-only-reports and test-match-lib before and after in the main checkout",
+        "affected_now": 12,
+        "names": [
+          "4 fixture-input dependencies declared or frozen",
+          "8 dated write-only names folded into 2 families that have readers"
+        ],
+        "risk": "a -* wildcard read now counts as a reader of its dated family; a dated family with NO reader is still reported (fixtured)",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-22 15:48-16:00 at cf5114d49 in the main checkout",
+      "proof": {
+        "guard_or_fixture": "test-match-lib (frozen class-reach cases), ops/audit-write-only-reports.ps1 -SelfTest, ops/run-daily-ratchets.ps1",
+        "must_fire_case": "frozen: a produce commodity missing one condiment_carrier pattern is named (a mutant that drops the append went red in this case alone, exit 1, while the live assertion stayed green); two dated writes with no reader are ONE write-only family verify-verdicts-<date>",
+        "clean_twin": "frozen: produce is read from the Fruit and Vegetables labels only; an undated family keeps its own name beside a dated one",
+        "commands": [
+          "powershell -File grocery/test-match-lib.ps1",
+          "powershell -File ops/audit-write-only-reports.ps1 -SelfTest",
+          "powershell -File ops/audit-fixture-inputs.ps1",
+          "powershell -File ops/run-daily-ratchets.ps1"
+        ]
+      },
+      "rollback": "revert the commit; the baseline returns to 41 with it",
+      "do_not_touch": [
+        "the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"
+      ],
+      "resolution_note": "before: audit-fixture-inputs exit 1 (4 new), audit-write-only-reports exit 2 (42 vs 41). after: 0 dependencies exit 0; 34 families exit 0 and baseline tightened to 34. test-match-lib output identical before and after (exit 0 both). No case passed only because of a live rule that it should not have: the 35 routing cases and 2 live class-reach checks are DEFINED over the live rules (the file's own contract since 2026-09-19), which is why they stay live and declared.",
+      "status": "shipped",
+      "premise_verified": true,
+      "deviation": "The dispatch asked to freeze test-match-lib's inputs. Freezing categories.json and category-excludes.json alone, beside the live commodities.json the same check reads, would have blinded the check it carries (the next produce commodity added without the class would pass). So the MECHANISM is frozen and the INVARIANT stays live and declared. apply-coverage-batch has no self-test and every run of it edits commodities.json and rebuilds a board, so its 'routing check' was not run: could not verify it without a board rebuild; test-match-lib's 35 routing fixtures are the routing proof instead.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-22-5d20b9",
+      "subject": "Resolver-contract worklist: the unassigned alert types, by producing script",
+      "family": "F5",
+      "classification": "infra",
+      "evidence": [
+        "grocery/alert-registry.json at cf5114d49: 176 live entries resolver unassigned:2026-09-22, resolver_ratchet.unassigned_max 176"
+      ],
+      "root_cause": "alert types were registered by condition and class, never by what closes them (RCA F5)",
+      "root_fix": {
+        "what": "planned",
+        "files": ["grocery/alert-registry.json"],
+        "exact_change": "planned"
+      },
+      "leaves_open": "planned",
+      "leaves_open_occurrences": 0,
+      "blast_radius": {
+        "measured_as": "registry entries",
+        "measured_by": "Get-AlertResolverRatchet",
+        "affected_now": 176,
+        "names": [],
+        "risk": "resolver is metadata: Get-AlertDelivery reads class, and only a missing or invalid resolver changes delivery",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-22 16:00",
+      "proof": {
+        "guard_or_fixture": "grocery/audit-alert-registry.ps1",
+        "must_fire_case": "planned",
+        "clean_twin": "planned",
+        "commands": ["powershell -File grocery/audit-alert-registry.ps1"]
+      },
+      "rollback": "revert the registry commit",
+      "do_not_touch": ["the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"],
+      "resolution_note": "planned: assign by producing script, lowering the cap with each group",
+      "status": "planned",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "discovered:heartbeat-output-slot-2026-09-22",
+      "subject": "health-heartbeat's output-freshness checks are not slot-aware (5d20b9 part 2b)",
+      "family": "F4",
+      "classification": "infra",
+      "evidence": ["plan-2026-09-22-3.json item 2026-09-22-2000e1 leaves_open"],
+      "root_cause": "planned",
+      "root_fix": {"what": "planned", "files": ["grocery/health-heartbeat.ps1"], "exact_change": "planned"},
+      "leaves_open": "planned",
+      "leaves_open_occurrences": 0,
+      "blast_radius": {"measured_as": "checks", "measured_by": "planned", "affected_now": 0, "names": [], "risk": "planned", "cell_effects": []},
+      "freshness": "planned",
+      "proof": {"guard_or_fixture": "grocery/health-heartbeat.ps1 -SelfTest", "must_fire_case": "planned", "clean_twin": "planned", "commands": ["powershell -File grocery/health-heartbeat.ps1 -SelfTest"]},
+      "rollback": "revert",
+      "do_not_touch": ["the scheduled tasks grocery-alert-triage and resume-grocery-alert-triage-0924"],
+      "resolution_note": "planned: reuse Get-ProducerSlot for every output-freshness check",
+      "status": "planned",
+      "premise_verified": false,
+      "deviation": null,
+      "shipped_commit": null
+    }
+  ],
+  "ship_sequence": [
+    "discovered:daily-ratchets-residual-2026-09-22",
+    "2026-09-22-5d20b9",
+    "discovered:heartbeat-output-slot-2026-09-22"
+  ],
+  "open_questions_for_brad": []
+}
