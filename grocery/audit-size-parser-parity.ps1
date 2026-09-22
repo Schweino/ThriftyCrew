@@ -58,6 +58,7 @@ $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 $repo = Split-Path $PSScriptRoot -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\json-io.ps1')   # Read-JsonFile: a BOM-less Get-Content read is cp1252 under PS 5.1
 
 # The tolerance is float noise, not a judgement about prices: both sides divide the same price by a
 # quantity each derives, so anything above this is a different QUANTITY and not a different rounding.
@@ -156,7 +157,9 @@ function Get-TcBoardSizeRows {
   if (-not (Test-Path $dir)) { return $null }
   $cmp = @(Get-ChildItem -LiteralPath $dir -Filter 'comparison-*.json' -File -ErrorAction SilentlyContinue | Sort-Object Name -Descending)
   if (-not $cmp.Count) { return $null }
-  $doc = (Get-Content -LiteralPath $cmp[0].FullName -Raw) | ConvertFrom-Json
+  # Read-JsonFile, never Get-Content -Raw: under PS 5.1 a BOM-less read is cp1252 and mangles every name
+  # (lib/json-io.ps1, and grocery/audit-json-readers.ps1 ratchets it - it caught this line on the push).
+  $doc = Read-JsonFile -Path $cmp[0].FullName
   $rows = New-Object System.Collections.ArrayList
   foreach ($r in @($doc.comparison)) {
     $unit = [string]$r.unit

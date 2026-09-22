@@ -1736,6 +1736,15 @@
    "condition": "information: the ONE message per emitter run that lists its due conditions; every condition is already its own queue item, so this is mailed and never queued",
    "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-5.json"
+  },
+  {
+   "id": "pointer-without-object",
+   "match": "exact",
+   "key": "the post shipped and today s board did not",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-run.ps1",
+   "note": "2026-09-22, queue 2026-09-22-972de2. The ship path published the Ghost post, which carries board.json?v=<hash of the board that run built>, and the commit that deploys public/board.json did not land, so readers are served the PREVIOUS board underneath a post advertising a different one. Condition 1: the live board or feed is wrong. One page per run, never per file. The branch that raises it printed 'Readers keep the last good board' until this landed, a claim it had never tested."
   }
  ]
 }
