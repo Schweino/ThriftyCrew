@@ -1,0 +1,1011 @@
+﻿{
+    "generated":  "2026-09-21",
+    "entries":  {
+                    "ground-allspice|Fareway":  {
+                                                    "key":  "ground-allspice|Fareway",
+                                                    "id":  "ground-allspice",
+                                                    "commodity":  "Allspice (ground)",
+                                                    "store":  "Fareway",
+                                                    "unit":  "oz",
+                                                    "claim":  {
+                                                                  "item":  "Badia Spices Ground Allspice",
+                                                                  "per_unit":  0.84,
+                                                                  "ad":  "$1.68",
+                                                                  "size":  "2 oz",
+                                                                  "row_type":  "sale",
+                                                                  "ad_from":  "2026-09-17",
+                                                                  "ad_to":  "2026-10-17",
+                                                                  "as_of":  "2026-09-19"
+                                                              },
+                                                    "claim_key":  "badia spices ground allspice|8400",
+                                                    "flag_types":  [
+                                                                       "outlier"
+                                                                   ],
+                                                    "first_flagged":  "2026-09-21",
+                                                    "last_flagged":  "2026-09-21",
+                                                    "status":  "pending",
+                                                    "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                                    "verdict_at":  "",
+                                                    "answer":  null,
+                                                    "attempts":  1,
+                                                    "last_attempt":  "2026-09-21",
+                                                    "alerted_at":  "",
+                                                    "closed_at":  "",
+                                                    "readings":  [
+
+                                                                 ]
+                                                },
+                    "anaheim-peppers|Baker\u0027s":  {
+                                                         "key":  "anaheim-peppers|Baker\u0027s",
+                                                         "id":  "anaheim-peppers",
+                                                         "commodity":  "Anaheim Peppers",
+                                                         "store":  "Baker\u0027s",
+                                                         "unit":  "lb",
+                                                         "claim":  {
+                                                                       "item":  "Fresh Anaheim Peppers",
+                                                                       "per_unit":  1.49,
+                                                                       "ad":  "$1.49",
+                                                                       "size":  "lb",
+                                                                       "row_type":  "everyday",
+                                                                       "ad_from":  "",
+                                                                       "ad_to":  "",
+                                                                       "as_of":  "2026-09-19"
+                                                                   },
+                                                         "claim_key":  "fresh anaheim peppers|14900",
+                                                         "flag_types":  [
+                                                                            "outlier"
+                                                                        ],
+                                                         "first_flagged":  "2026-09-21",
+                                                         "last_flagged":  "2026-09-21",
+                                                         "status":  "pending",
+                                                         "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                                         "verdict_at":  "",
+                                                         "answer":  null,
+                                                         "attempts":  1,
+                                                         "last_attempt":  "2026-09-21",
+                                                         "alerted_at":  "",
+                                                         "closed_at":  "",
+                                                         "readings":  [
+
+                                                                      ]
+                                                     },
+                    "baby-wipes|Walmart":  {
+                                               "key":  "baby-wipes|Walmart",
+                                               "id":  "baby-wipes",
+                                               "commodity":  "Baby Wipes",
+                                               "store":  "Walmart",
+                                               "unit":  "each",
+                                               "claim":  {
+                                                             "item":  "Ricitos de Oro Gentle Baby Wipes with Chamomile \u0026 Aloe Vera, 240 Count, 3-Pack",
+                                                             "per_unit":  0.0139,
+                                                             "ad":  "$3.34",
+                                                             "size":  "240 ct",
+                                                             "row_type":  "everyday",
+                                                             "ad_from":  "",
+                                                             "ad_to":  "",
+                                                             "as_of":  "2026-08-31"
+                                                         },
+                                               "claim_key":  "ricitos de oro gentle baby wipes with chamomile \u0026 aloe vera, 240 count, 3-pack|139",
+                                               "flag_types":  [
+                                                                  "outlier"
+                                                              ],
+                                               "first_flagged":  "2026-09-21",
+                                               "last_flagged":  "2026-09-21",
+                                               "status":  "pending",
+                                               "reason":  "no read of this product later than 2026-08-31 has landed yet",
+                                               "verdict_at":  "",
+                                               "answer":  null,
+                                               "attempts":  1,
+                                               "last_attempt":  "2026-09-21",
+                                               "alerted_at":  "",
+                                               "closed_at":  "",
+                                               "readings":  [
+
+                                                            ]
+                                           },
+                    "blueberries|Aldi":  {
+                                             "key":  "blueberries|Aldi",
+                                             "id":  "blueberries",
+                                             "commodity":  "Blueberries",
+                                             "store":  "Aldi",
+                                             "unit":  "oz",
+                                             "claim":  {
+                                                           "item":  "Organic Blueberries Package Per LB",
+                                                           "per_unit":  0.2056,
+                                                           "ad":  "$3.29",
+                                                           "size":  "1 lb",
+                                                           "row_type":  "everyday",
+                                                           "ad_from":  "",
+                                                           "ad_to":  "",
+                                                           "as_of":  "2026-09-19"
+                                                       },
+                                             "claim_key":  "organic blueberries package per lb|2056",
+                                             "flag_types":  [
+                                                                "outlier"
+                                                            ],
+                                             "first_flagged":  "2026-09-21",
+                                             "last_flagged":  "2026-09-21",
+                                             "status":  "pending",
+                                             "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                             "verdict_at":  "",
+                                             "answer":  null,
+                                             "attempts":  1,
+                                             "last_attempt":  "2026-09-21",
+                                             "alerted_at":  "",
+                                             "closed_at":  "",
+                                             "readings":  [
+
+                                                          ]
+                                         },
+                    "brown-lentils|Walmart":  {
+                                                  "key":  "brown-lentils|Walmart",
+                                                  "id":  "brown-lentils",
+                                                  "commodity":  "Brown Lentils",
+                                                  "store":  "Walmart",
+                                                  "unit":  "lb",
+                                                  "claim":  {
+                                                                "item":  "Great Value Lentils, 1 lb",
+                                                                "per_unit":  1.92,
+                                                                "ad":  "$1.92",
+                                                                "size":  "16 oz",
+                                                                "row_type":  "everyday",
+                                                                "ad_from":  "",
+                                                                "ad_to":  "",
+                                                                "as_of":  "2026-09-19"
+                                                            },
+                                                  "claim_key":  "great value lentils, 1 lb|19200",
+                                                  "flag_types":  [
+                                                                     "outlier"
+                                                                 ],
+                                                  "first_flagged":  "2026-09-21",
+                                                  "last_flagged":  "2026-09-21",
+                                                  "status":  "pending",
+                                                  "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                                  "verdict_at":  "",
+                                                  "answer":  null,
+                                                  "attempts":  1,
+                                                  "last_attempt":  "2026-09-21",
+                                                  "alerted_at":  "",
+                                                  "closed_at":  "",
+                                                  "readings":  [
+
+                                                               ]
+                                              },
+                    "canned-potatoes|Baker\u0027s":  {
+                                                         "key":  "canned-potatoes|Baker\u0027s",
+                                                         "id":  "canned-potatoes",
+                                                         "commodity":  "Canned Potatoes",
+                                                         "store":  "Baker\u0027s",
+                                                         "unit":  "oz",
+                                                         "claim":  {
+                                                                       "item":  "Kroger Sliced White Potatoes - 15oz can",
+                                                                       "per_unit":  0.0727,
+                                                                       "ad":  "$1.09",
+                                                                       "size":  "15 oz",
+                                                                       "row_type":  "everyday",
+                                                                       "ad_from":  "",
+                                                                       "ad_to":  "",
+                                                                       "as_of":  "2026-09-19"
+                                                                   },
+                                                         "claim_key":  "kroger sliced white potatoes - 15oz can|727",
+                                                         "flag_types":  [
+                                                                            "outlier"
+                                                                        ],
+                                                         "first_flagged":  "2026-09-21",
+                                                         "last_flagged":  "2026-09-21",
+                                                         "status":  "pending",
+                                                         "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                                         "verdict_at":  "",
+                                                         "answer":  null,
+                                                         "attempts":  1,
+                                                         "last_attempt":  "2026-09-21",
+                                                         "alerted_at":  "",
+                                                         "closed_at":  "",
+                                                         "readings":  [
+
+                                                                      ]
+                                                     },
+                    "cardamom|Walmart":  {
+                                             "key":  "cardamom|Walmart",
+                                             "id":  "cardamom",
+                                             "commodity":  "Cardamom",
+                                             "store":  "Walmart",
+                                             "unit":  "oz",
+                                             "claim":  {
+                                                           "item":  "McCormick Gourmet Organic Ground Cardamom, 1.75 oz Bottle",
+                                                           "per_unit":  5.3543,
+                                                           "ad":  "$9.37",
+                                                           "size":  "1.75 oz",
+                                                           "row_type":  "everyday",
+                                                           "ad_from":  "",
+                                                           "ad_to":  "",
+                                                           "as_of":  "2026-09-21"
+                                                       },
+                                             "claim_key":  "mccormick gourmet organic ground cardamom, 1.75 oz bottle|53543",
+                                             "flag_types":  [
+                                                                "wow"
+                                                            ],
+                                             "first_flagged":  "2026-09-21",
+                                             "last_flagged":  "2026-09-21",
+                                             "status":  "pending",
+                                             "reason":  "no read of this product later than 2026-09-21 has landed yet",
+                                             "verdict_at":  "",
+                                             "answer":  null,
+                                             "attempts":  1,
+                                             "last_attempt":  "2026-09-21",
+                                             "alerted_at":  "",
+                                             "closed_at":  "",
+                                             "readings":  [
+
+                                                          ]
+                                         },
+                    "cheddar-cheese-curds|Aldi":  {
+                                                      "key":  "cheddar-cheese-curds|Aldi",
+                                                      "id":  "cheddar-cheese-curds",
+                                                      "commodity":  "Cheddar cheese curds",
+                                                      "store":  "Aldi",
+                                                      "unit":  "oz",
+                                                      "claim":  {
+                                                                    "item":  "Happy Farms Cajun Cheese Curds 12 OZ",
+                                                                    "per_unit":  0.3575,
+                                                                    "ad":  "$4.29",
+                                                                    "size":  "12 oz",
+                                                                    "row_type":  "everyday",
+                                                                    "ad_from":  "",
+                                                                    "ad_to":  "",
+                                                                    "as_of":  "2026-09-19"
+                                                                },
+                                                      "claim_key":  "happy farms cajun cheese curds 12 oz|3575",
+                                                      "flag_types":  [
+                                                                         "outlier"
+                                                                     ],
+                                                      "first_flagged":  "2026-09-21",
+                                                      "last_flagged":  "2026-09-21",
+                                                      "status":  "pending",
+                                                      "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                                      "verdict_at":  "",
+                                                      "answer":  null,
+                                                      "attempts":  1,
+                                                      "last_attempt":  "2026-09-21",
+                                                      "alerted_at":  "",
+                                                      "closed_at":  "",
+                                                      "readings":  [
+
+                                                                   ]
+                                                  },
+                    "cherries|Aldi":  {
+                                          "key":  "cherries|Aldi",
+                                          "id":  "cherries",
+                                          "commodity":  "Cherries (fresh)",
+                                          "store":  "Aldi",
+                                          "unit":  "lb",
+                                          "claim":  {
+                                                        "item":  "Red Cherries Bag 1 LB",
+                                                        "per_unit":  2.49,
+                                                        "ad":  "$2.49",
+                                                        "size":  "lb",
+                                                        "row_type":  "everyday",
+                                                        "ad_from":  "",
+                                                        "ad_to":  "",
+                                                        "as_of":  "2026-08-05"
+                                                    },
+                                          "claim_key":  "red cherries bag 1 lb|24900",
+                                          "flag_types":  [
+                                                             "outlier"
+                                                         ],
+                                          "first_flagged":  "2026-09-21",
+                                          "last_flagged":  "2026-09-21",
+                                          "status":  "pending",
+                                          "reason":  "no read of this product later than 2026-08-05 has landed yet",
+                                          "verdict_at":  "",
+                                          "answer":  null,
+                                          "attempts":  1,
+                                          "last_attempt":  "2026-09-21",
+                                          "alerted_at":  "",
+                                          "closed_at":  "",
+                                          "readings":  [
+
+                                                       ]
+                                      },
+                    "chili-garlic-sauce|Baker\u0027s":  {
+                                                            "key":  "chili-garlic-sauce|Baker\u0027s",
+                                                            "id":  "chili-garlic-sauce",
+                                                            "commodity":  "Chili Garlic Sauce",
+                                                            "store":  "Baker\u0027s",
+                                                            "unit":  "oz",
+                                                            "claim":  {
+                                                                          "item":  "Huy Fong Chili Garlic Sauce",
+                                                                          "per_unit":  0.3113,
+                                                                          "ad":  "$2.49",
+                                                                          "size":  "8 oz",
+                                                                          "row_type":  "everyday",
+                                                                          "ad_from":  "",
+                                                                          "ad_to":  "",
+                                                                          "as_of":  "2026-09-19"
+                                                                      },
+                                                            "claim_key":  "huy fong chili garlic sauce|3113",
+                                                            "flag_types":  [
+                                                                               "outlier"
+                                                                           ],
+                                                            "first_flagged":  "2026-09-21",
+                                                            "last_flagged":  "2026-09-21",
+                                                            "status":  "pending",
+                                                            "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                                            "verdict_at":  "",
+                                                            "answer":  null,
+                                                            "attempts":  1,
+                                                            "last_attempt":  "2026-09-21",
+                                                            "alerted_at":  "",
+                                                            "closed_at":  "",
+                                                            "readings":  [
+
+                                                                         ]
+                                                        },
+                    "cooked-shredded-chicken|Aldi":  {
+                                                         "key":  "cooked-shredded-chicken|Aldi",
+                                                         "id":  "cooked-shredded-chicken",
+                                                         "commodity":  "Cooked Shredded Chicken",
+                                                         "store":  "Aldi",
+                                                         "unit":  "oz",
+                                                         "claim":  {
+                                                                       "item":  "Aldi Rotisserie Style Pulled Chicken 16 OZ",
+                                                                       "per_unit":  0.4369,
+                                                                       "ad":  "$6.99",
+                                                                       "size":  "16 oz",
+                                                                       "row_type":  "everyday",
+                                                                       "ad_from":  "",
+                                                                       "ad_to":  "",
+                                                                       "as_of":  "2026-09-21"
+                                                                   },
+                                                         "claim_key":  "aldi rotisserie style pulled chicken 16 oz|4369",
+                                                         "flag_types":  [
+                                                                            "outlier"
+                                                                        ],
+                                                         "first_flagged":  "2026-09-21",
+                                                         "last_flagged":  "2026-09-21",
+                                                         "status":  "pending",
+                                                         "reason":  "no read of this product later than 2026-09-21 has landed yet",
+                                                         "verdict_at":  "",
+                                                         "answer":  null,
+                                                         "attempts":  1,
+                                                         "last_attempt":  "2026-09-21",
+                                                         "alerted_at":  "",
+                                                         "closed_at":  "",
+                                                         "readings":  [
+
+                                                                      ]
+                                                     },
+                    "ground-coriander|Baker\u0027s":  {
+                                                          "key":  "ground-coriander|Baker\u0027s",
+                                                          "id":  "ground-coriander",
+                                                          "commodity":  "Coriander (ground)",
+                                                          "store":  "Baker\u0027s",
+                                                          "unit":  "oz",
+                                                          "claim":  {
+                                                                        "item":  "Tampico Coriander Ground",
+                                                                        "per_unit":  1.69,
+                                                                        "ad":  "$1.69",
+                                                                        "size":  "1 oz",
+                                                                        "row_type":  "everyday",
+                                                                        "ad_from":  "",
+                                                                        "ad_to":  "",
+                                                                        "as_of":  "2026-09-19"
+                                                                    },
+                                                          "claim_key":  "tampico coriander ground|16900",
+                                                          "flag_types":  [
+                                                                             "outlier"
+                                                                         ],
+                                                          "first_flagged":  "2026-09-21",
+                                                          "last_flagged":  "2026-09-21",
+                                                          "status":  "pending",
+                                                          "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                                          "verdict_at":  "",
+                                                          "answer":  null,
+                                                          "attempts":  1,
+                                                          "last_attempt":  "2026-09-21",
+                                                          "alerted_at":  "",
+                                                          "closed_at":  "",
+                                                          "readings":  [
+
+                                                                       ]
+                                                      },
+                    "ground-fennel|Family Fare":  {
+                                                      "key":  "ground-fennel|Family Fare",
+                                                      "id":  "ground-fennel",
+                                                      "commodity":  "Fennel Seed / Ground Fennel",
+                                                      "store":  "Family Fare",
+                                                      "unit":  "oz",
+                                                      "claim":  {
+                                                                    "item":  "Sugar \u0027N Spice Fennel Seed Whole",
+                                                                    "per_unit":  0.6232,
+                                                                    "ad":  "$3.49",
+                                                                    "size":  "5.6 oz",
+                                                                    "row_type":  "everyday",
+                                                                    "ad_from":  "",
+                                                                    "ad_to":  "",
+                                                                    "as_of":  "2026-08-09"
+                                                                },
+                                                      "claim_key":  "sugar \u0027n spice fennel seed whole|6232",
+                                                      "flag_types":  [
+                                                                         "outlier"
+                                                                     ],
+                                                      "first_flagged":  "2026-09-21",
+                                                      "last_flagged":  "2026-09-21",
+                                                      "status":  "pending",
+                                                      "reason":  "no read of this product later than 2026-08-09 has landed yet",
+                                                      "verdict_at":  "",
+                                                      "answer":  null,
+                                                      "attempts":  1,
+                                                      "last_attempt":  "2026-09-21",
+                                                      "alerted_at":  "",
+                                                      "closed_at":  "",
+                                                      "readings":  [
+
+                                                                   ]
+                                                  },
+                    "fruit-snacks|Sam\u0027s Club":  {
+                                                         "key":  "fruit-snacks|Sam\u0027s Club",
+                                                         "id":  "fruit-snacks",
+                                                         "commodity":  "Fruit Snacks",
+                                                         "store":  "Sam\u0027s Club",
+                                                         "unit":  "each",
+                                                         "claim":  {
+                                                                       "item":  "Mott\u0027s Assorted Fruit Flavored Snacks, 0.8 oz., 90 pk.",
+                                                                       "per_unit":  0.1109,
+                                                                       "ad":  "$9.98",
+                                                                       "size":  "72 oz",
+                                                                       "row_type":  "everyday",
+                                                                       "ad_from":  "2026-09-19",
+                                                                       "ad_to":  "2026-10-19",
+                                                                       "as_of":  "2026-09-19"
+                                                                   },
+                                                         "claim_key":  "mott\u0027s assorted fruit flavored snacks, 0.8 oz., 90 pk.|1109",
+                                                         "flag_types":  [
+                                                                            "outlier"
+                                                                        ],
+                                                         "first_flagged":  "2026-09-21",
+                                                         "last_flagged":  "2026-09-21",
+                                                         "status":  "pending",
+                                                         "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                                         "verdict_at":  "",
+                                                         "answer":  null,
+                                                         "attempts":  1,
+                                                         "last_attempt":  "2026-09-21",
+                                                         "alerted_at":  "",
+                                                         "closed_at":  "",
+                                                         "readings":  [
+
+                                                                      ]
+                                                     },
+                    "gelatin|Aldi":  {
+                                         "key":  "gelatin|Aldi",
+                                         "id":  "gelatin",
+                                         "commodity":  "Gelatin (Jell-O)",
+                                         "store":  "Aldi",
+                                         "unit":  "each",
+                                         "claim":  {
+                                                       "item":  "Baker S Corner Orange Gelatin 3 OZ",
+                                                       "per_unit":  0.98,
+                                                       "ad":  "$0.98",
+                                                       "size":  "3 oz",
+                                                       "row_type":  "everyday",
+                                                       "ad_from":  "",
+                                                       "ad_to":  "",
+                                                       "as_of":  "2026-09-19"
+                                                   },
+                                         "claim_key":  "baker s corner orange gelatin 3 oz|9800",
+                                         "flag_types":  [
+                                                            "outlier"
+                                                        ],
+                                         "first_flagged":  "2026-09-21",
+                                         "last_flagged":  "2026-09-21",
+                                         "status":  "pending",
+                                         "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                         "verdict_at":  "",
+                                         "answer":  null,
+                                         "attempts":  1,
+                                         "last_attempt":  "2026-09-21",
+                                         "alerted_at":  "",
+                                         "closed_at":  "",
+                                         "readings":  [
+
+                                                      ]
+                                     },
+                    "hummus|Sam\u0027s Club":  {
+                                                   "key":  "hummus|Sam\u0027s Club",
+                                                   "id":  "hummus",
+                                                   "commodity":  "Hummus",
+                                                   "store":  "Sam\u0027s Club",
+                                                   "unit":  "oz",
+                                                   "claim":  {
+                                                                 "item":  "Member\u0027s Mark Classic Hummus Singles 2.5 oz., 16 ct.",
+                                                                 "per_unit":  0.1395,
+                                                                 "ad":  "$5.58",
+                                                                 "size":  "16 ct 2.5 oz",
+                                                                 "row_type":  "everyday",
+                                                                 "ad_from":  "",
+                                                                 "ad_to":  "",
+                                                                 "as_of":  "2026-09-19"
+                                                             },
+                                                   "claim_key":  "member\u0027s mark classic hummus singles 2.5 oz., 16 ct.|1395",
+                                                   "flag_types":  [
+                                                                      "outlier"
+                                                                  ],
+                                                   "first_flagged":  "2026-09-21",
+                                                   "last_flagged":  "2026-09-21",
+                                                   "status":  "pending",
+                                                   "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                                   "verdict_at":  "",
+                                                   "answer":  null,
+                                                   "attempts":  1,
+                                                   "last_attempt":  "2026-09-21",
+                                                   "alerted_at":  "",
+                                                   "closed_at":  "",
+                                                   "readings":  [
+
+                                                                ]
+                                               },
+                    "keto-hamburger-buns|Walmart":  {
+                                                        "key":  "keto-hamburger-buns|Walmart",
+                                                        "id":  "keto-hamburger-buns",
+                                                        "commodity":  "Keto Hamburger Buns",
+                                                        "store":  "Walmart",
+                                                        "unit":  "each",
+                                                        "claim":  {
+                                                                      "item":  "bettergoods Keto Friendly Hamburger Buns, 14 oz, 8 Count",
+                                                                      "per_unit":  0.5975,
+                                                                      "ad":  "$4.78",
+                                                                      "size":  "14 oz",
+                                                                      "row_type":  "everyday",
+                                                                      "ad_from":  "",
+                                                                      "ad_to":  "",
+                                                                      "as_of":  "2026-09-19"
+                                                                  },
+                                                        "claim_key":  "bettergoods keto friendly hamburger buns, 14 oz, 8 count|5975",
+                                                        "flag_types":  [
+                                                                           "outlier"
+                                                                       ],
+                                                        "first_flagged":  "2026-09-21",
+                                                        "last_flagged":  "2026-09-21",
+                                                        "status":  "pending",
+                                                        "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                                        "verdict_at":  "",
+                                                        "answer":  null,
+                                                        "attempts":  1,
+                                                        "last_attempt":  "2026-09-21",
+                                                        "alerted_at":  "",
+                                                        "closed_at":  "",
+                                                        "readings":  [
+
+                                                                     ]
+                                                    },
+                    "lime-juice|Aldi":  {
+                                            "key":  "lime-juice|Aldi",
+                                            "id":  "lime-juice",
+                                            "commodity":  "Lime Juice (bottled)",
+                                            "store":  "Aldi",
+                                            "unit":  "floz",
+                                            "claim":  {
+                                                          "item":  "Nature S Nectar 100 Lime Juice 32 FL OZ",
+                                                          "per_unit":  0.0684,
+                                                          "ad":  "$2.19",
+                                                          "size":  "32 fl oz",
+                                                          "row_type":  "everyday",
+                                                          "ad_from":  "",
+                                                          "ad_to":  "",
+                                                          "as_of":  "2026-09-19"
+                                                      },
+                                            "claim_key":  "nature s nectar 100 lime juice 32 fl oz|684",
+                                            "flag_types":  [
+                                                               "outlier"
+                                                           ],
+                                            "first_flagged":  "2026-09-21",
+                                            "last_flagged":  "2026-09-21",
+                                            "status":  "pending",
+                                            "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                            "verdict_at":  "",
+                                            "answer":  null,
+                                            "attempts":  1,
+                                            "last_attempt":  "2026-09-21",
+                                            "alerted_at":  "",
+                                            "closed_at":  "",
+                                            "readings":  [
+
+                                                         ]
+                                        },
+                    "miracle-whip|Aldi":  {
+                                              "key":  "miracle-whip|Aldi",
+                                              "id":  "miracle-whip",
+                                              "commodity":  "Miracle Whip (Salad Dressing Spread)",
+                                              "store":  "Aldi",
+                                              "unit":  "oz",
+                                              "claim":  {
+                                                            "item":  "Burman S Whipped Dressing 30 FL OZ",
+                                                            "per_unit":  0.0963,
+                                                            "ad":  "$2.89",
+                                                            "size":  "30 fl oz",
+                                                            "row_type":  "everyday",
+                                                            "ad_from":  "",
+                                                            "ad_to":  "",
+                                                            "as_of":  "2026-09-19"
+                                                        },
+                                              "claim_key":  "burman s whipped dressing 30 fl oz|963",
+                                              "flag_types":  [
+                                                                 "outlier"
+                                                             ],
+                                              "first_flagged":  "2026-09-21",
+                                              "last_flagged":  "2026-09-21",
+                                              "status":  "pending",
+                                              "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                              "verdict_at":  "",
+                                              "answer":  null,
+                                              "attempts":  1,
+                                              "last_attempt":  "2026-09-21",
+                                              "alerted_at":  "",
+                                              "closed_at":  "",
+                                              "readings":  [
+
+                                                           ]
+                                          },
+                    "paper-towels|Aldi":  {
+                                              "key":  "paper-towels|Aldi",
+                                              "id":  "paper-towels",
+                                              "commodity":  "Paper Towels",
+                                              "store":  "Aldi",
+                                              "unit":  "each",
+                                              "claim":  {
+                                                            "item":  "Crofton 12pk Resuable Paper Towels Floral 1 Each",
+                                                            "per_unit":  0.5825,
+                                                            "ad":  "$6.99",
+                                                            "size":  "12 ct",
+                                                            "row_type":  "everyday",
+                                                            "ad_from":  "",
+                                                            "ad_to":  "",
+                                                            "as_of":  "2026-08-22"
+                                                        },
+                                              "claim_key":  "crofton 12pk resuable paper towels floral 1 each|5825",
+                                              "flag_types":  [
+                                                                 "outlier"
+                                                             ],
+                                              "first_flagged":  "2026-09-21",
+                                              "last_flagged":  "2026-09-21",
+                                              "status":  "pending",
+                                              "reason":  "no read of this product later than 2026-08-22 has landed yet",
+                                              "verdict_at":  "",
+                                              "answer":  null,
+                                              "attempts":  1,
+                                              "last_attempt":  "2026-09-21",
+                                              "alerted_at":  "",
+                                              "closed_at":  "",
+                                              "readings":  [
+
+                                                           ]
+                                          },
+                    "popsicles|Walmart":  {
+                                              "key":  "popsicles|Walmart",
+                                              "id":  "popsicles",
+                                              "commodity":  "Popsicles / Ice Pops",
+                                              "store":  "Walmart",
+                                              "unit":  "each",
+                                              "claim":  {
+                                                            "item":  "FunPops Freeze Pops, Variety Pack, Gluten Free, 2 oz, 36 Count Bag",
+                                                            "per_unit":  0.0825,
+                                                            "ad":  "$2.97",
+                                                            "size":  "72 oz",
+                                                            "row_type":  "everyday",
+                                                            "ad_from":  "",
+                                                            "ad_to":  "",
+                                                            "as_of":  "2026-09-19"
+                                                        },
+                                              "claim_key":  "funpops freeze pops, variety pack, gluten free, 2 oz, 36 count bag|825",
+                                              "flag_types":  [
+                                                                 "outlier"
+                                                             ],
+                                              "first_flagged":  "2026-09-21",
+                                              "last_flagged":  "2026-09-21",
+                                              "status":  "pending",
+                                              "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                              "verdict_at":  "",
+                                              "answer":  null,
+                                              "attempts":  1,
+                                              "last_attempt":  "2026-09-21",
+                                              "alerted_at":  "",
+                                              "closed_at":  "",
+                                              "readings":  [
+
+                                                           ]
+                                          },
+                    "serrano-peppers|Family Fare":  {
+                                                        "key":  "serrano-peppers|Family Fare",
+                                                        "id":  "serrano-peppers",
+                                                        "commodity":  "Serrano Peppers",
+                                                        "store":  "Family Fare",
+                                                        "unit":  "lb",
+                                                        "claim":  {
+                                                                      "item":  "Serrano Peppers (Capsicums)",
+                                                                      "per_unit":  2.99,
+                                                                      "ad":  "$2.99",
+                                                                      "size":  "lb",
+                                                                      "row_type":  "everyday",
+                                                                      "ad_from":  "",
+                                                                      "ad_to":  "",
+                                                                      "as_of":  "2026-08-22"
+                                                                  },
+                                                        "claim_key":  "serrano peppers (capsicums)|29900",
+                                                        "flag_types":  [
+                                                                           "outlier"
+                                                                       ],
+                                                        "first_flagged":  "2026-09-21",
+                                                        "last_flagged":  "2026-09-21",
+                                                        "status":  "pending",
+                                                        "reason":  "no read of this product later than 2026-08-22 has landed yet",
+                                                        "verdict_at":  "",
+                                                        "answer":  null,
+                                                        "attempts":  1,
+                                                        "last_attempt":  "2026-09-21",
+                                                        "alerted_at":  "",
+                                                        "closed_at":  "",
+                                                        "readings":  [
+
+                                                                     ]
+                                                    },
+                    "spring-mix|Aldi":  {
+                                            "key":  "spring-mix|Aldi",
+                                            "id":  "spring-mix",
+                                            "commodity":  "Spring Mix Salad Greens",
+                                            "store":  "Aldi",
+                                            "unit":  "oz",
+                                            "claim":  {
+                                                          "item":  "Little Salad Bar Spring Mix OF Baby Lettuces Baby Leafy Greens And Radicchio 12 OZ",
+                                                          "per_unit":  0.1742,
+                                                          "ad":  "$2.09",
+                                                          "size":  "12 oz",
+                                                          "row_type":  "everyday",
+                                                          "ad_from":  "",
+                                                          "ad_to":  "",
+                                                          "as_of":  "2026-09-21"
+                                                      },
+                                            "claim_key":  "little salad bar spring mix of baby lettuces baby leafy greens and radicchio 12 oz|1742",
+                                            "flag_types":  [
+                                                               "outlier"
+                                                           ],
+                                            "first_flagged":  "2026-09-21",
+                                            "last_flagged":  "2026-09-21",
+                                            "status":  "pending",
+                                            "reason":  "no read of this product later than 2026-09-21 has landed yet",
+                                            "verdict_at":  "",
+                                            "answer":  null,
+                                            "attempts":  1,
+                                            "last_attempt":  "2026-09-21",
+                                            "alerted_at":  "",
+                                            "closed_at":  "",
+                                            "readings":  [
+
+                                                         ]
+                                        },
+                    "sweet-corn|Baker\u0027s":  {
+                                                    "key":  "sweet-corn|Baker\u0027s",
+                                                    "id":  "sweet-corn",
+                                                    "commodity":  "Sweet Corn (ear)",
+                                                    "store":  "Baker\u0027s",
+                                                    "unit":  "each",
+                                                    "claim":  {
+                                                                  "item":  "Fresh Sweet Corn on the Cob-Each",
+                                                                  "per_unit":  0.33,
+                                                                  "ad":  "$0.33",
+                                                                  "size":  "1 ct",
+                                                                  "row_type":  "everyday",
+                                                                  "ad_from":  "",
+                                                                  "ad_to":  "",
+                                                                  "as_of":  "2026-09-19"
+                                                              },
+                                                    "claim_key":  "fresh sweet corn on the cob-each|3300",
+                                                    "flag_types":  [
+                                                                       "outlier"
+                                                                   ],
+                                                    "first_flagged":  "2026-09-21",
+                                                    "last_flagged":  "2026-09-21",
+                                                    "status":  "pending",
+                                                    "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                                    "verdict_at":  "",
+                                                    "answer":  null,
+                                                    "attempts":  1,
+                                                    "last_attempt":  "2026-09-21",
+                                                    "alerted_at":  "",
+                                                    "closed_at":  "",
+                                                    "readings":  [
+
+                                                                 ]
+                                                },
+                    "toilet-paper|Baker\u0027s":  {
+                                                      "key":  "toilet-paper|Baker\u0027s",
+                                                      "id":  "toilet-paper",
+                                                      "commodity":  "Toilet Paper",
+                                                      "store":  "Baker\u0027s",
+                                                      "unit":  "each",
+                                                      "claim":  {
+                                                                    "item":  "Scott ComfortPlus 1-Ply Toilet Paper Triple Rolls",
+                                                                    "per_unit":  0.5242,
+                                                                    "ad":  "$6.29",
+                                                                    "size":  "12 ct",
+                                                                    "row_type":  "everyday",
+                                                                    "ad_from":  "",
+                                                                    "ad_to":  "",
+                                                                    "as_of":  "2026-09-19"
+                                                                },
+                                                      "claim_key":  "scott comfortplus 1-ply toilet paper triple rolls|5242",
+                                                      "flag_types":  [
+                                                                         "outlier"
+                                                                     ],
+                                                      "first_flagged":  "2026-09-21",
+                                                      "last_flagged":  "2026-09-21",
+                                                      "status":  "pending",
+                                                      "reason":  "no read of this product later than 2026-09-19 has landed yet",
+                                                      "verdict_at":  "",
+                                                      "answer":  null,
+                                                      "attempts":  1,
+                                                      "last_attempt":  "2026-09-21",
+                                                      "alerted_at":  "",
+                                                      "closed_at":  "",
+                                                      "readings":  [
+
+                                                                   ]
+                                                  },
+                    "yellow-bell-pepper|Family Fare":  {
+                                                           "key":  "yellow-bell-pepper|Family Fare",
+                                                           "id":  "yellow-bell-pepper",
+                                                           "commodity":  "Yellow Bell Pepper",
+                                                           "store":  "Family Fare",
+                                                           "unit":  "each",
+                                                           "claim":  {
+                                                                         "item":  "Yellow Bell Pepper",
+                                                                         "per_unit":  1,
+                                                                         "ad":  "10 for $10.00 with purchase of 10",
+                                                                         "size":  "1 ea",
+                                                                         "row_type":  "sale",
+                                                                         "ad_from":  "2026-09-20",
+                                                                         "ad_to":  "2026-09-26",
+                                                                         "as_of":  ""
+                                                                     },
+                                                           "claim_key":  "yellow bell pepper|10000",
+                                                           "flag_types":  [
+                                                                              "outlier"
+                                                                          ],
+                                                           "first_flagged":  "2026-09-21",
+                                                           "last_flagged":  "2026-09-21",
+                                                           "status":  "pending",
+                                                           "reason":  "no read of this product later than 2026-09-20 has landed yet",
+                                                           "verdict_at":  "",
+                                                           "answer":  null,
+                                                           "attempts":  1,
+                                                           "last_attempt":  "2026-09-21",
+                                                           "alerted_at":  "",
+                                                           "closed_at":  "",
+                                                           "readings":  [
+
+                                                                        ]
+                                                       }
+                },
+    "closed":  [
+
+               ],
+    "summary":  {
+                    "board":  "comparison-2026-09-21.json",
+                    "flags_file":  "guards-2026-09-21.json",
+                    "paging_flags":  26,
+                    "with_cell":  26,
+                    "no_cell":  0,
+                    "open":  26,
+                    "pending":  26,
+                    "pending_oldest_days":  0,
+                    "pending_overdue":  0,
+                    "quarter_days":  90,
+                    "new_disagreements":  0,
+                    "by_store":  {
+                                     "Aldi":  {
+                                                  "match":  0,
+                                                  "wrong_price":  0,
+                                                  "wrong_product":  0,
+                                                  "pending":  9,
+                                                  "left_unverified":  0
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "match":  0,
+                                                          "wrong_price":  0,
+                                                          "wrong_product":  0,
+                                                          "pending":  6,
+                                                          "left_unverified":  0
+                                                      },
+                                     "Family Fare":  {
+                                                         "match":  0,
+                                                         "wrong_price":  0,
+                                                         "wrong_product":  0,
+                                                         "pending":  3,
+                                                         "left_unverified":  0
+                                                     },
+                                     "Fareway":  {
+                                                     "match":  0,
+                                                     "wrong_price":  0,
+                                                     "wrong_product":  0,
+                                                     "pending":  1,
+                                                     "left_unverified":  0
+                                                 },
+                                     "Sam\u0027s Club":  {
+                                                             "match":  0,
+                                                             "wrong_price":  0,
+                                                             "wrong_product":  0,
+                                                             "pending":  2,
+                                                             "left_unverified":  0
+                                                         },
+                                     "Walmart":  {
+                                                     "match":  0,
+                                                     "wrong_price":  0,
+                                                     "wrong_product":  0,
+                                                     "pending":  5,
+                                                     "left_unverified":  0
+                                                 }
+                                 },
+                    "files_read":  {
+                                       "Walmart":  [
+                                                       "walmart-regular-2026-09-21.json",
+                                                       "walmart-regular-2026-09-20.json",
+                                                       "walmart-regular-2026-09-19.json",
+                                                       "walmart-regular-2026-09-17.json",
+                                                       "walmart-regular-2026-09-12.json",
+                                                       "walmart-regular-2026-09-11.json",
+                                                       "walmart-regular-2026-09-10.json",
+                                                       "walmart-regular-2026-09-09.json"
+                                                   ],
+                                       "Fareway":  [
+                                                       "fareway-regular-2026-09-21.json",
+                                                       "fareway-regular-2026-09-20.json",
+                                                       "fareway-deals-2026-09-20.json",
+                                                       "fareway-regular-2026-09-19.json",
+                                                       "fareway-deals-2026-09-17.json",
+                                                       "fareway-regular-2026-09-12.json",
+                                                       "fareway-regular-2026-09-11.json",
+                                                       "fareway-regular-2026-09-10.json"
+                                                   ],
+                                       "Family Fare":  [
+                                                           "family-fare-regular-2026-09-21.json",
+                                                           "family-fare-regular-2026-09-20.json",
+                                                           "family-fare-regular-2026-09-19.json",
+                                                           "family-fare-regular-2026-09-18.json",
+                                                           "family-fare-regular-2026-09-17.json",
+                                                           "family-fare-regular-2026-09-14.json",
+                                                           "family-fare-regular-2026-09-13.json",
+                                                           "family-fare-regular-2026-09-12.json"
+                                                       ],
+                                       "Sam\u0027s Club":  [
+                                                               "sams-deals-2026-09-21.json",
+                                                               "sams-deals-2026-09-20.json",
+                                                               "sams-deals-2026-09-19.json",
+                                                               "sams-deals-2026-09-17.json",
+                                                               "sams-deals-2026-09-12.json",
+                                                               "sams-deals-2026-09-11.json",
+                                                               "sams-deals-2026-09-10.json",
+                                                               "sams-deals-2026-09-09.json"
+                                                           ],
+                                       "Aldi":  [
+                                                    "aldi-regular-2026-09-21.json",
+                                                    "aldi-regular-2026-09-20.json",
+                                                    "aldi-regular-2026-09-19.json",
+                                                    "aldi-regular-2026-09-17.json",
+                                                    "aldi-regular-2026-09-11.json",
+                                                    "aldi-regular-2026-09-10.json",
+                                                    "aldi-regular-2026-09-09.json",
+                                                    "aldi-regular-2026-09-08.json"
+                                                ],
+                                       "Baker\u0027s":  [
+                                                            "bakers-regular-2026-09-21.json",
+                                                            "bakers-regular-2026-09-20.json",
+                                                            "bakers-regular-2026-09-19.json",
+                                                            "bakers-regular-2026-09-18.json",
+                                                            "bakers-regular-2026-09-17.json",
+                                                            "bakers-regular-2026-09-14.json",
+                                                            "bakers-regular-2026-09-13.json",
+                                                            "bakers-regular-2026-09-12.json"
+                                                        ]
+                                   }
+                }
+}

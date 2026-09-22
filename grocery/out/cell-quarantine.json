@@ -1,0 +1,33 @@
+﻿{
+    "generated":  "2026-09-21T15:05:25",
+    "written_by":  "guards.ps1",
+    "board_file":  "comparison-2026-09-21.json",
+    "board_sha256":  "641769d86d8a8fd8a8a81e0b37bfe7d5bd26a666cd0caee4d7914b554db95800",
+    "action":  "quarantined",
+    "exit_code":  4,
+    "reasons":  [
+
+                ],
+    "cells":  [
+
+              ],
+    "stores":  [
+
+               ],
+    "breaker":  {
+                    "tripped":  false,
+                    "why":  "",
+                    "quarantined":  1,
+                    "priced":  2705,
+                    "board_pct_bar":  2,
+                    "store_pct_bar":  10,
+                    "stores":  [
+                                   {
+                                       "store":  "Sam\u0027s Club",
+                                       "quarantined":  1,
+                                       "priced":  316
+                                   }
+                               ]
+                },
+    "note":  "Written by every guards run. action: pass | quarantine (required: run apply-cell-quarantine.ps1, then guards again) | quarantined (applied and verified) | hold. See grocery\\cell-quarantine-lib.ps1."
+}
