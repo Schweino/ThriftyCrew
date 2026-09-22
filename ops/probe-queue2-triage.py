@@ -47,13 +47,13 @@ rec('I8', 'VERIFIED' if (py_listed and ps_discovered) else 'NOT VERIFIED',
 # ---------------------------------------------------------------- I9
 inits = []
 for root, dirs, files in os.walk(REPO):
-    if any(x in root for x in ('.venv', 'node_modules', '.git', 'worktrees', 'archive')):
+    if any(x in os.path.relpath(root, REPO) for x in ('.venv', 'node_modules', '.git', 'worktrees', 'archive')):   # below the root, never the full path: a worktree lives under .claude\worktrees
         continue
     if '__init__.py' in files:
         inits.append(os.path.relpath(root, REPO))
 pyfiles = 0
 for root, dirs, files in os.walk(REPO):
-    if any(x in root for x in ('.venv', 'node_modules', '.git', 'worktrees', 'archive')):
+    if any(x in os.path.relpath(root, REPO) for x in ('.venv', 'node_modules', '.git', 'worktrees', 'archive')):   # below the root, never the full path: a worktree lives under .claude\worktrees
         continue
     pyfiles += len([f for f in files if f.endswith('.py')])
 syspath = len(re.findall(r'sys\.path\.insert', read('meal-prep\\pipeline\\hunt_lib.py') +

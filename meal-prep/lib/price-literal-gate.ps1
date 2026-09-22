@@ -95,7 +95,7 @@ function Test-TcBuiltPriceLiterals { param([string]$Body, [string]$Head = '', [s
     if (-not $s.fallback -or $s.fallback -notmatch '^\d+\.\d{2}$' -or -not [double]::TryParse($s.fallback, [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$d) -or -not ($d -gt 0)) {
       $why += ("fallback '" + $s.fallback + "' is not a positive two-decimal price")
     } elseif ($s.text -ne ('~$' + $s.fallback)) { $why += ("text '" + $s.text + "' is not the fallback ~$" + $s.fallback) }
-    if ($RequireAsOf -and $s.asof -notmatch '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$') { $why += 'no data-tc-asof stamp: the fallback was never replaced by the card''s own fill, so its basis is unproven (run engineuild-cards.ps1)' }
+    if ($RequireAsOf -and $s.asof -notmatch '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$') { $why += 'no data-tc-asof stamp: the fallback was never replaced by the card''s own fill, so its basis is unproven (run engine\build-cards.ps1)' }
     if ($why.Count) { $f += ('placeholder: ' + ($why -join '; ') + ' -> ' + $s.raw) }
   }
   $bare = $code
