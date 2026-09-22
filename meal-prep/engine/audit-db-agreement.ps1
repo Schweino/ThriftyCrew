@@ -71,6 +71,22 @@ function Get-MacroDrift {
     return @($out.ToArray())
 }
 
+# HELD IS A THIRD STATE, NOT DRIFT (2026-09-22, queue 2026-09-19-2c96d8). A recipe held on purpose (db\held-recipes.json,
+# read through meal-prep\lib\held-state.ps1, the same read cost-recipes uses) is off the feed BY DESIGN, so its bid
+# not being a feed key is not "cheapest silently = everyday": nothing serves it. Only CHEAPEST-FALLBACK lines are
+# reclassed, and only for a held slug; every other finding kind on a held slug still scores.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\held-state.ps1')
+function Split-HeldFallback {
+    <# Pure. CHEAPEST-FALLBACK lines ("<slug> : ...") -> live (still findings) and held (reported, not scored). #>
+    param([string[]]$Lines, [hashtable]$Held)
+    $live = New-Object System.Collections.Generic.List[string]; $heldL = New-Object System.Collections.Generic.List[string]
+    foreach ($l in @($Lines)) {
+        if (-not $l) { continue }
+        $slug = ($l -split ' : ', 2)[0].Trim()
+        if ($Held -and $Held.ContainsKey($slug)) { $heldL.Add($l) } else { $live.Add($l) }
+    }
+    return [pscustomobject]@{ live = $live.ToArray(); held = $heldL.ToArray() }
+}
 function Get-CostDrift {
     <# Pure, so the founding bug can be pinned by -SelfTest without touching a live file. #>
     param([Parameter(Mandatory)]$Row, [Parameter(Mandatory)]$Spec, [Parameter(Mandatory)][string]$Slug)
@@ -178,6 +194,23 @@ if($SelfTest){
     T 'MUST NOT FIRE a ratio gap AT the 0.005 bar is agreement' ($g7 -eq 'agree') $g7
     $g8 = Get-GpuVerdict -SpecGpu 100.51 -DbGpu 100 -MapUnit 'each' -FeedLoaded $true -FeedUnit 'each'
     T 'MUST FIRE  a ratio gap one step past the 0.005 bar (0.0051) is drift' ($g8 -eq 'drift') $g8
+    # HELD vs DRIFT (2026-09-22, 2c96d8). Founding: six recipes held under Q1-2026-09-20-partial-cost scored as drift ten times.
+    $hfLine = "persian-fesenjan-chicken-bowls : 'Pomegranate Molasses' bid 'pomegranate-molasses' not on feed (cheapest silently = everyday)"
+    $hfLive = "zz-live-bowls : 'Harissa Paste' bid 'harissa-paste' not on feed (cheapest silently = everyday)"
+    $hs = Split-HeldFallback -Lines @($hfLine) -Held @{}
+    T 'MUST FIRE a LIVE slug whose bid is not on the feed still scores CHEAPEST-FALLBACK (no held list names it)' (@($hs.live).Count -eq 1 -and @($hs.held).Count -eq 0) ("live=" + @($hs.live).Count)
+    $hs2 = Split-HeldFallback -Lines @($hfLine, $hfLive) -Held @{ 'persian-fesenjan-chicken-bowls' = 'Q1-2026-09-20-partial-cost' }
+    T 'CLEAN TWIN the same line on a HELD slug is reported HELD, and a live slug beside it still scores' (@($hs2.held).Count -eq 1 -and @($hs2.live).Count -eq 1 -and $hs2.live[0] -like 'zz-live-bowls*') ("held=" + @($hs2.held).Count + " live=" + @($hs2.live).Count)
+    $hsDir = Join-Path $env:TEMP ('dba-held-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+    New-Item -ItemType Directory -Path $hsDir -ErrorAction Stop | Out-Null
+    try {
+        [IO.File]::WriteAllText((Join-Path $hsDir 'held-recipes.json'), '{ "held": [ { "slug": "persian-fesenjan-chicken-bowls", "reason": "Q1" } ] }')
+        $hr = Get-HeldRecipeSet $hsDir
+        T 'CLEAN TWIN the shared held read returns the held slug with its reason' ($hr.ok -and $hr.slugs.ContainsKey('persian-fesenjan-chicken-bowls') -and $hr.slugs.Count -eq 1) ("ok=" + $hr.ok + " n=" + $hr.slugs.Count)
+        [IO.File]::WriteAllText((Join-Path $hsDir 'held-recipes.json'), '{ "held": [ torn')
+        $hr2 = Get-HeldRecipeSet $hsDir
+        T 'MUST FIRE an unreadable held list holds NOTHING (ok=false), so every fallback still scores' ((-not $hr2.ok) -and $hr2.slugs.Count -eq 0) ("ok=" + $hr2.ok)
+    } finally { Remove-Item -LiteralPath $hsDir -Recurse -Force -ErrorAction SilentlyContinue }
     if($f -eq 0){ Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
@@ -395,6 +428,12 @@ if($bidMiss -gt $CAP8){ $issues.Add("... plus $($bidMiss-8) more missing-item li
 if($bidDrift -gt $CAP8){ $issues.Add("... plus $($bidDrift-8) more bid-drift lines") }
 if($gpuDrift -gt $CAP8){ $issues.Add("... plus $($gpuDrift-8) more gpu-drift lines") }
 if($costDriftRows -gt $CAP8){ $issues.Add("... plus $($costDriftRows-8) more COST-DRIFT rows ($costDriftFields stale cost fields in total - run pipeline\sync-recipesdb-cost.ps1)") }
+$heldState = Get-HeldRecipeSet (Join-Path $mp 'db')
+if (-not $heldState.ok) { Write-Output ("db-agreement: WARNING - " + $heldState.why) }
+$fbSplit = Split-HeldFallback -Lines $fallback -Held $heldState.slugs
+$heldFallback = @($fbSplit.held)
+$fallback = @($fbSplit.live)
+foreach($hf in $heldFallback){ Write-Output ("  HELD (db\held-recipes.json, not drift): " + $hf) }
 if($fallback.Count){
   foreach($f in ($fallback | Select-Object -First $CAP8)){ $issues.Add("CHEAPEST-FALLBACK: $f") }
   if($fallback.Count -gt $CAP8){ $issues.Add("... plus $($fallback.Count-8) more cheapest-fallback lines (unmapped bid -> add to no-board-price-ok.json if intentional, else fix the bid)") }
@@ -412,10 +451,10 @@ if($issues.Count -eq 0){
   }
   if($gpuBlind -gt 0){
     Write-Output $blindLine
-    Exit-Guard -Name 'db-agreement' -Summary ("recipes={0} issues=0 blind={1} could not evaluate: no feed" -f $specSlugs.Count, $gpuBlind) -Code 3
+    Exit-Guard -Name 'db-agreement' -Summary ("recipes={0} issues=0 held={2} blind={1} could not evaluate: no feed" -f $specSlugs.Count, $gpuBlind, $heldFallback.Count) -Code 3
   }
-  Write-Output ("db-agreement: CLEAN ({0} recipes, index==specs)" -f $specSlugs.Count)
-  Exit-Guard -Name 'db-agreement' -Summary ("recipes={0} issues=0" -f $specSlugs.Count) -Code 0
+  Write-Output ("db-agreement: CLEAN ({0} recipes, index==specs; {1} held recipe line(s) reported, not scored)" -f $specSlugs.Count, $heldFallback.Count)
+  Exit-Guard -Name 'db-agreement' -Summary ("recipes={0} issues=0 held={1}" -f $specSlugs.Count, $heldFallback.Count) -Code 0
 }
 # The headline used to count only what SURVIVED the category caps, so a default run reported 44 when the
 # real total was 48. The caps are a display convenience; the count must not inherit them.

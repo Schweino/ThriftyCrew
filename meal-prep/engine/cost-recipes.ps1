@@ -444,11 +444,12 @@ if($nbBad.Count){
 # engine reads them to label its own flag lines (Split-CostFlags above). A file that cannot be parsed is not an
 # empty one: an unreadable held list treats NOTHING as held, so every line pages (the loud direction), and says so.
 $HELDSLUGS = @{}; $LIVESLUGS = @{}
-$heldPath = Join-Path $db 'held-recipes.json'
-if(Test-Path $heldPath){
-  try { foreach($h in @((Get-Content $heldPath -Raw | ConvertFrom-Json).held)){ if($h -and $h.slug){ $HELDSLUGS[[string]$h.slug] = $true } } }
-  catch { $HELDSLUGS = @{}; Write-Output 'cost-recipes: WARNING - db\held-recipes.json could not be parsed, so NO recipe is treated as held this run and every flag line pages' }
-}
+# Through meal-prep\lib\held-state.ps1 since 2026-09-22 (queue 2026-09-19-2c96d8): the ONE read of held state, shared
+# with audit-db-agreement, so a second scorer cannot rediscover held-read-as-drift. Unreadable still means nothing held.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\held-state.ps1')
+$heldState = Get-HeldRecipeSet $db
+foreach($hk in @($heldState.slugs.Keys)){ $HELDSLUGS[[string]$hk] = $true }
+if(-not $heldState.ok){ Write-Output 'cost-recipes: WARNING - db\held-recipes.json could not be parsed, so NO recipe is treated as held this run and every flag line pages' }
 $livePath = Join-Path $db 'published-hashes.json'
 if(Test-Path $livePath){
   try { foreach($lp in (Get-Content $livePath -Raw | ConvertFrom-Json).PSObject.Properties){ $LIVESLUGS[[string]$lp.Name] = $true } }
