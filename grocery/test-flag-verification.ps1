@@ -172,6 +172,7 @@ try {
   $auditRc = $LASTEXITCODE
   $scope = Get-TcChildQuarantineScope $auditOut
   $named = @(); if ($scope) { $named = @($scope.cells | ForEach-Object { [string]$_.id + '|' + [string]$_.store }) }
+  # store-subset-ok: the five founding cells this fixture froze, as id|store pairs; audit-flag-verification scopes cells generically and never branches on which store (queue 2026-09-22-175249)
   $want = @('laundry-pods|Hy-Vee', 'coconut|Fareway', "shrimp|Sam's Club", 'bouillon|Walmart', "long-grain-rice|Baker's")
   $missing = @($want | Where-Object { $named -notcontains $_ })
   if ($auditRc -eq 2 -and $missing.Count -eq 0 -and $named.Count -eq 5 -and $named -notcontains '15-bean-soup-mix|Walmart') { Ok 'MUST FIRE  audit-flag-verification exits 2 and names exactly the 5 contradicted cells in the QUARANTINE-CELL protocol guards reads (the confirmed one is not named)' } else { Bad ("audit rc=$auditRc named=[$($named -join ', ')] missing=[$($missing -join ', ')] :: " + (($auditOut | Select-Object -Last 3) -join ' / ')) }

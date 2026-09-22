@@ -417,6 +417,9 @@ $static = @(
   # empty during a gate run - a confident "not applicable" that proves nothing. Its -Head form needs no staged set: it
   # hashes HEAD's committed rule files against HEAD's committed match-baseline.json (2026-09-22, queue 2026-09-21-a25dc0),
   # so rules that a rebase or a --no-verify commit landed without their review are refused at push. `a` = arguments.
+  # grocery\audit-store-registry.ps1 -CodeOnly (2026-09-22, queue 2026-09-22-175249): the roster scan over tracked source,
+  # so a script with a hand-typed store list is refused at its own push, not paged by the daily chain 17 hours later.
+  @{ f = 'grocery\audit-store-registry.ps1'; a = @('-CodeOnly'); n = 'no live grocery script holds its own copy of the store list, and every registered subset exemption still names a real line - the code half; the board and file halves stay in the daily chain' }
   @{ f = 'ops\verify-commodities-gate.ps1'; a = @('-Head'); n = 'the matching rules committed at HEAD are the ones HEAD''s committed match baseline reviewed (a rebase or --no-verify cannot land them apart)' }
 )
 # `daily = $true` MEANS "NOT ON EVERY PUSH" (Brad, 2026-09-12), and the mark lives on the entry rather than in a

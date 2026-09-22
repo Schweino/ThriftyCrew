@@ -34,7 +34,7 @@
   Params: -Alert (send-alert on drift, de-duped by signature), -SelfTest (frozen fixtures in %TEMP%)
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([switch]$Alert, [switch]$SelfTest)
+param([switch]$Alert, [switch]$SelfTest, [switch]$CodeOnly)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -56,6 +56,12 @@ foreach ($grp in @('name','order','regular_prefix')) {
   foreach ($d in $dup) { $issues.Add("registry: duplicate $grp '" + $d.Name + "'") }
 }
 
+# -CodeOnly (2026-09-22, queue 2026-09-22-175249; F2 in design/RCA-holistic-2026-09-22.md): run-gates' form. Checks 2-4
+# read data (the board, capture files, the ad schedule) and stay in the daily chain; checks 1, 5 and 6 read tracked source
+# only, so they run at push. Until then a script written with a hand-typed roster was found by the daily chain 17 hours
+# after its push (test-flag-verification.ps1, 2026-09-21 15:20 -> 2026-09-22 08:xx), which is the root fix 405c73 named
+# on 2026-09-19 and closed without building.
+if (-not $CodeOnly) {
 # ---- 2. newest comparison vs registry ----
 $cmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
 if ($cmpF) {
@@ -87,6 +93,7 @@ if (Test-Path $schedF) {
   foreach ($s in $sched.stores) { $sn = [string]$s.store; if ($sn -and ($names -notcontains $sn)) { $issues.Add("ad-schedule.json: store '$sn' is not in stores.json") } }
 }
 
+}   # end of the data checks -CodeOnly skips
 # ---- 5. code scan (live scripts only; archive/, out/, brands/ excluded) ----
 function Get-StoreNamesIn([string]$text, [string[]]$Names) {
   # Returns @{ hit = <int>; missing = @(...) } for one chunk of source.
@@ -165,6 +172,29 @@ function Test-InsideSelfTestClause {
   return (Test-TcInsideSelfTestClause -Ast $Ast -Line $Line)
 }
 
+# A STORE LIST HELD IN STRINGS IS A LITERAL WHATEVER SURROUNDS IT (2026-09-22, queue 2026-09-22-175249). The literal
+# test above only knew a string assigned straight to a variable, or a multi-line literal. A fixture's frozen board
+# JSON handed to a helper as a COMMAND ARGUMENT (test-auditors' `$eJ = ERun '...' '{"stores":[...]}'`) or an
+# `@('id|Store', ...)` array on one line is the same thing, a frozen value, and was unregistrable: its marker was
+# ignored, so 7 findings could not be quieted except by editing the fixture, which is how a watcher goes blind.
+# The rule, read off the parser's own tokens: every store name the scoped lines hit sits inside a string token on
+# those lines. A bare-word store name in code (a switch label, a parameter value) is not in a string token and
+# still fails this test. The fixture-home and marker requirements below are unchanged, so a production roster is
+# still reported however it is spelled.
+function Test-StoreNamesAllInStrings {
+  param($Tokens, [int]$StartLine, [int]$EndLine, [string[]]$Names, [int]$Hit)
+  if (-not $Tokens -or $Hit -lt 1) { return $false }
+  $sb = New-Object System.Text.StringBuilder
+  foreach ($tok in $Tokens) {
+    if ($tok -isnot [System.Management.Automation.Language.StringToken]) { continue }
+    if ($tok.Extent.EndLineNumber -lt $StartLine -or $tok.Extent.StartLineNumber -gt $EndLine) { continue }
+    [void]$sb.Append($tok.Extent.Text).Append("`n")
+  }
+  if ($sb.Length -eq 0) { return $false }
+  $inStr = Get-StoreNamesIn $sb.ToString() $Names
+  return ($inStr.hit -ge $Hit)
+}
+
 function Get-StoreListDrift {
   <#
     .SYNOPSIS Store-list drift findings for ONE .ps1 file, statement-scoped.
@@ -238,7 +268,8 @@ function Get-StoreListDrift {
     $isLiteral = ($u.Count -gt 0 -and (
                     $u[0] -is [System.Management.Automation.Language.StringConstantExpressionAst] -or
                     $u[0] -is [System.Management.Automation.Language.ExpandableStringExpressionAst])) -or
-                 ($code -match "=\s*['""]")
+                 ($code -match "=\s*['""]") -or
+                 (Test-StoreNamesAllInStrings -Tokens $tk -StartLine $scopeLine -EndLine $(if ($u.Count -gt 0) { $u[0].Extent.EndLineNumber } else { $ln }) -Names $Names -Hit $r.hit)
     $isFixtureFile = ($FileLabel -match '^(test|measure)-')
     # ...or the literal sits inside a guard's own `if ($SelfTest) { }` body, in ANY file (2026-09-10, queue
     # 2026-09-10-483a9c; see Test-InsideSelfTestClause for why a condition that merely mentions the switch
@@ -392,6 +423,37 @@ if ($SelfTest) {
     if ($mProd.Count -ne 1) { Write-Output ("FAIL  the marker silenced a PRODUCTION store list - it has become a blanket bypass: " + ($mProd -join ' | ')); $fail++ }
     else { Write-Output 'ok    CLEAN TWIN the marker is ignored in a non-test file, so it cannot become a bypass' }
 
+    # THE COMMAND-ARGUMENT AND ONE-LINE ARRAY SHAPES (2026-09-22, queue 2026-09-22-175249). Frozen from
+    # test-auditors' ERun lines and test-flag-verification's $want: both are frozen values in strings.
+    $fxArgNo = Join-Path $fx 'test-arg-no.ps1'
+    Set-Content $fxArgNo -Encoding UTF8 -Value @(
+      '# frozen board rows handed to a helper',
+      "`$eJ = ERun '2026-09-21' '{""a"":""Baker''s"",""b"":""Family Fare"",""c"":""Fareway"",""d"":""Walmart""}'")
+    $mArgNo = @(Get-StoreListDrift -Path $fxArgNo -FileLabel 'test-arg-no.ps1' -Names $fxNames -Subsets @())
+    if ($mArgNo.Count -ne 1) { Write-Output ("FAIL  an UNMARKED command-argument store list in a test- file was not reported: " + ($mArgNo -join ' | ')); $fail++ }
+    else { Write-Output 'ok    MUST FIRE  an unmarked store list passed as a COMMAND ARGUMENT in a test- file is still reported' }
+    $fxArgYes = Join-Path $fx 'test-arg-yes.ps1'
+    Set-Content $fxArgYes -Encoding UTF8 -Value @(
+      '# store-subset-ok: frozen board rows; the region under test never branches on store',
+      "`$eJ = ERun '2026-09-21' '{""a"":""Baker''s"",""b"":""Family Fare"",""c"":""Fareway"",""d"":""Walmart""}'")
+    $mArgYes = @(Get-StoreListDrift -Path $fxArgYes -FileLabel 'test-arg-yes.ps1' -Names $fxNames -Subsets @())
+    if ($mArgYes.Count -ne 0) { Write-Output ("FAIL  a MARKED command-argument store list still reported (the 175249 shape): " + ($mArgYes -join ' | ')); $fail++ }
+    else { Write-Output 'ok    MUST NOT FIRE a marked store list passed as a COMMAND ARGUMENT registers in place' }
+    $fxArr = Join-Path $fx 'test-arr-yes.ps1'
+    Set-Content $fxArr -Encoding UTF8 -Value @(
+      '# store-subset-ok: the founding cells this fixture froze, as id|store pairs',
+      "`$want = @('a|Hy-Vee', 'b|Fareway', 'c|Family Fare', 'd|Walmart')")
+    $mArr = @(Get-StoreListDrift -Path $fxArr -FileLabel 'test-arr-yes.ps1' -Names $fxNames -Subsets @())
+    if ($mArr.Count -ne 0) { Write-Output ("FAIL  a MARKED one-line @(...) store array still reported: " + ($mArr -join ' | ')); $fail++ }
+    else { Write-Output 'ok    MUST NOT FIRE a marked one-line @(...) array of store strings registers in place' }
+    $fxBare2 = Join-Path $fx 'test-bare.ps1'
+    Set-Content $fxBare2 -Encoding UTF8 -Value @(
+      '# store-subset-ok: bare words are code, not a frozen value',
+      "Write-Row -A Walmart -B Fareway -C Hy-Vee -D 'x'")
+    $mBare2 = @(Get-StoreListDrift -Path $fxBare2 -FileLabel 'test-bare.ps1' -Names $fxNames -Subsets @())
+    if ($mBare2.Count -ne 1) { Write-Output ("FAIL  bare-word store names outside any string were registered by a marker: " + ($mBare2 -join ' | ')); $fail++ }
+    else { Write-Output 'ok    MUST FIRE  bare-word store names outside a string are code, and a marker cannot register them' }
+
     # A MARKER WITH NO REASON IS NOT A REGISTRATION. allowed_subsets already carries entries nobody can
     # review; an inline scheme that accepted a bare token would import the same defect.
     $fxBare = Join-Path $fx 'test-z.ps1'
@@ -507,7 +569,8 @@ foreach ($f in $scanFiles) {
 foreach ($finding in (Get-OrphanedExemptions $subsets $root)) { $issues.Add($finding) }
 
 # ---- report ----
-if ($issues.Count -eq 0) { Write-Output ("store-registry: OK  " + $names.Count + " stores; board, files, schedule and live scripts all agree"); Write-GuardComplete -Name 'store-registry'; exit 0 }
+$srScope = if ($CodeOnly) { 'code only: registry, live scripts and exemptions agree (board, files and schedule are the daily chain''s)' } else { 'board, files, schedule and live scripts all agree' }
+if ($issues.Count -eq 0) { Write-Output ("store-registry: OK  " + $names.Count + " stores; " + $srScope); Write-GuardComplete -Name 'store-registry' -Summary ('scanned=' + @($scanFiles).Count + ' findings=0' + $(if ($CodeOnly) { ' code-only' } else { '' })); exit 0 }
 Write-Output ("store-registry: " + $issues.Count + " drift issue(s):")
 $issues | ForEach-Object { Write-Output ("  " + $_) }
 if ($Alert) {
