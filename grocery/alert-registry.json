@@ -905,7 +905,18 @@
    "class": "review",
    "condition": "review intake: a carried item left the pull, the 90-day carry still covers the cell",
    "emitter": "grocery/audit-ff-carry.ps1",
-   "resolver": "digest"
+   "note": "2026-09-22 (plan-2026-09-22-10, discovered:ff-alerts-lanes): no longer sent. A fresh victim is victim-first promotion\u0027s input (pull-regular-familyfare reads ff-carry-report.json and asks it first), so it is logged, not paged; what pages is ff-carry-promotion-failed. The entry stays so the queue history it owns still resolves.",
+   "resolver": "lane:grocery/pull-regular-familyfare.ps1"
+  },
+  {
+   "id": "ff-carry-promotion-failed",
+   "match": "exact",
+   "key": "grocery family fare victim first promotion failed review",
+   "class": "review",
+   "condition": "review intake: a confirmed Family Fare victim was put at the front of at least two landed windows since it was first seen and is still unpriced, so victim-first promotion failed for it (a starved term Freshop will not return is the known case)",
+   "emitter": "grocery/audit-ff-carry.ps1",
+   "lineage_parent": "ff-carry",
+   "resolver": "lane:grocery/triage-due.ps1"
   },
   {
    "id": "no-category",
@@ -1477,8 +1488,8 @@
    "class": "page",
    "condition": "3 scheduled-work-did-not-run-or-land",
    "emitter": "grocery/capture-watchdog.ps1 (Send-AlertConditions)",
-   "hold_observations": 2,
-   "note": "A scheduled-work condition that can clear by itself on the next run: queued on the first observation, mailed on the second (the hold the catch-all type carried since 2026-09-20, kept per condition).",
+   "producer_max_observations_per_day": 1,
+   "note": "NO HOLD: mailed on the FIRST observation (Brad\u0027s ruling 2026-09-22, \u0027Email first miss\u0027; plan-2026-09-22-10). Only the 14:15 slot-close run grades a day MISSING, after the whole capture window has closed, so a miss cannot be a fluke the next run clears; a producer that observes it at most once a day never reached the seen-twice hold (hold_observations 2 until that day), so a one-day miss never reached the inbox. audit-alert-registry refuses a hold above producer_max_observations_per_day.",
    "split_from": "plan-2026-09-21-5.json",
    "lineage_parent": "capture-watchdog",
    "resolver": "unassigned:2026-09-22"
@@ -1962,9 +1973,10 @@
    "class": "review",
    "condition": "review until plan Phase 2 recalibrates its trigger (Brad ruling R15, 2026-09-10), kept per signal",
    "emitter": "grocery/pull-regular-familyfare.ps1 (Send-AlertConditions)",
+   "note": "2026-09-22 (plan-2026-09-22-10, discovered:ff-alerts-lanes): no longer sent. The signal means shard windows are not landing, which capture-watchdog pages as MISSING-WINDOW (since 10f5856bf, 2026-09-01) and repairs with its own make-up Family Fare window; the watchdog owns the condition. The detector still runs and its reason stays in the run log.",
    "split_from": "plan-2026-09-21-5.json",
    "lineage_parent": "ff-catalog-degrading",
-   "resolver": "digest"
+   "resolver": "lane:grocery/capture-watchdog.ps1"
   },
   {
    "id": "ff-catalog-merged-catalog-shrank",

@@ -623,6 +623,13 @@ if ($SelfTest) {
     _T 'a declared hold reads as the number it declares' (Get-AlertHoldObservations $holdReg 'watchdog') 2
     _T 'an id no entry carries reads as 1' (Get-AlertHoldObservations $holdReg 'no-such-entry') 1
     _T 'an unreadable registry reads as 1, because this knob may only ever DELAY a mail' (Get-AlertHoldObservations $null 'watchdog') 1
+  # BRAD'S RULING "Email first miss" (2026-09-22, plan-2026-09-22-10), read off the COMMITTED registry: only the 14:15
+  # slot-close run grades a day MISSING, so the one observation a day it can make must mail.
+  $liveHoldReg = (Read-AlertRegistry (Join-Path $PSScriptRoot 'alert-registry.json')).registry
+  $bcHold = Get-AlertHoldObservations $liveHoldReg 'watchdog-browser-capture-missing-today'
+  _T 'MUST FIRE one slot-close BROWSER CAPTURE MISSING observation mails (hold 1, observation 1 of 1 is not pending)' ([bool]($bcHold -eq 1 -and -not (Test-AlertHeldPending $bcHold 1 $true ''))) 'True'
+  $mwHold = Get-AlertHoldObservations $liveHoldReg 'watchdog-missing-window'
+  _T 'CLEAN TWIN another held type (watchdog-missing-window) still waits for 2: observation 1 of 2 is pending' ([bool]($mwHold -eq 2 -and (Test-AlertHeldPending $mwHold 1 $true ''))) 'True'
     [IO.File]::WriteAllText($saReg, $saRegJson, $utf8)
     # ---- ONE INCIDENT, ONE ALERT (2026-09-10, plan Phase 1) ----
     $tdy = Get-Date -Format 'yyyy-MM-dd'

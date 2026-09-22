@@ -451,6 +451,16 @@ function Norm-Row($r, $asOf, $isCarried) {
   return $h
 }
 
+# 'THE SWEEP IS NOT BUYING' IS THE WATCHDOG'S TO PAGE (2026-09-22, plan-2026-09-22-10 item discovered:ff-alerts-lanes).
+# The signal means shard windows are not landing, and since 10f5856bf (2026-09-01) capture-watchdog pages exactly that as
+# MISSING-WINDOW and runs a make-up Family Fare window itself: two emitters, one condition, and 10 of this family's 11
+# fire-days in 30 were this arm. It stays in the run log and the catalog report; it is no longer sent from here.
+function Select-FfPagedConditions {
+  <# .SYNOPSIS Pure. The catalog conditions this script still pages: every one except 'sweep is not buying'. #>
+  param($Conditions)
+  return ,@(@($Conditions) | Where-Object { $_ -and [string]$_.Label -ne 'sweep is not buying' })
+}
+
 if ($SelfTest) {
   # Reachable BY CONSTRUCTION: declared on param() (an undeclared [switch] silently lands in $args and the
   # script runs its normal live path looking like a passing self-test - the 2026-07-29 class, re-proven in
@@ -523,6 +533,11 @@ if ($SelfTest) {
   # the two-window floor of 14, and a store that lands once in 48 hours is not keeping its catalog current.
   $m9 = Test-FfCatalogDegraded 5329 5325 0 0 239 7 7
   _T 'MUST-FIRE m9: FIRES on one landed window in 48h (7 terms against a floor of 14)' ($m9.degraded -and ($m9.reasons -join ' ') -match 'not buying')
+  # 2026-09-22 (plan-2026-09-22-10): the detector above still FIRES, and the run log keeps it; the page is the watchdog's.
+  $pcOnly = Select-FfPagedConditions @([pscustomobject]@{ Label = 'sweep is not buying'; Text = 'only 7 term(s) bought in the last 48h' })
+  _T 'MUST-NOT-FIRE a catalog check whose only reason is the sweep is not buying sends no condition (capture-watchdog MISSING-WINDOW owns it)' (@($pcOnly).Count -eq 0)
+  $pcMix = Select-FfPagedConditions @([pscustomobject]@{ Label = 'sweep is not buying'; Text = 'x' }, [pscustomobject]@{ Label = 'starved terms aging out'; Text = 'y' })
+  _T 'CLEAN-TWIN a starved-terms condition beside it still pages, alone' (@($pcMix).Count -eq 1 -and [string]@($pcMix)[0].Label -eq 'starved terms aging out')
   # CLEAN-TWIN c7 - TODAY'S FOUNDING FALSE POSITIVE, frozen (2026-09-05T07:01). 239 rows re-verified paged
   # under the old 300-row floor while the SAME store, SAME cursor, read "catalog healthy - 310 re-verified"
   # at 08:01 one hour later. Six landed windows in 48h is 42 terms against a floor of 14: healthy, and the
@@ -1565,10 +1580,14 @@ try {
               else { Get-AlertConditionKey $t }
         if ($lb -eq 'starved terms aging out' -and $starvedLine) { $t = $t + "`n" + $starvedLine.Trim() }
         [pscustomobject]@{ Label = $lb; Text = $t } })
+      $ffConds = Select-FfPagedConditions $ffConds
+      $ffConds = @($ffConds)
+      if ($ffConds.Count -eq 0) { Write-Output 'ff-catalog: the only signal is the sweep is not buying - capture-watchdog MISSING-WINDOW pages that and runs the make-up window, so nothing is sent from here' } else {
       Send-AlertConditions -SubjectPrefix 'Grocery: Family Fare catalog is degrading' -Conditions $ffConds -ReportPointer ("Merged catalog: $(@($deals).Count) items, $expired expired past $MaxCarryDays days, $recentVerified re-verified in 48h, against a best-of-recent of $prevMax. File: $file. The expiry classes and the throttle background are in this run's own output (pull-regular-familyfare.ps1).") | Out-Null
       # stamp only on a SENT alert: a failed send must be free to try again on the next run, or a transient
       # mail error would buy the whole day's silence.
       if ($LASTEXITCODE -eq 0) { Set-Content -Path $alertStamp -Value $todayS -Encoding ASCII }
+      }
     }
   } else {
     Write-Output ("Family Fare: catalog healthy - " + @($deals).Count + " items, $expired expired, $recentVerified re-verified in 48h (no alert)")

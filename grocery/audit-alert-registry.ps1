@@ -422,6 +422,13 @@ param([string]$Title = '')
   _T 'MUST NOT FIRE a split_from naming its retired parent passes' ($lnp.Count -eq 0) ($lnp -join ' | ')
   _T 'CLEAN TWIN the successor and its retired parent share one class key' (((Get-AlertClassKey $lnOk 'k watch-run-record') -eq 'class:watch') -and ((Get-AlertClassKey $lnOk 'k watch') -eq 'class:watch')) ((Get-AlertClassKey $lnOk 'k watch-run-record') + ' / ' + (Get-AlertClassKey $lnOk 'k watch'))
   _T 'CLEAN TWIN an unregistered type keeps its own key, counted apart' ((Get-AlertClassKey $lnOk 'k nobody knows') -eq 'unregistered:k nobody knows') (Get-AlertClassKey $lnOk 'k nobody knows')
+  # ---- A HOLD THE PRODUCER CAN NEVER REACH (2026-09-22, Brad's ruling "Email first miss") ----
+  $phOver = [pscustomobject]@{ entries = @((_LnE 'slot-close-missing' @{ hold_observations = 2; producer_max_observations_per_day = 1 })) }
+  $php = @((Get-AlertRegistryEntryProblems $phOver))
+  _T 'MUST FIRE a hold of 2 on a type its producer observes at most once a day is a finding' (@($php | Where-Object { $_ -match 'hold_observations 2 exceeds what its producer can observe in a day' }).Count -eq 1) ($php -join ' | ')
+  $phAt = [pscustomobject]@{ entries = @((_LnE 'slot-close-missing' @{ hold_observations = 1; producer_max_observations_per_day = 1 }), (_LnE 'hourly' @{ hold_observations = 2 })) }
+  $php = @((Get-AlertRegistryEntryProblems $phAt))
+  _T 'MUST NOT FIRE AT THE BAR a hold of 1 on a once-a-day producer, or a hold with no declared cadence, passes' ($php.Count -eq 0) ($php -join ' | ')
   # ---- NO SUBJECT (2026-09-22, plan-2026-09-22-10 item 2026-09-20-cb8f30): send-alert has no default subject ----
   $srcNs = @'
 Send-Alert -Body $b | Out-Null

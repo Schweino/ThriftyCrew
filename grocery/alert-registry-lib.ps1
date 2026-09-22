@@ -325,6 +325,15 @@ function Get-AlertRegistryEntryProblems {
     if (-not [string]$e.condition) { [void]$p.Add($tag + ': no condition') }
     elseif ([string]$e.class -eq 'page' -and $script:AlertPageConditions -notcontains [string]$e.condition) { [void]$p.Add($tag + ": page condition '" + [string]$e.condition + "' is not one of the page conditions") }
     if (-not [string]$e.emitter) { [void]$p.Add($tag + ': no emitter') }
+    # A HOLD A PRODUCER CAN NEVER REACH (2026-09-22, Brad's ruling "Email first miss", plan-2026-09-22-10). A type whose
+    # producer observes it at most N times a day, held for more than N observations, never mails a one-day occurrence:
+    # watchdog-browser-capture-missing-today carried hold 2 while only the 14:15 slot-close run grades a day MISSING.
+    # Checked wherever the entry declares its producer's cadence (producer_max_observations_per_day).
+    if ($e.PSObject.Properties['producer_max_observations_per_day'] -and $e.PSObject.Properties['hold_observations']) {
+      $pmx = 0; $hob = 0
+      try { $pmx = [int]$e.producer_max_observations_per_day; $hob = [int]$e.hold_observations } catch { $pmx = 0 }
+      if ($pmx -ge 1 -and $hob -gt $pmx) { [void]$p.Add($tag + ': hold_observations ' + $hob + ' exceeds what its producer can observe in a day (producer_max_observations_per_day ' + $pmx + '), so a one-day occurrence never mails') }
+    }
     $isRetired = ($e.PSObject.Properties['retired'] -and [string]$e.retired)
     if (-not $isRetired) {
       $rs = Get-AlertEntryResolver $e

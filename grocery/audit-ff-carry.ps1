@@ -195,6 +195,39 @@ function Merge-FfCarriedVictims($Fresh, $PrevReport, [scriptblock]$IsCovered, [d
   return ,$out.ToArray()
 }
 
+# ---- THE PAGE IS THE LANE'S FAILURE, NOT THE SYMPTOM (2026-09-22, plan-2026-09-22-10 item discovered:ff-alerts-lanes).
+# Since 2026-09-07 pull-regular-familyfare moves every confirmed victim to the FRONT of the next window, and since
+# 45d65a81e (2026-09-18) a victim is carried until a pull prices it. So a FRESH victim is that lane's input, not news:
+# it is written to ff-carry-report.json and logged, never paged. What pages is a victim promotion already had its
+# chance at: first seen at least $FfPromotionWindows landed Family Fare windows ago (counted off capture-cursor-log.jsonl,
+# the log the watchdog's MISSING-WINDOW reads, windows strictly after the day it was first seen, because first_seen is
+# a date with no time) and still unpriced by this pull. Two is the plan's first plausible value, not a sweep's survivor.
+$script:FfPromotionWindows = 2
+function Get-FfPromotionFailed {
+  <# .SYNOPSIS Pure. Report victims -> the ones victim-first promotion ran on at least MinWindows times and did not price.
+     A cursor line that does not parse or names no readable time is skipped, never counted as a window. #>
+  param($Victims, [string[]]$CursorLines, [int]$MinWindows = 2)
+  $ats = New-Object System.Collections.Generic.List[datetime]
+  foreach ($ln in @($CursorLines)) {
+    if (-not ("$ln").Trim()) { continue }
+    $rec = $null; try { $rec = "$ln" | ConvertFrom-Json } catch { continue }
+    if ([string]$rec.store -ne 'Family Fare') { continue }
+    $at = [datetime]'1900-01-01'
+    if (-not [datetime]::TryParse([string]$rec.at, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::None, [ref]$at)) { continue }
+    [void]$ats.Add($at)
+  }
+  $out = New-Object System.Collections.Generic.List[object]
+  foreach ($v in $Victims) {
+    if (-not $v -or -not [string]$v.first_seen -or ([string]$v.first_seen).Length -lt 10) { continue }
+    $fs = [datetime]::MinValue
+    if (-not [datetime]::TryParseExact(([string]$v.first_seen).Substring(0, 10), 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::None, [ref]$fs)) { continue }
+    $after = $fs.AddDays(1); $n = 0
+    foreach ($a in $ats) { if ($a -ge $after) { $n++ } }
+    if ($n -ge $MinWindows) { [void]$out.Add([pscustomobject]@{ term = [string]$v.term; commodity = [string]$v.commodity; product = [string]$v.product; first_seen = [string]$v.first_seen; windows_since = $n }) }
+  }
+  return ,$out.ToArray()
+}
+
 if ($SelfTest) {
   # ---- CARRY-FORWARD (2026-09-18, queue 2026-09-18-0ac1cb). Frozen from the founding case: pie-pumpkins found
   # 2026-09-10 and erased by the next run's sample before any pull read it; parsnips priced on the next window.
@@ -219,9 +252,26 @@ if ($SelfTest) {
   $cfAgain = Merge-FfCarriedVictims @([pscustomobject]@{ term = 'pie pumpkin'; commodity = 'pie-pumpkins'; product = 'Pie Pumpkin' }) $cfPrev $cfCov ([datetime]'2026-09-18T08:05:00') 14
   $cfA = @($cfAgain | Where-Object { $_.commodity -eq 'pie-pumpkins' })
   if ($cfA.Count -ne 1 -or $cfA[0].carried -or $cfA[0].first_seen -ne '2026-09-10') { $cfFails.Add('CLEAN-TWIN: a re-found victim must keep first_seen 2026-09-10 and read carried=false, got ' + ($cfAgain | ConvertTo-Json -Compress)) }
-  # AND THE ALERT SIGNATURE STAYS ON THE FRESH SET, so a carried victim does not re-page. Needle assembled.
-  $sigLine = '$sig = (@($victims' + ' | ForEach-Object { $_.commodity } | Sort-Object) -join '';'')'
-  if (-not ([IO.File]::ReadAllText($PSCommandPath)).Contains($sigLine)) { $cfFails.Add('MUST-FIRE: the -Alert signature no longer reads the fresh $victims list, so a carried victim could re-page') }
+  # THE ALERT SIGNATURE IS ON THE FAILED-PROMOTION SET (2026-09-22, plan-2026-09-22-10; it was the fresh set until then),
+  # so a fresh victim never pages and a failed one pages once per new set. Needle assembled.
+  $sigLine = '$sig = (@($promoFailed' + ' | ForEach-Object { $_.commodity } | Sort-Object) -join '';'')'
+  if (-not ([IO.File]::ReadAllText($PSCommandPath)).Contains($sigLine)) { $cfFails.Add('MUST-FIRE: the -Alert signature no longer reads the failed-promotion set, so a fresh victim could page again') }
+  # ---- PROMOTION FAILED (2026-09-22). Frozen: pie-pumpkins first seen 2026-09-10 and carried; two FF windows on 09-11.
+  $pfLines2 = @('{"at":"2026-09-11T07:00:10","store":"Family Fare","from":1,"to":8}', '{"at":"2026-09-11T08:00:12","store":"Family Fare","from":8,"to":15}', '{"at":"2026-09-11T09:00:00","store":"Aldi","from":1,"to":8}')
+  $pf2 = Get-FfPromotionFailed $cf $pfLines2 2
+  # MUST FIRE AT THE BAR (2 windows): the carried pie-pumpkins victim, still unpriced after two landed windows, pages.
+  if (@($pf2 | Where-Object { $_.commodity -eq 'pie-pumpkins' }).Count -ne 1) { $cfFails.Add('MUST-FIRE: pie-pumpkins, first seen 09-10 and unpriced after 2 landed FF windows, must be a failed promotion, got ' + ($pf2 | ConvertTo-Json -Compress)) }
+  # MUST NOT FIRE: parsnips, priced by the next pull, left the report, so it cannot page.
+  if (@($pf2 | Where-Object { $_.commodity -eq 'parsnips' }).Count -ne 0) { $cfFails.Add('MUST-NOT-FIRE: parsnips was priced by the next pull and must not page as a failed promotion') }
+  # MUST NOT FIRE ONE STEP BELOW THE BAR: one landed FF window (the Aldi line is not a window) is not a failure.
+  $pf1 = Get-FfPromotionFailed $cf @($pfLines2[0], $pfLines2[2]) 2
+  if (@($pf1).Count -ne 0) { $cfFails.Add('MUST-NOT-FIRE: one landed FF window is below the bar of 2, got ' + ($pf1 | ConvertTo-Json -Compress)) }
+  # CLEAN TWIN: the same victim first seen TODAY is still written to the report (promotion reads it) and pages nothing.
+  $script:covCache = @{}
+  $pfToday = Merge-FfCarriedVictims @([pscustomobject]@{ term = 'pie pumpkin'; commodity = 'pie-pumpkins'; product = 'Pie Pumpkin' }) $null $cfCov ([datetime]'2026-09-22T08:05:00') 14
+  $pfTodayLines = @('{"at":"2026-09-22T10:30:00","store":"Family Fare","from":1,"to":8}', '{"at":"2026-09-22T14:20:05","store":"Family Fare","from":8,"to":15}')
+  $pfT = Get-FfPromotionFailed $pfToday $pfTodayLines 2
+  if (@($pfToday | Where-Object { $_.commodity -eq 'pie-pumpkins' -and $_.first_seen -eq '2026-09-22' }).Count -ne 1 -or @($pfT).Count -ne 0) { $cfFails.Add('CLEAN-TWIN: a victim first seen today must be in the report with first_seen 2026-09-22 and page nothing, got report=' + ($pfToday | ConvertTo-Json -Compress) + ' failed=' + @($pfT).Count) }
   $script:covCache = @{}
   # FROZEN FIXTURES - never regenerate these from the live pull. Each pair is one MUST-FIRE (the real bug)
   # and one CLEAN-TWIN (the case that must stay silent), taken from the 2026-07-31 adjudication.
@@ -374,7 +424,16 @@ if ($attempted -gt 0 -and $probed -eq 0) {
   Write-Output ("ff-carry: BLIND  Freshop answered NONE of the " + $attempted + " term(s) this run needed to probe, so nothing was checked - this is not an OK" + $probeStat)
   exit 3
 }
-if ($victims.Count -eq 0) { Write-Output ("ff-carry: OK  no term is missing from the feed AND carried by FF" + $probeStat); Write-GuardComplete -Name 'ff-carry'; exit 0 }
+# PROMOTION FAILED (2026-09-22): judged over the REPORT's victims (fresh and carried), before the no-fresh-victim exit,
+# because a carried victim can fail with no fresh one beside it.
+$ffCurLines = @()
+$ffCurLog = Join-Path $OutDir 'capture-cursor-log.jsonl'
+if (Test-Path -LiteralPath $ffCurLog) { try { $ffCurLines = [IO.File]::ReadAllLines($ffCurLog) } catch { $ffCurLines = @() } }
+$promoFailedR = Get-FfPromotionFailed $reportVictims $ffCurLines $script:FfPromotionWindows
+$promoFailed = @($promoFailedR)
+if ($promoFailed.Count) { Write-Output ("ff-carry: PROMOTION FAILED for " + $promoFailed.Count + " victim(s) still unpriced after " + $script:FfPromotionWindows + "+ landed Family Fare window(s): " + ((@($promoFailed | ForEach-Object { $_.commodity + ' (first seen ' + $_.first_seen + ', ' + $_.windows_since + ' window(s) since)' })) -join ', ')) }
+if ($victims.Count -gt 0) { Write-Output ("ff-carry: " + $victims.Count + " fresh victim(s) written to ff-carry-report.json for victim-first promotion; logged, not paged (the page is a promotion that failed)") }
+if ($victims.Count -eq 0 -and $promoFailed.Count -eq 0) { Write-Output ("ff-carry: OK  no term is missing from the feed AND carried by FF" + $probeStat); Write-GuardComplete -Name 'ff-carry'; exit 0 }
 # HOW FAR AWAY IS THIS TERM, IN WINDOWS? (2026-09-05, queue 2026-09-05-18d67c)
 # This guard used to end by telling the reader to re-run the Family Fare pull and let recovery catch it. Under
 # capture-policy that advice cannot work and never could: a run buys the RotationTerms terms sitting at the
@@ -408,8 +467,8 @@ foreach ($v in $victims) {
   $due = Get-FfTermDue ([string]$v.term)
   if ($due) { Write-Output ('  ' + ''.PadRight(20) + " term '" + $v.term + "'" + $due) }
 }
-if ($Alert) {
-  $sig = (@($victims | ForEach-Object { $_.commodity } | Sort-Object) -join ';')
+if ($Alert -and $promoFailed.Count) {
+  $sig = (@($promoFailed | ForEach-Object { $_.commodity } | Sort-Object) -join ';')
   $sigHash = [BitConverter]::ToString((New-Object Security.Cryptography.SHA256Managed).ComputeHash([Text.Encoding]::UTF8.GetBytes($sig))).Replace('-', '').Substring(0, 16)
   $sigF = Join-Path $OutDir 'ff-carry-alert.sig'
   $last = if (Test-Path $sigF) { (Get-Content $sigF -Raw).Trim() } else { '' }
@@ -417,11 +476,11 @@ if ($Alert) {
     # NO RE-RUN SENTENCE. See the rotation-distance note above: under capture-policy a re-run buys the terms
     # at the cursor and cannot reach a term 37 windows away, so telling a developer to re-run is telling
     # them to do the one thing that cannot help. The distance is the actionable fact; print that instead.
-    $body = "The Family Fare pull has no priced row for item(s) FF actually carries. Board shows 'No price yet' for:`n" +
-            (($victims | ForEach-Object { $_.commodity + " <- " + $_.product + "`n    term '" + $_.term + "'" + (Get-FfTermDue ([string]$_.term)) }) -join "`n") +
+    $body = "Victim-first promotion FAILED: these item(s) Family Fare carries were put at the front of at least " + $script:FfPromotionWindows + " landed window(s) since they were first seen and are still unpriced. Board shows 'No price yet' for:`n" +
+            (($promoFailed | ForEach-Object { $_.commodity + " <- " + $_.product + " (first seen " + $_.first_seen + ", " + $_.windows_since + " window(s) since)`n    term '" + $_.term + "'" + (Get-FfTermDue ([string]$_.term)) }) -join "`n") +
             "`n`nThe term budget is " + $ffRot + " term(s) per landed window (capture-policy), about " + ($ffRot * $ffWindowsPerDay) +
             " a day, so a term far from the cursor cannot be bought by re-running the sweep. Confirmed victims are read from out\ff-carry-report.json by the next window and asked FIRST, within the store call cap (wired 2026-09-07 - before that nothing read this file, so this sentence promised a mechanism that did not exist); anything longer than that is the rotation working as designed."
-    try { Send-Alert -Subject "Grocery: Family Fare pull dropped a carried item - review" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
+    try { Send-Alert -Subject "Grocery: Family Fare victim-first promotion failed - review" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
   }
 }
 Exit-Guard -Name 'ff-carry' -Code 0
