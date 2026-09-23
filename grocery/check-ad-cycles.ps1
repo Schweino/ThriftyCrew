@@ -2061,6 +2061,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         # THE TWO SIZE READERS MUST AGREE ON TODAY'S BOARD (2026-09-22, queue 2026-09-22-43e8c0). -Board was left unwired while it
         # read 5 disagreements; pu-lib now reads those five the engine's way and the arm reads 0 over 2,583 comparable strings.
         New-FanoutLane -Name 'size-parser-parity'  -File (Join-Path $root 'audit-size-parser-parity.ps1') -Arguments @('-Board') -Marker 'SIZE-PARSER-PARITY-COMPLETE'
+        # EVERY BAND REFUSAL IS A BASIS ERROR OR IT PAGES (Brad, 2026-09-22: "make sure we are future proof so this doesn't
+        # happen again"): a band must never be the only thing keeping a wrong product off the board.
+        New-FanoutLane -Name 'band-refusals'       -File (Join-Path $root 'audit-band-refusals.ps1') -Arguments @('-OutDir', $OutDir) -Marker 'BAND-REFUSALS-COMPLETE'
         New-FanoutLane -Name 'walmart-fullpull'    -File (Join-Path $root 'audit-walmart-fullpull.ps1') -Marker 'WALMART-FULLPULL-COMPLETE'
         New-FanoutLane -Name 'capture-eviction'    -File (Join-Path $root 'audit-capture-eviction.ps1') -Marker 'CAPTURE-EVICTION-COMPLETE'
         # ADVISORY, and it reports COVERAGE before it reports findings (2026-08-29). Until the attended-Chrome
@@ -3089,6 +3092,14 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if ($sppRc -eq 2) { $summary += 'REVIEW    size-parser-parity: the engine (Get-SizeAmount) and the audit reader (Get-LinkPerUnit) disagree on a size string on today''s board - one rule has two answers; see ad-cycle-log / run audit-size-parser-parity.ps1 -Board' }
           elseif ($sppRc -eq 3) { $summary += 'REVIEW    size-parser-parity could not evaluate (no board or a library missing) - reader agreement is UNKNOWN this cycle, not clean' }
         } catch { Log ('size-parser-parity read threw: ' + $_.Exception.Message) }
+        try {
+          $brRec = Get-FanoutRecord 'band-refusals' $fanRecs
+          if ($brRec.ExitCode -eq 2) {
+            $brLines = @(@($brRec.Output) | Where-Object { [string]$_ -match 'UNEXPLAINED  ' })
+            $summary += ('REVIEW    band-refusals: ' + $brLines.Count + ' row(s) refused by a price band with no basis error to explain it - a hidden wrong product or a censored real price')
+            if (-not $NoAlert) { try { Send-Alert -Subject ('Grocery: a price band refused rows it cannot explain - ' + $asofS) -Body ("A price band's only job is to refuse a basis error (a pack price read per piece, ounces as pounds, a dropped decimal). These rows were refused by a band and carry no such evidence, so each is either a wrong product the band is hiding (resolve with an exclude through lane:grocery/apply-coverage-batch.ps1, per Brad's shape ruling) or a real price the band is censoring (fix the band derivation, never its number):`n`n" + ($brLines -join "`n")) | Out-Null } catch { Log ('band-refusals alert threw: ' + $_.Exception.Message) } }
+          } elseif ($brRec.ExitCode -eq 3) { $summary += 'REVIEW    band-refusals could not evaluate - whether a band is hiding a wrong product is UNKNOWN this cycle, not clean' }
+        } catch { Log ('band-refusals read threw: ' + $_.Exception.Message) }
         $pbF = Join-Path $OutDir 'pack-basis-audit.json'
         if (Test-Path $pbF) {
           $pbJ = Read-JsonFile $pbF

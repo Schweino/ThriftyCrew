@@ -14,6 +14,7 @@
   "why": "a ratchet, not a gate red on day one: the entries registered before the resolver contract are counted here and the count may only fall. audit-alert-registry fails a registry holding more, and says 'ratchet CAN tighten' when it holds fewer, without rewriting this number (a plain run never writes its mark)."
  },
  "entries": [
+        {"id":"band-refusal-unexplained","match":"exact","key":"grocery a price band refused rows it cannot explain","class":"review","condition":"a row a price band refused carries no basis-error evidence: a wrong product the band is hiding or a real price it censors (Brad, 2026-09-22: future proof)","emitter":"grocery/check-ad-cycles.ps1","resolver":"lane:grocery/apply-coverage-batch.ps1"},
   {
    "id": "guards-failed",
    "match": "exact",

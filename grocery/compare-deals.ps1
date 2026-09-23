@@ -123,14 +123,37 @@ $cdoc = Read-JsonFile $CommoditiesFile
 # a rule FILE may be a bare array (staples) or a wrapper { global_exclude:[...], commodities:[...] } (recipe
 # set, which relaxes sauce/canned/frozen since those items legitimately ARE those forms).
 if ($cdoc.PSObject.Properties['commodities']) { $commodities = $cdoc.commodities; $GEX_OVERRIDE = @($cdoc.global_exclude) } else { $commodities = $cdoc; $GEX_OVERRIDE = $null }
-# sanity price bands (magnitude/garbage net + health check)
+# SANITY PRICE BANDS ARE DERIVED, NEVER TYPED (Brad, queue 2026-09-21-6b17b1, 2026-09-22: "Derive from data", and on the
+# rollout: "We need to fix it now, properly, and to make sure we are future proof so this doesn't happen again. I dont
+# care how long it takes."). Every commodity's band is derived from this build's own price evidence in the pre-pass below
+# (derived-band-lib.ps1). A TYPED band is read in exactly two places:
+#   1. an explicit -BandsFile, which only the PINNED regression harness passes (regression-test.ps1 and
+#      build-regression-baseline.ps1 freeze the rules they ran under, inline band_min/band_max included), so a frozen
+#      baseline keeps judging what it always judged;
+#   2. a commodity's own "band_override": { "min": x, "max": y, "reason": "..." }, used ONLY while the build derives no
+#      band for it (fewer than 3 priced rows), and refused without a reason. More evidence retires it by itself.
+# A live rules file that still carries band_min/band_max has them IGNORED and COUNTED in out\band-derivation-<date>.json
+# (typed_fields_ignored), never silently honoured: that is the number nobody re-reads as prices move.
 $BANDS = @{}
-$bandsFile = if ($BandsFile) { $BandsFile } else { Join-Path $root 'price-bands.json' }
-if (Test-Path $bandsFile) { $bDoc = Read-JsonFile $bandsFile; foreach ($p in $bDoc.bands.PSObject.Properties) { $BANDS[$p.Name] = $p.Value } }
-# rules may carry their own inline band_min/band_max (recipe set) - these OVERRIDE price-bands.json because a
-# recipe commodity that shares an id with a staple (butter/milk/peanut-butter) may use a DIFFERENT unit (oz vs
-# lb), so the staple's per-lb band would wrongly reject every per-oz match.
-foreach ($c in $commodities) { if ($c.PSObject.Properties['band_min']) { $BANDS[[string]$c.id] = [pscustomobject]@{ min=[double]$c.band_min; max=[double]$c.band_max } } }
+$PINNED_BANDS = [bool]$BandsFile
+$BAND_OVERRIDES = @{}
+$TYPED_FIELDS_IGNORED = New-Object System.Collections.ArrayList
+if ($PINNED_BANDS) {
+  if (Test-Path $BandsFile) { $bDoc = Read-JsonFile $BandsFile; foreach ($p in $bDoc.bands.PSObject.Properties) { $BANDS[$p.Name] = $p.Value } }
+  # pinned rules may carry inline band_min/band_max (the recipe set): they override the bands file, because a recipe
+  # commodity that shares an id with a staple can use a different unit (oz vs lb).
+  foreach ($c in $commodities) { if ($c.PSObject.Properties['band_min']) { $BANDS[[string]$c.id] = [pscustomobject]@{ min=[double]$c.band_min; max=[double]$c.band_max } } }
+} else {
+  foreach ($c in $commodities) {
+    if ($null -eq $c) { continue }
+    if ($c.PSObject.Properties['band_min'] -or $c.PSObject.Properties['band_max']) { [void]$TYPED_FIELDS_IGNORED.Add([string]$c.id) }
+    if ($c.PSObject.Properties['band_override'] -and $null -ne $c.band_override) {
+      $bo = $c.band_override
+      if (-not ($bo.PSObject.Properties['reason'] -and ([string]$bo.reason).Trim())) { throw ('band_override on commodity ' + $c.id + ' carries no reason; an override is refused without one') }
+      $BAND_OVERRIDES[[string]$c.id] = [pscustomobject]@{ min = [double]$bo.min; max = [double]$bo.max; reason = [string]$bo.reason }
+    }
+  }
+}
 # WAREHOUSE STORES ARE JUDGED AGAINST THE WAREHOUSE FLOOR of a derived band (derived-band-lib.ps1, stores.json reference_group).
 function Test-Band($id, $up, $store = '') { if (-not $BANDS.ContainsKey($id)) { return $true }; $grp = if ($store -and $BAND_GROUPS.ContainsKey([string]$store)) { [string]$BAND_GROUPS[[string]$store] } else { 'retail' }; return (Test-TcInBand $BANDS[$id] ([double]$up) $grp) }
 # UNIVERSAL IMPLAUSIBILITY FLOOR (2026-07-27, overhaul-1): only 29 of 503 commodities carry a hand-tuned
@@ -2889,8 +2912,19 @@ $DERIVED_BANDS = Get-TcDerivedBands -Rows $evArr -Groups $BAND_GROUPS
 # three crowns went dearer; Family Fare's freeze-dried basil was refused on the high side), so the derived band is in
 # force ONLY on a commodity that declares "band": "derived" in commodities.json. vegetable-oil is the first (Brad's
 # founding cell, its typed 0.04 floor removed). Every other commodity keeps exactly what it had: its typed band, or none.
-foreach ($c0 in $commodities) { if ($c0.PSObject.Properties['band'] -and [string]$c0.band -eq 'derived') { $BANDS.Remove([string]$c0.id); if ($DERIVED_BANDS.ContainsKey([string]$c0.id)) { $BANDS[[string]$c0.id] = $DERIVED_BANDS[[string]$c0.id] } } }
-if ($env:TC_DERIVED_BANDS -eq 'enforce') { $BANDS = @{}; foreach ($k0 in $DERIVED_BANDS.Keys) { $BANDS[$k0] = $DERIVED_BANDS[$k0] } }
+# SUPERSEDED THE SAME DAY (Brad's rollout ruling, quoted at the band read above). The two defects named in the shadow note
+# got owners before the switch: identity through excludes and wrong-basis rulings (every one of the 28 board cells the
+# all-derived arm changed was read, plan-2026-09-22-5), and a bulk-aware reference (the warehouse reference group,
+# stores.json). So the derived band is now in force for EVERY commodity with evidence, and the per-commodity "band":
+# "derived" opt-in and the TC_DERIVED_BANDS arm are gone. A pinned run (-BandsFile) keeps its frozen typed bands.
+$THIN_OVERRIDES_USED = New-Object System.Collections.ArrayList
+if (-not $PINNED_BANDS) {
+  $BANDS = @{}
+  foreach ($k0 in $DERIVED_BANDS.Keys) { $BANDS[$k0] = $DERIVED_BANDS[$k0] }
+  foreach ($k0 in $BAND_OVERRIDES.Keys) { if (-not $BANDS.ContainsKey($k0)) { $BANDS[$k0] = $BAND_OVERRIDES[$k0]; [void]$THIN_OVERRIDES_USED.Add($k0) } }
+}
+$evIds = @{}; foreach ($e0 in $evArr) { $evIds[[string]$e0.id] = 1 + $(if ($evIds.ContainsKey([string]$e0.id)) { $evIds[[string]$e0.id] } else { 0 }) }
+$THIN_COMMODITIES = @($evIds.Keys | Where-Object { -not $DERIVED_BANDS.ContainsKey($_) } | Sort-Object)
 try {
   $sweep = [ordered]@{}
   foreach ($kk in @(3.0, 4.0, 5.0, 6.0)) {
@@ -2912,10 +2946,14 @@ try {
     if ($inT -and -not $inD) { [void]$refused.Add($rowRec) }
   }
   $bdoc = [ordered]@{ date = $today; rule = 'band = [ref / K, ref * K] (warehouse stores: floor ref / (K * W)), ref = median of the retail stores'' cheapest per-unit (>= 3 retail stores) else of every store''s cheapest (>= 3 stores) else median of rows (>= 3 rows) else no band'; K = $script:TcBandK; W = $script:TcBandW
+    pinned_typed_bands = $PINNED_BANDS
     evidence_rows = $evArr.Count; derived_commodities = $DERIVED_BANDS.Count; typed_commodities = $TYPED_BANDS.Count; k_sweep = $sweep
+    typed_fields_ignored = @($TYPED_FIELDS_IGNORED.ToArray())
+    thin_commodities = @($THIN_COMMODITIES | ForEach-Object { [ordered]@{ id = $_; rows = $evIds[$_]; override = $(if ($BAND_OVERRIDES.ContainsKey($_)) { $BAND_OVERRIDES[$_] } else { $null }) } })
+    thin_overrides_used = @($THIN_OVERRIDES_USED.ToArray())
     newly_admitted = $admitted.ToArray(); newly_refused = $refused.ToArray() }
   [IO.File]::WriteAllText((Join-Path $OutDir ('band-derivation-' + $(if ((Split-Path $CommoditiesFile -Leaf) -eq 'commodities.json') { '' } else { [IO.Path]::GetFileNameWithoutExtension($CommoditiesFile) + '-' }) + $today + '.json')), ($bdoc | ConvertTo-Json -Depth 6), (New-Object Text.UTF8Encoding($false)))
-  Write-Output ('bands: derived for ' + $DERIVED_BANDS.Count + ' commodities from ' + $evArr.Count + ' priced rows (K=' + $script:TcBandK + '); against the typed bands ' + $admitted.Count + ' row(s) newly admitted, ' + $refused.Count + ' newly refused (out\band-derivation-' + $today + '.json)')
+  Write-Output ('bands: ' + $(if ($PINNED_BANDS) { 'PINNED typed bands from -BandsFile (' + $TYPED_BANDS.Count + ')' } else { 'derived for ' + $DERIVED_BANDS.Count + ' commodities' }) + ' from ' + $evArr.Count + ' priced rows (K=' + $script:TcBandK + ', W=' + $script:TcBandW + '); ' + $THIN_COMMODITIES.Count + ' thin commodit(y/ies) with no band, ' + $THIN_OVERRIDES_USED.Count + ' band_override(s) in use, ' + $TYPED_FIELDS_IGNORED.Count + ' typed band field(s) ignored; ' + $refused.Count + ' row(s) outside a band (out\band-derivation-' + $today + '.json)')
 } catch { Write-Warning ('band-derivation report failed (the derived bands are still in force): ' + $_.Exception.Message) }
 foreach ($pp in $prePass) {
   $d = $pp.d

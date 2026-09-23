@@ -17,7 +17,7 @@
   below the fresh produce rows where they belong.
 
   Usage:
-    new-commodity.ps1 -Id canned-asparagus -Label "Canned Asparagus" -Unit oz -BandMin 0.06 -BandMax 0.7 `
+    new-commodity.ps1 -Id canned-asparagus -Label "Canned Asparagus" -Unit oz `
       -CloneExcludeFrom canned-peaches -Include 'asparagus\s+cut\s+spears','cut\s+asparagus\s+spears'
 
   Exit 0 = written. Exit 1 = refused, nothing written.
@@ -66,8 +66,11 @@ if ($null -eq $src) { Die ('clone source ''' + $CloneExcludeFrom + ''' not found
 
 # ---- build the new entry, property order matching the file ------------------------------------------------
 $obj = [ordered]@{ id = $Id; label = $Label; unit = $Unit }
-if ($BandMin -gt 0) { $obj['band_min'] = $BandMin }
-if ($BandMax -gt 0) { $obj['band_max'] = $BandMax }
+# NO TYPED BAND IS WRITTEN (Brad's rulings on queue 2026-09-21-6b17b1, 2026-09-22: "Derive from data", then "We need to
+# fix it now, properly, and to make sure we are future proof so this doesn't happen again"). A new commodity takes its
+# band from the build's own price evidence (derived-band-lib.ps1). -BandMin/-BandMax stay accepted so the Recipe Hunter's
+# existing call keeps working, and are said out loud and dropped: a typed band written here is the number nobody re-reads.
+if ($BandMin -gt 0 -or $BandMax -gt 0) { Say ('new-commodity: -BandMin/-BandMax ignored, the band is derived from price evidence (derived-band-lib.ps1): ' + $BandMin + '-' + $BandMax) }
 $obj['include'] = @($Include)
 $obj['exclude'] = @(@($ExtraExclude) + @($src.exclude))
 $blockJson = ([pscustomobject]$obj | ConvertTo-Json -Depth 6)
