@@ -2,866 +2,1212 @@
     {
         "slug":  "50-simple-money-saving-tips",
         "class":  "price-in-words",
-        "text":  "A few dollars here, a canceled charge there, one habit swapped for a cheaper one"
+        "figure":  "few dollars",
+        "text":  "A few dollars here, a canceled charge there, one habit swapped for a cheaper one",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "50-simple-money-saving-tips",
         "class":  "other (finance, non-food, product)",
-        "text":  "A simple list cuts impulse buys and can trim a $150 grocery run to $110"
+        "figure":  "$150",
+        "text":  "A simple list cuts impulse buys and can trim a $150 grocery run to $110",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "50-simple-money-saving-tips",
         "class":  "savings-or-budget-total",
-        "text":  "At $18 saved on each meal, twice a week, that is roughly $150 a month"
+        "figure":  "$18",
+        "text":  "At $18 saved on each meal, twice a week, that is roughly $150 a month",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "50-simple-money-saving-tips",
         "class":  "savings-or-budget-total",
-        "text":  "A $5 latte skipped 12 times a month is $60"
+        "figure":  "$5",
+        "text":  "A $5 latte skipped 12 times a month is $60",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "50-simple-money-saving-tips",
         "class":  "other (finance, non-food, product)",
-        "text":  "A $10 lunch bought out costs far more than the same lunch made at home"
+        "figure":  "$10",
+        "text":  "A $10 lunch bought out costs far more than the same lunch made at home",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "50-simple-money-saving-tips",
         "class":  "savings-or-budget-total",
-        "text":  "Two at $15 each is $360 a year"
+        "figure":  "$15",
+        "text":  "Two at $15 each is $360 a year",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "50-simple-money-saving-tips",
         "class":  "savings-or-budget-total",
-        "text":  "Fifteen minutes can save $20 a month"
+        "figure":  "$20",
+        "text":  "Fifteen minutes can save $20 a month",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "50-simple-money-saving-tips",
         "class":  "other (finance, non-food, product)",
-        "text":  "A $12 kit can cut heating loss noticeably"
+        "figure":  "$12",
+        "text":  "A $12 kit can cut heating loss noticeably",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "50-simple-money-saving-tips",
         "class":  "other (finance, non-food, product)",
-        "text":  "Use the 24-hour rule on any non-essential over $50"
+        "figure":  "$50",
+        "text":  "Use the 24-hour rule on any non-essential over $50",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "batch-cooking-chicken-guide",
         "class":  "price-in-words",
-        "text":  "Table salt runs a pound, and this uses pennies of it"
+        "figure":  "pennies",
+        "text":  "Table salt runs a pound, and this uses pennies of it",
+        "disposition":  "removed or reworded"
     },
     {
         "slug":  "batch-cooking-chicken-guide",
         "class":  "price-in-words",
-        "text":  "Pull It at 160 and Let It Rest A meat thermometer is the single best six dollars you will spend on meal prep"
+        "figure":  "six dollars",
+        "text":  "Pull It at 160 and Let It Rest A meat thermometer is the single best six dollars you will spend on meal prep",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "best-cheap-high-protein-foods",
         "class":  "price-in-words",
-        "text":  "Why beans and lentils win on pure math If you only care about grams of protein per dollar, dried legumes are untouchable"
+        "figure":  "",
+        "text":  "Why beans and lentils win on pure math If you only care about grams of protein per dollar, dried legumes are untouchable",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "best-cheap-high-protein-foods",
         "class":  "price-in-words",
-        "text":  "Pair a pot of pinto beans with rice and you get a complete protein for pennies"
+        "figure":  "pennies",
+        "text":  "Pair a pot of pinto beans with rice and you get a complete protein for pennies",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "best-cheap-high-protein-foods",
         "class":  "price-in-words",
-        "text":  "Stock two or three of these and you will never be stuck buying an eight-dollar convenience-store sandwich again"
+        "figure":  "",
+        "text":  "Stock two or three of these and you will never be stuck buying an eight-dollar convenience-store sandwich again",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "budget-breakfast-ideas",
         "class":  "price-in-words",
-        "text":  "A sausage biscuit and a coffee runs you five or six bucks before you\u0027ve even sat down"
+        "figure":  "five or six bucks",
+        "text":  "A sausage biscuit and a coffee runs you five or six bucks before you\u0027ve even sat down",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "budget-breakfast-ideas",
         "class":  "savings-or-budget-total",
-        "text":  "Do that five mornings a week and you\u0027ve spent well over a hundred dollars a month on food you could make at home for pocket change"
+        "figure":  "a hundred dollars",
+        "text":  "Do that five mornings a week and you\u0027ve spent well over a hundred dollars a month on food you could make at home for pocket change",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "budget-breakfast-ideas",
         "class":  "price-in-words",
-        "text":  "Bottom line: You don\u0027t need to spend five dollars every morning to eat a real breakfast"
+        "figure":  "five dollars",
+        "text":  "Bottom line: You don\u0027t need to spend five dollars every morning to eat a real breakfast",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "cheap-crockpot-meals",
         "class":  "price-in-words",
-        "text":  "A slow cooker sips electricity, running for pennies over several hours, far less than an oven cranked to 400 for an hour"
+        "figure":  "pennies",
+        "text":  "A slow cooker sips electricity, running for pennies over several hours, far less than an oven cranked to 400 for an hour",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "cheap-dinner-ideas",
         "class":  "price-in-words",
-        "text":  "Red Beans and Rice A pound of dried red beans costs very little, and a bag of rice works out to pennies per serving"
+        "figure":  "pennies",
+        "text":  "Red Beans and Rice A pound of dried red beans costs very little, and a bag of rice works out to pennies per serving",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "cheap-healthy-grocery-staples",
         "class":  "price-in-words",
-        "text":  "The trick is knowing which staples give you the most nutrition and the most meals per dollar"
+        "figure":  "",
+        "text":  "The trick is knowing which staples give you the most nutrition and the most meals per dollar",
+        "disposition":  "not a price: \"per dollar\" idiom, no figure"
     },
     {
         "slug":  "cheap-healthy-grocery-staples",
         "class":  "price-in-words",
-        "text":  "Garlic: A few cents a clove and it makes cheap food taste like you tried"
+        "figure":  "few cents",
+        "text":  "Garlic: A few cents a clove and it makes cheap food taste like you tried",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "cheap-healthy-grocery-staples",
         "class":  "price-in-words",
-        "text":  "Vinegar: Plain white vinegar runs a gallon and handles dressings, marinades, and brightening a dish for pennies per use"
+        "figure":  "pennies",
+        "text":  "Vinegar: Plain white vinegar runs a gallon and handles dressings, marinades, and brightening a dish for pennies per use",
+        "disposition":  "removed or reworded"
     },
     {
         "slug":  "cheap-lunch-ideas-for-work",
         "class":  "price-in-words",
-        "text":  "Grabbing something out runs ten to fifteen dollars a day once you count the drink and the tip"
+        "figure":  "ten to fifteen dollars",
+        "text":  "Grabbing something out runs ten to fifteen dollars a day once you count the drink and the tip",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "cheap-lunch-ideas-for-work",
         "class":  "savings-or-budget-total",
-        "text":  "Do that every workday and you\u0027re looking at two to three hundred dollars a month on lunch alone"
+        "figure":  "two to three hundred dollars",
+        "text":  "Do that every workday and you\u0027re looking at two to three hundred dollars a month on lunch alone",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "cheap-lunch-ideas-for-work",
         "class":  "price-in-words",
-        "text":  "Pack your own and that same month can cost you thirty or forty bucks"
+        "figure":  "thirty or forty bucks",
+        "text":  "Pack your own and that same month can cost you thirty or forty bucks",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "cheap-lunch-ideas-for-work",
         "class":  "price-in-words",
-        "text":  "The homemade version of the twelve-dollar fast-casual bowl, for a fraction of the price"
+        "figure":  "",
+        "text":  "The homemade version of the twelve-dollar fast-casual bowl, for a fraction of the price",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "cheap-lunch-ideas-for-work",
         "class":  "price-in-words",
-        "text":  "Bottom line: Packing lunch isn\u0027t about deprivation, it\u0027s about doing five minutes of prep on Sunday so your Tuesday self doesn\u0027t hand fifteen dollars to a cashier"
+        "figure":  "fifteen dollars",
+        "text":  "Bottom line: Packing lunch isn\u0027t about deprivation, it\u0027s about doing five minutes of prep on Sunday so your Tuesday self doesn\u0027t hand fifteen dollars to a cashier",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "chicken-and-rice-meal-prep-guide",
         "class":  "price-in-words",
-        "text":  "pound and bone-in usually less, both more forgiving and flavorful than breast Chicken breast: a pound when you want it leaner Dry white rice: a pound, which is pennies a cooked cup Seasonings, oil, and aromatics: pennies a serving from your pantry Buy the b"
+        "figure":  "pennies",
+        "text":  "pound and bone-in usually less, both more forgiving and flavorful than breast Chicken breast: a pound when you want it leaner Dry white rice: a pound, which is pennies a cooked cup Seasonings, oil, and aromatics: pennies a serving from your pantry Buy the b",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "chicken-and-rice-meal-prep-guide",
         "class":  "price-in-words",
-        "text":  "Five pounds of thighs: buy the family pack Six cups of cooked rice: two cups dry, at a pound Seasoning and oil: pennies from the pantry Batch total: six meals That works out to very little per container"
+        "figure":  "pennies",
+        "text":  "Five pounds of thighs: buy the family pack Six cups of cooked rice: two cups dry, at a pound Seasoning and oil: pennies from the pantry Batch total: six meals That works out to very little per container",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "freezer-meal-prep-guide",
         "class":  "restaurant",
-        "text":  "Compare that per-meal number to a $12 takeout order and you can see where this is going"
+        "figure":  "$12",
+        "text":  "Compare that per-meal number to a $12 takeout order and you can see where this is going",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "other (finance, non-food, product)",
-        "text":  "You walk in for a few things, you walk out $90 lighter, and you are not totally sure how it happened"
+        "figure":  "$90",
+        "text":  "You walk in for a few things, you walk out $90 lighter, and you are not totally sure how it happened",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "savings-or-budget-total",
-        "text":  "A family spending $800 a month can often trim $150 to $200 without eating worse"
+        "figure":  "$800",
+        "text":  "A family spending $800 a month can often trim $150 to $200 without eating worse",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "savings-or-budget-total",
-        "text":  "If your normal run is $120 and you cut the impulse buys, that is $24 to $48 back in your pocket every single trip"
+        "figure":  "$120",
+        "text":  "If your normal run is $120 and you cut the impulse buys, that is $24 to $48 back in your pocket every single trip",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "other (finance, non-food, product)",
-        "text":  "A 12 ounce bottle of dish soap at $3.49 is about 29 cents per ounce"
+        "figure":  "$3.49",
+        "text":  "A 12 ounce bottle of dish soap at $3.49 is about 29 cents per ounce",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "other (finance, non-food, product)",
-        "text":  "A 24 ounce bottle at $4.99 is about 21 cents per ounce"
+        "figure":  "$4.99",
+        "text":  "A 24 ounce bottle at $4.99 is about 21 cents per ounce",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "other (finance, non-food, product)",
-        "text":  "If a name brand costs $3.29 and the store brand is $2"
+        "figure":  "$3.29",
+        "text":  "If a name brand costs $3.29 and the store brand is $2",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "savings-or-budget-total",
-        "text":  "19, that is $1.10 saved on one item"
+        "figure":  "$1.10",
+        "text":  "19, that is $1.10 saved on one item",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "savings-or-budget-total",
-        "text":  "Times ten, that is $11 a trip, or over $500 a year"
+        "figure":  "$11",
+        "text":  "Times ten, that is $11 a trip, or over $500 a year",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "price-in-words",
-        "text":  "Cash-back apps let you snap a photo of your receipt and earn a little back, often 25 cents to a few dollars a trip"
+        "figure":  "25 cents",
+        "text":  "Cash-back apps let you snap a photo of your receipt and earn a little back, often 25 cents to a few dollars a trip",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "savings-or-budget-total",
-        "text":  "On a $600 monthly spend, that is $18 to $48 a month for a few taps"
+        "figure":  "$600",
+        "text":  "On a $600 monthly spend, that is $18 to $48 a month for a few taps",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "savings-or-budget-total",
-        "text":  "If your grocery bill is $800 a month and you waste even 20 percent, that is $160 going straight into the garbage"
+        "figure":  "$800",
+        "text":  "If your grocery bill is $800 a month and you waste even 20 percent, that is $160 going straight into the garbage",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "savings-or-budget-total",
-        "text":  "Cutting waste in half here could hand you back $80 a month without buying a single different item"
+        "figure":  "$80",
+        "text":  "Cutting waste in half here could hand you back $80 a month without buying a single different item",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "savings-or-budget-total",
-        "text":  "First, factor in the membership fee, often around $60 a year"
+        "figure":  "$60",
+        "text":  "First, factor in the membership fee, often around $60 a year",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "savings-or-budget-total",
-        "text":  "A household spending $800 a month can realistically get to $600 or lower and eat just as well"
+        "figure":  "$800",
+        "text":  "A household spending $800 a month can realistically get to $600 or lower and eat just as well",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "grocery-bill-hacks",
         "class":  "savings-or-budget-total",
-        "text":  "That is $2,400 a year staying in your account"
+        "figure":  "$2,400",
+        "text":  "That is $2,400 a year staying in your account",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "ground-beef-meal-prep-ideas",
         "class":  "restaurant",
-        "text":  "A fast-food combo runs $9 or more now, so every one of these puts real money back in your pocket"
+        "figure":  "$9",
+        "text":  "A fast-food combo runs $9 or more now, so every one of these puts real money back in your pocket",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "high-protein-breakfast-meal-prep",
         "class":  "restaurant",
-        "text":  "A drive-thru breakfast sandwich runs $5 to $7"
+        "figure":  "$5",
+        "text":  "A drive-thru breakfast sandwich runs $5 to $7",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "high-protein-breakfast-meal-prep",
         "class":  "other (finance, non-food, product)",
-        "text":  "A protein bar you grabbed at the gas station is $2.50 and leaves you hungry an hour later"
+        "figure":  "$2.50",
+        "text":  "A protein bar you grabbed at the gas station is $2.50 and leaves you hungry an hour later",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "high-protein-breakfast-meal-prep",
         "class":  "savings-or-budget-total",
-        "text":  "Do that five days a week and you have handed someone $25 to $35 for food you did not even enjoy sitting down to eat"
+        "figure":  "$25",
+        "text":  "Do that five days a week and you have handed someone $25 to $35 for food you did not even enjoy sitting down to eat",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "high-protein-breakfast-meal-prep",
         "class":  "other (finance, non-food, product)",
-        "text":  "Compare that to the $6 breakfast burrito down the street and you see why I keep preaching this one"
+        "figure":  "$6",
+        "text":  "Compare that to the $6 breakfast burrito down the street and you see why I keep preaching this one",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "high-protein-breakfast-meal-prep",
         "class":  "restaurant",
-        "text":  "You will eat better, feel fuller, and pocket the $25-plus a week you were handing to the drive-thru"
+        "figure":  "$25",
+        "text":  "You will eat better, feel fuller, and pocket the $25-plus a week you were handing to the drive-thru",
+        "disposition":  "removed: derived-total"
     },
     {
         "slug":  "high-protein-breakfast-meal-prep",
         "class":  "price-in-words",
-        "text":  "Grocery prices swing by region and season, so treat these dollar figures as a realistic starting point and check your own receipts to see where you land"
+        "figure":  "",
+        "text":  "Grocery prices swing by region and season, so treat these dollar figures as a realistic starting point and check your own receipts to see where you land",
+        "disposition":  "removed: derived-total"
     },
     {
         "slug":  "high-protein-lunch-meal-prep",
         "class":  "restaurant",
-        "text":  ", then you overpay for a sad $14 salad that leaves you hungry an hour later"
+        "figure":  "$14",
+        "text":  ", then you overpay for a sad $14 salad that leaves you hungry an hour later",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "high-protein-lunch-meal-prep",
         "class":  "price-in-words",
-        "text":  "Black beans and lentils , pennies a cooked cup, 15 to 18 grams of protein"
+        "figure":  "pennies",
+        "text":  "Black beans and lentils , pennies a cooked cup, 15 to 18 grams of protein",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "high-protein-lunch-meal-prep",
         "class":  "price-in-words",
-        "text":  "Rice runs a pound, which is pennies a serving"
+        "figure":  "pennies",
+        "text":  "Rice runs a pound, which is pennies a serving",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "high-volume-low-calorie-meal-prep",
         "class":  "price-in-words",
-        "text":  "Buy your spices from the bulk bin or the dollar store, not the fancy glass jars, and you will spend a fraction of the price"
+        "figure":  "",
+        "text":  "Buy your spices from the bulk bin or the dollar store, not the fancy glass jars, and you will spend a fraction of the price",
+        "disposition":  "not a price: \"per dollar\" idiom, no figure"
     },
     {
         "slug":  "how-to-count-macros",
         "class":  "savings-or-budget-total",
-        "text":  "A basic digital scale runs about $12 and pays for itself in a week by ending the \"one serving is whatever fits in my bowl\" pro"
+        "figure":  "$12",
+        "text":  "A basic digital scale runs about $12 and pays for itself in a week by ending the \"one serving is whatever fits in my bowl\" pro",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "how-to-count-macros",
         "class":  "price-in-words",
-        "text":  "Dried lentils and beans: plant protein for pennies per serving"
+        "figure":  "pennies",
+        "text":  "Dried lentils and beans: plant protein for pennies per serving",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "how-to-meal-plan-for-a-family",
         "class":  "restaurant",
-        "text":  "The average family of four spends somewhere between $900 and $1,300 a month on groceries, and a good chunk of that leaks out through last-minute takeout, for"
+        "figure":  "$900",
+        "text":  "The average family of four spends somewhere between $900 and $1,300 a month on groceries, and a good chunk of that leaks out through last-minute takeout, for",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-meal-plan-for-a-family",
         "class":  "savings-or-budget-total",
-        "text":  "A family that does a \"use it up\" week once a month can knock $60 to $100 off that month\u0027s grocery bill without eating a single thing they do not like"
+        "figure":  "$60",
+        "text":  "A family that does a \"use it up\" week once a month can knock $60 to $100 off that month\u0027s grocery bill without eating a single thing they do not like",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "how-to-meal-plan-for-a-family",
         "class":  "savings-or-budget-total",
-        "text":  "On a $1,000 monthly budget, that is well over $1,000 a year staying in your pocket"
+        "figure":  "$1,000",
+        "text":  "On a $1,000 monthly budget, that is well over $1,000 a year staying in your pocket",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-meal-plan-for-a-family",
         "class":  "restaurant",
-        "text":  "\" Every takeout order you skip because dinner was already halfway made is $40 to $60 back in the budget"
+        "figure":  "$40",
+        "text":  "\" Every takeout order you skip because dinner was already halfway made is $40 to $60 back in the budget",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "how-to-meal-plan-for-a-family",
         "class":  "savings-or-budget-total",
-        "text":  "Do that and a family of four can realistically save $150 to $250 a month, which is real grocery money without anybody feeling deprived"
+        "figure":  "$150",
+        "text":  "Do that and a family of four can realistically save $150 to $250 a month, which is real grocery money without anybody feeling deprived",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-meal-prep-for-muscle-gain",
         "class":  "price-in-words",
-        "text":  "With a little planning you can hit your protein and calories for a few bucks a day"
+        "figure":  "few bucks",
+        "text":  "With a little planning you can hit your protein and calories for a few bucks a day",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "how-to-meal-prep-for-muscle-gain",
         "class":  "price-in-words",
-        "text":  "Buy Protein by the Dollar, Not the Hype You do not need designer protein"
+        "figure":  "",
+        "text":  "Buy Protein by the Dollar, Not the Hype You do not need designer protein",
+        "disposition":  "not a price: \"per dollar\" idiom, no figure"
     },
     {
         "slug":  "how-to-meal-prep-for-muscle-gain",
         "class":  "price-in-words",
-        "text":  "You need grams per dollar"
+        "figure":  "",
+        "text":  "You need grams per dollar",
+        "disposition":  "not a price: \"per dollar\" idiom, no figure"
     },
     {
         "slug":  "how-to-meal-prep-for-muscle-gain",
         "class":  "price-in-words",
-        "text":  "Dried beans and lentils: a bag of dry lentils runs a pound, and both stack protein and fiber for pennies a serving"
+        "figure":  "pennies",
+        "text":  "Dried beans and lentils: a bag of dry lentils runs a pound, and both stack protein and fiber for pennies a serving",
+        "disposition":  "removed or reworded"
     },
     {
         "slug":  "how-to-meal-prep-for-muscle-gain",
         "class":  "price-in-words",
-        "text":  "Hit your two numbers, buy protein by grams per dollar, and prep in bulk so meals are ready when you are"
+        "figure":  "",
+        "text":  "Hit your two numbers, buy protein by grams per dollar, and prep in bulk so meals are ready when you are",
+        "disposition":  "not a price: \"per dollar\" idiom, no figure"
     },
     {
         "slug":  "how-to-meal-prep-for-one",
         "class":  "savings-or-budget-total",
-        "text":  "The average household tosses out hundreds of dollars of food a year, and solo cooks are especially prone to it"
+        "figure":  "",
+        "text":  "The average household tosses out hundreds of dollars of food a year, and solo cooks are especially prone to it",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "how-to-meal-prep-for-one",
         "class":  "restaurant",
-        "text":  "A plate of pasta and vegetables from the pantry costs a fraction of a twenty-dollar delivery order with fees and a tip"
+        "figure":  "",
+        "text":  "A plate of pasta and vegetables from the pantry costs a fraction of a twenty-dollar delivery order with fees and a tip",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "how-to-meal-prep-for-one",
         "class":  "savings-or-budget-total",
-        "text":  "Do that a couple of times a week and you have quietly saved more than a hundred dollars a month"
+        "figure":  "a hundred dollars",
+        "text":  "Do that a couple of times a week and you have quietly saved more than a hundred dollars a month",
+        "disposition":  "removed: derived-total"
     },
     {
         "slug":  "how-to-meal-prep-for-one",
         "class":  "price-in-words",
-        "text":  "Do that and you can eat well for a few dollars a plate while barely wasting a thing"
+        "figure":  "few dollars",
+        "text":  "Do that and you can eat well for a few dollars a plate while barely wasting a thing",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "how-to-meal-prep-for-two",
         "class":  "price-in-words",
-        "text":  "Try to hit a store sale on at least one protein and you shave a few dollars more"
+        "figure":  "few dollars",
+        "text":  "Try to hit a store sale on at least one protein and you shave a few dollars more",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "how-to-meal-prep-for-two",
         "class":  "restaurant",
-        "text":  "Compare that to two takeout orders at $15 each and you see why this adds up fast"
+        "figure":  "$15",
+        "text":  "Compare that to two takeout orders at $15 each and you see why this adds up fast",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "how-to-meal-prep-for-weight-loss",
         "class":  "other (finance, non-food, product)",
-        "text":  "Use a $10 kitchen scale or simple hand portions: a palm of protein, a cupped hand of carbs, a fist"
+        "figure":  "$10",
+        "text":  "Use a $10 kitchen scale or simple hand portions: a palm of protein, a cupped hand of carbs, a fist",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "how-to-meal-prep-on-a-budget",
         "class":  "restaurant",
-        "text":  "re, meal prep is just cooking once and eating three or four times, which saves you money, time, and the daily \"what\u0027s for dinner\" panic that ends with a twelve-dollar takeout order"
+        "figure":  "",
+        "text":  "re, meal prep is just cooking once and eating three or four times, which saves you money, time, and the daily \"what\u0027s for dinner\" panic that ends with a twelve-dollar takeout order",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "how-to-meal-prep-on-a-budget",
         "class":  "restaurant",
-        "text":  "The same meal from a lunch spot runs ten to fourteen dollars"
+        "figure":  "ten to fourteen dollars",
+        "text":  "The same meal from a lunch spot runs ten to fourteen dollars",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "how-to-meal-prep-on-a-budget",
         "class":  "savings-or-budget-total",
-        "text":  "Do that math across a week and you are keeping fifty dollars in your pocket"
+        "figure":  "fifty dollars",
+        "text":  "Do that math across a week and you are keeping fifty dollars in your pocket",
+        "disposition":  "removed: derived-total"
     },
     {
         "slug":  "how-to-meal-prep-on-a-budget",
         "class":  "price-in-words",
-        "text":  "Lean on these: dried beans and lentils (dirt cheap per serving), rice and oats (pennies a serving), eggs ( apiece), frozen vegetables ( a pound), and whatever protein is cheapes"
+        "figure":  "pennies",
+        "text":  "Lean on these: dried beans and lentils (dirt cheap per serving), rice and oats (pennies a serving), eggs ( apiece), frozen vegetables ( a pound), and whatever protein is cheapes",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "other (finance, non-food, product)",
-        "text":  "Start With a Tiny, Boring Goal A $1,000 emergency fund is the classic target, and it is a good one"
+        "figure":  "$1,000",
+        "text":  "Start With a Tiny, Boring Goal A $1,000 emergency fund is the classic target, and it is a good one",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "other (finance, non-food, product)",
-        "text":  "But if $1,000 feels like the moon right now, aim for $300 first"
+        "figure":  "$1,000",
+        "text":  "But if $1,000 feels like the moon right now, aim for $300 first",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "savings-or-budget-total",
-        "text":  "If you save $6 a week, you hit $300 in about a year"
+        "figure":  "$6",
+        "text":  "If you save $6 a week, you hit $300 in about a year",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "savings-or-budget-total",
-        "text":  "Bump it to $12 a week and you are there in six months"
+        "figure":  "$12",
+        "text":  "Bump it to $12 a week and you are there in six months",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "savings-or-budget-total",
-        "text":  "Nobody is going to write a magazine story about $12 a week, but that quiet little pile is what keeps a flat tire from turning into a lost job"
+        "figure":  "$12",
+        "text":  "Nobody is going to write a magazine story about $12 a week, but that quiet little pile is what keeps a flat tire from turning into a lost job",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "other (finance, non-food, product)",
-        "text":  "Set up an automatic transfer of even $5 the day after your paycheck lands"
+        "figure":  "$5",
+        "text":  "Set up an automatic transfer of even $5 the day after your paycheck lands",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "savings-or-budget-total",
-        "text":  "If you get paid every two weeks and auto-transfer $10 per check, that is $260 a year with zero ongoing effort"
+        "figure":  "$10",
+        "text":  "If you get paid every two weeks and auto-transfer $10 per check, that is $260 a year with zero ongoing effort",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "other (finance, non-food, product)",
-        "text":  "Round it up to $20 and you have $520"
+        "figure":  "$20",
+        "text":  "Round it up to $20 and you have $520",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "other (finance, non-food, product)",
-        "text":  "Start with whatever number does not scare you, then nudge it up $5 every couple of months"
+        "figure":  "$5",
+        "text":  "Start with whatever number does not scare you, then nudge it up $5 every couple of months",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "savings-or-budget-total",
-        "text":  "Getting hit with a $35 fee to save $10 is a losing trade"
+        "figure":  "$35",
+        "text":  "Getting hit with a $35 fee to save $10 is a losing trade",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "savings-or-budget-total",
-        "text":  "A roommate who splits a $1,200 apartment saves you $600 a month, which dwarfs anything you will do with coupons"
+        "figure":  "$1,200",
+        "text":  "A roommate who splits a $1,200 apartment saves you $600 a month, which dwarfs anything you will do with coupons",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "savings-or-budget-total",
-        "text":  "If you are carrying a car payment plus insurance plus gas, you may be spending $600 to $700 a month to get around"
+        "figure":  "$600",
+        "text":  "If you are carrying a car payment plus insurance plus gas, you may be spending $600 to $700 a month to get around",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "savings-or-budget-total",
-        "text":  "Shop your insurance once a year, because loyalty is quietly expensive and switching can save $30 to $60 a month"
+        "figure":  "$30",
+        "text":  "Shop your insurance once a year, because loyalty is quietly expensive and switching can save $30 to $60 a month",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "restaurant",
-        "text":  "A home-cooked dinner costs a small fraction of delivery, which easily hits $15 to $20 once you add fees, tax, and tip"
+        "figure":  "$15",
+        "text":  "A home-cooked dinner costs a small fraction of delivery, which easily hits $15 to $20 once you add fees, tax, and tip",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "savings-or-budget-total",
-        "text":  "Cook three of those a week instead of ordering out and you keep roughly $180 a month"
+        "figure":  "$180",
+        "text":  "Cook three of those a week instead of ordering out and you keep roughly $180 a month",
+        "disposition":  "removed: derived-total"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "price-in-words",
-        "text":  "It is about grabbing dollars that are already yours"
+        "figure":  "",
+        "text":  "It is about grabbing dollars that are already yours",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "savings-or-budget-total",
-        "text":  "Adjusting your W-4 can put $50 to $150 back in each paycheck now, when you need it"
+        "figure":  "$50",
+        "text":  "Adjusting your W-4 can put $50 to $150 back in each paycheck now, when you need it",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "savings-or-budget-total",
-        "text":  "Every dollar of help is a dollar you get to keep and save"
+        "figure":  "a dollar",
+        "text":  "Every dollar of help is a dollar you get to keep and save",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "other (finance, non-food, product)",
-        "text":  "Most people find $40 to $80 of \"where did that go\" money the first time they look"
+        "figure":  "$40",
+        "text":  "Most people find $40 to $80 of \"where did that go\" money the first time they look",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-low-income",
         "class":  "savings-or-budget-total",
-        "text":  "Six dollars a week, protected and repeated, quietly becomes the cushion that keeps one bad day from w"
+        "figure":  "Six dollars",
+        "text":  "Six dollars a week, protected and repeated, quietly becomes the cushion that keeps one bad day from w",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-wedding",
         "class":  "other (finance, non-food, product)",
-        "text":  "The average American wedding now runs north of $33,000"
+        "figure":  "$33,000",
+        "text":  "The average American wedding now runs north of $33,000",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-wedding",
         "class":  "other (finance, non-food, product)",
-        "text":  "Say you settle on $8,000"
+        "figure":  "$8,000",
+        "text":  "Say you settle on $8,000",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-wedding",
         "class":  "other (finance, non-food, product)",
-        "text":  "Break it into buckets that reflect what actually matters to you: Venue and food: $3,500 Photography: $1,500 Attire: $800 Flowers and decor: $600 Music: $500 Cake and desserts: $300 Everything else and a cushion: $800 The word \"wedding\" adds a tax"
+        "figure":  "$3,500",
+        "text":  "Break it into buckets that reflect what actually matters to you: Venue and food: $3,500 Photography: $1,500 Attire: $800 Flowers and decor: $600 Music: $500 Cake and desserts: $300 Everything else and a cushion: $800 The word \"wedding\" adds a tax",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-wedding",
         "class":  "other (finance, non-food, product)",
-        "text":  "If catering runs $75 a guest, then 120 guests is $9,000 and 60 guests is $4,500"
+        "figure":  "$75",
+        "text":  "If catering runs $75 a guest, then 120 guests is $9,000 and 60 guests is $4,500",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "how-to-save-money-on-a-wedding",
         "class":  "savings-or-budget-total",
-        "text":  "Cutting 60 names you barely know just saved you $4,500 and gave you a warmer room full of people who actually love you"
+        "figure":  "$4,500",
+        "text":  "Cutting 60 names you barely know just saved you $4,500 and gave you a warmer room full of people who actually love you",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "how-to-save-money-on-a-wedding",
         "class":  "price-in-words",
-        "text":  "A Saturday in June commands top dollar"
+        "figure":  "",
+        "text":  "A Saturday in June commands top dollar",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-wedding",
         "class":  "price-in-words",
-        "text":  "Many venues drop their rate several hundred to a couple thousand dollars off the Saturday price"
+        "figure":  "",
+        "text":  "Many venues drop their rate several hundred to a couple thousand dollars off the Saturday price",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "how-to-save-money-on-a-wedding",
         "class":  "other (finance, non-food, product)",
-        "text":  "Real numbers: a full-service florist might quote $2,000 for centerpieces and bouquets"
+        "figure":  "$2,000",
+        "text":  "Real numbers: a full-service florist might quote $2,000 for centerpieces and bouquets",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "how-to-save-money-on-a-wedding",
         "class":  "other (finance, non-food, product)",
-        "text":  "In-season flowers arranged by a crafty friend, or a warehouse-store floral order, can land the same look for $400"
+        "figure":  "$400",
+        "text":  "In-season flowers arranged by a crafty friend, or a warehouse-store floral order, can land the same look for $400",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "how-to-save-money-on-a-wedding",
         "class":  "savings-or-budget-total",
-        "text":  "That is $1,600 back in your pocket for something that wilts in three days"
+        "figure":  "$1,600",
+        "text":  "That is $1,600 back in your pocket for something that wilts in three days",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "how-to-save-money-on-a-wedding",
         "class":  "other (finance, non-food, product)",
-        "text":  "Buy the dress off the rack, sample sale, or gently used, where a $3,000 gown often sells for $600 or less, worn once"
+        "figure":  "$3,000",
+        "text":  "Buy the dress off the rack, sample sale, or gently used, where a $3,000 gown often sells for $600 or less, worn once",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "how-to-save-money-on-a-wedding",
         "class":  "price-in-words",
-        "text":  "Bottom line: A great wedding is measured in warmth, not dollars"
+        "figure":  "",
+        "text":  "Bottom line: A great wedding is measured in warmth, not dollars",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "is-buying-in-bulk-worth-it",
         "class":  "other (finance, non-food, product)",
-        "text":  "A 30-roll pack of paper towels might run you about $27, which sounds steep next to a 6-roll pack at $7"
+        "figure":  "$27,",
+        "text":  "A 30-roll pack of paper towels might run you about $27, which sounds steep next to a 6-roll pack at $7",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "is-buying-in-bulk-worth-it",
         "class":  "other (finance, non-food, product)",
-        "text":  "The big pack is $0.90 a roll"
+        "figure":  "$0.90",
+        "text":  "The big pack is $0.90 a roll",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "is-buying-in-bulk-worth-it",
         "class":  "other (finance, non-food, product)",
-        "text":  "The small pack is roughly $1.17 a roll"
+        "figure":  "$1.17",
+        "text":  "The small pack is roughly $1.17 a roll",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "is-buying-in-bulk-worth-it",
         "class":  "savings-or-budget-total",
-        "text":  "The Membership Fee Nobody Adds Back In Warehouse clubs charge $60 to $130 a year just to walk in the door"
+        "figure":  "$60",
+        "text":  "The Membership Fee Nobody Adds Back In Warehouse clubs charge $60 to $130 a year just to walk in the door",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "is-buying-in-bulk-worth-it",
         "class":  "savings-or-budget-total",
-        "text":  "If your bulk buying saves you $0.27 a roll on paper towels but you only shop there four times a year and spend $200 total, a"
+        "figure":  "$0.27",
+        "text":  "If your bulk buying saves you $0.27 a roll on paper towels but you only shop there four times a year and spend $200 total, a",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "is-buying-in-bulk-worth-it",
         "class":  "savings-or-budget-total",
-        "text":  "$65 membership can eat most of your savings alive"
+        "figure":  "$65",
+        "text":  "$65 membership can eat most of your savings alive",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "keto-meal-prep-on-a-budget",
         "class":  "restaurant",
-        "text":  "Compare that to a single fast-food combo at $9.00 and you can see why prep wins"
+        "figure":  "$9.00",
+        "text":  "Compare that to a single fast-food combo at $9.00 and you can see why prep wins",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "low-carb-meal-prep-ideas",
         "class":  "price-in-words",
-        "text":  "Dinners Worth Coming Home To Dinner is where you can stretch a few dollars into several servings"
+        "figure":  "few dollars",
+        "text":  "Dinners Worth Coming Home To Dinner is where you can stretch a few dollars into several servings",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "mason-jar-salads-meal-prep",
         "class":  "other (finance, non-food, product)",
-        "text":  "The lettuce wilts, the dressing turns everything to mush, and you end up ordering a $14 lunch instead"
+        "figure":  "$14",
+        "text":  "The lettuce wilts, the dressing turns everything to mush, and you end up ordering a $14 lunch instead",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "mason-jar-salads-meal-prep",
         "class":  "restaurant",
-        "text":  "Let me price out a chickpea-and-feta jar, the kind of Mediterranean salad a lunch spot charges you $12 for"
+        "figure":  "$12",
+        "text":  "Let me price out a chickpea-and-feta jar, the kind of Mediterranean salad a lunch spot charges you $12 for",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "mason-jar-salads-meal-prep",
         "class":  "savings-or-budget-total",
-        "text":  "Pack four work lunches a week and you save close to $40 a week, which is more than $2,000 a year for one habit you can do half-asleep on a Sunday"
+        "figure":  "$40",
+        "text":  "Pack four work lunches a week and you save close to $40 a week, which is more than $2,000 a year for one habit you can do half-asleep on a Sunday",
+        "disposition":  "removed: derived-total"
     },
     {
         "slug":  "mason-jar-salads-meal-prep",
         "class":  "restaurant",
-        "text":  "Bottom line: Mason jar salads turn a $12 lunch into a homemade one at a fraction of the price, and they beat the wilt problem by k"
+        "figure":  "$12",
+        "text":  "Bottom line: Mason jar salads turn a $12 lunch into a homemade one at a fraction of the price, and they beat the wilt problem by k",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "meal-planning-to-save",
         "class":  "other (finance, non-food, product)",
-        "text":  "On a $700 monthly spend, that is $140 to $210 back every month"
+        "figure":  "$700",
+        "text":  "On a $700 monthly spend, that is $140 to $210 back every month",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "meal-planning-to-save",
         "class":  "restaurant",
-        "text":  "The second is the weeknight, where \"there is nothing to eat\" turns into a $40 delivery order"
+        "figure":  "$40",
+        "text":  "The second is the weeknight, where \"there is nothing to eat\" turns into a $40 delivery order",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "meal-planning-to-save",
         "class":  "restaurant",
-        "text":  "Cutting just two takeout nights a week at $35 each saves $280 a month"
+        "figure":  "$35",
+        "text":  "Cutting just two takeout nights a week at $35 each saves $280 a month",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "meal-planning-to-save",
         "class":  "savings-or-budget-total",
-        "text":  "Fifteen minutes a week, a few cheap proteins, and a cook-once habit can trim 20 to 30 percent off your food spending, often $150 or more a month"
+        "figure":  "$150",
+        "text":  "Fifteen minutes a week, a few cheap proteins, and a cook-once habit can trim 20 to 30 percent off your food spending, often $150 or more a month",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "meal-prep-for-a-family-of-four",
         "class":  "restaurant",
-        "text":  "The average American family of four spends somewhere north of $1,000 a month on food, and a good chunk of that walks out the door as takeout and wilted produc"
+        "figure":  "$1,000",
+        "text":  "The average American family of four spends somewhere north of $1,000 a month on food, and a good chunk of that walks out the door as takeout and wilted produc",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "meal-prep-for-a-family-of-four",
         "class":  "savings-or-budget-total",
-        "text":  "For a family of four, a realistic and comfortable target is $150 to $200 a week, which lands you around $1.75 to $2"
+        "figure":  "$150",
+        "text":  "For a family of four, a realistic and comfortable target is $150 to $200 a week, which lands you around $1.75 to $2",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "meal-prep-for-a-family-of-four",
         "class":  "savings-or-budget-total",
-        "text":  "Compare that to $12 for the same bowl at a fast-casual spot and you can see where the month\u0027s savings hide"
+        "figure":  "$12",
+        "text":  "Compare that to $12 for the same bowl at a fast-casual spot and you can see where the month\u0027s savings hide",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "meal-prep-for-a-family-of-four",
         "class":  "savings-or-budget-total",
-        "text":  "Do it one afternoon a week and you can knock a few hundred dollars off your monthly food spend without anyone feeling deprived"
+        "figure":  "few hundred dollars",
+        "text":  "Do it one afternoon a week and you can knock a few hundred dollars off your monthly food spend without anyone feeling deprived",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "meal-prep-for-the-gym",
         "class":  "other (finance, non-food, product)",
-        "text":  "And here is the part nobody tells you: fueling your training well does not require a supplement store or a $15 salad"
+        "figure":  "$15",
+        "text":  "And here is the part nobody tells you: fueling your training well does not require a supplement store or a $15 salad",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "meal-prep-for-the-gym",
         "class":  "other (finance, non-food, product)",
-        "text":  "Compare that to a $12 fast-casual chicken bowl and you see why the guy with the cooler bag is quietly winning"
+        "figure":  "$12",
+        "text":  "Compare that to a $12 fast-casual chicken bowl and you see why the guy with the cooler bag is quietly winning",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "meal-prep-for-the-gym",
         "class":  "other (finance, non-food, product)",
-        "text":  "Nail your protein number, buy cheap staples in bulk, cook once on Sunday, and you can feed your workouts for a fraction of the $12 everyone else pays"
+        "figure":  "$12",
+        "text":  "Nail your protein number, buy cheap staples in bulk, cook once on Sunday, and you can feed your workouts for a fraction of the $12 everyone else pays",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "meal-prep-mistakes-to-avoid",
         "class":  "restaurant",
-        "text":  "That $9 delivery order erases the savings from the whole batch"
+        "figure":  "$9",
+        "text":  "That $9 delivery order erases the savings from the whole batch",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "meal-prep-mistakes-to-avoid",
         "class":  "savings-or-budget-total",
-        "text":  "A few dollars of spices and sauces buys you a week you will actually eat"
+        "figure":  "few dollars",
+        "text":  "A few dollars of spices and sauces buys you a week you will actually eat",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "meal-prep-mistakes-to-avoid",
         "class":  "savings-or-budget-total",
-        "text":  "The average American household throws out roughly $1,500 of food a year, and this is a big reason why"
+        "figure":  "$1,500",
+        "text":  "The average American household throws out roughly $1,500 of food a year, and this is a big reason why",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "meal-prep-mistakes-to-avoid",
         "class":  "other (finance, non-food, product)",
-        "text":  "It costs a little more in containers up front, but glass sets run about $20 to $30 and last years"
+        "figure":  "$20",
+        "text":  "It costs a little more in containers up front, but glass sets run about $20 to $30 and last years",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "meal-prep-mistakes-to-avoid",
         "class":  "price-in-words",
-        "text":  "That is real dollars in the trash"
+        "figure":  "",
+        "text":  "That is real dollars in the trash",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "meal-prep-shopping-list-guide",
         "class":  "other (finance, non-food, product)",
-        "text":  "For one person doing serious meal prep, a weekly grocery budget of $40 to $50 is realistic and generous"
+        "figure":  "$40",
+        "text":  "For one person doing serious meal prep, a weekly grocery budget of $40 to $50 is realistic and generous",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "meal-prep-shopping-list-guide",
         "class":  "other (finance, non-food, product)",
-        "text":  "For a family of four, $150 to $175 covers a lot of home-cooked ground"
+        "figure":  "$150",
+        "text":  "For a family of four, $150 to $175 covers a lot of home-cooked ground",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "meal-prep-shopping-list-guide",
         "class":  "price-in-words",
-        "text":  "Do that and you will spend less, waste almost nothing, and walk out of the store knowing exactly what every dollar bought"
+        "figure":  "",
+        "text":  "Do that and you will spend less, waste almost nothing, and walk out of the store knowing exactly what every dollar bought",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "meal-prep-soups-and-stews",
         "class":  "price-in-words",
-        "text":  "One big pot on Sunday can fill your freezer with lunches for pennies a bowl"
+        "figure":  "pennies",
+        "text":  "One big pot on Sunday can fill your freezer with lunches for pennies a bowl",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "meal-prep-soups-and-stews",
         "class":  "restaurant",
-        "text":  "A restaurant charges you $8 for that same bowl"
+        "figure":  "$8",
+        "text":  "A restaurant charges you $8 for that same bowl",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "other (finance, non-food, product)",
-        "text":  "Even $25 a paycheck builds the habit"
+        "figure":  "$25",
+        "text":  "Even $25 a paycheck builds the habit",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "other (finance, non-food, product)",
-        "text":  "Keep a starter emergency fund of $1,000 This one number stops small problems from becoming credit card debt"
+        "figure":  "$1,000",
+        "text":  "Keep a starter emergency fund of $1,000 This one number stops small problems from becoming credit card debt",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "other (finance, non-food, product)",
-        "text":  "A $600 car repair is an annoyance when you have cash"
+        "figure":  "$600",
+        "text":  "A $600 car repair is an annoyance when you have cash",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "savings-or-budget-total",
-        "text":  "If you bring home $3,500 a month, your life needs to cost less than $3,500 a month"
+        "figure":  "$3,500",
+        "text":  "If you bring home $3,500 a month, your life needs to cost less than $3,500 a month",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "price-in-words",
-        "text":  "Give every dollar a job A budget is not a punishment"
+        "figure":  "",
+        "text":  "Give every dollar a job A budget is not a punishment",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "other (finance, non-food, product)",
-        "text":  "Assign all of it, down to the last $10"
+        "figure":  "$10",
+        "text":  "Assign all of it, down to the last $10",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "other (finance, non-food, product)",
-        "text":  "Wait 24 hours before any purchase over $100 The urge to buy fades faster than you think"
+        "figure":  "$100",
+        "text":  "Wait 24 hours before any purchase over $100 The urge to buy fades faster than you think",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "savings-or-budget-total",
-        "text":  "Roughly half the time you will wake up and not want it anymore, and you just saved $100 or more"
+        "figure":  "$100",
+        "text":  "Roughly half the time you will wake up and not want it anymore, and you just saved $100 or more",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "savings-or-budget-total",
-        "text":  "Never carry a credit card balance At 24 percent interest, a $2,000 balance costs you about $480 a year just to exist"
+        "figure":  "$2,000",
+        "text":  "Never carry a credit card balance At 24 percent interest, a $2,000 balance costs you about $480 a year just to exist",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "restaurant",
-        "text":  "Cook at home more than you eat out A restaurant meal runs $15 to $20 a person"
+        "figure":  "$15",
+        "text":  "Cook at home more than you eat out A restaurant meal runs $15 to $20 a person",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "savings-or-budget-total",
-        "text":  "Do this four extra nights a week and you free up $200 a month"
+        "figure":  "$200",
+        "text":  "Do this four extra nights a week and you free up $200 a month",
+        "disposition":  "removed: derived-total"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "price-in-words",
-        "text":  "Write down every dollar for 30 days"
+        "figure":  "",
+        "text":  "Write down every dollar for 30 days",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "other (finance, non-food, product)",
-        "text":  "Almost everyone finds $150 to $300 leaking out on things they did not even enjoy"
+        "figure":  "$150",
+        "text":  "Almost everyone finds $150 to $300 leaking out on things they did not even enjoy",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "savings-or-budget-total",
-        "text":  "If you make $4,000 a month after taxes, aim to keep housing near $1,200"
+        "figure":  "$4,000",
+        "text":  "If you make $4,000 a month after taxes, aim to keep housing near $1,200",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "other (finance, non-food, product)",
-        "text":  "Raise your deductibles to lower your premiums Bumping a car insurance deductible from $250 to $1,000 can cut your premium by 15 to 20 percent"
+        "figure":  "$250",
+        "text":  "Raise your deductibles to lower your premiums Bumping a car insurance deductible from $250 to $1,000 can cut your premium by 15 to 20 percent",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "other (finance, non-food, product)",
-        "text":  "Cancel one subscription you forgot you had The average person carries two or three subscriptions they never use, often $10 to $15 each"
+        "figure":  "$10",
+        "text":  "Cancel one subscription you forgot you had The average person carries two or three subscriptions they never use, often $10 to $15 each",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "savings-or-budget-total",
-        "text":  "That is $360 a year drifting out the door for nothing"
+        "figure":  "$360",
+        "text":  "That is $360 a year drifting out the door for nothing",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "other (finance, non-food, product)",
-        "text":  "Keep a running list before you shop Walking into a store without a list is how a $40 trip becomes $90"
+        "figure":  "$40",
+        "text":  "Keep a running list before you shop Walking into a store without a list is how a $40 trip becomes $90",
+        "disposition":  "kept: finance"
     },
     {
         "slug":  "money-rules-to-live-by",
         "class":  "other (finance, non-food, product)",
-        "text":  "Skip the extended warranty on a $60 toaster"
+        "figure":  "$60",
+        "text":  "Skip the extended warranty on a $60 toaster",
+        "disposition":  "kept: non-food"
     },
     {
         "slug":  "no-cook-meal-prep-ideas",
         "class":  "restaurant",
-        "text":  "vernight oats and no-cook breakfasts Breakfast is where no-cook prep quietly saves the most money, because a coffee-shop breakfast sandwich and a latte can run $10 before you have even started your day"
+        "figure":  "$10",
+        "text":  "vernight oats and no-cook breakfasts Breakfast is where no-cook prep quietly saves the most money, because a coffee-shop breakfast sandwich and a latte can run $10 before you have even started your day",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "no-cook-meal-prep-ideas",
         "class":  "restaurant",
-        "text":  "That jar costs pocket change and beats a $4 muffin every single day of the week"
+        "figure":  "$4",
+        "text":  "That jar costs pocket change and beats a $4 muffin every single day of the week",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "no-cook-meal-prep-ideas",
         "class":  "savings-or-budget-total",
-        "text":  "Either way you have swapped a $10 morning habit for a cheap homemade one, and over a five-day work week that is close to $45 back in your pocket"
+        "figure":  "$10",
+        "text":  "Either way you have swapped a $10 morning habit for a cheap homemade one, and over a five-day work week that is close to $45 back in your pocket",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "rotisserie-chicken-meal-prep",
         "class":  "price-in-words",
-        "text":  "You just made a couple quarts of stock for pennies, plus you will pick another cup of meat off those bones"
+        "figure":  "pennies",
+        "text":  "You just made a couple quarts of stock for pennies, plus you will pick another cup of meat off those bones",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "sunday-meal-prep-routine",
         "class":  "restaurant",
-        "text":  "A comparable takeout dinner runs $12 to $18 before the tip and the delivery fee, so you keep most of that on every plate"
+        "figure":  "$12",
+        "text":  "A comparable takeout dinner runs $12 to $18 before the tip and the delivery fee, so you keep most of that on every plate",
+        "disposition":  "kept: restaurant"
     },
     {
         "slug":  "sunday-meal-prep-routine",
         "class":  "savings-or-budget-total",
-        "text":  "Over a week of dinners for one person, that is $50 or more staying in your pocket"
+        "figure":  "$50",
+        "text":  "Over a week of dinners for one person, that is $50 or more staying in your pocket",
+        "disposition":  "removed: derived-total"
     },
     {
         "slug":  "sunday-meal-prep-routine",
         "class":  "restaurant",
-        "text":  "Bottom line: One planned two-hour session on Sunday can cover a week of cheap dinners, save you $50 or more versus takeout, and hand you back your weeknights"
+        "figure":  "$50",
+        "text":  "Bottom line: One planned two-hour session on Sunday can cover a week of cheap dinners, save you $50 or more versus takeout, and hand you back your weeknights",
+        "disposition":  "removed: derived-total"
     },
     {
         "slug":  "vegetarian-meal-prep-on-a-budget",
         "class":  "price-in-words",
-        "text":  "Build Your Plate Around the Cheap Protein Powerhouses The whole game here is protein per dollar"
+        "figure":  "",
+        "text":  "Build Your Plate Around the Cheap Protein Powerhouses The whole game here is protein per dollar",
+        "disposition":  "not a price: \"per dollar\" idiom, no figure"
     },
     {
         "slug":  "vegetarian-meal-prep-on-a-budget",
         "class":  "price-in-words",
-        "text":  "These are pennies per serving but they turn the same three ingredients into a dozen different meals"
+        "figure":  "pennies",
+        "text":  "These are pennies per serving but they turn the same three ingredients into a dozen different meals",
+        "disposition":  "removed: price-in-words"
     },
     {
         "slug":  "welcome",
         "class":  "savings-or-budget-total",
-        "text":  "$10 for the year (about 83 cents a month)"
+        "figure":  "$10",
+        "text":  "$10 for the year (about 83 cents a month)",
+        "disposition":  "kept: non-food"
     }
 ]
