@@ -19,13 +19,20 @@
        would report the wrong thing). 1a index.lock: waited on, never deleted. 1b a rebase-merge directory whose ONLY
        entry is `autostash`, older than -AutostashAgeSec: `git rebase --quit`, and the autostash must then be
        stash@{0} (the E1 shape; --abort exits 1 on it and leaves the directory). 1c any other operation (rebase,
-       merge, cherry-pick, revert, sequencer, bisect): waited on, never aborted. 1d unmerged entries and 1e NEW
-       conflict markers in ANY dirty tracked file (JSON included, X4): on an owned path the bytes are set aside and
-       the path restored from HEAD; on any other path `blocked` class `conflict`, with nothing written. 1f HEAD must be
-       refs/heads/<Branch>. 1g (addendum) -BotCommit: index entries still holding the parent's version of a path that
-       commit changed, the private-index commit's leftover, are reset to HEAD. Deletions included.
-    2. Fetch, with retries. A failure is `degraded` class `fetch` and does not page (capture-watchdog's floor pages a
-       checkout that stays behind).
+       merge, cherry-pick, revert, sequencer, bisect): waited on, never aborted. 1c2 a LEFTOVER INTENT (a sync killed
+       between read-tree and update-ref): when HEAD is on the branch at its H0, the index equals its NEW's tree and
+       the tree matches the index on every path it changed, the missing update-ref is made as a compare-and-swap and a
+       note names the interrupted run; any other leftover is named in the outcome's `why` and KEPT until a run ends
+       current, synced or partial. 1d unmerged entries and 1e NEW conflict markers in ANY dirty tracked file (JSON
+       included, X4; read through a stream that shares write and delete): a path that is owned, NAMED by -OwnBlobs and,
+       for a marked one, not staged, is set aside and restored from HEAD, and the outcome then pages and says so; any
+       other path is `blocked` class `conflict`, with nothing written. 1f HEAD must be refs/heads/<Branch>. 1g
+       (addendum) -BotCommit: index entries still holding the parent's version of a path that commit changed, the
+       private-index commit's leftover, are reset to HEAD. Deletions included.
+    2. Fetch, with retries, each attempt bounded by -FetchTimeoutSec (its process tree killed on expiry) and by
+       http.lowSpeedLimit/lowSpeedTime. A failure is `degraded` class `fetch`, which pages once a date (the state
+       file's fetch_paged_on) as the kill switch does; capture-watchdog's CHECKOUT floor sees a checkout that stays
+       behind.
     3. Already containing origin: `current`, with ZERO writes to the tree, the index or HEAD (beyond step 1g's index
        resync, which only a caller passing -BotCommit asks for).
     4. A merge commit among the local commits: `degraded`. It is never linearised.
@@ -34,9 +41,11 @@
     6. Every startup file (capture-run.ps1 and what it dot-sources, $script:TcCheckoutSyncStartupFiles) that the move
        changes is PARSED at NEW from the object database first. A missing file or a parse error is `degraded` and
        nothing moves. `startup_changed` tells the caller to re-execute.
-    7. Every path the move changes is classified against `git status`: IN-THE-WAY (an untracked OR ignored file where
-       NEW adds a path; git overwrites an ignored one without a word) is moved to quarantine; ALREADY-UPSTREAM (a dirty
-       file that already holds NEW's blob) gets an index update only, its bytes and mtime never touched; OWN-MERGE and
+    7. Every path the move changes is classified against `git status`: IN-THE-WAY (an ignored file, or an untracked one
+       under an OWNED path, where NEW adds a path; git overwrites an ignored one without a word) is moved to quarantine;
+       an untracked file outside the owned paths is FOREIGN unless it already holds NEW's blob; ALREADY-UPSTREAM (a
+       dirty or untracked file that already holds NEW's blob) gets an index update only, its bytes and mtime never
+       touched; OWN-MERGE and
        OWN-SETASIDE (the pipeline's own output, owned AND vouched by -OwnBlobs) are merged, or set aside with upstream
        winning; OWN-DELETED comes back as upstream's version; FOREIGN (a staged change, anyone else's edit, a deletion
        nobody vouches for, and every other status code) is NEVER WRITTEN.
@@ -48,17 +57,24 @@
        read-tree is atomic in its up-to-date check and NOT in its write phase on Windows (section 2.6): a file another
        process holds open without FILE_SHARE_DELETE is refused mid-write with rc 128 and `unable to unlink old`, with
        other paths already written. FORWARD then stages git's own writes and retries once; BACKWARD restores every path
-       to its pre-sync state. Both are verified by bytes. A lost swap gets ONE recovery (F11).
+       to its pre-sync state. Both are verified by bytes. The same held file over a path upstream DELETES is only a
+       warning and rc 0, so every deleted path must be absent before the ref moves: one delete of a leftover still
+       holding H0's blob after -HeldRetrySec, else BACKWARD and `blocked` class `held-file`. An in-the-way file a reader
+       holds cannot be quarantined: one retry, then the put-back and `blocked` class `held-file`. A lost swap gets ONE
+       recovery (F11); an update-ref that fails while the branch still names H0 is not a lost swap: one retry, then
+       BACKWARD and `degraded` class `ref-lock`.
    10. Verify: HEAD, no unmerged entry, no operation, the INDEX at NEW on every changed path, the WORKTREE at NEW on
        every changed path but the merged ones, and the fingerprint (porcelain v2 line, length, mtime) of every dirty
-       path outside the move identical. The undo\ copies are deleted only after this passes.
+       path outside the move identical, except that a path whose status is unchanged and whose mtime only moved FORWARD
+       is a session's own save and goes into `notes`. The undo\ copies are deleted only after this passes.
    11. Record: `<git common dir>\tc-checkout-sync.json` (the last record, the intent, the kill-switch page date) and
        one row appended to `<git common dir>\tc-checkout-sync-log.jsonl`.
 
   OUTCOMES (the record's `outcome`, `class`, `why`, `page`): current, synced (no page); partial, blocked (classes
-  foreign, held-file, read-tree, conflict), degraded (classes in-progress, index-lock, branch, fetch, merge, replay,
-  startup-parse, head-moved, index), failed (classes environment, mixed-tree, verify, exception) page; disabled
-  pages once a day; skipped neither pages nor logs. The caller decides what to do with each; the plan's table is the
+  foreign, held-file, read-tree, conflict), degraded (classes in-progress, index-lock, branch, merge, replay,
+  startup-parse, head-moved, index, ref-lock), failed (classes environment, mixed-tree, verify, exception) page;
+  disabled and degraded class fetch page once a date; skipped neither pages nor logs. A current or synced outcome
+  that made a step 1d/1e set-aside pages too. The caller decides what to do with each; the plan's table is the
   contract: only `conflict` and `mixed-tree` should stop a run before its captures.
 
   WHAT IT NEVER DOES. It never runs stash, rebase (except --quit on the 1b shape), reset --hard, checkout -B, merge or
@@ -68,16 +84,19 @@
   on a failure path; never moves HEAD off refs/heads/<Branch>; never runs in a linked worktree.
 
   IDEMPOTENT, AND WHAT MAKES IT SO. A retried sync is idempotent: `current` writes nothing, and a completed move is seen
-  at step 3 as `current`. A sync interrupted before its update-ref leaves HEAD at H0 with the index or tree at NEW,
-  which the next sync's classifier reads as staged (FOREIGN) changes and refuses, so it can never compound. The log
-  append (Add-TcLine) is NOT idempotent, so it is never retried by this code.
+  at step 3 as `current`. A sync killed before its update-ref leaves HEAD at H0 with the index or tree at NEW and its
+  intent in the state file; the next sync's step 1c2 finishes it when the index and tree are exactly at NEW, and
+  otherwise names it on every outcome until a run ends clean, so it never compounds and is never misnamed as a
+  session's work. The log append (Add-TcLine) is NOT idempotent, so it is never retried by this code; it is written
+  before the state file and in its own try, so a held state file does not cost the row.
 
   CONCURRENCY. Writers of the two state files are serialised by capture-run's mutex (Global\tc-capture-run, the plan's
   lock level 0); readers such as capture-watchdog read one record lock-free, which survives a non-repeatable read.
   The sync takes no push lock and no gate slot.
 
   CONSTANTS. Each is the first plausible value, not the survivor of a sweep (plan section 6 W5.1): index.lock wait 60 s,
-  in-progress wait 120 s, autostash-only age 300 s, held-file retry 2 s once, fetch 3 attempts 5 s apart, marker scan
+  in-progress wait 120 s, autostash-only age 300 s, held-file retry 2 s once (also the held-delete, held-quarantine
+  and ref-lock retries), fetch 3 attempts 5 s apart, each bounded at 300 s and at 1,000 B/s for 60 s, marker scan
   cap 52,428,800 bytes, NUL probe 8,000 bytes. What each does when the producer stops: none is a floor; a sync that
   never runs writes no row, and capture-watchdog's CHECKOUT floor (W1.1) is what sees that.
 
@@ -138,6 +157,38 @@ function Invoke-TcCsGit {
   param([string]$Repo, [string[]]$GitArgs)
   $g = Invoke-GitCaptured -Repo $Repo -GitArgs (@('--no-optional-locks', '--literal-pathspecs', '-c', 'core.quotePath=false') + @($GitArgs))
   return [pscustomobject]@{ rc = [int]$g.rc; out = ([string]$g.stdout).Trim(); raw = [string]$g.stdout; err = ([string]$g.stderr).Trim() }
+}
+
+# The same, with a WALL-CLOCK BOUND, for the one command that talks to the network (review finding 9): a stalled remote
+# must not hold the run, and capture-run's mutex, before any capture starts. On the bound the whole process tree is
+# killed (git fetch runs a transport child), rc is -2 and timedOut is true. Both pipes drain while the child runs.
+# The tree is the one taskkill /T walks: git's transports (git-remote-https, ssh, upload-pack) are direct children of
+# git.exe and are reached; a grandchild an MSYS shell forks and then execs is orphaned from it and is not (measured with
+# the self-test's `sleep` uploadpack, which ends on its own).
+function Invoke-TcCsGitTimed {
+  param([string]$Repo, [string[]]$GitArgs, [int]$TimeoutSec)
+  $psi = New-Object System.Diagnostics.ProcessStartInfo
+  $psi.FileName = 'git'
+  $psi.Arguments = ConvertTo-GitArgString -GitArgs (@('-C', $Repo, '--no-optional-locks', '-c', 'core.quotePath=false') + @($GitArgs))
+  $psi.UseShellExecute = $false; $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true; $psi.CreateNoWindow = $true
+  $psi.StandardOutputEncoding = New-Object System.Text.UTF8Encoding($false); $psi.StandardErrorEncoding = New-Object System.Text.UTF8Encoding($false)
+  $p = $null
+  try {
+    $p = [System.Diagnostics.Process]::Start($psi)
+    $tOut = $p.StandardOutput.ReadToEndAsync(); $tErr = $p.StandardError.ReadToEndAsync()
+    if (-not $p.WaitForExit([Math]::Max(1, $TimeoutSec) * 1000)) {
+      $kp = New-Object System.Diagnostics.ProcessStartInfo('taskkill.exe', ('/T /F /PID ' + $p.Id))
+      $kp.UseShellExecute = $false; $kp.CreateNoWindow = $true; $kp.RedirectStandardOutput = $true; $kp.RedirectStandardError = $true
+      $k = [System.Diagnostics.Process]::Start($kp)
+      $kE = $k.StandardError.ReadToEndAsync(); [void]$k.StandardOutput.ReadToEnd(); [void]$kE.Wait(10000); $k.WaitForExit(); $krc = $k.ExitCode; $k.Dispose()
+      [void]$p.WaitForExit(10000)
+      return [pscustomobject]@{ rc = -2; timedOut = $true; out = ''; raw = ''; err = ('git ' + $GitArgs[0] + ' was still running after ' + $TimeoutSec + ' s and its process tree was killed (taskkill rc ' + $krc + ')') }
+    }
+    [void]$tOut.Wait(10000); [void]$tErr.Wait(10000)
+    return [pscustomobject]@{ rc = [int]$p.ExitCode; timedOut = $false; out = ([string]$tOut.Result).Trim(); raw = [string]$tOut.Result; err = ([string]$tErr.Result).Trim() }
+  } catch {
+    return [pscustomobject]@{ rc = -1; timedOut = $false; out = ''; raw = ''; err = ('could not run git: ' + $_.Exception.Message) }
+  } finally { if ($p) { $p.Dispose() } }
 }
 
 # Non-empty NUL-separated tokens, as an array that never unrolls to a scalar.
@@ -316,6 +367,21 @@ function Get-TcCsWorktreeFormBytes([string]$Repo, [string]$Spec) {
   } finally { $p.Dispose() }
 }
 
+# A file's bytes through a stream that shares Read, Write AND Delete, so a lane writing the file at that moment, or a
+# replace over it, is never refused by this read (ops-and-gates: a lock-free reader can cost a writer its write, and
+# [IO.File]::ReadAllBytes shares Read only). -Count > 0 reads at most that many bytes from the start.
+function Read-TcCsSharedBytes([string]$Path, [long]$Count = 0) {
+  $fs = New-Object IO.FileStream($Path, [IO.FileMode]::Open, [IO.FileAccess]::Read, ([IO.FileShare]'ReadWrite, Delete'))
+  try {
+    $want = if ($Count -gt 0) { [Math]::Min($Count, $fs.Length) } else { $fs.Length }
+    $buf = New-Object byte[] ([int]$want)
+    $got = 0
+    while ($got -lt $want) { $n = $fs.Read($buf, $got, ([int]$want - $got)); if ($n -le 0) { break }; $got += $n }
+    if ($got -lt $want) { $short = New-Object byte[] $got; [Array]::Copy($buf, $short, $got); return , $short }
+    return , $buf
+  } finally { $fs.Dispose() }
+}
+
 function Test-TcCsBytePrefix([byte[]]$Prefix, [byte[]]$Whole) {
   if ($null -eq $Prefix -or $null -eq $Whole -or $Whole.Length -lt $Prefix.Length) { return $false }
   for ($i = 0; $i -lt $Prefix.Length; $i++) { if ($Prefix[$i] -ne $Whole[$i]) { return $false } }
@@ -455,6 +521,8 @@ function Invoke-TcCheckoutSync {
     [int]$PollSec = 5,
     [int]$FetchAttempts = 3,
     [int]$FetchRetrySec = 5,
+    # One fetch attempt's wall-clock bound, killed with its process tree on expiry (review finding 9).
+    [int]$FetchTimeoutSec = 300,
     [long]$MarkerScanMaxBytes = 52428800,
     [int]$NulProbeBytes = 8000,
     [string]$Remote = 'origin',
@@ -476,7 +544,7 @@ function Invoke-TcCheckoutSync {
     partial_target = ''; partial_blocker = ''; held = ''; unscanned = @(); startup_changed = $false; startup_files = @()
     index_resynced = @(); cas_recovered = ''; notes = @(); tree = ''; sec = 0; lib_blob = ''; logged = $false
   }
-  $ctx = @{ commonDir = ''; log = $true }
+  $ctx = @{ commonDir = ''; log = $true; preSetAside = [System.Collections.Generic.List[string]]::new(); leftover = $null; leftoverText = '' }
   if (-not $OwnBlobs) { $OwnBlobs = @{} }
   $stage = 'plan'
 
@@ -490,25 +558,44 @@ function Invoke-TcCheckoutSync {
       'disabled' { }   # decided by the caller of this function, once a date
       'partial' { $rec.page = $true }
       'blocked' { $rec.page = $true }
-      'degraded' { $rec.page = ($Class -ne 'fetch') }
+      'degraded' { $rec.page = $true }   # class fetch: once a date, decided against the state file below
       'failed' { $rec.page = $true }
       default { throw ('unknown checkout-sync outcome: ' + $Outcome) }
     }
+    $resolved = ($Outcome -eq 'current') -or ($Outcome -eq 'synced') -or ($Outcome -eq 'partial')
+    # A step 1d/1e set-aside is a write, so a clean outcome that made one says so and pages (review finding 2).
+    if ($ctx.preSetAside.Count -and $resolved) {
+      $rec.page = $true
+      $rec.why = $rec.why + '; before the move the sync set aside and restored from HEAD the pipeline''s own conflicted path(s): ' + ($ctx.preSetAside -join ', ')
+    }
+    # A leftover intent this run did not resolve is named on every outcome that is not clean, and KEPT (finding 7).
+    if ($ctx.leftover -and -not $resolved -and $ctx.leftoverText) { $rec.why = $rec.why + ' [' + $ctx.leftoverText + ']' }
     $rec.sec = [math]::Round($clock.Elapsed.TotalSeconds, 2)
     $rec.lib_blob = Get-TcCsLibBlob
     if ($ctx.log -and $ctx.commonDir) {
+      $stateFile = Join-Path $ctx.commonDir 'tc-checkout-sync.json'
+      $doc = Read-TcCsState $stateFile
+      if ($Outcome -eq 'degraded' -and $Class -eq 'fetch') {
+        $today = $Now.ToString('yyyy-MM-dd')
+        $rec.page = -not [string]::Equals([string]$doc.fetch_paged_on, $today, [StringComparison]::Ordinal)
+        if ($rec.page) { $doc.fetch_paged_on = $today }
+      }
+      # THE LOG ROW FIRST AND ON ITS OWN (review finding 10): a held state file must not cost the append-only record.
+      $rec.logged = $true
+      try { [void](Add-TcLine -Path (Join-Path $ctx.commonDir 'tc-checkout-sync-log.jsonl') -Text ($rec | ConvertTo-Json -Depth 6 -Compress)) }
+      catch { $rec.logged = $false; $rec.notes = @($rec.notes) + @('the log row could not be appended: ' + $_.Exception.Message) }
       try {
-        $stateFile = Join-Path $ctx.commonDir 'tc-checkout-sync.json'
-        $doc = Read-TcCsState $stateFile
         $doc.last = $rec
-        if ($Outcome -ne 'disabled') { $doc.intent = $null }
+        # A throw mid-move keeps THIS run's intent (step 1c2 of the next run can finish it); an unresolved leftover is
+        # kept; everything else clears.
+        if ($Outcome -ne 'disabled' -and -not $ctx.ContainsKey('keepOwnIntent')) { $doc.intent = $(if ($ctx.leftover -and -not $resolved) { $ctx.leftover } else { $null }) }
         [void](Write-TcAtomicFile -Path $stateFile -Text ($doc | ConvertTo-Json -Depth 6) -NoBom)
-        $rec.logged = $true
-        [void](Add-TcLine -Path (Join-Path $ctx.commonDir 'tc-checkout-sync-log.jsonl') -Text ($rec | ConvertTo-Json -Depth 6 -Compress))
-      } catch { $rec.notes = @($rec.notes) + @('the record could not be written: ' + $_.Exception.Message); $rec.logged = $false }
+      } catch { $rec.notes = @($rec.notes) + @('the state file could not be replaced: ' + $_.Exception.Message) }
     }
     return [pscustomobject]$rec
   }
+  # Where the undo copies are, or that no dated tree was made because nothing was displaced.
+  function Get-TcCsUndoText { if ($rec.tree) { return ('The undo copies are kept in ' + $rec.tree) }; return 'Nothing was displaced, so no dated tree was made' }
 
   try {
     # ---- 0. GUARDS --------------------------------------------------------------------------------------------------
@@ -573,6 +660,46 @@ function Invoke-TcCheckoutSync {
       if ($w.Elapsed.TotalSeconds -ge $InProgressWaitSec) { return (Complete-TcCsSync 'degraded' 'in-progress' ('an operation is in progress in this checkout (' + ($present -join ', ') + ') after a ' + $InProgressWaitSec + ' s wait; the sync never touches another owner''s operation')) }
       Start-Sleep -Milliseconds $pollMs
     }
+    # 1c2. A LEFTOVER INTENT (review finding 7): a sync killed between its read-tree and its update-ref leaves HEAD at
+    # the intent's H0 with the index and tree at its NEW, which step 7 would read as a session's staged work. When
+    # exactly that is so (HEAD on the branch at H0, the index equal to NEW's tree, and the tree on every changed
+    # path at the index), the move is FINISHED with the update-ref it never made, as a compare-and-swap. Any other
+    # leftover is named on the outcome and KEPT unless this run ends clean; nothing is written on its account.
+    $leftDoc = Read-TcCsState (Join-Path $ctx.commonDir 'tc-checkout-sync.json')
+    if ($null -ne $leftDoc.intent) {
+      $li = $leftDoc.intent
+      $liH0 = [string]$li.H0; $liNew = [string]$li.NEW
+      $liWho = 'a sync interrupted earlier (pid ' + [string]$li.pid + ', started ' + [string]$li.started + ', H0 ' + $(if ($liH0.Length -ge 9) { $liH0.Substring(0, 9) } else { $liH0 }) + ', NEW ' + $(if ($liNew.Length -ge 9) { $liNew.Substring(0, 9) } else { $liNew }) + $(if ($li.PSObject.Properties['tree'] -and $li.tree) { ', its dated tree ' + [string]$li.tree } else { '' }) + ')'
+      $finished = $false
+      $symL = (Invoke-TcCsGit -Repo $Repo -GitArgs @('symbolic-ref', '-q', 'HEAD')).out
+      $headL = (Invoke-TcCsGit -Repo $Repo -GitArgs @('rev-parse', 'HEAD')).out
+      $newTree = if ($liNew) { (Invoke-TcCsGit -Repo $Repo -GitArgs @('rev-parse', '--verify', '-q', ($liNew + '^{tree}'))).out } else { '' }
+      if ($newTree -and [string]::Equals($symL, ('refs/heads/' + $Branch), [StringComparison]::Ordinal) -and [string]::Equals($headL, $liH0, [StringComparison]::Ordinal)) {
+        # The index equals NEW's tree, asked read-only: `git write-tree` would rewrite the index's cache-tree extension.
+        $idxAtNew = (Invoke-TcCsGit -Repo $Repo -GitArgs @('diff-index', '--cached', '--quiet', $liNew)).rc -eq 0
+        if ($idxAtNew) {
+          $dl = Get-TcCsTreeDiff -Repo $Repo -A $liH0 -B $liNew
+          $offDisk = [System.Collections.Generic.List[string]]::new()
+          if ($dl.Count) {
+            $wd = Invoke-TcCsGitPaths -Repo $Repo -Pre @('diff', '-z', '--name-only', '--no-renames') -Paths @($dl | ForEach-Object { $_.path })
+            foreach ($t in (Split-TcCsNul $wd.raw)) { $offDisk.Add($t) }
+            foreach ($x in @($dl | Where-Object { $_.st -eq 'D' })) { if ([IO.File]::Exists((Get-TcCsFullPath $Repo $x.path))) { $offDisk.Add($x.path + ' (still on disk)') } }
+          }
+          if (-not $offDisk.Count) {
+            $urL = Invoke-TcCsGit -Repo $Repo -GitArgs @('update-ref', '-m', ('capture-run sync: finishing an interrupted move onto ' + $liNew), ('refs/heads/' + $Branch), $liNew, $liH0)
+            if ($urL.rc -eq 0) {
+              $finished = $true
+              $rec.notes = @($rec.notes) + @('finished ' + $liWho + ': HEAD was at its H0 with the index and tree at its NEW, so the update-ref it never made was made now; an owned merge it had planned was not applied, and its undo copies stay in its dated tree')
+            } else { $ctx.leftoverText = $liWho + ' left the index and tree at its target, and finishing its update-ref failed (rc ' + $urL.rc + '): ' + $urL.err }
+          } else { $ctx.leftoverText = $liWho + ' left the index at its target and the tree off it on: ' + ($offDisk -join ', ') + '; repair by hand: git read-tree -m -u ' + $liNew + ' ' + $liH0 }
+        }
+      }
+      if (-not $finished) {
+        $ctx.leftover = $li
+        if (-not $ctx.leftoverText) { $ctx.leftoverText = $liWho + ' left an intent this run could not finish (HEAD ' + $(if ($headL.Length -ge 9) { $headL.Substring(0, 9) } else { $headL }) + '); the plan below judges the tree as it stands' }
+        $rec.notes = @($rec.notes) + @($ctx.leftoverText)
+      }
+    }
     # 1d + 1e. Unmerged entries (read the OUTPUT: ls-files -u exits 0 either way, X6) and NEW marker triples.
     $un = Invoke-TcCsGit -Repo $Repo -GitArgs @('ls-files', '-u', '-z')
     $unmerged = New-Object System.Collections.Generic.SortedSet[string] ([StringComparer]::Ordinal)
@@ -585,19 +712,32 @@ function Invoke-TcCheckoutSync {
       $fi = New-Object IO.FileInfo((Get-TcCsFullPath $Repo $p))
       if (-not $fi.Exists) { continue }
       if ($fi.Length -gt $MarkerScanMaxBytes) { $unscanned.Add($p); continue }
-      $bytes = [IO.File]::ReadAllBytes($fi.FullName)
-      $probe = [Math]::Min($bytes.Length, $NulProbeBytes)
-      if ($probe -gt 0 -and [Array]::IndexOf($bytes, [byte]0, 0, $probe) -ge 0) { continue }
+      # The NUL probe first, through a stream that shares write and delete, and the whole file only when it is text.
+      $head = Read-TcCsSharedBytes $fi.FullName $NulProbeBytes
+      if ($head.Length -gt 0 -and [Array]::IndexOf($head, [byte]0) -ge 0) { continue }
+      $bytes = if ($fi.Length -le $head.Length) { $head } else { Read-TcCsSharedBytes $fi.FullName }
       $wt = Get-TcCsMarkerTriples $bytes
       if ($wt -eq 0) { continue }
       $headBytes = Get-CommittedBlobBytes -Repo $Repo -Spec ('HEAD:' + $p)
       if ($wt -gt (Get-TcCsMarkerTriples $headBytes)) { [void]$marked.Add($p) }
     }
     $rec.unscanned = $unscanned.ToArray()
-    $badPaths = @(@($unmerged) + @($marked) | Where-Object { -not (Test-TcCsOwnedPath $_ $OwnedPaths) } | Sort-Object -Unique)
+    # ONLY THE PIPELINE'S OWN CONFLICT IS RESTORED (review finding 2, 2026-09-23). An owned path is not enough: step 7
+    # calls an owned but unvouched edit FOREIGN, and F3b calls a staged change FOREIGN even when owned and vouched, so
+    # 1d/1e restore a path only when it is owned, the journal names it (-OwnBlobs has the key: the marked or unmerged
+    # bytes can never hash to the blob the pipeline wrote, so naming is the only vouching there is), and, for a marked
+    # path, its index entry still equals HEAD's. Everything else blocks with nothing written.
+    $badPaths = [System.Collections.Generic.List[string]]::new()
+    foreach ($p in @(@($unmerged) + @($marked) | Sort-Object -Unique)) {
+      $isUn = $unmerged.Contains($p)
+      $why0 = ''
+      if (-not (Test-TcCsOwnedPath $p $OwnedPaths)) { $why0 = 'not the bot''s' }
+      elseif (-not $OwnBlobs.ContainsKey($p)) { $why0 = 'owned, but the pipeline journal does not name it' }
+      elseif (-not $isUn -and (Invoke-TcCsGit -Repo $Repo -GitArgs @('diff-index', '--cached', '--quiet', 'HEAD', '--', $p)).rc -ne 0) { $why0 = 'owned and named, but staged' }
+      if ($why0) { $badPaths.Add($p + $(if ($isUn) { ' (unmerged, ' } else { ' (new conflict markers, ' }) + $why0 + ')') }
+    }
     if ($badPaths.Count) {
-      $bits = @($badPaths | ForEach-Object { $_ + $(if ($unmerged.Contains($_)) { ' (unmerged)' } else { ' (new conflict markers)' }) })
-      return (Complete-TcCsSync 'blocked' 'conflict' ('the checkout holds unresolved conflicts on path(s) the bot does not own: ' + ($bits -join ', ') + '; nothing was written'))
+      return (Complete-TcCsSync 'blocked' 'conflict' ('the checkout holds unresolved conflicts on path(s) the sync may not restore: ' + ($badPaths -join ', ') + '; nothing was written'))
     }
     foreach ($p in @(@($unmerged) + @($marked) | Sort-Object -Unique)) {
       $why = if ($unmerged.Contains($p)) { 'unmerged' } else { 'new conflict markers' }
@@ -609,6 +749,7 @@ function Invoke-TcCheckoutSync {
       if ($co.rc -ne 0) { return (Complete-TcCsSync 'degraded' 'conflict' ('git checkout HEAD -- ' + $p + ' exited ' + $co.rc + ': ' + $co.err)) }
       $rec.set_aside = @($rec.set_aside) + @($p)
       $rec.notes = @($rec.notes) + @('set aside and restored from HEAD (' + $why + '): ' + $p)
+      $ctx.preSetAside.Add($p)
     }
     # 1f. The branch.
     $sym = Invoke-TcCsGit -Repo $Repo -GitArgs @('symbolic-ref', '-q', 'HEAD')
@@ -628,9 +769,11 @@ function Invoke-TcCheckoutSync {
     $prevPrompt = $env:GIT_TERMINAL_PROMPT; $env:GIT_TERMINAL_PROMPT = '0'
     try {
       for ($a = 1; $a -le [Math]::Max(1, $FetchAttempts); $a++) {
-        $f = Invoke-TcCsGit -Repo $Repo -GitArgs @('fetch', '--no-tags', $Remote, ('+refs/heads/' + $Branch + ':refs/remotes/' + $Remote + '/' + $Branch))
+        # Bounded twice: http.lowSpeed* ends an HTTPS transfer that stalls below 1,000 B/s for 60 s, and the wall-clock
+        # -FetchTimeoutSec kills anything else (an ssh or local transport that never answers).
+        $f = Invoke-TcCsGitTimed -Repo $Repo -TimeoutSec $FetchTimeoutSec -GitArgs @('-c', 'http.lowSpeedLimit=1000', '-c', 'http.lowSpeedTime=60', 'fetch', '--no-tags', $Remote, ('+refs/heads/' + $Branch + ':refs/remotes/' + $Remote + '/' + $Branch))
         if ($f.rc -eq 0) { $fetched = $true; break }
-        $fErr = 'fetch attempt ' + $a + ' exited ' + $f.rc + ': ' + $f.err
+        $fErr = 'fetch attempt ' + $a + $(if ($f.timedOut) { ' timed out: ' } else { ' exited ' + $f.rc + ': ' }) + $f.err
         if ($a -lt $FetchAttempts) { Start-Sleep -Seconds ([Math]::Max(0, $FetchRetrySec)) }
       }
     } finally { $env:GIT_TERMINAL_PROMPT = $prevPrompt }
@@ -679,7 +822,27 @@ function Invoke-TcCheckoutSync {
     [void](Write-TcAtomicFile -Path $stateFile -Text ($doc | ConvertTo-Json -Depth 6) -NoBom)
     $byCls = @{}; foreach ($c in 'clean', 'in-the-way', 'already-upstream', 'own-merge', 'own-setaside', 'own-deleted') { $byCls[$c] = @($plan.entries | Where-Object { $_.cls -eq $c }) }
     $stage = 'displacing'
-    foreach ($e in $byCls['in-the-way']) { Save-TcCsDisplaced -Kind 'quarantine' -Path $e.path -Source (Get-TcCsFullPath $Repo $e.path) -Reason 'untracked or ignored, where upstream adds this path' -Move; $rec.quarantined = @($rec.quarantined) + @($e.path) }
+    foreach ($e in $byCls['in-the-way']) {
+      # A reader holding the file open without delete sharing refuses the move (review finding 11): ONE retry after
+      # -HeldRetrySec, then blocked class held-file with every byte already displaced put back. Any other failure
+      # throws to the 'displacing' catch as before.
+      $qSrc = Get-TcCsFullPath $Repo $e.path
+      $moved = $false
+      for ($qa = 1; $qa -le 2 -and -not $moved; $qa++) {
+        try { Save-TcCsDisplaced -Kind 'quarantine' -Path $e.path -Source $qSrc -Reason 'untracked or ignored, where upstream adds this path' -Move; $moved = $true }
+        catch {
+          if ($_.Exception.Message -notmatch 'used by another process|sharing violation') { throw }
+          if ($qa -eq 1 -and $HeldRetrySec -gt 0) { Start-Sleep -Seconds $HeldRetrySec }
+        }
+      }
+      if (-not $moved) {
+        $rec.held = $e.path
+        $pb = Restore-TcCsPreSync -Plan $plan -GitWrote @()
+        if ($pb) { return (Complete-TcCsSync 'failed' 'mixed-tree' ('a reader held ' + $e.path + ' open, so it could not be moved out of upstream''s way, and the put-back could not verify: ' + $pb)) }
+        return (Complete-TcCsSync 'blocked' 'held-file' ('a reader held ' + $e.path + ' open (untracked, where upstream adds it), so it could not be moved out of the way; every byte already displaced was put back, nothing moved, and HEAD stays at ' + $rec.H0))
+      }
+      $rec.quarantined = @($rec.quarantined) + @($e.path)
+    }
     foreach ($e in @($byCls['own-merge']) + @($byCls['own-setaside'])) {
       $src = Get-TcCsFullPath $Repo $e.path
       Save-TcCsDisplaced -Kind 'undo' -Path $e.path -Source $src -Reason ($e.cls + ': the bytes before the move')
@@ -690,6 +853,11 @@ function Invoke-TcCheckoutSync {
     $own = @(@($byCls['own-merge']) + @($byCls['own-setaside']) | ForEach-Object { $_.path })
     if ($own.Count) { $gc = Invoke-TcCsGitPaths -Repo $Repo -Pre @('checkout') -Paths $own; if ($gc.rc -ne 0) { throw ('git checkout -- of the owned path(s) exited ' + $gc.rc + ': ' + $gc.err) } }
     $stage = 'displaced'
+    if ($rec.tree) {
+      # The intent names the dated tree, so a run killed from here on is found with its displaced bytes (finding 7).
+      $doc.intent.tree = $rec.tree
+      [void](Write-TcAtomicFile -Path $stateFile -Text ($doc | ConvertTo-Json -Depth 6) -NoBom)
+    }
     if ($BeforeMove) { $null = & $BeforeMove }
     # 9d. HEAD must still be H0.
     $hNow = (Invoke-TcCsGit -Repo $Repo -GitArgs @('rev-parse', 'HEAD')).out
@@ -720,16 +888,54 @@ function Invoke-TcCheckoutSync {
       if (-not $forwardOk) {
         $bad = Restore-TcCsPreSync -Plan $plan -GitWrote $wrote
         $stage = 'displaced'
-        if ($bad) { return (Complete-TcCsSync 'failed' 'mixed-tree' ('read-tree was refused (rc ' + $rt.rc + ') and the backward restore could not verify: ' + $bad + '. HEAD is ' + $rec.H0 + '; the dated tree ' + $rec.tree + ' keeps every displaced byte')) }
+        if ($bad) { return (Complete-TcCsSync 'failed' 'mixed-tree' ('read-tree was refused (rc ' + $rt.rc + ') and the backward restore could not verify: ' + $bad + '. HEAD is ' + $rec.H0 + '. ' + (Get-TcCsUndoText))) }
         $cls = if ($heldM.Success) { 'held-file' } else { 'read-tree' }
         $what = if ($heldM.Success) { 'a reader held ' + $rec.held + ' open, so git could not replace it' } else { 'read-tree refused the move (rc ' + $rt.rc + '): ' + $rt.err }
         return (Complete-TcCsSync 'blocked' $cls ($what + '; every path was restored to its bytes before the sync and verified, and HEAD stays at ' + $rec.H0))
       }
     }
+    # 9e2. A HELD DELETION (review finding 1). Over a path upstream DELETES, git's unlink of a file held open without
+    # delete sharing only WARNS (`unable to unlink '<p>': Invalid argument`) and read-tree exits 0 with the index entry
+    # gone and the file left behind, so rc alone cannot see it. Every deleted path must be absent before the ref moves.
+    # A leftover still holding H0's blob (recoverable from the object database) gets ONE delete after -HeldRetrySec; a
+    # leftover holding anything else, or one that still cannot be deleted, is the held-file case: BACKWARD, verified.
+    $left = Get-TcCsDeletedLeftovers -Plan $plan
+    if ($left.Count) {
+      $rec.held = ($left -join ', ')
+      if ($HeldRetrySec -gt 0) { Start-Sleep -Seconds $HeldRetrySec }
+      $lb = Get-TcCsDiskBlobs -Repo $Repo -Paths $left
+      $byP = @{}; foreach ($e in $plan.entries) { $byP[$e.path] = $e }
+      foreach ($p in $left) {
+        if ($lb.ContainsKey($p) -and [string]::Equals([string]$lb[$p], [string]$byP[$p].oldBlob, [StringComparison]::Ordinal)) {
+          try { [IO.File]::Delete((Get-TcCsFullPath $Repo $p)) } catch { }
+        }
+      }
+      $left2 = Get-TcCsDeletedLeftovers -Plan $plan
+      if ($left2.Count) {
+        $bad = Restore-TcCsPreSync -Plan $plan -GitWrote (Get-TcCsGitWritten -Plan $plan)
+        $stage = 'displaced'
+        if ($bad) { return (Complete-TcCsSync 'failed' 'mixed-tree' ('read-tree could not delete ' + ($left2 -join ', ') + ' (held open) and the backward restore could not verify: ' + $bad + '. HEAD is ' + $rec.H0 + '. ' + (Get-TcCsUndoText))) }
+        return (Complete-TcCsSync 'blocked' 'held-file' ('a reader held ' + ($left2 -join ', ') + ' open where upstream deletes it, so git could not remove it; every path was restored to its bytes before the sync and verified, and HEAD stays at ' + $rec.H0))
+      }
+      $rec.notes = @($rec.notes) + @('read-tree could not delete ' + ($left -join ', ') + ' (held open), and the one delete after the wait completed the move')
+    }
     $stage = 'moved'
     if ($BeforeRef) { $null = & $BeforeRef }
     # 9f. The ref, as a compare-and-swap.
     $ur = Invoke-TcCsGit -Repo $Repo -GitArgs @('update-ref', '-m', ('capture-run sync: onto ' + $fullO), ('refs/heads/' + $Branch), $plan.new, $rec.H0)
+    if ($ur.rc -ne 0 -and [string]::Equals((Invoke-TcCsGit -Repo $Repo -GitArgs @('rev-parse', ('refs/heads/' + $Branch))).out, $rec.H0, [StringComparison]::Ordinal)) {
+      # NOT A LOST SWAP (review finding 6): the branch still names H0, so update-ref failed for another reason (a ref
+      # lock held by a concurrent command, pack-refs, or a crashed git's stale lock). ONE retry after -HeldRetrySec;
+      # then BACKWARD, verified by bytes, so HEAD, the index and the tree all end at H0 and the next sync starts clean.
+      if ($HeldRetrySec -gt 0) { Start-Sleep -Seconds $HeldRetrySec }
+      $ur = Invoke-TcCsGit -Repo $Repo -GitArgs @('update-ref', '-m', ('capture-run sync: onto ' + $fullO), ('refs/heads/' + $Branch), $plan.new, $rec.H0)
+      if ($ur.rc -ne 0 -and [string]::Equals((Invoke-TcCsGit -Repo $Repo -GitArgs @('rev-parse', ('refs/heads/' + $Branch))).out, $rec.H0, [StringComparison]::Ordinal)) {
+        $bad = Restore-TcCsPreSync -Plan $plan -GitWrote (Get-TcCsGitWritten -Plan $plan)
+        $stage = 'displaced'
+        if ($bad) { return (Complete-TcCsSync 'failed' 'mixed-tree' ('update-ref could not move refs/heads/' + $Branch + ' (rc ' + $ur.rc + '): ' + $ur.err + '; the backward restore could not verify: ' + $bad + '. HEAD is ' + $rec.H0 + '. ' + (Get-TcCsUndoText))) }
+        return (Complete-TcCsSync 'degraded' 'ref-lock' ('update-ref could not move refs/heads/' + $Branch + ' twice (rc ' + $ur.rc + '): ' + $ur.err + '; nothing had committed on top of ' + $rec.H0 + ', so no swap was lost; HEAD, the index and the tree were restored to it and verified'))
+      }
+    }
     if ($ur.rc -ne 0) {
       # THE SWAP LOST: something committed on top of H0 while the tree moved (a lane's private-index commit takes no
       # index lock; a session's real-index commit does, but only between our two commands). ONE recovery, never a loop:
@@ -759,8 +965,9 @@ function Invoke-TcCheckoutSync {
     # ---- 10. VERIFY -------------------------------------------------------------------------------------------------
     $v = Test-TcCsAfterMove -Plan $plan -FullO $fullO -IsPartial $isPartial
     $rec.behind_after = $v.behind_after
-    if ($v.worktree) { return (Complete-TcCsSync 'failed' 'mixed-tree' ('HEAD moved to ' + $plan.new + ' but the working tree does not hold it: ' + $v.worktree + '. The undo copies are kept in ' + $rec.tree)) }
-    if ($v.other) { return (Complete-TcCsSync 'failed' 'verify' ($v.other + '. The undo copies are kept in ' + $rec.tree)) }
+    if ($v.later.Count) { $rec.notes = @($rec.notes) + @('' + $v.later.Count + ' dirty path(s) outside the move were saved by someone else during the sync (status and index unchanged, mtime forward), never written by it: ' + ($v.later -join ', ')) }
+    if ($v.worktree) { return (Complete-TcCsSync 'failed' 'mixed-tree' ('HEAD moved to ' + $plan.new + ' but the working tree does not hold it: ' + $v.worktree + '. ' + (Get-TcCsUndoText))) }
+    if ($v.other) { return (Complete-TcCsSync 'failed' 'verify' ($v.other + '. ' + (Get-TcCsUndoText))) }
     Remove-TcCsUndo
     $stage = 'done'
     if ($isPartial) {
@@ -773,9 +980,9 @@ function Invoke-TcCheckoutSync {
       'plan' { return (Complete-TcCsSync 'failed' 'exception' ('the sync threw before the move (only a step 1d/1e set-aside copy can exist): ' + $msg)) }
       'displacing' { $pb = Restore-TcCsPreSync -Plan $plan -GitWrote @(); return (Complete-TcCsSync 'failed' $(if ($pb) { 'mixed-tree' } else { 'exception' }) ('the sync threw while setting bytes aside: ' + $msg + $(if ($pb) { '; the put-back could not verify: ' + $pb } else { '; every displaced byte was put back' }))) }
       'displaced' { $pb = Restore-TcCsPreSync -Plan $plan -GitWrote @(); return (Complete-TcCsSync 'failed' $(if ($pb) { 'mixed-tree' } else { 'exception' }) ('the sync threw before the move: ' + $msg + $(if ($pb) { '; the put-back could not verify: ' + $pb } else { '; every displaced byte was put back' }))) }
-      'moving' { return (Complete-TcCsSync 'failed' 'mixed-tree' ('the sync threw during the tree move: ' + $msg + '. HEAD is ' + $rec.H0 + ' and the index or tree may be at ' + $rec.NEW + '; repair by hand: git read-tree -m -u ' + $rec.NEW + ' ' + $rec.H0 + ', then restore the undo copies in ' + $rec.tree)) }
-      'moved' { return (Complete-TcCsSync 'failed' 'mixed-tree' ('the sync threw after the tree moved and before the ref did: ' + $msg + '. HEAD is ' + $rec.H0 + ' and the index and tree are at ' + $rec.NEW + '; repair by hand: git read-tree -m -u ' + $rec.NEW + ' ' + $rec.H0 + ', then restore the undo copies in ' + $rec.tree)) }
-      'ref' { return (Complete-TcCsSync 'failed' 'exception' ('the sync threw after HEAD moved to ' + $rec.NEW + ': ' + $msg + '. The undo copies are kept in ' + $rec.tree)) }
+      'moving' { $ctx.keepOwnIntent = $true; return (Complete-TcCsSync 'failed' 'mixed-tree' ('the sync threw during the tree move: ' + $msg + '. HEAD is ' + $rec.H0 + ' and the index or tree may be at ' + $rec.NEW + '; repair by hand: git read-tree -m -u ' + $rec.NEW + ' ' + $rec.H0 + ', then restore the undo copies. ' + (Get-TcCsUndoText) + '. The intent is kept, so the next sync can finish this move')) }
+      'moved' { $ctx.keepOwnIntent = $true; return (Complete-TcCsSync 'failed' 'mixed-tree' ('the sync threw after the tree moved and before the ref did: ' + $msg + '. HEAD is ' + $rec.H0 + ' and the index and tree are at ' + $rec.NEW + '; repair by hand: git read-tree -m -u ' + $rec.NEW + ' ' + $rec.H0 + ', then restore the undo copies. ' + (Get-TcCsUndoText) + '. The intent is kept, so the next sync can finish this move')) }
+      'ref' { return (Complete-TcCsSync 'failed' 'exception' ('the sync threw after HEAD moved to ' + $rec.NEW + ': ' + $msg + '. ' + (Get-TcCsUndoText))) }
       'done' { return (Complete-TcCsSync 'failed' 'exception' ('the sync threw after it completed: ' + $msg)) }
       default { return (Complete-TcCsSync 'failed' 'exception' ('the sync threw at an unknown stage ' + $stage + ': ' + $msg)) }
     }
@@ -786,11 +993,12 @@ function Invoke-TcCheckoutSync {
 # scope, because each is only ever called from inside it; none is a public entry point. ------------------------------
 
 function Read-TcCsState([string]$Path) {
-  $doc = [ordered]@{ schema = 1; last = $null; intent = $null; disabled_paged_on = '' }
+  $doc = [ordered]@{ schema = 1; last = $null; intent = $null; disabled_paged_on = ''; fetch_paged_on = '' }
   if (Test-Path -LiteralPath $Path) {
     try {
-      $j = [IO.File]::ReadAllText($Path) | ConvertFrom-Json
+      $j = [Text.Encoding]::UTF8.GetString((Read-TcCsSharedBytes $Path)).TrimStart([char]0xFEFF) | ConvertFrom-Json
       if ($j.PSObject.Properties['disabled_paged_on']) { $doc.disabled_paged_on = [string]$j.disabled_paged_on }
+      if ($j.PSObject.Properties['fetch_paged_on']) { $doc.fetch_paged_on = [string]$j.fetch_paged_on }
       if ($j.PSObject.Properties['last']) { $doc.last = $j.last }
       if ($j.PSObject.Properties['intent']) { $doc.intent = $j.intent }
     } catch { $doc.disabled_paged_on = '' }
@@ -909,7 +1117,13 @@ function Get-TcCsPlanFor {
         if ($x.st -eq 'A' -and $onDisk -and (Invoke-TcCsGit -Repo $Repo -GitArgs @('ls-files', '--error-unmatch', '--', $p)).rc -ne 0) { $e.cls = 'in-the-way' }
         else { $e.cls = 'clean' }
       } elseif ($code -eq '??') {
-        if ($x.st -ne 'D') { $e.cls = 'in-the-way' } else { $e.cls = 'foreign'; $e.why = 'an untracked file at a path upstream deletes' }
+        # An untracked file where upstream adds the path is moved aside only when it is the bot's (review finding 3): a
+        # session's untracked draft outside the owned paths is FOREIGN like its ` M` twin, unless it already holds
+        # upstream's blob, in which case an index update carries it with its bytes and mtime untouched.
+        if ($x.st -eq 'D') { $e.cls = 'foreign'; $e.why = 'an untracked file at a path upstream deletes' }
+        elseif ($owned) { $e.cls = 'in-the-way' }
+        elseif ([string]::Equals((Invoke-TcCsGit -Repo $Repo -GitArgs @('hash-object', '--', $p)).out, $x.newBlob, [StringComparison]::Ordinal)) { $e.cls = 'already-upstream' }
+        else { $e.cls = 'foreign'; $e.why = 'an untracked file the bot does not own, where upstream adds this path' }
       } else {
         switch -Regex ($code) {
           '^[^ ]' { $e.cls = 'foreign'; $e.why = ('a staged change (' + $code + ') on a path upstream changed; the sync never rewrites an index entry it did not make') }
@@ -944,7 +1158,7 @@ function Get-TcCsOwnMerge {
   if (-not (Test-Path -LiteralPath $Scratch)) { [void](New-Item -ItemType Directory -Path $Scratch -ErrorAction Stop) }
   $base = Get-TcCsWorktreeFormBytes -Repo $Repo -Spec ($H0 + ':' + $Path)
   $up = Get-TcCsWorktreeFormBytes -Repo $Repo -Spec ($New + ':' + $Path)
-  $local = [IO.File]::ReadAllBytes((Get-TcCsFullPath $Repo $Path))
+  $local = Read-TcCsSharedBytes (Get-TcCsFullPath $Repo $Path)
   if ((Test-TcCsBytePrefix $base $local) -and (Test-TcCsBytePrefix $base $up) -and $local.Length -gt $base.Length) {
     $tail = New-Object byte[] ($local.Length - $base.Length); [Array]::Copy($local, $base.Length, $tail, 0, $tail.Length)
     $joined = New-Object byte[] ($up.Length + $tail.Length); [Array]::Copy($up, 0, $joined, 0, $up.Length); [Array]::Copy($tail, 0, $joined, $up.Length, $tail.Length)
@@ -1006,15 +1220,28 @@ function Get-TcCsGitWritten {
   return , $out.ToArray()
 }
 
+# The paths upstream DELETES (and the sync may write) that are still on disk after read-tree: git's held-unlink warning.
+function Get-TcCsDeletedLeftovers {
+  param($Plan)
+  $out = [System.Collections.Generic.List[string]]::new()
+  foreach ($e in @($Plan.entries)) {
+    if ($e.st -eq 'D' -and $e.cls -ne 'foreign' -and [IO.File]::Exists((Get-TcCsFullPath $Repo $e.path))) { $out.Add($e.path) }
+  }
+  return , $out.ToArray()
+}
+
 # BACKWARD: every D path back to its state before the sync, and every displaced byte back where it was. Returns '' when
 # each restored path verifies against its step 7 fingerprint, else the paths that do not.
+# THE INDEX OF EVERY NON-FOREIGN D PATH is reset to HEAD (H0 here: the ref has not moved), not only git's partial
+# writes. Before the sync each of them held H0's entry (a clean or owned path) or none (an in-the-way path), and a
+# read-tree that exited 0 before a later step refused (a held deletion, a ref that could not be locked) left EVERY one
+# at NEW (review findings 1 and 6). After a refused read-tree the index is still H0, so the reset is a no-op there.
 function Restore-TcCsPreSync {
   param($Plan, [string[]]$GitWrote)
   $bad = [System.Collections.Generic.List[string]]::new()
   if ($null -eq $Plan -or $null -eq $Plan.entries) { return '' }
   $byPath = @{}; foreach ($e in $Plan.entries) { $byPath[$e.path] = $e }
-  $au = @($Plan.entries | Where-Object { $_.cls -eq 'already-upstream' } | ForEach-Object { $_.path })
-  $idxPaths = @(@($GitWrote) + $au | Sort-Object -Unique)
+  $idxPaths = @(@($GitWrote) + @($Plan.entries | Where-Object { $_.cls -ne 'foreign' } | ForEach-Object { $_.path }) | Sort-Object -Unique)
   if ($idxPaths.Count) { $null = Invoke-TcCsGitPaths -Repo $Repo -Pre @('reset', '-q') -Paths $idxPaths }
   foreach ($p in @($GitWrote)) {
     $e = $byPath[$p]
@@ -1086,7 +1313,7 @@ function Test-TcCsAfterMove {
     $full = Get-TcCsFullPath $Repo $e.path
     if ($e.st -eq 'D' -and [IO.File]::Exists($full) -and $e.cls -ne 'foreign') { $wtBad.Add($e.path + ' (still on disk where upstream deletes it)') }
     if ($e.cls -eq 'own-merge') {
-      $b = if ([IO.File]::Exists($full)) { [IO.File]::ReadAllBytes($full) } else { $null }
+      $b = if ([IO.File]::Exists($full)) { Read-TcCsSharedBytes $full } else { $null }
       if ($null -eq $b -or [Convert]::ToBase64String($b) -ne [Convert]::ToBase64String([byte[]]$e.merged)) { $wtBad.Add($e.path + ' (not the merged bytes)') }
     }
   }
@@ -1094,10 +1321,20 @@ function Test-TcCsAfterMove {
   # THE FINGERPRINT of every dirty path outside the move (and every already-upstream path's bytes and mtime) is identical.
   $after = Get-TcCsStatus $Repo
   $fpBad = [System.Collections.Generic.List[string]]::new()
+  $v.later = [System.Collections.Generic.List[string]]::new()
   foreach ($p in @($ctx.fp0.Keys)) {
     if ($ctx.ContainsKey('casPaths') -and $ctx.casPaths.Contains($p)) { continue }
+    $fp0 = [string]$ctx.fp0[$p]
     $fpNow = Get-TcCsFingerprint $Repo $p $after.map
-    if (-not [string]::Equals([string]$ctx.fp0[$p], $fpNow, [StringComparison]::Ordinal)) { $fpBad.Add($p) }
+    if ([string]::Equals($fp0, $fpNow, [StringComparison]::Ordinal)) { continue }
+    # A SAVE BY SOMEONE ELSE, NOT A WRITE BY THIS SYNC (review finding 4). Nothing here or in a two-way read-tree
+    # writes a path outside the move, so a path whose status line(s) and index entry are unchanged and whose mtime
+    # only moved FORWARD is a session saving its own file mid-sync: a note, never a failure. A status change, a
+    # vanished file or an mtime that went backwards is still a failure.
+    $k0 = $fp0.LastIndexOf('#'); $k1 = $fpNow.LastIndexOf('#')
+    $d0 = @($fp0.Substring($k0 + 1).Split('|')); $d1 = @($fpNow.Substring($k1 + 1).Split('|'))
+    if ([string]::Equals($fp0.Substring(0, $k0), $fpNow.Substring(0, $k1), [StringComparison]::Ordinal) -and $d0.Count -eq 2 -and $d1.Count -eq 2 -and ([long]$d1[1] -gt [long]$d0[1])) { $v.later.Add($p); continue }
+    $fpBad.Add($p)
   }
   foreach ($e in @($Plan.entries | Where-Object { $_.cls -eq 'already-upstream' })) {
     $fpNow = Get-TcCsFingerprint $Repo $e.path $after.map

@@ -24,7 +24,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'checkout-sync.ps1')
 $env:GIT_TERMINAL_PROMPT = '0'
 
-$EXPECTED_CASES = 129
+$EXPECTED_CASES = 162
 $script:pass = 0; $script:fail = 0
 function T([string]$Label, [bool]$Cond, [string]$Got = '') {
   if ($Cond) { $script:pass++; Write-Output ('  ok    ' + $Label) }
@@ -377,12 +377,13 @@ try {
     T 'the session file is byte- and mtime-identical, and push 1''s files arrived' (((Md5 $f) -eq $md0) -and ((Mtime $f) -eq $mt0) -and (Test-Path (Join-Path $E.bot 'lib/a2.ps1'))) (Status $E.bot)
   }
 
-  function New-HeldEstate([string]$Name) {
+  function New-HeldEstate([string]$Name, [switch]$Delete) {
     $E = New-Estate $Name
     W $E.up 'lib/a.txt' "base-a`n"; W $E.up 'lib/held.json' "base-held`n"; W $E.up 'lib/z.txt' "base-z`n"
     $null = GitOk $E.up @('add', '-A'); $null = GitOk $E.up @('commit', '-q', '-m', 'held base'); $null = GitOk $E.up @('push', '-q', 'origin', 'HEAD:main')
     $null = GitOk $E.bot @('pull', '-q', 'origin', 'main')
-    W $E.up 'lib/a.txt' "up-a`n"; W $E.up 'lib/held.json' "up-held`n"; W $E.up 'lib/z.txt' "up-z`n"
+    W $E.up 'lib/a.txt' "up-a`n"; W $E.up 'lib/z.txt' "up-z`n"
+    if ($Delete) { $null = GitOk $E.up @('rm', '-q', 'lib/held.json') } else { W $E.up 'lib/held.json' "up-held`n" }
     $null = GitOk $E.up @('add', '-A'); $null = GitOk $E.up @('commit', '-q', '-m', 'upstream changes three'); $null = GitOk $E.up @('push', '-q', 'origin', 'HEAD:main')
     W $E.bot 'lib/code.ps1' "a session edit outside the move`n"
     $cf = Join-Path $E.bot 'lib\code.ps1'; (Get-Item $cf).LastWriteTime = [datetime]'2020-01-01T00:00:00'
@@ -409,6 +410,41 @@ try {
     T 'every changed path holds its H0 bytes' (((ReadOr (Join-Path $E.bot 'lib/a.txt')) -eq "base-a`n") -and ((ReadOr (Join-Path $E.bot 'lib/held.json')) -eq "base-held`n") -and ((ReadOr (Join-Path $E.bot 'lib/z.txt')) -eq "base-z`n"))
     T 'HEAD is H0 and the only dirt is the session edit' (((GitR $E.bot @('rev-parse', 'HEAD')).out -eq $s.H0) -and ((Status $E.bot) -eq ' M lib/code.ps1')) (Status $E.bot)
     T 'the foreign dirty file outside the move is byte- and mtime-identical' (((Md5 $cf) -eq $cmd0) -and ((Mtime $cf) -eq $cmt0))
+  }
+
+  # The reader shape here is lib\json-io.ps1's: FileShare.ReadWrite with NO Delete. Over a path upstream DELETES, git's
+  # unlink only warns and read-tree exits 0 (review finding 1), which the 'Read'-shared modify cases above never reach.
+  Invoke-Group 'HELD-DELETE FORWARD MUST FIRE - a reader holds a file upstream DELETES through the first read-tree only: the one delete completes the move' {
+    $E = New-HeldEstate 'hdel-fwd' -Delete
+    $script:fxHeldPath = Join-Path $E.bot 'lib\held.json'; $script:fxHold = $null
+    $s = Sync $E @{ BeforeMove = { $script:fxHold = [IO.File]::Open($script:fxHeldPath, 'Open', 'Read', 'ReadWrite') }; AfterReadTree = { if ($script:fxHold) { $script:fxHold.Dispose(); $script:fxHold = $null } } }
+    if ($script:fxHold) { $script:fxHold.Dispose(); $script:fxHold = $null }
+    T 'outcome is synced, and the record names the held file' (($s.outcome -eq 'synced') -and ($s.held -eq 'lib/held.json')) ($s.outcome + '/' + $s.class + ' held=' + $s.held + ': ' + $s.why)
+    T 'the deleted file is gone and the two modified paths hold NEW' ((-not (Test-Path -LiteralPath $script:fxHeldPath)) -and ((ReadOr (Join-Path $E.bot 'lib/a.txt')) -eq "up-a`n") -and ((ReadOr (Join-Path $E.bot 'lib/z.txt')) -eq "up-z`n")) (Status $E.bot)
+    T 'HEAD is origin and the only dirt is the session edit outside the move (no stranded untracked file)' (((GitR $E.bot @('rev-parse', 'HEAD')).out -eq $s.O) -and ((Status $E.bot) -eq ' M lib/code.ps1')) (Status $E.bot)
+  }
+
+  Invoke-Group 'HELD-DELETE THROUGHOUT MUST FIRE - the reader never lets go of a file upstream deletes: blocked class held-file, HEAD, index and tree at H0' {
+    $E = New-HeldEstate 'hdel-all' -Delete
+    $cf = Join-Path $E.bot 'lib\code.ps1'; $cmd0 = Md5 $cf; $cmt0 = Mtime $cf
+    $script:fxHeldPath = Join-Path $E.bot 'lib\held.json'; $script:fxHold = $null
+    try { $s = Sync $E @{ BeforeMove = { $script:fxHold = [IO.File]::Open($script:fxHeldPath, 'Open', 'Read', 'ReadWrite') } } }
+    finally { if ($script:fxHold) { $script:fxHold.Dispose(); $script:fxHold = $null } }
+    T 'blocked class held-file naming lib/held.json' (($s.outcome -eq 'blocked') -and ($s.class -eq 'held-file') -and ($s.held -eq 'lib/held.json')) ($s.outcome + '/' + $s.class + ': ' + $s.why)
+    T 'every changed path holds its H0 bytes, the held file included' (((ReadOr (Join-Path $E.bot 'lib/a.txt')) -eq "base-a`n") -and ((ReadOr (Join-Path $E.bot 'lib/held.json')) -eq "base-held`n") -and ((ReadOr (Join-Path $E.bot 'lib/z.txt')) -eq "base-z`n"))
+    T 'HEAD is H0, the held file is tracked again, and the only dirt is the session edit' (((GitR $E.bot @('rev-parse', 'HEAD')).out -eq $s.H0) -and ((Status $E.bot) -eq ' M lib/code.ps1') -and ((GitR $E.bot @('ls-files', '--', 'lib/held.json')).out -eq 'lib/held.json')) (Status $E.bot)
+    T 'the foreign dirty file outside the move is byte- and mtime-identical' (((Md5 $cf) -eq $cmd0) -and ((Mtime $cf) -eq $cmt0))
+  }
+
+  Invoke-Group 'HELD IN-THE-WAY MUST FIRE - an untracked owned file where upstream adds the path, held open by a reader: blocked class held-file, bytes kept' {
+    $E = New-Estate 'held-quar'
+    Push-Up $E 'grocery/new.json' "upstream new`n" 'up: add grocery/new.json'
+    W $E.bot 'grocery/new.json' "LOCAL new`n"
+    $nf = Join-Path $E.bot 'grocery\new.json'; $h0 = (GitR $E.bot @('rev-parse', 'HEAD')).out
+    $hold = [IO.File]::Open($nf, 'Open', 'Read', 'ReadWrite')
+    try { $s = Sync $E } finally { $hold.Dispose() }
+    T 'blocked class held-file naming the path, not failed/exception' (($s.outcome -eq 'blocked') -and ($s.class -eq 'held-file') -and ($s.held -eq 'grocery/new.json')) ($s.outcome + '/' + $s.class + ': ' + $s.why)
+    T 'the local bytes are where they were, untracked, and HEAD is H0' (((ReadOr $nf) -eq "LOCAL new`n") -and ((Status $E.bot) -eq '?? grocery/new.json') -and ((GitR $E.bot @('rev-parse', 'HEAD')).out -eq $h0)) (Status $E.bot)
   }
 
   Invoke-Group 'M2 TARGET MUST FIRE - an index at NEW over H0 bytes on disk (the checkout -B shape) is a mixed tree' {
@@ -476,10 +512,26 @@ try {
     $E = New-Estate 'markers-owned'
     $marked = "{`n<<<<<<< HEAD`n  ""v"": 3`n=======`n  ""v"": 2`n>>>>>>> side`n}`n"
     W $E.bot 'public/derived.json' $marked
-    $s = Sync $E
+    $s = Sync $E @{ OwnBlobs = @{ 'public/derived.json' = 'named by the journal' } }
     $sa = ReadOr (InTree $s 'set-aside\public\derived.json')
-    T 'owned: not blocked, the marked bytes are set aside' (($s.outcome -eq 'current') -and ($sa -eq $marked)) ($s.outcome + '/' + $s.class + ': ' + $s.why)
-    T 'owned: the path is restored from HEAD' (((ReadOr (Join-Path $E.bot 'public/derived.json')) -eq "{`n  ""v"": 1`n}`n") -and (-not (Status $E.bot))) (Status $E.bot)
+    T 'owned and named: not blocked, the marked bytes are set aside' (($s.outcome -eq 'current') -and ($sa -eq $marked)) ($s.outcome + '/' + $s.class + ': ' + $s.why)
+    T 'owned and named: the path is restored from HEAD' (((ReadOr (Join-Path $E.bot 'public/derived.json')) -eq "{`n  ""v"": 1`n}`n") -and (-not (Status $E.bot))) (Status $E.bot)
+    T 'owned and named: the set-aside is a write, so the outcome pages and says so (never "nothing was written" alone)' ($s.page -and ($s.why -match 'set aside and restored from HEAD') -and ($s.why -match 'public/derived\.json')) ('page=' + $s.page + ' ' + $s.why)
+  }
+
+  Invoke-Group 'CONFLICT VOUCHING MUST FIRE - an owned file with markers the journal does not name, or that is staged, blocks and stays identical' {
+    foreach ($arm in 'unnamed', 'staged') {
+      $E = New-Estate ('vouch-' + $arm)
+      $marked = "a`n<<<<<<< HEAD`nb`n=======`nb-S`n>>>>>>> stash`nc`n"
+      W $E.bot 'grocery/ledger.json' $marked
+      $f = Join-Path $E.bot 'grocery\ledger.json'
+      $more = @{ OwnBlobs = @{} }
+      if ($arm -eq 'staged') { $null = GitOk $E.bot @('add', 'grocery/ledger.json'); $more = @{ OwnBlobs = @{ 'grocery/ledger.json' = 'named by the journal' } } }
+      (Get-Item $f).LastWriteTime = [datetime]'2020-01-01T00:00:00'; $md0 = Md5 $f; $mt0 = Mtime $f; $st0 = Status $E.bot; $b4 = Snap $E.bot
+      $s = Sync $E $more
+      T ('MUST FIRE (' + $arm + '): blocked class conflict naming the path, and nothing set aside') (($s.outcome -eq 'blocked') -and ($s.class -eq 'conflict') -and ($s.why -match 'grocery/ledger\.json') -and (@($s.set_aside).Count -eq 0)) ($s.outcome + '/' + $s.class + ': ' + $s.why)
+      T ('MUST FIRE (' + $arm + '): the file''s bytes, mtime, status and the index are identical') (((Md5 $f) -eq $md0) -and ((Mtime $f) -eq $mt0) -and ((Status $E.bot) -eq $st0) -and ((Snap $E.bot) -eq $b4)) ((Status $E.bot) + ' VS ' + $st0)
+    }
   }
 
   Invoke-Group 'MARKERS MUST NOT FIRE - a doc that already quoted a triple at HEAD, and a lone setext underline' {
@@ -559,7 +611,8 @@ try {
 
   Invoke-Group '-z MUST NOT FIRE - a path holding a DEL byte, a space, an apostrophe and a non-ASCII letter round-trips exactly' {
     # NTFS forbids a double quote in a name; DEL (0x7F) is the character git still C-quotes with core.quotePath=false.
-    $odd = 'odd dir/a b''s' + [char]0x7f + ' caf' + [char]0xe9 + '.json'
+    # Under an OWNED path, so the untracked copy is the bot's and is quarantined (a non-owned one is FOREIGN, finding 3).
+    $odd = 'grocery/odd dir/a b''s' + [char]0x7f + ' caf' + [char]0xe9 + '.json'
     $E = New-Estate 'nul-z'
     Push-Up $E $odd "upstream odd`n" 'up: an oddly named file'
     W $E.bot $odd "LOCAL odd`n"
@@ -649,9 +702,10 @@ try {
     } finally { Remove-Item -LiteralPath $lock -Force }
     $url = (GitR $E.bot @('remote', 'get-url', 'origin')).out
     $null = GitOk $E.bot @('remote', 'set-url', 'origin', (Join-Path $E.dir 'no-such-remote.git'))
-    try { $s = Sync $E } finally { $null = GitOk $E.bot @('remote', 'set-url', 'origin', $url) }
+    $fd = [datetime]'2026-09-23T07:00:00'
+    try { $s = Sync $E @{ Now = $fd }; $s2 = Sync $E @{ Now = $fd.AddHours(3) } } finally { $null = GitOk $E.bot @('remote', 'set-url', 'origin', $url) }
     T 'a failed fetch: degraded class fetch' (($s.outcome -eq 'degraded') -and ($s.class -eq 'fetch')) ($s.outcome + '/' + $s.class + ': ' + $s.why)
-    T 'a failed fetch does not page (the watchdog floor does)' ($s.page -eq $false)
+    T 'a failed fetch pages once a date (finding 12: nothing else pages it until the watchdog floor lands), and not twice' (($s.page -eq $true) -and ($s2.outcome -eq 'degraded') -and ($s2.page -eq $false)) ('page=' + $s.page + ' then ' + $s2.page)
     Remove-Item (Join-Path $E.bot 'public\derived.json')
     $s = Sync $E
     T 'an owned deletion on a path upstream changed: synced, listed own_deleted' (($s.outcome -eq 'synced') -and (@($s.own_deleted) -contains 'public/derived.json')) ($s.outcome + '/' + $s.class + ': ' + $s.why)
@@ -686,6 +740,129 @@ try {
     $s = Sync $E @{ OwnBlobs = @{ 'grocery/ledger.json' = (OwnBlob $E 'grocery/ledger.json') } }
     T 'the owned CRLF edit merges cleanly and keeps CRLF' (($s.outcome -eq 'synced') -and ((ReadOr (Join-Path $E.bot 'grocery/ledger.json')) -eq "a-UP`r`nb`r`nc`r`nday`r`n")) ($s.outcome + ': ' + $s.why + ' | ' + ((ReadOr (Join-Path $E.bot 'grocery/ledger.json')) -replace "`r", '\r' -replace "`n", '\n'))
     T 'the CRLF session copy of upstream is already upstream, mtime unchanged' ((@($s.already_upstream) -contains 'lib/code.ps1') -and ((Mtime $f) -eq $mt0)) ((@($s.already_upstream) -join ','))
+  }
+
+  Invoke-Group 'IN-THE-WAY FOREIGN MUST FIRE - a session''s untracked draft OUTSIDE the owned paths where upstream adds the path is never moved' {
+    $E = New-Estate 'itw-foreign'
+    Push-Up $E 'lib/new.ps1' "upstream version`n" 'up: add lib/new.ps1'
+    W $E.bot 'lib/new.ps1' "session draft`n"
+    $f = Join-Path $E.bot 'lib\new.ps1'; (Get-Item $f).LastWriteTime = [datetime]'2020-01-01T00:00:00'; $md0 = Md5 $f; $mt0 = Mtime $f; $b4 = Snap $E.bot
+    $s = Sync $E
+    T 'MUST FIRE: blocked class foreign naming the draft, nothing quarantined' (($s.outcome -eq 'blocked') -and ($s.class -eq 'foreign') -and (($s.foreign -join ' ') -match 'lib/new\.ps1') -and (@($s.quarantined).Count -eq 0)) ($s.outcome + '/' + $s.class + ': ' + $s.why)
+    T 'MUST FIRE: the draft''s bytes and mtime, the index and HEAD are identical' (((Md5 $f) -eq $md0) -and ((Mtime $f) -eq $mt0) -and ((Snap $E.bot) -eq $b4)) (ReadOr $f)
+    $E = New-Estate 'itw-same'
+    Push-Up $E 'lib/new.ps1' "upstream version`n" 'up: add lib/new.ps1'
+    W $E.bot 'lib/new.ps1' "upstream version`n"
+    $f = Join-Path $E.bot 'lib\new.ps1'; (Get-Item $f).LastWriteTime = [datetime]'2020-01-01T00:00:00'; $mt0 = Mtime $f
+    $s = Sync $E
+    T 'CLEAN TWIN: the same untracked file already holding upstream''s blob is carried by an index update, mtime unchanged, clean' (($s.outcome -eq 'synced') -and (@($s.already_upstream) -contains 'lib/new.ps1') -and ((Mtime $f) -eq $mt0) -and -not (Status $E.bot)) ($s.outcome + ': ' + $s.why + ' | ' + (Status $E.bot))
+  }
+
+  Invoke-Group 'SESSION SAVE CLEAN TWIN - a session saving its OWN dirty file outside the move mid-sync is a note, not a verify failure' {
+    $E = New-Estate 'save-outside'
+    Push-Up $E 'lib/code.ps1' "line1`nline2-FIX`nline3`nline4`nline5`n" 'up: code fix'
+    W $E.bot 'tools/verifier.txt' "session edit`n"
+    $script:fxTouch = Join-Path $E.bot 'tools\verifier.txt'; (Get-Item $script:fxTouch).LastWriteTime = [datetime]'2020-01-01T00:00:00'
+    $s = Sync $E @{ BeforeRef = { [IO.File]::WriteAllText($script:fxTouch, "session edit, saved again mid-sync`n", $script:fxUtf8) } }
+    T 'synced, with a note naming the saved path' (($s.outcome -eq 'synced') -and ((@($s.notes) -join ' ') -match 'saved by someone else during the sync.*tools/verifier\.txt')) ($s.outcome + '/' + $s.class + ': ' + $s.why + ' | ' + (@($s.notes) -join ' '))
+    T 'the session''s save is intact and upstream''s fix arrived' (((ReadOr $script:fxTouch) -eq "session edit, saved again mid-sync`n") -and ((ReadOr (Join-Path $E.bot 'lib/code.ps1')) -match 'line2-FIX'))
+  }
+
+  Invoke-Group 'MARKER SCAN SHARES MUST NOT FIRE - a lane holding a dirty tracked file open for WRITING does not break the step 1e read' {
+    $E = New-Estate 'scan-shared'
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`nlane writing`n"
+    $lf = Join-Path $E.bot 'grocery\ledger.json'
+    $w = New-Object IO.FileStream($lf, [IO.FileMode]::Open, [IO.FileAccess]::Write, [IO.FileShare]::ReadWrite)
+    try { $s = Sync $E } finally { $w.Dispose() }
+    T 'outcome is current, never failed/exception' ($s.outcome -eq 'current') ($s.outcome + '/' + $s.class + ': ' + $s.why)
+  }
+
+  Invoke-Group 'REF-LOCK MUST FIRE - update-ref cannot lock the branch and nothing committed on top: HEAD, index and tree all end at H0, and the next sync heals' {
+    $E = New-Estate 'reflock'
+    Push-Up $E 'lib/code.ps1' "line1`nline2-FIX`nline3`nline4`nline5`n" 'up: code fix'
+    Push-Up $E 'grocery/cap/report.json' "upstream report`n" 'up: add report'
+    W $E.bot 'grocery/cap/report.json' "LOCAL untracked`n"; W $E.bot 'tools/verifier.txt' "session edit`n"
+    $st0 = Status $E.bot; $h0 = (GitR $E.bot @('rev-parse', 'HEAD')).out
+    $script:fxLock = Join-Path $E.bot '.git\refs\heads\main.lock'
+    try {
+      $s = Sync $E @{ BeforeRef = { [IO.File]::WriteAllText($script:fxLock, '', $script:fxUtf8) } }
+      T 'degraded class ref-lock, not failed/mixed-tree' (($s.outcome -eq 'degraded') -and ($s.class -eq 'ref-lock')) ($s.outcome + '/' + $s.class + ': ' + $s.why)
+      T 'HEAD is H0, the status is exactly what it was, and every changed path holds its H0 or local bytes' (((GitR $E.bot @('rev-parse', 'HEAD')).out -eq $h0) -and ((Status $E.bot) -eq $st0) -and ((ReadOr (Join-Path $E.bot 'lib/code.ps1')) -eq "line1`nline2`nline3`nline4`nline5`n") -and ((ReadOr (Join-Path $E.bot 'grocery/cap/report.json')) -eq "LOCAL untracked`n")) ((Status $E.bot) + ' VS ' + $st0)
+    } finally { Remove-Item -LiteralPath $script:fxLock -Force -ErrorAction SilentlyContinue }
+    $s = Sync $E
+    T 'CLEAN TWIN: with the lock gone the next sync ends synced, never blocked/foreign' (($s.outcome -eq 'synced') -and ((GitR $E.bot @('rev-parse', 'HEAD')).out -eq $s.O) -and ((ReadOr (Join-Path $E.bot 'lib/code.ps1')) -match 'line2-FIX')) ($s.outcome + '/' + $s.class + ': ' + $s.why)
+  }
+
+  function Write-FxIntent($E, [string]$H0, [string]$New, [int]$FakePid) {
+    $doc = [ordered]@{ schema = 1; last = $null; intent = [ordered]@{ pid = $FakePid; phase = 'start'; started = '2026-09-23T07:00:00.0000000-05:00'; H0 = $H0; O = $New; NEW = $New; plan = @() }; disabled_paged_on = '' }
+    [IO.File]::WriteAllText((Join-Path $E.bot '.git\tc-checkout-sync.json'), ($doc | ConvertTo-Json -Depth 6), $script:fxUtf8)
+  }
+  function Get-FxIntent($E) { $j = [IO.File]::ReadAllText((Join-Path $E.bot '.git\tc-checkout-sync.json')) | ConvertFrom-Json; return $j.intent }
+
+  Invoke-Group 'INTERRUPTED MUST FIRE - a sync killed between read-tree and update-ref is FINISHED by the next one, never misread as a session''s work' {
+    $E = New-Estate 'killed'
+    Push-Up $E 'lib/code.ps1' "line1`nline2-FIX`nline3`nline4`nline5`n" 'up: code fix'
+    W $E.bot 'lib/wip.ps1' "session wip`n"
+    $null = GitOk $E.bot @('fetch', '-q', 'origin')
+    $h0 = (GitR $E.bot @('rev-parse', 'HEAD')).out; $o = (GitR $E.bot @('rev-parse', 'refs/remotes/origin/main')).out
+    $null = GitOk $E.bot @('read-tree', '-m', '-u', $h0, $o)   # exactly what a kill after 9e leaves
+    Write-FxIntent $E $h0 $o 4242
+    $s = Sync $E
+    T 'the next sync finishes it: HEAD is origin, and a note names the interrupted run' (((GitR $E.bot @('rev-parse', 'HEAD')).out -eq $o) -and ($s.outcome -eq 'current') -and ((@($s.notes) -join ' ') -match 'finished a sync interrupted earlier \(pid 4242')) ($s.outcome + '/' + $s.class + ': ' + $s.why + ' | ' + (@($s.notes) -join ' '))
+    T 'the tree is clean but the session WIP, and the resolved intent is cleared' (((Status $E.bot) -eq '?? lib/wip.ps1') -and ($null -eq (Get-FxIntent $E))) (Status $E.bot)
+  }
+
+  Invoke-Group 'INTERRUPTED LEFTOVER MUST FIRE - an intent the next sync cannot finish is named on its page and KEPT, never erased' {
+    $E = New-Estate 'killed-mixed'
+    Push-Up $E 'lib/code.ps1' "line1`nline2-FIX`nline3`nline4`nline5`n" 'up: code fix'
+    $null = GitOk $E.bot @('fetch', '-q', 'origin')
+    $h0 = (GitR $E.bot @('rev-parse', 'HEAD')).out; $o = (GitR $E.bot @('rev-parse', 'refs/remotes/origin/main')).out
+    $null = GitOk $E.bot @('read-tree', '-m', $h0, $o)   # the index at NEW, the tree still at H0: not finishable
+    Write-FxIntent $E $h0 $o 4343
+    $b4 = Snap $E.bot
+    $s = Sync $E
+    $kept = Get-FxIntent $E
+    T 'not clean, and the page names the interrupted run' (($s.outcome -ne 'synced') -and ($s.outcome -ne 'current') -and $s.page -and ($s.why -match 'pid 4343')) ($s.outcome + '/' + $s.class + ': ' + $s.why)
+    T 'the leftover intent is kept, and nothing in the tree, the index or HEAD changed' ($kept -and ([int]$kept.pid -eq 4343) -and ((Snap $E.bot) -eq $b4)) ('intent=' + $(if ($kept) { $kept.pid } else { 'null' }))
+  }
+
+  Invoke-Group 'HEAD-MOVED AND BEFORE-MOVE THROW MUST FIRE - every displaced byte is put back with its mtime (the two put-backs no case reached)' {
+    foreach ($arm in 'head-moved', 'throws') {
+      $E = New-Estate ('putback-' + $arm)
+      Push-Up $E 'public/derived.json' "{`n  ""v"": 2, ""by"": ""other lane""`n}`n" 'up: derived'
+      Push-Up $E 'grocery/cap/report.json' "upstream report`n" 'up: add report'
+      W $E.bot 'public/derived.json' "{`n  ""v"": 1, ""bot"": ""refused day""`n}`n"; W $E.bot 'grocery/cap/report.json' "LOCAL untracked`n"
+      $df = Join-Path $E.bot 'public\derived.json'; $rf = Join-Path $E.bot 'grocery\cap\report.json'
+      foreach ($x in $df, $rf) { (Get-Item $x).LastWriteTime = [datetime]'2020-01-01T00:00:00' }
+      $dmd = Md5 $df; $dmt = Mtime $df; $rmd = Md5 $rf; $rmt = Mtime $rf
+      $script:fxBot = $E.bot
+      $bm = if ($arm -eq 'head-moved') { { W $script:fxBot 'docs/s.md' "a session note`n"; $null = GitOk $script:fxBot @('add', 'docs/s.md'); $null = GitOk $script:fxBot @('commit', '-q', '-m', 'Session commit while the sync planned') } } else { { throw 'injected before the move' } }
+      $s = Sync $E @{ OwnBlobs = @{ 'public/derived.json' = (OwnBlob $E 'public/derived.json') }; BeforeMove = $bm }
+      $want = if ($arm -eq 'head-moved') { ($s.outcome -eq 'degraded') -and ($s.class -eq 'head-moved') } else { ($s.outcome -eq 'failed') -and ($s.class -eq 'exception') -and ($s.why -match 'injected before the move') }
+      T ('MUST FIRE (' + $arm + '): the outcome names it, and a set-aside and a quarantine had both happened') ($want -and (@($s.set_aside) -contains 'public/derived.json') -and (@($s.quarantined) -contains 'grocery/cap/report.json')) ($s.outcome + '/' + $s.class + ': ' + $s.why)
+      T ('MUST FIRE (' + $arm + '): both displaced files are back, byte- and mtime-identical') (((Md5 $df) -eq $dmd) -and ((Mtime $df) -eq $dmt) -and ((Md5 $rf) -eq $rmd) -and ((Mtime $rf) -eq $rmt)) ((ReadOr $df) + ' | ' + (ReadOr $rf))
+    }
+  }
+
+  Invoke-Group 'FETCH BOUND MUST FIRE - a remote that never answers is cut off at -FetchTimeoutSec: degraded class fetch' {
+    $E = New-Estate 'fetch-hang'
+    Push-Up $E 'lib/other.ps1' "upstream`n" 'up: something to sync'
+    # The stall is an MSYS `sleep`, which the shell forks then execs, so its Windows parent is a transient sh outside the
+    # tree taskkill /T walks: it is orphaned and ends on its own, hence 20 s and not longer (git's own transports are direct
+    # children of git.exe and are killed).
+    $null = GitOk $E.bot @('config', 'remote.origin.uploadpack', 'sleep 20; git-upload-pack')
+    $s = Sync $E @{ FetchTimeoutSec = 3 }
+    T 'degraded class fetch, naming the timeout (a 20 s stall that finished would read synced)' (($s.outcome -eq 'degraded') -and ($s.class -eq 'fetch') -and ($s.why -match 'timed out')) ($s.outcome + '/' + $s.class + ': ' + $s.why)
+  }
+
+  Invoke-Group 'STATE HELD MUST FIRE - a reader holding the state file open does not cost the log row' {
+    $E = New-Estate 'state-held'
+    $null = Sync $E
+    $logFile = Join-Path $E.bot '.git\tc-checkout-sync-log.jsonl'; $rows0 = @([IO.File]::ReadAllLines($logFile) | Where-Object { $_ }).Count
+    $hold = [IO.File]::Open((Join-Path $E.bot '.git\tc-checkout-sync.json'), 'Open', 'Read', 'ReadWrite')
+    try { $s = Sync $E } finally { $hold.Dispose() }
+    $rows1 = @([IO.File]::ReadAllLines($logFile) | Where-Object { $_ }).Count
+    T 'the row count rose by one and the record says it logged' (($rows1 -eq $rows0 + 1) -and $s.logged -and ($s.outcome -eq 'current')) ('rows ' + $rows0 + '->' + $rows1 + ' logged=' + $s.logged + ' ' + $s.outcome)
   }
 } finally {
   if ($script:fxHold) { try { $script:fxHold.Dispose() } catch { } }
