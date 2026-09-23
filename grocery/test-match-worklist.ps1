@@ -118,6 +118,7 @@ try {
   $wl1 = Read-MatchWorklist (Join-Path $od 'match-worklist.json')
   $mz = @($wl1 | Where-Object { $_.name -eq 'Mezzetta Sun-Dried Tomatoes' })[0]
   _MT 'MUST FIRE  the Mezzetta release waits on the worklist with its pattern, for the weekly batch' ($mz -and [string]$mz.decision -eq 'release' -and [string]$mz.pattern) ([string]$mz.decision)
+  _MT 'MECHANISM  the resolver judged the release against the CLAIMER''s own words (its reason names turkey-lunchmeat; a shadowed claimer reads ''and ''s own words'')' ([string]$mz.why -like '*turkey-lunchmeat*') ([string]$mz.why)
   $cn = @($wl1 | Where-Object { $_.kind -eq 'contested' })[0]
   _MT 'MECHANISM  a contested arrival joins the worklist docket-only (decision undecided, suggestion kept)' ($cn -and [string]$cn.decision -eq 'undecided') ([string]$cn.decision)
   _MT 'MUST NOT FIRE  the lane never edits a rule: the commodity file is byte-identical after the run' ((Get-FileHash -LiteralPath $comF).Hash -eq $comHash) ''

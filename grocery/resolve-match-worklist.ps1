@@ -101,11 +101,14 @@ $rows = Merge-MatchWorklist -Findings $found.rows -Previous $prev -Verdicts $ver
 $kept = New-Object System.Collections.Generic.List[object]
 $newConfirms = 0; $decided = 0
 foreach ($r in @($rows)) {
-  $target = $null; $claimer = $null
+  # $clObj, never $claimer: PowerShell names are case-insensitive and -Claimer is a [string] parameter, so assigning the
+  # commodity object to $claimer turned it into a truthy string with no .id (found 2026-09-23: a release whose reason read
+  # "and 's own words do not"). ops/audit-typed-param-shadow holds the class.
+  $target = $null; $clObj = $null
   if ($r.kind -in 'coverage', 'semantic') { $target = $coms[[string]$r.commodity] }
   elseif ($r.kind -eq 'contested') { $others = @(([string]$r.commodity -split ',') | Where-Object { $_ }); if ($others.Count -eq 1) { $target = $coms[$others[0]] } }
-  if ($r.claimer) { $claimer = $coms[[string]$r.claimer] }
-  $cls = Get-MatchClassification -Kind $r.kind -Name $r.name -Target $target -Claimer $claimer -Index $tokIndex
+  if ($r.claimer) { $clObj = $coms[[string]$r.claimer] }
+  $cls = Get-MatchClassification -Kind $r.kind -Name $r.name -Target $target -Claimer $clObj -Index $tokIndex
   $deciding = $DecidingKinds -contains [string]$r.kind
   $row = [ordered]@{}; foreach ($pr in $r.PSObject.Properties) { $row[$pr.Name] = $pr.Value }
   $row['head'] = $cls.head; $row['why'] = $cls.why
@@ -131,7 +134,10 @@ $doc = [ordered]@{
   note = 'The matching lane''s worklist (plan-2026-09-22-9 b96f21). decision release/widen waits for apply-coverage-batch.ps1 -FromWorklist (weekly lane); ad-line waits for the per-product ingest split (Brad, Q-adline-two-products); undecided rows carry the classifier''s reading in why (and suggestion, for a docket-only kind). A decided key lives in match-verdicts.json and never returns here.'
   deciding_kinds = $DecidingKinds; blind = $found.blind; by_kind = $byKind; by_decision = $byDecision
   confirmed_today = $newConfirms; rows = $arr }
-[IO.File]::WriteAllText($wlFile, (($doc | ConvertTo-Json -Depth 6) -replace "`r`n", "`n") + "`n", (New-Object Text.UTF8Encoding($false)))
+[IO.File]::WriteAllText($wlFile, (($doc | ConvertTo-Json -Depth 6) -replace "`r
+", "
+") + "
+", (New-Object Text.UTF8Encoding($false)))
 $undec = @($arr | Where-Object { $_.decision -eq 'undecided' }).Count
 Write-Output ('match-worklist: ' + $arr.Count + ' open key(s) [' + (@($byKind.Keys | ForEach-Object { $_ + '=' + $byKind[$_] }) -join ' ') + '], ' + $newConfirms + ' confirmed into the ledger today, ' + $newN + ' first seen today; decisions [' + (@($byDecision.Keys | ForEach-Object { $_ + '=' + $byDecision[$_] }) -join ' ') + ']')
 if (@($found.blind).Count -gt 0) { Write-Output ('match-worklist: BLIND for ' + (@($found.blind) -join ', ') + ' - those detectors left no file, so their keys were kept as they were, not forgotten') }
