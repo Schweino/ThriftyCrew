@@ -1033,12 +1033,24 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           }
         }
       } catch { Log ('verify-for-history threw, banking from the raw board: ' + $_.Exception.Message) }
+      # -Reconcile (2026-09-22, plan-2026-09-22-10 274e4b): the same run re-derives every history week whose board is still
+      # on disk, so a board rebuilt on another road since yesterday is repaired here instead of living on as a second record.
+      $uhOut = $null
       if ($histTarget) {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'update-history.ps1') -CompareFile $histTarget | Out-Null
+        $uhOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'update-history.ps1') -CompareFile $histTarget -Reconcile
         Log 'history banked from the VERIFIED board'
       } else {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'update-history.ps1') | Out-Null
+        $uhOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'update-history.ps1') -Reconcile
         Log 'history banked from the raw board (no verdict file for this week - nothing judged, so raw == verified)'
+      }
+      $uhRc = $LASTEXITCODE
+      $uhMark = [string](@($uhOut | Where-Object { $_ -match '^UPDATE-HISTORY-COMPLETE ' }) | Select-Object -Last 1)
+      Log ('update-history: ' + $(if ($uhMark) { $uhMark } else { 'NO completion marker (rc=' + $uhRc + ')' }))
+      # A disagreement it cannot repair pages: a board that would not parse, or a run that never finished.
+      if ($uhRc -ne 0 -or -not $uhMark -or $uhMark -notmatch ' unreadable=0(\s|$)') {
+        if (-not $NoAlert) { try { Send-Alert -Subject 'Grocery: price history could not be reconciled with the boards' -Body (('update-history.ps1 -Reconcile exited {0} and printed: {1}
+
+price-history.json is a reconciled copy of the comparison boards on disk. A board that would not parse (unreadable=) or a run that did not finish leaves that week holding whatever it said before, so the trend pages, the freezer tool and the Friday email may be reading a price no board published. Re-run update-history.ps1 -Reconcile by hand and read the UNREADABLE lines.' -f $uhRc, $(if ($uhMark) { $uhMark } else { '(no UPDATE-HISTORY-COMPLETE marker)' }))) | Out-Null } catch {} }
       }
       # "raw == verified" is only true for products nobody has judged YET. The raw path above skips verify-apply
       # entirely, so it also skips verdict-suppressions.json - every standing DROP is inert on that branch and a
@@ -1449,8 +1461,19 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         }
       } catch { Log ('audit-carriage threw: ' + $_.Exception.Message) }
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-tile-integrity.ps1') -Quiet | Out-Null
+        $tiOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-tile-integrity.ps1') -Quiet
         if ($LASTEXITCODE -eq 3) { Log 'tile-integrity BLIND (zero links graded) - the link layer is empty/unreadable; fix-links-ff is about to run against nothing' }
+        # THE PRICE-DRIFT RATCHET (2026-09-22, plan-2026-09-22-10 bec597). This run comes straight after derive-links, so a
+        # drift count above its per-store mark is a link the chain could NOT reconcile - a new class, paged the day it appears.
+        $tiRose = @($tiOut | Where-Object { $_ -match 'PRICE-DRIFT RATCHET ROSE' })
+        if ($tiRose.Count) {
+          Log ('tile-integrity: ' + $tiRose.Count + ' store(s) rose above their PRICE-DRIFT mark: ' + (($tiRose | ForEach-Object { ($_ -replace '^.*ROSE\s+', '') }) -join '; '))
+          if (-not $NoAlert) { try { Send-Alert -Subject 'Grocery: tile link price drift rose at a store' -Body (('After today''s derive-links pass, a store has MORE See-item links whose recorded price disagrees with its tile than its ratchet mark allows:
+
+{0}
+
+The chain re-derives every store''s link prices from the rows the board priced, so drift that survives it is a link the chain cannot reconcile: an id with no proven URL shape (Sam''s alphanumeric ids until 2026-09-22), a row that never observed the price the board published, or a new source shape. Run derive-links-from-prices.ps1 (no -Apply) and read its refusal lines for that store. When the count falls again, audit-tile-integrity.ps1 -Tighten records the new mark.' -f (($tiRose | ForEach-Object { $_.Trim() }) -join "`n"))) | Out-Null } catch {} }
+        }
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'fix-links-ff.ps1') -Fresh -MaxCalls 30 | Out-Null
         $ffOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'fix-links-ff.ps1') -Apply
         Log ('family-fare link fill: ' + (@($ffOut | Where-Object { $_ -match 'APPLIED' })[-1]))

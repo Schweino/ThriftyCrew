@@ -36,5 +36,15 @@
                                           "violations":  36
                                       }
                  },
-    "set":  "2026-07-17 11:08"
+    "set":  "2026-07-17 11:08",
+    "drift_by_store":  {
+                           "Aldi":  13,
+                           "Baker\u0027s":  0,
+                           "Family Fare":  1,
+                           "Fareway":  0,
+                           "Hy-Vee":  0,
+                           "Sam\u0027s Club":  67,
+                           "Walmart":  2
+                       },
+    "drift_set":  "2026-09-22 21:58"
 }

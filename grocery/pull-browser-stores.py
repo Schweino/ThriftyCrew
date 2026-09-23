@@ -1322,6 +1322,14 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slo
         note = f"wrote {out_rel} (MATCHES {m}, EMPTY {e_}, UNUSABLE {u})"
         if walled:
             return False, note + " - STOPPED BY A BOT WALL, tail not captured"
+        if store_key == "samsclub":
+            # The capture is already written; a probe that throws must not un-write it or fail the store.
+            try:
+                shape = probe_sams_url_shape(browser, body, header, date_s, os.path.join(ROOT, "out", "sams"))
+                note += ("; url-shape: nothing alphanumeric to probe" if shape is None else
+                         f"; url-shape {shape['verdict']} {shape['proven']} of {shape['checked']}")
+            except Exception as e:
+                note += f"; url-shape probe could not run ({str(e)[:120]}) - no shape file written"
         return True, note
 
     finally:
@@ -1433,6 +1441,103 @@ def worklist_shape_self_test(T):
         ROOT, profile_dir, Chrome, find_chrome = saved
         sys.argv = argv
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+# ---- SAM'S URL SHAPE, RE-PROVEN EVERY PASS (2026-09-22, plan-2026-09-22-10 item 2026-09-20-bec597) ----------
+# Sam's moved every sams_item_id to an alphanumeric form, and derive-links-from-prices refuses to build a link from
+# an id whose URL shape nobody proved, so 67 Sam's tiles kept a link whose price the board had outgrown. Brad's
+# browser proved /ip/<alphanumeric id> on 2026-09-22 (3 of 3); this makes that proof a daily fact instead of a
+# one-off: after a successful sweep, in the SAME session, open /ip/<id> for up to 3 of today's alphanumeric ids and
+# read the page's own path, h1 and HTML. derive-links trusts only the NEWEST file and only a clean 3 of 3.
+# A WALL IS RECORDED AS 'blocked' AND THE PROBE STOPS: it is never retried and never bypassed, and a blocked file
+# proves nothing, so the links stay refused exactly as before. 3 is the number Brad's own proof used, not the
+# survivor of a sweep.
+SAMS_SHAPE_WANT = 3
+SAMS_WALL_RE = re.compile(r"robot or human|press (?:&|and) hold|captcha|access denied|verify you are (?:a )?human|are you a robot",
+                          re.I)
+SAMS_ALNUM_ID_RE = re.compile(r"^(?=[A-Za-z0-9]*[A-Za-z])[A-Za-z0-9]{6,20}$")
+
+
+def pick_sams_shape_ids(body, header, want=SAMS_SHAPE_WANT):
+    """Up to `want` distinct (id, name) pairs from a Sam's capture body whose id is ALPHANUMERIC (a purely
+    numeric id's /ip/ shape was already proven on 2026-07-17 and needs no daily proof)."""
+    cols = header.split("|")
+    if "id" not in cols or "n" not in cols:
+        return []
+    i_id, i_n = cols.index("id"), cols.index("n")
+    out, seen = [], set()
+    for ln in (body or "").strip().split("\n"):
+        s = ln.strip()
+        if not s or s.startswith("#") or s == header:
+            continue
+        f = s.split("|")
+        if len(f) != len(cols):
+            continue
+        sid, nm = f[i_id].strip(), f[i_n].strip()
+        if not nm or sid in seen or not SAMS_ALNUM_ID_RE.match(sid):
+            continue
+        seen.add(sid)
+        out.append((sid, nm))
+        if len(out) >= want:
+            break
+    return out
+
+
+def _shape_norm(s):
+    return re.sub(r"[^a-z0-9]+", " ", (s or "").lower()).strip()
+
+
+def judge_sams_shape_case(sid, row_item, final_path, page_h1, id_in_page, page_text):
+    """One /ip/<id> page against the capture row it came from. A match needs ALL of: no wall text, the id in the
+    final path and in the page HTML, and the page's h1 naming the row's product (normalised, exact)."""
+    blocked = bool(SAMS_WALL_RE.search(page_text or ""))
+    match = ((not blocked) and bool(id_in_page) and sid in (final_path or "")
+             and bool(_shape_norm(row_item)) and _shape_norm(page_h1) == _shape_norm(row_item))
+    return {"sams_item_id": sid, "row_item": row_item, "final_path": final_path or "", "page_h1": page_h1 or "",
+            "id_in_page": bool(id_in_page), "blocked": blocked, "match": match}
+
+
+def sams_shape_verdict(cases, want=SAMS_SHAPE_WANT):
+    proven = sum(1 for c in cases if c["match"])
+    if any(c["blocked"] for c in cases):
+        verdict = "blocked"
+    elif len(cases) == want and proven == want:
+        verdict = "proven"
+    else:
+        verdict = "unproven"
+    return {"verdict": verdict, "proven": proven, "checked": len(cases)}
+
+
+def probe_sams_url_shape(browser, body, header, date_s, out_dir, want=SAMS_SHAPE_WANT):
+    """Open /ip/<id> for up to `want` of today's alphanumeric ids in the live session and write
+    out/sams/sams-url-shape-<date>.json. Returns the document written, or None when there was nothing to probe."""
+    picks = pick_sams_shape_ids(body, header, want)
+    if not picks:
+        return None
+    cases = []
+    for sid, nm in picks:
+        browser.goto(f"https://www.samsclub.com/ip/{sid}", wait_ms=4000)
+        raw = browser.js(
+            "JSON.stringify({p: location.pathname, "
+            "h: ((document.querySelector('h1')||{}).innerText||'').trim(), "
+            "i: document.documentElement.outerHTML.indexOf(%s) >= 0, "
+            "t: (document.title||'') + ' ' + ((document.body&&document.body.innerText)||'').slice(0, 4000)})"
+            % json.dumps(sid)) or "{}"
+        d = json.loads(raw)
+        c = judge_sams_shape_case(sid, nm, d.get("p"), d.get("h"), d.get("i"), d.get("t"))
+        cases.append(c)
+        if c["blocked"]:
+            break          # a wall: record it and stop. Never retried, never bypassed.
+    doc = {"date": date_s, "shape": "https://www.samsclub.com/ip/<alphanumeric sams_item_id>"}
+    doc.update(sams_shape_verdict(cases, want))
+    doc["method"] = ("pull-browser-stores.py Sam's pass, same session as the sweep: /ip/<id> loaded, 4 s settle, "
+                     "then read final path, h1, the id in the page HTML, and a wall text check")
+    doc["cases"] = cases
+    os.makedirs(out_dir, exist_ok=True)
+    with open(os.path.join(out_dir, f"sams-url-shape-{date_s}.json"), "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(doc, fh, indent=2)
+        fh.write("\n")
+    return doc
 
 
 def check_capture_shape(body, header, emitter="sweepToCsv"):
@@ -1686,6 +1791,59 @@ def lookup_self_test():
         sys.argv = _argv
         for _n, _v in _saved2.items():
             _g[_n] = _v
+
+    # ---- Sam's url-shape probe (plan-2026-09-22-10, item 2026-09-20-bec597). HERMETIC: a stub browser answers
+    # each /ip/<id> page from a table, so the probe's pick, judge, verdict and file write all run with no Chrome.
+    # The three rows are the ones Brad's browser proved on 2026-09-22 (out/sams/sams-url-shape-2026-09-22.json).
+    import shutil
+    import tempfile
+    class _ShapeBrowser:
+        def __init__(self, pages):
+            self.pages, self.cur, self.visited = pages, None, []
+        def goto(self, url, wait_ms=0):
+            self.cur = url.rsplit("/", 1)[-1]
+            self.visited.append(self.cur)
+        def js(self, expr):
+            return json.dumps(self.pages[self.cur])
+    shdr = STORES["samsclub"]["csv_header"]
+    sbody = ("#tc-store Omaha 15429 Blackwell Dr\n" + shdr + "\n"
+             "snacks|Mott's Assorted Fruit Flavored Snacks, 0.8 oz., 90 pk.|13.98||1BWLUGF7QXGI||PICKUP\n"
+             "snacks|Welch's Mixed Fruit Fruit Snack, 0.8 oz, 90 pk.|13.98||1DAB9GS32WHT||PICKUP\n"
+             "snacks|Old numeric row|9.98||15235818162||PICKUP\n"
+             "snacks|Gushers Tropical Flavored Snacks, 4.25 oz., 8 pk.|8.98||7H05KHCUZJ61||PICKUP\n")
+    def _page(sid, h1, wall=False):
+        return {"p": f"/ip/{sid}", "h": h1, "i": True, "t": ("Robot or Human?" if wall else "Sam's Club " + h1)}
+    good = {"1BWLUGF7QXGI": _page("1BWLUGF7QXGI", "Mott's Assorted Fruit Flavored Snacks, 0.8 oz., 90 pk."),
+            "1DAB9GS32WHT": _page("1DAB9GS32WHT", "Welch's Mixed Fruit Fruit Snack, 0.8 oz, 90 pk."),
+            "7H05KHCUZJ61": _page("7H05KHCUZJ61", "Gushers Tropical Flavored Snacks, 4.25 oz., 8 pk.")}
+    stmp = tempfile.mkdtemp(prefix="shape-selftest-")
+    try:
+        picks = pick_sams_shape_ids(sbody, shdr)
+        T("MECHANISM  the probe picks 3 ALPHANUMERIC ids and skips the numeric one (its shape was proven 2026-07-17)",
+          [p[0] for p in picks] == ["1BWLUGF7QXGI", "1DAB9GS32WHT", "7H05KHCUZJ61"], str(picks))
+        b1 = _ShapeBrowser(good)
+        d1 = probe_sams_url_shape(b1, sbody, shdr, "2026-09-22", stmp)
+        with open(os.path.join(stmp, "sams-url-shape-2026-09-22.json"), encoding="utf-8") as fh:
+            f1 = json.load(fh)
+        T("MUST FIRE  three pages that each show their own id and the row's name write a PROVEN 3 of 3 file",
+          f1["verdict"] == "proven" and f1["proven"] == 3 and f1["checked"] == 3, str(d1 and d1.get("verdict")))
+        bad_name = dict(good)
+        bad_name["1DAB9GS32WHT"] = _page("1DAB9GS32WHT", "Welch's Berries 'n Cherries Fruit Snacks")
+        d2 = probe_sams_url_shape(_ShapeBrowser(bad_name), sbody, shdr, "2026-09-23", stmp)
+        T("MUST NOT FIRE  a page naming a different product leaves the file UNPROVEN (2 of 3)",
+          d2["verdict"] == "unproven" and d2["proven"] == 2, str(d2["verdict"]))
+        walled = dict(good)
+        walled["1DAB9GS32WHT"] = _page("1DAB9GS32WHT", "", wall=True)
+        b3 = _ShapeBrowser(walled)
+        d3 = probe_sams_url_shape(b3, sbody, shdr, "2026-09-24", stmp)
+        T("MUST FIRE  a wall records 'blocked' and the probe STOPS there (never retried, never the third page)",
+          d3["verdict"] == "blocked" and b3.visited == ["1BWLUGF7QXGI", "1DAB9GS32WHT"], "%s %r" % (d3["verdict"], b3.visited))
+        d4 = probe_sams_url_shape(_ShapeBrowser(good), "snacks|Old numeric row|9.98||15235818162||PICKUP\n", shdr,
+                                  "2026-09-25", stmp)
+        T("MUST NOT FIRE  a capture with no alphanumeric id writes no shape file at all",
+          d4 is None and not os.path.exists(os.path.join(stmp, "sams-url-shape-2026-09-25.json")), repr(d4))
+    finally:
+        shutil.rmtree(stmp, ignore_errors=True)
 
     print(f"  LOOKUP-SELFTEST-COMPLETE checks={len(bad)}failed" if bad else
           "  LOOKUP-SELFTEST-COMPLETE failed=0")

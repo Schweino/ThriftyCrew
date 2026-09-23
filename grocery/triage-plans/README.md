@@ -244,6 +244,7 @@ with the change and a future reader can see why a rule exists.
     "edit commodities.json + category-excludes.json",
     "repair-multipack-sizes.ps1 -Apply, then stamp-ad-as-of.ps1 -Apply (both BEFORE compare-deals)",
     "compare-deals.ps1 -MinStores 1 -BakersFile <newest> -FarewayFile <newest>",
+    "update-history.ps1 -Reconcile (a rebuilt board repairs its own history week the same hour; plan-2026-09-22-10)",
     "audit-food-category.ps1 (expect 0)",
     "audit-name-drift / prune-bad-links / audit-name-drift AGAIN when prune-bad-links rewrote product-urls.json / generate-board-overrides / build-deals-page",
     "audit-match-soundness.ps1 -> review drops line by line -> -Accept",

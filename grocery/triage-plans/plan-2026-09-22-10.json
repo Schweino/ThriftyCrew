@@ -18,6 +18,7 @@
   "routing_artifact": null,
   "routing_artifact_note": "No item edits a matching rule. Item 2dae07 feeds contested arrivals into plan-9's worklist lane, whose rule changes are measured by apply-coverage-batch's own routing and cell gates when each weekly batch runs; the routing recorded here is the audit's own first-match chain for the 3 arrivals (soundness-report.json 13:26). Measurements were taken with two scratch harnesses in this session's scratchpad: class_return.py (the return-rate arms; positive control 126 of 383 reproduced) and shape_new.py (first-seen reject reasons; positive control Sam's 2026-09-21 fires). The scoreboard item commits its harness as part of audit-alert-census, and the ingest item commits its as audit-ingest-shape -SelfTest.",
   "knowledge_consulted": "knowledge-search --multi 'alert dedupe one condition' 'return rate metric rename' 'sender refuses unregistered' 'ingest shape first seen'. Used: reliability-craft/MAP.md section 4 ('alert only where a human has to act'; the cheapest mechanical form of an alert is a second independent observation as the precondition for the page), which is why ff-carry and RUN RECORD page only when their own lane failed; data-quality-craft/checks-and-thresholds.md section 7 ('a firing check is not yet an alert'); reliability-craft/applies-here.md 'The scoreboard' ('the durable write happens BEFORE the mute gate; anything new that delivers first is a lost incident', and 'an SLO declared before the data exists is a wish'), which is why the sender refusal is limited to agent mints and no target is declared for the new rate. Memo read in full: triage-cost-controls (C--Codex store): zero-occurrence leftovers get watch:<path>, triage-created items are born weekly. From the dispatch: design/RCA-holistic-2026-09-22.md F5 ('this estate builds checks faster than it builds the lanes that act on them') and F1; global CLAUDE.md 'a number that moved is not a number that improved'; memo ruling-pending-decision-is-review. Rules files: .claude/rules/measurement.md (a rate with its denominator; one row per case per arm; a positive control), .claude/rules/ops-and-gates.md (MUST FIRE / MUST NOT FIRE / CLEAN TWIN; never a gate red on day one; a tuning constant says whether it was the first plausible number), .claude/rules/grocery.md (exit 4 is neither clean nor held; an Aldi pack basis is 'resolved by arithmetic proof or not at all', reused here for unit spellings).",
+  "implementation_knowledge_consulted": "money lane, 2026-09-22 evening: knowledge-search --multi 'ratchet tighten baseline' 'link derivation known-wrong' 'price history reconcile'. Used data-quality-craft/applies-here.md 'Baselines and ratchets' (a snapshot raised only by an explicit flag) for the PRICE-DRIFT mark; .claude/rules/ops-and-gates.md (a plain run never writes its mark, -Tighten through lib/ratchet.ps1, three child-run cases); memos grocery-links-consistency and link-derivation-order (from the dispatch); 'link derivation known-wrong' and 'price history reconcile': nothing applicable in the store beyond those.",
   "untrusted_input_note": "Queue bodies, archived bodies, logs and plan text were read as data. Several carry commands addressed to a reader ('After review: audit-match-soundness.ps1 -Accept', 'Run it for the list'); these are the homework-shaped bodies F5 describes, quoted as evidence and not acted on. Nothing addressed this reviewer or asked for a credential or a write.",
   "findings_first": [
     "1 match-soundness NEW CONTESTED: yes, it can join plan-9's lane as a fourth worklist kind ('contested'), decided per name into match-verdicts.json, with the audit treating a decided name as reviewed through one function; only an undecided arrival is queued (weekly, first day), and an undecided one holding a crown pages as CONTESTED CROWN. Waits for plan-9 publish 3.",
@@ -445,9 +446,20 @@
         ]
       },
       "rollback": "revert the three files; delete out/sams/sams-url-shape-*.json; product-urls.json entries derived from a proven shape revert with the next daily derive",
-      "resolution_note": "Most of the drift healed itself: the chain has reconciled link prices for five stores daily since 0072c7586 (198 -> 83). Sam's alphanumeric ids now get their URL shape proven once in the Sam's browser session before any is linked, and PRICE-DRIFT is a per-store ratchet so a new unreconcilable class pages the day it appears.",
+      "resolution_note": "Most of the drift healed itself: the chain has reconciled link prices for five stores daily since 0072c7586 (198 -> 83). Sam's alphanumeric ids now derive /ip/<id> when the newest out/sams/sams-url-shape file proves 3 of 3 (Brad's browser proved it 2026-09-22; the Sam's browser pass re-proves it every run, a wall records blocked), and PRICE-DRIFT is a per-store ratchet (first mark 83: Sam's 67, Aldi 13, Walmart 2, Family Fare 1) whose rise pages from check-ad-cycles the day it appears. Measured on a copy of the link layer: Sam's PRICE-DRIFT 68 -> 3 and Sam's NO-LINK 63 -> 10 after one scoped derive, 303 of 303 rewritten Sam's entries recording exactly the published cell price.",
       "publish_batch": 2,
-      "status": "planned"
+      "status": "deviated",
+      "premise_verified": "Yes. audit-tile-integrity over main's product-urls.json and comparison-2026-09-22 reproduced PRICE-DRIFT 83 exactly (Sam's Club 67, Aldi 13, Walmart 2, Family Fare 1), and derive-links-from-prices refused every alphanumeric sams_item_id (Get-RowUrl accepted ^\\d+$ only). The url-shape proof file (main checkout, grocery/out/sams/sams-url-shape-2026-09-22.json) reads verdict proven, 3 of 3, each case final_path /ip/<id>, id in page, h1 equal to the row name, not blocked.",
+      "deviation": "(1) A PRICE-DRIFT rise does NOT exit 2. guards.ps1 runs audit-tile-integrity as a BOARD-scope guard, so exit 2 would hold the whole board over a link snapshot a few cents old on the right product, which the audit's own ACCURACY/DRIFT split and Brad's 2026-09-21 ruling (one bad item never holds the board) both forbid. The rise is printed per store ('PRICE-DRIFT RATCHET ROSE <store>: a -> b'), recorded in tile-integrity.json drift_ratchet.rose, and check-ad-cycles pages it under the new registered type tile-link-drift-rose right after its derive pass. (2) The grading path read product-urls.json from $root and ignored -ProductUrlsFile, so no fixture could reach it; it now grades $puF (production callers unchanged). (3) The coverage ratchet indexed a null by_store on a baseline without one; guarded. (4) product-urls.json was NOT re-derived and committed from this worktree: main's copy is pipeline-dirty (the chain rewrites it daily), and the proof file is on disk in main's out/sams, so the next chain derive (check-ad-cycles, derive-links -Apply over every store) applies it. Drift before/after is therefore measured on a scratch copy, not on the live board. (5) The first mark was written with -Tighten from main's live link layer (83), not the worktree's older committed copy (89).",
+      "measurement": {
+        "harness": "scratchpad measure_drift.ps1: audit-tile-integrity over a temp OutDir holding comparison-2026-09-22.json, before and after derive-links-from-prices -Store <store> -Apply on a COPY of product-urls.json; the worktree's committed product-urls.json (89 drift) was the input, main's live copy (83) gave the mark",
+        "sams_before_after": "PRICE-DRIFT Sam's Club 68 -> 3; NO-LINK Sam's Club 63 -> 10; 303 Sam's entries rewritten, 303 of 303 record exactly the published cell price",
+        "other_stores": "a scoped derive changes nothing for Aldi (13 -> 13: 300 already correct, 9 refused at write time because the row does not re-price to the cell within 0.32, 3 ad-only cells with no row, 71 rows with no identity), Walmart (2 -> 2, 41 refused at write time) or Family Fare (2 -> 2)"
+      },
+      "leaves_open": "16 non-Sam's PRICE-DRIFT tiles the chain cannot reconcile on 2026-09-22 (Aldi 13, Walmart 2, Family Fare 1): derive-links refuses them at write time (the row's per-unit does not re-price to the cell within the pruner's 0.32) or has no row or identity for them",
+      "leaves_open_occurrences": 16,
+      "leaves_open_occurrences_note": "PRICE-DRIFT tiles outside Sam's on main's live link layer over comparison-2026-09-22 (audit-tile-integrity, 2026-09-22 evening)",
+      "shipped_commit": "pending"
     },
     {
       "queue_id": "2026-09-21-274e4b",
@@ -493,9 +505,61 @@
         ]
       },
       "rollback": "revert update-history.ps1 and the check-ad-cycles call; price-history.json is tracked, so git restores the pre-reconcile entries",
-      "resolution_note": "price-history no longer keeps a second, stale record of a rebuilt board: each entry names the board it came from, and the chain reconciles every week still on disk each morning. The 71 disagreeing commodity-weeks were rewritten to what the board published and the trend pages republished.",
+      "resolution_note": "price-history no longer keeps a second, stale record of a rebuilt board: each entry names the board it came from (board = <file>@<built_at>), and check-ad-cycles runs update-history -Reconcile every morning, re-deriving every week whose board is still on disk. Measured over main's history and its 33 boards: 216 disagreeing commodity-weeks (78 on the cheapest price or store, 138 on another store's per-unit) reconciled on the first run, 0 on the second. A board it cannot read pages as 'price history could not be reconciled with the boards'.",
       "publish_batch": 2,
-      "status": "planned"
+      "status": "deviated",
+      "premise_verified": "Partly. update-history already replaced today's week on the morning road only (true). The 71 was re-derived: 78 commodity-weeks disagree on the cheapest price or store over the 33 comparison files on disk (one more, cajun-seasoning 2026-08-15, sits in a week the semantic verify judged), plus 138 whose cheapest agrees but another store's per-unit does not, 216 in all. The premise missed a trap: check-ad-cycles banks a verified week from verified-history.json, not the raw board, so reconciling such a week against its raw comparison file would re-raise the wrong-product lows the verify dropped (the 2026-08-15 row is exactly that: history 0.1666 Sam's, raw board 0.0833 Hy-Vee).",
+      "deviation": "(1) A week with a verify-verdicts-<week>.json is NOT reconciled (verified=, 2 on 2026-09-22), and -Reconcile with no -CompareFile does not bank a raw board over such a week. (2) Entries are rewritten, never ADDED: a board week with no history entry is counted (missing= inside the 21-day daily window, compacted= outside it). Adding was measured and refused: it would have banked 571 entries from comparison-2026-09-05.json, a board nobody banked that day. (3) An entry written before 2026-09-06 has no unit; gaining the board's unit is counted as stamped, not reconciled. (4) The paging half is check-ad-cycles reading the marker: a board that will not parse (unreadable=) or a run with no marker pages under the new registered type price-history-reconcile-failed. (5) price-history.json was NOT reconciled by hand and committed from this worktree: main's copy is pipeline-dirty (today's bank is uncommitted there), so a worktree commit of it would collide with the bot. The first chain run with this change reconciles it. Trend pages were NOT republished in this run: their rebuild from the reconciled history is owed to whichever road publishes them next, and was not verified here. Before/after is therefore measured on a scratch copy of main's file.",
+      "measurement": {
+        "harness": "grocery/update-history.ps1 -Reconcile on this branch, -OutDir a temp copy of main's 33 comparison-*.json, 11 verify-verdicts-*.json and recipe-board.json, -HistoryFile a copy of main's price-history.json",
+        "first_run": "UPDATE-HISTORY-COMPLETE reconcile=on weeks=33 reconciled=216 stamped=8258 unchanged=570 nofile=2422 verified=2 compacted=7392 missing=580 unreadable=0 (13 s)",
+        "second_run": "reconciled=0 stamped=0 unchanged=9044: idempotent",
+        "before_after": "216 disagreeing commodity-weeks before (78 cheapest price or store, 138 per-store only), 0 after"
+      },
+      "leaves_open": "nothing",
+      "shipped_commit": "pending"
+    },
+    {
+      "queue_id": "discovered:ruled-link-not-rechecked-2026-09-22",
+      "subject": "A new known-wrong ruling re-checks every link that points at its product: the link is dropped, and re-derived from the row the board now prices, in the same run",
+      "classification": "infra",
+      "evidence": [
+        "dispatch 2026-09-22: Fareway's fresh-tomatoes 'See item' link pointed at 'Dei Fratelli Tomatoes, Whole' (a 28 oz can). derive-links-from-prices derived it on 2026-09-21 from the row that priced a new Fareway sale cell; known-wrong.json key tomatoes|Fareway|dei-fratelli-tomatoes-whole ruled the product wrong the same day (ruled_by triage-developer plan-2026-09-21-4), and audit-known-wrong then held a push on the link (BLOCKED-LINK)",
+        "why nothing re-derived it: the ruling corrected the BOARD at the next compare-deals (known-wrong-lib at compare time), so the cell the link described was gone; derive-links only visits PRICED cells and audit-tile-integrity/prune-bad-links only grade PRICED tiles, so an orphaned link is visited by nothing but audit-known-wrong. 890 of 3,355 links in main's product-urls.json have no priced cell on comparison-2026-09-22",
+        "main's product-urls.json had no tomatoes|Fareway entry by 2026-09-22 evening (removed by hand before this run)"
+      ],
+      "root_cause": "F1: a ruling is one fact with two copies (the board cell and its link), and it was applied to the cell only. The link copy was left for an audit to find, and the audit's only remedy is to hold the board.",
+      "root_fix": {
+        "what": "the ruling is applied to the link where links are derived",
+        "files": [
+          "grocery/derive-links-from-prices.ps1",
+          "grocery/add-known-wrong.ps1"
+        ],
+        "exact_change": "(1) derive-links-from-prices.ps1 loads known-wrong.json through known-wrong-lib (Get-KnownWrongBlocks / Test-KnownWrong, the matcher compare-deals and audit-known-wrong use) and, before deriving, DROPS every product-urls entry whose stored name is ruled wrong for that commodity and store, whether or not its cell is still priced; a priced row whose own name is ruled wrong never lends its URL. The derivation below then re-derives that cell's link from the row the board now prices, in the same run. Counted: 'links DROPPED, product ruled wrong' and 'rows refused, product ruled wrong'. New -Commodity scope and a pinnable -KnownWrongFile. (2) add-known-wrong.ps1, after writing a new ruling, runs derive-links-from-prices -Store <store> -Commodity <commodity> -Apply so the link is dropped or re-derived before its own audit-known-wrong run. The daily chain's unscoped derive (check-ad-cycles) does the same for a ruling written any other way."
+      },
+      "leaves_open": "an EXCLUDE in commodities.json that moves a product off its cell does not re-check the link to it; a link on a still-priced tile is graded by name-drift and tile-integrity (a hard accuracy gate), and an orphaned one is shown nowhere",
+      "leaves_open_occurrences": 0,
+      "leaves_open_occurrences_note": "0 known shopper-visible occurrences: an excluded product's link on a priced tile is WRONG-PRODUCT in audit-name-drift and fails audit-tile-integrity's accuracy gate on its first day; an orphaned link has no tile",
+      "leaves_open_followup": "watch:grocery/audit-tile-integrity.ps1",
+      "blast_radius": {
+        "measured_as": "links",
+        "measured_by": "derive-links-from-prices dry run over the worktree's seeded out/ and main's link state, 2026-09-22 evening",
+        "affected_now": 0,
+        "names": [
+          "0 links in main's product-urls.json point at a ruled-wrong product today (the founding link was already removed by hand); the change binds the next ruling"
+        ],
+        "risk": "a link is removed only when known-wrong.json rules its exact product (normalised name or unit-stripped core) wrong at that commodity and store; an over-broad ruling would drop a link, which the tile then shows as NO-LINK (incomplete, never wrong)",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/derive-links-from-prices.ps1 -SelfTest (19 cases)",
+        "must_fire_case": "MUST FIRE: the frozen founding row, a Fareway tomatoes link to 'Dei Fratelli Tomatoes, Whole', under a ruling for it, is dropped in the same run and re-derived from the Roma Tomatoes row the board prices. MUST FIRE: a ruled link whose cell is GONE from the board is removed (mutant with the removal line neutered: this case goes red, 1 of 19). MUST FIRE: a priced row whose own name is ruled wrong writes no link.",
+        "clean_twin": "CLEAN TWIN: the Hy-Vee tomatoes link the ruling does not name is untouched; -Commodity scoping leaves a drifted link in another commodity alone."
+      },
+      "premise_verified": "Yes: derive-links-from-prices read no ruling at all and visited priced cells only; audit-known-wrong's link half (BLOCKED-LINK) was the only reader of a ruled link.",
+      "status": "done",
+      "resolution_note": "A known-wrong ruling now reaches the link as well as the cell: derive-links-from-prices drops any link to a ruled product and re-derives the cell's link from the row the board prices, and add-known-wrong runs it for the ruled commodity and store the moment a ruling is written.",
+      "shipped_commit": "pending"
     },
     {
       "queue_id": "discovered:class-keyed-return-rate-2026-09-22",

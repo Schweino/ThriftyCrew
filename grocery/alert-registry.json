@@ -15,6 +15,8 @@
  },
  "entries": [
         {"id":"band-refusal-unexplained","match":"exact","key":"grocery a price band refused rows it cannot explain","class":"review","condition":"a row a price band refused carries no basis-error evidence: a wrong product the band is hiding or a real price it censors (Brad, 2026-09-22: future proof)","emitter":"grocery/check-ad-cycles.ps1","resolver":"lane:grocery/apply-coverage-batch.ps1"},
+        {"id":"tile-link-drift-rose","match":"exact","key":"grocery tile link price drift rose at a store","class":"review","condition":"after the chain's derive-links pass a store has more See-item links whose recorded price disagrees with its tile than its PRICE-DRIFT ratchet mark: a link class the chain cannot reconcile (plan-2026-09-22-10, 2026-09-20-bec597)","emitter":"grocery/check-ad-cycles.ps1","resolver":"lane:grocery/triage-due.ps1"},
+        {"id":"price-history-reconcile-failed","match":"exact","key":"grocery price history could not be reconciled with the boards","class":"review","condition":"update-history -Reconcile met a comparison board it could not read, or did not finish, so a history week may hold a price no board published (plan-2026-09-22-10, 2026-09-21-274e4b)","emitter":"grocery/check-ad-cycles.ps1","resolver":"lane:grocery/triage-due.ps1"},
   {
    "id": "guards-failed",
    "match": "exact",

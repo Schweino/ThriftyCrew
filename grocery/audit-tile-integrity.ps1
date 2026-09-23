@@ -46,11 +46,18 @@ param(
   [switch]$SelfTest,   # frozen fixtures for the staleness precondition
   [switch]$Baseline,   # write the current counts as the high-water mark
   [switch]$Strict,     # ANY violation fails - the end state
-  [switch]$Quiet
+  [switch]$Quiet,
+  # THE PRICE-DRIFT RATCHET (2026-09-22, plan-2026-09-22-10 bec597). A plain run never writes its mark; -Tighten
+  # records a believable fall (and the FIRST mark, when none exists); -AcceptDrop lets -Tighten record a fall the
+  # ratchet lib would otherwise refuse as implausible (a whole store healing at once, which a proven Sam's shape does).
+  [switch]$Tighten,
+  [switch]$AcceptDrop
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ratchet.ps1')     # Test-RatchetMove: the PRICE-DRIFT ratchet's plausibility bar
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\lf-write.ps1')    # Write-TcLfFile: a -Tighten writes the tracked baseline in git's bytes
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path $root 'pu-lib.ps1')   # the SAME per-unit math the page publishes with
@@ -96,6 +103,55 @@ if ($SelfTest) {
     # And the parameter that makes all of this reachable at all.
     TT 'CLEAN TWIN  -ProductUrlsFile is honoured, so the precondition is testable without touching a live file' `
       ($puF -eq $ProductUrlsFile -or -not $ProductUrlsFile) ('puF=' + $puF)
+
+    # ---- THE PRICE-DRIFT RATCHET, run as a CHILD over a frozen board (2026-09-22, plan-2026-09-22-10 bec597) ----
+    # The frozen row is the real 2026-09-20 Sam's pads tile: the board publishes $15.48 for 92 ct (0.1683/each) while
+    # the link snapshot still says $12.48 (0.1357/each), 24% off - a PRICE-DRIFT on the right product. Fareway's
+    # paper-towels tile agrees with its link and is the CLEAN TWIN.
+    $rx = Join-Path $fx 'ratchet'
+    [void](New-Item -ItemType Directory -Path $rx -Force -ErrorAction Stop)
+    $cmpR = @{ comparison = @(
+        @{ id = 'feminine-pads'; unit = 'each'; stores = @(@{ store = "Sam's Club"; per_unit = 0.1683; type = 'everyday'; item = 'Always Ultra Thin Long Super Pads with Wings, Size 2, 92 ct.' }) },
+        @{ id = 'paper-towels'; unit = 'each'; stores = @(@{ store = 'Fareway'; per_unit = 1.0; type = 'everyday'; item = 'Frozen Twin Paper Towels' }) }) }
+    ($cmpR | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath (Join-Path $rx 'comparison-2026-09-20.json') -Encoding UTF8
+    $puR = Join-Path $rx 'product-urls.json'
+    (@{ items = @{
+        'feminine-pads' = @{ "Sam's Club" = @{ url = 'https://www.samsclub.com/ip/15235818162'; name = 'Always Ultra Thin Long Super Pads with Wings, Size 2, 92 ct.'; price = '$12.48'; size = '92 ct' } }
+        'paper-towels'  = @{ 'Fareway' = @{ url = 'https://shop.fareway.com/p/1'; name = 'Frozen Twin Paper Towels'; price = '$6.00'; size = '6 ct' } } } } | ConvertTo-Json -Depth 8) |
+      Set-Content -LiteralPath $puR -Encoding UTF8
+    '{ "flags": [] }' | Set-Content -LiteralPath (Join-Path $rx 'name-drift.json') -Encoding UTF8
+    (Get-Item (Join-Path $rx 'name-drift.json')).LastWriteTimeUtc = (Get-Date).ToUniversalTime().AddMinutes(10)
+    $blR = Join-Path $rx 'tile-integrity-baseline.json'
+    function Invoke-DriftArm([string]$mark, [switch]$Tight) {
+      if ($mark) { [IO.File]::WriteAllText($blR, $mark, (New-Object Text.UTF8Encoding($false))) } elseif (Test-Path $blR) { Remove-Item -LiteralPath $blR -Force }
+      $h0 = if (Test-Path $blR) { (Get-FileHash -LiteralPath $blR).Hash } else { '' }
+      $argl = @('-NoProfile', '-File', $PSCommandPath, '-OutDir', $rx, '-ProductUrlsFile', $puR)
+      if ($Tight) { $argl += '-Tighten' }
+      $o = & powershell @argl
+      $rcA = $LASTEXITCODE
+      $h1 = if (Test-Path $blR) { (Get-FileHash -LiteralPath $blR).Hash } else { '' }
+      $rep = Read-JsonFile (Join-Path $rx 'tile-integrity.json')
+      return @{ rc = $rcA; text = ($o -join "`n"); same = ($h0 -eq $h1); rep = $rep; mark = $(if (Test-Path $blR) { Read-JsonFile $blR } else { $null }) }
+    }
+    $r1 = Invoke-DriftArm '{ "drift_by_store": { "Sam''s Club": 0, "Fareway": 0 } }'
+    TT "MUST FIRE  a PRICE-DRIFT count ONE ABOVE the mark (Sam's Club 0 -> 1) is named by store and recorded as rose" `
+      ($r1.text -match "PRICE-DRIFT RATCHET ROSE  Sam's Club: 0 -> 1" -and @($r1.rep.drift_ratchet.rose).Count -eq 1) ($r1.text -split "`n" | Select-String 'DRIFT' | Select-Object -Last 1)
+    TT "MUST NOT FIRE  a rise does not hold the board: the audit's exit is still its accuracy verdict (0)" ($r1.rc -eq 0) ("rc=" + $r1.rc)
+    $r2 = Invoke-DriftArm '{ "drift_by_store": { "Sam''s Club": 1, "Fareway": 0 } }'
+    TT "MUST NOT FIRE  a count EQUAL to the mark (1 = 1, the bar) is silent and the baseline file is byte-identical" `
+      ($r2.text -cnotmatch 'RATCHET ROSE' -and $r2.text -match 'PRICE-DRIFT RATCHET OK' -and $r2.same) ("same=" + $r2.same)
+    $r3 = Invoke-DriftArm '{ "drift_by_store": { "Sam''s Club": 2, "Fareway": 0 } }'
+    TT "MUST NOT FIRE  a PLAIN run over a fall (2 -> 1) speaks CAN TIGHTEN and leaves the baseline byte-identical" `
+      ($r3.text -match "CAN TIGHTEN  Sam's Club: 2 -> 1" -and $r3.same) ("same=" + $r3.same)
+    $r4 = Invoke-DriftArm '{ "drift_by_store": { "Sam''s Club": 2, "Fareway": 0 } }' -Tight
+    TT "CLEAN TWIN  -Tighten records the fall (Sam's Club mark 2 -> 1) and keeps Fareway at 0" `
+      ((-not $r4.same) -and [int]$r4.mark.drift_by_store.'Sam''s Club' -eq 1 -and [int]$r4.mark.drift_by_store.'Fareway' -eq 0) (($r4.mark | ConvertTo-Json -Compress))
+    $r5 = Invoke-DriftArm ''
+    TT "MUST NOT FIRE  with no mark yet a plain run writes nothing (no baseline file appears)" `
+      ((-not (Test-Path $blR)) -and $r5.text -match 'has no mark yet') ($r5.text -split "`n" | Select-String 'mark' | Select-Object -Last 1)
+    $r6 = Invoke-DriftArm '' -Tight
+    TT "CLEAN TWIN  -Tighten with no mark records TODAY's counts as the first mark (Sam's Club 1)" `
+      ([int]$r6.mark.drift_by_store.'Sam''s Club' -eq 1) (($r6.mark | ConvertTo-Json -Compress))
   } finally { Remove-Item -LiteralPath $fx -Recurse -Force -ErrorAction SilentlyContinue }
   if ($bad) { Write-Output "TILE-INTEGRITY SELF-TEST FAILED ($bad)"; exit 2 }
   Write-Output 'TILE-INTEGRITY SELF-TEST PASS - the staleness precondition fires on the founding case and stays silent on both twins'
@@ -104,7 +160,6 @@ if ($SelfTest) {
 
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
 $cmp = (Read-JsonFile $cmpF.FullName).comparison
-$pu = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 $drift = @{}
 $ndF = Join-Path $OutDir 'name-drift.json'
 # STALENESS ASSERTION (2026-08-21). The WRONG-PRODUCT half of this audit is not computed here - it is READ
@@ -123,6 +178,9 @@ $ndF = Join-Path $OutDir 'name-drift.json'
 # So: the flags must be no older than the things they describe. Anything else is HELD, not warned - a guard
 # that cannot see the current links has no opinion to offer, and saying so is the whole point.
 $puF = if ($ProductUrlsFile) { $ProductUrlsFile } else { Join-Path $root 'product-urls.json' }
+# GRADED FROM $puF, NOT FROM $root (2026-09-22). The staleness precondition already honoured -ProductUrlsFile but the
+# grading below read the live file regardless, so no fixture could reach the grading path.
+$pu = (Read-JsonFile $puF).items
 if (Test-Path $ndF) {
   $ndAge = (Get-Item $ndF).LastWriteTimeUtc
   $stale = @()
@@ -301,7 +359,8 @@ if ($Strict) {
   Write-Output 'tile-integrity: STRICT - every priced tile also has a verified link.'
   Exit-Guard -Name 'tile-integrity' -Code 0
 }
-if (Test-Path $blF) {
+# A baseline that carries only the drift mark (no coverage by_store yet) is not a coverage baseline: skip, never index null.
+if ((Test-Path $blF) -and (Read-JsonFile $blF).PSObject.Properties['by_store']) {
   $bl = (Read-JsonFile $blF).by_store
   $worse = @()
   # compare COVERAGE only. Accuracy is gated above, and pruning a bad link (the right fix) RAISES a store's
@@ -328,6 +387,65 @@ if (Test-Path $blF) {
   }
   else { Write-Output 'tile-integrity: COVERAGE OK - no store regressed against the baseline.' }
 }
+# ---- PRICE-DRIFT: a per-store RATCHET that may only fall (2026-09-22, plan-2026-09-22-10 bec597) -------------------
+# The chain has re-derived every store's link prices daily since 0072c7586, so drift that SURVIVES the chain is a link
+# the chain cannot reconcile: on 2026-09-22, 83 tiles, 67 of them Sam's alphanumeric ids with no proven URL shape.
+# A count that rises is a NEW class of unreconcilable link the day it appears. It is named here, recorded in
+# tile-integrity.json as drift_ratchet.rose, and check-ad-cycles pages it; it does NOT change this audit's exit.
+# DEVIATION FROM THE PLAN'S "a rise exits 2": guards.ps1 runs this audit as a BOARD-scope guard, so an exit 2 here
+# holds the whole board, and drift is a link snapshot a few cents old on the RIGHT product, which this file's own
+# ACCURACY/DRIFT split and Brad's 2026-09-21 ruling (one bad item never holds the board) both say must not block.
+# The mark lives in tile-integrity-baseline.json as drift_by_store. A plain run NEVER writes it (a gate run must not
+# rewrite a tracked file); a fall is spoken as CAN TIGHTEN and the committed mark kept; -Tighten records it through
+# lib\ratchet.ps1's plausibility bar, and records the first mark when none exists yet.
+$driftNow = @{}
+foreach ($k in $tiles.Keys) { $driftNow[$k] = 0 }
+foreach ($x in $driftRows) { $driftNow[$x.store] = [int]$driftNow[$x.store] + 1 }
+$driftRatchet = [ordered]@{ marks = $null; rose = @(); can_tighten = @(); now = $driftNow }
+$blDoc = $null
+if (Test-Path $blF) { $blDoc = Read-JsonFile $blF }
+$marks = $null
+if ($blDoc -and $blDoc.PSObject.Properties['drift_by_store']) { $marks = $blDoc.drift_by_store }
+$newMarks = [ordered]@{}; $markMoved = $false
+if ($null -eq $marks) {
+  Write-Output 'tile-integrity: PRICE-DRIFT RATCHET has no mark yet - run with -Tighten once to record today''s counts.'
+  foreach ($k in ($driftNow.Keys | Sort-Object)) { $newMarks[$k] = [int]$driftNow[$k] }
+  $markMoved = $true
+}
+else {
+  $driftRatchet.marks = $marks
+  foreach ($k in ($driftNow.Keys | Sort-Object)) {
+    $now = [int]$driftNow[$k]
+    if (-not $marks.PSObject.Properties[$k]) { $newMarks[$k] = $now; $markMoved = $true; continue }   # a store new to the board
+    $was = [int]$marks.$k
+    $mv = Test-RatchetMove -Name ('PRICE-DRIFT ' + $k) -Count $now -Baseline $was -AcceptDrop:$AcceptDrop
+    switch ($mv.Verdict) {
+      'rose'        { $driftRatchet.rose += ($k + ': ' + $was + ' -> ' + $now); $newMarks[$k] = $was
+                      Write-Output ('tile-integrity: PRICE-DRIFT RATCHET ROSE  ' + $k + ': ' + $was + ' -> ' + $now + '  (a new link the chain cannot reconcile)') }
+      'held'        { $newMarks[$k] = $was }
+      'tightened'   { $driftRatchet.can_tighten += ($k + ': ' + $was + ' -> ' + $now); $newMarks[$k] = $now; $markMoved = $true
+                      Write-Output ('tile-integrity: PRICE-DRIFT ratchet CAN TIGHTEN  ' + $k + ': ' + $was + ' -> ' + $now) }
+      'implausible' { $newMarks[$k] = $was; Write-Output ('tile-integrity: PRICE-DRIFT ' + $mv.Message) }
+      default       { throw ('unknown ratchet verdict: ' + $mv.Verdict) }
+    }
+  }
+  foreach ($p in $marks.PSObject.Properties) { if (-not $newMarks.Contains($p.Name)) { $newMarks[$p.Name] = [int]$p.Value } }   # a store off today's board keeps its mark
+  if (-not $driftRatchet.rose.Count) { Write-Output 'tile-integrity: PRICE-DRIFT RATCHET OK - no store rose above its mark.' }
+}
+$report['drift_ratchet'] = $driftRatchet
+($report | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $OutDir 'tile-integrity.json') -Encoding UTF8
+if ($Tighten) {
+  if ($markMoved) {
+    if ($linked -le 0 -or $graded -le 0) { Write-Output 'tile-integrity: -Tighten REFUSED - BLIND run; no drift mark written.'; exit 3 }
+    $bl2 = if ($blDoc) { $blDoc } else { [pscustomobject]@{} }
+    $bl2 | Add-Member -NotePropertyName drift_by_store -NotePropertyValue ([pscustomobject]$newMarks) -Force
+    $bl2 | Add-Member -NotePropertyName drift_set -NotePropertyValue (Get-Date -Format 'yyyy-MM-dd HH:mm') -Force
+    $null = Write-TcLfFile -Path $blF -Text ($bl2 | ConvertTo-Json -Depth 6)
+    Write-Output ('tile-integrity: PRICE-DRIFT mark written: ' + (($newMarks.Keys | ForEach-Object { $_ + ' ' + $newMarks[$_] }) -join ', '))
+  }
+  else { Write-Output 'tile-integrity: -Tighten - nothing to record, every store held or rose.' }
+}
+
 # The verdict is computed, so the marker has to be too: emit it for the 2 and 0 verdicts (both are completed
 # runs) and never for 3, which is this estate's could-not-evaluate code and the opposite of completion.
 $__tiCode = if ($fail2) { 2 } elseif ($linked -le 0 -or $graded -le 0) { 3 } else { 0 }

@@ -274,6 +274,25 @@ if ($DryRun) { Write-Output '--- DRY RUN, nothing written ---'; Write-Output $js
 [IO.File]::WriteAllText($ListFile, $json, (New-Object System.Text.UTF8Encoding($false)))
 Write-Output ("wrote " + $ListFile + " (" + @($entries).Count + " entries)")
 
+# A RULING RE-CHECKS THE LINK THAT POINTS AT ITS PRODUCT, IN THIS RUN (2026-09-22, plan-2026-09-22-10). On 2026-09-21
+# Fareway's fresh-tomatoes link was derived from "Dei Fratelli Tomatoes, Whole" hours before that can was ruled wrong
+# here; nothing re-checked the link, and the next thing to see it was audit-known-wrong holding a push. So a new
+# ruling runs derive-links-from-prices scoped to its own commodity and store: a link to the ruled product is dropped,
+# and re-derived from the row the board now prices when that row carries an identity. The daily chain's unscoped
+# derive does the same for a ruling written any other way.
+if (-not $Reverse -and $Commodity -and $Store) {
+  $deriver = Join-Path $PSScriptRoot 'derive-links-from-prices.ps1'
+  $purl = Join-Path $Root 'product-urls.json'
+  if ((Test-Path $deriver) -and (Test-Path $purl)) {
+    Write-Output ''
+    Write-Output ('--- derive-links-from-prices.ps1 -Store "' + $Store + '" -Commodity ' + $Commodity + ' -Apply ---')
+    & powershell -NoProfile -ExecutionPolicy Bypass -File $deriver -OutDir $outDir -ProductUrlsFile $purl -KnownWrongFile $ListFile -Store $Store -Commodity $Commodity -Apply |
+      Where-Object { $_ -match 'DROPPED|ruled wrong|DERIVED|APPLIED|scoped' }
+    if ($LASTEXITCODE -ne 0) { Write-Output ('derive-links-from-prices exited ' + $LASTEXITCODE + ' - the link was NOT re-checked; the daily chain will, and audit-known-wrong below still reads it') }
+  }
+  else { Write-Output 'no product-urls.json under -Root: link re-check skipped (the daily chain derive re-checks it)' }
+}
+
 $auditor = Join-Path $Root 'audit-known-wrong.ps1'
 if (-not (Test-Path $auditor)) { Write-Output 'audit-known-wrong.ps1 not found next to the list - run it manually'; exit 0 }
 Write-Output ''
