@@ -4133,29 +4133,34 @@ try {
   }
 } catch { Log ('ghost-drift weekly threw: ' + $_.Exception.Message) }
 
-# ---- WEEKLY: are the agent prompts and scheduled-task SKILLs still backed up and current? ----
+# ---- DAILY: is the mirror ON MAIN still a current backup of the agent prompts and scheduled-task SKILLs? ----
 # ops\audit-prompt-backup.ps1 existed since 2026-07-31 and NOTHING called it. The prompts the triage agents
 # run on are code, they live outside this repo in ~\.claude\, and the only thing proving they are backed up
-# was a script nobody invoked. Weekly, because prompts change on the scale of someone editing one.
+# was a script nobody invoked.
+# DAILY, AND THE FLOOR, SINCE 2026-09-23 (design\PLAN-push-derived-conflicts-2026-09-23.md W8.4, Brad's ruling
+# D15). The audit's push-time run now judges only what a push changed, because a live prompt edited in one
+# session reddened every other checkout's push and none of them could fix it. This is the run that still sees
+# the whole mirror: -Daily compares the shared live copies with the mirror AS COMMITTED on origin/main (the main
+# checkout's own copy is refreshed on disk every morning by capture-run's prompt-sync, so reading it would miss
+# exactly the mirror nobody committed), and exits 2 only on a finding more than 24 hours old, which is what pages
+# here. Every run of this chain runs it, like memory-backup below; the weekly stamp it used,
+# grocery\prompt-backup-weekly-stamp.txt, is read and written by nothing now and is left where the bot commits it.
+# The marker is logged whole on every run, so a day with no PROMPT-BACKUP-COMPLETE line in ad-cycle-log.txt is
+# a day the floor did not run (the plan's bar B15 counts it).
 try {
-  $pbStampF = Join-Path $root 'prompt-backup-weekly-stamp.txt'
-  $pbLast = [datetime]'2000-01-01'
-  if (Test-Path $pbStampF) { try { $pbLast = [datetime](Get-Content $pbStampF -TotalCount 1) } catch {} }
-  if (((Get-Date) - $pbLast).TotalDays -ge 7) {
-    $pb = (& powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'ops\audit-prompt-backup.ps1') | ForEach-Object { [string]$_ }) -join "`n"
-    $pbRc = $LASTEXITCODE
-    (Get-Date -Format 'yyyy-MM-dd') | Set-Content $pbStampF -Encoding ascii
-    if ($pb -notmatch '(?m)^PROMPT-BACKUP-COMPLETE') {
-      Log ('prompt-backup weekly DID NOT RUN TO THE END (rc=' + $pbRc + ') - no completion marker')
-      $summary += 'REVIEW    prompt-backup weekly did not finish - agent prompt backups went unverified'
-    } elseif ($pbRc -eq 0) { Log 'prompt-backup weekly: every live agent prompt and scheduled-task SKILL is backed up and current' }
-    else {
-      Log ('prompt-backup weekly rc=' + $pbRc)
-      $summary += 'REVIEW    an agent prompt or scheduled-task SKILL is not backed up (or the backup is stale)'
-      if (-not $NoAlert) { Send-Alert -Subject 'Ops: an agent prompt is not backed up' -Body ("ops\audit-prompt-backup.ps1 proves the agent prompts and scheduled-task SKILLs - which are CODE and live outside this repo - are backed up to ops\prompt-backup and identical across scopes. Exit " + $pbRc + ": 2 = drift or missing, 3 = BLIND (found nothing to check, which is a pass that proves nothing).`n`n" + $pb) | Out-Null }
-    }
+  $pb = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'ops\audit-prompt-backup.ps1') -Daily | ForEach-Object { [string]$_ }) -join "`n"
+  $pbRc = $LASTEXITCODE
+  $pbMark = [regex]::Match($pb, '(?m)^PROMPT-BACKUP-COMPLETE[^\r\n]*').Value
+  if (-not $pbMark) {
+    Log ('prompt-backup daily DID NOT RUN TO THE END (rc=' + $pbRc + ') - no completion marker')
+    $summary += 'REVIEW    prompt-backup daily did not finish - agent prompt backups went unverified'
+  } elseif ($pbRc -eq 0) { Log ('prompt-backup daily: nothing on the mirror on main has disagreed with its live copy for over 24 hours - ' + $pbMark) }
+  else {
+    Log ('prompt-backup daily rc=' + $pbRc + ' - ' + $pbMark)
+    $summary += 'REVIEW    an agent prompt or scheduled-task SKILL has not matched its backup on main for over 24 hours'
+    if (-not $NoAlert) { Send-Alert -Subject 'Ops: an agent prompt is not backed up' -Body ("ops\audit-prompt-backup.ps1 -Daily proves the agent prompts and scheduled-task SKILLs - which are CODE and live outside this repo - are backed up by ops\prompt-backup AS COMMITTED ON origin/main, and identical across scopes in the main checkout. It pages only on a finding more than 24 hours old: a push no longer fails on drift it did not cause, so this is the one run that sees the whole mirror. Exit " + $pbRc + ": 2 = drift or missing, 3 = BLIND (found nothing to check, which is a pass that proves nothing).`n`n" + $pb) | Out-Null }
   }
-} catch { Log ('prompt-backup weekly threw: ' + $_.Exception.Message) }
+} catch { Log ('prompt-backup daily threw: ' + $_.Exception.Message) }
 
 # ---- DAILY: is the agent memory store versioned, intact, and OUT of this public repo? ----
 # ops\audit-memory-backup.ps1, added 2026-09-03. The memory files are data this estate reasons from and
@@ -4164,8 +4169,8 @@ try {
 # changing the file size - and with nothing versioning the directory, recovery meant rebuilding the content
 # out of session transcripts. Memory now has its own local git history.
 #
-# DAILY, not weekly like prompt-backup: prompts change when someone edits one, memory changes on almost
-# every session. -Sync so the history can never fall behind on its own.
+# DAILY, because memory changes on almost every session (prompt-backup above was weekly until 2026-09-23, and
+# is daily now for a different reason: it became the floor). -Sync so the history can never fall behind on its own.
 #
 # IT IS NOT MIRRORED INTO ops\ AND MUST NOT BE. This repo is PUBLIC (private=False, checked 2026-09-03),
 # and memory carries cost, revenue and account notes. Half of what this guard watches for is memory
