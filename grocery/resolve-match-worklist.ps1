@@ -34,6 +34,9 @@ param(
   [string]$Pattern = '',
   [string]$Reason = '',
   [string]$By = 'resolve-match-worklist -Decide',
+  # -Decide on a key no longer on the worklist: the commodity that CLAIMS the name (a coverage key's key names only its
+  # target, so without this a release could not say where its exclude goes; found 2026-09-23)
+  [string]$Claimer = '',
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -70,8 +73,11 @@ if ($Decide) {
     # a key may be decided before it reaches the worklist (a hand review of a detector file); rebuild it from the key
     $p = $Decide -split '\|', 4
     if ($p.Count -lt 4) { Write-Output ('resolve-match-worklist: ' + $Decide + ' is not a kind|commodity|store|name key'); exit 1 }
-    $row = [pscustomobject]@{ kind = $p[0]; commodity = $p[1]; claimer = $(if ($p[0] -in 'contested', 'aisle', 'band') { $p[1] } else { '' }); store = $p[2]; name = $p[3] }
+    $prevV = if ($verdicts.ContainsKey($Decide)) { $verdicts[$Decide] } else { $null }
+    $cl = if ($Claimer) { $Claimer } elseif ($prevV -and [string]$prevV.claimer) { [string]$prevV.claimer } elseif ($p[0] -in 'contested', 'aisle', 'band') { $p[1] } else { '' }
+    $row = [pscustomobject]@{ kind = $p[0]; commodity = $p[1]; claimer = $cl; store = $p[2]; name = $p[3] }
   }
+  if ($Verdict -eq 'release' -and -not [string]$row.claimer) { Write-Output ('resolve-match-worklist: a release needs the claiming commodity; pass -Claimer for ' + $Decide); exit 1 }
   $verdicts[$Decide] = New-MatchVerdict $Decide $row $Verdict $By $Reason $Pattern $Today
   Save-MatchVerdicts $VerdictFile $verdicts
   Write-Output ('resolve-match-worklist: recorded ' + $Verdict + ' for ' + $Decide)
