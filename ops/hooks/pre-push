@@ -1,5 +1,5 @@
 #!/bin/sh
-# pre-push - run ops\run-gates.ps1 and refuse the push unless it passes.
+# pre-push - refuse the push unless the chain rehearsal record, ops\run-gates.ps1 and the test-auditors check all pass.
 #
 # WHY THIS EXISTS (2026-09-09). ThriftyCrew's own CLAUDE.md said "ops/run-gates.ps1 is the change-time
 # gate and runs on every push". It did not, and had not since 2026-08-11. gates.yml ran `on: push` to
@@ -41,7 +41,38 @@
 # uninstalls. ops\audit-hook-installed.ps1 asserts this file is live, so skipping it is a choice
 # somebody made rather than a state nobody noticed.
 #
+# THE ORDER, CHEAPEST REFUSAL FIRST (2026-09-23, W1.1 of design/PLAN-push-derived-conflicts-2026-09-23.md):
+#   1. read the ref lines (a push that only deletes refs exits 0 here);
+#   2. resolve the working tree, and refuse when it, the gate or the test-auditors check is missing;
+#   3. clear the repository environment;
+#   4. seed a checkout with no built cards, once;
+#   5. ask ops/rehearse-chain.ps1 -CheckPush for the recorded rehearsal verdict, which takes seconds;
+#   6. run ops/run-gates.ps1;
+#   7. run ops/prepush-test-auditors.ps1;
+#   8. take the machine-wide push lock for the ref update only.
+# Step 5 used to run AFTER step 7, inside the branch where test-auditors had passed, so a chain-touching push with no
+# verdict paid the whole gate and a full test-auditors run before a record read that takes seconds refused it: the plan
+# measured full test-auditors runs of 792 s and 709 s inside the lock before two such refusals. The same three checks
+# must all pass exactly as before. The one thing that changed is which refusal a push failing several of them sees
+# first: now the rehearsal's, which is also the one that prints the -NoRehearsal bypass line.
+#
+# EVERY REFUSAL ENDS WITH ONE FIXED LINE on stderr, for a machine to read rather than a person:
+#   PRE-PUSH-REFUSED cause=<run-gates|test-auditors|rehearsal|structure> [gate=<first failing gate>]
+# ops/push-main.ps1 classifies an in-lock refusal from it (the push ledger's reject_class) and prefers it to the prose
+# above it, which changes whenever somebody improves a message. gate= is the first token after FAIL on run-gates' first
+# "  FAIL" line, and is printed only when run-gates printed one. A push that exits 0 prints no such line.
+#
 # Install:  powershell -File ops\install-hooks.ps1
+
+# THE FIXED REFUSAL LINE (2026-09-23, W1.1). Every BLOCKED and REFUSING exit below calls this LAST, just before exit 1.
+# printf, never echo: a gate path carries backslashes, and an echo that interprets them would rewrite it.
+say_refused() {
+  if [ -n "$2" ]; then
+    printf 'PRE-PUSH-REFUSED cause=%s gate=%s\n' "$1" "$2" >&2
+  else
+    printf 'PRE-PUSH-REFUSED cause=%s\n' "$1" >&2
+  fi
+}
 
 # A push that only DELETES refs introduces no new code to gate. stdin carries one line per ref as
 # "<local ref> <local sha> <remote ref> <remote sha>", and an all-zero local sha is a deletion.
@@ -75,6 +106,7 @@ if [ -z "$repo" ]; then
   echo "pre-push: REFUSING - git could not resolve this checkout's working tree, so nothing gated this push." >&2
   echo "          If 'git config core.bare' says true in a checkout, the shared config is damaged: repair that first." >&2
   echo "          Bypass with: git push --no-verify" >&2
+  say_refused structure
   exit 1
 fi
 gate="$repo/ops/run-gates.ps1"
@@ -85,6 +117,7 @@ if [ ! -f "$gate" ]; then
   rm -f "$refs"
   echo "pre-push: REFUSING - ops/run-gates.ps1 is missing, so nothing verified this push." >&2
   echo "          Restore it, or push with --no-verify if you have decided that is right." >&2
+  say_refused structure
   exit 1
 fi
 
@@ -93,6 +126,7 @@ if [ ! -f "$ta" ]; then
   rm -f "$refs"
   echo "pre-push: REFUSING - ops/prepush-test-auditors.ps1 is missing, so nothing can say whether this push blinds a guard." >&2
   echo "          Restore it, or push with --no-verify if you have decided that is right." >&2
+  say_refused structure
   exit 1
 fi
 
@@ -248,6 +282,52 @@ take_push_lock() {
   fi
 }
 
+# A CHAIN-TOUCHING PUSH CARRIES A REHEARSAL VERDICT (2026-09-22, RCA F2, grocery/triage-plans/plan-2026-09-22-7.json).
+# 8 of the defects of 09-20 to 09-22 passed run-gates and failed on the next real board, because nothing ran the daily
+# chain over real data before the bot did. ops/rehearse-chain.ps1 -CheckPush reads git's ref lines and, for a push to
+# main that changes a script in ops/chain-manifest.json, ALLOWS only on a recorded rehearsal pass over data no older than
+# two days. It never rehearses: it decides from the record in seconds, BEFORE the push lock below is taken, so the
+# ~14-minute rehearsal itself runs outside the lock (ops/push-main.ps1 runs it there, or run the script by hand).
+# Exit 1 is "rehearsed and failed" or "no verdict"; exit 3 is "could not rehearse" and names its blind= cause; neither is
+# a pass. The loud bypass is TC_NO_REHEARSAL=<reason> (push-main -NoRehearsal sets it), which is printed and logged. A
+# checkout that predates the script has nothing to check with and says so, as the push-lock holder does.
+#
+# ASKED FIRST, BEFORE THE GATE (2026-09-23, W1.1 of design/PLAN-push-derived-conflicts-2026-09-23.md). This check used
+# to run after test-auditors, and its refusal printed only when test-auditors had passed, so a chain push with no
+# verdict paid run-gates and a full test-auditors run for an answer this record read gives in seconds. It now runs
+# here, and a refusal exits here, before run-gates is started. $refs is written at the top of this file, so its input
+# already exists; it is removed on this exit path as on every other early one, and kept on the way through because
+# test-auditors reads it too. The call, its exit codes and its TC_NO_REHEARSAL handling are exactly what they were.
+rh="$repo/ops/rehearse-chain.ps1"
+rhrc=0
+rhlog="${TMPDIR:-/tmp}/tc-prepush-rh-$$.log"
+if [ -f "$rh" ]; then
+  powershell -NoProfile -ExecutionPolicy Bypass -File "$rh" -CheckPush -RefsFromStdin < "$refs" > "$rhlog" 2>/dev/null
+  rhrc=$?
+  if [ "$rhrc" -eq 0 ] && ! tail -n 1 "$rhlog" | grep -q -E "^CHAIN-REHEARSAL-CHECK-COMPLETE"; then
+    rhrc=4
+  fi
+else
+  echo "pre-push: this checkout has no ops/rehearse-chain.ps1, so no chain rehearsal was asked of this push." > "$rhlog"
+fi
+if [ "$rhrc" -ne 0 ]; then
+  rm -f "$refs"
+  grep -v -E "^CHAIN-REHEARSAL-CHECK-COMPLETE" "$rhlog" >&2
+  echo "" >&2
+  case "$rhrc" in
+    3) echo "pre-push: BLOCKED - the chain rehearsal COULD NOT EVALUATE (exit 3). A could-not-rehearse is NEVER a pass; its blind= cause is above." >&2 ;;
+    4) echo "pre-push: BLOCKED - the chain rehearsal check exited 0 without its completion marker, so it decided nothing." >&2 ;;
+    *) echo "pre-push: BLOCKED - this push changes the daily chain and carries no passing rehearsal over recent data (exit $rhrc)." >&2 ;;
+  esac
+  echo "          Rehearse:  powershell -File ops/rehearse-chain.ps1   (or land with ops/push-main.ps1, which rehearses outside the lock)" >&2
+  echo "          Bypass loudly: ops/push-main.ps1 -NoRehearsal -NoRehearsalReason '<why>'  (a plain push: TC_NO_REHEARSAL='<why>')" >&2
+  echo "          full output kept at: $rhlog" >&2
+  say_refused rehearsal
+  exit 1
+fi
+grep -v -E "^CHAIN-REHEARSAL-CHECK-COMPLETE" "$rhlog" >&2
+rm -f "$rhlog"
+
 echo "pre-push: running ops/run-gates.ps1 (about 51s) - once for this push, not once per commit." >&2
 
 # REDIRECT, THEN READ THE STATUS, THEN GREP THE FILE. Reading a status through a pipe gives the LAST
@@ -289,50 +369,12 @@ if [ "$rc" -eq 0 ]; then
   talog="${TMPDIR:-/tmp}/tc-prepush-ta-$$.log"
   powershell -NoProfile -ExecutionPolicy Bypass -File "$ta" -RefsFromStdin < "$refs" > "$talog" 2>/dev/null
   tarc=$?
-
-  # A CHAIN-TOUCHING PUSH CARRIES A REHEARSAL VERDICT (2026-09-22, RCA F2, grocery/triage-plans/plan-2026-09-22-7.json).
-  # 8 of the defects of 09-20 to 09-22 passed run-gates and failed on the next real board, because nothing ran the daily
-  # chain over real data before the bot did. ops/rehearse-chain.ps1 -CheckPush reads git's ref lines and, for a push to
-  # main that changes a script in ops/chain-manifest.json, ALLOWS only on a recorded rehearsal pass over data no older than
-  # two days. It never rehearses: it decides from the record in seconds, BEFORE the push lock below is taken, so the
-  # ~14-minute rehearsal itself runs outside the lock (ops/push-main.ps1 runs it there, or run the script by hand).
-  # Exit 1 is "rehearsed and failed" or "no verdict"; exit 3 is "could not rehearse" and names its blind= cause; neither is
-  # a pass. The loud bypass is TC_NO_REHEARSAL=<reason> (push-main -NoRehearsal sets it), which is printed and logged. A
-  # checkout that predates the script has nothing to check with and says so, as the push-lock holder does.
-  rh="$repo/ops/rehearse-chain.ps1"
-  rhrc=0
-  rhlog="${TMPDIR:-/tmp}/tc-prepush-rh-$$.log"
-  if [ -f "$rh" ]; then
-    powershell -NoProfile -ExecutionPolicy Bypass -File "$rh" -CheckPush -RefsFromStdin < "$refs" > "$rhlog" 2>/dev/null
-    rhrc=$?
-    if [ "$rhrc" -eq 0 ] && ! tail -n 1 "$rhlog" | grep -q -E "^CHAIN-REHEARSAL-CHECK-COMPLETE"; then
-      rhrc=4
-    fi
-  else
-    echo "pre-push: this checkout has no ops/rehearse-chain.ps1, so no chain rehearsal was asked of this push." > "$rhlog"
-  fi
   rm -f "$refs"
   grep -v -E "^PREPUSH-TEST-AUDITORS-COMPLETE" "$talog" >&2
   # An exit 0 counts only with the completion marker as the last line: a check that died early has
   # not decided anything.
-  if [ "$tarc" -eq 0 ] && tail -n 1 "$talog" | grep -q -E "^PREPUSH-TEST-AUDITORS-COMPLETE" && [ "$rhrc" -ne 0 ]; then
-    rm -f "$talog"
-    grep -v -E "^CHAIN-REHEARSAL-CHECK-COMPLETE" "$rhlog" >&2
-    echo "" >&2
-    case "$rhrc" in
-      3) echo "pre-push: BLOCKED - the chain rehearsal COULD NOT EVALUATE (exit 3). A could-not-rehearse is NEVER a pass; its blind= cause is above." >&2 ;;
-      4) echo "pre-push: BLOCKED - the chain rehearsal check exited 0 without its completion marker, so it decided nothing." >&2 ;;
-      *) echo "pre-push: BLOCKED - this push changes the daily chain and carries no passing rehearsal over recent data (exit $rhrc)." >&2 ;;
-    esac
-    echo "          Rehearse:  powershell -File ops/rehearse-chain.ps1   (or land with ops/push-main.ps1, which rehearses outside the lock)" >&2
-    echo "          Bypass loudly: ops/push-main.ps1 -NoRehearsal -NoRehearsalReason '<why>'  (a plain push: TC_NO_REHEARSAL='<why>')" >&2
-    echo "          full output kept at: $rhlog" >&2
-    exit 1
-  fi
   if [ "$tarc" -eq 0 ] && tail -n 1 "$talog" | grep -q -E "^PREPUSH-TEST-AUDITORS-COMPLETE"; then
     rm -f "$talog"
-    grep -v -E "^CHAIN-REHEARSAL-CHECK-COMPLETE" "$rhlog" >&2
-    rm -f "$rhlog"
     # EVERY CHECK HAS PASSED, so now take the lock and hold it across the ref update only. The trap is cleared
     # first: it exists to hand the lock back on every failing path, and on THIS path the holder must outlive the
     # hook, because git has not pushed yet. What ends the hold is git exiting, which the holder watches.
@@ -340,7 +382,6 @@ if [ "$rc" -eq 0 ]; then
     trap - EXIT
     exit 0
   fi
-  rm -f "$rhlog"
   echo "" >&2
   if [ "$tarc" -eq 0 ]; then
     echo "pre-push: BLOCKED - the test-auditors check exited 0 without its completion marker, so it decided nothing." >&2
@@ -352,6 +393,7 @@ if [ "$rc" -eq 0 ]; then
   fi
   echo "          full output kept at: $talog" >&2
   echo "          Bypass with: git push --no-verify" >&2
+  say_refused test-auditors
   exit 1
 fi
 rm -f "$refs"
@@ -421,4 +463,8 @@ fi
 grep -E "^  FAIL|^run-gates: (FAILED|COULD NOT)" "$log" 2>/dev/null | head -12 >&2
 echo "          full gate output kept at: $log" >&2
 echo "          Bypass with: git push --no-verify" >&2
+# gate= is the first token after FAIL on run-gates' first "  FAIL" line, and is left off when there is none: a 3 from a
+# queue that never moved ran nothing and failed no gate. -n and p print only a line the pattern matched.
+failgate="$(grep -E '^  FAIL' "$log" 2>/dev/null | head -n 1 | sed -n -E 's/^  FAIL[[:space:]]+([^[:space:]]+).*/\1/p')"
+say_refused run-gates "$failgate"
 exit 1
