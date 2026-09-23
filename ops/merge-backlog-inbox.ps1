@@ -66,20 +66,100 @@
   2 = it would be quarantined, 3 = could not evaluate. This NAMES the existing -InboxDir
   plus -DryRun mechanism rather than adding a second one: one lane did exactly this by hand
   on 2026-09-12 and its files merged first time, and the lanes that broke the batch are the
-  ones that skipped the same instruction when it was only prose in a spawn prompt.
+  ones that skipped the same instruction when it was only prose in a spawn prompt. A file
+  whose folder is named `updates` is validated as an UPDATE file (below), because that is
+  how the merge will read it where it sits.
 
-  Exit 0 = everything merged, or nothing to merge. Exit 2 = at least one inbox file was
-  malformed and QUARANTINED; every other file merged. Exit 3 = could not evaluate.
+  PROGRESS ON AN EXISTING ITEM IS AN UPDATE, AND IT COMES THROUGH HERE TOO (2026-09-23, W3.1 of
+  design\PLAN-push-derived-conflicts-2026-09-23.md, Brad's ruling D2). Lanes used to record progress by
+  editing BACKLOG-course-findings.md directly, and that file overlapped in 12 of 19 recent rebase
+  conflicts (the plan's section 2.3, A3). Brad's 2026-09-08 ruling for new findings, one file per writer and one merge, now covers
+  updates as well. A lane writes its own file under a NEW subdirectory,
+  `design\backlog-inbox\updates\<lane>-<YYYY-MM-DD>.md`:
+
+      ## UPDATE I165
+      `DONE` `queue-7`
+      <body paragraphs, appended to that item>
+
+  The heading is exactly `## UPDATE <id>`, the id letters then digits. The next non-empty line is the
+  item's new tag spans, and its first span is the state. THE SUBDIRECTORY IS THE COMPATIBILITY: the merge
+  before this change listed `$InboxDir\*.md` without -Recurse, so an older copy in some other checkout never
+  sees an UPDATE file and cannot mint `## UPDATE I165` as a NEW item with a bogus id. For the same reason
+  an UPDATE heading in an inbox-ROOT file is quarantined here rather than minted.
+
+  WHAT AN UPDATE REPLACES, and nothing else. A heading is
+  `### <id> - <title> <state span> [<tag spans>] [<prose>]`, a title can carry backticked code of its
+  own (E7 `.worktreeinclude`), and some headings carry prose after their tags (I5). So an UPDATE replaces
+  exactly the ONE backticked span that is a state in audit-backlog-status.ps1's closed vocabulary (tried
+  longest first, as that file does), plus the backticked spans contiguous after it. The title before it
+  and the prose after the last replaced span stay byte-identical. The body goes at the end of that item's
+  section - before the next `#`, `##` or `###` heading outside a fenced block - after a blank line, and is
+  followed by `**Merged from design\backlog-inbox\updates\<file> on <date>.**`. Updates apply in ORDINAL
+  file-name order, then in-file order. A body line that is itself a heading is refused: appended to an
+  item it would start a new section, or a new item.
+
+  A CONFLICTING STATUS IS NEVER SETTLED BY ORDER. File names start with the lane, so "the later file wins"
+  would mean alphabetical by lane, not by time. Two files giving one id DIFFERENT tag sets are BOTH
+  quarantined into `updates\quarantine\`, each with a .reason.txt naming the other, nothing is merged for
+  that id, and the run exits 2. Identical tag sets both merge, and the output says
+  `I165 updated by 2 files: <a>, <b>`. One file giving one id two tag sets is quarantined the same way.
+
+  THE GATE JUDGES EVERY UPDATE BEFORE IT LANDS. A file's updates are applied to a TEMP copy and
+  `audit-backlog-status.ps1 -Backlog <that copy>` runs over it: the push gate's own rules, not a copy of
+  them. A file whose update fails there (a missing reversibility or first-rung tag on a heading that is not
+  closed, two state spans, an unknown state) is quarantined whole with the gate's finding in its
+  .reason.txt, and so is an UPDATE naming an id the backlog does not have. The gate runs first over the
+  backlog as it stands: if that is ALREADY red, no update can be judged by it, so every update file stays
+  where it is, none of it lands, and the run exits 3. A could-not-evaluate is never a quarantine. Each file
+  is judged ALONE, which is what lets a finding name the one file that caused it; the combined text needs no
+  second run, because every rule the gate applies is per heading or per item and a difference between two
+  files on one item never gets this far. NEW findings are still judged by this file's own parser, exactly as
+  before: the gate run is for updates.
+
+  ONE WRITER, AND NOW A LOCK THAT SAYS SO. The allocator was safe because only one merge ever ran, which
+  was a habit. W3.4 adds a scheduled run beside the hand runs, so a real merge holds lib\ledger-lock.ps1's
+  lock on the backlog's path across its inbox read, its id allocation, its write and its consume. A second
+  merge waits for it and then finds an empty inbox. It is the only lock this takes, innermost in the
+  declared order (.claude\rules\ops-and-gates.md), so nothing nests under it. A merge that cannot take it
+  within -LockWaitSec (120 s, the library's own default, the first plausible value and not swept) writes,
+  consumes and quarantines nothing and exits 3. -DryRun, and so -ValidateFile, takes NO lock: it writes
+  nothing, and a push validating one file must never wait behind a merge. What the wait does when the
+  producer stops: nothing - it runs only when a merge runs.
+
+  A backlog changed by an UPDATE is rewritten whole through lib\atomic-write.ps1 (Write-TcAtomicFile, its
+  BOM kept as it was, no newline added), because its readers - git, the gate, a person - take no lock, and
+  only after its bytes are checked unchanged since the read. A run that only appends new findings still
+  appends, byte for byte as before. THE WRITE COMES BEFORE THE CONSUME, so a crash between them loses
+  nothing and re-applies on the next run instead: replacing a heading's tags is idempotent, appending a
+  body is NOT, so that body (like a re-filed finding) would appear twice - a readable duplicate in one diff,
+  never a lost update.
+
+  THE COMMIT TRAILER. A merge that changed the backlog prints
+  `Backlog-Merged-From: <file>[, <file>...]`, each entry a path below design\backlog-inbox\ in forward
+  slashes, the way git names it (`lane-a-2026-09-23.md`, `updates/lane-b-2026-09-23.md`). Whoever commits
+  the merge puts that line in the commit, so a later check tells a merge from a hand edit by the trailer
+  rather than by a file deletion anyone could fake.
+
+  Exit 0 = everything merged, or nothing to merge. Exit 2 = at least one inbox file was malformed or
+  conflicting and QUARANTINED; every other file merged. Exit 3 = could not evaluate: no backlog, the lock
+  not taken, the backlog already failing its gate while updates wait, or a read, write or move that failed.
   Read the verdict LINE, not the number alone.
 
   Params: -InboxDir, -Backlog, -DryRun (print the plan, write nothing),
-          -ValidateFile <path> (one file, isolated), -SelfTest
+          -ValidateFile <path> (one file, isolated), -Today <yyyy-MM-dd> (the date written into merged-from
+          lines, today when omitted; a seam for the fixtures), -LockWaitSec <n>, -SelfTest
 #>
+# Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1). Every backlog and drop box the suite judges is
+# written into a per-run temp directory; beyond those it runs this file, the gate it validates updates with, the
+# libraries both load, and one FROZEN blob read by id from git's object store, which cannot change under its id.
+# gate-inputs: ops\merge-backlog-inbox.ps1, ops\audit-backlog-status.ps1, lib\ledger-lock.ps1, lib\atomic-write.ps1, lib\mutex-hold.ps1
 [CmdletBinding()]
 param(
   [string]$InboxDir = '',
   [string]$Backlog = '',
   [string]$ValidateFile = '',
+  [string]$Today = '',
+  [int]$LockWaitSec = 120,
   [switch]$DryRun,
   [switch]$SelfTest
 )
@@ -87,8 +167,13 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path -Parent $root
+. (Join-Path $repo 'lib\ledger-lock.ps1')     # Enter-TcLedgerLock: one merge at a time on one backlog
+. (Join-Path $repo 'lib\atomic-write.ps1')    # Write-TcAtomicFile: an updated backlog is replaced whole, never half
 if (-not $InboxDir) { $InboxDir = Join-Path $repo 'design\backlog-inbox' }
 if (-not $Backlog) { $Backlog = Join-Path $repo 'design\BACKLOG-course-findings.md' }
+if (-not $Today) { $Today = (Get-Date).ToString('yyyy-MM-dd') }
+# The push gate's own rules, run over a temp copy before any UPDATE lands.
+$AUDIT = Join-Path $root 'audit-backlog-status.ps1'
 
 # The closed vocabulary, copied from the legend `audit-backlog-status.ps1` enforces.
 # A state outside it turns that gate red, so this refuses rather than writes.
@@ -96,6 +181,12 @@ $STATES = @('DONE', 'PARKED', 'NEEDS A RULING', 'PARTLY DONE', 'OPEN')
 # The first-rung types audit-backlog-status.ps1 accepts, kept here so this merge refuses an invented
 # one rather than writing a heading that reddens the next push. `[ADDED 2026-09-12 after eight did.]`
 $RUNG_TYPES = @('READ', 'MEASURE', 'DOC', 'BUILD', 'RULING', 'BLOCKED')
+
+# An UPDATE heading, as it reads after the `## ` the block split removes (W3.1). Case-sensitive on purpose: a finding
+# titled "update the ..." is a finding, and `UPDATE I165` is the one spelling that names an existing item.
+$UPDATE_HEAD_RE = '^UPDATE[ \t]+([A-Z]+[0-9]+)[ \t]*$'
+# The same shape at the START of a root-inbox title, which the merge would otherwise mint as a new item.
+$UPDATE_TITLE_RE = '^UPDATE[ \t]+[A-Z]+[0-9]+\b'
 
 function Test-State([string]$s) {
   foreach ($v in $STATES) { if ($s -match ('^' + [regex]::Escape($v) + '\b')) { return $true } }
@@ -135,7 +226,8 @@ function Test-MislevelledFinding([string]$preamble) {
 function Read-Inbox([string]$path) {
   <# [(title, state, body)] from one inbox file. Throws on a malformed finding. #>
   $raw = Get-Content -LiteralPath $path -Raw -Encoding UTF8
-  $raw = $raw -replace "^﻿", ''
+  if ($null -eq $raw) { $raw = '' }
+  $raw = $raw -replace ('^' + [string][char]0xFEFF), ''
   $out = @()
   # Split on a heading at column 0 that is exactly two hashes. Element 0 is everything
   # BEFORE the first heading, which is NOT a finding - on 2026-09-08 a README's level-one
@@ -185,6 +277,11 @@ function Read-Inbox([string]$path) {
     $lines = $p -split "`r?`n"
     $title = $lines[0].Trim()
     if (-not $title) { continue }
+    # AN UPDATE IN THE ROOT WOULD BE MINTED AS A NEW ITEM (W3.1, 2026-09-23). Every `##` block here gets the next id,
+    # so `## UPDATE I165` filed at the root would become I<next> - UPDATE I165, a bogus item beside the real one.
+    if ($title -cmatch $UPDATE_TITLE_RE) {
+      throw "in $([IO.Path]::GetFileName($path)): '## $title' is an UPDATE to an existing item, and it sits in the inbox ROOT, where every '##' heading is minted as a NEW item with a new id. Move this file into design\backlog-inbox\updates\, where the merge applies it to the item it names."
+    }
     $stateLine = ($lines | Select-Object -Skip 1 | Where-Object { $_.Trim() } | Select-Object -First 1)
     # EVERY backticked tag on the line, not the first two. `[WIDENED 2026-09-09, measured.]` The old
     # pattern took a state and at most ONE tag, so an OPEN finding could not carry the reversibility
@@ -234,6 +331,223 @@ function Read-Inbox([string]$path) {
   return $out
 }
 
+# ------------------------------------------------------------------------------------ UPDATE blocks (W3.1)
+
+function Read-UpdateFile([string]$path) {
+  <# [(Id, Tags, Key, Body, From, Order)] from one updates\ file, or one Empty record for a declared NOTHING TO FILE.
+     Throws on a malformed block, so the whole file is quarantined: never one block out of a file a lane meant whole.
+     What it does NOT decide is whether the update would pass: that is the gate's, over a temp copy, below. #>
+  $name = [IO.Path]::GetFileName($path)
+  $raw = Get-Content -LiteralPath $path -Raw -Encoding UTF8
+  if ($null -eq $raw) { $raw = '' }
+  $raw = $raw -replace ('^' + [string][char]0xFEFF), ''
+  $parts = [regex]::Split($raw, '(?m)^##[ \t]+')
+  $preamble = [string]$parts[0]
+  if (@($parts).Count -le 1) {
+    if ($raw -match '(?m)^\s*NOTHING TO FILE\b') {
+      return @([pscustomobject]@{ Id = ''; Tags = @(); Key = ''; Body = ''; From = $name; Order = 0; Empty = $true })
+    }
+    throw "in $name`: no '## UPDATE <id>' block, and no 'NOTHING TO FILE' line. An updates\ file carries one or more blocks of the form '## UPDATE I165', then a line of tag spans, then the body."
+  }
+  if (Test-MislevelledFinding $preamble) {
+    throw "in $name`: a '#' heading above the first block has a tag line under it, so it is an UPDATE written with ONE hash. The heading is '## UPDATE <id>' - two hashes."
+  }
+  $out = @()
+  $order = 0
+  foreach ($p in @($parts | Select-Object -Skip 1)) {
+    $lines = $p -split "`r?`n"
+    $head = $lines[0].Trim()
+    if ($head -cnotmatch $UPDATE_HEAD_RE) {
+      throw "in $name`: '## $head' is not an UPDATE heading. Every '##' heading in updates\ is exactly '## UPDATE <id>', the id letters then digits (I165, E7). A NEW finding belongs in the inbox root, design\backlog-inbox\, where the merge gives it an id."
+    }
+    $id = $Matches[1]
+    $rest = @($lines | Select-Object -Skip 1)
+    $ti = -1
+    for ($k = 0; $k -lt $rest.Count; $k++) { if ($rest[$k].Trim()) { $ti = $k; break } }
+    $tagLine = if ($ti -ge 0) { [string]$rest[$ti] } else { '' }
+    $tags = @([regex]::Matches($tagLine, '`([^`]+)`') | ForEach-Object { $_.Groups[1].Value.Trim() })
+    if (-not $tags.Count -or $tagLine -notmatch $STATE_LINE_RE) {
+      throw "in $name`: UPDATE $id has no tag line. The next non-empty line under the heading is the item's new tag spans, for example ``DONE`` ``queue-7``, and they REPLACE the state span and every span right after it, so restate the ones you mean to keep."
+    }
+    if (-not (Test-State $tags[0])) {
+      throw "in $name`: UPDATE $id gives '$($tags[0])' as its first span, which is not a state in the closed vocabulary ($($STATES -join ', ')). The first span on the tag line is the state; audit-backlog-status.ps1 would fail the heading."
+    }
+    $bodyLines = if ($ti -ge 0) { @($rest | Select-Object -Skip ($ti + 1)) } else { @() }
+    foreach ($bl in $bodyLines) {
+      if ($bl -match '^#{1,3}[ \t]') {
+        throw "in $name`: the body of UPDATE $id carries a heading line ('$($bl.Trim())'). Appended to the item, it would start a new section of the backlog, or a new item. Write it as bold text or a list instead."
+      }
+    }
+    # Leading blank lines and trailing whitespace go; everything between is the lane's, byte for byte, in LF.
+    $body = (($bodyLines -join "`n") -replace '^(\s*\n)+', '').TrimEnd()
+    $order++
+    $out += [pscustomobject]@{ Id = $id; Tags = $tags; Key = ($tags -join [string][char]31); Body = $body
+      From = $name; Order = $order; Empty = $false }
+  }
+  return $out
+}
+
+function Get-TcHeadingTagRegion {
+  <# Where an UPDATE writes inside ONE heading line: Start and End (exclusive) of the state span plus every backticked
+     span contiguous after it, or a Problem. Pure. The state rule is audit-backlog-status.ps1's own: a span IS a state,
+     or begins 'STATE - ' or 'STATE <date>', tried longest first, so PARTLY DONE is never read as DONE. #>
+  param([string]$Line)
+  $ms = @([regex]::Matches($Line, '`([^`]+)`'))
+  $byLen = @($STATES | Sort-Object { - $_.Length })
+  $stateIdx = @()
+  for ($k = 0; $k -lt $ms.Count; $k++) {
+    $tag = $ms[$k].Groups[1].Value
+    foreach ($s in $byLen) {
+      if ($tag -eq $s -or $tag -match ('^' + [regex]::Escape($s) + '(\s+-\s+|\s+\d{4}-)')) { $stateIdx += $k; break }
+    }
+  }
+  if ($stateIdx.Count -ne 1) {
+    return [pscustomobject]@{ Start = -1; End = -1; Problem = ("its heading carries {0} state spans, so which span an UPDATE replaces is ambiguous" -f $stateIdx.Count) }
+  }
+  $first = $stateIdx[0]
+  $last = $first
+  while ($last + 1 -lt $ms.Count) {
+    $gapAt = $ms[$last].Index + $ms[$last].Length
+    $gap = $Line.Substring($gapAt, $ms[$last + 1].Index - $gapAt)
+    if ($gap -match '^[ \t]*$') { $last++ } else { break }
+  }
+  return [pscustomobject]@{ Start = $ms[$first].Index; End = ($ms[$last].Index + $ms[$last].Length); Problem = '' }
+}
+
+function Find-TcSectionEnd {
+  <# The index where the item section that starts at $From ends: the start of the next `#`, `##` or `###` heading line
+     outside a fenced block, or the end of the text. Pure. A `####` subheading belongs to the item. #>
+  param([string]$Text, [int]$From)
+  $pos = $From
+  $inFence = $false
+  while ($pos -lt $Text.Length) {
+    $nl = $Text.IndexOf("`n", $pos)
+    $lineEnd = if ($nl -lt 0) { $Text.Length } else { $nl }
+    $line = $Text.Substring($pos, $lineEnd - $pos).TrimEnd("`r")
+    if ($line -match '^[ \t]*(```|~~~)') { $inFence = -not $inFence }
+    elseif ((-not $inFence) -and $line -match '^#{1,3}[ \t]') { return $pos }
+    if ($nl -lt 0) { break }
+    $pos = $nl + 1
+  }
+  return $Text.Length
+}
+
+function Set-TcItemUpdate {
+  <# ONE UPDATE applied to the backlog TEXT. Pure. Returns Text (unchanged when it could not apply) and Problem. #>
+  param([string]$Text, $Update, [string]$Date)
+  # [^\r\n] keeps a CRLF file's CR out of the heading match, so it is never touched.
+  $rx = '(?m)^###[ \t]+' + [regex]::Escape([string]$Update.Id) + '[ \t]+-[ \t][^\r\n]*'
+  $hs = @([regex]::Matches($Text, $rx))
+  if ($hs.Count -eq 0) {
+    return [pscustomobject]@{ Text = $Text; Problem = ("names {0}, which is not an item heading in the backlog. An UPDATE only changes an item that exists; a new item is a finding in the inbox root." -f $Update.Id) }
+  }
+  if ($hs.Count -gt 1) {
+    return [pscustomobject]@{ Text = $Text; Problem = ("names {0}, which has {1} item headings in the backlog, so which one to update is ambiguous." -f $Update.Id, $hs.Count) }
+  }
+  $h = $hs[0]
+  $line = $h.Value
+  $reg = Get-TcHeadingTagRegion -Line $line
+  if ($reg.Problem) { return [pscustomobject]@{ Text = $Text; Problem = ("cannot update {0}: {1}." -f $Update.Id, $reg.Problem) } }
+  $spans = (@($Update.Tags | ForEach-Object { '`' + $_ + '`' })) -join ' '
+  $newLine = $line.Substring(0, $reg.Start) + $spans + $line.Substring($reg.End)
+  $t2 = $Text.Substring(0, $h.Index) + $newLine + $Text.Substring($h.Index + $h.Length)
+  $headEnd = $h.Index + $newLine.Length
+  $nl = $t2.IndexOf("`n", $headEnd)
+  $from = if ($nl -lt 0) { $t2.Length } else { $nl + 1 }
+  $end = Find-TcSectionEnd -Text $t2 -From $from
+  # Just after the section's last character that is not whitespace: the blank lines before the next heading stay after.
+  $p = $end
+  while ($p -gt $headEnd -and [char]::IsWhiteSpace($t2[$p - 1])) { $p-- }
+  $merged = '**Merged from design\backlog-inbox\updates\' + $Update.From + ' on ' + $Date + '.**'
+  $ins = "`n`n" + $(if ($Update.Body) { [string]$Update.Body + "`n`n" } else { '' }) + $merged
+  return [pscustomobject]@{ Text = ($t2.Substring(0, $p) + $ins + $t2.Substring($p)); Problem = '' }
+}
+
+function Invoke-TcBacklogUpdates {
+  <# Every UPDATE in $Updates applied to $Text in the order given. Pure. Returns Text and Problems, one per update that
+     could not apply (that update is skipped, the rest still apply). #>
+  param([string]$Text, [object[]]$Updates, [string]$Date)
+  $t = $Text
+  $probs = @()
+  foreach ($u in @($Updates)) {
+    $r = Set-TcItemUpdate -Text $t -Update $u -Date $Date
+    if ($r.Problem) { $probs += [pscustomobject]@{ From = $u.From; Id = $u.Id; Why = $r.Problem } }
+    else { $t = $r.Text }
+  }
+  return [pscustomobject]@{ Text = $t; Problems = $probs }
+}
+
+function Get-MbiScratch {
+  <# The ONE per-run temp directory the gate copies go into, allocated on first use and removed by the finally around
+     the merge. A fixed name here would have concurrent runs judging each other's copies. #>
+  if (-not $script:MbiScratch) {
+    $p = Join-Path $env:TEMP ('mbi-gate-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+    New-Item -ItemType Directory -Path $p -ErrorAction Stop | Out-Null
+    $script:MbiScratch = $p
+  }
+  return $script:MbiScratch
+}
+
+function Invoke-TcBacklogGate {
+  <# audit-backlog-status.ps1's GATE MODE over $Text, written to a temp copy. Returns Code (0 passed, 2 a finding, 3
+     could not evaluate) and Lines (what the gate printed, its marker left out). An exit 0 with no BACKLOG-STATUS-COMPLETE
+     marker, a throw, or any other code reads as 3: a gate that could not finish never passes an update. It runs
+     IN-PROCESS, the way this file's own fixtures re-enter it: the same rules, one powershell.exe fewer. #>
+  param([string]$Text)
+  $copy = Join-Path (Get-MbiScratch) ('gate-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.md')
+  [IO.File]::WriteAllText($copy, $Text, (New-Object Text.UTF8Encoding($false)))
+  $out = ''
+  $code = 3
+  try {
+    $global:LASTEXITCODE = 3
+    $out = & $AUDIT -Backlog $copy 2>&1 | Out-String
+    $code = $LASTEXITCODE
+  } catch {
+    $out = 'the gate threw: ' + $_.Exception.Message
+    $code = 3
+  } finally {
+    Remove-Item -LiteralPath $copy -Force -ErrorAction SilentlyContinue
+  }
+  if ($code -eq 0 -and $out -notmatch '(?m)^BACKLOG-STATUS-COMPLETE\b') { $code = 3 }
+  if (@(0, 2) -notcontains $code) { $code = 3 }
+  $lines = @(($out -split "`r?`n") | Where-Object { $_.Trim() -and $_ -notmatch '^BACKLOG-STATUS-COMPLETE\b' })
+  return [pscustomobject]@{ Code = $code; Lines = $lines }
+}
+
+function Get-TcSha256Hex([byte[]]$Bytes) {
+  $sha = [Security.Cryptography.SHA256]::Create()
+  try { return ([BitConverter]::ToString($sha.ComputeHash($Bytes)) -replace '-', '') } finally { $sha.Dispose() }
+}
+
+function Move-ToQuarantine {
+  <# The bad files, AFTER the accepted ones have landed. They keep their bytes, because
+     the lane's work is in them; they MOVE, so an empty inbox still means what it says and
+     a re-run does not re-report them forever; and each lands beside a .reason.txt,
+     because a reason printed to a console nobody kept is not a retry. A finding file goes to
+     <inbox>\quarantine\, an UPDATE file to <inbox>\updates\quarantine\.
+     Returns $true, or $false having said why. #>
+  param($Bad)
+  if (@($Bad).Count -eq 0) { return $true }
+  try {
+    foreach ($b in $Bad) {
+      if (-not (Test-Path -LiteralPath $b.QDir)) { New-Item -ItemType Directory -Path $b.QDir -Force -ErrorAction Stop | Out-Null }
+      $dest = Join-Path $b.QDir $b.Name
+      Move-Item -LiteralPath $b.Path -Destination $dest -Force -ErrorAction Stop  # atomic-replace:allow the destination is a quarantine path nothing reads concurrently, and the source is a drop file its lane has finished with; losing this move to a reader is not a failure mode here
+      # NOT $home: that is PowerShell's read-only automatic variable, and assigning it throws.
+      $backTo = if ([string]$b.Rel -like 'updates/*') { 'design\backlog-inbox\updates\' } else { 'the inbox' }
+      $note = "QUARANTINED $Today by merge-backlog-inbox.ps1`n`n" + $b.Reason +
+              "`n`nThe file itself is UNCHANGED. Fix it, move it back into $backTo, and re-run the merge.`n" +
+              "Check it first, in isolation:`n  ops\merge-backlog-inbox.ps1 -ValidateFile <path to the fixed file>`n"
+      [IO.File]::WriteAllText(($dest + '.reason.txt'), ($note -replace "`r`n", "`n"), (New-Object Text.UTF8Encoding($false)))
+    }
+  } catch {
+    Write-Output ("COULD NOT EVALUATE - the accepted lanes MERGED, but moving a bad file to quarantine failed: " + $_.Exception.Message)
+    Write-Output "That bad file is still in the inbox and its contents have NOT landed. Move it out by hand before the next run."
+    return $false
+  }
+  return $true
+}
+
 # ---- -ValidateFile: ONE inbox file, in ISOLATION, with an exit code. ----------------
 # A NAME for -InboxDir plus -DryRun, not a second implementation: it copies the one file
 # into a fresh per-run temp inbox and re-enters this same script. What that buys over
@@ -262,12 +576,20 @@ if ($ValidateFile) {
     Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
     exit 3
   }
+  # A file in a folder named `updates` is read by the merge as UPDATE blocks, so it is validated as one: its copy goes
+  # into the temp inbox's own updates\, which is the one place the merge applies updates from.
+  $asUpdate = ([IO.Path]::GetFileName([IO.Path]::GetDirectoryName([IO.Path]::GetFullPath($ValidateFile))) -eq 'updates')
   # Named per run under one directory removed in a finally: several sessions share one
   # %TEMP%, and a fixed name here would have lanes validating into each other.
   $valBox = Join-Path $env:TEMP ('mbi-val-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
   try {
     New-Item -ItemType Directory -Path $valBox -ErrorAction Stop | Out-Null
-    Copy-Item -LiteralPath $ValidateFile -Destination (Join-Path $valBox $leaf) -ErrorAction Stop
+    $valDest = $valBox
+    if ($asUpdate) {
+      $valDest = Join-Path $valBox 'updates'
+      New-Item -ItemType Directory -Path $valDest -ErrorAction Stop | Out-Null
+    }
+    Copy-Item -LiteralPath $ValidateFile -Destination (Join-Path $valDest $leaf) -ErrorAction Stop
     $valOut = & $PSCommandPath -InboxDir $valBox -Backlog $Backlog -DryRun 2>&1 | Out-String
     $valCode = $LASTEXITCODE
     foreach ($ln in ($valOut -split "`r?`n")) {
@@ -275,12 +597,13 @@ if ($ValidateFile) {
       if (-not $ln.Trim()) { continue }
       Write-Output $ln
     }
+    $kind = if ($asUpdate) { 'UPDATE file' } else { 'findings file' }
     if ($valCode -eq 0) {
-      Write-Output ("VALIDATE OK - {0} would merge. Nothing was written, and the real inbox was neither read nor touched." -f $leaf)
+      Write-Output ("VALIDATE OK - {0} ({1}) would merge. Nothing was written, and the real inbox was neither read nor touched." -f $leaf, $kind)
     } elseif ($valCode -eq 2) {
-      Write-Output ("VALIDATE FAILED - {0} would be QUARANTINED, not merged. Fix it before the merge runs; the reason is above." -f $leaf)
+      Write-Output ("VALIDATE FAILED - {0} ({1}) would be QUARANTINED, not merged. Fix it before the merge runs; the reason is above." -f $leaf, $kind)
     } else {
-      Write-Output ("VALIDATE COULD NOT EVALUATE - exit {0}. That is discovery broken, not a pass." -f $valCode)
+      Write-Output ("VALIDATE COULD NOT EVALUATE - exit {0}. That is not a pass; the reason is above." -f $valCode)
     }
     Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
     exit $valCode
@@ -305,16 +628,24 @@ if ($SelfTest) {
   # Both times this was violated, the failure was reported against the CODE UNDER TEST
   # rather than the setup, and a suite that lies about which thing broke is worse than one
   # that fails.
+  #
+  # EVERY PATH IS BELOW ONE PER-RUN ROOT, removed in the finally (2026-09-23). Until then the rung cases wrote their
+  # drop box to ops\inbox-rung beside this script, inside the checkout under test, and nothing removed the root if a
+  # case threw. Refusals from the lock case go to a scratch event bus, never the live one.
   $tmp = Join-Path $env:TEMP ('mbi-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $tmp -ErrorAction Stop | Out-Null
   $inb = Join-Path $tmp 'inbox'
   New-Item -ItemType Directory -Path $inb -Force | Out-Null
   $bl = Join-Path $tmp 'backlog.md'
-  $pass = 0; $fails = New-Object System.Collections.ArrayList
+  $pass = 0; $ran = 0; $blind = 0; $fails = New-Object System.Collections.ArrayList
   function _C($label, $name, $ok, $detail) {
+    $script:ran++
     if ($ok) { $script:pass++ } else { [void]$script:fails.Add("$label $name") }
     Write-Output ("  {0,-14} {1,-58} {2}" -f $label, $name, $(if ($ok) { 'ok' } else { "FAIL $detail" }))
   }
-
+  $prevBus = $env:TC_EVENT_BUS
+  $env:TC_EVENT_BUS = Join-Path $tmp 'bus.jsonl'
+  try {
   Set-Content $bl "# Backlog`n`n### I40 - an old one ``DONE```n`nbody`n" -Encoding UTF8
   Set-Content (Join-Path $inb 'lane-a.md') "## first finding`n``OPEN`` ``queue-6`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody one`n" -Encoding UTF8
   Set-Content (Join-Path $inb 'lane-b.md') "## second finding`n``PARTLY DONE`` ``queue-6`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody two`n" -Encoding UTF8
@@ -376,7 +707,7 @@ if ($SelfTest) {
      ((Get-Content (Join-Path $q 'lane-d.md.reason.txt') -Raw -Encoding UTF8) -match 'closed vocabulary') -and
      ((Get-Content (Join-Path $q 'lane-d.md.reason.txt') -Raw -Encoding UTF8) -match 'ValidateFile')) 'no reason on disk'
   _C 'MUST FIRE' 'and the VERDICT line states merged and quarantined counts' `
-    ($out3 -match 'VERDICT: merged 1 finding\(s\) from 1 file\(s\), quarantined 1 file\(s\). Exit 2.') 'no verdict line'
+    ($out3 -match 'VERDICT: merged 1 finding\(s\) from 1 file\(s\), applied 0 update\(s\) from 0 file\(s\), quarantined 1 file\(s\). Exit 2.') 'no verdict line'
   Remove-Item $q -Recurse -Force -ErrorAction SilentlyContinue
 
   # MUST FIRE - AN INVENTED FIRST-RUNG TYPE, and this is a MEASURED escape rather than a hypothetical.
@@ -385,7 +716,7 @@ if ($SelfTest) {
   # audit-backlog-status.ps1 accepts, so they turned run-gates red on the push instead, which is the
   # late failure a single writer exists to prevent. The twin is the point: a LEGAL rung must still
   # merge, because a vocabulary check that refused everything would satisfy the must-fire by accident.
-  $inbR = Join-Path $root 'inbox-rung'
+  $inbR = Join-Path $tmp 'inbox-rung'
   New-Item -ItemType Directory -Path $inbR -Force | Out-Null
   Set-Content (Join-Path $inbR 'lane-rung-bad.md')  "## a census is not a rung type`n``OPEN`` ``queue-7`` ``2-WAY`` ``RUNG1 CENSUS```n`nbody`n" -Encoding UTF8
   Set-Content (Join-Path $inbR 'lane-rung-good.md') "## a legal rung lands`n``OPEN`` ``queue-7`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody`n" -Encoding UTF8
@@ -593,18 +924,604 @@ if ($SelfTest) {
   _C 'CLEAN TWIN' '-DryRun plans without writing or emptying the inbox' `
     ($c5 -eq 0 -and $out5 -match 'a finding for the dry run' -and (Get-Content $bl -Raw -Encoding UTF8) -eq $before2 -and (Test-Path (Join-Path $inb 'lane-dry.md'))) "dry run wrote, or planned nothing (exit $c5)"
 
-  Remove-Item $tmp -Recurse -Force
+  # ======================= UPDATE blocks (2026-09-23, W3.1 of design\PLAN-push-derived-conflicts-2026-09-23.md) ==========
+  # Every case gets its OWN backlog and drop box (_NewBox), seeded LF with no BOM so "every other byte is identical" is
+  # asserted on the exact text the case wrote. The UPDATE heading is built by concatenation, so no line of this source
+  # is itself a heading. -Today pins the date the merged-from line carries.
+  $uh = '## ' + 'UPDATE'
+  $DAY = '2026-09-23'
+  $u8 = New-Object Text.UTF8Encoding($false)
+  $hdI2 = '### I2 - Stray artifacts at the repo root `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`'
+  $hdE7 = '### E7 - `.worktreeinclude` `OPEN` `queue-4` `2-WAY` `RUNG1 READ`'
+  $hdI5 = '### I5 - Coursera lapsed on `building-with-the-claude-api` `PARKED - KNOWLEDGE BANKED` - knowledge banked, only the record is missing'
+  $seedU = "# Backlog`n`n## Section one`n`n$hdI2`n`nI2 body line.`n`n$hdE7`n`nE7 body.`n`n$hdI5`n`nI5 body.`n`n## Section two`n`n### I40 - an old one ``DONE```n`nI40 body.`n"
+  function _NewBox([string]$Name, [string]$Seed = '') {
+    $d = Join-Path $script:tmp $Name
+    New-Item -ItemType Directory -Path (Join-Path $d 'inbox\updates') -Force -ErrorAction Stop | Out-Null
+    $b = Join-Path $d 'backlog.md'
+    $s = if ($Seed) { $Seed } else { $script:seedU }
+    [IO.File]::WriteAllText($b, $s, $script:u8)
+    return [pscustomobject]@{ Dir = $d; Backlog = $b; Inbox = (Join-Path $d 'inbox'); Upd = (Join-Path $d 'inbox\updates'); Q = (Join-Path $d 'inbox\updates\quarantine') }
+  }
+  function _Merged([string]$File) { return ('**Merged from design\backlog-inbox\updates\' + $File + ' on ' + $script:DAY + '.**') }
+
+  # MUST FIRE: the I2 shape. Exactly its state and tag spans change, the body lands at the end of ITS section, and the
+  # expected text is written out whole, so a single stray byte anywhere else is a red.
+  $bxA = _NewBox 'u-i2'
+  [IO.File]::WriteAllText((Join-Path $bxA.Upd 'lane-u-2026-09-23.md'), ("# lane u, 2026-09-23`n`n" + $uh + " I2`n``DONE`` ``queue-7```nThe stray files are gone.`n"), $u8)
+  $oA = & $PSCommandPath -InboxDir $bxA.Inbox -Backlog $bxA.Backlog -Today $DAY 2>&1 | Out-String
+  $cA = $LASTEXITCODE
+  $gotA = [IO.File]::ReadAllText($bxA.Backlog)
+  $expA = $seedU.Replace($hdI2, '### I2 - Stray artifacts at the repo root `DONE` `queue-7`').Replace("I2 body line.`n", ("I2 body line.`n`nThe stray files are gone.`n`n" + (_Merged 'lane-u-2026-09-23.md') + "`n"))
+  _C 'MUST FIRE' 'an UPDATE for I2 changes exactly its state and tag spans and appends at the end of I2, every other byte identical' `
+    ($cA -eq 0 -and [string]::Equals($gotA, $expA, [StringComparison]::Ordinal)) "exit $cA :: $oA :: GOT >>$gotA<<"
+  _C 'MUST FIRE' 'and it prints the commit trailer naming the file, and consumes it' `
+    (($oA -match '(?m)^Backlog-Merged-From: updates/lane-u-2026-09-23\.md\s*$') -and -not (Test-Path (Join-Path $bxA.Upd 'lane-u-2026-09-23.md'))) "exit $cA :: $oA"
+  $gA = & $AUDIT -Backlog $bxA.Backlog 2>&1 | Out-String
+  $gcA = $LASTEXITCODE
+  _C 'CLEAN TWIN' 'audit-backlog-status.ps1 over the merged temp backlog exits 0' ($gcA -eq 0 -and $gA -match 'BACKLOG-STATUS-COMPLETE items=4 malformed=0') "exit $gcA :: $gA"
+
+  # MUST FIRE: the E7 shape. The title's own backticked code is a span too, and it is not the state, so it stays.
+  $bxB = _NewBox 'u-e7'
+  [IO.File]::WriteAllText((Join-Path $bxB.Upd 'lane-e7.md'), ($uh + " E7`n``DONE`` ``4e8102c2```n`nDone at last.`n"), $u8)
+  $oB = & $PSCommandPath -InboxDir $bxB.Inbox -Backlog $bxB.Backlog -Today $DAY 2>&1 | Out-String
+  $cB = $LASTEXITCODE
+  $gotB = [IO.File]::ReadAllText($bxB.Backlog)
+  $expB = $seedU.Replace($hdE7, '### E7 - `.worktreeinclude` `DONE` `4e8102c2`').Replace("E7 body.`n", ("E7 body.`n`nDone at last.`n`n" + (_Merged 'lane-e7.md') + "`n"))
+  _C 'MUST FIRE' 'E7 shape: a title carrying backticked code keeps that span untouched' `
+    ($cB -eq 0 -and [string]::Equals($gotB, $expB, [StringComparison]::Ordinal)) "exit $cB :: $oB :: GOT >>$gotB<<"
+
+  # MUST FIRE: the I5 shape. Prose after the tags is not a span and stays byte-identical; the section ends at a `##`.
+  $bxC = _NewBox 'u-i5'
+  [IO.File]::WriteAllText((Join-Path $bxC.Upd 'lane-i5.md'), ($uh + " I5`n``DONE`` ``queue-7```n`nThe record was filed.`n"), $u8)
+  $oC = & $PSCommandPath -InboxDir $bxC.Inbox -Backlog $bxC.Backlog -Today $DAY 2>&1 | Out-String
+  $cC = $LASTEXITCODE
+  $gotC = [IO.File]::ReadAllText($bxC.Backlog)
+  $expC = $seedU.Replace($hdI5, '### I5 - Coursera lapsed on `building-with-the-claude-api` `DONE` `queue-7` - knowledge banked, only the record is missing').Replace("I5 body.`n", ("I5 body.`n`nThe record was filed.`n`n" + (_Merged 'lane-i5.md') + "`n"))
+  _C 'MUST FIRE' 'I5 shape: prose after the tags stays byte-identical, the body stops at the next ## section' `
+    ($cC -eq 0 -and [string]::Equals($gotC, $expC, [StringComparison]::Ordinal)) "exit $cC :: $oC :: GOT >>$gotC<<"
+
+  # MUST FIRE: an UPDATE naming an id the backlog does not have.
+  $bxD = _NewBox 'u-missing'
+  [IO.File]::WriteAllText((Join-Path $bxD.Upd 'lane-miss.md'), ($uh + " I999`n``DONE`` ``queue-7```n`nno such item.`n"), $u8)
+  $oD = & $PSCommandPath -InboxDir $bxD.Inbox -Backlog $bxD.Backlog -Today $DAY 2>&1 | Out-String
+  $cD = $LASTEXITCODE
+  _C 'MUST FIRE' 'an UPDATE naming a missing id is quarantined, exit non-zero, backlog unchanged' `
+    ($cD -eq 2 -and [string]::Equals([IO.File]::ReadAllText($bxD.Backlog), $seedU, [StringComparison]::Ordinal) -and
+     (Test-Path (Join-Path $bxD.Q 'lane-miss.md')) -and ((Get-Content (Join-Path $bxD.Q 'lane-miss.md.reason.txt') -Raw) -match 'I999') -and
+     -not (Test-Path (Join-Path $bxD.Upd 'lane-miss.md'))) "exit $cD :: $oD"
+
+  # MUST FIRE: an UPDATE whose state is not in the closed vocabulary.
+  $bxE = _NewBox 'u-state'
+  [IO.File]::WriteAllText((Join-Path $bxE.Upd 'lane-ship.md'), ($uh + " I2`n``SHIPPED`` ``queue-7```n`nshipped it.`n"), $u8)
+  $oE = & $PSCommandPath -InboxDir $bxE.Inbox -Backlog $bxE.Backlog -Today $DAY 2>&1 | Out-String
+  $cE = $LASTEXITCODE
+  _C 'MUST FIRE' 'an UPDATE with an unknown state is quarantined and names the vocabulary' `
+    ($cE -eq 2 -and $oE -match 'closed vocabulary' -and (Test-Path (Join-Path $bxE.Q 'lane-ship.md')) -and
+     [string]::Equals([IO.File]::ReadAllText($bxE.Backlog), $seedU, [StringComparison]::Ordinal)) "exit $cE :: $oE"
+
+  # MUST FIRE: the gate's own rules. The parser accepts this line - its first span IS a state - and only the gate, run
+  # over the temp copy, knows an open item owes a reversibility. So this case is the gate path and nothing else.
+  $bxF = _NewBox 'u-axes'
+  [IO.File]::WriteAllText((Join-Path $bxF.Upd 'lane-axes.md'), ($uh + " I2`n``OPEN`` ``queue-7`` ``RUNG1 BUILD```n`nreopened.`n"), $u8)
+  $oF = & $PSCommandPath -InboxDir $bxF.Inbox -Backlog $bxF.Backlog -Today $DAY 2>&1 | Out-String
+  $cF = $LASTEXITCODE
+  $rF = if (Test-Path (Join-Path $bxF.Q 'lane-axes.md.reason.txt')) { Get-Content (Join-Path $bxF.Q 'lane-axes.md.reason.txt') -Raw } else { '' }
+  _C 'MUST FIRE' 'an UPDATE that drops REVERSIBILITY on an open item is quarantined with the gate''s finding' `
+    ($cF -eq 2 -and $rF -match 'I2: declares no reversibility' -and $rF -match 'audit-backlog-status' -and
+     [string]::Equals([IO.File]::ReadAllText($bxF.Backlog), $seedU, [StringComparison]::Ordinal)) "exit $cF :: $oF :: reason >>$rF<<"
+
+  # MUST FIRE: two files, one id, DIFFERENT tag sets. Settled by nobody: both quarantined, each naming the other.
+  $bxG = _NewBox 'u-conflict'
+  [IO.File]::WriteAllText((Join-Path $bxG.Upd 'lane-a-2026-09-23.md'), ($uh + " I2`n``DONE`` ``queue-7```n`nfrom a.`n"), $u8)
+  [IO.File]::WriteAllText((Join-Path $bxG.Upd 'lane-b-2026-09-23.md'), ($uh + " I2`n``PARKED - SUPERSEDED`` ``queue-7```n`nfrom b.`n"), $u8)
+  $oG = & $PSCommandPath -InboxDir $bxG.Inbox -Backlog $bxG.Backlog -Today $DAY 2>&1 | Out-String
+  $cG2 = $LASTEXITCODE
+  $rGa = if (Test-Path (Join-Path $bxG.Q 'lane-a-2026-09-23.md.reason.txt')) { Get-Content (Join-Path $bxG.Q 'lane-a-2026-09-23.md.reason.txt') -Raw } else { '' }
+  $rGb = if (Test-Path (Join-Path $bxG.Q 'lane-b-2026-09-23.md.reason.txt')) { Get-Content (Join-Path $bxG.Q 'lane-b-2026-09-23.md.reason.txt') -Raw } else { '' }
+  _C 'MUST FIRE' 'two files giving I2 DIFFERENT tag sets quarantine both, each naming the other, exit 2, backlog unchanged' `
+    ($cG2 -eq 2 -and $rGa -match 'lane-b-2026-09-23\.md' -and $rGb -match 'lane-a-2026-09-23\.md' -and $rGa -match 'CONFLICTING' -and
+     [string]::Equals([IO.File]::ReadAllText($bxG.Backlog), $seedU, [StringComparison]::Ordinal)) "exit $cG2 :: $oG"
+
+  # MUST FIRE: tag sets that differ only in CASE. The gate reads `done` as DONE, but the two write different headings,
+  # so which one lands would be decided by file order. The comparison is ordinal for exactly that reason.
+  $bxG2 = _NewBox 'u-conflict-case'
+  [IO.File]::WriteAllText((Join-Path $bxG2.Upd 'lane-a-2026-09-23.md'), ($uh + " I2`n``DONE`` ``queue-7```n`nfrom a.`n"), $u8)
+  [IO.File]::WriteAllText((Join-Path $bxG2.Upd 'lane-b-2026-09-23.md'), ($uh + " I2`n``done`` ``queue-7```n`nfrom b.`n"), $u8)
+  $oG3 = & $PSCommandPath -InboxDir $bxG2.Inbox -Backlog $bxG2.Backlog -Today $DAY 2>&1 | Out-String
+  $cG3 = $LASTEXITCODE
+  _C 'MUST FIRE' 'tag sets differing only in case are DIFFERENT: both files quarantined, backlog unchanged' `
+    ($cG3 -eq 2 -and (Test-Path (Join-Path $bxG2.Q 'lane-a-2026-09-23.md')) -and (Test-Path (Join-Path $bxG2.Q 'lane-b-2026-09-23.md')) -and
+     [string]::Equals([IO.File]::ReadAllText($bxG2.Backlog), $seedU, [StringComparison]::Ordinal)) "exit $cG3 :: $oG3"
+
+  # CLEAN TWIN: the same two files agreeing. Both bodies land, in file-name order, and the output says so.
+  $bxH = _NewBox 'u-agree'
+  [IO.File]::WriteAllText((Join-Path $bxH.Upd 'lane-a-2026-09-23.md'), ($uh + " I2`n``DONE`` ``queue-7```n`nfrom a.`n"), $u8)
+  [IO.File]::WriteAllText((Join-Path $bxH.Upd 'lane-b-2026-09-23.md'), ($uh + " I2`n``DONE`` ``queue-7```n`nfrom b.`n"), $u8)
+  $oH = & $PSCommandPath -InboxDir $bxH.Inbox -Backlog $bxH.Backlog -Today $DAY 2>&1 | Out-String
+  $cH = $LASTEXITCODE
+  $gotH = [IO.File]::ReadAllText($bxH.Backlog)
+  $expH = $seedU.Replace($hdI2, '### I2 - Stray artifacts at the repo root `DONE` `queue-7`').Replace("I2 body line.`n", ("I2 body line.`n`nfrom a.`n`n" + (_Merged 'lane-a-2026-09-23.md') + "`n`nfrom b.`n`n" + (_Merged 'lane-b-2026-09-23.md') + "`n"))
+  _C 'CLEAN TWIN' 'two files giving I2 the SAME tag set both merge, and the output says updated by 2 files' `
+    ($cH -eq 0 -and $oH -match 'I2 updated by 2 files: lane-a-2026-09-23\.md, lane-b-2026-09-23\.md' -and
+     [string]::Equals($gotH, $expH, [StringComparison]::Ordinal)) "exit $cH :: $oH :: GOT >>$gotH<<"
+
+  # CLEAN TWIN: a plain new-finding file in the same batch still gets the next id, and the trailer names both files.
+  $bxI = _NewBox 'u-mixed'
+  [IO.File]::WriteAllText((Join-Path $bxI.Inbox 'lane-n.md'), "## a new thing found`n``OPEN`` ``queue-7`` ``2-WAY`` ``RUNG1 MEASURE```n`nnew body.`n", $u8)
+  [IO.File]::WriteAllText((Join-Path $bxI.Upd 'lane-u.md'), ($uh + " I2`n``DONE`` ``queue-7```n`nfinished.`n"), $u8)
+  $oI = & $PSCommandPath -InboxDir $bxI.Inbox -Backlog $bxI.Backlog -Today $DAY 2>&1 | Out-String
+  $cI = $LASTEXITCODE
+  $gotI = [IO.File]::ReadAllText($bxI.Backlog)
+  $idsI = @([regex]::Matches($gotI, '(?m)^### I(\d+)\b') | ForEach-Object { [int]$_.Groups[1].Value })
+  _C 'CLEAN TWIN' 'a plain new-finding file in the same batch still gets the next id and merges beside the update' `
+    ($cI -eq 0 -and $gotI -match '(?m)^### I41 - a new thing found `OPEN`' -and $gotI -match '(?m)^### I2 - Stray artifacts at the repo root `DONE` `queue-7`$' -and
+     (($idsI | Measure-Object -Maximum).Maximum -eq 41) -and $oI -match '(?m)^Backlog-Merged-From: lane-n\.md, updates/lane-u\.md\s*$') "exit $cI :: $oI"
+
+  # MUST NOT FIRE: order. Two updates to two different items commute - applied either way round, the same bytes.
+  $upI2 = [pscustomobject]@{ Id = 'I2'; Tags = @('DONE', 'queue-7'); Key = ''; Body = 'i2 done.'; From = 'lane-x.md'; Order = 1; Empty = $false }
+  $upE7 = [pscustomobject]@{ Id = 'E7'; Tags = @('DONE', '4e8102c2'); Key = ''; Body = 'e7 done.'; From = 'lane-y.md'; Order = 1; Empty = $false }
+  $ordA = Invoke-TcBacklogUpdates -Text $seedU -Updates @($upI2, $upE7) -Date $DAY
+  $ordB = Invoke-TcBacklogUpdates -Text $seedU -Updates @($upE7, $upI2) -Date $DAY
+  _C 'MUST NOT FIRE' 'UPDATE files for two different items give byte-identical backlogs in either merge order' `
+    ([string]::Equals($ordA.Text, $ordB.Text, [StringComparison]::Ordinal) -and -not [string]::Equals($ordA.Text, $seedU, [StringComparison]::Ordinal) -and
+     @($ordA.Problems).Count -eq 0 -and @($ordB.Problems).Count -eq 0) 'the two orders gave different text, or applied nothing'
+
+  # MUST NOT FIRE: the merge as it stood BEFORE this change, run from its frozen blob over a drop box holding only an
+  # updates\ file. That copy is what every checkout that has not pulled W3.1 still runs, and it must see nothing to mint.
+  $OLD_MERGE_BLOB = '371c5a8787fbf9c5c5b26dbf1c1b7f12e30f13a1'   # ops\merge-backlog-inbox.ps1 at f33d11829, the last blob before W3.1
+  if (-not (Test-Path -LiteralPath (Join-Path $repo '.git'))) {
+    $blind++
+    Write-Output ("  {0,-14} {1,-58} {2}" -f 'MUST NOT FIRE', 'the pre-W3.1 merge over an updates-only inbox finds no new finding', 'BLIND - not a git checkout, so the frozen blob cannot be read')
+  } else {
+    $bxK = _NewBox 'u-oldcopy'
+    [IO.File]::WriteAllText((Join-Path $bxK.Upd 'lane-u.md'), ($uh + " I2`n``DONE`` ``queue-7```n`nfinished.`n"), $u8)
+    $oldDir = Join-Path $bxK.Dir 'old'
+    New-Item -ItemType Directory -Path $oldDir -ErrorAction Stop | Out-Null
+    $oldPath = Join-Path $oldDir 'merge-backlog-inbox.ps1'
+    # The blob's BYTES, not PowerShell's re-encoding of git's output: a process stream copied straight to the file.
+    $psi = New-Object Diagnostics.ProcessStartInfo
+    $psi.FileName = 'git'
+    $psi.Arguments = ('-C "' + $repo + '" cat-file blob ' + $OLD_MERGE_BLOB)
+    $psi.UseShellExecute = $false; $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true; $psi.CreateNoWindow = $true
+    $gp = [Diagnostics.Process]::Start($psi)
+    $fsK = [IO.File]::Create($oldPath)
+    try { $gp.StandardOutput.BaseStream.CopyTo($fsK) } finally { $fsK.Dispose() }
+    $gErr = $gp.StandardError.ReadToEnd()
+    $gp.WaitForExit()
+    $oK = ''; $cK2 = -1
+    if ($gp.ExitCode -eq 0) {
+      $oK = & $oldPath -InboxDir $bxK.Inbox -Backlog $bxK.Backlog 2>&1 | Out-String
+      $cK2 = $LASTEXITCODE
+    }
+    _C 'MUST NOT FIRE' 'the pre-W3.1 merge over an updates-only inbox finds no new finding' `
+      ($gp.ExitCode -eq 0 -and $cK2 -eq 0 -and $oK -match 'inbox is empty' -and (Test-Path (Join-Path $bxK.Upd 'lane-u.md')) -and
+       [string]::Equals([IO.File]::ReadAllText($bxK.Backlog), $seedU, [StringComparison]::Ordinal)) "git=$($gp.ExitCode) $gErr :: exit $cK2 :: $oK"
+  }
+
+  # MUST FIRE: an UPDATE heading filed in the inbox ROOT. Every `##` there is minted as a new item, so it is quarantined.
+  $bxL = _NewBox 'u-root'
+  [IO.File]::WriteAllText((Join-Path $bxL.Inbox 'lane-root.md'), ($uh + " I2`n``DONE`` ``queue-7```n`nfiled in the wrong folder.`n"), $u8)
+  $oL = & $PSCommandPath -InboxDir $bxL.Inbox -Backlog $bxL.Backlog -Today $DAY 2>&1 | Out-String
+  $cL = $LASTEXITCODE
+  _C 'MUST FIRE' 'an UPDATE heading in the inbox ROOT is quarantined, never minted as a new item' `
+    ($cL -eq 2 -and (Test-Path (Join-Path $bxL.Inbox 'quarantine\lane-root.md')) -and $oL -match 'updates' -and
+     [string]::Equals([IO.File]::ReadAllText($bxL.Backlog), $seedU, [StringComparison]::Ordinal)) "exit $cL :: $oL"
+
+  # MUST FIRE: the ledger lock, held by ANOTHER PROCESS (lib\mutex-hold.ps1) on this case's own temp backlog, so the
+  # merge's wait times out however loaded the box is and no production lock name is ever opened. -LockWaitSec 0 is not a
+  # clock: the holder keeps the lock until released, so any wait would time out.
+  . (Join-Path $repo 'lib\mutex-hold.ps1')
+  $bxM = _NewBox 'u-lock'
+  [IO.File]::WriteAllText((Join-Path $bxM.Upd 'lane-u.md'), ($uh + " I2`n``DONE`` ``queue-7```n`nfinished.`n"), $u8)
+  $holdM = Start-TcMutexHold -Name (Get-TcLedgerLockName -Path $bxM.Backlog)
+  $oM = & $PSCommandPath -InboxDir $bxM.Inbox -Backlog $bxM.Backlog -Today $DAY -LockWaitSec 0 2>&1 | Out-String
+  $cM = $LASTEXITCODE
+  $untouchedM = [string]::Equals([IO.File]::ReadAllText($bxM.Backlog), $seedU, [StringComparison]::Ordinal) -and (Test-Path (Join-Path $bxM.Upd 'lane-u.md'))
+  Stop-TcMutexHold -Hold $holdM
+  _C 'MUST FIRE' 'while another process holds the backlog''s ledger lock the merge exits 3 and writes, consumes nothing' `
+    ($holdM.Held -and $cM -eq 3 -and $oM -match 'ledger lock' -and $untouchedM) "held=$($holdM.Held) $($holdM.Detail) :: exit $cM :: $oM"
+  $oM2 = & $PSCommandPath -InboxDir $bxM.Inbox -Backlog $bxM.Backlog -Today $DAY -LockWaitSec 0 2>&1 | Out-String
+  $cM2 = $LASTEXITCODE
+  _C 'CLEAN TWIN' 'once that holder lets go, the same merge takes the lock and lands the update' `
+    ($cM2 -eq 0 -and ([IO.File]::ReadAllText($bxM.Backlog)) -match '(?m)^### I2 - Stray artifacts at the repo root `DONE` `queue-7`$' -and
+     -not (Test-Path (Join-Path $bxM.Upd 'lane-u.md'))) "exit $cM2 :: $oM2"
+
+  # -ValidateFile over an UPDATE file where it sits, under a folder named updates: judged as the merge will read it.
+  $bxN = _NewBox 'u-validate'
+  $vU = Join-Path $bxN.Upd 'lane-v.md'
+  [IO.File]::WriteAllText($vU, ($uh + " I2`n``DONE`` ``queue-7```n`nfinished.`n"), $u8)
+  $oN = & $PSCommandPath -ValidateFile $vU -Backlog $bxN.Backlog 2>&1 | Out-String
+  $cN2 = $LASTEXITCODE
+  _C 'MUST NOT FIRE' '-ValidateFile on a good UPDATE file is exit 0, and nothing is written or consumed' `
+    ($cN2 -eq 0 -and $oN -match 'VALIDATE OK' -and $oN -match 'UPDATE file' -and (Test-Path $vU) -and
+     [string]::Equals([IO.File]::ReadAllText($bxN.Backlog), $seedU, [StringComparison]::Ordinal)) "exit $cN2 :: $oN"
+  $vU2 = Join-Path $bxN.Upd 'lane-v2.md'
+  [IO.File]::WriteAllText($vU2, ($uh + " I999`n``DONE`` ``queue-7```n`nno such item.`n"), $u8)
+  $oN3 = & $PSCommandPath -ValidateFile $vU2 -Backlog $bxN.Backlog 2>&1 | Out-String
+  $cN3 = $LASTEXITCODE
+  _C 'MUST FIRE' '-ValidateFile on an UPDATE naming a missing id is exit 2 and names it' `
+    ($cN3 -eq 2 -and $oN3 -match 'VALIDATE FAILED' -and $oN3 -match 'I999' -and (Test-Path $vU2)) "exit $cN3 :: $oN3"
+
+  # MUST FIRE: a body line that is a heading would start a new section of the backlog, or a new item.
+  $bxO = _NewBox 'u-bodyhead'
+  [IO.File]::WriteAllText((Join-Path $bxO.Upd 'lane-h.md'), ($uh + " I2`n``DONE`` ``queue-7```n`nfinished.`n`n### I99 - smuggled ``OPEN```n"), $u8)
+  $oO = & $PSCommandPath -InboxDir $bxO.Inbox -Backlog $bxO.Backlog -Today $DAY 2>&1 | Out-String
+  $cO = $LASTEXITCODE
+  _C 'MUST FIRE' 'an UPDATE whose body carries a heading line is quarantined, and nothing of it lands' `
+    ($cO -eq 2 -and $oO -match 'heading line' -and (Test-Path (Join-Path $bxO.Q 'lane-h.md')) -and
+     [string]::Equals([IO.File]::ReadAllText($bxO.Backlog), $seedU, [StringComparison]::Ordinal)) "exit $cO :: $oO"
+
+  # MUST NOT FIRE: a `## ` line inside a fenced block in the item is code, not a heading, so the section runs past it.
+  $fence = '```'
+  $seedP = "# Backlog`n`n$hdI2`n`nbefore the fence.`n`n$fence`n## not a heading`n$fence`n`nafter the fence.`n`n### I40 - an old one ``DONE```n`nI40 body.`n"
+  $bxP = _NewBox 'u-fence' $seedP
+  [IO.File]::WriteAllText((Join-Path $bxP.Upd 'lane-f.md'), ($uh + " I2`n``DONE`` ``queue-7```n`nfinished.`n"), $u8)
+  $oP = & $PSCommandPath -InboxDir $bxP.Inbox -Backlog $bxP.Backlog -Today $DAY 2>&1 | Out-String
+  $cP2 = $LASTEXITCODE
+  $expP = $seedP.Replace($hdI2, '### I2 - Stray artifacts at the repo root `DONE` `queue-7`').Replace("after the fence.`n", ("after the fence.`n`nfinished.`n`n" + (_Merged 'lane-f.md') + "`n"))
+  _C 'MUST NOT FIRE' 'a ## line inside a fenced block does not end the item: the body lands after the fence' `
+    ($cP2 -eq 0 -and [string]::Equals([IO.File]::ReadAllText($bxP.Backlog), $expP, [StringComparison]::Ordinal)) "exit $cP2 :: $oP"
+
+  # MUST FIRE: a backlog ALREADY red for its gate. No update can be judged by a gate that fails before it, so the file is
+  # left pending where it is, never quarantined for somebody else's defect, and the run says it could not evaluate.
+  $seedQ = $seedU.Replace($hdE7, '### E7 - `.worktreeinclude` `OPEN` `queue-4`')
+  $bxQ = _NewBox 'u-redbase' $seedQ
+  [IO.File]::WriteAllText((Join-Path $bxQ.Upd 'lane-u.md'), ($uh + " I2`n``DONE`` ``queue-7```n`nfinished.`n"), $u8)
+  $oQ = & $PSCommandPath -InboxDir $bxQ.Inbox -Backlog $bxQ.Backlog -Today $DAY 2>&1 | Out-String
+  $cQ = $LASTEXITCODE
+  _C 'MUST FIRE' 'a backlog already failing its gate: exit 3, the update left pending, not quarantined, nothing written' `
+    ($cQ -eq 3 -and $oQ -match 'COULD NOT EVALUATE' -and (Test-Path (Join-Path $bxQ.Upd 'lane-u.md')) -and -not (Test-Path $bxQ.Q) -and
+     [string]::Equals([IO.File]::ReadAllText($bxQ.Backlog), $seedQ, [StringComparison]::Ordinal)) "exit $cQ :: $oQ"
+  } catch {
+    [void]$fails.Add('HARNESS the suite threw before its last case: ' + $_.Exception.Message)
+    Write-Output ('  HARNESS        the suite threw before its last case: ' + $_.Exception.Message)
+  } finally {
+    $env:TC_EVENT_BUS = $prevBus
+    if (Get-Command Stop-TcMutexHold -ErrorAction SilentlyContinue) { Stop-TcMutexHold }
+    Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
+  # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (ops-and-gates.md). A blind case is counted as one that could not look,
+  # never as a pass, and it still counts toward the list so a lost case is a shortfall rather than a smaller green.
+  $EXPECTED_CASES = 62
   Write-Output ''
-  $total = $pass + $fails.Count
-  if ($fails.Count) {
-    Write-Output ("SELF-TEST FAIL: {0} case(s) of {1}" -f $fails.Count, $total)
+  if ($fails.Count -or ($ran + $blind) -ne $EXPECTED_CASES) {
+    Write-Output ("merge-backlog-inbox SELF-TEST FAIL: {0} case(s) failed, {1} of {2} case(s) ran, {3} blind" -f $fails.Count, $ran, $EXPECTED_CASES, $blind)
     foreach ($f in $fails) { Write-Output ("  " + $f) }
     exit 1
   }
-  Write-Output ("merge-backlog-inbox self-test: {0} of {0} cases pass" -f $total)
+  if ($blind) {
+    Write-Output ("merge-backlog-inbox self-test: {0} of {0} cases pass, {1} blind (not a git checkout, so the frozen-blob case could not look)" -f $ran, $blind)
+    exit 0
+  }
+  Write-Output ("merge-backlog-inbox self-test: {0} of {0} cases pass" -f $ran)
   exit 0
 }
 
+# ------------------------------------------------------------------------------------ the merge
+
+function Invoke-TcMerge {
+  <# The whole merge, with the ledger lock already held by the caller (or none, under -DryRun). Prints as it goes and
+     sets $script:MergeExit; it never exits, so the caller's finally always releases the lock. #>
+  $script:MergeExit = 0
+  # README.md documents the convention and lives here permanently so the directory survives
+  # in git; a name starting with `_` is a scratch file somebody parked. Everything else is
+  # findings. The skip list is deliberately TWO NAMES and not a heuristic: a broad "skip what
+  # does not look like findings" rule is a silent-loss machine in a tool that exists so that
+  # nothing is lost. What was skipped is printed, so a skip is never invisible.
+  $all = @(Get-ChildItem -LiteralPath $InboxDir -Filter *.md -ErrorAction SilentlyContinue |
+           Sort-Object Name)
+  $files = @($all | Where-Object { $_.Name -ne 'README.md' -and $_.Name -notlike '_*' })
+  $skipped = @($all).Count - @($files).Count
+  # The UPDATE files, from their own folder and NOT recursively below it, so updates\quarantine is never re-read. The
+  # same two skipped names. ORDINAL name order, because the order updates apply in must not depend on a culture.
+  $updDir = Join-Path $InboxDir 'updates'
+  $updAll = @()
+  if (Test-Path -LiteralPath $updDir -PathType Container) {
+    $updAll = @(Get-ChildItem -LiteralPath $updDir -Filter *.md -File -ErrorAction SilentlyContinue)
+  }
+  $updKeep = @($updAll | Where-Object { $_.Name -ne 'README.md' -and $_.Name -notlike '_*' })
+  $skipped += @($updAll).Count - @($updKeep).Count
+  $updNames = [string[]]@($updKeep | ForEach-Object { $_.Name })
+  [Array]::Sort($updNames, [StringComparer]::Ordinal)
+  $updFiles = @(foreach ($nm in $updNames) { @($updKeep | Where-Object { $_.Name -ceq $nm })[0] })
+  if ($skipped -gt 0) { Write-Output ("skipping " + $skipped + " documentation file(s): README.md / _*.md") }
+  if (@($files).Count -eq 0 -and @($updFiles).Count -eq 0) {
+    Write-Output "inbox is empty. Nothing to merge."
+    return
+  }
+
+  # READ EVERY FILE BEFORE WRITING ANYTHING, AND JUDGE EACH FILE ALONE. A malformed file
+  # is QUARANTINED and its siblings still merge: nothing it says is appended, so the backlog
+  # still cannot go red on its account, and the single allocator below still runs once, over
+  # the accepted set. The whole-batch refusal this replaced blocked three innocent lanes
+  # three times on 2026-09-11 and 12, every time over a closing `## Nothing else` heading
+  # with no state line under it.
+  $qRoot = Join-Path $InboxDir 'quarantine'
+  $qUpd = Join-Path $updDir 'quarantine'
+  $findings = @()
+  $bad = New-Object System.Collections.ArrayList
+  foreach ($f in $files) {
+    try {
+      $findings += Read-Inbox $f.FullName
+    } catch {
+      [void]$bad.Add([pscustomobject]@{ Name = $f.Name; Path = $f.FullName; Reason = $_.Exception.Message; QDir = $qRoot; Rel = $f.Name })
+    }
+  }
+  $updParsed = @()
+  foreach ($f in $updFiles) {
+    try {
+      $recs = Read-UpdateFile $f.FullName
+      $recs = @($recs)
+      $updParsed += [pscustomobject]@{ Name = $f.Name; Path = $f.FullName
+        Updates = @($recs | Where-Object { -not $_.Empty }); Empty = (@($recs | Where-Object { $_.Empty }).Count -gt 0) }
+    } catch {
+      [void]$bad.Add([pscustomobject]@{ Name = $f.Name; Path = $f.FullName; Reason = $_.Exception.Message; QDir = $qUpd; Rel = ('updates/' + $f.Name) })
+    }
+  }
+
+  # ---- THE UPDATES: every check that can refuse a file runs before the backlog is touched ----
+  $text = $null
+  $bytes = $null
+  $hasBom = $false
+  $applyFiles = @()
+  $pendingBlind = @()
+  $withUpdates = @($updParsed | Where-Object { @($_.Updates).Count -gt 0 })
+  if ($withUpdates.Count -gt 0) {
+    $bytes = [IO.File]::ReadAllBytes($Backlog)
+    $hasBom = ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF)
+    $off = if ($hasBom) { 3 } else { 0 }
+    try {
+      # STRICT decoding: an in-place rewrite of a file that is not valid UTF-8 would change bytes nobody asked to change.
+      $text = (New-Object Text.UTF8Encoding($false, $true)).GetString($bytes, $off, $bytes.Length - $off)
+    } catch {
+      Write-Output ("COULD NOT EVALUATE - the backlog is not valid UTF-8, so an in-place UPDATE would rewrite bytes it did not mean to change. Nothing was written, consumed or quarantined: " + $_.Exception.Message)
+      $script:MergeExit = 3
+      return
+    }
+
+    # 1. Each update names an item that exists exactly once, with one state span, and a file never contradicts itself.
+    $judged = @()
+    foreach ($u in $withUpdates) {
+      $why = ''
+      foreach ($x in @($u.Updates)) {
+        $probe = Set-TcItemUpdate -Text $text -Update $x -Date $Today
+        if ($probe.Problem) { $why = ('UPDATE ' + $x.Id + ' ' + $probe.Problem); break }
+      }
+      if (-not $why) {
+        $seenKey = @{}
+        foreach ($x in @($u.Updates)) {
+          if ($seenKey.ContainsKey($x.Id) -and -not [string]::Equals([string]$seenKey[$x.Id], [string]$x.Key, [StringComparison]::Ordinal)) {
+            $why = ('gives ' + $x.Id + ' two different tag sets in one file. One file, one outcome per item: keep the one you mean.')
+            break
+          }
+          $seenKey[$x.Id] = $x.Key
+        }
+      }
+      if ($why) { [void]$bad.Add([pscustomobject]@{ Name = $u.Name; Path = $u.Path; Reason = ('in ' + $u.Name + ': ' + $why); QDir = $qUpd; Rel = ('updates/' + $u.Name) }) }
+      else { $judged += $u }
+    }
+
+    # 2. A CONFLICTING STATUS IS NEVER SETTLED BY ORDER (Brad's ruling D2): every file giving one id a different tag set
+    #    is quarantined, each reason naming the others, and nothing is merged for that id.
+    $byId = @{}
+    foreach ($u in $judged) {
+      foreach ($x in @($u.Updates)) {
+        if (-not $byId.ContainsKey($x.Id)) { $byId[$x.Id] = New-Object System.Collections.ArrayList }
+        [void]$byId[$x.Id].Add([pscustomobject]@{ File = $u.Name; Key = $x.Key; Tags = $x.Tags })
+      }
+    }
+    $conflictWhy = @{}
+    foreach ($cid in @($byId.Keys | Sort-Object)) {
+      $rows = @($byId[$cid])
+      $keys = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+      foreach ($r in $rows) { [void]$keys.Add([string]$r.Key) }
+      if ($keys.Count -le 1) { continue }
+      foreach ($r in $rows) {
+        $mine = (@($r.Tags | ForEach-Object { '`' + $_ + '`' })) -join ' '
+        $others = @($rows | Where-Object { $_.File -cne $r.File } | ForEach-Object { $_.File + ' gives ' + ((@($_.Tags | ForEach-Object { '`' + $_ + '`' })) -join ' ') } | Select-Object -Unique)
+        $line = ("CONFLICTING UPDATE for {0}: this file gives {1}, and {2}. The merge never settles a conflicting status by file order, lane or time (Brad's ruling D2, 2026-09-23), so every file giving {0} a different tag set is quarantined and nothing is merged for {0}. Agree the tag line, keep it in ONE file, and move the files back." -f $cid, $mine, ($others -join '; '))
+        if (-not $conflictWhy.ContainsKey($r.File)) { $conflictWhy[$r.File] = New-Object System.Collections.ArrayList }
+        if (-not $conflictWhy[$r.File].Contains($line)) { [void]$conflictWhy[$r.File].Add($line) }
+      }
+    }
+    $clear = @()
+    foreach ($u in $judged) {
+      if ($conflictWhy.ContainsKey($u.Name)) {
+        [void]$bad.Add([pscustomobject]@{ Name = $u.Name; Path = $u.Path; Reason = ('in ' + $u.Name + ': ' + ((@($conflictWhy[$u.Name])) -join "`n")); QDir = $qUpd; Rel = ('updates/' + $u.Name) })
+      } else { $clear += $u }
+    }
+
+    # 3. THE GATE'S OWN RULES over a temp copy: the backlog as it stands first, then each file's updates alone.
+    if ($clear.Count -gt 0) {
+      $base = Invoke-TcBacklogGate -Text $text
+      if ($base.Code -ne 0) {
+        $pendingBlind = $clear
+        Write-Output ("COULD NOT EVALUATE {0} update file(s): the backlog fails audit-backlog-status.ps1 BEFORE any update is applied (gate exit {1}), so the gate cannot tell what an update would break. They stay in {2} untouched, and none of them lands until the backlog is green again:" -f $clear.Count, $base.Code, $updDir)
+        foreach ($ln in @($base.Lines | Select-Object -First 12)) { Write-Output ("    gate: " + $ln) }
+      } else {
+        foreach ($u in $clear) {
+          $alone = Invoke-TcBacklogUpdates -Text $text -Updates @($u.Updates) -Date $Today
+          if (@($alone.Problems).Count -gt 0) {
+            [void]$bad.Add([pscustomobject]@{ Name = $u.Name; Path = $u.Path; Reason = ('in ' + $u.Name + ': ' + ((@($alone.Problems | ForEach-Object { 'UPDATE ' + $_.Id + ' ' + $_.Why })) -join "`n")); QDir = $qUpd; Rel = ('updates/' + $u.Name) })
+            continue
+          }
+          $g = Invoke-TcBacklogGate -Text $alone.Text
+          if ($g.Code -eq 2) {
+            [void]$bad.Add([pscustomobject]@{ Name = $u.Name; Path = $u.Path; QDir = $qUpd; Rel = ('updates/' + $u.Name)
+              Reason = ('in ' + $u.Name + ': applied to a copy of the backlog, its update(s) fail audit-backlog-status.ps1, the push gate''s own rules:' + "`n" + ((@($g.Lines | ForEach-Object { '  ' + $_.Trim() })) -join "`n")) })
+          } elseif ($g.Code -ne 0) {
+            $pendingBlind += $u
+            Write-Output ("COULD NOT EVALUATE {0}: the gate could not judge the backlog with its update(s) applied (gate exit {1}). It stays in {2} untouched." -f $u.Name, $g.Code, $updDir)
+          } else {
+            $applyFiles += $u
+          }
+        }
+      }
+    }
+  }
+
+  if (@($bad).Count -gt 0) {
+    $verb = 'QUARANTINED'
+    if ($DryRun) { $verb = 'WOULD BE QUARANTINED' }
+    Write-Output ("{0} ({1} inbox file(s)) - NOT merged, kept on disk, and this run exits non-zero:" -f $verb, @($bad).Count)
+    foreach ($b in $bad) { Write-Output ("  " + $b.Rel + ": " + $b.Reason) }
+  }
+
+  # An empty landing is a RESULT and is reported by name; it never becomes a backlog item,
+  # because "this lane found nothing" is not a change anybody rules on. The two counts stay
+  # separate in the output: a total that folds them together is how a number comes to mean
+  # nothing.
+  $badPaths = @($bad | ForEach-Object { $_.Path })
+  $accepted = @($files | Where-Object { $badPaths -notcontains $_.FullName })
+  $empties  = @($findings | Where-Object { $_.Empty })
+  $findings = @($findings | Where-Object { -not $_.Empty })
+  $updEmpties = @($updParsed | Where-Object { $_.Empty -and @($_.Updates).Count -eq 0 })
+  foreach ($e in $empties) { Write-Output ("  NOTHING TO FILE declared by " + $e.From) }
+  foreach ($e in $updEmpties) { Write-Output ("  NOTHING TO FILE declared by updates/" + $e.Name) }
+  $allUpd = @()
+  foreach ($u in $applyFiles) { foreach ($x in @($u.Updates)) { $allUpd += $x } }
+
+  $exitCode = 0
+  if (@($bad).Count -gt 0) { $exitCode = 2 }
+  if (@($pendingBlind).Count -gt 0) { $exitCode = 3 }
+
+  if (@($findings).Count -eq 0 -and @($allUpd).Count -eq 0) {
+    $emptyCount = @($empties).Count + @($updEmpties).Count
+    if ($emptyCount -gt 0 -and -not $DryRun) {
+      # Consume them, so a lane that landed with nothing is not re-reported forever.
+      # ONLY THE ACCEPTED ONES: a quarantined file has landed nowhere, and deleting it
+      # would be the silent loss this whole tool exists to prevent.
+      foreach ($f in $accepted) { Remove-Item -LiteralPath $f.FullName -Force }
+      foreach ($e in $updEmpties) { Remove-Item -LiteralPath $e.Path -Force }
+      Write-Output ("no findings to merge; {0} lane(s) declared NOTHING TO FILE and were consumed." -f $emptyCount)
+    } else {
+      Write-Output "inbox holds $(@($accepted).Count) accepted file(s) and no findings. Nothing to merge."
+    }
+    if (-not $DryRun) {
+      $moved = Move-ToQuarantine -Bad $bad
+      if (-not $moved) { $script:MergeExit = 3; return }
+    }
+    Write-Output ("VERDICT: merged 0 finding(s) from 0 file(s), applied 0 update(s) from 0 file(s), quarantined {0} file(s). Exit {1}." -f @($bad).Count, $exitCode)
+    $script:MergeExit = $exitCode
+    return
+  }
+
+  if ($null -eq $text) { $text = Get-Content -LiteralPath $Backlog -Raw -Encoding UTF8 }
+  $next = Get-NextId $text
+
+  $block = New-Object System.Text.StringBuilder
+  if (@($findings).Count -gt 0) {
+    Write-Output ("MERGING {0} finding(s) from {1} inbox file(s), ids I{2} onward:" -f `
+      @($findings).Count, @($accepted).Count, $next)
+  }
+  $i = $next
+  foreach ($f in $findings) {
+    $tag = if ($f.Tag) { " ``$($f.Tag)``" } else { '' }
+    Write-Output ("  I{0,-4} {1,-58} <- {2}" -f $i, $f.Title.Substring(0, [Math]::Min(58, $f.Title.Length)), $f.From)
+    # LF EXPLICITLY, never AppendLine. `[FIXED 2026-09-08, measured.]` AppendLine emits
+    # [Environment]::NewLine, which is CRLF on this box, and the backlog is an LF file. The
+    # first real merge put 75 CRLF into 5,927 LF and NOTHING IN THIS SCRIPT NOTICED - git
+    # normalises on the way in, so the commit was clean and `git diff` showed nothing. That is
+    # the estate's own crlf-flip-is-invisible-in-git-diff trap, arriving through a writer.
+    [void]$block.Append("`n")
+    [void]$block.Append("### I$i - $($f.Title) ``$($f.State)``$tag`n")
+    [void]$block.Append("`n")
+    [void]$block.Append("**Merged from ``design\backlog-inbox\$($f.From)`` on $Today.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.`n")
+    [void]$block.Append("`n")
+    [void]$block.Append("$($f.Body)`n")
+    $i++
+  }
+
+  $newText = $null
+  if (@($allUpd).Count -gt 0) {
+    Write-Output ("APPLYING {0} update(s) from {1} file(s):" -f @($allUpd).Count, @($applyFiles).Count)
+    foreach ($x in $allUpd) {
+      Write-Output ("  UPDATE {0,-5} {1}  <- updates/{2}" -f $x.Id, ((@($x.Tags | ForEach-Object { '`' + $_ + '`' })) -join ' '), $x.From)
+    }
+    $idFiles = [ordered]@{}
+    foreach ($x in $allUpd) {
+      if (-not $idFiles.Contains($x.Id)) { $idFiles[$x.Id] = New-Object System.Collections.ArrayList }
+      if (-not $idFiles[$x.Id].Contains($x.From)) { [void]$idFiles[$x.Id].Add($x.From) }
+    }
+    foreach ($k in @($idFiles.Keys)) {
+      if ($idFiles[$k].Count -gt 1) { Write-Output ("  {0} updated by {1} files: {2}" -f $k, $idFiles[$k].Count, ((@($idFiles[$k])) -join ', ')) }
+    }
+    # NO SECOND GATE RUN OVER THE COMBINED TEXT, deliberately. Every rule the gate applies is per heading or per item
+    # body, an update never adds a heading, and two files reaching one item carry the identical tag set (a difference
+    # was quarantined above), so each file passing alone is each item passing together. A second run could never be
+    # red where the first was green, which makes it a guard no fixture can drive - the shape ops-and-gates.md calls an
+    # insensitive fixture. What IS kept is the invariant below: every update that was judged also applies.
+    $combined = Invoke-TcBacklogUpdates -Text $text -Updates $allUpd -Date $Today
+    if (@($combined.Problems).Count -gt 0) {
+      Write-Output ("COULD NOT EVALUATE - {0} update(s) that applied alone would not apply together, so nothing was written, consumed or quarantined:" -f @($combined.Problems).Count)
+      foreach ($pr in @($combined.Problems)) { Write-Output ("    " + $pr.From + ": UPDATE " + $pr.Id + " " + $pr.Why) }
+      $script:MergeExit = 3
+      return
+    }
+    $newText = $combined.Text + $block.ToString()
+  }
+
+  if ($DryRun) {
+    Write-Output ''
+    Write-Output "-DryRun: nothing written, inbox untouched, nothing quarantined."
+    Write-Output ("VERDICT: {0} finding(s) would merge, {1} update(s) would apply, {2} file(s) would be quarantined. Exit {3}." -f @($findings).Count, @($allUpd).Count, @($bad).Count, $exitCode)
+    $script:MergeExit = $exitCode
+    return
+  }
+
+  if ($null -ne $newText) {
+    # COMPARE, THEN SWAP. The lock keeps other MERGES out, not a person or a lane editing the file by hand, so the bytes
+    # this judged are checked unchanged before a whole-file replace could silently throw an edit away.
+    $nowBytes = [IO.File]::ReadAllBytes($Backlog)
+    if ((Get-TcSha256Hex $nowBytes) -ne (Get-TcSha256Hex $bytes)) {
+      Write-Output "COULD NOT EVALUATE - the backlog changed on disk while this merge was judging it, so an in-place rewrite would throw that change away. Nothing was written, consumed or quarantined. Re-run the merge."
+      $script:MergeExit = 3
+      return
+    }
+    try {
+      $null = Write-TcAtomicFile -Path $Backlog -Text $newText -NoNewline -NoBom:(-not $hasBom)
+    } catch {
+      Write-Output ("COULD NOT EVALUATE - the updated backlog could not be written, and the old one is intact. Nothing was consumed or quarantined: " + $_.Exception.Message)
+      $script:MergeExit = 3
+      return
+    }
+  } else {
+    # NOT Add-Content: it appends [Environment]::NewLine after the value on top of whatever the
+    # value already ends with. AppendAllText writes exactly the bytes given, and the explicit
+    # UTF8Encoding($false) is the no-BOM form the workspace CLAUDE.md prescribes.
+    [IO.File]::AppendAllText($Backlog, $block.ToString(), (New-Object Text.UTF8Encoding($false)))
+  }
+  # The inbox is emptied only after a successful write, so a crash re-runs cleanly
+  # rather than losing the findings - the failure this whole script exists for. ONLY THE
+  # ACCEPTED FILES: a quarantined file has landed nowhere and is never deleted, and an UPDATE
+  # file the gate could not judge stays where it is.
+  foreach ($f in $accepted) { Remove-Item -LiteralPath $f.FullName -Force }
+  foreach ($u in $applyFiles) { Remove-Item -LiteralPath $u.Path -Force }
+  foreach ($e in $updEmpties) { Remove-Item -LiteralPath $e.Path -Force }
+
+  $moved = Move-ToQuarantine -Bad $bad
+  if (-not $moved) { $script:MergeExit = 3; return }
+
+  Write-Output ''
+  $emptyNote = if ((@($empties).Count + @($updEmpties).Count) -gt 0) { ", plus {0} lane(s) declaring NOTHING TO FILE" -f (@($empties).Count + @($updEmpties).Count) } else { '' }
+  Write-Output ("merged {0} finding(s) and applied {1} update(s){2}. Run ops\audit-backlog-status.ps1 to confirm the states." -f @($findings).Count, @($allUpd).Count, $emptyNote)
+  if (@($bad).Count -gt 0) {
+    Write-Output ("{0} inbox file(s) were QUARANTINED into {1} or {2} and were NOT merged. Fix each one, move it back, and re-run." -f @($bad).Count, $qRoot, $qUpd)
+  }
+  # THE TRAILER, for whoever commits this merge: paths below design\backlog-inbox\, forward slashes, as git names them.
+  $trail = @(@($findings | ForEach-Object { $_.From } | Select-Object -Unique) + @($applyFiles | ForEach-Object { 'updates/' + $_.Name }))
+  Write-Output ("Backlog-Merged-From: " + ($trail -join ', '))
+  Write-Output ("VERDICT: merged {0} finding(s) from {1} file(s), applied {2} update(s) from {3} file(s), quarantined {4} file(s). Exit {5}." -f @($findings).Count, @($accepted).Count, @($allUpd).Count, @($applyFiles).Count, @($bad).Count, $exitCode)
+  $script:MergeExit = $exitCode
+}
+
+if ($Today -notmatch '^\d{4}-\d{2}-\d{2}$') {
+  Write-Output "COULD NOT EVALUATE - -Today must be a date written yyyy-MM-dd; it was '$Today'."
+  Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
+  exit 3
+}
 if (-not (Test-Path -LiteralPath $Backlog)) {
   Write-Output "COULD NOT EVALUATE - no backlog at $Backlog."
   Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
@@ -616,159 +1533,25 @@ if (-not (Test-Path -LiteralPath $InboxDir)) {
   exit 0
 }
 
-# README.md documents the convention and lives here permanently so the directory survives
-# in git; a name starting with `_` is a scratch file somebody parked. Everything else is
-# findings. The skip list is deliberately TWO NAMES and not a heuristic: a broad "skip what
-# does not look like findings" rule is a silent-loss machine in a tool that exists so that
-# nothing is lost. What was skipped is printed, so a skip is never invisible.
-$all = @(Get-ChildItem -LiteralPath $InboxDir -Filter *.md -ErrorAction SilentlyContinue |
-         Sort-Object Name)
-$files = @($all | Where-Object { $_.Name -ne 'README.md' -and $_.Name -notlike '_*' })
-$skipped = @($all).Count - @($files).Count
-if ($skipped -gt 0) { Write-Output ("skipping " + $skipped + " documentation file(s): README.md / _*.md") }
-if (-not $files -or @($files).Count -eq 0) {
-  Write-Output "inbox is empty. Nothing to merge."
-  Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
-  exit 0
-}
-
-# READ EVERY FILE BEFORE WRITING ANYTHING, AND JUDGE EACH FILE ALONE. A malformed file
-# is QUARANTINED and its siblings still merge: nothing it says is appended, so the backlog
-# still cannot go red on its account, and the single allocator below still runs once, over
-# the accepted set. The whole-batch refusal this replaced blocked three innocent lanes
-# three times on 2026-09-11 and 12, every time over a closing `## Nothing else` heading
-# with no state line under it.
-$findings = @()
-$bad = New-Object System.Collections.ArrayList
-foreach ($f in $files) {
+# ONE MERGE AT A TIME ON ONE BACKLOG. The lock is taken before the inbox is even listed, so two merges can never both
+# read the same drop file, and it is held until every accepted file is consumed. A dry run writes nothing and takes none.
+$mergeLock = $null
+if (-not $DryRun) {
   try {
-    $findings += Read-Inbox $f.FullName
+    $mergeLock = Enter-TcLedgerLock -Path $Backlog -TimeoutMs ([Math]::Max(0, $LockWaitSec) * 1000)
   } catch {
-    [void]$bad.Add([pscustomobject]@{ Name = $f.Name; Path = $f.FullName; Reason = $_.Exception.Message })
+    Write-Output ("COULD NOT EVALUATE - another merge holds the ledger lock on {0} and did not let go within {1} s, so this run merged, consumed and quarantined NOTHING. Re-run it once that merge has finished. ({2})" -f $Backlog, $LockWaitSec, $_.Exception.Message)
+    Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
+    exit 3
   }
 }
-
-$badNames = @($bad | ForEach-Object { $_.Name })
-$accepted = @($files | Where-Object { $badNames -notcontains $_.Name })
-if (@($bad).Count -gt 0) {
-  $verb = 'QUARANTINED'
-  if ($DryRun) { $verb = 'WOULD BE QUARANTINED' }
-  Write-Output ("{0} ({1} inbox file(s)) - NOT merged, kept on disk, and this run exits 2:" -f $verb, @($bad).Count)
-  foreach ($b in $bad) { Write-Output ("  " + $b.Name + ": " + $b.Reason) }
+$script:MergeExit = 3
+$script:MbiScratch = ''
+try {
+  Invoke-TcMerge
+} finally {
+  Exit-TcLedgerLock $mergeLock
+  if ($script:MbiScratch) { Remove-Item -LiteralPath $script:MbiScratch -Recurse -Force -ErrorAction SilentlyContinue }
 }
-
-function Move-ToQuarantine {
-  <# The bad files, AFTER the accepted ones have landed. They keep their bytes, because
-     the lane's work is in them; they MOVE, so an empty inbox still means what it says and
-     a re-run does not re-report them forever; and each lands beside a .reason.txt,
-     because a reason printed to a console nobody kept is not a retry.
-     Returns $true, or $false having said why. #>
-  if (@($script:bad).Count -eq 0) { return $true }
-  $qdir = Join-Path $InboxDir 'quarantine'
-  try {
-    if (-not (Test-Path -LiteralPath $qdir)) { New-Item -ItemType Directory -Path $qdir -Force -ErrorAction Stop | Out-Null }
-    foreach ($b in $script:bad) {
-      $dest = Join-Path $qdir $b.Name
-      Move-Item -LiteralPath $b.Path -Destination $dest -Force -ErrorAction Stop  # atomic-replace:allow the destination is a quarantine path nothing reads concurrently, and the source is a drop file its lane has finished with; losing this move to a reader is not a failure mode here
-      $note = "QUARANTINED $((Get-Date).ToString('yyyy-MM-dd')) by merge-backlog-inbox.ps1`n`n" + $b.Reason +
-              "`n`nThe file itself is UNCHANGED. Fix it, move it back into the inbox, and re-run the merge.`n" +
-              "Check it first, in isolation:`n  ops\merge-backlog-inbox.ps1 -ValidateFile <path to the fixed file>`n"
-      [IO.File]::WriteAllText(($dest + '.reason.txt'), ($note -replace "`r`n", "`n"), (New-Object Text.UTF8Encoding($false)))
-    }
-  } catch {
-    Write-Output ("COULD NOT EVALUATE - the accepted lanes MERGED, but moving a bad file to quarantine failed: " + $_.Exception.Message)
-    Write-Output "That bad file is still in the inbox and its findings have NOT landed. Move it out by hand before the next run."
-    return $false
-  }
-  return $true
-}
-
-# An empty landing is a RESULT and is reported by name; it never becomes a backlog item,
-# because "this lane found nothing" is not a change anybody rules on. The two counts stay
-# separate in the output: a total that folds them together is how a number comes to mean
-# nothing.
-$empties  = @($findings | Where-Object { $_.Empty })
-$findings = @($findings | Where-Object { -not $_.Empty })
-foreach ($e in $empties) { Write-Output ("  NOTHING TO FILE declared by " + $e.From) }
-
-$exitCode = 0
-if (@($bad).Count -gt 0) { $exitCode = 2 }
-
-if (@($findings).Count -eq 0) {
-  if (@($empties).Count -gt 0 -and -not $DryRun) {
-    # Consume them, so a lane that landed with nothing is not re-reported forever.
-    # ONLY THE ACCEPTED ONES: a quarantined file has landed nowhere, and deleting it
-    # would be the silent loss this whole tool exists to prevent.
-    foreach ($f in $accepted) { Remove-Item -LiteralPath $f.FullName -Force }
-    Write-Output ("no findings to merge; {0} lane(s) declared NOTHING TO FILE and were consumed." -f @($empties).Count)
-  } else {
-    Write-Output "inbox holds $(@($accepted).Count) accepted file(s) and no findings. Nothing to merge."
-  }
-  if (-not $DryRun) {
-    $moved = Move-ToQuarantine
-    if (-not $moved) {
-      Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
-      exit 3
-    }
-  }
-  Write-Output ("VERDICT: merged 0 finding(s), quarantined {0} file(s). Exit {1}." -f @($bad).Count, $exitCode)
-  Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
-  exit $exitCode
-}
-
-$text = Get-Content -LiteralPath $Backlog -Raw -Encoding UTF8
-$next = Get-NextId $text
-
-Write-Output ("MERGING {0} finding(s) from {1} inbox file(s), ids I{2} onward:" -f `
-  @($findings).Count, @($accepted).Count, $next)
-$block = New-Object System.Text.StringBuilder
-$i = $next
-foreach ($f in $findings) {
-  $tag = if ($f.Tag) { " ``$($f.Tag)``" } else { '' }
-  Write-Output ("  I{0,-4} {1,-58} <- {2}" -f $i, $f.Title.Substring(0, [Math]::Min(58, $f.Title.Length)), $f.From)
-  # LF EXPLICITLY, never AppendLine. `[FIXED 2026-09-08, measured.]` AppendLine emits
-  # [Environment]::NewLine, which is CRLF on this box, and the backlog is an LF file. The
-  # first real merge put 75 CRLF into 5,927 LF and NOTHING IN THIS SCRIPT NOTICED - git
-  # normalises on the way in, so the commit was clean and `git diff` showed nothing. That is
-  # the estate's own crlf-flip-is-invisible-in-git-diff trap, arriving through a writer.
-  [void]$block.Append("`n")
-  [void]$block.Append("### I$i - $($f.Title) ``$($f.State)``$tag`n")
-  [void]$block.Append("`n")
-  [void]$block.Append("**Merged from ``design\backlog-inbox\$($f.From)`` on $((Get-Date).ToString('yyyy-MM-dd')).** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.`n")
-  [void]$block.Append("`n")
-  [void]$block.Append("$($f.Body)`n")
-  $i++
-}
-
-if ($DryRun) {
-  Write-Output ''
-  Write-Output "-DryRun: nothing written, inbox untouched, nothing quarantined."
-  Write-Output ("VERDICT: {0} finding(s) would merge, {1} file(s) would be quarantined. Exit {2}." -f @($findings).Count, @($bad).Count, $exitCode)
-  Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
-  exit $exitCode
-}
-
-# NOT Add-Content: it appends [Environment]::NewLine after the value on top of whatever the
-# value already ends with. AppendAllText writes exactly the bytes given, and the explicit
-# UTF8Encoding($false) is the no-BOM form the workspace CLAUDE.md prescribes.
-[IO.File]::AppendAllText($Backlog, $block.ToString(), (New-Object Text.UTF8Encoding($false)))
-# The inbox is emptied only after a successful append, so a crash re-runs cleanly
-# rather than losing the findings - the failure this whole script exists for. ONLY THE
-# ACCEPTED FILES: a quarantined file has landed nowhere and is never deleted.
-foreach ($f in $accepted) { Remove-Item -LiteralPath $f.FullName -Force }
-
-$moved = Move-ToQuarantine
-if (-not $moved) {
-  Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
-  exit 3
-}
-
-Write-Output ''
-$emptyNote = if (@($empties).Count -gt 0) { ", plus {0} lane(s) declaring NOTHING TO FILE" -f @($empties).Count } else { '' }
-Write-Output ("merged {0} finding(s){1}. Run ops\audit-backlog-status.ps1 to confirm the states." -f @($findings).Count, $emptyNote)
-if (@($bad).Count -gt 0) {
-  Write-Output ("{0} inbox file(s) were QUARANTINED into {1} and were NOT merged. Fix each one, move it back, and re-run." -f @($bad).Count, (Join-Path $InboxDir 'quarantine'))
-}
-Write-Output ("VERDICT: merged {0} finding(s) from {1} file(s), quarantined {2} file(s). Exit {3}." -f @($findings).Count, @($accepted).Count, @($bad).Count, $exitCode)
 Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
-exit $exitCode
+exit $script:MergeExit

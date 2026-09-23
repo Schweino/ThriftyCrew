@@ -53,16 +53,35 @@
   EXIT CODES (lib\guard-contract.ps1 vocabulary): 0 clean, 2 hard finding, 3 could-not-evaluate.
   Read the verdict LINE, not the number (backlog E2).
 
+  -Backlog <path> JUDGES ANOTHER COPY (2026-09-23, W3.1 of design\PLAN-push-derived-conflicts-2026-09-23.md).
+  ops\merge-backlog-inbox.ps1 applies a lane's `## UPDATE <id>` block to a TEMP copy of the ledger and runs this
+  gate over that copy before it writes anything, so an update that would turn this gate red is quarantined instead
+  of landing. That is the gate's own rules judging the change, not a second copy of them in the merge. With no
+  -Backlog this reads design\BACKLOG-course-findings.md exactly as before, which is how run-gates calls it.
+
+  -Summary OVERLAYS PENDING UPDATES (same change). Progress on an existing item is now filed as an UPDATE under
+  design\backlog-inbox\updates\ and waits there until the merge runs, so a board read from the ledger alone would
+  show the item's OLD state for that wait. -Summary reads every pending UPDATE (Get-TcPendingUpdates) and prints the
+  item under its NEW state, marked `(pending inbox: <file>)`. Two files giving one item different tag spans are
+  shown under the CURRENT state and marked as a conflict, because the merge quarantines both and settles nothing by
+  order. -InboxDir names another drop box, for the fixtures. THE GATE MODE IS UNCHANGED: without -Summary it judges
+  only the ledger file, and a pending update, well formed or not, never moves its verdict.
+
   Self-test: powershell -File ops\audit-backlog-status.ps1 -SelfTest
 #>
+# Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1). The suite writes every ledger and drop box it
+# judges into a per-run temp directory and re-enters this file in-process; guard-contract is the one library it loads.
+# gate-inputs: ops\audit-backlog-status.ps1, lib\guard-contract.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([switch]$SelfTest, [switch]$Summary)
+param([switch]$SelfTest, [switch]$Summary, [string]$Backlog = '', [string]$InboxDir = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 
-$LEDGER = Join-Path $repo 'design\BACKLOG-course-findings.md'
+# PowerShell LOCATION semantics for a relative -Backlog or -InboxDir, the way Set-Content would resolve it.
+$LEDGER = if ($Backlog) { $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Backlog) } else { Join-Path $repo 'design\BACKLOG-course-findings.md' }
+$INBOX  = if ($InboxDir) { $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($InboxDir) } else { Join-Path $repo 'design\backlog-inbox' }
 
 # THE CLOSED VOCABULARY, in precedence order. Longest first matters: 'PARTLY DONE' has to be tested
 # before 'DONE' or every PARTLY DONE would read as a DONE with odd leading text.
@@ -174,10 +193,110 @@ function Get-TcBlockRecheck {
           "2026-09-09 without anyone noticing.")
 }
 
+function Get-TcPendingUpdates {
+  <# The `## UPDATE <id>` blocks ONE updates\ drop file carries, for -Summary's overlay. Pure over the file's name
+     and text, so the fixtures drive it without a disk.
+
+     Returns one record per block: Id, File, Tags (the backticked spans of the next non-empty line) and Readable.
+     A block whose next non-empty line is not a line of backticked spans is Readable = $false: the merge will
+     quarantine that file, and the board says so rather than guessing at a state.
+
+     THE SAME TWO RULES THE MERGE READS WITH, and only those two: the heading is `## UPDATE <id>` at column 0 with
+     the id pattern [A-Z]+[0-9]+, and the tag line is the next non-empty line. Whether the update would PASS is not
+     decided here; the merge decides that by running this file's gate mode over a temp copy. #>
+  param([string]$Name, [string]$Text)
+  $out = @()
+  $lines = ([string]$Text -replace ('^' + [string][char]0xFEFF), '') -split "`r?`n"
+  for ($i = 0; $i -lt $lines.Count; $i++) {
+    if ($lines[$i] -notmatch '^##[ \t]+UPDATE[ \t]+([A-Z]+[0-9]+)[ \t]*$') { continue }
+    $id = $Matches[1]
+    $tagLine = ''
+    for ($j = $i + 1; $j -lt $lines.Count; $j++) { if ($lines[$j].Trim()) { $tagLine = $lines[$j]; break } }
+    $tags = @([regex]::Matches($tagLine, '`([^`]+)`') | ForEach-Object { $_.Groups[1].Value.Trim() })
+    $readable = ($tags.Count -gt 0) -and ($tagLine -match '^\s*(`[^`]+`\s*)+$')
+    $out += [pscustomobject]@{ Id = $id; File = $Name; Tags = $tags; Readable = $readable }
+  }
+  return ,@($out)
+}
+
+function Get-TcPendingOverlay {
+  <# Folds the pending UPDATE records into the ledger's item records for -Summary. Pure over both lists.
+     Returns Items (every ledger item, each with a Pending note, '' when nothing is pending for it) and Orphans
+     (the lines to print for pending blocks that name no item in the ledger).
+
+     An item with ONE agreed tag set pending is shown with the state, detail and axes that tag set gives it, read by
+     Get-TcItemState over a heading built from those tags. An item with two DIFFERENT tag sets pending keeps its
+     current state and is marked CONFLICT, because the merge quarantines both files and settles nothing by order.
+     An unreadable block keeps the current state too, and says so. #>
+  param([object[]]$Items, [object[]]$Pending)
+  $byId = @{}
+  foreach ($p in @($Pending)) {
+    if (-not $byId.ContainsKey($p.Id)) { $byId[$p.Id] = New-Object System.Collections.ArrayList }
+    [void]$byId[$p.Id].Add($p)
+  }
+  $known = @{}
+  $outItems = @()
+  foreach ($it in @($Items)) {
+    $known[$it.Id] = $true
+    $note = ''
+    $rec = $it
+    if ($byId.ContainsKey($it.Id)) {
+      $ps = @($byId[$it.Id])
+      $files = (@($ps | ForEach-Object { $_.File } | Select-Object -Unique)) -join ', '
+      $unread = @($ps | Where-Object { -not $_.Readable })
+      # ORDINAL, because `DONE` and `done` are two different headings, and a culture-sensitive default would call
+      # them one tag set and hide a conflict the merge will refuse.
+      $keySet = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+      foreach ($p2 in $ps) { if ($p2.Readable) { [void]$keySet.Add(($p2.Tags -join [string][char]31)) } }
+      if ($unread.Count) {
+        $note = "(pending inbox: $files - UNREADABLE, the merge will quarantine it)"
+      } elseif ($keySet.Count -gt 1) {
+        $note = "(pending inbox: CONFLICT $files - the merge quarantines both and settles nothing by order)"
+      } else {
+        $spans = (@($ps[0].Tags | ForEach-Object { '`' + $_ + '`' })) -join ' '
+        $ov = Get-TcItemState ('### ' + $it.Id + ' - pending ' + $spans)
+        if ($null -ne $ov -and $ov.State) {
+          $rec = [pscustomobject]@{ Id = $it.Id; State = $ov.State; Detail = $ov.Detail
+            Reversibility = $ov.Reversibility; Rung = $ov.Rung; Problem = $ov.Problem }
+          $note = "(pending inbox: $files)"
+        } else {
+          $note = "(pending inbox: $files - its tag line declares no state the gate accepts, so the merge will quarantine it)"
+        }
+      }
+    }
+    $outItems += [pscustomobject]@{ Id = $rec.Id; State = $rec.State; Detail = $rec.Detail
+      Reversibility = $rec.Reversibility; Rung = $rec.Rung; Problem = $rec.Problem; Pending = $note }
+  }
+  $orphans = @()
+  foreach ($k in @($byId.Keys | Sort-Object)) {
+    if ($known.ContainsKey($k)) { continue }
+    $files = (@($byId[$k] | ForEach-Object { $_.File } | Select-Object -Unique)) -join ', '
+    $orphans += ("  {0,-4} (pending inbox: {1} - names no item in this ledger, so the merge will quarantine it)" -f $k, $files)
+  }
+  return [pscustomobject]@{ Items = $outItems; Orphans = $orphans }
+}
+
+function Get-TcPendingUpdateFiles {
+  <# The pending UPDATE drop files under <inbox>\updates, as (Name, Text) pairs in ordinal name order. The same
+     skip rule as the merge: README.md and _*.md are documentation, never updates. Absent directory, none pending. #>
+  param([string]$Inbox)
+  $dir = Join-Path $Inbox 'updates'
+  if (-not (Test-Path -LiteralPath $dir -PathType Container)) { return ,@() }
+  $names = @(Get-ChildItem -LiteralPath $dir -Filter *.md -File -ErrorAction SilentlyContinue |
+             Where-Object { $_.Name -ne 'README.md' -and $_.Name -notlike '_*' } | ForEach-Object { $_.Name })
+  $sorted = [string[]]$names
+  [Array]::Sort($sorted, [StringComparer]::Ordinal)
+  $out = @()
+  foreach ($n in $sorted) {
+    $out += [pscustomobject]@{ Name = $n; Text = [IO.File]::ReadAllText((Join-Path $dir $n)) }
+  }
+  return ,@($out)
+}
+
 # ------------------------------------------------------------------------------------- self-test
 if ($SelfTest) {
-  $f = 0
-  function T($m, $cond, $got) { if ($cond) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $got); $script:f++ } }
+  $f = 0; $n = 0
+  function T($m, $cond, $got) { $script:n++; if ($cond) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $got); $script:f++ } }
 
   # ---- A BLOCK MUST SAY HOW TO RE-TEST ITSELF (2026-09-09) ----------------------------------------
   # MUST FIRE: the founding shape. I44 as it stood this morning - blocked on Google, no way stated to
@@ -293,8 +412,103 @@ if ($SelfTest) {
   $one = Get-TcLedgerStates -Lines @('### E1 - a `DONE`')
   T 'CLEAN TWIN a single item comes back as an ARRAY, not unrolled to one object' ($one -is [array]) ($one.GetType().FullName)
 
-  if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 9 must-fire cases (both malformed state shapes, plus a missing reversibility, a missing first-rung type, a doubled reversibility and an out-of-vocabulary rung type), 10 must-not-fire cases led by the backticked-filename title that made the parser necessary, by the DONE/PARKED items that owe no axes, and by the two line-anchor cases a 2026-09-09 mutation probe proved were missing, and 4 clean twins including the PARTLY DONE heading with a commit hash beside its axes'
+  # ------- PENDING UPDATES AND -Backlog (2026-09-23, W3.1 of design\PLAN-push-derived-conflicts-2026-09-23.md) -------
+  # The UPDATE heading is built by concatenation and assigned before use: one string, one argument, and no line of this
+  # source is itself a heading an inbox reader could take for a block.
+  $uh = '## ' + 'UPDATE'
+  $pText1 = "# lane title`n`nprose`n`n$uh I165`n``DONE`` ``queue-7```nthe body`n"
+  $p1 = Get-TcPendingUpdates -Name 'lane-u.md' -Text $pText1
+  $p1 = @($p1)
+  T 'MUST FIRE  an UPDATE block is read as its id, its file and every tag span on the next non-empty line' `
+    (($p1.Count -eq 1) -and ($p1[0].Id -eq 'I165') -and ($p1[0].File -eq 'lane-u.md') -and $p1[0].Readable -and
+     (($p1[0].Tags -join '|') -eq 'DONE|queue-7')) ("count=" + $p1.Count + " tags=" + $(if ($p1.Count) { $p1[0].Tags -join '|' } else { '' }))
+  $pText2 = "## a new finding`n``OPEN`` ``queue-6```n`nsee $uh I2 for the shape`n$uh I2 - with a title after it`n``DONE```n    $uh I3`n``DONE```n"
+  $p2 = Get-TcPendingUpdates -Name 'lane-x.md' -Text $pText2
+  $p2 = @($p2)
+  T 'MUST NOT FIRE  a plain finding heading, an UPDATE quoted mid-line, one with a title after its id and an indented one are not pending updates' `
+    ($p2.Count -eq 0) ("count=" + $p2.Count)
+  $pText3 = "$uh I2`n`nthe tags were forgotten and this is prose`n"
+  $p3 = Get-TcPendingUpdates -Name 'lane-y.md' -Text $pText3
+  $p3 = @($p3)
+  T 'MUST FIRE  an UPDATE whose next non-empty line is not a line of tag spans is read as UNREADABLE, never guessed at' `
+    (($p3.Count -eq 1) -and (-not $p3[0].Readable)) ("count=" + $p3.Count + " readable=" + $(if ($p3.Count) { $p3[0].Readable } else { 'n/a' }))
+
+  $ovItems = Get-TcLedgerStates -Lines @('### I2 - stray artifacts `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`', '### E7 - `.worktreeinclude` `OPEN` `queue-4` `2-WAY` `RUNG1 READ`')
+  $ovOne = @([pscustomobject]@{ Id = 'I2'; File = 'lane-u.md'; Tags = @('DONE', 'queue-7'); Readable = $true })
+  $ov1 = Get-TcPendingOverlay -Items $ovItems -Pending $ovOne
+  $ov1i = @($ov1.Items | Where-Object { $_.Id -eq 'I2' })
+  $ov1e = @($ov1.Items | Where-Object { $_.Id -eq 'E7' })
+  T 'CLEAN TWIN a pending UPDATE moves its item to the NEW state and names the file it waits in; an item nothing updates keeps its state' `
+    (($ov1i.Count -eq 1) -and ($ov1i[0].State -eq 'DONE') -and ($ov1i[0].Pending -match 'pending inbox: lane-u\.md') -and
+     ($ov1e[0].State -eq 'OPEN') -and ($ov1e[0].Pending -eq '')) ("I2=" + $(if ($ov1i.Count) { $ov1i[0].State + ' ' + $ov1i[0].Pending } else { 'missing' }) + " E7=" + $ov1e[0].State)
+  $ovTwo = @([pscustomobject]@{ Id = 'I2'; File = 'lane-a.md'; Tags = @('DONE', 'queue-7'); Readable = $true },
+             [pscustomobject]@{ Id = 'I2'; File = 'lane-b.md'; Tags = @('PARKED - SUPERSEDED', 'queue-7'); Readable = $true })
+  $ov2 = Get-TcPendingOverlay -Items $ovItems -Pending $ovTwo
+  $ov2i = @($ov2.Items | Where-Object { $_.Id -eq 'I2' })
+  T 'MUST FIRE  two files giving one item DIFFERENT tag sets keep it under its CURRENT state, marked CONFLICT with both files named' `
+    (($ov2i[0].State -eq 'OPEN') -and ($ov2i[0].Pending -match 'CONFLICT') -and ($ov2i[0].Pending -match 'lane-a\.md') -and ($ov2i[0].Pending -match 'lane-b\.md')) `
+    ($ov2i[0].State + ' ' + $ov2i[0].Pending)
+  $ovOrphan = @([pscustomobject]@{ Id = 'I999'; File = 'lane-z.md'; Tags = @('DONE'); Readable = $true })
+  $ov3 = Get-TcPendingOverlay -Items $ovItems -Pending $ovOrphan
+  $ov3o = @($ov3.Orphans)
+  T 'MUST FIRE  a pending UPDATE naming no item in the ledger is printed as an orphan the merge will quarantine' `
+    (($ov3o.Count -eq 1) -and ($ov3o[0] -match 'I999') -and ($ov3o[0] -match 'lane-z\.md') -and ($ov3o[0] -match 'quarantine')) ("orphans=" + $ov3o.Count)
+
+  # End to end, in a per-run temp directory removed in the finally. Each run re-enters this file in-process.
+  $abt = Join-Path $env:TEMP ('abs-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    New-Item -ItemType Directory -Path $abt -ErrorAction Stop | Out-Null
+    $u8 = New-Object Text.UTF8Encoding($false)
+    $good = Join-Path $abt 'good.md'
+    [IO.File]::WriteAllText($good, "# Backlog`n`n### I2 - stray artifacts ``OPEN`` ``queue-6`` ``2-WAY`` ``RUNG1 BUILD```n`nbody`n`n### E7 - ``.worktreeinclude`` ``DONE`` ``4e8102c2```n`nbody`n`n### I40 - an old one ``DONE```n`nbody`n", $u8)
+    $badL = Join-Path $abt 'bad.md'
+    [IO.File]::WriteAllText($badL, "# Backlog`n`n### I2 - stray artifacts ``OPEN`` ``queue-6```n`nbody`n", $u8)
+    $inbA = Join-Path $abt 'inbox'
+    New-Item -ItemType Directory -Path (Join-Path $inbA 'updates') -ErrorAction Stop | Out-Null
+
+    $oBad = & $PSCommandPath -Backlog $badL 2>&1 | Out-String
+    $cBad = $LASTEXITCODE
+    T 'MUST FIRE  -Backlog judges THAT file: a temp ledger with an OPEN item missing its axes exits 2 and names the item' `
+      (($cBad -eq 2) -and ($oBad -match 'I2: declares no reversibility') -and ($oBad -match 'items=1 malformed=1')) ("exit $cBad :: $oBad")
+    $oGood = & $PSCommandPath -Backlog $good 2>&1 | Out-String
+    $cGood = $LASTEXITCODE
+    T 'CLEAN TWIN -Backlog over a clean temp ledger exits 0 and counts THAT ledger''s three items, not the real one' `
+      (($cGood -eq 0) -and ($oGood -match 'BACKLOG-STATUS-COMPLETE items=3 malformed=0')) ("exit $cGood :: $oGood")
+
+    [IO.File]::WriteAllText((Join-Path $inbA 'updates\lane-bad.md'), ($uh + " I2`n``SHIPPED```n`nbody`n"), $u8)
+    $oGate = & $PSCommandPath -Backlog $good -InboxDir $inbA 2>&1 | Out-String
+    $cGate = $LASTEXITCODE
+    T 'MUST NOT FIRE  the gate mode judges only the ledger file: a malformed PENDING update beside it does not move the verdict' `
+      (($cGate -eq 0) -and ($oGate -match 'items=3 malformed=0')) ("exit $cGate :: $oGate")
+    Remove-Item -LiteralPath (Join-Path $inbA 'updates\lane-bad.md') -Force
+
+    [IO.File]::WriteAllText((Join-Path $inbA 'updates\lane-u.md'), ($uh + " I2`n``DONE`` ``queue-7```n`nfinished.`n"), $u8)
+    $oSum = & $PSCommandPath -Summary -Backlog $good -InboxDir $inbA 2>&1 | Out-String
+    $cSum = $LASTEXITCODE
+    $sumLines = @($oSum -split "`r?`n")
+    $doneAt = -1; $i2At = -1; $openHdr = ''
+    for ($k = 0; $k -lt $sumLines.Count; $k++) {
+      if ($sumLines[$k] -match '^DONE  \(') { $doneAt = $k }
+      if ($sumLines[$k] -match '^OPEN  \(') { $openHdr = $sumLines[$k] }
+      if ($sumLines[$k] -match '^\s+I2\s.*\(pending inbox: lane-u\.md\)') { $i2At = $k }
+    }
+    T 'CLEAN TWIN -Summary shows a pending UPDATE''s item under its NEW state, marked pending, and exits 0' `
+      (($cSum -eq 0) -and ($doneAt -ge 0) -and ($i2At -gt $doneAt) -and ($openHdr -eq 'OPEN  (0)') -and ($oSum -match 'pending=1')) `
+      ("exit $cSum done_at=$doneAt i2_at=$i2At open='$openHdr' :: $oSum")
+  } catch {
+    T 'HARNESS the end-to-end block ran to its end without throwing' $false $_.Exception.Message
+  } finally {
+    Remove-Item -LiteralPath $abt -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
+  # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (ops-and-gates.md): a case lost to a comment, a glued line or a throw
+  # is a shortfall here, never a smaller green number.
+  $EXPECTED_CASES = 39
+  if ($f -or $n -ne $EXPECTED_CASES) {
+    Write-Output ("audit-backlog-status SELF-TEST FAIL: {0} check(s) failed, {1} of {2} case(s) ran" -f $f, $n, $EXPECTED_CASES)
+    exit 1
+  }
+  Write-Output ("audit-backlog-status SELF-TEST PASS: {0} of {0} cases (headings and axes, block re-checks, the pending-UPDATE overlay and -Backlog)" -f $n)
   exit 0
 }
 
@@ -311,13 +525,32 @@ if (-not $items.Count) {
 }
 
 if ($Summary) {
+  # THE PENDING OVERLAY. Every UPDATE waiting under <inbox>\updates is shown under the state it will give its item,
+  # so the board a person reads between a lane filing and the merge running is the board they are about to get.
+  $pendFiles = Get-TcPendingUpdateFiles -Inbox $INBOX
+  $pendFiles = @($pendFiles)
+  $pending = @()
+  foreach ($pf in $pendFiles) {
+    $recs = Get-TcPendingUpdates -Name $pf.Name -Text $pf.Text
+    $pending += @($recs)
+  }
+  $ov = Get-TcPendingOverlay -Items $items -Pending $pending
+  $items = @($ov.Items)
+  if ($pending.Count) {
+    Write-Output ("{0} pending UPDATE block(s) in {1} file(s) under {2} are overlaid below. The ledger itself is unchanged until ops\merge-backlog-inbox.ps1 runs." -f $pending.Count, $pendFiles.Count, (Join-Path $INBOX 'updates'))
+  }
+  foreach ($o in @($ov.Orphans)) { Write-Output $o }
   foreach ($s in @('NEEDS A RULING', 'OPEN', 'PARTLY DONE', 'PARKED', 'DONE')) {
     $rows = @($items | Where-Object { $_.State -eq $s })
     Write-Output ''
     Write-Output ("{0}  ({1})" -f $s, $rows.Count)
-    if ($s -eq 'DONE') { continue }   # the finished ones are a count, not a list
+    # The finished ones are a count, not a list - except an item a pending update is about to finish, which is the
+    # one DONE row a reader needs to see before the merge makes it true.
+    if ($s -eq 'DONE') { $rows = @($rows | Where-Object { $_.Pending }) }
     foreach ($r in $rows) {
-      Write-Output ("  {0,-4} {1,-5} {2,-8} {3}" -f $r.Id, $r.Reversibility, $r.Rung, $(if ($r.Detail) { $r.Detail } else { '' }))
+      $line = ("  {0,-4} {1,-5} {2,-8} {3}" -f $r.Id, $r.Reversibility, $r.Rung, $(if ($r.Detail) { $r.Detail } else { '' }))
+      if ($r.Pending) { $line = $line.TrimEnd() + ' ' + $r.Pending }
+      Write-Output $line
     }
   }
 
@@ -341,10 +574,11 @@ if ($Summary) {
     Write-Output ("  {0,-8} {1,3} of {2}" -f $t, $n, $notClosed.Count)
   }
   Write-Output ''
-  Write-GuardComplete -Name 'backlog-status' -Summary ("items={0} notclosed={1} twoway={2} oneway={3}" -f `
+  Write-GuardComplete -Name 'backlog-status' -Summary ("items={0} notclosed={1} twoway={2} oneway={3} pending={4}" -f `
     $items.Count, $notClosed.Count,
     @($notClosed | Where-Object { $_.Reversibility -eq '2-WAY' }).Count,
-    @($notClosed | Where-Object { $_.Reversibility -eq '1-WAY' }).Count)
+    @($notClosed | Where-Object { $_.Reversibility -eq '1-WAY' }).Count,
+    $pending.Count)
   exit 0
 }
 
