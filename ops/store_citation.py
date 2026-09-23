@@ -137,6 +137,15 @@ REPO_PATH_ALT = r"[\w.-]+(?:/[\w.-]+)+\.(?:md|ps1|psm1|py|js|json)"
 PATH_RE = re.compile(r"(?:memory:[\w.-]+|\[\[[\w.-]+\]\]|" + REPO_PATH_ALT + r"|[\w.-]+(?:/[\w.-]+)*\.md)")
 # Where a token STARTS: the start of the body, or after whitespace, a bracket, a separator or a quote.
 TOKEN_START = r"(?:^|(?<=[\s(\[;,\"'“‘]))"
+# A SECTION TITLE IS NOT A CITATION (2026-09-23). `course/CONSOLIDATE.md ("Everything about `applies-here.md`")` names
+# ONE file and the section inside it, but PATH_RE also read the bare `applies-here.md` in the title, which resolves
+# nowhere, so from REFUSE_FROM the line would have refused. Before extraction every quoted span is blanked (a title or a
+# search term, never a citation: 0 of 272 Store: lines from 2026-09-15 to 2026-09-23 held a path inside quotes), and so
+# is a parenthesised span that FOLLOWS a citation, the section designator rules_without_section already reads. A
+# parenthesis anywhere else keeps what it holds, so `reused (lib/x.ps1)` still cites. A straight single quote opens a
+# span only at a token start and closes only before a non-word character, so an apostrophe (estate's) is never a quote.
+QUOTE_CLOSE = {'"': '"', "“": "”", "'": "'", "‘": "’"}
+ENDS_IN_CITATION_RE = re.compile(r"(?:" + PATH_RE.pattern + r")\s*$")
 HOME_SKILLS_PREFIXES = (r"~/\.claude/skills/", r"[a-z]:/users/[^/\s]+/\.claude/skills/", r"skills/")
 
 
@@ -206,6 +215,66 @@ def normalise_body(body, repo_roots=()):
     roots = sorted({r.replace("\\", "/").rstrip("/") + "/" for r in repo_roots if r}, key=len, reverse=True)
     prefixes = [re.escape(r) for r in roots] + list(HOME_SKILLS_PREFIXES)   # longest repo root first
     return re.sub(TOKEN_START + "(?:" + "|".join(prefixes) + ")", "", b, flags=re.I)
+
+
+def _quote_end(s, i):
+    """Index just past the quoted span that opens at s[i], or None when s[i] opens none (see QUOTE_CLOSE)."""
+    c = s[i]
+    close = QUOTE_CLOSE.get(c)
+    if close is None:
+        return None
+    if c == "'" and i > 0 and not (s[i - 1].isspace() or s[i - 1] in "([;,"):
+        return None                                        # an apostrophe, not an opening quote
+    j = i + 1
+    while j < len(s):
+        ch = s[j]
+        if ch == "\\" and c == '"' and j + 1 < len(s):
+            j += 2                                         # \" inside a double-quoted title does not close it
+            continue
+        if ch == close or (c == "“" and ch == '"'):
+            if c in ("'", "‘") and j + 1 < len(s) and (s[j + 1].isalnum() or s[j + 1] == "_"):
+                j += 1                                     # estate's inside a single-quoted title
+                continue
+            return j + 1
+        j += 1
+    return None
+
+
+def _paren_end(s, i):
+    """Index just past the parenthesised span opening at s[i], quote-aware; len(s) when it never closes, because a
+    Store: line wrapped mid-title (93ef5df50) carries only the title's first half."""
+    depth, j = 0, i
+    while j < len(s):
+        e = _quote_end(s, j)
+        if e is not None:
+            j = e
+            continue
+        if s[j] == "(":
+            depth += 1
+        elif s[j] == ")":
+            depth -= 1
+            if depth == 0:
+                return j + 1
+        j += 1
+    return len(s)
+
+
+def strip_section_titles(line):
+    """One Store: line with every quoted span, and every parenthesised span that follows a citation, blanked to one
+    space (see QUOTE_CLOSE). Only what PATH_RE extracts reads this; the search-claim tests and rules_without_section
+    read the line as written, so a quoted search term and a named bullet still count."""
+    out, i = [], 0
+    while i < len(line):
+        e = _quote_end(line, i)
+        if e is None and line[i] == "(" and ENDS_IN_CITATION_RE.search("".join(out).replace("\\", "/")):
+            e = _paren_end(line, i)
+        if e is not None:
+            out.append(" ")
+            i = e
+            continue
+        out.append(line[i])
+        i += 1
+    return "".join(out)
 
 
 def repo_kind(rel):
@@ -337,8 +406,10 @@ def judge_message(text, code_files, store, today, searched):
         d.update(verdict=d["mode"], why="no Store: line")
         return d
     body = normalise_body(" ".join(lines), store.get("repo_roots") or ())
+    # Extraction reads the line with its section titles blanked (strip_section_titles); everything else reads body.
+    cites_text = normalise_body(" ".join(strip_section_titles(l) for l in lines), store.get("repo_roots") or ())
     staged = {p.replace("\\", "/").lower() for p in code_files}
-    found = PATH_RE.findall(body)
+    found = PATH_RE.findall(cites_text)
     d["self_cited"] = [c for c in found if c.lower() in staged]     # a file cannot back its own change
     d["cited"] = [c for c in found if c.lower() not in staged]
     located = {c: locate(c, store) for c in d["cited"]}
@@ -698,6 +769,37 @@ def selftest():
         case("CLEAN TWIN an unlistable repo accepts a repo citation and records repo_blind (a could-not-look never refuses)",
              d["verdict"] == "ok" and d["repo_blind"] is True and d["cited_kinds"] == ["repo_blind"])
 
+        # ---- a section title in quotes or parentheses is not a citation (strip_section_titles) ----
+        os.makedirs(os.path.join(store["skills"], "course"))
+        open(os.path.join(store["skills"], "course", "CONSOLIDATE.md"), "w").close()
+        title = 'Store: course/CONSOLIDATE.md ("Everything about `applies-here.md`")'
+        d = judge_message("fix\n\n" + title + "\n", code, store, refuse_day, True)
+        case("MUST NOT FIRE the brain lanes' line, verbatim: a bare .md inside a quoted, parenthesised section title is not cited",
+             d["verdict"] == "ok" and d["cited"] == ["course/CONSOLIDATE.md"] and d["unresolved"] == [])
+        d = judge_message("fix\n\n" + title + "; r.md\n", code, rstore, refuse_day, True)
+        case("CLEAN TWIN a real bare citation after the title still resolves (r.md, through the rules fallback)",
+             d["verdict"] == "ok" and d["cited"] == ["course/CONSOLIDATE.md", "r.md"] and "rules" in d["cited_kinds"])
+        d = judge_message("fix\n\n" + title + "; ghost.md\n", code, rstore, refuse_day, True)
+        case("MUST FIRE an unresolvable bare .md OUTSIDE the title is still refused on the refuse date",
+             d["verdict"] == "refuse" and d["unresolved"] == ["ghost.md"])
+        esc = 'Store: course/CONSOLIDATE.md, section "the estate\'s answer to \\"a `b.md` c\\""; memory:ps-null'
+        d = judge_message("fix\n\n" + esc + "\n", code, store, refuse_day, True)
+        case("MUST NOT FIRE a double-quoted title holding escaped quotes is blanked whole, and the memory after it is cited",
+             d["verdict"] == "ok" and d["cited"] == ["course/CONSOLIDATE.md", "memory:ps-null"])
+        sq = "Store: course/CONSOLIDATE.md section 'Brad's b.md list'; r.md"
+        d = judge_message("fix\n\n" + sq + "\n", code, rstore, refuse_day, True)
+        case("MUST NOT FIRE a single-quoted title is not cut short by the apostrophe inside it (Brad's)",
+             d["verdict"] == "ok" and d["cited"] == ["course/CONSOLIDATE.md", "r.md"])
+        d = judge_message("fix\n\nStore: reused (lib/x.ps1)\n", code, rstore, refuse_day, True)
+        case("CLEAN TWIN a parenthesis that does not follow a citation keeps its citation, which resolves",
+             d["verdict"] == "ok" and d["cited"] == ["lib/x.ps1"] and d["cited_kinds"] == ["machinery"])
+        d = judge_message('fix\n\nStore: searched "lib/zz.ps1 retry", nothing applicable\n', code, rstore, refuse_day, True)
+        case("MUST NOT FIRE a path inside a quoted search term is not a citation, and the quoted claim passes",
+             d["verdict"] == "ok" and d["cited"] == [] and d["escape"] is None)
+        d = judge_message("fix\n\nStore: course/CONSOLIDATE.md (Everything about applies-here.md, wrapped\n", code, store, refuse_day, True)
+        case("MUST NOT FIRE a title left open by a wrapped Store: line is blanked to the end of that line",
+             d["verdict"] == "ok" and d["cited"] == ["course/CONSOLIDATE.md"])
+
         # The real git path, on a temp repo. The eight repository variables are removed from the FIXTURE's child
         # env only (ops-and-gates: a fixture that builds a temp repo clears them); repo_context itself must keep
         # them, because under a pathspec commit GIT_INDEX_FILE names the index being committed.
@@ -920,7 +1022,7 @@ def selftest():
 
     for f in fails:
         print("  FAIL  " + f)
-    expected = 63
+    expected = 71
     if n != expected:
         fails.append("ran %d cases, expected %d" % (n, expected))
         print("  FAIL  ran %d cases, expected %d" % (n, expected))
