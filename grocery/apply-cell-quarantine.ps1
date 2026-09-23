@@ -66,6 +66,7 @@ foreach ($s in @($r.stores)) { Write-Output ("  dropped   {0}  {1} everyday cell
 # THE LINK FOLLOWS THE HELD VALUE, IN THIS STEP (Update-TcQuarantineLinks has the rule and why). The board is written
 # first and the links second: an interruption between them leaves a held cell with its old link, which tile-integrity
 # refuses loudly, never a link pointing at a cell that is not there.
+# The default stays the LIVE grocery\product-urls.json by decision (housekeeping lane, 2026-09-23): the only production caller, check-ad-cycles.ps1's quarantine step (line 581), passes only -OutDir and relies on it; a fixture passes -ProductUrlsFile.
 $puF = Join-Path $Repo 'grocery\product-urls.json'
 if (-not $ProductUrlsFile) { $ProductUrlsFile = $puF }
 if (Test-Path -LiteralPath $ProductUrlsFile) {
