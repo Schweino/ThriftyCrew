@@ -20,7 +20,6 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $mp = Split-Path -Parent $here
 $repo = Split-Path -Parent $mp
 . (Join-Path $repo 'lib\guard-contract.ps1')
-if (-not $FeedPath) { Write-Output 'no -FeedPath: export-feed names the feed it just wrote'; Exit-Guard -Name 'feed-everyday-ps' -Summary 'blind=no-feed-path' -Code 3 }
 if (-not $PublicPath) { $PublicPath = Join-Path $repo 'public\smp-feed.json' }
 if (-not $BuiltDir) { $BuiltDir = Join-Path $mp 'db\built' }
 
@@ -50,6 +49,7 @@ if ($SelfTest.IsPresent) {
   if ($script:fl -eq 0) { Write-Output ("feed-everyday-ps self-test PASS ($script:n cases)"); exit 0 } else { Write-Output ("feed-everyday-ps self-test FAIL ($script:fl of $script:n)"); exit 1 }
 }
 
+if (-not $FeedPath) { Write-Output 'no -FeedPath: export-feed names the feed it just wrote'; Exit-Guard -Name 'feed-everyday-ps' -Summary 'blind=no-feed-path' -Code 3 }
 $node = $NodeExe
 if (-not $node) { $p = Get-ChildItem 'C:\Codex\tools' -Filter 'node-*-win-x64' -Directory -ErrorAction SilentlyContinue | Sort-Object Name | Select-Object -Last 1; if ($p) { $node = Join-Path $p.FullName 'node.exe' } }
 if (-not $node -or -not (Test-Path $node) -or -not (Test-Path (Join-Path $JsdomEnv 'node_modules\jsdom'))) { Write-Output 'BLIND  node or jsdom missing: the feed is left as written'; Exit-Guard -Name 'feed-everyday-ps' -Summary 'blind=no-node' -Code 3 }
