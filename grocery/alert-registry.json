@@ -982,6 +982,15 @@
    "class": "review",
    "condition": "a tool page differs from its local source; the board and feed are not involved",
    "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "lane:grocery/reconcile-ghost-drift.ps1"
+  },
+  {
+   "id": "ghost-drift-conflict",
+   "match": "exact",
+   "key": "tools a live page and its local source both changed",
+   "class": "review",
+   "condition": "a live tool page matches no committed version and its source moved since our last publish, so no rule can merge them; the board and feed are not involved",
+   "emitter": "grocery/reconcile-ghost-drift.ps1",
    "resolver": "digest"
   },
   {

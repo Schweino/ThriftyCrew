@@ -3997,6 +3997,18 @@ try {
   if (((Get-Date) - $gdLast).TotalDays -ge 7) {
     $gd = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-ghost-drift.ps1') -ShowDiff | ForEach-Object { [string]$_ }) -join "`n"
     $gdRc = $LASTEXITCODE
+    # THE REPAIR LANE (2026-09-23): tool drift goes to reconcile-ghost-drift.ps1 -Apply, which republishes a page that only
+    # lags an older committed version, saves a Ghost edit back when our source has not moved since our last publish, and
+    # alerts ONCE on a page where both changed. A page it reconciled is no longer drift, so a clean reconcile clears rc 1.
+    if ($gdRc -eq 1) {
+      $gdFixArgs = @('-ExecutionPolicy', 'Bypass', '-File', (Join-Path $root 'reconcile-ghost-drift.ps1'), '-Apply')
+      if ($NoAlert) { $gdFixArgs += '-NoAlert' }
+      $gdFix = (& powershell @gdFixArgs | ForEach-Object { [string]$_ }) -join "`n"
+      $gdFixRc = $LASTEXITCODE
+      Log ('ghost-drift weekly: reconcile rc=' + $gdFixRc)
+      if (($gdFix -match '(?m)^GHOST-RECONCILE-COMPLETE') -and $gdFixRc -eq 0) { $gdRc = 0 }
+      $gd = $gd + "`n`n" + $gdFix
+    }
     # ...and the 542 recipe cards, against the publish ledger rather than a local file (a rebuilt card carries
     # today's prices, so build-vs-live is not the question; ledger-vs-live is). Same weekly cadence, same
     # advisory posture. Appended to the same body so one alert covers both surfaces.
