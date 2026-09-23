@@ -43,7 +43,7 @@ $recipes = @(
       make_it = @(
         'Weigh your empty pot first. Put the largest pot you will use to mix everything on your large scale and write down its weight. You need that number at the end to portion accurately.',
         'Boil the rotini in that pot until al dente, drain, and set it aside.',
-        'Cube and cook the chicken breast. Season it however you like: salt, pepper, garlic, Italian seasoning, a little cayenne if you want heat. No wrong answer here, so go with what your taste buds love.',
+        'Cube and cook the chicken breast. Season it however you like from your own spice cabinet; seasonings are not in the cost or the macros. No wrong answer here, so go with what your taste buds love.',
         'Blend the cottage cheese until smooth, then stir it into the alfredo sauce and warm it through. The cottage cheese bumps the protein up without changing the creamy taste.',
         'Steam or roast the broccoli.',
         'Combine everything back in the pot and stir to coat.')
@@ -90,13 +90,13 @@ $recipes = @(
       intro_html = '93/7 ground beef, protein penne and a pasta sauce blended with cottage cheese until it turns creamy. It eats like a rich meat sauce and carries a lot of protein for the money. It comes in at about <strong>${{cost_ps}}</strong> a serving (at everyday cost), with <strong>{{cal}} calories and {{protein}} grams of protein</strong>.'
       shop_smart = @(
         'Watch for ground beef sales and stock the freezer. 93/7 ground beef is one of the pricier proteins, so grab the big family packs when your store marks it down and freeze what you will not use that week. If you spot a great deal on 80/20, go for it, but know it adds calories and fat and takes a little protein away.',
-        'Store-brand pasta sauce is the move. It costs a fraction of the name brands. Punch it up with garlic, Italian seasoning, or a pinch of red pepper.',
+        'Any jar of store-brand pasta sauce works here. Punch it up with spices you already have if you like.',
         'Pasta is flexible. We use Barilla Protein penne for the macros here, but store-brand penne is dirt cheap. Your macros will shift a little if you swap.',
         'Buy cottage cheese in the big tubs and compare price per ounce across stores, and scan your local weekly ads too.')
       make_it = @(
         'Weigh your empty pot first and write down the number. You need it to portion at the end.',
         'Boil the penne until al dente, drain, and set it aside.',
-        'Brown the ground beef and drain the excess fat. Season it to your liking: salt, pepper, garlic, Italian seasoning, a little red pepper if you want heat.',
+        'Brown the ground beef and drain the excess fat. Season it to your liking from your own spice cabinet; seasonings are not in the cost or the macros.',
         'Make the sauce: blend the pasta sauce with the cottage cheese until smooth and creamy, then warm it through. Depending on your blender, you may need two batches.',
         'Combine the beef, sauce and penne back in the pot and stir to coat.')
       portion_html = 'Set the full pot on your large scale, subtract the empty-pot weight you wrote down in step 1, and divide by 14. Scoop that amount into each glass container. Every meal lands at <strong>{{cal}} calories and {{protein}} grams of protein</strong>.'
@@ -124,7 +124,7 @@ $recipes = @(
       make_it = @(
         'Weigh your empty pot first and write down the number. You need it to portion at the end.',
         'Boil the penne until al dente, drain, and set it aside.',
-        'Cube and cook the chicken breast. Season it to your liking: salt, pepper, garlic, Italian seasoning.',
+        'Cube and cook the chicken breast. Season it to your liking from your own spice cabinet; seasonings are not in the cost or the macros.',
         'Make the sauce: blend the cottage cheese into the marinara until smooth, then warm it through.',
         'Combine the chicken, sauce and penne in the pot and stir to coat.',
         'Stir in the shredded mozzarella and turkey pepperoni until the cheese melts through. No broiling needed.')
