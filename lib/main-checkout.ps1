@@ -84,7 +84,7 @@ if ($__mcSelfTest) {
       & git -C $mcMain config user.email t@t 2>$null | Out-Null
       & git -C $mcMain config user.name T 2>$null | Out-Null
       [IO.File]::WriteAllText((Join-Path $mcMain 'grocery\a.txt'), 'a')
-      & git -C $mcMain add -A 2>$null | Out-Null
+      & git -C $mcMain add -A -- grocery 2>$null | Out-Null
       & git -C $mcMain commit -q -m a 2>$null | Out-Null
       & git -C $mcMain worktree add -q $mcLinked 2>$null | Out-Null
     } finally { $ErrorActionPreference = $prevEap }

@@ -1504,8 +1504,11 @@ if ($postDecision -eq 'publish') {
     try { Remove-Item -LiteralPath $postDeferredF -Force } catch {}
   } else {
     Write-Output ("POST NOT PUBLISHED: publish-deals-page rc=$pdRc after the data went live - readers keep yesterday's post over today's data, which names no board it cannot serve")
-    $failed += 'deferred-post-publish'
-    try { Send-Alert -Subject "Grocery page HELD after its data shipped - $today" -Body ("capture-run published today's board.json and smp-feed.json and confirmed them live, then publish-deals-page returned rc=$pdRc, so the board POST was not updated. Its verdict lines: " + ((@(@($pdOut) | Where-Object { $null -ne $_ -and ([string]$_) -match '^(ERROR|HELD|WARN)' }) -join ' | '))) | Out-Null } catch {}
+    # Through Add-FailedLane, never a bare append (2026-09-23): capture-watchdog's lane-record case counts bypasses, and
+    # a bare append records no page, so RUN RECORD would page again for a lane that already paged as itself.
+    Add-FailedLane 'deferred-post-publish'
+    $dpSubj = "Grocery page HELD after its data shipped - $today"
+    try { Send-Alert -Subject $dpSubj -Body ("capture-run published today's board.json and smp-feed.json and confirmed them live, then publish-deals-page returned rc=$pdRc, so the board POST was not updated. Its verdict lines: " + ((@(@($pdOut) | Where-Object { $null -ne $_ -and ([string]$_) -match '^(ERROR|HELD|WARN)' }) -join ' | '))) | Out-Null; Set-FailedLanePaged 'deferred-post-publish' $dpSubj $LASTEXITCODE } catch {}
   }
 } elseif ($postDecision -like 'hold:*') {
   Write-Output ('POST HELD (it ships after its data, never before): ' + $postDecision.Substring(5) + '. The deferral stays in out\post-deferred.json and the next run that ships its data publishes it.')
