@@ -195,7 +195,7 @@ if ($SelfTest) {
     $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
     try { $fixedFull = (& git -C $repo rev-parse ('8847c9fa5:grocery/audit-match-soundness.ps1')); $fixedText = (& git -C $repo cat-file -p $fixedFull) -join "`n"; $fixedRc = $LASTEXITCODE } finally { $ErrorActionPreference = $prevEap }
     $r = Get-LneFindings -Text $fixedText
-    LneT 'CLEAN TWIN  the repaired blob from 8847c9fa5 still parses and its two cases are real CommandAst lines: 0 counted' ($fixedRc -eq 0 -and $fixedFull -like ($fixed + '*') -and $r.Findings.Count -eq 0 -and $r.ParseErrors -eq 0) ((LneGot $r) + ' blob=' + $fixedFull)
+    LneT 'MUST NOT FIRE  the repaired blob from 8847c9fa5 parses clean and holds 0 counted sites' ($fixedRc -eq 0 -and $fixedFull -like ($fixed + '*') -and $r.Findings.Count -eq 0 -and $r.ParseErrors -eq 0) ((LneGot $r) + ' blob=' + $fixedFull)
     $tok = $null; $perr = $null
     $ast = [System.Management.Automation.Language.Parser]::ParseInput($fixedText, [ref]$tok, [ref]$perr)
     $belvita = @($ast.FindAll({ param($x) $x -is [System.Management.Automation.Language.CommandAst] -and [string]$x.GetCommandName() -eq 'T' -and $x.Extent.Text -like '*CONTESTED CROWN*' }, $true))
