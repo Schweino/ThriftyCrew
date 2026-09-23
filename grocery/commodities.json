@@ -730,7 +730,9 @@
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
                         "\\bprotein\\s+bars?\\b",
-                        "\\bstews?\\b"
+                        "\\bstews?\\b",
+                        "\\bpatties\\b",
+                        "beef\\s+and\\s+pork"
                     ],
         "relax_global":  [
                              "\\bmeal\\b"
@@ -1072,7 +1074,10 @@
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
                         "\\bprotein\\s+bars?\\b",
                         "\\bstews?\\b",
-                        "\\bpeas\\b"
+                        "\\bpeas\\b",
+                        "fully\\s+cooked(?!.*\\bturkey\\b)",
+                        "\\bpancetta\\b",
+                        "mashed\\s+potatoes"
                     ]
     },
     {
@@ -3142,7 +3147,15 @@
                         "\\bstews?\\b",
                         "\\bcans?\\b",
                         "berry\\s+splash",
-                        "\\bfl\\.?\\s*oz\\b"
+                        "\\bfl\\.?\\s*oz\\b",
+                        "daiquiri",
+                        "margarita",
+                        "freeze[\\s-]?dried",
+                        "chocolat",
+                        "fruit\\s+(?:strips?|rolls?)",
+                        "\\bsnaps\\b",
+                        "finishing\\s+sugar",
+                        "\\bbites\\b"
                     ]
     },
     {
@@ -4324,7 +4337,14 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\bhavarti\\b",
+                        "herb\\s+seasoning",
+                        "onion\\s+salad",
+                        "fried\\s+onions",
+                        "\\bminced\\b",
+                        "\\bhummus\\b",
+                        "onion\\s+salt"
                     ]
     },
     {
@@ -4555,7 +4575,19 @@
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
                         "\\bcans?\\b",
-                        "\\beau\\s+de\\s+(?:parfum|toilette|cologne)\\b"
+                        "\\beau\\s+de\\s+(?:parfum|toilette|cologne)\\b",
+                        "rice\\s+(?:cakes?|crisps?)",
+                        "\\bgouda\\b",
+                        "\\bparmesan\\b",
+                        "\\brub\\b",
+                        "\\bfritters?\\b",
+                        "\\bsalad\\b",
+                        "\\bsqueezies\\b",
+                        "\\bstraws\\b",
+                        "\\bclusters\\b",
+                        "\\bblossoms\\b",
+                        "\\bpuree\\b",
+                        "chocolate\\s+apples"
                     ]
     },
     {
@@ -8635,7 +8667,11 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\bfeta\\b",
+                        "\\bcheese\\b",
+                        "\\bhummus\\b",
+                        "\\bcurry\\b"
                     ]
     },
     {
@@ -9100,7 +9136,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\branch\\b"
                     ]
     },
     {
@@ -10029,7 +10066,8 @@
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
                         "\\bcans?\\b",
-                        "\\bsticks?\\b"
+                        "\\bsticks?\\b",
+                        "\\branch\\b"
                     ]
     },
     {
@@ -10260,7 +10298,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\branch\\b"
                     ]
     },
     {
@@ -10513,7 +10552,8 @@
                         "\\bstews?\\b",
                         "\\bcans?\\b",
                         "\\bpork\\b",
-                        "\\btenderloin\\b"
+                        "\\btenderloin\\b",
+                        "tomato\\s+basil"
                     ]
     },
     {
@@ -11221,7 +11261,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\bpuree\\b"
                     ]
     },
     {
@@ -13693,7 +13734,8 @@
                         "\\bcheese\\b",
                         "\\bcascade\\b",
                         "smoked\\s+fish",
-                        "\\bsalmon\\b"
+                        "\\bsalmon\\b",
+                        "\\brub\\b"
                     ]
     },
     {
@@ -14731,7 +14773,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bqueso\\b"
                     ]
     },
     {
@@ -18776,7 +18819,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\bfrosting"
                     ]
     },
     {
@@ -22898,7 +22942,11 @@
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
                         "\\bprotein\\s+bars?\\b",
-                        "\\bstews?\\b"
+                        "\\bstews?\\b",
+                        "half\\s+loin",
+                        "ribeye\\s+roast",
+                        "loin\\s+filet",
+                        "pork\\s+chops"
                     ]
     },
     {
@@ -23713,7 +23761,8 @@
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
                         "\\bprotein\\s+bars?\\b",
-                        "\\bstews?\\b"
+                        "\\bstews?\\b",
+                        "meat\\s+sauce"
                     ]
     },
     {
@@ -37887,7 +37936,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "coffee\\s+drink"
                     ]
     },
     {
@@ -38835,7 +38885,8 @@
                         "\\bcascade\\b",
                         "\\blean\\s+cuisine\\b",
                         "\\bsmart\\s+ones\\b",
-                        "\\bravioli\\b"
+                        "\\bravioli\\b",
+                        "spaghetti\\s*rings"
                     ]
     },
     {
@@ -40313,7 +40364,8 @@
                         "\\bspf\\b",
                         "\\btanning\\b",
                         "calamine",
-                        "body\\s*wash"
+                        "body\\s*wash",
+                        "\\bfacial\\w*\\s+tissue"
                     ],
         "relax_global":  [
                              "\\bscent(?:s|ed)?\\b",
@@ -41700,7 +41752,9 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bbiscuits?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bclusters\\b",
+                        "\\bstraws\\b"
                     ]
     },
     {
@@ -51647,7 +51701,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "dressing\\s*(?:&|and)\\s*dip(?!\\s*mix)"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)",
@@ -53459,7 +53514,8 @@
                         "\\btea\\b",
                         "\\bcoffee\\b",
                         "\\bv8\\b",
-                        "gatorade(?!.*\\bprotein\\s+bars?\\b)"
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bsalad\\b"
                     ]
     },
     {
@@ -56380,7 +56436,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\bcurry\\b"
                     ]
     },
     {
@@ -59504,7 +59561,8 @@
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
                         "\\bprotein\\s+bars?\\b",
-                        "\\bstews?\\b"
+                        "\\bstews?\\b",
+                        "\\b73\\s*%\\s*lean"
                     ]
     },
     {
@@ -74355,7 +74413,8 @@
         "include":  [
                         "\\b(?:ready(?:[- ]to[- ]serve)?|90[- ]second|microwave(?:able)?)\\b.*\\b(?:long grain\\s*(?:\u0026|and)\\s*wild|wild\\s*(?:\u0026|and)\\s*long grain)\\b.*\\brice\\b",
                         "\\b(?:long grain\\s*(?:\u0026|and)\\s*wild|wild\\s*(?:\u0026|and)\\s*long grain)\\b.*\\bready(?:[- ]to[- ]serve)?\\s+rice\\b",
-                        "ready\\s+rice\\b.{0,20}long\\s+grain\\s*(?:\u0026|and)\\s*wild"
+                        "ready\\s+rice\\b.{0,20}long\\s+grain\\s*(?:\u0026|and)\\s*wild",
+                        "long\\s+grain\\s+wild\\s+ready\\s+to\\s+serve\\s+rice"
                     ],
         "exclude":  [
                         "\\b(?:uncooked|dry\\s+mix|rice\\s+mix|boxed?|cups?|bowls?|frozen|baby\\s+food|meal\\s+kit|soup|salad)\\b",
@@ -78974,7 +79033,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bdipping\\b"
                     ]
     },
     {
@@ -79197,7 +79257,8 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bcascade\\b",
-                        "\\bflavou?red\\b"
+                        "\\bflavou?red\\b",
+                        "flavou?red\\s+rice"
                     ]
     },
     {
