@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-21T21:40:46",
+  "generated_at": "2026-09-22T21:37:10",
   "reviewer": "claude-fable-medium",
   "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise. hold_clears are NOT proposals to rule on here: each names a promotion hold that has matched nothing on the board for 30 consecutive daily rechecks, with its readings. Clearing one means re-running the full guard suite (promote_aliases.py --gated) and stays with a person (ruling 2026-09-09, backlog I92).",
   "gates": {
@@ -268,6 +268,18 @@
       "payload": "cranberry\\s+cocktail",
       "stage1_confidence": 0.95,
       "rationale": "Simply Cranberry Cocktail is a standard cranberry juice product (often 100% juice or cocktail). The word order 'Cranberry Cocktail' is distinct enough to avoid matching other berry cocktails.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:8551861ce333f8013a1e",
+      "kind": "add_alias",
+      "target": "canned-chili",
+      "target_label": null,
+      "payload": "(black\\s+bean|medium|spicy|2\\s+bean)\\s+chili",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches common canned chili varieties.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }

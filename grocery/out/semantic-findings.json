@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-21 21:33",
-    "board":  "comparison-2026-09-21.json",
-    "sidecar_generated":  "2026-09-21 21:33:07",
+    "generated":  "2026-09-22 21:33",
+    "board":  "comparison-2026-09-22.json",
+    "sidecar_generated":  "2026-09-22 21:33:24",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,9 +9,9 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2705,
-                     "corpus":  43831,
-                     "rule_invisible":  8684
+                     "board_pairs":  2708,
+                     "corpus":  43876,
+                     "rule_invisible":  8703
                  },
     "identity_count":  0,
     "coverage_count":  3,
@@ -50,32 +50,8 @@
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ],
-    "coverage_excluded_count":  9,
+    "coverage_excluded_count":  4,
     "coverage_excluded":  [
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "cumin-seeds",
-                                  "commodity":  "Cumin seeds",
-                                  "store":  "Walmart",
-                                  "product":  "Soeos Cumin Seeds, 8oz (227g), Whole Cumin Powder, Resealable Bag",
-                                  "cos":  0.6671,
-                                  "score":  0.986137,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bpowder\\b\u0027 killed it"
-                              },
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "cumin-seeds",
-                                  "commodity":  "Cumin seeds",
-                                  "store":  "Walmart",
-                                  "product":  "Frontier Co-op Certified Organic Cumin Seed, Ground, 16 oz. Bag",
-                                  "cos":  0.6967,
-                                  "score":  0.984558,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bground\\b\u0027 killed it"
-                              },
                               {
                                   "kind":  "coverage",
                                   "id":  "laundry-detergent",
@@ -87,30 +63,6 @@
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
                                   "detail":  "include \u0027arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)\u0027 matched, exclude \u0027\\bpowder\\b\u0027 killed it"
-                              },
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "cumin-seeds",
-                                  "commodity":  "Cumin seeds",
-                                  "store":  "Walmart",
-                                  "product":  "Simply Organic Ground Cumin Seed, Shelf-Stable, 2.31 oz Bottle",
-                                  "cos":  0.6799,
-                                  "score":  0.966045,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bground\\b\u0027 killed it"
-                              },
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "cumin-seeds",
-                                  "commodity":  "Cumin seeds",
-                                  "store":  "Walmart",
-                                  "product":  "Spice Islands Ground Cumin Seed, Kosher, 1.9 oz",
-                                  "cos":  0.6818,
-                                  "score":  0.958278,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bground\\b\u0027 killed it"
                               },
                               {
                                   "kind":  "coverage",
@@ -147,18 +99,6 @@
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
                                   "detail":  "include \u0027(?:infant|baby)\\s+formula\u0027 matched, exclude \u0027ready[\\s-]?to[\\s-]?feed\u0027 killed it"
-                              },
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "cumin-seeds",
-                                  "commodity":  "Cumin seeds",
-                                  "store":  "Walmart",
-                                  "product":  "Pride of India Ground Cumin Seed, 8 oz Dual Sifter Bottle",
-                                  "cos":  0.6362,
-                                  "score":  0.906948,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bground\\b\u0027 killed it"
                               }
                           ]
 }

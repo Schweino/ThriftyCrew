@@ -2040,6 +2040,18 @@
     "target_id": "hot-honey"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-09-22T21:36:46",
+    "id": "lp:8551861ce333f8013a1e",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"(black\\\\s+bean|medium|spicy|2\\\\s+bean)\\\\s+chili\"}",
+    "queue_hash": "1f5d52b5c743889a8c7ddc4b626596c950106451fcf919a98f4381d7ea1f3976",
+    "rationale": "Matches common canned chili varieties.",
+    "status": "proposed",
+    "target_id": "canned-chili"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:86070b43087b2329c2e6",
