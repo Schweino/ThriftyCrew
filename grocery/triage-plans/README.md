@@ -254,6 +254,24 @@ with the change and a future reader can see why a rule exists.
     "commit + push, then verify one fixed cell on the live board"
   ],
 
+  // WHAT THE REVIEWER CONSULTED (2026-09-23, W5.3 of design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md).
+  // REQUIRED on a plan whose file-name date is on or after 2026-09-26 ($KcCutoff in validate-triage-plan.ps1); a
+  // *.routing.json is never asked. A string, or a list of strings, or an object such as {"searched": [...], "used":
+  // [...]} (every string inside it is read). At least one entry must NAME something a reader can follow:
+  //   - a store or repo file as <dir>/<file>.md        e.g. "reliability-craft/MAP.md (the four techniques)"
+  //   - a rules bullet as .claude/rules/<file>.md       e.g. ".claude/rules/ops-and-gates.md ('Three fixture labels')"
+  //   - a memory as memory:<slug>, [[<slug>]], or "memory <slug>" naming a file in either memory store
+  //   - or the search that found nothing: 'searched "<terms>", nothing applicable'
+  // The search terms themselves may sit beside those as prose. null, "", [], [""] and prose alone are refused (exit 2).
+  // A plan with NO field may instead set rca_document to a TRACKED design/*.md that carries a non-empty
+  // "## Knowledge consulted" section. A memory that resolves in neither store, or in the other store than the one
+  // the entry names ("(C--Codex store)"), prints a WARN line and is never refused.
+  "knowledge_consulted": [
+    "searched \"guard hard fail publish held\", \"unit basis outlier\"",
+    "memory:guard-blindness-family (C--Codex store): the fixture fired and said the wrong thing",
+    ".claude/rules/ops-and-gates.md ('Three fixture labels, three jobs')"
+  ],
+
   "open_questions_for_brad": []
 }
 ```
@@ -303,6 +321,16 @@ makes a RETURN (an earlier item of its `type` closed as resolved inside the 30-d
 not name only rule or exclusion data files as its source. A RETURN no-code-change item may carry
 `prevention_none_because` instead; superseded, needs-brad and needs-more-time are exempt. The gate prints a
 `RETURNS:` line naming every RETURN item it found.
+
+**A plan says what it consulted (2026-09-23, W5.3; refused from plans dated 2026-09-26).** In both modes a plan
+whose file-name date is on or after the cutoff carries `knowledge_consulted` (see the schema above), or links a
+tracked `rca_document` whose `## Knowledge consulted` section has content; otherwise the gate exits 2 and says how to
+comply. It prints a `KNOWLEDGE CONSULTED:` line and a `WARN` line for each memory that resolves in neither store or in
+the other store than the one named. Measured before it could refuse anything, with the cutoff lifted
+(`validate-triage-plan.ps1 -KcSurvey`, plans dated 2026-09-19..22): judged 24, refused 5 - the four plans that record
+nothing (plan-2026-09-20-4, -5, -6 and plan-2026-09-21-5) and plan-2026-09-22-2, whose rca_document
+`design/RCA-holistic-2026-09-22.md` was on disk in the main checkout but never committed. The cutoff is later than
+the plan asked because the live triage SKILL.md that tells the lane about the field could not be edited that day.
 
 ## The weekly lane's plan (2026-09-10, Brad's ruling 6: prevention first, then leftovers)
 

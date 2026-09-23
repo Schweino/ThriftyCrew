@@ -15,9 +15,12 @@ So this does not try to recall anything. It checks the RECORD, at the two places
 down, and a record either exists and resolves or it does not - that part has an exit code.
 
 TWO CHECKS.
-  1. A design/PLAN-*.md or design/MEASURE-*.md dated on or after PLAN_CUTOFF carries a
-     `## Knowledge consulted` section with something under it. Older plans are not judged, so this is
-     at zero on the day it lands and needs no ratchet.
+  1. A dated design/<PREFIX>-*.md, for every PREFIX in ANALYSIS_RECORD_PREFIXES (PLAN and MEASURE until
+     2026-09-23; RCA, REVIEW, EVAL and the rest since W5.3), dated on or after PLAN_CUTOFF carries a
+     `## Knowledge consulted` section with something under it. Older records are not judged, so this is
+     at zero on the day it lands and needs no ratchet. The section is checked for PRESENCE only: the
+     tokens inside it are never resolved here, because a record's prose names files the way a reader
+     would, and a push gate that warned on every one would warn every pusher about docs they never wrote.
   2. A commit made by a Claude session (CLAUDE_CODE_SESSION_ID is set) that changes CODE carries a
      `Store:` line naming the store files it used, or `Store: searched <terms>, nothing applicable`.
      Every named file must RESOLVE. A human commit and the daily bot have no session id and are not
@@ -78,7 +81,14 @@ MEMORY_PROJECTS = ("C--Codex-ThriftyCrew", "C--Codex")
 
 CODE_EXT = {".ps1", ".psm1", ".py", ".js", ".ts", ".sql", ".sh"}
 NOT_CODE_PREFIX = ("grocery/out/", "archive/", "meal-prep/out/", "ops/prompt-backup/")
-PLAN_RE = re.compile(r"^(PLAN|MEASURE)-.*?(\d{4}-\d{2}-\d{2}).*\.md$")
+# THE ANALYSIS RECORDS THE PLAN AUDIT JUDGES (2026-09-23, W5.3 of
+# design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md). Until that day only PLAN- and MEASURE- were
+# judged, so an RCA, a REVIEW or an EVAL - the records a diagnosis or a verdict is written into - could say
+# nothing about what it consulted and pass. This tuple is the ONE definition: ~/.claude/skills recall_core
+# mirrors it as ANALYSIS_RECORD_PREFIXES with a comment naming this file, and a prefix is added here first.
+# FINDING and FINDINGS are both real (design/FINDING-*.md and design/FINDINGS-contested-2026-08-21.md).
+ANALYSIS_RECORD_PREFIXES = ("PLAN", "MEASURE", "EVAL", "TRIAL", "RCA", "REVIEW", "AUDIT", "FINDING", "FINDINGS", "PROBE")
+PLAN_RE = re.compile(r"^(" + "|".join(ANALYSIS_RECORD_PREFIXES) + r")-.*?(\d{4}-\d{2}-\d{2}).*\.md$")
 HEADING_RE = re.compile(r"^##\s+knowledge consulted\s*$", re.I | re.M)
 STORE_LINE_RE = re.compile(r"^store:\s*(.*)$", re.I | re.M)
 EXEMPT_RE = re.compile(r"^store-exempt:\s*(\S.*)$", re.I | re.M)
@@ -440,6 +450,36 @@ def selftest():
         case("MUST NOT FIRE a plan dated before the cutoff is not judged", "PLAN-old-2026-09-01.md" not in judged)
         case("CLEAN TWIN a filled section on a MEASURE doc is judged and passes", "MEASURE-good-%s.md" % PLAN_CUTOFF in judged and len(judged) == 2)
 
+        # ---- W5.3: every analysis record prefix is judged, not only PLAN and MEASURE ----
+        ad = os.path.join(root, "design-analysis")
+        os.makedirs(ad)
+        for name, body in (("RCA-empty-%s.md" % PLAN_CUTOFF, "# rca\n"),
+                           ("FINDINGS-empty-%s.md" % PLAN_CUTOFF, "# f\n\n## Knowledge consulted\n\n## Next\n"),
+                           ("REVIEW-good-%s.md" % PLAN_CUTOFF, "# r\n\n## Knowledge consulted\n\nmemory:ps-null\n"),
+                           ("NOTES-other-prefix-%s.md" % PLAN_CUTOFF, "# not an analysis record\n")):
+            with open(os.path.join(ad, name), "w") as f:
+                f.write(body)
+        real_plan = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "design",
+                                 "PLAN-brain-consults-on-code-and-analysis-2026-09-22.md")
+        if os.path.isfile(real_plan):
+            with open(real_plan, "rb") as f:
+                rp = f.read()
+            with open(os.path.join(ad, os.path.basename(real_plan)), "wb") as f:
+                f.write(rp)
+        aj, am = plan_findings(ad)
+        case("MUST FIRE an RCA record dated on the cutoff with no section is judged and missing (a prefix W5.3 added)",
+             "RCA-empty-%s.md" % PLAN_CUTOFF in aj and "RCA-empty-%s.md" % PLAN_CUTOFF in am)
+        case("MUST FIRE a FINDINGS record whose section is empty is missing (FINDINGS, not cut short at FINDING)",
+             "FINDINGS-empty-%s.md" % PLAN_CUTOFF in am)
+        case("MUST NOT FIRE a dated file whose prefix is not an analysis record is not judged",
+             not any(n.startswith("NOTES-") for n in aj))
+        case("CLEAN TWIN an existing PLAN doc (this plan, copied byte for byte) and a filled REVIEW still pass the audit",
+             os.path.basename(real_plan) in aj and os.path.basename(real_plan) not in am
+             and "REVIEW-good-%s.md" % PLAN_CUTOFF in aj and "REVIEW-good-%s.md" % PLAN_CUTOFF not in am)
+        case("CLEAN TWIN ANALYSIS_RECORD_PREFIXES is the ten the plan names, in its order (recall_core mirrors this tuple)",
+             ANALYSIS_RECORD_PREFIXES == ("PLAN", "MEASURE", "EVAL", "TRIAL", "RCA", "REVIEW", "AUDIT", "FINDING",
+                                          "FINDINGS", "PROBE"))
+
         # ---- W0.1: the estate's own knowledge resolves (design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md) ----
         rroot = "C:/Temp/Repo"
         rstore = dict(store, tracked={".claude/rules/r.md", "lib/x.ps1", "ops/x.ps1", "design/plan-a-2026-09-22.md"},
@@ -578,7 +618,7 @@ def selftest():
 
     for f in fails:
         print("  FAIL  " + f)
-    expected = 40
+    expected = 45
     if n != expected:
         fails.append("ran %d cases, expected %d" % (n, expected))
         print("  FAIL  ran %d cases, expected %d" % (n, expected))

@@ -70,7 +70,14 @@ param(
   [switch]$SelfTest,
   [switch]$Closing,
   [string]$QueueFile = '',
-  [string]$CensusFile = ''
+  [string]$CensusFile = '',
+  # -KcSurvey: the knowledge_consulted rule ALONE, with the cutoff lifted, over every plan whose file-name date is in
+  # [-SurveySince, -SurveyUntil] in -SurveyDir (default grocery\triage-plans). A report, never a gate: it is how the
+  # rule was measured over real plans before it could refuse any (W5.3), and how the next change to it is measured.
+  [switch]$KcSurvey,
+  [string]$SurveyDir = '',
+  [string]$SurveySince = '2026-09-19',
+  [string]$SurveyUntil = '2026-09-22'
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
@@ -110,6 +117,167 @@ function Test-TouchesMatchingRule($Item) {
 $DATA_ONLY_SOURCES = @('grocery/commodities.json', 'grocery/category-excludes.json', 'grocery/known-wrong.json',
                        'grocery/price-bands.json', 'grocery/commodity-search.json')
 
+# --- A PLAN SAYS WHAT IT CONSULTED (2026-09-23, W5.3 of design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md) ---
+# FOUNDING MEASUREMENT: of the 24 non-routing plans dated 2026-09-19..22, 4 recorded nothing about what the reviewer
+# consulted (plan-2026-09-20-4, -5, -6 and plan-2026-09-21-5), and a fifth (plan-2026-09-22-2) had no field but linked
+# an rca_document. The triage lanes write a diagnosis every day, and this gate checked nothing about knowledge, so a
+# plan that consulted nothing and a plan that consulted everything read the same. A plan dated on or after $KcCutoff
+# carries `knowledge_consulted` naming something a reader can follow, or links a tracked rca_document that has a
+# `## Knowledge consulted` section.
+# THE CUTOFF IS A LITERAL, never Get-Date, like store_citation's PLAN_CUTOFF. It is 2026-09-26, NOT the plan's
+# "landing date + 1": the live grocery-alert-triage SKILL.md (the one instruction that tells the triage lane the field
+# exists, W5.3 step 2 by procedure P3) could not be edited on 2026-09-23 because another session held an uncommitted
+# edit of that live file, and a gate that refuses a field before the lane has been told about it refuses the lane for
+# the gate's own lateness. First value, not a sweep: moving it later is the one line to change if P3 slips again.
+$KcCutoff = '2026-09-26'
+# The two memory stores, in ops/store_citation.py MEMORY_PROJECTS order, and its NOTHING_RE text. Both are COPIES of
+# that file's constants, so the self-test reads that file and fails the day either copy drifts from it.
+$KcMemoryProjects = @('C--Codex-ThriftyCrew', 'C--Codex')
+$KcNothingPattern = '\bsearched\b.*\b(nothing|none)\b.*\bapplicable\b'
+$KcPathPattern = '[\w.\-]+(?:/[\w.\-]+)+\.md\b'                    # <dir>/<file>.md, which .claude/rules/<file>.md also is
+$KcExplicitMemoryPattern = 'memory:([\w.\-]+)|\[\[([\w.\-]+)\]\]'  # the two spellings store_citation resolves
+$KcLooseMemoryPattern = '\bmemo(?:ry)?\s+([A-Za-z0-9][\w.\-]*)'   # "memory <slug>" as current plans write it
+
+function Add-KcStrings($Value, $Acc) {
+  # Every non-empty string leaf. A plan writes the field as a string, a list, or an OBJECT: 7 of the 24 plans of
+  # 2026-09-19..22 wrote {searched, used} (and one {terms_searched, used, rollout_...}). Reading only top-level strings,
+  # as the plan's own sketch did, would have refused all seven for their shape while every one names real files.
+  if ($null -eq $Value) { return }
+  if ($Value -is [string]) { if ($Value.Trim()) { [void]$Acc.Add($Value) }; return }
+  if ($Value -is [System.Collections.IDictionary]) { foreach ($k in @($Value.Keys)) { Add-KcStrings $Value[$k] $Acc }; return }
+  if ($Value -is [System.Management.Automation.PSCustomObject]) { foreach ($pr in $Value.PSObject.Properties) { Add-KcStrings $pr.Value $Acc }; return }
+  if ($Value -is [System.Collections.IEnumerable]) { foreach ($x in $Value) { Add-KcStrings $x $Acc }; return }
+  # a number or a boolean names nothing, and is simply not a string leaf
+}
+
+function Get-KcMemoryDirs {
+  $h = if ($env:USERPROFILE) { $env:USERPROFILE } else { [Environment]::GetFolderPath('UserProfile') }
+  return @($KcMemoryProjects | ForEach-Object { [pscustomobject]@{ store = $_; dir = (Join-Path $h ('.claude\projects\' + $_ + '\memory')) } })
+}
+
+function Get-KcMemoryHome([string]$Slug, $MemoryDirs) {
+  # the stores holding <slug>.md, in store order; empty when none does
+  $s = $Slug.TrimEnd('.')
+  if ($s.EndsWith('.md')) { $s = $s.Substring(0, $s.Length - 3) }
+  if (-not $s) { return @() }
+  return @(@($MemoryDirs) | Where-Object { Test-Path -LiteralPath (Join-Path $_.dir ($s + '.md')) -PathType Leaf } | ForEach-Object { $_.store })
+}
+
+function Get-KcNamedStore([string]$After) {
+  # which store the words right after a memory token name, if any: "(C--Codex store; ...)", "(ThriftyCrew store)"
+  $seg = ($After -split ';')[0]
+  if ($seg.Length -gt 160) { $seg = $seg.Substring(0, 160) }
+  if ($seg -match 'C--Codex-ThriftyCrew|ThriftyCrew store') { return 'C--Codex-ThriftyCrew' }
+  if ($seg -match 'C--Codex\b') { return 'C--Codex' }
+  return ''
+}
+
+function Get-KcTrackedSet([string]$RepoRoot) {
+  # ONE `git ls-files` over the repo, lower-cased; $null when git cannot list it (a could-not-look, never an empty set)
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $out = & git -C $RepoRoot ls-files
+    if ($LASTEXITCODE -ne 0) { return $null }
+    $set = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+    foreach ($l in @($out)) { if ($l) { [void]$set.Add(([string]$l).Replace('\', '/').ToLowerInvariant()) } }
+    return ,$set
+  } catch { return $null } finally { $ErrorActionPreference = $prevEap }
+}
+
+function Test-KcRcaDocument([string]$Rel, [string]$RepoRoot, $Tracked) {
+  # @{ ok; why; warn }: the rca_document is TRACKED and carries a non-empty `## Knowledge consulted` section
+  $r = ($Rel.Trim() -replace '\\', '/')
+  while ($r.StartsWith('./')) { $r = $r.Substring(2) }
+  if ([IO.Path]::IsPathRooted($r)) { return @{ ok = $false; why = "'$Rel' is an absolute path, and a record the repo does not version cannot stand in for the field"; warn = '' } }
+  $full = Join-Path $RepoRoot $r
+  $warn = ''
+  if ($null -eq $Tracked) {
+    $warn = "could not list the repo's tracked files, so rca_document '$r' was accepted on disk alone (a could-not-look never refuses)"
+  } elseif (-not $Tracked.Contains($r.ToLowerInvariant())) {
+    return @{ ok = $false; why = "'$r' is not tracked in git (a working-tree file is not a record: commit it, or add the field)"; warn = '' }
+  }
+  if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { return @{ ok = $false; why = "'$r' is not on disk at $full"; warn = '' } }
+  $text = Read-TextFile $full
+  $h = [regex]::Match($text, '(?im)^##\s+knowledge consulted\s*$')
+  if (-not $h.Success) { return @{ ok = $false; why = "'$r' has no '## Knowledge consulted' section"; warn = '' } }
+  $rest = $text.Substring($h.Index + $h.Length)
+  $nx = [regex]::Match($rest, '(?m)^##\s')
+  $body = if ($nx.Success) { $rest.Substring(0, $nx.Index) } else { $rest }
+  if (-not $body.Trim()) { return @{ ok = $false; why = "'$r' has a '## Knowledge consulted' heading with nothing under it"; warn = '' } }
+  return @{ ok = $true; why = ''; warn = $warn }
+}
+
+function Test-KnowledgeConsulted {
+  <# @{ judged; problems; warnings; entries; naming; via } for one plan. Judged only when the FILE NAME carries a date on or
+     after -Cutoff and the file is not a *.routing.json. An entry NAMES SOMETHING when it holds a <dir>/<file>.md token
+     (a .claude/rules/<file>.md one included), memory:<slug> or [[<slug>]], "memory <slug>" naming a file in either store,
+     or a match for store_citation's NOTHING_RE ('searched "<terms>", nothing applicable'). A plan passes when at least
+     one entry names something: the search-terms leaf of {searched, used} is prose by nature, and the used leaf beside
+     it is where the files are. Memory findings only WARN - an entry naming a memo in neither store, or naming one store
+     while the memo lives in the other (the registrar-2026-09-22.json provenance case) - and never refuse. #>
+  param($Doc, [string]$PlanName, [string]$RepoRoot, $Tracked = $null, $MemoryDirs = $null, [string]$Cutoff = $script:KcCutoff)
+  $res = @{ judged = $false; problems = [System.Collections.Generic.List[string]]::new(); warnings = [System.Collections.Generic.List[string]]::new(); entries = 0; naming = 0; via = '' }
+  $leaf = [IO.Path]::GetFileName([string]$PlanName)
+  if (-not $leaf -or $leaf -like '*.routing.json') { return $res }
+  $dm = [regex]::Match($leaf, '\d{4}-\d{2}-\d{2}')
+  if (-not $dm.Success -or [string]::CompareOrdinal($dm.Value, $Cutoff) -lt 0) { return $res }
+  $res.judged = $true
+  if ($null -eq $MemoryDirs) { $MemoryDirs = Get-KcMemoryDirs }
+  $how = "name what the reviewer consulted in knowledge_consulted (a string or a list, grocery/triage-plans/README.md): a store or repo file as <dir>/<file>.md, a .claude/rules/<file>.md bullet, memory:<slug>, or 'searched ""<terms>"", nothing applicable'"
+  $p = $Doc.PSObject.Properties['knowledge_consulted']
+  if (-not $p -or $null -eq $p.Value) {
+    $rcaP = $Doc.PSObject.Properties['rca_document']
+    $rca = if ($rcaP) { ([string]$rcaP.Value).Trim() } else { '' }
+    if ($rca) {
+      if ($null -eq $Tracked) { $Tracked = Get-KcTrackedSet $RepoRoot }
+      $rt = Test-KcRcaDocument $rca $RepoRoot $Tracked
+      if ($rt.ok) { $res.via = 'rca_document'; if ($rt.warn) { $res.warnings.Add($rt.warn) }; return $res }
+      $res.problems.Add("$leaf is dated on or after $Cutoff and carries no knowledge_consulted, and its rca_document does not stand in for it: " + $rt.why + " - $how")
+      return $res
+    }
+    $res.problems.Add("$leaf is dated on or after $Cutoff and carries no knowledge_consulted - $how")
+    return $res
+  }
+  $acc = [System.Collections.Generic.List[string]]::new()
+  Add-KcStrings $p.Value $acc
+  $res.entries = $acc.Count
+  $res.via = 'field'
+  if ($acc.Count -eq 0) {
+    $res.problems.Add("$leaf knowledge_consulted is present but holds no text (null, an empty string, an empty list or a list of empty strings) - $how")
+    return $res
+  }
+  foreach ($e0 in $acc) {
+    $e = $e0 -replace '\\', '/'
+    $names = $false
+    if ([regex]::IsMatch($e, $KcPathPattern)) { $names = $true }
+    if ([regex]::IsMatch($e, $KcNothingPattern, [Text.RegularExpressions.RegexOptions]::IgnoreCase)) { $names = $true }
+    foreach ($m in [regex]::Matches($e, $KcExplicitMemoryPattern)) {
+      $names = $true
+      $slug = if ($m.Groups[1].Success) { $m.Groups[1].Value } else { $m.Groups[2].Value }
+      $homes = @(Get-KcMemoryHome $slug $MemoryDirs)
+      if ($homes.Count -eq 0) { $res.warnings.Add("memory '$slug' resolves in neither store (" + ($KcMemoryProjects -join ', ') + ")") }
+      else {
+        $named = Get-KcNamedStore $e.Substring($m.Index + $m.Length)
+        if ($named -and ($homes -notcontains $named)) { $res.warnings.Add("memory '$slug' is named as the $named store's but lives only in " + ($homes -join ', ')) }
+      }
+    }
+    foreach ($m in [regex]::Matches($e, $KcLooseMemoryPattern, [Text.RegularExpressions.RegexOptions]::IgnoreCase)) {
+      $slug = $m.Groups[1].Value
+      $homes = @(Get-KcMemoryHome $slug $MemoryDirs)
+      if ($homes.Count -eq 0) { continue }   # "memory index hooks read" is prose about memory, not a citation of one
+      $names = $true
+      $named = Get-KcNamedStore $e.Substring($m.Index + $m.Length)
+      if ($named -and ($homes -notcontains $named)) { $res.warnings.Add("memory '" + $slug.TrimEnd('.') + "' is named as the $named store's but lives only in " + ($homes -join ', ')) }
+    }
+    if ($names) { $res.naming++ }
+  }
+  if ($res.naming -eq 0) {
+    $res.problems.Add("$leaf knowledge_consulted is prose only: none of its " + $acc.Count + " entr" + $(if ($acc.Count -eq 1) { 'y' } else { 'ies' }) + " names a file, a memory or a search that found nothing - $how")
+  }
+  return $res
+}
+
 # The queue, read the same way for both modes. ok=$false is BLIND to the caller, never an empty queue.
 function Read-GateQueue {
   param([string]$Path)
@@ -122,7 +290,8 @@ function Read-GateQueue {
 
 function Test-Plan {
   param($Doc, [string[]]$Expect, [string]$PlanDir, [switch]$Closing, $QueueIds = @(), [string]$RepoRoot = '',
-        $QueueItems = $null, [datetime]$Now = [datetime]::MinValue, $Census = $null)
+        $QueueItems = $null, [datetime]$Now = [datetime]::MinValue, $Census = $null,
+        [string]$PlanName = '', $Tracked = $null, $MemoryDirs = $null)
   if ($Now -eq [datetime]::MinValue) { $Now = Get-Date }
   $returns = New-Object System.Collections.Generic.List[string]
   $prevInfo = $null
@@ -201,6 +370,10 @@ function Test-Plan {
       $problems.Add("weekly plan's prevention item(s) " + ($pvIds -join ', ') + " do not name the prevention_target type - its queue_id is '$wantPv'")
     }
   }
+
+  # --- WHAT THE PLAN CONSULTED (W5.3): a plan dated on or after $KcCutoff names it, in both modes ---------------------
+  $kc = Test-KnowledgeConsulted -Doc $Doc -PlanName $PlanName -RepoRoot $RepoRoot -Tracked $Tracked -MemoryDirs $MemoryDirs
+  foreach ($kp in $kc.problems) { $problems.Add($kp) }
 
   $ids = @($items | ForEach-Object { [string]$_.queue_id })
   foreach ($e in @($Expect)) {
@@ -456,8 +629,8 @@ function Test-Plan {
     }
   }
 
-  if ($problems.Count) { return @{ rc = 2; problems = $problems; returns = $returns; prevention = $prevInfo } }
-  return @{ rc = 0; problems = @(); returns = $returns; prevention = $prevInfo }
+  if ($problems.Count) { return @{ rc = 2; problems = $problems; returns = $returns; prevention = $prevInfo; kc = $kc } }
+  return @{ rc = 0; problems = @(); returns = $returns; prevention = $prevInfo; kc = $kc }
 }
 
 if ($SelfTest) {
@@ -868,6 +1041,92 @@ if ($SelfTest) {
       name='Bubs Goat Milk Infant Formula Powder With Iron, 20 oz., 2 pk.'; expected='baby-formula'; observed='<unmatched>' } }))
   _CaseArt 'a positive control that did not reproduce is rejected' $withArt 2 'did NOT reproduce'
   Remove-Item $artDir -Recurse -Force -ErrorAction SilentlyContinue
+
+  # --- A PLAN SAYS WHAT IT CONSULTED (2026-09-23, W5.3) ------------------------------------------------------------------
+  # Every case names its plan FILE (the rule reads the file-name date), a temp memory store pair and a temp tracked set,
+  # so no case reads the live memory directories, the live git index or today's date. Plans are built as JSON TEXT and
+  # parsed, as a real plan file is: under PS 5.1 an empty list built in PowerShell and one parsed from a file differ.
+  $kcRoot = Join-Path $env:TEMP ('vtp-kc-' + $PID + '-' + [guid]::NewGuid().ToString('N').Substring(0, 6))
+  New-Item -ItemType Directory -Force -Path (Join-Path $kcRoot 'mem-tc'), (Join-Path $kcRoot 'mem-cx'), (Join-Path $kcRoot 'repo\design'), (Join-Path $kcRoot 'plans') -ErrorAction Stop | Out-Null
+  try {
+    $u8k = New-Object Text.UTF8Encoding($false)
+    [IO.File]::WriteAllText((Join-Path $kcRoot 'mem-tc\known-tc-memo.md'), "x`n", $u8k)
+    [IO.File]::WriteAllText((Join-Path $kcRoot 'mem-cx\known-cx-memo.md'), "x`n", $u8k)
+    [IO.File]::WriteAllText((Join-Path $kcRoot 'repo\design\RCA-kc-fixture-2026-09-26.md'), "# rca`n`n## Knowledge consulted`n`nreliability-craft/MAP.md (the four techniques)`n`n## Next`n", $u8k)
+    [IO.File]::WriteAllText((Join-Path $kcRoot 'repo\design\RCA-kc-nosection-2026-09-26.md'), "# rca`n`n## Evidence`n`nrows`n", $u8k)
+    [IO.File]::WriteAllText((Join-Path $kcRoot 'repo\design\RCA-kc-untracked-2026-09-26.md'), "# rca`n`n## Knowledge consulted`n`nreliability-craft/MAP.md`n", $u8k)
+    $kcMem = @([pscustomobject]@{ store = 'C--Codex-ThriftyCrew'; dir = (Join-Path $kcRoot 'mem-tc') }, [pscustomobject]@{ store = 'C--Codex'; dir = (Join-Path $kcRoot 'mem-cx') })
+    $kcTracked = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+    [void]$kcTracked.Add('design/rca-kc-fixture-2026-09-26.md'); [void]$kcTracked.Add('design/rca-kc-nosection-2026-09-26.md')
+    $kcAt = 'plan-' + $KcCutoff + '.json'
+    $kcBefore = 'plan-' + ([datetime]::ParseExact($KcCutoff, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture).AddDays(-1).ToString('yyyy-MM-dd')) + '.json'
+    $goodJson = ($good | ConvertTo-Json -Depth 9).TrimEnd()
+    function _KcDoc([string]$KcJson, [string]$Extra) {
+      $j = $script:goodJson.Substring(0, $script:goodJson.Length - 1).TrimEnd()
+      if ($KcJson) { $j += ",`n  ""knowledge_consulted"": " + $KcJson }
+      if ($Extra) { $j += ",`n  " + $Extra }
+      return (($j + "`n}") | ConvertFrom-Json)
+    }
+    function _CaseKc($label, $doc, [string]$planName, $expectRc, $expectMatch, [int]$expectWarn, [string]$warnMatch) {
+      $script:ran++
+      $r = Test-Plan $doc @('q1') $env:TEMP -PlanName $planName -RepoRoot (Join-Path $script:kcRoot 'repo') -Tracked $script:kcTracked -MemoryDirs $script:kcMem
+      $txt = ($r.problems -join ' | ')
+      $w = @(); if ($r.kc) { $w = @($r.kc.warnings) }
+      $wOk = ($expectWarn -lt 0) -or (($w.Count -eq $expectWarn) -and ((-not $warnMatch) -or (($w -join ' | ') -match $warnMatch)))
+      if ($r.rc -eq $expectRc -and $wOk -and ((-not $expectMatch) -or ($txt -match $expectMatch))) { Write-Output "ok    $label" }
+      else { Write-Output ("FAIL  $label  rc=" + $r.rc + " want $expectRc; warnings=" + ($w -join ' | ') + "; problems: " + $txt); $script:fail++ }
+    }
+    # THE BAR IS THE CUTOFF DATE. The case AT it is judged and refused; the day before it is not judged at all.
+    _CaseKc "MUST FIRE a plan dated ON the cutoff ($KcCutoff) with no knowledge_consulted is refused" $good $kcAt 2 'carries no knowledge_consulted' 0 ''
+    _CaseKc "MUST NOT FIRE the same plan dated one day before the cutoff ($kcBefore) is not judged" $good $kcBefore 0 $null 0 ''
+    _CaseKc 'MUST FIRE "knowledge_consulted": null is refused like an absent field' (_KcDoc 'null' '') $kcAt 2 'carries no knowledge_consulted' 0 ''
+    _CaseKc 'MUST FIRE "knowledge_consulted": "" is refused' (_KcDoc '""' '') $kcAt 2 'holds no text' 0 ''
+    _CaseKc 'MUST FIRE "knowledge_consulted": [""] is refused' (_KcDoc '[""]' '') $kcAt 2 'holds no text' 0 ''
+    _CaseKc 'MUST FIRE "knowledge_consulted": [] is refused' (_KcDoc '[]' '') $kcAt 2 'holds no text' 0 ''
+    _CaseKc 'MUST FIRE a prose-only entry names nothing a reader can follow and is refused' (_KcDoc '["I read the rules and thought about the class carefully"]' '') $kcAt 2 'prose only' 0 ''
+    _CaseKc 'MUST NOT FIRE a routing file dated on the cutoff is never judged' $good ('plan-' + $KcCutoff + '.routing.json') 0 $null 0 ''
+    # CLEAN TWINS: frozen copies of real plans' fields, VALUES frozen here because plans rotate out monthly.
+    $frozen223 = '"searched --multi \"memory store directory\" \"line ending index blob\" \"advertised check never runs\": nothing applicable in the skills store. Used: design/RCA-holistic-2026-09-22.md (F1 one fact in one place, F4 a check that never looks); memory compare-bytes-not-decodings (the EOL comparison must read two blobs git stores, never a working file against a blob); .gitattributes (text=auto eol=lf since 2026-09-06); .claude/rules/ops-and-gates.md fixture vocabulary."'
+    _CaseKc 'CLEAN TWIN a frozen copy of plan-2026-09-22-3''s string field passes' (_KcDoc $frozen223 '') $kcAt 0 $null 0 ''
+    $frozen212 = '{ "searched": "knowledge-search --multi \"carriage ledger\" \"hyvee capture rotation\": 77 sections matched; data-quality-craft/applies-here.md was the only near hit and does not apply.", "used": [ "memory:recipe-cost-basis-map (from the brief): four per-serving numbers legitimately disagree", ".claude/rules/ops-and-gates.md fixture vocabulary: MUST FIRE / MUST NOT FIRE / CLEAN TWIN used by assertion" ] }'
+    _CaseKc 'CLEAN TWIN a frozen copy of plan-2026-09-21-2''s {searched, used} OBJECT passes, and its unresolvable memo only WARNS' (_KcDoc $frozen212 '') $kcAt 0 $null 1 "memory 'recipe-cost-basis-map' resolves in neither store"
+    _CaseKc 'CLEAN TWIN the rca_document shape passes: no field, and a tracked RCA carrying the section' (_KcDoc '' '"rca_document": "design/RCA-kc-fixture-2026-09-26.md"') $kcAt 0 $null 0 ''
+    _CaseKc 'MUST FIRE an rca_document on disk but NOT tracked does not stand in for the field (the plan-2026-09-22-2 shape)' (_KcDoc '' '"rca_document": "design/RCA-kc-untracked-2026-09-26.md"') $kcAt 2 'not tracked in git' 0 ''
+    _CaseKc 'MUST FIRE a tracked rca_document with no Knowledge consulted section does not stand in for the field' (_KcDoc '' '"rca_document": "design/RCA-kc-nosection-2026-09-26.md"') $kcAt 2 'has no .## Knowledge consulted. section' 0 ''
+    _CaseKc 'MUST NOT FIRE a search that found nothing passes (store_citation''s NOTHING_RE)' (_KcDoc '"searched \"regex timeout\", nothing applicable"' '') $kcAt 0 $null 0 ''
+    _CaseKc 'MUST NOT FIRE "memory <slug>" naming a real memo passes, with no warning' (_KcDoc '["memory known-tc-memo: the fix shape"]' '') $kcAt 0 $null 0 ''
+    _CaseKc 'MUST FIRE the word memory before a word that names no memo is prose, and is refused (plan-2026-09-19''s "memory index hooks read")' (_KcDoc '["memory index hooks read (index line only, files not opened)"]' '') $kcAt 2 'prose only' 0 ''
+    _CaseKc 'MUST FIRE (a WARN, never a refusal) memory:<slug> in neither store' (_KcDoc '["memory:no-such-memo-anywhere (read in full)"]' '') $kcAt 0 $null 1 "memory 'no-such-memo-anywhere' resolves in neither store"
+    _CaseKc 'MUST FIRE (a WARN) a memo named as the ThriftyCrew store''s that lives only in C--Codex (the registrar-2026-09-22.json provenance case)' (_KcDoc '["memo known-cx-memo (ThriftyCrew store; read in full)"]' '') $kcAt 0 $null 1 "known-cx-memo' is named as the C--Codex-ThriftyCrew store.s but lives only in C--Codex"
+    _CaseKc 'MUST FIRE (a WARN) the same wrong-store shape spelled memory:<slug>' (_KcDoc '["memory:known-cx-memo (C--Codex-ThriftyCrew)"]' '') $kcAt 0 $null 1 "known-cx-memo' is named as the C--Codex-ThriftyCrew store.s but lives only in C--Codex"
+    _CaseKc 'CLEAN TWIN a memo named in the store it lives in resolves with no warning' (_KcDoc '["memory:known-cx-memo (C--Codex store)"]' '') $kcAt 0 $null 0 ''
+    # CLEAN TWIN: the copies of store_citation's constants are still copies.
+    $script:ran++
+    $scPath = Join-Path (Split-Path $root -Parent) 'ops\store_citation.py'
+    $scText = if (Test-Path -LiteralPath $scPath) { Read-TextFile $scPath } else { '' }
+    $wantNothing = 'NOTHING_RE = re.compile(r"' + $KcNothingPattern + '", re.I)'
+    $wantProjects = 'MEMORY_PROJECTS = ("' + ($KcMemoryProjects -join '", "') + '")'
+    if ($scText.Contains($wantNothing) -and $scText.Contains($wantProjects)) { Write-Output 'ok    CLEAN TWIN the copies of NOTHING_RE and MEMORY_PROJECTS match ops/store_citation.py' }
+    else { Write-Output ("FAIL  CLEAN TWIN the copies of NOTHING_RE and MEMORY_PROJECTS match ops/store_citation.py (read " + $scText.Length + " chars from $scPath)"); $script:fail++ }
+    # END TO END: the script's own path hands the plan's FILE NAME to the rule, and the survey reads real files.
+    $kcPlanF = Join-Path $kcRoot ('plans\' + $kcAt); $kcQueueF = Join-Path $kcRoot 'queue.json'
+    [IO.File]::WriteAllText($kcPlanF, ($good | ConvertTo-Json -Depth 9), $u8k)
+    [IO.File]::WriteAllText((Join-Path $kcRoot ('plans\plan-' + $KcCutoff + '-2.json')), ((_KcDoc '"searched \"x\", nothing applicable"' '') | ConvertTo-Json -Depth 9), $u8k)
+    [IO.File]::WriteAllText((Join-Path $kcRoot ('plans\plan-' + $KcCutoff + '.routing.json')), '{ "positive_control": null }', $u8k)
+    [IO.File]::WriteAllText($kcQueueF, '{ "items": [ { "id": "q1", "type": "t", "ts": "2026-09-10T08:15:00", "status": "open" } ] }', $u8k)
+    $script:ran++
+    $kcOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Plan $kcPlanF -QueueFile $kcQueueF
+    $kcRc = $LASTEXITCODE
+    if ($kcRc -eq 2 -and (($kcOut -join ' ') -match 'carries no knowledge_consulted') -and (($kcOut -join ' ') -match 'KNOWLEDGE CONSULTED: judged')) { Write-Output 'ok    MUST FIRE the gate run on a plan FILE dated on the cutoff with no field exits 2 and names knowledge_consulted' }
+    else { Write-Output ("FAIL  MUST FIRE the gate run on a plan file dated on the cutoff with no field  rc=$kcRc; " + ($kcOut -join ' ')); $script:fail++ }
+    $script:ran++
+    $svOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -KcSurvey -SurveyDir (Join-Path $kcRoot 'plans') -SurveySince $KcCutoff -SurveyUntil $KcCutoff
+    $svRc = $LASTEXITCODE
+    $svLast = [string](@($svOut) | Select-Object -Last 1)
+    if ($svRc -eq 0 -and $svLast -eq 'KC-SURVEY-COMPLETE judged=2 refused=1 warned=0 blind=0') { Write-Output 'ok    CLEAN TWIN -KcSurvey judges both plan files, never the routing file, and ends on its COMPLETE line' }
+    else { Write-Output ("FAIL  CLEAN TWIN -KcSurvey over two plans and a routing file  rc=$svRc; last=" + $svLast); $script:fail++ }
+  } finally { Remove-Item -LiteralPath $kcRoot -Recurse -Force -ErrorAction SilentlyContinue }
+
   # BLIND: zero items proves nothing
   _Case 'zero items reports BLIND (rc 3)' ([pscustomobject]@{ queue_ids_seen=@(); ship_sequence=@('x'); items=@() }) 3 'ZERO items'
   # MUST-FIRE: a comma-joined -OpenIds (what `powershell -File` does to a [string[]]) must be split, not
@@ -876,9 +1135,51 @@ if ($SelfTest) {
   $script:ran++
   if ($split.Count -eq 2 -and $split[0] -eq 'q1' -and $split[1] -eq 'q2') { Write-Output 'ok    comma-joined -OpenIds is split back into real ids' }
   else { Write-Output "FAIL  comma-joined -OpenIds not split (got $($split.Count) id(s))"; $script:fail++ }
+  # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (2026-09-23, with W5.3's 23 cases): the count above is still COUNTED for
+  # the summary, and this is the other half - a case that silently stopped running is a defect, never a smaller suite.
+  # Raise it with every case added.
+  $expectedRan = 89
+  if ($ran -ne $expectedRan) { Write-Output "FAIL  ran $ran plan-gate cases, expected $expectedRan"; $fail++ }
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s) of $ran"; exit 1 }
   Write-Output "SELF-TEST PASS (all $ran plan-gate cases)"
+  exit 0
+}
+
+if ($KcSurvey) {
+  # THE RULE ALONE, CUTOFF LIFTED. Exit 0 when it judged at least one plan, 3 when it judged none: a survey that read
+  # nothing has shown nothing, and must never read as a clean sweep. Refusals here refuse nothing; they are the count.
+  $sDir = if ($SurveyDir) { $SurveyDir } else { Join-Path $root 'triage-plans' }
+  if (-not (Test-Path -LiteralPath $sDir -PathType Container)) {
+    Write-Output ("validate-triage-plan: KC-SURVEY BLIND - no plan directory at " + $sDir)
+    Write-Output 'KC-SURVEY-COMPLETE judged=0 refused=0 warned=0 blind=1'
+    exit 3
+  }
+  $sRepo = Split-Path $root -Parent
+  $sTracked = Get-KcTrackedSet $sRepo
+  if ($null -eq $sTracked) { Write-Output '  NOTE  git could not list the tracked files, so an rca_document is judged on disk alone' }
+  $sJudged = 0; $sRefused = 0; $sWarned = 0; $sBlind = 0
+  $sFiles = @(Get-ChildItem -LiteralPath $sDir -File -Filter 'plan-*.json' | Where-Object { $_.Name -notlike '*.routing.json' } | Sort-Object Name)
+  foreach ($sf in $sFiles) {
+    $sdm = [regex]::Match($sf.Name, '\d{4}-\d{2}-\d{2}')
+    if (-not $sdm.Success) { continue }
+    if ([string]::CompareOrdinal($sdm.Value, $SurveySince) -lt 0 -or [string]::CompareOrdinal($sdm.Value, $SurveyUntil) -gt 0) { continue }
+    $sd = $null
+    try { $sd = Read-JsonFile $sf.FullName } catch { $sd = $null }
+    if (-not $sd) { $sBlind++; Write-Output ("  BLIND   " + $sf.Name + " does not parse"); continue }
+    $sk = Test-KnowledgeConsulted -Doc $sd -PlanName $sf.Name -RepoRoot $sRepo -Tracked $sTracked -Cutoff '0000-00-00'
+    $sJudged++
+    if ($sk.problems.Count) { $sRefused++; Write-Output ("  REFUSE  " + $sf.Name + "  " + $sk.problems[0]) }
+    else {
+      $sVia = if ($sk.via -eq 'rca_document') { 'through its rca_document' } else { [string]$sk.naming + ' of ' + $sk.entries + ' entries name something' }
+      Write-Output ("  ok      " + $sf.Name + "  " + $sVia)
+    }
+    if ($sk.warnings.Count) { $sWarned++ }
+    foreach ($sw in $sk.warnings) { Write-Output ("          WARN  " + $sw) }
+  }
+  Write-Output ("validate-triage-plan: knowledge_consulted survey over " + $sDir + ", plans dated " + $SurveySince + ".." + $SurveyUntil + ", cutoff lifted")
+  Write-Output ("KC-SURVEY-COMPLETE judged=$sJudged refused=$sRefused warned=$sWarned blind=$sBlind")
+  if ($sJudged -eq 0) { exit 3 }
   exit 0
 }
 
@@ -917,11 +1218,18 @@ if (([string]$doc.lane).Trim() -eq 'weekly') {
 # RETURN priors read the queue UNIONED with the archive (594c27); owner resolution ($queueIds) stays the live queue.
 $retQueueItems = $queueItems
 try { $archItems = Read-TriageArchivedItems (Join-Path $root 'out\archive'); $retQueueItems = Join-TriageQueueWithArchive $queueItems $archItems } catch { $retQueueItems = $queueItems }
-$res = Test-Plan $doc $OpenIds (Split-Path $Plan -Parent) -Closing:$Closing -QueueIds $queueIds -QueueItems $retQueueItems -Now (Get-Date) -Census $census
+$res = Test-Plan $doc $OpenIds (Split-Path $Plan -Parent) -Closing:$Closing -QueueIds $queueIds -QueueItems $retQueueItems -Now (Get-Date) -Census $census -PlanName (Split-Path $Plan -Leaf)
 $items = @($doc.items)
 $mode = if ($Closing) { 'closing' } else { 'handoff' }
 Write-Output ("validate-triage-plan: " + $Plan)
 Write-Output ("  mode=" + $mode + "  round=" + $doc.round + "  items=" + $items.Count + "  ship_sequence=" + @($doc.ship_sequence).Count + "  expected ids=" + @($OpenIds).Count)
+if ($res.kc -and $res.kc.judged) {
+  $kcVia = if ($res.kc.via -eq 'rca_document') { 'through its rca_document' } elseif ($res.kc.via) { [string]$res.kc.naming + ' of ' + $res.kc.entries + ' entr' + $(if ($res.kc.entries -eq 1) { 'y' } else { 'ies' }) + ' name something' } else { 'absent' }
+  Write-Output ("  KNOWLEDGE CONSULTED: judged (dated on or after " + $KcCutoff + "), " + $kcVia)
+  foreach ($kw in $res.kc.warnings) { Write-Output ("  WARN  " + $kw) }
+} elseif ($res.kc) {
+  Write-Output ("  KNOWLEDGE CONSULTED: not judged (a routing file, or dated before " + $KcCutoff + ")")
+}
 foreach ($i in $items) {
   $cls = [string]$i.classification
   $ma  = if ($i.blast_radius) { [string]$i.blast_radius.measured_as } else { '-' }
