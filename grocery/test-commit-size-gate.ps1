@@ -264,7 +264,7 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
   $fhBlock = $src.Substring($fi, $fj - $fi)
   . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\git-blob-lib.ps1')
   . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\pipeline-commit.ps1')
-  function Run-ForeignHeld([bool]$rewriteForeign, [bool]$snapshotOk) {
+  function Run-ForeignHeld([bool]$rewriteForeign, [bool]$snapshotOk, [bool]$pipelineWrote = $false) {
     $c = Join-Path $env:TEMP ('fh-' + [guid]::NewGuid().ToString('N').Substring(0,8))
     New-Item -ItemType Directory $c -Force | Out-Null
     & git -C $c init -q .
@@ -277,6 +277,9 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
     # THE SESSION'S EDIT, BEFORE THE RUN: the BOM stripped, and the file's mtime well before the run start.
     [IO.File]::WriteAllBytes($foreign, [Text.Encoding]::UTF8.GetBytes('{"n":1}'))
     (Get-Item $foreign).LastWriteTime = (Get-Date).AddHours(-2)
+    # (2026-09-23, queue 2026-09-22-9bc4d2) THE PIPELINE'S OWN WRITE: a non-committing lane wrote these exact bytes and
+    # recorded them in the write journal, in the temp repo's own .git, so the lifted block must stage them, not hold them.
+    if ($pipelineWrote) { [void](Register-PipelineWrites -Repo $c -Lane 'fixture-watchdog-ff' -Since (Get-Date).AddHours(-3) -Paths @('grocery/out')) }
     $snap = if ($snapshotOk) { Get-DirtyOwnedSnapshot -Repo $c -Paths @('grocery/out') } else { [pscustomobject]@{ ok = $false; files = @(); why = 'fixture: git status failed' } }
     $runStart = (Get-Date).AddMinutes(-30)
     # THE RUN writes its own file; in the clean twin it also rewrites the foreign one.
@@ -300,6 +303,9 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
   T 'CLEAN TWIN a file dirty at start AND rewritten by the run is committed as the run''s own' `
     (($fh2.staged -match 'json-readers-baseline\.json') -and ($fh2.staged -match 'run-output\.txt')) ("staged=$($fh2.staged)")
   T 'MUST NOT FIRE a run that held nothing adds no held-list line to a refusal alert' ($fh2.line -eq '') ("line=$($fh2.line)")
+  $fh4 = Run-ForeignHeld $false $true $true
+  T 'MUST FIRE  a dirty-at-start file whose bytes a pipeline lane recorded is committed as the pipeline''s own, and named' `
+    (($fh4.staged -match 'json-readers-baseline\.json') -and ($fh4.text -match 'pipeline-own: 1 file.*fixture-watchdog-ff') -and ($fh4.line -eq '')) ("staged=$($fh4.staged) text=$($fh4.text)")
   $fh3 = Run-ForeignHeld $false $false
   T 'MUST FIRE  a snapshot that could not be taken holds NOTHING back, and says so' `
     (($fh3.staged -match 'json-readers-baseline\.json') -and ($fh3.text -match 'holding NOTHING back')) ("staged=$($fh3.staged) text=$($fh3.text)")

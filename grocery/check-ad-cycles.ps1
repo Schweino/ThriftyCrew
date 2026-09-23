@@ -4219,9 +4219,14 @@ if (-not $NoCommit) {
   $chainOutcome = 'threw'
   try {
     . (Join-Path (Split-Path $root -Parent) 'lib\pipeline-commit.ps1')
+    # -JournalPaths (2026-09-23, queue 2026-09-22-9bc4d2): the chain writes declared inputs its pricing commit does not
+    # own (graph/identity, from the board build). Recording them lets capture-run commit them as the pipeline's own
+    # instead of holding them as a session's edit. lib\bot-paths.ps1 is the one declaration of those inputs.
+    . (Join-Path (Split-Path $root -Parent) 'lib\bot-paths.ps1')
+    $chainJournal = @(@(Get-PipelinePaths -Kind pricing) + @(Get-BotInputPaths) | Select-Object -Unique)
     $msg = Invoke-PipelineCommit -Repo (Split-Path $root -Parent) -Paths (Get-PipelinePaths -Kind pricing) `
              -Message ("Pricing chain: board, recost and audits (" + (Get-Date).ToString('yyyy-MM-dd') + ") [pricing]") `
-             -Name 'check-ad-cycles' -Push -DirtyAtStart $script:ChainDirtyAtStart -RunStart $script:ChainStart
+             -Name 'check-ad-cycles' -Push -DirtyAtStart $script:ChainDirtyAtStart -RunStart $script:ChainStart -JournalPaths $chainJournal
     Log $msg
     $chainOutcome = Get-PipelineCommitOutcome -Verdict $msg
     $chainExit = Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome $chainOutcome

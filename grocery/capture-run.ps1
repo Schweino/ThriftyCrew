@@ -932,12 +932,18 @@ try {
     Write-Output $foreignHeldLine
   } else {
     $fhNow = Get-PathMtimes -Repo $repo -Paths @($script:DirtyAtStart.files | ForEach-Object { [string]$_.path })
-    $foreignHeld = Get-ForeignHeldPaths -Snapshot $script:DirtyAtStart -RunStart $script:RunStart -CurrentMtimes $fhNow
+    $fhCand = Get-ForeignHeldPaths -Snapshot $script:DirtyAtStart -RunStart $script:RunStart -CurrentMtimes $fhNow
+    # (2026-09-23, queue 2026-09-22-9bc4d2) A candidate whose bytes a pipeline lane recorded as its own write - the
+    # watchdog's Family Fare shard window, a hand-run pricing chain, a lane whose commit was refused - is the pipeline's
+    # and stays staged. Only what no lane vouches for is held. lib\pipeline-commit.ps1 has the rule.
+    $fhSplit = Split-PipelineOwnHeld -Repo $repo -Held $fhCand
+    $foreignHeld = @($fhSplit.foreign)
     foreach ($fh in $foreignHeld) { & git -C $repo reset -q -- $fh | Out-Null }
     if ($foreignHeld.Count) {
       $foreignHeldLine = ('foreign-held: ' + $foreignHeld.Count + ' tracked owned file(s) another session dirtied before this run started, left uncommitted: ' + ($foreignHeld -join ', '))
       Write-Output $foreignHeldLine
     }
+    if ($fhSplit.note) { Write-Output $fhSplit.note }
   }
   # <<< FOREIGN-HELD BLOCK <<<
   # ---- HOW BIG IS THIS COMMIT? (2026-08-23) --------------------------------------------------------
@@ -1074,6 +1080,13 @@ try {
     Add-FailedLane 'commit-size-gate'
   }
 
+  # ---- RECORD WHAT THIS RUN WROTE (2026-09-23, queue 2026-09-22-9bc4d2) -------------------------------------------
+  # Before the commit is decided, so a refused commit or a size-gate refusal still leaves the record: the next run then
+  # commits these bytes as the pipeline's own instead of holding them as a session's edit. Only $paths, which carries
+  # the served files only when this run was allowed to ship them, so a guards-blocked board is never vouched for.
+  # Never fatal: an unrecorded write is held exactly as it was before this existed.
+  try { $jN = Register-PipelineWrites -Repo $repo -Lane ('capture-run-' + $Kind) -Since $script:RunStart -Paths $paths; Write-Output ('pipeline-writes: recorded ' + $jN + ' file(s) this run wrote') }
+  catch { Write-Output ('pipeline-writes: could not record this run''s writes (' + $_.Exception.Message + ') - a file it leaves uncommitted is held by the next run as before') }
   & git -C $repo diff --cached --quiet
   if ($sizeGateRefused) {
     # already reported above; fall through without committing or pushing

@@ -47,6 +47,9 @@ $__pcSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-S
 # scheduled runs were refused over one file nobody could name. Sourced from THIS file's own directory so
 # it resolves wherever the repo is checked out, worktree included.
 . (Join-Path $PSScriptRoot 'git-blob-lib.ps1')
+# The pipeline write journal below takes the ledger lock and replaces its file atomically (2026-09-23).
+. (Join-Path $PSScriptRoot 'ledger-lock.ps1')
+. (Join-Path $PSScriptRoot 'atomic-write.ps1')
 
 # Anything that is CODE or CONFIG, in the broadest reading. Deliberately over-inclusive: the cost of a
 # false refusal is that a human commits a data file by hand, and the cost of a false accept is
@@ -181,6 +184,174 @@ function Get-ForeignHeldPaths {
   return ,$held.ToArray()
 }
 
+# ---- THE PIPELINE WRITE JOURNAL (2026-09-23, queue 2026-09-22-9bc4d2, reopened from 2026-09-10-a86b87) ----
+# THE CLASS. The foreign-held rule above can say "dirty before this run started" and nothing about WHO dirtied it. A
+# lane that writes owned paths and does not commit them - capture-watchdog's Family Fare shard window after the 08:00
+# commit, check-ad-cycles run by hand (its pricing commit does not own graph/identity), any lane whose own commit was
+# refused - left files the NEXT committer read as a session's edit and held back. A dated file is never rewritten, so it
+# was held on every run after: family-fare-regular-2026-09-13.json was held on 09-14, 09-17 and 09-18. Data the pipeline
+# wrote and never committed is data no reader gets (design/RCA-holistic-2026-09-22.md F2).
+# THE RULE. The OUTPUTS are declared once already: lib\bot-paths.ps1, and Get-PipelinePaths above for the three lanes.
+# What was missing is WHO wrote a file, so a lane now RECORDS what it wrote: every declared file that differs from HEAD
+# with an mtime at or after the lane's start, as (checkout, path) -> the git blob id of its bytes, in ONE journal in the
+# git common dir (never tracked, shared by every checkout, keyed by checkout so a worktree's run never vouches for the
+# main tree's file). At commit time a held candidate whose CURRENT bytes are the bytes a lane recorded is the
+# pipeline's own and is committed; a file a session edited after the lane wrote it has other bytes and stays held.
+# WHAT IT CANNOT DO, stated so nobody reads it as more: a pipeline script run by hand OUTSIDE any lane (compare-deals on
+# its own) records nothing, so its outputs are held exactly as before. A session edit made DURING a lane to a declared
+# file is recorded as the lane's; that is the same file the foreign-held rule already stages today (its mtime is after
+# the start), so nothing that was held before is newly committed by it. A journal that cannot be read or written
+# degrades to the rule of the day before: every candidate stays held.
+$script:PC_JOURNAL_NAME = 'tc-pipeline-writes.json'
+# 30 days, the first plausible number and not a sweep: a dated output held longer than that has a bigger problem than
+# this journal, and the prune only bounds the file. What it does when a lane STOPS recording: entries age out and the
+# held files go back to being held, which is the day-before behaviour.
+$script:PC_JOURNAL_KEEP_DAYS = 30
+
+function Get-PipelineWriteJournalPath {
+  <# The journal's full path: <git common dir>\tc-pipeline-writes.json. $null when git cannot name the common dir. #>
+  param([Parameter(Mandatory = $true)][string]$Repo)
+  $g = Invoke-GitCaptured -Repo $Repo -GitArgs @('rev-parse', '--git-common-dir')
+  if ($g.rc -ne 0) { return $null }
+  $d = ([string]$g.stdout).Trim()
+  if (-not $d) { return $null }
+  if (-not [IO.Path]::IsPathRooted($d)) { $d = Join-Path $Repo $d }
+  return (Join-Path ([IO.Path]::GetFullPath($d)) $script:PC_JOURNAL_NAME)
+}
+
+function Get-PipelineCheckoutKey {
+  <# The checkout a journal entry belongs to: its toplevel, full, lower-cased, backslashed. #>
+  param([Parameter(Mandatory = $true)][string]$Repo)
+  $g = Invoke-GitCaptured -Repo $Repo -GitArgs @('rev-parse', '--show-toplevel')
+  $t = if ($g.rc -eq 0) { ([string]$g.stdout).Trim() } else { $Repo }
+  return ([IO.Path]::GetFullPath($t.Replace('/', '\'))).TrimEnd('\').ToLowerInvariant()
+}
+
+function Get-PipelineBlobIds {
+  <# path -> the git blob id its CURRENT bytes would get (git hash-object, filters applied), in chunks of 50 so a long
+     list never meets the command-line limit. A path git could not hash is absent from the map, never guessed. #>
+  param([Parameter(Mandatory = $true)][string]$Repo, [string[]]$Paths)
+  $map = @{}
+  $list = @($Paths | Where-Object { $_ })
+  for ($i = 0; $i -lt $list.Count; $i += 50) {
+    $chunk = @($list[$i..([Math]::Min($i + 49, $list.Count - 1))])
+    $g = Invoke-GitCaptured -Repo $Repo -GitArgs (@('hash-object', '--') + $chunk)
+    if ($g.rc -ne 0) { continue }
+    $ids = @(([string]$g.stdout) -split "`r?`n" | Where-Object { $_.Trim() })
+    if ($ids.Count -ne $chunk.Count) { continue }
+    for ($k = 0; $k -lt $chunk.Count; $k++) { $map[[string]$chunk[$k]] = $ids[$k].Trim() }
+  }
+  return $map
+}
+
+function Read-PipelineWriteJournal {
+  <# The journal as an ordinal hashtable key -> @{ blob; lane; ts }. Empty when absent; THROWS when present and
+     unreadable, so a caller degrades on purpose rather than reading a damaged journal as an empty one. #>
+  param([Parameter(Mandatory = $true)][string]$JournalPath)
+  $h = New-Object 'System.Collections.Hashtable' ([StringComparer]::Ordinal)
+  if (-not (Test-Path -LiteralPath $JournalPath)) { return $h }
+  $doc = [IO.File]::ReadAllText($JournalPath, (New-Object Text.UTF8Encoding($false))) | ConvertFrom-Json
+  if ($null -ne $doc -and $doc.PSObject.Properties['writes']) {
+    foreach ($p in $doc.writes.PSObject.Properties) {
+      $h[$p.Name] = [pscustomobject]@{ blob = [string]$p.Value.blob; lane = [string]$p.Value.lane; ts = [string]$p.Value.ts }
+    }
+  }
+  return $h
+}
+
+function Register-PipelineWrites {
+  <# A LANE RECORDS WHAT IT WROTE. Every file under $Paths that differs from HEAD and was written at or after $Since is
+     recorded as this checkout's (path -> blob id, lane, time). Returns how many were recorded. Throws on a journal it
+     cannot write; every caller swallows that, because a lane must never die of its bookkeeping, and an unrecorded
+     write is simply held as before. #>
+  param(
+    [Parameter(Mandatory = $true)][string]$Repo,
+    [Parameter(Mandatory = $true)][string]$Lane,
+    [Parameter(Mandatory = $true)][datetime]$Since,
+    [string[]]$Paths
+  )
+  $present = @($Paths | Where-Object { $_ -and (Test-Path -LiteralPath (Join-Path $Repo $_)) })
+  if (-not $present.Count) { return 0 }
+  # AGAINST HEAD, NOT THE INDEX: capture-run calls this under its private index, where a staged file reads clean in the
+  # worktree column, and after a private-index commit the session's index is stale. HEAD-to-worktree is the question.
+  $g = Invoke-GitCaptured -Repo $Repo -GitArgs (@('-c', 'core.quotePath=false', 'diff', '--name-only', 'HEAD', '--') + $present)
+  if ($g.rc -ne 0) { throw ('git diff exited ' + $g.rc + ': ' + ([string]$g.stderr).Trim()) }
+  $mine = New-Object System.Collections.Generic.List[string]
+  foreach ($rel in @(([string]$g.stdout) -split "`r?`n")) {
+    $rel = $rel.Trim()
+    if (-not $rel) { continue }
+    $full = Join-Path $Repo $rel
+    if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { continue }
+    if ((Get-Item -LiteralPath $full).LastWriteTime -ge $Since) { $mine.Add($rel) }
+  }
+  if (-not $mine.Count) { return 0 }
+  $ids = Get-PipelineBlobIds -Repo $Repo -Paths $mine.ToArray()
+  $jp = Get-PipelineWriteJournalPath -Repo $Repo
+  if (-not $jp) { throw 'git could not name the common dir, so there is nowhere to record' }
+  $ck = Get-PipelineCheckoutKey -Repo $Repo
+  $now = Get-Date
+  $lock = Enter-TcLedgerLock -Path $jp
+  try {
+    $j = Read-PipelineWriteJournal -JournalPath $jp
+    $keep = [ordered]@{}
+    foreach ($k in @($j.Keys | Sort-Object)) {
+      $e = $j[$k]; $t = [datetime]::MinValue
+      if ([datetime]::TryParse([string]$e.ts, [ref]$t) -and ($now - $t).TotalDays -le $script:PC_JOURNAL_KEEP_DAYS) { $keep[$k] = $e }
+    }
+    $n = 0
+    foreach ($rel in $mine) {
+      if (-not $ids.ContainsKey($rel)) { continue }
+      $keep[($ck + '|' + $rel)] = [pscustomobject]@{ blob = $ids[$rel]; lane = $Lane; ts = $now.ToString('s') }
+      $n++
+    }
+    [void](Write-TcAtomicFile -Path $jp -Text ([pscustomobject]@{ writes = [pscustomobject]$keep } | ConvertTo-Json -Depth 4) -NoBom)
+  } finally { Exit-TcLedgerLock -Lock $lock }
+  return $n
+}
+
+function Get-PipelineOwnHeld {
+  <# Of $Paths (the foreign-held candidates), the ones whose CURRENT bytes are exactly what a pipeline lane recorded
+     for THIS checkout. Returns [pscustomobject]@{ path; lane }[], comma-returned. Throws when the journal is present
+     and unreadable; the caller keeps every candidate held. #>
+  param([Parameter(Mandatory = $true)][string]$Repo, [string[]]$Paths)
+  $own = New-Object System.Collections.Generic.List[object]
+  $cand = @($Paths | Where-Object { $_ })
+  if (-not $cand.Count) { return ,$own.ToArray() }
+  $jp = Get-PipelineWriteJournalPath -Repo $Repo
+  if (-not $jp) { return ,$own.ToArray() }
+  $j = Read-PipelineWriteJournal -JournalPath $jp
+  if (-not $j.Count) { return ,$own.ToArray() }
+  $ck = Get-PipelineCheckoutKey -Repo $Repo
+  $ids = Get-PipelineBlobIds -Repo $Repo -Paths $cand
+  foreach ($p in $cand) {
+    $e = $j[($ck + '|' + [string]$p)]
+    if ($null -eq $e -or -not $ids.ContainsKey([string]$p)) { continue }
+    if ([string]::Equals([string]$e.blob, [string]$ids[[string]$p], [StringComparison]::Ordinal)) {
+      $own.Add([pscustomobject]@{ path = [string]$p; lane = [string]$e.lane })
+    }
+  }
+  return ,$own.ToArray()
+}
+
+function Split-PipelineOwnHeld {
+  <# The one place a committer splits its foreign-held candidates: @{ foreign = string[]; own = @{path;lane}[]; note }.
+     A journal that cannot be read keeps every candidate held and says so in .note. #>
+  param([Parameter(Mandatory = $true)][string]$Repo, [string[]]$Held)
+  $h = @($Held | Where-Object { $_ })
+  $own = @(); $note = ''
+  if ($h.Count) {
+    try { $ownRaw = Get-PipelineOwnHeld -Repo $Repo -Paths $h; $own = @($ownRaw) }
+    catch { $own = @(); $note = ('pipeline-own: the write journal could not be read (' + $_.Exception.Message + '), so every held file stays held') }
+  }
+  $ownPaths = @($own | ForEach-Object { [string]$_.path })
+  $foreign = @($h | Where-Object { $ownPaths -notcontains $_ })
+  if ($own.Count) {
+    $lanes = @($own | ForEach-Object { [string]$_.lane } | Sort-Object -Unique)
+    $note = ('pipeline-own: ' + $own.Count + ' file(s) dirty before this run were written by a pipeline lane (' + ($lanes -join ', ') + ') and are committed: ' + ($ownPaths -join ', '))
+  }
+  return [pscustomobject]@{ foreign = $foreign; own = $own; note = $note }
+}
+
 function Invoke-PipelineCommit {
   <# Commit exactly $Paths under a private index. Returns a verdict string.
 
@@ -196,7 +367,11 @@ function Invoke-PipelineCommit {
     # an owned file that was already dirty when the caller's run started and has not been rewritten since is
     # unstaged and named instead of refusing the whole commit. Without them this behaves exactly as before.
     $DirtyAtStart = $null,
-    [datetime]$RunStart = [datetime]::MinValue
+    [datetime]$RunStart = [datetime]::MinValue,
+    # WHAT THIS LANE RECORDS AS ITS OWN WRITES (2026-09-23, queue 2026-09-22-9bc4d2). Defaults to $Paths. A lane that
+    # writes declared paths it does not commit passes the wider declared set (check-ad-cycles: lib\bot-paths.ps1's
+    # inputs, which carry graph/identity), so the committer that owns them takes them instead of holding them.
+    [string[]]$JournalPaths = $null
   )
   $bad = Assert-NoSourcePaths $Paths
   if ($bad.Count) {
@@ -226,12 +401,16 @@ function Invoke-PipelineCommit {
         $foreignNote = ('; foreign-held: the start-of-run snapshot is unavailable (' + [string]$DirtyAtStart.why + '), so nothing was held back')
       } else {
         $fhNow = Get-PathMtimes -Repo $Repo -Paths @($DirtyAtStart.files | ForEach-Object { [string]$_.path })
-        $foreignHeld = Get-ForeignHeldPaths -Snapshot $DirtyAtStart -RunStart $RunStart -CurrentMtimes $fhNow
+        $fhCand = Get-ForeignHeldPaths -Snapshot $DirtyAtStart -RunStart $RunStart -CurrentMtimes $fhNow
+        # A candidate a pipeline lane wrote and recorded is the pipeline's own and stays staged (2026-09-23, 9bc4d2).
+        $fhSplit = Split-PipelineOwnHeld -Repo $Repo -Held $fhCand
+        $foreignHeld = @($fhSplit.foreign)
         foreach ($fh in $foreignHeld) { & git -C $Repo reset -q -- $fh | Out-Null }
         if ($foreignHeld.Count) {
           $foreignNote = ('; foreign-held: ' + $foreignHeld.Count + ' tracked owned file(s) another session dirtied before this run started, left uncommitted: ' + ($foreignHeld -join ', '))
           $staged = @(& git -C $Repo diff --cached --name-only | Where-Object { $_ })
         }
+        if ($fhSplit.note) { $foreignNote += ('; ' + $fhSplit.note) }
       }
     }
     if (-not $staged.Count) {
@@ -265,6 +444,12 @@ function Invoke-PipelineCommit {
   } finally {
     if ($held) { if ($null -eq $prevIndex) { Remove-Item Env:\GIT_INDEX_FILE -ErrorAction SilentlyContinue } else { $env:GIT_INDEX_FILE = $prevIndex } }
     if ($tmpIndex -and (Test-Path $tmpIndex)) { Remove-Item $tmpIndex -Force -ErrorAction SilentlyContinue }
+    # RECORD WHAT THIS LANE WROTE AND DID NOT LAND (2026-09-23, 9bc4d2), on every path out: a refused commit, a held
+    # file set, or a lane that owns less than it writes. What landed no longer differs from HEAD, so it is not recorded.
+    # Only with a run start: without one there is no way to say which writes were this lane's.
+    if ($RunStart -gt [datetime]::MinValue) {
+      try { [void](Register-PipelineWrites -Repo $Repo -Lane $Name -Since $RunStart -Paths $(if ($JournalPaths) { $JournalPaths } else { $Paths })) } catch { }
+    }
   }
 
   $msg = ("{0}: committed {1} file(s){2}" -f $Name, $staged.Count, $foreignNote)
@@ -448,6 +633,56 @@ if ($__pcSelfTest) {
     $vt = Invoke-PipelineCommit -Repo $tr -Paths @('lane/out') -Message 'run2' -Name 'probe' -DirtyAtStart $snapT -RunStart $rs2
     T 'CLEAN TWIN  a foreign file the run rewrote is committed as the run''s own (2 files, nothing held)' (($vt -match 'committed 2 file') -and ($vt -notmatch 'foreign-held')) $vt
     T 'CLEAN TWIN  both landed commits classify as committed, the foreign-held note included' (((Get-PipelineCommitOutcome -Verdict $ve) -eq 'committed') -and ((Get-PipelineCommitOutcome -Verdict $vt) -eq 'committed')) ($ve + ' | ' + $vt)
+
+    # ---- THE PIPELINE WRITE JOURNAL (2026-09-23, queue 2026-09-22-9bc4d2) ------------------------------------------
+    # FROZEN from the founding case: capture-watchdog's Family Fare shard window wrote family-fare-regular-2026-09-21.json
+    # after the 08:00 commit and committed nothing, so the 2026-09-22 daily run held it as another session's edit. Here a
+    # non-committing lane writes a dated file and records it; a session strips a BOM from another owned file; the next
+    # run rewrites neither. The lane's file must land and the session's must stay held.
+    $fW = Join-Path $tr 'lane\out\regular-2026-09-21.json'
+    [IO.File]::WriteAllText($fW, '{"rows":1}')
+    [IO.File]::WriteAllBytes($fA, ([byte[]](0xEF, 0xBB, 0xBF) + [Text.Encoding]::UTF8.GetBytes('{"n":3}')))
+    & git -C $tr add -A -- lane/out | Out-Null
+    & git -C $tr commit -q -m seed2 | Out-Null
+    $laneStart = (Get-Date).AddMinutes(-3)
+    [IO.File]::WriteAllText($fW, '{"rows":2}')
+    $nReg = Register-PipelineWrites -Repo $tr -Lane 'probe-watchdog' -Since $laneStart -Paths @('lane/out')
+    T 'the non-committing lane records exactly the one file it wrote' ($nReg -eq 1) ('' + $nReg)
+    [IO.File]::WriteAllBytes($fA, [Text.Encoding]::UTF8.GetBytes('{"n":3}'))
+    (Get-Item $fA).LastWriteTime = (Get-Date).AddMinutes(-2)
+    (Get-Item $fW).LastWriteTime = (Get-Date).AddMinutes(-2)
+    $snapJ = Get-DirtyOwnedSnapshot -Repo $tr -Paths @('lane/out')
+    $rsJ = (Get-Date).AddMinutes(-1)
+    [IO.File]::WriteAllText($fB, 'v4j')
+    $vj = Invoke-PipelineCommit -Repo $tr -Paths @('lane/out') -Message 'run-j' -Name 'probe' -DirtyAtStart $snapJ -RunStart $rsJ
+    $inHeadJ = @(& git -C $tr show --name-only --pretty=format: HEAD | Where-Object { $_ })
+    $dirtyJ = @(& git -C $tr status --porcelain | Where-Object { $_ })
+    T 'MUST FIRE  a declared pipeline write (a non-committing lane''s, recorded) is committed, not held as a session''s edit' `
+      ((($inHeadJ -join ',') -match 'regular-2026-09-21\.json') -and ($vj -match 'pipeline-own: 1 file.*probe-watchdog.*regular-2026-09-21\.json')) ($vj + ' | head=' + ($inHeadJ -join ','))
+    T 'CLEAN TWIN  a genuinely foreign edit in the same run is still held back and left dirty' `
+      ((($inHeadJ -join ',') -notmatch 'json-readers-baseline') -and ($vj -match 'foreign-held: 1 .*json-readers-baseline\.json') -and (($dirtyJ -join ',') -match 'json-readers-baseline\.json')) ($vj + ' | dirty=' + ($dirtyJ -join ','))
+    # A session edit AFTER the lane recorded its write changes the bytes, so the record no longer vouches for the file.
+    # The lane starts NOW, after the session's older edit to the baseline file, so only its own write is recorded.
+    $rsK0 = Get-Date
+    [IO.File]::WriteAllText($fW, '{"rows":3}')
+    [void](Register-PipelineWrites -Repo $tr -Lane 'probe-watchdog' -Since $rsK0 -Paths @('lane/out'))
+    [IO.File]::WriteAllText($fW, '{"rows":3,"hand":true}')
+    (Get-Item $fW).LastWriteTime = (Get-Date).AddMinutes(-2)
+    $snapK = Get-DirtyOwnedSnapshot -Repo $tr -Paths @('lane/out')
+    $rsK = (Get-Date).AddMinutes(-1)
+    [IO.File]::WriteAllText($fB, 'v4k')
+    $vk = Invoke-PipelineCommit -Repo $tr -Paths @('lane/out') -Message 'run-k' -Name 'probe' -DirtyAtStart $snapK -RunStart $rsK
+    T 'MUST FIRE  a pipeline write a session then edited is held: the recorded bytes are not the bytes on disk' `
+      (($vk -match 'foreign-held: 2 .*regular-2026-09-21\.json') -and ($vk -notmatch 'pipeline-own')) $vk
+    T 'CLEAN TWIN  the journal lives in the git common dir, not in the tree, so it can never ride a commit' `
+      ((Test-Path -LiteralPath (Join-Path $tr ('.git\' + $script:PC_JOURNAL_NAME))) -and (@(& git -C $tr ls-files | Where-Object { $_ -match 'tc-pipeline-writes' }).Count -eq 0)) (Get-PipelineWriteJournalPath -Repo $tr)
+    # A DAMAGED journal degrades to the day before: every candidate held, and the note says why.
+    [IO.File]::WriteAllText((Get-PipelineWriteJournalPath -Repo $tr), '{not json')
+    $sd = Split-PipelineOwnHeld -Repo $tr -Held @('lane/out/regular-2026-09-21.json')
+    T 'MUST FIRE  an unreadable journal holds every candidate and says so' ((@($sd.foreign).Count -eq 1) -and ($sd.note -match 'could not be read')) ($sd.note)
+    # Leave the fixture repo clean for the push case below, which counts exactly one file.
+    & git -C $tr add -A -- lane/out | Out-Null
+    & git -C $tr commit -q -m tidy | Out-Null
     # CLEAN TWIN (2026-09-12): the commit LANDS and the push FAILS, and a clean lane must still exit 0. Hooks pinned to
     # an EMPTY directory so no inherited core.hooksPath can refuse this commit instead, and this repo has no remote, so
     # -Push fails for real: the sentence scored is the one the committer builds for that case, not a retyped copy.

@@ -1539,11 +1539,25 @@ $FF_EXPECTED_WINDOWS = 3
 if (-not $SelfTest) {
   try {
     Write-Output 'capture-watchdog: Family Fare shard window (3 of 3)'
+    $ffWindowStart = Get-Date
     # NO 2>&1 - see capture-run.ps1: EAP=Stop plus a native child's redirected stderr is a terminating
     # throw in PS 5.1, and it would kill the watchdog before it reported anything.
     $ffOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'pull-regular-familyfare.ps1') -MaxMinutes 5
     foreach ($l in @($ffOut)) { Write-Output ('  ff> ' + $l) }
   } catch { Write-Output ('  ff> shard window threw (not fatal, the cursor did not commit): ' + $_.Exception.Message) }
+  # THIS WINDOW COMMITS NOTHING, SO IT RECORDS WHAT IT WROTE (2026-09-23, queue 2026-09-22-9bc4d2). On 2026-09-22 the
+  # daily run held its three 09-21 files as "another session's edits" (capture-run-daily-2026-09-22.log line 209), and a
+  # dated file is never rewritten, so it would have been held on every run after. The next capture-run commits bytes
+  # recorded here as the pipeline's own. Scoped to lib\bot-paths.ps1's inputs and to this window's minutes. Never fatal.
+  if ($ffWindowStart) {
+    try {
+      $wdRepo = Split-Path $PSScriptRoot -Parent
+      . (Join-Path $wdRepo 'lib\pipeline-commit.ps1')
+      . (Join-Path $wdRepo 'lib\bot-paths.ps1')
+      $wdN = Register-PipelineWrites -Repo $wdRepo -Lane 'capture-watchdog-ff' -Since $ffWindowStart -Paths @(Get-BotInputPaths)
+      Write-Output ('  ff> pipeline-writes: recorded ' + $wdN + ' file(s) the shard window wrote')
+    } catch { Write-Output ('  ff> pipeline-writes: could not record the window''s writes (' + $_.Exception.Message + '); the next run holds them as before') }
+  }
 }
 
 # THE CADENCE WATCHER. The point of 2026-09-01-056e6b is not that Family Fare was throttled; it is that
