@@ -208,14 +208,29 @@ try {
   # THE REAL product-urls.json IS NEVER THE FIXTURE'S (2026-09-23). This call took apply-cell-quarantine's default,
   # grocery\product-urls.json, and moved the quarantined cells' links IN THE TRACKED FILE (a CRLF rewrite that dropped
   # derived links). It stayed hidden while the gate cache replayed this suite's pass; the first uncached run-gates
-  # found it through lib\gate-leftovers.ps1. The copy keeps the link move exercised; the hash proves the real file is untouched.
-  $puReal = Join-Path $root 'product-urls.json'
-  $puHashBefore = (Get-FileHash -LiteralPath $puReal).Hash
-  $puCopy = Join-Path $tmp 'product-urls.json'
-  Copy-Item -LiteralPath $puReal -Destination $puCopy -ErrorAction Stop
-  $apOut = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'apply-cell-quarantine.ps1') -OutDir $tmp -LastPublishedFile $lastF -LastPublishedDate '2026-09-20' -Today '2026-09-21' -ProductUrlsFile $puCopy)
-  if ([string]::Equals((Get-FileHash -LiteralPath $puReal).Hash, $puHashBefore, [StringComparison]::Ordinal)) { Ok 'MUST FIRE  the fixture''s apply-cell-quarantine run leaves the tracked grocery\product-urls.json byte-identical - it moves links in a temp copy' } else { Bad 'the fixture''s apply-cell-quarantine run REWROTE the tracked grocery\product-urls.json' }
+  # found it through lib\gate-leftovers.ps1.
+  # AND THE FIXTURE'S product-urls.json IS FROZEN HERE, never copied from or hashed off the live one (2026-09-23). The
+  # first repair copied grocery\product-urls.json into $tmp and compared its hash before and after: a live-rulings read
+  # by ops\audit-fixture-inputs.ps1's rule, and a flake in the main checkout, where the chain rewrites that file and a
+  # write landing mid-run would read as this suite's leak. One link per quarantined cell, plus the confirmed
+  # 15-bean-soup-mix cell nobody quarantined. The case below proves the MECHANISM: the links moved in the file this call
+  # was HANDED, and apply-cell-quarantine writes links to that one path only, so it did not write the tracked file.
+  $puItems = [pscustomobject]@{}
+  foreach ($k in $cells.Keys) {
+    $p = $k -split '\|', 2
+    $puRow = [pscustomobject]@{ commodity = $cells[$k][2] }
+    $puRow | Add-Member -NotePropertyName $p[1] -NotePropertyValue ([pscustomobject]@{ url = ('https://example.invalid/' + $p[0]); price = 1.0; size = '1 ct'; name = ('Fixture ' + $p[0]) })
+    $puItems | Add-Member -NotePropertyName $p[0] -NotePropertyValue $puRow
+  }
+  $puFx = Join-Path $tmp 'product-urls.json'
+  [IO.File]::WriteAllText($puFx, ([pscustomobject]@{ readme = 'frozen fixture'; updated = '2026-09-21'; items = $puItems } | ConvertTo-Json -Depth 8), (New-Object Text.UTF8Encoding($false)))
+  $apOut = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'apply-cell-quarantine.ps1') -OutDir $tmp -LastPublishedFile $lastF -LastPublishedDate '2026-09-20' -Today '2026-09-21' -ProductUrlsFile $puFx)
   $apRc = $LASTEXITCODE
+  $puAfter = Read-JsonFile $puFx
+  $stillLinked = @($want | Where-Object { $p = $_ -split '\|', 2; $r = $puAfter.items.PSObject.Properties[$p[0]]; $r -and $r.Value.PSObject.Properties[$p[1]] })
+  $beanRow = $puAfter.items.PSObject.Properties['15-bean-soup-mix']
+  $beanKept = [bool]($beanRow -and $beanRow.Value.PSObject.Properties['Walmart'] -and [string]$beanRow.Value.Walmart.url -eq 'https://example.invalid/15-bean-soup-mix')
+  if ($stillLinked.Count -eq 0 -and $beanKept) { Ok 'MUST FIRE  the real apply-cell-quarantine moves the 5 quarantined cells'' links in the product-urls file the fixture HANDED it (0 of 5 still linked, the unquarantined 15-bean-soup-mix link kept) - so never in the tracked grocery\product-urls.json' } else { Bad ("the links did not move in the handed product-urls file: still linked=[" + ($stillLinked -join ', ') + "] bean kept=$beanKept") }
   $held = @($apOut | Where-Object { $_ -match '^\s+held\s' }); $withheld = @($apOut | Where-Object { $_ -match '^\s+withheld\s' })
   if ($apRc -eq 0 -and $held.Count -eq 4 -and $withheld.Count -eq 1 -and ($withheld[0] -match 'laundry-pods')) { Ok 'MUST FIRE  the real apply-cell-quarantine holds 4 cells at their last verified published price and WITHHOLDS laundry pods, which has none - nothing is invented' } else { Bad ("apply rc=$apRc held=$($held.Count) withheld=$($withheld.Count) :: " + (($apOut | Select-Object -Last 4) -join ' / ')) }
   $auditOut2 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'audit-flag-verification.ps1') -OutDir $tmp)

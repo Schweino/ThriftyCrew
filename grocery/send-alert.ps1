@@ -651,8 +651,10 @@ if ($SelfTest) {
     _T 'a declared hold reads as the number it declares' (Get-AlertHoldObservations $holdReg 'watchdog') 2
     _T 'an id no entry carries reads as 1' (Get-AlertHoldObservations $holdReg 'no-such-entry') 1
     _T 'an unreadable registry reads as 1, because this knob may only ever DELAY a mail' (Get-AlertHoldObservations $null 'watchdog') 1
-  # BRAD'S RULING "Email first miss" (2026-09-22, plan-2026-09-22-10), read off the COMMITTED registry: only the 14:15
-  # slot-close run grades a day MISSING, so the one observation a day it can make must mail.
+  # LIVE-TWIN, on purpose: BRAD'S RULING "Email first miss" (2026-09-22, plan-2026-09-22-10), read off the COMMITTED
+  # registry: only the 14:15 slot-close run grades a day MISSING, so the one observation a day it can make must mail.
+  # The pure hold rule is pinned above against the frozen $saRegHold registry; these two cases pin the RULING itself, so
+  # a red here means grocery\alert-registry.json changed one of these two types' holds, not that this suite went blind.
   $liveHoldReg = (Read-AlertRegistry (Join-Path $PSScriptRoot 'alert-registry.json')).registry
   $bcHold = Get-AlertHoldObservations $liveHoldReg 'watchdog-browser-capture-missing-today'
   _T 'MUST FIRE one slot-close BROWSER CAPTURE MISSING observation mails (hold 1, observation 1 of 1 is not pending)' ([bool]($bcHold -eq 1 -and -not (Test-AlertHeldPending $bcHold 1 $true ''))) 'True'
