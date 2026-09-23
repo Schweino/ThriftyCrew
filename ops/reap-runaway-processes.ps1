@@ -248,13 +248,30 @@ function Get-ProcessSample {
 
 function Invoke-ReapProcess {
   <# .SYNOPSIS Live. Kill one pid. $true when it is gone afterwards. A process that exited on its own
-     between the verdict and the kill is a SUCCESS, not an error: the core is back either way. #>
-  param([int]$Id)
-  try { Stop-Process -Id $Id -Force -ErrorAction Stop } catch { }
-  Start-Sleep -Milliseconds 500
-  $still = $null
-  try { $still = Get-Process -Id $Id -ErrorAction SilentlyContinue } catch { $still = $null }
-  return ($null -eq $still)
+     between the verdict and the kill is a SUCCESS, not an error: the core is back either way.
+     IT WAITS ON THE PROCESS'S OWN EXIT, NEVER ON A CLOCK (2026-09-23). The first version slept a fixed
+     500 ms and then asked the process table, so under a 24-wide run-gates pool a killed powershell.exe
+     that took longer than that to leave the table read as SURVIVED: the self-test went red on a push that
+     could not reach it, and the live path could log a successful kill as COULD NOT KILL. $ExitWaitMs is a
+     hang guard, not a bar - a process that is really gone ends the wait at once however loaded the box is.
+     The Process object is taken BEFORE the kill, so the wait is on that process and not on whatever
+     reuses its pid afterwards. $Kill is the seam a self-test swaps to hold exit open on a condition it
+     controls; production passes nothing and gets Process.Kill(). #>
+  param([int]$Id, [int]$ExitWaitMs = 30000, [scriptblock]$Kill = $null)
+  $proc = $null
+  try { $proc = [Diagnostics.Process]::GetProcessById($Id) } catch { return $true }   # already gone
+  try {
+    try {
+      if ($Kill) { & $Kill $proc } else { $proc.Kill() }
+    } catch { }   # already exited, or refused: the wait below says which
+    try { return [bool]$proc.WaitForExit($ExitWaitMs) } catch {
+      # A handle we may not open (another user's process) cannot be waited on. Fall back to the table,
+      # conservatively: present means not confirmed gone.
+      $still = $null
+      try { $still = Get-Process -Id $Id -ErrorAction SilentlyContinue } catch { $still = $null }
+      return ($null -eq $still)
+    }
+  } finally { $proc.Dispose() }
 }
 
 # ---------------------------------------------------------------------------- SELF-TEST
@@ -430,6 +447,63 @@ if ($SelfTest) {
   } finally {
     if ($spinner) { try { Stop-Process -Id $spinner -Force -ErrorAction SilentlyContinue } catch { } }
     Remove-Item -LiteralPath $fxDir -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
+  # ---- THE KILL WAITS ON THE PROCESS'S EXIT, NEVER ON A CLOCK --------------------------------------
+  # Founding red, 2026-09-23 about 13:09: a push-main run was refused with pass=489 fail=1, the one failure
+  # the MUST FIRE above reading "the process survived", and the same self-test passed standalone a minute
+  # later. The kill slept a fixed 500 ms and then asked the table; under the gate pool a killed
+  # powershell.exe took longer than that to leave it. These cases HOLD the exit open on a stop file the
+  # test controls, so the exit lands after the kill has returned however loaded the box is.
+  # There is no AT-THE-BAR case for -ExitWaitMs on purpose: it is a hang guard, and a case at it would be
+  # an upper wall-clock bar, which is exactly the shape that went red.
+  $hxDir = Join-Path $env:TEMP ('tc-reap-hold-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+  $held = $null; $never = $null; $done = $null
+  try {
+    New-Item -ItemType Directory -Path $hxDir -ErrorAction Stop | Out-Null
+    $holdPs1 = Join-Path $hxDir 'hold.ps1'
+    # After the stop file it LINGERS 3 s before exiting. That is a LOWER bound, which load can only
+    # lengthen, and it is what makes a fixed-sleep reaper go red on a quiet box too: measured the day
+    # this landed, a mutant that slept 500 ms and then read HasExited PASSED every case without it.
+    Set-Content -LiteralPath $holdPs1 -Encoding ascii -Value 'param([string]$Stop) while (-not (Test-Path -LiteralPath $Stop)) { Start-Sleep -Milliseconds 20 }; Start-Sleep -Seconds 3'
+    $stopHeld = Join-Path $hxDir 'stop-held'
+    $stopNever = Join-Path $hxDir 'stop-never'   # never written
+    $held = Start-Process -FilePath 'powershell.exe' -PassThru -WindowStyle Hidden -ArgumentList @(
+      '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $holdPs1, '-Stop', $stopHeld)
+    $null = $held.Handle   # keep a handle so HasExited stays readable and the pid cannot be reused
+
+    # MUST FIRE: the seam does not kill; it reads the target STILL RUNNING (it cannot exit before the stop
+    # file exists), then writes the stop file and returns. The exit therefore lands after the "kill" has
+    # returned, and only a reaper that waits on the process's own exit can report it gone.
+    $obs = @{ aliveAtKill = $null }
+    $seam = { param($p) $obs.aliveAtKill = (-not $p.HasExited); Set-Content -LiteralPath $stopHeld -Value 'go' }.GetNewClosure()
+    $ok = Invoke-ReapProcess -Id $held.Id -ExitWaitMs 120000 -Kill $seam   # a hang guard far past the linger
+    _T 'MUST FIRE a process whose exit lands AFTER the kill returns is confirmed gone (the wait is on its exit, not a clock)' (
+      $ok -and ($obs.aliveAtKill -eq $true) -and $held.HasExited) "returned=$ok aliveAtKill=$($obs.aliveAtKill) exited=$($held.HasExited)"
+
+    # MUST NOT FIRE, the real timer's own twin: a process that never exits is NOT reported gone, and the
+    # hang guard ENDS the wait. This reads that it ended and what it said, never how long it took.
+    $never = Start-Process -FilePath 'powershell.exe' -PassThru -WindowStyle Hidden -ArgumentList @(
+      '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $holdPs1, '-Stop', $stopNever)
+    $null = $never.Handle
+    $ok = Invoke-ReapProcess -Id $never.Id -ExitWaitMs 200 -Kill { param($p) }
+    _T 'MUST NOT FIRE a process that never exits is reported NOT gone once the hang guard ends the wait' (
+      (-not $ok) -and (-not $never.HasExited)) "returned=$ok exited=$($never.HasExited)"
+
+    # CLEAN TWIN: a pid that exited before the reaper got to it is a success. The open handle pins the pid,
+    # so the real kill below cannot land on a stranger that reused it.
+    $done = Start-Process -FilePath 'powershell.exe' -PassThru -WindowStyle Hidden -ArgumentList @('-NoProfile', '-Command', 'exit 0')
+    $null = $done.Handle
+    $null = $done.WaitForExit(120000)   # hang guard only
+    $ok = Invoke-ReapProcess -Id $done.Id
+    _T 'CLEAN TWIN a pid that has already exited is a success' ($done.HasExited -and $ok) "returned=$ok exited=$($done.HasExited)"
+  } catch {
+    _T 'the held-exit fixture ran' $false $_.Exception.Message
+  } finally {
+    foreach ($px in @($held, $never, $done)) {
+      if ($px) { try { if (-not $px.HasExited) { $px.Kill() } } catch { }; try { $px.Dispose() } catch { } }
+    }
+    Remove-Item -LiteralPath $hxDir -Recurse -Force -ErrorAction SilentlyContinue
   }
 
   Write-Output ''
