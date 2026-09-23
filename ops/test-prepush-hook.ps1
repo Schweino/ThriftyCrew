@@ -389,6 +389,19 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
     (($discPush.rc -ne 0) -and ($discPush.remote -eq '') -and ($discText -match 'CAUSE: gate DISCOVERY is broken')) `
     ("rc=" + $discPush.rc + " ref=[" + $discPush.remote + "] text=[" + $discText + "]")
 
+  # MUST FIRE (W6.9, 2026-09-23): a 3 from a static gate that exited 0 while its own marker said it read nothing is
+  # refused AND named as that. The hook gained its static-scanned-zero branch with 8bf0d72f8 and no case drove it, so
+  # losing the branch would have fallen through to the generic "reported blind=" line with every case here green.
+  # The stub prints what run-gates prints on that path: its COULD NOT EVALUATE line and Exit-Guard's marker.
+  $zeroSay = 'run-gates: COULD NOT EVALUATE - static gate(s) scanned zero files: ops\audit-readjson-inline-wrap.ps1' +
+    '@@RUN-GATES-COMPLETE blind=static-scanned-zero pass=412 fail=0 noverdict=0 static_zero=1'
+  $env:TC_PREPUSH_PROBE_SAY = $zeroSay
+  $zeroPush = PushOut $linked 'static-zero-blind'
+  $zeroText = $zeroPush.text
+  Case 'MUST FIRE' 'a 3 from a static gate that read nothing is refused AND named as that, not as slots or discovery' `
+    (($zeroPush.rc -ne 0) -and ($zeroPush.remote -eq '') -and ($zeroText -match 'CAUSE: a static gate exited 0 while its own marker said it READ NOTHING') -and ($zeroText -notmatch 'no gate worker slot') -and ($zeroText -notmatch '(?i)discovery')) `
+    ("rc=" + $zeroPush.rc + " ref=[" + $zeroPush.remote + "] text=[" + $zeroText + "]")
+
   # CLEAN TWIN: a 3 that names no cause at all - the pool-size mismatch exits 3 with no marker - is still
   # refused, and the hook says it cannot name one rather than inventing the nearest.
   $env:TC_PREPUSH_PROBE_SAY = 'run-gates: something went wrong and it did not say what'
@@ -790,7 +803,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
 # writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
 # and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
 # prepush-test-auditors -SelfTest pins its own count.
-$expectedCases = 51   # 51 since 2026-09-22 with the three chain-rehearsal cases; 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder; 48 with the two that read the slot budget from lib\gate-slots.ps1 (2026-09-18, backlog I237)
+$expectedCases = 52   # 52 since 2026-09-23 with the case that reads the static-scanned-zero cause (W6.9); 51 since 2026-09-22 with the three chain-rehearsal cases; 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder; 48 with the two that read the slot budget from lib\gate-slots.ps1 (2026-09-18, backlog I237)
 if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''
