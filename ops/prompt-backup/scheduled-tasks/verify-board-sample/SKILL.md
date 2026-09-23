@@ -34,6 +34,15 @@ closed runs at the next launch), and Chrome is running with the extension connec
 the keyboard. Brad's Chrome is signed in to the stores that need a login (Sam's Club), so a sign-in wall is
 usually not real; a CAPTCHA is the one hard stop.
 
+<!-- store-step:ANALYSIS begin (canonical: ops/agent-blocks/store-step.md) -->
+## SEARCH THE KNOWLEDGE STORE BEFORE YOU DIAGNOSE OR JUDGE (Brad, 2026-09-22)
+
+Before you diagnose, measure, compare, audit or return a verdict, search:
+`C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py "<3-6 words>"`.
+Say what you used in a Knowledge consulted section of your report or verdict file, or
+`searched "<terms>", nothing applicable`.
+<!-- store-step:ANALYSIS end -->
+
 ## Step 0: is a verification owed, and is there a browser?
 
 Work in your own worktree, never in the main checkout (other sessions and a ~07:00 bot commit there):

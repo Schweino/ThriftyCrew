@@ -5,6 +5,15 @@ description: Weekly: is the knowledge store being applied to code and design? Re
 
 Run the weekly knowledge-store usage report and summarise it for Brad in a short plain-language TL;DR (no em dashes, no file paths in the summary).
 
+<!-- store-step:ANALYSIS begin (canonical: ops/agent-blocks/store-step.md) -->
+## SEARCH THE KNOWLEDGE STORE BEFORE YOU DIAGNOSE OR JUDGE (Brad, 2026-09-22)
+
+Before you diagnose, measure, compare, audit or return a verdict, search:
+`C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py "<3-6 words>"`.
+Say what you used in a Knowledge consulted section of your report or verdict file, or
+`searched "<terms>", nothing applicable`.
+<!-- store-step:ANALYSIS end -->
+
 1. Run: C:\Codex\Python312\python.exe C:\Users\Owner\.claude\skills\store-usage-report.py --days 7
    Read the EXIT CODE first. Exit 3 means it could not read the logs (BLIND): say so, and do not report any rate.
 2. Report, each with its denominator: judged code commits; how many carried a Store: line backed by a logged search, against the 80% bar; of those, how many cited a real store file, against the 50% bar; how many were warned or refused and the top reasons; how many sessions committed code without searching at all.
