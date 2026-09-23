@@ -134,20 +134,51 @@
   body is NOT, so that body (like a re-filed finding) would appear twice - a readable duplicate in one diff,
   never a lost update.
 
+  ONE ALLOCATOR, NOT ONE LOCK PER CHECKOUT (2026-09-23, W3.4a of the same plan, Brad's ruling D17). The lock above is
+  named from the FULL PATH of the backlog it guards (lib\ledger-lock.ps1 Get-TcLedgerLockName), so a merge in the
+  scheduled task's worktree and a hand merge in any other checkout take DIFFERENT mutexes. Each reads its own copy at
+  one base, each mints the same next id, and the second to land meets a rebase conflict on the backlog: the collision
+  Row 3 exists to remove. No lock can fix that, because the two writers never share a file; only one writer can. So
+  the scheduled merge (the TC Backlog Merge task, W3.4) is the one allocator, and a real merge of a
+  checkout's backlog anywhere else is REFUSED, exit 1, writing and consuming nothing, unless it passes
+  `-AllowHandMerge "<reason>"`. The reason is printed in its trailer, so a hand merge is visible in the commit that
+  carries it. A session that needs an id now runs the task on demand (`Start-ScheduledTask -TaskName 'TC Backlog
+  Merge'`), which uses the same worktree and the same push-main route.
+    HOW A CHECKOUT KNOWS IT IS THE ALLOCATOR. The task writes a marker, `tc-backlog-allocator`, into its own linked
+    worktree's GIT ADMIN directory (`<common .git>\worktrees\<name>\`), naming that checkout's root. A merge reads it
+    by following the checkout's `.git` pointer and `commondir` file, never by running git, because a hook's inherited
+    GIT_DIR would answer for another tree (.claude\rules\ops-and-gates.md). The marker is outside the working tree,
+    so it can never dirty the tree push-main is about to judge.
+    WHAT IS JUDGED. Only a backlog that IS a checkout's tracked file - `<root>\design\BACKLOG-course-findings.md` with
+    a `.git` entry at `<root>` - because that is the file two checkouts can both copy. A backlog anywhere else (every
+    fixture under %TEMP%) has no second copy to collide with and merges as before. -DryRun, and so -ValidateFile,
+    writes nothing and is never refused: push-main validates every added inbox file in its pre-flight (W3.2).
+    IT DEGRADES TO THE DAY BEFORE (.claude\rules\ops-and-gates.md, "EVERY LOCK PATH DEGRADES TO THE DAY BEFORE"). The
+    refusal arms only while an allocator is LIVE on this box: some `<common .git>\worktrees\*\` holds a marker whose
+    checkout still exists. With none - the task not yet installed, or its worktree deleted - a hand merge proceeds
+    exactly as it did before D17, prints a WARN that says so, and records `hand-merge: no scheduled allocator was live
+    on this box` in its trailer. Without that, landing this change before the task's first run would have stopped
+    every merge on the box.
+
   THE COMMIT TRAILER. A merge that changed the backlog prints
   `Backlog-Merged-From: <file>[, <file>...]`, each entry a path below design\backlog-inbox\ in forward
   slashes, the way git names it (`lane-a-2026-09-23.md`, `updates/lane-b-2026-09-23.md`). Whoever commits
   the merge puts that line in the commit, so a later check tells a merge from a hand edit by the trailer
-  rather than by a file deletion anyone could fake.
+  rather than by a file deletion anyone could fake. A merge that did not run as the allocator ends the same line with
+  `; hand-merge: <reason>`, the reason whitespace-collapsed onto the one line.
 
-  Exit 0 = everything merged, or nothing to merge. Exit 2 = at least one inbox file was malformed or
+  Exit 0 = everything merged, or nothing to merge. Exit 1 = REFUSED: a real merge of a checkout's backlog outside the
+  allocator's worktree while an allocator is live, with no -AllowHandMerge or a blank reason; nothing was read,
+  written or consumed. Exit 2 = at least one inbox file was malformed or
   conflicting and QUARANTINED; every other file merged. Exit 3 = could not evaluate: no backlog, the lock
-  not taken, the backlog already failing its gate while updates wait, or a read, write or move that failed.
+  not taken, the backlog already failing its gate while updates wait, a checkout whose `.git` pointer cannot be read,
+  or a read, write or move that failed.
   Read the verdict LINE, not the number alone.
 
   Params: -InboxDir, -Backlog, -DryRun (print the plan, write nothing),
           -ValidateFile <path> (one file, isolated), -Today <yyyy-MM-dd> (the date written into merged-from
-          lines, today when omitted; a seam for the fixtures), -LockWaitSec <n>, -SelfTest
+          lines, today when omitted; a seam for the fixtures), -LockWaitSec <n>,
+          -AllowHandMerge "<reason>" (a deliberate merge outside the allocator's worktree), -SelfTest
 #>
 # Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1). Every backlog and drop box the suite judges is
 # written into a per-run temp directory; beyond those it runs this file, the gate it validates updates with, the
@@ -160,6 +191,9 @@ param(
   [string]$ValidateFile = '',
   [string]$Today = '',
   [int]$LockWaitSec = 120,
+  # A deliberate merge outside the allocator's worktree (D17). Its PRESENCE is read with ContainsKey, so a blank
+  # reason is refused rather than read as "not passed".
+  [string]$AllowHandMerge = '',
   [switch]$DryRun,
   [switch]$SelfTest
 )
@@ -187,6 +221,97 @@ $RUNG_TYPES = @('READ', 'MEASURE', 'DOC', 'BUILD', 'RULING', 'BLOCKED')
 $UPDATE_HEAD_RE = '^UPDATE[ \t]+([A-Z]+[0-9]+)[ \t]*$'
 # The same shape at the START of a root-inbox title, which the merge would otherwise mint as a new item.
 $UPDATE_TITLE_RE = '^UPDATE[ \t]+[A-Z]+[0-9]+\b'
+
+# ONE ALLOCATOR (W3.4a, D17): the marker the scheduled task writes into its own worktree's git admin directory, and
+# the task it names. ops\run-backlog-merge.ps1's self-test runs THIS file against a marker that script wrote, so the two
+# copies of the name cannot drift apart unseen.
+$ALLOCATOR_MARKER = 'tc-backlog-allocator'
+$ALLOCATOR_TASK = 'TC Backlog Merge'
+# What a merge that proceeded without an allocator live records as its hand-merge reason.
+$NO_ALLOCATOR_REASON = 'no scheduled allocator was live on this box'
+
+function Resolve-TcGitPointer {
+  <# A checkout's git directories, read off its `.git` entry and never from git (a hook's GIT_DIR would answer for
+     another tree). Returns Kind ('dir', 'file' or 'none'), GitDir, CommonDir and Why. A `.git` FILE is a linked
+     worktree: its first `gitdir:` line names the admin directory, and that directory's `commondir` file names the
+     shared .git, relative to it. Relative paths are resolved the way git resolves them. Kind 'file' with an empty
+     GitDir is a pointer that could not be read, which the caller treats as could-not-evaluate. #>
+  param([string]$Root)
+  $r = [pscustomobject]@{ Kind = 'none'; GitDir = ''; CommonDir = ''; Why = '' }
+  $dot = Join-Path $Root '.git'
+  if (Test-Path -LiteralPath $dot -PathType Container) {
+    $full = [IO.Path]::GetFullPath($dot).TrimEnd('\')
+    $r.Kind = 'dir'; $r.GitDir = $full; $r.CommonDir = $full
+    return $r
+  }
+  if (-not (Test-Path -LiteralPath $dot -PathType Leaf)) { return $r }
+  $r.Kind = 'file'
+  try {
+    $first = @([IO.File]::ReadAllLines($dot) | Where-Object { $_ -match '^\s*gitdir:\s*\S' })
+    if ($first.Count -eq 0) { $r.Why = ($dot + ' has no gitdir: line'); return $r }
+    $p = ([regex]::Match([string]$first[0], '^\s*gitdir:\s*(.+?)\s*$')).Groups[1].Value.Replace('/', '\')
+    if (-not [IO.Path]::IsPathRooted($p)) { $p = Join-Path $Root $p }
+    $gd = [IO.Path]::GetFullPath($p).TrimEnd('\')
+    if (-not (Test-Path -LiteralPath $gd -PathType Container)) { $r.Why = ($dot + ' points at ' + $gd + ', which does not exist'); return $r }
+    $cd = $gd
+    $cdFile = Join-Path $gd 'commondir'
+    if (Test-Path -LiteralPath $cdFile -PathType Leaf) {
+      $c = ([IO.File]::ReadAllText($cdFile)).Trim().Replace('/', '\')
+      if ($c) {
+        if (-not [IO.Path]::IsPathRooted($c)) { $c = Join-Path $gd $c }
+        $cd = [IO.Path]::GetFullPath($c).TrimEnd('\')
+      }
+    }
+    $r.GitDir = $gd; $r.CommonDir = $cd
+  } catch {
+    $r.Why = ('the pointer ' + $dot + ' could not be read: ' + $_.Exception.Message)
+  }
+  return $r
+}
+
+function Read-TcAllocatorMarker {
+  <# One marker file, parsed: Checkout (full path) and Task, or $null when it is absent or unreadable. #>
+  param([string]$Path)
+  if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $null }
+  try {
+    $j = [IO.File]::ReadAllText($Path) | ConvertFrom-Json
+    if ($null -eq $j -or -not $j.PSObject.Properties['checkout'] -or -not [string]$j.checkout) { return $null }
+    return [pscustomobject]@{ Checkout = ([IO.Path]::GetFullPath([string]$j.checkout)).TrimEnd('\'); Task = [string]$j.task; Path = $Path }
+  } catch { return $null }
+}
+
+function Get-TcBacklogAllocator {
+  <# Is the merge of $BacklogPath the allocator's? Returns IsCopy (the backlog is a checkout's tracked
+     design\BACKLOG-course-findings.md), Root, Blind (the checkout's pointer could not be read), IsAllocator (this
+     checkout's own admin directory holds a marker naming this root), Live (the checkouts every live marker in the
+     shared .git names) and Why. A marker is LIVE when its checkout still has a `.git` entry. #>
+  param([string]$BacklogPath)
+  $r = [pscustomobject]@{ IsCopy = $false; Root = ''; Blind = $false; IsAllocator = $false; Live = @(); Why = '' }
+  $full = [IO.Path]::GetFullPath($BacklogPath)
+  $dir = Split-Path -Parent $full
+  if (-not [string]::Equals([IO.Path]::GetFileName($full), 'BACKLOG-course-findings.md', [StringComparison]::OrdinalIgnoreCase)) { return $r }
+  if (-not [string]::Equals([IO.Path]::GetFileName($dir), 'design', [StringComparison]::OrdinalIgnoreCase)) { return $r }
+  $root = (Split-Path -Parent $dir).TrimEnd('\')
+  $ptr = Resolve-TcGitPointer -Root $root
+  if ($ptr.Kind -eq 'none') { return $r }
+  $r.IsCopy = $true; $r.Root = $root
+  if (-not $ptr.GitDir) { $r.Blind = $true; $r.Why = $ptr.Why; return $r }
+  $live = New-Object System.Collections.Generic.List[string]
+  $wtRoot = Join-Path $ptr.CommonDir 'worktrees'
+  if (Test-Path -LiteralPath $wtRoot -PathType Container) {
+    foreach ($d in @(Get-ChildItem -LiteralPath $wtRoot -Directory -ErrorAction SilentlyContinue)) {
+      $m = Read-TcAllocatorMarker -Path (Join-Path $d.FullName $ALLOCATOR_MARKER)
+      if ($m -and (Test-Path -LiteralPath (Join-Path $m.Checkout '.git'))) { if (-not $live.Contains($m.Checkout)) { [void]$live.Add($m.Checkout) } }
+    }
+  }
+  $r.Live = $live.ToArray()
+  # A LINKED worktree only: the task never marks a main checkout, so a marker there names no allocator.
+  if ($ptr.Kind -eq 'file') {
+    $mine = Read-TcAllocatorMarker -Path (Join-Path $ptr.GitDir $ALLOCATOR_MARKER)
+    if ($mine -and [string]::Equals($mine.Checkout, $root, [StringComparison]::OrdinalIgnoreCase)) { $r.IsAllocator = $true }
+  }
+  return $r
+}
 
 function Test-State([string]$s) {
   foreach ($v in $STATES) { if ($s -match ('^' + [regex]::Escape($v) + '\b')) { return $true } }
@@ -1173,6 +1298,128 @@ if ($SelfTest) {
   _C 'MUST FIRE' 'a backlog already failing its gate: exit 3, the update left pending, not quarantined, nothing written' `
     ($cQ -eq 3 -and $oQ -match 'COULD NOT EVALUATE' -and (Test-Path (Join-Path $bxQ.Upd 'lane-u.md')) -and -not (Test-Path $bxQ.Q) -and
      [string]::Equals([IO.File]::ReadAllText($bxQ.Backlog), $seedQ, [StringComparison]::Ordinal)) "exit $cQ :: $oQ"
+
+  # ======================= ONE ALLOCATOR (2026-09-23, W3.4a of design\PLAN-push-derived-conflicts-2026-09-23.md, D17) ======
+  # Each case builds its OWN box: a shared .git in the MAIN checkout's shape (a directory), and linked worktrees whose
+  # `.git` FILE points at an admin directory under it with a `commondir` file, exactly as git lays them out. Every
+  # checkout holds design\BACKLOG-course-findings.md and one new finding. No git runs: the merge reads the pointers, so
+  # the fixture is the pointers. -Marker live plants the task's marker in the 'task' worktree's admin directory naming
+  # that checkout; 'stale' names a checkout directory that never existed; 'none' plants nothing. The marker file name
+  # is spelled here independently of the live constant (by concatenation), so a rename of one without the other goes red.
+  $mkName = 'tc-backlog-' + 'allocator'
+  function _AllocBox([string]$Name, [string]$Marker = 'live') {
+    $d = Join-Path $script:tmp $Name
+    $common = Join-Path $d 'main\.git'
+    New-Item -ItemType Directory -Path $common -Force -ErrorAction Stop | Out-Null
+    $box = [ordered]@{ Dir = $d; Common = $common }
+    foreach ($co in @('main', 'task', 'other')) {
+      $root = Join-Path $d $co
+      New-Item -ItemType Directory -Path (Join-Path $root 'design\backlog-inbox') -Force -ErrorAction Stop | Out-Null
+      if ($co -ne 'main') {
+        $adm = Join-Path $common ('worktrees\' + $co)
+        New-Item -ItemType Directory -Path $adm -Force -ErrorAction Stop | Out-Null
+        [IO.File]::WriteAllText((Join-Path $root '.git'), ('gitdir: ' + $adm + "`n"), $script:u8)
+        [IO.File]::WriteAllText((Join-Path $adm 'commondir'), "../..`n", $script:u8)
+        $box[$co + 'Adm'] = $adm
+      }
+      [IO.File]::WriteAllText((Join-Path $root 'design\BACKLOG-course-findings.md'), $script:seedU, $script:u8)
+      [IO.File]::WriteAllText((Join-Path $root 'design\backlog-inbox\lane-n.md'), "## a new thing found`n``OPEN`` ``queue-7`` ``2-WAY`` ``RUNG1 MEASURE```n`nnew body.`n", $script:u8)
+      $box[$co] = $root
+      $box[$co + 'Backlog'] = Join-Path $root 'design\BACKLOG-course-findings.md'
+      $box[$co + 'Inbox'] = Join-Path $root 'design\backlog-inbox'
+    }
+    if ($Marker -eq 'live' -or $Marker -eq 'stale') {
+      $names = if ($Marker -eq 'stale') { Join-Path $d 'gone' } else { $box['task'] }
+      $mk = '{"task":"TC Backlog Merge","checkout":' + (ConvertTo-Json ([string]$names)) + ',"written_utc":"2026-09-23T11:00:00Z"}'
+      [IO.File]::WriteAllText((Join-Path $box['taskAdm'] $script:mkName), $mk, $script:u8)
+    }
+    return [pscustomobject]$box
+  }
+  function _Untouched($Box, [string]$Co) {
+    return ([string]::Equals([IO.File]::ReadAllText($Box.($Co + 'Backlog')), $script:seedU, [StringComparison]::Ordinal) -and
+            (Test-Path (Join-Path $Box.($Co + 'Inbox') 'lane-n.md')) -and -not (Test-Path (Join-Path $Box.($Co + 'Inbox') 'quarantine')))
+  }
+
+  # MUST FIRE, the collision D17 exists for: the MAIN checkout's merge while the task's allocator is live.
+  $axA = _AllocBox 'al-main'
+  $oA1 = & $PSCommandPath -InboxDir $axA.mainInbox -Backlog $axA.mainBacklog -Today $DAY 2>&1 | Out-String
+  $cA1 = $LASTEXITCODE
+  _C 'MUST FIRE' 'a merge in the main checkout while an allocator is live is refused, exit 1, nothing read or written' `
+    ($cA1 -eq 1 -and $oA1 -match 'REFUSED' -and $oA1 -match [regex]::Escape($axA.task) -and $oA1 -match 'AllowHandMerge' -and (_Untouched $axA 'main')) "exit $cA1 :: $oA1"
+
+  # MUST FIRE: another LINKED worktree, the shape every lane runs in, is refused the same way.
+  $axB = _AllocBox 'al-other'
+  $oA2 = & $PSCommandPath -InboxDir $axB.otherInbox -Backlog $axB.otherBacklog -Today $DAY 2>&1 | Out-String
+  $cA2 = $LASTEXITCODE
+  _C 'MUST FIRE' 'a merge in another linked worktree while an allocator is live is refused, exit 1, nothing written' `
+    ($cA2 -eq 1 -and $oA2 -match 'REFUSED' -and (_Untouched $axB 'other')) "exit $cA2 :: $oA2"
+
+  # CLEAN TWIN: the task's own worktree merges with no switch, and its trailer carries no hand-merge reason.
+  $axC = _AllocBox 'al-task'
+  $oA3 = & $PSCommandPath -InboxDir $axC.taskInbox -Backlog $axC.taskBacklog -Today $DAY 2>&1 | Out-String
+  $cA3 = $LASTEXITCODE
+  _C 'CLEAN TWIN' 'the allocator''s own worktree merges with no switch: I41 minted, trailer with no hand-merge reason' `
+    ($cA3 -eq 0 -and ([IO.File]::ReadAllText($axC.taskBacklog)) -match '(?m)^### I41 - a new thing found `OPEN`' -and
+     $oA3 -match '(?m)^Backlog-Merged-From: lane-n\.md\s*$' -and $oA3 -match 'allocator: ' -and -not (Test-Path (Join-Path $axC.taskInbox 'lane-n.md'))) "exit $cA3 :: $oA3"
+
+  # CLEAN TWIN: -AllowHandMerge "<reason>" in the main checkout merges, and the reason is on the trailer line.
+  $axD = _AllocBox 'al-hand'
+  $oA4 = & $PSCommandPath -InboxDir $axD.mainInbox -Backlog $axD.mainBacklog -Today $DAY -AllowHandMerge "Brad asked for`r`nthis id now" 2>&1 | Out-String
+  $cA4 = $LASTEXITCODE
+  _C 'CLEAN TWIN' '-AllowHandMerge with a reason merges in the main checkout and prints the reason, one line, in its trailer' `
+    ($cA4 -eq 0 -and ([IO.File]::ReadAllText($axD.mainBacklog)) -match '(?m)^### I41 - a new thing found' -and
+     $oA4 -match '(?m)^Backlog-Merged-From: lane-n\.md; hand-merge: Brad asked for this id now\s*$') "exit $cA4 :: $oA4"
+
+  # MUST FIRE: a blank reason is no reason. It is refused, not read as "the switch was not passed".
+  $axE = _AllocBox 'al-blank'
+  $oA5 = & $PSCommandPath -InboxDir $axE.mainInbox -Backlog $axE.mainBacklog -Today $DAY -AllowHandMerge '   ' 2>&1 | Out-String
+  $cA5 = $LASTEXITCODE
+  _C 'MUST FIRE' '-AllowHandMerge with a blank reason is refused, exit 1, nothing written' `
+    ($cA5 -eq 1 -and $oA5 -match 'no reason' -and (_Untouched $axE 'main')) "exit $cA5 :: $oA5"
+
+  # MUST NOT FIRE: a dry run writes nothing, so it is never judged - push-main's pre-flight validates from any checkout.
+  $axF = _AllocBox 'al-dry'
+  $oA6 = & $PSCommandPath -InboxDir $axF.otherInbox -Backlog $axF.otherBacklog -Today $DAY -DryRun 2>&1 | Out-String
+  $cA6 = $LASTEXITCODE
+  _C 'MUST NOT FIRE' '-DryRun in a non-allocator checkout is not refused: exit 0, the plan printed, nothing written' `
+    ($cA6 -eq 0 -and $oA6 -match 'a new thing found' -and $oA6 -notmatch 'REFUSED' -and (_Untouched $axF 'other')) "exit $cA6 :: $oA6"
+
+  # MUST NOT FIRE: -ValidateFile against a non-allocator checkout's backlog still answers.
+  $oA7 = & $PSCommandPath -ValidateFile (Join-Path $axF.otherInbox 'lane-n.md') -Backlog $axF.otherBacklog 2>&1 | Out-String
+  $cA7 = $LASTEXITCODE
+  _C 'MUST NOT FIRE' '-ValidateFile against a non-allocator checkout''s backlog is not refused: exit 0 VALIDATE OK' `
+    ($cA7 -eq 0 -and $oA7 -match 'VALIDATE OK' -and (_Untouched $axF 'other')) "exit $cA7 :: $oA7"
+
+  # MUST FIRE: a marker in a checkout's admin directory that names a DIFFERENT checkout does not make it the allocator.
+  $axG = _AllocBox 'al-misnamed'
+  Copy-Item -LiteralPath (Join-Path $axG.taskAdm $mkName) -Destination (Join-Path $axG.otherAdm $mkName) -ErrorAction Stop
+  $oA8 = & $PSCommandPath -InboxDir $axG.otherInbox -Backlog $axG.otherBacklog -Today $DAY 2>&1 | Out-String
+  $cA8 = $LASTEXITCODE
+  _C 'MUST FIRE' 'a marker naming ANOTHER checkout does not make this one the allocator: refused, exit 1' `
+    ($cA8 -eq 1 -and $oA8 -match 'REFUSED' -and (_Untouched $axG 'other')) "exit $cA8 :: $oA8"
+
+  # MUST NOT FIRE, the degrade: with no marker anywhere, a hand merge proceeds as the day before and says so.
+  $axH = _AllocBox 'al-none' 'none'
+  $oA9 = & $PSCommandPath -InboxDir $axH.mainInbox -Backlog $axH.mainBacklog -Today $DAY 2>&1 | Out-String
+  $cA9 = $LASTEXITCODE
+  _C 'MUST NOT FIRE' 'with no allocator on the box a hand merge is not refused: exit 0, WARN, and the trailer says why' `
+    ($cA9 -eq 0 -and $oA9 -match 'WARN - no TC Backlog Merge allocator is live' -and ([IO.File]::ReadAllText($axH.mainBacklog)) -match '(?m)^### I41 - ' -and
+     $oA9 -match '(?m)^Backlog-Merged-From: lane-n\.md; hand-merge: no scheduled allocator was live on this box\s*$') "exit $cA9 :: $oA9"
+
+  # MUST NOT FIRE, the degrade: a marker whose checkout no longer exists is not a live allocator.
+  $axI = _AllocBox 'al-stale' 'stale'
+  $oA10 = & $PSCommandPath -InboxDir $axI.otherInbox -Backlog $axI.otherBacklog -Today $DAY 2>&1 | Out-String
+  $cA10 = $LASTEXITCODE
+  _C 'MUST NOT FIRE' 'a marker naming a checkout that is gone arms nothing: the merge proceeds, exit 0, with the WARN' `
+    ($cA10 -eq 0 -and $oA10 -match 'WARN - no TC Backlog Merge allocator is live' -and ([IO.File]::ReadAllText($axI.otherBacklog)) -match '(?m)^### I41 - ') "exit $cA10 :: $oA10"
+
+  # MUST FIRE: a `.git` file whose pointer names nothing cannot say whether this is the allocator: exit 3, nothing written.
+  $axJ = _AllocBox 'al-blind'
+  [IO.File]::WriteAllText((Join-Path $axJ.other '.git'), ('gitdir: ' + (Join-Path $axJ.Dir 'no-such-admin') + "`n"), $u8)
+  $oA11 = & $PSCommandPath -InboxDir $axJ.otherInbox -Backlog $axJ.otherBacklog -Today $DAY 2>&1 | Out-String
+  $cA11 = $LASTEXITCODE
+  _C 'MUST FIRE' 'a checkout whose .git pointer cannot be followed is could-not-evaluate, exit 3, nothing written' `
+    ($cA11 -eq 3 -and $oA11 -match 'COULD NOT EVALUATE' -and (_Untouched $axJ 'other')) "exit $cA11 :: $oA11"
   } catch {
     [void]$fails.Add('HARNESS the suite threw before its last case: ' + $_.Exception.Message)
     Write-Output ('  HARNESS        the suite threw before its last case: ' + $_.Exception.Message)
@@ -1184,7 +1431,7 @@ if ($SelfTest) {
 
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (ops-and-gates.md). A blind case is counted as one that could not look,
   # never as a pass, and it still counts toward the list so a lost case is a shortfall rather than a smaller green.
-  $EXPECTED_CASES = 62
+  $EXPECTED_CASES = 73
   Write-Output ''
   if ($fails.Count -or ($ran + $blind) -ne $EXPECTED_CASES) {
     Write-Output ("merge-backlog-inbox SELF-TEST FAIL: {0} case(s) failed, {1} of {2} case(s) ran, {3} blind" -f $fails.Count, $ran, $EXPECTED_CASES, $blind)
@@ -1512,7 +1759,9 @@ function Invoke-TcMerge {
   }
   # THE TRAILER, for whoever commits this merge: paths below design\backlog-inbox\, forward slashes, as git names them.
   $trail = @(@($findings | ForEach-Object { $_.From } | Select-Object -Unique) + @($applyFiles | ForEach-Object { 'updates/' + $_.Name }))
-  Write-Output ("Backlog-Merged-From: " + ($trail -join ', '))
+  # A merge that did not run as the allocator says why on the same line (W3.4a, D17), so the commit carrying it shows it.
+  $handTail = if ($script:HandMergeReason) { '; hand-merge: ' + $script:HandMergeReason } else { '' }
+  Write-Output ("Backlog-Merged-From: " + ($trail -join ', ') + $handTail)
   Write-Output ("VERDICT: merged {0} finding(s) from {1} file(s), applied {2} update(s) from {3} file(s), quarantined {4} file(s). Exit {5}." -f @($findings).Count, @($accepted).Count, @($allUpd).Count, @($applyFiles).Count, @($bad).Count, $exitCode)
   $script:MergeExit = $exitCode
 }
@@ -1527,6 +1776,42 @@ if (-not (Test-Path -LiteralPath $Backlog)) {
   Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
   exit 3
 }
+
+# ONE ALLOCATOR (W3.4a, D17; the header says why). Decided BEFORE the lock and before the inbox is listed, so a refused
+# merge reads, writes and consumes nothing. A dry run writes nothing and is never judged.
+$script:HandMergeReason = ''
+if (-not $DryRun) {
+  $alloc = Get-TcBacklogAllocator -BacklogPath $Backlog
+  $handAsked = $PSBoundParameters.ContainsKey('AllowHandMerge')
+  $handWhy = (([string]$AllowHandMerge) -replace '\s+', ' ').Trim()
+  if ($handAsked -and -not $handWhy) {
+    Write-Output "REFUSED - -AllowHandMerge was passed with no reason. A hand merge names why it is not waiting for the $ALLOCATOR_TASK task, and that reason lands in its Backlog-Merged-From trailer. Nothing was read, written or consumed."
+    Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
+    exit 1
+  }
+  if ($alloc.IsCopy -and $alloc.Blind) {
+    Write-Output ("COULD NOT EVALUATE - {0} is a checkout's backlog, but whether that checkout is the allocator could not be read ({1}). Nothing was read, written or consumed." -f $Backlog, $alloc.Why)
+    Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
+    exit 3
+  }
+  if ($alloc.IsCopy -and $alloc.IsAllocator) {
+    Write-Output ("allocator: {0} is the {1} task's own worktree, the one writer that allocates ids (D17)." -f $alloc.Root, $ALLOCATOR_TASK)
+    if ($handAsked) { $script:HandMergeReason = $handWhy }
+  } elseif ($alloc.IsCopy -and $handAsked) {
+    $script:HandMergeReason = $handWhy
+    Write-Output ("HAND MERGE (-AllowHandMerge): {0}. {1} is not the allocator's worktree; the reason goes into the Backlog-Merged-From trailer." -f $handWhy, $alloc.Root)
+  } elseif ($alloc.IsCopy -and @($alloc.Live).Count -gt 0) {
+    Write-Output ("REFUSED - {0} is not the allocator. The {1} task's worktree ({2}) is the one writer that allocates backlog ids and applies UPDATEs (Brad's ruling D17, 2026-09-23): a merge here would mint ids from its own copy and collide with it on the next rebase. Run the task instead, which uses the same worktree and lands through push-main:" -f $alloc.Root, $ALLOCATOR_TASK, (@($alloc.Live) -join ', '))
+    Write-Output ("  Start-ScheduledTask -TaskName '{0}'" -f $ALLOCATOR_TASK)
+    Write-Output '  A deliberate hand merge passes -AllowHandMerge "<reason>", and the reason is printed in its trailer. Nothing was read, written or consumed.'
+    Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
+    exit 1
+  } elseif ($alloc.IsCopy) {
+    $script:HandMergeReason = $NO_ALLOCATOR_REASON
+    Write-Output ("WARN - no {0} allocator is live on this box (no worktree under the shared .git holds a live {1} marker), so this merge in {2} proceeds exactly as it did before D17 and says so in its trailer. Once the task has run, a merge here needs -AllowHandMerge." -f $ALLOCATOR_TASK, $ALLOCATOR_MARKER, $alloc.Root)
+  }
+}
+
 if (-not (Test-Path -LiteralPath $InboxDir)) {
   Write-Output "inbox directory does not exist yet: $InboxDir. Nothing to merge."
   Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
