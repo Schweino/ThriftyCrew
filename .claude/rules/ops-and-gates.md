@@ -292,8 +292,10 @@ construction.
      `git push` runs the `pre-push` hook, which takes the push lock, and the run writes the pipeline write journal and the
      commit carry ledger under `lib\ledger-lock.ps1`. The checkout sync it runs at the start and the tail takes no push
      lock and no gate slot. A run that re-executes itself onto synced code holds this mutex across a wait on its child,
-     which is safe under the blocking-wait paragraph below only because the child INHERITS the mutex by token and never
-     waits for it.
+     which is safe under the blocking-wait paragraph below because the child INHERITS the mutex by token and does not wait
+     for it. When the token is NOT honoured (malformed, naming another lock, or a holder pid the probe reads as dead) the
+     child does ask for the lock, and that wait is BOUNDED, never a deadlock: 60 s, then `skipped-locked`, and the parent
+     pages `handoff-failed` and exits 1.
   1. **the push lock** - `lib\push-lock.ps1` (`Enter-TcPushLock`)
   2. **the gate worker slots** - `lib\gate-slots.ps1` (`Enter-TcGateSlots`)
   3. **the `Invoke-Locked` mutexes** - `grocery\ingredient-queue.ps1`, `meal-prep\pipeline\ingredient-resolutions.ps1`,

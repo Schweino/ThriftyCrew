@@ -272,6 +272,42 @@ function Get-FailedLanePaging {
   return $r
 }
 
+function Get-RunRecordVerdict {
+  <#
+    .SYNOPSIS What one capture-run record for today says, as ok, finding or failed (2026-09-23, the checkout-sync lane's review).
+    .DESCRIPTION
+      Pure. The stages capture-run writes, and what each means here:
+        complete                       exit 0 is ok; any other exit is 'failed' (RUN RECORD, which the paged-lane fold
+                                       may absorb for the daily run).
+        blocked-checkout, handoff-failed
+                                       FINAL and failed, written with exit 1 by the checkout-sync lane (plan W4.1): the
+                                       start sync found conflict markers or a mixed tree, or the synced child never ran.
+                                       Each already paged as its own lane (sync, sync-handoff), so it is 'failed' and goes
+                                       through the same fold as a completed exit 1, never "not a stage a real run passes
+                                       through", which repeated those pages with a wrong explanation.
+        started, syncing, synced-handoff, capturing, downstream, publishing
+                                       IN PROGRESS: ok under 90 minutes, a finding past it.
+        anything else                  a finding: an unrecognised stage is not a healthy one.
+      The fold is the caller's; this returns @{ verdict = ok|finding|failed; text }.
+  #>
+  param($Record, [string]$Kind, [int]$AgeMin)
+  $stage = [string]$Record.stage
+  if ($stage -eq 'complete') {
+    if ([int]$Record.exit_code -ne 0) { return [pscustomobject]@{ verdict = 'failed'; text = "RUN RECORD: capture-run [$Kind] completed with exit $($Record.exit_code) - see $($Record.log)" } }
+    return [pscustomobject]@{ verdict = 'ok'; text = "capture-run [$Kind] completed rc=0 at $($Record.updated)" }
+  }
+  if (@('blocked-checkout', 'handoff-failed') -contains $stage) {
+    return [pscustomobject]@{ verdict = 'failed'; text = "RUN RECORD: capture-run [$Kind] stopped at stage '$stage' with exit $($Record.exit_code) before any capture - see $($Record.log)" }
+  }
+  if (@('started', 'syncing', 'synced-handoff', 'capturing', 'downstream', 'publishing') -notcontains $stage) {
+    # An UNRECOGNISED stage is not a healthy one. 'whatif' used to land here and read as ok simply
+    # because it was under the age bar - the failure mode this whole check exists to end.
+    return [pscustomobject]@{ verdict = 'finding'; text = "RUN RECORD: capture-run [$Kind] left stage '$stage', which is not a stage a real run passes through. Its record cannot be trusted to say whether today's prices were built." }
+  }
+  if ($AgeMin -gt 90) { return [pscustomobject]@{ verdict = 'finding'; text = "RUN RECORD: capture-run [$Kind] has sat in stage '$stage' for $AgeMin min (pid $($Record.pid)) - it never reached 'complete'. Log: $($Record.log)" } }
+  return [pscustomobject]@{ verdict = 'ok'; text = "capture-run [$Kind] in stage '$stage' ($AgeMin min)" }
+}
+
 function Merge-PagedLaneFindings {
   <#
     .SYNOPSIS Fold RUN RECORD and its derivative findings under lanes that already paged as themselves.
@@ -642,11 +678,11 @@ if ($SelfTest) {
   $fail = 0
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (2026-09-23, W1.1). Every case prints exactly one line starting 'ok',
   # 'PASS' or 'FAIL'. The cases run inside a dot-sourced block, so they share this scope (their $fail counts), and
-  # every line they print is captured, re-printed unchanged and counted against this literal: 48 cases for checks 1
-  # to 6a, 13 for the bot checkout floors (7 to 9). A case lost to a thrown setup or a glued line reads as a shortfall.
+  # every line they print is captured, re-printed unchanged and counted against this literal: 54 cases for checks 1
+  # to 6a (6 of them the checkout-sync lane's run-record stages), 13 for the bot checkout floors (7 to 9). A case lost to a thrown setup or a glued line reads as a shortfall.
   # Captured with a plain dot-source, never inside @( ): audit-store-registry widens a store name to the smallest
   # multi-line array around it, and a whole suite inside one would hide every fixture's own store-subset-ok marker.
-  $WD_SELFTEST_CASES = 61
+  $WD_SELFTEST_CASES = 67
   $wdStOut = . {
   $now = [datetime]'2026-08-21 06:47'
 
@@ -886,6 +922,39 @@ if ($SelfTest) {
   if ($rrM3.findings.Count -eq 1 -and $rrM3.findings[0] -eq $rrTxt) {
     Write-Output 'ok    CLEAN TWIN a record with no failed_lanes field still pages RUN RECORD with its old text'
   } else { Write-Output ('FAIL  CLEAN TWIN old record: findings=' + ($rrM3.findings -join ' | ')); $fail++ }
+
+  # ---- THE CHECKOUT-SYNC LANE'S STAGES (2026-09-23, the lane's review) ------------------------------------------------
+  # FROZEN from the review's probe: blocked-checkout and handoff-failed are FINAL stages written with exit 1 on a day that
+  # already paged as lane sync / sync-handoff, and the old allowlist called each "not a stage a real run passes through",
+  # repeating that page with a wrong explanation. syncing and synced-handoff are in-progress stages.
+  foreach ($rrFx in @(@('blocked-checkout', 'sync', 'Grocery bot BLOCKED: the main checkout holds conflict markers - 2026-09-23'), @('handoff-failed', 'sync-handoff', 'capture-run could not start the synced code - 2026-09-23'))) {
+    $rrRecS = [pscustomobject]@{ stage = $rrFx[0]; exit_code = 1; log = 'x.log'; failed_lanes = @([pscustomobject]@{ lane = $rrFx[1]; paged = $rrFx[2] }) }
+    $rrVS = Get-RunRecordVerdict -Record $rrRecS -Kind 'daily' -AgeMin 5
+    $rrFS = New-Object System.Collections.Generic.List[string]; [void]$rrFS.Add($rrVS.text)
+    $rrMS = Merge-PagedLaneFindings $rrFS $rrFS (Get-FailedLanePaging $rrRecS) $rrVS.text 'daily'
+    if ($rrVS.verdict -eq 'failed' -and $rrVS.text -notmatch 'not a stage a real run' -and $rrMS.findings.Count -eq 0 -and $rrMS.line -match ('every failed lane paged as itself: ' + [regex]::Escape($rrFx[1]) + ' ')) {
+      Write-Output ('ok    MUST NOT FIRE a final ' + $rrFx[0] + ' record whose lane ' + $rrFx[1] + ' already paged is a failed run folded under that page, never "not a stage", and nothing is sent')
+    } else { Write-Output ('FAIL  ' + $rrFx[0] + ': verdict=' + $rrVS.verdict + ' text=' + $rrVS.text + ' findings=' + ($rrMS.findings -join ' | ') + ' line=' + $rrMS.line); $fail++ }
+  }
+  $rrIn = @(@('syncing', 5), @('synced-handoff', 5)) | ForEach-Object { (Get-RunRecordVerdict -Record ([pscustomobject]@{ stage = $_[0]; pid = 1; log = 'x' }) -Kind 'daily' -AgeMin $_[1]).verdict }
+  if ((@($rrIn) -join ',') -eq 'ok,ok') { Write-Output 'ok    MUST NOT FIRE syncing and synced-handoff are in-progress stages, ok at 5 min' }
+  else { Write-Output ('FAIL  in-progress stages: ' + (@($rrIn) -join ',')); $fail++ }
+  $rrAt = Get-RunRecordVerdict -Record ([pscustomobject]@{ stage = 'syncing'; pid = 1; log = 'x' }) -Kind 'daily' -AgeMin 90
+  if ($rrAt.verdict -eq 'ok') { Write-Output 'ok    MUST NOT FIRE AT THE BAR a syncing record exactly 90 min old is still ok (the bar is -gt 90)' }
+  else { Write-Output ('FAIL  at the bar: ' + $rrAt.verdict + ' ' + $rrAt.text); $fail++ }
+  $rrPast = Get-RunRecordVerdict -Record ([pscustomobject]@{ stage = 'syncing'; pid = 1; log = 'x' }) -Kind 'daily' -AgeMin 91
+  if ($rrPast.verdict -eq 'finding' -and $rrPast.text -match "sat in stage 'syncing' for 91 min") { Write-Output 'ok    MUST FIRE ONE MINUTE PAST THE BAR a syncing record 91 min old is a finding' }
+  else { Write-Output ('FAIL  past the bar: ' + $rrPast.verdict + ' ' + $rrPast.text); $fail++ }
+  # CLEAN TWIN, on the PRODUCER: every stage capture-run.ps1 writes (its literal Write-RunStatus arguments, read by AST)
+  # is one this verdict names, so the next stage the run grows cannot be forgotten here. skipped-locked is the one it
+  # deliberately still flags: an occurrence that found the lock held overwrote the holder's record, which is worth a look.
+  $rrCrAst = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $root 'capture-run.ps1'), [ref]$null, [ref]$null)
+  $rrStages = @($rrCrAst.FindAll({ param($a) $a -is [System.Management.Automation.Language.CommandAst] -and $a.GetCommandName() -eq 'Write-RunStatus' -and $a.CommandElements.Count -ge 2 -and $a.CommandElements[1] -is [System.Management.Automation.Language.StringConstantExpressionAst] }, $true) | ForEach-Object { [string]$_.CommandElements[1].Value } | Sort-Object -Unique)
+  $rrUnknown = @($rrStages | Where-Object { $_ -ne 'skipped-locked' -and (Get-RunRecordVerdict -Record ([pscustomobject]@{ stage = $_; exit_code = 0; pid = 1; log = 'x' }) -Kind 'daily' -AgeMin 1).text -match 'not a stage a real run' })
+  $rrNeed = @('blocked-checkout', 'handoff-failed', 'synced-handoff', 'syncing', 'started', 'capturing', 'downstream', 'publishing')
+  $rrMissing = @($rrNeed | Where-Object { $rrStages -notcontains $_ })
+  if ($rrUnknown.Count -eq 0 -and $rrMissing.Count -eq 0) { Write-Output ('ok    CLEAN TWIN every stage capture-run.ps1 writes (' + $rrStages.Count + ': ' + ($rrStages -join ', ') + ') is one the run-record verdict names, skipped-locked excepted on purpose') }
+  else { Write-Output ('FAIL  stages the verdict does not name: ' + ($rrUnknown -join ', ') + ' | expected but not found in capture-run.ps1: ' + ($rrMissing -join ', ')); $fail++ }
   # MUST FIRE, the producer half: capture-run's own Add-FailedLane and Set-FailedLanePaged, lifted by AST and run. A page
   # that did not send (rc 9) records no subject; one that did (rc 0) records it; and no lane bypasses Add-FailedLane.
   $crPath = Join-Path $root 'capture-run.ps1'
@@ -1211,21 +1280,15 @@ if (Test-Path $statusF) {
       if (-not $r) { continue }
       if ([string]$r.date -ne $todayS) { if ($kind -eq 'daily') { [void]$findings.Add("RUN RECORD: the daily capture-run left no record for today (last $($r.date), stage $($r.stage)).") }; continue }
       $ageMin = [int]((Get-Date) - [datetime]$r.updated).TotalMinutes
-      if ([string]$r.stage -eq 'complete') {
-        if ([int]$r.exit_code -ne 0) {
-          # Only the DAILY run can be a symptom of a guards hold: the 07:00 ad run finishes before
-          # check-ad-cycles ever runs guards, so its exit code is always its own news.
-          $rrText = "RUN RECORD: capture-run [$kind] completed with exit $($r.exit_code) - see $($r.log)"
-          if ($kind -eq 'daily') { Add-DerivativeFinding $rrText; $dailyRunRecord = $r; $dailyRunRecordText = $rrText } else { [void]$findings.Add($rrText) }
-        }
-        else { [void]$ok.Add("capture-run [$kind] completed rc=0 at $($r.updated)") }
-      } elseif (@('started','capturing','downstream','publishing') -notcontains [string]$r.stage) {
-        # An UNRECOGNISED stage is not a healthy one. 'whatif' used to land here and read as ok simply
-        # because it was under the age bar - the failure mode this whole check exists to end.
-        [void]$findings.Add("RUN RECORD: capture-run [$kind] left stage '$($r.stage)', which is not a stage a real run passes through. Its record cannot be trusted to say whether today's prices were built.")
-      } elseif ($ageMin -gt 90) {
-        [void]$findings.Add("RUN RECORD: capture-run [$kind] has sat in stage '$($r.stage)' for $ageMin min (pid $($r.pid)) - it never reached 'complete'. Log: $($r.log)")
-      } else { [void]$ok.Add("capture-run [$kind] in stage '$($r.stage)' ($ageMin min)") }
+      # Get-RunRecordVerdict (above) names every stage capture-run writes; -SelfTest checks that list against the AST.
+      $rrV = Get-RunRecordVerdict -Record $r -Kind $kind -AgeMin $ageMin
+      if ($rrV.verdict -eq 'failed') {
+        # Only the DAILY run can be a symptom of a guards hold: the 07:00 ad run finishes before
+        # check-ad-cycles ever runs guards, so its exit code is always its own news.
+        $rrText = $rrV.text
+        if ($kind -eq 'daily') { Add-DerivativeFinding $rrText; $dailyRunRecord = $r; $dailyRunRecordText = $rrText } else { [void]$findings.Add($rrText) }
+      } elseif ($rrV.verdict -eq 'finding') { [void]$findings.Add($rrV.text) }
+      else { [void]$ok.Add($rrV.text) }
     }
   } catch { [void]$findings.Add("RUN RECORD: $statusF is unreadable ($($_.Exception.Message))") }
 } else {

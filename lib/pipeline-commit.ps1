@@ -148,9 +148,12 @@ function Assert-NoSourcePaths {
 # run, nothing held the deletion back, and cec9779a3 carried it to origin/main as a rename into a quarantine directory.
 # So a worktree 'D' of a path HEAD tracks is snapshotted as kind 'deleted', and at commit time it is held while the
 # path is STILL absent: the unstage restores HEAD's entry in the private index, so the deletion is not committed. A
-# path that exists again at commit time was rewritten by the run and is the run's own. THE KNOWN RESIDUAL: a tracked
-# file the pipeline itself deletes during a run whose commit is then refused is ' D' at the next start, so it is held
-# and named on every run until a person commits or restores it. That is a visible leak and never a lost file.
+# path that exists again at commit time was rewritten by the run and is the run's own. WHAT WAS THE KNOWN RESIDUAL: a
+# tracked file the pipeline itself deletes during a run whose commit is then refused is ' D' at the next start, and was
+# held on every run after until a person acted (the lane's review proved it with browser-capture-due-2026-09-21.flag,
+# ' D' in the main checkout from the refused 09-22 and 09-23 days). Since then a run RECORDS its own deletions in the
+# write journal as tombstones (Get-PipelineRunDeletions, Register-PipelineWrites -Deleted), and the next run commits a
+# held deletion a tombstone vouches for. A deletion nobody recorded is still held, exactly as W0.2 says.
 function Get-DirtyEntryKind {
   <# PURE. A snapshot entry's kind: 'modified' or 'deleted' as Get-DirtyOwnedSnapshot writes it, and 'modified' for an
      entry with no kind, which is how every snapshot built before 2026-09-23 spelled one. A pscustomobject or a
@@ -262,6 +265,31 @@ function Format-ForeignHeldDeletionLines {
   return ,$lines.ToArray()
 }
 
+function Get-PipelineRunDeletions {
+  <# The tracked files under $Paths that THIS run deleted: HEAD holds them, the working tree does not, and the start
+     snapshot did not already record them as deleted (those were handed to the run, and W0.2 holds them). Returns a
+     string[] as git names the paths, comma-returned. With no usable snapshot there is no way to say which deletions are
+     the run's, so it returns nothing. HEAD against the WORKING TREE, --no-renames and -z, so a deletion git would pair
+     with an add still arrives as a deletion, and the answer does not depend on which index the caller holds. #>
+  param([Parameter(Mandatory = $true)][string]$Repo, [string[]]$Paths, $DirtyAtStart)
+  $out = New-Object System.Collections.Generic.List[string]
+  $spec = @($Paths | Where-Object { $_ })
+  if (-not $spec.Count -or $null -eq $DirtyAtStart -or -not $DirtyAtStart.ok) { return ,$out.ToArray() }
+  $g = Invoke-GitCaptured -Repo $Repo -GitArgs (@('-c', 'core.quotePath=false', 'diff', '--no-renames', '--name-only', '-z', '--diff-filter=D', 'HEAD', '--') + $spec)
+  if ($g.rc -ne 0) { return ,$out.ToArray() }
+  $atStart = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($f in @($DirtyAtStart.files)) {
+    if ($null -ne $f -and [string]::Equals((Get-DirtyEntryKind -Entry $f), 'deleted', [StringComparison]::Ordinal)) { [void]$atStart.Add([string]$f.path) }
+  }
+  foreach ($rel in @(([string]$g.stdout).Split([char]0))) {
+    if (-not $rel) { continue }
+    if ($atStart.Contains($rel)) { continue }
+    if (Test-Path -LiteralPath (Join-Path $Repo $rel)) { continue }
+    $out.Add($rel)
+  }
+  return ,$out.ToArray()
+}
+
 # ---- THE PIPELINE WRITE JOURNAL (2026-09-23, queue 2026-09-22-9bc4d2, reopened from 2026-09-10-a86b87) ----
 # THE CLASS. The foreign-held rule above can say "dirty before this run started" and nothing about WHO dirtied it. A
 # lane that writes owned paths and does not commit them - capture-watchdog's Family Fare shard window after the 08:00
@@ -350,7 +378,9 @@ function Read-PipelineWriteJournal {
       $v = $p.Value
       $c = $true
       if ($null -ne $v -and $v.PSObject.Properties['commit']) { $c = (($v.commit -is [bool]) -and $v.commit) }
-      $h[$p.Name] = [pscustomobject]@{ blob = [string]$v.blob; lane = [string]$v.lane; ts = [string]$v.ts; commit = [bool]$c }
+      # deleted (2026-09-23): a TOMBSTONE, a tracked file the lane deleted; only the JSON boolean true reads as one.
+      $d = ($null -ne $v -and $v.PSObject.Properties['deleted'] -and ($v.deleted -is [bool]) -and $v.deleted)
+      $h[$p.Name] = [pscustomobject]@{ blob = [string]$v.blob; lane = [string]$v.lane; ts = [string]$v.ts; commit = [bool]$c; deleted = [bool]$d }
     }
   }
   return $h
@@ -362,30 +392,36 @@ function Register-PipelineWrites {
      journal it cannot write; every caller swallows that, because a lane must never die of its bookkeeping, and an
      unrecorded write is simply held as before.
      -Built (W3.2) records the entries with commit = $false: pipeline bytes the mover may vouch for and no committer
-     may commit, which is a guards-blocked day's served outputs. Without it every entry is committable, as before. #>
+     may commit, which is a guards-blocked day's served outputs. Without it every entry is committable, as before.
+     -Deleted (2026-09-23) records TOMBSTONES: repo paths this lane deleted (Get-PipelineRunDeletions), each still
+     absent on disk, as { blob = ''; deleted = $true }. The next run commits a held deletion a tombstone vouches for,
+     so a refused day's deletions land with its other files. An empty blob means the mover never vouches bytes for one. #>
   param(
     [Parameter(Mandatory = $true)][string]$Repo,
     [Parameter(Mandatory = $true)][string]$Lane,
     [Parameter(Mandatory = $true)][datetime]$Since,
     [string[]]$Paths,
-    [switch]$Built
+    [switch]$Built,
+    [string[]]$Deleted = @()
   )
   $present = @($Paths | Where-Object { $_ -and (Test-Path -LiteralPath (Join-Path $Repo $_)) })
-  if (-not $present.Count) { return 0 }
-  # AGAINST HEAD, NOT THE INDEX: capture-run calls this under its private index, where a staged file reads clean in the
-  # worktree column, and after a private-index commit the session's index is stale. HEAD-to-worktree is the question.
-  $g = Invoke-GitCaptured -Repo $Repo -GitArgs (@('-c', 'core.quotePath=false', 'diff', '--name-only', 'HEAD', '--') + $present)
-  if ($g.rc -ne 0) { throw ('git diff exited ' + $g.rc + ': ' + ([string]$g.stderr).Trim()) }
+  $gone = @($Deleted | Where-Object { $_ -and -not (Test-Path -LiteralPath (Join-Path $Repo $_)) } | Sort-Object -Unique)
   $mine = New-Object System.Collections.Generic.List[string]
-  foreach ($rel in @(([string]$g.stdout) -split "`r?`n")) {
-    $rel = $rel.Trim()
-    if (-not $rel) { continue }
-    $full = Join-Path $Repo $rel
-    if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { continue }
-    if ((Get-Item -LiteralPath $full).LastWriteTime -ge $Since) { $mine.Add($rel) }
+  if ($present.Count) {
+    # AGAINST HEAD, NOT THE INDEX: capture-run calls this under its private index, where a staged file reads clean in the
+    # worktree column, and after a private-index commit the session's index is stale. HEAD-to-worktree is the question.
+    $g = Invoke-GitCaptured -Repo $Repo -GitArgs (@('-c', 'core.quotePath=false', 'diff', '--name-only', 'HEAD', '--') + $present)
+    if ($g.rc -ne 0) { throw ('git diff exited ' + $g.rc + ': ' + ([string]$g.stderr).Trim()) }
+    foreach ($rel in @(([string]$g.stdout) -split "`r?`n")) {
+      $rel = $rel.Trim()
+      if (-not $rel) { continue }
+      $full = Join-Path $Repo $rel
+      if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { continue }
+      if ((Get-Item -LiteralPath $full).LastWriteTime -ge $Since) { $mine.Add($rel) }
+    }
   }
-  if (-not $mine.Count) { return 0 }
-  $ids = Get-PipelineBlobIds -Repo $Repo -Paths $mine.ToArray()
+  if (-not $mine.Count -and -not $gone.Count) { return 0 }
+  $ids = if ($mine.Count) { Get-PipelineBlobIds -Repo $Repo -Paths $mine.ToArray() } else { @{} }
   $jp = Get-PipelineWriteJournalPath -Repo $Repo
   if (-not $jp) { throw 'git could not name the common dir, so there is nowhere to record' }
   $ck = Get-PipelineCheckoutKey -Repo $Repo
@@ -402,6 +438,10 @@ function Register-PipelineWrites {
     foreach ($rel in $mine) {
       if (-not $ids.ContainsKey($rel)) { continue }
       $keep[($ck + '|' + $rel)] = [pscustomobject]@{ blob = $ids[$rel]; lane = $Lane; ts = $now.ToString('s'); commit = (-not $Built.IsPresent) }
+      $n++
+    }
+    foreach ($rel in $gone) {
+      $keep[($ck + '|' + [string]$rel)] = [pscustomobject]@{ blob = ''; lane = $Lane; ts = $now.ToString('s'); commit = (-not $Built.IsPresent); deleted = $true }
       $n++
     }
     [void](Write-TcAtomicFile -Path $jp -Text ([pscustomobject]@{ writes = [pscustomobject]$keep } | ConvertTo-Json -Depth 4) -NoBom)
@@ -426,7 +466,13 @@ function Get-PipelineOwnHeld {
   $ids = Get-PipelineBlobIds -Repo $Repo -Paths $cand
   foreach ($p in $cand) {
     $e = $j[($ck + '|' + [string]$p)]
-    if ($null -eq $e -or -not $e.commit -or -not $ids.ContainsKey([string]$p)) { continue }
+    if ($null -eq $e -or -not $e.commit) { continue }
+    # A TOMBSTONE vouches for a held DELETION: the lane recorded deleting this path, and it is still absent on disk.
+    if ($e.deleted) {
+      if (-not (Test-Path -LiteralPath (Join-Path $Repo ([string]$p)))) { $own.Add([pscustomobject]@{ path = [string]$p; lane = [string]$e.lane }) }
+      continue
+    }
+    if (-not $ids.ContainsKey([string]$p)) { continue }
     if ([string]::Equals([string]$e.blob, [string]$ids[[string]$p], [StringComparison]::Ordinal)) {
       $own.Add([pscustomobject]@{ path = [string]$p; lane = [string]$e.lane })
     }
@@ -585,8 +631,13 @@ function Invoke-PipelineCommit {
     # RECORD WHAT THIS LANE WROTE AND DID NOT LAND (2026-09-23, 9bc4d2), on every path out: a refused commit, a held
     # file set, or a lane that owns less than it writes. What landed no longer differs from HEAD, so it is not recorded.
     # Only with a run start: without one there is no way to say which writes were this lane's.
+    # Its own DELETIONS too (tombstones), which need the start snapshot to tell them from a deletion it was handed.
     if ($RunStart -gt [datetime]::MinValue) {
-      try { [void](Register-PipelineWrites -Repo $Repo -Lane $Name -Since $RunStart -Paths $(if ($JournalPaths) { $JournalPaths } else { $Paths })) } catch { }
+      try {
+        $jpList = $(if ($JournalPaths) { $JournalPaths } else { $Paths })
+        $jpDel = Get-PipelineRunDeletions -Repo $Repo -Paths $jpList -DirtyAtStart $DirtyAtStart
+        [void](Register-PipelineWrites -Repo $Repo -Lane $Name -Since $RunStart -Paths $jpList -Deleted $jpDel)
+      } catch { }
     }
   }
 
@@ -1036,11 +1087,63 @@ if ($__pcSelfTest) {
     Remove-Item -LiteralPath $tr3 -Recurse -Force -ErrorAction SilentlyContinue
   }
 
+  # ---- A REFUSED RUN'S OWN DELETION LANDS WITH THE NEXT RUN (2026-09-23, the checkout-sync lane's review) ---------------
+  # FROZEN from the review's proof: day 1 modifies a data file and deletes a tracked flag
+  # (browser-capture-due-2026-09-21.flag on main, from the refused 09-22 and 09-23 days), and its commit is refused. The
+  # write journal vouched for the data file and had nothing for the deletion, so day 2 held the deletion as a session's
+  # and it never landed. A fourth throwaway repo, per-run name, removed in finally.
+  $tr4 = Join-Path $env:TEMP ('pc-dc-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $tr4 'lane\out') -Force | Out-Null
+    & git -C $tr4 init -q . | Out-Null
+    & git -C $tr4 config user.email t@t | Out-Null
+    & git -C $tr4 config user.name t | Out-Null
+    $noHook4 = Join-Path $tr4 'fixture-no-hooks'
+    New-Item -ItemType Directory -Path $noHook4 -Force | Out-Null
+    & git -C $tr4 config core.hooksPath ($noHook4 -replace '\\', '/') | Out-Null
+    foreach ($k in @('lane/out/due-2026-09-21.flag', 'lane/out/data.json', 'lane/out/sess.jsonl', 'lane/out/back.flag')) { [IO.File]::WriteAllText((Join-Path $tr4 $k), ('seed ' + $k)) }
+    & git -C $tr4 add -A -- lane | Out-Null
+    & git -C $tr4 commit -q -m seed | Out-Null
+    # BEFORE DAY 1: a session deletes sess.jsonl. DAY 1: the run rewrites data.json and deletes the flag and back.flag.
+    Remove-Item -LiteralPath (Join-Path $tr4 'lane/out/sess.jsonl')
+    $snap41 = Get-DirtyOwnedSnapshot -Repo $tr4 -Paths @('lane/out')
+    $rs41 = (Get-Date).AddMinutes(-3)
+    [IO.File]::WriteAllText((Join-Path $tr4 'lane/out/data.json'), '{"day":1}')
+    Remove-Item -LiteralPath (Join-Path $tr4 'lane/out/due-2026-09-21.flag')
+    Remove-Item -LiteralPath (Join-Path $tr4 'lane/out/back.flag')
+    $del41 = Get-PipelineRunDeletions -Repo $tr4 -Paths @('lane/out') -DirtyAtStart $snap41
+    T 'MUST FIRE  a run''s own deletions are found, and a deletion present at its start is not one of them' `
+      ((($del41 | Sort-Object) -join ',') -eq 'lane/out/back.flag,lane/out/due-2026-09-21.flag') (($del41 | Sort-Object) -join ',')
+    # THE COMMIT IS REFUSED: nothing lands, and the run records what it wrote and what it deleted.
+    $n41 = Register-PipelineWrites -Repo $tr4 -Lane 'probe-refused' -Since $rs41 -Paths @('lane/out') -Deleted $del41
+    # A session brings back.flag back before day 2: a tombstone for a path that exists again vouches for nothing.
+    [IO.File]::WriteAllText((Join-Path $tr4 'lane/out/back.flag'), 'restored by a session')
+    $ohBack = Get-PipelineOwnHeld -Repo $tr4 -Paths @('lane/out/back.flag')
+    $ob41 = Get-PipelineOwnBlobs -Repo $tr4
+    T 'MUST NOT FIRE a tombstone is never a blob the mover vouches, and one whose path exists again commits nothing' `
+      (($n41 -eq 3) -and (-not $ob41.ContainsKey('lane/out/due-2026-09-21.flag')) -and ($ohBack.Count -eq 0) -and ($ob41.ContainsKey('lane/out/data.json'))) ('registered=' + $n41 + ' vouched=' + (@($ob41.Keys | Sort-Object) -join ',') + ' back=' + $ohBack.Count)
+    # DAY 2: everything day 1 left is dirty at start, and the run rewrites none of it.
+    (Get-Item -LiteralPath (Join-Path $tr4 'lane/out/data.json')).LastWriteTime = (Get-Date).AddMinutes(-2)
+    (Get-Item -LiteralPath (Join-Path $tr4 'lane/out/back.flag')).LastWriteTime = (Get-Date).AddMinutes(-2)
+    $snap42 = Get-DirtyOwnedSnapshot -Repo $tr4 -Paths @('lane/out')
+    $rs42 = (Get-Date).AddMinutes(-1)
+    $v42 = Invoke-PipelineCommit -Repo $tr4 -Paths @('lane/out') -Message 'day-2' -Name 'probe' -DirtyAtStart $snap42 -RunStart $rs42
+    $tree42 = @((Invoke-GitCaptured -Repo $tr4 -GitArgs @('ls-tree', '-r', '--name-only', 'HEAD', '--', 'lane')).stdout -split "`r?`n" | Where-Object { $_ })
+    T 'MUST FIRE  the next run commits the deletion the refused run recorded, beside its vouched write' `
+      (($tree42 -notcontains 'lane/out/due-2026-09-21.flag') -and ($tree42 -contains 'lane/out/data.json') -and ($v42 -match 'pipeline-own: 2 file') -and ($v42 -notmatch 'kept a deletion present at start: lane/out/due-2026-09-21\.flag')) ($v42 + ' | head=' + ($tree42 -join ','))
+    T 'CLEAN TWIN a session''s deletion with no tombstone is still held and named, as W0.2 says' `
+      (($tree42 -contains 'lane/out/sess.jsonl') -and ($v42 -match [regex]::Escape('kept a deletion present at start: lane/out/sess.jsonl'))) $v42
+  } catch {
+    T 'the deletion-carry end-to-end block ran to its end without throwing' $false $_.Exception.Message
+  } finally {
+    Remove-Item -LiteralPath $tr4 -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
   # The literal count: every T line in this block, with the two loops counted at their widths (3 lane kinds x 2, and 4
   # outcomes). Moving it is part of adding or removing a case.
-  $pcExpectedCases = 82
+  $pcExpectedCases = 86
   if ($ran -ne $pcExpectedCases) { Write-Output ("FAIL  the suite ran " + $ran + " case(s) against its literal count of " + $pcExpectedCases); $fail++ }
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s) of {1} run" -f $fail, $ran); exit 1 }
-  Write-Output ('SELF-TEST PASS: ' + $ran + ' of ' + $pcExpectedCases + ' cases: the source-path refusal in eleven shapes, every real path list proved data-only and non-empty, no path owned twice, the committer refusing before it touches git, a lane''s exit code earned from its verdict (a refused commit exits 1, a landed one whose push failed exits 0), a deletion present at start held out of the commit, and a -Built journal entry that vouches its blob to the mover and is never committed')
+  Write-Output ('SELF-TEST PASS: ' + $ran + ' of ' + $pcExpectedCases + ' cases: the source-path refusal in eleven shapes, every real path list proved data-only and non-empty, no path owned twice, the committer refusing before it touches git, a lane''s exit code earned from its verdict (a refused commit exits 1, a landed one whose push failed exits 0), a deletion present at start held out of the commit, a -Built journal entry that vouches its blob to the mover and is never committed, and a refused run''s own deletion recorded as a tombstone that the next run commits')
   exit 0
 }

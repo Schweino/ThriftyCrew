@@ -25,18 +25,19 @@
   Exit:  0 every case passed and the count is the literal below; 1 otherwise; 3 a marker or function could not be found
          (BLIND, nothing proven). The last line is the verdict.
 #>
-# gate-inputs: grocery\test-capture-run-sync.ps1, grocery\capture-run.ps1, grocery\run-log-lib.ps1, grocery\native-lib.ps1, lib\checkout-sync.ps1, lib\git-blob-lib.ps1, lib\git-repo-env.ps1, lib\atomic-write.ps1, lib\append-line.ps1, lib\pipeline-commit.ps1, lib\ledger-lock.ps1, lib\event-bus.ps1, lib\json-io.ps1
+# gate-inputs: grocery\test-capture-run-sync.ps1, grocery\capture-run.ps1, grocery\capture-run-lock-lib.ps1, grocery\chain-idle.ps1, grocery\run-log-lib.ps1, grocery\native-lib.ps1, lib\checkout-sync.ps1, lib\git-blob-lib.ps1, lib\git-repo-env.ps1, lib\atomic-write.ps1, lib\append-line.ps1, lib\pipeline-commit.ps1, lib\ledger-lock.ps1, lib\event-bus.ps1, lib\json-io.ps1
 $ErrorActionPreference = 'Stop'
 $repoLib = Join-Path (Split-Path $PSScriptRoot -Parent) 'lib'
 . (Join-Path $repoLib 'git-repo-env.ps1'); Clear-TcGitRepoEnv
 . (Join-Path $repoLib 'json-io.ps1')
 . (Join-Path $repoLib 'checkout-sync.ps1')
 . (Join-Path $repoLib 'pipeline-commit.ps1')
+. (Join-Path $PSScriptRoot 'capture-run-lock-lib.ps1')   # Get-CaptureRunOrphanHolder, shared by capture-run and chain-idle
 # Loaded here, so the TAIL-PUSH block finds Invoke-Native and never dot-sources native-lib from the fixture's grocery\.
 . (Join-Path $PSScriptRoot 'native-lib.ps1')
 $env:GIT_TERMINAL_PROMPT = '0'
 
-$EXPECTED_CASES = 36
+$EXPECTED_CASES = 45
 $script:pass = 0; $script:fail = 0
 function T([string]$Label, [bool]$Cond, [string]$Got = '') {
   if ($Cond) { $script:pass++; Write-Output ('  ok    ' + $Label) }
@@ -53,7 +54,7 @@ if (-not (Test-Path -LiteralPath $crPath)) { Write-Output ('BLIND: capture-run.p
 $crSrc = [IO.File]::ReadAllText($crPath)
 $crAst = [System.Management.Automation.Language.Parser]::ParseInput($crSrc, [ref]$null, [ref]$null)
 $fnNames = @('Write-RunStatus', 'Add-FailedLane', 'Set-FailedLanePaged', 'Release-RunMutex', 'Test-CaptureRunPidAlive', 'Get-CaptureRunInheritedLock',
-  'Get-CaptureRunCommandLine', 'Get-CaptureRunOrphanHolder', 'Enter-CaptureRunMutex', 'ConvertTo-CaptureRunSyncStatus', 'Format-CaptureRunSyncLine',
+  'Enter-CaptureRunMutex', 'Register-CaptureRunMergedWrites', 'ConvertTo-CaptureRunSyncStatus', 'Format-CaptureRunSyncLine',
   'Get-StartSyncAction', 'Invoke-CaptureRunHandoff', 'Invoke-CaptureRunTailSync', 'Invoke-CaptureRunOwedTailSync')
 $fnAsts = @($crAst.FindAll({ param($a) $a -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $fnNames -contains $a.Name }, $true))
 $fnFound = @($fnAsts | ForEach-Object { $_.Name } | Sort-Object -Unique)
@@ -161,10 +162,10 @@ function Invoke-TailPush($E, [string]$BotSha, [hashtable]$Vars = @{}) {
 $script:tailTexts = New-Object System.Collections.Generic.List[string]
 
 # A child powershell running a generated script; stdout and stderr to files, the exit code read off the process.
-function Invoke-FxChild([string]$Script, [hashtable]$EnvVars = @{}) {
+function Invoke-FxChild([string]$Script, [hashtable]$EnvVars = @{}, [string]$ExtraArgs = '') {
   $psi = New-Object System.Diagnostics.ProcessStartInfo
   $psi.FileName = 'powershell'
-  $psi.Arguments = '-NoProfile -ExecutionPolicy Bypass -File "' + $Script + '"'
+  $psi.Arguments = '-NoProfile -ExecutionPolicy Bypass -File "' + $Script + '"' + $(if ($ExtraArgs) { ' ' + $ExtraArgs } else { '' })
   $psi.UseShellExecute = $false; $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true; $psi.CreateNoWindow = $true
   foreach ($k in @('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_COMMON_DIR')) { if ($psi.EnvironmentVariables.ContainsKey($k)) { $psi.EnvironmentVariables.Remove($k) } }
   foreach ($k in @($EnvVars.Keys)) { $psi.EnvironmentVariables[$k] = [string]$EnvVars[$k] }
@@ -187,6 +188,7 @@ function New-RegionHarness($E, [string]$MutexName, [string]$Body = '') {
     ('. ' + (Q (Join-Path $repoLib 'json-io.ps1'))),
     ('. ' + (Q (Join-Path $repoLib 'checkout-sync.ps1'))),
     ('. ' + (Q (Join-Path $repoLib 'pipeline-commit.ps1'))),
+    ('. ' + (Q (Join-Path $PSScriptRoot 'capture-run-lock-lib.ps1'))),
     ('. ' + (Q (Join-Path $PSScriptRoot 'run-log-lib.ps1'))),
     $fnText,
     ('function Send-Alert { param($Subject, $Body) [IO.File]::AppendAllText(' + (Q $E.pagesFile) + ', ([string]$Subject + "`n")); $global:LASTEXITCODE = 0 }'),
@@ -305,23 +307,96 @@ try {
       $w = [Diagnostics.Stopwatch]::StartNew(); while (-not ((Test-Path -LiteralPath $ready) -and (Test-Path -LiteralPath $childReady)) -and $w.Elapsed.TotalSeconds -lt 120) { Start-Sleep -Milliseconds 100 }
       [IO.File]::WriteAllText($status, ('{"daily":{"stage":"capturing","pid":' + $child.Id + '}}'))
       Stop-Process -Id $parent.Id -Force; $parent.WaitForExit()
+      # THE SCAN IS RESTRICTED TO THIS FIXTURE'S OWN FILE, so a real capture-run on this box never answers for it.
+      $pat = [regex]::Escape($childScript)
       $m2 = New-Object System.Threading.Mutex($false, $mxName)
-      $s1 = Enter-CaptureRunMutex -Mutex $m2 -Inherited $null -WaitSec 30 -OrphanCheck { Get-CaptureRunOrphanHolder -StatusFile $status }
+      $s1 = Enter-CaptureRunMutex -Mutex $m2 -Inherited $null -WaitSec 30 -OrphanCheck { Get-CaptureRunOrphanHolder -StatusFile $status -Pattern $pat }
       T 'the third run sees the lock ABANDONED and finds the child alive by its command line (capture-run.ps1)' ($s1.abandoned -and $null -ne $s1.orphan -and $s1.orphan.alive -and $s1.orphan.pid -eq $child.Id) ('abandoned=' + $s1.abandoned + ' orphan=' + $(if ($s1.orphan) { $s1.orphan.why } else { 'none' }))
       if ($s1.held) { try { $m2.ReleaseMutex() } catch { } }
+      # FAIL CLOSED (the lane's review): each probe that could not look, or a record that does not name the child, still
+      # finds it. Before, a torn record and a failed command-line lookup both answered alive=False and the run proceeded.
+      [IO.File]::WriteAllText($status, '{"daily":{"stage":"capt')
+      $oTorn = Get-CaptureRunOrphanHolder -StatusFile $status -Pattern $pat
+      T 'MUST FIRE  a torn status record does not hide the live child: the process scan finds it by its command line' ($oTorn.alive -and $oTorn.pid -eq $child.Id) ($oTorn.why)
+      [IO.File]::WriteAllText($status, ('{"daily":{"stage":"synced-handoff","pid":' + $parent.Id + '}}'))
+      $oWin = Get-CaptureRunOrphanHolder -StatusFile $status -Pattern $pat
+      T 'MUST FIRE  a record still carrying the killed parent''s pid (the child''s first seconds, or a skipped-locked overwrite) does not hide the child' ($oWin.alive -and $oWin.pid -eq $child.Id) ($oWin.why)
+      [IO.File]::WriteAllText($status, ('{"daily":{"stage":"capturing","pid":' + $child.Id + '}}'))
+      $oCim = Get-CaptureRunOrphanHolder -StatusFile $status -Pattern $pat -CommandLineOf { param($p) $null } -ScanProcesses { [pscustomobject]@{ ok = $true; pids = @(); why = '' } }
+      T 'MUST FIRE  a live recorded pid whose command line could not be read counts as a live capture-run' ($oCim.alive -and $oCim.pid -eq $child.Id) ($oCim.why)
+      [IO.File]::WriteAllText($status, '{"daily":{"stage":"complete","pid":0}}')
+      $oBlind = Get-CaptureRunOrphanHolder -StatusFile $status -Pattern $pat -ScanProcesses { [pscustomobject]@{ ok = $false; pids = @(); why = 'fixture: the process list could not be read' } }
+      T 'MUST FIRE  a process scan that could not look counts as a live capture-run' ($oBlind.alive -and ($oBlind.why -match 'could not look')) ($oBlind.why)
+      # Named $fxScanRows, never $rows: the seam runs inside Get-CaptureRunProcessScan, whose own $rows would shadow it.
+      $fxScanRows = @(
+        [pscustomobject]@{ ProcessId = $PID; ParentProcessId = 424242; Name = 'powershell.exe'; CommandLine = 'powershell -File C:\x\capture-run.ps1' },
+        [pscustomobject]@{ ProcessId = 424242; ParentProcessId = 1; Name = 'powershell.exe'; CommandLine = 'powershell -File C:\x\capture-run.ps1 -Kind daily' },
+        [pscustomobject]@{ ProcessId = 515151; ParentProcessId = 1; Name = 'pythonw.exe'; CommandLine = 'pythonw headless-exit.pyw powershell -File C:\x\capture-run.ps1' },
+        [pscustomobject]@{ ProcessId = 616161; ParentProcessId = 1; Name = 'powershell.exe'; CommandLine = 'powershell -File C:\x\capture-run.ps1 -Kind ad' },
+        [pscustomobject]@{ ProcessId = 717171; ParentProcessId = 1; Name = 'powershell.exe'; CommandLine = 'powershell -File C:\x\chain-idle.ps1' })
+      $scanX = Get-CaptureRunProcessScan -ListProcesses { $fxScanRows }
+      T 'MUST NOT FIRE the scan never counts this process, its ancestors, a non-powershell wrapper or another script' ($scanX.ok -and ((@($scanX.pids) -join ',') -eq '616161')) ((@($scanX.pids) -join ','))
+      [IO.File]::WriteAllText($status, ('{"daily":{"stage":"capturing","pid":' + $child.Id + '}}'))
       [IO.File]::WriteAllText($release, '1'); $child.WaitForExit(60000) | Out-Null
       # MUST NOT FIRE twin: a second killed holder, and the recorded child is now gone, so the lock is taken as before.
       Remove-Item -LiteralPath $ready -Force
       $parent2 = Start-Process -FilePath 'powershell' -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $parentScript) -PassThru -WindowStyle Hidden
       $w = [Diagnostics.Stopwatch]::StartNew(); while (-not (Test-Path -LiteralPath $ready) -and $w.Elapsed.TotalSeconds -lt 120) { Start-Sleep -Milliseconds 100 }
       Stop-Process -Id $parent2.Id -Force; $parent2.WaitForExit()
-      $s2 = Enter-CaptureRunMutex -Mutex $m2 -Inherited $null -WaitSec 30 -OrphanCheck { Get-CaptureRunOrphanHolder -StatusFile $status }
+      $s2 = Enter-CaptureRunMutex -Mutex $m2 -Inherited $null -WaitSec 30 -OrphanCheck { Get-CaptureRunOrphanHolder -StatusFile $status -Pattern $pat }
       T 'MUST NOT FIRE an abandoned lock whose recorded capture-run is dead is taken, as before' ($s2.abandoned -and $s2.held -and $null -ne $s2.orphan -and -not $s2.orphan.alive) ('abandoned=' + $s2.abandoned + ' held=' + $s2.held + ' orphan=' + $(if ($s2.orphan) { $s2.orphan.why } else { 'none' }))
       if ($s2.held) { try { $m2.ReleaseMutex() } catch { } }
       $m2.Dispose()
     } finally {
       [IO.File]::WriteAllText($release, '1')
       foreach ($pp in @($parent, $child)) { try { if (-not $pp.HasExited) { $pp.Kill() } } catch { } }
+    }
+  }
+
+  Invoke-Group 'CHAIN-IDLE MUST FIRE - an abandoned lock with a live capture-run is HELD, and stays abandoned for the next capture-run' {
+    # FROZEN from the review's probe (probe-chain-idle.ps1): chain-idle read ABANDONED as FREE and RELEASED the lock, so
+    # the browser-stores agent built into the orphan's tree and the next capture-run got a clean lock and never looked.
+    $cd = Join-Path $script:fxRoot 'chainidle'; New-Item -ItemType Directory -Path $cd | Out-Null
+    $mxName = 'Local\tc-crs-ci-' + [guid]::NewGuid().ToString('N')
+    $release = Join-Path $cd 'release.flag'; $ready = Join-Path $cd 'ready.flag'; $childReady = Join-Path $cd 'child-ready.flag'; $status = Join-Path $cd 'status.json'
+    $childScript = Join-Path $cd 'capture-run.ps1'
+    [IO.File]::WriteAllText($childScript, ('$mh = New-Object System.Threading.Mutex($false, ' + (Q $mxName) + '); [IO.File]::WriteAllText(' + (Q $childReady) + ', ''1''); $t =[Diagnostics.Stopwatch]::StartNew(); while (-not (Test-Path -LiteralPath ' + (Q $release) + ') -and $t.Elapsed.TotalSeconds -lt 300) { Start-Sleep -Milliseconds 100 }'))
+    $parentScript = Join-Path $cd 'parent.ps1'
+    [IO.File]::WriteAllText($parentScript, ('$m = New-Object System.Threading.Mutex($false, ' + (Q $mxName) + '); [void]$m.WaitOne(); [IO.File]::WriteAllText(' + (Q $ready) + ', ''1''); $t = [Diagnostics.Stopwatch]::StartNew(); while ($t.Elapsed.TotalSeconds -lt 300) { Start-Sleep -Milliseconds 200 }'))
+    $pat = [regex]::Escape($childScript)
+    $ciArgs = ('-MutexName "' + $mxName + '" -StatusFile "' + $status + '" -ScriptPattern "' + $pat + '"')
+    $chainIdle = Join-Path $PSScriptRoot 'chain-idle.ps1'
+    $child = Start-Process -FilePath 'powershell' -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $childScript) -PassThru -WindowStyle Hidden
+    $parent = Start-Process -FilePath 'powershell' -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $parentScript) -PassThru -WindowStyle Hidden
+    $keeper = $null
+    try {
+      $w = [Diagnostics.Stopwatch]::StartNew(); while (-not ((Test-Path -LiteralPath $ready) -and (Test-Path -LiteralPath $childReady)) -and $w.Elapsed.TotalSeconds -lt 120) { Start-Sleep -Milliseconds 100 }
+      [IO.File]::WriteAllText($status, ('{"daily":{"stage":"capturing","pid":' + $child.Id + '}}'))
+      Stop-Process -Id $parent.Id -Force; $parent.WaitForExit()
+      $ci = Invoke-FxChild $chainIdle @{} $ciArgs
+      $m3 = New-Object System.Threading.Mutex($false, $mxName)
+      $s3 = Enter-CaptureRunMutex -Mutex $m3 -Inherited $null -WaitSec 30 -OrphanCheck { Get-CaptureRunOrphanHolder -StatusFile $status -Pattern $pat }
+      T 'chain-idle prints HELD and exits 1, and the next capture-run still sees the lock ABANDONED and finds the child' ($ci.rc -eq 1 -and ($ci.out -match '(?m)^HELD\s*$') -and $s3.abandoned -and $null -ne $s3.orphan -and $s3.orphan.alive) ('rc=' + $ci.rc + ' out=' + $ci.out.Trim() + ' | next: abandoned=' + $s3.abandoned + ' orphan=' + $(if ($s3.orphan) { $s3.orphan.why } else { 'none' }))
+      if ($s3.held) { try { $m3.ReleaseMutex() } catch { } }
+      [IO.File]::WriteAllText($release, '1'); $child.WaitForExit(60000) | Out-Null
+      # CLEAN TWIN: the lock is abandoned again with no capture-run alive, so chain-idle is FREE and releases it, as before.
+      # A keeper process holds a handle, so the kernel mutex survives the killed holder as abandoned.
+      Remove-Item -LiteralPath $ready -Force
+      $keeperScript = Join-Path $cd 'keeper.ps1'
+      $keeperReady = Join-Path $cd 'keeper-ready.flag'
+      [IO.File]::WriteAllText($keeperScript, ('$mh = New-Object System.Threading.Mutex($false, ' + (Q $mxName) + '); [IO.File]::WriteAllText(' + (Q $keeperReady) + ', ''1''); $t =[Diagnostics.Stopwatch]::StartNew(); while (-not (Test-Path -LiteralPath ' + (Q ($release + '2')) + ') -and $t.Elapsed.TotalSeconds -lt 300) { Start-Sleep -Milliseconds 100 }'))
+      $keeper = Start-Process -FilePath 'powershell' -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $keeperScript) -PassThru -WindowStyle Hidden
+      $parent2 = Start-Process -FilePath 'powershell' -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $parentScript) -PassThru -WindowStyle Hidden
+      $w = [Diagnostics.Stopwatch]::StartNew(); while (-not ((Test-Path -LiteralPath $ready) -and (Test-Path -LiteralPath $keeperReady)) -and $w.Elapsed.TotalSeconds -lt 120) { Start-Sleep -Milliseconds 100 }
+      Stop-Process -Id $parent2.Id -Force; $parent2.WaitForExit()
+      $ci2 = Invoke-FxChild $chainIdle @{} $ciArgs
+      $s4 = Enter-CaptureRunMutex -Mutex $m3 -Inherited $null -WaitSec 30
+      T 'CLEAN TWIN with no capture-run alive an abandoned lock is FREE, and chain-idle releases it (the next run gets a clean lock)' ($ci2.rc -eq 0 -and ($ci2.out -match '(?m)^FREE\s*$') -and $s4.held -and -not $s4.abandoned) ('rc=' + $ci2.rc + ' out=' + $ci2.out.Trim() + ' | next: held=' + $s4.held + ' abandoned=' + $s4.abandoned)
+      if ($s4.held) { try { $m3.ReleaseMutex() } catch { } }
+      $m3.Dispose()
+    } finally {
+      [IO.File]::WriteAllText($release, '1'); [IO.File]::WriteAllText(($release + '2'), '1')
+      foreach ($pp in @($parent, $child, $keeper)) { try { if ($null -ne $pp -and -not $pp.HasExited) { $pp.Kill() } } catch { } }
     }
   }
 
@@ -454,6 +529,39 @@ try {
     $o1 = Invoke-CaptureRunOwedTailSync -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'daily' -Today '2026-09-23'
     $o2 = Invoke-CaptureRunOwedTailSync -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'daily' -Today '2026-09-23'
     T 'the owed sync is synced and not bad, and a second call owes nothing and does nothing' ($null -ne $o1 -and [string]$o1.record.outcome -eq 'synced' -and -not $o1.bad -and $null -eq $o2 -and -not $script:TailSyncOwed -and (GitR $E.bot @('rev-list', '--count', 'HEAD')).out -eq '2') ($(if ($o1) { $o1.line } else { 'none' }) + ' second=' + $(if ($o2) { $o2.line } else { 'none' }))
+  }
+
+  Invoke-Group 'MERGED VOUCH MUST FIRE - a file the owed tail sync merges is re-recorded, so the next run commits it' {
+    # FROZEN from the review's proof (merge-vouch.ps1): the run wrote and recorded a tracked file, did not commit,
+    # upstream changed another line of it, and the owed tail sync MERGED it. The merged bytes were in no journal entry,
+    # so the next run held the file as a session's edit, and once upstream touched it again the next start sync went
+    # blocked/foreign and ran behind origin.
+    $E = New-Estate 'mergevouch'
+    Push-Up $E 'grocery/cursor.json' "a`nb`nc`nd`ne`n" 'up: a pipeline file'
+    $null = GitOk $E.bot @('pull', '-q', '--ff-only')
+    $mStart = (Get-Date).AddSeconds(-2)
+    W $E.bot 'grocery/cursor.json' "a`nb`nc`nd`ne-bot`n"
+    $nReg = Register-PipelineWrites -Repo $E.bot -Lane 'capture-run-daily' -Since $mStart -Paths @('grocery')
+    Push-Up $E 'grocery/cursor.json' "a-up`nb`nc`nd`ne`n" 'up: another line of it'
+    $NoSync = $false; $script:TailSyncOwed = $true; $script:CaptureRunSyncSeams = $script:fxSeams; $script:pages.Clear()
+    $o = Invoke-CaptureRunOwedTailSync -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'daily' -Today '2026-09-23'
+    $merged = [IO.File]::ReadAllText((Join-Path $E.bot 'grocery/cursor.json'))
+    $split = Split-PipelineOwnHeld -Repo $E.bot -Held @('grocery/cursor.json')
+    T 'the owed sync merged the run''s own file with upstream, and the next run finds its merged bytes vouched and commits them' `
+      ($nReg -eq 1 -and $null -ne $o -and [string]$o.record.outcome -eq 'synced' -and (@($o.record.merged) -contains 'grocery/cursor.json') -and $merged -eq "a-up`nb`nc`nd`ne-bot`n" -and @($split.own).Count -eq 1 -and @($split.foreign).Count -eq 0) ('registered=' + $nReg + ' outcome=' + $(if ($o) { [string]$o.record.outcome + ' merged=' + (@($o.record.merged) -join ',') } else { 'none' }) + ' own=' + @($split.own).Count + ' foreign=' + (@($split.foreign) -join ','))
+  }
+
+  Invoke-Group 'NOSYNC TAIL MUST FIRE - a committed -NoSync hand run does not push, and pages instead of staying silent' {
+    # FROZEN from the review's probe: 'pushed=False outcome=skipped failed=sync pages=0'. The commit stayed on the shared
+    # main checkout, unpushed, with no page.
+    $E = New-Estate 'nosynctail'
+    Push-Up $E 'public/derived.json' "{`n  ""v"": 12`n}`n" 'up: derived'
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`nz`n"
+    $sha = New-BotCommit $E @('grocery')
+    $tip = (GitR $E.remote @('rev-parse', 'refs/heads/main')).out
+    $r = Invoke-TailPush $E $sha @{ NoSync = $true }
+    $script:tailTexts.Add($r.text)
+    T 'nothing is pushed, lane sync fails, and ONE page says the sync was skipped at the push' (-not $r.pushed -and $r.failed -eq 'sync' -and $r.remote -eq $tip -and ((@($r.pages) -join '|') -eq 'Grocery bot checkout sync skipped at the push - 2026-09-23') -and [string]$r.status.outcome -eq 'skipped') ('pushed=' + $r.pushed + ' failed=' + $r.failed + ' pages=' + (@($r.pages) -join '|') + ' outcome=' + [string]$r.status.outcome)
   }
 
   Invoke-Group 'KILL SWITCH ON A COMMITTED RUN - the commit stays local, lane sync, no push' {

@@ -132,6 +132,7 @@ $script:TcCsLibBlob = ''
 $script:TcCheckoutSyncStartupFiles = @(
   'grocery/capture-run.ps1',
   'grocery/alert-lib.ps1',
+  'grocery/capture-run-lock-lib.ps1',
   'grocery/capture-policy-lib.ps1',
   'grocery/commit-size-lib.ps1',
   'grocery/fanout-lib.ps1',

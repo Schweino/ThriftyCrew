@@ -65,7 +65,10 @@ param(
   [switch]$Force,
   [switch]$WhatIf,
   # -NoSync skips the checkout sync at the start and at the tail for ONE hand run (plan section 11, rollback 2). A
-  # scheduled run never passes it; the durable off switch is <git common dir>\tc-checkout-sync.disabled.
+  # scheduled run never passes it; the durable off switch is <git common dir>\tc-checkout-sync.disabled. A -NoSync run
+  # that COMMITS NEVER PUSHES, because the push needs a sync that reached origin: its commit stays local on main, the
+  # run fails lane sync and pages "checkout sync skipped at the push", and ops\push-main.ps1 or a run without -NoSync
+  # lands it. Use it only when the hand run must not move the checkout.
   [switch]$NoSync
 )
 
@@ -85,6 +88,7 @@ $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 . (Join-Path $root 'commit-size-lib.ps1')   # Test-CarriedCommitSize/Add-TcCommitCarry: the size gate judges per RUN (plan W2.2)
 . (Join-Path (Split-Path $root -Parent) 'lib\pipeline-commit.ps1')   # Get-PipelineOwnBlobs for the start sync, and the dirty-at-start snapshot
 . (Join-Path (Split-Path $root -Parent) 'lib\checkout-sync.ps1')     # Invoke-TcCheckoutSync: the ONE mover of the shared checkout, at the start and the tail (plan W4.1, W4.2)
+. (Join-Path $root 'capture-run-lock-lib.ps1')   # Get-CaptureRunOrphanHolder: an abandoned lock is not free while a capture-run is alive (plan W4.1 step 7), shared with chain-idle
 
 # ---- ALREADY RAN TODAY? (2026-09-10, queue 2026-09-10-2b79d3) --------------------------------------------
 # The TC capture tasks gained hourly catch-up occurrences inside a per-task window, so a Windows Update
@@ -211,10 +215,12 @@ function Release-RunMutex {
 # calls WaitOne (it would block on its own parent). The token is honoured only when it names this lock and its pid is
 # alive, and both variables are removed at once, so no lane this run starts inherits them.
 # ABANDONED IS NOT FREE WHILE A CHILD RUNS. A parent killed by Task Scheduler abandons the mutex while its child still
-# works the tree. The next waiter gets AbandonedMutexException, which used to count as held; it now reads the status
-# record's pids and skips when one of them is alive and its command line names capture-run.ps1 (process SHAPE, never
-# timing). It then exits WITHOUT releasing and WITHOUT writing the status record: its exit abandons the mutex again, so
-# the next occurrence asks the same question, and the live child's pid stays in the record for it to find. THE CHILD'S
+# works the tree. The next waiter gets AbandonedMutexException, which used to count as held; it now skips when a
+# capture-run other than itself is alive by process SHAPE, never timing: a pid the status record names, or a process scan
+# for a powershell running capture-run.ps1, and it FAILS CLOSED, so an unreadable record, a command line it could not
+# read or a scan that could not look all count as alive (grocery\capture-run-lock-lib.ps1). It then exits WITHOUT
+# releasing and WITHOUT writing the status record: its exit abandons the mutex again, so the next occurrence asks the
+# same question, and a skip costs one occurrence, never the day. THE CHILD'S
 # OWN HANDLE is what makes this work: every run opens the lock (the New-Object line below) BEFORE deciding to inherit
 # it, and a kernel mutex with a handle still open survives its killed owner as ABANDONED. With no handle left it would
 # be destroyed with its owner, and the next run would create a fresh, free one (grocery\test-capture-run-sync.ps1's
@@ -241,27 +247,8 @@ function Get-CaptureRunInheritedLock {
   $r.inherited = $true; $r.why = ('inherited from pid ' + $hp)
   return $r
 }
-function Get-CaptureRunCommandLine([int]$ProcessId) {
-  try { $w = Get-CimInstance -ClassName Win32_Process -Filter ('ProcessId=' + $ProcessId) -ErrorAction Stop; if ($w) { return [string]$w.CommandLine } } catch { }
-  return ''
-}
-function Get-CaptureRunOrphanHolder {
-  # A live capture-run named by the status record (either kind), other than this process. -CommandLineOf is the seam.
-  param([string]$StatusFile, [scriptblock]$CommandLineOf = $null)
-  $r = [pscustomobject]@{ alive = $false; pid = 0; kind = ''; why = '' }
-  if (-not $StatusFile -or -not (Test-Path -LiteralPath $StatusFile)) { $r.why = 'no status record to read'; return $r }
-  $doc = $null
-  try { $doc = Read-JsonFile $StatusFile } catch { $r.why = ('the status record is unreadable: ' + $_.Exception.Message); return $r }
-  foreach ($k in @('ad', 'daily')) {
-    if ($null -eq $doc -or -not $doc.PSObject.Properties[$k] -or $null -eq $doc.$k) { continue }
-    $p = 0
-    if (-not [int]::TryParse([string]$doc.$k.pid, [ref]$p) -or $p -le 0 -or $p -eq $PID) { continue }
-    $cl = if ($CommandLineOf) { [string](& $CommandLineOf $p) } else { Get-CaptureRunCommandLine $p }
-    if ($cl -and $cl -match '(?i)capture-run\.ps1') { $r.alive = $true; $r.pid = $p; $r.kind = $k; $r.why = ('pid ' + $p + ' (' + $k + ') is alive and runs capture-run.ps1'); return $r }
-  }
-  $r.why = 'no capture-run the status record names is alive'
-  return $r
-}
+# Get-CaptureRunOrphanHolder (is a capture-run other than this one alive behind an abandoned lock?) lives in
+# grocery\capture-run-lock-lib.ps1, dot-sourced above, because grocery\chain-idle.ps1 asks the lock the same question.
 function Enter-CaptureRunMutex {
   param($Mutex, $Inherited, [int]$WaitSec = 60, [scriptblock]$OrphanCheck = $null)
   $r = [pscustomobject]@{ held = $false; inherited = $false; abandoned = $false; waited = $false; orphan = $null }
@@ -340,8 +327,12 @@ function Invoke-CaptureRunTailSync {
   param([string]$Repo, [string]$Root, [string]$Kind, [string]$BotCommit = '')
   $r = $null
   if ($NoSync) {
-    $r = [pscustomobject]@{ outcome = 'skipped'; class = ''; why = '-NoSync'; page = $false; startup_changed = $false; H0 = ''; NEW = ''; behind = 0; behind_after = 0 }
+    # A COMMITTED -NoSync RUN NEVER PUSHES (the lane's review): the push needs a sync that reached origin, and this one
+    # never ran. page = $true, so the TAIL-PUSH block pages instead of leaving the commit on main silently; an
+    # uncommitted run's owed sync never pages a skip.
+    $r = [pscustomobject]@{ outcome = 'skipped'; class = ''; why = '-NoSync: this hand run skipped the checkout sync, so a commit it made is NOT pushed. It stays local on main until a later sync reaches origin; push it with ops\push-main.ps1, or re-run without -NoSync.'; page = $true; startup_changed = $false; H0 = ''; NEW = ''; behind = 0; behind_after = 0 }
   } else {
+    $tStart = Get-Date
     try {
       $tIn = Get-BotInputPaths
       $tSv = Get-BotServedPaths
@@ -353,9 +344,37 @@ function Invoke-CaptureRunTailSync {
     } catch {
       $r = [pscustomobject]@{ outcome = 'failed'; class = 'exception'; why = ('the tail sync threw: ' + $_.Exception.Message); page = $true; startup_changed = $false; H0 = ''; NEW = ''; behind = 0; behind_after = 0 }
     }
+    Register-CaptureRunMergedWrites -Repo $Repo -Kind $Kind -Record $r -Since $tStart.AddSeconds(-1)
   }
   $script:TailSyncStatus = ConvertTo-CaptureRunSyncStatus $r
   return $r
+}
+# A FILE THE TAIL SYNC MERGED IS RE-RECORDED (2026-09-23, the lane's review). The mover merges an owned dirty file only
+# when its bytes are the blob the write journal holds, and it writes the MERGED bytes, which no journal entry names. On a
+# day that did not commit, the next run then held that file as a session's edit, and once upstream touched it again the
+# next START sync went blocked/foreign and that day ran behind origin. A merge in the START sync is not exposed (the
+# file's mtime is after the run's start, so the run commits it as its own), and a committed run's own files are clean
+# before its tail sync. Each merged path is recorded with the kind its old entry had: -Built stays -Built, so a
+# guards-blocked board is still never committed. Never throws, never prints into the caller's return value.
+function Register-CaptureRunMergedWrites {
+  param([string]$Repo, [string]$Kind, $Record, [datetime]$Since)
+  try {
+    if ($null -eq $Record) { return }
+    $mg = @(@($Record.merged) | Where-Object { $_ } | ForEach-Object { [string]$_ })
+    if (-not $mg.Count) { return }
+    $jp = Get-PipelineWriteJournalPath -Repo $Repo
+    if (-not $jp) { return }
+    $j = Read-PipelineWriteJournal -JournalPath $jp
+    $ck = Get-PipelineCheckoutKey -Repo $Repo
+    $built = @($mg | Where-Object { $e = $j[($ck + '|' + $_)]; ($null -ne $e) -and -not $e.commit })
+    $commit = @($mg | Where-Object { $built -notcontains $_ })
+    $n = 0
+    if ($commit.Count) { $n += Register-PipelineWrites -Repo $Repo -Lane ('capture-run-' + $Kind + '-merged') -Since $Since -Paths $commit }
+    if ($built.Count) { $n += Register-PipelineWrites -Repo $Repo -Built -Lane ('capture-run-' + $Kind + '-built-merged') -Since $Since -Paths $built }
+    Write-Host ('pipeline-writes: re-recorded ' + $n + ' of ' + $mg.Count + ' file(s) the tail sync merged: ' + ($mg -join ', '))
+  } catch {
+    Write-Host ('pipeline-writes: could not re-record the files the tail sync merged (' + $_.Exception.Message + ') - the next run holds them as another session''s edits')
+  }
 }
 # The ONE tail sync a run that did not commit still owes (plan W4.2 step 2): run as the last git-mutating step, after
 # every watcher, so the watchers read the tree they always read; and from the top-level finally when the run threw
@@ -397,7 +416,7 @@ $script:MutexInherited = [bool]$script:RunMutexState.inherited
 if ($script:MutexInherited) { Write-Output ('lock: ' + $script:InheritedLock.why + ' - this is the synced child of a handed-off run, and it never asks for the lock itself') }
 elseif ($script:HandedOffBy) { Write-Output ('lock: a parent handed off (' + $script:HandedOffBy + ') but its lock token was not honoured (' + $script:InheritedLock.why + '), so this run asked for the lock itself') }
 if ($script:RunMutexState.abandoned -and $null -ne $script:RunMutexState.orphan -and $script:RunMutexState.orphan.alive) {
-  Write-Output ('SKIP: the capture-run lock was abandoned, and ' + $script:RunMutexState.orphan.why + ' - the synced child of a killed parent still works this tree. Nothing started, the lock is left abandoned for the next occurrence to ask again, and the status record keeps that child''s pid.')
+  Write-Output ('SKIP: the capture-run lock was abandoned, and ' + $script:RunMutexState.orphan.why + ' - the synced child of a killed parent may still work this tree. Nothing started, the lock is left abandoned for the next occurrence to ask again, and the status record is left as it is.')
   Stop-RunLog -ExitCode 0 -Path $runLog
   exit 0
 }
@@ -1492,7 +1511,14 @@ try {
     try { $jB = Register-PipelineWrites -Repo $repo -Built -Lane ('capture-run-' + $Kind + '-built') -Since $script:RunStart -Paths $servedPaths; Write-Output ('pipeline-writes: vouched ' + $jB + ' served file(s) this guards-blocked run built, never to be committed') }
     catch { Write-Output ('pipeline-writes: could not vouch this run''s built served files (' + $_.Exception.Message + ') - the checkout sync treats them as another session''s edits, as before') }
   }
-  try { $jN = Register-PipelineWrites -Repo $repo -Lane ('capture-run-' + $Kind) -Since $script:RunStart -Paths $paths; Write-Output ('pipeline-writes: recorded ' + $jN + ' file(s) this run wrote') }
+  # ITS OWN DELETIONS TOO (2026-09-23, the lane's review): a tracked file this run deleted, recorded as a tombstone, so a
+  # refused day's deletion is committed by the next run instead of being held there as a session's deletion every day
+  # after. Owned paths UNFILTERED, because $paths drops a single-file path that is no longer on disk.
+  try {
+    $jDel = Get-PipelineRunDeletions -Repo $repo -Paths @($inputPaths + $(if ($shipServed) { $servedPaths } else { @() })) -DirtyAtStart $script:DirtyAtStart
+    $jN = Register-PipelineWrites -Repo $repo -Lane ('capture-run-' + $Kind) -Since $script:RunStart -Paths $paths -Deleted $jDel
+    Write-Output ('pipeline-writes: recorded ' + $jN + ' file(s) this run wrote or deleted' + $(if ($jDel.Count) { ' (deleted: ' + ($jDel -join ', ') + ')' } else { '' }))
+  }
   catch { Write-Output ('pipeline-writes: could not record this run''s writes (' + $_.Exception.Message + ') - a file it leaves uncommitted is held by the next run as before') }
   & git -C $repo diff --cached --quiet
   if ($sizeGateRefused) {

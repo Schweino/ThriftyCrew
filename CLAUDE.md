@@ -112,7 +112,9 @@ for. Data-dependent audits stay in the daily chain against a real board.
 - **A fresh checkout is CRLF; main is LF.** golden-test and ghost-drift go red over bytes, not drift.
 - **The ~07:00 and ~08:00 bots bring the main checkout to origin/main with a two-way move at the start and
   end of every run** (`lib/checkout-sync.ps1`): no stash, no rebase. A dirty file of yours on a path upstream
-  changed is never written: the sync goes partial and pages. Kill switch: `.git\tc-checkout-sync.disabled`.
+  changed is never written: the sync goes partial and pages, and **the bot's push waits until that file is clean**
+  (the old tail pushed anyway). Kill switch: `.git\tc-checkout-sync.disabled`; a hand run's `-NoSync` commits but
+  never pushes, and pages.
   (Until 2026-09-23 the tail was an autostash rebase that rewrote uncommitted files and dropped staging;
   `design/PLAN-bot-checkout-self-heal-2026-09-23.md`, D7.)
 - **Spawned agents run in worktrees** and must write through repo-relative paths only. Writing to an
