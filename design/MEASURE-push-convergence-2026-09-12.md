@@ -38,6 +38,17 @@ recycled pid for its own. Nothing that computes a figure here changed: `Measure-
 the UNKNOWN handling, `Read-TcPushRows` and the file's location are byte-for-byte as they were, and a row written
 before the field existed is read exactly as before.
 
+Re-read at harness blob 571be8393ecc7861cbb0eb857a5abcfabbe390db (ops/probe-push-convergence.ps1): every number below
+still reads as measured. W0.3 of `design/PLAN-push-derived-conflicts-2026-09-23.md` added three modes, `-Cost`,
+`-History` and `-Due`, beside the convergence report this document ran, and changed none of the code that produced a
+figure here: of the 13 lines it removed, 8 are header text (the title, the run line, the exit codes, the not-a-gate
+paragraph) and 5 are self-test lines (two report calls now wrapped to capture their output, their two assertions, and
+the verdict line). Checked by the landing stage on 2026-09-23 rather than taken
+from the build: the report with no switch, run from the old blob 651dbcf3a and from this one over ONE frozen copy of the
+push ledger, the 298 retained pre-push logs and the reflog, printed identical output at `-Days 1` and at `-Days 14` (22
+lines each, 0 differing, compared case-sensitively), and the harness's self-test now pins that as a CLEAN TWIN. What
+`-Cost` prints is a new measurement with its own N and window, and revises nothing here.
+
 ## What the push path actually did today
 
 Three commits changed it, all before this brief was written:
