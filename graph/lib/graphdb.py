@@ -12,6 +12,10 @@ Design rules this module enforces (from the implementation plan):
   `rebuild.py` reconstructs the DB from it. Truth lives in the JSON.
 * **No implicit clock.** Timestamps are passed in. A replayed run reproduces
   byte-identical ids and rows.
+* **The learning mirror is joined, never overwritten.** `export_learning()`
+  first takes from the tracked JSON what its decision evidence proves another
+  checkout decided (`learning_reconcile.py`), so a verdict committed from any
+  checkout survives this one's next export.
 """
 
 from __future__ import annotations
@@ -58,6 +62,10 @@ def write_json(path: str, obj: Any) -> None:
         fh.write("\n")
 
 
+def _same_dir(a: str, b: str) -> bool:
+    return os.path.normcase(os.path.abspath(a)) == os.path.normcase(os.path.abspath(b))
+
+
 def analyze_full(conn: sqlite3.Connection) -> dict:
     """One FULL `ANALYZE` (analysis_limit=0), for the end of the nightly import (backlog I212).
 
@@ -91,6 +99,7 @@ class GraphDB:
         path = path or DB_PATH
         self.path = path
         self.restore_skipped: dict[str, int] = {}
+        self.last_reconcile: dict = {}          # the counts of the last export's reconcile (learning_reconcile.py)
         # A MISSING DATABASE IS REFUSED UNLESS THE CALLER SAYS IT MAY BE CREATED (2026-09-18, backlog
         # I229). sqlite3.connect() creates any path it is handed, so every open_db() script used to
         # build a fresh, empty graph.db wherever it ran - a worktree has none - restore the learning
@@ -521,9 +530,28 @@ class GraphDB:
         ("question_verdicts", "state/question-verdicts.json"),
     )
 
+    # EVERY EXPORT RECONCILES FIRST (2026-09-23, design/PLAN-graph-learning-reconcile-2026-09-23.md). This used to
+    # write the database over the tracked JSON unconditionally, so a verdict committed from another checkout - which
+    # is where W6.4 says graph ingest must run - was reverted by the main checkout's next export (69 of 69 of Brad's
+    # 2026-09-12 rulings on a stand-in). learning_reconcile.reconcile() now joins the tracked rows in first, taking
+    # only what their decision evidence proves is further along and deleting nothing; see its header for the rule
+    # per table. It is here, not at the eight call sites, so no export can skip it. It reads every tracked file
+    # before writing anything and raises LearningMirrorUnreadable over one it cannot parse, so conflict markers are
+    # never exported over. With nothing to adopt it writes nothing, and the export is byte-identical to before.
     def export_learning(self, out_dir: str | None = None) -> dict[str, int]:
-        """Write learning records to tracked JSON. Called after every write."""
+        """Reconcile the tracked learning JSON into the database, then write it back. Called after every write."""
         out_dir = out_dir or GRAPH_DIR
+        from learning_reconcile import reconcile, noteworthy      # noqa: PLC0415 - lazy: graph/lib is on the path
+        self.last_reconcile = reconcile(self.conn, {t: os.path.join(out_dir, f) for t, f in self.LEARNING_TABLES})
+        if noteworthy(self.last_reconcile) and _same_dir(out_dir, GRAPH_DIR):
+            # The live mirror only: a scratch export (a fixture, a probe over a copy) must never append to the
+            # tracked provenance trail, which log_event writes under GRAPH_DIR whatever out_dir says.
+            import time                                           # noqa: PLC0415
+            ts = time.strftime("%Y-%m-%dT%H:%M:%S")
+            self.log_event(run=f"run:learning-reconcile:{time.strftime('%Y%m%dT%H%M%S')}", timestamp=ts,
+                           etype="learning_reconcile", decision="reconcile_tracked_learning",
+                           detail={k: v for k, v in self.last_reconcile.items()})
+            self.conn.commit()
         written = {}
         for table, fname in self.LEARNING_TABLES:
             rows = [dict(r) for r in self.conn.execute(
