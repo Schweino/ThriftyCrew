@@ -39,6 +39,10 @@ try {
   $capRunPath = Join-Path $PSScriptRoot 'capture-run.ps1'
   if (-not (Test-Path $capRunPath)) { Write-Output ('BLIND: capture-run.ps1 not found beside this fixture (' + $capRunPath + ') - nothing was proven'); exit 3 }
   $src = [IO.File]::ReadAllText($capRunPath)
+# EVERY FAILED LANE GOES THROUGH Add-FailedLane SINCE 2026-09-22 (plan-2026-09-22-10 item 2026-09-22-7c932a), so the
+# block calls it: lift the SHIPPED function out of the same source, never a stub. It appends to the CALLER's $failed.
+$crLaneAst = [System.Management.Automation.Language.Parser]::ParseInput($src, [ref]$null, [ref]$null)
+foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management.Automation.Language.FunctionDefinitionAst] -and @('Add-FailedLane', 'Set-FailedLanePaged') -contains $a.Name }, $true))) { . ([scriptblock]::Create($crLaneFn.Extent.Text)) }
   $i = $src.IndexOf('  $newDirs = @()')
   $j = $src.IndexOf('  & git -C $repo diff --cached --quiet', $i)
   if ($i -lt 0 -or $j -lt 0) { Write-Output 'BLIND: could not find the gate markers in capture-run.ps1 - nothing was proven'; exit 3 }

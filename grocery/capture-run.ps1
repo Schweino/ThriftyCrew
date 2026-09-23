@@ -124,7 +124,13 @@ $script:StatusFile = Join-Path (Join-Path $OutDir 'logs') 'capture-run-status.js
 # failed_lanes rides beside exit_code in capture-run-status.json; a record without it pages exactly as before.
 $script:FailedLaneRecs = @()
 function Add-FailedLane([string]$Name, [string]$PagedSubject = '') {
-  $script:failed += $Name
+  # The CALLER's failed-lane list (scope 1), exactly the variable the old bare append wrote: in this script that is the
+  # script scope, and test-commit-size-gate runs the cut block inside a function whose own list it asserts on.
+  # Assign, then wrap: Get-Variable -ValueOnly hands an array back as ONE object, so wrapping the call nests it.
+  $flRaw = $null
+  try { $flRaw = Get-Variable -Name failed -Scope 1 -ValueOnly -ErrorAction Stop } catch { $flRaw = $null }
+  $flCur = @(); if ($null -ne $flRaw) { $flCur = @($flRaw) }
+  Set-Variable -Name failed -Scope 1 -Value ($flCur + $Name)
   $script:FailedLaneRecs += ,([pscustomobject]@{ lane = $Name; paged = $PagedSubject })
 }
 function Set-FailedLanePaged([string]$Name, [string]$Subject, $SendRc) {

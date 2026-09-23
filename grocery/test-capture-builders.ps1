@@ -36,6 +36,10 @@ $src = Get-Content (Join-Path $root 'capture-run.ps1') -Raw
 # while the block it guards was byte-for-byte unchanged. Fold to LF, and locate by NAMED markers
 # that encode neither a line ending nor a brace-nesting depth.
 $src = $src -replace "`r`n", "`n"
+# EVERY FAILED LANE GOES THROUGH Add-FailedLane SINCE 2026-09-22 (plan-2026-09-22-10 item 2026-09-22-7c932a), so the
+# block calls it: lift the SHIPPED function out of the same source, never a stub. It appends to the CALLER's $failed.
+$crLaneAst = [System.Management.Automation.Language.Parser]::ParseInput($src, [ref]$null, [ref]$null)
+foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management.Automation.Language.FunctionDefinitionAst] -and @('Add-FailedLane', 'Set-FailedLanePaged') -contains $a.Name }, $true))) { . ([scriptblock]::Create($crLaneFn.Extent.Text)) }
 $startMark = '# >>> BUILDER-BLOCK >>>'
 $endMark   = '# <<< BUILDER-BLOCK <<<'
 $i = $src.IndexOf($startMark)
