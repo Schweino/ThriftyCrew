@@ -53,6 +53,18 @@
   dot-sourcing runs a param() block in the CALLER's scope, so a param([switch]$SelfTest) here would
   reset every caller's own -SelfTest to $false on the line after it bound.
 #>
+# USE WHEN: a detector keeps a high-water mark that may only fall, compares today's named sites with its baseline's, or must tell a static scan that read nothing from a clean one
+# REPLACES: if\s*\(\s*\$\w+\s+-lt\s+\$\w+\s*\)\s*\{(?![^}]*Test-RatchetMove)[^}]*\b(?:Set-Content|Out-File|WriteAllText|Write-TcLfFile)\b ;; (?:Where-Object|\?)\s*\{\s*\$\w*(?:[Bb]ase|[Kk]nown)\w*\s+-notcontains\s+\$_\b
+# REPLACES-FIRE: if ($count -lt $base) { $doc.sites = $count; $doc | ConvertTo-Json | Set-Content $blPath }
+# REPLACES-FIRE: if ($n -lt $baseline) { [IO.File]::WriteAllText($bl, ($n | ConvertTo-Json)) }
+# REPLACES-FIRE: $new = @($keys | Where-Object { $baseKeys -notcontains $_ })
+# REPLACES-FIRE: $fresh = @($names | ? { $knownNames -notcontains $_ })
+# REPLACES-SILENT: if ($count -lt $base) { $move = Test-RatchetMove -Name 'x' -Count $count -Baseline $base; if ($move.Verdict -eq 'tightened') { $null = Write-TcLfFile -Path $bl -Text $t } }
+# REPLACES-SILENT: if ($count -lt $base) { foreach ($k in @($cmp.Gone)) { Write-Output ('  gone  ' + $k) } }
+# REPLACES-SILENT: $cmp = Compare-TcRatchetSites -Current $keys -Baseline $baseKeys
+# REPLACES-SILENT: if ($base -notcontains $cl) { $base += $cl }
+# REPLACES-SILENT: $extra = @($names | Where-Object { $allow -notcontains $_ })
+# ENFORCED BY: ops/audit-one-way-actuators.ps1 (none)
 $__ratchetSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 function Test-RatchetMove {
