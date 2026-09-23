@@ -5,7 +5,15 @@
   "board_week": "comparison-2026-09-22 (built 08:13:10; triage-due BOARD line, 590 min before this plan). A partial run rewrote soundness-report.json, semantic-findings.json and ff-carry-report.json at 13:26, AFTER that build; each item names the file it read. No item here changes a price, a band or a matching rule in the daily chain.",
   "parent_plan": "grocery/triage-plans/coverage-census-2026-09-22.json (126 types, per-type class) and design/RCA-holistic-2026-09-22.md F1 to F5",
   "depends_on": "Batch 2 (plan-2026-09-22-5.json in worktree agent-a8dca88c6b2cde9e4, head 814825a84, NOT an ancestor of origin/main 1b03efe4f at 18:40): publish 2 here waits for it (its dca1a1 edit to build-sams-deals, its 85c3b7 edit to the Walmart builder, its 6b17b1 derived bands that clear de4f72). Plan-9 (plan-2026-09-22-9.json): item 2026-09-22-2dae07's root fix extends plan-9 item 2026-09-21-b96f21 and waits for plan-9 publish 3; plan-9 also flips eight digest resolvers in grocery/alert-registry.json, the file publish 1 here edits, so rebase on it. Batch 4 (ops/rehearse-chain.ps1, landed 2026-09-22): every chain-script change here is rehearsed before it pushes. Batch 3 (articles and recipes): no dependency.",
-  "queue_ids_seen": ["2026-09-22-2dae07", "2026-09-20-cb8f30", "2026-09-22-7c932a", "2026-09-21-de4f72", "2026-09-22-20fecf", "2026-09-20-bec597", "2026-09-21-274e4b"],
+  "queue_ids_seen": [
+    "2026-09-22-2dae07",
+    "2026-09-20-cb8f30",
+    "2026-09-22-7c932a",
+    "2026-09-21-de4f72",
+    "2026-09-22-20fecf",
+    "2026-09-20-bec597",
+    "2026-09-21-274e4b"
+  ],
   "queue_scope_note": "Scoped plan, not a daily triage. The other open ids triage-due printed are owned elsewhere: a2af45, ceab00, 81d955, 43e8c0, 6b17b1, d16398, 85c3b7, dca1a1 by batch 2 (plan-2026-09-22-5); b96f21, c9f0f3, 7d64a6, 115180 by plan-9; dc1b5b, 149497, a0c785, 4b973e, 8491bf by the weekly lane (8491bf is ruling Q4). This plan carries the 7 ids whose alert types the census found with no owner, plus discovered items for the types with no open id (ff-catalog, ff-carry, the capture-file prefix, the 16 archived residuals and the scoreboard).",
   "routing_artifact": null,
   "routing_artifact_note": "No item edits a matching rule. Item 2dae07 feeds contested arrivals into plan-9's worklist lane, whose rule changes are measured by apply-coverage-batch's own routing and cell gates when each weekly batch runs; the routing recorded here is the audit's own first-match chain for the 3 arrivals (soundness-report.json 13:26). Measurements were taken with two scratch harnesses in this session's scratchpad: class_return.py (the return-rate arms; positive control 126 of 383 reproduced) and shape_new.py (first-seen reject reasons; positive control Sam's 2026-09-21 fires). The scoreboard item commits its harness as part of audit-alert-census, and the ingest item commits its as audit-ingest-shape -SelfTest.",
@@ -35,7 +43,8 @@
     "reading": "moved +12.2 points over 328 non-residual alerts with no change in the estate; one variant per adjustment, all arms paired on one corpus. It corrects the measurement, it is not a regression, and it is the baseline the next 14 days are compared against. Going forward the class key matters more than today: every future split, rename or per-cell subject scores its first fire as a possible return instead of a new type.",
     "harness": "class_return.py in this session's scratchpad (not committed); the root fix commits the rule into triage-return-lib and audit-alert-census and writes one row per (date, class) to out/alert-census-class.jsonl"
   },
-  "items": [    {
+  "items": [
+    {
       "queue_id": "2026-09-22-2dae07",
       "subject": "Contested arrivals (matching soundness NEW CONTESTED) join plan-9's matching worklist lane; only an undecided arrival is queued, and an undecided one that holds a crown pages as itself",
       "classification": "infra",
@@ -50,12 +59,20 @@
       "root_cause": "F5: an arrival review whose only resolver is a person running a whole-state -Accept. A contested name asks exactly the question plan-9's worklist lane asks (does this product belong to this commodity?), but it comes from a fourth detector that lane does not read, and the audit keeps no per-name record of a decision, so the only way to quiet one arrival is to bless everything.",
       "surface_fix": {
         "what": "clear today's 3 arrivals the way plan-2 verified them",
-        "files": ["grocery/out/audit/match-baseline.json"],
+        "files": [
+          "grocery/out/audit/match-baseline.json"
+        ],
         "exact_change": "re-run audit-match-soundness.ps1 against the current board; ONLY if it reports MOVED=0 DROPPED=0 and no new name beyond these 3, run -Accept and commit grocery/out/audit/match-baseline.json with a pathspec commit. If MOVED or DROPPED is non-zero, do not accept (an accept over an unreviewed rule change is the rubber stamp the script header warns about) and leave the arrivals to the lane."
       },
       "root_fix": {
         "what": "contested arrivals become a fourth input to plan-9's match worklist; the lane records a per-name verdict in match-verdicts.json, the audit treats a decided name as reviewed, and only an undecided arrival is queued (weekly, on its first day), except one that holds a crown, which pages as its own condition",
-        "files": ["grocery/match-worklist-lib.ps1 (plan-9, new)", "grocery/resolve-match-worklist.ps1 (plan-9, new)", "grocery/audit-match-soundness.ps1", "grocery/alert-registry.json", "grocery/test-match-worklist.ps1 (plan-9, new)"],
+        "files": [
+          "grocery/match-worklist-lib.ps1 (plan-9, new)",
+          "grocery/resolve-match-worklist.ps1 (plan-9, new)",
+          "grocery/audit-match-soundness.ps1",
+          "grocery/alert-registry.json",
+          "grocery/test-match-worklist.ps1 (plan-9, new)"
+        ],
         "exact_change": "(1) match-worklist-lib Read-MatchFindings gains kind 'contested': one row per name in soundness-report.json new_contested, key contested|<winner>|<name>, evidence = chain, form flag, engine verdict, cell, crown. (2) resolve-match-worklist classifies a contested row with the two-signal rule it uses for its other kinds (sidecar identity score AND head-noun check must agree): confirm (the winner is the product's food; written to match-verdicts.json), release (a later chain member is the food; apply-coverage-batch -FromWorklist derives the release exclude on the winner), release-to-none (FORM: no chain member is the food, e.g. a vegetable tray; release on the winner, admitted nowhere), ad-line, or undecided. (3) audit-match-soundness.ps1: one new function Test-ContestedReviewed reads baseline.contested UNION match-verdicts.json rows of kind contested with verdict confirm, and new_contested excludes a reviewed name; the lane never runs -Accept. (4) Get-SoundnessConditions: an undecided contested name that holds a CROWN is labelled 'CONTESTED CROWN' (new registry entry match-soundness-contested-crown: page, condition '4 live-cell-moved-unexplained', resolver lane:grocery/resolve-match-worklist.ps1, lineage_parent match-soundness); every other undecided arrival keeps 'NEW CONTESTED' and is sent -Lane weekly only on its first_seen day. (5) alert-registry.json: match-soundness-new-contested resolver digest -> lane:grocery/resolve-match-worklist.ps1, same commit. (6) a release applied by apply-coverage-batch stages the -Accept'ed baseline with the rule change, as ops/verify-commodities-gate.ps1 requires; if plan-9's -FromWorklist does not already stage it, this item adds that. ACCEPTANCE BAR, written before the classifier sees a contested row: over the 77 frozen September arrival names, labelled by the developer from each chain and product, 0 wrong confirms among the decided, with decided-of-77 printed beside it. Below the bar the contested kind ships docket-only, as plan-9 allows for its own kinds."
       },
       "leaves_open": "(1) arrivals the classifier leaves undecided still reach a person, through the weekly docket instead of a daily item; the undecided share is unmeasured until the 77 names are labelled and run. (2) MOVED/DROPPED lines (authored rule edits) keep -Accept as their resolver by design: the author reviews them and the push gate (2660cd919) binds the accept to the rule commit. (3) 'reviewed contested' stays in two records (baseline.contested and the ledger) read through one function; merging them is a data migration not done here",
@@ -65,7 +82,11 @@
         "measured_as": "routing",
         "measured_by": "the audit's own first-match chain for each arrival in out/audit/soundness-report.json 13:26 (winner and every other admitting commodity), each winner's cell looked up on comparison-2026-09-22 (none held), and NEW-CONTESTED lines counted in grocery/ad-cycle-log.txt (77 distinct names)",
         "affected_now": 3,
-        "names": ["Fresh Cut In Store Carrot & Cucumber Ranch (carrots > cucumbers, refused OUT-OF-BAND, no cell)", "Simple Truth Organic No Salt Added Whole Kernel Super Sweet Corn (canned-corn > frozen-corn, no cell)", "Simple Truth Organic Whole Kernel Super Sweet Corn (canned-corn > frozen-corn, no cell)"],
+        "names": [
+          "Fresh Cut In Store Carrot & Cucumber Ranch (carrots > cucumbers, refused OUT-OF-BAND, no cell)",
+          "Simple Truth Organic No Salt Added Whole Kernel Super Sweet Corn (canned-corn > frozen-corn, no cell)",
+          "Simple Truth Organic Whole Kernel Super Sweet Corn (canned-corn > frozen-corn, no cell)"
+        ],
         "risk": "the lane edits no rule in the daily chain; a release moves routing only inside apply-coverage-batch's gate, one batch a week, with that gate's own routing and cell measurement. The decisive risk is a wrong CONFIRM, which would silence a real misroute for good (the ledger never re-asks): hence the written bar, and the crown page, which keeps any contested name holding a crown in front of a person until decided.",
         "cell_effects": []
       },
@@ -74,15 +95,24 @@
         "guard_or_fixture": "grocery/test-match-worklist.ps1 (plan-9's suite, one more kind) and grocery/audit-match-soundness.ps1 -SelfTest",
         "must_fire_case": "MUST FIRE: the frozen 09-07 BELVITA biscuit bar row (a NEW contested name holding a CROWN at Fareway, 0.796/each, already a fixture in audit-match-soundness's self-test) raises 'CONTESTED CROWN' and is never classified confirm. MUST FIRE: an undecided contested name first seen today is sent exactly once, -Lane weekly.",
         "clean_twin": "CLEAN TWIN: 'Simple Truth Organic Whole Kernel Super Sweet Corn' (canned-corn > frozen-corn, 15 oz) is confirm, lands in match-verdicts.json, and the NEXT run's new_contested no longer lists it while baseline.contested is byte-identical. MUST NOT FIRE: a name already in baseline.contested stays silent (the existing case). MUST NOT FIRE: the [FORM] vegetable tray is never confirm.",
-        "commands": ["powershell -File grocery/test-match-worklist.ps1", "powershell -File grocery/audit-match-soundness.ps1 -SelfTest", "powershell -File grocery/audit-alert-registry.ps1"]
+        "commands": [
+          "powershell -File grocery/test-match-worklist.ps1",
+          "powershell -File grocery/audit-match-soundness.ps1 -SelfTest",
+          "powershell -File grocery/audit-alert-registry.ps1"
+        ]
       },
       "rollback": "revert the audit-match-soundness and registry hunks and the contested reader in match-worklist-lib; delete the contested rows from match-verdicts.json. No rule and no board cell is touched by this item.",
-      "do_not_touch": ["-Accept's whole-state semantics for MOVED/DROPPED", "ops/verify-commodities-gate.ps1's baseline binding", "plan-9's rule that the lane edits no rule in the daily chain"],
+      "do_not_touch": [
+        "-Accept's whole-state semantics for MOVED/DROPPED",
+        "ops/verify-commodities-gate.ps1's baseline binding",
+        "plan-9's rule that the lane edits no rule in the daily chain"
+      ],
       "resolution_note": "Contested arrivals now reach the matching worklist lane: each is decided per name into match-verdicts.json, only an undecided arrival is queued (weekly, on its first day), and one that holds a crown pages as CONTESTED CROWN. Today's 3 were verified (the corn is a 15 oz can, the tray is refused) and accepted at MOVED=0 DROPPED=0.",
       "publish_batch": 3,
       "depends_on": "plan-2026-09-22-9 item 2026-09-21-b96f21 on origin/main (plan-9 publish 3, which itself waits for batch 2). The surface accept rides publish 1.",
       "status": "planned"
-    },    {
+    },
+    {
       "queue_id": "discovered:ff-alerts-lanes-2026-09-22",
       "subject": "Family Fare's two alert families: ff-carry pages only when its lane failed, and 'the sweep is not buying' is left to the watchdog's MISSING-WINDOW, which pages the same condition and runs the make-up window",
       "classification": "infra",
@@ -96,7 +126,11 @@
       "root_cause": "F5 and F1 for alerts: both detectors page the SYMPTOM their own lane is already repairing. 'The sweep is not buying' repeats the watchdog's MISSING-WINDOW, whose make-up window is its resolver; ff-carry pages a fresh victim that victim-first promotion prices in the next window. Neither is keyed on the one thing a person could act on: the owning lane FAILED.",
       "root_fix": {
         "what": "each alert fires only on its lane's failure, and the registry names the lane",
-        "files": ["grocery/audit-ff-carry.ps1", "grocery/pull-regular-familyfare.ps1", "grocery/alert-registry.json"],
+        "files": [
+          "grocery/audit-ff-carry.ps1",
+          "grocery/pull-regular-familyfare.ps1",
+          "grocery/alert-registry.json"
+        ],
         "exact_change": "(1) audit-ff-carry.ps1: the -Alert signature moves from the fresh victims to FAILED victims: a victim whose first_seen is at least two landed Family Fare windows old (counted from the cursor log the watchdog already reads for MISSING-WINDOW) and whose commodity is still unpriced, i.e. promotion ran and did not price it. A fresh victim is still written to ff-carry-report.json (so promotion still reads it) and is logged, never paged. Subject 'Grocery: Family Fare victim-first promotion failed - review'; new registry entry ff-carry-promotion-failed, review, resolver lane:grocery/triage-due.ps1, lineage_parent ff-carry. (2) ff-carry resolver digest -> lane:grocery/pull-regular-familyfare.ps1. (3) pull-regular-familyfare.ps1: 'sweep is not buying' is no longer passed to Send-AlertConditions; it stays in the run log and the catalog report. Registry ff-catalog-sweep-is-not-buying resolver digest -> lane:grocery/capture-watchdog.ps1, with a note that MISSING-WINDOW owns the condition. (4) the other three successors (starved terms aging out, mass expiry in one run, merged catalog shrank) keep digest: 0 fires in 30 days, so a watch owns them, not a lane. The 'two landed windows' bar is a first plausible value, not the survivor of a sweep."
       },
       "leaves_open": "a victim Freshop will not return to any search (a starved term) cannot be priced by promotion either; it ages out at the 14-day horizon and its cell carries under the quarter rule, and after this change it pages once as a failed promotion. Occurrences: 1 (pie-pumpkins, found 2026-09-10 and erased before any pull read it, the case 45d65a81e fixed)",
@@ -105,7 +139,11 @@
         "measured_as": "alert-days",
         "measured_by": "census rows for the ff types over 2026-08-24..2026-09-22 (alert-census.jsonl scratch re-run, 383 alerts) and the MISSING-WINDOW start date (10f5856bf, 2026-09-01)",
         "affected_now": 0,
-        "names": ["ff-catalog 'sweep is not buying': 10 of 11 parent fire-days would not have been raised by this emitter; since 09-01 each dead window pages once as MISSING-WINDOW", "ff-carry: 8 fire-days; how many of their victims the next window priced is unmeasured (the report keeps only the current run), so after the change only an unpriced-after-promotion victim pages", "0 cells, 0 prices, 0 matching rules"],
+        "names": [
+          "ff-catalog 'sweep is not buying': 10 of 11 parent fire-days would not have been raised by this emitter; since 09-01 each dead window pages once as MISSING-WINDOW",
+          "ff-carry: 8 fire-days; how many of their victims the next window priced is unmeasured (the report keeps only the current run), so after the change only an unpriced-after-promotion victim pages",
+          "0 cells, 0 prices, 0 matching rules"
+        ],
         "risk": "a dropped 'sweep is not buying' page matters only if MISSING-WINDOW is blind; it carries its own MUST-FIRE in capture-watchdog's self-test ('FF cadence MUST-FIRE: one window a day against three configured ... pages MISSING-WINDOW')",
         "cell_effects": []
       },
@@ -114,12 +152,22 @@
         "guard_or_fixture": "grocery/audit-ff-carry.ps1 -SelfTest and grocery/pull-regular-familyfare.ps1 -SelfTest",
         "must_fire_case": "MUST FIRE: the frozen pie-pumpkins victim (first_seen 2026-09-10, already in audit-ff-carry's carry fixture) with two landed windows since and still no priced pie-pumpkins row raises the promotion-failed condition.",
         "clean_twin": "CLEAN TWIN: the same victim first seen today raises nothing AND is still written to ff-carry-report.json as a victim, so promotion reads it. MUST NOT FIRE: the parsnips victim priced by the next pull is dropped silently. MUST NOT FIRE: a catalog check whose only reason is 'the sweep is not buying' sends no condition, while capture-watchdog's FF cadence MUST-FIRE still pages MISSING-WINDOW.",
-        "commands": ["powershell -File grocery/audit-ff-carry.ps1 -SelfTest", "powershell -File grocery/pull-regular-familyfare.ps1 -SelfTest", "powershell -File grocery/capture-watchdog.ps1 -SelfTest", "powershell -File grocery/audit-alert-registry.ps1"]
+        "commands": [
+          "powershell -File grocery/audit-ff-carry.ps1 -SelfTest",
+          "powershell -File grocery/pull-regular-familyfare.ps1 -SelfTest",
+          "powershell -File grocery/capture-watchdog.ps1 -SelfTest",
+          "powershell -File grocery/audit-alert-registry.ps1"
+        ]
       },
       "rollback": "revert the three hunks; ff-carry-report.json keeps its format (only the alert signature moves)",
       "resolution_note": "ff-carry now pages only when victim-first promotion failed to price a victim (its lane since 09-07), and 'the sweep is not buying' is left to the watchdog's MISSING-WINDOW, which pages the same condition and runs the make-up window. The registry names both lanes.",
       "publish_batch": 1,
-      "status": "planned"
+      "status": "done",
+      "premise_verified": "Yes: pull-regular-familyfare raised 'sweep is not buying' through Send-AlertConditions and capture-watchdog pages MISSING-WINDOW for the same cadence; audit-ff-carry paged fresh victims although victim-first promotion already reads ff-carry-report.json.",
+      "deviation": "Windows are counted strictly after the first-seen day, because first_seen is a date with no time, so a victim found on day D needs two landed windows from D+1: conservative toward not paging. The -Alert signature needle in the self-test moved from the fresh set to the failed set, as the root fix says.",
+      "shipped_commit": "branch worktree-agent-a93e94038dd9f368c, commit \"Plan 2026-09-22-10 publish 1 (d) ff-alerts-lanes + F1 \"Email first miss\": each alert fires on its lane's failure\" (not pushed; ops/push-main.ps1 rebases it, so the pusher writes the landed hash here)",
+      "leaves_open_followup": "2026-09-22-781758",
+      "leaves_open_owner_note": "minted 2026-09-22 with send-alert.ps1 -Force -Lane weekly under 'Triage residual: a starved Family Fare term defeats victim-first promotion (residual of discovered:ff-alerts-lanes-2026-09-22)', because it has happened once (pie-pumpkins)"
     },
     {
       "queue_id": "discovered:unregistered-capture-prefix-2026-09-22",
@@ -132,7 +180,8 @@
       "root_cause": "a lane (the Recipe Hunter promotion) wrote a new out/regular prefix without registering it; the data half closed when the prefix was registered",
       "resolution_note": "Closed with evidence: registered 2026-08-30 (037ef56b6), 0 findings today over 295 scanned, 0 fires since 08-26. A new unregistered prefix pages through audit-store-registry's own condition (watch:grocery/audit-store-registry.ps1).",
       "status": "planned"
-    },    {
+    },
+    {
       "queue_id": "2026-09-20-cb8f30",
       "subject": "An alert must name a registered type: no default subject, the weekly lane is resolved like every other alert, and a call site with no -Subject fails the push",
       "classification": "infra",
@@ -147,21 +196,31 @@
       "root_cause": "the sender accepts an alert that names no registered type in two ways - a default subject that matches no entry, and a weekly-lane short-circuit that skips type resolution - and the push-time source audit reads a missing -Subject as 'cannot read' rather than as 'will send under no registered type', so nothing refuses the class at push either. Because the queue's type key is derived from the subject, every such alert is a one-shot type, or, under the default, two unrelated items become one type.",
       "surface_fix": {
         "what": "give the two default-subject items owners that are real types",
-        "files": ["grocery/triage-queue.json (through triage-close.ps1, never a hand edit)"],
+        "files": [
+          "grocery/triage-queue.json (through triage-close.ps1, never a hand edit)"
+        ],
         "exact_change": "close cb8f30 on batch 2's deviation note (premise false; its 312-row residual is batch 2's); 1139c4 folds into 2026-09-21-85c3b7 (see discovered:archived-open-residuals-2026-09-22)"
       },
       "root_fix": {
         "what": "no default subject; a weekly-lane alert is resolved and stamped like any other; a send-alert call with no -Subject is a push-time finding; and, on Brad's ruling, an agent's unregistered mint is refused at the sender",
-        "files": ["grocery/send-alert.ps1", "grocery/alert-registry-lib.ps1", "grocery/audit-alert-registry.ps1"],
+        "files": [
+          "grocery/send-alert.ps1",
+          "grocery/alert-registry-lib.ps1",
+          "grocery/audit-alert-registry.ps1"
+        ],
         "exact_change": "(1) send-alert.ps1: $Subject defaults to ''. An empty subject never becomes a type of its own: it is queued and paged as 'UNREGISTERED ALERT TYPE: (no subject) from <emitter>' with the emitter's path in the type key, so two callers can never share a key; nothing is dropped (ruling 1). (2) alert-registry-lib.ps1 Get-AlertDelivery: resolve the type FIRST; -Lane weekly then sets class review and mail off exactly as today, but an unregistered weekly type is stamped unregistered=true on its queue item and logged, the same record a pipeline alert gets. (3) audit-alert-registry.ps1 Get-AlertCallSites: a send-alert call with no -Subject argument is a finding 'no subject: would send under no registered type', not an unreadable site; run-gates already runs this half on every push, and the count today is 0, so it is a gate at zero, not a ratchet. (4) ONLY ON RULING A of Q-sender-refuses-unregistered: an unregistered or empty subject sent with -Lane weekly or -Escalates (an agent's mint, never a pipeline emitter) is REFUSED before any write: exit 2, 'SEND-ALERT-REFUSED unregistered-type <key>: mint it as Triage residual: <what> or Triage finding: <what>', so the agent re-sends in the same turn; validate-triage-plan -Closing already refuses a residual owner that is not a queue id, which is the backstop. Pipeline emitters keep ruling 1 unchanged: never dropped, paged with the marker."
       },
-      "leaves_open": "(a) a pipeline subject built from something the source half cannot follow (listed UNREADABLE today) can still reach send-alert unregistered; it is paged with the UNREGISTERED marker, never dropped. (b) until Brad rules, an agent's unregistered weekly mint is stamped, not refused. Occurrences: 34 unregistered weekly mints over 2026-09-11..2026-09-22 (class b); 0 measured for class a",
-      "leaves_open_occurrences": 34,
+      "leaves_open": "(a) a pipeline subject built from something the source half cannot follow (4 UNREADABLE call sites today) can still reach send-alert unregistered; it is paged with the UNREGISTERED marker, never dropped. Occurrences: 0 measured. (b) is closed by the ruling: an agent's unregistered mint is refused.",
+      "leaves_open_occurrences": 0,
       "blast_radius": {
         "measured_as": "callers",
         "measured_by": "every Send-Alert / send-alert.ps1 line in grocery, ops, lib, meal-prep/pipeline, meal-prep/engine and graph/pipeline without -Subject (0 production sites), and every weekly-lane item in triage-queue.json plus out/archive/triage-queue.archived-*.json resolved through the registry's own match modes (54 items, 34 unregistered)",
         "affected_now": 34,
-        "names": ["parts 1-3 change no delivery for any registered alert and none for any pipeline alert", "part 4 (on ruling A) would have refused 34 agent mints in 12 days, each re-sent under a 'Triage residual:' or 'Triage finding:' subject", "2 items typed 'grocery pipeline alert' (1139c4, cb8f30)"],
+        "names": [
+          "parts 1-3 change no delivery for any registered alert and none for any pipeline alert",
+          "part 4 (on ruling A) would have refused 34 agent mints in 12 days, each re-sent under a 'Triage residual:' or 'Triage finding:' subject",
+          "2 items typed 'grocery pipeline alert' (1139c4, cb8f30)"
+        ],
         "risk": "part 4 changes what a triage agent must type; a refused mint an agent ignores leaves its residual ownerless, which validate-triage-plan -Closing refuses. Parts 1-3 cannot lose an alert.",
         "cell_effects": []
       },
@@ -170,12 +229,20 @@
         "guard_or_fixture": "grocery/send-alert.ps1 -SelfTest (its queue routing and alert registry blocks) and grocery/audit-alert-registry.ps1 -SelfTest",
         "must_fire_case": "MUST FIRE: the 1139c4/cb8f30 call shape, send-alert.ps1 -Lane weekly -Force -BodyFile <f> with no -Subject, no longer queues an item typed 'grocery pipeline alert' (today it does). MUST FIRE: a weekly mint with the subject 'Grocery: 198 tile links record a price the board no longer publishes' is stamped unregistered=true (and on ruling A exits 2 with the sandbox queue byte-identical). MUST FIRE: a fixture script calling 'Send-Alert -Body $b' with no -Subject is an audit-alert-registry finding.",
         "clean_twin": "CLEAN TWIN: a weekly mint 'Triage residual: X' queues as review under entry triage-residual with no unregistered stamp. CLEAN TWIN: a pipeline alert with an unregistered non-empty subject still queues AND mails as 'UNREGISTERED ALERT TYPE: ...' (the existing ruling-1 cases at send-alert.ps1:489-493 stay green).",
-        "commands": ["powershell -File grocery/send-alert.ps1 -SelfTest", "powershell -File grocery/audit-alert-registry.ps1 -SelfTest", "powershell -File grocery/audit-alert-registry.ps1"]
+        "commands": [
+          "powershell -File grocery/send-alert.ps1 -SelfTest",
+          "powershell -File grocery/audit-alert-registry.ps1 -SelfTest",
+          "powershell -File grocery/audit-alert-registry.ps1"
+        ]
       },
       "rollback": "revert the three files; no data migration",
       "resolution_note": "Condition closed by batch 2 (premise false). The class it exposed is fixed: send-alert has no default subject, a weekly-lane alert is resolved and stamped unregistered like any other, and a call with no -Subject fails the push. Refusing an agent's unregistered mint at the sender waits on Brad (Q-sender-refuses-unregistered).",
       "publish_batch": 1,
-      "status": "planned"
+      "status": "done",
+      "premise_verified": "Yes: send-alert.ps1 defaulted -Subject to 'Grocery pipeline alert'; Get-AlertDelivery returned for -Lane weekly before resolving; Get-AlertCallSites marked a missing -Subject partial and unreadable. audit-alert-registry after the change: 0 NO SUBJECT sites in production, 0 findings.",
+      "deviation": "Part (4) shipped on Brad's ruling Q-sender-refuses-unregistered, option A (\"Refuse agents only\", 2026-09-22): an agent send (-Lane weekly or -Escalates) whose type is registered nowhere exits 2 SEND-ALERT-REFUSED before any queue write. A registry that cannot be read refuses nothing. The surface fix (closing cb8f30, folding 1139c4) is queue housekeeping and was not done here (dispatch: do not close queue items).",
+      "leaves_open_followup": "watch:grocery/audit-alert-registry.ps1",
+      "shipped_commit": "branch worktree-agent-a93e94038dd9f368c, commit \"Plan 2026-09-22-10 publish 1 (a)+(b): one class-keyed return rule; no default subject; an agent's unregistered alert is refused\" (not pushed; ops/push-main.ps1 rebases it, so the pusher writes the landed hash here)"
     },
     {
       "queue_id": "2026-09-21-de4f72",
@@ -187,7 +254,8 @@
       "root_cause": "one cell's band floor refused a consistent cheaper canola row; owned by 2026-09-21-6b17b1",
       "resolution_note": "Superseded by 2026-09-21-6b17b1 (batch 2, plan-2026-09-22-5). The quarantine is the designed valve and clears on the first build after batch 2 lands. Not the same source as RUN RECORD: a quarantine exits 0 through the chain (see 2026-09-22-7c932a).",
       "status": "planned"
-    },    {
+    },
+    {
       "queue_id": "2026-09-22-7c932a",
       "subject": "RUN RECORD pages only a failed lane that did not page as itself; a quarantine was never one of them",
       "classification": "infra",
@@ -202,7 +270,10 @@
       "root_cause": "F1 for alerts: two emitters for one condition. The watchdog folds its derivative findings (RUN RECORD, NOT PUBLISHED, COMPUTED BUT NOT SHIPPED) under their cause for ONE cause only, a guards hold (Test-HeldByGuards), because capture-run's record carries an exit code and not the lanes behind it; every other failed lane is paged two or three times.",
       "root_fix": {
         "what": "capture-run records each failed lane with the subject it paged; the watchdog folds its derivative findings under lanes that paged as themselves, and pages only the lanes that did not, by name",
-        "files": ["grocery/capture-run.ps1", "grocery/capture-watchdog.ps1"],
+        "files": [
+          "grocery/capture-run.ps1",
+          "grocery/capture-watchdog.ps1"
+        ],
         "exact_change": "(1) capture-run.ps1: every '$failed += <lane>' becomes Add-FailedLane -Name <lane> -PagedSubject <the subject its own Send-Alert sent, or ''>; a subject is recorded only when Send-Alert returned 0, so a page that failed to send counts as no page. $failed is kept as today (FAILED LANES line, exit code) and Write-RunStatus adds failed_lanes: [{lane, paged}] beside exit_code. Paged: commit-refused, push (the 1143 path), served-dirty, pointer-without-object, guards-blocked (paged by check-ad-cycles). Not paged: build-*, build2-*, downstream, downstream-missing, timed-out lane jobs, commit-size-gate, push when the commit step threw. (2) capture-watchdog.ps1, the daily RUN RECORD branch (lines 712-716) and the fold at 1478-1489: when the daily record carries failed_lanes and every lane has a paged subject, the derivative findings fold into one transcript line 'RUN RECORD: exit 1 - every failed lane paged as itself: <lane (subject)>' with NOT PUBLISHED and COMPUTED BUT NOT SHIPPED as sub-lines, and nothing is sent; when some lanes carry no page, RUN RECORD pages as 'RUN RECORD: capture-run [daily] exit 1 - failed lane(s) with no page of their own: <lanes>'. A record with NO failed_lanes field (an older capture-run) pages exactly as today, so a missing field fails toward the page. The 07:00 ad run is unchanged."
       },
       "leaves_open": "nothing inside capture-run's lanes. Outside this root cause's scope, the census names two more two-emitter pairs (board-prices-aging beside ad-window-no-capture; cross-store-integrity beside db-constraint-refused), not measured here",
@@ -211,7 +282,12 @@
         "measured_as": "alert-days",
         "measured_by": "FAILED LANES lines in all 28 grocery/out/logs/capture-run-daily-*.log (2026-08-24..2026-09-22) against the Send-Alert call beside each '$failed +=' site in capture-run.ps1",
         "affected_now": 1,
-        "names": ["4 RUN RECORD double pages in 28 days would have folded (09-09, 09-19, 09-20, 09-22)", "2 would still page, now naming the lane (08-24 commit-size-gate, 09-12 build-samsclub)", "09-22's COMPUTED BUT NOT SHIPPED would have been a sub-line of the commit-refused fold", "the 14 guards-blocked days are unchanged (already folded)"],
+        "names": [
+          "4 RUN RECORD double pages in 28 days would have folded (09-09, 09-19, 09-20, 09-22)",
+          "2 would still page, now naming the lane (08-24 commit-size-gate, 09-12 build-samsclub)",
+          "09-22's COMPUTED BUT NOT SHIPPED would have been a sub-line of the commit-refused fold",
+          "the 14 guards-blocked days are unchanged (already folded)"
+        ],
         "risk": "a lane that pages as itself but whose page did not send would be folded silently; recording the subject only when Send-Alert returned 0 closes that. An older status record without failed_lanes pages as today.",
         "cell_effects": []
       },
@@ -220,13 +296,21 @@
         "guard_or_fixture": "grocery/capture-watchdog.ps1 -SelfTest (beside its Merge-HeldFindings 4 -> 1 fold cases), plus a case in grocery/test-auditors.ps1 if capture-run has no self-test that can reach Add-FailedLane",
         "must_fire_case": "MUST FIRE: a frozen daily status {exit_code 1, failed_lanes [{lane build-samsclub, paged ''}]} (the 09-12 day) pages RUN RECORD naming build-samsclub.",
         "clean_twin": "MUST NOT FIRE: a frozen status {exit_code 1, failed_lanes [{lane commit-refused, paged 'Daily pipeline commit REFUSED - 2026-09-22'}]} with served files dirty (the 09-22 day) sends no RUN RECORD and no COMPUTED BUT NOT SHIPPED condition, and the transcript carries the folded line. CLEAN TWIN: a status with no failed_lanes field pages RUN RECORD exactly as today, and the guards-hold fold (4 -> 1) is unchanged.",
-        "commands": ["powershell -File grocery/capture-watchdog.ps1 -SelfTest", "powershell -File grocery/test-auditors.ps1", "powershell -File ops/rehearse-chain.ps1"]
+        "commands": [
+          "powershell -File grocery/capture-watchdog.ps1 -SelfTest",
+          "powershell -File grocery/test-auditors.ps1",
+          "powershell -File ops/rehearse-chain.ps1"
+        ]
       },
       "rollback": "revert both files; an older watchdog ignores the extra field and a newer one reads its absence as today's behaviour",
       "resolution_note": "RUN RECORD no longer repeats a page the failing lane already sent: capture-run records each failed lane with the page it sent, and the watchdog folds RUN RECORD, NOT PUBLISHED and COMPUTED BUT NOT SHIPPED under those, paging only a lane with no page of its own, by name. A quarantine never made the chain exit nonzero; today's exit 1 was the refused commit (148d78).",
       "publish_batch": 1,
-      "status": "planned"
-    },    {
+      "status": "done",
+      "premise_verified": "Yes: capture-run-status.json carried exit_code and no lanes; 13 `$failed +=` sites in capture-run.ps1, four of them beside a Send-Alert of their own (commit-refused, push after its rebases, served-dirty, pointer-without-object).",
+      "deviation": "guards-blocked records no page subject (capture-run cannot observe check-ad-cycles' GUARDS FAILED send); the watchdog's existing guards-hold fold still owns those days, and the new fold runs only when no guards hold is live. The producer case lives in capture-watchdog -SelfTest (capture-run has no self-test): it lifts Add-FailedLane and Set-FailedLanePaged out of capture-run by AST and asserts 0 bare `$failed +=` sites. ops/rehearse-chain.ps1 was not run (dispatch: no chain runs); it is owed before the push.",
+      "shipped_commit": "branch worktree-agent-a93e94038dd9f368c, commit \"Plan 2026-09-22-10 publish 1 (c) 2026-09-22-7c932a: RUN RECORD pages only a failed lane that did not page as itself\" (not pushed; ops/push-main.ps1 rebases it, so the pusher writes the landed hash here)"
+    },
+    {
       "queue_id": "2026-09-22-20fecf",
       "subject": "A store rendering first seen this morning is met at ingest: proved by the store's own price arithmetic and kept unattended, or queued with its rows, before the chain prices anything",
       "classification": "infra",
@@ -240,7 +324,17 @@
       "root_cause": "F2's residual: a builder meets a store rendering it has never seen, and its only outputs are a refusal line in a rejects file nobody reads and a smaller board. Nothing compares today's ingest with the store's own recent ingest, and a new unit spelling has no unattended way to be proven and kept, so the first reader of the change is a person, after the board shipped, and the same spelling can be met twice.",
       "root_fix": {
         "what": "every per-row capture builder records its ingest shape; a check at ingest compares it with the store's own 14 days, proves a new unit spelling by the store's own arithmetic and keeps the answer, or queues it with its rows",
-        "files": ["grocery/ingest-shape-lib.ps1 (new)", "grocery/audit-ingest-shape.ps1 (new)", "grocery/unit-aliases.json (new, tracked)", "grocery/build-sams-deals.ps1", "grocery/build-aldi-regular.ps1", "grocery/build-walmart-deals.ps1", "grocery/capture-run.ps1", "lib/bot-paths.ps1", "grocery/alert-registry.json"],
+        "files": [
+          "grocery/ingest-shape-lib.ps1 (new)",
+          "grocery/audit-ingest-shape.ps1 (new)",
+          "grocery/unit-aliases.json (new, tracked)",
+          "grocery/build-sams-deals.ps1",
+          "grocery/build-aldi-regular.ps1",
+          "grocery/build-walmart-deals.ps1",
+          "grocery/capture-run.ps1",
+          "lib/bot-paths.ps1",
+          "grocery/alert-registry.json"
+        ],
         "exact_change": "(1) ingest-shape-lib.ps1: Get-RejectReasonKey (lower case, every number to #, a quoted spelling KEPT, since it is the signal) and Write-IngestShape -Store -Date -RowsIn -RowsOut -Rejects, writing out/ingest-shape/<store>-<date>.json (gitignored): rows in and out, rejects by reason key, unit spellings seen. (2) the three builders call it once per build, after their rejects file, and read unit-aliases.json beside their own unit table. (3) audit-ingest-shape.ps1 runs in capture-run after the builders and BEFORE check-ad-cycles. Per store, a reason key or unit spelling absent from every file of the prior 14 days (at least 3 files, else it reports BLIND for that store and admits nothing) is a finding. For an 'unknown unit' spelling, Resolve-UnitSpelling proposes candidate families from the builder's own unit table after dropping a parenthetical qualifier and a plural s, then PROVES it: for every row carrying the spelling, line price / printed unit price reproduces a size the NAME states in that family within the store's printed-cent rounding (the pu_rounding_pct rule build-sams-deals already carries). Every row proved: the alias is written to unit-aliases.json with the proving rows and the date, and capture-run rebuilds that store before downstream. Any row unproved: nothing is admitted (the Aldi rule, 'resolved by arithmetic proof or not at all') and the finding is sent as 'Grocery: ingest shape - new unit spelling unproved' (new registry entry, review, resolver lane:grocery/audit-ingest-shape.ps1) with its rows. A new non-unit reason is printed in the chain summary and never sent (9 of the 16 measured were code-change wording, which the rehearsal owns). Marker: INGEST-SHAPE-COMPLETE stores= scanned= new= proved= unproved= blind=. (4) lib/bot-paths.ps1: unit-aliases.json joins the bot input paths so the daily commit carries it. The 14-day window and the 3-file minimum are first plausible values, not the survivors of a sweep."
       },
       "leaves_open": "(a) the Family Fare, Hy-Vee, Baker's API and Fareway builders write no per-row rejects, so a rendering change there is still first met by the engine; 0 such occurrences in the RCA's 2026-09-20..22 window. (b) a rendering MISREAD into a known unit (not refused) is not a new spelling; it is caught later by the band and audit-unit-basis-outlier, as the Aldi 4-pack pineapple of 2026-09-19 was. Occurrences: (a) 0, (b) 1",
@@ -249,7 +343,11 @@
         "measured_as": "store-days",
         "measured_by": "shape_new.py (scratch) over 87 reject files: aldi-rejects 26, sams-rejects 32, walmart-rejects 29, from the first file to 2026-09-22",
         "affected_now": 7,
-        "names": ["7 of 69 evaluable store-days met a first-seen unit spelling (Sam's 09-19, 09-21; Walmart 08-06, 08-11, 08-30, 08-31, 09-17)", "9 more met new refusal wording after a builder code change: printed, never sent", "today: no store has a spelling that batch 2's hand fix has not already read, so no row is admitted by this item on landing"],
+        "names": [
+          "7 of 69 evaluable store-days met a first-seen unit spelling (Sam's 09-19, 09-21; Walmart 08-06, 08-11, 08-30, 08-31, 09-17)",
+          "9 more met new refusal wording after a builder code change: printed, never sent",
+          "today: no store has a spelling that batch 2's hand fix has not already read, so no row is admitted by this item on landing"
+        ],
         "risk": "a proved alias admits rows the same run, and every admitted row still passes the builder's own gates, the engine and guards; a wrong alias needs EVERY row with the spelling to reproduce its name's size from the store's own price, which a misread cannot do for all rows at once. 'sq ft' and 'sft' rows (wrap and foil) are admitted only if the builder's table has that family; otherwise they stay refused and queue once.",
         "cell_effects": []
       },
@@ -258,15 +356,24 @@
         "guard_or_fixture": "grocery/audit-ingest-shape.ps1 -SelfTest (new, frozen from the real files), and each builder's -SelfTest",
         "must_fire_case": "MUST FIRE: frozen out/sams/sams-rejects-2026-09-21.json with its prior 14 days of sams-rejects files: 'fluid ounce (us)' is new, its 52 rows PROVE fl oz, so the alias is written and the finding reads proved, not sent. MUST FIRE: a frozen set where one row's arithmetic does not reproduce its name (the 2 'density conflict' rows of the same file as the decoy) keeps the spelling unproved and sends the review condition with the rows.",
         "clean_twin": "CLEAN TWIN: Sam's 2026-09-20 against its prior files raises nothing. MUST NOT FIRE: a store with fewer than 3 prior files reports BLIND for that store and admits nothing. MUST NOT FIRE: Walmart 2026-09-06's new 'refused: name quantity disagrees' wording is printed and never sent.",
-        "commands": ["powershell -File grocery/audit-ingest-shape.ps1 -SelfTest", "powershell -File grocery/build-sams-deals.ps1 -SelfTest", "powershell -File grocery/test-auditors.ps1", "powershell -File ops/rehearse-chain.ps1"]
+        "commands": [
+          "powershell -File grocery/audit-ingest-shape.ps1 -SelfTest",
+          "powershell -File grocery/build-sams-deals.ps1 -SelfTest",
+          "powershell -File grocery/test-auditors.ps1",
+          "powershell -File ops/rehearse-chain.ps1"
+        ]
       },
       "rollback": "remove the capture-run step and the three builder calls; delete unit-aliases.json and the builders fall back to their own tables",
-      "do_not_touch": ["the Aldi pack-basis rule (no plausibility bar)", "batch 2's hand-added Sam's spellings (they stay; the ledger is additive)"],
+      "do_not_touch": [
+        "the Aldi pack-basis rule (no plausibility bar)",
+        "batch 2's hand-added Sam's spellings (they stay; the ledger is additive)"
+      ],
       "resolution_note": "A new store rendering is met at ingest: each per-row builder records its shape, and a check between the builders and the chain proves a first-seen unit spelling by the store's own price arithmetic and keeps it in unit-aliases.json, or queues it with its rows. The founding 'fluid ounce (us)' case proves unattended. Batch 2's unbuilt reject-spike residual is this item.",
       "publish_batch": 2,
       "depends_on": "batch 2 on origin/main (build-sams-deals and the Walmart builder change there). Do NOT mint batch 2's 'per-reason reject spike check' residual: record it as superseded by 2026-09-22-20fecf.",
       "status": "planned"
-    },    {
+    },
+    {
       "queue_id": "discovered:archived-open-residuals-2026-09-22",
       "subject": "The 16 residuals the 2026-09-17 reset archived OPEN: 7 closed with evidence, 7 folded into owned items, 2 reopened weekly",
       "classification": "no-code-change",
@@ -290,8 +397,10 @@
       ],
       "root_cause": "the 2026-09-17 reset archived the queue by hand (Brad: ignore every past alert). Open residuals went into an archive nothing reads for OPEN work, so each lost its owner at once, although triage-return-lib has read the same archive for CLOSES since c74aa821b.",
       "resolution_note": "Each of the 16 archived-open residuals has a disposition: closed with evidence (c4a68f, 9fbafc, 36f57d, 915846, 139f58, 2bb198) or closed to a watch (d67882, watch:grocery/capture-run.ps1); folded into an owned item (582032, b09671 and bfc110 into 2026-09-21-b96f21; c8eb72 and 1139c4 into 2026-09-21-85c3b7; d625a4 into 2026-09-20-cb8f30; 0bea21 into 2026-09-18-8491bf); reopened weekly with today's measurement (a86b87, 935ce3). HOW: triage-close.ps1 -QueueFile grocery/out/archive/triage-queue.archived-2026-09-17.json -Id <id> -Disposition <confirmed|superseded|by-design> -Notes <the line above> for every close and fold; the two reopens are minted with send-alert.ps1 -Lane weekly under 'Triage residual:' subjects.",
-      "status": "planned"
-    },    {
+      "status": "planned",
+      "publish1_note": "0 of the 16 dispositions are code: every one is a close, a fold or a reopen through triage-close.ps1 or send-alert.ps1 -Lane weekly (ship_sequence step 3). None was done in this publish (dispatch: do not close queue items). The two reopens (a86b87, 935ce3) must be minted under 'Triage residual:' subjects, which since this publish is the only road: an unregistered -Lane weekly subject is refused."
+    },
+    {
       "queue_id": "2026-09-20-bec597",
       "subject": "Tile-link price drift: the chain already reconciles five stores daily (198 -> 83); prove Sam's URL shape once, unattended, and ratchet the count",
       "classification": "infra",
@@ -304,7 +413,11 @@
       "root_cause": "F1: the link record is a second copy of a price. Since 0072c7586 the chain reconciles it daily wherever a product id maps to a proven URL shape; Sam's alphanumeric ids map to none, so their records can never be reconciled and drift accumulates there only, with nothing that pages when a new unreconcilable class appears.",
       "root_fix": {
         "what": "prove Sam's alphanumeric URL shape once, unattended, in the Sam's browser lane; derive links from it only when proven; and make PRICE-DRIFT a per-store ratchet so a new unreconcilable class is a finding the day it appears",
-        "files": ["grocery/pull-browser-stores.py", "grocery/derive-links-from-prices.ps1", "grocery/audit-tile-integrity.ps1"],
+        "files": [
+          "grocery/pull-browser-stores.py",
+          "grocery/derive-links-from-prices.ps1",
+          "grocery/audit-tile-integrity.ps1"
+        ],
         "exact_change": "(1) pull-browser-stores.py, Sam's pass: after the sweep, for up to 3 alphanumeric sams_item_ids from today's rows, open samsclub.com/ip/<id> in the same session and record whether the page's own product id and name match the row (out/sams/sams-url-shape-<date>.json); a wall or CAPTCHA records 'blocked' and is never retried or bypassed. (2) derive-links-from-prices.ps1: when the newest sams-url-shape file proves /ip/<alphanumeric> for 3 of 3, an alphanumeric Sam's id derives /ip/<id> exactly as a numeric one does; otherwise it refuses as today. (3) audit-tile-integrity.ps1: PRICE-DRIFT per store becomes a ratchet over out/tile-integrity-baseline.json that may only fall (a plain run never writes its mark; -Tighten records a fall), and a rise exits 2 naming the store; its first run records today's 83."
       },
       "leaves_open": "16 non-Sam's entries derive-links refuses (Aldi 13, Walmart 2, Family Fare 1); their refusal reasons were not read here. The developer runs derive-links-from-prices.ps1 without -Apply and records them in this item. Occurrences: 16 on comparison-2026-09-22",
@@ -313,7 +426,10 @@
         "measured_as": "links",
         "measured_by": "out/tile-integrity.json 08:13 2026-09-22, fault counts by store (326 rows: NO-LINK 243, PRICE-DRIFT 83)",
         "affected_now": 83,
-        "names": ["Sam's Club 67 (alphanumeric ids; relinkable only after the shape is proven)", "Aldi 13, Walmart 2, Family Fare 1 (refused by derive-links today)"],
+        "names": [
+          "Sam's Club 67 (alphanumeric ids; relinkable only after the shape is proven)",
+          "Aldi 13, Walmart 2, Family Fare 1 (refused by derive-links today)"
+        ],
         "risk": "no cell price moves; a link changes only when the product id and name match the priced row and the URL shape was proven in the store's own session. A Sam's wall records blocked and changes nothing.",
         "cell_effects": []
       },
@@ -322,7 +438,11 @@
         "guard_or_fixture": "grocery/derive-links-from-prices.ps1 -SelfTest (the feminine-pads Sam's fixture at lines 99-110) and grocery/audit-tile-integrity.ps1 -SelfTest",
         "must_fire_case": "MUST FIRE: the frozen Sam's row with sams_item_id '4YKF09SXNTK8' derives https://www.samsclub.com/ip/4YKF09SXNTK8 ONLY when a frozen sams-url-shape file proves 3 of 3. MUST FIRE: a PRICE-DRIFT count one above the baseline for one store exits 2 naming that store.",
         "clean_twin": "CLEAN TWIN: with no url-shape file, or 2 of 3 proven, or 'blocked', the same row is refused exactly as today, and the numeric-id row '15235818162' still derives /ip/15235818162. MUST NOT FIRE: a count equal to the baseline is silent and the baseline file is byte-identical.",
-        "commands": ["powershell -File grocery/derive-links-from-prices.ps1 -SelfTest", "powershell -File grocery/audit-tile-integrity.ps1 -SelfTest", "powershell -File grocery/derive-links-from-prices.ps1"]
+        "commands": [
+          "powershell -File grocery/derive-links-from-prices.ps1 -SelfTest",
+          "powershell -File grocery/audit-tile-integrity.ps1 -SelfTest",
+          "powershell -File grocery/derive-links-from-prices.ps1"
+        ]
       },
       "rollback": "revert the three files; delete out/sams/sams-url-shape-*.json; product-urls.json entries derived from a proven shape revert with the next daily derive",
       "resolution_note": "Most of the drift healed itself: the chain has reconciled link prices for five stores daily since 0072c7586 (198 -> 83). Sam's alphanumeric ids now get their URL shape proven once in the Sam's browser session before any is linked, and PRICE-DRIFT is a per-store ratchet so a new unreconcilable class pages the day it appears.",
@@ -342,7 +462,11 @@
       "root_cause": "F1: two records of one board written on two roads at two cadences. The projection (the history entry) is regenerated only on the morning road and only for today's week, while the board can be rewritten on several roads on any day.",
       "root_fix": {
         "what": "each history entry records which board it was derived from, and the chain reconciles EVERY week still on disk, not only today's, so a rebuild on any road is repaired at the next chain run",
-        "files": ["grocery/update-history.ps1", "grocery/check-ad-cycles.ps1", "grocery/triage-plans/README.md"],
+        "files": [
+          "grocery/update-history.ps1",
+          "grocery/check-ad-cycles.ps1",
+          "grocery/triage-plans/README.md"
+        ],
         "exact_change": "(1) update-history.ps1 stamps each week's entry with its comparison file's built_at (or the file's SHA-256 when it has none) and gains -Reconcile: for every comparison-<week>.json on disk inside the history window, rewrite the entry whose stamp differs; it prints UPDATE-HISTORY-COMPLETE weeks= reconciled= unchanged= nofile=. (2) check-ad-cycles.ps1 calls update-history -Reconcile where it calls update-history today. (3) the README's ship_sequence template gains 'update-history -Reconcile' after compare-deals, so a triage rebuild repairs its own week the same hour."
       },
       "leaves_open": "a week whose comparison file has been rotated off disk keeps whatever the history says, since no second record exists to reconcile from; all 71 measured disagreements fall in 2026-08-23..2026-09-21, whose files plan-2026-09-21-6 read, so 0 of them are in a rotated week",
@@ -351,7 +475,9 @@
         "measured_as": "commodity-weeks",
         "measured_by": "plan-2026-09-21-6's diff of price-history.json against every comparison file 2026-08-23..2026-09-21 (7,401 commodity-weeks), carried; the developer re-measures it with -Reconcile's first dry count",
         "affected_now": 71,
-        "names": ["71 commodity-weeks whose cheapest differs between the two records; -Reconcile rewrites them to what the board actually published"],
+        "names": [
+          "71 commodity-weeks whose cheapest differs between the two records; -Reconcile rewrites them to what the board actually published"
+        ],
         "risk": "trend pages, the freezer tool and the Friday email read history, so those weeks change to the published truth; the developer diffs build-trend-pages output before and after and republishes trend pages in the same batch",
         "cell_effects": []
       },
@@ -360,13 +486,18 @@
         "guard_or_fixture": "grocery/update-history.ps1 -SelfTest (new)",
         "must_fire_case": "MUST FIRE: a frozen week whose comparison file was rebuilt with a different cheapest and a newer built_at is rewritten by -Reconcile.",
         "clean_twin": "CLEAN TWIN: a week whose stamp matches is byte-identical after -Reconcile, and today's week is still appended as before. MUST NOT FIRE: a week whose comparison file is absent is left untouched and counted in nofile=, never deleted.",
-        "commands": ["powershell -File grocery/update-history.ps1 -SelfTest", "powershell -File grocery/sanity-check.ps1 -SelfTest", "powershell -File ops/rehearse-chain.ps1"]
+        "commands": [
+          "powershell -File grocery/update-history.ps1 -SelfTest",
+          "powershell -File grocery/sanity-check.ps1 -SelfTest",
+          "powershell -File ops/rehearse-chain.ps1"
+        ]
       },
       "rollback": "revert update-history.ps1 and the check-ad-cycles call; price-history.json is tracked, so git restores the pre-reconcile entries",
       "resolution_note": "price-history no longer keeps a second, stale record of a rebuilt board: each entry names the board it came from, and the chain reconciles every week still on disk each morning. The 71 disagreeing commodity-weeks were rewritten to what the board published and the trend pages republished.",
       "publish_batch": 2,
       "status": "planned"
-    },    {
+    },
+    {
       "queue_id": "discovered:class-keyed-return-rate-2026-09-22",
       "subject": "The RETURN RATE is keyed by failure class with lineage across splits, reads archived closes through the one return rule, and leaves triage-created items out: 32.9% today is 45.1%",
       "classification": "infra",
@@ -381,16 +512,28 @@
       "root_cause": "F1 at the metric level: the return rule exists in two copies that disagree (the census's queue-only one and triage-return-lib's archive-aware one), both key a failure by the TEXT of its alert subject, and the denominator counts triage's own work items, which can never return. So a rename, a split, a per-cell subject or a queue reset moves the scoreboard without any failure stopping.",
       "root_fix": {
         "what": "one return rule, keyed by failure class with lineage, over queue and archive, with triage-created items counted on their own line",
-        "files": ["grocery/triage-return-lib.ps1", "grocery/alert-registry-lib.ps1", "grocery/audit-alert-census.ps1", "grocery/alert-registry.json", "grocery/audit-alert-registry.ps1"],
+        "files": [
+          "grocery/triage-return-lib.ps1",
+          "grocery/alert-registry-lib.ps1",
+          "grocery/audit-alert-census.ps1",
+          "grocery/alert-registry.json",
+          "grocery/audit-alert-registry.ps1"
+        ],
         "exact_change": "(1) alert-registry-lib.ps1: Get-AlertClassKey <type key> returns 'class:<root id>' through Resolve-AlertClass (the resolution send-alert uses) and the entry's lineage_parent chain; an unregistered type returns 'unregistered:<type>' and is counted apart. (2) alert-registry.json: the 75 successors gain lineage_parent (capture-watchdog, ff-catalog-degrading, automation-silent-death, match-soundness or store-registry-drift, as the stem derivation gives 75 of 75); any new entry that splits or replaces another names it. (3) audit-alert-registry.ps1: an entry with split_from must name a lineage_parent that exists and is retired, and a retired entry must be some entry's lineage_parent or carry no_successor with a reason. (4) triage-return-lib.ps1: Get-ClassReturnRows scores returns over the queue UNIONED with the archive (Join-TriageQueueWithArchive, the one copy): a new id is a return when an earlier item of its CLASS was resolved within 30 days. (5) audit-alert-census.ps1 scores returns through (4) and deletes its own closedBefore copy; leaves triage-created items (lane weekly, or entry triage-residual or triage-finding) out of numerator and denominator and prints them as the triage minting rate; prints 'RETURN RATE (class) last 30: <r> of <a> (<pct>)' as the scoreboard number with a decomposition line naming each adjustment and how many alerts it moved; keeps returnrate30 on its marker for existing readers and adds classreturnrate30; and writes one row per (date, class) to out/alert-census-class.jsonl (measurement.md: one row per case), so any later rate is re-derived, never re-typed. No numeric target is declared."
       },
-      "leaves_open": "a condition renamed WITHOUT a registry entry naming its parent (an entry deleted and a new one added with neither split_from nor lineage_parent) still reads as a new class; no check can tell it from a genuinely new condition. Occurrences: 0 in the window (all 75 successors carry split_from)",
+      "leaves_open": "a condition renamed WITHOUT a registry entry naming its parent still reads as a new class. The half a check can see is owned: audit-alert-registry (run-gates, every push) refuses a split_from with no lineage_parent and a retired entry that nothing descends from and that gives no no_successor reason, so a rename that keeps the old entry as retired is caught at push. An entry DELETED outright and a new one added is outside any check. Occurrences: 0 in the window (all 75 successors carry split_from).",
       "leaves_open_occurrences": 0,
       "blast_radius": {
         "measured_as": "alerts",
         "measured_by": "class_return.py (scratch) over the re-run alert-census.jsonl (383 alerts, 2026-08-24..2026-09-22), with lane and closes from triage-queue.json plus out/archive/triage-queue.archived-*.json and classes from alert-registry.json",
         "affected_now": 383,
-        "names": ["arm 0, the scoreboard today: 126 of 383 (32.9%)", "arm 1, residuals out: 126 of 328 (38.4%), +5.5 points", "arm 1b, plus archived closes: 145 of 328 (44.2%), +5.8 points, 19 rows", "arm 2, plus class key with lineage: 148 of 328 (45.1%), +0.9 points, 3 rows", "arm 3, class key with residuals in: 156 of 383 (40.7%)"],
+        "names": [
+          "arm 0, the scoreboard today: 126 of 383 (32.9%)",
+          "arm 1, residuals out: 126 of 328 (38.4%), +5.5 points",
+          "arm 1b, plus archived closes: 145 of 328 (44.2%), +5.8 points, 19 rows",
+          "arm 2, plus class key with lineage: 148 of 328 (45.1%), +0.9 points, 3 rows",
+          "arm 3, class key with residuals in: 156 of 383 (40.7%)"
+        ],
         "risk": "the scoreboard number RISES 12.2 points the day this ships with no change in the estate, so the census must print the decomposition beside it or it reads as a regression. The class key also scores a new cell of an old class as a return (price-disagreement), which is the intended reading: the class came back.",
         "cell_effects": []
       },
@@ -399,12 +542,31 @@
         "guard_or_fixture": "grocery/audit-alert-census.ps1 -SelfTest, grocery/triage-due.ps1 -SelfTest (it reaches triage-return-lib) and grocery/audit-alert-registry.ps1 -SelfTest",
         "must_fire_case": "MUST FIRE: a frozen pair, parent 'grocery capture watchdog issue s' closed 2026-09-21 and successor 'grocery capture watchdog run record' new on 2026-09-22, scores 1 class return (0 under the subject key). MUST FIRE: a close that exists only in an archive file makes the next same-class id a return. MUST FIRE: a registry entry with split_from and no lineage_parent is an audit-alert-registry finding.",
         "clean_twin": "CLEAN TWIN: a triage-residual item is in neither numerator nor denominator and appears on the minting line. CLEAN TWIN: returnrate30 on the marker is unchanged for the same input (126 of 383 on the frozen corpus), so a reader keyed on it keeps working. MUST NOT FIRE: two different classes (guards-failed closed, commit-refused new) score 0 returns.",
-        "commands": ["powershell -File grocery/audit-alert-census.ps1 -SelfTest", "powershell -File grocery/triage-due.ps1 -SelfTest", "powershell -File grocery/audit-alert-registry.ps1 -SelfTest", "powershell -File grocery/audit-alert-registry.ps1"]
+        "commands": [
+          "powershell -File grocery/audit-alert-census.ps1 -SelfTest",
+          "powershell -File grocery/triage-due.ps1 -SelfTest",
+          "powershell -File grocery/audit-alert-registry.ps1 -SelfTest",
+          "powershell -File grocery/audit-alert-registry.ps1"
+        ]
       },
       "rollback": "revert the five files; out/alert-census-class.jsonl is a new gitignored side file and can be deleted; the legacy returnrate30 never stopped printing",
       "resolution_note": "The scoreboard's return rate now has one rule: keyed by failure class with lineage across splits, over queue and archive, with triage-created items on their own line. Today it reads 148 of 328 (45.1%) against the old 126 of 383 (32.9%); the 12.2-point difference is measurement (residuals 5.5, archived closes 5.8, class key 0.9), not a change in the estate.",
       "publish_batch": 1,
-      "status": "planned"
+      "status": "deviated",
+      "premise_verified": "Yes, on the plan's own corpus: the main checkout's grocery/out/alert-census.jsonl (hash prefix 89DF8654AC3C, mtime 13:26), triage-queue.json (80 items) and both archive files, re-run through the shipped audit-alert-census.ps1 with -Today 2026-09-22. The legacy returnrate30 reproduces exactly: 126 of 383 (32.9%). 75 of 75 split successors map to one retired parent by emitter.",
+      "deviation": "Numbers, not code. Shipped table on the plan's corpus: arm 0 126 of 383 (32.9%, matches); arm 1 126 of 328 (38.4%, matches, 54 types); arm 1b 150 of 326 (46.0%, plan 145 of 328); arm 2, the scoreboard, 156 of 326 (47.9%, plan 148 of 328). Where they differ and why, each measured with the shipped lib: (1) the one archive reader (Read-TriageArchivedItems) reads BOTH archive files, and the 2026-08-22 archive adds 5 returns; with only the 2026-09-17 archive arm 1b reads 145, the plan's number. (2) triage-created is decided per ITEM (lane weekly, as the item's exact_change says), 59 alerts, not per type: 5 weekly items resolve to real classes (semantic-sweep, ghost-drift, stores-dropped, match-soundness, store-registry-drift), so the denominator is 326, not 328 (the census's type rule gives 330). (3) the class key adds 6 returns, not 3: capture-watchdog +3 (the plan's three), price-disagreement +1 (the per-cell subjects the plan named as the intended reading) and needs-brad +2. Arm 1 over stored rows first removed every row of a type an agent had ever minted under (106 of 287); it now removes a type only when every item of it is triage-created, which reproduces 126 of 328. The 30-day window vs none moves arm 1b by 1 (150 vs 151).",
+      "metric_table_shipped": {
+        "harness": "grocery/audit-alert-census.ps1 on this branch, -QueueFile/-OutFile/-ArchiveDir copies of the main checkout's files in a scratch directory, -Today 2026-09-22; decomposition line printed by the census itself",
+        "arm0_returnrate30": "126 of 383 (32.9%)",
+        "arm1_triage_created_out": "126 of 328 (38.4%)",
+        "arm1b_plus_archived_closes": "150 of 326 (46.0%)",
+        "arm2_class_key_scoreboard": "156 of 326 (47.9%)",
+        "triage_minted": "59 alert(s) under 40 key(s) across 54 queue type(s)",
+        "marker": "ALERT-CENSUS-COMPLETE quiet7=1/7 quiet30=2/30 alerts30=383 returns30=126 recurring=30 returnrate30=32.9% classreturns30=156 classalerts30=326 classreturnrate30=47.9% minted30=59",
+        "reading": "moved +15.0 points over 326 non-triage alerts with no change in the estate; one variant per adjustment on one corpus; it is measurement, and the baseline the next 14 days are compared against"
+      },
+      "shipped_commit": "branch worktree-agent-a93e94038dd9f368c, commit \"Plan 2026-09-22-10 publish 1 (a)+(b): one class-keyed return rule; no default subject; an agent's unregistered alert is refused\" (not pushed; ops/push-main.ps1 rebases it, so the pusher writes the landed hash here)",
+      "leaves_open_followup": "watch:grocery/audit-alert-registry.ps1"
     },
     {
       "queue_id": "discovered:sender-refusal-ruling-2026-09-22",
@@ -414,8 +576,66 @@
         "34 of 54 weekly-lane mints (2026-09-11..2026-09-22) were unregistered and 2 used the default subject; registry readme (ruling 1): 'An alert whose type matches NO entry is never dropped: it queues with unregistered=true AND is emailed'"
       ],
       "root_cause": "the dispatch asks for a refusal at the sender; ruling 1 says an unregistered alert is never dropped. Refusing an AGENT's mint loses nothing (the agent gets exit 2 and re-sends, and the -Closing gate refuses an ownerless residual), but it changes the ruling's text, so it is Brad's call",
-      "resolution_note": "Parked as Q-sender-refuses-unregistered. Item 2026-09-20-cb8f30 ships everything that does not need the ruling (no default subject, weekly types resolved and stamped, a missing -Subject fails the push); its part (4) lands only on ruling A.",
-      "status": "needs-brad"
+      "resolution_note": "Ruled by Brad on 2026-09-22: \"Refuse agents only\" (option A). Implemented in 2026-09-20-cb8f30 part (4): alert-registry-lib Test-AgentSendRefused and send-alert's refusal before any queue write. Fixtures: MUST FIRE an agent send with an unregistered subject is refused (exit 2, queue byte-identical); MUST NOT FIRE a pipeline send with an unregistered subject goes through, flagged; CLEAN TWIN an agent send with a registered subject passes.",
+      "status": "done"
+    },
+    {
+      "queue_id": "discovered:post-landing-review-2026-09-22",
+      "subject": "Post-landing review F1, F2, F4: a once-a-day MISSING grade mails on its first observation; heartbeat rows declare their exit semantics; the chain manifest names only the hook a rehearsal exercises",
+      "classification": "infra",
+      "evidence": [
+        "F1: watchdog-browser-capture-missing-today carried hold_observations 2 while only the 14:15 slot-close run grades a day MISSING, so a one-day miss stayed PENDING and never mailed (send-alert Test-AlertHeldPending).",
+        "F2: TC Process Reaper exits 1 for findings by design and 3 when it cannot read the process table; its heartbeat row declared neither, so proves-fresh excused both. capture-run exits 1 on a failed lane, which its own step or the RUN RECORD fold now pages.",
+        "F4: ops/chain-manifest.json named ops/hooks/*, but rehearse-chain only installs and commits through pre-commit (stage 7); commit-msg and pre-push are proved by ops/test-prepush-hook.ps1."
+      ],
+      "root_cause": "Each is a declaration missing where a reader needed it: the producer's cadence beside a hold, a task's exit semantics beside its freshness excuse, and which hook a rehearsal can reach.",
+      "root_fix": {
+        "what": "declare each where it is read, and check the declaration",
+        "files": [
+          "grocery/alert-registry.json",
+          "grocery/alert-registry-lib.ps1",
+          "grocery/audit-alert-registry.ps1",
+          "grocery/send-alert.ps1",
+          "grocery/expected-automations.json",
+          "grocery/health-heartbeat.ps1",
+          "ops/chain-manifest.json",
+          "ops/rehearse-chain.ps1"
+        ],
+        "exact_change": "F1 (Brad: \"Email first miss\"): the entry drops its hold and declares producer_max_observations_per_day 1; Get-AlertRegistryEntryProblems refuses a hold above a declared producer cadence. F2: ok_exits [0, 1] and fail_exits [3] on the Reaper, Ad Pulls and Daily Capture rows; Get-HbDeclaredExit makes a declared ok exit healthy and a declared fail exit TASK FAILED with no fresh-output excuse. F4: the manifest glob ops/hooks/* becomes the one file ops/hooks/pre-commit, with hooks_note."
+      },
+      "leaves_open": "F1 class: the hold-versus-cadence check runs only where an entry declares producer_max_observations_per_day, and 0 of the 14 other held types declare one today, so a second once-a-day producer behind a hold would not be caught until its cadence is declared. Occurrences: 0 known beyond the fixed one. F2: rows other than these three still read a nonzero exit through proves-fresh, as before.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/audit-alert-registry.ps1",
+      "blast_radius": {
+        "measured_as": "entries and rows",
+        "measured_by": "the registry and expected-automations.json on this branch",
+        "affected_now": 4,
+        "names": [
+          "watchdog-browser-capture-missing-today",
+          "TC Process Reaper",
+          "TC Grocery Ad Pulls 0700",
+          "TC Grocery Daily Capture 0800"
+        ],
+        "risk": "F1 mails a type that was silent on its first observation; F2 turns a Reaper exit 3 into a page that proves-fresh used to hide; F4 means a pre-push or commit-msg edit no longer demands a rehearsal",
+        "cell_effects": []
+      },
+      "freshness": "registry, expected-automations.json and chain-manifest.json on this branch, 2026-09-22 evening",
+      "proof": {
+        "guard_or_fixture": "send-alert -SelfTest, audit-alert-registry -SelfTest, health-heartbeat -SelfTest, rehearse-chain -SelfTest",
+        "must_fire_case": "F1: one slot-close BROWSER CAPTURE MISSING observation mails (hold 1, read off the committed registry); a hold of 2 on a once-a-day producer is a registry finding. F2: TC Process Reaper exit 3 is FAILED. F4: a pre-commit edit is a manifest change.",
+        "clean_twin": "F1: watchdog-missing-window still waits for 2 (CLEAN TWIN). F2: Reaper exit 1 and Daily Capture exit 1 are healthy (MUST NOT FIRE). F4: a pre-push or commit-msg edit demands no rehearsal (MUST NOT FIRE).",
+        "commands": [
+          "powershell -File grocery/send-alert.ps1 -SelfTest",
+          "powershell -File grocery/audit-alert-registry.ps1 -SelfTest",
+          "powershell -File grocery/health-heartbeat.ps1 -SelfTest",
+          "powershell -File ops/rehearse-chain.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "revert the two commits; the registry hold returns to 2, the rows lose their exit fields, the manifest glob returns to ops/hooks/*",
+      "resolution_note": "F1 on Brad's ruling \"Email first miss\": a MISSING grade the producer can make once a day mails on that one observation, and the registry refuses a hold above a declared cadence. F2: three heartbeat rows declare their exit semantics, so the Reaper's exit 3 pages and its exit 1 does not. F4: the chain manifest names only the hook a rehearsal exercises.",
+      "publish_batch": 1,
+      "status": "done",
+      "shipped_commit": "branch worktree-agent-a93e94038dd9f368c, commit \"Plan 2026-09-22-10 publish 1 (d) ff-alerts-lanes + F1 \"Email first miss\": each alert fires on its lane's failure\" (not pushed; ops/push-main.ps1 rebases it, so the pusher writes the landed hash here); and \"Plan 2026-09-22-10 publish 1, post-landing review F2 + F4: declared exit semantics per heartbeat row; the manifest names only the hook a rehearsal exercises\""
     }
   ],
   "ship_sequence": [
@@ -437,7 +657,28 @@
         "B: refuse nothing at runtime; stamp an unregistered agent mint unregistered=true like any other alert and rely on the push-time check (what ships without a ruling)",
         "C: refuse every unregistered alert, pipeline ones included (NOT recommended: a pipeline alert refused at 08:00 is a lost incident, the thing ruling 1 exists to prevent)"
       ],
-      "recommendation": "A: an agent is in session and re-sends in the same turn, and validate-triage-plan -Closing already refuses a residual whose owner is not a queue id, so nothing can be lost; it also makes every triage item carry a registered prefix, which is what lets the scoreboard count triage's own minting apart from real failures."
+      "recommendation": "A: an agent is in session and re-sends in the same turn, and validate-triage-plan -Closing already refuses a residual whose owner is not a queue id, so nothing can be lost; it also makes every triage item carry a registered prefix, which is what lets the scoreboard count triage's own minting apart from real failures.",
+      "ruling": {
+        "date": "2026-09-22",
+        "words": "Refuse agents only",
+        "option": "A",
+        "option_text": "an agent's alert with an unregistered title is refused on the spot; the agent must register the type or use an existing one and re-send in the same turn; the closing check refuses any leftover, so nothing is lost; alerts from the daily pipeline always get through"
+      }
+    }
+  ],
+  "rulings_recorded": [
+    {
+      "id": "Q-sender-refuses-unregistered",
+      "date": "2026-09-22",
+      "words": "Refuse agents only",
+      "implemented_in": "2026-09-20-cb8f30 part (4)"
+    },
+    {
+      "id": "F1-browser-capture-missing-hold",
+      "date": "2026-09-22",
+      "words": "Email first miss",
+      "source": "post-landing review 2026-09-22, finding F1, relayed by the coordinator",
+      "implemented_in": "discovered:post-landing-review-2026-09-22 (F1)"
     }
   ]
 }
