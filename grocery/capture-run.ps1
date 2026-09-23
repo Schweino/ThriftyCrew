@@ -1167,6 +1167,14 @@ try {
   # commits these bytes as the pipeline's own instead of holding them as a session's edit. Only $paths, which carries
   # the served files only when this run was allowed to ship them, so a guards-blocked board is never vouched for.
   # Never fatal: an unrecorded write is held exactly as it was before this existed.
+  # A GUARDS-BLOCKED DAY'S SERVED OUTPUTS ARE VOUCHED, NEVER COMMITTED (2026-09-23, design\PLAN-bot-checkout-self-heal-2026-09-23.md
+  # W3.2 step 3). The chain still wrote public\** and the recipe files; -Built records their bytes with commit = $false, so
+  # the checkout sync can tell the pipeline's own output from a session's edit (Get-PipelineOwnBlobs) while no committer
+  # ever ships a board the guards held. Registered BEFORE the committable set, which on this path holds inputs only.
+  if ($runDownstream -and -not $shipServed) {
+    try { $jB = Register-PipelineWrites -Repo $repo -Built -Lane ('capture-run-' + $Kind + '-built') -Since $script:RunStart -Paths $servedPaths; Write-Output ('pipeline-writes: vouched ' + $jB + ' served file(s) this guards-blocked run built, never to be committed') }
+    catch { Write-Output ('pipeline-writes: could not vouch this run''s built served files (' + $_.Exception.Message + ') - the checkout sync treats them as another session''s edits, as before') }
+  }
   try { $jN = Register-PipelineWrites -Repo $repo -Lane ('capture-run-' + $Kind) -Since $script:RunStart -Paths $paths; Write-Output ('pipeline-writes: recorded ' + $jN + ' file(s) this run wrote') }
   catch { Write-Output ('pipeline-writes: could not record this run''s writes (' + $_.Exception.Message + ') - a file it leaves uncommitted is held by the next run as before') }
   & git -C $repo diff --cached --quiet

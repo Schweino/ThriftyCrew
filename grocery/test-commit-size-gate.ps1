@@ -253,6 +253,44 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
   T 'MUST FIRE  a commit a hook refused after the gate admitted it records its own 150 files within-caps and none of the 20 older ones' `
     ((-not $cr3.refused) -and $cr3.mine -eq 1 -and $cr3.minePaths.Count -eq 150 -and @($cr3.minePaths | Where-Object { $_ -like '*carried-*' }).Count -eq 0 -and $cr3.mineVerdict -eq 'within-caps') ("refused=$($cr3.refused) mine=$($cr3.mine) paths=$($cr3.minePaths.Count) verdict=$($cr3.mineVerdict)")
 
+  # ---- A GUARDS-BLOCKED DAY'S SERVED OUTPUTS ARE VOUCHED, NEVER COMMITTED (2026-09-23, plan W3.2 step 3) ----
+  # The same lifted gate block, which ends with the pipeline-writes registration. The journal is the temp repo's own
+  # .git\tc-pipeline-writes.json, so nothing here opens this checkout's journal.
+  function Run-Built([bool]$Ship) {
+    $c = Join-Path $env:TEMP ('gatebuilt-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+    New-Item -ItemType Directory $c -Force | Out-Null
+    & git -C $c init -q .
+    & git -C $c config user.email t@t; & git -C $c config user.name t
+    New-Item -ItemType Directory (Join-Path $c 'grocery/out') -Force | Out-Null
+    New-Item -ItemType Directory (Join-Path $c 'public') -Force | Out-Null
+    [IO.File]::WriteAllText((Join-Path $c 'grocery/out/seed.txt'), 'seed')
+    [IO.File]::WriteAllText((Join-Path $c 'public/board.json'), '{"v":1}')
+    & git -C $c add -A | Out-Null; & git -C $c commit -q -m seed | Out-Null
+    # THE CHAIN wrote today's board and one input; a blocked day stages the input only.
+    [IO.File]::WriteAllText((Join-Path $c 'public/board.json'), '{"v":2}')
+    [IO.File]::WriteAllText((Join-Path $c 'grocery/out/seed.txt'), 'seed2')
+    $repo = $c; $failed = @(); $ForceBigCommit = $false
+    $runDownstream = $true; $shipServed = $Ship; $servedPaths = @('public')
+    $paths = @('grocery/out') + $(if ($Ship) { @('public') } else { @() })
+    & git -C $c add -A -- $paths | Out-Null
+    $bOut = . ([scriptblock]::Create($script:gateSrc))
+    $j = Read-PipelineWriteJournal -JournalPath (Get-PipelineWriteJournalPath -Repo $c)
+    $ck = Get-PipelineCheckoutKey -Repo $c
+    $board = $j[($ck + '|public/board.json')]; $inp = $j[($ck + '|grocery/out/seed.txt')]
+    Remove-Item $c -Recurse -Force -ErrorAction SilentlyContinue
+    return [pscustomobject]@{
+      board = $(if ($board) { [string]$board.lane + '/' + [string]$board.commit } else { 'none' })
+      input = $(if ($inp) { [string]$inp.lane + '/' + [string]$inp.commit } else { 'none' })
+      text = ((@($bOut) | ForEach-Object { [string]$_ }) -join "`n")
+    }
+  }
+  $bt1 = Run-Built $false
+  T 'MUST FIRE  a guards-blocked run vouches its built board as capture-run-daily-built, commit=False, and its input stays committable' `
+    ($bt1.board -eq 'capture-run-daily-built/False' -and $bt1.input -eq 'capture-run-daily/True' -and ($bt1.text -match 'vouched 1 served file')) ("board=$($bt1.board) input=$($bt1.input)")
+  $bt2 = Run-Built $true
+  T 'CLEAN TWIN a run that ships records its served board as committable, and vouches nothing as built' `
+    ($bt2.board -eq 'capture-run-daily/True' -and ($bt2.text -notmatch 'pipeline-writes: vouched'))("board=$($bt2.board) text=$($bt2.text)")
+
   # ---- SERVED-DIRTY: WHAT THE CHAIN WROTE vs WHAT IT STAGED (2026-09-02, queue 2026-09-02-reanch1) ----
   # Same harness, second shipped block. On 2026-09-02 the chain re-anchored 584 authored specs and rebuilt
   # three data files and three tool pages AFTER guards passed, and $servedPaths listed none of them, so 536
@@ -438,7 +476,7 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
 
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (.claude\rules\ops-and-gates.md): every case above is a literal T line, so
   # a case lost to a thrown helper or a mis-lifted block is a shortfall here, never a smaller green total.
-  $EXPECTED_CASES = 32
+  $EXPECTED_CASES = 34
   $ranBefore = $n
   T ('CLEAN TWIN every literal case ran: ' + $ranBefore + ' of ' + $EXPECTED_CASES) ($ranBefore -eq $EXPECTED_CASES) ("ran=$ranBefore")
   Write-Output ''
