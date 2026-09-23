@@ -981,6 +981,35 @@ if ($Accept -or $ForceAccept) {
   # same tree restored HEAD's baseline. The accept was gone, the drops came back, and the 12:13 chain build
   # was held by this gate again with nothing in the log saying why. Say it here, where the mistake is made.
   Write-Output ("  NOT DONE YET: $baseF is TRACKED. Commit it with the rule change or the next checkout restores the old baseline and this gate holds the next build again.")
+  # AN ACCEPTED RULE CHANGE RE-CHECKS THE LINKS OF EVERY COMMODITY IT RELEASED A PRODUCT FROM (2026-09-22, queue
+  # 2026-09-22-e9aed3). The accept is the moment a reviewed exclude becomes the rule, and the link layer did not
+  # hear about it: mexican-chorizo-fresh's `\bbeef\b` was accepted here, the cell moved to Cacique PORK, and the
+  # Walmart link kept opening the beef product. So each commodity that LOST a name between the old baseline and
+  # this one gets the same scoped re-check add-known-wrong runs for a ruling (derive-links-from-prices -Commodity):
+  # a link its rule now refuses is dropped and the cell re-derived from the row the board now prices. A copy of
+  # this script with no deriver beside it (the test-auditors fixtures) says so and skips.
+  $released = New-Object System.Collections.Generic.List[string]
+  if ($prevBase -and $prevBase.PSObject.Properties['names']) {
+    $newMap = $cf.names
+    foreach ($p in $prevBase.names.PSObject.Properties) {
+      $from = [string]$p.Value
+      if (-not $from -or $from -eq '<unmatched>') { continue }
+      $to = if ($newMap -is [System.Collections.IDictionary]) { [string]$newMap[$p.Name] } else { [string]$newMap.($p.Name) }
+      if ($to -and $to -ne $from -and -not $released.Contains($from)) { $released.Add($from) }
+    }
+  }
+  $deriver = Join-Path $root 'derive-links-from-prices.ps1'
+  if ($released.Count -eq 0) { Write-Output '  link re-check: no commodity lost a product in this accept, nothing to re-check' }
+  elseif (-not (Test-Path -LiteralPath $deriver)) { Write-Output ('  link re-check SKIPPED - derive-links-from-prices.ps1 is not beside this script; ' + $released.Count + ' released commodit(ies) NOT re-checked: ' + (($released.ToArray()) -join ', ')) }
+  else {
+    Write-Output ('  link re-check: ' + $released.Count + ' commodit(ies) released a product in this accept - ' + (($released.ToArray()) -join ', '))
+    foreach ($rid in $released.ToArray()) {
+      $dl = & powershell -NoProfile -ExecutionPolicy Bypass -File $deriver -OutDir $OutDir -Commodity $rid -Apply
+      $dlRc = $LASTEXITCODE
+      $dlLines = @($dl | Where-Object { $_ -match 'DROPPED|APPLIED' })
+      Write-Output ('    ' + $rid + ' (exit ' + $dlRc + '): ' + ($dlLines -join ' | '))
+    }
+  }
   Exit-Guard -Name 'match-soundness' -Code 0
 }
 

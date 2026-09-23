@@ -173,6 +173,25 @@ function Ident-Tokens([string]$s) {
   return $r
 }
 
+# RULE-RELEASED (2026-09-22, queue 2026-09-22-e9aed3): the link names a product its OWN commodity's rule refuses.
+# An exclude releases a product from a commodity; the board stops pricing it, but a link stored against that
+# commodity kept opening it. mexican-chorizo-fresh gained `\bbeef\b` and its Walmart cell moved to Cacique PORK
+# Chorizo while the link stayed on "Cacique Beef Chorizo 12oz" - brand and "chorizo" shared, so every test below
+# passed it, and 2.00 vs 2.68/lb sits inside the factor rule, so tile-integrity read it as PRICE-DRIFT. Flagged
+# here, prune-bad-links drops it and tile-integrity counts it WRONG-PRODUCT, the same road every flag takes.
+# The rules come from commodity-rules-lib (match-lib's exclude semantics). A copy of this script with no lib
+# beside it (the test-auditors fixtures) says it did not look rather than reading clean.
+$ruleIx = $null
+$crLib = Join-Path $root 'commodity-rules-lib.ps1'; $gxLib = Join-Path $root 'global-exclude-lib.ps1'
+if ((Test-Path $crLib) -and (Test-Path $gxLib)) {
+  . $gxLib; . $crLib
+  $ruleIx = @{}
+  Add-TcRuleIndex -Index $ruleIx -Doc (Read-JsonFile $cmFile)
+  $rcF = Join-Path $root 'recipe-commodities.json'
+  if (Test-Path $rcF) { Add-TcRuleIndex -Index $ruleIx -Doc (Read-JsonFile $rcF) }
+}
+else { Write-Output 'name-drift: rule-released NOT CHECKED - commodity-rules-lib.ps1 / global-exclude-lib.ps1 not beside this script' }
+
 $flags = @(); $examined = 0; $exByStore = @{}; $exCells = New-Object System.Collections.Generic.List[string]
 foreach ($it in $c) {
   $id = [string]$it.id
@@ -251,8 +270,15 @@ foreach ($it in $c) {
         $prodMismatch = -not $sharedProd
       }
     }
-    if ((-not $hit) -or $formFlip -or $countMismatch -or $brandMismatch -or $prodMismatch) {
-      $reason = if ($formFlip) { 'form-flip' } elseif ($countMismatch) { 'count-mismatch' } elseif ($brandMismatch) { 'brand-mismatch' } elseif ($prodMismatch) { 'product-mismatch' } else { 'name-drift' }
+    # rule-released: the link's product is refused by this commodity's rule while the board's own item is not
+    # (when both are refused the rule and the board disagree, which is match-soundness's question, not a link's).
+    $ruleReleased = $false
+    if ($null -ne $ruleIx) {
+      $relP = Get-TcReleasingPattern -Index $ruleIx -Id $id -Name ([string]$lnk.name)
+      if ($relP -and -not (Get-TcReleasingPattern -Index $ruleIx -Id $id -Name $item)) { $ruleReleased = $true }
+    }
+    if ((-not $hit) -or $ruleReleased -or $formFlip -or $countMismatch -or $brandMismatch -or $prodMismatch) {
+      $reason = if ($ruleReleased) { 'rule-released' } elseif ($formFlip) { 'form-flip' } elseif ($countMismatch) { 'count-mismatch' } elseif ($brandMismatch) { 'brand-mismatch' } elseif ($prodMismatch) { 'product-mismatch' } else { 'name-drift' }
       $flags += [pscustomobject]@{ id=$id; store=$store; reason=$reason; board_item=$item; link_name=[string]$lnk.name; link_price=$lnk.price }
     }
   }

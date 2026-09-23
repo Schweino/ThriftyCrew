@@ -367,6 +367,16 @@ Write-Output '    theft check: OK - no other commodity lost a cell or was re-pri
 
 if ($WhatIfOnly) { Copy-Item $bak $comFile -Force; Invoke-BatchChild 'compare-deals.ps1' | Out-Null; Write-Output 'WhatIfOnly: reverted'; exit 0 }
 
+# AN EXCLUDE RE-CHECKS EVERY LINK ON ITS COMMODITY, IN THIS RUN (2026-09-22, queue 2026-09-22-e9aed3). A rule edit
+# changes which product a cell prices, and the stored link kept opening the product the edit released: the
+# chorizo cell moved to Cacique PORK under a new `\bbeef\b` and its link stayed on the beef product. The same
+# re-check add-known-wrong runs for a ruling, scoped to each commodity this batch touched: a link its rule now
+# refuses is dropped, and every cell is re-derived from the row the board now prices.
+foreach ($tid in @($TouchedIds)) {
+  if (-not $tid) { continue }
+  Invoke-BatchChild 'derive-links-from-prices.ps1' @('-Commodity', [string]$tid, '-Apply') | Out-Null
+}
+
 # ---- gate 3..5: the checks that actually catch collisions
 $childRc = Invoke-BatchChild 'audit-known-wrong.ps1'
 if ($childRc -ne 0) { Revert "audit-known-wrong failed ($childRc) - a widened rule re-admitted an adjudicated-wrong product" }

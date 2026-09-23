@@ -45,8 +45,10 @@
 # -Commodity right after a ruling, so the one link that pointed at the newly ruled product is dropped or
 # re-derived in the SAME run instead of waiting for tomorrow's chain (or for audit-known-wrong to hold a push).
 # -KnownWrongFile is pinnable for the self-test; it defaults to the live known-wrong.json beside this script.
+# -CommoditiesFile is pinnable for the self-test (2026-09-22, queue 2026-09-22-e9aed3); it defaults to the live
+# commodities.json beside this script, with recipe-commodities.json added when it sits beside that file.
 param([switch]$Apply, [string]$OutDir = "", [string]$Store = "", [string]$Commodity = "", [string]$ProductUrlsFile = "",
-  [string]$KnownWrongFile = "", [switch]$SelfTest)
+  [string]$KnownWrongFile = "", [string]$CommoditiesFile = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path $PSScriptRoot 'regular-fileset-lib.ps1')
@@ -56,6 +58,9 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $KnownWrongFile) { $KnownWrongFile = Join-Path $root 'known-wrong.json' }
 . (Join-Path $root 'pu-lib.ps1')   # store what you audit: every entry re-prices through the same lib prune uses
 . (Join-Path $root 'known-wrong-lib.ps1')   # THE ruling matcher (KwNorm/KwCore) compare-deals and audit-known-wrong use
+. (Join-Path $root 'global-exclude-lib.ps1')
+. (Join-Path $root 'commodity-rules-lib.ps1')   # Add-TcRuleIndex / Get-TcReleasingPattern: an exclude releases a linked product
+if (-not $CommoditiesFile) { $CommoditiesFile = Join-Path $root 'commodities.json' }
 
 # ---- SAM'S ALPHANUMERIC /ip/<id> IS PROVEN BY A FILE, NOT BY THIS SCRIPT (2026-09-22, plan-2026-09-22-10 bec597) ----
 # Sam's moved every sams_item_id to an alphanumeric form (2,802 of 2,802 rows). The numeric /ip/<id> shape was
@@ -145,6 +150,7 @@ if ($SelfTest) {
     ($smFx | ConvertTo-Json -Depth 6) | Set-Content -LiteralPath (Join-Path $fx 'regular\sams-regular-2026-09-19.json') -Encoding UTF8
     $puFx = Join-Path $fx 'product-urls.json'
     $kwNone = Join-Path $fx 'known-wrong-absent.json'   # never written: the pre-2026-09-22 runs read no ruling
+    $cmNone = Join-Path $fx 'commodities-absent.json'   # never written: the arms before the rule-released case read no commodity rule
     $puSeed = @{ items = @{
         'feminine-pads' = @{
           'Fareway'     = @{ url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/34669-always-ultra-thin-pads-size-1-regular-with-wings-36-ct'; name = 'Always Ultra Thin Pads with Wings'; price = '6.99'; size = '36 ct' }
@@ -161,7 +167,7 @@ if ($SelfTest) {
     $seedJson = ($puSeed | ConvertTo-Json -Depth 8)
     $seedJson | Set-Content -LiteralPath $puFx -Encoding UTF8
     $twinBefore = (Get-FileHash -LiteralPath $puFx -Algorithm SHA256).Hash
-    $out = & powershell -NoProfile -File $PSCommandPath -OutDir $fx -ProductUrlsFile $puFx -KnownWrongFile $kwNone -Apply
+    $out = & powershell -NoProfile -File $PSCommandPath -OutDir $fx -ProductUrlsFile $puFx -KnownWrongFile $kwNone -CommoditiesFile $cmNone -Apply
     $rc = $LASTEXITCODE
     $text = ($out -join "`n")
     $after = Read-JsonFile $puFx
@@ -203,7 +209,7 @@ if ($SelfTest) {
     }
     function Invoke-ShapeArm {
       $seedJson | Set-Content -LiteralPath $puFx -Encoding UTF8
-      $o = & powershell -NoProfile -File $PSCommandPath -OutDir $fx -ProductUrlsFile $puFx -KnownWrongFile $kwNone -Apply
+      $o = & powershell -NoProfile -File $PSCommandPath -OutDir $fx -ProductUrlsFile $puFx -KnownWrongFile $kwNone -CommoditiesFile $cmNone -Apply
       return @{ rc = $LASTEXITCODE; text = ($o -join "`n"); doc = (Read-JsonFile $puFx) }
     }
     Write-ShapeFx 'proven' 3 @($true, $true, $true) $false
@@ -228,7 +234,7 @@ if ($SelfTest) {
     $kwDoc = @{ entries = @(@{ key = 'tomatoes|Fareway|dei-fratelli-tomatoes-whole'; commodity = 'tomatoes'; store = 'Fareway'; names = @('Dei Fratelli Tomatoes, Whole'); verdict = 'wrong-product'; ruled_on = '2026-09-21' }) }
     ($kwDoc | ConvertTo-Json -Depth 5) | Set-Content -LiteralPath $kwFx -Encoding UTF8
     $seedJson | Set-Content -LiteralPath $puFx -Encoding UTF8
-    $ok = & powershell -NoProfile -File $PSCommandPath -OutDir $fx -ProductUrlsFile $puFx -KnownWrongFile $kwFx -Store 'Fareway' -Commodity 'tomatoes' -Apply
+    $ok = & powershell -NoProfile -File $PSCommandPath -OutDir $fx -ProductUrlsFile $puFx -KnownWrongFile $kwFx -CommoditiesFile $cmNone -Store 'Fareway' -Commodity 'tomatoes' -Apply
     $krc = $LASTEXITCODE; $ktext = ($ok -join "`n")
     $kdoc = Read-JsonFile $puFx
     $tf = $kdoc.items.'tomatoes'.'Fareway'
@@ -245,7 +251,7 @@ if ($SelfTest) {
     $kwDoc3 = @{ entries = @(@{ key = 'tomatoes|Hy-Vee|otv'; commodity = 'tomatoes'; store = 'Hy-Vee'; names = @('Tomatoes on the Vine'); verdict = 'wrong-product'; ruled_on = '2026-09-22' }) }
     ($kwDoc3 | ConvertTo-Json -Depth 5) | Set-Content -LiteralPath $kwFx -Encoding UTF8
     $seedJson | Set-Content -LiteralPath $puFx -Encoding UTF8
-    $o3 = & powershell -NoProfile -File $PSCommandPath -OutDir $fx -ProductUrlsFile $puFx -KnownWrongFile $kwFx -Store 'Hy-Vee' -Commodity 'tomatoes' -Apply
+    $o3 = & powershell -NoProfile -File $PSCommandPath -OutDir $fx -ProductUrlsFile $puFx -KnownWrongFile $kwFx -CommoditiesFile $cmNone -Store 'Hy-Vee' -Commodity 'tomatoes' -Apply
     $k3 = Read-JsonFile $puFx
     TT "MUST FIRE: a ruled link whose cell is GONE from the board (the 2026-09-21 shape) is removed, not left for an audit to find" `
       ($LASTEXITCODE -eq 0 -and $null -eq $k3.items.'tomatoes'.PSObject.Properties['Hy-Vee'] -and $null -ne $k3.items.'tomatoes'.PSObject.Properties['Fareway']) ((($o3 -join "`n") -split "`n" | Select-String 'DROPPED' | Select-Object -Last 1))
@@ -253,15 +259,47 @@ if ($SelfTest) {
     $kwDoc2 = @{ entries = @(@{ key = 'tomatoes|Fareway|roma'; commodity = 'tomatoes'; store = 'Fareway'; names = @('Roma Tomatoes'); verdict = 'wrong-product'; ruled_on = '2026-09-22' }) }
     ($kwDoc2 | ConvertTo-Json -Depth 5) | Set-Content -LiteralPath $kwFx -Encoding UTF8
     $seedJson | Set-Content -LiteralPath $puFx -Encoding UTF8
-    $o2 = & powershell -NoProfile -File $PSCommandPath -OutDir $fx -ProductUrlsFile $puFx -KnownWrongFile $kwFx -Store 'Fareway' -Commodity 'tomatoes' -Apply
+    $o2 = & powershell -NoProfile -File $PSCommandPath -OutDir $fx -ProductUrlsFile $puFx -KnownWrongFile $kwFx -CommoditiesFile $cmNone -Store 'Fareway' -Commodity 'tomatoes' -Apply
     $k2 = Read-JsonFile $puFx
     TT "MUST FIRE: a priced row whose own name is ruled wrong is refused and counted, and no link is written from it" `
       ((($o2 -join "`n") -match 'rows refused, product ruled wrong: 1') -and ([string]$k2.items.'tomatoes'.'Fareway'.url) -ne 'https://shop.fareway.com/store/fareway-meat-grocery/products/2-roma-tomatoes') ([string]$k2.items.'tomatoes'.'Fareway'.url)
+
+    # ---- AN EXCLUDE RELEASES A LINKED PRODUCT (2026-09-22, queue 2026-09-22-e9aed3, the chorizo founding row) ----
+    # Its own tree, so the arms above are untouched. The real rows: mexican-chorizo-fresh gained `\bbeef\b`, the
+    # Walmart cell moved to "Cacique Pork Chorizo, 9 oz (Refrigerated)" (item 11027816, $1.50, 0.56 lb), and the
+    # link stayed on walmart.com/ip/10451933 "Cacique Beef Chorizo 12oz". A Hy-Vee link to a beef chorizo with NO
+    # Hy-Vee cell is the shape only the rule drop can reach: no derivation will ever write over it.
+    $cz = Join-Path $fx 'chz'
+    [void](New-Item -ItemType Directory -Path (Join-Path $cz 'regular') -Force -ErrorAction Stop)
+    (@{ comparison = @(@{ id = 'mexican-chorizo-fresh'; unit = 'lb'; stores = @(
+            @{ store = 'Walmart'; per_unit = 2.6786; unit = 'lb'; type = 'everyday'; item = 'Cacique Pork Chorizo, 9 oz (Refrigerated)'; ad = '$1.50'; size = '0.56 lb' },
+            @{ store = "Baker's"; per_unit = 3.5467; unit = 'lb'; type = 'everyday'; item = 'Kroger Mercado Chorizo Sausage Pork Links'; ad = '$3.99'; size = '5 pk 3.6 oz' }) }) } |
+      ConvertTo-Json -Depth 8) | Set-Content -LiteralPath (Join-Path $cz 'comparison-2026-09-22.json') -Encoding UTF8
+    (@{ deals = @(@{ item = 'Cacique Pork Chorizo, 9 oz (Refrigerated)'; ad_price = '$1.50'; regular = $null; size = '0.56 lb'; item_id = '11027816' }) } |
+      ConvertTo-Json -Depth 6) | Set-Content -LiteralPath (Join-Path $cz ('regular\walmart-regular-' + (Get-Date -Format 'yyyy-MM-dd') + '.json')) -Encoding UTF8
+    $czCm = Join-Path $cz 'commodities.json'
+    ConvertTo-Json -Depth 5 -InputObject @(@{ id = 'mexican-chorizo-fresh'; unit = 'lb'; include = @('\bchorizo\b'); exclude = @('\b(?:spanish|cured|smoked)\b', '\bbeef\b') }) |
+      Set-Content -LiteralPath $czCm -Encoding UTF8
+    $czPu = Join-Path $cz 'product-urls.json'
+    (@{ items = @{ 'mexican-chorizo-fresh' = @{
+          'Walmart' = @{ url = 'https://www.walmart.com/ip/10451933'; name = 'Cacique Beef Chorizo 12oz'; price = '1.5'; size = '0.75 lb'; verified = '2026-08-31 price-pull self-capture' }
+          'Hy-Vee'  = @{ url = 'https://www.hy-vee.com/aisles-online/p/9/beef-chorizo'; name = 'Hy-Vee Beef Chorizo'; price = '$3.49'; size = '1 lb'; verified = '2026-09-10 DERIVED from the price row (same record the board priced)' }
+          "Baker's" = @{ url = 'https://www.bakersplus.com/p/kroger-mercado-chorizo-sausage-pork-links/0001111062555'; name = 'Kroger Mercado Chorizo Sausage Pork Links'; price = '$3.99'; size = '5 pk 3.6 oz'; verified = '2026-09-20 DERIVED from the price row (same record the board priced)' } } } } |
+      ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $czPu -Encoding UTF8
+    $oc = & powershell -NoProfile -File $PSCommandPath -OutDir $cz -ProductUrlsFile $czPu -KnownWrongFile $kwNone -CommoditiesFile $czCm -Commodity 'mexican-chorizo-fresh' -Apply
+    $crc = $LASTEXITCODE; $ctext = ($oc -join "`n"); $cdoc = Read-JsonFile $czPu
+    $cItems = $cdoc.items.'mexican-chorizo-fresh'
+    TT "MUST FIRE: the Walmart chorizo link to the beef product the new \bbeef\b exclude released is dropped and RE-DERIVED from item 11027816" `
+      ($crc -eq 0 -and $ctext -match 'released by its commodity rule: 2' -and ([string]$cItems.'Walmart'.url) -eq 'https://www.walmart.com/ip/11027816' -and ([string]$cItems.'Walmart'.name) -eq 'Cacique Pork Chorizo, 9 oz (Refrigerated)') ("rc=$crc url=" + [string]$cItems.'Walmart'.url)
+    TT "MUST FIRE: a released link whose store has NO cell (Hy-Vee Beef Chorizo) is removed, not left for nothing to visit" `
+      ($null -eq $cItems.PSObject.Properties['Hy-Vee']) ($(if ($cItems.PSObject.Properties['Hy-Vee']) { [string]$cItems.'Hy-Vee'.name } else { '<gone>' }))
+    TT "CLEAN TWIN: the Baker's pork links link, which the exclude does not refuse, keeps its url and its verified stamp" `
+      (([string]$cItems."Baker's".url) -eq 'https://www.bakersplus.com/p/kroger-mercado-chorizo-sausage-pork-links/0001111062555' -and ([string]$cItems."Baker's".verified) -eq '2026-09-20 DERIVED from the price row (same record the board priced)') ([string]$cItems."Baker's".verified)
   }
   finally { Remove-Item -LiteralPath $fx -Recurse -Force -ErrorAction SilentlyContinue }
   Write-Output ''
-  if ($bad -eq 0 -and $ran -eq 19) { Write-Output ('derive-links-from-prices self-test: PASS (' + $ran + ' case(s), 0 failure(s))'); exit 0 }
-  Write-Output ("derive-links-from-prices self-test: FAIL (" + $bad + " failure(s) of " + $ran + " case(s) run, 19 expected)")
+  if ($bad -eq 0 -and $ran -eq 22) { Write-Output ('derive-links-from-prices self-test: PASS (' + $ran + ' case(s), 0 failure(s))'); exit 0 }
+  Write-Output ("derive-links-from-prices self-test: FAIL (" + $bad + " failure(s) of " + $ran + " case(s) run, 22 expected)")
   exit 1
 }
 
@@ -384,6 +422,36 @@ if ($Commodity) {
 # audit-known-wrong use) is dropped here, before derivation, and the derivation below then re-derives that cell's
 # link from the row the board now prices, in the same run, when that row carries an identity. A row whose name is
 # itself ruled wrong never lends its URL either.
+# AN EXCLUDE IS A RULING TOO (2026-09-22, queue 2026-09-22-e9aed3). A commodity exclude releases a product exactly
+# as a known-wrong ruling does, one level up: mexican-chorizo-fresh gained `\bbeef\b`, its Walmart cell moved to
+# Cacique PORK Chorizo, and the link kept opening "Cacique Beef Chorizo 12oz" because nothing re-checked it. So the
+# same drop covers a link whose stored name its own commodity's effective excludes refuse, and the derivation below
+# re-derives the cell from the row the board now prices. Every caller that applies an exclude runs this script
+# scoped to the commodities it touched (apply-coverage-batch, audit-match-soundness -Accept).
+$ruleIx = @{}
+if (Test-Path -LiteralPath $CommoditiesFile) {
+  Add-TcRuleIndex -Index $ruleIx -Doc (Read-JsonFile $CommoditiesFile)
+  $rcF = Join-Path (Split-Path -Parent $CommoditiesFile) 'recipe-commodities.json'
+  if (Test-Path -LiteralPath $rcF) { Add-TcRuleIndex -Index $ruleIx -Doc (Read-JsonFile $rcF) }
+}
+$ruleDropped = New-Object System.Collections.Generic.List[string]
+if ($ruleIx.Count -gt 0 -and $puDoc.items) {
+  foreach ($cProp in @($puDoc.items.PSObject.Properties)) {
+    if ($Commodity -and $cProp.Name -ne $Commodity) { continue }
+    if ($cProp.Value -isnot [psobject]) { continue }
+    foreach ($sProp in @($cProp.Value.PSObject.Properties)) {
+      if ($Store -and $sProp.Name -ne $Store) { continue }
+      $ev = $sProp.Value
+      if ($ev -isnot [psobject] -or -not $ev.PSObject.Properties['name']) { continue }
+      $relP = Get-TcReleasingPattern -Index $ruleIx -Id $cProp.Name -Name ([string]$ev.name)
+      if ($relP) {
+        $ruleDropped.Add(('  {0,-13}{1,-24}{2}   (exclude {3})' -f $sProp.Name, $cProp.Name, [string]$ev.name, $relP))
+        $cProp.Value.PSObject.Properties.Remove($sProp.Name)
+      }
+    }
+  }
+}
+
 $kwBlocks = Get-KnownWrongBlocks -Path $KnownWrongFile
 $kwDropped = New-Object System.Collections.Generic.List[string]
 if ($kwBlocks.Count -gt 0 -and $puDoc.items) {
@@ -501,6 +569,8 @@ foreach ($row in $cmp) {
 
 Write-Output ("links DROPPED, product ruled wrong: " + $kwDropped.Count + "  (known-wrong.json rules the linked product wrong for that commodity and store)")
 foreach ($c in ($kwDropped | Select-Object -First 15)) { Write-Output $c }
+Write-Output ("links DROPPED, product released by its commodity rule: " + $ruleDropped.Count + "  (the link names a product the commodity's own excludes refuse)")
+foreach ($c in ($ruleDropped | Select-Object -First 40)) { Write-Output $c }
 Write-Output ("rows refused, product ruled wrong: " + $kwRowRefused)
 Write-Output ("Sam's alphanumeric /ip/<id> shape: " + $(if ($script:SamsShape.proven) { 'PROVEN' } else { 'not proven' }) + " (" + $script:SamsShape.why + ")")
 Write-Output ("links DERIVED from the price row : " + $derived)

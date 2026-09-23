@@ -136,3 +136,37 @@ function Test-TcCommodityRulesAgree {
   }
   return ,$bad.ToArray()
 }
+
+<#
+  A LINK TO A PRODUCT ITS OWN COMMODITY'S RULE REFUSES (2026-09-22, queue 2026-09-22-e9aed3). An exclude
+  releases a product from a commodity: the board stops pricing it, but a See-item link stored against that
+  commodity still opens it. mexican-chorizo-fresh gained `\bbeef\b`, the Walmart cell moved to Cacique PORK
+  Chorizo, and the link stayed on walmart.com/ip/10451933, "Cacique Beef Chorizo 12oz". No link check saw it:
+  the names share brand and "chorizo", and the per-unit gap (2.00 vs 2.68/lb) is under the factor rule.
+  Measured that day over product-urls.json: 33 of 2,962 links named a product their own commodity refuses.
+
+  Add-TcRuleIndex adds id -> effective exclude regexes (own + unrelaxed globals, match-lib's semantics via
+  Get-TcCommodityExclude) for ONE commodity document (the staple array or the recipe {commodities,
+  global_exclude} doc) to $Index; an id already present is kept, so add the staple doc before the recipe doc,
+  the order audit-name-drift reads the boards in. One doc per call: a document that IS an array must not be
+  passed inside another array, where PS unrolls it.
+  Get-TcReleasingPattern returns the exclude text that refuses $Name for $Id, or $null (unknown id included:
+  no rule, no opinion). Raw name, case-insensitive, as match-lib tests excludes.
+#>
+function Add-TcRuleIndex {
+  param([Parameter(Mandatory)][hashtable]$Index, [Parameter(Mandatory)]$Doc)
+  $gex = Get-TcGlobalExcludeForDoc -Doc $Doc
+  foreach ($c in (Get-TcCommodityList -Doc $Doc)) {
+    $id = [string]$c.id
+    if (-not $id -or $Index.ContainsKey($id)) { continue }
+    $eff = Get-TcCommodityExclude -Commodity $c -GlobalExclude $gex
+    $Index[$id] = @($eff | ForEach-Object { [pscustomobject]@{ text = $_; rx = [regex]::new($_, [System.Text.RegularExpressions.RegexOptions]::IgnoreCase) } })
+  }
+}
+
+function Get-TcReleasingPattern {
+  param([Parameter(Mandatory)][hashtable]$Index, [string]$Id = '', [string]$Name = '')
+  if (-not $Id -or -not $Name -or -not $Index.ContainsKey($Id)) { return $null }
+  foreach ($p in $Index[$Id]) { if ($p.rx.IsMatch($Name)) { return [string]$p.text } }
+  return $null
+}

@@ -1770,6 +1770,28 @@ else { Bad ('name-drift clean twin failed (rc=' + $r.rc + ')') }
 Remove-Item $fxNd -Recurse -Force -ErrorAction SilentlyContinue
 } # u039-g-audit-name-drift-blind-at-zero
 
+# (g2) audit-name-drift: RULE-RELEASED (2026-09-22, queue 2026-09-22-e9aed3). The founding row, frozen: after
+# mexican-chorizo-fresh gained `\bbeef\b` the Walmart cell priced "Cacique Pork Chorizo, 9 oz (Refrigerated)" while
+# its link still opened "Cacique Beef Chorizo 12oz". Brand and "chorizo" are shared and 2.00 vs 2.68/lb is under
+# the factor rule, so no link check saw it live. The Baker's pork links link is the clean twin.
+if (Use-Unit 'u039r-audit-name-drift-rule-released') {
+$fxNr = NewFxDir 'nd-released'
+foreach ($f in @('audit-name-drift.ps1', 'global-exclude-lib.ps1', 'commodity-rules-lib.ps1')) { Copy-Item (Join-Path $root $f) (Join-Path $fxNr $f) }
+New-Item -ItemType Directory -Force (Join-Path $fxNr 'out') | Out-Null
+Set-Content (Join-Path $fxNr 'commodities.json') '[{"id":"mexican-chorizo-fresh","label":"Mexican Chorizo (Fresh)","include":["\\bchorizo\\b"],"exclude":["\\b(?:spanish|cured|smoked)\\b","\\bbeef\\b"]}]' -Encoding UTF8
+Set-Content (Join-Path $fxNr 'out\comparison-2026-01-01.json') '{"comparison":[{"id":"mexican-chorizo-fresh","unit":"lb","stores":[{"store":"Walmart","item":"Cacique Pork Chorizo, 9 oz (Refrigerated)","per_unit":2.6786,"type":"everyday"},{"store":"Baker''s","item":"Kroger Mercado Chorizo Sausage Pork Links","per_unit":3.5467,"type":"everyday"}]}]}' -Encoding UTF8
+Set-Content (Join-Path $fxNr 'product-urls.json') '{"items":{"mexican-chorizo-fresh":{"Walmart":{"url":"https://www.walmart.com/ip/10451933","price":"1.5","size":"0.75 lb","name":"Cacique Beef Chorizo 12oz"},"Baker''s":{"url":"https://www.bakersplus.com/p/kroger-mercado-chorizo-sausage-pork-links/0001111062555","price":"$3.99","size":"5 pk 3.6 oz","name":"Kroger Mercado Chorizo Sausage Pork Links"}}}}' -Encoding UTF8
+$r = RunPSAt $fxNr 'audit-name-drift.ps1' @()
+$ndJson = try { Read-JsonFile (Join-Path $fxNr 'out\name-drift.json') } catch { $null }
+$wm = @(@($ndJson.flags) | Where-Object { $_ -and [string]$_.store -eq 'Walmart' })
+$bk = @(@($ndJson.flags) | Where-Object { $_ -and [string]$_.store -eq "Baker's" })
+if ($r.rc -eq 0 -and $wm.Count -eq 1 -and [string]$wm[0].reason -eq 'rule-released') { Ok 'MUST FIRE: name-drift flags the Walmart chorizo link to the beef product its own \bbeef\b exclude released (rule-released)' }
+else { Bad ('name-drift did NOT flag the released beef chorizo link (rc=' + $r.rc + ', walmart flags=' + $wm.Count + ')') }
+if ($ndJson -and [int]$ndJson.examined -eq 2 -and $bk.Count -eq 0) { Ok "CLEAN TWIN: the Baker's pork chorizo link is examined (2 of 2) and stays unflagged" }
+else { Bad ("name-drift flagged or skipped the Baker's pork twin (examined=" + $(if ($ndJson) { $ndJson.examined } else { 'none' }) + ', flags=' + $bk.Count + ')') }
+Remove-Item $fxNr -Recurse -Force -ErrorAction SilentlyContinue
+} # u039r-audit-name-drift-rule-released
+
 # (g2) audit-name-drift MUST be able to see a RECIPE-BOARD cell. Founding bug (2026-07-30): it read
 # out\comparison-*.json only, so guards.ps1 guard 3's WRONG-PRODUCT clause - which looks a pin up in
 # name-drift.json by id|store - could not fire for ANY pin, because all 16 pins in board-price-overrides.json
@@ -4048,6 +4070,10 @@ else {
   $msNewBase = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $fxMs 'out\audit\match-baseline.json')))
   if ($r.rc -eq 0 -and ([string]$msNewBase.names.'Fresh Lemon 1 ct') -eq 'lemons') { Ok '-Accept ignores the sweep cache and baselines a freshly swept truth' }
   else { Bad ('-Accept blessed a CACHED mapping into the permanent baseline (got ' + [string]$msNewBase.names.'Fresh Lemon 1 ct' + ') - a stale sweep is now invisible forever') }
+  # 2026-09-22 (queue 2026-09-22-e9aed3): an accept names the commodities it released a product from and re-checks
+  # their links. This copy has no deriver beside it, so the branch must SAY it skipped, never pass silently.
+  if ($r.text -match 'link re-check (SKIPPED - derive-links-from-prices\.ps1 is not beside|: no commodity lost)') { Ok '-Accept reaches the released-commodity link re-check and states what it did' }
+  else { Bad ('-Accept printed no link re-check line - the released-link trigger was never reached: ' + $r.text) }
   if ((Get-Item $msCache).LastWriteTime.Ticks -eq $msCacheTicks) { Ok '-Accept does not write the sweep cache either (write path skipped entirely)' }
   else { Bad '-Accept wrote the sweep cache - the write path is not skipped' }
   # An unusable stamp must fall through to the real sweep ('' | ConvertFrom-Json returns $null WITHOUT throwing).
