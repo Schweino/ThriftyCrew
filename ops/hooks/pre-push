@@ -27,8 +27,9 @@
 # 3 = COULD NOT EVALUATE - nothing was judged, which is never the tree being clean. A 3 has SEVERAL causes and
 # the refusal below reads which one from the gate's own blind= marker: discovery collapsing, no gate worker slot
 # inside the wait, a push the remote will already reject, a pool that returned a different number of results than
-# it dispatched, or a self-test that exited 0 without its own verdict. A 3 is NEVER a pass and is refused here as
-# loudly as a 1, whichever cause it was and even when the gate named none.
+# it dispatched, a self-test that exited 0 without its own verdict, or (since 2026-09-23) a static gate that exited 0
+# while its own marker said it read zero files. A 3 is NEVER a pass and is refused here as loudly as a 1, whichever
+# cause it was and even when the gate named none.
 #
 # IT STANDS IN FRONT OF THE AUTOMATED PUSHES TOO, deliberately, and that is worth knowing before it
 # surprises somebody: the ~07:00 bot and wave-publish both push. run-gates is HERMETIC - it reads
@@ -391,6 +392,14 @@ if [ "$rc" -eq 3 ]; then
     no-selftests|selftest-discovery-collapsed)
       echo "          CAUSE: gate DISCOVERY is broken. run-gates found no self-tests, or far fewer than this tree" >&2
       echo "          holds, so it refused to judge. Fix the walk; a tree that cannot be examined is not a clean one." >&2
+      ;;
+    static-scanned-zero)
+      # W6.9 (2026-09-23): ops/audit-readjson-inline-wrap.ps1 read zero files from every worktree for two days and
+      # run-gates scored it ok. The token carries no gate name; run-gates' own COULD NOT EVALUATE line below does.
+      echo "          CAUSE: a static gate exited 0 while its own marker said it READ NOTHING (scanned=, files=," >&2
+      echo "          examined= or resolved= at 0), so it judged nothing. That is usually a walk that excludes on the" >&2
+      echo "          FULL path and so drops every file in a worktree. The gate's own line below names which. Fix" >&2
+      echo "          its walk; zero_ok = \$true on its run-gates entry is only for a gate whose empty set is a real answer." >&2
       ;;
     ?*)
       echo "          CAUSE: the gate reported blind=$blind. Read its own line below before doing anything else." >&2

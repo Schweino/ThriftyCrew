@@ -38,16 +38,19 @@ it - so for a month a push was gated exactly as much as the person pushing chose
 workflow is still dispatch-only; the hook is what restored the property, locally and for free.
 
 **Exit 0 = passed. 1 = at least one gate failed. 3 = could not evaluate**, which is never the tree being
-clean. **A 3 HAS FIVE CAUSES and you read WHICH from the gate's own `blind=` token**, never from a habit:
+clean. **A 3 HAS SIX CAUSES and you read WHICH from the gate's own `blind=` token**, never from a habit:
 discovery broken (`blind=no-selftests`, `blind=selftest-discovery-collapsed`); no gate worker slot inside
 the wait, which is contention on this box and nothing wrong with your checkout (`blind=no-gate-worker-slot`);
 a push the remote has already moved past (`blind=push-cannot-land`, rebase and push again); a pool that
-returned a different count than it dispatched; or a self-test that exited 0 without printing its OWN verdict
+returned a different count than it dispatched; a self-test that exited 0 without printing its OWN verdict
 as its last words (2026-09-11: a verdict glued onto a case line let pull-grocery-ads fall through to a live
-pull and score ok for hours). `pre-push` reads that token and names the cause in its refusal - until
-2026-09-12 it said "discovery is broken" for all five, which on a busy box sent the pusher to debug a walk
-that was fine. Never read 3 as a pass, whichever cause it names and even when it names none. (The recipe
-battery uses exit 2 for its own could-not-run - check which tool you actually ran.)
+pull and score ok for hours); or a static gate that exited 0 while its own marker said it READ NOTHING
+(`blind=static-scanned-zero`, since 2026-09-23: `audit-readjson-inline-wrap` walked zero files from every
+worktree for two days and scored ok; the gates are named on run-gates' COULD NOT EVALUATE line, and an entry
+whose empty set is a real answer declares `zero_ok = $true` with its reason). `pre-push` reads that token and
+names the cause in its refusal - until 2026-09-12 it said "discovery is broken" for all five, which on a busy
+box sent the pusher to debug a walk that was fine. Never read 3 as a pass, whichever cause it names and even
+when it names none. (The recipe battery uses exit 2 for its own could-not-run - check which tool you actually ran.)
 
 **The 24 machine-wide gate worker slots are a QUEUE, served in arrival order** (`lib/gate-slots.ps1`, since
 2026-09-11; Brad set the budget at 10 that day and raised it to 24 on 2026-09-12 in 39be9900e): a refusal

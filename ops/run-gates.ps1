@@ -24,7 +24,7 @@
   "did this change break the machinery?", not "is today's board correct".
 
   Exit 0 = every gate passed. 1 = at least one failed. 3 = COULD NOT EVALUATE, which is never the tree being
-  clean. A 3 HAS FIVE CAUSES and each one names itself in the COMPLETE marker's blind= token or in its own
+  clean. A 3 HAS SIX CAUSES and each one names itself in the COMPLETE marker's blind= token or in its own
   COULD NOT EVALUATE line, because a refusal that points at the wrong cause sends the reader to debug something
   that is fine and the next thing they reach for is --no-verify:
 
@@ -37,6 +37,12 @@
     a pool that returned a different number of results than it dispatched - no marker, its own line says so.
     a self-test that exited 0 without its own verdict as its last words - lib\selftest-verdict.ps1 is that rule,
       since 2026-09-11. The marker carries noverdict=N rather than a blind= token.
+    blind=static-scanned-zero - a static detector exited 0 while its own COMPLETE marker said it READ nothing
+      (scanned=, files=, examined= or resolved= at 0), so "found nothing" and "looked at nothing" were the same
+      bytes. Since 2026-09-23 (W6.9): ops\audit-readjson-inline-wrap.ps1 scanned zero files from every worktree for
+      two days and this file scored it ok. The gates are named on the COULD NOT EVALUATE line; the token carries no
+      path, because pre-push's grep stops at the first character outside [A-Za-z0-9_-]. A red gate outranks it, and
+      an entry with zero_ok = $true declares an empty population legitimate, with its reason beside it.
 
   ops\hooks\pre-push reads that token and names the cause in its refusal; ops\test-prepush-hook.ps1 fixtures it.
 #>
@@ -60,6 +66,7 @@ Clear-TcGitRepoEnv
 . (Join-Path $repo 'lib\selftest-discovery.ps1')   # Get-TcSelfTestSwitch - no param() block, so it cannot reset ours
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot - discovery excludes below the root, so a worktree root is scanned
 . (Join-Path $repo 'lib\selftest-verdict.ps1')   # Get-TcSelfTestScore - no param() block, so it cannot reset ours
+. (Join-Path $repo 'lib\ratchet.ps1')   # Get-TcStaticZeroScan - no param() block, so it cannot reset ours
 
 # Self-tests that cannot run hermetically, with the reason. Keyed by file name, same standard as every other
 # allowlist here: a line is a decision someone defends in a diff, not a way to make the gate quiet.
@@ -182,6 +189,7 @@ if (-not $Jobs -or $Jobs -lt 1) { $Jobs = [Math]::Max(1, [Math]::Min($script:TcG
 $PSEXE = (Get-Command powershell).Source
 $fail = @()
 $noVerdict = @()   # self-tests that exited 0 without their own verdict line - scored 3, never ok (lib\selftest-verdict.ps1)
+$staticBlind = @() # static gates that exited 0 over a population of 0 - scored 3, never ok (lib\ratchet.ps1, W6.9)
 $blindGates = @()
 Write-Output ("run-gates: {0} self-test(s) discovered" -f $withSelfTest.Count)
 # A DISCOVERED SET PRINTS WHAT IT RESOLVED (2026-09-11). The renamed-switch suites are named with the switch each
@@ -358,7 +366,11 @@ $static = @(
   @{ f = 'ops\audit-arg-binding.ps1';          n = 'every audit/verify/test/check script REFUSES an argument it does not declare, so a scoped check cannot silently run unscoped and report clean' }
   # Hermetic: reads .ps1 source text, never a board, so it belongs here rather than in the daily chain.
   @{ f = 'ops\audit-cross-module-reach.ps1';   n = 'no NEW script reaches into another module''s internals directory - a ratchet on cross-module path literals, high-water mark may only go DOWN' }
-  @{ f = 'ops\audit-lift-completeness.ps1';    n = 'every function a grocery script lifts out of another script''s source brings the functions it CALLS with it, so a hand-maintained lift list cannot fall behind and fail at run time' }
+  # NO zero_ok HERE, DELIBERATELY (2026-09-23). Its scanned= counts the LIFTS it checked, not files, and a 0 there is
+  # not always an empty set: it read 0 on 78 main-checkout runs over 2026-09-10 and 11, the days it had gone vacuous
+  # and checked nothing on every push. It reads 1 today (Merge-IwbRows). When that last lift becomes a library, retire
+  # this entry or give it zero_ok with that reason - a decision somebody makes, not a default.
+  @{ f = 'ops\audit-lift-completeness.ps1';   n = 'every function a grocery script lifts out of another script''s source brings the functions it CALLS with it, so a hand-maintained lift list cannot fall behind and fail at run time' }
   @{ f = 'ops\audit-one-way-actuators.ps1';    n = 'a control constant that may only move ONE WAY carries a rate limit and a plausibility bar - a REPORT, exit 0, because "one-directional" is a property of a design and no pattern matcher can be precise about it' }
   @{ f = 'ops\audit-event-bus.ps1';            n = 'every declared producer of an estate event still writes one, and the bus is not silently dead - the wiring half is static, and the FLOOR half is one of the estate''s only checks that fires on nothing happening' }
   @{ f = 'ops\audit-phantom-paths.ps1';        n = 'a script path named in standing guidance (CLAUDE.md, rules, agents, docs, hooks, rulings) exists in the tree - the founding phantom was ops\audit-hook-installed.ps1, cited five times as a running guard and never written' }
@@ -422,6 +434,15 @@ $static = @(
   @{ f = 'grocery\audit-store-registry.ps1'; a = @('-CodeOnly'); n = 'no live grocery script holds its own copy of the store list, and every registered subset exemption still names a real line - the code half; the board and file halves stay in the daily chain' }
   @{ f = 'ops\verify-commodities-gate.ps1'; a = @('-Head'); n = 'the matching rules committed at HEAD are the ones HEAD''s committed match baseline reviewed (a rebase or --no-verify cannot land them apart)' }
 )
+# `zero_ok = $true` MEANS "AN EMPTY POPULATION IS A LEGITIMATE ANSWER FOR THIS GATE" (2026-09-23, W6.9 of
+# design\PLAN-brain-consults-on-code-and-analysis-2026-09-22.md). Without it, a static gate that exits 0 while its own
+# COMPLETE marker says scanned=, files=, examined= or resolved= is 0 is scored 3, blind=static-scanned-zero, never ok:
+# a detector that read nothing has not judged the tree (lib\ratchet.ps1's Get-TcStaticZeroScan is the rule and its
+# fixtures). An entry that carries it says why in the comment beside it. Surveyed before this landed over the latest
+# reading of every static gate in every checkout's ops\out\gate-readings.jsonl: one gate read zero, the readjson walk,
+# and it was fixed before this rule landed, so no entry carries zero_ok today. A marker with no such field is still scored by its exit
+# code alone, which is the limit of this rule: it cannot see how much those gates read.
+#
 # `daily = $true` MEANS "NOT ON EVERY PUSH" (Brad, 2026-09-12), and the mark lives on the entry rather than in a
 # second list, because a name carried in two files goes stale and this one decides what a push checks.
 #
@@ -930,7 +951,16 @@ foreach ($g in $static) {
   $rc = $gr.ExitCode
   $gMarks = @(@($out) | Where-Object { "$_" -match '^[A-Z0-9][A-Z0-9-]*-COMPLETE\b' })
   if ($gMarks.Count) { [void]$gateReadings.Add([pscustomobject]@{ gate = [string]$g.f; rc = $rc; marker = [string]$gMarks[$gMarks.Count - 1] }) }
-  if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
+  # A STATIC GATE THAT READ NOTHING IS BLIND, NOT OK (2026-09-23, W6.9). Its last marker says how much it read; exit 0
+  # over a population of 0 is scored 3 unless the entry declares zero_ok. A non-zero exit is judged below as before.
+  $gLast = if ($gMarks.Count) { [string]$gMarks[$gMarks.Count - 1] } else { '' }
+  $zs = Get-TcStaticZeroScan -ExitCode $rc -Marker $gLast -ZeroOk ($g.ContainsKey('zero_ok') -and [bool]$g.zero_ok)
+  if ($zs.Blind) {
+    $staticBlind += $g.f
+    Write-Output ("  BLIND {0}  (exit 0, but its marker reads {1}=0: it looked at nothing, so it is scored 3, never ok) - {2}" -f $g.f, $zs.Field, $g.n)
+    Write-Output ('          ' + $gLast)
+  }
+  elseif ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
   else {
     $fail += $g.f
     Write-Output ("  FAIL  {0}  (exit {1}) - {2}" -f $g.f, $rc, $g.n)
@@ -961,7 +991,18 @@ foreach ($g in $pyStatic) {
   $out = $gr.Out
   Add-TcGateTiming -Name ($g.f) -Ms $gr.Ms -SpawnMs 68
   $rc = $gr.ExitCode
-  if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
+  # THE SAME ZERO-SCAN RULE AS THE POWERSHELL STATIC LOOP ABOVE. Python markers may be indented, so each line is read
+  # trimmed. Neither Python static gate's marker carries a population field today (corpora=, judged=), so the rule is
+  # silent on both until one does - stated, not assumed.
+  $pMarks = @(@($out) | ForEach-Object { ("" + $_).Trim() } | Where-Object { $_ -match '^[A-Z0-9][A-Z0-9-]*-COMPLETE\b' })
+  $pLast = if ($pMarks.Count) { [string]$pMarks[$pMarks.Count - 1] } else { '' }
+  $pzs = Get-TcStaticZeroScan -ExitCode $rc -Marker $pLast -ZeroOk ($g.ContainsKey('zero_ok') -and [bool]$g.zero_ok)
+  if ($pzs.Blind) {
+    $staticBlind += $g.f
+    Write-Output ("  BLIND {0}  (exit 0, but its marker reads {1}=0: it looked at nothing, so it is scored 3, never ok) - {2}" -f $g.f, $pzs.Field, $g.n)
+    Write-Output ('          ' + $pLast)
+  }
+  elseif ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
   else {
     $fail += $g.f
     Write-Output ("  FAIL  {0}  (exit {1}) - {2}" -f $g.f, $rc, $g.n)
@@ -1019,6 +1060,8 @@ Write-Output ''
 Write-Output ("run-gates: {0} passed, {1} failed, {2} could not evaluate (exit 0 with no self-test verdict)" -f $pass, $fail.Count, $noVerdict.Count)
 foreach ($f in $fail) { Write-Output ("  failed: " + $f) }
 foreach ($f in $noVerdict) { Write-Output ("  no verdict: " + $f) }
+if ($staticBlind.Count) { Write-Output ("run-gates: {0} static gate(s) exited 0 over a population of 0, scored 3 rather than counted as passes" -f $staticBlind.Count) }
+foreach ($f in $staticBlind) { Write-Output ("  scanned zero: " + $f) }
 # Counted as passes, and listed so that is never mistaken for having looked. Not a failure: a gate-check
 # checkout without the sidecar venv is not a broken tree. See the self-test loop above.
 if ($blindGates.Count) {
@@ -1034,9 +1077,17 @@ if ($blindGates.Count) {
 if ($fail.Count) {
   $nvNote = if ($noVerdict.Count) { ', and ' + $noVerdict.Count + ' self-test(s) exited 0 with no verdict of their own' } else { '' }
   Write-Output ("run-gates: FAILED - {0} gate(s) did not pass{1}. This tree must not be pushed until they do; fix the cause, never the gate." -f $fail.Count, $nvNote)
-} elseif ($noVerdict.Count) {
-  # The names ride on this line because it is the one the pre-push hook prints back.
-  Write-Output ("run-gates: COULD NOT EVALUATE - {0} self-test(s) exited 0 without printing their own verdict, so code past the verdict ran or the verdict never did: {1}. Scored 3, never ok. Each suite's last line must name its self-test with a result word (lib\selftest-verdict.ps1)." -f $noVerdict.Count, ($noVerdict -join ', '))
+  # A red gate outranks blind, so the exit is 1; the blind ones are still named, because they are not passes either.
+  if ($staticBlind.Count) { Write-Output ("run-gates: and {0} static gate(s) scanned zero files, which is blind, not a pass: {1}" -f $staticBlind.Count, ($staticBlind -join ', ')) }
+} elseif ($noVerdict.Count -or $staticBlind.Count) {
+  # The names ride on these lines because they are the ones the pre-push hook prints back.
+  if ($noVerdict.Count) {
+    Write-Output ("run-gates: COULD NOT EVALUATE - {0} self-test(s) exited 0 without printing their own verdict, so code past the verdict ran or the verdict never did: {1}. Scored 3, never ok. Each suite's last line must name its self-test with a result word (lib\selftest-verdict.ps1)." -f $noVerdict.Count, ($noVerdict -join ', '))
+  }
+  if ($staticBlind.Count) {
+    Write-Output ("run-gates: COULD NOT EVALUATE - static gate(s) scanned zero files: {0}" -f ($staticBlind -join ', '))
+    Write-Output '          Each exited 0 while its own COMPLETE marker said it read nothing (scanned=, files=, examined= or resolved= at 0). Fix its walk; a gate for which an empty population is a legitimate answer declares zero_ok = $true on its $static entry, with the reason beside it.'
+  }
 } else {
   Write-Output ("run-gates: PASSED - all {0} gate(s) passed." -f $pass)
 }
@@ -1065,13 +1116,14 @@ if ($timings.Count) {
 #
 # IT WRITES ONLY ON RED, and it cannot fail the run: Write-TcEvent swallows everything. A bus
 # that could take down the gate would cost more than every signal it carries.
-# A self-test with no verdict is red too: it blocks the push, so it leaves the same record, named in `gates`.
-if ($fail.Count -or $noVerdict.Count) {
+# A self-test with no verdict is red too: it blocks the push, so it leaves the same record, named in `gates`. So is a
+# static gate that scanned zero files (W6.9), for the same reason.
+if ($fail.Count -or $noVerdict.Count -or $staticBlind.Count) {
   . (Join-Path $repo 'lib\event-bus.ps1')
   # NO `Select-Object -First` ON A NATIVE EXE. It stops the upstream pipeline, which sends
   # the child a broken pipe mid-write; harmless for a one-line rev-parse and a bad habit to
   # spread into a gate. The output is captured and indexed instead.
-  $red = @($fail) + @($noVerdict)
+  $red = @($fail) + @($noVerdict) + @($staticBlind)
   $head = @(@($red | ForEach-Object { "$_" })[0..([Math]::Min(11, $red.Count - 1))])
   # 'Continue' AROUND THE REDIRECT, NOT A CATCH ALONE (2026-09-11). Under this file's 'Stop' a git stderr line is a
   # terminating throw; the catch kept the gate alive and threw git's answer away, so one warning recorded an empty
@@ -1086,6 +1138,7 @@ if ($fail.Count -or $noVerdict.Count) {
   $null = Write-TcEvent -Kind 'gate-red' -Producer 'ops\run-gates.ps1' -Data @{
     failed     = $fail.Count
     no_verdict = $noVerdict.Count
+    static_zero = $staticBlind.Count
     passed     = $pass
     gates      = $head
     commit     = "$commit"
@@ -1099,8 +1152,9 @@ if ($fail.Count -or $noVerdict.Count) {
 # run: a verdict that could not be kept is a lost saving, not a defect in the tree.
 # 1 when anything failed; otherwise 3 when a self-test exited 0 with no verdict of its own, because that suite was NOT
 # evaluated - and a 3 reaches Save-TcGateVerdict below, which records nothing and withdraws any pass over this same
-# content. A suite nobody evaluated must never stand in for one that passed.
-$gateCode = $(if ($fail.Count) { 1 } elseif ($noVerdict.Count) { 3 } else { 0 })
+# content. A suite nobody evaluated must never stand in for one that passed. A static gate that read nothing is the same
+# 3 (W6.9), and a red gate still outranks both.
+$gateCode = $(if ($fail.Count) { 1 } elseif ($noVerdict.Count -or $staticBlind.Count) { 3 } else { 0 })
 try {
   if (-not $fpBefore.Fingerprint) {
     Write-Output ("run-gates: this run's verdict is NOT recorded for reuse - {0}" -f $fpBefore.Reason)
@@ -1117,4 +1171,13 @@ try {
     elseif ($kept -eq 'withdrawn') { Write-Output 'run-gates: the recorded pass for this content is WITHDRAWN - the same content has now failed here' }
   }
 } catch { }
-Exit-Guard -Name 'run-gates' -Summary ("pass={0} fail={1} noverdict={2}" -f $pass, $fail.Count, $noVerdict.Count) -Code $gateCode
+# THE TOKEN LEADS, WITH NO ':' AND NO PATH (W6.9): pre-push reads `RUN-GATES-COMPLETE blind=[A-Za-z0-9_-]*` off this
+# line, so a blind= token must be the first thing after the marker name and must stop at the first space. The gates it
+# names are on the COULD NOT EVALUATE line above. Only when nothing failed: a red gate outranks blind, and a 1 carries
+# no token.
+$gateSummary = "pass={0} fail={1} noverdict={2}" -f $pass, $fail.Count, $noVerdict.Count
+if ($staticBlind.Count) {
+  if (-not $fail.Count) { $gateSummary = 'blind=static-scanned-zero ' + $gateSummary }
+  $gateSummary += (' static_zero=' + $staticBlind.Count)
+}
+Exit-Guard -Name 'run-gates' -Summary $gateSummary -Code $gateCode

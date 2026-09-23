@@ -28,6 +28,13 @@
   -AcceptDrop records it anyway, and exists so a genuine bulk migration is one flag rather than a
   hand-edited baseline file.
 
+  THE SAME ASYMMETRY ONE LEVEL DOWN: A DETECTOR THAT READ NOTHING (2026-09-23, W6.9 of
+  design\PLAN-brain-consults-on-code-and-analysis-2026-09-22.md). A ratchet's count is findings; a static detector's
+  COMPLETE marker also says how much it READ, as scanned=, files=, examined= or resolved=. When that is 0 and the exit
+  is 0, the detector did not look, and "found nothing" is the same bytes as "looked at nothing".
+  ops\audit-readjson-inline-wrap.ps1 did exactly that from every worktree for two days, and run-gates scored each run
+  ok. Get-TcStaticZeroScan reads the marker; run-gates scores such a gate 3 (blind=static-scanned-zero), never ok.
+
   IT ALSO KEEPS HISTORY, which is I15's actual ask. A single number cannot show a detection RATE, and
   a change in alert volume is one tripwire for several unrelated causes at once - real behaviour
   change, drift, a data-quality problem, a threshold edit, or the detector degrading. The history says
@@ -128,9 +135,39 @@ function Get-RatchetTrend {
   return ("trend: {0} to {1} across the last {2} run(s)" -f $lo, $hi, $counts.Count)
 }
 
+# The fields a static detector's COMPLETE marker uses for how much it READ. Only these: read=, findings=, sites= and
+# the rest count what was FOUND, and a zero there is the good news, not a blind walk. A field glued to a prefix
+# (stale-files=, py_files=) is a different quantity and is not read as one of these.
+$script:TcStaticPopulationRx = '(?<![\w-])(scanned|files|examined|resolved)=(\d+)(?![\w.])'
+
+function Get-TcStaticZeroScan {
+  <# Did a static detector that exited 0 read NOTHING? Read off its LAST COMPLETE marker, which the caller passes.
+
+     Returns @{ Blind; Counted; Field }:
+       Blind   - $true when the exit code is 0, the marker carries a population field (scanned|files|examined|resolved)
+                 whose value is 0, and the gate does not declare zero_ok. The caller scores that gate 3, never ok.
+       Counted - the marker carries at least one population field, so the rule could look at all.
+       Field   - the population field that read 0, or ''.
+
+     A NON-ZERO EXIT IS LEFT TO THE EXIT CODE: a red gate outranks blind, and a gate that says 3 itself already said
+     it. A marker with no population field is scored by its exit code exactly as before - the rule cannot see how much
+     such a gate read, and says so by Counted = $false rather than guessing. ZeroOk is a gate's own declaration that
+     an empty population is a legitimate answer for it, with its reason beside the declaration. #>
+  # $ExitCode is UNTYPED on purpose: [int] would turn a missing exit code into 0 and read an absent result as a pass.
+  param($ExitCode, [string]$Marker = '', [bool]$ZeroOk = $false)
+  $counted = $false; $field = ''
+  foreach ($m in [regex]::Matches([string]$Marker, $script:TcStaticPopulationRx)) {
+    $counted = $true
+    if (-not $field -and [long]$m.Groups[2].Value -eq 0) { $field = [string]$m.Groups[1].Value }
+  }
+  $blind = ($null -ne $ExitCode) -and ([int]$ExitCode -eq 0) -and (-not $ZeroOk) -and [bool]$field
+  return [pscustomobject]@{ Blind = $blind; Counted = $counted; Field = $field }
+}
+
 if ($__ratchetSelfTest) {
   $fail = 0
-  function T($n, $c, $g = '') { if ($c) { Write-Output ("ok    " + $n) } else { Write-Output ("FAIL  " + $n + "   got: " + $g); $script:fail++ } }
+  $cases = 0
+  function T($n, $c, $g = '') { $script:cases++; if ($c) { Write-Output ("ok    " + $n) } else { Write-Output ("FAIL  " + $n + "   got: " + $g); $script:fail++ } }
 
   $r = Test-RatchetMove -Name 'probe' -Count 18 -Baseline 17
   T 'a count above the baseline is a NEW finding' ($r.Verdict -eq 'rose' -and $r.NewBaseline -eq 17) $r.Verdict
@@ -189,7 +226,34 @@ if ($__ratchetSelfTest) {
   $flat = @(); for ($i = 0; $i -lt 5; $i++) { $flat += [pscustomobject]@{ count = 7 } }
   T 'MUST FIRE  a flat detector reads as flat, which is the I15 signal' ((Get-RatchetTrend -History $flat) -like '*flat at 7*') (Get-RatchetTrend -History $flat)
 
+  # ---- a static detector that READ nothing (W6.9, 2026-09-23) ----------------------------------------------------
+  # THE FOUNDING MARKER, verbatim from the readjson gate's runs in eleven worktrees: exit 0, scanned=0.
+  $z = Get-TcStaticZeroScan -ExitCode 0 -Marker 'READJSON-INLINE-WRAP-COMPLETE scanned=0 findings=0'
+  T 'MUST FIRE  exit 0 with scanned=0 is blind, and names the field that read zero' ($z.Blind -and $z.Field -ceq 'scanned') ("blind={0} field={1}" -f $z.Blind, $z.Field)
+  $z = Get-TcStaticZeroScan -ExitCode 0 -Marker 'X-COMPLETE files=0 read=0 sites=0'
+  T 'MUST FIRE  files=0 is a population field too' ($z.Blind -and $z.Field -ceq 'files') ("blind={0} field={1}" -f $z.Blind, $z.Field)
+  # THE BAR IS ZERO (backlog I196): exactly at it fires, one file past it does not.
+  $z = Get-TcStaticZeroScan -ExitCode 0 -Marker 'X-COMPLETE examined=1 findings=0'
+  T 'MUST NOT FIRE  examined=1, one step past the zero bar, is a detector that looked' (-not $z.Blind) ("blind={0}" -f $z.Blind)
+  $z = Get-TcStaticZeroScan -ExitCode 0 -Marker 'READJSON-INLINE-WRAP-COMPLETE scanned=681 findings=0'
+  T 'MUST NOT FIRE  scanned=681 is a detector that looked' (-not $z.Blind) ("blind={0}" -f $z.Blind)
+  T 'CLEAN TWIN  ...and it is read as a counted population, so the rule really looked at that marker' ($z.Counted) ("counted={0} field={1}" -f $z.Counted, $z.Field)
+  $z = Get-TcStaticZeroScan -ExitCode 0 -Marker 'AUDIT-TYPED-PARAM-SHADOW-COMPLETE files=725 read=0 assignments=0 sites=0 baseline=0'
+  T 'MUST NOT FIRE  a zero in a FOUND field (read=0, sites=0) beside files=725 is good news, not a blind walk' (-not $z.Blind) ("blind={0} field={1}" -f $z.Blind, $z.Field)
+  $z = Get-TcStaticZeroScan -ExitCode 0 -Marker 'X-COMPLETE stale-files=0 py_files=0 findings=0'
+  T 'MUST NOT FIRE  a prefixed field (stale-files=, py_files=) is a different quantity' (-not $z.Blind -and -not $z.Counted) ("blind={0} counted={1}" -f $z.Blind, $z.Counted)
+  $z = Get-TcStaticZeroScan -ExitCode 0 -Marker 'GUARD-CONTRACT-COMPLETE covered=63 backlog=0 dead=0'
+  T 'MUST NOT FIRE  a marker with no population field is scored by its exit code exactly as before' (-not $z.Blind -and -not $z.Counted) ("blind={0} counted={1}" -f $z.Blind, $z.Counted)
+  $z = Get-TcStaticZeroScan -ExitCode 1 -Marker 'X-COMPLETE scanned=0 findings=2'
+  T 'MUST NOT FIRE  a red gate stays red: a non-zero exit is left to the exit code, which outranks blind' (-not $z.Blind) ("blind={0}" -f $z.Blind)
+  $z = Get-TcStaticZeroScan -ExitCode $null -Marker 'X-COMPLETE scanned=0'
+  T 'MUST NOT FIRE  a missing exit code is never read as exit 0' (-not $z.Blind) ("blind={0}" -f $z.Blind)
+  $z = Get-TcStaticZeroScan -ExitCode 0 -Marker 'LIFT-COMPLETENESS-COMPLETE scanned=0 findings=0' -ZeroOk $true
+  T 'MUST NOT FIRE  a gate that declares zero_ok is not blind on zero' (-not $z.Blind -and $z.Field -ceq 'scanned') ("blind={0} field={1}" -f $z.Blind, $z.Field)
+
+  $expected = 29
+  if ($cases -ne $expected) { Write-Output ("FAIL  ran {0} case(s), the list holds {1}" -f $cases, $expected); $fail++ }
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); exit 1 }
-  Write-Output 'SELF-TEST PASS: the rise, the hold, a believable fall, and the two refusals - a fall to nothing and a fall too large - plus history and its cap'
+  Write-Output ("SELF-TEST PASS ({0} cases): the rise, the hold, a believable fall, and the two refusals - a fall to nothing and a fall too large - plus history and its cap, and a static detector that read nothing" -f $cases)
   exit 0
 }
