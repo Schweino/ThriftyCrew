@@ -120,6 +120,18 @@ function Get-NameTokens {
 
 function Get-CoreTokens { param([string]$Name) return @(Get-NameTokens $Name | Where-Object { $script:FORM_WORDS -notcontains $_ }) }
 
+# A PLURAL IS THE SAME WORD WHEN WE ARE LOOKING FOR CANDIDATES (2026-09-22). Until this date the
+# candidate search compared raw tokens, so `-Query 'shallot'` found no row sharing a core word and
+# printed "GENUINE GAP - it needs a new row", while `-Query 'shallots'` resolved to the real row. A
+# mapper handed a false "not in the vocabulary" picks the nearest food it knows, which is how three
+# live recipes came to buy shallots at the ONION price (registrar-2026-09-22; plan-2026-09-22-9,
+# discovered:recipe-ingredient-identity). The stem is used ONLY to FIND candidates: RESOLUTION is
+# still exact (Test-Resolves), so a near miss still needs a ruling - this makes the nearest row
+# visible, it never bridges to it. Naive on purpose, the same rule knowledge-search applies: strip a
+# regular trailing -s (and -ies to -y, -oes to -o), keep ss/us/is/as endings. Irregular plurals
+# still miss, which is the same false GAP as before and no worse.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ingredient-identity-lib.ps1')   # Get-TokenStem: ONE copy of the plural rule, shared with audit-ingredient-identity
+
 function Test-Resolves {
   param([string]$Name, $Rows)
   $n = ([string]$Name).Trim()
@@ -154,11 +166,12 @@ function Get-Candidates {
   foreach ($r in $Rows) {
     $rc = @(Get-CoreTokens ([string]$r.item))
     $ra = @(Get-NameTokens ([string]$r.item))
-    $sharedCore = @($core | Where-Object { $rc -contains $_ })
+    $rcStem = @($rc | ForEach-Object { Get-TokenStem $_ })
+    $sharedCore = @($core | Where-Object { $rcStem -contains (Get-TokenStem $_) })
     if (@($sharedCore).Count -eq 0) { continue }
     # Head-noun agreement separates a real candidate from a coincidental word overlap.
     $rHead = Get-HeadNoun ([string]$r.item)
-    $headMatch = ($head -ne '' -and $head -eq $rHead)
+    $headMatch = ($head -ne '' -and (Get-TokenStem $head) -eq (Get-TokenStem $rHead))
     if (-not $headMatch -and -not $IncludeWeak) { continue }
     # score on shared CORE words - the food itself. Form words are excluded from the score so that
     # "Fresh Parsley" and "Dried Parsley" rank on `parsley`, then get flagged for the form difference.
@@ -256,6 +269,16 @@ if ($runSelfTest) {
   $unruled = Test-Resolves 'Green Bell Pepper' $real
   T 'MUST FIRE  a NEAR-MISS name does not resolve without a ruling (singular vs the real plural row)' ($null -eq $unruled) 'resolved without a ruling'
   T 'CLEAN TWIN a known-good name resolves against the live vocabulary' ((Test-Resolves 'Black Pepper' $real) -ne $null) 'Black Pepper missing'
+  # THE FALSE GENUINE GAP (2026-09-22, registrar-2026-09-22). `shallot` answered "GENUINE GAP" while
+  # `Shallots` is a live row, and a mapper handed that picked onions. The singular must now SURFACE the
+  # plural row as a candidate, and must still NOT resolve to it (the near-miss rule above is unchanged).
+  $shq = @(Get-Candidates 'shallot' $real 5)
+  T 'MUST FIRE  the singular query "shallot" surfaces the live "Shallots" row as a candidate, not a GENUINE GAP' `
+    (@($shq | ForEach-Object { $_.item }) -contains 'Shallots') ((@($shq | ForEach-Object { $_.item }) -join ','))
+  T 'MUST NOT FIRE  ...and the singular still does not RESOLVE without a ruling' ($null -eq (Test-Resolves 'shallot' $real)) 'resolved without a ruling'
+  T 'CLEAN TWIN Get-TokenStem keeps ss/us endings and folds -ies: grass stays, asparagus stays, berries -> berry' `
+    (((Get-TokenStem 'grass') -eq 'grass') -and ((Get-TokenStem 'asparagus') -eq 'asparagus') -and ((Get-TokenStem 'berries') -eq 'berry') -and ((Get-TokenStem 'tomatoes') -eq 'tomato')) `
+    ((Get-TokenStem 'grass') + '/' + (Get-TokenStem 'asparagus') + '/' + (Get-TokenStem 'berries') + '/' + (Get-TokenStem 'tomatoes'))
 
   # ---- -RowsFile / -Recall: the SAME scorer over a different row set (2026-09-04) ---------------
   #

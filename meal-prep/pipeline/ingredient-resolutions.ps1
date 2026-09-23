@@ -18,7 +18,13 @@ param(
   [switch]$Record, [switch]$Query, [switch]$Invalidate, [switch]$List, [switch]$SelfTest,
   [string]$Term = '', [string]$ItemId = '', [string]$Evidence = '', [string]$By = '',
   [switch]$BidExists, [string]$Store = '', [switch]$Json,
-  [int]$ReadWaitMs = 3000     # the settled-read bound; lib\json-io.ps1 records where 3000 came from. Fixtures shorten it.
+  [int]$ReadWaitMs = 3000,    # the settled-read bound; lib\json-io.ps1 records where 3000 came from. Fixtures shorten it.
+  # THE IDENTITY CHECK AT THE WRITE (2026-09-22, plan-2026-09-22-9 discovered:recipe-ingredient-identity).
+  # A REUSE whose term routes to a DIFFERENT live commodity, or whose commodity's winning row does not name the
+  # term's food, is refused before it is recorded (meal-prep/lib/ingredient-identity-lib.ps1, Test-ReuseIdentity).
+  # It runs on the LIVE ledger, and on a scratch store only when the fixture names its frozen rules and board.
+  # -IdentityRuling '<why>' records a reviewed exception (a registrar ruling) instead of refusing, in the evidence.
+  [string]$IdentityCommoditiesFile = '', [string]$IdentityBoardFile = '', [string]$IdentityRuling = ''
 )
 $ErrorActionPreference = 'Stop'
 $runRecord=[bool]$Record; $runQuery=[bool]$Query; $runInv=[bool]$Invalidate; $runSelfTest=[bool]$SelfTest; $runJson=[bool]$Json; $runBid=[bool]$BidExists
@@ -364,6 +370,24 @@ if ($runSelfTest) {
     $cg = Invoke-IrChild $PSCommandPath @('-Query','-Term','labneh','-Store',$irGood,'-ReadWaitMs','200')
     T 'CLEAN TWIN -Query on a readable ledger still finds the prior ruling (exit 3) and names it' `
       ($cg.Code -eq 3 -and ($cg.Out -match 'labneh')) ('exit ' + $cg.Code + ': ' + $cg.Out)
+
+    # (8) THE IDENTITY CHECK AT THE WRITE (2026-09-22). Frozen rules and a frozen board holding the 2026-09-22
+    # union: chicken-thighs' winning row was Walmart's Tyson drumstick bag. The standing REUSE
+    # 'bone-in skin-on chicken thighs' -> chicken-thighs (ingredient-resolutions.json, hunt-2026-08-27-ten)
+    # must be refused while that is so, and pork chorizo -> ground-pork refused outright.
+    $idC = Join-Path $irDir 'id-commodities.json'; $idB = Join-Path $irDir 'comparison-2026-09-22.json'; $idS = Join-Path $irDir 'id-store.json'
+    [IO.File]::WriteAllText($idC, '[{"id":"chicken-thighs","include":["chicken\\s+(thigh|drumstick|leg)"],"exclude":[]},{"id":"ground-pork","include":["ground\\s+pork"],"exclude":["chorizo"]},{"id":"mexican-chorizo-fresh","include":["chorizo"],"exclude":["\\bbeef\\b"]},{"id":"onions","include":["\\bonions?\\b"],"exclude":["shallots?"]}]', $irEnc)
+    [IO.File]::WriteAllText($idB, '{"comparison":[{"id":"chicken-thighs","cheapest_store":"Walmart","stores":[{"store":"Walmart","item":"Tyson Fresh Chicken Drumstick, 10 lb Bag"}]},{"id":"onions","cheapest_store":"Walmart","stores":[{"store":"Walmart","item":"Fresh Yellow Onions, 3 lb Bag"}]}]}', $irEnc)
+    $idA = @('-IdentityCommoditiesFile', $idC, '-IdentityBoardFile', $idB, '-Store', $idS, '-ReadWaitMs', '200', '-By', 'fixture', '-BidExists', '-Record')
+    $ct = Invoke-IrChild $PSCommandPath (@('-Term', '"bone-in skin-on chicken thighs"', '-ItemId', 'chicken-thighs') + $idA)
+    T 'MUST FIRE  the mapper REFUSES bone-in skin-on chicken thighs -> chicken-thighs while the cell is won by a drumstick bag, and writes nothing' `
+      ($ct.Code -eq 1 -and ($ct.Out -match 'REFUSED') -and -not (Test-Path $idS)) ('exit ' + $ct.Code + ': ' + $ct.Out)
+    $cz = Invoke-IrChild $PSCommandPath (@('-Term', '"pork chorizo"', '-ItemId', 'ground-pork') + $idA)
+    T 'MUST FIRE  the mapper REFUSES pork chorizo -> ground-pork (its own name routes to mexican-chorizo-fresh)' `
+      ($cz.Code -eq 1 -and ($cz.Out -match 'mexican-chorizo-fresh')) ('exit ' + $cz.Code + ': ' + $cz.Out)
+    $cy = Invoke-IrChild $PSCommandPath (@('-Term', '"yellow onion"', '-ItemId', 'onions') + $idA)
+    T 'CLEAN TWIN the mapper still RECORDS yellow onion -> onions through the same check' `
+      ($cy.Code -eq 0 -and (Test-Path $idS)) ('exit ' + $cy.Code + ': ' + $cy.Out)
   } finally { Remove-Item $irDir -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($bad -gt 0) { Write-Output ("ingredient-resolutions SELF-TEST FAIL ({0})" -f $bad); exit 2 }
@@ -393,6 +417,30 @@ function Save-Rows { param($R)
 if ($runRecord) {
   $k = Get-TermKey $Term
   if (-not $k) { Write-Output 'ingredient-resolutions: -Record needs -Term'; exit 1 }
+  if ($ItemId -and (($storeIsLive -and (Test-Path $Store)) -or $IdentityCommoditiesFile)) {   # an ABSENT live ledger is refused inside the lock below
+    $idWhy = $null
+    try {
+      . (Join-Path $mp 'lib\ingredient-identity-lib.ps1')
+      . (Join-Path $repo 'grocery\match-lib.ps1')
+      . (Join-Path $repo 'grocery\global-exclude-lib.ps1')
+      $icf = if ($IdentityCommoditiesFile) { $IdentityCommoditiesFile } else { Join-Path $repo 'grocery\commodities.json' }
+      $icoms = Read-JsonFile $icf
+      $igex = if ($IdentityCommoditiesFile) { @('\bzz-fixture-never-matches\b') } else { @(Get-TcGlobalExclude) }
+      $im = New-CommodityMatcher -Commodities $icoms -GlobalExclude $igex
+      $iresolve = { param($n) $c = Resolve-Commodity -Matcher $im -Name ([string]$n); if ($c) { [string]$c.id } else { $null } }
+      $iweekly = New-Object 'System.Collections.Generic.HashSet[string]'
+      foreach ($c in @($icoms)) { [void]$iweekly.Add([string]$c.id) }
+      $ibf = $IdentityBoardFile
+      if (-not $ibf) { $g = Get-ChildItem (Join-Path $repo 'grocery\out\comparison-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1; if ($g) { $ibf = $g.FullName } }
+      $ibix = $null
+      if ($ibf -and (Test-Path $ibf)) { $ibix = Get-IdentityBoardIndex (Read-JsonFile $ibf) } else { Write-Output 'ingredient-resolutions: identity check read NO board, so only the routing half ran' }
+      $idWhy = Test-ReuseIdentity -Term $Term -Id $ItemId -Resolve $iresolve -WeeklyIds $iweekly -BoardIndex $ibix
+    } catch { Write-Output ('ingredient-resolutions: identity check COULD NOT RUN, nothing was written - ' + $_.Exception.Message); exit 1 }
+    if ($idWhy) {
+      if (-not $IdentityRuling) { Write-Output ('ingredient-resolutions: REFUSED ' + $k + ' -> ' + $ItemId + ' - ' + $idWhy + '. Nothing was written. A reviewed exception passes -IdentityRuling ''<ruling>''.'); exit 1 }
+      $Evidence = ($Evidence + ' [identity exception: ' + $IdentityRuling + '; check said: ' + $idWhy + ']').Trim()
+    }
+  }
   # READ INSIDE THE LOCK, AND ONLY HERE. A snapshot read before the mutex was taken would keep the exact
   # race the mutex exists to close - a writer that merges into a snapshot older than its own turn drops
   # whatever landed in between. -Record and -Invalidate never used one, yet until 2026-09-11 the script read

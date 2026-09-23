@@ -263,6 +263,23 @@ function Split-CostFlags {
   return [pscustomobject]@{ lines = $page.ToArray(); held = $heldL.ToArray(); advisory = $advL.ToArray(); live = $liveL.Count }
 }
 
+. (Join-Path $mp 'lib\ingredient-identity-lib.ps1')   # Test-DerivedBasis: one rule, shared with audit-ingredient-identity
+function Get-DerivedBasisRefusals($Rows) {
+  # Every db\ingredients.json row declared a YIELD of a parent food (relation derived) whose buy package is not
+  # one purchase of that yield, as '<item> :: <why>'. The engine refuses to write costed.json while this is
+  # non-empty (2026-09-22, plan-2026-09-22-9): Orange Zest's buy package was one orange's FRUIT weight in a
+  # ZEST-gram field, so one "each" bought 6.30 lb of oranges ($7.86 for 8 g of zest). Leading comma: an EMPTY
+  # answer is an empty array, not $null.
+  $hits = New-Object System.Collections.Generic.List[string]
+  foreach ($r in @($Rows)) {
+    if ($null -eq $r) { continue }
+    if ((Get-IdentityRelation $r) -ne 'derived') { continue }
+    $why = Test-DerivedBasis $r
+    if ($why) { $hits.Add(([string]$r.item + ' :: ' + $why)) }
+  }
+  return ,$hits.ToArray()
+}
+
 function Get-LabelBasisLines($Recipes) {
   # Every costed line priced from a label, as '<slug> :: <item> :: <basis>'. The engine refuses to write
   # costed.json while this is non-empty (2026-09-21, Brad's ruling): a label price reaching a recipe again is a
@@ -328,6 +345,16 @@ if ($SelfTest) {
   $okRecipe = [pscustomobject]@{ slug = 'turkey-wild-rice-casserole'; lines = @([pscustomobject]@{ item = 'Five-Spice Powder'; basis = 'board:five-spice-powder:nomem:Hy-Vee' }, [pscustomobject]@{ item = 'Wild Rice'; basis = 'ledger:wild-rice:Hy-Vee:2026-09-19' }, [pscustomobject]@{ item = 'Salt'; basis = 'feed:salt' }) }
   $okHits = Get-LabelBasisLines @($okRecipe)
   CChk 'MUST NOT FIRE a board-priced, a ledger-priced and a feed-priced line are not refused' (@($okHits).Count -eq 0) (@($okHits) -join ' | ')
+  # DERIVED BASIS (2026-09-22): the real Orange Zest row before and after, and the Lemon Zest row that was right.
+  $dzBad = ConvertFrom-Json '[{"item":"Orange Zest","bid":"oranges","gpu":20.78,"unit":"lb","buy_pkg_g":131,"buy_pkg_label":"each","relation":"derived","parent_units_per_purchase":1,"yield_g_per_parent_unit":6}]'
+  $dzHits = Get-DerivedBasisRefusals $dzBad
+  CChk 'MUST FIRE  the engine refuses the 2026-09-22 Orange Zest row (buy_pkg_g 131 against 6 g of zest from one orange)' ((@($dzHits).Count -eq 1) -and (@($dzHits)[0] -like 'Orange Zest :: *')) (@($dzHits) -join ' | ')
+  $dzOk = ConvertFrom-Json '[{"item":"Orange Zest","bid":"oranges","gpu":20.78,"unit":"lb","buy_pkg_g":6,"buy_pkg_label":"orange","relation":"derived","parent_units_per_purchase":1,"yield_g_per_parent_unit":6},{"item":"Lemon Zest","bid":"lemons","gpu":6,"unit":"each","buy_pkg_g":6,"relation":"derived","parent_units_per_purchase":1,"yield_g_per_parent_unit":6},{"item":"Shallots","bid":"shallots","gpu":453.592,"unit":"lb","buy_pkg_g":453.592}]'
+  $dzOkHits = Get-DerivedBasisRefusals $dzOk
+  CChk 'MUST NOT FIRE the repaired Orange Zest (6 g, one orange), Lemon Zest and a same-food row are not refused' (@($dzOkHits).Count -eq 0) (@($dzOkHits) -join ' | ')
+  $dzLiveRows = Get-Content (Join-Path $db 'ingredients.json') -Raw -Encoding utf8 | ConvertFrom-Json
+  $dzLive = Get-DerivedBasisRefusals $dzLiveRows
+  CChk 'CLEAN TWIN the live db\ingredients.json has no derived row the engine would refuse' (@($dzLive).Count -eq 0) (@($dzLive) -join ' | ')
   CChk 'CLEAN TWIN SizeToGrams still reads the real ledger size text as 16 oz, not as the 1 lb inside its parenthesis' ([math]::Abs((SizeToGrams '16 oz (1 lb stand up bag)') - (16 * 28.3495)) -lt 0.0001) ([string](SizeToGrams '16 oz (1 lb stand up bag)'))
   # ---- WHICH FLAG LINES PAGE (2026-09-21, queue 2026-09-20-6c14f6) -------------------------------------------
   # The four real shapes of 2026-09-21's db\cost-flags.txt, one line each: a catalogue-level allowlist refusal, a
@@ -657,6 +684,12 @@ if($Slugs){
 # can only fire if a label fallback creeps back in, or a -Slugs splice carries an old row forward. Either way the
 # costs are NOT written: a recipe page priced off a July walmart.com read is the defect this closes, and failing
 # loud here pages the chain ("Recipe recost failed") instead of publishing it.
+$derivedBad = Get-DerivedBasisRefusals @($ITEMS.Values)
+if (@($derivedBad).Count -gt 0) {
+  Write-Output ('cost-recipes: REFUSED - ' + @($derivedBad).Count + ' derived (yield) row(s) whose buy package is not one purchase of the parent''s yield (plan-2026-09-22-9). costed.json was NOT written:')
+  foreach ($x in @($derivedBad)) { Write-Output ('  ' + $x) }
+  exit 2
+}
 $labelBased = Get-LabelBasisLines $out
 if (@($labelBased).Count -gt 0) {
   Write-Output ('cost-recipes: REFUSED - ' + @($labelBased).Count + ' line(s) priced from a label: basis, which Brad ruled out on 2026-09-21 ("The pricing must be fetched from a store always"). costed.json was NOT written:')

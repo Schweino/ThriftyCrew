@@ -2064,6 +2064,9 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         New-FanoutLane -Name 'live-price-contract' -File (Join-Path $mealPrep 'pipeline\audit-live-price-contract.ps1') -TimeoutSec 600 -Marker 'LIVE-PRICE-CONTRACT-COMPLETE'
         New-FanoutLane -Name 'live-price-completeness' -File (Join-Path $mealPrep 'pipeline\audit-live-price-contract.ps1') -TimeoutSec 600 -Arguments @('-LivePosts') -Marker 'LIVE-PRICE-COMPLETENESS-COMPLETE'
         New-FanoutLane -Name 'live-recipe-prices'  -File (Join-Path $mealPrep 'pipeline\monitor-live-recipe-prices.ps1') -TimeoutSec 900 -Arguments $(if ($NoAlert) { @('-NoAlert') } else { @() }) -Marker 'LIVE-RECIPE-PRICES-COMPLETE'
+        # INGREDIENT IDENTITY (2026-09-22, plan-2026-09-22-9): each recipe ingredient's commodity id must name the same food the
+        # board prices (a proxy, a yield row bought in the parent's grams, a union row that is the other member). Keyed ratchet: exit 2 is a NEW finding.
+        New-FanoutLane -Name 'ingredient-identity' -File (Join-Path $mealPrep 'pipeline\audit-ingredient-identity.ps1') -TimeoutSec 600 -Marker 'INGREDIENT-IDENTITY-COMPLETE'
         New-FanoutLane -Name 'db-agreement'        -File (Join-Path $mealPrep 'engine\audit-db-agreement.ps1') -Marker 'DB-AGREEMENT-COMPLETE'
         New-FanoutLane -Name 'published-macros'    -File (Join-Path $mealPrep 'engine\audit-published-macros.ps1') -Marker 'PUBLISHED-MACROS-COMPLETE'
         New-FanoutLane -Name 'spec-contradictions' -File (Join-Path $mealPrep 'pipeline\audit-spec-contradictions.ps1') -TimeoutSec 600 -Arguments @('-Quiet') -Marker 'SPEC-CONTRADICTIONS-COMPLETE'
@@ -2678,6 +2681,12 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         $lrp = Get-FanoutRecord 'live-recipe-prices' $fanRecs
         Log ('live-recipe-prices exit ' + $lrp.ExitCode + ': ' + ((@($lrp.Output) | Select-Object -Last 1) -join ''))
         if ($lrp.ExitCode -ne 0) { $summary += ('REVIEW    live-recipe-prices exit ' + $lrp.ExitCode + ' - run meal-prep\pipeline\monitor-live-recipe-prices.ps1') }
+        $iid = Get-FanoutRecord 'ingredient-identity' $fanRecs
+        Log ('ingredient-identity exit ' + $iid.ExitCode + ': ' + ((@($iid.Output) | Where-Object { $_ -match '^audit-ingredient-identity:' } | Select-Object -First 1) -join ''))
+        if ($iid.ExitCode -eq 2) {
+          $summary += 'REVIEW    ingredient-identity: a recipe ingredient is priced by a commodity that is not its food - run meal-prep\pipeline\audit-ingredient-identity.ps1'
+          if (-not $NoAlert) { try { Send-Alert -Subject 'Recipe ingredient priced as a different food' -Body ('meal-prep\pipeline\audit-ingredient-identity.ps1 found a NEW identity finding (a keyed ratchet, so this is not yesterday''s list):' + "`n`n" + ((@($iid.Output) | Where-Object { $_ -match '^  (RISE|NEW)' } | Select-Object -First 40) -join "`n")) -What 'INGREDIENT-IDENTITY' } catch {} }
+        } elseif ($iid.ExitCode -ne 0) { $summary += ('REVIEW    ingredient-identity BLIND (exit ' + $iid.ExitCode + ')') }
       } catch { Log ('live-price lanes threw: ' + $_.Exception.Message) }
       # drift guard: recipes-db index vs db\recipes specs vs db\ingredients (2026-07-26). Non-fatal; alerts.
       try {
