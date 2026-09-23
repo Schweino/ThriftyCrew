@@ -18,7 +18,7 @@
 #
 # Usage (in-process, from engine\build-cards.ps1):  & stamp-live-price-fallback.ps1 -Slugs $slugs
 # Self-test:  powershell -File meal-prep\pipeline\stamp-live-price-fallback.ps1 -SelfTest
-param([string[]]$Slugs, [string]$BuiltDir = '', [string]$FeedPath = '', [string]$NodeExe = '',
+param([string[]]$Slugs, [string]$BuiltDir = '', [string]$FeedPath = '', [string]$NodeExe = '', [string]$ReferenceFeedPath = '',
       [string]$JsdomEnv = 'C:\Codex\tools\jsdom-env', [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $SelfTestSlf = $SelfTest.IsPresent   # captured BEFORE the dot-source below: render-tokens rebinds $SelfTest
@@ -106,19 +106,56 @@ if ($SelfTestSlf) {
     $v = Get-TcStampValue $r['turkey-wild-rice-casserole']
     T 'CLEAN TWIN  (real card script, jsdom) with the feed loaded every span fills with one positive value' ($v.ok) $v.why
   } else { Write-Output 'note  node/jsdom/card/feed not all present on this box: the end-to-end cases did not run (the pure cases above did)' }
-  if ($script:f -eq 0) { Write-Output ("stamp-live-price-fallback self-test PASS ($script:n cases)"); exit 0 } else { Write-Output ("stamp-live-price-fallback self-test FAIL ($script:f of $script:n)"); exit 1 }
+  # THE FEED-AGE REFUSAL, run as the real script in a child (2026-09-23). Frozen feeds carry the founding dates: a
+  # worktree seeded from 2026-09-22T08:14:34 while readers were served 2026-09-23T00:21:31.
+  $ft = Join-Path ([IO.Path]::GetTempPath()) ('tc-slf-' + [guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $ft -ErrorAction Stop | Out-Null
+  try {
+    [IO.File]::WriteAllText((Join-Path $ft 'old.json'), '{"schema":2,"generated":"2026-09-22T08:14:34","recipes":{},"pricing_inputs":{}}')
+    [IO.File]::WriteAllText((Join-Path $ft 'cur.json'), '{"schema":2,"generated":"2026-09-23T00:21:31","recipes":{},"pricing_inputs":{}}')
+    $card0 = Join-Path $ft 'fixture-bowl.body.html'
+    $body0 = '<p><span data-tc-live-price data-tc-slug="fixture-bowl" data-tc-field="cost_ps" data-tc-basis="feed-everyday-whole-package" data-tc-fallback="3.58">~$3.58</span></p>'
+    [IO.File]::WriteAllText($card0, $body0)
+    $self = if ($PSCommandPath) { $PSCommandPath } else { $MyInvocation.MyCommand.Path }
+    $o1 = @(& powershell -NoProfile -File $self -Slugs 'fixture-bowl' -BuiltDir $ft -FeedPath (Join-Path $ft 'old.json') -ReferenceFeedPath (Join-Path $ft 'cur.json')); $rc1 = $LASTEXITCODE
+    $t1 = $o1 -join ' | '
+    T 'MUST FIRE  a day-old seeded feed (2026-09-22T08:14:34) against the served one (2026-09-23T00:21:31) refuses: exit 2, both dates named, the card untouched' `
+      ($rc1 -eq 2 -and $t1 -cmatch 'STAMP: REFUSED' -and $t1 -match '2026-09-22T08:14:34' -and $t1 -match '2026-09-23T00:21:31' -and [IO.File]::ReadAllText($card0) -eq $body0) ("rc=$rc1 " + $t1)
+    $o2 = @(& powershell -NoProfile -File $self -Slugs 'no-such-card' -BuiltDir $ft -FeedPath (Join-Path $ft 'cur.json') -ReferenceFeedPath (Join-Path $ft 'cur.json')); $rc2 = $LASTEXITCODE
+    $t2 = $o2 -join ' | '
+    T 'CLEAN TWIN  the CURRENT feed (same generated as the served one) passes the age check and goes on to stamp' `
+      ($t2 -match 'is not older than' -and $t2 -cnotmatch 'STAMP: REFUSED' -and $rc2 -ne 2) ("rc=$rc2 " + $t2)
+  } finally { Remove-Item $ft -Recurse -Force -ErrorAction SilentlyContinue }  if ($script:f -eq 0) { Write-Output ("stamp-live-price-fallback self-test PASS ($script:n cases)"); exit 0 } else { Write-Output ("stamp-live-price-fallback self-test FAIL ($script:f of $script:n)"); exit 1 }
 }
 
 # ---------------- the stamp ----------------
 $dir = if ($BuiltDir) { $BuiltDir } else { Join-Path $mp 'db\built' }
 . (Join-Path $here 'feed-freshness.ps1')   # THE canonical feed path (FEED_CANONICAL_PATH); one copy of where it lives
 $feedFile = if ($FeedPath) { $FeedPath } else { $script:FEED_CANONICAL_PATH }
-$node = Resolve-TcNode $NodeExe
-if (-not $node -or -not (Test-Path $node)) { Write-Output 'STAMP: CANNOT RUN - node not found under C:\Codex\tools\node-*-win-x64 (pass -NodeExe). Nothing stamped.'; exit 2 }
-if (-not (Test-Path (Join-Path $JsdomEnv 'node_modules\jsdom'))) { Write-Output "STAMP: CANNOT RUN - no jsdom under $JsdomEnv. Nothing stamped."; exit 2 }
 if (-not (Test-Path $feedFile)) { Write-Output "STAMP: CANNOT RUN - no feed at $feedFile. Nothing stamped."; exit 2 }
 $asof = [string]((Get-Content $feedFile -Raw -Encoding UTF8 | ConvertFrom-Json).generated)
 if ($asof -notmatch '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$') { Write-Output "STAMP: CANNOT RUN - the feed's generated stamp '$asof' is not a timestamp. Nothing stamped."; exit 2 }
+# NEVER STAMP FROM A FEED OLDER THAN THE ONE READERS ARE SERVED (2026-09-23). build-cards run in a worktree stamped
+# fallbacks from the worktree's day-old seeded feed, so a card shipped today carried yesterday's price as its fallback
+# and a data-tc-asof that looked current to every later check. The reference is the SERVED feed, else the newest
+# committed public\smp-feed.json (origin/main or HEAD), read through grocery\feed-served-lib.ps1 - the one fetch path.
+# -ReferenceFeedPath replaces it with a file (the self-test's seam). A feed NEWER than the served one (the daily chain
+# built it and has not pushed yet) stamps; an older one refuses and names both dates; no reference at all is exit 2.
+. (Join-Path (Split-Path $mp -Parent) 'grocery\feed-served-lib.ps1')
+if ($ReferenceFeedPath) {
+  $refDoc = $null; try { $refDoc = ([IO.File]::ReadAllText($ReferenceFeedPath)).TrimStart([char]0xFEFF) | ConvertFrom-Json } catch { }
+  $ref = [pscustomobject]@{ Doc = $refDoc; Source = ('the reference feed ' + $ReferenceFeedPath) }
+} else { $ref = Get-TcServedFeedDoc -Repo (Split-Path $mp -Parent) -Refs @('origin/main', 'HEAD') }
+if ($null -eq $ref.Doc) { Write-Output ("STAMP: CANNOT RUN - nothing to prove the feed at $feedFile current against: " + $ref.Source + '. Nothing stamped.'); exit 2 }
+$fresh = Test-TcFeedNotOlder -Generated $asof -ReferenceGenerated ([string]$ref.Doc.generated) -ReferenceSource $ref.Source -LocalName ('the feed at ' + $feedFile)
+if (-not $fresh.Ok) {
+  Write-Output ('STAMP: REFUSED - ' + $fresh.Why + '. A fallback stamped from it would ship an older price than readers are served. Re-seed this checkout (ops\seed-worktree.ps1 -Target <it>) or pass -FeedPath to a current feed. Nothing stamped.')
+  exit 2
+}
+Write-Output ('stamp-live-price-fallback: ' + $fresh.Why)
+$node = Resolve-TcNode $NodeExe
+if (-not $node -or -not (Test-Path $node)) { Write-Output 'STAMP: CANNOT RUN - node not found under C:\Codex\tools\node-*-win-x64 (pass -NodeExe). Nothing stamped.'; exit 2 }
+if (-not (Test-Path (Join-Path $JsdomEnv 'node_modules\jsdom'))) { Write-Output "STAMP: CANNOT RUN - no jsdom under $JsdomEnv. Nothing stamped."; exit 2 }
 $want = @($Slugs | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 $paths = @(); $names = @()
 foreach ($s in $want) { $p = Join-Path $dir ($s + '.body.html'); if (Test-Path $p) { $paths += $p; $names += $s } else { Write-Output ("  X $s :: no built card to stamp") } }

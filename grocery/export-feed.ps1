@@ -92,6 +92,7 @@ function Test-TcFeedShrink {
   return [pscustomobject]@{ Findings = @($findings); Lines = @($lines) }
 }
 
+. (Join-Path $PSScriptRoot 'feed-served-lib.ps1')   # Get-TcServedFeedDoc: the one served-feed read
 function Get-TcPriorFeed {
   <# The feed this build is compared with: -PriorFeedPath when given, else the SERVED feed, else the last committed
      public\smp-feed.json. Doc is $null when none could be read, and Source says which one was used or why none was. #>
@@ -100,19 +101,9 @@ function Get-TcPriorFeed {
     try { return [pscustomobject]@{ Doc = (Read-JsonFile $Path); Source = ('the feed file ' + $Path) } }
     catch { return [pscustomobject]@{ Doc = $null; Source = ('the feed file ' + $Path + ' could not be read: ' + $_.Exception.Message) } }
   }
-  $why = ''
-  try {
-    $r = Invoke-WebRequest -Uri ($Url + '?exportcheck=' + [DateTime]::UtcNow.Ticks) -UseBasicParsing -TimeoutSec 20
-    $t = [Text.Encoding]::UTF8.GetString($r.RawContentStream.ToArray())
-    return [pscustomobject]@{ Doc = ($t | ConvertFrom-Json); Source = ('the served feed ' + $Url) }
-  } catch { $why = $_.Exception.Message }
-  try {
-    $lines = @(& git -C $Repo show 'HEAD:public/smp-feed.json')
-    if ($LASTEXITCODE -eq 0 -and $lines.Count) {
-      return [pscustomobject]@{ Doc = (($lines -join "`n") | ConvertFrom-Json); Source = ('the last committed HEAD:public/smp-feed.json, because the served feed could not be read (' + $why + ')') }
-    }
-  } catch { $why += '; git: ' + $_.Exception.Message }
-  return [pscustomobject]@{ Doc = $null; Source = ('neither the served feed (' + $why + ') nor HEAD:public/smp-feed.json could be read') }
+  # THE ONE FETCH PATH for a served feed file is grocery\feed-served-lib.ps1 (2026-09-23): the fallback stamp reads the
+  # same served feed, and two copies of a fetch drift. Same answer as before: served, else HEAD:public/smp-feed.json.
+  return (Get-TcServedFeedDoc -Repo $Repo -Refs @('HEAD') -Url $Url)
 }
 
 if ($SelfTest) {
