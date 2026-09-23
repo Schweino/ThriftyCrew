@@ -87,6 +87,9 @@ function New-TcLivePriceScript { param([string]$Src)
   $tail = $rank + @(
     'function go(){ fillLivePrices(); smpGetFeed().then(function(f){ feedData=f; if(!f){ feedFailed=true; } fillLivePrices(); tcRankLists(); }); }',
     'if(document.readyState===''loading''){ document.addEventListener(''DOMContentLoaded'',go); } else { go(); }',
+    # A page that INJECTS its spans on DOMContentLoaded (the homepage's code-injection block) can meet a feed that resolved
+    # first; one more fill at load, from the feed already read, reaches those spans. Idempotent: same feed, same text.
+    'window.addEventListener(''load'',function(){ if(feedData&&!feedFailed){ fillLivePrices(); tcRankLists(); } });',
     '})();')
   return (($head + $parts + $tail) -join "`n") + "`n"
 }
@@ -130,6 +133,34 @@ if ($SelfTest) {
       T 'CLEAN TWIN  a commodity span reads the EVERYDAY cell over a cheaper sale current (1.99/lb, not 1.49)' ($sp.Count -eq 6 -and $sp[2].text -eq '~$1.99') $txt
       T 'CLEAN TWIN  unit conversion: 0.0625/oz is 1.00/lb, 0.25 each is 3.00/dozen' ($sp.Count -eq 6 -and $sp[3].text -eq '~$1.00' -and $sp[3].filled -and $sp[4].text -eq '~$3.00') $txt
       T 'MUST FIRE  a unit pair the fill cannot convert (sq_ft to lb) is refused and keeps the fallback' ($sp.Count -eq 6 -and $sp[5].text -eq '~$4.44' -and -not $sp[5].filled) $txt
+      # HOMEPAGE CATALOGUE FIELDS (2026-09-23, Brad on Q-homepage-two-more-literals: "Make them live"). The spans are
+      # the ones the snippet pastes; each feed arm is a real feed shape. Fallbacks are deliberately NOT the feed values.
+      $hb = '<p>at <span data-tc-live-price data-tc-field="ps_range" data-tc-basis="feed-everyday-whole-package-iqr" data-tc-fallback="2-3">$2 to $3</span> a plate, cheapest <span data-tc-live-price data-tc-field="cheapest_ps" data-tc-basis="feed-everyday-whole-package-min" data-tc-fallback="1.54">~$1.54</span>.</p>' +
+            '<script>' + $js + '</script>'
+      [IO.File]::WriteAllText((Join-Path $tmp 'h.html'), $hb)
+      $hArms = @(
+        @{ k = 'live'; mode = 'ok'; feed = '{"schema":2,"generated":"2026-09-23T00:21:31","recipes":{},"pricing_inputs":{},"recipe_stats":{"n":566,"cheapest":{"slug":"pizza-pasta-bowls","everyday_ps":1.13},"p25":2.91,"p75":4.0275}}' },
+        @{ k = 'same'; mode = 'ok'; feed = '{"schema":2,"generated":"2026-09-23T00:21:31","recipes":{},"pricing_inputs":{},"recipe_stats":{"n":4,"cheapest":{"slug":"x","everyday_ps":2.5},"p25":2.5,"p75":3.49}}' },
+        @{ k = 'nostats'; mode = 'ok'; feed = '{"schema":2,"generated":"2026-09-23T00:21:31","recipes":{},"pricing_inputs":{}}' },
+        @{ k = 'bad'; mode = 'ok'; feed = '{"schema":2,"generated":"2026-09-23T00:21:31","recipes":{},"pricing_inputs":{},"recipe_stats":{"n":2,"cheapest":{"slug":"x","everyday_ps":0},"p25":0.4,"p75":3.2}}' },
+        @{ k = 'down'; mode = 'fail'; feed = '{"schema":2,"generated":"2026-09-23T00:21:31","recipes":{}}' })
+      foreach ($arm in $hArms) {
+        [IO.File]::WriteAllText((Join-Path $tmp 'hfeed.json'), $arm.feed)
+        $job = @{ jsdom = $jsdom; feedPath = (Join-Path $tmp 'hfeed.json'); feedMode = $arm.mode; waitMs = 1500; cards = @(@{ slug = 'home-fixture'; htmlPath = (Join-Path $tmp 'h.html'); kind = 'body' }) }
+        [IO.File]::WriteAllText((Join-Path $tmp 'hjob.json'), ($job | ConvertTo-Json -Depth 5))
+        $lines = & (Join-Path $node.FullName 'node.exe') (Join-Path $here 'live-price-fill.js') (Join-Path $tmp 'hjob.json')
+        $hr = $null; foreach ($l in @($lines)) { if ($l -match '^\{') { $hr = $l | ConvertFrom-Json } }
+        $hs = @(); if ($hr) { $hs = @($hr.spans) }
+        $got = ($hs | ForEach-Object { [string]$_.text + '/' + [string]$_.filled }) -join ' | '
+        switch ($arm.k) {
+          'live' { T 'CLEAN TWIN  ps_range fills from recipe_stats p25 2.91 / p75 4.0275 as "$3 to $4", and cheapest_ps as ~$1.13' ($hs.Count -eq 2 -and $hs[0].text -eq '$3 to $4' -and $hs[0].filled -eq '3-4' -and $hs[1].text -eq '~$1.13' -and $hs[1].filled -eq '1.13') $got }
+          'same' { T 'CLEAN TWIN  AT the rounding bar: p25 2.5 rounds UP to 3 and p75 3.49 rounds down to 3, so the text is "$3", not "$3 to $3"' ($hs.Count -eq 2 -and $hs[0].text -eq '$3' -and $hs[0].filled -eq '3-3') $got }
+          'nostats' { T 'MUST NOT FIRE  a feed with no recipe_stats keeps both fallbacks ("$2 to $3", ~$1.54) and marks nothing filled' ($hs.Count -eq 2 -and $hs[0].text -eq '$2 to $3' -and -not $hs[0].filled -and $hs[1].text -eq '~$1.54' -and -not $hs[1].filled) $got }
+          'bad' { T 'MUST FIRE  a range whose low end rounds below $1 (p25 0.4) and a cheapest of 0 are both refused, fallbacks kept' ($hs.Count -eq 2 -and $hs[0].text -eq '$2 to $3' -and -not $hs[0].filled -and $hs[1].text -eq '~$1.54' -and -not $hs[1].filled) $got }
+          'down' { T 'MUST NOT FIRE  with the feed down both spans show their fallbacks' ($hs.Count -eq 2 -and $hs[0].text -eq '$2 to $3' -and $hs[1].text -eq '~$1.54') $got }
+          default { throw ('unknown homepage arm: ' + $arm.k) }
+        }
+      }
       # RANKED LISTS: build order is by the stamped fallbacks; the live order must come from the feed
       $li = { param($id, $bid, $fb, $extra) '<li data-tc-rank-id="' + $id + '"' + $extra + '><b>' + $id + '</b> <span data-tc-live-price data-tc-bid="' + $bid + '" data-tc-per="lb" data-tc-field="unit_price" data-tc-basis="feed-everyday-per-unit" data-tc-fallback="' + $fb + '">~$' + $fb + '</span> a pound</li>' }
       $rfeed = '{"schema":2,"generated":"2026-09-22T08:14:34","recipes":{},"pricing_inputs":{"p1":{"current":{"unit":"lb","perUnitMicros":1000000}},"p2":{"current":{"unit":"lb","perUnitMicros":2000000}},"p3":{"current":{"unit":"lb","perUnitMicros":3000000}}}}'
@@ -157,7 +188,7 @@ if ($SelfTest) {
         }
       }
     } finally { Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue }
-  } else { Write-Output 'BLIND  node or jsdom missing under C:\Codex\tools: the generated script was not RUN (5 cases not covered)' }
+  } else { Write-Output 'BLIND  node or jsdom missing under C:\Codex\tools: the generated script was not RUN (14 cases not covered)' }
   if ($script:fl -eq 0) { Write-Output ("build-live-price-script self-test PASS ($script:n cases)"); exit 0 } else { Write-Output ("build-live-price-script self-test FAIL ($script:fl of $script:n)"); exit 1 }
 }
 

@@ -108,10 +108,38 @@ function Expand-SpecProse { param($Spec)
 #   A cost_ps span on a page that is NOT the recipe's own card reads feed.recipes[slug].everyday_ps (a feed key
 #   the landing adds; until it ships the span keeps its stamped fallback). Both fills run through the ONE script,
 #   public\tc-live-price.js, generated from the card template by pipeline\build-live-price-script.ps1.
-$script:TC_LIVE_PRICE_BASIS = @{ 'cost_ps' = 'feed-everyday-whole-package'; 'unit_price' = 'feed-everyday-per-unit' }
+#   field  cheapest_ps (2026-09-23, Brad on Q-homepage-two-more-literals: "Make them live")  the CHEAPEST recipe's
+#          per-serving price on the card fill's basis: feed.recipe_stats.cheapest.everyday_ps, the minimum of
+#          feed.recipes[*].everyday_ps over PUBLISHED recipes (db\published-hashes.json) that are NOT HELD
+#          (db\held-recipes.json). Names no recipe (the cheapest one moves). Written by pipeline\feed-everyday-ps.ps1.
+#   field  ps_range (same ruling)  "most recipes land at $A to $B a plate": the 25th and 75th percentiles (linear
+#          interpolation between order statistics) of the same population's everyday_ps, feed.recipe_stats.p25/.p75,
+#          each rounded half-up to a WHOLE dollar by the fill. The middle half of the catalogue, so "most" is exactly
+#          half by construction, never a claim about a tail. Fallback is "A-B" (whole dollars) and the text "$A to $B";
+#          when both round to the same dollar the text is "$A". A range whose low end rounds below $1 is refused.
+$script:TC_LIVE_PRICE_BASIS = @{ 'cost_ps' = 'feed-everyday-whole-package'; 'unit_price' = 'feed-everyday-per-unit'
+  'cheapest_ps' = 'feed-everyday-whole-package-min'; 'ps_range' = 'feed-everyday-whole-package-iqr' }
+# Fields whose span names no recipe and no commodity: they read a catalogue-wide statistic.
+$script:TC_LIVE_PRICE_CATALOGUE_FIELDS = @('cheapest_ps', 'ps_range')
 $script:TC_LIVE_PRICE_PER = @('lb', 'oz', 'dozen', 'each', 'gal')
 function Format-TcLivePriceSpan { param([string]$Slug, [string]$Field = 'cost_ps', [string]$Value, [string]$AsOf = '', [string]$Bid = '', [string]$Per = '')
   if (-not $script:TC_LIVE_PRICE_BASIS.ContainsKey($Field)) { throw ("Format-TcLivePriceSpan: unknown field '{0}'" -f $Field) }
+  if ($AsOf -and $AsOf -notmatch '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$') { throw ("Format-TcLivePriceSpan: as-of '{0}' is not a feed generated stamp" -f $AsOf) }
+  if ($script:TC_LIVE_PRICE_CATALOGUE_FIELDS -contains $Field) {
+    $asofC = if ($AsOf) { ' data-tc-asof="' + $AsOf + '"' } else { '' }
+    if ($Field -eq 'ps_range') {
+      # "A-B": two whole dollars, low first, low at least 1. The text is what the fill writes for the same pair.
+      $m = [regex]::Match([string]$Value, '^(\d+)-(\d+)$')
+      if (-not $m.Success -or [int]$m.Groups[1].Value -lt 1 -or [int]$m.Groups[2].Value -lt [int]$m.Groups[1].Value) { throw ("Format-TcLivePriceSpan: range fallback '{0}' is not 'A-B' whole dollars with 1 <= A <= B" -f $Value) }
+      $lo = [int]$m.Groups[1].Value; $hi = [int]$m.Groups[2].Value
+      $txt = if ($lo -eq $hi) { '$' + $lo } else { '$' + $lo + ' to $' + $hi }
+      return ('<span data-tc-live-price data-tc-field="{0}" data-tc-basis="{1}" data-tc-fallback="{2}-{3}"{4}>{5}</span>' -f $Field, $script:TC_LIVE_PRICE_BASIS[$Field], $lo, $hi, $asofC, $txt)
+    }
+    $dc = 0.0
+    if (-not [double]::TryParse($Value, [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$dc) -or -not ($dc -gt 0) -or [double]::IsInfinity($dc)) { throw ("Format-TcLivePriceSpan: fallback '{0}' for {1} is not a positive price" -f $Value, $Field) }
+    $vc = $dc.ToString('0.00', [Globalization.CultureInfo]::InvariantCulture)
+    return ('<span data-tc-live-price data-tc-field="{0}" data-tc-basis="{1}" data-tc-fallback="{2}"{3}>~${2}</span>' -f $Field, $script:TC_LIVE_PRICE_BASIS[$Field], $vc, $asofC)
+  }
   if ($Field -eq 'unit_price') {
     if ([string]::IsNullOrEmpty($Bid)) { throw 'Format-TcLivePriceSpan: a unit_price placeholder names no commodity (data-tc-bid), so the feed cannot fill it' }
     if ($script:TC_LIVE_PRICE_PER -notcontains $Per) { throw ("Format-TcLivePriceSpan: unit '{0}' is not one the fill converts to ({1})" -f $Per, ($script:TC_LIVE_PRICE_PER -join ', ')) }
@@ -314,6 +342,17 @@ if ($SelfTest) {
   $up = Format-TcLivePriceSpan -Field 'unit_price' -Bid 'chicken-thighs' -Per 'lb' -Value '1.9' -AsOf '2026-09-22T08:14:34'
   T 'CLEAN TWIN  a unit_price placeholder names bid, unit, field and basis, and its text is its fallback' `
     ($up -eq '<span data-tc-live-price data-tc-bid="chicken-thighs" data-tc-per="lb" data-tc-field="unit_price" data-tc-basis="feed-everyday-per-unit" data-tc-fallback="1.90" data-tc-asof="2026-09-22T08:14:34">~$1.90</span>') $up
+  # 2026-09-23 (Q-homepage-two-more-literals, "Make them live"): two catalogue-wide fields for the homepage.
+  $ch = Format-TcLivePriceSpan -Field 'cheapest_ps' -Value '1.13' -AsOf '2026-09-23T00:21:31'
+  T 'CLEAN TWIN  a cheapest_ps placeholder names field and basis, no recipe, and its text is its fallback' `
+    ($ch -eq '<span data-tc-live-price data-tc-field="cheapest_ps" data-tc-basis="feed-everyday-whole-package-min" data-tc-fallback="1.13" data-tc-asof="2026-09-23T00:21:31">~$1.13</span>') $ch
+  $rg = Format-TcLivePriceSpan -Field 'ps_range' -Value '3-4' -AsOf '2026-09-23T00:21:31'
+  T 'CLEAN TWIN  a ps_range placeholder carries the whole-dollar pair as its fallback and "$3 to $4" as its text' `
+    ($rg -eq '<span data-tc-live-price data-tc-field="ps_range" data-tc-basis="feed-everyday-whole-package-iqr" data-tc-fallback="3-4" data-tc-asof="2026-09-23T00:21:31">$3 to $4</span>') $rg
+  $rg1 = Format-TcLivePriceSpan -Field 'ps_range' -Value '3-3'
+  T 'CLEAN TWIN  a range whose ends round to one dollar reads "$3", never "$3 to $3"' ($rg1 -match '>\$3</span>$') $rg1
+  T 'MUST FIRE  a range fallback that is not two whole dollars low-first (4-3, 0-2, 2.5-3) is refused' `
+    ((& { $n = 0; foreach ($bad in '4-3', '0-2', '2.5-3') { try { Format-TcLivePriceSpan -Field 'ps_range' -Value $bad | Out-Null } catch { $n++ } }; $n }) -eq 3) 'accepted a malformed range'
   T 'MUST FIRE  a placeholder refuses to render without the slug it belongs to' `
     (& { $t = $false; try { Format-TcLivePriceSpan -Slug '' -Value '3.00' | Out-Null } catch { $t = $true }; $t }) 'rendered an anonymous span'
   # AT THE BAR (the bar is "greater than zero"; resolution is one cent): 0.01 is the smallest price the span

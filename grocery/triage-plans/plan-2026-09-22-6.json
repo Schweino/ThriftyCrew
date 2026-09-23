@@ -200,8 +200,8 @@
                       "rollback":  "paste the snippet\u0027s Step 2 text back over the Step 3 text and remove the Step 4 script tag (design/homepage-quote-live-snippet-2026-09-22.md, Roll back)",
                       "freshness":  "measured 2026-09-23 against the live site (www.thriftycrew.com read with cache-busting queries, 375px headless Chrome over media/reels/cdp.py), the Ghost Admin API, and feed.thriftycrew.com/smp-feed.json generated 2026-09-23T00:21:31 (week_of 2026-09-22); worktree agent-acc4db640d784b57b at origin/main 27b3dd5f9",
                       "premise_verified":  "true: the live homepage carries the Step 2 text exactly once (2026-09-23), and the alfredo card\u0027s stamped fallback is 2.00 @ 2026-09-22T08:14:34 in both the built card and the live post, equal to the value the live card fills today",
-                      "leaves_open":  "the homepage\u0027s other two typed grocery literals (A meal-prep batch ... $2 to $3 a plate ... $1.54; Most land at $2 to $3 a plate) are offered in the snippet, not ruled: 2 literals",
-                      "leaves_open_occurrences":  "2 literals on 1 page, standing",
+                      "leaves_open":  "the paste itself: Brad ruled Q-homepage-two-more-literals on 2026-09-23 (\"Make them live\"), so all three homepage values are live spans in ONE edit of design/homepage-quote-live-snippet-2026-09-22.md (cheapest_ps, ps_range, cost_ps), and the typed text stays live until Brad pastes it: 3 literals on 1 page, pending the paste",
+                      "leaves_open_occurrences":  "3 grocery literals on 1 page by the monitor's count (2026-09-22), standing until the paste; 0 once pasted",
                       "leaves_open_followup":  "Q-homepage-two-more-literals",
                       "resolution_note":  "needs-brad: paste design/homepage-quote-live-snippet-2026-09-22.md in Settings \u003e Code injection (integration tokens cannot write Settings). Rule Q-homepage-two-more-literals for the other two homepage prices."
                   },
@@ -276,6 +276,9 @@
     "open_questions_for_brad":  [
                                     {
                                         "id":  "Q-homepage-two-more-literals",
+                                        "status":  "ruled 2026-09-23",
+                                        "ruling":  "Brad, verbatim: \"Make them live\" (option C)",
+                                        "implemented":  "two catalogue-wide live fields: cheapest_ps (feed.recipe_stats.cheapest.everyday_ps, the lowest everyday_ps over published, non-held recipes) and ps_range (feed.recipe_stats.p25/p75 of the same population, each rounded half-up to a whole dollar by the fill). Registry meal-prep/lib/render-tokens.ps1, fill fillLivePrices() in meal-prep/pipeline/tpl2-scaler-prefix.html generated into public/tc-live-price.js, feed keys written by meal-prep/pipeline/feed-everyday-ps.ps1 (called by grocery/export-feed.ps1). On the feed generated 2026-09-23T00:21:31: cheapest 1.13 (pizza-pasta-bowls), p25 2.91, p75 4.03, n 566, so \"$3 to $4 a plate\" and \"~$1.13\". The paste is design/homepage-quote-live-snippet-2026-09-22.md, all three values in one edit, every find string read once in the live codeinjection_foot (Admin API GET, 2026-09-23); footer 65,311 of 65,535 characters after the edit.",
                                         "question":  "The homepage injection carries two more typed grocery prices beside the quote: \"feeds you all week at $2 to $3 a plate, and this week\u0027s cheapest lands at $1.54\" and \"Most land at $2 to $3 a plate.\" Ruling A named only the quote.",
                                         "options":  [
                                                         "A: take the snippet\u0027s two rewrites in the same paste (no figure; every recipe shows its live cost)",
@@ -283,6 +286,26 @@
                                                         "C: make them live spans too (needs a cheapest-recipe feed key that does not exist today)"
                                                     ],
                                         "measured":  "the monitor counts 3 grocery literals on the homepage (2026-09-22); the snippet removes 1"
+                                    },
+                                    {
+                                        "id":  "Q-homepage-dinner-chip-basis",
+                                        "question":  "The homepage's gold chip #tc-chip-dinner (\"Cheapest dinner this week, per serving\") is filled by the footer's own script from the minimum per_serving over recipes of at least 550 calories ($1.10 on the 2026-09-23T00:21:31 feed), while the ruled sentence now shows the minimum everyday_ps over published, non-held recipes (~$1.13). Two numbers for one 'cheapest' on one page.",
+                                        "options":  [
+                                                        "A: point the chip at recipe_stats.cheapest (one definition on the page; the 550-calorie floor goes)",
+                                                        "B: keep the chip's dinner definition and add a 550-calorie floor to recipe_stats.cheapest",
+                                                        "C: leave both; they answer different questions"
+                                                    ],
+                                        "measured":  "footer script read 2026-09-23 through the Admin API (GET): best = min v.per_serving where v.calories >= 550; feed min per_serving 1.10, min everyday_ps 1.13"
+                                    },
+                                    {
+                                        "id":  "Q-mealprep-banner-literal",
+                                        "question":  "The footer block gated on body.tag-meal-prep.post-template says \"an honest cost per serving (most land around $2&ndash;3 a plate)\" on every meal-prep post. It is the same typed range the ruling made live on the homepage, and no monitor sees it (monitor-sitewide-prices reads posts without their scripts). Make it live too?",
+                                        "options":  [
+                                                        "A: yes, as optional Pair 4 of the same paste (footer then 65,472 of 65,535 characters)",
+                                                        "B: no, reword it without a figure",
+                                                        "C: leave it"
+                                                    ],
+                                        "measured":  "occurs once in the live codeinjection_foot (Admin API GET, 2026-09-23)"
                                     }
                                 ],
     "closed":  {

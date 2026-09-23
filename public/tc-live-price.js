@@ -20,6 +20,8 @@ function tcFeedValue(live){
       var k={'lb|lb':1,'lb|oz':16,'oz|oz':1,'oz|lb':1/16,'dozen|dozen':1,'dozen|each':12,'each|each':1,'each|dozen':1/12,'gal|gallon':1,'gal|floz':128}[String(live.getAttribute('data-tc-per'))+'|'+String(c.unit)];
       return k?c.perUnitMicros/1e6*k:NaN;
     }
+    //   cheapest_ps (no slug) -> feed.recipe_stats.cheapest.everyday_ps: the cheapest published, non-held recipe
+    if(f==='cheapest_ps'){ var rs=feedData.recipe_stats; return (rs&&rs.cheapest)?Number(rs.cheapest.everyday_ps):NaN; }
     return NaN;
   }
 function fillLivePrices(){
@@ -31,6 +33,16 @@ function fillLivePrices(){
       if(stat&&good){ stat.innerHTML=stat.innerHTML.replace(/Makes \d+ servings/,'Makes '+nn2+' servings'); }
       [].slice.call(document.querySelectorAll('[data-tc-live-price]')).forEach(function(live){
         var f=live.getAttribute('data-tc-field');
+        // ps_range: feed.recipe_stats.p25/.p75 (the middle half of published, non-held recipes' everyday_ps), each
+        // rounded half-up to a whole dollar; "$A to $B", or "$A" when both round alike. Refused (fallback "A-B"
+        // restored) unless 1 <= A <= B.
+        if(f==='ps_range'){
+          var rs2=(feedData&&!feedFailed)?feedData.recipe_stats:null, lo=rs2?Math.round(Number(rs2.p25)):NaN, hi=rs2?Math.round(Number(rs2.p75)):NaN;
+          if(lo>=1&&hi>=lo){ live.setAttribute('data-tc-filled',lo+'-'+hi); }
+          else { var fm=/^(\d+)-(\d+)$/.exec(String(live.getAttribute('data-tc-fallback'))); lo=fm?+fm[1]:NaN; hi=fm?+fm[2]:NaN; live.removeAttribute('data-tc-filled'); }
+          if(lo>=1&&hi>=lo){ live.textContent=(lo===hi)?('$'+lo):('$'+lo+' to $'+hi); }
+          return;
+        }
         var w=((typeof tcStandalone!=='undefined'&&tcStandalone)||live.hasAttribute('data-tc-bid'))?tcFeedValue(live):((good&&(!f||f==='cost_ps'))?v:NaN);
         if(isFinite(w)&&w>0&&Math.round(w*100)>0){ var s2=w.toFixed(2); live.textContent='~$'+s2; live.setAttribute('data-tc-filled',s2); return; }
         var fb=parseFloat(live.getAttribute('data-tc-fallback'));
@@ -66,4 +78,5 @@ function tcRankLists(){
 }
 function go(){ fillLivePrices(); smpGetFeed().then(function(f){ feedData=f; if(!f){ feedFailed=true; } fillLivePrices(); tcRankLists(); }); }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+window.addEventListener('load',function(){ if(feedData&&!feedFailed){ fillLivePrices(); tcRankLists(); } });
 })();
