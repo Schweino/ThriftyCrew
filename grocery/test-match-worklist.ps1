@@ -94,7 +94,7 @@ try {
   $d4 = Merge-MatchWorklist -Findings @() -Previous $d1 -Verdicts @{} -Today '2026-09-23' -BlindKinds @('coverage')
   _MT 'CLEAN TWIN  a BLIND detector keeps yesterday''s key (not forgotten, not re-paged)' (@($d4).Count -eq 1 -and -not $d4[0].new) ([string]@($d4).Count)
   $d5 = Merge-MatchWorklist -Findings @() -Previous $d1 -Verdicts @{} -Today '2026-09-23'
-  _MT 'CLEAN TWIN  a key the detector no longer reports (and which ran) drops off the worklist' (@($d5).Count -eq 0) ([string]@($d5).Count)
+  _MT 'MECHANISM  a key the detector no longer reports (and which ran) drops off the worklist' (@($d5).Count -eq 0) ([string]@($d5).Count)
 
   # end to end over a temp tree: the resolver decides, writes the ledger, never touches the rule file
   $od = Join-Path $tmp 'out'; New-Item -ItemType Directory -Path (Join-Path $od 'audit') -Force | Out-Null
