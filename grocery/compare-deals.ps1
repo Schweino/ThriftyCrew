@@ -2109,7 +2109,7 @@ if ($SelfTest) {
   # builds it: split the item, then take each part's size the way the loader takes it. The assertion is the
   # exact NAME + SIZE + split_from triple that reaches Add-Norm, because that triple is what decides which
   # commodity the row routes to and what the engine divides by.
-  if (-not (Get-Command Split-TwoProductAdLine -ErrorAction SilentlyContinue)) { . (Join-Path $PSScriptRoot 'pricing-math-lib.ps1') }
+  if (-not (Get-Command Get-AdLineParts -ErrorAction SilentlyContinue)) { . (Join-Path $PSScriptRoot 'pricing-math-lib.ps1') }
   $ingestCases = @(
     # MUST FIRE - the founding line. Before this, ONE row reached Add-Norm named for the cereal and sized by
     # the orange juice: $4.49 / 46 fl oz = $0.0976/oz, published as the cheapest cereal in Omaha.
@@ -2126,17 +2126,35 @@ if ($SelfTest) {
     # CLEAN TWIN - a single-product line still reaches Add-Norm as ONE row with the FILE's size and no
     # split_from, exactly as it did before any of this existed
     @{ item='Kroger Pasta Sauce, 24 oz'; size='24 oz'; want=@('Kroger Pasta Sauce, 24 oz @@ 24 oz') }
-    # CLEAN TWIN - a size-less alternation is one product in two flavours and keeps the file's size
-    @{ item='Raspberries or Blackberries'; size='6 oz'; want=@('Raspberries or Blackberries @@ 6 oz') }
+    # MUST FIRE (Brad, Q-adline-two-products, 2026-09-22: 'Split per product') - a size-less alternation names TWO
+    # products at one size: one row each, both at the file's size. Until the ruling this line was kept whole.
+    @{ item='Raspberries or Blackberries'; size='6 oz'; want=@('Raspberries @@ 6 oz','Blackberries @@ 6 oz') }
+    # MUST FIRE - the three founding Hy-Vee lines of the ruling, frozen from coverage-gaps.json 2026-09-22
+    @{ item='Old Orchard Organic 100% apple or grape juice, 64 fl. oz., 2/ $7.00'; size=''
+       want=@('Old Orchard Organic 100% apple juice, 64 fl. oz., 2/ $7.00 @@ ','Old Orchard Organic 100% grape juice, 64 fl. oz., 2/ $7.00 @@ ') }
+    @{ item='Alexia fries, tots or onion rings, 13.5 to 28 oz., $5.89'; size=''
+       want=@('Alexia fries, 13.5 to 28 oz., $5.89 @@ ','Alexia tots, 13.5 to 28 oz., $5.89 @@ ','Alexia onion rings, 13.5 to 28 oz., $5.89 @@ ') }
+    @{ item='Hy-Vee party cheese or cheese dip, .50 off with digital coupon, $2.99'; size=''
+       want=@('Hy-Vee party cheese, .50 off with digital coupon, $2.99 @@ ','Hy-Vee cheese dip, .50 off with digital coupon, $2.99 @@ ') }
+    # CLEAN TWIN - two SIZES of one product stay ONE row (batch 2 prices the smaller size)
+    @{ item='Xtra laundry detergent, 56 or 67.5 oz.'; size='56 or 67.5 oz'; want=@('Xtra laundry detergent, 56 or 67.5 oz. @@ 56 or 67.5 oz') }
+    # MUST NOT FIRE - a product list with a size inside it ('A size, B size') stays whole: the loose split that made
+    # a wrong coffee crown out of 'ice coffee 50.7 oz.' is still refused
+    @{ item='Hy-Vee ice coffee 50.7 oz. or cold brew, $4.99'; size=''; want=@('Hy-Vee ice coffee 50.7 oz. or cold brew, $4.99 @@ ') }
+    # MUST NOT FIRE - two BRANDS with no lower-case product noun ('Pepsi or Mountain Dew') never become 'Pepsi Dew': a one-word
+    # part is a fragment, so the line stays whole (measured on the Fareway soda cell, 2026-09-22)
+    @{ item='Pepsi or Mountain Dew'; size='2 L'; want=@('Pepsi or Mountain Dew @@ 2 L') }
+    # MUST FIRE - a second brand names its own product; a short first brand borrows the lower-case noun
+    @{ item='Lean Cuisine or Stouffer''s entree, 8.5 to 12 oz., $2.77'; size=''; want=@('Lean Cuisine entree, 8.5 to 12 oz., $2.77 @@ ','Stouffer''s entree, 8.5 to 12 oz., $2.77 @@ ') }
   )
   foreach ($ic in $ingestCases) {
-    $parts = Split-TwoProductAdLine ([string]$ic.item)
+    $parts = Get-AdLineParts ([string]$ic.item) ([string]$ic.size)
     $parts = @($parts)
     $sfx = if ($parts.Count -gt 1) { [string]$ic.item } else { '' }
     $emitted = @()
-    foreach ($pn in $parts) {
-      $psz = if ($parts.Count -gt 1) { Get-SplitPartSizeText $pn ([string]$ic.size) } else { [string]$ic.size }
-      $emitted += ([string]$pn + ' @@ ' + [string]$psz)
+    foreach ($ap in $parts) {
+      $psz = if ($parts.Count -gt 1) { [string]$ap.size } else { [string]$ic.size }
+      $emitted += ([string]$ap.name + ' @@ ' + [string]$psz)
     }
     $ok = ($emitted.Count -eq @($ic.want).Count)
     if ($ok) { for ($i = 0; $i -lt $emitted.Count; $i++) { if ([string]$emitted[$i] -ne [string]$ic.want[$i]) { $ok = $false } } }
@@ -2368,13 +2386,16 @@ foreach ($d in $ads.deals) {                                                    
   # simulation. Those lines are refused by Get-UnitPrice instead of being priced by an arbitrary one of
   # their two sizes. Routing this loop through the one function is the point: the next flyer that writes
   # "A, size or B, size" here is handled the day it lands rather than the day somebody notices.
-  $adParts = Split-TwoProductAdLine ([string]$d.item)
+  # Brad's ruling Q-adline-two-products (2026-09-22): a line naming two or more products at ONE size is split
+  # per product too (Split-AdLineProducts, in Get-AdLineParts with the sized split above).
+  $adParts = Get-AdLineParts ([string]$d.item) $d.size
   $adParts = @($adParts)
   $sf = if ($adParts.Count -gt 1) { [string]$d.item } else { '' }
-  foreach ($pn in $adParts) {
+  foreach ($ap in $adParts) {
+    $pn = [string]$ap.name
     # the file row's size belongs to a part only when it states that part's own size expression; otherwise
     # the size is cut from the part itself. Unsplit lines keep $d.size byte for byte.
-    $pSize = if ($adParts.Count -gt 1) { Get-SplitPartSizeText $pn ([string]$d.size) } else { $d.size }
+    $pSize = if ($adParts.Count -gt 1) { $ap.size } else { $d.size }
     switch ($d.store) {
       # pull-grocery-ads stamps ad_from/ad_to on EVERY deal now - per FLYER for Hy-Vee (it runs three at
       # once), per ITEM for Aldi (flyerkit gives each product its own), per CIRCULAR for Family Fare.
@@ -2495,11 +2516,12 @@ foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
       # whichever product's words first-match-wins and divide by whichever size the transcriber wrote.
       # Split-TwoProductAdLine returns ONE element for every other line, so those are emitted exactly as
       # before.
-      $adParts = Split-TwoProductAdLine ([string]$d.item)
+      $adParts = Get-AdLineParts ([string]$d.item) $d.size   # + one row per named product (Q-adline-two-products)
       $adParts = @($adParts)
       $sf = if ($adParts.Count -gt 1) { [string]$d.item } else { '' }
-      foreach ($pn in $adParts) {
-        $pSize = if ($adParts.Count -gt 1) { Get-SplitPartSizeText $pn ([string]$d.size) } else { $d.size }
+      foreach ($ap in $adParts) {
+        $pn = [string]$ap.name
+        $pSize = if ($adParts.Count -gt 1) { $ap.size } else { $d.size }
         # THE STORE'S PRODUCT ID NAMES ONE PRODUCT, AND A SPLIT LINE HAS TWO. Handing both parts the same id
         # would make them the same product to Select-FreshestCaptureRows' supersession, which would let one
         # part evict the other. A part of a split line therefore carries NO id - it is name-keyed, exactly as

@@ -518,6 +518,86 @@ function Split-TwoProductAdLine([string]$name) {
   if ($parts.Count -lt 2) { return ,@($whole) }
   return ,@($parts.ToArray())
 }
+# ONE ROW PER NAMED PRODUCT (Brad's ruling Q-adline-two-products, 2026-09-22: "Split per product"). An ad line that
+# offers two or more PRODUCTS at one price with ONE size ("Old Orchard Organic 100% apple or grape juice, 64 fl.
+# oz., 2/ $7.00", "Alexia fries, tots or onion rings, 13.5 to 28 oz.", "Hy-Vee party cheese or cheese dip") used
+# to reach matching whole, and first-match-wins handed it to whichever commodity came first. The ad price is real
+# for EACH product named, so each becomes its own row, sharing the line's size and price text. Different SIZES of
+# one product ('56 or 67.5 oz', '3 or 4 ct') are one product and never split here (batch 2 prices the smaller).
+# STRICT, like Split-TwoProductAdLine: the product list is the comma items BEFORE the first item that starts with
+# a digit, '$' or '.', and it is split only when the LAST of those items holds a word-level ' or ' and NO item of
+# the list holds a digit (a size inside the list is the "A size, B size" shape the loose rule turned into a
+# wrong coffee crown; that line stays whole). Naming, for the last item's 'L or R':
+#   R opens with a capital (a second brand: 'Lean Cuisine or Stouffer''s entree') -> L (+ R's noun when L is short), and R
+#   R starts with L's last word ('party cheese or cheese dip')  -> distinct products: L, and L's brand + R
+#   R is one word ('wieners or sausage', 'Raspberries or Blackberries') -> shared lead: L, and L less its last word + R
+#   otherwise ('apple or grape juice')                           -> shared head: L + R's last word, and L less its last word + R
+# Earlier comma items are products of their own, prefixed with the first item's brand word when the later items
+# start lower-case ('Alexia fries, tots or onion rings'). Returns ONE element (the name unchanged) otherwise.
+function Split-AdLineProducts([string]$name) {
+  if (-not $name) { return ,@() }
+  $whole = "" + $name
+  if (-not [regex]::IsMatch($whole, '(?i)(?<![\d.])\b[a-z][a-z''.]*\s+or\s+(?!\d)[a-z]')) { return ,@($whole) }
+  $items = @($whole -split ',')
+  $k = -1
+  for ($i = 0; $i -lt $items.Count; $i++) { if ($items[$i].Trim() -match '^[\d$.]') { break }; $k = $i }
+  if ($k -lt 0) { return ,@($whole) }
+  $list = @($items[0..$k] | ForEach-Object { $_.Trim() })
+  $tail = if ($k -lt $items.Count - 1) { (@($items[($k + 1)..($items.Count - 1)]) -join ',').Trim() } else { '' }
+  # a SIZE inside the list (a digit and a unit) is the 'A size, B size' shape: whole. '100%' is not a size.
+  foreach ($it in $list) { if (-not $it -or $it -match '(?i)\d[\d.\-]*\s*-?\s*(?:fl\.?\s*oz|oz|ct|lbs?|pk|pack|ml|liters?|gal|qt|pt|count|ea|g|kg)\b') { return ,@($whole) } }
+  $last = $list[$list.Count - 1]
+  $lr = @([regex]::Split($last, '(?i)\s+or\s+'))
+  if ($lr.Count -ne 2 -or -not $lr[0].Trim() -or -not $lr[1].Trim()) { return ,@($whole) }
+  $L = $lr[0].Trim(); $R = $lr[1].Trim()
+  $lw = @($L -split '\s+'); $rw = @($R -split '\s+')
+  $lLess = if ($lw.Count -gt 1) { ($lw[0..($lw.Count - 2)] -join ' ') } else { '' }
+  $brand = (@($lw | Where-Object { $_ -cmatch '^[A-Z0-9]' }) | Select-Object -First 1)
+  $names = New-Object System.Collections.Generic.List[string]
+  if ($list.Count -gt 1) {
+    # the BRAND prefix is the first item's leading capitalised words ('Nature Raised Farms chicken strips' ->
+    # 'Nature Raised Farms'), lent to later items only when they start lower-case ('nuggets or bites')
+    $pre = ''
+    $firstWords = @($list[0] -split '\s+')
+    $capRun = @(); foreach ($fw in $firstWords) { if ($fw -cmatch '^[A-Z0-9]') { $capRun += $fw } else { break } }
+    if ($capRun.Count -gt 0 -and $capRun.Count -lt $firstWords.Count -and (@($list[1..($list.Count - 1)] | Where-Object { $_ -cmatch '^[A-Z]' }).Count -eq 0)) { $pre = ($capRun -join ' ') + ' ' }
+    [void]$names.Add($list[0])
+    for ($i = 1; $i -lt $list.Count - 1; $i++) { [void]$names.Add($pre + $list[$i]) }
+    [void]$names.Add($pre + $L); [void]$names.Add($pre + $R)
+  } elseif ($rw[0] -cmatch '^[A-Z]') {
+    # R opens with a capital: a second BRAND or product name ('Cocoa Krispies or Raisin Bran cereal', 'Lean Cuisine or
+    # Stouffer''s entree'). R stands alone; a short L (two words or fewer) takes R's last word as its product noun.
+    # ...and only a LOWER-CASE last word is a product noun: 'Pepsi or Mountain Dew' must never make 'Pepsi Dew'
+    [void]$names.Add($(if ($lw.Count -le 2 -and $rw.Count -gt 1 -and $rw[$rw.Count - 1] -cmatch '^[a-z]') { $L + ' ' + $rw[$rw.Count - 1] } else { $L })); [void]$names.Add($R)
+  } elseif ($rw[0] -ieq $lw[$lw.Count - 1]) {
+    [void]$names.Add($L); [void]$names.Add($(if ($brand -and $lw.Count -gt 1) { $brand + ' ' + $R } else { $R }))
+  } elseif ($rw.Count -eq 1) {
+    [void]$names.Add($L); [void]$names.Add((($lLess + ' ' + $R).Trim()))
+  } else {
+    [void]$names.Add($L + ' ' + $rw[$rw.Count - 1]); [void]$names.Add((($lLess + ' ' + $R).Trim()))
+  }
+  # A ONE-WORD PART is a fragment ('lasagna', 'Barq''s', 'sausage'), not a product name matching can route on
+  # safely: the line stays whole unless EVERY part is one word of a plain two-way alternation ('Raspberries or
+  # Blackberries'). Measured on ads-2026-09-22: without this, 'Take Home, Rana meal kit or lasagna' emitted a bare
+  # 'lasagna' row priced as a Rana meal kit.
+  $oneWord = @($names | Where-Object { @($_.Trim() -split '\s+').Count -lt 2 }).Count
+  if ($oneWord -gt 0 -and -not ($list.Count -eq 1 -and $oneWord -eq $names.Count)) { return ,@($whole) }
+  $out = @($names | ForEach-Object { if ($tail) { $_ + ', ' + $tail } else { $_ } })
+  if ($out.Count -lt 2) { return ,@($whole) }
+  return ,$out
+}
+# The rows ONE ad line becomes, with each row's size: the two-product-with-sizes split first (each part keeps its
+# own size), then the one-size product split (each part shares the line's size). One copy of the rule, used by
+# both ingest loops in compare-deals and by its fixture. .split is true when the line became more than one row.
+function Get-AdLineParts([string]$item, $fileSize) {
+  $p1 = Split-TwoProductAdLine $item
+  $p1 = @($p1)
+  if ($p1.Count -gt 1) { return ,@($p1 | ForEach-Object { [pscustomobject]@{ name = [string]$_; size = (Get-SplitPartSizeText $_ ([string]$fileSize)); split = $true } }) }
+  $p2 = Split-AdLineProducts $item
+  $p2 = @($p2)
+  if ($p2.Count -gt 1) { return ,@($p2 | ForEach-Object { [pscustomobject]@{ name = [string]$_; size = $fileSize; split = $true } }) }
+  return ,@([pscustomobject]@{ name = $item; size = $fileSize; split = $false })
+}
 # The size text a split part must be priced by. The file row's size field is the transcriber's pick and is
 # NOT reliably the first product's ("Nature Valley Bars, 5-12 ct or Pepperidge Farm Goldfish, 4.8-8 oz"
 # carries size '4.8-8 oz'), so it is handed to a part only when it actually contains that part's own size
