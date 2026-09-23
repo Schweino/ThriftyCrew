@@ -64,6 +64,24 @@ $repo = Split-Path -Parent $here
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 . (Join-Path $repo 'lib\lf-write.ps1')    # Write-TcLfFile: the baseline is tracked and stored eol=lf
+. (Join-Path $repo 'lib\production-text.ps1')   # Test-TcInsideSelfTestClause: the ONE rule for "this line runs only under -SelfTest"
+
+# A FIXTURE IS NOT A REACH (2026-09-22, queue 2026-09-17 archive 935ce3). A path literal inside the body of an
+# `if ($SelfTest)` clause is a frozen fixture, not a live dependency: it never runs in production, and moving the
+# directory it names breaks nothing but that fixture, which says so itself. lib\production-text.ps1 holds the
+# rule (exactly the switch; `if (-not $SelfTest)`, an `else` and `if ($SelfTest -and $x)` stay production), so
+# this sweep asks it rather than keeping a third copy. An unparseable file keeps every site: louder, never quieter.
+function Get-ReachProductionSites {
+  param([string]$Text, [string]$OwnModule)
+  $all = @(Get-ReachSites -Text $Text -OwnModule $OwnModule)
+  if ($all.Count -eq 0) { return ,@() }
+  $ast = $null
+  try { $tk = $null; $pe = $null; $ast = [System.Management.Automation.Language.Parser]::ParseInput($Text, [ref]$tk, [ref]$pe); if (@($pe).Count) { $ast = $null } } catch { $ast = $null }
+  if ($null -eq $ast) { return ,$all }
+  $keep = New-Object System.Collections.ArrayList
+  foreach ($s in $all) { if (-not (Test-TcInsideSelfTestClause -Ast $ast -Line ([int]$s.line))) { [void]$keep.Add($s) } }
+  return ,($keep.ToArray())
+}
 
 $BASELINE = Join-Path $here 'cross-module-reach-baseline.json'
 
@@ -382,7 +400,17 @@ if ($runSelfTest) {
     T 'MUST NOT FIRE  at the high-water mark it exits 0 and prints no site list' ($atRc -eq 0 -and $atRow.Count -eq 0) ("rc=$atRc rows=$($atRow.Count)")
   } finally { Remove-Item -LiteralPath $sbx -Recurse -Force -ErrorAction SilentlyContinue }
 
-  if ($bad -gt 0) { Write-Output ("cross-module-reach SELF-TEST FAIL ({0})" -f $bad); exit 2 }
+  # ---- A FIXTURE IS NOT A REACH (935ce3): lib\production-text.ps1 decides which lines run only under -SelfTest ----
+  $fxIn  = 'if ($SelfTest) {' + "`n" + '  $b = Get-Content ''meal-prep/db/fixture-x.json''' + "`n" + '}' + "`n"
+  $fxNot = 'if (-not $SelfTest) {' + "`n" + '  $b = Get-Content ''meal-prep/db/fixture-x.json''' + "`n" + '}' + "`n"
+  $fxTop = '$b = Get-Content ''meal-prep/db/fixture-x.json''' + "`n"
+  $pIn = Get-ReachProductionSites -Text $fxIn -OwnModule 'grocery'
+  $pNot = Get-ReachProductionSites -Text $fxNot -OwnModule 'grocery'
+  $pTop = Get-ReachProductionSites -Text $fxTop -OwnModule 'grocery'
+  $rawIn = @(Get-ReachSites -Text $fxIn -OwnModule 'grocery')
+  T 'MUST NOT FIRE  a reach inside an if ($SelfTest) body is a fixture: 0 production sites (the raw scan sees 1)' (@($pIn).Count -eq 0 -and $rawIn.Count -eq 1) ("prod=$(@($pIn).Count) raw=$($rawIn.Count)")
+  T 'MUST FIRE  the same reach under if (-not $SelfTest) is production and counts' (@($pNot).Count -eq 1) ("prod=$(@($pNot).Count)")
+  T 'CLEAN TWIN  a top-level reach still counts exactly once' (@($pTop).Count -eq 1) ("prod=$(@($pTop).Count)")  if ($bad -gt 0) { Write-Output ("cross-module-reach SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'cross-module-reach SELF-TEST PASS'
   Exit-Guard -Name 'cross-module-reach' -Summary 'selftest pass' -Code 0
 }
@@ -411,7 +439,7 @@ foreach ($f in $files) {
   # A detector must never scan itself: its own fixtures are full of the literals it hunts.
   if ($rel -replace '\\','/' -eq 'ops/audit-cross-module-reach.ps1') { continue }
   $text = [IO.File]::ReadAllText($f.FullName)
-  $sites = @(Get-ReachSites -Text $text -OwnModule $own)
+  $sites = Get-ReachProductionSites -Text $text -OwnModule $own   # assigned, not wrapped inline: a comma-returned array
   if ($sites.Count -gt 0) { $filesBy[$sites[0].classifier]++ }
   foreach ($s in $sites) {
     if (-not $s.line_comment) { $lineRuleCode++ }
