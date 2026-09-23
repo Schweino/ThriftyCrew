@@ -1,5 +1,10 @@
 # I60: the three lesson fixes, shown before anything is republished
 
+## What Brad does
+
+The before and after of the three finance lessons (30, 31, 37), the checks, and the commands that swap only the
+changed passages into the live posts. Nothing is republished until you run them.
+
 **APPLIED 2026-09-19 at 08:57 UTC. Brad approved it in chat after reading the exact passages below.** The swap
 ran exactly as written here, from the main checkout through `ops\review-staged.ps1`, and all three PUTs were
 sent (exit 0). Lesson 30 (`6a43b4155e9f16000182e978`) is now at `updated_at` 2026-09-19T08:57:44.000Z, journal

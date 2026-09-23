@@ -1,5 +1,11 @@
 # Three lesson drafts for Brad's approval (backlog I108, I109, I111)
 
+## What Brad does
+
+Three lesson drafts Brad ruled on 2026-09-19 (insurance basics, the emergency fund, the personal balance sheet),
+with their HTML bodies, the three cross-link lines, and the exact publish commands in `lessons\README.md`.
+Nothing is published until Brad runs them.
+
 **2026-09-19: Brad ruled "Publish all three". The publish is STAGED, NOT SENT**, as three queues under `staged\`
 (`new-lessons.jsonl`, `new-lessons-links.jsonl`, `new-lessons-oldpage-links.jsonl`). The apply order, the fields
 each post carries and the checks to run afterwards are in `new-lessons-publish.md`, which replaces the

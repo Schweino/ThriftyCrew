@@ -1,5 +1,13 @@
 # Produce refuses condiments: the rule is on main, the live board is not rebuilt yet
 
+## What Brad does
+
+The condiment class (aioli, mayo, squeeze, dip, dressing, spread) is already on main for 114 of 116 produce
+commodities; the live board was built ten minutes before it landed. The file has the paired diff (1 cell is this
+rule), the full rebuild diff (80 cells), and the one command that rebuilds the live board.
+Brad's second ruling the same day is recorded there too: both green-chilli products are known-wrong, stews and
+cans are fenced off produce, no hand rebuild. The one action left is the check after the 08:00 run on 2026-09-20.
+
 Brad's ruling, 2026-09-19: "Fix all produce". No aioli, mayo, squeeze condiment, dip, dressing or spread may win a
 fresh produce cell, not only green chiles.
 
