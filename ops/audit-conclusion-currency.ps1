@@ -46,8 +46,20 @@
     ops\audit-conclusion-currency.ps1 -Accept      record the CURRENT count as the new high-water mark
     ops\audit-conclusion-currency.ps1 -SelfTest    frozen fixtures, plus this script's live path run against a temp repository
 
+  THE BASELINE FAILS CLOSED (2026-09-23, W1.2 of design\PLAN-push-derived-conflicts-2026-09-23.md). A baseline is
+  READ (it parses and carries an integer `unqualified`), ABSENT (no file) or UNREADABLE (a parse error, conflict
+  markers from a botched hand resolution, or no integer `unqualified`). Until this change an absent or unreadable
+  baseline became $null, and `-Accept -or $null` then WROTE the current count as the new mark and exited 0 on a plain
+  run: a damaged baseline silently accepted whatever count the push carried, a rise included. Now a plain run and
+  -Tighten over an ABSENT or UNREADABLE baseline write nothing and exit 3 (blind=baseline-missing or
+  blind=baseline-unreadable, with the path), and print a line starting with `!` so run-gates' excerpt filter shows it
+  under the FAIL line. Only -Accept writes a baseline that could not be read, because recording a mark is a decision
+  a person makes after looking. run-gates scores any non-zero static exit as a FAIL, 3 included, so the whole run
+  exits 1 and pre-push refuses; the push ledger row reads refused-gate-red. On a READ baseline -Tighten and -Accept
+  behave exactly as before.
+
   EXIT: 0 held, tightened or able to tighten, 2 the count rose or -Tighten refused an implausible fall, 3 could not
-  evaluate (no documents, or no git).
+  evaluate (no documents, no git, or a baseline that is absent or unreadable on a run that is not -Accept).
 #>
 [CmdletBinding()]
 param([switch]$SelfTest, [switch]$Json, [switch]$Accept, [switch]$ReportOnly, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
@@ -176,6 +188,26 @@ function Get-CurrencyVerdict {
   }
   if ($moved.Count -gt 0) { return @{ Verdict = 'UNQUALIFIED'; Moved = $moved.ToArray(); Why = ''; Content = $ca; Unresolved = $ua; BlobRead = $ba } }
   return @{ Verdict = 'CURRENT'; Moved = @(); Why = ''; Content = $ca; Unresolved = $ua; BlobRead = $ba }
+}
+
+function Read-CcBaseline {
+  <# The ratchet baseline as @{ State = read | absent | unreadable; Value; Why } (W1.2, 2026-09-23). READ only when the
+     file parses as a JSON object carrying `unqualified` as a non-negative integer. Anything else is UNREADABLE with
+     the reason, and no file at all is ABSENT: the caller refuses both unless it was asked to -Accept. A JSON number
+     with a fraction, a quoted "4" and a missing field are all unreadable, because a mark nobody can read exactly is
+     not a mark. #>
+  param([string]$Path)
+  if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return @{ State = 'absent'; Value = $null; Why = 'no such file' } }
+  $doc = $null
+  try { $doc = [IO.File]::ReadAllText($Path) | ConvertFrom-Json } catch { return @{ State = 'unreadable'; Value = $null; Why = 'it does not parse as JSON' } }
+  if ($null -eq $doc -or $doc -is [array] -or $doc -is [string] -or $doc -is [ValueType]) { return @{ State = 'unreadable'; Value = $null; Why = 'it is not a JSON object' } }
+  $prop = $doc.PSObject.Properties['unqualified']
+  if (-not $prop) { return @{ State = 'unreadable'; Value = $null; Why = 'it has no unqualified field' } }
+  $v = $prop.Value
+  if (-not ($v -is [int] -or $v -is [long]) -or $v -lt 0 -or $v -gt [int]::MaxValue) {
+    return @{ State = 'unreadable'; Value = $null; Why = ('its unqualified field is not a non-negative integer: ' + [string]$v) }
+  }
+  return @{ State = 'read'; Value = [int]$v; Why = '' }
 }
 
 if ($SelfTest) {
@@ -335,7 +367,50 @@ if ($SelfTest) {
     [IO.File]::WriteAllText($ltRise, "{`n    ""unqualified"":  0,`n    ""note"":  ""fixture""`n}`n", $ltUtf8)
     $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltRise
     $rc3 = $LASTEXITCODE
-    Case 'CLEAN TWIN' 'a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+    Case 'CLEAN TWIN' 'a count that ROSE (1 against a bar of 0, one step past it) still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+
+    # THE BASELINE FAILS CLOSED (2026-09-23, W1.2). The founding shape: a baseline that failed to parse became $null,
+    # and `-Accept -or $null` WROTE the current count as the mark and exited 0, so a botched hand resolution of the JSON
+    # silently accepted whatever the push carried. Each case below runs this script as a child over the same temp
+    # tree, whose count is 1.
+    function Invoke-CcChild([string]$ChildBaseline, [string[]]$ChildArgs = @()) {
+      $co = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ChildBaseline @ChildArgs)
+      $crc = $LASTEXITCODE
+      $cm = @($co | Where-Object { "$_" -match '^CONCLUSION-CURRENCY-COMPLETE\b' })
+      return @{ Rc = $crc; Out = $co; Mark = $(if ($cm.Count) { [string]$cm[$cm.Count - 1] } else { '' }); Bang = @($co | Where-Object { "$_" -match '^!' }).Count }
+    }
+    $ltConf = Join-Path $lt 'baseline-conflict.json'
+    $confText = "{`n" + ('<' * 7) + " HEAD`n    ""unqualified"":  1,`n" + ('=' * 7) + "`n    ""unqualified"":  0,`n" + ('>' * 7) + " origin/main`n    ""note"":  ""fixture""`n}`n"
+    [IO.File]::WriteAllText($ltConf, $confText, $ltUtf8)
+    $confSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltConf))
+    $r5 = Invoke-CcChild $ltConf
+    $same5 = [string]::Equals($confSeed, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltConf)), [StringComparison]::Ordinal)
+    Case 'MUST FIRE' 'a baseline holding conflict markers exits 3, blind=baseline-unreadable, a ! line, and its bytes are unchanged' `
+      ($r5.Rc -eq 3 -and $same5 -and $r5.Mark -match '\bblind=baseline-unreadable\b' -and $r5.Bang -ge 1) ("rc=$($r5.Rc) unchanged=$same5 bang=$($r5.Bang) marker=[$($r5.Mark)]")
+    $ltQuoted = Join-Path $lt 'baseline-quoted.json'
+    [IO.File]::WriteAllText($ltQuoted, "{`n    ""unqualified"":  ""1"",`n    ""note"":  ""fixture""`n}`n", $ltUtf8)
+    $quotedSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltQuoted))
+    $r6 = Invoke-CcChild $ltQuoted
+    $same6 = [string]::Equals($quotedSeed, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltQuoted)), [StringComparison]::Ordinal)
+    Case 'MUST FIRE' 'a baseline whose unqualified is a quoted "1", not an integer, exits 3 unreadable and is not rewritten' `
+      ($r6.Rc -eq 3 -and $same6 -and $r6.Mark -match '\bblind=baseline-unreadable\b') ("rc=$($r6.Rc) unchanged=$same6 marker=[$($r6.Mark)]")
+    $ltAbsent = Join-Path $lt 'baseline-absent.json'
+    $r7 = Invoke-CcChild $ltAbsent
+    Case 'MUST FIRE' 'an ABSENT baseline on a plain run exits 3 with blind=baseline-missing, and no file is created' `
+      ($r7.Rc -eq 3 -and -not (Test-Path -LiteralPath $ltAbsent) -and $r7.Mark -match '\bblind=baseline-missing\b' -and $r7.Bang -ge 1) ("rc=$($r7.Rc) created=$(Test-Path -LiteralPath $ltAbsent) marker=[$($r7.Mark)]")
+    $r8 = Invoke-CcChild $ltAbsent @('-Tighten')
+    Case 'MUST FIRE' '-Tighten over an ABSENT baseline also exits 3, and no file is created' `
+      ($r8.Rc -eq 3 -and -not (Test-Path -LiteralPath $ltAbsent) -and $r8.Mark -match '\bblind=baseline-missing\b') ("rc=$($r8.Rc) created=$(Test-Path -LiteralPath $ltAbsent) marker=[$($r8.Mark)]")
+    $r9 = Invoke-CcChild $ltAbsent @('-Accept')
+    $b9 = Read-CcBaseline -Path $ltAbsent
+    Case 'CLEAN TWIN' '-Accept over an ABSENT baseline writes it with the current count of 1 and exits 0 - the one road that records an unread mark' `
+      ($r9.Rc -eq 0 -and $b9.State -eq 'read' -and $b9.Value -eq 1) ("rc=$($r9.Rc) state=$($b9.State) value=$($b9.Value)")
+    $ltEqual = Join-Path $lt 'baseline-equal.json'
+    [IO.File]::WriteAllText($ltEqual, "{`n    ""unqualified"":  1,`n    ""note"":  ""fixture""`n}`n", $ltUtf8)
+    $equalSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltEqual))
+    $r10 = Invoke-CcChild $ltEqual
+    $same10 = [string]::Equals($equalSeed, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltEqual)), [StringComparison]::Ordinal)
+    Case 'MUST NOT FIRE' 'AT THE BAR: a count EQUAL to the baseline (1 against a bar of 1) holds with exit 0 and writes nothing' ($r10.Rc -eq 0 -and $same10) ("rc=$($r10.Rc) unchanged=$same10")
     # THE STDERR THIS WAS FOUND BY (2026-09-18). The whole child's stderr goes to a file, never a 2> on the native call.
     $ltOut = Join-Path $lt 'rep.out'; $ltErr = Join-Path $lt 'rep.err'
     $p4 = Start-Process -FilePath 'powershell.exe' -PassThru -NoNewWindow -RedirectStandardOutput $ltOut -RedirectStandardError $ltErr `
@@ -358,6 +433,10 @@ if ($SelfTest) {
     Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
   }
 
+  # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (.claude\rules\ops-and-gates.md): a case lost to a thrown helper, a
+  # glued line or a comment is a shortfall here, never a smaller suite that still prints pass.
+  $expectedCases = 37
+  if ($ran.Count -ne $expectedCases) { [void]$fails.Add(("CASE COUNT ran {0} of the {1} cases written in this file" -f $ran.Count, $expectedCases)) }
   Write-Output ''
   if ($fails.Count) {
     Write-Output ("audit-conclusion-currency selftest: {0} FAILED of {1}" -f $fails.Count, $ran.Count)
@@ -462,8 +541,6 @@ Write-Output '  To re-qualify one: re-read it against the moved harness and add 
 Write-Output '  Cite the BLOB, not your own unlanded commit: push-main rebases and renames that commit, and it never reaches main.'
 
 $blF = if ($BaselineFile) { $BaselineFile } else { Join-Path $here 'conclusion-currency-baseline.json' }
-$base = $null
-if (Test-Path $blF) { try { $base = [int]([IO.File]::ReadAllText($blF) | ConvertFrom-Json).unqualified } catch { $base = $null } }
 function Write-CcBaseline([int]$Count) {
   $o = [ordered]@{ unqualified = $Count; examined = $docs.Count; recorded = (Get-Date).ToString('yyyy-MM-dd')
                    note = 'High-water mark for the conclusion-currency ratchet (WS 7d, 2026-09-10). May only go DOWN; a re-read lowers it.' }
@@ -477,11 +554,19 @@ if ($ReportOnly) {
   # could tighten a baseline as a side effect of being read would be a writer by accident.
   Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 0 -Summary "docs=$($docs.Count) unqualified=$unq unresolved=$unres content_ids=$cids report-only=1"
 }
-if ($Accept -or $null -eq $base) {
+if ($Accept) {
   Write-CcBaseline $unq
   Write-Output "  baseline written: $unq of $($docs.Count). From here the number may only go DOWN."
   Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 0 -Summary "docs=$($docs.Count) unqualified=$unq unresolved=$unres content_ids=$cids baseline=$unq"
 }
+# A PLAIN RUN AND -Tighten NEVER RECORD A MARK OVER A BASELINE THEY COULD NOT READ (W1.2). See the header.
+$bl = Read-CcBaseline -Path $blF
+if ($bl.State -ne 'read') {
+  $blTok = if ($bl.State -eq 'absent') { 'baseline-missing' } else { 'baseline-unreadable' }
+  Write-Output ("! conclusion-currency: COULD NOT EVALUATE - the ratchet baseline {0} is {1} ({2}). Nothing was written: a plain run and -Tighten never record a mark over a baseline they could not read. Restore it from git, or run -Accept once you have looked at the count above." -f $blF, $bl.State.ToUpperInvariant(), $bl.Why)
+  Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 3 -Summary "docs=$($docs.Count) unqualified=$unq unresolved=$unres content_ids=$cids blind=$blTok baseline_file=$blF"
+}
+$base = [int]$bl.Value
 $move = Test-RatchetMove -Name 'conclusion-currency' -Count $unq -Baseline $base
 if ($move.Verdict -eq 'rose') {
   Write-Output "conclusion-currency: RATCHET BROKEN - $unq unqualified, baseline $base. A conclusion that was current now names a harness changed after it. Re-read it and add a Re-read at commit line."
