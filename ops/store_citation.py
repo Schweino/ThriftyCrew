@@ -34,6 +34,24 @@ repo). A `Store:` line from a session with NO logged search in the last BACKING_
 unbacked. That is logged and reported, never refused: a session id can go missing for reasons that are
 not the author's, and a could-not-look must not settle the question.
 
+A CITATION MAY NAME THE ESTATE'S OWN KNOWLEDGE (2026-09-23, W0.1 of
+design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md). Until that day a token resolved only against
+~/.claude/skills, ~/.claude and the memory stores, so `.claude/rules/ops-and-gates.md`, a design/ doc or a
+reused `lib/atomic-write.ps1` read as unresolved - and from REFUSE_FROM that would REFUSE exactly the commits
+that used the estate's own rules and machinery. A replay of 2026-09-20..22 (ops/replay-store-citations.py)
+refused 4 of 61 for that reason and no other. So now:
+  - the Store: body is normalised BEFORE extraction (backslashes, then any home-skills, `skills/` or
+    repo-root prefix at the start of a token), because extracting first cut `.claude\rules\r.md` to `r.md`;
+  - a repo path with a code or config extension is a citation only when it holds a `/` (a bare
+    `hold-recipe.ps1` in prose is not extracted, so it can neither pass nor refuse a line);
+  - a token resolves when the committing checkout TRACKS it (`git ls-files`, run with the INHERITED env: under
+    a pathspec commit GIT_INDEX_FILE names the index being committed), and a bare `<name>.md` falls back to
+    `.claude/rules/<name>.md` only after every store base misses;
+  - a staged code file cannot cite itself, and when the repo cannot be listed the token is accepted and the
+    row says `repo_blind` - a could-not-look never refuses.
+The decision row records `cited_kinds`, `repo_blind`, `self_cited` and `rules_without_section` (a rules file
+cited with no bullet named). None of them refuses; the weekly report reads them.
+
 SCOPE OF A CLEAN REPORT: sound for what it checks and nothing more. A clean plan audit proves every new
 plan HAS the section, never that the section is honest or that the design used it well; a judgement has
 no exit code. A clean commit check proves the named files exist, not that they were read.
@@ -65,7 +83,14 @@ HEADING_RE = re.compile(r"^##\s+knowledge consulted\s*$", re.I | re.M)
 STORE_LINE_RE = re.compile(r"^store:\s*(.*)$", re.I | re.M)
 EXEMPT_RE = re.compile(r"^store-exempt:\s*(\S.*)$", re.I | re.M)
 NOTHING_RE = re.compile(r"\bsearched\b.*\b(nothing|none)\b.*\bapplicable\b", re.I)
-PATH_RE = re.compile(r"(?:memory:[\w.-]+|\[\[[\w.-]+\]\]|[\w.-]+(?:/[\w.-]+)*\.md)")
+# A repo path with a code or config extension counts only when it holds a '/': a bare basename in prose
+# ("superseded by hold-recipe.ps1", ce642822d) is description, not a citation. Markdown keeps its bare form,
+# because a bare `grocery.md` is how the rules files are cited (e5d0a00a1).
+REPO_PATH_ALT = r"[\w.-]+(?:/[\w.-]+)+\.(?:md|ps1|psm1|py|js|json)"
+PATH_RE = re.compile(r"(?:memory:[\w.-]+|\[\[[\w.-]+\]\]|" + REPO_PATH_ALT + r"|[\w.-]+(?:/[\w.-]+)*\.md)")
+# Where a token STARTS: the start of the body, or after whitespace, a bracket, a separator or a quote.
+TOKEN_START = r"(?:^|(?<=[\s(\[;,\"'“‘]))"
+HOME_SKILLS_PREFIXES = (r"~/\.claude/skills/", r"[a-z]:/users/[^/\s]+/\.claude/skills/", r"skills/")
 
 
 def home_store():
@@ -126,24 +151,77 @@ def memory_dirs(store):
     return list(store.get("memories") or [store["memory"]])
 
 
-def resolve(token, store):
-    """True when a cited token names a real store file."""
+def normalise_body(body, repo_roots=()):
+    """The Store: body with backslashes made '/' and any home-skills, `skills/` or repo-root prefix removed
+    wherever it STARTS a token. Runs BEFORE extraction: PATH_RE cannot see across a backslash, so extracting
+    first turned `.claude\\rules\\r.md` into `r.md` and `lib\\x.ps1` into nothing at all."""
+    b = body.replace("\\", "/")
+    roots = sorted({r.replace("\\", "/").rstrip("/") + "/" for r in repo_roots if r}, key=len, reverse=True)
+    prefixes = [re.escape(r) for r in roots] + list(HOME_SKILLS_PREFIXES)   # longest repo root first
+    return re.sub(TOKEN_START + "(?:" + "|".join(prefixes) + ")", "", b, flags=re.I)
+
+
+def repo_kind(rel):
+    r = rel.lower()
+    if r.startswith(".claude/rules/"):
+        return "rules"
+    if r.startswith("design/"):
+        return "design"
+    if os.path.splitext(r)[1] in CODE_EXT:
+        return "machinery"
+    return "repo"
+
+
+def resolve_kind(token, store):
+    """What a cited token names - memory, store, rules, design, machinery, repo or repo_blind - or None when it
+    names nothing. Store bases first, then the committing checkout's tracked set (store["tracked"], lower-cased
+    repo-relative paths), then a bare `<name>.md` as a rules file. With store["repo_blind"] the repo could not be
+    listed, so a token no store base holds is accepted as repo_blind rather than refused."""
     t = token.strip()
     if t.startswith("memory:") or t.startswith("[["):
         name = t[7:] if t.startswith("memory:") else t[2:-2]
         name = name[:-3] if name.endswith(".md") else name
-        return any(os.path.isfile(os.path.join(m, name + ".md")) for m in memory_dirs(store))
+        return "memory" if any(os.path.isfile(os.path.join(m, name + ".md")) for m in memory_dirs(store)) else None
     rel = t.replace("\\", "/")
-    for base in [store["skills"], os.path.dirname(store["skills"])] + memory_dirs(store):
+    while rel.startswith("./"):
+        rel = rel[2:]
+    for base in [store["skills"], os.path.dirname(store["skills"])]:
         if os.path.isfile(os.path.join(base, rel)):
-            return True
-    return False
+            return "store"
+    for m in memory_dirs(store):
+        if os.path.isfile(os.path.join(m, rel)):
+            return "memory"
+    tracked = store.get("tracked")
+    if tracked is not None:
+        if rel.lower() in tracked:
+            return repo_kind(rel)
+        if "/" not in rel and rel.lower().endswith(".md") and (".claude/rules/" + rel.lower()) in tracked:
+            return "rules"
+        return None
+    if store.get("repo_blind"):
+        return "repo_blind"
+    return None
+
+
+def resolve(token, store):
+    """True when a cited token names a real store or estate file."""
+    return resolve_kind(token, store) is not None
+
+
+def rules_without_section(body, token):
+    """True when a cited rules file is not followed by a parenthesis or a quote naming which bullet."""
+    i = body.find(token)
+    if i < 0:
+        return False
+    rest = body[i + len(token):].lstrip()
+    return not rest[:1] in ("(", '"', "'", "“", "‘")
 
 
 def judge_message(text, code_files, store, today, searched):
     """The decision for one commit message: a dict with verdict ok|exempt|warn|refuse and why."""
     d = {"code_files": len(code_files), "cited": [], "unresolved": [], "backed": searched,
-         "mode": "refuse" if today >= REFUSE_FROM else "warn"}
+         "mode": "refuse" if today >= REFUSE_FROM else "warn",
+         "cited_kinds": [], "self_cited": [], "rules_without_section": [], "repo_blind": bool(store.get("repo_blind"))}
     if not code_files:
         d.update(verdict="ok", why="no code changed")
         return d
@@ -155,9 +233,15 @@ def judge_message(text, code_files, store, today, searched):
     if not lines or not any(lines):
         d.update(verdict=d["mode"], why="no Store: line")
         return d
-    body = " ".join(lines)
-    d["cited"] = PATH_RE.findall(body)
-    d["unresolved"] = [c for c in d["cited"] if not resolve(c, store)]
+    body = normalise_body(" ".join(lines), store.get("repo_roots") or ())
+    staged = {p.replace("\\", "/").lower() for p in code_files}
+    found = PATH_RE.findall(body)
+    d["self_cited"] = [c for c in found if c.lower() in staged]     # a file cannot back its own change
+    d["cited"] = [c for c in found if c.lower() not in staged]
+    kinds = {c: resolve_kind(c, store) for c in d["cited"]}
+    d["unresolved"] = [c for c in d["cited"] if kinds[c] is None]
+    d["cited_kinds"] = sorted({k for k in kinds.values() if k})
+    d["rules_without_section"] = [c for c in d["cited"] if kinds[c] == "rules" and rules_without_section(body, c)]
     if d["unresolved"]:
         d.update(verdict=d["mode"], why="cited file(s) do not resolve")
     elif not d["cited"] and not NOTHING_RE.search(body):
@@ -183,6 +267,33 @@ def session_searched(recall_log, sid, now, hours=BACKING_HOURS):
         return False
     except OSError:
         return None
+
+
+def repo_context(cwd=None, env=None):
+    """{repo_roots, tracked, repo_blind} for the committing checkout.
+
+    git runs with the INHERITED environment unless env is given. Inside commit-msg that is the point: under
+    a pathspec commit GIT_INDEX_FILE names the temporary index being committed, and `git ls-files` must read
+    THAT index, never the shared .git/index other sessions stage into. Never scrub the git variables here.
+    Any failure reads as repo_blind (tracked None), never as an empty tracked set: a could-not-look must not
+    refuse a citation."""
+    def run(args):
+        return subprocess.run(["git"] + args, cwd=cwd, env=env, capture_output=True, encoding="utf-8",
+                              errors="replace", timeout=30)
+    try:
+        top = run(["rev-parse", "--show-toplevel"])
+        files = run(["ls-files", "-z"])
+        if top.returncode != 0 or files.returncode != 0 or not top.stdout.strip():
+            raise OSError("git could not list the repo")
+        roots = {top.stdout.strip().replace("\\", "/")}
+        common = run(["rev-parse", "--path-format=absolute", "--git-common-dir"])
+        c = common.stdout.strip().replace("\\", "/") if common.returncode == 0 else ""
+        if c.endswith("/.git"):
+            roots.add(c[:-5])                                  # the main checkout, when this is a worktree
+        tracked = {p.replace("\\", "/").lower() for p in files.stdout.split("\0") if p}
+        return {"repo_roots": sorted(roots, key=len, reverse=True), "tracked": tracked, "repo_blind": False}
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return {"repo_roots": [], "tracked": None, "repo_blind": True}
 
 
 def staged_code_files():
@@ -221,6 +332,7 @@ def run_commit_check(msg_path):
     text = "\n".join(l for l in text.splitlines() if not l.startswith("#"))
     now = int(time.time())
     today = time.strftime("%Y-%m-%d")
+    store.update(repo_context())
     d = judge_message(text, code, store, today, session_searched(store["recall_log"], sid, now))
     d.update(t=now, sid=sid, repo=os.path.basename(os.getcwd()), subject=(text.strip().splitlines() or [""])[0][:120])
     append_log(store["log"], d)
@@ -233,9 +345,10 @@ def run_commit_check(msg_path):
     print("store-citation: %s. This commit changes %d code file(s) and %s." % (head, len(code), d["why"]), file=sys.stderr)
     if d["unresolved"]:
         print("                not found in the store: %s" % ", ".join(d["unresolved"]), file=sys.stderr)
-    print("                Search first:  C:\\Codex\\Python312\\python.exe %USERPROFILE%\\.claude\\skills\\knowledge-search\\search.py \"<terms>\"\n"
+    print("                Search first:  C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py \"<terms>\"\n"
           "                then add a line such as:\n"
           "                  Store: database-craft/transactions-and-recovery.md (section 3); memory:ps-null-count-is-one\n"
+          "                  Store: .claude/rules/ops-and-gates.md (\"A catch around a native redirect is not a guard\"); lib/atomic-write.ps1 (reused)\n"
           "                  Store: searched \"regex timeout\", nothing applicable\n"
           "                  Store-Exempt: <reason>   (mechanical commits only - logged)", file=sys.stderr)
     return 1 if d["verdict"] == "refuse" else 0
@@ -326,13 +439,89 @@ def selftest():
         case("MUST FIRE a new plan whose section is EMPTY is missing", missing == ["PLAN-new-%s.md" % PLAN_CUTOFF])
         case("MUST NOT FIRE a plan dated before the cutoff is not judged", "PLAN-old-2026-09-01.md" not in judged)
         case("CLEAN TWIN a filled section on a MEASURE doc is judged and passes", "MEASURE-good-%s.md" % PLAN_CUTOFF in judged and len(judged) == 2)
+
+        # ---- W0.1: the estate's own knowledge resolves (design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md) ----
+        rroot = "C:/Temp/Repo"
+        rstore = dict(store, tracked={".claude/rules/r.md", "lib/x.ps1", "ops/x.ps1", "design/plan-a-2026-09-22.md"},
+                      repo_roots=[rroot], repo_blind=False)
+        d = judge_message('fix\n\nStore: .claude/rules/r.md ("a rule")\n', code, rstore, refuse_day, True)
+        case("MUST NOT FIRE a tracked rules file resolves as kind rules, and naming its bullet leaves no rules_without_section",
+             d["verdict"] == "ok" and d["cited_kinds"] == ["rules"] and d["rules_without_section"] == [])
+        d = judge_message("fix\n\nStore: lib\\x.ps1 (reused)\n", code, rstore, refuse_day, True)
+        case("MUST NOT FIRE a backslash lib path is normalised BEFORE extraction and resolves as machinery",
+             d["verdict"] == "ok" and d["cited"] == ["lib/x.ps1"] and d["cited_kinds"] == ["machinery"])
+        d = judge_message("fix\n\nStore: r.md\n", code, rstore, refuse_day, True)
+        case("MUST NOT FIRE a bare rules file name falls back to .claude/rules, and is recorded as citing no bullet",
+             d["verdict"] == "ok" and d["cited_kinds"] == ["rules"] and d["rules_without_section"] == ["r.md"])
+        d = judge_message("fix\n\nStore: .claude/rules/nope.md\n", code, rstore, refuse_day, True)
+        case("MUST FIRE a rules path the checkout does not track is refused on the refuse date",
+             d["verdict"] == "refuse" and d["unresolved"] == [".claude/rules/nope.md"])
+        disk = os.path.join(root, "repo")
+        os.makedirs(os.path.join(disk, "lib"))
+        open(os.path.join(disk, "lib", "y.ps1"), "w").close()
+        here = os.getcwd()
+        try:
+            os.chdir(disk)
+            d = judge_message("fix\n\nStore: lib/y.ps1\n", code, dict(rstore, repo_roots=[disk]), refuse_day, True)
+        finally:
+            os.chdir(here)
+        case("MUST FIRE a file on disk that git does not track is refused (the tracked test, not os.path.exists)",
+             d["verdict"] == "refuse" and d["unresolved"] == ["lib/y.ps1"])
+        d = judge_message("fix\n\nStore: ops/x.ps1\n", code, rstore, refuse_day, True)
+        case("MUST FIRE a line citing only the staged code file itself names nothing, and is refused",
+             d["verdict"] == "refuse" and d["self_cited"] == ["ops/x.ps1"] and d["cited"] == [])
+        d = judge_message("fix\n\nStore: C:\\Users\\Owner\\.claude\\skills\\database-craft\\transactions.md; "
+                          "C:\\Users\\Owner\\.claude\\skills\\database-craft\\transactions.md\n", code, rstore, refuse_day, True)
+        case("MUST NOT FIRE an absolute store path resolves, including a second one after ';' (a prefix at every token start)",
+             d["verdict"] == "ok" and d["cited"] == ["database-craft/transactions.md"] * 2 and d["cited_kinds"] == ["store"])
+        d = judge_message("fix\n\nStore: C:\\Temp\\Repo\\.claude\\rules\\r.md\n", code, rstore, refuse_day, True)
+        case("MUST NOT FIRE an absolute repo path is made repo-relative and resolves",
+             d["verdict"] == "ok" and d["cited"] == [".claude/rules/r.md"])
+        l93 = "Store: reliability-craft/applies-here.md (The scoreboard: audit-alert-precision.ps1 is the"
+        lce = ('Store: searched "not-carried recipe discard", nothing applicable in skills; '
+               "memory:no-gated-hold-for-a-pre-state-machine-recipe (superseded by hold-recipe.ps1), "
+               "design/PLAN-carriage-gate-2026-08-22.md section 5")
+        for sha, line in (("93ef5df50", l93), ("ce642822d", lce)):
+            d = judge_message("fix\n\n" + line + "\n", code, rstore, refuse_day, True)
+            case("MUST NOT FIRE %s's Store: line, verbatim: a bare .ps1 basename in its prose is not extracted" % sha,
+                 not any(c.endswith(".ps1") for c in d["cited"]))
+        d = judge_message("fix\n\nStore: memory:ps-null\n", code, rstore, refuse_day, True)
+        case("CLEAN TWIN a memory citation still resolves beside a repo context", d["verdict"] == "ok" and d["cited_kinds"] == ["memory"])
+        d = judge_message("fix\n\nStore: .claude/rules/r.md\n", code, dict(store, tracked=None, repo_roots=[], repo_blind=True), refuse_day, True)
+        case("CLEAN TWIN an unlistable repo accepts a repo citation and records repo_blind (a could-not-look never refuses)",
+             d["verdict"] == "ok" and d["repo_blind"] is True and d["cited_kinds"] == ["repo_blind"])
+
+        # The real git path, on a temp repo. The eight repository variables are removed from the FIXTURE's child
+        # env only (ops-and-gates: a fixture that builds a temp repo clears them); repo_context itself must keep
+        # them, because under a pathspec commit GIT_INDEX_FILE names the index being committed.
+        genv = {k: v for k, v in os.environ.items() if k not in (
+            "GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR", "GIT_OBJECT_DIRECTORY",
+            "GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_PREFIX", "GIT_NAMESPACE")}
+        genv["GIT_CEILING_DIRECTORIES"] = root
+        grepo = os.path.join(root, "gitrepo")
+        os.makedirs(os.path.join(grepo, ".claude", "rules"))
+        os.makedirs(os.path.join(grepo, "lib"))
+        for rel in (".claude/rules/r.md", "lib/x.ps1"):
+            with open(os.path.join(grepo, rel), "w") as f:
+                f.write("x\n")
+        for args in (["init", "-q"], ["add", "--", ".claude/rules/r.md", "lib/x.ps1"],
+                     ["-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q", "-m", "base"]):
+            subprocess.run(["git"] + args, cwd=grepo, env=genv, capture_output=True, text=True)
+        ctx = repo_context(cwd=grepo, env=genv)
+        case("CLEAN TWIN repo_context reads a real repo's tracked set and its root",
+             ctx["repo_blind"] is False and ctx["tracked"] is not None
+             and {".claude/rules/r.md", "lib/x.ps1"} <= ctx["tracked"] and len(ctx["repo_roots"]) >= 1)
+        os.makedirs(os.path.join(root, "not-a-repo"))
+        ctx2 = repo_context(cwd=os.path.join(root, "not-a-repo"), env=genv)
+        case("MUST FIRE a directory that is not a repo reads as repo_blind, never as an empty tracked set",
+             ctx2["repo_blind"] is True and ctx2["tracked"] is None)
     finally:
         import shutil
         shutil.rmtree(root, ignore_errors=True)
 
     for f in fails:
         print("  FAIL  " + f)
-    expected = 24
+    expected = 38
     if n != expected:
         fails.append("ran %d cases, expected %d" % (n, expected))
         print("  FAIL  ran %d cases, expected %d" % (n, expected))
