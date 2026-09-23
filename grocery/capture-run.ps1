@@ -29,6 +29,13 @@
   commit are counted apart when that run's carry record (grocery\commit-size-lib.ps1) vouches for them at the caps
   they already met; a run that stages and does not commit writes that record for its own additions. Before this, one
   refused day put the next day over the cap, and the refusal carried itself forward (09-22 and 09-23).
+
+  EVERY ARMED RUN STARTS ON THE CODE ORIGIN HOLDS (2026-09-23, same plan, W4.1). Right after the lock and before any
+  capture, lib\checkout-sync.ps1 brings the shared main checkout to origin/main with a two-way move (no stash, no
+  rebase). A conflict or a mixed tree stops the run with exit 1 before any capture; a move onto new capture-run code
+  re-executes this file once as a child that inherits the lock; every other outcome pages when it should and runs on
+  the HEAD it has. -NoSync skips it for one hand run; <git common dir>\tc-checkout-sync.disabled is the kill switch.
+  grocery\test-capture-run-sync.ps1 drives the shipped block, the exit, the handoff and the abandoned-lock check.
 #>
 [CmdletBinding()]
 param(
@@ -56,7 +63,10 @@ param(
   # -Force runs even when out\logs\capture-run-status.json says this kind already COMPLETED today. The
   # scheduled catch-up occurrences never pass it; a deliberate same-day re-run by hand does (see below).
   [switch]$Force,
-  [switch]$WhatIf
+  [switch]$WhatIf,
+  # -NoSync skips the checkout sync at the start and at the tail for ONE hand run (plan section 11, rollback 2). A
+  # scheduled run never passes it; the durable off switch is <git common dir>\tc-checkout-sync.disabled.
+  [switch]$NoSync
 )
 
 $ErrorActionPreference = 'Stop'
@@ -73,6 +83,8 @@ $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 . (Join-Path $root 'alert-lib.ps1')   # Send-Alert: the ONLY way this file may page (32 KB command-line trap)
 . (Join-Path $root 'fanout-lib.ps1')  # Invoke-Fanout: the browser-store builders, side by side
 . (Join-Path $root 'commit-size-lib.ps1')   # Test-CarriedCommitSize/Add-TcCommitCarry: the size gate judges per RUN (plan W2.2)
+. (Join-Path (Split-Path $root -Parent) 'lib\pipeline-commit.ps1')   # Get-PipelineOwnBlobs for the start sync, and the dirty-at-start snapshot
+. (Join-Path (Split-Path $root -Parent) 'lib\checkout-sync.ps1')     # Invoke-TcCheckoutSync: the ONE mover of the shared checkout, at the start and the tail (plan W4.1, W4.2)
 
 # ---- ALREADY RAN TODAY? (2026-09-10, queue 2026-09-10-2b79d3) --------------------------------------------
 # The TC capture tasks gained hourly catch-up occurrences inside a per-task window, so a Windows Update
@@ -132,6 +144,7 @@ $script:StatusFile = Join-Path (Join-Path $OutDir 'logs') 'capture-run-status.js
 $script:FailedLaneRecs = @()
 $script:CommitSizeStatus = $null
 $script:HeldDeletions = @()
+$script:SyncStatus = $null
 function Add-FailedLane([string]$Name, [string]$PagedSubject = '') {
   # The CALLER's failed-lane list (scope 1), exactly the variable the old bare append wrote: in this script that is the
   # script scope, and test-commit-size-gate runs the cut block inside a function whose own list it asserts on.
@@ -167,6 +180,9 @@ function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
       commit_size = $script:CommitSizeStatus
       # (plan W0.2 step 3) owned tracked files deleted before this run started, held out of its commit.
       held_deletions = @($script:HeldDeletions)
+      # THE START SYNC (2026-09-23, plan W4.1): outcome, class, why, H0, NEW, behind, behind_after, startup_changed.
+      # 'synced-by-parent' is a child a synced parent handed off to; $null = no sync decided yet.
+      sync = $script:SyncStatus
     }
     $dir = Split-Path $script:StatusFile -Parent
     if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
@@ -178,8 +194,147 @@ function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
   } catch { }
 }
 function Release-RunMutex {
-  if ($script:HoldsMutex) { try { $script:RunMutex.ReleaseMutex() } catch { }; $script:HoldsMutex = $false }
+  # An INHERITED lock is the parent's to release (plan W4.1 step 6): this process never owned it.
+  if ($script:HoldsMutex -and -not $script:MutexInherited) { try { $script:RunMutex.ReleaseMutex() } catch { } }
+  $script:HoldsMutex = $false
 }
+
+# ---- THE RUN LOCK, INHERITED BY A HANDED-OFF CHILD, AND AN ABANDONED ONE (2026-09-23, plan W4.1 steps 5 to 7) --------
+# When the start sync moved this checkout onto new capture-run code, the running process still holds the OLD text, so it
+# re-executes capture-run.ps1 once as a child (Brad's D4 (a)). The parent keeps holding Global\tc-capture-run and waits;
+# the child INHERITS it by a token the parent sets, TC_CAPTURE_RUN_LOCK_HOLDER = '<pid>|<guid>|<mutex name>', and never
+# calls WaitOne (it would block on its own parent). The token is honoured only when it names this lock and its pid is
+# alive, and both variables are removed at once, so no lane this run starts inherits them.
+# ABANDONED IS NOT FREE WHILE A CHILD RUNS. A parent killed by Task Scheduler abandons the mutex while its child still
+# works the tree. The next waiter gets AbandonedMutexException, which used to count as held; it now reads the status
+# record's pids and skips when one of them is alive and its command line names capture-run.ps1 (process SHAPE, never
+# timing). It then exits WITHOUT releasing and WITHOUT writing the status record: its exit abandons the mutex again, so
+# the next occurrence asks the same question, and the live child's pid stays in the record for it to find. THE CHILD'S
+# OWN HANDLE is what makes this work: every run opens the lock (the New-Object line below) BEFORE deciding to inherit
+# it, and a kernel mutex with a handle still open survives its killed owner as ABANDONED. With no handle left it would
+# be destroyed with its owner, and the next run would create a fresh, free one (grocery\test-capture-run-sync.ps1's
+# ORPHAN case first read exactly that, before its child opened a handle as capture-run does).
+# Every function below is pure over its arguments or its injected seam, so grocery\test-capture-run-sync.ps1 lifts
+# them by AST and drives the shipped code under a fixture lock name, never this one.
+function Test-CaptureRunPidAlive([int]$ProcessId) {
+  if ($ProcessId -le 0) { return $false }
+  try { return ($null -ne (Get-Process -Id $ProcessId -ErrorAction Stop)) }
+  catch [Microsoft.PowerShell.Commands.ProcessCommandException] { return $false }
+  catch { return $true }   # a probe that cannot look answers LIVE (lib\push-lock.ps1's rule): a guessed-dead holder hands the lock out twice
+}
+function Get-CaptureRunInheritedLock {
+  param([string]$Holder, [string]$MutexName, [scriptblock]$IsAlive = $null)
+  $r = [pscustomobject]@{ inherited = $false; pid = 0; why = '' }
+  if (-not $Holder) { $r.why = 'no holder token'; return $r }
+  $m = [regex]::Match($Holder, '^(\d+)\|[0-9a-f]{8,}\|(.+)$')
+  if (-not $m.Success) { $r.why = ('a malformed holder token: ' + $Holder); return $r }
+  if (-not [string]::Equals($m.Groups[2].Value, $MutexName, [StringComparison]::Ordinal)) { $r.why = ('the token names another lock: ' + $m.Groups[2].Value); return $r }
+  $hp = [int]$m.Groups[1].Value
+  $alive = if ($IsAlive) { [bool](& $IsAlive $hp) } else { Test-CaptureRunPidAlive $hp }
+  $r.pid = $hp
+  if (-not $alive) { $r.why = ('the holder pid ' + $hp + ' is not alive'); return $r }
+  $r.inherited = $true; $r.why = ('inherited from pid ' + $hp)
+  return $r
+}
+function Get-CaptureRunCommandLine([int]$ProcessId) {
+  try { $w = Get-CimInstance -ClassName Win32_Process -Filter ('ProcessId=' + $ProcessId) -ErrorAction Stop; if ($w) { return [string]$w.CommandLine } } catch { }
+  return ''
+}
+function Get-CaptureRunOrphanHolder {
+  # A live capture-run named by the status record (either kind), other than this process. -CommandLineOf is the seam.
+  param([string]$StatusFile, [scriptblock]$CommandLineOf = $null)
+  $r = [pscustomobject]@{ alive = $false; pid = 0; kind = ''; why = '' }
+  if (-not $StatusFile -or -not (Test-Path -LiteralPath $StatusFile)) { $r.why = 'no status record to read'; return $r }
+  $doc = $null
+  try { $doc = Read-JsonFile $StatusFile } catch { $r.why = ('the status record is unreadable: ' + $_.Exception.Message); return $r }
+  foreach ($k in @('ad', 'daily')) {
+    if ($null -eq $doc -or -not $doc.PSObject.Properties[$k] -or $null -eq $doc.$k) { continue }
+    $p = 0
+    if (-not [int]::TryParse([string]$doc.$k.pid, [ref]$p) -or $p -le 0 -or $p -eq $PID) { continue }
+    $cl = if ($CommandLineOf) { [string](& $CommandLineOf $p) } else { Get-CaptureRunCommandLine $p }
+    if ($cl -and $cl -match '(?i)capture-run\.ps1') { $r.alive = $true; $r.pid = $p; $r.kind = $k; $r.why = ('pid ' + $p + ' (' + $k + ') is alive and runs capture-run.ps1'); return $r }
+  }
+  $r.why = 'no capture-run the status record names is alive'
+  return $r
+}
+function Enter-CaptureRunMutex {
+  param($Mutex, $Inherited, [int]$WaitSec = 60, [scriptblock]$OrphanCheck = $null)
+  $r = [pscustomobject]@{ held = $false; inherited = $false; abandoned = $false; waited = $false; orphan = $null }
+  if ($null -ne $Inherited -and $Inherited.inherited) { $r.held = $true; $r.inherited = $true; return $r }
+  $r.waited = $true
+  try { $r.held = $Mutex.WaitOne([TimeSpan]::FromSeconds($WaitSec)) } catch [System.Threading.AbandonedMutexException] { $r.held = $true; $r.abandoned = $true }
+  if ($r.abandoned -and $OrphanCheck) { $r.orphan = & $OrphanCheck }
+  return $r
+}
+function ConvertTo-CaptureRunSyncStatus($Rec) {
+  if ($null -eq $Rec) { return $null }
+  return [ordered]@{ outcome = [string]$Rec.outcome; class = [string]$Rec.class; why = [string]$Rec.why; H0 = [string]$Rec.H0; NEW = [string]$Rec.NEW
+    behind = [int]$Rec.behind; behind_after = [int]$Rec.behind_after; startup_changed = [bool]$Rec.startup_changed; page = [bool]$Rec.page }
+}
+function Format-CaptureRunSyncLine([string]$Phase, $Rec) {
+  $h0 = [string]$Rec.H0; $nw = [string]$Rec.NEW
+  $shas = if ($h0 -or $nw) { ' ' + $(if ($h0.Length -ge 9) { $h0.Substring(0, 9) } else { $h0 }) + '..' + $(if ($nw.Length -ge 9) { $nw.Substring(0, 9) } else { $nw }) } else { '' }
+  return ('sync[' + $Phase + ']: ' + [string]$Rec.outcome + $(if ($Rec.class) { '/' + [string]$Rec.class } else { '' }) + $shas + ' behind=' + [int]$Rec.behind + ' behind_after=' + [int]$Rec.behind_after + $(if ($Rec.startup_changed) { ' startup_changed' } else { '' }) + $(if ($Rec.why) { ' - ' + [string]$Rec.why } else { '' }))
+}
+function Get-StartSyncAction {
+  # PURE. What a run does after its start sync (plan section 4.3): only a conflict or a mixed tree stops it before any
+  # capture; a move onto new startup code re-executes ONCE; everything else continues on the HEAD it has.
+  param($Record, [bool]$HandedOff)
+  if ($null -eq $Record) { return 'continue' }
+  $o = [string]$Record.outcome; $c = [string]$Record.class
+  if (($o -ceq 'blocked' -and $c -ceq 'conflict') -or ($o -ceq 'failed' -and $c -ceq 'mixed-tree')) { return 'exit-blocked' }
+  if (($o -ceq 'synced' -or $o -ceq 'partial') -and [bool]$Record.startup_changed -and -not $HandedOff) { return 'reexec' }
+  return 'continue'
+}
+function Invoke-CaptureRunHandoff {
+  # Re-executes the SYNCED capture-run.ps1 as a child under this process's lock and returns its exit code, and whether it
+  # really started: a child that never wrote its own status record (the record still says synced-handoff, or carries
+  # this pid, or says skipped-locked because it waited on the lock instead of inheriting it) did not run the day.
+  param([string]$ScriptPath, $Bound, [string]$NewSha, [string]$MutexName, [string]$StatusFile, [string]$Kind, [string]$PowerShellExe = 'powershell', [scriptblock]$Sink = $null)
+  $guid = [guid]::NewGuid().ToString('N')
+  $argv = New-Object System.Collections.Generic.List[string]
+  foreach ($a in @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $ScriptPath)) { $argv.Add($a) }
+  if ($null -ne $Bound) {
+    foreach ($k in @($Bound.Keys)) {
+      $v = $Bound[$k]
+      if ($v -is [System.Management.Automation.SwitchParameter]) { if ($v.IsPresent) { $argv.Add('-' + $k) } }
+      elseif ($v -is [bool]) { if ($v) { $argv.Add('-' + $k) } }
+      else { $argv.Add('-' + $k); $argv.Add([string]$v) }
+    }
+  }
+  $lines = New-Object System.Collections.Generic.List[string]
+  $rc = -1
+  $env:TC_CAPTURE_RUN_LOCK_HOLDER = ('' + $PID + '|' + $guid + '|' + $MutexName)
+  $env:TC_CAPTURE_RUN_SYNCED = ($NewSha + '|' + $guid)
+  try {
+    # Streamed, never a stderr redirect (EAP=Stop): stdout comes through the pipe, stderr goes straight to the console.
+    & $PowerShellExe @($argv.ToArray()) | ForEach-Object { $l = [string]$_; $lines.Add($l); if ($Sink) { & $Sink $l } }
+    $rc = $LASTEXITCODE
+  } catch {
+    $lines.Add('handoff: the child could not be started: ' + $_.Exception.Message)
+  } finally {
+    Remove-Item Env:\TC_CAPTURE_RUN_LOCK_HOLDER -ErrorAction SilentlyContinue
+    Remove-Item Env:\TC_CAPTURE_RUN_SYNCED -ErrorAction SilentlyContinue
+  }
+  $stage = ''; $cpid = 0
+  try {
+    if (Test-Path -LiteralPath $StatusFile) {
+      $sd = Read-JsonFile $StatusFile
+      if ($sd.PSObject.Properties[$Kind] -and $null -ne $sd.$Kind) { $stage = [string]$sd.$Kind.stage; [void][int]::TryParse([string]$sd.$Kind.pid, [ref]$cpid) }
+    }
+  } catch { $stage = '' }
+  $started = ($stage -and @('synced-handoff', 'skipped-locked') -cnotcontains $stage -and $cpid -gt 0 -and $cpid -ne $PID)
+  return [pscustomobject]@{ rc = $rc; started = [bool]$started; stage = $stage; child_pid = $cpid; lines = $lines.ToArray(); argv = $argv.ToArray() }
+}
+
+# ---- A RUN HANDED OFF BY ITS PARENT (2026-09-23, plan W4.1 step 6), read BEFORE the lock is asked for ------------------
+$script:RunMutexName = 'Global\tc-capture-run'   # the lock below; named once so the handoff token and the lock cannot disagree
+$script:InheritedLock = Get-CaptureRunInheritedLock -Holder ([string]$env:TC_CAPTURE_RUN_LOCK_HOLDER) -MutexName $script:RunMutexName
+$script:HandedOffBy = [string]$env:TC_CAPTURE_RUN_SYNCED
+Remove-Item Env:\TC_CAPTURE_RUN_LOCK_HOLDER -ErrorAction SilentlyContinue
+Remove-Item Env:\TC_CAPTURE_RUN_SYNCED -ErrorAction SilentlyContinue
+$script:MutexInherited = $false
+$script:CaptureRunSyncSeams = $null   # test seams for the sync's waits; $null in every real run
 # ---- ONE CAPTURE-RUN AT A TIME (2026-08-22) -----------------------------------------------------------
 # Task Scheduler's MultipleInstances=IgnoreNew is PER TASK, so it does not stop the 07:00 ad run (2h limit)
 # from overlapping the 08:00 daily one, and it does not see a manual run at all - both happened today.
@@ -189,12 +344,118 @@ function Release-RunMutex {
 # the cutover did not carry it over. Named mutex, same pattern as send-alert's queue writer.
 $script:RunMutex = New-Object System.Threading.Mutex($false, 'Global\tc-capture-run')
 $script:HoldsMutex = $false
-try { $script:HoldsMutex = $script:RunMutex.WaitOne([TimeSpan]::FromMinutes(1)) } catch [System.Threading.AbandonedMutexException] { $script:HoldsMutex = $true }
+$script:RunMutexState = Enter-CaptureRunMutex -Mutex $script:RunMutex -Inherited $script:InheritedLock -WaitSec 60 -OrphanCheck { Get-CaptureRunOrphanHolder -StatusFile $script:StatusFile }
+$script:HoldsMutex = [bool]$script:RunMutexState.held
+$script:MutexInherited = [bool]$script:RunMutexState.inherited
+if ($script:MutexInherited) { Write-Output ('lock: ' + $script:InheritedLock.why + ' - this is the synced child of a handed-off run, and it never asks for the lock itself') }
+elseif ($script:HandedOffBy) { Write-Output ('lock: a parent handed off (' + $script:HandedOffBy + ') but its lock token was not honoured (' + $script:InheritedLock.why + '), so this run asked for the lock itself') }
+if ($script:RunMutexState.abandoned -and $null -ne $script:RunMutexState.orphan -and $script:RunMutexState.orphan.alive) {
+  Write-Output ('SKIP: the capture-run lock was abandoned, and ' + $script:RunMutexState.orphan.why + ' - the synced child of a killed parent still works this tree. Nothing started, the lock is left abandoned for the next occurrence to ask again, and the status record keeps that child''s pid.')
+  Stop-RunLog -ExitCode 0 -Path $runLog
+  exit 0
+}
 if (-not $script:HoldsMutex) {
   Write-Output 'SKIP: another capture-run holds the lock (a scheduled run overlapping, or a manual one). Nothing started - two runs on one working tree corrupt each other.'
   Write-RunStatus 'skipped-locked' 0
   Stop-RunLog -ExitCode 0 -Path $runLog
   exit 0
+}
+
+# ---- THE START SYNC: THE RUN EXECUTES THE CODE ORIGIN HOLDS (2026-09-23, design\PLAN-bot-checkout-self-heal-2026-09-23.md W4.1) ----
+# THE FOUNDING DAY. On 2026-09-23 both scheduled runs executed on a checkout about 14 hours behind origin, because this
+# script fetched and moved the checkout only AFTER a commit, and 09-22's commit had been refused. The fix for the defect
+# that then held the board was already on origin. So an armed run now brings the shared checkout to origin/main FIRST,
+# after the lock and before the dirty-at-start snapshot and any capture, through lib\checkout-sync.ps1's two-way move
+# (no stash, no rebase; a session's dirty file on a path upstream changed is never written, the sync goes partial and
+# pages instead). What each outcome does (plan section 4.3):
+#   blocked/conflict, failed/mixed-tree  page and exit 1 BEFORE any capture; the next hourly occurrence retries, and since
+#                                        nothing was pulled it is a first pull, not a re-pull
+#   synced or partial onto new startup   re-execute capture-run.ps1 ONCE as a child under this run's lock (D4 (a))
+#   code (capture-run.ps1 or a file it
+#   dot-sources)
+#   anything else                        page when the record says to, and run on the HEAD it has: the day before
+# Not armed (-WhatIf, -NoDownstream, -NoSync), and a child a synced parent handed off to, never fetch. -WhatIf prints the
+# decision it would make from the refs it already has. The block is lifted verbatim by grocery\test-capture-run-sync.ps1;
+# the exit and the re-exec it decides happen right below it, outside the markers, so a fixture can run it.
+# >>> START-SYNC BLOCK >>>
+$script:StartSyncAction = 'continue'
+$script:SyncRecord = $null
+$ssRepo = Split-Path $root -Parent
+if ($script:HandedOffBy) {
+  $script:SyncStatus = [ordered]@{ outcome = 'synced-by-parent'; class = ''; why = ('the parent run synced to ' + $script:HandedOffBy + ' and handed off; this child neither syncs nor re-executes'); inherited_lock = [bool]$script:MutexInherited }
+  Write-Output ('sync[start]: synced-by-parent - ' + $script:SyncStatus.why)
+} elseif ($WhatIf -or $NoDownstream -or $NoSync) {
+  $ssWhy = if ($WhatIf) { '-WhatIf' } elseif ($NoDownstream) { '-NoDownstream (a testing run commits and pushes nothing)' } else { '-NoSync' }
+  $script:SyncStatus = [ordered]@{ outcome = 'skipped'; class = ''; why = $ssWhy }
+  $ssLr = Invoke-GitCaptured -Repo $ssRepo -GitArgs @('--no-optional-locks', 'rev-list', '--left-right', '--count', 'HEAD...refs/remotes/origin/main')
+  $ssCounts = @(([string]$ssLr.stdout).Trim() -split '\s+')
+  $ssCommon = Invoke-GitCaptured -Repo $ssRepo -GitArgs @('rev-parse', '--path-format=absolute', '--git-common-dir')
+  $ssKill = ($ssCommon.rc -eq 0) -and (Test-Path -LiteralPath (Join-Path ([string]$ssCommon.stdout).Trim() 'tc-checkout-sync.disabled'))
+  if ($ssLr.rc -eq 0 -and $ssCounts.Count -eq 2) {
+    Write-Output ('sync[start]: skipped (' + $ssWhy + ') - nothing fetched or moved. As last fetched this checkout is ' + $ssCounts[1] + ' behind and ' + $ssCounts[0] + ' ahead of origin/main, so an armed run would ' + $(if ($ssKill) { 'record disabled (the kill switch is present) and move nothing' } elseif ([int]$ssCounts[1] -eq 0) { 'fetch, and move only if origin moved since' } else { 'fetch and move it with lib\checkout-sync.ps1' }) + '.')
+  } else {
+    Write-Output ('sync[start]: skipped (' + $ssWhy + ') - nothing fetched or moved, and the refs could not be compared (git rev-list exited ' + $ssLr.rc + ').')
+  }
+} else {
+  Write-RunStatus 'syncing'
+  $ss = $null
+  try {
+    $ssInputs = Get-BotInputPaths
+    $ssServed = Get-BotServedPaths
+    $ssBlobs = Get-PipelineOwnBlobs -Repo $ssRepo
+    if ($ssBlobs.note) { Write-Output $ssBlobs.note }
+    $ssArgs = @{ Repo = $ssRepo; Phase = 'start'; Kind = $Kind; OwnedPaths = (@($ssInputs) + @($ssServed)); OwnBlobs = $ssBlobs; QuarantineRoot = (Join-Path $root 'out\untracked-quarantine') }
+    if ($script:CaptureRunSyncSeams) { foreach ($ssK in @($script:CaptureRunSyncSeams.Keys)) { $ssArgs[$ssK] = $script:CaptureRunSyncSeams[$ssK] } }
+    $ss = Invoke-TcCheckoutSync @ssArgs
+  } catch {
+    $ss = [pscustomobject]@{ outcome = 'failed'; class = 'exception'; why = ('the start sync threw: ' + $_.Exception.Message); page = $true; startup_changed = $false; H0 = ''; NEW = ''; behind = 0; behind_after = 0 }
+  }
+  $script:SyncRecord = $ss
+  $script:SyncStatus = ConvertTo-CaptureRunSyncStatus $ss
+  Write-Output (Format-CaptureRunSyncLine 'start' $ss)
+  $script:StartSyncAction = Get-StartSyncAction -Record $ss -HandedOff $false
+  if ($script:StartSyncAction -eq 'exit-blocked') {
+    $ssWhat = if ([string]$ss.class -ceq 'conflict') { 'conflict markers' } else { 'a mixed tree' }
+    Add-FailedLane 'sync'
+    try {
+      $ssSubj = "Grocery bot BLOCKED: the main checkout holds $ssWhat - $todayS"
+      Send-Alert -Subject $ssSubj -Body ("capture-run.ps1 [$Kind] stopped before any capture: the start sync found " + $ssWhat + " in the shared main checkout, and no capture lane may run on that tree.`n`n" + [string]$ss.why + "`n`nPaths: " + ((@($ss.foreign) + @($ss.set_aside)) -join ', ') + "`n`nThe next hourly occurrence retries once the tree is repaired; nothing was pulled, so that retry is a first pull.") | Out-Null
+      Set-FailedLanePaged 'sync' $ssSubj $LASTEXITCODE
+    } catch { Write-Output ('sync: the BLOCKED page could not be sent (' + $_.Exception.Message + ')') }
+    Write-RunStatus 'blocked-checkout' 1
+  } elseif ($ss.page) {
+    try { Send-Alert -Subject ("Grocery bot checkout sync " + [string]$ss.outcome + " - $todayS") -Body ("capture-run.ps1 [$Kind]: the start sync of the shared main checkout ended " + [string]$ss.outcome + $(if ($ss.class) { ' (' + [string]$ss.class + ')' } else { '' }) + ", and the run continues on the HEAD it has.`n`n" + [string]$ss.why) | Out-Null } catch { Write-Output ('sync: the page could not be sent (' + $_.Exception.Message + ')') }
+  }
+}
+# <<< START-SYNC BLOCK <<<
+if ($script:StartSyncAction -eq 'exit-blocked') {
+  Write-Output 'capture-run: STOPPED before any capture (stage blocked-checkout). FAILED LANES: sync'
+  Release-RunMutex
+  Stop-RunLog -ExitCode 1 -Path $runLog
+  exit 1
+}
+if ($script:StartSyncAction -eq 'reexec') {
+  # THE HANDOFF (plan W4.1 step 5). This process loaded the OLD capture-run text; the checkout now holds the new one.
+  $hoNew = [string]$script:SyncRecord.NEW
+  Write-RunStatus 'synced-handoff'
+  Write-Output ('sync: capture-run.ps1 or a startup library changed in the move; handing off to ' + $hoNew + ' - a child runs the synced code under this run''s lock, and this run exits with its code')
+  # The child opens the same dated transcript, so this one closes first and is reopened for the handoff's last lines.
+  try { Stop-Transcript -ErrorAction SilentlyContinue | Out-Null } catch { }
+  $ho = Invoke-CaptureRunHandoff -ScriptPath (Join-Path $root 'capture-run.ps1') -Bound $PSBoundParameters -NewSha $hoNew -MutexName $script:RunMutexName -StatusFile $script:StatusFile -Kind $Kind -Sink { param($l) Write-Host $l }
+  $runLog = Start-RunLog -Name ("capture-run-" + $Kind) -OutDir $OutDir -Today $todayS
+  if (-not $ho.started) {
+    Write-Output ('sync: HANDOFF FAILED - the child exited ' + $ho.rc + ' and its status record reads stage ''' + $ho.stage + ''' pid ' + $ho.child_pid + ', so it never ran the day')
+    Add-FailedLane 'sync-handoff'
+    Write-RunStatus 'handoff-failed' 1
+    try { $hoSubj = "capture-run could not start the synced code - $todayS"; Send-Alert -Subject $hoSubj -Body ("capture-run.ps1 [$Kind] synced the main checkout to " + $hoNew + ", whose capture-run code changed, and re-executed it as a child; the child never wrote its own run record (stage '" + $ho.stage + "', exit " + $ho.rc + "). Nothing was captured this occurrence; the next hourly one retries. Log: grocery\out\logs\capture-run-$Kind-$todayS.log") | Out-Null; Set-FailedLanePaged 'sync-handoff' $hoSubj $LASTEXITCODE } catch { }
+    Release-RunMutex
+    Stop-RunLog -ExitCode 1 -Path $runLog
+    exit 1
+  }
+  Write-Output ('sync: the synced child (pid ' + $ho.child_pid + ') exited ' + $ho.rc + '; this run exits with its code')
+  Release-RunMutex
+  Stop-RunLog -ExitCode $ho.rc -Path $runLog
+  exit $ho.rc
 }
 
 # ---- WHAT IS ALREADY DIRTY UNDER THE OWNED PATHS AS THIS RUN STARTS (2026-09-10, queue 2026-09-10-3a9de4) ----
@@ -206,7 +467,6 @@ if (-not $script:HoldsMutex) {
 # NOTHING back and says so - see Get-DirtyOwnedSnapshot and Get-ForeignHeldPaths in lib\pipeline-commit.ps1.
 $script:DirtyAtStart = $null
 try {
-  . (Join-Path (Split-Path $root -Parent) 'lib\pipeline-commit.ps1')
   $script:DirtyAtStart = Get-DirtyOwnedSnapshot -Repo (Split-Path $root -Parent) -Paths @((Get-BotInputPaths) + (Get-BotServedPaths))
 } catch {
   $script:DirtyAtStart = [pscustomobject]@{ ok = $false; files = @(); why = ('the snapshot threw: ' + $_.Exception.Message) }
