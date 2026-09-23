@@ -69,19 +69,42 @@ function Invoke-DigestPython {
 }
 
 function Get-QueueRow {
-  <# One queue's state. Returns @{ Name; Count; AgeDays; Floor; Cost; Known }.
-     `Known=$false` means the counter could not run, which is NOT the same as zero. #>
+  <# One queue's state. Returns @{ Name; Count; AgeDays; Floor; Cost; Known; Note }.
+     `Known=$false` means the counter could not run, which is NOT the same as zero. `Note` is the counter's own
+     qualifier, printed after the state (W6.4, 2026-09-23): "as of" a nightly handoff, or what was subtracted. #>
   param([string]$Name, [int]$Floor, [string]$Cost, [scriptblock]$Count)
-  $row = @{ Name = $Name; Count = 0; AgeDays = -1; Floor = $Floor; Cost = $Cost; Known = $false }
+  $row = @{ Name = $Name; Count = 0; AgeDays = -1; Floor = $Floor; Cost = $Cost; Known = $false; Note = '' }
   try {
     $r = & $Count
     if ($null -ne $r) {
       $row.Count = [int]$r.Count
       $row.AgeDays = [double]$r.AgeDays
+      if ($r.ContainsKey('Note')) { $row.Note = [string]$r.Note }
       $row.Known = $true
     }
   } catch { }
   return $row
+}
+
+function Get-OldestAgeDays {
+  <# Days since the OLDEST timestamp that parses, to 0.1, or -1 when none does. -1 is UNKNOWN and prints '-', never
+     0 (W6.4 step 5 of design\PLAN-brain-consults-on-code-and-analysis-2026-09-22.md): until 2026-09-23 six of this
+     page's nine queue rows hard-coded AgeDays = 0, so they could never read OVERDUE. An ISO stamp ending Z is UTC and
+     one without a zone is local. -Now replaces the clock for the fixtures. #>
+  param([string[]]$Stamps = @(), $Now = $null)
+  $now = if ($null -ne $Now) { ([DateTime]$Now).ToUniversalTime() } else { [DateTime]::UtcNow }
+  $oldest = $null
+  foreach ($s in @($Stamps)) {
+    if (-not "$s".Trim()) { continue }
+    $d = [DateTime]::MinValue
+    if ([DateTime]::TryParse("$s", [Globalization.CultureInfo]::InvariantCulture,
+        [Globalization.DateTimeStyles]::AssumeLocal, [ref]$d)) {
+      $u = $d.ToUniversalTime()
+      if ($null -eq $oldest -or $u -lt $oldest) { $oldest = $u }
+    }
+  }
+  if ($null -eq $oldest) { return -1 }
+  return [math]::Round(($now - $oldest).TotalDays, 1)
 }
 
 function Get-JsonlAge {
@@ -140,8 +163,13 @@ function Get-CurrentClassCount {
   $last = New-Object 'System.Collections.Generic.Dictionary[string,object]'
   foreach ($r in $rows) { if ([string]::Equals([string]$r.derived, $newest, [StringComparison]::Ordinal)) { $last[[string]$r.id] = $r } }
   $n = 0
-  foreach ($r in $last.Values) { if ($r.status -eq 'UNKNOWN-TO-THE-ESTATE') { $n++ } }
-  return @{ Count = $n; AgeDays = 0 }
+  $firsts = New-Object Collections.Generic.List[string]
+  foreach ($r in $last.Values) {
+    if ($r.status -eq 'UNKNOWN-TO-THE-ESTATE') { $n++; $firsts.Add([string]$r.first_seen) }
+  }
+  # The age is the oldest unknown class's first_seen, in the newest derivation (W6.4 step 5; it was a literal 0).
+  $ageR = Get-OldestAgeDays -Stamps $firsts.ToArray()
+  return @{ Count = $n; AgeDays = $ageR }
 }
 
 # J3 of design\PLAN-brain-v3-2026-09-10.md: the queues skills\recall-inbox.py gathers and rules. Its READY reflex
@@ -235,6 +263,7 @@ function Format-Digest {
     $state = 'ok'
     if ($q.Count -gt 0 -and $q.AgeDays -gt $q.Floor) { $state = 'OVERDUE'; $over++ }
     elseif ($q.Count -eq 0) { $state = 'empty' }
+    if ($q.ContainsKey('Note') -and "$($q.Note)".Trim()) { $state = "$state ($($q.Note))" }
     $out.Add('  ' + ('{0,-26} {1,6} {2,9} {3,7}  {4}' -f $q.Name, $q.Count, $ageTxt, "$($q.Floor)d", $state))
   }
   $out.Add('')
@@ -437,6 +466,45 @@ if ($SelfTest) {
   Case 'CLEAN TWIN' 'a torn line is skipped rather than fatal' ($b.Count -eq 1)
   Remove-Item -LiteralPath $tmp -ErrorAction SilentlyContinue
 
+  # W6.4 step 5 (2026-09-23): real ages where a source exists, and UNKNOWN never reads as 0.
+  $nowF = [DateTime]::Parse('2026-09-20T00:00:00Z').ToUniversalTime()
+  $oa = Get-OldestAgeDays -Stamps @('2026-09-13T00:00:00Z', '2026-09-10T00:00:00Z', 'not a date') -Now $nowF
+  Case 'MUST FIRE' 'the oldest parseable stamp sets the age (10 days)' ($oa -eq 10) "age=$oa"
+  $ob = Get-OldestAgeDays -Stamps @('', 'not a date') -Now $nowF
+  Case 'MUST NOT FIRE' 'no parseable stamp is UNKNOWN (-1), never 0' ($ob -eq -1) "age=$ob"
+  $agedQ = @(
+    @{ Name = 'aged10'; Count = 2; AgeDays = 10.0; Floor = 7; Cost = 'x'; Known = $true; Note = '' }
+    @{ Name = 'aged3'; Count = 2; AgeDays = 3.0; Floor = 7; Cost = 'x'; Known = $true; Note = '' }
+    @{ Name = 'noage'; Count = 3; AgeDays = -1; Floor = 7; Cost = 'x'; Known = $true; Note = '' }
+    @{ Name = 'noted'; Count = 1; AgeDays = 2.0; Floor = 14; Cost = 'x'; Known = $true; Note = '73 more answered on the page, not yet applied' }
+  )
+  $agedTxt = Format-Digest -Night $night -Queues $agedQ -Weakest 'x' -Events @()
+  Case 'MUST FIRE' 'a queue 10 days old against a 7 day floor is OVERDUE' ($agedTxt -match 'aged10\s+2\s+10d\s+7d\s+OVERDUE') $agedTxt
+  Case 'MUST NOT FIRE' 'a queue 3 days old against a 7 day floor is ok' ($agedTxt -match 'aged3\s+2\s+3d\s+7d\s+ok') $agedTxt
+  Case 'MUST NOT FIRE' 'a queue with no age source prints -, never 0d, and is not overdue' `
+    (($agedTxt -match 'noage\s+3\s+-\s+7d\s+ok') -and -not ($agedTxt -match 'noage\s+3\s+0d')) $agedTxt
+  Case 'CLEAN TWIN' 'a counter''s note is printed after the state' `
+    ($agedTxt -match 'noted\s+1\s+2d\s+14d\s+ok \(73 more answered on the page, not yet applied\)') $agedTxt
+  $throwRow = Get-QueueRow -Name 'thrower' -Floor 7 -Cost 'x' -Count { throw 'boom' }
+  $thTxt = Format-Digest -Night $night -Queues @($throwRow) -Weakest 'x' -Events @()
+  Case 'CLEAN TWIN' 'a counter that throws prints UNKNOWN, never 0d' `
+    (($thTxt -match 'thrower\s+\?\s+\?\s+7d\s+UNKNOWN') -and -not ($thTxt -match 'thrower[^\n]*0d')) $thTxt
+  $noteRow = Get-QueueRow -Name 'n' -Floor 7 -Cost 'x' -Count { @{ Count = 1; AgeDays = 1.0; Note = 'as of 2026-09-23T04:35:00' } }
+  Case 'MUST FIRE' 'Get-QueueRow carries a counter''s note' ($noteRow.Note -eq 'as of 2026-09-23T04:35:00') "note=$($noteRow.Note)"
+  $ctmp2 = Join-Path $env:TEMP ("digest-classes-age-{0}-{1}.jsonl" -f $PID, [guid]::NewGuid().ToString('N').Substring(0, 8))
+  $crow2 = '{"id": "class:a", "derived": "2026-09-10", "status": "UNKNOWN-TO-THE-ESTATE", "first_seen": "2026-08-29T00:00:00Z"}'
+  [IO.File]::WriteAllText($ctmp2, ($crow2 + "`n"), (New-Object Text.UTF8Encoding($false)))
+  $cc2 = Get-CurrentClassCount -Path $ctmp2
+  Remove-Item -LiteralPath $ctmp2 -ErrorAction SilentlyContinue
+  # A LOWER bar only: the clock can only move the age up, so load and date cannot turn this red.
+  Case 'MUST FIRE' 'an unknown failure class is aged from its first_seen, not 0' `
+    ($cc2.Count -eq 1 -and $cc2.AgeDays -gt 20) ("n=$($cc2.Count) age=$($cc2.AgeDays)")
+  Case 'MUST NOT FIRE' 'a class row with no first_seen is aged UNKNOWN (-1), never 0' ($cc.AgeDays -eq -1) "age=$($cc.AgeDays)"
+
+  # A literal-case suite asserts how many ran (brain-consults plan 4.8).
+  $expected = 43
+  if ($ran.Count -ne $expected) { $script:fails += "CASE COUNT ran $($ran.Count) cases, expected $expected" }
+
   ''
   if ($fails.Count -gt 0) {
     "brain-digest selftest: $($fails.Count) FAILED of $($ran.Count)"
@@ -471,11 +539,16 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
   $queues += Get-QueueRow -Name 'forgetting candidates' -Floor 7 `
     -Cost 'every unretired section competes in every search. BM25 at 1,118 sections measured 3 points worse at right-domain than at 1,043 - more sections retrieve WORSE.' `
     -Count {
-      $oR = Invoke-DigestPython -Exe $PY -ArgList @((Join-Path $SKILLS 'recall-forget.py'))
-      $o = @($oR)
-      $un = Get-UnruledSum -Text ($o -join "`n")
-      if ($null -eq $un) { return $null }
-      @{ Count = $un; AgeDays = 0 }
+      # W6.4 step 5: the count AND the age come from recall-forget.py --json, whose age is the oldest unruled section's
+      # first offer (-1, UNKNOWN, when none has one). It reads the nightly pass's own tally while that is under 26 h
+      # old instead of re-tallying the log (W6.3 step 3), and the row then says which night it is as of.
+      $oR = Invoke-DigestPython -Exe $PY -ArgList @((Join-Path $SKILLS 'recall-forget.py'), '--json')
+      $jl = @(@($oR) | Where-Object { "$_" -like 'forget-json: *' })
+      if (-not $jl.Count) { return $null }
+      $fj = ("$($jl[0])".Substring('forget-json: '.Length)) | ConvertFrom-Json
+      if (-not $fj.known) { return $null }
+      $note = if ($fj.source -eq 'handoff' -and $fj.as_of) { "as of $($fj.as_of)" } else { '' }
+      @{ Count = [int]$fj.unruled; AgeDays = [double]$fj.oldest_unruled_days; Note = $note }
     }
   $queues += Get-QueueRow -Name 'memory clusters' -Floor 14 `
     -Cost 'the memory store stays 156 dated incidents. Five separate CRLF memories remain five memories forever instead of one paragraph plus four pointers.' `
@@ -489,7 +562,9 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
       $o = @($oR)
       $un = Get-UnruledSum -Text ($o -join "`n")
       if ($null -eq $un) { return $null }
-      @{ Count = $un; AgeDays = 0 }
+      # NO AGE SOURCE, so UNKNOWN (-1, printed '-'), never 0 (W6.4 step 5). recall-consolidate prints no dates; a
+      # cluster's age is its FIRST appearance, which needs a `recall-consolidate.py --json` that does not exist yet.
+      @{ Count = $un; AgeDays = -1 }
     }
   $queues += Get-QueueRow -Name 'graph alias proposals' -Floor 14 `
     -Cost 'Stage 1 produces nightly and Stage 2 has no scheduler. 60 proposals have waited since 2026-08-21; every one is an alias the board is not using.' `
@@ -506,7 +581,23 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
       $st = ($js -join "`n") | ConvertFrom-Json
       if ($null -eq $st.proposals_pending) { return $null }
       $age = if ($null -eq $st.proposals_oldest_days) { -1 } else { [double]$st.proposals_oldest_days }
-      @{ Count = [int]$st.proposals_pending; AgeDays = $age }
+      $count = [int]$st.proposals_pending
+      $note = ''
+      # W6.4 step 3: minus the proposals Brad already answered on the approvals page. They wait on its runner, not on
+      # him, and the page subtracts them too; on 2026-09-23 that was 73 of 131. recall-inbox --graph-json reads only
+      # proposals.json and the answer files. When it cannot say, the full count and age stand and the row says so.
+      $gR = Invoke-DigestPython -Exe $PY -ArgList @((Join-Path $SKILLS 'recall-inbox.py'), '--graph-json')
+      $gl = @(@($gR) | Where-Object { "$_" -like 'inbox-graph-json: *' })
+      $gj = $null
+      if ($gl.Count) { $gj = ("$($gl[0])".Substring('inbox-graph-json: '.Length)) | ConvertFrom-Json }
+      if ($null -ne $gj -and $gj.known -and $null -ne $gj.answered_unapplied) {
+        $count = [math]::Max(0, $count - [int]$gj.answered_unapplied)
+        $age = [double]$gj.oldest_open_days
+        if ([int]$gj.answered_unapplied -gt 0) { $note = "$([int]$gj.answered_unapplied) more answered on the page, not yet applied" }
+      } else {
+        $note = 'answers on the approvals page could not be read, so none were subtracted'
+      }
+      @{ Count = $count; AgeDays = $age; Note = $note }
     }
   $queues += Get-QueueRow -Name 'failure classes UNKNOWN' -Floor 7 `
     -Cost 'a signature recurring across sessions that no reflex, no draft and nothing in the store names. Nobody is even able to ask about it yet.' `
@@ -537,7 +628,10 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
       if (-not (Test-Path -LiteralPath $p)) { return $null }
       $d = [IO.File]::ReadAllText($p) | ConvertFrom-Json
       $open = @(@($d.items) | Where-Object { $_.status -ne 'resolved' })
-      @{ Count = $open.Count; AgeDays = 0 }
+      # W6.4 step 5: the oldest OPEN item's `ts` (it was a literal 0).
+      $stamps = @($open | ForEach-Object { [string]$_.ts })
+      $ageR = Get-OldestAgeDays -Stamps $stamps
+      @{ Count = $open.Count; AgeDays = $ageR }
     }
   # WS 10f (2026-09-10): an INCIDENT draft waits for a person to write its root cause. The trigger WRITES
   # only in -Alert mode - the 06:45 task - so a digest run by hand opens nothing and only counts.
@@ -550,7 +644,8 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
       $jl = @($io | Where-Object { "$_" -match '^incident-json: ' })
       if (-not $jl.Count) { return $null }
       $ij = ("$($jl[0])" -replace '^incident-json: ', '') | ConvertFrom-Json
-      @{ Count = [int]$ij.drafts_open; AgeDays = 0 }
+      # NO AGE SOURCE, so UNKNOWN (-1), never 0 (W6.4 step 5): incident-json carries no draft date.
+      @{ Count = [int]$ij.drafts_open; AgeDays = -1 }
     }
   # WS 6c (2026-09-10): memory DRAFTS the dream wrote wait in each store's _drafts folder. They are not indexed
   # and not in MEMORY.md, so this row is the only place a person sees them - accepting one is a file move and
@@ -580,7 +675,8 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
       if (-not $jl.Count) { return $null }
       $rj = ("$($jl[0])" -replace '^ratchet-trends-json: ', '') | ConvertFrom-Json
       if (-not $rj.known) { return $null }
-      @{ Count = [int]$rj.stopped_looking; AgeDays = 0 }
+      # NO AGE SOURCE, so UNKNOWN (-1), never 0 (W6.4 step 5): ratchet-trends-json carries no start date of a flat run.
+      @{ Count = [int]$rj.stopped_looking; AgeDays = -1 }
     }
 
   # THE ESTATE HALF (WS 11). ops\brain-report.ps1 reads and never writes, so a RED floor becomes an event HERE,
