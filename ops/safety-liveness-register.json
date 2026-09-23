@@ -56,6 +56,6 @@
     { "file": "ops/audit-memory-backup.ps1", "verdict": "SAFETY", "sig": "b3563f2930bbeadd",
       "reason": "the clock stamps a commit message" },
     { "file": "ops/audit-rule-currency.ps1", "verdict": "LIVENESS", "grade": "PRINT", "sig": "0e20d3979207046d",
-      "reason": "dated claims older than StaleDays (90) are listed STALE 'for a person, not a verdict'; the exit is decided by the glob check alone" }
+      "reason": "dated claims older than StaleDays (90) are listed STALE 'for a person, not a verdict'; the exit is decided by the scope-key and paths checks alone (an inert globs:, alwaysApply: or mis-cased paths key, and a paths: entry that matches no tracked file)" }
   ]
 }
