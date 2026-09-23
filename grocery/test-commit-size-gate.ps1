@@ -19,11 +19,27 @@
   Run:  powershell -NoProfile -File grocery	est-commit-size-gate.ps1
   Exit: 0 pass, 1 a case failed, 3 could not find the gate (BLIND - nothing was proven).
 #>
+# gate-inputs: grocery\test-commit-size-gate.ps1, grocery\capture-run.ps1, grocery\commit-size-lib.ps1, lib\git-repo-env.ps1, lib\git-blob-lib.ps1, lib\pipeline-commit.ps1, lib\ledger-lock.ps1, lib\atomic-write.ps1, lib\event-bus.ps1
 $ErrorActionPreference='Continue'
 # Every repo below is a temp repo: clear the repository environment first (2026-09-10; lib\git-repo-env.ps1).
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\git-repo-env.ps1'); Clear-TcGitRepoEnv
+# THE LIBRARIES THE LIFTED BLOCKS CALL, loaded before any block runs (2026-09-23, plan W2.2): the size gate reads the
+# carry ledger through commit-size-lib and lists additions through Invoke-GitCaptured, and a block run without them
+# would take its degraded path and prove the wrong thing.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\git-blob-lib.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\pipeline-commit.ps1')
+. (Join-Path $PSScriptRoot 'commit-size-lib.ps1')
+# A STUB PAGER from the first case on: the gate pages a refusal, and every page any block composes is kept here.
+$script:pages = New-Object System.Collections.Generic.List[string]
+function Send-Alert { param($Subject, $Body) [void]$script:pages.Add([string]$Subject); $script:alertSubject = $Subject; $script:alertBody = $Body }
+# What the lifted blocks read from capture-run's script scope. Every file a case writes is newer than this, so it is
+# the run's OWN, and with no carry record every existing case is judged exactly as the gate judged before W2.2.
+$script:RunStart = (Get-Date).AddMinutes(-10)
+$today = '2026-09-23'; $Kind = 'daily'
 $d = Join-Path $env:TEMP ('gate-' + [guid]::NewGuid().ToString('N').Substring(0,8))
 New-Item -ItemType Directory $d -Force | Out-Null
+# The carry ledger of every case lives inside that case's own .git, which git never lists and the repo's removal takes.
+$env:TC_COMMIT_CARRY_PATH = Join-Path $d '.git\fx-carry.json'
 Push-Location $d
 try {
   & git init -q .; & git config user.email t@t; & git config user.name t
@@ -164,6 +180,78 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
   }
   T 'MUST FIRE  a valid manifest does not admit a directory it does not name' `
     ($rOther.refused -and $rOther.staged -eq 0) ("refused=$($rOther.refused) staged=$($rOther.staged)")
+
+  # ---- A REFUSED RUN'S OWN FILES CARRY AT THE CAPS THEY MET (2026-09-23, design\PLAN-bot-checkout-self-heal-2026-09-23.md W2.2) ----
+  # The 09-22/09-23 shape by COUNT, so no case writes megabytes: an earlier run wrote files and could not commit them,
+  # and the next run's own files plus those went over 300. The gate block and the COMMIT-CARRY block are both lifted
+  # from capture-run.ps1 and run against a throwaway repo; the carry ledger is that repo's own .git\fx-carry.json.
+  $ci = $src.IndexOf('  # >>> COMMIT-CARRY BLOCK >>>')
+  $cj = $src.IndexOf('  # <<< COMMIT-CARRY BLOCK <<<', [Math]::Max($ci, 0))
+  if ($ci -lt 0 -or $cj -lt 0) { Write-Output 'BLIND: could not find the commit-carry markers in capture-run.ps1 - nothing was proven'; exit 3 }
+  $carryBlock = $src.Substring($ci, $cj - $ci)
+  function Run-Carry([int]$OldN, [int]$OwnN, [bool]$Recorded, [bool]$Committed) {
+    $c = Join-Path $env:TEMP ('gatecarry-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+    New-Item -ItemType Directory $c -Force | Out-Null
+    & git -C $c init -q .
+    & git -C $c config user.email t@t; & git -C $c config user.name t
+    New-Item -ItemType Directory (Join-Path $c 'grocery/out') -Force | Out-Null
+    [IO.File]::WriteAllText((Join-Path $c 'grocery/out/seed.txt'), 'seed')
+    & git -C $c add -A | Out-Null; & git -C $c commit -q -m seed | Out-Null
+    $prevCarry = $env:TC_COMMIT_CARRY_PATH
+    $env:TC_COMMIT_CARRY_PATH = Join-Path $c '.git\fx-carry.json'
+    $prevStart = $script:RunStart
+    $runStart = (Get-Date).AddMinutes(-10)
+    # THE EARLIER RUN'S FILES: written 20 h before this run started, one byte each.
+    $oldRows = @()
+    foreach ($k in 1..([Math]::Max($OldN, 1))) {
+      if ($k -gt $OldN) { break }
+      $p = 'grocery/out/carried-' + $k + '.txt'
+      [IO.File]::WriteAllText((Join-Path $c $p), 'c')
+      (Get-Item (Join-Path $c $p)).LastWriteTime = $runStart.AddHours(-20)
+      $oldRows += ,([pscustomobject]@{ path = $p; bytes = 1 })
+    }
+    if ($Recorded) { [void](Add-TcCommitCarry -Repo $c -Run 'fx-yesterday' -Kind 'daily' -Started $runStart.AddHours(-21) -Verdict 'within-caps' -Files $oldRows -Now (Get-Date).AddHours(-20)) }
+    # THIS RUN'S OWN FILES, written after it started.
+    foreach ($k in 1..([Math]::Max($OwnN, 1))) { if ($k -gt $OwnN) { break }; [IO.File]::WriteAllText((Join-Path $c ('grocery/out/own-' + $k + '.txt')), 'o') }
+    & git -C $c add -A -- 'grocery/out' | Out-Null
+    $script:RunStart = $runStart
+    $repo = $c; $paths = @('grocery/out'); $failed = @(); $ForceBigCommit = $false
+    $script:pages.Clear()
+    $gOut = . ([scriptblock]::Create($script:gateSrc))
+    $refused = [bool]$sizeGateRefused
+    $staged = @(& git -C $c diff --cached --name-only | Where-Object { $_ }).Count
+    $status = $script:CommitSizeStatus
+    # THE COMMIT: refused by the gate, or (-Committed $false) refused by a hook after the gate admitted it.
+    $botCommitted = ($Committed -and -not $refused)
+    $cOut = . ([scriptblock]::Create($carryBlock))
+    $rd = Read-TcCommitCarry -Repo $c
+    $mine = @($rd.runs | Where-Object { [string]$_.run_id -like 'capture-run-daily-*' })
+    $minePaths = @(); $mineVerdict = ''
+    if ($mine.Count -eq 1) { $minePaths = @($mine[0].paths.Keys | Sort-Object); $mineVerdict = [string]$mine[0].verdict }
+    $script:RunStart = $prevStart
+    $env:TC_COMMIT_CARRY_PATH = $prevCarry
+    Remove-Item $c -Recurse -Force -ErrorAction SilentlyContinue
+    return [pscustomobject]@{
+      refused = $refused; staged = $staged; failed = ($failed -join ','); status = $status; pages = @($script:pages)
+      text = ((@($gOut) + @($cOut) | ForEach-Object { [string]$_ }) -join "`n"); runs = @($rd.runs).Count; mine = $mine.Count
+      minePaths = $minePaths; mineVerdict = $mineVerdict
+    }
+  }
+  $cr1 = Run-Carry 200 200 $true $true
+  T 'MUST NOT FIRE a run carrying a recorded within-caps day (200 files) plus its own day (200 files) is admitted' `
+    ((-not $cr1.refused) -and $cr1.staged -eq 400 -and ($cr1.text -match 'commit-size: carried +200 file\(s\)')) ("refused=$($cr1.refused) staged=$($cr1.staged) text=$($cr1.text)")
+  T 'CLEAN TWIN the status record names the carried run, and a committed run records no carry of its own' `
+    ((@($cr1.status.carried_runs) -join ',') -eq 'fx-yesterday' -and $cr1.mine -eq 0 -and $cr1.runs -eq 1) ("carried=$(@($cr1.status.carried_runs) -join ',') mine=$($cr1.mine) runs=$($cr1.runs)")
+  $cr2 = Run-Carry 200 200 $false $true
+  T 'MUST FIRE  the same carried files with NO record refuse at 400 files, which is the gate of the day before' `
+    ($cr2.refused -and $cr2.staged -eq 0 -and ($cr2.failed -match 'commit-size-gate')) ("refused=$($cr2.refused) staged=$($cr2.staged) failed=$($cr2.failed)")
+  T 'MUST FIRE  and the refusal pages once, by name' `
+    ((@($cr2.pages | Where-Object { $_ -eq 'Grocery commit refused by size - 2026-09-23' }).Count -eq 1)) ("pages=$(@($cr2.pages) -join ' | ')")
+  T 'MUST FIRE  a refused commit writes a carry record naming ONLY the 200 files written at or after RunStart, over-caps' `
+    ($cr2.mine -eq 1 -and $cr2.minePaths.Count -eq 200 -and @($cr2.minePaths | Where-Object { $_ -like '*carried-*' }).Count -eq 0 -and $cr2.mineVerdict -eq 'over-caps') ("mine=$($cr2.mine) paths=$($cr2.minePaths.Count) verdict=$($cr2.mineVerdict)")
+  $cr3 = Run-Carry 20 150 $false $false
+  T 'MUST FIRE  a commit a hook refused after the gate admitted it records its own 150 files within-caps and none of the 20 older ones' `
+    ((-not $cr3.refused) -and $cr3.mine -eq 1 -and $cr3.minePaths.Count -eq 150 -and @($cr3.minePaths | Where-Object { $_ -like '*carried-*' }).Count -eq 0 -and $cr3.mineVerdict -eq 'within-caps') ("refused=$($cr3.refused) mine=$($cr3.mine) paths=$($cr3.minePaths.Count) verdict=$($cr3.mineVerdict)")
 
   # ---- SERVED-DIRTY: WHAT THE CHAIN WROTE vs WHAT IT STAGED (2026-09-02, queue 2026-09-02-reanch1) ----
   # Same harness, second shipped block. On 2026-09-02 the chain re-anchored 584 authored specs and rebuilt
@@ -310,8 +398,13 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
   T 'MUST FIRE  a snapshot that could not be taken holds NOTHING back, and says so' `
     (($fh3.staged -match 'json-readers-baseline\.json') -and ($fh3.text -match 'holding NOTHING back')) ("staged=$($fh3.staged) text=$($fh3.text)")
 
+  # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (.claude\rules\ops-and-gates.md): every case above is a literal T line, so
+  # a case lost to a thrown helper or a mis-lifted block is a shortfall here, never a smaller green total.
+  $EXPECTED_CASES = 30
+  $ranBefore = $n
+  T ('CLEAN TWIN every literal case ran: ' + $ranBefore + ' of ' + $EXPECTED_CASES) ($ranBefore -eq $EXPECTED_CASES) ("ran=$ranBefore")
   Write-Output ''
   Write-Output ("SELFTEST: {0}/{1} pass" -f ($n-$bad), $n)
   Write-Output ("COMMIT-SIZE-GATE-COMPLETE cases={0} failed={1}" -f $n, $bad)
   if ($bad) { exit 1 }
-} finally { Pop-Location; Remove-Item $d -Recurse -Force -ErrorAction SilentlyContinue }
+} finally { Pop-Location; Remove-Item Env:\TC_COMMIT_CARRY_PATH -ErrorAction SilentlyContinue; Remove-Item $d -Recurse -Force -ErrorAction SilentlyContinue }

@@ -23,6 +23,12 @@
 
   Exit 0 = every lane that COULD run did. Exit 1 = a lane failed.
   Browser work outstanding is reported, never counted as a failure.
+
+  THE COMMIT'S SIZE GATE JUDGES ONE RUN, NOT A BACKLOG (2026-09-23, design\PLAN-bot-checkout-self-heal-2026-09-23.md
+  W2.2). The gate still caps a run's own new files at 300 files / 25 MB. Files an EARLIER run wrote and could not
+  commit are counted apart when that run's carry record (grocery\commit-size-lib.ps1) vouches for them at the caps
+  they already met; a run that stages and does not commit writes that record for its own additions. Before this, one
+  refused day put the next day over the cap, and the refusal carried itself forward (09-22 and 09-23).
 #>
 [CmdletBinding()]
 param(
@@ -66,6 +72,7 @@ $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 . (Join-Path $root 'run-log-lib.ps1')
 . (Join-Path $root 'alert-lib.ps1')   # Send-Alert: the ONLY way this file may page (32 KB command-line trap)
 . (Join-Path $root 'fanout-lib.ps1')  # Invoke-Fanout: the browser-store builders, side by side
+. (Join-Path $root 'commit-size-lib.ps1')   # Test-CarriedCommitSize/Add-TcCommitCarry: the size gate judges per RUN (plan W2.2)
 
 # ---- ALREADY RAN TODAY? (2026-09-10, queue 2026-09-10-2b79d3) --------------------------------------------
 # The TC capture tasks gained hourly catch-up occurrences inside a per-task window, so a Windows Update
@@ -123,6 +130,7 @@ $script:StatusFile = Join-Path (Join-Path $OutDir 'logs') 'capture-run-status.js
 # subject only when Send-Alert returned 0, so a page that failed to send counts as no page and RUN RECORD still fires.
 # failed_lanes rides beside exit_code in capture-run-status.json; a record without it pages exactly as before.
 $script:FailedLaneRecs = @()
+$script:CommitSizeStatus = $null
 function Add-FailedLane([string]$Name, [string]$PagedSubject = '') {
   # The CALLER's failed-lane list (scope 1), exactly the variable the old bare append wrote: in this script that is the
   # script scope, and test-commit-size-gate runs the cut block inside a function whose own list it asserts on.
@@ -153,6 +161,9 @@ function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
       # WHAT WAS ALREADY DIRTY WHEN THIS RUN STARTED (2026-09-10, queue 2026-09-10-3a9de4), recorded here so a
       # run that dies before its commit still leaves the foreign-held set legible. $null = no snapshot taken.
       dirty_at_start = $(if ($script:DirtyAtStart -and $script:DirtyAtStart.ok) { @($script:DirtyAtStart.files | ForEach-Object { [string]$_.path }) } else { $null })
+      # THE SIZE GATE'S BUCKETS (2026-09-23, plan W2.2): carried_runs names each earlier run whose record vouched for
+      # files in this commit, deep says one of them is over 24 h old. $null = the gate has not run yet.
+      commit_size = $script:CommitSizeStatus
     }
     $dir = Split-Path $script:StatusFile -Parent
     if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
@@ -1060,14 +1071,44 @@ try {
   $NEW_FILE_CAP = 300
   $NEW_MB_CAP   = 25
   $sizeGateRefused = $false
-  $added = @(& git -C $repo diff --cached --name-only --diff-filter=A | Where-Object { $_ })
-  $addedMB = 0.0
+  # ---- ONE RUN'S CAPS, NOT A BACKLOG'S (2026-09-23, design\PLAN-bot-checkout-self-heal-2026-09-23.md W2.2) ----------
+  # The caps used to sum EVERY staged addition, including files an earlier run wrote and could not commit, so one
+  # refused day put the next over the cap and the refusal carried itself forward (09-22, then both runs of 09-23).
+  # grocery\commit-size-lib.ps1 splits the additions: OWN (written at or after this run started), CARRIED (older, and
+  # named at the same byte length by an earlier run's within-caps record), UNVOUCHED (the rest). Own + unvouched meet
+  # exactly the caps above with the same rounding as before; a flood refused yesterday is recorded over-caps and vouches
+  # nothing. A judge that throws, or a ledger it cannot read, leaves every older addition unvouched: today's gate.
+  # The listing is -z with quotePath off, so a path with a space or a non-ASCII letter is measured as git names it.
+  $addedRes = Invoke-GitCaptured -Repo $repo -GitArgs @('-c', 'core.quotePath=false', 'diff', '--cached', '-z', '--name-only', '--diff-filter=A')
+  $added = @(([string]$addedRes.stdout).Split([char]0) | Where-Object { $_ })
+  $addedRows = @()
+  $addedBytes = [long]0
   foreach ($f in $added) {
     $fp = Join-Path $repo $f
-    if (Test-Path -LiteralPath $fp) { try { $addedMB += ((Get-Item -LiteralPath $fp).Length / 1MB) } catch { } }
+    $fLen = [long]0; $fMt = $null
+    if (Test-Path -LiteralPath $fp -PathType Leaf) { try { $fItem = Get-Item -LiteralPath $fp; $fLen = [long]$fItem.Length; $fMt = $fItem.LastWriteTime } catch { } }
+    $addedBytes += $fLen
+    $addedRows += ,([pscustomobject]@{ path = $f; bytes = $fLen; mtime = $fMt })
   }
-  $addedMB = [math]::Round($addedMB, 1)
-  if (-not $ForceBigCommit -and ($newDirs.Count -gt 0 -or $added.Count -gt $NEW_FILE_CAP -or $addedMB -gt $NEW_MB_CAP)) {
+  $addedMB = [math]::Round($addedBytes / 1MB, 1)
+  $script:CommitSize = $null
+  try {
+    $carryRead = Read-TcCommitCarry -Repo $repo
+    if (-not $carryRead.ok) { Write-Output ('commit-size: ' + $carryRead.why) }
+    $script:CommitSize = Test-CarriedCommitSize -Added $addedRows -RunStart $script:RunStart -Records @($carryRead.runs) -Now (Get-Date) -FileCap $NEW_FILE_CAP -MbCap $NEW_MB_CAP
+    $csLines = Format-CarriedCommitSize -Result $script:CommitSize
+    foreach ($csl in @($csLines)) { Write-Output $csl }
+  } catch {
+    $script:CommitSize = $null
+    Write-Output ('commit-size: the carry judge threw (' + $_.Exception.Message + ') - judging every addition at one run''s caps, exactly as before')
+  }
+  $sizeOver = if ($null -ne $script:CommitSize) { -not $script:CommitSize.ok } else { ($added.Count -gt $NEW_FILE_CAP -or $addedMB -gt $NEW_MB_CAP) }
+  $script:CommitSizeStatus = $(if ($null -ne $script:CommitSize) {
+      [ordered]@{ verdict = [string]$script:CommitSize.verdict; ok = [bool]$script:CommitSize.ok; own_files = [int]$script:CommitSize.own.files
+        unvouched_files = [int]$script:CommitSize.unvouched.files; carried_runs = @($script:CommitSize.carried | ForEach-Object { [string]$_.run_id })
+        deep = [bool]$script:CommitSize.deep; deep_days = [int]$script:CommitSize.deep_days }
+    } else { [ordered]@{ verdict = 'unjudged'; ok = (-not $sizeOver); own_files = $added.Count; unvouched_files = 0; carried_runs = @(); deep = $false; deep_days = 0 } })
+  if (-not $ForceBigCommit -and ($newDirs.Count -gt 0 -or $sizeOver)) {
     $sizeGateRefused = $true
     Write-Warning ("commit REFUSED: this run would ADD {0} new file(s) totalling {1} MB (caps: {2} files / {3} MB)." -f $added.Count, $addedMB, $NEW_FILE_CAP, $NEW_MB_CAP)
     if ($newDirs.Count) {
@@ -1093,6 +1134,22 @@ try {
     Write-Output  '  capture-run with -ForceBigCommit once you have read the list above.'
     & git -C $repo reset -q -- $paths | Out-Null
     Add-FailedLane 'commit-size-gate'
+    # THE REFUSAL PAGES, NAMING THE BUCKETS (2026-09-23, plan W2.2 step 3), so a refusal that a carry record could have
+    # prevented is told apart from a real flood without opening the log.
+    try {
+      $csSubj = "Grocery commit refused by size - $today"
+      $csBody = ("capture-run.ps1 [$Kind] staged " + $added.Count + " new file(s) / " + $addedMB + " MB and the commit was refused (see grocery\out\logs\capture-run-$Kind-$today.log). Nothing was committed and the index was reset; the working tree is untouched.`n`n" +
+        $(if ($newDirs.Count) { 'A directory under grocery\out has never been tracked before: ' + ($newDirs -join ', ') + "`n`n" } else { '' }) +
+        $(if ($null -ne $script:CommitSize) { ((Format-CarriedCommitSize -Result $script:CommitSize) -join "`n") } else { 'The carry judge did not run, so every addition was judged at one run''s caps.' }))
+      Send-Alert -Subject $csSubj -Body $csBody | Out-Null
+      Set-FailedLanePaged 'commit-size-gate' $csSubj $LASTEXITCODE
+    } catch { Write-Output ('commit-size: the refusal page could not be sent (' + $_.Exception.Message + ')') }
+  } elseif ($null -ne $script:CommitSize -and $script:CommitSize.deep) {
+    # ADMITTED, BUT THE BACKLOG IS OLD (plan W2.2 step 3): a carried record over 24 h old means a run refused a day or
+    # more ago and nothing has committed its files since. The commit goes ahead; the page says how deep it was.
+    try {
+      Send-Alert -Subject ("Grocery capture backlog " + $script:CommitSize.deep_days + " days deep - $today") -Body ("capture-run.ps1 [$Kind] is committing files earlier runs wrote and could not commit. The commit was admitted at one run's caps; this page is about how long they waited.`n`n" + ((Format-CarriedCommitSize -Result $script:CommitSize) -join "`n")) | Out-Null
+    } catch { Write-Output ('commit-size: the backlog page could not be sent (' + $_.Exception.Message + ')') }
   }
 
   # ---- RECORD WHAT THIS RUN WROTE (2026-09-23, queue 2026-09-22-9bc4d2) -------------------------------------------
@@ -1277,6 +1334,22 @@ try {
     }
     }
   }
+  # >>> COMMIT-CARRY BLOCK >>>  test-commit-size-gate.ps1 lifts everything between these two markers. Do not rename them.
+  # A RUN THAT DOES NOT COMMIT RECORDS ITS OWN ADDITIONS (2026-09-23, plan W2.2 step 4): the size gate refused, or a hook
+  # refused the commit. Only the files this run wrote (LastWriteTime at or after its start) go into the record, with the
+  # verdict own + unvouched met, so the next run can carry them at the caps they met and never a flood that did not.
+  # Never fatal: a ledger that cannot be written leaves those files unvouched tomorrow, which is today's gate, and pages.
+  if (-not $botCommitted -and $null -ne $script:CommitSize) {
+    try {
+      $carryRun = ('capture-run-' + $Kind.ToLowerInvariant() + '-' + $script:RunStart.ToString('yyyyMMdd-HHmmss') + '-' + $PID)
+      $carryAdd = Add-TcCommitCarry -Repo $repo -Run $carryRun -Kind $Kind.ToLowerInvariant() -Started $script:RunStart -Verdict ([string]$script:CommitSize.verdict) -Files @($script:CommitSize.own_files)
+      Write-Output ('commit-carry: recorded ' + $carryAdd.files + ' own file(s) of run ' + $carryRun + ' as ' + $script:CommitSize.verdict + $(if ($carryAdd.note) { ' (' + $carryAdd.note + ')' } else { '' }))
+    } catch {
+      Write-Output ('commit-carry: could not record this run''s own additions (' + $_.Exception.Message + ') - tomorrow''s gate judges them unvouched, as before')
+      try { Send-Alert -Subject "Grocery commit carry record not written - $today" -Body ("capture-run.ps1 [$Kind] did not commit, and the carry ledger that lets the next run commit this run's files at their own caps could not be written: " + $_.Exception.Message + ". The next run judges them at one run's caps, which can refuse it again.") | Out-Null } catch { }
+    }
+  }
+  # <<< COMMIT-CARRY BLOCK <<<
 } catch { Write-Output ("commit/push threw: " + $_.Exception.Message); Add-FailedLane 'push' }
 finally {
   # A THROW MUST NOT LEAVE GIT_INDEX_FILE SET. It is process-wide, so every git command AFTER this stage -
