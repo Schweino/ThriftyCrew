@@ -36,7 +36,15 @@
       "memory no-hardcoded-bands (C--Codex-ThriftyCrew): read for 6b17b1; it is Brad's 2026-09-04 ruling on recipe MACRO bands, not grocery price sanity bands",
       "data-quality-craft/applies-here.md, 'First-match-wins and freshness ranking' and 'The silent semantic change'",
       ".claude/rules/ops-and-gates.md: MUST FIRE / MUST NOT FIRE / CLEAN TWIN; write the POINTED-TO object before the pointer"
-    ]
+    ],
+    "rollout_2026_09_22": {
+      "terms": "derived band reference | unit basis pack | ratchet mark",
+      "used": [
+        "data-quality-craft/detecting-anomalies.md (section 1): a basis error is a point anomaly against shelf-mates, which is what the band refuses",
+        "rag-craft/applies-here.md (section 4): thresholds derived from the corpus, never hand-set",
+        "decision-craft/applies-here.md (section 5): a ratchet rather than a gate red on day one (the keyed backlog)"
+      ]
+    }
   },
   "items": [
     {
@@ -409,10 +417,10 @@
       "rollback": "nothing shipped for this item; nothing to roll back"
     },
     {
-      "leaves_open": "359 commodities still carry a typed band; each moves to band: derived once identity for its wrong products is carried by excludes/known-wrong and the reference is bulk-aware (warehouse packs more than 5x under small-jar medians). 359 typed bands",
-      "leaves_open_occurrences": 359,
-      "shipped_commit": null,
-      "deviation": "The full switch (every commodity on its derived band) was built and measured, then held. At K=5 over 39,075 priced rows it newly admitted 2,404 rows and newly refused 280 against the typed bands; switched on, the rebuild moved 25 crowns and changed 37 cells, and two defects showed: (1) the typed bands were doing IDENTITY work (salt | Aldi became a Himalayan pink salt popcorn, jalapenos | Walmart a hummus, butter | Sam's a butter seasoning, cooked-quinoa | Baker's a smoked-salmon bowl, garlic | Sam's a pork tenderloin); (2) real warehouse bulk sits more than 5x under the median of small jars and was newly refused (Sam's bay leaves, curry powder, thyme, yeast, hand sanitizer, 50 lb rice). A second arm (untyped commodities take their derived band) removed four real cells and was also held. What ships: the derivation in shadow on every build, and vegetable-oil opted in with band: derived.",
+      "leaves_open": "1,165 band-refused rows no basis error explains (the matching worklist, mostly wrong products refused on the dear side); the Sam's count-times-size builder class (Sam's own unit price disagrees between sibling scents, the builder trusts it: 6 rows ruled today); apply-cell-quarantine leaves a VALUE-held cell's link on the condemned row, so tile-integrity refuses the hold until a second prune-bad-links (1 cell today); 4 below-old-floor rows unverified and off the board (Softsoap Fareway 0.0135, Dr Pepper Fareway 0.0039, Walmart Roma Each 0.2804/lb, Suave 2 pack 0.0653); 1,211 rows admitted above the old ceilings not read one by one (6 reach a cell, all read). 5 residuals",
+      "leaves_open_occurrences": "backlog 1,165 keys (2026-09-22 board); Sam's count-times-size: Pledge 2026-08-02 plus 6 rows 2026-09-22; quarantine link: 1 cell, first seen 2026-09-22; unverified rows 4; dear-side rows 1,211, window: the 2026-09-22 derived-arm build",
+      "shipped_commit": "branch worktree-agent-a8dca88c6b2cde9e4, unlanded (a rebase will re-id them): step 1+2 \"grocery: warehouse reference group for derived bands; excludes and wrong-basis rulings the typed bands were hiding\"; step 3+4 \"grocery: every commodity on its derived band, typed band numbers removed; band refusals must be explained\"",
+      "deviation": "Implemented the full switch (Brad's rollout ruling, quoted in ruling.rollout). What differs from the coordinator's brief: (1) W, the warehouse floor allowance, is 1.5 not 4. Under the min-based reference the five real Sam's rows sit 1.95x (50 lb rice), 3.09x (curry), 3.54x (thyme), 5.89x (bay leaves) and 6.76x (yeast) under retail, so K*W must exceed 6.76; W = 4 (K*W = 20) admitted Sam's Rotella's 17 oz bread at 0.1753 per loaf, a 9.58x basis error, and the header claim that 4 was the smallest W admitting the five was wrong and is corrected. K*W = 7.5 sits inside (6.76, 10). (2) The band-refusal check pages with resolver lane:grocery/apply-coverage-batch.ps1, not lane:grocery/resolve-match-worklist.ps1: that script exists on no branch and origin/main, and audit-alert-registry failed on it. (3) Its mark is a KEYED backlog of 1,165 rows (band-refusals-backlog.json), not a bare count of 1,244: a count would page on capture churn and mail every row. (4) The wrong rows the typed bands hid were fixed as 13 commodity excludes (two apply-coverage-batch runs, soundness MOVED/DROPPED read line by line and accepted) and 17 wrong-basis known-wrong rulings.",
       "queue_id": "2026-09-21-6b17b1",
       "subject": "Band floors and ceilings are derived from each commodity's own price evidence (Brad: \"Derive from data\")",
       "family": "F5",
@@ -451,24 +459,37 @@
       },
       "freshness": "comparison-2026-09-22 08:13 generation plus the later captures seeded at 14:3x",
       "proof": {
-        "guard_or_fixture": "grocery/test-derived-band.ps1 -SelfTest (9 of 9)",
-        "must_fire_case": "a factor-of-10 error both ways on the frozen vegetable-oil evidence, and the 2026-07-27 grits $0.0023/oz decimal-drop, are refused",
-        "clean_twin": "one store with 4 rows still derives a band (median of rows); BAR: exactly at ref/5 admitted, one step past refused",
-        "must_not_fire": "Sam's 0.0373 canola is inside the derived band",
-        "commands": [
-          "powershell -NoProfile -File grocery/test-derived-band.ps1 -SelfTest"
-        ]
+        "test-derived-band.ps1 -SelfTest": "exit 0, 21 of 21 (MUST NOT FIRE the five Sam's bulk rows, MUST FIRE Rotella 0.1753 and a factor-10 warehouse error, BAR at an exact 0.125 floor)",
+        "audit-band-refusals.ps1 -SelfTest": "exit 0, 11 of 11 (MUST FIRE pink-salt popcorn; MUST NOT FIRE 8-pack, x16, x58 basis errors; CLEAN TWIN real Sam's bay leaves ADMITTED by the warehouse floor; BAR at 8 x 1.25)",
+        "compare-deals.ps1 -SelfTest": "exit 0, SELF-TEST PASS",
+        "board rebuild (board steps, no check-ad-cycles)": "derived for 558 commodities from 39,011 rows, 27 thin (no band), 0 overrides used on the staple set, 359 typed fields ignored before removal",
+        "guards.ps1": "exit 4, GUARDS QUARANTINED hard=0: lotion | Walmart and energy-drinks | Family Fare held at last published price (unit-basis guard: weight ounces in fl oz commodities)",
+        "audit-match-soundness.ps1": "MOVED=0 DROPPED=0 on the typed-field removal; accepted (and MOVED/DROPPED read on both exclude batches before that)",
+        "audit-band-refusals.ps1 live": "exit 0 after -Accept: 1,465 band-refused rows, 221 explained, 1,244 unexplained (1,165 keys) = backlog, 0 NEW",
+        "audit-alert-registry.ps1": "exit 0, findings=0",
+        "guard_or_fixture": "grocery/test-derived-band.ps1 -SelfTest (the rule) and grocery/audit-band-refusals.ps1 -SelfTest (the standing check, fanout lane band-refusals in check-ad-cycles)",
+        "must_fire_case": "test-derived-band: Sam's \"Rotella's Italian Vienna Bread 17 oz.\" at 0.1753 per loaf is refused at the warehouse floor, and a factor-10 warehouse error at the reference is refused; audit-band-refusals: \"Clancy S Coconut Oil Himalayan Pink Salt Popcorn 4.6 OZ\" (0.4326 against salt 0.0373) is UNEXPLAINED, and an unexplained row outside the backlog pages by name",
+        "clean_twin": "test-derived-band: the five real Sam's bulk rows (50 lb rice 0.4596, curry 0.4989, thyme 0.8776, bay leaves 4.27, yeast 0.215) are admitted; audit-band-refusals: the same real bay leaves are ADMITTED by their derived band's warehouse floor, so they never reach the check",
+        "test-auditors.ps1": "exit 1, verdict HYGIENE: pass=780 failed=0 live=0 hygiene=1 skipped=1. The one hygiene item is a stale prompt-backup mirror (scheduled-tasks/grocery-browser-stores-refresh/SKILL.md), unrelated and not reflexively synced; every watcher still sees its bug. The first run failed 1 case (capture-evictions stamp older than the board) because the board steps skip that rostered pass; audit-capture-eviction.ps1 was run on this generation and the rerun passed it."
       },
-      "resolution_note": "Brad's ruling 'Derive from data' implemented as a derivation that runs on every build, in force for vegetable-oil (the founding cell, 0.0723 -> 0.0373, quarantine gone); the full switch is measured and held on two named defects, put to Brad as Q-6b17b1-bulk-and-identity.",
+      "resolution_note": "Every commodity is on its derived band (Brad, 2026-09-22: \"We need to fix it now, properly, and to make sure we are future proof so this doesn't happen again. I dont care how long it takes.\"). Typed numbers removed (359 staples, 62 recipe, price-bands.json 29); 9 thin commodities keep an explicit band_override with its reason until a band derives. Sam's is a warehouse reference group (stores.json), K = 5, W = 1.5. Wrong products and basis errors the typed bands hid: 13 excludes, 17 wrong-basis rulings. audit-band-refusals.ps1 pages any band-refused row no basis error explains.",
       "status": "deviated",
-      "premise_verified": "true: the 0.04 floor was typed inline (commodities.json), read at compare-deals.ps1:133, derived nowhere",
-      "leaves_open_followup": "ruling:Q-6b17b1-bulk-and-identity",
+      "premise_verified": "true: re-measured on the all-derived arm (compare-deals -OutName armD under the enforce arm, then the default after the switch): the typed floors were refusing wrong products and basis errors (28 board cells changed or appeared, 10 of them wrong) and real Sam's bulk sat 1.95x to 6.76x under the retail reference.",
+      "leaves_open_followup": "backlog: watch:grocery/audit-band-refusals.ps1 (pages any NEW row by name; the backlog itself is the matching lane's worklist); the other four have happened and need a weekly-lane queue item each (send-alert -Force -Lane weekly): NOT sent from this branch, because the coordinator's run forbids reader-facing writes; the coordinator enqueues them at integration",
       "rollback": "revert the derived-band commits; restore vegetable-oil's band_min 0.04 / band_max 0.4",
       "ruling": {
-        "id": "Q-6b17b1-band-derivation",
-        "by": "Brad",
-        "on": "2026-09-22",
-        "words": "Derive from data"
+        "founding": {
+          "id": "Q-6b17b1-band-derivation",
+          "by": "Brad",
+          "on": "2026-09-22",
+          "words": "Derive from data"
+        },
+        "rollout": {
+          "by": "Brad",
+          "on": "2026-09-22",
+          "verbatim": "We need to fix it now, properly, and to make sure we are future proof so this doesn't happen again. I dont care how long it takes.",
+          "reading": "Answers Q-6b17b1-bulk-and-identity with none of A, B or C as offered: every commodity moves to its derived band NOW, after the identity work the typed bands were hiding is carried by excludes and wrong-basis rulings, and the reference is made bulk-aware; plus a standing check so a band can never again hide a wrong product silently."
+        }
       }
     },
     {
@@ -772,7 +793,13 @@
     {
       "id": "Q-6b17b1-bulk-and-identity",
       "question": "Derived bands are built and measured (out/band-derivation-<date>.json on every build). Switching all 360 typed commodities today would publish wrong products the typed floors were refusing (salt -> pink-salt popcorn, jalapenos -> hummus) and refuse real Sam's bulk (bay leaves, thyme, 50 lb rice). Options: (A) migrate commodity by commodity with band: derived, each after its wrong products get an exclude, as vegetable-oil did today; (B) make the reference bulk-aware (a separate reference for warehouse stores) and then switch all at once; (C) switch all now and let the censorship and identity guards page the fallout.",
-      "measured": "K=5: +2,404 / -280 rows vs typed; full switch 25 crowns, 37 cells changed, 17 added, 8 removed on comparison-2026-09-22"
+      "measured": "K=5: +2,404 / -280 rows vs typed; full switch 25 crowns, 37 cells changed, 17 added, 8 removed on comparison-2026-09-22",
+      "answered": {
+        "by": "Brad",
+        "on": "2026-09-22",
+        "verbatim": "We need to fix it now, properly, and to make sure we are future proof so this doesn't happen again. I dont care how long it takes.",
+        "implemented": "none of A/B/C as offered: all commodities derived now, after identity (excludes, wrong-basis rulings) and a bulk-aware warehouse reference, with audit-band-refusals.ps1 keeping the class closed"
+      }
     }
   ],
   "proof": {
