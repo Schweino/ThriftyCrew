@@ -205,7 +205,16 @@ try {
       'long-grain-rice' = [pscustomobject]@{ u = 'oz'; p = @(, @(4, 0.5, 0, '')) } } }
   $lastF = Join-Path $tmp 'last-published.json'
   [IO.File]::WriteAllText($lastF, ($last | ConvertTo-Json -Depth 8), (New-Object Text.UTF8Encoding($false)))
-  $apOut = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'apply-cell-quarantine.ps1') -OutDir $tmp -LastPublishedFile $lastF -LastPublishedDate '2026-09-20' -Today '2026-09-21')
+  # THE REAL product-urls.json IS NEVER THE FIXTURE'S (2026-09-23). This call took apply-cell-quarantine's default,
+  # grocery\product-urls.json, and moved the quarantined cells' links IN THE TRACKED FILE (a CRLF rewrite that dropped
+  # derived links). It stayed hidden while the gate cache replayed this suite's pass; the first uncached run-gates
+  # found it through lib\gate-leftovers.ps1. The copy keeps the link move exercised; the hash proves the real file is untouched.
+  $puReal = Join-Path $root 'product-urls.json'
+  $puHashBefore = (Get-FileHash -LiteralPath $puReal).Hash
+  $puCopy = Join-Path $tmp 'product-urls.json'
+  Copy-Item -LiteralPath $puReal -Destination $puCopy -ErrorAction Stop
+  $apOut = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'apply-cell-quarantine.ps1') -OutDir $tmp -LastPublishedFile $lastF -LastPublishedDate '2026-09-20' -Today '2026-09-21' -ProductUrlsFile $puCopy)
+  if ([string]::Equals((Get-FileHash -LiteralPath $puReal).Hash, $puHashBefore, [StringComparison]::Ordinal)) { Ok 'MUST FIRE  the fixture''s apply-cell-quarantine run leaves the tracked grocery\product-urls.json byte-identical - it moves links in a temp copy' } else { Bad 'the fixture''s apply-cell-quarantine run REWROTE the tracked grocery\product-urls.json' }
   $apRc = $LASTEXITCODE
   $held = @($apOut | Where-Object { $_ -match '^\s+held\s' }); $withheld = @($apOut | Where-Object { $_ -match '^\s+withheld\s' })
   if ($apRc -eq 0 -and $held.Count -eq 4 -and $withheld.Count -eq 1 -and ($withheld[0] -match 'laundry-pods')) { Ok 'MUST FIRE  the real apply-cell-quarantine holds 4 cells at their last verified published price and WITHHOLDS laundry pods, which has none - nothing is invented' } else { Bad ("apply rc=$apRc held=$($held.Count) withheld=$($withheld.Count) :: " + (($apOut | Select-Object -Last 4) -join ' / ')) }
@@ -292,6 +301,6 @@ try {
 catch { Bad ('the suite threw: ' + $_.Exception.Message + ' at ' + $_.InvocationInfo.PositionMessage) }
 finally { try { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction Stop } catch { } }
 $cases = $script:pass + $script:fail
-Write-Output ('flag-verification self-test ' + $(if ($script:fail -eq 0 -and $cases -eq 37) { 'pass' } else { 'FAIL' }) + ': ' + $script:pass + ' of ' + $cases + ' case(s) passed (37 expected)')
-if ($script:fail -eq 0 -and $cases -eq 37) { exit 0 }
+Write-Output ('flag-verification self-test ' + $(if ($script:fail -eq 0 -and $cases -eq 38) { 'pass' } else { 'FAIL' }) + ': ' + $script:pass + ' of ' + $cases + ' case(s) passed (38 expected)')
+if ($script:fail -eq 0 -and $cases -eq 38) { exit 0 }
 exit 1
