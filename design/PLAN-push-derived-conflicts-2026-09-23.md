@@ -13,7 +13,7 @@ that was not applied as written, and why. Scratch scripts live under `%TEMP%\con
 scratch. W0.3 commits a harness that re-derives every baseline read from the PUSH LEDGER. Every figure read from reflog,
 git history or transcripts is marked SCRATCH where it is used, unless W0.3's `-History` section re-derives it.
 
-**RULED 2026-09-23 (Brad, section 12 has each ruling): build all 8 rows. Every recommendation in section 12 is the
+**AMENDED 2026-09-23 (section 15, adopted by Brad): the sibling fix `5841e96b1` is the base of W2.1 and W2.2, and Row 8 closes the causes the first plan left standing.** **RULED 2026-09-23 (Brad, section 12 has each ruling): build all 8 rows. Every recommendation in section 12 is the
 ruling, except D8: the chain lease goes LIVE from its first commit with no shadow period.** Brad's words on D8: *"I dont
 want to shadow. i want to push live as long as its a thoughtful fix and ready to go"*. W6.1 is rewritten for that: its
 "ready" is proved before it lands (a sandbox two-push drill, every fixture and mutant, an `off` switch as the rollback),
@@ -1454,7 +1454,7 @@ ruling: D1 on W2.3's step 0 measurement, D2 yes (he answered "Yes to both" to th
 (the refusal, from a literal cutoff one week after W3.1 and W4.1 land), D4 yes, D5 yes, D6 no, D7 deferred to W0.3's
 measurement, D9 no, D10 yes, D11 yes, D12 no, D13 on W0.4's split. **D8 departs from its recommendation**: live from the
 first commit with no shadow period, in his words *"I dont want to shadow. i want to push live as long as its a
-thoughtful fix and ready to go"*. W6.1 steps 4, 9 and 10 carry what that means.
+thoughtful fix and ready to go"*. W6.1 steps 4, 9 and 10 carry what that means. The amendment of the same day (section 15, adopted by Brad) adds D11a and D14 to D18, all ruled yes as recommended (15.7).
 
 | # | Decision | Recommendation | Blocks |
 |---|---|---|---|
@@ -1523,3 +1523,675 @@ section says otherwise. These are the issues NOT applied exactly as the review w
 - **Figures that differ between a reviewer and the reviser**, both printed where used: landings to 10:32Z, 152 (reviser)
   against 153 (measurement reviewer); today's landings, 17 on the UTC day with median 2.9 min (reviser) against 15 on a
   local-day window with median 3.8 min (measurement reviewer). The difference is the window, and both are named.
+
+## 15. Amendment 2026-09-23: the landed sibling fix, and the gaps a skeptic found
+
+**Status: PROPOSED 2026-09-23 about 15:00Z by the synthesis stage, not yet ruled.** Brad asked the same day: *"Pushes
+are taking way too long. I see multiple attempts for one push. I hope this plan we are doing resolves this for
+good."* This section answers that against the plan as ruled plus `5841e96b1`, a push-main change a sibling session
+landed at 13:41:38Z without citing this plan. It was written from three read-only investigators (causes, sibling,
+residual) and two skeptics (correctness, measurement), read against origin/main `2c7a9fe50` to `ea3ec081f`. **Every
+figure here that is not from a committed harness is SCRATCH**, with its source named. The scratch lives under
+`%TEMP%\pushgood-causes\` (`attempts.jsonl`, one row per push-main row, 60 rows, 2026-09-21T00:00Z to 14:17:54Z),
+`%TEMP%\pushgood-sibling\`, `%TEMP%\pushgood-residual\`, `%TEMP%\pushgood-skeptic\`, `%TEMP%\pushgood-skmeas\` and
+`%TEMP%\pushgood-synth\`. W0.3's probe was on origin/main by 14:56Z (blob `571be839`), but its chain and phase
+figures need W0.1's fields, so none of the numbers below could come from it yet. An item marked **NEEDS A RULING** waits for Brad.
+Every other item here strengthens a check or adds an instrument and needs none.
+
+**The short answer.** As ruled, plus `5841e96b1`: **no, not for good.** Of today's 22 refused or rejected push-main
+attempts (349.2 min, 13 changes; section 15.3), the two together remove 7 outright (137.5 min), turn 2 into automatic
+re-rounds, and leave 13 standing. 3 of those 13 are correct refusals of a change's own red, which no plan should
+remove. The other 10 are causes this plan never targeted (dirty trees, reds over state outside git, one header-line
+conflict). Two more routes to a second attempt sit outside the push-main ledger altogether (main-checkout plain
+pushes, and plain-push chain landings that ignore the lease), and B6 as landed counts rows, so it cannot see most of
+this. Row 8 and the re-scoped items below target each of those. With them built, the answer becomes YES WITH
+NAMED GAPS, and 15.8 names the gaps.
+
+### 15.0 Knowledge consulted (for this amendment)
+
+Store search, `search.py --multi` with four probes ("dirty working tree during push refused not ready", "plain push
+from main checkout cannot lock ref rejected", "gate red from state outside git ambient", "single writer id allocation
+lock per repository"), exit 0, 8 hits, 3 used:
+- `reliability-craft/applies-here.md`, "The 07:00 bot, the shared index ...": the bot's push path *"runs `git -c
+  rebase.autoStash=true rebase -X theirs origin/main`, up to four times, and autoStash restores CONTENT and not the
+  index"*. Used for W8.2: a main-checkout landing must not leave pre-rebase copies on local main for that `-X theirs`
+  replay to find.
+- `claude-code-craft/applies-here.md`, "A worktree is not the main tree, and main moves while you work": the gate
+  family works from a seeded linked worktree (`git worktree add --detach ...` then `seed-worktree.ps1 -Target`). Used
+  for W8.2's throwaway worktree.
+- `course/inbox/README.md`, "Why it exists": *"Four shared files had every lane appending to them with no lock and no
+  allocator"*. Used for W3.4a: one allocator, not one lock per checkout.
+
+From the brief and the loaded rules:
+- `CLAUDE.md`, "A SIBLING MAY ALREADY HOLD THE FIX": *"the tie is broken by running both over one case list, not by
+  whichever session pushes first."* `attempts.jsonl` is that case list (15.3), and 15.2 builds on the sibling's code
+  instead of beside it.
+- `.claude/rules/ops-and-gates.md`, "EVERY LOCK PATH DEGRADES TO THE DAY BEFORE": the sibling's unlocked fetch refuses
+  on failure, which W2.1R turns back into a degrade.
+- `.claude/rules/ops-and-gates.md`, "A PUSH IS A COMPARE-AND-SWAP WHOSE CRITICAL SECTION IS THE WHOLE HOOK, so the
+  SLOWEST push converges on never landing": still true of every plain push, which is why W8.2 exists.
+- `.claude/rules/ops-and-gates.md`, "THE LOCK ORDER IS DECLARED" and "The order covers every BLOCKING WAIT": W8.3's
+  lease probe takes zero wait, so it adds no edge.
+- `.claude/rules/ops-and-gates.md`, "Do not add a gate that is red on day one" and "A rule in a file is not a block":
+  W7.2 warns first, with a dated refusal left to Brad.
+- `.claude/rules/measurement.md`, "A matcher that ABSTAINS is scored on what it skipped" and "a number that moved is
+  not a number that improved": B6 as landed excludes the classes that are still failing, so it is amended (15.6).
+- `concurrency-craft/concurrency-correctness.md` section 5: *"Starvation is NOT excluded ... an unlucky thread can lose
+  every race."* Plain pushes still race the whole hook (W8.2), and lease-ignoring chain landings still void a holder
+  (W8.3).
+- Memory `prepush-test-auditors-judges-against-a-shared-record`: *"judged against a SHARED record other checkouts
+  rewrite"*. Used for W8.5.
+
+### 15.1 What landed after the ruling, and what is still on a branch
+
+| Item | On origin/main | Note |
+|---|---|---|
+| sibling push-main change | `5841e96b1`, landed 13:41:38Z | push-main blob `c63e2a7c`. Its Store line reads *searched "rebase verdict key", nothing applicable*, and it has no Plan line |
+| W3.3 | `cd5ae5d85` | |
+| W0.5 | `2c3f491de` | |
+| W3.1 | `258410c55`, `cc2d28e50` | |
+| W0.2 | `ccd64fdc6` | |
+| W1.1 | `2a081824b`, `2c7a9fe50` | the common `.git\hooks\pre-push` hashes to origin/main's blob `1edfa22b` (read 14:56Z, file time 14:50Z), so the rehearsal record check now runs first on every push on the box |
+| W0.3 | `c1c418fdc`, `ea3ec081f` | probe blob `571be839` |
+
+Built on branches and not landed at 14:56Z: W0.1 on `feat/pd-ledger` (1 commit, 36 behind origin/main), W0.4 on
+`feat/pd-ta` (2 commits), and W1.2, W4.1 and W4.2 on `feat/pd-currency` (3 commits). Their hashes are not cited,
+because push-main rebases before it pushes.
+
+**Production exposure of `5841e96b1` is too small to judge.** 3 of the 60 case-list rows ran its order, and all 3
+landed (82 s, 1,036 s and 262 s; causes). 4 more push-main rows landed between 14:17:55Z and 14:56Z, and 0 were
+refused. They carry no `pm_blob`, so which code wrote them is unknown (synth, `since.py`, `lost.py`). **So at most 7
+rows, 0 refusals: its effect is UNMEASURED, not zero.** Every counterfactual below is read from its code, not observed.
+
+**Process cause of the double build.** The plan landed at 12:31:35Z (`f33d11829`) and names `ops/push-main.ps1`. The
+sibling committed its change to that file 54 minutes later. `git grep -l -F 'ops/push-main.ps1' origin/main --
+'design/PLAN-*2026-09-2*.md'` returns exactly this plan (SCRATCH, sibling), and nothing in the process runs that
+search. W7.2 closes it.
+
+### 15.2 `5841e96b1` is the base of W2.1 and W2.2, step by step
+
+Line numbers are from origin/main `ops/push-main.ps1` at blob `c63e2a7c`. DONE means the plan's step is met as
+written. DONE DIFFERENTLY means the behaviour exists in another shape, and the last column says which shape stands.
+The sibling investigator ran the sibling's own `-SelfTest` from a `git archive` export with `TEMP` redirected: exit 0,
+38 of 38 ok, 0 FAIL, verdict line `push-main self-test PASS: 38 cases`. Three single mutants each turned exactly their
+named case red, and the original was md5-identical afterwards (SCRATCH): in-lock check ignored, 3 reds; cap 3 to 4,
+q5 red; pre-flight sync removed, q1 red.
+
+**W2.1 (pre-flight)**
+
+| Step | Status | Where in `5841e96b1` | What stands after this amendment |
+|---|---|---|---|
+| 1 per-checkout guard | NOT DONE | nothing | W2.1R step 1, as written. It is now more urgent: every round starts by rebasing HEAD outside the lock (round-1 call after :403), so a retry started while the first run is gating rebases under its legs |
+| 2 `Invoke-TcPreflightRebase`, called before the seed | DONE DIFFERENTLY | `Invoke-TcSyncToRemote` :292-331, called at the top of every round (:403 onward). The seed runs BEFORE it (:399) | Extend `Invoke-TcSyncToRemote`. The new function is NOT built. The seed moves after the round-1 sync (W2.1R step 6) |
+| 3.1 fetch with `--refmap=`, a failure degrades | DONE DIFFERENTLY | a plain `git fetch --quiet <remote> <branch>` (:298) that updates the shared `refs/remotes/origin/main`. A failure REFUSES, exit 3 `blind-fetch-failed` (:299-301), in every phase | Keep the plain fetch and drop `--refmap=` (reason in W2.1R step 2). Retry once on `cannot lock ref`; outside the lock a fetch that still fails degrades |
+| 3.2 hand `FETCH_HEAD` to `Get-TcWarmRefLine` | NOT DONE, MOOT | a plain fetch leaves the shared ref current, which `Get-TcWarmRefLine` reads | Dropped |
+| 3.3 build the plan, a dirty tree is refused-not-ready | DONE | :312-316 | W8.1 adds the paths and when they appeared |
+| 3.4 `-DryRun` never rebases | DONE DIFFERENTLY | `-DryRun` rebases in the round-1 sync and can run up to 3 real rehearsals | W2.1R step 7 |
+| 3.5 conflict against could-not-rebase, files, siblings | PARTLY DONE | on any non-zero rebase it aborts and prints git's own text (:320-325). The `rebase --abort` result is discarded (:324). A rebase that could not start is called a conflict | W2.1R steps 3 to 5 |
+| 4 refuse with `phase=preflight` | DONE DIFFERENTLY | refused-rebase-conflict with no phase field | W0.1R fills `phase` |
+| 5 print and record `preflight_sha` | PARTLY DONE | prints the rebase (:329). Records nothing | W0.1R records it |
+| 6 a later red leaves the branch rebased | DONE in behaviour | the header states it for the churn path (:286-288) only | W2.1R step 10, header text |
+| 7 in-lock fetch retries once | NOT DONE | | W2.1R step 2 |
+| 8 outcome vocabulary | DONE | `$rebasedAny` for a rebase in any phase | none |
+| 9 existing cases move; `-BeforeLock` seam | DONE DIFFERENTLY | cases q1 to q5 drive a commit landing during the legs through the existing `-RehearsalRunner` seam. There is no in-lock CONFLICT case, and the suite does not assert its own case count | W2.1R step 9. The `-BeforeLock` seam is NOT built |
+
+**W2.2 (catch-up)**
+
+| Step | Status | Where in `5841e96b1` | What stands |
+|---|---|---|---|
+| 1 up to `$CatchUpRounds = 3` | DONE DIFFERENTLY | `$script:PmMaxRehearsalRounds = 3` (:290) counts leg sets | Two counters (W2.2R steps 1 and 2) |
+| 2.1 fetch after the legs, outside the lock | NOT DONE | origin's move is learnt only by the in-lock sync | W2.2R step 1 |
+| 2.2 rebase; a conflict refuses `phase=catchup` | PARTLY DONE | a round-2 or round-3 sync rebases before its legs; no phase | W0.1R and W2.2R |
+| 2.3 re-run each leg, reusing its own keys | DONE | every round re-runs the runner and the rehearsal leg | none |
+| 2.4 a leg exit 3 degrades | DONE for run-gates and test-auditors (:427-431, left to the hook). A rehearsal 3 refuses as `refused-rehearsal-blind` (:446), as it did before `5841e96b1` | Keep. D11a |
+| 3 after round 3, go to the lock | DONE DIFFERENTLY | refuses `refused-rehearsal-churn`, exit 1 (:517-520) | D11a: keep the refusal for the rehearsal leg only |
+| 4 record `rounds`, `catchup_sec`, `degraded` | NOT DONE | a round that hands the lock back writes no row (:509-514). `$ledgerWaitMs` holds the last round's wait only (:453). A round-2 or round-3 refusal before the lock writes `state=not-taken` although the lock was taken earlier | W0.1R |
+| (not in the plan) in-lock verdict check | ADDED by the sibling | after an in-lock rebase, `-CheckPush` over the ref line git will hand the hook (:482). If the verdict no longer covers the content, the lock is handed back and the push gates and rehearses again outside it (:484-485). It uses the same key, script copy, verdict directory and remote sha as the hook, and reproduced production verdict `90fa60e24508` in 0.8 to 0.9 s, 6 of 6 runs (SCRATCH, sibling) | Keep as the backstop |
+
+### 15.3 The case list: today's 22 refused attempts, and what removes each
+
+UTC 2026-09-23, 00:00Z to 14:17:54Z: 50 push-main rows over 24 checkouts, 28 landed, 22 refused or rejected. The
+refused rows cost **349.2 min** of push-main wall time (row time minus run start), across 13 changes. This was derived
+three times and agreed each time: causes 349.2, measurement skeptic 349.3, synth `lost.py` 349.2 (exit 0 each; SCRATCH).
+Classes are the causes investigator's, each cited per row in `attempts.jsonl`. The measurement skeptic's split
+(push-rejected 9, not-ready 7, gate-red 4, conflict 2) reconciles, because row 46 is a push-rejected row whose cause
+was a gate.
+
+| Class | Rows / changes / min | Removed by | After the plan as ruled plus `5841e96b1` |
+|---|---|---|---|
+| rehearsal voided by branch age: every commit that moved the key was on main before the run started | 6 / 6 / 107.0 | `5841e96b1`'s pre-flight rebase (from code) | REMOVED |
+| rehearsal voided during the run (rows 42 and 57) | 2 / 2 / 41.8 | `5841e96b1`'s in-lock check turns each into an automatic re-round, about 14 min of rehearsal and never a relaunch. W6.1's lease protects row 57's shape (its voider was a push-main landing). Row 42's voider `855171a1e` was a plain `git push`, which the lease cannot see | AUTOMATED; the time stays |
+| not-ready, dirty tree | 7 / 6 / 83.9 | nothing in the plan. `5841e96b1` finds dirt present at the start in seconds, which is still an attempt | STANDING (W8.1, W8.2, W7.1a) |
+| rebase conflict, row 40: re-read lines in one MEASURE doc | 1 / 1 / 30.5 | W4.1's ledger | REMOVED once W4.1 lands |
+| rebase conflict, row 36: comment-only header lines in `lib/concurrency-probe.ps1` against `15b02198b`, then re-read lines | 1 / 1 / 38.0 | W4.1 takes the re-read part. Nothing takes the header lines | STANDING (left, 15.8) |
+| gate red, the change's own | 3 / 3 / 24.7 | nothing should | CORRECT REFUSAL |
+| gate red, not the change's own: row 29 gate-leftovers (a self-test rewrote a tracked `grocery/product-urls.json`, fixed at source by `38357202c`); row 46 `audit-prompt-backup` red in the lock over live prompts outside git, 12 s before the mirror commit `091e6520d` landed | 2 / 2 / 23.3 | nothing in the plan (section 10 put prompt-backup NOT IN SCOPE) | STANDING (W8.4; gate-leftovers left, 15.8) |
+
+Both conflicts collided only with commits that landed during the run (0 of 4 colliders were on main at the run's
+start), so no pre-flight could have caught either (SCRATCH, causes).
+
+**Tally.** Removed 7 of 22 (137.5 min). Automated 2 (41.8 min, still paid as time). Standing 13 (169.9 min): 3
+correct, 10 caused by the system. Over the whole window (60 rows, 2026-09-21 to 14:17:54Z) the dirty-tree class is 10
+rows and 101.8 min. By when the dirt appeared: at the start 6 (40.4 min), during the run 1 (16.5 min), unknown 3 (45.0
+min). 3 of the 10 (17.9 min) were push-main run from the main checkout, which is always dirty (SCRATCH, causes;
+medium confidence on the split).
+
+**Outside the case list, and not visible in any push-main row:**
+- **Main-checkout plain pushes lose the compare-and-swap.** 16 push-main rows from the main checkout since 09-16 and
+  0 landed: 10 refused-not-ready, 6 refused-gate-red (SCRATCH, correctness skeptic; the measurement skeptic read 18 of
+  18 refused over all time). So the main checkout lands only by plain push: 72 of 310 landings in 7 days, 23.2%
+  (SCRATCH, residual). Of 82 main-checkout hook-lock rows since 09-16 in which every hook check passed, 11 were
+  followed by no origin/main update within 15 s, and 7 of those 11 match git's own `cannot lock ref ... is at <base>`
+  line in a transcript (SCRATCH, skeptic `mainland.py`). Example: agent-aaecadb7dfb010d3e at 2026-09-21T11:48:21Z
+  printed `pass=453 fail=0`, was rejected, rebased cleanly, and landed on its second push.
+- **Chain landings that ignore the lease.** 6 of 17 chain landings since the rehearsal gate (09-22T21:26Z) were plain
+  `git push` from linked worktrees, all from lanes of one orchestrator (session ffbacbef, whose briefs said `git push
+  origin HEAD:main` until 13:14Z) (SCRATCH, residual; the measurement skeptic read 6 of 18 with the production
+  `-ListSet`). Over 7 days it was 31 of 85, 25 of those from the main checkout (a counterfactual over today's manifest
+  set). B6 gives no verdict above 20%.
+- **Hook refusals of plain pushes leave no row.** Only 32 of 72 origin/main updates in the window came through a
+  push-main row (SCRATCH, causes). The hook writes a row only when it takes the lock, after its checks pass.
+
+**Corrections to section 2.2.** (1) The 2 genuine code conflicts are 1. The housekeeping lane's
+`grocery/test-flag-verification.ps1` commit and `38357202c` have the same patch-id (`677b6cd8ae38`), so the rebase
+skipped it. git actually stopped on the header lines and re-read lines above (SCRATCH, causes, confirmed by the
+measurement skeptic). (2) The rehearsal push-rejected rows are 8 of 8 confirmed, not "1 confirmed, 3 by construction".
+A read-only replica of `Get-RhManifestSet` reproduced the key of 37 of 37 recorded verdicts, and it reproduced the
+hook-log key of all 8 refusals on the post-rebase commit (SCRATCH, causes `rhkey.py`). 6 of the 8 were branch age and
+2 were voided during the run. (3) B2's baseline becomes 8 in-lock rehearsal refusals in 46 lock-taking push-main rows
+(UTC 09-23 to 14:17:54Z), not 4 in 28.
+
+### 15.4 Re-scoped items: nothing is built twice
+
+**The push-main lane is ONE lane.** `ops/push-main.ps1` is touched by W0.1R, W2.1R (with W8.1), W2.2R, W2.3, W3.2,
+W4.1 step 7, W6.1 and W8.2. They land in that order, one lane, each landed and verified before the next starts. Two
+sessions editing that file at once is how `5841e96b1` and `feat/pd-ledger` came to conflict in 6 hunks.
+
+**W0.1R W0.1, rebased onto `5841e96b1`.** Files as W0.1. The trial rebase in a scratch clone stopped on
+`ops/push-main.ps1` alone, with 6 hunks: 1 in the function block, 3 in the `Invoke-TcPushMain` body and 2 in the
+self-test. `lib/push-ledger.ps1` merged cleanly (SCRATCH, sibling; aborted afterwards).
+1. Keep both function sets: the sibling's `$script:PmMaxRehearsalRounds`, `Invoke-TcSyncToRemote` and
+   `Invoke-TcRehearsalCheck`, and W0.1's helpers.
+2. Take `pm_blob` at START, before the round-1 `Invoke-TcSyncToRemote`. That sync can rewrite `ops/push-main.ps1` on
+   disk, so a hash taken later names code that is not running.
+3. Fill `conflict_files`, `conflict_scope`, `conflict_files_all` and `sibling_same_subject` INSIDE
+   `Invoke-TcSyncToRemote`'s rebase-failure branch, before its `rebase --abort`, and return them on its result.
+4. `phase`: `preflight` is the round-1 sync. `catchup` is anything before the lock in rounds 2 and 3 (their sync,
+   legs and rehearsal). `inlock` is the in-lock sync, `push-rejected` and `refused-rehearsal-churn`. Fill
+   `rebase_phases` in order.
+5. New fields, added to section 6's schema table as W0.1 fields because the loop they describe has landed:
+
+   | Field | Meaning |
+   |---|---|
+   | `rounds` | leg sets run |
+   | `rehearsals` | the sibling's counter |
+   | `rehearsed` | rounds whose rehearsal leg made a NEW verdict (not reused, not "not needed") |
+   | `lock_takes` | times the push lock was entered |
+   | `lock_wait_ms_total`, `lock_held_ms` | sums over every take (`waitMs` keeps its old meaning, the last take, for old readers) |
+   | `inlock_check` | `covered`, `not-covered`, `could-not-decide` or `not-run` |
+   | `preflight_sha` | `FETCH_HEAD` at the round-1 sync (moved here from W2.1) |
+   | `subjects_sha` | SHA-256 of the Ordinal-sorted, LF-joined commit subjects of `branch_base..HEAD` at start (W0.3b groups on it) |
+   | `dirty_paths`, `dirty_since` | W8.1 |
+   | `via_worktree` | W8.2 |
+
+6. In the `finally`, skip W0.1's `phase=inlock` fill and the row when `$again`. Take `reject_class` and `hook_ta`
+   inside `if (-not $again)`. `leg_sec` is round 1's legs; `catchup_sec` is the legs of rounds 2 and 3.
+7. Apply W0.1's `$cloneA`, `$cloneB`, `$cloneC` rename to the sibling's untouched `$a`, `$b`, `$c` lines, and keep the
+   sibling's label "rebased before the lock".
+8. Every fixture stub of `ops\rehearse-chain.ps1` accepts `-CheckPush -Branch -RefsFile` and ends with
+   `CHAIN-REHEARSAL-CHECK-COMPLETE`.
+9. The merged suite asserts its literal case count. Expect about 70 (33 shared, 32 from W0.1, 5 from the sibling;
+   SCRATCH arithmetic): use the file's count. Recompute every blob the commit message cites.
+10. W0.3's outcome vocabulary gains `refused-rehearsal-churn`, `refused-rehearsal-blind`, `blind-fetch-failed` and
+    W2.1R's `refused-already-on-main`.
+Fixtures (added to W0.1's):
+- MUST FIRE: a push that hands the lock back once and then lands records `rounds=2`, `lock_takes=2`,
+  `inlock_check=covered` on its one row, and `lock_wait_ms_total` equals the sum of both waits.
+- MUST FIRE: when the fake remote carries a changed `ops/push-main.ps1` that the round-1 rebase brings in, `pm_blob`
+  equals the hash of the script as it was at start.
+- MUST FIRE: a round-2 refusal before the lock records `lock_takes=1`.
+- CLEAN TWIN: a one-round landing records `rounds=1`, `lock_takes=1`, `inlock_check=not-run`.
+Done when: as W0.1, and the first real landing after W0.1R carries every field above.
+
+**W2.1R Pre-flight residual (replaces W2.1).** File: `ops/push-main.ps1`, extending `Invoke-TcSyncToRemote`. Needs
+W0.1R and W0.3 step 7's soak. Re-reads owed: as W0.1.
+1. **The per-checkout guard**, exactly as W2.1 step 1. Its refusal names the holder's pid and start time, and says
+   *"another push-main is already landing this checkout: wait for it, do not relaunch"* (agents poll push-main with
+   9.5-minute deadlines, SCRATCH, correctness skeptic).
+2. **The fetch.** Keep the plain fetch, which updates the shared `refs/remotes/origin/main`. Drop `--refmap=`, because
+   1,223 of 1,225 updates of that ref from 08-23 to 09-23 were `update by push` (SCRATCH, sibling), so a stale shared
+   ref is rare. `rehearse-chain -ForPush` and `prepush-test-auditors`' `--not --remotes` both read it, so an isolated
+   `FETCH_HEAD` would make them read a stale base after an off-box push. When the fetch text matches `cannot lock ref`,
+   retry once. Outside the lock (round-1 and later-round syncs), a fetch that still fails returns Code 0 with its `Why`
+   and `degraded=fetch`, and push-main carries on: the in-lock fetch decides, which is the day before. Inside the lock,
+   after the retry, it stays `blind-fetch-failed`, exit 3. The one production race seen: a transcript at
+   2026-09-23T09:19:12Z read `cannot lock ref 'refs/remotes/origin/main': is at 38357202c but expected 4fa9f1a7b`, 1 s
+   after `38357202c` landed by push (SCRATCH, correctness skeptic). In a sandbox, 0 of 120 fetches beside a push failed
+   (SCRATCH, sibling), so it is rare and real.
+3. **Conflict against could-not-rebase.** On a non-zero rebase, unmerged files (`git diff --name-only
+   --diff-filter=U`) mean a CONFLICT: collect them, then abort. No unmerged file and no `rebase-merge` or
+   `rebase-apply` directory under `git rev-parse --git-dir` means COULD-NOT-REBASE. Outside the lock that returns Code 0
+   with the reason, and the in-lock path decides. Inside the lock it returns 3.
+4. **The abort is checked.** A non-zero `git rebase --abort`, or a rebase directory still present afterwards, returns
+   Code 3 with `blind=rebase-abort-failed`. Its message says the branch may be mid-rebase, and never says "exactly where
+   it was". Siblings, as W2.1 step 3.5.
+5. **Already on main.** After any successful rebase, if `git rev-list --count <rem>..HEAD` is 0, return Code 1 with
+   outcome `refused-already-on-main`. Name the dropped commits and the main commits carrying their subjects, and never
+   run a leg, push or record a landing. In sandbox `fx2` the rebase exited 0 with *skipped previously applied commit*,
+   `git push` exited 0 *Everything up-to-date*, and today's code prints LANDED and records `landed-after-rebase`
+   (SCRATCH, sibling). Duplicate lane work is real: `8bc691501` and `38357202c` carried one patch today.
+6. Seed after the round-1 sync, and only when it returned 0.
+7. `-DryRun`: the round-1 sync never rebases. It prints whether a rebase is needed and the approximate conflict list
+   from `git merge-tree --write-tree --name-only --no-messages HEAD <rem>`, and at most one round runs.
+8. **Re-exec on self-change.** When the round-1 sync rebased and `git hash-object ops/push-main.ps1` differs from
+   `pm_blob`, release the guard, run the new copy once as a child process with the same arguments and
+   `TC_PUSH_MAIN_REEXEC=1`, and return its exit code. The child writes the row; the parent writes none. A run with that
+   variable set never re-execs, and `-NoReexec` skips it on purpose. Why: 3 of 5 knowable rows after `5841e96b1`
+   landed ran an older copy (SCRATCH, measurement skeptic), and 31.7% of push-main rows came from checkouts older than
+   2 hours (126 of 327 rows with a HEAD log, SCRATCH, residual). Without it, a stale checkout's first push after W6.1
+   takes no lease and can void the holder. It takes effect only from the first copy that carries it.
+9. **Fixture moves.** Add the in-lock CONFLICT case through the existing `-RehearsalRunner` seam: the stub lands a
+   conflicting commit on the fake remote while it runs. This replaces the plan's `-BeforeLock` seam. The suite asserts
+   its literal case count.
+10. The header says: every round starts by rebasing outside the lock, and a later red leaves the branch rebased.
+Fixtures (temp bare remote plus clone; the runner stub records whether it ran and the HEAD it saw):
+- MUST FIRE: a conflicting branch is refused before the runner stub runs, `phase=preflight`, and `conflict_files` is
+  exactly the conflicted path.
+- MUST FIRE: a main commit with the branch's subject is named as a sibling.
+- MUST FIRE: through the `-RehearsalRunner` stub, a conflicting commit landed during the legs is refused in the lock
+  with `phase=inlock`, the rebase is aborted, and HEAD is the pre-lock sha.
+- MUST FIRE: a second push-main in the same checkout, while a holder in another process (`lib/mutex-hold.ps1`,
+  private name) holds the guard, is refused at once and names the holder's pid.
+- MUST FIRE: a branch whose only commit is already on the fake remote as an identical patch is refused
+  `refused-already-on-main`. The runner stub never ran, and no row says landed.
+- MUST FIRE: an abort that exits 1 (a seam) gives exit 3, and the message does not say "exactly where it was".
+- MUST FIRE: a round-1 rebase that brings in a changed `ops/push-main.ps1` re-executes once, the child's row carries the
+  new blob, and the parent writes none. CLEAN TWIN: with `TC_PUSH_MAIN_REEXEC` set, it does not re-exec again.
+- MUST NOT FIRE: a fetch that fails once with `cannot lock ref` succeeds on the retry. The ref's `.lock` is held from
+  another process until the first try has failed.
+- MUST NOT FIRE: a fetch that keeps failing outside the lock does not refuse: the stub ran and the row says
+  `degraded=fetch`.
+- MUST NOT FIRE: a planted `index.lock` is could-not-rebase, not a conflict, and push-main proceeds.
+- MUST NOT FIRE: `-DryRun` never moves HEAD, and runs one round.
+- CLEAN TWIN: a remote that moved without a conflict is rebased first, and the stub saw the rebased HEAD (the sibling's
+  q1, kept).
+- CLEAN TWIN: after a refused pre-flight, HEAD is the original sha and `git status --porcelain` is empty.
+Mutants: M1 retargets to removing the round-1 `Invoke-TcSyncToRemote` call, which must turn q1 and the first MUST FIRE
+red. M8 retargets to removing the in-lock abort, which must turn the in-lock CONFLICT case red. M15 removes the fetch
+retry, which must turn the retry MUST NOT FIRE red. M16 removes the already-on-main check, which must turn its MUST
+FIRE red. M18 removes the re-exec, which must turn its MUST FIRE red.
+Done when: `-SelfTest` exits 0 with its verdict line and its count assertion, `-VerifyDeclared` passes, and a `-DryRun`
+from the landing worktree prints the pre-flight lines and moves nothing. Bars: B1 (its (b) half judges the pre-flight
+directly) and B13a.
+
+**W2.2R Catch-up on top of the sibling's loop (replaces W2.2).** File: `ops/push-main.ps1`. Needs W2.1R.
+1. `$script:PmMaxCatchUpRounds = 3`, the first plausible value and not swept. When main stops moving, no catch-up
+   round runs. After a round's legs pass and before `Enter-TcPushLock`, run one unlocked fetch (W2.1R step 2). If the
+   remote has not moved, take the lock. If it moved, rebase outside the lock (a conflict refuses with `phase=catchup`),
+   then start the next round without taking the lock. Each leg reuses what its keys allow. A could-not-rebase, a fetch
+   failure, or reaching the catch-up cap goes to the lock, where the in-lock sync and the sibling's check decide
+   exactly as `5841e96b1` does today (D11's degrade).
+2. `$script:PmMaxRehearsalRounds = 3` keeps the sibling's cap, but counts only rounds whose rehearsal leg REHEARSED
+   (W0.1R's `rehearsed`). Why two counters: with one counter, cheap catch-up rounds over non-chain moves would spend the
+   rehearsal budget, and a chain push at a busy hour would reach the cap on rounds that needed no rehearsal.
+3. At the rehearsal cap, with no covering verdict, refuse `refused-rehearsal-churn` (D11a). A run-gates or test-auditors
+   exit 3 in any round degrades to the hook, as today.
+4. **An in-lock check that cannot decide** (Code 3, :347) is retried once (0.8 to 0.9 s a run, SCRATCH, sibling). If
+   it still cannot decide, it no longer hands the lock back: the push goes ahead and the hook decides, which is the day
+   before. Since W1.1 the hook's rehearsal record check runs first and takes seconds, so a wrong guess costs seconds and
+   one recorded refusal, where the sibling's path pays a whole round of about 14 minutes on every crash. Record
+   `inlock_check=could-not-decide`, so B2(b) does not count a hook refusal that follows it. The churn message names
+   which cause it saw: a manifest move, a stale verdict or a crashed check.
+5. Record `rounds`, `catchup_sec` and `degraded` (W0.1R).
+Fixtures: the sibling's q2, q4 and q5 stay. Added:
+- CLEAN TWIN: a remote that moves once during round 1's legs, on a non-chain file, settles in round 2 outside the lock.
+  Each stub is called twice, the rehearsal stub reports a reused verdict, and the in-lock rebase is a no-op.
+- MUST FIRE, at the bar: a remote that moves after every round's legs stops after exactly 3 catch-up rounds. The 4th
+  never starts, and the push reaches the lock.
+- MUST FIRE: a conflict found by the catch-up fetch refuses with `phase=catchup`, and a probe from another process shows
+  the lock was never taken.
+- MUST FIRE: a runner stub exiting 1 in round 2 refuses `refused-gate-red`.
+- MUST FIRE: three non-chain catch-up rounds do not spend the rehearsal budget. A chain move found in the lock after
+  them still gets its hand-back round.
+- MUST NOT FIRE: a stub exiting 3 in round 2 does not refuse. The push reaches the lock with `degraded` naming the leg.
+- MUST NOT FIRE: a failed catch-up fetch does not refuse, and the row says `degraded=fetch`.
+- MUST NOT FIRE: a remote that never moves gives exactly one catch-up fetch and no second leg run.
+- MUST NOT FIRE: an in-lock check stub that exits 3 twice does not hand the lock back. It was called exactly twice,
+  and the push is attempted with `inlock_check=could-not-decide`.
+- CLEAN TWIN: a check stub that exits 3 once and then 0 lands with `inlock_check=covered`.
+Mutants: M3 retargets `$script:PmMaxCatchUpRounds` from 3 to 4, which must turn the at-the-bar case red. M17 counts
+catch-up rounds against the rehearsal budget, which must turn the "does not spend" MUST FIRE red. The sibling's cap
+mutant, 3 to 4 on `$script:PmMaxRehearsalRounds`, must still turn q5 red.
+Done when: `-SelfTest` exits 0 with its verdict line and its count. B2, B3 and B8 are read on their dates.
+
+**W2.3, amended.** The `-RehearsalStarter` seam carries the sibling's q1 to q5 model (the stub records the HEAD it saw
+and moves the fake origin while it runs), moved in W2.3's commit. The default `Wait()` keeps the sibling's marker rule.
+`-RehearsalCheck` stays as the in-lock seam.
+
+**W6.1, amended.**
+- Step 3: the lease is taken after round 1's legs pass, before the first catch-up fetch. It is held across every lock
+  hand-back and every later round, and released after the push's final `Exit-TcPushLock`, whether it lands or refuses.
+  The MUST FIRE "a probe from another process sees the lease held at the moment the push holds the push lock" also runs
+  in a round-2 hand-back drill.
+- New step: while push-main holds the lease it exports `TC_CHAIN_LEASE_HOLDER`, a token naming the lease instance, so
+  its own hook child can tell it descends from the holder (W8.3). The token names its lock, following the rule that
+  TC_PUSH_LOCK_HOLDER learnt the hard way.
+- With W2.1R step 8, a stale checkout's first push after W6.1 runs the new copy and takes the lease.
+
+**W3.4a, amended (D17, NEEDS A RULING): one allocator for backlog ids.** W3.1 landed a merge whose ledger lock is named
+from the full path of the backlog file in the checkout that runs it (`lib/ledger-lock.ps1` `Get-TcLedgerLockName`;
+`ops/merge-backlog-inbox.ps1:173` defaults `$Backlog` to its own checkout, and :1541 locks it). So W3.4's task, in its
+own worktree, and a hand merge in any other checkout take DIFFERENT mutexes. Each can allocate the same next id from
+its own copy, and the second to land hits a rebase conflict on the backlog file, which is the collision Row 3 exists to
+remove. A shared lock cannot fix this, because two copies at one base still allocate the same id. Only one writer can.
+Evidence: code reading (correctness skeptic), and 13 backlog commits since 09-16 name a merge, all by hand (SCRATCH).
+No collision has been observed since W3.1 landed about an hour before this was written, which is no evidence either way.
+1. The scheduled task (W3.4) is the only writer that allocates ids or applies UPDATEs. A merge anywhere else refuses
+   unless `-AllowHandMerge "<reason>"` is passed, and prints that reason in its `Backlog-Merged-From:` trailer.
+2. A session that needs an id now runs the task on demand (`Start-ScheduledTask`), which uses the same worktree and the
+   same push-main route. It does not hand-merge.
+3. W3.2's pre-flight warning also counts commits that MODIFY an existing file under `design/backlog-inbox/updates/`.
+   Such a lane is appending to a day file that the merge may already have consumed and deleted, which rebases into a
+   modify/delete conflict. The README tells a lane to write a new file per batch, `<lane>-<YYYY-MM-DD>-<HHmmss>.md`.
+   Speculative: 0 inbox files have been edited twice since 09-08 (SCRATCH, correctness skeptic).
+Fixtures: MUST FIRE: a merge outside the task's worktree without `-AllowHandMerge` exits non-zero and writes nothing.
+CLEAN TWIN: with `-AllowHandMerge "<reason>"` it merges and prints the reason in the trailer. CLEAN TWIN: the task's own
+worktree merges with no switch. MUST FIRE (W3.2): a commit that modifies an existing `updates/` file warns with a count
+of 1. MUST NOT FIRE (W3.2): a commit that adds a new `updates/` file does not warn.
+Bar: B19.
+
+### 15.5 Row 8: the causes the first plan left standing
+
+**W8.1 push-main names the dirt, and says when it appeared.** File: `ops/push-main.ps1`, in `Invoke-TcSyncToRemote`'s
+not-ready branch. It is built with W2.1R, in the push-main lane.
+1. The round-1 sync keeps the dirty refusal, which `5841e96b1` already makes in seconds, before any leg. It records
+   `dirty_paths` (at most 20 `git status --porcelain` lines, sorted Ordinal) and `dirty_since=start`.
+2. A later sync (catch-up or in the lock) that finds the tree dirty records `dirty_since=during-legs` and the list. Its
+   message says the tree was clean at the pre-flight and names what became dirty while the legs ran, and that something
+   in this checkout wrote it.
+3. When the checkout is the main checkout (`git rev-parse --git-dir` equals `--git-common-dir`), the refusal names W8.2's
+   route instead.
+Fixtures:
+- MUST FIRE: a tree dirty at start refuses before the runner stub runs, with `dirty_since=start` and the path.
+- MUST FIRE: a runner stub that writes a tracked file refuses in the lock, with `dirty_since=during-legs` naming that
+  file.
+- MUST NOT FIRE: an ignored file written by the stub does not refuse.
+- CLEAN TWIN: a clean tree lands, and the row has no dirty fields.
+Bar: B13.
+
+**W8.2 The main checkout lands through push-main, from a throwaway worktree.** Files: `ops/push-main.ps1`
+(`-ViaWorktree`, automatic when run from the main checkout), `CLAUDE.md` (the "ONE PUSH AT A TIME" paragraph: the
+route), `.claude/rules/ops-and-gates.md`. It lands after W6.1 in the push-main lane, so a main-checkout chain push
+takes the lease like any other. It adds no lock. Each run pays one seed of a fresh worktree (about 47 MB, the figure
+W2.1 gives), and only from the main checkout.
+0. **Step 0, before code.** In a scratch repo carrying this repo's `.gitattributes`, with a dirty tree (modified tracked
+   data files the landed commits do not touch, plus untracked files) and one staged file belonging to "another
+   session", prove what `git reset --keep <landed>` does. The dirty files must stay byte-identical. The staged entry
+   must be unstaged with its content kept, as git's `--keep` table says. It must refuse when a file the landing changes
+   has local changes. If any of that differs, stop and report.
+1. From the main checkout, or with `-ViaWorktree`: refuse when HEAD has no commit ahead of origin/main. Print every
+   commit that will land: like a plain push, it lands the whole branch (UNPUSHED IS NOT PRIVATE). Run `git worktree add
+   --detach <per-run dir under %TEMP%, named tc-pm-via-<pid>-<guid8>> HEAD`, seed it with `ops/seed-worktree.ps1
+   -Target`, and run the whole push-main sequence with `-Dir` pointed at it: guard, pre-flight, legs, lease, lock.
+2. On a landing, if the main checkout's HEAD is still the sha the run started from, run `git reset --keep <landed tip>`
+   there. Local main then carries the landed commits, and nothing is left for the bot's `-X theirs` replay. If HEAD
+   moved, or `--keep` refuses, change nothing, print the landed tip and the one command to run, and exit 0 with
+   `main_sync=manual`.
+3. `finally`: `git worktree remove --force` and `git worktree prune`. A refusal leaves the main checkout exactly as it
+   was.
+4. `CLAUDE.md` and `ops-and-gates.md`: a session in the main checkout lands with `ops\push-main.ps1`, which does all of
+   this itself. A plain push is the fallback, and it is still fully gated.
+Fixtures (a temp bare remote, plus a clone standing in for the main checkout, private lock names):
+- MUST FIRE: from a dirty clone with a staged file, a push lands through a throwaway worktree. The dirty files are
+  byte-identical afterwards, and local main equals the landed tip.
+- MUST FIRE: a remote that moves during the legs is rebased in the throwaway worktree, never in the clone.
+- MUST FIRE: after every outcome, `git worktree list` shows no throwaway worktree.
+- MUST NOT FIRE: a clone whose HEAD moved during the run is left unchanged, with `main_sync=manual`.
+- CLEAN TWIN: a refused run leaves the clone's `git status --porcelain` and `git ls-files -s` byte-identical.
+Bar: B12.
+
+**W8.3 A chain push not descended from the lease holder is refused in seconds while the lease is held (D14, NEEDS A
+RULING).** Files: `ops/hooks/pre-push`, `lib/chain-lease.ps1` (a zero-wait probe), `ops/test-prepush-hook.ps1`. Needs
+W6.1. Evidence: 15.3. 6 of 17 chain landings since the gate ignored the lease, and 1 of today's 2 during-run voids was
+one of them (row 42, `855171a1e`).
+1. Directly after the rehearsal record check that W1.1 moved to the front of the hook, and before run-gates and any
+   lock: when that check's `CHAIN-REHEARSAL-CHECK-COMPLETE` outcome says the push is chain-touching (anything but its
+   not-needed outcome; read its vocabulary first), probe the lease with ZERO wait. If a process holds it and this push's inherited `TC_CHAIN_LEASE_HOLDER` does not name that instance,
+   print `pre-push: BLOCKED - a chain-touching push is landing under the chain lease (holder pid <n>, <checkout>). Land
+   chain changes with ops\push-main.ps1, which queues for the lease.` and `PRE-PUSH-REFUSED cause=chain-lease`, then
+   exit 1.
+2. If the lease is free, or the probe errors, proceed exactly as today, with one WARN line naming push-main as the route
+   for chain changes.
+3. **Why this is not section 10's NEVER.** That row forbids WAITING on the lease in the hook, which would invert the
+   lock order. A zero-wait probe acquires nothing and adds no wait-for edge. Nothing that holds the push lock waits on
+   this.
+4. **Blast radius, for D14.** A bot push carrying an unpushed session chain commit is refused while a lease is held,
+   which delays the bot by up to one lease hold (about 5 to 45 minutes, W6.1 step 3). That carry is itself the
+   UNPUSHED IS NOT PRIVATE defect, and the bot's refusal pages as it does today.
+Fixtures (the suite's sandbox, private lease prefix):
+- MUST FIRE: a chain-touching plain push with a recorded verdict, while the lease is held from another process
+  (`lib/mutex-hold.ps1`), is refused within the hang guard with `cause=chain-lease`, and the run-gates stub never ran.
+- MUST NOT FIRE: the same push with the lease free proceeds and prints the WARN line.
+- MUST NOT FIRE: a push-main child whose `TC_CHAIN_LEASE_HOLDER` names the held instance proceeds.
+- MUST NOT FIRE: a non-chain push proceeds while the lease is held.
+- CLEAN TWIN: a probe that throws proceeds as today.
+Re-install the hook from a clean worktree at the landed origin/main (section 5). Bar: B14.
+
+**W8.4 audit-prompt-backup refuses a push only over what the push changed (D15, NEEDS A RULING; reverses section 10's
+NOT IN SCOPE).** Files: `ops/audit-prompt-backup.ps1`, plus the daily chain step or W3.4's task that runs its full
+mode. Evidence: 5 of 19 kept in-hook run-gates red logs dated 09-20 to 09-23 name it (SCRATCH, correctness skeptic).
+8 of 44 cause-naming gate refusals over 7 days name it (SCRATCH, residual; coverage 44 of 78). Today's row 46 was one.
+The audit compares the SHARED live `C:\Users\Owner\.claude\scheduled-tasks` with each checkout's mirror, so one
+session's live edit reddens every other push on the box until its mirror lands, and none of those pushes can fix it.
+1. At push time, it fails only when a file under `ops/prompt-backup/` that this push changes (`git diff --name-only
+   <merge-base with origin/main>..HEAD`) does not match its live copy, or when the audit itself changed. A
+   live-to-mirror mismatch the push did not touch prints `REVIEW` with the paths, and passes.
+2. Its full live-to-mirror check runs daily, and pages on a mismatch older than 24 hours. That is the floor: a mirror
+   nobody committed.
+3. Its `SCOPE OF A CLEAN REPORT:` line says what the push mode no longer covers, and where that moved.
+Fixtures:
+- MUST FIRE: a push that edits a mirror so it no longer matches its live copy fails.
+- MUST NOT FIRE: a push touching no mirror, over a drifted live copy, passes and prints REVIEW naming it.
+- MUST FIRE: the daily mode fails on that same drift.
+- CLEAN TWIN: a push whose changed mirror matches its live copy passes.
+Bar: B15.
+
+**W8.5 test-auditors tells a red the push caused from one already on main (D16, NEEDS A RULING).** File:
+`ops/prepush-test-auditors.ps1`. Evidence: 13 of 44 cause-naming gate refusals over 7 days were test-auditors reds
+over board data (capture-evictions stamp 6, live-board twins 5, golden 1, derived-size-density 1; SCRATCH, residual,
+coverage 44 of 78). The memory records the same push ALLOWED at 19:25 and REFUSED at 20:09 on 09-11, "on nothing you
+did". The known-failures record lives in the common git dir (`ops/prepush-test-auditors.ps1:65-66`), and other
+checkouts rewrite it.
+0. **Step 0.** Read how the suite selects cases (the `selected` field of its pass record), and whether it can run named
+   cases only. If it cannot, stop and report: running the whole suite twice would double an 851 s leg (today's median,
+   SCRATCH).
+1. When a push adds a failing case, run ONLY the newly failing cases again, in a throwaway checkout at `git merge-base
+   HEAD origin/main`, over the SAME board files hardlinked in, as the EXPECTED-LIVE-RED paired run already does.
+2. A case that also fails at the base is PREEXISTING. Print `PREEXISTING <case>` with both exit lines, count it, and do
+   not refuse. A case that passes at the base and fails at the tip refuses exactly as today. Any exit 3 in the base run
+   refuses as today, because a could-not-look is never a pass.
+3. The shared record is written as today. The paired run is judged first.
+Fixtures:
+- MUST FIRE: a case red at the tip and green at the base refuses.
+- MUST NOT FIRE: a case red at both, over one board, does not refuse, and prints PREEXISTING.
+- MUST FIRE: a base run that exits 3 refuses.
+- CLEAN TWIN: the EXPECTED-LIVE-RED path decides exactly as before, over its frozen fixture.
+Bar: B16.
+
+**W0.3b The probe counts attempts, not rows.** File: `ops/probe-push-convergence.ps1` (landed as `c1c418fdc`). Needs
+W0.1R and W0.6. It changes no bar's value, only what the bar counts.
+1. An ATTEMPT is a run a session launched: a push-main row, or a W0.6 `hook-refused` row of a plain push. A LEG SET is
+   one round (`rounds`, summed). B6 and B10 print both.
+2. A change is (checkout, `subjects_sha`), and `change_id` only breaks ties. A lane that amends a baseline between
+   attempts keeps its subjects, so it stays one change. The housekeeping lane's three attempts carried three
+   `change_id`s (`67c869cf9e76`, `2f849964be2f`, `81a788cbef31`), so as landed B6 would read 1.0 where the truth is 3
+   (SCRATCH, measurement skeptic). A subject set that lands from another checkout links the two groups, and the change
+   is counted as crossing checkouts.
+3. A change landed on its first attempt only when that attempt's own row landed. Changes finished by another checkout
+   stay out of B6's denominator and are counted on their own line.
+4. B6 prints not-ready rows and ambient reds as columns instead of excluding them: own red, ambient red, not-ready at
+   start, not-ready during the legs, mechanical conflict, genuine conflict.
+5. B6 and B10 are stratified by PARALLEL RUN and by landings in the clock hour (fewer than 8, or 8 or more). The quiet
+   stratum prints P(result | old rate).
+6. `-History` gains two counts, committed rather than described: main-checkout plain pushes that passed every hook check
+   and were then rejected (a held hook-lock row with no origin/main update within 15 s, the method of
+   `%TEMP%\pushgood-skeptic\mainland.py`), and chain landings by route (push-main, plain push from a worktree, plain push
+   from the main checkout, no ledger row; the method of `%TEMP%\pushgood-residual\landings.py`).
+7. The older-copy count beside every bar is also printed as a share.
+Fixtures (frozen literal rows):
+- MUST FIRE: three attempts of one lane with three different `change_id`s and one `subjects_sha` are one change with 3
+  attempts.
+- MUST NOT FIRE: two changes in one checkout with different subjects stay two changes. This is the checkout that landed
+  7 changes in turn.
+- At the bar: a held hook-lock row followed by an update after 15 s counts as followed, and one after 16 s does not.
+- MUST FIRE: a change whose only push-main row was refused, and which landed from another checkout, is counted as
+  crossing checkouts and not as a first-attempt landing.
+- CLEAN TWIN: rows without `rounds` still print B6's old line, labelled pre-W0.1.
+Done when: `-SelfTest` exits 0 with its verdict line, and a plain `-Cost` prints both attempt and leg-set lines.
+
+**W0.6 The hook records its refusals.** Files: `ops/hooks/pre-push`, and a small writer that calls `Write-TcPushRow`.
+Read first how `audit-script-census` reaches `ops/hold-push-lock.ps1`, which only the hook names, and register the
+writer the same way.
+1. Every exit that prints `PRE-PUSH-REFUSED cause=...` (W1.1) also writes one ledger row: `event=hook-refused`, with
+   `cause`, `gate`, `checkout`, `pid`, the ref line's shas, and `under_push_main` (whether a push-main token was
+   inherited).
+2. The write is best effort. If it fails, the hook prints one line and keeps its exit code. It costs one PowerShell
+   start on a refusal (an estimate, not measured) and nothing on a pass.
+Fixtures (the suite's sandbox, `TC_PUSH_LEDGER_ROOT` per run as W0.2 set it):
+- MUST FIRE: a chain push with no verdict writes one `hook-refused` row with `cause=rehearsal`.
+- MUST FIRE: a run-gates red writes `cause=run-gates` and the first failing gate.
+- MUST NOT FIRE: a passing push writes no `hook-refused` row.
+- CLEAN TWIN: with an unwritable ledger directory, the hook still exits 1 with its PRE-PUSH-REFUSED line.
+Re-install the hook from a clean worktree at the landed origin/main. Done when: the suite exits 0, and the first real
+refusal afterwards is in the ledger.
+
+**W6.2 The manifest set follows dot-sources. This is a soundness gap, and it ADDS attempts.** File:
+`ops/rehearse-chain.ps1` (`Get-RhManifestSet`) or `ops/chain-manifest.json`'s derive rule. This is a chain-touching
+push, so budget its rehearsal. Evidence: the 130 members at origin/main reach 44 non-member `.ps1` files through
+dot-sources (for example `meal-prep/engine/publish.ps1:40` sources `meal-prep/lib/render-tokens.ps1`). 15 of 577
+first-parent commits in 7 days changed one of those 44 and no member (SCRATCH, correctness skeptic `closure.py` over
+the causes replica). Such a landing keeps every verdict valid, so a chain push can land a combination no rehearsal
+ran. That is the RCA F2 failure the rehearsal exists for.
+1. Derive the set transitively over literal dot-sources, the way `lib/gate-input-key.ps1` already derives self-test
+   keys.
+2. Stated cost: about 15 more chain-touching commits a week at the 7-day rate (SCRATCH), which raises lease contention.
+   So it lands AFTER W6.1 is live and after B6's first read-out, so that B6 is judged on the set it was designed for.
+   It strengthens a gate and needs no ruling. It is listed for Brad because it adds attempts.
+Fixtures:
+- MUST FIRE: a fixture member that dot-sources `lib/x.ps1` puts `lib/x.ps1` in `-ListSet`'s output, and a push that
+  changes only `lib/x.ps1` needs a rehearsal.
+- MUST NOT FIRE: a file no member reaches stays out.
+- CLEAN TWIN: a dot-source cycle terminates.
+- CLEAN TWIN: `-ListSet` over the real tree prints every current member plus the closure, and `files=` equals the
+  count.
+Bar: B17.
+
+**W7.1a, added to W7.1's text.** Three sentences, with the reason for each. (1) Run board steps, guards and reconcilers
+in a scratch clone, never in the checkout you land from: W8.1's during-legs class, where row 50 of the case list was the
+lane's own `reconcile-ghost-drift` writing `grocery/ghost-tool-published.json` mid-run. (2) Land a chain change only
+through `ops\push-main.ps1`, never `git push origin HEAD:main`, and orchestrator briefs say so: 15.3's lease-ignoring
+class. (3) From the main checkout, `ops\push-main.ps1` lands through a throwaway worktree (W8.2).
+
+**W7.2 A commit that changes a file an under-way plan names cites the plan.** Files: `ops/hooks/commit-msg`, and a new
+`ops/plan_citation.py` beside `ops/store_citation.py`, in its shape: judged only under `CLAUDE_CODE_SESSION_ID`, and a
+missing script or interpreter is BLIND, never a refusal. Evidence: 15.1's process cause.
+1. For each staged path, list the `design/PLAN-*.md` files on origin/main whose Status line says ruled or build under
+   way, and that name the path. When one exists and the message has neither `Plan: <that plan>` nor `Plan-not-applicable:
+   <reason>`, print `plan-citation: WARN - <path> is named by <plan> (build under way); read it, and add a Plan: line or
+   Plan-not-applicable: <reason>`.
+2. Warn only. A refusal from a literal cutoff date, as the Store line has, is D18 (NEEDS A RULING).
+Fixtures:
+- MUST FIRE: a staged path named by a fixture plan whose status says build under way, with no Plan line, warns.
+- MUST NOT FIRE: the same commit with a Plan line does not warn.
+- MUST NOT FIRE: a plan whose status says DONE or SUPERSEDED does not warn.
+- CLEAN TWIN: `Plan-not-applicable: <reason>` passes.
+- CLEAN TWIN: with no `CLAUDE_CODE_SESSION_ID`, the commit is not judged.
+Bar: B18.
+
+### 15.6 Bars, written now
+
+Each is measured by `ops/probe-push-convergence.ps1` (W0.3, with W0.3b), cited by its blob, over rows from UPDATED
+copies only. Each value is the first plausible one, not swept. Each item's landing adds its bar to the probe's literal
+bars table, with the 14-day read-out every bar already takes. A **mechanism** bar tests a deterministic step, so any
+counted row is a defect, and it needs no P(zero | old rate).
+
+| # | Metric | Stratum, minimum N | Baseline (source) | Bar | Item |
+|---|---|---|---|---|---|
+| B2 (amended) | as written, plus (b): in-lock refusals with `reject_class` `rehearsal` on rows whose `inlock_check` is `covered` | as written | (a) 8 in 46 lock-taking rows, UTC 09-23 to 14:17:54Z (SCRATCH, causes) | (a) as written; (b) 0, mechanism: the check and the hook read one key | W2.2R |
+| B6 (amended) | (a) ATTEMPTS per landed chain-touching change (W0.3b), counting not-ready and ambient reds and excluding only the change's own reds and genuine conflicts; (b) LEG SETS per landed chain-touching change | quiet (not a PARALLEL RUN, and fewer than 8 landings in the hour): at least 10 changes; contended: at least 5 | 12 chain changes landed through push-main 09-21 to 09-23, 2 of 12 on the first attempt, 30 rows, 2.50 per change; 1.92 under the old exclusions (SCRATCH, measurement skeptic) | (a) at most 1.2 quiet and at most 1.5 contended; (b) at most 1.8 quiet, reported when contended. The model for (b): at least one round-1 void at 31% to 62% of start times this morning (SCRATCH, residual replay, one day), so 1.3 to 1.6 is expected with the lease | W6.1, W8.x |
+| B12 | (a) share of landings of main-checkout commits made through `-ViaWorktree`; (b) remote rejections after the lock on `-ViaWorktree` rows | (a) at least 30 such landings | (b) plain pushes: 11 of 82 held main-checkout hook-lock rows since 09-16 were not followed by a landing (SCRATCH, correctness skeptic) | (a) at least 80%; (b) 0, mechanism: the lock is held from the in-lock fetch to the ref update | W8.2 |
+| B13 | (a) seconds from push-main start to a `dirty_since=start` refusal; (b) `dirty_since=during-legs` rows per push-main row that ran legs | (a) at least 5 rows; (b) at least 150 rows after W7.1a lands | (b) at least 2 of today's 48 rows, 4.2%, from direct transcript evidence, with 3 of the 7 dirty refusals undetermined (SCRATCH, residual) | (a) median at most 60 s, mechanism; (b) at most 1 in 150. P(at most 1 in 150 at 4.2%) = 1.3% | W8.1, W7.1a |
+| B14 | chain landings that did not hold the lease, by route; and plain-push chain landings made while a lease was held | at least 20 chain landings | 6 of 17 since the gate, 35.3% (SCRATCH, residual) | at most 10%; and 0 during a held lease, mechanism | W8.3 |
+| B15 | push refusals classed `run-gates:ops\audit-prompt-backup.ps1` on a push that changes nothing under `ops/prompt-backup/` and not the audit | 14 days | 5 of 19 kept in-hook red logs 09-20 to 09-23 (SCRATCH, correctness skeptic) | 0, mechanism; and the daily check's COMPLETE marker on at least 13 of 14 days (the floor) | W8.4 |
+| B16 | test-auditors refusals whose only newly failing cases are PREEXISTING | at least 10 test-auditors refusals | 13 of 44 named gate refusals over 7 days were board-data reds (SCRATCH, residual, coverage 44 of 78) | 0, mechanism. Reported, no verdict: PREEXISTING prints per day, and test-auditors refusals per 100 push-main rows against W0.3's recomputed baseline | W8.5 |
+| B17 | chain landings whose diff touches only a closure member without a covering rehearsal | 14 days | 15 of 577 first-parent commits in 7 days (SCRATCH, correctness skeptic) | 0, mechanism. Printed beside it: the chain share of landings before and after | W6.2 |
+| B18 | session commits that change a file named by an under-way plan and carry neither Plan line | at least 10 such commits | 1 known (`5841e96b1`) | reported while warn-only; 0 after D18's cutoff | W7.2 |
+| B19 | backlog conflict rows where both colliding commits carry a `Backlog-Merged-From:` trailer | 14 days | none observed since W3.1 (about 1 hour of rows) | 0, mechanism, once D17 lands | W3.4a |
+
+**Read B6 honestly.** B6 is read no earlier than 14 days after W6.1 and W2.1R's re-exec have both landed, and it
+prints the plain-push share of chain landings beside it. The build lands its own lanes one at a time, which removes one
+of the two sources of contention while the bars are read. So a quiet window can pass (a) for free, which is why the
+contended stratum is judged separately.
+
+### 15.7 Decisions for Brad, added to section 12
+
+**RULED 2026-09-23 (Brad).** He adopted this amendment ("Adopt and build (Recommended)") and accepted every ruling below as recommended: D11a, D14, D15, D16, D17 and D18.
+
+| # | Decision | Recommendation | Blocks |
+|---|---|---|---|
+| D11a | At the rehearsal cap, refuse (`refused-rehearsal-churn`, as `5841e96b1` does) rather than push into the lock | yes, for the rehearsal leg only. The hook never rehearses, so pushing in with no covering verdict is a certain refusal inside the lock. D11's degrade stays for run-gates and test-auditors, which the hook can run again | W2.2R |
+| D14 | The pre-push hook refuses, in seconds, a chain-touching push not descended from the lease holder while the lease is held | yes. 6 of 17 chain landings since the gate ignored the lease (SCRATCH). A zero-wait probe inverts no lock order. Cost: a bot push carrying an unpushed session chain commit waits out one lease hold | W8.3 |
+| D15 | audit-prompt-backup judges at push time only what the push changed; the full live-to-mirror check moves to a daily run that pages | yes. A push cannot fix another session's live prompt edit, so the refusal teaches retry and not repair. 8 of 44 named gate refusals over 7 days (SCRATCH) | W8.4 |
+| D16 | A test-auditors case that also fails at the push's base, over the same board, is PREEXISTING and does not refuse | yes. It is the paired-run rule Brad already ruled for EXPECTED-LIVE-RED, applied to "adds a failing case". 13 of 44 named refusals (SCRATCH) | W8.5 |
+| D17 | The scheduled merge is the only allocator of backlog ids; a hand merge needs `-AllowHandMerge "<reason>"` | yes. A lock per checkout cannot serialise two copies, and one writer is the 2026-09-08 ruling taken to its end | W3.4a |
+| D18 | W7.2's warning becomes a refusal from a literal cutoff, with a `Plan-not-applicable:` escape | yes, 7 days after it lands, as the Store line did | none |
+
+### 15.8 Gaps this amendment deliberately leaves, and why
+
+- **A change's own red, and a genuine code conflict.** These are the gates working: 3 own-red rows today, and 1 genuine
+  code conflict in 22 rebase conflicts over 8 days. They will always, correctly, cost a second attempt.
+- **Header-line conflicts** (row 36: `# gate-inputs:` lines against header-seed lines in one library). 1 row in 8 days,
+  and section 9 forbids a merge driver for any `.ps1`. W0.1R's `conflict_files` makes recurrences visible. Revisit at 3
+  or more in 14 days.
+- **gate-leftovers reds from a self-test that writes a tracked file in a linked worktree** (row 29). The gate is right
+  to refuse, it names the writer, and that instance was fixed at source (`38357202c`). Running every leg in a snapshot
+  worktree would copy every seeded board on every push. Revisit if W0.1R's `reject_class` shows more than 2 a week.
+- **The round-1 rehearsal void.** The lease is taken after round 1's legs, so a chain landing during those legs still
+  costs one automatic re-round of about 14 minutes (at least one void at 31% to 62% of start times this morning,
+  SCRATCH, one day). That is time and not an attempt. Taking the lease before round 1 would hold a lock across a
+  30-minute leg set and cap chain pushes at about 2 an hour.
+- **The lease queue at peak.** W6.1 step 6's ceiling stands: 2.4 to 3.5 chain pushes an hour when every holder
+  re-rehearses. It removes a livelock and adds no capacity. At the 09-19 rate of about 6 chain landings an hour (a
+  counterfactual over today's set), expect waits, not attempts. With the lease and 35% of chain landings ignoring it,
+  the chance that all 3 rounds are voided is 13% to 39% at that rate (SCRATCH, residual Poisson model); W8.3 is what
+  drives that share toward 0.
+- **Blind or stale rehearsal verdicts** (1 of 40 verdicts was blind, SCRATCH). This is infrastructure. W0.1R records
+  `refused-rehearsal-blind` on its own line.
+- **test-auditors' 1200 s kill under overlap.** W2.3's step 0 already measures it. 0 kills were seen in about 80
+  printed runs over 7 days, with a maximum of 949 s (SCRATCH, residual).
+- **Retro-filling the false LANDED rows** that an identical patch may already have produced. W2.1R step 5 stops new
+  ones, and old ones are not reconstructed.
+
+### 15.9 Order, and what changes elsewhere
+
+| Step | Items | Why here |
+|---|---|---|
+| now | W0.1R (the `feat/pd-ledger` rebase), then the rest of Wave 1 as planned (W0.4, W1.2, W4.1, W4.2) | every later bar needs W0.1R's fields |
+| with the soak | W0.3b, W0.6, W7.2 | instruments, and nothing refuses. The soak's rows should count attempts correctly from the start |
+| after the soak, push-main lane | W2.1R with W8.1, then W2.2R, W2.3, W3.2 (with W3.4a step 3) and W4.1 step 7, then W6.0 and W6.1, then W8.2 | one file, one lane |
+| beside that lane, other files | W8.4 (D15), W8.5 (D16), W3.4 with W3.4a (D17) | independent files |
+| after W6.1 is live | W8.3 (D14) | it reads W6.1's token |
+| after B6's first read-out | W6.2 | it raises chain contention, so B6 is read first |
+| last | W7.1 with W7.1a | the text follows the behaviour |
+
+- **Section 3** gains G11: a change that is green and conflicts with nothing on main lands on its first push-main run,
+  from any checkout including the main one (W2.1R, W8.1, W8.2, W8.3; B6, B12, B13). And G12: a push is refused only
+  for a red it caused (W8.4, W8.5; B15, B16).
+- **Section 8**: M1, M3 and M8 are retargeted as in 15.4. M15 to M18 are added.
+- **Section 10**: the prompt-backup row becomes D15. The "taking the lease inside the hook: NEVER" row stands, and
+  W8.3's zero-wait probe is not a take.
+- **Section 11**, added: W2.1R's re-exec makes a push-main change, including a broken one, reach a stale checkout one
+  run sooner. Rollback is a revert landed by plain `git push`, or `-NoReexec` on one push. W8.2 moves the main
+  checkout's HEAD with `git reset --keep`, and only when HEAD is where the run found it. W8.3 adds a hook refusal that
+  lasts at most one lease hold, and its rollback is a hook revert plus a re-install. W8.4 moves a check from the push
+  to the daily chain. W8.5 adds a partial second test-auditors run on a red only.
