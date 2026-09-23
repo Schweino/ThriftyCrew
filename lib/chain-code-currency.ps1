@@ -190,7 +190,7 @@ if ($__cccSelfTest) {
     $null = & $g $w 'add', '-A'; $null = & $g $w 'commit', '-q', '-m', 'C: unrelated'
     $tipC = (& $g $w 'rev-parse', 'HEAD').Out.Trim()
     $s2 = Get-TcStaleArtifacts -Repo $w -Base $tipB -Tip $tipC -Artifacts @('public/smp-feed.json')
-    CcT 'CLEAN TWIN  a rebase over unrelated commits (a feed READER, an excluded test, a new script) leaves the feed current: no stale row, producers still derived' (-not $s2.Blind -and @($s2.Rows).Count -eq 0 -and @($s2.Producers['public/smp-feed.json']).Count -eq 2) (($s2 | ConvertTo-Json -Depth 4 -Compress))
+    CcT 'MUST NOT FIRE  a rebase over unrelated commits (a feed READER, an excluded test, a new script) leaves the feed current: no stale row, producers still derived' (-not $s2.Blind -and @($s2.Rows).Count -eq 0 -and @($s2.Producers['public/smp-feed.json']).Count -eq 2) (($s2 | ConvertTo-Json -Depth 4 -Compress))
     $s3 = Get-TcStaleArtifacts -Repo $w -Base '' -Tip $tipC -Artifacts @('public/smp-feed.json')
     CcT 'MUST FIRE  no recorded base is BLIND, never a clean answer' ([bool]$s3.Blind) (($s3 | ConvertTo-Json -Compress))
   } catch {

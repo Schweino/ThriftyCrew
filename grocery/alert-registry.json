@@ -201,6 +201,24 @@
    "resolver": "lane:grocery/triage-due.ps1"
   },
   {
+   "id": "chain-stale-code-feed-refused",
+   "match": "exact",
+   "key": "daily chain did not push its feed was built by replaced code",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "lane:grocery/triage-due.ps1"
+  },
+  {
+   "id": "chain-stale-code-artifact-shipped",
+   "match": "exact",
+   "key": "daily chain shipped artifacts built by code that changed mid run",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "lane:grocery/triage-due.ps1"
+  },
+  {
    "id": "commit-refused",
    "match": "exact",
    "key": "daily pipeline commit refused",
