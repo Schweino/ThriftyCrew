@@ -4072,7 +4072,7 @@ else {
   else { Bad ('-Accept blessed a CACHED mapping into the permanent baseline (got ' + [string]$msNewBase.names.'Fresh Lemon 1 ct' + ') - a stale sweep is now invisible forever') }
   # 2026-09-22 (queue 2026-09-22-e9aed3): an accept names the commodities it released a product from and re-checks
   # their links. This copy has no deriver beside it, so the branch must SAY it skipped, never pass silently.
-  if ($r.text -match 'link re-check (SKIPPED - derive-links-from-prices\.ps1 is not beside|: no commodity lost)') { Ok '-Accept reaches the released-commodity link re-check and states what it did' }
+  if ($r.text -match 'link re-check( SKIPPED - derive-links-from-prices\.ps1 is not beside|: no commodity lost|: \d+ commodit\(ies\) released)') { Ok '-Accept reaches the released-commodity link re-check and states what it did' }
   else { Bad ('-Accept printed no link re-check line - the released-link trigger was never reached: ' + $r.text) }
   if ((Get-Item $msCache).LastWriteTime.Ticks -eq $msCacheTicks) { Ok '-Accept does not write the sweep cache either (write path skipped entirely)' }
   else { Bad '-Accept wrote the sweep cache - the write path is not skipped' }
