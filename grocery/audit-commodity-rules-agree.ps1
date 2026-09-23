@@ -25,6 +25,9 @@
     grocery\audit-commodity-rules-agree.ps1 -WriteFixture <path>   freeze today's corpus
     grocery\audit-commodity-rules-agree.ps1 -SelfTest              the corpus rule and the three verdicts
 #>
+# Its -SelfTest builds every capture it reads in a per-run temp directory and never opens the live capture directory,
+# commodities.json or match-lib, so what it reads is these files, declared rather than guessed at:
+# gate-inputs: grocery\audit-commodity-rules-agree.ps1, grocery\commodity-rules-lib.ps1, grocery\global-exclude-lib.ps1, lib\guard-contract.ps1
 [CmdletBinding()]
 param([switch]$SelfTest, [string]$CaptureDir = '', [string]$WriteFixture = '')
 $ErrorActionPreference = 'Stop'
@@ -98,7 +101,7 @@ if ($SelfTest) {
 }
 
 # ------------------------------------------------------------------------------------------- live run
-if (-not $CaptureDir) { $CaptureDir = Join-Path $here ('out' + '\regular') }
+if (-not $CaptureDir) { $CaptureDir = Join-Path $here 'out\regular' }
 $mlPath = Join-Path $here 'match-lib.ps1'
 $cPath = Join-Path $here 'commodities.json'
 if (-not (Test-Path $mlPath) -or -not (Test-Path $cPath)) {
