@@ -333,3 +333,5 @@ Re-read at harness blob 3004e2df162df2204dcbe93ea2adb8d2bc7a789c (grocery/pricin
 Re-read at harness blob 06381b161f7751f46dfca972fb9abee721ea43bd (grocery/build-sams-deals.ps1): the cents-form reading and its display window are untouched by the later change (queue 2026-09-22-20fecf), which only asks Resolve-UnitAlias after Resolve-Unit returns nothing and records the build's ingest shape; the unit table and every figure above still hold.
 
 Re-read at harness blob 54d42a244ab6dc3efa5445aeb20aadf392ebe912 (grocery/pricing-math-lib.ps1): the Sam's printed-unit-price reader and its precision bound are unchanged; the 2026-09-23 change to this file added Split-AdLineProducts and Get-AdLineParts (Brad's ruling Q-adline-two-products, ad-line ingest), which no Sam's path calls, so every figure above still holds.
+
+Re-read at harness blob a7c871a9c24aa090c930ec25fda45d2e1d78095f (grocery/pricing-math-lib.ps1): the only later change is one early return inside Split-AdLineProducts (a short title-case alternation stays whole), an ad-line ingest path no Sam's reading calls; the printed-unit-price reader, its precision bound and every figure above still hold.
