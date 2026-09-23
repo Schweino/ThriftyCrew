@@ -15,15 +15,38 @@
                 verdict in seconds. It never rehearses, so nothing slow ever runs inside the push lock.
     -ForPush    PUSH-MAIN'S LEG, run OUTSIDE the push lock: when HEAD's push to <Remote>/<Branch> touches the manifest
                 and no usable verdict is recorded, it rehearses HEAD, then decides exactly as -CheckPush will.
+    -ListSet    READ-ONLY, the set without a rehearsal (W0.5, design\PLAN-push-derived-conflicts-2026-09-23.md):
+                  powershell -File ops\rehearse-chain.ps1 -ListSet [-Commit <sha>] [-Range <base>..<tip>]
+                prints the manifest set at -Commit (default HEAD), and with -Range the TRIGGER -ForPush would decide for
+                that range. It clones nothing, takes no rehearsal slot, reads no verdict and writes nothing, so it costs
+                seconds where a default run costs about 14 minutes and one of the 6 slots. -Range is refused without
+                -ListSet (a default run would rehearse), and -ListSet is refused beside -CheckPush or -ForPush.
     -SelfTest   hermetic fixtures, per-run temp directories, nothing live.
 
+  THE TRIGGER IS ONE FUNCTION. Get-RhTrigger answers "does the diff <base>..<tip> touch the manifest set AT <tip>", and
+  Get-RhPushDecision (so -CheckPush and -ForPush) and -ListSet -Range all ask it, so the printed decision and the pushed
+  one cannot drift apart. The diff is tree to tree between the two endpoints, exactly as -ForPush diffs <Remote>/<Branch>
+  against HEAD, never from their merge base; that is why -Range refuses three dots. What a range triggers is not what a
+  recorded verdict would then allow: that half reads the verdict store and is -CheckPush's.
+
+  -LISTSET'S OUTPUT, a contract for a parser (W0.3's -History reads it). A SET line is a bare repo path, one per member,
+  sorted Ordinal. Every other line begins with CHAIN-REHEARSAL- or chain-rehearsal:, which no repo path does:
+    CHAIN-REHEARSAL-TRIGGER range=<base sha>..<tip sha> decision=needed|not-needed touched=<n>   (with -Range)
+    CHAIN-REHEARSAL-TOUCHED <path>                                                               (one per touched member)
+    CHAIN-REHEARSAL-LISTSET-COMPLETE files=<n> commit=<sha> key=<verdict key>[ decision=<d>]     (always the LAST line)
+  A tree with no manifest is a real answer, not a blind: files=0 manifest=absent (and decision=not-needed), exit 0, the
+  same "nothing to rehearse against" -CheckPush allows. A could-not-evaluate prints one chain-rehearsal: COULD NOT
+  EVALUATE line, NO path lines and a marker with blind=<cause> and NO files= token, so no parser can read it as an empty
+  set; exit 3.
+
   THREE OUTCOMES, NEVER TWO. Every mode ends in one of them, printed as its last line:
-    exit 0  pass     rehearsed and passed (or, at push time, no manifest script changed, or -NoRehearsal)
+    exit 0  pass     rehearsed and passed (or, at push time, no manifest script changed, or -NoRehearsal; or -ListSet listed)
     exit 1  fail     rehearsed and a stage FAILED; the stage and its own words are printed
     exit 3  blind    COULD NOT REHEARSE, with blind=<cause>: no-source, no-seed-board, stale-data, clone-failed,
                      checkout-failed, seed-failed, credential-present, chain-missing, nopublish-unproven, shiponly-unproven,
-                     no-chain-verdict, commit-stage, cannot-read-push, cannot-diff, no-manifest-readable. A 3 is never a
-                     pass and never a silent refusal: the cause is on the line, as run-gates' blind= token is.
+                     no-chain-verdict, commit-stage, no-rehearsal-slot, cannot-read-push, cannot-diff, no-manifest-readable;
+                     and for -ListSet, cannot-read-commit, bad-range, bad-usage. A 3 is never a pass and never a silent
+                     refusal: the cause is on the line, as run-gates' blind= token is.
 
   WHAT ONE REHEARSAL IS (one ARM):
     1. a STANDALONE clone (`git clone --shared`) of the commit into %TEMP%\tc-rh-<id>\<arm>, never a linked worktree:
@@ -85,6 +108,9 @@ param(
   [switch]$Full,
   [int]$ChainTimeoutMin = 90,
   [string]$VerdictDir = '',
+  # READ-ONLY: print the manifest set at -Commit, and with -Range <base>..<tip> the trigger -ForPush would decide (W0.5).
+  [switch]$ListSet,
+  [string]$Range = '',
   [switch]$SelfTest
 )
 
@@ -216,9 +242,30 @@ function Save-RhVerdict([string]$Dir, $Record) {
   $null = Write-TcAtomicFile -Path (Join-Path $Dir ([string]$Record.key + '.json')) -Text ($Record | ConvertTo-Json -Depth 5 -Compress) -NoBom -NoNewline
 }
 
+function Get-RhTrigger {
+  <# THE TRIGGER, the one definition (header, THE TRIGGER IS ONE FUNCTION): does the tree-to-tree diff $Base..$Tip touch
+     the manifest set AT $Tip? Get-RhPushDecision decides from it and -ListSet -Range prints it. Reads git only: it clones
+     nothing, takes no slot and writes nothing. Returns Blind ('' when evaluated, else no-manifest-readable or
+     cannot-diff), Why, DiffRc, Absent (the tip carries no manifest, so there is nothing to rehearse against), Manifest
+     (Get-RhManifestSet at $Tip) and Touched (the set members the diff names, in git's own path order). #>
+  param([string]$Repo, [string]$Base, [string]$Tip)
+  $ms = Get-RhManifestSet $Repo $Tip
+  $r = [ordered]@{ Blind = ''; Why = ''; DiffRc = 0; Absent = $false; Manifest = $ms; Touched = @() }
+  if (-not $ms.Ok) {
+    if ($ms.Absent) { $r.Absent = $true } else { $r.Blind = 'no-manifest-readable' }
+    $r.Why = $ms.Why
+    return [pscustomobject]$r
+  }
+  $d = Invoke-RhGit $Repo @('diff', '--name-only', '-z', $Base, $Tip)
+  if ($d.rc -ne 0) { $r.Blind = 'cannot-diff'; $r.DiffRc = $d.rc; $r.Why = ('git diff exited ' + $d.rc); return [pscustomobject]$r }
+  $r.Touched = @(([string]$d.stdout -split [char]0) | Where-Object { $_ -and $ms.Set.ContainsKey($_) })
+  return [pscustomobject]$r
+}
+
 function Get-RhPushDecision {
   <# The pre-push decision, from recorded verdicts only. Code 0 allow, 1 refuse, 3 could-not-evaluate (refused, with
-     its cause). Outcome is the worst over the ref lines; Lines are what the hook prints. #>
+     its cause). Outcome is the worst over the ref lines; Lines are what the hook prints. Whether a ref line needs a
+     rehearsal at all is Get-RhTrigger's answer, the same one -ListSet -Range prints. #>
   param([string]$Repo, [string[]]$RefLines, [string]$Branch = 'main', [string]$VerdictDir, [datetime]$Today, [string]$Bypass = '')
   $lines = New-Object Collections.ArrayList
   $codes = New-Object Collections.ArrayList
@@ -231,14 +278,14 @@ function Get-RhPushDecision {
     if ($lsha -match $zero) { continue }
     if ($rref -ne ('refs/heads/' + $Branch)) { [void]$lines.Add(('chain-rehearsal: {0} is not {1}; no rehearsal is asked of it' -f $rref, $Branch)); continue }
     if ($rsha -match $zero) { [void]$codes.Add(3); $outcome = 'could-not-rehearse'; [void]$lines.Add('chain-rehearsal: COULD NOT EVALUATE blind=cannot-diff - the push creates ' + $rref + ', so there is no base to diff the manifest against'); continue }
-    $ms = Get-RhManifestSet $Repo $lsha
-    if (-not $ms.Ok) {
-      if ($ms.Absent) { [void]$lines.Add('chain-rehearsal: ' + $ms.Why + '; nothing to rehearse against'); continue }
-      [void]$codes.Add(3); $outcome = 'could-not-rehearse'; [void]$lines.Add('chain-rehearsal: COULD NOT EVALUATE blind=no-manifest-readable - ' + $ms.Why); continue
-    }
-    $d = Invoke-RhGit $Repo @('diff', '--name-only', '-z', $rsha, $lsha)
-    if ($d.rc -ne 0) { [void]$codes.Add(3); $outcome = 'could-not-rehearse'; [void]$lines.Add(('chain-rehearsal: COULD NOT EVALUATE blind=cannot-diff - git diff {0}..{1} exited {2}; fetch and rebase, then push again' -f $rsha.Substring(0, 9), $lsha.Substring(0, 9), $d.rc)); continue }
-    $touched = @(([string]$d.stdout -split [char]0) | Where-Object { $_ -and $ms.Set.ContainsKey($_) })
+    $tr = Get-RhTrigger -Repo $Repo -Base $rsha -Tip $lsha
+    $ms = $tr.Manifest
+    # if/elseif and never a switch: `continue` inside a switch continues the SWITCH, not this foreach.
+    if ($tr.Absent) { [void]$lines.Add('chain-rehearsal: ' + $tr.Why + '; nothing to rehearse against'); continue }
+    if ($tr.Blind -eq 'no-manifest-readable') { [void]$codes.Add(3); $outcome = 'could-not-rehearse'; [void]$lines.Add('chain-rehearsal: COULD NOT EVALUATE blind=no-manifest-readable - ' + $tr.Why); continue }
+    if ($tr.Blind -eq 'cannot-diff') { [void]$codes.Add(3); $outcome = 'could-not-rehearse'; [void]$lines.Add(('chain-rehearsal: COULD NOT EVALUATE blind=cannot-diff - git diff {0}..{1} exited {2}; fetch and rebase, then push again' -f $rsha.Substring(0, 9), $lsha.Substring(0, 9), $tr.DiffRc)); continue }
+    if ($tr.Blind) { throw ('unknown trigger blind cause: ' + $tr.Blind) }
+    $touched = @($tr.Touched)
     if ($touched.Count -eq 0) { [void]$lines.Add('chain-rehearsal: no chain-manifest script changed in this push; no rehearsal needed'); continue }
     $named = ($touched | Select-Object -First 6) -join ', '
     if ($touched.Count -gt 6) { $named += (' and ' + ($touched.Count - 6) + ' more') }
@@ -558,6 +605,56 @@ function Get-RhExitCode([string]$Result) {
   switch ($Result) { 'pass' { return 0 } 'fail' { return 1 } 'blind' { return 3 } default { throw ('unknown rehearsal result: ' + $Result) } }
 }
 
+function Get-RhListSet {
+  <# -LISTSET (W0.5): the manifest set at one commit and, with a range, the trigger -ForPush would decide for it, as the
+     lines the header's output contract names. Returns Code (0 listed, 3 could not evaluate) and Lines, the last of
+     which is always the CHAIN-REHEARSAL-LISTSET-COMPLETE marker. Reads git only: no clone, no slot, no verdict read, no
+     write, so nothing here can change what a push decides. $CommitGiven says -Commit was passed explicitly; with a
+     range it must name the range's tip, because the set a range triggers on is the one AT its tip. #>
+  param([string]$Repo, [string]$Commit = 'HEAD', [string]$Range = '', [switch]$CommitGiven)
+  $blind = { param($cause, $why)
+    return [pscustomobject]@{ Code = 3; Lines = @(('chain-rehearsal: COULD NOT EVALUATE blind=' + $cause + ' - ' + $why), ('CHAIN-REHEARSAL-LISTSET-COMPLETE blind=' + $cause)) } }
+  $name = { param($spec) $n = Invoke-RhGit $Repo @('rev-parse', '--verify', '-q', ([string]$spec + '^{commit}')); if ($n.rc -ne 0) { return '' }; return ([string]$n.stdout).Trim() }
+  $base = ''
+  if ($Range) {
+    $ix = $Range.IndexOf('..')
+    if ($Range.Contains('...')) { return (& $blind 'bad-range' ('-Range ' + $Range + ' has three dots, which diff from the merge base; -ForPush diffs the two endpoints tree to tree, so write <base>..<tip>')) }
+    if ($ix -lt 1 -or ($ix + 2) -ge $Range.Length) { return (& $blind 'bad-range' ('-Range ' + $Range + ' is not <base>..<tip>')) }
+    $a = $Range.Substring(0, $ix); $b = $Range.Substring($ix + 2)
+    $base = & $name $a
+    $sha = & $name $b
+    if (-not $base -or -not $sha) { return (& $blind 'bad-range' ('git cannot name ' + $(if (-not $base) { $a } else { $b }) + ' as a commit')) }
+    if ($CommitGiven) {
+      $c = & $name $Commit
+      if (-not [string]::Equals($c, $sha, [StringComparison]::Ordinal)) { return (& $blind 'bad-range' ('-Commit ' + $Commit + ' is not the tip of -Range ' + $Range + '; with a range the set listed is the one at its tip, which is the set the trigger reads')) }
+    }
+    $tr = Get-RhTrigger -Repo $Repo -Base $base -Tip $sha
+    if ($tr.Blind) { return (& $blind $tr.Blind $tr.Why) }
+    $ms = $tr.Manifest
+  } else {
+    $sha = & $name $Commit
+    if (-not $sha) { return (& $blind 'cannot-read-commit' ('git cannot name ' + $Commit + ' as a commit')) }
+    $ms = Get-RhManifestSet $Repo $sha
+    if (-not $ms.Ok -and -not $ms.Absent) { return (& $blind 'no-manifest-readable' $ms.Why) }
+  }
+  $out = New-Object Collections.ArrayList
+  $paths = [string[]]@()
+  if ($ms.Ok) { $paths = [string[]]@($ms.Set.Keys); [Array]::Sort($paths, [StringComparer]::Ordinal) }
+  foreach ($p in $paths) { [void]$out.Add($p) }
+  $tail = ''
+  if ($Range) {
+    $tp = [string[]]@($tr.Touched)
+    [Array]::Sort($tp, [StringComparer]::Ordinal)
+    $dec = $(if ($tp.Count) { 'needed' } else { 'not-needed' })
+    [void]$out.Add(('CHAIN-REHEARSAL-TRIGGER range={0}..{1} decision={2} touched={3}' -f $base, $sha, $dec, $tp.Count))
+    foreach ($p in $tp) { [void]$out.Add('CHAIN-REHEARSAL-TOUCHED ' + $p) }
+    $tail = ' decision=' + $dec
+  }
+  if ($ms.Ok) { [void]$out.Add(('CHAIN-REHEARSAL-LISTSET-COMPLETE files={0} commit={1} key={2}{3}' -f $paths.Count, $sha, $ms.Key, $tail)) }
+  else { [void]$out.Add(('CHAIN-REHEARSAL-LISTSET-COMPLETE files=0 commit={0} key=- manifest=absent{1}' -f $sha, $tail)) }
+  return [pscustomobject]@{ Code = 0; Lines = @($out) }
+}
+
 # ======================================================================================================================
 if ($SelfTest) {
   $script:rhCases = 0; $script:rhFail = 0
@@ -788,7 +885,227 @@ if ($SelfTest) {
       Test-RhCase 'CLEAN TWIN  once one of the 6 slots frees, the same rehearsal runs and passes' { ($afterFree.result -eq 'pass'), ($afterFree.result + ' ' + $afterFree.blind + ' ' + $afterFree.cause) }
     } finally {
       foreach ($h in @($holds.ToArray())) { Stop-TcMutexHold $h }
-    }  } finally {
+    }
+
+    # ---- 5. -LISTSET (W0.5, design\PLAN-push-derived-conflicts-2026-09-23.md): the set and the trigger, printed without
+    # a rehearsal. -ListSet reads the repo its own copy sits in, so the script runs as a CHILD from a sandbox inside a
+    # fixture repo's working tree (untracked, so no commit and no diff sees it). Three sandboxes, each with the whole lib\:
+    #   ln  an exact copy of this file, for the -ForPush twin;
+    #   lo  this file as it stood BEFORE -ListSet existed, read from its blob, so "-ForPush decides exactly as before" is a
+    #       paired run of both scripts over one fixture rather than a claim;
+    #   lp  a copy whose rehearsal-slot prefix and slot stall, and whose lib\gate-slots.ps1 queue root, are PRIVATE, each
+    #       rewrite asserted to land exactly once. Every -ListSet run goes through lp, so no case here can open the
+    #       production slot names even if a regression made -ListSet reach for a slot.
+    $lsBlobBefore = '5126d59abccb3478072383c40e09c7cf2c423e26'   # ops/rehearse-chain.ps1 at f33d11829, the last blob before -ListSet
+    $lf = New-RhFixtureRepo 'l'
+    Write-RhFile $lf 'README.md' "doc v0`n"
+    $lPre = Save-RhCommit $lf 'no manifest yet'
+    # Zeta sorts FIRST by Ordinal (Z is 0x5A, a is 0x61) and after audit-thing by a culture sort, so the exact-order
+    # assertion tells an Ordinal sort from Sort-Object. absent-listed is in files[] and not in the tree, so it is no member.
+    Write-RhFile $lf 'ops\chain-manifest.json' '{"schema":1,"max_data_age_days":2,"board_glob":"grocery/out/comparison-*.json","chain_verdict":"grocery/out/chain-verdict.json","files":["grocery/check-ad-cycles.ps1","ops/chain-manifest.json","grocery/Zeta.ps1","grocery/absent-listed.ps1"],"globs":["grocery/build-*.ps1"],"derive_from":["grocery/guards.ps1"],"derive_dirs":["grocery/"],"exclude_globs":["grocery/test-*.ps1"]}'   # reach-fixture-ok: a fixture manifest in a throwaway repo; nothing opens the live module
+    Write-RhFile $lf 'grocery\check-ad-cycles.ps1' "'chain'`n"
+    Write-RhFile $lf 'grocery\guards.ps1' ". (Join-Path `$root 'audit-thing.ps1')`n& (Join-Path `$root 'test-thing.ps1')`n"
+    Write-RhFile $lf 'grocery\audit-thing.ps1' "'audit v1'`n"
+    Write-RhFile $lf 'grocery\audit-other.ps1' "'not named by guards'`n"
+    Write-RhFile $lf 'grocery\test-thing.ps1' "'a test'`n"
+    Write-RhFile $lf 'grocery\build-x.ps1' "'builder'`n"
+    Write-RhFile $lf 'grocery\Zeta.ps1' "'listed by name'`n"
+    $l0 = Save-RhCommit $lf 'manifest and chain'
+    Write-RhFile $lf 'grocery\check-ad-cycles.ps1' "'chain v2'`n"
+    Write-RhFile $lf 'grocery\audit-thing.ps1' "'audit v2'`n"
+    $l1 = Save-RhCommit $lf 'two chain members change, one of them through derive_from'
+    Write-RhFile $lf 'README.md' "doc v1`n"
+    $l2 = Save-RhCommit $lf 'doc only'
+    $lsWant = @('grocery/Zeta.ps1', 'grocery/audit-thing.ps1', 'grocery/build-x.ps1', 'grocery/check-ad-cycles.ps1', 'ops/chain-manifest.json')
+    $lsKey = (Get-RhManifestSet $lf $l1).Key
+    function New-RhSandbox([string]$Name, [byte[]]$Script) {
+      $box = Join-Path $lf $Name
+      $null = [IO.Directory]::CreateDirectory((Join-Path $box 'ops'))
+      $null = [IO.Directory]::CreateDirectory((Join-Path $box 'lib'))
+      foreach ($f in [IO.Directory]::GetFiles((Join-Path $script:RhRoot 'lib'), '*.ps1')) { [IO.File]::Copy($f, (Join-Path (Join-Path $box 'lib') ([IO.Path]::GetFileName($f)))) }
+      [IO.File]::WriteAllBytes((Join-Path $box 'ops\rehearse-chain.ps1'), $Script)
+      return $box
+    }
+    function Get-RhOrdinalCount([string]$Text, [string]$Needle) {
+      $n = 0; $i = $Text.IndexOf($Needle, [StringComparison]::Ordinal)
+      while ($i -ge 0) { $n++; $i = $Text.IndexOf($Needle, $i + $Needle.Length, [StringComparison]::Ordinal) }
+      return $n
+    }
+    $lsSelf = Join-Path $script:RhRoot 'ops\rehearse-chain.ps1'
+    $ln = New-RhSandbox 'ln' ([IO.File]::ReadAllBytes($lsSelf))
+    $lo = New-RhSandbox 'lo' ([byte[]](Get-CommittedBlobBytes -Repo $script:RhRoot -Spec $lsBlobBefore))
+    # NEEDLES BY CONCATENATION: this file is the text being rewritten, so a needle spelled whole here would count twice.
+    $lsPrefix = 'Global\tc-rhls-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '-'
+    $lsQueue = Join-Path $st 'lq'
+    $nPrefix = '$script:RhSlot' + 'Prefix = ''Global\tc-rehearsal' + '-slot-'''
+    $nStall = '$script:RhSlot' + 'StallSec = ' + '3600'
+    $nQueue = '$script:TcGateQueue' + 'Root = Join-Path ([Environment]::GetFolderPath(''LocalApplicationData'')) ''ThriftyCrew\gate-slot-queue'''
+    $lsSrcText = [IO.File]::ReadAllText($lsSelf)
+    $lsGsText = [IO.File]::ReadAllText((Join-Path $script:RhRoot 'lib\gate-slots.ps1'))
+    $lpRewrites = '' + (Get-RhOrdinalCount $lsSrcText $nPrefix) + ',' + (Get-RhOrdinalCount $lsSrcText $nStall) + ',' + (Get-RhOrdinalCount $lsGsText $nQueue)
+    $lpOk = ($lpRewrites -eq '1,1,1')
+    $lp = ''
+    if ($lpOk) {
+      $lpText = $lsSrcText.Replace($nPrefix, ('$script:RhSlotPrefix = ''' + $lsPrefix + '''')).Replace($nStall, '$script:RhSlotStallSec = 2')
+      $lp = New-RhSandbox 'lp' ((New-Object Text.UTF8Encoding($false)).GetBytes($lpText))
+      [IO.File]::WriteAllText((Join-Path $lp 'lib\gate-slots.ps1'), $lsGsText.Replace($nQueue, ('$script:TcGateQueueRoot = ''' + $lsQueue + '''')), (New-Object Text.UTF8Encoding($false)))
+    }
+    $lsPsExe = (Get-Command powershell).Source
+    $lsVd = Join-Path $st 'lvd'
+    $null = [IO.Directory]::CreateDirectory($lsVd)
+    function Invoke-RhSandbox([string]$Box, [string]$ArgLine, [hashtable]$Extra = @{}) {
+      # Every child sees a PRIVATE verdict directory and no bypass, whatever this shell carries.
+      if (-not $Box) { return [pscustomobject]@{ Rc = -9; Lines = @(); Err = ('the sandbox was not built: slot rewrites landed ' + $lpRewrites + ', not 1,1,1') } }
+      $e = @{ TC_REHEARSAL_VERDICT_DIR = $lsVd; TC_NO_REHEARSAL = '' }
+      foreach ($k in @($Extra.Keys)) { $e[$k] = $Extra[$k] }
+      $r = Invoke-RhProcess -File $lsPsExe -Arguments ('-NoProfile -ExecutionPolicy Bypass -File "' + (Join-Path $Box 'ops\rehearse-chain.ps1') + '" ' + $ArgLine) -WorkDir $Box -Env $e -TimeoutSec 300
+      return [pscustomobject]@{ Rc = $r.Rc; Lines = @(([string]$r.Out) -split "`r?`n" | Where-Object { $_ -ne '' }); Err = [string]$r.Err }
+    }
+    function Get-RhTreeListing([string]$Dir) {
+      # Every entry below $Dir with its size and write time, sorted Ordinal: two equal listings mean nothing was added,
+      # removed, resized or rewritten there.
+      if (-not [IO.Directory]::Exists($Dir)) { return '<absent>' }
+      $items = Get-ChildItem -LiteralPath $Dir -Recurse -Force
+      $rows = New-Object Collections.ArrayList
+      foreach ($i in @($items)) { [void]$rows.Add($i.FullName.Substring($Dir.Length) + '|' + $(if ($i.PSIsContainer) { 'dir' } else { [string]$i.Length }) + '|' + $i.LastWriteTimeUtc.Ticks) }
+      $a = [string[]]$rows.ToArray(); [Array]::Sort($a, [StringComparer]::Ordinal)
+      return ($a -join "`n")
+    }
+    function Get-RhSetLines($Lines) {
+      return @(@($Lines) | Where-Object { -not ([string]$_).StartsWith('CHAIN-REHEARSAL-', [StringComparison]::Ordinal) -and -not ([string]$_).StartsWith('chain-rehearsal:', [StringComparison]::Ordinal) })
+    }
+
+    $lsRun = Invoke-RhSandbox $lp ('-ListSet -Range ' + $l0 + '..' + $l1)
+    $lsSet = Get-RhSetLines $lsRun.Lines
+    $lsLast = [string]@($lsRun.Lines)[-1]
+    $lsWantLast = 'CHAIN-REHEARSAL-LISTSET-COMPLETE files=' + $lsWant.Count + ' commit=' + $l1 + ' key=' + $lsKey + ' decision=needed'
+    Test-RhCase 'MUST FIRE  -ListSet over a fixture manifest prints its set EXACTLY and in Ordinal order (Zeta first): files[], a glob, a derive_from member and the manifest, and no absent entry, excluded test or unnamed audit; files= is its count and key= is the verdict key' {
+      $lpOk -and ($lsRun.Rc -eq 0) -and [string]::Equals((@($lsSet) -join "`n"), ($lsWant -join "`n"), [StringComparison]::Ordinal) -and [string]::Equals($lsLast, $lsWantLast, [StringComparison]::Ordinal), ('rewrites=' + $lpRewrites + ' rc=' + $lsRun.Rc + ' set=' + (@($lsSet) -join ',') + ' last=' + $lsLast + ' err=' + $lsRun.Err)
+    }
+    $lsTrig = @(@($lsRun.Lines) | Where-Object { ([string]$_).StartsWith('CHAIN-REHEARSAL-TRIGGER ', [StringComparison]::Ordinal) -or ([string]$_).StartsWith('CHAIN-REHEARSAL-TOUCHED ', [StringComparison]::Ordinal) })
+    $lsT0 = 'CHAIN-REHEARSAL-TRIGGER range=' + $l0 + '..' + $l1 + ' decision=needed touched=2'
+    $lsTrigWant = @($lsT0, 'CHAIN-REHEARSAL-TOUCHED grocery/audit-thing.ps1', 'CHAIN-REHEARSAL-TOUCHED grocery/check-ad-cycles.ps1')
+    Test-RhCase 'MUST FIRE  with -Range it prints the trigger -ForPush would decide: needed, naming exactly the two members the range changed, one of them reached only through derive_from' {
+      [string]::Equals(($lsTrig -join "`n"), ($lsTrigWant -join "`n"), [StringComparison]::Ordinal), ($lsTrig -join ' / ')
+    }
+    $lsDoc = Get-RhListSet -Repo $lf -Range ($l1 + '..' + $l2)
+    $lsDocTrig = 'CHAIN-REHEARSAL-TRIGGER range=' + $l1 + '..' + $l2 + ' decision=not-needed touched=0'
+    Test-RhCase 'MUST NOT FIRE  a doc-only range asks for no rehearsal: decision=not-needed touched=0 with no touched line, and the set is still listed' {
+      ($lsDoc.Code -eq 0) -and (@(@($lsDoc.Lines) | Where-Object { ([string]$_).StartsWith('CHAIN-REHEARSAL-TOUCHED', [StringComparison]::Ordinal) }).Count -eq 0) -and (@(@($lsDoc.Lines) | Where-Object { $_ -ceq $lsDocTrig }).Count -eq 1) -and ((Get-RhSetLines $lsDoc.Lines).Count -eq $lsWant.Count) -and ([string]@($lsDoc.Lines)[-1] -cmatch ' decision=not-needed$'), (@($lsDoc.Lines) -join ' / ')
+    }
+    $lsBad = Get-RhListSet -Repo $lf -Commit ('f' * 40)
+    Test-RhCase 'MUST NOT FIRE  a commit -ListSet cannot name is never read as an empty set: exit 3, blind=cannot-read-commit on the marker, no files= token and no path line' {
+      ($lsBad.Code -eq 3) -and (@($lsBad.Lines).Count -eq 2) -and ([string]@($lsBad.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=cannot-read-commit') -and (@(@($lsBad.Lines) | Where-Object { $_ -match 'files=' }).Count -eq 0) -and ((Get-RhSetLines $lsBad.Lines).Count -eq 0), (@($lsBad.Lines) -join ' / ')
+    }
+    $lsAbs = Get-RhListSet -Repo $lf -Commit $lPre
+    Test-RhCase 'MUST NOT FIRE  a commit with no manifest lists no set, and that is a real answer, not a blind: exit 0, files=0 manifest=absent' {
+      ($lsAbs.Code -eq 0) -and (@($lsAbs.Lines).Count -eq 1) -and ([string]@($lsAbs.Lines)[-1] -ceq ('CHAIN-REHEARSAL-LISTSET-COMPLETE files=0 commit=' + $lPre + ' key=- manifest=absent')), (@($lsAbs.Lines) -join ' / ')
+    }
+    $lsDots = Get-RhListSet -Repo $lf -Range ($l0 + '...' + $l1)
+    $lsMis = Get-RhListSet -Repo $lf -Range ($l0 + '..' + $l1) -Commit $l0 -CommitGiven
+    Test-RhCase 'MUST NOT FIRE  a three-dot range (a merge-base diff, which -ForPush never makes) and a -Commit that is not the range''s tip are refused as bad-range, never listed' {
+      ($lsDots.Code -eq 3) -and ([string]@($lsDots.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-range') -and ($lsMis.Code -eq 3) -and ([string]@($lsMis.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-range'), ((@($lsDots.Lines) -join ' / ') + ' || ' + (@($lsMis.Lines) -join ' / '))
+    }
+    $lsVd8 = Join-Path $st 'lvd8'
+    $null = [IO.Directory]::CreateDirectory($lsVd8)
+    $lsNoLs = Invoke-RhSandbox $lp ('-Range ' + $l0 + '..' + $l1) @{ TC_REHEARSAL_VERDICT_DIR = $lsVd8 }
+    $lsBoth = Invoke-RhSandbox $lp '-ListSet -ForPush' @{ TC_REHEARSAL_VERDICT_DIR = $lsVd8 }
+    $lsUsageLines = @(@($lsNoLs.Lines) + @($lsBoth.Lines))
+    $lsRan = @($lsUsageLines | Where-Object { $_ -match '^CHAIN-REHEARSAL-(CHECK-)?COMPLETE ' })
+    Test-RhCase 'MUST FIRE  -Range without -ListSet (which would otherwise REHEARSE) and -ListSet beside -ForPush are refused with blind=bad-usage, exit 3, before anything runs: no rehearsal or push decision printed and no verdict written' {
+      $lpOk -and ($lsNoLs.Rc -eq 3) -and ([string]@($lsNoLs.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-usage') -and ($lsBoth.Rc -eq 3) -and ([string]@($lsBoth.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-usage') -and ($lsRan.Count -eq 0) -and ((Get-RhTreeListing $lsVd8) -eq ''), ('rc=' + $lsNoLs.Rc + '/' + $lsBoth.Rc + ' ' + ($lsUsageLines -join ' / ') + ' verdicts=' + (Get-RhTreeListing $lsVd8))
+    }
+
+    # NOTHING WRITTEN, NO SLOT TAKEN. Every one of the 6 slots of lp's private prefix is held by ANOTHER process
+    # (lib\mutex-hold.ps1) for the whole run, so a -ListSet that asked for a slot would have to queue: its ticket would
+    # create lp's private queue root and, through Invoke-RhRehearsal, print WAITING. The verdict directory and the child's
+    # own TEMP are compared by listing AND watched, because a rehearsal removes its scratch clone in a finally and only a
+    # watcher sees a clone that came and went.
+    function Invoke-RhListSetProbe {
+      $root = Join-Path $st 'lw'; $t = Join-Path $root 't'; $v = Join-Path $root 'v'
+      $null = [IO.Directory]::CreateDirectory($t); $null = [IO.Directory]::CreateDirectory($v)
+      [IO.File]::WriteAllText((Join-Path $t 'keep.txt'), 'present before the run')
+      Save-RhVerdict $v ([pscustomobject]@{ result = 'pass'; blind = ''; key = ('0' * 64); stage = ''; cause = 'fixture'; words = @(); data_date = '2026-09-22'; preexisting = @() })
+      $res = [ordered]@{ Error = ''; Rc = $null; Lines = @(); TBefore = ''; TAfter = ''; VBefore = ''; VAfter = ''; Held = 0; Alive = 0; Events = @(); Flushed = $false; QueueMade = $false }
+      $hl = New-Object Collections.ArrayList
+      $fsw = $null; $sid = 'rhls-' + [guid]::NewGuid().ToString('N').Substring(0, 12)
+      $kinds = @('Created', 'Changed', 'Deleted', 'Renamed')
+      try {
+        if (-not $lpOk) { throw ('the sandbox was not built: slot rewrites landed ' + $lpRewrites + ', not 1,1,1') }
+        for ($i = 0; $i -lt $script:RhMaxConcurrent; $i++) { [void]$hl.Add((Start-TcMutexHold -Name ($lsPrefix + $i))) }
+        $res.Held = @($hl | Where-Object { $_.Held }).Count
+        $res.TBefore = Get-RhTreeListing $t; $res.VBefore = Get-RhTreeListing $v
+        $fsw = New-Object IO.FileSystemWatcher $root
+        $fsw.IncludeSubdirectories = $true
+        $fsw.NotifyFilter = [IO.NotifyFilters]'FileName, DirectoryName, LastWrite, Size'
+        foreach ($ev in $kinds) { $null = Register-ObjectEvent -InputObject $fsw -EventName $ev -SourceIdentifier ($sid + '-' + $ev) }
+        $fsw.EnableRaisingEvents = $true
+        $run = Invoke-RhSandbox $lp ('-ListSet -Commit ' + $l1) @{ TEMP = $t; TMP = $t; TC_REHEARSAL_VERDICT_DIR = $v }
+        $res.Rc = $run.Rc; $res.Lines = @($run.Lines)
+        $res.Alive = @($hl | Where-Object { $_.Held -and -not $_.Process.HasExited }).Count
+        # FLUSH: the watcher reports in order, so once it has reported this file it has reported everything before it.
+        $flush = Join-Path $root ('flush-' + [guid]::NewGuid().ToString('N') + '.txt')
+        [IO.File]::WriteAllText($flush, 'x')
+        $sw = [Diagnostics.Stopwatch]::StartNew()
+        while (-not $res.Flushed -and $sw.Elapsed.TotalSeconds -lt 30) {   # a hang guard, never a bar: the event takes milliseconds
+          foreach ($e in @(Get-Event -SourceIdentifier ($sid + '-Created') -ErrorAction SilentlyContinue)) { if ([string]::Equals([string]$e.SourceEventArgs.FullPath, $flush, [StringComparison]::OrdinalIgnoreCase)) { $res.Flushed = $true } }
+          if (-not $res.Flushed) { Start-Sleep -Milliseconds 50 }
+        }
+        $evs = New-Object Collections.ArrayList
+        foreach ($ev in $kinds) {
+          foreach ($e in @(Get-Event -SourceIdentifier ($sid + '-' + $ev) -ErrorAction SilentlyContinue)) {
+            $fp = [string]$e.SourceEventArgs.FullPath
+            if ([string]::Equals($fp, $flush, [StringComparison]::OrdinalIgnoreCase)) { continue }
+            # PowerShell 5.1's own start-up writes and deletes __PSScriptPolicyTest_* in TEMP (measured 2026-09-23 on a bare
+            # child): the host's write, not the script's. A directory's Changed only echoes a create or delete inside it,
+            # and those are judged themselves.
+            if ([IO.Path]::GetFileName($fp).StartsWith('__PSScriptPolicyTest_', [StringComparison]::Ordinal) -and [string]::Equals([IO.Path]::GetDirectoryName($fp), $t, [StringComparison]::OrdinalIgnoreCase)) { continue }
+            if ($ev -eq 'Changed' -and [IO.Directory]::Exists($fp)) { continue }
+            [void]$evs.Add($ev + ' ' + $fp.Substring($root.Length))
+          }
+        }
+        $res.Events = @($evs)
+        $res.TAfter = Get-RhTreeListing $t; $res.VAfter = Get-RhTreeListing $v
+        $res.QueueMade = [IO.Directory]::Exists($lsQueue)
+      } catch { $res.Error = $_.Exception.Message }
+      finally {
+        if ($fsw) { $fsw.EnableRaisingEvents = $false }
+        foreach ($ev in $kinds) { Unregister-Event -SourceIdentifier ($sid + '-' + $ev) -ErrorAction SilentlyContinue; Remove-Event -SourceIdentifier ($sid + '-' + $ev) -ErrorAction SilentlyContinue }
+        if ($fsw) { $fsw.Dispose() }
+        foreach ($h in @($hl.ToArray())) { Stop-TcMutexHold $h }
+      }
+      return [pscustomobject]$res
+    }
+    $lsProbe = Invoke-RhListSetProbe
+    $lsWaited = @(@($lsProbe.Lines) | Where-Object { $_ -match 'WAITING' })
+    Test-RhCase ('MUST NOT FIRE  -ListSet writes nothing and takes no slot: with all ' + $script:RhMaxConcurrent + ' rehearsal slots held by other processes it lists at once (no WAITING, no queue ticket), and its verdict directory and TEMP are unchanged by listing and by a watcher') {
+      (-not $lsProbe.Error) -and ($lsProbe.Held -eq $script:RhMaxConcurrent) -and ($lsProbe.Alive -eq $script:RhMaxConcurrent) -and ($lsProbe.Rc -eq 0) -and ([string]@($lsProbe.Lines)[-1] -cmatch ('^CHAIN-REHEARSAL-LISTSET-COMPLETE files=' + $lsWant.Count + ' ')) -and ($lsWaited.Count -eq 0) -and (-not $lsProbe.QueueMade) -and $lsProbe.Flushed -and (@($lsProbe.Events).Count -eq 0) -and [string]::Equals($lsProbe.TBefore, $lsProbe.TAfter, [StringComparison]::Ordinal) -and [string]::Equals($lsProbe.VBefore, $lsProbe.VAfter, [StringComparison]::Ordinal),
+        ('error=' + $lsProbe.Error + ' held=' + $lsProbe.Held + ' alive=' + $lsProbe.Alive + ' rc=' + $lsProbe.Rc + ' last=' + [string]@($lsProbe.Lines)[-1] + ' waited=' + $lsWaited.Count + ' queue=' + $lsProbe.QueueMade + ' flushed=' + $lsProbe.Flushed + ' events=' + (@($lsProbe.Events) -join ';') + ' tSame=' + ($lsProbe.TBefore -eq $lsProbe.TAfter) + ' vSame=' + ($lsProbe.VBefore -eq $lsProbe.VAfter))
+    }
+
+    # THE -FORPUSH TWIN. The child reads the real clock, so the fixture verdict is dated today. Each state moves the
+    # fixture's HEAD and origin/main, then runs the script from before -ListSet (lo) and this one (ln) back to back.
+    $lsToday = (Get-Date).ToString('yyyy-MM-dd')
+    $lsStates = @(
+      [pscustomobject]@{ Name = 'allow';      Tip = $l1; Base = $l0; Verdict = 'pass'; Code = 0; Outcome = 'rehearsed-pass' },
+      [pscustomobject]@{ Name = 'not-needed'; Tip = $l2; Base = $l1; Verdict = 'pass'; Code = 0; Outcome = 'not-needed' },
+      [pscustomobject]@{ Name = 'refuse';     Tip = $l1; Base = $l0; Verdict = 'fail'; Code = 1; Outcome = 'rehearsed-fail' })
+    $lsTwin = New-Object Collections.ArrayList
+    foreach ($lsS in $lsStates) {
+      Save-RhVerdict $lsVd ([pscustomobject]@{ result = $lsS.Verdict; blind = ''; key = $lsKey; stage = 'commit'; cause = ('fixture ' + $lsS.Verdict); words = @('fixture words'); data_date = $lsToday; preexisting = @() })
+      $null = Invoke-RhGit $lf @('checkout', '-q', '--detach', $lsS.Tip)
+      $null = Invoke-RhGit $lf @('update-ref', 'refs/remotes/origin/main', $lsS.Base)
+      $lsO = Invoke-RhSandbox $lo '-ForPush'
+      $lsN = Invoke-RhSandbox $ln '-ForPush'
+      $lsWantMark = 'CHAIN-REHEARSAL-CHECK-COMPLETE code=' + $lsS.Code + ' outcome=' + $lsS.Outcome
+      $lsSame = ($lsO.Rc -eq $lsN.Rc) -and [string]::Equals((@($lsO.Lines) -join "`n"), (@($lsN.Lines) -join "`n"), [StringComparison]::Ordinal)
+      $lsOk = $lsSame -and ($lsN.Rc -eq $lsS.Code) -and (@($lsN.Lines).Count -ge 2) -and [string]::Equals([string]@($lsN.Lines)[-1], $lsWantMark, [StringComparison]::Ordinal)
+      [void]$lsTwin.Add([pscustomobject]@{ Name = $lsS.Name; Ok = $lsOk; Got = ($lsS.Name + ': before rc=' + $lsO.Rc + ' [' + (@($lsO.Lines) -join ' / ') + '] now rc=' + $lsN.Rc + ' [' + (@($lsN.Lines) -join ' / ') + '] ' + $lsN.Err) })
+    }
+    Test-RhCase 'CLEAN TWIN  -ForPush over the same fixture decides exactly as before -ListSet existed: allow, not-needed and refuse print the same lines and exit codes as that script, run from its blob beside this one' {
+      (@($lsTwin | Where-Object { $_.Ok }).Count -eq $lsStates.Count), ((@($lsTwin | Where-Object { -not $_.Ok } | ForEach-Object { $_.Got })) -join ' || ')
+    }
+  } finally {
     if ($null -eq $savedVd) { Remove-Item Env:\TC_REHEARSAL_VERDICT_DIR -ErrorAction SilentlyContinue } else { $env:TC_REHEARSAL_VERDICT_DIR = $savedVd }
     if ($null -eq $savedBy) { Remove-Item Env:\TC_NO_REHEARSAL -ErrorAction SilentlyContinue } else { $env:TC_NO_REHEARSAL = $savedBy }
     Remove-Item -LiteralPath $st -Recurse -Force -ErrorAction SilentlyContinue
@@ -799,7 +1116,7 @@ if ($SelfTest) {
   $hkSet = Get-RhManifestSet $script:RhRoot 'HEAD'
   Test-RhCase 'MUST FIRE  a pre-commit edit is a manifest change (the rehearsal commits through that hook)' { ($hkSet.Ok -and $hkSet.Set.ContainsKey('ops/hooks/pre-commit')), ('ok=' + $hkSet.Ok + ' why=' + $hkSet.Why) }
   Test-RhCase 'MUST NOT FIRE  a pre-push or commit-msg edit demands no rehearsal it cannot exercise' { ($hkSet.Ok -and -not $hkSet.Set.ContainsKey('ops/hooks/pre-push') -and -not $hkSet.Set.ContainsKey('ops/hooks/commit-msg')), ('ok=' + $hkSet.Ok) }
-  $want = 26
+  $want = 35
   if ($script:rhCases -ne $want) { Write-Output ('rehearse-chain self-test FAIL: ran {0} case(s), the suite lists {1}' -f $script:rhCases, $want); exit 1 }
   if ($script:rhFail) { Write-Output ('rehearse-chain self-test FAIL: {0} of {1} case(s)' -f $script:rhFail, $script:rhCases); exit 1 }
   Write-Output ('rehearse-chain self-test PASS: {0} of {0} cases - led by the founding defect (an empty cost-flags.txt refused by the 09-05 hook) and a manifest change with no verdict being refused' -f $script:rhCases)
@@ -810,6 +1127,24 @@ if ($SelfTest) {
 $vdir = Get-RhVerdictDir $VerdictDir
 Clear-TcGitRepoEnv
 $repoTop = $script:RhRoot
+
+# -Range BELONGS TO -ListSet. Without it this run would fall through to the default mode and REHEARSE (about 14 minutes
+# and one of the 6 slots) for a caller who asked only for a listing, so it is refused before anything is read.
+if ($Range -and -not $ListSet) {
+  Write-Output ('chain-rehearsal: COULD NOT EVALUATE blind=bad-usage - -Range ' + $Range + ' is read only by -ListSet, and without it this run would rehearse. Nothing was rehearsed; add -ListSet.')
+  Write-Output 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-usage'
+  exit 3
+}
+if ($ListSet) {
+  if ($CheckPush -or $ForPush) {
+    Write-Output 'chain-rehearsal: COULD NOT EVALUATE blind=bad-usage - -ListSet is read-only and cannot be combined with -CheckPush or -ForPush; run them separately. Nothing was decided.'
+    Write-Output 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-usage'
+    exit 3
+  }
+  $ls = Get-RhListSet -Repo $repoTop -Commit $Commit -Range $Range -CommitGiven:($PSBoundParameters.ContainsKey('Commit'))
+  foreach ($l in $ls.Lines) { Write-Output $l }
+  exit $ls.Code
+}
 
 if ($CheckPush) {
   $refLines = @()
