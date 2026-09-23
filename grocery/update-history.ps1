@@ -96,8 +96,8 @@ if ($SelfTest) {
     TT 'MUST FIRE: the rewrite is counted and named' ($txt -match 'reconciled=1 ' -and $txt -match 'RECONCILED cherries 2026-09-01') ($txt -split "`n" | Select-Object -Last 1)
     TT 'CLEAN TWIN: a week whose stamp matches is byte-identical after -Reconcile' `
       (((Wk '2026-09-08') | ConvertTo-Json -Compress) -eq ((Bk '2026-09-08') | ConvertTo-Json -Compress)) ((Wk '2026-09-08') | ConvertTo-Json -Compress)
-    TT "CLEAN TWIN: today's week is still appended as before, stamped with its board" `
-      ([double](Wk '2026-09-22').cheapest_price -eq 1.99 -and [string](Wk '2026-09-22').board -eq 'comparison-2026-09-22.json@2026-09-22T08:00:00') ((Wk '2026-09-22') | ConvertTo-Json -Compress)
+    TT "CLEAN TWIN: today's week is still appended as before, with its unit (lb), stamped with its board" `
+      ([double](Wk '2026-09-22').cheapest_price -eq 1.99 -and [string](Wk '2026-09-22').board -eq 'comparison-2026-09-22.json@2026-09-22T08:00:00' -and [string](Wk '2026-09-22').unit -eq 'lb') ((Wk '2026-09-22') | ConvertTo-Json -Compress)
     TT 'MUST NOT FIRE: a week whose comparison file is absent is left untouched and counted in nofile=, never deleted' `
       ([double](Wk '2026-08-04').cheapest_price -eq 2.50 -and $txt -match 'nofile=1 ') ((Wk '2026-08-04') | ConvertTo-Json -Compress)
     TT 'MUST NOT FIRE: a week the semantic verify judged keeps its VERIFIED entry (never re-raised to the raw board 0.0833) and is counted' `

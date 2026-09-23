@@ -3539,7 +3539,9 @@ else { Bad ('sanity wow: a unit-less legacy history entry produced ' + (@($uJ | 
 Remove-Item $fxU -Recurse -Force -ErrorAction SilentlyContinue
 # and the WRITER must actually bank the unit, or every case above tests a field nothing produces
 $uhSrc = Get-Content (Join-Path $root 'update-history.ps1') -Raw
-if ($uhSrc -match '\$thisWeek\s*=\s*\[ordered\]@\{[^}]*unit\s*=') { Ok 'sanity wow: update-history banks the commodity unit into every new history entry (the reader above has something to read)' }
+# 2026-09-22 (plan-2026-09-22-10): the entry is built by New-HistoryEntry, which the upsert AND -Reconcile share, so the
+# unit is required in that builder and the upsert must go through it; the old inline literal is still accepted.
+if (($uhSrc -match '\$thisWeek\s*=\s*\[ordered\]@\{[^}]*unit\s*=') -or (($uhSrc -match 'function New-HistoryEntry[^\n]*\n[^\n]*\n\s*return \[ordered\]@\{[^}]*unit\s*=') -and ($uhSrc -match '\$thisWeek\s*=\s*New-HistoryEntry '))) { Ok 'sanity wow: update-history banks the commodity unit into every new history entry (the reader above has something to read)' }
 else { Bad 'sanity wow: update-history no longer writes a unit into the history entry - the unit-changed detector will read every future week as legacy and never fire again' }
 } # u069-the-week-over-week-detector-must-not
 

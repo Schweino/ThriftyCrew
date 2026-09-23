@@ -459,7 +459,9 @@
       "leaves_open": "16 non-Sam's PRICE-DRIFT tiles the chain cannot reconcile on 2026-09-22 (Aldi 13, Walmart 2, Family Fare 1): derive-links refuses them at write time (the row's per-unit does not re-price to the cell within the pruner's 0.32) or has no row or identity for them",
       "leaves_open_occurrences": 16,
       "leaves_open_occurrences_note": "PRICE-DRIFT tiles outside Sam's on main's live link layer over comparison-2026-09-22 (audit-tile-integrity, 2026-09-22 evening)",
-      "shipped_commit": "pending"
+      "leaves_open_followup": "2026-09-22-817976",
+      "leaves_open_owner_note": "minted 2026-09-22 with main's send-alert.ps1 -Force -Lane weekly under 'Triage residual: 16 non-Sam's tile links the chain cannot re-price (residual of 2026-09-20-bec597)', because it has happened (16 tiles today)",
+      "shipped_commit": "commits 'Money lane plan-2026-09-22-10: Sam's links from a proven URL shape, a ruling re-checks its link, history reconciles to the boards' and its follow-up (landed on origin/main 2026-09-22 through ops/push-main.ps1; hashes are rewritten by the rebase, so they are cited by subject)"
     },
     {
       "queue_id": "2026-09-21-274e4b",
@@ -517,7 +519,7 @@
         "before_after": "216 disagreeing commodity-weeks before (78 cheapest price or store, 138 per-store only), 0 after"
       },
       "leaves_open": "nothing",
-      "shipped_commit": "pending"
+      "shipped_commit": "commits 'Money lane plan-2026-09-22-10: Sam's links from a proven URL shape, a ruling re-checks its link, history reconciles to the boards' and its follow-up (landed on origin/main 2026-09-22 through ops/push-main.ps1; hashes are rewritten by the rebase, so they are cited by subject)"
     },
     {
       "queue_id": "discovered:ruled-link-not-rechecked-2026-09-22",
@@ -556,10 +558,12 @@
         "must_fire_case": "MUST FIRE: the frozen founding row, a Fareway tomatoes link to 'Dei Fratelli Tomatoes, Whole', under a ruling for it, is dropped in the same run and re-derived from the Roma Tomatoes row the board prices. MUST FIRE: a ruled link whose cell is GONE from the board is removed (mutant with the removal line neutered: this case goes red, 1 of 19). MUST FIRE: a priced row whose own name is ruled wrong writes no link.",
         "clean_twin": "CLEAN TWIN: the Hy-Vee tomatoes link the ruling does not name is untouched; -Commodity scoping leaves a drifted link in another commodity alone."
       },
+      "freshness": "derive-links-from-prices.ps1 and add-known-wrong.ps1 at origin/main 427327335; main's product-urls.json and comparison-2026-09-22 read 2026-09-22 evening (890 of 3,355 links with no priced cell; no tomatoes|Fareway entry left)",
+      "rollback": "revert the derive-links-from-prices and add-known-wrong hunks; a dropped link is re-derived by the next chain derive when its cell's row carries an identity",
       "premise_verified": "Yes: derive-links-from-prices read no ruling at all and visited priced cells only; audit-known-wrong's link half (BLOCKED-LINK) was the only reader of a ruled link.",
       "status": "done",
       "resolution_note": "A known-wrong ruling now reaches the link as well as the cell: derive-links-from-prices drops any link to a ruled product and re-derives the cell's link from the row the board prices, and add-known-wrong runs it for the ruled commodity and store the moment a ruling is written.",
-      "shipped_commit": "pending"
+      "shipped_commit": "commits 'Money lane plan-2026-09-22-10: Sam's links from a proven URL shape, a ruling re-checks its link, history reconciles to the boards' and its follow-up (landed on origin/main 2026-09-22 through ops/push-main.ps1; hashes are rewritten by the rebase, so they are cited by subject)"
     },
     {
       "queue_id": "discovered:class-keyed-return-rate-2026-09-22",
