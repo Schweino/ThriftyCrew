@@ -85,7 +85,18 @@ carries all four rules in one file, and copying it is faster than re-deriving th
   to new and check the blobs match rather than assuming it. `design/MEASURE-sidecar-double-load-2026-09-11.md`
   is what that looks like.
   **RE-QUALIFY A MOVED HARNESS BY ITS BLOB** (2026-09-18, backlog I228). `ops/audit-conclusion-currency.ps1` marks a
-  document UNQUALIFIED when a harness it names moved after its newest cited commit. The re-read line to write is
+  document UNQUALIFIED when a harness it names moved after its newest cited commit, and lists the harness commits
+  the pair moved past since it was last qualified. **The preferred form since 2026-09-23 is a ROW in
+  `design/reread-ledger.tsv`, written by `ops/add-reread.ps1`** (W4.1 of `design/PLAN-push-derived-conflicts-2026-09-23.md`):
+      `powershell -NoProfile -File ops\add-reread.ps1 -Doc <design\MEASURE-...md> -Harness <path> -Note "<what still holds>"`
+  The row carries the harness's full blob (`git rev-parse HEAD:<path>`, or `git hash-object <path>` when the working
+  copy differs), the blob the pair was last qualified at, the date and your note, and it qualifies ONLY its own
+  (doc, harness) pair and only at that exact blob. The writer refuses an empty note, a note that repeats one already
+  written for the pair, and a harness the doc does not name; nothing writes a row on anyone's behalf, and the audit
+  prints no command to copy, because deciding that the listed changes altered nothing IS the re-read. The ledger is
+  merged by union (`.gitattributes`), so two sessions' rows never conflict, and `ops/audit-reread-ledger.ps1` refuses a
+  push that deletes or edits a row; take a re-read back by appending a `withdrawn` row for the same blob. The doc-line
+  form still works:
       `Re-read at harness blob <id> (<path>): <what still holds>`
   with `<id>` from `git rev-parse HEAD:<path>` (or `git hash-object <path>` before the commit), and the audit
   accepts it exactly as it accepts a commit at or after the harness's last change. A blob from before that change

@@ -18,7 +18,9 @@
     a CONTENT ID    a hash on such a line that names a blob or tree: listed, never read as a commit.
     an UNRESOLVED   a hash on such a line that names no object: counted on the marker and listed, not ratcheted.
   UNQUALIFIED when a named harness has a commit after the NEWEST cited commit, unless the document cites
-  that harness's CURRENT blob. To re-qualify, re-read the conclusion against the moved harness and add
+  that harness's CURRENT blob or the re-read ledger holds a live row for the pair at that blob. To re-qualify,
+  re-read the conclusion against the moved harness and record it as a ledger row (the preferred form since
+  2026-09-23; see RE-READS GO IN A LEDGER below), or as a doc line:
       Re-read at harness blob <git rev-parse HEAD:<path>> (<path>): <what still holds>
   THE BLOB FORM IS THE ONE TO USE (backlog I228, 2026-09-18). The older form, "Re-read at commit <hash>",
   still qualifies a harness when the hash is a commit at or after its last change, but the commit you
@@ -45,6 +47,17 @@
     ops\audit-conclusion-currency.ps1 -Tighten     the same, and record a believable FALL as the new high-water mark
     ops\audit-conclusion-currency.ps1 -Accept      record the CURRENT count as the new high-water mark
     ops\audit-conclusion-currency.ps1 -SelfTest    frozen fixtures, plus this script's live path run against a temp repository
+    ops\audit-conclusion-currency.ps1 -PairState [-PairDoc <EVAL-or-MEASURE file name>]
+                                                   REPORT ONLY: one tab-separated PAIR-STATE line per (doc, harness) with
+                                                   its state, the harness's current blob and the blob it was last qualified
+                                                   at. The re-read ledger's by-hand writer reads prior_blob from it.
+
+  RE-READS GO IN A LEDGER NOW (2026-09-23, W4.1). design\reread-ledger.tsv holds one row per re-read, and a row
+  qualifies its own (doc, harness) pair when its blob is the harness's current blob in full. The rules are beside
+  ConvertFrom-CcRereadLedger below; the writer and the preferred form are in .claude\rules\measurement.md. Doc lines
+  still qualify exactly as before. An UNQUALIFIED report now lists, for each pair, the harness commits it moved past
+  since the pair was last qualified, and it prints no ready-made command: deciding that those changes altered nothing
+  IS the re-read.
 
   THE BASELINE FAILS CLOSED (2026-09-23, W1.2 of design\PLAN-push-derived-conflicts-2026-09-23.md). A baseline is
   READ (it parses and carries an integer `unqualified`), ABSENT (no file) or UNREADABLE (a parse error, conflict
@@ -62,13 +75,15 @@
   evaluate (no documents, no git, or a baseline that is absent or unreadable on a run that is not -Accept).
 #>
 [CmdletBinding()]
-param([switch]$SelfTest, [switch]$Json, [switch]$Accept, [switch]$ReportOnly, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
+param([switch]$SelfTest, [switch]$Json, [switch]$Accept, [switch]$ReportOnly, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '',
+      [switch]$PairState, [string]$PairDoc = '')
 
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\ratchet.ps1')
+. (Join-Path $repo 'lib\git-blob-lib.ps1')   # Invoke-GitCaptured: a harness's history, read as UTF-8 off both streams
 
 # -Root and -BaselineFile exist so the self-test can drive the LIVE path against a temp repository. A gate passes neither.
 $treeRoot = if ($Root) { $Root } else { $repo }
@@ -147,7 +162,11 @@ function Get-CurrencyVerdict {
      a harness path's blob at HEAD (git rev-parse HEAD:<path>), and a cited content id that the current blob starts
      with qualifies THAT harness exactly as a cited commit at or after its last change would. A blob from before the
      harness last changed matches nothing and qualifies nothing, so a stale re-read stays stale. #>
-  param([string[]]$Paths, [string[]]$Hashes, [scriptblock]$HashType, [scriptblock]$PathExists, [scriptblock]$After, [scriptblock]$CurrentBlob = { param($p) '' })
+  <# A RE-READ LEDGER ROW QUALIFIES ITS OWN PAIR (2026-09-23, W4.1 of design\PLAN-push-derived-conflicts-2026-09-23.md).
+     -LedgerRead is the paths Get-CcLedgerQualified found a live row for, at the harness's current blob in full. They
+     count exactly as a doc line's current blob does. A path in -LedgerRead that is not in -Paths is ignored, so a
+     row never enrols a harness. LedgerRead comes back beside BlobRead so the report can say which road qualified. #>
+  param([string[]]$Paths, [string[]]$Hashes, [scriptblock]$HashType, [scriptblock]$PathExists, [scriptblock]$After, [scriptblock]$CurrentBlob = { param($p) '' }, [string[]]$LedgerRead = @())
   $real = New-Object System.Collections.Generic.List[string]
   $content = New-Object System.Collections.Generic.List[string]
   $unres = New-Object System.Collections.Generic.List[string]
@@ -160,7 +179,7 @@ function Get-CurrencyVerdict {
   }
   $ca = $content.ToArray(); $ua = $unres.ToArray()
   $hp = @(@($Paths) | Where-Object { $_ -and (& $PathExists $_) })
-  if ($hp.Count -eq 0) { return @{ Verdict = 'NOT-QUALIFIABLE'; Moved = @(); Why = 'names no harness that exists'; Content = $ca; Unresolved = $ua; BlobRead = @() } }
+  if ($hp.Count -eq 0) { return @{ Verdict = 'NOT-QUALIFIABLE'; Moved = @(); Why = 'names no harness that exists'; Content = $ca; Unresolved = $ua; BlobRead = @(); LedgerRead = @() } }
   $blobRead = New-Object System.Collections.Generic.List[string]
   foreach ($p in $hp) {
     $cb = ([string](& $CurrentBlob $p)).Trim().ToLowerInvariant()
@@ -169,16 +188,24 @@ function Get-CurrencyVerdict {
       if ($cb.StartsWith($c.ToLowerInvariant(), [StringComparison]::Ordinal)) { [void]$blobRead.Add($p); break }
     }
   }
-  $ba = $blobRead.ToArray()
+  $ledgerSet = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+  foreach ($l in @($LedgerRead)) { if ($l) { [void]$ledgerSet.Add($l) } }
+  $ledgerHit = New-Object System.Collections.Generic.List[string]
+  $readAll = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+  foreach ($p in $hp) {
+    if ($ledgerSet.Contains($p)) { [void]$ledgerHit.Add($p); [void]$readAll.Add($p) }
+    if ($blobRead.Contains($p)) { [void]$readAll.Add($p) }
+  }
+  $ba = $blobRead.ToArray(); $la = $ledgerHit.ToArray()
   if ($real.Count -eq 0) {
-    if ($ba.Count -eq $hp.Count) { return @{ Verdict = 'CURRENT'; Moved = @(); Why = ''; Content = $ca; Unresolved = $ua; BlobRead = $ba } }
+    if ($readAll.Count -eq $hp.Count) { return @{ Verdict = 'CURRENT'; Moved = @(); Why = ''; Content = $ca; Unresolved = $ua; BlobRead = $ba; LedgerRead = $la } }
     $why = 'cites no commit git can resolve'
     if ($ca.Count -or $ua.Count) { $why += (' ({0} blob or tree id(s), {1} hash(es) naming no object)' -f $ca.Count, $ua.Count) }
-    return @{ Verdict = 'NOT-QUALIFIABLE'; Moved = @(); Why = $why; Content = $ca; Unresolved = $ua; BlobRead = $ba }
+    return @{ Verdict = 'NOT-QUALIFIABLE'; Moved = @(); Why = $why; Content = $ca; Unresolved = $ua; BlobRead = $ba; LedgerRead = $la }
   }
   $moved = New-Object System.Collections.Generic.List[object]
   foreach ($p in $hp) {
-    if ($blobRead.Contains($p)) { continue }
+    if ($readAll.Contains($p)) { continue }
     $min = $null; $since = ''
     foreach ($h in $real) {
       $n = [int](& $After $h $p)
@@ -186,8 +213,126 @@ function Get-CurrencyVerdict {
     }
     if ($min -gt 0) { [void]$moved.Add(@{ Path = $p; After = $min; Since = $since }) }
   }
-  if ($moved.Count -gt 0) { return @{ Verdict = 'UNQUALIFIED'; Moved = $moved.ToArray(); Why = ''; Content = $ca; Unresolved = $ua; BlobRead = $ba } }
-  return @{ Verdict = 'CURRENT'; Moved = @(); Why = ''; Content = $ca; Unresolved = $ua; BlobRead = $ba }
+  if ($moved.Count -gt 0) { return @{ Verdict = 'UNQUALIFIED'; Moved = $moved.ToArray(); Why = ''; Content = $ca; Unresolved = $ua; BlobRead = $ba; LedgerRead = $la } }
+  return @{ Verdict = 'CURRENT'; Moved = @(); Why = ''; Content = $ca; Unresolved = $ua; BlobRead = $ba; LedgerRead = $la }
+}
+
+# ---- THE RE-READ LEDGER (2026-09-23, W4.1 of design\PLAN-push-derived-conflicts-2026-09-23.md) ----
+# WHY A LEDGER. A re-read written as a line inside the doc it re-qualifies collides with every other session that
+# re-reads the same doc, and a rebase that moves the harness's blob makes the line stale on arrival (51ef26dc0 edited
+# two re-read lines twenty seconds after 30dcc69c7 wrote them, for exactly that reason). design\reread-ledger.tsv is
+# one append-only file, LF, UTF-8 with no BOM, one header line and exactly seven tab-separated fields per row:
+#     doc  harness  blob  prior_blob  date  action  note
+# `.gitattributes` gives that ONE path merge=union, so two sessions appending rows never conflict, and
+# ops\audit-reread-ledger.ps1 refuses a push that deletes or edits a row, or writes one out of shape (a row with no
+# trailing LF would be glued to the next by a union merge and silently ignored here). This file reads it as a SET:
+#   - a `reread` row qualifies only its own (doc, harness) pair, and only when its blob EQUALS the harness's current
+#     blob in full, 40 hex, Ordinal - never a prefix;
+#   - a `withdrawn` row for the same doc, harness and blob cancels it, wherever either sits in the file;
+#   - a row never enrols a harness: only paths the doc already names can be qualified;
+#   - doc lines ("Re-read at harness blob ..." and "Re-read at commit ...") keep working exactly as before.
+$script:REREAD_LEDGER_REL = 'design/reread-ledger.tsv'
+$script:REREAD_HEADER = "doc`tharness`tblob`tprior_blob`tdate`taction`tnote"
+
+function ConvertTo-CcRepoPath([string]$P) {
+  # A repo-relative path as the ledger spells it: forward slashes, no leading ./ and no surrounding space.
+  $q = ([string]$P).Trim() -replace '\\', '/'
+  while ($q.StartsWith('./', [StringComparison]::Ordinal)) { $q = $q.Substring(2) }
+  return $q
+}
+
+function ConvertFrom-CcRereadLedger {
+  <# Pure over the ledger's TEXT. Returns @{ Rows; Malformed }. A row is kept when it has exactly seven fields and an
+     action of reread or withdrawn; anything else is counted as malformed and skipped, because ops\audit-reread-ledger.ps1
+     is what refuses it. The blob is NOT shape-checked here, on purpose: only an exact match against a 40-hex current
+     blob can qualify anything, so a short or damaged blob qualifies nothing by the match itself, and a second copy of
+     that rule here would make the match's fixture insensitive (.claude\rules\ops-and-gates.md, two guards over one rule).
+     A trailing CR is stripped from each line so a CRLF working copy reads as its LF blob does. #>
+  param([string]$Text)
+  $rows = New-Object System.Collections.Generic.List[object]
+  $bad = 0
+  if (-not $Text) { return @{ Rows = @(); Malformed = 0 } }
+  $lines = $Text -split "`n"
+  for ($i = 0; $i -lt $lines.Count; $i++) {
+    $ln = $lines[$i].TrimEnd([char]13)
+    if ($i -eq $lines.Count - 1 -and $ln.Length -eq 0) { continue }   # the empty string after the final LF
+    if ($i -eq 0 -and [string]::Equals($ln, $script:REREAD_HEADER, [StringComparison]::Ordinal)) { continue }
+    $f = $ln.Split([char]9)
+    if ($f.Count -ne 7) { $bad++; continue }
+    if (-not ($f[5] -ceq 'reread' -or $f[5] -ceq 'withdrawn')) { $bad++; continue }
+    [void]$rows.Add([pscustomobject]@{ Doc = (ConvertTo-CcRepoPath $f[0]); Harness = (ConvertTo-CcRepoPath $f[1]); Blob = $f[2]; Prior = $f[3]; Date = $f[4]; Action = $f[5]; Note = $f[6]; Line = ($i + 1) })
+  }
+  return @{ Rows = $rows.ToArray(); Malformed = $bad }
+}
+
+function Get-CcLedgerQualified {
+  <# The members of -Paths that the ledger re-qualifies for -Doc: a `reread` row for exactly that (doc, path) whose blob
+     EQUALS the path's current blob in full (Ordinal), with no `withdrawn` row for the same doc, path and blob anywhere.
+     Pure over -CurrentBlob, so the fixtures drive it without git. Only members of -Paths can come back, so a row
+     naming a path the doc does not name changes nothing. #>
+  param([string]$Doc, [string[]]$Paths, [object[]]$Rows, [scriptblock]$CurrentBlob)
+  $out = New-Object System.Collections.Generic.List[string]
+  $d = ConvertTo-CcRepoPath $Doc
+  foreach ($p in @($Paths)) {
+    if (-not $p) { continue }
+    $cb = ([string](& $CurrentBlob $p)).Trim()
+    if (-not $cb) { continue }
+    $pp = ConvertTo-CcRepoPath $p
+    $hit = $false; $withdrawn = $false
+    foreach ($r in @($Rows)) {
+      if (-not $r) { continue }
+      if (-not [string]::Equals($r.Doc, $d, [StringComparison]::OrdinalIgnoreCase)) { continue }
+      if (-not [string]::Equals($r.Harness, $pp, [StringComparison]::OrdinalIgnoreCase)) { continue }
+      if (-not [string]::Equals([string]$r.Blob, $cb, [StringComparison]::Ordinal)) { continue }
+      if ($r.Action -ceq 'withdrawn') { $withdrawn = $true } elseif ($r.Action -ceq 'reread') { $hit = $true }
+    }
+    if ($hit -and -not $withdrawn) { [void]$out.Add($p) }
+  }
+  $arr = $out.ToArray()
+  return ,$arr
+}
+
+function Get-CcPairLastQualified {
+  <# Where (doc, harness) was LAST qualified, read against the harness's history (-History: newest first, each entry
+     @{ Short; Date; Subject; Blob } for a commit that changed the harness). The candidates are every live `reread`
+     ledger blob of the pair (-LedgerBlobs, full ids, equality), every content id the doc cites (-ContentIds, a prefix
+     of a history blob), and every cited commit with the count of harness commits after it (-CommitAfter, @{ Ref; After }).
+     The newest candidate wins. Returns @{ Index; Blob; Via; Ref; MovedPast } where Index is how many history entries
+     are newer than that point and MovedPast is those entries, or $null when nothing ever qualified the pair. Pure, so
+     the fixtures drive it with a frozen history. #>
+  param([object[]]$History, [string[]]$LedgerBlobs = @(), [string[]]$ContentIds = @(), [object[]]$CommitAfter = @())
+  $h = @($History | Where-Object { $_ })
+  $best = $null
+  # Cited commits first, so a tie at one point names the commit; a candidate replaces the best only when strictly newer.
+  foreach ($ca in @($CommitAfter)) {
+    if (-not $ca) { continue }
+    $i = [int]$ca.After
+    if ($i -lt 0) { continue }
+    $bl = if ($i -lt $h.Count) { [string]$h[$i].Blob } else { '' }
+    if ($null -eq $best -or $i -lt $best.Index) { $best = @{ Index = $i; Blob = $bl; Via = 'cited commit'; Ref = [string]$ca.Ref } }
+  }
+  foreach ($b in @($LedgerBlobs)) {
+    if (-not $b) { continue }
+    for ($i = 0; $i -lt $h.Count; $i++) {
+      if ([string]::Equals([string]$h[$i].Blob, $b, [StringComparison]::Ordinal)) {
+        if ($null -eq $best -or $i -lt $best.Index) { $best = @{ Index = $i; Blob = [string]$h[$i].Blob; Via = 'ledger row'; Ref = $b } }
+        break
+      }
+    }
+  }
+  foreach ($c in @($ContentIds)) {
+    if (-not $c) { continue }
+    $cl = $c.ToLowerInvariant()
+    for ($i = 0; $i -lt $h.Count; $i++) {
+      if (([string]$h[$i].Blob).StartsWith($cl, [StringComparison]::Ordinal)) {
+        if ($null -eq $best -or $i -lt $best.Index) { $best = @{ Index = $i; Blob = [string]$h[$i].Blob; Via = 'doc line blob'; Ref = $c } }
+        break
+      }
+    }
+  }
+  if ($null -eq $best) { return $null }
+  $best.MovedPast = @(if ($best.Index -gt 0) { $h[0..($best.Index - 1)] })
+  return $best
 }
 
 function Read-CcBaseline {
@@ -306,6 +451,64 @@ if ($SelfTest) {
   $h16 = @($hh16)
   Case 'CLEAN TWIN' 'a full 40-hex commit id is still cited after the md5 rule' ($h16.Count -eq 1 -and $h16[0] -eq $full16) ($h16 -join ',')
 
+  # THE RE-READ LEDGER (2026-09-23, W4.1). Rows are parsed from TEXT, exactly as the live path reads the file, and the
+  # verdict is taken with the cited commit 3 changes behind the harness, so only the ledger can make a pair CURRENT.
+  $cbP = 'a1b2c3d4e5f60718293a4b5c6d7e8f9012345678'
+  $cbQ = 'f0e1d2c3b4a5968778695a4b3c2d1e0f98765432'
+  $oldP = '0123456789abcdef0123456789abcdef01234567'
+  # A frozen current-blob map over this block's own literal paths; any other path has no blob, as an uncommitted one would.
+  $cbOf = { param($p) switch ($p) { 'ops/p.ps1' { $cbP } 'ops/q.ps1' { $cbQ } 'ops/x.ps1' { $cbP } default { '' } } }
+  $TAB = [char]9
+  function New-CcLedgerText([string[]]$RowLines) { return ($script:REREAD_HEADER + "`n" + (($RowLines | ForEach-Object { $_ + "`n" }) -join '')) }
+  function Get-CcLedgerVerdict([string]$Text, [string[]]$DocPaths) {
+    $lg = ConvertFrom-CcRereadLedger -Text $Text
+    $lqx = Get-CcLedgerQualified -Doc 'design/EVAL-a.md' -Paths $DocPaths -Rows @($lg.Rows) -CurrentBlob $cbOf
+    $vx = Get-CurrencyVerdict -Paths $DocPaths -Hashes @('aaa1111') -HashType $isCommit -PathExists $yes -After { param($h, $p) 3 } -CurrentBlob $cbOf -LedgerRead @($lqx)
+    return @{ V = $vx; Q = @($lqx); Ledger = $lg }
+  }
+  $rowP = 'design/EVAL-a.md' + $TAB + 'ops/p.ps1' + $TAB + $cbP + $TAB + '-' + $TAB + '2026-09-23' + $TAB + 'reread' + $TAB + 'every figure holds'
+  $l23 = Get-CcLedgerVerdict -Text (New-CcLedgerText @($rowP)) -DocPaths @('ops/p.ps1')
+  Case 'MUST FIRE' 'a ledger reread row at the harness''s CURRENT blob makes that (doc, harness) CURRENT past a cited commit 3 changes old' `
+    ($l23.V.Verdict -eq 'CURRENT' -and @($l23.V.LedgerRead).Count -eq 1 -and $l23.Q[0] -eq 'ops/p.ps1') ($l23.V.Verdict + ' q=' + ($l23.Q -join ','))
+  $rowShort = 'design/EVAL-a.md' + $TAB + 'ops/p.ps1' + $TAB + $cbP.Substring(0, 12) + $TAB + '-' + $TAB + '2026-09-23' + $TAB + 'reread' + $TAB + 'a prefix is not a blob'
+  $l24 = Get-CcLedgerVerdict -Text (New-CcLedgerText @($rowShort)) -DocPaths @('ops/p.ps1')
+  Case 'MUST NOT FIRE' 'a ledger row carrying only a 12-character PREFIX of the current blob qualifies nothing: the match is the full id' `
+    ($l24.V.Verdict -eq 'UNQUALIFIED' -and $l24.Q.Count -eq 0) ($l24.V.Verdict + ' q=' + ($l24.Q -join ','))
+  $l25 = Get-CcLedgerVerdict -Text (New-CcLedgerText @($rowP)) -DocPaths @('ops/p.ps1', 'ops/q.ps1')
+  Case 'MUST NOT FIRE' 'a row for (doc A, harness P) does not qualify (doc A, harness Q): Q is still the one that moved' `
+    ($l25.V.Verdict -eq 'UNQUALIFIED' -and @($l25.V.Moved).Count -eq 1 -and $l25.V.Moved[0].Path -eq 'ops/q.ps1' -and $l25.Q -notcontains 'ops/q.ps1') ($l25.V.Verdict + ' q=' + ($l25.Q -join ','))
+  $rowX = 'design/EVAL-a.md' + $TAB + 'ops/x.ps1' + $TAB + $cbP + $TAB + '-' + $TAB + '2026-09-23' + $TAB + 'reread' + $TAB + 'a path the doc never named'
+  $l26 = Get-CcLedgerVerdict -Text (New-CcLedgerText @($rowX)) -DocPaths @('ops/p.ps1')
+  Case 'MUST NOT FIRE' 'a row naming a path the doc does not name enrols nothing: the harness set and the verdict are unchanged' `
+    ($l26.V.Verdict -eq 'UNQUALIFIED' -and $l26.Q.Count -eq 0 -and @($l26.V.Moved).Count -eq 1 -and $l26.V.Moved[0].Path -eq 'ops/p.ps1') ($l26.V.Verdict + ' q=' + ($l26.Q -join ','))
+  $rowOtherDoc = 'design/EVAL-b.md' + $TAB + 'ops/p.ps1' + $TAB + $cbP + $TAB + '-' + $TAB + '2026-09-23' + $TAB + 'reread' + $TAB + 'another document'
+  $l27 = Get-CcLedgerVerdict -Text (New-CcLedgerText @($rowOtherDoc)) -DocPaths @('ops/p.ps1')
+  Case 'MUST NOT FIRE' 'a row for doc B at the same harness and blob does not qualify doc A' ($l27.V.Verdict -eq 'UNQUALIFIED' -and $l27.Q.Count -eq 0) $l27.V.Verdict
+  $rowW = 'design/EVAL-a.md' + $TAB + 'ops/p.ps1' + $TAB + $cbP + $TAB + '-' + $TAB + '2026-09-23' + $TAB + 'withdrawn' + $TAB + 'the re-read missed a changed default'
+  $l28 = Get-CcLedgerVerdict -Text (New-CcLedgerText @($rowP, $rowW)) -DocPaths @('ops/p.ps1')
+  Case 'MUST FIRE' 'withdrawn AFTER reread, same doc, harness and blob, reads UNQUALIFIED' ($l28.V.Verdict -eq 'UNQUALIFIED' -and $l28.Q.Count -eq 0) $l28.V.Verdict
+  $l29 = Get-CcLedgerVerdict -Text (New-CcLedgerText @($rowW, $rowP)) -DocPaths @('ops/p.ps1')
+  Case 'MUST FIRE' 'withdrawn BEFORE reread reads UNQUALIFIED too: the ledger is a set, and file order settles nothing' ($l29.V.Verdict -eq 'UNQUALIFIED' -and $l29.Q.Count -eq 0) $l29.V.Verdict
+  $rowWOld = 'design/EVAL-a.md' + $TAB + 'ops/p.ps1' + $TAB + $oldP + $TAB + '-' + $TAB + '2026-09-20' + $TAB + 'withdrawn' + $TAB + 'an older reading withdrawn'
+  $l30 = Get-CcLedgerVerdict -Text (New-CcLedgerText @($rowWOld, $rowP)) -DocPaths @('ops/p.ps1')
+  Case 'CLEAN TWIN' 'a withdrawal is bound to its blob: withdrawing an OLDER blob leaves a reread at the current blob CURRENT' ($l30.V.Verdict -eq 'CURRENT' -and $l30.Q.Count -eq 1) $l30.V.Verdict
+  $bad31 = 'design/EVAL-a.md' + $TAB + 'ops/p.ps1' + $TAB + $cbP + $TAB + '-' + $TAB + '2026-09-23' + $TAB + 'reread'
+  $bad31b = 'design/EVAL-a.md' + $TAB + 'ops/p.ps1' + $TAB + $cbP + $TAB + '-' + $TAB + '2026-09-23' + $TAB + 'Reread' + $TAB + 'the action is case-exact'
+  $l31 = Get-CcLedgerVerdict -Text (New-CcLedgerText @($bad31, $bad31b)) -DocPaths @('ops/p.ps1')
+  Case 'MUST FIRE' 'a six-field row and an unknown action are counted malformed and qualify nothing' `
+    ($l31.Ledger.Malformed -eq 2 -and $l31.Q.Count -eq 0 -and $l31.V.Verdict -eq 'UNQUALIFIED') ("malformed=$($l31.Ledger.Malformed) " + $l31.V.Verdict)
+  $hist32 = @(
+    [pscustomobject]@{ Short = 'c3'; Date = '2026-09-23'; Subject = 'three'; Blob = 'b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3' }
+    [pscustomobject]@{ Short = 'c2'; Date = '2026-09-22'; Subject = 'two'; Blob = 'b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2' }
+    [pscustomobject]@{ Short = 'c1'; Date = '2026-09-21'; Subject = 'one'; Blob = 'b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1' }
+  )
+  $last32 = Get-CcPairLastQualified -History $hist32 -LedgerBlobs @('b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2') -CommitAfter @(@{ Ref = 'aaa1111'; After = 2 })
+  Case 'MUST FIRE' 'the moved-past list starts at the pair''s LAST qualifying point: a stale ledger row newer than the cited commit leaves ONE commit owed, not two' `
+    ($last32 -and $last32.Index -eq 1 -and $last32.Via -eq 'ledger row' -and @($last32.MovedPast).Count -eq 1 -and $last32.MovedPast[0].Short -eq 'c3') ("index=$($last32.Index) via=$($last32.Via)")
+  $last33 = Get-CcPairLastQualified -History $hist32 -ContentIds @('b1b1b1b1b1') -CommitAfter @(@{ Ref = 'aaa1111'; After = 2 })
+  Case 'CLEAN TWIN' 'with no newer ledger row, the cited commit and a doc-line blob of the same content give the pair''s blob at that point (b1) and two commits owed' `
+    ($last33 -and $last33.Index -eq 2 -and $last33.Blob -eq 'b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1' -and @($last33.MovedPast).Count -eq 2) ("index=$($last33.Index) blob=$($last33.Blob)")
+
   # THE LIVE PATH, DRIVEN (2026-09-11). The founding shape is a pre-push run-gates pass whose count FELL: it rewrote
   # the tracked baseline and left the pushing checkout dirty. These run THIS script as a child against a temp git
   # repository whose one EVAL document cites a commit its harness has since moved past, and a temp baseline, so they
@@ -342,6 +545,13 @@ if ($SelfTest) {
     # qualify it. It is CURRENT, so the unqualified count the ratchet cases below read is unchanged.
     $ltNowBlob = ([string](& git -C $ltTree rev-parse 'HEAD:ops/h.ps1')).Trim().Substring(0, 10)
     [IO.File]::WriteAllText((Join-Path $ltTree 'design\EVAL-reread.md'), ("Harness: ops/h.ps1`nCommit it ran at: " + $ltCited + "`n`nRe-read at harness blob " + $ltNowBlob + " (ops/h.ps1): it still holds.`n"), $ltUtf8)
+    # A THIRD document re-read ONLY by a ledger row (W4.1): same old commit and no re-read line, so the row is the only
+    # thing that can qualify it. It is CURRENT, so the ratchet cases below still read a count of 1.
+    $ltNowFull = ([string](& git -C $ltTree rev-parse 'HEAD:ops/h.ps1')).Trim()
+    $ltAtCited = ([string](& git -C $ltTree rev-parse ($ltCited + ':ops/h.ps1'))).Trim()
+    $ltTwoShort = ([string](& git -C $ltTree rev-parse HEAD)).Trim().Substring(0, 9)
+    [IO.File]::WriteAllText((Join-Path $ltTree 'design\EVAL-ledger.md'), ("Harness: ops/h.ps1`nCommit it ran at: " + $ltCited + "`n"), $ltUtf8)
+    [IO.File]::WriteAllText((Join-Path $ltTree 'design\reread-ledger.tsv'), ($script:REREAD_HEADER + "`n" + 'design/EVAL-ledger.md' + [char]9 + 'ops/h.ps1' + [char]9 + $ltNowFull + [char]9 + $ltAtCited + [char]9 + '2026-09-23' + [char]9 + 'reread' + [char]9 + 'the second write changed only the number printed' + "`n"), $ltUtf8)
     $ltBl = Join-Path $lt 'baseline.json'
     [IO.File]::WriteAllText($ltBl, "{`n    ""unqualified"":  2,`n    ""note"":  ""fixture""`n}`n", $ltUtf8)
     $ltSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltBl))
@@ -429,13 +639,25 @@ if ($SelfTest) {
       ($out4 -match 'UNQUALIFIED\s+EVAL-fixture\.md') ($out4 -replace "`r?`n", ' | ')
     Case 'LIVE PATH' 'a document whose re-read line cites the harness''s CURRENT blob (git rev-parse HEAD:<path>) is current against a real repository' `
       ($out4 -match 'current\s+EVAL-reread\.md' -and $out4 -match 'ops/h\.ps1 re-read by its CURRENT blob') ($out4 -replace "`r?`n", ' | ')
+    # THE LEDGER, READ BY THE LIVE PATH FROM THE WORKING COPY (W4.1).
+    Case 'LIVE PATH' 'a document re-read only by a design\reread-ledger.tsv row at the current blob is current against a real repository, and says so' `
+      ($out4 -match 'current\s+EVAL-ledger\.md' -and $out4 -match 'ops/h\.ps1 re-read by a ledger row at its CURRENT blob' -and $out4 -match '1 row\(s\) read, 1 pair\(s\) qualified') ($out4 -replace "`r?`n", ' | ')
+    $mp4 = [regex]::IsMatch($out4, ('(?m)last qualified by cited commit ' + $ltCited + '[^\r\n]*\(1\):\s*\r?\n\s+' + $ltTwoShort + ' \S+ two\s*$'))
+    Case 'LIVE PATH' 'an UNQUALIFIED pair lists the harness commit it moved past since it was last qualified (commit "two"), and prints no command' `
+      ($mp4 -and $out4 -notmatch 'add-reread') ($out4 -replace "`r?`n", ' | ')
+    $ps5 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -PairState -PairDoc 'EVAL-fixture.md')
+    $rc5 = $LASTEXITCODE
+    $want5 = 'PAIR-STATE' + [char]9 + 'design/EVAL-fixture.md' + [char]9 + 'ops/h.ps1' + [char]9 + 'unqualified' + [char]9 + $ltNowFull + [char]9 + $ltAtCited + [char]9 + 'cited-commit'
+    $lines5 = @($ps5 | Where-Object { "$_" -like 'PAIR-STATE*' })
+    Case 'LIVE PATH' '-PairState -PairDoc prints ONE tab-separated line for the pair: unqualified, the current blob, and the blob at the cited commit as last qualified' `
+      ($rc5 -eq 0 -and $lines5.Count -eq 1 -and [string]::Equals([string]$lines5[0], $want5, [StringComparison]::Ordinal)) ("rc=$rc5 lines=$($lines5.Count) got=[" + (($lines5 -join ' | ') -replace [char]9, '<T>') + ']')
   } finally {
     Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
   }
 
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (.claude\rules\ops-and-gates.md): a case lost to a thrown helper, a
   # glued line or a comment is a shortfall here, never a smaller suite that still prints pass.
-  $expectedCases = 37
+  $expectedCases = 51
   if ($ran.Count -ne $expectedCases) { [void]$fails.Add(("CASE COUNT ran {0} of the {1} cases written in this file" -f $ran.Count, $expectedCases)) }
   Write-Output ''
   if ($fails.Count) {
@@ -503,21 +725,103 @@ $currentBlobFn = {
   }
 }
 
-$unq = 0; $cur = 0; $nq = 0; $unres = 0; $cids = 0; $cited = 0
-Write-Output 'CONCLUSION CURRENCY - does each recorded conclusion still describe the harness it names?'
-Write-Output ''
+# THE HARNESS'S HISTORY, newest first (W4.1): one entry per commit that changed the path at HEAD, carrying the blob
+# that commit left. Read through Invoke-GitCaptured so a subject is decoded as UTF-8, off both streams, and cached per
+# path because several documents name one harness. A merge that carries no raw line has its blob asked for directly.
+$historyCache = @{}
+$historyFn = {
+  param($p)
+  if ($historyCache.ContainsKey($p)) { return ,$historyCache[$p] }
+  $list = New-Object System.Collections.Generic.List[object]
+  $gr = Invoke-GitCaptured -Repo $treeRoot -GitArgs @('log', '--no-abbrev', '--raw', '--no-renames', '--format=%x01%H%x09%cs%x09%s', 'HEAD', '--', $p)
+  if ($gr.rc -eq 0) {
+    $ent = $null
+    foreach ($ln in ([string]$gr.stdout -split "`n")) {
+      $l = $ln.TrimEnd([char]13)
+      if ($l.Length -gt 0 -and $l[0] -eq [char]1) {
+        $parts = $l.Substring(1).Split([char]9)
+        $full = [string]$parts[0]
+        $ent = [pscustomobject]@{ Full = $full; Short = $full.Substring(0, [Math]::Min(9, $full.Length)); Date = $(if ($parts.Count -gt 1) { $parts[1] } else { '' }); Subject = $(if ($parts.Count -gt 2) { ($parts[2..($parts.Count - 1)] -join ' ') } else { '' }); Blob = '' }
+        [void]$list.Add($ent)
+      } elseif ($l.StartsWith(':') -and $ent -and -not $ent.Blob) {
+        $tok = @(($l.Split([char]9)[0]) -split ' ')
+        if ($tok.Count -ge 4) { $ent.Blob = [string]$tok[3] }
+      }
+    }
+  }
+  foreach ($e in $list) {
+    if ($e.Blob -and $e.Blob -notmatch '^0+$') { continue }
+    $rb = Invoke-GitCaptured -Repo $treeRoot -GitArgs @('rev-parse', '--verify', '--quiet', ($e.Full + ':' + $p))
+    $e.Blob = $(if ($rb.rc -eq 0) { ([string]$rb.stdout).Trim() } else { '' })
+  }
+  $arr = $list.ToArray()
+  $historyCache[$p] = $arr
+  return ,$arr
+}
+
+# THE LEDGER is read from the working copy, as the documents are, and as a set (see ConvertFrom-CcRereadLedger).
+$ledgerFile = Join-Path $treeRoot ($script:REREAD_LEDGER_REL -replace '/', '\')
+$ledgerText = ''
+if (Test-Path -LiteralPath $ledgerFile -PathType Leaf) { $ledgerText = [IO.File]::ReadAllText($ledgerFile, (New-Object Text.UTF8Encoding($false))) }
+$ledger = ConvertFrom-CcRereadLedger -Text $ledgerText
+$ledgerRows = @($ledger.Rows)
+$ledgerQualifying = 0
+
+function Get-CcPairLedgerBlobs([string]$DocRel, [string]$HarnessRel, [object[]]$Rows) {
+  # The live `reread` blobs of one pair: those no `withdrawn` row for the same doc, harness and blob cancels.
+  $re = New-Object System.Collections.Generic.List[string]; $wd = New-Object System.Collections.Generic.List[string]
+  $dd = ConvertTo-CcRepoPath $DocRel; $hh = ConvertTo-CcRepoPath $HarnessRel
+  foreach ($r in @($Rows)) {
+    if (-not $r) { continue }
+    if (-not [string]::Equals($r.Doc, $dd, [StringComparison]::OrdinalIgnoreCase)) { continue }
+    if (-not [string]::Equals($r.Harness, $hh, [StringComparison]::OrdinalIgnoreCase)) { continue }
+    if ($r.Action -ceq 'withdrawn') { [void]$wd.Add([string]$r.Blob) } else { [void]$re.Add([string]$r.Blob) }
+  }
+  $live = @($re | Where-Object { $wd -cnotcontains $_ })
+  return ,$live
+}
+
+$unq = 0; $cur = 0; $nq = 0; $unres = 0; $cids = 0; $cited = 0; $pairsOut = 0
+if (-not $PairState) {
+  Write-Output 'CONCLUSION CURRENCY - does each recorded conclusion still describe the harness it names?'
+  Write-Output ''
+}
 foreach ($d in $docs) {
+  if ($PairState -and $PairDoc -and -not [string]::Equals($d.Name, (Split-Path $PairDoc -Leaf), [StringComparison]::OrdinalIgnoreCase)) { continue }
+  $docRel = 'design/' + $d.Name
   $text = [IO.File]::ReadAllText($d.FullName)
   $hpR = Get-HarnessPaths -Text $text
   $paths = @($hpR)
   $hhR = Get-CitedHashes -Text $text
   $hashes = @($hhR)
   $cited += $hashes.Count
-  $v = Get-CurrencyVerdict -Paths $paths -Hashes $hashes -HashType $hashType -PathExists $pathExists -After $afterFn -CurrentBlob $currentBlobFn
+  $lqR = Get-CcLedgerQualified -Doc $docRel -Paths $paths -Rows $ledgerRows -CurrentBlob $currentBlobFn
+  $lq = @($lqR)
+  $v = Get-CurrencyVerdict -Paths $paths -Hashes $hashes -HashType $hashType -PathExists $pathExists -After $afterFn -CurrentBlob $currentBlobFn -LedgerRead $lq
   $vB = @($v.BlobRead | Where-Object { $_ })
+  $vL = @($v.LedgerRead | Where-Object { $_ })
   $vC = @($v.Content | Where-Object { $_ })
   $vU = @($v.Unresolved | Where-Object { $_ })
-  $cids += $vC.Count; $unres += $vU.Count
+  $cids += $vC.Count; $unres += $vU.Count; $ledgerQualifying += $vL.Count
+  if ($PairState) {
+    # One line per pair the doc enrols and that exists. The commit citations are the cited hashes that are neither
+    # content nor unresolved, and each is read against the pair's own history for its last-qualified point.
+    $realC = @($hashes | Where-Object { $_ -and ($vC -notcontains $_) -and ($vU -notcontains $_) })
+    $movedPaths = @(@($v.Moved) | ForEach-Object { $_.Path })
+    foreach ($p in @($paths | Where-Object { $_ -and (& $pathExists $_) })) {
+      $st = if ($v.Verdict -eq 'NOT-QUALIFIABLE') { 'not-qualifiable' } elseif ($movedPaths -contains $p) { 'unqualified' } else { 'current' }
+      $cb = [string](& $currentBlobFn $p)
+      $hist = & $historyFn $p
+      $ca = @(foreach ($h in $realC) { @{ Ref = $h; After = [int](& $afterFn $h $p) } })
+      $lb = Get-CcPairLedgerBlobs -DocRel $docRel -HarnessRel $p -Rows $ledgerRows
+      $last = Get-CcPairLastQualified -History $hist -LedgerBlobs $lb -ContentIds $vC -CommitAfter $ca
+      $lastBlob = if ($last -and $last.Blob) { $last.Blob } else { '-' }
+      $via = if ($last) { $last.Via -replace ' ', '-' } else { '-' }
+      Write-Output ("PAIR-STATE`t{0}`t{1}`t{2}`t{3}`t{4}`t{5}" -f $docRel, $p, $st, $(if ($cb) { $cb } else { '-' }), $lastBlob, $via)
+      $pairsOut++
+    }
+    continue
+  }
   switch ($v.Verdict) {
     'UNQUALIFIED' {
       $unq++
@@ -525,19 +829,36 @@ foreach ($d in $docs) {
       foreach ($m in @($v.Moved)) {
         $newest = & git -C $treeRoot log -1 '--format=%h %cs' -- $m.Path
         Write-Output ("                   {0} has {1} commit(s) after cited {2}; newest {3}" -f $m.Path, $m.After, $m.Since, "$newest".Trim())
+        # WHAT IT MOVED PAST, since the pair was LAST qualified (W4.1): a stale ledger row or doc-line blob can be newer
+        # than the cited commit, and then fewer changes are owed a reading. No command is printed on purpose.
+        $hist = & $historyFn $m.Path
+        $lb = Get-CcPairLedgerBlobs -DocRel $docRel -HarnessRel $m.Path -Rows $ledgerRows
+        $last = Get-CcPairLastQualified -History $hist -LedgerBlobs $lb -ContentIds $vC -CommitAfter @(@{ Ref = $m.Since; After = $m.After })
+        if ($last) {
+          $mp = @($last.MovedPast)
+          Write-Output ("                   last qualified by {0} {1}; the harness commits a re-read of {2} must read ({3}):" -f $last.Via, $last.Ref, $d.Name, $mp.Count)
+          foreach ($e in @($mp | Select-Object -First 8)) { Write-Output ("                     {0} {1} {2}" -f $e.Short, $e.Date, $e.Subject) }
+          if ($mp.Count -gt 8) { Write-Output ("                     ... and {0} more (git log -- {1})" -f ($mp.Count - 8), $m.Path) }
+        }
       }
     }
     'CURRENT' { $cur++; Write-Output ("  current          {0}" -f $d.Name) }
-    default { $nq++; Write-Output ("  not qualifiable  {0} - {1}" -f $d.Name, $v.Why) }
+    default { $nq++; Write-Output ("  not qualifiable  {0} - {1}" -f $d.Name, $v.Why) }   # NOT-QUALIFIABLE, the third and last verdict Get-CurrencyVerdict returns
   }
   foreach ($b in $vB) { Write-Output ("                   {0} re-read by its CURRENT blob: qualified as a commit at or after its last change would be" -f $b) }
+  foreach ($b in $vL) { Write-Output ("                   {0} re-read by a ledger row at its CURRENT blob ({1})" -f $b, $script:REREAD_LEDGER_REL) }
   foreach ($c in $vC) { Write-Output ("                   cites blob or tree id {0} on a commit or blob line: content, not a commit; it qualifies a harness only when it IS that harness's current blob" -f $c) }
   foreach ($u in $vU) { Write-Output ("                   UNRESOLVED hash on a commit line, git names no object: {0} (missing, gc'd or ambiguous)" -f $u) }
+}
+if ($PairState) {
+  # A REPORT: it judges nothing and writes nothing, so it never reaches the ratchet below.
+  Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 0 -Summary "docs=$($docs.Count) pairs=$pairsOut report-only=1 pair-state=1"
 }
 Write-Output ''
 Write-Output ("  {0} of {1} document(s) UNQUALIFIED, {2} current, {3} not qualifiable (ops\audit-measurement-provenance.ps1's finding)" -f $unq, $docs.Count, $cur, $nq)
 Write-Output ("  of {0} cited hash(es): {1} blob or tree id(s) read as content, {2} naming no object - counted and listed, not ratcheted" -f $cited, $cids, $unres)
-Write-Output '  To re-qualify one: re-read it against the moved harness and add "Re-read at harness blob <git rev-parse HEAD:<path>> (<path>): <what still holds>".'
+Write-Output ("  re-read ledger {0}: {1} row(s) read, {2} pair(s) qualified by a live row at the current blob, {3} malformed row(s) skipped (ops\audit-reread-ledger.ps1 refuses those)" -f $script:REREAD_LEDGER_REL, $ledgerRows.Count, $ledgerQualifying, $ledger.Malformed)
+Write-Output '  To re-qualify one: re-read it against the moved harness, then record the re-read as a row in design\reread-ledger.tsv (its writer is named in .claude\rules\measurement.md), or as a doc line "Re-read at harness blob <git rev-parse HEAD:<path>> (<path>): <what still holds>".'
 Write-Output '  Cite the BLOB, not your own unlanded commit: push-main rebases and renames that commit, and it never reaches main.'
 
 $blF = if ($BaselineFile) { $BaselineFile } else { Join-Path $here 'conclusion-currency-baseline.json' }
@@ -569,7 +890,7 @@ if ($bl.State -ne 'read') {
 $base = [int]$bl.Value
 $move = Test-RatchetMove -Name 'conclusion-currency' -Count $unq -Baseline $base
 if ($move.Verdict -eq 'rose') {
-  Write-Output "conclusion-currency: RATCHET BROKEN - $unq unqualified, baseline $base. A conclusion that was current now names a harness changed after it. Re-read it and add a Re-read at commit line."
+  Write-Output "conclusion-currency: RATCHET BROKEN - $unq unqualified, baseline $base. A conclusion that was current now names a harness changed after it. Re-read it against the commits listed above and record the re-read as a design\reread-ledger.tsv row (or a Re-read at harness blob line)."
   Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 2 -Summary "docs=$($docs.Count) unqualified=$unq unresolved=$unres content_ids=$cids baseline=$base"
 }
 if ($move.Verdict -eq 'tightened') {

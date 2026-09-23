@@ -45,3 +45,12 @@
 *.sqlite binary
 *.woff  binary
 *.woff2 binary
+
+# THE RE-READ LEDGER IS THE ONE FILE HERE THAT GIT MERGES BY UNION (2026-09-23, W4.1 of
+# design/PLAN-push-derived-conflicts-2026-09-23.md, Brad's ruling D4). Two sessions that each append a re-read row
+# would otherwise conflict on the last line of the same file. union keeps both sides' lines, which is right ONLY for an
+# append-only file whose every line stands alone: on a document it interleaves prose, resurrects an edited line and
+# undoes a deletion, so it names this ONE path and nothing else. ops/audit-reread-ledger.ps1 holds the half union cannot:
+# it refuses a push that deletes or edits a row, or writes one that is out of shape. union is built into git and needs
+# no .git/config entry.
+design/reread-ledger.tsv merge=union
