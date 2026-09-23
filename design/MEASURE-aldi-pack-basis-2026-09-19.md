@@ -143,3 +143,5 @@ of juice boxes), because a name usually does state the per-unit size.
 No proof exists inside those rows: the name states N and one size, and nothing else. Extending the
 refusal there would drop 49 rows to fix 1, on no evidence, so it is recorded here rather than guessed at.
 The honest fixes are the product-page rate above, or a name-shape rule measured on its own evidence.
+
+Re-read at harness blob 7855258779d973df581da94bc4f8b0a0ace889a8 (grocery/build-aldi-regular.ps1): Resolve-PackBasis, the arithmetic-proof rule and every count above are untouched by the one later change (queue 2026-09-22-20fecf), which only records the build's ingest shape after the rejects file is written.

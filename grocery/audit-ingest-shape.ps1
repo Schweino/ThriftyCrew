@@ -39,6 +39,7 @@
   powershell -NoProfile -File grocery\audit-ingest-shape.ps1 -Date 2026-09-21
   powershell -NoProfile -File grocery\audit-ingest-shape.ps1 -SelfTest
 #>
+[CmdletBinding()]
 param(
   [string]$Date = '',
   [string]$OutRoot = '',
