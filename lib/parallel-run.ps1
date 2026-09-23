@@ -34,6 +34,14 @@
   param() block in the CALLER's scope, so declaring [switch]$SelfTest here would reset the -SelfTest of
   every script that dot-sources this.
 #>
+# USE WHEN: run many child processes at once through a bounded pool and read each one's stdout and exact exit code back in job order; call Invoke-TcParallel
+# REPLACES: (?im)^(?![ \t]*#)[^\r\n#]*?\.WaitForExit\([ \t]*\)[ \t]*(?:;|\r?\n)[^\r\n#]*?\.StandardOutput\.ReadToEnd\([ \t]*\)
+# REPLACES-FIRE: $p.WaitForExit(); $out = $p.StandardOutput.ReadToEnd()
+# REPLACES-FIRE: $proc.WaitForExit(); $text = $proc.StandardOutput.ReadToEnd(); $code = $proc.ExitCode
+# REPLACES-SILENT: $out = $proc.StandardOutput.ReadToEnd(); $proc.WaitForExit()
+# REPLACES-SILENT: $tOut = $p.StandardOutput.ReadToEndAsync()
+# REPLACES-SILENT: $results = Invoke-TcParallel -Jobs $jobs -Concurrency 8
+# ENFORCED BY: none (none)
 $__prSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 function Format-TcProcArg {

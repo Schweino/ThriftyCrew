@@ -142,6 +142,18 @@
 #
 # NO param() BLOCK HERE, DELIBERATELY - dot-sourced under PS 5.1 a param() block runs in the CALLER's
 # scope and would reset the caller's own -SelfTest. Same rule as lib\json-io.ps1.
+# USE WHEN: replace a whole file that another process may be reading at the same moment (a ledger, a queue, a cursor, a status file) without losing the write; call Write-TcAtomicFile
+# REPLACES: (?im)^(?![ \t]*#)(?![^\r\n]*atomic-replace:allow)(?:[^\r\n#]*[|;({&=][ \t]*|[ \t]*)(?:move-item|move|mv|mi)[ \t](?:[^#\r\n`|;]|`[ \t]*\r?\n)*?[ \t]-fo(?:r(?:ce?)?)?\b(?!:\$false)
+# REPLACES-FIRE: Move-Item -Path $tmpf -Destination $Store -Force
+# REPLACES-FIRE: Move-Item $tmpS $SuppressionsFile -Force
+# REPLACES-FIRE: Get-ChildItem -Path $GenDir -Filter *.html -File | Move-Item -Destination $doneDir -Force
+# REPLACES-FIRE: mv $a $b -Forc
+# REPLACES-SILENT: Move-Item $a $b
+# REPLACES-SILENT: Copy-Item $a $b -Force
+# REPLACES-SILENT: Move-Item $d $arch -Force   # atomic-replace:allow archive of a log nobody holds open
+# REPLACES-SILENT: Move-Item $a $b -Force:$false
+# REPLACES-SILENT: Write-TcAtomicFile -Path $dest -Text $json -NoBom -NoNewline
+# ENFORCED BY: ops/audit-bare-replace.ps1 (push)
 $__awSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 $script:TcAtomicAttempts = 40

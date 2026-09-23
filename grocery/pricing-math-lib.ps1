@@ -20,6 +20,14 @@
 # THE RULE THAT REPLACES THE OLD ONE: this file has NO side effects on load and must keep it that way.
 # Adding a line here that runs work at import re-creates the exact obstacle that produced the lifting.
 # ---------------------------------------------------------------------------------------------------
+# USE WHEN: a builder, audit or test needs the board's size, price or unit-price math (Get-UnitPrice, Get-ItemPrice, Get-SizeAmount, Convert-ToUnit); dot-source this file, never cut functions out of compare-deals.ps1's source text
+# REPLACES: (?im)^(?![ \t]*#)[^\r\n#]*\[regex\]::Match\([^\r\n#]*\^function\\s\+
+# REPLACES-FIRE: $m = [regex]::Match($engineSrc, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
+# REPLACES-FIRE: $m = [regex]::Match($src, '(?ms)^function\s+' + [regex]::Escape($fn) + '\s*\(.*?^\}')
+# REPLACES-SILENT: . (Join-Path $PSScriptRoot 'pricing-math-lib.ps1')
+# REPLACES-SILENT: $u = Get-UnitPrice $deal $cat
+# REPLACES-SILENT: $p = Get-ItemPrice $deal.price $deal.name $regular
+# ENFORCED BY: none (none)
 
 function Test-Bulk([string]$size, [string]$name) {
   $t = (("" + $size + " " + $name)).ToLower()

@@ -335,3 +335,5 @@ Re-read at harness blob 06381b161f7751f46dfca972fb9abee721ea43bd (grocery/build-
 Re-read at harness blob 54d42a244ab6dc3efa5445aeb20aadf392ebe912 (grocery/pricing-math-lib.ps1): the Sam's printed-unit-price reader and its precision bound are unchanged; the 2026-09-23 change to this file added Split-AdLineProducts and Get-AdLineParts (Brad's ruling Q-adline-two-products, ad-line ingest), which no Sam's path calls, so every figure above still holds.
 
 Re-read at harness blob a7c871a9c24aa090c930ec25fda45d2e1d78095f (grocery/pricing-math-lib.ps1): the only later change is one early return inside Split-AdLineProducts (a short title-case alternation stays whole), an ad-line ingest path no Sam's reading calls; the printed-unit-price reader, its precision bound and every figure above still hold.
+
+Re-read at harness blob 9fd32c0e60cbf020e9d3f210011d6f3802f6d4de (grocery/pricing-math-lib.ps1): header comment lines only (the USE WHEN, REPLACES and ENFORCED BY seeds of design/brain-consults-2026-09-22/phase-3-search.md W3.2); no function body changed, so the cents reading, the rounding-band table (NULL/0.11%/0.05%) and mutants C and D still hold; not re-measured.

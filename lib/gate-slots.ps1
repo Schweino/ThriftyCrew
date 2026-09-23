@@ -131,6 +131,13 @@
   NO param() BLOCK, for the reason lib\guard-contract.ps1 spells out: PS 5.1 runs a dot-sourced param()
   block in the CALLER's scope, so declaring [switch]$SelfTest here would reset the caller's.
 #>
+# USE WHEN: run CPU-heavy parallel work (a gate pool, a load test) on this shared box; take its width from the machine-wide budget with Enter-TcGateSlots and give it back with Exit-TcGateSlots (deliberate load goes through ops\cpu-load.ps1, which takes its slots with -Exact)
+# REPLACES: (?im)^(?![ \t]*#)[^\r\n#]*(?:\[Math\]::M(?:in|ax)\([^\r\n#]*(?:ProcessorCount|NUMBER_OF_PROCESSORS)|(?:ProcessorCount|NUMBER_OF_PROCESSORS)[^\r\n#]*\[Math\]::M(?:in|ax)\()
+# REPLACES-FIRE: if ($W -le 0) { $W = [Math]::Min(16, [Math]::Max(1, [Environment]::ProcessorCount - 2)) }
+# REPLACES-FIRE: try { $nproc = [int]$env:NUMBER_OF_PROCESSORS; if ($nproc -gt 0) { $script:KidThrottle = [math]::Max(2, [math]::Min(8, $nproc)) } } catch { }
+# REPLACES-SILENT: $lease = Enter-TcGateSlots -Want $Jobs -WaitSec 1200
+# REPLACES-SILENT: Write-Output ('processors=' + [Environment]::ProcessorCount)
+# ENFORCED BY: none (none)
 # gate-inputs: lib\gate-slots.ps1
 # WHY THIS FILE DECLARES (Brad, 2026-09-12). The inference refused it on ONE line - `return (Join-Path $Root $leaf)`
 # in Get-TcGateQueueDir - reading `$Root` as a repo root because of its NAME. It is not: it defaults to

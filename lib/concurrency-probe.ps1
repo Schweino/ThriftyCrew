@@ -48,6 +48,8 @@
   NO param() BLOCK, for the reason lib\guard-contract.ps1 spells out: PS 5.1 runs a dot-sourced param()
   block in the CALLER's scope, so a [switch]$SelfTest here would reset the -SelfTest of every caller.
 #>
+# USE WHEN: a test must prove N child processes really ran at the same instant without a wall-clock bar; make the rendezvous with New-TcRendezvousProbe, launch its script N times through the pool under test, and judge the run with Get-TcRendezvousVerdict
+# ENFORCED BY: none (none)
 # Its declared inputs (2026-09-23, lib\gate-input-key.ps1 rule 2): every [IO.Path]::Combine($root, ...) is its own rendezvous folder under %TEMP%.
 # gate-inputs: lib\concurrency-probe.ps1
 $__cpSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')

@@ -45,6 +45,14 @@
 # script runs its param() block in the CALLER's scope, so a param([switch]$SelfTest) here would reset the
 # caller's own -SelfTest to $false on the line after it bound, silently disarming its self-test. Read the
 # switch off $args, and only when this file is RUN rather than dot-sourced.
+# USE WHEN: read a JSON or text data file whatever its byte-order mark, so PowerShell 5.1 never decodes it with the ANSI codepage; call Read-JsonFile (Read-TextFile for raw text, Write-JsonFile to write one back)
+# REPLACES: (?im)^(?![ \t]*#)(?![^\r\n]*-Encoding)(?![^\r\n]*json-readers:allow[ \t]+\S)[^\r\n#]*\bGet-Content\b[^\r\n#]*\bConvertFrom-Json\b
+# REPLACES-FIRE: $doc = Get-Content $path -Raw | ConvertFrom-Json
+# REPLACES-FIRE: $cfg = (Get-Content -LiteralPath $cfgFile -Raw) | ConvertFrom-Json
+# REPLACES-SILENT: $doc = Read-JsonFile $path
+# REPLACES-SILENT: $doc = Get-Content $path -Raw -Encoding UTF8 | ConvertFrom-Json
+# REPLACES-SILENT: $src = Get-Content $file -Raw
+# ENFORCED BY: grocery/audit-json-readers.ps1 (push)
 $__jioSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 $script:JioReadShare = [IO.FileShare]([IO.FileShare]::ReadWrite -bor [IO.FileShare]::Delete)

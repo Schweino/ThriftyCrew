@@ -41,6 +41,15 @@
   to contain a stray U+0008 in its pattern, making it structurally unable to match
   anything. It had reported green for a day while watching nothing.
 #>
+# USE WHEN: run a native child (git, powershell, python) under ErrorActionPreference Stop and keep its output in a variable or silence its stderr; call Invoke-Native with the command and its arguments positionally, and read .ExitCode
+# REPLACES: (?im)^(?![ \t]*#)[^\r\n#]*?(?:^|[\s(&|;{=])(?:git|powershell|pwsh|python|py|node|nvidia-smi)(?:\.exe)?[ \t][^\r\n#]*?(?:\b2>&1|\b2>[ \t]*\$null|\*>&1)
+# REPLACES-FIRE: & git -C $repo fetch origin main 2>$null
+# REPLACES-FIRE: & powershell -NoProfile -File $cac -NoPull 2>&1 | ForEach-Object { $_ }
+# REPLACES-FIRE: $q = & nvidia-smi --query-gpu=memory.free --format=csv 2>$null
+# REPLACES-SILENT: & git -C $repo fetch origin main | ForEach-Object { Write-Output $_ }
+# REPLACES-SILENT: $r = Invoke-Native git -C $repo fetch origin main
+# REPLACES-SILENT: $out = Get-Content $f 2>$null
+# ENFORCED BY: grocery/test-native-stderr-eap.ps1 (push)
 
 function Invoke-Native {
   <#

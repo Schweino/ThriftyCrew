@@ -28,6 +28,8 @@
 # guards provable was silently disarming their self-tests instead: aisle-test -SelfTest fell straight past
 # its 14-case branch to "nothing to judge" and exited 0, which reads as a pass. Measured, not theorised
 # (True before the dot-source, False after). Read it off $args and only when RUN, never when dot-sourced.
+# USE WHEN: a detector, audit or guard must prove it ran to the end; leave through Exit-Guard (or print Write-GuardComplete last) so the final line is <NAME>-COMPLETE with its denominator, and judge a child's output with Test-GuardComplete
+# ENFORCED BY: grocery/audit-guard-contract.ps1 (push)
 $__gcSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 function Write-GuardComplete {

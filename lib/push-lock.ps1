@@ -53,6 +53,8 @@
 
   NO param() BLOCK: dot-sourced under PS 5.1 a param() block runs in the CALLER's scope (lib\guard-contract.ps1).
 #>
+# USE WHEN: land a push to main without another session on this box overtaking it; Enter-TcPushLock and Exit-TcPushLock bracket the fetch, rebase and ref update, which ops\push-main.ps1 already does (and the pre-push hook through ops\hold-push-lock.ps1), so a session lands through push-main rather than calling this directly
+# ENFORCED BY: none (none)
 $__plkSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 . (Join-Path $PSScriptRoot 'gate-slots.ps1')   # the arrival-order queue; no param() block, so it cannot reset ours
 

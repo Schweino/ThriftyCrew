@@ -46,6 +46,15 @@
 #
 # NO param() BLOCK HERE, DELIBERATELY - dot-sourced under PS 5.1 a param() block runs in the CALLER's scope and
 # would reset the caller's own -SelfTest. Same rule as lib\atomic-write.ps1.
+# USE WHEN: append a line to a log or JSONL file that more than one process may append to at once, without losing or splitting a line; call Add-TcLine
+# REPLACES: (?im)^(?![ \t]*#)[^\r\n#]*\bAdd-Content\b[^\r\n#]*\.(?:jsonl|log)\b
+# REPLACES-FIRE: Add-Content -LiteralPath (Join-Path $OutDir 'capture-cursor-log.jsonl') -Value $line -Encoding UTF8
+# REPLACES-FIRE: Add-Content -Path (Join-Path $RunDir 'density-gaps.jsonl') -Value $line -Encoding utf8
+# REPLACES-FIRE: Add-Content -Path (Join-Path $logDir 'capture-run.log') -Value $line
+# REPLACES-SILENT: $null = Add-TcLine -Path (Join-Path $OutDir 'capture-cursor-log.jsonl') -Text $line
+# REPLACES-SILENT: Add-Content -Path $notesFile -Value $line -Encoding UTF8
+# REPLACES-SILENT: $rows = Get-Content -LiteralPath (Join-Path $OutDir 'capture-cursor-log.jsonl') -Encoding UTF8
+# ENFORCED BY: none (none)
 $__alSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 $script:TcAppendAttempts = 40

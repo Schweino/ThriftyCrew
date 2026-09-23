@@ -101,6 +101,14 @@
 
   NO param() BLOCK: dot-sourced under PS 5.1 a param() block runs in the CALLER's scope (lib\json-io.ps1).
 #>
+# USE WHEN: read-modify-write a single-file ledger (sale-windows, the capture cursor, rollback first-seen) that concurrent lanes or builders write; hold Enter-TcLedgerLock around the whole cycle, the read included, and release it with Exit-TcLedgerLock in a finally
+# REPLACES: (?im)^(?![ \t]*#)[^\r\n#]*(?:\bNew-Object[ \t]+(?:-TypeName[ \t]+)?(?:System\.)?Threading\.Mutex\b|\[(?:System\.)?Threading\.Mutex\]::new\()
+# REPLACES-FIRE: $mx = New-Object System.Threading.Mutex($false, $key)
+# REPLACES-FIRE: $qMutex = New-Object System.Threading.Mutex($false, $QueueMutexName)
+# REPLACES-SILENT: $lock = Enter-TcLedgerLock -Path $ledger
+# REPLACES-SILENT: finally { Exit-TcLedgerLock $lock }
+# REPLACES-SILENT: try { $got = $m.WaitOne(0) } catch [System.Threading.AbandonedMutexException] { $got = $true }
+# ENFORCED BY: none (none)
 $__llSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 . (Join-Path $PSScriptRoot 'event-bus.ps1')        # Write-TcEvent: never throws, so reporting a refusal cannot break its writer
 . (Join-Path $PSScriptRoot 'ledger-fixture.ps1')   # Wait-TcLedgerFixtureGate: inert unless a ledger self-test launched this writer

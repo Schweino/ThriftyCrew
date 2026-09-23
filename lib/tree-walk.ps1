@@ -23,6 +23,17 @@
 #
 # THIS FILE DECLARES NO param() BLOCK, DELIBERATELY: dot-sourced under PS 5.1 a param() block runs in the
 # CALLER's scope and would reset the caller's own -SelfTest. Same rule as lib\ps-source.ps1.
+# USE WHEN: walk the repo tree and exclude worktrees, archive or out on the path BELOW the root, pruning the directory rather than filtering its files; call Get-TcTreeFiles -PruneBelow, or test a path with Get-TcPathBelowRoot
+# REPLACES: (?im)^(?![ \t]*#)[^\r\n#]*\b(?:FullName|DirectoryName)[ \t]+-(?:not)?(?:match|like)[ \t]+['"][^'"\r\n]*\\{1,2}(?:worktrees|\.claude)\\ ;; (?im)^(?![ \t]*#)[^\r\n#]*\bFullName(?:\.ToLower(?:Invariant)?\(\))?\.Contains\([ \t]*['"][^'"\r\n]*\\{1,2}(?:worktrees|\.claude)\\
+# REPLACES-FIRE: Where-Object { $_.FullName -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\\.git\\' } |
+# REPLACES-FIRE: foreach ($f in $files) { if ($f.FullName -like '*\.claude\*') { continue } }
+# REPLACES-FIRE: $keep = Get-ChildItem $root -Recurse -File | Where-Object FullName -NotMatch '\\worktrees\\'
+# REPLACES-FIRE: $keep = @($all | Where-Object { -not $_.FullName.ToLower().Contains('\worktrees\') })
+# REPLACES-FIRE: if ($f.FullName.Contains('\.claude\')) { continue }
+# REPLACES-SILENT: Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\\.git\\' } |
+# REPLACES-SILENT: Get-TcTreeFiles -RootFull $rootFull -Filter *.ps1 -PruneBelow $EXCLUDE |
+# REPLACES-SILENT: $files = @(Get-ChildItem $d -Recurse -Filter *.ps1 -File -ErrorAction SilentlyContinue)
+# ENFORCED BY: ops/audit-full-path-excludes.ps1 (daily)
 
 function Get-TcRootFull {
   # The root spelled the way the walk will spell it: resolved, with no trailing backslash.

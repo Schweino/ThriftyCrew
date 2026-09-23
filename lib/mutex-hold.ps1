@@ -26,6 +26,8 @@
 #
 # NO param() BLOCK, for the reason lib\concurrency-probe.ps1 gives: PS 5.1 runs a dot-sourced param() block in the
 # CALLER's scope, so a [switch]$SelfTest here would reset the -SelfTest of every caller.
+# USE WHEN: a fixture must make a locked writer's timed wait really time out, however loaded the box is; hold a fresh mutex from another process with Start-TcMutexHold (named by New-TcFixtureMutexName, never a live name) and let it go with Stop-TcMutexHold
+# ENFORCED BY: none (none)
 $__mhSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 # Every hold this process started, so Stop-TcMutexHold with no -Hold releases them all: the ALLOCATOR remembers,

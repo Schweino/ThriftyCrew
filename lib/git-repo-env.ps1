@@ -31,6 +31,14 @@
 # the private index out of the committer that loaded it.
 #
 # NO param() BLOCK, DELIBERATELY - same rule as lib\guard-contract.ps1: dot-sourcing runs it in the caller's scope.
+# USE WHEN: a script or fixture builds a temp git repo, or a hook spawns git against another repository; call Clear-TcGitRepoEnv first, in a process that owns its own environment
+# REPLACES: (?im)^(?![ \t]*#)[^\r\n#]*?(?<![\w$.-])git(?:\.exe)?[ \t][^\r\n#]*?(?<![\w.-])init(?![\w.-])
+# REPLACES-FIRE: & git -C $w init -q -b main .
+# REPLACES-FIRE: git init -q 2>$null | Out-Null
+# REPLACES-SILENT: & git submodule update --init
+# REPLACES-SILENT: & git -C $c config core.autocrlf false | Out-Null
+# REPLACES-SILENT: Clear-TcGitRepoEnv
+# ENFORCED BY: ops/audit-git-fixture-env.ps1 (push)
 
 function Clear-TcGitRepoEnv {
   # The variables that tell git WHICH repository, work tree, index, object store, ref namespace or path prefix

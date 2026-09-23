@@ -72,6 +72,14 @@
 #
 # NO param() BLOCK - same reason as lib\json-io.ps1 and lib\bot-paths.ps1: in PS 5.1 a dot-sourced param()
 # runs in the CALLER's scope and would reset the caller's own -SelfTest to $false.
+# USE WHEN: an AST walk needs a variable's name without its scope qualifier, or a scanner needs the exact self-test body of a script; call Get-SelfTestVariableName, or Get-SelfTestBlock for the body
+# REPLACES: (?m)^(?![ \t]*#)[^\r\n#]*\.UnqualifiedPath\b
+# REPLACES-FIRE: $up = [string]$vp.UnqualifiedPath
+# REPLACES-FIRE: $up = [string]$vp.UnqualifiedPath; if (-not $up) { $up = [string]$vp.UserPath }
+# REPLACES-SILENT: $name = Get-SelfTestVariableName $n
+# REPLACES-SILENT: $up = [string]$vp.UserPath
+# REPLACES-SILENT: $msg = 'do not use UnqualifiedPath here'
+# ENFORCED BY: ops/audit-internal-ast-members.ps1 (push)
 $__stlSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 function Get-SelfTestUnwrapped {

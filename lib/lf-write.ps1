@@ -33,6 +33,15 @@
 #
 # NO param() BLOCK HERE, DELIBERATELY - dot-sourced under PS 5.1 a param() block runs in the CALLER's scope and
 # would reset the caller's own -SelfTest. Same rule as lib\json-io.ps1.
+# USE WHEN: write a TRACKED text file (a report, a baseline, a JSON record) in the bytes git stores, so an unchanged run leaves the checkout clean; call Write-TcLfFile
+# REPLACES: (?im)^(?![ \t]*#)[^\r\n#]*\bConvertTo-Json\b[^\r\n#]*\|[ \t]*(?:\r?\n[ \t]*)?(?:Set-Content|Out-File)\b
+# REPLACES-FIRE: } | ConvertTo-Json -Depth 4 | Set-Content $stateFile -Encoding UTF8
+# REPLACES-FIRE: ([pscustomobject]@{ computed_at=(Get-Date).ToString('s'); week_of=$wk; recipes=$ranked } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $gout 'recipe-costs.json') -Encoding UTF8
+# REPLACES-FIRE: $doc | ConvertTo-Json -Depth 6 | Out-File -FilePath $p -Encoding utf8
+# REPLACES-SILENT: $null = Write-TcLfFile -Path $p -Text ($doc | ConvertTo-Json -Depth 6)
+# REPLACES-SILENT: $json = $doc | ConvertTo-Json -Depth 6
+# REPLACES-SILENT: Set-Content -LiteralPath $p -Value $text -Encoding UTF8
+# ENFORCED BY: none (none)
 $__lfwSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 function Write-TcLfFile {

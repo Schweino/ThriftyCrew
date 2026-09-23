@@ -33,6 +33,8 @@
 #
 # Dot-source:  . (Join-Path $mp 'lib\render-tokens.ps1')
 # Self-test:   powershell -File lib\render-tokens.ps1 -SelfTest
+# USE WHEN: a builder or publisher puts a price or macro figure into recipe prose or a card; write a {{cost_ps}}-style token and expand it with Expand-SpecProse, and write a price through Format-TcLivePriceSpan so the feed fills it at view time, never as a literal
+# ENFORCED BY: meal-prep/pipeline/audit-live-price-contract.ps1 (daily)
 param([switch]$SelfTest)
 
 $script:TOKEN_FIELDS = @('intro_html','portion_html','cost_closing_html','upsell_html')  # + head.description
