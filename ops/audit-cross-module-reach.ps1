@@ -410,7 +410,12 @@ if ($runSelfTest) {
   $rawIn = @(Get-ReachSites -Text $fxIn -OwnModule 'grocery')
   T 'MUST NOT FIRE  a reach inside an if ($SelfTest) body is a fixture: 0 production sites (the raw scan sees 1)' (@($pIn).Count -eq 0 -and $rawIn.Count -eq 1) ("prod=$(@($pIn).Count) raw=$($rawIn.Count)")
   T 'MUST FIRE  the same reach under if (-not $SelfTest) is production and counts' (@($pNot).Count -eq 1) ("prod=$(@($pNot).Count)")
-  T 'CLEAN TWIN  a top-level reach still counts exactly once' (@($pTop).Count -eq 1) ("prod=$(@($pTop).Count)")  if ($bad -gt 0) { Write-Output ("cross-module-reach SELF-TEST FAIL ({0})" -f $bad); exit 2 }
+  T 'CLEAN TWIN  a top-level reach still counts exactly once' (@($pTop).Count -eq 1) ("prod=$(@($pTop).Count)")
+  # THE VERDICT IS ITS OWN STATEMENT (2026-09-23). From 040418c8a this if sat on the line above, after the last T, so
+  # PowerShell passed "if", its condition and its block to T as extra arguments and the suite printed PASS, exit 0,
+  # whatever its cases said: the pull-grocery-ads shape in .claude\rules\ops-and-gates.md. ops\audit-keyword-arguments.ps1
+  # names it ("glued ... T carries [if]", exit 1), but it is a daily entry in run-gates, so the push that added it passed.
+  if ($bad -gt 0) { Write-Output ("cross-module-reach SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'cross-module-reach SELF-TEST PASS'
   Exit-Guard -Name 'cross-module-reach' -Summary 'selftest pass' -Code 0
 }
