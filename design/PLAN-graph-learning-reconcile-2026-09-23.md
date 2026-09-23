@@ -130,6 +130,15 @@ What the bot can still do: a future `-X theirs` hunk can drop a status line whil
 rule 3 recovers that. A checkout of an older version of BOTH files before main's first adoption leaves nothing to adopt;
 after the first adoption the DB holds the verdict and a backwards JSON is dominated, so it is kept.
 
+**One thing it can drop, and it is not a verdict.** The rulings commit also adds `graph/provenance/2026-09-23.jsonl`
+with the one `stage2_ingest` event, and every earlier day's shard was first added by the bot. If main writes today's
+shard and commits it before it rebases (the 08:00 daily pipeline does, when the 07:00 run has not already rebased),
+the rebase meets an add/add on that file and `-X theirs` keeps main's lines and drops that event: reproduced in a
+scratch repo, exit 0, the upstream line gone. The verdicts are unaffected (they live in the two learning files), and
+main's own reconcile logs a `learning_reconcile` event naming the 69 adopted ids when it takes them. Concurrent
+appends to one day's shard from two checkouts meet the same `-X theirs` rule whichever lands first; that is the
+provenance trail's standing shape, named here and not changed.
+
 ## 5. Fixtures (in `graph/lib/graphdb_selftest.py`, hermetic, per-run temp directory)
 
 - **MUST FIRE, the D13 shape**: a DB that predates two verdicts in tracked JSON, one export: each verdict survives in the
@@ -208,7 +217,10 @@ Run 2026-09-23 between 03:40 and 04:10, in the worktree `claude/graph-reconcile`
 - **Real-data clean twin**: `rebuild.py` into a scratch directory from origin/main's JSON, exit 0, then one export: 5 of
   5 files byte-identical to origin/main's blobs, reconcile counts all zero. The same from the rulings' JSON: 5 of 5.
 - **Bot simulation** through `--bot-sim`: the one replayed commit (`54bff6167`), 0 conflicts decided by `-X theirs`,
-  0 left by the autostash, 69 of 69 statuses and 69 of 69 patch rows kept at both steps.
+  0 left by the autostash, 69 of 69 statuses and 69 of 69 patch rows kept at both steps. Re-run against the branch tip
+  after the rulings were cherry-picked, whose two learning blobs are identical to the rulings commit's: the same. That
+  re-run found a harness bug first: `--landing HEAD` was resolved inside the main checkout, so it named main's HEAD and
+  replayed nothing. The landing is now resolved in the harness's own checkout before it is handed across.
 - **Re-validation of the 69** against origin/main at 03:28 (no commit had touched `graph/learning` since the rulings'
   parent): 69 of 69 valid (18 Accept, 51 Reject), 0 skipped. Each is still `proposed` there, with payload, target, kind,
   created_at, confidence and rationale identical to `proposals.json` at `4cd3733d6`, the version Brad ruled against;

@@ -170,6 +170,13 @@ def probe_db(a) -> int:
 
 def bot_sim(a) -> int:
     main = a.main
+    # Resolve the landing HERE: a symbolic rev ('HEAD', a branch) passed to the other checkout would name ITS commit.
+    sha = subprocess.run(["git", "--no-optional-locks", "-C", REPO, "rev-parse", "--verify", a.landing + "^{commit}"],
+                         capture_output=True, text=True).stdout.strip()
+    if not sha:
+        print(f"PROBE-LEARNING-RECONCILE could not evaluate: {a.landing} does not resolve here")
+        return 3
+    a.landing = sha
     head = subprocess.run(["git", "--no-optional-locks", "-C", main, "rev-parse", "HEAD"], capture_output=True,
                           text=True).stdout.strip()
     local = subprocess.run(["git", "--no-optional-locks", "-C", main, "rev-list", "--reverse", f"{a.landing}..{head}"],
