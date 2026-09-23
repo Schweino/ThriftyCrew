@@ -111,7 +111,10 @@
       "resolution_note": "Contested arrivals now reach the matching worklist lane: each is decided per name into match-verdicts.json, only an undecided arrival is queued (weekly, on its first day), and one that holds a crown pages as CONTESTED CROWN. Today's 3 were verified (the corn is a 15 oz can, the tray is refused) and accepted at MOVED=0 DROPPED=0.",
       "publish_batch": 3,
       "depends_on": "plan-2026-09-22-9 item 2026-09-21-b96f21 on origin/main (plan-9 publish 3, which itself waits for batch 2). The surface accept rides publish 1.",
-      "status": "planned"
+      "status": "blocked",
+      "blocked_by": "plan-2026-09-22-9 publish 3 (item 2026-09-21-b96f21) is not on origin/main, and another agent is changing commodities.json and recipe mappings on 2026-09-22 evening (drumsticks, chorizo, shallots). The dispatch for the money lane's evening run said: do NOT build 2dae07.",
+      "owner": "the matching-worklist lane (plan-9 publish 3), which takes this item's contested arrivals with it after that agent lands; queue id 2026-09-22-2dae07 stays open in the main checkout's queue (weekly) and carries the work",
+      "premise_verified": "not re-measured in this run: the item was not built, by instruction"
     },
     {
       "queue_id": "discovered:ff-alerts-lanes-2026-09-22",
@@ -180,7 +183,11 @@
       ],
       "root_cause": "a lane (the Recipe Hunter promotion) wrote a new out/regular prefix without registering it; the data half closed when the prefix was registered",
       "resolution_note": "Closed with evidence: registered 2026-08-30 (037ef56b6), 0 findings today over 295 scanned, 0 fires since 08-26. A new unregistered prefix pages through audit-store-registry's own condition (watch:grocery/audit-store-registry.ps1).",
-      "status": "planned"
+      "status": "done",
+      "premise_verified": "Yes, re-measured by the money lane 2026-09-22 evening in worktree agent-a5790dc37aa23094c (seeded): git merge-base --is-ancestor 037ef56b6 origin/main exits 0, and grocery/audit-store-registry.ps1 exits 0 with 'STORE-REGISTRY-COMPLETE scanned=302 findings=0' (the reviewer read 295; seven more files landed since, still 0 findings).",
+      "shipped_commit": "none: no code change; closed with evidence",
+      "leaves_open": "nothing",
+      "leaves_open_followup": "watch:grocery/audit-store-registry.ps1"
     },
     {
       "queue_id": "2026-09-20-cb8f30",
@@ -254,7 +261,10 @@
       ],
       "root_cause": "one cell's band floor refused a consistent cheaper canola row; owned by 2026-09-21-6b17b1",
       "resolution_note": "Superseded by 2026-09-21-6b17b1 (batch 2, plan-2026-09-22-5). The quarantine is the designed valve and clears on the first build after batch 2 lands. Not the same source as RUN RECORD: a quarantine exits 0 through the chain (see 2026-09-22-7c932a).",
-      "status": "planned"
+      "status": "superseded",
+      "premise_verified": "Yes: batch 2 is on origin/main (git merge-base --is-ancestor 74cc780df origin/main exits 0: 'every commodity on its derived band'), which is 6b17b1's fix; the queue item was open in the main checkout's queue until this run.",
+      "shipped_commit": "none: closed in the main checkout's queue as superseded by 2026-09-21-6b17b1 (triage-close exit 0, 2026-09-22 evening)",
+      "leaves_open": "nothing"
     },
     {
       "queue_id": "2026-09-22-7c932a",
@@ -372,7 +382,16 @@
       "resolution_note": "A new store rendering is met at ingest: each per-row builder records its shape, and a check between the builders and the chain proves a first-seen unit spelling by the store's own price arithmetic and keeps it in unit-aliases.json, or queues it with its rows. The founding 'fluid ounce (us)' case proves unattended. Batch 2's unbuilt reject-spike residual is this item.",
       "publish_batch": 2,
       "depends_on": "batch 2 on origin/main (build-sams-deals and the Walmart builder change there). Do NOT mint batch 2's 'per-reason reject spike check' residual: record it as superseded by 2026-09-22-20fecf.",
-      "status": "planned"
+      "status": "deviated",
+      "premise_verified": "PARTLY FALSE, and the item was built to the true figure. Batch 2 is on origin/main (74cc780df is an ancestor), so the builders were edited on top of its count-first Sam's names. The class premise holds: re-run over every rejects file on disk (84 store-days: sams 32, walmart 29, aldi 23 by file date; 66 evaluable, 18 blind under the 3-file bar), 16 carried a new reason key and 8 a new unit spelling (the plan's 7 plus Walmart 2026-09-19, whose 'gl' 'in' 'ca' 'ft' 'pack' were new that day). The founding premise does NOT hold: 'fluid ounce (us)' on Sam's 2026-09-21 is 50 of 52 rows proving fl oz, not 52 of 52. Bimbo Soft White Bread 20 oz x 2 at $3.52 printed 8.6 c/fluid ounce derives 40.93 against the name's 40, and a 750 ml Chardonnay at $20.58 printed 81.2 c/fluid ounce derives 25.345 against 25.361, outside the half-ulp. Under the plan's own rule (any row unproved admits nothing) the founding spelling is QUEUED with its two rows, not admitted. Measured with a scratch harness (prove52.ps1: pricing-math-lib Get-SamsUnitPriceReading + walmart-row-lib Get-NameQtyCandidates) and reproduced by the shipped audit's own MUST FIRE.",
+      "deviation": "(1) The founding MUST FIRE asserts what the real file says: 'fluid ounce (us)' UNPROVED 50 of 52 with both rows named, 'sq ft' and 'pad' unproved with no family, 'gallon (us)' unproved (Member's Mark water 6 x 1 gal at $5.38 printed 98.0 c/gallon, lp/up 5.49), and 'gl' PROVED 2 of 2 on the same day, so the alias file gains exactly 'gl'. The proving road is fixtured on the same frozen day with only the 50 reproducing rows left under the spelling (PROVED 50 of 50, REBUILD-STORE sams). The plan's density-conflict decoy was not needed: the real file carries its own. (2) History is read from the tracked rejects files, not from out/ingest-shape records: no shape record existed before today, and the rejects files are what the 87-file measurement used. Write-IngestShape still writes one per build (gitignored /grocery/out/ingest-shape/). (3) The candidate-family table lives in audit-ingest-shape.ps1 as the builders' Resolve-Unit vocabulary (Sam's is the superset), and the proof reuses walmart-row-lib's Get-NameQtyCandidates; ingest-shape-lib must not dot-source walmart-row-lib because build-sams-deals defines Resolve-Unit and Build-Row too. (4) A proved alias is per store: a Sam's proof never admits at Walmart (fixtured both ways). (5) Aldi's rejects carry no unit price, so Aldi reports new wording only. (6) walmart-row-lib (not build-walmart-deals) holds the Walmart unit table, so the fallback is there; both Walmart writers inherit it. (7) Not backfilled: running the audit over history would prove Walmart 'gl' (2026-09-19); it was left unwritten because it would admit rows at the next Walmart build that no routing check measured. It proves on its own the next morning Walmart prints it as a new spelling.",
+      "leaves_open": "(a) the Family Fare, Hy-Vee, Baker's API and Fareway builders write no per-row rejects, so a rendering change there is still first met by the engine: 0 occurrences in 2026-09-20..22; (b) a rendering MISREAD into a known unit is not a new spelling and is caught later by the band and audit-unit-basis-outlier: 1 occurrence (Aldi 4-pack pineapple, 2026-09-19)",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-22-293660",
+      "leaves_open_owner_note": "(b) has happened once, so it was minted weekly with send-alert.ps1 -Force -Lane weekly under 'Triage residual: a store rendering misread into a known unit never reaches the ingest-shape check (residual of 2026-09-22-20fecf)' and moved into the main checkout's queue under its mutex (send-alert writes the queue beside the script, which from a worktree is the worktree's seeded copy). (a) has 0 occurrences and rides on the same item's text rather than a second watch.",
+      "superseded_residual": "2026-09-22-f23a00 (batch 2's 'per-reason reject spike check') closed as superseded by this item in the main checkout's queue; not minted again.",
+      "proof_run": "audit-ingest-shape.ps1 -SelfTest PASS 21 cases exit 0 (BAR at the half cent and a step past; founding day; proving road; per-store alias; blind at 2 prior files and scanned at exactly 3; Walmart 09-06 wording printed and never sent; unknown store exit 3). build-sams-deals.ps1 -SelfTest exit 0 with 7h (alias admits only at its own store) and 11a2 (the build writes its shape under its own -OutDir). build-walmart-deals, build-aldi-regular, lib/bot-paths -SelfTest exit 0. audit-alert-registry exit 0 (104 subjects map to exactly one entry, unassigned 4 = mark 4).",
+      "shipped_commit": "b1eb2af0f on branch worktree-agent-a5790dc37aa23094c before rebase (rebases rename it; see origin/main for the landed id)"
     },
     {
       "queue_id": "discovered:archived-open-residuals-2026-09-22",
@@ -398,7 +417,32 @@
       ],
       "root_cause": "the 2026-09-17 reset archived the queue by hand (Brad: ignore every past alert). Open residuals went into an archive nothing reads for OPEN work, so each lost its owner at once, although triage-return-lib has read the same archive for CLOSES since c74aa821b.",
       "resolution_note": "Each of the 16 archived-open residuals has a disposition: closed with evidence (c4a68f, 9fbafc, 36f57d, 915846, 139f58, 2bb198) or closed to a watch (d67882, watch:grocery/capture-run.ps1); folded into an owned item (582032, b09671 and bfc110 into 2026-09-21-b96f21; c8eb72 and 1139c4 into 2026-09-21-85c3b7; d625a4 into 2026-09-20-cb8f30; 0bea21 into 2026-09-18-8491bf); reopened weekly with today's measurement (a86b87, 935ce3). HOW: triage-close.ps1 -QueueFile grocery/out/archive/triage-queue.archived-2026-09-17.json -Id <id> -Disposition <confirmed|superseded|by-design> -Notes <the line above> for every close and fold; the two reopens are minted with send-alert.ps1 -Lane weekly under 'Triage residual:' subjects.",
-      "status": "planned",
+      "status": "deviated",
+      "premise_verified": "Yes for the two that were re-measured: a86b87 is live (grocery/out/logs/capture-run-daily-2026-09-22.log line 209 in the main checkout: 'foreign-held: 20 tracked owned file(s)', the 7 named pipeline writes among them); 935ce3 held (neither ops script called lib/production-text.ps1 before this run). The 16 were all status open in C:\\Codex\\ThriftyCrew\\grocery\\out\\archive\\triage-queue.archived-2026-09-17.json.",
+      "deviation": "(1) 935ce3 was FIXED rather than reopened: ops/audit-cross-module-reach.ps1 now asks lib/production-text.ps1 (Test-TcInsideSelfTestClause) and drops a path literal inside an if ($SelfTest) body (sweep after: 107 code sites against the committed mark 118, a fall spoken and not written; self-test MUST NOT FIRE / MUST FIRE / CLEAN TWIN added, exit 0). ops/audit-fixture-inputs.ps1 was deliberately NOT routed there: its subject IS the self-test body (Get-SelfTestBlock from lib/selftest-lib.ps1, shared with audit-mustfire-census), which production-text removes by design, so the conversion would blind it; its here-string rule already skips nested fixture scripts. So 935ce3 closed confirmed and only ONE reopen was minted. (2) a86b87 was not fixed at its cause in this run: the cause is the non-committing writers (capture-watchdog's Family Fare shard window, the price-table writer, and probably the graph/identity and cadence emitters) plus Get-ForeignHeldPaths in lib/pipeline-commit.ps1, none of which this run's items touch. (3) send-alert writes the queue beside the script, which from a worktree is the worktree's seeded copy; the minted item was moved into the main checkout's queue under the queue mutex (Global\\smp-grocery-triage-queue) with lib/atomic-write.ps1, not re-typed.",
+      "dispositions": {
+        "2026-09-10-d67882": "closed confirmed, to watch:grocery/capture-run.ps1 (0 occurrences since 09-10)",
+        "2026-09-10-a86b87": "closed superseded by the weekly reopen 2026-09-22-9bc4d2 (in the main queue)",
+        "2026-09-10-582032": "closed superseded, folded into plan-9 2026-09-21-b96f21",
+        "2026-09-10-c8eb72": "closed superseded, folded into 2026-09-21-85c3b7",
+        "2026-09-11-1139c4": "closed superseded, folded into 2026-09-21-85c3b7",
+        "2026-09-11-c4a68f": "closed confirmed with evidence (push-main and the push lock)",
+        "2026-09-11-b09671": "closed superseded, folded into plan-9 2026-09-21-b96f21",
+        "2026-09-11-9fbafc": "closed superseded by b52b39cc3",
+        "2026-09-11-935ce3": "closed confirmed: fixed in this run (cross-module-reach); fixture-inputs recorded as not fitting",
+        "2026-09-11-bfc110": "closed superseded, folded into plan-9 2026-09-21-b96f21",
+        "2026-09-11-36f57d": "closed by-design, ruling Q-4fc24c",
+        "2026-09-12-d625a4": "closed superseded, folded into 2026-09-20-cb8f30",
+        "2026-09-12-915846": "closed confirmed with evidence",
+        "2026-09-12-139f58": "closed confirmed with evidence",
+        "2026-09-14-2bb198": "closed confirmed with evidence",
+        "2026-09-17-0bea21": "closed superseded, folded into 2026-09-18-8491bf"
+      },
+      "dispositions_applied": "grocery/triage-close.ps1 (this worktree's copy, which equals origin/main's blob) with -QueueFile C:\\Codex\\ThriftyCrew\\grocery\\out\\archive\\triage-queue.archived-2026-09-17.json, 16 of 16 exit 0, 2026-09-22 evening",
+      "leaves_open": "the foreign-held rule holds back the pipeline's own non-committing writes (a86b87): 20 files held on 2026-09-22, at least 7 pipeline writes",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-22-9bc4d2",
+      "shipped_commit": "935ce3 half: 35af0048a on branch worktree-agent-a5790dc37aa23094c before rebase (see origin/main for the landed id); the rest is queue housekeeping",
       "publish1_note": "0 of the 16 dispositions are code: every one is a close, a fold or a reopen through triage-close.ps1 or send-alert.ps1 -Lane weekly (ship_sequence step 3). None was done in this publish (dispatch: do not close queue items). The two reopens (a86b87, 935ce3) must be minted under 'Triage residual:' subjects, which since this publish is the only road: an unregistered -Lane weekly subject is refused."
     },
     {
