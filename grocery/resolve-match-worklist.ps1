@@ -28,7 +28,9 @@ param(
   [string]$GroceryDir = '',
   [string]$Today = '',
   [string]$Decide = '',
-  [ValidateSet('', 'confirm', 'release', 'widen', 'known-wrong', 'ad-line')][string]$Verdict = '',
+  # moot: the question no longer exists on the current rules (a release whose exclude suppresses nothing); applied: a rule
+  # shipped by hand through apply-coverage-batch for this key
+  [ValidateSet('', 'confirm', 'release', 'widen', 'known-wrong', 'ad-line', 'moot', 'applied')][string]$Verdict = '',
   [string]$Pattern = '',
   [string]$Reason = '',
   [string]$By = 'resolve-match-worklist -Decide',

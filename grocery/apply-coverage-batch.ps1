@@ -60,16 +60,20 @@ function Get-WorklistBatch($Rows, $Pending, [int]$Take) {
      A release excludes on the CLAIMER; a widen includes on the TARGET. A key with no pattern is skipped, never guessed. #>
   $cand = @(@($Rows | Where-Object { $_ -and [string]$_.decision -in 'release', 'widen' -and [string]$_.pattern }) + @($Pending | Where-Object { $_ -and [string]$_.verdict -in 'release', 'widen' -and [string]$_.pattern }))
   $cand = @($cand | Sort-Object @{ Expression = { if ($_.PSObject.Properties['first_seen']) { [string]$_.first_seen } else { [string]$_.date } } }, @{ Expression = { [string]$_.key } })
-  $pat = @{}; $exc = @{}; $keys = @{}
+  $pat = @{}; $exc = @{}; $keys = @{}; $ben = @{}
   foreach ($c in $cand) {
     if ($keys.Count -ge $Take) { break }
     if ($keys.ContainsKey([string]$c.key)) { continue }
     $kind = if ($c.PSObject.Properties['decision']) { [string]$c.decision } else { [string]$c.verdict }
-    if ($kind -eq 'release') { $id = [string]$c.claimer; if (-not $id) { continue }; if (-not $exc.ContainsKey($id)) { $exc[$id] = @() }; $exc[$id] = @($exc[$id]) + [string]$c.pattern }
+    if ($kind -eq 'release') {
+      $id = [string]$c.claimer; if (-not $id) { continue }; if (-not $exc.ContainsKey($id)) { $exc[$id] = @() }; $exc[$id] = @($exc[$id]) + [string]$c.pattern
+      # the TARGET the release hands the product to is an intended beneficiary, not a theft victim
+      foreach ($tg in @(([string]$c.commodity -split ',') | Where-Object { $_ -and $_ -ne $id })) { $ben[$tg] = $true }
+    }
     else { $id = [string]$c.commodity; if (-not $id) { continue }; if (-not $pat.ContainsKey($id)) { $pat[$id] = @() }; $pat[$id] = @($pat[$id]) + [string]$c.pattern }
     $keys[[string]$c.key] = [pscustomobject]@{ row = $c; pattern = [string]$c.pattern; kind = $kind }
   }
-  return [pscustomobject]@{ Patterns = $pat; Excludes = $exc; Keys = $keys }
+  return [pscustomobject]@{ Patterns = $pat; Excludes = $exc; Keys = $keys; Beneficiaries = @($ben.Keys | Sort-Object) }
 }
 function Save-WorklistOutcome([string]$Outcome, [string]$Why) {
   if ($script:FwKeys.Count -eq 0 -or $WhatIfOnly) { return }
@@ -88,6 +92,8 @@ if (-not $SelfTest -and $FromWorklist -gt 0) {
   $fwLedger = Read-MatchVerdicts $VerdictFile
   $fwB = Get-WorklistBatch (Read-MatchWorklist $WorklistFile) @($fwLedger.Values) $FromWorklist
   $Patterns = $fwB.Patterns; $Excludes = $fwB.Excludes; $script:FwKeys = $fwB.Keys
+  $script:FwBeneficiaries = @($fwB.Beneficiaries)
+  if ($script:FwBeneficiaries.Count) { Write-Output ('INTENDED BENEFICIARIES (each release hands its product to this commodity, so its cells are the batch''s to move and are printed with the batch''s own): ' + ($script:FwBeneficiaries -join ', ')) }
   Write-Output ('from the matching worklist: ' + $script:FwKeys.Count + ' decided key(s) of ' + $FromWorklist + ' asked')
   foreach ($k in @($script:FwKeys.Keys | Sort-Object)) { Write-Output ('    ' + $script:FwKeys[$k].kind + '  ' + $script:FwKeys[$k].pattern + '  <- ' + $k) }
 }
@@ -98,7 +104,11 @@ if (-not $SelfTest -and @($Patterns.Keys).Count -eq 0 -and @($Excludes.Keys).Cou
 # Every gate below reasons about "the commodities this batch touched". Keep ONE list, built once: the
 # theft check exempts exactly these ids, and an id missing from it would be judged as a victim of its own
 # batch. $TouchedIds is that list.
-$TouchedIds = @(@($Patterns.Keys) + @($Excludes.Keys) | Sort-Object -Unique)
+# A -FromWorklist release's TARGET is touched too (found on the first -FromWorklist batch, 2026-09-23: releasing 'Puffs
+# Facial Tissue Plus Lotion' from lotion re-priced facial-tissues, the product's own commodity, and the theft gate reverted
+# the whole batch for doing exactly what plan-9's claimed_by_earlier said it would). Declared, printed, never inferred.
+if (-not (Get-Variable -Name FwBeneficiaries -Scope Script -ErrorAction SilentlyContinue)) { $script:FwBeneficiaries = @() }
+$TouchedIds = @(@($Patterns.Keys) + @($Excludes.Keys) + @($script:FwBeneficiaries) | Where-Object { $_ } | Sort-Object -Unique)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -166,6 +176,7 @@ if ($SelfTest) {
   _BT 'MUST NOT FIRE  an ad-line or undecided key is never turned into a rule' ($fwB.Keys.Count -eq 2 -and -not $fwB.Patterns.ContainsKey('queso') -and -not $fwB.Patterns.ContainsKey('canned-pears'))
   $fw1 = Get-WorklistBatch $fwRows @() 1
   _BT 'MECHANISM  -FromWorklist 1 takes exactly the OLDEST decided key (AT the bar: 1 asked, 1 taken)' ($fw1.Keys.Count -eq 1 -and $fw1.Patterns.ContainsKey('apple-juice'))
+  _BT 'MUST FIRE  a release names its TARGET as an intended beneficiary (sun-dried-tomatoes), never its claimer' (($fwB.Beneficiaries -contains 'sun-dried-tomatoes') -and ($fwB.Beneficiaries -notcontains 'turkey-lunchmeat'))
   Write-Output ('apply-coverage-batch self-test ' + $(if ($bad -eq 0) { 'pass' } else { 'FAIL' }) + ': ' + ($n - $bad) + ' of ' + $n + ' case(s)')
   exit $(if ($bad -eq 0) { 0 } else { 1 })
 }
