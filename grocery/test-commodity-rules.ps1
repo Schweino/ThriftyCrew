@@ -59,21 +59,43 @@ function Get-RuleVerdict {
 # THE CASES. Product names are verbatim from grocery\out\captures\*.csv on the date noted.
 # =====================================================================================================
 $cases = @(
-  # ---- chicken-thighs, label "Chicken Thighs / Drumsticks" (fixed 2026-08-24) --------------------
-  # The founding case. All three drumstick names below were in the captures and priced BELOW the
-  # cheapest thigh ($0.98/lb against $1.28), so the exclusion cost accuracy and money at once.
-  @{ id='chicken-thighs'; name="Member's Mark Chicken Drumsticks, priced per pound"; expect='included'
-     why='FOUNDING CASE: the id whose label says "Chicken Thighs / Drumsticks" must carry a drumstick' }
-  @{ id='chicken-thighs'; name='fresh fresh chicken drumsticks family pack per lb'; expect='included'
+  # ---- chicken-drumsticks split from chicken-thighs (2026-09-22, Brad: "Split them") --------------
+  # From 2026-08-24 to 2026-09-22 chicken-thighs was a union labelled "Chicken Thighs / Drumsticks", and
+  # its crown became Walmart's Tyson 10 lb drumstick bag at $0.984/lb while the cheapest real thigh was
+  # $1.28 (Sam's) / $1.55 (Aldi): anything that meant "thighs" was priced 23-37% low. The registrar
+  # (grocery/triage-plans/registrar-2026-09-22.json) minted chicken-drumsticks at index 1 and narrowed
+  # chicken-thighs. The three drumstick names below are the 2026-08-24 founding names, now asserting
+  # the NEW home, and the thigh rule must refuse them.
+  @{ id='chicken-drumsticks'; name="Member's Mark Chicken Drumsticks, priced per pound"; expect='included'
+     why='FOUNDING CASE: a drumstick has its own commodity since the 2026-09-22 split' }
+  @{ id='chicken-drumsticks'; name='fresh fresh chicken drumsticks family pack per lb'; expect='included'
      why='and an Aldi drumstick pack, which is the cheapest bone-in chicken on the board' }
-  @{ id='chicken-thighs'; name='kirkwood fresh chicken drumsticks per lb'; expect='included'
+  @{ id='chicken-drumsticks'; name='kirkwood fresh chicken drumsticks per lb'; expect='included'
      why='three real drumstick names, because a collection fixture takes at least three' }
+  @{ id='chicken-drumsticks'; name='Smart Way Fresh Uncooked Chicken Drumsticks 4.5 lb'; expect='included'
+     why='the Baker''s row the union''s word order missed (registrar routing, 2026-09-22)' }
+  @{ id='chicken-drumsticks'; name='Nestle Drumstick Cone Variety Pack, Frozen 16 ct.'; expect='no-include-match'
+     why='the ice cream: no "chicken" in the name, so no drumstick include can reach it' }
+  @{ id='chicken-drumsticks'; name='Fresh chicken drumsticks or thighs, 100% natural, value pack No antibiotics ever., $1.88 lb.'; expect='included'
+     why='an "or" ad line is sold at that price for each cut; first match hands it to drumsticks (registrar, Hy-Vee ad 2026-09-22)' }
+  @{ id='chicken-thighs'; name="Member's Mark Chicken Drumsticks, priced per pound"; expect='no-include-match'
+     why='MUST FIRE the narrowed thigh rule no longer names a drumstick at all' }
+  @{ id='chicken-thighs'; name='Tyson Fresh Chicken Drumstick, 10 lb Bag'; expect='no-include-match'
+     why='MUST FIRE the 2026-09-22 crown that priced thighs at $0.984/lb' }
   @{ id='chicken-thighs'; name="Member's Mark Chicken Thighs, Case, priced per pound"; expect='included'
-     why='CLEAN TWIN the thighs the id has always carried are untouched by the fix' }
-  @{ id='chicken-thighs'; name='Nestle Drumstick Cone Variety Pack, Frozen 16 ct.'; expect='no-include-match'
-     why='the ice cream the old exclusion was aimed at. It never matched an include in the first place - it has no "chicken" in it - which is why removing that exclusion was free' }
+     why='CLEAN TWIN the thighs the id has always carried are untouched by the split' }
+  @{ id='chicken-thighs'; name='USDA Teriyaki Seasoned Chicken Thighs'; expect='included'
+     why='CLEAN TWIN no \bseasoned\b exclude: it would release this Aldi row onto teriyaki-sauce (registrar, measured)' }
   @{ id='chicken-thighs'; name='Tyson Chicken Nuggets'; expect='no-include-match'
-     why='CLEAN TWIN a chicken product that is not a thigh or a drumstick still does not match' }
+     why='a chicken product that is not a thigh still does not match' }
+
+  # ---- mexican-chorizo-fresh is PORK chorizo (2026-09-22, registrar) -----------------------------
+  # Four live recipes call for pork chorizo; the union crowned Cacique BEEF Chorizo, so a rebid would
+  # have priced pork at beef. Beef chorizo is released by exclude (ruling-recurring-shape-is-an-exclude).
+  @{ id='mexican-chorizo-fresh'; name='Cacique Beef Chorizo 12oz'; expect='excluded'
+     why='MUST FIRE the beef crown of 2026-09-22 leaves the pork id' }
+  @{ id='mexican-chorizo-fresh'; name='Cacique Pork Chorizo, 9 oz (Refrigerated)'; expect='included'
+     why='CLEAN TWIN the pork tube the recipes buy still prices here' }
 
   # ---- rice (fixed 2026-08-24) ------------------------------------------------------------------
   # `rice` includes a bare \brice\b, so "cauliflower rice" mapped to it and priced as white rice at
