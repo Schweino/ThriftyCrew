@@ -59,7 +59,13 @@ $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 . (Join-Path $here 'triage-lib.ps1')
 . (Join-Path (Split-Path -Parent $here) 'lib\atomic-write.ps1')   # Write-TcAtomicFile: a lock-free reader must not cost a close its write
-if (-not $QueueFile) { $QueueFile = Join-Path $here 'triage-queue.json' }
+# From a linked worktree the default is the MAIN checkout's queue (2026-09-23, ops lane; lib\main-checkout.ps1): a close
+# written to a worktree's gitignored copy is a close triage never sees. Loaded only here, so a sandbox passing -QueueFile needs no copy.
+if (-not $QueueFile) {
+  $QueueFile = Join-Path $here 'triage-queue.json'
+  . (Join-Path (Split-Path -Parent $here) 'lib\main-checkout.ps1')
+  $QueueFile = (Resolve-TcMainQueueFile -Dir $here -LocalQueue $QueueFile).path
+}
 
 # ------------------------------------------------------------------------------------- self-test
 if ($SelfTest) {

@@ -893,7 +893,12 @@ if (-not $doc) { Write-Output 'validate-triage-plan: BLIND - plan read back empt
 # written the other way, pass one that is not. Either is a confident wrong answer, so it is BLIND instead.
 # BOTH MODES since 2026-09-10 (ruling 5): handoff derives RETURN items from the queue, so an unreadable queue there
 # would silently exempt every RETURN. That is the same confident wrong answer, so it gets the same BLIND.
-if (-not $QueueFile) { $QueueFile = Join-Path $root 'triage-queue.json' }
+if (-not $QueueFile) {
+  # From a linked worktree the default is the MAIN checkout's queue (2026-09-23, ops lane; lib\main-checkout.ps1).
+  $QueueFile = Join-Path $root 'triage-queue.json'
+  . (Join-Path (Split-Path -Parent $root) 'lib\main-checkout.ps1')
+  $QueueFile = (Resolve-TcMainQueueFile -Dir $root -LocalQueue $QueueFile).path
+}
 $gq = Read-GateQueue $QueueFile
 if (-not $gq.ok) { Write-Output ("validate-triage-plan: BLIND - both modes read the queue (-Closing resolves owners against it, handoff derives RETURN items from it) and " + $gq.why); exit 3 }
 $queueItems = @($gq.items)

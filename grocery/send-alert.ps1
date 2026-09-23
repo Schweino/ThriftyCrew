@@ -81,6 +81,9 @@ param(
   # (default: this script's own checkout; the self-test points it at a fixture worktree).
   [switch]$AllowWorktree,
   [string]$GradedDir = '',
+  # 2026-09-23 (ops lane): the triage queue this send writes. Default: this script's own grocery\triage-queue.json from
+  # the main checkout, and the MAIN checkout's from a linked worktree (lib\main-checkout.ps1). The spool follows it.
+  [string]$QueueFile = '',
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -581,6 +584,29 @@ if ($SelfTest) {
       Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
       $cw = _SA 'Grocery page HELD (coverage) - 2026-09-22' @('-GradedDir', $gwLinked)
       _T 'MUST FIRE end to end: the real script grading a linked worktree queues nothing, mails nothing, and names the production root' ([bool]((-not (Test-Path -LiteralPath $saQ)) -and $cw.out -match 'NOT SENT from linked worktree' -and $cw.out -notmatch 'alert MUTED')) 'True'
+      # ---- WHICH QUEUE (2026-09-23, ops lane) ----
+      # The real script, its registry and every library copied INTO the fixture's linked worktree and into its main
+      # checkout, so the script's own checkout is the one under test. FROZEN from 2026-09-22: a weekly residual minted
+      # from a worktree landed in that worktree's gitignored queue and had to be moved into the main one by hand.
+      foreach ($gwTree in @($gwLinked, $gwMain)) {
+        New-Item -ItemType Directory -Path (Join-Path $gwTree 'grocery') -Force -ErrorAction Stop | Out-Null
+        New-Item -ItemType Directory -Path (Join-Path $gwTree 'lib') -Force -ErrorAction Stop | Out-Null
+        foreach ($gwF in @(Get-ChildItem -LiteralPath $saG -File | Where-Object { $_.Name -notmatch '^(triage-queue|triage-spool-|alert-log|alert-sent-)' })) { Copy-Item -LiteralPath $gwF.FullName -Destination (Join-Path $gwTree 'grocery') }
+        foreach ($gwF in @(Get-ChildItem -LiteralPath $saL -File)) { Copy-Item -LiteralPath $gwF.FullName -Destination (Join-Path $gwTree 'lib') }
+      }
+      [IO.File]::WriteAllText((Join-Path $gwLinked 'grocery\alert-registry.json'), $saRegJson, $utf8)
+      [IO.File]::WriteAllText((Join-Path $gwMain 'grocery\alert-registry.json'), $saRegJson, $utf8)
+      $gwMainQ = Join-Path $gwMain 'grocery\triage-queue.json'
+      $gwLinkedQ = Join-Path $gwLinked 'grocery\triage-queue.json'
+      $wq1 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $gwLinked 'grocery\send-alert.ps1') -Subject 'Triage residual: a frozen residual minted from a worktree' -BodyFile $saBody -Lane weekly -QueueMutexName $saMutex)
+      $wq1Items = @(); if (Test-Path -LiteralPath $gwMainQ) { $wq1Items = @((Get-Content -LiteralPath $gwMainQ -Raw -Encoding UTF8 | ConvertFrom-Json).items) }
+      _T 'MUST FIRE a residual minted from a linked worktree lands in the MAIN checkout''s queue, and the worktree''s own queue is never written' ([bool]($wq1Items.Count -eq 1 -and [string]$wq1Items[0].lane -eq 'weekly' -and -not (Test-Path -LiteralPath $gwLinkedQ) -and (($wq1 -join ' | ') -match 'routes to the main checkout'))) 'True'
+      $wq2 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $gwMain 'grocery\send-alert.ps1') -Subject 'Triage residual: a second frozen residual, from the main checkout' -BodyFile $saBody -Lane weekly -QueueMutexName $saMutex)
+      $wq2Items = @(); if (Test-Path -LiteralPath $gwMainQ) { $wq2Items = @((Get-Content -LiteralPath $gwMainQ -Raw -Encoding UTF8 | ConvertFrom-Json).items) }
+      _T 'CLEAN TWIN a main-checkout send still writes its own queue beside the script, unrouted (1 item -> 2)' ([bool]($wq2Items.Count -eq 2 -and (($wq2 -join ' | ') -notmatch 'routes to the main checkout'))) 'True'
+      $wq3Q = Join-Path $gwRoot 'explicit-queue.json'
+      $wq3 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $gwLinked 'grocery\send-alert.ps1') -Subject 'Triage residual: a third frozen residual, explicit queue' -BodyFile $saBody -Lane weekly -QueueMutexName $saMutex -QueueFile $wq3Q)
+      _T 'CLEAN TWIN an explicit -QueueFile wins over the routing, and the main queue is untouched (still 2)' ([bool]((Test-Path -LiteralPath $wq3Q) -and @((Get-Content -LiteralPath $gwMainQ -Raw -Encoding UTF8 | ConvertFrom-Json).items).Count -eq 2)) 'True'
     } finally {
       $ErrorActionPreference = 'Continue'
       try { & git -C $gwMain worktree remove --force $gwLinked 2>$null | Out-Null } finally { $ErrorActionPreference = $prevEapW }
@@ -802,6 +828,22 @@ if (Test-WorktreeSendRefused $graded ([bool]$AllowWorktree) $Lane $Escalates) {
   exit 0
 }
 
+# ---- WHICH QUEUE? (2026-09-23, ops lane) ----------------------------------------------------------------------------
+# Everything that reaches this line may write (the automated sends from a linked worktree were refused just above), and
+# it writes the ONE queue triage reads: the main checkout's. From a worktree this used to be the worktree's gitignored
+# copy, and on 2026-09-22 several agents' residuals had to be moved into the main queue by hand. It is still written
+# under the same machine-wide queue mutex, so a worktree's send and a main-checkout send never race.
+$queueFileEff = Join-Path $root 'triage-queue.json'
+if ($QueueFile) { $queueFileEff = $QueueFile }
+else {
+  try {
+    . (Join-Path (Split-Path -Parent $root) 'lib\main-checkout.ps1')
+    $qRes = Resolve-TcMainQueueFile -Dir $root -LocalQueue $queueFileEff
+    $queueFileEff = $qRes.path
+    if ($qRes.routed) { Write-Output ('queue: ' + $qRes.note + ' - writing ' + $queueFileEff) }
+  } catch { Log ("MAIN-CHECKOUT LIB DID NOT LOAD (" + $_.Exception.Message + ") - writing the queue next to this script") }
+}
+
 # ---- NO SUBJECT IS NEVER A TYPE OF ITS OWN (2026-09-22, item 2026-09-20-cb8f30) ----------------------------------
 # The emitter's path goes into the subject, so the type key is per caller. Nothing is dropped: a pipeline call pages it
 # with the UNREGISTERED marker (ruling 1); an agent's (-Lane weekly or -Escalates) is refused below.
@@ -907,7 +949,7 @@ try {
   $qMutex = New-Object System.Threading.Mutex($false, $QueueMutexName)
   try { $qHeld = $qMutex.WaitOne($QueueLockTimeoutMs) } catch [System.Threading.AbandonedMutexException] { $qHeld = $true }
   if (-not $qHeld) { throw ('triage-queue lock ' + $QueueMutexName + ' not acquired in ' + $QueueLockTimeoutMs + ' ms - the queue was NOT rewritten unlocked, so this entry is spooled') }
-  $qFile = Join-Path $root 'triage-queue.json'
+  $qFile = $queueFileEff
   # THIS ONE IS THE GENERATIONAL HALF AND IT IS THE WORSE OF THE TWO. This read feeds a
   # read-modify-WRITE of the whole queue, so without -Encoding utf8 every alert appended re-decoded and
   # re-encoded every entry already in the file - one more generation of damage per alert, to rows that
@@ -1054,7 +1096,7 @@ try {
   # NEVER lose the entry: Brad's rule is that an alert must not wait for a human, and an alert that never
   # reached the queue waits forever. Spool it beside the queue; triage-due.ps1 reports a spool as DUE.
   try {
-    $spool = Join-Path $root ('triage-spool-' + $today + '.jsonl')
+    $spool = Join-Path (Split-Path -Parent $queueFileEff) ('triage-spool-' + $today + '.jsonl')
     $line = ([pscustomobject]@{ ts=(Get-Date).ToString('s'); type=$typeKey; subject=$Subject; body=($Body + $gradedFooter); reason=$_.Exception.Message } | ConvertTo-Json -Depth 4 -Compress)
     # THROUGH lib\append-line.ps1 (2026-09-11). A bare Add-Content lands a line only while no other process is
     # appending: in a scratch harness two concurrent appenders landed 13 of 200 lines. A spool is written exactly when
