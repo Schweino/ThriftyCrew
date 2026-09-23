@@ -538,6 +538,8 @@ disposition.
 | D18 | Approve W1.1's temporary box-wide logger hooks | yes: logger only, session-filtered, self-expiring | W1.1 step 2 |
 | D19 | Per-session dedup for the analysis route, reversing recall-hook.py's "NO PER-SESSION DEDUP ON THIS EVENT" for that route only | yes | W5.4 step 4 |
 
+Ruled 2026-09-23 by Brad: D5 yes, D6 yes (the 9-line block as drafted), D8 yes, D12b yes, D13 yes, then revised to 'lasting fix first' (a reconcile step so graph.db takes newer tracked verdicts, before the 69 rulings land), D18 yes (the desktop probe ran and was removed the same session), D19 yes.
+
 ## 10. Blast radius and rollback
 
 - **Phase 0.** One ThriftyCrew file and one hook. W0.1 widens both what resolves AND what is extracted, so extraction
