@@ -515,13 +515,70 @@ def selftest():
         ctx2 = repo_context(cwd=os.path.join(root, "not-a-repo"), env=genv)
         case("MUST FIRE a directory that is not a repo reads as repo_blind, never as an empty tracked set",
              ctx2["repo_blind"] is True and ctx2["tracked"] is None)
+
+        # ---- W0.2: the SHARED commit-msg hook, driven by a real `git commit` in a temp repo ----
+        # core.hooksPath points at a temp copy of ops/hooks/commit-msg, so git runs it the way it runs it live
+        # and nothing installed on this box is touched. USERPROFILE is a temp home holding an empty
+        # .claude/skills, which keeps both the BLIND-no-store branch and the live decision log out of the case.
+        # No date override reaches this path: the verdicts asserted here hold on any day.
+        hooks_dir = os.path.join(root, "hooks")
+        os.makedirs(hooks_dir)
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "hooks", "commit-msg"), "rb") as f:
+            hook_bytes = f.read().replace(b"\r\n", b"\n")
+        with open(os.path.join(hooks_dir, "commit-msg"), "wb") as f:
+            f.write(hook_bytes)
+        thome = os.path.join(root, "home")
+        os.makedirs(os.path.join(thome, ".claude", "skills"))
+        henv = dict(genv, CLAUDE_CODE_SESSION_ID="stc-fixture-session", USERPROFILE=thome)
+
+        def hook_commit(repo, rel, body, msg, tag):
+            with open(os.path.join(repo, rel), "w", newline="\n") as f:
+                f.write(body)
+            subprocess.run(["git", "add", "--", rel], cwd=repo, env=henv, capture_output=True, text=True)
+            mp = os.path.join(root, "msg-%s.txt" % tag)
+            with open(mp, "w", encoding="utf-8", newline="\n") as f:
+                f.write(msg)
+            r = subprocess.run(["git", "-c", "core.hooksPath=" + hooks_dir, "-c", "user.name=t", "-c", "user.email=t@t",
+                                "commit", "-q", "-F", mp], cwd=repo, env=henv, capture_output=True, encoding="utf-8",
+                               errors="replace", timeout=180)
+            head = subprocess.run(["git", "log", "-1", "--format=%s"], cwd=repo, env=henv, capture_output=True,
+                                  encoding="utf-8", errors="replace").stdout.strip()
+            return r, head
+
+        hr, hhead = hook_commit(grepo, "lib/x.ps1", "y\n", 'blind case\n\nStore: .claude/rules/r.md ("a rule")\n', "blind")
+        case("MUST FIRE a checkout with no ops/store_citation.py prints the BLIND line on stderr, exits 0 and the commit lands",
+             hr.returncode == 0 and hhead == "blind case" and "store-citation: BLIND - this checkout has no "
+             + "ops/store_citation.py; the commit is not judged" in (hr.stderr or ""))
+        hrepo = os.path.join(root, "hookrepo")
+        os.makedirs(os.path.join(hrepo, ".claude", "rules"))
+        os.makedirs(os.path.join(hrepo, "lib"))
+        os.makedirs(os.path.join(hrepo, "ops"))
+        with open(os.path.abspath(__file__), "rb") as f:
+            me = f.read().replace(b"\r\n", b"\n")
+        with open(os.path.join(hrepo, "ops", "store_citation.py"), "wb") as f:
+            f.write(me)
+        for rel in (".claude/rules/r.md", "lib/x.ps1"):
+            with open(os.path.join(hrepo, rel), "w", newline="\n") as f:
+                f.write("x\n")
+        for args in (["init", "-q"], ["add", "--", ".claude/rules/r.md", "lib/x.ps1", "ops/store_citation.py"],
+                     ["-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q", "-m", "base"]):
+            subprocess.run(["git"] + args, cwd=hrepo, env=genv, capture_output=True, text=True)
+        hr2, hhead2 = hook_commit(hrepo, "lib/x.ps1", "z\n", 'cites a rule\n\nStore: .claude/rules/r.md ("a rule")\n', "ok")
+        hlog = os.path.join(thome, ".claude", "store-citation-log.jsonl")
+        hrows = []
+        if os.path.isfile(hlog):
+            with open(hlog, encoding="utf-8", errors="replace") as f:
+                hrows = [json.loads(l) for l in f if l.strip()]
+        case("CLEAN TWIN with the script present the hook reaches store_citation: the commit lands and exactly one ok row is logged",
+             hr2.returncode == 0 and hhead2 == "cites a rule" and len(hrows) == 1 and hrows[0].get("verdict") == "ok"
+             and hrows[0].get("cited") == [".claude/rules/r.md"])
     finally:
         import shutil
         shutil.rmtree(root, ignore_errors=True)
 
     for f in fails:
         print("  FAIL  " + f)
-    expected = 38
+    expected = 40
     if n != expected:
         fails.append("ran %d cases, expected %d" % (n, expected))
         print("  FAIL  ran %d cases, expected %d" % (n, expected))
