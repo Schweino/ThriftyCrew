@@ -1,0 +1,9 @@
+# Evidence for design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md
+
+Two read-only review passes, run on 2026-09-22 from session 134f2f6e-7fb9-4057-a890-b2c27ba9dfc0.
+
+**Pass 1, the system review** (Workflow run wf_2ae11799-ea0). Nine mappers, one per subsystem, each checked by an adversarial verifier, then a completeness critic (critic.md). Each digest-*.md holds the mapper's summary and measurements, then every finding with its verdict (CONFIRMED, PLAUSIBLE, OVERSTATED, REFUTED, ALREADY-RULED), the verifier's CORRECTED statement, the fix sketch, and the verifier's critique of what a lower-effort implementation would get wrong. Where a CORRECTED line and the mapper's own text disagree, the CORRECTED line is the checked fact.
+
+**Pass 2, the plan review** (Workflow run wf_d6439ad3-4d8). Five skeptics reviewed the FIRST DRAFT of the plan, one lens each: implementability, evidence fidelity, estate-rule compliance, sequencing, and goal coverage (plan-review-*.md). The plan as committed was revised against every issue they raised. Their line numbers refer to that uncommitted first draft, not to the committed files.
+
+Edits made on copying, and nothing else: double square brackets were spaced apart, so placeholder memory links in the prose are not read as citations by ops/audit-memory-citations.ps1; em dashes were replaced with hyphens; line endings were normalised to LF. The scratch harnesses the reviewers ran are not committed. Each measurement names its command and window instead, which is a description, not a harness (measurement.md); the plan commits the harnesses its own bars need.
