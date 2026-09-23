@@ -51,6 +51,16 @@
                                                    REPORT ONLY: one tab-separated PAIR-STATE line per (doc, harness) with
                                                    its state, the harness's current blob and the blob it was last qualified
                                                    at. The re-read ledger's by-hand writer reads prior_blob from it.
+    ops\audit-conclusion-currency.ps1 -ListHarnessSources
+                                                   REPORT ONLY: one tab-separated HARNESS-SOURCE line per (doc, harness)
+                                                   pair, with the line number and text of the line that enrolled it.
+
+  A RE-READ LINE NEVER ENROLS A HARNESS (2026-09-23, W4.2, Brad's ruling D5). A re-read paragraph starts at a line
+  matching "Re-read at harness blob" or "Re-read at commit" and runs to the next blank line, or to the next line that
+  BEGINS with a harness label ("Harness:" or "Harness (frozen"); nothing inside it enrols, and no harness line is
+  joined to a line inside it. Before this, a re-read naming a path made that path a new harness of its doc, so every
+  re-read could owe re-reads of its own. The pairs that existed only that way were frozen first as explicit
+  "Harness (frozen 2026-09-23 from a re-read line): <path>" lines, so the watched set did not shrink.
 
   RE-READS GO IN A LEDGER NOW (2026-09-23, W4.1). design\reread-ledger.tsv holds one row per re-read, and a row
   qualifies its own (doc, harness) pair when its blob is the harness's current blob in full. The rules are beside
@@ -76,7 +86,7 @@
 #>
 [CmdletBinding()]
 param([switch]$SelfTest, [switch]$Json, [switch]$Accept, [switch]$ReportOnly, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '',
-      [switch]$PairState, [string]$PairDoc = '')
+      [switch]$PairState, [string]$PairDoc = '', [switch]$ListHarnessSources)
 
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
@@ -95,25 +105,65 @@ $script:COMMIT_LINE  = '(?i)\b(commit|blob)\b'
 $script:PATH_RX = '(?<![\w/\\.-])((?:ops|grocery|graph|meal-prep|sidecar|lib|tools)[\\/][A-Za-z0-9_.\\/-]+?\.(?:ps1|py))(?![\w])'
 $script:HASH_RX = '(?<![0-9A-Za-z])([0-9a-f]{7,40})(?![0-9A-Za-z])'
 
-function Get-HarnessPaths {
-  <# Repo-relative harness paths named on a harness line OR THE LINE AFTER IT, forward slashes, de-duplicated.
+# A RE-READ PARAGRAPH ENROLS NOTHING (2026-09-23, W4.2 of design\PLAN-push-derived-conflicts-2026-09-23.md, Brad's
+# ruling D5). A re-read line says "harness", so until this change every path on it, and on the line after it, was
+# enrolled as a NEW harness of its doc: that is how ops/run-gates.ps1, the most-edited gate file, became a harness of
+# both gate-queue documents, and every re-read then owed a re-read of its own. A paragraph starts at a line matching
+# REREAD_START and runs to the next blank line, or to the next line that BEGINS with a harness label (HARNESS_LABEL),
+# whichever comes first; the label line is outside it. No line inside one enrols, and no harness line is joined to a
+# line inside one. The pairs that existed only because a re-read line named them were frozen first, as
+# "Harness (frozen 2026-09-23 from a re-read line): <path>" lines above each doc's re-read block, so nothing that was
+# watched stopped being watched.
+$script:REREAD_START = '(?i)\bRe-read at (?:harness blob|commit)\b'
+$script:HARNESS_LABEL = '^\s*(?:[-*>]\s+)?(?:\*\*|__)?Harness(?:\*\*|__)?\s*(?::|\(frozen)'
+
+function Get-RereadParagraphMask {
+  <# Pure. One bool per line: true when the line sits inside a re-read paragraph (see REREAD_START above). #>
+  param([string[]]$Lines)
+  $mask = New-Object 'bool[]' (@($Lines).Count)
+  $open = $false
+  for ($i = 0; $i -lt $mask.Length; $i++) {
+    $l = [string]$Lines[$i]
+    if ($l -match $script:REREAD_START) { $open = $true; $mask[$i] = $true; continue }
+    if (-not $open) { continue }
+    if ($l.Trim().Length -eq 0 -or $l -cmatch $script:HARNESS_LABEL) { $open = $false; continue }
+    $mask[$i] = $true
+  }
+  return ,$mask
+}
+
+function Get-HarnessSources {
+  <# Each harness path the document enrols, with the line that enrolled it: @{ Path; LineNo; Line }, first
+     enrolment only, forward slashes. A path is named on a harness line OR THE LINE AFTER IT, and never on a line
+     inside a re-read paragraph (Get-RereadParagraphMask).
 
      THE LINE AFTER, because the first live run read EVAL-alert-retention-2026-09-09.md as naming no
      harness: its line 6 is "**Harness and commit** (per ...): the snapshot producer is" and the path
      wraps onto line 7. Markdown prose wraps at a column, not at a sentence. #>
   param([string]$Text)
-  $out = New-Object System.Collections.Generic.List[string]
+  $out = New-Object System.Collections.Generic.List[object]
+  $seen = New-Object System.Collections.Generic.List[string]
   $all = $Text -split "`r?`n"
+  $inReread = Get-RereadParagraphMask -Lines $all
   for ($i = 0; $i -lt $all.Count; $i++) {
+    if ($inReread[$i]) { continue }
     if ($all[$i] -notmatch $script:HARNESS_LINE) { continue }
     $line = $all[$i]
-    if ($i + 1 -lt $all.Count) { $line = $line + ' ' + $all[$i + 1] }
+    if ($i + 1 -lt $all.Count -and -not $inReread[$i + 1]) { $line = $line + ' ' + $all[$i + 1] }
     foreach ($m in [regex]::Matches($line, $script:PATH_RX)) {
       $p = $m.Groups[1].Value -replace '\\', '/'
-      if (-not $out.Contains($p)) { [void]$out.Add($p) }
+      if (-not $seen.Contains($p)) { [void]$seen.Add($p); [void]$out.Add([pscustomobject]@{ Path = $p; LineNo = ($i + 1); Line = $all[$i] }) }
     }
   }
   $arr = $out.ToArray()
+  return ,$arr
+}
+
+function Get-HarnessPaths {
+  <# The distinct harness paths Get-HarnessSources enrols, in the order it found them. #>
+  param([string]$Text)
+  $src = Get-HarnessSources -Text $Text
+  $arr = @(@($src) | ForEach-Object { [string]$_.Path })
   return ,$arr
 }
 
@@ -451,6 +501,30 @@ if ($SelfTest) {
   $h16 = @($hh16)
   Case 'CLEAN TWIN' 'a full 40-hex commit id is still cited after the md5 rule' ($h16.Count -eq 1 -and $h16[0] -eq $full16) ($h16 -join ',')
 
+  # A RE-READ PARAGRAPH ENROLS NOTHING (2026-09-23, W4.2). The founding shape: a re-read line says "harness", so the
+  # path on it, and on the line after it, became a NEW harness of its doc, and ops/run-gates.ps1 became a harness of
+  # both gate-queue documents that way. The re-read lines below are built by concatenation, so this file's own source
+  # is never the text under test.
+  $rrl = 'Re-read at harness blob ' + 'c0de5eed00 (ops/run-gates.ps1): still holds'
+  $hs34 = Get-HarnessPaths -Text ("Harness: ops/a.ps1`n`n" + $rrl + ', and ops/new-thing.ps1 was read beside it.')
+  $p34 = @($hs34)
+  Case 'MUST NOT FIRE' 'a re-read line naming a NEW path does not enrol it; the explicit harness still does' ($p34.Count -eq 1 -and $p34[0] -eq 'ops/a.ps1') ($p34 -join ',')
+  $hs35 = Get-HarnessPaths -Text ("Harness: ops/a.ps1`n`n" + $rrl + ", and the other file it read`nwas the harness ops/wrapped.ps1, which only the continuation names.")
+  $p35 = @($hs35)
+  Case 'MUST NOT FIRE' 'a wrapped continuation of a re-read line, carrying the word harness, does not enrol its path' ($p35.Count -eq 1 -and $p35[0] -eq 'ops/a.ps1') ($p35 -join ',')
+  $hs36 = Get-HarnessPaths -Text ($rrl + "`n" + 'Harness: ops/next.ps1')
+  $p36 = @($hs36)
+  Case 'MUST FIRE' 'a Harness: line on the VERY NEXT line after a re-read line still enrols: the label ends the paragraph' ($p36.Count -eq 1 -and $p36[0] -eq 'ops/next.ps1') ($p36 -join ',')
+  $hs37 = Get-HarnessPaths -Text ($rrl + "`n" + 'Harness (frozen 2026-09-23 from a re-read line): ops/frozen.ps1')
+  $p37 = @($hs37)
+  Case 'MUST FIRE' 'the frozen form "Harness (frozen ...): <path>" directly after a re-read line enrols too' ($p37.Count -eq 1 -and $p37[0] -eq 'ops/frozen.ps1') ($p37 -join ',')
+  $hs38 = Get-HarnessPaths -Text ("Intro.`n`n**Harness:** ``ops/explicit.ps1``, run twice.`n`n" + $rrl + "`n`nLater prose.`n`nMeasured through grocery/other.ps1 at width 4.")
+  $p38 = @($hs38)
+  Case 'CLEAN TWIN' 'an explicit harness line elsewhere still enrols, before a re-read paragraph and after the blank line that ends it' ($p38.Count -eq 2 -and $p38[0] -eq 'ops/explicit.ps1' -and $p38[1] -eq 'grocery/other.ps1') ($p38 -join ',')
+  $hs39 = Get-HarnessPaths -Text ('Harness: ops/a.ps1 and' + "`n" + $rrl)
+  $p39 = @($hs39)
+  Case 'MUST NOT FIRE' 'a harness line is never joined to a re-read line that follows it, so the re-read''s path is not enrolled through the join' ($p39.Count -eq 1 -and $p39[0] -eq 'ops/a.ps1') ($p39 -join ',')
+
   # THE RE-READ LEDGER (2026-09-23, W4.1). Rows are parsed from TEXT, exactly as the live path reads the file, and the
   # verdict is taken with the cited commit 3 changes behind the harness, so only the ledger can make a pair CURRENT.
   $cbP = 'a1b2c3d4e5f60718293a4b5c6d7e8f9012345678'
@@ -651,13 +725,20 @@ if ($SelfTest) {
     $lines5 = @($ps5 | Where-Object { "$_" -like 'PAIR-STATE*' })
     Case 'LIVE PATH' '-PairState -PairDoc prints ONE tab-separated line for the pair: unqualified, the current blob, and the blob at the cited commit as last qualified' `
       ($rc5 -eq 0 -and $lines5.Count -eq 1 -and [string]::Equals([string]$lines5[0], $want5, [StringComparison]::Ordinal)) ("rc=$rc5 lines=$($lines5.Count) got=[" + (($lines5 -join ' | ') -replace [char]9, '<T>') + ']')
+    # -ListHarnessSources (W4.2): every pair with the line that enrolled it. Three documents each enrol ops/h.ps1 on line 1.
+    $hs6 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -ListHarnessSources)
+    $rc6 = $LASTEXITCODE
+    $src6 = @($hs6 | Where-Object { "$_" -like 'HARNESS-SOURCE*' })
+    $want6 = 'HARNESS-SOURCE' + [char]9 + 'design/EVAL-fixture.md' + [char]9 + 'ops/h.ps1' + [char]9 + 'exists' + [char]9 + '1' + [char]9 + 'Harness: ops/h.ps1'
+    Case 'LIVE PATH' '-ListHarnessSources prints each (doc, harness) pair with its enrolling line: 3 pairs, EVAL-fixture.md by line 1' `
+      ($rc6 -eq 0 -and $src6.Count -eq 3 -and ($src6 -ccontains $want6)) ("rc=$rc6 lines=$($src6.Count) got=[" + (($src6 -join ' | ') -replace [char]9, '<T>') + ']')
   } finally {
     Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
   }
 
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (.claude\rules\ops-and-gates.md): a case lost to a thrown helper, a
   # glued line or a comment is a shortfall here, never a smaller suite that still prints pass.
-  $expectedCases = 51
+  $expectedCases = 58
   if ($ran.Count -ne $expectedCases) { [void]$fails.Add(("CASE COUNT ran {0} of the {1} cases written in this file" -f $ran.Count, $expectedCases)) }
   Write-Output ''
   if ($fails.Count) {
@@ -779,6 +860,21 @@ function Get-CcPairLedgerBlobs([string]$DocRel, [string]$HarnessRel, [object[]]$
   }
   $live = @($re | Where-Object { $wd -cnotcontains $_ })
   return ,$live
+}
+
+if ($ListHarnessSources) {
+  # REPORT ONLY (W4.2): every (doc, harness) pair a document enrols, with the line number and text of the line that
+  # enrolled it, and whether the path exists. It judges nothing and writes nothing.
+  $np = 0
+  foreach ($d in $docs) {
+    $srcR = Get-HarnessSources -Text ([IO.File]::ReadAllText($d.FullName))
+    foreach ($s in @($srcR)) {
+      $ex = [bool](& $pathExists $s.Path)
+      Write-Output ("HARNESS-SOURCE`t{0}`t{1}`t{2}`t{3}`t{4}" -f ('design/' + $d.Name), $s.Path, $(if ($ex) { 'exists' } else { 'missing' }), $s.LineNo, (([string]$s.Line).Trim() -replace "`t", ' '))
+      $np++
+    }
+  }
+  Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 0 -Summary "docs=$($docs.Count) pairs=$np report-only=1 harness-sources=1"
 }
 
 $unq = 0; $cur = 0; $nq = 0; $unres = 0; $cids = 0; $cited = 0; $pairsOut = 0

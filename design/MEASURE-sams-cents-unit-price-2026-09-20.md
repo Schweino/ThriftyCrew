@@ -249,6 +249,9 @@ The harnesses named below were written or changed by this same change, so the nu
 through them at the state they landed in. Blobs rather than commit ids, because `ops/push-main.ps1`
 rebases before it pushes and a rebase cannot move a blob:
 
+Harness (frozen 2026-09-23 from a re-read line): grocery/pricing-math-lib.ps1
+Harness (frozen 2026-09-23 from a re-read line): grocery/audit-basis-reconcile.ps1
+
     Re-read at harness blob 7819e3e5849478d1532f97876c6eaae9786e695d (grocery/probe-sams-unit-price-shapes.ps1): the shape census - 25,434 rows, 24,073 dollar at 2 decimals, 7 cents at 1, 0 unparsed - is this file's own output.
     Re-read at harness blob d80e5c63c7379feaf567e3a48635f3f1a5a0b882 (grocery/test-pull-agent-lib.ps1): the 18 guard cases, and the mutant-A kill, are this file's.
     Re-read at harness blob c176e71e6e5360029a30c4e1ae82d5cc368a3b2f (grocery/build-sams-deals.ps1): the 77 builder cases, the at-the-bar trio and mutants B and E are this file's; the A/B arm figures were taken against its parent blob 79345e86f5c09cdb530f4d7fd783388e883f86e3 as the "old" arm.

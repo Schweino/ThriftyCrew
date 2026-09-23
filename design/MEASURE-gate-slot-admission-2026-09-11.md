@@ -29,6 +29,9 @@ Two alternatives must be ruled in or out with the same data:
 
 ## The harness
 
+Harness (frozen 2026-09-23 from a re-read line): ops/run-gates.ps1
+Harness (frozen 2026-09-23 from a re-read line): grocery/audit-store-registry.ps1
+
 **Re-read at commit `30f237b35`:** what this file measures still holds. Its own harness - the probe and the
 reporter - is unchanged; what moved is `ops\run-gates.ps1`, which this file names only in the caveat that each
 session runs its own checkout's copy. The 2026-09-12 change there keys each self-test on its inputs and does
