@@ -2832,6 +2832,14 @@ if (-not $phgSrcM.Success) {
   $phg = Get-PublishHeldGate @('price-mode: in-store', 'name-drift: 0 suppressed', $phgMs)
   if ($phg.gate -eq 'match-soundness') { Ok 'publish-held-gate: CLEAN TWIN - the HELD line is found among the price-mode and name-drift verdict lines around it' }
   else { Bad ('publish-held-gate: a HELD line below other verdict lines was missed - gate=' + $phg.gate) }
+  # MUST FIRE (2026-09-23): the served-board hold, verbatim in shape from publish-deals-page.ps1, names its own gate and
+  # never reads as coverage - the hand-run post that named board.json?v=780837d352 over a feed serving 34d164ae13.
+  $phg = Get-PublishHeldGate @('HELD: the board this post names is not served by feed.thriftycrew.com yet - the post names board.json?v=780837d352 but feed.thriftycrew.com serves v=34d164ae13. NOT publishing: land the push, let the edge serve that board, then publish (nothing was written to Ghost).')
+  if ($phg.gate -eq 'board-not-served' -and $phg.why -match '(?i)nothing was written to ghost') { Ok 'publish-held-gate: MUST FIRE - a post over an unserved board is named board-not-served' }
+  else { Bad ('publish-held-gate: the served-board hold reads as ' + $phg.gate) }
+  $phg = Get-PublishHeldGate @('HELD: could not confirm the board this post names is served by feed.thriftycrew.com - could not read the served board from feed.thriftycrew.com (timed out). NOT publishing: land the push, let the edge serve that board, then publish (nothing was written to Ghost).')
+  if ($phg.gate -eq 'board-not-served') { Ok 'publish-held-gate: MUST FIRE - an unreachable feed is named board-not-served, never a pass and never coverage' }
+  else { Bad ('publish-held-gate: the unreachable-feed hold reads as ' + $phg.gate) }
 }
 $ssSrcM = [regex]::Match($cacSrc, '(?s)<<SHIP-SUMMARY-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<SHIP-SUMMARY-END>>')
 if (-not $ssSrcM.Success) {

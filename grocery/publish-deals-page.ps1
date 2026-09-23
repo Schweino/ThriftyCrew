@@ -11,6 +11,8 @@
           -Force (skips the coverage gate AND the change gate)
           -SelfTest (hermetic fixture for the change gate; touches no data, publishes nothing)
 #>
+# Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): read off the self-test block, which works in a temp sandbox and reads nothing else of this repo. Verify with: powershell -File lib\gate-input-key.ps1 -VerifyDeclared <this file>
+# gate-inputs: grocery\publish-deals-page.ps1, grocery\feed-served-lib.ps1, lib\git-blob-lib.ps1, lib\json-io.ps1
 param([string]$CompareFile = "", [int]$MinCommodities = 25, [int]$MinPerStore = 15, [switch]$Force, [switch]$Draft, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
@@ -88,8 +90,26 @@ if ($SelfTest) {
   # publish path: the live-post handle is passed at exactly one place, the real call site.
   if ([IO.File]::ReadAllText($PSCommandPath) -notmatch '-LiveSeen \(\[bool\]\$ex\)') { $fails += 'Test-UpsertNeeded is defined but never called by the publish path' }
   Remove-Item $t -Recurse -Force -ErrorAction SilentlyContinue
+  # THE POST SHIPS AFTER ITS DATA (2026-09-23): the served-board check must stand after the page is built and before
+  # EVERY Ghost write in this file, and its refusal must leave. The decision itself is fixtured in feed-served-lib.ps1;
+  # this proves it is WIRED where it can stop a write. Needles are concatenated so this case cannot match itself.
+  $pdpSrc = [IO.File]::ReadAllText($PSCommandPath)
+  $servedAt = $pdpSrc.IndexOf('$served = Test-TcBoard' + 'Served -Html')
+  $builtAt = $pdpSrc.IndexOf('-Out $embed' + ' -Embed')
+  $refuseAt = if ($servedAt -ge 0) { $pdpSrc.IndexOf('exit ' + '2', $servedAt) } else { -1 }
+  $ghostWrites = @(('publish-' + 'resource.ps1'), ('-Method ' + 'PUT'), ('publish-store-' + 'guide.ps1'), ('publish-trend-' + 'pages.ps1'))
+  $firstWrite = [int]::MaxValue
+  foreach ($gw in $ghostWrites) { $before = $pdpSrc.IndexOf($gw); if ($before -ge 0 -and $before -lt $firstWrite) { $firstWrite = $before } }
+  if ($servedAt -lt 0) { $fails += 'MUST-FIRE: the served-board check is not called at all - a post could name a board readers cannot get' }
+  elseif ($builtAt -lt 0 -or $servedAt -lt $builtAt) { $fails += 'the served-board check runs before the page is built, so it would check a stale embed' }
+  elseif ($firstWrite -lt $servedAt) { $fails += 'MUST-FIRE: a Ghost write stands BEFORE the served-board check, so an unserved board can still be posted' }
+  elseif ($refuseAt -lt 0 -or $refuseAt -gt $firstWrite) { $fails += 'MUST-FIRE: the served-board refusal does not exit before the first Ghost write' }
+  $fslFile = Join-Path $PSScriptRoot 'feed-served-lib.ps1'
+  $fslOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $fslFile -SelfTest
+  $fslRc = $LASTEXITCODE
+  if ($fslRc -ne 0 -or -not ((@($fslOut))[-1] -match '^feed-served-lib SELF-TEST PASS')) { $fails += ('the served-board decision failed its own fixtures (rc=' + $fslRc + ')') }
   if ($fails.Count) { Write-Output ('SELFTEST FAIL - ' + ($fails -join ' | ')); exit 1 }
-  Write-Output 'SELFTEST PASS - change gate: unchanged board skips; one-byte and visibility changes publish; missing, empty or unreadable stamp publishes; unread live post publishes; -Force/-Draft bypass.'
+  Write-Output 'SELFTEST PASS - change gate: unchanged board skips; one-byte and visibility changes publish; missing, empty or unreadable stamp publishes; unread live post publishes; -Force/-Draft bypass; the served-board check stands before every Ghost write and its decision passed its own fixtures.'
   exit 0
 }
 # Ghost admin key: env var (CI secret) or gitignored .ghostkey; apiUrl stays the ghost.io admin host.
@@ -231,6 +251,24 @@ $__sw = [Diagnostics.Stopwatch]::StartNew()
 & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-category-coverage.ps1') -OutDir $OutDir
 $__sw.Stop(); $script:StageTimes['audit-category-coverage'] = [math]::Round($__sw.Elapsed.TotalSeconds, 1)
 if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: a commodity is not in exactly one category (see out\category-coverage-report.json) - it would render in no filter. Add it to a category in categories.json (or -Force to override).'; exit 2 }
+
+# ---- THE POST SHIPS AFTER ITS DATA, WHOEVER RUNS THIS (2026-09-23) -------------------------------------------------
+# The post names board.json?v=<SHA-1 of the board this build just wrote>, and public\board.json reaches readers only when
+# a push lands and the edge deploys it. On the night of 2026-09-22/23 a HAND run of this script published before its
+# push landed, and the live post named v=780837d352 over a feed serving 34d164ae13: the new post over the old board.
+# The daily chain was already ordered (check-ad-cycles -DeferPost, then capture-run publishes through THIS script once
+# the edge serves the data); a hand run went round it. So the check stands HERE, before the first Ghost write, and every
+# caller meets it, capture-run's deferred publish included - one check, not a second copy in each caller.
+# No flag skips it, -Force included: -Force overrides coverage judgements, and whether readers can get the board is not
+# a judgement. grocery\feed-served-lib.ps1 holds the rule and its fixtures; a could-not-look is a hold that names its cause.
+. (Join-Path $root 'feed-served-lib.ps1')
+$served = Test-TcBoardServed -Html ([IO.File]::ReadAllText($embed)) -Fetch { Invoke-TcFeedBoardFetch }
+if (-not $served.Ok) {
+  $heldHead = if ($served.Verdict -eq 'not-served') { 'HELD: the board this post names is not served by feed.thriftycrew.com yet' } else { 'HELD: could not confirm the board this post names is served by feed.thriftycrew.com' }
+  Write-Output ($heldHead + ' - ' + $served.Why + '. NOT publishing: land the push, let the edge serve that board, then publish (nothing was written to Ghost).')
+  exit 2
+}
+Write-Output ('feed-served: the post names board.json?v=' + $served.Version + ' and feed.thriftycrew.com serves exactly that board')
 
 # ---- preserve the live post's current visibility (so a weekly refresh never reverts a manual paid-gate) ----
 . (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
