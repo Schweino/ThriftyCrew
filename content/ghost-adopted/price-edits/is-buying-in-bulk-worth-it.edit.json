@@ -16,17 +16,29 @@
                              "find":  "Run the numbers on that 5-pound bag of spring mix that cost $9. If half of it turns to slime in the crisper drawer before you eat it, you did not pay $9 for greens. You paid $9 for the greens you actually ate, which means your real cost doubled to the equivalent of $18 for the usable half.",
                              "replace":  "Run the numbers on a 5-pound bag of spring mix. If half of it turns to slime in the crisper drawer before you eat it, you did not pay that price for five pounds of greens. You paid it for the greens you actually ate, which means your real cost per pound doubled for the usable half.",
                              "class":  "unbacked"
-                         },
-                         {
-                             "find":  "(end of body)",
-                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
-                             "class":  "script"
                          }
                      ],
     "field_edits":  [
 
                     ],
-    "new_lexical_sha256":  "a6aa6394b0e8572a33adbcb1a09cf42687f269f709a03240bfc2035a0840ede1",
+    "kept":  [
+                 {
+                     "match":  "A 30-roll pack of paper towels might run you about $27, which sounds steep next to a 6-roll pack at $7. But do the math. The big pack is $0.90 a roll. The small pack is roughly $1.17 a roll",
+                     "class":  "non-food",
+                     "why":  "paper towels"
+                 },
+                 {
+                     "match":  "Warehouse clubs charge $60 to $130 a year just to walk in the door",
+                     "class":  "non-food",
+                     "why":  "a warehouse-club membership fee, which Brad\u0027s ruling keeps"
+                 },
+                 {
+                     "match":  "If your bulk buying saves you $0.27 a roll on paper towels but you only shop there four times a year and spend $200 total, a $65 membership can eat most of your savings alive",
+                     "class":  "non-food",
+                     "why":  "paper towels and the membership fee; $200 is a hypothetical year of club spending used only in the fee arithmetic"
+                 }
+             ],
+    "new_lexical_sha256":  "1334365ef83c672ce84070f37d3765b10fd5c8e6b79f61a18908aa22357bc911",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

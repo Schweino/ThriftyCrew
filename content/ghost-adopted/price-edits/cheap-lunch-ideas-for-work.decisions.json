@@ -141,6 +141,29 @@
       "class": "unbacked",
       "figures": [],
       "why": "housekeeping: the caveat referred to per-serving figures that no longer appear"
+    },
+    {
+      "find": "Pack your own and that same month can cost you thirty or forty bucks.",
+      "replace": "Pack your own and most of that money stays in your pocket.",
+      "class": "price-in-words",
+      "figures": ["thirty or forty bucks"],
+      "why": "Brad 2026-09-22 \"Remove derived ones\": a month of packed lunches priced in words, built from the per-serving grocery prices the first pass removed."
+    },
+    {
+      "find": "and you'll cover a full work week for less than a single restaurant lunch.",
+      "replace": "and you'll cover a full work week for far less than eating out.",
+      "class": "derived-total",
+      "figures": ["less than a single restaurant lunch"],
+      "why": "Brad 2026-09-22 \"Remove derived ones\": five packed lunches costing less than one restaurant lunch is a weekly total built from the removed per-serving prices; softened to the article's general point with no ratio."
     }
+  ],
+  "field_edits": [
+    { "find": ", each with real per-serving costs. Pack lunch and save hundreds a month.", "replace": ". Pack lunch and keep more of your paycheck." }
+  ],
+  "kept": [
+    { "match": "Grabbing something out runs ten to fifteen dollars a day", "class": "restaurant", "why": "A lunch bought out, with the drink and the tip." },
+    { "match": "you're looking at two to three hundred dollars a month on lunch alone", "class": "restaurant", "why": "The monthly total of buying lunch out every workday; it multiplies the restaurant price only." },
+    { "match": "the twelve-dollar fast-casual bowl", "class": "restaurant", "why": "A fast-casual restaurant bowl." },
+    { "match": "doesn't hand fifteen dollars to a cashier", "class": "restaurant", "why": "The lunch-out spend from the intro, restated." }
   ]
 }

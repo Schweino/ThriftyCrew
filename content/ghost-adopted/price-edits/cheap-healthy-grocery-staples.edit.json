@@ -114,7 +114,7 @@
                          },
                          {
                              "find":  "\u003cstrong\u003eVinegar:\u003c/strong\u003e A $2 bottle for dressings, marinades, and brightening a dish for pennies per use.",
-                             "replace":  "\u003cstrong\u003eVinegar:\u003c/strong\u003e Plain white vinegar runs \u003cspan data-tc-live-price data-tc-bid=\"white-vinegar\" data-tc-per=\"gal\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"3.00\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$3.00\u003c/span\u003e a gallon and handles dressings, marinades, and brightening a dish for pennies per use.",
+                             "replace":  "\u003cstrong\u003eVinegar:\u003c/strong\u003e Plain white vinegar runs \u003cspan data-tc-live-price data-tc-bid=\"white-vinegar\" data-tc-per=\"gal\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"3.00\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$3.00\u003c/span\u003e a gallon and handles dressings, marinades, and brightening a dish, a splash at a time.",
                              "class":  "backed-commodity"
                          },
                          {
@@ -133,15 +133,30 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "A few cents a clove and it makes cheap food taste like you tried.",
+                             "replace":  "A clove or two makes cheap food taste like you tried.",
+                             "class":  "price-in-words"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
                          }
                      ],
     "field_edits":  [
-
+                        {
+                            "find":  "with real per-serving costs",
+                            "replace":  "with live prices"
+                        },
+                        {
+                            "find":  ", so you can build a week of meals for under fifty dollars.",
+                            "replace":  ", so you can build a week of meals on a small budget."
+                        }
                     ],
-    "new_lexical_sha256":  "6742d9c84be65d3e81e9fa2ce4ccb11d97816347d7ba593303e24362fc75588e",
+    "kept":  [
+
+             ],
+    "new_lexical_sha256":  "097982d88bc211a757427d4b6954a094309456d24749285fa3a71b9afb7ae088",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

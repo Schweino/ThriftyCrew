@@ -108,15 +108,45 @@
                              "class":  "unbacked"
                          },
                          {
-                             "find":  "(end of body)",
-                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
-                             "class":  "script"
+                             "find":  "Pack your own and that same month can cost you thirty or forty bucks.",
+                             "replace":  "Pack your own and most of that money stays in your pocket.",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "and you\u0027ll cover a full work week for less than a single restaurant lunch.",
+                             "replace":  "and you\u0027ll cover a full work week for far less than eating out.",
+                             "class":  "derived-total"
                          }
                      ],
     "field_edits":  [
-
+                        {
+                            "find":  ", each with real per-serving costs. Pack lunch and save hundreds a month.",
+                            "replace":  ". Pack lunch and keep more of your paycheck."
+                        }
                     ],
-    "new_lexical_sha256":  "b7777f75ef97744a66780e5e34b6b775c1a99f2e0f13a34a89db3918eda40751",
+    "kept":  [
+                 {
+                     "match":  "Grabbing something out runs ten to fifteen dollars a day",
+                     "class":  "restaurant",
+                     "why":  "A lunch bought out, with the drink and the tip."
+                 },
+                 {
+                     "match":  "you\u0027re looking at two to three hundred dollars a month on lunch alone",
+                     "class":  "restaurant",
+                     "why":  "The monthly total of buying lunch out every workday; it multiplies the restaurant price only."
+                 },
+                 {
+                     "match":  "the twelve-dollar fast-casual bowl",
+                     "class":  "restaurant",
+                     "why":  "A fast-casual restaurant bowl."
+                 },
+                 {
+                     "match":  "doesn\u0027t hand fifteen dollars to a cashier",
+                     "class":  "restaurant",
+                     "why":  "The lunch-out spend from the intro, restated."
+                 }
+             ],
+    "new_lexical_sha256":  "f32b10a624c3b806484da01fc22b56c20392e63bfd79a4b05a903069acee1183",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

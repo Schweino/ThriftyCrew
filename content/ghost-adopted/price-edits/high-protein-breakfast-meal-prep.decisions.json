@@ -116,6 +116,24 @@
                                       "$2"
                                   ],
                       "why":  "generic per-serving bound"
+                  },
+                  {
+                      "find":  "and pocket the $25-plus a week you were handing to the drive-thru.",
+                      "replace":  "and stop handing the drive-thru $25-plus a week.",
+                      "class":  "derived-total",
+                      "figures":  [
+
+                                  ],
+                      "why":  "Brad 2026-09-22 \"Remove derived ones\": what a reader pockets is the drive-thru spend less the cost of the homemade breakfasts, and that cost was removed, so \"pocket the $25-plus\" overstated a saving. The $25-plus stays as what the drive-thru was paid, a restaurant figure (kept), as the excerpt already says it."
+                  },
+                  {
+                      "find":  "so treat these dollar figures as a realistic starting point and check your own receipts to see where you land.",
+                      "replace":  "so check the live prices against your own receipts to see where you land.",
+                      "class":  "unbacked",
+                      "figures":  [
+
+                                  ],
+                      "why":  "housekeeping: the caveat pointed at typed per-serving dollar figures that no longer appear; the grocery prices left are live."
                   }
               ],
     "field_edits":  [
@@ -126,6 +144,42 @@
                         {
                             "find":  "High-protein breakfast meal prep under $2 a serving: egg muffins, overnight oats, and freezer burritos, with the cost and protein of each.",
                             "replace":  "High-protein breakfast meal prep: egg muffins, overnight oats, and freezer burritos, with the protein in each."
+                        },
+                        {
+                            "find":  "Ideas (Under $2 a Serving)",
+                            "replace":  "Ideas"
                         }
-                    ]
+                    ],
+    "kept":  [
+                 {
+                     "match":  "A drive-thru breakfast sandwich runs $5 to $7",
+                     "class":  "restaurant",
+                     "why":  "A drive-thru breakfast sandwich."
+                 },
+                 {
+                     "match":  "A protein bar you grabbed at the gas station is $2.50",
+                     "class":  "restaurant",
+                     "why":  "A grab-and-go bar bought at a gas station, the convenience side of the comparison beside the drive-thru; not a grocery-store price."
+                 },
+                 {
+                     "match":  "you have handed someone $25 to $35 for food",
+                     "class":  "restaurant",
+                     "why":  "Five drive-thru breakfasts a week at the sandwich price above; it multiplies the restaurant price only."
+                 },
+                 {
+                     "match":  "the $6 breakfast burrito down the street",
+                     "class":  "restaurant",
+                     "why":  "A breakfast burrito bought at a restaurant."
+                 },
+                 {
+                     "match":  "stop handing the drive-thru $25-plus a week",
+                     "class":  "restaurant",
+                     "why":  "The weekly drive-thru spend from the intro, restated."
+                 },
+                 {
+                     "match":  "stop handing the drive-thru $25 or more a week",
+                     "class":  "restaurant",
+                     "why":  "Excerpt: the weekly drive-thru spend from the intro."
+                 }
+             ]
 }

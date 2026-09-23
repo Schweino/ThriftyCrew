@@ -6,8 +6,63 @@
       "find": "If catering runs $75 per plate, then 120 guests is $9,000 and 60 guests is $4,500.",
       "replace": "If catering runs $75 a guest, then 120 guests is $9,000 and 60 guests is $4,500.",
       "class": "unbacked",
-      "figures": ["$75"],
+      "figures": [
+        "$75"
+      ],
       "why": "Catering is a vendor service price, not a grocery price, and $75 drives the out-of-scope $9,000 and $4,500 arithmetic, so the figure stays; only 'per plate' becomes 'a guest', which says the same thing without reading as a grocery unit to the monitor."
+    }
+  ],
+  "field_edits": [],
+  "kept": [
+    {
+      "match": "The average American wedding now runs north of $33,000",
+      "class": "finance",
+      "why": "a wedding cost, which Brad's ruling keeps"
+    },
+    {
+      "match": "The average wedding tops $33,000, but",
+      "class": "finance",
+      "why": "the same wedding cost in the stored excerpt (the match carries the comma because the money pattern reads '$33,000,' as one figure)"
+    },
+    {
+      "match": "Say you settle on $8,000",
+      "class": "finance",
+      "why": "a wedding budget, which Brad's ruling keeps"
+    },
+    {
+      "match": "Venue and food: $3,500 Photography: $1,500 Attire: $800 Flowers and decor: $600 Music: $500 Cake and desserts: $300 Everything else and a cushion: $800",
+      "class": "finance",
+      "why": "the split of the example wedding budget into vendor buckets; wedding costs stay"
+    },
+    {
+      "match": "If catering runs $75 a guest, then 120 guests is $9,000 and 60 guests is $4,500. Cutting 60 names you barely know just saved you $4,500",
+      "class": "restaurant",
+      "why": "wedding catering, prepared food bought from a vendor, and the guest-count arithmetic on it"
+    },
+    {
+      "match": "several hundred to a couple thousand dollars off the Saturday price",
+      "class": "non-food",
+      "why": "a wedding venue rate"
+    },
+    {
+      "match": "A few moves that quietly save thousands",
+      "class": "finance",
+      "why": "wedding savings in general"
+    },
+    {
+      "match": "a sheet cake in the back saves hundreds",
+      "class": "restaurant",
+      "why": "a wedding cake bought from a bakery against a custom cake; a wedding cost"
+    },
+    {
+      "match": "a full-service florist might quote $2,000 for centerpieces and bouquets. In-season flowers arranged by a crafty friend, or a warehouse-store floral order, can land the same look for $400. That is $1,600 back in your pocket",
+      "class": "non-food",
+      "why": "wedding flowers"
+    },
+    {
+      "match": "where a $3,000 gown often sells for $600 or less",
+      "class": "non-food",
+      "why": "a wedding dress"
     }
   ]
 }

@@ -54,7 +54,14 @@
                             "replace":  "and eat well for very little per serving."
                         }
                     ],
+    "kept":  [
+                 {
+                     "match":  "Use a $10 kitchen scale",
+                     "class":  "non-food",
+                     "why":  "a kitchen scale, a tool, not food"
+                 }
+             ],
     "new_lexical_sha256":  "e9624068e65c4e022dcd3d54b01a8e8c27eb0eca7870f2b0fd3da4781c470792",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

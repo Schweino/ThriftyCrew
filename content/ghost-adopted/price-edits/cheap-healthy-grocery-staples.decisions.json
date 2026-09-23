@@ -151,10 +151,10 @@
     },
     {
       "find": "<strong>Vinegar:</strong> A $2 bottle for dressings, marinades, and brightening a dish for pennies per use.",
-      "replace": "<strong>Vinegar:</strong> Plain white vinegar runs {{live-unit:white-vinegar:gal}} a gallon and handles dressings, marinades, and brightening a dish for pennies per use.",
+      "replace": "<strong>Vinegar:</strong> Plain white vinegar runs {{live-unit:white-vinegar:gal}} a gallon and handles dressings, marinades, and brightening a dish, a splash at a time.",
       "class": "backed-commodity",
       "figures": ["$2"],
-      "why": "white-vinegar is the board's distilled White Vinegar commodity; the sentence now names plain white vinegar so the live price is for exactly what it names."
+      "why": "white-vinegar is the board's distilled White Vinegar commodity; the sentence now names plain white vinegar so the live price is for exactly what it names. Second pass (Brad 2026-09-22, remove derived ones): \"for pennies per use\" was a price in words for the vinegar and is gone."
     },
     {
       "find": "<strong>Plain yogurt:</strong> A big tub for $4 beats single cups on price",
@@ -176,6 +176,18 @@
       "class": "unbacked",
       "figures": ["$50"],
       "why": "The cost of a week of meals from the whole list is a mixed basket, not one commodity."
+    },
+    {
+      "find": "A few cents a clove and it makes cheap food taste like you tried.",
+      "replace": "A clove or two makes cheap food taste like you tried.",
+      "class": "price-in-words",
+      "figures": ["a few cents a clove"],
+      "why": "Brad 2026-09-22 \"Remove derived ones\": \"a few cents a clove\" is a price in words for garlic."
     }
-  ]
+  ],
+  "field_edits": [
+    { "find": "with real per-serving costs", "replace": "with live prices" },
+    { "find": ", so you can build a week of meals for under fifty dollars.", "replace": ", so you can build a week of meals on a small budget." }
+  ],
+  "kept": []
 }

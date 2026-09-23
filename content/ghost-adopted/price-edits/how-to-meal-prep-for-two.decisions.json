@@ -6,29 +6,62 @@
       "find": "At roughly $3 a pound for chicken thighs and $5 a pound for ground turkey, a two-protein week for two people runs about $16 to $18 in protein.",
       "replace": "Chicken thighs or drumsticks can run as little as {{live-unit:chicken-thighs:lb}} a pound and ground turkey as little as {{live-unit:ground-turkey:lb}} a pound, so a two-protein week for two people stays cheap.",
       "class": "backed-commodity",
-      "figures": ["$3", "$5", "$16", "$18"],
+      "figures": [
+        "$3",
+        "$5",
+        "$16",
+        "$18"
+      ],
       "why": "$3 is the chicken-thighs commodity (Chicken Thighs / Drumsticks, so both are named) and $5 is ground-turkey, both live per pound; the $16 to $18 weekly total is derived and removed"
     },
     {
       "find": "Split across ten to twelve servings, that is well under $2 a serving before you add the cheap stuff like rice and beans.",
       "replace": "Split across ten to twelve servings, the protein in each one costs very little before you add the cheap stuff like rice and beans.",
       "class": "unbacked",
-      "figures": ["$2"],
+      "figures": [
+        "$2"
+      ],
       "why": "a per-serving bound derived from the typed prices"
     },
     {
       "find": "Same base food, two happy people, and you spent maybe $8 on sauces that last a month.",
       "replace": "Same base food, two happy people, and a handful of cheap sauces lasts a month.",
       "class": "unbacked",
-      "figures": ["$8"],
+      "figures": [
+        "$8"
+      ],
       "why": "a mixed basket of sauces (salsa, soy sauce, sriracha, a lemon); the $15 takeout comparison after it is out of scope and kept"
     },
     {
       "find": "you will eat well all week for a couple of dollars a serving without either of you feeling stuck",
       "replace": "you will eat well all week for a fraction of takeout prices without either of you feeling stuck",
       "class": "unbacked",
-      "figures": ["a couple of dollars a serving"],
+      "figures": [
+        "a couple of dollars a serving"
+      ],
       "why": "a typed per-serving bound written in words"
+    },
+    {
+      "find": "Try to hit a store sale on at least one protein and you shave a few dollars more.",
+      "replace": "Try to hit a store sale on at least one protein and the bill drops even further.",
+      "class": "price-in-words",
+      "figures": [
+        "a few dollars"
+      ],
+      "why": "Brad 2026-09-22 ruling 1 (remove derived ones): a grocery saving written in words"
+    }
+  ],
+  "field_edits": [
+    {
+      "find": "and season at the plate for a few bucks a serving.",
+      "replace": "and season at the plate so nobody gets bored."
+    }
+  ],
+  "kept": [
+    {
+      "match": "Compare that to two takeout orders at $15 each",
+      "class": "restaurant",
+      "why": "takeout orders, a restaurant price"
     }
   ]
 }

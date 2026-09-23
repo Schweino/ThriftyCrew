@@ -83,6 +83,46 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "and a batch costs about the price of a fancy coffee.",
+                             "replace":  "and one batch covers most of a week.",
+                             "class":  "derived-total"
+                         },
+                         {
+                             "find":  "which is pennies a cooked cup",
+                             "replace":  "and it triples in volume once cooked",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "pennies a serving from your pantry",
+                             "replace":  "mostly already in your pantry",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eSeasoning and oil:\u003c/strong\u003e pennies from the pantry",
+                             "replace":  "\u003cstrong\u003eSeasoning and oil:\u003c/strong\u003e from the pantry",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "Use thighs if you can. They are cheaper and they stay juicy even when you reheat them, which breast does not.",
+                             "replace":  "Use thighs if you can. They are often cheaper, so check the live price: boneless thighs run \u003cspan data-tc-live-price data-tc-bid=\"boneless-skinless-chicken-thigh\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.43\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.43\u003c/span\u003e a pound against \u003cspan data-tc-live-price data-tc-bid=\"chicken-breast\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.99\u003c/span\u003e a pound for breast. They also stay juicy even when you reheat them, which breast does not.",
+                             "class":  "soften-comparison"
+                         },
+                         {
+                             "find":  "the fat drops to around 6 grams and the cost bumps up a little.",
+                             "replace":  "the fat drops to around 6 grams, and the cost is often a little higher, so check the live price.",
+                             "class":  "soften-comparison"
+                         },
+                         {
+                             "find":  "meal for roughly the price of a candy bar.",
+                             "replace":  "meal on a small budget.",
+                             "class":  "derived-total"
+                         },
+                         {
+                             "find":  "to each container for pocket change and you round",
+                             "replace":  "to each container and you round",
+                             "class":  "price-in-words"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
@@ -96,9 +136,16 @@
                         {
                             "find":  "Make the $2 chicken and rice meal that built",
                             "replace":  "Make the cheap chicken and rice meal that built"
+                        },
+                        {
+                            "find":  "(The $2 Bodybuilder Staple)",
+                            "replace":  "(The Bodybuilder Staple)"
                         }
                     ],
-    "new_lexical_sha256":  "8d02a0cb9c958aaefaade71f4d09cfbaa03766d12300f70ace06f0fb7e9c4446",
+    "kept":  [
+
+             ],
+    "new_lexical_sha256":  "a7223566cd850e238a44b966cab1591a9d685be9551ba83b35f391a7491a587c",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

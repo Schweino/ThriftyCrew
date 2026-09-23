@@ -78,6 +78,11 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "Toss one alongside your volume skillet and you have added serious staying power for pocket change.",
+                             "replace":  "Toss one alongside your volume skillet and you have added serious staying power for very little.",
+                             "class":  "price-in-words"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
@@ -93,7 +98,10 @@
                             "replace":  "that keeps you full for very little per meal."
                         }
                     ],
-    "new_lexical_sha256":  "31ef2502aa455ccce075a8428eeddeac28e2615bd530ccfd484019e4f8b77f3e",
+    "kept":  [
+
+             ],
+    "new_lexical_sha256":  "8770975ad87e4a5ff6b0f2f5f271442803b45f5df15a4a690dc7eb757b91379c",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

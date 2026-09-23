@@ -21,7 +21,14 @@
     "field_edits":  [
 
                     ],
+    "kept":  [
+                 {
+                     "match":  "$10 for the year (about 83 cents a month)",
+                     "class":  "non-food",
+                     "why":  "the Thrifty Crew membership price"
+                 }
+             ],
     "new_lexical_sha256":  "b79cb3187fe48d9085489dcfc783dbe017691b39977cfe91fd7ca76c2530b9bc",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:20"
 }

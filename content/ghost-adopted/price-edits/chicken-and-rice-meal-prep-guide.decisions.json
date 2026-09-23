@@ -137,8 +137,72 @@
                                       "$2"
                                   ],
                       "why":  "per-container cost of a generic dish"
-                  }
-              ],
+                  },
+                  {
+                      "find":  "and a batch costs about the price of a fancy coffee.",
+                      "replace":  "and one batch covers most of a week.",
+                      "class":  "derived-total",
+                      "figures":  [
+                                      "about the price of a fancy coffee"
+                                  ],
+                      "why":  "Brad 2026-09-22 \"Remove derived ones\": a batch cost stated by comparison, built from the typed batch total the first pass removed; the replacement is the article's own \"one hour of cooking covers most of a week\"."
+                  },
+                  {
+                      "find":  "which is pennies a cooked cup",
+                      "replace":  "and it triples in volume once cooked",
+                      "class":  "price-in-words",
+                      "figures":  [
+                                      "pennies a cooked cup"
+                                  ],
+                      "why":  "Brad 2026-09-22 \"Remove derived ones\": a price in words for cooked rice; the replacement restates the article's own two cups dry to six cups cooked."
+                  },
+                  {
+                      "find":  "pennies a serving from your pantry",
+                      "replace":  "mostly already in your pantry",
+                      "class":  "price-in-words",
+                      "figures":  [
+                                      "pennies a serving"
+                                  ],
+                      "why":  "Brad 2026-09-22 \"Remove derived ones\": a price in words for seasonings and oil."
+                  },
+                  {
+                      "find":  "\u003cstrong\u003eSeasoning and oil:\u003c/strong\u003e pennies from the pantry",
+                      "replace":  "\u003cstrong\u003eSeasoning and oil:\u003c/strong\u003e from the pantry",
+                      "class":  "price-in-words",
+                      "figures":  [
+                                      "pennies"
+                                  ],
+                      "why":  "Brad 2026-09-22 \"Remove derived ones\": a price in words for the batch's seasoning and oil."
+                  },
+                  {
+                      "find":  "Use thighs if you can. They are cheaper and they stay juicy even when you reheat them, which breast does not.",
+                      "replace":  "Use thighs if you can. They are often cheaper, so check the live price: boneless thighs run {{live-unit:boneless-skinless-chicken-thigh:lb}} a pound against {{live-unit:chicken-breast:lb}} a pound for breast. They also stay juicy even when you reheat them, which breast does not.",
+                      "class":  "soften-comparison",
+                      "figures":  [
+
+                                  ],
+                      "why":  "Brad 2026-09-22 \"Soften them\": thighs cheaper than breast, and both carry a live price in this article, so the claim becomes \"often cheaper, check the live price\" with both live prices beside it."
+                  },
+                  {
+                      "find":  "the fat drops to around 6 grams and the cost bumps up a little.",
+                      "replace":  "the fat drops to around 6 grams, and the cost is often a little higher, so check the live price.",
+                      "class":  "soften-comparison",
+                      "figures":  [
+
+                                  ],
+                      "why":  "Brad 2026-09-22 \"Soften them\": breast costing more than thighs is the same comparison, and both carry a live price in this article."
+                  },
+                  {
+                      "find":  "meal for roughly the price of a candy bar.",
+                      "replace":  "meal on a small budget.",
+                      "class":  "derived-total",
+                      "figures":  [
+                                      "roughly the price of a candy bar"
+                                  ],
+                      "why":  "Brad 2026-09-22 \"Remove derived ones\": a per-container cost stated by comparison, built from the typed per-container price the first pass removed."
+                  },
+    {"find":"to each container for pocket change and you round","replace":"to each container and you round","class":"price-in-words","figures":["pocket change"],"why":"Brad 2026-09-22 \"Remove derived ones\": the first pass turned \"for a dollar\" into \"for pocket change\", which is still a price in words for the frozen vegetables."}
+  ],
     "field_edits":  [
                         {
                             "find":  "for about $2 a container when you buy in bulk",
@@ -147,6 +211,13 @@
                         {
                             "find":  "Make the $2 chicken and rice meal that built",
                             "replace":  "Make the cheap chicken and rice meal that built"
+                        },
+                        {
+                            "find":  "(The $2 Bodybuilder Staple)",
+                            "replace":  "(The Bodybuilder Staple)"
                         }
-                    ]
+                    ],
+    "kept":  [
+
+             ]
 }

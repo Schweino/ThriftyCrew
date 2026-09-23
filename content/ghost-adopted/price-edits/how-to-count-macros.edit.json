@@ -23,6 +23,11 @@
                              "class":  "backed-commodity"
                          },
                          {
+                             "find":  "\u003cstrong\u003eDried lentils and beans:\u003c/strong\u003e plant protein for pennies per serving.",
+                             "replace":  "\u003cstrong\u003eDried lentils and beans:\u003c/strong\u003e cheap plant protein that stretches a long way.",
+                             "class":  "price-in-words"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
@@ -31,7 +36,14 @@
     "field_edits":  [
 
                     ],
-    "new_lexical_sha256":  "316496b501c67d0c288b29c7d09857fe33381727b7e66427a06124b4994094c2",
+    "kept":  [
+                 {
+                     "match":  "A basic digital scale runs about $12",
+                     "class":  "non-food",
+                     "why":  "a kitchen scale, a tool, not food"
+                 }
+             ],
+    "new_lexical_sha256":  "2fc3196173d81756ccf931718f574c6130f247375540fb49191476c6fe447949",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

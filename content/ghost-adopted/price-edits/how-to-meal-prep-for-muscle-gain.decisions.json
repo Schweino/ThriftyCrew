@@ -1,105 +1,129 @@
 {
-    "slug":  "how-to-meal-prep-for-muscle-gain",
-    "title_new":  null,
-    "edits":  [
-                  {
-                      "find":  "a mountain of overpriced chicken breast and $60 tubs of powder.",
-                      "replace":  "a mountain of overpriced chicken breast and pricey tubs of powder.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$60"
-                                  ],
-                      "why":  "protein powder is a grocery item the feed does not price"
-                  },
-                  {
-                      "find":  "\u003cstrong\u003eEggs:\u003c/strong\u003e around $3 a dozen, roughly 6 grams of protein each. That is about 72 grams of protein for $3.",
-                      "replace":  "\u003cstrong\u003eEggs:\u003c/strong\u003e {{live-unit:eggs:dozen}} a dozen, roughly 6 grams of protein each. That is about 72 grams of protein per carton.",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$3",
-                                      "$3"
-                                  ],
-                      "why":  "eggs is a board commodity per dozen; the second $3 was the same carton price"
-                  },
-                  {
-                      "find":  "\u003cstrong\u003eChicken thighs:\u003c/strong\u003e often $1.99 a pound,",
-                      "replace":  "\u003cstrong\u003eChicken thighs:\u003c/strong\u003e often {{live-unit:chicken-thighs:lb}} a pound,",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$1.99"
-                                  ],
-                      "why":  "chicken-thighs is a board commodity per lb"
-                  },
-                  {
-                      "find":  "\u003cstrong\u003eCanned tuna and canned chicken:\u003c/strong\u003e often under a dollar a can for 15-plus grams of protein and a long shelf life.",
-                      "replace":  "\u003cstrong\u003eCanned tuna and canned chicken:\u003c/strong\u003e tuna runs {{live-unit:canned-tuna:oz}} an ounce and chicken {{live-unit:canned-chicken:oz}} an ounce, with 15-plus grams of protein a can and a long shelf life.",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "under a dollar"
-                                  ],
-                      "why":  "a price in words (not in figures.txt); canned tuna and canned chicken breast are each board commodities, per-can becomes per-ounce"
-                  },
-                  {
-                      "find":  "\u003cstrong\u003eDried beans and lentils:\u003c/strong\u003e about $1.50 a pound, stacking protein and fiber for pennies a serving.",
-                      "replace":  "\u003cstrong\u003eDried beans and lentils:\u003c/strong\u003e a bag of dry lentils runs {{live-unit:brown-lentils:lb}} a pound, and both stack protein and fiber for pennies a serving.",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$1.50"
-                                  ],
-                      "why":  "brown-lentils is the board\u0027s dry-lentils commodity per lb; dried beans have no commodity, so only the lentils carry the live price"
-                  },
-                  {
-                      "find":  "At roughly $25 for about 30 servings, that is under a dollar for 24 grams of protein, which is handy when you are short on time.",
-                      "replace":  "Bought in the big tub, each scoop brings 24 grams of protein for very little, which is handy when you are short on time.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$25",
-                                      "under a dollar"
-                                  ],
-                      "why":  "whey protein is not priced by the feed; package and per-scoop prices removed"
-                  },
-                  {
-                      "find":  "Rough cost: about $6 for thighs, $1 in rice, $1 in beans, $2 for veggies, and $1 in oil. That is around $11 for the batch, or about \u003cstrong\u003e$1.83 per serving\u003c/strong\u003e, landing near 600 calories and 40 grams of protein each.",
-                      "replace":  "Every piece of that is a cheap staple, so the batch comes out \u003cstrong\u003echeap per serving\u003c/strong\u003e, landing near 600 calories and 40 grams of protein each.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$6",
-                                      "$1",
-                                      "$1",
-                                      "$2",
-                                      "$1",
-                                      "$11",
-                                      "$1.83"
-                                  ],
-                      "why":  "mixed-basket batch total for a generic dish, not an engine recipe"
-                  },
-                  {
-                      "find":  "can hit 600 calories for about a dollar.",
-                      "replace":  "can hit 600 calories for very little money.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "about a dollar"
-                                  ],
-                      "why":  "a price in words (not in figures.txt) for a generic jar"
-                  },
-                  {
-                      "find":  "Around $1.83 a serving can deliver 600 calories and 40 grams of protein,",
-                      "replace":  "A cheap prepped serving can deliver 600 calories and 40 grams of protein,",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$1.83"
-                                  ],
-                      "why":  "per-serving estimate for the same generic batch"
-                  }
-              ],
-    "field_edits":  [
-                        {
-                            "find":  "no $60 powder tubs required.",
-                            "replace":  "no pricey powder tubs required."
-                        },
-                        {
-                            "find":  "prep 600-calorie meals for about $1.83 a serving.",
-                            "replace":  "prep cheap 600-calorie meals."
-                        }
-                    ]
+  "slug": "how-to-meal-prep-for-muscle-gain",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "a mountain of overpriced chicken breast and $60 tubs of powder.",
+      "replace": "a mountain of overpriced chicken breast and pricey tubs of powder.",
+      "class": "unbacked",
+      "figures": [
+        "$60"
+      ],
+      "why": "protein powder is a grocery item the feed does not price"
+    },
+    {
+      "find": "<strong>Eggs:</strong> around $3 a dozen, roughly 6 grams of protein each. That is about 72 grams of protein for $3.",
+      "replace": "<strong>Eggs:</strong> {{live-unit:eggs:dozen}} a dozen, roughly 6 grams of protein each. That is about 72 grams of protein per carton.",
+      "class": "backed-commodity",
+      "figures": [
+        "$3",
+        "$3"
+      ],
+      "why": "eggs is a board commodity per dozen; the second $3 was the same carton price"
+    },
+    {
+      "find": "<strong>Chicken thighs:</strong> often $1.99 a pound,",
+      "replace": "<strong>Chicken thighs:</strong> often {{live-unit:chicken-thighs:lb}} a pound,",
+      "class": "backed-commodity",
+      "figures": [
+        "$1.99"
+      ],
+      "why": "chicken-thighs is a board commodity per lb"
+    },
+    {
+      "find": "<strong>Canned tuna and canned chicken:</strong> often under a dollar a can for 15-plus grams of protein and a long shelf life.",
+      "replace": "<strong>Canned tuna and canned chicken:</strong> tuna runs {{live-unit:canned-tuna:oz}} an ounce and chicken {{live-unit:canned-chicken:oz}} an ounce, with 15-plus grams of protein a can and a long shelf life.",
+      "class": "backed-commodity",
+      "figures": [
+        "under a dollar"
+      ],
+      "why": "a price in words (not in figures.txt); canned tuna and canned chicken breast are each board commodities, per-can becomes per-ounce"
+    },
+    {
+      "find": "<strong>Dried beans and lentils:</strong> about $1.50 a pound, stacking protein and fiber for pennies a serving.",
+      "replace": "<strong>Dried beans and lentils:</strong> a bag of dry lentils runs {{live-unit:brown-lentils:lb}} a pound, and both stack protein and fiber for very little per serving.",
+      "class": "backed-commodity",
+      "figures": [
+        "$1.50",
+        "pennies"
+      ],
+      "why": "brown-lentils is the board's dry-lentils commodity per lb; dried beans have no commodity, so only the lentils carry the live price; second pass: 'pennies a serving' is a price in words and goes (Brad 2026-09-22 ruling 1 (remove derived ones):)"
+    },
+    {
+      "find": "At roughly $25 for about 30 servings, that is under a dollar for 24 grams of protein, which is handy when you are short on time.",
+      "replace": "Bought in the big tub, each scoop brings 24 grams of protein for very little, which is handy when you are short on time.",
+      "class": "unbacked",
+      "figures": [
+        "$25",
+        "under a dollar"
+      ],
+      "why": "whey protein is not priced by the feed; package and per-scoop prices removed"
+    },
+    {
+      "find": "Rough cost: about $6 for thighs, $1 in rice, $1 in beans, $2 for veggies, and $1 in oil. That is around $11 for the batch, or about <strong>$1.83 per serving</strong>, landing near 600 calories and 40 grams of protein each.",
+      "replace": "Every piece of that is a cheap staple, so the batch comes out <strong>cheap per serving</strong>, landing near 600 calories and 40 grams of protein each.",
+      "class": "unbacked",
+      "figures": [
+        "$6",
+        "$1",
+        "$1",
+        "$2",
+        "$1",
+        "$11",
+        "$1.83"
+      ],
+      "why": "mixed-basket batch total for a generic dish, not an engine recipe"
+    },
+    {
+      "find": "can hit 600 calories for about a dollar.",
+      "replace": "can hit 600 calories for very little money.",
+      "class": "unbacked",
+      "figures": [
+        "about a dollar"
+      ],
+      "why": "a price in words (not in figures.txt) for a generic jar"
+    },
+    {
+      "find": "Around $1.83 a serving can deliver 600 calories and 40 grams of protein,",
+      "replace": "A cheap prepped serving can deliver 600 calories and 40 grams of protein,",
+      "class": "unbacked",
+      "figures": [
+        "$1.83"
+      ],
+      "why": "per-serving estimate for the same generic batch"
+    },
+    {
+      "find": "With a little planning you can hit your protein and calories for a few bucks a day.",
+      "replace": "With a little planning you can hit your protein and calories on a tight grocery budget.",
+      "class": "price-in-words",
+      "figures": [
+        "a few bucks"
+      ],
+      "why": "Brad 2026-09-22 ruling 1 (remove derived ones): a day of food priced in words"
+    },
+    {
+      "find": "a glass adds roughly 150 calories and 8 grams of protein for pocket change.",
+      "replace": "a glass adds roughly 150 calories and 8 grams of protein for very little.",
+      "class": "price-in-words",
+      "figures": [
+        "pocket change"
+      ],
+      "why": "Brad 2026-09-22 ruling 1 (remove derived ones): a glass of milk priced in words"
+    }
+  ],
+  "field_edits": [
+    {
+      "find": "no $60 powder tubs required.",
+      "replace": "no pricey powder tubs required."
+    },
+    {
+      "find": "prep 600-calorie meals for about $1.83 a serving.",
+      "replace": "prep cheap 600-calorie meals."
+    },
+    {
+      "find": "for a few bucks a day,",
+      "replace": "on a tight budget,"
+    }
+  ],
+  "kept": []
 }

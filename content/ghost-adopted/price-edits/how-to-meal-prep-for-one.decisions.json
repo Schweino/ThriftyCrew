@@ -1,27 +1,74 @@
 {
-  "slug": "how-to-meal-prep-for-one",
-  "title_new": null,
-  "edits": [
-    {
-      "find": "A small tray of chicken can run a dollar or more per pound over the big bag.",
-      "replace": "A small tray of chicken can cost noticeably more per pound than the big bag.",
-      "class": "unbacked",
-      "figures": ["a dollar or more per pound"],
-      "why": "A typed price gap in words between two pack sizes; the feed prices the cheapest per pound, not a single-serve tray."
-    },
-    {
-      "find": "Grab the family pack of chicken thighs at $1.89 a pound instead of the single-serve tray at $3.29.",
-      "replace": "Bone-in chicken thighs and drumsticks often run {{live-unit:chicken-thighs:lb}} a pound, and the single-serve tray charges you more for the same meat, so grab the family pack instead.",
-      "class": "backed-commodity",
-      "figures": ["$1.89", "$3.29"],
-      "why": "chicken-thighs is the board's Chicken Thighs / Drumsticks commodity (today it prices a drumstick bag), so the sentence names both; the single-serve tray has no bid and loses its price."
-    },
-    {
-      "find": "A five-dollar plate of pasta and vegetables from the pantry beats a twenty-dollar delivery order with fees and a tip.",
-      "replace": "A plate of pasta and vegetables from the pantry costs a fraction of a twenty-dollar delivery order with fees and a tip.",
-      "class": "unbacked",
-      "figures": ["five-dollar"],
-      "why": "A generic pantry plate priced in words, not an engine recipe; the twenty-dollar delivery order is a restaurant price and stays."
-    }
-  ]
+    "slug":  "how-to-meal-prep-for-one",
+    "title_new":  null,
+    "edits":  [
+                  {
+                      "find":  "A small tray of chicken can run a dollar or more per pound over the big bag.",
+                      "replace":  "A small tray of chicken can cost noticeably more per pound than the big bag.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "a dollar or more per pound"
+                                  ],
+                      "why":  "A typed price gap in words between two pack sizes; the feed prices the cheapest per pound, not a single-serve tray."
+                  },
+                  {
+                      "find":  "Grab the family pack of chicken thighs at $1.89 a pound instead of the single-serve tray at $3.29.",
+                      "replace":  "Bone-in chicken thighs and drumsticks often run {{live-unit:chicken-thighs:lb}} a pound, and the single-serve tray charges you more for the same meat, so grab the family pack instead.",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.89",
+                                      "$3.29"
+                                  ],
+                      "why":  "chicken-thighs is the board\u0027s Chicken Thighs / Drumsticks commodity (today it prices a drumstick bag), so the sentence names both; the single-serve tray has no bid and loses its price."
+                  },
+                  {
+                      "find":  "A five-dollar plate of pasta and vegetables from the pantry beats a twenty-dollar delivery order with fees and a tip.",
+                      "replace":  "A plate of pasta and vegetables from the pantry costs a fraction of a twenty-dollar delivery order with fees and a tip.",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "five-dollar"
+                                  ],
+                      "why":  "A generic pantry plate priced in words, not an engine recipe; the twenty-dollar delivery order is a restaurant price and stays."
+                  },
+                  {
+                      "find":  "Do that a couple of times a week and you have quietly saved more than a hundred dollars a month.",
+                      "replace":  "Do that a couple of times a week and the savings stack up fast.",
+                      "class":  "derived-total",
+                      "figures":  [
+                                      "a hundred dollars"
+                                  ],
+                      "why":  "Brad 2026-09-22 ruling 1 (remove derived ones): the monthly saving is the delivery order minus the pantry plate, whose five-dollar price this article removed"
+                  },
+                  {
+                      "find":  "Do that and you can eat well for a few dollars a plate while barely wasting a thing.",
+                      "replace":  "Do that and you can eat well at home while barely wasting a thing.",
+                      "class":  "price-in-words",
+                      "figures":  [
+                                      "a few dollars"
+                                  ],
+                      "why":  "Brad 2026-09-22 ruling 1 (remove derived ones): a plate of food priced in words"
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "to eat well for a few dollars a plate with almost zero waste.",
+                            "replace":  "to eat well with almost zero waste."
+                        },
+                        {
+                            "find":  "so you eat well for a few dollars a plate and waste almost nothing.",
+                            "replace":  "so you eat well and waste almost nothing."
+                        }
+                    ],
+    "kept":  [
+                 {
+                     "match":  "a twenty-dollar delivery order with fees and a tip",
+                     "class":  "restaurant",
+                     "why":  "a delivery order, a restaurant price"
+                 },
+                 {
+                     "match":  "tosses out hundreds of dollars of food a year",
+                     "class":  "finance",
+                     "why":  "a grocery-spending statistic not built from any price in the article: finance, stays (one rule across all 43)"
+                 }
+             ]
 }

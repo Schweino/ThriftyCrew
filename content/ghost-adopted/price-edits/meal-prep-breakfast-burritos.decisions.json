@@ -1,0 +1,90 @@
+{
+  "slug": "meal-prep-breakfast-burritos",
+  "title_new": "Freezer Breakfast Burritos: A Week of Breakfasts From One Skillet",
+  "edits": [
+    {
+      "find": "These freezer breakfast burritos come in under a dollar each, pack real protein, and reheat beautifully.",
+      "replace": "These freezer breakfast burritos cost far less than a drive-thru breakfast, pack real protein, and reheat beautifully.",
+      "class": "price-in-words",
+      "figures": [
+        "under a dollar"
+      ],
+      "why": "a per-burrito price in words built from the batch basket below (Brad 2026-09-22, remove derived ones); the comparison is now with the drive-thru the article already names"
+    },
+    {
+      "find": "Optional, but they stretch the filling and add flavor for pennies.",
+      "replace": "Optional, but they stretch the filling and add flavor for very little.",
+      "class": "price-in-words",
+      "figures": [
+        "pennies"
+      ],
+      "why": "a price in words for two foods at once (onion and bell pepper), so no single bid can back it"
+    },
+    {
+      "find": "Using store-brand staples, a batch of twelve runs about right around this: eggs near $4, sausage about $4, tortillas about $3, potatoes about $2, cheese about $3, plus a dollar or so of onion and pepper.",
+      "replace": "Here are the big pieces, with prices that update live from our grocery board. Eggs run {{live-unit:eggs:dozen}} a dozen, and you need a dozen and a half. Pork breakfast sausage runs {{live-unit:breakfast-sausage:lb}} a pound. Frozen hash browns run {{live-unit:hash-browns:lb}} a pound, and shredded cheese runs {{live-unit:shredded-cheese:oz}} an ounce. The tortillas and a little onion and pepper round out the list.",
+      "class": "backed-commodity",
+      "figures": [
+        "$4",
+        "$4",
+        "$3",
+        "$2",
+        "$3",
+        "a dollar or so"
+      ],
+      "why": "ruling C: eggs (Large Eggs, dozen), breakfast-sausage (Breakfast Sausage, pork), hash-browns (Frozen Hash Browns) and shredded-cheese (Shredded / Block Cheese) are commodities at allowed units, so each batch amount becomes that food's unit price. Tortillas stay unpriced: the tortillas bid is flour tortillas of any size and its cheapest cell would understate a burrito-size tortilla. Onion and pepper are two foods in one figure, so no price."
+    },
+    {
+      "find": "Call it roughly $17 for the batch.",
+      "replace": "Total up your receipt and divide by twelve, and you know exactly what each burrito costs you.",
+      "class": "derived-total",
+      "figures": [
+        "$17"
+      ],
+      "why": "the batch total of the typed basket above (Brad 2026-09-22, remove derived ones)"
+    },
+    {
+      "find": "That comes out to about $1.40 per burrito if you use everything as listed, and you can push it under a dollar by choosing turkey sausage, skipping the pepper, and buying cheese in a larger block.",
+      "replace": "You can push that number lower by choosing turkey sausage, skipping the pepper, and buying cheese in a larger block.",
+      "class": "derived-total",
+      "figures": [
+        "$1.40",
+        "under a dollar"
+      ],
+      "why": "the batch total divided by twelve, and a per-burrito bound in words built from it (Brad 2026-09-22, remove derived ones); the drive-thru comparison after it stays"
+    },
+    {
+      "find": "One thirty-minute cook session gives you a week or two of hot, high-protein breakfasts for around a dollar each.",
+      "replace": "One thirty-minute cook session gives you a week or two of hot, high-protein breakfasts for far less than the drive-thru charges.",
+      "class": "price-in-words",
+      "figures": [
+        "around a dollar each"
+      ],
+      "why": "a per-burrito price in words (Brad 2026-09-22, remove derived ones)"
+    },
+    {
+      "find": "These cost and nutrition figures are general estimates,",
+      "replace": "These nutrition figures are general estimates,",
+      "class": "unbacked",
+      "figures": [],
+      "why": "coherence: the cost figures are now live prices or gone, so only the nutrition figures are estimates"
+    }
+  ],
+  "field_edits": [
+    {
+      "find": "in 30 minutes, around a dollar each, with 30g protein.",
+      "replace": "in 30 minutes, with 30g protein each."
+    },
+    {
+      "find": "A Week of Breakfasts for Under $1 Each",
+      "replace": "A Week of Breakfasts From One Skillet"
+    }
+  ],
+  "kept": [
+    {
+      "match": "the four or five dollars a drive-thru charges",
+      "class": "restaurant",
+      "why": "a drive-thru breakfast burrito"
+    }
+  ]
+}

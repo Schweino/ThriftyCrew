@@ -154,12 +154,24 @@
 
                                   ],
                       "why":  "coherence: the note referred to per-serving figures that are now removed"
-                  }
-              ],
+                  },
+    {"find":"A pot of them costs about the same as one drive-through coffee and covers breakfast for most of the week.","replace":"One pot covers breakfast for most of the week.","class":"derived-total","figures":["about the same as one drive-through coffee"],"why":"Brad 2026-09-22 \"Remove derived ones\": the cost of a pot of oats stated by comparison, built from the typed per-serving oats price the first pass removed."}
+  ],
     "field_edits":  [
                         {
                             "find":  "Twelve budget crockpot meals with real per-serving costs. Cheap cuts and dried beans turn into tender dinners for $1 to $2 a plate.",
                             "replace":  "Twelve budget crockpot meals. Cheap cuts and dried beans turn into tender dinners that cost very little per plate."
+                        },
+                        {
+                            "find":  "into tender, filling dinners for a dollar or two a serving.",
+                            "replace":  "into tender, filling dinners for very little per serving."
                         }
-                    ]
+                    ],
+    "kept":  [
+                 {
+                     "match":  "running for pennies over several hours",
+                     "class":  "non-food",
+                     "why":  "The electricity a slow cooker uses, not a food price."
+                 }
+             ]
 }

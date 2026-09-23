@@ -29,9 +29,39 @@
                          }
                      ],
     "field_edits":  [
-
+                        {
+                            "find":  "that plugs the leaks costing you hundreds a month.",
+                            "replace":  "that plugs the leaks in your grocery budget."
+                        }
                     ],
+    "kept":  [
+                 {
+                     "match":  "The average family of four spends somewhere between $900 and $1,300 a month on groceries",
+                     "class":  "finance",
+                     "why":  "a household grocery-spending statistic; it is not built from any price in the article"
+                 },
+                 {
+                     "match":  "On a $1,000 monthly budget, that is well over $1,000 a year staying in your pocket",
+                     "class":  "finance",
+                     "why":  "percent arithmetic on a stated example budget (10 to 15 percent of $1,000 a month), not built from a grocery price"
+                 },
+                 {
+                     "match":  "Every takeout order you skip because dinner was already halfway made is $40 to $60 back in the budget",
+                     "class":  "restaurant",
+                     "why":  "a takeout order, a restaurant price"
+                 },
+                 {
+                     "match":  "knock $60 to $100 off that month\u0027s grocery bill",
+                     "class":  "finance",
+                     "why":  "a grocery-spending statistic not built from any price in the article: finance, stays (one rule across all 43)"
+                 },
+                 {
+                     "match":  "save $150 to $250 a month",
+                     "class":  "finance",
+                     "why":  "a grocery-spending statistic not built from any price in the article: finance, stays (one rule across all 43)"
+                 }
+             ],
     "new_lexical_sha256":  "bf7cc25a8f068c9524b578028bfa81b46c3c4c1b5b1a26bda18d9feb852584a7",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

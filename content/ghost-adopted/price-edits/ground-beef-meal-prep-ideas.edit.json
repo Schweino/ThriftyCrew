@@ -14,7 +14,7 @@
                          },
                          {
                              "find":  "Leaner beef like 90/10 costs about a dollar more per pound and gives you less grease to drain.",
-                             "replace":  "Leaner beef like 90/10 costs more, often \u003cspan data-tc-live-price data-tc-bid=\"ground-beef-9010\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"5.86\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$5.86\u003c/span\u003e a pound, and gives you less grease to drain.",
+                             "replace":  "Leaner beef like 90/10 often costs more, so check the live price: \u003cspan data-tc-live-price data-tc-bid=\"ground-beef-9010\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"5.86\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$5.86\u003c/span\u003e a pound against \u003cspan data-tc-live-price data-tc-bid=\"ground-beef-8020\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"3.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$3.99\u003c/span\u003e for 80/20. It gives you less grease to drain.",
                              "class":  "backed-commodity"
                          },
                          {
@@ -87,9 +87,20 @@
                         {
                             "find":  "Ten budget ground beef meal prep ideas with real per-serving costs and protein counts. Cook once, freeze smart, and feed the family for about $1 a serving.",
                             "replace":  "Ten budget ground beef meal prep ideas with protein counts and live beef prices. Cook once, freeze smart, and feed the family for very little per serving."
+                        },
+                        {
+                            "find":  "eat well all week for around a dollar a serving.",
+                            "replace":  "eat well all week for very little per serving."
                         }
                     ],
-    "new_lexical_sha256":  "7bbf63e8d3d68f656dbc7885e2da6a980759724177043000a769e3dd942ee09f",
+    "kept":  [
+                 {
+                     "match":  "A fast-food combo runs $9 or more now",
+                     "class":  "restaurant",
+                     "why":  "A fast-food combo, the drive-through side of the comparison."
+                 }
+             ],
+    "new_lexical_sha256":  "1ec8747fa64bc8422be161764fd2a88a3b42db8ed933b83a3a624f5c8f2c59e4",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

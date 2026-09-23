@@ -73,15 +73,44 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "Do that math across a week and you are keeping fifty dollars in your pocket.",
+                             "replace":  "Do that math across a week and you are keeping real money in your pocket.",
+                             "class":  "derived-total"
+                         },
+                         {
+                             "find":  "rice and oats (pennies a serving),",
+                             "replace":  "rice and oats (cheap by the pound),",
+                             "class":  "price-in-words"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
                          }
                      ],
     "field_edits":  [
-
+                        {
+                            "find":  "and eat well for around two dollars a plate.",
+                            "replace":  "and eat well for very little per plate."
+                        },
+                        {
+                            "find":  "Eat well for about two dollars a meal.",
+                            "replace":  "Eat well for very little per meal."
+                        }
                     ],
-    "new_lexical_sha256":  "9b18784b592110a7fbaf05872495666b7e00b2977cdae962dd6131b46714e499",
+    "kept":  [
+                 {
+                     "match":  "ends with a twelve-dollar takeout order",
+                     "class":  "restaurant",
+                     "why":  "a takeout order, a restaurant price"
+                 },
+                 {
+                     "match":  "The same meal from a lunch spot runs ten to fourteen dollars",
+                     "class":  "restaurant",
+                     "why":  "a lunch bought out, a restaurant price"
+                 }
+             ],
+    "new_lexical_sha256":  "5f0a3792912e9da1f28e571bfdd728ce6db793a63fec8f46716cf4a080f00e66",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

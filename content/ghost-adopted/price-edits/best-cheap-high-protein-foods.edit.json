@@ -9,7 +9,7 @@
     "replacements":  [
                          {
                              "find":  "Prices are rough national averages as of mid-2026, and a \"serving\" here means",
-                             "replace":  "The prices below are live store prices, shown by the pound, ounce, egg or gallon, and a \"serving\" here means",
+                             "replace":  "The prices below are live store prices, shown by the pound, egg or gallon, and a \"serving\" here means",
                              "class":  "backed-commodity"
                          },
                          {
@@ -39,7 +39,7 @@
                          },
                          {
                              "find":  "\u003cstrong\u003eCanned tuna:\u003c/strong\u003e about $0.90 per can, 20g protein.",
-                             "replace":  "\u003cstrong\u003eCanned tuna:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.17\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.17\u003c/span\u003e an ounce, 20g protein per can.",
+                             "replace":  "\u003cstrong\u003eCanned tuna:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.66\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.66\u003c/span\u003e a pound, 20g protein per can.",
                              "class":  "backed-commodity"
                          },
                          {
@@ -103,15 +103,69 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "\u003ch2\u003eThe cheap protein rankings (by cost per serving)\u003c/h2\u003e",
+                             "replace":  "\u003ch2\u003eThe cheap protein rankings (by live price per pound)\u003c/h2\u003e",
+                             "class":  "rank"
+                         },
+                         {
+                             "find":  "\u003cul\u003e",
+                             "replace":  "\u003cp\u003e\u003cspan data-tc-rank-note data-tc-rank-live=\"Sorted cheapest first by today\u0027s live price per pound.\"\u003eSorted cheapest first by price per pound, using store prices as of September 22, 2026.\u003c/span\u003e Eggs and milk are sold by the egg and the gallon, and we do not track a store price for dried beans, so those three sit at the bottom, unranked.\u003c/p\u003e\n\u003cul data-tc-rank=\"unit_price\" data-tc-rank-per=\"lb\"\u003e",
+                             "class":  "rank"
+                         },
+                         {
+                             "find":  "\u003cli\u003e\u003cstrong\u003eDried beans:\u003c/strong\u003e",
+                             "replace":  "\u003cli data-tc-rank-skip=\"no store price tracked\"\u003e\u003cstrong\u003eDried beans:\u003c/strong\u003e",
+                             "class":  "rank"
+                         },
+                         {
+                             "find":  "\u003cli\u003e\u003cstrong\u003eEggs:\u003c/strong\u003e",
+                             "replace":  "\u003cli data-tc-rank-skip=\"sold by the egg\"\u003e\u003cstrong\u003eEggs:\u003c/strong\u003e",
+                             "class":  "rank"
+                         },
+                         {
+                             "find":  "\u003cli\u003e\u003cstrong\u003eMilk:\u003c/strong\u003e",
+                             "replace":  "\u003cli data-tc-rank-skip=\"sold by the gallon\"\u003e\u003cstrong\u003eMilk:\u003c/strong\u003e",
+                             "class":  "rank"
+                         },
+                         {
+                             "find":  "Pair a pot of pinto beans with rice and you get a complete protein for pennies.",
+                             "replace":  "Pair a pot of pinto beans with rice and you get a complete protein on the cheap.",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "and once you know the price per serving, you can feed yourself well for less than a fancy coffee costs.",
+                             "replace":  "and once you know what they really cost, you can eat well without spending much.",
+                             "class":  "derived-total"
+                         },
+                         {
+                             "find":  "\u003cul data-tc-rank=\"unit_price\" data-tc-rank-per=\"lb\"\u003e\n\u003cli data-tc-rank-skip=\"no store price tracked\"\u003e\u003cstrong\u003eDried beans:\u003c/strong\u003e roughly 15g protein per cooked cup. The cheapest protein in the store, hands down.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eDried lentils:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"brown-lentils\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.92\u003c/span\u003e a pound dry, roughly 18g protein per cooked cup. Cook in 20 minutes with no soaking.\u003c/li\u003e\n\u003cli data-tc-rank-skip=\"sold by the egg\"\u003e\u003cstrong\u003eEggs:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e an egg, 12g protein for two large eggs. Prices swing, but still a bargain.\u003c/li\u003e\n\u003cli data-tc-rank-skip=\"sold by the gallon\"\u003e\u003cstrong\u003eMilk:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"milk\" data-tc-per=\"gal\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.75\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.75\u003c/span\u003e a gallon, 8g protein per cup. Cheap protein you can drink.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003ePeanut butter:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"peanut-butter\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.38\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.38\u003c/span\u003e a pound, 7g protein per 2-tablespoon serving. Fat and protein together, shelf-stable forever.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eCanned tuna:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.66\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.66\u003c/span\u003e a pound, 20g protein per can. Ready to eat, no cooking, long shelf life.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eChicken (bone-in thighs or whole bird):\u003c/strong\u003e a whole bird runs \u003cspan data-tc-live-price data-tc-bid=\"whole-chicken\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.32\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.32\u003c/span\u003e a pound, 25g protein per 4 ounces. Buy it on the bone and skin-on to save the most.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eGreek yogurt (large tub):\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"greek-yogurt\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.24\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.24\u003c/span\u003e a pound, 17g protein per two-thirds cup. Buy the tub, never the little cups.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eCottage cheese:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"cottage-cheese\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.82\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.82\u003c/span\u003e a pound, 24g protein per cup. Quietly one of the best deals going.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eGround turkey:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"ground-turkey\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.66\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.66\u003c/span\u003e a pound, 22g protein per 4 ounces. Lean and easy to stretch.\u003c/li\u003e\n\u003c/ul\u003e",
+                             "replace":  "\u003cul data-tc-rank=\"unit_price\" data-tc-rank-per=\"lb\"\u003e\n\u003cli\u003e\u003cstrong\u003eChicken (bone-in thighs or whole bird):\u003c/strong\u003e a whole bird runs \u003cspan data-tc-live-price data-tc-bid=\"whole-chicken\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.32\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.32\u003c/span\u003e a pound, 25g protein per 4 ounces. Buy it on the bone and skin-on to save the most.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003ePeanut butter:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"peanut-butter\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.38\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.38\u003c/span\u003e a pound, 7g protein per 2-tablespoon serving. Fat and protein together, shelf-stable forever.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eCottage cheese:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"cottage-cheese\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.82\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.82\u003c/span\u003e a pound, 24g protein per cup. Quietly one of the best deals going.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eDried lentils:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"brown-lentils\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.92\u003c/span\u003e a pound dry, roughly 18g protein per cooked cup. Cook in 20 minutes with no soaking.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eGreek yogurt (large tub):\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"greek-yogurt\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.24\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.24\u003c/span\u003e a pound, 17g protein per two-thirds cup. Buy the tub, never the little cups.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eCanned tuna:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.66\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.66\u003c/span\u003e a pound, 20g protein per can. Ready to eat, no cooking, long shelf life.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eGround turkey:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"ground-turkey\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.66\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.66\u003c/span\u003e a pound, 22g protein per 4 ounces. Lean and easy to stretch.\u003c/li\u003e\n\u003cli data-tc-rank-skip=\"no store price tracked\"\u003e\u003cstrong\u003eDried beans:\u003c/strong\u003e roughly 15g protein per cooked cup. The cheapest protein in the store, hands down.\u003cspan data-tc-rank-label\u003e (not ranked: no store price tracked)\u003c/span\u003e\u003c/li\u003e\n\u003cli data-tc-rank-skip=\"sold by the egg\"\u003e\u003cstrong\u003eEggs:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e an egg, 12g protein for two large eggs. Prices swing, but still a bargain.\u003cspan data-tc-rank-label\u003e (not ranked: sold by the egg)\u003c/span\u003e\u003c/li\u003e\n\u003cli data-tc-rank-skip=\"sold by the gallon\"\u003e\u003cstrong\u003eMilk:\u003c/strong\u003e \u003cspan data-tc-live-price data-tc-bid=\"milk\" data-tc-per=\"gal\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.75\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.75\u003c/span\u003e a gallon, 8g protein per cup. Cheap protein you can drink.\u003cspan data-tc-rank-label\u003e (not ranked: sold by the gallon)\u003c/span\u003e\u003c/li\u003e\n\u003c/ul\u003e",
+                             "class":  "rank"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
                          }
                      ],
     "field_edits":  [
-
+                        {
+                            "find":  "are also the most filling, and most cost under a dollar a serving.",
+                            "replace":  "are also the most filling."
+                        },
+                        {
+                            "find":  "ranked by cost per serving",
+                            "replace":  "ranked by live price per pound"
+                        }
                     ],
-    "new_lexical_sha256":  "d69825751338cccc69bf82d9cf9a95f555d79c9d0b489580164b7fc78d12cb9e",
+    "kept":  [
+                 {
+                     "match":  "an eight-dollar convenience-store sandwich",
+                     "class":  "restaurant",
+                     "why":  "A ready-made sandwich bought at a convenience store, the takeout side of the comparison; not a grocery price."
+                 }
+             ],
+    "new_lexical_sha256":  "f3a7a4702b4c9e00985d1595ce9c895ec1ea7aebafe36d9d97a2e93d3b11cefa",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

@@ -1,0 +1,122 @@
+{
+    "slug":  "high-protein-shake-recipes",
+    "id":  "6a49a65d50682b0001cd4608",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-05T00:33:33.000Z",
+    "base_lexical_sha256":  "dc1c1fee0f3f97d877416b6e8cb3ef98f73bd91a7fc5254035918c8e1a4ec205",
+    "title_old":  "6 Cheap High-Protein Shake Recipes (Under $1.50 Each)",
+    "title_new":  "6 Cheap High-Protein Shake Recipes",
+    "replacements":  [
+                         {
+                             "find":  "A store-bought protein shake runs three or four dollars a bottle, and half of that is packaging and marketing.",
+                             "replace":  "A store-bought protein shake charges you for the bottle, the packaging, and the marketing.",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "Make the same thing in your own blender and it drops to about a buck.",
+                             "replace":  "Make the same thing in your own blender and you pay for the ingredients and nothing else.",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "Here are six high-protein shakes that each land under $1.50, taste like something you would actually order, and take about two minutes to throw together.",
+                             "replace":  "Here are six high-protein shakes that taste like something you would actually order and take about two minutes to throw together.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A tub of store-brand whey protein runs about $25 for 30 scoops, which works out to roughly $0.85 a scoop and about 24 grams of protein. That single number does most of the heavy lifting in every shake below.",
+                             "replace":  "A tub of store-brand whey protein holds about 30 scoops, and each one brings about 24 grams of protein. That one scoop does most of the heavy lifting in every shake below.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Half a cup of Greek yogurt is around $0.55 and adds about 12 grams of protein.",
+                             "replace":  "Half a cup of Greek yogurt adds about 12 grams of protein.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "A cup of milk is roughly $0.30 and another 8 grams.",
+                             "replace":  "A cup of milk adds another 8 grams, and milk runs \u003cspan data-tc-live-price data-tc-bid=\"milk\" data-tc-per=\"gal\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.75\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.75\u003c/span\u003e a gallon.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "one banana ($0.25), one tablespoon peanut butter ($0.10),",
+                             "replace":  "one banana (bananas run \u003cspan data-tc-live-price data-tc-bid=\"bananas\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.48\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.48\u003c/span\u003e a pound), one tablespoon peanut butter (\u003cspan data-tc-live-price data-tc-bid=\"peanut-butter\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.09\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.09\u003c/span\u003e an ounce),",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "About $1.20 for roughly 34 grams of protein.",
+                             "replace":  "Roughly 34 grams of protein.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "three-quarters cup frozen mixed berries ($0.45), and a cup of water. Comes in near $1.30 and about 25 grams of protein.",
+                             "replace":  "three-quarters cup frozen mixed berries, and a cup of water. About 25 grams of protein.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "three-quarters cup frozen mango ($0.40), and a cup of milk. Around $1.35 for about 32 grams of protein.",
+                             "replace":  "three-quarters cup frozen mango, and a cup of milk. About 32 grams of protein.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "a cup of cold brewed coffee ($0.10), and a handful of ice.",
+                             "replace":  "a cup of cold brewed coffee (ground coffee runs \u003cspan data-tc-live-price data-tc-bid=\"coffee\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"6.45\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$6.45\u003c/span\u003e a pound), and a handful of ice.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "About $1.00 for roughly 24 grams of protein, and it doubles as your morning caffeine.",
+                             "replace":  "Roughly 24 grams of protein, and it doubles as your morning caffeine.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "one tablespoon cocoa powder ($0.10), a quarter cup rolled oats ($0.10),",
+                             "replace":  "one tablespoon cocoa powder (\u003cspan data-tc-live-price data-tc-bid=\"cocoa-powder\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.52\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.52\u003c/span\u003e an ounce), a quarter cup rolled oats (oats run \u003cspan data-tc-live-price data-tc-bid=\"oatmeal\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.80\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.80\u003c/span\u003e a pound),",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Near $1.35 for about 34 grams of protein and enough oats to keep you full.",
+                             "replace":  "About 34 grams of protein and enough oats to keep you full.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Around $1.40 for a thick, spoonable 36 grams of protein.",
+                             "replace":  "A thick, spoonable 36 grams of protein.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "lasts months and costs pennies per shake, while",
+                             "replace":  "lasts months, while",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "a tub of rolled oats runs about $3 and stretches across dozens of servings.",
+                             "replace":  "rolled oats run \u003cspan data-tc-live-price data-tc-bid=\"oatmeal\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.80\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.80\u003c/span\u003e a pound and a tub stretches across dozens of servings.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Six shakes, each under $1.50 and most closer to a dollar, versus three to four dollars a bottle at the store.",
+                             "replace":  "Six shakes built from a handful of cheap staples, versus paying for the bottle and the marketing at the store.",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "that each cost under $1.50, versus three to four dollars a bottle at the store.",
+                            "replace":  "you can blend at home from a handful of cheap staples."
+                        },
+                        {
+                            "find":  "Six high-protein shakes under $1.50 each, from peanut butter banana to chocolate coffee. Cheap base, real per-serving costs, and two-minute prep.",
+                            "replace":  "Six cheap high-protein shakes, from peanut butter banana to chocolate coffee. A cheap protein base, live store prices on the staples, and two-minute prep."
+                        }
+                    ],
+    "kept":  [
+
+             ],
+    "new_lexical_sha256":  "8b842fabcee6811bc7c3b540f1afec6069fa6af34a538bf18a65c51f5c3302c3",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-23T06:15:19"
+}

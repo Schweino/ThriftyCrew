@@ -13,15 +13,32 @@
                              "class":  "unbacked"
                          },
                          {
-                             "find":  "(end of body)",
-                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
-                             "class":  "script"
+                             "find":  "A few dollars of spices and sauces buys you a week you will actually eat.",
+                             "replace":  "A shelf of spices and a couple of sauces buys you a week you will actually eat.",
+                             "class":  "price-in-words"
                          }
                      ],
     "field_edits":  [
 
                     ],
-    "new_lexical_sha256":  "3cee3980a610350f512b6e6bfec906aba7f560f02f391d703bfc669d21eee7d6",
+    "kept":  [
+                 {
+                     "match":  "That $9 delivery order",
+                     "class":  "restaurant",
+                     "why":  "a delivery order"
+                 },
+                 {
+                     "match":  "throws out roughly $1,500 of food a year",
+                     "class":  "finance",
+                     "why":  "a national household food-waste figure, not a grocery price or a total built from one"
+                 },
+                 {
+                     "match":  "glass sets run about $20 to $30",
+                     "class":  "non-food",
+                     "why":  "food containers"
+                 }
+             ],
+    "new_lexical_sha256":  "cf83b63805e05dc6754248548fe3824738a9ef1246326973da49241f0e39b01c",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

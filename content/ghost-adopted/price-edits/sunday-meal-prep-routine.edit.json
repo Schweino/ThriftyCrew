@@ -38,6 +38,16 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "Over a week of dinners for one person, that is $50 or more staying in your pocket. Your exact savings depend on local prices and how often you were ordering out, but even at half that number, this pays for itself many times over.",
+                             "replace":  "Over a week of dinners for one person, that is real money staying in your pocket. Your exact savings depend on local prices and how often you were ordering out, but even if you only replace a few takeout nights, this pays for itself many times over.",
+                             "class":  "derived-total"
+                         },
+                         {
+                             "find":  "save you $50 or more versus takeout, and hand you back your weeknights.",
+                             "replace":  "cut way back on takeout, and hand you back your weeknights.",
+                             "class":  "derived-total"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
@@ -53,7 +63,14 @@
                             "replace":  "covers a week of cheap dinners."
                         }
                     ],
-    "new_lexical_sha256":  "cf5e93997d6ed48c02c93c4b877d5211c899b58bff8df4334d39459fc649cb55",
+    "kept":  [
+                 {
+                     "match":  "A comparable takeout dinner runs $12 to $18",
+                     "class":  "restaurant",
+                     "why":  "a takeout dinner"
+                 }
+             ],
+    "new_lexical_sha256":  "e07f4448ef72636dbbdb433705c6b0b2ce42a399fa23037d1087b51d1ef87c6b",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:20"
 }

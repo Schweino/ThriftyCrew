@@ -29,7 +29,7 @@
                          },
                          {
                              "find":  "\u003cstrong\u003eDried beans and lentils:\u003c/strong\u003e about $1.50 a pound, stacking protein and fiber for pennies a serving.",
-                             "replace":  "\u003cstrong\u003eDried beans and lentils:\u003c/strong\u003e a bag of dry lentils runs \u003cspan data-tc-live-price data-tc-bid=\"brown-lentils\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.92\u003c/span\u003e a pound, and both stack protein and fiber for pennies a serving.",
+                             "replace":  "\u003cstrong\u003eDried beans and lentils:\u003c/strong\u003e a bag of dry lentils runs \u003cspan data-tc-live-price data-tc-bid=\"brown-lentils\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.92\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.92\u003c/span\u003e a pound, and both stack protein and fiber for very little per serving.",
                              "class":  "backed-commodity"
                          },
                          {
@@ -53,6 +53,16 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "With a little planning you can hit your protein and calories for a few bucks a day.",
+                             "replace":  "With a little planning you can hit your protein and calories on a tight grocery budget.",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "a glass adds roughly 150 calories and 8 grams of protein for pocket change.",
+                             "replace":  "a glass adds roughly 150 calories and 8 grams of protein for very little.",
+                             "class":  "price-in-words"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
@@ -66,9 +76,16 @@
                         {
                             "find":  "prep 600-calorie meals for about $1.83 a serving.",
                             "replace":  "prep cheap 600-calorie meals."
+                        },
+                        {
+                            "find":  "for a few bucks a day,",
+                            "replace":  "on a tight budget,"
                         }
                     ],
-    "new_lexical_sha256":  "2bed910536e2abc1aee3ae9370a35987ee606df1ca20bd21b0e6ad9098d59a94",
+    "kept":  [
+
+             ],
+    "new_lexical_sha256":  "504a8624ed88a6478afe6f282e41d8e8250655268ef81726d4875df290c18f84",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

@@ -66,7 +66,14 @@
     "field_edits":  [
 
                     ],
+    "kept":  [
+                 {
+                     "match":  "a weekly grocery budget of $40 to $50 is realistic and generous. For a family of four, $150 to $175 covers",
+                     "class":  "finance",
+                     "why":  "a grocery-spending statistic not built from any price in the article: finance, stays (one rule across all 43)"
+                 }
+             ],
     "new_lexical_sha256":  "2b43cb9199c550f1efda930cc1ec479ee95d875ec896943d58556468e0e80cf3",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

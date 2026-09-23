@@ -1,140 +1,161 @@
 {
-    "slug":  "keto-meal-prep-on-a-budget",
-    "title_new":  null,
-    "edits":  [
-                  {
-                      "find":  "A dozen large eggs runs about $3.00, which comes to $0.25 an egg.",
-                      "replace":  "A dozen large eggs runs {{live-unit:eggs:dozen}}, which comes to {{live-unit:eggs:each}} an egg.",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$3.00",
-                                      "$0.25"
-                                  ],
-                      "why":  "a dozen large eggs is the eggs cell (Large Eggs, dozen); per egg is the same cell per each"
-                  },
-                  {
-                      "find":  "almost zero carbs for $0.50.",
-                      "replace":  "almost zero carbs for very little money.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$0.50"
-                                  ],
-                      "why":  "a two-egg multiple has no token; the per-egg price just above is live"
-                  },
-                  {
-                      "find":  "Whole chicken thighs, roughly $1.80 per pound, fattier",
-                      "replace":  "Whole chicken thighs, fattier",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$1.80"
-                                  ],
-                      "why":  "chicken-thighs cell is Thighs/Drumsticks and its cheapest row is a drumstick bag, so it would show a non-thigh price"
-                  },
-                  {
-                      "find":  "Ground beef (80/20), around $4.50 per pound,",
-                      "replace":  "Ground beef (80/20), {{live-unit:ground-beef-8020:lb}} per pound,",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$4.50"
-                                  ],
-                      "why":  "80/20 ground beef per pound is the ground-beef-8020 cell"
-                  },
-                  {
-                      "find":  "\u003cli\u003eCanned tuna, about $1.00 per can\u003c/li\u003e",
-                      "replace":  "\u003cli\u003eCanned tuna, {{live-unit:canned-tuna:oz}} an ounce\u003c/li\u003e",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$1.00"
-                                  ],
-                      "why":  "canned tuna is the canned-tuna cell; per can is not an allowed unit, so per ounce"
-                  },
-                  {
-                      "find":  "Block cheese, near $4.00 per pound,",
-                      "replace":  "Block cheese, {{live-unit:block-cheese:lb}} per pound,",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$4.00"
-                                  ],
-                      "why":  "block cheese per pound is the block-cheese cell (Block Cheese)"
-                  },
-                  {
-                      "find":  "\u003cli\u003eFrozen spinach and broccoli, roughly $1.50 per bag\u003c/li\u003e",
-                      "replace":  "\u003cli\u003eFrozen spinach, {{live-unit:frozen-chopped-spinach:lb}} a pound, and frozen broccoli, {{live-unit:frozen-broccoli:lb}} a pound\u003c/li\u003e",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$1.50"
-                                  ],
-                      "why":  "frozen spinach is frozen-chopped-spinach and frozen broccoli is frozen-broccoli; per bag becomes per pound for each"
-                  },
-                  {
-                      "find":  "Cost lands near $6.50 for the batch, or about $0.54 per cup.",
-                      "replace":  "The whole batch is cheap to make.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$6.50",
-                                      "$0.54"
-                                  ],
-                      "why":  "generic breakfast cup batch, a mixed basket; not an engine title"
-                  },
-                  {
-                      "find":  "Six servings for about $14.00 total, or $2.33 a bowl.",
-                      "replace":  "That makes six servings on a budget.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$14.00",
-                                      "$2.33"
-                                  ],
-                      "why":  "generic taco bowl batch, a mixed basket; not an engine title"
-                  },
-                  {
-                      "find":  "Four to five servings at about $8.00 total, or $1.70 per serving.",
-                      "replace":  "Four to five servings from one cheap sheet pan.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$8.00",
-                                      "$1.70"
-                                  ],
-                      "why":  "generic thighs and broccoli batch, a mixed basket"
-                  },
-                  {
-                      "find":  "you are looking at roughly $30 to $35 in groceries for one person. That is about $1.60 per meal.",
-                      "replace":  "you are looking at a small grocery bill for one person, and each meal costs very little.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$30",
-                                      "$35",
-                                      "$1.60"
-                                  ],
-                      "why":  "a week of the plan is a mixed basket; the $9.00 fast-food combo after it is a restaurant price and stays"
-                  },
-                  {
-                      "find":  "A big pack of chicken thighs looks expensive at $12.00, but at $1.80 a pound it is",
-                      "replace":  "A big pack of chicken thighs looks expensive at the register, but by the pound it is",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$12.00",
-                                      "$1.80"
-                                  ],
-                      "why":  "package total has no token, and the chicken-thighs cell currently prices drumsticks, not thighs"
-                  },
-                  {
-                      "find":  "you can run a full low-carb week for around $30.",
-                      "replace":  "you can run a full low-carb week on a small grocery bill.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$30"
-                                  ],
-                      "why":  "a week of groceries is a mixed basket"
-                  }
-              ],
-    "field_edits":  [
-                        {
-                            "find":  "run a full low-carb week for around $30.",
-                            "replace":  "run a full low-carb week on a budget."
-                        },
-                        {
-                            "find":  "Eat keto for around $30 a week. Budget fats and proteins, three batch recipes, and real per-serving costs and macros",
-                            "replace":  "Eat keto on a budget. Budget fats and proteins, three batch recipes, live store prices and real macros"
-                        }
-                    ]
+  "slug": "keto-meal-prep-on-a-budget",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "A dozen large eggs runs about $3.00, which comes to $0.25 an egg.",
+      "replace": "A dozen large eggs runs {{live-unit:eggs:dozen}}, which comes to {{live-unit:eggs:each}} an egg.",
+      "class": "backed-commodity",
+      "figures": [
+        "$3.00",
+        "$0.25"
+      ],
+      "why": "a dozen large eggs is the eggs cell (Large Eggs, dozen); per egg is the same cell per each"
+    },
+    {
+      "find": "almost zero carbs for $0.50.",
+      "replace": "almost zero carbs for very little money.",
+      "class": "unbacked",
+      "figures": [
+        "$0.50"
+      ],
+      "why": "a two-egg multiple has no token; the per-egg price just above is live"
+    },
+    {
+      "find": "Whole chicken thighs, roughly $1.80 per pound, fattier",
+      "replace": "Whole chicken thighs, fattier",
+      "class": "unbacked",
+      "figures": [
+        "$1.80"
+      ],
+      "why": "chicken-thighs cell is Thighs/Drumsticks and its cheapest row is a drumstick bag, so it would show a non-thigh price"
+    },
+    {
+      "find": "Ground beef (80/20), around $4.50 per pound,",
+      "replace": "Ground beef (80/20), {{live-unit:ground-beef-8020:lb}} per pound,",
+      "class": "backed-commodity",
+      "figures": [
+        "$4.50"
+      ],
+      "why": "80/20 ground beef per pound is the ground-beef-8020 cell"
+    },
+    {
+      "find": "<li>Canned tuna, about $1.00 per can</li>",
+      "replace": "<li>Canned tuna, {{live-unit:canned-tuna:oz}} an ounce</li>",
+      "class": "backed-commodity",
+      "figures": [
+        "$1.00"
+      ],
+      "why": "canned tuna is the canned-tuna cell; per can is not an allowed unit, so per ounce"
+    },
+    {
+      "find": "Block cheese, near $4.00 per pound,",
+      "replace": "Block cheese, {{live-unit:block-cheese:lb}} per pound,",
+      "class": "backed-commodity",
+      "figures": [
+        "$4.00"
+      ],
+      "why": "block cheese per pound is the block-cheese cell (Block Cheese)"
+    },
+    {
+      "find": "<li>Frozen spinach and broccoli, roughly $1.50 per bag</li>",
+      "replace": "<li>Frozen spinach, {{live-unit:frozen-chopped-spinach:lb}} a pound, and frozen broccoli, {{live-unit:frozen-broccoli:lb}} a pound</li>",
+      "class": "backed-commodity",
+      "figures": [
+        "$1.50"
+      ],
+      "why": "frozen spinach is frozen-chopped-spinach and frozen broccoli is frozen-broccoli; per bag becomes per pound for each"
+    },
+    {
+      "find": "Cost lands near $6.50 for the batch, or about $0.54 per cup.",
+      "replace": "The whole batch is cheap to make.",
+      "class": "unbacked",
+      "figures": [
+        "$6.50",
+        "$0.54"
+      ],
+      "why": "generic breakfast cup batch, a mixed basket; not an engine title"
+    },
+    {
+      "find": "Six servings for about $14.00 total, or $2.33 a bowl.",
+      "replace": "That makes six servings on a budget.",
+      "class": "unbacked",
+      "figures": [
+        "$14.00",
+        "$2.33"
+      ],
+      "why": "generic taco bowl batch, a mixed basket; not an engine title"
+    },
+    {
+      "find": "Four to five servings at about $8.00 total, or $1.70 per serving.",
+      "replace": "Four to five servings from one cheap sheet pan.",
+      "class": "unbacked",
+      "figures": [
+        "$8.00",
+        "$1.70"
+      ],
+      "why": "generic thighs and broccoli batch, a mixed basket"
+    },
+    {
+      "find": "you are looking at roughly $30 to $35 in groceries for one person. That is about $1.60 per meal.",
+      "replace": "you are looking at a small grocery bill for one person, and each meal costs very little.",
+      "class": "unbacked",
+      "figures": [
+        "$30",
+        "$35",
+        "$1.60"
+      ],
+      "why": "a week of the plan is a mixed basket; the $9.00 fast-food combo after it is a restaurant price and stays"
+    },
+    {
+      "find": "A big pack of chicken thighs looks expensive at $12.00, but at $1.80 a pound it is",
+      "replace": "A big pack of chicken thighs looks expensive at the register, but by the pound it is",
+      "class": "unbacked",
+      "figures": [
+        "$12.00",
+        "$1.80"
+      ],
+      "why": "package total has no token, and the chicken-thighs cell currently prices drumsticks, not thighs"
+    },
+    {
+      "find": "you can run a full low-carb week for around $30.",
+      "replace": "you can run a full low-carb week on a small grocery bill.",
+      "class": "unbacked",
+      "figures": [
+        "$30"
+      ],
+      "why": "a week of groceries is a mixed basket"
+    },
+    {
+      "find": " cheaper than pre-shredded</li>",
+      "replace": " often cheaper than pre-shredded cheddar at {{live-unit:cheddar-cheese-shredded:lb}} per pound, so check the live price</li>",
+      "class": "soften-comparison",
+      "figures": [],
+      "why": "Brad 2026-09-22 ruling 2 (soften them): block cheese vs pre-shredded; the block side is already live (block-cheese, a cheddar block today) and pre-shredded cheddar is the cheddar-cheese-shredded cell (recipe-commodities.json 'Cheddar Cheese, Shredded'), so both are live and the claim becomes 'often cheaper'"
+    },
+    {
+      "find": "Pre-shredded costs more and comes coated in anti-caking starch,",
+      "replace": "Pre-shredded often costs more, so check the live prices above, and it comes coated in anti-caking starch,",
+      "class": "soften-comparison",
+      "figures": [],
+      "why": "Brad 2026-09-22 ruling 2 (soften them): the same block vs pre-shredded claim restated below the list; both sides are live in the list above"
+    }
+  ],
+  "field_edits": [
+    {
+      "find": "run a full low-carb week for around $30.",
+      "replace": "run a full low-carb week on a budget."
+    },
+    {
+      "find": "Eat keto for around $30 a week. Budget fats and proteins, three batch recipes, and real per-serving costs and macros",
+      "replace": "Eat keto on a budget. Budget fats and proteins, three batch recipes, live store prices and real macros"
+    }
+  ],
+  "kept": [
+    {
+      "match": "Compare that to a single fast-food combo at $9.00",
+      "class": "restaurant",
+      "why": "a fast-food combo, a restaurant price"
+    }
+  ]
 }

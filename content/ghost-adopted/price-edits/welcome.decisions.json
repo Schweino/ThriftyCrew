@@ -1,15 +1,23 @@
 {
-    "slug":  "welcome",
-    "title_new":  null,
-    "edits":  [
-                  {
-                      "find":  "14 dinners at about $2.40 a plate.",
-                      "replace":  "14 dinners at {{live-recipe:free-chicken-alfredo}} a plate.",
-                      "class":  "backed-recipe",
-                      "figures":  [
-                                      "$2.40"
-                                  ],
-                      "why":  "links /free-chicken-alfredo/, rebuilt as an engine recipe on this branch (ruling A); the span fills once the recipe is published and the feed carries recipes[free-chicken-alfredo].everyday_ps. -Land refuses this article until the deployed feed can fill it."
-                  }
-              ]
+  "slug": "welcome",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "14 dinners at about $2.40 a plate.",
+      "replace": "14 dinners at {{live-recipe:free-chicken-alfredo}} a plate.",
+      "class": "backed-recipe",
+      "figures": [
+        "$2.40"
+      ],
+      "why": "links /free-chicken-alfredo/, rebuilt as an engine recipe on this branch (ruling A); the span fills once the recipe is published and the feed carries recipes[free-chicken-alfredo].everyday_ps. -Land refuses this article until the deployed feed can fill it."
+    }
+  ],
+  "field_edits": [],
+  "kept": [
+    {
+      "match": "$10 for the year (about 83 cents a month)",
+      "class": "non-food",
+      "why": "the Thrifty Crew membership price"
+    }
+  ]
 }

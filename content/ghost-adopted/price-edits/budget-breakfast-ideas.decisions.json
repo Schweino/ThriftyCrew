@@ -208,12 +208,44 @@
                                       "under a dollar a serving"
                                   ],
                       "why":  "a typed per-serving bound written in words"
-                  }
-              ],
+                  },
+    {"find":"on food you could make at home for pocket change.","replace":"on food you could make at home for a lot less.","class":"price-in-words","figures":["pocket change"],"why":"Brad 2026-09-22 \"Remove derived ones\": \"for pocket change\" prices the homemade breakfasts in words, the same claim as \"pennies a serving\"."},
+    {"find":"make a stack for \u003cstrong\u003epocket change\u003c/strong\u003e.","replace":"make a stack \u003cstrong\u003efor very little\u003c/strong\u003e.","class":"price-in-words","figures":["pocket change"],"why":"Brad 2026-09-22 \"Remove derived ones\": the first pass turned \"$0.35 a serving\" into \"pocket change\", which is still a price in words for the pancakes."},
+    {"find":"rotate through most of this list for pocket change without","replace":"rotate through most of this list on a small budget without","class":"price-in-words","figures":["pocket change"],"why":"Brad 2026-09-22 \"Remove derived ones\": the first pass turned \"under a dollar a serving\" into \"pocket change\", which is still a price in words for the breakfasts."}
+  ],
     "field_edits":  [
                         {
                             "find":  "20 cheap breakfast ideas under $1 a serving, from oatmeal",
                             "replace":  "20 cheap breakfast ideas, from oatmeal"
+                        },
+                        {
+                            "find":  "you can make at home for less than a dollar a serving, no drive-thru required.",
+                            "replace":  "you can make at home, no drive-thru required."
+                        },
+                        {
+                            "find":  "Skip the drive-thru and save about $100 a month with real per-serving costs.",
+                            "replace":  "Skip the drive-thru and eat a real breakfast at home."
+                        },
+                        {
+                            "find":  "Ideas Under $1 a Serving",
+                            "replace":  "Ideas"
                         }
-                    ]
+                    ],
+    "kept":  [
+                 {
+                     "match":  "A sausage biscuit and a coffee runs you five or six bucks",
+                     "class":  "restaurant",
+                     "why":  "A drive-thru breakfast, a restaurant price."
+                 },
+                 {
+                     "match":  "you've spent well over a hundred dollars a month on food",
+                     "class":  "restaurant",
+                     "why":  "The monthly total of the drive-thru breakfast above, five mornings a week; it multiplies the restaurant price only, not a removed grocery price."
+                 },
+                 {
+                     "match":  "You don't need to spend five dollars every morning",
+                     "class":  "restaurant",
+                     "why":  "The drive-thru breakfast spend from the intro, restated."
+                 }
+             ]
 }

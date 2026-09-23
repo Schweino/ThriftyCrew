@@ -301,6 +301,15 @@
                                       "$3"
                                   ],
                       "why":  "per-serving bound over generic dishes"
+                  },
+                  {
+                      "find":  "and a bag of rice works out to pennies per serving.",
+                      "replace":  "and a bag of rice stretches across a lot of servings.",
+                      "class":  "price-in-words",
+                      "figures":  [
+                                      "pennies per serving"
+                                  ],
+                      "why":  "Brad 2026-09-22 \"Remove derived ones\": \"pennies per serving\" is a price in words for rice."
                   }
               ],
     "field_edits":  [
@@ -311,6 +320,13 @@
                         {
                             "find":  "25 cheap dinner ideas that come in under $3 a serving, with real per-serving prices.",
                             "replace":  "25 cheap dinner ideas, with live Omaha store prices on the staples."
+                        },
+                        {
+                            "find":  "Ideas Under $3 a Serving",
+                            "replace":  "Ideas"
                         }
-                    ]
+                    ],
+    "kept":  [
+
+             ]
 }

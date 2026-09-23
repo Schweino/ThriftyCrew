@@ -78,7 +78,24 @@
                             "replace":  "Fuel your workouts for very little per meal."
                         }
                     ],
+    "kept":  [
+                 {
+                     "match":  "a supplement store or a $15 salad",
+                     "class":  "restaurant",
+                     "why":  "a bought salad"
+                 },
+                 {
+                     "match":  "Compare that to a $12 fast-casual chicken bowl",
+                     "class":  "restaurant",
+                     "why":  "a fast-casual bowl"
+                 },
+                 {
+                     "match":  "a fraction of the $12 everyone else pays",
+                     "class":  "restaurant",
+                     "why":  "the same fast-casual bowl"
+                 }
+             ],
     "new_lexical_sha256":  "560fb1f73cdc81c5d83b2fdc71e18894b2fe317a0e759e68896cf161da726945",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

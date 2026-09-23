@@ -1,27 +1,67 @@
 {
-  "slug": "how-to-meal-plan-for-a-family",
-  "title_new": null,
-  "edits": [
-    {
-      "find": "Three \"cheap and mighty\" meals under $8 total to feed everyone (think",
-      "replace": "Three \"cheap and mighty\" meals that feed everyone for the least money (think",
-      "class": "unbacked",
-      "figures": ["$8"],
-      "why": "A bound on generic dishes (beans and rice, chili, a potato bar), none named as an engine recipe."
-    },
-    {
-      "find": "Four solid weeknight standards ($12 to $18 to feed four), like",
-      "replace": "Four solid weeknight standards that still feed four for far less than takeout, like",
-      "class": "unbacked",
-      "figures": ["$12", "$18"],
-      "why": "A batch cost for generic dishes (sheet-pan chicken, taco night, pasta bake), none an engine recipe."
-    },
-    {
-      "find": "When chicken thighs drop to $1.29 a pound or ground beef hits a real markdown, that is your green light",
-      "replace": "Bone-in chicken thighs and drumsticks often run {{live-unit:chicken-thighs:lb}} a pound, and when they go on sale or ground beef hits a real markdown, that is your green light",
-      "class": "backed-commodity",
-      "figures": ["$1.29"],
-      "why": "chicken-thighs is the board's Chicken Thighs / Drumsticks commodity (today it prices a drumstick bag), so the sentence names both; the typed sale price becomes the live price and the plan-around-sales point stays."
-    }
-  ]
+    "slug":  "how-to-meal-plan-for-a-family",
+    "title_new":  null,
+    "edits":  [
+                  {
+                      "find":  "Three \"cheap and mighty\" meals under $8 total to feed everyone (think",
+                      "replace":  "Three \"cheap and mighty\" meals that feed everyone for the least money (think",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$8"
+                                  ],
+                      "why":  "A bound on generic dishes (beans and rice, chili, a potato bar), none named as an engine recipe."
+                  },
+                  {
+                      "find":  "Four solid weeknight standards ($12 to $18 to feed four), like",
+                      "replace":  "Four solid weeknight standards that still feed four for far less than takeout, like",
+                      "class":  "unbacked",
+                      "figures":  [
+                                      "$12",
+                                      "$18"
+                                  ],
+                      "why":  "A batch cost for generic dishes (sheet-pan chicken, taco night, pasta bake), none an engine recipe."
+                  },
+                  {
+                      "find":  "When chicken thighs drop to $1.29 a pound or ground beef hits a real markdown, that is your green light",
+                      "replace":  "Bone-in chicken thighs and drumsticks often run {{live-unit:chicken-thighs:lb}} a pound, and when they go on sale or ground beef hits a real markdown, that is your green light",
+                      "class":  "backed-commodity",
+                      "figures":  [
+                                      "$1.29"
+                                  ],
+                      "why":  "chicken-thighs is the board\u0027s Chicken Thighs / Drumsticks commodity (today it prices a drumstick bag), so the sentence names both; the typed sale price becomes the live price and the plan-around-sales point stays."
+                  }
+              ],
+    "field_edits":  [
+                        {
+                            "find":  "that plugs the leaks costing you hundreds a month.",
+                            "replace":  "that plugs the leaks in your grocery budget."
+                        }
+                    ],
+    "kept":  [
+                 {
+                     "match":  "The average family of four spends somewhere between $900 and $1,300 a month on groceries",
+                     "class":  "finance",
+                     "why":  "a household grocery-spending statistic; it is not built from any price in the article"
+                 },
+                 {
+                     "match":  "On a $1,000 monthly budget, that is well over $1,000 a year staying in your pocket",
+                     "class":  "finance",
+                     "why":  "percent arithmetic on a stated example budget (10 to 15 percent of $1,000 a month), not built from a grocery price"
+                 },
+                 {
+                     "match":  "Every takeout order you skip because dinner was already halfway made is $40 to $60 back in the budget",
+                     "class":  "restaurant",
+                     "why":  "a takeout order, a restaurant price"
+                 },
+                 {
+                     "match":  "knock $60 to $100 off that month\u0027s grocery bill",
+                     "class":  "finance",
+                     "why":  "a grocery-spending statistic not built from any price in the article: finance, stays (one rule across all 43)"
+                 },
+                 {
+                     "match":  "save $150 to $250 a month",
+                     "class":  "finance",
+                     "why":  "a grocery-spending statistic not built from any price in the article: finance, stays (one rule across all 43)"
+                 }
+             ]
 }

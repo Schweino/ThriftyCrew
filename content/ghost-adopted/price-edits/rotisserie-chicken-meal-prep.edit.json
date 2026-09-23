@@ -63,6 +63,11 @@
                              "class":  "backed-commodity"
                          },
                          {
+                             "find":  "You just made a couple quarts of stock for pennies, plus you will pick another cup of meat off those bones.",
+                             "replace":  "You just made a couple quarts of stock out of what most folks throw away, plus you will pick another cup of meat off those bones.",
+                             "class":  "price-in-words"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
@@ -76,9 +81,16 @@
                         {
                             "find":  "Turn one $5 rotisserie chicken into 5 meals and a dozen servings of protein for under a dollar each. Real per-serving costs, macros, and bone-broth tips.",
                             "replace":  "Turn one rotisserie chicken into 5 meals and a dozen servings of protein. The live price of the bird, macros, and bone-broth tips."
+                        },
+                        {
+                            "find":  "From One $5 Bird",
+                            "replace":  "From One Bird"
                         }
                     ],
-    "new_lexical_sha256":  "eef251d6d878a7928bb489230c391854673406a53526817a167ec5346f415ba6",
+    "kept":  [
+
+             ],
+    "new_lexical_sha256":  "49b998ce3f00542a92415e32452da3c5238d900d4126fce7f9bcc392088175d9",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:20"
 }

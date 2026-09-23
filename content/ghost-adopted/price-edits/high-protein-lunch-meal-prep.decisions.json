@@ -67,12 +67,12 @@
                   },
                   {
                       "find":  "Rice runs about $0.15 a serving.",
-                      "replace":  "Rice runs {{live-unit:rice:lb}} a pound, which is pennies a serving.",
+                      "replace":  "Rice runs {{live-unit:rice:lb}} a pound dry, and a little goes a long way once cooked.",
                       "class":  "backed-commodity",
                       "figures":  [
                                       "$0.15"
                                   ],
-                      "why":  "rice is the rice cell (White Rice); per serving is not an allowed unit, so per pound"
+                      "why":  "rice is the rice cell (White Rice); per serving is not an allowed unit, so per pound. Second pass (Brad 2026-09-22, \"Remove derived ones\"): \"which is pennies a serving\" was a price in words for cooked rice and is gone."
                   },
                   {
                       "find":  "roasted or frozen, about $0.40 a serving.",
@@ -172,6 +172,33 @@
                                       "$2.47"
                                   ],
                       "why":  "per-serving cost of a generic bowl"
+                  },
+                  {
+                      "find":  "\u003cstrong\u003eBlack beans and lentils\u003c/strong\u003e, pennies a cooked cup, 15 to 18 grams of protein.",
+                      "replace":  "\u003cstrong\u003eBlack beans and lentils\u003c/strong\u003e, 15 to 18 grams of protein a cooked cup.",
+                      "class":  "price-in-words",
+                      "figures":  [
+                                      "pennies a cooked cup"
+                                  ],
+                      "why":  "Brad 2026-09-22 \"Remove derived ones\": a price in words for cooked beans and lentils, two foods the line prices together."
+                  },
+                  {
+                      "find":  "That is a lunch that keeps you full through the afternoon for less than the tip on a takeout order.",
+                      "replace":  "That is a lunch that keeps you full through the afternoon.",
+                      "class":  "derived-total",
+                      "figures":  [
+                                      "less than the tip on a takeout order"
+                                  ],
+                      "why":  "Brad 2026-09-22 \"Remove derived ones\": a per-bowl cost stated by comparison, built from the typed $2.47 a serving the first pass removed."
+                  },
+                  {
+                      "find":  "Want it even cheaper? Swap half the chicken for an extra can of beans and the cost drops further while protein stays above 35 grams.",
+                      "replace":  "Want it cheaper still? Swap half the chicken for an extra can of beans. Beans are often cheaper, so check the live price: canned black beans run {{live-unit:canned-black-beans:lb}} a pound against {{live-unit:chicken-breast:lb}} a pound for chicken breast. Protein still stays above 35 grams.",
+                      "class":  "soften-comparison",
+                      "figures":  [
+
+                                  ],
+                      "why":  "Brad 2026-09-22 \"Soften them\": the swap claims beans are cheaper than chicken, and both carry a live price in this article, so it becomes \"often cheaper, check the live price\" with both live prices beside it, per pound so the two compare."
                   }
               ],
     "field_edits":  [
@@ -182,6 +209,17 @@
                         {
                             "find":  "High-protein lunch meal prep for under $2.50 a serving. Hit 40g protein with a base-protein-veg-sauce formula, real costs, and a 45-minute batch plan.",
                             "replace":  "Cheap high-protein lunch meal prep. Hit 40g protein with a base-protein-veg-sauce formula, live store prices, and a 45-minute batch plan."
+                        },
+                        {
+                            "find":  "Prep (Under $2.50 a Serving)",
+                            "replace":  "Prep"
                         }
-                    ]
+                    ],
+    "kept":  [
+                 {
+                     "match":  "you overpay for a sad $14 salad",
+                     "class":  "restaurant",
+                     "why":  "A salad bought out at lunch."
+                 }
+             ]
 }

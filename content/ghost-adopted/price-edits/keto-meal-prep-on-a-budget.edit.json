@@ -73,6 +73,16 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  " cheaper than pre-shredded\u003c/li\u003e",
+                             "replace":  " often cheaper than pre-shredded cheddar at \u003cspan data-tc-live-price data-tc-bid=\"cheddar-cheese-shredded\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"3.29\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$3.29\u003c/span\u003e per pound, so check the live price\u003c/li\u003e",
+                             "class":  "soften-comparison"
+                         },
+                         {
+                             "find":  "Pre-shredded costs more and comes coated in anti-caking starch,",
+                             "replace":  "Pre-shredded often costs more, so check the live prices above, and it comes coated in anti-caking starch,",
+                             "class":  "soften-comparison"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
@@ -88,7 +98,14 @@
                             "replace":  "Eat keto on a budget. Budget fats and proteins, three batch recipes, live store prices and real macros"
                         }
                     ],
-    "new_lexical_sha256":  "59d11887e28f83b373a4dc640a42873d8ec4be73221f5acc3dfb7874f33fc742",
+    "kept":  [
+                 {
+                     "match":  "Compare that to a single fast-food combo at $9.00",
+                     "class":  "restaurant",
+                     "why":  "a fast-food combo, a restaurant price"
+                 }
+             ],
+    "new_lexical_sha256":  "813fb6e58917b9107610c57f1b78ce19ad2071d6600f378951447c36246f328d",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

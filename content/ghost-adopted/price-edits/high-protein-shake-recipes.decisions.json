@@ -1,0 +1,186 @@
+{
+  "slug": "high-protein-shake-recipes",
+  "title_new": "6 Cheap High-Protein Shake Recipes",
+  "edits": [
+    {
+      "find": "A store-bought protein shake runs three or four dollars a bottle, and half of that is packaging and marketing.",
+      "replace": "A store-bought protein shake charges you for the bottle, the packaging, and the marketing.",
+      "class": "price-in-words",
+      "figures": [
+        "three or four dollars"
+      ],
+      "why": "Brad 2026-09-22 ruling 1 (remove derived ones): a bottled shake bought at the store is a grocery price written in words; the 'half of that' share went with it"
+    },
+    {
+      "find": "Make the same thing in your own blender and it drops to about a buck.",
+      "replace": "Make the same thing in your own blender and you pay for the ingredients and nothing else.",
+      "class": "price-in-words",
+      "figures": [
+        "about a buck"
+      ],
+      "why": "Brad 2026-09-22 ruling 1 (remove derived ones): the homemade shake priced in words"
+    },
+    {
+      "find": "Here are six high-protein shakes that each land under $1.50, taste like something you would actually order, and take about two minutes to throw together.",
+      "replace": "Here are six high-protein shakes that taste like something you would actually order and take about two minutes to throw together.",
+      "class": "unbacked",
+      "figures": [
+        "$1.50"
+      ],
+      "why": "ruling C: a per-shake cap over six mixed baskets; none is an engine recipe"
+    },
+    {
+      "find": "A tub of store-brand whey protein runs about $25 for 30 scoops, which works out to roughly $0.85 a scoop and about 24 grams of protein. That single number does most of the heavy lifting in every shake below.",
+      "replace": "A tub of store-brand whey protein holds about 30 scoops, and each one brings about 24 grams of protein. That one scoop does most of the heavy lifting in every shake below.",
+      "class": "unbacked",
+      "figures": [
+        "$25",
+        "$0.85"
+      ],
+      "why": "ruling C: whey protein powder has no feed bid (the nearest, protein-bars, is a different food)"
+    },
+    {
+      "find": "Half a cup of Greek yogurt is around $0.55 and adds about 12 grams of protein.",
+      "replace": "Half a cup of Greek yogurt adds about 12 grams of protein.",
+      "class": "unbacked",
+      "figures": [
+        "$0.55"
+      ],
+      "why": "ruling C: the yogurt cell's cheapest rows are a plain nonfat tub and a vanilla lowfat tub, not Greek yogurt, so it would show a non-Greek price"
+    },
+    {
+      "find": "A cup of milk is roughly $0.30 and another 8 grams.",
+      "replace": "A cup of milk adds another 8 grams, and milk runs {{live-unit:milk:gal}} a gallon.",
+      "class": "backed-commodity",
+      "figures": [
+        "$0.30"
+      ],
+      "why": "ruling C: milk is the milk cell (Milk (gallon), a 1% low-fat gallon today); per cup becomes per gallon"
+    },
+    {
+      "find": "one banana ($0.25), one tablespoon peanut butter ($0.10),",
+      "replace": "one banana (bananas run {{live-unit:bananas:lb}} a pound), one tablespoon peanut butter ({{live-unit:peanut-butter:oz}} an ounce),",
+      "class": "backed-commodity",
+      "figures": [
+        "$0.25",
+        "$0.10"
+      ],
+      "why": "ruling C: a banana is the bananas cell (per lb) and peanut butter is the peanut-butter cell (creamy jars); per banana and per tablespoon become per pound and per ounce"
+    },
+    {
+      "find": "About $1.20 for roughly 34 grams of protein.",
+      "replace": "Roughly 34 grams of protein.",
+      "class": "unbacked",
+      "figures": [
+        "$1.20"
+      ],
+      "why": "ruling C: per-shake total of a mixed basket, not an engine recipe"
+    },
+    {
+      "find": "three-quarters cup frozen mixed berries ($0.45), and a cup of water. Comes in near $1.30 and about 25 grams of protein.",
+      "replace": "three-quarters cup frozen mixed berries, and a cup of water. About 25 grams of protein.",
+      "class": "unbacked",
+      "figures": [
+        "$0.45",
+        "$1.30"
+      ],
+      "why": "ruling C: the frozen-fruit cell prices sliced strawberries and blueberries today, not a mixed berry bag; the shake total is a mixed basket"
+    },
+    {
+      "find": "three-quarters cup frozen mango ($0.40), and a cup of milk. Around $1.35 for about 32 grams of protein.",
+      "replace": "three-quarters cup frozen mango, and a cup of milk. About 32 grams of protein.",
+      "class": "unbacked",
+      "figures": [
+        "$0.40",
+        "$1.35"
+      ],
+      "why": "ruling C: the mangoes cell is a fresh mango by the each and frozen-fruit prices berries, so neither is frozen mango; the shake total is a mixed basket"
+    },
+    {
+      "find": "a cup of cold brewed coffee ($0.10), and a handful of ice.",
+      "replace": "a cup of cold brewed coffee (ground coffee runs {{live-unit:coffee:lb}} a pound), and a handful of ice.",
+      "class": "backed-commodity",
+      "figures": [
+        "$0.10"
+      ],
+      "why": "ruling C: brewed coffee comes from the coffee cell (Coffee (ground/beans), a ground medium roast today); per cup becomes per pound of grounds"
+    },
+    {
+      "find": "About $1.00 for roughly 24 grams of protein, and it doubles as your morning caffeine.",
+      "replace": "Roughly 24 grams of protein, and it doubles as your morning caffeine.",
+      "class": "unbacked",
+      "figures": [
+        "$1.00"
+      ],
+      "why": "ruling C: per-shake total of a mixed basket"
+    },
+    {
+      "find": "one tablespoon cocoa powder ($0.10), a quarter cup rolled oats ($0.10),",
+      "replace": "one tablespoon cocoa powder ({{live-unit:cocoa-powder:oz}} an ounce), a quarter cup rolled oats (oats run {{live-unit:oatmeal:lb}} a pound),",
+      "class": "backed-commodity",
+      "figures": [
+        "$0.10",
+        "$0.10"
+      ],
+      "why": "ruling C: cocoa powder is the cocoa-powder cell (unsweetened baking cocoa) and oats are the oatmeal cell (Oats / Oatmeal); per tablespoon and per quarter cup become per ounce and per pound"
+    },
+    {
+      "find": "Near $1.35 for about 34 grams of protein and enough oats to keep you full.",
+      "replace": "About 34 grams of protein and enough oats to keep you full.",
+      "class": "unbacked",
+      "figures": [
+        "$1.35"
+      ],
+      "why": "ruling C: per-shake total of a mixed basket"
+    },
+    {
+      "find": "Around $1.40 for a thick, spoonable 36 grams of protein.",
+      "replace": "A thick, spoonable 36 grams of protein.",
+      "class": "unbacked",
+      "figures": [
+        "$1.40"
+      ],
+      "why": "ruling C: per-shake total of a mixed basket"
+    },
+    {
+      "find": "lasts months and costs pennies per shake, while",
+      "replace": "lasts months, while",
+      "class": "price-in-words",
+      "figures": [
+        "pennies"
+      ],
+      "why": "Brad 2026-09-22 ruling 1 (remove derived ones): cocoa priced in words; its live per-ounce price sits in the Cocoa Oat recipe above"
+    },
+    {
+      "find": "a tub of rolled oats runs about $3 and stretches across dozens of servings.",
+      "replace": "rolled oats run {{live-unit:oatmeal:lb}} a pound and a tub stretches across dozens of servings.",
+      "class": "backed-commodity",
+      "figures": [
+        "$3"
+      ],
+      "why": "ruling C: rolled oats are the oatmeal cell; per tub is not an allowed unit, so per pound"
+    },
+    {
+      "find": "Six shakes, each under $1.50 and most closer to a dollar, versus three to four dollars a bottle at the store.",
+      "replace": "Six shakes built from a handful of cheap staples, versus paying for the bottle and the marketing at the store.",
+      "class": "price-in-words",
+      "figures": [
+        "$1.50",
+        "a dollar",
+        "three to four dollars"
+      ],
+      "why": "Brad 2026-09-22 ruling 1 (remove derived ones): the per-shake cap is a mixed basket (ruling C) and the dollar and bottle prices in words name foods"
+    }
+  ],
+  "field_edits": [
+    {
+      "find": "that each cost under $1.50, versus three to four dollars a bottle at the store.",
+      "replace": "you can blend at home from a handful of cheap staples."
+    },
+    {
+      "find": "Six high-protein shakes under $1.50 each, from peanut butter banana to chocolate coffee. Cheap base, real per-serving costs, and two-minute prep.",
+      "replace": "Six cheap high-protein shakes, from peanut butter banana to chocolate coffee. A cheap protein base, live store prices on the staples, and two-minute prep."
+    }
+  ],
+  "kept": []
+}

@@ -11,17 +11,64 @@
                              "find":  "If catering runs $75 per plate, then 120 guests is $9,000 and 60 guests is $4,500.",
                              "replace":  "If catering runs $75 a guest, then 120 guests is $9,000 and 60 guests is $4,500.",
                              "class":  "unbacked"
-                         },
-                         {
-                             "find":  "(end of body)",
-                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
-                             "class":  "script"
                          }
                      ],
     "field_edits":  [
 
                     ],
-    "new_lexical_sha256":  "9f76626c75023e4b72986007ca748b4c5f8a717244b8148de086af54d569883d",
+    "kept":  [
+                 {
+                     "match":  "The average American wedding now runs north of $33,000",
+                     "class":  "finance",
+                     "why":  "a wedding cost, which Brad\u0027s ruling keeps"
+                 },
+                 {
+                     "match":  "The average wedding tops $33,000, but",
+                     "class":  "finance",
+                     "why":  "the same wedding cost in the stored excerpt (the match carries the comma because the money pattern reads \u0027$33,000,\u0027 as one figure)"
+                 },
+                 {
+                     "match":  "Say you settle on $8,000",
+                     "class":  "finance",
+                     "why":  "a wedding budget, which Brad\u0027s ruling keeps"
+                 },
+                 {
+                     "match":  "Venue and food: $3,500 Photography: $1,500 Attire: $800 Flowers and decor: $600 Music: $500 Cake and desserts: $300 Everything else and a cushion: $800",
+                     "class":  "finance",
+                     "why":  "the split of the example wedding budget into vendor buckets; wedding costs stay"
+                 },
+                 {
+                     "match":  "If catering runs $75 a guest, then 120 guests is $9,000 and 60 guests is $4,500. Cutting 60 names you barely know just saved you $4,500",
+                     "class":  "restaurant",
+                     "why":  "wedding catering, prepared food bought from a vendor, and the guest-count arithmetic on it"
+                 },
+                 {
+                     "match":  "several hundred to a couple thousand dollars off the Saturday price",
+                     "class":  "non-food",
+                     "why":  "a wedding venue rate"
+                 },
+                 {
+                     "match":  "A few moves that quietly save thousands",
+                     "class":  "finance",
+                     "why":  "wedding savings in general"
+                 },
+                 {
+                     "match":  "a sheet cake in the back saves hundreds",
+                     "class":  "restaurant",
+                     "why":  "a wedding cake bought from a bakery against a custom cake; a wedding cost"
+                 },
+                 {
+                     "match":  "a full-service florist might quote $2,000 for centerpieces and bouquets. In-season flowers arranged by a crafty friend, or a warehouse-store floral order, can land the same look for $400. That is $1,600 back in your pocket",
+                     "class":  "non-food",
+                     "why":  "wedding flowers"
+                 },
+                 {
+                     "match":  "where a $3,000 gown often sells for $600 or less",
+                     "class":  "non-food",
+                     "why":  "a wedding dress"
+                 }
+             ],
+    "new_lexical_sha256":  "c4b08998197bd0ebcf03dd33b06993a3de0d803566bef64c26622619f5a9c6b5",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

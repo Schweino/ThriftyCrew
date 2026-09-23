@@ -1,123 +1,137 @@
 {
-    "slug":  "rotisserie-chicken-meal-prep",
-    "title_new":  "Rotisserie Chicken Meal Prep: 5 Meals From One Bird",
-    "edits":  [
-                  {
-                      "find":  "That warm, already-cooked bird usually runs about $5 to $7, and if you pull it apart",
-                      "replace":  "That warm, already-cooked bird usually runs {{live-unit:rotisserie-chicken:each}}, and if you pull it apart",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$5",
-                                      "$7"
-                                  ],
-                      "why":  "rotisserie-chicken is a board commodity priced each."
-                  },
-                  {
-                      "find":  "At $6 for the bird and about 24 ounces of meat, you are paying roughly 25 cents per ounce of cooked protein. Boneless chicken breast you cook yourself usually lands closer to 35 to 45 cents per cooked ounce once you account for shrinkage. The rotisserie bird wins, and it saved you the cooking.",
-                      "replace":  "Divide the price of the bird by about 24 ounces of meat and you know what each ounce of cooked protein costs you. Compare that with boneless chicken breast at {{live-unit:chicken-breast:lb}} a pound raw, which loses weight as it cooks, and remember the rotisserie bird already saved you the cooking.",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$6",
-                                      "25 cents",
-                                      "35 to 45 cents"
-                                  ],
-                      "why":  "The per-ounce figures were built from a typed bird price and a typed breast price; chicken-breast is a board commodity, and \u0027the rotisserie bird wins\u0027 is dropped because at today\u0027s feed prices it may not."
-                  },
-                  {
-                      "find":  "and it costs about $1.40 a serving when you count 15 cents of rice and 25 cents of veg.",
-                      "replace":  "and the rice and vegetables add only a little to the cost of the chicken.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$1.40",
-                                      "15 cents",
-                                      "25 cents"
-                                  ],
-                      "why":  "A generic chicken and rice bowl is not an engine recipe or a single commodity."
-                  },
-                  {
-                      "find":  "Comes in near $1.75 a serving and gives you close to 28 grams of protein.",
-                      "replace":  "It gives you close to 28 grams of protein for a few cheap extras.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$1.75"
-                                  ],
-                      "why":  "A generic chicken salad or wrap is not an engine recipe or a single commodity."
-                  },
-                  {
-                      "find":  "That single dish stretches to three or four servings on its own at roughly $1.60 a serving, about 26 grams of protein each.",
-                      "replace":  "That single dish stretches to three or four servings on its own, about 26 grams of protein each.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$1.60"
-                                  ],
-                      "why":  "A generic chicken and pasta bake is not an engine recipe."
-                  },
-                  {
-                      "find":  "A can of black beans costs under a dollar and adds protein and fiber so the chicken goes further.",
-                      "replace":  "Canned black beans run {{live-unit:canned-black-beans:lb}} a pound, and a can adds protein and fiber so the chicken goes further.",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "under a dollar"
-                                  ],
-                      "why":  "A typed price in words; canned-black-beans is a board commodity, and a can is not an allowed per, so it reads per pound."
-                  },
-                  {
-                      "find":  "Figure $1.30 a serving with roughly 24 grams of protein when you split",
-                      "replace":  "Figure roughly 24 grams of protein a serving when you split",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$1.30"
-                                  ],
-                      "why":  "Generic tacos or quesadillas are not an engine recipe."
-                  },
-                  {
-                      "find":  "Call it 50 cents a bowl, and it makes three or four bowls.",
-                      "replace":  "It makes three or four bowls.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "50 cents"
-                                  ],
-                      "why":  "A generic homemade soup is not an engine recipe; the point that it is nearly free stays in the sentence before."
-                  },
-                  {
-                      "find":  "and you can sometimes grab one for $4.",
-                      "replace":  "and you can sometimes grab one marked down.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$4"
-                                  ],
-                      "why":  "An evening markdown is not a price the feed captures."
-                  },
-                  {
-                      "find":  "One $6 bird became five meals stretching to somewhere around a dozen servings once you count the casserole, taco night, and soup. That is well under a dollar a serving of home-cooked protein, and a good chunk of a week handled.",
-                      "replace":  "One {{live-unit:rotisserie-chicken:each}} bird became five meals stretching to somewhere around a dozen servings once you count the casserole, taco night, and soup. That is a lot of home-cooked protein, and a good chunk of a week handled.",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$6",
-                                      "under a dollar"
-                                  ],
-                      "why":  "The bird price goes live from rotisserie-chicken; the per-serving bound in words was derived from the typed price and goes."
-                  },
-                  {
-                      "find":  "One $5 to $6 rotisserie chicken, pulled apart with a little intention, becomes five meals and around a dozen servings of protein for under a dollar each, bones and all.",
-                      "replace":  "One {{live-unit:rotisserie-chicken:each}} rotisserie chicken, pulled apart with a little intention, becomes five meals and around a dozen servings of protein, bones and all.",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$5",
-                                      "$6",
-                                      "under a dollar"
-                                  ],
-                      "why":  "The bird price goes live from rotisserie-chicken; the per-serving bound in words was derived from the typed price and goes."
-                  }
-              ],
-    "field_edits":  [
-                        {
-                            "find":  "One $5 rotisserie chicken, pulled apart the smart way, turns into five meals and around a dozen servings of protein for under a dollar each.",
-                            "replace":  "One rotisserie chicken, pulled apart the smart way, turns into five meals and around a dozen servings of protein."
-                        },
-                        {
-                            "find":  "Turn one $5 rotisserie chicken into 5 meals and a dozen servings of protein for under a dollar each. Real per-serving costs, macros, and bone-broth tips.",
-                            "replace":  "Turn one rotisserie chicken into 5 meals and a dozen servings of protein. The live price of the bird, macros, and bone-broth tips."
-                        }
-                    ]
+  "slug": "rotisserie-chicken-meal-prep",
+  "title_new": "Rotisserie Chicken Meal Prep: 5 Meals From One Bird",
+  "edits": [
+    {
+      "find": "That warm, already-cooked bird usually runs about $5 to $7, and if you pull it apart",
+      "replace": "That warm, already-cooked bird usually runs {{live-unit:rotisserie-chicken:each}}, and if you pull it apart",
+      "class": "backed-commodity",
+      "figures": [
+        "$5",
+        "$7"
+      ],
+      "why": "rotisserie-chicken is a board commodity priced each."
+    },
+    {
+      "find": "At $6 for the bird and about 24 ounces of meat, you are paying roughly 25 cents per ounce of cooked protein. Boneless chicken breast you cook yourself usually lands closer to 35 to 45 cents per cooked ounce once you account for shrinkage. The rotisserie bird wins, and it saved you the cooking.",
+      "replace": "Divide the price of the bird by about 24 ounces of meat and you know what each ounce of cooked protein costs you. Compare that with boneless chicken breast at {{live-unit:chicken-breast:lb}} a pound raw, which loses weight as it cooks, and remember the rotisserie bird already saved you the cooking.",
+      "class": "backed-commodity",
+      "figures": [
+        "$6",
+        "25 cents",
+        "35 to 45 cents"
+      ],
+      "why": "The per-ounce figures were built from a typed bird price and a typed breast price; chicken-breast is a board commodity, and 'the rotisserie bird wins' is dropped because at today's feed prices it may not."
+    },
+    {
+      "find": "and it costs about $1.40 a serving when you count 15 cents of rice and 25 cents of veg.",
+      "replace": "and the rice and vegetables add only a little to the cost of the chicken.",
+      "class": "unbacked",
+      "figures": [
+        "$1.40",
+        "15 cents",
+        "25 cents"
+      ],
+      "why": "A generic chicken and rice bowl is not an engine recipe or a single commodity."
+    },
+    {
+      "find": "Comes in near $1.75 a serving and gives you close to 28 grams of protein.",
+      "replace": "It gives you close to 28 grams of protein for a few cheap extras.",
+      "class": "unbacked",
+      "figures": [
+        "$1.75"
+      ],
+      "why": "A generic chicken salad or wrap is not an engine recipe or a single commodity."
+    },
+    {
+      "find": "That single dish stretches to three or four servings on its own at roughly $1.60 a serving, about 26 grams of protein each.",
+      "replace": "That single dish stretches to three or four servings on its own, about 26 grams of protein each.",
+      "class": "unbacked",
+      "figures": [
+        "$1.60"
+      ],
+      "why": "A generic chicken and pasta bake is not an engine recipe."
+    },
+    {
+      "find": "A can of black beans costs under a dollar and adds protein and fiber so the chicken goes further.",
+      "replace": "Canned black beans run {{live-unit:canned-black-beans:lb}} a pound, and a can adds protein and fiber so the chicken goes further.",
+      "class": "backed-commodity",
+      "figures": [
+        "under a dollar"
+      ],
+      "why": "A typed price in words; canned-black-beans is a board commodity, and a can is not an allowed per, so it reads per pound."
+    },
+    {
+      "find": "Figure $1.30 a serving with roughly 24 grams of protein when you split",
+      "replace": "Figure roughly 24 grams of protein a serving when you split",
+      "class": "unbacked",
+      "figures": [
+        "$1.30"
+      ],
+      "why": "Generic tacos or quesadillas are not an engine recipe."
+    },
+    {
+      "find": "Call it 50 cents a bowl, and it makes three or four bowls.",
+      "replace": "It makes three or four bowls.",
+      "class": "unbacked",
+      "figures": [
+        "50 cents"
+      ],
+      "why": "A generic homemade soup is not an engine recipe; the point that it is nearly free stays in the sentence before."
+    },
+    {
+      "find": "and you can sometimes grab one for $4.",
+      "replace": "and you can sometimes grab one marked down.",
+      "class": "unbacked",
+      "figures": [
+        "$4"
+      ],
+      "why": "An evening markdown is not a price the feed captures."
+    },
+    {
+      "find": "One $6 bird became five meals stretching to somewhere around a dozen servings once you count the casserole, taco night, and soup. That is well under a dollar a serving of home-cooked protein, and a good chunk of a week handled.",
+      "replace": "One {{live-unit:rotisserie-chicken:each}} bird became five meals stretching to somewhere around a dozen servings once you count the casserole, taco night, and soup. That is a lot of home-cooked protein, and a good chunk of a week handled.",
+      "class": "backed-commodity",
+      "figures": [
+        "$6",
+        "under a dollar"
+      ],
+      "why": "The bird price goes live from rotisserie-chicken; the per-serving bound in words was derived from the typed price and goes."
+    },
+    {
+      "find": "One $5 to $6 rotisserie chicken, pulled apart with a little intention, becomes five meals and around a dozen servings of protein for under a dollar each, bones and all.",
+      "replace": "One {{live-unit:rotisserie-chicken:each}} rotisserie chicken, pulled apart with a little intention, becomes five meals and around a dozen servings of protein, bones and all.",
+      "class": "backed-commodity",
+      "figures": [
+        "$5",
+        "$6",
+        "under a dollar"
+      ],
+      "why": "The bird price goes live from rotisserie-chicken; the per-serving bound in words was derived from the typed price and goes."
+    },
+    {
+      "find": "You just made a couple quarts of stock for pennies, plus you will pick another cup of meat off those bones.",
+      "replace": "You just made a couple quarts of stock out of what most folks throw away, plus you will pick another cup of meat off those bones.",
+      "class": "price-in-words",
+      "figures": [
+        "pennies"
+      ],
+      "why": "a price in words for homemade stock (Brad 2026-09-22, remove derived ones)"
+    }
+  ],
+  "field_edits": [
+    {
+      "find": "One $5 rotisserie chicken, pulled apart the smart way, turns into five meals and around a dozen servings of protein for under a dollar each.",
+      "replace": "One rotisserie chicken, pulled apart the smart way, turns into five meals and around a dozen servings of protein."
+    },
+    {
+      "find": "Turn one $5 rotisserie chicken into 5 meals and a dozen servings of protein for under a dollar each. Real per-serving costs, macros, and bone-broth tips.",
+      "replace": "Turn one rotisserie chicken into 5 meals and a dozen servings of protein. The live price of the bird, macros, and bone-broth tips."
+    },
+    {
+      "find": "From One $5 Bird",
+      "replace": "From One Bird"
+    }
+  ],
+  "kept": []
 }

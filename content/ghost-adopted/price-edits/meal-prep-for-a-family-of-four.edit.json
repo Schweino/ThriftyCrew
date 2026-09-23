@@ -68,6 +68,11 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "For a family of four, a realistic and comfortable target is $150 to $200 a week, which lands you around $1.75 to $2.50 per person per meal. That is a defensible middle ground: leaner than restaurant prices, more generous than beans-only survival mode.",
+                             "replace":  "For a family of four, a realistic and comfortable target is $150 to $200 a week. That is a defensible middle ground: leaner than restaurant prices, more generous than beans-only survival mode.",
+                             "class":  "derived-total"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
@@ -80,10 +85,37 @@
                         },
                         {
                             "find":  "Meal prep for a family of four on $150 to $200 a week. Real per-serving costs, cheap anchor ingredients,",
-                            "replace":  "Meal prep for a family of four on a real budget. Live store prices, cheap anchor ingredients,"
+                            "replace":  "Meal prep for a family of four on $150 to $200 a week. Live store prices, cheap anchor ingredients,"
                         }
                     ],
-    "new_lexical_sha256":  "b1f4760b1f91972217ed64357413416bba6e1119cbf54f53c9f26db89c38783a",
+    "kept":  [
+                 {
+                     "match":  "north of $1,000 a month on food",
+                     "class":  "finance",
+                     "why":  "a national household spending figure (food at home and away), not a grocery price or a total built from one"
+                 },
+                 {
+                     "match":  "Compare that to $12 for the same bowl at a fast-casual spot",
+                     "class":  "restaurant",
+                     "why":  "a fast-casual bowl"
+                 },
+                 {
+                     "match":  "a few hundred dollars off your monthly food spend",
+                     "class":  "finance",
+                     "why":  "a grocery-spending statistic not built from any price in the article: finance, stays (one rule across all 43)"
+                 },
+                 {
+                     "match":  "target is $150 to $200 a week",
+                     "class":  "finance",
+                     "why":  "a grocery-spending statistic not built from any price in the article: finance, stays (one rule across all 43)"
+                 },
+                 {
+                     "match":  "family of four on $150 to $200 a week",
+                     "class":  "finance",
+                     "why":  "a grocery-spending statistic not built from any price in the article: finance, stays (one rule across all 43)"
+                 }
+             ],
+    "new_lexical_sha256":  "57bc046c8f49a690e10d405a1bc5040efc5eb6ad9bc40a62392dcc068e19f0ec",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

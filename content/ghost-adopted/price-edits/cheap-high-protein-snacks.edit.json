@@ -1,0 +1,130 @@
+{
+    "slug":  "cheap-high-protein-snacks",
+    "id":  "6a499c0450682b0001cd42e9",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:49:24.000Z",
+    "base_lexical_sha256":  "25d37a58c82ef926bf32e9057c99b38dbe12c6a4a084a5d24cd76c40443f08bd",
+    "title_old":  "15 Cheap High-Protein Snacks (Under $1 Each)",
+    "title_new":  "15 Cheap High-Protein Snacks",
+    "replacements":  [
+                         {
+                             "find":  "A fancy bar with 20 grams of protein and a $3.50 price tag is not a health food",
+                             "replace":  "A fancy bar with 20 grams of protein and a price tag to match is not a health food",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "Here are 15 high-protein snacks that each cost under a dollar per serving, most of them with real, defensible numbers you can check at your own store. Prices reflect typical 2026 grocery costs and will wander a bit by region.",
+                             "replace":  "Here are 15 high-protein snacks built from plain grocery staples. Where a snack is a single food we track, the price shown is live, so it moves when store prices move.",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eHard-boiled eggs (about 25 cents each).\u003c/strong\u003e Six grams of protein apiece. Boil a dozen on Sunday and you have grab-and-go protein all week for pocket change.",
+                             "replace":  "\u003cstrong\u003eHard-boiled eggs (\u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"each\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.14\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.14\u003c/span\u003e an egg).\u003c/strong\u003e Six grams of protein apiece. Boil a dozen on Sunday and you have grab-and-go protein all week.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eCottage cheese (about 55 cents per half cup).\u003c/strong\u003e A big tub runs a few dollars and gives you 13 grams of protein per serving.",
+                             "replace":  "\u003cstrong\u003eCottage cheese (\u003cspan data-tc-live-price data-tc-bid=\"cottage-cheese\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.82\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.82\u003c/span\u003e a pound).\u003c/strong\u003e A big tub gives you 13 grams of protein per half cup.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eGreek yogurt (about 60 cents per serving).\u003c/strong\u003e Buy the large plain tub, not the little flavored cups. You get 15 to 17 grams of protein for well under a dollar.",
+                             "replace":  "\u003cstrong\u003eGreek yogurt (\u003cspan data-tc-live-price data-tc-bid=\"greek-yogurt\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.24\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.24\u003c/span\u003e a pound).\u003c/strong\u003e Buy the large plain tub, not the little flavored cups. You get 15 to 17 grams of protein a serving.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003ePeanut butter on a banana (about 45 cents).\u003c/strong\u003e",
+                             "replace":  "\u003cstrong\u003ePeanut butter on a banana.\u003c/strong\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eCanned tuna (about 90 cents per can).\u003c/strong\u003e",
+                             "replace":  "\u003cstrong\u003eCanned tuna (\u003cspan data-tc-live-price data-tc-bid=\"canned-tuna\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.17\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.17\u003c/span\u003e an ounce).\u003c/strong\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eRoasted chickpeas (about 40 cents per serving).\u003c/strong\u003e",
+                             "replace":  "\u003cstrong\u003eRoasted chickpeas (canned chickpeas run \u003cspan data-tc-live-price data-tc-bid=\"chickpeas\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.88\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.88\u003c/span\u003e a pound).\u003c/strong\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eString cheese (about 35 cents per stick).\u003c/strong\u003e",
+                             "replace":  "\u003cstrong\u003eString cheese (\u003cspan data-tc-live-price data-tc-bid=\"string-cheese\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.20\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.20\u003c/span\u003e an ounce).\u003c/strong\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eEdamame (about 55 cents per serving).\u003c/strong\u003e",
+                             "replace":  "\u003cstrong\u003eEdamame (\u003cspan data-tc-live-price data-tc-bid=\"shelled-edamame\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.49\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.49\u003c/span\u003e a pound).\u003c/strong\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eRoasted peanuts (about 30 cents per handful).\u003c/strong\u003e",
+                             "replace":  "\u003cstrong\u003eRoasted peanuts (\u003cspan data-tc-live-price data-tc-bid=\"peanuts\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.09\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.09\u003c/span\u003e an ounce).\u003c/strong\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eDeli turkey roll-ups (about 80 cents per serving).\u003c/strong\u003e",
+                             "replace":  "\u003cstrong\u003eDeli turkey roll-ups.\u003c/strong\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eTuna or bean salad on crackers (about 75 cents).\u003c/strong\u003e",
+                             "replace":  "\u003cstrong\u003eTuna or bean salad on crackers.\u003c/strong\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eMilk (about 25 cents per cup).\u003c/strong\u003e",
+                             "replace":  "\u003cstrong\u003eMilk (\u003cspan data-tc-live-price data-tc-bid=\"milk\" data-tc-per=\"gal\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.75\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.75\u003c/span\u003e a gallon).\u003c/strong\u003e",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eOvernight oats with yogurt (about 70 cents).\u003c/strong\u003e",
+                             "replace":  "\u003cstrong\u003eOvernight oats with yogurt.\u003c/strong\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eSunflower seeds (about 35 cents per serving).\u003c/strong\u003e",
+                             "replace":  "\u003cstrong\u003eSunflower seeds.\u003c/strong\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "\u003cstrong\u003eHomemade protein bites (about 30 cents each).\u003c/strong\u003e",
+                             "replace":  "\u003cstrong\u003eHomemade protein bites.\u003c/strong\u003e",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "and you will stop paying $3.50 for a bar that a boiled egg could replace for a quarter.",
+                             "replace":  "and you will stop paying for a bar that a boiled egg could replace.",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "Fifteen high-protein snacks that each cost under a dollar, no lab-coat candy bars required.",
+                            "replace":  "Fifteen cheap high-protein snacks, no lab-coat candy bars required."
+                        },
+                        {
+                            "find":  "15 cheap high-protein snacks under $1 each, with real prices and protein grams.",
+                            "replace":  "15 cheap high-protein snacks, with protein grams and live prices on the staples."
+                        },
+                        {
+                            "find":  "Skip the $3.50 bars and hit your protein for pocket change.",
+                            "replace":  "Skip the fancy bars and hit your protein from the grocery aisle."
+                        },
+                        {
+                            "find":  "Snacks (Under $1 Each)",
+                            "replace":  "Snacks"
+                        }
+                    ],
+    "kept":  [
+
+             ],
+    "new_lexical_sha256":  "7e7470475d8403e3386277115a2c10e6708b46fe219ad9d758fa9634110ca947",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-23T06:15:19"
+}

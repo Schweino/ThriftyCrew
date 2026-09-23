@@ -25,10 +25,10 @@
     },
     {
       "find": "A whole box costs about a dollar and this uses pennies of it.",
-      "replace": "Table salt runs {{live-unit:salt:lb}} a pound, and this uses pennies of it.",
+      "replace": "Table salt runs {{live-unit:salt:lb}} a pound, and a brine only takes two tablespoons of it.",
       "class": "backed-commodity",
       "figures": ["about a dollar"],
-      "why": "A typed price in words; salt is the board's Table Salt commodity, and a box is not an allowed per, so it reads per pound."
+      "why": "A typed price in words; salt is the board's Table Salt commodity, and a box is not an allowed per, so it reads per pound. Second pass (Brad 2026-09-22, remove derived ones): \"this uses pennies of it\" was a price in words for the salt, now the two tablespoons the brine step already names."
     },
     {
       "find": "Three pounds of chicken for $7.50, a bag of rice for about $1.50 of usage, and a couple pounds of frozen vegetables for around $3.",
@@ -44,5 +44,12 @@
       "figures": ["$12", "$1.20"],
       "why": "A mixed-basket total and a per-plate figure derived from typed prices; the drive-thru comparison in the next sentence keeps the point."
     }
+  ],
+  "field_edits": [
+    { "find": "you will have a week of juicy chicken for about a buck a serving.", "replace": "you will have a week of juicy chicken ready to go." },
+    { "find": "a week of cheap, healthy protein at about 75 cents a serving.", "replace": "a week of cheap, healthy protein." }
+  ],
+  "kept": [
+    { "match": "the single best six dollars you will spend on meal prep", "class": "non-food", "why": "A meat thermometer, a kitchen tool." }
   ]
 }

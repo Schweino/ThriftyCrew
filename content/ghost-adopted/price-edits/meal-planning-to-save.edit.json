@@ -31,7 +31,29 @@
     "field_edits":  [
 
                     ],
+    "kept":  [
+                 {
+                     "match":  "On a $700 monthly spend, that is $140 to $210 back every month",
+                     "class":  "finance",
+                     "why":  "an illustrative household food budget and 20 to 30 percent of it; percentage arithmetic on a stated budget, not built from a grocery price the article removed"
+                 },
+                 {
+                     "match":  "turns into a $40 delivery order",
+                     "class":  "restaurant",
+                     "why":  "a delivery order"
+                 },
+                 {
+                     "match":  "Cutting just two takeout nights a week at $35 each saves $280 a month",
+                     "class":  "restaurant",
+                     "why":  "a takeout price and the monthly total built only from it"
+                 },
+                 {
+                     "match":  "often $150 or more a month",
+                     "class":  "finance",
+                     "why":  "20 to 30 percent of the illustrative $700 budget above; percentage arithmetic, not built from a removed grocery price"
+                 }
+             ],
     "new_lexical_sha256":  "400c5ff02bcc62be936a79d2787d8417547149ccca889145e2871d66492da495",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

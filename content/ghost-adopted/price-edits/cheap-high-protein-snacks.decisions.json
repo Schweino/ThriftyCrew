@@ -1,0 +1,139 @@
+{
+  "slug": "cheap-high-protein-snacks",
+  "title_new": "15 Cheap High-Protein Snacks",
+  "edits": [
+    {
+      "find": "A fancy bar with 20 grams of protein and a $3.50 price tag is not a health food",
+      "replace": "A fancy bar with 20 grams of protein and a price tag to match is not a health food",
+      "class": "unbacked",
+      "figures": ["$3.50"],
+      "why": "A typed price for one premium bar; the feed's protein-bars commodity is the cheapest bar it can find, not the fancy one this sentence means, so its live price would change the claim. Rewritten without a figure."
+    },
+    {
+      "find": "Here are 15 high-protein snacks that each cost under a dollar per serving, most of them with real, defensible numbers you can check at your own store. Prices reflect typical 2026 grocery costs and will wander a bit by region.",
+      "replace": "Here are 15 high-protein snacks built from plain grocery staples. Where a snack is a single food we track, the price shown is live, so it moves when store prices move.",
+      "class": "price-in-words",
+      "figures": ["under a dollar per serving"],
+      "why": "A per-serving bound in words across fifteen mixed snacks, plus a note about typed 2026 prices that no longer appear; the list now carries live prices where a snack is one commodity."
+    },
+    {
+      "find": "<strong>Hard-boiled eggs (about 25 cents each).</strong> Six grams of protein apiece. Boil a dozen on Sunday and you have grab-and-go protein all week for pocket change.",
+      "replace": "<strong>Hard-boiled eggs ({{live-unit:eggs:each}} an egg).</strong> Six grams of protein apiece. Boil a dozen on Sunday and you have grab-and-go protein all week.",
+      "class": "backed-commodity",
+      "figures": ["25 cents"],
+      "why": "eggs is the board's Large Eggs (dozen) commodity and each is an allowed per; a hard-boiled egg is one egg. \"for pocket change\" dropped with the figure."
+    },
+    {
+      "find": "<strong>Cottage cheese (about 55 cents per half cup).</strong> A big tub runs a few dollars and gives you 13 grams of protein per serving.",
+      "replace": "<strong>Cottage cheese ({{live-unit:cottage-cheese:lb}} a pound).</strong> A big tub gives you 13 grams of protein per half cup.",
+      "class": "backed-commodity",
+      "figures": ["55 cents", "a few dollars"],
+      "why": "cottage-cheese is a board commodity; a half cup is not an allowed per, so it reads per pound. \"A big tub runs a few dollars\" was a price in words and goes; the half-cup serving moves into the protein line."
+    },
+    {
+      "find": "<strong>Greek yogurt (about 60 cents per serving).</strong> Buy the large plain tub, not the little flavored cups. You get 15 to 17 grams of protein for well under a dollar.",
+      "replace": "<strong>Greek yogurt ({{live-unit:greek-yogurt:lb}} a pound).</strong> Buy the large plain tub, not the little flavored cups. You get 15 to 17 grams of protein a serving.",
+      "class": "backed-commodity",
+      "figures": ["60 cents", "well under a dollar"],
+      "why": "greek-yogurt is priced in the feed from 32 oz plain tubs, the large plain tub the item names; a serving is not an allowed per. \"for well under a dollar\" was a price in words and goes."
+    },
+    {
+      "find": "<strong>Peanut butter on a banana (about 45 cents).</strong>",
+      "replace": "<strong>Peanut butter on a banana.</strong>",
+      "class": "unbacked",
+      "figures": ["45 cents"],
+      "why": "Two foods priced together, not one commodity or an engine recipe."
+    },
+    {
+      "find": "<strong>Canned tuna (about 90 cents per can).</strong>",
+      "replace": "<strong>Canned tuna ({{live-unit:canned-tuna:oz}} an ounce).</strong>",
+      "class": "backed-commodity",
+      "figures": ["90 cents"],
+      "why": "canned-tuna is a board commodity priced per ounce; a can is not an allowed per."
+    },
+    {
+      "find": "<strong>Roasted chickpeas (about 40 cents per serving).</strong>",
+      "replace": "<strong>Roasted chickpeas (canned chickpeas run {{live-unit:chickpeas:lb}} a pound).</strong>",
+      "class": "backed-commodity",
+      "figures": ["40 cents"],
+      "why": "chickpeas is the board's Chickpeas / Garbanzo Beans (canned) commodity, the one can the item roasts; the sentence now prices the canned chickpeas themselves per pound, not the finished serving with oil and spices."
+    },
+    {
+      "find": "<strong>String cheese (about 35 cents per stick).</strong>",
+      "replace": "<strong>String cheese ({{live-unit:string-cheese:oz}} an ounce).</strong>",
+      "class": "backed-commodity",
+      "figures": ["35 cents"],
+      "why": "string-cheese is a board commodity priced per ounce; a stick is not an allowed per and no stick weight is claimed."
+    },
+    {
+      "find": "<strong>Edamame (about 55 cents per serving).</strong>",
+      "replace": "<strong>Edamame ({{live-unit:shelled-edamame:lb}} a pound).</strong>",
+      "class": "backed-commodity",
+      "figures": ["55 cents"],
+      "why": "shelled-edamame is a board commodity, the bag of frozen shelled soybeans the item describes; a serving is not an allowed per."
+    },
+    {
+      "find": "<strong>Roasted peanuts (about 30 cents per handful).</strong>",
+      "replace": "<strong>Roasted peanuts ({{live-unit:peanuts:oz}} an ounce).</strong>",
+      "class": "backed-commodity",
+      "figures": ["30 cents"],
+      "why": "peanuts is a board commodity priced per ounce, and the next sentence already names a one-ounce handful; a handful is not an allowed per."
+    },
+    {
+      "find": "<strong>Deli turkey roll-ups (about 80 cents per serving).</strong>",
+      "replace": "<strong>Deli turkey roll-ups.</strong>",
+      "class": "unbacked",
+      "figures": ["80 cents"],
+      "why": "Turkey wrapped around cheese, two foods priced together; not one commodity or an engine recipe."
+    },
+    {
+      "find": "<strong>Tuna or bean salad on crackers (about 75 cents).</strong>",
+      "replace": "<strong>Tuna or bean salad on crackers.</strong>",
+      "class": "unbacked",
+      "figures": ["75 cents"],
+      "why": "A mixed snack of tuna or beans, mustard and crackers; not one commodity or an engine recipe."
+    },
+    {
+      "find": "<strong>Milk (about 25 cents per cup).</strong>",
+      "replace": "<strong>Milk ({{live-unit:milk:gal}} a gallon).</strong>",
+      "class": "backed-commodity",
+      "figures": ["25 cents"],
+      "why": "milk is the board's Milk (gallon) commodity; a cup is not an allowed per, so it reads per gallon."
+    },
+    {
+      "find": "<strong>Overnight oats with yogurt (about 70 cents).</strong>",
+      "replace": "<strong>Overnight oats with yogurt.</strong>",
+      "class": "unbacked",
+      "figures": ["70 cents"],
+      "why": "Oats and yogurt priced together; not one commodity or an engine recipe."
+    },
+    {
+      "find": "<strong>Sunflower seeds (about 35 cents per serving).</strong>",
+      "replace": "<strong>Sunflower seeds.</strong>",
+      "class": "unbacked",
+      "figures": ["35 cents"],
+      "why": "The feed prices no sunflower seed commodity."
+    },
+    {
+      "find": "<strong>Homemade protein bites (about 30 cents each).</strong>",
+      "replace": "<strong>Homemade protein bites.</strong>",
+      "class": "unbacked",
+      "figures": ["30 cents"],
+      "why": "Oats, peanut butter and protein powder rolled together; not one commodity or an engine recipe."
+    },
+    {
+      "find": "and you will stop paying $3.50 for a bar that a boiled egg could replace for a quarter.",
+      "replace": "and you will stop paying for a bar that a boiled egg could replace.",
+      "class": "unbacked",
+      "figures": ["$3.50", "a quarter"],
+      "why": "The typed bar price from the intro (rewritten there without a figure) and a price in words for one egg; the egg's live price already shows in the list."
+    }
+  ],
+  "field_edits": [
+    { "find": "Fifteen high-protein snacks that each cost under a dollar, no lab-coat candy bars required.", "replace": "Fifteen cheap high-protein snacks, no lab-coat candy bars required." },
+    { "find": "15 cheap high-protein snacks under $1 each, with real prices and protein grams.", "replace": "15 cheap high-protein snacks, with protein grams and live prices on the staples." },
+    { "find": "Skip the $3.50 bars and hit your protein for pocket change.", "replace": "Skip the fancy bars and hit your protein from the grocery aisle." },
+    { "find": "Snacks (Under $1 Each)", "replace": "Snacks" }
+  ],
+  "kept": []
+}

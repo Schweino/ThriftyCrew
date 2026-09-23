@@ -43,7 +43,14 @@
                             "replace":  "freeze a month of cheap meals."
                         }
                     ],
+    "kept":  [
+                 {
+                     "match":  "a $12 takeout order",
+                     "class":  "restaurant",
+                     "why":  "A takeout order, the restaurant side of the comparison."
+                 }
+             ],
     "new_lexical_sha256":  "044725c75e556604a86c91be23ec8504862b478449fca7e296d6c5f1d0168dcd",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

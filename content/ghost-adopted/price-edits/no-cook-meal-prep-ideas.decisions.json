@@ -1,126 +1,152 @@
 {
-    "slug":  "no-cook-meal-prep-ideas",
-    "title_new":  null,
-    "edits":  [
-                  {
-                      "find":  "A can of tuna is about $1, a can of chickpeas or black beans runs around $1 too, and both are already cooked and ready.",
-                      "replace":  "Canned tuna runs {{live-unit:canned-tuna:oz}} an ounce, canned chickpeas {{live-unit:chickpeas:oz}} and black beans {{live-unit:canned-black-beans:oz}} an ounce, and all of them come already cooked and ready.",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$1",
-                                      "$1"
-                                  ],
-                      "why":  "canned tuna, canned chickpeas and canned black beans are each a board commodity; per-can prices become per-ounce prices"
-                  },
-                  {
-                      "find":  "rolled oats (about $3 for a big canister)",
-                      "replace":  "rolled oats ({{live-unit:oatmeal:lb}} a pound in a big canister)",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$3"
-                                  ],
-                      "why":  "oatmeal (Oats / Oatmeal, rolled oats included) is priced by the feed; canister price becomes per-pound"
-                  },
-                  {
-                      "find":  "A pouch of ready rice or quinoa costs about $2, needs no heating",
-                      "replace":  "A pouch of ready rice or quinoa is cheap, needs no heating",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$2"
-                                  ],
-                      "why":  "ready-rice pouches are excluded from the rice commodity; quinoa pouches are not priced"
-                  },
-                  {
-                      "find":  "That whole bowl lands around $2.50 a serving and takes four minutes to build.",
-                      "replace":  "That whole bowl costs a fraction of a takeout lunch and takes four minutes to build.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$2.50"
-                                  ],
-                      "why":  "per-serving estimate for a generic bowl"
-                  },
-                  {
-                      "find":  "makes a tuna salad for roughly $1.50 a serving.",
-                      "replace":  "makes a cheap tuna salad.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$1.50"
-                                  ],
-                      "why":  "per-serving estimate for a generic dish"
-                  },
-                  {
-                      "find":  "That jar costs about 60 cents and beats a $4 muffin every single day of the week.",
-                      "replace":  "That jar costs pocket change and beats a $4 muffin every single day of the week.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "60 cents"
-                                  ],
-                      "why":  "per-jar estimate for a generic dish removed; the $4 coffee-shop muffin is a cafe price, out of scope, restored after the over-mark fix"
-                  },
-                  {
-                      "find":  "does the same job for around $1.25.",
-                      "replace":  "does the same job for not much more.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$1.25"
-                                  ],
-                      "why":  "per-cup estimate for a generic dish"
-                  },
-                  {
-                      "find":  "swapped a $10 morning habit for a $1 one,",
-                      "replace":  "swapped a $10 morning habit for a cheap homemade one,",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$1"
-                                  ],
-                      "why":  "per-breakfast estimate for a generic dish; the $10 coffee-shop habit is takeout and stays"
-                  },
-                  {
-                      "find":  "It reads like a fancy bistro board and costs about $2.50 to put together.",
-                      "replace":  "It reads like a fancy bistro board and costs a fraction of one to put together.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$2.50"
-                                  ],
-                      "why":  "mixed snack-box basket"
-                  },
-                  {
-                      "find":  "is a real meal for about $3.",
-                      "replace":  "is a real meal for very little money.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$3"
-                                  ],
-                      "why":  "per-meal estimate for a generic wrap"
-                  },
-                  {
-                      "find":  "is dinner in five minutes for roughly $4 a serving, which still beats almost anything you can order.",
-                      "replace":  "is dinner in five minutes, and it still costs less than almost anything you can order.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$4"
-                                  ],
-                      "why":  "per-serving estimate for a two-item assembled plate"
-                  },
-                  {
-                      "find":  "you can run a full week of meals at $2 to $4 a serving without turning on a burner.",
-                      "replace":  "you can run a full week of cheap meals without turning on a burner.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$2",
-                                      "$4"
-                                  ],
-                      "why":  "generic per-serving range"
-                  }
-              ],
-    "field_edits":  [
-                        {
-                            "find":  "Build a full week of cheap, healthy meals at $2 to $4 a serving without turning on a single burner.",
-                            "replace":  "Build a full week of cheap, healthy meals without turning on a single burner."
-                        },
-                        {
-                            "find":  "loaded wraps at $2 to $4 a serving, with zero cooking required.",
-                            "replace":  "loaded wraps, with zero cooking required."
-                        }
-                    ]
+  "slug": "no-cook-meal-prep-ideas",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "A can of tuna is about $1, a can of chickpeas or black beans runs around $1 too, and both are already cooked and ready.",
+      "replace": "Canned tuna runs {{live-unit:canned-tuna:oz}} an ounce, canned chickpeas {{live-unit:chickpeas:oz}} and black beans {{live-unit:canned-black-beans:oz}} an ounce, and all of them come already cooked and ready.",
+      "class": "backed-commodity",
+      "figures": [
+        "$1",
+        "$1"
+      ],
+      "why": "canned tuna, canned chickpeas and canned black beans are each a board commodity; per-can prices become per-ounce prices"
+    },
+    {
+      "find": "rolled oats (about $3 for a big canister)",
+      "replace": "rolled oats ({{live-unit:oatmeal:lb}} a pound in a big canister)",
+      "class": "backed-commodity",
+      "figures": [
+        "$3"
+      ],
+      "why": "oatmeal (Oats / Oatmeal, rolled oats included) is priced by the feed; canister price becomes per-pound"
+    },
+    {
+      "find": "A pouch of ready rice or quinoa costs about $2, needs no heating",
+      "replace": "A pouch of ready rice or quinoa is cheap, needs no heating",
+      "class": "unbacked",
+      "figures": [
+        "$2"
+      ],
+      "why": "ready-rice pouches are excluded from the rice commodity; quinoa pouches are not priced"
+    },
+    {
+      "find": "That whole bowl lands around $2.50 a serving and takes four minutes to build.",
+      "replace": "That whole bowl costs a fraction of a takeout lunch and takes four minutes to build.",
+      "class": "unbacked",
+      "figures": [
+        "$2.50"
+      ],
+      "why": "per-serving estimate for a generic bowl"
+    },
+    {
+      "find": "makes a tuna salad for roughly $1.50 a serving.",
+      "replace": "makes a cheap tuna salad.",
+      "class": "unbacked",
+      "figures": [
+        "$1.50"
+      ],
+      "why": "per-serving estimate for a generic dish"
+    },
+    {
+      "find": "That jar costs about 60 cents and beats a $4 muffin every single day of the week.",
+      "replace": "That jar costs pocket change and beats a $4 muffin every single day of the week.",
+      "class": "unbacked",
+      "figures": [
+        "60 cents"
+      ],
+      "why": "per-jar estimate for a generic dish removed; the $4 coffee-shop muffin is a cafe price, out of scope, restored after the over-mark fix"
+    },
+    {
+      "find": "does the same job for around $1.25.",
+      "replace": "does the same job for not much more.",
+      "class": "unbacked",
+      "figures": [
+        "$1.25"
+      ],
+      "why": "per-cup estimate for a generic dish"
+    },
+    {
+      "find": "swapped a $10 morning habit for a $1 one,",
+      "replace": "swapped a $10 morning habit for a cheap homemade one,",
+      "class": "unbacked",
+      "figures": [
+        "$1"
+      ],
+      "why": "per-breakfast estimate for a generic dish; the $10 coffee-shop habit is takeout and stays"
+    },
+    {
+      "find": "It reads like a fancy bistro board and costs about $2.50 to put together.",
+      "replace": "It reads like a fancy bistro board and costs a fraction of one to put together.",
+      "class": "unbacked",
+      "figures": [
+        "$2.50"
+      ],
+      "why": "mixed snack-box basket"
+    },
+    {
+      "find": "is a real meal for about $3.",
+      "replace": "is a real meal for very little money.",
+      "class": "unbacked",
+      "figures": [
+        "$3"
+      ],
+      "why": "per-meal estimate for a generic wrap"
+    },
+    {
+      "find": "is dinner in five minutes for roughly $4 a serving, which still beats almost anything you can order.",
+      "replace": "is dinner in five minutes, and it still costs less than almost anything you can order.",
+      "class": "unbacked",
+      "figures": [
+        "$4"
+      ],
+      "why": "per-serving estimate for a two-item assembled plate"
+    },
+    {
+      "find": "you can run a full week of meals at $2 to $4 a serving without turning on a burner.",
+      "replace": "you can run a full week of cheap meals without turning on a burner.",
+      "class": "unbacked",
+      "figures": [
+        "$2",
+        "$4"
+      ],
+      "why": "generic per-serving range"
+    },
+    {
+      "find": "and over a five-day work week that is close to $45 back in your pocket.",
+      "replace": "and over a five-day work week that adds up to real money back in your pocket.",
+      "class": "derived-total",
+      "figures": [
+        "$45"
+      ],
+      "why": "five days of the $10 coffee-shop habit minus the homemade breakfast price the first pass removed ($1): a savings total built from a removed price (Brad 2026-09-22, remove derived ones)"
+    }
+  ],
+  "field_edits": [
+    {
+      "find": "Build a full week of cheap, healthy meals at $2 to $4 a serving without turning on a single burner.",
+      "replace": "Build a full week of cheap, healthy meals without turning on a single burner."
+    },
+    {
+      "find": "loaded wraps at $2 to $4 a serving, with zero cooking required.",
+      "replace": "loaded wraps, with zero cooking required."
+    }
+  ],
+  "kept": [
+    {
+      "match": "a coffee-shop breakfast sandwich and a latte can run $10",
+      "class": "restaurant",
+      "why": "a coffee-shop breakfast"
+    },
+    {
+      "match": "beats a $4 muffin",
+      "class": "restaurant",
+      "why": "a coffee-shop muffin"
+    },
+    {
+      "match": "swapped a $10 morning habit",
+      "class": "restaurant",
+      "why": "the same coffee-shop breakfast"
+    }
+  ]
 }

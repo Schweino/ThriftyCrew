@@ -93,18 +93,29 @@
                              "class":  "unbacked"
                          },
                          {
-                             "find":  "(end of body)",
-                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
-                             "class":  "script"
+                             "find":  "A pot of them costs about the same as one drive-through coffee and covers breakfast for most of the week.",
+                             "replace":  "One pot covers breakfast for most of the week.",
+                             "class":  "derived-total"
                          }
                      ],
     "field_edits":  [
                         {
                             "find":  "Twelve budget crockpot meals with real per-serving costs. Cheap cuts and dried beans turn into tender dinners for $1 to $2 a plate.",
                             "replace":  "Twelve budget crockpot meals. Cheap cuts and dried beans turn into tender dinners that cost very little per plate."
+                        },
+                        {
+                            "find":  "into tender, filling dinners for a dollar or two a serving.",
+                            "replace":  "into tender, filling dinners for very little per serving."
                         }
                     ],
-    "new_lexical_sha256":  "72c08841b7bf712e06875d4222d8edd8e9c3d7c97af87d48e8165965ef852f9e",
+    "kept":  [
+                 {
+                     "match":  "running for pennies over several hours",
+                     "class":  "non-food",
+                     "why":  "The electricity a slow cooker uses, not a food price."
+                 }
+             ],
+    "new_lexical_sha256":  "b80b8b863049b2228262777d4118f2c385e3b685c5cfbbf2e4636d70a36c6b26",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

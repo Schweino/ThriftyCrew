@@ -21,7 +21,79 @@
     "field_edits":  [
 
                     ],
+    "kept":  [
+                 {
+                     "match":  "you walk out $90 lighter",
+                     "class":  "finance",
+                     "why":  "A whole grocery trip as a household spending figure, not the price of a food; the article removed no price it could be derived from."
+                 },
+                 {
+                     "match":  "A family spending $800 a month can often trim $150 to $200 without eating worse",
+                     "class":  "finance",
+                     "why":  "A household grocery budget and the savings range the article\u0027s habits target; budget arithmetic, not derived from a removed food price."
+                 },
+                 {
+                     "match":  "If your normal run is $120 and you cut the impulse buys, that is $24 to $48 back in your pocket every single trip",
+                     "class":  "finance",
+                     "why":  "20 to 40 percent of a stated hypothetical trip total; percentage arithmetic on a budget figure."
+                 },
+                 {
+                     "match":  "A 12 ounce bottle of dish soap at $3.49 is about 29 cents per ounce",
+                     "class":  "non-food",
+                     "why":  "Dish soap, the article\u0027s unit-price example."
+                 },
+                 {
+                     "match":  "A 24 ounce bottle at $4.99 is about 21 cents per ounce",
+                     "class":  "non-food",
+                     "why":  "Dish soap, the article\u0027s unit-price example."
+                 },
+                 {
+                     "match":  "If a name brand costs $3.29 and the store brand is $2.19, that is $1.10 saved on one item. Times ten, that is $11 a trip, or over $500 a year",
+                     "class":  "finance",
+                     "why":  "A labelled hypothetical (\u0027Try a simple test\u0027) for an unnamed item, showing how a per-item gap compounds over a year; it names no food and prices nothing the feed could fetch."
+                 },
+                 {
+                     "match":  "often 25 cents to a few dollars a trip",
+                     "class":  "finance",
+                     "why":  "Cash-back app rewards per trip, not a food price."
+                 },
+                 {
+                     "match":  "On a $600 monthly spend, that is $18 to $48 a month for a few taps",
+                     "class":  "finance",
+                     "why":  "3 to 8 percent of a stated hypothetical monthly budget."
+                 },
+                 {
+                     "match":  "If your grocery bill is $800 a month and you waste even 20 percent, that is $160 going straight into the garbage",
+                     "class":  "finance",
+                     "why":  "20 percent of a stated hypothetical monthly budget."
+                 },
+                 {
+                     "match":  "could hand you back $80 a month",
+                     "class":  "finance",
+                     "why":  "Half of the $160 waste figure above; budget arithmetic."
+                 },
+                 {
+                     "match":  "the membership fee, often around $60 a year",
+                     "class":  "non-food",
+                     "why":  "A warehouse club membership fee."
+                 },
+                 {
+                     "match":  "A household spending $800 a month can realistically get to $600 or lower and eat just as well. That is $2,400 a year staying in your account",
+                     "class":  "finance",
+                     "why":  "A household grocery budget before and after, and the yearly difference; budget arithmetic, not derived from a removed food price."
+                 },
+                 {
+                     "match":  "can trim $150 to $200 a month off your groceries",
+                     "class":  "finance",
+                     "why":  "Excerpt: the same household savings range as the body\u0027s intro."
+                 },
+                 {
+                     "match":  "Cut your grocery bill $150 to $200 a month",
+                     "class":  "finance",
+                     "why":  "Meta description: the same household savings range as the body\u0027s intro."
+                 }
+             ],
     "new_lexical_sha256":  "c17d496524001578a143ea433e0f1749261e0d3fbede30e8f33e41786f774aa5",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

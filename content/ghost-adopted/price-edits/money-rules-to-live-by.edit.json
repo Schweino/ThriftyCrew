@@ -13,15 +13,92 @@
                              "class":  "unbacked"
                          },
                          {
-                             "find":  "(end of body)",
-                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
-                             "class":  "script"
+                             "find":  "Do this four extra nights a week and you free up $200 a month.",
+                             "replace":  "Do this four extra nights a week and the difference stays in your pocket every single month.",
+                             "class":  "derived-total"
                          }
                      ],
     "field_edits":  [
 
                     ],
-    "new_lexical_sha256":  "c15dadc74cc8ad33c5a39e70f6bc4310a3dcd52604c1243135cf8f1bd333ea4a",
+    "kept":  [
+                 {
+                     "match":  "Even $25 a paycheck builds the habit",
+                     "class":  "finance",
+                     "why":  "a savings contribution"
+                 },
+                 {
+                     "match":  "Keep a starter emergency fund of $1,000",
+                     "class":  "finance",
+                     "why":  "an emergency fund"
+                 },
+                 {
+                     "match":  "A $600 car repair",
+                     "class":  "non-food",
+                     "why":  "a car repair"
+                 },
+                 {
+                     "match":  "If you bring home $3,500 a month, your life needs to cost less than $3,500 a month",
+                     "class":  "finance",
+                     "why":  "take-home pay"
+                 },
+                 {
+                     "match":  "down to the last $10",
+                     "class":  "finance",
+                     "why":  "budget arithmetic"
+                 },
+                 {
+                     "match":  "Wait 24 hours before any purchase over $100",
+                     "class":  "finance",
+                     "why":  "a purchase threshold"
+                 },
+                 {
+                     "match":  "you just saved $100 or more",
+                     "class":  "finance",
+                     "why":  "the same purchase threshold"
+                 },
+                 {
+                     "match":  "a $2,000 balance costs you about $480 a year",
+                     "class":  "finance",
+                     "why":  "credit card interest"
+                 },
+                 {
+                     "match":  "A restaurant meal runs $15 to $20 a person",
+                     "class":  "restaurant",
+                     "why":  "a restaurant meal"
+                 },
+                 {
+                     "match":  "Almost everyone finds $150 to $300 leaking out",
+                     "class":  "finance",
+                     "why":  "untracked spending"
+                 },
+                 {
+                     "match":  "If you make $4,000 a month after taxes, aim to keep housing near $1,200",
+                     "class":  "finance",
+                     "why":  "income and housing"
+                 },
+                 {
+                     "match":  "from $250 to $1,000",
+                     "class":  "finance",
+                     "why":  "insurance deductibles"
+                 },
+                 {
+                     "match":  "often $10 to $15 each. That is $360 a year",
+                     "class":  "non-food",
+                     "why":  "unused subscriptions and their yearly total"
+                 },
+                 {
+                     "match":  "how a $40 trip becomes $90",
+                     "class":  "finance",
+                     "why":  "an impulse-spending illustration for a store trip; it names no food and is not built from a removed price"
+                 },
+                 {
+                     "match":  "the extended warranty on a $60 toaster",
+                     "class":  "non-food",
+                     "why":  "an appliance warranty"
+                 }
+             ],
+    "new_lexical_sha256":  "9802d75292a61596255a9b906f67e2431b5444435ddd168fab109b92fe20a1fb",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

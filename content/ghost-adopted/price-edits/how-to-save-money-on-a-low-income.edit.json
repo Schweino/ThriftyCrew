@@ -13,15 +13,97 @@
                              "class":  "unbacked"
                          },
                          {
-                             "find":  "(end of body)",
-                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
-                             "class":  "script"
+                             "find":  "Cook three of those a week instead of ordering out and you keep roughly $180 a month.",
+                             "replace":  "Cook three of those a week instead of ordering out and you keep most of what delivery would have cost.",
+                             "class":  "derived-total"
                          }
                      ],
     "field_edits":  [
 
                     ],
-    "new_lexical_sha256":  "06b347996e440bf31535a4b82155d085d1b36ecdf9ba2660fd6c94302568b052",
+    "kept":  [
+                 {
+                     "match":  "A $1,000 emergency fund is the classic target",
+                     "class":  "finance",
+                     "why":  "an emergency-fund goal"
+                 },
+                 {
+                     "match":  "But if $1,000 feels like the moon right now, aim for $300 first",
+                     "class":  "finance",
+                     "why":  "an emergency-fund goal"
+                 },
+                 {
+                     "match":  "If you save $6 a week, you hit $300 in about a year. Bump it to $12 a week and you are there in six months. Nobody is going to write a magazine story about $12 a week",
+                     "class":  "finance",
+                     "why":  "savings-rate arithmetic"
+                 },
+                 {
+                     "match":  "Set up an automatic transfer of even $5 the day after your paycheck lands",
+                     "class":  "finance",
+                     "why":  "an automatic savings transfer"
+                 },
+                 {
+                     "match":  "auto-transfer $10 per check, that is $260 a year with zero ongoing effort. Round it up to $20 and you have $520",
+                     "class":  "finance",
+                     "why":  "automatic-transfer arithmetic"
+                 },
+                 {
+                     "match":  "then nudge it up $5 every couple of months",
+                     "class":  "finance",
+                     "why":  "an automatic savings transfer"
+                 },
+                 {
+                     "match":  "Getting hit with a $35 fee to save $10 is a losing trade",
+                     "class":  "finance",
+                     "why":  "a bank overdraft fee against a savings transfer"
+                 },
+                 {
+                     "match":  "A roommate who splits a $1,200 apartment saves you $600 a month",
+                     "class":  "non-food",
+                     "why":  "rent"
+                 },
+                 {
+                     "match":  "you may be spending $600 to $700 a month to get around",
+                     "class":  "non-food",
+                     "why":  "car payment, insurance and gas"
+                 },
+                 {
+                     "match":  "switching can save $30 to $60 a month",
+                     "class":  "non-food",
+                     "why":  "a car-insurance bill"
+                 },
+                 {
+                     "match":  "delivery, which easily hits $15 to $20 once you add fees, tax, and tip",
+                     "class":  "restaurant",
+                     "why":  "a delivery order, a restaurant price"
+                 },
+                 {
+                     "match":  "Adjusting your W-4 can put $50 to $150 back in each paycheck",
+                     "class":  "finance",
+                     "why":  "tax withholding"
+                 },
+                 {
+                     "match":  "Most people find $40 to $80 of \"where did that go\" money the first time they look",
+                     "class":  "finance",
+                     "why":  "untracked spending found by tracking a month; names no food"
+                 },
+                 {
+                     "match":  "Every dollar of help is a dollar you get to keep and save",
+                     "class":  "finance",
+                     "why":  "public assistance, no food price"
+                 },
+                 {
+                     "match":  "Six dollars a week, protected and repeated",
+                     "class":  "finance",
+                     "why":  "the savings rate from the goal section, restated"
+                 },
+                 {
+                     "match":  "which is worth thousands to many low- and moderate-income working families",
+                     "class":  "finance",
+                     "why":  "the Earned Income Tax Credit"
+                 }
+             ],
+    "new_lexical_sha256":  "921d371d6a07f32e2156a9acef2b8343a1b725ca4efc46387661c119b102247e",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

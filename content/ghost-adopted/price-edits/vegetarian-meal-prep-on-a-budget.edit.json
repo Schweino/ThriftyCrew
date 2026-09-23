@@ -73,6 +73,11 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "These are pennies per serving but they turn the same three ingredients into a dozen different meals.",
+                             "replace":  "They cost next to nothing per serving, but they turn the same three ingredients into a dozen different meals.",
+                             "class":  "price-in-words"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
@@ -88,7 +93,10 @@
                             "replace":  "eggs for very little per serving."
                         }
                     ],
-    "new_lexical_sha256":  "349f500e7df95c061332bda5110172f4bdda50d75ffc55605ce2915ca6361b0a",
+    "kept":  [
+
+             ],
+    "new_lexical_sha256":  "d5b815b074037fc96ff29287cec8a3f45c0011701c0f29584e369b8ea1449247",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:20"
 }

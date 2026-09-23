@@ -1,8 +1,8 @@
 {
-    "generated":  "2026-09-22T15:13:39",
+    "generated":  "2026-09-22T16:10:40",
     "ruling":  "C (Brad, 2026-09-21): live where the article names something the pipeline prices, removed where it does not",
-    "articles":  40,
-    "figures":  626,
+    "articles":  43,
+    "figures":  658,
     "blind":  [
 
               ],
@@ -761,6 +761,36 @@
                                  ],
                      "figure_count":  22,
                      "monitor_shape_count":  10
+                 },
+                 {
+                     "slug":  "cheap-high-protein-snacks",
+                     "id":  "6a499c0450682b0001cd42e9",
+                     "kind":  "post",
+                     "visibility":  null,
+                     "title":  "15 Cheap High-Protein Snacks (Under $1 Each)",
+                     "title_has_price":  true,
+                     "base_updated_at":  "2026-07-04T23:49:24.000Z",
+                     "base_source":  "Admin API GET posts (read-only) 2026-09-22T15:49:54",
+                     "base_lexical_sha256":  "25d37a58c82ef926bf32e9057c99b38dbe12c6a4a084a5d24cd76c40443f08bd",
+                     "figures":  [
+                                     {
+                                         "figure":  "$3.50",
+                                         "sentence":  "A fancy bar with 20 grams of protein and a $3.50 price tag is not a health food, it is a candy bar wearing a lab coat.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$3.50",
+                                         "sentence":  "Stock two or three of these, keep them at eye level in the fridge, and you will stop paying $3.50 for a bar that a boiled egg could replace for a quarter.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$1",
+                                         "sentence":  "Membership is just $1 a month.",
+                                         "monitor_shape":  false
+                                     }
+                                 ],
+                     "figure_count":  3,
+                     "monitor_shape_count":  0
                  },
                  {
                      "slug":  "cheap-lunch-ideas-for-work",
@@ -1551,6 +1581,126 @@
                                  ],
                      "figure_count":  20,
                      "monitor_shape_count":  8
+                 },
+                 {
+                     "slug":  "high-protein-shake-recipes",
+                     "id":  "6a49a65d50682b0001cd4608",
+                     "kind":  "post",
+                     "visibility":  null,
+                     "title":  "6 Cheap High-Protein Shake Recipes (Under $1.50 Each)",
+                     "title_has_price":  true,
+                     "base_updated_at":  "2026-07-05T00:33:33.000Z",
+                     "base_source":  "content/ghost-adopted/high-protein-shake-recipes.json (exported 2026-09-19)",
+                     "base_lexical_sha256":  "dc1c1fee0f3f97d877416b6e8cb3ef98f73bd91a7fc5254035918c8e1a4ec205",
+                     "figures":  [
+                                     {
+                                         "figure":  "$1.50",
+                                         "sentence":  "Here are six high-protein shakes that each land under $1.50, taste like something you would actually order, and take about two minutes to throw together.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$25",
+                                         "sentence":  "A tub of store-brand whey protein runs about $25 for 30 scoops, which works out to roughly $0.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$0.85",
+                                         "sentence":  "A tub of store-brand whey protein runs about $25 for 30 scoops, which works out to roughly $0.85 a scoop and about 24 grams of protein.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$0.55",
+                                         "sentence":  "Half a cup of Greek yogurt is around $0.55 and adds about 12 grams of protein.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$0.30",
+                                         "sentence":  "A cup of milk is roughly $0.30 and another 8 grams.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$0.25",
+                                         "sentence":  "One scoop whey, one banana ($0.25), one tablespoon peanut butter ($0.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$0.10",
+                                         "sentence":  "25), one tablespoon peanut butter ($0.10), and a cup of milk.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$1.20",
+                                         "sentence":  "About $1.20 for roughly 34 grams of protein.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$0.45",
+                                         "sentence":  "One scoop whey, three-quarters cup frozen mixed berries ($0.45), and a cup of water.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$1.30",
+                                         "sentence":  "Comes in near $1.30 and about 25 grams of protein.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$0.40",
+                                         "sentence":  "One scoop whey, three-quarters cup frozen mango ($0.40), and a cup of milk.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$1.35",
+                                         "sentence":  "Around $1.35 for about 32 grams of protein.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$0.10",
+                                         "sentence":  "One scoop chocolate whey, a cup of cold brewed coffee ($0.10), and a handful of ice.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$1.00",
+                                         "sentence":  "About $1.00 for roughly 24 grams of protein, and it doubles as your morning caffeine.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$0.10",
+                                         "sentence":  "One scoop whey, one tablespoon cocoa powder ($0.10), a quarter cup rolled oats ($0.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$0.10",
+                                         "sentence":  "10), a quarter cup rolled oats ($0.10), and a cup of milk.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$1.35",
+                                         "sentence":  "Near $1.35 for about 34 grams of protein and enough oats to keep you full.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$1.40",
+                                         "sentence":  "Around $1.40 for a thick, spoonable 36 grams of protein.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$3",
+                                         "sentence":  "A big canister of cocoa powder lasts months and costs pennies per shake, while a tub of rolled oats runs about $3 and stretches across dozens of servings.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$1.50",
+                                         "sentence":  "Bottom line: Six shakes, each under $1.50 and most closer to a dollar, versus three to four dollars a bottle at the store.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$1",
+                                         "sentence":  "Membership is just $1 a month.",
+                                         "monitor_shape":  false
+                                     }
+                                 ],
+                     "figure_count":  21,
+                     "monitor_shape_count":  0
                  },
                  {
                      "slug":  "high-volume-low-calorie-meal-prep",
@@ -2801,6 +2951,61 @@
                                  ],
                      "figure_count":  12,
                      "monitor_shape_count":  1
+                 },
+                 {
+                     "slug":  "meal-prep-breakfast-burritos",
+                     "id":  "6a499e7850682b0001cd43d9",
+                     "kind":  "post",
+                     "visibility":  null,
+                     "title":  "Freezer Breakfast Burritos: A Week of Breakfasts for Under $1 Each",
+                     "title_has_price":  true,
+                     "base_updated_at":  "2026-07-04T23:59:52.000Z",
+                     "base_source":  "Admin API GET posts (read-only) 2026-09-22T15:49:55",
+                     "base_lexical_sha256":  "2246b325de971bdc27ec0763bba2e60322e7540157715d87f4eedf1b7fb5732b",
+                     "figures":  [
+                                     {
+                                         "figure":  "$4,",
+                                         "sentence":  "Using store-brand staples, a batch of twelve runs about right around this: eggs near $4, sausage about $4, tortillas about $3, potatoes about $2, cheese about $3, plus a dollar or so of onion and pepper.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$4,",
+                                         "sentence":  "Using store-brand staples, a batch of twelve runs about right around this: eggs near $4, sausage about $4, tortillas about $3, potatoes about $2, cheese about $3, plus a dollar or so of onion and pepper.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$3,",
+                                         "sentence":  "Using store-brand staples, a batch of twelve runs about right around this: eggs near $4, sausage about $4, tortillas about $3, potatoes about $2, cheese about $3, plus a dollar or so of onion and pepper.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$2,",
+                                         "sentence":  "Using store-brand staples, a batch of twelve runs about right around this: eggs near $4, sausage about $4, tortillas about $3, potatoes about $2, cheese about $3, plus a dollar or so of onion and pepper.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$3,",
+                                         "sentence":  "Using store-brand staples, a batch of twelve runs about right around this: eggs near $4, sausage about $4, tortillas about $3, potatoes about $2, cheese about $3, plus a dollar or so of onion and pepper.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$17",
+                                         "sentence":  "Call it roughly $17 for the batch.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$1.40",
+                                         "sentence":  "That comes out to about $1.40 per burrito if you use everything as listed, and you can push it under a dollar by choosing turkey sausage, skipping the pepper, and buying cheese in a larger block.",
+                                         "monitor_shape":  false
+                                     },
+                                     {
+                                         "figure":  "$1",
+                                         "sentence":  "Membership is just $1 a month.",
+                                         "monitor_shape":  false
+                                     }
+                                 ],
+                     "figure_count":  8,
+                     "monitor_shape_count":  0
                  },
                  {
                      "slug":  "meal-prep-for-a-family-of-four",

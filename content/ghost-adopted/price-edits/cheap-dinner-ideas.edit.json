@@ -173,6 +173,11 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "and a bag of rice works out to pennies per serving.",
+                             "replace":  "and a bag of rice stretches across a lot of servings.",
+                             "class":  "price-in-words"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
@@ -186,9 +191,16 @@
                         {
                             "find":  "25 cheap dinner ideas that come in under $3 a serving, with real per-serving prices.",
                             "replace":  "25 cheap dinner ideas, with live Omaha store prices on the staples."
+                        },
+                        {
+                            "find":  "Ideas Under $3 a Serving",
+                            "replace":  "Ideas"
                         }
                     ],
-    "new_lexical_sha256":  "9b2afc9a6a64e5986cb4107a2269ca13f186ed1733156887d046ad6fa5028a28",
+    "kept":  [
+
+             ],
+    "new_lexical_sha256":  "96c0ad9e446be7e27f8b0fc44b54db5c8a685ea57c5337aef8c841223c019fad",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

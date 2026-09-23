@@ -44,7 +44,7 @@
                          },
                          {
                              "find":  "Rice runs about $0.15 a serving.",
-                             "replace":  "Rice runs \u003cspan data-tc-live-price data-tc-bid=\"rice\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.46\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.46\u003c/span\u003e a pound, which is pennies a serving.",
+                             "replace":  "Rice runs \u003cspan data-tc-live-price data-tc-bid=\"rice\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.46\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.46\u003c/span\u003e a pound dry, and a little goes a long way once cooked.",
                              "class":  "backed-commodity"
                          },
                          {
@@ -103,6 +103,21 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "\u003cstrong\u003eBlack beans and lentils\u003c/strong\u003e, pennies a cooked cup, 15 to 18 grams of protein.",
+                             "replace":  "\u003cstrong\u003eBlack beans and lentils\u003c/strong\u003e, 15 to 18 grams of protein a cooked cup.",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "That is a lunch that keeps you full through the afternoon for less than the tip on a takeout order.",
+                             "replace":  "That is a lunch that keeps you full through the afternoon.",
+                             "class":  "derived-total"
+                         },
+                         {
+                             "find":  "Want it even cheaper? Swap half the chicken for an extra can of beans and the cost drops further while protein stays above 35 grams.",
+                             "replace":  "Want it cheaper still? Swap half the chicken for an extra can of beans. Beans are often cheaper, so check the live price: canned black beans run \u003cspan data-tc-live-price data-tc-bid=\"canned-black-beans\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.91\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.91\u003c/span\u003e a pound against \u003cspan data-tc-live-price data-tc-bid=\"chicken-breast\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.99\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.99\u003c/span\u003e a pound for chicken breast. Protein still stays above 35 grams.",
+                             "class":  "soften-comparison"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
@@ -116,9 +131,20 @@
                         {
                             "find":  "High-protein lunch meal prep for under $2.50 a serving. Hit 40g protein with a base-protein-veg-sauce formula, real costs, and a 45-minute batch plan.",
                             "replace":  "Cheap high-protein lunch meal prep. Hit 40g protein with a base-protein-veg-sauce formula, live store prices, and a 45-minute batch plan."
+                        },
+                        {
+                            "find":  "Prep (Under $2.50 a Serving)",
+                            "replace":  "Prep"
                         }
                     ],
-    "new_lexical_sha256":  "0924ec19af91987ae575b06436b494200d04338abb137d0007cb64c296d41642",
+    "kept":  [
+                 {
+                     "match":  "you overpay for a sad $14 salad",
+                     "class":  "restaurant",
+                     "why":  "A salad bought out at lunch."
+                 }
+             ],
+    "new_lexical_sha256":  "5b489efc267ad45ac39766a71222b7c4da2ba1c17b9d31e09405f9c3a75cb5ef",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

@@ -16,5 +16,17 @@
       "figures": ["$3"],
       "why": "A generic homemade lunch is not a board commodity or an engine recipe; the $10 bought lunch is a restaurant price and stays."
     }
+  ],
+  "field_edits": [],
+  "kept": [
+    { "match": "A few dollars here, a canceled charge there", "class": "finance", "why": "General money-habit phrasing about savings; names no food and no price." },
+    { "match": "can trim a $150 grocery run to $110", "class": "finance", "why": "A whole grocery trip before and after planning, a household spending figure and not the price of a food; the article removed no price it could be derived from." },
+    { "match": "At $18 saved on each meal, twice a week, that is roughly $150 a month", "class": "restaurant", "why": "Money saved by skipping two takeout meals a week and the monthly total of that; the article states no grocery price it was computed from, so it is takeout savings arithmetic, not a total derived from a removed grocery price." },
+    { "match": "A $5 latte skipped 12 times a month is $60", "class": "restaurant", "why": "A coffee-shop drink and the monthly total of skipping it." },
+    { "match": "A $10 lunch bought out", "class": "restaurant", "why": "A lunch bought out, a restaurant price." },
+    { "match": "Two at $15 each is $360 a year", "class": "non-food", "why": "Streaming subscriptions and their yearly total." },
+    { "match": "Fifteen minutes can save $20 a month", "class": "non-food", "why": "An internet or phone bill reduction." },
+    { "match": "A $12 kit can cut heating loss", "class": "non-food", "why": "Weather stripping kit." },
+    { "match": "any non-essential over $50", "class": "non-food", "why": "A spending threshold for non-essential shopping, not food." }
   ]
 }

@@ -1,71 +1,96 @@
 {
-    "slug":  "sunday-meal-prep-routine",
-    "title_new":  null,
-    "edits":  [
-                  {
-                      "find":  "A rotisserie chicken runs about $6 and gives you roughly four cups of meat.",
-                      "replace":  "A rotisserie chicken runs {{live-unit:rotisserie-chicken:each}} and gives you roughly four cups of meat.",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$6"
-                                  ],
-                      "why":  "rotisserie-chicken is a board commodity per each"
-                  },
-                  {
-                      "find":  "A pound of dried lentils is around $2 and feeds a crowd.",
-                      "replace":  "A pound of dried lentils runs {{live-unit:brown-lentils:lb}} and feeds a crowd.",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$2"
-                                  ],
-                      "why":  "brown-lentils is the board\u0027s dry-lentils commodity per lb"
-                  },
-                  {
-                      "find":  "A 5-pound bag of rice is about $5 and lasts weeks.",
-                      "replace":  "A 5-pound bag of rice runs {{live-unit:rice:lb}} a pound and lasts weeks.",
-                      "class":  "backed-commodity",
-                      "figures":  [
-                                      "$5"
-                                  ],
-                      "why":  "rice (white rice) is a board commodity per lb; the 5 lb bag price becomes per-pound"
-                  },
-                  {
-                      "find":  "Say the whole batch runs $35 in groceries and yields ten to twelve dinner servings. That is about $3 per serving.",
-                      "replace":  "Add up the grocery receipt, divide it by the ten to twelve dinner servings the batch yields, and you will see how little each plate costs.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$35",
-                                      "$3"
-                                  ],
-                      "why":  "mixed-basket batch total and per-serving cost for generic components"
-                  },
-                  {
-                      "find":  "before the tip and the delivery fee, so you are saving roughly $10 a plate.",
-                      "replace":  "before the tip and the delivery fee, so you keep most of that on every plate.",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$10"
-                                  ],
-                      "why":  "per-plate saving computed from the removed $3 serving; the monitor counts \u0027$10 a plate\u0027"
-                  },
-                  {
-                      "find":  "can cover a week of dinners at roughly $3 a serving, save you $50 or more versus takeout,",
-                      "replace":  "can cover a week of cheap dinners, save you $50 or more versus takeout,",
-                      "class":  "unbacked",
-                      "figures":  [
-                                      "$3"
-                                  ],
-                      "why":  "generic per-serving estimate; the $50 savings total is left as finance arithmetic"
-                  }
-              ],
-    "field_edits":  [
-                        {
-                            "find":  "a full week of dinners at about $3 a serving, and buy back",
-                            "replace":  "a full week of cheap dinners, and buy back"
-                        },
-                        {
-                            "find":  "covers a week of dinners at about $3 a serving.",
-                            "replace":  "covers a week of cheap dinners."
-                        }
-                    ]
+  "slug": "sunday-meal-prep-routine",
+  "title_new": null,
+  "edits": [
+    {
+      "find": "A rotisserie chicken runs about $6 and gives you roughly four cups of meat.",
+      "replace": "A rotisserie chicken runs {{live-unit:rotisserie-chicken:each}} and gives you roughly four cups of meat.",
+      "class": "backed-commodity",
+      "figures": [
+        "$6"
+      ],
+      "why": "rotisserie-chicken is a board commodity per each"
+    },
+    {
+      "find": "A pound of dried lentils is around $2 and feeds a crowd.",
+      "replace": "A pound of dried lentils runs {{live-unit:brown-lentils:lb}} and feeds a crowd.",
+      "class": "backed-commodity",
+      "figures": [
+        "$2"
+      ],
+      "why": "brown-lentils is the board's dry-lentils commodity per lb"
+    },
+    {
+      "find": "A 5-pound bag of rice is about $5 and lasts weeks.",
+      "replace": "A 5-pound bag of rice runs {{live-unit:rice:lb}} a pound and lasts weeks.",
+      "class": "backed-commodity",
+      "figures": [
+        "$5"
+      ],
+      "why": "rice (white rice) is a board commodity per lb; the 5 lb bag price becomes per-pound"
+    },
+    {
+      "find": "Say the whole batch runs $35 in groceries and yields ten to twelve dinner servings. That is about $3 per serving.",
+      "replace": "Add up the grocery receipt, divide it by the ten to twelve dinner servings the batch yields, and you will see how little each plate costs.",
+      "class": "unbacked",
+      "figures": [
+        "$35",
+        "$3"
+      ],
+      "why": "mixed-basket batch total and per-serving cost for generic components"
+    },
+    {
+      "find": "before the tip and the delivery fee, so you are saving roughly $10 a plate.",
+      "replace": "before the tip and the delivery fee, so you keep most of that on every plate.",
+      "class": "unbacked",
+      "figures": [
+        "$10"
+      ],
+      "why": "per-plate saving computed from the removed $3 serving; the monitor counts '$10 a plate'"
+    },
+    {
+      "find": "can cover a week of dinners at roughly $3 a serving, save you $50 or more versus takeout,",
+      "replace": "can cover a week of cheap dinners, save you $50 or more versus takeout,",
+      "class": "unbacked",
+      "figures": [
+        "$3"
+      ],
+      "why": "generic per-serving estimate; the $50 savings total is left as finance arithmetic"
+    },
+    {
+      "find": "Over a week of dinners for one person, that is $50 or more staying in your pocket. Your exact savings depend on local prices and how often you were ordering out, but even at half that number, this pays for itself many times over.",
+      "replace": "Over a week of dinners for one person, that is real money staying in your pocket. Your exact savings depend on local prices and how often you were ordering out, but even if you only replace a few takeout nights, this pays for itself many times over.",
+      "class": "derived-total",
+      "figures": [
+        "$50"
+      ],
+      "why": "a weekly savings total built from the $3 per serving the first pass removed (Brad 2026-09-22, remove derived ones)"
+    },
+    {
+      "find": "save you $50 or more versus takeout, and hand you back your weeknights.",
+      "replace": "cut way back on takeout, and hand you back your weeknights.",
+      "class": "derived-total",
+      "figures": [
+        "$50"
+      ],
+      "why": "the same weekly savings total in the bottom line; this supersedes the first pass's note that left it as finance arithmetic (Brad 2026-09-22, remove derived ones)"
+    }
+  ],
+  "field_edits": [
+    {
+      "find": "a full week of dinners at about $3 a serving, and buy back",
+      "replace": "a full week of cheap dinners, and buy back"
+    },
+    {
+      "find": "covers a week of dinners at about $3 a serving.",
+      "replace": "covers a week of cheap dinners."
+    }
+  ],
+  "kept": [
+    {
+      "match": "A comparable takeout dinner runs $12 to $18",
+      "class": "restaurant",
+      "why": "a takeout dinner"
+    }
+  ]
 }

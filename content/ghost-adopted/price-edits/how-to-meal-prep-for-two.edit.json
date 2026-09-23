@@ -28,15 +28,30 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "Try to hit a store sale on at least one protein and you shave a few dollars more.",
+                             "replace":  "Try to hit a store sale on at least one protein and the bill drops even further.",
+                             "class":  "price-in-words"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
                          }
                      ],
     "field_edits":  [
-
+                        {
+                            "find":  "and season at the plate for a few bucks a serving.",
+                            "replace":  "and season at the plate so nobody gets bored."
+                        }
                     ],
-    "new_lexical_sha256":  "adf72ce9588951c6372bef417ce27032b138c2f044d213831866d820b6394183",
+    "kept":  [
+                 {
+                     "match":  "Compare that to two takeout orders at $15 each",
+                     "class":  "restaurant",
+                     "why":  "takeout orders, a restaurant price"
+                 }
+             ],
+    "new_lexical_sha256":  "3b2be7e8296a5af7ecbf2c7b2f73e968a6d53e9570f1372fcf7031bf5f1288e0",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

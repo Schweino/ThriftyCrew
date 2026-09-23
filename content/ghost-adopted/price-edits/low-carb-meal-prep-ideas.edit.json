@@ -73,9 +73,9 @@
                              "class":  "unbacked"
                          },
                          {
-                             "find":  "(end of body)",
-                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
-                             "class":  "script"
+                             "find":  "Dinner is where you can stretch a few dollars into several servings.",
+                             "replace":  "Dinner is where a small grocery bill stretches into several servings.",
+                             "class":  "price-in-words"
                          }
                      ],
     "field_edits":  [
@@ -84,7 +84,10 @@
                             "replace":  "Real macros, all built on cheap staples."
                         }
                     ],
-    "new_lexical_sha256":  "6876e6991e305cde66bd23c86d92ec9765ae4fe31f74c010c2e2a2d6db3d0a3e",
+    "kept":  [
+
+             ],
+    "new_lexical_sha256":  "b9a9407fd45c94372eb94e8bce91b1c5c68cf742c58aa093a0def1d2dd6e8bc9",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

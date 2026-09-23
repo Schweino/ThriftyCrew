@@ -13,12 +13,12 @@
                   },
                   {
                       "find":  "Leaner beef like 90/10 costs about a dollar more per pound and gives you less grease to drain.",
-                      "replace":  "Leaner beef like 90/10 costs more, often {{live-unit:ground-beef-9010:lb}} a pound, and gives you less grease to drain.",
+                      "replace":  "Leaner beef like 90/10 often costs more, so check the live price: {{live-unit:ground-beef-9010:lb}} a pound against {{live-unit:ground-beef-8020:lb}} for 80/20. It gives you less grease to drain.",
                       "class":  "backed-commodity",
                       "figures":  [
                                       "a dollar more"
                                   ],
-                      "why":  "90/10 ground beef is the ground-beef-9010 cell; the typed difference becomes its live per-pound price beside the live 80/20 price above"
+                      "why":  "90/10 ground beef is the ground-beef-9010 cell; the typed difference becomes its live per-pound price beside the live 80/20 price above. Second pass (Brad 2026-09-22, \"Soften them\"): both grinds carry a live price, so \"costs more\" becomes \"often costs more, so check the live price\" with the 80/20 live price beside it."
                   },
                   {
                       "find":  "Buy the family pack when it drops under $4 a pound and freeze half.",
@@ -134,6 +134,17 @@
                         {
                             "find":  "Ten budget ground beef meal prep ideas with real per-serving costs and protein counts. Cook once, freeze smart, and feed the family for about $1 a serving.",
                             "replace":  "Ten budget ground beef meal prep ideas with protein counts and live beef prices. Cook once, freeze smart, and feed the family for very little per serving."
+                        },
+                        {
+                            "find":  "eat well all week for around a dollar a serving.",
+                            "replace":  "eat well all week for very little per serving."
                         }
-                    ]
+                    ],
+    "kept":  [
+                 {
+                     "match":  "A fast-food combo runs $9 or more now",
+                     "class":  "restaurant",
+                     "why":  "A fast-food combo, the drive-through side of the comparison."
+                 }
+             ]
 }

@@ -5,7 +5,7 @@
     "base_updated_at":  "2026-07-05T00:12:51.000Z",
     "base_lexical_sha256":  "abe7750a362e2fdee15de53d7914ebd6564bda425de1d44dcb863f59ff795fc1",
     "title_old":  "Freezer Soups and Stews: Big-Batch Meal Prep for Pennies a Bowl",
-    "title_new":  "Freezer Soups and Stews: Big-Batch Meal Prep for Pennies a Bowl",
+    "title_new":  "Freezer Soups and Stews: Big-Batch Meal Prep on a Budget",
     "replacements":  [
                          {
                              "find":  "A pound of dry beans is around $1.50 and cooks up to the same as four or five cans that would run you $4 or more.",
@@ -63,15 +63,38 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "One big pot on Sunday can fill your freezer with lunches for pennies a bowl.",
+                             "replace":  "One big pot on Sunday can fill your freezer with cheap, filling lunches for weeks.",
+                             "class":  "price-in-words"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
                          }
                      ],
     "field_edits":  [
-
+                        {
+                            "find":  "fills your freezer with ten lunches for as little as 44 cents a bowl.",
+                            "replace":  "fills your freezer with ten lunches for a fraction of a restaurant bowl."
+                        },
+                        {
+                            "find":  "freeze into ten lunches for 44 cents to a dollar a bowl. Learn the base formula, real costs, and how to freeze right.",
+                            "replace":  "freeze into ten lunches for a fraction of a restaurant bowl. Learn the base formula and how to freeze right."
+                        },
+                        {
+                            "find":  "Big-Batch Meal Prep for Pennies a Bowl",
+                            "replace":  "Big-Batch Meal Prep on a Budget"
+                        }
                     ],
-    "new_lexical_sha256":  "13dc4e4189388cff06bdce96512313ddc3eca78f3875fb2027a6e842dee2d2c6",
+    "kept":  [
+                 {
+                     "match":  "A restaurant charges you $8 for that same bowl",
+                     "class":  "restaurant",
+                     "why":  "a restaurant bowl"
+                 }
+             ],
+    "new_lexical_sha256":  "9ca65a2302ccdf467d39d60b01ec95302b6e4fcadb5049c242c1f76733a49b38",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

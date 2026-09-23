@@ -1,0 +1,71 @@
+{
+    "slug":  "meal-prep-breakfast-burritos",
+    "id":  "6a499e7850682b0001cd43d9",
+    "kind":  "post",
+    "base_updated_at":  "2026-07-04T23:59:52.000Z",
+    "base_lexical_sha256":  "2246b325de971bdc27ec0763bba2e60322e7540157715d87f4eedf1b7fb5732b",
+    "title_old":  "Freezer Breakfast Burritos: A Week of Breakfasts for Under $1 Each",
+    "title_new":  "Freezer Breakfast Burritos: A Week of Breakfasts From One Skillet",
+    "replacements":  [
+                         {
+                             "find":  "These freezer breakfast burritos come in under a dollar each, pack real protein, and reheat beautifully.",
+                             "replace":  "These freezer breakfast burritos cost far less than a drive-thru breakfast, pack real protein, and reheat beautifully.",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "Optional, but they stretch the filling and add flavor for pennies.",
+                             "replace":  "Optional, but they stretch the filling and add flavor for very little.",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "Using store-brand staples, a batch of twelve runs about right around this: eggs near $4, sausage about $4, tortillas about $3, potatoes about $2, cheese about $3, plus a dollar or so of onion and pepper.",
+                             "replace":  "Here are the big pieces, with prices that update live from our grocery board. Eggs run \u003cspan data-tc-live-price data-tc-bid=\"eggs\" data-tc-per=\"dozen\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.62\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.62\u003c/span\u003e a dozen, and you need a dozen and a half. Pork breakfast sausage runs \u003cspan data-tc-live-price data-tc-bid=\"breakfast-sausage\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"2.89\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$2.89\u003c/span\u003e a pound. Frozen hash browns run \u003cspan data-tc-live-price data-tc-bid=\"hash-browns\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"1.57\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$1.57\u003c/span\u003e a pound, and shredded cheese runs \u003cspan data-tc-live-price data-tc-bid=\"shredded-cheese\" data-tc-per=\"oz\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.15\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.15\u003c/span\u003e an ounce. The tortillas and a little onion and pepper round out the list.",
+                             "class":  "backed-commodity"
+                         },
+                         {
+                             "find":  "Call it roughly $17 for the batch.",
+                             "replace":  "Total up your receipt and divide by twelve, and you know exactly what each burrito costs you.",
+                             "class":  "derived-total"
+                         },
+                         {
+                             "find":  "That comes out to about $1.40 per burrito if you use everything as listed, and you can push it under a dollar by choosing turkey sausage, skipping the pepper, and buying cheese in a larger block.",
+                             "replace":  "You can push that number lower by choosing turkey sausage, skipping the pepper, and buying cheese in a larger block.",
+                             "class":  "derived-total"
+                         },
+                         {
+                             "find":  "One thirty-minute cook session gives you a week or two of hot, high-protein breakfasts for around a dollar each.",
+                             "replace":  "One thirty-minute cook session gives you a week or two of hot, high-protein breakfasts for far less than the drive-thru charges.",
+                             "class":  "price-in-words"
+                         },
+                         {
+                             "find":  "These cost and nutrition figures are general estimates,",
+                             "replace":  "These nutrition figures are general estimates,",
+                             "class":  "unbacked"
+                         },
+                         {
+                             "find":  "(end of body)",
+                             "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
+                             "class":  "script"
+                         }
+                     ],
+    "field_edits":  [
+                        {
+                            "find":  "in 30 minutes, around a dollar each, with 30g protein.",
+                            "replace":  "in 30 minutes, with 30g protein each."
+                        },
+                        {
+                            "find":  "A Week of Breakfasts for Under $1 Each",
+                            "replace":  "A Week of Breakfasts From One Skillet"
+                        }
+                    ],
+    "kept":  [
+                 {
+                     "match":  "the four or five dollars a drive-thru charges",
+                     "class":  "restaurant",
+                     "why":  "a drive-thru breakfast burrito"
+                 }
+             ],
+    "new_lexical_sha256":  "57575f4ab90f7c04b8fc1d0a549c26dc78b19962f2856b7b0fb1351dfd7b5844",
+    "stamped_against_feed":  "2026-09-22T08:14:34",
+    "prepared":  "2026-09-23T06:15:19"
+}

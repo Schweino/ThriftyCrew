@@ -24,7 +24,7 @@
                          },
                          {
                              "find":  "A whole box costs about a dollar and this uses pennies of it.",
-                             "replace":  "Table salt runs \u003cspan data-tc-live-price data-tc-bid=\"salt\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.49\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.49\u003c/span\u003e a pound, and this uses pennies of it.",
+                             "replace":  "Table salt runs \u003cspan data-tc-live-price data-tc-bid=\"salt\" data-tc-per=\"lb\" data-tc-field=\"unit_price\" data-tc-basis=\"feed-everyday-per-unit\" data-tc-fallback=\"0.49\" data-tc-asof=\"2026-09-22T08:14:34\"\u003e~$0.49\u003c/span\u003e a pound, and a brine only takes two tablespoons of it.",
                              "class":  "backed-commodity"
                          },
                          {
@@ -44,9 +44,23 @@
                          }
                      ],
     "field_edits":  [
-
+                        {
+                            "find":  "you will have a week of juicy chicken for about a buck a serving.",
+                            "replace":  "you will have a week of juicy chicken ready to go."
+                        },
+                        {
+                            "find":  "a week of cheap, healthy protein at about 75 cents a serving.",
+                            "replace":  "a week of cheap, healthy protein."
+                        }
                     ],
-    "new_lexical_sha256":  "b4f82421fbee7d086bda3dcc4ab0f0079685c1ed398d6f45d9c9212abbf30e86",
+    "kept":  [
+                 {
+                     "match":  "the single best six dollars you will spend on meal prep",
+                     "class":  "non-food",
+                     "why":  "A meat thermometer, a kitchen tool."
+                 }
+             ],
+    "new_lexical_sha256":  "c0dfd2675f84618ad0f844909ec70bf1bed220a6daad3577da7f68f2f540b013",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:19"
 }

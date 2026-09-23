@@ -12,6 +12,33 @@
         "$2.00"
       ],
       "why": "frozen versus fresh vegetables in general; a live pair could invert the comparison it states"
+    },
+    {
+      "find": "A few dollars of spices and sauces buys you a week you will actually eat.",
+      "replace": "A shelf of spices and a couple of sauces buys you a week you will actually eat.",
+      "class": "price-in-words",
+      "figures": [
+        "a few dollars"
+      ],
+      "why": "a price in words for spices and sauces (Brad 2026-09-22, remove derived ones)"
+    }
+  ],
+  "field_edits": [],
+  "kept": [
+    {
+      "match": "That $9 delivery order",
+      "class": "restaurant",
+      "why": "a delivery order"
+    },
+    {
+      "match": "throws out roughly $1,500 of food a year",
+      "class": "finance",
+      "why": "a national household food-waste figure, not a grocery price or a total built from one"
+    },
+    {
+      "match": "glass sets run about $20 to $30",
+      "class": "non-food",
+      "why": "food containers"
     }
   ]
 }

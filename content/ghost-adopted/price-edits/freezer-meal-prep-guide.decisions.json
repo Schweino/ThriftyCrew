@@ -52,5 +52,12 @@
                             "find":  "freeze a month of meals at about $2.50 a serving.",
                             "replace":  "freeze a month of cheap meals."
                         }
-                    ]
+                    ],
+    "kept":  [
+                 {
+                     "match":  "a $12 takeout order",
+                     "class":  "restaurant",
+                     "why":  "A takeout order, the restaurant side of the comparison."
+                 }
+             ]
 }

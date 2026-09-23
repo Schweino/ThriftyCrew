@@ -68,6 +68,11 @@
                              "class":  "unbacked"
                          },
                          {
+                             "find":  "and over a five-day work week that is close to $45 back in your pocket.",
+                             "replace":  "and over a five-day work week that adds up to real money back in your pocket.",
+                             "class":  "derived-total"
+                         },
+                         {
                              "find":  "(end of body)",
                              "replace":  "\u003cscript src=\"https://feed.thriftycrew.com/tc-live-price.js\" defer\u003e\u003c/script\u003e",
                              "class":  "script"
@@ -83,7 +88,24 @@
                             "replace":  "loaded wraps, with zero cooking required."
                         }
                     ],
-    "new_lexical_sha256":  "25ea976159491377b9b03c3c12cc3a2c85bf87d163a93f6ff8795e3c7fe03477",
+    "kept":  [
+                 {
+                     "match":  "a coffee-shop breakfast sandwich and a latte can run $10",
+                     "class":  "restaurant",
+                     "why":  "a coffee-shop breakfast"
+                 },
+                 {
+                     "match":  "beats a $4 muffin",
+                     "class":  "restaurant",
+                     "why":  "a coffee-shop muffin"
+                 },
+                 {
+                     "match":  "swapped a $10 morning habit",
+                     "class":  "restaurant",
+                     "why":  "the same coffee-shop breakfast"
+                 }
+             ],
+    "new_lexical_sha256":  "d921e5b6785d36e165c38c4f703a842605ee6d59c96fbbdc7598db5093c428e5",
     "stamped_against_feed":  "2026-09-22T08:14:34",
-    "prepared":  "2026-09-22T15:18:38"
+    "prepared":  "2026-09-23T06:15:20"
 }
