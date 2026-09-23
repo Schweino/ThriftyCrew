@@ -384,6 +384,8 @@ $static = @(
   @{ f = 'ops\audit-typed-param-shadow.ps1';   n = 'no NEW assignment reuses a typed parameter''s name with a value of another kind, which converts it rather than making a local - a ratchet over the AST, hermetic, reads source only' }
   # 8253ded82 glued a self-test's closing if/else onto its last case line, so the branch never exited and every push's gate ran a live three-store pull and scored it ok.
   @{ daily = $true; f = 'ops\audit-keyword-arguments.ps1';    n = 'no tracked .ps1 or .psm1 carries a statement keyword (if, else, exit, return, try, throw, continue and the rest) as a bare command ARGUMENT - a statement glued onto a command line never runs as one; a gate at zero, hermetic, reads source only' }
+  # 2026-09-23: a typed backslash-n joined two self-test cases onto a comment line in audit-match-soundness.ps1; neither ran and the suite printed PASS.
+  @{ f = 'ops\audit-literal-newline-escape.ps1'; n = 'no tracked .ps1 or .psm1 carries a typed newline escape outside a string that joins two source lines, or a self-test case call inside a line comment - a case in a comment never runs; a gate at zero, hermetic, reads source only' }
   # The keyword audit above sees that SPELLING and lib\selftest-verdict.ps1 sees the silence AFTER the live work ran. This reads the control flow, so the push stops before a self-test can reach a store.
   @{ f = 'ops\audit-selftest-fallthrough.ps1'; n = 'no top-level self-test block that live statements follow can end without exit, throw, return or Exit-Guard - a gate at zero, hermetic, reads source only' }
   # 2026-09-11: this watcher ran only inside test-auditors, which this file skips, and walked grocery\ only; wave-preaudit's drill died mid-suite on the class it watches.

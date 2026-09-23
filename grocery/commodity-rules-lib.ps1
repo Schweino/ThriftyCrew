@@ -106,9 +106,20 @@ function Test-TcCommodityRulesAgree {
     $Matcher = New-CommodityMatcher -Commodities $list -GlobalExclude $GlobalExclude
   }
   $bad = New-Object System.Collections.Generic.List[string]
+  # THE ENTRY IS LOOKED UP ONCE PER COMMODITY, NOT ONCE PER NAME (2026-09-23). The lookup below used to sit inside the
+  # name loop as a Where-Object over every matcher entry: commodities x names x entries pipeline steps, about 38
+  # million for 520 commodities and 154 names, and 322 s of every push's gate. The first entry whose id matches
+  # wins, exactly as `@(... | Where-Object ...)[0]` chose it.
+  $entryById = @{}
+  foreach ($e in $Matcher.entries) {
+    $eid = [string]$e.commodity.id
+    if (-not $entryById.ContainsKey($eid)) { $entryById[$eid] = $e }
+  }
   foreach ($c in $list) {
     $eff = Get-TcCommodityExclude -Commodity $c -GlobalExclude $GlobalExclude
     $rx = @($eff | ForEach-Object { [regex]::new($_, [System.Text.RegularExpressions.RegexOptions]::IgnoreCase) })
+    $entry = $null
+    if ($entryById.ContainsKey([string]$c.id)) { $entry = $entryById[[string]$c.id] }
     foreach ($nm in $Names) {
       $mine = $false
       foreach ($r in $rx) { if ($r.IsMatch($nm)) { $mine = $true; break } }
@@ -116,7 +127,6 @@ function Test-TcCommodityRulesAgree {
       # hits and is not relaxed. Reconstructed from the entry the matcher built, so it reads the same
       # compiled patterns the engine uses rather than re-deriving them here.
       $theirs = $false
-      $entry = @($Matcher.entries | Where-Object { [string]$_.commodity.id -eq [string]$c.id })[0]
       if ($entry) {
         # NEVER WRAP THESE IN @( ). match-lib builds entries, exc, gex and relax as
         # System.Collections.Generic.List[object], and under PS 5.1 the array subexpression around such a
@@ -135,6 +145,32 @@ function Test-TcCommodityRulesAgree {
     }
   }
   return ,$bad.ToArray()
+}
+
+<#
+  THE AGREEMENT CORPUS, ONE COPY (2026-09-23). Test-TcCommodityRulesAgree is run two ways and both must ask the same
+  question: at push time over a FROZEN name list committed as a fixture (test-commodity-rules-lib.ps1, hermetic and
+  cacheable), and daily over the LIVE capture pool (audit-commodity-rules-agree.ps1, in check-ad-cycles). These two
+  functions are the corpus rule both read, so the frozen list is by construction what the live run would pick.
+  Get-TcRulesProbeNames: the names that exercise the global list whatever a capture holds.
+  Get-TcRulesCaptureCorpus: the newest *-regular-*.json in $CaptureDir by LastWriteTime and the item names of its
+  first $Take deals, or $null when none is readable. The caller supplies the directory.
+#>
+function Get-TcRulesProbeNames {
+  return @('Gerber Baby Food Banana', 'Coca-Cola Soda 12 pk', 'Kroger Disinfecting Wipes', 'Fresh Gala Apples')
+}
+
+function Get-TcRulesCaptureCorpus {
+  param([Parameter(Mandatory)][string]$CaptureDir, [int]$Take = 150)
+  $cap = Get-ChildItem (Join-Path $CaptureDir '*-regular-*.json') -ErrorAction SilentlyContinue | Sort-Object LastWriteTime | Select-Object -Last 1
+  if (-not $cap) { return $null }
+  $names = New-Object System.Collections.Generic.List[string]
+  try {
+    foreach ($d in @((Get-Content $cap.FullName -Raw -Encoding UTF8 | ConvertFrom-Json).deals | Select-Object -First $Take)) {
+      if ($d.item) { $names.Add([string]$d.item) }
+    }
+  } catch { return $null }
+  return [pscustomobject]@{ file = $cap.Name; path = $cap.FullName; names = $names.ToArray() }
 }
 
 <#

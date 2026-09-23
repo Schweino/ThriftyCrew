@@ -3549,6 +3549,29 @@ try {
   }
 } catch { Log ('everyday-mismatch threw: ' + $_.Exception.Message) }
 
+# ---- THE EXCLUDE ACCESSOR AGREES WITH THE MATCHER, OVER TODAY'S CAPTURE NAMES (2026-09-23) ----
+# The live half of test-commodity-rules-lib.ps1's corpus case. At push time that case now reads a FROZEN name list
+# (grocery\regression-inputs\commodity-rules-corpus-2026-09-23.json), because reading the newest capture made it
+# uncacheable and cost 322 s of every push; this asks the same question over the names the stores sent today. It
+# reads captures and the rules only, so its place in the chain is free; it sits here beside the other agreement
+# audits. Exit 1 = a name one copy of the rule refuses and the other admits; 3 = could not look. No 2>&1.
+try {
+  $craPath = Join-Path $root 'audit-commodity-rules-agree.ps1'
+  if (Test-Path $craPath) {
+    $craOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $craPath
+    $craRc  = $LASTEXITCODE
+    foreach ($l in @($craOut)) { Log ('commodity-rules-agree: ' + $l) }
+    if ($craRc -eq 1) {
+      $summary += 'REVIEW    commodity-rules-agree: the exclude accessor and match-lib disagree on a live name - a script reading the accessor decides differently from the engine'
+      if (-not $NoAlert) { Send-Alert -Subject 'Grocery commodity rules: the accessor disagrees with the matcher' -Body ("grocery\audit-commodity-rules-agree.ps1 compared commodity-rules-lib.ps1's effective exclude set with match-lib's matcher over the newest capture's names and found a disagreement: every script that reads the accessor (the non-applying audits) now decides a name differently from the engine. Fix the copy that drifted in commodity-rules-lib.ps1 or match-lib.ps1, then re-run the audit; freeze a disagreeing name into the fixture if it is a new shape.`n`n" + (@($craOut) -join "`n")) | Out-Null }
+    }
+    elseif ($craRc -ne 0) {
+      $summary += ('REVIEW    commodity-rules-agree could not evaluate (exit ' + $craRc + ') - the accessor/matcher agreement went unchecked over live names')
+      if (-not $NoAlert) { Send-Alert -Subject 'Grocery commodity rules: the agreement check could not evaluate' -Body ("grocery\audit-commodity-rules-agree.ps1 exited " + $craRc + ": no readable regular capture, fewer than 10 names, or match-lib.ps1 / commodities.json missing. Nothing was proven about the live names; the push-time frozen case still ran.`n`n" + (@($craOut) -join "`n")) | Out-Null }
+    }
+  }
+} catch { Log ('commodity-rules-agree threw: ' + $_.Exception.Message) }
+
 # ---- THE SAME COMMODITY MUST NOT BE PUBLISHED ON BOTH BOARDS ----
 # recipe-overlay (line ~699) drops any recipe row whose commodity also lives on the weekly board, and since
 # 2026-08-08 it resolves the two id spellings through recipe-floor-id-map.json. This is the independent

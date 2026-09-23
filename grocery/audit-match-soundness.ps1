@@ -428,7 +428,13 @@ function Merge-BaselineCarryForward {
 }
 if ($SelfTest) {
   $bad = 0
+  # A SUITE WHOSE CASES ARE A LITERAL LIST ASSERTS HOW MANY RAN (.claude/rules/ops-and-gates.md). On 2026-09-23 two of
+  # these cases sat inside a comment behind a typed backslash-n (8847c9fa5) and the suite printed PASS over 60 of 62. Every call
+  # to T counts; the verdict below refuses any total but $script:expectedCases. Add a case, move the number.
+  $script:ran = 0
+  $script:expectedCases = 62
   function T([string]$n, [bool]$ok, [string]$got) {
+    $script:ran++
     if ($ok) { Write-Output ('  ok    ' + $n) } else { Write-Output ('  X     ' + $n + '   got: ' + $got); $script:bad++ }
   }
   $names = @{ 'Honey Boy Pink Salmon' = 'canned-salmon'; 'Sue Bee Honey' = 'honey'
@@ -712,6 +718,11 @@ if ($SelfTest) {
     T 'MUST FIRE  a NEW contested name holding a CROWN (the frozen BELVITA row) is labelled CONTESTED CROWN; a crownless one stays NEW CONTESTED' ((@($ccC | Where-Object { $_.Label -eq 'CONTESTED CROWN' -and $_.Text -like '*BELVITA*' }).Count -eq 1) -and (@($ccC | Where-Object { $_.Label -eq 'NEW CONTESTED' -and $_.Text -like '*Super Sweet Corn*' }).Count -eq 1)) ((@($ccC | ForEach-Object { $_.Label }) -join ','))
     T 'MUST FIRE  every condition this audit can send derives a type key that alert-registry.json registers (an unregistered one pages as UNREGISTERED)' ($rgMiss.Count -eq 0) ($rgMiss -join ', ')
   } catch { T 'the registry check could load alert-registry-lib.ps1 and alert-registry.json' $false $_.Exception.Message }
+  $ranCount = $script:ran
+  if ($ranCount -ne $script:expectedCases) {
+    Write-Output ("  X     CASE COUNT  the suite ran {0} case(s) and lists {1}: a case was skipped, hidden in a comment, or added without moving expectedCases" -f $ranCount, $script:expectedCases)
+    $script:bad++
+  }
   if ($bad -eq 0) { Write-Output 'match-soundness SELF-TEST PASS'; exit 0 }
   Write-Output ("match-soundness SELF-TEST FAIL: $bad case(s)"); exit 2
 }

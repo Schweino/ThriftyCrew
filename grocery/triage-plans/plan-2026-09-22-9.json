@@ -623,15 +623,15 @@
         ]
       },
       "rollback": "revert the registry hunk with its lane's commit",
-      "leaves_open": "the four attended-browser types (run-needs-you, run-blocked-bot-wall, watchdog-browser-capture-missing-today, watchdog-browser-work-stale) stay unassigned: a CAPTCHA or bot wall cannot close unattended. 0 fires each in 30 days.",
-      "leaves_open_occurrences": 0,
-      "leaves_open_followup": "watch:grocery/capture-watchdog.ps1",
+      "leaves_open": "ghost-drift keeps resolver 'digest' until grocery/reconcile-ghost-drift.ps1 exists (discovered:ghost-drift-reconciler-2026-09-22, building with batch 3); the flip lands in that lane's commit, never before, as this item's own rule says. 5 fire days in the census window, owned by the open ghost-drift queue item 2026-09-21-115180. The four attended-browser types (run-needs-you, run-blocked-bot-wall, watchdog-browser-capture-missing-today, watchdog-browser-work-stale) stay unassigned BY DESIGN and each now carries no_lane_because in the registry: a CAPTCHA or bot wall cannot close unattended; 0 fires each in 30 days and grocery/capture-watchdog.ps1 pages the first miss.",
+      "leaves_open_occurrences": 5,
+      "leaves_open_followup": "2026-09-21-115180",
       "publish_batch": 1,
-      "status": "planned",
-      "resolution_note": "Of the eight review types that fired with no consumer, five now have a lane that closes them (one matching worklist for three detectors, the capture plan for sale fallbacks, a ghost-drift reconciler), one is re-homed to the weekly triage agent with its findings in the body (recipe-db-drift), one was a retired wording that stopped firing on 09-03, and one (walmart-capture-aging) was a detector bug fixed 08-31 that now serves as a backstop.",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "deviated",
+      "resolution_note": "Of the eight review types that fired with no consumer, five now have a lane that closes them (one matching worklist for three detectors, the capture plan for sale fallbacks, a ghost-drift reconciler), one is re-homed to the weekly triage agent with its findings in the body (recipe-db-drift), one was a retired wording that stopped firing on 09-03, and one (walmart-capture-aging) was a detector bug fixed 08-31 that now serves as a backstop. CLOSED 2026-09-23 (ops lane): read at origin/main 0c06fcf1d, grocery/alert-registry.json already names semantic-sweep, stores-dropped and wrong-department -> lane:grocery/resolve-match-worklist.ps1 (landed with 9a3e9286b, b96f21), sale-no-fallback-unworked -> lane:grocery/capture-policy-lib.ps1, recipe-db-drift -> lane:grocery/triage-due.ps1, sale-no-fallback retired 2026-09-03, walmart-capture-aging digest by design. audit-alert-registry.ps1 exit 0: resolvers lane 142, ruling 10, digest 46, unassigned 4 (mark 4), missing 0, invalid 0. The unassigned cap stays 4: no unassigned entry moved in this change (the moves off unassigned, 176 -> 4, landed on 2026-09-22), and the 4 left are the attended-browser types, recorded with no_lane_because.",
+      "premise_verified": "2026-09-23 at origin/main 0c06fcf1d: 5 of the 7 flips already on main; ghost-drift still digest because grocery/reconcile-ghost-drift.ps1 does not exist (Test-Path false); unassigned_max 4 with exactly the 4 attended-browser entries; queue item 2026-09-22-5d20b9 already resolved (confirmed, 2026-09-22T16:09:10).",
+      "deviation": "ghost-drift is not flipped: its lane script does not exist yet and this item's own rule forbids a flip before its lane. It moves to leaves_open, owned by 2026-09-21-115180. The attended-browser four were annotated (no_lane_because) instead of left as bare unassigned.",
+      "shipped_commit": "by subject: ops lane 2026-09-23: frozen commodity-rules corpus, literal-newline detector, 5d20b9 closed"
     }
   ],
   "ship_sequence": [

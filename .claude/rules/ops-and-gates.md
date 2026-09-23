@@ -632,6 +632,15 @@ construction.
   `lib/gate-leftovers.ps1` snapshots the bot-staged paths around `run-gates`' pool and fails a LINKED worktree whose
   pool changed a file there; the main checkout, where capture lanes write, prints REVIEW. It watches that pool only:
   `prepush-test-auditors` runs after it and outside it.
+- **A typed backslash-n is two characters, never a line break, and a case in a comment never runs** (2026-09-23).
+  The 2dae07 edit joined two self-test cases onto a line of `grocery/audit-match-soundness.ps1` that began with `#`,
+  with a literal backslash-n between them; neither case ran and the suite printed PASS until 8847c9fa5 (founding blob
+  8b8320d27, line 708). `ops/audit-literal-newline-escape.ps1` holds it at push time over the TOKENS, never the text: a
+  bareword that begins or ends with the escape, a line comment where the escape is followed by what reads as a new
+  source line, and a line comment carrying a `T 'MUST FIRE ...' (...)`-shaped case call. Strings, regexes and block
+  comments are never read; prose about line endings is listed, not counted. Zero sites on day one over 839 scripts, so
+  a gate at zero, not a ratchet. **Its pair is the literal-list rule above: a suite's own count catches a lost case of
+  ANY shape**, which is why `audit-match-soundness` now asserts its 62.
 
 - **A RULING PUSH IS RED ON PURPOSE, AND THE GATE ACCEPTS THAT RED ONLY WHEN THE PUSH CAUSES IT** (Brad's ruling,
   2026-09-19, "Teach the gate"). `ops/prepush-test-auditors.ps1` refuses a new failing test-auditors case, and the
