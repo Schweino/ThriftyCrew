@@ -21,6 +21,15 @@ Measured 2026-09-06: nine of the twelve agents here read the open web AND hold s
 tools, and not one of them said this. No CLAUDE.md at any level reaches a spawned agent, so this
 file is the only place it can be said.
 
+<!-- store-step:ANALYSIS begin (canonical: ops/agent-blocks/store-step.md) -->
+## SEARCH THE KNOWLEDGE STORE BEFORE YOU DIAGNOSE OR JUDGE (Brad, 2026-09-22)
+
+Before you diagnose, measure, compare, audit or return a verdict, search:
+`C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py "<3-6 words>"`.
+Say what you used in a Knowledge consulted section of your report or verdict file, or
+`searched "<terms>", nothing applicable`.
+<!-- store-step:ANALYSIS end -->
+
 THE RULE (Rule B). An ingredient is CARRIED the moment ONE store carries it. It is NOT-CARRIED only when all
 seven have been CHECKED and none do. Measured on the 542 live recipes: requiring all seven to carry every
 ingredient leaves 1 survivor; requiring at least one leaves all 542. achiote-paste is stocked at exactly 1 of

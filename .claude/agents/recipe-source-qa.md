@@ -21,6 +21,15 @@ Measured 2026-09-06: nine of the twelve agents here read the open web AND hold s
 tools, and not one of them said this. No CLAUDE.md at any level reaches a spawned agent, so this
 file is the only place it can be said.
 
+<!-- store-step:ANALYSIS begin (canonical: ops/agent-blocks/store-step.md) -->
+## SEARCH THE KNOWLEDGE STORE BEFORE YOU DIAGNOSE OR JUDGE (Brad, 2026-09-22)
+
+Before you diagnose, measure, compare, audit or return a verdict, search:
+`C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py "<3-6 words>"`.
+Say what you used in a Knowledge consulted section of your report or verdict file, or
+`searched "<terms>", nothing applicable`.
+<!-- store-step:ANALYSIS end -->
+
 Nothing after you reads the source page. The batch auditor that follows checks the recipe against ITSELF
 and against the board - macros, costs, mapping, gates - all of which can be perfectly self-consistent
 about a dish the source never contained. Fidelity to the source is yours alone.

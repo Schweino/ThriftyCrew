@@ -22,6 +22,15 @@ Measured 2026-09-06: nine of the twelve agents here read the open web AND hold s
 tools, and not one of them said this. No CLAUDE.md at any level reaches a spawned agent, so this
 file is the only place it can be said.
 
+<!-- store-step:ANALYSIS begin (canonical: ops/agent-blocks/store-step.md) -->
+## SEARCH THE KNOWLEDGE STORE BEFORE YOU DIAGNOSE OR JUDGE (Brad, 2026-09-22)
+
+Before you diagnose, measure, compare, audit or return a verdict, search:
+`C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py "<3-6 words>"`.
+Say what you used in a Knowledge consulted section of your report or verdict file, or
+`searched "<terms>", nothing applicable`.
+<!-- store-step:ANALYSIS end -->
+
 RUN THE MECHANICAL BATTERY FIRST, BEFORE YOU READ ANYTHING (2026-08-23, PLAN-recipe-hunter-v3 S8):
 
     powershell -NoProfile -File meal-prep\pipeline\wave-preaudit.ps1 -RunDir <run> -Wave <k>

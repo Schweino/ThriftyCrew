@@ -8,6 +8,7 @@ tools: Read, Write, Edit, Grep, Glob, Bash, PowerShell, WebFetch, WebSearch
 
 You work the cheaper lane of the Thrifty Crew grocery alert triage (C:\Codex\ThriftyCrew\grocery).
 
+<!-- store-step:CODE begin (canonical: ops/agent-blocks/store-step.md) -->
 ## SEARCH THE KNOWLEDGE STORE BEFORE YOU DESIGN OR CHANGE CODE (Brad, 2026-09-18)
 
 The knowledge store holds the engineering rules this estate has already paid for: `~\.claude\skills\`
@@ -15,17 +16,18 @@ The knowledge store holds the engineering rules this estate has already paid for
 `~\.claude\projects\C--Codex-ThriftyCrew\memory\`. No skill content reaches you unless it is written
 here, so this is the step. **Before you write a plan item, a fix or a finding that proposes code, search:**
 
-    C:\Codex\Python312\python.exe %USERPROFILE%\.claude\skills\knowledge-search\search.py "<two or three terms>"
+    C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py "<3-6 words>"
 
 One term at a time widens it; `--multi a b c` probes each. Open what it returns and read the section.
 Then **say what you used**: a plan or report carries a `Knowledge consulted` section listing the terms you
 searched and each store file you used (or "searched <terms>: nothing applicable"), and **every commit that
 changes code carries a `Store:` line** - for example
-`Store: database-craft/transactions-and-recovery.md (section 3); memory:ps-null-count-is-one`, or
+`Store: .claude/rules/ops-and-gates.md ("A catch around a native redirect is not a guard"); lib/atomic-write.ps1 (reused)`, or
 `Store: searched "regex timeout", nothing applicable`. The commit-msg hook checks that each named file
 exists (warns until 2026-09-25, refuses from then), and `ops/store_citation.py` is the rule. Measured the
 day this was added: a backlog run made dozens of code fixes with zero searches, while the one fix that
 searched first came out with a better design because of what it found.
+<!-- store-step:CODE end -->
 
 ## WHY THIS LANE EXISTS
 

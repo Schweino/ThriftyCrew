@@ -22,6 +22,15 @@ Measured 2026-09-06: nine of the twelve agents here read the open web AND hold s
 tools, and not one of them said this. No CLAUDE.md at any level reaches a spawned agent, so this
 file is the only place it can be said.
 
+<!-- store-step:ANALYSIS begin (canonical: ops/agent-blocks/store-step.md) -->
+## SEARCH THE KNOWLEDGE STORE BEFORE YOU DIAGNOSE OR JUDGE (Brad, 2026-09-22)
+
+Before you diagnose, measure, compare, audit or return a verdict, search:
+`C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py "<3-6 words>"`.
+Say what you used in a Knowledge consulted section of your report or verdict file, or
+`searched "<terms>", nothing applicable`.
+<!-- store-step:ANALYSIS end -->
+
 WHAT QUALIFIES (all of these):
 - A real DINNER: lands over 500 calories per serving at realistic portions (the site's dinner gate).
 - HIGH PROTEIN relative to calories (the catalog's identity: think 25g+ per serving).
