@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
-# commit-msg - refuse a commit message that begins with a UTF-8 byte order mark.
+# commit-msg - three checks on the message of the commit being made, in this order:
+#   1. refuse a message that begins with a UTF-8 byte order mark (every commit);
+#   2. STORE CITATION: a Claude session's code commit names what the knowledge store told it (ops/store_citation.py);
+#   3. PLAN CITATION: a Claude session's commit that changes a file an under-way plan names cites that plan
+#      (ops/plan_citation.py, W7.2 of design/PLAN-push-derived-conflicts-2026-09-23.md).
+# 2 and 3 run from the COMMITTING checkout's own copy, judge only when CLAUDE_CODE_SESSION_ID is set, and both run
+# before the hook decides, so one commit shows every finding at once. Anything they cannot evaluate is a BLIND line
+# and never a refusal.
 #
+# THE BOM CHECK (1):
 # WHY THIS EXISTS (2026-09-07). Commit 79c62b0f0's subject line starts EF BB BF:
 #
 #     $ git log -1 --format=%s 79c62b0f0 | head -c 6 | xxd -p
@@ -53,13 +61,40 @@ fi
 # hook said nothing. A could-not-look is never a refusal, and it is never silent either.
 py="/c/Codex/Python312/python.exe"
 top="$(git rev-parse --show-toplevel 2>/dev/null)"
+refuse=0
 if [ -n "${CLAUDE_CODE_SESSION_ID:-}" ]; then
   if [ ! -f "$top/ops/store_citation.py" ]; then
     echo "store-citation: BLIND - this checkout has no ops/store_citation.py; the commit is not judged" >&2
   elif [ ! -x "$py" ]; then
     echo "store-citation: BLIND - no interpreter at $py; the commit is not judged" >&2
   else
-    "$py" "$top/ops/store_citation.py" --commit-msg "$msg" || exit 1
+    "$py" "$top/ops/store_citation.py" --commit-msg "$msg" || refuse=1
   fi
 fi
+
+# PLAN CITATION (W7.2 of design/PLAN-push-derived-conflicts-2026-09-23.md, 2026-09-23). A Claude session's commit
+# that changes a file named by a plan on origin/main whose Status line says ruled or build under way carries a
+# `Plan: <that plan>` line or `Plan-not-applicable: <reason>`. On 2026-09-23 a sibling session changed
+# ops/push-main.ps1 54 minutes after that plan named it, cited nothing, and the design was built twice.
+# ops/plan_citation.py holds the rule, its warn-then-refuse date (Brad's D18: refuse from 7 days after landing) and
+# its fixtures; this only calls it.
+# IT FAILS OPEN. The script's ONE refusal code is 10 (its REFUSE_EXIT). Every other non-zero code - a traceback's 1, an
+# unopenable file's 2, a killed interpreter - is printed as BLIND and the commit goes through, so a broken copy of the
+# rule in some checkout can never refuse a commit. A missing script or interpreter is BLIND too, and never silent.
+if [ -n "${CLAUDE_CODE_SESSION_ID:-}" ]; then
+  if [ ! -f "$top/ops/plan_citation.py" ]; then
+    echo "plan-citation: BLIND - this checkout has no ops/plan_citation.py; the commit is not judged" >&2
+  elif [ ! -x "$py" ]; then
+    echo "plan-citation: BLIND - no interpreter at $py; the commit is not judged" >&2
+  else
+    "$py" "$top/ops/plan_citation.py" --commit-msg "$msg"
+    prc=$?
+    case "$prc" in
+      0) ;;
+      10) refuse=1 ;;
+      *) echo "plan-citation: BLIND - ops/plan_citation.py exited $prc, which is not a verdict (only 0 and 10 are); the commit is not judged" >&2 ;;
+    esac
+  fi
+fi
+[ "$refuse" -eq 0 ] || exit 1
 exit 0
