@@ -33,6 +33,8 @@ the harness's current blob now does, as a commit at or after its last change alw
 flag or rise branch changed: a plain run still writes nothing, and its three ratchet live-path cases pass in its
 31-case self-test. This line cites the blob because the commit carrying the change is rebased before it lands.
 
+Re-read at harness blob b6019f129555afb3529cb83ebcaae126a0aa50b6 (ops/audit-conclusion-currency.ps1): every figure below still holds, and the census row for that script now holds in one more case than the census tested. The 2026-09-23 change (W1.2 of the push-derived-conflicts plan) removed the one plain-run write it still had: over a baseline that was absent or failed to parse, a plain run used to seed a new mark from the current count and exit 0. That branch recorded no fall, which is the defect this census counted, so the row's "no" was right for the question asked; now a plain run and a tighten there exit 3 and write nothing, and only an accept records a mark. Over a readable baseline no fall, tighten or rise branch changed, and its three ratchet live-path cases pass in its 37-case self-test.
+
 This document is in its own commit for the reason `design\MEASURE-gate-slot-admission-2026-09-11.md`
 gives: a document cannot carry the hash of the commit that adds it, and here the harness IS what moved,
 so the scripts land first and this cites them. The gate suite that ran over the whole tree is named in
