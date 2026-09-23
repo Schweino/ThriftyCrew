@@ -23,5 +23,11 @@ Loaded in every ThriftyCrew session: this file has no `paths:` key, on purpose
   [[learning-must-be-per-batch-not-nightly]]
 - **An agreeing number escapes scrutiny.** Run the check by rule, not by suspicion.
   [[an-agreeing-number-escapes-scrutiny]]
+- **A graph.db that EXISTS may hold no nodes** (2026-09-23). `graph/lib/rebuild.py`'s plain mode
+  restores only the five learning tables, by design, and `design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md`
+  W6.4 sends worktrees down that road, so `question_verdicts` names commodities the index cannot compile.
+  A check that reads graph.db when it is present asks whether it holds `Commodity` nodes before resolving
+  one, and a no is BLIND: counted, never ok, never a failure. `_index_blind` in
+  `graph/bench/priors_ablation.py` is the exemplar; its self-test red a push over exactly this.
 
 Regime: this holds for files under `graph/`.

@@ -39,7 +39,9 @@ import io
 import json
 import os
 import random
+import shutil
 import sys
+import tempfile
 import time
 from concurrent.futures import ThreadPoolExecutor
 
@@ -49,7 +51,7 @@ sys.path.insert(0, os.path.join(HERE, "..", "pipeline"))
 sys.path.insert(0, os.path.join(HERE, "..", "gold"))
 
 from authority import authority_tier                              # noqa: E402
-from graphdb import open_db                                       # noqa: E402
+from graphdb import GraphDB, open_db                              # noqa: E402
 from ids import norm_text                                         # noqa: E402
 from llm import LocalLLM, should_escalate                         # noqa: E402
 from resolve import RESOLVE_SCHEMA, build_resolve_prompt, Resolver  # noqa: E402
@@ -61,6 +63,35 @@ MODES = {"none": "none", "loo-all": "all", "loo": "adjudicated"}
 # Matches the layer-5 default (Resolver.escalate_below) so an answer counted as
 # "escalated" here is one production would also have escalated.
 ESCALATE_BELOW = 0.75
+
+# The self-test's leave-one-out half needs a commodity carrying at least this many banked
+# rulings, so one can be held out and others still shown. The first plausible number, not the
+# survivor of a sweep: it has stood since the half was written.
+LOO_MIN_HISTORY = 3
+# The checks that half runs when it can look. A checkout where it cannot reports every one of
+# them BLIND, and the clean twin asserts the seeing arm ran exactly these, so the blind count is
+# checked by the arm that can see rather than claimed by the one that cannot.
+LOO_CHECKS = ("MUST FIRE  a case never appears among its own examples",
+              "MUST FIRE  only adjudicated rulings are cited as precedent")
+
+
+def _index_blind(db) -> tuple[str, str] | None:
+    """Why this index cannot compile a commodity, as (code, why), or None when it can.
+
+    A LEARNING-ONLY INDEX IS A SANCTIONED SHAPE, NOT A BROKEN ONE (2026-09-23). graph/lib/rebuild.py's
+    plain mode restores the five learning tables and nothing else, by design, and says to run
+    import_all.py for the nodes. question_verdicts then names thousands of commodities the nodes
+    table does not hold, so Resolver._verdict_index is full while Resolver.commodity() raises
+    KeyError for every one of them. On branch claude/d13-graph-rulings that red a push (run-gates
+    pass=471 fail=1) for a reason unrelated to the change. Anything else wrong with the file, not a
+    database or no schema, is NOT this shape: the query raises, and the caller scores a failure.
+    """
+    if db.conn.execute("SELECT COUNT(*) FROM nodes WHERE type='Commodity'").fetchone()[0]:
+        return None
+    total = db.conn.execute("SELECT COUNT(*) FROM nodes").fetchone()[0]
+    return ("no-commodity-nodes",
+            f"the index holds no Commodity nodes ({total} node(s) of any type) - a learning-only "
+            f"rebuild (graph/lib/rebuild.py plain mode); graph/import/import_all.py builds them")
 
 
 def probe_cases(db, r: Resolver, n: int, require_history: bool, seed: int) -> list[dict]:
@@ -149,17 +180,150 @@ def run_mode(llm: LocalLLM, r: Resolver, cases: list[dict], mode: str,
             "rows": rows}
 
 
+def _leave_one_out(db_path: str, T) -> tuple[str, str] | None:
+    """The leave-one-out checks over the index at `db_path`, each reported through T.
+
+    Returns None when they ran, or (code, why) when this index cannot answer them: no file
+    (graph.db is gitignored, so a fresh worktree has none), a learning-only index
+    (`_index_blind`), or no compiled commodity with LOO_MIN_HISTORY rulings. Each of those is a
+    could-not-look, reported BLIND by the caller, never a failure and never a pass. A genuine
+    error, a file that is not a database or a query that raises, is still a failing case.
+
+    Opened with no learning restore: open_db() writes the tracked learning records into an index
+    whose learning tables are empty, and a self-test must not write the index it reads.
+    """
+    if not os.path.exists(db_path):
+        return ("no-db", "no graph.db here - it is gitignored (graph/.gitignore), so a fresh worktree has none")
+    try:
+        with GraphDB(db_path, create=False, restore_learning=False) as db:
+            blind = _index_blind(db)
+            if blind:
+                return blind
+            r = Resolver(db, llm=None, use_llm=False)
+            # A partly built index can bank rulings on a commodity it holds no node for, so the
+            # case is chosen among commodities that compile: the check is about the leave-one-out
+            # rule, not about whether the import finished.
+            hit = next(((node, pool) for node, pool in r._verdict_index.items()
+                        if len(pool) >= LOO_MIN_HISTORY and db.get_node(node)), None)
+            if hit is None:
+                return ("no-history", f"no commodity with a node carries {LOO_MIN_HISTORY} or more "
+                                      f"banked rulings ({len(r._verdict_index)} carry any)")
+            node, pool = hit
+            cc = r.commodity(node)
+            own = pool[0][0]
+            ex = r.prior_rulings(cc, own, authority="all")
+            shown = {norm_text(x) for v in ex.values() for x in v}
+            T(LOO_CHECKS[0], norm_text(own) not in shown, own[:60])
+            adj = r.prior_rulings(cc, own, authority="adjudicated")
+            cited = [x for x in (adj.get("rejected", []) + adj.get("confirmed", []))]
+            tiers = {norm_text(p[0]): p[3] for p in pool}
+            T(LOO_CHECKS[1],
+              all(tiers.get(norm_text(c)) == "adjudicated" for c in cited),
+              str([(c, tiers.get(norm_text(c))) for c in cited])[:160])
+    except Exception as e:                                        # noqa: BLE001
+        T(f"graph available for the leave-one-out check ({type(e).__name__})", False, str(e)[:120])
+    return None
+
+
+def _fixture_index(root: str, name: str, commodities=(), verdicts=()) -> str:
+    """A temp index: the real schema, these Commodity nodes and question_verdicts rows, nothing else."""
+    path = os.path.join(root, name + ".db")
+    at = "2026-09-23T00:00:00"
+    with GraphDB(path, allow_new=True, restore_learning=False) as db:
+        for cid in commodities:
+            db.upsert_node(cid, "Commodity", cid.rsplit(":", 1)[-1], at)
+        for cid, product, status, reason in verdicts:
+            db.conn.execute(
+                "INSERT INTO question_verdicts (commodity_id, product_key, product_name, status, "
+                "reason, decided_at) VALUES (?,?,?,?,?,?)",
+                (cid, norm_text(product), product, status, reason, at))
+    return path
+
+
+def _fixtures(T) -> None:
+    """The leave-one-out half against temp indexes of each shape. Never the live graph.db."""
+    adobo = "commodity:staple:adobo-seasoning"
+    beans = "commodity:staple:black-beans"
+
+    def rulings(cid, n):
+        # One adjudicated rejection, one model-only rejection and one adjudicated confirmation,
+        # so both checks have something to get wrong: the held-out case is among the rulings
+        # `all` would show, and a model-only row is among those `adjudicated` must not cite.
+        rows = [(cid, "Goya Adobo All Purpose Seasoning 8 oz", "llm_rejected", "reviewer: wrong pack"),
+                (cid, "Adobo Chipotle Peppers 7 oz", "llm_rejected", "banked: llm: not a seasoning"),
+                (cid, "Badia Adobo Seasoning 7 oz", "llm_confirmed", "adjudicated: match")]
+        return rows[:n]
+
+    def run(path):
+        seen: list[tuple[str, bool]] = []
+        blind = _leave_one_out(path, lambda name, ok, got="": seen.append((name, bool(ok))))
+        return blind, seen
+
+    root = tempfile.mkdtemp(prefix="pa-st-")
+    try:
+        # MUST FIRE, the founding shape. The precondition proves this fixture IS the input that
+        # went red: the verdict index is full and compiling the commodity raises KeyError.
+        lo = _fixture_index(root, "learning-only", verdicts=rulings(adobo, 3))
+        with GraphDB(lo, create=False, restore_learning=False) as db:
+            r = Resolver(db, llm=None, use_llm=False)
+            try:
+                r.commodity(adobo)
+                founding = "commodity() compiled"
+            except KeyError:
+                pool_n = len(r._verdict_index.get(adobo) or [])
+                founding = "KeyError" if pool_n >= LOO_MIN_HISTORY else f"KeyError, but the pool holds {pool_n}"
+        blind, seen = run(lo)
+        T("MUST FIRE  a learning-only index (rebuild.py plain mode: 3 rulings on adobo-seasoning, "
+          "0 nodes) reads BLIND no-commodity-nodes, never the KeyError failure",
+          founding == "KeyError" and blind is not None and blind[0] == "no-commodity-nodes" and not seen,
+          f"precondition={founding} blind={blind} seen={seen}")
+
+        blind, seen = run(os.path.join(root, "absent.db"))
+        T("MUST FIRE  an absent graph.db reads BLIND no-db and creates no file",
+          blind is not None and blind[0] == "no-db" and not seen
+          and not os.path.exists(os.path.join(root, "absent.db")), f"blind={blind} seen={seen}")
+
+        partial = _fixture_index(root, "partial", commodities=[beans], verdicts=rulings(adobo, 3))
+        blind, seen = run(partial)
+        T("MUST FIRE  a partly built index whose only history sits on a commodity with no node "
+          "reads BLIND no-history, never the KeyError failure",
+          blind is not None and blind[0] == "no-history" and not seen, f"blind={blind} seen={seen}")
+
+        below = _fixture_index(root, "below-bar", commodities=[adobo], verdicts=rulings(adobo, 2))
+        blind, seen = run(below)
+        T("MUST FIRE  a commodity with 2 rulings, one below the bar of 3, reads BLIND no-history",
+          blind is not None and blind[0] == "no-history" and not seen, f"blind={blind} seen={seen}")
+
+        at_bar = _fixture_index(root, "at-bar", commodities=[adobo], verdicts=rulings(adobo, 3))
+        blind, seen = run(at_bar)
+        T("CLEAN TWIN  a built index with 3 rulings, exactly the bar of 3, runs every leave-one-out "
+          "check and each passes - the checks a blind checkout reports as not covered",
+          blind is None and [n for n, _ in seen] == list(LOO_CHECKS) and all(ok for _, ok in seen),
+          f"blind={blind} seen={seen}")
+
+        junk = os.path.join(root, "not-a-database.db")
+        with io.open(junk, "wb") as fh:
+            fh.write(b"this file is not an SQLite database\n" * 64)
+        blind, seen = run(junk)
+        T("CLEAN TWIN  a graph.db that is not a database is still a failing case, never BLIND - "
+          "only the sanctioned shapes above could not look",
+          blind is None and len(seen) == 1 and not seen[0][1], f"blind={blind} seen={seen}")
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+
 def _selftest() -> int:
     """No GPU, no server: the routing and the leave-one-out rule."""
-    bad = 0
+    ran: list[str] = []
+    bad: list[str] = []
 
     def T(name, ok, got=""):
-        nonlocal bad
+        ran.append(name)
         if ok:
             print(f"  ok    {name}")
         else:
             print(f"  X     {name}   got: {got}")
-            bad += 1
+            bad.append(name)
 
     T("every mode maps to a prior_rulings authority",
       set(MODES.values()) == {"none", "all", "adjudicated"}, str(MODES))
@@ -170,50 +334,27 @@ def _selftest() -> int:
       should_escalate(0.5, ESCALATE_BELOW))
     T("MUST FIRE  a model-only rejection is not citable as precedent",
       authority_tier("llm_rejected", "banked: llm: x") == "single_model")
+    _fixtures(T)
 
-    # Leave-one-out over a real index, if the graph is present. A worktree with no
-    # graph.db (the DB is not tracked — graph/.gitignore) skips this half rather
-    # than failing: the pure checks above still hold, and a self-test that cannot
-    # pass in a fresh clone stops being run.
-    db_path = os.path.join(HERE, "..", "sqlite", "graph.db")
-    if not os.path.exists(db_path):
-        print("  ok    graph db absent - leave-one-out checks skipped (fresh worktree)")
-        if bad:
-            print(f"priors_ablation SELF-TEST FAIL ({bad})")
-            return 2
-        print("priors_ablation SELF-TEST PASS")
-        return 0
-    try:
-        with open_db(create=False) as db:
-            r = Resolver(db, llm=None, use_llm=False)
-            hit = None
-            for node, pool in r._verdict_index.items():
-                if len(pool) >= 3:
-                    hit = (node, pool)
-                    break
-            if hit is None:
-                T("leave-one-out: no commodity with history in this graph (skipped)", True)
-            else:
-                node, pool = hit
-                cc = r.commodity(node)
-                own = pool[0][0]
-                ex = r.prior_rulings(cc, own, authority="all")
-                shown = {norm_text(x) for v in ex.values() for x in v}
-                T("MUST FIRE  a case never appears among its own examples",
-                  norm_text(own) not in shown, own[:60])
-                adj = r.prior_rulings(cc, own, authority="adjudicated")
-                cited = [x for x in (adj.get("rejected", []) + adj.get("confirmed", []))]
-                tiers = {norm_text(p[0]): p[3] for p in pool}
-                T("MUST FIRE  only adjudicated rulings are cited as precedent",
-                  all(tiers.get(norm_text(c)) == "adjudicated" for c in cited),
-                  str([(c, tiers.get(norm_text(c))) for c in cited])[:160])
-    except Exception as e:                                        # noqa: BLE001
-        T(f"graph available for the leave-one-out check ({type(e).__name__})", False, str(e)[:120])
-
+    # Leave-one-out over the real index. A checkout that cannot answer it, no graph.db or a
+    # learning-only one, reports those checks BLIND: counted, named, and neither passed nor
+    # failed. It used to print an ok line for the absent case and fail the learning-only one.
+    blind = _leave_one_out(os.path.join(HERE, "..", "sqlite", "graph.db"), T)
+    n_blind = len(LOO_CHECKS) if blind else 0
+    cases = len(ran) + n_blind
+    marker = f"PRIORS-ABLATION-SELFTEST-COMPLETE cases={cases} failed={len(bad)} blind={n_blind}"
     if bad:
-        print(f"priors_ablation SELF-TEST FAIL ({bad})")
+        print(f"priors_ablation SELF-TEST FAIL ({len(bad)} of {cases} case(s))")
+        print(marker)
         return 2
-    print("priors_ablation SELF-TEST PASS")
+    if blind:
+        print(f"priors_ablation selftest: {len(ran)} of {cases} cases pass, {n_blind} BLIND - "
+              f"could not look, NOT passed ({blind[0]}: {blind[1]}):")
+        for name in LOO_CHECKS:
+            print(f"  {name}")
+    else:
+        print(f"priors_ablation SELF-TEST PASS: {cases} of {cases} case(s)")
+    print(marker)
     return 0
 
 
@@ -247,6 +388,14 @@ def main() -> int:
         return 2
 
     with open_db(create=False) as db:
+        # A learning-only index resolves no gold case, so the run below would measure zero cases
+        # and print a table of zeros: an agreeing answer to a question nobody asked it.
+        blind = _index_blind(db)
+        if blind:
+            print(f"PRIORS ABLATION BLIND: {blind[1]}. Nothing was measured, which is not "
+                  f"a measurement of nothing.")
+            print(f"PRIORS-ABLATION-COMPLETE blind={blind[0]}")
+            return 3
         r = Resolver(db, llm=None, use_llm=False)
         cases = probe_cases(db, r, args.n, not args.all_cases, args.seed)
         print(f"priors ablation   model={llm.model}   cases={len(cases)}   "

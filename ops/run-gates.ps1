@@ -1037,7 +1037,20 @@ foreach ($g in $pySuites) {
     $noVerdict += $g.f
     Write-Output ("  NO VERDICT  {0}  (exit 0, scored 3 - {1}; last line: {2})" -f $g.f, $score.Verdict.Reason, $score.Verdict.Line)
   }
-  elseif ($score.Score -ceq 'ok') { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
+  elseif ($score.Score -ceq 'ok') {
+    $pass++
+    # A PYTHON SUITE THAT COULD NOT LOOK IS NAMED TOO (2026-09-23). The self-test loop above has named a blind=<n>
+    # marker since 2026-09-11 and this one printed a bare ok over it, which never mattered until
+    # graph\bench\priors_ablation.py became the first Python self-test to report BLIND cases (no graph.db, or a
+    # learning-only one). Last marker only, each line trimmed, the same read as the cache loop above.
+    $marks = @(@($out) | ForEach-Object { ("" + $_).Trim() } | Where-Object { $_ -match '^[A-Z0-9][A-Z0-9-]*-COMPLETE\b' })
+    if ($marks.Count -and ("" + $marks[$marks.Count - 1]) -match '\bblind=([1-9][0-9]*)\b') {
+      $blindGates += ("{0} ({1} case(s))" -f $g.f, $Matches[1])
+      Write-Output ("  ok    {0}  ({1}; BLIND on {2} case(s) - see its output)" -f $g.f, $g.n, $Matches[1])
+    } else {
+      Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n)
+    }
+  }
   else {
     $fail += $g.f
     $said = if ($rc -eq 0) { ' - it exited 0, but its own output says it failed' } else { '' }
