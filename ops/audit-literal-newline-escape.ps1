@@ -29,8 +29,10 @@
     CASE      a LINE comment carrying a self-test case CALL: a command name, then a quoted label that opens with
               MUST FIRE, MUST NOT FIRE or CLEAN TWIN, then a `(` or `$` condition. A case in a comment never runs.
   LISTED, NOT COUNTED: every other comment holding \n or \r\n (prose about line endings) where the escape does not follow a
-  letter or digit, so out\name-drift.json is not listed. Ten on the day this was written, all prose; printed so a reader
-  can see what the COMMENT rule chose not to count.
+  letter or digit, so out\name-drift.json is not listed. Ten on the day this was written, all prose, and 22 after the same day's
+  REPLACES header seeds added regex classes such as [^\r\n#] to twelve library headers; printed so a reader can see
+  what the COMMENT rule chose not to count. Those headers are why the COMMENT rule wants a blank, or a # followed by a
+  blank, between the escape and the new line it reads: the first cut counted all twelve.
 
   A GATE AT ZERO, NOT A RATCHET. Measured 2026-09-23 through this file from a linked worktree over the tree at
   origin/main 0c06fcf1d: git listed 839 tracked .ps1/.psm1, the walk resolved 839, CODE 0, COMMENT 0, CASE 0 counted,
@@ -63,7 +65,10 @@ $script:LNE_WALK_EXCLUDE = '\\work' + 'trees\\|\\\.git\\|node_modules'
 # Built by concatenation so a detector reading its own source could never match its own patterns.
 $script:LNE_ESC = '(?:\\' + 'r)?\\' + 'n'   # an optional backslash-r, then backslash-n
 $script:LNE_CODE_RX = '^' + $script:LNE_ESC + '|' + $script:LNE_ESC + '$'
-$script:LNE_COMMENT_RX = $script:LNE_ESC + '[ \t]*(?:#|\$[\w{]|[A-Za-z_][\w-]*[ \t]+[''"($-])'
+# After the escape: blanks and then a comment, a variable or a command (the founding shape, an indented next line), or
+# with no blank a comment that opens with a space, a variable, or a command. A regex class such as [^\r\n#] puts # right
+# after the escape with no space, and is not a new line (the REPLACES headers of 2026-09-23 carry a dozen of them).
+$script:LNE_COMMENT_RX = $script:LNE_ESC + '(?:[ \t]+(?:#|\$[\w{]|[A-Za-z_][\w-]*[ \t]+[''"($-])|#[ \t]|\$[A-Za-z_{]|[A-Za-z_][\w-]*[ \t]+[''"($-])'
 $script:LNE_CASE_RX = '(?:^#|[\s;{(])[A-Za-z_][\w-]*[ \t]+''(?:MUST ' + 'FIRE|MUST NOT ' + 'FIRE|CLEAN ' + 'TWIN)[^'']*''[ \t]+[($]'
 $script:LNE_ALLOW = 'literal-newline' + ':allow'
 $script:LNE_BSN = [string][char]92 + 'n'
@@ -144,7 +149,7 @@ function Get-LneScanFiles {
 # ------------------------------------------------------------------------------------------- self-test
 if ($SelfTest) {
   $script:fail = 0; $script:cases = 0
-  $script:expectedCases = 18
+  $script:expectedCases = 19
   function LneT([string]$m, [bool]$c, [string]$got = '') {
     $script:cases++
     if ($c) { Write-Output ('  ok    ' + $m) } else { Write-Output ('  FAIL  ' + $m + '   got: ' + $got); $script:fail++ }
@@ -202,6 +207,9 @@ if ($SelfTest) {
     $r = Get-LneFindings -Text ("# T 'MUST FIRE  quoted on purpose' (`$x)   # " + $script:LNE_ALLOW + ' fixture of the shape')
     $r = Get-LneFindings -Text ("function T([string]`$n, [bool]`$ok) { }`nT 'MUST FIRE  x' (`$y)`n# a note")
     LneT 'MUST NOT FIRE  a file with neither a backslash-n nor a commented label is skipped by the prefilter, unparsed' ((-not $r.Parsed) -and $r.Findings.Count -eq 0) ('parsed=' + $r.Parsed)
+    $fxClass = '# REPLACES: (?im)^(?![ \t]*#)[^' + $bs + 'r' + $bs + 'n#]*' + $bs + 'bAdd-Content' + $bs + 'b[^' + $bs + 'r' + $bs + 'n#]*' + $bs + '.(?:jsonl|log)'
+    $r = Get-LneFindings -Text $fxClass
+    LneT 'MUST NOT FIRE  a regex class [^\r\n#] in a line comment (the REPLACES header shape) is not a joined line' ($r.Findings.Count -eq 0) (LneGot $r)
     LneT 'MUST NOT FIRE  a line comment that carries the allow marker' ($r.Findings.Count -eq 0) (LneGot $r)
 
     # ---- CLEAN TWIN -------------------------------------------------------------------------------------------
