@@ -197,8 +197,10 @@ harness's `--bot-sim` mode so the question can be asked again at the next cross-
 
 Run 2026-09-23 between 03:40 and 04:10, in the worktree `claude/graph-reconcile`, interpreter
 `C:\Codex\Python312\python.exe`. The harness is cited by blob because `ops\push-main.ps1` rebases before it pushes:
-`graph/bench/probe_learning_reconcile.py`, `graph/lib/learning_reconcile.py`, `graph/lib/graphdb.py` and
-`graph/lib/graphdb_selftest.py` at the blobs named in the commit that adds them.
+`graph/lib/learning_reconcile.py` 90f88c28bcb65d174c8b1b7be070f464ae881403, `graph/lib/graphdb.py`
+9c73fe45e2bbf0f6b9d5ced5ddcb35bd8a00f297, `graph/lib/graphdb_selftest.py` 6094ea3af1beab9ae595faa5e37cf77f20aef83f;
+`graph/bench/probe_learning_reconcile.py` 558fb3a1af80097ed3515eb6eccce75907b88b23 for every `--db` result below, and
+3bb65acd54c66f5d3247f656f826fc3b74d75d70 (the `--bot-sim` fix, which touched only that mode) for the final bot run.
 
 - **Fixtures**: `graph/lib/graphdb_selftest.py --selftest` exit 0, `SELF-TEST PASS: graphdb 25 of 25 cases` (13 before
   plus the 12 in section 5). Unchanged and still green: `graph/lib/graphdb.py --selftest` (10 of 10),
