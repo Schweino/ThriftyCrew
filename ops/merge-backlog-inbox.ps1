@@ -139,7 +139,7 @@
   scheduled task's worktree and a hand merge in any other checkout take DIFFERENT mutexes. Each reads its own copy at
   one base, each mints the same next id, and the second to land meets a rebase conflict on the backlog: the collision
   Row 3 exists to remove. No lock can fix that, because the two writers never share a file; only one writer can. So
-  the scheduled merge (the TC Backlog Merge task, W3.4) is the one allocator, and a real merge of a
+  the scheduled merge (the TC Backlog Merge task, ops\run-backlog-merge.ps1, W3.4) is the one allocator, and a real merge of a
   checkout's backlog anywhere else is REFUSED, exit 1, writing and consuming nothing, unless it passes
   `-AllowHandMerge "<reason>"`. The reason is printed in its trailer, so a hand merge is visible in the commit that
   carries it. A session that needs an id now runs the task on demand (`Start-ScheduledTask -TaskName 'TC Backlog
