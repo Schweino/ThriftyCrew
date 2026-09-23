@@ -1,3 +1,5 @@
+# Its declared inputs (2026-09-23, lib\gate-input-key.ps1 rule 2): meal-prep\.ghostkey is read only on a live Ghost call, which no hermetic self-test makes.
+# gate-inputs: lib\ghost-lib.ps1
 # ghost-lib.ps1 - THE single Ghost Admin API helper for the whole income estate. Dot-source it:
 #   . (Join-Path <repo-root> 'lib\ghost-lib.ps1')
 # Exists because the JWT-minting function was copy-pasted 50+ times across grocery + meal-prep scripts

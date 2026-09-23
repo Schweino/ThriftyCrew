@@ -1,3 +1,5 @@
+# Its declared inputs (2026-09-23, lib\gate-input-key.ps1 rule 2): its only Join-Path on $root builds a fixture sibling worktree under %TEMP%; every walk reads the root its CALLER passes, which the caller's own key answers for.
+# gate-inputs: lib\tree-walk.ps1
 # tree-walk.ps1 - THE one way a walk over this tree decides a path is excluded: on the part BELOW the root.
 #
 # WHY THIS EXISTS (2026-09-11). Nineteen walks in seventeen files excluded \worktrees\ (two of them \.claude\

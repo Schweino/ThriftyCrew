@@ -29,6 +29,9 @@
   NOT AN EXPIRY, AND NOT A CLOCK. The key is content, so an entry is valid until its content changes. A max
   age is kept anyway as a backstop against a machine whose PowerShell or OS moved under it, and it is long.
 #>
+# Its self-test builds every sandbox it reads under %TEMP% and reads three frozen blobs by id from git's object store,
+# which cannot change under an id. So it reads nothing else of this repo, and says so rather than being guessed at.
+# gate-inputs: lib\gate-input-key.ps1
 $__gikSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 # A DATA DIRECTORY IS BYTES THAT CHANGE WITHOUT A COMMIT. A gate that reads one cannot be keyed on source.
@@ -39,12 +42,231 @@ $__gikSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-
 $script:TcGateDataBody = '(?:grocery\\out|meal-prep\\db|meal-prep\\out|graph\\(?:gold|learning|out)|public\\|content\\|site\\|run\\waves|\.git\\)'   # reach-fixture-ok: the shape this rule REFUSES, named in a pattern; nothing here opens a real data file
 $script:TcGateDataRx = '(?i)' + $script:TcGateDataBody
 # Join-Path $repo $something: the second part is a variable, so the file it names cannot be read from source.
-$script:TcGateComputedRx = '(?i)Join-Path\s+\$(repo|root|RepoRoot|here)\s+\$'
-# Join-Path $repo 'a\b.ps1': a literal the key can resolve and hash.
-$script:TcGateLiteralRx = '(?i)Join-Path\s+\$(?:repo|root|RepoRoot|here)\s+''([^'']+)'''
-# A dot-sourced library, in the one spelling this estate uses.
-$script:TcGateLibRx = '(?i)Join-Path\s+\$(?:repo|root|RepoRoot)\s+''(lib\\[^'']+\.ps1)'''
+$script:TcGateComputedRx = '(?i)Join-Path\s+\$(repo|root|RepoRoot|here|PSScriptRoot)\s+\$'
+# Join-Path <base> 'a\b.ps1': a literal the key can resolve and hash. Group 1 is the BASE as written, group 2 the
+# literal. A base is one of the four named variables, $PSScriptRoot, or (Split-Path $PSScriptRoot -Parent) in either
+# argument order - the three spellings this estate uses for "the folder a path is joined to".
+$script:TcGateLiteralRx = '(?i)Join-Path\s+(\$(?:repo|root|RepoRoot|here|PSScriptRoot)\b|\(\s*Split-Path\s+(?:-Parent\s+)?\$(?:PSScriptRoot|repo|root|RepoRoot|here)\b(?:\s+-Parent)?\s*\))\s+''([^'']+)'''
+$script:TcGateBaseVarNames = @('repo', 'root', 'RepoRoot', 'here')
+# THE SAME DIRECTORIES as $script:TcGateDataBody, asked of a RESOLVED repo-relative path with a trailing separator, and
+# anchored at both ends of the directory name so grocery\outline.ps1 is not grocery\out. Keep the two lists in step.
+$script:TcGateDataResolvedRx = '(?i)^(?:grocery\\out|meal-prep\\db|meal-prep\\out|graph\\(?:gold|learning|out)|public|content|site|run\\waves|\.git)\\'   # reach-fixture-ok: the shape this rule REFUSES, named in a pattern; nothing here opens a real data file
 $script:TcGateKeyMaxAgeHours = 72
+
+# ---- THE KEY RESOLVES A PATH AGAINST THE FOLDER ITS VARIABLE NAMES (2026-09-23) ----
+# WHY. Until this change every `Join-Path $root '<lit>'` was resolved against the REPO ROOT, whatever $root was. In this
+# estate $root is usually $PSScriptRoot, so grocery\capture-watchdog.ps1's twelve inputs were all looked for at the root,
+# none was there, and each was hashed as the constant 'absent' and ACCEPTED. capture-run.ps1 changed four times and the
+# watchdog's key did not move once, so a 19:06 pass was replayed over a red self-test on five pushes to main
+# (427327335, 1fb95392f, 92f2cfa7c, 1fbb617c4, f936a4b31). Measured at 351ff7f5c: 133 of 277 keyable self-tests named
+# a real file the key could not see. grocery\triage-plans\investigation-red-on-main-2026-09-23.md is the account.
+# THE FOUR RULES (Brad, 2026-09-23, "Full fix + declare"):
+#   1. a literal is resolved against the folder its base names: $PSScriptRoot is the file's own folder, and a named
+#      variable is read from its assignment in the same file (Get-TcGateVarBase). A base it cannot read is every
+#      ancestor folder of the file and of the gate, and every one of those candidates goes into the key.
+#   2. an input that exists under no candidate is a REFUSAL, never the constant 'absent' - the rule this file already
+#      applied to the gate file itself. So is a directory, whose listing no source key can watch.
+#   3. the data-directory refusal is asked of the RESOLVED path, so `Join-Path $root 'out'` beside a grocery script is
+#      data even though the literal never spells grocery\out.
+#   4. a spelling that builds a path on a base and that this file does not parse is refused (Test-TcGateUnparsed).
+# A DECLARATION (# gate-inputs:) still outranks all four: the author has said what the gate reads.
+
+function Resolve-TcGateBaseExpr {
+  <# Pure over one assignment's right-hand side. Returns an array of bases - an [int] number of folders UP from the
+     file's own folder, or the string 'repo' for the checkout root, or 'var:<name>' for another base variable - or
+     $null when the expression is a spelling this file does not read. $null is the conservative answer: the caller
+     then treats every ancestor folder as a candidate. #>
+  param([string]$Expr)
+  $e = ([string]$Expr).Trim()
+  $e = ($e -replace '\s+#.*$', '').Trim().TrimEnd(';').Trim()
+  if (-not $e) { return $null }
+  if ($e -match '(?i)^\$(repo|root|RepoRoot|here)$') { return , @('var:' + $Matches[1].ToLowerInvariant()) }
+  if ($e -match '(?i)\bgit\b.*\brev-parse\b.*--show-toplevel') { return , @('repo') }
+  $m = [regex]::Match($e, '(?is)^if\s*\(\s*\$PSScriptRoot\s*\)\s*\{(.+)\}\s*else\s*\{(.+)\}$')
+  $branches = if ($m.Success) { @($m.Groups[1].Value, $m.Groups[2].Value) } else { @($e) }
+  $out = [Collections.Generic.List[object]]::new()
+  foreach ($b in $branches) {
+    $ps = [regex]::IsMatch($b, '(?i)\$PSScriptRoot\b')
+    $mi = [regex]::IsMatch($b, '(?i)\$MyInvocation\.MyCommand\.(?:Path|Definition)\b')
+    if ($ps -eq $mi) { return $null }
+    # Everything left after the tokens this reader understands must be nothing but brackets and space.
+    $rest = $b -replace '(?i)\$PSScriptRoot\b|\$MyInvocation\.MyCommand\.(?:Path|Definition)\b|\bSplit-Path\b|\bResolve-Path\b|\bConvert-Path\b|\bJoin-Path\b|-Parent\b|-LiteralPath\b|-Path\b|\.ProviderPath\b|\.Path\b|\[(?:System\.)?IO\.Path\]::GetFullPath|''(?:\.\.[\\/]?)+''', ''
+    if ($rest -notmatch '^[\s\(\)]*$') { return $null }
+    $ups = ([regex]::Matches($b, '(?i)\bSplit-Path\b')).Count
+    foreach ($dm in [regex]::Matches($b, '''((?:\.\.[\\/]?)+)''')) { $ups += ([regex]::Matches($dm.Groups[1].Value, '\.\.')).Count }
+    if ($mi) { $ups-- }
+    if ($ups -lt 0) { return $null }
+    $out.Add([int]$ups)
+  }
+  return , $out.ToArray()
+}
+
+function Get-TcGateVarBase {
+  <# Pure over TEXT (comment-stripped). For each named base variable, the bases its assignments in this file give it
+     (see Resolve-TcGateBaseExpr), or $null when it has no assignment here, any assignment is unreadable, or it is also
+     a typed parameter or a loop variable - each of those means the folder is decided somewhere this file cannot see. #>
+  param([string]$Code)
+  $raw = @{}
+  foreach ($v in $script:TcGateBaseVarNames) {
+    $raw[$v.ToLowerInvariant()] = $null
+    if ([regex]::IsMatch($Code, ('(?i)\[[\w\.\[\]]+\]\s*\$' + $v + '\b')) -or [regex]::IsMatch($Code, ('(?i)foreach\s*\(\s*\$' + $v + '\s+in\b'))) { continue }
+    $ms = [regex]::Matches($Code, ('(?im)^[ \t]*(?:\$script:)?\$' + $v + '[ \t]*=(?!=)[ \t]*(.+?)[ \t]*$'))
+    if (-not $ms.Count) { continue }
+    $bases = [Collections.Generic.List[object]]::new(); $unknown = $false
+    foreach ($m in $ms) {
+      $b = Resolve-TcGateBaseExpr -Expr $m.Groups[1].Value
+      if ($null -eq $b) { $unknown = $true; break }
+      foreach ($x in $b) { $bases.Add($x) }
+    }
+    if (-not $unknown) { $raw[$v.ToLowerInvariant()] = $bases.ToArray() }
+  }
+  # One level of `$repo = $root`: follow it when the other variable is itself known, otherwise the pair is unknown.
+  $out = @{}
+  foreach ($k in @($raw.Keys)) {
+    $list = $raw[$k]
+    if ($null -eq $list) { $out[$k] = $null; continue }
+    $res = [Collections.Generic.List[object]]::new(); $bad = $false
+    foreach ($x in $list) {
+      if ($x -is [string] -and $x.StartsWith('var:')) {
+        $o = $raw[$x.Substring(4)]
+        if ($null -eq $o -or $x.Substring(4) -eq $k) { $bad = $true; break }
+        foreach ($y in $o) { if ($y -is [string] -and $y.StartsWith('var:')) { $bad = $true; break } else { $res.Add($y) } }
+        if ($bad) { break }
+      } else { $res.Add($x) }
+    }
+    $out[$k] = if ($bad) { $null } else { $res.ToArray() }
+  }
+  return $out
+}
+
+function Get-TcGateAncestorDirs {
+  <# Every folder from $Rel up to the checkout root, root last as ''. Repo-relative, no trailing separator. #>
+  param([string]$Rel)
+  $out = [Collections.Generic.List[string]]::new()
+  $cur = ([string]$Rel).Trim('\')
+  while ($true) {
+    $out.Add($cur)
+    if (-not $cur) { break }
+    $i = $cur.LastIndexOf('\')
+    $cur = if ($i -lt 0) { '' } else { $cur.Substring(0, $i) }
+  }
+  return , $out.ToArray()
+}
+
+function Test-TcGateUnparsed {
+  <# Pure over comment-stripped TEXT. RULE 4: a spelling that builds a path on a base and that Get-TcGateReferencedPaths
+     does not parse would otherwise be neither keyed nor refused - an input dropped from the key in silence. Returns
+     the name of the first such spelling, or '' when there is none. A backtick-escaped `$root inside a fixture string
+     is text, not a read, so every pattern refuses only an unescaped $. #>
+  param([string]$Code)
+  $b = '(?:repo|root|RepoRoot|here|PSScriptRoot)'
+  $rules = @(
+    @(('(?i)\[(?:System\.)?IO\.Path\]::Combine\(\s*\$' + $b + '\b'), '[IO.Path]::Combine on a base folder'),
+    @(('(?i)"[^"\r\n]*(?<!`)\$\{?' + $b + '\}?\\'), 'a path interpolated into a double-quoted string on a base folder'),
+    @(('(?i)Join-Path\s+\$' + $b + '\s+"'), 'Join-Path on a base folder with a double-quoted child'),
+    @(('(?i)Join-Path\s+-Path\s+\$' + $b + '\b'), 'Join-Path on a base folder with named parameters'),
+    @(('(?i)Join-Path\s+\((?!\s*Split-Path\s+(?:-Parent\s+)?\$(?:PSScriptRoot|repo|root|RepoRoot|here)\b(?:\s+-Parent)?\s*\)\s+'')[^\r\n]*?(?<!`)\$' + $b + '\b'), 'Join-Path over a nested expression on a base folder')
+  )
+  foreach ($r in $rules) { if ([regex]::IsMatch($Code, $r[0])) { return $r[1] } }
+  return ''
+}
+
+function Resolve-TcGateFileRefs {
+  <# The inputs ONE file names, resolved against the folders its bases really point to. $FileRel is the file's path
+     below the checkout, $GateRel the gate's (an unreadable base takes the ancestors of both). -Strict applies rules
+     2 and 3; without it (a gate or a library that DECLARES its inputs) only the candidates that exist are hashed and
+     nothing refuses, because the declaration already answered the question.
+     Returns Ok, Why, Paths (existing files, repo-relative) and Absent (candidates that do not exist, which still go
+     into the key so a file appearing there moves it). #>
+  param([string]$Repo, [string]$FileRel, [string]$GateRel, [string]$Text, [switch]$Strict)
+  $repoFull = [IO.Path]::GetFullPath($Repo).TrimEnd('\')
+  $code = Remove-TcGateComments -Text $Text
+  $vars = Get-TcGateVarBase -Code $code
+  $fileDir = [IO.Path]::GetDirectoryName(([string]$FileRel).TrimStart('\'))
+  if ($null -eq $fileDir) { $fileDir = '' }
+  $gateDir = [IO.Path]::GetDirectoryName(([string]$GateRel).TrimStart('\'))
+  if ($null -eq $gateDir) { $gateDir = '' }
+  $fileAnc = Get-TcGateAncestorDirs -Rel $fileDir
+  $fallback = [Collections.Generic.List[string]]::new()
+  # ASSIGN, THEN USE: the helper returns its array with a leading comma, and an inline @() around the call would read it as ONE element.
+  $gateAnc = Get-TcGateAncestorDirs -Rel $gateDir
+  foreach ($d in $fileAnc) { if (-not $fallback.Contains($d)) { $fallback.Add($d) } }
+  foreach ($d in $gateAnc) { if (-not $fallback.Contains($d)) { $fallback.Add($d) } }
+  $paths = [Collections.Generic.List[string]]::new()
+  $absent = [Collections.Generic.List[string]]::new()
+  foreach ($m in [regex]::Matches($code, $script:TcGateLiteralRx)) {
+    $baseTxt = $m.Groups[1].Value
+    $lit = $m.Groups[2].Value -replace '/', '\'
+    $dirs = [Collections.Generic.List[string]]::new()
+    $bases = $null
+    if ($baseTxt -match '(?i)^\$PSScriptRoot$') { $bases = @(0) }
+    elseif ($baseTxt.StartsWith('(')) {
+      # (Split-Path <base> -Parent): one folder above whatever the inner base names.
+      $inner = [regex]::Match($baseTxt, '(?i)\$(PSScriptRoot|repo|root|RepoRoot|here)\b').Groups[1].Value
+      if ($inner -ieq 'PSScriptRoot') { $bases = @(1) }
+      else {
+        $ib = $vars[$inner.ToLowerInvariant()]
+        if ($null -ne $ib) { $bases = @(foreach ($x in $ib) { if ($x -is [string]) { 'outside' } else { [int]$x + 1 } }) }
+      }
+    }
+    else { $bases = $vars[$baseTxt.Substring(1).ToLowerInvariant()] }
+    if ($null -eq $bases) { foreach ($d in $fallback) { $dirs.Add($d) } }
+    else {
+      foreach ($x in $bases) {
+        if ($x -is [string]) { if ($x -eq 'repo' -and -not $dirs.Contains('')) { $dirs.Add('') } ; continue }
+        $ups = [int]$x
+        if ($ups -lt $fileAnc.Count) { $d = $fileAnc[$ups]; if (-not $dirs.Contains($d)) { $dirs.Add($d) } }
+      }
+    }
+    $found = 0; $cands = [Collections.Generic.List[string]]::new()
+    foreach ($d in $dirs) {
+      $full = ''
+      # A WILDCARD LITERAL NAMES A LISTING: every file it matches is hashed, so a file added or removed there moves the
+      # key the way a declared glob does. It resolves like any literal, and its FOLDER is what the data rule reads.
+      if ($lit -match '[\*\?]') {
+        $gdir = ''
+        try { $gdir = [IO.Path]::GetFullPath([IO.Path]::Combine([IO.Path]::Combine($repoFull, $d), [IO.Path]::GetDirectoryName($lit))).TrimEnd('\') } catch { continue }
+        if (-not ($gdir + '\').StartsWith($repoFull + '\', [StringComparison]::OrdinalIgnoreCase)) { continue }
+        $grel = if ($gdir.Length -gt $repoFull.Length) { $gdir.Substring($repoFull.Length + 1) } else { '' }
+        $gkey = $grel + '\' + [IO.Path]::GetFileName($lit)
+        if ($cands.Contains($gkey)) { continue }
+        $cands.Add($gkey)
+        if ($Strict -and [regex]::IsMatch($grel + '\', $script:TcGateDataResolvedRx)) {
+          return [pscustomobject]@{ Ok = $false; Why = ("reads '" + $lit + "', which resolves into a data directory (" + $gkey + "), whose bytes change with no commit"); Paths = @(); Absent = @() }
+        }
+        $hits = @()
+        if ([IO.Directory]::Exists($gdir)) { $hits = @([IO.Directory]::GetFiles($gdir, [IO.Path]::GetFileName($lit)) | Sort-Object) }
+        if ($hits.Count) {
+          $found++
+          foreach ($h in $hits) { $hr = $h.Substring($repoFull.Length + 1); if (-not $paths.Contains($hr)) { $paths.Add($hr) } }
+        } elseif (-not $absent.Contains($gkey)) { $absent.Add($gkey) }
+        continue
+      }
+      try { $full = [IO.Path]::GetFullPath([IO.Path]::Combine([IO.Path]::Combine($repoFull, $d), $lit)).TrimEnd('\') } catch { continue }
+      if (-not $full.StartsWith($repoFull + '\', [StringComparison]::OrdinalIgnoreCase)) { continue }
+      $rel = $full.Substring($repoFull.Length + 1)
+      if ($cands.Contains($rel)) { continue }
+      $cands.Add($rel)
+      # Under a DECLARATION a data file is not hashed either: the author has said the self-test does not read it, and
+      # hashing it would only turn every daily data write into a miss.
+      if (-not $Strict -and [regex]::IsMatch($rel + '\', $script:TcGateDataResolvedRx)) { continue }
+      if ($Strict -and [regex]::IsMatch($rel + '\', $script:TcGateDataResolvedRx)) {
+        return [pscustomobject]@{ Ok = $false; Why = ("reads '" + $lit + "', which resolves into a data directory (" + $rel + "), whose bytes change with no commit"); Paths = @(); Absent = @() }
+      }
+      if ([IO.File]::Exists($full)) { $found++; if (-not $paths.Contains($rel)) { $paths.Add($rel) } }
+      elseif ([IO.Directory]::Exists($full)) {
+        if ($Strict) { return [pscustomobject]@{ Ok = $false; Why = ("names the directory '" + $rel + "', whose listing a source key cannot watch"); Paths = @(); Absent = @() } }
+      } elseif (-not $absent.Contains($rel)) { $absent.Add($rel) }
+    }
+    if ($Strict -and -not $found) {
+      $where = if ($cands.Count) { $cands -join ', ' } else { 'no folder inside this repo' }
+      return [pscustomobject]@{ Ok = $false; Why = ("names '" + $lit + "', which exists nowhere it could be read from (" + $where + "), so the key cannot hash it and will not stand in 'absent' for it"); Paths = @(); Absent = @() }
+    }
+  }
+  $pa = $paths.ToArray(); [Array]::Sort($pa, [StringComparer]::OrdinalIgnoreCase)
+  $ab = $absent.ToArray(); [Array]::Sort($ab, [StringComparer]::OrdinalIgnoreCase)
+  return [pscustomobject]@{ Ok = $true; Why = ''; Paths = $pa; Absent = $ab }
+}
 
 function Get-TcFileSha256 {
   param([string]$Path)
@@ -65,7 +287,7 @@ function Get-TcGateReferencedPaths {
   $paths = [Collections.Generic.List[string]]::new()
   $seen = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
   foreach ($m in [regex]::Matches($Text, $script:TcGateLiteralRx)) {
-    $p = $m.Groups[1].Value
+    $p = $m.Groups[2].Value
     if (-not $p) { continue }
     if (-not $seen.ContainsKey($p)) { $seen[$p] = $true; $paths.Add($p) }
   }
@@ -112,6 +334,10 @@ function Test-TcGateCacheable {
   }
   if ([regex]::IsMatch($Text, $script:TcGateComputedRx)) {
     return [pscustomobject]@{ Ok = $false; Why = 'builds a repo path from a variable, which a source key cannot watch' }
+  }
+  $unparsed = Test-TcGateUnparsed -Code $code
+  if ($unparsed) {
+    return [pscustomobject]@{ Ok = $false; Why = ('builds a path with ' + $unparsed + ', a spelling the key does not parse, so the file it reads cannot be hashed') }
   }
   return [pscustomobject]@{ Ok = $true; Why = '' }
 }
@@ -183,6 +409,64 @@ function Resolve-TcGateDeclaredInputs {
   return [pscustomobject]@{ Ok = $true; Paths = @($sorted); Why = '' }
 }
 
+function Test-TcGateDeclarationMoves {
+  <# VERIFIES A DECLARATION the way Brad's 2026-09-23 ruling asks for one: in a TEMP COPY of every file the gate's key
+     reads, change each declared input by one byte, and add a file under each declared glob, and require the key to
+     move each time. A declaration is an author's assertion that nothing mechanical can prove COMPLETE; what this
+     proves is that every file it names really reaches the key, so a typo that matched the wrong file, or a key that
+     stopped hashing declared paths, is caught. Returns Ok, Why and one row per probe. #>
+  param([string]$Repo, [string]$GateFile)
+  $repoFull = [IO.Path]::GetFullPath($Repo).TrimEnd('\')
+  $gateFull = [IO.Path]::GetFullPath($GateFile)
+  $none = [pscustomobject]@{ Ok = $false; Why = ''; Rows = @() }
+  if (-not $gateFull.StartsWith($repoFull + '\', [StringComparison]::OrdinalIgnoreCase)) { $none.Why = 'the gate is not inside the repo'; return $none }
+  $gateRel = $gateFull.Substring($repoFull.Length + 1)
+  $decl = Get-TcGateDeclaredInputs -Text ([IO.File]::ReadAllText($gateFull))
+  if (-not $decl.Count) { $none.Why = 'declares nothing, so there is no declaration to verify'; return $none }
+  $k = Get-TcGateInputKey -Repo $Repo -GateFile $gateFull -GateArg '-SelfTest'
+  if (-not $k.Ok) { $none.Why = ('is not keyable: ' + $k.Why); return $none }
+  $res = Resolve-TcGateDeclaredInputs -Repo $Repo -Patterns $decl
+  $tmp = Join-Path ([IO.Path]::GetTempPath()) ('tc-gikv-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+  $rows = [Collections.Generic.List[object]]::new()
+  try {
+    foreach ($f in @($k.Files)) {
+      $ff = [IO.Path]::GetFullPath([string]$f)
+      if (-not $ff.StartsWith($repoFull + '\', [StringComparison]::OrdinalIgnoreCase)) { continue }
+      $dst = Join-Path $tmp $ff.Substring($repoFull.Length + 1)
+      $null = New-Item -ItemType Directory -Force -Path (Split-Path -Parent $dst) -ErrorAction Stop
+      [IO.File]::Copy($ff, $dst, $true)
+    }
+    $gCopy = Join-Path $tmp $gateRel
+    $base = Get-TcGateInputKey -Repo $tmp -GateFile $gCopy -GateArg '-SelfTest'
+    # The copy holds the files the key hashed, not the folders beside them, so a candidate that is a DIRECTORY in the
+    # checkout can read as an absent candidate here and move the base key. Each probe is judged against the copy's own base.
+    if (-not $base.Ok) { $none.Why = ('the temp copy is not keyable (' + $base.Why + ')'); return $none }
+    foreach ($rel in @($res.Paths)) {
+      $cp = Join-Path $tmp $rel
+      $orig = [IO.File]::ReadAllBytes($cp)
+      [IO.File]::WriteAllBytes($cp, [byte[]]($orig + [byte]32))
+      $k2 = Get-TcGateInputKey -Repo $tmp -GateFile $gCopy -GateArg '-SelfTest'
+      [IO.File]::WriteAllBytes($cp, $orig)
+      $rows.Add([pscustomobject]@{ Probe = ('edit ' + $rel); Moved = [bool]($k2.Ok -and $k2.Key -ne $base.Key) })
+    }
+    foreach ($pat in @($decl)) {
+      if ($pat -notmatch '[\*\?]') { continue }
+      $nf = Join-Path $tmp (($pat -replace '/', '\') -replace '\*', 'zz-gikv-new' -replace '\?', 'z')
+      if ([IO.File]::Exists($nf)) { continue }
+      $null = New-Item -ItemType Directory -Force -Path (Split-Path -Parent $nf) -ErrorAction Stop
+      [IO.File]::WriteAllText($nf, "# a file that appeared under a declared glob`n")
+      $k3 = Get-TcGateInputKey -Repo $tmp -GateFile $gCopy -GateArg '-SelfTest'
+      [IO.File]::Delete($nf)
+      $rows.Add([pscustomobject]@{ Probe = ('add under ' + $pat); Moved = [bool]($k3.Ok -and $k3.Key -ne $base.Key) })
+    }
+  } finally {
+    if ($tmp -and $tmp.Contains('tc-gikv-')) { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
+  }
+  $still = @($rows | Where-Object { -not $_.Moved })
+  $why = if ($still.Count) { ('the key did not move for: ' + (($still | ForEach-Object { $_.Probe }) -join '; ')) } elseif (-not $rows.Count) { 'nothing was probed' } else { '' }
+  return [pscustomobject]@{ Ok = [bool]($rows.Count -and -not $still.Count); Why = $why; Rows = $rows.ToArray() }
+}
+
 function Get-TcGateInputKey {
   <# The key for ONE gate. $Repo is the checkout, $GateFile its full path, $GateArg the argument it runs with
      (so `-SelfTest` and a renamed switch are different entries), $RunnerFiles the bytes of whatever dispatches
@@ -231,12 +515,19 @@ function Get-TcGateInputKey {
   $rows.Add('arg ' + $GateArg)
 
   # TRANSITIVE, because a library that dot-sources another is exactly how a change reaches a gate without
-  # touching it. The walk is breadth-first over literal lib\ spellings and stops at what it has already seen.
+  # touching it. The walk is breadth-first and stops at what it has already seen. EVERY literal a walked file names
+  # joins the walk (2026-09-23), resolved against that file's own bases: until then only lib\ spellings were followed
+  # below the gate, so a file a loaded library named was outside the key.
+  $gateFull = [IO.Path]::GetFullPath($GateFile)
+  $gateRel = if ($gateFull.StartsWith($repoFull + '\', [StringComparison]::OrdinalIgnoreCase)) { $gateFull.Substring($repoFull.Length + 1) } else { [IO.Path]::GetFileName($gateFull) }
   $queue = [Collections.Generic.Queue[string]]::new()
   $seen = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
-  foreach ($m in [regex]::Matches($text, $script:TcGateLibRx)) { $queue.Enqueue($m.Groups[1].Value) }
-  $refs = Get-TcGateReferencedPaths -Text $text
-  foreach ($p in $refs.Paths) { if ($p -notmatch '(?i)^lib\\') { $queue.Enqueue($p) } }
+  $seen[$gateRel] = $true
+  $absentSeen = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
+  $gateRefs = Resolve-TcGateFileRefs -Repo $Repo -FileRel $gateRel -GateRel $gateRel -Text $text -Strict:(-not $declResolved)
+  if (-not $gateRefs.Ok) { return [pscustomobject]@{ Ok = $false; Key = ''; Why = $gateRefs.Why; Files = @() } }
+  foreach ($p in $gateRefs.Paths) { $queue.Enqueue($p) }
+  foreach ($p in $gateRefs.Absent) { $absentSeen[$p] = $true }
   # The declared set joins the same queue, so a declared .ps1 is walked into exactly like an inferred one.
   if ($declResolved) { foreach ($p in $declResolved.Paths) { $queue.Enqueue($p) } }
   while ($queue.Count) {
@@ -271,10 +562,18 @@ function Get-TcGateInputKey {
             return [pscustomobject]@{ Ok = $false; Key = ''; Why = ('a file it loads (' + $rel + ') ' + $subCan.Why); Files = @() }
           }
         }
-        foreach ($m in [regex]::Matches($sub, $script:TcGateLibRx)) { $queue.Enqueue($m.Groups[1].Value) }
+        $subStrict = (-not $declResolved) -and (-not $subDecl.Count)
+        $subRefs = Resolve-TcGateFileRefs -Repo $Repo -FileRel $rel -GateRel $gateRel -Text $sub -Strict:$subStrict
+        if (-not $subRefs.Ok) {
+          return [pscustomobject]@{ Ok = $false; Key = ''; Why = ('a file it loads (' + $rel + ') ' + $subRefs.Why); Files = @() }
+        }
+        foreach ($p in $subRefs.Paths) { $queue.Enqueue($p) }
+        foreach ($p in $subRefs.Absent) { $absentSeen[$p] = $true }
       }
     }
   }
+  # A CANDIDATE THAT IS NOT THERE STILL GOES INTO THE KEY, so a file appearing where a base could point moves it.
+  foreach ($p in @($absentSeen.Keys)) { if (-not $seen.ContainsKey($p)) { $rows.Add('cand ' + $p + ' absent') } }
   foreach ($rf in @($RunnerFiles)) {
     if (-not $rf) { continue }
     $rows.Add('runner ' + [IO.Path]::GetFileName($rf) + ' ' + (Get-TcFileSha256 $rf))
@@ -379,6 +678,25 @@ function Test-TcGateCacheHit {
   if (-not [DateTime]::TryParse($p[2], [ref]$at)) { return [pscustomobject]@{ Hit = $false; Why = 'unreadable timestamp' } }
   if (($NowUtc - $at.ToUniversalTime()).TotalHours -gt $MaxAgeHours) { return [pscustomobject]@{ Hit = $false; Why = 'older than the backstop' } }
   return [pscustomobject]@{ Hit = $true; Why = '' }
+}
+
+# -VerifyDeclared <gate>[,<gate>...]: run Test-TcGateDeclarationMoves over each named gate and exit 1 if any declared input
+# fails to move its key. The harness for "each declaration must be verified" (2026-09-23), committed so the next
+# declaration is verified the same way.
+$__gikVerify = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-VerifyDeclared')
+if ($__gikVerify) {
+  $vRepo = Split-Path -Parent $PSScriptRoot
+  $vi = [Array]::IndexOf($args, '-VerifyDeclared')
+  $vGates = @(); for ($j = $vi + 1; $j -lt $args.Count; $j++) { foreach ($g in ([string]$args[$j] -split ',')) { if ($g.Trim()) { $vGates += $g.Trim() } } }
+  $vBad = 0
+  foreach ($g in $vGates) {
+    $vr = Test-TcGateDeclarationMoves -Repo $vRepo -GateFile (Join-Path $vRepo $g)
+    Write-Output ('{0} {1}  probes={2}{3}' -f $(if ($vr.Ok) { 'VERIFIED' } else { 'NOT-VERIFIED' }), $g, @($vr.Rows).Count, $(if ($vr.Why) { '  ' + $vr.Why } else { '' }))
+    if (-not $vr.Ok) { $vBad++ }
+  }
+  Write-Output ('GATE-DECLARATIONS-VERIFIED {0} of {1}' -f ($vGates.Count - $vBad), $vGates.Count)
+  if ($vBad -or -not $vGates.Count) { exit 1 }
+  exit 0
 }
 
 if ($__gikSelfTest) {
@@ -525,6 +843,178 @@ if ($SelfTest) { Write-Output 'cases' }
     T 'MUST FIRE  a gate file that is not there is refused, never keyed as absent' `
       ((-not $kMissing.Ok) -and $kMissing.Why -match 'does not exist') $kMissing.Why
 
+    # ---- THE FOUR RULES OF 2026-09-23: a path is resolved against the folder its variable names ----
+    $null = New-Item -ItemType Directory -Force -Path (Join-Path $sb 'grocery')
+    $gDep = Join-Path $sb 'grocery\dep.ps1'
+    [IO.File]::WriteAllText($gDep, "# read by the gate beside it`n", $utf8)
+    $g1 = Join-Path $sb 'grocery\beside-gate.ps1'
+    $g1Text = @'
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+$crPath = Join-Path $root 'dep.ps1'
+if ($SelfTest) { }
+'@
+    [IO.File]::WriteAllText($g1, $g1Text, $utf8)
+    $kR1a = Get-TcGateInputKey -Repo $sb -GateFile $g1 -GateArg '-SelfTest' -RunnerFiles @($runner)
+    [IO.File]::WriteAllText($gDep, "# read by the gate beside it, edited`n", $utf8)
+    $kR1b = Get-TcGateInputKey -Repo $sb -GateFile $g1 -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  rule 1: editing a file joined to $root = $PSScriptRoot moves the key (the founding incident: capture-run.ps1 changed four times under one watchdog key)' `
+      ($kR1a.Ok -and $kR1b.Ok -and $kR1a.Key -ne $kR1b.Key) ("okA={0} okB={1} whyA={2}" -f $kR1a.Ok, $kR1b.Ok, $kR1a.Why)
+    $gUp = Join-Path $sb 'ops\up-one.ps1'
+    $gUpText = @'
+$repo = Split-Path -Parent $PSScriptRoot
+. (Join-Path $repo 'lib\helper.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\brand-new.ps1')
+if ($SelfTest) { }
+'@
+    [IO.File]::WriteAllText($gUp, $gUpText, $utf8)
+    $kUp1 = Get-TcGateInputKey -Repo $sb -GateFile $gUp -GateArg '-SelfTest' -RunnerFiles @($runner)
+    [IO.File]::WriteAllText((Join-Path $sb 'lib\brand-new.ps1'), "# edited through a (Split-Path `$PSScriptRoot -Parent) join`n", $utf8)
+    $kUp2 = Get-TcGateInputKey -Repo $sb -GateFile $gUp -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  rule 1: a base ONE folder up (Split-Path -Parent $PSScriptRoot, and the inline (Split-Path $PSScriptRoot -Parent)) resolves there, and an edit there moves the key' `
+      ($kUp1.Ok -and $kUp2.Ok -and $kUp1.Key -ne $kUp2.Key) ("ok1={0} ok2={1} why={2}" -f $kUp1.Ok, $kUp2.Ok, $kUp1.Why)
+    $gPs = Join-Path $sb 'grocery\ps-root.ps1'
+    [IO.File]::WriteAllText($gPs, "`$d = Join-Path `$PSScriptRoot 'dep.ps1'`nif (`$SelfTest) { }`n", $utf8)
+    $kPs1 = Get-TcGateInputKey -Repo $sb -GateFile $gPs -GateArg '-SelfTest' -RunnerFiles @($runner)
+    [IO.File]::WriteAllText($gDep, "# read by the gate beside it, edited twice`n", $utf8)
+    $kPs2 = Get-TcGateInputKey -Repo $sb -GateFile $gPs -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'CLEAN TWIN  rule 4 parses Join-Path $PSScriptRoot ''<lit>'' rather than refusing it: it keys, and an edit to the file moves the key' `
+      ($kPs1.Ok -and $kPs2.Ok -and $kPs1.Key -ne $kPs2.Key) ("ok1={0} ok2={1} why={2}" -f $kPs1.Ok, $kPs2.Ok, $kPs1.Why)
+    # RULE 2. The constant 'absent' is gone: a named input that is nowhere is a refusal.
+    $gNo = Join-Path $sb 'grocery\names-ghost.ps1'
+    [IO.File]::WriteAllText($gNo, "`$root = `$PSScriptRoot`n`$x = Join-Path `$root 'never-made.ps1'`nif (`$SelfTest) { }`n", $utf8)
+    $kNo = Get-TcGateInputKey -Repo $sb -GateFile $gNo -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  rule 2: an input that exists under no candidate folder is refused, never hashed as absent' `
+      ((-not $kNo.Ok) -and $kNo.Why -match 'exists nowhere' -and $kNo.Why -match 'never-made') ("ok={0} why={1}" -f $kNo.Ok, $kNo.Why)
+    [IO.File]::WriteAllText((Join-Path $sb 'root-only.ps1'), "# exists at the repo root and nowhere else`n", $utf8)
+    [IO.File]::WriteAllText($gNo, "`$root = `$PSScriptRoot`n`$x = Join-Path `$root 'root-only.ps1'`nif (`$SelfTest) { }`n", $utf8)
+    $kRootOnly = Get-TcGateInputKey -Repo $sb -GateFile $gNo -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  rule 2: a file at the REPO ROOT does not stand in for the one beside the gate its $root names - the old resolution keyed exactly that wrong file' `
+      ((-not $kRootOnly.Ok) -and $kRootOnly.Why -match 'exists nowhere') ("ok={0} why={1}" -f $kRootOnly.Ok, $kRootOnly.Why)
+    $null = New-Item -ItemType Directory -Force -Path (Join-Path $sb 'grocery\fixtures')
+    [IO.File]::WriteAllText($gNo, "`$root = `$PSScriptRoot`n`$x = Join-Path `$root 'fixtures'`nif (`$SelfTest) { }`n", $utf8)
+    $kDir = Get-TcGateInputKey -Repo $sb -GateFile $gNo -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  rule 2: a named DIRECTORY is refused, because its listing is not in any key' `
+      ((-not $kDir.Ok) -and $kDir.Why -match 'directory') ("ok={0} why={1}" -f $kDir.Ok, $kDir.Why)
+    # An UNREADABLE base keys every candidate folder, including the ones that do not exist yet.
+    [IO.File]::WriteAllText($gNo, "`$root = Get-Location`n`$x = Join-Path `$root 'root-only.ps1'`nif (`$SelfTest) { }`n", $utf8)
+    $kUnk1 = Get-TcGateInputKey -Repo $sb -GateFile $gNo -GateArg '-SelfTest' -RunnerFiles @($runner)
+    [IO.File]::WriteAllText((Join-Path $sb 'grocery\root-only.ps1'), "# a second candidate appears beside the gate`n", $utf8)
+    $kUnk2 = Get-TcGateInputKey -Repo $sb -GateFile $gNo -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'CLEAN TWIN  a base the key cannot read still keys over every ancestor candidate, and a file APPEARING at another candidate moves the key' `
+      ($kUnk1.Ok -and $kUnk2.Ok -and $kUnk1.Key -ne $kUnk2.Key) ("ok1={0} ok2={1} why={2}" -f $kUnk1.Ok, $kUnk2.Ok, $kUnk1.Why)
+    # RULE 3. Data is judged on where the path LANDS.
+    $null = New-Item -ItemType Directory -Force -Path (Join-Path $sb 'grocery\out')
+    [IO.File]::WriteAllText($gNo, "`$root = `$PSScriptRoot`n`$OutDir = Join-Path `$root 'out'`nif (`$SelfTest) { }`n", $utf8)
+    $kOut = Get-TcGateInputKey -Repo $sb -GateFile $gNo -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  rule 3: Join-Path $root ''out'' beside a grocery script resolves into grocery\out and is refused as data, though the literal never spells it' `
+      ((-not $kOut.Ok) -and $kOut.Why -match 'data directory') ("ok={0} why={1}" -f $kOut.Ok, $kOut.Why)
+    Remove-Item -LiteralPath (Join-Path $sb 'grocery\out') -Recurse -Force
+    $kOut2 = Get-TcGateInputKey -Repo $sb -GateFile $gNo -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  rule 3: the data refusal holds in a checkout where the data folder does not exist yet' `
+      ((-not $kOut2.Ok) -and $kOut2.Why -match 'data directory') ("ok={0} why={1}" -f $kOut2.Ok, $kOut2.Why)
+    [IO.File]::WriteAllText((Join-Path $sb 'grocery\outline.ps1'), "# a script whose name begins with out`n", $utf8)
+    [IO.File]::WriteAllText($gNo, "`$root = `$PSScriptRoot`n`$x = Join-Path `$root 'outline.ps1'`nif (`$SelfTest) { }`n", $utf8)
+    $kOutline = Get-TcGateInputKey -Repo $sb -GateFile $gNo -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'CLEAN TWIN  rule 3 matches a whole folder name: grocery\outline.ps1 is a source file and still keys' `
+      ($kOutline.Ok) ("ok={0} why={1}" -f $kOutline.Ok, $kOutline.Why)
+    # RULE 4. Every spelling that builds a path on a base and is not parsed is refused.
+    $spell = @(
+      @('[IO.Path]::Combine', "`$x = [IO.Path]::Combine(`$root, 'dep.ps1')"),
+      @('interpolated string', "`$x = `"`$root\dep.ps1`""),
+      @('double-quoted child', "`$x = Join-Path `$root `"dep.ps1`""),
+      @('named parameters', "`$x = Join-Path -Path `$root -ChildPath 'dep.ps1'"),
+      @('nested expression', "`$x = Join-Path (Join-Path `$root 'a') 'dep.ps1'"),
+      @('$PSScriptRoot and a variable', "`$x = Join-Path `$PSScriptRoot `$leaf")
+    )
+    foreach ($sp in $spell) {
+      [IO.File]::WriteAllText($gNo, ("`$root = `$PSScriptRoot`n" + $sp[1] + "`nif (`$SelfTest) { }`n"), $utf8)
+      $kSp = Get-TcGateInputKey -Repo $sb -GateFile $gNo -GateArg '-SelfTest' -RunnerFiles @($runner)
+      T ('MUST FIRE  rule 4: a path built by ' + $sp[0] + ' is refused, never silently dropped from the key') `
+        ((-not $kSp.Ok) -and $kSp.Why -match 'spelling the key does not parse|from a variable') ("ok={0} why={1}" -f $kSp.Ok, $kSp.Why)
+    }
+    [IO.File]::WriteAllText($gNo, ("`$root = `$PSScriptRoot`n`$fx = `"`$root\dep.ps1 is fixture text`"`n" -replace '\$root\\dep', '`$root\dep') + "`$d = Join-Path `$root 'dep.ps1'`nif (`$SelfTest) { }`n", $utf8)
+    $kEsc2 = Get-TcGateInputKey -Repo $sb -GateFile $gNo -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST NOT FIRE  rule 4: a backtick-escaped `$root inside a fixture string is text, not a read, and does not refuse the gate' `
+      ($kEsc2.Ok) ("ok={0} why={1}" -f $kEsc2.Ok, $kEsc2.Why)
+    # TRANSITIVE: a file named by a LOADED library is an input too.
+    [IO.File]::WriteAllText((Join-Path $sb 'grocery\g5-rules.json'), '{"v":1}', $utf8)
+    [IO.File]::WriteAllText((Join-Path $sb 'grocery\g5-lib.ps1'), "`$here = `$PSScriptRoot`n`$rules = Join-Path `$here 'g5-rules.json'`n", $utf8)
+    $g5 = Join-Path $sb 'grocery\g5.ps1'
+    [IO.File]::WriteAllText($g5, ". (Join-Path `$PSScriptRoot 'g5-lib.ps1')`nif (`$SelfTest) { }`n", $utf8)
+    $kG5a = Get-TcGateInputKey -Repo $sb -GateFile $g5 -GateArg '-SelfTest' -RunnerFiles @($runner)
+    [IO.File]::WriteAllText((Join-Path $sb 'grocery\g5-rules.json'), '{"v":2}', $utf8)
+    $kG5b = Get-TcGateInputKey -Repo $sb -GateFile $g5 -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  a file that a LOADED library names, beside that library, moves the key: the walk follows every literal, not only lib\ ones' `
+      ($kG5a.Ok -and $kG5b.Ok -and $kG5a.Key -ne $kG5b.Key) ("okA={0} okB={1} why={2}" -f $kG5a.Ok, $kG5b.Ok, $kG5a.Why)
+    [IO.File]::WriteAllText($gDep, "# the repo-root clean twin`n", $utf8)
+    $gRootLib = Join-Path $sb 'ops\root-lib-gate.ps1'
+    [IO.File]::WriteAllText($gRootLib, ". (Join-Path `$repo 'lib\deeper.ps1')`nif (`$SelfTest) { }`n", $utf8)
+    $kRl1 = Get-TcGateInputKey -Repo $sb -GateFile $gRootLib -GateArg '-SelfTest' -RunnerFiles @($runner)
+    [IO.File]::WriteAllText($lib2, "# deeper edited for the repo-root twin`n", $utf8)
+    $kRl2 = Get-TcGateInputKey -Repo $sb -GateFile $gRootLib -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'CLEAN TWIN  a repo-root Join-Path $repo ''lib\x.ps1'' still keys, and still moves when x.ps1 changes' `
+      ($kRl1.Ok -and $kRl2.Ok -and $kRl1.Key -ne $kRl2.Key) ("ok1={0} ok2={1} why={2}" -f $kRl1.Ok, $kRl2.Ok, $kRl1.Why)
+
+    # A WILDCARD LITERAL is a listing: a new file under it moves the key.
+    $null = New-Item -ItemType Directory -Force -Path (Join-Path $sb 'grocery\rules')
+    [IO.File]::WriteAllText((Join-Path $sb 'grocery\rules\a.json'), '{}', $utf8)
+    $gGlob = Join-Path $sb 'grocery\globber.ps1'
+    [IO.File]::WriteAllText($gGlob, "`$root = `$PSScriptRoot`n`$all = Get-ChildItem (Join-Path `$root 'rules\*.json')`nif (`$SelfTest) { }`n", $utf8)
+    $kGl1 = Get-TcGateInputKey -Repo $sb -GateFile $gGlob -GateArg '-SelfTest' -RunnerFiles @($runner)
+    [IO.File]::WriteAllText((Join-Path $sb 'grocery\rules\b.json'), '{}', $utf8)
+    $kGl2 = Get-TcGateInputKey -Repo $sb -GateFile $gGlob -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  a wildcard literal is a listing: a NEW file matching it moves the key' `
+      ($kGl1.Ok -and $kGl2.Ok -and $kGl1.Key -ne $kGl2.Key) ("ok1={0} ok2={1} why={2}" -f $kGl1.Ok, $kGl2.Ok, $kGl1.Why)
+    # THE VERIFIER that every declaration added on 2026-09-23 went through.
+    $gDecl = Join-Path $sb 'ops\declared-ok.ps1'
+    [IO.File]::WriteAllText($gDecl, "# gate-inputs: ops\caller.ps1, grocery\rules\*.json`n`$p = Join-Path `$repo `$whatever`nif (`$SelfTest) { }`n", $utf8)
+    $vOk = Test-TcGateDeclarationMoves -Repo $sb -GateFile $gDecl
+    T 'CLEAN TWIN  the declaration verifier edits every declared file and adds one under every declared glob in a temp copy, and the key moves for each' `
+      ($vOk.Ok -and @($vOk.Rows).Count -ge 3) ("ok={0} rows={1} why={2}" -f $vOk.Ok, @($vOk.Rows).Count, $vOk.Why)
+    $vNone = Test-TcGateDeclarationMoves -Repo $sb -GateFile $g1
+    T 'MUST FIRE  the verifier refuses a gate that declares nothing, rather than reporting a declaration it never saw as verified' `
+      ((-not $vNone.Ok) -and $vNone.Why -match 'declares nothing') ("ok={0} why={1}" -f $vNone.Ok, $vNone.Why)
+
+    # ---- THE FOUNDING REPLAY, from FROZEN BLOBS (never regenerated). grocery\capture-watchdog.ps1 at 1ec218d5f..f936a4b31
+    # was one blob; capture-run.ps1 was adafac8e1070 at 1ec218d5f and cbb188c3e749 at 0da71cba5, where the bare
+    # `$failed +=` that turned the watchdog red arrived. The old key was bbba10ec... over both. The new one must differ,
+    # or refuse. A blob is read by its id and its id is re-derived from its bytes, so the fixture cannot drift.
+    $realRepo = Split-Path -Parent $PSScriptRoot
+    $blobs = @{ wd = '2e195d34fbedba9e24457fca5fea0fd8d4dedfa4'; crA = 'adafac8e10705d25342851ed7a18fd0b545bd866'; crB = 'cbb188c3e749b4cfd5d1c1f81ea260e6c8974ae8' }
+    $got = @{}
+    foreach ($bk in @($blobs.Keys)) {
+      $psi = New-Object Diagnostics.ProcessStartInfo 'git'
+      $psi.Arguments = '-C "' + $realRepo + '" cat-file blob ' + $blobs[$bk]
+      $psi.UseShellExecute = $false; $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true; $psi.CreateNoWindow = $true
+      $gp = [Diagnostics.Process]::Start($psi)
+      $ms = New-Object IO.MemoryStream
+      $gp.StandardOutput.BaseStream.CopyTo($ms)
+      $null = $gp.StandardError.ReadToEnd(); $gp.WaitForExit()
+      $bytes = $ms.ToArray()
+      $hdr = [Text.Encoding]::ASCII.GetBytes('blob ' + $bytes.Length + [char]0)
+      $sha1 = [Security.Cryptography.SHA1]::Create()
+      $id = ([BitConverter]::ToString($sha1.ComputeHash([byte[]]($hdr + $bytes))) -replace '-', '').ToLowerInvariant()
+      $sha1.Dispose()
+      if ($gp.ExitCode -ne 0 -or $id -ne $blobs[$bk]) { throw ('frozen blob ' + $blobs[$bk] + ' could not be read back byte for byte (git exit ' + $gp.ExitCode + ', id ' + $id + ')') }
+      $got[$bk] = $bytes
+    }
+    $rp = Join-Path $sb 'replay'
+    $null = New-Item -ItemType Directory -Force -Path (Join-Path $rp 'grocery')
+    $rpWd = Join-Path $rp 'grocery\capture-watchdog.ps1'
+    $rpCr = Join-Path $rp 'grocery\capture-run.ps1'
+    [IO.File]::WriteAllBytes($rpWd, $got['wd'])
+    [IO.File]::WriteAllBytes($rpCr, $got['crA'])
+    $kWdA = Get-TcGateInputKey -Repo $rp -GateFile $rpWd -GateArg '-SelfTest' -RunnerFiles @($runner)
+    [IO.File]::WriteAllBytes($rpCr, $got['crB'])
+    $kWdB = Get-TcGateInputKey -Repo $rp -GateFile $rpWd -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  REPLAY: the real watchdog blob over the real capture-run change is refused or keyed differently - never the one key that replayed a 19:06 pass on five pushes' `
+      (((-not $kWdA.Ok) -and (-not $kWdB.Ok)) -or ($kWdA.Ok -and $kWdB.Ok -and $kWdA.Key -ne $kWdB.Key)) ("okA={0} okB={1} whyA={2}" -f $kWdA.Ok, $kWdB.Ok, $kWdA.Why)
+    $wdRefs = Resolve-TcGateFileRefs -Repo $rp -FileRel 'grocery\capture-watchdog.ps1' -GateRel 'grocery\capture-watchdog.ps1' -Text ([Text.Encoding]::UTF8.GetString($got['wd']))
+    T 'MUST FIRE  REPLAY: the key now SEES the file the failing case reads - grocery\capture-run.ps1 is among the watchdog''s resolved inputs, where the old resolution looked for it at the root' `
+      (@($wdRefs.Paths) -contains 'grocery\capture-run.ps1') (@($wdRefs.Paths) -join ', ')
+    T 'MUST FIRE  REPLAY: the watchdog is refused for a named reason the rules give (data, a missing input or an unparsed spelling), not for a missing gate file' `
+      ((-not $kWdA.Ok) -and $kWdA.Why -match 'data directory|exists nowhere|does not parse') ("why={0}" -f $kWdA.Why)
+
     # ---- the stored entry ----
     $now = [DateTime]::UtcNow
     T 'CLEAN TWIN a stored pass over the same key, inside the backstop, is a hit' `
@@ -615,7 +1105,7 @@ if ($SelfTest) { Write-Output 'cases' }
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A SUITE CAN RUN ZERO CASES AND EXIT 0, so the count is asserted.
-  if ($cases -lt 43) { $f++; Write-Output ("FAIL  only {0} of 43 cases ran" -f $cases) }
+  if ($cases -lt 68) { $f++; Write-Output ("FAIL  only {0} of 68 cases ran" -f $cases) }
   if ($f) { Write-Output ("gate-input-key SELF-TEST FAIL: {0} of {1} case(s)" -f $f, $cases); exit 1 }
   Write-Output ("gate-input-key SELF-TEST PASS: {0} cases - led by every input moving the key one at a time, including two hops down a library graph, and by the three refusals that keep a stale pass impossible" -f $cases)
   exit 0

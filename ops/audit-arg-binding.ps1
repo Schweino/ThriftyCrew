@@ -52,6 +52,8 @@
   Exit: 0 = at or under the baseline. 2 = MORE unbound checking scripts than the baseline, or -Tighten refused an
   implausible fall. 3 = BLIND.
 #>
+# Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): read off the self-test block, which works in a temp sandbox and reads nothing else of this repo. Verify with: powershell -File lib\gate-input-key.ps1 -VerifyDeclared <this file>
+# gate-inputs: ops\audit-arg-binding.ps1
 [CmdletBinding()]   # this file is itself in the class it audits
 param([switch]$SelfTest, [switch]$Accept, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'

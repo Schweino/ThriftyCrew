@@ -47,6 +47,8 @@
   written, which is either a quiet estate or a dead producer, and only
   ops\audit-event-bus.ps1 can tell those apart - it carries the floor.
 #>
+# Its declared inputs (2026-09-23, lib\gate-input-key.ps1 rule 2): ops\out\events.jsonl is the file it APPENDS to at run time, never an input a self-test reads.
+# gate-inputs: lib\event-bus.ps1
 
 $script:TcEventBusPath = $null
 

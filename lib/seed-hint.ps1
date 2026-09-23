@@ -1,3 +1,5 @@
+# Its declared inputs (2026-09-23, lib\gate-input-key.ps1 rule 2): the root it counts files under is the caller's checkout, passed in.
+# gate-inputs: lib\seed-hint.ps1, ops\seed-worktree.ps1
 # seed-hint.ps1 - when a self-test cannot find an input, say whether this checkout was never seeded, and name the fix.
 #
 # WHY THIS EXISTS (2026-09-11). A push from a linked worktree that had not been seeded was BLOCKED by ops\hooks\pre-push

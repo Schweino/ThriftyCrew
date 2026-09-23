@@ -1,3 +1,5 @@
+# Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): read off the self-test block, which works in a temp sandbox and reads nothing else of this repo. Verify with: powershell -File lib\gate-input-key.ps1 -VerifyDeclared <this file>
+# gate-inputs: lib\mutex-hold.ps1
 # mutex-hold.ps1 - hold a named mutex from ANOTHER PROCESS until told to let go, so a fixture can make a locked
 # writer's wait time out without racing a clock.
 #

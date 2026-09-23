@@ -13,6 +13,8 @@
   does not start AT ALL, so the alert simply never happens) and makes a failed send a loud log line rather
   than a swallowed exception. The whole account of the four-day silent outage is in alert-lib.ps1.
 #>
+# Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): read off the self-test block, which works in a temp sandbox and reads nothing else of this repo. Verify with: powershell -File lib\gate-input-key.ps1 -VerifyDeclared <this file>
+# gate-inputs: grocery\send-alert.ps1, grocery\alert-lib.ps1, grocery\mute-lib.ps1, grocery\alert-registry-lib.ps1, grocery\alert-registry.json, lib\*.ps1
 param(
   # NO DEFAULT SUBJECT (2026-09-22, plan-2026-09-22-10 item 2026-09-20-cb8f30). The old default 'Grocery pipeline alert'
   # matched no registry entry, and two unrelated residuals minted with no -Subject became ONE type. An empty subject is

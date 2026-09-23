@@ -48,6 +48,8 @@
   NO param() BLOCK, for the reason lib\guard-contract.ps1 spells out: PS 5.1 runs a dot-sourced param()
   block in the CALLER's scope, so a [switch]$SelfTest here would reset the -SelfTest of every caller.
 #>
+# Its declared inputs (2026-09-23, lib\gate-input-key.ps1 rule 2): every [IO.Path]::Combine($root, ...) is its own rendezvous folder under %TEMP%.
+# gate-inputs: lib\concurrency-probe.ps1
 $__cpSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 # Every probe directory this process made, so Remove-TcRendezvousProbe with no -Probe can sweep them all:

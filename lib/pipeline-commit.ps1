@@ -39,6 +39,8 @@
   dot-sourcing runs a param() block in the CALLER's scope, so a param([switch]$SelfTest) here would
   reset every caller's own -SelfTest to $false on the line after it bound.
 #>
+# Its declared inputs (2026-09-23, lib\gate-input-key.ps1 rule 2): every Join-Path $Repo is a path its CALLER passes; its own loads are $PSScriptRoot libraries the walk follows.
+# gate-inputs: lib\pipeline-commit.ps1
 $__pcSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 # Invoke-GitCaptured / Format-GitRefusal (2026-09-09, queue 2026-09-09-a95022). The commit below piped

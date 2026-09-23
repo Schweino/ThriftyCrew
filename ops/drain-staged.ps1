@@ -29,6 +29,8 @@
   EXIT CODES (lib\guard-contract.ps1 vocabulary): 0 applied or nothing queued, 2 held, 3 could-not-run.
   Read the verdict LINE, not the number (backlog E2).
 #>
+# Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): read off the self-test block, which works in a temp sandbox and reads nothing else of this repo. Verify with: powershell -File lib\gate-input-key.ps1 -VerifyDeclared <this file>
+# gate-inputs: ops\drain-staged.ps1
 param(
   [string]$Queue = '',
   [switch]$WhatIf,
