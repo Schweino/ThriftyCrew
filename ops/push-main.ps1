@@ -1,6 +1,17 @@
 <#
-  push-main.ps1 - push to main so that it LANDS: gate first, OUTSIDE the machine-wide push lock, then take the lock
-  and do the fetch, the rebase and the push inside it.
+  push-main.ps1 - push to main so that it LANDS. THE ORDER (since 2026-09-23): fetch and rebase, gate, rehearse the
+  chain - all OUTSIDE the machine-wide push lock - then take the lock for a final fetch, a rebase only if origin moved
+  again, and the ref update.
+
+  BEFORE 2026-09-23 the order was gate, rehearse, THEN lock, fetch, rebase, push, so the rehearsal judged the content
+  from BEFORE the rebase. Its verdict is keyed on the manifest set of the exact commit pushed (ops\rehearse-chain.ps1,
+  THE VERDICT KEY), so whenever origin had moved over a manifest script the hook found no verdict for the rebased
+  content, refused, and the push needed a second 13-to-15-minute rehearsal. Several landings that day paid it.
+  THE TRADE-OFF THAT REMAINS: if origin changes a chain-manifest script in the window between the rebase outside the
+  lock and the fetch inside it, the rehearsal no longer covers the content, so the lock is handed back and the push
+  gates and rehearses again (at most $script:PmMaxRehearsalRounds rounds, then refused-rehearsal-churn). A move over
+  non-manifest files keeps the verdict and lands without a second rehearsal. The cap of 6 rehearsals at once and the
+  three outcomes are ops\rehearse-chain.ps1's and are unchanged.
 
   THAT SENTENCE USED TO SAY "take the lock first, then rebase, then gate, then push, all inside it" (fixed
   2026-09-12). It was true for one day. The gate moved out of the lock that morning in 4ae8376f4 - with a ~10-minute
@@ -19,8 +30,8 @@
   remote has moved past. The gate then refuses it in seconds with "fetch, rebase and push again" - cheap, honest, and
   still a second attempt.
 
-  THE ORDER IS THE WHOLE POINT. Take the lock BEFORE fetching, and the rebase cannot go stale: nothing else can land
-  between the fetch and the ref update, so the push lands on its FIRST attempt. That is the only place the guarantee
+  THE ORDER IS THE WHOLE POINT. The FINAL fetch happens inside the lock, and the rebase cannot go stale: nothing else
+  can land between that fetch and the ref update, so the push lands on its FIRST attempt. That is the only place the guarantee
   can be made, and it is outside git, which is why it is a wrapper and not a hook.
 
   IT DOES NOT WEAKEN OR SKIP ANYTHING. It runs a plain `git push`, so ops\hooks\pre-push runs, run-gates runs, the
@@ -270,8 +281,78 @@ function Get-TcWarmRefLine {
   return ('HEAD ' + $hs + ' refs/heads/' + $Branch + ' ' + $bs)
 }
 
+# HOW MANY TIMES ONE PUSH MAY GATE AND REHEARSE BEFORE IT GIVES UP (2026-09-23). A round ends early, lock handed back,
+# only when origin moved while the push waited AND that move changed what the rehearsal covered. 3 is the first plausible
+# number, not the survivor of a sweep: each extra round costs a full rehearsal (about 14 minutes), so a third means origin
+# changed a chain-manifest script twice inside half an hour, and looping on past that is the livelock this file exists to
+# end. Past it the push is refused (exit 1, outcome refused-rehearsal-churn) with the branch rebased and nothing pushed.
+# What it does when the producer stops: nothing moves origin, every push finishes in round 1.
+$script:PmMaxRehearsalRounds = 3
+
+function Invoke-TcSyncToRemote {
+  <# Fetch <Remote>/<Branch>, decide from git alone (Get-TcPushPlan), and rebase when the remote moved. Called TWICE per
+     round: OUTSIDE the lock, so the gate and the rehearsal judge the content that will actually land, and again INSIDE
+     it, where a remote that moved in between is rebased over once more. Code 0 ready, 1 refused, 3 could not evaluate;
+     Outcome is the ledger's word for a refusal and Message the line to print. #>
+  param([string]$Dir, [string]$Remote, [string]$Branch)
+  $f = Invoke-TcGit -Dir $Dir -Arguments @('fetch', '--quiet', $Remote, $Branch)
+  if ($f.Code -ne 0) {
+    return [pscustomobject]@{ Code = 3; Outcome = 'blind-fetch-failed'; Rebased = $false; Head = ''; Rem = ''; Ahead = 0; Message = ("push-main: COULD NOT EVALUATE - `git fetch {0} {1}` exited {2}, so what this push would land on is unknown. That is not a pass.`n{3}" -f $Remote, $Branch, $f.Code, $f.Text) }
+  }
+  $head = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'HEAD')).Out[0]).Trim()
+  $rem = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'FETCH_HEAD')).Out[0]).Trim()
+  $mbR = Invoke-TcGit -Dir $Dir -Arguments @('merge-base', 'HEAD', $rem)
+  $mb = $(if ($mbR.Code -eq 0 -and $mbR.Out.Count) { ([string]$mbR.Out[0]).Trim() } else { '' })
+  $cntR = Invoke-TcGit -Dir $Dir -Arguments @('rev-list', '--count', ($rem + '..HEAD'))
+  $ahead = $(if ($cntR.Code -eq 0 -and $cntR.Out.Count) { [int]([string]$cntR.Out[0]).Trim() } else { 0 })
+  # --no-optional-locks IS A GLOBAL OPTION and must come BEFORE the subcommand, so taking a status never takes the
+  # index lock a session's own commit needs. After `status` git rejects it as unknown - which this file did until
+  # the streams were separated, when the rejection stopped counting as a changed path and a dirty checkout was
+  # pushed. Two bugs that had been cancelling each other out.
+  $st = Invoke-TcGit -Dir $Dir -Arguments @('--no-optional-locks', 'status', '--porcelain')
+  $dirty = [bool](@($st.Out | Where-Object { $_.Trim() }).Count)
+  $plan = Get-TcPushPlan -Head $head -RemoteSha $rem -MergeBase $mb -Ahead $ahead -Dirty $dirty
+  if (-not $plan.Ready) {
+    return [pscustomobject]@{ Code = 1; Outcome = 'refused-not-ready'; Rebased = $false; Head = $head; Rem = $rem; Ahead = $ahead; Message = ("push-main: REFUSED - {0}" -f $plan.Reason) }
+  }
+  Say ("push-main: {0} commit(s) to land on {1}/{2}; {3}." -f $ahead, $Remote, $Branch, $plan.Reason)
+  if ($plan.NeedsRebase) {
+    $rb = Invoke-TcGit -Dir $Dir -Arguments @('rebase', $rem)
+    if ($rb.Code -ne 0) {
+      # THE BRANCH IS LEFT EXACTLY WHERE IT WAS. A half-finished rebase is the worst thing this could hand back,
+      # because the next session to push inherits it.
+      $null = Invoke-TcGit -Dir $Dir -Arguments @('rebase', '--abort')
+      return [pscustomobject]@{ Code = 1; Outcome = 'refused-rebase-conflict'; Rebased = $false; Head = $head; Rem = $rem; Ahead = $ahead; Message = ("push-main: REFUSED - the rebase onto {0}/{1} conflicts, so it was aborted and this branch is exactly where it was. Resolve it and run this again.`n{2}" -f $Remote, $Branch, $rb.Text) }
+    }
+    $head = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'HEAD')).Out[0]).Trim()
+    Say ("push-main: rebased onto {0}; HEAD is now {1}." -f $rem.Substring(0, 9), $head.Substring(0, 9))
+  }
+  return [pscustomobject]@{ Code = 0; Outcome = ''; Rebased = [bool]$plan.NeedsRebase; Head = $head; Rem = $rem; Ahead = $ahead; Message = '' }
+}
+
+function Invoke-TcRehearsalCheck {
+  <# THE HOOK'S OWN QUESTION, asked inside the lock only after a rebase there: does a recorded rehearsal verdict cover
+     this exact content? ops\rehearse-chain.ps1 -CheckPush over the ref line git will hand the hook. It reads verdicts
+     and never rehearses, so it takes seconds, as the hook's leg does. Code 0 covered (or no chain-manifest script
+     changed, or a loud -NoRehearsal, or no harness in this checkout); anything else is not covered. #>
+  param([string]$Dir, [string]$Branch, [string]$Head, [string]$RemoteSha)
+  $rh = Join-Path $Dir 'ops\rehearse-chain.ps1'
+  if (-not (Test-Path -LiteralPath $rh)) { return [pscustomobject]@{ Code = 0; Why = 'this checkout has no ops\rehearse-chain.ps1' } }
+  $rf = Join-Path $env:TEMP ('tc-pm-rc-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '.txt')
+  try {
+    [IO.File]::WriteAllText($rf, ('HEAD ' + $Head + ' refs/heads/' + $Branch + ' ' + $RemoteSha + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $out = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $rh -CheckPush -Branch $Branch -RefsFile $rf)
+    $code = $LASTEXITCODE
+    $last = [string]($out | Select-Object -Last 1)
+    if ($last -notmatch '^CHAIN-REHEARSAL-CHECK-COMPLETE') { return [pscustomobject]@{ Code = 3; Why = 'the verdict check printed no completion marker, so it decided nothing' } }
+    return [pscustomobject]@{ Code = [int]$code; Why = $last }
+  } finally {
+    if (Test-Path -LiteralPath $rf) { Remove-Item -LiteralPath $rf -Force -ErrorAction SilentlyContinue }
+  }
+}
+
 function Invoke-TcPushMain {
-  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '', [string]$SeedScript = '', [scriptblock]$RehearsalRunner = $null)
+  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '', [string]$SeedScript = '', [scriptblock]$RehearsalRunner = $null, [scriptblock]$RehearsalCheck = $null)
   # WHAT THE REMOTE HELD BEFORE THIS PUSH QUEUED. Read here and compared with what the fetch inside the lock returns,
   # it is this wrapper's own answer to "did the remote move while I waited" - the quantity that decides whether a
   # retry can ever converge, recorded per push in lib\push-ledger.ps1 rather than re-derived from %TEMP% afterwards.
@@ -316,111 +397,127 @@ function Invoke-TcPushMain {
   } })
   # SEEDED FIRST, so neither leg of the gate below judges a checkout that has no built cards (backlog I237).
   $null = Invoke-TcSeedIfUnseeded -Dir $Dir -Seeder $SeedScript
-  $g = & $runner $Dir
-  if ($g.Ran -and $g.Code -eq 1) {
-    $redWhy = $(if ($g.Why) { [string]$g.Why } else { 'run-gates exited 1' })
-    Say ("push-main: REFUSED - {0} before the lock was taken, so this push never entered the queue and nothing else on this box was held up. Fix the cause and run this again." -f $redWhy)
-    $outcome = 'refused-gate-red'; $ledgerState = 'not-taken'
-    & $writeRow
-    return 1
-  }
-  if ($g.Code -ne 0) {
-    Say ("push-main: the gate did not settle outside the lock ({0}), so it is left to the hook inside the lock, gated exactly as before.{1}" -f $g.Code, $(if ($g.Why) { ' ' + $g.Why } else { '' }))
-  } else {
-    Say 'push-main: gate PASSED outside the lock, so the lock is taken only for the fetch, the rebase and the ref update.'
-  }
-
-  # ---- THE CHAIN REHEARSAL, ALSO BEFORE THE LOCK (2026-09-22, RCA F2, plan-2026-09-22-7) ----
-  # A push that changes a script in ops\chain-manifest.json must carry a rehearsal over recent real data, and the rehearsal
-  # takes the chain's own time (about 14 minutes), so it runs HERE, unlocked, for the reason the gate does. The hook inside
-  # the lock only reads the recorded verdict. 1 = rehearsed and failed (or no verdict could be made to pass), 3 = could not
-  # rehearse with its blind= cause; both refuse before the queue, and neither is ever read as a pass.
-  $rh = $(if ($RehearsalRunner) { & $RehearsalRunner $Dir } else { Invoke-TcRehearsalForPush -Dir $Dir -Remote $Remote -Branch $Branch })
-  if ($rh.Code -ne 0) {
-    Say ("push-main: REFUSED before the lock - {0}. The rehearsal lines above say which stage or cause. Rehearse again, or push with -NoRehearsal -NoRehearsalReason '<why>' to bypass loudly." -f $(if ($rh.Code -eq 3) { 'the chain rehearsal COULD NOT EVALUATE (exit 3), which is never a pass' } else { 'this push changes the daily chain and has no passing rehearsal (exit ' + $rh.Code + ')' }))
-    $outcome = $(if ($rh.Code -eq 3) { 'refused-rehearsal-blind' } else { 'refused-rehearsal' }); $ledgerState = 'not-taken'
-    & $writeRow
-    return $rh.Code
-  }
-
-  $lock = Enter-TcPushLock @enter
-  $ledgerWaitMs = [double]$lock.WaitedMs
-  $ledgerState = $(if (-not $lock.Held) { 'unlocked' } elseif ($lock.Inherited) { 'inherited' } else { 'held' })
-  if (-not $lock.Held) {
-    # STILL NOT A REFUSAL. The lock is a fairness device; without it this push is exactly as gated as it ever was and
-    # merely races for the ref, which is what every push did before the lock existed.
-    Say ("push-main: the push lock was NOT taken - {0}. Pushing anyway: this push is gated identically, it just races for the ref." -f $lock.Reason)
-  } elseif ($lock.Inherited) {
-    Say 'push-main: an ancestor already holds the push lock, so it was not taken again.'
-  } else {
-    Say ("push-main: holding the machine-wide push lock after {0:N0}s - nothing else on this box can land until this push is done." -f ($lock.WaitedMs / 1000))
-  }
-  try {
-    # INSIDE THE LOCK: fetch, decide, rebase. Nothing else can land between here and the ref update.
-    $f = Invoke-TcGit -Dir $Dir -Arguments @('fetch', '--quiet', $Remote, $Branch)
-    if ($f.Code -ne 0) {
-      Say ("push-main: COULD NOT EVALUATE - `git fetch {0} {1}` exited {2}, so what this push would land on is unknown. That is not a pass.`n{3}" -f $Remote, $Branch, $f.Code, $f.Text)
-      $outcome = 'blind-fetch-failed'
-      return 3
+  $checker = $(if ($RehearsalCheck) { $RehearsalCheck } else { { param($d, $h, $r) Invoke-TcRehearsalCheck -Dir $d -Branch $Branch -Head $h -RemoteSha $r } })
+  $rebasedAny = $false
+  $rehearsals = 0
+  for ($round = 1; $round -le $script:PmMaxRehearsalRounds; $round++) {
+    # ---- 1. FETCH AND REBASE, OUTSIDE THE LOCK (2026-09-23, ops lane) ----
+    # Until this change the fetch and the rebase happened only INSIDE the lock, AFTER the gate and the rehearsal, so both
+    # judged the content from BEFORE the rebase. The gate's per-input keys absorbed that; the rehearsal could not, because
+    # its verdict is keyed on the manifest set of the exact commit pushed, and a rebase over any commit touching a
+    # manifest script moves the key. The hook then found no verdict for the rebased content, refused, and the push paid
+    # a second 13-to-15-minute rehearsal (several landings on 2026-09-23). Rebasing FIRST makes the rehearsed content the
+    # content that lands whenever origin holds still for the length of the rehearsal.
+    $s = Invoke-TcSyncToRemote -Dir $Dir -Remote $Remote -Branch $Branch
+    if ($s.Code -ne 0) {
+      Say $s.Message
+      $outcome = $s.Outcome; $ledgerState = 'not-taken'
+      & $writeRow
+      return $s.Code
     }
-    $head = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'HEAD')).Out[0]).Trim()
-    $rem = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'FETCH_HEAD')).Out[0]).Trim()
-    # WHAT THE REMOTE HOLDS NOW, read under the lock. Against $ledgerBase above it says whether the remote moved
-    # while this push queued - recorded whatever happens next, including on the paths that refuse.
-    $ledgerGrant = $rem
-    $mbR = Invoke-TcGit -Dir $Dir -Arguments @('merge-base', 'HEAD', $rem)
-    $mb = $(if ($mbR.Code -eq 0 -and $mbR.Out.Count) { ([string]$mbR.Out[0]).Trim() } else { '' })
-    $cntR = Invoke-TcGit -Dir $Dir -Arguments @('rev-list', '--count', ($rem + '..HEAD'))
-    $ahead = $(if ($cntR.Code -eq 0 -and $cntR.Out.Count) { [int]([string]$cntR.Out[0]).Trim() } else { 0 })
-    # --no-optional-locks IS A GLOBAL OPTION and must come BEFORE the subcommand, so taking a status never takes the
-    # index lock a session's own commit needs. After `status` git rejects it as unknown - which this file did until
-    # the streams were separated, when the rejection stopped counting as a changed path and a dirty checkout was
-    # pushed. Two bugs that had been cancelling each other out.
-    $st = Invoke-TcGit -Dir $Dir -Arguments @('--no-optional-locks', 'status', '--porcelain')
-    $dirty = [bool](@($st.Out | Where-Object { $_.Trim() }).Count)
-    $plan = Get-TcPushPlan -Head $head -RemoteSha $rem -MergeBase $mb -Ahead $ahead -Dirty $dirty
-    if (-not $plan.Ready) {
-      Say ("push-main: REFUSED - {0}" -f $plan.Reason)
-      $outcome = 'refused-not-ready'
+    if ($s.Rebased) { $rebasedAny = $true }
+
+    # ---- 2. THE GATE, BEFORE THE LOCK (Brad, 2026-09-12; the account is above $runner): a red gate never queues, and a
+    # 3 is neither a refusal nor a pass - it leaves the gate to the hook inside the lock, exactly as before.
+    $g = & $runner $Dir
+    if ($g.Ran -and $g.Code -eq 1) {
+      $redWhy = $(if ($g.Why) { [string]$g.Why } else { 'run-gates exited 1' })
+      Say ("push-main: REFUSED - {0} before the lock was taken, so this push never entered the queue and nothing else on this box was held up. Fix the cause and run this again." -f $redWhy)
+      $outcome = 'refused-gate-red'; $ledgerState = 'not-taken'
+      & $writeRow
       return 1
     }
-    Say ("push-main: {0} commit(s) to land on {1}/{2}; {3}." -f $ahead, $Remote, $Branch, $plan.Reason)
-    if ($plan.NeedsRebase) {
-      $rb = Invoke-TcGit -Dir $Dir -Arguments @('rebase', $rem)
-      if ($rb.Code -ne 0) {
-        # THE BRANCH IS LEFT EXACTLY WHERE IT WAS. A half-finished rebase under a lock is the worst thing this could
-        # hand back, because the next session to push inherits it.
-        $null = Invoke-TcGit -Dir $Dir -Arguments @('rebase', '--abort')
-        Say ("push-main: REFUSED - the rebase onto {0}/{1} conflicts, so it was aborted and this branch is exactly where it was. Resolve it and run this again.`n{2}" -f $Remote, $Branch, $rb.Text)
-        $outcome = 'refused-rebase-conflict'
-        return 1
+    if ($g.Code -ne 0) {
+      Say ("push-main: the gate did not settle outside the lock ({0}), so it is left to the hook inside the lock, gated exactly as before.{1}" -f $g.Code, $(if ($g.Why) { ' ' + $g.Why } else { '' }))
+    } else {
+      Say 'push-main: gate PASSED outside the lock, so the lock is taken only for the fetch, the rebase and the ref update.'
+    }
+
+    # ---- 3. THE CHAIN REHEARSAL, ALSO BEFORE THE LOCK, AND AFTER THE REBASE (2026-09-22 RCA F2; order 2026-09-23) ----
+    # A push that changes a script in ops\chain-manifest.json must carry a rehearsal over recent real data, and the
+    # rehearsal takes the chain's own time (about 14 minutes), so it runs HERE, unlocked. The hook inside the lock only
+    # reads the recorded verdict. 1 = rehearsed and failed, 3 = could not rehearse with its blind= cause; both refuse
+    # before the queue, and neither is ever read as a pass. The cap of 6 at once and the three outcomes are
+    # ops\rehearse-chain.ps1's, unchanged.
+    $rehearsals++
+    $rh = $(if ($RehearsalRunner) { & $RehearsalRunner $Dir } else { Invoke-TcRehearsalForPush -Dir $Dir -Remote $Remote -Branch $Branch })
+    if ($rh.Code -ne 0) {
+      Say ("push-main: REFUSED before the lock - {0}. The rehearsal lines above say which stage or cause. Rehearse again, or push with -NoRehearsal -NoRehearsalReason '<why>' to bypass loudly." -f $(if ($rh.Code -eq 3) { 'the chain rehearsal COULD NOT EVALUATE (exit 3), which is never a pass' } else { 'this push changes the daily chain and has no passing rehearsal (exit ' + $rh.Code + ')' }))
+      $outcome = $(if ($rh.Code -eq 3) { 'refused-rehearsal-blind' } else { 'refused-rehearsal' }); $ledgerState = 'not-taken'
+      & $writeRow
+      return $rh.Code
+    }
+
+    # ---- 4. THE LOCK: a final fetch, a rebase only if origin moved again, and the ref update ----
+    $lock = Enter-TcPushLock @enter
+    $ledgerWaitMs = [double]$lock.WaitedMs
+    $ledgerState = $(if (-not $lock.Held) { 'unlocked' } elseif ($lock.Inherited) { 'inherited' } else { 'held' })
+    if (-not $lock.Held) {
+      # STILL NOT A REFUSAL. The lock is a fairness device; without it this push is exactly as gated as it ever was and
+      # merely races for the ref, which is what every push did before the lock existed.
+      Say ("push-main: the push lock was NOT taken - {0}. Pushing anyway: this push is gated identically, it just races for the ref." -f $lock.Reason)
+    } elseif ($lock.Inherited) {
+      Say 'push-main: an ancestor already holds the push lock, so it was not taken again.'
+    } else {
+      Say ("push-main: holding the machine-wide push lock after {0:N0}s - nothing else on this box can land until this push is done." -f ($lock.WaitedMs / 1000))
+    }
+    $again = $false
+    try {
+      $s2 = Invoke-TcSyncToRemote -Dir $Dir -Remote $Remote -Branch $Branch
+      # WHAT THE REMOTE HOLDS NOW, read under the lock. Against $ledgerBase it says whether the remote moved while this
+      # push queued - recorded whatever happens next, including on the paths that refuse.
+      $ledgerGrant = $s2.Rem
+      if ($s2.Code -ne 0) {
+        Say $s2.Message
+        $outcome = $s2.Outcome
+        return $s2.Code
       }
-      $head = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'HEAD')).Out[0]).Trim()
-      Say ("push-main: rebased onto {0}; HEAD is now {1}." -f $rem.Substring(0, 9), $head.Substring(0, 9))
+      if ($s2.Rebased) {
+        $rebasedAny = $true
+        # THE TRADE-OFF, SAID PLAINLY: origin moved AGAIN between the rebase outside the lock and this one. When that
+        # move touched no chain-manifest script the verdict key is unchanged and the rehearsal above still covers the
+        # content, so this push lands now. When it did touch one, no verdict covers the new content and the hook would
+        # refuse, so the lock is handed back and this push gates and rehearses again OUTSIDE it - a push can still
+        # re-rehearse, but only when origin changed a manifest script inside that window.
+        $ck = & $checker $Dir $s2.Head $s2.Rem
+        if ($ck.Code -ne 0) {
+          $again = $true
+          Say ("push-main: origin moved again while this push waited, and the rebase inside the lock changed what the rehearsal covered ({0}). The lock is handed back; round {1} of {2} gates and rehearses the rebased content OUTSIDE it." -f $ck.Why, ($round + 1), $script:PmMaxRehearsalRounds)
+        } else {
+          Say 'push-main: origin moved again while this push waited; the rebase inside the lock changed no chain-manifest script, so the recorded rehearsal still covers this content and it is not rehearsed again.'
+        }
+      }
+      if (-not $again) {
+        if ($DryRun) {
+          Say 'push-main: -DryRun, so nothing was pushed. Everything up to the push was done under the lock.'
+          $outcome = 'dry-run'
+          return 0
+        }
+        # A PLAIN PUSH: the pre-push hook runs, the gate runs, and a red gate refuses this exactly as it refuses any other
+        # push. --no-verify is not passed and is not an option here.
+        $p = Invoke-TcGit -Dir $Dir -Arguments @('push', $Remote, ('HEAD:refs/heads/' + $Branch))
+        Say $p.Text
+        if ($p.Code -ne 0) {
+          Say ("push-main: the push did NOT land (git exited {0}). Nothing here overrides that; read the reason above." -f $p.Code)
+          $outcome = 'push-rejected'
+          return 1
+        }
+        Say ("push-main: LANDED on {0}/{1} at {2}, on the first attempt, after {3} rehearsal round(s)." -f $Remote, $Branch, $s2.Head.Substring(0, 9), $rehearsals)
+        $outcome = $(if ($rebasedAny) { 'landed-after-rebase' } else { 'landed' })
+        return 0
+      }
+    } finally {
+      # THE LOCK GOES BACK FIRST, then the row is written: a ledger write must never sit inside the critical section
+      # this whole file exists to keep short, and nothing reads the row to decide anything. A round that hands the lock
+      # back to rehearse again writes no row; the push's one row is written when it finally lands or refuses.
+      Exit-TcPushLock $lock
+      if (-not $again) { & $writeRow }
     }
-    if ($DryRun) {
-      Say 'push-main: -DryRun, so nothing was pushed. Everything up to the push was done under the lock.'
-      $outcome = 'dry-run'
-      return 0
-    }
-    # A PLAIN PUSH: the pre-push hook runs, the gate runs, and a red gate refuses this exactly as it refuses any other
-    # push. --no-verify is not passed and is not an option here.
-    $p = Invoke-TcGit -Dir $Dir -Arguments @('push', $Remote, ('HEAD:refs/heads/' + $Branch))
-    Say $p.Text
-    if ($p.Code -ne 0) {
-      Say ("push-main: the push did NOT land (git exited {0}). Nothing here overrides that; read the reason above." -f $p.Code)
-      $outcome = 'push-rejected'
-      return 1
-    }
-    Say ("push-main: LANDED on {0}/{1} at {2}, on the first attempt." -f $Remote, $Branch, $head.Substring(0, 9))
-    $outcome = $(if ($plan.NeedsRebase) { 'landed-after-rebase' } else { 'landed' })
-    return 0
-  } finally {
-    # THE LOCK GOES BACK FIRST, then the row is written: a ledger write must never sit inside the critical section
-    # this whole file exists to keep short, and nothing reads the row to decide anything.
-    Exit-TcPushLock $lock
-    & $writeRow
   }
+  Say ("push-main: REFUSED - origin changed a chain-manifest script while this push waited in each of {0} rounds, so no rehearsal could keep up with it. The branch is rebased and nothing was pushed; run this again when main is quieter." -f $script:PmMaxRehearsalRounds)
+  $outcome = 'refused-rehearsal-churn'
+  & $writeRow
+  return 1
 }
 
 if ($SelfTest) {
@@ -625,6 +722,97 @@ $m.Dispose()
     $rR4 = Invoke-TcRehearsalForPush -Dir $s3 -Remote 'origin' -Branch 'main'
     T ($kMNF + '  a checkout with no ops\rehearse-chain.ps1 is not asked for a rehearsal (the older-checkout rule)') ($rR4.Code -eq 0) ("code={0} why={1}" -f $rR4.Code, $rR4.Why)
 
+    # ---- THE REHEARSAL JUDGES THE REBASED CONTENT (2026-09-23) ----
+    # Founding case: on 2026-09-23 several landings rehearsed the content from BEFORE push-main's in-lock rebase, the hook
+    # found no verdict for the rebased content, and each push paid a second 13-to-15-minute rehearsal. The fixture models
+    # ops\rehearse-chain.ps1's verdict key at small scale: a verdict covers one blob of chain.ps1 (the "manifest"), the
+    # rehearsal runner records one for whatever HEAD it sees, and the in-lock check asks whether HEAD's blob has one. The
+    # runner can also make origin MOVE while it runs, from a second clone, which is the window the trade-off is about.
+    $script:rhVerdicts = @{}
+    $script:rhSeen = New-Object Collections.ArrayList
+    $script:rhMoves = @()
+    $script:rhLockFree = $null
+    $mover = New-Clone 'mover'
+    $blobOf = { param($d) $bo = @(& git -C $d rev-parse 'HEAD:chain.ps1' 2>$null); if ($LASTEXITCODE -eq 0 -and $bo.Count) { ([string]$bo[0]).Trim() } else { 'no-chain' } }
+    $moveOrigin = { param([string]$File)
+      $null = & git -C $mover pull -q --rebase origin main 2>$null
+      [IO.File]::WriteAllText((Join-Path $mover $File), ('moved ' + [guid]::NewGuid().ToString('N')))
+      $null = & git -C $mover add -- $File 2>$null; $null = & git -C $mover commit -q -m ('move ' + $File) 2>$null
+      $null = & git -C $mover push -q origin HEAD:main 2>$null
+    }
+    $rhModel = { param($d)
+      [void]$script:rhSeen.Add(([string](@(& git -C $d rev-parse HEAD 2>$null))[0]).Trim())
+      $pr = @(& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $probeScript -Name ($prefix + '0'))
+      $script:rhLockFree = [bool](@($pr | Where-Object { "$_".Trim() -eq 'FREE' }).Count)
+      $script:rhVerdicts[(& $blobOf $d)] = $true
+      if ($script:rhMoves.Count) { $mf = $script:rhMoves[0]; $script:rhMoves = @($script:rhMoves | Select-Object -Skip 1); & $moveOrigin $mf }
+      return [pscustomobject]@{ Code = 0; Why = 'fixture: rehearsed-pass' }
+    }
+    $rhCheck = { param($d, $h, $r) if ($script:rhVerdicts.ContainsKey((& $blobOf $d))) { [pscustomobject]@{ Code = 0; Why = 'covered' } } else { [pscustomobject]@{ Code = 1; Why = 'fixture: no-verdict for the rebased chain.ps1' } } }
+    $greenGate = { param($d) [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    $newPusher = { param([string]$Name)
+      $pd = New-Clone $Name
+      [IO.File]::WriteAllText((Join-Path $pd ($Name + '.txt')), $Name)
+      $null = & git -C $pd add -- ($Name + '.txt') 2>$null; $null = & git -C $pd commit -q -m $Name 2>$null
+      return $pd
+    }
+    $tipOf = { ([string](@(& git -C $origin rev-parse main 2>$null))[0]).Trim() }
+    $isAnc = { param($d, $anc, $desc) $null = & git -C $d merge-base --is-ancestor $anc $desc 2>$null; return ($LASTEXITCODE -eq 0) }
+
+    # MUST FIRE, the founding order: origin moved over chain.ps1 BEFORE this push started. The one rehearsal must see a
+    # HEAD already rebased on top of that move, with the push lock free while it runs, and the push lands on it.
+    $q1 = & $newPusher 'q1'
+    & $moveOrigin 'chain.ps1'
+    $moved1 = & $tipOf
+    $script:rhSeen.Clear(); $script:rhMoves = @()
+    $tokenWas2 = $env:TC_PUSH_LOCK_HOLDER; $env:TC_PUSH_LOCK_HOLDER = $null
+    $rQ1 = Invoke-TcPushMain -Dir $q1 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhModel -RehearsalCheck $rhCheck
+    $env:TC_PUSH_LOCK_HOLDER = $tokenWas2
+    $seen1 = $(if ($script:rhSeen.Count) { [string]$script:rhSeen[0] } else { '' })
+    T ($kMF + '  the rehearsal judges the REBASED content: origin moved over a manifest script before the push, and the one rehearsal saw a HEAD already on top of it, outside the lock') `
+      ($rQ1 -eq 0 -and $script:rhSeen.Count -eq 1 -and $seen1 -and (& $isAnc $q1 $moved1 $seen1) -and $script:rhLockFree -eq $true -and (& $tipOf) -eq $seen1) `
+      ("rc={0} rehearsals={1} sawRebased={2} lockFree={3} landedWhatWasRehearsed={4}" -f $rQ1, $script:rhSeen.Count, $(if ($seen1) { & $isAnc $q1 $moved1 $seen1 } else { $false }), $script:rhLockFree, ((& $tipOf) -eq $seen1))
+
+    # MUST FIRE, the trade-off: origin changes a manifest script WHILE the first rehearsal runs. The rebase inside the lock
+    # moves the key, so the push hands the lock back and rehearses the rebased content again before it pushes.
+    $q2 = & $newPusher 'q2'
+    $script:rhSeen.Clear(); $script:rhMoves = @('chain.ps1')
+    $rQ2 = Invoke-TcPushMain -Dir $q2 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhModel -RehearsalCheck $rhCheck
+    $moved2 = ([string](@(& git -C $mover rev-parse HEAD 2>$null))[0]).Trim()
+    $seen2 = $(if ($script:rhSeen.Count -ge 2) { [string]$script:rhSeen[1] } else { '' })
+    T ($kMF + '  a rebase inside the lock that changes a manifest script re-rehearses before the push: two rehearsals, the second over the moved content, and it lands') `
+      ($rQ2 -eq 0 -and $script:rhSeen.Count -eq 2 -and $seen2 -and (& $isAnc $q2 $moved2 $seen2) -and (& $tipOf) -eq $seen2) `
+      ("rc={0} rehearsals={1} secondSawMove={2}" -f $rQ2, $script:rhSeen.Count, $(if ($seen2) { & $isAnc $q2 $moved2 $seen2 } else { $false }))
+
+    # CLEAN TWIN: origin moves WHILE the rehearsal runs, over a file no rehearsal covers. The rebase inside the lock keeps
+    # the key, the recorded verdict is reused, and the push lands after ONE rehearsal carrying the moved commit.
+    $q3 = & $newPusher 'q3'
+    $script:rhSeen.Clear(); $script:rhMoves = @('notes.txt')
+    $rQ3 = Invoke-TcPushMain -Dir $q3 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhModel -RehearsalCheck $rhCheck
+    $moved3 = ([string](@(& git -C $mover rev-parse HEAD 2>$null))[0]).Trim()
+    $head3 = ([string](@(& git -C $q3 rev-parse HEAD 2>$null))[0]).Trim()
+    T ($kCT + '  a rebase inside the lock over non-manifest commits reuses the verdict: one rehearsal, and the landed HEAD carries the moved commit') `
+      ($rQ3 -eq 0 -and $script:rhSeen.Count -eq 1 -and (& $isAnc $q3 $moved3 $head3) -and (& $tipOf) -eq $head3) `
+      ("rc={0} rehearsals={1} carriesMove={2} landed={3}" -f $rQ3, $script:rhSeen.Count, (& $isAnc $q3 $moved3 $head3), ((& $tipOf) -eq $head3))
+
+    # THE ROUND CAP (3), AT it and one PAST it. At the bar: origin changes chain.ps1 during rounds 1 and 2, and round 3
+    # lands. Past it: origin changes chain.ps1 in all three rounds, and the push is refused rather than looping on.
+    $q4 = & $newPusher 'q4'
+    $script:rhSeen.Clear(); $script:rhMoves = @('chain.ps1', 'chain.ps1')
+    $rQ4 = Invoke-TcPushMain -Dir $q4 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhModel -RehearsalCheck $rhCheck
+    T ($kMNF + '  at the 3-round cap (origin changes a manifest script in rounds 1 and 2) the push still lands, after exactly 3 rehearsals') `
+      ($rQ4 -eq 0 -and $script:rhSeen.Count -eq 3) ("rc={0} rehearsals={1}" -f $rQ4, $script:rhSeen.Count)
+    $q5 = & $newPusher 'q5'
+    $script:rhSeen.Clear(); $script:rhMoves = @('chain.ps1', 'chain.ps1', 'chain.ps1')
+    $ledRoot5 = Join-Path $tmp 'led5'
+    $rQ5 = Invoke-TcPushMain -Dir $q5 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhModel -RehearsalCheck $rhCheck -LedgerRoot $ledRoot5
+    $head5 = ([string](@(& git -C $q5 rev-parse HEAD 2>$null))[0]).Trim()
+    $row5Raw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledRoot5)
+    $row5 = @($row5Raw)
+    T ($kMF + '  one round past the cap (origin changes a manifest script in all 3 rounds) is refused, nothing is pushed, and ONE ledger row says refused-rehearsal-churn') `
+      ($rQ5 -eq 1 -and $script:rhSeen.Count -eq 3 -and -not (& $isAnc $q5 $head5 (& $tipOf)) -and $row5.Count -eq 1 -and $row5[0].outcome -eq 'refused-rehearsal-churn') `
+      ("rc={0} rehearsals={1} rows={2} outcome={3}" -f $rQ5, $script:rhSeen.Count, $row5.Count, $(if ($row5.Count) { $row5[0].outcome } else { '' }))
+
     $a = New-Clone 'a'
     [IO.File]::WriteAllText((Join-Path $a 'a.txt'), 'a')
     $null = & git -C $a add -- a.txt 2>$null; $null = & git -C $a commit -q -m a 2>$null
@@ -646,7 +834,7 @@ $m.Dispose()
     $remB = ([string](@(& git -C $origin rev-parse main 2>$null))[0]).Trim()
     $headB = ([string](@(& git -C $b rev-parse HEAD 2>$null))[0]).Trim()
     $hasC = @(& git -C $b log --oneline 2>$null) -match ' c$'
-    T ($kMF + '  a branch whose base the remote moved past is rebased under the lock and still lands on its first attempt') `
+    T ($kMF + '  a branch whose base the remote moved past is rebased before the lock and still lands on its first attempt') `
       ($r2 -eq 0 -and $remB -eq $headB -and @($hasC).Count -ge 1) ("rc={0} remote={1} head={2} carriesC={3}" -f $r2, $remB, $headB, @($hasC).Count)
 
     # A DIRTY TREE IS REFUSED, and the branch is not touched.
