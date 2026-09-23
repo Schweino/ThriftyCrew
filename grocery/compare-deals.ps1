@@ -2146,6 +2146,11 @@ if ($SelfTest) {
     @{ item='Pepsi or Mountain Dew'; size='2 L'; want=@('Pepsi or Mountain Dew @@ 2 L') }
     # MUST FIRE - a second brand names its own product; a short first brand borrows the lower-case noun
     @{ item='Lean Cuisine or Stouffer''s entree, 8.5 to 12 oz., $2.77'; size=''; want=@('Lean Cuisine entree, 8.5 to 12 oz., $2.77 @@ ','Stouffer''s entree, 8.5 to 12 oz., $2.77 @@ ') }
+    # MUST NOT FIRE - frozen from Aldi's weekly ad (2026-09-16 to 2026-09-22): a short L beside a title-case R whose last
+    # word may be the shared noun. Split, it emitted 'VitaLife Turmeric' and a wellness shot took the ground-turmeric cell.
+    @{ item='VitaLife Turmeric or Ginger Shot'; size='2 oz.'; want=@('VitaLife Turmeric or Ginger Shot @@ 2 oz.') }
+    # MUST NOT FIRE - the same undecidable shape at Fareway (2026-09-21 ad): 'Rotella''s Vienna' lacks the 'Bread' it shares
+    @{ item='Rotella''s Vienna or Honey Wheat Bread'; size=''; want=@('Rotella''s Vienna or Honey Wheat Bread @@ ') }
   )
   foreach ($ic in $ingestCases) {
     $parts = Get-AdLineParts ([string]$ic.item) ([string]$ic.size)

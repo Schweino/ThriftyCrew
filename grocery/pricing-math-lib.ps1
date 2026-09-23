@@ -568,6 +568,11 @@ function Split-AdLineProducts([string]$name) {
     # R opens with a capital: a second BRAND or product name ('Cocoa Krispies or Raisin Bran cereal', 'Lean Cuisine or
     # Stouffer''s entree'). R stands alone; a short L (two words or fewer) takes R's last word as its product noun.
     # ...and only a LOWER-CASE last word is a product noun: 'Pepsi or Mountain Dew' must never make 'Pepsi Dew'
+    # A SHORT L beside a multi-word R whose last word is CAPITALISED is undecidable from the words alone: in Aldi's
+    # 'VitaLife Turmeric or Ginger Shot' that word is the shared noun L lacks, in 'Coke Zero or Mountain Dew' it is not.
+    # Splitting emitted a bare 'VitaLife Turmeric' (a wellness shot) that took the Aldi ground-turmeric cell at
+    # 0.845/oz on the 2026-09-23 rebuild. A line that cannot be named safely stays WHOLE, as it did before the ruling.
+    if ($lw.Count -le 2 -and $rw.Count -gt 1 -and $rw[$rw.Count - 1] -cmatch '^[A-Z]') { return ,@($whole) }
     [void]$names.Add($(if ($lw.Count -le 2 -and $rw.Count -gt 1 -and $rw[$rw.Count - 1] -cmatch '^[a-z]') { $L + ' ' + $rw[$rw.Count - 1] } else { $L })); [void]$names.Add($R)
   } elseif ($rw[0] -ieq $lw[$lw.Count - 1]) {
     [void]$names.Add($L); [void]$names.Add($(if ($brand -and $lw.Count -gt 1) { $brand + ' ' + $R } else { $R }))
