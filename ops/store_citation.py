@@ -60,7 +60,9 @@ ThriftyCrew checkout - the ~/.claude repo, whose own commit-msg hook calls THIS 
 repo-relative token also resolves against the estate's tracked set (RECALL_ESTATE_ROOT, default
 C:\Codex\ThriftyCrew), because a brain change legitimately cites `.claude/rules/*.md` or a design doc that only the
 estate holds. The row records `resolved_in` per token (store, memory, repo, estate or repo_blind). A brain commit
-refuses only from BRAIN_REFUSE_FROM, which is None - warn only - until Brad sets it (D17).
+refuses only from BRAIN_REFUSE_FROM, which is None - warn only - until Brad sets it (D17). A commit from a LINKED
+worktree of the brain repo (the C:/Users/Owner/.claude-wt/* lanes) is a brain commit too: is_brain_checkout reads
+every repo root, not only the toplevel, because a worktree's toplevel is never the brain home.
 
 THE CHEAP ESCAPES ARE MEASURED BEFORE THEY ARE CLOSED (2026-09-23, W6.11). Three forms pass the letter of the rule
 and say nothing a reader can check: `searched ..., nothing applicable` with no quoted term, a citation set made only
@@ -413,6 +415,16 @@ def _norm_dir(p):
     return os.path.normcase(os.path.normpath(p.replace("/", os.sep))) if p else ""
 
 
+def is_brain_checkout(repo_roots, brain_home):
+    """True when the committing checkout belongs to the brain repo: ANY of its roots (repo_context holds the toplevel
+    and, for a linked worktree, the common dir's parent, which is the main checkout) is the brain home. Until
+    2026-09-23 only the toplevel was compared, so a commit from a LINKED worktree of the brain repo (every
+    C:/Users/Owner/.claude-wt/* lane) read as a ThriftyCrew-style repo, and from REFUSE_FROM it would have been
+    REFUSED, against D17: the brain warns until Brad sets BRAIN_REFUSE_FROM."""
+    b = _norm_dir(brain_home)
+    return bool(b) and any(_norm_dir(r) == b for r in (repo_roots or ()))
+
+
 def estate_context(repo_roots, root=None):
     """{estate_tracked, estate_root, estate_blind} for a commit to a repo that is NOT a ThriftyCrew checkout (W4.5
     step 0). A checkout of the estate - the main one or any linked worktree, whose common dir is the estate's .git -
@@ -476,7 +488,7 @@ def run_commit_check(msg_path):
     now = int(time.time())
     today = time.strftime("%Y-%m-%d")
     store.update(repo_context())
-    store["repo_is_brain"] = bool(store.get("top")) and _norm_dir(store["top"]) == _norm_dir(os.path.dirname(store["skills"]))
+    store["repo_is_brain"] = is_brain_checkout(store.get("repo_roots"), os.path.dirname(store["skills"]))
     ec = estate_context(store.get("repo_roots") or ())
     store.update(estate_tracked=ec["estate_tracked"])
     d = judge_message(text, code, store, today, session_searched(store["recall_log"], sid, now))
@@ -794,11 +806,11 @@ def selftest():
         subprocess.run(["git", "add", "--", "skills/x.py"], cwd=brepo, env=genv, capture_output=True, text=True)
         benv = dict(genv, CLAUDE_CODE_SESSION_ID="stc-brain-fixture", USERPROFILE=bhome, RECALL_ESTATE_ROOT=erepo)
 
-        def brain_check(msg, tag):
+        def brain_check(msg, tag, cwd=None):
             mp = os.path.join(root, "bmsg-%s.txt" % tag)
             with open(mp, "w", encoding="utf-8", newline="\n") as f:
                 f.write(msg)
-            r = subprocess.run([sys.executable, os.path.abspath(__file__), "--commit-msg", mp], cwd=brepo, env=benv,
+            r = subprocess.run([sys.executable, os.path.abspath(__file__), "--commit-msg", mp], cwd=cwd or brepo, env=benv,
                                capture_output=True, encoding="utf-8", errors="replace", timeout=180)
             blog = os.path.join(brepo, "store-citation-log.jsonl")
             rows = []
@@ -838,6 +850,26 @@ def selftest():
         ectx_gone = estate_context([brepo], root=os.path.join(root, "no-such-estate"))
         case("MUST FIRE an estate root that cannot be listed is estate_blind, never an empty tracked set",
              ectx_gone["estate_blind"] is True and ectx_gone["estate_tracked"] is None)
+
+        # ---- a LINKED worktree of the brain repo is the brain (the C:/Users/Owner/.claude-wt/* lanes) ----
+        # Its toplevel is the worktree, never the brain home, so the brain is recognised through the common root
+        # repo_context already holds. The worktree is cut from the temp brain repo; nothing live is touched.
+        bwt = os.path.join(root, "bwt")
+        subprocess.run(["git", "worktree", "add", "-q", "-b", "lane", bwt], cwd=brepo, env=genv, capture_output=True, text=True)
+        with open(os.path.join(bwt, "skills", "x.py"), "w", newline="\n") as f:
+            f.write("x = 3\n")
+        subprocess.run(["git", "add", "--", "skills/x.py"], cwd=bwt, env=genv, capture_output=True, text=True)
+        wr, wrow, wn = brain_check("brain lane fix\n\nbody\n", "worktree", cwd=bwt)
+        case("MUST FIRE a commit from a LINKED worktree of the brain repo is judged as the brain (repo_is_brain, the brain's warn head, exit 0)",
+             wr.returncode == 0 and "WARNING (the brain repo warns" in (wr.stderr or "") and wn == 3
+             and wrow.get("repo_is_brain") is True and wrow.get("verdict") == "warn")
+        ewt = os.path.join(root, "ewt")
+        subprocess.run(["git", "worktree", "add", "-q", "-b", "lane", ewt], cwd=erepo, env=genv, capture_output=True, text=True)
+        bctx = repo_context(cwd=bwt, env=genv)
+        ewctx = repo_context(cwd=ewt, env=genv)
+        case("MUST NOT FIRE a linked worktree of a repo that is NOT the brain is not the brain, while the brain's own worktree is",
+             not is_brain_checkout(ewctx["repo_roots"], brepo) and is_brain_checkout(bctx["repo_roots"], brepo)
+             and len(ewctx["repo_roots"]) == 2 and not is_brain_checkout([], brepo))
 
         # ---- W6.11: the cheap escapes are recorded as escape-warn, never through the refuse mode ----
         open(os.path.join(root, "CLAUDE.md"), "w").close()                       # the ~/.claude store base holds CLAUDE.md
@@ -888,7 +920,7 @@ def selftest():
 
     for f in fails:
         print("  FAIL  " + f)
-    expected = 61
+    expected = 63
     if n != expected:
         fails.append("ran %d cases, expected %d" % (n, expected))
         print("  FAIL  ran %d cases, expected %d" % (n, expected))
