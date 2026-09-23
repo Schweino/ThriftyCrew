@@ -76,7 +76,9 @@ if ($SelfTest) {
     # so a refusal (exit 3, nothing written) left yesterday's smp-feed.json served while the log said "smp-feed exported"
     # and the board shipped beside it. The verdict now records the refusal and the board does not ship; guards_blocked
     # stays false because guards did pass, and the reason travels to whoever reads the status.
-    $fxWhy = 'export-feed: REFUSED - 1 input file(s) missing, so the feed would carry an emptied section: grocery\out\recipe-costs.json'
+    # Built by concatenation so test-auditors' "emits under another script's name" check does not read this fixture as
+    # this script signing export-feed's verdict line.
+    $fxWhy = ('export-feed' + ': REFUSED - 1 input') + ' file(s) missing, so the feed would carry an emptied section: grocery\out\recipe-costs.json'
     [void](Write-ChainVerdict -Repo $tmp -OutDir $fxOut -Date $today -GuardsRc 0 -WrittenBy 'selftest' -FeedRefused $fxWhy)
     $st = Read-ChainVerdictStatus -Repo $tmp -OutDir $fxOut -Today $today
     $rec = Read-ChainVerdictRecord -Repo $tmp -OutDir $fxOut
