@@ -1,7 +1,7 @@
 ﻿{
     "_doc":  "What the pipeline has learned about recipe publishers. Written automatically on every fetch outcome; read by sourcers before searching and before fetching. Replaces the prose blocked-domain lists that used to live, duplicated, in two agent prompts.",
     "_rule":  "One failure is `unreliable`, not `blocked` - a 404 is a fact about one URL. Only a repeated pattern with no successes earns `blocked`. Counts stay visible so the judgment is auditable.",
-    "updated":  "2026-09-22T18:01:38",
+    "updated":  "2026-09-23T18:00:17",
     "count":  45,
     "domains":  [
                     {
@@ -116,14 +116,14 @@
                     },
                     {
                         "domain":  "thereciperebel.com",
-                        "ok":  929,
+                        "ok":  930,
                         "fail":  142,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "unreliable",
                         "note":  "fetch-recipe: The remote server returned an error: (429) Too Many Requests.",
-                        "updated":  "2026-09-22T18:01:38"
+                        "updated":  "2026-09-23T18:00:17"
                     },
                     {
                         "domain":  "orgasmicchef.com",
@@ -182,14 +182,14 @@
                     },
                     {
                         "domain":  "lecremedelacrumb.com",
-                        "ok":  925,
+                        "ok":  926,
                         "fail":  28,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "unreliable",
                         "note":  "fetch-recipe: The remote server returned an error: (429) Too Many Requests.",
-                        "updated":  "2026-09-20T18:01:47"
+                        "updated":  "2026-09-23T18:00:17"
                     },
                     {
                         "domain":  "thecleaneatingcouple.com",
