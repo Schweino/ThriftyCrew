@@ -2066,7 +2066,8 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         New-FanoutLane -Name 'live-recipe-prices'  -File (Join-Path $mealPrep 'pipeline\monitor-live-recipe-prices.ps1') -TimeoutSec 900 -Arguments $(if ($NoAlert) { @('-NoAlert') } else { @() }) -Marker 'LIVE-RECIPE-PRICES-COMPLETE'
         # INGREDIENT IDENTITY (2026-09-22, plan-2026-09-22-9): each recipe ingredient's commodity id must name the same food the
         # board prices (a proxy, a yield row bought in the parent's grams, a union row that is the other member). Keyed ratchet: exit 2 is a NEW finding.
-        New-FanoutLane -Name 'ingredient-identity' -File (Join-Path $mealPrep 'pipeline\audit-ingredient-identity.ps1') -TimeoutSec 600 -Marker 'INGREDIENT-IDENTITY-COMPLETE'
+        $iidBoard = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+    New-FanoutLane -Name 'ingredient-identity' -File (Join-Path $mealPrep 'pipeline\audit-ingredient-identity.ps1') -TimeoutSec 600 -Arguments $(if ($iidBoard) { @('-BoardFile', $iidBoard.FullName) } else { @() }) -Marker 'INGREDIENT-IDENTITY-COMPLETE'
         New-FanoutLane -Name 'db-agreement'        -File (Join-Path $mealPrep 'engine\audit-db-agreement.ps1') -Marker 'DB-AGREEMENT-COMPLETE'
         New-FanoutLane -Name 'published-macros'    -File (Join-Path $mealPrep 'engine\audit-published-macros.ps1') -Marker 'PUBLISHED-MACROS-COMPLETE'
         New-FanoutLane -Name 'spec-contradictions' -File (Join-Path $mealPrep 'pipeline\audit-spec-contradictions.ps1') -TimeoutSec 600 -Arguments @('-Quiet') -Marker 'SPEC-CONTRADICTIONS-COMPLETE'

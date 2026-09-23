@@ -354,7 +354,7 @@ if ($SelfTest) {
   CChk 'MUST NOT FIRE the repaired Orange Zest (6 g, one orange), Lemon Zest and a same-food row are not refused' (@($dzOkHits).Count -eq 0) (@($dzOkHits) -join ' | ')
   $dzLiveRows = Get-Content (Join-Path $db 'ingredients.json') -Raw -Encoding utf8 | ConvertFrom-Json
   $dzLive = Get-DerivedBasisRefusals $dzLiveRows
-  CChk 'CLEAN TWIN the live db\ingredients.json has no derived row the engine would refuse' (@($dzLive).Count -eq 0) (@($dzLive) -join ' | ')
+  CChk 'MUST NOT FIRE the live db\ingredients.json has no derived row the engine would refuse' (@($dzLive).Count -eq 0) (@($dzLive) -join ' | ')
   CChk 'CLEAN TWIN SizeToGrams still reads the real ledger size text as 16 oz, not as the 1 lb inside its parenthesis' ([math]::Abs((SizeToGrams '16 oz (1 lb stand up bag)') - (16 * 28.3495)) -lt 0.0001) ([string](SizeToGrams '16 oz (1 lb stand up bag)'))
   # ---- WHICH FLAG LINES PAGE (2026-09-21, queue 2026-09-20-6c14f6) -------------------------------------------
   # The four real shapes of 2026-09-21's db\cost-flags.txt, one line each: a catalogue-level allowlist refusal, a
@@ -397,7 +397,12 @@ if ($SelfTest) {
     CChk 'END-TO-END MUST FIRE  a PUBLISHED recipe''s unpriced Doubanjiang line is in cost-flags.txt, first, labelled LIVE' (($eRc -eq 0) -and ($eF.Count -ge 1) -and ($eF[0] -like 'LIVE :: Ants Climbing a Tree Pork Noodles :: Doubanjiang :: *') -and ($eF -contains 'LIVE :: Ants Climbing a Tree Pork Noodles :: Doubanjiang :: NO PRICE BASIS')) ("rc=$eRc first=$(if($eF.Count){$eF[0]}else{'(empty)'})")
     CChk 'END-TO-END MUST NOT FIRE a HELD recipe''s six flag lines are not in cost-flags.txt' (@($eF | Where-Object { $_ -like '*ZZ Synthetic Flag Cases*' }).Count -eq 0) ($eF -join ' | ')
     CChk 'END-TO-END CLEAN TWIN the held recipe is REPORTED: a HELD count line, and its 6 lines kept in costed.stamp.json' ((@($eLog | Where-Object { $_ -like 'cost-recipes: HELD 1 recipe(s)*' }).Count -eq 1) -and ($null -ne $eS) -and ([int]$eS.flags_set_aside.held_recipes -eq 1) -and (@($eS.flags_set_aside.held_lines).Count -eq 6)) ("held-lines=$(if($eS){@($eS.flags_set_aside.held_lines).Count}else{'no stamp'}) log=$((@($eLog | Where-Object { $_ -like 'cost-recipes: HELD*' })) -join ' | ')")
-    CChk 'END-TO-END CLEAN TWIN the held recipe is still COSTED: costed.json is byte-identical to the frozen golden baseline' ((Test-Path $eOut) -and ((Get-FileHash $eOut).Hash -eq (Get-FileHash (Join-Path $gfx 'expected\costed.json')).Hash)) 'costed.json moved'
+    # CONTENT-IDENTICAL, NOT RAW-BYTE-IDENTICAL (2026-09-22). The engine writes UTF-8 with a BOM and CRLF (Out-File), and git stores this
+  # fixture LF with no BOM (.gitattributes eol=lf), so a fresh checkout or worktree failed this case on bytes alone while
+  # the main checkout, whose working copy still carried CRLF, passed. The BOM and the line ending are stripped on both sides;
+  # every other byte must match.
+  $eNorm = { param($p) ([IO.File]::ReadAllText($p)).TrimStart([char]0xFEFF).Replace("`r`n", "`n") }
+  CChk 'END-TO-END CLEAN TWIN the held recipe is still COSTED: costed.json is content-identical to the frozen golden baseline (BOM and line endings aside)' ((Test-Path $eOut) -and [string]::Equals((& $eNorm $eOut), (& $eNorm (Join-Path $gfx 'expected\costed.json')), [StringComparison]::Ordinal)) 'costed.json moved'
     # The fixture's db\label-prices.json still carries PRICED rows (it is frozen), so this is the end-to-end proof that
     # the engine reads none of them: not one costed line may carry a label: basis, and the run must still exit 0.
     $fxLab = Get-Content (Join-Path $edb 'label-prices.json') -Raw | ConvertFrom-Json

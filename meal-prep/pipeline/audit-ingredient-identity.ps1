@@ -70,12 +70,11 @@ function Invoke-IdentityRun {
     $resolve = New-IdentityResolver -Commodities $coms -GlobalExclude $gex
     $weekly = New-Object 'System.Collections.Generic.HashSet[string]'
     foreach ($c in @($coms)) { [void]$weekly.Add([string]$c.id) }
+    # THE BOARD IS PASSED, NEVER DISCOVERED (ops/audit-cross-module-reach.ps1): the board is grocery's internal
+    # output, so the grocery caller that owns it (check-ad-cycles' fan-out) names the newest comparison. With no
+    # -BoardFile, check (c) cannot run and the ratchet cannot be compared fairly, so the run is BLIND (exit 3).
     $bf = $BoardFile
-    if (-not $bf) {
-      $g = Get-ChildItem (Join-Path $repo 'grocery\out\comparison-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
-      if ($g) { $bf = $g.FullName }
-    }
-    if (-not $bf -or -not (Test-Path $bf)) { [void]$lines.Add('audit-ingredient-identity: COULD NOT EVALUATE - no comparison board to read (check c needs one)'); return [pscustomobject]@{ Code = 3; Lines = $lines } }
+    if (-not $bf -or -not (Test-Path $bf)) { [void]$lines.Add('audit-ingredient-identity: COULD NOT EVALUATE - check (c) needs -BoardFile <comparison-YYYY-MM-DD.json>; check-ad-cycles passes the newest one'); return [pscustomobject]@{ Code = 3; Lines = $lines } }
     if (-not (Test-Path $CostedFile)) { [void]$lines.Add('audit-ingredient-identity: COULD NOT EVALUATE - no costed.json at ' + $CostedFile); return [pscustomobject]@{ Code = 3; Lines = $lines } }
     $bix = Get-IdentityBoardIndex (Read-JsonFile $bf)
     $costed = Read-JsonFile $CostedFile
@@ -147,7 +146,7 @@ if ($SelfTest) {
   $k = KindsOf @(Rw 'Yellow Onion' 'onions')
   Check 'MUST NOT FIRE  Yellow Onion bid onions is the same food' ($k.Count -eq 0) ($k -join ',')
   $k = KindsOf @(Rw 'Shallots' 'shallots')
-  Check 'CLEAN TWIN  the repaired Shallots bid shallots routes to its own bid and reads clean' ($k.Count -eq 0) ($k -join ',')
+  Check 'MUST NOT FIRE  the repaired Shallots bid shallots routes to its own bid and reads clean' ($k.Count -eq 0) ($k -join ',')
   $k = KindsOf @(Rw 'Tandoori Masala' 'onions' @{ relation = 'substitute' })
   Check 'MUST FIRE  a declared substitute is a finding by name (Brad, 2026-09-22: no substitute of any kind)' ($k -contains 'SUBSTITUTE') ($k -join ',')
 
@@ -160,9 +159,9 @@ if ($SelfTest) {
   $k = KindsOf @(Rw 'Orange Zest' 'oranges' ($oz + @{ buy_pkg_g = 6.5 }))
   Check 'MUST FIRE  ONE STEP PAST THE BAR: buy_pkg_g 6.5 against 6.0 is a finding' ($k -contains 'DERIVED-BASIS') ($k -join ',')
   $k = KindsOf @(Rw 'Fresh Lemon Juice' 'lemons' @{ relation = 'derived'; parent_units_per_purchase = 1; yield_g_per_parent_unit = 47; buy_pkg_g = 47 })
-  Check 'CLEAN TWIN  Fresh Lemon Juice declared derived from lemons (47 g a lemon) stays clean, though its name would route elsewhere' ($k.Count -eq 0) ($k -join ',')
+  Check 'MUST NOT FIRE  Fresh Lemon Juice declared derived from lemons (47 g a lemon) stays clean, though its name would route elsewhere' ($k.Count -eq 0) ($k -join ',')
   $k = KindsOf @(Rw 'Lemon Zest' 'lemons' @{ relation = 'derived'; parent_units_per_purchase = 1; yield_g_per_parent_unit = 6; buy_pkg_g = 6 })
-  Check 'CLEAN TWIN  Lemon Zest (buy_pkg_g 6 == 6 x 1 on an each fruit) stays clean' ($k.Count -eq 0) ($k -join ',')
+  Check 'MUST NOT FIRE  Lemon Zest (buy_pkg_g 6 == 6 x 1 on an each fruit) stays clean' ($k.Count -eq 0) ($k -join ',')
 
   # (c) the union row: a thigh line priced by the drumstick bag that won chicken-thighs on 2026-09-22.
   $board = [pscustomobject]@{ comparison = @(
@@ -178,7 +177,7 @@ if ($SelfTest) {
   Check "MUST NOT FIRE  the same line priced by Sam's bone-in thighs names its food" ($k.Count -eq 0) ($k -join ',')
   $cost3 = @([pscustomobject]@{ slug = 'fixture-zest'; lines = @([pscustomobject]@{ item = 'Orange Zest'; basis = 'board:oranges:walmart' }, [pscustomobject]@{ item = 'Yellow Onion'; basis = 'board:onions:walmart' }) })
   $k = KindsOf @((Rw 'Orange Zest' 'oranges' ($oz + @{ buy_pkg_g = 6 })), (Rw 'Yellow Onion' 'onions')) $bix $cost3
-  Check 'CLEAN TWIN  a derived zest line is asked about its PARENT and "Navel Oranges" answers; Yellow Onion by yellow onions answers' ($k.Count -eq 0) ($k -join ',')
+  Check 'MUST NOT FIRE  a derived zest line is asked about its PARENT and "Navel Oranges" answers; Yellow Onion by yellow onions answers' ($k.Count -eq 0) ($k -join ',')
 
   # THE MAPPER'S WRITE: the standing REUSE bone-in skin-on chicken thighs -> chicken-thighs is refused while the
   # cell is won by a drumstick bag, and a term that routes elsewhere is refused outright.
@@ -187,7 +186,7 @@ if ($SelfTest) {
   $why = Test-ReuseIdentity -Term 'pork chorizo' -Id 'ground-pork' -Resolve $resolve -WeeklyIds $weekly -BoardIndex $bix
   Check 'MUST FIRE  the mapper refuses pork chorizo -> ground-pork (the chorizo-as-ground-pork line)' ([bool]$why) ([string]$why)
   $why = Test-ReuseIdentity -Term 'yellow onion' -Id 'onions' -Resolve $resolve -WeeklyIds $weekly -BoardIndex $bix
-  Check 'CLEAN TWIN  the mapper still records yellow onion -> onions' ($null -eq $why) ([string]$why)
+  Check 'MUST NOT FIRE  the mapper does not refuse yellow onion -> onions' ($null -eq $why) ([string]$why)
   Check 'CLEAN TWIN  Get-TokenStem folds the plural the vocabulary missed: shallots -> shallot, and keeps asparagus' (((Get-TokenStem 'shallots') -eq 'shallot') -and ((Get-TokenStem 'asparagus') -eq 'asparagus')) ((Get-TokenStem 'shallots') + '/' + (Get-TokenStem 'asparagus'))
 
   # THE RATCHET, run as a child over temp files: a fall keeps the mark byte-identical, -Tighten writes it,

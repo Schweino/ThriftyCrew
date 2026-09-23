@@ -1207,6 +1207,15 @@
    "resolver": "lane:grocery/triage-due.ps1"
   },
   {
+   "id": "recipe-ingredient-identity",
+   "match": "exact",
+   "key": "recipe ingredient priced as a different food",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "lane:grocery/triage-due.ps1"
+  },
+  {
    "id": "live-recipe-price-monitor-blind",
    "match": "exact",
    "key": "live recipe price monitor could not look",

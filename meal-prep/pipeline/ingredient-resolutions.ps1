@@ -430,10 +430,11 @@ if ($runRecord) {
       $iresolve = { param($n) $c = Resolve-Commodity -Matcher $im -Name ([string]$n); if ($c) { [string]$c.id } else { $null } }
       $iweekly = New-Object 'System.Collections.Generic.HashSet[string]'
       foreach ($c in @($icoms)) { [void]$iweekly.Add([string]$c.id) }
+      # The board is grocery's internal output, so it is PASSED (-IdentityBoardFile), never discovered from here
+      # (ops/audit-cross-module-reach.ps1). Without it only the routing half runs, and this says so.
       $ibf = $IdentityBoardFile
-      if (-not $ibf) { $g = Get-ChildItem (Join-Path $repo 'grocery\out\comparison-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1; if ($g) { $ibf = $g.FullName } }
       $ibix = $null
-      if ($ibf -and (Test-Path $ibf)) { $ibix = Get-IdentityBoardIndex (Read-JsonFile $ibf) } else { Write-Output 'ingredient-resolutions: identity check read NO board, so only the routing half ran' }
+      if ($ibf -and (Test-Path $ibf)) { $ibix = Get-IdentityBoardIndex (Read-JsonFile $ibf) } else { Write-Output 'ingredient-resolutions: identity check was handed NO board (-IdentityBoardFile), so only the routing half ran' }
       $idWhy = Test-ReuseIdentity -Term $Term -Id $ItemId -Resolve $iresolve -WeeklyIds $iweekly -BoardIndex $ibix
     } catch { Write-Output ('ingredient-resolutions: identity check COULD NOT RUN, nothing was written - ' + $_.Exception.Message); exit 1 }
     if ($idWhy) {
