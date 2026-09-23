@@ -20,6 +20,17 @@
   ops\hold-push-lock.ps1 (every push through the hook) and ops\push-main.ps1 (a wrapper push, which also knows
   whether it had to rebase and what it landed). One row each, appended, never rewritten.
 
+  A ROW HAS TEN FIELDS OF ITS OWN, AND A WRITER MAY ADD MORE (2026-09-23, design\PLAN-push-derived-conflicts-2026-09-23.md
+  W0.1). ts, pid, run, event, waitMs, state, base, grant, outcome and checkout are this file's; Write-TcPushRow and
+  New-TcPushRowText take one optional -Fields dictionary that is merged AFTER them, in its own order. push-main passes
+  `schema = 2` and the rest of W0.1's fields there (which push-main wrote the row, the change, the conflicted files, the
+  refusal class); hold-push-lock passes none, so its rows keep the old shape. A -Fields key that names one of the ten
+  THROWS, compared ignoring case because ConvertFrom-Json under PS 5.1 refuses two keys that differ only in case: an
+  extra field may never overwrite what the row already says. Write-TcPushRow still never throws into a push; it catches
+  that throw and returns it as its Reason, writing nothing. READERS IGNORE FIELDS THEY DO NOT KNOW, so an old-shape row
+  and a schema-2 row read side by side in one file (Read-TcPushRows and Measure-TcPushRows, which
+  ops\probe-push-convergence.ps1 reads through), and the self-test has that case.
+
   WHAT A ROW IS FOR, and what it is not. It is a MEASUREMENT, not a control: nothing reads it to decide anything,
   no gate has a threshold on it, and a run that cannot write one carries on exactly as it did before. That is
   deliberate - ops-and-gates.md forbids a gate that is red on day one, and a bar on push waits would be red on the
@@ -128,7 +139,10 @@ function New-TcPushRowText {
      BaseSha is refs/remotes/origin/<branch> as it stood when this push started waiting, GrantSha the same ref when
      the lock was granted. Both are read from the SHARED .git on this box, which every landing from this box updates
      ("update by push" in the reflog), so a difference between them is a landing that happened under this push's
-     feet. Either one empty means the ref could not be read, and that is UNKNOWN, never "it did not move". #>
+     feet. Either one empty means the ref could not be read, and that is UNKNOWN, never "it did not move".
+
+     -Fields is merged after the ten own fields, in its own order, and a key naming one of them THROWS (see the header):
+     this function is pure, so the throw is the answer, and Write-TcPushRow is what turns it into a Reason. #>
   param(
     [string]$Event,
     [double]$WaitMs = -1,
@@ -138,7 +152,8 @@ function New-TcPushRowText {
     [string]$Outcome = '',
     [string]$Checkout = '',
     [datetime]$Now = [datetime]::UtcNow,
-    [string]$Run = ''
+    [string]$Run = '',
+    [System.Collections.IDictionary]$Fields = $null
   )
   # `pid` stays for a reader, but it is NOT an identity: `run` is (Get-TcPushLedgerRunId, backlog I171).
   $runId = $Run
@@ -155,8 +170,20 @@ function New-TcPushRowText {
     outcome  = [string]$Outcome
     checkout = [string]$Checkout
   }
-  # -Compress keeps a row to one line, which is what makes the file appendable and readable line by line.
-  return (ConvertTo-Json ([pscustomobject]$row) -Compress)
+  if ($null -ne $Fields) {
+    # [ordered] compares keys IGNORING CASE, so `Outcome` collides with `outcome` here, which is the comparison
+    # ConvertFrom-Json applies on the way back in. A second -Fields key differing only in case collides the same way.
+    foreach ($k in @($Fields.Keys)) {
+      $key = [string]$k
+      if (-not $key.Trim()) { throw 'push-ledger: a -Fields key is empty' }
+      if ($row.Contains($key)) { throw ("push-ledger: the -Fields key '{0}' collides with a field the row already has; an extra field may never overwrite what the row says" -f $key) }
+      $row[$key] = $Fields[$k]
+    }
+  }
+  # -Compress keeps a row to one line, which is what makes the file appendable and readable line by line. -Depth 5,
+  # because a -Fields value may be an object or an array (push-main's leg_sec, conflict_files), and the default depth of
+  # 2 would write a nested value as its type name.
+  return (ConvertTo-Json ([pscustomobject]$row) -Compress -Depth 5)
 }
 
 function Read-TcPushRows {
@@ -264,7 +291,8 @@ function Get-TcPushLedgerRefSha {
 function Write-TcPushRow {
   <# Append one row. Returns Written / Reason / Path and NEVER throws: the caller is a push, and a ledger must not be
      able to refuse one. A failure is reported in Reason so a case can read it - a fallback nobody can see is the
-     blind kind this estate has a rule about. #>
+     blind kind this estate has a rule about. The row TEXT is built before the directory is touched, so a -Fields
+     collision writes nothing at all, not even an empty ledger directory. #>
   param(
     [string]$Event,
     [double]$WaitMs = -1,
@@ -273,15 +301,16 @@ function Write-TcPushRow {
     [string]$GrantSha = '',
     [string]$Outcome = '',
     [string]$Checkout = '',
-    [string]$Root = ''
+    [string]$Root = '',
+    [System.Collections.IDictionary]$Fields = $null
   )
   $path = ''
   try {
     $path = Get-TcPushLedgerPath -Root $Root
+    $text = New-TcPushRowText -Event $Event -WaitMs $WaitMs -State $State -BaseSha $BaseSha -GrantSha $GrantSha `
+      -Outcome $Outcome -Checkout $Checkout -Fields $Fields
     $dir = Split-Path -Parent $path
     if (-not (Test-Path -LiteralPath $dir)) { $null = New-Item -ItemType Directory -Force -ErrorAction Stop $dir }
-    $text = New-TcPushRowText -Event $Event -WaitMs $WaitMs -State $State -BaseSha $BaseSha -GrantSha $GrantSha `
-      -Outcome $Outcome -Checkout $Checkout
     $null = Add-TcLine -Path $path -Text $text
     return [pscustomobject]@{ Written = $true; Reason = ''; Path = $path }
   } catch {
@@ -379,6 +408,45 @@ if ($__pldSelfTest) {
       (@($read2).Count -eq 3 -and $m2.Malformed -eq 1 -and $m2.Comparable -eq 2) `
       ("rows={0} malformed={1} comparable={2}" -f @($read2).Count, $m2.Malformed, $m2.Comparable)
 
+    # ---- -Fields, the extra fields a writer adds (2026-09-23, PLAN-push-derived-conflicts W0.1) ----
+    # AN EXTRA FIELD MAY NEVER OVERWRITE WHAT THE ROW SAYS. `Outcome` differs from the row's `outcome` only in case, which
+    # is exactly the pair ConvertFrom-Json under PS 5.1 refuses on the way back in, so it must collide here too.
+    $colFields = [ordered]@{ schema = 2; Outcome = 'refused' }
+    $colText = $null; $colErr = ''
+    try { $colText = New-TcPushRowText -Event 'push-main' -Outcome 'landed' -Fields $colFields } catch { $colErr = [string]$_.Exception.Message }
+    $colRoot = Join-Path $tmp 'collide-fields'
+    $wCol = Write-TcPushRow -Event 'push-main' -Outcome 'landed' -Root $colRoot -Fields $colFields
+    T ($kMF + '  a -Fields key naming a field the row already has (Outcome, differing only in case) throws naming it, and Write-TcPushRow returns that as its Reason and writes nothing, not even the directory') `
+      (($null -eq $colText) -and $colErr -match "'Outcome'" -and (-not $wCol.Written) -and $wCol.Reason -match "'Outcome'" -and -not (Test-Path -LiteralPath $colRoot)) `
+      ("text={0} err={1} written={2} reason={3} dirMade={4}" -f [bool]$colText, $colErr, $wCol.Written, $wCol.Reason, (Test-Path -LiteralPath $colRoot))
+    # THE MERGE KEEPS EVERY OLD FIELD AND ITS VALUE, puts the extras after them in their own order, and keeps an array an
+    # array: under PS 5.1 a one-element array that got unrolled on the way in would be written as a bare string, which a
+    # reader counting conflict files would then read as one path of that many characters.
+    $fTxt = New-TcPushRowText -Event 'push-main' -WaitMs 5 -State 'held' -BaseSha $A -GrantSha $B -Outcome 'landed' -Checkout 'wt' -Run 'run-fixed' `
+      -Fields ([ordered]@{ schema = 2; conflict_files = [string[]]@('a.txt'); none = [string[]]@(); nothing = $null; leg_sec = [ordered]@{ rg = 3; ta = $null } })
+    $fBack = $fTxt | ConvertFrom-Json
+    $fNames = @($fBack.PSObject.Properties | ForEach-Object { $_.Name }) -join ','
+    $fWant = 'ts,pid,run,event,waitMs,state,base,grant,outcome,checkout,schema,conflict_files,none,nothing,leg_sec'
+    T ($kCT + '  -Fields lands after the ten own fields in its own order, the own fields keep their values, a one-element array stays an array, and an empty array and a null survive as themselves') `
+      ([string]::Equals($fNames, $fWant, [StringComparison]::Ordinal) -and $fBack.outcome -eq 'landed' -and $fBack.base -eq $A -and $fBack.run -eq 'run-fixed' -and `
+        $fTxt.Contains('"conflict_files":["a.txt"]') -and $fTxt.Contains('"none":[]') -and $fTxt.Contains('"nothing":null') -and `
+        $fTxt.Contains('"leg_sec":{"rg":3,"ta":null}') -and ($fTxt -notmatch "`n")) `
+      ("names={0} text={1}" -f $fNames, $fTxt)
+    # A READER THAT KNOWS ONLY THE OLD SHAPE STILL READS BOTH. Read-TcPushRows and Measure-TcPushRows are what
+    # ops\probe-push-convergence.ps1 reads the ledger through, so a schema-2 row must parse beside a row written before it.
+    $mixRoot = Join-Path $tmp 'mixed'
+    $null = New-Item -ItemType Directory -Force -ErrorAction Stop $mixRoot
+    $mixPath = Get-TcPushLedgerPath -Root $mixRoot
+    $oldShape = '{"ts":"2026-09-22T10:00:00Z","pid":1,"run":"run-old","event":"push-main","waitMs":3,"state":"held","base":"' + $A + '","grant":"' + $B + '","outcome":"landed-after-rebase","checkout":"wt"}'
+    $null = Add-TcLine -Path $mixPath -Text $oldShape
+    $wNew = Write-TcPushRow -Event 'push-main' -WaitMs 4 -State 'held' -BaseSha $A -GrantSha $A -Outcome 'landed' -Root $mixRoot `
+      -Fields ([ordered]@{ schema = 2; conflict_files = [string[]]@(); leg_sec = [ordered]@{ rg = 1; ta = $null; rh = $null } })
+    $mixRows = Read-TcPushRows -Path $mixPath
+    $mm = Measure-TcPushRows $mixRows
+    T ($kMNF + '  an old-shape row and a schema-2 row in one ledger both parse: neither is malformed, both are comparable, and only the old one moved') `
+      ($wNew.Written -and @($mixRows).Count -eq 2 -and $mm.Malformed -eq 0 -and $mm.Comparable -eq 2 -and $mm.Moved -eq 1) `
+      ("written={0} rows={1} malformed={2} comparable={3} moved={4}" -f $wNew.Written, @($mixRows).Count, $mm.Malformed, $mm.Comparable, $mm.Moved)
+
     # THE LEDGER MUST NOT BE ABLE TO REFUSE A PUSH. The root is a FILE here, so the directory cannot be created.
     $blocked = Join-Path $tmp 'blocked'
     [IO.File]::WriteAllText($blocked, 'not a directory')
@@ -447,6 +515,10 @@ if ($__pldSelfTest) {
     }
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }
+  # A LITERAL-CASE SUITE KNOWS ITS OWN NUMBER, so a shortfall is a defect rather than a smaller tree: a case lost to a
+  # throw, a comment or a glued line would otherwise leave the rest green (ops-and-gates.md).
+  $expectedCases = 21
+  if ($cases -ne $expectedCases) { Write-Output ("FAIL  the suite ran {0} case(s) where this file holds {1}, so a case was skipped or lost" -f $cases, $expectedCases); $f++ }
   if ($f) { Write-Output ("push-ledger self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("push-ledger self-test PASS: {0} cases - led by a push whose ref moved between the start of its wait and the grant being counted as moved-while-waiting, and by a ref that could not be read counting UNKNOWN rather than as a ref that stood still" -f $cases)
   exit 0
