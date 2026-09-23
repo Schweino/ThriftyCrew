@@ -62,11 +62,88 @@
 # above it, which changes whenever somebody improves a message. gate= is the first token after FAIL on run-gates' first
 # "  FAIL" line, and is printed only when run-gates printed one. A push that exits 0 prints no such line.
 #
+# AND EVERY REFUSAL WRITES ONE PUSH-LEDGER ROW (2026-09-23, W0.6 of the same plan, section 15.5). The ledger
+# (lib/push-ledger.ps1) had two writers, ops/hold-push-lock.ps1, which starts only after every check here has passed, and
+# ops/push-main.ps1, so a plain push this hook refused left no row, and only 32 of 72 origin/main updates in the plan's
+# window came through a push-main row at all. Just before the fixed line, say_refused starts
+# ops/record-hook-refusal.ps1, which appends one `hook-refused` row: the cause, the gate, the refusing check's exit code
+# and kept log, the pushing checkout, the first ref line's refs and shas, this hook's pid and blob, and whether the push
+# runs under ops/push-main.ps1. BEST EFFORT, NEVER A VERDICT: the hook has already refused, so a writer that is missing or
+# fails costs ONE printed line and changes no exit code. A pass writes no such row and starts no writer.
+#
 # Install:  powershell -File ops\install-hooks.ps1
+
+# THE PUSH-LEDGER WRITER FOR A REFUSAL (2026-09-23, W0.6). Resolved like the push-lock holder below: the pushing
+# checkout's copy, else the MAIN checkout's, because this hook is installed in the SHARED .git and most checkouts are
+# older than any change to it. Main's copy resolves lib/push-ledger.ps1 from its own directory. It runs no git, so the
+# repository environment this hook has not yet cleared on its first refusals cannot reach anything through it.
+find_recorder() {
+  rr_found=""
+  if [ -n "$repo" ] && [ -f "$repo/ops/record-hook-refusal.ps1" ]; then
+    rr_found="$repo/ops/record-hook-refusal.ps1"
+    return 0
+  fi
+  if [ -n "$repo" ]; then
+    rr_common="$(git -C "$repo" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+  else
+    rr_common="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+  fi
+  case "$rr_common" in
+    */.git)
+      if [ -f "${rr_common%/.git}/ops/record-hook-refusal.ps1" ]; then
+        rr_found="${rr_common%/.git}/ops/record-hook-refusal.ps1"
+      fi
+      ;;
+  esac
+}
+
+# $1 cause, $2 gate, $3 the refusing check's exit code, $4 its kept log, $5 run-gates' blind= token. Every value that is
+# empty is LEFT OUT of the writer's arguments rather than passed as "": powershell.exe -File drops an empty argument and
+# binds the next token to the parameter instead (grocery/audit-script-census.ps1 measured it), which would shift every
+# value after it. set -- inside a function replaces only the function's own arguments, so the copies come first.
+record_refusal() {
+  rr_cause="$1"; rr_gate="$2"; rr_rc="$3"; rr_log="$4"; rr_blind="$5"
+  find_recorder
+  if [ -z "$rr_found" ]; then
+    echo "pre-push: this refusal was not recorded in the push ledger (no ops/record-hook-refusal.ps1 in this checkout or the main one); the refusal stands." >&2
+    return 0
+  fi
+  rr_hookpid="$(cat /proc/$$/winpid 2>/dev/null)"
+  case "$rr_hookpid" in ''|*[!0-9]*) rr_hookpid="" ;; esac
+  rr_blob="$(git hash-object --no-filters -- "$0" 2>/dev/null)"
+  if [ -n "$rr_log" ] && command -v cygpath >/dev/null 2>&1; then
+    rr_log="$(cygpath -w "$rr_log")"
+  fi
+  set -- -Cause "$rr_cause"
+  [ -n "$rr_gate" ] && set -- "$@" -Gate "$rr_gate"
+  [ -n "$rr_rc" ] && set -- "$@" -Rc "$rr_rc"
+  [ -n "$rr_blind" ] && set -- "$@" -Blind "$rr_blind"
+  [ -n "$rr_log" ] && set -- "$@" -Log "$rr_log"
+  [ -n "$repo" ] && set -- "$@" -Checkout "$repo"
+  [ -n "$push_remote_name" ] && set -- "$@" -Remote "$push_remote_name"
+  [ -n "$first_lref" ] && set -- "$@" -LocalRef "$first_lref"
+  [ -n "$first_lsha" ] && set -- "$@" -LocalSha "$first_lsha"
+  [ -n "$first_rref" ] && set -- "$@" -RemoteRef "$first_rref"
+  [ -n "$first_rsha" ] && set -- "$@" -RemoteSha "$first_rsha"
+  set -- "$@" -RefLines "$ref_lines"
+  [ -n "$rr_hookpid" ] && set -- "$@" -HookPid "$rr_hookpid"
+  [ -n "$rr_blob" ] && set -- "$@" -HookBlob "$rr_blob"
+  # </dev/null: the ref loop has already read this hook's stdin, and the writer must not inherit it.
+  rr_out="$(powershell -NoProfile -ExecutionPolicy Bypass -File "$rr_found" "$@" < /dev/null 2>&1)"
+  rr_status=$?
+  if [ "$rr_status" -ne 0 ]; then
+    rr_why="$(printf '%s\n' "$rr_out" | tail -n 1)"
+    echo "pre-push: this refusal was not recorded in the push ledger (${rr_why:-the writer exited $rr_status and said nothing}); the refusal stands." >&2
+  fi
+  return 0
+}
 
 # THE FIXED REFUSAL LINE (2026-09-23, W1.1). Every BLOCKED and REFUSING exit below calls this LAST, just before exit 1.
 # printf, never echo: a gate path carries backslashes, and an echo that interprets them would rewrite it.
+# The ledger row is written FIRST (W0.6), so a could-not-record line never lands after the fixed line: the fixed line
+# stays the hook's last word. Arguments: cause, gate, and then record_refusal's rc, log and blind token.
 say_refused() {
+  record_refusal "$1" "$2" "$3" "$4" "$5"
   if [ -n "$2" ]; then
     printf 'PRE-PUSH-REFUSED cause=%s gate=%s\n' "$1" "$2" >&2
   else
@@ -83,11 +160,22 @@ say_refused() {
 refs="${TMPDIR:-/tmp}/tc-prepush-refs-$$.txt"
 : > "$refs"
 have_work=0
+# THE FIRST REF LINE THAT CARRIES WORK, and how many lines git handed over, kept for a refusal's ledger row (W0.6): the
+# refs file is removed before most refusals, and the row must still say what was being pushed. The remote NAME is kept
+# too, never its URL ($2), which can carry a credential.
+push_remote_name="$1"
+first_lref=""; first_lsha=""; first_rref=""; first_rsha=""; ref_lines=0
 while read -r lref lsha rref rsha; do
   [ -z "$lsha" ] && continue
   echo "$lref $lsha $rref $rsha" >> "$refs"
+  ref_lines=$((ref_lines + 1))
   case "$lsha" in
-    *[!0]*) have_work=1 ;;
+    *[!0]*)
+      have_work=1
+      if [ -z "$first_lsha" ]; then
+        first_lref="$lref"; first_lsha="$lsha"; first_rref="$rref"; first_rsha="$rsha"
+      fi
+      ;;
   esac
 done
 if [ "$have_work" -eq 0 ]; then
@@ -322,7 +410,7 @@ if [ "$rhrc" -ne 0 ]; then
   echo "          Rehearse:  powershell -File ops/rehearse-chain.ps1   (or land with ops/push-main.ps1, which rehearses outside the lock)" >&2
   echo "          Bypass loudly: ops/push-main.ps1 -NoRehearsal -NoRehearsalReason '<why>'  (a plain push: TC_NO_REHEARSAL='<why>')" >&2
   echo "          full output kept at: $rhlog" >&2
-  say_refused rehearsal
+  say_refused rehearsal "" "$rhrc" "$rhlog"
   exit 1
 fi
 grep -v -E "^CHAIN-REHEARSAL-CHECK-COMPLETE" "$rhlog" >&2
@@ -393,7 +481,7 @@ if [ "$rc" -eq 0 ]; then
   fi
   echo "          full output kept at: $talog" >&2
   echo "          Bypass with: git push --no-verify" >&2
-  say_refused test-auditors
+  say_refused test-auditors "" "$tarc" "$talog"
   exit 1
 fi
 rm -f "$refs"
@@ -466,5 +554,6 @@ echo "          Bypass with: git push --no-verify" >&2
 # gate= is the first token after FAIL on run-gates' first "  FAIL" line, and is left off when there is none: a 3 from a
 # queue that never moved ran nothing and failed no gate. -n and p print only a line the pattern matched.
 failgate="$(grep -E '^  FAIL' "$log" 2>/dev/null | head -n 1 | sed -n -E 's/^  FAIL[[:space:]]+([^[:space:]]+).*/\1/p')"
-say_refused run-gates "$failgate"
+# $blind is set only on a 3 above; on a 1 it is empty and the row records no blind token.
+say_refused run-gates "$failgate" "$rc" "$log" "$blind"
 exit 1

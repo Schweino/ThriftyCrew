@@ -91,6 +91,19 @@
   ops\push-main.ps1 reads before the prose; four cases read it for structure, run-gates with a FAIL line (gate= is the
   first one's gate), run-gates with none (no gate=), and test-auditors.
 
+  THE ELEVENTH (2026-09-23, W0.6 of the same plan, section 15.5): EVERY REFUSAL WRITES ONE PUSH-LEDGER ROW. The ledger's
+  only writers were ops\hold-push-lock.ps1, which the hook starts only after every check has passed, and
+  ops\push-main.ps1, so a plain push the hook refused left no row and W0.3b could not count it as an attempt. The hook
+  now starts ops\record-hook-refusal.ps1 just before its fixed PRE-PUSH-REFUSED line. The sandbox carries that writer in
+  the MAIN checkout only, untracked, the way it carries hold-push-lock: a push from the linked checkout has no copy of
+  its own, so its rows prove the fallback to the main checkout's copy, which is the road most checkouts on this box
+  take. Four cases read the suite's own ledger: a chain push with no verdict writes exactly one `hook-refused` row with
+  cause=rehearsal, the pushing checkout, the ref line's sha, this hook's blob and under_push_main false; a run-gates red
+  writes cause=run-gates and the first failing gate; three passing pushes write none; and with a ledger directory that
+  cannot be made the hook still exits 1 with its fixed line, printing the could-not-record line BEFORE it. The suite
+  clears TC_PUSH_LOCK_HOLDER for its whole run: run under ops\push-main.ps1 it inherits push-main's live token, and a
+  sandbox push would otherwise read as under_push_main (ops-and-gates.md: say which instance you mean).
+
   WHAT THIS DRIVES. A sandbox repository, a linked worktree, the REAL ops\hooks\pre-push, the REAL
   ops\prepush-test-auditors.ps1 with every lib\*.ps1, and stubs for the gate and for test-auditors.
   Then real `git push`es to a sandbox bare remote. No network, nothing outside the sandbox. THIS FILE
@@ -104,7 +117,7 @@
   check it proves the hook's wiring and the script's decisions against a stub suite; it does not prove the
   real suite's input set, which the script's own -SelfTest pins live.
 #>
-# gate-inputs: ops\hooks\pre-push, ops\prepush-test-auditors.ps1, ops\hold-push-lock.ps1, ops\rehearse-chain.ps1, lib\*.ps1
+# gate-inputs: ops\hooks\pre-push, ops\prepush-test-auditors.ps1, ops\hold-push-lock.ps1, ops\rehearse-chain.ps1, ops\record-hook-refusal.ps1, lib\*.ps1
 # WHY THIS FILE DECLARES (Brad, 2026-09-12). At 67s this is the most expensive gate on the box and the one that
 # sets the floor on a push's wall clock, since no pool can finish sooner than its longest single job. It could
 # never be keyed by inference: line 258 copies the library set with `Get-ChildItem (Join-Path $RepoRoot 'lib')
@@ -113,7 +126,8 @@
 # The set is what the sandbox actually copies in: the hook itself (251), prepush-test-auditors (252),
 # hold-push-lock (fallback path), every lib\*.ps1 (258-260), and ops\rehearse-chain.ps1, which the chain rehearsal
 # clause copies into the linked checkout and which the hook's first check runs (added 2026-09-23, W1.1: until then
-# an edit to it could replay this suite's recorded pass without running it, because a declaration outranks inference). The line numbers here are as first written and
+# an edit to it could replay this suite's recorded pass without running it, because a declaration outranks inference), and
+# ops\record-hook-refusal.ps1, which the sandbox's main checkout carries and every refusal starts (added 2026-09-23, W0.6). The line numbers here are as first written and
 # have moved; the Copy-Item calls are the ground truth. ops\run-gates.ps1 is already in every key as a RUNNER, so it
 # is deliberately not repeated here.
 [CmdletBinding()]
@@ -206,6 +220,21 @@ function Read-LedgerLinesNaming {
   }
   return [pscustomobject]@{ Hits = $hits.ToArray(); Read = $read; Unreadable = $unreadable.ToArray() }
 }
+function Get-SuiteRefusalRows {
+  <# Every `hook-refused` row in this run's own ledger (W0.6), parsed through lib\push-ledger.ps1's reader, from every
+     daily file the directory holds, so a run that crosses midnight still sees all of them. A malformed line is not a
+     refusal row and is left out; a case that needs to know a row is ABSENT reads it through a filter on this list. #>
+  param([string]$Dir)
+  $out = New-Object Collections.Generic.List[object]
+  foreach ($file in @(Get-ChildItem -LiteralPath $Dir -Filter 'pushes-*.jsonl' -File -ErrorAction SilentlyContinue)) {
+    $rowsRaw = Read-TcPushRows -Path $file.FullName
+    foreach ($r in @($rowsRaw)) {
+      if ($null -eq $r -or $r.PSObject.Properties['malformed']) { continue }
+      if ([string]::Equals([string]$r.event, 'hook-refused', [StringComparison]::Ordinal)) { $out.Add($r) }
+    }
+  }
+  return , ($out.ToArray())
+}
 function Get-SandboxRehearsalKey {
   <# The verdict key ops\rehearse-chain.ps1 computes for a commit (its Get-RhManifestSet): SHA-256 over the Ordinal-
      sorted `path blob` rows of the manifest set, joined by LF. Rebuilt here because that script cannot be dot-sourced
@@ -245,6 +274,13 @@ $suiteLedger = Join-Path $sb 'ledger'
 $prodLedgerRoot = $script:TcPushLedgerRoot
 $suiteStart = [datetime]::Now
 $env:TC_PUSH_LEDGER_ROOT = $suiteLedger
+# NO INHERITED PUSH-MAIN TOKEN FOR THE WHOLE RUN (W0.6). run-gates often runs under ops\push-main.ps1, which exports
+# TC_PUSH_LOCK_HOLDER while it holds the real push lock, and every sandbox push here would inherit it: the refusal rows
+# would then say under_push_main about pushes that are plain. The holder these cases start takes a private Local\ lock,
+# which a Global token never matched, so clearing it changes nothing any other case reads. Restored in the finally.
+$holderTokHad = Test-Path -LiteralPath 'Env:\TC_PUSH_LOCK_HOLDER'
+$holderTokWas = [string]$env:TC_PUSH_LOCK_HOLDER
+Remove-Item -LiteralPath 'Env:\TC_PUSH_LOCK_HOLDER' -ErrorAction SilentlyContinue
 try {
   $null = New-Item -ItemType Directory -Force $sb, $probe
   $steps = @(
@@ -380,6 +416,12 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
   $built = $true
   $hooksPath = Join-Path $main '.git\hooks'
   $script:HooksPath = $hooksPath
+  # THE REFUSAL WRITER (W0.6), in the MAIN checkout only and untracked, as hold-push-lock is carried below: the linked
+  # checkout shares main's commits and not its untracked files, so its refusals prove the hook's fallback to the main
+  # checkout's copy. Every refusal from here on appends one row to this run's own ledger ($suiteLedger).
+  $recorderSrc = Join-Path $RepoRoot 'ops\record-hook-refusal.ps1'
+  if (Test-Path -LiteralPath $recorderSrc) { Copy-Item -LiteralPath $recorderSrc -Destination (Join-Path $main 'ops\record-hook-refusal.ps1') }
+  $installedHookBlob = GOut hash-object --no-filters -- (Join-Path $hooksPath 'pre-push')
   # The hook writes its gate log to ${TMPDIR:-/tmp}. Pointed into the sandbox, the log is removed with it
   # instead of accumulating in the real temp directory one refused push at a time.
   $env:TMPDIR = $sb.Replace('\', '/')
@@ -520,6 +562,37 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
   # MUST NOT FIRE: a 3 whose gate printed no FAIL line names the cause and NO gate, rather than an empty or invented one.
   Case 'MUST NOT FIRE' 'a 3 with no FAIL line prints cause=run-gates and no gate=' `
     ($slotText -match '(?m)^PRE-PUSH-REFUSED cause=run-gates\s*$') ("text=[" + $slotText + "]")
+
+  # ---- W0.6 (2026-09-23): that red push wrote ONE hook-refused row, through the MAIN checkout's writer ----
+  # The linked checkout carries no writer of its own (the sandbox put it in main only), so this row also proves the
+  # hook's fallback to the main checkout's copy, the road most checkouts on the box take.
+  $redRowsRaw = Get-SuiteRefusalRows -Dir $suiteLedger
+  $redRows = @(@($redRowsRaw) | Where-Object { [string]$_.remote_ref -eq 'refs/heads/red-gate-named' })
+  $redRow = $(if ($redRows.Count -eq 1) { $redRows[0] } else { $null })
+  $linkedHasWriter = Test-Path -LiteralPath (Join-Path $linked 'ops\record-hook-refusal.ps1')
+  Case 'MUST FIRE' 'a run-gates red writes one hook-refused row naming cause=run-gates and the first failing gate' `
+    ($null -ne $redRow -and $redRow.cause -eq 'run-gates' -and $redRow.gate -eq 'ops\audit-conclusion-currency.ps1' -and $redRow.rc -eq 1 `
+      -and [string]::Equals([string]$redRow.checkout, $linked, [StringComparison]::OrdinalIgnoreCase) -and $redRow.local_sha -eq $redPush.head `
+      -and [bool]$redRow.log -and -not $linkedHasWriter) `
+    ("rows=" + $redRows.Count + " linkedHasWriter=" + $linkedHasWriter + " row=[" + $(if ($redRow) { ConvertTo-Json $redRow -Compress } else { '' }) + "]")
+
+  # CLEAN TWIN (W0.6): a ledger that cannot be written changes nothing the hook decides. TC_PUSH_LEDGER_ROOT names a FILE,
+  # so the writer cannot make its directory; the push is still refused with the fixed line, the could-not-record line
+  # comes BEFORE that line (the fixed line stays the hook's last word), and no row reached the suite's ledger either.
+  $env:TC_PREPUSH_PROBE_EXIT = '1'
+  $blockedLedger = Join-Path $sb 'ledger-is-a-file'
+  [IO.File]::WriteAllText($blockedLedger, 'not a directory')
+  $env:TC_PUSH_LEDGER_ROOT = $blockedLedger
+  try { $unrecPush = PushOut $linked 'red-gate-unrecorded' } finally { $env:TC_PUSH_LEDGER_ROOT = $suiteLedger }
+  $env:TC_PREPUSH_PROBE_EXIT = '3'
+  $iNotRec = $unrecPush.text.IndexOf('pre-push: this refusal was not recorded in the push ledger')
+  $iFixed = [regex]::Match($unrecPush.text, '(?m)^PRE-PUSH-REFUSED cause=run-gates gate=ops\\audit-conclusion-currency\.ps1\s*$').Index
+  $unrecRowsRaw = Get-SuiteRefusalRows -Dir $suiteLedger
+  $unrecRows = @(@($unrecRowsRaw) | Where-Object { [string]$_.remote_ref -eq 'refs/heads/red-gate-unrecorded' })
+  Case 'CLEAN TWIN' 'with a ledger directory that cannot be made the hook still exits 1 with PRE-PUSH-REFUSED, saying first that it recorded nothing' `
+    (($unrecPush.rc -ne 0) -and ($unrecPush.remote -eq '') -and ($unrecPush.text -match '(?m)^PRE-PUSH-REFUSED cause=run-gates gate=ops\\audit-conclusion-currency\.ps1\s*$') `
+      -and $iNotRec -ge 0 -and $iFixed -gt $iNotRec -and $unrecRows.Count -eq 0) `
+    ("rc=" + $unrecPush.rc + " notRecordedAt=" + $iNotRec + " fixedAt=" + $iFixed + " rows=" + $unrecRows.Count + " text=[" + $unrecPush.text + "]")
   $env:TC_PREPUSH_PROBE_SAY = ''
 
   # ---- a checkout whose working tree git cannot resolve ----
@@ -901,6 +974,20 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
   # MUST FIRE: the new early exit removes the hook's refs file, as every other early exit does.
   Case 'MUST FIRE' 'after that refusal no tc-prepush-refs file from this hook run is left in the temp directory' `
     ($rhNo.rc -ne 0 -and $refsInSandbox -and $refsLeft.Count -eq 0) "refsPath=[$refsPathSeen] inSandbox=$refsInSandbox left=[$($refsLeft -join ',')]"
+  # MUST FIRE (W0.6): that refusal wrote exactly ONE hook-refused row, saying what was refused and by which hook. It is a
+  # plain push, so under_push_main is false (the suite cleared any inherited push-main token), and hook_blob is the blob
+  # of the hook the sandbox installed.
+  $rhRowsRaw = Get-SuiteRefusalRows -Dir $suiteLedger
+  $rhRows = @(@($rhRowsRaw) | Where-Object { [string]$_.local_sha -eq $rhNo.head -and [string]$_.remote_ref -eq 'refs/heads/main' })
+  $rhRow = $(if ($rhRows.Count -eq 1) { $rhRows[0] } else { $null })
+  Case 'MUST FIRE' 'a chain push with no verdict writes one hook-refused row with cause=rehearsal' `
+    ($null -ne $rhRow -and $rhRow.cause -eq 'rehearsal' -and $rhRow.rc -eq 1 -and $null -eq $rhRow.gate -and [bool]$rhRow.log `
+      -and [string]::Equals([string]$rhRow.checkout, $linked, [StringComparison]::OrdinalIgnoreCase) -and $rhRow.remote -eq 'origin' `
+      -and $rhRow.under_push_main -eq $false -and $rhRow.hook_blob -eq $installedHookBlob -and $rhRow.ref_lines -eq 1) `
+    ("rows=" + $rhRows.Count + " installedHookBlob=" + $installedHookBlob + " row=[" + $(if ($rhRow) { ConvertTo-Json $rhRow -Compress } else { '' }) + "]")
+  # THE BASELINE FOR THE MUST NOT FIRE BELOW: every hook-refused row so far. The three passing pushes that follow may add none.
+  $refusedBeforePassRaw = Get-SuiteRefusalRows -Dir $suiteLedger
+  $refusedBeforePass = @($refusedBeforePassRaw).Count
   # CLEAN TWIN: with a passing verdict recorded for exactly this content, the same push runs BOTH legs and lands. The
   # verdict is written where the hook's check reads it (TC_REHEARSAL_VERDICT_DIR), keyed as rehearse-chain keys it.
   $rhKey = Get-SandboxRehearsalKey -Dir $linked -Rev 'HEAD' -Files $rhFiles
@@ -925,6 +1012,14 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
   Case 'MUST NOT FIRE' 'a push to main touching no chain script runs run-gates and test-auditors as before and lands' `
     ($rhTa.rc -eq 0 -and $rhTa.remote -eq $rhTa.head -and $rhTa.text -match 'no rehearsal needed' -and (Test-Path -LiteralPath $sawFile) -and (Test-Path -LiteralPath $ranFile)) `
     "rc=$($rhTa.rc) gateRan=$(Test-Path -LiteralPath $sawFile) taRan=$(Test-Path -LiteralPath $ranFile) text=[$($rhTa.text)]"
+  # MUST NOT FIRE (W0.6): the three pushes that PASSED above (a recorded verdict, a doc, a test-auditors input) wrote no
+  # hook-refused row. Counted against the rows present before them, and read only when all three landed, so the case
+  # cannot pass because a push was refused somewhere the writer never ran.
+  $refusedAfterPassRaw = Get-SuiteRefusalRows -Dir $suiteLedger
+  $refusedAfterPass = @($refusedAfterPassRaw).Count
+  Case 'MUST NOT FIRE' 'a passing push writes no hook-refused row' `
+    ($rhYes.rc -eq 0 -and $rhDoc.rc -eq 0 -and $rhTa.rc -eq 0 -and $refusedBeforePass -ge 1 -and $refusedAfterPass -eq $refusedBeforePass) `
+    ("rc=" + $rhYes.rc + "," + $rhDoc.rc + "," + $rhTa.rc + " refusedRowsBefore=" + $refusedBeforePass + " after=" + $refusedAfterPass)
   Remove-Item -LiteralPath 'Env:\TC_REHEARSAL_VERDICT_DIR' -ErrorAction SilentlyContinue
   # MUST FIRE, STATIC: run-gates clears the same environment for EVERY caller, not only this hook - a session
   # shell or a scheduled task spawned from inside a git hook inherits it just the same. Since 2026-09-11 it does so
@@ -968,6 +1063,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
   Remove-Item -LiteralPath 'Env:\TC_PREPUSH_PROBE', 'Env:\TC_PREPUSH_PROBE_EXIT', 'Env:\TC_PREPUSH_PROBE_SAY', 'Env:\TMPDIR', 'Env:\TC_PREPUSH_TA_FAILS', 'Env:\TC_PREPUSH_TA_FAILS_BETA' -ErrorAction SilentlyContinue
   Remove-Item -LiteralPath 'Env:\TC_REHEARSAL_VERDICT_DIR', 'Env:\TC_NO_REHEARSAL' -ErrorAction SilentlyContinue
   if ($ledgerRootHad) { $env:TC_PUSH_LEDGER_ROOT = $ledgerRootWas } else { Remove-Item -LiteralPath 'Env:\TC_PUSH_LEDGER_ROOT' -ErrorAction SilentlyContinue }
+  if ($holderTokHad) { $env:TC_PUSH_LOCK_HOLDER = $holderTokWas } else { Remove-Item -LiteralPath 'Env:\TC_PUSH_LOCK_HOLDER' -ErrorAction SilentlyContinue }
   if (Test-Path -LiteralPath $sb) {
     # The sandbox's own worktree first, through git, then the directory. No junctions are ever made here.
     if ($built) { $null = G -C $main worktree remove --force $linked }
@@ -979,7 +1075,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
 # writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
 # and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
 # prepush-test-auditors -SelfTest pins its own count.
-$expectedCases = 63   # 63 since 2026-09-23 with THE TENTH's nine cases (W1.1): four that read the fixed refusal line for structure, run-gates with and without a gate, and test-auditors, and five over the reordered rehearsal check; 54 with THE NINTH's two ledger cases (W0.2 of design\PLAN-push-derived-conflicts-2026-09-23.md); 52 with the case that reads the static-scanned-zero cause (W6.9); 51 since 2026-09-22 with the three chain-rehearsal cases; 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder; 48 with the two that read the slot budget from lib\gate-slots.ps1 (2026-09-18, backlog I237)
+$expectedCases = 67   # 67 since 2026-09-23 with THE ELEVENTH's four refusal-row cases (W0.6); 63 with THE TENTH's nine cases (W1.1): four that read the fixed refusal line for structure, run-gates with and without a gate, and test-auditors, and five over the reordered rehearsal check; 54 with THE NINTH's two ledger cases (W0.2 of design\PLAN-push-derived-conflicts-2026-09-23.md); 52 with the case that reads the static-scanned-zero cause (W6.9); 51 since 2026-09-22 with the three chain-rehearsal cases; 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder; 48 with the two that read the slot budget from lib\gate-slots.ps1 (2026-09-18, backlog I237)
 if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''
