@@ -1,7 +1,5 @@
 ---
 description: Traps when working on the grocery board, captures, or the comparison pipeline.
-globs: "grocery/**"
-alwaysApply: false
 ---
 
 > **Resolving the `[[citations]]` below.** Each is a filename without its extension, under
@@ -13,9 +11,10 @@ alwaysApply: false
 
 # Working in `grocery/`
 
-Loaded only when you touch a file under `grocery/`. These are the traps that have actually cost this
-estate a day; each names the memory or file holding the full account rather than restating it, so there
-is one copy of every rule and nothing here can drift from it.
+Loaded in every ThriftyCrew session: this file has no `paths:` key, on purpose
+(design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md, W2.3). These are the traps that have
+actually cost this estate a day; each names the memory or file holding the full account rather than
+restating it, so there is one copy of every rule and nothing here can drift from it.
 
 - **A BAD CELL QUARANTINES ITSELF; A BAD STORE DROPS ITSELF; ONLY A BOARD-SCOPED FAILURE OR THE CIRCUIT BREAKER HOLDS
   THE BOARD** (Brad, 2026-09-21: *"The ENTIRE board shouldn't be held hostage because of one (or a few) bad items. Each

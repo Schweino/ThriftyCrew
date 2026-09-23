@@ -249,6 +249,11 @@ gated on re-checking its own premise.
 | 10 | **E5** | Four-layer validation at source (format, business rules, self-prompted semantic, human review) with low confidence routed to **review, not rejection**. | The ingredient queue and the capture readers. | A low-confidence row appearing in the review queue rather than being dropped. |
 | 11 | **E4** | BM25 alongside the embedding index, merged with reciprocal rank fusion. **Gated on first confirming what in that pipeline still rules anything** (see §0). | The dedup pipeline. | A rare exact identifier - a commodity id or SKU - retrieved by BM25 and missed by embeddings, measured, not asserted. |
 
+> `[REFUTED 2026-09-22]` Row 4 shipped (E14, `a8b17d05`) on the `globs:` key, which the Claude Code loader never
+> reads, so the split scoped nothing: every rules file loads in every session, and row 4's own gate (a `grocery/`
+> rule that does not load in `meal-prep/`) was never met. See BACKLOG E14, and W2.3 of
+> `design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md`.
+
 ---
 
 ## 4. What I will not touch

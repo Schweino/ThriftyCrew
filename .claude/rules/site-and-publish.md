@@ -1,7 +1,5 @@
 ---
 description: Rules for published copy and delivery - Ghost, the feed, the worker, and anything a reader sees.
-globs: "site/**, content/**, public/**, worker/**"
-alwaysApply: false
 ---
 
 > **Resolving the `[[citations]]` below.** Each is a filename without its extension, under
@@ -13,8 +11,9 @@ alwaysApply: false
 
 # Working in `site/`, `content/`, `public/` or `worker/`
 
-Loaded only when you touch something a reader sees. This is a LIVE, PAID site: a wrong number here is a
-real cost to a real person, and understating is exactly as wrong as overstating.
+Loaded in every ThriftyCrew session: this file has no `paths:` key, on purpose
+(design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md, W2.3). This is a LIVE, PAID site: a
+wrong number here is a real cost to a real person, and understating is exactly as wrong as overstating.
 
 - **Any page whose layout changed gets the 375px mobile check.** No horizontal scroll, nothing crushed.
   And a measurement is not a look - screenshot the element you changed and read the words.

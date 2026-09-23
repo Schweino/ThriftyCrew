@@ -1,7 +1,5 @@
 ---
 description: Rules for gate, audit and shared-library code - exit codes, the guard contract, must-fire discipline.
-globs: "ops/**, lib/**"
-alwaysApply: false
 ---
 
 > **Resolving the `[[citations]]` below.** Each is a filename without its extension, under
@@ -13,8 +11,10 @@ alwaysApply: false
 
 # Working in `ops/` or `lib/`
 
-Loaded only when you touch a gate, an audit or a shared library. This is the machinery that keeps
-everything else honest, so a defect here is silent by construction.
+Loaded in every ThriftyCrew session: this file has no `paths:` key, on purpose
+(design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md, W2.3). Gates, audits and shared
+libraries are the machinery that keeps everything else honest, so a defect here is silent by
+construction.
 
 - **Read the EXIT CODE first and the tally second**, and do not decode the number: three vocabularies
   are live at once and the same `2` means "hard defect" in the guard-contract audits and "never ran" in

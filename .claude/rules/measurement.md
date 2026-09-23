@@ -1,7 +1,5 @@
 ---
 description: Rules for anything that scores, compares two versions, or reports a rate - denominators, acceptance bars, per-case evidence.
-globs: "sidecar/**, **/*eval*.py, **/*probe*.py, **/audit-*.ps1, **/*_eval.py"
-alwaysApply: false
 ---
 
 > **Resolving the `[[citations]]` below.** Each is a filename without its extension, under
@@ -13,9 +11,11 @@ alwaysApply: false
 
 # Measuring anything here
 
-Loaded when you touch something that scores, compares two versions, or prints a rate. These four
-rules were each learned from a number that was wrong in a way nobody could see, and every one of them
-is cheap at the moment the code is written and impossible to add afterwards.
+Loaded in every ThriftyCrew session: this file has no `paths:` key, on purpose
+(design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md, W2.3). It holds for anything that
+scores, compares two versions, or prints a rate. These four rules were each learned from a number that
+was wrong in a way nobody could see, and every one of them is cheap at the moment the code is written
+and impossible to add afterwards.
 
 **The exemplar is `sidecar/matcher_eval.py`.** Read its header before writing a new scorer - it
 carries all four rules in one file, and copying it is faster than re-deriving them.

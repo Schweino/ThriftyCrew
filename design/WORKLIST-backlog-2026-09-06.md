@@ -29,7 +29,7 @@ State: `TODO` · `WIP` · `DONE <sha>` · `BLOCKED-ON-BRAD` · `WONTFIX`
 | B1 | **E1 rest** | R2 seam (nothing to hook - measured); `publish.ps1` staging-aware; write-seam ratchet | `DONE b30d4e54` |
 | B2 | **E6** | Fact Check List before publish | `DONE a90b2081` |
 | B3 | **E3b** | Explicit `tools:` on all four + `ops/audit-agent-tools.ps1` gate | `DONE 9c42bd8e` |
-| B4 | **E14** | 5 scoped `.claude/rules/` files; field is `globs` not `paths` | `DONE a8b17d05` |
+| B4 | **E14** | 5 `.claude/rules/` files. `[REFUTED 2026-09-22]` The loader reads `paths:`, so `globs` scoped nothing and all of them load in every session; see BACKLOG E14 | `DONE a8b17d05` |
 | B5 | **E13** | Resolver block on all 12 agents + citation gate; 2 dangling found | `DONE 6f3b6fd5` |
 | B6 | **E12** | `ops/audit-ruling-drift.ps1` - document-to-code drift; 3 violations baselined | `DONE 28151c39` |
 | B7 | **E9** | Split already existed; gate fails a missing model/effort pin, prints the matrix | `DONE 993ec7c6` |

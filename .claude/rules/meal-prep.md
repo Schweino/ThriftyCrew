@@ -1,7 +1,5 @@
 ---
 description: Traps when working on recipes, the food DB, costing, or the Recipe Hunter pipeline.
-globs: "meal-prep/**"
-alwaysApply: false
 ---
 
 > **Resolving the `[[citations]]` below.** Each is a filename without its extension, under
@@ -13,8 +11,9 @@ alwaysApply: false
 
 # Working in `meal-prep/`
 
-Loaded only when you touch a file under `meal-prep/`. Pointers, not copies - the full account lives in
-the named memory or file.
+Loaded in every ThriftyCrew session: this file has no `paths:` key, on purpose
+(design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md, W2.3). Pointers, not copies - the full
+account lives in the named memory or file.
 
 - **`set-board-cell.ps1` is the RECIPE-board corrector**, one cell at a time on
   `recipe-board-everyday.json`. It is not `known-wrong`, which corrects the main board.

@@ -1,7 +1,5 @@
 ---
 description: Rules for the identity graph, provenance and learning state.
-globs: "graph/**"
-alwaysApply: false
 ---
 
 > **Resolving the `[[citations]]` below.** Each is a filename without its extension, under
@@ -13,7 +11,8 @@ alwaysApply: false
 
 # Working in `graph/`
 
-Loaded only when you touch the identity graph, provenance or learning state.
+Loaded in every ThriftyCrew session: this file has no `paths:` key, on purpose
+(design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md, W2.3).
 
 - **A commodity id is NAMESPACED: `commodity:staple:<id>`.** The bare id returns an agreeing zero,
   which is the worst possible answer - it looks like a clean lookup.

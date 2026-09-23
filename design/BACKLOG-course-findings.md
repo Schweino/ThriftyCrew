@@ -1446,6 +1446,25 @@ matter carrying a `paths` glob so the file loads ONLY when Claude touches a matc
 > scoped with `globs:`, and `ops/audit-memory-citations.ps1` now checks that every `[[name]]` they
 > cite resolves. C3 in the claims register is answered: corrected, not confirmed.
 
+> **`[REFUTED 2026-09-22]` THE VERIFICATION ABOVE READ THE WRONG TEXT, AND THE COURSE WAS RIGHT: the loader
+> reads `paths:`.** The `globs:` and `alwaysApply:` example it relied on is Bun's embedded Cursor template
+> (`.cursor/rules/use-bun-instead-of-node-vite-npm-pnpm.mdc`) inside claude.exe, not Claude Code's own help
+> text. The review of 2026-09-22 found one rules loader in all 4 builds it checked (2.1.173, 2.1.236, 2.1.263,
+> 2.1.280), and it was read again in 2.1.263 and 2.1.280 on 2026-09-23:
+> `if(!n.paths)return{content:r}`, then a split of `paths`, a trailing `/**` stripped, and a list that is
+> empty or only `**` treated as no scope. Nothing in it reads `globs` or `alwaysApply`. So the five files
+> shipped here, and `measurement.md` after them, were never scoped: all six loaded in every ThriftyCrew
+> session (118,538 B together, 33 of 33 transcripts checked by the review), and this item's goal of
+> shrinking the always-on load was never met. Nothing looked wrong, which is the failure the block above
+> warned about with its sign flipped. "Without losing anything" below does not hold either: scoping would
+> take the rules away from Bash-only, Agent and Workflow contexts until a probe proves otherwise, and today
+> the accidental unconditional load is what delivers them there.
+> **On 2026-09-23 the inert keys were deleted** and each file now says it loads in every session (W2.3 option
+> A of `design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md`). `ops/audit-rule-currency.ps1` refuses
+> `globs:` and `alwaysApply:` and reads `paths:` the way the loader does. Scoping any file is option B, a
+> separate change on Brad's ruling D2. Evidence: `design/brain-review-2026-09-22/digest-memory-and-budget.md`,
+> finding rules-scope-key-inert.
+
 conditional loading, which we had written down nowhere - `claude-code-craft` had been posing the
 attention-budget problem since course 2 without an answer to it.
 
