@@ -62,10 +62,15 @@
     * A SELECTIVE RUN NEVER READS AS A PASS. It prints "ran N of T cases, selected by M pushed path(s)",
       the harness names itself SELECTIVE, and a clean one is reported as SELECTED CASES PASSED.
 
-  HOW "ALREADY FAILING" IS DECIDED: a known-failures record in the SHARED git directory
-  (<git-common-dir>\tc-test-auditors-known-failures.json), so every linked worktree reads the same one
-  and nothing about it can be committed. Chosen over a second test-auditors run against origin/main
-  because that run would need its own seeded checkout of the boards and would double a six-minute push.
+  HOW "ALREADY FAILING" IS DECIDED, TWO WAYS SINCE 2026-09-23. First, a known-failures record in the SHARED git
+  directory (<git-common-dir>\tc-test-auditors-known-failures.json), so every linked worktree reads the same one
+  and nothing about it can be committed. It was chosen in 2026-09 over a second test-auditors run against
+  origin/main because that run would need its own seeded checkout of the boards and would double a six-minute
+  push. Second, since W8.5 (design/PLAN-push-derived-conflicts-2026-09-23.md, D16), a case the record does not
+  hold is run AGAIN at the push's base, in a throwaway checkout over the same boards hardlinked in, and one that
+  fails there too is PREEXISTING and does not refuse. That second run is PARTIAL (only the units that print the
+  newly failing cases) and happens only on a refusal, which is what answers the doubling objection. See the
+  PREEXISTING block below.
     * ONLY THE DAILY CHAIN ADDS A CASE. grocery\check-ad-cycles.ps1 calls -Record with the output of its
       own test-auditors run, which already paged any failure it holds. A push-time FULL run may only
       CONFIRM or SHRINK the record, so a refused push can never launder its own failure by being retried.
@@ -97,7 +102,9 @@
   Modes:
     -RefsFromStdin   the pre-push hook: pre-push's ref lines on stdin. Exit 0 allow, 1 refuse, 3 could
                      not evaluate (refuse). A run that cannot reuse its keyed pass first prints one
-                     TA-KEY-MOVED line naming the input that moved the key (see PASS REUSE below).
+                     TA-KEY-MOVED line naming the input that moved the key (see PASS REUSE below). A run
+                     that would refuse first runs the newly failing cases again at the push's base, and
+                     prints one PREEXISTING or NOT PREEXISTING line per case (see PREEXISTING below).
     -PathsFile <f>   the same decision for a list of repo-relative paths instead of refs (measurement and
                      fixtures). Runs the suite; never writes the known-failures record.
     -Record -OutputFile <file> -ExitCode <rc>
@@ -115,6 +122,9 @@
   is not refused. The record's in-flight check counts code, fixture and harness inputs only (rules 1-4),
   so a hand edit to a named rule file such as commodities.json that is uncommitted when the chain records
   can be recorded as already failing; counting those files would refuse nearly every morning's record.
+  A PREEXISTING case is judged by its key too, so a case the base fails for ANOTHER reason under the same key
+  (data the throwaway base checkout does not carry, such as meal-prep\db\built) is allowed; the PREEXISTING
+  block below says what is carried and what is not.
 #>
 [CmdletBinding()]
 param(
@@ -386,14 +396,16 @@ function Get-HarnessSummary($Lines) {
 }
 
 # ONE CHILD RUN, its stdout and stderr redirected to <Stem>.out and <Stem>.err. A function so the self-test
-# drives the same launch and the same file handling the hook does, not a copy of them.
-function Invoke-TaChild([string]$ScriptPath, [string[]]$ExtraArgs, [string]$Stem, [int]$TimeoutSeconds) {
+# drives the same launch and the same file handling the hook does, not a copy of them. $WorkDir is the child's
+# working directory, this checkout unless the PREEXISTING base run names its throwaway checkout.
+function Invoke-TaChild([string]$ScriptPath, [string[]]$ExtraArgs, [string]$Stem, [int]$TimeoutSeconds, [string]$WorkDir = '') {
   $r = [pscustomobject]@{ rc = 124; lines = @(); outFile = ($Stem + '.out'); errFile = ($Stem + '.err'); secs = 0; startError = '' }
   $argList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $ScriptPath + '"'))
   if ($ExtraArgs) { $argList += $ExtraArgs }
+  $wd = if ($WorkDir) { $WorkDir } else { $RepoRoot }
   $sw = [Diagnostics.Stopwatch]::StartNew()
   try {
-    $proc = Start-Process -FilePath 'powershell.exe' -ArgumentList $argList -WorkingDirectory $RepoRoot -NoNewWindow -PassThru -RedirectStandardOutput $r.outFile -RedirectStandardError $r.errFile
+    $proc = Start-Process -FilePath 'powershell.exe' -ArgumentList $argList -WorkingDirectory $wd -NoNewWindow -PassThru -RedirectStandardOutput $r.outFile -RedirectStandardError $r.errFile
     $null = $proc.Handle
     if ($proc.WaitForExit($TimeoutSeconds * 1000)) { $proc.WaitForExit(); $r.rc = $proc.ExitCode }
     else { $null = & taskkill.exe /PID $proc.Id /T /F 2>$null }
@@ -1424,6 +1436,356 @@ function Resolve-ExpectedLiveReds($V, $Known, [object[]]$Cases, [string]$Root, [
   return $res
 }
 
+# ============================================================================================ PREEXISTING
+# A RED ALREADY ON MAIN IS NOT THE PUSH'S RED (W8.5 of design/PLAN-push-derived-conflicts-2026-09-23.md; Brad ruled D16
+# yes on 2026-09-23). A new failing case used to be judged ONLY against the known-failures record, and that record sits
+# in the shared git directory where other checkouts rewrite it: the same push was ALLOWED at 19:25 and REFUSED at 20:09
+# on 2026-09-11 "on nothing you did" (memory prepush-test-auditors-judges-against-a-shared-record), and 13 of 44
+# cause-naming gate refusals over the 7 days to 2026-09-23 were test-auditors reds over board data (SCRATCH, the plan's
+# residual investigator, coverage 44 of 78). The ruling: a case that ALSO FAILS AT THE PUSH'S BASE, over the same board,
+# is PREEXISTING and does not refuse. It is EXPECTED LIVE RED's paired-run rule above, applied to "adds a failing case".
+# THE MECHANISM IS A SECOND, PARTIAL RUN, NOT A READING OF THE DIFF, and it runs only when this check would refuse:
+#   1. TRACE. Each newly failing line is traced to the unit(s) whose code prints it: a Bad (FAIL) or Live (LIVE-RED)
+#      call in this checkout's test-auditors.ps1 whose message's leading literal the line starts with (Get-CaseCallSites;
+#      a message that is one literal must equal the line). A call inside a helper function is charged to every unit
+#      that calls the helper, and a call outside every unit always runs. A line no call can have printed is NOT traced,
+#      and it refuses exactly as before.
+#   2. CHECKOUT. A throwaway linked worktree at the base (`git worktree add --detach`, removed in a finally): the
+#      merge-base of the ONE pushed tip and the remote ref's old sha, else origin/main (Get-PushBase, the base the EXPECTED
+#      LIVE RED arms use). More than one pushed tip resolves no base, and nothing is PREEXISTING.
+#   3. DATA. HARDLINKED into it at the same relative path, the same files and not a copy: every IGNORED file directly in
+#      a directory that test-auditors' $HasBoard patterns name (the boards and every stamp, feed and candidate list
+#      beside them), and every ignored file a .worktreeinclude pattern matches in this checkout (Get-PreBaseDataFiles).
+#      Tracked files are the base's own. .worktreeinclude directory patterns and ops\seed-worktree.ps1's directory seeds
+#      (meal-prep\db\built) are NOT carried.
+#   4. RUN. The BASE's own test-auditors runs only the traced units and what their code needs, by the def-use pass over
+#      the BASE's own unit model (Get-PreWantedUnits): every other base unit goes in its -SkipUnitsFile. So a unit the
+#      push added cannot run there, and its case is not PREEXISTING.
+#   5. JUDGE. A case whose key (Get-CaseKey) the base run also prints as failing is PREEXISTING: printed with the tip's
+#      line and the base's line, counted, and not refused. A case that passes at the base refuses exactly as today.
+# FAIL CLOSED. A base run that is not a verdict (exit 3, a timeout, no completion marker, an exit code its FAIL lines
+# contradict), a base with no board, a base whose unit model cannot be built, a checkout or a hardlink that cannot be
+# made, a hardlinked file whose stamp moved during the base run, or anything thrown makes EVERY case refuse as today: a
+# could-not-look is never a pass.
+# THE RECORDS ARE WRITTEN AS TODAY. A PREEXISTING case never enters the known-failures record (a push-time run still
+# only confirms or shrinks it), and a push allowed because of one is never recorded as a keyed pass, so a retry pays the
+# paired run again rather than replaying it. The record need not be fresh for this: the paired run measures the question
+# directly, where a stale record can only refuse.
+# THE COST, because the header once chose the record to avoid doubling the leg: measured 2026-09-23 on this box, a
+# `git worktree add --detach` of this repo at origin/main took 6.9 s and its `worktree remove --force` 1.0 s, 200
+# hardlinks 114 ms, and listing the 497 ignored files beside the main checkout's boards 147 ms (39 for the
+# .worktreeinclude patterns, 42 ms). Then the traced units' own time, bounded like the tip run by $script:TimeoutSeconds.
+# SCOPE: judged by KEY, so a case the base fails for ANOTHER reason under the same key reads as PREEXISTING: data not
+# carried (step 3), a check that depends on the checkout's own path or on being the main checkout, a child that behaves
+# differently under %TEMP%. The known-failures record already has the same limit ("a push that worsens an
+# already-failing case is not refused"). Hardlinks share bytes, so a base run that rewrote a carried file IN PLACE
+# changes this checkout's copy too: the stamp check makes that loud and refuses; it cannot undo it.
+$script:PreCaseTags = @('Bad', 'Live')
+$script:TPrn = [System.Management.Automation.Language.ParenExpressionAst]
+$script:TBin = [System.Management.Automation.Language.BinaryExpressionAst]
+$script:TCex = [System.Management.Automation.Language.CommandExpressionAst]
+$script:TPip = [System.Management.Automation.Language.PipelineAst]
+
+# The leading literal of a case message as written, or $null when it has none: .text and .exact (the whole message is
+# that literal). Handles the shapes test-auditors uses: 'text', "text $x", ('text' + $x ...), ("text {0}" -f $x).
+function Get-CaseMessageLead($Arg) {
+  $a = $Arg; $exact = $true; $fmt = $false
+  for ($depth = 0; $depth -lt 64 -and $null -ne $a; $depth++) {
+    if ($a -is $script:TPrn) {
+      $pl = $a.Pipeline
+      if ($pl -is $script:TPip -and $pl.PipelineElements.Count -eq 1 -and $pl.PipelineElements[0] -is $script:TCex) { $a = $pl.PipelineElements[0].Expression; continue }
+      return $null
+    }
+    if ($a -is $script:TBin) {
+      $op = [string]$a.Operator
+      if ($op -eq 'Plus') { $exact = $false; $a = $a.Left; continue }
+      if ($op -eq 'Format') { $exact = $false; $fmt = $true; $a = $a.Left; continue }
+      return $null
+    }
+    if ($a -is $script:TStr -or $a -is $script:TExp) {
+      $t = [string]$a.Value
+      $cut = -1
+      if ($a -is $script:TExp) { $cut = $t.IndexOf('$') }
+      if ($fmt) { $bi = $t.IndexOf('{'); if ($bi -ge 0 -and ($cut -lt 0 -or $bi -lt $cut)) { $cut = $bi } }
+      if ($cut -ge 0) { $t = $t.Substring(0, $cut); $exact = $false }
+      if (-not $t) { return $null }
+      return [pscustomobject]@{ text = $t; exact = $exact }
+    }
+    return $null
+  }
+  return $null
+}
+
+# Every Bad and Live call in a harness text with a leading literal and an owner, over the unit model built from THAT
+# text: .sites (tag, text, exact, units, always, line), and the counts .total, .lead and .owned for the resolved line.
+function Get-CaseCallSites([string]$TaText, $Model) {
+  $res = [pscustomobject]@{ sites = @(); total = 0; lead = 0; owned = 0 }
+  if ($null -eq $Model -or -not $Model.ok) { return $res }
+  $tk = $null; $pe = $null
+  $ast = [System.Management.Automation.Language.Parser]::ParseInput($TaText, [ref]$tk, [ref]$pe)
+  if ($pe.Count) { return $res }
+  $spans = New-Object System.Collections.ArrayList
+  foreach ($e in @($Model.entries)) { foreach ($rt in @($e.roots)) { [void]$spans.Add(@($rt.Extent.StartOffset, $rt.Extent.EndOffset, $e)) } }
+  $calls = @($ast.FindAll({ param($n) $n -is $script:TCmd -and $script:PreCaseTags -contains [string]$n.GetCommandName() }, $true))
+  $sites = New-Object System.Collections.ArrayList
+  foreach ($c in $calls) {
+    $res.total++
+    $tag = if ([string]::Equals([string]$c.GetCommandName(), 'Live', [StringComparison]::OrdinalIgnoreCase)) { 'LIVE-RED' } else { 'FAIL' }
+    $lead = $null
+    if ($c.CommandElements.Count -ge 2) { $lead = Get-CaseMessageLead $c.CommandElements[1] }
+    if ($null -eq $lead) { continue }
+    $res.lead++
+    $units = @{}; $always = $false
+    $fn = $c.Parent
+    while ($null -ne $fn -and -not ($fn -is $script:TFn)) { $fn = $fn.Parent }
+    if ($null -ne $fn) {
+      foreach ($e in @($Model.entries)) {
+        if ($null -eq $e.PSObject.Properties['callNames'] -or $null -eq $e.callNames -or -not $e.callNames.ContainsKey($fn.Name)) { continue }
+        if ($e.unit) { $units[$e.id] = $true } else { $always = $true }
+      }
+    } else {
+      $at = $c.Extent.StartOffset; $owner = $null
+      foreach ($sp in $spans) { if ($at -ge $sp[0] -and $at -lt $sp[1]) { $owner = $sp[2]; break } }
+      if ($null -ne $owner -and $owner.unit) { $units[$owner.id] = $true } else { $always = $true }
+    }
+    if ($units.Count -eq 0 -and -not $always) { continue }   # a helper nothing calls cannot have printed anything
+    $res.owned++
+    [void]$sites.Add([pscustomobject]@{ tag = $tag; text = $lead.text; exact = $lead.exact; units = @($units.Keys | Sort-Object); always = $always; line = $c.Extent.StartLineNumber })
+  }
+  $res.sites = $sites.ToArray()
+  return $res
+}
+
+# Which call sites could have printed each line: .hit, the .units that print it and .always (a site outside every unit).
+function Get-FailAttribution([string[]]$Lines, [object[]]$Sites) {
+  $out = @()
+  foreach ($l in @($Lines | Where-Object { $_ })) {
+    $t = [string]$l; $tag = ''; $msg = ''
+    if ($t.StartsWith('FAIL  ', [StringComparison]::Ordinal)) { $tag = 'FAIL'; $msg = $t.Substring(6) }
+    elseif ($t.StartsWith('LIVE-RED  ', [StringComparison]::Ordinal)) { $tag = 'LIVE-RED'; $msg = $t.Substring(10) }
+    $units = @{}; $always = $false; $hits = 0
+    if ($tag) {
+      foreach ($s in @($Sites)) {
+        if ($s.tag -ne $tag) { continue }
+        $match = $false
+        if ($s.exact) { $match = [string]::Equals($msg.TrimEnd(), ([string]$s.text).TrimEnd(), [StringComparison]::Ordinal) }
+        else { $match = $msg.StartsWith([string]$s.text, [StringComparison]::Ordinal) }
+        if (-not $match) { continue }
+        $hits++
+        foreach ($u in @($s.units)) { $units[$u] = $true }
+        if ($s.always) { $always = $true }
+      }
+    }
+    $out += [pscustomobject]@{ line = $t; key = (Get-CaseKey $t); hit = ($hits -gt 0); sites = $hits; units = @($units.Keys | Sort-Object); always = $always }
+  }
+  return ,$out
+}
+
+# The units a base run must run for these ids: the ids the model has, closed over its def-use needs, in model order;
+# .missing names an id the model lacks, and .skip is every other unit, for the harness's -SkipUnitsFile.
+function Get-PreWantedUnits($Model, [string[]]$Ids) {
+  $want = @{}; $missing = @()
+  $q = New-Object System.Collections.Queue
+  foreach ($id in @($Ids | Where-Object { $_ })) {
+    if ($Model.byId.ContainsKey($id)) { if (-not $want.ContainsKey($id)) { $want[$id] = $true; $q.Enqueue($id) } }
+    elseif ($missing -notcontains $id) { $missing += $id }
+  }
+  while ($q.Count) {
+    $id = [string]$q.Dequeue()
+    foreach ($n in @($Model.byId[$id].needs.Keys)) { if ($Model.byId.ContainsKey($n) -and -not $want.ContainsKey($n)) { $want[$n] = $true; $q.Enqueue($n) } }
+  }
+  return [pscustomobject]@{ want = @($Model.ids | Where-Object { $want.ContainsKey($_) }); missing = $missing; skip = @($Model.ids | Where-Object { -not $want.ContainsKey($_) }) }
+}
+
+# The ignored files of $Root the base checkout receives (step 3): .ok, .files (repo-relative, forward slashes, Ordinal
+# order) and .why. Git does the matching: glob pathspecs over `ls-files --others --ignored --exclude-standard`.
+function Get-PreBaseDataFiles([string]$Root, [string[]]$BoardPatterns) {
+  $r = [pscustomobject]@{ ok = $false; files = @(); why = '' }
+  $specs = New-Object 'System.Collections.Generic.List[string]'
+  foreach ($bp in @($BoardPatterns | Where-Object { $_ })) {
+    $d = ''; $p = ([string]$bp).Replace('\', '/')
+    if ($p.Contains('/')) { $d = $p.Substring(0, $p.LastIndexOf('/') + 1) }
+    $sp = ':(glob)' + $d + '*'
+    if (-not $specs.Contains($sp)) { $specs.Add($sp) }
+  }
+  $inc = Join-Path $Root '.worktreeinclude'
+  if (Test-Path -LiteralPath $inc) {
+    foreach ($raw in [IO.File]::ReadAllLines($inc)) {
+      $t = $raw.Trim()
+      if (-not $t -or $t.StartsWith('#') -or $t.StartsWith('!') -or $t.EndsWith('/')) { continue }
+      $t = $t.TrimStart('/')
+      $sp = if ($t.Contains('/')) { ':(glob)' + $t } else { ':(glob)**/' + $t }
+      if (-not $specs.Contains($sp)) { $specs.Add($sp) }
+    }
+  }
+  if ($specs.Count -eq 0) { $r.why = 'no board directory and no .worktreeinclude pattern to carry'; return $r }
+  $ls = @(& git -C $Root -c core.quotepath=off ls-files --others --ignored --exclude-standard -- @($specs) 2>$null); $lsRc = $LASTEXITCODE
+  if ($lsRc -ne 0) { $r.why = ('git ls-files exited ' + $lsRc + ' listing the ignored files to carry'); return $r }
+  $set = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($x in $ls) { $v = ([string]$x).Trim(); if ($v -and -not $v.EndsWith('/')) { [void]$set.Add($v) } }
+  $arr = New-Object string[] $set.Count; $set.CopyTo($arr); [Array]::Sort($arr, [StringComparer]::Ordinal)
+  $r.files = $arr; $r.ok = $true
+  return $r
+}
+
+function Get-PreFileStamp([string]$Path) {
+  $fi = New-Object IO.FileInfo($Path)
+  if (-not $fi.Exists) { return 'absent' }
+  return ('' + $fi.Length + ':' + $fi.LastWriteTimeUtc.Ticks)
+}
+
+# The decision. $V is Get-PushVerdict's result; returns { v; lines; preexisting; ran; want; unitsRan; unitsSkipped;
+# baseRc; secs; linked; scratch }. $V comes back untouched (the same object, no field changed) unless at least one new
+# case is PREEXISTING; the lines always say why each new case is or is not.
+function Resolve-PreexistingReds($V, $Known, [string]$TaText, $TipModel, [string]$Root, [string]$AuditorsRel, [string]$Base, [int]$TimeoutSeconds) {
+  $res = [pscustomobject]@{ v = $V; lines = @(); preexisting = 0; ran = $false; want = @(); unitsRan = -1; unitsSkipped = -1; baseRc = $null; secs = 0; linked = 0; scratch = '' }
+  if ($V.code -ne 1 -or @($V.newLines).Count -eq 0) { return $res }
+  $newL = @($V.newLines)
+  $out = @()
+  if (-not $Base) {
+    $res.lines = @('prepush-test-auditors: NOT PREEXISTING - the push''s base could not be resolved (one pushed tip is needed), so no paired base run could say whether any of the ' + $newL.Count + ' new failing case(s) fail on main too')
+    return $res
+  }
+  $b9 = $Base.Substring(0, [Math]::Min(9, $Base.Length))
+  if ($null -eq $TipModel -or -not $TipModel.ok) {
+    $res.lines = @('prepush-test-auditors: NOT PREEXISTING - the unit model of ' + $AuditorsRel + ' could not be built (' + $(if ($null -ne $TipModel) { $TipModel.why } else { 'none' }) + '), so no new failing case can be traced to a unit')
+    return $res
+  }
+  $cs = Get-CaseCallSites $TaText $TipModel
+  $attr = Get-FailAttribution $newL $cs.sites
+  $traced = @($attr | Where-Object { $_.hit })
+  $why = @{}; $baseLine = @{}
+  foreach ($a in $attr) { if (-not $a.hit) { $why[$a.line] = ('no Bad or Live call in ' + $AuditorsRel + ' prints this line (' + $cs.owned + ' of ' + $cs.total + ' calls traceable), so no base run can reproduce it') } }
+  if ($traced.Count -gt 0) {
+    $scratch = Join-Path $env:TEMP ('tcpb-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+    $co = Join-Path $scratch 'c'
+    $res.scratch = $scratch
+    $added = $false; $fail = ''
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+      $null = New-Item -ItemType Directory -Path $scratch -ErrorAction Stop
+      $null = @(& git -C $Root worktree add --detach $co $Base 2>$null); $wtRc = $LASTEXITCODE
+      if ($wtRc -ne 0 -or -not (Test-Path -LiteralPath $co)) { $fail = ('git worktree add of the base ' + $b9 + ' exited ' + $wtRc) }
+      else { $added = $true }
+      $bText = ''; $bModel = $null; $want = $null
+      if (-not $fail) {
+        $bTa = Join-Path $co $AuditorsRel.Replace('/', '\')
+        if (-not (Test-Path -LiteralPath $bTa)) { $fail = ('the base ' + $b9 + ' has no ' + $AuditorsRel) }
+        else { $bText = [IO.File]::ReadAllText($bTa) }
+      }
+      $stamps = @{}
+      if (-not $fail) {
+        # Assigned, then wrapped: Get-BoardPatterns returns its array with a comma, and an inline @(...) would read it as
+        # ONE element that the [string[]] parameter below then joins into a single space-separated pattern.
+        $tipPats = Get-BoardPatterns $TaText $AuditorsRel
+        $basePats = Get-BoardPatterns $bText $AuditorsRel
+        $pats = @(@($tipPats) + @($basePats) | Where-Object { $_ })
+        $df = Get-PreBaseDataFiles $Root $pats
+        if (-not $df.ok) { $fail = $df.why }
+        else {
+          foreach ($rel in $df.files) {
+            $src = Join-Path $Root $rel.Replace('/', '\'); $dst = Join-Path $co $rel.Replace('/', '\')
+            if (Test-Path -LiteralPath $dst) { continue }   # tracked at the base: the base's own copy stands
+            $null = New-Item -ItemType Directory -Path (Split-Path -Parent $dst) -Force -ErrorAction Stop
+            $null = New-Item -ItemType HardLink -Path $dst -Target $src -ErrorAction Stop
+            $stamps[$src] = Get-PreFileStamp $src
+            $res.linked++
+          }
+        }
+      }
+      if (-not $fail) {
+        $bModel = Get-UnitModel $bText $AuditorsRel
+        if (-not $bModel.ok) { $fail = ('the base''s unit model could not be built: ' + $bModel.why) }
+      }
+      if (-not $fail -and -not (Test-HasBoard $co (Get-BoardPatterns $bText $AuditorsRel))) { $fail = ('the base checkout has none of the boards its test-auditors looks for, so its verdict would prove nothing') }
+      if (-not $fail) {
+        $ids = @($traced | ForEach-Object { $_.units } | Where-Object { $_ } | Sort-Object -Unique)
+        $want = Get-PreWantedUnits $bModel $ids
+        $res.want = $want.want
+        $anyAlways = @($traced | Where-Object { $_.always }).Count -gt 0
+        foreach ($a in $traced) {
+          $present = @($a.units | Where-Object { $want.want -contains $_ })
+          if ($present.Count -eq 0 -and -not $a.always) { $why[$a.line] = ('the unit(s) that print it (' + ($a.units -join ', ') + ') do not exist at the base ' + $b9 + ', so the push added this case') }
+        }
+        if ($want.want.Count -gt 0 -or $anyAlways) {
+          $skipF = Join-Path $scratch 'skip.txt'
+          [IO.File]::WriteAllLines($skipF, [string[]]@($want.skip), (New-Object Text.UTF8Encoding($false)))
+          $run = Invoke-TaChild $bTa @('-SkipUnitsFile', ('"' + $skipF + '"')) (Join-Path $scratch 'run') $TimeoutSeconds $co
+          $res.ran = $true; $res.secs = $run.secs; $res.baseRc = $run.rc
+          $bLines = @($run.lines)
+          $bComplete = Test-GuardComplete -Output $bLines -Name 'test-auditors'
+          $bFails = Get-FailLines $bLines
+          $bSum = Get-HarnessSummary $bLines
+          $res.unitsRan = $bSum.unitsRan; $res.unitsSkipped = $bSum.unitsSkipped
+          $moved = @()
+          foreach ($k in @($stamps.Keys)) { if (-not [string]::Equals((Get-PreFileStamp $k), [string]$stamps[$k], [StringComparison]::Ordinal)) { $moved += $k } }
+          if ($moved.Count -gt 0) {
+            $fail = ('the base run rewrote ' + $moved.Count + ' file(s) hardlinked from this checkout, first ' + $moved[0] + ', so this checkout''s copy changed too and the base run is not trusted')
+          } elseif ($run.startError) {
+            $fail = ('the base test-auditors could not be started: ' + $run.startError)
+          } elseif (-not $bComplete -or @(0, 1, 2, 4) -notcontains $run.rc -or ((@(2, 4) -contains $run.rc) -ne ($bFails.Count -gt 0))) {
+            $lastB = @($bLines | Where-Object { ([string]$_).Trim() } | Select-Object -Last 2)
+            $fail = ('the base run could not look (rc=' + $run.rc + ', completion marker=' + $bComplete + ', ' + $bFails.Count + ' FAIL/LIVE-RED line(s); last: ' + $(if ($lastB.Count) { $lastB -join ' | ' } else { '(nothing)' }) + '), and a could-not-look is never a pass')
+          } else {
+            foreach ($bl in $bFails) { $bk = Get-CaseKey $bl; foreach ($a in $traced) { if (-not $why.ContainsKey($a.line) -and -not $baseLine.ContainsKey($a.line) -and [string]::Equals($a.key, $bk, [StringComparison]::Ordinal)) { $baseLine[$a.line] = [string]$bl } } }
+            foreach ($a in $traced) { if (-not $why.ContainsKey($a.line) -and -not $baseLine.ContainsKey($a.line)) { $why[$a.line] = ('it passes at the base ' + $b9 + ' (the same unit(s) ' + (@($a.units | Where-Object { $want.want -contains $_ }) -join ', ') + $(if ($a.always) { ', and code outside every unit' } else { '' }) + ' ran there over the same boards, rc=' + $run.rc + '), so this push caused it') } }
+          }
+        }
+      }
+    } catch {
+      $fail = ('the paired base run threw: ' + $_.Exception.Message)
+    } finally {
+      if ($added) {
+        $null = @(& git -C $Root worktree remove --force $co 2>$null)
+        if ($LASTEXITCODE -ne 0) { $out += ('prepush-test-auditors: the throwaway base checkout could not be removed by git (exit ' + $LASTEXITCODE + '); its directory is deleted below and its worktree entry is left for git worktree prune') }
+      }
+      if (Test-Path -LiteralPath $scratch) { Remove-Item -LiteralPath $scratch -Recurse -Force -ErrorAction SilentlyContinue }
+      $ErrorActionPreference = $prevEap
+    }
+    if ($fail) { $baseLine = @{}; foreach ($a in $traced) { $why[$a.line] = $fail } }
+  }
+  $pre = @(); $rest = @()
+  foreach ($l in $newL) {
+    $key = Get-CaseKey $l
+    if ($baseLine.ContainsKey($l)) {
+      $pre += $l
+      $out += ('  PREEXISTING           ' + $key + ': fails at the base ' + $b9 + ' too (base run rc=' + $res.baseRc + ') - tip: ' + ($l -replace '^(FAIL|LIVE-RED)\s+', '') + ' | base: ' + ([string]$baseLine[$l] -replace '^(FAIL|LIVE-RED)\s+', ''))
+    } else {
+      $rest += $l
+      $out += ('  NOT PREEXISTING       ' + $key + ': ' + $(if ($why.ContainsKey($l)) { $why[$l] } else { 'no paired run judged it' }))
+    }
+  }
+  $head = 'prepush-test-auditors: PAIRED BASE RUN at ' + $b9 + ' - ' + $newL.Count + ' new failing case(s), ' + $traced.Count + ' traced to a unit'
+  if ($res.ran) { $head += ('; ran ' + $(if ($res.unitsRan -ge 0) { [string]$res.unitsRan + ' base unit(s) (' + (@($res.want) -join ', ') + '), skipped ' + $res.unitsSkipped } else { 'every base unit (the base harness reported no selective run)' }) + ', rc=' + $res.baseRc + ' in ' + $res.secs + 's over ' + $res.linked + ' hardlinked data file(s); ' + $pre.Count + ' PREEXISTING') }
+  else { $head += '; no base run' }
+  $res.lines = @($head) + $out
+  if ($pre.Count -eq 0) { return $res }
+  $res.preexisting = $pre.Count
+  $recNote = if ($null -ne $Known -and $Known.state -eq 'fresh') { 'the known-failures record (' + $Known.detail + ') does not hold' } else { 'no fresh known-failures record can place (it is ' + $(if ($null -ne $Known) { $Known.state } else { 'missing' }) + ')' }
+  $nv = [pscustomobject]@{ code = 1; verdict = 'REFUSED'; detail = ''; newLines = $rest; oldLines = @($V.oldLines); preLines = $pre }
+  if ($rest.Count -gt 0) {
+    $nv.detail = ('this push adds ' + $rest.Count + ' failing test-auditors case(s) that ' + $recNote + ' and that do not fail at the base ' + $b9 + '; ' + $pre.Count + ' other(s) fail at the base too (PREEXISTING) and are not what refuses it')
+  } else {
+    $nv.code = 0; $nv.verdict = 'ALLOWED'
+    $nv.detail = ('test-auditors has ' + ($pre.Count + @($V.oldLines).Count) + ' failing case(s) and this push added none: ' + $pre.Count + ' that ' + $recNote + ' fail at the base ' + $b9 + ' too (PREEXISTING, proven by a paired run of the same units over the same boards in a throwaway checkout at the base)' + $(if (@($V.oldLines).Count -gt 0) { ', and ' + @($V.oldLines).Count + ' are already in the known-failures record' } else { '' }) + '. That is not a pass')
+  }
+  $res.v = $nv
+  return $res
+}
+
+# PREEXISTING first, then EXPECTED LIVE RED over what is left (plan step 3: the paired run is judged first). Returns
+# { v; pre; expected }. The main flow and the self-test's CLEAN TWIN drive this one composition.
+function Resolve-NewFailingCases($V, $Known, [string]$TaText, $TipModel, [object[]]$LiveCases, [string]$Root, [string]$AuditorsRel, [string]$Base, [string]$Tip, [int]$TimeoutSeconds) {
+  $pre = Resolve-PreexistingReds $V $Known $TaText $TipModel $Root $AuditorsRel $Base $TimeoutSeconds
+  $selfDir = ''
+  if ($AuditorsRel.Contains('/')) { $selfDir = $AuditorsRel.Substring(0, $AuditorsRel.LastIndexOf('/') + 1) }
+  $exp = Resolve-ExpectedLiveReds $pre.v $Known $LiveCases $Root $selfDir $Base $Tip (Join-Path $Root ($selfDir.Replace('/', '\') + 'out'))
+  $fv = $exp.v
+  if ($pre.preexisting -gt 0 -and $exp.accepted -gt 0 -and $fv.code -eq 0) { $fv.detail += ('; and ' + $pre.preexisting + ' other failing case(s) fail at the base too (PREEXISTING)') }
+  return [pscustomobject]@{ v = $fv; pre = $pre; expected = $exp }
+}
+
 # ============================================================================================ SELF-TEST
 if ($SelfTest) {
   $fails = @(); $ran = 0
@@ -1907,6 +2269,12 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
     $eA = & $runEx $shaB $shaA @($fcLine, $kwLine) $freshX
     $eAl = @($eA.lines | Where-Object { $_ -match '^\s+EXPECTED-LIVE-RED\s' })
     Case 'MUST FIRE' 'a push adding a ruling against a product on the board, base green, is ACCEPTED with EXPECTED-LIVE-RED lines' ($eA.v.code -eq 0 -and $eA.accepted -eq 2 -and $eAl.Count -eq 2 -and ($eAl -join '|').Contains('[StoreB] fx-apple ''Apple Fizz Soda 12 oz''') -and ($eAl -join '|').Contains('next board build clears it') -and $eA.v.detail.Contains('2 accepted as expected')) "code=$($eA.v.code) accepted=$($eA.accepted) arms=$($eA.arms) lines=$($eA.lines -join ' || ')"
+    # CLEAN TWIN (W8.5): the same founding push through the main flow's composition, PREEXISTING first. The harness text
+    # handed to the trace ($ux) prints neither live line, so no base run happens, and EXPECTED LIVE RED then decides
+    # exactly as it did alone: the same verdict, field for field.
+    $cmpA = Resolve-NewFailingCases (Get-PushVerdict 2 $true @($fcLine, $kwLine) $freshX) $freshX $ux $um $liveCases $exDir 'modg/test-auditors.ps1' $shaB $shaA 120
+    $cmpJ = $cmpA.v | ConvertTo-Json -Depth 4 -Compress; $eAJ = $eA.v | ConvertTo-Json -Depth 4 -Compress
+    Case 'CLEAN TWIN' 'preexisting runs first, and the founding EXPECTED-LIVE-RED push still decides exactly as before (the same verdict, 2 accepted)' ($cmpA.pre.ran -eq $false -and $cmpA.pre.preexisting -eq 0 -and $cmpA.expected.accepted -eq 2 -and $cmpA.v.code -eq 0 -and [string]::Equals($cmpJ, $eAJ, [StringComparison]::Ordinal)) "ran=$($cmpA.pre.ran) accepted=$($cmpA.expected.accepted) same=$([string]::Equals($cmpJ, $eAJ, [StringComparison]::Ordinal)) pre=$(@($cmpA.pre.lines) -join ' || ')"
     # MUST FIRE: the same ruling pushed over a base where the food-category audit is ALREADY red. That red is a live
     # defect this push did not cause, so the push is refused and the reason says so.
     $eB = & $runEx $shaB2 $shaTB @($fcLine, $kwLine) $freshX
@@ -1949,9 +2317,214 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
   $eP = Resolve-ExpectedLiveReds $vP $fresh $liveCases $RepoRoot 'grocery/' 'b' 't' $env:TEMP
   Case 'MUST NOT FIRE' 'an ordinary push with no new failure keeps its verdict byte-identical (ALLOWED over a recorded case, and PASS)' ([object]::ReferenceEquals($e0.v, $v0) -and ($e0.v | ConvertTo-Json -Depth 4 -Compress) -eq $j0 -and $e0.v.code -eq 0 -and @($e0.lines).Count -eq 0 -and $e0.arms -eq 0 -and [object]::ReferenceEquals($eP.v, $vP) -and $eP.v.verdict -eq 'PASS' -and @($eP.lines).Count -eq 0) "code=$($e0.v.code) lines=$(@($e0.lines).Count) arms=$($e0.arms) pass=$($eP.v.verdict)"
 
+  # ---- PREEXISTING (W8.5 of design/PLAN-push-derived-conflicts-2026-09-23.md, D16 ruled yes 2026-09-23) ----
+  # A sandbox repo holds a synthetic harness in the real one's shape (units, a $HasBoard test, a -SkipUnitsFile, the
+  # completion marker, the 0/2/4 exits), a tracked rule file, and an ignored board, stamp and include-listed digest. Each
+  # end-to-end case drives the REAL paired run: a throwaway worktree at a base commit, the ignored files hardlinked in,
+  # the base's own harness run on the traced units only. The tip's failing lines are written as that harness prints
+  # them, as the EXPECTED LIVE RED cases do. Synthetic module and file names throughout.
+  $pbBase = @'
+param([string]$SkipUnitsFile = '')
+$ErrorActionPreference = 'Stop'
+$root = $PSScriptRoot
+$HasBoard = (@(Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue).Count -gt 0) -or
+            (Test-Path (Join-Path $root 'out\recipe-board.json'))
+$pass = 0; $failed = 0; $live = 0
+function Ok($m) { Write-Output ('  PASS  ' + $m); $script:pass++ }
+function Bad($m) { Write-Output ('  FAIL  ' + $m); $script:failed++ }
+function Live($m) { Write-Output ('  LIVE-RED  ' + $m); $script:live++ }
+$script:SkipIds = @{}; $script:RanN = 0; $script:SkippedN = 0
+if ($SkipUnitsFile) { foreach ($s in [IO.File]::ReadAllLines($SkipUnitsFile)) { if ($s.Trim()) { $script:SkipIds[$s.Trim()] = $true } } }
+function Use-Unit {
+  param([string]$Id, [string[]]$Reads = @(), [string]$Always = '')
+  if ($script:SkipIds.ContainsKey($Id)) { $script:SkippedN++; return $false }
+  $script:RanN++
+  return $true
+}
+try {
+function Assert-Stamp([string]$P) {
+  if (Test-Path -LiteralPath $P) { Bad ('the stamp says the pass is stale: ' + $P) } else { Ok 'there is no stamp' }
+}
+if (Use-Unit 'u001-board') {
+  $b = [IO.File]::ReadAllText((Join-Path $root 'out\comparison-2026-01-01.json'))
+  if ($b.Contains('bad-cell')) { Live ('the live board holds a bad cell: ' + $b.Length) } else { Ok 'the board is clean' }
+}
+if (Use-Unit 'u002-rule') {
+  $r = [IO.File]::ReadAllText((Join-Path $root 'rule.json'))
+  if ($r.Contains('broken')) { Bad 'the rule file is broken - a push broke it' } else { Ok 'the rule file is fine' }
+}
+if (Use-Unit 'u003-bystander') {
+  Ok 'a unit no failing case names'
+}
+if (Use-Unit 'u004-stamp') {
+  Assert-Stamp (Join-Path $root 'out\stamp.json')
+}
+} finally { }
+$tail = ''
+if ($script:SkippedN -gt 0) { $tail = ' selective=1 units_ran=' + $script:RanN + ' units_skipped=' + $script:SkippedN }
+Write-Output ('TEST-AUDITORS-COMPLETE pass=' + $pass + ' failed=' + $failed + ' live=' + $live + ' hygiene=0 skipped=0' + $tail)
+if ($failed -gt 0) { exit 2 }
+if ($live -gt 0) { exit 4 }
+exit 0
+'@
+  $pbTip = $pbBase.Replace('} finally { }', ("if (Use-Unit 'u005-new') {`n  Bad 'a case the push added fails'`n}`n} finally { }"))
+  $pbExit3 = $pbBase.Replace('$root = $PSScriptRoot', ('$root = $PSScriptRoot' + "`n" + 'Write-Output ''fixture: this base harness cannot start''' + "`n" + 'exit 3'))
+  $pbRwOld = '  if ($b.Contains(''bad-cell''))'
+  $pbRewrite = $pbBase.Replace($pbRwOld, ('  [IO.File]::WriteAllText((Join-Path $root ''out\comparison-2026-01-01.json''), $b)' + "`n" + $pbRwOld))
+  $pbModel = Get-UnitModel $pbTip 'modh/test-auditors.ps1'
+  $pbSites = Get-CaseCallSites $pbTip $pbModel
+  $lBoard = 'LIVE-RED  the live board holds a bad cell: 30'
+  $lRule = 'FAIL  the rule file is broken - a push broke it'
+  $lNew = 'FAIL  a case the push added fails'
+  $lNone = 'FAIL  a line no case in this harness prints'
+  $pbDir = Join-Path $env:TEMP ('tc-ptapb-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  $lStamp = 'FAIL  the stamp says the pass is stale: ' + (Join-Path $pbDir 'modh\out\stamp.json')
+  $pbAttr = Get-FailAttribution @($lBoard, $lStamp, $lRule, $lNone) $pbSites.sites
+  $pbLonger = Get-FailAttribution @($lRule + ' and more') $pbSites.sites
+  Case 'MUST FIRE' 'preexisting: a LIVE-RED line built with + is traced to the unit whose Live call leads with its literal' ($pbModel.ok -and $pbAttr[0].hit -and ($pbAttr[0].units -join ',') -eq 'u001-board') "ok=$($pbModel.ok) hit=$($pbAttr[0].hit) units=$($pbAttr[0].units -join ',') sites=$($pbSites.owned)/$($pbSites.total)"
+  Case 'MUST FIRE' 'preexisting: a FAIL line printed inside a helper function is traced to the unit that calls the helper' ($pbAttr[1].hit -and ($pbAttr[1].units -join ',') -eq 'u004-stamp') "hit=$($pbAttr[1].hit) units=$($pbAttr[1].units -join ',')"
+  Case 'MUST FIRE' 'preexisting: a FAIL line that is one literal is traced only when it equals that literal' ($pbAttr[2].hit -and ($pbAttr[2].units -join ',') -eq 'u002-rule' -and $pbLonger[0].hit -eq $false) "hit=$($pbAttr[2].hit) units=$($pbAttr[2].units -join ',') longer=$($pbLonger[0].hit)"
+  Case 'MUST NOT FIRE' 'preexisting: a line no Bad or Live call prints is traced to nothing' ($pbAttr[3].hit -eq $false -and @($pbAttr[3].units).Count -eq 0) "hit=$($pbAttr[3].hit) units=$($pbAttr[3].units -join ',')"
+  # u002-beta of the synthetic unit model above reads a variable u001-alpha assigns (the def-use pass's founding case).
+  $pw = Get-PreWantedUnits $um @('u002-beta', 'u999-gone')
+  Case 'MUST FIRE' 'preexisting: a traced unit that reads a variable another unit assigns brings that unit into the base run' (($pw.want -join ',') -eq 'u001-alpha,u002-beta' -and ($pw.missing -join ',') -eq 'u999-gone' -and ($pw.skip -join ',') -eq 'u003-scan,u004-live,u005-delta') "want=$($pw.want -join ',') missing=$($pw.missing -join ',') skip=$($pw.skip -join ',')"
+  # LIVE: the real harness's call sites resolve, and both marked live-board ruling cases trace to a unit (each tried as
+  # a FAIL line and as a LIVE-RED line, since which tally a case reports through is the harness's choice).
+  $liveSites = Get-CaseCallSites $taText $lm
+  "  live case call sites: $($liveSites.total) Bad/Live call(s), $($liveSites.lead) with a leading literal, $($liveSites.owned) traced to a unit or to code that always runs"
+  $liveTraced = 0
+  foreach ($lc in @($liveCases)) {
+    $tr = Get-FailAttribution @(('FAIL  ' + $lc.prefix + '2) - fixture'), ('LIVE-RED  ' + $lc.prefix + '2) - fixture')) $liveSites.sites
+    if (@($tr | Where-Object { $_.hit -and @($_.units).Count -ge 1 }).Count -ge 1) { $liveTraced++ }
+  }
+  Case 'MUST FIRE' 'live: both live-board ruling cases of the real harness trace to a unit, so a live red already on main can be judged' ($liveTraced -eq 2 -and @($liveCases).Count -eq 2 -and $liveSites.owned -gt 0) "traced=$liveTraced of $(@($liveCases).Count) owned=$($liveSites.owned)"
+  $pbRuns = @()
+  try {
+    foreach ($pair in @(@($pbTip, $pbBase, 'the tip'), @($pbExit3, $pbBase, 'the exit-3 base'), @($pbRewrite, $pbBase, 'the rewriting base'))) {
+      if ([string]::Equals([string]$pair[0], [string]$pair[1], [StringComparison]::Ordinal)) { throw ('the fixture edit that makes ' + $pair[2] + ' changed nothing') }
+    }
+    Clear-TcGitRepoEnv
+    $null = New-Item -ItemType Directory -Path $pbDir -ErrorAction Stop
+    $u8p = New-Object Text.UTF8Encoding($false)
+    foreach ($d in @('modh', 'modh\out', 'modh\cache')) { $null = New-Item -ItemType Directory -Path (Join-Path $pbDir $d) -Force }
+    $gp = { param([string[]]$A) $null = & git -C $pbDir -c user.name=fixture -c user.email=fixture@example.invalid -c core.autocrlf=false @A 2>$null }
+    $putP = { param([string]$Rel, [string]$Text) [IO.File]::WriteAllText((Join-Path $pbDir $Rel), $Text, $u8p) }
+    $headP = { (@(& git -C $pbDir rev-parse HEAD) -join '').Trim() }
+    & $putP '.gitignore' ("modh/out/`nmodh/cache/`n")
+    & $putP '.worktreeinclude' ("# the fixture's one include pattern`nmodh/cache/digest.json`n")
+    & $putP 'modh\test-auditors.ps1' $pbBase
+    & $putP 'modh\rule.json' ('{"state":"ok"}' + "`n")
+    $pbBoard = Join-Path $pbDir 'modh\out\comparison-2026-01-01.json'
+    & $putP 'modh\out\comparison-2026-01-01.json' ('{"cells":["good","bad-cell"]}' + "`n")
+    [IO.File]::SetLastWriteTimeUtc($pbBoard, [datetime]::new(2026, 1, 1, 0, 0, 0, [DateTimeKind]::Utc))
+    & $putP 'modh\out\stamp.json' ('{"stale":true}' + "`n")
+    & $putP 'modh\cache\digest.json' ('{"digest":1}' + "`n")
+    & $gp @('init', '-q')
+    & $gp @('add', '--', '.gitignore', '.worktreeinclude', 'modh/test-auditors.ps1', 'modh/rule.json'); & $gp @('commit', '-q', '-m', 'base')
+    $pbB = & $headP
+    & $putP 'modh\test-auditors.ps1' $pbExit3; & $gp @('add', '--', 'modh/test-auditors.ps1'); & $gp @('commit', '-q', '-m', 'a base whose harness cannot start')
+    $pbB3 = & $headP
+    & $gp @('checkout', '-q', $pbB)
+    & $putP 'modh\test-auditors.ps1' $pbRewrite; & $gp @('add', '--', 'modh/test-auditors.ps1'); & $gp @('commit', '-q', '-m', 'a base whose harness rewrites its board')
+    $pbB4 = & $headP
+    & $gp @('checkout', '-q', $pbB)
+    & $putP 'modh\test-auditors.ps1' $pbTip; & $putP 'modh\rule.json' ('{"state":"broken"}' + "`n")
+    & $gp @('add', '--', 'modh/test-auditors.ps1', 'modh/rule.json'); & $gp @('commit', '-q', '-m', 'tip: a new unit and a broken rule')
+    $pbT = & $headP
+    if (@(@($pbB, $pbB3, $pbB4, $pbT) | Where-Object { $_ -match '^[0-9a-f]{40}$' } | Sort-Object -Unique).Count -ne 4) { throw 'the sandbox repo did not make 4 distinct commits' }
+    $pbFresh = [pscustomobject]@{ state = 'fresh'; keys = @('an unrelated recorded case'); lines = @(); recordedAt = 'x'; ageHours = 2.0; detail = 'recorded x'; totalCases = 5 }
+    $pbStale = [pscustomobject]@{ state = 'stale'; keys = @(); lines = @(); recordedAt = 'x'; ageHours = 240.0; detail = '240h old'; totalCases = -1 }
+    $runP = { param([string]$Base, [string[]]$Lines, $Known) Resolve-PreexistingReds (Get-PushVerdict 2 $true $Lines $Known) $Known $pbTip $pbModel $pbDir 'modh/test-auditors.ps1' $Base 120 }
+
+    $pbData = Get-PreBaseDataFiles $pbDir @('modh/out/comparison-*.json', 'modh/out/recipe-board.json')
+    Case 'MUST FIRE' 'preexisting: the base receives every ignored file beside the boards and every .worktreeinclude match, and no tracked file' ($pbData.ok -and ($pbData.files -join ',') -eq 'modh/cache/digest.json,modh/out/comparison-2026-01-01.json,modh/out/stamp.json') "ok=$($pbData.ok) why=$($pbData.why) files=$($pbData.files -join ',')"
+    # MUST NOT FIRE, the founding shape: a live-board red that main already shows, over the same board, does not refuse.
+    $pA = & $runP $pbB @($lBoard) $pbFresh; $pbRuns += $pA
+    Case 'MUST NOT FIRE' 'preexisting: a case red at the tip and at the base, over one hardlinked board, is not refused and prints PREEXISTING' ($pA.v.code -eq 0 -and $pA.preexisting -eq 1 -and (@($pA.lines) -join '|') -match 'PREEXISTING\s+LIVE-RED the live board holds a bad cell: fails at the base' -and $pA.v.detail.Contains('PREEXISTING')) "code=$($pA.v.code) pre=$($pA.preexisting) lines=$(@($pA.lines) -join ' || ')"
+    Case 'CLEAN TWIN' 'preexisting: that base run ran only the traced unit, skipped the other three, over the three carried files' ($pA.ran -and $pA.unitsRan -eq 1 -and $pA.unitsSkipped -eq 3 -and ($pA.want -join ',') -eq 'u001-board' -and $pA.linked -eq 3 -and $pA.baseRc -eq 4) "ran=$($pA.ran) units=$($pA.unitsRan)/$($pA.unitsSkipped) want=$($pA.want -join ',') linked=$($pA.linked) rc=$($pA.baseRc)"
+    $pB = & $runP $pbB @($lStamp) $pbStale; $pbRuns += $pB
+    Case 'MUST NOT FIRE' 'preexisting: a red over an ignored stamp beside the board, traced through a helper, is PREEXISTING with the known-failures record stale' ($pB.v.code -eq 0 -and $pB.preexisting -eq 1 -and ($pB.want -join ',') -eq 'u004-stamp') "code=$($pB.v.code) pre=$($pB.preexisting) want=$($pB.want -join ',') lines=$(@($pB.lines) -join ' || ')"
+    # MUST FIRE: the push's own red. The base holds the rule unbroken, so the same unit passes there.
+    $pC = & $runP $pbB @($lRule) $pbFresh; $pbRuns += $pC
+    Case 'MUST FIRE' 'preexisting: a case red at the tip and green at the base is REFUSED, and says it passes at the base' ($pC.v.code -eq 1 -and $pC.preexisting -eq 0 -and $pC.ran -and (@($pC.lines) -join '|') -match 'NOT PREEXISTING\s+the rule file is broken: it passes at the base') "code=$($pC.v.code) ran=$($pC.ran) lines=$(@($pC.lines) -join ' || ')"
+    $pD = & $runP $pbB @($lBoard, $lRule) $pbFresh; $pbRuns += $pD
+    Case 'MUST FIRE' 'preexisting: a push with its own red beside a PREEXISTING one is REFUSED on its own red alone' ($pD.v.code -eq 1 -and $pD.preexisting -eq 1 -and @($pD.v.newLines).Count -eq 1 -and ([string]@($pD.v.newLines)[0]).Contains('rule file is broken') -and $pD.v.detail.Contains('PREEXISTING')) "code=$($pD.v.code) pre=$($pD.preexisting) new=$(@($pD.v.newLines) -join ' | ') detail=$($pD.v.detail)"
+    $pE = & $runP $pbB @($lNew) $pbFresh; $pbRuns += $pE
+    Case 'MUST FIRE' 'preexisting: a case whose unit the base does not have (the push added it) is REFUSED with no base run' ($pE.v.code -eq 1 -and $pE.ran -eq $false -and (@($pE.lines) -join '|') -match 'do not exist at the base') "code=$($pE.v.code) ran=$($pE.ran) lines=$(@($pE.lines) -join ' || ')"
+    $pF = & $runP $pbB3 @($lBoard) $pbFresh; $pbRuns += $pF
+    Case 'MUST FIRE' 'preexisting: a base run that exits 3 refuses its case, naming the could-not-look' ($pF.v.code -eq 1 -and $pF.preexisting -eq 0 -and $pF.ran -and $pF.baseRc -eq 3 -and (@($pF.lines) -join '|') -match 'could not look \(rc=3') "code=$($pF.v.code) rc=$($pF.baseRc) lines=$(@($pF.lines) -join ' || ')"
+    $pG = & $runP $pbB4 @($lBoard) $pbFresh; $pbRuns += $pG
+    Case 'MUST FIRE' 'preexisting: a base run that rewrites a hardlinked board refuses, naming the file' ($pG.v.code -eq 1 -and $pG.preexisting -eq 0 -and (@($pG.lines) -join '|') -match 'rewrote 1 file\(s\) hardlinked' -and (@($pG.lines) -join '|').Contains('comparison-2026-01-01.json')) "code=$($pG.v.code) lines=$(@($pG.lines) -join ' || ')"
+    $wtLeft = @(@(& git -C $pbDir worktree list --porcelain 2>$null) | Where-Object { ([string]$_).StartsWith('worktree ', [StringComparison]::Ordinal) })
+    $dirLeft = @($pbRuns | Where-Object { $_.scratch -and (Test-Path -LiteralPath $_.scratch) })
+    $scratchMade = @($pbRuns | Where-Object { $_.scratch }).Count
+    Case 'MUST NOT FIRE' 'preexisting: no paired run leaves its throwaway checkout: git lists the sandbox''s own worktree alone, and no scratch directory remains' ($wtLeft.Count -eq 1 -and $dirLeft.Count -eq 0 -and $scratchMade -eq 7) "worktrees=$($wtLeft.Count) dirs-left=$($dirLeft.Count) scratch-made=$scratchMade"
+  } catch {
+    $fails += ('preexisting cases THREW: ' + $_.Exception.Message)
+    "  preexisting cases THREW: $($_.Exception.Message)"
+  } finally { Remove-Item -LiteralPath $pbDir -Recurse -Force -ErrorAction SilentlyContinue }
+
+  # ---- PREEXISTING THROUGH THE REAL PRE-PUSH FLOW (W8.5) ----
+  # The cases above drive the functions. These two drive THIS FILE, copied into a sandbox repo with every lib\*.ps1 and
+  # the synthetic harness as its grocery\test-auditors.ps1, through -RefsFromStdin with one ref line, as the hook runs
+  # it. The child's TEMP is the sandbox's own, so the output files a refusal keeps and its base checkout go with it.
+  $mfDir = Join-Path $env:TEMP ('tc-ptapm-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  $mfTempWas = $env:TEMP; $mfTmpWas = $env:TMP
+  try {
+    Clear-TcGitRepoEnv
+    $null = New-Item -ItemType Directory -Path $mfDir -ErrorAction Stop
+    $u8m = New-Object Text.UTF8Encoding($false)
+    foreach ($d in @('lib', 'ops', 'grocery', 'grocery\out', 'tmp')) { $null = New-Item -ItemType Directory -Path (Join-Path $mfDir $d) -Force }   # reach-fixture-ok: the board directory of a %TEMP% sandbox repo
+    foreach ($lf in @(Get-ChildItem (Join-Path $RepoRoot 'lib\*.ps1') -File)) { Copy-Item -LiteralPath $lf.FullName -Destination (Join-Path $mfDir 'lib') }
+    Copy-Item -LiteralPath $PSCommandPath -Destination (Join-Path $mfDir 'ops\prepush-test-auditors.ps1')
+    $gm = { param([string[]]$A) $null = & git -C $mfDir -c user.name=fixture -c user.email=fixture@example.invalid -c core.autocrlf=false @A 2>$null }
+    $putM = { param([string]$Rel, [string]$Text) [IO.File]::WriteAllText((Join-Path $mfDir $Rel), $Text, $u8m) }
+    $headM = { (@(& git -C $mfDir rev-parse HEAD) -join '').Trim() }
+    & $putM '.gitignore' ("grocery/out/`ntmp/`n")   # reach-fixture-ok: the .gitignore of a %TEMP% sandbox repo
+    & $putM 'grocery\test-auditors.ps1' $pbBase
+    & $putM 'grocery\rule.json' ('{"state":"ok"}' + "`n")
+    & $putM 'grocery\out\comparison-2026-01-01.json' ('{"cells":["good","bad-cell"]}' + "`n")   # reach-fixture-ok: a stub board inside a %TEMP% sandbox repo
+    & $putM 'grocery\out\stamp.json' ('{"stale":true}' + "`n")   # reach-fixture-ok: a stub stamp inside a %TEMP% sandbox repo
+    & $gm @('init', '-q')
+    & $gm @('add', '--', '.gitignore', 'lib', 'ops/prepush-test-auditors.ps1', 'grocery/test-auditors.ps1', 'grocery/rule.json'); & $gm @('commit', '-q', '-m', 'base')
+    $mfBase = & $headM
+    & $gm @('update-ref', 'refs/remotes/origin/main', $mfBase)
+    & $putM 'grocery\test-auditors.ps1' ($pbBase + "# a harness edit, so the push runs the suite in full`n")
+    & $gm @('add', '--', 'grocery/test-auditors.ps1'); & $gm @('commit', '-q', '-m', 'tip A: the harness moves and nothing breaks')
+    $mfTipA = & $headM
+    & $putM 'grocery\rule.json' ('{"state":"broken"}' + "`n")
+    & $gm @('add', '--', 'grocery/rule.json'); & $gm @('commit', '-q', '-m', 'tip B: the rule breaks')
+    $mfTipB = & $headM
+    if (@(@($mfBase, $mfTipA, $mfTipB) | Where-Object { $_ -match '^[0-9a-f]{40}$' } | Sort-Object -Unique).Count -ne 3) { throw 'the flow sandbox did not make 3 distinct commits' }
+    $mfRun = { param([string]$Tip)
+      & $gm @('checkout', '-q', $Tip)
+      $rf = Join-Path $mfDir ('tmp\refs-' + $Tip.Substring(0, 8) + '.txt')
+      [IO.File]::WriteAllText($rf, ('refs/heads/main ' + $Tip + ' refs/heads/main 0000000000000000000000000000000000000000' + "`n"), $u8m)
+      $env:TEMP = Join-Path $mfDir 'tmp'; $env:TMP = $env:TEMP
+      try {
+        $o = @(Get-Content -LiteralPath $rf | & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mfDir 'ops\prepush-test-auditors.ps1') -RefsFromStdin)
+        $c = $LASTEXITCODE
+      } finally { $env:TEMP = $mfTempWas; $env:TMP = $mfTmpWas }
+      $nb = @($o | Where-Object { ([string]$_).Trim() })
+      [pscustomobject]@{ rc = $c; text = ($o -join "`n"); last = $(if ($nb.Count) { [string]$nb[$nb.Count - 1] } else { '' }) }
+    }
+    $mA = & $mfRun $mfTipA
+    $mfPassFiles = @(Get-ChildItem -LiteralPath (Join-Path $mfDir '.git') -Filter 'tc-test-auditors-pass-*' -File -ErrorAction SilentlyContinue)
+    $mfKnownFile = Test-Path -LiteralPath (Join-Path $mfDir '.git\tc-test-auditors-known-failures.json')
+    Case 'MUST NOT FIRE' 'preexisting, through the real pre-push flow: a push whose failing cases all fail at its base exits 0 ALLOWED, recording no keyed pass and no known failure' ($mA.rc -eq 0 -and $mA.text -match '(?m)^prepush-test-auditors: ALLOWED after' -and $mA.last.StartsWith('PREPUSH-TEST-AUDITORS-COMPLETE', [StringComparison]::Ordinal) -and $mA.last.Contains('preexisting=2') -and $mfPassFiles.Count -eq 0 -and $mfKnownFile -eq $false) "rc=$($mA.rc) pass-files=$($mfPassFiles.Count) known=$mfKnownFile last=$($mA.last) text=$($mA.text)"
+    $mB = & $mfRun $mfTipB
+    Case 'MUST FIRE' 'preexisting, through the real pre-push flow: the push''s own red beside two PREEXISTING ones exits 1 REFUSED and names it' ($mB.rc -eq 1 -and $mB.text -match 'NEW FAILING CASE\s+the rule file is broken' -and $mB.text -match 'NOT PREEXISTING\s+the rule file is broken: it passes at the base' -and $mB.last.Contains('preexisting=2')) "rc=$($mB.rc) last=$($mB.last) text=$($mB.text)"
+  } catch {
+    $fails += ('preexisting flow cases THREW: ' + $_.Exception.Message)
+    "  preexisting flow cases THREW: $($_.Exception.Message)"
+  } finally {
+    $env:TEMP = $mfTempWas; $env:TMP = $mfTmpWas
+    Remove-Item -LiteralPath $mfDir -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
   # A SUITE THAT SILENTLY RAN A SUBSET still prints "N of N". The first run of this file did exactly that:
   # a throw inside the record block skipped five cases and the tally read 30 of 30. The count is pinned.
-  $expectedCases = 100
+  $expectedCases = 119
   if ($ran -ne $expectedCases) { $fails += "ran $ran case(s), expected $expectedCases - a block of cases was skipped" }
 
   ''
@@ -2170,16 +2743,17 @@ if ($isSelective -and $complete -and -not $hs.selective) {
 }
 $v = Get-PushVerdict $rc $complete $fl $known $isSelective $ranNote
 $secs = $run.secs
-# EXPECTED LIVE RED (see its block above): a real push only, and only one pushed tip, since a paired run measures one
-# rule change. Otherwise $v is untouched.
+# PREEXISTING, then EXPECTED LIVE RED (see their blocks above): a real push only, and only one pushed tip, since each
+# paired run measures one change against one base. Otherwise $v is untouched.
+$pre = [pscustomobject]@{ v = $v; lines = @(); preexisting = 0; ran = $false; want = @(); unitsRan = -1; unitsSkipped = -1; baseRc = $null; secs = 0; linked = 0; scratch = '' }
 $expected = [pscustomobject]@{ v = $v; lines = @(); accepted = 0; findings = 0; arms = 0 }
 if ($RefsFromStdin -and -not $PathsFile -and $v.code -eq 1) {
   $tipSet = @($pushTips | ForEach-Object { $_[0] } | Sort-Object -Unique)
   $eTip = ''; $eBase = ''
   if ($tipSet.Count -eq 1) { $eTip = [string]$tipSet[0]; $eRemote = [string](@($pushTips | Where-Object { $_[0] -eq $eTip })[0][1]); $eBase = Get-PushBase $RepoRoot $eTip $eRemote }
-  $selfDirE = $script:AuditorsRel.Substring(0, $script:AuditorsRel.LastIndexOf('/') + 1)
-  $expected = Resolve-ExpectedLiveReds $v $known (Get-LiveRulingCases $taText) $RepoRoot $selfDirE $eBase $eTip (Join-Path $RepoRoot ($selfDirE.Replace('/', '\') + 'out'))
-  $v = $expected.v
+  $tipModel = if ($null -ne $model -and $model.ok) { $model } else { Get-UnitModel $taText $script:AuditorsRel }
+  $nfc = Resolve-NewFailingCases $v $known $taText $tipModel (Get-LiveRulingCases $taText) $RepoRoot $script:AuditorsRel $eBase $eTip $script:TimeoutSeconds
+  $pre = $nfc.pre; $expected = $nfc.expected; $v = $nfc.v
 }
 
 if ($isSelective -and $hs.found) {
@@ -2190,13 +2764,15 @@ if ($isSelective -and $hs.found) {
 "prepush-test-auditors: $($v.verdict) after ${secs}s - $($v.detail)."
 foreach ($l in $v.newLines) { $s = $l -replace '^FAIL\s+', ''; '  NEW FAILING CASE      ' + $(if ($s.Length -gt 300) { $s.Substring(0, 300) + '...' } else { $s }) }
 foreach ($l in $v.oldLines) { $s = $l -replace '^FAIL\s+', ''; '  ALREADY FAILING       ' + $(if ($s.Length -gt 300) { $s.Substring(0, 300) + '...' } else { $s }) }
+foreach ($l in @($pre.lines)) { $l }
 foreach ($l in @($expected.lines)) { $l }
 Complete-TaChildFiles $run $v.code
 
 if ($passPath -and $null -ne $passKey -and $passKey.ok) {
-  # An expected live red is never recorded as a pass: a reuse re-judges only against the known-failures record, which
-  # does not hold these cases, so a retry pays the paired run again rather than replaying an acceptance.
-  if ($v.code -eq 0 -and $expected.accepted -eq 0) {
+  # An expected live red, or a PREEXISTING case, is never recorded as a pass: a reuse re-judges only against the
+  # known-failures record, which does not hold these cases, so a retry pays the paired run again rather than replaying
+  # an acceptance.
+  if ($v.code -eq 0 -and $expected.accepted -eq 0 -and $pre.preexisting -eq 0) {
     $after = Get-TaInputKey $RepoRoot $inputs $boardPatterns
     if ($after.ok -and [string]::Equals($after.key, $passKey.key, [StringComparison]::Ordinal)) {
       # $after, not $passKey: its rows carry the board stamps as they stand now, which is what the hashes are checked against.
@@ -2222,4 +2798,4 @@ if ($v.code -eq 0 -and $rp -and -not $PathsFile) {
     }
   }
 }
-Exit-Guard -Name $script:GuardName -Code $v.code -Summary ("pushed=$($paths.Count) inputs=$($hits.Count) mode=$($sel.mode) units=$($sel.selected.Count) rc=$rc cases=$($hs.cases) failing=$($fl.Count) new=$($v.newLines.Count) seconds=$secs" + $(if ($expected.accepted -gt 0) { " expected=$($expected.accepted)" } else { '' }))
+Exit-Guard -Name $script:GuardName -Code $v.code -Summary ("pushed=$($paths.Count) inputs=$($hits.Count) mode=$($sel.mode) units=$($sel.selected.Count) rc=$rc cases=$($hs.cases) failing=$($fl.Count) new=$($v.newLines.Count) seconds=$secs" + $(if ($expected.accepted -gt 0) { " expected=$($expected.accepted)" } else { '' }) + $(if ($pre.preexisting -gt 0) { " preexisting=$($pre.preexisting)" } else { '' }))
