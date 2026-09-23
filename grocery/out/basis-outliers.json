@@ -4,20 +4,6 @@
                               "id":  "all-purpose-cleaner",
                               "commodity":  "All-Purpose Cleaner",
                               "unit":  "floz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.074,
-                              "size":  "139.73 oz",
-                              "item":  "Simple Green All-Purpose Cleaner, 172 fl. oz., Spray Bottle + Refill",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false,
-                              "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
-                              "id":  "all-purpose-cleaner",
-                              "commodity":  "All-Purpose Cleaner",
-                              "unit":  "floz",
                               "store":  "Family Fare",
                               "per_unit":  0.1247,
                               "size":  "32 oz",
@@ -99,20 +85,6 @@
                               "agrees_with_engine_divisor":  false
                           },
                           {
-                              "id":  "apple-juice",
-                              "commodity":  "Apple Juice",
-                              "unit":  "floz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.0574,
-                              "size":  "24 ct 10 oz",
-                              "item":  "Apple \u0026 Eve 100% Apple Juice 10 oz., 24 pk.",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false,
-                              "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
                               "id":  "balsamic-vinegar",
                               "commodity":  "Balsamic Vinegar",
                               "unit":  "floz",
@@ -153,20 +125,6 @@
                               "holds_crown":  false,
                               "unit_kind":  "weight",
                               "agrees_with_engine_divisor":  true
-                          },
-                          {
-                              "id":  "dried-basil",
-                              "commodity":  "Basil (dried)",
-                              "unit":  "oz",
-                              "store":  "Family Fare",
-                              "per_unit":  21.3929,
-                              "size":  "200 ml",
-                              "item":  "Litehouse Herb, Freeze  Dried Basil 0.28 Oz",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false,
-                              "unit_kind":  "weight",
-                              "agrees_with_engine_divisor":  false
                           },
                           {
                               "id":  "beef-broth",
@@ -301,7 +259,7 @@
                               "store":  "Aldi",
                               "per_unit":  0.0841,
                               "size":  "32 oz.",
-                              "item":  "Barissimo Assorted Seasonal Coffee Creamer",
+                              "item":  "Barissimo Caramel Macchiato Creamer",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  true,
@@ -590,12 +548,12 @@
                           },
                           {
                               "id":  "laundry-detergent",
-                              "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
+                              "commodity":  "Laundry Detergent (liquid, any brand)",
                               "unit":  "floz",
-                              "store":  "Aldi",
-                              "per_unit":  0.0884,
-                              "size":  "130 oz",
-                              "item":  "Arm \u0026 Hammer A\u0026H Plus Oxi Deterg 130oz",
+                              "store":  "Fareway",
+                              "per_unit":  0.0694,
+                              "size":  "128 oz",
+                              "item":  "Bright Essentials Laundry Detergent",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false,
@@ -789,7 +747,7 @@
                               "commodity":  "Shower / Bathroom Cleaner",
                               "unit":  "floz",
                               "store":  "Sam\u0027s Club",
-                              "per_unit":  0.0832,
+                              "per_unit":  0.1035,
                               "size":  "96 oz",
                               "item":  "Scrubbing Bubbles Flowers \u0026 Showers, Bathroom Grime Fighter Spray, Rainshower, Petal Paradise, and Floral Fusion, 32 oz., 3 pk.",
                               "kind":  "weight",
@@ -981,7 +939,7 @@
                               "agrees_with_engine_divisor":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-09-21.json",
+    "compare_file":  "comparison-2026-09-23.json",
     "min_stores":  4,
     "kind_mismatch_label_vs_declared_unit":  [
                                                  {
@@ -1019,7 +977,7 @@
                                                      "store":  "Aldi",
                                                      "per_unit":  0.0841,
                                                      "size":  "32 oz.",
-                                                     "item":  "Barissimo Assorted Seasonal Coffee Creamer",
+                                                     "item":  "Barissimo Caramel Macchiato Creamer",
                                                      "kind":  "weight",
                                                      "row_kind":  "volume",
                                                      "holds_crown":  true,
@@ -1083,20 +1041,6 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
-                                                     "id":  "all-purpose-cleaner",
-                                                     "commodity":  "All-Purpose Cleaner",
-                                                     "unit":  "floz",
-                                                     "store":  "Sam\u0027s Club",
-                                                     "per_unit":  0.074,
-                                                     "size":  "139.73 oz",
-                                                     "item":  "Simple Green All-Purpose Cleaner, 172 fl. oz., Spray Bottle + Refill",
-                                                     "kind":  "weight",
-                                                     "row_kind":  "volume",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
                                                      "id":  "almond-milk",
                                                      "commodity":  "Almond Milk",
                                                      "unit":  "floz",
@@ -1153,20 +1097,6 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
-                                                     "id":  "apple-juice",
-                                                     "commodity":  "Apple Juice",
-                                                     "unit":  "floz",
-                                                     "store":  "Sam\u0027s Club",
-                                                     "per_unit":  0.0574,
-                                                     "size":  "24 ct 10 oz",
-                                                     "item":  "Apple \u0026 Eve 100% Apple Juice 10 oz., 24 pk.",
-                                                     "kind":  "weight",
-                                                     "row_kind":  "volume",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
                                                      "id":  "balsamic-vinegar",
                                                      "commodity":  "Balsamic Vinegar",
                                                      "unit":  "floz",
@@ -1192,20 +1122,6 @@
                                                      "row_kind":  "volume",
                                                      "holds_crown":  false,
                                                      "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
-                                                     "id":  "dried-basil",
-                                                     "commodity":  "Basil (dried)",
-                                                     "unit":  "oz",
-                                                     "store":  "Family Fare",
-                                                     "per_unit":  21.3929,
-                                                     "size":  "200 ml",
-                                                     "item":  "Litehouse Herb, Freeze  Dried Basil 0.28 Oz",
-                                                     "kind":  "volume",
-                                                     "row_kind":  "weight",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "weight",
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
@@ -1490,12 +1406,12 @@
                                                  },
                                                  {
                                                      "id":  "laundry-detergent",
-                                                     "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
+                                                     "commodity":  "Laundry Detergent (liquid, any brand)",
                                                      "unit":  "floz",
-                                                     "store":  "Aldi",
-                                                     "per_unit":  0.0884,
-                                                     "size":  "130 oz",
-                                                     "item":  "Arm \u0026 Hammer A\u0026H Plus Oxi Deterg 130oz",
+                                                     "store":  "Fareway",
+                                                     "per_unit":  0.0694,
+                                                     "size":  "128 oz",
+                                                     "item":  "Bright Essentials Laundry Detergent",
                                                      "kind":  "weight",
                                                      "row_kind":  "volume",
                                                      "holds_crown":  false,
@@ -1619,7 +1535,7 @@
                                                      "commodity":  "Shower / Bathroom Cleaner",
                                                      "unit":  "floz",
                                                      "store":  "Sam\u0027s Club",
-                                                     "per_unit":  0.0832,
+                                                     "per_unit":  0.1035,
                                                      "size":  "96 oz",
                                                      "item":  "Scrubbing Bubbles Flowers \u0026 Showers, Bathroom Grime Fighter Spray, Rainshower, Petal Paradise, and Floral Fusion, 32 oz., 3 pk.",
                                                      "kind":  "weight",
@@ -1770,22 +1686,24 @@
                                                  }
                                              ],
     "rounding_band_crown":  [
-
+                                {
+                                    "id":  "chicken-drumsticks",
+                                    "commodity":  "Chicken Drumsticks",
+                                    "unit":  "lb",
+                                    "store":  "Sam\u0027s Club",
+                                    "per_unit":  0.98,
+                                    "rounding_pct":  0.51,
+                                    "band_low":  0.975,
+                                    "band_high":  0.985,
+                                    "tie_with":  [
+                                                     "Walmart"
+                                                 ],
+                                    "item":  "Member\u0027s Mark Chicken Drumsticks, priced per pound",
+                                    "size":  "lb",
+                                    "basis":  "per-lb marker"
+                                }
                             ],
     "findings":  [
-                     {
-                         "id":  "tea-bags",
-                         "commodity":  "Tea Bags",
-                         "unit":  "each",
-                         "store":  "Sam\u0027s Club",
-                         "per_unit":  0.2851,
-                         "median":  0.0621,
-                         "mult":  4.59,
-                         "size":  "591.5 fl oz",
-                         "item":  "Member\u0027s Mark Zero Sugar Green Tea, 16.9 fl. oz., 35 pk.",
-                         "peers_packed":  "4 of 4",
-                         "size_shape_mismatch":  true
-                     },
                      {
                          "id":  "bouillon",
                          "commodity":  "Bouillon (cubes / granules / base)",
@@ -1797,32 +1715,6 @@
                          "size":  "3.25 oz",
                          "item":  "Our Family Bouillon Cubes, Chicken Flavor, Instant 3.25 Oz",
                          "peers_packed":  "1 of 4",
-                         "size_shape_mismatch":  false
-                     },
-                     {
-                         "id":  "dried-basil",
-                         "commodity":  "Basil (dried)",
-                         "unit":  "oz",
-                         "store":  "Family Fare",
-                         "per_unit":  21.3929,
-                         "median":  3.32,
-                         "mult":  6.44,
-                         "size":  "200 ml",
-                         "item":  "Litehouse Herb, Freeze  Dried Basil 0.28 Oz",
-                         "peers_packed":  "0 of 4",
-                         "size_shape_mismatch":  false
-                     },
-                     {
-                         "id":  "green-olives",
-                         "commodity":  "Green Olives (stuffed)",
-                         "unit":  "oz",
-                         "store":  "Hy-Vee",
-                         "per_unit":  1.4975,
-                         "median":  0.28,
-                         "mult":  5.35,
-                         "size":  "4 oz",
-                         "item":  "FreeStyle Snacks Original Green Olives",
-                         "peers_packed":  "0 of 4",
                          "size_shape_mismatch":  false
                      },
                      {
@@ -1869,7 +1761,7 @@
 
                             ],
     "ratio":  4,
-    "generated":  "2026-09-21T08:11:00",
+    "generated":  "2026-09-23T09:53:31",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "coconut-oil",

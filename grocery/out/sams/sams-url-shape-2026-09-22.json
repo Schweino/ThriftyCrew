@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-22",
+  "shape": "https://www.samsclub.com/ip/<alphanumeric sams_item_id>",
+  "proven": 3,
+  "checked": 3,
+  "verdict": "proven",
+  "method": "claude-in-chrome, Brad's own Chrome profile (new tab, permission given 2026-09-22), each URL loaded, 4 s settle, then read: final path, h1, the id present in the page HTML, and a CAPTCHA/wall text check",
+  "source_rows": "grocery/out/sams/sams-deals-2026-09-22.json (220 rows, all alphanumeric sams_item_id)",
+  "cases": [
+    { "sams_item_id": "1BWLUGF7QXGI", "row_item": "Mott's Assorted Fruit Flavored Snacks, 0.8 oz., 90 pk.", "final_path": "/ip/1BWLUGF7QXGI", "page_h1": "Mott's Assorted Fruit Flavored Snacks, 0.8 oz., 90 pk.", "id_in_page": true, "blocked": false, "match": true },
+    { "sams_item_id": "1DAB9GS32WHT", "row_item": "Welch's Mixed Fruit Fruit Snack, 0.8 oz, 90 pk.", "final_path": "/ip/1DAB9GS32WHT", "page_h1": "Welch's Mixed Fruit Fruit Snack, 0.8 oz, 90 pk.", "id_in_page": true, "blocked": false, "match": true },
+    { "sams_item_id": "7H05KHCUZJ61", "row_item": "Gushers Tropical Flavored Snacks, 4.25 oz., 8 pk.", "final_path": "/ip/7H05KHCUZJ61", "page_h1": "Gushers Tropical Flavored Snacks, 4.25 oz., 8 pk.", "id_in_page": true, "blocked": false, "match": true }
+  ],
+  "for": "plan-2026-09-22-10 item 2026-09-20-bec597: derive-links-from-prices may derive /ip/<alphanumeric id> when the newest url-shape file proves 3 of 3"
+}

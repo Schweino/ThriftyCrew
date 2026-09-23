@@ -1,0 +1,72 @@
+﻿{
+    "store":  "Sam\u0027s Club",
+    "date":  "2026-09-23",
+    "policy":  "ad-rollover + sale-expiry + rotation (whole list inside 90d)",
+    "full_recapture":  false,
+    "ad_rollover":  false,
+    "ad_note":  "no weekly ad cycle",
+    "cursor_start":  229,
+    "cursor_next":  237,
+    "total_terms":  640,
+    "rotation_terms":  [
+                           "dill weed",
+                           "guajillo chiles",
+                           "oregano leaves",
+                           "parsley flakes",
+                           "rosemary leaves",
+                           "dried thyme",
+                           "dryer sheets",
+                           "dry green lentils"
+                       ],
+    "sale_terms":  [
+
+                   ],
+    "terms":  [
+                  "hummus",
+                  "dill weed",
+                  "guajillo chiles",
+                  "oregano leaves",
+                  "parsley flakes",
+                  "rosemary leaves",
+                  "dried thyme",
+                  "dryer sheets",
+                  "dry green lentils"
+              ],
+    "commodities":  [
+                        "hummus",
+                        "dried-dill",
+                        "dried-guajillo-chiles",
+                        "dried-oregano",
+                        "dried-parsley",
+                        "dried-rosemary",
+                        "dried-thyme",
+                        "dryer-sheets",
+                        "dry-green-lentils"
+                    ],
+    "ruling_terms":  [
+
+                     ],
+    "ruling_owed_total":  0,
+    "ruling_of":  0,
+    "ruling_deferred":  0,
+    "ruling_blind":  false,
+    "ruling_blind_why":  "",
+    "ad_terms":  [
+
+                 ],
+    "sale_fallback_terms":  [
+
+                            ],
+    "ad_owed_total":  0,
+    "ad_of":  0,
+    "ad_deferred":  0,
+    "ad_list":  "",
+    "ad_blind":  false,
+    "ad_why":  "",
+    "expiry_deferred_by_ad":  0,
+    "call_cap":  45,
+    "expiry_deferred":  0,
+    "expiry_deferred_by_ruling":  0,
+    "expiry_oldest_owed":  "",
+    "note":  "Fetch ONLY these terms today - the list is already capped at this store\u0027s call_cap so it cannot trip a rate limit. Advance the cursor with Save-CaptureCursor AFTER the capture lands - a run that fetched nothing must re-attempt this slice tomorrow, never skip it. expiry_deferred re-prices did NOT fit today; they are still recorded as owed in sale-windows.json and lead tomorrow\u0027s slice, oldest first - do NOT fetch them here. ruling_terms are a STANDING RULING\u0027s owed recaptures and lead this list; they leave it on their own once a built file proves them recaptured at the sanctioned store, so never edit a ruling file to discharge one. ruling_blind means this checkout could not read what has already landed and is reporting everything the ruling named."
+}

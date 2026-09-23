@@ -1,7 +1,7 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
-    "week_of":  "2026-09-22",
-    "rotated_at":  "2026-09-22T08:18:04",
+    "week_of":  "2026-09-23",
+    "rotated_at":  "2026-09-23T09:56:58",
     "free":  [
                  {
                      "slug":  "chicken-fried-rice-skillet",
@@ -11,32 +11,32 @@
                      "per_serving":  1.99
                  },
                  {
-                     "slug":  "creamy-tuscan-chicken-skillet",
+                     "slug":  "free-chicken-alfredo",
                      "protein":  "chicken",
                      "rank":  2,
+                     "name":  "Budget Chicken Alfredo Meal Prep",
+                     "per_serving":  2
+                 },
+                 {
+                     "slug":  "poppy-seed-chicken-and-rice-casserole",
+                     "protein":  "chicken",
+                     "rank":  3,
+                     "name":  "Poppy Seed Chicken and Rice Casserole",
+                     "per_serving":  2.01
+                 },
+                 {
+                     "slug":  "creamy-tuscan-chicken-skillet",
+                     "protein":  "chicken",
+                     "rank":  4,
                      "name":  "Creamy Tuscan Chicken Skillet",
                      "per_serving":  2.02
                  },
                  {
                      "slug":  "buffalo-chicken-pasta-bake",
                      "protein":  "chicken",
-                     "rank":  3,
+                     "rank":  5,
                      "name":  "Buffalo Chicken Pasta Bake",
                      "per_serving":  2.04
-                 },
-                 {
-                     "slug":  "poppy-seed-chicken-and-rice-casserole",
-                     "protein":  "chicken",
-                     "rank":  4,
-                     "name":  "Poppy Seed Chicken and Rice Casserole",
-                     "per_serving":  2.04
-                 },
-                 {
-                     "slug":  "slow-cooker-salsa-chicken-bowl",
-                     "protein":  "chicken",
-                     "rank":  5,
-                     "name":  "Slow Cooker Salsa Chicken Burrito Bowl",
-                     "per_serving":  2.05
                  },
                  {
                      "slug":  "haluski-and-kielbasa-cabbage-noodles",
@@ -57,7 +57,7 @@
                      "protein":  "turkey",
                      "rank":  3,
                      "name":  "Turkey Maqluba (Upside-Down Rice Bake)",
-                     "per_serving":  2.2
+                     "per_serving":  2.17
                  },
                  {
                      "slug":  "turkey-alfredo-rotini-bake",
@@ -67,46 +67,46 @@
                      "per_serving":  2.23
                  },
                  {
-                     "slug":  "scalloped-potato-turkey-casserole",
+                     "slug":  "turkey-huevos-rancheros-rice-bowls",
                      "protein":  "turkey",
                      "rank":  5,
-                     "name":  "Scalloped Potato Turkey Casserole",
-                     "per_serving":  2.33
+                     "name":  "Turkey Huevos Rancheros Rice Bowls",
+                     "per_serving":  2.37
                  },
                  {
                      "slug":  "low-carb-taco-cabbage-beef-skillet",
                      "protein":  "beef",
                      "rank":  1,
                      "name":  "Low Carb Taco Cabbage Beef Skillet",
-                     "per_serving":  1.98
+                     "per_serving":  2.16
                  },
                  {
                      "slug":  "beef-potato-au-gratin-casserole",
                      "protein":  "beef",
                      "rank":  2,
                      "name":  "Slow Cooker Beef and Potato Au Gratin Casserole",
-                     "per_serving":  2.32
+                     "per_serving":  2.31
+                 },
+                 {
+                     "slug":  "lebanese-hashweh",
+                     "protein":  "beef",
+                     "rank":  3,
+                     "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
+                     "per_serving":  2.38
                  },
                  {
                      "slug":  "million-dollar-baked-spaghetti",
                      "protein":  "beef",
-                     "rank":  3,
+                     "rank":  4,
                      "name":  "Million Dollar Baked Spaghetti",
                      "per_serving":  2.41
                  },
                  {
                      "slug":  "pakistani-chapli-kebab-rice-bowls",
                      "protein":  "beef",
-                     "rank":  4,
+                     "rank":  5,
                      "name":  "Pakistani Chapli Kebab Rice Bowls",
                      "per_serving":  2.41
-                 },
-                 {
-                     "slug":  "keto-cheeseburger-skillet",
-                     "protein":  "beef",
-                     "rank":  5,
-                     "name":  "Keto Cheeseburger Casserole Skillet",
-                     "per_serving":  2.42
                  },
                  {
                      "slug":  "orecchiette-italian-sausage-broccoli",
@@ -141,7 +141,7 @@
                      "protein":  "pork",
                      "rank":  5,
                      "name":  "Asado de Puerco (Mexican Red Chile Pork Stew) Bowls",
-                     "per_serving":  1.97
+                     "per_serving":  1.94
                  }
              ]
 }

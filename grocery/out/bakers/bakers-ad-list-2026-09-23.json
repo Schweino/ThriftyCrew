@@ -1,0 +1,3482 @@
+﻿{
+    "store":  "Baker\u0027s",
+    "ad_id":  "ea4d7271-76ac-46b4-b5de-913f2eda03d4",
+    "id_source":  "browser",
+    "week_number":  "2634",
+    "ad_from":  "2026-09-23",
+    "ad_to":  "2026-09-29",
+    "location":  "61500319",
+    "captured":  "2026-09-23T08:00:16",
+    "read_on":  "2026-09-23",
+    "source_url":  "https://oms-kroger-webapp-da-classic-api-prod.przone.net/api/dacs/ea4d7271-76ac-46b4-b5de-913f2eda03d4?location=61500319",
+    "pages":  13,
+    "offer_count":  149,
+    "offers_for_other_stores":  0,
+    "routed_count":  86,
+    "unrouted_count":  63,
+    "term_count":  78,
+    "matcher_could_not_look":  0,
+    "note":  "The weekly ad LIST, not its prices: the Kroger API prices every term below when capture-policy\u0027s Get-BakersAdOwed hands it to pull-regular-bakers-api.ps1. Routed through match-lib Resolve-Commodity over commodities.json; unrouted offers are listed with the phrases tried.",
+    "terms":  [
+                  {
+                      "id":  "ground-turkey",
+                      "term":  "ground turkey"
+                  },
+                  {
+                      "id":  "shaved-beef-steak",
+                      "term":  "shaved beef steak"
+                  },
+                  {
+                      "id":  "chicken-thighs",
+                      "term":  "chicken thighs"
+                  },
+                  {
+                      "id":  "yogurt",
+                      "term":  "yogurt"
+                  },
+                  {
+                      "id":  "raspberries",
+                      "term":  "fresh raspberries"
+                  },
+                  {
+                      "id":  "blackberries",
+                      "term":  "fresh blackberries"
+                  },
+                  {
+                      "id":  "grapes",
+                      "term":  "grapes"
+                  },
+                  {
+                      "id":  "soda",
+                      "term":  "cola 12 pack"
+                  },
+                  {
+                      "id":  "laundry-pods",
+                      "term":  "laundry detergent pods"
+                  },
+                  {
+                      "id":  "ground-beef-8020",
+                      "term":  "80/20 ground beef"
+                  },
+                  {
+                      "id":  "ice-cream",
+                      "term":  "vanilla ice cream"
+                  },
+                  {
+                      "id":  "bacon",
+                      "term":  "bacon"
+                  },
+                  {
+                      "id":  "potato-chips",
+                      "term":  "potato chips"
+                  },
+                  {
+                      "id":  "sparkling-water",
+                      "term":  "sparkling water"
+                  },
+                  {
+                      "id":  "bread",
+                      "term":  "white bread"
+                  },
+                  {
+                      "id":  "sports-drinks",
+                      "term":  "gatorade"
+                  },
+                  {
+                      "id":  "bell-peppers",
+                      "term":  "green bell pepper"
+                  },
+                  {
+                      "id":  "paper-towels",
+                      "term":  "paper towels"
+                  },
+                  {
+                      "id":  "canned-tuna",
+                      "term":  "canned tuna"
+                  },
+                  {
+                      "id":  "tortilla-chips",
+                      "term":  "tortilla chips"
+                  },
+                  {
+                      "id":  "breakfast-sausage",
+                      "term":  "breakfast sausage"
+                  },
+                  {
+                      "id":  "clementines",
+                      "term":  "mandarins clementines"
+                  },
+                  {
+                      "id":  "apples",
+                      "term":  "apples"
+                  },
+                  {
+                      "id":  "almonds",
+                      "term":  "whole almonds"
+                  },
+                  {
+                      "id":  "frozen-pizza",
+                      "term":  "frozen pizza"
+                  },
+                  {
+                      "id":  "cereal",
+                      "term":  "cereal"
+                  },
+                  {
+                      "id":  "oatmeal",
+                      "term":  "old fashioned oats"
+                  },
+                  {
+                      "id":  "coffee-pods",
+                      "term":  "coffee k cups"
+                  },
+                  {
+                      "id":  "shampoo",
+                      "term":  "shampoo"
+                  },
+                  {
+                      "id":  "conditioner",
+                      "term":  "hair conditioner"
+                  },
+                  {
+                      "id":  "toilet-paper",
+                      "term":  "toilet paper"
+                  },
+                  {
+                      "id":  "mayonnaise",
+                      "term":  "mayonnaise"
+                  },
+                  {
+                      "id":  "crackers",
+                      "term":  "saltine crackers"
+                  },
+                  {
+                      "id":  "pretzels",
+                      "term":  "pretzel twists"
+                  },
+                  {
+                      "id":  "cookies",
+                      "term":  "chocolate chip cookies"
+                  },
+                  {
+                      "id":  "applesauce",
+                      "term":  "applesauce"
+                  },
+                  {
+                      "id":  "frozen-fruit",
+                      "term":  "frozen mixed berries"
+                  },
+                  {
+                      "id":  "rice",
+                      "term":  "long grain white rice"
+                  },
+                  {
+                      "id":  "pasta",
+                      "term":  "spaghetti"
+                  },
+                  {
+                      "id":  "coffee",
+                      "term":  "ground coffee"
+                  },
+                  {
+                      "id":  "popsicles",
+                      "term":  "popsicles"
+                  },
+                  {
+                      "id":  "popsicles",
+                      "term":  "ice pops"
+                  },
+                  {
+                      "id":  "butter",
+                      "term":  "butter"
+                  },
+                  {
+                      "id":  "toaster-pastries",
+                      "term":  "toaster pastries"
+                  },
+                  {
+                      "id":  "mac-and-cheese",
+                      "term":  "macaroni and cheese"
+                  },
+                  {
+                      "id":  "queso",
+                      "term":  "salsa con queso"
+                  },
+                  {
+                      "id":  "dishwasher-detergent",
+                      "term":  "dishwasher detergent pacs"
+                  },
+                  {
+                      "id":  "granola",
+                      "term":  "granola"
+                  },
+                  {
+                      "id":  "frozen-meatballs",
+                      "term":  "frozen meatballs"
+                  },
+                  {
+                      "id":  "hummus",
+                      "term":  "hummus"
+                  },
+                  {
+                      "id":  "hot-sauce",
+                      "term":  "hot sauce"
+                  },
+                  {
+                      "id":  "charcoal",
+                      "term":  "charcoal briquets"
+                  },
+                  {
+                      "id":  "bottled-water",
+                      "term":  "purified water 24 pack"
+                  },
+                  {
+                      "id":  "chicken-breast",
+                      "term":  "boneless skinless chicken breast"
+                  },
+                  {
+                      "id":  "sweet-corn",
+                      "term":  "sweet corn"
+                  },
+                  {
+                      "id":  "energy-drinks",
+                      "term":  "energy drink"
+                  },
+                  {
+                      "id":  "coffee-creamer",
+                      "term":  "coffee creamer"
+                  },
+                  {
+                      "id":  "protein-bars",
+                      "term":  "protein bars"
+                  },
+                  {
+                      "id":  "miracle-whip",
+                      "term":  "miracle whip"
+                  },
+                  {
+                      "id":  "ramen",
+                      "term":  "ramen noodles"
+                  },
+                  {
+                      "id":  "canned-pasta",
+                      "term":  "canned ravioli"
+                  },
+                  {
+                      "id":  "pasta-sauce",
+                      "term":  "pasta sauce marinara"
+                  },
+                  {
+                      "id":  "chicken-wings",
+                      "term":  "chicken wings"
+                  },
+                  {
+                      "id":  "saffron",
+                      "term":  "saffron threads"
+                  },
+                  {
+                      "id":  "muffins",
+                      "term":  "blueberry muffins"
+                  },
+                  {
+                      "id":  "pears",
+                      "term":  "bartlett pears"
+                  },
+                  {
+                      "id":  "lemons",
+                      "term":  "lemons"
+                  },
+                  {
+                      "id":  "limes",
+                      "term":  "fresh limes"
+                  },
+                  {
+                      "id":  "pineapple",
+                      "term":  "whole pineapple"
+                  },
+                  {
+                      "id":  "croissants",
+                      "term":  "croissants"
+                  },
+                  {
+                      "id":  "baby-back-ribs",
+                      "term":  "pork baby back ribs"
+                  },
+                  {
+                      "id":  "shrimp",
+                      "term":  "frozen raw shrimp"
+                  },
+                  {
+                      "id":  "strawberries",
+                      "term":  "strawberries"
+                  },
+                  {
+                      "id":  "jalapenos",
+                      "term":  "jalapeno peppers"
+                  },
+                  {
+                      "id":  "bouillon",
+                      "term":  "chicken bouillon cubes"
+                  },
+                  {
+                      "id":  "hominy",
+                      "term":  "canned hominy"
+                  },
+                  {
+                      "id":  "tomatillos",
+                      "term":  "tomatillos"
+                  },
+                  {
+                      "id":  "instant-coffee",
+                      "term":  "instant coffee"
+                  }
+              ],
+    "offers":  [
+                   {
+                       "id":  "1296863",
+                       "page":  "TB01",
+                       "headline":  "Kroger 85% Lean Ground Turkey",
+                       "body":  "1 lb, Limit 3",
+                       "commodities":  [
+                                           "ground-turkey"
+                                       ],
+                       "terms":  [
+                                     "ground turkey"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296852",
+                       "page":  "TB01",
+                       "headline":  "Kroger Beef Shaved Steak",
+                       "body":  "Select Varieties, 14 oz",
+                       "commodities":  [
+                                           "shaved-beef-steak"
+                                       ],
+                       "terms":  [
+                                     "shaved beef steak"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296859",
+                       "page":  "TB01",
+                       "headline":  "Private Selection Gourmet Potatoes",
+                       "body":  "Select Varieties, 1.5 lb Bag",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296912",
+                       "page":  "TB01",
+                       "headline":  "Fresh Tyson Chicken Drumsticks or Thighs",
+                       "body":  "Bone-In",
+                       "commodities":  [
+                                           "chicken-thighs"
+                                       ],
+                       "terms":  [
+                                     "chicken thighs"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296868",
+                       "page":  "TB01",
+                       "headline":  "Chobani Greek Yogurt",
+                       "body":  "Select Varieties, 5.3 oz",
+                       "commodities":  [
+                                           "yogurt"
+                                       ],
+                       "terms":  [
+                                     "yogurt"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296915",
+                       "page":  "TB01",
+                       "headline":  "Raspberries or Blackberries",
+                       "body":  "6 oz",
+                       "commodities":  [
+                                           "raspberries",
+                                           "blackberries"
+                                       ],
+                       "terms":  [
+                                     "fresh raspberries",
+                                     "fresh blackberries"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296920",
+                       "page":  "TB01",
+                       "headline":  "Red, Green or Black Seedless Grapes",
+                       "body":  "",
+                       "commodities":  [
+                                           "grapes"
+                                       ],
+                       "terms":  [
+                                     "grapes"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296841",
+                       "page":  "TB01",
+                       "headline":  "Coca-Cola, Pepsi or 7UP",
+                       "body":  "Select Varieties, 24-Pack, 12 fl oz Cans, Limit 5 Packages",
+                       "commodities":  [
+                                           "soda"
+                                       ],
+                       "terms":  [
+                                     "cola 12 pack"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296838",
+                       "page":  "TB01",
+                       "headline":  "Kroger Cheese",
+                       "body":  "Select Varieties, 6-8 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296886",
+                       "page":  "TB01",
+                       "headline":  "Persil Liquid Laundry Detergent",
+                       "body":  "84 fl oz or Pods, 32-42 ct or all Free \u0026 Clear Liquid Laundry Detergent, 73 fl oz or Mighty Pacs, 32-39 ct; Select Varieties",
+                       "commodities":  [
+                                           "laundry-pods"
+                                       ],
+                       "terms":  [
+                                     "laundry detergent pods"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296911",
+                       "page":  "TB01",
+                       "headline":  "Kroger 80% Lean Ground Beef",
+                       "body":  "Sold in a 3 lb Roll for $14.97. Kroger 80% Lean Ground Beef, 1 lb Roll, $5.99",
+                       "commodities":  [
+                                           "ground-beef-8020"
+                                       ],
+                       "terms":  [
+                                     "80/20 ground beef"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296803",
+                       "page":  "TB01",
+                       "headline":  "Lipton Tea",
+                       "body":  "12-Pack, 16.9 fl oz Bottles",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296885",
+                       "page":  "TB01",
+                       "headline":  "Coca-Cola",
+                       "body":  "12-Pack, 12 fl oz Cans",
+                       "commodities":  [
+                                           "soda"
+                                       ],
+                       "terms":  [
+                                     "cola 12 pack"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296819",
+                       "page":  "TB01",
+                       "headline":  "Tillamook Ice Cream",
+                       "body":  "Select Varieties, 48 fl oz",
+                       "commodities":  [
+                                           "ice-cream"
+                                       ],
+                       "terms":  [
+                                     "vanilla ice cream"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296836",
+                       "page":  "TB01",
+                       "headline":  "Hormel Bacon",
+                       "body":  "Select Varieties, 9.3-16 oz",
+                       "commodities":  [
+                                           "bacon"
+                                       ],
+                       "terms":  [
+                                     "bacon"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296810",
+                       "page":  "TB01",
+                       "headline":  "Lay\u0027s Potato Chips",
+                       "body":  "7.5-9.38 oz or Cheetos, 7.5-8.5 oz or Smartfood Popcorn, 5.5-7.75 oz; Select Varieties",
+                       "commodities":  [
+                                           "potato-chips"
+                                       ],
+                       "terms":  [
+                                     "potato chips"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296851",
+                       "page":  "TB01",
+                       "headline":  "Spindrift Sparkling Water",
+                       "body":  "8-Pack, 12 fl oz Cans",
+                       "commodities":  [
+                                           "sparkling-water"
+                                       ],
+                       "terms":  [
+                                     "sparkling water"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296877",
+                       "page":  "TB01",
+                       "headline":  "Bai Beverage",
+                       "body":  "6-Pack, 14 fl oz Bottles",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296825",
+                       "page":  "TB01",
+                       "headline":  "Kraft Salad Dressing",
+                       "body":  "16 fl oz or Sara Lee Honey Wheat or Butter Bread, 20 oz; Select Varieties",
+                       "commodities":  [
+                                           "bread"
+                                       ],
+                       "terms":  [
+                                     "white bread"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296890",
+                       "page":  "TB01",
+                       "headline":  "Pepsi",
+                       "body":  "6-Pack, 16.9 fl oz Bottles",
+                       "commodities":  [
+                                           "soda"
+                                       ],
+                       "terms":  [
+                                     "cola 12 pack"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296807",
+                       "page":  "TB01",
+                       "headline":  "Garden Mum",
+                       "body":  "8\" Pot",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296918",
+                       "page":  "TB01",
+                       "headline":  "Bud, Miller Lite or Coors Light",
+                       "body":  "Select Varieties, 24-Pack, 12 fl oz Cans",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296779",
+                       "page":  "TB01",
+                       "headline":  "Gatorade",
+                       "body":  "8-Pack, 20 fl oz Bottles",
+                       "commodities":  [
+                                           "sports-drinks"
+                                       ],
+                       "terms":  [
+                                     "gatorade"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296850",
+                       "page":  "TB01",
+                       "headline":  "7UP",
+                       "body":  "6-Pack, 16.9 fl oz Bottles",
+                       "commodities":  [
+                                           "soda"
+                                       ],
+                       "terms":  [
+                                     "cola 12 pack"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296899",
+                       "page":  "TB01",
+                       "headline":  "Kroger Bell Peppers",
+                       "body":  "6 ct",
+                       "commodities":  [
+                                           "bell-peppers"
+                                       ],
+                       "terms":  [
+                                     "green bell pepper"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296849",
+                       "page":  "TB01",
+                       "headline":  "Party Size Tostitos",
+                       "body":  "Select Varieties, 14.5-20 oz, Limit 5 Packages",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296781",
+                       "page":  "TB01",
+                       "headline":  "Zevia Soda",
+                       "body":  "6-Pack, 12 fl oz Cans",
+                       "commodities":  [
+                                           "soda"
+                                       ],
+                       "terms":  [
+                                     "cola 12 pack"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296865",
+                       "page":  "TB01",
+                       "headline":  "Sparkle Paper Towels",
+                       "body":  "2 Double Rolls, Limit 5 Packages",
+                       "commodities":  [
+                                           "paper-towels"
+                                       ],
+                       "terms":  [
+                                     "paper towels"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296881",
+                       "page":  "TB01",
+                       "headline":  "Kroger Beans",
+                       "body":  "15.5 oz or Starkist Tuna, 2.6-5 oz; Select Varieties",
+                       "commodities":  [
+                                           "canned-tuna"
+                                       ],
+                       "terms":  [
+                                     "canned tuna"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296832",
+                       "page":  "TB05",
+                       "headline":  "Progresso Soup",
+                       "body":  "Select Varieties, 18.5-19 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296892",
+                       "page":  "TB05",
+                       "headline":  "Knorr Sides",
+                       "body":  "Select Varieties, 4.2-5.7 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296897",
+                       "page":  "TB05",
+                       "headline":  "Doritos",
+                       "body":  "9-10.75 oz or Miss Vickie\u0027s Potato Chips, 6-8 oz; Select Varieties",
+                       "commodities":  [
+                                           "tortilla-chips",
+                                           "potato-chips"
+                                       ],
+                       "terms":  [
+                                     "tortilla chips",
+                                     "potato chips"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296891",
+                       "page":  "TB05",
+                       "headline":  "Bob Evans Side Dish",
+                       "body":  "12-24 oz or Breakfast Sausage Roll, 16 oz; Select Varieties",
+                       "commodities":  [
+                                           "breakfast-sausage"
+                                       ],
+                       "terms":  [
+                                     "breakfast sausage"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296804",
+                       "page":  "TB05",
+                       "headline":  "Stouffer\u0027s Family Size Entrée",
+                       "body":  "Select Varieties, 28-40 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296785",
+                       "page":  "TB05",
+                       "headline":  "Kroger Adorbs Seedless Mandarins",
+                       "body":  "5 lb Bag or Honeycrisp Apples, 3 lb Bag",
+                       "commodities":  [
+                                           "clementines",
+                                           "apples"
+                                       ],
+                       "terms":  [
+                                     "mandarins clementines",
+                                     "apples"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296854",
+                       "page":  "TB05",
+                       "headline":  "Blue Diamond Almonds",
+                       "body":  "Select Varieties, 4-6 oz",
+                       "commodities":  [
+                                           "almonds"
+                                       ],
+                       "terms":  [
+                                     "whole almonds"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296919",
+                       "page":  "TB05",
+                       "headline":  "Jack\u0027s Pizza",
+                       "body":  "Select Varieties, 13.8-15.8 oz",
+                       "commodities":  [
+                                           "frozen-pizza"
+                                       ],
+                       "terms":  [
+                                     "frozen pizza"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296834",
+                       "page":  "TB05",
+                       "headline":  "Breyers Ice Cream",
+                       "body":  "48 fl oz or Talenti Gelato or Sorbetto, 16 fl oz; Select Varieties",
+                       "commodities":  [
+                                           "ice-cream"
+                                       ],
+                       "terms":  [
+                                     "vanilla ice cream"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296887",
+                       "page":  "TB05",
+                       "headline":  "Cap\u0027n Crunch or Life Cereal",
+                       "body":  "10.3-13 oz or Quaker Instant Oatmeal, 8-10 ct; Select Varieties",
+                       "commodities":  [
+                                           "cereal",
+                                           "oatmeal"
+                                       ],
+                       "terms":  [
+                                     "cereal",
+                                     "old fashioned oats"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296800",
+                       "page":  "TB05",
+                       "headline":  "Green Mountain, McCafé or Donut Shop K-Cups",
+                       "body":  "Select Varieties, 10 ct",
+                       "commodities":  [
+                                           "coffee-pods"
+                                       ],
+                       "terms":  [
+                                     "coffee k cups"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296914",
+                       "page":  "TB05",
+                       "headline":  "Klondike Ice Cream Bars",
+                       "body":  "Select Varieties, 6 ct",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296903",
+                       "page":  "TB05",
+                       "headline":  "Tyson Frozen Chicken",
+                       "body":  "Select Varieties, 16-26 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296826",
+                       "page":  "TB05",
+                       "headline":  "Double Layer Cake",
+                       "body":  "8\" or Ice Cream Cake, 25.5-46 fl oz; Select Varieties, In the Bakery",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296856",
+                       "page":  "IA01",
+                       "headline":  "Degree or Axe Body Spray",
+                       "body":  "Select Varieties, 2.9-3.8 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296818",
+                       "page":  "IA01",
+                       "headline":  "Garnier Fructis Shampoo or Conditioner",
+                       "body":  "Select Varieties, 12-12.5 fl oz",
+                       "commodities":  [
+                                           "shampoo",
+                                           "conditioner"
+                                       ],
+                       "terms":  [
+                                     "shampoo",
+                                     "hair conditioner"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296906",
+                       "page":  "IA01",
+                       "headline":  "Cottonelle Bath Tissue",
+                       "body":  "Select Varieties, 6 Mega Rolls",
+                       "commodities":  [
+                                           "toilet-paper"
+                                       ],
+                       "terms":  [
+                                     "toilet paper"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296857",
+                       "page":  "TB02",
+                       "headline":  "Hellmann\u0027s Mayonnaise",
+                       "body":  "Select Varieties, 20-30 fl oz",
+                       "commodities":  [
+                                           "mayonnaise"
+                                       ],
+                       "terms":  [
+                                     "mayonnaise"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296790",
+                       "page":  "TB02",
+                       "headline":  "Nabisco Family Size Crackers",
+                       "body":  "Select Varieties, 11.5-14 oz",
+                       "commodities":  [
+                                           "crackers"
+                                       ],
+                       "terms":  [
+                                     "saltine crackers"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296797",
+                       "page":  "TB02",
+                       "headline":  "Charmin Bath Tissue",
+                       "body":  "Select Varieties, 6 Mega XL Rolls",
+                       "commodities":  [
+                                           "toilet-paper"
+                                       ],
+                       "terms":  [
+                                     "toilet paper"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296861",
+                       "page":  "TB02",
+                       "headline":  "Dot\u0027s Pretzels",
+                       "body":  "14-16 oz or Tate\u0027s Cookies, 5.5-8 oz; Select Varieties",
+                       "commodities":  [
+                                           "pretzels",
+                                           "cookies"
+                                       ],
+                       "terms":  [
+                                     "pretzel twists",
+                                     "chocolate chip cookies"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296791",
+                       "page":  "TB02",
+                       "headline":  "Wonder Bread",
+                       "body":  "20 oz or Buns, 8 ct or Mott\u0027s Applesauce Cups, 6-Pack; Select Varieties",
+                       "commodities":  [
+                                           "bread",
+                                           "applesauce"
+                                       ],
+                       "terms":  [
+                                     "white bread",
+                                     "applesauce"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296846",
+                       "page":  "TB02",
+                       "headline":  "Nature Valley Bars or Biscuits",
+                       "body":  "10-24 ct or Tru Fru Frozen Fruit, 8 oz; Select Varieties",
+                       "commodities":  [
+                                           "frozen-fruit"
+                                       ],
+                       "terms":  [
+                                     "frozen mixed berries"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296872",
+                       "page":  "TB02",
+                       "headline":  "Rice-A-Roni or Pasta-Roni",
+                       "body":  "Select Varieties, 4.3-7.2 oz",
+                       "commodities":  [
+                                           "rice",
+                                           "pasta"
+                                       ],
+                       "terms":  [
+                                     "long grain white rice",
+                                     "spaghetti"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296799",
+                       "page":  "TB02",
+                       "headline":  "Starbucks Coffee",
+                       "body":  "10-12 oz Bag or K-Cups, 10 ct; Select Varieties",
+                       "commodities":  [
+                                           "coffee",
+                                           "coffee-pods"
+                                       ],
+                       "terms":  [
+                                     "ground coffee",
+                                     "coffee k cups"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296816",
+                       "page":  "TB02",
+                       "headline":  "Tide Liquid Laundry Detergent",
+                       "body":  "Select Varieties, 92-105 fl oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296823",
+                       "page":  "TB02",
+                       "headline":  "Wellshire Lunch Meat",
+                       "body":  "Select Varieties, 7 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296916",
+                       "page":  "TB02",
+                       "headline":  "Popsicle Ice Pops",
+                       "body":  "6-18 ct or V8 Vegetable Juice, 8-Pack, 5.5 fl oz Cans; Select Varieties",
+                       "commodities":  [
+                                           "popsicles"
+                                       ],
+                       "terms":  [
+                                     "popsicles",
+                                     "ice pops"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296884",
+                       "page":  "TB02",
+                       "headline":  "Kroger Fruit \u0026 Grain Bars",
+                       "body":  "8 ct or Campbell\u0027s V8 Splash, 64 fl oz; Select Varieties",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296795",
+                       "page":  "TB02",
+                       "headline":  "Barilla Pasta",
+                       "body":  "16 oz or Kroger Protein Pasta, 12-14.5 oz; Select Varieties",
+                       "commodities":  [
+                                           "pasta"
+                                       ],
+                       "terms":  [
+                                     "spaghetti"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296828",
+                       "page":  "TB02",
+                       "headline":  "Land O Lakes Butter",
+                       "body":  "Select Varieties, 4 ct",
+                       "commodities":  [
+                                           "butter"
+                                       ],
+                       "terms":  [
+                                     "butter"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296875",
+                       "page":  "IA02",
+                       "headline":  "Pop-Tarts",
+                       "body":  "Select Varieties, 8-12 ct",
+                       "commodities":  [
+                                           "toaster-pastries"
+                                       ],
+                       "terms":  [
+                                     "toaster pastries"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296780",
+                       "page":  "IA02",
+                       "headline":  "Folgers Coffee",
+                       "body":  "Select Varieties, 22.6-25.9 oz",
+                       "commodities":  [
+                                           "coffee"
+                                       ],
+                       "terms":  [
+                                     "ground coffee"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296786",
+                       "page":  "IA02",
+                       "headline":  "Private Selection Mac \u0026 Cheese",
+                       "body":  "12 oz or Kroger Queso Dip, 15 oz; Select Varieties",
+                       "commodities":  [
+                                           "mac-and-cheese",
+                                           "queso"
+                                       ],
+                       "terms":  [
+                                     "macaroni and cheese",
+                                     "salsa con queso"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296822",
+                       "page":  "IA02",
+                       "headline":  "Birds Eye Steamfresh Vegetables",
+                       "body":  "8-14.4 oz or Simple Truth Organic 90 Second Rice, 8.8 oz; Select Varieties",
+                       "commodities":  [
+                                           "rice"
+                                       ],
+                       "terms":  [
+                                     "long grain white rice"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296901",
+                       "page":  "IA02",
+                       "headline":  "Bounty Paper Towels",
+                       "body":  "6 Triple Rolls",
+                       "commodities":  [
+                                           "paper-towels"
+                                       ],
+                       "terms":  [
+                                     "paper towels"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296876",
+                       "page":  "IA02",
+                       "headline":  "Hormel Beef Entrée",
+                       "body":  "Select Varieties, 15 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296793",
+                       "page":  "IA02",
+                       "headline":  "Green Mountain, McCafé or Donut Shop K-Cups",
+                       "body":  "Select Varieties, 48 ct",
+                       "commodities":  [
+                                           "coffee-pods"
+                                       ],
+                       "terms":  [
+                                     "coffee k cups"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296821",
+                       "page":  "IA02",
+                       "headline":  "Cascade Action Pacs",
+                       "body":  "Select Varieties, 9-16 ct",
+                       "commodities":  [
+                                           "dishwasher-detergent"
+                                       ],
+                       "terms":  [
+                                     "dishwasher detergent pacs"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296902",
+                       "page":  "IA02",
+                       "headline":  "Private Selection Tiramisu Bar Cake",
+                       "body":  "or Other Varieties, 23.32-27.2 oz, In the Bakery",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296909",
+                       "page":  "IA02",
+                       "headline":  "Cascadian Farm Organic Cereal or Granola",
+                       "body":  "Select Varieties, 9-14.6 oz",
+                       "commodities":  [
+                                           "granola",
+                                           "cereal"
+                                       ],
+                       "terms":  [
+                                     "granola",
+                                     "cereal"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296878",
+                       "page":  "IA02",
+                       "headline":  "Farm Rich Appetizers",
+                       "body":  "Select Varieties, 13-22 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296783",
+                       "page":  "IA02",
+                       "headline":  "Nestlé Drumstick Cones",
+                       "body":  "8 ct or Cooked Perfect Meatballs, 18-28 oz; Select Varieties",
+                       "commodities":  [
+                                           "frozen-meatballs"
+                                       ],
+                       "terms":  [
+                                     "frozen meatballs"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296824",
+                       "page":  "IA03",
+                       "headline":  "Sabra Hummus",
+                       "body":  "8 oz or Stacy\u0027s Pita Chips, 6.75-7.33 oz; Select Varieties, In the Deli",
+                       "commodities":  [
+                                           "hummus"
+                                       ],
+                       "terms":  [
+                                     "hummus"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296831",
+                       "page":  "IA03",
+                       "headline":  "Frank\u0027s RedHot Sauce",
+                       "body":  "Select Varieties, 12 fl oz",
+                       "commodities":  [
+                                           "hot-sauce"
+                                       ],
+                       "terms":  [
+                                     "hot sauce"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296880",
+                       "page":  "IA03",
+                       "headline":  "Perdue 92% Lean Ground Chicken",
+                       "body":  "1 lb Package or Perdue 92% Lean Ground Chicken, 3 lb, $10",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296830",
+                       "page":  "IA03",
+                       "headline":  "Kroger Charcoal or Instant Light Charcoal",
+                       "body":  "Select Varieties, 11.6-15.5 lb",
+                       "commodities":  [
+                                           "charcoal"
+                                       ],
+                       "terms":  [
+                                     "charcoal briquets"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296835",
+                       "page":  "IA03",
+                       "headline":  "Kroger Potato Chips",
+                       "body":  "Select Varieties, 7.5-8 oz",
+                       "commodities":  [
+                                           "potato-chips"
+                                       ],
+                       "terms":  [
+                                     "potato chips"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296784",
+                       "page":  "IA03",
+                       "headline":  "Home Chef St. Louis Style Ribs",
+                       "body":  "Fully Cooked, 2 lb, In the Deli",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296798",
+                       "page":  "IA03",
+                       "headline":  "Kroger Celebration Plates",
+                       "body":  "100 ct",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296813",
+                       "page":  "IA03",
+                       "headline":  "Kroger Celebration Cups",
+                       "body":  "50 ct",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296858",
+                       "page":  "IA03",
+                       "headline":  "Kroger Purified Water",
+                       "body":  "24-Pack, 16.9 fl oz",
+                       "commodities":  [
+                                           "bottled-water"
+                                       ],
+                       "terms":  [
+                                     "purified water 24 pack"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296874",
+                       "page":  "IA03",
+                       "headline":  "Ball Park Buns",
+                       "body":  "8 ct or Nature\u0027s Own Perfectly Crafted Buns, 8 ct; Select Varieties",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296904",
+                       "page":  "IA03",
+                       "headline":  "Smart Chicken Air-Chilled Boneless Chicken Breasts",
+                       "body":  "or Tenders, $6.99 lb",
+                       "commodities":  [
+                                           "chicken-breast"
+                                       ],
+                       "terms":  [
+                                     "boneless skinless chicken breast"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296882",
+                       "page":  "IA03",
+                       "headline":  "Kroger Sweet Corn",
+                       "body":  "4 ct Package",
+                       "commodities":  [
+                                           "sweet-corn"
+                                       ],
+                       "terms":  [
+                                     "sweet corn"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296847",
+                       "page":  "TB03",
+                       "headline":  "Siete Tortilla Chips",
+                       "body":  "5-7.5 oz or Beans, 16 oz; Select Varieties",
+                       "commodities":  [
+                                           "tortilla-chips"
+                                       ],
+                       "terms":  [
+                                     "tortilla chips"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296842",
+                       "page":  "TB03",
+                       "headline":  "Entenmann\u0027s Little Bites, Donuts or Cakes",
+                       "body":  "Select Varieties, 6.88-21 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296905",
+                       "page":  "TB03",
+                       "headline":  "White Claw, Modelo or Corona",
+                       "body":  "Select Varieties, 12-Pack, 12 fl oz Bottles or Cans",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296910",
+                       "page":  "TB03",
+                       "headline":  "Busch, Miller High Life or Keystone",
+                       "body":  "Select Varieties, 30-Pack, 12 fl oz Cans",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296871",
+                       "page":  "TB03",
+                       "headline":  "Bloom Energy Drink",
+                       "body":  "12 fl oz or Starbucks Energy Drink, 15 fl oz; Select Varieties",
+                       "commodities":  [
+                                           "energy-drinks"
+                                       ],
+                       "terms":  [
+                                     "energy drink"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296788",
+                       "page":  "TB03",
+                       "headline":  "Coffee-Mate Creamer",
+                       "body":  "32 fl oz or Coffee-Mate Cold Foam Creamer, 14 oz; Select Varieties",
+                       "commodities":  [
+                                           "coffee-creamer"
+                                       ],
+                       "terms":  [
+                                     "coffee creamer"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296864",
+                       "page":  "TB03",
+                       "headline":  "Little Debbie Snack Cakes",
+                       "body":  "6-12 ct or David Protein Bar, 2.19-2.2 oz; Select Varieties",
+                       "commodities":  [
+                                           "protein-bars"
+                                       ],
+                       "terms":  [
+                                     "protein bars"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296853",
+                       "page":  "TB03",
+                       "headline":  "Miracle Whip or Kraft Real Mayonnaise",
+                       "body":  "Select Varieties, 19-30 oz",
+                       "commodities":  [
+                                           "miracle-whip",
+                                           "mayonnaise"
+                                       ],
+                       "terms":  [
+                                     "miracle whip",
+                                     "mayonnaise"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296801",
+                       "page":  "TB03",
+                       "headline":  "Nissin Ramen Bowl",
+                       "body":  "2.89-4.6 oz or Campbell\u0027s Spaghettios, 15.6 oz; Select Varieties",
+                       "commodities":  [
+                                           "ramen",
+                                           "canned-pasta"
+                                       ],
+                       "terms":  [
+                                     "ramen noodles",
+                                     "canned ravioli"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296855",
+                       "page":  "TB03",
+                       "headline":  "Rao\u0027s Pasta Sauce",
+                       "body":  "Select Varieties, 15-24 oz",
+                       "commodities":  [
+                                           "pasta-sauce"
+                                       ],
+                       "terms":  [
+                                     "pasta sauce marinara"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296829",
+                       "page":  "TB03",
+                       "headline":  "Snapple",
+                       "body":  "Select Varieties, 6-Pack, 16.9 fl oz Bottles",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296837",
+                       "page":  "TB03",
+                       "headline":  "Swanson Broth",
+                       "body":  "Select Varieties, 32 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296860",
+                       "page":  "TB03",
+                       "headline":  "Tito\u0027s, Captain Morgan or Jose Cuervo Gold Tequila",
+                       "body":  "Select Varieties, 750 ml",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296893",
+                       "page":  "TB03",
+                       "headline":  "Newman\u0027s Own Pizza",
+                       "body":  "13.1-17 oz or Red Baron Stuffed Crust Pizza, 22.75-23.53 oz; Select Varieties",
+                       "commodities":  [
+                                           "frozen-pizza"
+                                       ],
+                       "terms":  [
+                                     "frozen pizza"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296844",
+                       "page":  "TB03",
+                       "headline":  "Apothic or Ménage à Trois",
+                       "body":  "750 ml or Sutter Home, 1.5 Liter; Select Varieties",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296845",
+                       "page":  "TB03",
+                       "headline":  "Kroger Frozen Potatoes",
+                       "body":  "80 oz or Frozen Chicken Wings, 22 oz; Select Varieties",
+                       "commodities":  [
+                                           "chicken-wings"
+                                       ],
+                       "terms":  [
+                                     "chicken wings"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296805",
+                       "page":  "IA04",
+                       "headline":  "Chobani Creamer",
+                       "body":  "Select Varieties, 24 fl oz",
+                       "commodities":  [
+                                           "coffee-creamer"
+                                       ],
+                       "terms":  [
+                                     "coffee creamer"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296815",
+                       "page":  "IA04",
+                       "headline":  "mix \u0026 match",
+                       "body":  "on participating pet items.",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296896",
+                       "page":  "IA04",
+                       "headline":  "Simple Truth Organic Tortilla Chips",
+                       "body":  "Select Varieties, 7.5-9 oz",
+                       "commodities":  [
+                                           "tortilla-chips"
+                                       ],
+                       "terms":  [
+                                     "tortilla chips"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296809",
+                       "page":  "IA04",
+                       "headline":  "Nature Made Supplements",
+                       "body":  "24-300 ct or Nature’s Bounty Supplements, 25-360 ct; Select Varieties",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296802",
+                       "page":  "IA04",
+                       "headline":  "Hot Wheels Cars",
+                       "body":  "Select Varieties, 5-Pack",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296862",
+                       "page":  "IA04",
+                       "headline":  "Saffron Road Entrée",
+                       "body":  "Select Varieties, 9.5-10 oz",
+                       "commodities":  [
+                                           "saffron"
+                                       ],
+                       "terms":  [
+                                     "saffron threads"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296895",
+                       "page":  "IA04",
+                       "headline":  "Fairlife Core Power Protein Shake",
+                       "body":  "Select Varieties, 14 fl oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296898",
+                       "page":  "IA04",
+                       "headline":  "Ben \u0026 Jerry\u0027s Dairy-Free Dessert",
+                       "body":  "Select Varieties, 16 fl oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296796",
+                       "page":  "IA04",
+                       "headline":  "Energizer MAX AA or AAA Batteries",
+                       "body":  "8 ct",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296867",
+                       "page":  "IA04",
+                       "headline":  "Simple Truth Organic 85% Lean Ground Beef",
+                       "body":  "3 lb",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296879",
+                       "page":  "IA04",
+                       "headline":  "Simple Truth Organic Broth",
+                       "body":  "Select Varieties, 32 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296945",
+                       "page":  "IA04",
+                       "headline":  "Command Hanging Solutions",
+                       "body":  "Select Varieties",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296866",
+                       "page":  "IA04",
+                       "headline":  "Holiday Home Halloween Throw",
+                       "body":  "Select Varieties",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296843",
+                       "page":  "IA04",
+                       "headline":  "Lifesavers or Skittles Gummies",
+                       "body":  "Select Varieties, 5.8-7 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296934",
+                       "page":  "IA07",
+                       "headline":  "Pumpkin Pie",
+                       "body":  "8\", In the Bakery",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296952",
+                       "page":  "IA07",
+                       "headline":  "Private Selection Pumpkin Cake Roll",
+                       "body":  "18 oz, In the Bakery",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296947",
+                       "page":  "IA07",
+                       "headline":  "Pumpkin Snickerdoodle Muffins",
+                       "body":  "or Other Varieties, 4 ct, In the Bakery",
+                       "commodities":  [
+                                           "muffins"
+                                       ],
+                       "terms":  [
+                                     "blueberry muffins"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296787",
+                       "page":  "TB04",
+                       "headline":  "Kroger Bartlett, Bosc or Red Pears",
+                       "body":  "4 ct Tray",
+                       "commodities":  [
+                                           "pears"
+                                       ],
+                       "terms":  [
+                                     "bartlett pears"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296889",
+                       "page":  "TB04",
+                       "headline":  "Kroger Lemons or Limes",
+                       "body":  "2 lb Bag",
+                       "commodities":  [
+                                           "lemons",
+                                           "limes"
+                                       ],
+                       "terms":  [
+                                     "lemons",
+                                     "fresh limes"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296833",
+                       "page":  "TB04",
+                       "headline":  "Boneless Top Round Roast or London Broil",
+                       "body":  "USDA CHOICE",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296888",
+                       "page":  "TB04",
+                       "headline":  "Private Selection Gold Island Pineapple",
+                       "body":  "",
+                       "commodities":  [
+                                           "pineapple"
+                                       ],
+                       "terms":  [
+                                     "whole pineapple"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296840",
+                       "page":  "TB04",
+                       "headline":  "Private Selection Fresh Baked Butter Croissants",
+                       "body":  "Large, 4 ct",
+                       "commodities":  [
+                                           "croissants"
+                                       ],
+                       "terms":  [
+                                     "croissants"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296873",
+                       "page":  "TB04",
+                       "headline":  "Classic Fried Chicken",
+                       "body":  "4-Piece, Includes 1 Breast, 1 Thigh, 1 Wing \u0026 1 Drumstick; Fully Cooked",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296814",
+                       "page":  "TB04",
+                       "headline":  "Bloom Haus Golden Ray Bouquet",
+                       "body":  "",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296806",
+                       "page":  "TB04",
+                       "headline":  "Oscar Mayer Value Lunchables",
+                       "body":  "1.3-1.9 oz or Armour Lunchmakers, 2-2.67 oz; Select Varieties",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296907",
+                       "page":  "TB04",
+                       "headline":  "Fresh In-Store Made Fruit Bowls",
+                       "body":  "Select Varieties, 18 oz, In the Produce Department",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296848",
+                       "page":  "TB04",
+                       "headline":  "Pork Back Ribs",
+                       "body":  "Bone-In",
+                       "commodities":  [
+                                           "baby-back-ribs"
+                                       ],
+                       "terms":  [
+                                     "pork baby back ribs"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296900",
+                       "page":  "TB04",
+                       "headline":  "Kroger Cooked or Raw Shrimp",
+                       "body":  "Frozen, Select Varieties, 31-40 ct, 12 oz",
+                       "commodities":  [
+                                           "shrimp"
+                                       ],
+                       "terms":  [
+                                     "frozen raw shrimp"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296820",
+                       "page":  "TB04",
+                       "headline":  "Land O\u0027 Frost Deli Shaved Lunch Meat",
+                       "body":  "Select Varieties, 8-9 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296921",
+                       "page":  "TB04",
+                       "headline":  "Strawberries",
+                       "body":  "16 oz",
+                       "commodities":  [
+                                           "strawberries"
+                                       ],
+                       "terms":  [
+                                     "strawberries"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296808",
+                       "page":  "TB04",
+                       "headline":  "Private Selection Soup",
+                       "body":  "Select Varieties, 24 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296964",
+                       "page":  "IA14",
+                       "headline":  "Twisted Tea, Blue Moon or Samuel Adams",
+                       "body":  "Select Varieties, 12-Pack, 12 fl oz Bottles or Cans",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296925",
+                       "page":  "IA14",
+                       "headline":  "Michelob Ultra",
+                       "body":  "Select Varieties, 24-Pack, 12 fl oz Bottles or Cans",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296946",
+                       "page":  "IA14",
+                       "headline":  "Barefoot or Woodbridge",
+                       "body":  "1.5 Liter or Stella Rosa, 750 ml; Select Varieties",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296957",
+                       "page":  "IA14",
+                       "headline":  "Carbliss or High Noon",
+                       "body":  "8-Pack, 12 fl oz Cans or Truly, 12-Pack, 12 fl oz Cans; Select Varieties",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296959",
+                       "page":  "IA14",
+                       "headline":  "La Marca or Wairau River",
+                       "body":  "750 ml or Jose Cuervo Margarita, 1.75 Liter; Select Varieties",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296939",
+                       "page":  "IA14",
+                       "headline":  "Angry Orchard, Leinenkugel\u0027s, Topo Chico or Simply Spiked",
+                       "body":  "Select Varieties, 12-Pack, 12 fl oz Bottles or Cans",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296944",
+                       "page":  "IA05",
+                       "headline":  "Tapatío Hot Sauce",
+                       "body":  "10 fl oz",
+                       "commodities":  [
+                                           "hot-sauce"
+                                       ],
+                       "terms":  [
+                                     "hot sauce"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296926",
+                       "page":  "IA05",
+                       "headline":  "Jalapeño Peppers",
+                       "body":  "",
+                       "commodities":  [
+                                           "jalapenos"
+                                       ],
+                       "terms":  [
+                                     "jalapeno peppers"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296936",
+                       "page":  "IA05",
+                       "headline":  "Juanita\u0027s Menudo",
+                       "body":  "Select Varieties, 25-30 oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296923",
+                       "page":  "IA05",
+                       "headline":  "Knorr Bouillon",
+                       "body":  "Select Varieties, 7.9 oz",
+                       "commodities":  [
+                                           "bouillon"
+                                       ],
+                       "terms":  [
+                                     "chicken bouillon cubes"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296941",
+                       "page":  "IA05",
+                       "headline":  "Guerrero Tostadas",
+                       "body":  "Select Varieties, 22-30 ct",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296922",
+                       "page":  "IA05",
+                       "headline":  "Electrolit Beverage",
+                       "body":  "Select Varieties, 21-21.44 fl oz",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296955",
+                       "page":  "IA05",
+                       "headline":  "Del Real Tamales",
+                       "body":  "Select Varieties, 6 ct, In the Deli",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296940",
+                       "page":  "IA05",
+                       "headline":  "Seasoned Chicken Leg Quarters",
+                       "body":  "",
+                       "commodities":  [
+
+                                       ],
+                       "terms":  [
+
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296938",
+                       "page":  "IA05",
+                       "headline":  "Juanita\u0027s Hominy",
+                       "body":  "Select Varieties, 110 oz",
+                       "commodities":  [
+                                           "hominy"
+                                       ],
+                       "terms":  [
+                                     "canned hominy"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296958",
+                       "page":  "IA05",
+                       "headline":  "Marias Gamesa Cookies",
+                       "body":  "5 oz",
+                       "commodities":  [
+                                           "cookies"
+                                       ],
+                       "terms":  [
+                                     "chocolate chip cookies"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296937",
+                       "page":  "IA05",
+                       "headline":  "Tomatillos",
+                       "body":  "",
+                       "commodities":  [
+                                           "tomatillos"
+                                       ],
+                       "terms":  [
+                                     "tomatillos"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   },
+                   {
+                       "id":  "1296928",
+                       "page":  "IA05",
+                       "headline":  "Nescafé Gold Instant Coffee",
+                       "body":  "Select Varieties, 3.17-3.5 oz",
+                       "commodities":  [
+                                           "instant-coffee"
+                                       ],
+                       "terms":  [
+                                     "instant coffee"
+                                 ],
+                       "commodities_without_term":  [
+
+                                                    ]
+                   }
+               ],
+    "unrouted":  [
+                     {
+                         "id":  "1296859",
+                         "page":  "TB01",
+                         "headline":  "Private Selection Gourmet Potatoes",
+                         "body":  "Select Varieties, 1.5 lb Bag",
+                         "phrases":  [
+                                         "Private Selection Gourmet Potatoes",
+                                         "Private Selection Gourmet Potatoes, Select Varieties, 1.5 lb Bag"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296838",
+                         "page":  "TB01",
+                         "headline":  "Kroger Cheese",
+                         "body":  "Select Varieties, 6-8 oz",
+                         "phrases":  [
+                                         "Kroger Cheese",
+                                         "Kroger Cheese, Select Varieties, 6-8 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296803",
+                         "page":  "TB01",
+                         "headline":  "Lipton Tea",
+                         "body":  "12-Pack, 16.9 fl oz Bottles",
+                         "phrases":  [
+                                         "Lipton Tea",
+                                         "Lipton Tea, 12-Pack, 16.9 fl oz Bottles"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296877",
+                         "page":  "TB01",
+                         "headline":  "Bai Beverage",
+                         "body":  "6-Pack, 14 fl oz Bottles",
+                         "phrases":  [
+                                         "Bai Beverage",
+                                         "Bai Beverage, 6-Pack, 14 fl oz Bottles"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296807",
+                         "page":  "TB01",
+                         "headline":  "Garden Mum",
+                         "body":  "8\" Pot",
+                         "phrases":  [
+                                         "Garden Mum",
+                                         "Garden Mum, 8\" Pot"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296918",
+                         "page":  "TB01",
+                         "headline":  "Bud, Miller Lite or Coors Light",
+                         "body":  "Select Varieties, 24-Pack, 12 fl oz Cans",
+                         "phrases":  [
+                                         "Bud, Miller Lite or Coors Light",
+                                         "Bud, Miller Lite or Coors Light, Select Varieties, 24-Pack, 12 fl oz Cans",
+                                         "Bud, Miller Lite",
+                                         "Coors Light, Select Varieties, 24-Pack, 12 fl oz Cans"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296849",
+                         "page":  "TB01",
+                         "headline":  "Party Size Tostitos",
+                         "body":  "Select Varieties, 14.5-20 oz, Limit 5 Packages",
+                         "phrases":  [
+                                         "Party Size Tostitos",
+                                         "Party Size Tostitos, Select Varieties, 14.5-20 oz, Limit 5 Packages"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296832",
+                         "page":  "TB05",
+                         "headline":  "Progresso Soup",
+                         "body":  "Select Varieties, 18.5-19 oz",
+                         "phrases":  [
+                                         "Progresso Soup",
+                                         "Progresso Soup, Select Varieties, 18.5-19 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296892",
+                         "page":  "TB05",
+                         "headline":  "Knorr Sides",
+                         "body":  "Select Varieties, 4.2-5.7 oz",
+                         "phrases":  [
+                                         "Knorr Sides",
+                                         "Knorr Sides, Select Varieties, 4.2-5.7 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296804",
+                         "page":  "TB05",
+                         "headline":  "Stouffer\u0027s Family Size Entrée",
+                         "body":  "Select Varieties, 28-40 oz",
+                         "phrases":  [
+                                         "Stouffer\u0027s Family Size Entrée",
+                                         "Stouffer\u0027s Family Size Entrée, Select Varieties, 28-40 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296914",
+                         "page":  "TB05",
+                         "headline":  "Klondike Ice Cream Bars",
+                         "body":  "Select Varieties, 6 ct",
+                         "phrases":  [
+                                         "Klondike Ice Cream Bars",
+                                         "Klondike Ice Cream Bars, Select Varieties, 6 ct"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296903",
+                         "page":  "TB05",
+                         "headline":  "Tyson Frozen Chicken",
+                         "body":  "Select Varieties, 16-26 oz",
+                         "phrases":  [
+                                         "Tyson Frozen Chicken",
+                                         "Tyson Frozen Chicken, Select Varieties, 16-26 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296826",
+                         "page":  "TB05",
+                         "headline":  "Double Layer Cake",
+                         "body":  "8\" or Ice Cream Cake, 25.5-46 fl oz; Select Varieties, In the Bakery",
+                         "phrases":  [
+                                         "Double Layer Cake",
+                                         "Double Layer Cake, 8\" or Ice Cream Cake, 25.5-46 fl oz; Select Varieties, In the Bakery",
+                                         "Double Layer Cake, 8\"",
+                                         "Ice Cream Cake, 25.5-46 fl oz",
+                                         "Select Varieties, In the Bakery"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296856",
+                         "page":  "IA01",
+                         "headline":  "Degree or Axe Body Spray",
+                         "body":  "Select Varieties, 2.9-3.8 oz",
+                         "phrases":  [
+                                         "Degree or Axe Body Spray",
+                                         "Degree or Axe Body Spray, Select Varieties, 2.9-3.8 oz",
+                                         "Degree",
+                                         "Axe Body Spray, Select Varieties, 2.9-3.8 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296816",
+                         "page":  "TB02",
+                         "headline":  "Tide Liquid Laundry Detergent",
+                         "body":  "Select Varieties, 92-105 fl oz",
+                         "phrases":  [
+                                         "Tide Liquid Laundry Detergent",
+                                         "Tide Liquid Laundry Detergent, Select Varieties, 92-105 fl oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296823",
+                         "page":  "TB02",
+                         "headline":  "Wellshire Lunch Meat",
+                         "body":  "Select Varieties, 7 oz",
+                         "phrases":  [
+                                         "Wellshire Lunch Meat",
+                                         "Wellshire Lunch Meat, Select Varieties, 7 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296884",
+                         "page":  "TB02",
+                         "headline":  "Kroger Fruit \u0026 Grain Bars",
+                         "body":  "8 ct or Campbell\u0027s V8 Splash, 64 fl oz; Select Varieties",
+                         "phrases":  [
+                                         "Kroger Fruit \u0026 Grain Bars",
+                                         "Kroger Fruit \u0026 Grain Bars, 8 ct or Campbell\u0027s V8 Splash, 64 fl oz; Select Varieties",
+                                         "Kroger Fruit \u0026 Grain Bars, 8 ct",
+                                         "Campbell\u0027s V8 Splash, 64 fl oz",
+                                         "Select Varieties"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296876",
+                         "page":  "IA02",
+                         "headline":  "Hormel Beef Entrée",
+                         "body":  "Select Varieties, 15 oz",
+                         "phrases":  [
+                                         "Hormel Beef Entrée",
+                                         "Hormel Beef Entrée, Select Varieties, 15 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296902",
+                         "page":  "IA02",
+                         "headline":  "Private Selection Tiramisu Bar Cake",
+                         "body":  "or Other Varieties, 23.32-27.2 oz, In the Bakery",
+                         "phrases":  [
+                                         "Private Selection Tiramisu Bar Cake",
+                                         "Private Selection Tiramisu Bar Cake, or Other Varieties, 23.32-27.2 oz, In the Bakery",
+                                         "Other Varieties, 23.32-27.2 oz, In the Bakery"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296878",
+                         "page":  "IA02",
+                         "headline":  "Farm Rich Appetizers",
+                         "body":  "Select Varieties, 13-22 oz",
+                         "phrases":  [
+                                         "Farm Rich Appetizers",
+                                         "Farm Rich Appetizers, Select Varieties, 13-22 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296880",
+                         "page":  "IA03",
+                         "headline":  "Perdue 92% Lean Ground Chicken",
+                         "body":  "1 lb Package or Perdue 92% Lean Ground Chicken, 3 lb, $10",
+                         "phrases":  [
+                                         "Perdue 92% Lean Ground Chicken",
+                                         "Perdue 92% Lean Ground Chicken, 1 lb Package or Perdue 92% Lean Ground Chicken, 3 lb, $10",
+                                         "Perdue 92% Lean Ground Chicken, 1 lb Package",
+                                         "Perdue 92% Lean Ground Chicken, 3 lb, $10"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296784",
+                         "page":  "IA03",
+                         "headline":  "Home Chef St. Louis Style Ribs",
+                         "body":  "Fully Cooked, 2 lb, In the Deli",
+                         "phrases":  [
+                                         "Home Chef St. Louis Style Ribs",
+                                         "Home Chef St. Louis Style Ribs, Fully Cooked, 2 lb, In the Deli"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296798",
+                         "page":  "IA03",
+                         "headline":  "Kroger Celebration Plates",
+                         "body":  "100 ct",
+                         "phrases":  [
+                                         "Kroger Celebration Plates",
+                                         "Kroger Celebration Plates, 100 ct"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296813",
+                         "page":  "IA03",
+                         "headline":  "Kroger Celebration Cups",
+                         "body":  "50 ct",
+                         "phrases":  [
+                                         "Kroger Celebration Cups",
+                                         "Kroger Celebration Cups, 50 ct"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296874",
+                         "page":  "IA03",
+                         "headline":  "Ball Park Buns",
+                         "body":  "8 ct or Nature\u0027s Own Perfectly Crafted Buns, 8 ct; Select Varieties",
+                         "phrases":  [
+                                         "Ball Park Buns",
+                                         "Ball Park Buns, 8 ct or Nature\u0027s Own Perfectly Crafted Buns, 8 ct; Select Varieties",
+                                         "Ball Park Buns, 8 ct",
+                                         "Nature\u0027s Own Perfectly Crafted Buns, 8 ct",
+                                         "Select Varieties"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296842",
+                         "page":  "TB03",
+                         "headline":  "Entenmann\u0027s Little Bites, Donuts or Cakes",
+                         "body":  "Select Varieties, 6.88-21 oz",
+                         "phrases":  [
+                                         "Entenmann\u0027s Little Bites, Donuts or Cakes",
+                                         "Entenmann\u0027s Little Bites, Donuts or Cakes, Select Varieties, 6.88-21 oz",
+                                         "Entenmann\u0027s Little Bites, Donuts",
+                                         "Cakes, Select Varieties, 6.88-21 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296905",
+                         "page":  "TB03",
+                         "headline":  "White Claw, Modelo or Corona",
+                         "body":  "Select Varieties, 12-Pack, 12 fl oz Bottles or Cans",
+                         "phrases":  [
+                                         "White Claw, Modelo or Corona",
+                                         "White Claw, Modelo or Corona, Select Varieties, 12-Pack, 12 fl oz Bottles or Cans",
+                                         "White Claw, Modelo",
+                                         "Corona, Select Varieties, 12-Pack, 12 fl oz Bottles",
+                                         "Cans"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296910",
+                         "page":  "TB03",
+                         "headline":  "Busch, Miller High Life or Keystone",
+                         "body":  "Select Varieties, 30-Pack, 12 fl oz Cans",
+                         "phrases":  [
+                                         "Busch, Miller High Life or Keystone",
+                                         "Busch, Miller High Life or Keystone, Select Varieties, 30-Pack, 12 fl oz Cans",
+                                         "Busch, Miller High Life",
+                                         "Keystone, Select Varieties, 30-Pack, 12 fl oz Cans"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296829",
+                         "page":  "TB03",
+                         "headline":  "Snapple",
+                         "body":  "Select Varieties, 6-Pack, 16.9 fl oz Bottles",
+                         "phrases":  [
+                                         "Snapple",
+                                         "Snapple, Select Varieties, 6-Pack, 16.9 fl oz Bottles"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296837",
+                         "page":  "TB03",
+                         "headline":  "Swanson Broth",
+                         "body":  "Select Varieties, 32 oz",
+                         "phrases":  [
+                                         "Swanson Broth",
+                                         "Swanson Broth, Select Varieties, 32 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296860",
+                         "page":  "TB03",
+                         "headline":  "Tito\u0027s, Captain Morgan or Jose Cuervo Gold Tequila",
+                         "body":  "Select Varieties, 750 ml",
+                         "phrases":  [
+                                         "Tito\u0027s, Captain Morgan or Jose Cuervo Gold Tequila",
+                                         "Tito\u0027s, Captain Morgan or Jose Cuervo Gold Tequila, Select Varieties, 750 ml",
+                                         "Tito\u0027s, Captain Morgan",
+                                         "Jose Cuervo Gold Tequila, Select Varieties, 750 ml"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296844",
+                         "page":  "TB03",
+                         "headline":  "Apothic or Ménage à Trois",
+                         "body":  "750 ml or Sutter Home, 1.5 Liter; Select Varieties",
+                         "phrases":  [
+                                         "Apothic or Ménage à Trois",
+                                         "Apothic or Ménage à Trois, 750 ml or Sutter Home, 1.5 Liter; Select Varieties",
+                                         "Apothic",
+                                         "Ménage à Trois, 750 ml",
+                                         "Sutter Home, 1.5 Liter",
+                                         "Select Varieties"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296815",
+                         "page":  "IA04",
+                         "headline":  "mix \u0026 match",
+                         "body":  "on participating pet items.",
+                         "phrases":  [
+                                         "mix \u0026 match",
+                                         "mix \u0026 match, on participating pet items."
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296809",
+                         "page":  "IA04",
+                         "headline":  "Nature Made Supplements",
+                         "body":  "24-300 ct or Nature’s Bounty Supplements, 25-360 ct; Select Varieties",
+                         "phrases":  [
+                                         "Nature Made Supplements",
+                                         "Nature Made Supplements, 24-300 ct or Nature’s Bounty Supplements, 25-360 ct; Select Varieties",
+                                         "Nature Made Supplements, 24-300 ct",
+                                         "Nature’s Bounty Supplements, 25-360 ct",
+                                         "Select Varieties"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296802",
+                         "page":  "IA04",
+                         "headline":  "Hot Wheels Cars",
+                         "body":  "Select Varieties, 5-Pack",
+                         "phrases":  [
+                                         "Hot Wheels Cars",
+                                         "Hot Wheels Cars, Select Varieties, 5-Pack"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296895",
+                         "page":  "IA04",
+                         "headline":  "Fairlife Core Power Protein Shake",
+                         "body":  "Select Varieties, 14 fl oz",
+                         "phrases":  [
+                                         "Fairlife Core Power Protein Shake",
+                                         "Fairlife Core Power Protein Shake, Select Varieties, 14 fl oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296898",
+                         "page":  "IA04",
+                         "headline":  "Ben \u0026 Jerry\u0027s Dairy-Free Dessert",
+                         "body":  "Select Varieties, 16 fl oz",
+                         "phrases":  [
+                                         "Ben \u0026 Jerry\u0027s Dairy-Free Dessert",
+                                         "Ben \u0026 Jerry\u0027s Dairy-Free Dessert, Select Varieties, 16 fl oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296796",
+                         "page":  "IA04",
+                         "headline":  "Energizer MAX AA or AAA Batteries",
+                         "body":  "8 ct",
+                         "phrases":  [
+                                         "Energizer MAX AA or AAA Batteries",
+                                         "Energizer MAX AA or AAA Batteries, 8 ct",
+                                         "Energizer MAX AA",
+                                         "AAA Batteries, 8 ct"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296867",
+                         "page":  "IA04",
+                         "headline":  "Simple Truth Organic 85% Lean Ground Beef",
+                         "body":  "3 lb",
+                         "phrases":  [
+                                         "Simple Truth Organic 85% Lean Ground Beef",
+                                         "Simple Truth Organic 85% Lean Ground Beef, 3 lb"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296879",
+                         "page":  "IA04",
+                         "headline":  "Simple Truth Organic Broth",
+                         "body":  "Select Varieties, 32 oz",
+                         "phrases":  [
+                                         "Simple Truth Organic Broth",
+                                         "Simple Truth Organic Broth, Select Varieties, 32 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296945",
+                         "page":  "IA04",
+                         "headline":  "Command Hanging Solutions",
+                         "body":  "Select Varieties",
+                         "phrases":  [
+                                         "Command Hanging Solutions",
+                                         "Command Hanging Solutions, Select Varieties"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296866",
+                         "page":  "IA04",
+                         "headline":  "Holiday Home Halloween Throw",
+                         "body":  "Select Varieties",
+                         "phrases":  [
+                                         "Holiday Home Halloween Throw",
+                                         "Holiday Home Halloween Throw, Select Varieties"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296843",
+                         "page":  "IA04",
+                         "headline":  "Lifesavers or Skittles Gummies",
+                         "body":  "Select Varieties, 5.8-7 oz",
+                         "phrases":  [
+                                         "Lifesavers or Skittles Gummies",
+                                         "Lifesavers or Skittles Gummies, Select Varieties, 5.8-7 oz",
+                                         "Lifesavers",
+                                         "Skittles Gummies, Select Varieties, 5.8-7 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296934",
+                         "page":  "IA07",
+                         "headline":  "Pumpkin Pie",
+                         "body":  "8\", In the Bakery",
+                         "phrases":  [
+                                         "Pumpkin Pie",
+                                         "Pumpkin Pie, 8\", In the Bakery"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296952",
+                         "page":  "IA07",
+                         "headline":  "Private Selection Pumpkin Cake Roll",
+                         "body":  "18 oz, In the Bakery",
+                         "phrases":  [
+                                         "Private Selection Pumpkin Cake Roll",
+                                         "Private Selection Pumpkin Cake Roll, 18 oz, In the Bakery"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296833",
+                         "page":  "TB04",
+                         "headline":  "Boneless Top Round Roast or London Broil",
+                         "body":  "USDA CHOICE",
+                         "phrases":  [
+                                         "Boneless Top Round Roast or London Broil",
+                                         "Boneless Top Round Roast or London Broil, USDA CHOICE",
+                                         "Boneless Top Round Roast",
+                                         "London Broil, USDA CHOICE"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296873",
+                         "page":  "TB04",
+                         "headline":  "Classic Fried Chicken",
+                         "body":  "4-Piece, Includes 1 Breast, 1 Thigh, 1 Wing \u0026 1 Drumstick; Fully Cooked",
+                         "phrases":  [
+                                         "Classic Fried Chicken",
+                                         "Classic Fried Chicken, 4-Piece, Includes 1 Breast, 1 Thigh, 1 Wing \u0026 1 Drumstick; Fully Cooked",
+                                         "Classic Fried Chicken, 4-Piece, Includes 1 Breast, 1 Thigh, 1 Wing \u0026 1 Drumstick",
+                                         "Fully Cooked"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296814",
+                         "page":  "TB04",
+                         "headline":  "Bloom Haus Golden Ray Bouquet",
+                         "body":  "",
+                         "phrases":  [
+                                         "Bloom Haus Golden Ray Bouquet"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296806",
+                         "page":  "TB04",
+                         "headline":  "Oscar Mayer Value Lunchables",
+                         "body":  "1.3-1.9 oz or Armour Lunchmakers, 2-2.67 oz; Select Varieties",
+                         "phrases":  [
+                                         "Oscar Mayer Value Lunchables",
+                                         "Oscar Mayer Value Lunchables, 1.3-1.9 oz or Armour Lunchmakers, 2-2.67 oz; Select Varieties",
+                                         "Oscar Mayer Value Lunchables, 1.3-1.9 oz",
+                                         "Armour Lunchmakers, 2-2.67 oz",
+                                         "Select Varieties"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296907",
+                         "page":  "TB04",
+                         "headline":  "Fresh In-Store Made Fruit Bowls",
+                         "body":  "Select Varieties, 18 oz, In the Produce Department",
+                         "phrases":  [
+                                         "Fresh In-Store Made Fruit Bowls",
+                                         "Fresh In-Store Made Fruit Bowls, Select Varieties, 18 oz, In the Produce Department"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296820",
+                         "page":  "TB04",
+                         "headline":  "Land O\u0027 Frost Deli Shaved Lunch Meat",
+                         "body":  "Select Varieties, 8-9 oz",
+                         "phrases":  [
+                                         "Land O\u0027 Frost Deli Shaved Lunch Meat",
+                                         "Land O\u0027 Frost Deli Shaved Lunch Meat, Select Varieties, 8-9 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296808",
+                         "page":  "TB04",
+                         "headline":  "Private Selection Soup",
+                         "body":  "Select Varieties, 24 oz",
+                         "phrases":  [
+                                         "Private Selection Soup",
+                                         "Private Selection Soup, Select Varieties, 24 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296964",
+                         "page":  "IA14",
+                         "headline":  "Twisted Tea, Blue Moon or Samuel Adams",
+                         "body":  "Select Varieties, 12-Pack, 12 fl oz Bottles or Cans",
+                         "phrases":  [
+                                         "Twisted Tea, Blue Moon or Samuel Adams",
+                                         "Twisted Tea, Blue Moon or Samuel Adams, Select Varieties, 12-Pack, 12 fl oz Bottles or Cans",
+                                         "Twisted Tea, Blue Moon",
+                                         "Samuel Adams, Select Varieties, 12-Pack, 12 fl oz Bottles",
+                                         "Cans"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296925",
+                         "page":  "IA14",
+                         "headline":  "Michelob Ultra",
+                         "body":  "Select Varieties, 24-Pack, 12 fl oz Bottles or Cans",
+                         "phrases":  [
+                                         "Michelob Ultra",
+                                         "Michelob Ultra, Select Varieties, 24-Pack, 12 fl oz Bottles or Cans",
+                                         "Michelob Ultra, Select Varieties, 24-Pack, 12 fl oz Bottles",
+                                         "Cans"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296946",
+                         "page":  "IA14",
+                         "headline":  "Barefoot or Woodbridge",
+                         "body":  "1.5 Liter or Stella Rosa, 750 ml; Select Varieties",
+                         "phrases":  [
+                                         "Barefoot or Woodbridge",
+                                         "Barefoot or Woodbridge, 1.5 Liter or Stella Rosa, 750 ml; Select Varieties",
+                                         "Barefoot",
+                                         "Woodbridge, 1.5 Liter",
+                                         "Stella Rosa, 750 ml",
+                                         "Select Varieties"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296957",
+                         "page":  "IA14",
+                         "headline":  "Carbliss or High Noon",
+                         "body":  "8-Pack, 12 fl oz Cans or Truly, 12-Pack, 12 fl oz Cans; Select Varieties",
+                         "phrases":  [
+                                         "Carbliss or High Noon",
+                                         "Carbliss or High Noon, 8-Pack, 12 fl oz Cans or Truly, 12-Pack, 12 fl oz Cans; Select Varieties",
+                                         "Carbliss",
+                                         "High Noon, 8-Pack, 12 fl oz Cans",
+                                         "Truly, 12-Pack, 12 fl oz Cans",
+                                         "Select Varieties"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296959",
+                         "page":  "IA14",
+                         "headline":  "La Marca or Wairau River",
+                         "body":  "750 ml or Jose Cuervo Margarita, 1.75 Liter; Select Varieties",
+                         "phrases":  [
+                                         "La Marca or Wairau River",
+                                         "La Marca or Wairau River, 750 ml or Jose Cuervo Margarita, 1.75 Liter; Select Varieties",
+                                         "La Marca",
+                                         "Wairau River, 750 ml",
+                                         "Jose Cuervo Margarita, 1.75 Liter",
+                                         "Select Varieties"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296939",
+                         "page":  "IA14",
+                         "headline":  "Angry Orchard, Leinenkugel\u0027s, Topo Chico or Simply Spiked",
+                         "body":  "Select Varieties, 12-Pack, 12 fl oz Bottles or Cans",
+                         "phrases":  [
+                                         "Angry Orchard, Leinenkugel\u0027s, Topo Chico or Simply Spiked",
+                                         "Angry Orchard, Leinenkugel\u0027s, Topo Chico or Simply Spiked, Select Varieties, 12-Pack, 12 fl oz Bottles or Cans",
+                                         "Angry Orchard, Leinenkugel\u0027s, Topo Chico",
+                                         "Simply Spiked, Select Varieties, 12-Pack, 12 fl oz Bottles",
+                                         "Cans"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296936",
+                         "page":  "IA05",
+                         "headline":  "Juanita\u0027s Menudo",
+                         "body":  "Select Varieties, 25-30 oz",
+                         "phrases":  [
+                                         "Juanita\u0027s Menudo",
+                                         "Juanita\u0027s Menudo, Select Varieties, 25-30 oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296941",
+                         "page":  "IA05",
+                         "headline":  "Guerrero Tostadas",
+                         "body":  "Select Varieties, 22-30 ct",
+                         "phrases":  [
+                                         "Guerrero Tostadas",
+                                         "Guerrero Tostadas, Select Varieties, 22-30 ct"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296922",
+                         "page":  "IA05",
+                         "headline":  "Electrolit Beverage",
+                         "body":  "Select Varieties, 21-21.44 fl oz",
+                         "phrases":  [
+                                         "Electrolit Beverage",
+                                         "Electrolit Beverage, Select Varieties, 21-21.44 fl oz"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296955",
+                         "page":  "IA05",
+                         "headline":  "Del Real Tamales",
+                         "body":  "Select Varieties, 6 ct, In the Deli",
+                         "phrases":  [
+                                         "Del Real Tamales",
+                                         "Del Real Tamales, Select Varieties, 6 ct, In the Deli"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "1296940",
+                         "page":  "IA05",
+                         "headline":  "Seasoned Chicken Leg Quarters",
+                         "body":  "",
+                         "phrases":  [
+                                         "Seasoned Chicken Leg Quarters"
+                                     ],
+                         "commodities_without_term":  [
+
+                                                      ]
+                     }
+                 ]
+}

@@ -16,8 +16,8 @@
                         "why":  "match found but per-unit disagrees: board $1.33 vs link $1.6633 (20%)"
                     },
                     {
-                        "id":  "dried-basil",
-                        "why":  "no confident match (best 0)"
+                        "id":  "bratwurst",
+                        "why":  "match found but per-unit disagrees: board $4.99 vs link $5.49 (9.1%)"
                     },
                     {
                         "id":  "bread",
@@ -26,10 +26,6 @@
                     {
                         "id":  "brownie-mix",
                         "why":  "match found but its size \"10.25 oz\" gives no per-unit in each"
-                    },
-                    {
-                        "id":  "caesar-dressing",
-                        "why":  "match found but per-unit disagrees: board $0.1744 vs link $0.1869 (6.7%)"
                     },
                     {
                         "id":  "caesar-salad-kit",
@@ -80,20 +76,16 @@
                         "why":  "match found but its size \"10 oz\" gives no per-unit in each"
                     },
                     {
-                        "id":  "tomatoes-green-chilies",
-                        "why":  "match found but per-unit disagrees: board $0.0683 vs link $0.119 (42.6%)"
-                    },
-                    {
                         "id":  "dinner-rolls",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "donuts",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "french-bread",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "frosting",
@@ -125,11 +117,11 @@
                     },
                     {
                         "id":  "ground-cumin",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but per-unit disagrees: board $1.145 vs link $1.295 (11.6%)"
                     },
                     {
                         "id":  "iced-tea",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but per-unit disagrees: board $0.0676 vs link $0.0733 (7.8%)"
                     },
                     {
                         "id":  "jumbo-pasta-shells",
@@ -157,6 +149,10 @@
                     },
                     {
                         "id":  "pesto",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "pomegranates",
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
@@ -188,10 +184,6 @@
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
-                        "id":  "teriyaki-sauce",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
                         "id":  "tomatoes",
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
@@ -206,13 +198,9 @@
                     {
                         "id":  "vegetable-soup",
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "yogurt",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     }
                 ],
-    "worked":  52,
-    "generated":  "2026-09-21 08:10",
-    "board":  "comparison-2026-09-21.json"
+    "worked":  50,
+    "generated":  "2026-09-23 09:50",
+    "board":  "comparison-2026-09-23.json"
 }

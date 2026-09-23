@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-09-21T15:05:25",
+    "generated":  "2026-09-23T09:54:50",
     "written_by":  "guards.ps1",
-    "board_file":  "comparison-2026-09-21.json",
-    "board_sha256":  "641769d86d8a8fd8a8a81e0b37bfe7d5bd26a666cd0caee4d7914b554db95800",
+    "board_file":  "comparison-2026-09-23.json",
+    "board_sha256":  "75959cd442f7487e27c6f167faef4702438d8ba81dad3e8d1ce93859d714fd45",
     "action":  "quarantined",
     "exit_code":  4,
     "reasons":  [
@@ -17,15 +17,20 @@
     "breaker":  {
                     "tripped":  false,
                     "why":  "",
-                    "quarantined":  1,
-                    "priced":  2705,
+                    "quarantined":  3,
+                    "priced":  2737,
                     "board_pct_bar":  2,
                     "store_pct_bar":  10,
                     "stores":  [
                                    {
-                                       "store":  "Sam\u0027s Club",
+                                       "store":  "Family Fare",
+                                       "quarantined":  2,
+                                       "priced":  459
+                                   },
+                                   {
+                                       "store":  "Walmart",
                                        "quarantined":  1,
-                                       "priced":  316
+                                       "priced":  518
                                    }
                                ]
                 },

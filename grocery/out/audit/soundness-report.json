@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-21 08:16",
+    "generated":  "2026-09-23 10:01",
     "drift_vs_engine":  0,
     "drift_products":  [
 
@@ -8,121 +8,68 @@
 
               ],
     "dropped":  [
-
+                    {
+                        "name":  "Fresh Cut In Store Carrot \u0026 Cucumber Ranch",
+                        "from":  "carrots"
+                    },
+                    {
+                        "name":  "Fresh Cut In Store Cucumber Ranch Bowl",
+                        "from":  "cucumbers"
+                    }
                 ],
     "new_contested":  [
                           {
-                              "name":  "Alexia fries, tots or onion rings, 13.5 to 28 oz., $5.89",
-                              "chain":  "frozen-fries (oz) \u003e tater-tots (oz)",
-                              "form":  false,
-                              "winner":  "frozen-fries",
-                              "verdict":  "size 28 oz = 0.2104/oz",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Aloha Shoyu Spicy Kalbi Hawaiian Style Beef Jerky, 10 oz.",
-                              "chain":  "beef-jerky (oz) \u003e soy-sauce (floz)",
+                              "name":  "Deutsche Küche Lentil Chickpea or Harvest Potato",
+                              "chain":  "chickpeas (oz) \u003e brown-lentils (lb)",
                               "form":  true,
-                              "winner":  "beef-jerky",
-                              "verdict":  "WITHHELD-UNPROVEN-CHANNEL",
+                              "winner":  "chickpeas",
+                              "verdict":  "not in the newest candidates file",
                               "cell":  "",
                               "crown":  false
                           },
                           {
-                              "name":  "Apple Brandy on the Rocks by Kilian Eau de Parfum, 1.7 fl. oz.",
-                              "chain":  "apples (lb) \u003e brandy (floz)",
-                              "form":  true,
-                              "winner":  "apples",
-                              "verdict":  "WITHHELD-UNPROVEN-CHANNEL",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Bar X Brand Green Chile Old Fashioned Beef Jerky, 7 oz.",
-                              "chain":  "beef-jerky (oz) \u003e canned-green-chilies (oz)",
-                              "form":  true,
-                              "winner":  "beef-jerky",
-                              "verdict":  "WITHHELD-UNPROVEN-CHANNEL",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Bounce dryer sheets 330 ct., Tide Pods 25 to 42 ct., Evo tiles 22 ct., laundry detergent, Gain, Downy fabric softener, beads or rinse 18.2 to 140 fl. oz., $10.00 ea. with purchase of 2",
-                              "chain":  "dryer-sheets (each) \u003e laundry-pods (each)",
+                              "name":  "Di Lusso deli sliced ham, turkey, chicken or cheese, FREE King\u0027s Hawaiian slider buns 9 ct. with 1 lb. purchase of Di Lusso deli sliced ham, turkey or chicken,",
+                              "chain":  "deli-ham (oz) \u003e sliced-cheese (oz)",
                               "form":  false,
-                              "winner":  "dryer-sheets",
-                              "verdict":  "OUT-OF-BAND",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Bounty paper towels or Charmin bath tissue, 2 triple rolls or 6 mega rolls, $7.99",
-                              "chain":  "paper-towels (each) \u003e toilet-paper (each)",
-                              "form":  false,
-                              "winner":  "paper-towels",
+                              "winner":  "deli-ham",
                               "verdict":  "UNPRICED",
                               "cell":  "",
                               "crown":  false
                           },
                           {
-                              "name":  "Califia plant-based half \u0026 half, 16 fl. oz., barista blend 32 fl. oz. or milk 48 fl. oz., $3.49",
-                              "chain":  "milk (gallon) \u003e half-and-half (floz)",
+                              "name":  "Honey Stinger 16ct Peanut Butter Chocolate Waffle",
+                              "chain":  "peanut-butter (oz) \u003e honey (oz) \u003e frozen-waffles (each)",
                               "form":  true,
-                              "winner":  "milk",
-                              "verdict":  "UNPRICED",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "GOYA Adobo All Purpose Seasoning with Bitter Orange, 16.5 oz",
-                              "chain":  "oranges (lb) \u003e adobo-seasoning (oz)",
-                              "form":  true,
-                              "winner":  "oranges",
+                              "winner":  "peanut-butter",
                               "verdict":  "WITHHELD-SHIP-ONLY",
                               "cell":  "",
                               "crown":  false
                           },
                           {
-                              "name":  "Grapery Moon Drop or Cherry Crush grapes, from California, $3.49 lb.",
-                              "chain":  "grapes (lb) \u003e cherries (lb)",
-                              "form":  false,
-                              "winner":  "grapes",
-                              "verdict":  "per-lb marker = 3.49/lb",
+                              "name":  "Kroger Orange Rind Muenster Block Cheese",
+                              "chain":  "block-cheese (oz) \u003e oranges (lb)",
+                              "form":  true,
+                              "winner":  "block-cheese",
+                              "verdict":  "size 16 oz = 0.2306/oz",
                               "cell":  "",
                               "crown":  false
                           },
                           {
-                              "name":  "Gustare Vita artichokes, sundried tomatoes or roasted peppers, FUEL SAVER EARN 1¢ OFF PER GALLON, $5.79",
-                              "chain":  "sun-dried-tomatoes (oz) \u003e artichokes (each)",
+                              "name":  "Simek\u0027s Kids Mini Breakfast Sausage Meatballs",
+                              "chain":  "breakfast-sausage (lb) \u003e frozen-meatballs (oz)",
                               "form":  true,
-                              "winner":  "sun-dried-tomatoes",
-                              "verdict":  "UNPRICED",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Häagen-Dazs novelties, 3 or 4 ct., ice cream 14 fl. oz. or Frollies ice pops 6 ct., $3.49",
-                              "chain":  "ice-cream (floz) \u003e popsicles (each)",
-                              "form":  true,
-                              "winner":  "ice-cream",
-                              "verdict":  "UNPRICED",
+                              "winner":  "breakfast-sausage",
+                              "verdict":  "size 0.75 lb = 11.9867/lb",
                               "cell":  "",
                               "crown":  false
                           }
                       ],
     "new_contested_names":  [
-                                "Alexia fries, tots or onion rings, 13.5 to 28 oz., $5.89",
-                                "Aloha Shoyu Spicy Kalbi Hawaiian Style Beef Jerky, 10 oz.",
-                                "Apple Brandy on the Rocks by Kilian Eau de Parfum, 1.7 fl. oz.",
-                                "Bar X Brand Green Chile Old Fashioned Beef Jerky, 7 oz.",
-                                "Bounce dryer sheets 330 ct., Tide Pods 25 to 42 ct., Evo tiles 22 ct., laundry detergent, Gain, Downy fabric softener, beads or rinse 18.2 to 140 fl. oz., $10.00 ea. with purchase of 2",
-                                "Bounty paper towels or Charmin bath tissue, 2 triple rolls or 6 mega rolls, $7.99",
-                                "Califia plant-based half \u0026 half, 16 fl. oz., barista blend 32 fl. oz. or milk 48 fl. oz., $3.49",
-                                "GOYA Adobo All Purpose Seasoning with Bitter Orange, 16.5 oz",
-                                "Grapery Moon Drop or Cherry Crush grapes, from California, $3.49 lb.",
-                                "Gustare Vita artichokes, sundried tomatoes or roasted peppers, FUEL SAVER EARN 1¢ OFF PER GALLON, $5.79",
-                                "Häagen-Dazs novelties, 3 or 4 ct., ice cream 14 fl. oz. or Frollies ice pops 6 ct., $3.49"
+                                "Deutsche Küche Lentil Chickpea or Harvest Potato",
+                                "Di Lusso deli sliced ham, turkey, chicken or cheese, FREE King\u0027s Hawaiian slider buns 9 ct. with 1 lb. purchase of Di Lusso deli sliced ham, turkey or chicken,",
+                                "Honey Stinger 16ct Peanut Butter Chocolate Waffle",
+                                "Kroger Orange Rind Muenster Block Cheese",
+                                "Simek\u0027s Kids Mini Breakfast Sausage Meatballs"
                             ],
     "cell_by_contest":  [
 

@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-22 21:33",
-    "board":  "comparison-2026-09-22.json",
-    "sidecar_generated":  "2026-09-22 21:33:24",
+    "generated":  "2026-09-23 10:02",
+    "board":  "comparison-2026-09-23.json",
+    "sidecar_generated":  "2026-09-23 10:02:46",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,60 +9,50 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2708,
-                     "corpus":  43876,
-                     "rule_invisible":  8703
+                     "board_pairs":  2734,
+                     "corpus":  43952,
+                     "rule_invisible":  8807
                  },
     "identity_count":  0,
-    "coverage_count":  3,
+    "coverage_count":  2,
     "identity":  [
 
                  ],
     "coverage":  [
                      {
                          "kind":  "coverage",
-                         "id":  "ready-to-serve-long-grain-wild-rice-pouch",
-                         "commodity":  "Ready-to-Serve Long Grain \u0026 Wild Rice Pouch",
-                         "store":  "Aldi",
-                         "product":  "Long Grain Wild Ready TO Serve Rice",
-                         "cos":  0.6164,
-                         "score":  0.989546,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "frozen-waffles",
-                         "commodity":  "Frozen Waffles",
+                         "id":  "laundry-detergent",
+                         "commodity":  "Laundry Detergent (liquid, any brand)",
                          "store":  "Family Fare",
-                         "product":  "Eggo Frozen Pancakes, Buttermilk 14.8 Oz",
-                         "cos":  0.6349,
-                         "score":  0.92068,
+                         "product":  "Arm \u0026 Hammer Liquid Laundry Clean Burst",
+                         "cos":  0.5761,
+                         "score":  0.935975,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "shredded-cheese",
-                         "commodity":  "Shredded / Block Cheese",
-                         "store":  "Aldi",
-                         "product":  "Happy Farms Shredded Mild Cheddar",
-                         "cos":  0.6514,
-                         "score":  0.90962,
+                         "id":  "hot-sauce",
+                         "commodity":  "Hot Sauce",
+                         "store":  "Family Fare",
+                         "product":  "Trappey\u0027s Pepper Sauce, Cayenne, Red Devil 12 Fl Oz",
+                         "cos":  0.6291,
+                         "score":  0.910308,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ],
-    "coverage_excluded_count":  4,
+    "coverage_excluded_count":  8,
     "coverage_excluded":  [
                               {
                                   "kind":  "coverage",
-                                  "id":  "laundry-detergent",
-                                  "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
+                                  "id":  "pork-tenderloin",
+                                  "commodity":  "Pork Tenderloin",
                                   "store":  "Walmart",
-                                  "product":  "ARM \u0026 HAMMER Plus the Power of ODOR BLASTERS Odor Fighters 2-in-1 Laundry  Detergent Powder, Fresh Rush Scent, 10 lb",
-                                  "cos":  0.7998,
-                                  "score":  0.966532,
+                                  "product":  "Smithfield Roasted Garlic \u0026 Herb Fresh Seasoned Pork Loin Filet, 1.98 - 2.5lb, 20 Grams of Protein per 4 oz Serving",
+                                  "cos":  0.7671,
+                                  "score":  0.948806,
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)\u0027 matched, exclude \u0027\\bpowder\\b\u0027 killed it"
+                                  "verdict":  "REFUSED-BY-EXCLUDE",
+                                  "detail":  "no admit pattern matches, and exclude \u0027seasoned\u0027 would refuse it anyway"
                               },
                               {
                                   "kind":  "coverage",
@@ -75,6 +65,30 @@
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "REFUSED-BY-EXCLUDE",
                                   "detail":  "no admit pattern matches, and exclude \u0027patt\u0027 would refuse it anyway"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "corn-dogs",
+                                  "commodity":  "Corn Dogs (frozen)",
+                                  "store":  "Family Fare",
+                                  "product":  "State Fair Classic Mini Corn Dogs, Frozen 46 Ct",
+                                  "cos":  0.6838,
+                                  "score":  0.923633,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027corn\\s*dogs?\u0027 matched, exclude \u0027\\bmini\\b\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "corn-dogs",
+                                  "commodity":  "Corn Dogs (frozen)",
+                                  "store":  "Fareway",
+                                  "product":  "State Fair Classic Mini Corn Dogs, Frozen",
+                                  "cos":  0.6838,
+                                  "score":  0.923633,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027corn\\s*dogs?\u0027 matched, exclude \u0027\\bmini\\b\u0027 killed it"
                               },
                               {
                                   "kind":  "coverage",
@@ -99,6 +113,30 @@
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
                                   "detail":  "include \u0027(?:infant|baby)\\s+formula\u0027 matched, exclude \u0027ready[\\s-]?to[\\s-]?feed\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "pork-tenderloin",
+                                  "commodity":  "Pork Tenderloin",
+                                  "store":  "Walmart",
+                                  "product":  "Marketside Roasted Garlic and Herb Fresh Seasoned Pork Loin Filet, 1.4 - 1.9 lbs., 21g of Protein per 4 oz Serving",
+                                  "cos":  0.7361,
+                                  "score":  0.909029,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "REFUSED-BY-EXCLUDE",
+                                  "detail":  "no admit pattern matches, and exclude \u0027seasoned\u0027 would refuse it anyway"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "pork-tenderloin",
+                                  "commodity":  "Pork Tenderloin",
+                                  "store":  "Walmart",
+                                  "product":  "Smithfield Roasted Garlic \u0026 Cracked Black Pepper Fresh Seasoned Pork Tenderloin, 0.5–2.5 lb, 19 Grams of Protein per 4 oz Serving",
+                                  "cos":  0.8371,
+                                  "score":  0.904848,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027pork\\s+tenderloin\u0027 matched, exclude \u0027seasoned\u0027 killed it"
                               }
                           ]
 }
