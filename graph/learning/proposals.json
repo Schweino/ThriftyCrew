@@ -8,7 +8,7 @@
     "payload_json": "{\"payload\": \"zesty\\\\s+buffalo\\\\s+sauce|buffalo\\\\s+wing\\\\s+sauce|buffalo\\\\s+wild\\\\s+wings.*hot\\\\s+sauce|asian\\\\s+kick\\\\s+wing\\\\s+sauce\"}",
     "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
     "rationale": "Covers multiple variations of Buffalo Wing Sauce including brand-specific names like Chick-fil-A Zesty Buffalo, Sweet Baby Ray's Buffalo Wing, Buffalo Wild Wings Hot Sauce, and Burman S Asian Kick Wing Sauce.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -32,7 +32,7 @@
     "payload_json": "{\"payload\": \"au\\\\s+jus\\\\s+sauce\\\\s+mix\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Hy-Vee Au Jus Sauce Mix' by anchoring on the specific 'Au Jus Sauce Mix' phrase.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "au-jus-gravy-mix"
   },
   {
@@ -92,7 +92,7 @@
     "payload_json": "{\"payload\": \"^red\\\\s*pepper$\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Red Pepper'. In grocery contexts, 'Red Pepper' usually implies Red Bell Pepper unless specified as chili/ground. The anchor ensures it's the whole item.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "red-bell-pepper"
   },
   {
@@ -128,7 +128,7 @@
     "payload_json": "{\"payload\": \"great\\\\s+value\\\\s+shredded\\\\s+mozzarella\"}",
     "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
     "rationale": "Matches 'Great Value Shredded Mozzarella'. Specific to brand and form.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "part-skim-mozzarella-shredded"
   },
   {
@@ -380,7 +380,7 @@
     "payload_json": "{\"payload\": \"spicy\\\\s+garlic\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Buffalo Wild Wings Sauce, Spicy Garlic' by anchoring on the specific flavor descriptor 'Spicy Garlic Sauce'.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -524,7 +524,7 @@
     "payload_json": "{\"payload\": \"hot\\\\s+honey|habanero\\\\s+honey\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Pace® Hot Honey Habanero' for hot honey.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "hot-honey"
   },
   {
@@ -584,7 +584,7 @@
     "payload_json": "{\"payload\": \"whitewater\\\\s+valley\\\\s+18\"}",
     "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
     "rationale": "Whitewater Valley 18 is a specific brand/size of eggs. The pattern anchors on the brand and size to match the commodity.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "large-eggs-dozen"
   },
   {
@@ -596,7 +596,7 @@
     "payload_json": "{\"payload\": \"great\\\\s*value\\\\s*shredded\\\\s*mozzarella\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Great Value Shredded Mozzarella'. Great Value shredded mozzarella is typically part-skim. This avoids matching whole milk or other brands.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "part-skim-mozzarella-shredded"
   },
   {
@@ -620,7 +620,7 @@
     "payload_json": "{\"payload\": \"^red\\\\s+pepper$\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Red Pepper'. Anchored to the full string to avoid matching 'Roasted Red Peppers' or 'Red Bell Pepper Sauce'. Note: 'Red Pepper' is ambiguous (could be chili flakes), but in a grocery context next to 'Roasted Red Peppers', it often指",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "red-bell-pepper"
   },
   {
@@ -644,7 +644,7 @@
     "payload_json": "{\"payload\": \"cut\\\\s+green\\\\s+beans\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans' and 'Smart Way Cut Green Beans'. Anchors on 'Cut Green Beans' which is the standard form for frozen green beans.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "frozen-cut-green-beans"
   },
   {
@@ -656,7 +656,7 @@
     "payload_json": "{\"payload\": \"green\\\\s+beans,?\\\\s*cut\"}",
     "queue_hash": "8f974cd3e0489656be154549bd660eafa6ceeb1490441e52c3745cd9f92eab58",
     "rationale": "Matches 'Our Family Green Beans, Cut, Fresh Frozen 24 Oz' (2x)",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "frozen-cut-green-beans"
   },
   {
@@ -704,7 +704,7 @@
     "payload_json": "{\"payload\": \"sparkling\\\\s+apple\\\\s+cider\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Martinelli's Sparkling Apple Cider' by anchoring on the specific 'Sparkling Apple Cider' phrase.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "apple-cider"
   },
   {
@@ -776,7 +776,7 @@
     "payload_json": "{\"payload\": \"part-skim\\\\s+mozzarella.*shredded|shredded.*part-skim\\\\s+mozzarella\"}",
     "queue_hash": "8f974cd3e0489656be154549bd660eafa6ceeb1490441e52c3745cd9f92eab58",
     "rationale": "Matches 'Great Value Low-Moisture Part-Skim Mozzarella Shredded Cheese' (2x). The second listing 'Great Value Shredded Mozzarella, 80 oz' is ambiguous as it doesn't specify part-skim, so we only anchor on the explicit part-skim mention",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "part-skim-mozzarella-shredded"
   },
   {
@@ -788,7 +788,7 @@
     "payload_json": "{\"payload\": \"hickory\\\\s+liquid\\\\s+smoke\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Figaro Hickory Liquid Smoke'. Anchors on the specific flavor/type 'Hickory Liquid Smoke'.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "liquid-smoke"
   },
   {
@@ -848,7 +848,7 @@
     "payload_json": "{\"payload\": \"au\\\\s+jus\\\\s+gravy\\\\s+mix\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Au Jus Gravy Mix' and variants like 'Our Family Au Jus Gravy Mix' by anchoring on the core product name.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "au-jus-gravy-mix"
   },
   {
@@ -860,7 +860,7 @@
     "payload_json": "{\"payload\": \"pace\\\\s*hot\\\\s*honey\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on brand + core product name.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "hot-honey"
   },
   {
@@ -908,7 +908,7 @@
     "payload_json": "{\"payload\": \"roasted\\\\s+peppers|roasted\\\\s+red\\\\s+peppers\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Dunbars Roasted Peppers' for roasted red peppers.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "roasted-red-peppers"
   },
   {
@@ -992,7 +992,7 @@
     "payload_json": "{\"payload\": \"figaro\\\\s*hickory\\\\s*liquid\\\\s*smoke\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Figaro Hickory Liquid Smoke'. Anchors on brand + flavor to avoid matching other liquid smoke brands or marinades.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "liquid-smoke"
   },
   {
@@ -1016,7 +1016,7 @@
     "payload_json": "{\"payload\": \"chick\\\\s*caesar\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Tay Farm Chick Caesar' (20x). Anchors on the specific product name 'Chick Caesar' to avoid matching generic chicken or other caesar items.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "caesar-salad-kit"
   },
   {
@@ -1040,7 +1040,7 @@
     "payload_json": "{\"payload\": \"shredded\\\\s+mozzarella\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches multiple listings like 'Great Value Shredded Mozzarella', 'Kraft Natural Mozzarella Shredded Cheese', etc. This is the core descriptor for the commodity.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "part-skim-mozzarella-shredded"
   },
   {
@@ -1076,7 +1076,7 @@
     "payload_json": "{\"payload\": \"medium\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Buffalo Wild Wings Medium Sauce' by anchoring on the specific flavor descriptor 'Medium Sauce' in the context of Buffalo Wild Wings.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -1112,7 +1112,7 @@
     "payload_json": "{\"payload\": \"cut\\\\s+green\\\\s+beans|steam\\\\s+cut\\\\s+green\\\\s+beans\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans' and 'Smart Way Cut Green Beans' for frozen cut green beans.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "frozen-cut-green-beans"
   },
   {
@@ -1316,7 +1316,7 @@
     "payload_json": "{\"payload\": \"spicy\\\\s+italian\\\\s+sausage\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage'. Anchors on 'Spicy Italian Sausage' to distinguish from mild or sweet varieties.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "hot-italian-sausage"
   },
   {
@@ -1412,7 +1412,7 @@
     "payload_json": "{\"payload\": \"spicy\\\\s+italian\\\\s+sausage|cafe\\\\s+spicy\\\\s+italian\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage' for hot Italian sausage.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "hot-italian-sausage"
   },
   {
@@ -1436,7 +1436,7 @@
     "payload_json": "{\"payload\": \"kraft\\\\s+natural\\\\s+mozzarella\\\\s+(finely\\\\s+)?shredded\"}",
     "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
     "rationale": "Matches multiple Kraft Natural Mozzarella Shredded variants. Anchors on brand and form.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "part-skim-mozzarella-shredded"
   },
   {
@@ -1484,7 +1484,7 @@
     "payload_json": "{\"payload\": \"jasmine|thjasmine\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Great Value Gv Thjasmine' for jasmine rice (dry).",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "jasmine-rice-dry"
   },
   {
@@ -1568,7 +1568,7 @@
     "payload_json": "{\"payload\": \"zesty\\\\s*buffalo\\\\s*sauce\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Chick-fil-A Zesty Buffalo Sauce'. Anchors on the specific flavor/brand combo to avoid matching generic buffalo sauce or other hot sauces.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -1664,7 +1664,7 @@
     "payload_json": "{\"payload\": \"figaro\\\\s+hickory\\\\s+liquid\\\\s+smoke\"}",
     "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
     "rationale": "Matches 'Figaro Hickory Liquid Smoke & Barbecue Marinade'. Anchors on brand and specific flavor/type.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "liquid-smoke"
   },
   {
@@ -1688,7 +1688,7 @@
     "payload_json": "{\"payload\": \"100%\\\\s+apple\\\\s+cider|apple\\\\s+cider\\\\s+juice\"}",
     "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
     "rationale": "Covers Hy-Vee 100% Apple Cider and Our Family Apple Cider Juice. The pattern anchors on the food name 'apple cider'.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "apple-cider"
   },
   {
@@ -1712,7 +1712,7 @@
     "payload_json": "{\"payload\": \"chicken\\\\s+breast\\\\s+bites|breaded\\\\s+chicken\\\\s+.*\\\\s+frozen\"}",
     "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
     "rationale": "Member's Mark Chicken Breast Bites are a type of frozen chicken nugget/bite. The pattern anchors on the food name to avoid matching other chicken products.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "frozen-chicken-nuggets"
   },
   {
@@ -1724,7 +1724,7 @@
     "payload_json": "{\"payload\": \"smart\\\\s*way\\\\s*cut\\\\s*green\\\\s*beans\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Smart Way Cut Green Beans'. Anchors on brand + cut to ensure it's the frozen/cut variety.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "frozen-cut-green-beans"
   },
   {
@@ -1820,7 +1820,7 @@
     "payload_json": "{\"payload\": \"cafe\\\\s+spicy\\\\s+italian\\\\s+sausage\"}",
     "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
     "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage'. Anchors on the specific product line name.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "hot-italian-sausage"
   },
   {
@@ -1832,7 +1832,7 @@
     "payload_json": "{\"payload\": \"buffalo\\\\s+wing\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches multiple listings like 'Moore's Original Buffalo Wing Sauce' and 'Cookies Wings 'N Things Buffalo Wing Sauce' by anchoring on the core product name 'Buffalo Wing Sauce'.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -1880,7 +1880,7 @@
     "payload_json": "{\"payload\": \"hy-vee\\\\s+fresh\\\\s+steam\\\\s+cut\\\\s+green\\\\s+beans\"}",
     "queue_hash": "d682b8c730032228e5212f3aff23c4aa57059d761aeb14a96d4c5e19e6c641da",
     "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans'. Note: 'Fresh' in the name is confusing for a frozen commodity, but this is likely the specific frozen product line from Hy-Vee. The pattern is very specific to avoid matching fresh green beans.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "frozen-cut-green-beans"
   },
   {
@@ -1892,7 +1892,7 @@
     "payload_json": "{\"payload\": \"sweet\\\\s+peas\"}",
     "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
     "rationale": "Great Value Sweet Peas are a type of frozen peas. The pattern anchors on the food name 'sweet peas'.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "frozen-peas"
   },
   {
@@ -1904,7 +1904,7 @@
     "payload_json": "{\"payload\": \"buffalo\\\\s+sauce|zesty\\\\s+buffalo\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Chick-fil-A Zesty Buffalo Sauce' specifically for buffalo wing sauce.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -2000,7 +2000,7 @@
     "payload_json": "{\"payload\": \"buffalo\\\\s+wings\\\\s+hot\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Frank's Red Hot Buffalo Wings Hot Sauce' by anchoring on the specific product name.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -2036,7 +2036,7 @@
     "payload_json": "{\"payload\": \"hot\\\\s+honey\\\\s+habanero\"}",
     "queue_hash": "e1ce4e393cf1846745d81b9a7e9bf86afbac83e44bdf60d39c7911e3511bf4b8",
     "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on the specific flavor profile 'Hot Honey Habanero'.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "hot-honey"
   },
   {
@@ -2060,7 +2060,7 @@
     "payload_json": "{\"payload\": \"hot\\\\s+italian.*sausage|sausage.*hot\\\\s+italian\"}",
     "queue_hash": "8f974cd3e0489656be154549bd660eafa6ceeb1490441e52c3745cd9f92eab58",
     "rationale": "Matches 'Johnsonville Hot Italian Pork Sausage Links' (2x)",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "hot-italian-sausage"
   },
   {
@@ -2084,7 +2084,7 @@
     "payload_json": "{\"payload\": \"chicken\\\\s+thighs,?\\\\s+boneless\"}",
     "queue_hash": "d64b16ed5a7b3b29d0b68645ea6482fe24ca4ca111b36f460847faa5d248761a",
     "rationale": "Matches 'Chicken Thighs, Boneless Gold N Plump'. Anchors on the cut and boneless attribute.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "boneless-skinless-chicken-thigh"
   },
   {
@@ -2252,7 +2252,7 @@
     "payload_json": "{\"payload\": \"jasmine\\\\s+rice\"}",
     "queue_hash": "8f974cd3e0489656be154549bd660eafa6ceeb1490441e52c3745cd9f92eab58",
     "rationale": "Matches 'Mahatma Jasmine Rice' (2x)",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "jasmine-rice-dry"
   },
   {
@@ -2276,7 +2276,7 @@
     "payload_json": "{\"payload\": \"pace\\\\s+hot\\\\s+honey\"}",
     "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
     "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on brand and product name.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "hot-honey"
   },
   {
@@ -2324,7 +2324,7 @@
     "payload_json": "{\"payload\": \"spinach\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Simply Nature Organic Spinach' for frozen chopped spinach.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "frozen-chopped-spinach"
   },
   {
@@ -2372,7 +2372,7 @@
     "payload_json": "{\"payload\": \"spicy\\\\s+margarita\\\\s+chips\"}",
     "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
     "rationale": "Clancy's Spicy Margarita Chips are a type of tortilla chip. The pattern anchors on the specific flavor/name to avoid matching other chips.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "tortilla-chips"
   },
   {
@@ -2420,7 +2420,7 @@
     "payload_json": "{\"payload\": \"baby\\\\s*broccoli\\\\s*florets\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Birds Eye Baby Broccoli Florets'. Anchors on the specific cut/size 'Baby Broccoli Florets'.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "frozen-broccoli-florets"
   },
   {
@@ -2468,7 +2468,7 @@
     "payload_json": "{\"payload\": \"gv\\\\s+thjasmine\"}",
     "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
     "rationale": "Matches 'Great Value Gv Thjasmine'. This is a specific typo/abbreviation for Great Value Jasmine Rice. The pattern is very specific to this listing.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "jasmine-rice-dry"
   },
   {
@@ -2624,7 +2624,7 @@
     "payload_json": "{\"payload\": \"simply\\\\s*nature\\\\s*organic\\\\s*spinach\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Simply Nature Organic Spinach'. While 'Simply Nature' is a brand, the listing is ambiguous without it. This specific pattern ensures we only catch this exact product variant which is likely chopped/frozen in this context.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "frozen-chopped-spinach"
   },
   {
@@ -2780,7 +2780,7 @@
     "payload_json": "{\"payload\": \"caesar\\\\s+salad|chick\\\\s+caesar\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Tay Farm Chick Caesar' and other Caesar salad kit variants without matching unrelated items.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "caesar-salad-kit"
   },
   {
@@ -2876,7 +2876,7 @@
     "payload_json": "{\"payload\": \"thjasmine\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Great Value Gv Thjasmine'. This appears to be a typo for 'Th Jasmine' or similar, but 'thjasmine' is unique enough to this specific listing pattern.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "jasmine-rice-dry"
   },
   {
@@ -2900,7 +2900,7 @@
     "payload_json": "{\"payload\": \"au\\\\s+jus\\\\s+(gravy|sauce)\\\\s+mix\"}",
     "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
     "rationale": "Covers various brands of Au Jus Gravy Mix including Hy-Vee, Kroger, and Our Family. The pattern anchors on the food name 'au jus gravy mix' or 'au jus sauce mix'.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "au-jus-gravy-mix"
   },
   {
@@ -2912,7 +2912,7 @@
     "payload_json": "{\"payload\": \"buffalo\\\\s+wing\\\\s+sauce|buffalo\\\\s+sauce\"}",
     "queue_hash": "8f974cd3e0489656be154549bd660eafa6ceeb1490441e52c3745cd9f92eab58",
     "rationale": "Matches numerous listings like 'Sweet Baby Ray's Buffalo Wing Sauce', 'Frank's RedHot Kosher Buffalo Wings Hot Sauce', 'Guy Fieri Flavortown O.G. Buffalo Sauce'. The pattern anchors on 'buffalo' and 'sauce' to avoid matching unrelated items",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -3032,7 +3032,7 @@
     "payload_json": "{\"payload\": \"thjasmine|jasmine\\\\s+rice\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Great Value Gv Thjasmine' (likely a typo for Jasmine) and standard jasmine rice listings. The regex handles the specific typo found in the data.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "jasmine-rice-dry"
   },
   {
@@ -3116,7 +3116,7 @@
     "payload_json": "{\"payload\": \"gv\\\\s*thjasmine\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Great Value Gv Thjasmine'. This is a specific typo/abbreviation for Great Value Jasmine Rice. Anchoring on the typo ensures we don't match other jasmine rice brands.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "jasmine-rice-dry"
   },
   {
@@ -3128,7 +3128,7 @@
     "payload_json": "{\"payload\": \"hot\\\\s+honey\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on the core product name 'Hot Honey'.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "hot-honey"
   },
   {
@@ -3140,7 +3140,7 @@
     "payload_json": "{\"payload\": \"roasted\\\\s+peppers\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Dunbars Roasted Peppers'. Anchors on 'Roasted Peppers'.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "roasted-red-peppers"
   },
   {
@@ -3188,7 +3188,7 @@
     "payload_json": "{\"payload\": \"simply\\\\s+nature\\\\s+organic\\\\s+spinach\"}",
     "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
     "rationale": "Matches 'Simply Nature Organic Spinach'. While brand-anchored, this is a specific frozen spinach product often sold in chopped form. The pattern is specific enough to avoid matching fresh spinach or other brands.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "frozen-chopped-spinach"
   },
   {
@@ -3248,7 +3248,7 @@
     "payload_json": "{\"payload\": \"fresca\\\\s+.*\\\\s+2\\\\s+liters|fresca\\\\s+.*\\\\s+2l\"}",
     "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
     "rationale": "Fresca is a zero-sugar soda brand. The pattern anchors on the brand and size to match the specific commodity.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "zero-sugar-soda-2l"
   },
   {
@@ -3308,7 +3308,7 @@
     "payload_json": "{\"payload\": \"moore's\\\\s+original\\\\s+buffalo\\\\s+wing\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches '(2 pack) Moore's Original Buffalo Wing Sauce' by anchoring on the specific brand and product name.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -3368,7 +3368,7 @@
     "payload_json": "{\"payload\": \"cafe\\\\s*spicy\\\\s*italian\\\\s*sausage\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage'. Anchors on the specific flavor profile 'Cafe Spicy' to distinguish from regular or sweet Italian sausage.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "hot-italian-sausage"
   },
   {
@@ -3392,7 +3392,7 @@
     "payload_json": "{\"payload\": \"apple\\\\s+cider\\\\s+juice\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Our Family Apple Cider Juice' by anchoring on the specific 'Apple Cider Juice' phrase.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "apple-cider"
   },
   {
@@ -3404,7 +3404,7 @@
     "payload_json": "{\"payload\": \"spicy\\\\s+garlic\\\\s+buffalo\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Buffalo Wild Wings Spicy Garlic Buffalo Sauce' by anchoring on the specific flavor descriptor 'Spicy Garlic Buffalo Sauce'.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -3440,7 +3440,7 @@
     "payload_json": "{\"payload\": \"zesty\\\\s+buffalo\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Chick-fil-A Zesty Buffalo Sauce' by anchoring on the specific flavor variant name.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -3452,7 +3452,7 @@
     "payload_json": "{\"payload\": \"red\\\\s+pepper|red\\\\s+bell\\\\s+pepper\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Red Pepper' for red bell pepper.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "red-bell-pepper"
   },
   {
@@ -3524,7 +3524,7 @@
     "payload_json": "{\"payload\": \"100%\\\\s+apple\\\\s+cider\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Hy-Vee 100% Apple Cider' by anchoring on the specific '100% Apple Cider' phrase.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "apple-cider"
   },
   {
@@ -3536,7 +3536,7 @@
     "payload_json": "{\"payload\": \"liquid\\\\s+smoke|hickory\\\\s+liquid\\\\s+smoke\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Figaro Hickory Liquid Smoke & Barbecue Marinade' for liquid smoke.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "liquid-smoke"
   },
   {
@@ -3572,7 +3572,7 @@
     "payload_json": "{\"payload\": \"kraft\\\\s+natural\\\\s+mozzarella\\\\s+shredded\"}",
     "queue_hash": "2e699d7c466b0130721766804424619c05fd56754b5ea6f045ea0633f2481b5f",
     "rationale": "Matches 'Kraft Natural Mozzarella Shredded Cheese'. Kraft Natural Mozzarella is typically part-skim.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "part-skim-mozzarella-shredded"
   },
   {
@@ -3584,7 +3584,7 @@
     "payload_json": "{\"payload\": \"broccoli\\\\s+florets|baby\\\\s+broccoli\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Birds Eye Baby Broccoli Florets' for frozen broccoli florets.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "frozen-broccoli-florets"
   },
   {
@@ -3644,7 +3644,7 @@
     "payload_json": "{\"payload\": \"medium\\\\s+buffalo\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Buffalo Wild Wings Medium Buffalo Sauce' by anchoring on the specific flavor variant name.",
-    "status": "proposed",
+    "status": "accepted",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -3740,7 +3740,7 @@
     "payload_json": "{\"payload\": \"shredded\\\\s+mozzarella|mozzarella\\\\s+shredded\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches multiple listings: 'Great Value Shredded Mozzarella', 'Kraft Natural Mozzarella Shredded Cheese', 'Sargento Mozzarella Shredded Cheese', etc. Anchors on the combination of 'Shredded' and 'Mozzarella'.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "part-skim-mozzarella-shredded"
   }
 ]
