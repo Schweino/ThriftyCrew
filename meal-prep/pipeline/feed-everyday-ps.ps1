@@ -55,7 +55,8 @@ if (-not $node) { $p = Get-ChildItem 'C:\Codex\tools' -Filter 'node-*-win-x64' -
 if (-not $node -or -not (Test-Path $node) -or -not (Test-Path (Join-Path $JsdomEnv 'node_modules\jsdom'))) { Write-Output 'BLIND  node or jsdom missing: the feed is left as written'; Exit-Guard -Name 'feed-everyday-ps' -Summary 'blind=no-node' -Code 3 }
 $raw = [IO.File]::ReadAllText($FeedPath)
 $feed = $raw.TrimStart([char]0xFEFF) | ConvertFrom-Json
-$slugs = @($feed.recipes.PSObject.Properties.Name)
+$slugs = @($feed.recipes.PSObject.Properties | ForEach-Object { $_.Name })
+if ($slugs.Count -eq 0) { Write-Output 'BLIND  the feed carries no recipes, so there is nothing to price: the feed is left as written'; Exit-Guard -Name 'feed-everyday-ps' -Summary 'blind=no-recipes' -Code 3 }
 $cards = @(); foreach ($s in $slugs) { $b = Join-Path $BuiltDir ($s + '.body.html'); if (Test-Path $b) { $cards += @{ slug = $s; htmlPath = $b; kind = 'body' } } }
 $tmp = Join-Path ([IO.Path]::GetTempPath()) ('tc-fep-' + [guid]::NewGuid().ToString('N') + '.json')
 try {

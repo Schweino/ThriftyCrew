@@ -290,6 +290,14 @@ if (Test-Path $rcF) {
   }
 }
 
+# A FEED WITH NO RECIPES IS NEVER WRITTEN (2026-09-23). recipe-costs.json lives in grocery\out, which a worktree does not carry,
+# and without it this wrote recipes={} and recipe_count 0: commit 2dcbe8622 shipped exactly that at 00:24 on 2026-09-23 and the
+# cheap-dinners, dinner-tonight, my-crew and payday-stretcher tools lost every recipe cost until it was repaired. Refuse and leave
+# the served feed as it was; a could-not-build is exit 3, never an empty map.
+if ($rec.Count -eq 0) {
+  Write-Output ("export-feed: REFUSED - no recipe costs ({0}), so the feed would carry zero recipes. Nothing was written; the served feed stands." -f $(if (Test-Path $rcF) { 'recipe-costs.json lists none' } else { 'no ' + $rcF }))
+  exit 3
+}
 # board_item_count: distinct commodities on the WEEKLY board (the "N items at seven stores" claim on
 # the homepage). Served in the feed so the tc-ic site markers stay current without any page edits.
 $boardItemCount = 0
