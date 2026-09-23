@@ -337,6 +337,24 @@ function Test-SamsPerPieceUnit([string]$Name, [string]$Tok, [double]$Qty) {
   if (-not $same -or $v -le 0) { return $false }
   return ([math]::Abs($Qty - $v) -le (0.01 * $v))
 }
+# A COUNT-FIRST MULTIPACK NAME DOES NOT SAY WHETHER ITS MEASURE IS THE PACK TOTAL OR ONE PIECE (2026-09-22,
+# plan-2026-09-22-5). "Febreze Air Mist ..., 4ct., 32.4 oz." is four cans totalling 32.4 oz; "Purina Fancy Feast ...,
+# 48 ct., 3 oz." is 48 cans of 3 oz each. Measured over the 73 rows of sams-deals-2026-09-21 whose name states both a
+# count and a measure: every MEASURE-FIRST name ("10 oz., 8 ct.") priced by weight or volume reproduced Sam's unit price
+# only as N pieces of the measure; COUNT-FIRST names split both ways, and three Febreze scents disagreed with their own
+# two siblings (Sam's printed 7.7 cents/oz on three, 30.8 on two, same name shape, same $9.98). This builder used to
+# let Sam's unit price pick between the readings, so Sam's error became our size (0.077/oz against a true 0.308), the
+# furniture-polish Pledge ruling of 2026-08-02 was the same shape, and neither band nor guard owned it.
+# Returns @{ count; value; unit } for the count immediately followed by a measure, or $null.
+function Get-SamsCountFirstMeasure([string]$Name) {
+  if (-not $Name) { return $null }
+  $m = [regex]::Match($Name.ToLowerInvariant(), '(?<![\d.-])(\d+)\s*(?:ct|count|pk|packs?)\.?\s*,?\s*(\d[\d.]*|\.\d+)\s*(fl\.?\s*oz|oz|lbs?|pounds?|gallons?|gal|ml|l|liters?|g|grams?|kg)\b(?!\.?\s*/\s*(?:pk|pack|ea|each|ct|can|bottle|pouch))')
+  if (-not $m.Success) { return $null }
+  $n = [double]$m.Groups[1].Value
+  $vt = $m.Groups[2].Value.TrimEnd('.')
+  $v = 0.0; if (-not [double]::TryParse($vt, [ref]$v) -or $v -le 0 -or $n -le 1) { return $null }
+  return @{ count = $n; value = $v; unit = ($m.Groups[3].Value -replace '\.', '' -replace '\s+', ' ') }
+}
 function Build-Row($raw, [string]$Club = '') {
   $lpm = [regex]::Match(("" + $raw.lp), '\$\s*([\d,]+(?:\.\d{1,2})?)')
   if (-not $lpm.Success) { return @{ err='no linePrice' } }
@@ -433,6 +451,24 @@ function Build-Row($raw, [string]$Club = '') {
     # number can justify, and publish a per-unit price off by that much.
     if ($err -le $upDisplayTol -and $err -lt $bestErr) { $best = $c; $bestErr = $err }
   }
+  # THE NAME WINS OVER SAM'S UNIT PRICE ON A COUNT-FIRST NAME (see Get-SamsCountFirstMeasure). A count-first name is
+  # read as it prints, "N ct, X oz" = a pack of N totalling X. When Sam's unit price reproduces ONLY N x X, the store
+  # and the name disagree about the size and nothing on the row can say which is right: REFUSED, never published.
+  $cfm = Get-SamsCountFirstMeasure ([string]$raw.n)
+  if ($cfm -and $null -eq $hintQty) {
+    if ($u.tok -eq 'ct') {
+      # Priced per piece, so Sam's number says nothing about the ounces, and the builder would pair the measure as
+      # each piece's ("N ct X oz" = N x X downstream): the name cannot say which, so the row is refused.
+      return @{ err=('NAME AMBIGUOUS: count-first name "' + [string]$cfm.count + ' ct, ' + [string]$cfm.value + ' ' + $cfm.unit + '" does not say whether ' + [string]$cfm.value + ' ' + $cfm.unit + ' is the pack total or each piece, and Sam''s per-each price cannot tell (the Pledge 2026-08-02 shape)') }
+    }
+    if ($best) {
+      # best is the MULTIPLIED reading when some other candidate times the name's count equals it.
+      $multiplied = @($cands | Where-Object { $_ -gt 0 -and [math]::Abs($_ * $cfm.count - $best) -le (0.0005 * $best) -and [math]::Abs($_ - $best) -gt (0.0005 * $best) })
+      if ($multiplied.Count -gt 0) {
+        return @{ err=('NAME CONFLICT: count-first name reads ' + [string]$cfm.value + ' ' + $cfm.unit + ' as the pack total, but Sam''s ' + $up + '/' + $u.tok + ' reproduces only ' + [string]$cfm.count + ' x that (' + (Format-Qty $best) + ' ' + $u.tok + ') - the name wins, and a name the store contradicts is refused (the Febreze 2026-09-22 shape)') }
+      }
+    }
+  }
   if ($best -and $null -ne $statedTotal) { $qty = $best; $basis = 'name stated total (reproduces Sam''s unit price)' }
   elseif ($best) { $qty = $best; $basis = 'name (reproduces Sam''s unit price)' }
   elseif ($cands.Count) {
@@ -454,7 +490,9 @@ function Build-Row($raw, [string]$Club = '') {
     if ($qty -lt 1) { $qty = 1 }
   }
   if ($qty -le 0) { return @{ err='bad qty' } }
-  if (Test-SamsPerPieceUnit ([string]$raw.n) ([string]$u.tok) ([double]$qty)) { return @{ err=('NAME CONFLICT: per-piece unit price - the name states a multipack and Sam''s ' + $up + '/' + $u.tok + ' prices ONE piece (lp/up derives ' + (Format-Qty $derived) + ')') } }
+  # A COUNT-FIRST name states its measure as the pack total (Get-SamsCountFirstMeasure), so a size equal to that measure is
+  # the name read as it prints, not one piece: the per-piece guard is for measure-first names (its founding poppi row).
+  if (-not $cfm -and (Test-SamsPerPieceUnit ([string]$raw.n) ([string]$u.tok) ([double]$qty))) { return @{ err=('NAME CONFLICT: per-piece unit price - the name states a multipack and Sam''s ' + $up + '/' + $u.tok + ' prices ONE piece (lp/up derives ' + (Format-Qty $derived) + ')') } }
 
   # size = the quantity + its unit. qty 1 -> the bare unit token, which the engine reads as "priced per that unit".
   $bare = if ($u.tok -eq 'ct') { 'each' } else { $u.tok }
@@ -745,6 +783,19 @@ if ($SelfTest) {
   #     cent of rounding is +/-16% - lp/up derives 124 fl oz and publishes $3.84/gal for milk that costs
   #     $3.72. Converting the name's gallon into fl oz lets the exact 128 win.
   _Chk 'milk 1 gal priced per foz' (_R "Member's Mark 2% Reduced Fat Milk 1 gal." '$3.72' '$0.03/foz') '128 fl oz' '$3.72'
+  # COUNT-FIRST NAMES: THE NAME WINS OVER SAM'S UNIT PRICE (2026-09-22, plan-2026-09-22-5; Get-SamsCountFirstMeasure).
+  # Frozen verbatim from sams-deals-2026-09-21 and the Pledge ruling of 2026-08-02.
+  function _Refused($label, $raw, $want) {
+    $r = Build-Row $raw
+    if ($r.err -and ([string]$r.err).StartsWith($want)) { Write-Output "ok    $label -> $($r.err.Substring(0, [math]::Min(80, $r.err.Length)))" }
+    else { Write-Output "FAIL  $label -> expected a '$want' refusal, got $(if ($r.err) { $r.err } else { 'size ' + $r.row.size })"; $script:fail++ }
+  }
+  _Refused 'MUST FIRE  Febreze Air Mist Gain 4ct., 32.4 oz. at 7.7 c/oz (Sam''s reproduces only 4 x 32.4) is refused' (_R 'Febreze Air Mist Air Freshener Spray, Gain Original + Unstopables Fresh, 4ct., 32.4 oz.' '$9.98' '7.7 ¢/oz') 'NAME CONFLICT: count-first'
+  _Refused 'MUST FIRE  Pledge 3ct., 29 oz. priced per each: the name cannot say total or per can, so it is refused' (_R 'Pledge Furniture Enhancing Polish Spray, Lemon, 3ct., 29 oz.' '$12.52' '$4.17/ea') 'NAME AMBIGUOUS: count-first'
+  _Refused 'MUST FIRE  Pledge Multisurface 3 ct., 29 oz. priced per each is refused' (_R 'Pledge Multisurface Cleaner, Rainshower, 3 ct., 29 oz.' '$12.52' '$4.17/ea') 'NAME AMBIGUOUS: count-first'
+  _Chk 'CLEAN TWIN  the Febreze sibling Sam''s prints at 30.8 c/oz still builds as the name states it, 32.4 oz' (_R 'Febreze Air Mist Air Freshener Spray, Holiday Mixed Scent, 4ct., 32.4 oz.' '$9.98' '30.8 ¢/oz') '32.4 oz' '$9.98'
+  _Chk 'MUST NOT FIRE  a MEASURE-first multipack (Ro-Tel 10 oz., 8 ct.) still pairs its per-can measure' (_R 'Ro-Tel Diced Tomatoes & Green Chilies 10 oz., 8 ct.' '$7.98' '99.8 ¢/ea') '8 ct 10 oz' '$7.98'
+  _Chk 'MUST NOT FIRE  an explicit per-pack measure (ZEISS 2 pk., 8 fl. oz./pk.) is not ambiguous' (_R 'ZEISS Lens Cleaning Solution Kit 2 pk., 8 fl. oz./pk.' '$7.88' '$3.94/ea') '2 ct 8 fl oz' '$7.88'
   # 7h. a name unit from ANOTHER family must be ignored, never converted
   $r7h = Build-Row (_R 'Mystery Item 12 ct' '$6.00' '$0.50/lb')
   if ($r7h.row -and $r7h.row.size -eq '12 lb') { Write-Output "ok    foreign name-unit ignored -> size='$($r7h.row.size)'" }
