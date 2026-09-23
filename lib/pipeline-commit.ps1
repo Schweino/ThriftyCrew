@@ -31,7 +31,8 @@
   snapshot: an owned file a session left dirty before a run started, MODIFIED or (since 2026-09-23, W0.2 of
   design/PLAN-bot-checkout-self-heal-2026-09-23.md) DELETED, and not rewritten by the run, stays out of the commit and
   is named. The PIPELINE WRITE JOURNAL: what a lane wrote, so the next committer can tell the pipeline's own bytes from
-  a session's edit.
+  a session's edit. Since W3.2 of the same plan, a -Built entry (a guards-blocked day's served outputs) vouches for its
+  bytes without ever being committed, and Get-PipelineOwnBlobs hands the checkout sync every vouched blob.
 
   PUSH POLICY: TRY ONCE, NEVER BLOCK. Four schedulers can race. Each caller attempts a single push and,
   on failure, leaves the commit local and says so - the next capture-run pushes it. A commit that exists
@@ -279,6 +280,17 @@ function Format-ForeignHeldDeletionLines {
 # file is recorded as the lane's; that is the same file the foreign-held rule already stages today (its mtime is after
 # the start), so nothing that was held before is newly committed by it. A journal that cannot be read or written
 # degrades to the rule of the day before: every candidate stays held.
+# BUILT ENTRIES VOUCH WITHOUT COMMITTING (2026-09-23, design/PLAN-bot-checkout-self-heal-2026-09-23.md W3.2). A day whose
+# guards held the board still WROTE its served outputs, and the checkout sync that plan adds must be able to tell those
+# pipeline bytes from a session's edit before it merges or sets one aside. `Register-PipelineWrites -Built` records them
+# with commit = $false: Get-PipelineOwnHeld never commits such an entry (a blocked day's board is never shipped by the
+# next run's foreign-held rule), and Get-PipelineOwnBlobs hands the entries of BOTH kinds to the mover. An entry with no
+# commit field, which is every entry written before this, is committable, exactly as it was. A commit field that is not
+# the JSON boolean true is NOT committable, so a damaged or hand-typed value fails closed. The newest registration of a
+# (checkout, path) pair replaces the older one, whichever kind either is: capture-run registers a guards-blocked day's
+# served paths -Built and keeps them out of its committable set, so the two never name one path in one run.
+# One journal is shared by every checkout on the box, and a copy of this file older than W3.2 reads a built entry as
+# committable. Each checkout reads only its own entries, and the bot lanes all run in the main checkout at one version.
 $script:PC_JOURNAL_NAME = 'tc-pipeline-writes.json'
 # 30 days, the first plausible number and not a sweep: a dated output held longer than that has a bigger problem than
 # this journal, and the prune only bounds the file. What it does when a lane STOPS recording: entries age out and the
@@ -325,15 +337,20 @@ function Get-PipelineBlobIds {
 }
 
 function Read-PipelineWriteJournal {
-  <# The journal as an ordinal hashtable key -> @{ blob; lane; ts }. Empty when absent; THROWS when present and
-     unreadable, so a caller degrades on purpose rather than reading a damaged journal as an empty one. #>
+  <# The journal as an ordinal hashtable key -> @{ blob; lane; ts; commit }. Empty when absent; THROWS when present and
+     unreadable, so a caller degrades on purpose rather than reading a damaged journal as an empty one.
+     commit (W3.2): $true when the field is absent (every entry written before -Built existed) or is the JSON boolean
+     true; $false for anything else, so a -Built entry and a damaged value both read as not committable. #>
   param([Parameter(Mandatory = $true)][string]$JournalPath)
   $h = New-Object 'System.Collections.Hashtable' ([StringComparer]::Ordinal)
   if (-not (Test-Path -LiteralPath $JournalPath)) { return $h }
   $doc = [IO.File]::ReadAllText($JournalPath, (New-Object Text.UTF8Encoding($false))) | ConvertFrom-Json
   if ($null -ne $doc -and $doc.PSObject.Properties['writes']) {
     foreach ($p in $doc.writes.PSObject.Properties) {
-      $h[$p.Name] = [pscustomobject]@{ blob = [string]$p.Value.blob; lane = [string]$p.Value.lane; ts = [string]$p.Value.ts }
+      $v = $p.Value
+      $c = $true
+      if ($null -ne $v -and $v.PSObject.Properties['commit']) { $c = (($v.commit -is [bool]) -and $v.commit) }
+      $h[$p.Name] = [pscustomobject]@{ blob = [string]$v.blob; lane = [string]$v.lane; ts = [string]$v.ts; commit = [bool]$c }
     }
   }
   return $h
@@ -341,14 +358,17 @@ function Read-PipelineWriteJournal {
 
 function Register-PipelineWrites {
   <# A LANE RECORDS WHAT IT WROTE. Every file under $Paths that differs from HEAD and was written at or after $Since is
-     recorded as this checkout's (path -> blob id, lane, time). Returns how many were recorded. Throws on a journal it
-     cannot write; every caller swallows that, because a lane must never die of its bookkeeping, and an unrecorded
-     write is simply held as before. #>
+     recorded as this checkout's (path -> blob id, lane, time, commit). Returns how many were recorded. Throws on a
+     journal it cannot write; every caller swallows that, because a lane must never die of its bookkeeping, and an
+     unrecorded write is simply held as before.
+     -Built (W3.2) records the entries with commit = $false: pipeline bytes the mover may vouch for and no committer
+     may commit, which is a guards-blocked day's served outputs. Without it every entry is committable, as before. #>
   param(
     [Parameter(Mandatory = $true)][string]$Repo,
     [Parameter(Mandatory = $true)][string]$Lane,
     [Parameter(Mandatory = $true)][datetime]$Since,
-    [string[]]$Paths
+    [string[]]$Paths,
+    [switch]$Built
   )
   $present = @($Paths | Where-Object { $_ -and (Test-Path -LiteralPath (Join-Path $Repo $_)) })
   if (-not $present.Count) { return 0 }
@@ -381,7 +401,7 @@ function Register-PipelineWrites {
     $n = 0
     foreach ($rel in $mine) {
       if (-not $ids.ContainsKey($rel)) { continue }
-      $keep[($ck + '|' + $rel)] = [pscustomobject]@{ blob = $ids[$rel]; lane = $Lane; ts = $now.ToString('s') }
+      $keep[($ck + '|' + $rel)] = [pscustomobject]@{ blob = $ids[$rel]; lane = $Lane; ts = $now.ToString('s'); commit = (-not $Built.IsPresent) }
       $n++
     }
     [void](Write-TcAtomicFile -Path $jp -Text ([pscustomobject]@{ writes = [pscustomobject]$keep } | ConvertTo-Json -Depth 4) -NoBom)
@@ -391,8 +411,9 @@ function Register-PipelineWrites {
 
 function Get-PipelineOwnHeld {
   <# Of $Paths (the foreign-held candidates), the ones whose CURRENT bytes are exactly what a pipeline lane recorded
-     for THIS checkout. Returns [pscustomobject]@{ path; lane }[], comma-returned. Throws when the journal is present
-     and unreadable; the caller keeps every candidate held. #>
+     for THIS checkout in a COMMITTABLE entry. A -Built entry (commit = $false, W3.2) is skipped, so its file stays
+     held. Returns [pscustomobject]@{ path; lane }[], comma-returned. Throws when the journal is present and
+     unreadable; the caller keeps every candidate held. #>
   param([Parameter(Mandatory = $true)][string]$Repo, [string[]]$Paths)
   $own = New-Object System.Collections.Generic.List[object]
   $cand = @($Paths | Where-Object { $_ })
@@ -405,12 +426,45 @@ function Get-PipelineOwnHeld {
   $ids = Get-PipelineBlobIds -Repo $Repo -Paths $cand
   foreach ($p in $cand) {
     $e = $j[($ck + '|' + [string]$p)]
-    if ($null -eq $e -or -not $ids.ContainsKey([string]$p)) { continue }
+    if ($null -eq $e -or -not $e.commit -or -not $ids.ContainsKey([string]$p)) { continue }
     if ([string]::Equals([string]$e.blob, [string]$ids[[string]$p], [StringComparison]::Ordinal)) {
       $own.Add([pscustomobject]@{ path = [string]$p; lane = [string]$e.lane })
     }
   }
   return ,$own.ToArray()
+}
+
+function Get-PipelineOwnBlobs {
+  <# THE MOVER'S VOUCH (2026-09-23, design/PLAN-bot-checkout-self-heal-2026-09-23.md W3.2). Repo path (as git names it)
+     -> the blob id a pipeline lane recorded for THIS checkout, from entries of EITHER kind, committable or -Built. The
+     checkout sync merges into or sets aside an owned dirty file only when its current bytes are this blob; anything
+     else is FOREIGN and never written.
+     Returns an ORDINAL hashtable carrying a .note NoteProperty: '' when the journal was read or is absent. A journal
+     git cannot place, or one that cannot be read, gives an EMPTY table and says why in .note, so the mover vouches for
+     nothing and every owned edit is FOREIGN: the day before. Never throws. Entries are not aged here: a blob that
+     still equals the file's bytes is still the pipeline's, however old its row, and Register-PipelineWrites prunes. #>
+  param([Parameter(Mandatory = $true)][string]$Repo)
+  $t = New-Object 'System.Collections.Hashtable' ([StringComparer]::Ordinal)
+  $note = ''
+  try {
+    $jp = Get-PipelineWriteJournalPath -Repo $Repo
+    if (-not $jp) {
+      $note = 'pipeline-own-blobs: git could not name the common dir, so nothing is vouched and every owned edit is FOREIGN'
+    } else {
+      $j = Read-PipelineWriteJournal -JournalPath $jp
+      $pre = (Get-PipelineCheckoutKey -Repo $Repo) + '|'
+      foreach ($k in @($j.Keys)) {
+        if (-not $k.StartsWith($pre, [StringComparison]::Ordinal)) { continue }
+        $b = [string]$j[$k].blob
+        if ($b) { $t[$k.Substring($pre.Length)] = $b }
+      }
+    }
+  } catch {
+    $t.Clear()
+    $note = ('pipeline-own-blobs: the write journal could not be read (' + $_.Exception.Message + '), so nothing is vouched and every owned edit is FOREIGN')
+  }
+  Add-Member -InputObject $t -NotePropertyName note -NotePropertyValue $note
+  return $t
 }
 
 function Split-PipelineOwnHeld {
@@ -896,11 +950,97 @@ if ($__pcSelfTest) {
     Remove-Item -LiteralPath $tr2 -Recurse -Force -ErrorAction SilentlyContinue
   }
 
+  # ---- W3.2: A -Built ENTRY VOUCHES WITHOUT COMMITTING, AND THE MOVER GETS ITS BLOBS (2026-09-23) -----------------------
+  # A third throwaway repo, per-run name, removed in finally. FROZEN from the shape W3.2 exists for: a day whose guards
+  # held the board still wrote its served outputs, and they must be vouched pipeline bytes for the checkout sync while no
+  # committer ever ships them. lane/pub stands in for the served paths.
+  $tr3 = Join-Path $env:TEMP ('pc-bu-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $tr3 'lane\out') -Force | Out-Null
+    New-Item -ItemType Directory -Path (Join-Path $tr3 'lane\pub') -Force | Out-Null
+    & git -C $tr3 init -q . | Out-Null
+    & git -C $tr3 config user.email t@t | Out-Null
+    & git -C $tr3 config user.name t | Out-Null
+    $noHook3 = Join-Path $tr3 'fixture-no-hooks'
+    New-Item -ItemType Directory -Path $noHook3 -Force | Out-Null
+    & git -C $tr3 config core.hooksPath ($noHook3 -replace '\\', '/') | Out-Null
+    foreach ($k in @('lane/pub/served.json', 'lane/out/run-output.txt', 'lane/out/old.json', 'lane/out/str.json')) { [IO.File]::WriteAllText((Join-Path $tr3 $k), 'seed') }
+    & git -C $tr3 add -A -- lane | Out-Null
+    & git -C $tr3 commit -q -m seed | Out-Null
+    $servedSeed = ([string](& git -C $tr3 rev-parse 'HEAD:lane/pub/served.json')).Trim()
+    # THE BLOCKED DAY. The chain writes the served file, guards hold the board, and the run records it -Built.
+    $bStart = (Get-Date).AddMinutes(-3)
+    [IO.File]::WriteAllText((Join-Path $tr3 'lane/pub/served.json'), '{"served":2}')
+    $nB = Register-PipelineWrites -Repo $tr3 -Lane 'probe-built' -Since $bStart -Paths @('lane/pub') -Built
+    T 'the -Built registration records exactly the one served file it wrote' ($nB -eq 1) ('' + $nB)
+    $servedNow = ([string](& git -C $tr3 hash-object -- lane/pub/served.json)).Trim()
+    $ob = Get-PipelineOwnBlobs -Repo $tr3
+    T 'MUST FIRE  Get-PipelineOwnBlobs returns a -Built entry with its blob, in a hashtable whose note is empty' `
+      (($ob -is [hashtable]) -and ($ob['lane/pub/served.json'] -eq $servedNow) -and ([string]$ob.note -eq '')) ('blob=' + $ob['lane/pub/served.json'] + ' want=' + $servedNow + ' note=' + $ob.note)
+    T 'MUST NOT FIRE the table is Ordinal: a path spelled in another case is not vouched' (-not $ob.ContainsKey('LANE/pub/served.json')) (@($ob.Keys) -join ',')
+    $ohB = Get-PipelineOwnHeld -Repo $tr3 -Paths @('lane/pub/served.json')
+    T 'MUST NOT FIRE a -Built entry is never committed by Get-PipelineOwnHeld, although its bytes match' ($ohB.Count -eq 0) (@($ohB | ForEach-Object { $_.path }) -join ',')
+    # THE NEXT RUN. The served file is dirty at start and not rewritten; the run writes only its own file.
+    (Get-Item -LiteralPath (Join-Path $tr3 'lane/pub/served.json')).LastWriteTime = (Get-Date).AddMinutes(-2)
+    $snapB = Get-DirtyOwnedSnapshot -Repo $tr3 -Paths @('lane/out', 'lane/pub')
+    $rsB = (Get-Date).AddMinutes(-1)
+    [IO.File]::WriteAllText((Join-Path $tr3 'lane/out/run-output.txt'), 'v2')
+    $vB = Invoke-PipelineCommit -Repo $tr3 -Paths @('lane/out', 'lane/pub') -Message 'run-b' -Name 'probe' -DirtyAtStart $snapB -RunStart $rsB
+    $servedHead = ([string](& git -C $tr3 rev-parse 'HEAD:lane/pub/served.json')).Trim()
+    T 'MUST NOT FIRE end to end, the next run holds a blocked day''s built file and commits only its own' `
+      (($vB -match 'committed 1 file') -and ($vB -match 'foreign-held: 1 .*lane/pub/served\.json') -and ($vB -notmatch 'pipeline-own') -and ($servedHead -eq $servedSeed)) ($vB + ' | head served=' + $servedHead)
+    # HAND-WRITTEN ROWS beside the built one: a row from before -Built existed (no commit field), a row whose commit
+    # field is the STRING "false", and another checkout's row.
+    [IO.File]::WriteAllText((Join-Path $tr3 'lane/out/old.json'), '{"old":2}')
+    [IO.File]::WriteAllText((Join-Path $tr3 'lane/out/str.json'), '{"str":2}')
+    $oldBlob = ([string](& git -C $tr3 hash-object -- lane/out/old.json)).Trim()
+    $strBlob = ([string](& git -C $tr3 hash-object -- lane/out/str.json)).Trim()
+    $jp3 = Get-PipelineWriteJournalPath -Repo $tr3
+    $doc3 = [IO.File]::ReadAllText($jp3, (New-Object Text.UTF8Encoding($false))) | ConvertFrom-Json
+    $w3 = [ordered]@{}
+    foreach ($pp in $doc3.writes.PSObject.Properties) { $w3[$pp.Name] = $pp.Value }
+    $ck3 = Get-PipelineCheckoutKey -Repo $tr3
+    $nowS = (Get-Date).ToString('s')
+    $w3[($ck3 + '|lane/out/old.json')] = [pscustomobject]@{ blob = $oldBlob; lane = 'pre-w32-lane'; ts = $nowS }
+    $w3[($ck3 + '|lane/out/str.json')] = [pscustomobject]@{ blob = $strBlob; lane = 'hand-typed'; ts = $nowS; commit = 'false' }
+    $w3['c:\another\checkout|lane/out/other.json'] = [pscustomobject]@{ blob = $oldBlob; lane = 'elsewhere'; ts = $nowS; commit = $true }
+    [IO.File]::WriteAllText($jp3, ([pscustomobject]@{ writes = [pscustomobject]$w3 } | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
+    $ohH = Get-PipelineOwnHeld -Repo $tr3 -Paths @('lane/out/old.json', 'lane/pub/served.json', 'lane/out/str.json')
+    $ohHPaths = @($ohH | ForEach-Object { [string]$_.path })
+    T 'CLEAN TWIN an entry written before -Built existed (no commit field) is still committable' (($ohHPaths -join ',') -eq 'lane/out/old.json') ($ohHPaths -join ',')
+    T 'MUST NOT FIRE a commit field that is not the JSON boolean true fails closed and is never committed' ($ohHPaths -notcontains 'lane/out/str.json') ($ohHPaths -join ',')
+    $ob2 = Get-PipelineOwnBlobs -Repo $tr3
+    T 'MUST FIRE  Get-PipelineOwnBlobs vouches entries of either kind: the built, the pre-W3.2 and the damaged-flag row' `
+      (($ob2.Count -eq 3) -and ($ob2['lane/pub/served.json'] -eq $servedNow) -and ($ob2['lane/out/old.json'] -eq $oldBlob) -and ($ob2['lane/out/str.json'] -eq $strBlob)) (@($ob2.Keys | Sort-Object) -join ',')
+    T 'MUST NOT FIRE Get-PipelineOwnBlobs holds only THIS checkout''s entries, never another checkout''s row' (-not $ob2.ContainsKey('lane/out/other.json')) (@($ob2.Keys | Sort-Object) -join ',')
+    # THE NEWEST REGISTRATION OF A PATH WINS: a committing lane that records the same file later makes it committable.
+    $rjSince = (Get-Date).AddMinutes(-1)
+    (Get-Item -LiteralPath (Join-Path $tr3 'lane/pub/served.json')).LastWriteTime = Get-Date
+    [void](Register-PipelineWrites -Repo $tr3 -Lane 'probe-ship' -Since $rjSince -Paths @('lane/pub'))
+    $ohJ = Get-PipelineOwnHeld -Repo $tr3 -Paths @('lane/pub/served.json')
+    T 'CLEAN TWIN a -Built path registered again by a committing lane is committable: the newest registration wins' `
+      (($ohJ.Count -eq 1) -and ($ohJ[0].path -eq 'lane/pub/served.json') -and ($ohJ[0].lane -eq 'probe-ship')) (@($ohJ | ForEach-Object { $_.path + '@' + $_.lane }) -join ',')
+    # AND IT DEGRADES TO THE DAY BEFORE: nothing vouched, and the note says why.
+    [IO.File]::WriteAllText($jp3, '{not json')
+    $ob3 = Get-PipelineOwnBlobs -Repo $tr3
+    T 'MUST FIRE  an unreadable journal gives Get-PipelineOwnBlobs an EMPTY table with a note, and never throws' `
+      (($ob3 -is [hashtable]) -and ($ob3.Count -eq 0) -and ([string]$ob3.note -match 'could not be read')) ('count=' + $ob3.Count + ' note=' + $ob3.note)
+    Remove-Item -LiteralPath $jp3 -Force
+    $ob4 = Get-PipelineOwnBlobs -Repo $tr3
+    T 'MUST NOT FIRE an absent journal is an empty table with no note: no lane recorded anything, and nothing is wrong' (($ob4.Count -eq 0) -and ([string]$ob4.note -eq '')) ('count=' + $ob4.Count + ' note=' + $ob4.note)
+    $ob5 = Get-PipelineOwnBlobs -Repo (Join-Path $tr3 'no-such-checkout')
+    T 'MUST FIRE  a checkout git cannot place gives an empty table and says so' (($ob5.Count -eq 0) -and ([string]$ob5.note -match 'could not name the common dir')) ('count=' + $ob5.Count + ' note=' + $ob5.note)
+  } catch {
+    T 'the W3.2 end-to-end block ran to its end without throwing' $false $_.Exception.Message
+  } finally {
+    Remove-Item -LiteralPath $tr3 -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
   # The literal count: every T line in this block, with the two loops counted at their widths (3 lane kinds x 2, and 4
   # outcomes). Moving it is part of adding or removing a case.
-  $pcExpectedCases = 69
+  $pcExpectedCases = 82
   if ($ran -ne $pcExpectedCases) { Write-Output ("FAIL  the suite ran " + $ran + " case(s) against its literal count of " + $pcExpectedCases); $fail++ }
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s) of {1} run" -f $fail, $ran); exit 1 }
-  Write-Output ('SELF-TEST PASS: ' + $ran + ' of ' + $pcExpectedCases + ' cases: the source-path refusal in eleven shapes, every real path list proved data-only and non-empty, no path owned twice, the committer refusing before it touches git, a lane''s exit code earned from its verdict (a refused commit exits 1, a landed one whose push failed exits 0), and a deletion present at start held out of the commit')
+  Write-Output ('SELF-TEST PASS: ' + $ran + ' of ' + $pcExpectedCases + ' cases: the source-path refusal in eleven shapes, every real path list proved data-only and non-empty, no path owned twice, the committer refusing before it touches git, a lane''s exit code earned from its verdict (a refused commit exits 1, a landed one whose push failed exits 0), a deletion present at start held out of the commit, and a -Built journal entry that vouches its blob to the mover and is never committed')
   exit 0
 }
