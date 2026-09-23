@@ -2,7 +2,7 @@
 
 Filed by W3.1's landing push, as the landing stage asks of every item that section 8 of the plan gives a bar. Section
 8 names W3.1 in three live bars, B4, B5 and B8, and in seven mutants, M2, M3, M5, M6, M7, M10 and M11. What W3.1
-landed, by blob, because a rebase cannot move a blob: `lib/checkout-sync.ps1` eb1b66d6a56d22b97a80e7488bcdf32eb7fb53f2,
+landed, by blob, because a rebase cannot move a blob: `lib/checkout-sync.ps1` 6b814066c3b0f54fc59ab668d449f61311f269e3,
 `lib/test-checkout-sync.ps1` 7a6ba2088be7af6753fb84fa2ac7ae7310b60608.
 
 **Nothing calls the lib in production yet.** `grocery/capture-run.ps1` gains its call in W4.1, and until then no armed
@@ -25,11 +25,13 @@ copy after a throw past read-tree) and M11 with 7 red (F11). That message record
 review-fix probe instead: 16 single mutants plus a control, each from its own temp mirror, 3 at a time rather than one
 at a time. The control passed 162 of 162. All 16 mutants were red, each in its own named case. The original's md5 was
 1231CAB244819E44F404A89136A53599 before and after. The harness is the scratch file `cs-mutants.ps1` and is not
-committed. **The plan's seven should be run again against blob eb1b66d6a56d before section 13 records them as holding
+committed. **The plan's seven should be run again against blob 6b814066c3b0 before section 13 records them as holding
 for the landed lib.**
 
 **Re-verified at landing, on the tree rebased onto origin/main.** `lib/checkout-sync.ps1 -SelfTest` exited 0 with
 `checkout-sync: 162 passed, 0 failed, 162 of 162 literal cases ran`, then `CHECKOUT-SYNC SELF-TEST PASS`.
+The first rebased run went red in one case, the STARTUP FILES CLEAN TWIN, because capture-run.ps1 had begun dot-sourcing
+lib/chain-code-currency.ps1 on main. The lib's list now names it, and the run above is the one after that fix.
 `lib/gate-input-key.ps1 -VerifyDeclared lib\checkout-sync.ps1` exited 0 with `GATE-DECLARATIONS-VERIFIED 1 of 1`.
 
 ## read out bars b4, b5 and b8 for w3.1 on 2026-10-07 at the earliest, 14 days after W4.1 lands
