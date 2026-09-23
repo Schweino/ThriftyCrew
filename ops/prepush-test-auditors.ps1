@@ -96,7 +96,8 @@
 
   Modes:
     -RefsFromStdin   the pre-push hook: pre-push's ref lines on stdin. Exit 0 allow, 1 refuse, 3 could
-                     not evaluate (refuse).
+                     not evaluate (refuse). A run that cannot reuse its keyed pass first prints one
+                     TA-KEY-MOVED line naming the input that moved the key (see PASS REUSE below).
     -PathsFile <f>   the same decision for a list of repo-relative paths instead of refs (measurement and
                      fixtures). Runs the suite; never writes the known-failures record.
     -Record -OutputFile <file> -ExitCode <rc>
@@ -482,7 +483,8 @@ function Get-RecordPath([string]$Root) {
 # The key is taken again after the run and a pass is recorded only if nothing moved under it.
 # THE RECORD IS SCHEMA 2 SINCE W0.4 (design/PLAN-push-derived-conflicts-2026-09-23.md, 2026-09-23). Schema 1 held the
 # key and the verdict. Schema 2 adds the sorted input ROWS the key was computed over and, beside each board row, the
-# SHA-256 of that board's bytes, so a later run that cannot reuse the pass can say WHICH input moved the key. The KEY is
+# SHA-256 of that board's bytes, so a later run that cannot reuse the pass can say WHICH input moved the key (the
+# TA-KEY-MOVED line, see WHICH INPUT MOVED THE KEY below). The KEY is
 # unchanged (a board still enters it by name, length and mtime), so nothing it decides moves; a self-test case pins the
 # rows and the key over a frozen input set against the key the pre-schema-2 code computed.
 # IT LIVES BESIDE THE SCHEMA 1 FILE, NEVER ON IT: this copy uses tc-test-auditors-pass-<h>.schema2.json, and an older
@@ -494,8 +496,9 @@ function Get-RecordPath([string]$Root) {
 # reuse each other's pass anyway. This copy never reads, writes or deletes the schema 1 file, and a schema 1 record is
 # no record here, so every checkout pays ONE full run on its first push after W0.4 (D13 in that plan).
 # A schema 2 record whose rows do not hash to its own key is corrupt and is not reused (fail closed).
-# BOARD HASHING is paid when a pass is WRITTEN, never on the reuse path, so a key computation costs what it did before
-# (see Get-TaBoardHashes for the figures). Every recorded pass prints what its hashing cost, so the figure keeps coming.
+# BOARD HASHING is paid when a pass is WRITTEN, and when a run that cannot reuse has to tell a board's stamp from its
+# bytes (WHICH INPUT MOVED THE KEY, below), never on the reuse path, so a key computation costs what it did before (see
+# Get-TaBoardHashes for the figures). Every recorded pass prints what its hashing cost, so the figure keeps coming.
 # SCOPE: inherits the derivation's unsoundness (a file a unit reaches through a computed path is not keyed), and an
 # ignored non-board file test-auditors reads is not keyed; the age bound caps how long either can matter.
 $script:PassMaxAgeHours = 6   # first plausible value, no sweep: a retry follows its run by minutes; the key, not the clock, makes a reuse safe
@@ -602,9 +605,10 @@ function Get-TaInputKey([string]$Root, $Inputs, [string[]]$BoardPatterns) {
 }
 
 # $Mode and $Selected are what THIS push needs. Returns .reuse, .why and the record. Only a schema 2 record whose rows
-# hash to its own key can be reused; a schema 1 record (the shape before W0.4) never is.
+# hash to its own key can be reused; a schema 1 record (the shape before W0.4) never is. .rec is set for every sound
+# schema 2 record, reused or not, so Get-TaKeyMove can compare its rows; .noRecord is true when there is none.
 function Read-TaPassRecord([string]$Path, [string]$Key, [datetime]$NowUtc, [double]$MaxAgeHours, [string]$Mode, [string[]]$Selected) {
-  $r = [pscustomobject]@{ reuse = $false; why = ''; rec = $null }
+  $r = [pscustomobject]@{ reuse = $false; why = ''; rec = $null; noRecord = $true }
   if (-not $Key) { $r.why = 'no input key'; return $r }
   if (-not $Path -or -not (Test-Path -LiteralPath $Path)) { $r.why = ('no schema 2 pass record at ' + $Path); return $r }
   try {
@@ -614,6 +618,7 @@ function Read-TaPassRecord([string]$Path, [string]$Key, [datetime]$NowUtc, [doub
     if (-not $j.PSObject.Properties['rows'] -or $null -eq $j.rows) { throw 'the pass record holds no input rows' }
     $rk = Get-TaKeyOfRows ([string[]]@($j.rows))
     if (-not [string]::Equals($rk, [string]$j.key, [StringComparison]::Ordinal)) { throw ('its rows hash to ' + $rk + ', not to its own key ' + $j.key) }
+    $r.rec = $j; $r.noRecord = $false
     if (-not [string]::Equals([string]$j.key, $Key, [StringComparison]::Ordinal)) { $r.why = ('an input moved since the recorded pass (recorded key ' + $j.key + ', now ' + $Key + ')'); return $r }
     $at = [DateTimeOffset]::Parse([string]$j.recorded_at, [Globalization.CultureInfo]::InvariantCulture).UtcDateTime
     $age = [math]::Round(($NowUtc - $at).TotalHours, 2)
@@ -646,6 +651,99 @@ function Write-TaPassRecord([string]$Path, $KeyInfo, [int]$Rc, [string[]]$FailLi
 
 function Format-ReuseLine([string]$Key, $Pass, $KeyInfo) {
   return ('prepush-test-auditors: REUSED key=' + $Key + ' - ' + $Pass.why + '; ' + $KeyInfo.inputs + ' input file(s) (' + $KeyInfo.dirty + ' uncommitted) and ' + $KeyInfo.boards + ' board file(s) hashed in ' + $KeyInfo.ms + 'ms, none moved since that pass, so test-auditors did not run again')
+}
+
+# ============================================================================================ WHICH INPUT MOVED THE KEY
+# W0.4 step 2 (design/PLAN-push-derived-conflicts-2026-09-23.md). When the keyed pass is not reused, ONE line is printed
+# before the run; push-main copies it into its ledger row's ta_moved field, and W0.3 splits the full runs by it for D13:
+#     TA-KEY-MOVED kind=<content|lib|board|mtime> input=<repo path>
+#     TA-KEY-MOVED kind=no-record        no schema 2 record: none, a schema 1 one, a corrupt one, or another checkout's
+# The rows are compared as SETS KEYED BY NAME (data-quality-craft/checks-and-thresholds.md section 5c): a name on both
+# sides with another value has moved, and so has a name on one side only. The kinds:
+#     content  any tracked input that is not lib/*.ps1: test-auditors.ps1, its fixtures, the scripts it runs, this file
+#     lib      a lib/*.ps1 row (test-auditors copies the whole lib into its run root)
+#     board    a board whose file appeared, went, changed length, or changed bytes (its content hash differs)
+#     mtime    a board whose content hash is equal and whose LastWriteTimeUtc differs
+# "THE FIRST INPUT THAT DIFFERS" IS TAKEN BY KIND BEFORE PATH: content, then lib, then board, then mtime, and Ordinal path
+# order inside a kind. In plain sorted order every board row ('board:...') sorts ahead of every repo path, so a run a code
+# edit forced anyway would be named after a board stamp beside it, and D13's split would count it as a run that keying
+# boards by content could have saved. So kind=mtime means that NOTHING but board stamps moved. A board is hashed only when
+# no content or lib row moved and its length did not change, and the scan stops at the first board whose bytes moved.
+# When the key did not move (the record is too old, narrower than this push, or no longer passes) there is no line.
+# Nothing here decides the verdict: the caller prints what this returns and runs either way, and names a throw.
+function ConvertTo-TaRowMap($Rows) {
+  $m = New-Object System.Collections.Hashtable ([StringComparer]::Ordinal)
+  if ($null -eq $Rows) { return $m }
+  foreach ($row in @($Rows)) {
+    $t = [string]$row
+    if (-not $t) { continue }
+    $tab = $t.IndexOf("`t")
+    $n = $t; $v = ''
+    if ($tab -ge 0) { $n = $t.Substring(0, $tab); $v = $t.Substring($tab + 1) }
+    # a path listed twice (an index with unmerged stages) keeps every value, so any change to either still reads as a move
+    if ($m.ContainsKey($n)) { $m[$n] = [string]$m[$n] + '|' + $v } else { $m[$n] = $v }
+  }
+  return $m
+}
+
+# 'board:<pattern>:<file>' names a board by the pattern that found it; the file sits in the pattern's own directory.
+function Get-TaBoardRepoPath([string]$Name) {
+  $t = $Name.Substring('board:'.Length)
+  $c = $t.LastIndexOf(':')
+  if ($c -lt 0) { return $t }
+  $bp = $t.Substring(0, $c); $f = $t.Substring($c + 1)
+  $s = $bp.LastIndexOf('/')
+  if ($s -lt 0) { return $f }
+  return ($bp.Substring(0, $s + 1) + $f)
+}
+
+# $Pass is Read-TaPassRecord's result and $KeyInfo the Get-TaInputKey result it was read for. Returns .line ('' when there
+# is nothing to say), .kind, .input and how many rows of each kind moved (content, lib, board).
+function Get-TaKeyMove($Pass, $KeyInfo) {
+  $res = [pscustomobject]@{ line = ''; kind = ''; input = ''; content = 0; lib = 0; board = 0 }
+  if ($null -eq $KeyInfo -or -not $KeyInfo.ok -or $null -eq $Pass -or $Pass.reuse) { return $res }
+  if ($Pass.noRecord -or $null -eq $Pass.rec) { $res.kind = 'no-record'; $res.line = 'TA-KEY-MOVED kind=no-record'; return $res }
+  if ([string]::Equals([string]$Pass.rec.key, [string]$KeyInfo.key, [StringComparison]::Ordinal)) { return $res }
+  $old = ConvertTo-TaRowMap $Pass.rec.rows
+  $new = ConvertTo-TaRowMap $KeyInfo.rows
+  # The file is named for this checkout's root, so a record holding another root is not this checkout's record.
+  if (-not [string]::Equals([string]$old['root'], [string]$new['root'], [StringComparison]::Ordinal)) { $res.kind = 'no-record'; $res.line = 'TA-KEY-MOVED kind=no-record'; return $res }
+  $names = New-Object 'System.Collections.Generic.List[string]'
+  foreach ($k in $old.Keys) { $names.Add([string]$k) }
+  foreach ($k in $new.Keys) { if (-not $old.ContainsKey($k)) { $names.Add([string]$k) } }
+  $arr = $names.ToArray(); [Array]::Sort($arr, [StringComparer]::Ordinal)
+  $firstContent = ''; $firstLib = ''
+  $boards = New-Object 'System.Collections.Generic.List[string]'
+  foreach ($n in $arr) {
+    if ([string]::Equals($n, 'root', [StringComparison]::Ordinal)) { continue }
+    if ($old.ContainsKey($n) -and $new.ContainsKey($n) -and [string]::Equals([string]$old[$n], [string]$new[$n], [StringComparison]::Ordinal)) { continue }
+    if ($n.StartsWith('board:', [StringComparison]::Ordinal)) { $res.board++; $boards.Add($n) }
+    elseif ($n -match '^lib/[^/]+\.ps1$') { $res.lib++; if (-not $firstLib) { $firstLib = $n } }
+    else { $res.content++; if (-not $firstContent) { $firstContent = $n } }
+  }
+  if ($firstContent) { $res.kind = 'content'; $res.input = $firstContent }
+  elseif ($firstLib) { $res.kind = 'lib'; $res.input = $firstLib }
+  else {
+    $stampOnly = ''
+    $hashes = $Pass.rec.board_sha256
+    foreach ($n in $boards) {
+      $same = $false
+      if ($old.ContainsKey($n) -and $new.ContainsKey($n) -and [string]::Equals(([string]$old[$n] -split ':')[0], ([string]$new[$n] -split ':')[0], [StringComparison]::Ordinal)) {
+        $rh = ''
+        if ($null -ne $hashes -and $hashes.PSObject.Properties[$n]) { $rh = [string]$hashes.PSObject.Properties[$n].Value }
+        $f = [string]$KeyInfo.boardFiles[$n]
+        # No recorded hash, no file, or a hash that cannot be taken is never "the same bytes".
+        if ($rh -and $f) { $same = [string]::Equals($rh, (Get-TaBoardSha $f ([string]$new[$n])), [StringComparison]::OrdinalIgnoreCase) }
+      }
+      if (-not $same) { $res.kind = 'board'; $res.input = Get-TaBoardRepoPath $n; break }
+      if (-not $stampOnly) { $stampOnly = Get-TaBoardRepoPath $n }
+    }
+    if (-not $res.kind -and $stampOnly) { $res.kind = 'mtime'; $res.input = $stampOnly }
+  }
+  # Unreachable while a record's rows hash to its key and the key is computed from its rows: said loudly if it ever is.
+  if (-not $res.kind) { throw ('the key moved (' + $Pass.rec.key + ' to ' + $KeyInfo.key + ') and no input row differs') }
+  $res.line = 'TA-KEY-MOVED kind=' + $res.kind + ' input=' + $res.input
+  return $res
 }
 
 # ============================================================================================ UNITS
@@ -1619,12 +1717,16 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
     $recS1 = Join-Path $prDir 'pass-schema1.json'
     [IO.File]::WriteAllText($recS1, ('{"schema":1,"key":"' + $k1.key + '","recorded_at":"' + $now.ToString('o') + '","rc":0,"mode":"full","selected":[],"cases":700,"fail_lines":[]}'), $u8)
     $pS1 = Read-TaPassRecord $recS1 $k1.key $now 6 'full' @()
-    Case 'MUST FIRE' 'schema 1: a pre-W0.4 record over the current key is not reused, and the suite runs' (-not $pS1.reuse -and $pS1.why -match 'schema 1') "reuse=$($pS1.reuse) why=$($pS1.why)"
+    # Get-TaKeyMove through a catch of the case's own, so a throw goes red in the case that met it and the rest still run.
+    $mvSafe = { param($MvPass, $MvKey) try { Get-TaKeyMove $MvPass $MvKey } catch { [pscustomobject]@{ line = ('THREW: ' + $_.Exception.Message); kind = ''; input = ''; content = -1; lib = -1; board = -1 } } }
+    $mS1 = & $mvSafe $pS1 $k1
+    Case 'MUST FIRE' 'schema 1: a pre-W0.4 record prints TA-KEY-MOVED kind=no-record, and the suite runs' (-not $pS1.reuse -and $pS1.why -match 'schema 1' -and $mS1.line -ceq 'TA-KEY-MOVED kind=no-record') "reuse=$($pS1.reuse) why=$($pS1.why) line=$($mS1.line)"
     # MUST FIRE: a schema 2 record whose rows no longer hash to its own key is corrupt, so it is not reused (fail closed).
     $recBad = Join-Path $prDir 'pass-badrows.json'
     [IO.File]::WriteAllText($recBad, ([IO.File]::ReadAllText($recP)).Replace('7c871bec462e4411b5b392ea1849467955b5aa16', '0000000000000000000000000000000000000000'), $u8)
     $pBad = Read-TaPassRecord $recBad $k1.key $now 6 'full' @()
-    Case 'MUST FIRE' 'schema 2: a record whose rows do not hash to its own key is not reused' (-not $pBad.reuse -and $pBad.why -match 'rows hash to') "reuse=$($pBad.reuse) why=$($pBad.why)"
+    $mBad = & $mvSafe $pBad $k1
+    Case 'MUST FIRE' 'schema 2: a record whose rows do not hash to its own key is not reused, and is no record' (-not $pBad.reuse -and $pBad.why -match 'rows hash to' -and $mBad.line -ceq 'TA-KEY-MOVED kind=no-record') "reuse=$($pBad.reuse) why=$($pBad.why) line=$($mBad.line)"
     # CLEAN TWIN: a "rebase" that brings in only non-input files leaves the key, and the pass is REUSED with its key printed.
     [IO.File]::WriteAllText((Join-Path $prDir 'notes\readme.txt'), "another session's note`n", $u8)
     [IO.File]::WriteAllText((Join-Path $prDir 'notes\new.txt'), "arrived by rebase`n", $u8)
@@ -1633,6 +1735,46 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
     $p2 = Read-TaPassRecord $recP $k2.key $now 6 'full' @()
     $line2 = Format-ReuseLine $k2.key $p2 $k2
     Case 'CLEAN TWIN' 'pass reuse: only non-input files arrived, so the same key reuses the recorded pass, printed REUSED with the key' ($k1.ok -and $k2.ok -and $k1.inputs -ge 4 -and $k1.key -eq $k2.key -and $p2.reuse -and $line2.StartsWith('prepush-test-auditors: REUSED key=' + $k1.key)) "k1=$($k1.key)/$($k1.inputs) k2=$($k2.key) reuse=$($p2.reuse) why=$($p2.why)"
+    # ---- TA-KEY-MOVED (W0.4 step 2): which input moved the key, against the schema 2 record written for $k1 ----
+    $m2 = & $mvSafe $p2 $k2
+    Case 'MUST NOT FIRE' 'TA-KEY-MOVED: an unchanged key prints nothing and reuses' ($p2.reuse -and $m2.line -eq '' -and $m2.kind -eq '') "reuse=$($p2.reuse) line='$($m2.line)'"
+    $mvOf = { $kx = & $kOf; $px = Read-TaPassRecord $recP $kx.key $now 6 'full' @(); [pscustomobject]@{ k = $kx; p = $px; m = (& $mvSafe $px $kx) } }
+    $boardRel = 'modz/boards/comparison-2026-09-18.json'
+    # MUST FIRE: the board rewritten with the SAME bytes under a new stamp, the founding D13 question.
+    [IO.File]::WriteAllText($prBoard, "{}`n", $u8); [IO.File]::SetLastWriteTimeUtc($prBoard, $prStampAt.AddSeconds(1))
+    $xM = & $mvOf
+    Case 'MUST FIRE' 'TA-KEY-MOVED: a board rewritten with identical bytes prints kind=mtime' ($xM.k.key -ne $k1.key -and -not $xM.p.reuse -and $xM.m.line -ceq ('TA-KEY-MOVED kind=mtime input=' + $boardRel)) "key=$($xM.k.key) reuse=$($xM.p.reuse) line=$($xM.m.line)"
+    [IO.File]::SetLastWriteTimeUtc($prBoard, $prStampAt)
+    # MUST FIRE: an edit of test-auditors itself (this fixture's modz/test-auditors.ps1, uncommitted).
+    $taFx = Join-Path $prDir 'modz\test-auditors.ps1'
+    [IO.File]::WriteAllText($taFx, ($prTa + "# an edit`n"), $u8)
+    $xC = & $mvOf
+    Case 'MUST FIRE' 'TA-KEY-MOVED: an edit of test-auditors.ps1 prints kind=content' (-not $xC.p.reuse -and $xC.m.line -ceq 'TA-KEY-MOVED kind=content input=modz/test-auditors.ps1' -and $xC.m.content -eq 1 -and $xC.m.board -eq 0) "line=$($xC.m.line) content=$($xC.m.content) board=$($xC.m.board)"
+    # MUST FIRE: the same edit with a board stamp moving beside it. Sorted plainly the board row comes first; the stamp
+    # must not take the credit for a run the code edit forced.
+    [IO.File]::SetLastWriteTimeUtc($prBoard, $prStampAt.AddSeconds(1))
+    $xP = & $mvOf
+    Case 'MUST FIRE' 'TA-KEY-MOVED: a content edit beside a board stamp move names the content, never the stamp' ($xP.m.line -ceq 'TA-KEY-MOVED kind=content input=modz/test-auditors.ps1' -and $xP.m.content -eq 1 -and $xP.m.board -eq 1) "line=$($xP.m.line) content=$($xP.m.content) board=$($xP.m.board)"
+    [IO.File]::SetLastWriteTimeUtc($prBoard, $prStampAt)
+    [IO.File]::WriteAllText($taFx, $prTa, $u8)
+    # MUST FIRE: a library the harness copies.
+    $libFx = Join-Path $prDir 'lib\modq-lib.ps1'
+    [IO.File]::WriteAllText($libFx, "'lib v1 edited'`n", $u8)
+    $xL = & $mvOf
+    Case 'MUST FIRE' 'TA-KEY-MOVED: an edit of a lib script prints kind=lib' ($xL.m.line -ceq 'TA-KEY-MOVED kind=lib input=lib/modq-lib.ps1') "line=$($xL.m.line)"
+    [IO.File]::WriteAllText($libFx, "'lib v1'`n", $u8)
+    # MUST FIRE: a board REBUILT to different bytes of the SAME length under a new stamp is a board move, not a stamp.
+    [IO.File]::WriteAllText($prBoard, "[]`n", $u8); [IO.File]::SetLastWriteTimeUtc($prBoard, $prStampAt.AddSeconds(2))
+    $xB = & $mvOf
+    Case 'MUST FIRE' 'TA-KEY-MOVED: a board rebuilt to new bytes of the same length prints kind=board' ($xB.m.line -ceq ('TA-KEY-MOVED kind=board input=' + $boardRel)) "line=$($xB.m.line)"
+    [IO.File]::WriteAllText($prBoard, "{}`n", $u8); [IO.File]::SetLastWriteTimeUtc($prBoard, $prStampAt)
+    # MUST FIRE: a record holding another checkout's root row is not this checkout's record.
+    $rowsR = @($k1.rows | ForEach-Object { if (([string]$_).StartsWith("root`t", [StringComparison]::Ordinal)) { "root`tc:\another\checkout" } else { [string]$_ } })
+    $kR = [pscustomobject]@{ ok = $true; key = (Get-TaKeyOfRows $rowsR); rows = $rowsR; boardFiles = $k1.boardFiles }
+    $pR = Read-TaPassRecord $recP $kR.key $now 6 'full' @()
+    $mR = & $mvSafe $pR $kR
+    $kBack = & $kOf
+    Case 'MUST FIRE' 'TA-KEY-MOVED: a record carrying another checkout''s root prints kind=no-record' (-not $pR.reuse -and $null -ne $pR.rec -and $mR.line -ceq 'TA-KEY-MOVED kind=no-record' -and $kBack.key -eq $k1.key) "reuse=$($pR.reuse) line=$($mR.line) restored=$($kBack.key -eq $k1.key)"
     # MUST FIRE: an input changed between the runs, so the key moves and the run is full.
     [IO.File]::WriteAllText((Join-Path $prDir 'modz\modq-audit.ps1'), "'v2'`n", $u8)
     & $gq @('add', 'modz/modq-audit.ps1'); & $gq @('commit', '-q', '-m', 'input moved')
@@ -1809,7 +1951,7 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
 
   # A SUITE THAT SILENTLY RAN A SUBSET still prints "N of N". The first run of this file did exactly that:
   # a throw inside the record block skipped five cases and the tally read 30 of 30. The count is pinned.
-  $expectedCases = 93
+  $expectedCases = 100
   if ($ran -ne $expectedCases) { $fails += "ran $ran case(s), expected $expectedCases - a block of cases was skipped" }
 
   ''
@@ -1985,6 +2127,13 @@ if ($RefsFromStdin -and -not $PathsFile) {
       "prepush-test-auditors: the recorded pass for key=$($passKey.key) no longer passes against the current known-failures record ($($rv.detail)); running"
     } else {
       "prepush-test-auditors: no pass reused (key=$($passKey.key)) - $($pr.why); running"
+      # W0.4: name the input that moved the key, before the run (see WHICH INPUT MOVED THE KEY). A diagnostic: whatever
+      # it returns or throws, the suite runs and the verdict is unchanged.
+      try {
+        $mv = Get-TaKeyMove $pr $passKey
+        if ($mv.line) { $mv.line }
+        if ($mv.kind -and $mv.kind -ne 'no-record') { "prepush-test-auditors: $($mv.content + $mv.lib + $mv.board) input row(s) moved since the recorded pass: $($mv.content) content, $($mv.lib) lib, $($mv.board) board; the line above names the first by kind (content, lib, board, mtime)" }
+      } catch { "prepush-test-auditors: which input moved the key could not be said ($($_.Exception.Message)); running" }
     }
   }
 }
