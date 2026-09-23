@@ -890,6 +890,7 @@
   },
   {
    "id": "sale-no-fallback-unworked",
+   "lineage_parent": "sale-no-fallback",
    "match": "exact",
    "key": "grocery on sale item s have no everyday fallback and no one is working them",
    "class": "review",
