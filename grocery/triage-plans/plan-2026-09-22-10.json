@@ -165,7 +165,7 @@
       "status": "done",
       "premise_verified": "Yes: pull-regular-familyfare raised 'sweep is not buying' through Send-AlertConditions and capture-watchdog pages MISSING-WINDOW for the same cadence; audit-ff-carry paged fresh victims although victim-first promotion already reads ff-carry-report.json.",
       "deviation": "Windows are counted strictly after the first-seen day, because first_seen is a date with no time, so a victim found on day D needs two landed windows from D+1: conservative toward not paging. The -Alert signature needle in the self-test moved from the fresh set to the failed set, as the root fix says.",
-      "shipped_commit": "branch worktree-agent-a93e94038dd9f368c, commit \"Plan 2026-09-22-10 publish 1 (d) ff-alerts-lanes + F1 \"Email first miss\": each alert fires on its lane's failure\" (not pushed; ops/push-main.ps1 rebases it, so the pusher writes the landed hash here)",
+      "shipped_commit": "2f0394147 (landed on origin/main 2026-09-22, tip 1ec218d5f)",
       "leaves_open_followup": "2026-09-22-781758",
       "leaves_open_owner_note": "minted 2026-09-22 with send-alert.ps1 -Force -Lane weekly under 'Triage residual: a starved Family Fare term defeats victim-first promotion (residual of discovered:ff-alerts-lanes-2026-09-22)', because it has happened once (pie-pumpkins)"
     },
@@ -242,7 +242,7 @@
       "premise_verified": "Yes: send-alert.ps1 defaulted -Subject to 'Grocery pipeline alert'; Get-AlertDelivery returned for -Lane weekly before resolving; Get-AlertCallSites marked a missing -Subject partial and unreadable. audit-alert-registry after the change: 0 NO SUBJECT sites in production, 0 findings.",
       "deviation": "Part (4) shipped on Brad's ruling Q-sender-refuses-unregistered, option A (\"Refuse agents only\", 2026-09-22): an agent send (-Lane weekly or -Escalates) whose type is registered nowhere exits 2 SEND-ALERT-REFUSED before any queue write. A registry that cannot be read refuses nothing. The surface fix (closing cb8f30, folding 1139c4) is queue housekeeping and was not done here (dispatch: do not close queue items).",
       "leaves_open_followup": "watch:grocery/audit-alert-registry.ps1",
-      "shipped_commit": "branch worktree-agent-a93e94038dd9f368c, commit \"Plan 2026-09-22-10 publish 1 (a)+(b): one class-keyed return rule; no default subject; an agent's unregistered alert is refused\" (not pushed; ops/push-main.ps1 rebases it, so the pusher writes the landed hash here)"
+      "shipped_commit": "85d930e37 (landed on origin/main 2026-09-22, tip 1ec218d5f)"
     },
     {
       "queue_id": "2026-09-21-de4f72",
@@ -308,7 +308,7 @@
       "status": "done",
       "premise_verified": "Yes: capture-run-status.json carried exit_code and no lanes; 13 `$failed +=` sites in capture-run.ps1, four of them beside a Send-Alert of their own (commit-refused, push after its rebases, served-dirty, pointer-without-object).",
       "deviation": "guards-blocked records no page subject (capture-run cannot observe check-ad-cycles' GUARDS FAILED send); the watchdog's existing guards-hold fold still owns those days, and the new fold runs only when no guards hold is live. The producer case lives in capture-watchdog -SelfTest (capture-run has no self-test): it lifts Add-FailedLane and Set-FailedLanePaged out of capture-run by AST and asserts 0 bare `$failed +=` sites. ops/rehearse-chain.ps1 was not run (dispatch: no chain runs); it is owed before the push.",
-      "shipped_commit": "branch worktree-agent-a93e94038dd9f368c, commit \"Plan 2026-09-22-10 publish 1 (c) 2026-09-22-7c932a: RUN RECORD pages only a failed lane that did not page as itself\" (not pushed; ops/push-main.ps1 rebases it, so the pusher writes the landed hash here)"
+      "shipped_commit": "04dae909c, 1ec218d5f (landed on origin/main 2026-09-22, tip 1ec218d5f)"
     },
     {
       "queue_id": "2026-09-22-20fecf",
@@ -565,7 +565,7 @@
         "marker": "ALERT-CENSUS-COMPLETE quiet7=1/7 quiet30=2/30 alerts30=383 returns30=126 recurring=30 returnrate30=32.9% classreturns30=156 classalerts30=326 classreturnrate30=47.9% minted30=59",
         "reading": "moved +15.0 points over 326 non-triage alerts with no change in the estate; one variant per adjustment on one corpus; it is measurement, and the baseline the next 14 days are compared against"
       },
-      "shipped_commit": "branch worktree-agent-a93e94038dd9f368c, commit \"Plan 2026-09-22-10 publish 1 (a)+(b): one class-keyed return rule; no default subject; an agent's unregistered alert is refused\" (not pushed; ops/push-main.ps1 rebases it, so the pusher writes the landed hash here)",
+      "shipped_commit": "85d930e37 (landed on origin/main 2026-09-22, tip 1ec218d5f)",
       "leaves_open_followup": "watch:grocery/audit-alert-registry.ps1"
     },
     {
@@ -635,7 +635,7 @@
       "resolution_note": "F1 on Brad's ruling \"Email first miss\": a MISSING grade the producer can make once a day mails on that one observation, and the registry refuses a hold above a declared cadence. F2: three heartbeat rows declare their exit semantics, so the Reaper's exit 3 pages and its exit 1 does not. F4: the chain manifest names only the hook a rehearsal exercises.",
       "publish_batch": 1,
       "status": "done",
-      "shipped_commit": "branch worktree-agent-a93e94038dd9f368c, commit \"Plan 2026-09-22-10 publish 1 (d) ff-alerts-lanes + F1 \"Email first miss\": each alert fires on its lane's failure\" (not pushed; ops/push-main.ps1 rebases it, so the pusher writes the landed hash here); and \"Plan 2026-09-22-10 publish 1, post-landing review F2 + F4: declared exit semantics per heartbeat row; the manifest names only the hook a rehearsal exercises\""
+      "shipped_commit": "bf7f6f309, 2f0394147 (landed on origin/main 2026-09-22, tip 1ec218d5f)"
     }
   ],
   "ship_sequence": [
