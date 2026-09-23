@@ -398,9 +398,47 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
   T 'MUST FIRE  a snapshot that could not be taken holds NOTHING back, and says so' `
     (($fh3.staged -match 'json-readers-baseline\.json') -and ($fh3.text -match 'holding NOTHING back')) ("staged=$($fh3.staged) text=$($fh3.text)")
 
+  # ---- A DELETION PRESENT AT START IS HELD (2026-09-23, design\PLAN-bot-checkout-self-heal-2026-09-23.md W0.2 step 3) ----
+  # FROZEN from 09-23: graph/provenance/2026-09-22.jsonl was deleted from the main checkout BEFORE a forced run, nothing
+  # held the deletion, and the bot commit carried it to origin/main. Same harness: the shipped block, a throwaway repo,
+  # and then a real `git commit` there, so the case reads the tree the commit made rather than the index alone.
+  function Run-HeldDeletion([bool]$DeleteBeforeSnapshot) {
+    $c = Join-Path $env:TEMP ('fhd-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+    New-Item -ItemType Directory $c -Force | Out-Null
+    & git -C $c init -q .
+    & git -C $c config user.email t@t; & git -C $c config user.name t
+    New-Item -ItemType Directory (Join-Path $c 'grocery/out') -Force | Out-Null
+    $prov = 'grocery/out/prov-2026-09-22.jsonl'
+    [IO.File]::WriteAllText((Join-Path $c $prov), '{"p":1}')
+    [IO.File]::WriteAllText((Join-Path $c 'grocery/out/run-output.txt'), 'v1')
+    & git -C $c add -A | Out-Null; & git -C $c commit -q -m seed | Out-Null
+    if ($DeleteBeforeSnapshot) { Remove-Item -LiteralPath (Join-Path $c $prov) -Force }
+    $snap = Get-DirtyOwnedSnapshot -Repo $c -Paths @('grocery/out')
+    $script:RunStart = (Get-Date).AddMinutes(-30)
+    # THE RUN: it writes its own file, and in the MUST NOT FIRE twin it deletes the provenance file itself.
+    [IO.File]::WriteAllText((Join-Path $c 'grocery/out/run-output.txt'), 'v2')
+    if (-not $DeleteBeforeSnapshot) { Remove-Item -LiteralPath (Join-Path $c $prov) -Force }
+    & git -C $c add -A -- 'grocery/out' | Out-Null
+    $repo = $c
+    $script:DirtyAtStart = $snap; $script:HeldDeletions = @()
+    $out = . ([scriptblock]::Create($fhBlock))
+    & git -C $c commit -q -m 'bot' | Out-Null
+    $inTree = @(& git -C $c ls-tree --name-only HEAD -- $prov | Where-Object { $_ }).Count
+    $ownIn = [string](& git -C $c show HEAD:grocery/out/run-output.txt)
+    Remove-Item $c -Recurse -Force -ErrorAction SilentlyContinue
+    return [pscustomobject]@{ inTree = $inTree; own = $ownIn; text = ((@($out) | ForEach-Object { [string]$_ }) -join "`n"); held = @($script:HeldDeletions); kind = (@($snap.files | ForEach-Object { [string]$_.kind }) -join ',') }
+  }
+  $fhd1 = Run-HeldDeletion $true
+  T 'MUST FIRE  an owned tracked file deleted BEFORE the run and still absent is not deleted by the commit, and the line names it' `
+    ($fhd1.inTree -eq 1 -and $fhd1.own -eq 'v2' -and ($fhd1.text -match 'foreign-held: kept a deletion present at start: grocery/out/prov-2026-09-22\.jsonl') -and (@($fhd1.held) -join ',') -eq 'grocery/out/prov-2026-09-22.jsonl') ("inTree=$($fhd1.inTree) own=$($fhd1.own) held=$(@($fhd1.held) -join ',') text=$($fhd1.text)")
+  $fhd2 = Run-HeldDeletion $false
+  T 'MUST NOT FIRE an owned tracked file the run deleted DURING the run is committed as a deletion, as before, with no held line' `
+    ($fhd2.inTree -eq 0 -and $fhd2.own -eq 'v2' -and ($fhd2.text -notmatch 'kept a deletion') -and @($fhd2.held).Count -eq 0) ("inTree=$($fhd2.inTree) own=$($fhd2.own) text=$($fhd2.text)")
+  $script:RunStart = (Get-Date).AddMinutes(-10)
+
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (.claude\rules\ops-and-gates.md): every case above is a literal T line, so
   # a case lost to a thrown helper or a mis-lifted block is a shortfall here, never a smaller green total.
-  $EXPECTED_CASES = 30
+  $EXPECTED_CASES = 32
   $ranBefore = $n
   T ('CLEAN TWIN every literal case ran: ' + $ranBefore + ' of ' + $EXPECTED_CASES) ($ranBefore -eq $EXPECTED_CASES) ("ran=$ranBefore")
   Write-Output ''

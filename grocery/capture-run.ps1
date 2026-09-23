@@ -131,6 +131,7 @@ $script:StatusFile = Join-Path (Join-Path $OutDir 'logs') 'capture-run-status.js
 # failed_lanes rides beside exit_code in capture-run-status.json; a record without it pages exactly as before.
 $script:FailedLaneRecs = @()
 $script:CommitSizeStatus = $null
+$script:HeldDeletions = @()
 function Add-FailedLane([string]$Name, [string]$PagedSubject = '') {
   # The CALLER's failed-lane list (scope 1), exactly the variable the old bare append wrote: in this script that is the
   # script scope, and test-commit-size-gate runs the cut block inside a function whose own list it asserts on.
@@ -164,6 +165,8 @@ function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
       # THE SIZE GATE'S BUCKETS (2026-09-23, plan W2.2): carried_runs names each earlier run whose record vouched for
       # files in this commit, deep says one of them is over 24 h old. $null = the gate has not run yet.
       commit_size = $script:CommitSizeStatus
+      # (plan W0.2 step 3) owned tracked files deleted before this run started, held out of its commit.
+      held_deletions = @($script:HeldDeletions)
     }
     $dir = Split-Path $script:StatusFile -Parent
     if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
@@ -969,6 +972,13 @@ try {
       $foreignHeldLine = ('foreign-held: ' + $foreignHeld.Count + ' tracked owned file(s) another session dirtied before this run started, left uncommitted: ' + ($foreignHeld -join ', '))
       Write-Output $foreignHeldLine
     }
+    # A DELETION PRESENT AT START IS HELD AND SAID (2026-09-23, design\PLAN-bot-checkout-self-heal-2026-09-23.md W0.2
+    # step 3). The unstage above restores HEAD's entry in the private index, so the deletion is not committed; this names
+    # each one on its own line, and the status record lists them, because a held deletion is the 09-23 graph/provenance
+    # shape and must be visible every run until a person commits or restores it (a leak, never a lost file).
+    $fhDelLines = Format-ForeignHeldDeletionLines -Snapshot $script:DirtyAtStart -Held $foreignHeld
+    $script:HeldDeletions = @()
+    foreach ($fdl in @($fhDelLines)) { Write-Output $fdl; $script:HeldDeletions += ,([string]$fdl).Substring('foreign-held: kept a deletion present at start: '.Length) }
     if ($fhSplit.note) { Write-Output $fhSplit.note }
   }
   # <<< FOREIGN-HELD BLOCK <<<
