@@ -77,7 +77,32 @@
   of landings (through ops\rehearse-chain.ps1 -ListSet; BLIND until W0.5 adds it, and never run while its param block
   lacks it, because an unknown switch without CmdletBinding would fall into a real 14-minute rehearsal), the 14-day
   class census, the backlog touch share and the median overlap share. The conflict attribution before W0.1 needed
-  transcripts and cannot be re-derived: it stays SCRATCH.
+  transcripts and cannot be re-derived: it stays SCRATCH. Since W0.3b it also reads the push ledger for two counts the
+  amendment measured by scratch, now committed: main-checkout plain pushes that passed every hook check and were then
+  rejected (a held hook-lock row from the main checkout with no main-ref update 0 to 15 s after it), and every landing
+  of the last 7 days by ROUTE (push-main, a plain push from a worktree, a plain push from the main checkout, no ledger
+  row), with the chain landings among them. Either is BLIND, never zero, when no ledger file is in the window.
+
+  W0.3b: THE PROBE COUNTS ATTEMPTS, NOT ROWS (2026-09-23, the plan's section 15.5). Section 3 of -Cost now reads:
+  - An ATTEMPT is a run a session launched: a push-main row, or a hook-refused row (W0.6) of a PLAIN push. A hook-refused
+    row written under a push-main is that push-main's attempt, which its own row already records, so it is counted
+    apart and never again. A dry run moves nothing and is no attempt. A LEG SET is one push-main round (`rounds`, W0.1R,
+    summed); a change whose rows do not all carry `rounds` gets no leg count rather than a guessed one.
+  - A CHANGE is (checkout, subjects_sha). change_id only breaks a tie: the same subjects after a landing, over a
+    different patch, is new work. Rows without subjects_sha fall back to W0.3's (checkout, change_id), and rows with
+    neither to its 6-hour gap. A plain push's attempt joins the change its checkout was working on at that moment. A
+    subject set that lands from another checkout links the groups into one change that CROSSES checkouts, which stays
+    out of B6's denominator and is counted on its own line. A change landed on its FIRST attempt only when that
+    attempt's own row landed.
+  - B6 prints every attempt in a column: landed, own red, ambient red, red undecided, not-ready at start, during the
+    legs or unrecorded, mechanical, genuine or unrecorded conflict, and other. Own against ambient is read from the
+    PATCH: a red whose change_id equals the one the change landed with is ambient, because the refused patch later
+    landed unchanged. (a) excludes only own reds and genuine conflicts, because an exclusion needs evidence; (b) is leg
+    sets per change. B6 and B10 are split into QUIET (no attempt inside a parallel run, none in an hour with 8 or more
+    landings of the main ref's reflog) and CONTENDED, and the quiet B6 prints P(result | old rate) under a stated
+    model. Verdicts print only under -Cost -Bar B6, whose rows are treated. W0.3b changes no bar's value, only what the
+    bars count.
+  - Every older-copy count beside a bar is also printed as a share of the rows it was taken from.
 
   IT IS A REPORT, NOT A GATE. There is no threshold on push waits here and there must not be one: ops-and-gates.md
   forbids a gate that is red on day one, and any bar on push waits would be red on the first busy morning and teach
@@ -329,7 +354,29 @@ $script:TcPpcB1aMinN = 5                   # B1(a): at least 5 preflight refusal
 $script:TcPpcB1bMinN = 10                  # B1(b): at least 10 conflict rows of any phase
 $script:TcPpcLandedOutcomes = @('landed', 'landed-after-rebase')
 $script:TcPpcOutcomeOrder = @('landed', 'landed-after-rebase', 'refused-gate-red', 'refused-rehearsal', 'refused-rehearsal-blind',
-  'refused-not-ready', 'refused-rebase-conflict', 'push-rejected', 'blind-fetch-failed', 'dry-run')
+  'refused-rehearsal-churn', 'refused-not-ready', 'refused-rebase-conflict', 'refused-already-on-main', 'push-rejected', 'blind-fetch-failed', 'dry-run')
+# W0.3b (15.5): attempts, changes and leg sets. Every value is the plan's own, first plausible, not swept.
+$script:TcPpcContendedHourLandings = 8     # B6/B10 strata: an hour with at least 8 landings is contended (15.6: "fewer than 8 landings in the hour" is quiet)
+$script:TcPpcB6QuietMinN = 10              # B6 quiet: at least 10 changes
+$script:TcPpcB6ContendedMinN = 5           # B6 contended: at least 5 changes
+# B6's OLD RATE for P(result | old rate): 15.6's baseline, 30 push-main rows over 12 landed chain changes 09-21 to 09-23
+# (2.50 per change), and 1.92 under W0.3's old exclusions. Both SCRATCH (the measurement skeptic). The amended count sits
+# between them, so both are printed; a lower old rate gives a larger P.
+$script:TcPpcB6OldRates = @(2.5, 1.92)
+$script:TcPpcFollowedSec = 15              # -History: a held hook-lock row is FOLLOWED when a reflog update lands 0 to 15 s after it (the method of %TEMP%\pushgood-skeptic\mainland.py)
+# -History's route match, the windows of %TEMP%\pushgood-residual\landings.py, used as written: a push-main landed row
+# written -10 to +900 s after the landing and naming the sha main moved from as its base or grant; else one written -10
+# to +120 s after it; else a hook-lock row written 900 s before to 30 s after the landing, naming that sha.
+$script:TcPpcRoutePmBeforeSec = 10
+$script:TcPpcRoutePmAfterSec = 900
+$script:TcPpcRoutePmNearSec = 120
+$script:TcPpcRouteHookBeforeSec = 900
+$script:TcPpcRouteHookAfterSec = 30
+$script:TcPpcMechanicalClasses = @('backlog-index', 'reread')
+$script:TcPpcAttemptColumns = @('landed', 'own-red', 'ambient-red', 'red-undecided', 'not-ready-start', 'not-ready-legs', 'not-ready-unrecorded',
+  'conflict-mechanical', 'conflict-genuine', 'conflict-unrecorded', 'other')
+$script:TcPpcExcludedColumns = @('own-red', 'conflict-genuine')
+$script:TcPpcRouteNames = @('push-main', 'plain-worktree', 'plain-main', 'plain-unknown', 'no-ledger-row')
 
 # THE CLASS TABLE, W0.3 step 3, literal and case-sensitive over a repo path with forward slashes. First match wins.
 $script:TcPpcClassTable = @(
@@ -364,8 +411,9 @@ $script:TcPpcBars = @(
     Metric = '(a) re-reads written as ledger rows, of all re-reads added; (b) conflict rows in class reread'
     MinN = '(a) 10 re-reads'; Value = '(a) at least 90% ledger rows; (b) reported with P(0 under the old rate), no verdict' }
   [pscustomobject]@{ Id = 'B6'; Items = @('W6.1'); ReadoutDays = $script:TcPpcReadoutDays
-    Metric = 'push-main rows per landed chain-touching change (by change_id), excluding gate-red and not-ready'
-    MinN = '10 chain-touching changes from updated copies in live lease mode'; Value = 'at most 1.2; no verdict when unleased chain landings exceed 20%' }
+    Metric = '(amended, 15.6) (a) ATTEMPTS per landed chain-touching change, counting not-ready and ambient reds and excluding only the change''s own reds and genuine conflicts; (b) LEG SETS per landed chain-touching change'
+    MinN = 'quiet (not a parallel run, fewer than 8 landings in the hour): 10 changes; contended: 5'
+    Value = '(a) at most 1.2 quiet and at most 1.5 contended; (b) at most 1.8 quiet, reported when contended; read no earlier than 14 days after W6.1 and W2.1R, with the plain-push share of chain landings (-History) beside it' }
   [pscustomobject]@{ Id = 'B7'; Items = @('W2.3'); ReadoutDays = $script:TcPpcReadoutDays
     Metric = 'pre-lock wall on chain-touching rows where test-auditors ran and the rehearsal ran over 60 s'
     MinN = '5 rows after and 3 before'; Value = 'median at most the pre-change rg + max(ta, rh) + 60 s; 0 test-auditors timeouts in overlapped runs' }
@@ -535,6 +583,11 @@ function Select-TcPpcRows {
   $tr = ''
   if ($SandboxRoot) { try { $tr = [IO.Path]::GetFullPath($SandboxRoot).TrimEnd('\') } catch { $tr = ([string]$SandboxRoot).TrimEnd('\') } }
   $kept = [Collections.Generic.List[object]]::new()
+  # W0.3b: the non-push-main rows that are still ATTEMPTS or route evidence are kept on their own lists. OtherEvents
+  # still counts every row that is not push-main, so the head line's count is what it was.
+  $hookRefused = [Collections.Generic.List[object]]::new()
+  $hookLock = [Collections.Generic.List[object]]::new()
+  $hrUnder = 0
   $read = 0; $mal = 0; $otherEv = 0; $sand = 0; $sandBlob = 0; $tmpOther = 0
   foreach ($r in @($Rows)) {
     if ($null -eq $r) { continue }
@@ -549,13 +602,20 @@ function Select-TcPpcRows {
       }
       if ($co.StartsWith($tr + '\', [StringComparison]::OrdinalIgnoreCase)) { $tmpOther++; continue }
     }
-    if (-not [string]::Equals([string](Get-TcPpcProp $r 'event'), 'push-main', [StringComparison]::Ordinal)) { $otherEv++; continue }
+    $ev = [string](Get-TcPpcProp $r 'event')
+    if (-not [string]::Equals($ev, 'push-main', [StringComparison]::Ordinal)) {
+      $otherEv++
+      if ([string]::Equals($ev, 'hook-refused', [StringComparison]::Ordinal)) { if (Test-TcPpcUnderPushMain $r) { $hrUnder++ } else { $hookRefused.Add($r) } }
+      elseif ([string]::Equals($ev, 'hook-lock', [StringComparison]::Ordinal)) { $hookLock.Add($r) }
+      continue
+    }
     $kept.Add($r)
   }
   return [pscustomobject]@{
     Read = $read; Malformed = $mal; OtherEvents = $otherEv
     ExcludedSandbox = $sand; ExcludedSandboxBlob = $sandBlob; ExcludedTemp = $tmpOther
     Kept = $kept.ToArray()
+    HookRefused = $hookRefused.ToArray(); HookRefusedUnderPm = $hrUnder; HookLock = $hookLock.ToArray()
   }
 }
 
@@ -807,35 +867,154 @@ function Measure-TcPpcB1 {
   return [pscustomobject]@{ A = $sa; ANoStart = $noStart; AVerdict = $va; BBad = $bad; BConflictRows = $conflictRows; BVerdict = $vb }
 }
 
+function Test-TcPpcUnderPushMain {
+  <# Did the hook write this hook-refused row (W0.6) under a push-main? Its `under_push_main` says whether a push-main
+     token was inherited. A row under a push-main is that push-main's attempt, which its own row already records, so it
+     is never counted again. A row that does not carry the field is read as a PLAIN push and counted: W0.6 writes it on
+     every row, so its absence is a writer this reader does not know, and dropping the row would hide an attempt. #>
+  param($Row)
+  $v = Get-TcPpcProp $Row 'under_push_main'
+  if ($null -eq $v) { return $false }
+  if ($v -is [bool]) { return $v }
+  return (@('true', '1', 'yes') -contains ([string]$v).Trim().ToLowerInvariant())
+}
+
+function Test-TcPpcIsRed {
+  <# Is this attempt a GATE RED: push-main's own legs refused it (refused-gate-red), the in-lock hook refused it on
+     run-gates or test-auditors (push-rejected with that reject_class), or a plain push's hook did (hook-refused with
+     that cause). A rehearsal, remote, structure or chain-lease refusal is not a red of the change's content. #>
+  param($Row)
+  $ev = [string](Get-TcPpcProp $Row 'event')
+  if ($ev -eq 'hook-refused') { return (@('run-gates', 'test-auditors') -contains [string](Get-TcPpcProp $Row 'cause')) }
+  $o = [string](Get-TcPpcProp $Row 'outcome')
+  if ($o -eq 'refused-gate-red') { return $true }
+  if ($o -eq 'push-rejected') { return ([string](Get-TcPpcProp $Row 'reject_class') -match '^(run-gates|test-auditors)') }
+  return $false
+}
+
+function Get-TcPpcAttemptClass {
+  <# Which column of B6 one attempt falls in (W0.3b step 4). $LandingChangeId is the change_id of the row the change
+     LANDED with, '' when it did not land or that row carries none.
+
+     OWN RED against AMBIENT RED is decided by the patch, never by the gate's name: a red attempt whose change_id equals
+     the landing's is AMBIENT, because the very patch that was refused later landed unchanged, so what was red was not
+     the patch (another session's live edit, a flaky suite, a mirror nobody had committed). A red whose change_id
+     differs is the change's OWN: the lane changed its patch before it landed. A red that cannot be compared (no
+     change_id on either row, or a plain push's hook-refused row, which carries none) is RED-UNDECIDED. A table of
+     "ambient gates" was rejected: audit-prompt-backup is ambient before W8.4 and the push's own after it, so a name
+     would be right on one date and wrong on the next.
+
+     A conflict is MECHANICAL when every conflict file is in the backlog-index or reread class (the append-shaped files
+     section 8 already sets apart), GENUINE otherwise. That reads a header-line conflict in a .ps1 (15.8, row 36) as
+     genuine, which is the rubric's limit and is stated where it is printed.
+
+     An outcome this reader does not know is counted OTHER, never dropped, and the report prints it by name; that is
+     why this is a lookup and not a switch that could fall through unseen. #>
+  param($Row, [string]$LandingChangeId = '')
+  if (Test-TcPpcIsRed $Row) {
+    if ([string](Get-TcPpcProp $Row 'event') -eq 'hook-refused') { return 'red-undecided' }
+    $cid = [string](Get-TcPpcProp $Row 'change_id')
+    if (-not $cid -or -not $LandingChangeId) { return 'red-undecided' }
+    if ([string]::Equals($cid, $LandingChangeId, [StringComparison]::Ordinal)) { return 'ambient-red' }
+    return 'own-red'
+  }
+  if ([string](Get-TcPpcProp $Row 'event') -eq 'hook-refused') { return 'other' }
+  if (Test-TcPpcLanded $Row) { return 'landed' }
+  $o = [string](Get-TcPpcProp $Row 'outcome')
+  if ($o -eq 'refused-not-ready') {
+    $ds = [string](Get-TcPpcProp $Row 'dirty_since')
+    if ($ds -eq 'start') { return 'not-ready-start' }
+    if ($ds -eq 'during-legs') { return 'not-ready-legs' }
+    return 'not-ready-unrecorded'
+  }
+  if ($o -eq 'refused-rebase-conflict') {
+    $files = Get-TcPpcList $Row 'conflict_files'
+    if (-not $files.Count) { return 'conflict-unrecorded' }
+    foreach ($f in $files) { if ($script:TcPpcMechanicalClasses -notcontains (Get-TcPpcFileClass $f)) { return 'conflict-genuine' } }
+    return 'conflict-mechanical'
+  }
+  return 'other'
+}
+
 function New-TcPpcChange {
-  param($Rows, [string]$How)
-  $first = $null; $landedRow = $null; $anyChain = $false; $anyUnknown = $false; $n = 0
-  foreach ($r in @($Rows)) {
-    if ($null -eq $r) { continue }
-    $n++
+  <# One change from its push-main rows and the plain-push hook-refused rows attached to it. Every row is an ATTEMPT.
+     Attempts is the count of both; LegSets is the sum of `rounds` over the push-main rows, $null when any of them
+     does not carry it (a copy before W0.1R), so a change is never given a leg count it cannot show. #>
+  param($Rows, [string]$How, $HookRows = @(), [bool]$Crosses = $false)
+  $att = [Collections.Generic.List[object]]::new()
+  foreach ($r in @($Rows)) { if ($null -ne $r) { $att.Add($r) } }
+  $pmN = $att.Count
+  foreach ($r in @($HookRows)) { if ($null -ne $r) { $att.Add($r) } }
+  $sorted = @($att.ToArray() | Sort-Object { Get-TcPpcRowAnchor $_ })
+  $first = $null; $landedRow = $null; $anyChain = $false; $anyUnknown = $false
+  $legs = 0; $roundsRows = 0; $cos = @{}
+  foreach ($r in $sorted) {
     $a = Get-TcPpcRowAnchor $r
     if ($null -eq $first -or $a -lt $first) { $first = $a }
+    $cos[(Get-TcPpcCheckoutKey $r)] = $true
+    if ([string](Get-TcPpcProp $r 'event') -eq 'hook-refused') {
+      # A plain push the hook refused on the rehearsal or the chain lease changed the daily chain.
+      if (@('rehearsal', 'chain-lease') -contains [string](Get-TcPpcProp $r 'cause')) { $anyChain = $true }
+      continue
+    }
     if ($null -eq $landedRow -and (Test-TcPpcLanded $r)) { $landedRow = $r }
     $c = Get-TcPpcChainClass $r
     if ($c -eq 'chain-touching') { $anyChain = $true } elseif ($c -eq 'unknown') { $anyUnknown = $true }
+    $rd = Get-TcPpcNum $r 'rounds'
+    if ($null -ne $rd) { $roundsRows++; $legs += [int]$rd }
   }
   $pop = if ($anyChain) { 'chain-touching' } elseif ($anyUnknown) { 'unknown' } else { 'generic' }
   $sec = $null
   if ($null -ne $landedRow) { $lt = ConvertTo-TcPpcUtc (Get-TcPpcProp $landedRow 'ts'); if ($null -ne $lt) { $sec = ($lt - $first).TotalSeconds } }
-  return [pscustomobject]@{ How = $How; Attempts = $n; Landed = ($null -ne $landedRow); Seconds = $sec; Population = $pop }
+  $landCid = if ($null -ne $landedRow) { [string](Get-TcPpcProp $landedRow 'change_id') } else { '' }
+  $cls = [ordered]@{}
+  foreach ($k in $script:TcPpcAttemptColumns) { $cls[$k] = 0 }
+  foreach ($r in $sorted) { $k = Get-TcPpcAttemptClass -Row $r -LandingChangeId $landCid; $cls[$k] = [int]$cls[$k] + 1 }
+  $excl = 0
+  foreach ($k in $script:TcPpcExcludedColumns) { $excl += [int]$cls[$k] }
+  return [pscustomobject]@{
+    How = $How; Attempts = $sorted.Count; PmRows = $pmN; HookRows = ($sorted.Count - $pmN)
+    Landed = ($null -ne $landedRow); Seconds = $sec; Population = $pop
+    FirstAttemptLanded = ($null -ne $landedRow -and $sorted.Count -and [object]::ReferenceEquals($sorted[0], $landedRow))
+    Crosses = $Crosses; Checkouts = $cos.Count
+    LegSets = $(if ($pmN -and $roundsRows -eq $pmN) { $legs } else { $null }); RoundsRows = $roundsRows
+    Classes = $cls; Counted = ($sorted.Count - $excl); Rows = $sorted
+  }
 }
 
-function Group-TcPpcChanges {
-  <# W0.3 step 1's changes. Rows carrying change_id group by (checkout, change_id). Rows without one group by checkout
-     and consecutive attempts: a new change starts when the previous attempt LANDED, or when this attempt began MORE
-     than $GapSec after the previous row was written. So a gap of exactly 6 hours is still one change. #>
-  param($Rows, [int]$GapSec = $script:TcPpcChangeGapSec)
-  $byCid = @{}; $noCid = @{}
+function Get-TcPpcChangeSet {
+  <# W0.3b steps 1 to 3: the changes, with every ATTEMPT attached.
+
+     THE KEY. A push-main row carrying subjects_sha (W0.1R) groups by (checkout, subjects_sha): a lane that amends a
+     baseline between attempts moves its change_id and keeps its subjects, so it stays one change (the housekeeping
+     lane's three attempts carried three change_ids). change_id only BREAKS A TIE: within one (checkout, subjects_sha),
+     a row after a LANDED row starts a new change when its change_id differs from the landing's, because the same
+     subjects over a different patch after a landing is new work, and over the same patch is the same change pushed
+     again. A row with no subjects_sha groups by (checkout, change_id), W0.3's rule; a row with neither, by W0.3's gap.
+
+     A PLAIN PUSH'S ATTEMPT is a hook-refused row (W0.6) not under a push-main. It attaches to the change its checkout
+     was working on at that moment: the change of that checkout whose first attempt began no more than the gap after
+     it and whose last row was written at or after it, the one whose last row is soonest. One that attaches to nothing
+     is counted as Unattached.
+
+     CROSSING CHECKOUTS. Groups in two or more checkouts sharing one subjects_sha, at least one of which landed, are
+     ONE change counted as crossing checkouts: a subject set that lands from another checkout links the two. A crossing
+     change stays out of B6's denominator and is counted on its own line (step 3).
+
+     DRY RUNS move nothing (W2.1R step 7), so they are no attempt and are counted as DryRuns. #>
+  param($Rows, $HookRefused = @(), [int]$GapSec = $script:TcPpcChangeGapSec)
+  $bySub = @{}; $byCid = @{}; $noCid = @{}; $dry = 0
   foreach ($r in @($Rows)) {
     if ($null -eq $r) { continue }
+    if ([string](Get-TcPpcProp $r 'outcome') -eq 'dry-run') { $dry++; continue }
     $co = Get-TcPpcCheckoutKey $r
+    $sub = [string](Get-TcPpcProp $r 'subjects_sha')
     $cid = [string](Get-TcPpcProp $r 'change_id')
-    if ($cid) {
+    if ($sub) {
+      $k = $co + '|' + $sub
+      if (-not $bySub.ContainsKey($k)) { $bySub[$k] = [Collections.Generic.List[object]]::new() }
+      $bySub[$k].Add($r)
+    } elseif ($cid) {
       $k = $co + '|' + $cid
       if (-not $byCid.ContainsKey($k)) { $byCid[$k] = [Collections.Generic.List[object]]::new() }
       $byCid[$k].Add($r)
@@ -845,7 +1024,24 @@ function Group-TcPpcChanges {
     }
   }
   $groups = [Collections.Generic.List[object]]::new()
-  foreach ($k in @($byCid.Keys | Sort-Object)) { $groups.Add((New-TcPpcChange -Rows $byCid[$k].ToArray() -How 'change_id')) }
+  foreach ($k in @($bySub.Keys | Sort-Object)) {
+    $sorted = @($bySub[$k].ToArray() | Sort-Object { Get-TcPpcRowAnchor $_ })
+    $cur = [Collections.Generic.List[object]]::new()
+    $landedCid = $null
+    foreach ($r in $sorted) {
+      if ($cur.Count -and $null -ne $landedCid -and -not [string]::Equals([string](Get-TcPpcProp $r 'change_id'), $landedCid, [StringComparison]::Ordinal)) {
+        $groups.Add([pscustomobject]@{ How = 'subjects'; Checkout = (Get-TcPpcCheckoutKey $cur[0]); Subjects = [string](Get-TcPpcProp $cur[0] 'subjects_sha'); Rows = $cur; Hook = [Collections.Generic.List[object]]::new(); Merged = $false })
+        $cur = [Collections.Generic.List[object]]::new()
+        $landedCid = $null
+      }
+      $cur.Add($r)
+      if ($null -eq $landedCid -and (Test-TcPpcLanded $r)) { $landedCid = [string](Get-TcPpcProp $r 'change_id') }
+    }
+    if ($cur.Count) { $groups.Add([pscustomobject]@{ How = 'subjects'; Checkout = (Get-TcPpcCheckoutKey $cur[0]); Subjects = [string](Get-TcPpcProp $cur[0] 'subjects_sha'); Rows = $cur; Hook = [Collections.Generic.List[object]]::new(); Merged = $false }) }
+  }
+  foreach ($k in @($byCid.Keys | Sort-Object)) {
+    $groups.Add([pscustomobject]@{ How = 'change_id'; Checkout = (Get-TcPpcCheckoutKey $byCid[$k][0]); Subjects = ''; Rows = $byCid[$k]; Hook = [Collections.Generic.List[object]]::new(); Merged = $false })
+  }
   foreach ($co in @($noCid.Keys | Sort-Object)) {
     $sorted = @($noCid[$co].ToArray() | Sort-Object { Get-TcPpcRowAnchor $_ })
     $cur = [Collections.Generic.List[object]]::new()
@@ -853,16 +1049,148 @@ function Group-TcPpcChanges {
     foreach ($r in $sorted) {
       $st = Get-TcPpcRowAnchor $r
       if ($cur.Count -and ($prevLanded -or ($null -ne $prevTs -and ($st - $prevTs).TotalSeconds -gt $GapSec))) {
-        $groups.Add((New-TcPpcChange -Rows $cur.ToArray() -How 'gap'))
+        $groups.Add([pscustomobject]@{ How = 'gap'; Checkout = $co; Subjects = ''; Rows = $cur; Hook = [Collections.Generic.List[object]]::new(); Merged = $false })
         $cur = [Collections.Generic.List[object]]::new()
       }
       $cur.Add($r)
       $prevTs = ConvertTo-TcPpcUtc (Get-TcPpcProp $r 'ts')
       $prevLanded = Test-TcPpcLanded $r
     }
-    if ($cur.Count) { $groups.Add((New-TcPpcChange -Rows $cur.ToArray() -How 'gap')) }
+    if ($cur.Count) { $groups.Add([pscustomobject]@{ How = 'gap'; Checkout = $co; Subjects = ''; Rows = $cur; Hook = [Collections.Generic.List[object]]::new(); Merged = $false }) }
   }
-  return , ($groups.ToArray())
+  # Attach each plain push's attempt to the change its checkout was working on.
+  $unattached = 0
+  foreach ($h in @($HookRefused)) {
+    if ($null -eq $h) { continue }
+    $co = Get-TcPpcCheckoutKey $h
+    $t = Get-TcPpcRowAnchor $h
+    $best = $null; $bestLast = $null
+    foreach ($g in $groups) {
+      if ($g.Checkout -ne $co) { continue }
+      $f = $null; $l = $null
+      foreach ($r in $g.Rows) {
+        $a = Get-TcPpcRowAnchor $r; if ($null -eq $f -or $a -lt $f) { $f = $a }
+        $w = ConvertTo-TcPpcUtc (Get-TcPpcProp $r 'ts'); if ($null -eq $w) { $w = $a }; if ($null -eq $l -or $w -gt $l) { $l = $w }
+      }
+      if ($t -lt $f.AddSeconds(-$GapSec) -or $t -gt $l) { continue }
+      if ($null -eq $best -or $l -lt $bestLast) { $best = $g; $bestLast = $l }
+    }
+    if ($null -eq $best) { $unattached++ } else { $best.Hook.Add($h) }
+  }
+  # Link groups across checkouts that share a subject set, once one of them landed.
+  $bySubAll = @{}
+  foreach ($g in $groups) { if ($g.Subjects) { if (-not $bySubAll.ContainsKey($g.Subjects)) { $bySubAll[$g.Subjects] = [Collections.Generic.List[object]]::new() }; $bySubAll[$g.Subjects].Add($g) } }
+  $changes = [Collections.Generic.List[object]]::new()
+  foreach ($s in @($bySubAll.Keys | Sort-Object)) {
+    $gs = $bySubAll[$s]
+    $cos = @{}; $anyLanded = $false
+    foreach ($g in $gs) { $cos[$g.Checkout] = $true; foreach ($r in $g.Rows) { if (Test-TcPpcLanded $r) { $anyLanded = $true } } }
+    if ($cos.Count -lt 2 -or -not $anyLanded) { continue }
+    $rows = [Collections.Generic.List[object]]::new(); $hooks = [Collections.Generic.List[object]]::new()
+    foreach ($g in $gs) { foreach ($r in $g.Rows) { $rows.Add($r) }; foreach ($r in $g.Hook) { $hooks.Add($r) }; $g.Merged = $true }
+    $changes.Add((New-TcPpcChange -Rows $rows.ToArray() -How 'subjects' -HookRows $hooks.ToArray() -Crosses $true))
+  }
+  foreach ($g in $groups) {
+    if ($g.Merged) { continue }
+    $changes.Add((New-TcPpcChange -Rows $g.Rows.ToArray() -How $g.How -HookRows $g.Hook.ToArray()))
+  }
+  return [pscustomobject]@{ Changes = $changes.ToArray(); Unattached = $unattached; DryRuns = $dry }
+}
+
+function Group-TcPpcChanges {
+  <# The changes alone, for callers that need no attempt counts (W0.3's section 3 and its fixtures). #>
+  param($Rows, [int]$GapSec = $script:TcPpcChangeGapSec, $HookRefused = @())
+  $cs = Get-TcPpcChangeSet -Rows $Rows -HookRefused $HookRefused -GapSec $GapSec
+  return , ($cs.Changes)
+}
+
+function Get-TcPpcHourKey { param($At) return ([datetime]$At).ToString('yyyy-MM-ddTHH') }
+
+function Get-TcPpcHourLandings {
+  <# Landings per UTC clock hour, keyed 'yyyy-MM-ddTHH'. From reflog landings (objects with Ts), or, with
+     -FromRows, from the landed push-main rows' ts, which is the fallback when the reflog cannot be read and misses
+     every plain push. #>
+  param($Landings, [switch]$FromRows)
+  $h = @{}
+  foreach ($l in @($Landings)) {
+    if ($null -eq $l) { continue }
+    if ($FromRows) {
+      if (-not (Test-TcPpcLanded $l)) { continue }
+      $t = ConvertTo-TcPpcUtc (Get-TcPpcProp $l 'ts')
+    } else { $t = $l.Ts }
+    if ($null -eq $t) { continue }
+    $k = Get-TcPpcHourKey $t
+    if ($h.ContainsKey($k)) { $h[$k] = [int]$h[$k] + 1 } else { $h[$k] = 1 }
+  }
+  return $h
+}
+
+function Get-TcPpcChangeStratum {
+  <# W0.3b step 5: CONTENDED when any attempt of the change is a row inside a parallel run (its session, inside the
+     run's first and last row), or began in a UTC clock hour with at least $script:TcPpcContendedHourLandings landings;
+     QUIET otherwise. A hook-refused row carries no session, so only its hour can make a change contended. #>
+  param($Change, $Runs, $HourLandings)
+  foreach ($r in @($Change.Rows)) {
+    $s = [string](Get-TcPpcProp $r 'session')
+    $t = ConvertTo-TcPpcUtc (Get-TcPpcProp $r 'ts')
+    if ($s -and $null -ne $t) {
+      foreach ($x in @($Runs)) { if ($null -ne $x -and $x.Session -eq $s -and $t -ge $x.Start -and $t -le $x.End) { return 'contended' } }
+    }
+    if ($null -ne $HourLandings) {
+      $k = Get-TcPpcHourKey (Get-TcPpcRowAnchor $r)
+      if ($HourLandings.ContainsKey($k) -and [int]$HourLandings[$k] -ge $script:TcPpcContendedHourLandings) { return 'contended' }
+    }
+  }
+  return 'quiet'
+}
+
+function Get-TcPpcNegBinCdf {
+  <# P(n changes take at most $Attempts attempts in total | each attempt lands independently with probability $Q):
+     the sum of n geometric counts on {1, 2, ...}, so the failures are negative binomial. It is the chance of a result
+     this good or better if nothing had changed, which is what "P(result | old rate)" asks. A model, printed as one. #>
+  param([int]$Changes, [int]$Attempts, [double]$Q)
+  if ($Changes -le 0) { return 1.0 }
+  $f = $Attempts - $Changes
+  if ($f -lt 0) { return 0.0 }
+  $term = [math]::Pow($Q, $Changes)
+  $sum = $term
+  for ($k = 0; $k -lt $f; $k++) { $term = $term * ($k + $Changes) / ($k + 1) * (1.0 - $Q); $sum += $term }
+  if ($sum -gt 1.0) { $sum = 1.0 }
+  return $sum
+}
+
+function Measure-TcPpcB6 {
+  <# B6 (amended, 15.6) over landed chain-touching changes that did not cross checkouts, by stratum. (a) counted
+     attempts per change: every attempt except the change's own reds and its genuine conflicts, because an exclusion
+     needs evidence and an undecided red or an unrecorded conflict has none. (b) leg sets per change, over the changes
+     whose every push-main row carries rounds. The bars are compared in INTEGERS (5A <= 6n is 1.2, 2A <= 3n is 1.5,
+     5L <= 9n is 1.8), so a case at the bar is decided by the rule and never by a double. Under the minimum N there is
+     NO VERDICT, never a pass. #>
+  param($Changes, $Runs, $HourLandings)
+  $landedChain = @(@($Changes) | Where-Object { $_.Landed -and $_.Population -eq 'chain-touching' })
+  $cross = @($landedChain | Where-Object { $_.Crosses })
+  $out = [ordered]@{}
+  foreach ($st in @('quiet', 'contended')) {
+    $cs = @($landedChain | Where-Object { -not $_.Crosses -and (Get-TcPpcChangeStratum -Change $_ -Runs $Runs -HourLandings $HourLandings) -eq $st })
+    $cols = [ordered]@{}
+    foreach ($k in $script:TcPpcAttemptColumns) { $cols[$k] = 0 }
+    $n = $cs.Count; $att = 0; $counted = 0; $first = 0
+    foreach ($c in $cs) { $att += $c.Attempts; $counted += $c.Counted; if ($c.FirstAttemptLanded) { $first++ }; foreach ($k in $script:TcPpcAttemptColumns) { $cols[$k] = [int]$cols[$k] + [int]$c.Classes[$k] } }
+    $withLegs = @($cs | Where-Object { $null -ne $_.LegSets })
+    $legs = 0; foreach ($c in $withLegs) { $legs += [int]$c.LegSets }
+    $minN = if ($st -eq 'quiet') { $script:TcPpcB6QuietMinN } else { $script:TcPpcB6ContendedMinN }
+    if ($n -lt $minN) { $va = ('no verdict (N={0} changes, under {1})' -f $n, $minN) }
+    elseif ($st -eq 'quiet') { $va = $(if (5 * $counted -le 6 * $n) { 'pass' } else { 'fail' }) }
+    else { $va = $(if (2 * $counted -le 3 * $n) { 'pass' } else { 'fail' }) }
+    $nl = $withLegs.Count
+    if ($st -ne 'quiet') { $vb = 'reported, no bar when contended' }
+    elseif ($nl -lt $minN) { $vb = ('no verdict (N={0} changes carrying rounds, under {1})' -f $nl, $minN) }
+    else { $vb = $(if (5 * $legs -le 9 * $nl) { 'pass' } else { 'fail' }) }
+    $p = [ordered]@{}
+    foreach ($rate in $script:TcPpcB6OldRates) { $p[([string]$rate)] = (Get-TcPpcNegBinCdf -Changes $n -Attempts $counted -Q (1.0 / $rate)) }
+    $out[$st] = [pscustomobject]@{ Changes = $n; Attempts = $att; Counted = $counted; FirstAttempt = $first; Columns = $cols; LegChanges = $nl; LegSets = $legs; AVerdict = $va; BVerdict = $vb; P = $p }
+  }
+  return [pscustomobject]@{ Strata = $out; Crossing = $cross.Count; CrossingFirst = @($cross | Where-Object { $_.FirstAttemptLanded }).Count }
 }
 
 function Split-TcPpcFlushRows {
@@ -979,6 +1307,13 @@ function Format-TcPpcCounts {
 
 function Add-TcPpcCount { param($Table, [string]$Key) if ($Table.Contains($Key)) { $Table[$Key] = [int]$Table[$Key] + 1 } else { $Table[$Key] = 1 } }
 
+function Format-TcPpcShare {
+  <# 'N of M (P%)', with the denominator always printed; 'N of 0' when there is none (W0.3b step 7). #>
+  param([int]$Part, [int]$Whole)
+  if ($Whole -le 0) { return ('{0} of 0' -f $Part) }
+  return ('{0} of {1} ({2:N1}%)' -f $Part, $Whole, (100.0 * $Part / $Whole))
+}
+
 function Write-TcPpcCostHead {
   param($Rows, $Ctx)
   $s = $Ctx.Sel
@@ -987,6 +1322,9 @@ function Write-TcPpcCostHead {
   Write-TcPpcLine ('  excluded {0} rows: test-prepush sandbox checkouts (%TEMP%\{1}*), {2} of them named with W0.2''s blob segment' -f $s.ExcludedSandbox, $script:TcPpcSandboxLeaf, $s.ExcludedSandboxBlob)
   Write-TcPpcLine ('  excluded {0} rows: other fixture checkouts under %TEMP%' -f $s.ExcludedTemp)
   Write-TcPpcLine ('  not costed {0} rows: hook-lock and other events that are not push-main' -f $s.OtherEvents)
+  $hrN = @(Get-TcPpcProp $s 'HookRefused' | Where-Object { $null -ne $_ }).Count
+  $hrU = [int](Get-TcPpcProp $s 'HookRefusedUnderPm')
+  Write-TcPpcLine ('    of them hook-refused rows (W0.6): {0} of a plain push, kept as ATTEMPTS for section 3; {1} written under a push-main, whose own row records the attempt' -f $hrN, $hrU)
   Write-TcPpcLine ('  kept {0} push-main rows' -f @($s.Kept).Count)
   $pre = 0; $unk = 0; $withBlob = 0
   $by = [ordered]@{}
@@ -1006,7 +1344,7 @@ function Write-TcPpcCostHead {
     $b = $Ctx.Bar
     $c = Measure-TcPpcBarCopies -Rows $s.Kept -State $b -Index $Ctx.Index
     Write-TcPpcLine ('  BAR {0} ({1}): landed {2} at {3}; read-out {4}; the window runs from the landing to the read-out or now, whichever is first' -f $b.Id, (@($b.Def.Items) -join ', '), (Format-TcPpcShort ([string]$b.Landing.Sha)), (Format-TcPpcUtc $b.Landing.Ts), (Format-TcPpcUtc $b.Readout))
-    Write-TcPpcLine ('    treated {0}; older-copy rows excluded {1}; unknown-copy rows excluded {2}; pre-W0.1 rows excluded {3}; no base {4}; base before the landing {5}; landing blob unmapped {6}' -f $c['treated'], $c['older-copy'], $c['unknown-copy'], $c['pre-w01'], $c['no-base'], $c['base-before-landing'], $c['unknown-landing'])
+    Write-TcPpcLine ('    treated {0}; older-copy rows excluded {1}; unknown-copy rows excluded {2}; pre-W0.1 rows excluded {3}; no base {4}; base before the landing {5}; landing blob unmapped {6}' -f $c['treated'], (Format-TcPpcShare $c['older-copy'] @($s.Kept).Count), $c['unknown-copy'], $c['pre-w01'], $c['no-base'], $c['base-before-landing'], $c['unknown-landing'])
     Write-TcPpcLine ('    every section below is over the {0} treated rows only' -f @($Rows).Count)
   }
 }
@@ -1064,19 +1402,88 @@ function Write-TcPpcCostDurations {
 function Write-TcPpcCostChanges {
   param($Rows, $Ctx)
   Write-TcPpcLine ''
-  Write-TcPpcLine ('3. first attempt to landing per change, by (checkout, change_id), else by a 6-hour gap within one checkout ({0})' -f (Format-TcPpcWindow $Ctx))
-  $gs = Group-TcPpcChanges -Rows $Rows
-  $all = @($gs)
+  Write-TcPpcLine ('3. changes and their attempts ({0}). An ATTEMPT is a push-main row or a plain push''s hook-refused row (W0.6); a LEG SET is one push-main round (rounds, W0.1R); a change is (checkout, subjects_sha), else (checkout, change_id), else a 6-hour gap within one checkout' -f (Format-TcPpcWindow $Ctx))
+  $hr = @(Get-TcPpcProp $Ctx.Sel 'HookRefused' | Where-Object { $null -ne $_ })
+  $cs = Get-TcPpcChangeSet -Rows $Rows -HookRefused $hr
+  $all = @($cs.Changes)
+  $pmAtt = 0; $hkAtt = 0
+  foreach ($c in $all) { $pmAtt += $c.PmRows; $hkAtt += $c.HookRows }
+  Write-TcPpcLine ('   attempts {0}: push-main rows {1}, plain-push hook refusals attached to a change {2}; left out: plain-push hook refusals attached to no change {3}, dry runs {4} (they move nothing), hook refusals under a push-main {5} (its own row records them)' -f ($pmAtt + $hkAtt), $pmAtt, $hkAtt, $cs.Unattached, $cs.DryRuns, [int](Get-TcPpcProp $Ctx.Sel 'HookRefusedUnderPm'))
+  $bySub = @($all | Where-Object { $_.How -eq 'subjects' }).Count
   $byCid = @($all | Where-Object { $_.How -eq 'change_id' }).Count
+  $byGap = @($all | Where-Object { $_.How -eq 'gap' }).Count
   $landed = @($all | Where-Object { $_.Landed })
-  Write-TcPpcLine ('   changes {0}: by change_id {1}, by a gap (rows with no change_id, labelled so) {2}; landed {3}, not landed in the window {4}' -f $all.Count, $byCid, ($all.Count - $byCid), $landed.Count, ($all.Count - $landed.Count))
+  $cross = @($all | Where-Object { $_.Crosses })
+  Write-TcPpcLine ('   changes {0}: by subjects_sha {1}, by change_id {2} (rows before W0.1R), by a gap {3} (rows before W0.1, labelled so); landed {4}, not landed in the window {5}; crossing checkouts {6} (landed {7}, on its first attempt {8}), out of B6''s denominator' -f $all.Count, $bySub, $byCid, $byGap, $landed.Count, ($all.Count - $landed.Count), $cross.Count, @($cross | Where-Object { $_.Landed }).Count, @($cross | Where-Object { $_.FirstAttemptLanded }).Count)
   foreach ($pop in @('generic', 'chain-touching', 'unknown')) {
     $v = @($landed | Where-Object { $_.Population -eq $pop } | ForEach-Object { $_.Seconds })
     Write-TcPpcLine ('   {0,-15} first attempt to landing: {1} changes' -f $pop, (Format-TcPpcStats (Get-TcPpcStats $v)))
   }
   $att = @($landed | ForEach-Object { $_.Attempts })
   $attC = @($landed | Where-Object { $_.Population -eq 'chain-touching' } | ForEach-Object { $_.Attempts })
-  Write-TcPpcLine ('   push-main rows per landed change: {0}; chain-touching only (B6): {1}' -f (Format-TcPpcStats (Get-TcPpcStats $att) -Unit ''), (Format-TcPpcStats (Get-TcPpcStats $attC) -Unit ''))
+  Write-TcPpcLine ('   attempts per landed change, every attempt counted: {0}; chain-touching only: {1}' -f (Format-TcPpcStats (Get-TcPpcStats $att) -Unit ''), (Format-TcPpcStats (Get-TcPpcStats $attC) -Unit ''))
+  $withLegs = @($landed | Where-Object { $null -ne $_.LegSets })
+  $lg = @($withLegs | ForEach-Object { $_.LegSets })
+  $lgC = @($withLegs | Where-Object { $_.Population -eq 'chain-touching' } | ForEach-Object { $_.LegSets })
+  Write-TcPpcLine ('   leg sets per landed change, rounds summed over changes whose every push-main row carries rounds ({0}): {1}; chain-touching only: {2}' -f (Format-TcPpcShare $withLegs.Count $landed.Count), (Format-TcPpcStats (Get-TcPpcStats $lg) -Unit ''), (Format-TcPpcStats (Get-TcPpcStats $lgC) -Unit ''))
+  $pre = @($landed | Where-Object { $null -eq $_.LegSets })
+  if ($pre.Count) {
+    # B6's OLD LINE, kept for rows that carry no rounds: W0.3's count of push-main rows per landed change.
+    $preA = @($pre | ForEach-Object { $_.PmRows })
+    $preC = @($pre | Where-Object { $_.Population -eq 'chain-touching' } | ForEach-Object { $_.PmRows })
+    Write-TcPpcLine ('   B6''s old line, pre-W0.1 ({0} landed changes whose rows carry no rounds): push-main rows per landed change: {1}; chain-touching only (B6): {2}' -f $pre.Count, (Format-TcPpcStats (Get-TcPpcStats $preA) -Unit ''), (Format-TcPpcStats (Get-TcPpcStats $preC) -Unit ''))
+  }
+  $runs = Find-TcPpcParallelRuns -Rows $Rows
+  $hl = Get-TcPpcProp $Ctx 'HourLandings'
+  $hlFrom = [string](Get-TcPpcProp $Ctx 'HourSource')
+  if ($null -eq $hl) { $hl = Get-TcPpcHourLandings -Landings $Rows -FromRows; $hlFrom = 'landed push-main rows only (no reflog was read), which misses every plain push' }
+  Write-TcPpcB6Lines -Changes $all -Runs $runs -HourLandings $hl -HourFrom $hlFrom -Judge ($null -ne $Ctx.Bar -and $Ctx.Bar.Id -eq 'B6')
+  Write-TcPpcB10Lines -Changes $all -Runs $runs -HourLandings $hl
+}
+
+function Write-TcPpcB6Lines {
+  <# B6 (amended, 15.6) by stratum. -Judge prints the verdicts; without it the rows are not treated for B6, so the
+     figures are reported and the verdict is withheld. #>
+  param($Changes, $Runs, $HourLandings, [string]$HourFrom, [switch]$Judge)
+  $m = Measure-TcPpcB6 -Changes $Changes -Runs $Runs -HourLandings $HourLandings
+  Write-TcPpcLine ('   B6 (amended, 15.6), landed chain-touching changes not crossing checkouts; strata by parallel run and by landings in the hour (contended at {0} or more; hours read from {1}); crossing checkouts, counted apart: {2} (on its first attempt {3})' -f $script:TcPpcContendedHourLandings, $HourFrom, $m.Crossing, $m.CrossingFirst)
+  Write-TcPpcLine '     columns: own red and genuine conflict are EXCLUDED from (a); every other column is COUNTED, an undecided red and an unrecorded conflict included, because an exclusion needs evidence. own against ambient is read from the patch (a red whose change_id equals the landing''s is ambient); mechanical means every conflict file is backlog-index or reread, so a header-line conflict in a .ps1 reads genuine'
+  foreach ($st in @('quiet', 'contended')) {
+    $s = $m.Strata[$st]
+    $cols = (@($script:TcPpcAttemptColumns | ForEach-Object { '{0} {1}' -f $_, $s.Columns[$_] }) -join ', ')
+    $bar = if ($st -eq 'quiet') { 'at most 1.2 over at least {0}' -f $script:TcPpcB6QuietMinN } else { 'at most 1.5 over at least {0}' -f $script:TcPpcB6ContendedMinN }
+    $ratio = if ($s.Changes) { '{0:N2}' -f ($s.Counted / $s.Changes) } else { 'n/a' }
+    $legR = if ($s.LegChanges) { '{0:N2}' -f ($s.LegSets / $s.LegChanges) } else { 'n/a' }
+    $va = if ($Judge) { $s.AVerdict } else { 'not judged here: run -Cost -Bar B6, whose rows are treated' }
+    $vb = if ($Judge) { $s.BVerdict } else { 'not judged here' }
+    Write-TcPpcLine ('     {0,-9} changes {1} (landed on the first attempt {2}); attempts {3}: {4}' -f $st, $s.Changes, $s.FirstAttempt, $s.Attempts, $cols)
+    Write-TcPpcLine ('               (a) counted attempts per change {0} ({1} over {2}); bar {3}; verdict {4}' -f $ratio, $s.Counted, $s.Changes, $bar, $va)
+    Write-TcPpcLine ('               (b) leg sets per change {0} ({1} over {2} changes carrying rounds); bar {3}; verdict {4}' -f $legR, $s.LegSets, $s.LegChanges, $(if ($st -eq 'quiet') { 'at most 1.8' } else { 'none, reported' }), $vb)
+    if ($st -eq 'quiet' -and -not $s.Changes) { Write-TcPpcLine '               P(result | old rate): no change in this stratum, so there is no result to weigh' }
+    elseif ($st -eq 'quiet') {
+      $ps = (@($s.P.Keys | ForEach-Object { 'at {0} per change {1:G4}' -f $_, $s.P[$_] }) -join '; ')
+      Write-TcPpcLine ('               P(at most {0} counted attempts over {1} changes | old rate), each attempt landing independently with probability 1/rate: {2}' -f $s.Counted, $s.Changes, $ps)
+    }
+  }
+  Write-TcPpcLine '     the plain-push share of chain landings, which B6 is read beside, is -History''s "chain landings by route"'
+}
+
+function Write-TcPpcB10Lines {
+  <# B10, first attempt to landing per change, with the attempts and leg sets beside it (W0.3b step 1), by population
+     and stratum. No old rate for B10 is recorded (its baseline is W0.3's first run), so no P is printed for it. #>
+  param($Changes, $Runs, $HourLandings)
+  $landed = @(@($Changes) | Where-Object { $_.Landed -and -not $_.Crosses })
+  Write-TcPpcLine ('   B10, landed changes not crossing checkouts ({0}), by population and stratum: first attempt to landing, attempts per change, leg sets per change. P(result | old rate): none, because no old rate for B10 is recorded yet' -f $landed.Count)
+  foreach ($pop in @('generic', 'chain-touching', 'unknown')) {
+    foreach ($st in @('quiet', 'contended')) {
+      $cs = @($landed | Where-Object { $_.Population -eq $pop -and (Get-TcPpcChangeStratum -Change $_ -Runs $Runs -HourLandings $HourLandings) -eq $st })
+      if (-not $cs.Count) { Write-TcPpcLine ('     {0,-15} {1,-9} no change' -f $pop, $st); continue }
+      $t = Get-TcPpcStats @($cs | ForEach-Object { $_.Seconds })
+      $a = Get-TcPpcStats @($cs | ForEach-Object { $_.Attempts })
+      $l = Get-TcPpcStats @($cs | Where-Object { $null -ne $_.LegSets } | ForEach-Object { $_.LegSets })
+      Write-TcPpcLine ('     {0,-15} {1,-9} {2}; attempts {3}; leg sets {4}' -f $pop, $st, (Format-TcPpcStats $t), (Format-TcPpcStats $a -Unit ''), (Format-TcPpcStats $l -Unit ''))
+    }
+  }
 }
 
 function Write-TcPpcCostLegs {
@@ -1259,6 +1666,7 @@ function Write-TcPpcCostBars {
     Write-TcPpcLine ('    {0}: {1}' -f $Ctx.Bar.Id, $Ctx.Bar.Def.Metric)
     Write-TcPpcLine ('    minimum N {0}; bar {1}' -f $Ctx.Bar.Def.MinN, $Ctx.Bar.Def.Value)
     if ($Ctx.Bar.Id -eq 'B1') { Write-TcPpcB1Lines -Rows $Rows -Ancestry $Ctx.Ancestry }
+    elseif ($Ctx.Bar.Id -eq 'B6') { Write-TcPpcLine '    B6''s verdicts are printed in section 3, over these treated rows; its result line goes in section 13' }
     else { Write-TcPpcLine '    this bar is read by a person from the sections above, which are over its treated rows, and its result line goes in section 13' }
     return
   }
@@ -1268,7 +1676,7 @@ function Write-TcPpcCostBars {
       continue
     }
     $c = Measure-TcPpcBarCopies -Rows $Rows -State $b -Index $Ctx.Index
-    Write-TcPpcLine ('    {0,-4} {1}: landed {2} at {3}; read-out {4} ({5}); treated {6}, older-copy rows excluded {7}, unknown-copy rows excluded {8}, pre-W0.1 {9}, no base {10}, base before the landing {11}' -f $b.Id, (@($b.Def.Items) -join ', '), (Format-TcPpcShort ([string]$b.Landing.Sha)), (Format-TcPpcUtc $b.Landing.Ts), (Format-TcPpcUtc $b.Readout), $(if ($b.Due) { 'DUE' } else { 'not due' }), $c['treated'], $c['older-copy'], $c['unknown-copy'], $c['pre-w01'], $c['no-base'], $c['base-before-landing'])
+    Write-TcPpcLine ('    {0,-4} {1}: landed {2} at {3}; read-out {4} ({5}); treated {6}, older-copy rows excluded {7}, unknown-copy rows excluded {8}, pre-W0.1 {9}, no base {10}, base before the landing {11}' -f $b.Id, (@($b.Def.Items) -join ', '), (Format-TcPpcShort ([string]$b.Landing.Sha)), (Format-TcPpcUtc $b.Landing.Ts), (Format-TcPpcUtc $b.Readout), $(if ($b.Due) { 'DUE' } else { 'not due' }), $c['treated'], (Format-TcPpcShare $c['older-copy'] @($Rows).Count), $c['unknown-copy'], $c['pre-w01'], $c['no-base'], $c['base-before-landing'])
     if ($b.Id -eq 'B1') {
       $tr = @(@($Rows) | Where-Object { (Resolve-TcPpcRowCopy -Row $_ -Index $Ctx.Index -LandingBlob ([string]$b.LandingBlob) -AfterLanding $b.AfterLanding) -eq 'treated' })
       $ta = @(@($Ctx.Ancestry) | Where-Object { $e = $_; @($tr | Where-Object { [object]::ReferenceEquals($_, $e.Row) }).Count })
@@ -1477,11 +1885,22 @@ function Invoke-TcPpcCost {
   if ($rg.Code -eq 0) {
     foreach ($ln in @($rg.Out)) { if ($ln -match '^@@TC-COMMIT \S+ (\S+)') { $t = ConvertTo-TcPpcUtc $Matches[1]; if ($null -ne $t) { $rgTimes.Add($t) } } }
   }
+  # W0.3b step 5: landings per clock hour for the B6 and B10 strata, from the shared reflog, which sees every landing
+  # from this box and not only push-main's. When it cannot be read, section 3 falls back to push-main rows and says so.
+  $hourL = $null; $hourFrom = ''
+  $rfl = Invoke-TcPpcGit -Dir $Repo -GitArgs @('reflog', 'show', '--format=%H%x09%gd%x09%gs', '--date=iso-strict', $RefName)
+  if ($rfl.Code -eq 0) {
+    $rfe = ConvertFrom-TcPpcReflog $rfl.Out
+    $rfLand = Get-TcPpcReflogLandings -Entries $rfe -StartUtc $startUtc.AddDays(-1) -EndUtc $endUtc
+    $hourL = Get-TcPpcHourLandings -Landings $rfLand
+    $hourFrom = ('the ' + $RefName + ' reflog, ' + @($rfLand).Count + ' landings from a day before the window to its end')
+  }
   $ctx = [pscustomobject]@{
     StartUtc = $startUtc; EndUtc = $endUtc; RefName = $RefName; Sel = $sel; Files = $raw.Files
     Index = $index; BlobOk = ($bl.Code -eq 0); Bars = $states; Bar = $barState; Ancestry = $anc.ToArray()
     RunGatesTimes = $rgTimes.ToArray(); RunGatesOk = ($rg.Code -eq 0)
     PlanLogOk = $log.Ok; PlanLogWhy = $log.Why; PlanRecords = @($records).Count; PlanMalformed = $malformed
+    HourLandings = $hourL; HourSource = $hourFrom
   }
   Write-TcPpcCostReport -Rows $rows -Ctx $ctx
   Write-TcPpcLine ''
@@ -1613,6 +2032,108 @@ function Measure-TcPpcClassCensus {
   return , (@($res.Values))
 }
 
+function Measure-TcPpcMainRejects {
+  <# W0.3b step 6, the first count, committed from the method of %TEMP%\pushgood-skeptic\mainland.py: a plain push
+     from the MAIN checkout that passed every hook check writes a hook-lock row with state held, because the hook takes
+     the push lock only after its checks (ops\hooks\pre-push, "TAKEN AFTER THE CHECKS"). Such a row is FOLLOWED when a
+     reflog update of the main ref lands 0 to $WithinSec seconds after it, inclusive; one that is not followed was
+     rejected after every check had passed, or is an update the reflog did not record, and the two cannot be told
+     apart here. $Updates are reflog entries (objects with Ts). #>
+  param($HookRows, [string]$MainCheckout, $Updates, [int]$WithinSec = $script:TcPpcFollowedSec)
+  $mk = ([string]$MainCheckout).TrimEnd('\').ToLowerInvariant()
+  $held = [Collections.Generic.List[object]]::new()
+  $not = [Collections.Generic.List[object]]::new()
+  $followed = 0
+  foreach ($r in @($HookRows)) {
+    if ($null -eq $r -or -not $mk) { continue }
+    if ([string](Get-TcPpcProp $r 'state') -ne 'held') { continue }
+    if ((Get-TcPpcCheckoutKey $r) -ne $mk) { continue }
+    $t = ConvertTo-TcPpcUtc (Get-TcPpcProp $r 'ts')
+    if ($null -eq $t) { continue }
+    $held.Add($r)
+    $hit = $false
+    foreach ($u in @($Updates)) { if ($null -eq $u) { continue }; $d = ($u.Ts - $t).TotalSeconds; if ($d -ge 0 -and $d -le $WithinSec) { $hit = $true; break } }
+    if ($hit) { $followed++ } else { $not.Add($r) }
+  }
+  return [pscustomobject]@{ Held = $held.Count; Followed = $followed; NotFollowed = $not.ToArray() }
+}
+
+function Resolve-TcPpcLandingRoutes {
+  <# W0.3b step 6, the second count, committed from the method of %TEMP%\pushgood-residual\landings.py: which road each
+     landing came by. Oldest first, each landing takes one unused row: a landed push-main row written from
+     $script:TcPpcRoutePmBeforeSec before to $script:TcPpcRoutePmAfterSec after it whose base or grant is the sha main
+     moved FROM, nearest first; else one written within $script:TcPpcRoutePmNearSec after it; else a hook-lock row written
+     from $script:TcPpcRouteHookBeforeSec before to $script:TcPpcRouteHookAfterSec after it naming that sha, whose
+     checkout makes it plain-main or plain-worktree (plain-unknown when the main checkout could not be named); else
+     no-ledger-row. A push-main's own hook also writes hook-lock rows, which is why a push-main row is tried first. #>
+  param($Landings, $PushMainRows, $HookRows, [string]$MainCheckout)
+  $mk = ([string]$MainCheckout).TrimEnd('\').ToLowerInvariant()
+  $pm = @(@($PushMainRows) | Where-Object { $null -ne $_ -and (Test-TcPpcLanded $_) -and $null -ne (ConvertTo-TcPpcUtc (Get-TcPpcProp $_ 'ts')) })
+  $hk = @(@($HookRows) | Where-Object { $null -ne $_ -and $null -ne (ConvertTo-TcPpcUtc (Get-TcPpcProp $_ 'ts')) })
+  $usedPm = @{}; $usedHk = @{}
+  $out = [Collections.Generic.List[object]]::new()
+  foreach ($l in @(@($Landings) | Sort-Object Ts)) {
+    if ($null -eq $l) { continue }
+    $prev = [string]$l.Prev
+    $best = -1; $bestD = 0.0
+    for ($i = 0; $i -lt $pm.Count; $i++) {
+      if ($usedPm.ContainsKey($i)) { continue }
+      $d = ((ConvertTo-TcPpcUtc (Get-TcPpcProp $pm[$i] 'ts')) - $l.Ts).TotalSeconds
+      if ($d -lt -$script:TcPpcRoutePmBeforeSec -or $d -gt $script:TcPpcRoutePmAfterSec) { continue }
+      $names = ($prev -and ([string]::Equals([string](Get-TcPpcProp $pm[$i] 'grant'), $prev, [StringComparison]::OrdinalIgnoreCase) -or [string]::Equals([string](Get-TcPpcProp $pm[$i] 'base'), $prev, [StringComparison]::OrdinalIgnoreCase)))
+      if ($names -and ($best -lt 0 -or [math]::Abs($d) -lt [math]::Abs($bestD))) { $best = $i; $bestD = $d }
+    }
+    if ($best -lt 0) {
+      for ($i = 0; $i -lt $pm.Count; $i++) {
+        if ($usedPm.ContainsKey($i)) { continue }
+        $d = ((ConvertTo-TcPpcUtc (Get-TcPpcProp $pm[$i] 'ts')) - $l.Ts).TotalSeconds
+        if ($d -lt -$script:TcPpcRoutePmBeforeSec -or $d -gt $script:TcPpcRoutePmNearSec) { continue }
+        if ($best -lt 0 -or [math]::Abs($d) -lt [math]::Abs($bestD)) { $best = $i; $bestD = $d }
+      }
+    }
+    if ($best -ge 0) {
+      $usedPm[$best] = $true
+      $out.Add([pscustomobject]@{ Landing = $l; Route = 'push-main'; Checkout = [string](Get-TcPpcProp $pm[$best] 'checkout') })
+      continue
+    }
+    $hb = -1; $hbD = 0.0
+    for ($i = 0; $i -lt $hk.Count; $i++) {
+      if ($usedHk.ContainsKey($i)) { continue }
+      $d = ($l.Ts - (ConvertTo-TcPpcUtc (Get-TcPpcProp $hk[$i] 'ts'))).TotalSeconds
+      if ($d -lt -$script:TcPpcRouteHookAfterSec -or $d -gt $script:TcPpcRouteHookBeforeSec) { continue }
+      $names = ($prev -and ([string]::Equals([string](Get-TcPpcProp $hk[$i] 'grant'), $prev, [StringComparison]::OrdinalIgnoreCase) -or [string]::Equals([string](Get-TcPpcProp $hk[$i] 'base'), $prev, [StringComparison]::OrdinalIgnoreCase)))
+      if ($names -and ($hb -lt 0 -or [math]::Abs($d) -lt [math]::Abs($hbD))) { $hb = $i; $hbD = $d }
+    }
+    if ($hb -ge 0) {
+      $usedHk[$hb] = $true
+      $route = if (-not $mk) { 'plain-unknown' } elseif ((Get-TcPpcCheckoutKey $hk[$hb]) -eq $mk) { 'plain-main' } else { 'plain-worktree' }
+      $out.Add([pscustomobject]@{ Landing = $l; Route = $route; Checkout = [string](Get-TcPpcProp $hk[$hb] 'checkout') })
+      continue
+    }
+    $out.Add([pscustomobject]@{ Landing = $l; Route = 'no-ledger-row'; Checkout = '' })
+  }
+  return , ($out.ToArray())
+}
+
+function Format-TcPpcRoutes {
+  <# 'push-main a, plain-worktree b, ...' over a route list, every route named even at 0. #>
+  param($Routes)
+  $t = [ordered]@{}
+  foreach ($k in $script:TcPpcRouteNames) { $t[$k] = 0 }
+  foreach ($r in @($Routes)) { if ($null -ne $r) { $t[[string]$r.Route] = [int]$t[[string]$r.Route] + 1 } }
+  return (@($t.Keys | ForEach-Object { '{0} {1}' -f $_, $t[$_] }) -join ', ')
+}
+
+function Get-TcPpcMainCheckout {
+  <# The main checkout: the parent of the ABSOLUTE git common dir, when that is a `.git` folder; '' otherwise. #>
+  param([string]$Repo)
+  $g = Invoke-TcPpcGit -Dir $Repo -GitArgs @('rev-parse', '--path-format=absolute', '--git-common-dir')
+  if ($g.Code -ne 0 -or -not @($g.Out).Count) { return '' }
+  $c = ([string]@($g.Out)[0]).Trim() -replace '/', '\'
+  if ($c -notmatch '\\\.git$') { return '' }
+  return $c.Substring(0, $c.Length - 5)
+}
+
 function Test-TcPpcHasListSet {
   <# Does this rehearse-chain carry W0.5's -ListSet parameter? Read from its PARAM BLOCK, never by running it: without
      the switch, a run would be a real rehearsal. #>
@@ -1675,7 +2196,7 @@ function Get-TcPpcChainSet {
 
 function Invoke-TcPpcHistory {
   <# -History: the reflog's landings over 14 days, each with the files git says it changed, then the four figures. #>
-  param([string]$Repo, [string]$RefName, [datetime]$AtUtc)
+  param([string]$Repo, [string]$RefName, [datetime]$AtUtc, [string]$Root = '', [string]$SandboxRoot = '')
   $rl = Invoke-TcPpcGit -Dir $Repo -GitArgs @('reflog', 'show', '--format=%H%x09%gd%x09%gs', '--date=iso-strict', $RefName)
   if ($rl.Code -ne 0) { return (Write-TcPpcBlind 'History' ('git could not read the reflog of ' + $RefName)) }
   $entries = ConvertFrom-TcPpcReflog $rl.Out
@@ -1722,8 +2243,40 @@ function Invoke-TcPpcHistory {
   foreach ($e in @($cc)) { Write-TcPpcLine ('   {0,-14} exposed {1} of {2} touches' -f $e.Class, $e.Exposed, $e.Touches) }
   Write-TcPpcLine '   These classes are W0.3''s literal table, not the scratch census''s (section 2.3 A3), so the two do not compare row for row.'
   Write-TcPpcLine ''
-  Write-TcPpcLine '5. not re-derivable: the conflict attribution before W0.1 needed transcripts, so it stays SCRATCH wherever the plan uses it.'
-  Write-TcPpcLine ('PUSH-CONVERGENCE-HISTORY-COMPLETE landings14={0} landings7={1} chain={2} nofiles={3}' -f @($l14).Count, $l7.Count, $chainTok, $noFiles)
+  # W0.3b step 6: the two counts the amendment measured by scratch, committed. Both read the push ledger over 7 days.
+  $led = Read-TcPpcLedgerWindow -Root $Root -StartUtc $start7.AddHours(-1) -EndUtc $AtUtc
+  $lsel = Select-TcPpcRows -Rows $led.Rows -SandboxRoot $SandboxRoot
+  $mainCo = Get-TcPpcMainCheckout -Repo $Repo
+  $heldTok = 'blind'; $rejTok = 'blind'; $routeTok = 'blind'
+  Write-TcPpcLine ('5. main-checkout plain pushes that passed every hook check and were then rejected, 7 days (a held hook-lock row from the main checkout with no {0} update 0 to {1} s after it; the method of %TEMP%\pushgood-skeptic\mainland.py, committed)' -f $RefName, $script:TcPpcFollowedSec)
+  if (-not @($led.Files).Count) { Write-TcPpcLine ('   BLIND: no push ledger file in the window under {0}' -f $(if ($Root) { $Root } else { '%LOCALAPPDATA%\ThriftyCrew\push-ledger' })) }
+  elseif (-not $mainCo) { Write-TcPpcLine '   BLIND: git could not name the main checkout (its common dir is not a .git folder)' }
+  else {
+    $held7 = @(@($lsel.HookLock) | Where-Object { $t = ConvertTo-TcPpcUtc (Get-TcPpcProp $_ 'ts'); $null -ne $t -and $t -ge $start7 -and $t -le $AtUtc })
+    $mr = Measure-TcPpcMainRejects -HookRows $held7 -MainCheckout $mainCo -Updates $entries
+    $heldTok = [string]$mr.Held; $rejTok = [string]@($mr.NotFollowed).Count
+    Write-TcPpcLine ('   main checkout {0}; held hook-lock rows from it {1} (ledger files read {2}); followed by an update {3}; NOT followed {4} (rejected after every check passed, or an update the reflog did not record)' -f $mainCo, $mr.Held, @($led.Files).Count, (Format-TcPpcShare $mr.Followed $mr.Held), (Format-TcPpcShare @($mr.NotFollowed).Count $mr.Held))
+    foreach ($r in @($mr.NotFollowed)) { Write-TcPpcLine ('     {0} waitMs={1} base={2} grant={3}' -f (Format-TcPpcUtc (ConvertTo-TcPpcUtc (Get-TcPpcProp $r 'ts'))), [string](Get-TcPpcProp $r 'waitMs'), (Format-TcPpcShort ([string](Get-TcPpcProp $r 'base'))), (Format-TcPpcShort ([string](Get-TcPpcProp $r 'grant')))) }
+  }
+  Write-TcPpcLine ''
+  Write-TcPpcLine '6. landings by route, 7 days: each landing matched to a landed push-main row, else a hook-lock row, else none (the method of %TEMP%\pushgood-residual\landings.py, committed)'
+  if (-not @($led.Files).Count) { Write-TcPpcLine '   BLIND: no push ledger file in the window, so no landing can be matched to a row' }
+  else {
+    $routes = Resolve-TcPpcLandingRoutes -Landings $l7 -PushMainRows $lsel.Kept -HookRows $lsel.HookLock -MainCheckout $mainCo
+    Write-TcPpcLine ('   every landing, {0}: {1}' -f @($routes).Count, (Format-TcPpcRoutes $routes))
+    if (-not $chain.Ok) { Write-TcPpcLine ('   chain landings BLIND: {0}' -f $chain.Why) }
+    else {
+      $cset = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+      foreach ($f in $chain.Files) { $null = $cset.Add([string]$f) }
+      $cr = @(@($routes) | Where-Object { $x = $_; $null -ne $x.Landing.Files -and @(@($x.Landing.Files) | Where-Object { $cset.Contains([string]$_) }).Count })
+      $notPm = @($cr | Where-Object { $_.Route -ne 'push-main' }).Count
+      $routeTok = [string]$cr.Count
+      Write-TcPpcLine ('   chain landings (touching the set at {0}, the counterfactual over today''s set), {1}: {2}; not through push-main {3} (B6 is read beside this; B14 bars it at 10%)' -f (Format-TcPpcShort $mainSha), $cr.Count, (Format-TcPpcRoutes $cr), (Format-TcPpcShare $notPm $cr.Count))
+    }
+  }
+  Write-TcPpcLine ''
+  Write-TcPpcLine '7. not re-derivable: the conflict attribution before W0.1 needed transcripts, so it stays SCRATCH wherever the plan uses it.'
+  Write-TcPpcLine ('PUSH-CONVERGENCE-HISTORY-COMPLETE landings14={0} landings7={1} chain={2} nofiles={3} mainheld={4} mainrejected={5} chainrouted={6}' -f @($l14).Count, $l7.Count, $chainTok, $noFiles, $heldTok, $rejTok, $routeTok)
   return 0
 }
 
@@ -1731,7 +2284,7 @@ if ($SelfTest) {
   $f = 0; $cases = 0
   # THE LITERAL CASE COUNT. A literal-case suite knows its own number, so a case that never ran is a defect, never a
   # smaller tree (ops-and-gates.md). Move this with every case added or removed.
-  $expectedCases = 67
+  $expectedCases = 91
   $kMF = 'MUST' + ' FIRE'; $kMNF = 'MUST' + ' NOT FIRE'; $kCT = 'CLEAN' + ' TWIN'
   function T($m, $cond, $got) {
     $script:cases++
@@ -2179,6 +2732,194 @@ if ($SelfTest) {
     [IO.File]::WriteAllText((Join-Path $fr 'ops\rehearse-chain.ps1'), $withLs)
     $csYes = Get-TcPpcChainSet -Repo $fr -Commit 'abc'
     T ($kCT + '  a rehearse-chain WITH -ListSet is run as a child and its set is read') ($csYes.Ok -and (@($csYes.Files) -join ',') -eq 'ops/a.ps1,ops/b.ps1') ("ok={0} why={1} files={2}" -f $csYes.Ok, $csYes.Why, (@($csYes.Files) -join ','))
+
+    # ==== W0.3b (15.5): attempts, changes and leg sets, over frozen literal rows ====
+    function New-PpcAttRow {
+      <# One push-main row as the ledger holds it. Every argument is a literal, so no case is fed a fragment. #>
+      param([string]$Co, [string]$Ts, [string]$RunStart, [string]$Outcome, [string]$Sub = '', [string]$Cid = '', [string]$Extra = '')
+      $j = '{"ts":"' + $Ts + '","run":"9@' + $RunStart + '","event":"push-main","outcome":"' + $Outcome + '","checkout":"C:\\wt\\' + $Co + '"'
+      if ($Sub) { $j += ',"subjects_sha":"' + $Sub + '"' }
+      if ($Cid) { $j += ',"change_id":"' + $Cid + '"' }
+      if ($Extra) { $j += ',' + $Extra }
+      return (($j + '}') | ConvertFrom-Json)
+    }
+    # THE HOUSEKEEPING LANE, from the ledger rows the planner re-read (section 2.1): three attempts, one subject set,
+    # three change_ids because it regenerated a baseline after each rebase. By change_id, B6 read 1.0 where it took 3.
+    $hk1 = New-PpcAttRow 'housekeeping' '2026-09-23T09:34:59Z' '2026-09-23T08:57:01.0000000Z' 'refused-rebase-conflict' 'hsubj' '67c869cf9e76' '"chain_touching":true'
+    $hk2 = New-PpcAttRow 'housekeeping' '2026-09-23T10:11:46Z' '2026-09-23T09:41:15.0000000Z' 'refused-rebase-conflict' 'hsubj' '2f849964be2f' '"chain_touching":true'
+    $hk3 = New-PpcAttRow 'housekeeping' '2026-09-23T10:48:53Z' '2026-09-23T10:16:17.0000000Z' 'landed-after-rebase' 'hsubj' '81a788cbef31' '"chain_touching":true'
+    $gHk = Group-TcPpcChanges -Rows @($hk1, $hk2, $hk3)
+    T ($kMF + '  three attempts of one lane with three different change_ids and one subjects_sha are ONE change with 3 attempts, timed from the first') `
+      (@($gHk).Count -eq 1 -and $gHk[0].Attempts -eq 3 -and $gHk[0].How -eq 'subjects' -and $gHk[0].Landed -and -not $gHk[0].FirstAttemptLanded -and $gHk[0].Seconds -eq 6712) `
+      ("changes={0} attempts={1} sec={2}" -f @($gHk).Count, $(if (@($gHk).Count) { $gHk[0].Attempts }), $(if (@($gHk).Count) { $gHk[0].Seconds }))
+    $sevenRows = @(1..7 | ForEach-Object { New-PpcAttRow 'seven' ('2026-09-22T1{0}:05:00Z' -f $_) ('2026-09-22T1{0}:00:00.0000000Z' -f $_) 'landed' ('sub' + $_) ('cid' + $_) })
+    $gSeven = Group-TcPpcChanges -Rows $sevenRows
+    T ($kMNF + '  seven changes in one checkout with different subjects stay SEVEN changes, each landed on its first attempt') `
+      (@($gSeven).Count -eq 7 -and @(@($gSeven) | Where-Object { $_.Attempts -eq 1 -and $_.FirstAttemptLanded }).Count -eq 7) ("changes={0}" -f @($gSeven).Count)
+
+    # ---- the tie-break: change_id splits one (checkout, subjects_sha) only after a landing ----
+    $tb1 = New-PpcAttRow 'tie' '2026-09-22T12:05:00Z' '2026-09-22T12:00:00.0000000Z' 'landed' 'tsub' 'k1'
+    $tb2 = New-PpcAttRow 'tie' '2026-09-22T13:05:00Z' '2026-09-22T13:00:00.0000000Z' 'landed' 'tsub' 'k2'
+    $tb3 = New-PpcAttRow 'tie' '2026-09-22T13:05:00Z' '2026-09-22T13:00:00.0000000Z' 'refused-already-on-main' 'tsub' 'k1'
+    $gSplit = Group-TcPpcChanges -Rows @($tb1, $tb2)
+    $gSame = Group-TcPpcChanges -Rows @($tb1, $tb3)
+    T ($kMF + '  the same subjects after a LANDING over a different patch (change_id) is a new change: two changes') (@($gSplit).Count -eq 2) ("changes={0}" -f @($gSplit).Count)
+    T ($kCT + '  the same subjects after a landing over the SAME patch is that change pushed again: one change with 2 attempts') `
+      (@($gSame).Count -eq 1 -and $gSame[0].Attempts -eq 2) ("changes={0} attempts={1}" -f @($gSame).Count, $(if (@($gSame).Count) { $gSame[0].Attempts }))
+
+    # ---- a change that lands from ANOTHER checkout crosses checkouts ----
+    $xa = New-PpcAttRow 'lanea' '2026-09-22T11:00:00Z' '2026-09-22T10:50:00.0000000Z' 'refused-gate-red' 'xsub' 'xa' '"chain_touching":true'
+    $xb = New-PpcAttRow 'laneb' '2026-09-22T11:30:00Z' '2026-09-22T11:20:00.0000000Z' 'landed' 'xsub' 'xb' '"chain_touching":true'
+    $gX = Group-TcPpcChanges -Rows @($xa, $xb)
+    $mX = Measure-TcPpcB6 -Changes $gX -Runs @() -HourLandings @{}
+    T ($kMF + '  a change whose only push-main row was refused and which landed from another checkout crosses checkouts, is not a first-attempt landing, and stays out of B6''s denominator') `
+      (@($gX).Count -eq 1 -and $gX[0].Crosses -and $gX[0].Checkouts -eq 2 -and $gX[0].Landed -and -not $gX[0].FirstAttemptLanded -and $mX.Crossing -eq 1 -and $mX.CrossingFirst -eq 0 -and $mX.Strata['quiet'].Changes -eq 0 -and $mX.Strata['contended'].Changes -eq 0) `
+      ("changes={0} crosses={1} crossing={2} quiet={3}" -f @($gX).Count, $(if (@($gX).Count) { $gX[0].Crosses }), $mX.Crossing, $mX.Strata['quiet'].Changes)
+
+    # ---- B6's columns: own against ambient is read from the patch, and only own reds and genuine conflicts are left out ----
+    $colRows = @(
+      (New-PpcAttRow 'cols' '2026-09-24T14:01:30Z' '2026-09-24T14:01:00.0000000Z' 'refused-gate-red' 'csub' 'p1' '"chain_touching":true')
+      (New-PpcAttRow 'cols' '2026-09-24T14:02:30Z' '2026-09-24T14:02:00.0000000Z' 'refused-gate-red' 'csub' 'p2' '"chain_touching":true')
+      (New-PpcAttRow 'cols' '2026-09-24T14:03:30Z' '2026-09-24T14:03:00.0000000Z' 'refused-rebase-conflict' 'csub' 'p2' '"chain_touching":true,"conflict_files":["ops/x.ps1"]')
+      (New-PpcAttRow 'cols' '2026-09-24T14:04:30Z' '2026-09-24T14:04:00.0000000Z' 'refused-rebase-conflict' 'csub' 'p2' '"chain_touching":true,"conflict_files":["design/BACKLOG-course-findings.md"]')
+      (New-PpcAttRow 'cols' '2026-09-24T14:05:30Z' '2026-09-24T14:05:00.0000000Z' 'refused-not-ready' 'csub' 'p2' '"chain_touching":true,"dirty_since":"start"')
+      (New-PpcAttRow 'cols' '2026-09-24T14:06:30Z' '2026-09-24T14:06:00.0000000Z' 'refused-not-ready' 'csub' 'p2' '"chain_touching":true,"dirty_since":"during-legs"')
+      (New-PpcAttRow 'cols' '2026-09-24T14:07:30Z' '2026-09-24T14:07:00.0000000Z' 'push-rejected' 'csub' 'p2' '"chain_touching":true,"reject_class":"rehearsal"')
+      (New-PpcAttRow 'cols' '2026-09-24T14:08:30Z' '2026-09-24T14:08:00.0000000Z' 'landed-after-rebase' 'csub' 'p2' '"chain_touching":true')
+    )
+    $gCol = Group-TcPpcChanges -Rows $colRows
+    $cc0 = $(if (@($gCol).Count) { $gCol[0].Classes } else { [ordered]@{} })
+    $colGot = (@('landed', 'own-red', 'ambient-red', 'conflict-genuine', 'conflict-mechanical', 'not-ready-start', 'not-ready-legs', 'other') | ForEach-Object { '{0}={1}' -f $_, $cc0[$_] }) -join ','
+    T ($kMF + '  a red on a patch that later landed unchanged is AMBIENT and counted, a red on a patch the lane then changed is OWN and left out, a code conflict is genuine and left out, a backlog conflict is mechanical and counted: 6 of 8 counted') `
+      (@($gCol).Count -eq 1 -and $colGot -eq 'landed=1,own-red=1,ambient-red=1,conflict-genuine=1,conflict-mechanical=1,not-ready-start=1,not-ready-legs=1,other=1' -and $gCol[0].Counted -eq 6 -and $gCol[0].Attempts -eq 8) `
+      ("changes={0} {1} counted={2}" -f @($gCol).Count, $colGot, $(if (@($gCol).Count) { $gCol[0].Counted }))
+
+    # ---- a plain push's hook-refused row is an attempt; one under a push-main is not counted twice ----
+    $hrA = '{"ts":"2026-09-24T09:00:00Z","event":"hook-refused","cause":"run-gates","gate":"ops\\audit-x.ps1","under_push_main":false,"checkout":"C:\\wt\\plain"}' | ConvertFrom-Json
+    $hrB = '{"ts":"2026-09-24T09:20:00Z","event":"hook-refused","cause":"rehearsal","under_push_main":true,"checkout":"C:\\wt\\plain"}' | ConvertFrom-Json
+    $hrC = '{"ts":"2026-09-24T09:00:00Z","event":"hook-refused","cause":"rehearsal","under_push_main":false,"checkout":"C:\\wt\\nowhere"}' | ConvertFrom-Json
+    $hrPm = New-PpcAttRow 'plain' '2026-09-24T09:40:00Z' '2026-09-24T09:30:00.0000000Z' 'landed' 'psub' 'pp'
+    $hrSel = Select-TcPpcRows -Rows @($hrA, $hrB, $hrC, $hrPm) -SandboxRoot $sbRoot
+    $hrSet = Get-TcPpcChangeSet -Rows $hrSel.Kept -HookRefused $hrSel.HookRefused
+    $hrCh = @($hrSet.Changes)
+    T ($kMF + '  a plain push''s hook refusal joins the change its checkout lands next as an attempt, one under a push-main is not counted again, and one with no change is counted unattached') `
+      (@($hrSel.HookRefused).Count -eq 2 -and $hrSel.HookRefusedUnderPm -eq 1 -and $hrCh.Count -eq 1 -and $hrCh[0].Attempts -eq 2 -and $hrCh[0].HookRows -eq 1 -and $hrCh[0].Classes['red-undecided'] -eq 1 -and -not $hrCh[0].FirstAttemptLanded -and $hrSet.Unattached -eq 1) `
+      ("plain={0} underPm={1} changes={2} attempts={3} unattached={4}" -f @($hrSel.HookRefused).Count, $hrSel.HookRefusedUnderPm, $hrCh.Count, $(if ($hrCh.Count) { $hrCh[0].Attempts }), $hrSet.Unattached)
+
+    # The attach window, at its bar: a plain push's refusal up to 6 hours before the change's first attempt joins it.
+    $hwAt = '{"ts":"2026-09-24T03:30:00Z","event":"hook-refused","cause":"rehearsal","under_push_main":false,"checkout":"C:\\wt\\plain"}' | ConvertFrom-Json
+    $hwPast = '{"ts":"2026-09-24T03:29:59Z","event":"hook-refused","cause":"rehearsal","under_push_main":false,"checkout":"C:\\wt\\plain"}' | ConvertFrom-Json
+    $hwSetAt = Get-TcPpcChangeSet -Rows @($hrPm) -HookRefused @($hwAt)
+    $hwSetPast = Get-TcPpcChangeSet -Rows @($hrPm) -HookRefused @($hwPast)
+    T ($kMF + '  AT the 6-hour attach bar a plain push''s refusal exactly 21600 s before the change''s first attempt joins it, and one 21601 s before joins nothing') `
+      ($hwSetAt.Unattached -eq 0 -and @($hwSetAt.Changes)[0].Attempts -eq 2 -and $hwSetPast.Unattached -eq 1 -and @($hwSetPast.Changes)[0].Attempts -eq 1) `
+      ("at: unattached {0}; past: unattached {1}" -f $hwSetAt.Unattached, $hwSetPast.Unattached)
+    $dryRow = New-PpcAttRow 'plain' '2026-09-24T09:10:00Z' '2026-09-24T09:05:00.0000000Z' 'dry-run' 'psub' 'pp'
+    $drySet = Get-TcPpcChangeSet -Rows @($dryRow, $hrPm)
+    T ($kMNF + '  a dry run moves nothing, so it is no attempt: the change keeps one attempt, landed on its first, and the dry run is counted apart') `
+      ($drySet.DryRuns -eq 1 -and @($drySet.Changes).Count -eq 1 -and @($drySet.Changes)[0].Attempts -eq 1 -and @($drySet.Changes)[0].FirstAttemptLanded) ("dry={0} changes={1}" -f $drySet.DryRuns, @($drySet.Changes).Count)
+
+    # ---- the strata, at the bar: 8 landings in the hour is contended, 7 is quiet; a parallel run is contended ----
+    $stRow = New-PpcAttRow 'strat' '2026-09-24T15:20:00Z' '2026-09-24T15:10:00.0000000Z' 'landed' 'ssub' 'sc'
+    $stChG = Group-TcPpcChanges -Rows @($stRow); $stCh = @($stChG)
+    $st8 = Get-TcPpcChangeStratum -Change $stCh[0] -Runs @() -HourLandings @{ '2026-09-24T15' = 8 }
+    $st7 = Get-TcPpcChangeStratum -Change $stCh[0] -Runs @() -HourLandings @{ '2026-09-24T15' = 7 }
+    T ($kMF + '  AT the stratum bar: an attempt begun in an hour with 8 landings makes its change CONTENDED') ($st8 -eq 'contended') ("stratum={0}" -f $st8)
+    T ($kMNF + '  a step under the stratum bar: 7 landings in the hour leaves the change QUIET') ($st7 -eq 'quiet') ("stratum={0}" -f $st7)
+    $prRows = @(
+      (New-PpcAttRow 'pa' '2026-09-24T16:00:00Z' '2026-09-24T15:55:00.0000000Z' 'landed' 'pas' 'pac' '"session":"sp"')
+      (New-PpcAttRow 'pb' '2026-09-24T16:10:00Z' '2026-09-24T16:05:00.0000000Z' 'landed' 'pbs' 'pbc' '"session":"sp"')
+      (New-PpcAttRow 'pc' '2026-09-24T16:20:00Z' '2026-09-24T16:15:00.0000000Z' 'landed' 'pcs' 'pcc' '"session":"sp"')
+      (New-PpcAttRow 'pd' '2026-09-24T16:30:00Z' '2026-09-24T16:25:00.0000000Z' 'landed' 'pds' 'pdc' '"session":"sp"')
+    )
+    $prRuns = Find-TcPpcParallelRuns -Rows $prRows
+    $prAll = Group-TcPpcChanges -Rows $prRows; $prCh = @(@($prAll) | Where-Object { $_.Rows[0].checkout -like '*\pa' })
+    $stPr = Get-TcPpcChangeStratum -Change $prCh[0] -Runs $prRuns -HourLandings @{}
+    T ($kMF + '  a change with an attempt inside a parallel run is CONTENDED, whatever the hour') (@($prRuns).Count -eq 1 -and $stPr -eq 'contended') ("runs={0} stratum={1}" -f @($prRuns).Count, $stPr)
+
+    # ---- B6 at its bars, compared in integers ----
+    function New-PpcChainSet {
+      <# $N landed chain-touching changes in one checkout; the first $Extra of them take one refused attempt first (a
+         rehearsal void, counted); $Rounds gives each change's landed row its rounds, and every refused row has 1. #>
+      param([string]$Pre, [int]$N, [int]$Extra, [int[]]$Rounds)
+      $out = [Collections.Generic.List[object]]::new()
+      for ($i = 1; $i -le $N; $i++) {
+        $t0 = ([datetime]'2026-09-25T10:00:00').AddMinutes(3 * $i)
+        if ($i -le $Extra) {
+          $ts = $t0.ToString('yyyy-MM-ddTHH:mm:ss') + 'Z'; $rs = $t0.AddSeconds(-10).ToString('yyyy-MM-ddTHH:mm:ss') + '.0000000Z'
+          $out.Add((New-PpcAttRow $Pre $ts $rs 'push-rejected' ($Pre + 's' + $i) ($Pre + 'c' + $i) '"chain_touching":true,"reject_class":"rehearsal","rounds":1'))
+        }
+        $t1 = $t0.AddMinutes(1)
+        $ts = $t1.ToString('yyyy-MM-ddTHH:mm:ss') + 'Z'; $rs = $t1.AddSeconds(-10).ToString('yyyy-MM-ddTHH:mm:ss') + '.0000000Z'
+        $out.Add((New-PpcAttRow $Pre $ts $rs 'landed' ($Pre + 's' + $i) ($Pre + 'c' + $i) ('"chain_touching":true,"rounds":' + $Rounds[$i - 1])))
+      }
+      return , ($out.ToArray())
+    }
+    $ones = @(1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+    $b6At = Measure-TcPpcB6 -Changes (Group-TcPpcChanges -Rows (New-PpcChainSet 'ba' 10 2 $ones)) -Runs @() -HourLandings @{}
+    $b6Past = Measure-TcPpcB6 -Changes (Group-TcPpcChanges -Rows (New-PpcChainSet 'bp' 10 3 $ones)) -Runs @() -HourLandings @{}
+    $b6Nine = Measure-TcPpcB6 -Changes (Group-TcPpcChanges -Rows (New-PpcChainSet 'bn' 9 0 $ones)) -Runs @() -HourLandings @{}
+    T ($kCT + '  AT the B6(a) bar and its minimum N: 12 counted attempts over 10 quiet changes (1.2) passes') ($b6At.Strata['quiet'].Changes -eq 10 -and $b6At.Strata['quiet'].Counted -eq 12 -and $b6At.Strata['quiet'].AVerdict -eq 'pass') ("n={0} counted={1} verdict={2}" -f $b6At.Strata['quiet'].Changes, $b6At.Strata['quiet'].Counted, $b6At.Strata['quiet'].AVerdict)
+    T ($kMF + '  a step PAST the B6(a) bar: 13 counted attempts over 10 quiet changes fails') ($b6Past.Strata['quiet'].Counted -eq 13 -and $b6Past.Strata['quiet'].AVerdict -eq 'fail') ("counted={0} verdict={1}" -f $b6Past.Strata['quiet'].Counted, $b6Past.Strata['quiet'].AVerdict)
+    T ($kMNF + '  9 quiet changes (a step under the minimum N of 10) give NO verdict, never a pass') ($b6Nine.Strata['quiet'].Changes -eq 9 -and $b6Nine.Strata['quiet'].AVerdict -like 'no verdict*') ("verdict={0}" -f $b6Nine.Strata['quiet'].AVerdict)
+    $leg18 = Measure-TcPpcB6 -Changes (Group-TcPpcChanges -Rows (New-PpcChainSet 'la' 10 0 @(2, 2, 2, 2, 2, 2, 2, 2, 1, 1))) -Runs @() -HourLandings @{}
+    $leg19 = Measure-TcPpcB6 -Changes (Group-TcPpcChanges -Rows (New-PpcChainSet 'lb' 10 0 @(2, 2, 2, 2, 2, 2, 2, 2, 2, 1))) -Runs @() -HourLandings @{}
+    T ($kMF + '  AT the B6(b) bar 18 leg sets over 10 quiet changes (1.8) passes, and a step PAST it, 19, fails') `
+      ($leg18.Strata['quiet'].LegSets -eq 18 -and $leg18.Strata['quiet'].BVerdict -eq 'pass' -and $leg19.Strata['quiet'].LegSets -eq 19 -and $leg19.Strata['quiet'].BVerdict -eq 'fail') `
+      ("18: {0} {1}; 19: {2} {3}" -f $leg18.Strata['quiet'].LegSets, $leg18.Strata['quiet'].BVerdict, $leg19.Strata['quiet'].LegSets, $leg19.Strata['quiet'].BVerdict)
+    $lgA = New-PpcAttRow 'legs' '2026-09-25T12:05:00Z' '2026-09-25T12:00:00.0000000Z' 'refused-gate-red' 'lsub' 'lc' '"rounds":2'
+    $lgB = New-PpcAttRow 'legs' '2026-09-25T12:35:00Z' '2026-09-25T12:30:00.0000000Z' 'landed' 'lsub' 'lc'
+    $gLgG = Group-TcPpcChanges -Rows @($lgA, $lgB); $gLg = @($gLgG)
+    T ($kMF + '  a change with one push-main row missing rounds gets NO leg count, never the partial sum of the rows that carry it') `
+      ($gLg.Count -eq 1 -and $null -eq $gLg[0].LegSets -and $gLg[0].RoundsRows -eq 1) ("legs={0} roundsRows={1}" -f $(if ($gLg.Count) { $gLg[0].LegSets }), $(if ($gLg.Count) { $gLg[0].RoundsRows }))
+    $nb1 = Get-TcPpcNegBinCdf -Changes 1 -Attempts 2 -Q 0.4
+    $nb2 = Get-TcPpcNegBinCdf -Changes 2 -Attempts 2 -Q 0.4
+    T ($kCT + '  P(result | old rate): one change in at most 2 attempts at a 0.4 landing chance is 0.64, and two changes in exactly 2 attempts is 0.16') `
+      ([math]::Abs($nb1 - 0.64) -lt 1e-12 -and [math]::Abs($nb2 - 0.16) -lt 1e-12) ("p1={0} p2={1}" -f $nb1, $nb2)
+
+    # ---- -History: main-checkout pushes that passed the hook and were rejected, at the 15 s bar ----
+    $mcPath = 'C:\ppc-fixture\ThriftyCrew'
+    $mHeld = '{"ts":"2026-09-21T11:48:21Z","event":"hook-lock","state":"held","waitMs":0,"base":"b","grant":"g","checkout":"C:\\ppc-fixture\\ThriftyCrew"}' | ConvertFrom-Json
+    $mWt = '{"ts":"2026-09-21T11:48:21Z","event":"hook-lock","state":"held","waitMs":0,"checkout":"C:\\wt\\other"}' | ConvertFrom-Json
+    $mInh = '{"ts":"2026-09-21T11:48:21Z","event":"hook-lock","state":"inherited","waitMs":0,"checkout":"C:\\ppc-fixture\\ThriftyCrew"}' | ConvertFrom-Json
+    $t15 = [pscustomobject]@{ Ts = (ConvertTo-TcPpcUtc '2026-09-21T11:48:36Z') }
+    $t16 = [pscustomobject]@{ Ts = (ConvertTo-TcPpcUtc '2026-09-21T11:48:37Z') }
+    $mr15 = Measure-TcPpcMainRejects -HookRows @($mHeld, $mWt, $mInh) -MainCheckout $mcPath -Updates @($t15)
+    $mr16 = Measure-TcPpcMainRejects -HookRows @($mHeld, $mWt, $mInh) -MainCheckout $mcPath -Updates @($t16)
+    T ($kMNF + '  AT the 15 s bar: a held main-checkout hook-lock row followed by an update 15 s later is FOLLOWED, and worktree and inherited rows are not counted') `
+      ($mr15.Held -eq 1 -and $mr15.Followed -eq 1 -and @($mr15.NotFollowed).Count -eq 0) ("held={0} followed={1}" -f $mr15.Held, $mr15.Followed)
+    T ($kMF + '  a step PAST the 15 s bar: an update 16 s later does not follow it, so the push is counted as rejected after every check passed') `
+      ($mr16.Held -eq 1 -and $mr16.Followed -eq 0 -and @($mr16.NotFollowed).Count -eq 1) ("held={0} followed={1}" -f $mr16.Held, $mr16.Followed)
+
+    # ---- -History: landings by route ----
+    function New-PpcLand([string]$prev, [string]$ts) { return [pscustomobject]@{ Sha = ('n' + $prev); Prev = $prev; Ts = (ConvertTo-TcPpcUtc $ts); Kind = 'push'; Files = @('ops/a.ps1') } }
+    $rtL = @((New-PpcLand 'p1' '2026-09-26T10:00:00Z'), (New-PpcLand 'p2' '2026-09-26T11:00:00Z'), (New-PpcLand 'p3' '2026-09-26T12:00:00Z'), (New-PpcLand 'p4' '2026-09-26T13:00:00Z'))
+    $rtPm = '{"ts":"2026-09-26T10:01:00Z","event":"push-main","outcome":"landed","base":"p0","grant":"p1","checkout":"C:\\wt\\r1"}' | ConvertFrom-Json
+    $rtHm = '{"ts":"2026-09-26T10:58:00Z","event":"hook-lock","state":"held","base":"p2","grant":"p2","checkout":"C:\\ppc-fixture\\ThriftyCrew"}' | ConvertFrom-Json
+    $rtHw = '{"ts":"2026-09-26T11:59:30Z","event":"hook-lock","state":"held","base":"pz","grant":"p3","checkout":"C:\\wt\\r3"}' | ConvertFrom-Json
+    $rt = Resolve-TcPpcLandingRoutes -Landings $rtL -PushMainRows @($rtPm) -HookRows @($rtHm, $rtHw) -MainCheckout $mcPath
+    T ($kCT + '  each landing takes its road: a push-main row naming the sha main moved from, a main-checkout hook-lock row, a worktree one, and none') `
+      ((Format-TcPpcRoutes $rt) -eq 'push-main 1, plain-worktree 1, plain-main 1, plain-unknown 0, no-ledger-row 1') ("routes={0}" -f (Format-TcPpcRoutes $rt))
+    $rtX = @(New-PpcLand 'q1' '2026-09-27T10:00:00Z')
+    $rtAt = '{"ts":"2026-09-27T10:15:00Z","event":"push-main","outcome":"landed","base":"q0","grant":"q1","checkout":"C:\\wt\\q"}' | ConvertFrom-Json
+    $rtPast = '{"ts":"2026-09-27T10:15:01Z","event":"push-main","outcome":"landed","base":"q0","grant":"q1","checkout":"C:\\wt\\q"}' | ConvertFrom-Json
+    $rAt = Resolve-TcPpcLandingRoutes -Landings $rtX -PushMainRows @($rtAt) -HookRows @() -MainCheckout $mcPath
+    $rPast = Resolve-TcPpcLandingRoutes -Landings $rtX -PushMainRows @($rtPast) -HookRows @() -MainCheckout $mcPath
+    T ($kMF + '  AT the 900 s route window a push-main row written 900 s after the landing is its road, and one 901 s after is not') `
+      ($rAt[0].Route -eq 'push-main' -and $rPast[0].Route -eq 'no-ledger-row') ("at={0} past={1}" -f $rAt[0].Route, $rPast[0].Route)
+
+    # ---- the older-copy count beside a bar is a share, and a plain -Cost prints the attempt and leg-set lines ----
+    $shState = [pscustomobject]@{
+      Id = 'B2b'; Def = [pscustomobject]@{ Items = @('W1.1'); Metric = 'm'; MinN = 'n'; Value = 'v' }; Landed = $true; Missing = @()
+      Landing = [pscustomobject]@{ Sha = $c2; Ts = (ConvertTo-TcPpcUtc '2026-09-25T10:00:00Z') }; Readout = (ConvertTo-TcPpcUtc '2026-10-09T10:00:00Z'); Due = $false
+      LandingBlob = $bB; AfterLanding = $after2
+    }
+    $shCtx = [pscustomobject]@{ StartUtc = (ConvertTo-TcPpcUtc '2026-09-25T00:00:00Z'); EndUtc = (ConvertTo-TcPpcUtc '2026-09-27T00:00:00Z'); RefName = 'fixture'; Index = $bix; Bars = @($shState); Bar = $null; Ancestry = @(); PlanLogOk = $true; PlanLogWhy = ''; PlanRecords = 1; PlanMalformed = 0 }
+    $capSh = Invoke-TcPpcCaptured { Write-TcPpcCostBars -Rows @($rOld, $rNew) -Ctx $shCtx }
+    T ($kCT + '  the older-copy count beside a bar is printed as a share of the rows it was taken from') ($capSh.Text -match 'older-copy rows excluded 1 of 2 \(50\.0%\)' -and -not $capSh.Error) ("error={0} had={1}" -f $capSh.Error, ($capSh.Text -match 'older-copy rows excluded 1 of 2'))
+    T ($kCT + '  rows without rounds still print B6''s old line, labelled pre-W0.1, beside the attempt and leg-set lines a plain -Cost prints') `
+      ($ct -match 'B6''s old line, pre-W0\.1 \(2 landed changes whose rows carry no rounds\)' -and $ct -match 'attempts per landed change, every attempt counted' -and $ct -match 'leg sets per landed change' -and $ct -match 'B6 \(amended, 15\.6\)') `
+      ("old={0} attempts={1} legs={2}" -f ($ct -match 'B6''s old line, pre-W0\.1'), ($ct -match 'attempts per landed change'), ($ct -match 'leg sets per landed change'))
   } catch {
     $f++
     Write-Output ("FAIL  the suite threw, so the cases after this point did not run: " + $_.Exception.Message + ' at line ' + $_.InvocationInfo.ScriptLineNumber)
@@ -2190,7 +2931,7 @@ if ($SelfTest) {
     Write-Output ("FAIL  the suite ran {0} case(s) and lists {1}: a case was skipped or added without moving the count" -f $cases, $expectedCases)
   }
   if ($f) { Write-Output ("probe-push-convergence self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
-  Write-Output ("probe-push-convergence self-test PASS: {0} cases - led by a report whose every source is empty resolving NOTHING rather than printing a healthy box, a fetch entry never being counted as a landing, -Due exiting 2 for a bar past its read-out with no result line, and W2.1 never matching W2.10" -f $cases)
+  Write-Output ("probe-push-convergence self-test PASS: {0} cases - led by a report whose every source is empty resolving NOTHING rather than printing a healthy box, a fetch entry never being counted as a landing, -Due exiting 2 for a bar past its read-out with no result line, W2.1 never matching W2.10, and three attempts of one lane under three change_ids counting as ONE change" -f $cases)
   exit 0
 }
 
@@ -2215,12 +2956,12 @@ if ($Cost -or $History -or $Due) {
     $rcDue = Invoke-TcPpcDue -Repo $repo -RefName $MainRef -PlanPath $PlanFile -LogPath $PlanLogFile -AtUtc $atUtc
     exit ([int]$rcDue)
   }
+  $sandboxDir = $(if ($TempRoot) { $TempRoot } else { [IO.Path]::GetTempPath() })
   if ($History) {
-    $rcHist = Invoke-TcPpcHistory -Repo $repo -RefName $MainRef -AtUtc $atUtc
+    $rcHist = Invoke-TcPpcHistory -Repo $repo -RefName $MainRef -AtUtc $atUtc -Root $LedgerRoot -SandboxRoot $sandboxDir
     exit ([int]$rcHist)
   }
   $costDays = $(if ($PSBoundParameters.ContainsKey('Days')) { [math]::Max(1, $Days) } else { 7 })
-  $sandboxDir = $(if ($TempRoot) { $TempRoot } else { [IO.Path]::GetTempPath() })
   $rcCost = Invoke-TcPpcCost -Repo $repo -RefName $MainRef -Root $LedgerRoot -WindowDays $costDays -BarWanted $Bar -SandboxRoot $sandboxDir -LogPath $PlanLogFile -AtUtc $atUtc
   exit ([int]$rcCost)
 }
