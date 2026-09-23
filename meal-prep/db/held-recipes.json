@@ -2,6 +2,30 @@
     "_doc":  "Recipes deliberately taken down to a Ghost draft. engine\\publish.ps1 REFUSES to publish a slug listed here, which is the only thing stopping an ordinary publish run from silently ending a hold - it sets status=published unconditionally on update. Remove an entry with hold-recipe.ps1 -Release, then publish it on purpose.",
     "held":  [
                  {
+                     "slug":  "andong-jjimdak-braised-chicken",
+                     "reason":  "Brad 2026-09-22: \u0027That recipe should not be live if an ingredient is not carried in Omaha with a price\u0027; no substitute food. Korean glass noodles (dangmyeon) were priced as rice noodles; the real food (O\u0027Food Sweet Potato Glass Noodle, Baker\u0027s capture 2026-09-01) is on no board cell (queue 2026-09-22-5a9676).",
+                     "held":  "2026-09-23",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
+                     "slug":  "beef-chow-mein-noodles",
+                     "reason":  "Brad 2026-09-22: \u0027That recipe should not be live if an ingredient is not carried in Omaha with a price\u0027; no substitute food. Lo Mein Noodles were priced as wide egg noodles; lo mein (Baker\u0027s Wei Chuan 16 oz, Family Fare Wel Pac 10 oz, captures 2026-09-01) is on no board cell (queue 2026-09-22-5a9676).",
+                     "held":  "2026-09-23",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
+                     "slug":  "beijing-zha-jiang-mian-pork-noodles",
+                     "reason":  "Brad 2026-09-22: \u0027That recipe should not be live if an ingredient is not carried in Omaha with a price\u0027; no substitute food. Lo Mein Noodles were priced as wide egg noodles; lo mein (Baker\u0027s Wei Chuan 16 oz, Family Fare Wel Pac 10 oz, captures 2026-09-01) is on no board cell (queue 2026-09-22-5a9676).",
+                     "held":  "2026-09-23",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
+                     "slug":  "blackened-chicken-with-mango-salsa",
+                     "reason":  "Brad 2026-09-22: \u0027That recipe should not be live if an ingredient is not carried in Omaha with a price\u0027; no substitute food. Blackened Seasoning was priced as a plain cajun seasoning; the real food (Cajun\u0027s Choice Blackened Seasoning \u0026 Rub, Baker\u0027s capture 2026-09-04) is on no board cell (queue 2026-09-22-5a9676).",
+                     "held":  "2026-09-23",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
                      "slug":  "ethiopian-doro-wat-chicken-bowls",
                      "reason":  "not carried in store by any Omaha store (carriage.json, verified live 2026-09-19); Brad: a recipe is discarded if an ingredient is not carried by any Omaha store",
                      "held":  "2026-09-19",
@@ -14,9 +38,33 @@
                      "by":  "hold-recipe.ps1"
                  },
                  {
+                     "slug":  "five-spice-turkey-noodle-bowls",
+                     "reason":  "Brad 2026-09-22: \u0027That recipe should not be live if an ingredient is not carried in Omaha with a price\u0027; no substitute food. Lo Mein Noodles were priced as wide egg noodles; lo mein (Baker\u0027s Wei Chuan 16 oz, Family Fare Wel Pac 10 oz, captures 2026-09-01) is on no board cell (queue 2026-09-22-5a9676).",
+                     "held":  "2026-09-23",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
+                     "slug":  "ground-turkey-lo-mein",
+                     "reason":  "Brad 2026-09-22: \u0027That recipe should not be live if an ingredient is not carried in Omaha with a price\u0027; no substitute food. Lo Mein Noodles were priced as wide egg noodles; lo mein (Baker\u0027s Wei Chuan 16 oz, Family Fare Wel Pac 10 oz, captures 2026-09-01) is on no board cell (queue 2026-09-22-5a9676).",
+                     "held":  "2026-09-23",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
                      "slug":  "harissa-chicken-rice-bowls",
                      "reason":  "not carried in store by any Omaha store (carriage.json, verified live 2026-09-19); Brad: a recipe is discarded if an ingredient is not carried by any Omaha store",
                      "held":  "2026-09-19",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
+                     "slug":  "korean-beef-japchae-noodle-bowls",
+                     "reason":  "Brad 2026-09-22: \u0027That recipe should not be live if an ingredient is not carried in Omaha with a price\u0027; no substitute food. Korean glass noodles (dangmyeon) were priced as rice noodles; the real food (O\u0027Food Sweet Potato Glass Noodle, Baker\u0027s capture 2026-09-01) is on no board cell (queue 2026-09-22-5a9676).",
+                     "held":  "2026-09-23",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
+                     "slug":  "korean-turkey-japchae",
+                     "reason":  "Brad 2026-09-22: \u0027That recipe should not be live if an ingredient is not carried in Omaha with a price\u0027; no substitute food. Korean glass noodles (dangmyeon) were priced as rice noodles; the real food (O\u0027Food Sweet Potato Glass Noodle, Baker\u0027s capture 2026-09-01) is on no board cell (queue 2026-09-22-5a9676).",
+                     "held":  "2026-09-23",
                      "by":  "hold-recipe.ps1"
                  },
                  {
@@ -32,9 +80,27 @@
                      "by":  "hold-recipe.ps1"
                  },
                  {
+                     "slug":  "sheet-pan-tandoori-chicken-cauliflower",
+                     "reason":  "Brad 2026-09-22: \u0027That recipe should not be live if an ingredient is not carried in Omaha with a price\u0027; no substitute food. Tandoori Masala was priced as garam-masala (a different blend); no Omaha capture carries tandoori masala and tandoori-seasoning has no board cell (queue 2026-09-22-5a9676).",
+                     "held":  "2026-09-23",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
+                     "slug":  "spicy-pork-noodles",
+                     "reason":  "Brad 2026-09-22: \u0027That recipe should not be live if an ingredient is not carried in Omaha with a price\u0027; no substitute food. Lo Mein Noodles were priced as wide egg noodles; lo mein (Baker\u0027s Wei Chuan 16 oz, Family Fare Wel Pac 10 oz, captures 2026-09-01) is on no board cell (queue 2026-09-22-5a9676).",
+                     "held":  "2026-09-23",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
                      "slug":  "tunisian-harissa-coconut-beef-meatballs",
                      "reason":  "not carried in store by any Omaha store (carriage.json, verified live 2026-09-19); Brad: a recipe is discarded if an ingredient is not carried by any Omaha store",
                      "held":  "2026-09-19",
+                     "by":  "hold-recipe.ps1"
+                 },
+                 {
+                     "slug":  "turkey-zha-jiang-mian",
+                     "reason":  "Brad 2026-09-22: \u0027That recipe should not be live if an ingredient is not carried in Omaha with a price\u0027; no substitute food. Lo Mein Noodles were priced as wide egg noodles; lo mein (Baker\u0027s Wei Chuan 16 oz, Family Fare Wel Pac 10 oz, captures 2026-09-01) is on no board cell (queue 2026-09-22-5a9676).",
+                     "held":  "2026-09-23",
                      "by":  "hold-recipe.ps1"
                  }
              ]

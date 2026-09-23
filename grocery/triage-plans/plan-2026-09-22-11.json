@@ -1,0 +1,222 @@
+{
+    "generated":  "2026-09-23T00:30:00",
+    "round":  1,
+    "kind":  "money-lane-direct-dispatch",
+    "board_week":  "comparison-2026-09-22 (rebuilt 2026-09-23 00:04 in worktree agent-a5049c84c8b14f0df from main\u0027s 2026-09-22 captures, refreshed by robocopy /XO because directory seeds are never refreshed)",
+    "parent_plan":  "plan-2026-09-22-9.json",
+    "depends_on":  [
+                       "92f2cfa7c on origin/main"
+                   ],
+    "queue_ids_seen":  [
+                           "2026-09-22-e9aed3",
+                           "2026-09-22-5a9676"
+                       ],
+    "queue_scope_note":  "Direct dispatch from the orchestrator (no reviewer plan): four items in order - the live chorizo link and its class, the six substitute ingredient rows, the review of crowns moved by late captures, and plan-9\u0027s stale shipped_commit hashes. commodities.json is NOT edited here (the matching-worklist lane holds it); every matching change is handed to that lane.",
+    "routing_artifact":  null,
+    "routing_artifact_note":  "No rule change ships in this plan, so there is no routing contract to diff against. The one ruling (bacon ends, known-wrong) is one exact product name.",
+    "knowledge_consulted":  [
+                                "searched \"exclude link rederive\", \"known-wrong link\", \"held recipe\" and \"link rederive exclude\" (knowledge-search): nothing applicable (SEO link-authority sections only)",
+                                "memory grocery-links-consistency (C--Codex): the link must open the product the price is for; SeeLink\u0027s everyday gate is a 30% per-unit band, which is why a same-brand wrong product under 30% passes",
+                                "memory compare-deals-is-not-standalone (C--Codex-ThriftyCrew): the rebuild sequence compare-deals -IdentityNamespace staple, recipe-overlay, prune, sync-browser-links, relink-drifted-cells, audit-name-drift, capture-eviction",
+                                "memory triage-rebuild-reads-late-captures (C--Codex): diff crowns against the published board before publishing a rebuild",
+                                "memory ruling-recipe-live-only-if-every-ingredient-priced (C--Codex, via the dispatch): a recipe whose ingredient the pipeline cannot put on the board from an Omaha store is HELD",
+                                "grocery/commodity-rules-lib.ps1 header: Get-TcCommodityExclude is the one accessor for a commodity\u0027s effective excludes (match-lib semantics), so the released-link test reuses it rather than re-deriving exclude semantics"
+                            ],
+    "untrusted_input_note":  "No fetched page or tool result addressed the agent. Store captures and product names were read as data only.",
+    "items":  [
+                  {
+                      "queue_id":  "2026-09-22-e9aed3",
+                      "subject":  "Live wrong link: mexican-chorizo-fresh Walmart See-item opened the BEEF chorizo the new \\bbeef\\b exclude released, and no link guard saw it",
+                      "classification":  "money",
+                      "evidence":  [
+                                       "public/board.json at 92f2cfa7c: mexican-chorizo-fresh Walmart chip $2.68/lb (Cacique Pork Chorizo, 9 oz, item 11027816, $1.50, 0.56 lb) with href https://www.walmart.com/ip/10451933; product-urls.json named that url \u0027Cacique Beef Chorizo 12oz\u0027 (price 1.5, 0.75 lb, verified 2026-08-31 price-pull self-capture)",
+                                       "why no guard fired: audit-name-drift shares brand (Cacique) and product word (chorizo) so no token/brand/product mismatch; the link per-unit 2.00 vs board 2.68 is a 0.747 ratio, inside the factor rule (0.67..1.5), so prune-bad-links kept it and audit-tile-integrity graded it PRICE-DRIFT (warn), never WRONG-PRODUCT",
+                                       "why nothing re-derived it: derive-links-from-prices runs in check-ad-cycles and apply-coverage-batch\u0027s repair path only; the plan-9 hand chain (compare-deals, name-drift, prune, overrides, build, guards) never runs it, and add-known-wrong\u0027s scoped re-check fires on a known-wrong ruling, not on an exclude",
+                                       "class size measured over the live product-urls.json: 33 of 2,962 stored links name a product their own commodity\u0027s effective excludes refuse (e.g. grapefruit|Fareway \u0027Carbliss Grapefruit Vodka Cocktail\u0027, cherries|Family Fare \u0027Sweet Cherry Brats (4 Ct.)\u0027, chicken-thighs|Walmart \u0027Tyson Fresh Chicken Drumstick, 10 lb Bag\u0027, plums|Fareway \u0027Fareway Red Plum Jelly\u0027)"
+                                   ],
+                      "root_cause":  "An exclude is a ruling that releases products from a commodity, but the link layer only heard about known-wrong rulings. A link keyed on commodity|store survives its product leaving the cell, and the only identity checks (name-drift token/brand/product tests, the 0.67..1.5 factor band) cannot see a same-brand, same-noun product in another variant.",
+                      "root_fix":  {
+                                       "what":  "grocery/commodity-rules-lib.ps1 gains Add-TcRuleIndex / Get-TcReleasingPattern (the commodity\u0027s effective excludes via Get-TcCommodityExclude). derive-links-from-prices drops every link whose stored name its own commodity refuses, alongside the known-wrong drop, then re-derives from the row the board prices (new -CommoditiesFile pin). The trigger runs where an exclude is applied: apply-coverage-batch re-checks every touched commodity (derive -Commodity \u003cid\u003e -Apply) after its rebuild, and audit-match-soundness -Accept re-checks every commodity that lost a name between the old and new baseline. The guard gap: audit-name-drift flags such a link \u0027rule-released\u0027, so prune-bad-links drops it in the chain and audit-tile-integrity counts it WRONG-PRODUCT (a hard accuracy fault) if it ever ships.",
+                                       "files":  [
+                                                     "grocery/commodity-rules-lib.ps1",
+                                                     "grocery/derive-links-from-prices.ps1",
+                                                     "grocery/audit-name-drift.ps1",
+                                                     "grocery/apply-coverage-batch.ps1",
+                                                     "grocery/audit-match-soundness.ps1",
+                                                     "grocery/test-auditors.ps1"
+                                                 ]
+                                   },
+                      "prevention":  "derive self-test (22 cases) carries the frozen chorizo row: MUST FIRE the Walmart beef link is dropped and re-derived to /ip/11027816; MUST FIRE a released link with no cell (Hy-Vee Beef Chorizo) is removed; CLEAN TWIN the Baker\u0027s pork links link keeps url and verified stamp. test-auditors u039r runs audit-name-drift over the same frozen row (MUST FIRE rule-released on Walmart, CLEAN TWIN Baker\u0027s examined and unflagged); u076 asserts -Accept reaches the released-commodity re-check line.",
+                      "blast_radius":  {
+                                           "measured_as":  "links",
+                                           "detail":  "33 of 2,962 stored links refused by their own commodity rule before the chain; see proof for what the rebuilt chain dropped and re-derived",
+                                           "measured_by":  "scratch scan of grocery/product-urls.json (2,962 links) against each commodity\u0027s effective excludes (commodities.json + recipe-commodities.json via Get-TcCommodityExclude), worktree agent-a5049c84c8b14f0df, 2026-09-22 23:50 and again after the chain",
+                                           "affected_now":  33
+                                       },
+                      "claimed_by_earlier":  "n/a (no include widened)",
+                      "freshness":  "product-urls.json and commodities.json at 92f2cfa7c; board rebuilt 2026-09-23 00:04 from main\u0027s 2026-09-22 captures",
+                      "proof":  {
+                                    "guard_or_fixture":  "grocery/derive-links-from-prices.ps1 -SelfTest (run-gates) and grocery/test-auditors.ps1 units u039r and u076",
+                                    "must_fire_case":  "frozen 2026-09-22 row: Walmart link walmart.com/ip/10451933 \"Cacique Beef Chorizo 12oz\" on mexican-chorizo-fresh (exclude \\bbeef\\b) while the cell prices \"Cacique Pork Chorizo, 9 oz (Refrigerated)\" item 11027816 - derive drops it and re-derives /ip/11027816; a released Hy-Vee Beef Chorizo link with no cell is removed; name-drift flags the Walmart link rule-released",
+                                    "clean_twin":  "Baker\u0027s \u0027Kroger Mercado Chorizo Sausage Pork Links\u0027 link keeps its url and verified stamp through derive, and name-drift examines it (2 of 2) without a flag",
+                                    "results":  [
+                                                    "derive-links-from-prices -SelfTest: exit 0, \u0027self-test: PASS (22 case(s), 0 failure(s))\u0027, including the three chorizo cases",
+                                                    "live repair, scoped: derive-links-from-prices -Commodity mexican-chorizo-fresh -Apply printed \u0027links DROPPED, product released by its commodity rule: 1  Walmart mexican-chorizo-fresh Cacique Beef Chorizo 12oz (exclude \\bbeef\\b)\u0027 then \u0027DERIVED 1 Walmart Cacique Pork Chorizo, 9 oz (Refrigerated)\u0027; product-urls now https://www.walmart.com/ip/11027816, $1.50, verified 2026-09-23 DERIVED",
+                                                    "class: released links over product-urls.json 33 of 2,962 before; 0 of 2,999 after relink-drifted-cells -Apply ran the per-store derive (measured by the same scratch scan, commodities.json + global excludes)",
+                                                    "rebuilt public/board.json chorizo Walmart chip href https://www.walmart.com/ip/11027816; public/smp-feed.json ingredients.mexican-chorizo-fresh url https://www.walmart.com/ip/11027816 at cheapest 2.6786",
+                                                    "guards: first run exit 2 QUARANTINE-REQUIRED (energy-drinks/Family Fare and lotion/Walmart unit-basis-outlier, the same two cells held on the 2026-09-22 publish); apply-cell-quarantine held both at their last published value; after audit-name-drift, guards exit 4 \u0027GUARDS QUARANTINED ... every other hard invariant holds. Safe to publish.\u0027 tile-integrity \u0027ZERO shipped links disagree with their tile\u0027"
+                                                ]
+                                },
+                      "rollback":  "revert the commit; product-urls.json entries dropped by the rule re-check come back from git",
+                      "leaves_open":  "nothing",
+                      "leaves_open_occurrences":  "",
+                      "leaves_open_followup":  "",
+                      "publish_batch":  1,
+                      "status":  "done",
+                      "resolution_note":  "Chorizo link re-derived from the priced row (walmart.com/ip/11027816, Cacique Pork Chorizo 9 oz) and live on the republished board and feed. Class closed: an exclude now re-checks every link on its commodity in the same run (derive-links drops any link its own rule refuses and re-derives; triggered from apply-coverage-batch and audit-match-soundness -Accept), and audit-name-drift flags such a link rule-released so prune drops it and tile-integrity holds it as WRONG-PRODUCT. The 32 other released links (vodka for grapefruit, brats for cherries, drumsticks for thighs, jelly for plums...) were dropped or re-derived by the same run.",
+                      "premise_verified":  "true: HEAD public/board.json chorizo Walmart chip href /ip/10451933 beside $2.68/lb, product-urls names it Cacique Beef Chorizo 12oz; rebuilt comparison prices Cacique Pork Chorizo, 9 oz (Refrigerated) item 11027816",
+                      "deviation":  "",
+                      "shipped_commit":  ""
+                  },
+                  {
+                      "queue_id":  "2026-09-22-5a9676",
+                      "subject":  "Six substitute ingredient rows still live against Brad\u0027s 2026-09-22 ruling",
+                      "classification":  "money",
+                      "evidence":  [
+                                       "audit-ingredient-identity over the 08:13 board: PROXY Tandoori Masala (bid garam-masala, routes to tandoori-seasoning); UNROUTED Lo Mein Noodles (egg-noodles), Olives (green-olives), Korean glass noodles (dangmyeon) (rice-noodles), Fresh Red Chili (jalapenos), Blackened Seasoning (cajun-seasoning)",
+                                       "costed.json lines: Olives 24 recipes (board:green-olives:walmart), Lo Mein Noodles 6, dangmyeon 3, Tandoori Masala 1 (board:garam-masala:nomem:Baker\u0027s), Fresh Red Chili 1 (board:jalapenos:walmart), Blackened Seasoning 1 (board:cajun-seasoning:walmart)",
+                                       "captures searched (regular, sams, bakers, fareway, 2026-09): tandoori - only \u0027Member\u0027s Mark Tandoori Style Naan Bites\u0027 (sams-deals-2026-09-19), no tandoori masala; dangmyeon - Baker\u0027s \u0027O\u0027Food Sweet Potato Glass Noodle\u0027 3.5 oz $2.69 (bakers-regular-2026-09-01); lo mein - Baker\u0027s \u0027Wei Chuan Organic Chinese Lo Mein\u0027 16 oz $3.79 and Family Fare \u0027Wel Pac Egg Noodles, Lo Mein 10 Oz\u0027 $2.59 (2026-09-01); blackened - Baker\u0027s \u0027Cajun\u0027s Choice Blackened Seasoning \u0026 Rub\u0027 6.5 oz $8.79 (bakers-regular-2026-09-04); red chili - Family Fare \u0027Red/Mexican Red Jalapeno Peppers (Capsicums)\u0027 $1.99/lb (family-fare-regular-2026-09-07)",
+                                       "board and feed: none of the dangmyeon, lo mein, blackened or tandoori rows holds a cell on comparison-2026-09-22 or the recipe board, and the feed has no key for any of them; jalapenos DOES carry the Family Fare red jalapeno as a priced cell ($1.99/lb); green-olives carries real olives at five stores (Sam\u0027s Member\u0027s Mark Manzanilla 0.226/oz, Baker\u0027s, Walmart, Fareway, Hy-Vee)"
+                                   ],
+                      "root_cause":  "Ingredient rows bid the nearest existing commodity when the real food had no commodity, which prices a different food; the identity check that now names them landed with a ratchet, so the standing keys page nowhere.",
+                      "root_fix":  {
+                                       "what":  "Per Brad\u0027s ruling, per row: HOLD every recipe whose ingredient\u0027s real food is on no board cell (hold-recipe.ps1 -Apply, which drafts in Ghost, verifies by re-read, records db/held-recipes.json so publish refuses it, and removes the published hash); KEEP the rows whose bid commodity already carries the real food on the board. Sourcing of the four missing commodities is handed to the matching lane (commodities.json is not edited here).",
+                                       "files":  [
+                                                     "meal-prep/db/held-recipes.json",
+                                                     "meal-prep/runs/hunt-2026-08-15-lowcarb-100/state/sheet-pan-tandoori-chicken-cauliflower.json",
+                                                     "meal-prep/runs/hunt-2026-08-27-highprotein/state/blackened-chicken-with-mango-salsa.json"
+                                                 ]
+                                   },
+                      "prevention":  "publish.ps1 refuses every held slug; the identity check\u0027s ratchet keys remain and a new key pages daily.",
+                      "blast_radius":  {
+                                           "measured_as":  "routing",
+                                           "detail":  "No matching rule changed and no grocery cell moved (the validator reads the handoff to the matching lane as a rule change). Recipe effect: 11 live recipes held (1 tandoori, 3 dangmyeon, 6 lo mein, 1 blackened); 25 recipes kept live (24 Olives, 1 Fresh Red Chili)",
+                                           "measured_by":  "meal-prep/db/costed.json lines by ingredient name at 92f2cfa7c; audit-ingredient-identity over the 08:13 board; capture search over grocery/out regular, sams, bakers and fareway 2026-09 files",
+                                           "affected_now":  11,
+                                           "cell_effects":  [
+
+                                                            ]
+                                       },
+                      "claimed_by_earlier":  "n/a",
+                      "freshness":  "costed.json and ingredients.json at 92f2cfa7c; captures in main\u0027s grocery/out as of 2026-09-22 23:52",
+                      "proof":  {
+                                    "guard_or_fixture":  "meal-prep/engine/publish.ps1 refuses any slug in db/held-recipes.json (hold-recipe.ps1 -SelfTest drills it); meal-prep/pipeline/audit-ingredient-identity.ps1 ratchet pages a new key daily",
+                                    "must_fire_case":  "each of the 11 slugs read status published before the hold and draft after, verified by hold-recipe\u0027s re-read of the Ghost post",
+                                    "clean_twin":  "the 25 recipes on Olives and Fresh Red Chili stay published: their bid commodity carries the real food on comparison-2026-09-22 (green-olives 5 stores; jalapenos Family Fare red jalapeno 1.99/lb)",
+                                    "results":  [
+                                                    "hold-recipe.ps1 -Apply, 11 of 11 exit 0, each \u0027ghost: DRAFTED and verified by re-read (status draft)\u0027, \u0027held-recipes: recorded (publish.ps1 will refuse this slug)\u0027, \u0027published-hashes: entry removed\u0027. Before: all 11 read \u0027status published\u0027 from Ghost.",
+                                                    "held: sheet-pan-tandoori-chicken-cauliflower; andong-jjimdak-braised-chicken, korean-beef-japchae-noodle-bowls, korean-turkey-japchae; beef-chow-mein-noodles, beijing-zha-jiang-mian-pork-noodles, five-spice-turkey-noodle-bowls, ground-turkey-lo-mein, spicy-pork-noodles, turkey-zha-jiang-mian; blackened-chicken-with-mango-salsa",
+                                                    "kept live, real food on the board: Olives (24 recipes) priced by green-olives, which carries real olives at 5 Omaha stores on comparison-2026-09-22 (Sam\u0027s Member\u0027s Mark Pimento Stuffed Manzanilla 0.226/oz, Baker\u0027s Kroger Manzanilla 0.2355, Walmart Great Value Manzanilla 0.28, Fareway 0.3805, Hy-Vee 1.4975); Fresh Red Chili (chicken-and-potato-curry) bids jalapenos, which carries Family Fare \u0027Red/Mexican Red Jalapeno Peppers (Capsicums)\u0027 $1.99/lb (family-fare-regular-2026-09-07) as a priced cell, per Brad\u0027s 2026-08-31 ruling that a fresh red chili is a ripe red jalapeno"
+                                                ]
+                                },
+                      "rollback":  "hold-recipe.ps1 -Slug \u003cs\u003e -Release -Reason \u003cwhy\u003e -Apply, then publish on purpose",
+                      "leaves_open":  "4 missing commodities keep 11 recipes held (tandoori-seasoning, sweet-potato glass noodles, lo-mein noodles, blackened seasoning); the Fresh Red Chili card prices jalapenos\u0027 cheapest cell (Walmart green, 1.76/lb) not the Family Fare red row; and the queue item\u0027s union-rows half (138 costed lines over 30 ingredient/product pairs) was not in this dispatch (union rows owned by queue 2026-09-23-9999c0)",
+                      "leaves_open_occurrences":  "11 recipes held on 2026-09-23 (4 foods); 1 red-chili card; 138 union lines standing in ops/out/ingredient-identity-baseline.json since 2026-09-22",
+                      "leaves_open_followup":  "2026-09-23-dd290b",
+                      "publish_batch":  2,
+                      "status":  "deviated",
+                      "resolution_note":  "Per Brad\u0027s 2026-09-22 ruling: 11 live recipes held to draft through hold-recipe.ps1 (their food is on no Omaha board cell); Olives and Fresh Red Chili kept, because their bid commodity already carries the real food on the board. No recipe was re-pointed, so nothing was re-costed or republished. Sourcing handed to the matching lane.",
+                      "premise_verified":  "true: re-ran audit-ingredient-identity against the 08:13 board; all six rows present with the bids the queue item names; all 11 held slugs were status published in Ghost before the hold (hold-recipe read each post)",
+                      "deviation":  "Two of the six rows were not substitutes on the evidence: green-olives and jalapenos already carry the real food on the board, so those 25 recipes stay live. Two prior Brad rulings conflict with today\u0027s and are named rather than silently overridden: Tandoori Masala was RULED onto garam-masala on 2026-08-28 (held today under the 2026-09-22 ruling, since no Omaha capture carries tandoori masala), and Fresh Red Chili was ruled onto jalapenos on 2026-08-31 (kept). Found in passing, zero live effect: ingredients.json row \u0027Green Olives\u0027 bids olives (alias of black-olives), a black-for-green substitute; no costed recipe uses that row today.",
+                      "shipped_commit":  ""
+                  },
+                  {
+                      "queue_id":  "discovered:late-capture-crowns-2026-09-22",
+                      "subject":  "Crowns the recipe rebuild moved from late 2026-09-22 captures, reviewed against the 08:13 board",
+                      "classification":  "money",
+                      "evidence":  [
+                                       "diff of public/board.json at 92f2cfa7c (__rows first chip) against the 08:13 comparison-2026-09-22 (lowest priced cell): 34 ids differ. 14 are equal-price ties listed in a different store order (chicken-breast, mangoes, bagels, hamburger-buns, pita-bread, refried-beans, both cream soups, chili-beans, tomatoes-green-chilies, brown-sugar, powdered-sugar, stuffing-mix, frozen-lima-beans): no price moved. 2 are new commodities from plan-9\u0027s split (chicken-drumsticks Sam\u0027s 0.98/lb Member\u0027s Mark drumsticks; ground-sumac Baker\u0027s Morton \u0026 Bassett Sumac 2 oz $12.79 = 6.395/oz). 18 moved crowns, reviewed below",
+                                       "RIGHT product, plausible per-unit (16): chicken-thighs Sam\u0027s Member\u0027s Mark bone-in thighs 1.28/lb (was a Walmart DRUMSTICK bag, fixed by plan-9); mexican-chorizo-fresh Walmart Cacique Pork Chorizo 9 oz 2.68/lb; pepperoni Sam\u0027s Member\u0027s Mark Cafe Sliced Pepperoni 25 lb case $76.92 = 0.192/oz (a real Sam\u0027s case; bulk shape noted); rotisserie-chicken Walmart Freshness Guaranteed Lemon Pepper Rotisserie Chicken 36 oz (Chilled) $3.97; tortillas Aldi Pueblo Lindo Fajita Flour 20 ct $1.85 = 0.0925 each; corned-beef-hash Aldi Brookdale $2.89 (name says 15 OZ, size field 14 oz: per-unit 0.2064 on 14, 0.1927 on 15; the crown holds either way); creamy-cilantro-lime-dressing Walmart Briannas 12 fl oz $4.00; hot-sauce Walmart Trappey\u0027s Red Devil 32 fl oz $2.63; vegetable-oil Sam\u0027s Member\u0027s Mark Canola 192 fl oz $7.16 (canola is in the commodity\u0027s include by design); granola Sam\u0027s Member\u0027s Mark Honey Almond 32 oz $6.56; apple-juice Aldi Nature\u0027s Nectar 100% 64 fl oz $2.19; laundry-detergent Aldi Tandil 100 fl oz $5.49; paper-towels Hy-Vee That\u0027s Smart 3 ct $2.98 (was an Aldi REUSABLE towel, now gone); sandwich-bags Walmart Great Value 200 ct $1.97; air-freshener Walmart Great Value aerosol 8 oz $0.97; toothpaste Walmart AIM 5.5 oz $1.00; toothbrushes Walmart Reach 2 ct $1.00",
+                                       "WRONG (1): bacon Fareway \u0027Webster City Bacon Ends\u0027 80 oz $11.99 = 2.398/lb crowned bacon over sliced bacon (Aldi Appleton Farms 16 oz 3.95/lb). Ends are irregular trimmings, a different product for the reader"
+                                   ],
+                      "root_cause":  "A rebuild reads every capture that landed after the reviewer\u0027s board; nobody measured those rows.",
+                      "root_fix":  null,
+                      "prevention":  "the crown diff is run before this plan\u0027s publish (memory triage-rebuild-reads-late-captures)",
+                      "blast_radius":  {
+                                           "measured_as":  "routing",
+                                           "detail":  "crowns: live public/board.json __rows first chip vs the 08:13 comparison\u0027s lowest priced cell",
+                                           "measured_by":  "public/board.json __rows at 92f2cfa7c against the 08:13 comparison-2026-09-22 copy, named from the rebuilt comparison",
+                                           "affected_now":  18
+                                       },
+                      "claimed_by_earlier":  "n/a",
+                      "freshness":  "public/board.json at 92f2cfa7c; comparison-2026-09-22 08:13 copy",
+                      "proof":  {
+                                    "guard_or_fixture":  "grocery/audit-known-wrong.ps1 (run by add-known-wrong and by guards)",
+                                    "must_fire_case":  "add-known-wrong\u0027s audit printed BLOCKED [Fareway] bacon \u0027Webster City Bacon Ends\u0027 $11.99 per_unit=2.398 crown=True before the rebuild",
+                                    "clean_twin":  "after the rebuild the bacon crown is Aldi Appleton Farms Lower Sodium Bacon 16 OZ 3.95/lb, unchanged from the 08:13 board, and guards exit 4 with known-wrong clean",
+                                    "results":  [
+                                                    "add-known-wrong.ps1 -Commodity bacon -Store Fareway (key bacon|Fareway|webster-city-bacon-ends); its audit was RED as designed until the rebuild",
+                                                    "rebuilt comparison: bacon crown Aldi Appleton Farms Lower Sodium Bacon 16 OZ 3.95/lb, then Walmart Great Value Hickory Smoked 3.96, Sam\u0027s 4.42; feed ingredients.bacon cheapest 3.95 Aldi; guards exit 4 with known-wrong clean"
+                                                ]
+                                },
+                      "rollback":  "add-known-wrong.ps1 -Reverse -Key bacon|Fareway|webster-city-bacon-ends",
+                      "leaves_open":  "the recurring shape (bacon ends and pieces) needs a bacon exclude in commodities.json, which this dispatch may not edit; the known-wrong ruling covers the one exact product only",
+                      "leaves_open_occurrences":  "1 crown on 2026-09-22 (Fareway)",
+                      "leaves_open_followup":  "2026-09-23-dd290b",
+                      "publish_batch":  1,
+                      "status":  "done",
+                      "resolution_note":  "18 moved crowns reviewed: 17 right products at plausible per-units, 1 wrong (Fareway bacon ends) ruled known-wrong and the board rebuilt through the chain; the exclude for the shape is handed to the matching lane.",
+                      "premise_verified":  "true: 18 moved crowns, 14 ties and 2 new commodities counted from the diff (the dispatch said 17; the extra is chorizo, whose move was plan-9\u0027s own)",
+                      "deviation":  "",
+                      "shipped_commit":  "",
+                      "root_fix_none_because":  "the late-capture class is already a standing habit (memory triage-rebuild-reads-late-captures) and the crown diff ran before publish; the one wrong product was ruled and its recurring shape is handed to the matching lane"
+                  },
+                  {
+                      "queue_id":  "discovered:plan-9-stale-hashes-2026-09-22",
+                      "subject":  "plan-2026-09-22-9 named pre-rebase commit ids that never reached origin/main",
+                      "classification":  "ops",
+                      "evidence":  [
+                                       "322fd93b1, 26fe7909a and ecc5d9fac are not ancestors of origin/main (git merge-base --is-ancestor); their landed twins are 87d2109f3, de8ddbeb3 and 39738ce0c, with 270a5c288 (board and feed) and 92f2cfa7c (gate fixes)"
+                                   ],
+                      "root_cause":  "push-main rebases before it pushes, so an id read in the worktree is not the id that lands",
+                      "root_fix":  null,
+                      "prevention":  ".claude/rules/measurement.md already says never cite an unlanded hash; this plan cites landed ids only",
+                      "blast_radius":  {
+                                           "measured_as":  "routing",
+                                           "detail":  "no board or reader effect",
+                                           "measured_by":  "grocery/triage-plans/plan-2026-09-22-9.json shipped_commit fields (3 stale of 7)",
+                                           "affected_now":  3
+                                       },
+                      "claimed_by_earlier":  "n/a",
+                      "freshness":  "origin/main 92f2cfa7c",
+                      "proof":  {
+                                    "guard_or_fixture":  "git merge-base --is-ancestor \u003chash\u003e origin/main",
+                                    "must_fire_case":  "322fd93b1, 26fe7909a and ecc5d9fac are not ancestors of origin/main",
+                                    "clean_twin":  "87d2109f3, de8ddbeb3, 39738ce0c, 270a5c288 and 92f2cfa7c are",
+                                    "results":  [
+                                                    "git merge-base --is-ancestor: 87d2109f3, de8ddbeb3, 39738ce0c, 270a5c288, 92f2cfa7c all on origin/main; 322fd93b1, 26fe7909a, ecc5d9fac not"
+                                                ]
+                                },
+                      "rollback":  "revert the plan edit",
+                      "leaves_open":  "nothing",
+                      "leaves_open_occurrences":  "",
+                      "leaves_open_followup":  "",
+                      "publish_batch":  1,
+                      "status":  "done",
+                      "resolution_note":  "plan-2026-09-22-9 items recipe-ingredient-identity, chicken-thighs-meaning and declared-substitutes now name 87d2109f3 / de8ddbeb3 / 39738ce0c / 270a5c288 / 92f2cfa7c",
+                      "premise_verified":  "true: merge-base check above",
+                      "deviation":  "",
+                      "shipped_commit":  "",
+                      "root_fix_none_because":  ".claude/rules/measurement.md already forbids citing an unlanded hash; this was the repair of one plan written before its rebase"
+                  }
+              ],
+    "ship_sequence":  [
+                          "1. links class (e9aed3): commodity-rules-lib, derive-links, name-drift, apply-coverage-batch, match-soundness accept trigger, fixtures; rebuild the board through the chain; crown review; bacon-ends ruling; guards; publish board and feed",
+                          "2. substitutes (5a9676): holds through hold-recipe.ps1 -Apply",
+                          "3. plan-9 hashes",
+                          "4. land: rebase, run-gates, test-auditors, guards, rehearse-chain, push, close queue items in the main queue, verify live"
+                      ],
+    "open_questions_for_brad":  [
+
+                                ]
+}

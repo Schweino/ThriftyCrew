@@ -495,7 +495,7 @@
       "resolution_note": "Recipe ingredients were priced by hand-written commodity ids nothing checked against the board. Three shapes were live on 8 paid recipes: shallots at the onion price (understated about 0.15 a serving on the live card), orange zest bought as 6.3 lb of oranges (overstated 0.51 a serving), pork chorizo at the ground-pork price (overstated up to about 0.64). Every vocabulary row now declares whether it is the same food, a yield of a parent, or a declared substitute, and one identity check reconciles the vocabulary with the board at push, daily and when the mapper records a reuse. The 8 lines are repaired and recosted.",
       "premise_verified": "true, checked 2026-09-22 in worktree agent-ab034ff7f1b928b54 against costed.json at ba13faba0 (13:26:53) and comparison-2026-09-22: Shallots basis board:onions:walmart buy 0.75 on 3 recipes; Pork Chorizo basis board:ground-pork:walmart on 4 (buy 6.66/19.97/4.44/4.44); Orange Zest basis board:oranges:walmart buy 7.86 (buy_pkg_g 131, gpu 20.78, lb). Board: shallots Walmart 2.88, mexican-chorizo-fresh Walmart Cacique BEEF Chorizo 2.00, chicken-thighs crown Tyson drumstick bag 0.984. ingredient-vocab -Query shallot printed GENUINE GAP before the fix. All as the plan said.",
       "deviation": "(1) Ran AFTER the registrar ruling, so the class fix treats `substitute` as a finding by name (Brad: no substitute of any kind) instead of shipping a declared-substitute relation; Tandoori Masala stays bid garam-masala and is a standing PROXY finding, not a declared row. (2) The union check (c) uses the ingredient HEAD word (last non-qualifier word, walking back past generic class heads, stems and a joined-name compound match) because an any-word test passes the chicken line against the drumstick bag; mark 149 keys (PROXY 2, UNROUTED 9, UNION-ROW 138) after the repairs, against the plan day-one estimate of about 44 union lines. (3) Mapper check lives in ingredient-resolutions -Record (Test-ReuseIdentity), with -IdentityRuling for a reviewed exception. (4) identity_reviewed on High Fiber Tortilla, Butter Crackers, Pasta Shells - jumbo instead of an alias field. (5) Recost used cost-recipes -Slugs <8> (targeted), and publish went build-cards -Slugs + engine/publish -Slugs behind propagate's own gates run by hand, because propagate -DryRun found 54 dirty specs with 47 unnamed in this checkout, and republishing them is not this item. (6) The board rebuild read main's newer 2026-09-22 captures (copied, not committed); 17 crowns outside this item moved with them and two late-capture cells (energy-drinks Family Fare, lotion Walmart) were quarantined by guards (exit 4) at their last published values. (7) chicken-drumsticks drops its inherited bare `cooked` exclude (it matched Uncooked and held Baker's Smart Way drumsticks out); its own \\bcooked\\b stays.",
-      "shipped_commit": "322fd93b1 (commodity split + chorizo exclude), 26fe7909a (identity check), ecc5d9fac (vocabulary repairs + recost); plan, board and feed in the landing commit"
+      "shipped_commit": "87d2109f3 (commodity split + chorizo exclude), de8ddbeb3 (identity check), 39738ce0c (vocabulary repairs + recost), 270a5c288 (board and feed), 92f2cfa7c (gate fixes); hashes corrected 2026-09-23 from the pre-rebase ids 322fd93b1 / 26fe7909a / ecc5d9fac, which never reached origin/main"
     },
     {
       "queue_id": "discovered:chicken-thighs-meaning-2026-09-22",
@@ -510,7 +510,7 @@
       "resolution_note": "Split, per Brad (answer A) and registrar-2026-09-22: chicken-drumsticks is its own commodity at index 1 and chicken-thighs is narrowed to thighs. Rebuilt board: drumsticks crown Sam's 0.98/lb (Walmart, Aldi, Baker's, Hy-Vee ad, Fareway cells too); thighs crown Sam's 1.28/lb, and Walmart keeps a thigh cell (Tyson thighs tray). Match-soundness MOVED 6, all thighs -> drumsticks, all on the registrar list.",
       "status": "done",
       "premise_verified": "true: comparison-2026-09-22 chicken-thighs crown was Walmart Tyson Fresh Chicken Drumstick, 10 lb Bag at 0.984; Sam's bone-in thighs 1.28",
-      "shipped_commit": "322fd93b1"
+      "shipped_commit": "87d2109f3"
     },
     {
       "queue_id": "discovered:declared-substitutes-2026-09-22",
@@ -524,7 +524,7 @@
       "resolution_note": "Ruled: no substitute of any kind, and a recipe is not live unless every ingredient is carried in Omaha with a pipeline price. The identity check now reports a substitute as a finding by name and the mapper refuses a REUSE to a different food. Holding or re-sourcing the recipes still priced as a stand-in is queue item 2026-09-22-5a9676 (weekly, measured).",
       "status": "done",
       "premise_verified": "true: Tandoori Masala, Korean glass noodles, Lo Mein Noodles, Blackened Seasoning, Fresh Red Chili and Olives still price as another food on 2026-09-22",
-      "shipped_commit": "26fe7909a",
+      "shipped_commit": "de8ddbeb3",
       "leaves_open": "6 substitute rows still live on paid recipes (Tandoori Masala, Korean glass noodles, Lo Mein Noodles, Blackened Seasoning, Fresh Red Chili, Olives)",
       "leaves_open_occurrences": 6,
       "leaves_open_followup": "2026-09-22-5a9676"

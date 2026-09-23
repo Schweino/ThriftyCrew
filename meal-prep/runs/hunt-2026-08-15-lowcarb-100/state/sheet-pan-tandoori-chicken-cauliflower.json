@@ -3,10 +3,10 @@
     "title":  "",
     "source_url":  "",
     "protein":  "",
-    "state":  "published",
+    "state":  "held",
     "wave":  3,
     "created":  "2026-08-16T01:20:25",
-    "updated":  "2026-08-16T16:04:33",
+    "updated":  "2026-09-23T00:08:26",
     "terms":  [
                   {
                       "term":  "tandoori spice mix",
@@ -101,6 +101,12 @@
                         "at":  "2026-08-16T16:04:33",
                         "by":  "wave-publish",
                         "detail":  "wave 3"
+                    },
+                    {
+                        "state":  "held",
+                        "at":  "2026-09-23T00:08:26",
+                        "by":  "hold-recipe",
+                        "detail":  "Brad 2026-09-22: \u0027That recipe should not be live if an ingredient is not carried in Omaha with a price\u0027; no substitute food. Tandoori Masala was priced as garam-masala (a different blend); no Omaha capture carries tandoori masala and tandoori-seasoning has no board cell (queue 2026-09-22-5a9676)."
                     }
                 ]
 }

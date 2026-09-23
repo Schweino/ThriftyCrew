@@ -5255,6 +5255,21 @@
                         "ruled_on":  "2026-09-22",
                         "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "bacon|Fareway|webster-city-bacon-ends",
+                        "commodity":  "bacon",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Webster City Bacon Ends"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Webster City Bacon Ends, 80 oz at 11.99 (2.398/lb), crowned the bacon cell from a late 2026-09-22 Fareway capture over sliced bacon (Aldi Appleton Farms 16 oz, 3.95/lb). Bacon ends are irregular trimmings sold below sliced bacon because they are not slices: a different product for the reader. The recurring shape (ends and pieces) is handed to the matching lane as an exclude; this rules the one exact product.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-23",
+                        "ruled_by":  "triage-developer 2026-09-23 (crown review, queue 2026-09-22-e9aed3 run)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

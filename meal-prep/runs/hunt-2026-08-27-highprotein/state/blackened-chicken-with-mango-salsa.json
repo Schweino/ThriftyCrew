@@ -3,10 +3,10 @@
     "title":  "Blackened Chicken with Mango Salsa",
     "source_url":  "https://easyeatsdietitian.com/blackened-chicken-with-mango-salsa/",
     "protein":  "chicken",
-    "state":  "published",
+    "state":  "held",
     "wave":  13,
     "created":  "2026-08-27T18:20:33",
-    "updated":  "2026-08-29T11:04:52",
+    "updated":  "2026-09-23T00:08:42",
     "terms":  [
                   {
                       "term":  "blackened seasoning mix",
@@ -121,6 +121,12 @@
                         "at":  "2026-08-29T11:04:52",
                         "by":  "wave-publish",
                         "detail":  "wave 13"
+                    },
+                    {
+                        "state":  "held",
+                        "at":  "2026-09-23T00:08:42",
+                        "by":  "hold-recipe",
+                        "detail":  "Brad 2026-09-22: \u0027That recipe should not be live if an ingredient is not carried in Omaha with a price\u0027; no substitute food. Blackened Seasoning was priced as a plain cajun seasoning; the real food (Cajun\u0027s Choice Blackened Seasoning \u0026 Rub, Baker\u0027s capture 2026-09-04) is on no board cell (queue 2026-09-22-5a9676)."
                     }
                 ]
 }
