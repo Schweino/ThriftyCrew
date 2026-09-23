@@ -327,3 +327,6 @@ that slice has no derived row the density rule can judge. The 2026-09-19 A/B wou
 BOTH arms rather than 2,802: that file carries the two 35 lb oil jugs at 799.6 and 799.429 fl oz (0.671 and
 0.672 g/mL), and the new rule refuses both. The arms still differ in exactly the two files named above, so
 the byte-identity finding stands.
+
+Re-read at harness blob e3a9b356ef7817e6c890045b8aa32ad4df60812d (grocery/build-sams-deals.ps1): the cents-form reading (Get-SamsUnitPriceReading) and the display window it feeds are untouched by the three later changes (the dca1a1 per-piece guard, the count-first name rule of 2026-09-22, and its exemption of count-first names from that guard); build-sams-deals -SelfTest reads SELF-TEST PASS, exit 0, at this blob. The A/B arm figures above were NOT re-measured.
+Re-read at harness blob 3004e2df162df2204dcbe93ea2adb8d2bc7a789c (grocery/pricing-math-lib.ps1): the one later change reads an 'A or B' size as the smaller size and does not touch the cents reading or the rounding-band table; not re-measured.

@@ -2,6 +2,7 @@
   test-derived-band.ps1 -SelfTest - frozen fixtures for derived-band-lib.ps1 (Brad's ruling "Derive from data" on
   queue 2026-09-21-6b17b1). Evidence frozen from comparison-2026-09-22 (08:13 generation, the cells as published).
 #>
+[CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 if (-not $SelfTest) { Write-Output 'test-derived-band: run with -SelfTest'; exit 3 }
@@ -25,8 +26,9 @@ try {
   $fb = (Get-TcDerivedBands -Rows $flat)['x']
   Tc 'BAR  a price exactly AT the floor (0.2 = 1.0 / 5) is admitted' (Test-TcInBand $fb 0.2)
   Tc 'BAR  one step past (0.1999) is refused' (-not (Test-TcInBand $fb 0.1999))
-  # the grits founding error ($0.0023/oz on a real 0.12-0.19/oz board) is refused by the derived band too
-  $grits = @(@('Fareway', 0.1246), @('Walmart', 0.135), @("Baker's", 0.1662), @('Family Fare', 0.1871)) | ForEach-Object { [pscustomobject]@{ id = 'grits'; store = $_[0]; per_unit = $_[1] } }
+  # the grits founding error ($0.0023/oz on a real 0.12-0.19/oz board) is refused by the derived band too; the four real
+  # store numbers are kept and their names are not (the rule reads distinct stores only, never which ones)
+  $grits = @(@('StoreA', 0.1246), @('StoreB', 0.135), @('StoreC', 0.1662), @('StoreD', 0.1871)) | ForEach-Object { [pscustomobject]@{ id = 'grits'; store = $_[0]; per_unit = $_[1] } }
   Tc 'MUST FIRE  the 2026-07-27 grits decimal-drop ($0.0023/oz) is refused' (-not (Test-TcInBand (Get-TcDerivedBands -Rows $grits)['grits'] 0.0023))
   $two = @([pscustomobject]@{ id = 'y'; store = 'A'; per_unit = 1.0 }, [pscustomobject]@{ id = 'y'; store = 'B'; per_unit = 2.0 })
   Tc 'MUST NOT FIRE  two rows from two stores are not enough evidence: no band is derived' (-not (Get-TcDerivedBands -Rows $two).ContainsKey('y'))

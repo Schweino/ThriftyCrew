@@ -37,6 +37,7 @@
 
   Usage: .\audit-band-refusals.ps1 [-OutDir <dir>] [-Date yyyy-MM-dd] | -SelfTest
 #>
+[CmdletBinding()]
 param([string]$OutDir = '', [string]$Date = '', [string]$BacklogFile = '', [switch]$Accept, [switch]$Tighten, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot

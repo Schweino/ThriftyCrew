@@ -2,6 +2,7 @@
   test-hold-scope.ps1 -SelfTest - fixtures for hold-scope-lib.ps1 (queue 2026-09-21-d16398), then the LIVE contract over
   this tree's guards.ps1 and its delegates.
 #>
+[CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 if (-not $SelfTest) { Write-Output 'test-hold-scope: run with -SelfTest'; exit 3 }
@@ -36,7 +37,7 @@ try {
   # LIVE: this tree's guards.ps1 and every delegate it names
   $gl = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'guards.ps1'))
   $live = Test-TcHoldScopeContract -GuardsText $gl -ReadDelegate { param($f) $p = Join-Path $PSScriptRoot $f; if (Test-Path -LiteralPath $p) { [IO.File]::ReadAllText($p) } else { $null } }
-  Hc ('CLEAN TWIN  the live tree: ' + $live.delegates + ' delegates, ' + $live.board + ' board-scoped against a mark of ' + $live.mark + ', findings ' + $live.findings.Count) ($live.delegates -ge 13 -and $live.findings.Count -eq 0)
+  Hc ('MUST NOT FIRE  the live tree: ' + $live.delegates + ' delegates, ' + $live.board + ' board-scoped against a mark of ' + $live.mark + ', findings ' + $live.findings.Count) ($live.delegates -ge 13 -and $live.findings.Count -eq 0)
   foreach ($x in $live.findings) { Write-Output ('      ' + $x) }
 } catch { Write-Output ('FAIL  a case threw: ' + $_.Exception.Message); $script:bad++ }
 Write-Output ('test-hold-scope self-test ' + $(if ($script:bad -eq 0 -and $script:n -eq 8) { 'pass' } else { 'FAIL' }) + ': ' + ($script:n - $script:bad) + ' of ' + $script:n + ' case(s) passed (8 expected)')
