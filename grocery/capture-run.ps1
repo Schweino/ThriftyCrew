@@ -199,6 +199,21 @@ try {
 }
 Write-RunStatus 'started'
 
+# ---- THE CODE THIS RUN EXECUTES (2026-09-23, founding commit cec9779a3) ----------------------------------------------
+# Recorded now so the push stage can ask whether its rebase brought in a change to a script that PRODUCED something this
+# run ships (lib\chain-code-currency.ps1). On 09-23 the run built the feed with feed-everyday-ps as it stood at 09:32,
+# 8b8d85ff7 changed it on origin mid-run, and the rebase shipped the old-code feed over the new one. Never fatal: an
+# unrecorded base makes the push-time check BLIND, which it says.
+$script:ChainCodeBase = ''
+try {
+  . (Join-Path (Split-Path $root -Parent) 'lib\chain-code-currency.ps1')
+  $ccb = Invoke-TcCccGit (Split-Path $root -Parent) @('rev-parse', 'HEAD')
+  if ($ccb.Rc -eq 0) { $script:ChainCodeBase = $ccb.Out.Trim() }
+} catch { Write-Output ('chain-code: could not record the code this run executes (' + $_.Exception.Message + ')') }
+$script:FeedCodeBase = $script:ChainCodeBase
+$script:StaleOthersSaid = $false
+Write-Output ('chain-code: this run executes the code at ' + $(if ($script:ChainCodeBase) { $script:ChainCodeBase } else { 'UNRECORDED' }))
+
 # ---- 1st-OF-MONTH HOUSEKEEPING (moved here 2026-08-22 from the retired run-daily-local.ps1) ----------
 # The pipeline logs grow forever and every line rides every bot commit; triage plans are pure history
 # once shipped; the Ghost content backup is the only off-Ghost copy. All three lived in the old 8:30
@@ -1190,7 +1205,16 @@ try {
         & git -C $repo rebase --abort | ForEach-Object { Write-Output ("abort[$attempt]: " + $_) }   # no redirect: same EAP=Stop rule
         # AN UNTRACKED FILE IN THE WAY IS NOT A CONFLICT A RETRY CAN CLEAR (2026-09-19, Get-RebaseUntrackedBlockers).
         # Move exactly the files git named into a dated quarantine (kept, never deleted), say so, and retry.
-        $blockers = Get-RebaseUntrackedBlockers $rbLines
+        $blockers0 = Get-RebaseUntrackedBlockers $rbLines
+        # NEVER A PATH HEAD TRACKS (2026-09-23): moving one is a deletion the next commit carries (cec9779a3 took
+        # graph/provenance/2026-09-22.jsonl off origin that way). Those are named and left where they are.
+        $blockers = @()
+        if (@($blockers0).Count) {
+          $trkRes = Invoke-GitCaptured -Repo $repo -GitArgs (@('ls-files', '--') + @($blockers0))
+          $qSplit = Split-RebaseBlockersByTracking -Blockers @($blockers0) -TrackedAtHead @(([string]$trkRes.stdout) -split "`r?`n" | Where-Object { $_ })
+          foreach ($rq in @($qSplit.Refuse)) { Write-Output ("rebase[$attempt]: NOT moving '" + $rq + "' - HEAD tracks it, so moving it would be a deletion the next commit carries") }
+          $blockers = @($qSplit.Move)
+        }
         if (@($blockers).Count) {
           $qDir = Join-Path $root ("out\untracked-quarantine\" + $today)
           foreach ($b in @($blockers)) {
@@ -1205,6 +1229,42 @@ try {
           continue
         }
         Start-Sleep -Seconds 10; continue
+      }
+      # ---- AN ARTIFACT BUILT BY CODE THIS REBASE REPLACED IS REBUILT, OR NAMED AND PAGED (2026-09-23, cec9779a3) ------
+      # The rebase above can bring in commits that changed a script that PRODUCED a served file this run is about to
+      # ship. lib\chain-code-currency.ps1 derives each artifact's producers and says which the range changed. The FEED is
+      # rebuilt on the rebased code by export-feed as a child (a running PowerShell keeps the text it loaded) and
+      # committed on top; if export-feed refuses, this push is refused, because shipping the stale feed is the defect.
+      # Any OTHER stale artifact (the board and its pages: a rebuild is the whole publish stage) is NAMED and PAGED and
+      # still ships - a known, bounded gap recorded in the landing, not a silent one.
+      if ($shipServed) {
+        try {
+          $ccChanged = @((Invoke-TcCccGit $repo (@('diff', '--name-only', 'HEAD~1', 'HEAD', '--') + @($servedPaths))).Lines)
+          $ccFeed = Get-TcStaleArtifacts -Repo $repo -Base $script:FeedCodeBase -Tip 'HEAD' -Artifacts @($ccChanged | Where-Object { $_ -eq 'public/smp-feed.json' })
+          $ccAll = if ($script:StaleOthersSaid) { $null } else { Get-TcStaleArtifacts -Repo $repo -Base $script:ChainCodeBase -Tip 'HEAD' -Artifacts @($ccChanged | Where-Object { $_ -ne 'public/smp-feed.json' }) }
+          if ($ccFeed.Blind) { Write-Output ("chain-code[$attempt]: BLIND - the feed's producers could not be compared: " + $ccFeed.Blind) }
+          elseif (@($ccFeed.Rows).Count) {
+            Write-Output ("chain-code[$attempt]: public/smp-feed.json was built by code this rebase replaced (" + (@(@($ccFeed.Rows)[0].Changed) -join ', ') + ") - rebuilding it on the rebased code")
+            $efRes = Invoke-Native 'powershell' '-NoProfile' '-ExecutionPolicy' 'Bypass' '-File' (Join-Path $root 'export-feed.ps1')
+            foreach ($l in @($efRes.Lines)) { Write-Output ("  export-feed[$attempt]: " + $l) }
+            if ([int]$efRes.ExitCode -ne 0) {
+              Write-Output ("chain-code[$attempt]: REFUSED - export-feed exited " + $efRes.ExitCode + " on the rebased code, so the feed this run built would ship with code it was not built by. NOT pushing.")
+              Add-FailedLane 'stale-code-feed'
+              try { $scSubj = "Daily chain did not push: its feed was built by replaced code - $today"; Send-Alert -Subject $scSubj -Body ("capture-run.ps1 [$Kind]: the rebase onto origin/main brought in a change to " + (@(@($ccFeed.Rows)[0].Changed) -join ', ') + ", which produce public/smp-feed.json, and export-feed refused to rebuild the feed on the new code (exit " + $efRes.ExitCode + "). Nothing was pushed; the served feed stands. See grocery\out\logs\capture-run-$Kind-$today.log.") | Out-Null; Set-FailedLanePaged 'stale-code-feed' $scSubj $LASTEXITCODE } catch {}
+              $pushed = $false; break
+            }
+            $fc = Invoke-GitCaptured -Repo $repo -GitArgs @('-c', 'user.name=smp-pipeline-bot', '-c', 'user.email=actions@users.noreply.github.com', 'commit', '-m', ("Daily pipeline: feed rebuilt on the rebased code ($today) [$Kind]"), '--', 'public/smp-feed.json')
+            Write-Output ("chain-code[$attempt]: feed rebuilt; commit rc=" + $fc.rc + $(if ($fc.rc -ne 0) { ' (' + ([string]$fc.stdout + ' ' + [string]$fc.stderr).Trim() + ')' } else { '' }))
+            $script:FeedCodeBase = (Invoke-TcCccGit $repo @('rev-parse', 'HEAD')).Out.Trim()
+          }
+          if ($null -ne $ccAll -and -not $ccAll.Blind -and @($ccAll.Rows).Count) {
+            $script:StaleOthersSaid = $true
+            $ccList = @($ccAll.Rows | ForEach-Object { $_.Artifact + ' <- ' + (@($_.Changed) -join ', ') })
+            Write-Output ("chain-code[$attempt]: " + $ccList.Count + " other served artifact(s) were built by code this rebase replaced and ship as built: " + (($ccList | Select-Object -First 6) -join ' | '))
+            Add-FailedLane 'stale-code-artifact'
+            try { $soSubj = "Daily chain shipped artifacts built by code that changed mid-run - $today"; Send-Alert -Subject $soSubj -Body ("capture-run.ps1 [$Kind]: the rebase onto origin/main brought in changes to scripts that produce these served files, which were built before those changes and ship as built. The next run rebuilds them on the new code.`n`n" + ($ccList -join "`n")) | Out-Null; Set-FailedLanePaged 'stale-code-artifact' $soSubj $LASTEXITCODE } catch {}
+          }
+        } catch { Write-Output ("chain-code[$attempt]: the stale-code check threw (" + $_.Exception.Message + ") - pushing as before") }
       }
       & git -C $repo push origin HEAD:main | ForEach-Object { Write-Output ("push[$attempt]: " + $_) }
       if ($LASTEXITCODE -eq 0) { $pushed = $true; Write-Output "pushed on attempt $attempt"; break }

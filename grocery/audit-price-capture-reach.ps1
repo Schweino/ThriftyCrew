@@ -53,6 +53,7 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')
+. (Join-Path (Split-Path $root -Parent) 'lib\atomic-write.ps1')
 
 # THE ROSTER OF SIDE STORES. Explicit on purpose: adding a new place that holds captured prices has
 # to be a deliberate act, because the failure mode is a file nobody remembers. `expected` records
@@ -205,7 +206,9 @@ $doc2 = [ordered]@{
       missing_rows = @($_.missing_rows | Select-Object -First 200) } })
 }
 $outF = Join-Path $OutDir 'price-capture-reach.json'
-[IO.File]::WriteAllText($outF, ($doc2 | ConvertTo-Json -Depth 6), (New-Object System.Text.UTF8Encoding($false)))
+# THROUGH Write-TcAtomicFile (2026-09-23): the same user-mapped-section IOException as audit-hyvee-store-blend killed this lane
+# in the 09-23 chain (exit 1, no marker). Same bytes as before: no BOM, no trailing newline.
+[void](Write-TcAtomicFile -Path $outF -Text ($doc2 | ConvertTo-Json -Depth 6) -NoBom -NoNewline)
 
 if (-not $Quiet) {
   Write-Output 'price-capture-reach  -  prices captured in the codebase vs prices in the table'

@@ -33,6 +33,7 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')
+. (Join-Path (Split-Path $root -Parent) 'lib\atomic-write.ps1')
 . (Join-Path $root 'hyvee-store-lib.ps1')
 
 $f = Get-ChildItem (Join-Path $OutDir 'regular\hyvee-regular-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
@@ -77,7 +78,10 @@ $doc2 = [ordered]@{
   note = 'A row states its own store in store_id (or, before 2026-09-19, in source_ad). off_target rows were captured at a store the board no longer speaks for and are NOT wrong in themselves - they are simply another store''s prices. Measured 2026-08-21: the two Omaha stores disagree on ~35% of everyday rows and most sale rows, so off_target is a direct count of how many cells are likely wrong for the claimed store. unstated rows predate source_ad carrying an id and cannot be attributed either way.'
 }
 $out = Join-Path $OutDir 'hyvee-store-blend.json'
-[IO.File]::WriteAllText($out, ($doc2 | ConvertTo-Json -Depth 4), (New-Object System.Text.UTF8Encoding($false)))
+# THROUGH Write-TcAtomicFile (2026-09-23): the 09-23 chain run died here, exit 1 and no marker, on "The requested operation
+# cannot be performed on a file with a user-mapped section open" - a concurrent git in the shared checkout had this tracked
+# file mapped. The temp-then-retried-move waits that out; same bytes (no BOM, no trailing newline).
+[void](Write-TcAtomicFile -Path $out -Text ($doc2 | ConvertTo-Json -Depth 4) -NoBom -NoNewline)
 
 if (-not $Quiet) {
   Write-Output ("hyvee-store-blend  -  board speaks for {0} (storeId {1})" -f $want.label, $wantId)

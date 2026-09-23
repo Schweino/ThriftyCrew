@@ -651,6 +651,12 @@ try {
   $rbC0 = Get-RebaseUntrackedBlockers @('CONFLICT (content): Merge conflict in grocery/x.json', 'error: could not apply abc123... msg'); $rbC = @($rbC0)
   if ($rbC.Count -eq 0) { Ok 'MUST NOT FIRE  an ordinary content conflict names no untracked blocker, so nothing is moved' }
   else { Bad "content conflict read as blockers [$($rbC -join ', ')]" }
+  # 2026-09-23: the graph-nightly provenance file HEAD tracked went into quarantine and left origin as a rename (cec9779a3).
+  $qs = Split-RebaseBlockersByTracking -Blockers @('graph/provenance/2026-09-22.jsonl', 'design/RCA-holistic-2026-09-22.md') -TrackedAtHead @('graph/provenance/2026-09-22.jsonl')
+  if ((@($qs.Refuse) -join ',') -eq 'graph/provenance/2026-09-22.jsonl' -and (@($qs.Move) -join ',') -notmatch 'provenance') { Ok 'MUST FIRE  a blocker HEAD tracks (the cec9779a3 provenance file) is refused, never moved into quarantine' }
+  else { Bad "tracked blocker: move=[$(@($qs.Move) -join ',')] refuse=[$(@($qs.Refuse) -join ',')]" }
+  if ((@($qs.Move) -join ',') -eq 'design/RCA-holistic-2026-09-22.md') { Ok 'CLEAN TWIN  an untracked stray in the same message is still set aside, so the push can retry' }
+  else { Bad "untracked blocker not moved: move=[$(@($qs.Move) -join ',')]" }
 
   # ---- SALE FALLBACKS ARE OWED IN THE STORE'S OWN PLAN (2026-09-22, plan-2026-09-22-9, queue 2026-09-19-c9f0f3) ----
   # Frozen from c9f0f3's body: clam-chowder and vegetable-soup on sale at Family Fare with no everyday twin, owner NONE,

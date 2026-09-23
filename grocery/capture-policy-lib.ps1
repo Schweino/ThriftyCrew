@@ -2028,6 +2028,20 @@ function Get-RebaseUntrackedBlockers([string[]]$Lines) {
   return ,$out.ToArray()
 }
 
+# ---- A PATH HEAD TRACKS IS NEVER MOVED INTO QUARANTINE (2026-09-23) ------------------------------------------------
+# On 2026-09-23 graph/provenance/2026-09-22.jsonl, tracked at HEAD by the unpushed graph-nightly commit, was moved into
+# grocery/out/untracked-quarantine/ by a hand repair of the stuck checkout, and the next forced bot commit recorded it
+# as a RENAME, so the real path left origin in cec9779a3 (restored at 73eec5dd0, which also ignores the folder). Moving
+# a tracked path is a deletion the next commit carries, whoever does it. Pure: $TrackedAtHead is `git ls-files` over
+# the blockers. Returns Move (safe to set aside: nothing tracks them here) and Refuse (tracked at HEAD: never moved).
+function Split-RebaseBlockersByTracking([string[]]$Blockers, [string[]]$TrackedAtHead) {
+  $trk = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($t in @($TrackedAtHead)) { if ($t) { [void]$trk.Add(([string]$t).Replace('\', '/')) } }
+  $move = New-Object System.Collections.Generic.List[string]; $refuse = New-Object System.Collections.Generic.List[string]
+  foreach ($b in @($Blockers)) { if (-not $b) { continue }; if ($trk.Contains(([string]$b).Replace('\', '/'))) { $refuse.Add([string]$b) } else { $move.Add([string]$b) } }
+  return [pscustomobject]@{ Move = $move.ToArray(); Refuse = $refuse.ToArray() }
+}
+
 function Test-BrowserCaptureOwned {
   <# .SYNOPSIS  Is <Store> currently deferred to a browser owner, with the deferral still inside its
                 expiry window? .DESCRIPTION Reads out\browser-capture-due-*.flag. Returns $false for
