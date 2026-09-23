@@ -37,10 +37,20 @@
   LastWriteTime is strictly later than the target copy's is REFRESH. Copy-Item carries the source's
   LastWriteTime onto the copy (the self-test measures it), so a copy taken after the last rewrite compares
   equal, and a file rewritten inside the target (a local rebuild) is newer than its source: both are left alone.
-  NOT covered, on purpose or by limit: a DIRECTORY seed is FILLED when it is missing files (see PARTIAL above)
-  but its existing files are never refreshed, so a card rewritten under the same name inside db\built stays as
-  first copied; a file DELETED from the source stays in the target; and one run is not atomic, so a source
-  rebuilding while this copies can still hand over a mixed pair. The checks that read such a pair report it.
+  A FILE INSIDE A DIRECTORY SEED IS REFRESHED BY THE SAME RULE (2026-09-23). Until then a directory seed was
+  FILLED when it was missing files but a file already inside it stayed as first copied. MEASURED that day in
+  worktree recursing-edison-169e3b: its db\built\turkey-wild-rice-casserole.body.html was dated 2026-09-03 while
+  the main checkout's was 2026-09-21, rebuilt after the live-price template changed (98ba12efd), so
+  stamp-live-price-fallback's two real-card cases failed 2 of 11 and refused a push that did not touch them. A
+  re-seed said copied=0 present=40 and changed nothing; deleting db\built and re-seeding made it 11 of 11. Now a
+  directory seed holding any file whose source copy is strictly newer is REFRESH, and only those files are copied,
+  one by one, INTO the directory (never Copy-Item -Recurse onto it, which nests). The alternative considered was to
+  have each gate that reads a card report BLIND when the card is older than its template. Rejected: it needs every
+  such gate to know which template its card came from, it would still leave the checkout unable to look, and a
+  refresh makes it look. A blind case is the answer when the input CANNOT be had; here it can.
+  NOT covered, on purpose or by limit: a file DELETED from the source stays in the target; and one run is not
+  atomic, so a source rebuilding while this copies can still hand over a mixed pair. The checks that read such a
+  pair report it.
 
   HOW A PATTERN BECOMES FILES: git does the matching, not this file. Each pattern goes to
   `git ls-files --others --ignored --exclude=<pattern>` in the SOURCE checkout, which applies real
@@ -180,8 +190,8 @@ function Get-SeedPlan {
      .worktreeinclude pattern that matched nothing in the source, and is MISSING-SOURCE whatever the
      predicate says about its literal spelling.
      A seed carrying file=$true is one FILE. When both copies exist and $Newer says the source was written
-     after the target copy, it is REFRESH rather than ALREADY-PRESENT. A directory seed is never refreshed:
-     Copy-Item -Recurse onto a directory that exists nests the copy inside it instead of replacing it. #>
+     after the target copy, it is REFRESH rather than ALREADY-PRESENT. A DIRECTORY seed is REFRESH when $Stale
+     counts at least one file inside it whose source copy is newer; $Newer never answers for a directory. #>
   param(
     [object[]]$Seeds,
     [string]$SourceRoot,
@@ -192,7 +202,11 @@ function Get-SeedPlan {
     [scriptblock]$Count = $null,
     # IS THE SOURCE FILE NEWER THAN THE TARGET COPY? Also optional, and also inert when absent. $Count answers
     # "is the target MISSING part of this seed"; this answers "is the target's copy OLDER than the source".
-    [scriptblock]$Newer = $null
+    [scriptblock]$Newer = $null,
+    # HOW MANY FILES INSIDE A DIRECTORY SEED ARE OLDER THAN THE SOURCE'S COPY? -1 when either side is not a
+    # directory. Optional and inert when absent, like the two above. It is $Newer's question asked of each
+    # file inside a directory, because a directory's own timestamp says nothing about the files in it.
+    [scriptblock]$Stale = $null
   )
   $plan = @()
   foreach ($s in @($Seeds)) {
@@ -227,6 +241,9 @@ function Get-SeedPlan {
         if ($sc -ge 0 -and $dc -ge 0 -and $dc -lt $sc) { $action = 'PARTIAL' }
       }
       if (($action -eq 'ALREADY-PRESENT') -and $s.file -and $Newer -and [bool](& $Newer $src $dst)) { $action = 'REFRESH' }
+      # A PRESENT, COMPLETE DIRECTORY IS NOT A CURRENT ONE (2026-09-23). PARTIAL keeps precedence: the fill that
+      # PARTIAL runs refreshes the stale files too, so a directory that is both short and stale is one action.
+      if (($action -eq 'ALREADY-PRESENT') -and -not $s.file -and $Stale -and ([int](& $Stale $src $dst) -gt 0)) { $action = 'REFRESH' }
     }
     $plan += [pscustomobject]@{ Path = $s.p; Source = $src; Dest = $dst; Action = $action; Why = $s.why }
   }
@@ -294,6 +311,68 @@ function Test-SeedSourceNewer {
   if (-not (Test-Path -LiteralPath $SourcePath -PathType Leaf)) { return $false }
   if (-not (Test-Path -LiteralPath $TargetPath -PathType Leaf)) { return $false }
   return ((Get-Item -LiteralPath $SourcePath).LastWriteTimeUtc -gt (Get-Item -LiteralPath $TargetPath).LastWriteTimeUtc)
+}
+
+function Get-StaleSeedFiles {
+  <# The live $Stale, as a list: the paths, relative to the directory, of every file present on BOTH sides whose
+     source copy was written strictly later than the target's. Test-SeedSourceNewer's rule, per file, so a card
+     rebuilt inside the target (newer than its source) is left alone and a copy taken after the source's last
+     write compares equal. A file only the source has is PARTIAL's business, never stale. Relative paths are
+     keyed case-insensitively, which is what this filesystem does. #>
+  param([string]$SourceDir, [string]$TargetDir)
+  if (-not (Test-Path -LiteralPath $SourceDir -PathType Container)) { return ,@() }
+  if (-not (Test-Path -LiteralPath $TargetDir -PathType Container)) { return ,@() }
+  $srcRoot = (Get-Item -LiteralPath $SourceDir -Force).FullName.TrimEnd('\')
+  $dstRoot = (Get-Item -LiteralPath $TargetDir -Force).FullName.TrimEnd('\')
+  $tgt = [System.Collections.Generic.Dictionary[string, datetime]]::new([StringComparer]::OrdinalIgnoreCase)
+  $tItems = Get-ChildItem -LiteralPath $dstRoot -Recurse -File -Force -ErrorAction SilentlyContinue
+  foreach ($t in @($tItems)) { $tgt[$t.FullName.Substring($dstRoot.Length).TrimStart('\')] = $t.LastWriteTimeUtc }
+  $stale = @()
+  $sItems = Get-ChildItem -LiteralPath $srcRoot -Recurse -File -Force -ErrorAction SilentlyContinue
+  foreach ($sf in @($sItems)) {
+    $rel = $sf.FullName.Substring($srcRoot.Length).TrimStart('\')
+    $tw = [datetime]::MinValue
+    if ($tgt.TryGetValue($rel, [ref]$tw) -and ($sf.LastWriteTimeUtc -gt $tw)) { $stale += $rel }
+  }
+  return ,@($stale)
+}
+
+function Sync-SeedDirectory {
+  <# Bring one directory seed up to its source: copy each file the target LACKS and each file whose source copy is
+     NEWER, one file at a time and INTO the directory. Never `Copy-Item <dir> -Recurse` onto a directory that
+     exists, which nests the copy (db\built\built), and never -LiteralPath with a `*`, which is a literal character
+     there and copies nothing (both measured on 2026-09-11). Files only the target holds are left alone. Returns the
+     counts either side, so the caller prints a denominator and can see a copy that did not land. -WhatIf counts and
+     copies nothing. #>
+  param([string]$SourceDir, [string]$TargetDir, [switch]$WhatIf)
+  $srcRoot = (Get-Item -LiteralPath $SourceDir -Force).FullName.TrimEnd('\')
+  $dstRoot = (Get-Item -LiteralPath $TargetDir -Force).FullName.TrimEnd('\')
+  $beforeItems = Get-ChildItem -LiteralPath $dstRoot -Recurse -File -Force -ErrorAction SilentlyContinue
+  $wantItems = Get-ChildItem -LiteralPath $srcRoot -Recurse -File -Force -ErrorAction SilentlyContinue
+  $staleRaw = Get-StaleSeedFiles -SourceDir $srcRoot -TargetDir $dstRoot   # comma-returned: assign, then wrap
+  $stale = @($staleRaw)
+  $missing = 0
+  foreach ($sf in @($wantItems)) {
+    $rel = $sf.FullName.Substring($srcRoot.Length).TrimStart('\')
+    $dest = [IO.Path]::Combine($dstRoot, $rel)
+    if (Test-Path -LiteralPath $dest) { continue }
+    $missing++
+    if ($WhatIf) { continue }
+    $tp = Split-Path $dest -Parent
+    if ($tp -and -not (Test-Path -LiteralPath $tp)) { New-Item -ItemType Directory -Force -Path $tp | Out-Null }
+    Copy-Item -LiteralPath $sf.FullName -Destination $dest -Force
+  }
+  if (-not $WhatIf) {
+    foreach ($rel in $stale) {
+      Copy-Item -LiteralPath ([IO.Path]::Combine($srcRoot, $rel)) -Destination ([IO.Path]::Combine($dstRoot, $rel)) -Force
+    }
+  }
+  $afterItems = Get-ChildItem -LiteralPath $dstRoot -Recurse -File -Force -ErrorAction SilentlyContinue
+  $stillRaw = if ($WhatIf) { @() } else { Get-StaleSeedFiles -SourceDir $srcRoot -TargetDir $dstRoot }
+  return [pscustomobject]@{
+    Before = @($beforeItems).Count; Want = @($wantItems).Count; Missing = $missing; Refreshed = $stale.Count
+    After = @($afterItems).Count; StillStale = @($stillRaw).Count
+  }
 }
 
 function Test-SameCheckout {
@@ -583,11 +662,35 @@ if ($SelfTest) {
   $plan5 = Get-SeedPlan -Seeds $fs1 -SourceRoot $S -TargetRoot $D -Exists { param($x) $true } -Newer { param($s, $d) $false }
   T 'MUST NOT FIRE  an include file no older than its source stays ALREADY-PRESENT' `
     (@($plan5 | Where-Object { $_.Action -eq 'REFRESH' }).Count -eq 0) (($plan5 | ForEach-Object { $_.Path + '=' + $_.Action }) -join ',')
-  # MUST NOT FIRE - a DIRECTORY seed is never refreshed, whatever the predicate says. Copy-Item -Recurse onto a
-  # directory that exists nests the copy inside it (db\built\built) rather than replacing it.
+  # MUST NOT FIRE - -Newer is the FILE predicate and never answers for a directory: a directory's own timestamp
+  # says nothing about the files in it. Directory staleness is -Stale's question, asked per file.
   $plan6 = Get-SeedPlan -Seeds @($SEED_DIRS) -SourceRoot $S -TargetRoot $D -Exists { param($x) $true } -Newer $newerAll
-  T 'MUST NOT FIRE  a directory seed is ALREADY-PRESENT, never REFRESH, even when its source is newer' `
+  T 'MUST NOT FIRE  -Newer (the file predicate) alone never makes a directory seed REFRESH' `
     (@($plan6 | Where-Object { $_.Action -eq 'REFRESH' }).Count -eq 0) (($plan6 | ForEach-Object { $_.Path + '=' + $_.Action }) -join ',')
+
+  # ---- REFRESH INSIDE A DIRECTORY SEED (2026-09-23) -------------------------------------------------
+  # MUST FIRE - THE FOUNDING BUG, pure. A complete db\built whose card the source rebuilt after the copy was
+  # ALREADY-PRESENT, so a re-seed said copied=0 and stamp-live-price-fallback judged a 2026-09-03 card against the
+  # 2026-09-21 template. One stale file inside a complete directory is enough.
+  $plan7 = Get-SeedPlan -Seeds @($SEED_DIRS) -SourceRoot $S -TargetRoot $D -Exists { param($x) $true } -Count $fullCount -Stale { param($s, $d) 1 }
+  T 'MUST FIRE  a complete directory seed holding ONE file older than the source''s copy plans a REFRESH' `
+    (@($plan7 | Where-Object { $_.Action -eq 'REFRESH' }).Count -eq 1) (($plan7 | ForEach-Object { $_.Path + '=' + $_.Action }) -join ',')
+  # MUST NOT FIRE - a directory with no stale file stays ALREADY-PRESENT, and so does one the predicate cannot
+  # read (-1), because could-not-count is never "stale".
+  $plan8 = Get-SeedPlan -Seeds @($SEED_DIRS) -SourceRoot $S -TargetRoot $D -Exists { param($x) $true } -Count $fullCount -Stale { param($s, $d) 0 }
+  $plan8b = Get-SeedPlan -Seeds @($SEED_DIRS) -SourceRoot $S -TargetRoot $D -Exists { param($x) $true } -Count $fullCount -Stale { param($s, $d) -1 }
+  T 'MUST NOT FIRE  a directory seed with no file older than the source (0) or an unreadable one (-1) stays ALREADY-PRESENT' `
+    ((@($plan8 | Where-Object { $_.Action -eq 'ALREADY-PRESENT' }).Count -eq 1) -and (@($plan8b | Where-Object { $_.Action -eq 'ALREADY-PRESENT' }).Count -eq 1)) `
+    ((@($plan8) + @($plan8b) | ForEach-Object { $_.Path + '=' + $_.Action }) -join ',')
+  # CLEAN TWIN - a directory both SHORT and stale is PARTIAL: the fill it runs refreshes the stale files too, so it
+  # is one action and never two rows for one path.
+  $plan9 = Get-SeedPlan -Seeds @($SEED_DIRS) -SourceRoot $S -TargetRoot $D -Exists { param($x) $true } -Count $shortCount -Stale { param($s, $d) 3 }
+  T 'CLEAN TWIN a directory seed that is both short and stale is PARTIAL, which fills and refreshes in one pass' `
+    ((@($plan9).Count -eq 1) -and ($plan9[0].Action -eq 'PARTIAL')) (($plan9 | ForEach-Object { $_.Path + '=' + $_.Action }) -join ',')
+  # MUST NOT FIRE - -Stale is the DIRECTORY predicate; a file seed is still decided by -Newer alone.
+  $plan10 = Get-SeedPlan -Seeds $fs1 -SourceRoot $S -TargetRoot $D -Exists { param($x) $true } -Stale { param($s, $d) 5 }
+  T 'MUST NOT FIRE  -Stale never makes a FILE seed REFRESH' `
+    (@($plan10 | Where-Object { $_.Action -eq 'REFRESH' }).Count -eq 0) (($plan10 | ForEach-Object { $_.Path + '=' + $_.Action }) -join ',')
   # CLEAN TWIN - a caller that passes no -Newer gets the old behaviour exactly: present means present.
   T 'CLEAN TWIN with no -Newer predicate an include file already in the target is still ALREADY-PRESENT' `
     (@($plan3 | Where-Object { $_.Action -eq 'REFRESH' }).Count -eq 0) (($plan3 | ForEach-Object { $_.Path + '=' + $_.Action }) -join ',')
@@ -851,6 +954,59 @@ if ($SelfTest) {
     } else {
       T 'MUST FIRE  an unseeded target GAINS the feed through the shipped .worktreeinclude' $false 'the temp worktree could not be created, so the feed cases could not run'
     }
+
+    # ---- A DIRECTORY SEED, END TO END THROUGH THE SHIPPED LIST (2026-09-23) -------------------------
+    # The founding case: a reused worktree's db\built card dated 2026-09-03 beside a main-checkout card of
+    # 2026-09-21, and a re-seed that said copied=0 present=40. These run THIS SCRIPT as a child over the SHIPPED
+    # $SEED_DIRS entry, so the directory is the real one's relative path inside the temp repo; each case reads that
+    # directory's own row line and the bytes that landed. File names below are synthetic.
+    if ($wtOk) {
+      $dirRel = @($SEED_DIRS)[0].p
+      $dSrc = Join-Path $tmp $dirRel
+      $dDst = Join-Path $tmpWt $dirRel
+      $dirRowRx = { param($verb) '^' + $verb + '\s+' + [regex]::Escape($dirRel) + '(\s|$)' }
+      $dirRow = { param($lines, $verb) $rx = & $dirRowRx $verb; @(@($lines) | Where-Object { ([string]$_).Trim() -match $rx }).Count -eq 1 }
+      $dirLine = { param($lines) (@($lines | Where-Object { ([string]$_) -like ('*' + $dirRel + '*') }) -join ' | ') }
+      $readOr = { param($p) if (Test-Path -LiteralPath $p) { [IO.File]::ReadAllText($p) } else { '(absent)' } }
+      $cA = 'card-a.body.html'; $cB = 'card-b.body.html'; $cC = 'card-c.body.html'
+      $tOld = [datetime]::new(2026, 9, 3, 12, 0, 0, [DateTimeKind]::Utc)
+      $tNew = [datetime]::new(2026, 9, 21, 12, 0, 0, [DateTimeKind]::Utc)
+      $tLocal = [datetime]::new(2026, 9, 22, 12, 0, 0, [DateTimeKind]::Utc)
+      $null = New-Item -ItemType Directory -Force $dSrc
+      foreach ($pair in @(@($cA, 'A-old'), @($cB, 'B-old'))) {
+        [IO.File]::WriteAllText((Join-Path $dSrc $pair[0]), $pair[1], $utf8)
+        [IO.File]::SetLastWriteTimeUtc((Join-Path $dSrc $pair[0]), $tOld)
+      }
+      $d0 = & $runSeed
+      $seeded0 = ((& $readOr (Join-Path $dDst $cA)) -ceq 'A-old') -and (& $dirRow $d0 'copied')
+      # The source rebuilds card A under the SAME name, later than the copy was taken.
+      [IO.File]::WriteAllText((Join-Path $dSrc $cA), 'A-new', $utf8)
+      [IO.File]::SetLastWriteTimeUtc((Join-Path $dSrc $cA), $tNew)
+      $d1 = & $runSeed
+      # MUST FIRE - THE FOUNDING BUG. A stale file inside a complete directory seed is refreshed, and only it.
+      T 'MUST FIRE  a stale seeded file INSIDE a directory seed is refreshed to the source''s bytes, and the row says refreshed' `
+        ($seeded0 -and ((& $readOr (Join-Path $dDst $cA)) -ceq 'A-new') -and ((& $readOr (Join-Path $dDst $cB)) -ceq 'B-old') -and (& $dirRow $d1 'refreshed')) `
+        ("first seed ok=" + $seeded0 + " A=" + (& $readOr (Join-Path $dDst $cA)) + " B=" + (& $readOr (Join-Path $dDst $cB)) + " row=" + (& $dirLine $d1))
+      # MUST NOT FIRE - a CURRENT directory is left alone: A was just refreshed (equal times), and B is rebuilt
+      # INSIDE the target, newer than its source, which a re-seed must never overwrite.
+      [IO.File]::WriteAllText((Join-Path $dDst $cB), 'B-local', $utf8)
+      [IO.File]::SetLastWriteTimeUtc((Join-Path $dDst $cB), $tLocal)
+      $aT0 = (Get-Item -LiteralPath (Join-Path $dDst $cA)).LastWriteTimeUtc
+      $d2 = & $runSeed
+      $aT1 = (Get-Item -LiteralPath (Join-Path $dDst $cA)).LastWriteTimeUtc
+      T 'MUST NOT FIRE  a current directory seed reads present: nothing refreshed, and a file rebuilt inside the target is not overwritten' `
+        ((& $dirRow $d2 'present') -and -not (& $dirRow $d2 'refreshed') -and ($aT0 -eq $aT1) -and ((& $readOr (Join-Path $dDst $cB)) -ceq 'B-local')) `
+        ("row=" + (& $dirLine $d2) + " B=" + (& $readOr (Join-Path $dDst $cB)) + " A mtime " + $aT0.ToString('o') + " -> " + $aT1.ToString('o'))
+      # CLEAN TWIN - a MISSING file is still filled, and filling touches nothing already current.
+      [IO.File]::WriteAllText((Join-Path $dSrc $cC), 'C-new', $utf8)
+      $d3 = & $runSeed
+      T 'CLEAN TWIN a file missing from a directory seed is still FILLED, and the files already there are untouched' `
+        (((& $readOr (Join-Path $dDst $cC)) -ceq 'C-new') -and (& $dirRow $d3 'filled') -and ((& $readOr (Join-Path $dDst $cB)) -ceq 'B-local') -and
+         ((& $readOr (Join-Path $dDst $cA)) -ceq 'A-new') -and -not (Test-Path -LiteralPath (Join-Path $dDst (Split-Path $dirRel -Leaf)))) `
+        ("row=" + (& $dirLine $d3) + " C=" + (& $readOr (Join-Path $dDst $cC)) + " B=" + (& $readOr (Join-Path $dDst $cB)))
+    } else {
+      T 'MUST FIRE  a stale seeded file INSIDE a directory seed is refreshed' $false 'the temp worktree could not be created, so the directory cases could not run'
+    }
     # The live REFRESH predicate against real files. Its whole premise is that Copy-Item carries the source's
     # LastWriteTime onto the copy, so this measures that rather than assuming it.
     $nSrc = Join-Path $tmp 'data\a.json'
@@ -889,7 +1045,7 @@ if ($SelfTest) {
     $(if ($null -eq $shipped) { 'missing' } else { "patterns=$($shipped.Patterns.Count) refused=$($shipped.Refused.Count)" })
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
-  Write-Output ("SELF-TEST PASS: {0} of {0} checks - directory and .worktreeinclude file seeding, the git resolver in a temp repo, the main-checkout source resolver (pure and from a real linked worktree), the source guard, both shipped lists, the feed seeded, refreshed and left alone end to end through the shipped list, and the pair check (pure, and live over a record that reached a linked worktree by commit while the file it names reached it by copy)" -f $cases)
+  Write-Output ("SELF-TEST PASS: {0} of {0} checks - directory and .worktreeinclude file seeding, the git resolver in a temp repo, the main-checkout source resolver (pure and from a real linked worktree), the source guard, both shipped lists, the feed seeded, refreshed and left alone end to end through the shipped list, a directory seed refreshed file by file, left alone when current and still filled when short, and the pair check (pure, and live over a record that reached a linked worktree by commit while the file it names reached it by copy)" -f $cases)
   exit 0
 }
 
@@ -957,7 +1113,13 @@ $plan = Get-SeedPlan -Seeds $allSeeds -SourceRoot $sourceFull -TargetRoot $targe
     $items = Get-ChildItem -LiteralPath $x -Recurse -File -Force -ErrorAction SilentlyContinue
     return @($items).Count
   } `
-  -Newer { param($s, $d) Test-SeedSourceNewer -SourcePath $s -TargetPath $d }
+  -Newer { param($s, $d) Test-SeedSourceNewer -SourcePath $s -TargetPath $d } `
+  -Stale {
+    param($s, $d)
+    if (-not (Test-Path -LiteralPath $s -PathType Container) -or -not (Test-Path -LiteralPath $d -PathType Container)) { return -1 }
+    $staleRaw = Get-StaleSeedFiles -SourceDir $s -TargetDir $d   # comma-returned: assign, then wrap
+    return @($staleRaw).Count
+  }
 
 Write-Output ("seed-worktree: {0} -> {1}   (source from {2})" -f $sourceFull, $targetFull, $sourceHow)
 Write-Output ("  lists read from {0}: {1} directory seed(s), {2} .worktreeinclude pattern(s) resolving to {3} file seed(s)" -f $repo, @($SEED_DIRS).Count, $inc.Patterns.Count, @($fileSeeds | Where-Object { -not $_.nohit }).Count)
@@ -973,53 +1135,50 @@ foreach ($row in $plan) {
       Write-Output ("  present  {0}  - already there and no older than the source, left alone" -f $row.Path)
     }
     'REFRESH' {
-      # A FILE THE SOURCE REWROTE AFTER THIS COPY WAS TAKEN. Left alone, the seeded set is half old and half new.
-      $was = (Get-Item -LiteralPath $row.Dest).LastWriteTimeUtc
-      if ($WhatIf) {
-        Write-Output ("  WOULD REFRESH {0}  - target copy written {1:s}Z, source rewritten since" -f $row.Path, $was)
-      } else {
-        Copy-Item -LiteralPath $row.Source -Destination $row.Dest -Force
-        $sl = (Get-Item -LiteralPath $row.Source).Length
-        $dl = (Get-Item -LiteralPath $row.Dest).Length
-        if ($sl -ne $dl) {
+      if (Test-Path -LiteralPath $row.Source -PathType Container) {
+        # A DIRECTORY HOLDING FILES THE SOURCE REWROTE AFTER THEY WERE COPIED (2026-09-23). Only those files move.
+        $sync = Sync-SeedDirectory -SourceDir $row.Source -TargetDir $row.Dest -WhatIf:$WhatIf
+        if ($WhatIf) {
+          Write-Output ("  WOULD REFRESH {0}  - {1} of its {2} file(s) older than the source's copy" -f $row.Path, $sync.Refreshed, $sync.Before)
+        } elseif ($sync.StillStale -gt 0) {
           $problems += $row.Path
-          Write-Output ("  SHORT    {0}  - refresh landed source {1} bytes, target {2}" -f $row.Path, $sl, $dl)
+          Write-Output ("  SHORT    {0}  - refreshed {1} file(s) and {2} are still older than the source" -f $row.Path, $sync.Refreshed, $sync.StillStale)
         } else {
-          Write-Output ("  refreshed {0}  ({1:N0} bytes; the target copy was written {2:s}Z, before the source was rewritten)" -f $row.Path, $dl, $was)
+          Write-Output ("  refreshed {0}  ({1} of {2} file(s) were older than the source's copy and were rewritten)" -f $row.Path, $sync.Refreshed, $sync.After)
         }
+        $refreshed++
+      } else {
+        # A FILE THE SOURCE REWROTE AFTER THIS COPY WAS TAKEN. Left alone, the seeded set is half old and half new.
+        $was = (Get-Item -LiteralPath $row.Dest).LastWriteTimeUtc
+        if ($WhatIf) {
+          Write-Output ("  WOULD REFRESH {0}  - target copy written {1:s}Z, source rewritten since" -f $row.Path, $was)
+        } else {
+          Copy-Item -LiteralPath $row.Source -Destination $row.Dest -Force
+          $sl = (Get-Item -LiteralPath $row.Source).Length
+          $dl = (Get-Item -LiteralPath $row.Dest).Length
+          if ($sl -ne $dl) {
+            $problems += $row.Path
+            Write-Output ("  SHORT    {0}  - refresh landed source {1} bytes, target {2}" -f $row.Path, $sl, $dl)
+          } else {
+            Write-Output ("  refreshed {0}  ({1:N0} bytes; the target copy was written {2:s}Z, before the source was rewritten)" -f $row.Path, $dl, $was)
+          }
+        }
+        $refreshed++
       }
-      $refreshed++
     }
     'PARTIAL' {
-      # THE MISSING FILES ONLY, and copied INTO the directory: `Copy-Item <src> -Destination <dst>` where
-      # dst already exists nests src INSIDE it, which would leave db\built\built. The trailing \* copies the
-      # contents. The counts either side are printed because "filled" without them is the same unreadable
-      # claim as a rate without its denominator.
-      $before = @(Get-ChildItem -LiteralPath $row.Dest -Recurse -File -Force -ErrorAction SilentlyContinue)
-      $want = @(Get-ChildItem -LiteralPath $row.Source -Recurse -File -Force -ErrorAction SilentlyContinue)
+      # THE MISSING FILES, copied one by one INTO the directory, and since 2026-09-23 the stale ones with them
+      # (Sync-SeedDirectory says why each copy is shaped the way it is). The counts either side are printed
+      # because "filled" without them is the same unreadable claim as a rate without its denominator, and the
+      # post-copy count is what caught the first version of this copying nothing on a worktree holding 2 of 1,168.
+      $sync = Sync-SeedDirectory -SourceDir $row.Source -TargetDir $row.Dest -WhatIf:$WhatIf
       if ($WhatIf) {
-        Write-Output ("  WOULD FILL {0}  - it holds {1} of the source's {2} file(s). {3}" -f $row.Path, $before.Count, $want.Count, $row.Why)
+        Write-Output ("  WOULD FILL {0}  - it holds {1} of the source's {2} file(s), {3} of them older than the source's copy. {4}" -f $row.Path, $sync.Before, $sync.Want, $sync.Refreshed, $row.Why)
+      } elseif ($sync.After -lt $sync.Want -or $sync.StillStale -gt 0) {
+        $problems += $row.Path
+        Write-Output ("  SHORT    {0}  - filled to {1} file(s), source has {2}; {3} still older than the source" -f $row.Path, $sync.After, $sync.Want, $sync.StillStale)
       } else {
-        # ONE COPY PER MISSING FILE, and -LiteralPath throughout. The first version of this was
-        # `Copy-Item -LiteralPath <src>\* -Recurse`, which copied NOTHING: -LiteralPath means the `*` is a
-        # literal character, not a wildcard, so it named a file that does not exist. Measured here, on a
-        # worktree holding 2 of 1,168 - and the post-copy count below is what caught it, which is why that
-        # check exists rather than a line saying "filled".
-        foreach ($sf in $want) {
-          $rel = $sf.FullName.Substring($row.Source.Length).TrimStart('\', '/')
-          $target = [IO.Path]::Combine($row.Dest, $rel)
-          if (Test-Path -LiteralPath $target) { continue }
-          $tp = Split-Path $target -Parent
-          if ($tp -and -not (Test-Path -LiteralPath $tp)) { New-Item -ItemType Directory -Force -Path $tp | Out-Null }
-          Copy-Item -LiteralPath $sf.FullName -Destination $target -Force
-        }
-        $after = @(Get-ChildItem -LiteralPath $row.Dest -Recurse -File -Force -ErrorAction SilentlyContinue)
-        if ($after.Count -lt $want.Count) {
-          $problems += $row.Path
-          Write-Output ("  SHORT    {0}  - filled to {1} file(s), source has {2}" -f $row.Path, $after.Count, $want.Count)
-        } else {
-          Write-Output ("  filled   {0}  ({1} -> {2} file(s), source has {3})" -f $row.Path, $before.Count, $after.Count, $want.Count)
-        }
+        Write-Output ("  filled   {0}  ({1} -> {2} file(s), source has {3}; {4} stale file(s) refreshed)" -f $row.Path, $sync.Before, $sync.After, $sync.Want, $sync.Refreshed)
       }
       $copied++
     }
@@ -1107,5 +1266,5 @@ $verb = if ($WhatIf) { 'WOULD COPY' } else { 'copied' }
 $rverb = if ($WhatIf) { 'WOULD REFRESH' } else { 'refreshed' }
 Write-Output ("seed-worktree: DONE - {0} {1} and {2} {3} of {4} seed path(s), {5} already present. Directories from `$SEED_DIRS, files from {6}." -f $verb, $copied, $rverb, $refreshed, @($plan).Count, $skipped, $INCLUDE_FILE)
 Write-Output '  Deliberately not seeded: sidecar\.venv. start-sidecar reports that case BLIND in a checkout with no venv, and run-gates names it.'
-Write-Output '  A directory seed is FILLED when it is missing files, but never refreshed: a file already inside it stays as first copied, whatever the source has done to it since.'
+Write-Output '  A directory seed is FILLED when it is missing files and REFRESHED file by file where the source rewrote a file after it was copied; a file rebuilt inside this checkout, newer than its source, is left alone, and a file deleted from the source is not removed here.'
 Exit-Guard -Name 'seed-worktree' -Summary ("seeds={0} copied={1} refreshed={2} present={3}" -f @($plan).Count, $copied, $refreshed, $skipped) -Code 0

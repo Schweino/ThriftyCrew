@@ -253,7 +253,7 @@ function Invoke-TcWarmGate {
   return [pscustomobject]@{ Ran = $true; Code = [int]$code; Why = ''; Sec = $sec; Lines = $lines.ToArray() }
 }
 
-function Invoke-TcSeedIfUnseeded {
+function Invoke-TcSeedBeforeGate {
   <# SEED BEFORE THE GATE, AS THE HOOK DOES (2026-09-18, backlog I237). ops\hooks\pre-push seeds a checkout with no
      built cards once, before its gate, because meal-prep\db\built is gitignored and a worktree has none until
      ops\seed-worktree.ps1 copies it. push-main's gate runs OUTSIDE the lock and BEFORE git push, so it ran unseeded:
@@ -263,7 +263,14 @@ function Invoke-TcSeedIfUnseeded {
      supplies inputs and decides nothing. WHAT "UNSEEDED" MEANS IS READ FROM THE SEEDER, never restated here: a directory
      its $SEED_DIRS names (lib\seed-hint.ps1 Get-TcSeedDirs) that is absent or holds no file. That keeps this file from
      spelling another module's internals path, which ops\audit-cross-module-reach.ps1 ratchets, and a directory that
-     joins or leaves that list moves this check the same day. Returns Ran / Code / Why. -Seeder is the self-test's seam. #>
+     joins or leaves that list moves this check the same day. Returns Ran / Code / Why. -Seeder is the self-test's seam.
+     A SEEDED CHECKOUT IS RE-SEEDED TOO (2026-09-23). This used to return 'already seeded' once a seed directory held a
+     file, so a REUSED worktree kept whatever it was first given: recursing-edison-169e3b's push was refused by
+     stamp-live-price-fallback, 2 of 11, over a built card copied on 2026-09-03 while the main checkout's was rebuilt on
+     2026-09-21 after the live-price template changed. The seeder now refreshes a file inside a directory seed whose
+     source is newer, as it already did for file seeds, and a re-seed of a current checkout copies nothing and took 5.7 s
+     on 2026-09-23 against a gate measured in minutes. The hook still seeds only an unseeded checkout, because its seed
+     runs inside the push lock when push-main holds it, and this one runs before the lock is taken. #>
   param([string]$Dir, [string]$Seeder = '')
   if (-not $Seeder) { $Seeder = Join-Path $Dir 'ops\seed-worktree.ps1' }
   if (-not (Test-Path -LiteralPath $Seeder)) { return [pscustomobject]@{ Ran = $false; Code = 3; Why = 'no ops\seed-worktree.ps1 in this checkout' } }
@@ -277,8 +284,11 @@ function Invoke-TcSeedIfUnseeded {
     $sd = Join-Path $Dir $_
     -not ((Test-Path -LiteralPath $sd -PathType Container) -and [IO.Directory]::EnumerateFiles($sd).GetEnumerator().MoveNext())
   })
-  if ($empty.Count -eq 0) { return [pscustomobject]@{ Ran = $false; Code = 0; Why = 'already seeded' } }
-  Say ("push-main: this checkout has nothing in {0}, so gates that read it would be BLIND - seeding once before the gate, as the hook does." -f ($empty -join ', '))
+  if ($empty.Count -eq 0) {
+    Say 'push-main: re-seeding before the gate, so a seeded file the main checkout has rewritten since it was copied is refreshed.'
+  } else {
+    Say ("push-main: this checkout has nothing in {0}, so gates that read it would be BLIND - seeding before the gate, as the hook does." -f ($empty -join ', '))
+  }
   try {
     $p = Start-Process -FilePath 'powershell.exe' -WorkingDirectory $Dir -NoNewWindow -PassThru -ErrorAction Stop `
       -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $Seeder + '"'), '-Target', ('"' + $Dir + '"'))
@@ -1123,7 +1133,7 @@ function Invoke-TcPushMain {
     # Invoke-TcDefaultLegs holds that decision and also hands back what each leg said, for the row.
     $runner = $(if ($GateRunner) { $GateRunner } else { { param($d) Invoke-TcDefaultLegs -Dir $d -Remote $Remote -Branch $Branch } })
     # SEEDED FIRST, so neither leg of the gate below judges a checkout that has no built cards (backlog I237).
-    $null = Invoke-TcSeedIfUnseeded -Dir $Dir -Seeder $SeedScript
+    $null = Invoke-TcSeedBeforeGate -Dir $Dir -Seeder $SeedScript
     $checker = $(if ($RehearsalCheck) { $RehearsalCheck } else { { param($d, $h, $r) Invoke-TcRehearsalCheck -Dir $d -Branch $Branch -Head $h -RemoteSha $r } })
     $rebasedAny = $false
     $rehearsals = 0
@@ -1647,9 +1657,13 @@ $m.Dispose()
     T ($kMF + '  a checkout with nothing in a directory the seeder seeds is seeded, with -Target naming it, BEFORE the gate runs') `
       ($rS1 -eq 0 -and $script:cardAtGate -eq $true -and [string]::Equals($sFor, $s1, [StringComparison]::OrdinalIgnoreCase)) ("rc={0} cardAtGate={1} seededFor={2}" -f $rS1, $script:cardAtGate, $sFor)
     Remove-Item -LiteralPath (Join-Path $s1 'seeded-for.txt') -Force -ErrorAction SilentlyContinue
-    $rS2 = Invoke-TcSeedIfUnseeded -Dir $s1 -Seeder $sdStub
-    T ($kMNF + '  a checkout whose seed directories already hold files is not seeded again') `
-      ((-not $rS2.Ran) -and -not (Test-Path -LiteralPath (Join-Path $s1 'seeded-for.txt'))) ("ran={0} why={1}" -f $rS2.Ran, $rS2.Why)
+    # A SEEDED CHECKOUT IS RE-SEEDED (2026-09-23): the founding case was a reused worktree whose built card was copied
+    # 2026-09-03 and never refreshed, because this returned 'already seeded' and never called the seeder again.
+    $rS2 = Invoke-TcSeedBeforeGate -Dir $s1 -Seeder $sdStub
+    $sFor2 = if (Test-Path -LiteralPath (Join-Path $s1 'seeded-for.txt')) { ([IO.File]::ReadAllText((Join-Path $s1 'seeded-for.txt'))).Trim() } else { '<not seeded>' }
+    T ($kMF + '  a checkout whose seed directories already hold files is RE-SEEDED, so a stale seeded file can be refreshed') `
+      ($rS2.Ran -and $rS2.Code -eq 0 -and [string]::Equals($sFor2, $s1, [StringComparison]::OrdinalIgnoreCase)) ("ran={0} code={1} why={2} seededFor={3}" -f $rS2.Ran, $rS2.Code, $rS2.Why, $sFor2)
+    Remove-Item -LiteralPath (Join-Path $s1 'seeded-for.txt') -Force -ErrorAction SilentlyContinue
     $s3 = New-Clone 's3'
     Add-Content -LiteralPath (Join-Path $s3 '.git\info\exclude') -Value @('seeded-for.txt', 'seedfx/') -Encoding ascii   # gitignored in the real repo
     [IO.File]::WriteAllText((Join-Path $s3 's3.txt'), 's3')

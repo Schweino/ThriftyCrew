@@ -137,7 +137,10 @@ restating it, so there is one copy of every rule and nothing here can drift from
   engines exit 0 having priced nothing. `ops/seed-worktree.ps1` and `.worktreeinclude` seed them.
   **A RE-SEED REFRESHES a seeded FILE whose source was rewritten since the copy** (2026-09-11). A board is
   rebuilt under the SAME dated name several times a day, and a seeder that left every present file alone gave
-  a half-old, half-new set: a stale board under a fresh ruling. Directory seeds are not refreshed.
+  a half-old, half-new set: a stale board under a fresh ruling. **Since 2026-09-23 a file INSIDE a directory seed
+  is refreshed by the same rule** (a `db\built` card copied 2026-09-03 refused a push over a 2026-09-21 template),
+  and `ops\push-main.ps1` re-seeds before every gate, not only an unseeded checkout. A file deleted from the source
+  is still not removed.
 - **A check that compares a derived file with a board reads that file by the BOARD'S road** (2026-09-11). A
   board reaches a checkout by copy; a tracked file reaches it only by commit, and a hand-run chain rebuilds a
   board and commits its source only. test-auditors' capture-eviction currency case read the tracked report and
