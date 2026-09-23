@@ -26,6 +26,15 @@
   Both exit 3 (could not build a trustworthy feed) and leave the served feed as it was. -AcceptShrink '<reason>' is the
   loud, deliberate override for a shrink that is the decision (a catalogue retirement); it is printed with its reason.
   SCOPE: the shrink check is a count. A feed whose sections kept their size and carry wrong values is outside it.
+    3. A TOP-LEVEL SECTION PRESENT IN THE SERVED FEED AND ABSENT FROM THIS ONE is a refusal that names it (2026-09-23,
+       founding commit cec9779a3: the daily chain built the feed with code older than feed-everyday-ps's recipe_stats and
+       shipped it over the newer served feed, so the homepage's live cheapest and range lost their source). The count
+       check could not see it: recipe_stats is not a counted section. -RemoveSection 'a,b' with -RemoveReason '<why>'
+       declares a removal that is the decision; the check runs on the FINAL feed, after feed-everyday-ps has added
+       everyday_ps and recipe_stats in a staging copy, so nothing reaches either served path before it has passed.
+  HELD RECIPES NEVER REACH THE FEED (2026-09-23): a slug in meal-prep\db\held-recipes.json is left out of `recipes`,
+  so no tool (cheap-dinners, dinner-tonight, my-crew, payday-stretcher) offers a recipe that was taken down. Batch 3
+  removed the 17 by hand, and the next daily export put them all back. A missing or unreadable held file is refusal 1.
 
   Self-test:  powershell -File grocery\export-feed.ps1 -SelfTest
 #>
@@ -40,6 +49,9 @@ param(
   # Compare with this feed file instead of the served one (the self-test, or a deliberate offline run).
   [string]$PriorFeedPath = '',
   [string]$AcceptShrink = '',
+  # A comma list (one string: -File cannot bind an array) of top-level sections whose removal is the decision, and why.
+  [string]$RemoveSection = '',
+  [string]$RemoveReason = '',
   [switch]$SkipEverydayPs,
   [switch]$SelfTest
 )
@@ -92,6 +104,38 @@ function Test-TcFeedShrink {
   return [pscustomobject]@{ Findings = @($findings); Lines = @($lines) }
 }
 
+function Get-TcFeedTopNames {
+  <# The top-level key names of a feed doc: an ordered dictionary as built here, or a PSCustomObject as read back. #>
+  param($Doc)
+  if ($null -eq $Doc) { return @() }
+  if ($Doc -is [Collections.IDictionary]) { return @($Doc.Keys | ForEach-Object { [string]$_ }) }
+  return @($Doc.PSObject.Properties | ForEach-Object { [string]$_.Name })
+}
+
+function Get-TcFeedMissingSections {
+  <# Every top-level section the PRIOR feed carries and the NEW one does not, minus the declared removals. Ordinal
+     compare: a section is a JSON key, and the JSON reader of every consumer is case-sensitive. #>
+  param($New, $Prior, [string[]]$Declared = @())
+  $have = New-Object 'Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($n in (Get-TcFeedTopNames $New)) { [void]$have.Add($n) }
+  $decl = New-Object 'Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($d in $Declared) { if ($d) { [void]$decl.Add($d) } }
+  $missing = New-Object Collections.ArrayList
+  foreach ($p in (Get-TcFeedTopNames $Prior)) { if (-not $have.Contains($p) -and -not $decl.Contains($p)) { [void]$missing.Add($p) } }
+  return ,@($missing)
+}
+
+function Get-TcHeldSlugs {
+  <# The held slugs from meal-prep\db\held-recipes.json ({ held: [ { slug } ] }). Throws on a missing or unreadable file,
+     so the caller refuses by name rather than serving a held recipe. #>
+  param([string]$Path)
+  $set = New-Object 'Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  $doc = Read-JsonFile $Path
+  if ($null -eq $doc -or -not $doc.PSObject.Properties['held']) { throw ($Path + ' has no held list') }
+  foreach ($h in @($doc.held)) { if ($h -and $h.slug) { [void]$set.Add([string]$h.slug) } }
+  return ,$set
+}
+
 . (Join-Path $PSScriptRoot 'feed-served-lib.ps1')   # Get-TcServedFeedDoc: the one served-feed read
 function Get-TcPriorFeed {
   <# The feed this build is compared with: -PriorFeedPath when given, else the SERVED feed, else the last committed
@@ -141,6 +185,16 @@ if ($SelfTest) {
   Test-EfCase ($kMF + '  one row past the 10% bar (200 -> 179) is refused') (@($r6.Findings).Count -eq 1) (@($r6.Findings) -join ' | ')
   $r7 = Test-TcFeedShrink (New-EfFeed 900 900 900 900) $p200 $bar
   Test-EfCase ($kMNF + '  a section that GREW is never refused') (@($r7.Findings).Count -eq 0) (@($r7.Findings) -join ' | ')
+  # REFUSAL 3, pure. The founding shape, cec9779a3: the served feed carried recipe_stats and the stale-code build did not.
+  $servedStats = ('{"schema":2,"generated":"2026-09-23T00:21:31","week_of":"2026-09-23","ingredients":{},"pricing_inputs":{},"recipes":{},"board_item_count":1,' + '"recipe_stats":{"n":566,"p25":2.91,"p75":4.03}}') | ConvertFrom-Json
+  $staleBuild = [ordered]@{ schema = 2; generated = 'x'; week_of = 'y'; ingredients = @{}; pricing_inputs = @{}; recipes = @{}; board_item_count = 1 }
+  $m1 = Get-TcFeedMissingSections $staleBuild $servedStats @()
+  Test-EfCase ($kMF + '  the recipe_stats that cec9779a3 dropped is named as absent (a section, not a count, so the shrink bar never saw it)') (@($m1).Count -eq 1 -and @($m1)[0] -ceq 'recipe_stats') (@($m1) -join ',')
+  $m2 = Get-TcFeedMissingSections $staleBuild $servedStats @('recipe_stats')
+  Test-EfCase ($kMNF + '  a removal declared with -RemoveSection is not refused') (@($m2).Count -eq 0) (@($m2) -join ',')
+  $fullBuild = [ordered]@{ schema = 2; generated = 'x'; week_of = 'y'; ingredients = @{}; pricing_inputs = @{}; recipes = @{}; board_item_count = 1; recipe_stats = @{ n = 1 }; new_section = 1 }
+  $m3 = Get-TcFeedMissingSections $fullBuild $servedStats @()
+  Test-EfCase ($kMNF + '  a build carrying every served section plus a NEW one is not refused') (@($m3).Count -eq 0) (@($m3) -join ',')
 
   # ---- the WHOLE export, run as a child in a sandbox: the refusals stop the WRITE, and a sound build still writes ----
   $sb = Join-Path $env:TEMP ('tc-ef-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
@@ -154,14 +208,18 @@ if ($SelfTest) {
     [IO.File]::WriteAllText((Join-Path $dO 'comparison-2026-09-22.json'), $cmp, $utf8)
     [IO.File]::WriteAllText((Join-Path $dO 'recipe-board.json'), '{"comparison":[]}', $utf8)
     [IO.File]::WriteAllText((Join-Path $dM 'recipes-db.json'), '{"recipes":[]}', $utf8)
+    $null = New-Item -ItemType Directory -Force -ErrorAction Stop (Join-Path $dM 'db')
+    $heldPath = Join-Path $dM 'db\held-recipes.json'
+    [IO.File]::WriteAllText($heldPath, '{"held":[]}', $utf8)
     $mkCosts = { param([int]$n) '{"recipes":[' + ((0..($n - 1) | ForEach-Object { '{"slug":"s' + $_ + '","name":"S","week_cost":10,"per_serving":1,"calories":500,"sale_items":[]}' }) -join ',') + ']}' }
     $priorText = (New-EfFeed 10 10 10 10 | ConvertTo-Json -Depth 4 -Compress)
     $pubFeed = Join-Path $dP 'smp-feed.json'; $outFeed = Join-Path $dO 'smp-feed.json'
     $runChild = {
-      [IO.File]::WriteAllText($pubFeed, $priorText, $utf8)
+      param([string]$Prior = $priorText, [string[]]$Extra = @())
+      [IO.File]::WriteAllText($pubFeed, $Prior, $utf8)
       if (Test-Path -LiteralPath $outFeed) { Remove-Item -LiteralPath $outFeed -Force }
-      $o = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -DataRoot $dG -OutDir $dO -PublicDir $dP -MealPrepDir $dM -PriorFeedPath $pubFeed -SkipEverydayPs)
-      return [pscustomobject]@{ Rc = $LASTEXITCODE; Text = ($o -join "`n"); PubSame = ([IO.File]::ReadAllText($pubFeed) -ceq $priorText); OutWritten = (Test-Path -LiteralPath $outFeed) }
+      $o = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -DataRoot $dG -OutDir $dO -PublicDir $dP -MealPrepDir $dM -PriorFeedPath $pubFeed -SkipEverydayPs @Extra)
+      return [pscustomobject]@{ Rc = $LASTEXITCODE; Text = ($o -join "`n"); PubSame = ([IO.File]::ReadAllText($pubFeed) -ceq $Prior); OutWritten = (Test-Path -LiteralPath $outFeed) }
     }
     # MUST FIRE: the founding shape, recipe-costs.json absent from the checkout.
     $c1 = & $runChild
@@ -182,10 +240,25 @@ if ($SelfTest) {
     $c3 = & $runChild
     $written = $null; try { $written = [IO.File]::ReadAllText($pubFeed) | ConvertFrom-Json } catch {}
     Test-EfCase ($kCT + '  a sound build over the same inputs still exports: exit 0, both copies written, 10 recipes and 10 ingredients served') ($c3.Rc -eq 0 -and $c3.OutWritten -and $null -ne $written -and (Get-TcFeedSectionSize $written 'recipes') -eq 10 -and (Get-TcFeedSectionSize $written 'ingredients') -eq 10) ("rc={0} outWritten={1} text={2}" -f $c3.Rc, $c3.OutWritten, $c3.Text)
+    # REFUSAL 3, end to end: the served feed carries recipe_stats and this build (no everyday pass) cannot.
+    $priorStats = $priorText.TrimEnd('}') + ',"recipe_stats":{"n":10,"p25":1,"p75":2}}'
+    $c4 = & $runChild $priorStats
+    Test-EfCase ($kMF + '  a build missing the served recipe_stats section is refused (exit 3) BY NAME and writes nothing') ($c4.Rc -eq 3 -and $c4.Text -match 'ABSENT from this build: recipe_stats' -and $c4.PubSame -and -not $c4.OutWritten) ("rc={0} pubSame={1} outWritten={2} text={3}" -f $c4.Rc, $c4.PubSame, $c4.OutWritten, $c4.Text)
+    $c5 = & $runChild $priorStats @('-RemoveSection', 'recipe_stats', '-RemoveReason', 'self-test declared removal')
+    Test-EfCase ($kCT + '  the same build with the removal DECLARED exports (exit 0) and prints the declaration') ($c5.Rc -eq 0 -and $c5.OutWritten -and $c5.Text -match 'SECTION REMOVAL DECLARED\s+\*\*\* recipe_stats') ("rc={0} outWritten={1} text={2}" -f $c5.Rc, $c5.OutWritten, $c5.Text)
+    # HELD RECIPES: costs list 11, s10 is held, so the feed carries 10 and never s10.
+    [IO.File]::WriteAllText((Join-Path $dO 'recipe-costs.json'), (& $mkCosts 11), $utf8)
+    [IO.File]::WriteAllText($heldPath, '{"held":[{"slug":"s10","reason":"self-test"}]}', $utf8)
+    $c6 = & $runChild
+    $w6 = $null; try { $w6 = [IO.File]::ReadAllText($pubFeed) | ConvertFrom-Json } catch {}
+    Test-EfCase ($kMF + '  a HELD recipe (s10) never reaches the feed: 11 costed, 10 served, s10 absent, and the log names it') ($c6.Rc -eq 0 -and $null -ne $w6 -and (Get-TcFeedSectionSize $w6 'recipes') -eq 10 -and -not $w6.recipes.PSObject.Properties['s10'] -and $null -ne $w6.recipes.PSObject.Properties['s9'] -and $c6.Text -match '1 held recipe\(s\) left out of recipes .*: s10') ("rc={0} text={1}" -f $c6.Rc, $c6.Text)
+    Remove-Item -LiteralPath $heldPath -Force
+    $c7 = & $runChild
+    Test-EfCase ($kMF + '  a missing held-recipes.json is refused BY NAME (exit 3) rather than serving a held recipe, and nothing is written') ($c7.Rc -eq 3 -and $c7.Text -match 'held-recipes\.json' -and $c7.PubSame -and -not $c7.OutWritten) ("rc={0} pubSame={1} outWritten={2} text={3}" -f $c7.Rc, $c7.PubSame, $c7.OutWritten, $c7.Text)
   } finally {
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
-  $want = 11
+  $want = 18
   if ($script:stCases -ne $want) { Write-Output ('FAIL  the suite ran {0} case(s), expected {1}' -f $script:stCases, $want); $script:stFail++ }
   if ($script:stFail) { Write-Output ('export-feed self-test FAIL: {0} of {1} case(s)' -f $script:stFail, $script:stCases); exit 1 }
   Write-Output ('export-feed self-test PASS: {0} of {0} cases - led by the empty recipes map of 2dcbe8622 being refused before either copy of the feed is written' -f $script:stCases)
@@ -203,7 +276,8 @@ foreach ($need in @(
     @{ p = (Join-Path $dataRoot 'product-urls.json'); feeds = 'the See-item links on every ingredient' },
     @{ p = (Join-Path $out 'recipe-costs.json'); feeds = 'recipes' },
     @{ p = (Join-Path $out 'recipe-board.json'); feeds = 'the recipe-only ingredients and pricing_inputs' },
-    @{ p = (Join-Path $mp 'recipes-db.json'); feeds = 'every recipe''s base servings' })) {
+    @{ p = (Join-Path $mp 'recipes-db.json'); feeds = 'every recipe''s base servings' },
+    @{ p = (Join-Path $mp 'db\held-recipes.json'); feeds = 'the held recipes left out of recipes' })) {
   if (-not (Test-Path -LiteralPath $need.p)) { [void]$missing.Add(('{0} (feeds {1})' -f $need.p, $need.feeds)) }
 }
 if (-not (Get-ChildItem (Join-Path $out 'comparison-*.json') -ErrorAction SilentlyContinue | Select-Object -First 1)) { [void]$missing.Add((Join-Path $out 'comparison-*.json') + ' (feeds ingredients, pricing_inputs, week_of and board_item_count)') }
@@ -471,11 +545,18 @@ try { foreach ($r in (Read-JsonFile (Join-Path $mp 'recipes-db.json')).recipes) 
   Write-Output ('export-feed: REFUSED - ' + (Join-Path $mp 'recipes-db.json') + ' could not be read (' + $_.Exception.Message + '), so every recipe would carry a guessed serving count. Nothing was written; the served feed stands.')
   exit 3
 }
+$heldF = Join-Path $mp 'db\held-recipes.json'
+try { $heldSet = Get-TcHeldSlugs $heldF } catch {
+  Write-Output ('export-feed: REFUSED - ' + $heldF + ' could not be read (' + $_.Exception.Message + '), so a held recipe could reach the tools. Nothing was written; the served feed stands.')
+  exit 3
+}
+$heldOut = New-Object Collections.ArrayList
 $rec = [ordered]@{}
 $rcF = Join-Path $out 'recipe-costs.json'
 if (Test-Path $rcF) {
   foreach ($c in (Read-JsonFile $rcF).recipes) {
     $slug = [string]$c.slug
+    if ($heldSet.Contains($slug)) { [void]$heldOut.Add($slug); continue }
     $rec[$slug] = [ordered]@{
       name        = [string]$c.name
       servings    = if ($servings.ContainsKey($slug)) { $servings[$slug] } else { 14 }
@@ -520,9 +601,40 @@ $feed = [ordered]@{
   recipes     = $rec
 }
 Write-Output ("export-feed: pricing_inputs for {0} commodities ({1} cell(s) per-unit-only -> card uses its authored package size; {2} cell(s) where the shelf tag did not divide into its per-unit price -> derived)" -f $pin.Count, $pinNoBasis, $pinDiverged)
+Write-Output ("export-feed: {0} held recipe(s) left out of recipes (of {1} listed in {2}){3}" -f $heldOut.Count, $heldSet.Count, $heldF, $(if ($heldOut.Count) { ': ' + (@($heldOut) -join ', ') } else { '' }))
+
+# ---- THE FINAL FEED, STAGED: everyday_ps and recipe_stats are added to a staging copy, so every refusal below judges
+#      exactly the bytes that would ship, and nothing reaches out\ or public\ until all of them have passed. ----
+$json = $feed | ConvertTo-Json -Depth 8 -Compress
+if ($SkipEverydayPs) {
+  Write-Output 'export-feed: -SkipEverydayPs, so the feed is built without everyday_ps'
+} else {
+  $stage = Join-Path ([IO.Path]::GetTempPath()) ('tc-efs-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  $null = New-Item -ItemType Directory -Force -ErrorAction Stop $stage
+  try {
+    $stF = Join-Path $stage 'feed.json'; $stP = Join-Path $stage 'public.json'
+    [IO.File]::WriteAllText($stF, $json, (New-Object Text.UTF8Encoding($false)))
+    try { & (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\feed-everyday-ps.ps1') -FeedPath $stF -PublicPath $stP | ForEach-Object { Write-Output ("  " + $_) } } catch { Write-Output ("feed-everyday-ps threw: " + $_.Exception.Message + " - feed built without everyday_ps") }
+    if (Test-Path -LiteralPath $stP) { $json = [IO.File]::ReadAllText($stP).TrimStart([char]0xFEFF) }
+    else { Write-Output 'export-feed: feed-everyday-ps wrote no feed, so it is built without everyday_ps and recipe_stats' }
+  } finally { Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue }
+}
+$final = $json | ConvertFrom-Json
+
+# ---- REFUSAL 3: no top-level section the served feed carries may vanish from this one, unless declared. ----
+$declared = @($RemoveSection -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+if ($declared.Count -and -not $RemoveReason) { Write-Output 'export-feed: REFUSED - -RemoveSection needs -RemoveReason ''<why>''. Nothing was written; the served feed stands.'; exit 3 }
+$prior = Get-TcPriorFeed -Path $PriorFeedPath -Url $script:FeedServedUrl -Repo (Split-Path $root -Parent)
+if ($null -ne $prior.Doc) {
+  $gone = Get-TcFeedMissingSections $final $prior.Doc $declared
+  if (@($gone).Count) {
+    Write-Output ('export-feed: REFUSED - {0} top-level section(s) in {1} are ABSENT from this build: {2}. Nothing was written; the served feed stands. If the removal is the decision, run again with -RemoveSection ''{3}'' -RemoveReason ''<why>''.' -f @($gone).Count, $prior.Source, (@($gone) -join ', '), (@($gone) -join ','))
+    exit 3
+  }
+  foreach ($d in $declared) { Write-Output ('export-feed: *** SECTION REMOVAL DECLARED *** ' + $d + ': ' + $RemoveReason) }
+}
 
 # ---- REFUSAL 2: no section may fall past the bar against what readers are served now. BEFORE either write. ----
-$prior = Get-TcPriorFeed -Path $PriorFeedPath -Url $script:FeedServedUrl -Repo (Split-Path $root -Parent)
 if ($null -eq $prior.Doc) {
   if ($AcceptShrink) {
     Write-Output ('export-feed: *** SHRINK CHECK NOT RUN *** ' + $prior.Source + '. Writing anyway under -AcceptShrink: ' + $AcceptShrink)
@@ -531,7 +643,7 @@ if ($null -eq $prior.Doc) {
     exit 3
   }
 } else {
-  $sk = Test-TcFeedShrink $feed $prior.Doc $script:FeedMaxDropFraction
+  $sk = Test-TcFeedShrink $final $prior.Doc $script:FeedMaxDropFraction
   Write-Output ('export-feed: shrink check compared with ' + $prior.Source + ': ' + (@($sk.Lines) -join '; '))
   if (@($sk.Findings).Count) {
     if ($AcceptShrink) {
@@ -548,8 +660,8 @@ if ($null -eq $prior.Doc) {
 # Pretty-printing bloated it ~4x (973 KB raw for ~236 KB of data); at 1500 recipes that is a ~2.3 MB
 # raw file JSON.parse'd on every mobile page view. Compact keeps the wire small (worker still gzips) and
 # the on-device parse cheap. No consumer depends on whitespace.
-$json = $feed | ConvertTo-Json -Depth 8 -Compress
-$json | Set-Content (Join-Path $out 'smp-feed.json') -Encoding UTF8
+# The out\ copy keeps the BOM it has always carried (feed-everyday-ps wrote it that way); public\ is BOM-less, below.
+[IO.File]::WriteAllText((Join-Path $out 'smp-feed.json'), $json, (New-Object Text.UTF8Encoding($true)))
 if (-not (Test-Path $pub)) { New-Item -ItemType Directory -Force -Path $pub | Out-Null }
 # BOM-LESS (L7, 2026-08-01). Set-Content -Encoding UTF8 emits a UTF-8 BOM in PS 5.1. Browsers strip it
 # per spec so the live page was never broken - but PS 5.1's OWN ConvertFrom-Json chokes on it, which is
@@ -558,7 +670,7 @@ if (-not (Test-Path $pub)) { New-Item -ItemType Directory -Force -Path $pub | Ou
 [IO.File]::WriteAllText((Join-Path $pub 'smp-feed.json'), $json, (New-Object Text.UTF8Encoding($false)))
 Write-Output ("smp-feed.json: " + $ing.Count + " ingredients, " + $rec.Count + " recipes, week " + $weekOf + " -> out\ + public\")
 # EVERYDAY_PS (2026-09-23): each recipe's per-serving price on its card's own basis, computed by running the card's own
-# script against the feed just written, so a recipe price on an article or the homepage fills from the feed. Non-fatal:
-# a recipe it cannot price carries no key and its span keeps the stamped fallback.
-if ($SkipEverydayPs) { Write-Output 'export-feed: -SkipEverydayPs, so the feed was written without everyday_ps'; exit 0 }
-try { & (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\feed-everyday-ps.ps1') -FeedPath (Join-Path $out 'smp-feed.json') -PublicPath (Join-Path $pub 'smp-feed.json') | ForEach-Object { Write-Output ("  " + $_) } } catch { Write-Output ("feed-everyday-ps threw: " + $_.Exception.Message + " - feed written without everyday_ps") }
+# script against the feed, so a recipe price on an article or the homepage fills from the feed. It runs on the STAGED copy
+# above, before the refusals, so the section check judges the feed that ships. Non-fatal per recipe: one it cannot price
+# carries no key and its span keeps the stamped fallback.
+exit 0
