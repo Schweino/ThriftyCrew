@@ -21,9 +21,22 @@
         carried a stale price for a week. Different question from 5: that one is
         about today, this one is about the record.
     6. BROWSER      is a browser-capture flag still sitting unworked?
+    7. CHECKOUT     does the checkout the bot runs from contain origin/main? BOT CHECKOUT STALE when the oldest commit
+                    it is missing is more than 93,600 s (26 h) old. When capture-run STOPS it still fires: it reads git
+                    (ls-remote, merge-base, rev-list), never capture-run's record.
+    8. BACKLOG      after 10:00 local, is any untracked, not-ignored file under grocery/out dated before today?
+                    CAPTURE BACKLOG, grouped by date. When capture-run STOPS it still fires: it reads git ls-files and
+                    the file sizes on disk, never capture-run's record.
+    9. KILL SWITCH  is <git common dir>\tc-checkout-sync.disabled present? BOT CHECKOUT SYNC DISABLED on every run, so
+                    it cannot be forgotten. When capture-run STOPS it still fires: it reads the file, never a record.
+    (7 to 9 are design\PLAN-bot-checkout-self-heal-2026-09-23.md W1.1. The per-store freshness scan further down is
+    headed "7." in the body for historical reasons and is not one of them. The -SlotClose run grades only check 6a.)
 
   Anything that fails is ONE email, not six. Exit 0 = healthy, 1 = findings.
 #>
+# What -SelfTest reads, declared so the gate key moves when any of it does (its fixtures build every git repo and
+# every out\ directory they read under %TEMP%; capture-run.ps1 is read for its AST, stores.json by the -SlotClose child).
+# gate-inputs: grocery\capture-watchdog.ps1, lib\json-io.ps1, grocery\run-log-lib.ps1, grocery\native-lib.ps1, lib\git-blob-lib.ps1, lib\git-repo-env.ps1, grocery\capture-policy-lib.ps1, grocery\capture-run.ps1, grocery\stores.json
 param([switch]$Alert, [string]$OutDir = '', [string]$Today = '', [switch]$SelfTest, [switch]$SlotClose)
 
 $ErrorActionPreference = 'Stop'
@@ -33,6 +46,7 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 . (Join-Path $root 'run-log-lib.ps1')
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native: the ONLY safe way to redirect a native child under EAP=Stop
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\git-blob-lib.ps1')   # Invoke-GitCaptured: git with both streams kept, never a redirect (checks 7-9)
 
 # Runs hidden from a scheduled task, so its findings only existed in an email.
 # The transcript keeps the evidence even when the alert de-dup suppresses the mail.
@@ -380,10 +394,260 @@ function Measure-CursorAdvances {
   return $n
 }
 
+# ---- 7, 8 AND 9: THE BOT CHECKOUT FLOORS (2026-09-23, design\PLAN-bot-checkout-self-heal-2026-09-23.md W1.1) ----------
+# WHY. On 2026-09-23 the daily run executed on a checkout about 14 hours behind origin, so a fix that had landed the night
+# before was not running, and two days of captures sat uncommitted because each refused commit made the next one bigger.
+# Both quantities grew for a day and a half and nothing paged: every other check here reads what capture-run DID, and a
+# run that never syncs or never commits leaves nothing new to read. These three read git and the filesystem of the
+# watchdog's own checkout instead, so they still fire when capture-run has stopped running at all. They WRITE nothing:
+# every git call carries --no-optional-locks, because the 10:30 task runs in the shared main checkout while sessions
+# commit there, and a read that refreshed the index would be a write.
+# 93,600 s is 26 h: one daily cadence plus 2 h of slack, the same shape and size as $script:BoardStaleHours above. The
+# first plausible number, not the survivor of a sweep. When the producer (capture-run) stops, this still fires: origin
+# keeps moving and the age of the oldest missing commit keeps growing.
+$script:CheckoutStaleBarSec = 93600
+# The backlog is graded only from 10:00 local, when the 07:00 ad run and the 08:00 daily run have each had their chance to
+# commit yesterday's files. The first plausible time, not a sweep. Before it the answer is NOT CHECKED, never ok.
+$script:BacklogDueAt = [timespan]::FromHours(10)
+
+function Invoke-WdGit {
+  <# git -C <Repo> --no-optional-locks <GitArgs> through Invoke-GitCaptured (lib\git-blob-lib.ps1): both streams kept,
+     no redirect under EAP=Stop, never throws. Returns @{ rc; stdout; stderr }. #>
+  param([Parameter(Mandatory)][string]$Repo, [Parameter(Mandatory)][string[]]$GitArgs)
+  return (Invoke-GitCaptured -Repo $Repo -GitArgs (@('--no-optional-locks') + @($GitArgs)))
+}
+
+function Get-WdGitCommonDir([string]$Repo) {
+  # The shared git directory (the main checkout's .git, from any linked worktree), absolute, or '' when git cannot say.
+  $r = Invoke-WdGit -Repo $Repo -GitArgs @('rev-parse', '--path-format=absolute', '--git-common-dir')
+  if ($r.rc -ne 0) { return '' }
+  $p = ([string]$r.stdout).Trim()
+  if (-not $p) { return '' }
+  return ($p -replace '/', '\')
+}
+
+function Get-WdCaptureDateOf([string]$Path) {
+  <# The capture date a path is named for: the LAST yyyy-MM-dd in it, else a yyyyMMdd directly before -HHmmss, else ''.
+     The same two expressions as the plan's prototype (sync-proto.ps1 blob 3ddd9f98c415), which W2.1 ports into
+     grocery\commit-size-lib.ps1 as Get-CaptureDateOf. This is a copy until that lib lands, and the self-test pins its
+     answers so a drift between the two is a red, not a surprise. #>
+  $m = [regex]::Matches([string]$Path, '(?<!\d)(20\d\d)-(\d\d)-(\d\d)(?!\d)')
+  if ($m.Count) { $g = $m[$m.Count - 1].Groups; return ($g[1].Value + '-' + $g[2].Value + '-' + $g[3].Value) }
+  $m = [regex]::Matches([string]$Path, '(?<!\d)(20\d\d)(\d\d)(\d\d)(?=-\d{6})')
+  if ($m.Count) { $g = $m[$m.Count - 1].Groups; return ($g[1].Value + '-' + $g[2].Value + '-' + $g[3].Value) }
+  return ''
+}
+
+function Get-WdShortSha([string]$Sha) { if ($Sha.Length -ge 8) { return $Sha.Substring(0, 8) } else { return $Sha } }
+function Format-WdAge([long]$Sec) { return ('{0:N0} s ({1:N1} h)' -f $Sec, ($Sec / 3600.0)) }
+
+function Get-WdLastSyncText([string]$CommonDir) {
+  <# One clause naming the last checkout sync's outcome and why, read from <git common dir>\tc-checkout-sync.json, the
+     record lib\checkout-sync.ps1 (W3.1) keeps. Absent, unreadable, and an intent with no outcome (a sync that may have
+     died mid-move) each say so. Field presence is asked of PSObject.Properties, never inferred from $null. Never throws. #>
+  if (-not $CommonDir) { return 'last sync: unknown (git named no common dir)' }
+  $p = Join-Path $CommonDir 'tc-checkout-sync.json'
+  if (-not (Test-Path -LiteralPath $p)) { return 'last sync: no record (lib\checkout-sync.ps1 has not run in this checkout)' }
+  $d = $null
+  try { $d = ConvertFrom-Json ([IO.File]::ReadAllText($p, [Text.Encoding]::UTF8)) } catch { return ('last sync: its record ' + $p + ' is unreadable (' + $_.Exception.Message + ')') }
+  if ($null -eq $d) { return ('last sync: its record ' + $p + ' is empty') }
+  $fields = @{}
+  foreach ($n in @('outcome', 'class', 'why', 'phase', 'pid', 'finished', 'ts', 'updated', 'started')) {
+    $pp = $d.PSObject.Properties[$n]
+    $fields[$n] = if ($pp -and $null -ne $pp.Value) { [string]$pp.Value } else { '' }
+  }
+  $when = ''
+  foreach ($n in @('finished', 'ts', 'updated', 'started')) { if ($fields[$n]) { $when = $fields[$n]; break } }
+  if (-not $fields['outcome']) {
+    return ('last sync: an intent with no outcome (pid ' + $fields['pid'] + ', phase ' + $fields['phase'] + ', started ' + $fields['started'] + '), so a sync may have died mid-move')
+  }
+  $t = 'last sync: ' + $fields['outcome']
+  if ($fields['class']) { $t += (' class ' + $fields['class']) }
+  $t += (' (phase ' + $fields['phase'] + ', ' + $when + ')')
+  if ($fields['why']) { $t += (': ' + $fields['why']) }
+  return $t
+}
+
+function Get-CheckoutFloor {
+  <#
+    CHECK 7, CHECKOUT. Does the checkout at -Repo contain origin/main, and if not, how old is the oldest commit it lacks?
+      1. `git ls-remote origin refs/heads/main`, the remote's own word, which writes nothing here. A non-zero rc is the
+         finding `CHECKOUT: BLIND - ls-remote exited <rc>`, never a pass, and the local checks below still run.
+      2. `git merge-base --is-ancestor refs/remotes/origin/main HEAD`: rc 0 is ok, rc 1 is behind, anything else BLIND.
+      3. Behind: the first line of `git rev-list --reverse refs/remotes/origin/main --not HEAD` is the oldest missing
+         commit and its %ct is its age against -Now. MORE than -BarSec (93,600 s) is BOT CHECKOUT STALE, with the last
+         sync outcome and why from <git common dir>\tc-checkout-sync.json. Exactly at the bar is not stale.
+    NOTHING HERE FETCHES, so the count is against the LOCAL refs/remotes/origin/main, which every session's push-main
+    fetch on this box updates. When ls-remote's tip is not that ref, the line says so: a stale local ref can only
+    understate the age. Returns findings, ok lines and one CHECKOUT-FLOOR marker line that
+    grocery\report-checkout-sync.ps1 reads for bar B9. -Now is the clock seam; the fixtures pass an exact epoch.
+  #>
+  param([Parameter(Mandatory)][string]$Repo, [Parameter(Mandatory)][datetime]$Now, [int]$BarSec = 0)
+  if ($BarSec -le 0) { $BarSec = $script:CheckoutStaleBarSec }
+  $fl = New-Object System.Collections.Generic.List[string]
+  $okL = New-Object System.Collections.Generic.List[string]
+  $res = [pscustomobject]@{ findings = $fl; ok = $okL; behind = -1; age_s = [long]-1; stale = $false; remote = 'unread'; blind = 0; marker = '' }
+  $mark = {
+    $res.blind = @($fl | Where-Object { ([string]$_).StartsWith('CHECKOUT: BLIND') }).Count
+    $res.marker = ('CHECKOUT-FLOOR behind={0} oldest_age_s={1} bar_s={2} stale={3} remote={4} blind={5}' -f $res.behind, $res.age_s, $BarSec, $(if ($res.stale) { 1 } else { 0 }), $res.remote, $res.blind)
+  }
+  # A credential prompt would hang an unattended run, and a stalled transfer would too: both are refused for this one
+  # call and the environment is put back exactly as it was ($null removes the variable again).
+  $prevTp = $env:GIT_TERMINAL_PROMPT; $prevGcm = $env:GCM_INTERACTIVE
+  try {
+    $env:GIT_TERMINAL_PROMPT = '0'; $env:GCM_INTERACTIVE = 'never'
+    $ls = Invoke-WdGit -Repo $Repo -GitArgs @('-c', 'http.lowSpeedLimit=1', '-c', 'http.lowSpeedTime=60', 'ls-remote', 'origin', 'refs/heads/main')
+  } finally { $env:GIT_TERMINAL_PROMPT = $prevTp; $env:GCM_INTERACTIVE = $prevGcm }
+  $remoteTip = ''
+  if ($ls.rc -ne 0) {
+    $errL = @(([string]$ls.stderr) -split "`r?`n" | Where-Object { $_.Trim() })
+    $why = if ($errL.Count) { ' (' + $errL[0].Trim() + ')' } else { '' }
+    [void]$fl.Add('CHECKOUT: BLIND - ls-remote exited ' + $ls.rc + $why + '. The remote could not be read, so whether it has moved past this checkout is unknown this run, not clean.')
+    $res.remote = 'blind'
+  } else {
+    $mt = [regex]::Match([string]$ls.stdout, '(?m)^([0-9a-f]{40})\trefs/heads/main\s*$')
+    if ($mt.Success) { $remoteTip = $mt.Groups[1].Value }
+    else { [void]$fl.Add('CHECKOUT: BLIND - ls-remote exited 0 but origin named no refs/heads/main, so whether the remote has moved past this checkout is unknown this run.'); $res.remote = 'blind' }
+  }
+  $lr = Invoke-WdGit -Repo $Repo -GitArgs @('rev-parse', '--verify', '-q', 'refs/remotes/origin/main^{commit}')
+  $localTip = if ($lr.rc -eq 0) { ([string]$lr.stdout).Trim() } else { '' }
+  if (-not $localTip) {
+    [void]$fl.Add('CHECKOUT: BLIND - this checkout has no refs/remotes/origin/main (rev-parse exited ' + $lr.rc + '), so nothing here can say how far behind origin it is.')
+    & $mark; return $res
+  }
+  $note = ''
+  if ($remoteTip) {
+    if ([string]::Equals($remoteTip, $localTip, [StringComparison]::Ordinal)) { $res.remote = 'same' }
+    else {
+      $res.remote = 'moved'
+      $note = (" The remote's main is at " + (Get-WdShortSha $remoteTip) + ", not this checkout's refs/remotes/origin/main " + (Get-WdShortSha $localTip) + ': nothing here fetches, so this is counted against the local ref and can only understate how far behind the checkout is.')
+    }
+  } elseif ($res.remote -eq 'blind') {
+    $note = ' Counted against the local refs/remotes/origin/main, which can only understate how far behind the checkout is.'
+  }
+  $anc = Invoke-WdGit -Repo $Repo -GitArgs @('merge-base', '--is-ancestor', 'refs/remotes/origin/main', 'HEAD')
+  if ($anc.rc -eq 0) {
+    $res.behind = 0
+    [void]$okL.Add('checkout: HEAD contains origin/main ' + (Get-WdShortSha $localTip) + '.' + $note)
+    & $mark; return $res
+  }
+  if ($anc.rc -ne 1) {
+    [void]$fl.Add('CHECKOUT: BLIND - merge-base --is-ancestor exited ' + $anc.rc + ', so whether HEAD contains origin/main is unknown this run.')
+    & $mark; return $res
+  }
+  $rl = Invoke-WdGit -Repo $Repo -GitArgs @('rev-list', '--reverse', 'refs/remotes/origin/main', '--not', 'HEAD')
+  $missing = @(([string]$rl.stdout) -split "`r?`n" | Where-Object { $_ -match '^[0-9a-f]{40}$' })
+  if ($rl.rc -ne 0 -or $missing.Count -eq 0) {
+    [void]$fl.Add('CHECKOUT: BLIND - HEAD does not contain origin/main but rev-list exited ' + $rl.rc + ' naming ' + $missing.Count + ' missing commit(s), so the age of the oldest is unknown this run.')
+    & $mark; return $res
+  }
+  $oldest = $missing[0]
+  $ct = Invoke-WdGit -Repo $Repo -GitArgs @('log', '-1', '--format=%ct', $oldest)
+  [long]$ctN = 0
+  if ($ct.rc -ne 0 -or -not [long]::TryParse(([string]$ct.stdout).Trim(), [ref]$ctN)) {
+    [void]$fl.Add('CHECKOUT: BLIND - ' + $missing.Count + ' commit(s) behind origin/main, but the commit time of the oldest, ' + (Get-WdShortSha $oldest) + ', could not be read (git log exited ' + $ct.rc + ').')
+    & $mark; return $res
+  }
+  $age = ([DateTimeOffset]$Now).ToUnixTimeSeconds() - $ctN
+  $res.behind = $missing.Count; $res.age_s = $age
+  if ($age -gt $BarSec) {
+    $res.stale = $true
+    $last = Get-WdLastSyncText (Get-WdGitCommonDir $Repo)
+    [void]$fl.Add(('BOT CHECKOUT STALE: {0} commits behind, oldest missing {1} committed {2} ago, past the {3} bar; {4}.{5} capture-run runs whatever code this checkout holds, so a fix that landed on origin since then is not running. Kill switch and rollback: design\PLAN-bot-checkout-self-heal-2026-09-23.md section 11.' -f $missing.Count, (Get-WdShortSha $oldest), (Format-WdAge $age), (Format-WdAge $BarSec), $last, $note))
+  } else {
+    [void]$okL.Add(('checkout: {0} commit(s) behind origin/main, oldest missing {1} committed {2} ago, inside the {3} bar.{4}' -f $missing.Count, (Get-WdShortSha $oldest), (Format-WdAge $age), (Format-WdAge $BarSec), $note))
+  }
+  & $mark; return $res
+}
+
+function Get-CaptureBacklog {
+  <#
+    CHECK 8, BACKLOG. From -DueAt (10:00 local) on, every file `git ls-files -z --others --exclude-standard -- grocery/out`
+    lists whose path date (Get-WdCaptureDateOf) is before -TodayS is a capture no commit has taken. Any is
+    CAPTURE BACKLOG: <n> file(s), <MiB> MiB, oldest dated <date>, grouped by date. Ignored files are never listed, an
+    undated path is never counted, and a path is split on NUL, so a name with a space or a quote arrives whole. Before
+    -DueAt the answer is NOT CHECKED, an ok line that says so, never a clean one. -Now is the clock seam.
+  #>
+  param([Parameter(Mandatory)][string]$Repo, [Parameter(Mandatory)][string]$TodayS, [Parameter(Mandatory)][datetime]$Now, $DueAt = $null)
+  if ($null -eq $DueAt) { $DueAt = $script:BacklogDueAt }
+  $fl = New-Object System.Collections.Generic.List[string]
+  $okL = New-Object System.Collections.Generic.List[string]
+  $res = [pscustomobject]@{ findings = $fl; ok = $okL; due = $false; files = 0; bytes = [long]0; oldest = ''; examined = 0 }
+  if ($Now.TimeOfDay -lt $DueAt) {
+    [void]$okL.Add(('capture backlog: NOT CHECKED at {0} - graded only from {1}, once the 07:00 and 08:00 runs have each had their chance to commit the files dated before {2}. Not clean and not a finding.' -f $Now.ToString('HH:mm:ss'), $DueAt.ToString('hh\:mm'), $TodayS))
+    return $res
+  }
+  $res.due = $true
+  $ls = Invoke-WdGit -Repo $Repo -GitArgs @('-c', 'core.quotePath=false', 'ls-files', '-z', '--others', '--exclude-standard', '--', 'grocery/out')
+  if ($ls.rc -ne 0) {
+    [void]$fl.Add('CAPTURE BACKLOG: BLIND - git ls-files exited ' + $ls.rc + ', so whether captures from before today are still uncommitted is unknown this run, not clean.')
+    return $res
+  }
+  $paths = @(([string]$ls.stdout) -split [char]0 | Where-Object { $_ })
+  $res.examined = $paths.Count
+  $byDate = @{}
+  foreach ($p in $paths) {
+    $d = Get-WdCaptureDateOf $p
+    if (-not $d) { continue }
+    if ([string]::CompareOrdinal($d, $TodayS) -ge 0) { continue }
+    [long]$len = 0
+    try { $len = [long](New-Object IO.FileInfo (Join-Path $Repo $p)).Length } catch { $len = 0 }
+    if (-not $byDate.ContainsKey($d)) { $byDate[$d] = [pscustomobject]@{ files = 0; bytes = [long]0 } }
+    $byDate[$d].files++; $byDate[$d].bytes += $len
+    $res.files++; $res.bytes += $len
+  }
+  if ($res.files -gt 0) {
+    [string[]]$dates = @($byDate.Keys)
+    [Array]::Sort($dates, [StringComparer]::Ordinal)
+    $res.oldest = $dates[0]
+    $parts = @(foreach ($d in $dates) { ('{0} {1} file(s) {2:N1} MiB' -f $d, $byDate[$d].files, ($byDate[$d].bytes / 1MB)) })
+    [void]$fl.Add(('CAPTURE BACKLOG: {0} file(s), {1:N1} MiB, oldest dated {2} - by date: {3}. These are untracked, not-ignored files under grocery/out named for a day before {4} that no commit has taken. Each refused day adds its files to the next run''s commit, which is how 2026-09-22 and 2026-09-23 refused each other.' -f $res.files, ($res.bytes / 1MB), $res.oldest, ($parts -join '; '), $TodayS))
+  } else {
+    [void]$okL.Add(('capture backlog: 0 untracked file(s) under grocery/out dated before {0} ({1} untracked, not-ignored file(s) examined)' -f $TodayS, $paths.Count))
+  }
+  return $res
+}
+
+function Get-SyncKillSwitch {
+  <#
+    CHECK 9, KILL SWITCH. <git common dir>\tc-checkout-sync.disabled present is BOT CHECKOUT SYNC DISABLED since <mtime>,
+    raised on EVERY run while the file exists, so a switch set for hours cannot quietly become weeks. While it exists
+    lib\checkout-sync.ps1 records every sync as disabled and moves nothing (plan section 11, rollback step 1). A common
+    dir git cannot name is a BLIND finding.
+  #>
+  param([Parameter(Mandatory)][string]$Repo)
+  $fl = New-Object System.Collections.Generic.List[string]
+  $okL = New-Object System.Collections.Generic.List[string]
+  $res = [pscustomobject]@{ findings = $fl; ok = $okL; on = $false; path = '' }
+  $cd = Get-WdGitCommonDir $Repo
+  if (-not $cd) {
+    [void]$fl.Add('KILL SWITCH: BLIND - git could not name this checkout''s common dir, so whether the checkout sync is disabled is unknown this run.')
+    return $res
+  }
+  $ks = Join-Path $cd 'tc-checkout-sync.disabled'
+  $res.path = $ks
+  if (Test-Path -LiteralPath $ks) {
+    $res.on = $true
+    $mt = (Get-Item -LiteralPath $ks -Force).LastWriteTime
+    [void]$fl.Add(('BOT CHECKOUT SYNC DISABLED since {0} ({1}). While it exists every capture-run checkout sync records disabled and moves nothing, so the bot keeps running on whatever HEAD it has. Delete the file to re-enable, as soon as whatever it was set for is over.' -f $mt.ToString('yyyy-MM-dd HH:mm'), $ks))
+  } else {
+    [void]$okL.Add('checkout sync kill switch: off (' + $ks + ' absent)')
+  }
+  return $res
+}
+
 if ($SelfTest) {
   # Frozen fixtures: the founding bug (a task that never runs, reported green forever) and
   # its clean twin (a task legitimately still waiting for its first slot).
   $fail = 0
+  # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (2026-09-23, W1.1). Every case prints exactly one line starting 'ok',
+  # 'PASS' or 'FAIL'. The cases run inside a dot-sourced block, so they share this scope (their $fail counts), and
+  # every line they print is captured, re-printed unchanged and counted against this literal: 48 cases for checks 1
+  # to 6a, 13 for the bot checkout floors (7 to 9). A case lost to a thrown setup or a glued line reads as a shortfall.
+  # Captured with a plain dot-source, never inside @( ): audit-store-registry widens a store name to the smallest
+  # multi-line array around it, and a whole suite inside one would hide every fixture's own store-subset-ok marker.
+  $WD_SELFTEST_CASES = 61
+  $wdStOut = . {
   $now = [datetime]'2026-08-21 06:47'
 
   # ---- FF SHARD CADENCE (2026-09-01, queue 2026-09-01-056e6b) ---------------------------------
@@ -696,6 +960,148 @@ if ($SelfTest) {
     $scYes = Get-BrowserCaptureVerdict -Stores $bvStores -TodayFiles $bvToday -YesterdayFiles $bvYday2 -Now ([datetime]'2026-09-23 10:30') -Slot (Get-ProducerSlot 'grocery-browser-stores-refresh' ([datetime]'2026-09-23')) -YesterdayGraded (Test-Path -LiteralPath $scStamp)
     if (@($scYes.MissingYesterday).Count -eq 0) { Write-Output 'PASS  CLEAN TWIN the stamp that -SlotClose wrote is the one that stops the next morning paging the same miss' } else { Write-Output 'FAIL  the -SlotClose stamp did not reach the backstop'; $fail++ }
   } finally { Remove-Item -LiteralPath $bvDir -Recurse -Force -ErrorAction SilentlyContinue }
+
+  # ---- 7, 8, 9: THE BOT CHECKOUT FLOORS (2026-09-23, design\PLAN-bot-checkout-self-heal-2026-09-23.md W1.1) ----
+  # A temp bare remote plus clones in one per-run root under %TEMP%, removed in finally; the repository environment is
+  # cleared before the first git init. Commit times are exact epochs through GIT_COMMITTER_DATE and the clock is the
+  # -Now seam, so the case AT the 93,600 s bar is exactly at it. Fixture setup that fails is one counted FAIL, and the
+  # case count below then falls short as well: it can never pass over nothing.
+  $flSb = Join-Path $env:TEMP ('wd-fl-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+  $flPrevCd = $env:GIT_COMMITTER_DATE; $flPrevAd = $env:GIT_AUTHOR_DATE
+  try {
+    New-Item -ItemType Directory -Path $flSb -ErrorAction Stop | Out-Null
+    . (Join-Path (Split-Path $root -Parent) 'lib\git-repo-env.ps1')
+    Clear-TcGitRepoEnv
+    $flUtf8 = New-Object Text.UTF8Encoding($false)
+    function WdFxGit([string]$Dir, [string[]]$A) {
+      $r = Invoke-GitCaptured -Repo $Dir -GitArgs $A
+      if ($r.rc -ne 0) { throw ('fixture git ' + ($A -join ' ') + ' exited ' + $r.rc + ': ' + ([string]$r.stderr).Trim()) }
+      return ([string]$r.stdout).Trim()
+    }
+    function WdFxCommit([string]$Dir, [string]$File, [string]$Text, [long]$At) {
+      [IO.File]::WriteAllText((Join-Path $Dir $File), $Text, $flUtf8)
+      $env:GIT_COMMITTER_DATE = ('@' + $At + ' +0000'); $env:GIT_AUTHOR_DATE = $env:GIT_COMMITTER_DATE
+      try {
+        $null = WdFxGit $Dir @('add', '--', $File)
+        $null = WdFxGit $Dir @('-c', 'user.name=wd', '-c', 'user.email=wd@t', '-c', 'commit.gpgsign=false', 'commit', '-q', '-m', ('add ' + $File))
+      } finally { $env:GIT_COMMITTER_DATE = $flPrevCd; $env:GIT_AUTHOR_DATE = $flPrevAd }
+      return (WdFxGit $Dir @('rev-parse', 'HEAD'))
+    }
+    function WdFxStale($o) { return @($o.findings | Where-Object { ([string]$_).StartsWith('BOT CHECKOUT STALE:') }).Count }
+    function WdFxAt([long]$Epoch) { return [DateTimeOffset]::FromUnixTimeSeconds($Epoch).UtcDateTime }
+    $T0 = [long]1757000000; $T1 = [long]1758000000
+    $flRemote = Join-Path $flSb 'remote.git'; $flUp = Join-Path $flSb 'up'; $flBot = Join-Path $flSb 'bot'
+    $null = WdFxGit $flSb @('init', '-q', '--bare', '-b', 'main', 'remote.git')
+    $null = WdFxGit $flSb @('init', '-q', '-b', 'main', 'up')
+    $null = WdFxGit $flUp @('config', 'core.autocrlf', 'false')
+    $null = WdFxCommit $flUp 'a.txt' "one`n" $T0
+    $null = WdFxGit $flUp @('remote', 'add', 'origin', $flRemote)
+    $null = WdFxGit $flUp @('push', '-q', 'origin', 'main')
+    $null = WdFxGit $flSb @('clone', '-q', 'remote.git', 'bot')
+    $null = WdFxGit $flBot @('config', 'core.autocrlf', 'false')
+    $c2 = WdFxCommit $flUp 'b.txt' "two`n" $T1
+    $null = WdFxGit $flUp @('push', '-q', 'origin', 'main')
+    $null = WdFxGit $flBot @('fetch', '-q', 'origin')
+
+    # MUST NOT FIRE AT THE BAR: the oldest missing commit is exactly 93,600 s old, which is as old as the bar allows.
+    $co1 = Get-CheckoutFloor -Repo $flBot -Now (WdFxAt ($T1 + 93600))
+    if ((WdFxStale $co1) -eq 0 -and $co1.findings.Count -eq 0 -and $co1.behind -eq 1 -and $co1.age_s -eq 93600 -and $co1.marker -match 'oldest_age_s=93600 bar_s=93600 stale=0 remote=same') { Write-Output 'PASS  MUST NOT FIRE AT THE BAR the oldest missing commit exactly 93,600 s (26 h) old is not stale: 1 behind, inside the bar' }
+    else { Write-Output ('FAIL  AT THE BAR 93,600 s: findings=' + ($co1.findings -join ' | ') + ' behind=' + $co1.behind + ' age=' + $co1.age_s + ' marker=' + $co1.marker); $fail++ }
+
+    # MUST FIRE ONE PAST THE BAR: 93,601 s, with the last sync record's outcome and why on the line.
+    $flCd = Get-WdGitCommonDir $flBot
+    [IO.File]::WriteAllText((Join-Path $flCd 'tc-checkout-sync.json'), '{"phase":"start","started":"2026-09-23T08:00:02","outcome":"blocked","class":"foreign","why":"fixture-session-file.json is dirty on a moved path"}', $flUtf8)
+    $co2 = Get-CheckoutFloor -Repo $flBot -Now (WdFxAt ($T1 + 93601))
+    $co2Line = @($co2.findings | Where-Object { ([string]$_).StartsWith('BOT CHECKOUT STALE:') })
+    if ($co2Line.Count -eq 1 -and $co2Line[0].StartsWith('BOT CHECKOUT STALE: 1 commits behind, oldest missing ' + $c2.Substring(0, 8) + ' committed 93,601 s') -and $co2Line[0].Contains('last sync: blocked class foreign') -and $co2Line[0].Contains('fixture-session-file.json is dirty') -and $co2.marker -match 'stale=1') { Write-Output 'PASS  MUST FIRE ONE PAST THE BAR a missing commit 93,601 s old is BOT CHECKOUT STALE, naming the commit, its age and the last sync outcome and why' }
+    else { Write-Output ('FAIL  ONE PAST 93,601 s: findings=' + ($co2.findings -join ' | ') + ' marker=' + $co2.marker); $fail++ }
+
+    # CLEAN TWIN: the remote moved past the local ref and nothing here fetched. The line names both tips.
+    $c3 = WdFxCommit $flUp 'c.txt' "three`n" ($T1 + 100)
+    $null = WdFxGit $flUp @('push', '-q', 'origin', 'main')
+    $co3 = Get-CheckoutFloor -Repo $flBot -Now (WdFxAt ($T1 + 93601))
+    $co3Line = @($co3.findings | Where-Object { ([string]$_).StartsWith('BOT CHECKOUT STALE:') })
+    if ($co3Line.Count -eq 1 -and $co3Line[0].Contains("The remote's main is at " + $c3.Substring(0, 8)) -and $co3Line[0].Contains('refs/remotes/origin/main ' + $c2.Substring(0, 8)) -and $co3Line[0].Contains('can only understate') -and $co3.marker -match 'remote=moved') { Write-Output 'PASS  CLEAN TWIN a remote tip past the local refs/remotes/origin/main is named on the line, which says the count can only understate' }
+    else { Write-Output ('FAIL  CLEAN TWIN remote moved: findings=' + ($co3.findings -join ' | ') + ' marker=' + $co3.marker); $fail++ }
+
+    # MUST NOT FIRE: origin contained, at any age.
+    $null = WdFxGit $flBot @('fetch', '-q', 'origin')
+    $null = WdFxGit $flBot @('merge', '-q', '--ff-only', 'origin/main')
+    $co4 = Get-CheckoutFloor -Repo $flBot -Now (WdFxAt ($T1 + 10000000))
+    if ($co4.findings.Count -eq 0 -and $co4.behind -eq 0 -and @($co4.ok | Where-Object { ([string]$_).StartsWith('checkout: HEAD contains origin/main ' + $c3.Substring(0, 8)) }).Count -eq 1) { Write-Output 'PASS  MUST NOT FIRE a checkout that contains origin/main is ok at any age (checked 10,000,000 s after the last commit)' }
+    else { Write-Output ('FAIL  MUST NOT FIRE contained: findings=' + ($co4.findings -join ' | ') + ' behind=' + $co4.behind); $fail++ }
+
+    # MUST FIRE: ls-remote against a removed remote is a BLIND finding, never a pass.
+    $flGone = Join-Path $flSb 'gone.git'
+    $null = WdFxGit $flSb @('init', '-q', '--bare', '-b', 'main', 'gone.git')
+    $null = WdFxGit $flUp @('push', '-q', $flGone, 'main')
+    $null = WdFxGit $flSb @('clone', '-q', 'gone.git', 'bot2')
+    Remove-Item -LiteralPath $flGone -Recurse -Force -ErrorAction Stop
+    $co5 = Get-CheckoutFloor -Repo (Join-Path $flSb 'bot2') -Now (WdFxAt ($T1 + 93601))
+    $co5Blind = @($co5.findings | Where-Object { ([string]$_) -match '^CHECKOUT: BLIND - ls-remote exited ([1-9]\d*|-\d+)' })
+    if ($co5Blind.Count -eq 1 -and $co5.findings.Count -eq 1 -and $co5.marker -match 'remote=blind blind=1') { Write-Output 'PASS  MUST FIRE ls-remote against a removed remote prints CHECKOUT: BLIND with its exit code and counts as a finding' }
+    else { Write-Output ('FAIL  MUST FIRE removed remote: findings=' + ($co5.findings -join ' | ') + ' marker=' + $co5.marker); $fail++ }
+
+    # CHECK 8. A frozen day: 2026-09-23. The fixture's .git\info\exclude ignores its grocery/out/ignored-* files. The
+    # pattern is concatenated so ops\audit-write-only-reports.ps1 does not read this temp write as a report family.
+    $flOut = Join-Path $flBot 'grocery\out'
+    New-Item -ItemType Directory -Path (Join-Path $flOut 'regular') -Force -ErrorAction Stop | Out-Null
+    New-Item -ItemType Directory -Path (Join-Path $flCd 'info') -Force -ErrorAction Stop | Out-Null
+    $flExcl = 'grocery/out/ignored-*' + '.json'
+    [IO.File]::WriteAllText((Join-Path $flCd 'info\exclude'), ($flExcl + "`n"), $flUtf8)
+    $null = WdFxCommit $flBot 'grocery/out/tracked-2026-09-22.json' "{}`n" ($T1 + 200)
+    [IO.File]::WriteAllText((Join-Path $flOut 'regular\x-2026-09-23.json'), "{}`n", $flUtf8)
+    [IO.File]::WriteAllText((Join-Path $flOut 'ignored-2026-09-22.json'), "{}`n", $flUtf8)
+    $flDay = [datetime]'2026-09-23'
+    # MUST NOT FIRE: an untracked file dated today, an ignored file dated yesterday and a tracked one dated yesterday.
+    $bl1 = Get-CaptureBacklog -Repo $flBot -TodayS '2026-09-23' -Now $flDay.AddHours(10.5)
+    if ($bl1.due -and $bl1.findings.Count -eq 0 -and $bl1.examined -eq 1 -and @($bl1.ok | Where-Object { ([string]$_).StartsWith('capture backlog: 0 untracked file(s) under grocery/out dated before 2026-09-23 (1 untracked') }).Count -eq 1) { Write-Output 'PASS  MUST NOT FIRE an untracked file dated today, an ignored one dated yesterday and a tracked one dated yesterday are no backlog' }
+    else { Write-Output ('FAIL  MUST NOT FIRE today/ignored/tracked: findings=' + ($bl1.findings -join ' | ') + ' examined=' + $bl1.examined); $fail++ }
+    # One untracked capture dated yesterday, exactly 1 MiB.
+    [IO.File]::WriteAllBytes((Join-Path $flOut 'regular\x-2026-09-22.json'), (New-Object byte[] 1048576))
+    # MUST NOT FIRE one second before the 10:00 bar: not graded, and the ok line says NOT CHECKED rather than clean.
+    $bl2 = Get-CaptureBacklog -Repo $flBot -TodayS '2026-09-23' -Now $flDay.AddHours(10).AddSeconds(-1)
+    if (-not $bl2.due -and $bl2.findings.Count -eq 0 -and @($bl2.ok | Where-Object { ([string]$_).StartsWith('capture backlog: NOT CHECKED at 09:59:59') }).Count -eq 1) { Write-Output 'PASS  MUST NOT FIRE the same file at 09:59:59, one second before the 10:00 bar, is NOT CHECKED, never clean' }
+    else { Write-Output ('FAIL  MUST NOT FIRE before the slot: due=' + $bl2.due + ' findings=' + ($bl2.findings -join ' | ')); $fail++ }
+    # MUST FIRE AT THE BAR: at exactly 10:00:00 the backlog is graded.
+    $bl3 = Get-CaptureBacklog -Repo $flBot -TodayS '2026-09-23' -Now $flDay.AddHours(10)
+    if ($bl3.due -and $bl3.findings.Count -eq 1 -and $bl3.files -eq 1) { Write-Output 'PASS  MUST FIRE AT THE BAR at exactly 10:00:00 the untracked file dated yesterday is graded and raised' }
+    else { Write-Output ('FAIL  MUST FIRE at 10:00:00: due=' + $bl3.due + ' findings=' + ($bl3.findings -join ' | ')); $fail++ }
+    # MUST FIRE after the slot: one untracked grocery/out/regular/x-<yesterday>.json, with its count, size and date.
+    $bl4 = Get-CaptureBacklog -Repo $flBot -TodayS '2026-09-23' -Now $flDay.AddHours(10.5)
+    if ($bl4.findings.Count -eq 1 -and ([string]$bl4.findings[0]).StartsWith('CAPTURE BACKLOG: 1 file(s), 1.0 MiB, oldest dated 2026-09-22 - by date: 2026-09-22 1 file(s) 1.0 MiB.')) { Write-Output 'PASS  MUST FIRE one untracked grocery/out/regular/x-2026-09-22.json after the slot is CAPTURE BACKLOG: 1 file(s), 1.0 MiB, oldest dated 2026-09-22' }
+    else { Write-Output ('FAIL  MUST FIRE one file after the slot: ' + ($bl4.findings -join ' | ')); $fail++ }
+    # CLEAN TWIN: a second day, a path with a space (split on NUL, never C-quoted), grouped by date, oldest first.
+    [IO.File]::WriteAllBytes((Join-Path $flOut 'y two-2026-09-21.json'), (New-Object byte[] 524288))
+    $bl5 = Get-CaptureBacklog -Repo $flBot -TodayS '2026-09-23' -Now $flDay.AddHours(10.5)
+    if ($bl5.findings.Count -eq 1 -and ([string]$bl5.findings[0]).StartsWith('CAPTURE BACKLOG: 2 file(s), 1.5 MiB, oldest dated 2026-09-21 - by date: 2026-09-21 1 file(s) 0.5 MiB; 2026-09-22 1 file(s) 1.0 MiB.')) { Write-Output 'PASS  CLEAN TWIN two days group by date, oldest first, and a path with a space arrives whole: 2 file(s), 1.5 MiB, oldest 2026-09-21' }
+    else { Write-Output ('FAIL  CLEAN TWIN grouping: ' + ($bl5.findings -join ' | ')); $fail++ }
+    # CLEAN TWIN: the path-date rule, pinned so a drift from W2.1's Get-CaptureDateOf is a red.
+    $dq = @((Get-WdCaptureDateOf 'grocery/out/regular/x-2026-09-22.json'), (Get-WdCaptureDateOf 'grocery/out/2026-09-01/b-2026-09-02.json'), (Get-WdCaptureDateOf 'grocery/out/captures/walmart-20260921-081500.csv'), (Get-WdCaptureDateOf 'grocery/out/match-worklist.json'), (Get-WdCaptureDateOf 'grocery/out/x-12026-09-22.json'))
+    if (($dq -join ',') -eq '2026-09-22,2026-09-02,2026-09-21,,') { Write-Output 'PASS  CLEAN TWIN the path date is the LAST yyyy-MM-dd, else yyyyMMdd before -HHmmss, else none (5 of 5 answers)' }
+    else { Write-Output ('FAIL  CLEAN TWIN path dates: ' + ($dq -join ',')); $fail++ }
+
+    # CHECK 9. MUST NOT FIRE: no kill-switch file.
+    $ks1 = Get-SyncKillSwitch -Repo $flBot
+    if ($ks1.findings.Count -eq 0 -and -not $ks1.on -and @($ks1.ok | Where-Object { ([string]$_).StartsWith('checkout sync kill switch: off') }).Count -eq 1) { Write-Output 'PASS  MUST NOT FIRE no tc-checkout-sync.disabled in the git common dir: the kill switch is off' }
+    else { Write-Output ('FAIL  MUST NOT FIRE kill switch absent: ' + ($ks1.findings -join ' | ')); $fail++ }
+    # MUST FIRE: the file present.
+    [IO.File]::WriteAllText((Join-Path $flCd 'tc-checkout-sync.disabled'), "fixture`n", $flUtf8)
+    $ks2 = Get-SyncKillSwitch -Repo $flBot
+    if ($ks2.on -and $ks2.findings.Count -eq 1 -and ([string]$ks2.findings[0]).StartsWith('BOT CHECKOUT SYNC DISABLED since ')) { Write-Output 'PASS  MUST FIRE tc-checkout-sync.disabled present in the git common dir raises BOT CHECKOUT SYNC DISABLED since <mtime>' }
+    else { Write-Output ('FAIL  MUST FIRE kill switch present: ' + ($ks2.findings -join ' | ')); $fail++ }
+  } catch {
+    Write-Output ('FAIL  the bot checkout floor fixtures threw: ' + $_.Exception.Message); $fail++
+  } finally {
+    $env:GIT_COMMITTER_DATE = $flPrevCd; $env:GIT_AUTHOR_DATE = $flPrevAd
+    Remove-Item -LiteralPath $flSb -Recurse -Force -ErrorAction SilentlyContinue
+  }
+  }
+  $wdStOut = @($wdStOut)
+  foreach ($wdL in $wdStOut) { Write-Output $wdL }
+  $wdCaseN = @($wdStOut | Where-Object { ([string]$_) -match '^(ok|PASS|FAIL) ' }).Count
+  if ($wdCaseN -eq $WD_SELFTEST_CASES) { Write-Output ("CASES ok: exactly $WD_SELFTEST_CASES case lines ran, the literal count of this suite") }
+  else { Write-Output ("FAIL  the suite ran $wdCaseN case line(s) against its literal $WD_SELFTEST_CASES - a case was lost or added without the count"); $fail++ }
   Write-Output ("SELFTEST " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
   exit $(if ($fail) { 1 } else { 0 })
 }
@@ -1270,6 +1676,31 @@ if ($bcNotYet.Count) {
   [void]$ok.Add(("browser capture NOT YET: " + ($bcNotYet -join ', ') + " - nothing dated $todayS yet, and the producer's $bcSlotTxt is still open (grocery-browser-stores-refresh). Not missing and not ok: graded after the slot, at tomorrow's run if not before."))
 }
 
+# ---- 7, 8, 9 (header). THE BOT CHECKOUT FLOORS: a stale checkout, a capture backlog, the sync kill switch (W1.1) -----
+# Get-CheckoutFloor, Get-CaptureBacklog and Get-SyncKillSwitch above hold the rules. Each reads git and the filesystem
+# of THIS checkout (the watchdog's own repo root: the main checkout when the 10:30 task runs), writes nothing, and still
+# fires when capture-run has stopped. A check that throws is a BLIND finding, never a silent pass. CHECKOUT reads the
+# real clock, since git's state is live; BACKLOG takes the same 10:30 pin as check 6a when -Today is given.
+$flRepo = Split-Path $root -Parent
+$flNow = if ($Today) { $bcDay.AddHours(10.5) } else { Get-Date }
+$flMarker = ('CHECKOUT-FLOOR behind=-1 oldest_age_s=-1 bar_s={0} stale=0 remote=unread blind=1' -f $script:CheckoutStaleBarSec)
+try {
+  $coF = Get-CheckoutFloor -Repo $flRepo -Now (Get-Date)
+  foreach ($x in $coF.findings) { [void]$findings.Add($x) }
+  foreach ($x in $coF.ok) { [void]$ok.Add($x) }
+  $flMarker = $coF.marker
+} catch { [void]$findings.Add('CHECKOUT: BLIND - the check threw (' + $_.Exception.Message + '), so whether the bot checkout is behind origin is unknown this run.') }
+try {
+  $blF = Get-CaptureBacklog -Repo $flRepo -TodayS $todayS -Now $flNow
+  foreach ($x in $blF.findings) { [void]$findings.Add($x) }
+  foreach ($x in $blF.ok) { [void]$ok.Add($x) }
+} catch { [void]$findings.Add('CAPTURE BACKLOG: BLIND - the check threw (' + $_.Exception.Message + '), so whether captures from before today are uncommitted is unknown this run.') }
+try {
+  $ksF = Get-SyncKillSwitch -Repo $flRepo
+  foreach ($x in $ksF.findings) { [void]$findings.Add($x) }
+  foreach ($x in $ksF.ok) { [void]$ok.Add($x) }
+} catch { [void]$findings.Add('KILL SWITCH: BLIND - the check threw (' + $_.Exception.Message + '), so whether the checkout sync is disabled is unknown this run.') }
+
 
 # ---- 6b. IS ANYTHING STILL HOLDING THE RUN LOG MUTE? (2026-08-25) ------------------------------------
 # check-ad-cycles.ps1 already survives a locked ad-cycle-log.txt: it diverts the run's trail to a dated
@@ -1616,6 +2047,8 @@ foreach ($o in $ok) { Write-Output "  ok    $o" }
 foreach ($f in $findings) { Write-Output "  FIND  $f" }
 if ($rrFoldLine) { Write-Output ("  FOLD  " + $rrFoldLine) }
 foreach ($s in $heldSub) { Write-Output "          - $s" }
+# Check 7's own numbers, one machine-readable line per run, for grocery\report-checkout-sync.ps1's bar B9.
+Write-Output ('  ' + $flMarker)
 
 if ($findings.Count -and $Alert) {
   # healthy checks are the transcript's, never the alert's (2026-09-21): the body names what is wrong and points here
