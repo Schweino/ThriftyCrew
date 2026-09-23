@@ -2,6 +2,8 @@
 description: Rules for anything that scores, compares two versions, or reports a rate - denominators, acceptance bars, per-case evidence.
 ---
 
+**First, the analysis preflight:** [experiment-craft/analysis-preflight.md](C:/Users/Owner/.claude/skills/experiment-craft/analysis-preflight.md), the ten checks to run before any analysis verdict, each naming where its depth lives.
+
 > **Resolving the `[[citations]]` below.** Each is a filename without its extension, under
 > `~/.claude/projects/C--Codex-ThriftyCrew/memory/`. So `[[propagate-has-no-slugs]]` is
 > `~/.claude/projects/C--Codex-ThriftyCrew/memory/propagate-has-no-slugs.md`. The line here is a
