@@ -72,6 +72,29 @@ if ($SelfTest) {
     if ($st.status -eq 'BLOCKED' -and -not $st.ship_ok) { Write-Output '  PASS  MUST FIRE: an unknown guards rc (5) is BLOCKED, never read as a pass' }
     else { Write-Output ('  FAIL  an unknown guards rc read ' + $st.status); $fail++ }
 
+    # ---- MUST FIRE: guards PASSED but export-feed REFUSED (2026-09-23). check-ad-cycles ran export-feed with | Out-Null,
+    # so a refusal (exit 3, nothing written) left yesterday's smp-feed.json served while the log said "smp-feed exported"
+    # and the board shipped beside it. The verdict now records the refusal and the board does not ship; guards_blocked
+    # stays false because guards did pass, and the reason travels to whoever reads the status.
+    $fxWhy = 'export-feed: REFUSED - 1 input file(s) missing, so the feed would carry an emptied section: grocery\out\recipe-costs.json'
+    [void](Write-ChainVerdict -Repo $tmp -OutDir $fxOut -Date $today -GuardsRc 0 -WrittenBy 'selftest' -FeedRefused $fxWhy)
+    $st = Read-ChainVerdictStatus -Repo $tmp -OutDir $fxOut -Today $today
+    $rec = Read-ChainVerdictRecord -Repo $tmp -OutDir $fxOut
+    if ($st.status -eq 'FEED-REFUSED' -and -not $st.ship_ok -and -not $st.guards_blocked -and $st.why -match 'recipe-costs\.json' -and -not [bool]$rec.feed_refreshed) { Write-Output '  PASS  MUST FIRE: a passing guards verdict whose feed export was REFUSED reads FEED-REFUSED, does not ship, and names the reason' }
+    else { Write-Output ('  FAIL  a refused feed export read ' + $st.status + ' ship_ok=' + $st.ship_ok + ' (' + $st.why + ')'); $fail++ }
+    # ---- MUST FIRE: a guards-only re-measure (refresh-chain-verdict's live path passes no -FeedRefused) CARRIES today's
+    # refusal forward rather than laundering it into a PASS: re-running guards says nothing about the feed.
+    [void](Write-ChainVerdict -Repo $tmp -OutDir $fxOut -Date $today -GuardsRc 0 -WrittenBy 'selftest')
+    $st = Read-ChainVerdictStatus -Repo $tmp -OutDir $fxOut -Today $today
+    if ($st.status -eq 'FEED-REFUSED' -and -not $st.ship_ok -and $st.why -match 'recipe-costs\.json') { Write-Output '  PASS  MUST FIRE: a guards-only rewrite keeps today''s feed refusal and still does not ship' }
+    else { Write-Output ('  FAIL  a guards-only rewrite dropped the feed refusal and read ' + $st.status); $fail++ }
+    # ---- CLEAN TWIN: the chain's next run exports the feed (-FeedRefused '') and the board ships again as a PASS
+    [void](Write-ChainVerdict -Repo $tmp -OutDir $fxOut -Date $today -GuardsRc 0 -WrittenBy 'selftest' -FeedRefused '')
+    $st = Read-ChainVerdictStatus -Repo $tmp -OutDir $fxOut -Today $today
+    $rec = Read-ChainVerdictRecord -Repo $tmp -OutDir $fxOut
+    if ($st.status -eq 'PASS' -and $st.ship_ok -and [bool]$rec.feed_refreshed -and [string]$rec.feed_refused -eq '') { Write-Output '  PASS  CLEAN TWIN: a refreshed feed (-FeedRefused empty) records feed_refreshed=true and ships as PASS' }
+    else { Write-Output ('  FAIL  a refreshed feed read ' + $st.status + ' feed_refreshed=' + [string]$rec.feed_refreshed); $fail++ }
+
     # ---- MUST FIRE: yesterday's verdict is not today's ----------------------------------------------
     [void](Write-ChainVerdict -Repo $tmp -OutDir $fxOut -Date '2026-09-06' -GuardsRc 0 -WrittenBy 'selftest')
     $st = Read-ChainVerdictStatus -Repo $tmp -OutDir $fxOut -Today $today
@@ -103,7 +126,7 @@ if ($SelfTest) {
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }
   if ($fail) { Write-Output "SELF-TEST FAILED ($fail)"; exit 2 }
-  Write-Output 'SELF-TEST PASS - 7 must-fire (stale PASS after an input moved, a blocking verdict, a quarantined verdict that ships as QUARANTINE, an unknown rc held, another day, a fingerprint-less verdict, a missing file) and 3 clean twins'
+  Write-Output 'SELF-TEST PASS - 9 must-fire (stale PASS after an input moved, a blocking verdict, a quarantined verdict that ships as QUARANTINE, an unknown rc held, a refused feed export held, that refusal carried through a guards-only rewrite, another day, a fingerprint-less verdict, a missing file) and 4 clean twins'
   exit 0
 }
 

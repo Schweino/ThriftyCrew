@@ -86,8 +86,27 @@ function Write-ChainVerdict {
     [Parameter(Mandatory = $true)][string]$Date,
     [Parameter(Mandatory = $true)][int]$GuardsRc,
     [string]$WrittenBy = 'check-ad-cycles',
-    [int]$Quarantined = 0
+    [int]$Quarantined = 0,
+    # THE FEED HALF (2026-09-23). grocery\export-feed.ps1 refuses (exit 3, nothing written) on a missing input or a
+    # section that fell more than 10%, and the served smp-feed.json then stays yesterday's. A board shipped beside a
+    # refused feed is the 2026-09-06 divergence (board and feed on different weeks) made on purpose, so the chain
+    # records the refusal HERE, where every shipping reader already looks: '' = the feed was refreshed this run, any
+    # other text = refused, and that text is the reason. check-ad-cycles always passes it. A caller that does not
+    # (refresh-chain-verdict re-runs guards only, and never re-exports the feed) CARRIES FORWARD today's recorded
+    # refusal, because re-measuring guards says nothing about the feed and must not launder a refusal into a pass.
+    [AllowNull()][string]$FeedRefused = $null
   )
+  if (-not $PSBoundParameters.ContainsKey('FeedRefused')) {
+    $FeedRefused = ''
+    try {
+      $prevF = Join-Path $OutDir 'chain-verdict.json'
+      if (Test-Path -LiteralPath $prevF) {
+        $prev = Get-Content -LiteralPath $prevF -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ([string]$prev.date -eq $Date -and $prev.PSObject.Properties['feed_refused'] -and [string]$prev.feed_refused) { $FeedRefused = [string]$prev.feed_refused }
+      }
+    } catch { $FeedRefused = 'the previous chain verdict could not be read to carry its feed state forward: ' + $_.Exception.Message }
+  }
+  if ($null -eq $FeedRefused) { $FeedRefused = '' }
   $hashes = Get-ChainVerdictInputHashes -Repo $Repo
   # THREE TIERS SINCE 2026-09-21 (grocery\cell-quarantine-lib.ps1): guards exits 0 (clean), 4 (QUARANTINED: some cells
   # held at their last verified price, verified on this board, publishable) or anything else (not publishable as it
@@ -103,6 +122,8 @@ function Write-ChainVerdict {
     guards_blocked  = [bool]($GuardsRc -ne 0 -and $GuardsRc -ne 4)
     verdict         = $verdictWord
     quarantined     = $Quarantined
+    feed_refreshed  = [bool](-not $FeedRefused)
+    feed_refused    = $FeedRefused
     inputs_fingerprint = (Get-ChainVerdictFingerprint -Repo $Repo -Hashes $hashes)
     inputs          = $hashes
     note            = 'Written after guards ran. Readers must go through lib\chain-verdict-lib.ps1: a verdict for another day, or one whose inputs_fingerprint no longer matches the tree, is treated as ABSENT and never ships public\** or meal-prep\**.'
@@ -118,6 +139,7 @@ function Read-ChainVerdictStatus {
   # The ONLY reader. Returns a status a publisher can act on without re-deriving the rules:
   #   PASS         guards passed, today, over the tree as it stands now  -> the only status that ships
   #   BLOCKED      guards failed, today, over the tree as it stands now
+  #   FEED-REFUSED guards did not block, but export-feed refused today's feed (2026-09-23), so the board holds too
   #   STALE-INPUTS today's verdict, but the artifacts it scored have changed since
   #   OTHER-DAY    the newest verdict is for a different day
   #   ABSENT       no verdict file, or it could not be read
@@ -164,6 +186,17 @@ function Read-ChainVerdictStatus {
   }
   if ([bool]$v.guards_blocked) {
     $res.status = 'BLOCKED'; $res.why = "guards BLOCKED today's board"; $res.guards_blocked = $true
+    return $res
+  }
+  # FEED-REFUSED does not ship (2026-09-23). Guards may have passed, so guards_blocked stays false (it answers the
+  # guards question, and capture-watchdog / health-heartbeat read it as that), but export-feed refused today's feed
+  # and the served smp-feed.json is yesterday's: shipping public\board.json beside it would put the board and the
+  # 583 recipe pages on different weeks. A verdict written before this field existed has no feed_refreshed and reads
+  # exactly as before.
+  if ($v.PSObject.Properties['feed_refreshed'] -and -not [bool]$v.feed_refreshed) {
+    $fr = ''; if ($v.PSObject.Properties['feed_refused']) { $fr = [string]$v.feed_refused }
+    $res.status = 'FEED-REFUSED'; $res.guards_blocked = $false; $res.ship_ok = $false
+    $res.why = ('export-feed refused today''s feed, so the served smp-feed.json is NOT current and the board does not ship beside it: ' + $fr)
     return $res
   }
   # QUARANTINE ships, under its own name (2026-09-21). guards_rc 4 is a board whose bad cells are held at their last

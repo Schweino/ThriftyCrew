@@ -244,6 +244,68 @@ if ($SelfTest) {
     ($st.body -match 'DROP off it') -and ($st.body -match '146 sale row') -and ($st.body -match 'advanced on 2026-08-03') -and ($st.body -notmatch 'keeps pricing cells from the PREVIOUS ad') -and ($st.body -notmatch 'run the browser agent')
   }
 
+  # ---- THE FEED EXPORT'S EXIT CODE IS READ (2026-09-23) ------------------------------------------------------------------
+  # Founding bug: export-feed ran with | Out-Null, so its exit-3 refusal (a1493be0d) left yesterday's feed served while the
+  # log said "smp-feed exported" and the board shipped beside it. A stub export-feed stands in for the real one, so no
+  # live file is read or written; Log and Send-Alert are stubs that record what the chain would have logged and paged.
+  . (Join-Path $PSScriptRoot 'native-lib.ps1')
+  . (Join-Path $PSScriptRoot 'feed-export-lib.ps1')
+  . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\chain-verdict-lib.ps1')
+  $script:cacFxLog = New-Object System.Collections.ArrayList
+  $script:cacFxPages = New-Object System.Collections.ArrayList
+  function Log([string]$m) { [void]$script:cacFxLog.Add($m) }
+  function Send-Alert { param([string]$Subject, [string]$Body) [void]$script:cacFxPages.Add([pscustomobject]@{ subject = $Subject; body = $Body }) }
+  $cacFxRoot = Join-Path $env:TEMP ('cacfx-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    [void](New-Item -ItemType Directory -Path (Join-Path $cacFxRoot 'grocery\out') -Force -ErrorAction Stop)
+    $cacRefuse = Join-Path $cacFxRoot 'export-refuses.ps1'
+    $cacOk = Join-Path $cacFxRoot 'export-ok.ps1'
+    [IO.File]::WriteAllText($cacRefuse, "Write-Output 'export-feed: REFUSED - 1 input file(s) missing, so the feed would carry an emptied section: grocery\out\recipe-costs.json. Nothing was written; the served feed stands.'`r`nexit 3`r`n")
+    [IO.File]::WriteAllText($cacOk, "Write-Output 'export-feed: wrote smp-feed.json'`r`nexit 0`r`n")
+    [IO.File]::WriteAllText((Join-Path $cacFxRoot 'grocery\out\comparison-2026-09-23.json'), '{"rows":[]}')
+    $cacFxOut = Join-Path $cacFxRoot 'grocery\out'
+
+    $cacR = Invoke-ChainFeedExport -ScriptPath $cacRefuse -Stage 'daily' -AsOf '2026-09-23'
+    Test-CacCase 'MUST FIRE  a stubbed export-feed exit 3 is read as NOT refreshed, with export-feed''s own reason' { ($cacR.rc -eq 3) -and (-not $cacR.refreshed) -and ($cacR.why -match '^export-feed: REFUSED - .*recipe-costs\.json') }
+    Test-CacCase 'MUST FIRE  ...is LOGGED with its reason, and never as "smp-feed exported"' { (@($script:cacFxLog | Where-Object { $_ -match 'smp-feed NOT exported \(daily\): export-feed exited 3 - export-feed: REFUSED' }).Count -eq 1) -and (@($script:cacFxLog | Where-Object { $_ -match '^smp-feed exported' }).Count -eq 0) }
+    Test-CacCase 'MUST FIRE  ...PAGES once, under the registered type grocery smp feed export refused' { ($script:cacFxPages.Count -eq 1) -and ([string]$script:cacFxPages[0].subject -eq 'Grocery: smp feed export refused - 2026-09-23') -and ([string]$script:cacFxPages[0].body -match 'recipe-costs\.json') }
+    [void](Write-ChainVerdict -Repo $cacFxRoot -OutDir $cacFxOut -Date '2026-09-23' -GuardsRc 0 -WrittenBy 'selftest' -FeedRefused $cacR.why)
+    $cacSt = Read-ChainVerdictStatus -Repo $cacFxRoot -OutDir $cacFxOut -Today '2026-09-23'
+    Test-CacCase 'MUST FIRE  ...and is RECORDED: over a guards PASS the chain verdict reads FEED-REFUSED and does not ship public\board.json' { ($cacSt.status -eq 'FEED-REFUSED') -and (-not $cacSt.ship_ok) -and ($cacSt.why -match 'recipe-costs\.json') }
+
+    $script:cacFxLog.Clear(); $script:cacFxPages.Clear()
+    $cacK = Invoke-ChainFeedExport -ScriptPath $cacOk -Stage 'daily' -AsOf '2026-09-23'
+    [void](Write-ChainVerdict -Repo $cacFxRoot -OutDir $cacFxOut -Date '2026-09-23' -GuardsRc 0 -WrittenBy 'selftest' -FeedRefused $cacK.why)
+    $cacSt = Read-ChainVerdictStatus -Repo $cacFxRoot -OutDir $cacFxOut -Today '2026-09-23'
+    Test-CacCase 'CLEAN TWIN  export-feed exit 0 proceeds unchanged: refreshed, logged as exported, no page, and the verdict ships as PASS' { ($cacK.rc -eq 0) -and $cacK.refreshed -and ($cacK.why -eq '') -and (@($script:cacFxLog | Where-Object { $_ -match '^smp-feed exported \(daily' }).Count -eq 1) -and ($script:cacFxPages.Count -eq 0) -and ($cacSt.status -eq 'PASS') -and $cacSt.ship_ok }
+
+    # The four reader-facing steps swept with it (build-sale-windows, recipe-overlay, publish-deals-page, top5-weekly).
+    $cacStepBad = Join-Path $cacFxRoot 'step-fails.ps1'
+    [IO.File]::WriteAllText($cacStepBad, "Write-Output 'recipe-overlay: could not read the rule set'`r`nexit 1`r`n")
+    $script:cacFxLog.Clear(); $script:cacFxPages.Clear()
+    $cacS = Invoke-ChainReaderStep -ScriptPath $cacStepBad -Stale 'the recipe board sale overlay' -OkLog 'recipe-overlay applied' -AsOf '2026-09-23'
+    Test-CacCase 'MUST FIRE  a reader-facing step that exits 1 is logged as FAILED with its last line, never with its success line, and pages under grocery chain step failed' {
+      (-not $cacS.ok) -and ($cacS.rc -eq 1) -and (@($script:cacFxLog | Where-Object { $_ -match 'step-fails\.ps1 FAILED \(exit 1\).*could not read the rule set' }).Count -eq 1) -and
+        (@($script:cacFxLog | Where-Object { $_ -eq 'recipe-overlay applied' }).Count -eq 0) -and ($script:cacFxPages.Count -eq 1) -and ([string]$script:cacFxPages[0].subject -eq 'Grocery: chain step failed - step-fails.ps1 - 2026-09-23')
+    }
+    $script:cacFxLog.Clear(); $script:cacFxPages.Clear()
+    $cacS = Invoke-ChainReaderStep -ScriptPath $cacOk -Stale 'x' -OkLog 'recipe-overlay applied' -AsOf '2026-09-23'
+    Test-CacCase 'CLEAN TWIN  a reader-facing step that exits 0 logs its success line exactly as before and pages nothing' { $cacS.ok -and (@($script:cacFxLog | Where-Object { $_ -eq 'recipe-overlay applied' }).Count -eq 1) -and ($script:cacFxPages.Count -eq 0) }
+  } finally { Remove-Item -LiteralPath $cacFxRoot -Recurse -Force -ErrorAction SilentlyContinue }
+  Test-CacCase 'WIRING  the four reader-facing steps (build-sale-windows, recipe-overlay, publish-deals-page, top5-weekly) go through Invoke-ChainReaderStep' { (Get-CacCalls 'Invoke-ChainReaderStep').Count -eq 4 }
+  # WIRING, read off the parsed file: both exports go through Invoke-ChainFeedExport, no pipeline outside this block still
+  # runs export-feed into Out-Null, and the verdict writer is handed the refusal.
+  Test-CacCase 'WIRING  both export-feed runs (the daily export and the quarantine re-export) go through Invoke-ChainFeedExport' { (Get-CacCalls 'Invoke-ChainFeedExport').Count -eq 2 }
+  Test-CacCase 'WIRING  no pipeline outside the self-test runs export-feed into Out-Null' {
+    $cacNeedle = 'export-feed' + '\.ps1'
+    $pl = @($cacAst.FindAll({ param($n) $n -is [System.Management.Automation.Language.PipelineAst] }, $true) | Where-Object { (-not (Test-CacInSelfTest $_)) -and ($_.Extent.Text -match $cacNeedle) -and ($_.Extent.Text -match 'Out-Null') })
+    $pl.Count -eq 0
+  }
+  Test-CacCase 'WIRING  Write-ChainVerdict is handed -FeedRefused $script:ChainFeedRefused' {
+    $wc = Get-CacCalls 'Write-ChainVerdict'
+    ($wc.Count -eq 1) -and ($wc[0].Extent.Text -match ('-FeedRefused \$script:' + 'ChainFeedRefused'))
+  }
+
   if ($script:cacCases -eq 0) { Write-Output 'check-ad-cycles SELF-TEST FAILED (ran zero cases)'; exit 1 }
   if ($script:cacFail) { Write-Output ("check-ad-cycles SELF-TEST FAILED ({0} of {1} case(s))" -f $script:cacFail, $script:cacCases); exit 1 }
   Write-Output ("check-ad-cycles SELF-TEST PASSED ({0} of {0} case(s): the 2026-09-10 refused commit exits 1, a landed commit with a failed push exits 0, and this file's own tail wires that verdict only without -NoCommit)" -f $script:cacCases)
@@ -372,6 +434,10 @@ if (-not $NoCommit) {
 . (Join-Path $root 'alert-lib.ps1')
 . (Join-Path $root 'match-worklist-lib.ps1')   # Read-MatchWorklist / Get-MatchPageRows: the matching lane's worklist (plan-2026-09-22-9 b96f21)
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native / Invoke-NativeScript: the ONLY safe redirect under EAP=Stop
+. (Join-Path $root 'feed-export-lib.ps1')   # Invoke-ChainFeedExport: export-feed's EXIT CODE is read, a refusal is logged, paged and recorded (2026-09-23)
+# '' = every export-feed this run exited 0; otherwise the reason the LAST refusal gave. Write-ChainVerdict records it as
+# feed_refreshed=false and the shipping readers (capture-run, push-data) then hold public\board.json.
+$script:ChainFeedRefused = ''
 . (Join-Path $root 'capture-policy-lib.ps1')   # Test-BrowserCaptureOwned: a store deferred to a browser owner under 24h ago is an OWNED gap, not an unowned one (2026-09-09-e60137). Declares no param() block, so it cannot reset this script's switches
 . (Join-Path $root 'fanout-lib.ps1')   # Invoke-Fanout / Get-FanoutRecord / Test-FanoutComplete: the inspect fan-out
 . (Join-Path (Split-Path $root -Parent) 'meal-prep\lib\gated-republish-lib.ps1')   # Invoke-TcGatedRepublish: the close-the-loop republish, per slug (I234). No param() block, so it cannot reset this script's switches
@@ -599,7 +665,13 @@ function Invoke-GuardsGate([switch]$Silent) {
       $qd = Read-JsonFile $qb.FullName
       if ($qd.PSObject.Properties['quarantine'] -and $qd.quarantine) { $res.quarantined = @(@($qd.quarantine.cells) | Where-Object { $_ }).Count }
     } catch { Log ('could not count the quarantined cells: ' + $_.Exception.Message) }
-    try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'export-feed.ps1') | Out-Null; Log 'smp-feed re-exported over the quarantined board, so the feed carries the same held values the board does' } catch { Log ('export-feed threw after the quarantine: ' + $_.Exception.Message) }
+    # EXIT CODE READ (2026-09-23): this was `| Out-Null` and logged success whatever export-feed returned.
+    try {
+      $qFx = Invoke-ChainFeedExport -ScriptPath (Join-Path $root 'export-feed.ps1') -Stage 'quarantine' -AsOf $asofS -NoAlert:$NoAlert
+      # A re-export that lands supersedes an earlier refusal this run: the served feed is now the current one.
+      if ($qFx.refreshed) { $script:ChainFeedRefused = ''; Log 'smp-feed re-exported over the quarantined board, so the feed carries the same held values the board does' }
+      else { $script:ChainFeedRefused = $qFx.why }
+    } catch { $script:ChainFeedRefused = ('export-feed threw after the quarantine: ' + $_.Exception.Message); Log $script:ChainFeedRefused }
   } else { $res.why = ('guards exited ' + $res.rc + ' over the quarantined board') }
   return $res
 }
@@ -1070,7 +1142,8 @@ price-history.json is a reconciled copy of the comparison boards on disk. A boar
       # lanes that know their own outcome (Family Fare, Hy-Vee, the four walled builders via
       # commit-capture-cursor) have already written theirs; this catches the rest.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'capture-policy.ps1') -Reconcile | Out-Null; Log 'sale-expiry re-prices reconciled' } catch { Log ('capture-policy -Reconcile threw: ' + $_.Exception.Message) }
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-sale-windows.ps1') | Out-Null; Log 'sale-windows refreshed' } catch { Log ('build-sale-windows threw: ' + $_.Exception.Message) }
+      # Exit code read since 2026-09-23 (Invoke-ChainReaderStep): this was `| Out-Null; Log 'sale-windows refreshed'`.
+      try { [void](Invoke-ChainReaderStep -ScriptPath (Join-Path $root 'build-sale-windows.ps1') -Stale 'sale-windows.json (the sale end dates the feed serves)' -OkLog 'sale-windows refreshed' -AsOf $asofS -NoAlert:$NoAlert) } catch { Log ('build-sale-windows threw: ' + $_.Exception.Message) }
       # Re-apply the weekly semantic verdicts (wrong-product drops / de-crowns) to TODAY's fresh board so
       # build/publish's verified-<week> board reflects both the fresh prices AND the wrong-product removals.
       # Deterministic PS (no LLM); only runs when this week's verdicts exist. Non-fatal.
@@ -1079,7 +1152,8 @@ price-history.json is a reconciled copy of the comparison boards on disk. A boar
       # overlay this week's ad-sales onto the everyday recipe-ingredient board (catches recipe items on sale;
       # reverts automatically when a sale ends). MUST run BEFORE resolve-worklist so the link worklist reflects
       # TODAY's recipe board, not yesterday's. Non-fatal - only runs once the recipe rule-set exists.
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'recipe-overlay.ps1') | Out-Null; Log 'recipe-overlay applied' } catch { Log ('recipe-overlay threw: ' + $_.Exception.Message) }
+      # Exit code read since 2026-09-23 (Invoke-ChainReaderStep): this was `| Out-Null; Log 'recipe-overlay applied'`.
+      try { [void](Invoke-ChainReaderStep -ScriptPath (Join-Path $root 'recipe-overlay.ps1') -Stale 'the recipe board sale overlay (the recipe prices the feed serves)' -OkLog 'recipe-overlay applied' -AsOf $asofS -NoAlert:$NoAlert) } catch { Log ('recipe-overlay threw: ' + $_.Exception.Message) }
       # RECIPE PRICES COME FROM THE PRICING DATABASE (Brad, 2026-09-19). recipe-overlay records, per ingredient, whether
       # its price came from today's gated recipe build or still from the undated July snapshot. Any snapshot price on a
       # live recipe is a number nobody re-read, so it pages until every recipe ingredient has a rule of its own.
@@ -1233,7 +1307,18 @@ price-history.json is a reconciled copy of the comparison boards on disk. A boar
       # "compute-v2 REFUSED to recompute the manifest - stale price feed: ... freshness: STALE_VS_CLOCK".
       # export-feed reads the comparison, the recipe board, sale-windows, product-urls and recipe-costs -
       # all final by this point - and reads NOTHING compute-v2 writes, so there is no cycle to create.
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'export-feed.ps1') | Out-Null; Log 'smp-feed exported' } catch { Log ('export-feed threw: ' + $_.Exception.Message) }
+      # AND READ ITS EXIT CODE (2026-09-23). This line was `| Out-Null; Log 'smp-feed exported'`, so from a1493be0d, when
+      # export-feed began REFUSING (exit 3, nothing written) on a missing input or a section fall over 10%, a refusal
+      # left yesterday's feed served under a log line saying it was exported. Invoke-ChainFeedExport logs the refusal
+      # with its reason and pages once; the reason is carried to Write-ChainVerdict below, whose FEED-REFUSED status
+      # holds public\board.json in capture-run and push-data, and the post is held further down.
+      try {
+        $dFx = Invoke-ChainFeedExport -ScriptPath (Join-Path $root 'export-feed.ps1') -Stage 'daily' -AsOf $asofS -NoAlert:$NoAlert
+        if (-not $dFx.refreshed) { $script:ChainFeedRefused = $dFx.why; $summary += ('ERROR     smp-feed export REFUSED - feed NOT refreshed, board held from shipping: ' + $dFx.why) }
+      } catch {
+        $script:ChainFeedRefused = ('export-feed could not be run: ' + $_.Exception.Message); Log $script:ChainFeedRefused
+        $summary += ('ERROR     smp-feed export did not run - feed NOT refreshed, board held from shipping')
+      }
       # WEEK PARITY, CHECKED RIGHT HERE because this is the line whose ABSENCE caused the incident
       # (2026-09-06, backlog E1). On 2026-09-06 guards hard-failed at 08:15, the publish stage shipped
       # inputs only, triage unblocked the guard and republished the BOARD twice - and never re-ran the
@@ -1565,7 +1650,7 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       # which a same-day verdict says nothing about whether guards ever saw THIS board. $guardsRc is the
       # exit code observed four lines above; nothing here can name a verdict it did not measure.
       try {
-        [void](Write-ChainVerdict -Repo (Split-Path $root -Parent) -OutDir $OutDir -Date $asofS -GuardsRc $guardsRc -WrittenBy 'check-ad-cycles' -Quarantined $gGate.quarantined)
+        [void](Write-ChainVerdict -Repo (Split-Path $root -Parent) -OutDir $OutDir -Date $asofS -GuardsRc $guardsRc -WrittenBy 'check-ad-cycles' -Quarantined $gGate.quarantined -FeedRefused $script:ChainFeedRefused)
       } catch { Log ('chain-verdict write threw: ' + $_.Exception.Message) }
       if ($guardsRc -eq 4) {
         # A PUBLISHED BOARD WITH QUARANTINED CELLS PAGES ONCE, naming every cell and why (its own registered type in
@@ -1611,6 +1696,12 @@ The chain re-derives every store''s link prices from the rows the board priced, 
 
       if ($guardsBlocked) {
         # already logged + alerted above; fall through without publishing
+      } elseif ($script:ChainFeedRefused) {
+        # THE FEED WAS REFUSED, SO THE POST WAITS (2026-09-23). The post names board.json?v=<this board>, and the chain
+        # verdict's FEED-REFUSED keeps that board.json from shipping, so publishing (or deferring) the post here would
+        # point readers at a board the edge never serves. Logged and paged where the export ran.
+        Log 'POST HELD - export-feed refused today''s feed, so the board and its post do not ship beside the old feed'
+        $summary += 'HELD      board post not published - the feed export was refused (see the ERROR line above)'
       } elseif (-not $boardChanged) {
         Log 'no price change today - board already current, nothing republished'
         $summary += 'CURRENT   no price change today - live page already current'
@@ -1814,7 +1905,8 @@ The chain re-derives every store''s link prices from the rows the board priced, 
               if (($gRepair.rc -eq 0 -or $gRepair.rc -eq 4) -and $DeferPost) {
                 Log 'consistency repair re-gated clean; the post stays DEFERRED to the caller (it ships the repaired board first)'
               } elseif ($gRepair.rc -eq 0 -or $gRepair.rc -eq 4) {
-                & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')   | Out-Null
+                # Exit code read since 2026-09-23: this ran into Out-Null, so a failed republish was silent.
+                try { [void](Invoke-ChainReaderStep -ScriptPath (Join-Path $root 'publish-deals-page.ps1') -Stale 'the live board page (republish after the consistency repair)' -OkLog 'board page republished after the consistency repair' -AsOf $asofS -NoAlert:$NoAlert) } catch { Log ('publish-deals-page threw: ' + $_.Exception.Message) }
               } else {
                 Log 'GUARDS FAILED after consistency auto-repair - NOT republished (left at last good)'
                 $summary += 'BLOCKED   guards failed after consistency auto-repair - live page left at last good'
@@ -1916,7 +2008,7 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       # board, while the live feed still read week_of 2026-09-06. Readers saw card prices from a board
       # they could not see. These three write to Ghost; a held board must hold them too.
       if ($guardsBlocked) { Log 'held: guards blocked - hub/rotation not republished from a refused board (top5-weekly, rotate-free-dinners, build-hub-grid -Publish all skipped)'; $summary += 'HELD      guards blocked the board, so the hub Top 5, the free rotation and the 591 recipe cards were NOT republished from it' }
-      if (-not $guardsBlocked) { if (-not $NoPublish) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') | Out-Null; Log 'top5-weekly refreshed' } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) } } }
+      if (-not $guardsBlocked) { if (-not $NoPublish) { try { [void](Invoke-ChainReaderStep -ScriptPath (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') -Stale 'the weekly cheapest-recipe rotation and recipe-costs.json' -OkLog 'top5-weekly refreshed' -AsOf $asofS -NoAlert:$NoAlert) } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) } } }
       # Free-dinner rotation (Brad, 2026-07-25): top 5 cheapest dinners per protein go FREE for the board
       # week; they revert to members-only when the week re-ranks them. Runs daily right after re-costing but
       # no-ops until the board week (or the set) changes, so flips happen on the ad flip. Non-fatal.

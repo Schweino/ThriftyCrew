@@ -80,6 +80,12 @@ grocery/out/capture-evictions-stamp.json
 # 2026-09-19: 1 of 76 worktrees under .claude\worktrees held a copy. About 800 KB. Rebuilt in place under
 # the same name by grocery\export-feed.ps1, so a re-seed REFRESHES a copy the source has rewritten since.
 grocery/out/smp-feed.json
+# AND THE TWO RECIPE INPUTS export-feed REQUIRES (2026-09-23). Since a1493be0d grocery\export-feed.ps1 refuses
+# (exit 3, nothing written) when either is missing, so a worktree without them cannot rebuild the feed and
+# rehearse-chain / check-ad-cycles read a refusal there that says nothing about the change under test. Both are
+# gitignored and rewritten in place (top5-weekly.ps1, the recipe-board build), so a re-seed refreshes them.
+grocery/out/recipe-costs.json
+grocery/out/recipe-board.json
 # AND THE PUBLISHED SET IT IS JUDGED AGAINST (2026-09-19, the same day). feed-covers-published asks whether every
 # PUBLISHED card can be priced from that feed, so a checkout holding the feed and not the published set exits 3
 # ("no published set") - and test-auditors' stripped-feed live twin, which runs whenever the feed is present, read

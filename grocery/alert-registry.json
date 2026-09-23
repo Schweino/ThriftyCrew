@@ -84,6 +84,24 @@
    "resolver": "lane:grocery/triage-due.ps1"
   },
   {
+   "id": "feed-export-refused",
+   "match": "exact",
+   "key": "grocery smp feed export refused",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/feed-export-lib.ps1",
+   "resolver": "lane:grocery/triage-due.ps1"
+  },
+  {
+   "id": "chain-step-failed",
+   "match": "prefix",
+   "key": "grocery chain step failed",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/feed-export-lib.ps1",
+   "resolver": "lane:grocery/triage-due.ps1"
+  },
+  {
    "id": "store-dropped-off-tile",
    "match": "exact",
    "key": "grocery a store dropped off a commodity tile",
