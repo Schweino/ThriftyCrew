@@ -65,6 +65,19 @@
   refused push hand the lock back. THE FIXTURE NEVER TOUCHES THE LIVE LOCK: TC_PUSH_LOCK_PREFIX redirects it onto a
   private Local\ name, which hold-push-lock honours only because it is Local\.
 
+  THE NINTH (2026-09-23, W0.2 of design\PLAN-push-derived-conflicts-2026-09-23.md): THE SUITE WRITES NO PRODUCTION
+  LEDGER ROW. The push-lock cases start the REAL ops\hold-push-lock.ps1, which appends a `hook-lock` row to the push
+  ledger (lib\push-ledger.ps1), and nothing redirected it, so every run of this suite wrote its rows into
+  %LOCALAPPDATA%\ThriftyCrew\push-ledger beside the real pushes they were meant to measure. Read at 2026-09-23 over
+  that ledger's ten daily files (2026-09-12 to 2026-09-23): 426 of its 806 hook-lock rows, from 142 distinct sandboxes,
+  named a checkout inside one of these sandboxes. TC_PUSH_LEDGER_ROOT now points the whole run at a directory inside
+  this run's sandbox, set before the first push and restored in the outer finally. The sandbox is named
+  tc-prepush-selftest-<blob8>-<pid>-<guid8>, where <blob8> is the first 8 hex of this file's own git blob, so a
+  sandbox name WITH a blob segment can only come from a suite at or after this change, and the old prefix still
+  matches every exclusion glob. A MUST FIRE reads the suite's own ledger for a row a sandbox wrote (so the redirect
+  cannot pass by nothing having been written), and a MUST NOT FIRE reads the real ledger for this run's sandbox name.
+  It compares names, never a line count: a real push may append to the real file while the suite runs.
+
   WHAT THIS DRIVES. A sandbox repository, a linked worktree, the REAL ops\hooks\pre-push, the REAL
   ops\prepush-test-auditors.ps1 with every lib\*.ps1, and stubs for the gate and for test-auditors.
   Then real `git push`es to a sandbox bare remote. No network, nothing outside the sandbox. THIS FILE
@@ -146,7 +159,41 @@ foreach ($need in @($hookSrc, $taCheckSrc, $contractSrc)) {
   }
 }
 
-$sb = Join-Path $env:TEMP ('tc-prepush-selftest-{0}-{1}' -f $PID, [guid]::NewGuid().ToString('N').Substring(0, 8))
+function Get-SuiteBlob8 {
+  <# The first 8 hex of this file's own git blob, for the sandbox name (W0.2). git hashes it through the repository's
+     attributes, so a CRLF checkout of an LF blob still names the blob main carries. When git cannot (a copy outside
+     any repository), the same id is computed here over the bytes as they sit, which is `git hash-object --no-filters`:
+     the name always carries 8 hex, and never a word that a reader would have to special-case. #>
+  $b = GOut -C $RepoRoot hash-object -- $PSCommandPath
+  if ($b -match '^[0-9a-f]{40}$') { return $b.Substring(0, 8) }
+  $bytes = [IO.File]::ReadAllBytes($PSCommandPath)
+  $hdr = [Text.Encoding]::ASCII.GetBytes('blob ' + $bytes.Length + [char]0)
+  $all = New-Object byte[] ($hdr.Length + $bytes.Length)
+  [Array]::Copy($hdr, 0, $all, 0, $hdr.Length)
+  [Array]::Copy($bytes, 0, $all, $hdr.Length, $bytes.Length)
+  $sha = [Security.Cryptography.SHA1]::Create()
+  try { return ([BitConverter]::ToString($sha.ComputeHash($all)) -replace '-', '').ToLowerInvariant().Substring(0, 8) }
+  finally { $sha.Dispose() }
+}
+function Read-LedgerLinesNaming {
+  <# Every ledger line, in the given files, that names $Needle, read ORDINALLY off the raw line (String.Contains is
+     ordinal), plus how many files were read and which could not be. A file that does not exist is simply not read; one
+     that exists and cannot be read is REPORTED, because a could-not-look must never pass for "nothing there". #>
+  param([string[]]$Files, [string]$Needle)
+  $hits = New-Object Collections.Generic.List[string]
+  $read = 0; $unreadable = New-Object Collections.Generic.List[string]
+  foreach ($f in @($Files | Sort-Object -Unique)) {
+    if (-not (Test-Path -LiteralPath $f)) { continue }
+    try { $lines = @(Get-Content -LiteralPath $f -ErrorAction Stop) } catch { $unreadable.Add($f); continue }
+    $read++
+    foreach ($l in $lines) { if (([string]$l).Contains($Needle)) { $hits.Add([string]$l) } }
+  }
+  return [pscustomobject]@{ Hits = $hits.ToArray(); Read = $read; Unreadable = $unreadable.ToArray() }
+}
+
+# THE SANDBOX NAME CARRIES THIS FILE'S BLOB (W0.2), so a ledger row naming a sandbox says which suite wrote it.
+$sbLeaf = 'tc-prepush-selftest-{0}-{1}-{2}' -f (Get-SuiteBlob8), $PID, [guid]::NewGuid().ToString('N').Substring(0, 8)
+$sb = Join-Path $env:TEMP $sbLeaf
 $main = Join-Path $sb 'main'
 $linked = Join-Path $sb 'linked'
 $remote = Join-Path $sb 'remote.git'
@@ -154,6 +201,16 @@ $script:Remote = $remote
 $probe = Join-Path $sb 'probe'
 $built = $false
 $utf8 = New-Object Text.UTF8Encoding($false)
+# THE WHOLE RUN WRITES ITS LEDGER ROWS INSIDE ITS OWN SANDBOX (W0.2). Set before the first push and restored in the
+# outer finally. Every child the suite starts - git, the hook, the holder the hook starts - inherits it, which a
+# per-call -LedgerRoot could never reach. The production root is read from the library, never spelled here.
+. (Join-Path $RepoRoot 'lib\push-ledger.ps1')
+$ledgerRootHad = Test-Path -LiteralPath 'Env:\TC_PUSH_LEDGER_ROOT'
+$ledgerRootWas = [string]$env:TC_PUSH_LEDGER_ROOT
+$suiteLedger = Join-Path $sb 'ledger'
+$prodLedgerRoot = $script:TcPushLedgerRoot
+$suiteStart = [datetime]::Now
+$env:TC_PUSH_LEDGER_ROOT = $suiteLedger
 try {
   $null = New-Item -ItemType Directory -Force $sb, $probe
   $steps = @(
@@ -789,9 +846,25 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
   $iTa = $hookText.IndexOf('powershell -NoProfile' + ' -ExecutionPolicy Bypass -File "$ta"')
   Case 'MUST FIRE' 'the hook reads refs, resolves the tree, unsets the environment, then runs the gate and the check' `
     ($iRead -ge 0 -and $iRepo -gt $iRead -and $iUnset -gt $iRepo -and $iRun -gt $iUnset -and $iTa -gt $iUnset) "read@$iRead repo@$iRepo unset@$iUnset run@$iRun ta@$iTa"
+
+  # ---- THE NINTH (2026-09-23, W0.2): this run's ledger rows stay inside this run's sandbox ----
+  $suiteFiles = @(Get-ChildItem -LiteralPath $suiteLedger -Filter 'pushes-*.jsonl' -File -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName })
+  $suiteRead = Read-LedgerLinesNaming -Files $suiteFiles -Needle $sbLeaf
+  # MUST FIRE: the redirect reached the REAL holder the push-lock pushes started, and its rows are here. Without this
+  # the case below would pass on a suite that wrote no row anywhere.
+  Case 'MUST FIRE' 'the suite''s own ledger holds a row a sandbox push wrote, so the redirect reached the holder' `
+    (@($suiteRead.Hits).Count -ge 1) ("files=" + $suiteFiles.Count + " rows naming " + $sbLeaf + "=" + @($suiteRead.Hits).Count)
+  # MUST NOT FIRE: the production ledger, for every day this run spanned, holds no row naming this run's sandbox. Names,
+  # never a line count: a real push may append to that file while this suite runs. A file that could not be read is a
+  # failure here, never a pass.
+  $prodFiles = @((Get-TcPushLedgerPath -Root $prodLedgerRoot -Now $suiteStart), (Get-TcPushLedgerPath -Root $prodLedgerRoot -Now ([datetime]::Now)))
+  $prodRead = Read-LedgerLinesNaming -Files $prodFiles -Needle $sbLeaf
+  Case 'MUST NOT FIRE' 'no row in the PRODUCTION push ledger names this run''s sandbox' `
+    ((@($prodRead.Hits).Count -eq 0) -and (@($prodRead.Unreadable).Count -eq 0)) ("read=" + $prodRead.Read + " unreadable=[" + (@($prodRead.Unreadable) -join ',') + "] rows=[" + (@($prodRead.Hits) -join ' | ') + "]")
 } finally {
   Remove-Item -LiteralPath 'Env:\TC_PREPUSH_PROBE', 'Env:\TC_PREPUSH_PROBE_EXIT', 'Env:\TC_PREPUSH_PROBE_SAY', 'Env:\TMPDIR', 'Env:\TC_PREPUSH_TA_FAILS', 'Env:\TC_PREPUSH_TA_FAILS_BETA' -ErrorAction SilentlyContinue
   Remove-Item -LiteralPath 'Env:\TC_REHEARSAL_VERDICT_DIR', 'Env:\TC_NO_REHEARSAL' -ErrorAction SilentlyContinue
+  if ($ledgerRootHad) { $env:TC_PUSH_LEDGER_ROOT = $ledgerRootWas } else { Remove-Item -LiteralPath 'Env:\TC_PUSH_LEDGER_ROOT' -ErrorAction SilentlyContinue }
   if (Test-Path -LiteralPath $sb) {
     # The sandbox's own worktree first, through git, then the directory. No junctions are ever made here.
     if ($built) { $null = G -C $main worktree remove --force $linked }
@@ -803,7 +876,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
 # writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
 # and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
 # prepush-test-auditors -SelfTest pins its own count.
-$expectedCases = 52   # 52 since 2026-09-23 with the case that reads the static-scanned-zero cause (W6.9); 51 since 2026-09-22 with the three chain-rehearsal cases; 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder; 48 with the two that read the slot budget from lib\gate-slots.ps1 (2026-09-18, backlog I237)
+$expectedCases = 54   # 54 since 2026-09-23 with THE NINTH's two ledger cases (W0.2 of design\PLAN-push-derived-conflicts-2026-09-23.md); 52 with the case that reads the static-scanned-zero cause (W6.9); 51 since 2026-09-22 with the three chain-rehearsal cases; 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder; 48 with the two that read the slot budget from lib\gate-slots.ps1 (2026-09-18, backlog I237)
 if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''
