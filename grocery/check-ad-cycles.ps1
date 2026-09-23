@@ -290,7 +290,8 @@ if ($SelfTest) {
     }
     $script:cacFxLog.Clear(); $script:cacFxPages.Clear()
     $cacS = Invoke-ChainReaderStep -ScriptPath $cacOk -Stale 'x' -OkLog 'recipe-overlay applied' -AsOf '2026-09-23'
-    Test-CacCase 'CLEAN TWIN  a reader-facing step that exits 0 logs its success line exactly as before and pages nothing' { $cacS.ok -and (@($script:cacFxLog | Where-Object { $_ -eq 'recipe-overlay applied' }).Count -eq 1) -and ($script:cacFxPages.Count -eq 0) }
+    Test-CacCase 'CLEAN TWIN  a reader-facing step that exits 0 logs its success line exactly as before' { $cacS.ok -and ($cacS.rc -eq 0) -and (@($script:cacFxLog | Where-Object { $_ -eq 'recipe-overlay applied' }).Count -eq 1) }
+    Test-CacCase 'MUST NOT FIRE  ...and pages nothing' { $script:cacFxPages.Count -eq 0 }
   } finally { Remove-Item -LiteralPath $cacFxRoot -Recurse -Force -ErrorAction SilentlyContinue }
   Test-CacCase 'WIRING  the four reader-facing steps (build-sale-windows, recipe-overlay, publish-deals-page, top5-weekly) go through Invoke-ChainReaderStep' { (Get-CacCalls 'Invoke-ChainReaderStep').Count -eq 4 }
   # WIRING, read off the parsed file: both exports go through Invoke-ChainFeedExport, no pipeline outside this block still
