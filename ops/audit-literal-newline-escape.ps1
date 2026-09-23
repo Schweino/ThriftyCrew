@@ -38,6 +38,10 @@
   put back to blob 8b8320d27 the run exits 1 with the one line 708 carrying COMMENT and CASE (the self-test below
   reads that blob from git's object store on every run, which no rebase can move).
 
+  PREFILTER. A file whose text holds no backslash-n and no # followed on its line by a quoted label cannot match any
+  rule and is not tokenised (131 of 839 files held a backslash-n on 2026-09-23, 3 a commented label); a self-test case
+  pins that a commented case with no escape still reaches the tokeniser.
+
   DISCOVERY. Every .ps1 and .psm1 under the root, excluded on the path BELOW the root (lib\tree-walk.ps1), never this
   file, and only the paths `git ls-files` lists.
 
@@ -62,6 +66,8 @@ $script:LNE_CODE_RX = '^' + $script:LNE_ESC + '|' + $script:LNE_ESC + '$'
 $script:LNE_COMMENT_RX = $script:LNE_ESC + '[ \t]*(?:#|\$[\w{]|[A-Za-z_][\w-]*[ \t]+[''"($-])'
 $script:LNE_CASE_RX = '(?:^#|[\s;{(])[A-Za-z_][\w-]*[ \t]+''(?:MUST ' + 'FIRE|MUST NOT ' + 'FIRE|CLEAN ' + 'TWIN)[^'']*''[ \t]+[($]'
 $script:LNE_ALLOW = 'literal-newline' + ':allow'
+$script:LNE_BSN = [string][char]92 + 'n'
+$script:LNE_CASE_PRE_RX = '#[^\r\n]*''(?:MUST FIRE|MUST NOT FIRE|CLEAN TWIN)'
 $script:LNE_QUOTED_KINDS = @('StringLiteral', 'StringExpandable', 'HereStringLiteral', 'HereStringExpandable')
 # LISTED prose only: an escape that does not follow a letter or digit, so a path such as out\name-drift.json is not prose
 # about line endings. The COUNTED rules take no such lookbehind: the founding line joined "own" to its next line.
@@ -71,6 +77,12 @@ function Get-LneFindings {
   <# Pure over one file's text, so the self-test drives exactly what the live scan runs.
      Returns @{ Findings = @({Line; Rules; Text}); Listed = @({Line; Text}); ParseErrors }. #>
   param([string]$Text)
+  # PREFILTER, a superset of all three rules (2026-09-23: 61 s tokenising all 839 scripts, most of it a PowerShell loop
+  # over tokens no rule can match). CODE and COMMENT need the two characters backslash-n somewhere in the text; CASE
+  # needs a # followed on the same line by a quoted label. A file with neither is not parsed, and says so.
+  if (-not $Text.Contains($script:LNE_BSN) -and -not [regex]::IsMatch($Text, $script:LNE_CASE_PRE_RX)) {
+    return [pscustomobject]@{ Findings = @(); Listed = @(); ParseErrors = 0; Parsed = $false }
+  }
   $tok = $null; $err = $null
   [void][System.Management.Automation.Language.Parser]::ParseInput([string]$Text, [ref]$tok, [ref]$err)
   $parseErrors = if ($null -eq $err) { 0 } else { $err.Count }
@@ -109,7 +121,7 @@ function Get-LneFindings {
     if ($s.Length -gt 160) { $s = $s.Substring(0, 160) + '...' }
     [void]$out.Add([pscustomobject]@{ Line = $n; Rules = (@($byLine[$key]) -join ','); Text = $s })
   }
-  return [pscustomobject]@{ Findings = $out.ToArray(); Listed = $listed.ToArray(); ParseErrors = $parseErrors }
+  return [pscustomobject]@{ Findings = $out.ToArray(); Listed = $listed.ToArray(); ParseErrors = $parseErrors; Parsed = $true }
 }
 
 function Get-LneScanFiles {
@@ -132,7 +144,7 @@ function Get-LneScanFiles {
 # ------------------------------------------------------------------------------------------- self-test
 if ($SelfTest) {
   $script:fail = 0; $script:cases = 0
-  $script:expectedCases = 17
+  $script:expectedCases = 18
   function LneT([string]$m, [bool]$c, [string]$got = '') {
     $script:cases++
     if ($c) { Write-Output ('  ok    ' + $m) } else { Write-Output ('  FAIL  ' + $m + '   got: ' + $got); $script:fail++ }
@@ -188,6 +200,8 @@ if ($SelfTest) {
     $r = Get-LneFindings -Text ("# MUST FIRE: the case below proves X`n# the 'MUST FIRE' label names the founding bug")
     LneT 'MUST NOT FIRE  a comment that NAMES the vocabulary without a quoted-label-then-condition call' ($r.Findings.Count -eq 0) (LneGot $r)
     $r = Get-LneFindings -Text ("# T 'MUST FIRE  quoted on purpose' (`$x)   # " + $script:LNE_ALLOW + ' fixture of the shape')
+    $r = Get-LneFindings -Text ("function T([string]`$n, [bool]`$ok) { }`nT 'MUST FIRE  x' (`$y)`n# a note")
+    LneT 'MUST NOT FIRE  a file with neither a backslash-n nor a commented label is skipped by the prefilter, unparsed' ((-not $r.Parsed) -and $r.Findings.Count -eq 0) ('parsed=' + $r.Parsed)
     LneT 'MUST NOT FIRE  a line comment that carries the allow marker' ($r.Findings.Count -eq 0) (LneGot $r)
 
     # ---- CLEAN TWIN -------------------------------------------------------------------------------------------
@@ -254,15 +268,17 @@ if ($files.Count -eq 0) {
 $sites = New-Object System.Collections.ArrayList
 $prose = New-Object System.Collections.ArrayList
 $parseErrorFiles = 0
+$parsedFiles = 0
 foreach ($f in $files) {
   $r = Get-LneFindings -Text ([IO.File]::ReadAllText($f.FullName))
   if ($r.ParseErrors) { $parseErrorFiles++ }
+  if ($r.Parsed) { $parsedFiles++ }
   $rel = (Get-TcPathBelowRoot $f.FullName $rootFull).TrimStart('\')
   foreach ($h in $r.Findings) { [void]$sites.Add(("{0}:{1}  [{2}]  {3}" -f $rel, $h.Line, $h.Rules, $h.Text)) }
   foreach ($h in $r.Listed) { [void]$prose.Add(("{0}:{1}  {2}" -f $rel, $h.Line, $h.Text)) }
 }
-$summary = "listed={0} files={1} parse_error_files={2} sites={3} prose_listed={4}" -f $tracked.Count, $files.Count, $parseErrorFiles, $sites.Count, $prose.Count
-Write-Output ("literal-newline-escape: git lists {0} tracked .ps1/.psm1; the walk resolved {1}, {2} with a parse error; {3} counted site(s), {4} prose comment(s) listed" -f $tracked.Count, $files.Count, $parseErrorFiles, $sites.Count, $prose.Count)
+$summary = "listed={0} files={1} parsed={5} parse_error_files={2} sites={3} prose_listed={4}" -f $tracked.Count, $files.Count, $parseErrorFiles, $sites.Count, $prose.Count, $parsedFiles
+Write-Output ("literal-newline-escape: git lists {0} tracked .ps1/.psm1; the walk resolved {1}; {5} held a backslash-n or a commented label and were tokenised, {2} with a parse error; {3} counted site(s), {4} prose comment(s) listed" -f $tracked.Count, $files.Count, $parseErrorFiles, $sites.Count, $prose.Count, $parsedFiles)
 foreach ($s in $prose) { Write-Output ('  listed (prose, not counted)  ' + $s) }
 if ($sites.Count) {
   foreach ($s in $sites) { Write-Output ('  site  ' + $s) }
