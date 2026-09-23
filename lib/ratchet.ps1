@@ -28,6 +28,12 @@
   -AcceptDrop records it anyway, and exists so a genuine bulk migration is one flag rather than a
   hand-edited baseline file.
 
+  A COUNT IS NOT A NAME (2026-09-23, W6.9 step 3). A count ratchet admits a NEW defect into the slack a fixed one
+  left: a fix and a new site in one change hold the count, and Test-RatchetMove reads 'held'. Compare-TcRatchetSites
+  is the named comparison, multisets keyed on the path below the root plus the site's normalised text. It was lifted
+  from the two copies that existed (grocery\test-native-stderr-eap.ps1, ops\audit-typed-param-shadow.ps1), and both
+  call it now, so there is one copy rather than three.
+
   THE SAME ASYMMETRY ONE LEVEL DOWN: A DETECTOR THAT READ NOTHING (2026-09-23, W6.9 of
   design\PLAN-brain-consults-on-code-and-analysis-2026-09-22.md). A ratchet's count is findings; a static detector's
   COMPLETE marker also says how much it READ, as scanned=, files=, examined= or resolved=. When that is 0 and the exit
@@ -90,6 +96,38 @@ function Test-RatchetMove {
   }
   return [pscustomobject]@{ Verdict = 'tightened'; NewBaseline = $Count
     Message = ("{0}: {1} finding(s), down from {2}. Baseline lowered; it can never rise again." -f $Name, $Count, $Baseline) }
+}
+
+function Compare-TcRatchetSites {
+  <# NAMES AGAINST THE BASELINE, NEVER ONLY A COUNT (2026-09-23, W6.9 step 3). A fix and a new site in one change hold
+     the count, and Test-RatchetMove reads that as 'held'; this calls the new one new. Lifted from the two copies that
+     existed, grocery\test-native-stderr-eap.ps1's Compare-TcSiteBaseline and ops\audit-typed-param-shadow.ps1's
+     Compare-TpsSites, which both call this now, so there is one.
+
+     THE KEY IS THE CALLER'S, and its contract is: the path BELOW the root (Get-TcPathBelowRoot, so a run from a worktree
+     and a run from the main checkout build identical keys) plus the site's whitespace-normalised text, and NEVER its
+     line number, so an edit above a known site does not move it. A rename inside a known bad line is then one gone plus
+     one new, a red on a refactor: read the line, then re-record through the caller's own road (-Accept in
+     test-native-stderr-eap). audit-typed-param-shadow has no same-count road yet; stated, not built here.
+
+     MULTISETS, compared ORDINALLY: a second copy of a known site is new, and a case change is not waved through as the
+     same site (a bare @{} is case-insensitive). Returns Verdict 'rose' | 'fell' | 'held', New (one entry per occurrence
+     above the baseline, in Current's order) and Gone (one per occurrence below it, in Baseline's order). #>
+  param([string[]]$Current, [string[]]$Baseline)
+  $left = New-Object 'System.Collections.Generic.Dictionary[string,int]' ([StringComparer]::Ordinal)
+  foreach ($k in @($Baseline)) { if ($null -eq $k) { continue }; if ($left.ContainsKey($k)) { $left[$k] = $left[$k] + 1 } else { $left[$k] = 1 } }
+  $new = New-Object System.Collections.Generic.List[string]
+  foreach ($k in @($Current)) {
+    if ($null -eq $k) { continue }
+    if ($left.ContainsKey($k) -and $left[$k] -gt 0) { $left[$k] = $left[$k] - 1 } else { $new.Add($k) }
+  }
+  $gone = New-Object System.Collections.Generic.List[string]
+  foreach ($k in @($Baseline)) {
+    if ($null -eq $k) { continue }
+    if ($left[$k] -gt 0) { $gone.Add($k); $left[$k] = $left[$k] - 1 }
+  }
+  $verdict = if ($new.Count) { 'rose' } elseif ($gone.Count) { 'fell' } else { 'held' }
+  return [pscustomobject]@{ Verdict = $verdict; New = $new.ToArray(); Gone = $gone.ToArray() }
 }
 
 function Add-RatchetHistory {
@@ -251,9 +289,33 @@ if ($__ratchetSelfTest) {
   $z = Get-TcStaticZeroScan -ExitCode 0 -Marker 'LIFT-COMPLETENESS-COMPLETE scanned=0 findings=0' -ZeroOk $true
   T 'MUST NOT FIRE  a gate that declares zero_ok is not blind on zero' (-not $z.Blind -and $z.Field -ceq 'scanned') ("blind={0} field={1}" -f $z.Blind, $z.Field)
 
-  $expected = 29
+  # ---- one named-site comparison (W6.9 step 3, 2026-09-23) --------------------------------------------------------
+  $s = Compare-TcRatchetSites -Current @('a|x', 'c|z') -Baseline @('a|x', 'b|y')
+  T 'MUST FIRE  a fix plus a NEW site in one change is a rise, although the count held at 2' ($s.Verdict -ceq 'rose' -and @($s.New).Count -eq 1 -and $s.New[0] -ceq 'c|z' -and @($s.Gone).Count -eq 1 -and $s.Gone[0] -ceq 'b|y') ("{0} new={1} gone={2}" -f $s.Verdict, (@($s.New) -join ','), (@($s.Gone) -join ','))
+  $s = Compare-TcRatchetSites -Current @('a|x', 'a|x') -Baseline @('a|x')
+  T 'MUST FIRE  a second copy of a known site is new - these are multisets, not sets' ($s.Verdict -ceq 'rose' -and @($s.New).Count -eq 1) ("{0} new={1}" -f $s.Verdict, @($s.New).Count)
+  $s = Compare-TcRatchetSites -Current @('A|x') -Baseline @('a|x')
+  T 'MUST FIRE  names compare ORDINALLY, so a case change is not waved through as the same site' ($s.Verdict -ceq 'rose') $s.Verdict
+  $s = Compare-TcRatchetSites -Current @('a|x') -Baseline @('a|x', 'b|y')
+  T 'MUST NOT FIRE  a pure fall reports no new site' (@($s.New).Count -eq 0) ("new=" + (@($s.New) -join ','))
+  T 'CLEAN TWIN  ...and the fall NAMES the site that went, so a tightening says what it lowers' ($s.Verdict -ceq 'fell' -and @($s.Gone).Count -eq 1 -and $s.Gone[0] -ceq 'b|y') ("{0} gone={1}" -f $s.Verdict, (@($s.Gone) -join ','))
+  $s = Compare-TcRatchetSites -Current @('b|y', 'a|x') -Baseline @('a|x', 'b|y')
+  T 'MUST NOT FIRE  an unchanged set of sites holds, in any order' ($s.Verdict -ceq 'held') $s.Verdict
+  $s = Compare-TcRatchetSites -Current @() -Baseline @()
+  T 'MUST NOT FIRE  an empty tree against an empty baseline holds, not a PS 5.1 @($null) count of 1' ($s.Verdict -ceq 'held' -and @($s.New).Count -eq 0 -and @($s.Gone).Count -eq 0) ("{0} new={1} gone={2}" -f $s.Verdict, @($s.New).Count, @($s.Gone).Count)
+  $s = Compare-TcRatchetSites -Current @('z|1', 'a|2') -Baseline @()
+  T 'CLEAN TWIN  New keeps the order the caller listed its sites in, so a report reads in the caller''s order' ((@($s.New) -join ',') -ceq 'z|1,a|2') (@($s.New) -join ',')
+  # THE KEY CONTRACT, on the real rule: a site keyed below the root reads the same from a worktree as from the main
+  # checkout, so a worktree run never calls every known site new.
+  . (Join-Path $PSScriptRoot 'tree-walk.ps1')
+  $kMain = (Get-TcPathBelowRoot 'C:\x\main\ops\a.ps1' 'C:\x\main') + '|$v = & git log -1 2>$null'
+  $kWt = (Get-TcPathBelowRoot 'C:\x\main\.claude\worktrees\wt1\ops\a.ps1' 'C:\x\main\.claude\worktrees\wt1') + '|$v = & git log -1 2>$null'
+  $s = Compare-TcRatchetSites -Current @($kWt) -Baseline @($kMain)
+  T 'CLEAN TWIN  a key built below a worktree root equals the key built below the main root, so the comparison holds' ($s.Verdict -ceq 'held' -and $kWt -ceq $kMain) ("{0} wt={1} main={2}" -f $s.Verdict, $kWt, $kMain)
+
+  $expected = 38
   if ($cases -ne $expected) { Write-Output ("FAIL  ran {0} case(s), the list holds {1}" -f $cases, $expected); $fail++ }
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); exit 1 }
-  Write-Output ("SELF-TEST PASS ({0} cases): the rise, the hold, a believable fall, and the two refusals - a fall to nothing and a fall too large - plus history and its cap, and a static detector that read nothing" -f $cases)
+  Write-Output ("SELF-TEST PASS ({0} cases): the rise, the hold, a believable fall, and the two refusals - a fall to nothing and a fall too large - plus history and its cap, one named-site comparison, and a static detector that read nothing" -f $cases)
   exit 0
 }

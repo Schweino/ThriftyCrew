@@ -66,7 +66,7 @@ $repo = Split-Path $root -Parent
 try {
   $ErrorActionPreference = 'Stop'
   . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is scanned
-  . (Join-Path $repo 'lib\ratchet.ps1')     # Test-RatchetMove: a fall clears a plausibility bar before -Tighten records it
+  . (Join-Path $repo 'lib\ratchet.ps1')     # Test-RatchetMove: a fall clears a plausibility bar before -Tighten records it; Compare-TcRatchetSites: the named comparison
   . (Join-Path $repo 'lib\lf-write.ps1')    # Write-TcLfFile: the baseline is tracked and stored eol=lf
 } catch {
   Write-Output ('  FAIL  a library would not load, so nothing below could be evaluated: ' + $_.Exception.Message)
@@ -400,22 +400,9 @@ function Invoke-TcEapScan {
                             Sites = @($sites.ToArray()); Guarded = @($guarded.ToArray()); Unparsed = @($unparsed.ToArray()) }
 }
 
-function Compare-TcSiteBaseline {
-  <# NAMES AGAINST THE BASELINE, NEVER A COUNT. A count that held while one site was fixed and another added reads
-     as 'held'; a named comparison calls the new one new. Keys compare ORDINALLY: a bare @{} is case-insensitive.
-     Returns Verdict 'rose' | 'fell' | 'held', New (one entry per occurrence above the baseline), Gone. #>
-  param([string[]]$Current, [string[]]$Baseline)
-  $cur = New-Object 'System.Collections.Generic.Dictionary[string,int]' ([StringComparer]::Ordinal)
-  $base = New-Object 'System.Collections.Generic.Dictionary[string,int]' ([StringComparer]::Ordinal)
-  foreach ($k in @($Current)) { if ($null -eq $k) { continue }; if ($cur.ContainsKey($k)) { $cur[$k] = $cur[$k] + 1 } else { $cur[$k] = 1 } }
-  foreach ($k in @($Baseline)) { if ($null -eq $k) { continue }; if ($base.ContainsKey($k)) { $base[$k] = $base[$k] + 1 } else { $base[$k] = 1 } }
-  $new = New-Object System.Collections.ArrayList
-  $gone = New-Object System.Collections.ArrayList
-  foreach ($k in $cur.Keys) { $b = 0; if ($base.ContainsKey($k)) { $b = $base[$k] }; for ($i = $b; $i -lt $cur[$k]; $i++) { [void]$new.Add($k) } }
-  foreach ($k in $base.Keys) { $c = 0; if ($cur.ContainsKey($k)) { $c = $cur[$k] }; for ($i = $c; $i -lt $base[$k]; $i++) { [void]$gone.Add($k) } }
-  $verdict = if ($new.Count) { 'rose' } elseif ($gone.Count) { 'fell' } else { 'held' }
-  return [pscustomobject]@{ Verdict = $verdict; New = @($new.ToArray()); Gone = @($gone.ToArray()) }
-}
+# THE NAMED COMPARISON LIVES IN lib\ratchet.ps1 SINCE 2026-09-23 (W6.9 step 3). This file carried its own copy,
+# Compare-TcSiteBaseline, and ops\audit-typed-param-shadow.ps1 a second; both call Compare-TcRatchetSites now, so there
+# is one. The key stays this file's: the path below the root plus the whitespace-normalised command, never the line.
 
 function ConvertTo-TcJsonText([string]$s) {
   # A minimal JSON string. ConvertTo-Json under PS 5.1 writes & ' < > as \u escapes, which leaves a baseline of
@@ -582,17 +569,17 @@ try {
 } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
 
 # --- THE RATCHET, BY NAME ------------------------------------------------------------------------------------------
-$cmp = Compare-TcSiteBaseline -Current @('a|x', 'b|y') -Baseline @('b|y', 'a|x')
+$cmp = Compare-TcRatchetSites -Current @('a|x', 'b|y') -Baseline @('b|y', 'a|x')
 Check 'an unchanged set of sites holds, in any order' ($cmp.Verdict -eq 'held') $cmp.Verdict
-$cmp = Compare-TcSiteBaseline -Current @('a|x', 'c|z') -Baseline @('a|x', 'b|y')
+$cmp = Compare-TcRatchetSites -Current @('a|x', 'c|z') -Baseline @('a|x', 'b|y')
 Check 'MUST FIRE  a fix plus a NEW site in one change is a rise, although the count held at 2' ($cmp.Verdict -eq 'rose' -and @($cmp.New).Count -eq 1 -and $cmp.New[0] -eq 'c|z') ("{0} new={1}" -f $cmp.Verdict, (@($cmp.New) -join ','))
-$cmp = Compare-TcSiteBaseline -Current @('a|x', 'a|x') -Baseline @('a|x')
+$cmp = Compare-TcRatchetSites -Current @('a|x', 'a|x') -Baseline @('a|x')
 Check 'MUST FIRE  a second copy of a known site is new' ($cmp.Verdict -eq 'rose' -and @($cmp.New).Count -eq 1) ("{0} new={1}" -f $cmp.Verdict, @($cmp.New).Count)
-$cmp = Compare-TcSiteBaseline -Current @('a|x') -Baseline @('a|x', 'b|y')
+$cmp = Compare-TcRatchetSites -Current @('a|x') -Baseline @('a|x', 'b|y')
 Check 'CLEAN TWIN  a fixed site is a fall that names what went' ($cmp.Verdict -eq 'fell' -and @($cmp.Gone).Count -eq 1 -and $cmp.Gone[0] -eq 'b|y') ("{0} gone={1}" -f $cmp.Verdict, (@($cmp.Gone) -join ','))
-$cmp = Compare-TcSiteBaseline -Current @('A|x') -Baseline @('a|x')
+$cmp = Compare-TcRatchetSites -Current @('A|x') -Baseline @('a|x')
 Check 'MUST FIRE  names compare ordinally, so a case change is not waved through as the same site' ($cmp.Verdict -eq 'rose') $cmp.Verdict
-$cmp = Compare-TcSiteBaseline -Current @() -Baseline @()
+$cmp = Compare-TcRatchetSites -Current @() -Baseline @()
 Check 'an empty tree against an empty baseline holds, not a PS 5.1 @($null) count of 1' ($cmp.Verdict -eq 'held' -and @($cmp.New).Count -eq 0) ("{0} new={1}" -f $cmp.Verdict, @($cmp.New).Count)
 
 # --- CASE 5: the tree scan, over targets it DERIVES rather than a list that rots ------
@@ -633,7 +620,7 @@ if ($scan.Scanned -lt $ScanFloor -or $missingTops.Count) {
     $baseNote = ' (no baseline file, so every site counts as new)'
   }
   $keys = @($sites | ForEach-Object { $_.Key })
-  $cmp = Compare-TcSiteBaseline -Current $keys -Baseline $baseKeys
+  $cmp = Compare-TcRatchetSites -Current $keys -Baseline $baseKeys
   $newSet = @($cmp.New)
   foreach ($s in $sites) {
     $tag = if ($newSet -ccontains $s.Key) { 'NEW  ' } else { 'known' }

@@ -301,21 +301,10 @@ function Get-TpsSiteKey {
   return ('{0} :: {1} <- {2} :: {3}' -f $Rel, $Finding.Param, $Finding.Kind, $Finding.Text)
 }
 
-function Compare-TpsSites {
-  <# Multiset difference both ways. A site swapped for a new one at the SAME count is still a new site, which a
-     bare count cannot see. #>
-  param([string[]]$Now, [string[]]$Known)
-  $left = @{}
-  foreach ($k in @($Known)) { if ($null -ne $k) { if ($left.ContainsKey($k)) { $left[$k]++ } else { $left[$k] = 1 } } }
-  $new = New-Object System.Collections.ArrayList
-  foreach ($k in @($Now)) {
-    if ($null -eq $k) { continue }
-    if ($left.ContainsKey($k) -and $left[$k] -gt 0) { $left[$k]-- } else { [void]$new.Add($k) }
-  }
-  $gone = New-Object System.Collections.ArrayList
-  foreach ($k in $left.Keys) { for ($i = 0; $i -lt $left[$k]; $i++) { [void]$gone.Add($k) } }
-  return [pscustomobject]@{ New = $new.ToArray(); Gone = $gone.ToArray() }
-}
+# THE MULTISET COMPARISON LIVES IN lib\ratchet.ps1 SINCE 2026-09-23 (W6.9 step 3): this file's Compare-TpsSites and
+# grocery\test-native-stderr-eap.ps1's copy both became Compare-TcRatchetSites, so there is one. It compares ORDINALLY
+# where this copy used a bare @{}, which is case-insensitive; the keys above are built the same way every run, so the
+# only change that makes is that a case change is no longer waved through as the same site.
 
 # ------------------------------------------------------------------------------------------------------ the walk
 function Get-TpsScanFiles {
@@ -482,14 +471,14 @@ if ($SelfTest) {
     TpsT 'CLEAN TWIN  a pipeline with no @() is counted UNJUDGED and a string into [string] LEGAL, so the gap is printed rather than passed' ($r.Unjudged -eq 1 -and $r.Legal -eq 1 -and $r.Typed -eq 2) ("typed={0} legal={1} unjudged={2}" -f $r.Typed, $r.Legal, $r.Unjudged)
 
     # ---- the baseline comparison ------------------------------------------------------------------------------
-    $cmp = Compare-TpsSites -Now @('a', 'c') -Known @('a', 'b')
+    $cmp = Compare-TcRatchetSites -Current @('a', 'c') -Baseline @('a', 'b')
     TpsT 'MUST FIRE  a site swapped for a new one at the SAME count is still a new site' (@($cmp.New).Count -eq 1 -and @($cmp.New)[0] -eq 'c' -and @($cmp.Gone)[0] -eq 'b') ("new={0} gone={1}" -f (@($cmp.New) -join ','), (@($cmp.Gone) -join ','))
-    $cmp = Compare-TpsSites -Now @('a', 'a') -Known @('a')
+    $cmp = Compare-TcRatchetSites -Current @('a', 'a') -Baseline @('a')
     TpsT 'MUST FIRE  a second copy of a known site is new' (@($cmp.New).Count -eq 1) ("new=" + @($cmp.New).Count)
     # TWO LABELS, because the two halves are different assertions (ops\audit-fixture-vocabulary.ps1 caught this
     # file carrying them as one CLEAN TWIN): that nothing is reported is a MUST NOT FIRE, and that the fall NAMES
     # what went is the positive one.
-    $cmp = Compare-TpsSites -Now @('a') -Known @('a', 'b')
+    $cmp = Compare-TcRatchetSites -Current @('a') -Baseline @('a', 'b')
     TpsT 'MUST NOT FIRE  a pure fall reports no new site' (@($cmp.New).Count -eq 0) ("new=" + (@($cmp.New) -join ','))
     TpsT 'CLEAN TWIN  the fall NAMES the site that went, so a tightening says what it is lowering' (@($cmp.Gone).Count -eq 1 -and @($cmp.Gone)[0] -eq 'b') ("gone=" + (@($cmp.Gone) -join ','))
 
@@ -622,7 +611,7 @@ if ($null -eq $baseDoc -or $null -eq $baseDoc.PSObject.Properties['sites']) {
 $base = [int]$baseDoc.sites
 $knownNames = @()
 if ($baseDoc.PSObject.Properties['names'] -and $null -ne $baseDoc.names) { $knownNames = @($baseDoc.names) }
-$cmp = Compare-TpsSites -Now $keys.ToArray() -Known $knownNames
+$cmp = Compare-TcRatchetSites -Current $keys.ToArray() -Baseline $knownNames
 
 if ($count -gt $base -or @($cmp.New).Count) {
   Write-Output ("TYPED-PARAM-SHADOW AUDIT FAILED: {0} site(s) against a baseline of {1}, and {2} the baseline does not name:" -f $count, $base, @($cmp.New).Count)
