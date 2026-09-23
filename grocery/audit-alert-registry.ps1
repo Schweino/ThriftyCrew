@@ -443,7 +443,7 @@ Send-Alert -Body $b | Out-Null
   $dPiU = Get-AlertDelivery -Resolution (Resolve-AlertClass $fxReg 'grocery tile links record a price the board no longer publishes') -Subject 's'
   _T 'MUST NOT FIRE a pipeline send with an unregistered subject is never refused, and is flagged' ((-not (Test-AgentSendRefused $dPiU 'daily' '')) -and $dPiU.unregistered -and $dPiU.queue -and $dPiU.mail) ('unregistered=' + $dPiU.unregistered)
   $dAgR = Get-AlertDelivery -Resolution (Resolve-AlertClass $fxReg 'grocery page held coverage') -Subject 's' -Lane 'weekly'
-  _T 'CLEAN TWIN an agent send with a registered subject passes as review, stamped with its entry' ((-not (Test-AgentSendRefused $dAgR 'weekly' '')) -and $dAgR.class -eq 'review' -and $dAgR.entry_id -eq 'held' -and -not $dAgR.mail) ('class=' + $dAgR.class + ' entry=' + $dAgR.entry_id)
+  _T 'CLEAN TWIN an agent send with a registered subject passes as review, stamped with its entry' ($dAgR.class -eq 'review' -and $dAgR.entry_id -eq 'held' -and -not $dAgR.mail -and -not (Test-AgentSendRefused $dAgR 'weekly' '')) ('class=' + $dAgR.class + ' entry=' + $dAgR.entry_id)
   $dAgX = Get-AlertDelivery -Resolution (Resolve-AlertClass $null 'x') -Subject 's' -Lane 'weekly'
   _T 'MUST NOT FIRE an unreadable registry refuses no agent send (fail toward delivery)' (-not (Test-AgentSendRefused $dAgX 'weekly' '')) ('unregistered=' + $dAgX.unregistered)
   # the queue half's homework census

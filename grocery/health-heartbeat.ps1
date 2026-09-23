@@ -576,7 +576,7 @@ $hbDaily = @($cfg.windows_tasks | Where-Object { $_ -and [string]$_.name -eq 'TC
 HbCase 'MUST FIRE  TC Process Reaper exit 3 (could not read the process table) is FAILED, never excused by a fresh log' ($hbReaper.Count -eq 1 -and (Get-HbDeclaredExit $hbReaper[0] 3) -eq 'fail') ('rows=' + $hbReaper.Count)
 HbCase 'MUST NOT FIRE  TC Process Reaper exit 1 (it has findings, by design) is healthy' ($hbReaper.Count -eq 1 -and (Get-HbDeclaredExit $hbReaper[0] 1) -eq 'ok') ('rows=' + $hbReaper.Count)
 HbCase 'MUST NOT FIRE  TC Grocery Daily Capture 0800 exit 1 (a failed lane, paged by its own step or the RUN RECORD fold) is not paged again' ($hbDaily.Count -eq 1 -and (Get-HbDeclaredExit $hbDaily[0] 1) -eq 'ok' -and (Get-HbDeclaredExit $hbDaily[0] 3) -eq 'fail') ('rows=' + $hbDaily.Count)
-HbCase 'CLEAN TWIN  a row that declares nothing keeps the existing path (proves-fresh excuse included)' ((Get-HbDeclaredExit ([pscustomobject]@{ name = 'x'; proves = 'y' }) 1) -eq '') 'declared'
+HbCase 'MUST NOT FIRE  a row that declares nothing gets no declared verdict, so the existing path (proves-fresh excuse included) decides' ((Get-HbDeclaredExit ([pscustomobject]@{ name = 'x'; proves = 'y' }) 1) -eq '') 'declared'
   try {
     $ErrorActionPreference = 'Stop'
     if (-not (Get-Command Get-PipelineCommitOutcome -ErrorAction SilentlyContinue)) { throw 'lib\pipeline-commit.ps1 did not load, so Get-PipelineCommitOutcome is missing' }
