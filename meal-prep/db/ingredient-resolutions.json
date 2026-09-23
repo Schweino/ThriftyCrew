@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
     "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
-    "updated":  "2026-09-04T08:45:54",
-    "count":  283,
+    "updated":  "2026-09-22T21:52:56",
+    "count":  271,
     "resolutions":  [
                         {
                             "key":  "pepperoni",
@@ -75,15 +75,6 @@
                             "evidence":  "already in the vocabulary with a bid; the live spec simply predates the row - rebuild only",
                             "by":  "adjudication",
                             "at":  "2026-08-16T08:21:02"
-                        },
-                        {
-                            "key":  "chorizo sausage",
-                            "term":  "chorizo sausage",
-                            "item_id":  "ground-pork",
-                            "bid_exists":  true,
-                            "evidence":  "Vocab row Pork Chorizo (bid ground-pork, 6 of 7); Cacique 190cal/70g raw label row in food DB; dedicated mexican-chorizo-fresh commodity ALSO claims the term (2 of 7, Walmart $2.6786/lb Cacique) - bid-repoint flagged to registrar/match-soundness",
-                            "by":  "mapper",
-                            "at":  "2026-08-16T11:53:02"
                         },
                         {
                             "key":  "ground turkey",
@@ -248,15 +239,6 @@
                             "at":  "2026-08-26T04:22:00"
                         },
                         {
-                            "key":  "med onion",
-                            "term":  "med onion",
-                            "item_id":  "onions",
-                            "bid_exists":  true,
-                            "evidence":  "Vocabulary row Yellow Onion [onions] is same form and the board carries onions 7 of 7; an unqualified \u0027onion\u0027 in a savoury braise is the yellow cooking onion, not the red variety. [slug apple-spice-pork-chops, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:33:59"
-                        },
-                        {
                             "key":  "fuji apples",
                             "term":  "fuji apples",
                             "item_id":  "apples",
@@ -318,15 +300,6 @@
                             "evidence":  "Button mushroom is the retail name for the white mushroom; same product, same price class, board 7 of 7. Portobello is a different, dearer product. [slug slow-cooker-beef-stroganoff, run hunt-2026-08-26-ten]",
                             "by":  "mapper",
                             "at":  "2026-08-26T04:34:46"
-                        },
-                        {
-                            "key":  "small yellow onion",
-                            "term":  "small yellow onion",
-                            "item_id":  "onions",
-                            "bid_exists":  true,
-                            "evidence":  "Exact same-form vocabulary row Yellow Onion [onions]; board 7 of 7. Small onion weighed at 70 g. [slug slow-cooker-beef-stroganoff, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:34:47"
                         },
                         {
                             "key":  "better than bouillon",
@@ -644,15 +617,6 @@
                             "at":  "2026-08-26T04:52:59"
                         },
                         {
-                            "key":  "medium yellow onion",
-                            "term":  "medium yellow onion",
-                            "item_id":  "onions",
-                            "bid_exists":  true,
-                            "evidence":  "Exact same-form vocabulary row Yellow Onion [onions], board 7 of 7; \u0027medium\u0027 is a size word. Follows the \u0027small yellow onion\u0027 ruling of 2026-08-26. [slug rosemary-chicken-thighs, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:53:02"
-                        },
-                        {
                             "key":  "medium tart apple",
                             "term":  "medium tart apple",
                             "item_id":  "apples",
@@ -714,24 +678,6 @@
                             "evidence":  "Chopped fresh leaves, so the vocabulary\u0027s Fresh Basil row and not dried-basil (different price class and gram weight). No commodity claims it, so the term is reported. [slug spaghetti-squash-boats-with-chicken, run hunt-2026-08-26-ten]",
                             "by":  "mapper",
                             "at":  "2026-08-26T04:53:07"
-                        },
-                        {
-                            "key":  "sliced onions",
-                            "term":  "Sliced onions",
-                            "item_id":  "onions",
-                            "bid_exists":  true,
-                            "evidence":  "Garnish line with no stated quantity, so optional; onions is live 7 of 7 and the \u0027med onion\u0027 -\u003e onions precedent binds. Weighed as half a medium onion. [slug enchiladas-suizas, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:06:00"
-                        },
-                        {
-                            "key":  "small white onion",
-                            "term":  "small white onion",
-                            "item_id":  "onions",
-                            "bid_exists":  true,
-                            "evidence":  "White and yellow cooking onions sell from the same bulk bags at the same price class, unlike red (which the estate rejects on variety pricing); precedent \u0027small yellow onion\u0027 -\u003e onions, board 7 of 7. [slug baked-stuffed-pork-chops, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:07:23"
                         },
                         {
                             "key":  "celery stalk",
@@ -964,15 +910,6 @@
                             "item_id":  "beef-broth",
                             "bid_exists":  true,
                             "evidence":  "Reduced sodium is a label variant of the same carton at the same shelf price, the same call as \u0027less sodium soy sauce\u0027 -\u003e soy-sauce; board 7 of 7. Not a form flip: no gram-weight or price change. [slug salisbury-steak-burgers, run hunt-2026-08-26-smoke]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T10:11:23"
-                        },
-                        {
-                            "key":  "onion",
-                            "term":  "onion",
-                            "item_id":  "onions",
-                            "bid_exists":  true,
-                            "evidence":  "An unqualified onion in a savoury gravy is the yellow cooking onion, per the \u0027med onion\u0027 -\u003e onions precedent; red is refused on variety pricing. Board 7 of 7. [slug salisbury-steak-burgers, run hunt-2026-08-26-smoke]",
                             "by":  "mapper",
                             "at":  "2026-08-26T10:11:23"
                         },
@@ -1445,15 +1382,6 @@
                             "at":  "2026-08-27T11:56:09"
                         },
                         {
-                            "key":  "finely chopped onion",
-                            "term":  "finely chopped onion",
-                            "item_id":  "onions",
-                            "bid_exists":  true,
-                            "evidence":  "\u0027Finely chopped\u0027 is a prep word, not a food; unqualified cooking onion is the yellow onion per the \u0027med onion\u0027 and \u0027small yellow onion\u0027 precedents, and red is refused on variety pricing. Board 7 of 7; half a cup chopped weighs 80 g. [slug healthy-hamburger-helper, run hunt-2026-08-27-highprotein]",
-                            "by":  "mapper",
-                            "at":  "2026-08-27T11:56:09"
-                        },
-                        {
                             "key":  "dry rotini pasta",
                             "term":  "dry rotini pasta",
                             "item_id":  "rotini-pasta",
@@ -1477,15 +1405,6 @@
                             "item_id":  "pasta",
                             "bid_exists":  true,
                             "evidence":  "The source names no shape, so the generic dry short-cut pasta id is the honest match rather than rotini specifically; board carries `pasta` 7 of 7 at 0.0571. Source states its own 300 g. [slug butter-chicken-pasta, run hunt-2026-08-27-highprotein]",
-                            "by":  "mapper",
-                            "at":  "2026-08-27T11:56:55"
-                        },
-                        {
-                            "key":  "medium onion",
-                            "term":  "medium onion",
-                            "item_id":  "onions",
-                            "bid_exists":  true,
-                            "evidence":  "\u0027Medium\u0027 is a size word: the \u0027medium yellow onion\u0027 -\u003e onions ruling of 2026-08-26 transfers directly, board 7 of 7. Medium onion weighed at 110 g, between the estate\u0027s 70 g small and a large. [slug butter-chicken-pasta, run hunt-2026-08-27-highprotein]",
                             "by":  "mapper",
                             "at":  "2026-08-27T11:56:55"
                         },
@@ -2237,15 +2156,6 @@
                             "at":  "2026-08-28T07:35:25"
                         },
                         {
-                            "key":  "yellow onions",
-                            "term":  "yellow onions",
-                            "item_id":  "onions",
-                            "bid_exists":  true,
-                            "evidence":  "REUSE of onions, 7 of 7 at 0.7967, matching the 2026-08-26 \u0027small yellow onion\u0027 ruling. Green-onions is a different vegetable and is refused; medium weighed at 110 g each. [slug roasted-stuffed-pork-loin, run hunt-2026-08-27-highprotein]",
-                            "by":  "mapper",
-                            "at":  "2026-08-28T07:35:26"
-                        },
-                        {
                             "key":  "balsamic syrup",
                             "term":  "balsamic syrup",
                             "item_id":  "balsamic-glaze",
@@ -2291,15 +2201,6 @@
                             "at":  "2026-08-28T07:50:49"
                         },
                         {
-                            "key":  "pickled onions",
-                            "term":  "pickled onions",
-                            "item_id":  "onions",
-                            "bid_exists":  true,
-                            "evidence":  "Quick-pickled at home from a whole onion plus pantry vinegar, so both the purchase and the macros are the onion; canon reuses the existing Yellow Onion row. Unquantified garnish with no stated quantity, hence optional, per the \u0027Sliced onions\u0027 precedent. [slug bang-bang-chicken-bowls, run hunt-2026-08-27-highprotein]",
-                            "by":  "mapper",
-                            "at":  "2026-08-28T07:50:49"
-                        },
-                        {
                             "key":  "grated ginger",
                             "term":  "grated ginger",
                             "item_id":  "fresh-ginger",
@@ -2323,15 +2224,6 @@
                             "item_id":  "zucchini",
                             "bid_exists":  true,
                             "evidence":  "Vocabulary row Zucchini [zucchini] is exactly this food, same form; board 6 of 7. Each-weight from the panel I transcribed (1 medium = 196 g), taken at 200 g for medium/large. [slug hibachi-chicken, run hunt-2026-09-04-five]",
-                            "by":  "mapper",
-                            "at":  "2026-09-04T05:01:51"
-                        },
-                        {
-                            "key":  "medium large yellow onion",
-                            "term":  "medium/large yellow onion",
-                            "item_id":  "onions",
-                            "bid_exists":  true,
-                            "evidence":  "Vocabulary row Yellow Onion [onions] is same-food same-form; deliberately not red-onion, which is a separate variety price class. Board 7 of 7. Medium/large onion 170 g, half = 85 g. [slug hibachi-chicken, run hunt-2026-09-04-five]",
                             "by":  "mapper",
                             "at":  "2026-09-04T05:01:51"
                         },

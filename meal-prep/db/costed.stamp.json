@@ -1,9 +1,31 @@
 ﻿{
-    "generated":  "2026-09-19T17:19:54",
-    "scope":  "full",
-    "board_file":  "comparison-2026-09-17.json",
+    "generated":  "2026-09-22T22:12:56",
+    "scope":  "partial",
+    "board_file":  "comparison-2026-09-22.json",
     "board_built_at":  "2026-09-19T17:16:41",
     "board_week_of":  "2026-09-17",
     "recipes_costed":  584,
-    "note":  "board_built_at is the build of the board the WHOLE catalog was priced from. A -Slugs recost splices a few recipes and deliberately leaves it where it was: the catalog is not fresher because three of its rows are."
+    "note":  "board_built_at is the build of the board the WHOLE catalog was priced from. A -Slugs recost splices a few recipes and deliberately leaves it where it was: the catalog is not fresher because three of its rows are.",
+    "partial_slugs":  [
+                          "slow-cooker-tuscan-chicken-pasta",
+                          "chicken-florentine",
+                          "southwest-ground-turkey-cauliflower-rice-skillet",
+                          "mexican-chorizo-egg-casserole",
+                          "chorizo-and-potato-bowls",
+                          "creamy-ground-turkey-and-chorizo-pasta",
+                          "panseared-pork-chops-with-cajun-dirty-rice",
+                          "slow-cooker-orange-chicken-rice-bowls"
+                      ],
+    "partial_priced_from":  "2026-09-22T21:56:59",
+    "flags_set_aside":  {
+                            "held_recipes":  0,
+                            "held_lines":  [
+
+                                           ],
+                            "advisory_lines":  [
+
+                                               ],
+                            "live_lines":  0,
+                            "note":  "Flag lines this recost wrote and deliberately kept OUT of cost-flags.txt, the file the chain pages on: a HELD recipe\u0027s lines (taken down by design, still costed) and ADVISORY lines (bid on no board, the line still priced). The rule is Split-CostFlags in engine\\cost-recipes.ps1."
+                        }
 }
