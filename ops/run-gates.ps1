@@ -964,7 +964,18 @@ foreach ($g in $static) {
     Write-Output ("  BLIND {0}  (exit 0, but its marker reads {1}=0: it looked at nothing, so it is scored 3, never ok) - {2}" -f $g.f, $zs.Field, $g.n)
     Write-Output ('          ' + $gLast)
   }
-  elseif ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
+  elseif ($rc -eq 0) {
+    $pass++
+    # A STATIC GATE THAT COULD NOT LOOK AT ONE CASE IS NAMED (2026-09-23), the rule the self-test and Python loops
+    # already follow. ops\audit-event-bus.ps1 is the first: its wiring half passes and its FLOOR reports blind=1 when
+    # no main checkout can be named. Last marker only.
+    if ($gLast -match '\bblind=([1-9][0-9]*)\b') {
+      $blindGates += ("{0} ({1} case(s))" -f $g.f, $Matches[1])
+      Write-Output ("  ok    {0}  ({1}; BLIND on {2} case(s) - see its output)" -f $g.f, $g.n, $Matches[1])
+    } else {
+      Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n)
+    }
+  }
   else {
     $fail += $g.f
     Write-Output ("  FAIL  {0}  (exit {1}) - {2}" -f $g.f, $rc, $g.n)

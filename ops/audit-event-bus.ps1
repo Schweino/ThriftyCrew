@@ -18,6 +18,19 @@
        every threshold here is an upper bound, so not one of them can fire on nothing happening.
        This is deliberately a check that fires on ABSENCE.
 
+  WHICH BUS THE FLOOR JUDGES (2026-09-23). The ESTATE's bus, which lives in the MAIN checkout: that is where
+  the daily chain writes the `chain-complete` heartbeat. Every producer resolves the bus from its own lib\, so
+  a linked worktree (.claude\worktrees\<name>) has its own gitignored ops\out\events.jsonl holding only what
+  ran IN that worktree, and it can be days old while the estate is healthy. Until this change the floor read
+  that local file: on 2026-09-23 a reused worktree's one row from 2026-09-19 (4 days, over the 3-day floor)
+  refused a push that touched only ops\reap-runaway-processes.ps1, and run-gates then wrote its own gate-red
+  row to the same file, so a rerun a minute later passed. That red measured the worktree, not the estate,
+  and cleared itself. So from a linked worktree the floor reads the main checkout's bus
+  (lib\main-checkout.ps1, the parent of the git common dir); from the main checkout it reads its own. When
+  no main checkout can be named - not a git checkout, or a common dir that is not a .git directory - the
+  floor is BLIND: it says so, the COMPLETE marker carries blind=1, and the case is neither ok nor a finding.
+  TC_EVENT_BUS, when set, is an explicit bus and is judged as given. The WIRING half is unchanged.
+
   WHY THE FLOOR IS A WARNING AND NOT A HARD FAIL. A bus can be legitimately empty - a fresh
   checkout, a machine that was off, a day nobody pushed. Failing on that would be red on day one
   and would teach people to ignore it. It goes red only when the bus is empty AND the session
@@ -39,8 +52,10 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\event-bus.ps1')
+. (Join-Path $repo 'lib\main-checkout.ps1')
 
-# A bus with no rows for this long, while sessions ran, is dead rather than quiet.
+# A bus with no rows for this long, while sessions ran, is dead rather than quiet. Compared in whole SECONDS
+# (FLOOR_DAYS x 86400), so the bar is an integer and a case at it is exact rather than decided by a double.
 $FLOOR_DAYS = 3
 
 # EVERY PRODUCER, ITS EVENT, AND WHAT ITS SILENCE WOULD COST. The third column is the part
@@ -89,18 +104,49 @@ function Test-ProducerWired {
 }
 
 function Get-BusAge {
-  <# @{ Rows=<int>; NewestEpoch=<int>; AgeDays=<double or -1> }. -1 means no rows at all. #>
-  param([string]$Path = '')
+  <# @{ Rows=<int>; NewestEpoch=<long>; AgeSec=<long or -1>; AgeDays=<double or -1> }. -1 means no rows at all.
+     AgeDays is for the report; the floor compares AgeSec. $NowEpoch 0 means the clock now. #>
+  param([string]$Path = '', [long]$NowEpoch = 0)
   # ASSIGN, THEN WRAP. Read-TcEvents returns `,$out` so an empty log arrives as @(@()),
   # whose Count is 1 - an absent bus would read as one row and the floor would never fire.
   $read = Read-TcEvents -Path $Path
   $rows = @($read)
-  if ($rows.Count -eq 0) { return @{ Rows = 0; NewestEpoch = 0; AgeDays = -1 } }
-  $newest = 0
-  foreach ($r in $rows) { if ([int]$r.t -gt $newest) { $newest = [int]$r.t } }
-  $now = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-  return @{ Rows = $rows.Count; NewestEpoch = $newest
-            AgeDays = [math]::Round(($now - $newest) / 86400.0, 2) }
+  if ($rows.Count -eq 0) { return @{ Rows = 0; NewestEpoch = 0; AgeSec = -1; AgeDays = -1 } }
+  $newest = [long]0
+  foreach ($r in $rows) { if ([long]$r.t -gt $newest) { $newest = [long]$r.t } }
+  $now = if ($NowEpoch -gt 0) { $NowEpoch } else { [DateTimeOffset]::UtcNow.ToUnixTimeSeconds() }
+  $ageSec = $now - $newest
+  return @{ Rows = $rows.Count; NewestEpoch = $newest; AgeSec = $ageSec
+            AgeDays = [math]::Round($ageSec / 86400.0, 2) }
+}
+
+function Test-BusStale {
+  <# $true when the newest row is MORE than $FloorDays old. Integer seconds, so the bar is exact:
+     an age of exactly FloorDays x 86400 is not stale, one second more is. #>
+  param([long]$AgeSec, [int]$FloorDays)
+  return ($AgeSec -gt ([long]$FloorDays * 86400))
+}
+
+function Resolve-FloorBus {
+  <# WHICH BUS THE FLOOR JUDGES, from the checkout at $RepoDir. Returns
+     [pscustomobject]@{ Path; Blind; Source; Note }. Blind means no estate bus can be named, so the floor
+     cannot look: never ok, never a finding. See the header for why a linked worktree's own bus is not it. #>
+  param([string]$RepoDir, [string]$Explicit = '')
+  $r = [pscustomobject]@{ Path = ''; Blind = $false; Source = ''; Note = '' }
+  if ($Explicit) { $r.Path = $Explicit; $r.Source = 'TC_EVENT_BUS'; return $r }
+  $mc = Get-TcMainCheckout -Dir $RepoDir
+  if (-not $mc.ok) {
+    $r.Blind = $true; $r.Note = ('cannot name the main checkout from ' + $RepoDir + ': ' + $mc.note); return $r
+  }
+  if (-not $mc.linked) {
+    $r.Path = Join-Path $mc.top 'ops\out\events.jsonl'; $r.Source = 'this checkout, which is the main checkout'; return $r
+  }
+  if (-not $mc.main) {
+    $r.Blind = $true; $r.Note = ('a linked worktree with no main checkout to name: ' + $mc.note); return $r
+  }
+  $r.Path = Join-Path $mc.main 'ops\out\events.jsonl'
+  $r.Source = 'the main checkout, read from the linked worktree ' + $mc.top
+  return $r
 }
 
 # ---------------------------------------------------------------------------
@@ -269,10 +315,94 @@ for ($i = 0; $i -lt $E; $i++) {
     Remove-Item -LiteralPath $cdir -Recurse -Force -ErrorAction SilentlyContinue
   }
 
+  # THE FLOOR'S BAR, EXACTLY AT IT AND ONE STEP PAST IT (`.claude\rules\ops-and-gates.md`, backlog I196). The bar is
+  # FLOOR_DAYS x 86400 = 259,200 whole seconds and the comparison's resolution is one second, so both cases are
+  # integers and the double never decides them. Driven through a real bus file and Get-BusAge with a pinned clock.
+  $now0 = [long]2000000000
+  $barSec = [long]$FLOOR_DAYS * 86400
+  $fb = Join-Path ([IO.Path]::GetTempPath()) ('tc-ebf-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '.jsonl')
+  try {
+    [IO.File]::WriteAllText($fb, ('{"t":' + ($now0 - $barSec) + ',"kind":"chain-complete"}' + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $atBar = Get-BusAge -Path $fb -NowEpoch $now0
+    Case 'MUST NOT FIRE' ("a bus whose newest row is EXACTLY {0} day(s) = {1} s old is not stale" -f $FLOOR_DAYS, $barSec) `
+      ($atBar.Rows -eq 1 -and $atBar.AgeSec -eq $barSec -and -not (Test-BusStale -AgeSec $atBar.AgeSec -FloorDays $FLOOR_DAYS)) `
+      ("rows=$($atBar.Rows) age_s=$($atBar.AgeSec)")
+    [IO.File]::WriteAllText($fb, ('{"t":' + ($now0 - $barSec - 1) + ',"kind":"chain-complete"}' + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $pastBar = Get-BusAge -Path $fb -NowEpoch $now0
+    Case 'MUST FIRE' ("a bus whose newest row is {0} s old, one second past the {1}-day bar, is stale" -f ($barSec + 1), $FLOOR_DAYS) `
+      ($pastBar.AgeSec -eq ($barSec + 1) -and (Test-BusStale -AgeSec $pastBar.AgeSec -FloorDays $FLOOR_DAYS)) `
+      ("age_s=$($pastBar.AgeSec)")
+  } finally { Remove-Item -LiteralPath $fb -ErrorAction SilentlyContinue }
+
+  # WHICH BUS THE FLOOR JUDGES, PROVED ON A REAL REPO WITH A REAL LINKED WORKTREE, never on path arithmetic
+  # (`.claude\rules\ops-and-gates.md`: prove a sandbox by building one). The founding shape, 2026-09-23: a reused
+  # worktree's own bus held one 4-day-old row while the estate's bus was live, and the floor read the worktree's.
+  . (Join-Path $repo 'lib\git-repo-env.ps1')
+  Clear-TcGitRepoEnv
+  $gr = Join-Path ([IO.Path]::GetTempPath()) ('tc-ebw-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  $prevEap = $ErrorActionPreference
+  try {
+    [void][IO.Directory]::CreateDirectory($gr)
+    $gm = Join-Path $gr 'main'; $gw = Join-Path $gr 'wt'; $gn = Join-Path $gr 'nogit'
+    [void][IO.Directory]::CreateDirectory($gm); [void][IO.Directory]::CreateDirectory($gn)
+    $ErrorActionPreference = 'Continue'
+    & git -C $gm init -q 2>$null | Out-Null
+    & git -C $gm -c user.name=selftest -c user.email=selftest@example.invalid commit -q --allow-empty -m init 2>$null | Out-Null
+    & git -C $gm worktree add -q $gw -b selftest-wt 2>$null | Out-Null
+    $ErrorActionPreference = $prevEap
+    $mainBus = Join-Path $gm 'ops\out\events.jsonl'; $wtBus = Join-Path $gw 'ops\out\events.jsonl'
+    [void][IO.Directory]::CreateDirectory((Split-Path $mainBus -Parent)); [void][IO.Directory]::CreateDirectory((Split-Path $wtBus -Parent))
+    $nowR = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+    $utf8 = New-Object Text.UTF8Encoding($false)
+    function Get-FloorVerdictFrom([string]$Dir) {
+      $fr = Resolve-FloorBus -RepoDir $Dir
+      if ($fr.Blind) { return [pscustomobject]@{ Blind = $true; Path = ''; Stale = $false; Note = $fr.Note } }
+      $a = Get-BusAge -Path $fr.Path -NowEpoch $nowR
+      return [pscustomobject]@{ Blind = $false; Path = [IO.Path]::GetFullPath($fr.Path); Stale = ($a.Rows -gt 0 -and (Test-BusStale -AgeSec $a.AgeSec -FloorDays $FLOOR_DAYS)); Note = $fr.Note }
+    }
+    $mainFull = [IO.Path]::GetFullPath($mainBus)
+    $samePath = { param($a, $b) [string]::Equals($a, $b, [StringComparison]::OrdinalIgnoreCase) }
+
+    # MUST NOT FIRE, the founding shape: the worktree's OWN bus is 4 days old, the estate's (main's) is 1 hour old.
+    [IO.File]::WriteAllText($wtBus, ('{"t":' + ($nowR - 4 * 86400) + ',"kind":"gate-red"}' + "`n"), $utf8)
+    [IO.File]::WriteAllText($mainBus, ('{"t":' + ($nowR - 3600) + ',"kind":"chain-complete"}' + "`n"), $utf8)
+    $v1 = Get-FloorVerdictFrom $gw
+    Case 'MUST NOT FIRE' 'a linked worktree whose own bus is stale is judged on the MAIN checkout''s live bus' `
+      (-not $v1.Blind -and -not $v1.Stale -and (& $samePath $v1.Path $mainFull)) ("blind=$($v1.Blind) stale=$($v1.Stale) path=$($v1.Path) note=$($v1.Note)")
+
+    # MUST FIRE: the estate's bus is stale one second past the bar, and a FRESH worktree bus must not hide it.
+    [IO.File]::WriteAllText($wtBus, ('{"t":' + ($nowR - 60) + ',"kind":"gate-red"}' + "`n"), $utf8)
+    [IO.File]::WriteAllText($mainBus, ('{"t":' + ($nowR - $barSec - 1) + ',"kind":"chain-complete"}' + "`n"), $utf8)
+    $v2 = Get-FloorVerdictFrom $gw
+    Case 'MUST FIRE' 'a stale MAIN-checkout bus fires from a linked worktree whose own bus is fresh' `
+      (-not $v2.Blind -and $v2.Stale -and (& $samePath $v2.Path $mainFull)) ("blind=$($v2.Blind) stale=$($v2.Stale) path=$($v2.Path)")
+
+    # CLEAN TWIN: from the main checkout itself the floor still judges its own bus, and still fires on it.
+    $v3 = Get-FloorVerdictFrom $gm
+    Case 'CLEAN TWIN' 'from the main checkout the floor judges its own bus, and a stale one still fires' `
+      (-not $v3.Blind -and $v3.Stale -and (& $samePath $v3.Path $mainFull)) ("blind=$($v3.Blind) stale=$($v3.Stale) path=$($v3.Path)")
+
+    # MUST FIRE (blind): no main checkout can be named, so the floor says BLIND rather than judging a local file.
+    [void][IO.Directory]::CreateDirectory((Join-Path $gn 'ops\out'))
+    [IO.File]::WriteAllText((Join-Path $gn 'ops\out\events.jsonl'), ('{"t":' + ($nowR - 4 * 86400) + ',"kind":"gate-red"}' + "`n"), $utf8)
+    $v4 = Get-FloorVerdictFrom $gn
+    Case 'MUST FIRE' 'a directory with no main checkout to name is BLIND - neither judged stale nor passed' `
+      ($v4.Blind -and -not $v4.Stale -and -not $v4.Path) ("blind=$($v4.Blind) stale=$($v4.Stale) path=$($v4.Path)")
+  } finally {
+    $ErrorActionPreference = $prevEap
+    if (Test-Path -LiteralPath $gw) { $ErrorActionPreference = 'Continue'; & git -C $gm worktree remove --force $gw 2>$null | Out-Null; $ErrorActionPreference = $prevEap }
+    Remove-Item -LiteralPath $gr -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
   # CLEAN TWIN: an absent bus reads as zero rows and age -1, never as fresh.
   $age = Get-BusAge -Path (Join-Path $env:TEMP ("no-such-bus-{0}.jsonl" -f $PID))
   Case 'CLEAN TWIN' 'an absent bus is 0 rows and age -1, never age 0' `
     ($age.Rows -eq 0 -and $age.AgeDays -eq -1) ("rows=" + $age.Rows + " age=" + $age.AgeDays)
+
+  # A LITERAL LIST KNOWS ITS OWN NUMBER, so a case lost to a parse slip or a swallowed throw is a failure here,
+  # not a smaller suite. Move this when a case is added or removed.
+  $EXPECTED_CASES = 19
+  if ($ran.Count -ne $EXPECTED_CASES) { $fails += ("COUNT ran $($ran.Count) case(s), expected $EXPECTED_CASES") }
 
   ''
   if ($fails.Count -gt 0) {
@@ -304,13 +434,23 @@ Invoke-Guard -Name 'EVENT-BUS' -Body {
   }
 
   ''
-  $age = Get-BusAge
-  $busPath = Get-TcEventBusPath
+  $floorBus = Resolve-FloorBus -RepoDir $repo -Explicit $(if ($env:TC_EVENT_BUS) { $env:TC_EVENT_BUS } else { '' })
+  $floorBlind = 0
+  $age = @{ Rows = 0 }
+  if ($floorBus.Blind) {
+    # A COULD-NOT-LOOK IS NEVER A PASS AND NEVER A FAILURE. Reading this checkout's own bus instead is what
+    # produced the 2026-09-23 false red, so the floor does not guess; it says it did not look.
+    $floorBlind = 1
+    'the bus itself: BLIND - the floor judges the estate''s bus, and {0}' -f $floorBus.Note
+    '  The floor case is NOT covered by this run. The wiring half above still ran.'
+  } else {
+  $age = Get-BusAge -Path $floorBus.Path
+  $busPath = $floorBus.Path
+  'the floor judges: {0}' -f $floorBus.Source
   if ($age.Rows -eq 0) {
     'the bus itself: EMPTY (0 rows) at {0}' -f $busPath
     # THE FLOOR. An empty bus is only a finding when the estate was demonstrably running,
     # which is what the session digest can answer and nothing else can.
-    $digest = Join-Path (Split-Path -Parent $repo) 'ThriftyCrew\ops\out\events.jsonl'
     $sessions = 0
     $sd = Join-Path $env:USERPROFILE '.claude\recall-session-digest.jsonl'
     if (Test-Path -LiteralPath $sd) {
@@ -339,12 +479,12 @@ Invoke-Guard -Name 'EVENT-BUS' -Body {
     }
   } else {
     'the bus itself: {0} row(s), newest {1} day(s) old, at {2}' -f $age.Rows, $age.AgeDays, $busPath
-    if ($age.AgeDays -gt $FLOOR_DAYS) {
+    if (Test-BusStale -AgeSec $age.AgeSec -FloorDays $FLOOR_DAYS) {
       '  STALE: nothing has been written for more than {0} day(s).' -f $FLOOR_DAYS
-      $findings += ("the newest event on the bus is {0} day(s) old, over the {1}-day floor. Every other threshold in this estate is an upper bound and cannot fire on nothing happening; this one can, and it just did." -f $age.AgeDays, $FLOOR_DAYS)
+      $findings += ("the newest event on the bus at {2} is {0} day(s) old, over the {1}-day floor. Every other threshold in this estate is an upper bound and cannot fire on nothing happening; this one can, and it just did." -f $age.AgeDays, $FLOOR_DAYS, $busPath)
     }
     $kinds = @{}
-    $allEv = Read-TcEvents
+    $allEv = Read-TcEvents -Path $busPath
     foreach ($r in @($allEv)) {
       $k = [string]$r.kind
       if (-not $kinds.ContainsKey($k)) { $kinds[$k] = 0 }
@@ -352,14 +492,19 @@ Invoke-Guard -Name 'EVENT-BUS' -Body {
     }
     foreach ($k in ($kinds.Keys | Sort-Object)) { '    {0,-24} {1}' -f $k, $kinds[$k] }
   }
+  }
 
   ''
   'SCOPE OF A CLEAN REPORT: SOUND about wiring, UNSOUND about behaviour. It proves the call is'
   'in the file; it cannot prove the call sits on a path that runs.'
   if ($findings.Count -gt 0) {
     'EVENT BUS AUDIT FAILED: {0} finding(s) over {1} declared producer(s).' -f $findings.Count, $PRODUCERS.Count
-    Exit-Guard -Name 'EVENT-BUS' -Code 2 -Summary "producers=$($PRODUCERS.Count) findings=$($findings.Count)"
+    Exit-Guard -Name 'EVENT-BUS' -Code 2 -Summary "producers=$($PRODUCERS.Count) findings=$($findings.Count) blind=$floorBlind"
   }
-  'event-bus: PASSED - {0} declared producer(s) wired, bus has {1} row(s).' -f $PRODUCERS.Count, $age.Rows
-  Exit-Guard -Name 'EVENT-BUS' -Code 0 -Summary "producers=$($PRODUCERS.Count) rows=$($age.Rows) findings=0"
+  if ($floorBlind) {
+    'event-bus: PASSED on wiring - {0} declared producer(s) wired; the FLOOR is BLIND (1 case not covered).' -f $PRODUCERS.Count
+  } else {
+    'event-bus: PASSED - {0} declared producer(s) wired, bus has {1} row(s).' -f $PRODUCERS.Count, $age.Rows
+  }
+  Exit-Guard -Name 'EVENT-BUS' -Code 0 -Summary "producers=$($PRODUCERS.Count) rows=$($age.Rows) findings=0 blind=$floorBlind"
 }
