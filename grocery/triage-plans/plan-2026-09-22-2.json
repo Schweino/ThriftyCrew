@@ -193,7 +193,7 @@
       ],
       "status": "done",
       "closed_from": "grocery/triage-plans/plan-2026-09-22-4.json (status done)",
-      "leaves_open": "1 residual: the judgement queues (clusters, forgetting) still grow with each day's memory writing and only a person rules on them, so a night with a new cluster reports VERDICT: FAIL and now exits 3, which health-heartbeat pages as TASK FAILED. Unruled clusters or candidates were the cause on 7 of the last 8 logged runs.",
+      "leaves_open": "CORRECTED 2026-09-23 to the landed state: 1 residual - the judgement queues (clusters, forgetting) still grow with each day\u0027s memory writing and only a person rules on them. Per the heartbeat ruling (Q-4fc24c-1, ruled in plan-2026-09-22-4; 3005162d5, 1a9250b3d) such a night\u0027s exit 3 is graded REVIEW, not TASK FAILED. Unruled clusters or candidates were the cause on 7 of the last 8 logged runs. (The text copied at close said exit 3 paged as TASK FAILED; that was already false.)",
       "leaves_open_occurrences": 7,
       "leaves_open_followup": "Q-4fc24c-1"
     },
@@ -278,7 +278,7 @@
         ],
         "exact_change": "one helper (Get-ProducerSlot) in capture-policy-lib returns start/end for a named producer from the task registry; the watchdog's browser check and the heartbeat's output-freshness checks call it, and the -COMPLETE marker prints 'not_yet=N' beside findings so a blind branch is counted, not hidden"
       },
-      "leaves_open": "(1) the Fareway session sitting at a Des Moines store at 08:00, refused by the identity guard as designed, 1 occurrence today; (2) health-heartbeat output-freshness checks are not yet slot-aware.",
+      "leaves_open": "CORRECTED 2026-09-23 to the landed state: (1) the Fareway session sitting at a Des Moines store at 08:00, refused by the identity guard as designed, 1 occurrence (2026-09-22), and since 3005162d5 a browser miss pages the same day; (2) is CLOSED: health-heartbeat\u0027s output-freshness checks read NOT YET inside the producer\u0027s slot since 54eb1efa0 (5d20b9 F4), whose own residual plan-2026-09-22-8 owns by watch.",
       "leaves_open_occurrences": 1,
       "blast_radius": {
         "measured_as": "watchdog days",
@@ -558,7 +558,7 @@
       "resolution_note": "Root of the recall-sleep third: conhost --headless (I236) returns 0 whatever the child does. TC Recall Sleep 0435 now runs through pythonw + headless-exit.pyw and read LastTaskResult 1 on a failing day. The other nine conhost tasks are Brad's call (Q-1b8544-1).",
       "status": "done",
       "closed_from": "grocery/triage-plans/plan-2026-09-22-4.json (status done)",
-      "leaves_open": "the other 9 conhost-wrapped TC tasks still report 0 whatever they return (TC Daily Ratchets 0315's rc=1 on 3 of the last 3 days reads 0), and the item's other two automations (Graph Nightly's refused commit, Daemon Battery's exit 2) are judged by run_log and a green-only stamp, which this item did not change. Rewrapping them touches every registrar and the conhost check in ops/install-grocery-tasks.ps1, outside this run's permission.",
+      "leaves_open": "CORRECTED 2026-09-23 to the landed state: the rewrap is done - all 12 TC tasks were rewrapped in the ops lane\u0027s batch 1 round 2 (4849526da, which closed Q-1b8544-1 in plan-2026-09-22-4 as a defect fix), so no TC task reports 0 whatever it returns. Not re-measured here: whether Graph Nightly\u0027s refused commit and Daemon Battery\u0027s exit 2 are still judged by run_log and a green-only stamp. (The text copied at close said 9 tasks still reported 0; that was already false.)",
       "leaves_open_occurrences": 3,
       "leaves_open_followup": "Q-1b8544-1"
     },
@@ -859,7 +859,7 @@
         ],
         "exact_change": "the chain reads each store's rejects file after its build and compares per-reason counts to the previous capture's; a reason that rose by more than the bar pages under one condition per store; the -COMPLETE marker of each builder prints rejected=N by_reason=... so the number is in the log even when it does not page"
       },
-      "leaves_open": "a store-side rendering change still costs coverage without a page: no chain step compares per-reason reject counts day over day. 1 occurrence (2026-09-21, 52 rows)",
+      "leaves_open": "nothing - CORRECTED 2026-09-23 to the landed state: a store-side rendering change is now met at ingest, where grocery/audit-ingest-shape.ps1 compares each capture builder\u0027s rejects with the store\u0027s own prior 14 days and prints every new reason key (967f06033; 2026-09-22-f23a00 resolved as superseded by 2026-09-22-20fecf in plan-2026-09-22-10). The founding occurrence was 1 (2026-09-21, 52 rows). (The text copied at close said no chain step compared per-reason reject counts.)",
       "leaves_open_occurrences": 1,
       "blast_radius": {
         "measured_as": "rows",
@@ -1676,7 +1676,7 @@
         ],
         "exact_change": "send-alert refuses to page a type whose registry entry has no resolver (it queues it under UNREGISTERED with the reason, exactly as an unmapped class is handled today), so a new emitter with no consumer cannot start a daily page"
       },
-      "leaves_open": "185 live alert types are grandfathered 'unassigned:2026-09-22' with no resolver; each gets one as its consumer exists, lowering resolver_ratchet.unassigned_max in the same commit. The worklist in order of queue items: matching soundness 19, semantic sweep 18, stores dropped 16, wrong department 9, recipe db drift 9, link drift 6, Baker's ad window 6, ghost drift 4. 97 historical items in 18 types were the homework shape.",
+      "leaves_open": "nothing in this item - CORRECTED 2026-09-23 to the landed state: the grandfathered unassigned types fell from 185 to 4 through 5d20b9 groups C to E (a06659b21: the cap falls 43 -\u003e 4; grocery/alert-registry.json resolver_ratchet.unassigned_max = 4). Those 4 (run-needs-you, run-blocked-bot-wall, watchdog-browser-capture-missing-today, watchdog-browser-work-stale) are plan-2026-09-22-8\u0027s residual, owned there by Q-5d20b9-lanes. (The text copied at close said 185.)",
       "leaves_open_occurrences": 185,
       "blast_radius": {
         "measured_as": "alert types",
@@ -1748,7 +1748,7 @@
         ],
         "exact_change": "chain-manifest.json lists the scripts whose first real run is the daily chain (check-ad-cycles, capture-run, the seven builders, verify-*, guards and every delegated audit, publish-*, the hooks, cost-recipes, export-feed); pre-push, after run-gates, refuses a push that changed any of them without a recorded REHEARSAL pass over data no older than 2 days for that content fingerprint; -NoRehearsal is the loud bypass, logged like --no-verify"
       },
-      "leaves_open": "(1) a failure that needs TODAY's data (a store rendering first seen the same morning, like Sam's on 09-21, e291a1) is still first met in production: 1 of the 8. (2) Stages behind -NoPull (the store pulls, now excluded from the manifest) and behind -NoPublish (publish-deals-page, the recipe republish, hub, member mail) are never rehearsed, by design. (3) capture-run's commit-size gate is not rehearsed; only the pre-commit hook judges the staged set. (4) The cost: see resolution_note; measured over origin/main 2026-09-19 to 2026-09-22, 58 of 193 non-bot commits touched the manifest set (about 14 a day; pushes batch commits, so fewer rehearsals than that). (5) Concurrency is capped at 6 (Brad, 2026-09-22); the cap bounds count, not load, and the per-rehearsal peak (3.43 GB) was measured once, over one day's data. (6) Landed; the hook is installed from the main checkout at landing.",
+      "leaves_open": "CORRECTED 2026-09-23 to the landed state: (1) is CLOSED - a store rendering first seen the same morning (the Sam\u0027s 09-21 shape, e291a1) is met at ingest by grocery/audit-ingest-shape.ps1 (967f06033, 2026-09-22-20fecf resolved in plan-2026-09-22-10), not first in production. (2) stages behind -NoPull (the store pulls) and -NoPublish (publish-deals-page, the recipe republish, hub, member mail) are still never rehearsed; not re-measured here.",
       "leaves_open_occurrences": 1,
       "blast_radius": {
         "measured_as": "pushes",

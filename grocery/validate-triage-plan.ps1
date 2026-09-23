@@ -288,6 +288,31 @@ function Read-GateQueue {
   return @{ ok = $true; why = ''; items = @($qDoc.items | Where-Object { $_ }) }
 }
 
+# A COPIED RESIDUAL WHOSE OWNER HAS ALREADY CLOSED (2026-09-23). The master plan-2026-09-22-2 closed by copying its
+# sub-plans' leaves_open text verbatim, and four of those lines were already false when copied: the owner had landed
+# (1b8544 all 12 tasks rewrapped, 4fc24c exit 3 is REVIEW, the resolver cap at 4 not 185, 5d20b9's reconciler shipped).
+# The owner rule above cannot see that: a RESOLVED queue item still resolves. So -Closing WARNS, never refuses, when an
+# open residual names a queue owner the queue already records as resolved: re-read what landed and correct the text.
+# Pure over the plan items and the queue (live plus archive). A could-not-look (no queue items) warns nothing.
+function Get-ResolvedOwnerWarnings { param($Items, $QueueItems)
+  $out = New-Object System.Collections.Generic.List[string]
+  if ($null -eq $QueueItems) { return , $out.ToArray() }
+  $byId = @{}
+  foreach ($q in @($QueueItems)) { if ($q -and [string]$q.id) { $byId[[string]$q.id] = $q } }
+  foreach ($i in @($Items)) {
+    if (-not $i) { continue }
+    $lo = ([string]$i.leaves_open).Trim()
+    if (-not $lo -or $lo -match '^nothing\b') { continue }
+    $fu = ([string]$i.leaves_open_followup).Trim()
+    if (-not $fu -or -not $byId.ContainsKey($fu)) { continue }
+    $st = [string]$byId[$fu].status
+    if ($st -eq 'resolved') {
+      $out.Add(([string]$i.queue_id + ' leaves_open names owner ' + $fu + ', which the queue already records as resolved: re-read what landed and correct the residual text (it may have been copied from a sub-plan before the owner closed)'))
+    }
+  }
+  return , $out.ToArray()
+}
+
 function Test-Plan {
   param($Doc, [string[]]$Expect, [string]$PlanDir, [switch]$Closing, $QueueIds = @(), [string]$RepoRoot = '',
         $QueueItems = $null, [datetime]$Now = [datetime]::MinValue, $Census = $null,
@@ -782,7 +807,22 @@ if ($SelfTest) {
   $nothingLeft = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
   $nothingLeft.items[0] | Add-Member -NotePropertyName status -NotePropertyValue 'done' -Force
   _CaseClose 'at close, a done item whose leaves_open is nothing passes with no followup' $nothingLeft @() 0 $null
-
+  # THE COPIED-STALE-RESIDUAL WARNING (2026-09-23). Founding row: plan-2026-09-22-2's 5d20b9 residual, copied while its
+  # owner 2026-09-22-5d20b9 was already resolved in the queue.
+  $script:ran++
+  $cpy = @([pscustomobject]@{ queue_id = '2026-09-19-8a3090'; status = 'done'; leaves_open = 'the footer makes the lag legible but does not stop the send. 1 occurrence'; leaves_open_followup = '2026-09-22-5d20b9' })
+  $wq = @([pscustomobject]@{ id = '2026-09-22-5d20b9'; status = 'resolved' }, [pscustomobject]@{ id = '2026-09-10-aaaaaa'; status = 'open' })
+  $w1 = Get-ResolvedOwnerWarnings $cpy $wq
+  if (@($w1).Count -eq 1 -and @($w1)[0] -match '2026-09-22-5d20b9' -and @($w1)[0] -match 'resolved') { Write-Output 'ok    MUST FIRE  a residual naming an owner the queue already resolved WARNS once, naming the owner' } else { Write-Output ('FAIL  MUST FIRE  resolved-owner warning  got: ' + (@($w1) -join ' | ')); $script:fail++ }
+  $script:ran++
+  $cpy2 = @([pscustomobject]@{ queue_id = 'x'; status = 'done'; leaves_open = 'still open, 3 rows'; leaves_open_followup = '2026-09-10-aaaaaa' }, [pscustomobject]@{ queue_id = 'y'; status = 'done'; leaves_open = 'nothing'; leaves_open_followup = '2026-09-22-5d20b9' })
+  $w2 = Get-ResolvedOwnerWarnings $cpy2 $wq
+  if (@($w2).Count -eq 0) { Write-Output 'ok    MUST NOT FIRE  an owner still open, and a closed item whose leaves_open is nothing, warn nothing' } else { Write-Output ('FAIL  MUST NOT FIRE  resolved-owner warning  got: ' + (@($w2) -join ' | ')); $script:fail++ }
+  $script:ran++
+  $closedOwned = $closed | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $closedOwned.items[0] | Add-Member -NotePropertyName leaves_open_followup -NotePropertyValue '2026-09-22-5d20b9' -Force
+  $r4w = Test-Plan $closedOwned @() $env:TEMP -Closing -QueueIds @('2026-09-22-5d20b9') -QueueItems $wq
+  if ($r4w.rc -eq 0) { Write-Output 'ok    CLEAN TWIN  the same resolved owner still RESOLVES for the owner rule (the warning never becomes a refusal)' } else { Write-Output ('FAIL  CLEAN TWIN  resolved owner refused: rc=' + $r4w.rc + ' ' + ($r4w.problems -join ' | ')); $script:fail++ }
   # --- A WATCH OWNS ONLY WHAT HAS NEVER HAPPENED (2026-09-10) -------------------------------------------
   # A sandbox repo holding one real check, so the path test reads a file instead of trusting the plan.
   $wRoot = Join-Path $env:TEMP ('vtp-watch-' + $PID)
@@ -1138,7 +1178,7 @@ if ($SelfTest) {
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (2026-09-23, with W5.3's 23 cases): the count above is still COUNTED for
   # the summary, and this is the other half - a case that silently stopped running is a defect, never a smaller suite.
   # Raise it with every case added.
-  $expectedRan = 89
+  $expectedRan = 92   # +3 on 2026-09-23: the resolved-owner warning (MUST FIRE, MUST NOT FIRE, CLEAN TWIN)
   if ($ran -ne $expectedRan) { Write-Output "FAIL  ran $ran plan-gate cases, expected $expectedRan"; $fail++ }
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s) of $ran"; exit 1 }
@@ -1247,6 +1287,7 @@ if ($res.prevention) {
 }
 # EVERY RESIDUAL, VERBATIM. These lines are what the orchestrator's report copies. A summary of them is how
 # the 2026-09-09 report called eight items closed when four had left part of their own class open.
+if ($Closing) { $staleOwners = Get-ResolvedOwnerWarnings $items $retQueueItems; foreach ($sw in @($staleOwners)) { Write-Output ('  WARN  ' + $sw) } }
 $residuals = @($items | Where-Object { $_ -and ([string]$_.leaves_open).Trim() -and (([string]$_.leaves_open).Trim() -notmatch '^nothing\b') })
 if ($residuals.Count) {
   Write-Output ("  LEAVES OPEN: " + $residuals.Count + " of " + $items.Count + " item(s) - copy these into the report as written, never summarised:")

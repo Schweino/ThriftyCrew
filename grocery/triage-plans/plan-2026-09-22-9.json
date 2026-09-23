@@ -532,9 +532,9 @@
       "status": "done",
       "premise_verified": "true: Tandoori Masala, Korean glass noodles, Lo Mein Noodles, Blackened Seasoning, Fresh Red Chili and Olives still price as another food on 2026-09-22",
       "shipped_commit": "de8ddbeb3",
-      "leaves_open": "6 substitute rows still live on paid recipes (Tandoori Masala, Korean glass noodles, Lo Mein Noodles, Blackened Seasoning, Fresh Red Chili, Olives)",
+      "leaves_open": "CORRECTED 2026-09-23 to the landed state: the recipes carrying the Tandoori Masala, Korean glass noodle, Lo Mein Noodle and Blackened Seasoning substitutes are HELD since 2026-09-23 (11 recipes over 4 missing foods, 2dcbe8622, plan-2026-09-22-11), so those rows are no longer live; Fresh Red Chili still prices jalapenos\u0027 cheapest cell; Olives not re-measured here. Owned with plan-2026-09-22-11\u0027s residual by 2026-09-23-dd290b.",
       "leaves_open_occurrences": 6,
-      "leaves_open_followup": "2026-09-22-5a9676"
+      "leaves_open_followup": "2026-09-23-dd290b"
     },
     {
       "queue_id": "discovered:registry-duplicate-verdicts-2026-09-22",
@@ -624,7 +624,7 @@
         ]
       },
       "rollback": "revert the registry hunk with its lane's commit",
-      "leaves_open": "ghost-drift keeps resolver 'digest' until grocery/reconcile-ghost-drift.ps1 exists (discovered:ghost-drift-reconciler-2026-09-22, building with batch 3); the flip lands in that lane's commit, never before, as this item's own rule says. 5 fire days in the census window, owned by the open ghost-drift queue item 2026-09-21-115180. The four attended-browser types (run-needs-you, run-blocked-bot-wall, watchdog-browser-capture-missing-today, watchdog-browser-work-stale) stay unassigned BY DESIGN and each now carries no_lane_because in the registry: a CAPTCHA or bot wall cannot close unattended; 0 fires each in 30 days and grocery/capture-watchdog.ps1 pages the first miss.",
+      "leaves_open": "nothing - CORRECTED 2026-09-23 to the landed state: the reconciler shipped in d642ca001 (grocery/reconcile-ghost-drift.ps1) and ghost-drift\u0027s resolver flipped to it in that same commit, as this item\u0027s own rule required. (The text copied at close said the resolver stayed digest until the reconciler existed.)",
       "leaves_open_occurrences": 5,
       "leaves_open_followup": "2026-09-21-115180",
       "publish_batch": 1,
