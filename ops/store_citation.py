@@ -53,7 +53,8 @@ refused 4 of 61 for that reason and no other. So now:
   - a staged code file cannot cite itself, and when the repo cannot be listed the token is accepted and the
     row says `repo_blind` - a could-not-look never refuses.
 The decision row records `cited_kinds`, `repo_blind`, `self_cited` and `rules_without_section` (a rules file
-cited with no bullet named). None of them refuses; the weekly report reads them.
+cited with no bullet named), and since 2026-09-23 `toplevel` and `common_root`, the committing checkout and the
+main checkout it belongs to (both "" when git could not say). None of them refuses; the weekly report reads them.
 
 THE BRAIN REPO IS JUDGED BY THE SAME RULE (2026-09-23, W4.5 step 0). When the committing checkout is not a
 ThriftyCrew checkout - the ~/.claude repo, whose own commit-msg hook calls THIS file in the main checkout - a
@@ -473,13 +474,14 @@ def repo_context(cwd=None, env=None):
         roots = {top.stdout.strip().replace("\\", "/")}
         common = run(["rev-parse", "--path-format=absolute", "--git-common-dir"])
         c = common.stdout.strip().replace("\\", "/") if common.returncode == 0 else ""
-        if c.endswith("/.git"):
-            roots.add(c[:-5])                                  # the main checkout, when this is a worktree
+        common_root = c[:-5] if c.endswith("/.git") else ""    # the main checkout, when this is a worktree
+        if common_root:
+            roots.add(common_root)
         tracked = {p.replace("\\", "/").lower() for p in files.stdout.split("\0") if p}
         return {"repo_roots": sorted(roots, key=len, reverse=True), "tracked": tracked, "repo_blind": False,
-                "top": top.stdout.strip().replace("\\", "/")}
+                "top": top.stdout.strip().replace("\\", "/"), "common_root": common_root}
     except (OSError, ValueError, subprocess.SubprocessError):
-        return {"repo_roots": [], "tracked": None, "repo_blind": True, "top": ""}
+        return {"repo_roots": [], "tracked": None, "repo_blind": True, "top": "", "common_root": ""}
 
 
 def _norm_dir(p):
@@ -563,8 +565,10 @@ def run_commit_check(msg_path):
     ec = estate_context(store.get("repo_roots") or ())
     store.update(estate_tracked=ec["estate_tracked"])
     d = judge_message(text, code, store, today, session_searched(store["recall_log"], sid, now))
+    # toplevel and common_root name the committing checkout outright, so store-usage-report need not infer the repo
+    # from `repo`, a basename that reads the same for a brain lane and a ThriftyCrew worktree. Recorded, never judged.
     d.update(t=now, sid=sid, repo=os.path.basename(os.getcwd()), subject=(text.strip().splitlines() or [""])[0][:120],
-             estate_blind=ec["estate_blind"])
+             estate_blind=ec["estate_blind"], toplevel=store.get("top") or "", common_root=store.get("common_root") or "")
     append_log(store["log"], d)
     return emit_verdict(d, len(code))
 
@@ -972,6 +976,11 @@ def selftest():
         case("MUST NOT FIRE a linked worktree of a repo that is NOT the brain is not the brain, while the brain's own worktree is",
              not is_brain_checkout(ewctx["repo_roots"], brepo) and is_brain_checkout(bctx["repo_roots"], brepo)
              and len(ewctx["repo_roots"]) == 2 and not is_brain_checkout([], brepo))
+        case("CLEAN TWIN each decision row names its checkout: the lane's toplevel is the worktree and its common_root the brain, "
+             "the brain's own row has both at the brain, and a non-repo reads both as ''",
+             _norm_dir(wrow.get("toplevel", "")) == _norm_dir(bwt) and _norm_dir(wrow.get("common_root", "")) == _norm_dir(brepo)
+             and _norm_dir(brow.get("toplevel", "")) == _norm_dir(brepo) and _norm_dir(brow.get("common_root", "")) == _norm_dir(brepo)
+             and ctx2.get("top") == "" and ctx2.get("common_root") == "")
 
         # ---- W6.11: the cheap escapes are recorded as escape-warn, never through the refuse mode ----
         open(os.path.join(root, "CLAUDE.md"), "w").close()                       # the ~/.claude store base holds CLAUDE.md
@@ -1022,7 +1031,7 @@ def selftest():
 
     for f in fails:
         print("  FAIL  " + f)
-    expected = 71
+    expected = 72
     if n != expected:
         fails.append("ran %d cases, expected %d" % (n, expected))
         print("  FAIL  ran %d cases, expected %d" % (n, expected))
