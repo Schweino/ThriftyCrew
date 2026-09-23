@@ -531,4 +531,4 @@ ops/out/gate-verdict.json
 
 # The site-wide price monitor's daily findings (meal-prep/pipeline/monitor-sitewide-prices.ps1), read by the article lane
 # (prepare-article-price-edits.ps1). A day's measurement, rewritten every run: derived, never a record.
-/grocery/out/sitewide-price-literals.json
+/meal-prep/out/sitewide-price-literals.json

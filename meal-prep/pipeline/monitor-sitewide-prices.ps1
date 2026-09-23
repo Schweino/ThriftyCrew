@@ -24,7 +24,7 @@
 # shape: the figure is on the live page, attached to a grocery unit.
 #
 # RESOLVER: meal-prep\pipeline\prepare-article-price-edits.ps1 reads this run's findings file
-# (grocery\out\sitewide-price-literals.json) into a per-article worklist and a prepared edit (ruling C: live where
+# (meal-prep\out\sitewide-price-literals.json) into a per-article worklist and a prepared edit (ruling C: live where
 # the pipeline prices it, removed where it does not). Registered in grocery\alert-registry.json.
 #
 # Exit 0 clean (at or under the mark), 1 findings, 3 could not evaluate (a sitemap unreadable, or a page that could
@@ -42,7 +42,7 @@ $repo = Split-Path -Parent $mp
 . (Join-Path $repo 'lib\json-io.ps1')
 $SITE = 'https://www.thriftycrew.com'
 $cfgPath = Join-Path $mp 'db\sitewide-price-monitor.json'
-$outPath = Join-Path $repo 'grocery\out\sitewide-price-literals.json'
+$outPath = Join-Path $mp 'out\sitewide-price-literals.json'   # this module's own output, never grocery's internals
 
 # One page's measurement. Pure: the self-test drives it with page bytes.
 function Measure-SwpPage { param([string]$Html, [switch]$IsHome)
@@ -115,7 +115,8 @@ if ($SelfTestSwp) {
   $v = Get-TcSitewideRatchetVerdict -Measured @{ a = @{ literals = 4; title = $true }; b = @{ literals = 1; title = $true } } -Ratchet $rat
   T 'MUST FIRE  one literal past a page''s own mark (4 > 3) and a new title price' ((($v.findings -join ' ') -match 'GREW\s+a: 4') -and (($v.findings -join ' ') -match 'TITLE\s+a')) ($v.findings -join ' | ')
   $v = Get-TcSitewideRatchetVerdict -Measured @{ a = @{ literals = 2; title = $false } } -Ratchet $rat
-  T 'CLEAN TWIN  a page that improved is reported as CAN TIGHTEN, and the fix is never a finding' ($v.findings.Count -eq 0 -and ($v.tighten -join ' ') -match 'a: 2 literal' -and ($v.tighten -join ' ') -match 'b: clean') (($v.findings + $v.tighten) -join ' | ')
+  T 'MUST NOT FIRE  a page that improved is never a finding' ($v.findings.Count -eq 0) ($v.findings -join ' | ')
+  T 'CLEAN TWIN  a page that improved is reported as CAN TIGHTEN (a: 2 of mark 3, b: clean)' ((($v.tighten -join ' ') -match 'a: 2 literal') -and (($v.tighten -join ' ') -match 'b: clean')) ($v.tighten -join ' | ')
   if ($script:fl -eq 0) { Write-Output ("monitor-sitewide-prices self-test PASS ($script:n cases)"); exit 0 } else { Write-Output ("monitor-sitewide-prices self-test FAIL ($script:fl of $script:n)"); exit 1 }
 }
 
@@ -194,7 +195,7 @@ Write-Output ("sitewide-prices: {0} live URL(s) incl. the homepage: {1} exempt b
 if ($v.findings.Count) {
   $body = "monitor-sitewide-prices.ps1 read every live page in Ghost's sitemaps and found a grocery price typed as a literal that was not there when the mark was set (" + $cfg.ratchet.set + "):`n`n" + ($v.findings -join "`n") + "`n`n"
   foreach ($p in $pages) { if (($v.findings -join ' ') -match ('\b' + [regex]::Escape($p.slug) + '\b')) { $body += ($p.url + "`n" + ((@($p.hits) | Select-Object -First 5 | ForEach-Object { '    ' + $_.context }) -join "`n") + "`n") } }
-  $body += "`nCloses through meal-prep\pipeline\prepare-article-price-edits.ps1, which reads grocery\out\sitewide-price-literals.json into a prepared edit per page (live where the pipeline prices it, removed where it does not)."
+  $body += "`nCloses through meal-prep\pipeline\prepare-article-price-edits.ps1, which reads meal-prep\out\sitewide-price-literals.json into a prepared edit per page (live where the pipeline prices it, removed where it does not)."
   Send-SwpPage ('Sitewide price literals: ' + $v.findings.Count + ' new typed grocery price finding(s)') $body
 } elseif ($unread.Count) {
   Send-SwpPage 'Sitewide price monitor could not look' (($unread.Count.ToString() + " live page(s) could not be read twice, so they were not checked for a typed grocery price:`n") + (($unread | Select-Object -First 30) -join "`n"))

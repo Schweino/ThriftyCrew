@@ -331,3 +331,7 @@ if (-not (Test-Path $pub)) { New-Item -ItemType Directory -Force -Path $pub | Ou
 # to read what we publish.
 [IO.File]::WriteAllText((Join-Path $pub 'smp-feed.json'), $json, (New-Object Text.UTF8Encoding($false)))
 Write-Output ("smp-feed.json: " + $ing.Count + " ingredients, " + $rec.Count + " recipes, week " + $weekOf + " -> out\ + public\")
+# EVERYDAY_PS (2026-09-23): each recipe's per-serving price on its card's own basis, computed by running the card's own
+# script against the feed just written, so a recipe price on an article or the homepage fills from the feed. Non-fatal:
+# a recipe it cannot price carries no key and its span keeps the stamped fallback.
+try { & (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\feed-everyday-ps.ps1') -FeedPath (Join-Path $out 'smp-feed.json') -PublicPath (Join-Path $pub 'smp-feed.json') | ForEach-Object { Write-Output ("  " + $_) } } catch { Write-Output ("feed-everyday-ps threw: " + $_.Exception.Message + " - feed written without everyday_ps") }

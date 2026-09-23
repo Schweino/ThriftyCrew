@@ -154,6 +154,11 @@ $KNOWN = [ordered]@{
   'grocery\build-trend-redirects.ps1'        = 'emits the Ghost redirects file for every retired trend page; re-run whenever the keep-list moves, because the upload replaces the WHOLE redirect set'
   'grocery\unpublish-trend-pages.ps1'        = 'drafts (never deletes) the retired trend posts; refuses to run until the redirects answer over HTTP, and is resumable'
   'grocery\publish-trend-index.ps1'          = 'publishes the trend index page; live successor to the archived one-off, with the tracked-count derived from the keep-list'
+# -- 2026-09-23 batch 3 (live prices beyond recipe cards). Run by hand at a landing, not by the chain.
+'meal-prep\pipeline\build-live-price-script.ps1' = 'regenerates public\tc-live-price.js from the card template when the template changes; its -Check fails a committed copy that drifted, and run-gates runs its -SelfTest'
+'meal-prep\pipeline\prepare-article-price-edits.ps1' = 'the resolver the sitewide-price-literals alert names (alert-registry lane:): a person runs -Inventory, -Prepare and -Land on the pages the monitor flags'
+'meal-prep\runs\legacy-rebuild-2026-09-22\build-intakes.ps1' = 'the intake for the four legacy recipe rebuilds (ruling A); kept as the record of what was taken from each old post, re-run only to rebuild them'
+'meal-prep\runs\legacy-rebuild-2026-09-22\add-recipesdb-rows.ps1' = 'appends the four legacy rebuilds'' recipes-db rows once; refuses a slug already present, so re-running is a no-op error'
   # -- finished one-shots still in the tree on 2026-07-30. Both were verified to change ZERO records today
   # and both unconditionally rewrite live data plus a hardcoded 2026-07-14 backup name, so re-running one
   # DESTROYS that backup. Delete these two lines once they are in archive\one-off\.

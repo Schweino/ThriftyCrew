@@ -6,7 +6,7 @@
 #   -Inventory   read each article's CURRENT body (content\ghost-adopted\<slug>.json when it has one, else a read-only
 #                Admin API GET), list EVERY dollar figure with its sentence, mark the ones the monitor's literal
 #                shape catches, and write content\ghost-adopted\price-edits\inventory.json. Targets: -Slugs, or the
-#                non-exempt pages in grocery\out\sitewide-price-literals.json (the monitor's findings file).
+#                non-exempt pages in meal-prep\out\sitewide-price-literals.json (the monitor's findings file).
 #   -Prepare     read content\ghost-adopted\price-edits\<slug>.decisions.json (a person's or a writer's ruling on
 #                every figure: find -> replace, where a BACKED figure is a token {{live-recipe:<slug>}} or
 #                {{live-unit:<bid>:<per>}} and an UNBACKED one is prose without a figure), render each token through
@@ -160,7 +160,7 @@ function Get-ApeRecipeSpan { param([string]$RecipeSlug)
 function Get-ApeUnitValues { param([object[]]$Pairs)   # @(@{bid;per}) -> hashtable 'bid|per' -> '1.99'; runs the SHIPPED fill
   $node = Get-ChildItem 'C:\Codex\tools' -Filter 'node-*-win-x64' -Directory -ErrorAction SilentlyContinue | Sort-Object Name | Select-Object -Last 1
   if (-not $node) { throw 'node is missing under C:\Codex\tools: a commodity fallback cannot be stamped by the real fill' }
-  $feedPath = Join-Path $repo 'grocery\out\smp-feed.json'
+  $feedPath = Join-Path $repo 'public\smp-feed.json'   # the published feed: the same bytes export-feed wrote, read as the contract
   $feed = Read-JsonFile $feedPath
   $tmp = Join-Path ([IO.Path]::GetTempPath()) ('tc-ape-' + [guid]::NewGuid().ToString('N')); New-Item -ItemType Directory -Path $tmp -ErrorAction Stop | Out-Null
   try {
@@ -205,17 +205,19 @@ if ($SelfTestApe) {
   $order = @([regex]::Matches($ro.html, '<li\b[^>]*>(\w+)') | ForEach-Object { $_.Groups[1].Value }) -join ','
   T 'MUST FIRE  the build-time order follows the stamped prices (A 1.00 before B 2.00) with the skipped item last and labelled' ($order -eq 'A,B,Eggs' -and $ro.html -match 'not ranked: sold by the egg' -and @($ro.moves).Count -eq 1) ($order + ' moves=' + @($ro.moves).Count)
   $ro2 = Set-ApeRankOrder $ro.html
-  T 'CLEAN TWIN  an already-ranked list is left byte-identical, with no move recorded' ([string]::Equals($ro2.html, $ro.html, [StringComparison]::Ordinal) -and @($ro2.moves).Count -eq 0) (@($ro2.moves).Count)
+  T 'MUST NOT FIRE  an already-ranked list records no move' (@($ro2.moves).Count -eq 0) (@($ro2.moves).Count)
+  T 'CLEAN TWIN  an already-ranked list keeps its bytes (A, B, then the skipped item)' ([string]::Equals($ro2.html, $ro.html, [StringComparison]::Ordinal) -and $ro2.html -match 'not ranked: sold by the egg') 'bytes changed'
   $fr1 = Get-ApeFieldResult ([pscustomobject]@{ custom_excerpt = 'Twenty-five real dinners that land under $3 a serving.' }) 'T' 'T' @() @()
   T 'MUST FIRE  a price literal left in a stored field refuses (the same function -Prepare and -Land run)' ($fr1.findings.Count -ge 1 -and ($fr1.findings -join ' ') -match 'custom_excerpt still carries') ($fr1.findings -join ' | ')
   $fr2 = Get-ApeFieldResult ([pscustomobject]@{ custom_excerpt = 'Twenty-five real dinners that land under $3 a serving.'; meta_title = 'Cheap Dinners Under $3 a Serving' }) 'Cheap Dinners Under $3 a Serving' 'Cheap Dinners' @([pscustomobject]@{ find = 'that land under $3 a serving'; replace = 'that cost very little' }) @()
-  T 'CLEAN TWIN  a field cleaned by its edit and a title change passes and is carried as an update' ($fr2.findings.Count -eq 0 -and $fr2.updates['custom_excerpt'] -eq 'Twenty-five real dinners that cost very little.' -and $fr2.updates['meta_title'] -eq 'Cheap Dinners') (($fr2.findings -join ' | ') + ' / ' + ($fr2.updates | ConvertTo-Json -Compress))
+  T 'MUST NOT FIRE  a field cleaned by its edit and a title change is not refused' ($fr2.findings.Count -eq 0) ($fr2.findings -join ' | ')
+  T 'CLEAN TWIN  the cleaned field and the new title are carried as updates' ($fr2.updates['custom_excerpt'] -eq 'Twenty-five real dinners that cost very little.' -and $fr2.updates['meta_title'] -eq 'Cheap Dinners') ($fr2.updates | ConvertTo-Json -Compress)
   if ($script:fl -eq 0) { Write-Output ("prepare-article-price-edits self-test PASS ($script:n cases)"); exit 0 } else { Write-Output ("prepare-article-price-edits self-test FAIL ($script:fl of $script:n)"); exit 1 }
 }
 
 if ($Inventory) {
   if (-not $slugList.Count) {
-    $fp = Join-Path $repo 'grocery\out\sitewide-price-literals.json'
+    $fp = Join-Path $mp 'out\sitewide-price-literals.json'
     if (-not (Test-Path $fp)) { Write-Output 'no -Slugs and no monitor findings file: run monitor-sitewide-prices.ps1 first'; Exit-Guard -Name 'article-price-edits' -Summary 'blind=no-findings' -Code 3 }
     $slugList = @((Read-JsonFile $fp).pages | ForEach-Object { [string]$_.slug } | Where-Object { $_ -ne '(home)' })
   }
@@ -245,7 +247,7 @@ if ($Prepare) {
   $refused = @(); $done = 0
   $pairs = @(); foreach ($d in $decs) { foreach ($e in @((Read-JsonFile $d.FullName).edits)) { foreach ($m in [regex]::Matches([string]$e.replace, '\{\{live-unit:([a-z0-9-]+):([a-z]+)\}\}')) { $pairs += @{ bid = $m.Groups[1].Value; per = $m.Groups[2].Value } } } }
   $unit = @{ values = @{}; asof = '' }; if ($pairs.Count) { $unit = Get-ApeUnitValues $pairs }
-  $fgen = [string](Read-JsonFile (Join-Path $repo 'grocery\out\smp-feed.json')).generated
+  $fgen = [string](Read-JsonFile (Join-Path $repo 'public\smp-feed.json')).generated
   $rankAsOf = ([datetime]::Parse($fgen, [Globalization.CultureInfo]::InvariantCulture)).ToString('MMMM d, yyyy', [Globalization.CultureInfo]::InvariantCulture)
   foreach ($d in $decs) {
     $dec = Read-JsonFile $d.FullName; $s = [string]$dec.slug
