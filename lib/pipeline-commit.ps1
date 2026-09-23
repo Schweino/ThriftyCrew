@@ -27,6 +27,12 @@
   leaves the session's index untouched. capture-run's own stage is deliberately untouched: it works, and
   it carries the scar tissue of four incidents.
 
+  WHAT ELSE IT HOLDS, shared with capture-run's own commit stage, which calls these functions. The FOREIGN-HELD
+  snapshot: an owned file a session left dirty before a run started, MODIFIED or (since 2026-09-23, W0.2 of
+  design/PLAN-bot-checkout-self-heal-2026-09-23.md) DELETED, and not rewritten by the run, stays out of the commit and
+  is named. The PIPELINE WRITE JOURNAL: what a lane wrote, so the next committer can tell the pipeline's own bytes from
+  a session's edit.
+
   PUSH POLICY: TRY ONCE, NEVER BLOCK. Four schedulers can race. Each caller attempts a single push and,
   on failure, leaves the commit local and says so - the next capture-run pushes it. A commit that exists
   locally is already the whole of what "not uncommitted" means, and a retry loop between four
@@ -135,25 +141,67 @@ function Assert-NoSourcePaths {
 # WHAT IT CANNOT DO, stated so nobody reads it as more: an edit a session makes DURING the run to a file the run
 # never writes has an mtime after the start and cannot be attributed, so it is still staged. A snapshot that
 # cannot be taken holds NOTHING back and says so - it never silently stages less.
+# A DELETION PRESENT AT START IS HELD TOO (2026-09-23, design/PLAN-bot-checkout-self-heal-2026-09-23.md W0.2). Until
+# then the snapshot kept only a worktree 'M', on the reading that a deletion was not a file the run could have been
+# handed. It is: on 2026-09-23 graph/provenance/2026-09-22.jsonl was deleted from the main checkout before a forced
+# run, nothing held the deletion back, and cec9779a3 carried it to origin/main as a rename into a quarantine directory.
+# So a worktree 'D' of a path HEAD tracks is snapshotted as kind 'deleted', and at commit time it is held while the
+# path is STILL absent: the unstage restores HEAD's entry in the private index, so the deletion is not committed. A
+# path that exists again at commit time was rewritten by the run and is the run's own. THE KNOWN RESIDUAL: a tracked
+# file the pipeline itself deletes during a run whose commit is then refused is ' D' at the next start, so it is held
+# and named on every run until a person commits or restores it. That is a visible leak and never a lost file.
+function Get-DirtyEntryKind {
+  <# PURE. A snapshot entry's kind: 'modified' or 'deleted' as Get-DirtyOwnedSnapshot writes it, and 'modified' for an
+     entry with no kind, which is how every snapshot built before 2026-09-23 spelled one. A pscustomobject or a
+     dictionary entry. Any other value is returned as it is, for the caller's refusing default to name. #>
+  param($Entry)
+  if ($null -eq $Entry) { return 'modified' }
+  if ($Entry -is [System.Collections.IDictionary]) {
+    if ($Entry.Contains('kind') -and $null -ne $Entry['kind']) { return [string]$Entry['kind'] }
+    return 'modified'
+  }
+  if ($Entry.PSObject.Properties['kind'] -and $null -ne $Entry.kind) { return [string]$Entry.kind }
+  return 'modified'
+}
+
 function Get-DirtyOwnedSnapshot {
-  <# The tracked files under $Paths that are MODIFIED in the working tree now, each with its LastWriteTime.
-     Returns [pscustomobject]@{ ok; files = [pscustomobject]@{ path; mtime }[]; why }. #>
+  <# The tracked files under $Paths that are MODIFIED or DELETED in the working tree now.
+     Returns [pscustomobject]@{ ok; files = [pscustomobject]@{ path; mtime; kind }[]; why }, where
+       kind 'modified': the worktree column is M (' M', 'MM'), and mtime is the file's LastWriteTime;
+       kind 'deleted' : the worktree column is D, HEAD tracks the path, and it is absent on disk; mtime is $null.
+     HEAD TRACKS IT is git's own index column: with the worktree column D the index holds the path, so an index
+     column of ' ', 'M' or 'T' means HEAD holds it too, and 'A' means only the index does (an add that was then
+     deleted from disk, or an index a private-index commit left behind). Unmerged codes never reach either kind.
+     EVERY GIVEN PATH GOES TO GIT, on disk or not, so a deleted single-file owned path, or an owned directory a
+     session removed whole, is seen: git status answers rc 0 and nothing for a path it does not know (measured
+     2026-09-23 on git 2.54.0.windows.1). The listing is -z with core.quotePath=false and --no-renames, split on
+     NUL, so a path with a space or a non-ASCII letter arrives exactly as git names it, and a rename arrives as a
+     deletion and an add. #>
   param([Parameter(Mandatory = $true)][string]$Repo, [Parameter(Mandatory = $true)][string[]]$Paths)
-  $present = @($Paths | Where-Object { $_ -and (Test-Path -LiteralPath (Join-Path $Repo $_)) })
-  if (-not $present.Count) { return [pscustomobject]@{ ok = $true; files = @(); why = 'no owned path exists' } }
-  $g = Invoke-GitCaptured -Repo $Repo -GitArgs (@('status', '--porcelain', '--untracked-files=no', '--') + $present)
+  $spec = @($Paths | Where-Object { $_ })
+  if (-not $spec.Count) { return [pscustomobject]@{ ok = $true; files = @(); why = 'no owned path given' } }
+  $g = Invoke-GitCaptured -Repo $Repo -GitArgs (@('-c', 'core.quotePath=false', 'status', '--porcelain', '-z', '--untracked-files=no', '--no-renames', '--') + $spec)
   if ($g.rc -ne 0) { return [pscustomobject]@{ ok = $false; files = @(); why = ('git status exited ' + $g.rc + ': ' + ([string]$g.stderr).Trim()) } }
   $files = New-Object System.Collections.Generic.List[object]
-  foreach ($line in @(([string]$g.stdout) -split "`r?`n")) {
-    if ($line.Length -lt 4) { continue }
-    # The WORKTREE column: ' M' and 'MM'. A staged-only change, a rename or a deletion is not a file the run
-    # could have been handed dirty and then hold back unchanged.
-    if ($line[1] -ne 'M') { continue }
-    $rel = $line.Substring(3).Trim()
-    if ($rel.Length -ge 2 -and $rel.StartsWith('"') -and $rel.EndsWith('"')) { $rel = $rel.Substring(1, $rel.Length - 2) }
+  $rows = ([string]$g.stdout).Split([char]0)
+  for ($i = 0; $i -lt $rows.Count; $i++) {
+    $row = $rows[$i]
+    if ($row.Length -lt 4) { continue }
+    $x = [string]$row[0]; $y = [string]$row[1]; $rel = $row.Substring(3)
+    # porcelain -z writes a rename's or copy's SOURCE as the next field. --no-renames means none should arrive;
+    # stepping over one keeps every later row aligned if one ever does.
+    if ($x -ceq 'R' -or $x -ceq 'C') { $i++ }
     $full = Join-Path $Repo $rel
-    if (-not (Test-Path -LiteralPath $full)) { continue }
-    $files.Add([pscustomobject]@{ path = $rel; mtime = (Get-Item -LiteralPath $full).LastWriteTime })
+    if ($y -ceq 'M') {
+      if (-not (Test-Path -LiteralPath $full)) { continue }
+      $files.Add([pscustomobject]@{ path = $rel; mtime = (Get-Item -LiteralPath $full).LastWriteTime; kind = 'modified' })
+    } elseif ($y -ceq 'D') {
+      if (@(' ', 'M', 'T') -cnotcontains $x) { continue }
+      if (Test-Path -LiteralPath $full) { continue }
+      $files.Add([pscustomobject]@{ path = $rel; mtime = $null; kind = 'deleted' })
+    }
+    # Any other worktree column (' ' for a staged-only change, 'T', an unmerged code) is not a file the run could
+    # have been handed dirty and then hold back unchanged, which is the rule of the day before for everything but D.
   }
   return [pscustomobject]@{ ok = $true; files = $files.ToArray(); why = '' }
 }
@@ -171,19 +219,46 @@ function Get-PathMtimes {
 }
 
 function Get-ForeignHeldPaths {
-  <# PURE. From a start-of-run snapshot, the files the run did NOT rewrite: dirty before it started and with an
-     mtime still before $RunStart. A file rewritten by the run (mtime at or after the start) is the run's own.
-     An unusable snapshot holds nothing back. Comma-returned, so a caller assigns it and reads .Count. #>
+  <# PURE. From a start-of-run snapshot, the files the run did NOT rewrite, which its commit must not carry:
+       a 'modified' entry whose path still exists with an mtime before $RunStart (one at or after the start is the
+       run's own write);
+       a 'deleted' entry whose path is STILL absent, so the deletion was there before the run and the run did not
+       bring the file back (one that exists again was rewritten by the run and is the run's own).
+     $CurrentMtimes is Get-PathMtimes' map, which holds only the paths that exist now. An unusable snapshot holds
+     nothing back. An entry of any other kind THROWS: it is a defect in whoever built the snapshot, and guessing it
+     held or free would hide that. Comma-returned, so a caller assigns it and reads .Count. #>
   param($Snapshot, [datetime]$RunStart, $CurrentMtimes)
   $held = New-Object System.Collections.Generic.List[string]
   if ($null -eq $Snapshot -or -not $Snapshot.ok -or $null -eq $CurrentMtimes) { return ,$held.ToArray() }
   foreach ($f in @($Snapshot.files)) {
     if ($null -eq $f) { continue }
     $p = [string]$f.path
-    if (-not $CurrentMtimes.ContainsKey($p)) { continue }
-    if ([datetime]$CurrentMtimes[$p] -lt $RunStart) { $held.Add($p) }
+    $kind = Get-DirtyEntryKind -Entry $f
+    switch -CaseSensitive ($kind) {
+      'modified' { if ($CurrentMtimes.ContainsKey($p) -and ([datetime]$CurrentMtimes[$p] -lt $RunStart)) { $held.Add($p) } }
+      'deleted'  { if (-not $CurrentMtimes.ContainsKey($p)) { $held.Add($p) } }
+      default    { throw ('Get-ForeignHeldPaths: unknown snapshot kind ''' + $kind + ''' for ' + $p) }
+    }
   }
   return ,$held.ToArray()
+}
+
+function Format-ForeignHeldDeletionLines {
+  <# PURE. For each HELD path the snapshot recorded as a deletion present at start, the line a commit stage prints and
+     its status record carries: 'foreign-held: kept a deletion present at start: <path>', in the order $Held names
+     them. A held modification gets no line here; the commit stage's own count line names it. Comma-returned. #>
+  param($Snapshot, [string[]]$Held)
+  $lines = New-Object System.Collections.Generic.List[string]
+  if ($null -eq $Snapshot -or -not $Snapshot.ok) { return ,$lines.ToArray() }
+  $deleted = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($f in @($Snapshot.files)) {
+    if ($null -eq $f) { continue }
+    if ([string]::Equals((Get-DirtyEntryKind -Entry $f), 'deleted', [StringComparison]::Ordinal)) { [void]$deleted.Add([string]$f.path) }
+  }
+  foreach ($p in @($Held)) {
+    if ($p -and $deleted.Contains([string]$p)) { $lines.Add('foreign-held: kept a deletion present at start: ' + $p) }
+  }
+  return ,$lines.ToArray()
 }
 
 # ---- THE PIPELINE WRITE JOURNAL (2026-09-23, queue 2026-09-22-9bc4d2, reopened from 2026-09-10-a86b87) ----
@@ -231,10 +306,13 @@ function Get-PipelineCheckoutKey {
 
 function Get-PipelineBlobIds {
   <# path -> the git blob id its CURRENT bytes would get (git hash-object, filters applied), in chunks of 50 so a long
-     list never meets the command-line limit. A path git could not hash is absent from the map, never guessed. #>
+     list never meets the command-line limit. A path git could not hash is absent from the map, never guessed.
+     ONLY A FILE ON DISK IS HASHED (2026-09-23, W0.2). A held deletion now reaches this list, and git hash-object
+     refuses a whole call over one missing path: `hash-object -- present missing` printed the first id and exited 128
+     (measured in a temp repo that day), so the chunk was dropped and every file in it lost its journal vouch. #>
   param([Parameter(Mandatory = $true)][string]$Repo, [string[]]$Paths)
   $map = @{}
-  $list = @($Paths | Where-Object { $_ })
+  $list = @($Paths | Where-Object { $_ -and (Test-Path -LiteralPath (Join-Path $Repo $_) -PathType Leaf) })
   for ($i = 0; $i -lt $list.Count; $i += 50) {
     $chunk = @($list[$i..([Math]::Min($i + 49, $list.Count - 1))])
     $g = Invoke-GitCaptured -Repo $Repo -GitArgs (@('hash-object', '--') + $chunk)
@@ -412,6 +490,10 @@ function Invoke-PipelineCommit {
           $foreignNote = ('; foreign-held: ' + $foreignHeld.Count + ' tracked owned file(s) another session dirtied before this run started, left uncommitted: ' + ($foreignHeld -join ', '))
           $staged = @(& git -C $Repo diff --cached --name-only | Where-Object { $_ })
         }
+        # A HELD DELETION IS NAMED ON ITS OWN LINE (2026-09-23, W0.2): the reset above restored HEAD's entry, so the
+        # commit keeps the file, and the file stays absent on disk for its owner to restore or commit.
+        $fhDeleted = Format-ForeignHeldDeletionLines -Snapshot $DirtyAtStart -Held $foreignHeld
+        foreach ($fhLine in @($fhDeleted)) { $foreignNote += ('; ' + $fhLine) }
         if ($fhSplit.note) { $foreignNote += ('; ' + $fhSplit.note) }
       }
     }
@@ -515,7 +597,10 @@ function Get-PipelineLaneExitCode {
 
 if ($__pcSelfTest) {
   $fail = 0
-  function T($n, $c, $g = '') { if ($c) { Write-Output ("ok    " + $n) } else { Write-Output ("FAIL  " + $n + "   got: " + $g); $script:fail++ } }
+  # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (2026-09-23): every T call counts, and the verdict compares the count with
+  # $pcExpectedCases below, so a case lost to a throw, a skipped block or a joined line is a failure, not a smaller pass.
+  $ran = 0
+  function T($n, $c, $g = '') { $script:ran++; if ($c) { Write-Output ("ok    " + $n) } else { Write-Output ("FAIL  " + $n + "   got: " + $g); $script:fail++ } }
 
   T 'MUST NOT FIRE a data path list is accepted' ((Assert-NoSourcePaths @('grocery/out', 'meal-prep/db/costed.json')).Count -eq 0)
 
@@ -594,6 +679,33 @@ if ($__pcSelfTest) {
   T 'MUST FIRE  a snapshot that could not be taken holds NOTHING back' ($h2.Count -eq 0) ($h2 -join ', ')
   $h3 = Get-ForeignHeldPaths -Snapshot $snapOk -RunStart $t0 -CurrentMtimes @{ 'lane/out/capture-cursor.json' = $t0.AddMinutes(5) }
   T 'MUST NOT FIRE a snapshot file that has since disappeared is not held' ($h3.Count -eq 0) ($h3 -join ', ')
+  # THE BAR IS `mtime -lt RunStart`, and a [datetime] is a whole number of 100 ns ticks, so both cases are exact.
+  $snapBar = [pscustomobject]@{ ok = $true; why = ''; files = @([pscustomobject]@{ path = 'lane/out/bar.json'; mtime = $t0; kind = 'modified' }) }
+  $hAt = Get-ForeignHeldPaths -Snapshot $snapBar -RunStart $t0 -CurrentMtimes @{ 'lane/out/bar.json' = $t0 }
+  T 'MUST NOT FIRE AT THE BAR an mtime exactly equal to RunStart is the run''s own write and is not held' ($hAt.Count -eq 0) ($hAt -join ', ')
+  $hPast = Get-ForeignHeldPaths -Snapshot $snapBar -RunStart $t0 -CurrentMtimes @{ 'lane/out/bar.json' = $t0.AddTicks(-1) }
+  T 'MUST FIRE  ONE TICK PAST THE BAR an mtime one 100 ns tick before RunStart is held' (($hPast.Count -eq 1) -and ($hPast[0] -eq 'lane/out/bar.json')) ($hPast -join ', ')
+
+  # ---- A DELETION PRESENT AT START IS HELD (2026-09-23, design/PLAN-bot-checkout-self-heal-2026-09-23.md W0.2) --------
+  # PURE, frozen times. The founding shape is graph/provenance/2026-09-22.jsonl, deleted before a forced run and carried
+  # to origin/main; here it is a neutral lane/out/prov.jsonl.
+  $snapDel = [pscustomobject]@{ ok = $true; why = ''; files = @(
+    [pscustomobject]@{ path = 'lane/out/prov.jsonl'; mtime = $null; kind = 'deleted' },
+    [pscustomobject]@{ path = 'lane/out/back.jsonl'; mtime = $null; kind = 'deleted' },
+    [pscustomobject]@{ path = 'lane/out/json-readers-baseline.json'; mtime = $t0.AddHours(-2); kind = 'modified' }) }
+  $nowDel = @{ 'lane/out/back.jsonl' = $t0.AddMinutes(5); 'lane/out/json-readers-baseline.json' = $t0.AddHours(-2) }
+  $hD = Get-ForeignHeldPaths -Snapshot $snapDel -RunStart $t0 -CurrentMtimes $nowDel
+  T 'MUST FIRE  a deletion present at start and still absent is held, beside a held modification, in snapshot order' (($hD -join ',') -eq 'lane/out/prov.jsonl,lane/out/json-readers-baseline.json') ($hD -join ',')
+  T 'MUST NOT FIRE a deletion the run brought back (the path exists again) is the run''s own and is not held' (@($hD | Where-Object { $_ -eq 'lane/out/back.jsonl' }).Count -eq 0) ($hD -join ',')
+  $dlD = Format-ForeignHeldDeletionLines -Snapshot $snapDel -Held $hD
+  T 'MUST FIRE  the commit stage''s line names exactly the held deletion, and the held modification gets none' `
+    (($dlD.Count -eq 1) -and ($dlD[0] -eq ('foreign-held: kept a deletion ' + 'present at start: lane/out/prov.jsonl'))) ($dlD -join ' | ')
+  $snapOdd = [pscustomobject]@{ ok = $true; why = ''; files = @([pscustomobject]@{ path = 'lane/out/odd.json'; mtime = $null; kind = 'renamed' }) }
+  $oddMsg = ''
+  try { [void](Get-ForeignHeldPaths -Snapshot $snapOdd -RunStart $t0 -CurrentMtimes @{}) } catch { $oddMsg = $_.Exception.Message }
+  T 'MUST FIRE  a snapshot entry of an unknown kind throws and names the kind, instead of being guessed held or free' ($oddMsg -match 'unknown snapshot kind ''renamed''') $oddMsg
+  T 'CLEAN TWIN an entry with no kind (every snapshot built before 2026-09-23) reads as modified' `
+    (((Get-DirtyEntryKind -Entry $snapOk.files[0]) -eq 'modified') -and ((Get-DirtyEntryKind -Entry @{ path = 'x'; kind = 'deleted' }) -eq 'deleted')) ((Get-DirtyEntryKind -Entry $snapOk.files[0]) + ' / ' + (Get-DirtyEntryKind -Entry @{ path = 'x'; kind = 'deleted' }))
 
   # END TO END in a throwaway repo, repository environment cleared first (ops rule: a fixture that builds a temp repo
   # must not inherit GIT_DIR or GIT_INDEX_FILE from a hook). FROZEN from the founding case: a session stripped the BOM
@@ -695,11 +807,100 @@ if ($__pcSelfTest) {
     $vp = Invoke-PipelineCommit -Repo $tr -Paths @('lane/out') -Message 'run3' -Name 'probe' -Push
     $xp = Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome (Get-PipelineCommitOutcome -Verdict $vp)
     T 'CLEAN TWIN  a landed commit whose push failed classifies as committed and a clean lane still exits 0' (($vp -match 'committed 1 file') -and ($vp -match 'push (failed|threw)') -and ((Get-PipelineCommitOutcome -Verdict $vp) -eq 'committed') -and ($xp -eq 0)) ($vp + ' | exit=' + $xp)
+  } catch {
+    T 'the first end-to-end block ran to its end without throwing' $false $_.Exception.Message
   } finally {
     Remove-Item -LiteralPath $tr -Recurse -Force -ErrorAction SilentlyContinue
   }
 
-  if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); exit 1 }
-  Write-Output 'SELF-TEST PASS: the source-path refusal in eleven shapes, every real path list proved data-only and non-empty, no path owned twice, the committer refusing before it touches git, and a lane''s exit code earned from its verdict (a refused commit exits 1, a landed one whose push failed exits 0)'
+  # ---- W0.2 END TO END: a deletion present at start stays out of the commit (2026-09-23) --------------------------------
+  # A second throwaway repo, its own per-run name, removed in finally, repository environment already cleared above.
+  # FROZEN from the founding case: a session deleted a tracked owned file (graph/provenance/2026-09-22.jsonl) before a
+  # forced run, the run never brought it back, and the bot commit carried the deletion. Beside it, the adjacent shapes a
+  # snapshot change could break: a deletion made DURING the run, a deletion the run undoes, a deleted single-file owned
+  # path, an index-only add, a session's modification, a pipeline lane's recorded write, and a path with a space and a
+  # non-ASCII letter.
+  $tr2 = Join-Path $env:TEMP ('pc-dl-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $tr2 'lane\out') -Force | Out-Null
+    & git -C $tr2 init -q . | Out-Null
+    & git -C $tr2 config user.email t@t | Out-Null
+    & git -C $tr2 config user.name t | Out-Null
+    # Hooks pinned to an EMPTY directory, so no inherited core.hooksPath can refuse a commit this block judges.
+    $noHook2 = Join-Path $tr2 'fixture-no-hooks'
+    New-Item -ItemType Directory -Path $noHook2 -Force | Out-Null
+    & git -C $tr2 config core.hooksPath ($noHook2 -replace '\\', '/') | Out-Null
+    $odd = 'lane/out/caf' + [char]0x00E9 + ' x.json'
+    $seed2 = [ordered]@{
+      'lane/out/prov.jsonl' = '{"p":1}'; 'lane/out/back.jsonl' = '{"b":1}'; 'lane/out/during.json' = '{"d":1}'
+      'lane/out/baseline.json' = '{"n":1}'; 'lane/out/written.json' = '{"w":1}'; 'lane/out/run-output.txt' = 'v1'
+      'lane/single.json' = '{"s":1}' }
+    $seed2[$odd] = '{"o":1}'
+    foreach ($k in @($seed2.Keys)) { [IO.File]::WriteAllText((Join-Path $tr2 $k), [string]$seed2[$k]) }
+    & git -C $tr2 add -A -- lane | Out-Null
+    & git -C $tr2 commit -q -m seed | Out-Null
+    $provBlob0 = ([string](& git -C $tr2 rev-parse 'HEAD:lane/out/prov.jsonl')).Trim()
+    # BEFORE THE RUN. The session deletes three files and edits two; a pipeline lane writes one and records it; an index-
+    # only add is deleted from disk (AD).
+    Remove-Item -LiteralPath (Join-Path $tr2 'lane/out/prov.jsonl')
+    Remove-Item -LiteralPath (Join-Path $tr2 'lane/out/back.jsonl')
+    Remove-Item -LiteralPath (Join-Path $tr2 'lane/single.json')
+    foreach ($k in @('lane/out/baseline.json', $odd)) {
+      [IO.File]::WriteAllText((Join-Path $tr2 $k), '{"session":true}')
+      (Get-Item -LiteralPath (Join-Path $tr2 $k)).LastWriteTime = (Get-Date).AddHours(-2)
+    }
+    $wLane = (Get-Date).AddMinutes(-3)
+    [IO.File]::WriteAllText((Join-Path $tr2 'lane/out/written.json'), '{"w":2}')
+    $nW = Register-PipelineWrites -Repo $tr2 -Lane 'probe-lane' -Since $wLane -Paths @('lane/out/written.json')
+    (Get-Item -LiteralPath (Join-Path $tr2 'lane/out/written.json')).LastWriteTime = (Get-Date).AddMinutes(-2)
+    [IO.File]::WriteAllText((Join-Path $tr2 'lane/out/idx-only.json'), '{"i":1}')
+    & git -C $tr2 add -- lane/out/idx-only.json | Out-Null
+    Remove-Item -LiteralPath (Join-Path $tr2 'lane/out/idx-only.json')
+    $snapD = Get-DirtyOwnedSnapshot -Repo $tr2 -Paths @('lane/out', 'lane/single.json')
+    $kinds = @{}
+    foreach ($f in @($snapD.files)) { $kinds[[string]$f.path] = (Get-DirtyEntryKind -Entry $f) }
+    $kindText = (@($kinds.Keys | Sort-Object) | ForEach-Object { $_ + '=' + $kinds[$_] }) -join ', '
+    T 'MUST FIRE  the start snapshot keeps a worktree deletion of a HEAD-tracked file as kind deleted with no mtime' `
+      (($snapD.ok) -and ($kinds['lane/out/prov.jsonl'] -eq 'deleted') -and ($kinds['lane/out/back.jsonl'] -eq 'deleted') -and ($nW -eq 1)) ($kindText + ' | registered=' + $nW)
+    T 'MUST FIRE  a deleted SINGLE-FILE owned path is seen although it is not on disk to be listed' ($kinds['lane/single.json'] -eq 'deleted') $kindText
+    T 'MUST NOT FIRE an index-only add deleted from disk (AD: HEAD does not track it) is no deletion the run was handed' (-not $kinds.ContainsKey('lane/out/idx-only.json')) $kindText
+    T 'CLEAN TWIN the -z listing names a path with a space and a non-ASCII letter exactly, as modified' ($kinds[$odd] -eq 'modified') $kindText
+    T 'CLEAN TWIN a session''s modification is still snapshotted as modified with its mtime' `
+      (($kinds['lane/out/baseline.json'] -eq 'modified') -and (@($snapD.files | Where-Object { $_.path -eq 'lane/out/baseline.json' -and $_.mtime -is [datetime] }).Count -eq 1)) $kindText
+    # THE RUN. It writes its own file, brings back.jsonl back with new bytes, and deletes during.json itself.
+    $rsD = (Get-Date).AddMinutes(-1)
+    [IO.File]::WriteAllText((Join-Path $tr2 'lane/out/run-output.txt'), 'v2')
+    [IO.File]::WriteAllText((Join-Path $tr2 'lane/out/back.jsonl'), '{"b":2}')
+    Remove-Item -LiteralPath (Join-Path $tr2 'lane/out/during.json')
+    $vD = Invoke-PipelineCommit -Repo $tr2 -Paths @('lane/out', 'lane/single.json') -Message 'run-d' -Name 'probe' -DirtyAtStart $snapD -RunStart $rsD
+    $treeD = @{}
+    $lsD = Invoke-GitCaptured -Repo $tr2 -GitArgs @('-c', 'core.quotePath=false', 'ls-tree', '-r', '-z', 'HEAD', '--', 'lane')
+    foreach ($row in @(([string]$lsD.stdout).Split([char]0) | Where-Object { $_ })) { $tab = $row.IndexOf("`t"); $treeD[$row.Substring($tab + 1)] = ($row.Substring(0, $tab) -split ' ')[2] }
+    $statusD = @((Invoke-GitCaptured -Repo $tr2 -GitArgs @('-c', 'core.quotePath=false', 'status', '--porcelain', '-z', '--untracked-files=no')).stdout.Split([char]0) | Where-Object { $_ })
+    T 'MUST FIRE  a deletion present at start and still absent is NOT committed: HEAD still lists the file at its blob, the line names it, and it stays deleted on disk' `
+      (($treeD['lane/out/prov.jsonl'] -eq $provBlob0) -and ($vD -match [regex]::Escape('foreign-held: kept a deletion present at start: lane/out/prov.jsonl')) -and ($statusD -contains ' D lane/out/prov.jsonl')) ($vD + ' | head prov=' + $treeD['lane/out/prov.jsonl'] + ' | status=' + ($statusD -join ','))
+    T 'MUST FIRE  a deleted single-file owned path is kept in HEAD and named on its own line' `
+      (($treeD.ContainsKey('lane/single.json')) -and ($vD -match [regex]::Escape('kept a deletion present at start: lane/single.json'))) $vD
+    T 'MUST NOT FIRE a tracked file the run itself deleted DURING the run is committed as a deletion, as before' `
+      ((-not $treeD.ContainsKey('lane/out/during.json')) -and ($vD -notmatch 'during\.json')) ($vD + ' | head=' + (@($treeD.Keys | Sort-Object) -join ','))
+    T 'MUST NOT FIRE a deletion the run brought back is committed with the run''s new bytes, never held' `
+      (($treeD['lane/out/back.jsonl'] -eq ([string](& git -C $tr2 hash-object -- lane/out/back.jsonl)).Trim()) -and ($vD -notmatch 'back\.jsonl')) $vD
+    T 'CLEAN TWIN a session''s modification present at start is still held at HEAD''s bytes and left dirty, as before' `
+      (($vD -match 'foreign-held: 4 tracked owned file') -and ($statusD -contains ' M lane/out/baseline.json') -and ($statusD -contains (' M ' + $odd))) ($vD + ' | status=' + ($statusD -join ','))
+    T 'CLEAN TWIN a recorded pipeline write beside held deletions is still committed as the pipeline''s own (a missing path never breaks the hash)' `
+      (($vD -match 'pipeline-own: 1 file.*probe-lane.*written\.json') -and ($treeD['lane/out/written.json'] -eq ([string](& git -C $tr2 hash-object -- lane/out/written.json)).Trim())) $vD
+    T 'CLEAN TWIN the landed commit still classifies as committed with its held-deletion lines' ((Get-PipelineCommitOutcome -Verdict $vD) -eq 'committed') $vD
+  } catch {
+    T 'the W0.2 end-to-end block ran to its end without throwing' $false $_.Exception.Message
+  } finally {
+    Remove-Item -LiteralPath $tr2 -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
+  # The literal count: every T line in this block, with the two loops counted at their widths (3 lane kinds x 2, and 4
+  # outcomes). Moving it is part of adding or removing a case.
+  $pcExpectedCases = 69
+  if ($ran -ne $pcExpectedCases) { Write-Output ("FAIL  the suite ran " + $ran + " case(s) against its literal count of " + $pcExpectedCases); $fail++ }
+  if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s) of {1} run" -f $fail, $ran); exit 1 }
+  Write-Output ('SELF-TEST PASS: ' + $ran + ' of ' + $pcExpectedCases + ' cases: the source-path refusal in eleven shapes, every real path list proved data-only and non-empty, no path owned twice, the committer refusing before it touches git, a lane''s exit code earned from its verdict (a refused commit exits 1, a landed one whose push failed exits 0), and a deletion present at start held out of the commit')
   exit 0
 }
