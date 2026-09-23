@@ -1,0 +1,452 @@
+[
+    {
+        "name":  "Mrs. Renfro\u0027s Fan Favorites Salsa Bundle",
+        "lp":  "$35.00",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "ReadyWise Sliced Strawberries Whole Shelf-Stable 18 Servings",
+        "lp":  "$26.99",
+        "up":  "15.0 ¢/g",
+        "reason":  "unknown unit \"g\""
+    },
+    {
+        "name":  "ReadyWise Dehydrated Blueberries for Smoothies \u0026 Snacks, 28 Servings",
+        "lp":  "$26.99",
+        "up":  "7.9 ¢/g",
+        "reason":  "unknown unit \"g\""
+    },
+    {
+        "name":  "Del Monte Golden Sweet Whole Kernel Corn 15.25 Ounce (8 Pack)",
+        "lp":  "$19.50",
+        "up":  "$19.50/count",
+        "reason":  "INVARIANT: no shape reproduces Walmart\u0027s 19.5/ct -\u003e package: engine 2.4375 vs Walmart\u0027s 19.5 (88% off) | per-unit: engine 2.4375 vs Walmart\u0027s 19.5 (88% off)"
+    },
+    {
+        "name":  "7UP Caffeine Free Zero Sugar Lemon Lime Soda Pop, 2 Liter Bottle (Pack of 6)",
+        "lp":  "$37.00",
+        "up":  "$18.50/l",
+        "reason":  "unknown unit \"l\""
+    },
+    {
+        "name":  "Individual Salt Packets by Salty Ernie, Iodized Table Salt, 0.6 grams   200 Packets",
+        "lp":  "$7.49",
+        "up":  "3.7 ¢/pack",
+        "reason":  "unknown unit \"pack\""
+    },
+    {
+        "name":  "Great Value Heavy Duty Aluminum Foil, 150 sq ft",
+        "lp":  "$12.28",
+        "up":  "8.2 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Glad Press\u0027N Seal Multipurpose Sealing Food Wrap, 50 sq ft Roll",
+        "lp":  "$3.66",
+        "up":  "7.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Non-Stick Aluminum Foil Roll, 12 inches Wide, 150 Sq. Ft.",
+        "lp":  "$16.97",
+        "up":  "11.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Fun Foil with Special Edition Fireworks Pattern, Embossed Aluminum Foil Roll, 50 Sq. Ft.",
+        "lp":  "$5.24",
+        "up":  "10.5 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Great Value Aluminum Foil, 25 sq ft",
+        "lp":  "$1.82",
+        "up":  "7.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Everyday Strength Aluminum Foil, 75 square feet",
+        "lp":  "$5.97",
+        "up":  "8.0 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Great Value Heavy Duty Aluminum Foil, 50 sq ft",
+        "lp":  "$4.83",
+        "up":  "9.7 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty Aluminum Foil, 12 Inch Wide, 50 Sq. Ft.",
+        "lp":  "$5.97",
+        "up":  "11.9 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Great Value Heavy Duty Aluminum Foil, 100 sq ft",
+        "lp":  "$8.98",
+        "up":  "9.0 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty Aluminum Foil, Heavy Duty Foil Roll, Extra Wide, 37.5 Sq. Ft.",
+        "lp":  "$5.97",
+        "up":  "15.9 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Great Value Non-Stick Aluminum Foil, 50 sq ft",
+        "lp":  "$4.83",
+        "up":  "9.7 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Non-Stick Aluminum Foil Roll, 12 inches Wide, 50 Sq. Ft.",
+        "lp":  "$5.97",
+        "up":  "11.9 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Great Value Heavy Duty Aluminum Foil, 75 sq ft",
+        "lp":  "$6.98",
+        "up":  "9.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty Aluminum Foil, 18 Inch Width, 75 square feet",
+        "lp":  "$10.17",
+        "up":  "13.6 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Great Value Heavy Duty Aluminum Foil, 37.5 Sq Ft",
+        "lp":  "$3.98",
+        "up":  "10.6 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Non Stick Heavy Duty Foil for Grilling, Extra Wide 18 Inch Width, 37.5 Sq. Ft.",
+        "lp":  "$6.13",
+        "up":  "16.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Standard Aluminum Foil, 30 Square Feet",
+        "lp":  "$8.31",
+        "up":  "27.7 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "ReadyWise Freeze-Dried Raspberries 22-Serving Can   Long Shelf Life, Nutritious Snack",
+        "lp":  "$29.99",
+        "up":  "13.2 ¢/g",
+        "reason":  "unknown unit \"g\""
+    },
+    {
+        "name":  "Bushel \u0026 Berry Blackberry Baby Cakes Live Shrub in 2-Gallon Grower Pot",
+        "lp":  "$36.38",
+        "up":  "$18.19/gl",
+        "reason":  "unknown unit \"gl\""
+    },
+    {
+        "name":  "Almond Breeze Almondmilk, Unsweetened Original 32 oz (Pack of 12)",
+        "lp":  "$54.47",
+        "up":  "$1.65/ea",
+        "reason":  "name/unit-price divergence: Walmart\u0027s unit price $1.65/ea derives 33 but the name states 12 x 32 oz (= 384, neither reading) - the store contradicts itself, verify by hand (fish-sauce class 2026-07-27)"
+    },
+    {
+        "name":  "STIR. Mushroom Coffee",
+        "lp":  "$32.99",
+        "up":  "18.3 ¢/g",
+        "reason":  "unknown unit \"g\""
+    },
+    {
+        "name":  "Airship Coffee Ethiopia Fruity and Floral",
+        "lp":  "$16.97",
+        "up":  "3.3 ¢/g",
+        "reason":  "unknown unit \"g\""
+    },
+    {
+        "name":  "Jordan\u0027s Skinny Mixes Naturally Sweetened Pumpkin Spice Syrup, 375 mL",
+        "lp":  "$4.97",
+        "up":  "1.3 ¢/ml",
+        "reason":  "unknown unit \"ml\""
+    },
+    {
+        "name":  "Kuner\u0027s No Salt Added Pinto Beans, 15.5 oz (Pack of 12)",
+        "lp":  "$14.18",
+        "up":  "7.9 ¢/ea",
+        "reason":  "name/unit-price divergence: Walmart\u0027s unit price 7.9 ¢/ea derives 179 but the name states 12 x 15.5 oz (= 186, neither reading) - the store contradicts itself, verify by hand (fish-sauce class 2026-07-27)"
+    },
+    {
+        "name":  "Javvy Caramel Protein Instant Coffee, 8.4 oz",
+        "lp":  "$24.97",
+        "up":  "10.4 ¢/g",
+        "reason":  "unknown unit \"g\""
+    },
+    {
+        "name":  "Javvy French Vanilla Protein Instant Coffee, 8.3 oz",
+        "lp":  "$24.97",
+        "up":  "10.6 ¢/g",
+        "reason":  "unknown unit \"g\""
+    },
+    {
+        "name":  "Glad Kids Disney Toy Story 8.5\" Round Paper Plate 30ct Light Beams",
+        "lp":  "$8.14",
+        "up":  "95.8 ¢/in",
+        "reason":  "unknown unit \"in\""
+    },
+    {
+        "name":  "Glad Press\u0027N Seal Multipurpose Sealing Food Wrap, 50 sq ft Roll",
+        "lp":  "$3.66",
+        "up":  "7.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Kitchens Quick Cut Plastic Wrap, 200 square feet",
+        "lp":  "$4.33",
+        "up":  "2.2 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Great Value Plastic Wrap, 200 Sq ft",
+        "lp":  "$2.14",
+        "up":  "1.1 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Glad Cling\u0027N Seal Food Wrap, 200 sq ft Roll",
+        "lp":  "$3.67",
+        "up":  "1.8 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Great Value Slide Cutter Plastic Wrap, 400 sq ft",
+        "lp":  "$6.64",
+        "up":  "1.7 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Glad Cling\u0027N Seal Food Wrap, 300 sq ft Roll",
+        "lp":  "$4.36",
+        "up":  "1.5 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Kitchens Countertop Prep Paper, 22.22 yds x 18 in, 100 Total Sq. Ft.",
+        "lp":  "$5.97",
+        "up":  "6.0 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Glad Press\u0027N Seal Multipurpose Sealing Food Wrap, 100 sq ft Roll",
+        "lp":  "$5.28",
+        "up":  "5.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Pen+Gear Easy Roll Stretch Wrap, 15 in x 750 ft, Easy Unwind, Clear, 1 Roll",
+        "lp":  "$18.78",
+        "up":  "2.0 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Saran Premium Heavy Duty Microwave Safe Plastic Film Wrap, 100 sq ft Roll",
+        "lp":  "$7.46",
+        "up":  "7.5 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Glad Cling\u0027N Seal Food Wrap, 400 sq ft Roll",
+        "lp":  "$9.49",
+        "up":  "2.4 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Glad Press\u0027n Seal Plastic Food Wrap, 70 Square Feet",
+        "lp":  "$6.81",
+        "up":  "9.7 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Glad, Plastic Food, Cling  Wrap,  100 Square Foot Roll",
+        "lp":  "$7.24",
+        "up":  "7.2 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Saran Premium Wrap 200 sq ft",
+        "lp":  "$7.33",
+        "up":  "3.7 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "(2 pack) Pen + Gear Plastic Stretch Wrap, 5 in. x 1000 ft., Clear",
+        "lp":  "$17.06",
+        "up":  "2.0 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Glad Press\u0027N Seal Multipurpose Sealing Food Wrap, 140 sq ft Roll",
+        "lp":  "$10.00",
+        "up":  "7.1 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Glad Cling\u0027N Seal Plant Based Food Wrap, 200 sq ft Roll",
+        "lp":  "$8.44",
+        "up":  "4.2 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Pen+Gear 5 in. x 400 ft. Stretch Wrap, Clear, 1 Roll",
+        "lp":  "$4.48",
+        "up":  "1.1 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "PaperChef Unbleached Parchment Paper, 50 sq ft Roll",
+        "lp":  "$3.88",
+        "up":  "7.8 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Kitchens Stay Flat Parchment Paper Roll with SmartGrid, 80 ft x 15 in, 100 Total Sq. ft.",
+        "lp":  "$7.57",
+        "up":  "7.6 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Great Value Unbleached Parchment Paper, 50 Sq ft",
+        "lp":  "$2.96",
+        "up":  "5.9 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Great Value Non-Stick Parchment Paper, 50 sq ft",
+        "lp":  "$3.16",
+        "up":  "6.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Kitchens Parchment Paper Roll, 25 ft x 12 in, 25 Total Sq. ft.",
+        "lp":  "$2.08",
+        "up":  "8.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Kitchens Unbleached Parchment Paper Roll, 50 feet x 12 inches, 50 Total Sq. ft.",
+        "lp":  "$3.77",
+        "up":  "7.5 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Kitchens Stay Flat Parchment Paper Roll with SmartGrid, 40 ft x 15 in, 50 Total Sq. ft.",
+        "lp":  "$4.14",
+        "up":  "8.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Great Value Non-Stick Parchment Paper Roll, 100 sq ft",
+        "lp":  "$5.67",
+        "up":  "5.7 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Ortho Home Defense Insect Killer for Indoor \u0026 Perimeter2 with Comfort Wand, 1 gal.",
+        "lp":  "$17.34",
+        "up":  "$17.34/gl",
+        "reason":  "unknown unit \"gl\""
+    },
+    {
+        "name":  "500 PACKS : N\u0027Joy Crushed Red Pepper, 1 Gram",
+        "lp":  "$17.99",
+        "up":  "$17.99/g",
+        "reason":  "unknown unit \"g\""
+    },
+    {
+        "name":  "Heinz Distilled White Vinegar 5% Acidity, 1 gal Jug",
+        "lp":  "$8.40",
+        "up":  "$8.40/gl",
+        "reason":  "unknown unit \"gl\""
+    },
+    {
+        "name":  "FRENCH\u0027S MUST SQZ DIJON 325ML",
+        "lp":  "$7.98",
+        "up":  "2.5 ¢/ml",
+        "reason":  "unknown unit \"ml\""
+    },
+    {
+        "name":  "Broil King Perfect Steak Marinade, Each",
+        "lp":  "$23.87",
+        "up":  "$23.87/1",
+        "reason":  "unknown unit \"1\""
+    },
+    {
+        "name":  "Soeos Thai Fish Sauce 500ml, Savory Flavor, Naturally Fermented for Rich Umami Flavor",
+        "lp":  "$10.99",
+        "up":  "2.2 ¢/ml",
+        "reason":  "unknown unit \"ml\""
+    },
+    {
+        "name":  "(Pack of 6), Ohsawa Organic Genuine Mirin, 8.45 oz",
+        "lp":  "$55.67",
+        "up":  "$55.67/pack",
+        "reason":  "unknown unit \"pack\""
+    },
+    {
+        "name":  "Kikkoman Unagi Tare Sushi Sauce 5lb 4oz",
+        "lp":  "$23.99",
+        "up":  "$10.00/kg",
+        "reason":  "unknown unit \"kg\""
+    },
+    {
+        "name":  "5-Pack - Mild Palacios Chorizo - 5 x 7.9 Ounce Each",
+        "lp":  "$49.99",
+        "up":  "94.3 ¢/ft",
+        "reason":  "unknown unit \"ft\""
+    },
+    {
+        "name":  "Paul Masson Pineapple Brandy, 750ml",
+        "lp":  "$13.49",
+        "up":  "1.8 ¢/ml",
+        "reason":  "unknown unit \"ml\""
+    },
+    {
+        "name":  "Paul Masson Grande Amber VSOP Brandy, 750ml Bottle",
+        "lp":  "$16.49",
+        "up":  "2.2 ¢/ml",
+        "reason":  "unknown unit \"ml\""
+    },
+    {
+        "name":  "Metaxa 5 Star Greek Brandy, 750 ml 40% ABV",
+        "lp":  "$33.49",
+        "up":  "4.5 ¢/ml",
+        "reason":  "unknown unit \"ml\""
+    },
+    {
+        "name":  "Barefoot Cellars Cabernet Sauvignon red wine, 200 ml tetra, 13.5% ABV",
+        "lp":  "$0.98",
+        "up":  "0.5 ¢/ml",
+        "reason":  "unknown unit \"ml\""
+    },
+    {
+        "name":  "Soeos Cinnamon Sticks, 6 oz (170g), Medium Kraft Bag",
+        "lp":  "$9.07",
+        "up":  "5.3 ¢/g",
+        "reason":  "unknown unit \"g\""
+    },
+    {
+        "name":  "Soeos Cinnamon Sticks, 3 oz (85g), Small Kraft Bag",
+        "lp":  "$4.98",
+        "up":  "5.9 ¢/g",
+        "reason":  "unknown unit \"g\""
+    },
+    {
+        "name":  "(2 pack) Ziyad Merchandise",
+        "lp":  "$7.46",
+        "up":  "62.2 ¢/oz",
+        "reason":  "multipack: pack priced as a single board unit (guard 5) - not a shopper single-buy unit"
+    }
+]

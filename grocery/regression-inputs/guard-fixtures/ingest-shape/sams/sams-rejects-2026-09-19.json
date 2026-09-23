@@ -1,0 +1,368 @@
+[
+    {
+        "name":  "Ninja DualBrew Grounds \u0026 Pods Hot \u0026 Iced Coffee Maker with Rapid Cold Brew",
+        "lp":  "$79.00",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Bonduelle Bistro Loaded Chicken \u0026 Guacamole Bowl, 8 oz., 2 pk.",
+        "lp":  "$7.12",
+        "up":  "$0.46/oz",
+        "reason":  "NAME CONFLICT: name states 8, 16 oz but none reproduces Sam\u0027s 0.46/oz (lp/up derives 15.478)"
+    },
+    {
+        "name":  "Superb Canola Clear Fry Oil, 35 lb.",
+        "lp":  "$36.98",
+        "up":  "$0.06/oz",
+        "reason":  "NAME CONFLICT: name states 560 oz but none reproduces Sam\u0027s 0.06/oz (lp/up derives 616.333)"
+    },
+    {
+        "name":  "Shirakiku Japanese Bread Crumbs 35.27 oz.",
+        "lp":  "$6.48",
+        "up":  "$2.95/lb",
+        "reason":  "NAME CONFLICT: name states 2.204375 lb but none reproduces Sam\u0027s 2.95/lb (lp/up derives 2.197)"
+    },
+    {
+        "name":  "Neosporin Original First Aid Antibiotic Ointment 1 oz. tube + two .5 oz. tubes, 3 pk.",
+        "lp":  "$10.82",
+        "up":  "$5.41/oz",
+        "reason":  "NAME CONFLICT: name states 1, 3, 0.5, 1.5 oz but none reproduces Sam\u0027s 5.41/oz (lp/up derives 2)"
+    },
+    {
+        "name":  "Member\u0027s Mark Uncured Black Forest Ham, Sliced, 1 lb. 6 oz.",
+        "lp":  "$6.97",
+        "up":  "$5.07/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 5.07/lb (lp/up derives 1.375)"
+    },
+    {
+        "name":  "Febreze Air Effects Air Freshener Spray, Hawaiian Aloha \u0026 Ocean, 4 ct., 35.2 oz.",
+        "lp":  "",
+        "up":  "",
+        "reason":  "no linePrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Commercial  Dish Detergent, 1 Gallon Jugs",
+        "lp":  "$30.32",
+        "up":  "$0.06/foz",
+        "reason":  "NAME CONFLICT: name states 128 fl oz but none reproduces Sam\u0027s 0.06/fl oz (lp/up derives 505.333)"
+    },
+    {
+        "name":  "Kleenex Snap \u0026 Go Facial Tissues, 12 packs, 25 tissues/pack",
+        "lp":  "$14.98",
+        "up":  "$0.05/ea",
+        "reason":  "NAME CONFLICT: name states 12 ct but none reproduces Sam\u0027s 0.05/ct (lp/up derives 299.6)"
+    },
+    {
+        "name":  "Gold Peak Unsweetened Tea 16.9 fl. oz., 18 pk.",
+        "lp":  "$16.98",
+        "up":  "$0.08/foz",
+        "reason":  "NAME CONFLICT: name states 16.9, 304.2 fl oz but none reproduces Sam\u0027s 0.08/fl oz (lp/up derives 212.25)"
+    },
+    {
+        "name":  "Marathon Multifold 1-Ply White Paper Towels 16 pks., 250 towels/pk",
+        "lp":  "$32.88",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Marathon Centerpull Premium 1-Ply White Paper Towels, 6 rolls, 300 sheets/roll",
+        "lp":  "$38.88",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark, Huge Roll 2 ply, White, Paper Towel 15 Rolls, 101 sheets/roll",
+        "lp":  "$24.98",
+        "up":  "$0.02/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "POM Individually Wrapped 2-Ply Paper Towels 30 rolls, 110 sheets/roll",
+        "lp":  "$35.98",
+        "up":  "$0.02/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Marathon Singlefold 1-Ply Natural Paper Towels 16 pks., 250 towels/pk.",
+        "lp":  "$36.48",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Select \u0026 Tear 2-Ply Paper Towel 15 rolls, 150 sheets/roll",
+        "lp":  "$20.93",
+        "up":  "$0.02/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Bounty Prints Select-A-Size 2-Ply Paper Towels, 12 Rolls, 128 sheets/roll",
+        "lp":  "$22.78",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Bounty Select-A-Size 2-Ply Paper Towels, 12 Rolls, 165 sheets/roll",
+        "lp":  "$38.38",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Bounty Select-A-Size 2-Ply Paper Towels, 12 Rolls, 110 sheets/roll",
+        "lp":  "$25.68",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Marathon Centerpull Premium 1-Ply White Paper Towels, 6 rolls, 300 sheets/roll",
+        "lp":  "$38.88",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Marathon Multifold 1-Ply White Paper Towels 16 pks., 250 towels/pk",
+        "lp":  "$32.88",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Bounty Prints Select-A-Size 2-Ply Paper Towels, 12 Rolls, 128 sheets/roll",
+        "lp":  "$22.78",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Select \u0026 Tear 2-Ply Paper Towel 15 rolls, 150 sheets/roll",
+        "lp":  "$20.93",
+        "up":  "$0.02/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark, Huge Roll 2 ply, White, Paper Towel 15 Rolls, 101 sheets/roll",
+        "lp":  "$24.98",
+        "up":  "$0.02/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Marathon Hardwound Roll 1-Ply White Paper Towels, 6 rolls, 700 ft./roll",
+        "lp":  "$44.98",
+        "up":  "$0.02/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Bounty Select-A-Size 2-Ply Paper Towels, 12 Rolls, 110 sheets/roll",
+        "lp":  "$25.68",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Bounty Select-A-Size 2-Ply Paper Towels, 12 Rolls, 165 sheets/roll",
+        "lp":  "$38.38",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "POM Individually Wrapped 2-Ply Paper Towels 30 rolls, 110 sheets/roll",
+        "lp":  "$35.98",
+        "up":  "$0.02/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Marathon Singlefold 1-Ply Natural Paper Towels 16 pks., 250 towels/pk.",
+        "lp":  "$36.48",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Scott Shop Towels Original 55 sheets/roll, 12 rolls",
+        "lp":  "$22.64",
+        "up":  "$0.05/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty 18\" Aluminum Foil, 120 sq. ft., 2 pk.",
+        "lp":  "$21.78",
+        "up":  "$0.09/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Every Day 12\" Aluminum Foil, 200 sq. ft., 2 pk.",
+        "lp":  "$24.98",
+        "up":  "$0.06/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Unbleached Parchment Paper, 205 sq. ft., 2 pk.",
+        "lp":  "$16.47",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Glad Press\u0027n Seal Plastic Food Wrap 140 sq. ft./roll, 2 rolls",
+        "lp":  "$9.28",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Glad Cling ‘N Seal Clear Plastic Food Wrap 400 sq. ft./roll, 2 rolls",
+        "lp":  "$7.48",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Foodservice Aluminum Foil 12 in. x 1000 ft., 1,000 ft.",
+        "lp":  "$44.58",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Standard Foodservice Aluminum Foil, 18\" x 400\u0027",
+        "lp":  "$27.18",
+        "up":  "$0.05/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Heavy Duty Foodservice Foil, 18\" x 400\u0027",
+        "lp":  "$35.33",
+        "up":  "$0.06/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Standard Foodservice Aluminum Foil 18\" x 500 ft.",
+        "lp":  "$31.58",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Heavy Duty Foodservice Foil 18\" x 500\u0027",
+        "lp":  "$43.98",
+        "up":  "$0.06/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Non-Stick 12\" Aluminum Foil 130 sq. ft., 2 pk.",
+        "lp":  "$23.98",
+        "up":  "$0.09/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty 18\" Aluminum Foil, 150 sq. ft., 2 pk.",
+        "lp":  "$27.78",
+        "up":  "$0.09/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Glad Cling ‘N Seal Clear Plastic Food Wrap 400 sq. ft./roll, 2 rolls",
+        "lp":  "$7.48",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Glad Press\u0027n Seal Plastic Food Wrap 140 sq. ft./roll, 2 rolls",
+        "lp":  "$9.28",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Every Day 12\" Aluminum Foil, 200 sq. ft., 2 pk.",
+        "lp":  "$24.98",
+        "up":  "$0.06/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "stretch-tite Pro Multi-Purpose Professional 18\" Food Wrap, 4500 sq. ft.",
+        "lp":  "$23.98",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "stretch-tite Pro Multi-Purpose Professional 12\" Food Wrap, 3000 sq. ft.",
+        "lp":  "$17.98",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Heavy Duty Foodservice Foil 18\" x 500\u0027",
+        "lp":  "$43.98",
+        "up":  "$0.06/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty 18\" Aluminum Foil, 120 sq. ft., 2 pk.",
+        "lp":  "$21.78",
+        "up":  "$0.09/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Standard Foodservice Aluminum Foil 18\" x 500 ft.",
+        "lp":  "$31.58",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Non-Stick 12\" Aluminum Foil 130 sq. ft., 2 pk.",
+        "lp":  "$23.98",
+        "up":  "$0.09/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Unbleached Parchment Paper, 205 sq. ft., 2 pk.",
+        "lp":  "$16.47",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Foodservice Aluminum Foil 12 in. x 1000 ft., 1,000 ft.",
+        "lp":  "$44.58",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Kitchens Countertop Prep Paper 100 sq. ft., 2 pack",
+        "lp":  "$6.98",
+        "up":  "$0.07/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "PaperChef 18\" Pink Butcher Paper, 100 sq. ft., 2 pk.",
+        "lp":  "$13.48",
+        "up":  "$0.07/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Heavy Duty Foodservice Foil, 18\" x 400\u0027",
+        "lp":  "$35.33",
+        "up":  "$0.06/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Standard Foodservice Aluminum Foil, 18\" x 400\u0027",
+        "lp":  "$27.18",
+        "up":  "$0.05/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Select Surfaces Barnwood Waterproof AC4 Laminate Flooring 14 mm Thick 6.22 in. W x 47.60 in. L (12.34 sq. ft. / carton)",
+        "lp":  "$20.60",
+        "up":  "$1.67/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Traditional Living Golden Amber Oak II Laminate Flooring",
+        "lp":  "$38.38",
+        "up":  "$1.96/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Select Surfaces Southern Grey Spill Defense Laminate Flooring 12.34 sq. ft. per box",
+        "lp":  "$20.60",
+        "up":  "$1.67/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "N\u0027Joy Iodized Salt .5 g., 1,200 ct.",
+        "lp":  "$3.24",
+        "up":  "$0.00/ea",
+        "reason":  "zero price"
+    }
+]

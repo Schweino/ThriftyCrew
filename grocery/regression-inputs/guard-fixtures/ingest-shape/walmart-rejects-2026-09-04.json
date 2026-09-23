@@ -1,0 +1,44 @@
+[
+    {
+        "name":  "Miracle Whip, 30 fl oz Packaging May Vary",
+        "lp":  "$8.36",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Broil King Perfect Steak Marinade, Each",
+        "lp":  "$23.87",
+        "up":  "$23.87/1",
+        "reason":  "unknown unit \"1\""
+    },
+    {
+        "name":  "Big Hat Nojito Mocktail, Non-Alcoholic 4 Pack, 12 fl oz Cans",
+        "lp":  "$13.67",
+        "up":  "$13.67/count",
+        "reason":  "INVARIANT: no shape reproduces Walmart\u0027s 13.67/ct -\u003e package: engine 3.4175 vs Walmart\u0027s 13.67 (75% off) | per-unit: engine 3.4175 vs Walmart\u0027s 13.67 (75% off)"
+    },
+    {
+        "name":  "Paul Masson Grande Amber VSOP Brandy, 750ml Bottle",
+        "lp":  "$16.49",
+        "up":  "2.2 ¢/ml",
+        "reason":  "unknown unit \"ml\""
+    },
+    {
+        "name":  "Metaxa 5 Star Greek Brandy, 750 ml 40% ABV",
+        "lp":  "$33.49",
+        "up":  "4.5 ¢/ml",
+        "reason":  "unknown unit \"ml\""
+    },
+    {
+        "name":  "Paul Masson Pineapple Brandy, 750ml",
+        "lp":  "$13.49",
+        "up":  "1.8 ¢/ml",
+        "reason":  "unknown unit \"ml\""
+    },
+    {
+        "name":  "Dasani Purified Water Bottles, 16.9 fl oz, 32 Pack",
+        "lp":  "$5.98",
+        "up":  "17.7 ¢/fl oz",
+        "reason":  "multipack: pack priced as a single board unit (guard 5) - not a shopper single-buy unit"
+    }
+]

@@ -1,0 +1,20 @@
+[
+    {
+        "name":  "Miracle Whip, 30 fl oz Packaging May Vary",
+        "lp":  "$8.36",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Kikkoman Unagi Tare Sushi Sauce 5lb 4oz",
+        "lp":  "$22.99",
+        "up":  "$9.58/kg",
+        "reason":  "unknown unit \"kg\""
+    },
+    {
+        "name":  "bettergoods Gluten-Free Salsa Verde Hash Brown Breakfast Sandwiches, 9.6 oz, 2 Pack (Frozen)",
+        "lp":  "$5.84",
+        "up":  "60.8 ¢/oz",
+        "reason":  "multipack: pack priced as a single board unit (guard 5) - not a shopper single-buy unit"
+    }
+]

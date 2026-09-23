@@ -283,6 +283,15 @@
    "resolver": "lane:grocery/triage-due.ps1"
   },
   {
+   "id": "ingest-shape-unit-unproved",
+   "match": "exact",
+   "key": "grocery ingest shape new unit spelling unproved",
+   "class": "review",
+   "condition": "a store printed a unit spelling no builder table knows and not every row carrying it reproduced its own name at the store's printed rounding, so its rows stay refused (queue 2026-09-22-20fecf)",
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "lane:grocery/audit-ingest-shape.ps1"
+  },
+  {
    "id": "ff-catalog-degrading",
    "match": "exact",
    "key": "grocery family fare catalog is degrading signal s",

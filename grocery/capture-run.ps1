@@ -726,6 +726,41 @@ if ($runDownstream -and -not $WhatIf) {
   } catch { Write-Output ('null-rate threw (not fatal, the board guards still stand): ' + $_.Exception.Message) }
 }
 
+# INGEST SHAPE, AFTER THE BUILDERS AND BEFORE ANYTHING PRICES (2026-09-22, queue 2026-09-22-20fecf). A store rendering
+# first seen this morning (a unit spelling no builder table knows) is met HERE, with the same-morning data the
+# rehearsal can never have: audit-ingest-shape proves it from the store's own price arithmetic and keeps it in
+# unit-aliases.json, and that store is rebuilt before downstream so its rows reach today's board; or, unproved, it
+# is sent with its rows. A new refusal WORDING is printed, never sent. Not fatal either way: the builders' own
+# refusals and the board guards still stand between a bad row and a published price.
+if ($runDownstream -and -not $WhatIf) {
+  try {
+    $isa = Join-Path $root 'audit-ingest-shape.ps1'
+    if (Test-Path $isa) {
+      Write-Output ''
+      Write-Output 'ingest-shape: did a store print a unit spelling no builder has seen?'
+      $isOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $isa -Date $todayS
+      $isRc = $LASTEXITCODE
+      foreach ($l in @($isOut)) { Write-Output ('  ' + [string]$l) }
+      $isRebuild = @(@($isOut) | Where-Object { [string]$_ -match '^REBUILD-STORE (\w+)$' } | ForEach-Object { ([string]$_ -replace '^REBUILD-STORE ', '').Trim() })
+      $isBuilderKey = @{ 'sams' = 'samsclub'; 'walmart' = 'walmart' }
+      foreach ($k in $isRebuild) {
+        if (-not $isBuilderKey.ContainsKey($k)) { Write-Output ("  ingest-shape: no rebuild road for '{0}'" -f $k); continue }
+        $bk = $isBuilderKey[$k]
+        $bIn = Join-Path $root ($BROWSER_BUILDERS[$bk].In -f $todayS)
+        if (-not (Test-Path -LiteralPath $bIn)) { Write-Output ("  ingest-shape: {0} proved a spelling but today's capture {1} is not on disk - the alias is kept for the next build" -f $k, (Split-Path $bIn -Leaf)); continue }
+        Write-Output ("  ingest-shape: rebuilding {0} so the proved spelling's rows reach today's board" -f $k)
+        $rbOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root $BROWSER_BUILDERS[$bk].Script) -In $bIn -Date $todayS
+        $rbRc = $LASTEXITCODE
+        foreach ($l in @($rbOut)) { Write-Output ('    ' + [string]$l) }
+        if ($rbRc -ne 0) { Write-Warning ("ingest-shape: the {0} rebuild exited {1}; the first build's file stands" -f $k, $rbRc) }
+      }
+      if ($isRc -eq 2) {
+        try { Send-Alert -Subject "Grocery: ingest shape - new unit spelling unproved - $todayS" -Body (@($isOut) -join "`n") | Out-Null } catch {}
+      } elseif ($isRc -ne 0) { Write-Output ("  ingest-shape could not evaluate (exit {0}); nothing was admitted" -f $isRc) }
+    }
+  } catch { Write-Output ('ingest-shape threw (not fatal, the builders and board guards still stand): ' + $_.Exception.Message) }
+}
+
 if ($runDownstream) {
   Write-RunStatus 'downstream'
   Write-Output ''

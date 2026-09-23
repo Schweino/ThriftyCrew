@@ -1,0 +1,26 @@
+[
+    {
+        "name":  "Ranch Style Beans, Canned Beans, 15 oz.",
+        "lp":  "$8.18",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 15 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 116.857)"
+    },
+    {
+        "name":  "SUMM! Chicken Dumplings with Chili Crisp Oil, 20 Count, 16.23 oz.",
+        "lp":  "$8.64",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Mangos, 8.8 lbs.",
+        "lp":  "$12.95",
+        "up":  "$1.52/lb",
+        "reason":  "NAME CONFLICT: name states 8.8 lb but none reproduces Sam\u0027s 1.52/lb (lp/up derives 8.52)"
+    },
+    {
+        "name":  "Demakes Bros. Choice Beef Shaved Steak,  16 oz, 2 pk.",
+        "lp":  "$17.47",
+        "up":  "$0.62/oz",
+        "reason":  "NAME CONFLICT: name states 16, 32 oz but none reproduces Sam\u0027s 0.62/oz (lp/up derives 28.177)"
+    }
+]

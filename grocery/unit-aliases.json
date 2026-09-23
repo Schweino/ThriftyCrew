@@ -1,0 +1,7 @@
+{
+  "readme": "Unit spellings a store printed for the first time and audit-ingest-shape.ps1 PROVED from that store's own price arithmetic: every row carrying the spelling reproduced a size its NAME states, within the half-ulp the unit price was printed to. Written by the audit only (queue 2026-09-22-20fecf); build-sams-deals and walmart-row-lib read it through Resolve-UnitAlias only when their own unit table has no answer. Additive: a hand-added spelling in a builder's own table stays there. A spelling proved at one store is never admitted at another.",
+  "stores": {
+    "sams": {},
+    "walmart": {}
+  }
+}

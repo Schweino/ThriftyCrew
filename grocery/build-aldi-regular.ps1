@@ -984,6 +984,12 @@ $doc = [ordered]@{
 
 $rejFile = Join-Path $root "out\aldi-rejects-$Date.json"
 ($res.rejects | ConvertTo-Json -Depth 4) | Set-Content $rejFile -Encoding UTF8
+# THE INGEST SHAPE (2026-09-22, queue 2026-09-22-20fecf): one record per build for audit-ingest-shape.ps1. Aldi's
+# rejects carry no unit price, so only new refusal wording can be seen here, never a unit proof. Never fatal.
+try {
+  . (Join-Path $PSScriptRoot 'ingest-shape-lib.ps1')
+  [void](Write-IngestShape -Store 'aldi' -Date $Date -RowsIn @($raw).Count -RowsOut @($rows).Count -Rejects $res.rejects -OutRoot (Join-Path $root 'out'))
+} catch { Write-Warning ("build-aldi-regular: ingest shape not recorded (" + $_.Exception.Message + ")") }
 
 $why = $res.rejects | Group-Object why | Sort-Object Count -Descending
 Write-Output ("build-aldi-regular: {0} raw -> {1} priced rows over {2} search terms -> aldi-regular-$Date.json" -f $raw.Count, $rows.Count, $doc.pull_terms)

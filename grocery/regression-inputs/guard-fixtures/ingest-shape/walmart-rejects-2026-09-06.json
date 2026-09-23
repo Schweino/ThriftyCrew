@@ -1,0 +1,20 @@
+[
+    {
+        "name":  "Miracle Whip, 30 fl oz Packaging May Vary",
+        "lp":  "$8.34",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Mountain Valley Seed Sunbright .25 Oz Sweet Pepper Plant Seeds, Non-GMO, Large Yellow Bell Pepper",
+        "lp":  "$16.12",
+        "up":  "$16.12/oz",
+        "reason":  "REFUSED: name quantity disagrees with unit price, no pack count - the name states 0.25 oz but Walmart\u0027s $16.12/oz derives 1 oz"
+    },
+    {
+        "name":  "(6 pack) Duncan Hines MEGA Brownie Mix, Chewy Fudge, 7.7 oz.",
+        "lp":  "$15.00",
+        "up":  "34.7 ¢/oz",
+        "reason":  "multipack: pack priced as a single board unit (guard 5) - not a shopper single-buy unit"
+    }
+]

@@ -1,0 +1,716 @@
+[
+    {
+        "name":  "Member\u0027s Mark Mild Cheddar Shredded Cheese 16 oz., 2 pk.",
+        "lp":  "$5.93",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Uncured Black Forest Ham, Sliced, 1 lb. 6 oz.",
+        "lp":  "$6.97",
+        "up":  "$5.05/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 5.05/lb (lp/up derives 1.38)"
+    },
+    {
+        "name":  "Member\u0027s Mark Oven Roasted Turkey Breast, Sliced 1 lb. 6 oz.",
+        "lp":  "$8.92",
+        "up":  "40.5 ¢/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.405/oz (lp/up derives 22.025)"
+    },
+    {
+        "name":  "Dove Men+Care Clean Comfort Spray Deodorant, 3.8 oz., 3 pk.",
+        "lp":  "$9.91",
+        "up":  "86.9 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Air-Care Premium Washable Air Filter Cleaner \u0026 Deodorizer Combo Pack, 2/ 32 oz. Spray",
+        "lp":  "$19.98",
+        "up":  "31.2 ¢/fl oz",
+        "reason":  "NAME CONFLICT: name states 32 fl oz but none reproduces Sam\u0027s 0.312/fl oz (lp/up derives 64.038)"
+    },
+    {
+        "name":  "Nissin Top Ramen, Beef, 24 pk.",
+        "lp":  "$5.98",
+        "up":  "29.1 ¢/ea",
+        "reason":  "NAME CONFLICT: name states 24 ct but none reproduces Sam\u0027s 0.291/ct (lp/up derives 20.55)"
+    },
+    {
+        "name":  "Kinder’s Crispy Panko Blend Seasoned Coating Mix, Buttery Garlic \u0026 Herb Seasoned, 13 oz.",
+        "lp":  "$5.98",
+        "up":  "53.7 ¢/oz",
+        "reason":  "NAME CONFLICT: name states 13 oz but none reproduces Sam\u0027s 0.537/oz (lp/up derives 11.136)"
+    },
+    {
+        "name":  "Shirakiku Japanese Bread Crumbs 35.27 oz.",
+        "lp":  "$6.48",
+        "up":  "$2.95/lb",
+        "reason":  "NAME CONFLICT: name states 2.204375 lb but none reproduces Sam\u0027s 2.95/lb (lp/up derives 2.197)"
+    },
+    {
+        "name":  "Member\u0027s Mark Pure Soybean Oil, 35 lbs.",
+        "lp":  "$29.98",
+        "up":  "3.6 ¢/fl oz",
+        "reason":  "DENSITY CONFLICT: the name states 35 lbs = 15876 g but the derived size is 832.778 fl oz = 24628 mL, an implied density of 0.645 g/mL - outside 0.75-1.65 g/mL, which no grocery liquid is - Sam\u0027s 3.6 ¢/fl oz was computed against a volume this package cannot hold, so no per-unit price from it is publishable"
+    },
+    {
+        "name":  "Member\u0027s Mark 2% Reduced Fat Milk 1 gal.",
+        "lp":  "$3.77",
+        "up":  "$3.77/gl",
+        "reason":  "unknown unit \"gl\""
+    },
+    {
+        "name":  "Aveeno Baby 2-in-1 Wash and Shampoo, 18 fl. oz., 2 pk.",
+        "lp":  "$16.84",
+        "up":  "52.3 ¢/fl oz",
+        "reason":  "NAME CONFLICT: name states 18, 36 fl oz but none reproduces Sam\u0027s 0.523/fl oz (lp/up derives 32.199)"
+    },
+    {
+        "name":  "Member\u0027s Mark Purified Water, 1 gal., 6 pk.",
+        "lp":  "$5.38",
+        "up":  "98.0 ¢/gallon (us)",
+        "reason":  "unknown unit \"gallon (us)\""
+    },
+    {
+        "name":  "Bacardi Island Punch Rum Cocktail, 1.75 L",
+        "lp":  "$17.67",
+        "up":  "29.9 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "poppi Prebiotic Soda Punch Pop 12 fl. oz., 15 pk.",
+        "lp":  "$19.98",
+        "up":  "$1.67/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Member\u0027s Mark 2% Reduced Fat Milk 1 gal.",
+        "lp":  "$3.77",
+        "up":  "$3.77/gl",
+        "reason":  "unknown unit \"gl\""
+    },
+    {
+        "name":  "Marathon Centerpull Premium 1-Ply White Paper Towels, 6 rolls, 300 sheets/roll",
+        "lp":  "$38.88",
+        "up":  "2.8 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Select \u0026 Tear 2-Ply Paper Towel 15 rolls, 150 sheets/roll",
+        "lp":  "$20.93",
+        "up":  "2.0 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Bounty Prints Select-A-Size 2-Ply Paper Towels, 12 Rolls, 128 sheets/roll",
+        "lp":  "$27.78",
+        "up":  "3.9 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark, Huge Roll 2 ply, White, Paper Towel 15 Rolls, 101 sheets/roll",
+        "lp":  "$24.98",
+        "up":  "2.1 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Marathon Hardwound Roll 1-Ply White Paper Towels, 6 rolls, 700 ft./roll",
+        "lp":  "$44.98",
+        "up":  "1.7 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Bounty Select-A-Size 2-Ply Paper Towels, 12 Rolls, 165 sheets/roll",
+        "lp":  "$38.38",
+        "up":  "4.2 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "POM Individually Wrapped 2-Ply Paper Towels 30 rolls, 110 sheets/roll",
+        "lp":  "$35.98",
+        "up":  "1.6 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Bounty Select-A-Size 2-Ply Paper Towels, 12 Rolls, 110 sheets/roll",
+        "lp":  "$25.68",
+        "up":  "4.2 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Scott Shop Towels Original 55 sheets/roll, 12 rolls",
+        "lp":  "$22.64",
+        "up":  "4.8 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Tart \u0026 Sweet Cherry Turnover, 8 ct.",
+        "lp":  "$5.98",
+        "up":  "$4.33/pad",
+        "reason":  "unknown unit \"pad\""
+    },
+    {
+        "name":  "Member\u0027s Mark French Baguette, 2 ct.",
+        "lp":  "$4.46",
+        "up":  "$4.21/pad",
+        "reason":  "unknown unit \"pad\""
+    },
+    {
+        "name":  "Bimbo Soft White Bread Family Pack 20 oz., 2 pk.",
+        "lp":  "$3.52",
+        "up":  "8.6 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Sara Lee Honey Wheat Bread 20 oz., 2 pk.",
+        "lp":  "$5.48",
+        "up":  "13.7 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Brownberry Whole Grains Oatnut Bread 24 oz., 2 pk.",
+        "lp":  "$6.68",
+        "up":  "13.9 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Brownberry Whole Grains 100% Whole Wheat Bread 24 oz., 2 pk.",
+        "lp":  "$6.68",
+        "up":  "13.9 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Glad Cling ‘N Seal Clear Plastic Food Wrap 400 sq. ft./roll, 2 rolls",
+        "lp":  "$7.48",
+        "up":  "0.9 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Glad Press\u0027n Seal Plastic Food Wrap 140 sq. ft./roll, 2 rolls",
+        "lp":  "$9.28",
+        "up":  "3.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "stretch-tite Pro Multi-Purpose Professional 18\" Food Wrap, 4500 sq. ft.",
+        "lp":  "$23.98",
+        "up":  "0.5 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "stretch-tite Pro Multi-Purpose Professional 12\" Food Wrap, 3000 sq. ft.",
+        "lp":  "$17.98",
+        "up":  "0.6 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Every Day 12\" Aluminum Foil, 200 sq. ft., 2 pk.",
+        "lp":  "$24.98",
+        "up":  "6.2 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Heavy Duty Foodservice Foil 18\" x 500\u0027",
+        "lp":  "$43.98",
+        "up":  "5.9 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty 18\" Aluminum Foil, 120 sq. ft., 2 pk.",
+        "lp":  "$21.78",
+        "up":  "9.1 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Standard Foodservice Aluminum Foil 18\" x 500 ft.",
+        "lp":  "$32.98",
+        "up":  "4.4 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Non-Stick 12\" Aluminum Foil 130 sq. ft., 2 pk.",
+        "lp":  "$23.98",
+        "up":  "9.2 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Unbleached Parchment Paper, 205 sq. ft., 2 pk.",
+        "lp":  "$16.47",
+        "up":  "4.0 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Foodservice Aluminum Foil 12 in. x 1000 ft., 1,000 ft.",
+        "lp":  "$44.58",
+        "up":  "4.5 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Kitchens Countertop Prep Paper 100 sq. ft., 2 pack",
+        "lp":  "$6.98",
+        "up":  "9.0 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "PaperChef 18\" Pink Butcher Paper, 100 sq. ft., 2 pk.",
+        "lp":  "$13.48",
+        "up":  "6.7 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty 18\" Aluminum Foil, 150 sq. ft., 2 pk.",
+        "lp":  "$27.78",
+        "up":  "9.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Quilted Northern Ultra Soft \u0026 Strong 2-Ply Toilet Paper 32 rolls, 244 sheets/roll",
+        "lp":  "$24.48",
+        "up":  "3.0 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Marathon Jumbo Roll 2-Ply White Toilet Paper 6 rolls, 1000 ft./roll",
+        "lp":  "$24.98",
+        "up":  "1.5 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Ultra Premium 2-Ply Toilet Paper 45 rolls, 235 sheets/roll",
+        "lp":  "$24.76",
+        "up":  "2.0 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Charmin Ultra Soft 2-Ply Toilet Paper 32 rolls, 215 sheets/roll",
+        "lp":  "$29.38",
+        "up":  "3.9 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Quilted Northern Ultra Plush 3-Ply Toilet Paper 36 rolls, 255 sheets/roll",
+        "lp":  "$27.98",
+        "up":  "2.9 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Quilted Northern Ultra Plush 3-Ply Toilet Paper, 32 rolls, 255 sheets/roll",
+        "lp":  "$26.78",
+        "up":  "3.1 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Scott 1000 1-Ply Toilet Paper 45 rolls, 1,000 sheets/roll",
+        "lp":  "$30.48",
+        "up":  "0.6 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Charmin Ultra Strong 2-Ply Toilet Paper 32 rolls, 231 sheets/roll",
+        "lp":  "$29.98",
+        "up":  "3.7 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "POM 2-Ply Toilet Paper 45 rolls, 473 sheets/roll",
+        "lp":  "$24.98",
+        "up":  "1.1 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Cottonelle Freshcare Flushable Wipes, 12 ct., 504 wipes",
+        "lp":  "$14.28",
+        "up":  "11.2 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Select \u0026 Tear 2-Ply Paper Towel 15 rolls, 150 sheets/roll",
+        "lp":  "$20.93",
+        "up":  "2.0 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "POM Individually Wrapped 2-Ply Paper Towels 30 rolls, 110 sheets/roll",
+        "lp":  "$35.98",
+        "up":  "1.6 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "DUDE WIPES XL Flushable Wipes, Mint Chill, 8 ct., 400 wipes",
+        "lp":  "$19.18",
+        "up":  "14.1 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "DUDE WIPES  XL Flushable Wipes, Fragrance Free, 10 ct., 180 wipes",
+        "lp":  "$19.24",
+        "up":  "31.6 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "DUDE WIPES XL On-the-Go Flushable Wipes, Mint Chill, 4 ct., 120 wipes",
+        "lp":  "$26.54",
+        "up":  "71.6 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Flushable Wipes, Scented, 540 ct.",
+        "lp":  "$12.22",
+        "up":  "8.9 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "DUDE WIPES XL Flushable Wipes, Fragrance Free, 8 ct., 400 wipes",
+        "lp":  "$19.18",
+        "up":  "14.1 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "DUDE Wipes XL Flushable Wipes, Dumpkin Spice, 8 ct., 384 wipes",
+        "lp":  "$19.98",
+        "up":  "15.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Tork Universal 2-Ply White Jumbo Bath Tissue, 12 rolls, 1,000 ft./roll",
+        "lp":  "$51.74",
+        "up":  "1.5 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "DUDE Wipes XL Flushable Wipes, POOPsicle, 8 ct., 384 wipes",
+        "lp":  "$19.98",
+        "up":  "15.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Suja Organic Immunity Defense and Digestion Shots Variety Pack, 2 fl. oz., 8 pk.",
+        "lp":  "$14.96",
+        "up":  "93.5 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty 18\" Aluminum Foil, 120 sq. ft., 2 pk.",
+        "lp":  "$21.78",
+        "up":  "9.1 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Every Day 12\" Aluminum Foil, 200 sq. ft., 2 pk.",
+        "lp":  "$24.98",
+        "up":  "6.2 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Unbleached Parchment Paper, 205 sq. ft., 2 pk.",
+        "lp":  "$16.47",
+        "up":  "4.0 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Glad Press\u0027n Seal Plastic Food Wrap 140 sq. ft./roll, 2 rolls",
+        "lp":  "$9.28",
+        "up":  "3.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Foodservice Aluminum Foil 12 in. x 1000 ft., 1,000 ft.",
+        "lp":  "$44.58",
+        "up":  "4.5 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Standard Foodservice Aluminum Foil 18\" x 500 ft.",
+        "lp":  "$32.98",
+        "up":  "4.4 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Heavy Duty Foodservice Foil 18\" x 500\u0027",
+        "lp":  "$43.98",
+        "up":  "5.9 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Non-Stick 12\" Aluminum Foil 130 sq. ft., 2 pk.",
+        "lp":  "$23.98",
+        "up":  "9.2 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty 18\" Aluminum Foil, 150 sq. ft., 2 pk.",
+        "lp":  "$27.78",
+        "up":  "9.3 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Glad Cling ‘N Seal Clear Plastic Food Wrap 400 sq. ft./roll, 2 rolls",
+        "lp":  "$7.48",
+        "up":  "0.9 ¢/sq ft",
+        "reason":  "unknown unit \"sq ft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Marlborough Sauvignon Blanc, 750 ml",
+        "lp":  "$6.98",
+        "up":  "27.5 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Member\u0027s Mark Pinot Grigio DOC Delle Venezie, 1.5 L",
+        "lp":  "$8.97",
+        "up":  "17.7 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Franzia Chardonnay White Wine, 5 L",
+        "lp":  "$15.97",
+        "up":  "9.4 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Member\u0027s Mark Mosel Germany Riesling Wine, 1.5 L",
+        "lp":  "$10.67",
+        "up":  "21.0 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Meiomi Chardonnay California White Wine 750 ml",
+        "lp":  "$14.47",
+        "up":  "57.1 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Kim Crawford Sauvignon Blanc Wine, 750 ml",
+        "lp":  "$10.34",
+        "up":  "40.8 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Member\u0027s Mark Sonoma County Chardonnay Wine, 750 ml",
+        "lp":  "$6.94",
+        "up":  "27.4 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Josh Cellars Pinot Grigio Wine, 750 ml",
+        "lp":  "$10.96",
+        "up":  "43.2 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Woodbridge Chardonnay Wine, 1.5 L",
+        "lp":  "$7.96",
+        "up":  "15.7 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Santa Margherita Pinot Grigio Wine, 750 ml",
+        "lp":  "$18.98",
+        "up":  "74.8 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Kim Crawford Illuminate Sauvignon Blanc, 750 ml",
+        "lp":  "$12.98",
+        "up":  "51.2 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Matua Marlborough Sauvignon Blanc Wine, 750 ml",
+        "lp":  "$10.78",
+        "up":  "42.5 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Robert Mondavi Private Selection Buttery Chardonnay 750 ml",
+        "lp":  "$6.92",
+        "up":  "27.3 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "La Crema Sonoma County Sauvignon Blanc, 750 ml",
+        "lp":  "$15.98",
+        "up":  "63.0 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "J. Lohr Estates Riverstone Chardonnay Wine, 750 ml",
+        "lp":  "$11.96",
+        "up":  "47.2 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Kendall-Jackson Vintner\u0027s Reserve Chardonnay, 750 ml",
+        "lp":  "$9.96",
+        "up":  "39.3 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Decoy California Chardonnay, 750 ml",
+        "lp":  "$15.22",
+        "up":  "60.0 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Sonoma-Cutrer Sonoma Coast Chardonnay Wine, 750 ml",
+        "lp":  "$20.58",
+        "up":  "81.2 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Bread \u0026 Butter Chardonnay, 750 ml",
+        "lp":  "$10.47",
+        "up":  "41.3 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Austin Paso Robles Chardonnay Wine, 750 ml",
+        "lp":  "$19.98",
+        "up":  "78.8 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Duckhorn Vineyards Napa Valley Sauvignon Blanc, 750 ml",
+        "lp":  "$24.48",
+        "up":  "96.5 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Ferrari-Carano Chardonnay, 750 ml",
+        "lp":  "$18.98",
+        "up":  "74.8 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Oyster Bay New Zealand Sauvignon Blanc Wine, 750 ml",
+        "lp":  "$13.18",
+        "up":  "52.0 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "J Vineyards Pinot Gris Wine, 750 ml",
+        "lp":  "$13.98",
+        "up":  "55.1 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Chloe Pinot Grigio Wine, 750 ml",
+        "lp":  "$11.38",
+        "up":  "44.9 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Joel Gott Sauvignon Blanc White Wine, 750 ml",
+        "lp":  "$10.98",
+        "up":  "43.3 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "SEAGLASS Pinot Grigio Wine, 750 ml",
+        "lp":  "$10.97",
+        "up":  "43.3 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Chalk Hill Sonoma Coast Chardonnay Wine, 750 ml",
+        "lp":  "$16.97",
+        "up":  "66.9 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Starborough Sauvignon Blanc Wine, 750 ml",
+        "lp":  "$11.38",
+        "up":  "44.9 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Chateau Ste. Michelle Indian Wells Chardonnay White Wine 750 ml",
+        "lp":  "$12.47",
+        "up":  "49.2 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Bread \u0026 Butter Sauvignon Blanc 750 ml",
+        "lp":  "$10.97",
+        "up":  "43.3 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Frei Brothers Chardonnay 750 ml",
+        "lp":  "$16.97",
+        "up":  "66.9 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Chateau Ste. Michelle Columbia Valley Riesling, 750 ml",
+        "lp":  "$8.96",
+        "up":  "35.3 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Christian Brothers VS Grape Brandy, 1.75 L",
+        "lp":  "$19.28",
+        "up":  "32.6 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "E\u0026J VS Brandy, 1.75 L",
+        "lp":  "$20.97",
+        "up":  "35.4 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Remy Martin VSOP Cognac, 750 ml",
+        "lp":  "$40.47",
+        "up":  "$1.60/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Remy Martin XO Cognac, 750 ml",
+        "lp":  "$199.47",
+        "up":  "$7.87/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Hennessy XO Cognac, 750 ml",
+        "lp":  "$205.97",
+        "up":  "$8.12/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Hennessy Privilege VSOP Cognac, 750 ml",
+        "lp":  "$66.47",
+        "up":  "$2.62/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Hennessy Paradis Rare Cognac, 700 ml",
+        "lp":  "$1,102.94",
+        "up":  "$46.60/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Member\u0027s Mark XO Cognac, 750 ml",
+        "lp":  "$44.94",
+        "up":  "$1.77/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Ketel One Espresso Martini Cocktail, 750 ml",
+        "lp":  "$20.98",
+        "up":  "82.7 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "Bacardi Island Punch Rum Cocktail, 1.75 L",
+        "lp":  "$17.67",
+        "up":  "29.9 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    },
+    {
+        "name":  "1800 The Ultimate Peach Margarita Tequila Cocktail, 1.75 L",
+        "lp":  "$18.47",
+        "up":  "31.2 ¢/fluid ounce (us)",
+        "reason":  "unknown unit \"fluid ounce (us)\""
+    }
+]

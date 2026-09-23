@@ -1,0 +1,14 @@
+[
+    {
+        "name":  "505 Roasted Green Chile 40oz.",
+        "lp":  "$8.22",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Dove 0% Aluminum Deodorant, Cucumber and Green Tea., 2.6 oz., 4 pk.",
+        "lp":  "$13.96",
+        "up":  "$1.63/oz",
+        "reason":  "NAME CONFLICT: name states 2.6, 10.4 oz but none reproduces Sam\u0027s 1.63/oz (lp/up derives 8.564)"
+    }
+]

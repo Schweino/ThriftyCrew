@@ -67,6 +67,10 @@ function Get-BotInputPaths {
     'grocery/carriage.json', 'grocery/ingredient-queue.json',
     'grocery/board-price-overrides.json', 'grocery/sale-without-ad.json',
     'grocery/notify-log.txt',
+    # THE PROVED UNIT SPELLINGS (2026-09-22, queue 2026-09-22-20fecf). audit-ingest-shape writes a spelling a store
+    # printed for the first time here once that store's own arithmetic proves it, and the builders read it. It is
+    # evidence of what a store told us, so the daily commit carries it; on a quiet day it is not rewritten at all.
+    'grocery/unit-aliases.json',
     # THE PUBLISHER LEDGER (2026-08-27). harvest and the sourcing agents learn which domains serve
     # robots.txt, allow us, and carry a usable nutrition panel - and that knowledge was on no staging list.
     # One probe added THIRTEEN new publishers (masonfit, eatingbirdfood, feelgoodfoodie and ten more) and

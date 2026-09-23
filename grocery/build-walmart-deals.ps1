@@ -719,6 +719,10 @@ if ($rejects.Count) {
   $rj = Join-Path $root ("out\walmart-rejects-$Date.json")
   $rejects | ConvertTo-Json -Depth 4 | Set-Content $rj -Encoding UTF8
 }
+# THE INGEST SHAPE (2026-09-22, queue 2026-09-22-20fecf): one record per build for audit-ingest-shape.ps1. Never fatal.
+# Write-IngestShape comes in through walmart-row-lib's dot-source of ingest-shape-lib.
+try { [void](Write-IngestShape -Store 'walmart' -Date $Date -RowsIn $raw.Count -RowsOut $ded.Count -Rejects $rejects.ToArray() -OutRoot (Join-Path $root 'out')) }
+catch { Write-Warning ("${Me}: ingest shape not recorded (" + $_.Exception.Message + ")") }
 Write-Output ("${Me}: {0} raw -> {1} priced ({2} after de-dupe), {3} rejected -> {4}" -f $raw.Count, $rows.Count, $ded.Count, $rejects.Count, (Split-Path $outFile -Leaf))
 # THE CHANNEL, WITH ITS DENOMINATOR. Rows are written whatever their channel (the board's provenance contract is the
 # one place that withholds), so this line is what says how much of the file can prove it is buyable at the store.

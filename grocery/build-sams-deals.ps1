@@ -85,6 +85,8 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocer
 # so the builder, the engine and the watcher cannot disagree about the band. It also brings lib\json-io.ps1
 # (Read-JsonFile); no function name in either collides with one defined here (checked 2026-09-21).
 . (Join-Path $root 'derived-size-density-lib.ps1')
+# Resolve-UnitAlias (the proved-spelling fallback) and Write-IngestShape. Defines no function this file defines.
+. (Join-Path $root 'ingest-shape-lib.ps1')
 
 # unit token as Sam's prints it -> (engine size token, engine category unit for the invariant check)
 # Sam's abbreviates FLUID OUNCE as "foz" ("$0.16/foz"). Missing that silently drops every liquid in the
@@ -375,6 +377,9 @@ function Build-Row($raw, [string]$Club = '') {
   $up = [double]$upRead.value
   if ($lp -le 0 -or $up -le 0) { return @{ err='zero price' } }
   $u = Resolve-Unit $upRead.unit
+  # A spelling this table does not know, but audit-ingest-shape PROVED from Sam's own arithmetic (unit-aliases.json,
+  # queue 2026-09-22-20fecf). Asked only after the table, so a hand-added spelling above always wins.
+  if (-not $u) { $u = Resolve-UnitAlias -Store 'sams' -Spelling $upRead.unit }
   if (-not $u) { return @{ err=('unknown unit "' + $upRead.unit + '"') } }
 
   # The unit price is rounded to its last printed digit, so lp/up is only as good as that rounding: a
@@ -832,6 +837,20 @@ $rP = Build-Row (_R 'poppi Prebiotic Soda Punch Pop 12 fl. oz., 15 pk.' '$19.98'
 if ($rP.err -and $rP.err -match 'per-piece') { Write-Output "ok    MUST FIRE poppi 15 pk at `$1.67/fluid ounce (us) is refused per-piece -> $($rP.err)" } else { Write-Output ("FAIL  poppi per-piece row was not refused: " + ($rP | ConvertTo-Json -Compress -Depth 4)); $script:fail++ }
 $rB = Build-Row (_R 'Bacardi Island Punch Rum Cocktail, 1.75 L' '$17.67' ('29.9 ' + [string][char]0x00A2 + '/fluid ounce (us)'))
 if ($rB.row -and [string]$rB.row.size -match 'fl oz') { Write-Output "ok    CLEAN TWIN 'fluid ounce (us)' now reads as fl oz (Bacardi 1.75 L -> $($rB.row.size))" } else { Write-Output ("FAIL  'fluid ounce (us)' still unread: " + ($rB | ConvertTo-Json -Compress -Depth 4)); $script:fail++ }
+# 7h THE PROVED-SPELLING FALLBACK (2026-09-22, queue 2026-09-22-20fecf). A spelling this builder's table does not know
+# is admitted only when audit-ingest-shape PROVED it for Sam's and wrote it to unit-aliases.json. Driven against a
+# temp alias file, never the live one.
+$aliasTmp = Join-Path ([IO.Path]::GetTempPath()) ('sams-alias-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.json')
+try {
+  [IO.File]::WriteAllText($aliasTmp, '{"readme":"fixture","stores":{"sams":{},"walmart":{"fl oz (us)":{"tok":"fl oz","unit":"floz"}}}}', (New-Object Text.UTF8Encoding($false)))
+  $script:UnitAliasDefaultFile = $aliasTmp; $script:UnitAliasCache = @{}
+  $rAl0 = Build-Row (_R 'Fixture Orange Juice 64 fl oz' '$16.00' '$0.25/fl oz (us)')
+  if ($rAl0.err -and $rAl0.err -match 'unknown unit') { Write-Output "ok    7h MUST NOT FIRE a spelling proved only at WALMART is still an unknown unit at Sam's -> $($rAl0.err)" } else { Write-Output ("FAIL  7h a Walmart-proved spelling was admitted at Sam's: " + ($rAl0 | ConvertTo-Json -Compress -Depth 4)); $script:fail++ }
+  [IO.File]::WriteAllText($aliasTmp, '{"readme":"fixture","stores":{"sams":{"fl oz (us)":{"tok":"fl oz","unit":"floz"}},"walmart":{}}}', (New-Object Text.UTF8Encoding($false)))
+  $script:UnitAliasCache = @{}
+  $rAl1 = Build-Row (_R 'Fixture Orange Juice 64 fl oz' '$16.00' '$0.25/fl oz (us)')
+  if ($rAl1.row -and [string]$rAl1.row.size -eq '64 fl oz') { Write-Output "ok    7h MUST FIRE a Sam's-proved alias admits the row through Resolve-UnitAlias (64 fl oz)" } else { Write-Output ("FAIL  7h the proved alias did not admit the row: " + ($rAl1 | ConvertTo-Json -Compress -Depth 4)); $script:fail++ }
+} finally { $script:UnitAliasDefaultFile = ''; $script:UnitAliasCache = @{}; Remove-Item -LiteralPath $aliasTmp -Force -ErrorAction SilentlyContinue }
 $rG = Build-Row (_R 'Member''s Mark Distilled Water 1 gal.' '$1.28' '$1.28/gallon (us)')
 if ($rG.row -and [string]$rG.row.size -match 'gal') { Write-Output "ok    CLEAN TWIN 'gallon (us)' reads as gal -> $($rG.row.size)" } else { Write-Output ("FAIL  'gallon (us)' still unread: " + $rG.err); $script:fail++ }
 $rC = Build-Row (_R 'Thai Kitchen Unsweetened Coconut Milk 13.66 fl. oz. cans, 6 pk.' '$11.24' '$0.14/fl oz')
@@ -1081,6 +1100,11 @@ if (-not ($rC.err -and $rC.err -match 'per-piece')) { Write-Output "ok    MUST N
     $okA = ($runA.ExitCode -eq 0) -and ($sumA -eq 1) -and ($rjNames.Count -eq 1) -and ($rjNames[0] -eq 'Bogus Beans, 99 ct.') -and (Test-Path -LiteralPath (Join-Path $outA 'sams-deals-1999-01-01.json'))
     if ($okA) { Write-Output 'ok    11a MUST FIRE  a build with one reject reaches its summary line, writes the rejects file and exits 0' }
     else { Write-Output ("FAIL  11a build with a reject: exit=" + $runA.ExitCode + " summary_lines=" + $sumA + " reject_names=" + ($rjNames -join ';') + " | " + (($linesA | Select-Object -Last 4) -join ' / ')); $fail++ }
+    # 11a2 (20fecf): the same build records its ingest shape under ITS OWN -OutDir (never the live out\): 1 reject, 1 key.
+    $shA = Join-Path $outA 'ingest-shape\sams-1999-01-01.json'
+    $shDoc = $null; if (Test-Path -LiteralPath $shA) { $shDoc = [IO.File]::ReadAllText($shA, [Text.Encoding]::UTF8) | ConvertFrom-Json }
+    if ($shDoc -and [int]$shDoc.rejects -eq 1 -and @($shDoc.rejects_by_reason.PSObject.Properties).Count -eq 1) { Write-Output 'ok    11a2 MUST FIRE  the build writes its ingest shape (1 reject under 1 reason key) beside its own output' }
+    else { Write-Output ("FAIL  11a2 no ingest shape at " + $shA); $fail++ }
     # 11b CLEAN TWIN: the same build with no reject still reaches its summary line, exits 0 and writes no rejects file.
     $csvB = Join-Path $bsdT 'sams-capture-b.csv'
     [IO.File]::WriteAllText($csvB, ($bsdStore + "`n" + $bsdHead + "`n" + $bsdGood + "`n"), (New-Object Text.UTF8Encoding($false)))
@@ -1403,6 +1427,13 @@ if ($rejects.Count -or $hintNotes.Count) {
   $rjRows = @($rejects.ToArray()) + @($hintNotes)
   $rjRows | ConvertTo-Json -Depth 4 | Set-Content $rj -Encoding UTF8
 }
+# THE INGEST SHAPE (2026-09-22, queue 2026-09-22-20fecf): one record per build, read by audit-ingest-shape.ps1 beside
+# the rejects file. Never fatal: a builder that dies after writing its rows loses the capture. A self-test child
+# (-OutDir) writes it under its own temp directory, never the live out\.
+try {
+  $isRoot = if ($OutDir) { $OutDir } else { Join-Path $root 'out' }
+  [void](Write-IngestShape -Store 'sams' -Date $Date -RowsIn $raw.Count -RowsOut $ded.Count -Rejects $rejects.ToArray() -OutRoot $isRoot)
+} catch { Write-Warning ("build-sams-deals: ingest shape not recorded (" + $_.Exception.Message + ")") }
 Write-Output ("build-sams-deals: {0} raw -> {1} priced ({2} after de-dupe), {3} rejected -> {4}" -f $raw.Count, $rows.Count, $ded.Count, $rejects.Count, (Split-Path $outFile -Leaf))
 if ($rejects.Count) {
   Write-Output "  reject reasons:"

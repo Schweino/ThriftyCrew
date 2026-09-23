@@ -70,6 +70,7 @@
 # It is not trivially each-able either: "Reynolds Wrap Aluminum Foil 200 sq. ft. Box" parses to size
 # "200 ct", which under unit=each reads as 200 boxes rather than one.
 . (Join-Path $PSScriptRoot 'derived-size-density-lib.ps1')   # Test-DerivedSizeDensity: both Walmart writers inherit the density refusal (85c3b7)
+. (Join-Path $PSScriptRoot 'ingest-shape-lib.ps1')   # Resolve-UnitAlias: the proved-spelling fallback (20fecf); defines nothing this file defines
 
 function Resolve-Unit([string]$u) {
   switch -Regex (($u -replace '\.','').Trim().ToLower()) {
@@ -392,6 +393,9 @@ function Build-Row($raw) {
     if ($dq -gt 0) { $up = $up / $dq; $denom = $dm.Groups[2].Value }
   }
   $u = Resolve-Unit $denom
+  # A spelling this table does not know, but audit-ingest-shape PROVED from Walmart's own arithmetic (unit-aliases.json,
+  # queue 2026-09-22-20fecf). Asked only after the table, so a spelling written above always wins.
+  if (-not $u) { $u = Resolve-UnitAlias -Store 'walmart' -Spelling $denom }
   if (-not $u) { return @{ err=('unknown unit "' + $denom + '"') } }
 
   # unitPrice is rounded to the cent, so lp/up is only as good as that rounding: a $0.09/ea item can be off by
