@@ -131,7 +131,8 @@ if (Test-Path $bandsFile) { $bDoc = Read-JsonFile $bandsFile; foreach ($p in $bD
 # recipe commodity that shares an id with a staple (butter/milk/peanut-butter) may use a DIFFERENT unit (oz vs
 # lb), so the staple's per-lb band would wrongly reject every per-oz match.
 foreach ($c in $commodities) { if ($c.PSObject.Properties['band_min']) { $BANDS[[string]$c.id] = [pscustomobject]@{ min=[double]$c.band_min; max=[double]$c.band_max } } }
-function Test-Band($id, $up) { if (-not $BANDS.ContainsKey($id)) { return $true }; $b = $BANDS[$id]; return ([double]$up -ge [double]$b.min -and [double]$up -le [double]$b.max) }
+# WAREHOUSE STORES ARE JUDGED AGAINST THE WAREHOUSE FLOOR of a derived band (derived-band-lib.ps1, stores.json reference_group).
+function Test-Band($id, $up, $store = '') { if (-not $BANDS.ContainsKey($id)) { return $true }; $grp = if ($store -and $BAND_GROUPS.ContainsKey([string]$store)) { [string]$BAND_GROUPS[[string]$store] } else { 'retail' }; return (Test-TcInBand $BANDS[$id] ([double]$up) $grp) }
 # UNIVERSAL IMPLAUSIBILITY FLOOR (2026-07-27, overhaul-1): only 29 of 503 commodities carry a hand-tuned
 # band, so 474 have NO low-end floor - a dropped decimal / unit-confusion parse ships unchecked (the
 # $0.0023/oz grits price that sat live for days was exactly this, on a band-less commodity). These per-unit
@@ -259,7 +260,7 @@ function Test-PieceSize($id, $size, $name, $pieces) {
 function Get-FirstRefusal($id, $unit, $up, $size, $name, $pieces, $store = '', $KwBlocks = $null) {
   $r = ''
   if (-not (Test-PieceSize $id $size $name $pieces)) { $r = 'piece' }
-  elseif (-not (Test-Band $id $up)) { $r = 'band' }
+  elseif (-not (Test-Band $id $up $store)) { $r = 'band' }
   elseif (-not (Test-Floor $unit $up)) { $r = 'floor' }
   elseif (-not (Test-PackSize $id $size $name)) { $r = 'pack-cap' }
   elseif (-not (Test-PackSizeFloor $id $size $name)) { $r = 'pack-floor' }
@@ -500,6 +501,7 @@ function Format-TcNamelessByStore {
 # second inline copy here - a shared-lib fix ships nothing while callers keep inline copies.
 . (Join-Path $PSScriptRoot 'derived-size-density-lib.ps1')
 . (Join-Path $PSScriptRoot 'derived-band-lib.ps1')   # Get-TcDerivedBands: the band is derived, never typed (6b17b1)
+$BAND_GROUPS = @{}; try { $BAND_GROUPS = Get-TcStoreReferenceGroups (Read-JsonFile (Join-Path $PSScriptRoot 'stores.json')) } catch { Write-Warning ('stores.json reference groups unreadable - every store is judged as retail: ' + $_.Exception.Message) }
 
 # ---------------------------------------------------------------- THE STORE'S OWN PER-UNIT NUMBER
 # (2026-09-04, queue 2026-09-04-def37c, triage-plans\plan-2026-09-04.json)
@@ -2868,7 +2870,7 @@ foreach ($d0 in $deals) {
 }
 $TYPED_BANDS = @{}; foreach ($k0 in $BANDS.Keys) { $TYPED_BANDS[$k0] = $BANDS[$k0] }
 $evArr = $bandEvidence.ToArray()
-$DERIVED_BANDS = Get-TcDerivedBands -Rows $evArr
+$DERIVED_BANDS = Get-TcDerivedBands -Rows $evArr -Groups $BAND_GROUPS
 # SHADOW MODE, NOT IN FORCE (2026-09-22). Measured on the first switch over comparison-2026-09-22 at K=5: 25 crowns moved,
 # and the typed bands turned out to be doing IDENTITY work the derived band cannot: salt | Aldi went to "Clancy's Coconut
 # Oil Himalayan Pink Salt Popcorn", jalapenos | Walmart to a jalapeno hummus, butter | Sam's to a butter seasoning,
@@ -2892,11 +2894,11 @@ if ($env:TC_DERIVED_BANDS -eq 'enforce') { $BANDS = @{}; foreach ($k0 in $DERIVE
 try {
   $sweep = [ordered]@{}
   foreach ($kk in @(3.0, 4.0, 5.0, 6.0)) {
-    $dk = Get-TcDerivedBands -Rows $evArr -K $kk
+    $dk = Get-TcDerivedBands -Rows $evArr -K $kk -Groups $BAND_GROUPS
     $na = 0; $nr = 0
     foreach ($e in $evArr) {
       $inT = Test-TcInBand $TYPED_BANDS[[string]$e.id] ([double]$e.per_unit)
-      $inD = Test-TcInBand $dk[[string]$e.id] ([double]$e.per_unit)
+      $inD = Test-TcInBand $dk[[string]$e.id] ([double]$e.per_unit) $(if ($BAND_GROUPS.ContainsKey([string]$e.store)) { [string]$BAND_GROUPS[[string]$e.store] } else { 'retail' })
       if ($inD -and -not $inT) { $na++ }; if ($inT -and -not $inD) { $nr++ }
     }
     $sweep[('K=' + $kk)] = [ordered]@{ newly_admitted_rows = $na; newly_refused_rows = $nr }
@@ -2904,12 +2906,12 @@ try {
   $admitted = New-Object System.Collections.ArrayList; $refused = New-Object System.Collections.ArrayList
   foreach ($e in $evArr) {
     $tb = $TYPED_BANDS[[string]$e.id]; $db = $DERIVED_BANDS[[string]$e.id]
-    $inT = Test-TcInBand $tb ([double]$e.per_unit); $inD = Test-TcInBand $db ([double]$e.per_unit)
+    $inT = Test-TcInBand $tb ([double]$e.per_unit); $inD = Test-TcInBand $db ([double]$e.per_unit) $(if ($BAND_GROUPS.ContainsKey([string]$e.store)) { [string]$BAND_GROUPS[[string]$e.store] } else { 'retail' })
     $rowRec = [ordered]@{ id = $e.id; store = $e.store; name = $e.name; per_unit = $e.per_unit; typed = $(if ($tb) { ('' + $tb.min + '-' + $tb.max) } else { 'none' }); derived = $(if ($db) { ('' + $db.min + '-' + $db.max) } else { 'none' }) }
     if ($inD -and -not $inT) { [void]$admitted.Add($rowRec) }
     if ($inT -and -not $inD) { [void]$refused.Add($rowRec) }
   }
-  $bdoc = [ordered]@{ date = $today; rule = 'band = [ref / K, ref * K], ref = median of per-store median per-unit (>= 3 stores) else median of rows (>= 3 rows) else no band'; K = $script:TcBandK
+  $bdoc = [ordered]@{ date = $today; rule = 'band = [ref / K, ref * K] (warehouse stores: floor ref / (K * W)), ref = median of the retail stores'' cheapest per-unit (>= 3 retail stores) else of every store''s cheapest (>= 3 stores) else median of rows (>= 3 rows) else no band'; K = $script:TcBandK; W = $script:TcBandW
     evidence_rows = $evArr.Count; derived_commodities = $DERIVED_BANDS.Count; typed_commodities = $TYPED_BANDS.Count; k_sweep = $sweep
     newly_admitted = $admitted.ToArray(); newly_refused = $refused.ToArray() }
   [IO.File]::WriteAllText((Join-Path $OutDir ('band-derivation-' + $(if ((Split-Path $CommoditiesFile -Leaf) -eq 'commodities.json') { '' } else { [IO.Path]::GetFileNameWithoutExtension($CommoditiesFile) + '-' }) + $today + '.json')), ($bdoc | ConvertTo-Json -Depth 6), (New-Object Text.UTF8Encoding($false)))
@@ -2958,7 +2960,11 @@ foreach ($pp in $prePass) {
     }
     elseif ($refusal -eq 'band') {
       $bn = $BANDS[$c.id]
-      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("$($bn.min)-$($bn.max)"); price_text=$d.price_text; size_text=$d.size_text })
+      # band_ref / band_group / band_kind: what the band judged against, so audit-band-refusals can ask whether the refusal is
+      # EXPLAINED as a basis error (the band's job) or is hiding a wrong product or a real bargain (Brad, 2026-09-22).
+      $bGrp = if ($BAND_GROUPS.ContainsKey([string]$d.store)) { [string]$BAND_GROUPS[[string]$d.store] } else { 'retail' }
+      $bLo = if ($bGrp -eq 'warehouse' -and $bn.PSObject.Properties['wmin'] -and $null -ne $bn.wmin) { $bn.wmin } else { $bn.min }
+      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("$($bLo)-$($bn.max)"); band_ref=$(if ($bn.PSObject.Properties['reference']) { $bn.reference } else { $null }); band_group=$bGrp; band_kind=$(if ($bn.PSObject.Properties['reference']) { 'derived' } else { 'typed' }); price_text=$d.price_text; size_text=$d.size_text })
       # if the out-of-band price came from a multibuy, it's a bad multibuy parse - reflect it in the multibuy
       # signal too (not just the generic out-of-band bucket the human is told is "usually normal").
       if (Test-IsMultibuy $d.price_text) {

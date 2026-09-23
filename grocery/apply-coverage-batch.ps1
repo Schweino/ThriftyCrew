@@ -161,6 +161,17 @@ Write-Output ("before: {0} commodities on the board" -f $before.Count)
 # the baseline's own quarantine cells, so the guards gate below judges only what the batch ADDED (Test-BatchGuardsVerdict)
 $gBase = Invoke-NativeScript (Join-Path $root 'guards.ps1')
 $script:BatchBaseQuarantine = Get-BatchQuarantineCells @($gBase.Lines)
+# THE BASELINE'S OWN TILE FAULTS (2026-09-22, plan-2026-09-22-5): a fault on a touched commodity at a cell the batch did not
+# move is not the batch's (the Sam's PRICE-DRIFT links bec597 names were read as 'the cheese collision shape' and reverted
+# the identity excludes of 6b17b1). Faults present before the edit, keyed id|store|fault, are pre-existing.
+$script:BatchBaseTile = @{}
+try {
+  Invoke-BatchChild 'build-deals-page.ps1' | Out-Null
+  $null = Invoke-BatchChild 'audit-tile-integrity.ps1'
+  $tfb = Join-Path $OutDir 'tile-integrity.json'
+  if (Test-Path $tfb) { foreach ($rw in @((Read-JsonFile $tfb).rows)) { if ([string]$rw.fault -ne 'NO-LINK') { $script:BatchBaseTile[([string]$rw.id + '|' + [string]$rw.store + '|' + [string]$rw.fault)] = $true } } }
+} catch { Write-Output ('baseline tile-integrity could not be read (' + $_.Exception.Message + '): every fault on a touched commodity counts as the batch''s') }
+Write-Output ("baseline tile-integrity: " + $script:BatchBaseTile.Count + " hard fault(s) before the edit")
 Write-Output ("baseline guards: rc=" + $gBase.ExitCode + ", " + $script:BatchBaseQuarantine.Count + " cell(s) already quarantined before the edit")
 
 # ---- edit
@@ -376,7 +387,7 @@ if ($tileRc -ne 0) {
   if (Test-Path $tf) {
     foreach ($rw in @((Read-JsonFile $tf).rows)) {
       if ([string]$rw.fault -eq 'NO-LINK') { continue }
-      if ($TouchedIds -contains [string]$rw.id) { $mine += $rw } else { $theirs += $rw }
+      if ($TouchedIds -contains [string]$rw.id -and -not $script:BatchBaseTile.ContainsKey(([string]$rw.id + '|' + [string]$rw.store + '|' + [string]$rw.fault))) { $mine += $rw } else { $theirs += $rw }
     }
   }
   Write-Output ("tile-integrity failed: {0} hard fault(s) on BATCH commodities, {1} pre-existing elsewhere" -f $mine.Count, $theirs.Count)
@@ -411,7 +422,7 @@ if ($tileRc -ne 0) {
     $still = @()
     if (Test-Path $tf) {
       foreach ($rw in @((Read-JsonFile $tf).rows)) {
-        if ([string]$rw.fault -ne 'NO-LINK' -and $TouchedIds -contains [string]$rw.id) { $still += $rw }
+        if ([string]$rw.fault -ne 'NO-LINK' -and $TouchedIds -contains [string]$rw.id -and -not $script:BatchBaseTile.ContainsKey(([string]$rw.id + '|' + [string]$rw.store + '|' + [string]$rw.fault))) { $still += $rw }
       }
     }
     if ($still.Count -gt 0) {

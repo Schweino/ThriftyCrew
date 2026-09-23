@@ -167,6 +167,7 @@
       "capture": "browser, CAPTCHA-walled -> PARTIAL SLICES; compare-deals unions every capture in its 14-day window, freshest-per-commodity wins",
       "walled": true,
       "price_mode": "in-store (club 68137 preferred over national)",
+      "reference_group":  "warehouse",
       "membership": true,
       "notes": "unit-price feed - ingest ONLY via build-sams-deals.ps1 (linePrice AND unitPrice) or recover-sams-quarantine.ps1; never write bare per-unit rows",
       "pull_profile": {

@@ -864,7 +864,8 @@
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
                         "\\bprotein\\s+bars?\\b",
-                        "\\bstews?\\b"
+                        "\\bstews?\\b",
+                        "\\bpeas\\b"
                     ]
     },
     {
@@ -1617,7 +1618,10 @@
                         "butter\\s+chickpea",
                         "\\bcascade\\b",
                         "\\bpasta\\s+roni\\b",
-                        "\\bflavou?r\\s+pasta\\b"
+                        "\\bflavou?r\\s+pasta\\b",
+                        "\\bpotato(e?s)?\\b",
+                        "butter\\s+seasoning",
+                        "cowboy\\s+butter"
                     ]
     },
     {
@@ -2939,7 +2943,9 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "berry\\s+splash",
+                        "\\bfl\\.?\\s*oz\\b"
                     ]
     },
     {
@@ -5331,7 +5337,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "florida\u0027?s\\s+natural"
                     ]
     },
     {
@@ -8216,7 +8223,9 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "true\\s+lime",
+                        "\\bcrystallized\\b"
                     ]
     },
     {
@@ -9864,7 +9873,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\bsticks?\\b"
                     ]
     },
     {
@@ -10350,7 +10360,9 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\bpork\\b",
+                        "\\btenderloin\\b"
                     ]
     },
     {
@@ -11687,7 +11699,8 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bready[-\\s]+to[-\\s]+eat\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bcooked\\b"
                     ]
     },
     {
@@ -12803,7 +12816,9 @@
                         "\\bsausages?\\b",
                         "\\bbelvita\\b",
                         "\\bbel\\s+vita\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bsplenda\\b",
+                        "sugar\\s+blend"
                     ]
     },
     {
@@ -13399,7 +13414,8 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "bacon\\s+jam",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bvinegar\\b"
                     ]
     },
     {
@@ -13567,7 +13583,9 @@
                         "\\bseasoning\\b",
                         "smoked\\s+salmon",
                         "\\bcheese\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "smoked\\s+fish",
+                        "\\bsalmon\\b"
                     ]
     },
     {
@@ -14762,7 +14780,8 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\b(?:pistachios?|crackers?)\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bpopcorn\\b"
                     ]
     },
     {
@@ -15694,7 +15713,8 @@
                         "\\bsqueeze\\b",
                         "\\bbtl\\b",
                         "\\bbottle\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "with\\s+crunch"
                     ]
     },
     {
@@ -17991,7 +18011,9 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "fruit\\s+bowls?",
+                        "\\bgel\\b"
                     ]
     },
     {
@@ -21261,7 +21283,9 @@
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
-                        "\\bstews?\\b"
+                        "\\bstews?\\b",
+                        "\\bhummus\\b",
+                        "\\bflakes?\\b"
                     ]
     },
     {
@@ -26370,7 +26394,8 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bscallops?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bgnocchi\\b"
                     ]
     },
     {
@@ -29701,7 +29726,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bpopcorn\\b"
                     ]
     },
     {
@@ -30046,7 +30072,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bbeans?\\b"
                     ]
     },
     {
@@ -32143,7 +32170,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bcrisps?\\b"
                     ]
     },
     {
@@ -37770,7 +37798,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "zero\\s+sugar",
+                        "\\bfl\\.?\\s*oz\\b"
                     ]
     },
     {
@@ -38832,7 +38862,8 @@
                         "\\bbelvita\\b",
                         "\\bbel\\s+vita\\b",
                         "\\bbreakfast\\s+bars?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "biscuit\\s+sandwich\\s+with\\s+almond\\s+butter"
                     ]
     },
     {
@@ -39068,7 +39099,8 @@
                         "\\bmeals?\\b",
                         "\\bcascade\\b",
                         "\\blean\\s+cuisine\\b",
-                        "\\bsmart\\s+ones\\b"
+                        "\\bsmart\\s+ones\\b",
+                        "\\bravioli\\b"
                     ]
     },
     {
@@ -39415,7 +39447,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "sweet\\s+potato"
                     ]
     },
     {
@@ -39506,7 +39539,8 @@
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bmini\\b"
                     ]
     },
     {
@@ -40103,7 +40137,9 @@
                         "\\bcake\\b",
                         "\\bbath\\b",
                         "makeup",
-                        "\\bmop\\b"
+                        "\\bmop\\b",
+                        "dishwand",
+                        "replacement\\s+heads?"
                     ],
         "relax_global":  [
                              "\\bscent(?:s|ed)?\\b",
@@ -40206,7 +40242,12 @@
                         "parchment"
                     ],
         "exclude":  [
-                        "\\bwax\\b.{0,10}paper\\s+only"
+                        "\\bwax\\b.{0,10}paper\\s+only",
+                        "baking\\s+cups?",
+                        "air\\s*fryer",
+                        "\\bliners?\\b",
+                        "pop-?up",
+                        "cookie\\s+baking\\s+sheets?"
                     ]
     },
     {
@@ -40412,7 +40453,8 @@
                         "\\bkids\\b",
                         "\\bdog\\b",
                         "\\bholder\\b",
-                        "battery"
+                        "battery",
+                        "\\bwisps?\\b"
                     ],
         "relax_global":  [
                              "\\bscent(?:s|ed)?\\b",
@@ -76509,7 +76551,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bsalmon\\b"
                     ],
         "band_min":  0.08,
         "band_max":  0.72

@@ -4998,6 +4998,263 @@
                         "ruled_on":  "2026-09-22",
                         "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "air-freshener|Aldi|febreze-air-freshener-linen-sky-0-25-oz",
+                        "commodity":  "air-freshener",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Febreze Air Freshener Linen Sky 0 25 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real product, WRONG BASIS. The name reads 0.25 oz and the row\u0027s own size is 7.5 ml (a car vent clip), yet the engine published 0.1376/oz, which neither size reproduces: the name\u0027s \"0 25\" was read as 25 oz. Surfaced 2026-09-22 when every commodity took its derived band (plan-2026-09-22-5): the typed band floor had been refusing this row, so the class was hidden, not absent.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "air-freshener|SamsClub|febreze-air-mist-air-freshener-spray-gain-origin",
+                        "commodity":  "air-freshener",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Febreze Air Mist Air Freshener Spray, Gain Original + Unstopables Fresh, 4ct., 32.4 oz.",
+                                      "Febreze Air Mist Air Freshener Spray, Mixed Scent, 4ct., 32.4 oz.",
+                                      "Febreze Air Mist Air Freshener Spray, Spring Mixed Scent, 4ct., 32.4 oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real price, WRONG BASIS. \"4ct., 32.4 oz.\" is the pack TOTAL: the Holiday and Fall Mixed Scent siblings in the same sams-deals-2026-09-21 capture carry the identical name shape and $9.98 and Sam\u0027s shows 30.8 cents/oz on them, while on these three Sam\u0027s own unit price reads 7.7 cents/oz = 9.98 / (4 x 32.4). The builder picks the size that reproduces Sam\u0027s unit price, so it took 129.6 oz and published 0.077/oz against a true 0.308/oz. Same class as the furniture-polish Pledge ruling of 2026-08-02. Surfaced 2026-09-22 when every commodity took its derived band (plan-2026-09-22-5): the typed band floor had been refusing this row, so the class was hidden, not absent.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "bread|SamsClub|rotellas-italian-vienna-bread-17-oz",
+                        "commodity":  "bread",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Rotella\u0027s Italian Vienna Bread 17 oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real price, WRONG BASIS. One 17 oz loaf; the size was read as \"17 ct\", so the each-priced bread cell published 0.1753 per loaf, one seventeenth of the shelf price. Every other store\u0027s bread cell is 1.19 to 1.99 per loaf. Surfaced 2026-09-22 when every commodity took its derived band (plan-2026-09-22-5): the typed band floor had been refusing this row, so the class was hidden, not absent.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "canned-chicken|Walmart|8-pack-great-value-chunk-chicken-breast-with-rib",
+                        "commodity":  "canned-chicken",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "(8 pack) Great Value Chunk Chicken Breast with Rib Meat in Water, 12.5 oz Cans, 4 Pack"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real product, WRONG BASIS. The name states two pack counts, \"(8 pack)\" and \"4 Pack\", and the engine multiplied both into 398.8 oz, publishing 0.05/oz; Great Value 12.5 oz cans price at 0.1992 to 0.2332/oz at every other store on this board, and whichever count is true, both cannot be. Surfaced 2026-09-22 when every commodity took its derived band (plan-2026-09-22-5): the typed band floor had been refusing this row, so the class was hidden, not absent.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coffee|Fareway|scooters-coffee-french-vanilla-ground-coffee",
+                        "commodity":  "coffee",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Scooter\u0027s Coffee French Vanilla Ground Coffee"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real product, WRONG BASIS. The ad row\u0027s size is \"12 x 12 oz\", a case of twelve bags, and the ad price is one bag\u0027s, so the engine published 0.0763/oz; every other store\u0027s coffee cell is 0.403 to 0.5262/oz. Surfaced 2026-09-22 when every commodity took its derived band (plan-2026-09-22-5): the typed band floor had been refusing this row, so the class was hidden, not absent.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "crackers|Aldi|savoritz-protein-crackers-ranch-120-oz",
+                        "commodity":  "crackers",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Savoritz Protein Crackers Ranch 120 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real product, WRONG BASIS. \"120 OZ\" is a 12.0 oz box with the decimal point lost, so the engine published 0.0332/oz; every other store\u0027s crackers cell is 0.1112 to 0.1556/oz and a protein cracker is dearer, not ten times cheaper. Surfaced 2026-09-22 when every commodity took its derived band (plan-2026-09-22-5): the typed band floor had been refusing this row, so the class was hidden, not absent.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "dog-treats|FamilyFare|greenies-regular-25-50-lbs-11-22-kgs-daily-origi",
+                        "commodity":  "dog-treats",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Greenies Regular 25 50 Lbs (11 22 Kgs) Daily Original Dog Treats 12 Ea"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real product, WRONG BASIS. The row\u0027s size is \"12 ea\" (twelve chews) in an ounce-priced commodity, so the count was read as ounces and the engine published 0.0287/oz; the \"25 50 Lbs\" in the name is the dog\u0027s weight range, not the pack. Surfaced 2026-09-22 when every commodity took its derived band (plan-2026-09-22-5): the typed band floor had been refusing this row, so the class was hidden, not absent.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "facial-tissues|Walmart|32-pack-kleenex-on-the-go-3-ply-travel-tissues-8",
+                        "commodity":  "facial-tissues",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "(32 pack) Kleenex On-The-Go 3-Ply Travel Tissues, 8 Pack (80 Total Tissues), Facial Tissues"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real product, WRONG BASIS. The name states two pack counts, \"(32 pack)\" and \"8 Pack (80 Total Tissues)\", and the engine multiplied them into 2,557 tissues, publishing 0.0039 per tissue; every other store\u0027s cell is 0.0087 to 0.0124. Surfaced 2026-09-22 when every commodity took its derived band (plan-2026-09-22-5): the typed band floor had been refusing this row, so the class was hidden, not absent.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "hot-dogs|SamsClub|nathans-grass-fed-skinless-beef-franks-32-oz-16",
+                        "commodity":  "hot-dogs",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Nathan\u0027s Grass-Fed Skinless Beef Franks, 32 oz., 16 ct."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real price, WRONG BASIS. \"32 oz., 16 ct.\" is sixteen franks weighing 32 oz in TOTAL; the size was carried as \"16 ct 32 oz\" and read as 512 oz, publishing 0.0231/oz, sixteen times too cheap. Same Sam\u0027s count-times-size class as the Febreze and Pledge rulings. Surfaced 2026-09-22 when every commodity took its derived band (plan-2026-09-22-5): the typed band floor had been refusing this row, so the class was hidden, not absent.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "air-freshener|Aldi|febreze-odor-eliminating-air-freshener-gain-orig",
+                        "commodity":  "air-freshener",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Febreze Odor Eliminating Air Freshener Gain Original Scent 0 25 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real product, WRONG BASIS. Sibling of the Linen Sky ruling: a 0.25 oz (7.5 ml) vent clip whose \"0 25 OZ\" was read as 25 oz, published at 0.1376/oz. Found 2026-09-22 in the rows every commodity\u0027s derived band newly admits BELOW its old typed floor (plan-2026-09-22-5): no board cell today, but it would take the cell the day the row ahead of it leaves.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "air-freshener|SamsClub|febreze-air-effects-air-freshener-spray-hawaiian",
+                        "commodity":  "air-freshener",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Febreze Air Effects Air Freshener Spray, Hawaiian Aloha \u0026 Ocean, 4 ct., 35.2 oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real price, WRONG BASIS. \"4 ct., 35.2 oz.\" is four 8.8 oz cans, 35.2 oz in TOTAL (the Linen \u0026 Sky sibling in the same capture is carried at 35.2 fl oz, 0.2835/fl oz); this row was read as 4 x 35.2 and reached 0.0709/oz. Found 2026-09-22 in the rows every commodity\u0027s derived band newly admits BELOW its old typed floor (plan-2026-09-22-5): no board cell today, but it would take the cell the day the row ahead of it leaves.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "crackers|Aldi|savoritz-protein-crackers-red-chili-120-oz",
+                        "commodity":  "crackers",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Savoritz Protein Crackers Red Chili 120 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real product, WRONG BASIS. Sibling of the Ranch ruling: a 12.0 oz box whose decimal was lost, published at 0.0332/oz. Found 2026-09-22 in the rows every commodity\u0027s derived band newly admits BELOW its old typed floor (plan-2026-09-22-5): no board cell today, but it would take the cell the day the row ahead of it leaves.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "canned-chicken|Walmart|8-pack-great-value-chunk-chicken-breast-fully-co",
+                        "commodity":  "canned-chicken",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "(8 pack) Great Value Chunk Chicken Breast, Fully Cooked, 12.5 oz Can, 4 Pack"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real product, WRONG BASIS. Sibling of the Rib Meat ruling: two pack counts in one name, \"(8 pack)\" and \"4 Pack\", multiplied into one size and published at 0.05/oz against 0.1992 to 0.2332/oz everywhere else. Found 2026-09-22 in the rows every commodity\u0027s derived band newly admits BELOW its old typed floor (plan-2026-09-22-5): no board cell today, but it would take the cell the day the row ahead of it leaves.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "facial-tissues|Walmart|32-pack-kleenex-on-the-go-3-ply-facial-tissues-8",
+                        "commodity":  "facial-tissues",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "(32 pack) Kleenex On-The-Go 3-Ply Facial Tissues, 8 Pack (80 Total Tissues)"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real product, WRONG BASIS. Sibling of the Travel Tissues ruling: \"(32 pack)\" and \"8 Pack (80 Total Tissues)\" multiplied, published at 0.0039 per tissue. Found 2026-09-22 in the rows every commodity\u0027s derived band newly admits BELOW its old typed floor (plan-2026-09-22-5): no board cell today, but it would take the cell the day the row ahead of it leaves.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coffee|Fareway|scooters-coffee-original-blend-ground-coffee",
+                        "commodity":  "coffee",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Scooter\u0027s Coffee Original Blend Ground Coffee"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real product, WRONG BASIS. Sibling of the French Vanilla ruling: a \"12 x 12 oz\" case size on a one-bag ad price, published at 0.0763/oz against 0.403 to 0.5262/oz everywhere else. Found 2026-09-22 in the rows every commodity\u0027s derived band newly admits BELOW its old typed floor (plan-2026-09-22-5): no board cell today, but it would take the cell the day the row ahead of it leaves.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "dog-treats|SamsClub|pedigree-dentastix-large-variety-adult-dog-treat",
+                        "commodity":  "dog-treats",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Pedigree Dentastix Large Variety Adult Dog Treats, 3.45 lbs., 65 ct."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real product, WRONG BASIS. \"3.45 lbs., 65 ct.\" is 65 chews weighing 3.45 lb in TOTAL; published at 0.0064/oz, more than ten times under every other store\u0027s dog-treats cell (0.0749 to 0.1204/oz): the count and the total weight were multiplied. Found 2026-09-22 in the rows every commodity\u0027s derived band newly admits BELOW its old typed floor (plan-2026-09-22-5): no board cell today, but it would take the cell the day the row ahead of it leaves.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "bread|Walmart|food-for-life-ezekiel-4-9-sprouted-whole-grain-b",
+                        "commodity":  "bread",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Food for Life Ezekiel 4:9 Sprouted Whole Grain Bread, Organic and Flourless, 24 oz Loaf, 20 Count Bag"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real product, WRONG BASIS. Bread is priced per loaf here, and this row published 0.3765 \"per loaf\", which is one twentieth of the loaf: the name\u0027s \"20 Count\" is the slice count, read as twenty loaves; every store\u0027s bread cell is 1.19 to 1.99 per loaf. Found 2026-09-22 in the rows every commodity\u0027s derived band newly admits BELOW its old typed floor (plan-2026-09-22-5): no board cell today, but it would take the cell the day the row ahead of it leaves.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-22",
+                        "ruled_by":  "triage-money-lane 2026-09-22 (plan-2026-09-22-5, 6b17b1 derived-band rollout)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
