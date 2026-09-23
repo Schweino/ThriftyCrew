@@ -24,7 +24,7 @@
   Anything else is UNEXPLAINED: the identity rules matched the row to the commodity, and its price is merely unusual,
   so it is either a wrong product the band is hiding (fix at identity: an exclude, per Brad's shape ruling) or a real
   bargain or premium the band is censoring (fix the band's derivation, never its number). Either way it PAGES, naming
-  the row, with the resolver lane:grocery/apply-coverage-batch.ps1 (the gated exclude road: every MOVED and DROPPED line reviewed, then audit-match-soundness -Accept).
+  the row, with the resolver lane:grocery/resolve-match-worklist.ps1 (2026-09-22, plan-2026-09-22-9 b96f21: the backlog is the matching worklist's kind 'band'; a key is decided there one at a time, and a wrong product becomes an exclude through apply-coverage-batch -FromWorklist, every MOVED and DROPPED line reviewed, then audit-match-soundness -Accept).
   $BasisTol = 0.25 and 50 are FIRST PLAUSIBLE NUMBERS, nothing else tried.
 
   A RATCHET, not a gate red on day one: the unexplained rows on the first measured board are the backlog
@@ -156,6 +156,6 @@ if ($Accept -or $Tighten) {
 $new = Get-TcNewRefusals $un $backlog
 $gone = @($backlog.Keys | Where-Object { -not $curKeys.ContainsKey($_) }).Count
 Write-Output ('band-refusals: ' + $res.examined + ' band-refused row(s) in ' + $ff.Name + ': ' + $res.explained + ' explained as a basis error, ' + $un.Count + ' unexplained, of which ' + $new.Count + ' NEW (not in the backlog of ' + $backlog.Count + '); ' + $gone + ' backlog key(s) no longer occur' + $(if ($gone -gt 0) { ' (ratchet CAN tighten: -Tighten)' } else { '' }))
-foreach ($u in ($new | Sort-Object id)) { Write-Output ('  UNEXPLAINED  ' + $u.id + ' | ' + $u.store + ' | ' + ('{0:0.####}' -f [double]$u.unit_price) + ' against reference ' + $u.band_ref + ' | ' + $u.name + '   resolver: lane:grocery/apply-coverage-batch.ps1 (a wrong product -> an exclude) or the band derivation (a real price)') }
+foreach ($u in ($new | Sort-Object id)) { Write-Output ('  UNEXPLAINED  ' + $u.id + ' | ' + $u.store + ' | ' + ('{0:0.####}' -f [double]$u.unit_price) + ' against reference ' + $u.band_ref + ' | ' + $u.name + '   resolver: lane:grocery/resolve-match-worklist.ps1 (a wrong product -> an exclude via apply-coverage-batch -FromWorklist) or the band derivation (a real price)') }
 Write-GuardComplete -Name 'band-refusals' -Summary ('scanned=' + $res.examined + ' explained=' + $res.explained + ' unexplained=' + $un.Count + ' findings=' + $new.Count + ' backlog=' + $backlog.Count)
 exit $(if ($new.Count -gt 0) { 2 } else { 0 })

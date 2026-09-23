@@ -34,13 +34,63 @@
     .\apply-coverage-batch.ps1 -Patterns @{ 'sun-dried-tomatoes' = @('sun.?dried.{0,30}tomato') }
     .\apply-coverage-batch.ps1 -Excludes @{ 'dried-thyme' = @('local\s+roots') }
     .\apply-coverage-batch.ps1 -Patterns $p -WhatIfOnly     measure without keeping
+    .\apply-coverage-batch.ps1 -FromWorklist 5             the weekly lane: the 5 oldest decided keys of the matching worklist
+
+  -FromWorklist <n> (2026-09-22, plan-2026-09-22-9 item 2026-09-21-b96f21) takes the n OLDEST keys the matching lane
+  decided (grocery/out/match-worklist.json decision release/widen, and hand verdicts release/widen in
+  grocery/match-verdicts.json not yet applied), turns each into its derived exclude on the claimer or include on the
+  target, runs EVERY gate below unchanged, and records each key's outcome in match-verdicts.json: 'applied' when the
+  batch is kept, 'reverted' with the gate's own reason when it is not. The batch never -Accepts the soundness
+  baseline: the MOVED/DROPPED report is still read and accepted by whoever commits the rule change, as
+  ops\verify-commodities-gate.ps1 requires.
 #>
 param(
   [hashtable]$Patterns = @{},
   [hashtable]$Excludes = @{},
   [switch]$WhatIfOnly,
+  [int]$FromWorklist = 0,
+  [string]$WorklistFile = '',
+  [string]$VerdictFile = '',
   [switch]$SelfTest
 )
+# ---- THE MATCHING LANE'S BATCH (b96f21): build the batch from the worklist BEFORE the empty-batch check.
+$script:FwKeys = @{}; $script:FwVerdictFile = ''
+function Get-WorklistBatch($Rows, $Pending, [int]$Take) {
+  <# Pure. The n oldest decided keys (worklist rows, then ledger hand verdicts) as Patterns/Excludes plus the key map.
+     A release excludes on the CLAIMER; a widen includes on the TARGET. A key with no pattern is skipped, never guessed. #>
+  $cand = @(@($Rows | Where-Object { $_ -and [string]$_.decision -in 'release', 'widen' -and [string]$_.pattern }) + @($Pending | Where-Object { $_ -and [string]$_.verdict -in 'release', 'widen' -and [string]$_.pattern }))
+  $cand = @($cand | Sort-Object @{ Expression = { if ($_.PSObject.Properties['first_seen']) { [string]$_.first_seen } else { [string]$_.date } } }, @{ Expression = { [string]$_.key } })
+  $pat = @{}; $exc = @{}; $keys = @{}
+  foreach ($c in $cand) {
+    if ($keys.Count -ge $Take) { break }
+    if ($keys.ContainsKey([string]$c.key)) { continue }
+    $kind = if ($c.PSObject.Properties['decision']) { [string]$c.decision } else { [string]$c.verdict }
+    if ($kind -eq 'release') { $id = [string]$c.claimer; if (-not $id) { continue }; if (-not $exc.ContainsKey($id)) { $exc[$id] = @() }; $exc[$id] = @($exc[$id]) + [string]$c.pattern }
+    else { $id = [string]$c.commodity; if (-not $id) { continue }; if (-not $pat.ContainsKey($id)) { $pat[$id] = @() }; $pat[$id] = @($pat[$id]) + [string]$c.pattern }
+    $keys[[string]$c.key] = [pscustomobject]@{ row = $c; pattern = [string]$c.pattern; kind = $kind }
+  }
+  return [pscustomobject]@{ Patterns = $pat; Excludes = $exc; Keys = $keys }
+}
+function Save-WorklistOutcome([string]$Outcome, [string]$Why) {
+  if ($script:FwKeys.Count -eq 0 -or $WhatIfOnly) { return }
+  try {
+    $v = Read-MatchVerdicts $script:FwVerdictFile
+    foreach ($k in @($script:FwKeys.Keys)) { $e = $script:FwKeys[$k]; $v[$k] = New-MatchVerdict $k $e.row $Outcome 'apply-coverage-batch -FromWorklist' ($e.kind + ': ' + $Why) $e.pattern }
+    Save-MatchVerdicts $script:FwVerdictFile $v
+    Write-Output ('match-verdicts: ' + $script:FwKeys.Count + ' key(s) recorded ' + $Outcome)
+  } catch { Write-Output ('match-verdicts: could not record the outcome (' + $_.Exception.Message + ') - the keys stay on the worklist and the next batch retries them') }
+}
+if (-not $SelfTest -and $FromWorklist -gt 0) {
+  . (Join-Path $PSScriptRoot 'match-worklist-lib.ps1')
+  if (-not $WorklistFile) { $WorklistFile = Join-Path $PSScriptRoot 'out\match-worklist.json' }
+  if (-not $VerdictFile) { $VerdictFile = Join-Path $PSScriptRoot 'match-verdicts.json' }
+  $script:FwVerdictFile = $VerdictFile
+  $fwLedger = Read-MatchVerdicts $VerdictFile
+  $fwB = Get-WorklistBatch (Read-MatchWorklist $WorklistFile) @($fwLedger.Values) $FromWorklist
+  $Patterns = $fwB.Patterns; $Excludes = $fwB.Excludes; $script:FwKeys = $fwB.Keys
+  Write-Output ('from the matching worklist: ' + $script:FwKeys.Count + ' decided key(s) of ' + $FromWorklist + ' asked')
+  foreach ($k in @($script:FwKeys.Keys | Sort-Object)) { Write-Output ('    ' + $script:FwKeys[$k].kind + '  ' + $script:FwKeys[$k].pattern + '  <- ' + $k) }
+}
 if (-not $SelfTest -and @($Patterns.Keys).Count -eq 0 -and @($Excludes.Keys).Count -eq 0) {
   Write-Output 'apply-coverage-batch: pass -Patterns (includes) and/or -Excludes. An empty batch would run every gate and prove nothing.'
   exit 1
@@ -106,6 +156,16 @@ if ($SelfTest) {
   _BT 'MUST FIRE  a board-scoped hold (rc 2 with no quarantine verdict) still fails' ((Test-BatchGuardsVerdict 2 @('GUARDS FAILED: hard=1') $base) -like 'fail:*')
   _BT 'MUST FIRE  rc 1 and rc 3 still fail' (((Test-BatchGuardsVerdict 1 @() $base) -like 'fail:*') -and ((Test-BatchGuardsVerdict 3 @() $base) -like 'fail:*'))
   _BT 'CLEAN TWIN  a clean guards run (rc 0) passes' ((Test-BatchGuardsVerdict 0 @() @{}) -eq 'pass')
+  # -FromWorklist (b96f21): frozen from the 2026-09-22 worklist
+  $fwRows = @([pscustomobject]@{ key = 'coverage|sun-dried-tomatoes|Fareway|Mezzetta Sun-Dried Tomatoes'; decision = 'release'; claimer = 'turkey-lunchmeat'; commodity = 'sun-dried-tomatoes'; pattern = '\btomato'; first_seen = '2026-09-22' },
+              [pscustomobject]@{ key = 'coverage|apple-juice|Fareway|Old Orchard 100% Juice, Apple, Value Size'; decision = 'widen'; claimer = ''; commodity = 'apple-juice'; pattern = '\bjuice.{0,30}\bapple'; first_seen = '2026-09-21' },
+              [pscustomobject]@{ key = 'coverage|queso|Hy-Vee|party cheese or cheese dip'; decision = 'ad-line'; claimer = ''; commodity = 'queso'; pattern = ''; first_seen = '2026-09-20' },
+              [pscustomobject]@{ key = 'coverage|canned-pears|Fareway|Fareway Diced No Sugar Added Pears'; decision = 'undecided'; claimer = ''; commodity = 'canned-pears'; pattern = ''; first_seen = '2026-09-19' })
+  $fwB = Get-WorklistBatch $fwRows @() 5
+  _BT 'MUST FIRE  a release becomes an EXCLUDE on the claimer and a widen an INCLUDE on the target' (($fwB.Excludes['turkey-lunchmeat'] -contains '\btomato') -and ($fwB.Patterns['apple-juice'] -contains '\bjuice.{0,30}\bapple'))
+  _BT 'MUST NOT FIRE  an ad-line or undecided key is never turned into a rule' ($fwB.Keys.Count -eq 2 -and -not $fwB.Patterns.ContainsKey('queso') -and -not $fwB.Patterns.ContainsKey('canned-pears'))
+  $fw1 = Get-WorklistBatch $fwRows @() 1
+  _BT 'MECHANISM  -FromWorklist 1 takes exactly the OLDEST decided key (AT the bar: 1 asked, 1 taken)' ($fw1.Keys.Count -eq 1 -and $fw1.Patterns.ContainsKey('apple-juice'))
   Write-Output ('apply-coverage-batch self-test ' + $(if ($bad -eq 0) { 'pass' } else { 'FAIL' }) + ': ' + ($n - $bad) + ' of ' + $n + ' case(s)')
   exit $(if ($bad -eq 0) { 0 } else { 1 })
 }
@@ -197,6 +257,7 @@ Write-Output ("added {0} include pattern(s) across {1} commodit(y/ies), {2} excl
 function Revert([string]$why) {
   Copy-Item $bak $comFile -Force
   Write-Output ("REVERTED: $why")
+  Save-WorklistOutcome 'reverted' $why
   Invoke-BatchChild 'compare-deals.ps1' | Out-Null
   exit 2
 }
@@ -446,6 +507,7 @@ if ($tileRc -ne 0) {
     Write-Output ("  {0} pre-existing fault(s) remain and are NOT from this batch. The batch is KEPT;" -f $theirs.Count)
     Write-Output '  heal them through check-ad-cycles (headless stores) or withdraw-stale-link (the rest) before publishing.'
     Write-Output 'BATCH ACCEPTED, BOARD NOT PUBLISHABLE YET (pre-existing link churn).'
+    Save-WorklistOutcome 'applied' 'batch kept; pre-existing link churn elsewhere'
     exit 1
   }
 }
@@ -455,4 +517,5 @@ if ($gVerdict -ne 'pass') { Revert ("guards failed (" + $gAfter.ExitCode + "): "
 if ([int]$gAfter.ExitCode -eq 2) { Write-Output ('    guards: quarantine-required, but every cell it names was already quarantined on the baseline board (' + (@($script:BatchBaseQuarantine.Keys) -join '; ') + ') - not this batch''s') }
 
 Write-Output 'BATCH GREEN: crown-diff reviewed, coverage gained, known-wrong clean, tile-integrity clean, guards clean.'
+Save-WorklistOutcome 'applied' 'every gate green'
 exit 0

@@ -370,6 +370,7 @@ if (-not $NoCommit) {
   } catch { $script:ChainDirtyAtStart = [pscustomobject]@{ ok = $false; files = @(); why = ('the snapshot threw: ' + $_.Exception.Message) } }
 }
 . (Join-Path $root 'alert-lib.ps1')
+. (Join-Path $root 'match-worklist-lib.ps1')   # Read-MatchWorklist / Get-MatchPageRows: the matching lane's worklist (plan-2026-09-22-9 b96f21)
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native / Invoke-NativeScript: the ONLY safe redirect under EAP=Stop
 . (Join-Path $root 'capture-policy-lib.ps1')   # Test-BrowserCaptureOwned: a store deferred to a browser owner under 24h ago is an OWNED gap, not an unowned one (2026-09-09-e60137). Declares no param() block, so it cannot reset this script's switches
 . (Join-Path $root 'fanout-lib.ps1')   # Invoke-Fanout / Get-FanoutRecord / Test-FanoutComplete: the inspect fan-out
@@ -2135,6 +2136,31 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       # hard invariant, so it lives in guards.ps1 where a failure actually stops the publish. Setting $hardFail
       # at this point would not: the publish (now ABOVE, on the ship path) gates on $guardsBlocked, and $hardFail
       # was already read at the top of this block - so it would log "publish HELD" while the board shipped anyway.
+      # ---- THE MATCHING LANE (2026-09-22, plan-2026-09-22-9 item 2026-09-21-b96f21). The three blocks below (coverage
+      # gaps, semantic sweep, aisle test) and audit-match-soundness' arrivals all ask one question - does this product
+      # belong to this commodity? - and each used to page a WHOLE-SET signature and hand a person a command, so one new
+      # member re-paged every undecided old one (stores-dropped fired 15 days in 30, semantic 19, wrong-department 8).
+      # resolve-match-worklist merges every finding into ONE worklist with first_seen per key, records what its
+      # classifier can decide in match-verdicts.json (a decided key never pages again), and edits NO rule; the weekly
+      # lane applies releases and widenings through apply-coverage-batch -FromWorklist. Each block below now pages only
+      # the keys first seen TODAY that are still open, once, with the lane's reading and no command.
+      $mwlToday = (Get-Date).ToString('yyyy-MM-dd'); $mwlRows = @()
+      try {
+        $mwlRes = Invoke-NativeScript (Join-Path $root 'resolve-match-worklist.ps1') @('-OutDir', $OutDir)
+        foreach ($ln in @($mwlRes.Lines)) { Log ('match-worklist: ' + $ln) }
+        if ($mwlRes.ExitCode -eq 3) { $summary += 'REVIEW    the matching worklist could not evaluate (no detector file) - no matching finding was paged or decided this cycle' }
+        $mwlRows = Read-MatchWorklist (Join-Path $OutDir 'match-worklist.json')
+      } catch { Log ('match-worklist lane threw: ' + $_.Exception.Message + ' - the three matching alerts fall back to paging every current finding once') ; $mwlRows = $null }
+      function Get-MwlPageBody([string]$Kind, $Rows) {
+        # one line per NEW open key: what the detector saw and what the lane made of it. No command: the lane owns it.
+        return (@($Rows | ForEach-Object { '- ' + [string]$_.name + ' | ' + $(if ($_.commodity) { [string]$_.commodity } else { [string]$_.claimer }) + $(if ($_.store) { ' @ ' + [string]$_.store } else { '' }) + ' | lane: ' + [string]$_.decision + $(if ($_.suggestion) { ' (suggested ' + [string]$_.suggestion + ')' } else { '' }) + ' - ' + [string]$_.why }) -join "`n")
+      }
+      function Get-MwlNewRows([string]$Kind) {
+        # $null worklist = the lane broke: fail OPEN (page), never silent
+        if ($null -eq $mwlRows) { return $null }
+        $pr = Get-MatchPageRows -Worklist $mwlRows -Kind $Kind -Today $mwlToday
+        return ,@($pr | Where-Object { [string]$_.decision -ne 'confirm' })
+      }
       # ---- COVERAGE GAP GUARD: a store SILENTLY dropped from a commodity it actually carries (a too-strict
       # include regex not matching that store's real product name - the Hy-Vee "Pork Loin TOP Loin Chops" bug).
       # audit-coverage-gaps.ps1 scans each missing store's raw pull for a loosened-include match; a hit = fix the
@@ -2173,10 +2199,12 @@ The chain re-derives every store''s link prices from the rows the board priced, 
           $cgList = (@($cgAct | ForEach-Object { $_.commodity + ' @ ' + $_.store + ' [' + [string]$_.reason + ']' }) -join '; ')
           Log ("coverage-gaps: $($cgAll.Count) gap(s), $($cgAct.Count) actionable - $cgList")
           $summary += "REVIEW    coverage gaps: $($cgAct.Count) actionable of $($cgAll.Count) store(s) dropped despite carrying the item - see coverage-gaps.json"
-          if ($cgSig -ne $cgPrev -and (-not $NoAlert)) {
-            try { Send-Alert -Subject "Grocery: $($cgAct.Count) store(s) dropped from a commodity they carry - $asofS" -Body "audit-coverage-gaps found $($cgAct.Count) store(s) missing from a commodity whose product they appear to carry, each tagged with WHY: [RULE-INVISIBLE] no include matches the name, so widen that commodity's include; [CLAIMED-BY] first-match-wins gave the name to another commodity, so add a release exclude or confirm the claim; [PRICED] the engine priced a row the board does not show, so look downstream of matching, not at a rule; [UNKNOWN-VERDICT] the engine refused the row with a verdict the audit does not know, so teach Get-EngineVerdictReason in audit-coverage-gaps.ps1 (not a rule gap). $cgList. A reviewed exception goes in coverage-gap-allowlist.json. $($cgAll.Count - $cgAct.Count) further gap(s) are engine-explained (withheld by the provenance contract, refused by an engine gate, BASIS-NULL, BAND-DROPPED, RULED-WRONG, AD-LINE) and are counted in the report without paging. Details: grocery/out/coverage-gaps.json." | Out-Null
-                  if ($LASTEXITCODE -eq 0) { Set-Content -Path $cgF -Value $cgSig -Encoding UTF8; Log 'coverage-gap alert sent' } } catch { Log ('coverage-gap alert threw: ' + $_.Exception.Message) }
-          } else { Log 'coverage-gaps unchanged since last alert - not re-alerting' }
+          $cgNewRows = if (-not $NoAlert) { Get-MwlNewRows 'coverage' } else { @() }
+          if ((-not $NoAlert) -and ($null -eq $cgNewRows -or @($cgNewRows).Count -gt 0)) {
+            $cgLaneBody = if ($null -ne $cgNewRows) { "NEW today and still open on the matching worklist (grocery/out/match-worklist.json; resolver lane:grocery/resolve-match-worklist.ps1, the weekly lane applies releases and widenings through apply-coverage-batch -FromWorklist):`n" + (Get-MwlPageBody 'coverage' $cgNewRows) + "`n`n" } else { "The matching worklist could not be read, so every current gap is listed:`n`n" }
+            try { Send-Alert -Subject "Grocery: $($cgAct.Count) store(s) dropped from a commodity they carry - $asofS" -Body ($cgLaneBody + "audit-coverage-gaps found $($cgAct.Count) store(s) missing from a commodity whose product they appear to carry, each tagged with WHY: [RULE-INVISIBLE] no include matches the name, so widen that commodity's include; [CLAIMED-BY] first-match-wins gave the name to another commodity, so add a release exclude or confirm the claim; [PRICED] the engine priced a row the board does not show, so look downstream of matching, not at a rule; [UNKNOWN-VERDICT] the engine refused the row with a verdict the audit does not know, so teach Get-EngineVerdictReason in audit-coverage-gaps.ps1 (not a rule gap). $cgList. A reviewed exception goes in coverage-gap-allowlist.json. $($cgAll.Count - $cgAct.Count) further gap(s) are engine-explained (withheld by the provenance contract, refused by an engine gate, BASIS-NULL, BAND-DROPPED, RULED-WRONG, AD-LINE) and are counted in the report without paging. Details: grocery/out/coverage-gaps.json.") | Out-Null
+                  if ($LASTEXITCODE -eq 0) { Log 'coverage-gap alert sent' } } catch { Log ('coverage-gap alert threw: ' + $_.Exception.Message) }
+          } else { Log 'coverage-gaps: no gap first seen today is open on the matching worklist - not paging (each gap pages once, on its first day)' }
         }
         # <<COVERAGE-GAP-ALERT-END>>
         elseif ($cg -and $cgAll.Count -gt 0) {
@@ -2221,10 +2249,12 @@ The chain re-derives every store''s link prices from the rows the board priced, 
             $semIds = (@($semRows | ForEach-Object { [string]$_.id } | Sort-Object -Unique) -join ', ')
             Log ("semantic sweep: $($semRows.Count) product(s) invisible to the rules across $(@($semRows | Group-Object id).Count) commodit(y/ies) - $semIds")
             $summary += "REVIEW    semantic sweep: $($semRows.Count) real product(s) no rule can see - see semantic-findings.json"
-            if ($semSig -ne $semPrev -and (-not $NoAlert)) {
-              try { Send-Alert -Subject "Grocery: semantic sweep found $($semRows.Count) product(s) no rule can see - $asofS" -Body "The embedding sweep found real store products that look like a tracked commodity but match NO include pattern, so they can never win a cell - not this week and not any future week. Commodities: $semIds. Work them with explain-coverage-gap.ps1 (diagnose WHY: NO-INCLUDE / EXCLUDED / CLAIMED / MATCHES) then apply-coverage-batch.ps1 (applies and gates one batch). Anything that is genuinely a different product gets a ruling via add-known-wrong.ps1 instead of a rule. Details: grocery/out/semantic-findings.json." | Out-Null
-                    if ($LASTEXITCODE -eq 0) { Set-Content -Path $semF -Value $semSig -Encoding UTF8; Log 'semantic sweep alert sent' } } catch { Log ('semantic alert threw: ' + $_.Exception.Message) }
-            } else { Log 'semantic findings unchanged since last alert - not re-alerting' }
+            $semNewRows = if (-not $NoAlert) { Get-MwlNewRows 'semantic' } else { @() }
+            if ((-not $NoAlert) -and ($null -eq $semNewRows -or @($semNewRows).Count -gt 0)) {
+              $semBody = if ($null -ne $semNewRows) { "NEW today and still open on the matching worklist (resolver lane:grocery/resolve-match-worklist.ps1; the weekly lane applies decided widenings through apply-coverage-batch -FromWorklist):`n" + (Get-MwlPageBody 'semantic' $semNewRows) } else { "The matching worklist could not be read. Commodities: $semIds." }
+              try { Send-Alert -Subject "Grocery: semantic sweep found $($semRows.Count) product(s) no rule can see - $asofS" -Body ("The embedding sweep found real store products that look like a tracked commodity but match NO include pattern. " + $semBody + "`nDetails: grocery/out/semantic-findings.json.") | Out-Null
+                    if ($LASTEXITCODE -eq 0) { Log 'semantic sweep alert sent' } } catch { Log ('semantic alert threw: ' + $_.Exception.Message) }
+            } else { Log 'semantic findings: none first seen today is open on the matching worklist - not paging' }
           } else {
             Log 'semantic sweep: no invisible products found'
             if (Test-Path (Join-Path $OutDir 'semantic-alert.sig')) { Remove-Item (Join-Path $OutDir 'semantic-alert.sig') -ErrorAction SilentlyContinue }
@@ -2260,10 +2290,12 @@ The chain re-derives every store''s link prices from the rows the board priced, 
             $atIds = (@($atBlocked | ForEach-Object { [string]$_.id } | Sort-Object -Unique) -join ', ')
             Log ("aisle test: $($atBlocked.Count) live cell(s) sit in a department their commodity does not occupy - $atIds")
             $summary += "REVIEW    aisle test: $($atBlocked.Count) live cell(s) in the wrong store department - see out\aisle-test.json"
-            if ($atSig -ne $atPrev -and (-not $NoAlert)) {
-              try { Send-Alert -Subject "Grocery: $($atBlocked.Count) board cell(s) sit in the wrong store department - $asofS" -Body "aisle-test judged the LIVE board against Family Fare's own shelf paths and found cells whose product the STORE files in a department the commodity never occupies. This is the class that finds cat litter priced as baking soda and teriyaki brats priced as pineapple - real prices on the wrong product, so no price guard can see them. Commodities: $atIds. Check the CROWN rows first (a wrong crown is the cheapest-price verdict shoppers see). Fix by tightening that commodity's exclude, then record the product via add-known-wrong.ps1. NOTE: a standing ~22 are known department-map false positives (spices shelved in produce, canned milks in dairy) - compare against the previous set. Details: grocery/out/aisle-test.json." | Out-Null
-                    if ($LASTEXITCODE -eq 0) { Set-Content -Path $atF -Value $atSig -Encoding UTF8; Log 'aisle-test alert sent' } } catch { Log ('aisle alert threw: ' + $_.Exception.Message) }
-            } else { Log 'aisle-test block-set unchanged since last alert - not re-alerting' }
+            $atNewRows = if (-not $NoAlert) { Get-MwlNewRows 'aisle' } else { @() }
+            if ((-not $NoAlert) -and ($null -eq $atNewRows -or @($atNewRows).Count -gt 0)) {
+              $atLane = if ($null -ne $atNewRows) { "NEW today and still open on the matching worklist (resolver lane:grocery/resolve-match-worklist.ps1):`n" + (Get-MwlPageBody 'aisle' $atNewRows) + "`n`n" } else { '' }
+              try { Send-Alert -Subject "Grocery: $($atBlocked.Count) board cell(s) sit in the wrong store department - $asofS" -Body ($atLane + "aisle-test judged the LIVE board against Family Fare's own shelf paths and found cells whose product the STORE files in a department the commodity never occupies. This is the class that finds cat litter priced as baking soda and teriyaki brats priced as pineapple - real prices on the wrong product, so no price guard can see them. Commodities: $atIds. Check the CROWN rows first (a wrong crown is the cheapest-price verdict shoppers see). A standing set of department-map false positives exists; each is decided once on the worklist and never pages again. Details: grocery/out/aisle-test.json.") | Out-Null
+                    if ($LASTEXITCODE -eq 0) { Log 'aisle-test alert sent' } } catch { Log ('aisle alert threw: ' + $_.Exception.Message) }
+            } else { Log 'aisle-test: no BLOCK first seen today is open on the matching worklist - not paging' }
           } else {
             Log 'aisle test: no live cell sits in a wrong department'
             if (Test-Path (Join-Path $OutDir 'aisle-alert.sig')) { Remove-Item (Join-Path $OutDir 'aisle-alert.sig') -ErrorAction SilentlyContinue }
@@ -3131,7 +3163,7 @@ The chain re-derives every store''s link prices from the rows the board priced, 
           if ($brRec.ExitCode -eq 2) {
             $brLines = @(@($brRec.Output) | Where-Object { [string]$_ -match 'UNEXPLAINED  ' })
             $summary += ('REVIEW    band-refusals: ' + $brLines.Count + ' row(s) refused by a price band with no basis error to explain it - a hidden wrong product or a censored real price')
-            if (-not $NoAlert) { try { Send-Alert -Subject ('Grocery: a price band refused rows it cannot explain - ' + $asofS) -Body ("A price band's only job is to refuse a basis error (a pack price read per piece, ounces as pounds, a dropped decimal). These rows were refused by a band and carry no such evidence, so each is either a wrong product the band is hiding (resolve with an exclude through lane:grocery/apply-coverage-batch.ps1, per Brad's shape ruling) or a real price the band is censoring (fix the band derivation, never its number):`n`n" + ($brLines -join "`n")) | Out-Null } catch { Log ('band-refusals alert threw: ' + $_.Exception.Message) } }
+            if (-not $NoAlert) { try { Send-Alert -Subject ('Grocery: a price band refused rows it cannot explain - ' + $asofS) -Body ("A price band's only job is to refuse a basis error (a pack price read per piece, ounces as pounds, a dropped decimal). These rows were refused by a band and carry no such evidence, so each is either a wrong product the band is hiding (it joins the matching worklist as kind band, resolver lane:grocery/resolve-match-worklist.ps1; a wrong product becomes an exclude through apply-coverage-batch -FromWorklist, per Brad's shape ruling) or a real price the band is censoring (fix the band derivation, never its number):`n`n" + ($brLines -join "`n")) | Out-Null } catch { Log ('band-refusals alert threw: ' + $_.Exception.Message) } }
           } elseif ($brRec.ExitCode -eq 3) { $summary += 'REVIEW    band-refusals could not evaluate - whether a band is hiding a wrong product is UNKNOWN this cycle, not clean' }
         } catch { Log ('band-refusals read threw: ' + $_.Exception.Message) }
         $pbF = Join-Path $OutDir 'pack-basis-audit.json'

@@ -1,0 +1,18 @@
+{
+    "note":  "The matching lane\u0027s decision ledger (plan-2026-09-22-9 b96f21). One row per worklist key: confirm (the claim or refusal is right), applied (a release/widen rule shipped through apply-coverage-batch), reverted (a gate refused it; the reason is kept), known-wrong, ad-line. A key here never re-enters the worklist and never pages again. Written by resolve-match-worklist.ps1 and apply-coverage-batch.ps1 -FromWorklist; edit only through resolve-match-worklist.ps1 -Decide.",
+    "verdicts":  [
+                     {
+                         "key":  "coverage|fresh-ginger|Fareway|Ginger Gold Apple",
+                         "kind":  "coverage",
+                         "commodity":  "fresh-ginger",
+                         "claimer":  "apples",
+                         "store":  "Fareway",
+                         "name":  "Ginger Gold Apple",
+                         "verdict":  "confirm",
+                         "pattern":  "",
+                         "by":  "classifier",
+                         "date":  "2026-09-22",
+                         "reason":  "the head noun \u0027apple\u0027 names apples, the claim is right; fresh-ginger is a lookalike"
+                     }
+                 ]
+}

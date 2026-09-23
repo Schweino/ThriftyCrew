@@ -14,7 +14,7 @@
   "why": "a ratchet, not a gate red on day one: the entries registered before the resolver contract are counted here and the count may only fall. audit-alert-registry fails a registry holding more, and says 'ratchet CAN tighten' when it holds fewer, without rewriting this number (a plain run never writes its mark)."
  },
  "entries": [
-        {"id":"band-refusal-unexplained","match":"exact","key":"grocery a price band refused rows it cannot explain","class":"review","condition":"a row a price band refused carries no basis-error evidence: a wrong product the band is hiding or a real price it censors (Brad, 2026-09-22: future proof)","emitter":"grocery/check-ad-cycles.ps1","resolver":"lane:grocery/apply-coverage-batch.ps1"},
+        {"id":"band-refusal-unexplained","match":"exact","key":"grocery a price band refused rows it cannot explain","class":"review","condition":"a row a price band refused carries no basis-error evidence: a wrong product the band is hiding or a real price it censors (Brad, 2026-09-22: future proof)","emitter":"grocery/check-ad-cycles.ps1","resolver":"lane:grocery/resolve-match-worklist.ps1"},
         {"id":"tile-link-drift-rose","match":"exact","key":"grocery tile link price drift rose at a store","class":"review","condition":"after the chain's derive-links pass a store has more See-item links whose recorded price disagrees with its tile than its PRICE-DRIFT ratchet mark: a link class the chain cannot reconcile (plan-2026-09-22-10, 2026-09-20-bec597)","emitter":"grocery/check-ad-cycles.ps1","resolver":"lane:grocery/triage-due.ps1"},
         {"id":"price-history-reconcile-failed","match":"exact","key":"grocery price history could not be reconciled with the boards","class":"review","condition":"update-history -Reconcile met a comparison board it could not read, or did not finish, so a history week may hold a price no board published (plan-2026-09-22-10, 2026-09-21-274e4b)","emitter":"grocery/check-ad-cycles.ps1","resolver":"lane:grocery/triage-due.ps1"},
   {
@@ -808,7 +808,19 @@
    "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
    "split_from": "plan-2026-09-21-7.json",
    "lineage_parent": "match-soundness",
-   "resolver": "digest"
+   "resolver": "lane:grocery/resolve-match-worklist.ps1"
+  },
+  {
+   "id": "match-soundness-contested-crown",
+   "match": "exact",
+   "key": "grocery matching soundness contested crown",
+   "class": "page",
+   "condition": "4 live-cell-moved-unexplained",
+   "condition_note": "a NEW contested product name (two rules admit it, array order picked) holds a CROWN and the matching lane has not decided it, so the cheapest price in Omaha may be the wrong product (the 2026-09-07 BELVITA biscuit bar at Fareway). Pages until the lane decides the name (plan-2026-09-22-10 2dae07).",
+   "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-09-22-10.json",
+   "lineage_parent": "match-soundness",
+   "resolver": "lane:grocery/resolve-match-worklist.ps1"
   },
   {
    "id": "match-soundness-matcher-drift",
@@ -862,7 +874,7 @@
    "emitter": "grocery/check-ad-cycles.ps1",
    "hold_observations": 2,
    "hold_note": "A recurring standing state: fired on 19 of the 30 days ending 2026-09-20. Review class is already never emailed, so the hold changes no delivery today; it is declared so the duration travels with the type if it is ever promoted to page (Brad, 2026-09-20).",
-   "resolver": "digest"
+   "resolver": "lane:grocery/resolve-match-worklist.ps1"
   },
   {
    "id": "stores-dropped",
@@ -871,7 +883,7 @@
    "class": "review",
    "condition": "review intake: include rules that may be too strict (plan section 3, bucket 1)",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "resolver": "digest"
+   "resolver": "lane:grocery/resolve-match-worklist.ps1"
   },
   {
    "id": "wrong-department",
@@ -880,7 +892,7 @@
    "class": "review",
    "condition": "review intake: an aisle judgement to adjudicate (plan section 3, bucket 1)",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "resolver": "digest"
+   "resolver": "lane:grocery/resolve-match-worklist.ps1"
   },
   {
    "id": "store-registry-drift",

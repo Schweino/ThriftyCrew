@@ -251,7 +251,10 @@ function Get-SoundnessConditions {
     if ($n.form) { $t += ' [FORM]' }
     $t += (' ' + $n.name + ' | chain: ' + $n.chain + ' | engine: ' + $n.verdict)
     if ([string]$n.cell) { $hl = 'CELL'; if ($n.crown) { $hl = 'CROWN' }; $t += (' | holds a ' + $hl + ': ' + $n.cell) }
-    [void]$out.Add([pscustomobject]@{ Label = 'NEW CONTESTED'; Text = $t })
+    # an undecided contested name holding a CROWN pages as its own condition (plan-2026-09-22-10 2dae07): the
+    # cheapest price in Omaha may be the wrong product, so it stays in front of a person until the lane decides it
+    $lbl = 'NEW CONTESTED'; if ($n.crown) { $lbl = 'CONTESTED CROWN' }
+    [void]$out.Add([pscustomobject]@{ Label = $lbl; Text = $t })
   }
   foreach ($cb in (Get-SoundnessItems $Report.cell_by_contest)) {
     $hl = 'CELL'; if ($cb.crown) { $hl = 'CROWN' }
@@ -698,11 +701,11 @@ if ($SelfTest) {
     $rgKeys = @{}
     foreach ($e in $rgDoc.entries) { if ([string]$e.match -eq 'exact' -and -not $e.PSObject.Properties['retired']) { $rgKeys[[string]$e.key] = [string]$e.class } }
     $rgMiss = @()
-    foreach ($lb in @('RULE EDIT IN PROGRESS', 'RULE CHANGE UNREVIEWED', 'MOVED WITH NO RULE CHANGE', 'NEW CONTESTED', 'MATCHER DRIFT')) {
+    foreach ($lb in @('RULE EDIT IN PROGRESS', 'RULE CHANGE UNREVIEWED', 'MOVED WITH NO RULE CHANGE', 'NEW CONTESTED', 'CONTESTED CROWN', 'MATCHER DRIFT')) {
       $k = Get-AlertTypeKey ('Grocery matching soundness: ' + $lb)
       if (-not $rgKeys.ContainsKey($k)) { $rgMiss += $k }
     }
-    T 'MUST FIRE  every condition this audit can send derives a type key that alert-registry.json registers (an unregistered one pages as UNREGISTERED)' ($rgMiss.Count -eq 0) ($rgMiss -join ', ')
+    # 2dae07: the frozen BELVITA arrival (a NEW contested name holding a CROWN at Fareway, 0.796/each) pages as its own\n    # condition; the same name holding no crown stays NEW CONTESTED\n    $ccRep = [ordered]@{ drift_vs_engine = 0; moved = $null; dropped = $null; cell_by_contest = $null; drift_products = $null; new_contested = @([pscustomobject]@{ name = 'BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz'; chain = 'breakfast-sandwiches (each)'; form = $false; verdict = 'size 5 ct = 0.796/each'; cell = 'Fareway 0.796/each'; crown = $true }, [pscustomobject]@{ name = 'Simple Truth Organic Whole Kernel Super Sweet Corn'; chain = 'canned-corn (oz) > frozen-corn (oz)'; form = $false; verdict = 'size 15 oz'; cell = ''; crown = $false }) }\n    $ccC = Get-SoundnessConditions $ccRep $null\n    T 'MUST FIRE  a NEW contested name holding a CROWN (the frozen BELVITA row) is labelled CONTESTED CROWN; a crownless one stays NEW CONTESTED' ((@($ccC | Where-Object { $_.Label -eq 'CONTESTED CROWN' -and $_.Text -like '*BELVITA*' }).Count -eq 1) -and (@($ccC | Where-Object { $_.Label -eq 'NEW CONTESTED' -and $_.Text -like '*Super Sweet Corn*' }).Count -eq 1)) ((@($ccC | ForEach-Object { $_.Label }) -join ','))\n    T 'MUST FIRE  every condition this audit can send derives a type key that alert-registry.json registers (an unregistered one pages as UNREGISTERED)' ($rgMiss.Count -eq 0) ($rgMiss -join ', ')
   } catch { T 'the registry check could load alert-registry-lib.ps1 and alert-registry.json' $false $_.Exception.Message }
   if ($bad -eq 0) { Write-Output 'match-soundness SELF-TEST PASS'; exit 0 }
   Write-Output ("match-soundness SELF-TEST FAIL: $bad case(s)"); exit 2
@@ -1016,7 +1019,11 @@ if ($Accept -or $ForceAccept) {
 if (-not (Test-Path $baseF)) { Write-Output 'match-soundness: NO baseline yet - run with -Accept to establish one. (skipping gate)'; Write-GuardComplete -Name 'match-soundness'; exit 0 }
 $base = ConvertFrom-Json ([IO.File]::ReadAllText($baseF))
 $baseNames = @{}; foreach ($p in $base.names.PSObject.Properties) { $baseNames[$p.Name] = [string]$p.Value }
-$baseContest = @{}; foreach ($x in @($base.contested)) { $baseContest[[string]$x] = $true }
+# REVIEWED = the accepted baseline's contested list UNION every contested name the matching lane CONFIRMED in
+# match-verdicts.json, one name at a time (2026-09-22, plan-2026-09-22-10 item 2dae07). The lane never runs a
+# whole-state -Accept; -Accept keeps its whole-state meaning for MOVED/DROPPED, untouched.
+. (Join-Path $root 'match-worklist-lib.ps1')   # Get-ReviewedContested / Get-LaneKnownContested / Select-UnknownContestedConditions
+$baseContest = Get-ReviewedContested -Baseline $base -VerdictFile (Join-Path $root 'match-verdicts.json')
 
 $moved = New-Object System.Collections.Generic.List[object]
 $dropped = New-Object System.Collections.Generic.List[object]
@@ -1153,6 +1160,12 @@ if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
   # Every condition is review class, as the one type was, so no delivery changes.
   $sigF = Join-Path $audDir 'soundness-alert-sig.txt'
   $conds = Get-SoundnessConditions $report $regCause
+  # ONE PAGE PER ARRIVAL (2dae07): a contested name the matching lane already holds from an earlier day, or has
+  # decided, paged on its own first day and does not page again; a CONTESTED CROWN line is never filtered here.
+  try {
+    $laneKnown = Get-LaneKnownContested -WorklistFile (Join-Path $OutDir 'match-worklist.json') -VerdictFile (Join-Path $root 'match-verdicts.json') -Today ((Get-Date).ToString('yyyy-MM-dd'))
+    $conds = Select-UnknownContestedConditions $conds $laneKnown
+  } catch { Write-Output ('match-soundness: the matching worklist could not be read (' + $_.Exception.Message + '), so every contested arrival pages as before') }
   $pick = Select-ChangedConditions $conds (Read-SoundnessSigs $sigF)
   $keep = @{}
   foreach ($k in @($pick.sigs.Keys)) { $keep[[string]$k] = [string]$pick.sigs[$k] }
