@@ -287,6 +287,13 @@ construction.
   that holds two of them at once takes them in this order, releases in REVERSE, and SAYS IN ITS COMMIT that it is
   the first nested acquisition of that pair** - the pair nobody has nested before is the one with no precedent to
   copy, so the commit is where the next reader finds out one exists:
+  0. **the capture-run mutex** - `Global\tc-capture-run`, taken in `grocery\capture-run.ps1` (Brad's ruling D6, 2026-09-23,
+     `design\PLAN-bot-checkout-self-heal-2026-09-23.md`). OUTERMOST, because it already nests over the others: the tail's
+     `git push` runs the `pre-push` hook, which takes the push lock, and the run writes the pipeline write journal and the
+     commit carry ledger under `lib\ledger-lock.ps1`. The checkout sync it runs at the start and the tail takes no push
+     lock and no gate slot. A run that re-executes itself onto synced code holds this mutex across a wait on its child,
+     which is safe under the blocking-wait paragraph below only because the child INHERITS the mutex by token and never
+     waits for it.
   1. **the push lock** - `lib\push-lock.ps1` (`Enter-TcPushLock`)
   2. **the gate worker slots** - `lib\gate-slots.ps1` (`Enter-TcGateSlots`)
   3. **the `Invoke-Locked` mutexes** - `grocery\ingredient-queue.ps1`, `meal-prep\pipeline\ingredient-resolutions.ps1`,

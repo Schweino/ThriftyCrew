@@ -145,6 +145,9 @@ $script:FailedLaneRecs = @()
 $script:CommitSizeStatus = $null
 $script:HeldDeletions = @()
 $script:SyncStatus = $null
+$script:TailSyncStatus = $null
+$script:TailSyncOwed = $false
+$script:TailRetrySec = 10   # between a rejected push and the re-sync before the next attempt; unchanged from the loop it replaced
 function Add-FailedLane([string]$Name, [string]$PagedSubject = '') {
   # The CALLER's failed-lane list (scope 1), exactly the variable the old bare append wrote: in this script that is the
   # script scope, and test-commit-size-gate runs the cut block inside a function whose own list it asserts on.
@@ -183,6 +186,8 @@ function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
       # THE START SYNC (2026-09-23, plan W4.1): outcome, class, why, H0, NEW, behind, behind_after, startup_changed.
       # 'synced-by-parent' is a child a synced parent handed off to; $null = no sync decided yet.
       sync = $script:SyncStatus
+      # THE TAIL SYNC (plan W4.2): the last one this run made, before its push or, uncommitted, after every watcher.
+      tail_sync = $script:TailSyncStatus
     }
     $dir = Split-Path $script:StatusFile -Parent
     if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
@@ -325,6 +330,48 @@ function Invoke-CaptureRunHandoff {
   } catch { $stage = '' }
   $started = ($stage -and @('synced-handoff', 'skipped-locked') -cnotcontains $stage -and $cpid -gt 0 -and $cpid -ne $PID)
   return [pscustomobject]@{ rc = $rc; started = [bool]$started; stage = $stage; child_pid = $cpid; lines = $lines.ToArray(); argv = $argv.ToArray() }
+}
+# ---- THE TAIL SYNC (2026-09-23, plan W4.2) ------------------------------------------------------------------------------
+# One call of the mover at the tail, with what the start sync passes plus -BotCommit on the first attempt after a commit.
+# -NoSync records skipped. A throw is failed/exception with a page, never a throw out of the tail. It returns the record
+# and leaves printing, failed lanes and paging to its caller: Add-FailedLane writes its CALLER's list, so it must be
+# called from the script's own scope, never from inside a function.
+function Invoke-CaptureRunTailSync {
+  param([string]$Repo, [string]$Root, [string]$Kind, [string]$BotCommit = '')
+  $r = $null
+  if ($NoSync) {
+    $r = [pscustomobject]@{ outcome = 'skipped'; class = ''; why = '-NoSync'; page = $false; startup_changed = $false; H0 = ''; NEW = ''; behind = 0; behind_after = 0 }
+  } else {
+    try {
+      $tIn = Get-BotInputPaths
+      $tSv = Get-BotServedPaths
+      $tBlobs = Get-PipelineOwnBlobs -Repo $Repo
+      $tArgs = @{ Repo = $Repo; Phase = 'tail'; Kind = $Kind; OwnedPaths = (@($tIn) + @($tSv)); OwnBlobs = $tBlobs; QuarantineRoot = (Join-Path $Root 'out\untracked-quarantine') }
+      if ($BotCommit) { $tArgs['BotCommit'] = $BotCommit }
+      if ($script:CaptureRunSyncSeams) { foreach ($tK in @($script:CaptureRunSyncSeams.Keys)) { $tArgs[$tK] = $script:CaptureRunSyncSeams[$tK] } }
+      $r = Invoke-TcCheckoutSync @tArgs
+    } catch {
+      $r = [pscustomobject]@{ outcome = 'failed'; class = 'exception'; why = ('the tail sync threw: ' + $_.Exception.Message); page = $true; startup_changed = $false; H0 = ''; NEW = ''; behind = 0; behind_after = 0 }
+    }
+  }
+  $script:TailSyncStatus = ConvertTo-CaptureRunSyncStatus $r
+  return $r
+}
+# The ONE tail sync a run that did not commit still owes (plan W4.2 step 2): run as the last git-mutating step, after
+# every watcher, so the watchers read the tree they always read; and from the top-level finally when the run threw
+# first. Idempotent per run: the owed flag is cleared BEFORE the sync, so a sync that throws is never retried here.
+# Returns $null when nothing is owed, else @{ record; line; bad }, where bad is an outcome other than current, synced or
+# skipped (an uncommitted run that could not reach origin); the caller adds the failed lane.
+function Invoke-CaptureRunOwedTailSync {
+  param([string]$Repo, [string]$Root, [string]$Kind, [string]$Today)
+  if (-not $script:TailSyncOwed) { return $null }
+  $script:TailSyncOwed = $false
+  $r = Invoke-CaptureRunTailSync -Repo $Repo -Root $Root -Kind $Kind
+  $bad = (@('current', 'synced', 'skipped') -cnotcontains [string]$r.outcome)
+  if ($bad -and $r.page) {
+    try { Send-Alert -Subject ("Grocery bot checkout sync " + [string]$r.outcome + " at the tail - $Today") -Body ("capture-run.ps1 [$Kind] did not commit, and the sync that brings the shared checkout to origin/main at the end of the run ended " + [string]$r.outcome + $(if ($r.class) { ' (' + [string]$r.class + ')' } else { '' }) + ". The next run's start sync tries again.`n`n" + [string]$r.why) | Out-Null } catch { }
+  }
+  return [pscustomobject]@{ record = $r; line = (Format-CaptureRunSyncLine 'tail' $r); bad = [bool]$bad }
 }
 
 # ---- A RUN HANDED OFF BY ITS PARENT (2026-09-23, plan W4.1 step 6), read BEFORE the lock is asked for ------------------
@@ -1148,8 +1195,14 @@ if ($Kind -eq 'daily' -and -not $WhatIf -and -not $NoDownstream) {
 # real data to main, so publishing is gated on it exactly as the chain is. -WhatIf already exited above.
 $today = $todayS
 $repo = Split-Path -Parent $root
+# THE PUBLISH STAGE OWES ONE TAIL SYNC (2026-09-23, plan W4.2 step 2). Armed from here: a run that commits syncs before
+# its push in the TAIL-PUSH block and clears the debt; one that does not pays it as the last git-mutating step below,
+# after every watcher; and the finally at the end of this stage pays it when the run threw first, so a refused or
+# broken day can never leave the checkout where it was, which is what froze it on 09-22 and 09-23.
+try {
 if ($NoDownstream) { Write-Output 'publish: SKIPPED (-NoDownstream is a testing flag - no commit, no push)' }
 else {
+$script:TailSyncOwed = $true
 # TWO SETS, BECAUSE THEY CARRY DIFFERENT PROOF (2026-08-22), AND THEY NO LONGER LIVE HERE (2026-09-06).
 # INPUTS are what a store told us; SERVED are what a READER gets. Both lists, and every reason each path
 # is on one of them, moved verbatim to lib\bot-paths.ps1 - because a list that lives inside ONE consumer
@@ -1182,6 +1235,10 @@ $pushed = $false
 # of them means "there was nothing to land". Declaring it false here and setting it true where the commit
 # succeeds makes both watchers answer about the thing they name.
 $botCommitted = $false
+# $botMadeCommit is true only when `git commit` itself landed (the no-changes path sets $botCommitted and made nothing
+# to push); only then does the TAIL-PUSH block sync and push. $script:BotCommitSha is that commit, for -BotCommit.
+$botMadeCommit = $false
+$script:BotCommitSha = ''
 $tmpIndex = $null; $prevIndex = $null; $indexHeld = $false
 try {
   # ---- A PRIVATE INDEX FOR THE BOT COMMIT (2026-09-06, PLAN-top5 area 3) ---------------------------
@@ -1506,110 +1563,20 @@ try {
       # files as a staged REVERT - one careless `git commit` from undoing the run. This never touches the
       # working tree and never touches a path outside the commit.
       if ($botCommitted) {
-        foreach ($cf in @(& git -C $repo show --name-only --pretty=format: HEAD | Where-Object { $_ })) {
+        # --no-renames (2026-09-23): a deletion git pairs with an add as a RENAME was listed under its new name only, so the
+        # deleted path kept its stale entry in the real index (design\backlog-inbox\sh-sync-2026-09-23.md), and the next
+        # whole-index commit or restore could bring it back. The tail sync's -BotCommit resync (lib\checkout-sync.ps1 step
+        # 1g) resets every leftover this misses, deletions included.
+        foreach ($cf in @(& git -C $repo -c core.quotePath=false show --no-renames --name-only --pretty=format: HEAD | Where-Object { $_ })) {
           & git -C $repo reset -q -- $cf | Out-Null
         }
       }
     }
     if (-not $botCommitted) { $pushed = $false }
     else {
-    # PUSH with the conflict-survival the cloud learned on 2026-07-16: -X theirs prefers the freshly
-    # regenerated derived files; abort on unresolvable so we NEVER strand a detached HEAD; autoStash
-    # carries any human WIP across the rebase untouched.
-    foreach ($attempt in 1..4) {
-      # NO REDIRECT ON git fetch. `git fetch` writes its ordinary progress ("From https://github.com/...")
-      # to STDERR on every fetch that moves a ref, and under EAP=Stop a native child's stderr becomes a
-      # TERMINATING error even with `2>$null` - the same trap documented 20 lines above for the add stage
-      # and fixed 2026-08-22 for the downstream child. It hit here on the 2026-08-23 07:00 ad run: both
-      # captures succeeded, the commit landed, and then fetch's first stderr line threw out of the whole
-      # try block, so push was NEVER ATTEMPTED and the run exited 1 with FAILED LANES: push.
-      & git -C $repo fetch origin main | ForEach-Object { Write-Output ("fetch[$attempt]: " + $_) }
-      # Invoke-Native (native-lib.ps1): git prints the untracked-file refusal on STDERR, and reading stderr under this
-      # script's EAP=Stop by any redirect would make its first line a terminating throw. Invoke-Native never throws.
-      if (-not (Get-Command Invoke-Native -ErrorAction SilentlyContinue)) { . (Join-Path $root 'native-lib.ps1') }
-      # EVERY FLAG QUOTED. Unquoted, -C and -c were parsed as parameter NAMES of Invoke-Native itself
-      # (see native-lib.ps1's header): both prefix-match -Command, so this line threw at binding time on
-      # 2026-09-20 and took the push stage with it. native-lib.ps1 now takes its arguments through $args
-      # so no flag can bind; quoting here is the belt beside that brace, and reads as what it is - data.
-      $rbRes = Invoke-Native 'git' '-C' $repo '-c' 'rebase.autoStash=true' 'rebase' '-X' 'theirs' 'origin/main'
-      $rbLines = @($rbRes.Lines | ForEach-Object { [string]$_ })
-      $rbRc = [int]$rbRes.ExitCode
-      foreach ($l in $rbLines) { Write-Output ("rebase[$attempt]: " + $l) }
-      if ($rbRc -ne 0) {
-        Write-Output "rebase attempt $attempt conflicted; aborting (never detached)"
-        & git -C $repo rebase --abort | ForEach-Object { Write-Output ("abort[$attempt]: " + $_) }   # no redirect: same EAP=Stop rule
-        # AN UNTRACKED FILE IN THE WAY IS NOT A CONFLICT A RETRY CAN CLEAR (2026-09-19, Get-RebaseUntrackedBlockers).
-        # Move exactly the files git named into a dated quarantine (kept, never deleted), say so, and retry.
-        $blockers0 = Get-RebaseUntrackedBlockers $rbLines
-        # NEVER A PATH HEAD TRACKS (2026-09-23): moving one is a deletion the next commit carries (cec9779a3 took
-        # graph/provenance/2026-09-22.jsonl off origin that way). Those are named and left where they are.
-        $blockers = @()
-        if (@($blockers0).Count) {
-          $trkRes = Invoke-GitCaptured -Repo $repo -GitArgs (@('ls-files', '--') + @($blockers0))
-          $qSplit = Split-RebaseBlockersByTracking -Blockers @($blockers0) -TrackedAtHead @(([string]$trkRes.stdout) -split "`r?`n" | Where-Object { $_ })
-          foreach ($rq in @($qSplit.Refuse)) { Write-Output ("rebase[$attempt]: NOT moving '" + $rq + "' - HEAD tracks it, so moving it would be a deletion the next commit carries") }
-          $blockers = @($qSplit.Move)
-        }
-        if (@($blockers).Count) {
-          $qDir = Join-Path $root ("out\untracked-quarantine\" + $today)
-          foreach ($b in @($blockers)) {
-            $src = Join-Path $repo $b
-            if (-not (Test-Path -LiteralPath $src)) { continue }
-            $dst = Join-Path $qDir $b
-            New-Item -ItemType Directory -Force -Path (Split-Path $dst -Parent) | Out-Null
-            Move-Item -LiteralPath $src -Destination $dst -Force   # atomic-replace:allow a move of an untracked stray into a fresh dated quarantine, not a replace of a file anything reads
-            Write-Output ("rebase[$attempt]: moved untracked '" + $b + "' aside to " + $dst + " - it blocked the rebase; upstream now tracks that path")
-          }
-          try { Send-Alert -Subject "Grocery pipeline moved an untracked file out of the rebase's way - $today" -Body ("capture-run.ps1 [$Kind]: the rebase onto origin/main was refused because untracked file(s) in $repo would be overwritten by files upstream now tracks: " + (@($blockers) -join ', ') + ". They were moved (not deleted) to $qDir and the push retried. Check whether anything in them is worth keeping.") | Out-Null } catch {}
-          continue
-        }
-        Start-Sleep -Seconds 10; continue
-      }
-      # ---- AN ARTIFACT BUILT BY CODE THIS REBASE REPLACED IS REBUILT, OR NAMED AND PAGED (2026-09-23, cec9779a3) ------
-      # The rebase above can bring in commits that changed a script that PRODUCED a served file this run is about to
-      # ship. lib\chain-code-currency.ps1 derives each artifact's producers and says which the range changed. The FEED is
-      # rebuilt on the rebased code by export-feed as a child (a running PowerShell keeps the text it loaded) and
-      # committed on top; if export-feed refuses, this push is refused, because shipping the stale feed is the defect.
-      # Any OTHER stale artifact (the board and its pages: a rebuild is the whole publish stage) is NAMED and PAGED and
-      # still ships - a known, bounded gap recorded in the landing, not a silent one.
-      if ($shipServed) {
-        try {
-          $ccChanged = @((Invoke-TcCccGit $repo (@('diff', '--name-only', 'HEAD~1', 'HEAD', '--') + @($servedPaths))).Lines)
-          $ccFeed = Get-TcStaleArtifacts -Repo $repo -Base $script:FeedCodeBase -Tip 'HEAD' -Artifacts @($ccChanged | Where-Object { $_ -eq 'public/smp-feed.json' })
-          $ccAll = if ($script:StaleOthersSaid) { $null } else { Get-TcStaleArtifacts -Repo $repo -Base $script:ChainCodeBase -Tip 'HEAD' -Artifacts @($ccChanged | Where-Object { $_ -ne 'public/smp-feed.json' }) }
-          if ($ccFeed.Blind) { Write-Output ("chain-code[$attempt]: BLIND - the feed's producers could not be compared: " + $ccFeed.Blind) }
-          elseif (@($ccFeed.Rows).Count) {
-            Write-Output ("chain-code[$attempt]: public/smp-feed.json was built by code this rebase replaced (" + (@(@($ccFeed.Rows)[0].Changed) -join ', ') + ") - rebuilding it on the rebased code")
-            $efRes = Invoke-Native 'powershell' '-NoProfile' '-ExecutionPolicy' 'Bypass' '-File' (Join-Path $root 'export-feed.ps1')
-            foreach ($l in @($efRes.Lines)) { Write-Output ("  export-feed[$attempt]: " + $l) }
-            if ([int]$efRes.ExitCode -ne 0) {
-              Write-Output ("chain-code[$attempt]: REFUSED - export-feed exited " + $efRes.ExitCode + " on the rebased code, so the feed this run built would ship with code it was not built by. NOT pushing.")
-              Add-FailedLane 'stale-code-feed'
-              try { $scSubj = "Daily chain did not push: its feed was built by replaced code - $today"; Send-Alert -Subject $scSubj -Body ("capture-run.ps1 [$Kind]: the rebase onto origin/main brought in a change to " + (@(@($ccFeed.Rows)[0].Changed) -join ', ') + ", which produce public/smp-feed.json, and export-feed refused to rebuild the feed on the new code (exit " + $efRes.ExitCode + "). Nothing was pushed; the served feed stands. See grocery\out\logs\capture-run-$Kind-$today.log.") | Out-Null; Set-FailedLanePaged 'stale-code-feed' $scSubj $LASTEXITCODE } catch {}
-              $pushed = $false; break
-            }
-            $fc = Invoke-GitCaptured -Repo $repo -GitArgs @('-c', 'user.name=smp-pipeline-bot', '-c', 'user.email=actions@users.noreply.github.com', 'commit', '-m', ("Daily pipeline: feed rebuilt on the rebased code ($today) [$Kind]"), '--', 'public/smp-feed.json')
-            Write-Output ("chain-code[$attempt]: feed rebuilt; commit rc=" + $fc.rc + $(if ($fc.rc -ne 0) { ' (' + ([string]$fc.stdout + ' ' + [string]$fc.stderr).Trim() + ')' } else { '' }))
-            $script:FeedCodeBase = (Invoke-TcCccGit $repo @('rev-parse', 'HEAD')).Out.Trim()
-          }
-          if ($null -ne $ccAll -and -not $ccAll.Blind -and @($ccAll.Rows).Count) {
-            $script:StaleOthersSaid = $true
-            $ccList = @($ccAll.Rows | ForEach-Object { $_.Artifact + ' <- ' + (@($_.Changed) -join ', ') })
-            Write-Output ("chain-code[$attempt]: " + $ccList.Count + " other served artifact(s) were built by code this rebase replaced and ship as built: " + (($ccList | Select-Object -First 6) -join ' | '))
-            Add-FailedLane 'stale-code-artifact'
-            try { $soSubj = "Daily chain shipped artifacts built by code that changed mid-run - $today"; Send-Alert -Subject $soSubj -Body ("capture-run.ps1 [$Kind]: the rebase onto origin/main brought in changes to scripts that produce these served files, which were built before those changes and ship as built. The next run rebuilds them on the new code.`n`n" + ($ccList -join "`n")) | Out-Null; Set-FailedLanePaged 'stale-code-artifact' $soSubj $LASTEXITCODE } catch {}
-          }
-        } catch { Write-Output ("chain-code[$attempt]: the stale-code check threw (" + $_.Exception.Message + ") - pushing as before") }
-      }
-      & git -C $repo push origin HEAD:main | ForEach-Object { Write-Output ("push[$attempt]: " + $_) }
-      if ($LASTEXITCODE -eq 0) { $pushed = $true; Write-Output "pushed on attempt $attempt"; break }
-      Start-Sleep -Seconds 10
-    }
-    if (-not $pushed) {
-      Write-Output 'PUSH FAILED after 4 attempts - this run''s data is committed locally but NOT on main, so the live site still serves the previous board'
-      Add-FailedLane 'push'
-      try { Send-Alert -Subject "Grocery pipeline could not push - $today" -Body ("capture-run.ps1 [$Kind] committed today's refresh locally but could not push to main after 4 rebase attempts. Cloudflare deploys from the repo, so the live board and feed are STALE until this lands. Check for a rebase conflict in $repo (see grocery\out\logs\capture-run-$Kind-$today.log).") | Out-Null; Set-FailedLanePaged 'push' ("Grocery pipeline could not push - $today") $LASTEXITCODE } catch {}
-    }
+      $botMadeCommit = $true
+      $bcRes = Invoke-GitCaptured -Repo $repo -GitArgs @('rev-parse', 'HEAD')
+      $script:BotCommitSha = $(if ($bcRes.rc -eq 0) { ([string]$bcRes.stdout).Trim() } else { '' })
     }
   }
   # >>> COMMIT-CARRY BLOCK >>>  test-commit-size-gate.ps1 lifts everything between these two markers. Do not rename them.
@@ -1628,6 +1595,88 @@ try {
     }
   }
   # <<< COMMIT-CARRY BLOCK <<<
+  # >>> TAIL-PUSH BLOCK >>>  grocery\test-capture-run-sync.ps1 lifts everything between these two markers. Do not rename them.
+  # ---- THE TAIL: SYNC, THEN PUSH (2026-09-23, design\PLAN-bot-checkout-self-heal-2026-09-23.md W4.2) ----------------------
+  # This replaced a four-attempt autostash rebase loop (`rebase -X theirs`, the autostash option on, and no check that
+  # origin had moved). Proved in temp repos on 2026-09-23 (plan section 2.2): it could exit 128 and strand a rebase
+  # directory holding only an autostash, after which every retry failed; it exited 0 with conflict markers left in the
+  # tree; and even with origin already contained it stashed, rewrote the mtime of every dirty file and dropped staging.
+  # The one mover now is lib\checkout-sync.ps1: a two-way move that replays this run's commit (and any other local
+  # commit) onto origin off to the side, never writes a session's dirty file, and verifies the tree by bytes. It also
+  # replaces the old untracked-blocker quarantine: its IN-THE-WAY class moves such a file aside itself.
+  # Each attempt syncs, then pushes; a rejected push sleeps and re-syncs. A sync that ends anything but current or synced
+  # (partial, blocked, degraded, failed, disabled, skipped) adds failed lane sync, pages when its record says to, and
+  # does NOT push: this run's commit stays local until a sync reaches origin. The first attempt passes -BotCommit, so
+  # index entries the private-index commit left behind, deletions included, are reset to HEAD (the plan's addendum:
+  # on 09-23 three files the bot commit deleted came back on disk and staged).
+  if ($botMadeCommit) {
+    $script:TailSyncOwed = $false
+    $tailStopped = $false
+    foreach ($attempt in 1..4) {
+      $tsRes = Invoke-CaptureRunTailSync -Repo $repo -Root $root -Kind $Kind -BotCommit $(if ($attempt -eq 1) { [string]$script:BotCommitSha } else { '' })
+      Write-Output (Format-CaptureRunSyncLine ('tail ' + $attempt) $tsRes)
+      if (@('current', 'synced') -cnotcontains [string]$tsRes.outcome) {
+        Write-Output ('tail[' + $attempt + ']: the sync ended ' + [string]$tsRes.outcome + ' - NOT pushing; this run''s commit stays local until a sync reaches origin/main')
+        Add-FailedLane 'sync'
+        if ($tsRes.page) {
+          try {
+            $tsSubj = "Grocery bot checkout sync " + [string]$tsRes.outcome + " at the push - $today"
+            Send-Alert -Subject $tsSubj -Body ("capture-run.ps1 [$Kind] committed today's refresh, and the sync before its push ended " + [string]$tsRes.outcome + $(if ($tsRes.class) { ' (' + [string]$tsRes.class + ')' } else { '' }) + ", so nothing was pushed: public\board.json and public\smp-feed.json are STALE at the edge until a later sync reaches origin/main.`n`n" + [string]$tsRes.why) | Out-Null
+            Set-FailedLanePaged 'sync' $tsSubj $LASTEXITCODE
+          } catch { }
+        }
+        $tailStopped = $true
+        break
+      }
+      # Invoke-Native (native-lib.ps1) for the feed rebuild below: it never throws, and reads stderr with no redirect.
+      if (-not (Get-Command Invoke-Native -ErrorAction SilentlyContinue)) { . (Join-Path $root 'native-lib.ps1') }
+      # ---- AN ARTIFACT BUILT BY CODE THIS SYNC REPLACED IS REBUILT, OR NAMED AND PAGED (2026-09-23, cec9779a3) ------
+      # The sync above (which replays this run's commit onto origin, as the rebase it replaced did) can bring in commits that changed a script that PRODUCED a served file this run is about to
+      # ship. lib\chain-code-currency.ps1 derives each artifact's producers and says which the range changed. The FEED is
+      # rebuilt on the synced code by export-feed as a child (a running PowerShell keeps the text it loaded) and
+      # committed on top; if export-feed refuses, this push is refused, because shipping the stale feed is the defect.
+      # Any OTHER stale artifact (the board and its pages: a rebuild is the whole publish stage) is NAMED and PAGED and
+      # still ships - a known, bounded gap recorded in the landing, not a silent one.
+      if ($shipServed) {
+        try {
+          $ccChanged = @((Invoke-TcCccGit $repo (@('diff', '--name-only', 'HEAD~1', 'HEAD', '--') + @($servedPaths))).Lines)
+          $ccFeed = Get-TcStaleArtifacts -Repo $repo -Base $script:FeedCodeBase -Tip 'HEAD' -Artifacts @($ccChanged | Where-Object { $_ -eq 'public/smp-feed.json' })
+          $ccAll = if ($script:StaleOthersSaid) { $null } else { Get-TcStaleArtifacts -Repo $repo -Base $script:ChainCodeBase -Tip 'HEAD' -Artifacts @($ccChanged | Where-Object { $_ -ne 'public/smp-feed.json' }) }
+          if ($ccFeed.Blind) { Write-Output ("chain-code[$attempt]: BLIND - the feed's producers could not be compared: " + $ccFeed.Blind) }
+          elseif (@($ccFeed.Rows).Count) {
+            Write-Output ("chain-code[$attempt]: public/smp-feed.json was built by code this sync replaced (" + (@(@($ccFeed.Rows)[0].Changed) -join ', ') + ") - rebuilding it on the synced code")
+            $efRes = Invoke-Native 'powershell' '-NoProfile' '-ExecutionPolicy' 'Bypass' '-File' (Join-Path $root 'export-feed.ps1')
+            foreach ($l in @($efRes.Lines)) { Write-Output ("  export-feed[$attempt]: " + $l) }
+            if ([int]$efRes.ExitCode -ne 0) {
+              Write-Output ("chain-code[$attempt]: REFUSED - export-feed exited " + $efRes.ExitCode + " on the synced code, so the feed this run built would ship with code it was not built by. NOT pushing.")
+              Add-FailedLane 'stale-code-feed'
+              try { $scSubj = "Daily chain did not push: its feed was built by replaced code - $today"; Send-Alert -Subject $scSubj -Body ("capture-run.ps1 [$Kind]: the sync onto origin/main brought in a change to " + (@(@($ccFeed.Rows)[0].Changed) -join ', ') + ", which produce public/smp-feed.json, and export-feed refused to rebuild the feed on the new code (exit " + $efRes.ExitCode + "). Nothing was pushed; the served feed stands. See grocery\out\logs\capture-run-$Kind-$today.log.") | Out-Null; Set-FailedLanePaged 'stale-code-feed' $scSubj $LASTEXITCODE } catch {}
+              $pushed = $false; break
+            }
+            $fc = Invoke-GitCaptured -Repo $repo -GitArgs @('-c', 'user.name=smp-pipeline-bot', '-c', 'user.email=actions@users.noreply.github.com', 'commit', '-m', ("Daily pipeline: feed rebuilt on the synced code ($today) [$Kind]"), '--', 'public/smp-feed.json')
+            Write-Output ("chain-code[$attempt]: feed rebuilt; commit rc=" + $fc.rc + $(if ($fc.rc -ne 0) { ' (' + ([string]$fc.stdout + ' ' + [string]$fc.stderr).Trim() + ')' } else { '' }))
+            $script:FeedCodeBase = (Invoke-TcCccGit $repo @('rev-parse', 'HEAD')).Out.Trim()
+          }
+          if ($null -ne $ccAll -and -not $ccAll.Blind -and @($ccAll.Rows).Count) {
+            $script:StaleOthersSaid = $true
+            $ccList = @($ccAll.Rows | ForEach-Object { $_.Artifact + ' <- ' + (@($_.Changed) -join ', ') })
+            Write-Output ("chain-code[$attempt]: " + $ccList.Count + " other served artifact(s) were built by code this sync replaced and ship as built: " + (($ccList | Select-Object -First 6) -join ' | '))
+            Add-FailedLane 'stale-code-artifact'
+            try { $soSubj = "Daily chain shipped artifacts built by code that changed mid-run - $today"; Send-Alert -Subject $soSubj -Body ("capture-run.ps1 [$Kind]: the sync onto origin/main brought in changes to scripts that produce these served files, which were built before those changes and ship as built. The next run rebuilds them on the new code.`n`n" + ($ccList -join "`n")) | Out-Null; Set-FailedLanePaged 'stale-code-artifact' $soSubj $LASTEXITCODE } catch {}
+          }
+        } catch { Write-Output ("chain-code[$attempt]: the stale-code check threw (" + $_.Exception.Message + ") - pushing as before") }
+      }
+      & git -C $repo push origin HEAD:main | ForEach-Object { Write-Output ("push[$attempt]: " + $_) }
+      if ($LASTEXITCODE -eq 0) { $pushed = $true; Write-Output "pushed on attempt $attempt"; break }
+      Start-Sleep -Seconds $script:TailRetrySec
+    }
+    if (-not $pushed -and -not $tailStopped) {
+      Write-Output 'PUSH FAILED after 4 attempts - this run''s data is committed locally but NOT on main, so the live site still serves the previous board'
+      Add-FailedLane 'push'
+      try { Send-Alert -Subject "Grocery pipeline could not push - $today" -Body ("capture-run.ps1 [$Kind] committed today's refresh locally but could not push to main after 4 sync-and-push attempts. Cloudflare deploys from the repo, so the live board and feed are STALE until this lands. See grocery\out\logs\capture-run-$Kind-$today.log for each attempt's sync line and push output.") | Out-Null; Set-FailedLanePaged 'push' ("Grocery pipeline could not push - $today") $LASTEXITCODE } catch {}
+    }
+  }
+  # <<< TAIL-PUSH BLOCK <<<
 } catch { Write-Output ("commit/push threw: " + $_.Exception.Message); Add-FailedLane 'push' }
 finally {
   # A THROW MUST NOT LEAVE GIT_INDEX_FILE SET. It is process-wide, so every git command AFTER this stage -
@@ -2001,7 +2050,25 @@ if ($runDownstream) {
   } catch { Write-Output ("feed assert threw: " + $_.Exception.Message) }
 }
 
+# THE OWED TAIL SYNC, after every watcher (plan W4.2 step 2): only a run that did not push its own commit still owes it.
+$owedTail = Invoke-CaptureRunOwedTailSync -Repo $repo -Root $root -Kind $Kind -Today $today
+if ($null -ne $owedTail) {
+  Write-Output $owedTail.line
+  if ($owedTail.bad) { Add-FailedLane 'sync' }
+}
+
 }   # end publish gate
+} finally {
+  # >>> TAIL-FINALLY BLOCK >>>  grocery\test-capture-run-sync.ps1 lifts everything between these two markers.
+  # A run that threw after its commit stage and before its tail sync still pays it (plan W4.2 step 2). The throw then
+  # goes on out of this script exactly as before; this only keeps the checkout from staying behind because of it.
+  if ($script:TailSyncOwed) {
+    Write-Output 'tail: this run threw before its tail sync - running the owed sync now'
+    $owedF = Invoke-CaptureRunOwedTailSync -Repo (Split-Path -Parent $root) -Root $root -Kind $Kind -Today $todayS
+    if ($null -ne $owedF) { Write-Output $owedF.line }
+  }
+  # <<< TAIL-FINALLY BLOCK <<<
+}
 
 Write-Output 'CAPTURE-RUN-COMPLETE'
 

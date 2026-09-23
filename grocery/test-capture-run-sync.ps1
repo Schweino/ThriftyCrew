@@ -25,16 +25,18 @@
   Exit:  0 every case passed and the count is the literal below; 1 otherwise; 3 a marker or function could not be found
          (BLIND, nothing proven). The last line is the verdict.
 #>
-# gate-inputs: grocery\test-capture-run-sync.ps1, grocery\capture-run.ps1, grocery\run-log-lib.ps1, lib\checkout-sync.ps1, lib\git-blob-lib.ps1, lib\git-repo-env.ps1, lib\atomic-write.ps1, lib\append-line.ps1, lib\pipeline-commit.ps1, lib\ledger-lock.ps1, lib\event-bus.ps1, lib\json-io.ps1
+# gate-inputs: grocery\test-capture-run-sync.ps1, grocery\capture-run.ps1, grocery\run-log-lib.ps1, grocery\native-lib.ps1, lib\checkout-sync.ps1, lib\git-blob-lib.ps1, lib\git-repo-env.ps1, lib\atomic-write.ps1, lib\append-line.ps1, lib\pipeline-commit.ps1, lib\ledger-lock.ps1, lib\event-bus.ps1, lib\json-io.ps1
 $ErrorActionPreference = 'Stop'
 $repoLib = Join-Path (Split-Path $PSScriptRoot -Parent) 'lib'
 . (Join-Path $repoLib 'git-repo-env.ps1'); Clear-TcGitRepoEnv
 . (Join-Path $repoLib 'json-io.ps1')
 . (Join-Path $repoLib 'checkout-sync.ps1')
 . (Join-Path $repoLib 'pipeline-commit.ps1')
+# Loaded here, so the TAIL-PUSH block finds Invoke-Native and never dot-sources native-lib from the fixture's grocery\.
+. (Join-Path $PSScriptRoot 'native-lib.ps1')
 $env:GIT_TERMINAL_PROMPT = '0'
 
-$EXPECTED_CASES = 25
+$EXPECTED_CASES = 36
 $script:pass = 0; $script:fail = 0
 function T([string]$Label, [bool]$Cond, [string]$Got = '') {
   if ($Cond) { $script:pass++; Write-Output ('  ok    ' + $Label) }
@@ -52,7 +54,7 @@ $crSrc = [IO.File]::ReadAllText($crPath)
 $crAst = [System.Management.Automation.Language.Parser]::ParseInput($crSrc, [ref]$null, [ref]$null)
 $fnNames = @('Write-RunStatus', 'Add-FailedLane', 'Set-FailedLanePaged', 'Release-RunMutex', 'Test-CaptureRunPidAlive', 'Get-CaptureRunInheritedLock',
   'Get-CaptureRunCommandLine', 'Get-CaptureRunOrphanHolder', 'Enter-CaptureRunMutex', 'ConvertTo-CaptureRunSyncStatus', 'Format-CaptureRunSyncLine',
-  'Get-StartSyncAction', 'Invoke-CaptureRunHandoff')
+  'Get-StartSyncAction', 'Invoke-CaptureRunHandoff', 'Invoke-CaptureRunTailSync', 'Invoke-CaptureRunOwedTailSync')
 $fnAsts = @($crAst.FindAll({ param($a) $a -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $fnNames -contains $a.Name }, $true))
 $fnFound = @($fnAsts | ForEach-Object { $_.Name } | Sort-Object -Unique)
 if ($fnFound.Count -ne $fnNames.Count) { Write-Output ('BLIND: capture-run.ps1 defines ' + $fnFound.Count + ' of the ' + $fnNames.Count + ' functions this fixture lifts (' + ($fnFound -join ', ') + ') - nothing was proven'); Write-Output 'capture-run-sync SELF-TEST BLIND'; exit 3 }
@@ -66,6 +68,9 @@ function Get-Between([string]$Src, [string]$A, [string]$B) {
 $startBlock = Get-Between $crSrc '# >>> START-SYNC BLOCK >>>' '# <<< START-SYNC BLOCK <<<'
 $startRegion = Get-Between $crSrc '# >>> START-SYNC BLOCK >>>' '# ---- WHAT IS ALREADY DIRTY UNDER THE OWNED PATHS'
 if (-not $startBlock -or -not $startRegion) { Write-Output 'BLIND: could not find the START-SYNC markers in capture-run.ps1 - nothing was proven'; Write-Output 'capture-run-sync SELF-TEST BLIND'; exit 3 }
+$tailBlock = Get-Between $crSrc '  # >>> TAIL-PUSH BLOCK >>>' '  # <<< TAIL-PUSH BLOCK <<<'
+$tailFinally = Get-Between $crSrc '  # >>> TAIL-FINALLY BLOCK >>>' '  # <<< TAIL-FINALLY BLOCK <<<'
+if (-not $tailBlock -or -not $tailFinally) { Write-Output 'BLIND: could not find the TAIL-PUSH or TAIL-FINALLY markers in capture-run.ps1 - nothing was proven'; Write-Output 'capture-run-sync SELF-TEST BLIND'; exit 3 }
 
 # ---- FIXTURES ---------------------------------------------------------------------------------------------------------
 $script:fxRoot = Join-Path $env:TEMP ('tc-crs-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
@@ -125,6 +130,36 @@ function Invoke-StartBlock($E, [hashtable]$Vars = @{}) {
   return [pscustomobject]@{ action = $script:StartSyncAction; rec = $script:SyncRecord; status = $script:SyncStatus; pages = @($script:pages); failed = ($failed -join ','); text = ((@($out) | ForEach-Object { [string]$_ }) -join "`n") }
 }
 
+# The bot's commit exactly as capture-run makes it: a private index seeded from HEAD, the owned paths added whole, the
+# commit, then the real index left as it was, which is the leftover the tail's -BotCommit resync must clear.
+function New-BotCommit($E, [string[]]$Paths) {
+  $tmp = Join-Path $E.dir ('bot-index-' + [guid]::NewGuid().ToString('N'))
+  $prev = $env:GIT_INDEX_FILE
+  $env:GIT_INDEX_FILE = $tmp
+  try {
+    $null = GitOk $E.bot @('read-tree', 'HEAD')
+    $null = GitOk $E.bot (@('add', '-A', '--') + $Paths)
+    $null = GitOk $E.bot @('-c', 'user.name=smp-pipeline-bot', '-c', 'user.email=actions@users.noreply.github.com', 'commit', '-q', '-m', 'Daily pipeline: refresh prices + feed (2026-09-23) [daily]')
+  } finally {
+    if ($null -eq $prev) { Remove-Item Env:\GIT_INDEX_FILE -ErrorAction SilentlyContinue } else { $env:GIT_INDEX_FILE = $prev }
+    Remove-Item -LiteralPath $tmp -Force -ErrorAction SilentlyContinue
+  }
+  return (GitOk $E.bot @('rev-parse', 'HEAD'))
+}
+# The TAIL-PUSH block in this process, as capture-run holds its variables after a commit landed.
+function Invoke-TailPush($E, [string]$BotSha, [hashtable]$Vars = @{}) {
+  $repo = $E.bot; $root = Join-Path $E.bot 'grocery'; $Kind = 'daily'; $today = '2026-09-23'; $todayS = $today
+  $botMadeCommit = $true; $script:BotCommitSha = $BotSha
+  $shipServed = $false; $servedPaths = @('public'); $pushed = $false; $failed = @(); $NoSync = [bool]$Vars['NoSync']
+  $script:TailRetrySec = 0; $script:TailSyncOwed = $true; $script:TailSyncStatus = $null; $script:FailedLaneRecs = @()
+  $script:CaptureRunSyncSeams = $script:fxSeams
+  $script:pages.Clear()
+  $out = . ([scriptblock]::Create($tailBlock))
+  $remoteTip = (GitR $E.remote @('rev-parse', 'refs/heads/main')).out
+  return [pscustomobject]@{ pushed = [bool]$pushed; failed = ($failed -join ','); pages = @($script:pages); owed = [bool]$script:TailSyncOwed; remote = $remoteTip; status = $script:TailSyncStatus; text = ((@($out) | ForEach-Object { [string]$_ }) -join "`n") }
+}
+$script:tailTexts = New-Object System.Collections.Generic.List[string]
+
 # A child powershell running a generated script; stdout and stderr to files, the exit code read off the process.
 function Invoke-FxChild([string]$Script, [hashtable]$EnvVars = @{}) {
   $psi = New-Object System.Diagnostics.ProcessStartInfo
@@ -143,8 +178,9 @@ function Invoke-FxChild([string]$Script, [hashtable]$EnvVars = @{}) {
 }
 function Q([string]$S) { return ("'" + $S.Replace("'", "''") + "'") }
 # The shipped start REGION (the block, the blocked exit and the handoff) run in a child, then a sentinel "capture lane".
-function New-RegionHarness($E, [string]$MutexName) {
+function New-RegionHarness($E, [string]$MutexName, [string]$Body = '') {
   $h = Join-Path $E.dir 'harness.ps1'
+  if (-not $Body) { $Body = ($startRegion + "`n[IO.File]::WriteAllText(" + (Q $E.sentinel) + ", 'a capture lane ran')`nexit 0") }
   $lines = @(
     '$ErrorActionPreference = ''Stop''',
     ('. ' + (Q (Join-Path $repoLib 'git-repo-env.ps1')) + '; Clear-TcGitRepoEnv'),
@@ -163,9 +199,8 @@ function New-RegionHarness($E, [string]$MutexName) {
     '$script:CaptureRunSyncSeams = @{ IndexLockWaitSec = 0; InProgressWaitSec = 0; HeldRetrySec = 0; PollSec = 0; FetchAttempts = 1; FetchRetrySec = 0 }',
     ('$script:RunMutexName = ' + (Q $MutexName)),
     '$script:RunMutex = New-Object System.Threading.Mutex($false, $script:RunMutexName); $script:HoldsMutex = $script:RunMutex.WaitOne(0)',
-    $startRegion,
-    ('[IO.File]::WriteAllText(' + (Q $E.sentinel) + ', ''a capture lane ran'')'),
-    'exit 0'
+    '$script:TailSyncOwed = $false; $script:TailSyncStatus = $null; $script:TailRetrySec = 0',
+    $Body
   )
   [IO.File]::WriteAllText($h, ($lines -join "`n"), (New-Object Text.UTF8Encoding($true)))
   return $h
@@ -329,6 +364,115 @@ try {
     W $E.bot 'lib/code.ps1' "line1-SESSION`nline2`nline3`n"
     $r = Invoke-StartBlock $E
     T 'blocked class foreign continues, pages by outcome, and leaves the session''s file alone' ($r.rec.outcome -eq 'blocked' -and $r.rec.class -eq 'foreign' -and $r.action -eq 'continue' -and ((@($r.pages) -join '|') -eq 'Grocery bot checkout sync blocked - 2026-09-23') -and [IO.File]::ReadAllText((Join-Path $E.bot 'lib/code.ps1')) -eq "line1-SESSION`nline2`nline3`n") ([string]$r.rec.outcome + '/' + [string]$r.rec.class + ' pages=' + (@($r.pages) -join '|'))
+  }
+  # ---- THE TAIL (plan W4.2) -------------------------------------------------------------------------------------------
+  Invoke-Group 'F6 MUST FIRE - a local graph commit and the bot commit are replayed, the push lands, and the tree is what rebase -X theirs builds' {
+    $E = New-Estate 'f6'
+    Push-Up $E 'grocery/ledger.json' "a`nB-up`nc`n" 'up: ledger line b'
+    Push-Up $E 'public/derived.json' "{`n  ""v"": 2`n}`n" 'up: derived v2'
+    W $E.bot 'graph/x.json' "g1`n"; $null = GitOk $E.bot @('add', '--', 'graph/x.json'); $null = GitOk $E.bot @('commit', '-q', '-m', 'graph nightly (local)')
+    W $E.bot 'grocery/ledger.json' "a`nb`nc-bot`n"
+    W $E.bot 'public/derived.json' "{`n  ""v"": 9`n}`n"
+    $sha = New-BotCommit $E @('grocery', 'public')
+    # What the old tail would have built, in a scratch clone of the bot at the same commit.
+    $scratch = Join-Path $E.dir 'scratch'
+    $null = GitOk $E.dir @('-c', 'core.autocrlf=false', 'clone', '-q', $E.bot, $scratch)
+    foreach ($kv in @(@('core.autocrlf', 'false'), @('user.name', 'fx'), @('user.email', 'fx@x'))) { $null = GitOk $scratch (@('config') + $kv) }
+    $null = GitOk $scratch @('fetch', '-q', $E.remote, 'main')
+    $null = GitOk $scratch @('rebase', '-q', '-X', 'theirs', 'FETCH_HEAD')
+    $want = GitOk $scratch @('rev-parse', 'HEAD^{tree}')
+    $r = Invoke-TailPush $E $sha
+    $script:tailTexts.Add($r.text)
+    $got = (GitR $E.remote @('rev-parse', 'refs/heads/main^{tree}')).out
+    T 'the push lands on attempt 1, and origin''s tree is exactly the tree rebase -X theirs builds' ($r.pushed -and ($r.text -match 'pushed on attempt 1') -and $got -eq $want) ('pushed=' + $r.pushed + ' want=' + $want + ' got=' + $got + ' text=' + $r.text)
+    $subjects = (GitR $E.remote @('log', '--format=%s', '-3', 'refs/heads/main')).out
+    T 'both local commits reached origin, replayed on top of upstream, and nothing is owed' (($subjects -match 'Daily pipeline: refresh prices') -and ($subjects -match 'graph nightly \(local\)') -and (GitR $E.remote @('rev-list', '--count', 'refs/heads/main')).out -eq '5' -and -not $r.owed -and [string]$r.status.outcome -eq 'synced') ('subjects=' + $subjects + ' owed=' + $r.owed)
+  }
+
+  Invoke-Group 'RETRY MUST FIRE - a rejected push re-syncs and lands on attempt 2' {
+    $E = New-Estate 'retry'
+    Push-Up $E 'public/derived.json' "{`n  ""v"": 5`n}`n" 'up: derived'
+    [IO.File]::WriteAllText((Join-Path $E.remote 'hooks\pre-receive'), "#!/bin/sh`nif [ ! -f ""`$GIT_DIR/rejected-once"" ]; then touch ""`$GIT_DIR/rejected-once""; echo 'fixture: the first push is rejected' >&2; exit 1; fi`nexit 0`n", $script:fxUtf8)
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`nd`n"
+    $sha = New-BotCommit $E @('grocery')
+    $r = Invoke-TailPush $E $sha
+    $script:tailTexts.Add($r.text)
+    T 'attempt 1 is rejected, attempt 2 syncs again and lands' ($r.pushed -and ($r.text -match 'sync\[tail 2\]') -and ($r.text -match 'pushed on attempt 2') -and $r.failed -eq '' -and (Test-Path -LiteralPath (Join-Path $E.remote 'rejected-once'))) ('pushed=' + $r.pushed + ' failed=' + $r.failed + ' text=' + $r.text)
+  }
+
+  Invoke-Group 'PARTIAL MUST FIRE - a partial tail sync with a local commit does not push, and fails lane sync' {
+    $E = New-Estate 'partial'
+    Push-Up $E 'public/derived.json' "{`n  ""v"": 6`n}`n" 'up: push 1'
+    $null = GitOk $E.bot @('fetch', '-q', 'origin')
+    Push-Up $E 'lib/code.ps1' "line1-UP`nline2`nline3`n" 'up: push 2 touches the session file'
+    $tip2 = (GitR $E.remote @('rev-parse', 'refs/heads/main')).out
+    W $E.bot 'lib/code.ps1' "line1-SESSION`nline2`nline3`n"
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`ne`n"
+    $sha = New-BotCommit $E @('grocery')
+    $r = Invoke-TailPush $E $sha
+    $script:tailTexts.Add($r.text)
+    T 'the sync ends partial, nothing is pushed and origin still holds push 2' (-not $r.pushed -and [string]$r.status.outcome -eq 'partial' -and $r.remote -eq $tip2) ('pushed=' + $r.pushed + ' outcome=' + [string]$r.status.outcome + ' remote=' + $r.remote)
+    T 'failed lane sync, a page naming partial at the push, and the session''s file untouched' ($r.failed -eq 'sync' -and ((@($r.pages) -join '|') -eq 'Grocery bot checkout sync partial at the push - 2026-09-23') -and [IO.File]::ReadAllText((Join-Path $E.bot 'lib/code.ps1')) -eq "line1-SESSION`nline2`nline3`n") ('failed=' + $r.failed + ' pages=' + (@($r.pages) -join '|'))
+  }
+
+  Invoke-Group 'ADDENDUM MUST FIRE - a path the bot commit deletes is absent from the index and the disk after the push' {
+    foreach ($moved in @($true, $false)) {
+      $E = New-Estate ('deleted-' + $moved)
+      Push-Up $E 'grocery/out/browser-capture-due-2026-09-18.flag' "due`n" 'up: a flag the pipeline later retires'
+      $null = GitOk $E.bot @('pull', '-q', '--ff-only')
+      if ($moved) { Push-Up $E 'public/derived.json' "{`n  ""v"": 7`n}`n" 'up: derived' }
+      # THE PIPELINE retires the flag, and the bot commit carries the deletion through its private index.
+      $flag = 'grocery/out/browser-capture-due-2026-09-18.flag'
+      Remove-Item -LiteralPath (Join-Path $E.bot $flag) -Force
+      W $E.bot 'grocery/ledger.json' "a`nb`nc`nf`n"
+      $sha = New-BotCommit $E @('grocery')
+      $leftover = (GitR $E.bot @('ls-files', '--', $flag)).out
+      $r = Invoke-TailPush $E $sha
+      $script:tailTexts.Add($r.text)
+      $idx = (GitR $E.bot @('ls-files', '--', $flag)).out
+      $st = (GitR $E.bot @('status', '--porcelain', '--', $flag)).out
+      $onRemote = (GitR $E.remote @('ls-tree', '--name-only', 'refs/heads/main', '--', $flag)).out
+      $label = if ($moved) { 'with origin moved (synced)' } else { 'with origin not moved (current)' }
+      T ($label + ': the real index held the deleted path before the tail and holds nothing after; the disk, git status and origin have none of it') ($r.pushed -and $leftover -eq $flag -and $idx -eq '' -and $st -eq '' -and $onRemote -eq '' -and -not (Test-Path -LiteralPath (Join-Path $E.bot $flag))) ('pushed=' + $r.pushed + ' leftover=' + $leftover + ' index=' + $idx + ' status=' + $st + ' remote=' + $onRemote)
+    }
+  }
+
+  Invoke-Group 'FINALLY MUST FIRE - a run that throws after its commit stage still pays its tail sync' {
+    $E = New-Estate 'finally'
+    Push-Up $E 'public/derived.json' "{`n  ""v"": 8`n}`n" 'up: derived'
+    $tip = (GitR $E.remote @('rev-parse', 'refs/heads/main')).out
+    $body = ('$script:TailSyncOwed = $true' + "`n" + 'try { throw ''fixture: a watcher threw after the commit stage'' } finally {' + "`n" + $tailFinally + "`n}`n" + 'exit 0')
+    $h = New-RegionHarness $E ('Local\tc-crs-fin-' + [guid]::NewGuid().ToString('N')) $body
+    $c = Invoke-FxChild $h
+    T 'the throw still ends the run non-zero, and the owed sync moved the checkout to origin first' ($c.rc -ne 0 -and ($c.out -match 'tail: this run threw before its tail sync') -and ($c.out -match 'sync\[tail\]: synced') -and (GitR $E.bot @('rev-parse', 'HEAD')).out -eq $tip) ('rc=' + $c.rc + ' out=' + $c.out + ' err=' + $c.err)
+  }
+
+  Invoke-Group 'UNCOMMITTED MUST NOT FIRE - a run that did not commit pays one tail sync, once' {
+    $E = New-Estate 'owed'
+    Push-Up $E 'public/derived.json' "{`n  ""v"": 10`n}`n" 'up: derived'
+    $NoSync = $false; $script:TailSyncOwed = $true; $script:CaptureRunSyncSeams = $script:fxSeams; $script:pages.Clear()
+    $o1 = Invoke-CaptureRunOwedTailSync -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'daily' -Today '2026-09-23'
+    $o2 = Invoke-CaptureRunOwedTailSync -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'daily' -Today '2026-09-23'
+    T 'the owed sync is synced and not bad, and a second call owes nothing and does nothing' ($null -ne $o1 -and [string]$o1.record.outcome -eq 'synced' -and -not $o1.bad -and $null -eq $o2 -and -not $script:TailSyncOwed -and (GitR $E.bot @('rev-list', '--count', 'HEAD')).out -eq '2') ($(if ($o1) { $o1.line } else { 'none' }) + ' second=' + $(if ($o2) { $o2.line } else { 'none' }))
+  }
+
+  Invoke-Group 'KILL SWITCH ON A COMMITTED RUN - the commit stays local, lane sync, no push' {
+    $E = New-Estate 'killtail'
+    Push-Up $E 'public/derived.json' "{`n  ""v"": 11`n}`n" 'up: derived'
+    [IO.File]::WriteAllText((Join-Path $E.bot '.git\tc-checkout-sync.disabled'), 'fixture')
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`ng`n"
+    $sha = New-BotCommit $E @('grocery')
+    $tip = (GitR $E.remote @('rev-parse', 'refs/heads/main')).out
+    $r = Invoke-TailPush $E $sha
+    $script:tailTexts.Add($r.text)
+    T 'disabled: nothing pushed, failed lane sync, and the bot commit is still HEAD, local' (-not $r.pushed -and $r.failed -eq 'sync' -and $r.remote -eq $tip -and (GitR $E.bot @('rev-parse', 'HEAD')).out -eq $sha -and [string]$r.status.outcome -eq 'disabled') ('pushed=' + $r.pushed + ' failed=' + $r.failed + ' outcome=' + [string]$r.status.outcome)
+  }
+
+  Invoke-Group 'NO AUTOSTASH MUST NOT FIRE - bar B3 on its mechanism' {
+    $autoCfg = 'rebase.' + 'autoStash'
+    $stashLine = 'Created ' + 'autostash'
+    $hits = @($script:tailTexts | Where-Object { $_ -match [regex]::Escape($stashLine) }).Count
+    T ('no tail fixture run printed "' + $stashLine + '" (' + $script:tailTexts.Count + ' runs read), and capture-run.ps1 no longer names ' + $autoCfg) ($script:tailTexts.Count -ge 6 -and $hits -eq 0 -and $crSrc.IndexOf($autoCfg, [StringComparison]::OrdinalIgnoreCase) -lt 0) ('runs=' + $script:tailTexts.Count + ' hits=' + $hits)
   }
 } finally {
   Remove-Item -LiteralPath $script:fxRoot -Recurse -Force -ErrorAction SilentlyContinue

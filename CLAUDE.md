@@ -110,8 +110,11 @@ for. Data-dependent audits stay in the daily chain against a real board.
   a CI runner or a worktree has no board. `run-gates` and every data audit are BLIND there, and the
   pricing engines exit 0 having priced nothing. A green run off-main proves nothing.
 - **A fresh checkout is CRLF; main is LF.** golden-test and ghost-drift go red over bytes, not drift.
-- **A ~07:00 bot commits the whole tree daily** with an autoStash rebase that rewrites uncommitted
-  files. Only rebase when `origin/main` actually moved; autostash restores content, not the index.
+- **The ~07:00 and ~08:00 bots bring the main checkout to origin/main with a two-way move at the start and
+  end of every run** (`lib/checkout-sync.ps1`): no stash, no rebase. A dirty file of yours on a path upstream
+  changed is never written: the sync goes partial and pages. Kill switch: `.git\tc-checkout-sync.disabled`.
+  (Until 2026-09-23 the tail was an autostash rebase that rewrote uncommitted files and dropped staging;
+  `design/PLAN-bot-checkout-self-heal-2026-09-23.md`, D7.)
 - **Spawned agents run in worktrees** and must write through repo-relative paths only. Writing to an
   absolute `C:\Codex\ThriftyCrew` path corrupts the main tree under a concurrent session.
 - **UNPUSHED IS NOT PRIVATE. A commit you are not ready to push does not go on `main`** - put it on a
