@@ -39,6 +39,22 @@ outside `design/` and `grocery/out/`.
 check-ad-cycles already pages on, so a second report of the same finding) or keep the push mode and reword its `Ok`
 line to what it proved. Neither changes a verdict of the audit.
 
+## run-gates' entry for audit-prompt-backup still says the push proves the whole mirror current and the scopes agreeing
+
+`OPEN` `queue-pd-promptbackup` `2-WAY` `RUNG1 DOC`
+
+**Source.** `ops/run-gates.ps1:327` registers the audit with `n = 'the only versioned copy of the agent prompts is
+current, and the scopes agree'`, and the comment above it says the same. The first run-gates after W8.4, from the lane
+worktree (exit 0, `RUN-GATES-COMPLETE pass=483 fail=0 noverdict=0`), printed that sentence beside `ok`. Since W8.4 the
+push run proves only that nothing the push changed disagrees with its counterpart (its marker reads
+`mode=push ... failed=0 review=N`), and whole-mirror currency is `-Daily`'s, in the daily chain. The entry was not
+edited in W8.4 because a registration edit to run-gates.ps1 flushes every self-test key (the plan's D7) and the file
+belonged to no lane of this build.
+
+**The first rung.** Reword the `n` text and its comment the next time run-gates.ps1 is edited for another reason, so
+the flush is paid once: for example `nothing this push changed under ops\prompt-backup or the prompt trees disagrees
+with its counterpart; the whole mirror is judged daily by -Daily`.
+
 ## grocery/prompt-backup-weekly-stamp.txt is tracked and nothing reads or writes it any more
 
 `OPEN` `queue-pd-promptbackup` `2-WAY` `RUNG1 READ`
