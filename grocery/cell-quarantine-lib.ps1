@@ -423,6 +423,44 @@ function Update-TcRowWinners($Row) {
   }
 }
 
+function Update-TcQuarantineLinks {
+  # A QUARANTINED CELL'S "See item" LINK FOLLOWS THE VALUE THE CELL SHOWS (2026-09-22, plan-2026-09-22-5 landing
+  # blocker). Found on the first all-derived board: lotion | Walmart was HELD at 0.2175 while product-urls.json still
+  # linked the condemned row (Queen Helene 32 oz, 0.1244), so audit-tile-integrity refused the hold (0.57x) and the
+  # chain would have held the whole board until a second prune-bad-links ran. The rule, per quarantined cell:
+  #   - WITHHELD: the cell shows nothing, so it links nothing: its entry is REMOVED;
+  #   - HELD at a DIFFERENT value than today's candidate: the link becomes the one the last published board was built
+  #     with ($PublishedItems, product-urls.json at the same revision as that board), or is REMOVED when that board
+  #     linked nothing there. Never today's link: it describes the product the guard condemned;
+  #   - HELD at the SAME value: the row itself was kept, so its link is left exactly as it is.
+  # A cell nobody quarantined is never touched. Pure: mutates $Items (product-urls.json's items object) and returns
+  # one record per changed cell.
+  param($Items, $Entries, $PublishedItems)
+  $changes = New-Object System.Collections.ArrayList
+  foreach ($e in @($Entries)) {
+    if ($null -eq $e) { continue }
+    $id = [string]$e.id; $st = [string]$e.store
+    $same = ($e.action -eq 'last-good' -and $null -ne $e.per_unit -and [math]::Abs([double]$e.per_unit - [double]$e.bad_per_unit) -lt 0.00005)
+    if ($same) { continue }
+    $rowP = $Items.PSObject.Properties[$id]
+    $cur = $null; if ($rowP -and $rowP.Value -and $rowP.Value.PSObject.Properties[$st]) { $cur = $rowP.Value.$st }
+    $pub = $null
+    if ($e.action -eq 'last-good' -and $PublishedItems) {
+      $pr = $PublishedItems.PSObject.Properties[$id]
+      if ($pr -and $pr.Value -and $pr.Value.PSObject.Properties[$st]) { $pub = $pr.Value.$st }
+    }
+    if ($pub) {
+      if ($null -eq $rowP -or $null -eq $rowP.Value) { $Items | Add-Member -NotePropertyName $id -NotePropertyValue ([pscustomobject]@{ commodity = $id }) -Force; $rowP = $Items.PSObject.Properties[$id] }
+      $rowP.Value | Add-Member -NotePropertyName $st -NotePropertyValue $pub -Force
+      [void]$changes.Add([pscustomobject]@{ id = $id; store = $st; action = 'restored-published-link'; url = [string]$pub.url })
+    } elseif ($cur) {
+      $rowP.Value.PSObject.Properties.Remove($st)
+      [void]$changes.Add([pscustomobject]@{ id = $id; store = $st; action = 'removed-link'; url = [string]$cur.url })
+    }
+  }
+  return ,($changes.ToArray())
+}
+
 function Invoke-TcCellQuarantine {
   # Applies a guards plan to a board IN MEMORY. The caller writes the board only when .ok is true, so a refusal can
   # never leave a half-quarantined board on disk.

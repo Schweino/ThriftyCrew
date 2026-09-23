@@ -15,7 +15,7 @@
   -LastPublishedFile/-LastPublishedDate stand in for the git read, for a fixture or a hermetic copy with no history.
 #>
 [CmdletBinding()]
-param([string]$OutDir = '', [string]$Repo = '', [string]$LastPublishedFile = '', [string]$LastPublishedDate = '', [string]$Today = '')
+param([string]$OutDir = '', [string]$Repo = '', [string]$LastPublishedFile = '', [string]$LastPublishedDate = '', [string]$Today = '', [string]$ProductUrlsFile = '', [string]$PublishedUrlsFile = '')
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 . (Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1')
@@ -63,6 +63,23 @@ foreach ($e in @($r.cells)) {
 }
 foreach ($s in @($r.stores)) { Write-Output ("  dropped   {0}  {1} everyday cell(s) withheld; its live ad cells stay" -f $s.store, $s.cells) }
 ($doc | ConvertTo-Json -Depth 12) | Set-Content -LiteralPath $boardF -Encoding UTF8
+# THE LINK FOLLOWS THE HELD VALUE, IN THIS STEP (Update-TcQuarantineLinks has the rule and why). The board is written
+# first and the links second: an interruption between them leaves a held cell with its old link, which tile-integrity
+# refuses loudly, never a link pointing at a cell that is not there.
+$puF = Join-Path $Repo 'grocery\product-urls.json'
+if (-not $ProductUrlsFile) { $ProductUrlsFile = $puF }
+if (Test-Path -LiteralPath $ProductUrlsFile) {
+  $puDoc = Read-JsonFile $ProductUrlsFile
+  $pubItems = $null
+  if ($PublishedUrlsFile) { $pubItems = (Read-JsonFile $PublishedUrlsFile).items }
+  elseif ($lp -and $lp.commit) {
+    $pb = Invoke-TcGitBytes -Repo $Repo -GitArgs @('show', ($lp.commit + ':grocery/product-urls.json'))
+    if ($pb.rc -eq 0 -and $pb.bytes.Length -gt 0) { $pt = [Text.Encoding]::UTF8.GetString($pb.bytes); if ($pt[0] -eq [char]0xFEFF) { $pt = $pt.Substring(1) }; try { $pubItems = ($pt | ConvertFrom-Json).items } catch { $pubItems = $null } }
+  }
+  $lc = Update-TcQuarantineLinks -Items $puDoc.items -Entries $r.cells -PublishedItems $pubItems
+  foreach ($c in $lc) { Write-Output ("  link      {0} / {1}  {2}  {3}" -f $c.id, $c.store, $c.action, $c.url) }
+  if (@($lc).Count -gt 0) { ($puDoc | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $ProductUrlsFile -Encoding UTF8; Write-Output ('links: ' + @($lc).Count + ' quarantined cell link(s) moved to the held value; re-run audit-name-drift before guards (check-ad-cycles does)') }
+} else { Write-Output ('links: BLIND - no ' + $ProductUrlsFile + ', so no quarantined cell''s link could be moved') }
 $held = @(@($r.cells) | Where-Object { $_.action -eq 'last-good' }).Count
 $wh = @(@($r.cells) | Where-Object { $_.action -eq 'withheld' }).Count
 Write-Output ("applied to {0}: {1} cell(s) held at their last verified published price, {2} withheld, {3} store(s) dropped. Run guards.ps1 again: it must exit 4." -f (Split-Path $boardF -Leaf), $held, $wh, @($r.stores).Count)

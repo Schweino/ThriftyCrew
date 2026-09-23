@@ -245,6 +245,35 @@ $needleJr = "Register-Kid 'json-" + "readers'"
 Assert-QCase 'MUST FIRE  guards.ps1 exits with the disposition''s code and no longer runs the json-readers source ratchet' {
   $gSrc.Contains($needleDisp) -and $gSrc.Contains($needleExit) -and -not $gSrc.Contains($needleJr) }
 
+# ---- 18: a quarantined cell's link follows the held value, in the quarantine step itself (2026-09-22) ---------------
+# Frozen from the first all-derived board of 2026-09-22: lotion | Walmart held at 0.2175 while product-urls.json still
+# linked the condemned Queen Helene row (0.1244), so audit-tile-integrity refused the hold until a second prune ran.
+function New-QLinks {
+  return ('{"lotion":{"commodity":"lotion",' +
+    '"Walmart":{"url":"https://www.walmart.com/ip/queen-helene","name":"Queen Helene Cocoa Butter Hand & Body Lotion for Dry Skin, 32 oz","price":3.98,"size":"32 oz"},' +
+    '"Baker''s":{"url":"https://www.bakersplus.com/p/kroger-cocoa-butter-lotion/0004126002319","name":"Kroger Cocoa Butter Lotion","price":4.19,"size":"20.3 fl oz"},' +
+    '"Aldi":{"url":"https://www.aldi.us/lacura","name":"Lacura Body Lotion 18 OZ","price":"$3.99","size":"18 fl oz"}}}') | ConvertFrom-Json
+}
+$qPub = ('{"lotion":{"commodity":"lotion","Walmart":{"url":"https://www.walmart.com/ip/equate-ultra","name":"Equate Ultra Moisturizing Extra Dry Skin Lotion, 32 oz","price":6.96,"size":"32 fl oz"}}}') | ConvertFrom-Json
+$qHeld = [pscustomobject]@{ id = 'lotion'; store = 'Walmart'; action = 'last-good'; per_unit = 0.2175; bad_per_unit = 0.1244 }
+$qL1 = New-QLinks; $qC1 = Update-TcQuarantineLinks -Items $qL1 -Entries @($qHeld) -PublishedItems $qPub
+Assert-QCase 'MUST FIRE  FOUNDING CASE lotion | Walmart held at 0.2175: its link leaves the condemned Queen Helene row for the link the published board was built with' {
+  $qL1.lotion.Walmart.url -eq 'https://www.walmart.com/ip/equate-ultra' -and @($qC1).Count -eq 1 -and $qC1[0].action -eq 'restored-published-link' }
+Assert-QCase 'CLEAN TWIN  the cells nobody quarantined keep their links exactly (Baker''s and Aldi)' {
+  $qL1.lotion.'Baker''s'.url -eq 'https://www.bakersplus.com/p/kroger-cocoa-butter-lotion/0004126002319' -and $qL1.lotion.Aldi.url -eq 'https://www.aldi.us/lacura' }
+$qL2 = New-QLinks; $qC2 = Update-TcQuarantineLinks -Items $qL2 -Entries @([pscustomobject]@{ id = 'lotion'; store = 'Walmart'; action = 'withheld'; per_unit = $null; bad_per_unit = 0.1244 }) -PublishedItems $qPub
+Assert-QCase 'MUST FIRE  a WITHHELD cell shows nothing, so its link is removed' {
+  -not $qL2.lotion.PSObject.Properties['Walmart'] -and @($qC2).Count -eq 1 -and $qC2[0].action -eq 'removed-link' }
+$qL3 = New-QLinks; $qC3 = Update-TcQuarantineLinks -Items $qL3 -Entries @($qHeld) -PublishedItems $null
+Assert-QCase 'MUST FIRE  a held cell whose published board linked nothing there loses today''s link rather than keep the condemned one' {
+  -not $qL3.lotion.PSObject.Properties['Walmart'] }
+$qL4 = New-QLinks; $qC4 = Update-TcQuarantineLinks -Items $qL4 -Entries @([pscustomobject]@{ id = 'lotion'; store = 'Walmart'; action = 'last-good'; per_unit = 0.1244; bad_per_unit = 0.1244 }) -PublishedItems $qPub
+Assert-QCase 'MUST NOT FIRE  a cell held at the SAME value kept its row, so its link is left as it was' {
+  @($qC4).Count -eq 0 -and $qL4.lotion.Walmart.url -eq 'https://www.walmart.com/ip/queen-helene' }
+$acqSrc = [IO.File]::ReadAllText((Join-Path $root 'apply-cell-quarantine.ps1'))
+Assert-QCase 'MUST FIRE  apply-cell-quarantine.ps1 moves the links in the same step, after writing the board' {
+  $acqSrc.Contains('Update-TcQuarantine' + 'Links -Items') -and $acqSrc.IndexOf('Update-TcQuarantine' + 'Links -Items') -gt $acqSrc.IndexOf('Set-Content -LiteralPath $board' + 'F') }
+
 if ($script:qFail -gt 0) { Write-Output ("test-cell-quarantine self-test: FAIL ({0} of {1} case(s) failed)" -f $script:qFail, $script:qCases); exit 1 }
 Write-Output ("test-cell-quarantine self-test: PASS ({0} of {0} case(s))" -f $script:qCases)
 exit 0
