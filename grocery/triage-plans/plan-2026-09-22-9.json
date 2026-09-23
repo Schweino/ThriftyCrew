@@ -328,7 +328,8 @@
         "the body: live cheap-dinners-right-now +17 bytes, 'nothing has published this tool in 17 days', first difference a per-serving cost (c 2.48 local vs 2.54 live)"
       ],
       "root_cause": "F1: the tool page is a third copy of per-serving costs, written as literals and published by hand",
-      "resolution_note": "Superseded by batch 3 (plan-2026-09-22-6, b174ba551). The reconciler that closes the remaining ghost-drift class unattended is discovered:ghost-drift-reconciler-2026-09-22 in plan-2026-09-22-9."
+      "resolution_note": "Superseded by batch 3 (plan-2026-09-22-6), which closed it done on 2026-09-23 from evidence: audit-ghost-drift 16 of 16 clean. The reconciler is discovered:ghost-drift-reconciler-2026-09-22 here.",
+      "status": "superseded"
     },
     {
       "queue_id": "discovered:ghost-drift-reconciler-2026-09-22",
@@ -376,11 +377,11 @@
       "leaves_open_occurrences": 1,
       "leaves_open_followup": "2026-09-22-5d20b9",
       "publish_batch": 5,
-      "status": "planned",
+      "status": "done",
       "resolution_note": "A drifted tool page is now reconciled by direction: a stale live page is republished from its source, an edit made in Ghost admin is folded into the source by commit, and only a true two-sided conflict pages (weekly). Batch 3 removed the cost-literal copy that caused 4 of the 5 drift days.",
-      "premise_verified": null,
+      "premise_verified": "true: grocery/reconcile-ghost-drift.ps1 and grocery/out/ghost-drift.json exist on origin/main; audit-ghost-drift read 16 of 16 tools clean on 2026-09-23 (exit 0, GHOST-DRIFT-COMPLETE clean=16 drift=0 unpublished=0)",
       "deviation": null,
-      "shipped_commit": null
+      "shipped_commit": "d642ca001 (ghost-drift reconciler: the repair lane, and the alert type's resolver flips to it) and 27b3dd5f9 (ghost-tool-published.json: the reconciler's publish record, seeded over all 16 tool pages), on origin/main"
     },
     {
       "queue_id": "discovered:recipe-ingredient-identity-2026-09-22",

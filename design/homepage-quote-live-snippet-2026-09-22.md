@@ -11,6 +11,13 @@ AND the feed carries `recipes["free-chicken-alfredo"].everyday_ps` (a landing de
 shows its fallback. That is safe (a real price on the fill's own basis, never blank), but the paste is only worth
 doing once those two have landed. The integrator tells you when.
 
+**Checked 2026-09-23 (integrator):** `/free-chicken-alfredo/` is live and public; its built card and its live post
+both carry `data-tc-fallback="2.00" data-tc-asof="2026-09-22T08:14:34"`, and the live card fills `~$2.00` against the
+served feed of `2026-09-23T00:21:31`, so 2.00 is a real price on the fill's own basis today. The served feed does NOT
+yet carry `recipes["free-chicken-alfredo"]` (566 recipes, no alfredo), so until the next daily export ships it the
+pasted span shows that 2.00 fallback. The Step 2 text is on the live homepage exactly once. Queue item
+`2026-09-23-749d31` owns the feed key.
+
 ## Step 1. Re-read the fallback right before you paste
 
 The fallback below was stamped at build time on 2026-09-22 against the feed generated `2026-09-22T08:14:34`:
