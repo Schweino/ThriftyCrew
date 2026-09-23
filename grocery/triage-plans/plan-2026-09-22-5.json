@@ -151,7 +151,7 @@
       "resolution_note": "Ruling B implemented: recurring shapes are excludes measured by apply-coverage-batch; add-known-wrong refuses the second ruling of a shape and points at the exclude. The Ben's flavour shape is now the cooked-jasmine-rice exclude.",
       "status": "done",
       "premise_verified": "partly: the Ben's pair is in known-wrong as stated; the Stayfree variant is not (0 entries), so only one shape was convertible",
-      "leaves_open_followup": "enqueue weekly through send-alert.ps1 -Lane weekly at landing (a worktree has no queue file): 'convert 13 recurring known-wrong shapes to excludes via apply-coverage-batch', body = the 13 groups from this item",
+      "leaves_open_followup": "2026-09-22-eb807b",
       "rollback": "revert the add-known-wrong / coverage-explain-lib / apply-coverage-batch / audit-semantic-identity changes and remove the \\bflavou?red\\b exclude from cooked-jasmine-rice (the two Ben's known-wrong rulings were never touched)",
       "prior_closes": [
         "2026-09-18-37ac63",
@@ -372,7 +372,7 @@
       "resolution_note": "The spelling is read and the per-piece guard ships with it. The per-reason reject spike page (the root fix) is not built.",
       "status": "deviated",
       "premise_verified": "true: both rows are in the 09-21 capture exactly as the item states",
-      "leaves_open_followup": "enqueue weekly through send-alert.ps1 -Lane weekly at landing: 'per-reason reject spike check for capture builders', body: 52 Sam's rows refused 2026-09-21 reached only sams-rejects; plan-2026-09-22-2 dca1a1 root_fix",
+      "leaves_open_followup": "2026-09-22-f23a00",
       "rollback": "revert the dca1a1 commit (build-sams-deals)"
     },
     {
@@ -413,12 +413,12 @@
       "resolution_note": "Premise false as of today: id-less rows are already outside the ask order and carried rows already expire at the quarter. No change shipped; 0 crowns move today.",
       "status": "deviated",
       "premise_verified": "false: Get-HyVeeAskOrder skips pid <= 0 and the carry expiry reads the policy quarter; the 09-20 count the plan carried predates both",
-      "leaves_open_followup": "enqueue weekly through send-alert.ps1 -Lane weekly at landing: 'Hy-Vee catalogue-id worklist: 312 id-less rows expire from 2026-10-13', body: this item's evidence",
+      "leaves_open_followup": "2026-09-22-3366e4",
       "rollback": "nothing shipped for this item; nothing to roll back"
     },
     {
-      "leaves_open": "1,165 band-refused rows no basis error explains (the matching worklist, mostly wrong products refused on the dear side); the Sam's count-times-size builder class (Sam's own unit price disagrees between sibling scents, the builder trusts it: 6 rows ruled today); apply-cell-quarantine leaves a VALUE-held cell's link on the condemned row, so tile-integrity refuses the hold until a second prune-bad-links (1 cell today); 4 below-old-floor rows unverified and off the board (Softsoap Fareway 0.0135, Dr Pepper Fareway 0.0039, Walmart Roma Each 0.2804/lb, Suave 2 pack 0.0653); 1,211 rows admitted above the old ceilings not read one by one (6 reach a cell, all read). 5 residuals",
-      "leaves_open_occurrences": "backlog 1,165 keys (2026-09-22 board); Sam's count-times-size: Pledge 2026-08-02 plus 6 rows 2026-09-22; quarantine link: 1 cell, first seen 2026-09-22; unverified rows 4; dear-side rows 1,211, window: the 2026-09-22 derived-arm build",
+      "leaves_open": "1,165 band-refused rows no basis error explains (the matching worklist); 7 real Sam's rows refused as ambiguous plus Nathan's measure-first pack total (held by a ruling); 4 unverified cheap rows and 1,211 dear-side admitted rows not read one by one. 3 residuals",
+      "leaves_open_occurrences": "backlog 1,165 keys (2026-09-22 board); Sam's count-times-size: Pledge 2026-08-02 plus 7 rows 2026-09-22 (6 now refused by rule, 1 ruled); unverified rows 4 cheap + 1,211 dear, one build 2026-09-22",
       "shipped_commit": "branch worktree-agent-a8dca88c6b2cde9e4, unlanded (a rebase will re-id them): step 1+2 \"grocery: warehouse reference group for derived bands; excludes and wrong-basis rulings the typed bands were hiding\"; step 3+4 \"grocery: every commodity on its derived band, typed band numbers removed; band refusals must be explained\"",
       "deviation": "Implemented the full switch (Brad's rollout ruling, quoted in ruling.rollout). What differs from the coordinator's brief: (1) W, the warehouse floor allowance, is 1.5 not 4. Under the min-based reference the five real Sam's rows sit 1.95x (50 lb rice), 3.09x (curry), 3.54x (thyme), 5.89x (bay leaves) and 6.76x (yeast) under retail, so K*W must exceed 6.76; W = 4 (K*W = 20) admitted Sam's Rotella's 17 oz bread at 0.1753 per loaf, a 9.58x basis error, and the header claim that 4 was the smallest W admitting the five was wrong and is corrected. K*W = 7.5 sits inside (6.76, 10). (2) The band-refusal check pages with resolver lane:grocery/apply-coverage-batch.ps1, not lane:grocery/resolve-match-worklist.ps1: that script exists on no branch and origin/main, and audit-alert-registry failed on it. (3) Its mark is a KEYED backlog of 1,165 rows (band-refusals-backlog.json), not a bare count of 1,244: a count would page on capture churn and mail every row. (4) The wrong rows the typed bands hid were fixed as 13 commodity excludes (two apply-coverage-batch runs, soundness MOVED/DROPPED read line by line and accepted) and 17 wrong-basis known-wrong rulings.",
       "queue_id": "2026-09-21-6b17b1",
@@ -470,12 +470,13 @@
         "guard_or_fixture": "grocery/test-derived-band.ps1 -SelfTest (the rule) and grocery/audit-band-refusals.ps1 -SelfTest (the standing check, fanout lane band-refusals in check-ad-cycles)",
         "must_fire_case": "test-derived-band: Sam's \"Rotella's Italian Vienna Bread 17 oz.\" at 0.1753 per loaf is refused at the warehouse floor, and a factor-10 warehouse error at the reference is refused; audit-band-refusals: \"Clancy S Coconut Oil Himalayan Pink Salt Popcorn 4.6 OZ\" (0.4326 against salt 0.0373) is UNEXPLAINED, and an unexplained row outside the backlog pages by name",
         "clean_twin": "test-derived-band: the five real Sam's bulk rows (50 lb rice 0.4596, curry 0.4989, thyme 0.8776, bay leaves 4.27, yeast 0.215) are admitted; audit-band-refusals: the same real bay leaves are ADMITTED by their derived band's warehouse floor, so they never reach the check",
-        "test-auditors.ps1": "exit 1, verdict HYGIENE: pass=780 failed=0 live=0 hygiene=1 skipped=1. The one hygiene item is a stale prompt-backup mirror (scheduled-tasks/grocery-browser-stores-refresh/SKILL.md), unrelated and not reflexively synced; every watcher still sees its bug. The first run failed 1 case (capture-evictions stamp older than the board) because the board steps skip that rostered pass; audit-capture-eviction.ps1 was run on this generation and the rerun passed it."
+        "test-auditors.ps1": "exit 1, verdict HYGIENE: pass=780 failed=0 live=0 hygiene=1 skipped=1. The one hygiene item is a stale prompt-backup mirror (scheduled-tasks/grocery-browser-stores-refresh/SKILL.md), unrelated and not reflexively synced; every watcher still sees its bug. The first run failed 1 case (capture-evictions stamp older than the board) because the board steps skip that rostered pass; audit-capture-eviction.ps1 was run on this generation and the rerun passed it.",
+        "after rebase onto origin/main 6918646b1": "self-tests: derived-band 21/21, band-refusals 11/11, cell-quarantine 43/43, build-sams-deals PASS, compare-deals PASS, apply-coverage-batch 6/6, check-ad-cycles 21/21, add-known-wrong 11 - all exit 0; guards exit 4 (QUARANTINED, hard=0); test-auditors exit 0 pass=782 failed=0 hygiene=0; run-gates exit 0 pass=467 fail=0; rehearse-chain exit 0 verdict=pass (chain, guards, commit ok)"
       },
       "resolution_note": "Every commodity is on its derived band (Brad, 2026-09-22: \"We need to fix it now, properly, and to make sure we are future proof so this doesn't happen again. I dont care how long it takes.\"). Typed numbers removed (359 staples, 62 recipe, price-bands.json 29); 9 thin commodities keep an explicit band_override with its reason until a band derives. Sam's is a warehouse reference group (stores.json), K = 5, W = 1.5. Wrong products and basis errors the typed bands hid: 13 excludes, 17 wrong-basis rulings. audit-band-refusals.ps1 pages any band-refused row no basis error explains.",
       "status": "deviated",
       "premise_verified": "true: re-measured on the all-derived arm (compare-deals -OutName armD under the enforce arm, then the default after the switch): the typed floors were refusing wrong products and basis errors (28 board cells changed or appeared, 10 of them wrong) and real Sam's bulk sat 1.95x to 6.76x under the retail reference.",
-      "leaves_open_followup": "backlog: watch:grocery/audit-band-refusals.ps1 (pages any NEW row by name; the backlog itself is the matching lane's worklist); the other four have happened and need a weekly-lane queue item each (send-alert -Force -Lane weekly): NOT sent from this branch, because the coordinator's run forbids reader-facing writes; the coordinator enqueues them at integration",
+      "leaves_open_followup": "2026-09-22-0c812e",
       "rollback": "revert the derived-band commits; restore vegetable-oil's band_min 0.04 / band_max 0.4",
       "ruling": {
         "founding": {
@@ -490,7 +491,15 @@
           "verbatim": "We need to fix it now, properly, and to make sure we are future proof so this doesn't happen again. I dont care how long it takes.",
           "reading": "Answers Q-6b17b1-bulk-and-identity with none of A, B or C as offered: every commodity moves to its derived band NOW, after the identity work the typed bands were hiding is carried by excludes and wrong-basis rulings, and the reference is made bulk-aware; plus a standing check so a band can never again hide a wrong product silently."
         }
-      }
+      },
+      "landing_fixes": {
+        "quarantine_link": "apply-cell-quarantine now moves a quarantined cell's link in the same step (Update-TcQuarantineLinks): withheld -> link removed; held at a different value -> the link from product-urls.json at the published board's commit, or removed; same value and every unquarantined cell untouched. test-cell-quarantine 43 of 43. Live on the rebased build: guards exit 2, apply, name-drift, guards exit 4 (lotion | Walmart and energy-drinks | Family Fare held, each linked to the product the published board showed), with no second prune-bad-links.",
+        "sams_count_first": "build-sams-deals reads a count-first name (\"N ct, X oz\") as the pack total; refused when Sam's price reproduces only N x X, or when priced per each; explicit \"/pk\" measures exempt; count-first names exempt from the per-piece guard. Replayed over 1,030 rows of sams-deals-2026-09-21: 21 change - 6 wrong refused (Febreze Air Mist x3, Febreze Hawaiian, Pledge x2), 7 real restored (Febreze Holiday/Fall, Lysol, Febreze Linen & Sky, Clorox, Pine-Sol x2), 7 real refused as ambiguous (Fresh Step, Fancy Feast, Friskies x2, Blue Buffalo, Temptations, Bloom). SELF-TEST PASS."
+      },
+      "leaves_open_followup_also": [
+        "2026-09-22-93f022 (Sam's count-first rows refused as ambiguous; Nathan's measure-first total)",
+        "2026-09-22-8d2ad5 (4 cheap and 1,211 dear admitted rows not read)"
+      ]
     },
     {
       "leaves_open": "9 delegated audits still hold the whole board on a finding; each is taught separately, and the ratchet mark falls with each. 9 audits",
@@ -539,7 +548,7 @@
       "resolution_note": "Every delegated guard audit declares its hold scope and the contract audit enforces it; board-scoped delegates are a ratchet at 9.",
       "status": "done",
       "premise_verified": "partly: 9 board-scoped delegates, not 8",
-      "leaves_open_followup": "its own queue id (left open) - d16398's residual is the nine audits' teaching",
+      "leaves_open_followup": "2026-09-22-6e6a3b",
       "rollback": "revert the d16398 commit"
     },
     {
