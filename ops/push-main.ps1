@@ -60,7 +60,10 @@
     change_id = `git diff <branch_base> HEAD | git patch-id --stable`, first field; subjects_sha = SHA-256 (lower-case
       hex) of the commit subjects of branch_base..HEAD, sorted Ordinal and joined with LF, null when that range holds no
       commit; branch_base, branch_base_ts = the merge-base with refs/remotes/<remote>/<branch> and its %cI. All four are
-      taken at START, before any fetch.
+      taken at START, before any fetch. subject_shas = one 16-hex SHA-256 prefix per DISTINCT subject of that range, sorted
+      Ordinal and cut at 50, and subject_count = how many commits the range held, so a reader can link attempts whose
+      subject SET moved (an amended subject, an added fix commit) by overlap; head_ref = `git symbolic-ref -q --short HEAD`,
+      null when detached. All three are taken at start too (review of W0.1R, 2026-09-23).
     phase = where a refusal stopped: 'preflight' is the round-1 fetch and rebase; 'catchup' is anything before the lock
       in rounds 2 and 3 (their fetch and rebase, their legs and their rehearsal); 'inlock' is the fetch and rebase under
       the lock, a rejected push, a throw under the lock, and refused-rehearsal-churn. Null for a landing, a dry run, and a
@@ -68,6 +71,8 @@
       this run attempted, one entry per rebase, in order. preflight_sha = FETCH_HEAD at the round-1 fetch.
     conflict_files, conflict_scope = `git diff --name-only --diff-filter=U` read INSIDE Invoke-TcSyncToRemote BEFORE its
       `git rebase --abort`, which clears them, scope 'first-stop' (the commit the rebase stopped on); conflict_files_all,
+      scope 'none-unmerged' beside [] when the rebase failed without stopping on a commit (an index.lock, say);
+      conflict_target = the FETCH_HEAD of the sync whose rebase conflicted, which for a catch-up conflict is NOT the grant;
       conflict_all_basis = `git merge-tree --write-tree --name-only --no-messages` over the whole range, labelled
       'merge-tree-approximate' because it is one squashed merge; sibling_same_subject = main commits any rebase of this run
       brought in whose subject is Ordinal-equal to one of the branch's, short shas, first seen first; [] when a rebase was
@@ -88,9 +93,13 @@
     inlock_check = the in-lock verdict check of the LAST take: covered, not-covered, could-not-decide (Code 3: it printed
       no completion marker), or not-run (that take ran no in-lock rebase or stopped before the check, or no take was
       made: lock_takes says which).
-    hook_ta = what the in-lock hook's test-auditors lines say (reused, ran, not-needed or unknown), and reject_class,
-      reject_lines = on push-rejected, the first rule of Get-TcPushRejectClass that matches git's output, and up to 3
-      matching lines of at most 300 characters. Both are read only on the take that pushed.
+    hook_ta = what the in-lock hook's test-auditors lines say (reused, ran, not-needed or unknown), hook_ta_scope = 'full',
+      'selective <n> of <m>' or null for a run that was not made, and reject_class, reject_lines = on push-rejected, the
+      first rule of Get-TcPushRejectClass that matches git's output, and up to 3 matching lines of at most 300 characters;
+      reject_rc = the refusing check's exit code read from the hook's own BLOCKED line (1 a red, 3 could-not-evaluate,
+      null unreadable), because the fixed PRE-PUSH-REFUSED line carries none. All are read only on the take that pushed.
+    A THROW OUTSIDE THE LOCK now writes the run's one row too (outcome unknown, the phase it had reached) before it goes on
+      to the caller, and every reader outside the lock runs through Invoke-TcRowReader, so a defect in one costs its field.
   The run-gates leg now runs through the call operator and a pipeline rather than Start-Process, so its lines reach the
   console as it prints them AND reach the row; its exit code is $LASTEXITCODE, which the Start-Process handle trap
   ([[ps-start-process-exitcode-needs-handle]]) does not touch.
@@ -419,8 +428,12 @@ function Invoke-TcSyncToRemote {
       # because the next session to push inherits it.
       $null = Invoke-TcGit -Dir $Dir -Arguments @('rebase', '--abort')
       $whole = Get-TcMergeTreeConflicts -Dir $Dir -Head 'HEAD' -Target $rem
+      # THE SCOPE SAYS WHETHER THE REBASE STOPPED AT ALL (review of W0.1R, 2026-09-23). A rebase that fails with nothing
+      # unmerged - an index.lock another process holds, say - never stopped on a commit, so 'first-stop' would name a stop
+      # that did not happen: it is 'none-unmerged', beside an empty list. A git that could not be asked leaves both null.
+      $scope = $(if ($null -eq $unmerged) { '' } elseif (@($unmerged).Count) { 'first-stop' } else { 'none-unmerged' })
       return (New-TcSyncResult -Code 1 -Outcome 'refused-rebase-conflict' -Head $head -Rem $rem -Ahead $ahead -RebaseTried $true -Siblings $siblings `
-        -ConflictFiles $unmerged -ConflictScope 'first-stop' -ConflictFilesAll $whole -ConflictAllBasis 'merge-tree-approximate' `
+        -ConflictFiles $unmerged -ConflictScope $scope -ConflictFilesAll $whole -ConflictAllBasis 'merge-tree-approximate' `
         -Message ("push-main: REFUSED - the rebase onto {0}/{1} conflicts, so it was aborted and this branch is exactly where it was. Resolve it and run this again.`n{2}" -f $Remote, $Branch, $rb.Text))
     }
     $head = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'HEAD')).Out[0]).Trim()
@@ -632,6 +645,45 @@ function Get-TcRejectLinesCapped {
   return , ($out.ToArray())
 }
 
+function Get-TcRejectRc {
+  <# THE EXIT CODE OF THE CHECK THAT REFUSED (the row's reject_rc, review of W0.1R, 2026-09-23): 1 is a red, 3 is
+     could-not-evaluate, which is NEVER a red and never a pass. The fixed PRE-PUSH-REFUSED line carries cause and gate but
+     no code, so rule 1 of the classifier kept a contention 3 of run-gates or test-auditors exactly as it kept a red, and
+     a reader scored both as the change's own red. Read, first match wins:
+       1. an rc=<n> on a PRE-PUSH-REFUSED line (a later hook may print one)     n
+       2. a ^pre-push: BLOCKED - line saying COULD NOT EVALUATE, or "without its completion marker" (decided nothing)  3
+       3. a ^pre-push: BLOCKED - line carrying "(exit <n>)" or "exited <n>"      n
+     $null when no line says, which is what a structure refusal, a remote rejection and an unknown text all are. Pure. #>
+  param($Lines)
+  $all = @(@($Lines) | ForEach-Object { [string]$_ })
+  foreach ($l in $all) {
+    $m = [regex]::Match($l, '^PRE-PUSH-REFUSED cause=\S+.*?\brc=(\d+)')
+    if ($m.Success) { return [int]$m.Groups[1].Value }
+  }
+  foreach ($l in $all) {
+    if ($l -cnotmatch '^pre-push: BLOCKED - ') { continue }
+    if ($l -cmatch 'COULD NOT EVALUATE' -or $l -cmatch 'without its completion marker') { return 3 }
+    $m = [regex]::Match($l, '\(exit (\d+)\)')
+    if (-not $m.Success) { $m = [regex]::Match($l, '\bexited (\d+)\b') }
+    if ($m.Success) { return [int]$m.Groups[1].Value }
+  }
+  return $null
+}
+
+function Get-TcHookTestAuditorsScope {
+  <# How much of test-auditors the IN-LOCK hook ran (the row's hook_ta_scope, review of W0.1R, 2026-09-23): 'full' for
+     prepush-test-auditors' "running <suite> in full" line, 'selective <n> of <m>' for its "running <suite> on <n> of <m>
+     unit(s)" line, $null when it did not run. hook_ta keeps its four words (the probe reads them); B11 counts FULL runs
+     inside the lock, and 'ran' alone could not say which. Pure. #>
+  param([string]$Text)
+  foreach ($l in @(([string]$Text) -split "`r?`n")) {
+    if ($l -cmatch '^\s*prepush-test-auditors: running .+? in full\b') { return 'full' }
+    $m = [regex]::Match($l, '^\s*prepush-test-auditors: running .+? on (\d+) of (\d+) unit\(s\)')
+    if ($m.Success) { return ('selective ' + $m.Groups[1].Value + ' of ' + $m.Groups[2].Value) }
+  }
+  return $null
+}
+
 function Get-TcPushRejectClass {
   <# WHY A PUSH WAS REJECTED, from git's output (the row's reject_class and reject_lines). The FIRST RULE THAT MATCHES
      ANY LINE wins, in this order, never the first line that matches any rule: a text carrying both the fixed line and an
@@ -649,33 +701,35 @@ function Get-TcPushRejectClass {
      THE WORDING BEFORE 2026-09-23 matched only rule 5's lines (^(pre-push: REFUS|chain-rehearsal: REFUSED) or RATCHET
      BROKEN): every gate refusal in the hook says BLOCKED, and RATCHET BROKEN never reaches git's stderr, because the hook
      echoes only FAIL and run-gates: lines from run-gates' log. Lines are matched case-sensitively, as the hook prints
-     them. Pure: it runs nothing and never throws on any text. #>
+     them. Rc is Get-TcRejectRc's reading of the same text (the row's reject_rc). Pure: it runs nothing and never throws on
+     any text. #>
   param([string]$Text)
   $lines = @(([string]$Text) -split "`r?`n" | Where-Object { ([string]$_).Trim() })
+  $rc = Get-TcRejectRc -Lines $lines
   $pp = @($lines | Where-Object { $_ -cmatch '^PRE-PUSH-REFUSED cause=\S+' })
   if ($pp.Count) {
     $m = [regex]::Match([string]$pp[0], '^PRE-PUSH-REFUSED cause=(\S+)(?:.*?\sgate=(\S+))?')
     $cls = $m.Groups[1].Value
     if ($m.Groups[2].Success -and $m.Groups[2].Value) { $cls = $cls + ':' + $m.Groups[2].Value }
-    return [pscustomobject]@{ Class = $cls; Lines = (Get-TcRejectLinesCapped $pp) }
+    return [pscustomobject]@{ Rc = $rc; Class = $cls; Lines = (Get-TcRejectLinesCapped $pp) }
   }
   $rh = @($lines | Where-Object { $_ -cmatch '^pre-push: BLOCKED - (the chain rehearsal|this push changes the daily chain)' -or $_ -cmatch '^chain-rehearsal: (REFUSED|COULD NOT)' })
-  if ($rh.Count) { return [pscustomobject]@{ Class = 'rehearsal'; Lines = (Get-TcRejectLinesCapped $rh) } }
+  if ($rh.Count) { return [pscustomobject]@{ Rc = $rc; Class = 'rehearsal'; Lines = (Get-TcRejectLinesCapped $rh) } }
   $ta = @($lines | Where-Object { $_ -cmatch '^pre-push: BLOCKED - the test-auditors check' })
-  if ($ta.Count) { return [pscustomobject]@{ Class = 'test-auditors'; Lines = (Get-TcRejectLinesCapped $ta) } }
+  if ($ta.Count) { return [pscustomobject]@{ Rc = $rc; Class = 'test-auditors'; Lines = (Get-TcRejectLinesCapped $ta) } }
   $rg = @($lines | Where-Object { $_ -cmatch '^pre-push: BLOCKED - run-gates' })
   if ($rg.Count) {
     $fails = @($lines | Where-Object { $_ -cmatch '^\s+FAIL\s+\S+' })
     $said = @($lines | Where-Object { $_ -cmatch '^run-gates: (FAILED|COULD NOT)' })
     $cls = 'run-gates'
     if ($fails.Count) { $cls = 'run-gates:' + [regex]::Match([string]$fails[0], '^\s+FAIL\s+(\S+)').Groups[1].Value }
-    return [pscustomobject]@{ Class = $cls; Lines = (Get-TcRejectLinesCapped (@($rg[0]) + $fails + $said)) }
+    return [pscustomobject]@{ Rc = $rc; Class = $cls; Lines = (Get-TcRejectLinesCapped (@($rg[0]) + $fails + $said)) }
   }
   $st = @($lines | Where-Object { $_ -cmatch '^pre-push: REFUSING' })
-  if ($st.Count) { return [pscustomobject]@{ Class = 'structure'; Lines = (Get-TcRejectLinesCapped $st) } }
+  if ($st.Count) { return [pscustomobject]@{ Rc = $rc; Class = 'structure'; Lines = (Get-TcRejectLinesCapped $st) } }
   $rm = @($lines | Where-Object { $_ -cmatch '! \[remote rejected\]' -or $_ -cmatch 'cannot lock ref' })
-  if ($rm.Count) { return [pscustomobject]@{ Class = 'remote'; Lines = (Get-TcRejectLinesCapped $rm) } }
-  return [pscustomobject]@{ Class = 'unknown'; Lines = (Get-TcRejectLinesCapped $lines) }
+  if ($rm.Count) { return [pscustomobject]@{ Rc = $rc; Class = 'remote'; Lines = (Get-TcRejectLinesCapped $rm) } }
+  return [pscustomobject]@{ Rc = $rc; Class = 'unknown'; Lines = (Get-TcRejectLinesCapped $lines) }
 }
 
 function Get-TcRunGatesReading {
@@ -822,15 +876,83 @@ function Get-TcSubjectsSha {
      (a branch with nothing to push has no subjects to be named by). The subjects are the lines Invoke-TcGit decodes
      from git's stdout, so one box hashes one subject one way. #>
   param([string]$Dir, [string]$Base)
+  $subj = Get-TcRangeSubjects -Dir $Dir -Base $Base
+  if ($null -eq $subj) { return $null }
+  return (Get-TcSubjectsShaOf -Subjects $subj)
+}
+
+function Get-TcRangeSubjects {
+  <# The commit subjects of <Base>..HEAD as git decodes them, one per commit, or $null when the base is unreadable, git
+     fails, or the range holds no commit. #>
+  param([string]$Dir, [string]$Base)
   if ($Base -notmatch '^[0-9a-f]{40}([0-9a-f]{24})?$') { return $null }
   $r = Invoke-TcGit -Dir $Dir -Arguments @('log', '--format=%s', ($Base + '..HEAD'))
   if ($r.Code -ne 0) { return $null }
   $subj = [string[]]@(@($r.Out) | ForEach-Object { [string]$_ })
   if ($subj.Count -eq 0) { return $null }
-  [Array]::Sort($subj, [StringComparer]::Ordinal)
+  return , $subj
+}
+
+function Get-TcSha256Hex {
+  <# SHA-256 of a string's UTF-8 bytes (no preamble), lower-case hex. #>
+  param([string]$Text)
   $sha = [Security.Cryptography.SHA256]::Create()
-  try { $h = $sha.ComputeHash((New-Object Text.UTF8Encoding($false)).GetBytes(($subj -join "`n"))) } finally { $sha.Dispose() }
+  try { $h = $sha.ComputeHash((New-Object Text.UTF8Encoding($false)).GetBytes($Text)) } finally { $sha.Dispose() }
   return (([BitConverter]::ToString($h) -replace '-', '').ToLowerInvariant())
+}
+
+function Get-TcSubjectsShaOf {
+  <# subjects_sha over a subject list: sorted ORDINAL, joined with LF, hashed. Null for an empty or absent list. Pure. #>
+  param([string[]]$Subjects)
+  if ($null -eq $Subjects -or $Subjects.Count -eq 0) { return $null }
+  $s = [string[]]$Subjects.Clone()
+  [Array]::Sort($s, [StringComparer]::Ordinal)
+  return (Get-TcSha256Hex -Text ($s -join "`n"))
+}
+
+# HOW MANY PER-SUBJECT HASHES A ROW KEEPS. The first plausible number (the W0.1R review's "around 50"), not the survivor
+# of a sweep: a push-main range is a handful of commits, and a range longer than this is rare enough that keeping its
+# first 50 sorted hashes still overlaps an earlier attempt's. subject_count says when the list was cut.
+$script:TcSubjectShasCap = 50
+
+function Get-TcSubjectShaList {
+  <# The row's subject_shas (review of W0.1R, 2026-09-23): one short hash per DISTINCT subject of the range, the first 16
+     hex of Get-TcSha256Hex, sorted ORDINAL and cut at $script:TcSubjectShasCap. subjects_sha is ONE hash over the whole
+     set, so it moves whenever a lane amends one subject or adds a fix commit, and W0.3b split one change into several
+     on exactly the housekeeping lane its key was founded on (three attempts, three subjects_sha values, measured from
+     the 2026-09-23 production ledger by the review). Per-subject hashes let a reader link attempts by OVERLAP instead.
+     Null for an empty or absent list. Pure. #>
+  param([string[]]$Subjects)
+  if ($null -eq $Subjects -or $Subjects.Count -eq 0) { return $null }
+  $set = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($x in $Subjects) { [void]$set.Add((Get-TcSha256Hex -Text ([string]$x)).Substring(0, 16)) }
+  $list = [string[]]@($set)
+  [Array]::Sort($list, [StringComparer]::Ordinal)
+  if ($list.Count -gt $script:TcSubjectShasCap) { $list = [string[]]$list[0..($script:TcSubjectShasCap - 1)] }
+  return , $list
+}
+
+function Get-TcHeadRef {
+  <# The row's head_ref: `git symbolic-ref -q --short HEAD` at START, the branch the checkout pushes from, or $null for a
+     detached HEAD or a git that could not be asked. A lane keeps one branch across its attempts however often it amends,
+     so this is the second link W0.3b can group attempts on. #>
+  param([string]$Dir)
+  $r = Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('symbolic-ref', '-q', '--short', 'HEAD'))
+  if ($r) { return $r }
+  return $null
+}
+
+function Invoke-TcRowReader {
+  <# A ROW READER MAY COST ITS FIELD, NEVER THE PUSH (review of W0.1R, 2026-09-23). Every reader that fills the row
+     outside the lock runs through this: a throw is said, the field keeps what it held (or $RrFallback), and the push goes
+     on, the same guard the in-lock refusal classifier carries. The parameter names are prefixed so the reader's own
+     variables, resolved through the caller's scope, are never shadowed. #>
+  param([string]$RrName, [scriptblock]$RrRead, $RrFallback = $null)
+  try { return (& $RrRead) }
+  catch {
+    Say ("push-main: the row reader '{0}' threw ({1}); its field is recorded as unknown and the push goes on." -f $RrName, $_.Exception.Message)
+    return $RrFallback
+  }
 }
 
 function Add-TcSyncReadings {
@@ -853,6 +975,11 @@ function Add-TcSyncReadings {
   if ($props['Outcome'] -and [string]::Equals([string]$props['Outcome'].Value, 'refused-rebase-conflict', [StringComparison]::Ordinal)) {
     # Plain assignments, never $( ): a subexpression unrolls an array too, and a one-path list would land as a bare string.
     $Row['conflict_files'] = $null; $Row['conflict_files_all'] = $null; $Row['conflict_scope'] = $null; $Row['conflict_all_basis'] = $null
+    $Row['conflict_target'] = $null
+    # WHAT THIS REBASE CONFLICTED AGAINST (review of W0.1R, 2026-09-23): the FETCH_HEAD of THIS sync. The row's grant is
+    # the in-lock remote of the last take, so for a catch-up conflict in round 2 or 3 it names a main the conflicting
+    # rebase never saw, and a reader that took the grant as the collider's side named the wrong commit.
+    if ($props['Rem'] -and $props['Rem'].Value) { $Row['conflict_target'] = [string]$props['Rem'].Value }
     if ($props['ConflictFiles']) { $Row['conflict_files'] = $props['ConflictFiles'].Value }
     if ($props['ConflictFilesAll']) { $Row['conflict_files_all'] = $props['ConflictFilesAll'].Value }
     if ($props['ConflictScope'] -and $props['ConflictScope'].Value) { $Row['conflict_scope'] = [string]$props['ConflictScope'].Value }
@@ -890,7 +1017,7 @@ function Invoke-TcPushMain {
   # WHICH CODE IS RUNNING, read FIRST (W0.1R step 2). The round-1 fetch and rebase below rewrite this checkout, and when
   # origin changed ops\push-main.ps1 they rewrite THIS script on disk: a hash taken after that names code this process is
   # not running, which is the one thing pm_blob exists to say.
-  $pmBlob = Get-TcScriptBlob -Path $script:TcPushMainPath
+  $pmBlob = Invoke-TcRowReader 'pm_blob' { Get-TcScriptBlob -Path $script:TcPushMainPath } ''
   # WHAT THE REMOTE HELD BEFORE THIS PUSH QUEUED. Read here and compared with what the fetch inside the lock returns,
   # it is this wrapper's own answer to "did the remote move while I waited" - the quantity that decides whether a
   # retry can ever converge, recorded per push in lib\push-ledger.ps1 rather than re-derived from %TEMP% afterwards.
@@ -904,10 +1031,17 @@ function Invoke-TcPushMain {
   # HERE, at start and before any fetch, so they describe the branch as the session handed it over. Every field starts
   # null, or at zero for a count, and is filled where it becomes known; later plan items add their own keys to this same
   # dictionary.
-  $startBase = Get-TcBranchBase -Dir $Dir -Remote $Remote -Branch $Branch
-  $sess = Get-TcPushSession
-  $changeId = Get-TcChangeId -Dir $Dir -Base $startBase.Sha
-  $subjectsSha = Get-TcSubjectsSha -Dir $Dir -Base $startBase.Sha
+  # EACH READER IS GUARDED (Invoke-TcRowReader): a defect in one costs its field, never the push.
+  $startBase = Invoke-TcRowReader 'branch_base' { Get-TcBranchBase -Dir $Dir -Remote $Remote -Branch $Branch } ([pscustomobject]@{ Sha = ''; Ts = '' })
+  $sess = Invoke-TcRowReader 'session' { Get-TcPushSession } ([pscustomobject]@{ Value = $null; Var = $null })
+  $changeId = Invoke-TcRowReader 'change_id' { Get-TcChangeId -Dir $Dir -Base $startBase.Sha } ''
+  # The subject list comes back through the guard unrolled (a one-subject list as a bare string), so it is re-wrapped.
+  $subjList = Invoke-TcRowReader 'subjects' { Get-TcRangeSubjects -Dir $Dir -Base $startBase.Sha } $null
+  if ($null -ne $subjList) { $subjList = [string[]]@($subjList) }
+  $subjectsSha = Invoke-TcRowReader 'subjects_sha' { Get-TcSubjectsShaOf -Subjects $subjList } $null
+  $subjectShas = $null
+  try { $subjectShas = Get-TcSubjectShaList -Subjects $subjList } catch { Say ('push-main: the row reader ''subject_shas'' threw (' + $_.Exception.Message + '); its field is recorded as unknown and the push goes on.') }
+  $headRef = Invoke-TcRowReader 'head_ref' { Get-TcHeadRef -Dir $Dir } $null
   $pmRow = [ordered]@{
     schema               = 2
     pm_blob              = $(if ($pmBlob) { $pmBlob } else { $null })
@@ -915,12 +1049,16 @@ function Invoke-TcPushMain {
     session_var          = $sess.Var
     change_id            = $(if ($changeId) { $changeId } else { $null })
     subjects_sha         = $subjectsSha
+    subject_shas         = $subjectShas
+    subject_count        = $(if ($null -ne $subjList) { $subjList.Count } else { $null })
+    head_ref             = $headRef
     branch_base          = $(if ($startBase.Sha) { $startBase.Sha } else { $null })
     branch_base_ts       = $(if ($startBase.Ts) { $startBase.Ts } else { $null })
     phase                = $null
     rebase_phases        = [string[]]@()
     preflight_sha        = $null
     conflict_files       = $null
+    conflict_target      = $null
     conflict_scope       = $null
     conflict_files_all   = $null
     conflict_all_basis   = $null
@@ -936,6 +1074,7 @@ function Invoke-TcPushMain {
     ta_rc                = $null
     ta_moved             = $null
     hook_ta              = $null
+    hook_ta_scope        = $null
     chain_touching       = $null
     rh_outcome           = $null
     lock_takes           = 0
@@ -943,9 +1082,16 @@ function Invoke-TcPushMain {
     lock_held_ms         = $null
     inlock_check         = 'not-run'
     reject_class         = $null
+    reject_rc            = $null
     reject_lines         = $null
   }
+  # ONE ROW PER RUN, and at most one (review of W0.1R, 2026-09-23): the guard below writes a row for a throw that no path
+  # wrote one for, so every path now ends here, and a path that already wrote one is never written twice.
+  $rowState = @{ Written = $false }
+  $curPhase = $null
   $writeRow = {
+    if ($rowState.Written) { return }
+    $rowState.Written = $true
     $wr = Write-TcPushRow -Event 'push-main' -WaitMs $ledgerWaitMs -State $ledgerState -BaseSha $ledgerBase `
       -GrantSha $ledgerGrant -Outcome $outcome -Checkout $Dir -Root $LedgerRoot -Fields $pmRow
     # A ROW THAT WAS NOT WRITTEN IS SAID, never refused: the ledger must not be able to stop a push, and a silent miss is
@@ -957,207 +1103,227 @@ function Invoke-TcPushMain {
   if ($LockQueueRoot) { $enter['QueueRoot'] = $LockQueueRoot }
   $enter['OnWait'] = { param($ahead) Say ("push-main: {0} push(es) are ahead of this one on this box, and the lock is served in arrival order - waiting." -f $ahead) }
 
-  # ---- THE GATE RUNS BEFORE THE LOCK IS TAKEN (Brad, 2026-09-12) ----
-  # The lock serialises pushes machine-wide, and until now the ~10-minute gate ran INSIDE it, so the box could land
-  # about six pushes an hour however many sessions were working: measured that morning at 9 pushes queued, the oldest
-  # 47 minutes, while only 2 gates ran on a 32-core box and the ref update itself took 2 seconds. Serialising the PUSH
-  # costs nothing, because refs/heads/main is serialised already; serialising the GATE costs everything, because
-  # gating is the part that can run in parallel and has its own 10-slot budget to bound it.
-  # Running it here is not a second gate and weakens nothing: the hook still gates inside the lock, and a red gate
-  # there still refuses. What this buys is that the hook's run is WARM - lib\gate-verdict.ps1 replays the whole
-  # verdict when the rebase changed nothing, and the per-gate input keys re-run only the gates whose own inputs the
-  # rebase brought in - so the lock is held for seconds rather than minutes.
-  # A RED GATE NEVER QUEUES. Before this, a push that was going to fail took the lock, held it for its whole run and
-  # blocked every other session on the box before refusing. It now refuses without ever entering the queue.
-  # A 3 IS NOT A REFUSAL AND NOT A PASS. Exit 3 is could-not-evaluate, which on this box is usually slot contention,
-  # so this degrades to exactly the behaviour of the day before: take the lock and let the hook be the gate.
-  # The default runner is BOTH hook legs: run-gates, then (only on a pass) the test-auditors check with this push's own
-  # ref line, so its keyed pass is recorded before the lock and the in-lock leg can reuse it (queue 2026-09-18-1139a0).
-  # Invoke-TcDefaultLegs holds that decision and also hands back what each leg said, for the row.
-  $runner = $(if ($GateRunner) { $GateRunner } else { { param($d) Invoke-TcDefaultLegs -Dir $d -Remote $Remote -Branch $Branch } })
-  # SEEDED FIRST, so neither leg of the gate below judges a checkout that has no built cards (backlog I237).
-  $null = Invoke-TcSeedIfUnseeded -Dir $Dir -Seeder $SeedScript
-  $checker = $(if ($RehearsalCheck) { $RehearsalCheck } else { { param($d, $h, $r) Invoke-TcRehearsalCheck -Dir $d -Branch $Branch -Head $h -RemoteSha $r } })
-  $rebasedAny = $false
-  $rehearsals = 0
-  # THE ROW'S SUMS OVER ROUNDS (W0.1R step 5). Kept as doubles and written rounded after every change, so whichever path
-  # writes the row carries every take and every catch-up leg so far.
-  $lockWaitTotal = 0.0
-  $lockHeldTotal = 0.0
-  $catchupTotal = 0.0
-  for ($round = 1; $round -le $script:PmMaxRehearsalRounds; $round++) {
-    # WHICH PHASE A REFUSAL BEFORE THE LOCK BELONGS TO (W0.1R step 4): round 1's fetch and rebase are the pre-flight, and
-    # everything before the lock in a later round is the catch-up. Round 1's LEGS carry no phase: their outcome already
-    # names where the push stopped, and a row from before this loop existed reads the same way.
-    $syncPhase = $(if ($round -eq 1) { 'preflight' } else { 'catchup' })
-    $legPhase = $(if ($round -eq 1) { $null } else { 'catchup' })
+  try {
+    # ---- THE GATE RUNS BEFORE THE LOCK IS TAKEN (Brad, 2026-09-12) ----
+    # The lock serialises pushes machine-wide, and until now the ~10-minute gate ran INSIDE it, so the box could land
+    # about six pushes an hour however many sessions were working: measured that morning at 9 pushes queued, the oldest
+    # 47 minutes, while only 2 gates ran on a 32-core box and the ref update itself took 2 seconds. Serialising the PUSH
+    # costs nothing, because refs/heads/main is serialised already; serialising the GATE costs everything, because
+    # gating is the part that can run in parallel and has its own 10-slot budget to bound it.
+    # Running it here is not a second gate and weakens nothing: the hook still gates inside the lock, and a red gate
+    # there still refuses. What this buys is that the hook's run is WARM - lib\gate-verdict.ps1 replays the whole
+    # verdict when the rebase changed nothing, and the per-gate input keys re-run only the gates whose own inputs the
+    # rebase brought in - so the lock is held for seconds rather than minutes.
+    # A RED GATE NEVER QUEUES. Before this, a push that was going to fail took the lock, held it for its whole run and
+    # blocked every other session on the box before refusing. It now refuses without ever entering the queue.
+    # A 3 IS NOT A REFUSAL AND NOT A PASS. Exit 3 is could-not-evaluate, which on this box is usually slot contention,
+    # so this degrades to exactly the behaviour of the day before: take the lock and let the hook be the gate.
+    # The default runner is BOTH hook legs: run-gates, then (only on a pass) the test-auditors check with this push's own
+    # ref line, so its keyed pass is recorded before the lock and the in-lock leg can reuse it (queue 2026-09-18-1139a0).
+    # Invoke-TcDefaultLegs holds that decision and also hands back what each leg said, for the row.
+    $runner = $(if ($GateRunner) { $GateRunner } else { { param($d) Invoke-TcDefaultLegs -Dir $d -Remote $Remote -Branch $Branch } })
+    # SEEDED FIRST, so neither leg of the gate below judges a checkout that has no built cards (backlog I237).
+    $null = Invoke-TcSeedIfUnseeded -Dir $Dir -Seeder $SeedScript
+    $checker = $(if ($RehearsalCheck) { $RehearsalCheck } else { { param($d, $h, $r) Invoke-TcRehearsalCheck -Dir $d -Branch $Branch -Head $h -RemoteSha $r } })
+    $rebasedAny = $false
+    $rehearsals = 0
+    # THE ROW'S SUMS OVER ROUNDS (W0.1R step 5). Kept as doubles and written rounded after every change, so whichever path
+    # writes the row carries every take and every catch-up leg so far.
+    $lockWaitTotal = 0.0
+    $lockHeldTotal = 0.0
+    $catchupTotal = 0.0
+    for ($round = 1; $round -le $script:PmMaxRehearsalRounds; $round++) {
+      # WHICH PHASE A REFUSAL BEFORE THE LOCK BELONGS TO (W0.1R step 4): round 1's fetch and rebase are the pre-flight, and
+      # everything before the lock in a later round is the catch-up. Round 1's LEGS carry no phase: their outcome already
+      # names where the push stopped, and a row from before this loop existed reads the same way.
+      $syncPhase = $(if ($round -eq 1) { 'preflight' } else { 'catchup' })
+      $legPhase = $(if ($round -eq 1) { $null } else { 'catchup' })
 
-    # ---- 1. FETCH AND REBASE, OUTSIDE THE LOCK (2026-09-23, ops lane) ----
-    # Until this change the fetch and the rebase happened only INSIDE the lock, AFTER the gate and the rehearsal, so both
-    # judged the content from BEFORE the rebase. The gate's per-input keys absorbed that; the rehearsal could not, because
-    # its verdict is keyed on the manifest set of the exact commit pushed, and a rebase over any commit touching a
-    # manifest script moves the key. The hook then found no verdict for the rebased content, refused, and the push paid
-    # a second 13-to-15-minute rehearsal (several landings on 2026-09-23). Rebasing FIRST makes the rehearsed content the
-    # content that lands whenever origin holds still for the length of the rehearsal.
-    $s = Invoke-TcSyncToRemote -Dir $Dir -Remote $Remote -Branch $Branch
-    Add-TcSyncReadings -Row $pmRow -Sync $s -Phase $syncPhase
-    if ($round -eq 1 -and $s.Rem) { $pmRow['preflight_sha'] = $s.Rem }
-    if ($s.Code -ne 0) {
-      Say $s.Message
-      $outcome = $s.Outcome; $ledgerState = 'not-taken'; $pmRow['phase'] = $syncPhase
-      & $writeRow
-      return $s.Code
-    }
-    if ($s.Rebased) { $rebasedAny = $true }
-
-    # ---- 2. THE GATE, BEFORE THE LOCK (Brad, 2026-09-12; the account is above $runner): a red gate never queues, and a
-    # 3 is neither a refusal nor a pass - it leaves the gate to the hook inside the lock, exactly as before.
-    # A LEG SET STARTS HERE, so this is what `rounds` counts. Round 1's legs are the row's leg readings (leg_sec and the
-    # rest); a later round's legs are catch-up time, summed into catchup_sec.
-    $pmRow['rounds'] = $round
-    $gateSw = [Diagnostics.Stopwatch]::StartNew()
-    $g = & $runner $Dir
-    $gateSw.Stop()
-    if ($round -eq 1) {
-      Add-TcRunnerReadings -Row $pmRow -Result $g
-    } else {
-      $catchupTotal += $gateSw.Elapsed.TotalSeconds; $pmRow['catchup_sec'] = [int][math]::Round($catchupTotal)
-    }
-    if ($g.Ran -and $g.Code -eq 1) {
-      $redWhy = $(if ($g.Why) { [string]$g.Why } else { 'run-gates exited 1' })
-      Say ("push-main: REFUSED - {0} before the lock was taken, so this push never entered the queue and nothing else on this box was held up. Fix the cause and run this again." -f $redWhy)
-      $outcome = 'refused-gate-red'; $ledgerState = 'not-taken'; $pmRow['phase'] = $legPhase
-      & $writeRow
-      return 1
-    }
-    if ($g.Code -ne 0) {
-      Say ("push-main: the gate did not settle outside the lock ({0}), so it is left to the hook inside the lock, gated exactly as before.{1}" -f $g.Code, $(if ($g.Why) { ' ' + $g.Why } else { '' }))
-    } else {
-      Say 'push-main: gate PASSED outside the lock, so the lock is taken only for the fetch, the rebase and the ref update.'
-    }
-
-    # ---- 3. THE CHAIN REHEARSAL, ALSO BEFORE THE LOCK, AND AFTER THE REBASE (2026-09-22 RCA F2; order 2026-09-23) ----
-    # A push that changes a script in ops\chain-manifest.json must carry a rehearsal over recent real data, and the
-    # rehearsal takes the chain's own time (about 14 minutes), so it runs HERE, unlocked. The hook inside the lock only
-    # reads the recorded verdict. 1 = rehearsed and failed, 3 = could not rehearse with its blind= cause; both refuse
-    # before the queue, and neither is ever read as a pass. The cap of 6 at once and the three outcomes are
-    # ops\rehearse-chain.ps1's, unchanged.
-    $rehearsals++
-    $pmRow['rehearsals'] = $rehearsals
-    $rhSw = [Diagnostics.Stopwatch]::StartNew()
-    $rh = $(if ($RehearsalRunner) { & $RehearsalRunner $Dir } else { Invoke-TcRehearsalForPush -Dir $Dir -Remote $Remote -Branch $Branch })
-    $rhSw.Stop()
-    if ($round -eq 1) {
-      Add-TcRehearsalReadings -Row $pmRow -Result $rh -Sec ([int][math]::Round($rhSw.Elapsed.TotalSeconds))
-    } else {
-      $catchupTotal += $rhSw.Elapsed.TotalSeconds; $pmRow['catchup_sec'] = [int][math]::Round($catchupTotal)
-    }
-    if (Test-TcRehearsedNew -Result $rh) { $pmRow['rehearsed'] = [int]$pmRow['rehearsed'] + 1 }
-    if ($rh.Code -ne 0) {
-      Say ("push-main: REFUSED before the lock - {0}. The rehearsal lines above say which stage or cause. Rehearse again, or push with -NoRehearsal -NoRehearsalReason '<why>' to bypass loudly." -f $(if ($rh.Code -eq 3) { 'the chain rehearsal COULD NOT EVALUATE (exit 3), which is never a pass' } else { 'this push changes the daily chain and has no passing rehearsal (exit ' + $rh.Code + ')' }))
-      $outcome = $(if ($rh.Code -eq 3) { 'refused-rehearsal-blind' } else { 'refused-rehearsal' }); $ledgerState = 'not-taken'; $pmRow['phase'] = $legPhase
-      & $writeRow
-      return $rh.Code
-    }
-
-    # ---- 4. THE LOCK: a final fetch, a rebase only if origin moved again, and the ref update ----
-    $lock = Enter-TcPushLock @enter
-    # HOW LONG THE LOCK IS HELD (lock_held_ms): from the grant to Exit-TcPushLock, on this process's own clock, summed over
-    # every take. A take that did not hold the lock has no hold. Every take counts in lock_takes and lock_wait_ms_total,
-    # and the check word starts at not-run, so the row keeps the LAST take's check.
-    $lockSw = $(if ($lock.Held) { [Diagnostics.Stopwatch]::StartNew() } else { $null })
-    $pmRow['lock_takes'] = [int]$pmRow['lock_takes'] + 1
-    $lockWaitTotal += [double]$lock.WaitedMs
-    $pmRow['lock_wait_ms_total'] = [long][math]::Round($lockWaitTotal)
-    $pmRow['inlock_check'] = 'not-run'
-    $ledgerWaitMs = [double]$lock.WaitedMs
-    $ledgerState = $(if (-not $lock.Held) { 'unlocked' } elseif ($lock.Inherited) { 'inherited' } else { 'held' })
-    if (-not $lock.Held) {
-      # STILL NOT A REFUSAL. The lock is a fairness device; without it this push is exactly as gated as it ever was and
-      # merely races for the ref, which is what every push did before the lock existed.
-      Say ("push-main: the push lock was NOT taken - {0}. Pushing anyway: this push is gated identically, it just races for the ref." -f $lock.Reason)
-    } elseif ($lock.Inherited) {
-      Say 'push-main: an ancestor already holds the push lock, so it was not taken again.'
-    } else {
-      Say ("push-main: holding the machine-wide push lock after {0:N0}s - nothing else on this box can land until this push is done." -f ($lock.WaitedMs / 1000))
-    }
-    $again = $false
-    try {
-      $s2 = Invoke-TcSyncToRemote -Dir $Dir -Remote $Remote -Branch $Branch
-      Add-TcSyncReadings -Row $pmRow -Sync $s2 -Phase 'inlock'
-      # WHAT THE REMOTE HOLDS NOW, read under the lock. Against $ledgerBase it says whether the remote moved while this
-      # push queued - recorded whatever happens next, including on the paths that refuse.
-      $ledgerGrant = $s2.Rem
-      if ($s2.Code -ne 0) {
-        Say $s2.Message
-        $outcome = $s2.Outcome
-        return $s2.Code
+      # ---- 1. FETCH AND REBASE, OUTSIDE THE LOCK (2026-09-23, ops lane) ----
+      # Until this change the fetch and the rebase happened only INSIDE the lock, AFTER the gate and the rehearsal, so both
+      # judged the content from BEFORE the rebase. The gate's per-input keys absorbed that; the rehearsal could not, because
+      # its verdict is keyed on the manifest set of the exact commit pushed, and a rebase over any commit touching a
+      # manifest script moves the key. The hook then found no verdict for the rebased content, refused, and the push paid
+      # a second 13-to-15-minute rehearsal (several landings on 2026-09-23). Rebasing FIRST makes the rehearsed content the
+      # content that lands whenever origin holds still for the length of the rehearsal.
+      $curPhase = $syncPhase
+      $s = Invoke-TcSyncToRemote -Dir $Dir -Remote $Remote -Branch $Branch
+      $null = Invoke-TcRowReader 'sync' { Add-TcSyncReadings -Row $pmRow -Sync $s -Phase $syncPhase }
+      # ROUND 1 ONLY: a later round's fetch is catch-up, and preflight_sha is what every B1 ancestry verdict is read against.
+      if ($round -eq 1 -and $s.Rem) { $pmRow['preflight_sha'] = $s.Rem }
+      if ($s.Code -ne 0) {
+        Say $s.Message
+        $outcome = $s.Outcome; $ledgerState = 'not-taken'; $pmRow['phase'] = $syncPhase
+        & $writeRow
+        return $s.Code
       }
-      if ($s2.Rebased) {
-        $rebasedAny = $true
-        # THE TRADE-OFF, SAID PLAINLY: origin moved AGAIN between the rebase outside the lock and this one. When that
-        # move touched no chain-manifest script the verdict key is unchanged and the rehearsal above still covers the
-        # content, so this push lands now. When it did touch one, no verdict covers the new content and the hook would
-        # refuse, so the lock is handed back and this push gates and rehearses again OUTSIDE it - a push can still
-        # re-rehearse, but only when origin changed a manifest script inside that window.
-        $ck = & $checker $Dir $s2.Head $s2.Rem
-        $pmRow['inlock_check'] = Get-TcInlockCheckWord -Check $ck
-        if ($ck.Code -ne 0) {
-          $again = $true
-          Say ("push-main: origin moved again while this push waited, and the rebase inside the lock changed what the rehearsal covered ({0}). The lock is handed back; round {1} of {2} gates and rehearses the rebased content OUTSIDE it." -f $ck.Why, ($round + 1), $script:PmMaxRehearsalRounds)
-        } else {
-          Say 'push-main: origin moved again while this push waited; the rebase inside the lock changed no chain-manifest script, so the recorded rehearsal still covers this content and it is not rehearsed again.'
+      if ($s.Rebased) { $rebasedAny = $true }
+
+      # ---- 2. THE GATE, BEFORE THE LOCK (Brad, 2026-09-12; the account is above $runner): a red gate never queues, and a
+      # 3 is neither a refusal nor a pass - it leaves the gate to the hook inside the lock, exactly as before.
+      # A LEG SET STARTS HERE, so this is what `rounds` counts. Round 1's legs are the row's leg readings (leg_sec and the
+      # rest); a later round's legs are catch-up time, summed into catchup_sec.
+      $pmRow['rounds'] = $round
+      $curPhase = $legPhase
+      $gateSw = [Diagnostics.Stopwatch]::StartNew()
+      $g = & $runner $Dir
+      $gateSw.Stop()
+      if ($round -eq 1) {
+        $null = Invoke-TcRowReader 'runner' { Add-TcRunnerReadings -Row $pmRow -Result $g }
+      } else {
+        $catchupTotal += $gateSw.Elapsed.TotalSeconds; $pmRow['catchup_sec'] = [int][math]::Round($catchupTotal)
+      }
+      if ($g.Ran -and $g.Code -eq 1) {
+        $redWhy = $(if ($g.Why) { [string]$g.Why } else { 'run-gates exited 1' })
+        Say ("push-main: REFUSED - {0} before the lock was taken, so this push never entered the queue and nothing else on this box was held up. Fix the cause and run this again." -f $redWhy)
+        $outcome = 'refused-gate-red'; $ledgerState = 'not-taken'; $pmRow['phase'] = $legPhase
+        & $writeRow
+        return 1
+      }
+      if ($g.Code -ne 0) {
+        Say ("push-main: the gate did not settle outside the lock ({0}), so it is left to the hook inside the lock, gated exactly as before.{1}" -f $g.Code, $(if ($g.Why) { ' ' + $g.Why } else { '' }))
+      } else {
+        Say 'push-main: gate PASSED outside the lock, so the lock is taken only for the fetch, the rebase and the ref update.'
+      }
+
+      # ---- 3. THE CHAIN REHEARSAL, ALSO BEFORE THE LOCK, AND AFTER THE REBASE (2026-09-22 RCA F2; order 2026-09-23) ----
+      # A push that changes a script in ops\chain-manifest.json must carry a rehearsal over recent real data, and the
+      # rehearsal takes the chain's own time (about 14 minutes), so it runs HERE, unlocked. The hook inside the lock only
+      # reads the recorded verdict. 1 = rehearsed and failed, 3 = could not rehearse with its blind= cause; both refuse
+      # before the queue, and neither is ever read as a pass. The cap of 6 at once and the three outcomes are
+      # ops\rehearse-chain.ps1's, unchanged.
+      $rehearsals++
+      $pmRow['rehearsals'] = $rehearsals
+      $rhSw = [Diagnostics.Stopwatch]::StartNew()
+      $rh = $(if ($RehearsalRunner) { & $RehearsalRunner $Dir } else { Invoke-TcRehearsalForPush -Dir $Dir -Remote $Remote -Branch $Branch })
+      $rhSw.Stop()
+      if ($round -eq 1) {
+        $rhSec = [int][math]::Round($rhSw.Elapsed.TotalSeconds)
+        $null = Invoke-TcRowReader 'rehearsal' { Add-TcRehearsalReadings -Row $pmRow -Result $rh -Sec $rhSec }
+      } else {
+        $catchupTotal += $rhSw.Elapsed.TotalSeconds; $pmRow['catchup_sec'] = [int][math]::Round($catchupTotal)
+      }
+      if (Invoke-TcRowReader 'rehearsed' { Test-TcRehearsedNew -Result $rh } $false) { $pmRow['rehearsed'] = [int]$pmRow['rehearsed'] + 1 }
+      if ($rh.Code -ne 0) {
+        Say ("push-main: REFUSED before the lock - {0}. The rehearsal lines above say which stage or cause. Rehearse again, or push with -NoRehearsal -NoRehearsalReason '<why>' to bypass loudly." -f $(if ($rh.Code -eq 3) { 'the chain rehearsal COULD NOT EVALUATE (exit 3), which is never a pass' } else { 'this push changes the daily chain and has no passing rehearsal (exit ' + $rh.Code + ')' }))
+        $outcome = $(if ($rh.Code -eq 3) { 'refused-rehearsal-blind' } else { 'refused-rehearsal' }); $ledgerState = 'not-taken'; $pmRow['phase'] = $legPhase
+        & $writeRow
+        return $rh.Code
+      }
+
+      # ---- 4. THE LOCK: a final fetch, a rebase only if origin moved again, and the ref update ----
+      $lock = Enter-TcPushLock @enter
+      $curPhase = 'inlock'
+      # HOW LONG THE LOCK IS HELD (lock_held_ms): from the grant to Exit-TcPushLock, on this process's own clock, summed over
+      # every take. A take that did not hold the lock has no hold. Every take counts in lock_takes and lock_wait_ms_total,
+      # and the check word starts at not-run, so the row keeps the LAST take's check.
+      $lockSw = $(if ($lock.Held) { [Diagnostics.Stopwatch]::StartNew() } else { $null })
+      $pmRow['lock_takes'] = [int]$pmRow['lock_takes'] + 1
+      $lockWaitTotal += [double]$lock.WaitedMs
+      $pmRow['lock_wait_ms_total'] = [long][math]::Round($lockWaitTotal)
+      $pmRow['inlock_check'] = 'not-run'
+      $ledgerWaitMs = [double]$lock.WaitedMs
+      $ledgerState = $(if (-not $lock.Held) { 'unlocked' } elseif ($lock.Inherited) { 'inherited' } else { 'held' })
+      if (-not $lock.Held) {
+        # STILL NOT A REFUSAL. The lock is a fairness device; without it this push is exactly as gated as it ever was and
+        # merely races for the ref, which is what every push did before the lock existed.
+        Say ("push-main: the push lock was NOT taken - {0}. Pushing anyway: this push is gated identically, it just races for the ref." -f $lock.Reason)
+      } elseif ($lock.Inherited) {
+        Say 'push-main: an ancestor already holds the push lock, so it was not taken again.'
+      } else {
+        Say ("push-main: holding the machine-wide push lock after {0:N0}s - nothing else on this box can land until this push is done." -f ($lock.WaitedMs / 1000))
+      }
+      $again = $false
+      try {
+        $s2 = Invoke-TcSyncToRemote -Dir $Dir -Remote $Remote -Branch $Branch
+        $null = Invoke-TcRowReader 'sync' { Add-TcSyncReadings -Row $pmRow -Sync $s2 -Phase 'inlock' }
+        # WHAT THE REMOTE HOLDS NOW, read under the lock. Against $ledgerBase it says whether the remote moved while this
+        # push queued - recorded whatever happens next, including on the paths that refuse.
+        $ledgerGrant = $s2.Rem
+        if ($s2.Code -ne 0) {
+          Say $s2.Message
+          $outcome = $s2.Outcome
+          return $s2.Code
         }
-      }
-      if (-not $again) {
-        if ($DryRun) {
-          Say 'push-main: -DryRun, so nothing was pushed. Everything up to the push was done under the lock.'
-          $outcome = 'dry-run'
+        if ($s2.Rebased) {
+          $rebasedAny = $true
+          # THE TRADE-OFF, SAID PLAINLY: origin moved AGAIN between the rebase outside the lock and this one. When that
+          # move touched no chain-manifest script the verdict key is unchanged and the rehearsal above still covers the
+          # content, so this push lands now. When it did touch one, no verdict covers the new content and the hook would
+          # refuse, so the lock is handed back and this push gates and rehearses again OUTSIDE it - a push can still
+          # re-rehearse, but only when origin changed a manifest script inside that window.
+          $ck = & $checker $Dir $s2.Head $s2.Rem
+          $pmRow['inlock_check'] = Invoke-TcRowReader 'inlock_check' { Get-TcInlockCheckWord -Check $ck } 'could-not-decide'
+          if ($ck.Code -ne 0) {
+            $again = $true
+            Say ("push-main: origin moved again while this push waited, and the rebase inside the lock changed what the rehearsal covered ({0}). The lock is handed back; round {1} of {2} gates and rehearses the rebased content OUTSIDE it." -f $ck.Why, ($round + 1), $script:PmMaxRehearsalRounds)
+          } else {
+            Say 'push-main: origin moved again while this push waited; the rebase inside the lock changed no chain-manifest script, so the recorded rehearsal still covers this content and it is not rehearsed again.'
+          }
+        }
+        if (-not $again) {
+          if ($DryRun) {
+            Say 'push-main: -DryRun, so nothing was pushed. Everything up to the push was done under the lock.'
+            $outcome = 'dry-run'
+            return 0
+          }
+          # A PLAIN PUSH: the pre-push hook runs, the gate runs, and a red gate refuses this exactly as it refuses any other
+          # push. --no-verify is not passed and is not an option here.
+          $p = Invoke-TcGit -Dir $Dir -Arguments @('push', $Remote, ('HEAD:refs/heads/' + $Branch))
+          Say $p.Text
+          # WHAT THE IN-LOCK HOOK DID AND WHY IT REFUSED, read only on the take that pushed (W0.1R step 6).
+          $pmRow['hook_ta'] = Invoke-TcRowReader 'hook_ta' { Get-TcHookTestAuditors -Text $p.Text } 'unknown'
+          $pmRow['hook_ta_scope'] = Invoke-TcRowReader 'hook_ta_scope' { Get-TcHookTestAuditorsScope -Text $p.Text } $null
+          if ($p.Code -ne 0) {
+            Say ("push-main: the push did NOT land (git exited {0}). Nothing here overrides that; read the reason above." -f $p.Code)
+            $outcome = 'push-rejected'
+            # WHICH CHECK REFUSED IT, kept at the moment it is known. The classifier is pure over text and has a case for a
+            # text it has never seen; the catch is so that a defect in it can only cost the row its class, never the push.
+            try {
+              $rj = Get-TcPushRejectClass -Text $p.Text
+              $pmRow['reject_class'] = $rj.Class; $pmRow['reject_rc'] = $rj.Rc; $pmRow['reject_lines'] = $rj.Lines
+            } catch {
+              $pmRow['reject_class'] = 'unknown'; $pmRow['reject_lines'] = [string[]]@(('push-main: the refusal classifier threw: ' + $_.Exception.Message))
+            }
+            return 1
+          }
+          Say ("push-main: LANDED on {0}/{1} at {2}, on the first attempt, after {3} rehearsal round(s)." -f $Remote, $Branch, $s2.Head.Substring(0, 9), $rehearsals)
+          $outcome = $(if ($rebasedAny) { 'landed-after-rebase' } else { 'landed' })
           return 0
         }
-        # A PLAIN PUSH: the pre-push hook runs, the gate runs, and a red gate refuses this exactly as it refuses any other
-        # push. --no-verify is not passed and is not an option here.
-        $p = Invoke-TcGit -Dir $Dir -Arguments @('push', $Remote, ('HEAD:refs/heads/' + $Branch))
-        Say $p.Text
-        # WHAT THE IN-LOCK HOOK DID AND WHY IT REFUSED, read only on the take that pushed (W0.1R step 6).
-        $pmRow['hook_ta'] = Get-TcHookTestAuditors -Text $p.Text
-        if ($p.Code -ne 0) {
-          Say ("push-main: the push did NOT land (git exited {0}). Nothing here overrides that; read the reason above." -f $p.Code)
-          $outcome = 'push-rejected'
-          # WHICH CHECK REFUSED IT, kept at the moment it is known. The classifier is pure over text and has a case for a
-          # text it has never seen; the catch is so that a defect in it can only cost the row its class, never the push.
-          try {
-            $rj = Get-TcPushRejectClass -Text $p.Text
-            $pmRow['reject_class'] = $rj.Class; $pmRow['reject_lines'] = $rj.Lines
-          } catch {
-            $pmRow['reject_class'] = 'unknown'; $pmRow['reject_lines'] = [string[]]@(('push-main: the refusal classifier threw: ' + $_.Exception.Message))
-          }
-          return 1
+      } finally {
+        # THE LOCK GOES BACK FIRST, then the row is written: a ledger write must never sit inside the critical section
+        # this whole file exists to keep short, and nothing reads the row to decide anything. A round that hands the lock
+        # back to rehearse again writes no row; the push's one row is written when it finally lands or refuses.
+        if ($lockSw) { $lockSw.Stop(); $lockHeldTotal += $lockSw.Elapsed.TotalMilliseconds; $pmRow['lock_held_ms'] = [long][math]::Round($lockHeldTotal) }
+        Exit-TcPushLock $lock
+        if (-not $again) {
+          # EVERYTHING THAT ENDS IN HERE WITHOUT LANDING STOPPED IN THE LOCK: a refusal, a rejected push, a fetch that
+          # failed, or a throw that left the outcome unknown. A landing and a dry run carry no phase.
+          if (-not ($outcome -ceq 'landed' -or $outcome -ceq 'landed-after-rebase' -or $outcome -ceq 'dry-run')) { $pmRow['phase'] = 'inlock' }
+          & $writeRow
         }
-        Say ("push-main: LANDED on {0}/{1} at {2}, on the first attempt, after {3} rehearsal round(s)." -f $Remote, $Branch, $s2.Head.Substring(0, 9), $rehearsals)
-        $outcome = $(if ($rebasedAny) { 'landed-after-rebase' } else { 'landed' })
-        return 0
-      }
-    } finally {
-      # THE LOCK GOES BACK FIRST, then the row is written: a ledger write must never sit inside the critical section
-      # this whole file exists to keep short, and nothing reads the row to decide anything. A round that hands the lock
-      # back to rehearse again writes no row; the push's one row is written when it finally lands or refuses.
-      if ($lockSw) { $lockSw.Stop(); $lockHeldTotal += $lockSw.Elapsed.TotalMilliseconds; $pmRow['lock_held_ms'] = [long][math]::Round($lockHeldTotal) }
-      Exit-TcPushLock $lock
-      if (-not $again) {
-        # EVERYTHING THAT ENDS IN HERE WITHOUT LANDING STOPPED IN THE LOCK: a refusal, a rejected push, a fetch that
-        # failed, or a throw that left the outcome unknown. A landing and a dry run carry no phase.
-        if (-not ($outcome -ceq 'landed' -or $outcome -ceq 'landed-after-rebase' -or $outcome -ceq 'dry-run')) { $pmRow['phase'] = 'inlock' }
-        & $writeRow
       }
     }
+    Say ("push-main: REFUSED - origin changed a chain-manifest script while this push waited in each of {0} rounds, so no rehearsal could keep up with it. The branch is rebased and nothing was pushed; run this again when main is quieter." -f $script:PmMaxRehearsalRounds)
+    $outcome = 'refused-rehearsal-churn'
+    # THE LAST THING THIS PUSH DID WAS HAND BACK THE LOCK over a check that did not cover it, so the refusal is in-lock.
+    $pmRow['phase'] = 'inlock'
+    & $writeRow
+    return 1
+  } catch {
+    # A THROW THAT NO PATH WROTE A ROW FOR (review of W0.1R, 2026-09-23). Every return above writes one, and a throw
+    # under the lock writes one in that finally; a throw OUTSIDE the lock (a leg runner, the seeder, a reader the guard
+    # does not wrap) used to write none, so a crashed attempt was missing from every attempt count. It is written here,
+    # outcome unknown at the phase the push had reached, and the throw goes on to the caller exactly as before.
+    if (-not $rowState.Written) {
+      # Only a throw OUTSIDE the lock reaches here unwritten, so this round took no lock: state says not-taken.
+      $outcome = 'unknown'; $ledgerState = 'not-taken'
+      $pmRow['phase'] = $curPhase
+      & $writeRow
+    }
+    throw
   }
-  Say ("push-main: REFUSED - origin changed a chain-manifest script while this push waited in each of {0} rounds, so no rehearsal could keep up with it. The branch is rebased and nothing was pushed; run this again when main is quieter." -f $script:PmMaxRehearsalRounds)
-  $outcome = 'refused-rehearsal-churn'
-  # THE LAST THING THIS PUSH DID WAS HAND BACK THE LOCK over a check that did not cover it, so the refusal is in-lock.
-  $pmRow['phase'] = 'inlock'
-  & $writeRow
-  return 1
 }
 
 if ($SelfTest) {
@@ -1230,6 +1396,61 @@ if ($SelfTest) {
   $htUn = Get-TcHookTestAuditors -Text 'pre-push: BLOCKED - run-gates exited 1.'
   T ($kMF + '  the in-lock hook''s test-auditors lines read as ran, reused and not-needed, and a hook that never reached them as unknown') `
     ($htRan -ceq 'ran' -and $htReu -ceq 'reused' -and $htNn -ceq 'not-needed' -and $htUn -ceq 'unknown') ("ran={0} reused={1} notNeeded={2} unknown={3}" -f $htRan, $htReu, $htNn, $htUn)
+
+  # ---- THE REVIEW OF W0.1R (2026-09-23): the readers it found blind ----
+  # reject_rc: the fixed PRE-PUSH-REFUSED line carries no exit code, so a contention 3 and a red wrote the same class and
+  # lines. The code is read off the hook's own BLOCKED line. Founding texts: the hook's exit-3 and exit-1 wordings.
+  $rc3 = Get-TcPushRejectClass -Text "pre-push: BLOCKED - run-gates COULD NOT EVALUATE (exit 3). A 3 is NEVER a pass.`n          CAUSE: no gate worker slot.`nPRE-PUSH-REFUSED cause=run-gates"
+  $rc3ta = Get-TcPushRejectClass -Text "pre-push: BLOCKED - the test-auditors check COULD NOT EVALUATE (exit 3). That is not a pass.`nPRE-PUSH-REFUSED cause=test-auditors"
+  T ($kMF + '  a could-not-evaluate refusal under the fixed line records reject_rc 3, for run-gates and for test-auditors, beside its unchanged class') `
+    ($rc3.Class -ceq 'run-gates' -and $rc3.Rc -eq 3 -and $rc3ta.Class -ceq 'test-auditors' -and $rc3ta.Rc -eq 3) ("rg={0}/{1} ta={2}/{3}" -f $rc3.Class, $rc3.Rc, $rc3ta.Class, $rc3ta.Rc)
+  $rc1 = Get-TcPushRejectClass -Text "pre-push: BLOCKED - run-gates exited 1. This tree must not be pushed until it passes.`n  FAIL  fixture-gate  (exit 2) - x`nPRE-PUSH-REFUSED cause=run-gates gate=fixture-gate"
+  $rc1ta = Get-TcPushRejectClass -Text "pre-push: BLOCKED - the test-auditors check exited 1. This push leaves a watcher that cannot see its own bug.`nPRE-PUSH-REFUSED cause=test-auditors"
+  $rc1rh = Get-TcPushRejectClass -Text 'pre-push: BLOCKED - this push changes the daily chain and carries no passing rehearsal over recent data (exit 1).'
+  $rcSt = Get-TcPushRejectClass -Text "pre-push: REFUSING - git could not name a working tree for this push`nPRE-PUSH-REFUSED cause=structure"
+  $rcRm = Get-TcPushRejectClass -Text ' ! [remote rejected] HEAD -> main (cannot lock ref)'
+  T ($kMNF + '  a red is still a red: exit 1 of run-gates, test-auditors and the rehearsal records reject_rc 1 (never the FAIL line''s own exit 2), and a structure or remote refusal records none') `
+    ($rc1.Rc -eq 1 -and $rc1ta.Rc -eq 1 -and $rc1rh.Rc -eq 1 -and $null -eq $rcSt.Rc -and $null -eq $rcRm.Rc -and $rc1.Class -ceq 'run-gates:fixture-gate') `
+    ("rg={0} ta={1} rh={2} structure={3} remote={4} class={5}" -f $rc1.Rc, $rc1ta.Rc, $rc1rh.Rc, $rcSt.Rc, $rcRm.Rc, $rc1.Class)
+
+  # inlock_check: Code 3 (no completion marker) and a check that returned no Code decided nothing; only 0 is covered.
+  $ckW0 = Get-TcInlockCheckWord -Check ([pscustomobject]@{ Code = 0 })
+  $ckW1 = Get-TcInlockCheckWord -Check ([pscustomobject]@{ Code = 1 })
+  $ckW3 = Get-TcInlockCheckWord -Check ([pscustomobject]@{ Code = 3 })
+  $ckWn = Get-TcInlockCheckWord -Check ([pscustomobject]@{ Why = 'no code at all' })
+  T ($kMF + '  the in-lock check word is covered for Code 0, not-covered for 1, and could-not-decide for 3 and for a check that returned no Code') `
+    ($ckW0 -ceq 'covered' -and $ckW1 -ceq 'not-covered' -and $ckW3 -ceq 'could-not-decide' -and $ckWn -ceq 'could-not-decide') ("0={0} 1={1} 3={2} none={3}" -f $ckW0, $ckW1, $ckW3, $ckWn)
+
+  # hook_ta_scope: B11 counts FULL test-auditors runs inside the lock, and hook_ta 'ran' says only that one ran.
+  $hsFull = Get-TcHookTestAuditorsScope -Text 'prepush-test-auditors: running grocery\test-auditors.ps1 in full (measured 500s on 2026-09-10, bound 900s)'
+  $hsSel = Get-TcHookTestAuditorsScope -Text 'prepush-test-auditors: running grocery\test-auditors.ps1 on 3 of 84 unit(s) (a full run measured 500s on 2026-09-10, bound 900s)'
+  $hsNone = Get-TcHookTestAuditorsScope -Text 'prepush-test-auditors: REUSED key=0123456789abcdef - fixture'
+  T ($kMF + '  hook_ta_scope tells a full in-lock test-auditors run from a selective one, with its unit counts, and is null when none ran') `
+    ($hsFull -ceq 'full' -and $hsSel -ceq 'selective 3 of 84' -and $null -eq $hsNone) ("full={0} selective={1} none={2}" -f $hsFull, $hsSel, $hsNone)
+
+  # subject_shas: the founding case is the housekeeping lane, three attempts of one change with three subjects_sha values
+  # (an amended subject, then a dropped sibling commit). One hash over the set moves; per-subject hashes still OVERLAP.
+  $sjA = [string[]]@('fix the widget', 'mustfire-census baseline retrained on a rise: 3,023 to 4,735')
+  $sjAmend = [string[]]@('fix the widget', 'mustfire-census baseline retrained on a rise: 3,023 to 4,770')
+  $sjAdded = [string[]]@('fix the widget', 'mustfire-census baseline retrained on a rise: 3,023 to 4,735', 'fix the red the gate found')
+  $shA = Get-TcSubjectShaList -Subjects $sjA
+  $shAm = Get-TcSubjectShaList -Subjects $sjAmend
+  $shAd = Get-TcSubjectShaList -Subjects $sjAdded
+  $ovAm = @($shA | Where-Object { $shAm -ccontains $_ }).Count
+  $ovAd = @($shA | Where-Object { $shAd -ccontains $_ }).Count
+  T ($kMF + '  an amended subject and an added fix commit each move subjects_sha, and subject_shas still overlaps the first attempt''s (1 and 2 shared of 2)') `
+    ((Get-TcSubjectsShaOf -Subjects $sjA) -cne (Get-TcSubjectsShaOf -Subjects $sjAmend) -and (Get-TcSubjectsShaOf -Subjects $sjA) -cne (Get-TcSubjectsShaOf -Subjects $sjAdded) -and `
+      $shA.Count -eq 2 -and $shAd.Count -eq 3 -and $ovAm -eq 1 -and $ovAd -eq 2 -and ([string]$shA[0]) -match '^[0-9a-f]{16}$' -and [string]::CompareOrdinal([string]$shA[0], [string]$shA[1]) -lt 0) `
+    ("countA={0} countAdded={1} overlapAmend={2} overlapAdded={3} first={4}" -f $shA.Count, $shAd.Count, $ovAm, $ovAd, $(if ($shA) { $shA[0] }))
+  # THE CAP (50), AT it and one PAST it, and a repeated subject counted once.
+  $sj50 = [string[]]@(1..50 | ForEach-Object { 'subject ' + $_ })
+  $sj51 = [string[]]@(1..51 | ForEach-Object { 'subject ' + $_ })
+  $sh50 = Get-TcSubjectShaList -Subjects $sj50
+  $sh51 = Get-TcSubjectShaList -Subjects $sj51
+  $shDup = Get-TcSubjectShaList -Subjects ([string[]]@('same', 'same', 'other'))
+  $shNone = Get-TcSubjectShaList -Subjects ([string[]]@())
+  T ($kCT + '  subject_shas keeps all 50 hashes AT the cap of 50 and exactly 50 of 51 one past it, counts a repeated subject once, and is null for no subjects') `
+    ($sh50.Count -eq 50 -and $sh51.Count -eq 50 -and $shDup.Count -eq 2 -and $null -eq $shNone) ("at={0} past={1} dup={2} none={3}" -f $sh50.Count, $sh51.Count, $shDup.Count, $(if ($null -eq $shNone) { 'null' } else { $shNone.Count }))
 
   $tmLine = 'TA-KEY-MOVED kind=board input=fixture/board.json'
   $tmA = Get-TcTaKeyMoved -Lines @('prepush-test-auditors: no pass reused (key=abc) - the inputs changed; running', $tmLine, 'prepush-test-auditors: running the suite in full')
@@ -1623,6 +1844,167 @@ $m.Dispose()
         [string]$r2cRow.phase -ceq 'catchup' -and [int]$r2cRow.rounds -eq 2 -and [string]$r2cRow.state -ceq 'not-taken' -and [string]$r2cRow.inlock_check -ceq 'not-covered' -and [int]$r2cRow.catchup_sec -ge 2) `
       ("rc={0} gateRuns={1} rows={2} outcome={3} takes={4} phase={5} rounds={6} state={7} check={8} catchup={9}" -f $rR2c, $script:twoGateRuns, $r2cRows.Count, $(if ($r2cRow) { $r2cRow.outcome }), $(if ($r2cRow) { $r2cRow.lock_takes }), $(if ($r2cRow) { $r2cRow.phase }), $(if ($r2cRow) { $r2cRow.rounds }), $(if ($r2cRow) { $r2cRow.state }), $(if ($r2cRow) { $r2cRow.inlock_check }), $(if ($r2cRow) { $r2cRow.catchup_sec }))
 
+    # ---- THE REVIEW OF W0.1R (2026-09-23): the catch-up sync, the check word and the row a throw leaves ----
+    # Founding case: every hand-back fixture above moved origin only DURING THE REHEARSAL, so the round-2 sync never
+    # rebased and never conflicted, and three mutants survived the whole suite: every sync labelled preflight, preflight_sha
+    # overwritten on every round, and a check that printed no marker read as not-covered. The review's harness moved origin
+    # from INSIDE the in-lock check while it answered not-covered, which is the shape these cases copy: $ckMoves is what the
+    # check pushes from the mover the moment it refuses to cover the rebased content.
+    $script:ckMoves = @()
+    $moveOriginText = { param([string]$File, [string]$Text)
+      $null = & git -C $mover pull -q --rebase origin main 2>$null
+      [IO.File]::WriteAllText((Join-Path $mover $File), $Text)
+      $null = & git -C $mover add -- $File 2>$null; $null = & git -C $mover commit -q -m ('edit ' + $File) 2>$null
+      $null = & git -C $mover push -q origin HEAD:main 2>$null
+    }
+    $ckMover = { param($d, $h, $r)
+      $res = & $rhCheck $d $h $r
+      if ($res.Code -ne 0 -and $script:ckMoves.Count) {
+        $mv = $script:ckMoves[0]; $script:ckMoves = @($script:ckMoves | Select-Object -Skip 1)
+        & $moveOriginText $mv.File $mv.Text
+      }
+      return $res
+    }
+    $tenLines = { param([string]$First, [string]$Tenth) ((@($First) + @(2..9 | ForEach-Object { 'l' + $_ }) + @($Tenth)) -join "`n") + "`n" }
+
+    # MUST FIRE: a catch-up sync that REBASES. Round 1's rehearsal moves chain.ps1, so the in-lock check does not cover the
+    # rebased content, and while it says so origin moves again over a file nothing covers. Round 2's fetch and rebase meet
+    # that move before the lock: rebase_phases must say inlock then CATCHUP, and preflight_sha must still be the tip origin
+    # held when the push started, never the round-2 fetch.
+    $cu = & $newPusher 'cu'
+    $cuStartTip = & $tipOf
+    $script:rhSeen.Clear(); $script:rhMoves = @('chain.ps1')
+    $script:ckMoves = @([pscustomobject]@{ File = 'notes.txt'; Text = ('catch-up ' + [guid]::NewGuid().ToString('N')) })
+    $ledCu = Join-Path $tmp 'ledcu'
+    $rCu = Invoke-TcPushMain -Dir $cu -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhModel -RehearsalCheck $ckMover -LedgerRoot $ledCu
+    $cuMoveTip = ([string](@(& git -C $mover rev-parse HEAD 2>$null))[0]).Trim()
+    $cuRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledCu)
+    $cuRows = @($cuRaw)
+    $cuRow = $(if ($cuRows.Count) { $cuRows[$cuRows.Count - 1] } else { $null })
+    T ($kMF + '  a round-2 sync that rebases is recorded as catchup (rebase_phases inlock,catchup), and preflight_sha stays the tip origin held at the start, not the round-2 fetch') `
+      ($rCu -eq 0 -and $cuRows.Count -eq 1 -and [string]$cuRow.outcome -ceq 'landed-after-rebase' -and [int]$cuRow.rounds -eq 2 -and (@($cuRow.rebase_phases) -join ',') -ceq 'inlock,catchup' -and `
+        [string]$cuRow.preflight_sha -ceq $cuStartTip -and [string]$cuRow.preflight_sha -cne $cuMoveTip -and $script:ckMoves.Count -eq 0) `
+      ("rc={0} rows={1} outcome={2} rounds={3} phases={4} preflight={5} start={6} round2fetch={7} movesLeft={8}" -f $rCu, $cuRows.Count, $(if ($cuRow) { $cuRow.outcome }), $(if ($cuRow) { $cuRow.rounds }), $(if ($cuRow) { @($cuRow.rebase_phases) -join ',' }), $(if ($cuRow) { $cuRow.preflight_sha }), $cuStartTip, $cuMoveTip, $script:ckMoves.Count)
+
+    # MUST FIRE: a catch-up sync that CONFLICTS. F.txt has ten lines; the branch edits line 10. Before the push starts
+    # origin edits line 1 (X), so the pre-flight rebase is clean and preflight_sha is X. Round 1's rehearsal moves
+    # chain.ps1 (M1), the in-lock rebase takes it and the grant is M1; the check refuses to cover it and, while it does,
+    # origin edits line 10 (Y). Round 2's rebase conflicts on F.txt against Y. The row must say phase catchup, name F.txt,
+    # and name Y as what it conflicted against - the grant says M1, which that rebase never saw.
+    $null = & git -C $mover pull -q --rebase origin main 2>$null
+    [IO.File]::WriteAllText((Join-Path $mover 'F.txt'), (& $tenLines 'l1' 'l10'))
+    $null = & git -C $mover add -- F.txt 2>$null; $null = & git -C $mover commit -q -m 'F ten lines' 2>$null
+    $null = & git -C $mover push -q origin HEAD:main 2>$null
+    $cc = New-Clone 'cc'
+    [IO.File]::WriteAllText((Join-Path $cc 'F.txt'), (& $tenLines 'l1' 'mine10'))
+    $null = & git -C $cc add -- F.txt 2>$null; $null = & git -C $cc commit -q -m 'cc edits line 10' 2>$null
+    & $moveOriginText 'F.txt' (& $tenLines 'x1' 'l10')
+    $ccX = & $tipOf
+    $script:rhSeen.Clear(); $script:rhMoves = @('chain.ps1')
+    $script:ckMoves = @([pscustomobject]@{ File = 'F.txt'; Text = (& $tenLines 'x1' 'theirs10') })
+    $ledCc = Join-Path $tmp 'ledcc'
+    $rCc = Invoke-TcPushMain -Dir $cc -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhModel -RehearsalCheck $ckMover -LedgerRoot $ledCc
+    $ccY = & $tipOf
+    $ccRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledCc)
+    $ccRows = @($ccRaw)
+    $ccRow = $(if ($ccRows.Count) { $ccRows[$ccRows.Count - 1] } else { $null })
+    $ccFiles = @($(if ($ccRow) { $ccRow.conflict_files } else { @() }))
+    $ccMid = (Test-Path -LiteralPath (Join-Path $cc '.git\rebase-merge')) -or (Test-Path -LiteralPath (Join-Path $cc '.git\rebase-apply'))
+    T ($kMF + '  a round-2 conflict before the lock records phase catchup, rebase_phases preflight,inlock,catchup, the one conflicted file, and conflict_target the round-2 fetch (Y), not the grant (M1)') `
+      ($rCc -eq 1 -and $ccRows.Count -eq 1 -and [string]$ccRow.outcome -ceq 'refused-rebase-conflict' -and [string]$ccRow.phase -ceq 'catchup' -and (@($ccRow.rebase_phases) -join ',') -ceq 'preflight,inlock,catchup' -and `
+        $ccFiles.Count -eq 1 -and [string]$ccFiles[0] -ceq 'F.txt' -and [string]$ccRow.conflict_scope -ceq 'first-stop' -and [string]$ccRow.conflict_target -ceq $ccY -and [string]$ccRow.grant -cne $ccY -and `
+        [string]$ccRow.preflight_sha -ceq $ccX -and [int]$ccRow.rounds -eq 1 -and [int]$ccRow.lock_takes -eq 1 -and [string]$ccRow.state -ceq 'not-taken' -and -not $ccMid) `
+      ("rc={0} rows={1} outcome={2} phase={3} phases={4} files={5} scope={6} target={7} Y={8} grant={9} preflight={10} X={11} rounds={12} takes={13} state={14} midRebase={15}" -f $rCc, $ccRows.Count, $(if ($ccRow) { $ccRow.outcome }), $(if ($ccRow) { $ccRow.phase }), $(if ($ccRow) { @($ccRow.rebase_phases) -join ',' }), ($ccFiles -join ','), $(if ($ccRow) { $ccRow.conflict_scope }), $(if ($ccRow) { $ccRow.conflict_target }), $ccY, $(if ($ccRow) { $ccRow.grant }), $(if ($ccRow) { $ccRow.preflight_sha }), $ccX, $(if ($ccRow) { $ccRow.rounds }), $(if ($ccRow) { $ccRow.lock_takes }), $(if ($ccRow) { $ccRow.state }), $ccMid)
+
+    # MUST FIRE: an in-lock check that DECIDED NOTHING (Code 3, no completion marker) is could-not-decide on the row, never
+    # not-covered. It still hands the lock back, as any check that does not cover does; round 2's gate is red, so the row
+    # carries the last take's word.
+    $cn = & $newPusher 'cn'
+    $script:rhSeen.Clear(); $script:rhMoves = @('chain.ps1')
+    $script:cnGateRuns = 0
+    $cnGate = { param($d) $script:cnGateRuns++; if ($script:cnGateRuns -ge 2) { return [pscustomobject]@{ Ran = $true; Code = 1; Why = 'fixture: run-gates red in round 2' } }; return [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    $cnCheck = { param($d, $h, $r) [pscustomobject]@{ Code = 3; Why = 'fixture: the verdict check printed no completion marker' } }
+    $ledCn = Join-Path $tmp 'ledcn'
+    $rCn = Invoke-TcPushMain -Dir $cn -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $cnGate -RehearsalRunner $rhModel -RehearsalCheck $cnCheck -LedgerRoot $ledCn
+    $cnRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledCn)
+    $cnRows = @($cnRaw)
+    $cnRow = $(if ($cnRows.Count) { $cnRows[$cnRows.Count - 1] } else { $null })
+    T ($kMF + '  an in-lock check that returned Code 3 is recorded could-not-decide, hands the lock back, and the round-2 refusal keeps that word') `
+      ($rCn -eq 1 -and $script:cnGateRuns -eq 2 -and $cnRows.Count -eq 1 -and [string]$cnRow.inlock_check -ceq 'could-not-decide' -and [int]$cnRow.lock_takes -eq 1 -and [string]$cnRow.phase -ceq 'catchup' -and [string]$cnRow.outcome -ceq 'refused-gate-red') `
+      ("rc={0} gateRuns={1} rows={2} check={3} takes={4} phase={5} outcome={6}" -f $rCn, $script:cnGateRuns, $cnRows.Count, $(if ($cnRow) { $cnRow.inlock_check }), $(if ($cnRow) { $cnRow.lock_takes }), $(if ($cnRow) { $cnRow.phase }), $(if ($cnRow) { $cnRow.outcome }))
+
+    # MUST FIRE: a throw OUTSIDE the lock writes the run's one row, and the throw still reaches the caller. Run under the
+    # production preference (Stop), because this block runs under Continue and a throw there is not the same path.
+    # THE PREFERENCE IS SET INSIDE A FUNCTION, never by an assignment in this block: grocery\test-native-stderr-eap.ps1
+    # reads the preference lexically, and a Stop assigned here would make every later `2>$null` in the block a site.
+    function Invoke-StUnderStop([scriptblock]$StBody) { $ErrorActionPreference = 'Stop'; & $StBody }
+    $tw = & $newPusher 'tw'
+    $throwGate = { param($d) throw 'fixture: the gate runner threw' }
+    $ledTw = Join-Path $tmp 'ledtw'
+    $twCaught = ''
+    try { $null = Invoke-StUnderStop { Invoke-TcPushMain -Dir $tw -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $throwGate -RehearsalRunner $rhGreen -LedgerRoot $ledTw } }
+    catch { $twCaught = [string]$_.Exception.Message }
+    $twRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledTw)
+    $twRows = @($twRaw)
+    $twRow = $(if ($twRows.Count) { $twRows[0] } else { $null })
+    T ($kMF + '  a leg runner that throws in round 1 writes ONE row (outcome unknown, state not-taken, no phase, lock_takes 0), and the throw still reaches the caller') `
+      ($twCaught -match 'the gate runner threw' -and $twRows.Count -eq 1 -and [string]$twRow.outcome -ceq 'unknown' -and [string]$twRow.state -ceq 'not-taken' -and $null -eq $twRow.phase -and [int]$twRow.lock_takes -eq 0 -and [int]$twRow.rounds -eq 1) `
+      ("caught={0} rows={1} outcome={2} state={3} phase={4} takes={5} rounds={6}" -f $twCaught, $twRows.Count, $(if ($twRow) { $twRow.outcome }), $(if ($twRow) { $twRow.state }), $(if ($twRow) { $twRow.phase }), $(if ($twRow) { $twRow.lock_takes }), $(if ($twRow) { $twRow.rounds }))
+    # CLEAN TWIN: a throw INSIDE the lock still writes exactly one row (the in-lock finally writes it, and the guard must
+    # not write a second), and the lock is handed back.
+    $ti = & $newPusher 'ti'
+    $script:rhSeen.Clear(); $script:rhMoves = @('chain.ps1')
+    $throwCheck = { param($d, $h, $r) throw 'fixture: the in-lock check threw' }
+    $ledTi = Join-Path $tmp 'ledti'
+    $tiCaught = ''
+    try { $null = Invoke-StUnderStop { Invoke-TcPushMain -Dir $ti -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhModel -RehearsalCheck $throwCheck -LedgerRoot $ledTi } }
+    catch { $tiCaught = [string]$_.Exception.Message }
+    $tiRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledTi)
+    $tiRows = @($tiRaw)
+    $tiRow = $(if ($tiRows.Count) { $tiRows[0] } else { $null })
+    $tiFree = Enter-TcPushLock -Prefix $prefix -QueueRoot $qroot -WaitSec 5 -PollMs 50 -NoInherit
+    T ($kCT + '  a throw inside the lock still writes exactly one row (outcome unknown, phase inlock), reaches the caller, and hands the lock back') `
+      ($tiCaught -match 'the in-lock check threw' -and $tiRows.Count -eq 1 -and [string]$tiRow.outcome -ceq 'unknown' -and [string]$tiRow.phase -ceq 'inlock' -and $tiFree.Held) `
+      ("caught={0} rows={1} outcome={2} phase={3} lockFree={4}" -f $tiCaught, $tiRows.Count, $(if ($tiRow) { $tiRow.outcome }), $(if ($tiRow) { $tiRow.phase }), $tiFree.Held)
+    Exit-TcPushLock $tiFree
+    # CLEAN TWIN: a READER that throws costs its field, never the push. The gate's result says its run-gates leg took
+    # 'not-a-number' seconds, so Add-TcRunnerReadings' [int] cast throws; the push must land and the row keep leg_sec.rg
+    # null. NOT a throwing ScriptProperty: PowerShell swallows a getter's exception on member access and reads $null, and
+    # the first version of this case, built that way, survived the mutant that removes the guard (0 reds).
+    $tr2 = & $newPusher 'tr'
+    $readerThrowGate = { param($d) [pscustomobject]@{ Ran = $true; Code = 0; Why = ''; RgSec = 'not-a-number' } }
+    $ledTr = Join-Path $tmp 'ledtr'
+    $rTr = $null
+    try { $rTr = Invoke-StUnderStop { Invoke-TcPushMain -Dir $tr2 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $readerThrowGate -RehearsalRunner $rhGreen -LedgerRoot $ledTr } }
+    catch { $rTr = 'threw: ' + $_.Exception.Message }
+    $trRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledTr)
+    $trRows = @($trRaw)
+    $trRow = $(if ($trRows.Count) { $trRows[0] } else { $null })
+    T ($kCT + '  a row reader that throws outside the lock costs only its field: the push still lands, one row, leg_sec.rg null') `
+      ($rTr -eq 0 -and $trRows.Count -eq 1 -and [string]$trRow.outcome -ceq 'landed' -and $null -ne $trRow.leg_sec -and $null -eq $trRow.leg_sec.rg) `
+      ("rc={0} rows={1} outcome={2} rg={3}" -f $rTr, $trRows.Count, $(if ($trRow) { $trRow.outcome }), $(if ($trRow) { $trRow.leg_sec.rg }))
+
+    # MUST FIRE: a rebase that fails with NOTHING UNMERGED is not a stop. Origin moves before the push starts and the
+    # checkout holds an index.lock, so the pre-flight rebase cannot even begin: the row keeps conflict_files [] and says
+    # conflict_scope none-unmerged, never first-stop.
+    $il = & $newPusher 'il'
+    & $moveOrigin 'notes.txt'
+    $ilLock = Join-Path $il '.git\index.lock'
+    [IO.File]::WriteAllText($ilLock, '')
+    $ledIl = Join-Path $tmp 'ledil'
+    try {
+      $rIl = Invoke-TcPushMain -Dir $il -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhGreen -LedgerRoot $ledIl
+    } finally { Remove-Item -LiteralPath $ilLock -Force -ErrorAction SilentlyContinue }
+    $ilRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledIl)
+    $ilRows = @($ilRaw)
+    $ilRow = $(if ($ilRows.Count) { $ilRows[0] } else { $null })
+    # Plain assignments, never $( ): a subexpression unrolls the empty list this case exists to see into $null.
+    $ilFiles = 'no row'
+    if ($ilRow) { $ilFiles = $ilRow.conflict_files }
+    T ($kMF + '  a rebase that fails with nothing unmerged records conflict_files [] and conflict_scope none-unmerged, never a first-stop that did not happen') `
+      ($rIl -eq 1 -and $ilRows.Count -eq 1 -and [string]$ilRow.outcome -ceq 'refused-rebase-conflict' -and $null -ne $ilFiles -and @($ilFiles).Count -eq 0 -and [string]$ilRow.conflict_scope -ceq 'none-unmerged') `
+      ("rc={0} rows={1} outcome={2} files={3} scope={4}" -f $rIl, $ilRows.Count, $(if ($ilRow) { $ilRow.outcome }), (ConvertTo-Json -Compress -InputObject $ilFiles), $(if ($ilRow) { $ilRow.conflict_scope }))
+
     # MUST FIRE: pm_blob names the script AS IT WAS AT START. A file tracked in the clone stands in for the checkout's own
     # push-main, and origin changes it before the push starts, so the round-1 rebase rewrites it on disk before any leg
     # runs. $script:TcPushMainPath points at that copy for this one run and is put back in finally.
@@ -1877,6 +2259,14 @@ $m.Dispose()
     T ($kCT + '  every one of those refusals was a real rejected push: the remote never took the stub clone''s commit, a row was written each time, and each row says phase inlock') `
       ($script:hookRun -eq 4 -and $hkHead -ne $hkRemote -and $hkRh.Rows -eq 1 -and $hkRg.Rows -eq 1 -and $hkPp.Rows -eq 1 -and $hkUn.Rows -eq 1 -and $hkPhases -ceq 'inlock,inlock,inlock,inlock') `
       ("runs={0} head={1} remote={2} phases={3}" -f $script:hookRun, $hkHead, $hkRemote, $hkPhases)
+    # MUST FIRE (review of W0.1R): a could-not-evaluate refusal under the fixed line is NOT a red on the row. The hook ran
+    # test-auditors IN FULL inside the lock, which hook_ta_scope keeps, and the check could not evaluate (exit 3).
+    $hkC3 = Invoke-StubHookPush ("prepush-test-auditors: running grocery\test-auditors.ps1 in full (measured 500s on 2026-09-10, bound 900s)`n" + `
+      "pre-push: BLOCKED - the test-auditors check COULD NOT EVALUATE (exit 3). That is not a pass.`nPRE-PUSH-REFUSED cause=test-auditors")
+    T ($kMF + '  a real rejected push whose hook could not evaluate records reject_rc 3 beside class test-auditors, hook_ta ran and hook_ta_scope full; the reds above record reject_rc 1, and an unknown text none') `
+      ($hkC3.Rc -eq 1 -and $hkC3.Rows -eq 1 -and [string]$hkC3.Row.reject_class -ceq 'test-auditors' -and $hkC3.Row.reject_rc -eq 3 -and [string]$hkC3.Row.hook_ta -ceq 'ran' -and [string]$hkC3.Row.hook_ta_scope -ceq 'full' -and `
+        $hkRg.Row.reject_rc -eq 1 -and $hkRh.Row.reject_rc -eq 1 -and $null -eq $hkUn.Row.reject_rc) `
+      ("c3={0}/{1}/{2}/{3} rg={4} rh={5} unknown={6}" -f $(if ($hkC3.Row) { $hkC3.Row.reject_class }), $(if ($hkC3.Row) { $hkC3.Row.reject_rc }), $(if ($hkC3.Row) { $hkC3.Row.hook_ta }), $(if ($hkC3.Row) { $hkC3.Row.hook_ta_scope }), $hkRg.Row.reject_rc, $hkRh.Row.reject_rc, $hkUn.Row.reject_rc)
 
     # ---- THE CLEAN TWIN: a clean rebase through the DEFAULT legs, each a stub in the clone's own ops\ (W0.1) ----
     # No -GateRunner and no -RehearsalRunner: Invoke-TcDefaultLegs runs the stub run-gates and then the stub test-auditors
@@ -1938,6 +2328,14 @@ $m.Dispose()
         [int]$dlRow.catchup_sec -eq 0 -and ($dlRow.lock_wait_ms_total -is [int] -or $dlRow.lock_wait_ms_total -is [long]) -and [string]$dlRow.preflight_sha -ceq $dl2Tip -and [string]$dlRow.subjects_sha -ceq $dlSubjWant) `
       ("rounds={0} takes={1} check={2} rehearsals={3} rehearsed={4} catchup={5} waitTotal={6} preflight={7} want={8} subjects={9} want={10}" -f $(if ($dlRow) { $dlRow.rounds }), $(if ($dlRow) { $dlRow.lock_takes }), $(if ($dlRow) { $dlRow.inlock_check }), $(if ($dlRow) { $dlRow.rehearsals }), $(if ($dlRow) { $dlRow.rehearsed }), $(if ($dlRow) { $dlRow.catchup_sec }), $(if ($dlRow) { $dlRow.lock_wait_ms_total }), $(if ($dlRow) { $dlRow.preflight_sha }), $dl2Tip, $(if ($dlRow) { $dlRow.subjects_sha }), $dlSubjWant)
 
+    # CLEAN TWIN (review of W0.1R): the same one-round row carries the per-subject hashes, the commit count and the branch
+    # it pushed from, and none of the refusal-only fields.
+    $dlShWant = $dlSubjWant.Substring(0, 16)
+    $dlShs = @($(if ($dlRow) { $dlRow.subject_shas } else { @() }))
+    T ($kCT + '  a one-round landing records subject_shas as the 16-hex prefix of its one subject''s hash, subject_count 1 and head_ref main, and no conflict_target, reject_rc or hook_ta_scope') `
+      ($null -ne $dlRow -and $dlShs.Count -eq 1 -and [string]$dlShs[0] -ceq $dlShWant -and [int]$dlRow.subject_count -eq 1 -and [string]$dlRow.head_ref -ceq 'main' -and `
+        $null -eq $dlRow.conflict_target -and $null -eq $dlRow.reject_rc -and $null -eq $dlRow.hook_ta_scope) `
+      ("shas={0} want={1} count={2} head_ref={3} target={4} rc={5} scope={6}" -f ($dlShs -join ','), $dlShWant, $(if ($dlRow) { $dlRow.subject_count }), $(if ($dlRow) { $dlRow.head_ref }), $(if ($dlRow) { $dlRow.conflict_target }), $(if ($dlRow) { $dlRow.reject_rc }), $(if ($dlRow) { $dlRow.hook_ta_scope }))
     # ---- AN OLD-SHAPE ROW STILL PARSES IN THE CONVERGENCE PROBE (W0.1) ----
     # The probe itself is run, as a child, over a ledger holding the schema-2 row above and a row written before it. An
     # empty reflog file and an empty log directory keep it off this box's real history.
@@ -1992,9 +2390,9 @@ $m.Dispose()
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A LITERAL-CASE SUITE KNOWS ITS OWN NUMBER, so a shortfall is a defect rather than a smaller tree: a case lost to a
-  # throw, a comment or a glued line would otherwise leave the rest green (ops-and-gates.md). 78 = the 38 of the
-  # fetch-and-rebase-first loop, W0.1's 32 and W0.1R's 8; read off this file, not added up.
-  $expectedCases = 78
+  # throw, a comment or a glued line would otherwise leave the rest green (ops-and-gates.md). 93 = the 38 of the
+  # fetch-and-rebase-first loop, W0.1's 32, W0.1R's 8 and the 15 its review added; read off this file, not added up.
+  $expectedCases = 93
   if ($cases -ne $expectedCases) { Write-Output ("FAIL  the suite ran {0} case(s) where this file holds {1}, so a case was skipped or lost" -f $cases, $expectedCases); $f++ }
   if ($f) { Write-Output ("push-main self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("push-main self-test PASS: {0} cases - led by a branch whose base the remote moved past landing on its FIRST attempt, and by a conflicting rebase being aborted rather than left half-finished under the lock" -f $cases)
