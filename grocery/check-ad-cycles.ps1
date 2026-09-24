@@ -1301,6 +1301,19 @@ price-history.json is a reconciled copy of the comparison boards on disk. A boar
           }
         }
       } catch { Log ('price-claims threw: ' + $_.Exception.Message) }
+      # RECONCILE HOLDS BEFORE ANY READER OF THE PUBLISHED SET (2026-09-24, triage 2026-09-24-755c23). A hold applied
+      # in a linked worktree removes its hash from the GITIGNORED db\published-hashes.json only there, so this checkout
+      # kept 11 held recipes keyed as published and the FEED ASSERT and audit-live-price-contract read them as live.
+      # hold-recipe -Reconcile -Apply rebuilds that half from the tracked db\held-recipes.json. Logged, never fatal.
+      try {
+        $hrc = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\hold-recipe.ps1'
+        if (Test-Path $hrc) {
+          $hrcOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $hrc -Reconcile -Apply
+          $hrcRc = $LASTEXITCODE
+          foreach ($l in @($hrcOut)) { Log ('hold-reconcile: ' + [string]$l) }
+          if ($hrcRc -ne 0) { Log ('hold-reconcile: exited ' + $hrcRc + ' - published-hashes.json may still list held recipes') }
+        } else { Log 'hold-reconcile: meal-prep\pipeline\hold-recipe.ps1 not found - held recipes NOT reconciled' }
+      } catch { Log ('hold-reconcile threw: ' + $_.Exception.Message) }
       # EXPORT THE FEED BEFORE ANYTHING RESOLVES IT (2026-08-22). compute-v2-perserving.ps1 is invoked with
       # -FeedPath out\smp-feed.json and export-feed.ps1 is what WRITES that file - and until today it wrote
       # it ~270 lines LATER in this same run. So compute-v2 resolved YESTERDAY's feed every single day and

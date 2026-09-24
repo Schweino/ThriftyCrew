@@ -38,6 +38,7 @@
     .\hold-recipe.ps1 -Slug <s> -Reason "<why>"            dry run; proves every step, writes nothing
     .\hold-recipe.ps1 -Slug <s> -Reason "<why>" -Apply
     .\hold-recipe.ps1 -Slug <s> -Release -Reason "<why>" -Apply
+    .\hold-recipe.ps1 -Reconcile [-Apply]                     drop held slugs still keyed in published-hashes.json
     .\hold-recipe.ps1 -SelfTest
 #>
 param(
@@ -46,6 +47,7 @@ param(
   [switch]$Apply,
   [switch]$Release,
   [switch]$SkipGhost,      # the drill, and a re-run after Ghost is already drafted
+  [switch]$Reconcile,      # remove every held slug still keyed in published-hashes.json (dry unless -Apply)
   [string]$Root = '',
   [switch]$SelfTest
 )
@@ -161,6 +163,27 @@ if ($SelfTest) {
     $r = Run @{ Slug = 'never-held'; Reason = 'x'; Root = $t; Release = $true; Apply = $true }
     T 'MUST FIRE  releasing a slug that was never held is refused' ($r.rc -ne 0) $r.out
 
+    # RECONCILE (2026-09-24-755c23): a hold applied in a worktree left its hash keyed in the main checkout.
+    # Founding shape: andong-jjimdak-braised-chicken held in held-recipes.json AND keyed in published-hashes.json.
+    $rt = Join-Path $t 'recon'
+    [void](New-Item -ItemType Directory -Force (Join-Path $rt 'db'))
+    $rHash = Join-Path $rt 'db\published-hashes.json'
+    [IO.File]::WriteAllText($rHash, (ConvertTo-Json ([ordered]@{ 'andong-jjimdak-braised-chicken' = 'h9'; 'pizza-pasta-bowls' = 'h8' }) -Depth 4), $UTF8)
+    [IO.File]::WriteAllText((Join-Path $rt 'db\held-recipes.json'),
+      (ConvertTo-Json @{ held = @(@{ slug = 'andong-jjimdak-braised-chicken'; reason = 'drill'; held = '2026-09-23'; by = 'hold-recipe.ps1' }) } -Depth 4), $UTF8)
+    $rBefore = [IO.File]::ReadAllBytes($rHash)
+    $r = Run @{ Reconcile = $true; Root = $rt }
+    T 'MUST NOT FIRE  a dry -Reconcile names the held slug and writes nothing' `
+      (($r.rc -eq 0) -and ($r.out -match 'andong-jjimdak-braised-chicken .*would remove') -and ($r.out -match 'removed=0 stale=1 mode=dry') -and ([Convert]::ToBase64String([IO.File]::ReadAllBytes($rHash)) -eq [Convert]::ToBase64String($rBefore)) -and -not (Test-Path ($rHash + '.bak'))) $r.out
+    $r = Run @{ Reconcile = $true; Root = $rt; Apply = $true }
+    $rh = Read-JsonFile $rHash
+    T 'MUST FIRE  -Reconcile -Apply removes a held slug still keyed in published-hashes, names it, removed=1' `
+      (($r.rc -eq 0) -and ($r.out -match 'andong-jjimdak-braised-chicken .*removed') -and ($r.out -match 'HOLD-RECONCILE-COMPLETE held=1 removed=1') -and (-not ($rh.PSObject.Properties.Name -contains 'andong-jjimdak-braised-chicken'))) $r.out
+    T '  ...and the published, not-held slug is left in place with its hash' ($rh.'pizza-pasta-bowls' -eq 'h8') (ConvertTo-Json $rh -Compress)
+    T '  ...and the first -Apply keeps a .bak of the file it changed' ((Test-Path ($rHash + '.bak')) -and ([Convert]::ToBase64String([IO.File]::ReadAllBytes($rHash + '.bak')) -eq [Convert]::ToBase64String($rBefore))) 'no .bak'
+    $r = Run @{ Reconcile = $true; Root = $rt; Apply = $true }
+    T 'CLEAN TWIN  a reconciled db reports removed=0 and exits 0' (($r.rc -eq 0) -and ($r.out -match 'held=1 removed=0 stale=0')) $r.out
+
     # AND THE REFUSAL publish.ps1 IS SUPPOSED TO CARRY. A held recipe that publish.ps1 would still
     # publish is a hold in name only, so the wiring is asserted here rather than assumed.
     $pub = Join-Path (Split-Path (Split-Path $PSCommandPath -Parent) -Parent) 'engine\publish.ps1'
@@ -180,6 +203,33 @@ if ($SelfTest) {
   finally { Remove-Item $t -Recurse -Force -ErrorAction SilentlyContinue }
   if ($bad -eq 0) { Write-Output 'hold-recipe SELF-TEST PASS'; exit 0 }
   Write-Output ("hold-recipe SELF-TEST FAIL: {0} case(s)" -f $bad); exit 1
+}
+
+# ---- RECONCILE (2026-09-24, triage 2026-09-24-755c23) ------------------------------------------------
+# A hold has two halves on two roads. db\held-recipes.json is TRACKED and reaches main by commit;
+# db\published-hashes.json is GITIGNORED, so a hold applied in a linked worktree removed the hash THERE
+# and the main checkout kept 11 held slugs keyed as published, which the daily FEED ASSERT and
+# audit-live-price-contract then read as live. This rebuilds the untracked half from the tracked one:
+# every slug listed held is removed from the hashes. Safe by the ordering argument in the header:
+# publish.ps1 refuses a held slug, so a missing hash cannot invite a republish. Removes ONLY held slugs.
+if ($Reconcile) {
+  $hp = Get-HeldPath $mp; $hashPath = Get-HashPath $mp
+  $heldDoc = Read-JsonMap $hp
+  $heldSlugs = @(); if ($heldDoc.PSObject.Properties['held']) { $heldSlugs = @($heldDoc.held | ForEach-Object { [string]$_.slug } | Where-Object { $_ }) }
+  $hashes = Read-JsonMap $hashPath
+  $stale = @($heldSlugs | Where-Object { $hashes.PSObject.Properties.Name -contains $_ } | Sort-Object -Unique)
+  foreach ($s in $stale) { Say ('  hold-reconcile: ' + $s + ' is held but still keyed in published-hashes.json' + $(if ($Apply) { ' - removed' } else { ' - would remove (dry run)' })) }
+  $removed = 0
+  if ($Apply -and $stale.Count -gt 0) {
+    . (Join-Path $__jioRoot 'lib\atomic-write.ps1')
+    $bak = $hashPath + '.bak'
+    if (-not (Test-Path $bak)) { Copy-Item -LiteralPath $hashPath -Destination $bak }
+    foreach ($s in $stale) { $hashes.PSObject.Properties.Remove($s) }
+    [void](Write-TcAtomicFile -Path $hashPath -Text ($hashes | ConvertTo-Json -Depth 6) -NoBom -NoNewline)
+    $removed = $stale.Count
+  }
+  Say ('HOLD-RECONCILE-COMPLETE held={0} removed={1} stale={2} mode={3}' -f $heldSlugs.Count, $removed, $stale.Count, $(if ($Apply) { 'apply' } else { 'dry' }))
+  exit 0
 }
 
 # ---------------------------------------------------------------------------------------------------
