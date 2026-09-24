@@ -311,10 +311,13 @@ construction.
      push lock, a gate slot or a rehearsal slot ever waits on a ticket. The hook's W8.3 probe waits on nothing. Since
      push-main's W9.2 integration a member holds its ticket across its own run-gates (gate slots) and its own rehearsal
      child (a rehearsal slot, in another process): the first nested acquisitions of ticket over gate slots and ticket
-     over a rehearsal slot, both outermost-first as this list reads, and neither waits on the ticket. (`2a`, the
-     early-rehearsal cap, is placed by W9.1's rehearse-chain half when it lands.)
+     over a rehearsal slot, both outermost-first as this list reads, and neither waits on the ticket. `2a`, the
+     early-rehearsal cap, is placed below.
   1. **the push lock** - `lib\push-lock.ps1` (`Enter-TcPushLock`)
   2. **the gate worker slots** - `lib\gate-slots.ps1` (`Enter-TcGateSlots`)
+  2a. **the early-rehearsal cap** - `Global\tc-rehearsal-early-`, 4 of the 6 rehearsal slots, taken in
+     `ops\rehearse-chain.ps1` only by an `-Early` run and always BEFORE its rehearsal slot (W9.1, plan 16.6): the first
+     nested acquisition of early cap over rehearsal slot. A push-time rehearsal never takes it.
   2b. **the rehearsal slots** - `Global\tc-rehearsal-slot-`, taken in `ops\rehearse-chain.ps1`. A PEER of the gate slots,
      never nested with them: read 2026-09-23 for W9.2, nothing a rehearsal runs while it holds its slot (the arm's clone,
      seed, the rehearsed tree's `check-ad-cycles -SelfTest` and ship path, and its own pre-commit hook) takes a gate slot
@@ -764,18 +767,19 @@ construction.
   `reconcile-ghost-drift` wrote `grocery/ghost-tool-published.json` while its legs ran, `dirty_since=during-legs`); and
   land a chain change only through push-main, never `git push origin HEAD:main`, with every orchestrator brief saying so
   (6 of 17 chain landings after the rehearsal gate were plain pushes from one orchestrator's lanes, and one of them,
-  `855171a1e`, voided a rehearsal another push was relying on). **From the main checkout**, push-main refuses the tree
-  the pipelines keep dirty; land from a clean linked worktree, seeded with `ops\seed-worktree.ps1 -Target`.
-  **STILL LANDING when this was written (2026-09-24); read `git log origin/main` for the Plan id before relying on any
-  of it.** The lock order paragraph above gains `0a`, `0b`, `2a` and `2b` in W9.2's commit (plan 16.6).
+  `855171a1e`, voided a rehearsal another push was relying on). From the main checkout,
+  push-main lands through a throwaway worktree by itself (W8.2, the paragraph that closes the next bullet).
+  **The rest of design A landed the same day (2026-09-24)**; each item's own commit and script header is the account.
+  The lock order paragraph above carries `0a`, `0b` and `2b`, and `2a` below.
   - **Commit-time rehearsal** (W9.1, D19 ruled yes). `ops/hooks/post-commit` starts `push-main -Prepare` detached under
-    `CLAUDE_CODE_SESSION_ID`, never inside a rehearsal (`TC_REHEARSAL_RUN`), and never fails a commit; `-Prepare` fetches
-    and starts `rehearse-chain.ps1 -Early -Onto <origin sha>`, which rehearses HEAD rebased onto origin as it stood at
-    commit time, and a later commit that moves the key supersedes it through a stop file. **The rebase is the design,
+    `CLAUDE_CODE_SESSION_ID`, never inside a rehearsal (`TC_REHEARSAL_RUN`), never for the commits a rebase replays, and
+    never fails a commit; `-Prepare` fetches and starts `rehearse-chain.ps1 -Early -Onto <origin sha>`, which rehearses
+    HEAD rebased onto origin as it stood at commit time, and a later commit that moves the key supersedes it through a
+    stop file. An early run first takes one of `$script:RhEarlyMaxSlots = 4` early caps (`Global\tc-rehearsal-early-`,
+    lock order `2a`, always before its rehearsal slot), so 2 of the 6 slots stay for pushes. **The rebase is the design,
     not an optimisation**: over 23 chain landings on 2026-09-23 the rebased variant would have covered 10 (43%) and the
-    unrebased one 6 (26%), against a 30% bar written before the run; B22 re-measures it live on push-main landings.
-    `-Prepare` and the row's `early_hit` are on main; the rehearsal half and the hook are not, so `early_hit` reads
-    `unknown` on a reuse until they land.
+    unrebased one 6 (26%), against a 30% bar written before the run; B22 re-measures it live on push-main landings,
+    from the row's `early_hit`, which reads the `early=yes|no` token on rehearse-chain's check marker.
   - **The legs start together** (W9.3, absorbing W2.3). The rehearsal starts beside run-gates, then test-auditors runs,
     and a red leg writes the stop file so the rehearsal ends `blind=stopped` and the push refuses `refused-gate-red`
     without waiting up to about 14 minutes. No process holds one pool while waiting on the other.
@@ -783,16 +787,16 @@ construction.
     arrival-order ticket (`lib\chain-queue.ps1`, on `lib\gate-slots.ps1`'s ticket functions, never `Enter-TcGateSlots`),
     and its rehearsal judges HEAD stacked on the ranges of the live tickets ahead, in the rehearsal's clone only: the
     worktree is NEVER rebased onto another ticket's commits. It waits for the tickets ahead to land or leave before its
-    swap, holding nothing but its ticket. **ORDER, NOT CAPACITY**: its ceiling is 6 rehearsal slots over an 800 to
-    1,240 s rehearsal, about 17 to 27 chain landings an hour (review, SCRATCH); its cost is head-of-line, up to about 21
-    minutes. `-ChainQueue off` is the rollback.
-  - **The main checkout lands through push-main** (W8.2): a throwaway worktree per run, then `git reset --keep` to the
-    landed tip in the main checkout when its HEAD did not move (`main_sync=manual` when it did), and the throwaway is
-    always removed. The manual route above then retires.
+    swap, holding nothing but its ticket, and a ticket ahead that leaves makes it restack and rehearse once more.
+    **ORDER, NOT CAPACITY**: its ceiling is 6 rehearsal slots over an 800 to 1,240 s rehearsal, about 17 to 27 chain
+    landings an hour (review, SCRATCH); its cost is head-of-line, up to about 21 minutes. `-ChainQueue off` is the
+    rollback.
   - **The pre-push queue-head check** (W8.3, amended). Right after the rehearsal record check and before run-gates, a
-    chain-touching push that is not descended from a live ticket (`TC_CHAIN_QUEUE_HOLDER`) is refused in seconds with
-    `PRE-PUSH-REFUSED cause=chain-queue` while any ticket is live. It probes with ZERO wait and acquires nothing, so the
-    hook never waits on the queue and no wait-for edge is added.
+    chain-touching push whose `TC_CHAIN_QUEUE_HOLDER` does not name the queue's head is refused in seconds with
+    `PRE-PUSH-REFUSED cause=chain-queue` while any live ticket that has not landed or left exists. A head whose record
+    has not changed for longer than the library's own stall bound is WEDGED, and the push proceeds, because the queue's timed-out
+    waiters push unqueued. It probes with ZERO wait and acquires nothing, so the hook never waits on the queue and no
+    wait-for edge is added.
 - **A LANE WRITES ONLY WHAT IT OWNS** (2026-09-23, W3.1, W3.3, W4.1 of the same plan). A file several lanes append to,
   or one derived from the whole tree, is a conflict factory: **20 of 22 push-main rebase conflicts conflicted ONLY on
   shared append-shaped or derived files, and 14 of the 22 named `design/BACKLOG-course-findings.md`** (a row can

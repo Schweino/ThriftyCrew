@@ -98,25 +98,19 @@ A rebase refuses on a real conflict. It never guesses at one. **Two rules go wit
   orchestrator whose briefs said `git push origin HEAD:main`, and one of them voided a rehearsal another push was
   counting on.
 
-**From the main checkout** push-main still refuses, because that tree is always dirty with the pipelines' data. Land
-from a clean linked worktree: `git worktree add`, `ops\seed-worktree.ps1 -Target <it>`, then push-main there.
-
-**STILL LANDING, not yet on main when this was written (2026-09-24).** Until each item is on main this is the design,
-not the behaviour. Check `git log origin/main` for its Plan id before relying on it.
-- **Commit-time rehearsal** (W9.1, D19 ruled yes). A commit that changes the chain starts its rehearsal in the
-  background from `ops/hooks/post-commit`, on HEAD rebased onto origin as it stands at commit time, so the push usually
-  finds its verdict already recorded. The rebase is the design: over 23 chain landings on 2026-09-23, a rehearsal of the
-  commit as made would have covered 6 (26%), and of the commit rebased 10 (43%), against a bar of 30% set before the run. `push-main -Prepare` is on main and starts it by hand; the rehearsal half and the hook are not.
-- **All three gates start together** (W9.3). The rehearsal starts beside run-gates instead of after it, and a red gate
-  stops the rehearsal instead of waiting up to about 14 minutes for it.
+**The rest landed the same day (2026-09-24)**, each under its Plan id on `git log origin/main`:
+- **Commit-time rehearsal** (W9.1, D19 ruled yes). `ops/hooks/post-commit` starts `push-main -Prepare` in the
+  background on a session commit that changes the chain, and `-Prepare` starts the rehearsal of HEAD rebased onto
+  origin as it stands at commit time, so the push usually finds its verdict already recorded. It never fails or holds
+  a commit. The rebase is the design: over 23 chain landings on 2026-09-23, a rehearsal of the commit as made would
+  have covered 6 (26%), and of the commit rebased 10 (43%), against a bar of 30% set before the run. The row's
+  `early_hit` says whether the push's verdict came from such a rehearsal.
+- **The rehearsal starts beside run-gates** (W9.3), and a red gate stops it instead of waiting up to about 14 minutes.
 - **The chain queue** (W9.2). A chain push takes a ticket and is rehearsed stacked on the tickets ahead of it, so one
   chain landing no longer voids the next. It waits for its turn to SWAP, never to gate. It replaces the chain lease,
-  which was never built.
-- **The main checkout lands through push-main** (W8.2). Run from the main checkout, push-main lands through a throwaway
-  worktree of its own, then moves the main checkout's branch to what landed with `git reset --keep`, which
-  leaves its uncommitted data alone. The manual route above then goes away.
-- **The pre-push queue check** (W8.3). A plain push of a chain change is refused in seconds with `cause=chain-queue`
-  while any ticket is live, and told to use push-main.
+  which was never built. `-ChainQueue off` is the rollback.
+- **The pre-push queue check** (W8.3). While a ticket is live, a chain push that is not the queue's head is refused in
+  seconds with `cause=chain-queue` and told to use push-main.
 
 **Superseded, kept so the numbers keep their context:** until 2026-09-23 push-main took the lock BEFORE its fetch and
 rebased inside it, and before 2026-09-12 the hook held the lock across the whole gate. Neither is true now; the hook
@@ -139,7 +133,7 @@ before refusing. **Since 2026-09-23 the lock holds the swap and nothing else**: 
 moved three times running, so the hook's warm run inside it is a replay. **No lock is held across a gate, and nothing
 planned needs one.** The chain lease proposed on 2026-09-23 would have, and it needed a named exception to this ruling;
 Brad chose design A instead the same evening, so the lease was never built and the exception is withdrawn. The chain
-queue that replaces it (still landing) waits for a turn to swap, which `refs/heads/main` serialises already, and
+queue that replaces it waits for a turn to swap, which `refs/heads/main` serialises already, and
 never holds up anyone's gate. The ordering is fixtured on the MECHANISM: the self-test's gate probes the lock FROM ANOTHER PROCESS,
 because a Windows mutex is reentrant on its owning thread and the first version of that case, probing in-process,
 SURVIVED the mutant that hoists the lock back above the gate. Paired 3 rounds after the fix: mutant killed 3 of 3 in
