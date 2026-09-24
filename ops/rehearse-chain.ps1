@@ -23,7 +23,8 @@
                 -ListSet (a default run would rehearse), and -ListSet is refused beside -CheckPush or -ForPush.
     -SelfTest   hermetic fixtures, per-run temp directories, nothing live.
 
-  THE TRIGGER IS ONE FUNCTION. Get-RhTrigger answers "does the diff <base>..<tip> touch the manifest set AT <tip>", and
+  THE TRIGGER IS ONE FUNCTION. Get-RhTrigger answers "does the diff <base>..<tip> touch the manifest set at <base> OR at
+  <tip>" (the union, W6.0: a deleted member is in the set only at the base), and
   Get-RhPushDecision (so -CheckPush and -ForPush) and -ListSet -Range all ask it, so the printed decision and the pushed
   one cannot drift apart. The diff is tree to tree between the two endpoints, exactly as -ForPush diffs <Remote>/<Branch>
   against HEAD, never from their merge base; that is why -Range refuses three dots. What a range triggers is not what a
@@ -244,10 +245,17 @@ function Save-RhVerdict([string]$Dir, $Record) {
 
 function Get-RhTrigger {
   <# THE TRIGGER, the one definition (header, THE TRIGGER IS ONE FUNCTION): does the tree-to-tree diff $Base..$Tip touch
-     the manifest set AT $Tip? Get-RhPushDecision decides from it and -ListSet -Range prints it. Reads git only: it clones
-     nothing, takes no slot and writes nothing. Returns Blind ('' when evaluated, else no-manifest-readable or
+     the manifest set AT EITHER END? Get-RhPushDecision decides from it and -ListSet -Range prints it. Reads git only: it
+     clones nothing, takes no slot and writes nothing. Returns Blind ('' when evaluated, else no-manifest-readable or
      cannot-diff), Why, DiffRc, Absent (the tip carries no manifest, so there is nothing to rehearse against), Manifest
-     (Get-RhManifestSet at $Tip) and Touched (the set members the diff names, in git's own path order). #>
+     (Get-RhManifestSet at $Tip, whose Key is the verdict key) and Touched (the members of the UNION the diff names, in
+     git's own path order).
+     THE UNION (W6.0, design\PLAN-push-derived-conflicts-2026-09-23.md): a push that DELETES a member is not in the set at
+     its tip, because the file is gone, so a trigger read at the tip alone never rehearsed it, yet the deletion moves the
+     verdict key of every rehearsal after it. So a path touched by the diff counts when it is a member at $Base OR at $Tip.
+     This rehearses more pushes than before, never fewer. A base whose manifest is ABSENT contributes nothing; a base
+     whose manifest cannot be read contributes nothing only when the diff names the manifest itself (which then triggers
+     anyway, because the manifest is always a member at the tip); otherwise it is blind=no-manifest-readable. #>
   param([string]$Repo, [string]$Base, [string]$Tip)
   $ms = Get-RhManifestSet $Repo $Tip
   $r = [ordered]@{ Blind = ''; Why = ''; DiffRc = 0; Absent = $false; Manifest = $ms; Touched = @() }
@@ -258,7 +266,14 @@ function Get-RhTrigger {
   }
   $d = Invoke-RhGit $Repo @('diff', '--name-only', '-z', $Base, $Tip)
   if ($d.rc -ne 0) { $r.Blind = 'cannot-diff'; $r.DiffRc = $d.rc; $r.Why = ('git diff exited ' + $d.rc); return [pscustomobject]$r }
-  $r.Touched = @(([string]$d.stdout -split [char]0) | Where-Object { $_ -and $ms.Set.ContainsKey($_) })
+  $names = @(([string]$d.stdout -split [char]0) | Where-Object { $_ })
+  $bs = Get-RhManifestSet $Repo $Base
+  $baseSet = $null
+  if ($bs.Ok) { $baseSet = $bs.Set }
+  elseif (-not $bs.Absent -and -not ($names -contains 'ops/chain-manifest.json')) {
+    $r.Blind = 'no-manifest-readable'; $r.Why = ('the base ' + $Base + ': ' + $bs.Why); return [pscustomobject]$r
+  }
+  $r.Touched = @($names | Where-Object { $ms.Set.ContainsKey($_) -or ($null -ne $baseSet -and $baseSet.ContainsKey($_)) })
   return [pscustomobject]$r
 }
 
@@ -659,11 +674,27 @@ function Get-RhListSet {
 if ($SelfTest) {
   $script:rhCases = 0; $script:rhFail = 0
   function Test-RhCase([string]$Label, [scriptblock]$Body) {
+    # A BODY RETURNS EXACTLY TWO THINGS: the verdict and the got-text. `a -and b, 'got'` parses as `a -and (b, 'got')`
+    # because the comma binds tighter than -and, so b is never judged (a two-element array is truthy) and the body
+    # returns ONE boolean. Found 2026-09-23 while killing M11: every multi-condition case here had an inert last
+    # condition. So a body that does not return a pair is a FAILED case, and every verdict is wrapped whole: `(a -and b), 'got'`.
     $script:rhCases++
+    $res = Get-RhCaseResult $Body
+    if ($res.Ok) { Write-Output ('ok    ' + $Label) } else { $script:rhFail++; Write-Output ('FAIL  ' + $Label + '   got: ' + $res.Got) }
+  }
+  function Get-RhCaseResult([scriptblock]$Body) {
     $got = ''
-    try { $ErrorActionPreference = 'Stop'; $r = & $Body; $ok = [bool]$r[0]; if ($r.Count -gt 1) { $got = [string]$r[1] } }
+    try {
+      $ErrorActionPreference = 'Stop'; $r = @(& $Body)
+      if ($r.Count -ne 2 -or -not ($r[0] -is [bool])) { $ok = $false; $got = ('the case body returned ' + $r.Count + ' value(s), not (verdict, got); wrap the whole verdict in parentheses') }
+      else { $ok = [bool]$r[0]; $got = [string]$r[1] }
+    }
     catch { $ok = $false; $got = 'threw: ' + $_.Exception.Message }
-    if ($ok) { Write-Output ('ok    ' + $Label) } else { $script:rhFail++; Write-Output ('FAIL  ' + $Label + '   got: ' + $got) }
+    return [pscustomobject]@{ Ok = $ok; Got = $got }
+  }
+  $malformed = Get-RhCaseResult { ($true) -and ($false), ('got') }
+  Test-RhCase 'MUST FIRE  the case harness scores a body whose last condition the comma swallowed (`a -and b, got`) as FAILED, never as a pass' {
+    ((-not $malformed.Ok) -and ($malformed.Got -match 'returned 1 value')), ('ok=' + $malformed.Ok + ' got=' + $malformed.Got)
   }
   Clear-TcGitRepoEnv
   $st = Join-Path $env:TEMP ('tc-rhst-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
@@ -717,21 +748,21 @@ if ($SelfTest) {
     [IO.File]::WriteAllBytes((Join-Path $old 'meal-prep\db\cost-flags.txt'), [byte[]]@())   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
     $oc = Invoke-RhCommitStage -Repo $old
     Test-RhCase 'MUST FIRE  the founding defect: the bot''s commit of an EMPTY cost-flags.txt is REFUSED by the 09-05 hook, in its own words (BOM CHANGED)' {
-      ($oc.Outcome -eq 'refused') -and ((@($oc.Words) -join "`n") -match 'BOM CHANGED') -and ((@($oc.Words) -join "`n") -match 'cost-flags\.txt'), ($oc.Outcome + ' | ' + ((@($oc.Words) | Select-Object -First 3) -join ' / '))
+      (($oc.Outcome -eq 'refused') -and ((@($oc.Words) -join "`n") -match 'BOM CHANGED') -and ((@($oc.Words) -join "`n") -match 'cost-flags\.txt')), ($oc.Outcome + ' | ' + ((@($oc.Words) | Select-Object -First 3) -join ' / '))
     }
     $new = New-RhHookRepo 'n' $false
     [IO.File]::WriteAllBytes((Join-Path $new 'meal-prep\db\cost-flags.txt'), [byte[]]@())   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
     $nc = Invoke-RhCommitStage -Repo $new
     $nHead = ([string](Invoke-RhGit $new @('log', '-1', '--format=%an|%s')).stdout).Trim()
     Test-RhCase 'CLEAN TWIN  the same empty file through TODAY''S hook is committed, as smp-pipeline-bot, so the harness passes a fixed tree' {
-      ($nc.Outcome -eq 'committed') -and ($nHead -like 'smp-pipeline-bot|*rehearsal*'), ($nc.Outcome + ' | ' + $nHead + ' | ' + ((@($nc.Words) | Select-Object -First 3) -join ' / '))
+      (($nc.Outcome -eq 'committed') -and ($nHead -like 'smp-pipeline-bot|*rehearsal*')), ($nc.Outcome + ' | ' + $nHead + ' | ' + ((@($nc.Words) | Select-Object -First 3) -join ' / '))
     }
     Test-RhCase 'MUST FIRE  the commit stage refuses to install a hook anywhere but a standalone repository''s own .git' {
       $wt = Join-Path $st 'wt'
       $null = Invoke-RhGit $new @('worktree', 'add', '-q', '--detach', $wt)
       $w = Invoke-RhCommitStage -Repo $wt
       $null = Invoke-RhGit $new @('worktree', 'remove', '--force', $wt)
-      ($w.Outcome -eq 'blind') -and ($w.Why -match 'not a standalone repository'), ($w.Outcome + ' ' + $w.Why)
+      (($w.Outcome -eq 'blind') -and ($w.Why -match 'not a standalone repository')), ($w.Outcome + ' ' + $w.Why)
     }
 
     # ---- 2. THE PUSH DECISION ----
@@ -758,20 +789,20 @@ if ($SelfTest) {
     $k2 = (Get-RhManifestSet $p $c2).Key
     $dNo = Get-RhPushDecision -Repo $p -RefLines @($refChain) -VerdictDir $vd -Today $today
     Test-RhCase 'MUST FIRE  a push that changes a manifest script with NO rehearsal verdict is refused (exit 1), naming the script and how to rehearse' {
-      ($dNo.Code -eq 1) -and ($dNo.Outcome -eq 'no-verdict') -and ((@($dNo.Lines) -join ' ') -match 'check-ad-cycles\.ps1') -and ((@($dNo.Lines) -join ' ') -match 'rehearse-chain'), ('' + $dNo.Code + ' ' + $dNo.Outcome + ' ' + (@($dNo.Lines) -join ' / '))
+      (($dNo.Code -eq 1) -and ($dNo.Outcome -eq 'no-verdict') -and ((@($dNo.Lines) -join ' ') -match 'check-ad-cycles\.ps1') -and ((@($dNo.Lines) -join ' ') -match 'rehearse-chain')), ('' + $dNo.Code + ' ' + $dNo.Outcome + ' ' + (@($dNo.Lines) -join ' / '))
     }
     $dDoc = Get-RhPushDecision -Repo $p -RefLines @($refDoc) -VerdictDir $vd -Today $today
     Test-RhCase 'MUST NOT FIRE  a push touching no manifest script needs no rehearsal (exit 0) and says so' {
-      ($dDoc.Code -eq 0) -and ($dDoc.Outcome -eq 'not-needed') -and ((@($dDoc.Lines) -join ' ') -match 'no rehearsal needed'), ('' + $dDoc.Code + ' ' + $dDoc.Outcome)
+      (($dDoc.Code -eq 0) -and ($dDoc.Outcome -eq 'not-needed') -and ((@($dDoc.Lines) -join ' ') -match 'no rehearsal needed')), ('' + $dDoc.Code + ' ' + $dDoc.Outcome)
     }
     $dBranch = Get-RhPushDecision -Repo $p -RefLines @('refs/heads/rh ' + $c1 + ' refs/heads/rh ' + $c0) -VerdictDir $vd -Today $today
     Test-RhCase 'MUST NOT FIRE  a push to a branch other than main is not asked for a rehearsal' { ($dBranch.Code -eq 0), ('' + $dBranch.Code) }
     Test-RhCase 'CLEAN TWIN  a doc-only commit after a rehearsal keeps the verdict key; a manifest change moves it' {
-      ($k1 -eq $k2) -and ($k1 -ne (Get-RhManifestSet $p $c0).Key), ($k1 + ' ' + $k2)
+      (($k1 -eq $k2) -and ($k1 -ne (Get-RhManifestSet $p $c0).Key)), ($k1 + ' ' + $k2)
     }
     Test-RhCase 'MUST FIRE  derive_from: an audit NAMED by guards.ps1 is in the set; one it does not name, a named test-*.ps1 under exclude_globs, and README are not' {
       $s = (Get-RhManifestSet $p $c1).Set
-      $s.ContainsKey('grocery/audit-thing.ps1') -and (-not $s.ContainsKey('grocery/audit-other.ps1')) -and $s.ContainsKey('grocery/build-x.ps1') -and (-not $s.ContainsKey('README.md')) -and (-not $s.ContainsKey('grocery/test-thing.ps1')), (@($s.Keys) -join ',')
+      ($s.ContainsKey('grocery/audit-thing.ps1') -and (-not $s.ContainsKey('grocery/audit-other.ps1')) -and $s.ContainsKey('grocery/build-x.ps1') -and (-not $s.ContainsKey('README.md')) -and (-not $s.ContainsKey('grocery/test-thing.ps1'))), (@($s.Keys) -join ',')
     }
     function Set-RhVerdict([string]$Key, [string]$Result, [string]$DataDate, [string]$Blind = '', [string]$Stage = '') {
       Save-RhVerdict $vd ([pscustomobject]@{ result = $Result; blind = $Blind; key = $Key; stage = $Stage; cause = ('fixture ' + $Result); words = @('fixture words'); data_date = $DataDate; preexisting = @() })
@@ -779,34 +810,66 @@ if ($SelfTest) {
     Set-RhVerdict $k1 'blind' '2026-09-22' 'no-seed-board'
     $dBlind = Get-RhPushDecision -Repo $p -RefLines @($refChain) -VerdictDir $vd -Today $today
     Test-RhCase 'MUST NOT FIRE  a rehearsal that COULD NOT RUN is not a pass: exit 3, and the line names its cause (blind=no-seed-board)' {
-      ($dBlind.Code -eq 3) -and ($dBlind.Outcome -eq 'could-not-rehearse') -and ((@($dBlind.Lines) -join ' ') -match 'blind=no-seed-board') -and ((@($dBlind.Lines) -join ' ') -match 'not a pass'), ('' + $dBlind.Code + ' ' + (@($dBlind.Lines) -join ' / '))
+      (($dBlind.Code -eq 3) -and ($dBlind.Outcome -eq 'could-not-rehearse') -and ((@($dBlind.Lines) -join ' ') -match 'blind=no-seed-board') -and ((@($dBlind.Lines) -join ' ') -match 'not a pass')), ('' + $dBlind.Code + ' ' + (@($dBlind.Lines) -join ' / '))
     }
     Set-RhVerdict $k1 'fail' '2026-09-22' '' 'commit'
     $dFail = Get-RhPushDecision -Repo $p -RefLines @($refChain) -VerdictDir $vd -Today $today
     Test-RhCase 'MUST FIRE  a recorded FAILED rehearsal refuses (exit 1) and names the stage' {
-      ($dFail.Code -eq 1) -and ($dFail.Outcome -eq 'rehearsed-fail') -and ((@($dFail.Lines) -join ' ') -match 'stage commit'), ('' + $dFail.Code + ' ' + $dFail.Outcome)
+      (($dFail.Code -eq 1) -and ($dFail.Outcome -eq 'rehearsed-fail') -and ((@($dFail.Lines) -join ' ') -match 'stage commit')), ('' + $dFail.Code + ' ' + $dFail.Outcome)
     }
     Set-RhVerdict $k1 'pass' '2026-09-20'
     $dAt = Get-RhPushDecision -Repo $p -RefLines @($refChain) -VerdictDir $vd -Today $today
     Test-RhCase 'CLEAN TWIN  a pass over data exactly AT the 2-day bar (09-20 on 09-22) lets the push through (exit 0)' {
-      ($dAt.Code -eq 0) -and ($dAt.Outcome -eq 'rehearsed-pass') -and ((@($dAt.Lines) -join ' ') -match 'PASSED'), ('' + $dAt.Code + ' ' + $dAt.Outcome)
+      (($dAt.Code -eq 0) -and ($dAt.Outcome -eq 'rehearsed-pass') -and ((@($dAt.Lines) -join ' ') -match 'PASSED')), ('' + $dAt.Code + ' ' + $dAt.Outcome)
     }
     $dDocAfter = Get-RhPushDecision -Repo $p -RefLines @('refs/heads/main ' + $c2 + ' refs/heads/main ' + $c0) -VerdictDir $vd -Today $today
     Test-RhCase 'CLEAN TWIN  the same pass still holds when a doc commit rides on top of the rehearsed one' { ($dDocAfter.Code -eq 0), ('' + $dDocAfter.Code + ' ' + $dDocAfter.Outcome) }
     Set-RhVerdict $k1 'pass' '2026-09-19'
     $dPast = Get-RhPushDecision -Repo $p -RefLines @($refChain) -VerdictDir $vd -Today $today
     Test-RhCase 'MUST FIRE  a pass over data one day PAST the 2-day bar (09-19 on 09-22, 3 days) is stale and refused' {
-      ($dPast.Code -eq 1) -and ($dPast.Outcome -eq 'stale'), ('' + $dPast.Code + ' ' + $dPast.Outcome)
+      (($dPast.Code -eq 1) -and ($dPast.Outcome -eq 'stale')), ('' + $dPast.Code + ' ' + $dPast.Outcome)
     }
     [IO.File]::Delete((Join-Path $vd ($k1 + '.json')))
     $dBy = Get-RhPushDecision -Repo $p -RefLines @($refChain) -VerdictDir $vd -Today $today -Bypass 'fixture: emergency'
     $logRows = @()
     if ([IO.File]::Exists((Join-Path $vd 'bypass-log.jsonl'))) { $logRows = @([IO.File]::ReadAllLines((Join-Path $vd 'bypass-log.jsonl')) | Where-Object { $_ }) }
     Test-RhCase 'CLEAN TWIN  -NoRehearsal (TC_NO_REHEARSAL) still lets the push through, says so LOUDLY and logs the bypass with its reason' {
-      ($dBy.Code -eq 0) -and ($dBy.Outcome -eq 'bypassed') -and ((@($dBy.Lines) -join ' ') -match '\*\*\* REHEARSAL BYPASSED') -and ($logRows.Count -eq 1) -and ($logRows[0] -match 'fixture: emergency'), ('' + $dBy.Code + ' ' + $dBy.Outcome + ' rows=' + $logRows.Count)
+      (($dBy.Code -eq 0) -and ($dBy.Outcome -eq 'bypassed') -and ((@($dBy.Lines) -join ' ') -match '\*\*\* REHEARSAL BYPASSED') -and ($logRows.Count -eq 1) -and ($logRows[0] -match 'fixture: emergency')), ('' + $dBy.Code + ' ' + $dBy.Outcome + ' rows=' + $logRows.Count)
     }
     $dCreate = Get-RhPushDecision -Repo $p -RefLines @('refs/heads/main ' + $c1 + ' refs/heads/main ' + ('0' * 40)) -VerdictDir $vd -Today $today
-    Test-RhCase 'MUST NOT FIRE  a push the harness cannot diff is exit 3 with blind=cannot-diff, never a silent pass' { ($dCreate.Code -eq 3) -and ((@($dCreate.Lines) -join ' ') -match 'blind=cannot-diff'), ('' + $dCreate.Code) }
+    Test-RhCase 'MUST NOT FIRE  a push the harness cannot diff is exit 3 with blind=cannot-diff, never a silent pass' { (($dCreate.Code -eq 3) -and ((@($dCreate.Lines) -join ' ') -match 'blind=cannot-diff')), ('' + $dCreate.Code) }
+
+    # ---- 2b. THE UNION TRIGGER (W6.0): a deleted member is a member only at the push's BASE. Each case names the deleted
+    # path in the refusal, so a trigger read at the tip alone (mutant M11) turns it red even where the manifest's own
+    # edit would still have asked for a rehearsal.
+    $vdU = Join-Path $st 'verdicts-union'
+    [IO.File]::Delete((Join-Path $p 'grocery\build-x.ps1'))
+    $u1 = Save-RhCommit $p 'delete a GLOB member, manifest untouched'
+    $dGlobDel = Get-RhPushDecision -Repo $p -RefLines @('refs/heads/main ' + $u1 + ' refs/heads/main ' + $c2) -VerdictDir $vdU -Today $today
+    Test-RhCase 'MUST FIRE  a push that deletes a manifest member reached by a glob, and edits nothing else, needs a rehearsal (the member is in the set only at the base)' {
+      (($dGlobDel.Code -eq 1) -and ($dGlobDel.Outcome -eq 'no-verdict') -and ((@($dGlobDel.Lines) -join ' ') -match 'grocery/build-x\.ps1')), ('' + $dGlobDel.Code + ' ' + $dGlobDel.Outcome + ' ' + (@($dGlobDel.Lines) -join ' / '))
+    }
+    Write-RhFile $p 'ops\chain-manifest.json' ($man.Replace('"grocery/check-ad-cycles.ps1",', ''))
+    [IO.File]::Delete((Join-Path $p 'grocery\check-ad-cycles.ps1'))
+    $u2 = Save-RhCommit $p 'delete a files[] member and drop it from files[]'
+    $dFilesDel = Get-RhPushDecision -Repo $p -RefLines @('refs/heads/main ' + $u2 + ' refs/heads/main ' + $u1) -VerdictDir $vdU -Today $today
+    $u2Touched = @((Get-RhTrigger -Repo $p -Base $u1 -Tip $u2).Touched)
+    Test-RhCase 'MUST FIRE  a push that deletes a files[] member and removes it from files[] needs a rehearsal, and the deleted member is among the touched' {
+      (($dFilesDel.Code -eq 1) -and ($dFilesDel.Outcome -eq 'no-verdict') -and ($u2Touched -contains 'grocery/check-ad-cycles.ps1') -and ($u2Touched -contains 'ops/chain-manifest.json')), ('' + $dFilesDel.Code + ' ' + $dFilesDel.Outcome + ' touched=' + ($u2Touched -join ','))
+    }
+    Write-RhFile $p 'grocery\audit-thing.ps1' "'audit v2'`n"
+    $u3 = Save-RhCommit $p 'edit a member that is one at both ends'
+    $dEdit = Get-RhPushDecision -Repo $p -RefLines @('refs/heads/main ' + $u3 + ' refs/heads/main ' + $u2) -VerdictDir $vdU -Today $today
+    Test-RhCase 'CLEAN TWIN  under the union a push that EDITS a member still needs a rehearsal, naming it' {
+      (($dEdit.Code -eq 1) -and ($dEdit.Outcome -eq 'no-verdict') -and ((@($dEdit.Lines) -join ' ') -match 'grocery/audit-thing\.ps1')), ('' + $dEdit.Code + ' ' + $dEdit.Outcome)
+    }
+    Write-RhFile $p 'grocery\audit-other.ps1' "'still not named by guards'`n"
+    [IO.File]::Delete((Join-Path $p 'grocery\test-thing.ps1'))
+    $u4 = Save-RhCommit $p 'edit a non-member and delete an excluded test'
+    $dNone = Get-RhPushDecision -Repo $p -RefLines @('refs/heads/main ' + $u4 + ' refs/heads/main ' + $u3) -VerdictDir $vdU -Today $today
+    Test-RhCase 'MUST NOT FIRE  a push touching no member at EITHER end (a non-member edit, an excluded test deleted) needs no rehearsal' {
+      (($dNone.Code -eq 0) -and ($dNone.Outcome -eq 'not-needed')), ('' + $dNone.Code + ' ' + $dNone.Outcome + ' ' + (@($dNone.Lines) -join ' / '))
+    }
 
     # ---- 3. A WHOLE REHEARSAL over a fixture source, through the seams (the seeder and the chain are the only fakes) ----
     $src = New-RhHookRepo 's' $false
@@ -837,20 +900,20 @@ if ($SelfTest) {
     $scratchLeft = @(@($fullRun.scratch) | Where-Object { $_ -and (Test-Path -LiteralPath $_) })
     Test-RhCase 'CLEAN TWIN  a whole rehearsal over a fixture source passes, is RECORDED under its key with its data date, and the push it tried went nowhere' {
       $v = Read-RhVerdict $vd $fullRun.key
-      ($fullRun.result -eq 'pass') -and ($null -ne $v) -and ($v.result -eq 'pass') -and ($v.data_date -eq '2026-09-21') -and ($leak.rc -ne 0), ($fullRun.result + ' ' + $fullRun.blind + ' ' + $fullRun.cause + ' leak.rc=' + $leak.rc)
+      (($fullRun.result -eq 'pass') -and ($null -ne $v) -and ($v.result -eq 'pass') -and ($v.data_date -eq '2026-09-21') -and ($leak.rc -ne 0)), ($fullRun.result + ' ' + $fullRun.blind + ' ' + $fullRun.cause + ' leak.rc=' + $leak.rc)
     }
     Test-RhCase 'MUST NOT FIRE  it leaves nothing behind: no scratch clone of this commit under %TEMP%, and the launching checkout''s git status is unchanged' {
-      ($fullRun.scratch -like '*tc-rh-*') -and ($scratchLeft.Count -eq 0) -and [string]::Equals($statusBefore, $statusAfter, [StringComparison]::Ordinal), ('left=' + $scratchLeft.Count)
+      (($fullRun.scratch -like '*tc-rh-*') -and ($scratchLeft.Count -eq 0) -and [string]::Equals($statusBefore, $statusAfter, [StringComparison]::Ordinal)), ('left=' + $scratchLeft.Count)
     }
     $bad = Invoke-RhRehearsal -Repo $src -Commit 'HEAD' -SourceRoot (Join-Path $st 'no-such-source') -VerdictDir $vd -Today $today -Seeder $fakeSeeder -ChainRunner (& $mkRunner $false) -NoPair
     Test-RhCase 'MUST NOT FIRE  a rehearsal with no board to seed from reports blind=no-seed-board (exit 3), records it, and is never a pass' {
-      ($bad.result -eq 'blind') -and ($bad.blind -in @('no-source', 'no-seed-board')) -and ((Get-RhExitCode $bad.result) -eq 3) -and ((Format-RhComplete $bad) -match '^CHAIN-REHEARSAL-COMPLETE verdict=blind blind='), ($bad.result + ' ' + $bad.blind)
+      (($bad.result -eq 'blind') -and ($bad.blind -in @('no-source', 'no-seed-board')) -and ((Get-RhExitCode $bad.result) -eq 3) -and ((Format-RhComplete $bad) -match '^CHAIN-REHEARSAL-COMPLETE verdict=blind blind=')), ($bad.result + ' ' + $bad.blind)
     }
     $credSeeder = { param($Tree, $SourceRoot) Copy-Item -Recurse -Force (Join-Path $SourceRoot 'grocery') $Tree; $null = [IO.Directory]::CreateDirectory((Join-Path $Tree 'meal-prep')); [IO.File]::WriteAllText((Join-Path $Tree 'meal-prep\.ghostkey'), 'x'); [pscustomobject]@{ Rc = 0; Tail = @() } }
     $cred = Invoke-RhRehearsal -Repo $src -Commit 'HEAD' -SourceRoot $seedDir -VerdictDir $vd -Today $today -Seeder $credSeeder -ChainRunner (& $mkRunner $false) -NoPair
-    Test-RhCase 'MUST FIRE  a seed that carries a live credential is never started: blind=credential-present' { ($cred.result -eq 'blind') -and ($cred.blind -eq 'credential-present'), ($cred.result + ' ' + $cred.blind) }
+    Test-RhCase 'MUST FIRE  a seed that carries a live credential is never started: blind=credential-present' { (($cred.result -eq 'blind') -and ($cred.blind -eq 'credential-present')), ($cred.result + ' ' + $cred.blind) }
     $stale = Invoke-RhRehearsal -Repo $src -Commit 'HEAD' -SourceRoot $seedDir -VerdictDir $vd -Today ([datetime]'2026-09-24') -Seeder $fakeSeeder -ChainRunner (& $mkRunner $false) -NoPair
-    Test-RhCase 'MUST FIRE  data older than the bar is not rehearsed over: blind=stale-data (09-21 board on 09-24)' { ($stale.result -eq 'blind') -and ($stale.blind -eq 'stale-data'), ($stale.result + ' ' + $stale.blind) }
+    Test-RhCase 'MUST FIRE  data older than the bar is not rehearsed over: blind=stale-data (09-21 board on 09-24)' { (($stale.result -eq 'blind') -and ($stale.blind -eq 'stale-data')), ($stale.result + ' ' + $stale.blind) }
 
     # ---- 4. BRAD'S CAP: at most 6 at once, through gate-slots with a private prefix and queue. Slots are held from
     # OTHER processes (lib\mutex-hold.ps1), because a Windows mutex is reentrant on its owning thread.
@@ -864,7 +927,7 @@ if ($SelfTest) {
       $sixthGot = $sixth.Count
       Exit-TcGateSlots $sixth
       Test-RhCase ('MUST NOT FIRE  with 5 of the ' + $script:RhMaxConcurrent + ' rehearsal slots held elsewhere, a 6th starts at once without waiting') {
-        (@($holds | Where-Object { $_.Held }).Count -eq 5) -and ($sixthGot -eq 1) -and (-not $script:rhSixthWaited), ('held=' + @($holds | Where-Object { $_.Held }).Count + ' got=' + $sixthGot + ' waited=' + $script:rhSixthWaited)
+        ((@($holds | Where-Object { $_.Held }).Count -eq 5) -and ($sixthGot -eq 1) -and (-not $script:rhSixthWaited)), ('held=' + @($holds | Where-Object { $_.Held }).Count + ' got=' + $sixthGot + ' waited=' + $script:rhSixthWaited)
       }
       [void]$holds.Add((Start-TcMutexHold -Name ($capPrefix + 5)))
       $vd2 = Join-Path $st 'verdicts-cap'
@@ -874,11 +937,11 @@ if ($SelfTest) {
       $seventh = @($seventhOut | Where-Object { $_ -is [pscustomobject] -and $_.PSObject.Properties['result'] })[0]
       $waitLines = @($seventhOut | Where-Object { ([string]$_) -match 'WAITING for a rehearsal slot - all 6 are in use' })
       Test-RhCase 'MUST FIRE  with all 6 slots held, a 7th rehearsal WAITS and says so, and runs no clone while it waits' {
-        ($waitLines.Count -ge 1) -and ($seventh.blind -eq 'no-rehearsal-slot') -and (-not $seventh.scratch), ('wait lines=' + $waitLines.Count + ' blind=' + $seventh.blind + ' scratch=' + $seventh.scratch)
+        (($waitLines.Count -ge 1) -and ($seventh.blind -eq 'no-rehearsal-slot') -and (-not $seventh.scratch)), ('wait lines=' + $waitLines.Count + ' blind=' + $seventh.blind + ' scratch=' + $seventh.scratch)
       }
       $dWait = Get-RhPushDecision -Repo $src -RefLines @('refs/heads/main ' + $srcHead + ' refs/heads/main ' + (([string](Invoke-RhGit $src @('rev-parse', 'HEAD~1')).stdout).Trim())) -VerdictDir $vd2 -Today $today
       Test-RhCase 'MUST NOT FIRE  the waiting 7th is never recorded as blind or failed: no verdict exists for its content, so the push reads no-verdict' {
-        ($null -eq (Read-RhVerdict $vd2 $seventh.key)) -and ($dWait.Outcome -eq 'no-verdict'), ('verdict=' + [bool](Read-RhVerdict $vd2 $seventh.key) + ' outcome=' + $dWait.Outcome)
+        (($null -eq (Read-RhVerdict $vd2 $seventh.key)) -and ($dWait.Outcome -eq 'no-verdict')), ('verdict=' + [bool](Read-RhVerdict $vd2 $seventh.key) + ' outcome=' + $dWait.Outcome)
       }
       Stop-TcMutexHold $holds[0]; $holds.RemoveAt(0)
       $afterFree = Invoke-RhRehearsal @capArgs -SlotStallSec 30
@@ -980,7 +1043,7 @@ if ($SelfTest) {
     $lsLast = [string]@($lsRun.Lines)[-1]
     $lsWantLast = 'CHAIN-REHEARSAL-LISTSET-COMPLETE files=' + $lsWant.Count + ' commit=' + $l1 + ' key=' + $lsKey + ' decision=needed'
     Test-RhCase 'MUST FIRE  -ListSet over a fixture manifest prints its set EXACTLY and in Ordinal order (Zeta first): files[], a glob, a derive_from member and the manifest, and no absent entry, excluded test or unnamed audit; files= is its count and key= is the verdict key' {
-      $lpOk -and ($lsRun.Rc -eq 0) -and [string]::Equals((@($lsSet) -join "`n"), ($lsWant -join "`n"), [StringComparison]::Ordinal) -and [string]::Equals($lsLast, $lsWantLast, [StringComparison]::Ordinal), ('rewrites=' + $lpRewrites + ' rc=' + $lsRun.Rc + ' set=' + (@($lsSet) -join ',') + ' last=' + $lsLast + ' err=' + $lsRun.Err)
+      ($lpOk -and ($lsRun.Rc -eq 0) -and [string]::Equals((@($lsSet) -join "`n"), ($lsWant -join "`n"), [StringComparison]::Ordinal) -and [string]::Equals($lsLast, $lsWantLast, [StringComparison]::Ordinal)), ('rewrites=' + $lpRewrites + ' rc=' + $lsRun.Rc + ' set=' + (@($lsSet) -join ',') + ' last=' + $lsLast + ' err=' + $lsRun.Err)
     }
     $lsTrig = @(@($lsRun.Lines) | Where-Object { ([string]$_).StartsWith('CHAIN-REHEARSAL-TRIGGER ', [StringComparison]::Ordinal) -or ([string]$_).StartsWith('CHAIN-REHEARSAL-TOUCHED ', [StringComparison]::Ordinal) })
     $lsT0 = 'CHAIN-REHEARSAL-TRIGGER range=' + $l0 + '..' + $l1 + ' decision=needed touched=2'
@@ -991,20 +1054,20 @@ if ($SelfTest) {
     $lsDoc = Get-RhListSet -Repo $lf -Range ($l1 + '..' + $l2)
     $lsDocTrig = 'CHAIN-REHEARSAL-TRIGGER range=' + $l1 + '..' + $l2 + ' decision=not-needed touched=0'
     Test-RhCase 'MUST NOT FIRE  a doc-only range asks for no rehearsal: decision=not-needed touched=0 with no touched line, and the set is still listed' {
-      ($lsDoc.Code -eq 0) -and (@(@($lsDoc.Lines) | Where-Object { ([string]$_).StartsWith('CHAIN-REHEARSAL-TOUCHED', [StringComparison]::Ordinal) }).Count -eq 0) -and (@(@($lsDoc.Lines) | Where-Object { $_ -ceq $lsDocTrig }).Count -eq 1) -and ((Get-RhSetLines $lsDoc.Lines).Count -eq $lsWant.Count) -and ([string]@($lsDoc.Lines)[-1] -cmatch ' decision=not-needed$'), (@($lsDoc.Lines) -join ' / ')
+      (($lsDoc.Code -eq 0) -and (@(@($lsDoc.Lines) | Where-Object { ([string]$_).StartsWith('CHAIN-REHEARSAL-TOUCHED', [StringComparison]::Ordinal) }).Count -eq 0) -and (@(@($lsDoc.Lines) | Where-Object { $_ -ceq $lsDocTrig }).Count -eq 1) -and ((Get-RhSetLines $lsDoc.Lines).Count -eq $lsWant.Count) -and ([string]@($lsDoc.Lines)[-1] -cmatch ' decision=not-needed$')), (@($lsDoc.Lines) -join ' / ')
     }
     $lsBad = Get-RhListSet -Repo $lf -Commit ('f' * 40)
     Test-RhCase 'MUST NOT FIRE  a commit -ListSet cannot name is never read as an empty set: exit 3, blind=cannot-read-commit on the marker, no files= token and no path line' {
-      ($lsBad.Code -eq 3) -and (@($lsBad.Lines).Count -eq 2) -and ([string]@($lsBad.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=cannot-read-commit') -and (@(@($lsBad.Lines) | Where-Object { $_ -match 'files=' }).Count -eq 0) -and ((Get-RhSetLines $lsBad.Lines).Count -eq 0), (@($lsBad.Lines) -join ' / ')
+      (($lsBad.Code -eq 3) -and (@($lsBad.Lines).Count -eq 2) -and ([string]@($lsBad.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=cannot-read-commit') -and (@(@($lsBad.Lines) | Where-Object { $_ -match 'files=' }).Count -eq 0) -and ((Get-RhSetLines $lsBad.Lines).Count -eq 0)), (@($lsBad.Lines) -join ' / ')
     }
     $lsAbs = Get-RhListSet -Repo $lf -Commit $lPre
     Test-RhCase 'MUST NOT FIRE  a commit with no manifest lists no set, and that is a real answer, not a blind: exit 0, files=0 manifest=absent' {
-      ($lsAbs.Code -eq 0) -and (@($lsAbs.Lines).Count -eq 1) -and ([string]@($lsAbs.Lines)[-1] -ceq ('CHAIN-REHEARSAL-LISTSET-COMPLETE files=0 commit=' + $lPre + ' key=- manifest=absent')), (@($lsAbs.Lines) -join ' / ')
+      (($lsAbs.Code -eq 0) -and (@($lsAbs.Lines).Count -eq 1) -and ([string]@($lsAbs.Lines)[-1] -ceq ('CHAIN-REHEARSAL-LISTSET-COMPLETE files=0 commit=' + $lPre + ' key=- manifest=absent'))), (@($lsAbs.Lines) -join ' / ')
     }
     $lsDots = Get-RhListSet -Repo $lf -Range ($l0 + '...' + $l1)
     $lsMis = Get-RhListSet -Repo $lf -Range ($l0 + '..' + $l1) -Commit $l0 -CommitGiven
     Test-RhCase 'MUST NOT FIRE  a three-dot range (a merge-base diff, which -ForPush never makes) and a -Commit that is not the range''s tip are refused as bad-range, never listed' {
-      ($lsDots.Code -eq 3) -and ([string]@($lsDots.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-range') -and ($lsMis.Code -eq 3) -and ([string]@($lsMis.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-range'), ((@($lsDots.Lines) -join ' / ') + ' || ' + (@($lsMis.Lines) -join ' / '))
+      (($lsDots.Code -eq 3) -and ([string]@($lsDots.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-range') -and ($lsMis.Code -eq 3) -and ([string]@($lsMis.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-range')), ((@($lsDots.Lines) -join ' / ') + ' || ' + (@($lsMis.Lines) -join ' / '))
     }
     $lsVd8 = Join-Path $st 'lvd8'
     $null = [IO.Directory]::CreateDirectory($lsVd8)
@@ -1013,7 +1076,7 @@ if ($SelfTest) {
     $lsUsageLines = @(@($lsNoLs.Lines) + @($lsBoth.Lines))
     $lsRan = @($lsUsageLines | Where-Object { $_ -match '^CHAIN-REHEARSAL-(CHECK-)?COMPLETE ' })
     Test-RhCase 'MUST FIRE  -Range without -ListSet (which would otherwise REHEARSE) and -ListSet beside -ForPush are refused with blind=bad-usage, exit 3, before anything runs: no rehearsal or push decision printed and no verdict written' {
-      $lpOk -and ($lsNoLs.Rc -eq 3) -and ([string]@($lsNoLs.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-usage') -and ($lsBoth.Rc -eq 3) -and ([string]@($lsBoth.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-usage') -and ($lsRan.Count -eq 0) -and ((Get-RhTreeListing $lsVd8) -eq ''), ('rc=' + $lsNoLs.Rc + '/' + $lsBoth.Rc + ' ' + ($lsUsageLines -join ' / ') + ' verdicts=' + (Get-RhTreeListing $lsVd8))
+      ($lpOk -and ($lsNoLs.Rc -eq 3) -and ([string]@($lsNoLs.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-usage') -and ($lsBoth.Rc -eq 3) -and ([string]@($lsBoth.Lines)[-1] -ceq 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-usage') -and ($lsRan.Count -eq 0) -and ((Get-RhTreeListing $lsVd8) -eq '')), ('rc=' + $lsNoLs.Rc + '/' + $lsBoth.Rc + ' ' + ($lsUsageLines -join ' / ') + ' verdicts=' + (Get-RhTreeListing $lsVd8))
     }
 
     # NOTHING WRITTEN, NO SLOT TAKEN. Every one of the 6 slots of lp's private prefix is held by ANOTHER process
@@ -1079,7 +1142,7 @@ if ($SelfTest) {
     $lsProbe = Invoke-RhListSetProbe
     $lsWaited = @(@($lsProbe.Lines) | Where-Object { $_ -match 'WAITING' })
     Test-RhCase ('MUST NOT FIRE  -ListSet writes nothing and takes no slot: with all ' + $script:RhMaxConcurrent + ' rehearsal slots held by other processes it lists at once (no WAITING, no queue ticket), and its verdict directory and TEMP are unchanged by listing and by a watcher') {
-      (-not $lsProbe.Error) -and ($lsProbe.Held -eq $script:RhMaxConcurrent) -and ($lsProbe.Alive -eq $script:RhMaxConcurrent) -and ($lsProbe.Rc -eq 0) -and ([string]@($lsProbe.Lines)[-1] -cmatch ('^CHAIN-REHEARSAL-LISTSET-COMPLETE files=' + $lsWant.Count + ' ')) -and ($lsWaited.Count -eq 0) -and (-not $lsProbe.QueueMade) -and $lsProbe.Flushed -and (@($lsProbe.Events).Count -eq 0) -and [string]::Equals($lsProbe.TBefore, $lsProbe.TAfter, [StringComparison]::Ordinal) -and [string]::Equals($lsProbe.VBefore, $lsProbe.VAfter, [StringComparison]::Ordinal),
+      ((-not $lsProbe.Error) -and ($lsProbe.Held -eq $script:RhMaxConcurrent) -and ($lsProbe.Alive -eq $script:RhMaxConcurrent) -and ($lsProbe.Rc -eq 0) -and ([string]@($lsProbe.Lines)[-1] -cmatch ('^CHAIN-REHEARSAL-LISTSET-COMPLETE files=' + $lsWant.Count + ' ')) -and ($lsWaited.Count -eq 0) -and (-not $lsProbe.QueueMade) -and $lsProbe.Flushed -and (@($lsProbe.Events).Count -eq 0) -and [string]::Equals($lsProbe.TBefore, $lsProbe.TAfter, [StringComparison]::Ordinal) -and [string]::Equals($lsProbe.VBefore, $lsProbe.VAfter, [StringComparison]::Ordinal)),
         ('error=' + $lsProbe.Error + ' held=' + $lsProbe.Held + ' alive=' + $lsProbe.Alive + ' rc=' + $lsProbe.Rc + ' last=' + [string]@($lsProbe.Lines)[-1] + ' waited=' + $lsWaited.Count + ' queue=' + $lsProbe.QueueMade + ' flushed=' + $lsProbe.Flushed + ' events=' + (@($lsProbe.Events) -join ';') + ' tSame=' + ($lsProbe.TBefore -eq $lsProbe.TAfter) + ' vSame=' + ($lsProbe.VBefore -eq $lsProbe.VAfter))
     }
 
@@ -1116,7 +1179,7 @@ if ($SelfTest) {
   $hkSet = Get-RhManifestSet $script:RhRoot 'HEAD'
   Test-RhCase 'MUST FIRE  a pre-commit edit is a manifest change (the rehearsal commits through that hook)' { ($hkSet.Ok -and $hkSet.Set.ContainsKey('ops/hooks/pre-commit')), ('ok=' + $hkSet.Ok + ' why=' + $hkSet.Why) }
   Test-RhCase 'MUST NOT FIRE  a pre-push or commit-msg edit demands no rehearsal it cannot exercise' { ($hkSet.Ok -and -not $hkSet.Set.ContainsKey('ops/hooks/pre-push') -and -not $hkSet.Set.ContainsKey('ops/hooks/commit-msg')), ('ok=' + $hkSet.Ok) }
-  $want = 35
+  $want = 40
   if ($script:rhCases -ne $want) { Write-Output ('rehearse-chain self-test FAIL: ran {0} case(s), the suite lists {1}' -f $script:rhCases, $want); exit 1 }
   if ($script:rhFail) { Write-Output ('rehearse-chain self-test FAIL: {0} of {1} case(s)' -f $script:rhFail, $script:rhCases); exit 1 }
   Write-Output ('rehearse-chain self-test PASS: {0} of {0} cases - led by the founding defect (an empty cost-flags.txt refused by the 09-05 hook) and a manifest change with no verdict being refused' -f $script:rhCases)
