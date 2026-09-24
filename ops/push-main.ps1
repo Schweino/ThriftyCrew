@@ -153,7 +153,9 @@
   design/BACKLOG-course-findings.md directly (neither deleting nor moving out an inbox file, which a merge does), inbox
   files the push adds that ops\merge-backlog-inbox.ps1 -ValidateFile says the merge would quarantine, and commits that
   MODIFY an existing updates/ file. Each warns and lands on the row (backlog_direct, inbox_invalid,
-  inbox_updates_modified); none refuses, which is D3's to decide from a dated cutoff.
+  inbox_updates_modified); none refuses, which is D3's to decide from a dated cutoff. W4.1 step 7 adds a fourth: commits
+  that add a "Re-read at" line to a top-level design/*.md file, where a design/reread-ledger.tsv row written by
+  ops\add-reread.ps1 is the road that union-merges and cannot conflict (reread_doc_lines).
 
   SCOPE OF A CLEAN REPORT: exit 0 means the remote accepted this push while this process held the lock. It says
   nothing about a pusher that does not take the lock - an older checkout, a plain `git push --no-verify`, or another
@@ -1454,6 +1456,33 @@ function Invoke-TcBacklogPreflight {
   $Row['inbox_invalid'] = $invalid
 }
 
+function Get-TcRereadDocLineCount {
+  <# W4.1 step 7 (pure over `git log -p -U0` text): how many commits ADD a line carrying "Re-read at" to a top-level
+     design/*.md file. The patch's own "+++" header is not an added line, and a removed re-read line is not counted. #>
+  param($Lines)
+  $n = 0; $cur = $false
+  foreach ($l in @($Lines)) {
+    $s = [string]$l
+    if ($s.StartsWith('TC-COMMIT ')) { if ($cur) { $n++ }; $cur = $false; continue }
+    if ($s.StartsWith('+++')) { continue }
+    if ($s.StartsWith('+') -and $s -cmatch '\bRe-read at\b') { $cur = $true }
+  }
+  if ($cur) { $n++ }
+  return $n
+}
+
+function Invoke-TcRereadPreflight {
+  <# THE WARNING (W4.1 step 7) and the row's reread_doc_lines: commits of the branch that add a re-read as a doc line,
+     where design/reread-ledger.tsv (ops\add-reread.ps1) is the road that cannot conflict. Never refuses; D3 decides. #>
+  param([string]$Dir, [string]$Base, [System.Collections.IDictionary]$Row)
+  if (-not $Base) { return }
+  $r = Invoke-TcGit -Dir $Dir -Arguments @('-c', 'core.quotepath=off', 'log', '--reverse', '--no-renames', '--no-color', '-p', '-U0', '--format=TC-COMMIT %H', ($Base + '..HEAD'), '--', ':(glob)design/*.md')
+  if ($r.Code -ne 0) { Say 'push-main: git could not list this branch''s design/*.md changes, so the re-read count is not taken.'; return }
+  $n = Get-TcRereadDocLineCount -Lines $r.Out
+  $Row['reread_doc_lines'] = $n
+  if ($n -gt 0) { Say ("push-main: WARN - {0} commit(s) here add a re-read as a doc line; record it with ops\add-reread.ps1 instead" -f $n) }
+}
+
 function Invoke-TcPushMainReexec {
   <# RUN THE NEW COPY ONCE (W2.1R step 8): the script at -Path as a child, with -Arguments and TC_PUSH_MAIN_REEXEC=1, its
      lines echoed as they arrive. Returns its exit code, or $null when it could not be started, in which case the caller
@@ -1569,6 +1598,8 @@ function Invoke-TcPushMain {
     backlog_direct       = $null
     inbox_invalid        = $null
     inbox_updates_modified = $null
+    # W4.1 step 7 (warn only): commits adding a re-read as a doc line instead of a design/reread-ledger.tsv row.
+    reread_doc_lines     = $null
   }
   # ONE ROW PER RUN, and at most one (review of W0.1R, 2026-09-23): the guard below writes a row for a throw that no path
   # wrote one for, so every path now ends here, and a path that already wrote one is never written twice.
@@ -1712,6 +1743,7 @@ function Invoke-TcPushMain {
         # own commits over what the pre-flight just fetched, so a sibling's commits on main are never counted as this one's.
         $bcBase = $(if ($s.Rem) { Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('merge-base', 'HEAD', $s.Rem)) } else { '' })
         $null = Invoke-TcRowReader 'backlog' { Invoke-TcBacklogPreflight -Dir $Dir -Base $bcBase -Row $pmRow }
+        $null = Invoke-TcRowReader 'reread' { Invoke-TcRereadPreflight -Dir $Dir -Base $bcBase -Row $pmRow }
         # SEEDED AFTER THE PRE-FLIGHT, so neither leg judges a checkout that has no built cards (backlog I237).
         $null = Invoke-TcSeedBeforeGate -Dir $Dir -Seeder $SeedScript
       }
@@ -2947,6 +2979,24 @@ $m.Dispose()
       T ($kMF + '  (W3.4a step 3) a commit that MODIFIES an existing updates/ file warns with a count of 1') `
         ($b6.Rc -eq 0 -and $null -ne $b6.Row -and [int]$b6.Row.inbox_updates_modified -eq 1 -and $b6.Text -match 'WARN - 1 commit\(s\) here MODIFY an existing file under design/backlog-inbox/updates/') ("rc={0} modified={1}" -f $b6.Rc, $(if ($b6.Row) { $b6.Row.inbox_updates_modified }))
     } finally { $script:TcPmInboxValidatorScript = '' }
+
+    # ---- W4.1 STEP 7: A RE-READ ADDED AS A DOC LINE WARNS (2026-09-23), warn only ----
+    # Founding case: row 40 of the case list conflicted on re-read lines in one MEASURE doc; the ledger row is the road
+    # that union-merges. MUST FIRE: a commit adding a "Re-read at" line to a design doc warns, reread_doc_lines 1.
+    $rrDoc = 'design/MEASURE-fixture-2026-09-23.md'
+    $rrLine = 'Re-read at harness blob ' + ('a' * 40) + ' (ops/x.ps1): the conclusion holds'
+    $rr1 = Invoke-StBacklogCase 'rr1' { param($d) $null = New-Item -ItemType Directory -Force (Join-Path $d 'design'); [IO.File]::WriteAllText((Join-Path $d $rrDoc), ("# A measurement`n`n" + $rrLine + "`n")); $null = & git -C $d add -- $rrDoc 2>$null }
+    T ($kMF + '  a commit that adds a Re-read at line to a design doc warns to use ops\add-reread.ps1, with reread_doc_lines 1, and the push is not refused') `
+      ($rr1.Rc -eq 0 -and $null -ne $rr1.Row -and [int]$rr1.Row.reread_doc_lines -eq 1 -and $rr1.Text -match 'WARN - 1 commit\(s\) here add a re-read as a doc line') ("rc={0} count={1}" -f $rr1.Rc, $(if ($rr1.Row) { $rr1.Row.reread_doc_lines }))
+    # MUST NOT FIRE: the same line in a file outside design/*.md, and a design doc edit with no re-read line, count 0.
+    $rr2 = Invoke-StBacklogCase 'rr2' { param($d) [IO.File]::WriteAllText((Join-Path $d 'notes-rr.md'), ($rrLine + "`n")); $null = New-Item -ItemType Directory -Force (Join-Path $d 'design'); [IO.File]::WriteAllText((Join-Path $d 'design\PLAN-fixture.md'), "# a plan`n`nno re-read here`n"); $null = & git -C $d add -- notes-rr.md design/PLAN-fixture.md 2>$null }
+    T ($kMNF + '  a Re-read at line outside design/*.md, and a design doc edit with none, count 0 and do not warn') `
+      ($rr2.Rc -eq 0 -and $null -ne $rr2.Row -and [int]$rr2.Row.reread_doc_lines -eq 0 -and $rr2.Text -notmatch 'add a re-read as a doc line') ("rc={0} count={1}" -f $rr2.Rc, $(if ($rr2.Row) { $rr2.Row.reread_doc_lines }))
+    # MUST NOT FIRE (pure): a patch that REMOVES a re-read line, or carries one only in its +++ header, counts 0.
+    $rrPure = Get-TcRereadDocLineCount -Lines @('TC-COMMIT 1111', ('--- a/design/MEASURE-x.md'), ('+++ b/design/MEASURE-x.md Re-read at'), ('-' + $rrLine), 'TC-COMMIT 2222', ('+' + 'an unrelated line'))
+    $rrPure2 = Get-TcRereadDocLineCount -Lines @('TC-COMMIT 1111', ('+' + $rrLine), ('+' + $rrLine), 'TC-COMMIT 2222', ('+' + $rrLine))
+    T ($kMNF + '  a removed re-read line or one only in the +++ header counts 0, and two added lines in one commit count that commit once (2 commits, 2)') `
+      ($rrPure -eq 0 -and $rrPure2 -eq 2) ("removed={0} twoCommits={1}" -f $rrPure, $rrPure2)
     # CLEAN TWIN: a READER that throws costs its field, never the push. The gate's result says its run-gates leg took
     # 'not-a-number' seconds, so Add-TcRunnerReadings' [int] cast throws; the push must land and the row keep leg_sec.rg
     # null. NOT a throwing ScriptProperty: PowerShell swallows a getter's exception on member access and reads $null, and
@@ -3623,8 +3673,8 @@ $m.Dispose()
   # fetch-and-rebase-first loop, W0.1's 32, W0.1R's 8, the 15 its review added, W2.1R with W8.1's 14 (the index.lock
   # case was rewritten in place, not added), and W2.2R's 10 (9 catch-up cases, and the could-not-decide case split into a
   # MUST NOT FIRE and a CLEAN TWIN), W9.4's 5 (the queue member's hand-back case lands with W9.2), and W3.2 with W3.4a
-  # step 3's 7; read off this file, not added up.
-  $expectedCases = 129
+  # step 3's 7, and W4.1 step 7's 3; read off this file, not added up.
+  $expectedCases = 132
   if ($cases -ne $expectedCases) { Write-Output ("FAIL  the suite ran {0} case(s) where this file holds {1}, so a case was skipped or lost" -f $cases, $expectedCases); $f++ }
   if ($f) { Write-Output ("push-main self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("push-main self-test PASS: {0} cases - led by a branch whose base the remote moved past landing on its FIRST attempt, and by a conflicting rebase being aborted rather than left half-finished under the lock" -f $cases)
