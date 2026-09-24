@@ -332,10 +332,12 @@ $null = Register-Kid 'unit-basis-outlier'   'audit-unit-basis-outlier.ps1'   @()
 $null = Register-Kid 'cell-drops'           'audit-cell-drops.ps1'           @()
 $null = Register-Kid 'coverage-regression'  'audit-coverage-regression.ps1'  @()
 $null = Register-Kid 'pack-basis'           'audit-pack-basis.ps1'           @()
-$null = Register-Kid 'band-censorship'      'audit-band-censorship.ps1'      @()
+# -Tighten on the two self-tightening ratchets (2026-09-24, Brad's "Change them too"): a plain run of either no longer
+# records a fall, so the chain asks for it here and each mark tightens exactly as it did before this change.
+$null = Register-Kid 'band-censorship'      'audit-band-censorship.ps1'      @('-Tighten')
 # audit-json-readers LEFT this gate on 2026-09-21: it reads SOURCE CODE, not the board, and on 2026-09-20 it held a
 # board with no board cell behind it. It runs at push time in ops\run-gates.ps1, where a source defect belongs.
-$null = Register-Kid 'board-mojibake'      'audit-board-mojibake.ps1'       @('-Quiet')
+$null = Register-Kid 'board-mojibake'      'audit-board-mojibake.ps1'       @('-Quiet', '-Tighten')
 $null = Register-Kid 'capture-encoding'    'audit-capture-encoding.ps1'     @()
 $null = Register-Kid 'flag-verification'   'audit-flag-verification.ps1'    @()
 $null = Register-Kid 'st-walmart-deals'     'build-walmart-deals.ps1'        @('-SelfTest')

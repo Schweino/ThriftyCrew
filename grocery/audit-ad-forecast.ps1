@@ -60,7 +60,17 @@
            lifetime count fell. NEVER read 3 as a pass.
 
   Params: -ScheduleFile <path>, -Json, -Baseline <path>, -AcceptDrop (record a
-          genuine history rewrite rather than refusing it).
+          genuine history rewrite rather than refusing it), -AcceptMiss (acknowledge
+          a miss once), -Accept (record a mark where none can be read; see below).
+
+  THE MARK IS WRITTEN ONLY ON PURPOSE (Brad's ruling, 2026-09-24: "Change them too
+  (Recommended)"; design\backlog-inbox\pd-currency-2026-09-23.md). A missing baseline
+  used to be a first run that WROTE the current count, and an unreadable one threw.
+  Now (lib\ratchet.ps1's Read-TcRatchetBaseline, field full_misses) both are exit 3,
+  COULD NOT EVALUATE with blind=baseline-missing or blind=baseline-unreadable, and
+  nothing is written; -Accept is the one road to a mark over them, and does nothing
+  over a baseline that reads (-AcceptMiss and -AcceptDrop move a readable one).
+  A plain run never writes: a rise exits 2, a fall exits 3, both leave the file alone.
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param(
@@ -69,6 +79,7 @@ param(
   [string]$Baseline = '',
   [switch]$AcceptDrop,
   [switch]$AcceptMiss,
+  [switch]$Accept,
   [switch]$SelfTest
 )
 
@@ -79,6 +90,7 @@ if (-not $ScheduleFile) { $ScheduleFile = Join-Path $root 'ad-schedule.json' }
 if (-not $Baseline) { $Baseline = Join-Path $root 'ad-forecast-baseline.json' }
 $gc = Join-Path $repo 'lib\guard-contract.ps1'
 if (Test-Path $gc) { . $gc }
+. (Join-Path $repo 'lib\ratchet.ps1')   # Read-TcRatchetBaseline: read, absent or unreadable (2026-09-24)
 
 # THE BAR, WRITTEN HERE AND NOT DERIVED FROM THE RUN. A threshold chosen after
 # seeing the number is a description of a decision already taken.
@@ -155,9 +167,12 @@ if ($SelfTest) {
   $missed = $clean + ,@('2026-09-05','2026-09-11')   # predicted 08-29, actual 09-05 = +7
   $slip   = $clean + ,@('2026-08-30','2026-09-05')   # predicted 08-29, actual 08-30 = +1
 
+  # FAIL CLOSED (Brad, 2026-09-24, "Change them too"): no baseline is exit 3 and writes nothing; -Accept records one.
   _Sched $clean
   $r = _Run
-  _Case 'MUST NOT FIRE' 'a clean history writes a baseline of 0 and exits 0' ($r.code -eq 0 -and $r.out -match 'BASELINE WRITTEN at 0') $r.code
+  _Case 'MUST FIRE' 'an ABSENT baseline exits 3, blind=baseline-missing, and no file is created' ($r.code -eq 3 -and $r.out -match 'blind=baseline-missing' -and -not (Test-Path -LiteralPath $bf)) $r.code
+  $r = _Run @{ Accept = $true }
+  _Case 'CLEAN TWIN' '-Accept over an absent baseline records 0 on a clean history and exits 0' ($r.code -eq 0 -and $r.out -match 'BASELINE WRITTEN at 0' -and (Test-Path -LiteralPath $bf)) $r.code
   $r = _Run
   _Case 'MUST NOT FIRE' 'an unchanged history passes on the second run' ($r.code -eq 0 -and $r.out -match 'PASSED') $r.code
 
@@ -167,7 +182,7 @@ if ($SelfTest) {
   _Case 'MUST FIRE' 'and it names the store that skipped' ($r.out -match 'NEW\s+TestMart 0 -> 1') 'no NEW line'
 
   Remove-Item $bf -Force; _Sched $slip
-  $r = _Run
+  $r = _Run @{ Accept = $true }
   _Case 'MUST NOT FIRE' 'a one-day slip is NOT a full-cycle miss' ($r.code -eq 0 -and $r.out -match 'BASELINE WRITTEN at 0') $r.code
 
   # ------- THE NAIVE BASELINE ARM (2026-09-08, backlog I70). The fixtures pin BOTH arms, or the
@@ -187,13 +202,13 @@ if ($SelfTest) {
   # arms tie, the live rule is buying nothing over a plain calendar, and the report must say so
   # rather than letting the live figure read as a win.
   Remove-Item $bf -Force; _Sched $clean
-  $r = _Run
+  $r = _Run @{ Accept = $true }
   _Case 'CLEAN TWIN' 'the report prints the naive arm with its OWN denominator beside the live one' `
     ($r.out -match "NAIVE BASELINE: \d+/\d+ exact, against the live rule's \d+/\d+") 'no NAIVE BASELINE line'
   _Case 'MUST FIRE' 'and it says out loud when the live rule is NOT beating the plain calendar' `
     ($r.out -match 'NOT beating a plain calendar') 'no not-beating note on a fixture where the arms tie'
 
-  Remove-Item $bf -Force; _Sched $clean; _Run | Out-Null; _Sched $missed
+  Remove-Item $bf -Force; _Sched $clean; _Run @{ Accept = $true } | Out-Null; _Sched $missed
   $r = _Run @{ AcceptMiss = $true }
   _Case 'MUST FIRE' '-AcceptMiss raises the baseline and clears the red' ($r.code -eq 0 -and $r.out -match 'ACCEPTED: baseline raised 0 -> 1') $r.code
   $r = _Run
@@ -205,14 +220,23 @@ if ($SelfTest) {
   Remove-Item $bf -Force; _Sched $clean
   @{ generated = '2026-09-08'; full_misses = 5; per_store = @{ TestMart = 5 }; note = 'test' } |
     ConvertTo-Json -Depth 4 | Set-Content $bf -Encoding UTF8
+  $fb0 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($bf))
   $r = _Run
-  _Case 'MUST FIRE' 'a FALL is refused with exit 3, never passed' ($r.code -eq 3 -and $r.out -match 'COULD NOT EVALUATE') $r.code
+  _Case 'MUST FIRE' 'a FALL is refused with exit 3, never passed, and the baseline is byte-identical' ($r.code -eq 3 -and $r.out -match 'COULD NOT EVALUATE' -and [string]::Equals($fb0, [Convert]::ToBase64String([IO.File]::ReadAllBytes($bf)), [StringComparison]::Ordinal)) $r.code
+  $r = _Run @{ Accept = $true }
+  _Case 'MUST NOT FIRE' '-Accept over a baseline that READS moves nothing: the fall is still refused, bytes unchanged' ($r.code -eq 3 -and $r.out -match '-Accept ignored' -and [string]::Equals($fb0, [Convert]::ToBase64String([IO.File]::ReadAllBytes($bf)), [StringComparison]::Ordinal)) $r.code
   $r = _Run @{ AcceptDrop = $true }
   _Case 'CLEAN TWIN' '-AcceptDrop records a genuine fall deliberately' ($r.code -eq 0 -and $r.out -match 'baseline lowered') $r.code
 
+  # A baseline a botched rebase left holding conflict markers used to THROW at the parse; it is exit 3 now, bytes kept.
+  [IO.File]::WriteAllText($bf, ('<' * 7) + " HEAD`n{ ""full_misses"": 1 }`n" + ('=' * 7) + "`n{ ""full_misses"": 0 }`n" + ('>' * 7) + " theirs`n", (New-Object Text.UTF8Encoding($false)))
+  $cb0 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($bf))
+  $r = _Run
+  _Case 'MUST FIRE' 'a baseline holding conflict markers exits 3, blind=baseline-unreadable, bytes unchanged' ($r.code -eq 3 -and $r.out -match 'blind=baseline-unreadable' -and [string]::Equals($cb0, [Convert]::ToBase64String([IO.File]::ReadAllBytes($bf)), [StringComparison]::Ordinal)) $r.code
+
   Remove-Item $bf -Force
   _Sched @(@('2026-08-01','2026-08-14'), @('2026-08-15','2026-08-28'), @('2026-08-29','2026-09-11'))
-  $r = _Run
+  $r = _Run @{ Accept = $true }
   _Case 'MUST FIRE' 'an observed cadence contradicting the declared one fails' ($r.code -eq 2 -and $r.out -match 'CADENCE DRIFT') $r.code
 
   Remove-Item $bf -Force
@@ -399,10 +423,21 @@ foreach ($r in $rows) { if ($r.scored) { $perStore[$r.store] = [int]$r.full_miss
 
 $note = 'BASELINE for full-cycle ad-forecast misses. A full miss is HISTORY and cannot be undone, so this number may only STAY THE SAME. A RISE is a newly skipped ad cycle and hard-fails. A FALL means history was rewritten or the reader broke, and is refused rather than recorded.'
 
-if (-not (Test-Path -LiteralPath $Baseline)) {
+# FAIL CLOSED ON A MARK NOBODY CAN READ (Brad, 2026-09-24, "Change them too"): an absent baseline used to be WRITTEN
+# from the current count here, and an unreadable one threw. Only -Accept records a mark over either now.
+$blRead = Read-TcRatchetBaseline -Path $Baseline -Field 'full_misses'
+if ($blRead.State -ne 'read' -and -not $Accept) {
+  $blTok = Get-TcRatchetBlindToken $blRead.State
+  Write-Output ("COULD NOT EVALUATE - the baseline $Baseline is $($blRead.State) ($($blRead.Why)), so there is no mark to hold $fm full-cycle miss(es) against. Nothing was written: a plain run never records a mark. Restore it from git, or record the current count on purpose with -Accept.")
+  if (Get-Command Write-GuardComplete -ErrorAction SilentlyContinue) {
+    Write-GuardComplete -Name 'ad-forecast' -Summary ("pairs={0} full={1} blind={2}" -f $pairs, $fm, $blTok)
+  } else { Write-Output 'AD-FORECAST-COMPLETE' }
+  exit 3
+}
+if ($blRead.State -ne 'read') {
   @{ generated = (Get-Date).ToString('s'); full_misses = $fm; per_store = $perStore; note = $note } |
     ConvertTo-Json -Depth 4 | Set-Content $Baseline -Encoding UTF8
-  Write-Output ("BASELINE WRITTEN at {0} full-cycle miss(es) over {1} scored pair(s). These are on the record and are silent from here; the NEXT one fails." -f $fm, $pairs)
+  Write-Output ("BASELINE WRITTEN at {0} full-cycle miss(es) over {1} scored pair(s) by -Accept (it was {2}). These are on the record and are silent from here; the NEXT one fails." -f $fm, $pairs, $blRead.State)
   Write-Output "This is a PREDICTION score, not a staleness check. audit-ad-status.ps1"
   Write-Output "owns 'is an ad closed right now' and runs in the daily watchdog."
   if (Get-Command Write-GuardComplete -ErrorAction SilentlyContinue) {
@@ -411,8 +446,9 @@ if (-not (Test-Path -LiteralPath $Baseline)) {
   exit $(if ($drifted.Count) { 2 } else { 0 })
 }
 
-$baseDoc = Get-Content -LiteralPath $Baseline -Raw -Encoding UTF8 | ConvertFrom-Json
-$base = [int]$baseDoc.full_misses
+$baseDoc = $blRead.Doc
+$base = [int]$blRead.Value
+if ($Accept) { Write-Output ("-Accept ignored: the baseline reads ({0} full-cycle miss(es)); -AcceptMiss and -AcceptDrop are how a readable mark moves." -f $base) }
 
 if ($fm -gt $base) {
   $new = @()

@@ -1823,10 +1823,12 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       # kind of question about the same artifact: is what the reader sees actually true?
       # It alerts on its own; this wiring is what makes it RUN daily, and the BLIND arm is reported
       # separately so "0 findings" and "I read nothing" never look the same in this log.
+      # -Tighten (2026-09-24, Brad's "Change them too"): a plain run of the audit no longer records a fall, so the chain
+      # asks for it here and the mark tightens exactly as it did before. A missing or unreadable mark is exit 3 now.
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-board-mojibake.ps1') | Out-Null
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-board-mojibake.ps1') -Tighten | Out-Null
         if ($LASTEXITCODE -eq 2) { Log 'board-mojibake: the published board carries mangled product name(s) - see the alert'; $summary += 'REVIEW    audit-board-mojibake found mangled product name(s) on the board - fix the reader, heal, rebuild' }
-        elseif ($LASTEXITCODE -eq 3) { Log 'board-mojibake BLIND: no readable board with named store rows'; $summary += 'REVIEW    audit-board-mojibake could not read a board - board names went unchecked this cycle' }
+        elseif ($LASTEXITCODE -eq 3) { Log 'board-mojibake BLIND: no readable board with named store rows, or no readable baseline'; $summary += 'REVIEW    audit-board-mojibake could not evaluate (no board, or its baseline is missing or unreadable) - board names went unchecked this cycle' }
       } catch { Log ('audit-board-mojibake threw: ' + $_.Exception.Message) }
 
       # ---- CONSISTENCY GUARD: enforce "the price shown == the product the 'See item' link opens", every day.

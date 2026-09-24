@@ -28,15 +28,24 @@
 # board with no rows is the shape where a counter-based check reports "0 findings" and means "I looked at
 # nothing", which is how five structurally dead guards were found here in one sweep.
 #
-# Run:  .\audit-board-mojibake.ps1
+# THE MARK IS WRITTEN ONLY ON PURPOSE (Brad's ruling, 2026-09-24: "Change them too (Recommended)";
+# design\backlog-inbox\pd-currency-2026-09-23.md). A missing or unreadable baseline used to be a first run that WROTE the
+# current count as the mark, so a baseline a botched rebase left holding conflict markers, or a deleted one, accepted
+# whatever the board carried, a rise included. Now (lib\ratchet.ps1's Read-TcRatchetBaseline) it is exit 3 with
+# blind=baseline-missing or blind=baseline-unreadable and nothing written; -Accept is the one road to a mark over it.
+# A FALL is spoken and the committed mark kept on a plain run; -Tighten records it. The daily chain's callers
+# (guards.ps1 and check-ad-cycles.ps1) pass -Tighten, so the chain tightens exactly as it did before; a hand run does not.
+#
+# Run:  .\audit-board-mojibake.ps1 [-Tighten] [-Accept]
 #       .\audit-board-mojibake.ps1 -SelfTest
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([switch]$SelfTest, [string]$OutDir, [string]$Board, [switch]$Quiet)
+param([switch]$SelfTest, [string]$OutDir, [string]$Board, [switch]$Quiet, [switch]$Tighten, [switch]$Accept)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1')   # Read-JsonFile: this guard must not itself read through the codepage bug it watches for
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')   # Write-GuardComplete: this guard joined the chain without it, so 'ran to the end' was unprovable
+. (Join-Path (Split-Path $root -Parent) 'lib\ratchet.ps1')   # Read-TcRatchetBaseline: read, absent or unreadable (2026-09-24)
 
 # THE SIGNATURE, and why it is these three lead bytes and nothing else.
 # UTF-8 read as Windows-1252 turns every non-ASCII character into a sequence that STARTS with one of
@@ -188,8 +197,47 @@ if ($SelfTest) {
   _T 'Repair-Mojibake leaves a real registered sign alone' (
     (Repair-Mojibake ('Filippo Berio' + [char]0x00AE + ' Classic Pesto 6.7 oz. Jar')) -eq ('Filippo Berio' + [char]0x00AE + ' Classic Pesto 6.7 oz. Jar'))
 
+  # ---- THE LIVE PATH, run as a child against a temp board and a temp baseline (Brad, 2026-09-24, "Change them too") ----
+  # -Quiet on every child: a finding must never reach Send-Alert from a fixture. One mangled name on the board, so the
+  # count is 1 throughout; each case names the mark it starts from.
+  $lp = Join-Path $env:TEMP ('abm-st-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $lp -ErrorAction Stop | Out-Null
+  try {
+    $lpBoard = [pscustomobject]@{ comparison = @([pscustomobject]@{ id = 'pickled-jalapenos'; stores = @(
+      [pscustomobject]@{ store = 'Fareway'; item = $costena },
+      [pscustomobject]@{ store = 'Walmart'; item = 'Great Value Gluten-Free Vegetable Broth, 32 oz Carton' }) }) }
+    [IO.File]::WriteAllText((Join-Path $lp 'comparison-2026-01-01.json'), ($lpBoard | ConvertTo-Json -Depth 5), (New-Object Text.UTF8Encoding($true)))
+    $lpBl = Join-Path $lp 'board-mojibake-baseline.json'
+    function _LpRun([string[]]$extra) {
+      $o = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -OutDir $lp -Quiet @extra)
+      return [pscustomobject]@{ rc = $LASTEXITCODE; text = ($o -join "`n") }
+    }
+    function _LpSeed([int]$n) { [IO.File]::WriteAllText($lpBl, ('{ "generated": "2026-01-01T00:00:00", "count": ' + $n + ', "note": "fixture" }'), (New-Object Text.UTF8Encoding($false))) }
+    function _LpBytes { if (Test-Path -LiteralPath $lpBl) { return [Convert]::ToBase64String([IO.File]::ReadAllBytes($lpBl)) } else { return '' } }
+    _LpSeed 2; $b0 = _LpBytes
+    $r = _LpRun @()
+    _T ('MUST NOT FIRE live: a FALL (1 under a mark of 2) on a plain run leaves the baseline byte-identical and says it CAN tighten (rc=' + $r.rc + ')') ($r.rc -eq 1 -and [string]::Equals($b0, (_LpBytes), [StringComparison]::Ordinal) -and $r.text -match 'CAN tighten to 1')
+    $r = _LpRun @('-Tighten')
+    $wrote = if (Test-Path -LiteralPath $lpBl) { [int](([IO.File]::ReadAllText($lpBl) | ConvertFrom-Json).count) } else { -1 }
+    _T ('CLEAN TWIN live: -Tighten records the fall (mark 2 -> 1) (rc=' + $r.rc + ' mark=' + $wrote + ')') ($r.rc -eq 1 -and $wrote -eq 1 -and $r.text -match 'ratchet tightened to 1')
+    _LpSeed 0
+    $r = _LpRun @('-Tighten')
+    _T ('CLEAN TWIN live: a RISE (1 over a mark of 0) still exits 2, with -Tighten too (rc=' + $r.rc + ')') ($r.rc -eq 2 -and $r.text -match 'RATCHET BROKEN')
+    [IO.File]::WriteAllText($lpBl, ('<' * 7) + " HEAD`n{ ""count"": 1 }`n" + ('=' * 7) + "`n{ ""count"": 0 }`n" + ('>' * 7) + " theirs`n", (New-Object Text.UTF8Encoding($false)))
+    $b1 = _LpBytes
+    $r = _LpRun @()
+    _T ('MUST FIRE live: a baseline holding conflict markers exits 3, blind=baseline-unreadable, bytes unchanged (rc=' + $r.rc + ')') ($r.rc -eq 3 -and [string]::Equals($b1, (_LpBytes), [StringComparison]::Ordinal) -and $r.text -match 'blind=baseline-unreadable')
+    Remove-Item -LiteralPath $lpBl -Force
+    $r = _LpRun @('-Tighten')
+    _T ('MUST FIRE live: an ABSENT baseline under -Tighten exits 3, blind=baseline-missing, and no file is created (rc=' + $r.rc + ')') ($r.rc -eq 3 -and -not (Test-Path -LiteralPath $lpBl) -and $r.text -match 'blind=baseline-missing')
+    $r = _LpRun @('-Accept')
+    $wrote = if (Test-Path -LiteralPath $lpBl) { [int](([IO.File]::ReadAllText($lpBl) | ConvertFrom-Json).count) } else { -1 }
+    _T ('CLEAN TWIN live: -Accept over an absent baseline records the current count (1) and exits 0 (rc=' + $r.rc + ' mark=' + $wrote + ')') ($r.rc -eq 0 -and $wrote -eq 1)
+  } catch { Write-Output ('FAIL  the live-path cases threw: ' + $_.Exception.Message); $fail++ }
+  finally { Remove-Item -LiteralPath $lp -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($fail) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
-  Write-Output 'SELF-TEST PASS'
+  Write-Output 'SELF-TEST PASS (with six live-path baseline cases)'
   exit 0
 }
 
@@ -225,28 +273,38 @@ if ($res.examined -eq 0) {
 # today, which means both rules are currently identical and this costs nothing - and the moment a name that
 # was clean yesterday is mangled today, that is a LIVE reader bug and it blocks.
 $blF = Join-Path $OutDir 'board-mojibake-baseline.json'
-$base = $null
-if (Test-Path $blF) { try { $base = [int]((Read-JsonFile $blF).count) } catch { $base = $null } }
 $count = $res.findings.Count
-if ($null -eq $base) {
-  # A BLIND run never reaches here - every could-not-read path above exits 3 first - so a baseline written
-  # at this point is always taken from a board that was actually examined.
+# FAIL CLOSED ON A MARK NOBODY CAN READ (Brad, 2026-09-24, "Change them too"): an absent or unreadable baseline used to
+# set $base to $null and the next block WROTE the current count, a rise included. Only -Accept records a mark now.
+$blRead = Read-TcRatchetBaseline -Path $blF -Field 'count'
+if ($Accept) {
+  # A BLIND run never reaches here - every could-not-read path above exits 3 first - so a mark recorded at this
+  # point is always taken from a board that was actually examined.
   @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the board-mojibake ratchet, set 2026-09-05. May only go DOWN. A run above it is a NEW mangled name, i.e. a live reader bug, and hard-fails.' } |
     ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
-  Write-Output ("audit-board-mojibake: baseline written at $count. From here the number may only go DOWN.")
-  $base = $count
+  Write-Output ("audit-board-mojibake: baseline recorded at $count by -Accept (it was $($blRead.State)). From here the number may only go DOWN.")
+  Exit-Guard -Name 'board-mojibake' -Summary ("baseline $count recorded by -Accept") -Code 0
 }
+if ($blRead.State -ne 'read') {
+  $blTok = Get-TcRatchetBlindToken $blRead.State
+  Write-Output ("! audit-board-mojibake: COULD NOT EVALUATE - the baseline $blF is $($blRead.State) ($($blRead.Why)), so there is no mark to hold $count mangled name(s) against. Nothing was written: a plain run and -Tighten never record a mark. Restore it from git, or record the current count on purpose with -Accept.")
+  Exit-Guard -Name 'board-mojibake' -Summary ("$count mangled, blind=$blTok") -Code 3
+}
+$base = [int]$blRead.Value
 # DELIBERATELY NOT ROUTED THROUGH lib\ratchet.ps1 (2026-09-07, backlog I15). That library refuses a
 # fall to ZERO, because for a FINDINGS ratchet a sudden nothing usually means the detector broke. Here
 # zero is the GOAL STATE - a board with no mangled names - and the clean branch below exits 0 on
 # exactly that, so refusing it would punish the success this audit exists to reach. The broken-detector
 # case that motivates the library is already covered here by a different mechanism: every
 # could-not-read path above exits 3 BEFORE this line, so a run that reaches it examined a real board.
-if ($count -lt $base) {
+if ($count -lt $base -and $Tighten) {
   @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the board-mojibake ratchet. May only go DOWN.' } |
     ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
   Write-Output ("audit-board-mojibake: ratchet tightened to $count (was $base).")
   $base = $count
+} elseif ($count -lt $base) {
+  # A PLAIN RUN NEVER WRITES ITS MARK (ops-and-gates.md): the fall is spoken and the committed mark kept.
+  Write-Output ("audit-board-mojibake: ratchet CAN tighten to $count (the mark is $base, kept). -Tighten records it; the daily chain passes it.")
 }
 if (-not $res.findings.Count) {
   Write-Output ('audit-board-mojibake: clean - ' + $res.examined + ' board name(s) examined in ' + (Split-Path $Board -Leaf) + ', 0 mangled')

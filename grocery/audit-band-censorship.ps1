@@ -64,10 +64,18 @@
 #                                                a cell (backlog I216). Writes nothing, not even a baseline.
 # Exit 0 = clean or advisory findings. Exit 2 = self-test regression. Exit 3 = BLIND (nothing to judge).
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([string]$OutDir = '', [string]$FlaggedFile = '', [string]$CompareFile = '', [double]$NearFloor = 0.75, [double]$MedianFloor = 0.4, [switch]$SelfTest, [int]$Replay = 0, [string]$ReplayRows = '')
+# THE MARK IS WRITTEN ONLY ON PURPOSE (Brad's ruling, 2026-09-24: "Change them too (Recommended)";
+# design\backlog-inbox\pd-currency-2026-09-23.md). A missing or unreadable baseline used to be verdict 'first', which
+# WROTE the current count, so a baseline a botched rebase left holding conflict markers, or a deleted one, accepted
+# whatever the board carried, a rise included. Now (lib\ratchet.ps1's Read-TcRatchetBaseline, field cells) it is exit 3
+# with blind=baseline-missing or blind=baseline-unreadable and nothing written, the report included; -Accept is the one
+# road to a mark over it. A FALL, and a changed counted set at the same mark, are spoken and the committed baseline kept
+# on a plain run; -Tighten records them. guards.ps1 passes -Tighten, so the daily chain tightens exactly as it did.
+param([string]$OutDir = '', [string]$FlaggedFile = '', [string]$CompareFile = '', [double]$NearFloor = 0.75, [double]$MedianFloor = 0.4, [switch]$SelfTest, [int]$Replay = 0, [string]$ReplayRows = '', [switch]$Tighten, [switch]$Accept)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ratchet.ps1')   # Read-TcRatchetBaseline: read, absent or unreadable (2026-09-24)
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
@@ -346,8 +354,10 @@ if ($SelfTest) {
   else { Write-Output '  FAIL  RATCHET: the known backlog blocks, which is the gate that gets switched off'; $fail++ }
   if ((Get-RatchetVerdict -Cells 49 -Baseline 50) -eq 'tighten') { Write-Output '  PASS  RATCHET: working the backlog down tightens the high-water mark automatically' }
   else { Write-Output '  FAIL  RATCHET: the baseline does not tighten, so a fixed cell could silently regress later'; $fail++ }
-  if ((Get-RatchetVerdict -Cells 50 -Baseline $null) -eq 'first') { Write-Output '  PASS  RATCHET: a first run with no baseline writes one rather than reading a missing file as zero' }
-  else { Write-Output '  FAIL  RATCHET: a missing baseline is not handled as a first run'; $fail++ }
+  # The pure verdict still reads a null mark as 'first': -Replay's simulation starts there. The LIVE path never reaches it
+  # since 2026-09-24 - a missing or unreadable baseline exits 3 first, and the live-path cases at the end prove that.
+  if ((Get-RatchetVerdict -Cells 50 -Baseline $null) -eq 'first') { Write-Output '  PASS  RATCHET: the pure verdict reads no mark as first rather than as zero (the replay starts there; the live path refuses it)' }
+  else { Write-Output '  FAIL  RATCHET: a missing mark is not the pure verdict first'; $fail++ }
   # AND AT THE NEW HIGH-WATER MARK. The scale test tightens the baseline from 41 to the low 30s, and the
   # thing that must not happen is a tighter ratchet that has stopped ratcheting. One cell over the NEW
   # baseline is still a hard fail; the numbers are the ones this run is about to record.
@@ -416,8 +426,54 @@ if ($SelfTest) {
     Write-Output '  PASS  CLEAN TWIN: a parked cell whose own row is gone leaves the count and the ratchet tightens 3 -> 2'
   } else { Write-Output ('  FAIL  CLEAN TWIN: a resolved parked cell stayed counted (counted ' + $s5.counted.Count + ', ' + $v5 + ')'); $fail++ }
 
+  # (8) THE LIVE PATH, run as a child against a temp flagged file, board and baseline (Brad, 2026-09-24, "Change them
+  #     too"). The frozen lettuce row is the one finding, so the counted set is exactly lettuce|Sam's Club throughout.
+  $lp = Join-Path $env:TEMP ('abc-st-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $lp -ErrorAction Stop | Out-Null
+  try {
+    $u8 = New-Object Text.UTF8Encoding($false)
+    $lpFlag = [pscustomobject]@{ flagged = @([pscustomobject]@{ id='lettuce'; label='Lettuce (head)'; store=$sams; unit='each'; unit_price=0.7783; band='0.8-4.5'; name='Romaine Hearts, 6 ct.'; price_text='$4.67'; size_text='6 ct' }) }
+    [IO.File]::WriteAllText((Join-Path $lp 'flagged-2026-01-01.json'), ($lpFlag | ConvertTo-Json -Depth 5), $u8)
+    $lpCmp = [pscustomobject]@{ comparison = @([pscustomobject]@{ id = 'lettuce'; stores = @([pscustomobject]@{ store = $sams; per_unit = 1.0367; item = 'Romaine Hearts, 6 ct.' }) }) }
+    [IO.File]::WriteAllText((Join-Path $lp 'comparison-2026-01-01.json'), ($lpCmp | ConvertTo-Json -Depth 5), $u8)
+    $lpBl = Join-Path $lp 'band-censorship-baseline.json'
+    $lpRep = Join-Path $lp 'band-censorship.json'
+    function _LpRun([string[]]$extra) {
+      $o = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -OutDir $lp @extra)
+      return [pscustomobject]@{ rc = $LASTEXITCODE; text = ($o -join "`n") }
+    }
+    function _LpSeed([int]$n, [string]$set) { [IO.File]::WriteAllText($lpBl, ('{ "generated": "2026-01-01T00:00:00", "cells": ' + $n + ', "counted_cells": [' + $set + '], "note": "fixture" }'), $u8) }
+    function _LpBytes { if (Test-Path -LiteralPath $lpBl) { return [Convert]::ToBase64String([IO.File]::ReadAllBytes($lpBl)) } else { return '' } }
+    function _LpCells { if (Test-Path -LiteralPath $lpBl) { return [int](([IO.File]::ReadAllText($lpBl) | ConvertFrom-Json).cells) } else { return -1 } }
+    _LpSeed 2 '"gone|Walmart", "lettuce|Sam''s Club"'; $b0 = _LpBytes
+    $r = _LpRun @()
+    if ($r.rc -eq 0 -and [string]::Equals($b0, (_LpBytes), [StringComparison]::Ordinal) -and $r.text -match 'CAN tighten to 1') { Write-Output '  PASS  MUST NOT FIRE live: a FALL (1 counted under a mark of 2) on a plain run leaves the baseline byte-identical and says it CAN tighten' }
+    else { Write-Output ('  FAIL  MUST NOT FIRE live: a plain run wrote the fallen mark (rc=' + $r.rc + ')'); $fail++ }
+    $r = _LpRun @('-Tighten')
+    if ($r.rc -eq 0 -and (_LpCells) -eq 1 -and $r.text -match 'ratchet tightened: 1') { Write-Output '  PASS  CLEAN TWIN live: -Tighten records the fall (mark 2 -> 1)' }
+    else { Write-Output ('  FAIL  CLEAN TWIN live: -Tighten did not record the fall (rc=' + $r.rc + ' cells=' + (_LpCells) + ')'); $fail++ }
+    _LpSeed 0 ''
+    $r = _LpRun @('-Tighten')
+    if ($r.rc -eq 2 -and $r.text -match 'RATCHET BROKEN' -and (_LpCells) -eq 0) { Write-Output '  PASS  CLEAN TWIN live: a RISE (1 counted over a mark of 0) still exits 2 and moves no mark, with -Tighten too' }
+    else { Write-Output ('  FAIL  CLEAN TWIN live: a rise did not exit 2 (rc=' + $r.rc + ')'); $fail++ }
+    [IO.File]::WriteAllText($lpBl, ('<' * 7) + " HEAD`n{ ""cells"": 1 }`n" + ('=' * 7) + "`n{ ""cells"": 0 }`n" + ('>' * 7) + " theirs`n", $u8)
+    $b1 = _LpBytes
+    Remove-Item -LiteralPath $lpRep -Force -ErrorAction SilentlyContinue
+    $r = _LpRun @()
+    if ($r.rc -eq 3 -and [string]::Equals($b1, (_LpBytes), [StringComparison]::Ordinal) -and $r.text -match 'blind=baseline-unreadable' -and -not (Test-Path -LiteralPath $lpRep)) { Write-Output '  PASS  MUST FIRE live: a baseline holding conflict markers exits 3, blind=baseline-unreadable, bytes unchanged, and no report is written' }
+    else { Write-Output ('  FAIL  MUST FIRE live: a conflicted baseline did not fail closed (rc=' + $r.rc + ')'); $fail++ }
+    Remove-Item -LiteralPath $lpBl -Force
+    $r = _LpRun @('-Tighten')
+    if ($r.rc -eq 3 -and -not (Test-Path -LiteralPath $lpBl) -and $r.text -match 'blind=baseline-missing') { Write-Output '  PASS  MUST FIRE live: an ABSENT baseline under -Tighten exits 3, blind=baseline-missing, and no file is created' }
+    else { Write-Output ('  FAIL  MUST FIRE live: an absent baseline did not fail closed (rc=' + $r.rc + ' created=' + (Test-Path -LiteralPath $lpBl) + ')'); $fail++ }
+    $r = _LpRun @('-Accept')
+    if ($r.rc -eq 0 -and (_LpCells) -eq 1) { Write-Output '  PASS  CLEAN TWIN live: -Accept over an absent baseline records the current count (1) and exits 0' }
+    else { Write-Output ('  FAIL  CLEAN TWIN live: -Accept did not record the count (rc=' + $r.rc + ' cells=' + (_LpCells) + ')'); $fail++ }
+  } catch { Write-Output ('  FAIL  the live-path cases threw: ' + $_.Exception.Message); $fail++ }
+  finally { Remove-Item -LiteralPath $lp -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($fail) { Write-Output ("SELF-TEST FAILED ($fail)"); exit 2 }
-  Write-Output 'SELF-TEST PASS - founding bug armed (floor AND scale), the case-pack parse error refused, three clean twins, the discrimination case, the ratchet hold, and another store''s sale parked rather than counted'
+  Write-Output 'SELF-TEST PASS - founding bug armed (floor AND scale), the case-pack parse error refused, three clean twins, the discrimination case, the ratchet hold, another store''s sale parked rather than counted, and six live-path baseline cases'
   exit 0
 }
 
@@ -531,10 +587,19 @@ if (-not $board.Count) { Write-Output 'BLIND: comparison carries no priced store
 $blF = Join-Path $OutDir 'band-censorship-baseline.json'
 $base = $null
 $known = @()
-if (Test-Path $blF) {
-  try { $bdoc = Read-JsonFile $blF; $base = [int]$bdoc.cells; if ($bdoc.PSObject.Properties['counted_cells']) { $known = @($bdoc.counted_cells | ForEach-Object { [string]$_ }) } } catch { $base = $null; $known = @() }
+# FAIL CLOSED ON A MARK NOBODY CAN READ (Brad, 2026-09-24, "Change them too"). Read-TcRatchetBaseline tells READ, ABSENT
+# and UNREADABLE apart; only -Accept goes on past the last two, and a refusal writes nothing, not even the report.
+$blRead = Read-TcRatchetBaseline -Path $blF -Field 'cells'
+if ($blRead.State -eq 'read') {
+  $base = [int]$blRead.Value
+  if ($blRead.Doc.PSObject.Properties['counted_cells']) { $known = @($blRead.Doc.counted_cells | ForEach-Object { [string]$_ }) }
 }
 $state = Get-BandRatchetState -Flagged $flagged -Board $board -NearFloor $NearFloor -MedianFloor $MedianFloor -Known $known
+if ($blRead.State -ne 'read' -and -not $Accept) {
+  $blTok = Get-TcRatchetBlindToken $blRead.State
+  Write-Output ("! band-censorship: COULD NOT EVALUATE - the baseline $blF is $($blRead.State) ($($blRead.Why)), so there is no mark to hold $(@($state.counted).Count) counted cell(s) against. Nothing was written: a plain run and -Tighten never record a mark. Restore it from git, or record the current count on purpose with -Accept.")
+  Exit-Guard -Name 'band-censorship' -Summary ("$(@($state.counted).Count) counted, blind=$blTok") -Code 3
+}
 $findings = @($state.findings)
 $cells =@($findings | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object -Unique).Count
 $pct = [int]((1 - $NearFloor) * 100)
@@ -584,15 +649,15 @@ function Write-BandBaseline([int]$N, [string[]]$Set) {
   @{ generated = (Get-Date).ToString('s'); cells = $N; counted_cells = @($Set); note = 'High-water mark for the band-censorship ratchet. This number may only go DOWN. A run above it is a NEW censored cell and hard-fails. counted_cells is the set behind the number: a cell in it stays counted while its own row is still a near-floor refusal, even when another store moves the commodity median (backlog I216).' } |
     ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
 }
-$verdict = Get-RatchetVerdict -Cells $nCounted -Baseline $base
-if ($verdict -eq 'first') {
-  # A BLIND run must never write the baseline: pinning a high-water mark from a run that saw nothing would
-  # permanently disarm the ratchet, which is exactly how tile-integrity's -Baseline refusal came to exist.
-  # Every BLIND path above exits 3 before reaching here, so arriving with a real board is the precondition.
+if ($Accept) {
+  # THE ONE ROAD TO A MARK (2026-09-24). A BLIND run must never write the baseline: pinning a high-water mark from a
+  # run that saw nothing would permanently disarm the ratchet, which is exactly how tile-integrity's -Baseline refusal
+  # came to exist. Every BLIND path above exits 3 before reaching here, so arriving with a real board is the precondition.
   Write-BandBaseline -N $nCounted -Set $counted
-  Write-Output ("  baseline written: $nCounted cell(s). From here the number may only go DOWN.")
-  $base = $nCounted
+  Write-Output ("  baseline recorded by -Accept: $nCounted cell(s) (it was $($blRead.State)). From here the number may only go DOWN.")
+  Exit-Guard -Name 'band-censorship' -Summary ("baseline $nCounted recorded by -Accept") -Code 0
 }
+$verdict = Get-RatchetVerdict -Cells $nCounted -Baseline $base
 if ($verdict -eq 'break') {
   $newCells = @($counted | Where-Object { $known -notcontains $_ })
   Write-Output ("band-censorship: RATCHET BROKEN - $nCounted cell(s) now, baseline $base. A cell that was not being censored yesterday is being censored today, which is a live regression rather than the known backlog.")
@@ -607,15 +672,21 @@ if ($verdict -eq 'break') {
   }
   Exit-Guard -Name 'band-censorship' -Summary ("$nCounted cell(s) over a baseline of $base") -Code 2
 }
+# A PLAIN RUN NEVER WRITES ITS MARK (ops-and-gates.md, Brad 2026-09-24): the fall and the changed set are spoken and the
+# committed baseline kept; -Tighten, which guards.ps1 passes, records them exactly as every run did before.
 if ($verdict -eq 'tighten') {
-  Write-BandBaseline -N $nCounted -Set $counted
-  Write-Output ("  ratchet tightened: $nCounted cell(s), was $base. New baseline written.")
+  if ($Tighten) {
+    Write-BandBaseline -N $nCounted -Set $counted
+    Write-Output ("  ratchet tightened: $nCounted cell(s), was $base. New baseline written.")
+  } else { Write-Output ("  ratchet CAN tighten to $nCounted cell(s) (the mark is $base, kept). -Tighten records it; guards.ps1 passes it.") }
 }
 if ($verdict -eq 'hold' -and -not [string]::Equals((@($known) -join ','), ($counted -join ','), [StringComparison]::Ordinal)) {
   # Same count, different cells (or a baseline written before the set existed): record WHICH cells, so a
   # cell counted today can be parked tomorrow. The number itself does not move.
-  Write-BandBaseline -N $base -Set $counted
-  Write-Output ("  counted set recorded at the same mark of $base.")
+  if ($Tighten) {
+    Write-BandBaseline -N $base -Set $counted
+    Write-Output ("  counted set recorded at the same mark of $base.")
+  } else { Write-Output ("  counted set CAN be recorded at the same mark of $base (kept). -Tighten records it.") }
 }
 Write-Output ("band-censorship: $nCounted cell(s) against a baseline of $base - the known backlog, not a regression. Work it from $outFile (ranked: nearest the floor is likeliest to be a real price).")
 Exit-Guard -Name 'band-censorship' -Summary ("$($findings.Count) finding(s) across $cells cell(s), $nCounted counted, baseline $base") -Code 0
