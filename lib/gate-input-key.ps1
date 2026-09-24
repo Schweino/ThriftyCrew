@@ -1247,20 +1247,22 @@ if ($SelfTest) { }
     # ---- A DATA GLOB IN A WALKED FILE, UNDER A DECLARATION (2026-09-24) ----
     # The founding shape: grocery\capture-run.ps1 names 'meal-prep\db\recipes\*.json', and every declared gate whose walk
     # reached it hashed every spec. A data LITERAL there was already left out; the glob was not.
-    $null = New-Item -ItemType Directory -Force -Path (Join-Path $sb 'meal-prep\db\recipes')
-    [IO.File]::WriteAllText((Join-Path $sb 'meal-prep\db\recipes\a.json'), '{}', $utf8)
+    $dgRel = 'meal-prep\db\recipes'   # reach-fixture-ok: a folder inside the %TEMP% sandbox repo, never this repo's meal-prep\db
+    $dgGlob = $dgRel + '\*.json'
+    $null = New-Item -ItemType Directory -Force -Path (Join-Path $sb $dgRel)
+    [IO.File]::WriteAllText((Join-Path $sb ($dgRel + '\a.json')), '{}', $utf8)
     $dgLib = Join-Path $sb 'grocery\globs-data-lib.ps1'
-    [IO.File]::WriteAllText($dgLib, "`$repo = Split-Path -Parent `$PSScriptRoot`n`$specs = Get-ChildItem (Join-Path `$repo 'meal-prep\db\recipes\*.json')`n", $utf8)
+    [IO.File]::WriteAllText($dgLib, "`$repo = Split-Path -Parent `$PSScriptRoot`n`$specs = Get-ChildItem (Join-Path `$repo '" + $dgGlob + "')`n", $utf8)
     $dgGate = Join-Path $sb 'ops\declares-data-lib.ps1'
     [IO.File]::WriteAllText($dgGate, "# gate-inputs: grocery\globs-data-lib.ps1`nif (`$SelfTest) { }`n", $utf8)
     $kDg1 = Get-TcGateInputKey -Repo $sb -GateFile $dgGate -GateArg '-SelfTest' -RunnerFiles @($runner)
-    [IO.File]::WriteAllText((Join-Path $sb 'meal-prep\db\recipes\a.json'), '{"edited":1}', $utf8)
-    [IO.File]::WriteAllText((Join-Path $sb 'meal-prep\db\recipes\b.json'), '{}', $utf8)
+    [IO.File]::WriteAllText((Join-Path $sb ($dgRel + '\a.json')), '{"edited":1}', $utf8)
+    [IO.File]::WriteAllText((Join-Path $sb ($dgRel + '\b.json')), '{}', $utf8)
     $kDg2 = Get-TcGateInputKey -Repo $sb -GateFile $dgGate -GateArg '-SelfTest' -RunnerFiles @($runner)
     $dgFiles = @($kDg2.Files | ForEach-Object { [string]$_ } | Where-Object { $_ -match 'recipes' })
     T 'MUST NOT FIRE  a data glob in a LIBRARY a declared gate walks is not hashed: editing and adding a spec under it leaves the key alone, as a data literal there already did' `
       ($kDg1.Ok -and $kDg2.Ok -and $kDg1.Key -eq $kDg2.Key -and $dgFiles.Count -eq 0) ("ok1={0} ok2={1} why={2} data-files={3}" -f $kDg1.Ok, $kDg2.Ok, $kDg1.Why, ($dgFiles -join ','))
-    [IO.File]::WriteAllText($dgLib, "`$repo = Split-Path -Parent `$PSScriptRoot`n`$specs = Get-ChildItem (Join-Path `$repo 'meal-prep\db\recipes\*.json')`n# edited`n", $utf8)
+    [IO.File]::WriteAllText($dgLib, "`$repo = Split-Path -Parent `$PSScriptRoot`n`$specs = Get-ChildItem (Join-Path `$repo '" + $dgGlob + "')`n# edited`n", $utf8)
     $kDg3 = Get-TcGateInputKey -Repo $sb -GateFile $dgGate -GateArg '-SelfTest' -RunnerFiles @($runner)
     T 'MUST FIRE  the library that names the data glob is still an input: editing it moves the key' `
       ($kDg3.Ok -and $kDg3.Key -ne $kDg2.Key) ("ok={0} why={1}" -f $kDg3.Ok, $kDg3.Why)
@@ -1268,11 +1270,11 @@ if ($SelfTest) { }
     T 'MUST FIRE  the declaration verifier still moves the key for every declared input of that gate' `
       ($vDg.Ok) ("ok={0} why={1}" -f $vDg.Ok, $vDg.Why)
     $dgOwn = Join-Path $sb 'ops\own-data-glob.ps1'
-    [IO.File]::WriteAllText($dgOwn, "# gate-inputs: grocery\globs-data-lib.ps1`n`$repo = Split-Path -Parent `$PSScriptRoot`n`$b = Get-ChildItem (Join-Path `$repo 'meal-prep\db\recipes\*.json')`nif (`$SelfTest) { }`n", $utf8)
+    [IO.File]::WriteAllText($dgOwn, "# gate-inputs: grocery\globs-data-lib.ps1`n`$repo = Split-Path -Parent `$PSScriptRoot`n`$b = Get-ChildItem (Join-Path `$repo '" + $dgGlob + "')`nif (`$SelfTest) { }`n", $utf8)
     $kDo1 = Get-TcGateInputKey -Repo $sb -GateFile $dgOwn -GateArg '-SelfTest' -RunnerFiles @($runner)
-    [IO.File]::WriteAllText((Join-Path $sb 'meal-prep\db\recipes\c.json'), '{}', $utf8)
+    [IO.File]::WriteAllText((Join-Path $sb ($dgRel + '\c.json')), '{}', $utf8)
     $kDo2 = Get-TcGateInputKey -Repo $sb -GateFile $dgOwn -GateArg '-SelfTest' -RunnerFiles @($runner)
-    [IO.File]::WriteAllText((Join-Path $sb 'meal-prep\db\recipes\c.json'), '{"edited":1}', $utf8)
+    [IO.File]::WriteAllText((Join-Path $sb ($dgRel + '\c.json')), '{"edited":1}', $utf8)
     $kDo3 = Get-TcGateInputKey -Repo $sb -GateFile $dgOwn -GateArg '-SelfTest' -RunnerFiles @($runner)
     T 'MUST FIRE  the GATE''S OWN data glob is still hashed under a declaration: a new spec and an edited spec each move its key (hunt-run''s -Init fixture lists the real boards)' `
       ($kDo1.Ok -and $kDo2.Ok -and $kDo3.Ok -and $kDo1.Key -ne $kDo2.Key -and $kDo2.Key -ne $kDo3.Key) ("ok={0}/{1}/{2} why={3}" -f $kDo1.Ok, $kDo2.Ok, $kDo3.Ok, $kDo1.Why)
