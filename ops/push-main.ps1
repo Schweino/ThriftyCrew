@@ -104,12 +104,39 @@
   console as it prints them AND reach the row; its exit code is $LASTEXITCODE, which the Start-Process handle trap
   ([[ps-start-process-exitcode-needs-handle]]) does not touch.
 
+  THE PRE-FLIGHT (2026-09-23, W2.1R with W8.1 of design\PLAN-push-derived-conflicts-2026-09-23.md). EVERY ROUND STARTS BY
+  REBASING OUTSIDE THE LOCK, and a later red LEAVES THE BRANCH REBASED: the session then fixes its change on current main,
+  which is where it has to land anyway. Round 1's fetch and rebase are the pre-flight, and around them:
+    - ONE PUSH-MAIN PER CHECKOUT. A per-checkout guard (a mutex named from SHA-256 of the lower-cased worktree path, taken
+      with ZERO wait) refuses a second push-main in the same checkout at once, naming the holder's pid and start time,
+      because every round rewrites HEAD outside the push lock and a retry started while the first run is gating would
+      rebase under its legs. It never waits, so it forms no wait-for edge with any other lock. A guard that cannot be
+      created is said and the push goes on, as the day before.
+    - THE FETCH RETRIES ONCE on git's `cannot lock ref` (another fetch or push updating the shared remote-tracking ref).
+      Outside the lock a fetch that still fails DEGRADES: the round goes on without a rebase, the row says
+      degraded=fetch, and the fetch inside the lock decides, as the day before. Inside the lock it is blind-fetch-failed.
+    - A CONFLICT IS NOT A COULD-NOT-REBASE. A failed rebase with unmerged files or a rebase directory left is a conflict:
+      the files are read, the rebase is aborted, and the ABORT IS CHECKED (a failed abort is exit 3,
+      blind=rebase-abort-failed, and says the branch may be mid-rebase). No unmerged file and no rebase directory (an
+      index.lock stopped it from starting) is could-not-rebase: outside the lock it degrades (degraded=rebase), inside it
+      is exit 3, blind-rebase-failed.
+    - A BRANCH ALREADY ON MAIN IS REFUSED. A rebase that drops every commit as already applied leaves nothing to push, and
+      `git push` then says "Everything up-to-date" and exits 0: that is refused-already-on-main, never a landing.
+    - THE DIRT IS NAMED (W8.1): a dirty tree lists its paths (dirty_paths, at most 20) and when they appeared
+      (dirty_since: start, or during-legs when the pre-flight was clean and something in this checkout wrote them while
+      the legs ran).
+    - THE SEED RUNS AFTER THE PRE-FLIGHT, and only when it passed, so a seconds-long refusal waits for no seed.
+    - -DryRun NEVER REBASES: it says whether a rebase is needed and the approximate conflict list, and runs one round.
+    - A REBASE THAT BRINGS IN A NEW COPY OF THIS SCRIPT RE-EXECUTES IT ONCE: the guard is released, the new copy runs as a
+      child with the same arguments and TC_PUSH_MAIN_REEXEC=1, its exit code is this run's, and the child writes the one
+      row. A run with TC_PUSH_MAIN_REEXEC set never re-executes; -NoReexec skips it on purpose.
+
   SCOPE OF A CLEAN REPORT: exit 0 means the remote accepted this push while this process held the lock. It says
   nothing about a pusher that does not take the lock - an older checkout, a plain `git push --no-verify`, or another
   machine - and nothing about whether main is healthy afterwards.
 #>
 # Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): read off the self-test block, which works in a temp sandbox and reads nothing else of this repo. Verify with: powershell -File lib\gate-input-key.ps1 -VerifyDeclared <this file>
-# gate-inputs: ops\push-main.ps1, lib\push-lock.ps1, lib\git-repo-env.ps1, lib\push-ledger.ps1, lib\seed-hint.ps1, ops\seed-worktree.ps1, ops\probe-push-convergence.ps1
+# gate-inputs: ops\push-main.ps1, lib\push-lock.ps1, lib\git-repo-env.ps1, lib\push-ledger.ps1, lib\seed-hint.ps1, ops\seed-worktree.ps1, ops\probe-push-convergence.ps1, lib\mutex-hold.ps1
 [CmdletBinding()]
 param(
   [string]$Remote = 'origin',
@@ -120,6 +147,9 @@ param(
   # pre-push hook prints and ops\rehearse-chain.ps1 logs with the reason. Use it for an emergency, never as a habit.
   [switch]$NoRehearsal,
   [string]$NoRehearsalReason = '',
+  # SKIP THE RE-EXEC ON SELF-CHANGE (W2.1R step 8) for this one push: the copy already running is used even when the
+  # pre-flight rebase brought in a new one. The rollback for a broken re-exec, never a habit.
+  [switch]$NoReexec,
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -389,6 +419,113 @@ function Get-TcWarmRefLine {
 # What it does when the producer stops: nothing moves origin, every push finishes in round 1.
 $script:PmMaxRehearsalRounds = 3
 
+# ======================================================================================================================
+# THE PER-CHECKOUT GUARD (2026-09-23, W2.1R step 1). Every round now rebases HEAD OUTSIDE the push lock, so two push-main
+# runs in one checkout (a retry an agent started because its first run passed a 9.5-minute deadline, say) would rewrite
+# HEAD under each other's legs, and gate-verdict could record a pass for content no run wholly judged. The guard is a
+# mutex named from SHA-256 of the lower-cased worktree path, built the way lib\ledger-lock.ps1 names a ledger, taken with
+# ZERO wait: a second run is refused at once and never waits, so the guard forms no wait-for edge with any other lock (it
+# sits at 0a in the declared lock order, outside the push lock). An abandoned mutex (a killed holder) reads free. A guard
+# that cannot be created is SAID and the push goes on exactly as the day before, because a guard must never be the reason
+# a push cannot land. Who holds it is in a small info file beside it, since a mutex cannot say; the refusal prints that
+# file's pid and start time, or says it could not read one.
+# The prefix and the info root are script variables so the self-test can point every case at a private name: no case
+# opens the production guard (plan section 5).
+# ======================================================================================================================
+$script:TcPmGuardPrefix = 'Global\tc-push-main-checkout-'
+$script:TcPmGuardInfoRoot = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'ThriftyCrew\push-main-guard'
+
+function Get-TcCheckoutGuardKey {
+  <# The guard's key for a checkout: the first 12 bytes of SHA-256 over the lower-cased full path of its worktree top
+     (`git rev-parse --show-toplevel`, or $Dir itself when git cannot say), as lower-case hex. #>
+  param([string]$Dir)
+  $top = Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', '--show-toplevel'))
+  if (-not $top) { $top = $Dir }
+  $full = [IO.Path]::GetFullPath(($top -replace '/', '\')).TrimEnd([char[]]@('\', '/')).ToLowerInvariant()
+  $sha = [Security.Cryptography.SHA256]::Create()
+  try { $bytes = $sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($full)) } finally { $sha.Dispose() }
+  return (-join @($bytes[0..11] | ForEach-Object { $_.ToString('x2') }))
+}
+
+function Enter-TcCheckoutGuard {
+  <# Takes the per-checkout guard with ZERO wait. Held (this run owns it), Refused (another live run owns it: Holder says
+     who, from the info file), or neither (the mutex could not be created: Reason says why, and the push goes on). #>
+  param([string]$Dir)
+  $key = ''
+  try { $key = Get-TcCheckoutGuardKey -Dir $Dir } catch { return [pscustomobject]@{ Held = $false; Refused = $false; Mutex = $null; Name = ''; Info = ''; Holder = ''; Reason = ('the guard key could not be formed: ' + $_.Exception.Message) } }
+  $name = $script:TcPmGuardPrefix + $key
+  $info = Join-Path $script:TcPmGuardInfoRoot ($key + '.json')
+  $m = $null
+  try { $m = New-Object System.Threading.Mutex($false, $name) }
+  catch { return [pscustomobject]@{ Held = $false; Refused = $false; Mutex = $null; Name = $name; Info = $info; Holder = ''; Reason = ('the guard mutex could not be created: ' + $_.Exception.Message) } }
+  $got = $false
+  try { $got = $m.WaitOne(0) } catch [System.Threading.AbandonedMutexException] { $got = $true }   # a killed holder's guard reads free
+  if (-not $got) {
+    $holder = 'a holder whose pid this run could not read'
+    try {
+      if (Test-Path -LiteralPath $info) {
+        $o = [IO.File]::ReadAllText($info) | ConvertFrom-Json
+        $holder = ('pid {0}, started {1}' -f $o.pid, $o.start_utc)
+      }
+    } catch { }
+    $m.Dispose()
+    return [pscustomobject]@{ Held = $false; Refused = $true; Mutex = $null; Name = $name; Info = $info; Holder = $holder; Reason = '' }
+  }
+  try {
+    if (-not (Test-Path -LiteralPath $script:TcPmGuardInfoRoot)) { $null = New-Item -ItemType Directory -Force -ErrorAction Stop $script:TcPmGuardInfoRoot }
+    $body = ('{{"pid":{0},"start_utc":"{1}","checkout":{2}}}' -f $PID, [DateTime]::UtcNow.ToString('o'), (ConvertTo-Json -Compress -InputObject ([string]$Dir)))
+    [IO.File]::WriteAllText($info, $body, (New-Object Text.UTF8Encoding($false)))
+  } catch { Say ('push-main: the guard is held, but who holds it could not be written (' + $_.Exception.Message + '); a second run here will be refused without a pid.') }
+  return [pscustomobject]@{ Held = $true; Refused = $false; Mutex = $m; Name = $name; Info = $info; Holder = ''; Reason = '' }
+}
+
+function Exit-TcCheckoutGuard {
+  <# Releases a guard Enter-TcCheckoutGuard granted, removing its info file first when the file still names this pid. #>
+  param($Guard)
+  if ($null -eq $Guard -or -not $Guard.Held -or $null -eq $Guard.Mutex) { return }
+  try {
+    if ($Guard.Info -and (Test-Path -LiteralPath $Guard.Info)) {
+      $o = $null
+      try { $o = [IO.File]::ReadAllText($Guard.Info) | ConvertFrom-Json } catch { }
+      if ($null -ne $o -and [int]$o.pid -eq $PID) { Remove-Item -LiteralPath $Guard.Info -Force -ErrorAction SilentlyContinue }
+    }
+  } catch { }
+  try { $Guard.Mutex.ReleaseMutex() } catch { }
+  try { $Guard.Mutex.Dispose() } catch { }
+  $Guard.Held = $false
+}
+
+# ======================================================================================================================
+# THE SYNC'S SEAMS AND CONSTANTS (W2.1R steps 2 to 4).
+# ======================================================================================================================
+# ONE RETRY on `cannot lock ref`, after this pause. The race it answers is another fetch or push updating the shared
+# refs/remotes/<remote>/<branch> at the same moment (one seen in production: a fetch 1 s after a landing read "is at
+# 38357202c but expected 4fa9f1a7b"). 1 s is the first plausible value, not swept: a ref update takes milliseconds.
+$script:TcPmFetchRetryPauseMs = 1000
+# SELF-TEST SEAMS, $null in production: run between the failed fetch and its retry, and in place of `git rebase --abort`.
+$script:TcPmBeforeFetchRetry = $null
+$script:TcPmRebaseAbort = { param($d) Invoke-TcGit -Dir $d -Arguments @('rebase', '--abort') }
+# AT MOST THIS MANY DIRTY PATHS ON A ROW (W8.1): the first plausible number, enough to name a board sweep without
+# carrying the whole tree into the ledger.
+$script:TcPmDirtyCap = 20
+
+function Test-TcRebaseInProgress {
+  <# Whether git left a rebase directory (rebase-merge or rebase-apply) under this checkout's own git dir. #>
+  param([string]$Dir)
+  $gd = Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', '--absolute-git-dir'))
+  if (-not $gd) { return $false }
+  return ((Test-Path -LiteralPath (Join-Path $gd 'rebase-merge')) -or (Test-Path -LiteralPath (Join-Path $gd 'rebase-apply')))
+}
+
+function Test-TcMainCheckout {
+  <# True when $Dir is the repository's MAIN checkout (its git dir IS the common dir), where W8.2's route applies. #>
+  param([string]$Dir)
+  $gd = Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', '--absolute-git-dir'))
+  $cd = Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', '--path-format=absolute', '--git-common-dir'))
+  if (-not $gd -or -not $cd) { return $false }
+  return [string]::Equals(([IO.Path]::GetFullPath(($gd -replace '/', '\')).TrimEnd('\')), ([IO.Path]::GetFullPath(($cd -replace '/', '\')).TrimEnd('\')), [StringComparison]::OrdinalIgnoreCase)
+}
+
 function Invoke-TcSyncToRemote {
   <# Fetch <Remote>/<Branch>, decide from git alone (Get-TcPushPlan), and rebase when the remote moved. Called TWICE per
      round: OUTSIDE the lock, so the gate and the rehearsal judge the content that will actually land, and again INSIDE
@@ -402,14 +539,43 @@ function Invoke-TcSyncToRemote {
      before the abort, as ConflictFiles (scope 'first-stop', the commit the rebase stopped on), and ConflictFilesAll is one
      squashed merge-tree over the whole range, read after the abort from the restored HEAD ('merge-tree-approximate').
      W0.1 read them in the lock only; this function is called in every phase, so every phase's conflict is recorded the
-     same way. Which phase a call belongs to is the caller's to say. #>
-  param([string]$Dir, [string]$Remote, [string]$Branch)
-  $f = Invoke-TcGit -Dir $Dir -Arguments @('fetch', '--quiet', $Remote, $Branch)
-  if ($f.Code -ne 0) {
-    return (New-TcSyncResult -Code 3 -Outcome 'blind-fetch-failed' -Message ("push-main: COULD NOT EVALUATE - `git fetch {0} {1}` exited {2}, so what this push would land on is unknown. That is not a pass.`n{3}" -f $Remote, $Branch, $f.Code, $f.Text))
+     same way. Which phase a call belongs to is the caller's to say.
+
+     THE PHASE DECIDES WHAT A FAILURE MEANS (2026-09-23, W2.1R). -Phase is preflight or catchup (OUTSIDE the lock) or
+     inlock. Outside the lock a fetch that fails after its one retry, and a rebase that could not start, DEGRADE: Code 0,
+     Degraded 'fetch' or 'rebase', no rebase, and the fetch inside the lock decides, as the day before. Inside the lock
+     each is Code 3. A conflict refuses in every phase; an abort that fails is Code 3 in every phase. -NoRebase (a dry
+     run) never rebases: it says whether one is needed and the approximate conflict list. A rebase that leaves nothing to
+     push is refused-already-on-main. A dirty tree hands back its paths (DirtyPaths, sorted Ordinal, at most
+     $script:TcPmDirtyCap), and its message says whether the dirt was there at the start or appeared while the legs ran,
+     and names the main-checkout route when this is the main checkout. #>
+  param([string]$Dir, [string]$Remote, [string]$Branch, [string]$Phase = 'inlock', [bool]$NoRebase = $false)
+  $outside = -not [string]::Equals($Phase, 'inlock', [StringComparison]::Ordinal)
+  $fetchArgs = @('fetch', '--quiet', $Remote, $Branch)
+  $f = Invoke-TcGit -Dir $Dir -Arguments $fetchArgs
+  if ($f.Code -ne 0 -and $f.Text -match 'cannot lock ref') {
+    # ONE RETRY, on git's own words for a ref another process is updating at this moment (W2.1R step 2).
+    Say ("push-main: `git fetch` could not lock the remote-tracking ref (another fetch or push was updating it); retrying once.")
+    if ($script:TcPmBeforeFetchRetry) { & $script:TcPmBeforeFetchRetry $Dir }
+    Start-Sleep -Milliseconds $script:TcPmFetchRetryPauseMs
+    $f = Invoke-TcGit -Dir $Dir -Arguments $fetchArgs
   }
+  $degraded = ''
   $head = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'HEAD')).Out[0]).Trim()
-  $rem = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'FETCH_HEAD')).Out[0]).Trim()
+  if ($f.Code -ne 0) {
+    if (-not $outside) {
+      return (New-TcSyncResult -Code 3 -Outcome 'blind-fetch-failed' -Message ("push-main: COULD NOT EVALUATE - `git fetch {0} {1}` exited {2}, so what this push would land on is unknown. That is not a pass.`n{3}" -f $Remote, $Branch, $f.Code, $f.Text))
+    }
+    # OUTSIDE THE LOCK A FAILED FETCH DEGRADES (EVERY LOCK PATH DEGRADES TO THE DAY BEFORE): the last-fetched ref stands in
+    # for the remote, so a dirty tree and an empty push are still refused in seconds, and no rebase runs on a base nobody
+    # has just read. The fetch inside the lock decides, as it always did.
+    Say ("push-main: `git fetch {0} {1}` failed outside the lock (exit {2}), so this round goes on WITHOUT a rebase; the fetch inside the lock decides, as before.`n{3}" -f $Remote, $Branch, $f.Code, $f.Text)
+    $degraded = 'fetch'
+    $NoRebase = $true
+    $rem = Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', ('refs/remotes/' + $Remote + '/' + $Branch)))
+  } else {
+    $rem = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'FETCH_HEAD')).Out[0]).Trim()
+  }
   $mbR = Invoke-TcGit -Dir $Dir -Arguments @('merge-base', 'HEAD', $rem)
   $mb = $(if ($mbR.Code -eq 0 -and $mbR.Out.Count) { ([string]$mbR.Out[0]).Trim() } else { '' })
   $cntR = Invoke-TcGit -Dir $Dir -Arguments @('rev-list', '--count', ($rem + '..HEAD'))
@@ -419,51 +585,107 @@ function Invoke-TcSyncToRemote {
   # the streams were separated, when the rejection stopped counting as a changed path and a dirty checkout was
   # pushed. Two bugs that had been cancelling each other out.
   $st = Invoke-TcGit -Dir $Dir -Arguments @('--no-optional-locks', 'status', '--porcelain')
-  $dirty = [bool](@($st.Out | Where-Object { $_.Trim() }).Count)
+  $dirtyLines = [string[]]@(@($st.Out) | Where-Object { ([string]$_).Trim() } | ForEach-Object { ([string]$_).TrimEnd() })
+  $dirty = [bool]$dirtyLines.Count
   $plan = Get-TcPushPlan -Head $head -RemoteSha $rem -MergeBase $mb -Ahead $ahead -Dirty $dirty
   if (-not $plan.Ready) {
-    return (New-TcSyncResult -Code 1 -Outcome 'refused-not-ready' -Head $head -Rem $rem -Ahead $ahead -Message ("push-main: REFUSED - {0}" -f $plan.Reason))
+    $dirtyPaths = $null
+    $msg = ("push-main: REFUSED - {0}" -f $plan.Reason)
+    if ($dirty) {
+      # THE DIRT IS NAMED (W8.1): which paths, and whether they were there at the start or appeared while the legs ran.
+      [Array]::Sort($dirtyLines, [StringComparer]::Ordinal)
+      $dirtyPaths = [string[]]@($dirtyLines | Select-Object -First $script:TcPmDirtyCap)
+      $more = $(if ($dirtyLines.Count -gt $script:TcPmDirtyCap) { "`n  ... and {0} more" -f ($dirtyLines.Count - $script:TcPmDirtyCap) } else { '' })
+      $listed = (@($dirtyPaths | ForEach-Object { '  ' + $_ }) -join "`n") + $more
+      if ($Phase -ceq 'preflight') {
+        $msg = ("push-main: REFUSED - the working tree has uncommitted changes, before anything ran:`n{0}`nCommit them or set them aside: rebasing over them restores content but not the index, which is how this estate has left a path unmerged before." -f $listed)
+      } else {
+        $msg = ("push-main: REFUSED - the working tree was clean at the pre-flight, and while the legs ran something in THIS checkout wrote:`n{0}`nA leg, a board step or a reconciler run here writes into the checkout being landed; run it in a scratch clone instead, then run this again." -f $listed)
+      }
+      if (Test-TcMainCheckout -Dir $Dir) {
+        $msg += "`nThis is the MAIN checkout, which other sessions and the bots keep dirty: land from a clean linked worktree instead (git worktree add, then ops\push-main.ps1 there)."
+      }
+    }
+    return (New-TcSyncResult -Code 1 -Outcome 'refused-not-ready' -Head $head -Rem $rem -Ahead $ahead -Message $msg -DirtyPaths $dirtyPaths -Degraded $degraded)
   }
   Say ("push-main: {0} commit(s) to land on {1}/{2}; {3}." -f $ahead, $Remote, $Branch, $plan.Reason)
   $siblings = $null
+  if ($plan.NeedsRebase -and $NoRebase) {
+    # A DRY RUN (or a round whose fetch failed) NEVER REBASES (W2.1R step 7): it says what a rebase would meet, from one
+    # squashed merge-tree, which is approximate by construction and labelled so.
+    $approx = Get-TcMergeTreeConflicts -Dir $Dir -Head 'HEAD' -Target $rem
+    $cl = $(if ($null -eq $approx) { 'could not be computed' } elseif ($approx.Count) { 'would conflict on ' + ($approx -join ', ') } else { 'would not conflict' })
+    Say ("push-main: a rebase onto {0} is needed and was NOT run (approximate, from one squashed merge-tree: it {1})." -f $rem.Substring(0, [Math]::Min(9, $rem.Length)), $cl)
+    return (New-TcSyncResult -Code 0 -Head $head -Rem $rem -Ahead $ahead -Degraded $degraded)
+  }
   if ($plan.NeedsRebase) {
     # WHAT THE REBASE BRINGS IN, read before it moves HEAD: any main commit whose subject is one of this branch's.
     $siblings = Get-TcSameSubjectSiblings -Dir $Dir -MergeBase $mb -Target $rem
+    $origHead = $head
     $rb = Invoke-TcGit -Dir $Dir -Arguments @('rebase', $rem)
     if ($rb.Code -ne 0) {
       # RECORD THE CASE AT THE MOMENT IT FAILS (measurement.md): the unmerged paths exist only until the abort below
       # clears them, so they are read first. The squashed whole-range list is read after, from the restored HEAD.
       $unmerged = Get-TcUnmergedFiles -Dir $Dir
-      # THE BRANCH IS LEFT EXACTLY WHERE IT WAS. A half-finished rebase is the worst thing this could hand back,
-      # because the next session to push inherits it.
-      $null = Invoke-TcGit -Dir $Dir -Arguments @('rebase', '--abort')
+      $nothingUnmerged = ($null -eq $unmerged) -or ($unmerged.Length -eq 0)
+      if ($nothingUnmerged -and -not (Test-TcRebaseInProgress -Dir $Dir)) {
+        # COULD-NOT-REBASE, NOT A CONFLICT (W2.1R step 3): nothing unmerged and no rebase directory, so the rebase never
+        # started (an index.lock another process holds, say) and nothing moved. Outside the lock that degrades; inside it
+        # is could-not-evaluate. Never a refusal of the change, which conflicted with nothing.
+        if ($outside) {
+          Say ("push-main: the rebase onto {0} could not START (nothing unmerged, no rebase directory: {1}). Nothing was changed; this round goes on and the rebase inside the lock decides, as before." -f $rem.Substring(0, 9), (($rb.Text -split "`n") | Select-Object -First 1))
+          return (New-TcSyncResult -Code 0 -Head $head -Rem $rem -Ahead $ahead -RebaseTried $true -Siblings $siblings -Degraded $(if ($degraded) { $degraded + ',rebase' } else { 'rebase' }))
+        }
+        return (New-TcSyncResult -Code 3 -Outcome 'blind-rebase-failed' -Head $head -Rem $rem -Ahead $ahead -RebaseTried $true -Siblings $siblings `
+          -Message ("push-main: COULD NOT EVALUATE - blind=rebase-could-not-start: the rebase onto {0}/{1} inside the lock could not start (nothing unmerged, no rebase directory), so nothing was pushed. That is not a pass.`n{2}" -f $Remote, $Branch, $rb.Text))
+      }
+      # THE ABORT IS CHECKED (W2.1R step 4). A half-finished rebase is the worst thing this could hand back, because the
+      # next session to push inherits it, so an abort that exits non-zero or leaves a rebase directory is exit 3 and says
+      # the branch MAY be mid-rebase - never that it is where it was.
+      $ab = & $script:TcPmRebaseAbort $Dir
+      $still = Test-TcRebaseInProgress -Dir $Dir
+      $scope = $(if ($null -eq $unmerged) { '' } elseif ($unmerged.Length) { 'first-stop' } else { 'none-unmerged' })
+      if ($ab.Code -ne 0 -or $still) {
+        return (New-TcSyncResult -Code 3 -Outcome 'blind-rebase-abort-failed' -Head $head -Rem $rem -Ahead $ahead -RebaseTried $true -Siblings $siblings `
+          -ConflictFiles $unmerged -ConflictScope $scope `
+          -Message ("push-main: COULD NOT EVALUATE - blind=rebase-abort-failed: the rebase onto {0}/{1} conflicted and `git rebase --abort` exited {2}{3}. This branch MAY BE MID-REBASE: run `git status` here before anything else, and `git rebase --abort` by hand if it says a rebase is in progress. Nothing was pushed.`n{4}" -f $Remote, $Branch, $ab.Code, $(if ($still) { ' and left a rebase directory' } else { '' }), $rb.Text))
+      }
       $whole = Get-TcMergeTreeConflicts -Dir $Dir -Head 'HEAD' -Target $rem
-      # THE SCOPE SAYS WHETHER THE REBASE STOPPED AT ALL (review of W0.1R, 2026-09-23). A rebase that fails with nothing
-      # unmerged - an index.lock another process holds, say - never stopped on a commit, so 'first-stop' would name a stop
-      # that did not happen: it is 'none-unmerged', beside an empty list. A git that could not be asked leaves both null.
-      $scope = $(if ($null -eq $unmerged) { '' } elseif (@($unmerged).Count) { 'first-stop' } else { 'none-unmerged' })
+      $filesSaid = $(if ($null -ne $unmerged -and $unmerged.Length) { "`n  conflicted: " + ($unmerged -join ', ') } else { '' })
+      $sibSaid = $(if ($null -ne $siblings -and @($siblings).Count) { "`n  main already holds a commit with this branch's subject: " + (@($siblings) -join ', ') + ' - another session may have landed this change' } else { '' })
       return (New-TcSyncResult -Code 1 -Outcome 'refused-rebase-conflict' -Head $head -Rem $rem -Ahead $ahead -RebaseTried $true -Siblings $siblings `
         -ConflictFiles $unmerged -ConflictScope $scope -ConflictFilesAll $whole -ConflictAllBasis 'merge-tree-approximate' `
-        -Message ("push-main: REFUSED - the rebase onto {0}/{1} conflicts, so it was aborted and this branch is exactly where it was. Resolve it and run this again.`n{2}" -f $Remote, $Branch, $rb.Text))
+        -Message ("push-main: REFUSED - the rebase onto {0}/{1} conflicts, so it was aborted and this branch is exactly where it was. Resolve it and run this again.{2}{3}`n{4}" -f $Remote, $Branch, $filesSaid, $sibSaid, $rb.Text))
     }
     $head = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'HEAD')).Out[0]).Trim()
+    # ALREADY ON MAIN (W2.1R step 5): a rebase that skipped every commit as already applied exits 0 and leaves nothing to
+    # push, and `git push` would then say "Everything up-to-date" and exit 0, which the day before recorded as a landing.
+    $leftR = Invoke-TcGit -Dir $Dir -Arguments @('rev-list', '--count', ($rem + '..HEAD'))
+    if ($leftR.Code -eq 0 -and $leftR.Out.Count -and [int]([string]$leftR.Out[0]).Trim() -eq 0) {
+      $dropped = Invoke-TcGit -Dir $Dir -Arguments @('log', '--format=%h %s', ($mb + '..' + $origHead))
+      $dl = (@($dropped.Out) | ForEach-Object { '  ' + $_ }) -join "`n"
+      $sibSaid = $(if ($null -ne $siblings -and @($siblings).Count) { (@($siblings) -join ', ') } else { 'none found by subject' })
+      return (New-TcSyncResult -Code 1 -Outcome 'refused-already-on-main' -Head $head -Rem $rem -Ahead 0 -RebaseTried $true -Siblings $siblings `
+        -Message ("push-main: REFUSED - every commit of this branch is already on {0}/{1} as an identical patch, so the rebase dropped them all and there is nothing to push. Nothing was run and nothing landed. The dropped commits (the branch was at {2}):`n{3}`nThe main commits carrying their subjects: {4}" -f $Remote, $Branch, $origHead.Substring(0, 9), $dl, $sibSaid))
+    }
     Say ("push-main: rebased onto {0}; HEAD is now {1}." -f $rem.Substring(0, 9), $head.Substring(0, 9))
   }
-  return (New-TcSyncResult -Code 0 -Rebased ([bool]$plan.NeedsRebase) -Head $head -Rem $rem -Ahead $ahead -RebaseTried ([bool]$plan.NeedsRebase) -Siblings $siblings)
+  return (New-TcSyncResult -Code 0 -Rebased ([bool]$plan.NeedsRebase) -Head $head -Rem $rem -Ahead $ahead -RebaseTried ([bool]$plan.NeedsRebase) -Siblings $siblings -Degraded $degraded)
 }
 
 function New-TcSyncResult {
   <# One Invoke-TcSyncToRemote answer, with every field present on every path, so no reader has to ask whether a field
      exists before it reads one. The array fields are passed through untouched: a caller hands in $null, an empty array
      or the list itself, and a PARAMETER keeps each as it came, which a function's return value would not (PowerShell
-     unrolls an array returned from a function, so an empty one arrives as $null). #>
+     unrolls an array returned from a function, so an empty one arrives as $null). Degraded is '' or a comma list of
+     what this sync could not do outside the lock (fetch, rebase); DirtyPaths is $null unless the tree was dirty. #>
   param([int]$Code, [string]$Outcome = '', [bool]$Rebased = $false, [string]$Head = '', [string]$Rem = '', [int]$Ahead = 0,
     [string]$Message = '', [bool]$RebaseTried = $false, $Siblings = $null, $ConflictFiles = $null, [string]$ConflictScope = '',
-    $ConflictFilesAll = $null, [string]$ConflictAllBasis = '')
+    $ConflictFilesAll = $null, [string]$ConflictAllBasis = '', $DirtyPaths = $null, [string]$Degraded = '')
   return [pscustomobject]@{
     Code = $Code; Outcome = $Outcome; Rebased = $Rebased; Head = $Head; Rem = $Rem; Ahead = $Ahead; Message = $Message
     RebaseTried = $RebaseTried; Siblings = $Siblings; ConflictFiles = $ConflictFiles; ConflictScope = $ConflictScope
-    ConflictFilesAll = $ConflictFilesAll; ConflictAllBasis = $ConflictAllBasis
+    ConflictFilesAll = $ConflictFilesAll; ConflictAllBasis = $ConflictAllBasis; DirtyPaths = $DirtyPaths; Degraded = $Degraded
   }
 }
 
@@ -976,6 +1198,14 @@ function Add-TcSyncReadings {
   if ($null -eq $Sync) { return }
   $props = $Sync.PSObject.Properties
   if ($props['RebaseTried'] -and $props['RebaseTried'].Value -eq $true) { $Row['rebase_phases'] = [string[]](@($Row['rebase_phases']) + $Phase) }
+  # WHAT THIS SYNC COULD NOT DO OUTSIDE THE LOCK (W2.1R): degraded is a comma list of distinct words, in first-seen order.
+  if ($props['Degraded'] -and $props['Degraded'].Value) { Add-TcDegraded -Row $Row -Words ([string]$props['Degraded'].Value) }
+  # THE DIRT AND WHEN IT APPEARED (W8.1): at the pre-flight it was there at the start; any later sync found a tree the
+  # pre-flight had found clean, so it appeared while the legs ran.
+  if ($props['DirtyPaths'] -and $null -ne $props['DirtyPaths'].Value) {
+    $Row['dirty_paths'] = [string[]]@($props['DirtyPaths'].Value)
+    $Row['dirty_since'] = $(if ($Phase -ceq 'preflight') { 'start' } else { 'during-legs' })
+  }
   if ($props['Siblings'] -and $null -ne $props['Siblings'].Value) {
     $have = [Collections.Generic.List[string]]::new()
     foreach ($x in @($Row['sibling_same_subject'])) { if ($null -ne $x) { $have.Add([string]$x) } }
@@ -995,6 +1225,16 @@ function Add-TcSyncReadings {
     if ($props['ConflictScope'] -and $props['ConflictScope'].Value) { $Row['conflict_scope'] = [string]$props['ConflictScope'].Value }
     if ($props['ConflictAllBasis'] -and $props['ConflictAllBasis'].Value) { $Row['conflict_all_basis'] = [string]$props['ConflictAllBasis'].Value }
   }
+}
+
+function Add-TcDegraded {
+  <# Adds each comma-separated word of -Words to the row's `degraded` (a comma list, distinct, first seen first; null
+     until something degraded). The probe reads it as text (B1(b) leaves out rows whose degraded mentions fetch). #>
+  param([System.Collections.IDictionary]$Row, [string]$Words)
+  $have = [Collections.Generic.List[string]]::new()
+  foreach ($w in @(([string]$Row['degraded']) -split ',')) { if ($w.Trim()) { $have.Add($w.Trim()) } }
+  foreach ($w in @($Words -split ',')) { $t = $w.Trim(); if ($t -and -not $have.Contains($t)) { $have.Add($t) } }
+  $Row['degraded'] = $(if ($have.Count) { $have -join ',' } else { $null })
 }
 
 function Test-TcRehearsedNew {
@@ -1022,8 +1262,31 @@ function Get-TcInlockCheckWord {
   return 'not-covered'
 }
 
+function Invoke-TcPushMainReexec {
+  <# RUN THE NEW COPY ONCE (W2.1R step 8): the script at -Path as a child, with -Arguments and TC_PUSH_MAIN_REEXEC=1, its
+     lines echoed as they arrive. Returns its exit code, or $null when it could not be started, in which case the caller
+     goes on with the copy already running (the day before). A child whose exit code cannot be read is 3. #>
+  param([string]$Path, [string[]]$Arguments)
+  $was = $env:TC_PUSH_MAIN_REEXEC
+  $env:TC_PUSH_MAIN_REEXEC = '1'
+  $code = $null
+  try {
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $Path @Arguments | ForEach-Object { Say ([string]$_) }
+    $code = $LASTEXITCODE
+  } catch {
+    Say ('push-main: the new copy could not be started (' + $_.Exception.Message + '); going on with the copy already running.')
+    return $null
+  } finally {
+    if ($null -eq $was) { Remove-Item -LiteralPath Env:TC_PUSH_MAIN_REEXEC -ErrorAction SilentlyContinue } else { $env:TC_PUSH_MAIN_REEXEC = $was }
+  }
+  if ($null -eq $code) { return 3 }
+  return [int]$code
+}
+# EXTRA ARGUMENTS A RE-EXEC PASSES ON (the -NoRehearsal pair), set by the script body below; empty in the self-test.
+$script:TcPmReexecExtra = @()
+
 function Invoke-TcPushMain {
-  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '', [string]$SeedScript = '', [scriptblock]$RehearsalRunner = $null, [scriptblock]$RehearsalCheck = $null)
+  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '', [string]$SeedScript = '', [scriptblock]$RehearsalRunner = $null, [scriptblock]$RehearsalCheck = $null, [bool]$NoReexec = $false)
   # WHICH CODE IS RUNNING, read FIRST (W0.1R step 2). The round-1 fetch and rebase below rewrite this checkout, and when
   # origin changed ops\push-main.ps1 they rewrite THIS script on disk: a hash taken after that names code this process is
   # not running, which is the one thing pm_blob exists to say.
@@ -1094,6 +1357,13 @@ function Invoke-TcPushMain {
     reject_class         = $null
     reject_rc            = $null
     reject_lines         = $null
+    # W2.1R and W8.1: what a sync could not do outside the lock, the dirt and when it appeared, who held the guard on a
+    # guard refusal, and whether this run is the re-executed new copy.
+    degraded             = $null
+    dirty_paths          = $null
+    dirty_since          = $null
+    guard_holder         = $null
+    reexec               = [bool]$env:TC_PUSH_MAIN_REEXEC
   }
   # ONE ROW PER RUN, and at most one (review of W0.1R, 2026-09-23): the guard below writes a row for a throw that no path
   # wrote one for, so every path now ends here, and a path that already wrote one is never written twice.
@@ -1112,8 +1382,18 @@ function Invoke-TcPushMain {
   if ($LockPrefix) { $enter['Prefix'] = $LockPrefix }
   if ($LockQueueRoot) { $enter['QueueRoot'] = $LockQueueRoot }
   $enter['OnWait'] = { param($ahead) Say ("push-main: {0} push(es) are ahead of this one on this box, and the lock is served in arrival order - waiting." -f $ahead) }
+  $guard = $null
 
   try {
+    # ---- 0. ONE PUSH-MAIN PER CHECKOUT (W2.1R step 1): zero wait, so it serialises nothing across checkouts ----
+    $guard = Enter-TcCheckoutGuard -Dir $Dir
+    if ($guard.Refused) {
+      Say ("push-main: REFUSED - another push-main is already landing this checkout ({0}): wait for it, do not relaunch. Every round rebases this checkout outside the push lock, so a second run here would rewrite HEAD under the first one's legs." -f $guard.Holder)
+      $outcome = 'refused-not-ready'; $ledgerState = 'not-taken'; $pmRow['phase'] = 'preflight'; $pmRow['guard_holder'] = $guard.Holder
+      & $writeRow
+      return 1
+    }
+    if (-not $guard.Held) { Say ('push-main: the per-checkout guard was NOT taken (' + $guard.Reason + '); going on without it, as before it existed.') }
     # ---- THE GATE RUNS BEFORE THE LOCK IS TAKEN (Brad, 2026-09-12) ----
     # The lock serialises pushes machine-wide, and until now the ~10-minute gate ran INSIDE it, so the box could land
     # about six pushes an hour however many sessions were working: measured that morning at 9 pushes queued, the oldest
@@ -1132,8 +1412,8 @@ function Invoke-TcPushMain {
     # ref line, so its keyed pass is recorded before the lock and the in-lock leg can reuse it (queue 2026-09-18-1139a0).
     # Invoke-TcDefaultLegs holds that decision and also hands back what each leg said, for the row.
     $runner = $(if ($GateRunner) { $GateRunner } else { { param($d) Invoke-TcDefaultLegs -Dir $d -Remote $Remote -Branch $Branch } })
-    # SEEDED FIRST, so neither leg of the gate below judges a checkout that has no built cards (backlog I237).
-    $null = Invoke-TcSeedBeforeGate -Dir $Dir -Seeder $SeedScript
+    # THE SEED RUNS AFTER THE PRE-FLIGHT (W2.1R step 6), inside round 1 below: a seconds-long refusal should not wait for a
+    # fresh worktree's 47 MB seed, and the rebase needs no seeded input (the seeded paths are gitignored).
     $checker = $(if ($RehearsalCheck) { $RehearsalCheck } else { { param($d, $h, $r) Invoke-TcRehearsalCheck -Dir $d -Branch $Branch -Head $h -RemoteSha $r } })
     $rebasedAny = $false
     $rehearsals = 0
@@ -1157,7 +1437,7 @@ function Invoke-TcPushMain {
       # a second 13-to-15-minute rehearsal (several landings on 2026-09-23). Rebasing FIRST makes the rehearsed content the
       # content that lands whenever origin holds still for the length of the rehearsal.
       $curPhase = $syncPhase
-      $s = Invoke-TcSyncToRemote -Dir $Dir -Remote $Remote -Branch $Branch
+      $s = Invoke-TcSyncToRemote -Dir $Dir -Remote $Remote -Branch $Branch -Phase $syncPhase -NoRebase $DryRun
       $null = Invoke-TcRowReader 'sync' { Add-TcSyncReadings -Row $pmRow -Sync $s -Phase $syncPhase }
       # ROUND 1 ONLY: a later round's fetch is catch-up, and preflight_sha is what every B1 ancestry verdict is read against.
       if ($round -eq 1 -and $s.Rem) { $pmRow['preflight_sha'] = $s.Rem }
@@ -1168,6 +1448,30 @@ function Invoke-TcPushMain {
         return $s.Code
       }
       if ($s.Rebased) { $rebasedAny = $true }
+      if ($round -eq 1) {
+        # ---- RE-EXEC ON SELF-CHANGE (W2.1R step 8) ----
+        # When the pre-flight rebase brought in a different ops\push-main.ps1, the copy running is not the copy that will
+        # land, and a stale checkout's first push after a push-main change would run the old rules (3 of 5 knowable rows
+        # after 5841e96b1 landed ran an older copy). So the guard is released and the new copy runs ONCE as a child with
+        # the same arguments; its exit code is this run's and it writes the one row. A child never re-execs again
+        # (TC_PUSH_MAIN_REEXEC), -NoReexec skips it on purpose, and a copy that cannot start leaves this one running.
+        if ($s.Rebased -and $pmBlob -and -not $NoReexec -and -not $env:TC_PUSH_MAIN_REEXEC) {
+          $nowBlob = Invoke-TcRowReader 'reexec-blob' { Get-TcScriptBlob -Path $script:TcPushMainPath } ''
+          if ($nowBlob -and -not [string]::Equals($nowBlob, $pmBlob, [StringComparison]::Ordinal)) {
+            Say ("push-main: the pre-flight rebase brought in a new ops\push-main.ps1 (blob {0} -> {1}), so the NEW copy runs this push once; this run writes no row of its own." -f $pmBlob.Substring(0, 9), $nowBlob.Substring(0, 9))
+            Exit-TcCheckoutGuard $guard
+            $reArgs = [string[]](@('-Remote', $Remote, '-Branch', $Branch, '-LockWaitSec', [string]$LockWaitSec) + @($(if ($DryRun) { '-DryRun' })) + @($script:TcPmReexecExtra) | Where-Object { $null -ne $_ -and $_ -ne '' })
+            $childRc = Invoke-TcPushMainReexec -Path $script:TcPushMainPath -Arguments $reArgs
+            if ($null -ne $childRc) {
+              $rowState.Written = $true   # the child wrote this push's one row
+              return $childRc
+            }
+            $guard = Enter-TcCheckoutGuard -Dir $Dir
+          }
+        }
+        # SEEDED AFTER THE PRE-FLIGHT, so neither leg judges a checkout that has no built cards (backlog I237).
+        $null = Invoke-TcSeedBeforeGate -Dir $Dir -Seeder $SeedScript
+      }
 
       # ---- 2. THE GATE, BEFORE THE LOCK (Brad, 2026-09-12; the account is above $runner): a red gate never queues, and a
       # 3 is neither a refusal nor a pass - it leaves the gate to the hook inside the lock, exactly as before.
@@ -1245,7 +1549,7 @@ function Invoke-TcPushMain {
       }
       $again = $false
       try {
-        $s2 = Invoke-TcSyncToRemote -Dir $Dir -Remote $Remote -Branch $Branch
+        $s2 = Invoke-TcSyncToRemote -Dir $Dir -Remote $Remote -Branch $Branch -Phase 'inlock' -NoRebase $DryRun
         $null = Invoke-TcRowReader 'sync' { Add-TcSyncReadings -Row $pmRow -Sync $s2 -Phase 'inlock' }
         # WHAT THE REMOTE HOLDS NOW, read under the lock. Against $ledgerBase it says whether the remote moved while this
         # push queued - recorded whatever happens next, including on the paths that refuse.
@@ -1333,6 +1637,9 @@ function Invoke-TcPushMain {
       & $writeRow
     }
     throw
+  } finally {
+    # THE GUARD GOES BACK ON EVERY PATH, a throw included; a guard this run never held is left alone.
+    Exit-TcCheckoutGuard $guard
   }
 }
 
@@ -1596,6 +1903,25 @@ $m.Dispose()
   $runWas = $env:TC_PUSH_LEDGER_RUN
   $suiteRun = New-TcPushLedgerRunId
   $env:TC_PUSH_LEDGER_RUN = $suiteRun
+  # NO CASE OPENS THE PRODUCTION PER-CHECKOUT GUARD (plan section 5): every Invoke-TcPushMain below takes a private
+  # Local\ name, and its holder files go under this run's root. Put back in the finally.
+  $guardPrefixWas = $script:TcPmGuardPrefix
+  $guardInfoWas = $script:TcPmGuardInfoRoot
+  $script:TcPmGuardPrefix = 'Local\tc-pm-guard-selftest-' + [guid]::NewGuid().ToString('N').Substring(0, 12) + '-'
+  $script:TcPmGuardInfoRoot = Join-Path $tmp 'guard'
+  $reexecWas = $env:TC_PUSH_MAIN_REEXEC
+  Remove-Item -LiteralPath Env:TC_PUSH_MAIN_REEXEC -ErrorAction SilentlyContinue
+  . (Join-Path $repo 'lib\mutex-hold.ps1')   # Start-TcMutexHold: a guard held from ANOTHER process
+  # CONSOLE CAPTURE, for the cases that read what push-main SAID: Say writes to [Console]::Out, which a StringWriter can
+  # stand in for while one call runs. Children echoed through Say are captured too.
+  function Invoke-StCapture([scriptblock]$CapBody) {
+    $capOld = [Console]::Out
+    $capSw = New-Object IO.StringWriter
+    [Console]::SetOut($capSw)
+    $capRes = $null
+    try { $capRes = & $CapBody } finally { [Console]::SetOut($capOld) }
+    return [pscustomobject]@{ Result = $capRes; Text = $capSw.ToString() }
+  }
   try {
     Clear-TcGitRepoEnv
     $origin = Join-Path $tmp 'origin'
@@ -1998,26 +2324,246 @@ $m.Dispose()
       ($rTr -eq 0 -and $trRows.Count -eq 1 -and [string]$trRow.outcome -ceq 'landed' -and $null -ne $trRow.leg_sec -and $null -eq $trRow.leg_sec.rg) `
       ("rc={0} rows={1} outcome={2} rg={3}" -f $rTr, $trRows.Count, $(if ($trRow) { $trRow.outcome }), $(if ($trRow) { $trRow.leg_sec.rg }))
 
-    # MUST FIRE: a rebase that fails with NOTHING UNMERGED is not a stop. Origin moves before the push starts and the
-    # checkout holds an index.lock, so the pre-flight rebase cannot even begin: the row keeps conflict_files [] and says
-    # conflict_scope none-unmerged, never first-stop.
+    # MUST NOT FIRE (W2.1R step 3): a rebase that fails with NOTHING UNMERGED and no rebase directory never started, so it
+    # is COULD-NOT-REBASE, not a conflict. Origin moves before the push starts and the checkout holds an index.lock, so the
+    # pre-flight rebase cannot begin; it degrades, the gate runs (and, as the lock's real holder would, lets go of it), and
+    # the rebase inside the lock lands the push. The day before, W0.1R's row read this as refused-rebase-conflict.
     $il = & $newPusher 'il'
     & $moveOrigin 'notes.txt'
     $ilLock = Join-Path $il '.git\index.lock'
     [IO.File]::WriteAllText($ilLock, '')
     $ledIl = Join-Path $tmp 'ledil'
+    $script:ilGateRuns = 0
+    $ilGate = { param($d) $script:ilGateRuns++; Remove-Item -LiteralPath (Join-Path $d '.git\index.lock') -Force -ErrorAction SilentlyContinue; [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
     try {
-      $rIl = Invoke-TcPushMain -Dir $il -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhGreen -LedgerRoot $ledIl
+      $rIl = Invoke-TcPushMain -Dir $il -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $ilGate -RehearsalRunner $rhGreen -LedgerRoot $ledIl
     } finally { Remove-Item -LiteralPath $ilLock -Force -ErrorAction SilentlyContinue }
     $ilRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledIl)
     $ilRows = @($ilRaw)
     $ilRow = $(if ($ilRows.Count) { $ilRows[0] } else { $null })
-    # Plain assignments, never $( ): a subexpression unrolls the empty list this case exists to see into $null.
-    $ilFiles = 'no row'
-    if ($ilRow) { $ilFiles = $ilRow.conflict_files }
-    T ($kMF + '  a rebase that fails with nothing unmerged records conflict_files [] and conflict_scope none-unmerged, never a first-stop that did not happen') `
-      ($rIl -eq 1 -and $ilRows.Count -eq 1 -and [string]$ilRow.outcome -ceq 'refused-rebase-conflict' -and $null -ne $ilFiles -and @($ilFiles).Count -eq 0 -and [string]$ilRow.conflict_scope -ceq 'none-unmerged') `
-      ("rc={0} rows={1} outcome={2} files={3} scope={4}" -f $rIl, $ilRows.Count, $(if ($ilRow) { $ilRow.outcome }), (ConvertTo-Json -Compress -InputObject $ilFiles), $(if ($ilRow) { $ilRow.conflict_scope }))
+    T ($kMNF + '  a pre-flight rebase an index.lock stopped from starting is could-not-rebase, not a conflict: the gate ran, the row says degraded rebase, and the rebase inside the lock lands it') `
+      ($rIl -eq 0 -and $script:ilGateRuns -eq 1 -and $ilRows.Count -eq 1 -and [string]$ilRow.outcome -ceq 'landed-after-rebase' -and [string]$ilRow.degraded -ceq 'rebase' -and $null -eq $ilRow.conflict_files -and (@($ilRow.rebase_phases) -join ',') -ceq 'preflight,inlock') `
+      ("rc={0} gateRuns={1} rows={2} outcome={3} degraded={4} files={5} phases={6}" -f $rIl, $script:ilGateRuns, $ilRows.Count, $(if ($ilRow) { $ilRow.outcome }), $(if ($ilRow) { $ilRow.degraded }), $(if ($ilRow) { ConvertTo-Json -Compress -InputObject $ilRow.conflict_files }), $(if ($ilRow) { @($ilRow.rebase_phases) -join ',' }))
+
+    # ---- W2.1R AND W8.1: THE PRE-FLIGHT'S OWN CASES (2026-09-23) ----
+    # MUST FIRE: a second push-main in this checkout, while ANOTHER PROCESS holds its guard, is refused at once and names
+    # the holder's pid. The holder is lib\mutex-hold.ps1 on this run's private name; its pid goes in the info file, as a
+    # real holder's would. Nothing ran: no gate, no fetch, no lock take.
+    $gd = & $newPusher 'gd'
+    $gKey = Get-TcCheckoutGuardKey -Dir $gd
+    $gHold = Start-TcMutexHold -Name ($script:TcPmGuardPrefix + $gKey)
+    $null = New-Item -ItemType Directory -Force -ErrorAction Stop $script:TcPmGuardInfoRoot
+    [IO.File]::WriteAllText((Join-Path $script:TcPmGuardInfoRoot ($gKey + '.json')), ('{"pid":' + $gHold.Process.Id + ',"start_utc":"2026-09-23T20:00:00.0000000Z","checkout":"fixture"}'))
+    $ledGd = Join-Path $tmp 'ledgd'
+    $script:gateRuns = 0
+    $gdCap = Invoke-StCapture { Invoke-TcPushMain -Dir $gd -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -RehearsalRunner $rhGreen -LedgerRoot $ledGd }
+    Stop-TcMutexHold -Hold $gHold
+    $gdRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledGd)
+    $gdRows = @($gdRaw)
+    $gdRow = $(if ($gdRows.Count) { $gdRows[0] } else { $null })
+    T ($kMF + '  a second push-main in a checkout whose guard another process holds is refused at once, names that pid, and runs no gate and takes no lock') `
+      ($gHold.Held -and $gdCap.Result -eq 1 -and $script:gateRuns -eq 0 -and $gdRows.Count -eq 1 -and [string]$gdRow.outcome -ceq 'refused-not-ready' -and [int]$gdRow.lock_takes -eq 0 -and `
+        [string]$gdRow.guard_holder -match ('pid ' + $gHold.Process.Id + '\b') -and $gdCap.Text -match 'do not relaunch' -and $gdCap.Text -match ('pid ' + $gHold.Process.Id + '\b')) `
+      ("held={0} rc={1} gateRuns={2} rows={3} outcome={4} takes={5} holder={6}" -f $gHold.Held, $gdCap.Result, $script:gateRuns, $gdRows.Count, $(if ($gdRow) { $gdRow.outcome }), $(if ($gdRow) { $gdRow.lock_takes }), $(if ($gdRow) { $gdRow.guard_holder }))
+
+    # MUST FIRE: a conflicting commit that lands WHILE THE LEGS RUN (the -RehearsalRunner stub pushes it) is refused IN
+    # THE LOCK: phase inlock, the one conflicted file, the rebase aborted, and HEAD back at the sha the legs judged.
+    $ic = New-Clone 'ic'
+    [IO.File]::WriteAllText((Join-Path $ic 'clashI.txt'), 'mine')
+    $null = & git -C $ic add -- clashI.txt 2>$null; $null = & git -C $ic commit -q -m 'ic mine' 2>$null
+    $script:icHeadAtLegs = ''
+    $icRunner = { param($d) $script:icHeadAtLegs = ([string](@(& git -C $d rev-parse HEAD 2>$null))[0]).Trim(); & $moveOriginText 'clashI.txt' 'theirs'; [pscustomobject]@{ Code = 0; Why = 'fixture: rehearsed-pass' } }
+    $ledIc = Join-Path $tmp 'ledic'
+    $rIc = Invoke-TcPushMain -Dir $ic -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $icRunner -LedgerRoot $ledIc
+    $icRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledIc)
+    $icRows = @($icRaw)
+    $icRow = $(if ($icRows.Count) { $icRows[0] } else { $null })
+    $icHead = ([string](@(& git -C $ic rev-parse HEAD 2>$null))[0]).Trim()
+    $icMid = Test-TcRebaseInProgress -Dir $ic
+    $icFiles = @($(if ($icRow) { $icRow.conflict_files } else { @() }))
+    T ($kMF + '  a conflicting commit landed during the legs is refused in the lock: phase inlock, the one conflicted file, the rebase aborted, and HEAD the sha the legs judged') `
+      ($rIc -eq 1 -and $icRows.Count -eq 1 -and [string]$icRow.outcome -ceq 'refused-rebase-conflict' -and [string]$icRow.phase -ceq 'inlock' -and $icFiles.Count -eq 1 -and [string]$icFiles[0] -ceq 'clashI.txt' -and `
+        -not $icMid -and $script:icHeadAtLegs -and [string]::Equals($icHead, $script:icHeadAtLegs, [StringComparison]::Ordinal) -and [int]$icRow.lock_takes -eq 1) `
+      ("rc={0} rows={1} outcome={2} phase={3} files={4} mid={5} head={6} atLegs={7}" -f $rIc, $icRows.Count, $(if ($icRow) { $icRow.outcome }), $(if ($icRow) { $icRow.phase }), ($icFiles -join ','), $icMid, $icHead, $script:icHeadAtLegs)
+
+    # MUST FIRE: a branch whose only commit is already on origin as an IDENTICAL PATCH is refused-already-on-main. The
+    # rebase exits 0 having skipped it, and `git push` would then say Everything up-to-date and exit 0: the day before
+    # recorded that as a landing. No leg runs, the remote is untouched, and no row says landed.
+    $am = New-Clone 'am'
+    [IO.File]::WriteAllText((Join-Path $am 'am.txt'), 'the same change twice')
+    $null = & git -C $am add -- am.txt 2>$null; $null = & git -C $am commit -q -m 'am duplicate lane work' 2>$null
+    $null = & git -C $mover pull -q --rebase origin main 2>$null
+    $null = & git -C $mover fetch -q $am HEAD 2>$null
+    # ANOTHER COMMITTER, so the copy is a different commit with the same patch: the same identity cherry-picking in the
+    # same second writes a byte-identical commit object, the SAME sha, and the case read "nothing to push" instead
+    # (seen once in the first runs of this case).
+    $null = & git -C $mover -c user.name=Lane2 -c user.email=l2@p cherry-pick FETCH_HEAD 2>$null
+    $null = & git -C $mover push -q origin HEAD:main 2>$null
+    $amTip = & $tipOf
+    $ledAm = Join-Path $tmp 'ledam'
+    $script:gateRuns = 0
+    $amCap = Invoke-StCapture { Invoke-TcPushMain -Dir $am -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -RehearsalRunner $rhGreen -LedgerRoot $ledAm }
+    $amRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledAm)
+    $amRows = @($amRaw)
+    $amRow = $(if ($amRows.Count) { $amRows[0] } else { $null })
+    T ($kMF + '  a branch already on main as an identical patch is refused-already-on-main: no leg ran, the remote is untouched, no row says landed, and the dropped commit is named') `
+      ($amCap.Result -eq 1 -and $script:gateRuns -eq 0 -and (& $tipOf) -eq $amTip -and $amRows.Count -eq 1 -and [string]$amRow.outcome -ceq 'refused-already-on-main' -and [string]$amRow.phase -ceq 'preflight' -and $amCap.Text -match 'am duplicate lane work') `
+      ("rc={0} gateRuns={1} tipMoved={2} rows={3} outcome={4} phase={5} said={6}" -f $amCap.Result, $script:gateRuns, ((& $tipOf) -ne $amTip), $amRows.Count, $(if ($amRow) { $amRow.outcome }), $(if ($amRow) { $amRow.phase }), (($amCap.Text -split "`n" | Where-Object { $_ -match 'REFUSED' }) -join ' / '))
+
+    # MUST FIRE: an abort that fails (the seam answers exit 1) is could-not-evaluate: exit 3, blind=rebase-abort-failed,
+    # and the message says the branch may be mid-rebase and NEVER that it is exactly where it was.
+    $ab = New-Clone 'ab'
+    [IO.File]::WriteAllText((Join-Path $ab 'clashA.txt'), 'mine')
+    $null = & git -C $ab add -- clashA.txt 2>$null; $null = & git -C $ab commit -q -m 'ab mine' 2>$null
+    & $moveOriginText 'clashA.txt' 'theirs'
+    $ledAb = Join-Path $tmp 'ledab'
+    $script:TcPmRebaseAbort = { param($d) [pscustomobject]@{ Code = 1; Out = @(); Err = @('fixture: the abort refused'); Text = 'fixture: the abort refused' } }
+    try {
+      $abCap = Invoke-StCapture { Invoke-TcPushMain -Dir $ab -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -RehearsalRunner $rhGreen -LedgerRoot $ledAb }
+    } finally {
+      $script:TcPmRebaseAbort = { param($d) Invoke-TcGit -Dir $d -Arguments @('rebase', '--abort') }
+      $null = & git -C $ab rebase --abort 2>$null
+    }
+    $abRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledAb)
+    $abRows = @($abRaw)
+    $abRow = $(if ($abRows.Count) { $abRows[0] } else { $null })
+    T ($kMF + '  an abort that exits 1 is exit 3 with blind=rebase-abort-failed, says the branch may be mid-rebase, and never says it is exactly where it was') `
+      ($abCap.Result -eq 3 -and $abRows.Count -eq 1 -and [string]$abRow.outcome -ceq 'blind-rebase-abort-failed' -and $abCap.Text -match 'blind=rebase-abort-failed' -and $abCap.Text -match 'MAY BE MID-REBASE' -and $abCap.Text -notmatch 'exactly where it was') `
+      ("rc={0} rows={1} outcome={2} saysBlind={3} saysWhere={4}" -f $abCap.Result, $abRows.Count, $(if ($abRow) { $abRow.outcome }), ($abCap.Text -match 'blind=rebase-abort-failed'), ($abCap.Text -match 'exactly where it was'))
+
+    # MUST FIRE: a pre-flight rebase that brings in a CHANGED push-main re-executes the new copy once. A tracked file in the
+    # clone stands in for this checkout's own push-main (as the pm_blob case above does), and origin replaces it with a
+    # stub that records how it was called and writes the push's one row with its own blob. The parent writes none.
+    $reRel = 'pmre/push-main.ps1'
+    $reMarker = Join-Path $tmp 'reexec-marker.txt'
+    $reStub = { param([string]$Tag)
+      $ledgerLib = Join-Path $repo ('lib\push-' + 'ledger.ps1')
+      ("param([string]`$Remote, [string]`$Branch, [int]`$LockWaitSec, [switch]`$DryRun)`n" +
+       ". '" + $ledgerLib + "'`n" +
+       "`$b = ([string](@(& git -C (Split-Path -Parent `$PSCommandPath) hash-object `$PSCommandPath))[0]).Trim()`n" +
+       "[IO.File]::WriteAllText('" + $reMarker + "', ('reexec=' + `$env:TC_PUSH_MAIN_REEXEC + ' remote=' + `$Remote + ' branch=' + `$Branch + ' tag=" + $Tag + "'))`n" +
+       "`$null = Write-TcPushRow -Event 'push-main' -Outcome 'landed' -Checkout 'reexec-child' -Fields ([ordered]@{ schema = 2; pm_blob = `$b })`n" +
+       "exit 0`n")
+    }
+    $null = & git -C $mover pull -q --rebase origin main 2>$null
+    $null = New-Item -ItemType Directory -Force -ErrorAction Stop (Join-Path $mover 'pmre')
+    [IO.File]::WriteAllText((Join-Path $mover $reRel), (& $reStub 'v1'))
+    $null = & git -C $mover add -- $reRel 2>$null; $null = & git -C $mover commit -q -m 'pmre v1' 2>$null
+    $null = & git -C $mover push -q origin HEAD:main 2>$null
+    $re1 = & $newPusher 're1'
+    $re2 = & $newPusher 're2'
+    $reStart1 = ([string](@(& git -C $re1 hash-object (Join-Path $re1 $reRel) 2>$null))[0]).Trim()
+    [IO.File]::WriteAllText((Join-Path $mover $reRel), (& $reStub 'v2'))
+    $null = & git -C $mover add -- $reRel 2>$null; $null = & git -C $mover commit -q -m 'pmre v2' 2>$null
+    $null = & git -C $mover push -q origin HEAD:main 2>$null
+    $ledRe = Join-Path $tmp 'ledre'
+    $pmPathWas2 = $script:TcPushMainPath
+    $ledEnvWas = $env:TC_PUSH_LEDGER_ROOT
+    $rRe = $null
+    try {
+      $script:TcPushMainPath = Join-Path $re1 $reRel
+      $env:TC_PUSH_LEDGER_ROOT = $ledRe
+      $rRe = Invoke-TcPushMain -Dir $re1 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -RehearsalRunner $rhGreen -LedgerRoot $ledRe
+    } finally { $script:TcPushMainPath = $pmPathWas2; $env:TC_PUSH_LEDGER_ROOT = $ledEnvWas }
+    $reNow1 = ([string](@(& git -C $re1 hash-object (Join-Path $re1 $reRel) 2>$null))[0]).Trim()
+    $reRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledRe)
+    $reRows = @($reRaw)
+    $reRow = $(if ($reRows.Count) { $reRows[0] } else { $null })
+    $reSaid = $(if (Test-Path -LiteralPath $reMarker) { ([IO.File]::ReadAllText($reMarker)).Trim() } else { '<not run>' })
+    T ($kMF + '  a pre-flight rebase that brings in a changed push-main runs the NEW copy once, with the same arguments and TC_PUSH_MAIN_REEXEC=1; its exit is the run''s, and its row, with the new blob, is the only row') `
+      ($rRe -eq 0 -and $reSaid -ceq 'reexec=1 remote=origin branch=main tag=v2' -and $reRows.Count -eq 1 -and [string]$reRow.checkout -ceq 'reexec-child' -and [string]$reRow.pm_blob -ceq $reNow1 -and $reNow1 -ne $reStart1) `
+      ("rc={0} child={1} rows={2} checkout={3} blob={4} new={5} start={6}" -f $rRe, $reSaid, $reRows.Count, $(if ($reRow) { $reRow.checkout }), $(if ($reRow) { $reRow.pm_blob }), $reNow1, $reStart1)
+    # CLEAN TWIN: with TC_PUSH_MAIN_REEXEC already set (a run that IS the new copy) it never re-executes again: the
+    # stand-in moves once more, the push lands through this copy, and its own row carries the blob it started with.
+    $reStart2 = ([string](@(& git -C $re2 hash-object (Join-Path $re2 $reRel) 2>$null))[0]).Trim()
+    [IO.File]::WriteAllText((Join-Path $mover $reRel), (& $reStub 'v3'))
+    $null = & git -C $mover add -- $reRel 2>$null; $null = & git -C $mover commit -q -m 'pmre v3' 2>$null
+    $null = & git -C $mover push -q origin HEAD:main 2>$null
+    Remove-Item -LiteralPath $reMarker -Force -ErrorAction SilentlyContinue
+    $ledRe2 = Join-Path $tmp 'ledre2'
+    $rRe2 = $null
+    try {
+      $script:TcPushMainPath = Join-Path $re2 $reRel
+      $env:TC_PUSH_MAIN_REEXEC = '1'
+      $rRe2 = Invoke-TcPushMain -Dir $re2 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -RehearsalRunner $rhGreen -LedgerRoot $ledRe2
+    } finally { $script:TcPushMainPath = $pmPathWas2; Remove-Item -LiteralPath Env:TC_PUSH_MAIN_REEXEC -ErrorAction SilentlyContinue }
+    $re2Raw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledRe2)
+    $re2Rows = @($re2Raw)
+    $re2Row = $(if ($re2Rows.Count) { $re2Rows[0] } else { $null })
+    T ($kCT + '  with TC_PUSH_MAIN_REEXEC set the run does not re-execute again: no child ran, it landed itself, and its row carries its start blob and reexec true') `
+      ($rRe2 -eq 0 -and -not (Test-Path -LiteralPath $reMarker) -and $re2Rows.Count -eq 1 -and [string]$re2Row.outcome -ceq 'landed-after-rebase' -and [string]$re2Row.pm_blob -ceq $reStart2 -and $re2Row.reexec -eq $true) `
+      ("rc={0} childRan={1} rows={2} outcome={3} blob={4} start={5} reexec={6}" -f $rRe2, (Test-Path -LiteralPath $reMarker), $re2Rows.Count, $(if ($re2Row) { $re2Row.outcome }), $(if ($re2Row) { $re2Row.pm_blob }), $reStart2, $(if ($re2Row) { $re2Row.reexec }))
+
+    # MUST NOT FIRE: a fetch that fails ONCE with `cannot lock ref` succeeds on its retry. Origin moves so the fetch must
+    # update the remote-tracking ref, and that ref's .lock file exists (git creates a lock with O_EXCL, so a file present
+    # is exactly what another updater holding it looks like to git) until the retry seam removes it, after the first try.
+    $fr = & $newPusher 'fr'
+    & $moveOrigin 'notes.txt'
+    $frLockDir = Join-Path $fr '.git\refs\remotes\origin'
+    $null = New-Item -ItemType Directory -Force -ErrorAction Stop $frLockDir
+    $frLock = Join-Path $frLockDir 'main.lock'
+    [IO.File]::WriteAllText($frLock, '')
+    $script:frRetries = 0
+    $script:TcPmBeforeFetchRetry = { param($d) $script:frRetries++; Remove-Item -LiteralPath (Join-Path $d '.git\refs\remotes\origin\main.lock') -Force -ErrorAction SilentlyContinue }
+    $ledFr = Join-Path $tmp 'ledfr'
+    try {
+      $rFr = Invoke-TcPushMain -Dir $fr -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhGreen -LedgerRoot $ledFr
+    } finally { $script:TcPmBeforeFetchRetry = $null; Remove-Item -LiteralPath $frLock -Force -ErrorAction SilentlyContinue }
+    $frRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledFr)
+    $frRows = @($frRaw)
+    $frRow = $(if ($frRows.Count) { $frRows[0] } else { $null })
+    T ($kMNF + '  a fetch that fails once with cannot lock ref retries once and succeeds: the push lands, rebased at the pre-flight, and nothing degraded') `
+      ($rFr -eq 0 -and $script:frRetries -eq 1 -and $frRows.Count -eq 1 -and [string]$frRow.outcome -ceq 'landed-after-rebase' -and $null -eq $frRow.degraded -and (@($frRow.rebase_phases) -join ',') -ceq 'preflight') `
+      ("rc={0} retries={1} rows={2} outcome={3} degraded={4} phases={5}" -f $rFr, $script:frRetries, $frRows.Count, $(if ($frRow) { $frRow.outcome }), $(if ($frRow) { $frRow.degraded }), $(if ($frRow) { @($frRow.rebase_phases) -join ',' }))
+
+    # MUST NOT FIRE: a fetch that keeps failing OUTSIDE the lock does not refuse. The clone's remote points nowhere until its
+    # gate stub puts it back, so the pre-flight fetch fails, the stub still runs, and the fetch inside the lock lands it.
+    $fx = & $newPusher 'fx'
+    $null = & git -C $fx remote set-url origin (Join-Path $tmp 'no-such-remote') 2>$null
+    $script:fxGateRuns = 0
+    $fxGate = { param($d) $script:fxGateRuns++; $null = & git -C $d remote set-url origin $origin 2>$null; [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    $ledFx = Join-Path $tmp 'ledfx'
+    $rFx = Invoke-TcPushMain -Dir $fx -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $fxGate -RehearsalRunner $rhGreen -LedgerRoot $ledFx
+    $fxRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledFx)
+    $fxRows = @($fxRaw)
+    $fxRow = $(if ($fxRows.Count) { $fxRows[0] } else { $null })
+    T ($kMNF + '  a fetch that keeps failing outside the lock does not refuse: the gate stub ran, the row says degraded fetch, and the fetch inside the lock lands it') `
+      ($rFx -eq 0 -and $script:fxGateRuns -eq 1 -and $fxRows.Count -eq 1 -and [string]$fxRow.degraded -ceq 'fetch' -and ([string]$fxRow.outcome).StartsWith('landed')) `
+      ("rc={0} gateRuns={1} rows={2} degraded={3} outcome={4}" -f $rFx, $script:fxGateRuns, $fxRows.Count, $(if ($fxRow) { $fxRow.degraded }), $(if ($fxRow) { $fxRow.outcome }))
+
+    # MUST NOT FIRE: -DryRun never moves HEAD, even when origin moved and a rebase is needed, and it runs ONE round.
+    $dr = & $newPusher 'dr'
+    & $moveOrigin 'notes.txt'
+    $drHead0 = ([string](@(& git -C $dr rev-parse HEAD 2>$null))[0]).Trim()
+    $ledDr = Join-Path $tmp 'leddr'
+    $script:gateRuns = 0
+    $drCap = Invoke-StCapture { Invoke-TcPushMain -Dir $dr -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -RehearsalRunner $rhGreen -LedgerRoot $ledDr }
+    $drHead1 = ([string](@(& git -C $dr rev-parse HEAD 2>$null))[0]).Trim()
+    $drRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledDr)
+    $drRows = @($drRaw)
+    $drRow = $(if ($drRows.Count) { $drRows[0] } else { $null })
+    T ($kMNF + '  -DryRun with a rebase needed never moves HEAD, says the rebase was not run, and runs one round') `
+      ($drCap.Result -eq 0 -and $drHead0 -eq $drHead1 -and $script:gateRuns -eq 1 -and $drRows.Count -eq 1 -and [string]$drRow.outcome -ceq 'dry-run' -and [int]$drRow.rounds -eq 1 -and @($drRow.rebase_phases).Count -eq 0 -and $drCap.Text -match 'was NOT run') `
+      ("rc={0} headMoved={1} gateRuns={2} rows={3} outcome={4} rounds={5} phases={6}" -f $drCap.Result, ($drHead0 -ne $drHead1), $script:gateRuns, $drRows.Count, $(if ($drRow) { $drRow.outcome }), $(if ($drRow) { $drRow.rounds }), $(if ($drRow) { @($drRow.rebase_phases) -join ',' }))
+
+    # W8.1, MUST FIRE: a runner stub that writes a TRACKED file makes the tree dirty during the legs, and the push is refused
+    # in the lock with dirty_since during-legs naming that file. MUST NOT FIRE: an ignored file the stub writes does not.
+    $dw = & $newPusher 'dw'
+    $dwGate = { param($d) [IO.File]::WriteAllText((Join-Path $d 'seed.txt'), 'written by a leg'); [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    $ledDw = Join-Path $tmp 'leddw'
+    $dwCap = Invoke-StCapture { Invoke-TcPushMain -Dir $dw -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $dwGate -RehearsalRunner $rhGreen -LedgerRoot $ledDw }
+    $dwRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledDw)
+    $dwRows = @($dwRaw)
+    $dwRow = $(if ($dwRows.Count) { $dwRows[0] } else { $null })
+    $dwPaths = @($(if ($dwRow) { $dwRow.dirty_paths } else { @() }))
+    T ($kMF + '  a leg that writes a tracked file is refused in the lock with dirty_since during-legs naming that file, and the message says the pre-flight was clean') `
+      ($dwCap.Result -eq 1 -and $dwRows.Count -eq 1 -and [string]$dwRow.outcome -ceq 'refused-not-ready' -and [string]$dwRow.phase -ceq 'inlock' -and [string]$dwRow.dirty_since -ceq 'during-legs' -and $dwPaths.Count -eq 1 -and ([string]$dwPaths[0]).Trim() -ceq 'M seed.txt' -and $dwCap.Text -match 'clean at the pre-flight') `
+      ("rc={0} rows={1} outcome={2} phase={3} since={4} paths={5}" -f $dwCap.Result, $dwRows.Count, $(if ($dwRow) { $dwRow.outcome }), $(if ($dwRow) { $dwRow.phase }), $(if ($dwRow) { $dwRow.dirty_since }), ($dwPaths -join '|'))
+    $dgi = & $newPusher 'dgi'
+    Add-Content -LiteralPath (Join-Path $dgi '.git\info\exclude') -Value @('ign.txt') -Encoding ascii
+    $dgiGate = { param($d) [IO.File]::WriteAllText((Join-Path $d 'ign.txt'), 'ignored output'); [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    $rDgi = Invoke-TcPushMain -Dir $dgi -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $dgiGate -RehearsalRunner $rhGreen
+    T ($kMNF + '  an ignored file a leg writes does not refuse: the push lands') ($rDgi -eq 0 -and (& $tipOf) -eq ([string](@(& git -C $dgi rev-parse HEAD 2>$null))[0]).Trim()) ("rc={0}" -f $rDgi)
 
     # MUST FIRE: pm_blob names the script AS IT WAS AT START. A file tracked in the clone stands in for the checkout's own
     # push-main, and origin changes it before the push starts, so the round-1 rebase rewrites it on disk before any leg
@@ -2037,7 +2583,9 @@ $m.Dispose()
     $rPb = $null
     try {
       $script:TcPushMainPath = $pbPath
-      $rPb = Invoke-TcPushMain -Dir $pb -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhGreen -LedgerRoot $ledPb
+      # -NoReexec: this case is about the hash at START, and the stand-in here is no runnable script (the re-exec cases
+      # below drive one that is).
+      $rPb = Invoke-TcPushMain -Dir $pb -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhGreen -LedgerRoot $ledPb -NoReexec $true
     } finally {
       $script:TcPushMainPath = $pmPathWas
     }
@@ -2085,10 +2633,20 @@ $m.Dispose()
     $null = & git -C $d2 add -- d.txt 2>$null; $null = & git -C $d2 commit -q -m d 2>$null
     [IO.File]::WriteAllText((Join-Path $d2 'dirty.txt'), 'uncommitted')
     $headD0 = ([string](@(& git -C $d2 rev-parse HEAD 2>$null))[0]).Trim()
-    $r3 = Invoke-TcPushMain -Dir $d2 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate
+    $ledD2 = Join-Path $tmp 'ledd2'
+    $script:gateRuns = 0
+    $r3 = Invoke-TcPushMain -Dir $d2 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -LedgerRoot $ledD2
     $headD1 = ([string](@(& git -C $d2 rev-parse HEAD 2>$null))[0]).Trim()
     T ($kMF + '  a dirty checkout is refused and its branch is left exactly where it was') `
       ($r3 -eq 1 -and $headD0 -eq $headD1) ("rc={0} before={1} after={2}" -f $r3, $headD0, $headD1)
+    # W8.1: THE DIRT IS NAMED, and it was there at the START, so no leg ran.
+    $d2Raw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledD2)
+    $d2Rows = @($d2Raw)
+    $d2Row = $(if ($d2Rows.Count) { $d2Rows[0] } else { $null })
+    $d2Paths = @($(if ($d2Row) { $d2Row.dirty_paths } else { @() }))
+    T ($kMF + '  a tree dirty at the start is refused before the runner stub runs, with dirty_since start and the path') `
+      ($r3 -eq 1 -and $script:gateRuns -eq 0 -and $d2Rows.Count -eq 1 -and [string]$d2Row.dirty_since -ceq 'start' -and [string]$d2Row.phase -ceq 'preflight' -and $d2Paths.Count -eq 1 -and ([string]$d2Paths[0]).Trim() -ceq '?? dirty.txt') `
+      ("rc={0} gateRuns={1} rows={2} since={3} phase={4} paths={5}" -f $r3, $script:gateRuns, $d2Rows.Count, $(if ($d2Row) { $d2Row.dirty_since }), $(if ($d2Row) { $d2Row.phase }), ($d2Paths -join '|'))
 
     # A CONFLICTING REBASE IS ABORTED, not left half-applied for the next session to inherit.
     $e = New-Clone 'e'
@@ -2104,6 +2662,9 @@ $m.Dispose()
     $midRebase = (Test-Path -LiteralPath (Join-Path $e '.git\rebase-merge')) -or (Test-Path -LiteralPath (Join-Path $e '.git\rebase-apply'))
     T ($kMF + '  a conflicting rebase is aborted, refused, and leaves no half-finished rebase behind') `
       ($r4 -eq 1 -and $headE0 -eq $headE1 -and -not $midRebase) ("rc={0} before={1} after={2} midRebase={3}" -f $r4, $headE0, $headE1, $midRebase)
+    $eStatus = @(& git -C $e status --porcelain 2>$null | Where-Object { "$_".Trim() })
+    T ($kCT + '  after a refused pre-flight the checkout is the original sha with an empty git status --porcelain') `
+      ($headE0 -eq $headE1 -and $eStatus.Count -eq 0) ("head={0} status={1}" -f $headE1, ($eStatus -join ' | '))
 
     # NOTHING TO PUSH IS A REFUSAL, not a claimed landing.
     $h = New-Clone 'h'
@@ -2350,6 +2911,10 @@ $m.Dispose()
       ($null -ne $dlRow -and $dlShs.Count -eq 1 -and [string]$dlShs[0] -ceq $dlShWant -and [int]$dlRow.subject_count -eq 1 -and [string]$dlRow.head_ref -ceq 'main' -and `
         $null -eq $dlRow.conflict_target -and $null -eq $dlRow.reject_rc -and $null -eq $dlRow.hook_ta_scope) `
       ("shas={0} want={1} count={2} head_ref={3} target={4} rc={5} scope={6}" -f ($dlShs -join ','), $dlShWant, $(if ($dlRow) { $dlRow.subject_count }), $(if ($dlRow) { $dlRow.head_ref }), $(if ($dlRow) { $dlRow.conflict_target }), $(if ($dlRow) { $dlRow.reject_rc }), $(if ($dlRow) { $dlRow.hook_ta_scope }))
+    # W8.1 CLEAN TWIN: a clean tree lands, and its row carries no dirty field, nothing degraded and no guard holder.
+    T ($kCT + '  a clean tree lands through the default legs, and the row has no dirty_paths, no dirty_since, nothing degraded and no guard_holder') `
+      ($rDl -eq 0 -and $null -ne $dlRow -and $null -eq $dlRow.dirty_paths -and $null -eq $dlRow.dirty_since -and $null -eq $dlRow.degraded -and $null -eq $dlRow.guard_holder -and $dlRow.reexec -eq $false) `
+      ("rc={0} paths={1} since={2} degraded={3} holder={4} reexec={5}" -f $rDl, $(if ($dlRow) { $dlRow.dirty_paths }), $(if ($dlRow) { $dlRow.dirty_since }), $(if ($dlRow) { $dlRow.degraded }), $(if ($dlRow) { $dlRow.guard_holder }), $(if ($dlRow) { $dlRow.reexec }))
     # ---- AN OLD-SHAPE ROW STILL PARSES IN THE CONVERGENCE PROBE (W0.1) ----
     # The probe itself is run, as a child, over a ledger holding the schema-2 row above and a row written before it. An
     # empty reflog file and an empty log directory keep it off this box's real history.
@@ -2391,6 +2956,12 @@ $m.Dispose()
       ($suiteMine.Count -ge 1 -and $suiteMine.Count -eq @($suiteRaw).Count) ("rowsInRedirect={0} rowsOfThisRun={1}" -f @($suiteRaw).Count, $suiteMine.Count)
   } finally {
     $ErrorActionPreference = $prev
+    $script:TcPmGuardPrefix = $guardPrefixWas
+    $script:TcPmGuardInfoRoot = $guardInfoWas
+    $script:TcPmRebaseAbort = { param($d) Invoke-TcGit -Dir $d -Arguments @('rebase', '--abort') }
+    $script:TcPmBeforeFetchRetry = $null
+    Stop-TcMutexHold
+    if ($null -eq $reexecWas) { Remove-Item -LiteralPath Env:TC_PUSH_MAIN_REEXEC -ErrorAction SilentlyContinue } else { $env:TC_PUSH_MAIN_REEXEC = $reexecWas }
     if ($null -eq $runWas) {
       Remove-Item -LiteralPath Env:TC_PUSH_LEDGER_RUN -ErrorAction SilentlyContinue
     } else {
@@ -2404,9 +2975,10 @@ $m.Dispose()
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A LITERAL-CASE SUITE KNOWS ITS OWN NUMBER, so a shortfall is a defect rather than a smaller tree: a case lost to a
-  # throw, a comment or a glued line would otherwise leave the rest green (ops-and-gates.md). 93 = the 38 of the
-  # fetch-and-rebase-first loop, W0.1's 32, W0.1R's 8 and the 15 its review added; read off this file, not added up.
-  $expectedCases = 93
+  # throw, a comment or a glued line would otherwise leave the rest green (ops-and-gates.md). 107 = the 38 of the
+  # fetch-and-rebase-first loop, W0.1's 32, W0.1R's 8, the 15 its review added, and W2.1R with W8.1's 14 (the index.lock
+  # case was rewritten in place, not added); read off this file, not added up.
+  $expectedCases = 107
   if ($cases -ne $expectedCases) { Write-Output ("FAIL  the suite ran {0} case(s) where this file holds {1}, so a case was skipped or lost" -f $cases, $expectedCases); $f++ }
   if ($f) { Write-Output ("push-main self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("push-main self-test PASS: {0} cases - led by a branch whose base the remote moved past landing on its FIRST attempt, and by a conflicting rebase being aborted rather than left half-finished under the lock" -f $cases)
@@ -2416,6 +2988,7 @@ $m.Dispose()
 if ($NoRehearsal) {
   $env:TC_NO_REHEARSAL = $(if ($NoRehearsalReason) { $NoRehearsalReason } else { 'push-main -NoRehearsal, no reason given' })
   Say ('push-main: *** -NoRehearsal *** this push skips the chain rehearsal; the hook will print it and the bypass is logged. Reason: ' + $env:TC_NO_REHEARSAL)
+  $script:TcPmReexecExtra = @('-NoRehearsal', '-NoRehearsalReason', $env:TC_NO_REHEARSAL)
 }
-$rc = Invoke-TcPushMain -Dir $repo -Remote $Remote -Branch $Branch -LockWaitSec $LockWaitSec -DryRun ([bool]$DryRun)
+$rc = Invoke-TcPushMain -Dir $repo -Remote $Remote -Branch $Branch -LockWaitSec $LockWaitSec -DryRun ([bool]$DryRun) -NoReexec ([bool]$NoReexec)
 exit $rc
