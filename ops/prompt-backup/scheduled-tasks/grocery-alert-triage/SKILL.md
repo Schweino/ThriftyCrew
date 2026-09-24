@@ -116,7 +116,10 @@ closes six as `deviated`, and the report says which it did. Finishing means the 
 was described: an item you cannot finish is left `needs-more-time` ON PURPOSE and early, not discovered at
 the ceiling.
 **RUN CEILINGS, in tool calls, named in every dispatch:** money lane 200 for the run; ops lane 100; weekly
-lane 40 per item and 150 for the lane. Past a ceiling an item becomes `needs-more-time` and its own queue id
+lane 40 per item and 150 for the lane. **Since 2026-09-25 the plan gate checks the ceilings BEFORE the run**:
+every planned code item carries `lane` and `est_tool_calls`, each lane's sum must fit, and what does not fit is
+planned `deferred-budget` (its id stays open, due tomorrow). Tell the reviewer so in every dispatch. The agents'
+`maxTurns` (developer 180, ops 160, reviewer 90) is the harness backstop behind the self-count. Past a ceiling an item becomes `needs-more-time` and its own queue id
 stays open; no new queue item is ever minted for work a run ran out of budget on. These are first plausible
 numbers, not the survivors of a sweep, and the harness cannot enforce them: the agent counts its own calls,
 and the ledger shows whether it did.
@@ -124,10 +127,31 @@ and the ledger shows whether it did.
 `triage-due.ps1` prints a `RESUME` block above the DUE list naming every queue item whose newest plan item
 closed `deviated` or `needs-more-time`, with the plan path and lane to resume from, and RESUME work alone
 makes the run DUE. On the day it landed it named 9 unfinished root fixes nothing else could see.
-**THE COST LEDGER.** After every agent spawn, append one line to `grocery\triage-plans\cost-ledger.jsonl` from
-the harness usage block (date, plan, lane, agent, model, effort, tokens, tool_uses, duration_ms, items_worked,
-items_transcribed, items_board_changing, note) and commit it with the plan. The report gives the run's totals
-against the ceilings. Revisit the ceilings and the 7/21-day numbers once four weekly runs are in it.
+**THE COST LEDGER IS DERIVED, NEVER TYPED (2026-09-24, Brad: "we burn a TON of tokens each time";
+design\PLAN-triage-token-efficiency-2026-09-24.md).** Until that day this step copied the harness usage block by
+hand, and that block's `tokens` is the agent's FINAL CONTEXT SIZE, not what it consumed (exact on 4 of 4 spawns
+of 09-19). Every number above in "tokens" is in that unit and understates spend one to two orders of magnitude.
+Measured in input-token equivalents (`cost_units`): normal single-day runs 18M, 26M and 45M; the 09-20 session,
+left open for three days of follow-on work, 402M across 56 spawns, none of it on the ledger. So now:
+- After every spawn, and again at STEP 5, run
+  `C:\Codex\Python312\python.exe C:\Codex\ThriftyCrew\grocery\triage-cost.py --append --plan <every plan this run wrote, comma separated>`.
+  It reads this session's transcripts (the orchestrator and every spawn, any agent type) and appends schema-2
+  rows. Never type a ledger row. Exit 3 is BLIND (the transcript format moved): say so, never report a zero.
+- **RUN BUDGET: 30,000,000 cost_units for the whole session, orchestrator included.** Before EVERY spawn run
+  `C:\Codex\Python312\python.exe C:\Codex\ThriftyCrew\grocery\triage-cost.py --budget 30000000`. Exit 2 means
+  the run is spent: spawn nothing more, leave the remaining items open (their ids are due tomorrow), and say so
+  in the report with the BUDGET line verbatim. First plausible number from the measured runs above, not a sweep.
+- **ONE DEVELOPER SPAWN PER `publish_batch`.** Cost grows with (calls x context), because every call re-reads the
+  whole context: 30 developer spawns averaged about 312k tokens of context per call, and 40% of the 09-20
+  session's developer spend was cache WRITES from context sitting idle through long gates. A fresh spawn per
+  batch keeps each context small. The plan file is the handoff between them.
+- **No general-purpose agents in triage.** Its lanes are the three triage agents, whose definitions carry the
+  token discipline and a `maxTurns` cap; 11 general-purpose spawns cost 65M on 09-20 to 09-23 with neither.
+- **THIS SESSION IS THE DAILY RUN, NOT A WORKSPACE.** It ends at STEP 5. If Brad asks for more work in it, run
+  `triage-cost.py` first and tell him the session's cost so far, and recommend a fresh session for work that is
+  not today's queue: a session carried forward keeps paying for everything already in its context.
+- The report gives the run's cost_units against the budget, and `triage-cost.py --report` lines for today's
+  plans (cost per done item). Revisit the budget, the ceilings and the 7/21-day numbers after five runs.
 
 The handoff is a FILE, never a message: `grocery/triage-plans/plan-<yyyy-MM-dd>[-N].json`, schema in
 `grocery/triage-plans/README.md`. Read that README once before you start so you can check the plan is
@@ -258,6 +282,10 @@ always the bare `plan-<today>.json`), that round = 1, and a per-item effort ceil
 PER ITEM AND PER CLASS, not one number for the run: name the short wall budget from STEP 0.75 on the items
 it applies to, and a real ceiling on the substantive ones. A single ceiling quoted for a mixed dispatch is
 how a wall alert ends up costing what a wrong-product alert should.
+Tell it too that every planned code item carries `lane` and `est_tool_calls`, that each lane's sum must fit (money
+200, ops 100), and that what does not fit is planned `deferred-budget` (README; the gate refuses a plan that does
+not fit from 2026-09-25). Measured before this rule: 95 of 201 plan items since 09-10 ended `done` and 78 ended
+`deviated` or `needs-more-time`, and an unfinished item comes back at full diagnosis price.
 **A RETURN SKIPS THE REVIEWER (Brad's ruling, 2026-09-20, after reading the cost ledger.)** 116 of the 323
 alerts in 30 days were a type triage had already closed, and each was paying full diagnosis price again at
 about 317k tokens a reviewer run to re-derive a root cause a committed plan already holds. So a RETURN item is
@@ -301,18 +329,24 @@ STEP 3 - IMPLEMENT, IN TWO LANES, ONE AFTER THE OTHER. Split the plan's code ite
 in the report: an item goes to the MONEY lane when its `publish_batch` is 1 or more, its classification is
 wrong-product, parse-basis-bug or real-economics, it changes a matching or pricing rule, or it touches a
 blocking guard. Every other code item goes to the OPS lane. When in doubt, money.
-- MONEY: spawn "triage-developer" synchronously, naming the plan file path, ONLY its item ids, the routing
-  artifact, the foreign-dirty file list, the per-item effort ceilings and a RUN CEILING of 200 tool calls,
+- MONEY: spawn "triage-developer" synchronously ONCE PER `publish_batch` (a fresh, small context each time;
+  COST CONTROLS), naming the plan file path, ONLY that batch's item ids, the routing artifact, the
+  foreign-dirty file list, the per-item effort ceilings and the batch's share of the 200-call RUN CEILING,
   and the fact that the plan has already passed the gate so it should implement rather than re-diagnose. It
-  owns the edits, the gated chain, the publish, the commit/push, and those queue statuses. Tell it to publish
-  once per `publish_batch`, not once per item.
+  owns the edits, the gated chain, the publish, the commit, one landing through `ops\push-main.ps1`, and those
+  queue statuses. Run `triage-cost.py --budget 30000000` before each spawn.
+- LANDING: agents land ONCE through `ops\push-main.ps1` and never retry a refused push inside their own
+  context. When a lane reports a refusal, re-run `powershell -NoProfile -File C:\Codex\ThriftyCrew\ops\push-main.ps1`
+  yourself, once, from the checkout the lane committed in, and read its outcome line. A second refusal is
+  reported verbatim, never looped.
 - OPS: once the money lane has returned, spawn "triage-ops-developer" synchronously in JOB 1 (IMPLEMENT) with
   the same plan, ONLY its item ids, the refreshed foreign-dirty list, its per-item ceilings and a RUN CEILING
   of 100 tool calls. Skip the spawn when there are no ops items. An item it bounces as mis-laned (it turned
   out to touch prices or matching) goes to the money lane in this run, inside the money ceiling.
 Tell both that every residual in `leaves_open` gets the CHEAPEST HONEST owner (watch, weekly-lane queue item,
 or ruling, per COST CONTROLS) before it closes a single queue item, and that
-`validate-triage-plan.ps1 -Plan <plan> -Closing` must exit 0 first. Append each spawn's row to the cost ledger.
+`validate-triage-plan.ps1 -Plan <plan> -Closing` must exit 0 first. After each spawn run `triage-cost.py --append
+--plan <plans>` (COST CONTROLS); `-Closing` refuses a plan dated 2026-09-25 or later that no derived row names.
 
 STEP 3.5 - THE WEEKLY LANE, only when `triage-due.ps1` said it is due. After the daily lane, or on its own when
 the daily lane was empty, spawn "triage-ops-developer" synchronously ONCE, in JOB 2 (WEEKLY LANE), with the
@@ -330,7 +364,7 @@ it. Leftovers come after, inside the same ceilings. Then run both gates on that 
   [IO.File]::WriteAllText('C:\Codex\ThriftyCrew\grocery\triage-weekly-lane-stamp.txt', (Get-Date).ToString('o'), (New-Object Text.UTF8Encoding($false)))
 A lane that ran and did not close was not worked, so it stays due tomorrow (the test-guards stamp lesson,
 queue 2026-09-10-267ba6). Weekly items left `needs-more-time` stay open; they are neither STEP 4.5 arrivals nor
-a bounce. Append the spawn's row to the cost ledger.
+a bounce. Then run `triage-cost.py --append --plan <that plan>`.
 
 STEP 4 - ONE BOUNCE ROUND, MAX. If the developer reports items with status "bounced" (a genuinely NEW
 failure class it found while implementing, not a detail), spawn the reviewer again for round 2 with ONLY
@@ -340,7 +374,9 @@ commodities had no sanity band, both did, and round 2's first job was disproving
 anything still unresolved becomes needs-brad with ONE specific email via
 `grocery\send-alert.ps1 -Force`. Discovery during implementation is normal here (on 2026-07-30 a second
 wrong-product cell only appeared after the first exclusion rebuilt the board), which is why this round
-exists and why it is capped.
+exists and why it is capped. **The cap is a gate since 2026-09-25**: `validate-triage-plan.ps1` refuses a
+plan whose `round` is above 2 unless it carries `round_override` quoting Brad and the date, because plans
+reached round 5 on 09-20 and round 6 on 09-22 with this sentence as the only brake.
 
 STEP 4.5 - ALERTS THAT ARRIVE MID-RUN ARE STALE BY CONSTRUCTION. The run's scope is the open queue as it
 stood at STEP 0. The daily cycle keeps firing while you work, so re-read the queue before STEP 5 and expect
@@ -365,8 +401,12 @@ STEP 5 - VERIFY THE RUN, DO NOT TAKE ITS WORD FOR IT:
   arrivals STEP 4.5 deliberately left for the next run, or list weekly-lane items that are not due or that
   STEP 3.5 left `needs-more-time`. Those are the ONLY clean endings. If it is DUE for anything else, that is
   an item the run dropped, and the report names it rather than closing quiet.
-- `grocery\triage-plans\cost-ledger.jsonl` has one row per agent this run spawned, committed with the plan,
-  and the report gives the run's total tokens and tool calls against the ceilings.
+- Run `C:\Codex\Python312\python.exe C:\Codex\ThriftyCrew\grocery\triage-cost.py --append --plan <every plan
+  this run wrote>` one last time, so the orchestrator's own row is current, and commit
+  `grocery\triage-plans\cost-ledger.jsonl` with the plan. The report gives the session's cost_units against the
+  30M budget (the BUDGET line verbatim), the `--report` line of each of today's plans (cost per done item), and
+  tool calls against the ceilings. `python grocery\triage-cost.py --check-agents` must exit 0: the three copies
+  of each triage agent (the repo, C:\Codex\.claude\agents, ~\.claude\agents) are identical.
 - Re-run `grocery\audit-alert-census.ps1` so its numbers include this run's closes, quote its QUIET DAYS,
   TARGET and RETURNS lines, and commit `grocery\out\alert-census.jsonl` by explicit path with the plan. That
   file is the only history of alerts older than the queue's 30 days, so a copy that lives on one disk is not

@@ -5,6 +5,13 @@ commit; a rebase cannot move a blob). It reads Claude Code session transcripts u
 internal format; a transcript with calls and no usage block reads BLIND, never zero. Plan:
 `design/PLAN-triage-token-efficiency-2026-09-24.md`.
 
+## Knowledge consulted
+
+- `.claude/rules/measurement.md`: the bar is written before the run, a rate carries its denominator, the harness is
+  committed and cited by blob.
+- `memory:triage-cost-controls` (the 2026-09-10 ceilings) and `memory:harness-tokens-is-final-context` (the unit trap
+  this document measures around).
+
 ## The unit
 
 `cost_units` = input + 1.25 x cache write + 0.1 x cache read + 5 x output, summed over every API call of the
