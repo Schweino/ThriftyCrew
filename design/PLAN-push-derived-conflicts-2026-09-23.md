@@ -2651,6 +2651,11 @@ defect.
 
 B6, B7, B9, B10 and B11 are read as written; their items now resolve through the Plan-line rule (16.9).
 
+**The soak is WAIVED (Brad, 2026-09-24 01:00: "Land now, use what we have").** W0.3 step 7's 30 rows are not collected
+before Row 2 and Row 9 land. The before-picture is the 2026-09-23 reconstructed analysis (15.3 and the review) plus the 11
+schema-2 rows already on the ledger. B3, B7 and B9, whose baselines the soak was to supply, are judged against that
+before-picture and are therefore WEAKER bars: any verdict on them says so beside the number.
+
 ### 16.6 The lock order
 
 The declared order in `.claude/rules/ops-and-gates.md` gains, in W9.2's landing commit, outermost first:
