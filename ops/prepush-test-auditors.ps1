@@ -661,6 +661,57 @@ function Write-TaPassRecord([string]$Path, $KeyInfo, [int]$Rc, [string[]]$FailLi
   return $bh
 }
 
+# PRUNING THE SHARED DIRECTORY (2026-09-24, design\backlog-inbox\pd-ta-2026-09-23.md). One record per checkout root, in
+# the SHARED git directory, and nothing deleted one except this script's own withdrawal: measured 2026-09-23, 91 files,
+# 82 older than 6 hours, the oldest from 2026-09-18, beside 119 checkouts, and a schema 2 record is about 70 KB. Two rules,
+# both two-way (a wrongly deleted record costs one full test-auditors run in a checkout that still exists, never a wrong
+# verdict):
+#   * a SCHEMA 1 file older than $script:PassMaxAgeHours goes: no copy at or after W0.4 reads one, and an older copy
+#     could not reuse it past that age anyway. AT the limit it is kept (the bar is -gt, as Read-TaPassRecord's age check).
+#   * a SCHEMA 2 file goes when its own `root` row names a directory that no longer exists. NEVER by age: since W0.4 the
+#     newest schema 2 record of a LIVE checkout is also what names the input that moved the key (TA-KEY-MOVED), at any
+#     age, so an age rule would turn every push made 6 hours after the last pass into kind=no-record.
+# A file whose name is not exactly one of the two shapes, one that cannot be read, one with no root row, and $Keep (this
+# checkout's own record) are left alone. Never throws; returns what it did so the caller can print one line.
+function Invoke-TaPassRecordPrune([string]$Dir, [datetime]$NowUtc, [double]$MaxAgeHours, [string]$Keep = '') {
+  $r = [pscustomobject]@{ scanned = 0; schema1 = 0; orphan = 0; kept = 0; failed = 0; why = '' }
+  if (-not $Dir -or -not (Test-Path -LiteralPath $Dir -PathType Container)) { $r.why = ('no record directory at ' + $Dir); return $r }
+  $files = @()
+  try { $files = @(Get-ChildItem -LiteralPath $Dir -Filter 'tc-test-auditors-pass-*' -File -ErrorAction Stop) } catch { $r.why = ('the record directory could not be listed: ' + $_.Exception.Message); return $r }
+  foreach ($f in $files) {
+    $name = $f.Name
+    $isS1 = $name -cmatch '^tc-test-auditors-pass-[0-9a-f]{12}\.json$'
+    $isS2 = $name -cmatch '^tc-test-auditors-pass-[0-9a-f]{12}\.schema2\.json$'
+    if (-not ($isS1 -or $isS2)) { continue }
+    $r.scanned++
+    if ($Keep -and [string]::Equals($f.FullName, $Keep, [StringComparison]::OrdinalIgnoreCase)) { $r.kept++; continue }
+    $drop = $false
+    if ($isS1) {
+      $drop = (($NowUtc - $f.LastWriteTimeUtc).TotalHours -gt $MaxAgeHours)
+    } else {
+      $rootRow = $null
+      try {
+        $j = [IO.File]::ReadAllText($f.FullName, [Text.Encoding]::UTF8) | ConvertFrom-Json
+        if ($null -ne $j -and $j.PSObject.Properties['rows']) {
+          $rootRow = @(@($j.rows) | ForEach-Object { [string]$_ } | Where-Object { $_.StartsWith("root`t", [StringComparison]::Ordinal) })
+        }
+      } catch { $rootRow = $null }
+      if ($null -ne $rootRow -and $rootRow.Count -eq 1) {
+        $rootDir = $rootRow[0].Substring(5)
+        $drop = ($rootDir -and -not (Test-Path -LiteralPath $rootDir -PathType Container))
+      }
+    }
+    if (-not $drop) { $r.kept++; continue }
+    try { [IO.File]::Delete($f.FullName); if ($isS1) { $r.schema1++ } else { $r.orphan++ } } catch { $r.failed++ }
+  }
+  return $r
+}
+
+function Format-TaPruneLine($P) {
+  if ($P.why) { return ('prepush-test-auditors: pass records not pruned - ' + $P.why) }
+  return ('prepush-test-auditors: pruned pass records - ' + $P.schema1 + ' schema 1 older than ' + $script:PassMaxAgeHours + 'h and ' + $P.orphan + ' schema 2 whose checkout is gone, of ' + $P.scanned + ' read (' + $P.kept + ' kept, ' + $P.failed + ' could not be deleted)')
+}
+
 function Format-ReuseLine([string]$Key, $Pass, $KeyInfo) {
   return ('prepush-test-auditors: REUSED key=' + $Key + ' - ' + $Pass.why + '; ' + $KeyInfo.inputs + ' input file(s) (' + $KeyInfo.dirty + ' uncommitted) and ' + $KeyInfo.boards + ' board file(s) hashed in ' + $KeyInfo.ms + 'ms, none moved since that pass, so test-auditors did not run again')
 }
@@ -2212,6 +2263,35 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
   # red on purpose, and this check refused it forever. A sandbox git repo holds the REAL audits (copied from this
   # checkout, with every lib), rule files committed at a base and at several tips, and an untracked fixture board, so
   # each case drives the real paired run through the real audits. Synthetic commodity and store names throughout.
+  # ---- PRUNING THE SHARED RECORD DIRECTORY (2026-09-24, pd-ta-2026-09-23.md) ----
+  $pnDir = Join-Path $env:TEMP ('tc-ptapn-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    $null = New-Item -ItemType Directory -Path $pnDir -ErrorAction Stop
+    $u8p = New-Object Text.UTF8Encoding($false)
+    $pnNow = [datetime]::new(2026, 9, 24, 12, 0, 0, [DateTimeKind]::Utc)
+    $liveRoot = Join-Path $pnDir 'live-checkout'; $null = New-Item -ItemType Directory -Path $liveRoot
+    $goneRoot = Join-Path $pnDir 'removed-checkout'
+    $mkS1 = { param([string]$H, [double]$AgeH) $fp = Join-Path $pnDir ('tc-test-auditors-pass-' + $H + '.json'); [IO.File]::WriteAllText($fp, '{"schema":1}', $u8p); [IO.File]::SetLastWriteTimeUtc($fp, $pnNow.AddHours(-$AgeH)); return $fp }
+    $mkS2 = { param([string]$H, [string]$Root, [double]$AgeH) $fp = Join-Path $pnDir ('tc-test-auditors-pass-' + $H + '.schema2.json'); [IO.File]::WriteAllText($fp, ('{"schema":2,"rows":["root\t' + $Root.ToLowerInvariant().Replace('\', '\\') + '"]}'), $u8p); [IO.File]::SetLastWriteTimeUtc($fp, $pnNow.AddHours(-$AgeH)); return $fp }
+    $s1Old = & $mkS1 'aaaaaaaaaaa1' 6.25
+    $s1Bar = & $mkS1 'aaaaaaaaaaa2' 6
+    $s1New = & $mkS1 'aaaaaaaaaaa3' 1
+    $s2Gone = & $mkS2 'bbbbbbbbbbb1' $goneRoot 1
+    $s2Live = & $mkS2 'bbbbbbbbbbb2' $liveRoot 720
+    $s2Own = & $mkS2 'bbbbbbbbbbb3' $goneRoot 1
+    $s2Bad = Join-Path $pnDir 'tc-test-auditors-pass-bbbbbbbbbbb4.schema2.json'; [IO.File]::WriteAllText($s2Bad, '{"schema":2,', $u8p)
+    $other = Join-Path $pnDir 'tc-test-auditors-pass-aaaaaaaaaaa9.json.4242.tmp'; [IO.File]::WriteAllText($other, 'x', $u8p); [IO.File]::SetLastWriteTimeUtc($other, $pnNow.AddDays(-9))
+    $s2LiveBefore = [IO.File]::ReadAllText($s2Live)
+    $pn = Invoke-TaPassRecordPrune $pnDir $pnNow 6 $s2Own
+    $ex = { param([string]$P) Test-Path -LiteralPath $P }
+    Case 'MUST FIRE' 'prune: a schema 1 record one step past the 6h bar (6.25h) and a schema 2 record whose checkout root is gone are deleted' ((-not (& $ex $s1Old)) -and (-not (& $ex $s2Gone)) -and $pn.schema1 -eq 1 -and $pn.orphan -eq 1) ("schema1=$($pn.schema1) orphan=$($pn.orphan) s1Old=$(& $ex $s1Old) s2Gone=$(& $ex $s2Gone) " + (Format-TaPruneLine $pn))
+    Case 'MUST NOT FIRE' 'prune: a schema 1 record exactly AT the 6h bar, a 1h one, a 30-day-old schema 2 of a live checkout, an unreadable one, this checkout''s own, and a temp file are all kept' ((& $ex $s1Bar) -and (& $ex $s1New) -and (& $ex $s2Live) -and (& $ex $s2Bad) -and (& $ex $s2Own) -and (& $ex $other) -and $pn.scanned -eq 7 -and $pn.kept -eq 5 -and $pn.failed -eq 0) ("scanned=$($pn.scanned) kept=$($pn.kept) failed=$($pn.failed)")
+    $s2LiveText = [IO.File]::ReadAllText($s2Live)
+    Case 'CLEAN TWIN' 'prune: the kept live-checkout record is byte-identical and still names its root, so TA-KEY-MOVED can still compare against it' ([string]::Equals($s2LiveText, $s2LiveBefore, [StringComparison]::Ordinal) -and $s2LiveText.Contains('live-checkout')) ("text=$s2LiveText")
+  } catch {
+    $fails += ('prune cases THREW: ' + $_.Exception.Message)
+  } finally { Remove-Item -LiteralPath $pnDir -Recurse -Force -ErrorAction SilentlyContinue }
+
   $liveCases = Get-LiveRulingCases $taText
   Case 'MUST FIRE' 'live: test-auditors marks exactly the food-category and known-wrong live-board cases' (@($liveCases).Count -eq 2 -and (@($liveCases | ForEach-Object { $_.audit } | Sort-Object) -join ',') -eq 'audit-food-category.ps1,audit-known-wrong.ps1') "got=$(@($liveCases | ForEach-Object { $_.audit + ' <' + $_.prefix + '>' }) -join '; ')"
   $auditTexts = @{}
@@ -2539,7 +2619,7 @@ exit 0
 
   # A SUITE THAT SILENTLY RAN A SUBSET still prints "N of N". The first run of this file did exactly that:
   # a throw inside the record block skipped five cases and the tally read 30 of 30. The count is pinned.
-  $expectedCases = 121
+  $expectedCases = 124
   if ($ran -ne $expectedCases) { $fails += "ran $ran case(s), expected $expectedCases - a block of cases was skipped" }
 
   ''
@@ -2793,6 +2873,7 @@ if ($passPath -and $null -ne $passKey -and $passKey.ok) {
       # $after, not $passKey: its rows carry the board stamps as they stand now, which is what the hashes are checked against.
       try { $ws = Write-TaPassRecord $passPath $after $rc $fl $(if ($isSelective) { 'selective' } else { 'full' }) @($sel.selected) $hs.cases ([datetime]::UtcNow); "prepush-test-auditors: pass recorded for key=$($passKey.key) (schema 2: $(@($after.rows).Count) input row(s), $($ws.hashed) of $($ws.boards) board file(s) hashed, $([math]::Round($ws.bytes / 1MB, 1)) MB in $($ws.ms)ms), so a retry over the same input content reuses it" }
       catch { "prepush-test-auditors: the pass record could not be written: $($_.Exception.Message)" }
+      try { Format-TaPruneLine (Invoke-TaPassRecordPrune (Split-Path -Parent $passPath) ([datetime]::UtcNow) $script:PassMaxAgeHours $passPath) } catch { "prepush-test-auditors: pass records not pruned - $($_.Exception.Message)" }
     } else {
       Remove-Item -LiteralPath $passPath -Force -ErrorAction SilentlyContinue
       "prepush-test-auditors: pass NOT recorded - an input moved during the run (key before $($passKey.key), after $($after.key) $($after.why))"
