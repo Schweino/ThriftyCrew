@@ -429,6 +429,19 @@ param([string]$Title = '')
   $phAt = [pscustomobject]@{ entries = @((_LnE 'slot-close-missing' @{ hold_observations = 1; producer_max_observations_per_day = 1 }), (_LnE 'hourly' @{ hold_observations = 2 })) }
   $php = @((Get-AlertRegistryEntryProblems $phAt))
   _T 'MUST NOT FIRE AT THE BAR a hold of 1 on a once-a-day producer, or a hold with no declared cadence, passes' ($php.Count -eq 0) ($php -join ' | ')
+  # ---- LIVE-TWIN, Brad's ruling "Email after 2 sightings (Recommended)" (2026-09-24), read off the COMMITTED registry ----
+  # The backlog merge task's PUSH REFUSED is held for 2 observations (the first queues for review, the second mails), and
+  # its twice-a-day cadence can reach that hold; a sibling type from the same emitter declares no hold and mails on its
+  # first. send-alert.ps1 -SelfTest pins the pending/mail arithmetic for the same two entries. A red here means the
+  # registry entry moved, not that this suite went blind.
+  $lhReg = (Read-AlertRegistry (Join-Path $root 'alert-registry.json')).registry
+  $lhPr = Resolve-AlertClass $lhReg (Get-AlertTypeKey 'Ops backlog merge: PUSH REFUSED')
+  $lhPrE = $lhPr.entry
+  $lhPrOk = ($lhPr.registered -and -not $lhPr.ambiguous -and $lhPrE -and [string]$lhPrE.id -ceq 'backlog-merge-push-refused' -and $lhPrE.PSObject.Properties['hold_observations'] -and [int]$lhPrE.hold_observations -eq 2)
+  $lhProb = @((Get-AlertRegistryEntryProblems $lhReg) | Where-Object { $_ -match 'backlog-merge-push-refused' })
+  _T 'MUST FIRE the live PUSH REFUSED entry holds for 2 observations and its twice-a-day producer can reach the hold' ($lhPrOk -and $lhProb.Count -eq 0) ('id=' + [string]$lhPrE.id + ' hold=' + [string]$lhPrE.hold_observations + ' problems=' + ($lhProb -join ' | '))
+  $lhQu = Resolve-AlertClass $lhReg (Get-AlertTypeKey 'Ops backlog merge: QUARANTINED')
+  _T 'CLEAN TWIN a different backlog merge type (QUARANTINED) is unchanged: registered page, no hold, so its first observation mails' ($lhQu.registered -and $lhQu.class -eq 'page' -and [string]$lhQu.entry.id -ceq 'backlog-merge-quarantined' -and -not $lhQu.entry.PSObject.Properties['hold_observations']) ('id=' + [string]$lhQu.entry.id + ' class=' + $lhQu.class)
   # ---- NO SUBJECT (2026-09-22, plan-2026-09-22-10 item 2026-09-20-cb8f30): send-alert has no default subject ----
   $srcNs = @'
 Send-Alert -Body $b | Out-Null

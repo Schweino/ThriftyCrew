@@ -660,6 +660,13 @@ if ($SelfTest) {
   _T 'MUST FIRE one slot-close BROWSER CAPTURE MISSING observation mails (hold 1, observation 1 of 1 is not pending)' ([bool]($bcHold -eq 1 -and -not (Test-AlertHeldPending $bcHold 1 $true ''))) 'True'
   $mwHold = Get-AlertHoldObservations $liveHoldReg 'watchdog-missing-window'
   _T 'CLEAN TWIN another held type (watchdog-missing-window) still waits for 2: observation 1 of 2 is pending' ([bool]($mwHold -eq 2 -and (Test-AlertHeldPending $mwHold 1 $true ''))) 'True'
+  # LIVE-TWIN, BRAD'S RULING "Email after 2 sightings (Recommended)" (2026-09-24): the backlog merge task's PUSH REFUSED
+  # queues on its first sighting and mails on its second; a sibling type from the same emitter still mails on its first.
+  $prHold = Get-AlertHoldObservations $liveHoldReg 'backlog-merge-push-refused'
+  _T 'MUST NOT FIRE one PUSH REFUSED sighting is PENDING, never mailed (hold 2, observation 1 of 2)' ([bool]($prHold -eq 2 -and (Test-AlertHeldPending $prHold 1 $true ''))) 'True'
+  _T 'MUST FIRE the second PUSH REFUSED sighting mails (observation 2 of 2 is not pending)' ([bool]($prHold -eq 2 -and -not (Test-AlertHeldPending $prHold 2 $true ''))) 'True'
+  $bqHold = Get-AlertHoldObservations $liveHoldReg 'backlog-merge-quarantined'
+  _T 'CLEAN TWIN a different backlog merge type (QUARANTINED) is unchanged: hold 1, its first observation mails' ([bool]($bqHold -eq 1 -and -not (Test-AlertHeldPending $bqHold 1 $true ''))) 'True'
     [IO.File]::WriteAllText($saReg, $saRegJson, $utf8)
     # ---- ONE INCIDENT, ONE ALERT (2026-09-10, plan Phase 1) ----
     $tdy = Get-Date -Format 'yyyy-MM-dd'

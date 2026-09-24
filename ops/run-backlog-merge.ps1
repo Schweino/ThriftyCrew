@@ -46,7 +46,8 @@
 
   WHAT IT PAGES, one condition each (alert type 'Ops backlog merge: <LABEL>'):
     QUARANTINED        the merge exited 2: an inbox file was malformed or two updates conflict, and a person decides
-    PUSH REFUSED       push-main exited 1 (its tail is the body); the next run redoes the merge from origin/main
+    PUSH REFUSED       push-main exited 1 (its tail is the body); the next run redoes the merge from origin/main. Queued
+                       on its first sighting and EMAILED on its second (registry hold_observations 2, Brad 2026-09-24)
     READ-OUT DUE       -Due exited 2
     LEASE TIMEOUT / LEASE ERROR   a ledger row since the last paging run: a wedged holder, or a lease that errored
     STALE INBOX        a file pending on origin/main more than 24 hours after the commit that added it
@@ -92,8 +93,9 @@
 # Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): every case works in a per-run temp directory -
 # a bare origin, a clone standing in for the main checkout, and a worktree - into which it copies the real merge, the
 # gate that merge runs and the whole lib\ they load. It reads nothing else of this repo.
-# Since 2026-09-24 it also reads the alert registry, to prove every condition it pages is registered.
-# gate-inputs: ops\run-backlog-merge.ps1, ops\merge-backlog-inbox.ps1, ops\audit-backlog-status.ps1, lib\*.ps1, grocery\run-log-lib.ps1, .gitattributes, grocery\alert-registry.json, grocery\alert-registry-lib.ps1
+# Since 2026-09-24 it also reads the alert registry, to prove every condition it pages is registered, and runs the real
+# alert-lib and send-alert (with mute-lib) in a muted sandbox, to prove PUSH REFUSED mails only on its second sighting.
+# gate-inputs: ops\run-backlog-merge.ps1, ops\merge-backlog-inbox.ps1, ops\audit-backlog-status.ps1, lib\*.ps1, grocery\run-log-lib.ps1, .gitattributes, grocery\alert-registry.json, grocery\alert-registry-lib.ps1, grocery\send-alert.ps1, grocery\alert-lib.ps1, grocery\mute-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [switch]$Alert,
@@ -1140,6 +1142,8 @@ if ($SelfTest) {
     # Send-AlertConditions, so no push gate could see it. The labels are read off this file's parse tree (every call of
     # the condition collector with a literal first argument), then resolved through the real registry and matcher.
     . (Join-Path $repo 'grocery\alert-registry-lib.ps1')
+    # LIVE-TWIN: the COMMITTED registry on purpose (audit-fixture-inputs): the question is whether THIS task's pages are
+    # registered there, so a red here means the registry changed, not that the suite went blind.
     $regRead = Read-AlertRegistry (Join-Path $repo 'grocery\alert-registry.json')
     $bmTok = $null; $bmErr = $null
     $bmAst = [System.Management.Automation.Language.Parser]::ParseFile($PSCommandPath, [ref]$bmTok, [ref]$bmErr)
@@ -1161,6 +1165,47 @@ if ($SelfTest) {
     $rcX = Resolve-AlertClass $regRead.registry (Get-AlertTypeKey ($script:SubjectPrefix + ': NOT A CONDITION IT SENDS'))
     _T 'MUST NOT FIRE  a label this task never sends still resolves unregistered, so the entries are exact and match nothing else' ($rcX.why -ceq 'unregistered') ($rcX.why + '/' + $rcX.class)
 
+    # ---- PUSH REFUSED MAILS ON ITS SECOND SIGHTING (Brad's ruling, 2026-09-24: "Email after 2 sightings (Recommended)") ----
+    # Driven through the REAL pager path: this checkout's alert-lib.ps1 Send-AlertConditions and send-alert.ps1, and the
+    # COMMITTED registry, copied into a per-run sandbox that is muted and has its own queue and queue lock. The first
+    # sighting lands in the triage queue (the review list) and is not due for mail; the second is; a different type from
+    # this task (QUARANTINED) is due on its first. The mechanism is the registry's hold_observations, not a count here.
+    $saRoot = Join-Path $st 'sa'
+    $saG = Join-Path $saRoot 'grocery'
+    $saL = Join-Path $saRoot 'lib'
+    New-Item -ItemType Directory -Path $saG -ErrorAction Stop | Out-Null
+    New-Item -ItemType Directory -Path $saL -ErrorAction Stop | Out-Null
+    # LIVE-TWIN: the COMMITTED alert-registry.json on purpose - the ruling is that entry's hold, so a red here means the
+    # registry's PUSH REFUSED or QUARANTINED entry moved, not that this suite went blind.
+    foreach ($saN in @('send-alert.ps1', 'alert-lib.ps1', 'alert-registry-lib.ps1', 'mute-lib.ps1', 'alert-registry.json')) {
+      Copy-Item -LiteralPath (Join-Path (Join-Path $repo 'grocery') $saN) -Destination (Join-Path $saG $saN) -ErrorAction Stop
+    }
+    foreach ($saLf in @(Get-ChildItem -LiteralPath (Join-Path $repo 'lib') -Filter '*.ps1' -File)) { Copy-Item -LiteralPath $saLf.FullName -Destination (Join-Path $saL $saLf.Name) -ErrorAction Stop }
+    [IO.File]::WriteAllText((Join-Path $saG 'alerts-muted.json'), '{ "muted": true, "since": "2026-09-24", "until": null }', $u8)
+    $saQ = Join-Path $saG 'triage-queue.json'
+    $saArgs = @('-QueueMutexName', (New-TcFixtureMutexName -Prefix 'tcbm-st-queue'), '-QueueFile', $saQ)
+    . (Join-Path $saG 'alert-lib.ps1')
+    $saPick = Get-AlertSenderPath -LibDir $saG
+    if ($saPick.Routed -ne 'local' -or -not [string]::Equals($saPick.Path, (Join-Path $saG 'send-alert.ps1'), [StringComparison]::OrdinalIgnoreCase)) { throw ('the sandbox sender resolved to ' + $saPick.Path + ', not its own copy; refusing to send') }
+    function _BmSighting([string]$Label) {
+      $r = Send-AlertConditions -SubjectPrefix $script:SubjectPrefix -Conditions @([pscustomobject]@{ Label = $Label; Text = ('fixture ' + $Label + ' sighting') }) -ReportPointer 'fixture' -SenderArgs $saArgs
+      $its = @()
+      if (Test-Path -LiteralPath $saQ) { $its = @(([IO.File]::ReadAllText($saQ) | ConvertFrom-Json).items) }
+      return [pscustomobject]@{ Due = @(@($r.due) | ForEach-Object { [string]$_.label }); Items = $its; Rc = $r.rc }
+    }
+    $prType = 'ops backlog merge push refused'
+    $s1 = _BmSighting 'PUSH REFUSED'
+    $s1It = @($s1.Items | Where-Object { [string]$_.type -ceq $prType })
+    _T 'MUST NOT FIRE  one PUSH REFUSED sighting lands in the triage queue (the review list) at count 1 and is not due for mail' `
+      (($s1.Due.Count -eq 0) -and ($s1It.Count -eq 1) -and ([int]$s1It[0].count -eq 1) -and ([string]$s1It[0].status -ceq 'open')) ('due=' + ($s1.Due -join ',') + ' items=' + $s1It.Count + ' rc=' + $s1.Rc)
+    $s2 = _BmSighting 'PUSH REFUSED'
+    $s2It = @($s2.Items | Where-Object { [string]$_.type -ceq $prType })
+    _T 'MUST FIRE      the second PUSH REFUSED sighting of the same open item is due for mail, and the digest went out (muted)' `
+      ((@($s2.Due) -contains 'PUSH REFUSED') -and ($s2It.Count -eq 1) -and ([int]$s2It[0].count -eq 2) -and ($s2.Rc -eq 0)) ('due=' + ($s2.Due -join ',') + ' count=' + $(if ($s2It.Count) { $s2It[0].count } else { 'none' }) + ' rc=' + $s2.Rc)
+    $s3 = _BmSighting 'QUARANTINED'
+    _T 'CLEAN TWIN     a different type from this task (QUARANTINED) is unchanged: due for mail on its first sighting' `
+      ((@($s3.Due) -contains 'QUARANTINED') -and (@($s3.Items | Where-Object { [string]$_.type -ceq 'ops backlog merge quarantined' -and [int]$_.count -eq 1 }).Count -eq 1)) ('due=' + ($s3.Due -join ',') + ' rc=' + $s3.Rc)
+
     # The heartbeat's proof: a stamp written with the verdict's exit and conditions.
     $stampP = Join-Path $st 'stamp\backlog-merge-stamp.json'
     Write-TcBmStamp -Path $stampP -Res $e5 -Code $e5.Code -NowUtc $nowS
@@ -1179,7 +1224,7 @@ if ($SelfTest) {
     }
   }
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (ops-and-gates.md): a case lost to a throw is a shortfall, never a smaller green.
-  $EXPECTED_CASES = 45
+  $EXPECTED_CASES = 48
   Write-Output ''
   if ($script:stFails.Count -or ($script:stRan -ne $EXPECTED_CASES)) {
     Write-Output ('run-backlog-merge SELF-TEST FAIL: {0} case(s) failed, {1} of {2} case(s) ran' -f $script:stFails.Count, $script:stRan, $EXPECTED_CASES)
