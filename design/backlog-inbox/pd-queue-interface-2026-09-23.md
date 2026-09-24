@@ -99,10 +99,13 @@ rehearsal slot, no push lock). Returns `.Outcome`:
 `-OnReport { param($Position, $Depth, $WaitedSec) ... }` runs every `-ReportEverySec`; its output goes to
 Out-Default, never into the return. `.WaitedMs` is this call's wait, and the member accumulates it in `.WaitMs`.
 
-### `Resolve-TcChainStackCommit -Stack <st> -Sha <sha>` and `Set-TcChainStackConflict -Member <m> -Stack <st> -Sha <sha> [-Files <string[]>]`
+### `Resolve-TcChainStackCommit -Stack <st> -Sha <sha>` and `Set-TcChainStackConflict -Member <m> -Stack <st> -Sha <sha> [-Files <string[]>] [-Ticket <name>]`
 When the rehearsal reports `blind=stack-conflict` and the commit it stopped on, Resolve names the ahead ticket
 whose range holds that sha (or `$null` when it is the member's own commit), and Set records `stack=conflict` and
-`.ConflictWith` (`Name`, `Pid`, `Checkout`, `Files`). The member KEEPS ITS PLACE and waits: if that ticket leaves,
+`.ConflictWith` (`Name`, `Pid`, `Checkout`, `Files`, `Sha`). When the stop is on the member's OWN commit (the usual
+case: the ahead commits apply, then the member's conflicts), pass `-Ticket` naming the ahead ticket whose range
+touched the conflicting files (`git diff-tree --name-only -r <sha>` over each `$stack.Ahead[i].Range`); the
+reference runner in `ops/drill-chain-queue.ps1` (`Invoke-DRh`) does exactly that. The member KEEPS ITS PLACE and waits: if that ticket leaves,
 Wait returns `restack`; if it lands, the member's catch-up rebase refuses with `phase=catchup`.
 
 ### `Exit-TcChainQueue -Member <m> [-State landed|left]`

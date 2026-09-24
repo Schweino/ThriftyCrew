@@ -296,8 +296,21 @@ construction.
      for it. When the token is NOT honoured (malformed, naming another lock, or a holder pid the probe reads as dead) the
      child does ask for the lock, and that wait is BOUNDED, never a deadlock: 60 s, then `skipped-locked`, and the parent
      pages `handoff-failed` and exits 1.
+  0b. **the chain queue ticket** - `lib\chain-queue.ps1` (`Join-TcChainQueue`, W9.2 of
+     `design\PLAN-push-derived-conflicts-2026-09-23.md`, section 16.6). **It is not a lock held across a leg**: while a
+     member holds a ticket every other push, member or not, runs run-gates, test-auditors and its rehearsal freely. The
+     only thing a ticket defers is the next member's SWAP, which `refs/heads/main` serialises already, so it serialises
+     the push and never the gate (the 2026-09-12 ruling). It sits outside 1, 2 and 2b because a holder waits on all three
+     (its swap, its run-gates, its rehearsal child in another process). Its own blocking wait, for the tickets ahead, is
+     safe under the blocking-wait paragraph below: a ticket ahead never waits on anything behind it, and no holder of the
+     push lock, a gate slot or a rehearsal slot ever waits on a ticket. The hook's W8.3 probe waits on nothing. (`0a`, the
+     per-checkout guard, and `2a`, the early-rehearsal cap, are placed by W2.1R and W9.1 when they land.)
   1. **the push lock** - `lib\push-lock.ps1` (`Enter-TcPushLock`)
   2. **the gate worker slots** - `lib\gate-slots.ps1` (`Enter-TcGateSlots`)
+  2b. **the rehearsal slots** - `Global\tc-rehearsal-slot-`, taken in `ops\rehearse-chain.ps1`. A PEER of the gate slots,
+     never nested with them: read 2026-09-23 for W9.2, nothing a rehearsal runs while it holds its slot (the arm's clone,
+     seed, the rehearsed tree's `check-ad-cycles -SelfTest` and ship path, and its own pre-commit hook) takes a gate slot
+     or the push lock, and no script under `grocery\` or `meal-prep\` calls `Enter-TcGateSlots` or `Enter-TcPushLock`.
   3. **the `Invoke-Locked` mutexes** - `grocery\ingredient-queue.ps1`, `meal-prep\pipeline\ingredient-resolutions.ps1`,
      `meal-prep\pipeline\source-domains.ps1`
   4. **the ledger locks** - `lib\ledger-lock.ps1` (`Enter-TcLedgerLock`), and **between two ledger locks, ASCENDING
