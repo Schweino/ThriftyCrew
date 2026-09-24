@@ -39,12 +39,123 @@ param([switch]$Quiet, [int]$MaxNames = 0, [int]$Workers = 0,
       # SHARD MODE - set by the parent on its own children, never by a human. The parent hands over the
       # exact name list it built (so a shard can never be measuring a different corpus than its siblings),
       # the shard takes every ChunkOf'th name from ChunkIx, and writes its verdicts to OutFile as JSON.
-      [string]$ChunkFile = '', [int]$ChunkOf = 0, [int]$ChunkIx = -1, [string]$OutFile = '')
+      [string]$ChunkFile = '', [int]$ChunkOf = 0, [int]$ChunkIx = -1, [string]$OutFile = '',
+      # HERMETIC self-test of the could-not-look re-look below: a frozen two-row catalogue, no corpus, no board.
+      [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')
 $isShard = [bool]$ChunkFile
+
+# ---- 0. A BLIND LOOK IS NAMED, AND RE-LOOKED ONCE AT THE SAME BOUND (2026-09-24, triage 2026-09-24-3ca22f) --------
+# On 2026-09-24 one name hit the 250 ms regex bound while test-auditors took 1117 s on a loaded box, and the suite read
+# "1 could-not-look" with no name: a load spike and a catastrophic pattern looked identical, and only a re-run could
+# tell them apart. Now every blind look carries its name and path; after the shard pool drains, the parent re-looks each
+# one serially on a FRESH matcher (a breaker tripped under load cannot answer for it) at the UNCHANGED 250 ms bound.
+# A name blind again stays could-not-look and fails (I183/I209: a blind name must never pass by agreeing with an
+# unmatched original). A name that resolves must equal the reference's decision, or it is a divergence: a retry never
+# launders a disagreement. The bound is never raised here (ops-and-gates.md: name the timeout and retry it).
+$script:BlindRetryCap = 50   # more blind looks than this in one run is not load noise; the rest stay could-not-look
+function New-MatchLibPsTwin($m) {
+  # the interpreted fallback over the SAME entries, with its own look state so a timeout is RECORDED, not thrown
+  return [pscustomobject]@{ gex = $m.gex; entries = $m.entries; core = $null; span = $m.span; look = (New-MatchLookState) }
+}
+function Invoke-MatchLibBlindRetry {
+  param([object[]]$Blind, [Parameter(Mandatory)][scriptblock]$Reference, [Parameter(Mandatory)][scriptblock]$NewMatcher)
+  $retried = New-Object System.Collections.ArrayList; $still = New-Object System.Collections.ArrayList
+  $diverged = New-Object System.Collections.ArrayList; $lines = New-Object System.Collections.ArrayList
+  $seen = @{}; $bounds = New-Object System.Collections.ArrayList
+  foreach ($b in @($Blind)) {
+    if ($null -eq $b) { continue }
+    $nm = [string]$b.name; $path = [string]$b.path
+    $key = $path + [char]1 + $nm
+    if ($seen.ContainsKey($key)) { continue }
+    $seen[$key] = 1
+    $row = [pscustomobject]@{ name = $nm; path = $path; decision = ''; reference = '' }
+    if ($seen.Count -gt $script:BlindRetryCap) { [void]$still.Add($row); continue }
+    $m = & $NewMatcher
+    if ($path -eq 'fallback') { $m = New-MatchLibPsTwin $m }
+    $c = Resolve-Commodity -Matcher $m -Name $nm
+    $row.decision = $(if ($c) { [string]$c.id } else { '' })
+    $detailId = $row.decision
+    if ($path -ne 'fallback') { $d = Resolve-CommodityDetail -Matcher $m -Name $nm; $detailId = $(if ($d.commodity) { [string]$d.commodity.id } else { '' }) }
+    $mb = Get-CommodityMatcherBlind -Matcher $m
+    [void]$bounds.Add([int]$mb.timeout_ms)
+    if (@($mb.could_not_look | Where-Object { $null -ne $_ }).Count -gt 0) { [void]$still.Add($row); continue }
+    $row.reference = [string](& $Reference $nm)
+    if (($row.decision -ne $row.reference) -or ($detailId -ne $row.reference)) {
+      [void]$diverged.Add($row)
+      [void]$lines.Add(("  could-not-look RETRIED, DIVERGES: [{0}] {1} -> {2}, reference {3}" -f $path, $nm, $(if ($row.decision) { $row.decision } else { '<none>' }), $(if ($row.reference) { $row.reference } else { '<none>' })))
+    } else {
+      [void]$retried.Add($row)
+      [void]$lines.Add(("  could-not-look RETRIED (load): {0} -> {1} [{2}]" -f $nm, $(if ($row.decision) { $row.decision } else { '<none>' }), $path))
+    }
+  }
+  return [pscustomobject]@{ retried = @($retried.ToArray()); still = @($still.ToArray()); diverged = @($diverged.ToArray()); lines = @($lines.ToArray()); bounds_ms = @($bounds.ToArray()) }
+}
+function Get-MatchLibVerdict {
+  # ONE verdict line for the live run and the self-test. test-auditors keeps only lines matching FAIL|diverg in its Bad
+  # message, so the still-blind names ride ON the FAILED line (up to 15, each cut to 80 characters).
+  param([int]$Diff, [int]$DetailDiff, [int]$DetailNoHit, [object[]]$StillBlind, [int]$TextDiff, [int]$RetryDiverged)
+  $sb = @($StillBlind | Where-Object { $null -ne $_ })
+  $fast = $Diff + $RetryDiverged
+  $total = $fast + $DetailDiff + $DetailNoHit + $sb.Count + $TextDiff
+  if ($total -eq 0) { return [pscustomobject]@{ rc = 0; line = 'MATCH-LIB PASSED' } }
+  $line = ("MATCH-LIB FAILED ({0} divergence(s): {1} fast-path, {2} detail-winner, {3} detail-no-include-hit, {4} could-not-look, {5} Get-MatchTexts) - match-lib must not be used by the engine until it decides identically" -f $total, $fast, $DetailDiff, $DetailNoHit, $sb.Count, $TextDiff)
+  if ($sb.Count) {
+    $named = @($sb | Select-Object -First 15 | ForEach-Object { $t = ([string]$_.name -replace '\s+', ' '); if ($t.Length -gt 80) { $t = $t.Substring(0, 80) + '...' }; ("'{0}' [{1}]" -f $t, $_.path) })
+    $line += ' | blind again on one re-look at the same bound: ' + ($named -join '; ')
+  }
+  return [pscustomobject]@{ rc = 1; line = $line }
+}
+
+if ($SelfTest) {
+  # HERMETIC: the two matcher libraries and a frozen two-row catalogue; no compare-deals, no commodities.json, no corpus.
+  # NO STOPWATCH DECIDES A CASE (ops-and-gates.md): blindness is read from the timeout the matcher RECORDS. The victim is
+  # match-lib's own I208 founding shape, sized so a neutered bound costs seconds, not a hang (match-lib.ps1 self-test).
+  . (Join-Path $root 'match-lib.ps1')
+  $stBad = 0; $stRan = 0
+  function _ST([string]$label, [bool]$ok, [string]$got) {
+    $script:stRan++
+    if ($ok) { Write-Output ('  ok    ' + $label) } else { Write-Output ('  FAIL  ' + $label + '   got: ' + $got); $script:stBad++ }
+  }
+  $FOUNDING = '(?:boneless|skinless)\s*[,&/ ]+\s*(?:boneless|skinless)[^,]*chicken\s+breast'
+  $VICTIM   = 'boneless' + (' ' * 800) + 'x chicken breast'
+  $BENIGN   = 'Fresh Chicken Breast, 1 lb'
+  $cat = @([pscustomobject]@{ id = 'fixture-redos'; include = @($FOUNDING); exclude = @(); relax_global = @() },
+           [pscustomobject]@{ id = 'fixture-breast'; include = @('chicken\s+breast'); exclude = @(); relax_global = @() })
+  $newM = { New-CommodityMatcher -Commodities $cat -GlobalExclude @('zz-fixture-global-that-never-matches-zz') }
+  $refNone = { param($n) '' }
+  $refBreast = { param($n) 'fixture-breast' }
+  # MUST FIRE: the founding shape, a name blind on the FIRST look (really looked, on both paths) and blind again.
+  $first = & $newM
+  [void](Resolve-Commodity -Matcher $first -Name $VICTIM)
+  $tw = New-MatchLibPsTwin $first
+  [void](Resolve-Commodity -Matcher $tw -Name $VICTIM)
+  $rec = @(); foreach ($x in @((Get-CommodityMatcherBlind -Matcher $first).could_not_look)) { $rec += [pscustomobject]@{ name = $x.name; path = 'compiled' } }
+  foreach ($x in @((Get-CommodityMatcherBlind -Matcher $tw).could_not_look)) { $rec += [pscustomobject]@{ name = $x.name; path = 'fallback' } }
+  _ST 'MUST FIRE  the founding ReDoS name is blind on the first look, on both paths' ($rec.Count -eq 2) ("records=" + $rec.Count)
+  $r = Invoke-MatchLibBlindRetry -Blind $rec -Reference $refNone -NewMatcher $newM
+  $v = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind $r.still -TextDiff 0 -RetryDiverged $r.diverged.Count
+  _ST 'MUST FIRE  ...and blind again on the one re-look, so it stays could-not-look and fails rc 1' (($r.still.Count -eq 2) -and ($r.retried.Count -eq 0) -and ($v.rc -eq 1) -and ($v.line -match '^MATCH-LIB FAILED .* 2 could-not-look')) ("still=" + $r.still.Count + " rc=" + $v.rc + " " + $v.line)
+  _ST 'MUST FIRE  ...and the FAILED line NAMES the blind name and its path' (($v.line -match "blind again on one re-look at the same bound: 'boneless x chicken breast' \[compiled\]") -and ($v.line -match '\[fallback\]')) $v.line
+  _ST '  ...the re-look ran at the unchanged 250 ms production bound (never a raised one)' ((@($r.bounds_ms | Where-Object { $_ -ne 250 }).Count -eq 0) -and ($r.bounds_ms.Count -eq 2)) (($r.bounds_ms) -join ',')
+  # CLEAN TWIN: a benign name whose FIRST look is forced blind (the load shape); the re-look resolves and agrees.
+  $r = Invoke-MatchLibBlindRetry -Blind @([pscustomobject]@{ name = $BENIGN; path = 'compiled' }, [pscustomobject]@{ name = $BENIGN; path = 'fallback' }) -Reference $refBreast -NewMatcher $newM
+  $v = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind $r.still -TextDiff 0 -RetryDiverged $r.diverged.Count
+  _ST 'CLEAN TWIN  a load-blind first look that resolves and agrees passes rc 0 and prints RETRIED (load)' (($v.rc -eq 0) -and ($r.retried.Count -eq 2) -and (@($r.lines | Where-Object { $_ -like "*could-not-look RETRIED (load): $BENIGN -> fixture-breast*" }).Count -eq 2)) ("rc=" + $v.rc + " " + ($r.lines -join ' | '))
+  # MUST NOT PASS: the re-look resolves, but to a decision the reference does not make: a divergence, rc 1.
+  $r = Invoke-MatchLibBlindRetry -Blind @([pscustomobject]@{ name = $BENIGN; path = 'compiled' }) -Reference $refNone -NewMatcher $newM
+  $v = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind $r.still -TextDiff 0 -RetryDiverged $r.diverged.Count
+  _ST 'MUST FIRE  a re-look that disagrees with the reference is a divergence, rc 1 (a retry never launders one)' (($v.rc -eq 1) -and ($r.diverged.Count -eq 1) -and ($v.line -match '1 fast-path, .* 0 could-not-look')) ("rc=" + $v.rc + " " + $v.line)
+  # AT THE BAR and ONE PAST: nothing blind is PASSED; a single still-blind name is FAILED.
+  $v0 = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind @() -TextDiff 0 -RetryDiverged 0
+  $v1 = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind @([pscustomobject]@{ name = 'x'; path = 'compiled' }) -TextDiff 0 -RetryDiverged 0
+  _ST 'AT THE BAR  0 still-blind passes, 1 still-blind fails' (($v0.rc -eq 0) -and ($v0.line -eq 'MATCH-LIB PASSED') -and ($v1.rc -eq 1)) ($v0.line + ' / ' + $v1.line)
+  if ($stBad -eq 0) { Write-Output ("test-match-lib SELF-TEST PASSED ({0} of {0} case(s))" -f $stRan); exit 0 }
+  Write-Output ("test-match-lib SELF-TEST FAILED ({0} of {1} case(s))" -f $stBad, $stRan); exit 1
+}
 
 # ---- 1. the ORIGINAL, verbatim, from compare-deals.ps1 -------------------------------------------
 # THE START ANCHOR MOVED WITH THE LIST (2026-09-09, backlog I82). The exclude list used to be an array
@@ -311,7 +422,8 @@ if ($isShard) {
   # the fallback when Add-Type is unavailable. A harness that only tested "whichever loaded" would leave
   # one of them unverified, and the unverified one is exactly the one that runs on the day something is
   # different about the machine.
-  $psOnly = [pscustomobject]@{ gex = $matcher.gex; entries = $matcher.entries; core = $null }
+  # With span and its own look state (2026-09-24): without them a fallback timeout had no bookkeeping to land in.
+  $psOnly = New-MatchLibPsTwin $matcher
   $sw = [Diagnostics.Stopwatch]::StartNew()
   for ($k = 0; $k -lt $n; $k++) { $c = & $origMatch $list[$ix[$k]]; $orig[$k] = $(if ($c) { [string]$c.id } else { '' }) }
   $tO = $sw.Elapsed.TotalSeconds; $sw.Restart()
@@ -350,19 +462,45 @@ if ($isShard) {
   # scores a timed-out name could-not-look, which reads as "" here exactly like an unmatched name - so a blind
   # name would AGREE with an original that also found nothing and pass as proven. Counted and failed instead:
   # no real name has come near the bound (worst 15.1 ms over 42,753 names on 2026-09-19).
-  $blindC = @((Get-CommodityMatcherBlind -Matcher $matcher).could_not_look).Count
-  $blindP = @((Get-CommodityMatcherBlind -Matcher $psOnly).could_not_look).Count
+  # NAMED since 2026-09-24 (3ca22f): the matcher records the NORMALISED text it looked at, so each blind text is
+  # mapped back to the corpus name(s) that produced it, and the parent re-looks those. A blind name's own divergence
+  # rows are held back here, because the re-look decides them against the reference.
+  $blindTxt = @{ compiled = @{}; fallback = @{} }
+  foreach ($x in @((Get-CommodityMatcherBlind -Matcher $matcher).could_not_look)) { if ($null -ne $x) { $blindTxt.compiled[[string]$x.name] = 1 } }
+  foreach ($x in @((Get-CommodityMatcherBlind -Matcher $psOnly).could_not_look)) { if ($null -ne $x) { $blindTxt.fallback[[string]$x.name] = 1 } }
+  $blindRec = New-Object System.Collections.ArrayList
+  $blindIx = @{ compiled = @{}; fallback = @{} }
+  if ($blindTxt.compiled.Count -or $blindTxt.fallback.Count) {
+    for ($k = 0; $k -lt $n; $k++) {
+      $mt = @(Get-MatchTexts $list[$ix[$k]])
+      foreach ($pth in @('compiled', 'fallback')) {
+        if (@($mt | Where-Object { $blindTxt[$pth].ContainsKey([string]$_) }).Count) {
+          $blindIx[$pth][$ix[$k]] = 1
+          [void]$blindRec.Add([pscustomobject]@{ name = $list[$ix[$k]]; path = $pth })
+        }
+      }
+    }
+    # a blind text no corpus name maps to is still counted, under its recorded text, so it can never vanish
+    foreach ($pth in @('compiled', 'fallback')) {
+      foreach ($t in @($blindTxt[$pth].Keys)) {
+        if (-not @($blindRec | Where-Object { $_.path -eq $pth -and @(Get-MatchTexts $_.name) -contains $t }).Count) { [void]$blindRec.Add([pscustomobject]@{ name = $t; path = $pth }) }
+      }
+    }
+    $detailDiff = [Collections.ArrayList]@($detailDiff | Where-Object { -not $blindIx.compiled.ContainsKey([int]$_.ix) })
+  }
+  $blindC = @($blindRec | Where-Object { $_.path -eq 'compiled' }).Count
+  $blindP = @($blindRec | Where-Object { $_.path -eq 'fallback' }).Count
   # key = ix*2 (+1 for the fallback entry) reproduces the single-threaded emission order exactly: one pass
   # over the names, and for each name the fast-path divergence before the powershell-fallback one.
   $diff = New-Object System.Collections.ArrayList
   $matched = 0
   for ($k = 0; $k -lt $n; $k++) {
     if ($orig[$k]) { $matched++ }
-    if ($orig[$k] -ne $new[$k])   { [void]$diff.Add([pscustomobject]@{ key = ($ix[$k] * 2);     name = $list[$ix[$k]]; original = $orig[$k]; fast = $new[$k];   path = $(if ($hasCore) { 'compiled' } else { 'powershell' }) }) }
-    if ($orig[$k] -ne $newPs[$k]) { [void]$diff.Add([pscustomobject]@{ key = ($ix[$k] * 2 + 1); name = $list[$ix[$k]]; original = $orig[$k]; fast = $newPs[$k]; path = 'powershell-fallback' }) }
+    if (($orig[$k] -ne $new[$k]) -and -not $blindIx.compiled.ContainsKey($ix[$k])) { [void]$diff.Add([pscustomobject]@{ key = ($ix[$k] * 2);     name = $list[$ix[$k]]; original = $orig[$k]; fast = $new[$k];   path = $(if ($hasCore) { 'compiled' } else { 'powershell' }) }) }
+    if (($orig[$k] -ne $newPs[$k]) -and -not $blindIx.fallback.ContainsKey($ix[$k])) { [void]$diff.Add([pscustomobject]@{ key = ($ix[$k] * 2 + 1); name = $list[$ix[$k]]; original = $orig[$k]; fast = $newPs[$k]; path = 'powershell-fallback' }) }
   }
   ([pscustomobject]@{
-    names = $n; core = $hasCore; matched = $matched; blind = ($blindC + $blindP); diff = @($diff.ToArray()); detailDiff = @($detailDiff.ToArray())
+    names = $n; core = $hasCore; matched = $matched; blind = ($blindC + $blindP); blindNames = @($blindRec.ToArray()); diff = @($diff.ToArray()); detailDiff = @($detailDiff.ToArray())
     detailNoHit = @($detailNoHit.ToArray()); textDiff = @($textDiff.ToArray()); tO = $tO; tN = $tN; tP = $tP; tD = $tD
   } | ConvertTo-Json -Depth 6 -Compress) | Set-Content -LiteralPath $OutFile -Encoding UTF8
   exit 0
@@ -465,6 +603,11 @@ $diff        = @(Gather $results 'diff'        | Sort-Object key)
 $textDiff    = @(Gather $results 'textDiff'    | Sort-Object ix)
 $matched     = 0; foreach ($r in $results) { $matched += [int]$r.matched }
 $blindNames  = 0; foreach ($r in $results) { $blindNames += [int]$r.blind }
+# THE RE-LOOK (2026-09-24, 3ca22f): only now, with the shard pool drained and the box as quiet as this run gets.
+$blindRecs = @(Gather $results 'blindNames')
+$retry = Invoke-MatchLibBlindRetry -Blind $blindRecs -NewMatcher { New-CommodityMatcher -Commodities $commodities -GlobalExclude $GLOBAL_EXCLUDE } `
+  -Reference { param($nm) $c = & $origMatch $nm; if ($c) { [string]$c.id } else { '' } }
+foreach ($ln in @($retry.lines)) { Write-Output $ln }
 
 if (-not $Quiet) {
   Write-Output ("match-lib identity: {0} distinct names ({1} matched by the original)" -f $list.Count, $matched)
@@ -475,16 +618,17 @@ if (-not $Quiet) {
   Write-Output ("  shards                  : {0,7:N1}s wall across {1} process(es)" -f $tWall, $W)
   Write-Output ("  divergences             : {0}" -f $diff.Count)
   Write-Output ("  Get-MatchTexts          : {0} of {1} name(s) normalised differently by the reference and match-lib" -f $textDiff.Count, $list.Count)
-  Write-Output ("  could-not-look          : {0} name look(s) hit the regex bound (compiled + fallback)" -f $blindNames)
+  Write-Output ("  could-not-look          : {0} name look(s) hit the regex bound (compiled + fallback); re-looked once at the same bound: {1} resolved and agreed, {2} diverged, {3} blind again" -f $blindNames, $retry.retried.Count, $retry.diverged.Count, $retry.still.Count)
   foreach ($d in ($diff | Select-Object -First 15)) { Write-Output ("     [{3}] '{0}'  original={1}  fast={2}" -f $d.name, $(if ($d.original) { $d.original } else { '<none>' }), $(if ($d.fast) { $d.fast } else { '<none>' }), $d.path) }
   foreach ($d in ($detailDiff | Select-Object -First 15)) { Write-Output ("     [detail] '{0}'  original={1}  detail={2}" -f $d.name, $(if ($d.original) { $d.original } else { '<none>' }), $(if ($d.detail) { $d.detail } else { '<none>' })) }
   foreach ($n in ($detailNoHit | Select-Object -First 10)) { Write-Output ("     [detail] '{0}' matched but named no include pattern" -f $n) }
   foreach ($d in ($textDiff | Select-Object -First 10)) { Write-Output ("     [texts] '{0}'  original='{1}'  match-lib='{2}'" -f $d.name, $d.original, $d.lib) }
 }
-if ($diff.Count -or $detailDiff.Count -or $detailNoHit.Count -or $blindNames -or $textDiff.Count) {
-  $total = $diff.Count + $detailDiff.Count + $detailNoHit.Count + $blindNames + $textDiff.Count
-  Write-Output ("MATCH-LIB FAILED ({0} divergence(s): {1} fast-path, {2} detail-winner, {3} detail-no-include-hit, {4} could-not-look, {5} Get-MatchTexts) - match-lib must not be used by the engine until it decides identically" -f $total, $diff.Count, $detailDiff.Count, $detailNoHit.Count, $blindNames, $textDiff.Count)
+$verdict = Get-MatchLibVerdict -Diff $diff.Count -DetailDiff $detailDiff.Count -DetailNoHit $detailNoHit.Count -StillBlind $retry.still -TextDiff $textDiff.Count -RetryDiverged $retry.diverged.Count
+if ($verdict.rc -ne 0) {
+  $total = $diff.Count + $retry.diverged.Count + $detailDiff.Count + $detailNoHit.Count + $retry.still.Count + $textDiff.Count
+  Write-Output $verdict.line
   Exit-Guard -Name 'match-lib' -Summary "names=$($list.Count) divergences=$total" -Code 1
 }
-Write-Output 'MATCH-LIB PASSED'
+Write-Output $verdict.line
 Exit-Guard -Name 'match-lib' -Summary ("names=" + $list.Count + " divergences=0 detail=0 speedup=" + [math]::Round($(if ($tN -gt 0) { $tO / $tN } else { 0 }), 1) + "x") -Code 0
