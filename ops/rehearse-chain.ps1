@@ -21,6 +21,30 @@
                 that range. It clones nothing, takes no rehearsal slot, reads no verdict and writes nothing, so it costs
                 seconds where a default run costs about 14 minutes and one of the 6 slots. -Range is refused without
                 -ListSet (a default run would rehearse), and -ListSet is refused beside -CheckPush or -ForPush.
+    -Onto <sha> / -StackFile <path>   (W9.1 step 1; any of the modes above that rehearse) rehearse -Commit REBASED onto
+                <sha>, or onto the stack the file lists: line 1 the base (the origin sha), then one commit per line, the
+                commits of every ticket ahead, oldest first (W9.2 writes it). The stacked tip is built by New-RhStack in a
+                private bare clone, before any slot is taken, and its manifest set is the verdict key. A replay that
+                conflicts records NOTHING and is blind=stack-conflict, with a chain-rehearsal: STACK CONFLICT line.
+                With -ForPush the push is still judged chain-touching on HEAD against <Remote>/<Branch>; when it is, the
+                verdict looked up (and rehearsed) is the stacked tip's.
+    -Early      THE REHEARSAL AT COMMIT (W9.1 step 2), needs -Onto or -StackFile:
+                  powershell -File ops\rehearse-chain.ps1 -Early -Onto <origin sha> [-Commit HEAD]
+                push-main -Prepare and the post-commit hook (D19) start it DETACHED. It starts nothing when the stacked
+                content touches no member, when a pass or fail verdict for its key is recorded over fresh data, or when a
+                live early run in any checkout holds its key; otherwise it records itself in
+                <verdict dir>\early\<SHA-256 of the lower-cased checkout path>.json, SUPERSEDES this checkout's older live
+                run of a different key by writing that run's stop file, takes one of 4 early caps and then a rehearsal
+                slot, and rehearses. Its last line: CHAIN-REHEARSAL-EARLY-COMPLETE started=yes|no reason=<r> ...
+                (exit 0 for started=no with reason not-chain, verdict-exists or in-flight; else the rehearsal's exit, or 3).
+    -StopFile <path>   (W9.1 step 4, W9.3) polled every 5 s while any child runs, and between stages; when it appears
+                the run stops its OWN child tree, records nothing, removes its scratch root and ends blind=stopped
+                (-ForPush: CHAIN-REHEARSAL-CHECK-COMPLETE code=3 outcome=could-not-rehearse blind=stopped). -Early makes
+                its own and names it in the in-flight file. Nobody else ever kills a rehearsal.
+    Every chain child gets TC_REHEARSAL_RUN=1 (a post-commit hook that sees it starts nothing) and a TEMP inside the
+    scratch root, so what a stopped child leaves in its temp directory goes with the root. The verdict record also
+    carries early, onto, head, checkout (hashed as the in-flight file is) and stage_secs (stack, clone, checkout, seed,
+    selftest, ship, commit); -CheckPush and -ForPush read none of them.
     -SelfTest   hermetic fixtures, per-run temp directories, nothing live.
 
   THE TRIGGER IS ONE FUNCTION. Get-RhTrigger answers "does the diff <base>..<tip> touch the manifest set at <base> OR at
@@ -51,7 +75,8 @@
     exit 1  fail     rehearsed and a stage FAILED; the stage and its own words are printed
     exit 3  blind    COULD NOT REHEARSE, with blind=<cause>: no-source, no-seed-board, stale-data, clone-failed,
                      checkout-failed, seed-failed, credential-present, chain-missing, nopublish-unproven, shiponly-unproven,
-                     no-chain-verdict, commit-stage, no-rehearsal-slot, cannot-read-push, cannot-diff, no-manifest-readable;
+                     no-chain-verdict, commit-stage, no-rehearsal-slot, cannot-read-push, cannot-diff, no-manifest-readable,
+                     stack-conflict, stopped, bad-usage (and for -Early, no-early-cap);
                      and for -ListSet, cannot-read-commit, bad-range, bad-usage. A 3 is never a pass and never a silent
                      refusal: the cause is on the line, as run-gates' blind= token is.
 
@@ -120,6 +145,12 @@ param(
   # READ-ONLY: print the manifest set at -Commit, and with -Range <base>..<tip> the trigger -ForPush would decide (W0.5).
   [switch]$ListSet,
   [string]$Range = '',
+  # W9.1 (design\PLAN-push-derived-conflicts-2026-09-23.md 16.3): rehearse -Commit rebased onto -Onto <sha>, or onto the
+  # stack a -StackFile lists; -Early does it as the speculative rehearsal at commit time; -StopFile is polled to stop it.
+  [string]$Onto = '',
+  [string]$StackFile = '',
+  [string]$StopFile = '',
+  [switch]$Early,
   [switch]$SelfTest
 )
 
@@ -154,6 +185,16 @@ $script:RhMaxConcurrent = 6
 $script:RhSlotPrefix = 'Global\tc-rehearsal-slot-'
 # The first plausible number: four ship-path rehearsals (~15 min each) in a row with no slot freed means a wedge.
 $script:RhSlotStallSec = 3600
+# THE EARLY CAP (W9.1 step 2): an early rehearsal takes one of these BEFORE its rehearsal slot, so at most 4 of the 6
+# slots ever run speculative work and 2 are always left to a push that is waiting. 4 is the plan's first plausible
+# value, not swept. Push-time rehearsals never take it. Lock order (plan 16.6): 2a, always outside the slot (2b).
+$script:RhEarlyMaxSlots = 4
+$script:RhEarlyPrefix = 'Global\tc-rehearsal-early-'
+$script:RhEarlyStallSec = 3600
+# THE STOP (W9.1 step 4): the stop file this run polls, and how often. 5 s is the plan's first plausible value, not
+# swept; a stop costs at most that much more of a slot.
+$script:RhStopFile = $StopFile
+$script:RhStopPollMs = 5000
 function Invoke-RhGit([string]$Repo, [string[]]$GitArgs) { return (Invoke-GitCaptured -Repo $Repo -GitArgs $GitArgs) }
 
 function Get-RhVerdictDir([string]$Override) {
@@ -573,10 +614,18 @@ function Invoke-RhCommitStage {
   }
 }
 
+function Test-RhStopped {
+  # The stop (W9.1 step 4): a superseding early start, or a red leg in push-main (W9.3), writes this run's stop file.
+  return [bool]($script:RhStopFile -and [IO.File]::Exists($script:RhStopFile))
+}
+
 function Invoke-RhProcess {
   <# A child with its environment set per call (never this process's), both streams drained, and a hang guard that
-     kills the whole tree. Returns Rc (-1 could not start), TimedOut, Out, Err. #>
-  param([string]$File, [string]$Arguments, [string]$WorkDir, [hashtable]$Env = @{}, [int]$TimeoutSec = 3600)
+     kills the whole tree. Returns Rc (-1 could not start, -2 hang guard, -3 stopped), TimedOut, Stopped, Out, Err.
+     THE STOP: while it waits it polls $StopFile every $script:RhStopPollMs; on seeing it, it stops its OWN child tree
+     (taskkill /T, exactly as the hang guard does) and returns. The rehearsal process itself is never killed by anyone
+     else, so its own finally still removes the scratch root and releases its slots. #>
+  param([string]$File, [string]$Arguments, [string]$WorkDir, [hashtable]$Env = @{}, [int]$TimeoutSec = 3600, [string]$StopFile = $script:RhStopFile)
   $psi = New-Object System.Diagnostics.ProcessStartInfo
   $psi.FileName = $File; $psi.Arguments = $Arguments; $psi.WorkingDirectory = $WorkDir
   $psi.UseShellExecute = $false; $psi.CreateNoWindow = $true
@@ -589,32 +638,50 @@ function Invoke-RhProcess {
   try {
     $p = [Diagnostics.Process]::Start($psi)
     $tOut = $p.StandardOutput.ReadToEndAsync(); $tErr = $p.StandardError.ReadToEndAsync()
-    $done = $p.WaitForExit($TimeoutSec * 1000)
-    if (-not $done) {
+    $sw = [Diagnostics.Stopwatch]::StartNew()
+    $limitMs = [double]$TimeoutSec * 1000
+    while ($true) {
+      $left = $limitMs - $sw.Elapsed.TotalMilliseconds
+      if ($left -le 0) { break }
+      if ($p.WaitForExit([int][Math]::Min([double]$script:RhStopPollMs, $left))) { break }
+      if ($StopFile -and [IO.File]::Exists($StopFile)) {
+        $null = & taskkill.exe /T /F /PID $p.Id
+        $p.WaitForExit(30000) | Out-Null
+        return [pscustomobject]@{ Rc = -3; TimedOut = $false; Stopped = $true; Out = ''; Err = ('stopped: ' + $StopFile + ' appeared') }
+      }
+    }
+    if (-not $p.HasExited) {
       $null = & taskkill.exe /T /F /PID $p.Id
       $p.WaitForExit(30000) | Out-Null
-      return [pscustomobject]@{ Rc = -2; TimedOut = $true; Out = ''; Err = ('hang guard: killed after ' + $TimeoutSec + ' s') }
+      return [pscustomobject]@{ Rc = -2; TimedOut = $true; Stopped = $false; Out = ''; Err = ('hang guard: killed after ' + $TimeoutSec + ' s') }
     }
+    $p.WaitForExit()
     $tOut.Wait(); $tErr.Wait()
-    return [pscustomobject]@{ Rc = $p.ExitCode; TimedOut = $false; Out = [string]$tOut.Result; Err = [string]$tErr.Result }
+    return [pscustomobject]@{ Rc = $p.ExitCode; TimedOut = $false; Stopped = $false; Out = [string]$tOut.Result; Err = [string]$tErr.Result }
   } catch {
-    return [pscustomobject]@{ Rc = -1; TimedOut = $false; Out = ''; Err = ('could not start ' + $File + ': ' + $_.Exception.Message) }
+    return [pscustomobject]@{ Rc = -1; TimedOut = $false; Stopped = $false; Out = ''; Err = ('could not start ' + $File + ': ' + $_.Exception.Message) }
   } finally { if ($p) { $p.Dispose() } }
 }
 
 $script:RhDefaultSeeder = {
   param([string]$Tree, [string]$SourceRoot)
   $seeder = Join-Path $script:RhRoot 'ops\seed-worktree.ps1'
-  $r = Invoke-RhProcess -File 'powershell.exe' -Arguments ('-NoProfile -ExecutionPolicy Bypass -File "' + $seeder + '" -Target "' + $Tree + '" -Source "' + $SourceRoot + '"') -WorkDir $Tree -TimeoutSec 1800
-  return [pscustomobject]@{ Rc = $r.Rc; Tail = @((($r.Out + "`n" + $r.Err) -split "`r?`n" | Where-Object { $_.Trim() }) | Select-Object -Last 6) }
+  $r = Invoke-RhProcess -File 'powershell.exe' -Arguments ('-NoProfile -ExecutionPolicy Bypass -File "' + $seeder + '" -Target "' + $Tree + '" -Source "' + $SourceRoot + '"') -WorkDir $Tree -Env $script:RhChildTempEnv -TimeoutSec 1800
+  return [pscustomobject]@{ Rc = $r.Rc; Stopped = [bool]$r.Stopped; Tail = @((($r.Out + "`n" + $r.Err) -split "`r?`n" | Where-Object { $_.Trim() }) | Select-Object -Last 6) }
 }
+# Every child of an arm gets TEMP and TMP INSIDE the scratch root (Invoke-RhArm sets this), so whatever a stopped or
+# killed child leaves in its temp directory (check-ad-cycles' own -SelfTest roots, for one) is removed with the root.
+$script:RhChildTempEnv = @{}
 
 $script:RhDefaultChainRunner = {
   param([string]$Tree, [int]$TimeoutMin, [hashtable]$ChildEnv)
   $cac = Join-Path $Tree 'grocery\check-ad-cycles.ps1'
   if (-not [IO.File]::Exists($cac)) { return [pscustomobject]@{ Blind = 'chain-missing'; Why = 'the rehearsed tree has no grocery\check-ad-cycles.ps1'; Rc = -1; TimedOut = $false; Tail = @() } }
   # THE INTERLOCK: this tree's own -SelfTest must pass its -NoPublish case, or the chain is never started here.
+  $t0 = [DateTime]::UtcNow
   $st = Invoke-RhProcess -File 'powershell.exe' -Arguments ('-NoProfile -ExecutionPolicy Bypass -File "' + $cac + '" -SelfTest') -WorkDir (Split-Path $cac) -Env $ChildEnv -TimeoutSec 600
+  $stSecs = [int]([DateTime]::UtcNow - $t0).TotalSeconds
+  if ($st.Stopped) { return [pscustomobject]@{ Blind = 'stopped'; Why = 'stopped during the interlock self-test'; Rc = -3; TimedOut = $false; Stopped = $true; Tail = @(); SelftestSecs = $stSecs; ShipSecs = 0 } }
   $okLine = @(($st.Out -split "`r?`n") | Where-Object { $_ -match '^\s*(ok|PASS)\s' -and $_.Contains($script:RhNoPublishCase) })
   if ($st.Rc -ne 0 -or $okLine.Count -ne 1) {
     return [pscustomobject]@{ Blind = 'nopublish-unproven'; Why = ('the rehearsed check-ad-cycles -SelfTest exited ' + $st.Rc + ' and passed ' + $okLine.Count + ' case(s) naming "' + $script:RhNoPublishCase + '", so its -NoPublish cannot be shown to hold the reader-facing writers; not started'); Rc = -1; TimedOut = $false; Tail = @() }
@@ -624,37 +691,60 @@ $script:RhDefaultChainRunner = {
     return [pscustomobject]@{ Blind = 'shiponly-unproven'; Why = ('the rehearsed check-ad-cycles -SelfTest passed ' + $shipOk.Count + ' case(s) naming "' + $script:RhShipOnlyCase + '", so it cannot be asked to stop at the ship boundary; rehearse with -Full'); Rc = -1; TimedOut = $false; Tail = @() }
   }
   $scopeArg = $(if ($script:RhFull) { '' } else { ' -ShipOnly' })
+  $t1 = [DateTime]::UtcNow
   $r = Invoke-RhProcess -File 'powershell.exe' -Arguments ('-NoProfile -ExecutionPolicy Bypass -File "' + $cac + '" -NoPull -NoCommit -NoPublish -NoAlert' + $scopeArg) -WorkDir (Split-Path $cac) -Env $ChildEnv -TimeoutSec ($TimeoutMin * 60)
+  $shipSecs = [int]([DateTime]::UtcNow - $t1).TotalSeconds
+  if ($r.Stopped) { return [pscustomobject]@{ Blind = 'stopped'; Why = 'stopped during the ship path'; Rc = -3; TimedOut = $false; Stopped = $true; Tail = @(); SelftestSecs = $stSecs; ShipSecs = $shipSecs } }
   $tail = @((($r.Out + "`n" + $r.Err) -split "`r?`n" | Where-Object { $_.Trim() }) | Select-Object -Last 12)
-  return [pscustomobject]@{ Blind = ''; Why = ''; Rc = $r.Rc; TimedOut = $r.TimedOut; Tail = $tail }
+  return [pscustomobject]@{ Blind = ''; Why = ''; Rc = $r.Rc; TimedOut = $r.TimedOut; Stopped = $false; Tail = $tail; SelftestSecs = $stSecs; ShipSecs = $shipSecs }
 }
 
 function Invoke-RhArm {
   <# One rehearsal of one commit in its own clone. Result pass|fail|blind, Blind (cause), Stages (name -> ok|fail|blind),
-     Failed (stage names), Why, Words, DataDate, Secs. The clone is left for the caller's finally to remove. #>
+     Failed (stage names), Why, Words, DataDate, Secs, StageSecs (seconds per stage: clone, checkout, seed, selftest,
+     ship, commit; W9.1 step 6). The clone is left for the caller's finally to remove. A stop (Test-RhStopped) is
+     honoured between stages and inside every child wait, and ends the arm blind=stopped. #>
   param([string]$Repo, [string]$Sha, [string]$SourceRoot, [string]$RunRoot, [string]$Arm, [scriptblock]$Seeder, [scriptblock]$ChainRunner, [int]$TimeoutMin, $Manifest)
   $t0 = [DateTime]::UtcNow
   $stages = [ordered]@{ chain = 'not-run'; guards = 'not-run'; commit = 'not-run' }
+  $ss = [ordered]@{ clone = 0; checkout = 0; seed = 0; selftest = 0; ship = 0; commit = 0 }
   $mk = { param($result, $blind, $why, $words, $failed, $dd)
-    [pscustomobject]@{ Result = $result; Blind = $blind; Why = $why; Words = @($words); Failed = @($failed); Stages = $stages; DataDate = $dd; Secs = [int]([DateTime]::UtcNow - $t0).TotalSeconds } }
+    [pscustomobject]@{ Result = $result; Blind = $blind; Why = $why; Words = @($words); Failed = @($failed); Stages = $stages; StageSecs = $ss; DataDate = $dd; Secs = [int]([DateTime]::UtcNow - $t0).TotalSeconds } }
+  $lap = [Diagnostics.Stopwatch]::StartNew()
+  $stopMsg = 'the rehearsal was stopped (its stop file appeared); nothing is recorded for this content'
+  if (Test-RhStopped) { return (& $mk 'blind' 'stopped' $stopMsg @() @() '') }
   $tree = Join-Path $RunRoot $Arm
   $cl = Invoke-RhGit $RunRoot @('-c', 'core.longpaths=true', 'clone', '-q', '--shared', '--no-checkout', $Repo, $tree)
   if ($cl.rc -ne 0) { return (& $mk 'blind' 'clone-failed' ('git clone exited ' + $cl.rc + ': ' + ([string]$cl.stderr).Trim()) @() @() '') }
   $null = Invoke-RhGit $tree @('config', 'core.longpaths', 'true')
   $null = Invoke-RhGit $tree @('remote', 'set-url', '--push', 'origin', (Join-Path $RunRoot 'no-push-from-a-rehearsal'))
+  $ss.clone = [int]$lap.Elapsed.TotalSeconds; $lap.Restart()
   $co = Invoke-RhGit $tree @('checkout', '-q', '--detach', $Sha)
   if ($co.rc -ne 0) { return (& $mk 'blind' 'checkout-failed' ('git checkout ' + $Sha + ' exited ' + $co.rc + ': ' + ([string]$co.stderr).Trim()) @() @() '') }
-  $sd = & $Seeder $tree $SourceRoot
+  $ss.checkout = [int]$lap.Elapsed.TotalSeconds; $lap.Restart()
+  # A TEMP INSIDE THE ROOT for every child of this arm, so a stopped child's temp leftovers go with the root.
+  $childTemp = Join-Path $RunRoot ('t' + $Arm)
+  $null = [IO.Directory]::CreateDirectory($childTemp)
+  $prevTempEnv = $script:RhChildTempEnv
+  $script:RhChildTempEnv = @{ TEMP = $childTemp; TMP = $childTemp }
+  try { $sd = & $Seeder $tree $SourceRoot } finally { $script:RhChildTempEnv = $prevTempEnv }
+  $ss.seed = [int]$lap.Elapsed.TotalSeconds; $lap.Restart()
+  if (($sd.PSObject.Properties['Stopped'] -and $sd.Stopped) -or (Test-RhStopped)) { return (& $mk 'blind' 'stopped' $stopMsg @() @() '') }
   if ($sd.Rc -ne 0) { return (& $mk 'blind' 'seed-failed' ('ops\seed-worktree.ps1 exited ' + $sd.Rc + ': ' + ((@($sd.Tail)) -join ' | ')) @() @() '') }
   foreach ($cp in $script:RhCredentialPaths) {
     if ([IO.File]::Exists((Join-Path $tree $cp))) { return (& $mk 'blind' 'credential-present' ('a live credential arrived in the scratch clone (' + $cp + '); a rehearsal must be unable to mail or publish, so it is not started') @() @() '') }
   }
   $dd = Get-RhNewestBoardDate $tree $Manifest.BoardGlob
   if (-not $dd) { return (& $mk 'blind' 'no-seed-board' 'the seed brought no comparison board (comparison-*.json), so there is no real data to rehearse over' @() @() '') }
-  $childEnv = @{ GHOST_ADMIN_KEY = $script:RhSentinelKey; KROGER_CLIENT_ID = 'tc-rehearsal-sentinel'; KROGER_CLIENT_SECRET = 'tc-rehearsal-sentinel'; TC_REHEARSAL = '1' }
+  # TC_REHEARSAL_RUN=1 (W9.1 step 3): a post-commit hook that sees it starts nothing, so no commit made inside a
+  # rehearsal can start a rehearsal from inside a rehearsal.
+  $childEnv = @{ GHOST_ADMIN_KEY = $script:RhSentinelKey; KROGER_CLIENT_ID = 'tc-rehearsal-sentinel'; KROGER_CLIENT_SECRET = 'tc-rehearsal-sentinel'; TC_REHEARSAL = '1'; TC_REHEARSAL_RUN = '1'; TEMP = $childTemp; TMP = $childTemp }
   $verdictPath = Join-Path $tree ($Manifest.VerdictPath -replace '/', '\')
   $before = [DateTime]::UtcNow.AddSeconds(-2)
   $ch = & $ChainRunner $tree $TimeoutMin $childEnv
+  $chSecs = [int]$lap.Elapsed.TotalSeconds; $lap.Restart()
+  if ($ch.PSObject.Properties['SelftestSecs']) { $ss.selftest = [int]$ch.SelftestSecs; $ss.ship = [int]$ch.ShipSecs } else { $ss.ship = $chSecs }
+  if (($ch.PSObject.Properties['Stopped'] -and $ch.Stopped) -or $ch.Blind -eq 'stopped' -or (Test-RhStopped)) { return (& $mk 'blind' 'stopped' $stopMsg @() @() $dd) }
   if ($ch.Blind) { return (& $mk 'blind' $ch.Blind $ch.Why @() @() $dd) }
   $failed = New-Object Collections.ArrayList
   $words = New-Object Collections.ArrayList
@@ -671,7 +761,11 @@ function Invoke-RhArm {
     elseif ([bool]$cv.guards_blocked) { $stages.guards = 'fail'; [void]$failed.Add('guards'); if (-not $why) { $why = 'guards held the board (chain-verdict ' + [string]$cv.verdict + ')' } }
     else { $stages.guards = 'ok' }
   } elseif ($stages.chain -eq 'ok') { $stages.guards = 'blind'; $blind = 'no-chain-verdict' }
-  $cm = Invoke-RhCommitStage -Repo $tree
+  $prevRun = $env:TC_REHEARSAL_RUN
+  $env:TC_REHEARSAL_RUN = '1'
+  try { $cm = Invoke-RhCommitStage -Repo $tree }
+  finally { if ($null -eq $prevRun) { Remove-Item Env:\TC_REHEARSAL_RUN -ErrorAction SilentlyContinue } else { $env:TC_REHEARSAL_RUN = $prevRun } }
+  $ss.commit = [int]$lap.Elapsed.TotalSeconds
   switch ($cm.Outcome) {
     'committed' { $stages.commit = 'ok' }
     'nothing'   { $stages.commit = 'ok' }
@@ -684,76 +778,318 @@ function Invoke-RhArm {
   return (& $mk 'pass' '' 'every stage passed' @() @() $dd)
 }
 
+function New-RhStack {
+  <# THE STACK (W9.1 step 1): the tree a push would land, built without touching any worktree. The base is -Onto, or
+     the first line of -StackFile (W9.2 writes it: the origin sha, then every commit of every ticket ahead, oldest
+     first); on it go, in order, the stack file's commits and then the commits of <merge-base>..<Commit>, each applied
+     the way `git rebase` applies it (a merge-ort three-way merge against the commit's own parent, `git merge-tree
+     --write-tree --merge-base=<parent>`, merges skipped as rebase skips them) and committed with `git commit-tree`.
+     All of it happens in a private BARE `git clone --shared` under %TEMP%, so the new objects never enter the shared
+     .git and nothing that is checked out moves. Cheap (no checkout), so it runs BEFORE any rehearsal slot is taken,
+     and the verdict key of the stacked tip is known before anything waits.
+     Returns Ok, Blind (stack-conflict | cannot-read-push | clone-failed | bad-usage), Why, Repo (the bare clone: the
+     caller removes it with Remove-RhStack), Onto, Base (the tip before the commit's own range: what a failure pairs
+     against), Tip, Applied, Files and ConflictOn (a conflict's files and the commit it stopped on), Secs. #>
+  param([string]$Repo, [string]$Commit, [string]$Onto = '', [string]$StackFile = '')
+  $t0 = [DateTime]::UtcNow
+  $r = [ordered]@{ Ok = $false; Blind = ''; Why = ''; Repo = ''; Onto = ''; Base = ''; Tip = ''; Applied = 0; Files = @(); ConflictOn = ''; Secs = 0 }
+  $done = { $r.Secs = [int]([DateTime]::UtcNow - $t0).TotalSeconds; return [pscustomobject]$r }
+  $ahead = @()
+  $base0 = $Onto
+  if ($StackFile) {
+    if (-not [IO.File]::Exists($StackFile)) { $r.Blind = 'cannot-read-push'; $r.Why = ('the stack file ' + $StackFile + ' does not exist'); return (& $done) }
+    $ls = @([IO.File]::ReadAllLines($StackFile) | ForEach-Object { $_.Trim() } | Where-Object { $_ -and -not $_.StartsWith('#') })
+    if ($ls.Count -lt 1) { $r.Blind = 'cannot-read-push'; $r.Why = ('the stack file ' + $StackFile + ' names no base'); return (& $done) }
+    if ($Onto -and -not [string]::Equals($Onto, $ls[0], [StringComparison]::OrdinalIgnoreCase)) { $r.Blind = 'bad-usage'; $r.Why = ('-Onto ' + $Onto + ' is not the stack file''s base ' + $ls[0]); return (& $done) }
+    $base0 = $ls[0]
+    if ($ls.Count -gt 1) { $ahead = @($ls[1..($ls.Count - 1)]) }
+  }
+  if (-not $base0) { $r.Blind = 'bad-usage'; $r.Why = 'a stack needs -Onto or -StackFile'; return (& $done) }
+  $dir = Join-Path $env:TEMP ('tc-rhs-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  # CLONE FROM THE COMMON GIT DIR: $Repo may be a checkout's subfolder (a sandbox) or a linked worktree, and git clones a
+  # repository, not a folder inside one. Every commit named here lives in the common object store.
+  $gd = Invoke-RhGit $Repo @('rev-parse', '--path-format=absolute', '--git-common-dir')
+  $src = $(if ($gd.rc -eq 0 -and ([string]$gd.stdout).Trim()) { (([string]$gd.stdout).Trim() -replace '/', '\') } else { $Repo })
+  $cl = Invoke-RhGit $env:TEMP @('clone', '-q', '--bare', '--shared', $src, $dir)
+  if ($cl.rc -ne 0) { $r.Blind = 'clone-failed'; $r.Why = ('git clone --bare --shared exited ' + $cl.rc + ': ' + ([string]$cl.stderr).Trim()); return (& $done) }
+  $r.Repo = $dir
+  $name = { param($spec) $n = Invoke-RhGit $dir @('rev-parse', '--verify', '-q', ([string]$spec + '^{commit}')); if ($n.rc -ne 0) { return '' }; return ([string]$n.stdout).Trim() }
+  $onto = & $name $base0
+  $head = & $name $Commit
+  if (-not $onto -or -not $head) { $r.Blind = 'cannot-read-push'; $r.Why = ('git cannot name ' + $(if (-not $onto) { $base0 } else { $Commit }) + ' as a commit'); return (& $done) }
+  $r.Onto = $onto
+  $cur = $onto
+  $apply = { param($c)
+    $par = & $name ($c + '^')
+    if (-not $par) { return ('the commit ' + $c + ' has no parent to replay it against') }
+    $mt = Invoke-RhGit $dir @('merge-tree', '--write-tree', '--name-only', ('--merge-base=' + $par), $cur, $c)
+    $ol = @(([string]$mt.stdout) -split "`r?`n")
+    if ($mt.rc -eq 1) {
+      $files = New-Object Collections.ArrayList
+      for ($i = 1; $i -lt $ol.Count; $i++) { if (-not $ol[$i].Trim()) { break }; [void]$files.Add($ol[$i].Trim()) }
+      $r.Files = @($files); $r.ConflictOn = $c
+      return 'conflict'
+    }
+    if ($mt.rc -ne 0 -or -not $ol[0].Trim()) { return ('git merge-tree exited ' + $mt.rc + ': ' + ([string]$mt.stderr).Trim()) }
+    $subj = ([string](Invoke-RhGit $dir @('log', '-1', '--format=%s', $c)).stdout).Trim()
+    $ct = Invoke-RhGit $dir @('-c', 'user.name=tc-rehearsal-stack', '-c', 'user.email=rehearsal-stack@tc.invalid', 'commit-tree', $ol[0].Trim(), '-p', $cur, '-m', ('stacked by rehearse-chain: ' + $subj))
+    if ($ct.rc -ne 0) { return ('git commit-tree exited ' + $ct.rc + ': ' + ([string]$ct.stderr).Trim()) }
+    $script:RhStackCur = ([string]$ct.stdout).Trim()
+    return ''
+  }
+  foreach ($a in $ahead) {
+    $as = & $name $a
+    if (-not $as) { $r.Blind = 'cannot-read-push'; $r.Why = ('the stack file names ' + $a + ', which git cannot name as a commit'); return (& $done) }
+    $w = & $apply $as
+    if ($w -eq 'conflict') { $r.Blind = 'stack-conflict'; $r.Why = ('a commit of a ticket ahead conflicts with the stack below it'); return (& $done) }
+    if ($w) { $r.Blind = 'cannot-read-push'; $r.Why = $w; return (& $done) }
+    $cur = $script:RhStackCur; $r.Applied++
+  }
+  $r.Base = $cur
+  $mb = Invoke-RhGit $dir @('merge-base', $head, $onto)
+  $mbs = ([string]$mb.stdout).Trim()
+  if ($mb.rc -ne 0 -or -not $mbs) { $r.Blind = 'cannot-read-push'; $r.Why = ('git merge-base ' + $head.Substring(0, 9) + ' ' + $onto.Substring(0, 9) + ' found none'); return (& $done) }
+  if ($ahead.Count -eq 0 -and [string]::Equals($mbs, $onto, [StringComparison]::Ordinal)) {
+    $cur = $head   # HEAD already sits on the base: the stacked tip IS HEAD, with its own id
+  } else {
+    $rl = Invoke-RhGit $dir @('rev-list', '--reverse', '--no-merges', ($mbs + '..' + $head))
+    foreach ($c in @(([string]$rl.stdout) -split "`r?`n" | Where-Object { $_.Trim() })) {
+      $w = & $apply $c.Trim()
+      if ($w -eq 'conflict') { $r.Blind = 'stack-conflict'; $r.Why = ('this commit''s own range conflicts with the stack it is applied on'); return (& $done) }
+      if ($w) { $r.Blind = 'cannot-read-push'; $r.Why = $w; return (& $done) }
+      $cur = $script:RhStackCur; $r.Applied++
+    }
+  }
+  $r.Tip = $cur; $r.Ok = $true
+  return (& $done)
+}
+
+function Remove-RhStack($Stack) {
+  if ($Stack -and $Stack.Repo -and ([string]$Stack.Repo).Contains('tc-rhs-')) { Remove-Item -LiteralPath $Stack.Repo -Recurse -Force -ErrorAction SilentlyContinue }
+}
+
+function Format-RhStackConflict($Stack) {
+  $on = $(if ($Stack.ConflictOn) { $Stack.ConflictOn.Substring(0, 9) } else { '-' })
+  return ('chain-rehearsal: STACK CONFLICT - applying ' + $on + ' onto the stack conflicts in: ' + ((@($Stack.Files)) -join ', ') + '. ' + $Stack.Why + '. No verdict is recorded.')
+}
+
 function Invoke-RhRehearsal {
-  <# Rehearse $Commit, pair a failure against the base, record the verdict, remove every scratch path. Returns the record. #>
+  <# Rehearse $Commit, pair a failure against the base, record the verdict, remove every scratch path. Returns the record.
+     With -Onto or -StackFile (or a -Stack New-RhStack already built) the rehearsed tree is the STACKED tip, and the key
+     is that tip's. A stack conflict records nothing (blind=stack-conflict); a stopped run records nothing (blind=stopped). #>
   param([string]$Repo, [string]$Commit = 'HEAD', [string]$SourceRoot = '', [string]$Remote = 'origin', [string]$Branch = 'main',
         [string]$VerdictDir, [switch]$NoPair, [int]$TimeoutMin = 90, [datetime]$Today = (Get-Date),
         [scriptblock]$Seeder = $script:RhDefaultSeeder, [scriptblock]$ChainRunner = $script:RhDefaultChainRunner,
-        [int]$SlotTotal = $script:RhMaxConcurrent, [string]$SlotPrefix = $script:RhSlotPrefix, [string]$SlotQueueRoot = $script:TcGateQueueRoot, [int]$SlotStallSec = $script:RhSlotStallSec)
+        [int]$SlotTotal = $script:RhMaxConcurrent, [string]$SlotPrefix = $script:RhSlotPrefix, [string]$SlotQueueRoot = $script:TcGateQueueRoot, [int]$SlotStallSec = $script:RhSlotStallSec,
+        [string]$Onto = '', [string]$StackFile = '', $Stack = $null, [switch]$Early, [string]$CheckoutHash = '')
   $t0 = [DateTime]::UtcNow
   $rec = [ordered]@{ result = 'blind'; blind = ''; key = ''; commit = ''; stage = ''; cause = ''; words = @(); data_date = ''; preexisting = @();
-    stages = $null; base = ''; scratch = ''; scope = $(if ($script:RhFull) { 'full' } else { 'ship-only' }); slot_waited_s = 0; secs = 0; utc = ''; harness = 'ops\rehearse-chain.ps1'; harness_blob = '' }
+    stages = $null; base = ''; scratch = ''; scope = $(if ($script:RhFull) { 'full' } else { 'ship-only' }); slot_waited_s = 0; secs = 0; utc = ''; harness = 'ops\rehearse-chain.ps1'; harness_blob = '';
+    early = [bool]$Early; onto = ''; head = ''; checkout = $CheckoutHash; stage_secs = $null }
   $hb = Invoke-RhGit $script:RhRoot @('hash-object', (Join-Path $script:RhRoot 'ops\rehearse-chain.ps1'))
   if ($hb.rc -eq 0) { $rec.harness_blob = ([string]$hb.stdout).Trim() }
   $finish = {
     $rec.secs = [int]([DateTime]::UtcNow - $t0).TotalSeconds
     $rec.utc = [DateTime]::UtcNow.ToString('o')
-    if ($rec.key) { Save-RhVerdict $VerdictDir ([pscustomobject]$rec) }
+    # A STOPPED RUN RECORDS NOTHING: it says nothing about the content, and a verdict covers only its own key anyway.
+    if ($rec.key -and -not ($rec.result -eq 'blind' -and $rec.blind -eq 'stopped')) { Save-RhVerdict $VerdictDir ([pscustomobject]$rec) }
     return [pscustomobject]$rec
   }
   $rp = Invoke-RhGit $Repo @('rev-parse', '--verify', '-q', ($Commit + '^{commit}'))
   if ($rp.rc -ne 0) { $rec.blind = 'cannot-read-push'; $rec.cause = ('git cannot name ' + $Commit); return (& $finish) }
-  $sha = ([string]$rp.stdout).Trim()
-  $rec.commit = $sha
-  $ms = Get-RhManifestSet $Repo $sha
-  if (-not $ms.Ok) { $rec.blind = 'no-manifest-readable'; $rec.cause = $ms.Why; return (& $finish) }
-  $rec.key = $ms.Key
-  if (-not $SourceRoot) { $SourceRoot = Get-RhMainCheckout $Repo }
-  if (-not $SourceRoot -or -not [IO.Directory]::Exists($SourceRoot)) { $rec.blind = 'no-source'; $rec.cause = 'no main checkout to seed from (pass -Source)'; return (& $finish) }
-  if (-not $ms.BoardGlob -or -not $ms.VerdictPath) { $rec.blind = 'no-manifest-readable'; $rec.cause = 'the manifest at this commit declares no board_glob or chain_verdict, so there is nothing to seed-check or read'; return (& $finish) }
-  $srcDate = Get-RhNewestBoardDate $SourceRoot $ms.BoardGlob
-  if (-not $srcDate) { $rec.blind = 'no-seed-board'; $rec.cause = ('the source checkout ' + $SourceRoot + ' holds no comparison board (comparison-*.json)'); return (& $finish) }
-  $sd = [datetime]::ParseExact($srcDate, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
-  if (($Today.Date - $sd).Days -gt $ms.MaxAge) { $rec.blind = 'stale-data'; $rec.data_date = $srcDate; $rec.cause = ('the newest board in ' + $SourceRoot + ' is ' + $srcDate + ', older than ' + $ms.MaxAge + ' day(s)'); return (& $finish) }
-  # THE CAP, taken before any clone exists. Waiting is not a verdict: nothing is recorded while this waits.
-  $slot = $null
+  $headSha = ([string]$rp.stdout).Trim()
+  $rec.head = $headSha
+  $ownStack = $false
+  if ($null -eq $Stack -and ($Onto -or $StackFile)) { $Stack = New-RhStack -Repo $Repo -Commit $headSha -Onto $Onto -StackFile $StackFile; $ownStack = $true }
   try {
-    $slot = Enter-TcGateSlots -Want 1 -Total $SlotTotal -Prefix $SlotPrefix -QueueRoot $SlotQueueRoot -WaitSec $SlotStallSec -PollMs 500 `
-      -OnWait { param($ahead) Write-Host ('chain-rehearsal: WAITING for a rehearsal slot - all {0} are in use (Brad''s cap), {1} rehearsal(s) queued ahead of this one. This is a wait, not a failure.' -f $SlotTotal, $ahead) }
-  } catch { $slot = $null; Write-Host ('chain-rehearsal: the rehearsal slot queue could not be read (' + $_.Exception.Message + '); not rehearsing rather than exceeding the cap') }
-  if ($null -eq $slot -or $slot.TimedOut -or $slot.Count -lt 1) {
-    if ($slot) { Exit-TcGateSlots $slot }
-    $rec.blind = 'no-rehearsal-slot'; $rec.cause = ('no rehearsal slot came free: the queue of rehearsals did not move for ' + $SlotStallSec + ' s; nothing was recorded for this content, so rehearse again')
-    $rec.secs = [int]([DateTime]::UtcNow - $t0).TotalSeconds; $rec.utc = [DateTime]::UtcNow.ToString('o')
-    return [pscustomobject]$rec
-  }
-  $rec.slot_waited_s = [int]($slot.WaitedMs / 1000)
-  $runRoot = Join-Path $env:TEMP ('tc-rh-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
-  $null = New-Item -ItemType Directory -Path $runRoot -ErrorAction Stop
-  $rec.scratch = $runRoot
-  try {
-    $a = Invoke-RhArm -Repo $Repo -Sha $sha -SourceRoot $SourceRoot -RunRoot $runRoot -Arm 'h' -Seeder $Seeder -ChainRunner $ChainRunner -TimeoutMin $TimeoutMin -Manifest $ms
-    $rec.stages = $a.Stages; $rec.data_date = $a.DataDate
-    if ($a.Result -eq 'blind') { $rec.result = 'blind'; $rec.blind = $a.Blind; $rec.cause = $a.Why; return (& $finish) }
-    if ($a.Result -eq 'pass') { $rec.result = 'pass'; $rec.cause = $a.Why; return (& $finish) }
-    $rec.result = 'fail'; $rec.stage = ($a.Failed -join ','); $rec.cause = $a.Why; $rec.words = @($a.Words)
-    if ($NoPair) { return (& $finish) }
-    $mb = Invoke-RhGit $Repo @('merge-base', $sha, ($Remote + '/' + $Branch))
-    $base = ([string]$mb.stdout).Trim()
-    if ($mb.rc -ne 0 -or -not $base -or $base -eq $sha) { $rec.cause += ' (no distinct base to pair against, so the failure stands)'; return (& $finish) }
-    $rec.base = $base
-    $b = Invoke-RhArm -Repo $Repo -Sha $base -SourceRoot $SourceRoot -RunRoot $runRoot -Arm 'b' -Seeder $Seeder -ChainRunner $ChainRunner -TimeoutMin $TimeoutMin -Manifest (Get-RhManifestSet $Repo $base)
-    if ($b.Result -eq 'blind') { $rec.cause += (' (the base arm could not run, blind=' + $b.Blind + ', so the failure stands)'); return (& $finish) }
-    $new = @($a.Failed | Where-Object { @($b.Failed) -notcontains $_ })
-    $pre = @($a.Failed | Where-Object { @($b.Failed) -contains $_ })
-    $rec.preexisting = $pre
-    if ($new.Count -eq 0) { $rec.result = 'pass'; $rec.stage = ''; $rec.cause = ('every failed stage (' + ($pre -join ',') + ') fails on the base ' + $base.Substring(0, 9) + ' too, over the same data') }
-    else { $rec.stage = ($new -join ','); if ($pre.Count) { $rec.cause += (' (also failing on the base, so preexisting: ' + ($pre -join ',') + ')') } }
-    return (& $finish)
+    $gitRepo = $Repo; $sha = $headSha; $pairBase = ''
+    if ($Stack) {
+      $rec.onto = [string]$Stack.Onto
+      if (-not $Stack.Ok) {
+        $rec.blind = $Stack.Blind; $rec.cause = $Stack.Why
+        if ($Stack.Blind -eq 'stack-conflict') { Write-Host (Format-RhStackConflict $Stack) }
+        $rec.secs = [int]([DateTime]::UtcNow - $t0).TotalSeconds; $rec.utc = [DateTime]::UtcNow.ToString('o')
+        return [pscustomobject]$rec
+      }
+      $gitRepo = $Stack.Repo; $sha = $Stack.Tip; $pairBase = $Stack.Base
+    }
+    $rec.commit = $sha
+    $ms = Get-RhManifestSet $gitRepo $sha
+    if (-not $ms.Ok) { $rec.blind = 'no-manifest-readable'; $rec.cause = $ms.Why; return (& $finish) }
+    $rec.key = $ms.Key
+    if (-not $SourceRoot) { $SourceRoot = Get-RhMainCheckout $Repo }
+    if (-not $SourceRoot -or -not [IO.Directory]::Exists($SourceRoot)) { $rec.blind = 'no-source'; $rec.cause = 'no main checkout to seed from (pass -Source)'; return (& $finish) }
+    if (-not $ms.BoardGlob -or -not $ms.VerdictPath) { $rec.blind = 'no-manifest-readable'; $rec.cause = 'the manifest at this commit declares no board_glob or chain_verdict, so there is nothing to seed-check or read'; return (& $finish) }
+    $srcDate = Get-RhNewestBoardDate $SourceRoot $ms.BoardGlob
+    if (-not $srcDate) { $rec.blind = 'no-seed-board'; $rec.cause = ('the source checkout ' + $SourceRoot + ' holds no comparison board (comparison-*.json)'); return (& $finish) }
+    $sd = [datetime]::ParseExact($srcDate, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
+    if (($Today.Date - $sd).Days -gt $ms.MaxAge) { $rec.blind = 'stale-data'; $rec.data_date = $srcDate; $rec.cause = ('the newest board in ' + $SourceRoot + ' is ' + $srcDate + ', older than ' + $ms.MaxAge + ' day(s)'); return (& $finish) }
+    # THE CAP, taken before any clone exists. Waiting is not a verdict: nothing is recorded while this waits.
+    $slot = $null
+    try {
+      $slot = Enter-TcGateSlots -Want 1 -Total $SlotTotal -Prefix $SlotPrefix -QueueRoot $SlotQueueRoot -WaitSec $SlotStallSec -PollMs 500 `
+        -OnWait { param($ahead) Write-Host ('chain-rehearsal: WAITING for a rehearsal slot - all {0} are in use (Brad''s cap), {1} rehearsal(s) queued ahead of this one. This is a wait, not a failure.' -f $SlotTotal, $ahead) }
+    } catch { $slot = $null; Write-Host ('chain-rehearsal: the rehearsal slot queue could not be read (' + $_.Exception.Message + '); not rehearsing rather than exceeding the cap') }
+    if ($null -eq $slot -or $slot.TimedOut -or $slot.Count -lt 1) {
+      if ($slot) { Exit-TcGateSlots $slot }
+      $rec.blind = 'no-rehearsal-slot'; $rec.cause = ('no rehearsal slot came free: the queue of rehearsals did not move for ' + $SlotStallSec + ' s; nothing was recorded for this content, so rehearse again')
+      $rec.secs = [int]([DateTime]::UtcNow - $t0).TotalSeconds; $rec.utc = [DateTime]::UtcNow.ToString('o')
+      return [pscustomobject]$rec
+    }
+    $rec.slot_waited_s = [int]($slot.WaitedMs / 1000)
+    $runRoot = Join-Path $env:TEMP ('tc-rh-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+    $null = New-Item -ItemType Directory -Path $runRoot -ErrorAction Stop
+    $rec.scratch = $runRoot
+    try {
+      $a = Invoke-RhArm -Repo $gitRepo -Sha $sha -SourceRoot $SourceRoot -RunRoot $runRoot -Arm 'h' -Seeder $Seeder -ChainRunner $ChainRunner -TimeoutMin $TimeoutMin -Manifest $ms
+      $rec.stages = $a.Stages; $rec.data_date = $a.DataDate
+      $stS = [ordered]@{ stack = $(if ($Stack) { [int]$Stack.Secs } else { 0 }) }
+      foreach ($k in @($a.StageSecs.Keys)) { $stS[$k] = $a.StageSecs[$k] }
+      $rec.stage_secs = $stS
+      if ($a.Result -eq 'blind') { $rec.result = 'blind'; $rec.blind = $a.Blind; $rec.cause = $a.Why; return (& $finish) }
+      if ($a.Result -eq 'pass') { $rec.result = 'pass'; $rec.cause = $a.Why; return (& $finish) }
+      $rec.result = 'fail'; $rec.stage = ($a.Failed -join ','); $rec.cause = $a.Why; $rec.words = @($a.Words)
+      if ($NoPair) { return (& $finish) }
+      if ($Stack) { $base = $pairBase; $mbrc = 0 }
+      else {
+        $mb = Invoke-RhGit $Repo @('merge-base', $sha, ($Remote + '/' + $Branch))
+        $base = ([string]$mb.stdout).Trim(); $mbrc = $mb.rc
+      }
+      if ($mbrc -ne 0 -or -not $base -or $base -eq $sha) { $rec.cause += ' (no distinct base to pair against, so the failure stands)'; return (& $finish) }
+      $rec.base = $base
+      $b = Invoke-RhArm -Repo $gitRepo -Sha $base -SourceRoot $SourceRoot -RunRoot $runRoot -Arm 'b' -Seeder $Seeder -ChainRunner $ChainRunner -TimeoutMin $TimeoutMin -Manifest (Get-RhManifestSet $gitRepo $base)
+      if ($b.Result -eq 'blind' -and $b.Blind -eq 'stopped') { $rec.result = 'blind'; $rec.blind = 'stopped'; $rec.cause = $b.Why; return (& $finish) }
+      if ($b.Result -eq 'blind') { $rec.cause += (' (the base arm could not run, blind=' + $b.Blind + ', so the failure stands)'); return (& $finish) }
+      $new = @($a.Failed | Where-Object { @($b.Failed) -notcontains $_ })
+      $pre = @($a.Failed | Where-Object { @($b.Failed) -contains $_ })
+      $rec.preexisting = $pre
+      if ($new.Count -eq 0) { $rec.result = 'pass'; $rec.stage = ''; $rec.cause = ('every failed stage (' + ($pre -join ',') + ') fails on the base ' + $base.Substring(0, 9) + ' too, over the same data') }
+      else { $rec.stage = ($new -join ','); if ($pre.Count) { $rec.cause += (' (also failing on the base, so preexisting: ' + ($pre -join ',') + ')') } }
+      return (& $finish)
+    } finally {
+      Remove-Item -LiteralPath $runRoot -Recurse -Force -ErrorAction SilentlyContinue
+      Exit-TcGateSlots $slot
+      if (Test-Path -LiteralPath $runRoot) { Write-Host ('chain-rehearsal: LEFTOVER - the scratch root ' + $runRoot + ' could not be removed (a process may still hold a file in it); remove it by hand') }
+    }
   } finally {
-    Remove-Item -LiteralPath $runRoot -Recurse -Force -ErrorAction SilentlyContinue
-    Exit-TcGateSlots $slot
-    if (Test-Path -LiteralPath $runRoot) { Write-Host ('chain-rehearsal: LEFTOVER - the scratch root ' + $runRoot + ' could not be removed (a process may still hold a file in it); remove it by hand') }
+    if ($ownStack) { Remove-RhStack $Stack }
+  }
+}
+
+function Get-RhCheckoutHash([string]$Path) {
+  # SHA-256 of the lower-cased full checkout path: the in-flight file's name and the verdict record's `checkout`.
+  $full = [IO.Path]::GetFullPath($Path).TrimEnd('\').ToLowerInvariant()
+  $sha = [Security.Cryptography.SHA256]::Create()
+  try { return ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($full))) -replace '-', '').ToLowerInvariant() }
+  finally { $sha.Dispose() }
+}
+
+function Test-RhInFlightLive($Rec) {
+  # A recorded early run is live when its pid is running AND began when the record says (a reused pid is not it).
+  if ($null -eq $Rec -or -not $Rec.pid) { return $false }
+  $pr = Get-Process -Id ([int]$Rec.pid) -ErrorAction SilentlyContinue
+  if ($null -eq $pr) { return $false }
+  try { $st = $pr.StartTime.ToUniversalTime().Ticks } catch { return $true }
+  return ([string]$st -eq [string]$Rec.pid_start)
+}
+
+function Invoke-RhEarly {
+  <# -EARLY (W9.1 step 2): rehearse $Commit rebased onto $Onto (or the stack a -StackFile lists) as the speculative
+     rehearsal a commit starts, under every rule of a push-time one plus four of its own:
+       - it starts nothing when the stacked content touches no manifest member (Get-RhTrigger $Onto..tip, the union),
+         when a pass or fail verdict for the stacked key is already recorded over fresh data, or when a LIVE in-flight
+         early run in ANY checkout already holds that key;
+       - it records its run at <verdict dir>\early\<SHA-256 of the lower-cased checkout path>.json (pid, key, onto,
+         head, start, stop file) through Write-TcAtomicFile, and removes it when it ends;
+       - SUPERSEDE: when this checkout's in-flight file names a LIVE run of a DIFFERENT key, it writes that run's stop
+         file first (a stop that cannot be written is reported and ignored: the older run finishes, which is harmless
+         because a verdict covers only its own key);
+       - it takes an EARLY CAP (4 of the 6 slots at most, plan 16.6 order 2a) before the rehearsal slot (2b).
+     Returns Started, Reason (rehearsed | not-chain | verdict-exists | in-flight | stack-conflict | no-early-cap |
+     cannot-read-push | bad-usage | no-manifest-readable | cannot-diff | stopped-before-start), Key, Record,
+     InFlight, StopFile, Superseded, Lines. #>
+  param([string]$Repo, [string]$Commit = 'HEAD', [string]$Onto = '', [string]$StackFile = '', [string]$VerdictDir, [string]$SourceRoot = '',
+        [string]$CheckoutPath = '', [datetime]$Today = (Get-Date), [switch]$NoPair, [int]$TimeoutMin = 90,
+        [scriptblock]$Seeder = $script:RhDefaultSeeder, [scriptblock]$ChainRunner = $script:RhDefaultChainRunner,
+        [int]$EarlyTotal = $script:RhEarlyMaxSlots, [string]$EarlyPrefix = $script:RhEarlyPrefix, [string]$EarlyQueueRoot = $script:TcGateQueueRoot, [int]$EarlyStallSec = $script:RhEarlyStallSec,
+        [int]$SlotTotal = $script:RhMaxConcurrent, [string]$SlotPrefix = $script:RhSlotPrefix, [string]$SlotQueueRoot = $script:TcGateQueueRoot, [int]$SlotStallSec = $script:RhSlotStallSec)
+  $res = [ordered]@{ Started = $false; Reason = ''; Key = ''; Record = $null; InFlight = ''; StopFile = ''; Superseded = ''; Lines = (New-Object Collections.ArrayList) }
+  $say = { param($t) [void]$res.Lines.Add([string]$t) }
+  if (-not $Onto -and -not $StackFile) { $res.Reason = 'bad-usage'; & $say 'chain-rehearsal: COULD NOT EVALUATE blind=bad-usage - -Early needs -Onto <sha> (or -StackFile)'; return [pscustomobject]$res }
+  if (-not $CheckoutPath) { $CheckoutPath = $Repo }
+  $rp = Invoke-RhGit $Repo @('rev-parse', '--verify', '-q', ($Commit + '^{commit}'))
+  if ($rp.rc -ne 0) { $res.Reason = 'cannot-read-push'; & $say ('chain-rehearsal: COULD NOT EVALUATE blind=cannot-read-push - git cannot name ' + $Commit); return [pscustomobject]$res }
+  $headSha = ([string]$rp.stdout).Trim()
+  $earlyDir = Join-Path $VerdictDir 'early'
+  $ck = Get-RhCheckoutHash $CheckoutPath
+  $mine = Join-Path $earlyDir ($ck + '.json')
+  $stack = New-RhStack -Repo $Repo -Commit $headSha -Onto $Onto -StackFile $StackFile
+  $cap = $null; $prevStop = $script:RhStopFile; $wrote = $false; $myStop = ''
+  try {
+    if (-not $stack.Ok) {
+      $res.Reason = $stack.Blind
+      if ($stack.Blind -eq 'stack-conflict') { & $say (Format-RhStackConflict $stack) }
+      & $say ('chain-rehearsal: COULD NOT EVALUATE blind=' + $stack.Blind + ' - ' + $stack.Why)
+      return [pscustomobject]$res
+    }
+    $tr = Get-RhTrigger -Repo $stack.Repo -Base $stack.Onto -Tip $stack.Tip
+    if ($tr.Absent) { $res.Reason = 'not-chain'; & $say ('chain-rehearsal: EARLY - ' + $tr.Why + '; nothing to rehearse against, so nothing starts'); return [pscustomobject]$res }
+    if ($tr.Blind) { $res.Reason = $tr.Blind; & $say ('chain-rehearsal: COULD NOT EVALUATE blind=' + $tr.Blind + ' - ' + $tr.Why); return [pscustomobject]$res }
+    if (@($tr.Touched).Count -eq 0) { $res.Reason = 'not-chain'; & $say ('chain-rehearsal: EARLY - this content touches no chain-manifest member onto ' + $stack.Onto.Substring(0, 9) + ', so nothing starts'); return [pscustomobject]$res }
+    $key = $tr.Manifest.Key; $res.Key = $key
+    $v = Read-RhVerdict $VerdictDir $key
+    if ($v -and ([string]$v.result -eq 'pass' -or [string]$v.result -eq 'fail')) {
+      $dd = [datetime]::MinValue
+      if ([datetime]::TryParseExact([string]$v.data_date, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::None, [ref]$dd) -and (($Today.Date - $dd.Date).Days -le $tr.Manifest.MaxAge)) {
+        $res.Reason = 'verdict-exists'; & $say ('chain-rehearsal: EARLY - a ' + $v.result + ' verdict is already recorded for this stacked content (key ' + $key.Substring(0, 12) + '), so nothing starts'); return [pscustomobject]$res
+      }
+    }
+    if ([IO.Directory]::Exists($earlyDir)) {
+      foreach ($f in [IO.Directory]::GetFiles($earlyDir, '*.json')) {
+        $o = $null; try { $o = [IO.File]::ReadAllText($f) | ConvertFrom-Json } catch { $o = $null }
+        if ($o -and [string]::Equals([string]$o.key, $key, [StringComparison]::Ordinal) -and (Test-RhInFlightLive $o)) {
+          $res.Reason = 'in-flight'; $res.InFlight = $f
+          & $say ('chain-rehearsal: EARLY - an early rehearsal of this key is already in flight (pid ' + $o.pid + ', ' + [IO.Path]::GetFileName($f) + '), so nothing starts')
+          return [pscustomobject]$res
+        }
+      }
+    }
+    if ([IO.File]::Exists($mine)) {
+      $old = $null; try { $old = [IO.File]::ReadAllText($mine) | ConvertFrom-Json } catch { $old = $null }
+      if ($old -and (Test-RhInFlightLive $old) -and $old.stop_file) {
+        try { $null = Write-TcAtomicFile -Path ([string]$old.stop_file) -Text ('superseded by pid ' + $PID + ' key ' + $key) -NoBom -NoNewline; $res.Superseded = [string]$old.pid
+          & $say ('chain-rehearsal: EARLY - SUPERSEDED the in-flight early rehearsal of key ' + ([string]$old.key).Substring(0, 12) + ' (pid ' + $old.pid + ') in this checkout: its stop file is written') }
+        catch { & $say ('chain-rehearsal: EARLY - the older run''s stop file could not be written (' + $_.Exception.Message + '); it runs to the end, which is harmless') }
+      }
+    }
+    if (-not [IO.Directory]::Exists($earlyDir)) { $null = [IO.Directory]::CreateDirectory($earlyDir) }
+    $myStop = Join-Path $earlyDir ($ck + '-' + $PID + '.stop')
+    if ([IO.File]::Exists($myStop)) { [IO.File]::Delete($myStop) }
+    $me = Get-Process -Id $PID
+    $inf = [ordered]@{ pid = $PID; pid_start = [string]$me.StartTime.ToUniversalTime().Ticks; key = $key; onto = $stack.Onto; head = $headSha; tip = $stack.Tip; start = [DateTime]::UtcNow.ToString('o'); stop_file = $myStop; checkout = $ck }
+    $null = Write-TcAtomicFile -Path $mine -Text ($inf | ConvertTo-Json -Compress) -NoBom -NoNewline
+    $wrote = $true; $res.InFlight = $mine; $res.StopFile = $myStop
+    $script:RhStopFile = $myStop
+    try {
+      $cap = Enter-TcGateSlots -Want 1 -Total $EarlyTotal -Prefix $EarlyPrefix -QueueRoot $EarlyQueueRoot -WaitSec $EarlyStallSec -PollMs 500 `
+        -OnWait { param($ahead) Write-Host ('chain-rehearsal: EARLY WAITING for an early-rehearsal cap - all {0} are in use, {1} queued ahead. Push-time rehearsals are not held by this.' -f $EarlyTotal, $ahead) }
+    } catch { $cap = $null; & $say ('chain-rehearsal: the early cap queue could not be read (' + $_.Exception.Message + ')') }
+    if ($null -eq $cap -or $cap.TimedOut -or $cap.Count -lt 1) { $res.Reason = 'no-early-cap'; & $say ('chain-rehearsal: COULD NOT EVALUATE blind=no-early-cap - no early-rehearsal cap came free inside ' + $EarlyStallSec + ' s; nothing started'); return [pscustomobject]$res }
+    if (Test-RhStopped) { $res.Reason = 'stopped-before-start'; & $say 'chain-rehearsal: EARLY - stopped before it started'; return [pscustomobject]$res }
+    $res.Started = $true; $res.Reason = 'rehearsed'
+    & $say ('chain-rehearsal: EARLY - rehearsing ' + $headSha.Substring(0, 9) + ' rebased onto ' + $stack.Onto.Substring(0, 9) + ' (key ' + $key.Substring(0, 12) + '), in-flight file ' + $mine)
+    $res.Record = Invoke-RhRehearsal -Repo $Repo -Commit $headSha -Stack $stack -Early -CheckoutHash $ck -VerdictDir $VerdictDir -SourceRoot $SourceRoot -Today $Today -NoPair:$NoPair -TimeoutMin $TimeoutMin `
+      -Seeder $Seeder -ChainRunner $ChainRunner -SlotTotal $SlotTotal -SlotPrefix $SlotPrefix -SlotQueueRoot $SlotQueueRoot -SlotStallSec $SlotStallSec
+    return [pscustomobject]$res
+  } finally {
+    if ($cap) { Exit-TcGateSlots $cap }
+    $script:RhStopFile = $prevStop
+    if ($wrote -and [IO.File]::Exists($mine)) {
+      $o = $null; try { $o = [IO.File]::ReadAllText($mine) | ConvertFrom-Json } catch { $o = $null }
+      if ($o -and [string]$o.pid -eq [string]$PID) { try { [IO.File]::Delete($mine) } catch { } }
+    }
+    if ($myStop -and [IO.File]::Exists($myStop)) { try { [IO.File]::Delete($myStop) } catch { } }
+    Remove-RhStack $stack
   }
 }
 
@@ -1377,6 +1713,235 @@ if ($SelfTest) {
     Test-RhCase 'CLEAN TWIN  -ForPush over the same fixture decides exactly as before -ListSet existed: allow, not-needed and refuse print the same lines and exit codes as that script, run from its blob beside this one' {
       (@($lsTwin | Where-Object { $_.Ok }).Count -eq $lsStates.Count), ((@($lsTwin | Where-Object { -not $_.Ok } | ForEach-Object { $_.Got })) -join ' || ')
     }
+
+    # ---- 6. REHEARSE AT COMMIT (W9.1): -Onto, -StackFile, -Early, the in-flight record, supersede and the stop.
+    # Fixture timeline: e0 is the commit's base; origin moved to eO, which changes a MEMBER (grocery/member-b.ps1); HEAD
+    # eH changes another member on e0. So HEAD as committed and HEAD rebased onto eO have DIFFERENT keys, which is what
+    # lets the measured condition tell a rebased early rehearsal from an unrebased one (mutant M19).
+    $er = New-RhHookRepo 'e' $false
+    Write-RhFile $er 'ops\chain-manifest.json' '{"schema":1,"max_data_age_days":2,"board_glob":"grocery/out/comparison-*.json","chain_verdict":"grocery/out/chain-verdict.json","files":["grocery/check-ad-cycles.ps1","grocery/member-b.ps1","grocery/ahead.ps1","ops/chain-manifest.json"],"globs":[],"derive_from":[],"derive_dirs":[]}'   # reach-fixture-ok: a fixture manifest in a throwaway repo; nothing opens the live module
+    Write-RhFile $er 'grocery\check-ad-cycles.ps1' "'chain v1'`n"
+    Write-RhFile $er 'grocery\member-b.ps1' "'b v1'`n"
+    Write-RhFile $er 'README.md' "doc v1`n"
+    $e0 = Save-RhCommit $er 'early base'
+    $eAt = { param($from, [hashtable]$files, $msg)
+      $null = Invoke-RhGit $er @('checkout', '-q', '--detach', $from)
+      foreach ($k in @($files.Keys)) { Write-RhFile $er $k $files[$k] }
+      return (Save-RhCommit $er $msg) }
+    $eO = & $eAt $e0 @{ 'grocery\member-b.ps1' = "'b v2'`n" } 'origin at commit time changes a member'
+    $eO2 = & $eAt $eO @{ 'README.md' = "doc v2`n" } 'origin moves on by a non-member change'
+    $eO3 = & $eAt $eO @{ 'grocery\member-b.ps1' = "'b v3'`n" } 'origin moves on by a member change'
+    $eH = & $eAt $e0 @{ 'grocery\check-ad-cycles.ps1' = "'chain v2'`n" } 'the session''s own chain change'
+    $eHdoc = & $eAt $eH @{ 'README.md' = "doc own`n" } 'a doc commit on top of it: same key'
+    $eH2 = & $eAt $e0 @{ 'grocery\check-ad-cycles.ps1' = "'chain v3'`n" } 'a second chain change: a new key'
+    $eDoc = & $eAt $e0 @{ 'README.md' = "doc only`n" } 'a commit touching no member'
+    $eAhead = & $eAt $e0 @{ 'grocery\ahead.ps1' = "'from the ticket ahead'`n" } 'a ticket ahead adds a member absent until then'
+    $eClash = & $eAt $e0 @{ 'grocery\member-b.ps1' = "'b clash'`n" } 'a ticket ahead that conflicts with origin'
+    $null = Invoke-RhGit $er @('checkout', '-q', '--detach', $eH)
+    # THE PUSH'S KEY, by REAL git: HEAD rebased with `git rebase` in a throwaway clone, then Get-RhManifestSet. This is
+    # the independent half of "the early key equals the key -ForPush computes after push-main's rebase".
+    function Get-RhRebasedKey([string]$Head, [string]$OntoSha) {
+      $d = Join-Path $st ('rb-' + [guid]::NewGuid().ToString('N').Substring(0, 6))
+      $null = Invoke-RhGit $st @('clone', '-q', '--shared', '--no-checkout', $er, $d)
+      $null = Invoke-RhGit $d @('config', 'core.autocrlf', 'false')
+      $null = Invoke-RhGit $d @('checkout', '-q', '--detach', $Head)
+      $rb = Invoke-RhGit $d @('-c', 'user.name=rh-fixture', '-c', 'user.email=rh@fixture.invalid', 'rebase', '-q', $OntoSha)
+      $tip = ([string](Invoke-RhGit $d @('rev-parse', 'HEAD')).stdout).Trim()
+      return [pscustomobject]@{ Rc = $rb.rc; Tip = $tip; Repo = $d; Key = (Get-RhManifestSet $d $tip).Key }
+    }
+    $eRuns = Join-Path $st 'eruns'; $null = [IO.Directory]::CreateDirectory($eRuns)
+    $eRunner = {
+      param($Tree, $TimeoutMin, $ChildEnv)
+      [IO.File]::WriteAllText((Join-Path $Tree 'grocery\out\chain-verdict.json'), '{"guards_blocked":false,"verdict":"clean"}')   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
+      $seen = [ordered]@{ chain = [IO.File]::ReadAllText((Join-Path $Tree 'grocery\check-ad-cycles.ps1')).Trim(); b = [IO.File]::ReadAllText((Join-Path $Tree 'grocery\member-b.ps1')).Trim()
+        ahead = [IO.File]::Exists((Join-Path $Tree 'grocery\ahead.ps1')); run = [string]$ChildEnv['TC_REHEARSAL_RUN']; temp = [string]$ChildEnv['TEMP']; tree = $Tree }
+      [IO.File]::WriteAllText((Join-Path $eRuns ([guid]::NewGuid().ToString('N') + '.json')), ($seen | ConvertTo-Json -Compress))
+      [pscustomobject]@{ Blind = ''; Why = ''; Rc = 0; TimedOut = $false; Stopped = $false; Tail = @() }
+    }.GetNewClosure()
+    function Get-RhRuns { $o = @(); foreach ($f in [IO.Directory]::GetFiles($eRuns, '*.json')) { $o += ([IO.File]::ReadAllText($f) | ConvertFrom-Json); [IO.File]::Delete($f) }; return , $o }
+    $ePfx = 'Global\tc-rhe-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '-'
+    $eSlotPfx = 'Global\tc-rhes-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '-'
+    $eQ = Join-Path $st 'eq'
+    $vdE = Join-Path $st 'verdicts-early'
+    $eCk = 'C:\rh-fixture\checkout-a'
+    $eArgs = @{ Repo = $er; VerdictDir = $vdE; SourceRoot = $seedDir; Today = $today; Seeder = $fakeSeeder; ChainRunner = $eRunner; NoPair = $true;
+      EarlyPrefix = $ePfx; EarlyQueueRoot = $eQ; EarlyStallSec = 30; SlotPrefix = $eSlotPfx; SlotQueueRoot = $eQ; SlotStallSec = 30 }
+    $e1 = Invoke-RhEarly @eArgs -Commit $eH -Onto $eO -CheckoutPath $eCk
+    $e1Runs = Get-RhRuns
+    $rbO = Get-RhRebasedKey $eH $eO
+    Test-RhCase 'MUST FIRE  a commit that changes a member starts ONE early rehearsal onto the given origin sha, of HEAD REBASED onto it, and its verdict key equals the key of that content after a real git rebase onto the same origin' {
+      ($e1.Started -and ($e1.Record.result -eq 'pass') -and ($rbO.Rc -eq 0) -and ($e1.Key -ceq $rbO.Key) -and ($e1.Record.key -ceq $rbO.Key) -and ($e1Runs.Count -eq 1) -and ($e1Runs[0].chain -ceq "'chain v2'") -and ($e1Runs[0].b -ceq "'b v2'")), ('started=' + $e1.Started + ' reason=' + $e1.Reason + ' result=' + $e1.Record.result + ' ' + $e1.Record.blind + ' ' + $e1.Record.cause + ' key=' + $e1.Key + ' rebased=' + $rbO.Key + ' runs=' + $e1Runs.Count + ' ' + (@($e1Runs | ForEach-Object { $_.chain + '/' + $_.b }) -join ';') + ' ' + (@($e1.Lines) -join ' / '))
+    }
+    Test-RhCase 'MUST FIRE  the rehearsal exports TC_REHEARSAL_RUN=1 to the chain child (a post-commit hook that sees it starts nothing), and gives it a TEMP inside its own scratch root' {
+      (($e1Runs.Count -eq 1) -and ($e1Runs[0].run -ceq '1') -and ([string]$e1Runs[0].temp).StartsWith((Split-Path -Parent ([string]$e1Runs[0].tree)) + '\', [StringComparison]::OrdinalIgnoreCase)), ('runs=' + $e1Runs.Count + ' run=' + (@($e1Runs | ForEach-Object { $_.run }) -join ',') + ' temp=' + (@($e1Runs | ForEach-Object { $_.temp }) -join ','))
+    }
+    $e1V = Read-RhVerdict $vdE $e1.Key
+    $ssNames = @('stack', 'clone', 'checkout', 'seed', 'selftest', 'ship', 'commit')
+    $ssBad = @($ssNames | Where-Object { -not ($e1V -and $e1V.stage_secs -and $e1V.stage_secs.PSObject.Properties[$_] -and ($e1V.stage_secs.$_ -is [int] -or $e1V.stage_secs.$_ -is [long])) })
+    Test-RhCase 'CLEAN TWIN  the early verdict record carries early, onto, head, checkout (the hashed checkout path) and a numeric stage_secs for every stage' {
+      (($null -ne $e1V) -and ($e1V.early -eq $true) -and ($e1V.onto -ceq $eO) -and ($e1V.head -ceq $eH) -and ($e1V.checkout -ceq (Get-RhCheckoutHash $eCk)) -and ($ssBad.Count -eq 0)), ('rec=' + [bool]$e1V + ' early=' + $e1V.early + ' onto=' + $e1V.onto + ' head=' + $e1V.head + ' ck=' + $e1V.checkout + ' missing=' + ($ssBad -join ','))
+    }
+    $dAfter = Get-RhPushDecision -Repo $rbO.Repo -RefLines @('refs/heads/main ' + $rbO.Tip + ' refs/heads/main ' + $eO) -VerdictDir $vdE -Today $today
+    Test-RhCase 'CLEAN TWIN  the push of that same content, rebased onto that origin, reads PASSED from the early verdict in seconds: no rehearsal runs' {
+      (($dAfter.Code -eq 0) -and ($dAfter.Outcome -eq 'rehearsed-pass') -and ((Get-RhRuns).Count -eq 0)), ('' + $dAfter.Code + ' ' + $dAfter.Outcome + ' ' + (@($dAfter.Lines) -join ' / '))
+    }
+    $rbO2 = Get-RhRebasedKey $eH $eO2
+    $dO2 = Get-RhPushDecision -Repo $rbO2.Repo -RefLines @('refs/heads/main ' + $rbO2.Tip + ' refs/heads/main ' + $eO2) -VerdictDir $vdE -Today $today
+    $rbO3 = Get-RhRebasedKey $eH $eO3
+    $dO3 = Get-RhPushDecision -Repo $rbO3.Repo -RefLines @('refs/heads/main ' + $rbO3.Tip + ' refs/heads/main ' + $eO3) -VerdictDir $vdE -Today $today
+    Test-RhCase 'MUST FIRE  the measured condition: origin moved past the early rehearsal''s base by a NON-member commit, the early verdict still covers the push; moved by a MEMBER commit, it does not' {
+      (($rbO2.Key -ceq $e1.Key) -and ($dO2.Code -eq 0) -and ($dO2.Outcome -eq 'rehearsed-pass') -and ($rbO3.Key -cne $e1.Key) -and ($dO3.Code -eq 1) -and ($dO3.Outcome -eq 'no-verdict')), ('O2 key same=' + ($rbO2.Key -ceq $e1.Key) + ' ' + $dO2.Outcome + ' | O3 key same=' + ($rbO3.Key -ceq $e1.Key) + ' ' + $dO3.Outcome)
+    }
+    $eNo = Invoke-RhEarly @eArgs -Commit $eDoc -Onto $eO -CheckoutPath $eCk
+    Test-RhCase 'MUST NOT FIRE  a commit touching no member starts nothing (reason not-chain), and runs no chain' {
+      ((-not $eNo.Started) -and ($eNo.Reason -eq 'not-chain') -and ((Get-RhRuns).Count -eq 0)), ('started=' + $eNo.Started + ' reason=' + $eNo.Reason)
+    }
+    $eAgain = Invoke-RhEarly @eArgs -Commit $eHdoc -Onto $eO -CheckoutPath 'C:\rh-fixture\checkout-b'
+    $k2 = ''
+    $s2 = New-RhStack -Repo $er -Commit $eH2 -Onto $eO
+    try { $k2 = (Get-RhManifestSet $s2.Repo $s2.Tip).Key } finally { Remove-RhStack $s2 }
+    $fakeIn = Join-Path (Join-Path $vdE 'early') ((Get-RhCheckoutHash 'C:\rh-fixture\checkout-z') + '.json')
+    $meStart = [string](Get-Process -Id $PID).StartTime.ToUniversalTime().Ticks
+    [IO.File]::WriteAllText($fakeIn, (([ordered]@{ pid = $PID; pid_start = $meStart; key = $k2; stop_file = (Join-Path $st 'never.stop') }) | ConvertTo-Json -Compress))
+    $eHeld = Invoke-RhEarly @eArgs -Commit $eH2 -Onto $eO -CheckoutPath $eCk
+    [IO.File]::Delete($fakeIn)
+    Test-RhCase 'MUST NOT FIRE  a commit whose rebased key already has a verdict starts nothing, from any checkout; nor does one whose key a LIVE early run in ANOTHER checkout already holds' {
+      ((-not $eAgain.Started) -and ($eAgain.Reason -eq 'verdict-exists') -and (-not $eHeld.Started) -and ($eHeld.Reason -eq 'in-flight') -and ((Get-RhRuns).Count -eq 0)), ('again=' + $eAgain.Reason + ' held=' + $eHeld.Reason + ' ' + (@($eHeld.Lines) -join ' / '))
+    }
+    $clashFile = Join-Path $st 'stack-clash.txt'
+    [IO.File]::WriteAllText($clashFile, ($eO + "`n" + $eClash + "`n"))
+    # THE VERDICT STORE BY CONTENT: every verdict file's name and SHA-256 (a directory's own write time is not a verdict).
+    function Get-RhVerdictHashes([string]$Dir) { $a = @(); if ([IO.Directory]::Exists($Dir)) { foreach ($f in ([IO.Directory]::GetFiles($Dir, '*.json') | Sort-Object)) { $a += ([IO.Path]::GetFileName($f) + '=' + (Get-FileHash -Algorithm SHA256 -LiteralPath $f).Hash) } }; return ($a -join ';') }
+    $vdBefore = Get-RhVerdictHashes $vdE
+    $sc = Invoke-RhRehearsal -Repo $er -Commit $eH -StackFile $clashFile -VerdictDir $vdE -SourceRoot $seedDir -Today $today -Seeder $fakeSeeder -ChainRunner $eRunner -NoPair -SlotPrefix $eSlotPfx -SlotQueueRoot $eQ -SlotStallSec 30
+    Test-RhCase 'MUST FIRE  a stack whose replay conflicts records NO verdict: blind=stack-conflict, exit 3, the verdict store unchanged and no chain run' {
+      (($sc.result -eq 'blind') -and ($sc.blind -eq 'stack-conflict') -and ((Get-RhExitCode $sc.result) -eq 3) -and ([string]::Equals($vdBefore, (Get-RhVerdictHashes $vdE), [StringComparison]::Ordinal)) -and ((Get-RhRuns).Count -eq 0)), ($sc.result + ' ' + $sc.blind + ' ' + $sc.cause + ' rc=' + (Get-RhExitCode $sc.result) + ' storeSame=' + [string]::Equals($vdBefore, (Get-RhVerdictHashes $vdE), [StringComparison]::Ordinal) + ' runs=' + (Get-RhRuns).Count)
+    }
+    $aheadFile = Join-Path $st 'stack-ahead.txt'
+    [IO.File]::WriteAllText($aheadFile, ($eO + "`n" + $eAhead + "`n"))
+    $sa = Invoke-RhRehearsal -Repo $er -Commit $eH -StackFile $aheadFile -VerdictDir $vdE -SourceRoot $seedDir -Today $today -Seeder $fakeSeeder -ChainRunner $eRunner -NoPair -SlotPrefix $eSlotPfx -SlotQueueRoot $eQ -SlotStallSec 30
+    $saRuns = Get-RhRuns
+    Test-RhCase 'MUST FIRE  a stack file stacks: the rehearsed tree holds origin, the ticket ahead and this commit''s own change, and the key is that stacked tip''s, not HEAD''s rebased onto origin alone' {
+      (($sa.result -eq 'pass') -and ($saRuns.Count -eq 1) -and $saRuns[0].ahead -and ($saRuns[0].chain -ceq "'chain v2'") -and ($saRuns[0].b -ceq "'b v2'") -and ($sa.key -cne $e1.Key)), ($sa.result + ' ' + $sa.blind + ' ' + $sa.cause + ' runs=' + $saRuns.Count + ' ' + (@($saRuns | ForEach-Object { $_.chain + '/' + $_.b + '/' + $_.ahead }) -join ';'))
+    }
+    # THE EARLY CAP: 4 early caps held by OTHER processes (a mutex is reentrant on its owning thread). A 5th early run
+    # waits and gives up inside its lowered stall; a push-time rehearsal at the same moment is still granted a slot.
+    $capHolds = New-Object Collections.ArrayList
+    try {
+      for ($i = 0; $i -lt $script:RhEarlyMaxSlots; $i++) { [void]$capHolds.Add((Start-TcMutexHold -Name ($ePfx + $i))) }
+      $eCapArgs = $eArgs.Clone(); $eCapArgs.EarlyStallSec = 2
+      $eCap = Invoke-RhEarly @eCapArgs -Commit $eH2 -Onto $eO -CheckoutPath $eCk
+      $pushTime = Invoke-RhRehearsal -Repo $er -Commit $eH2 -VerdictDir $vdE -SourceRoot $seedDir -Today $today -Seeder $fakeSeeder -ChainRunner $eRunner -NoPair -SlotPrefix $eSlotPfx -SlotQueueRoot $eQ -SlotStallSec 30
+      $capRuns = Get-RhRuns
+      Test-RhCase ('MUST FIRE  the early cap: with all ' + $script:RhEarlyMaxSlots + ' early caps held by other processes a 5th early run starts nothing (no-early-cap), while a push-time rehearsal is still granted a slot and runs') {
+        ((@($capHolds | Where-Object { $_.Held }).Count -eq $script:RhEarlyMaxSlots) -and (-not $eCap.Started) -and ($eCap.Reason -eq 'no-early-cap') -and ($pushTime.result -eq 'pass') -and ($capRuns.Count -eq 1)), ('held=' + @($capHolds | Where-Object { $_.Held }).Count + ' early=' + $eCap.Reason + ' push=' + $pushTime.result + ' ' + $pushTime.blind + ' runs=' + $capRuns.Count)
+      }
+    } finally { foreach ($h in @($capHolds.ToArray())) { Stop-TcMutexHold $h } }
+
+    # SUPERSEDE AND THE STOP, across PROCESSES: a run is stopped only through its own stop file, so the run being stopped
+    # must be another process. Each child runs -Early from a sandbox inside the fixture repo, a copy of this file whose
+    # slot, early-cap and queue names are private, whose stop poll is 200 ms, and whose seeder and chain are stubs: the
+    # chain stub blocks on a release file when TC_RHFX_BLOCK names one, in a CHILD it starts, so the stop has a child to stop.
+    $esToday = (Get-Date).ToString('yyyy-MM-dd')
+    $esSeed = Join-Path $st 'eseed'
+    Write-RhFile $esSeed ('grocery\out\comparison-' + $esToday + '.json') '{}'   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
+    $esBox = Join-Path $er 'le'
+    $null = [IO.Directory]::CreateDirectory((Join-Path $esBox 'ops')); $null = [IO.Directory]::CreateDirectory((Join-Path $esBox 'lib'))
+    foreach ($f in [IO.Directory]::GetFiles((Join-Path $script:RhRoot 'lib'), '*.ps1')) { [IO.File]::Copy($f, (Join-Path (Join-Path $esBox 'lib') ([IO.Path]::GetFileName($f)))) }
+    $esQ = Join-Path $st 'esq'
+    $esPfx = 'Global\tc-rhxs-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '-'
+    $esEPfx = 'Global\tc-rhxe-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '-'
+    $nEarly = '$script:RhEarly' + 'Prefix = ''Global\tc-rehearsal' + '-early-'''
+    $nPoll = '$script:RhStop' + 'PollMs = ' + '5000'
+    $nSeed = '$script:RhDefault' + 'Seeder = {'
+    $nRun = '$script:RhDefault' + 'ChainRunner = {'
+    $stubSeed = '$script:RhDefault' + 'Seeder = { param([string]$Tree, [string]$SourceRoot) Copy-Item -Recurse -Force (Join-Path $SourceRoot ''grocery'') $Tree; [pscustomobject]@{ Rc = 0; Stopped = $false; Tail = @() } }' + "`n" + '$script:RhUnusedSeeder = {'
+    $stubRun = '$script:RhDefault' + 'ChainRunner = { param([string]$Tree, [int]$TimeoutMin, [hashtable]$ChildEnv)' + "`n" +
+      '  [IO.File]::WriteAllText((Join-Path $Tree ''grocery\out\chain-verdict.json''), ''{"guards_blocked":false,"verdict":"clean"}'')' + "`n" +
+      '  if ($env:TC_RHFX_BLOCK) { [IO.File]::WriteAllText(($env:TC_RHFX_BLOCK + ''.started''), $Tree)' + "`n" +
+      '    $w = Invoke-RhProcess -File ''powershell.exe'' -Arguments (''-NoProfile -Command "while (-not (Test-Path -LiteralPath '''''' + $env:TC_RHFX_BLOCK + ''.release'''')) { Start-Sleep -Milliseconds 100 }"'') -WorkDir $Tree -Env $ChildEnv -TimeoutSec 300' + "`n" +
+      '    if ($w.Stopped) { return [pscustomobject]@{ Blind = ''stopped''; Why = ''stopped in the fixture chain''; Rc = -3; TimedOut = $false; Stopped = $true; Tail = @() } } }' + "`n" +
+      '  [pscustomobject]@{ Blind = ''''; Why = ''''; Rc = 0; TimedOut = $false; Stopped = $false; Tail = @() } }' + "`n" + '$script:RhUnusedChainRunner = {'
+    $esSrc = [IO.File]::ReadAllText((Join-Path $script:RhRoot 'ops\rehearse-chain.ps1'))
+    $esGs = [IO.File]::ReadAllText((Join-Path $script:RhRoot 'lib\gate-slots.ps1'))
+    $esRewrites = '' + (Get-RhOrdinalCount $esSrc $nPrefix) + ',' + (Get-RhOrdinalCount $esSrc $nStall) + ',' + (Get-RhOrdinalCount $esSrc $nEarly) + ',' + (Get-RhOrdinalCount $esSrc $nPoll) + ',' + (Get-RhOrdinalCount $esSrc $nSeed) + ',' + (Get-RhOrdinalCount $esSrc $nRun) + ',' + (Get-RhOrdinalCount $esGs $nQueue)
+    $esOk = ($esRewrites -eq '1,1,1,1,1,1,1')
+    if ($esOk) {
+      $esText = $esSrc.Replace($nPrefix, ('$script:RhSlotPrefix = ''' + $esPfx + '''')).Replace($nStall, '$script:RhSlotStallSec = 30').Replace($nEarly, ('$script:RhEarlyPrefix = ''' + $esEPfx + '''')).Replace($nPoll, '$script:RhStopPollMs = 200').Replace($nSeed, $stubSeed).Replace($nRun, $stubRun)
+      [IO.File]::WriteAllText((Join-Path $esBox 'ops\rehearse-chain.ps1'), $esText, (New-Object Text.UTF8Encoding($false)))
+      [IO.File]::WriteAllText((Join-Path $esBox 'lib\gate-slots.ps1'), $esGs.Replace($nQueue, ('$script:TcGateQueueRoot = ''' + $esQ + '''')), (New-Object Text.UTF8Encoding($false)))
+    }
+    $vdS = Join-Path $st 'verdicts-stop'; $null = [IO.Directory]::CreateDirectory($vdS)
+    $esIn = Join-Path (Join-Path $vdS 'early') ((Get-RhCheckoutHash $esBox) + '.json')
+    function Start-RhEsChild([string]$Commit, [string]$Block, [string]$TempDir) {
+      $null = [IO.Directory]::CreateDirectory($TempDir)
+      $psi = New-Object System.Diagnostics.ProcessStartInfo
+      $psi.FileName = $lsPsExe; $psi.WorkingDirectory = $esBox; $psi.UseShellExecute = $false; $psi.CreateNoWindow = $true
+      $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true
+      $psi.Arguments = ('-NoProfile -ExecutionPolicy Bypass -File "' + (Join-Path $esBox 'ops\rehearse-chain.ps1') + '" -Early -Onto ' + $eO + ' -Commit ' + $Commit + ' -Source "' + $esSeed + '" -NoPair')
+      foreach ($n in @('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'TC_NO_REHEARSAL')) { if ($psi.EnvironmentVariables.ContainsKey($n)) { $psi.EnvironmentVariables.Remove($n) } }
+      $psi.EnvironmentVariables['TC_REHEARSAL_VERDICT_DIR'] = $vdS; $psi.EnvironmentVariables['TEMP'] = $TempDir; $psi.EnvironmentVariables['TMP'] = $TempDir
+      $psi.EnvironmentVariables['TC_RHFX_BLOCK'] = $Block
+      $pr = [Diagnostics.Process]::Start($psi)
+      return [pscustomobject]@{ P = $pr; Out = $pr.StandardOutput.ReadToEndAsync(); Err = $pr.StandardError.ReadToEndAsync() }
+    }
+    function Wait-RhEsChild($C, [int]$Sec, [string]$Release) {
+      # A hang guard, never a bar: on a miss the release file frees the stub so the child still ends.
+      # Released says the stub had to be FREED to end, which a working stop never needs.
+      $released = $false
+      if (-not $C.P.WaitForExit($Sec * 1000)) { if ($Release) { [IO.File]::WriteAllText($Release, 'x'); $released = $true }; $null = $C.P.WaitForExit(120000) }
+      $C.Out.Wait(); $C.Err.Wait()
+      return [pscustomobject]@{ Released = $released; Rc = $C.P.ExitCode; Lines = @(([string]$C.Out.Result) -split "`r?`n" | Where-Object { $_ -ne '' }); Err = [string]$C.Err.Result }
+    }
+    function Wait-RhFile([string]$Path, $C, [int]$Sec) {
+      $sw = [Diagnostics.Stopwatch]::StartNew()
+      while (-not [IO.File]::Exists($Path) -and -not $C.P.HasExited -and $sw.Elapsed.TotalSeconds -lt $Sec) { Start-Sleep -Milliseconds 100 }   # a hang guard, never a bar
+      return [IO.File]::Exists($Path)
+    }
+    function Get-RhStoreHash { return (Get-RhVerdictHashes $vdS) }
+    function Get-RhTempLeft([string]$Dir) { return @(Get-ChildItem -LiteralPath $Dir -Force -ErrorAction SilentlyContinue | Where-Object { $_.Name -like 'tc-rh*' -or $_.Name -like 'rh-index-*' } | ForEach-Object { $_.Name }) }
+    # (a) THE STOP: A blocks inside its chain; its stop file, written here, ends it.
+    $blkA = Join-Path $st 'blkA'; $tA = Join-Path $st 'tA'
+    $storeA0 = Get-RhStoreHash
+    $cA = $null; $rA = $null; $aStarted = $false; $aStop = ''
+    if ($esOk) {
+      $cA = Start-RhEsChild $eH $blkA $tA
+      $aStarted = Wait-RhFile ($blkA + '.started') $cA 120
+      if ($aStarted -and [IO.File]::Exists($esIn)) { $aStop = [string](([IO.File]::ReadAllText($esIn) | ConvertFrom-Json).stop_file) }
+      if ($aStop) { [IO.File]::WriteAllText($aStop, 'stopped by the fixture') }
+      $rA = Wait-RhEsChild $cA 120 ($blkA + '.release')
+    }
+    $aLast = $(if ($rA) { [string]@($rA.Lines)[-1] } else { '' })
+    $slotsFree = $null
+    try { $slotsFree = Enter-TcGateSlots -Want $script:RhMaxConcurrent -Total $script:RhMaxConcurrent -Prefix $esPfx -QueueRoot $esQ -WaitSec 5 -PollMs 100 } catch { $slotsFree = $null }
+    $slotsGot = $(if ($slotsFree) { $slotsFree.Count } else { -1 }); if ($slotsFree) { Exit-TcGateSlots $slotsFree }
+    Test-RhCase 'MUST FIRE  the stop: a running early rehearsal whose stop file appears stops its OWN chain child and ends blind=stopped, exit 3, with its scratch root gone, its in-flight file removed and all 6 of its slots free' {
+      ($esOk -and $aStarted -and [bool]$aStop -and (-not $rA.Released) -and ($rA.Rc -eq 3) -and ($aLast -cmatch '^CHAIN-REHEARSAL-EARLY-COMPLETE started=yes reason=rehearsed verdict=blind blind=stopped ') -and ((Get-RhTempLeft $tA).Count -eq 0) -and (-not [IO.File]::Exists($esIn)) -and ($slotsGot -eq $script:RhMaxConcurrent)), ('rewrites=' + $esRewrites + ' released=' + $rA.Released + ' started=' + $aStarted + ' stop=' + $aStop + ' rc=' + $rA.Rc + ' last=' + $aLast + ' left=' + ((Get-RhTempLeft $tA) -join ',') + ' inflight=' + [IO.File]::Exists($esIn) + ' slots=' + $slotsGot + ' err=' + $(if ($rA) { $rA.Err.Substring(0, [Math]::Min(300, $rA.Err.Length)) }))
+    }
+    Test-RhCase 'MUST NOT FIRE  a stopped run changes nothing in the verdict store: every verdict file''s hash is identical before and after' {
+      ($esOk -and [bool]$rA -and [string]::Equals($storeA0, (Get-RhStoreHash), [StringComparison]::Ordinal)), ('before=' + $storeA0 + ' after=' + (Get-RhStoreHash))
+    }
+    # (b) SUPERSEDE: A2 blocks; B' (a doc commit on top, the SAME key) stops nothing; B (a NEW key) stops A2 and runs.
+    $blkA2 = Join-Path $st 'blkA2'; $tA2 = Join-Path $st 'tA2'; $tB1 = Join-Path $st 'tB1'; $tB = Join-Path $st 'tB'
+    $cA2 = $null; $rA2 = $null; $rB1 = $null; $rB = $null; $a2Started = $false; $a2Stop = ''; $b1StopSeen = $true
+    if ($esOk) {
+      $cA2 = Start-RhEsChild $eH $blkA2 $tA2
+      $a2Started = Wait-RhFile ($blkA2 + '.started') $cA2 120
+      if ($a2Started -and [IO.File]::Exists($esIn)) { $a2Stop = [string](([IO.File]::ReadAllText($esIn) | ConvertFrom-Json).stop_file) }
+      $rB1 = Wait-RhEsChild (Start-RhEsChild $eHdoc '' $tB1) 120 ''
+      $b1StopSeen = ($a2Stop -and [IO.File]::Exists($a2Stop))
+      $rB = Wait-RhEsChild (Start-RhEsChild $eH2 '' $tB) 120 ''
+      $rA2 = Wait-RhEsChild $cA2 120 ($blkA2 + '.release')
+    }
+    $b1Last = $(if ($rB1) { [string]@($rB1.Lines)[-1] } else { '' })
+    $bLast = $(if ($rB) { [string]@($rB.Lines)[-1] } else { '' })
+    $a2Last = $(if ($rA2) { [string]@($rA2.Lines)[-1] } else { '' })
+    Test-RhCase 'CLEAN TWIN  supersede leaves the same key alone: a second commit in the same checkout that keeps the key (a doc commit on top) starts nothing and writes no stop file' {
+      ($esOk -and $a2Started -and ($rB1.Rc -eq 0) -and ($b1Last -cmatch '^CHAIN-REHEARSAL-EARLY-COMPLETE started=no reason=in-flight ') -and (-not $b1StopSeen)), ('started=' + $a2Started + ' rc=' + $rB1.Rc + ' last=' + $b1Last + ' stopSeen=' + $b1StopSeen)
+    }
+    Test-RhCase 'MUST FIRE  supersede: a second commit in the same checkout that CHANGES the key writes the first run''s stop file; the first ends blind=stopped with its scratch root gone, and the second runs and passes' {
+      ($esOk -and $a2Started -and ($rB.Rc -eq 0) -and ($bLast -cmatch '^CHAIN-REHEARSAL-EARLY-COMPLETE started=yes reason=rehearsed verdict=pass key=\S+ superseded=\d+$') -and (-not $rA2.Released) -and ($rA2.Rc -eq 3) -and ($a2Last -cmatch ' blind=stopped ') -and ((Get-RhTempLeft $tA2).Count -eq 0) -and ((Get-RhTempLeft $tB).Count -eq 0)), ('b rc=' + $rB.Rc + ' last=' + $bLast + ' | a2 released=' + $rA2.Released + ' rc=' + $rA2.Rc + ' last=' + $a2Last + ' left=' + ((Get-RhTempLeft $tA2) -join ',') + ' err=' + $(if ($rB) { $rB.Err.Substring(0, [Math]::Min(300, $rB.Err.Length)) }))
+    }
   } finally {
     if ($null -eq $savedVd) { Remove-Item Env:\TC_REHEARSAL_VERDICT_DIR -ErrorAction SilentlyContinue } else { $env:TC_REHEARSAL_VERDICT_DIR = $savedVd }
     if ($null -eq $savedBy) { Remove-Item Env:\TC_NO_REHEARSAL -ErrorAction SilentlyContinue } else { $env:TC_NO_REHEARSAL = $savedBy }
@@ -1388,7 +1953,7 @@ if ($SelfTest) {
   $hkSet = Get-RhManifestSet $script:RhRoot 'HEAD'
   Test-RhCase 'MUST FIRE  a pre-commit edit is a manifest change (the rehearsal commits through that hook)' { ($hkSet.Ok -and $hkSet.Set.ContainsKey('ops/hooks/pre-commit')), ('ok=' + $hkSet.Ok + ' why=' + $hkSet.Why) }
   Test-RhCase 'MUST NOT FIRE  a pre-push or commit-msg edit demands no rehearsal it cannot exercise' { ($hkSet.Ok -and -not $hkSet.Set.ContainsKey('ops/hooks/pre-push') -and -not $hkSet.Set.ContainsKey('ops/hooks/commit-msg')), ('ok=' + $hkSet.Ok) }
-  $want = 47
+  $want = 61
   if ($script:rhCases -ne $want) { Write-Output ('rehearse-chain self-test FAIL: ran {0} case(s), the suite lists {1}' -f $script:rhCases, $want); exit 1 }
   if ($script:rhFail) { Write-Output ('rehearse-chain self-test FAIL: {0} of {1} case(s)' -f $script:rhFail, $script:rhCases); exit 1 }
   Write-Output ('rehearse-chain self-test PASS: {0} of {0} cases - led by the founding defect (an empty cost-flags.txt refused by the 09-05 hook) and a manifest change with no verdict being refused' -f $script:rhCases)
@@ -1406,6 +1971,28 @@ if ($Range -and -not $ListSet) {
   Write-Output ('chain-rehearsal: COULD NOT EVALUATE blind=bad-usage - -Range ' + $Range + ' is read only by -ListSet, and without it this run would rehearse. Nothing was rehearsed; add -ListSet.')
   Write-Output 'CHAIN-REHEARSAL-LISTSET-COMPLETE blind=bad-usage'
   exit 3
+}
+if ($Early) {
+  # -EARLY (W9.1): the speculative rehearsal a commit starts (push-main -Prepare, or the post-commit hook of D19,
+  # each of which starts this DETACHED and returns at once). It never runs beside -CheckPush, -ForPush or -ListSet.
+  if ($CheckPush -or $ForPush -or $ListSet) {
+    Write-Output 'chain-rehearsal: COULD NOT EVALUATE blind=bad-usage - -Early cannot be combined with -CheckPush, -ForPush or -ListSet. Nothing was rehearsed.'
+    Write-Output 'CHAIN-REHEARSAL-EARLY-COMPLETE started=no reason=bad-usage key=none'
+    exit 3
+  }
+  $e = Invoke-RhEarly -Repo $repoTop -Commit $Commit -Onto $Onto -StackFile $StackFile -VerdictDir $vdir -SourceRoot $Source -CheckoutPath $repoTop -NoPair:$NoPair -TimeoutMin $ChainTimeoutMin
+  foreach ($l in $e.Lines) { Write-Output $l }
+  $k12 = $(if ($e.Key) { $e.Key.Substring(0, 12) } else { 'none' })
+  $sup = $(if ($e.Superseded) { ' superseded=' + $e.Superseded } else { '' })
+  if ($e.Started) {
+    Write-Output (Format-RhComplete $e.Record)
+    $vb = $(if ($e.Record.result -eq 'blind') { ' blind=' + $e.Record.blind } else { '' })
+    Write-Output ('CHAIN-REHEARSAL-EARLY-COMPLETE started=yes reason=rehearsed verdict={0}{1} key={2}{3}' -f $e.Record.result, $vb, $k12, $sup)
+    exit (Get-RhExitCode $e.Record.result)
+  }
+  $benign = @('not-chain', 'verdict-exists', 'in-flight', 'stopped-before-start')
+  Write-Output ('CHAIN-REHEARSAL-EARLY-COMPLETE started=no reason={0} key={1}{2}' -f $e.Reason, $k12, $sup)
+  if ($benign -contains $e.Reason) { exit 0 } else { exit 3 }
 }
 if ($ListSet) {
   if ($CheckPush -or $ForPush) {
@@ -1436,21 +2023,49 @@ if ($ForPush) {
     Write-Output 'CHAIN-REHEARSAL-CHECK-COMPLETE code=3 outcome=could-not-rehearse'
     exit 3
   }
-  $line = 'refs/heads/' + $Branch + ' ' + ([string]$hh.stdout).Trim() + ' refs/heads/' + $Branch + ' ' + ([string]$rr.stdout).Trim()
+  $headSha = ([string]$hh.stdout).Trim(); $originSha = ([string]$rr.stdout).Trim()
+  $line = 'refs/heads/' + $Branch + ' ' + $headSha + ' refs/heads/' + $Branch + ' ' + $originSha
   $bypass = [string]$env:TC_NO_REHEARSAL
-  $d = Get-RhPushDecision -Repo $repoTop -RefLines @($line) -Branch $Branch -VerdictDir $vdir -Today (Get-Date) -Bypass $bypass
-  if (-not $bypass -and ($d.Outcome -eq 'no-verdict' -or $d.Outcome -eq 'stale')) {
-    Write-Output 'chain-rehearsal: this push changes the chain and has no usable rehearsal verdict - rehearsing HEAD now, OUTSIDE the push lock.'
-    $rec = Invoke-RhRehearsal -Repo $repoTop -Commit 'HEAD' -SourceRoot $Source -Remote $Remote -Branch $Branch -VerdictDir $vdir -NoPair:$NoPair -TimeoutMin $ChainTimeoutMin
-    Write-Output (Format-RhComplete $rec)
-    $d = Get-RhPushDecision -Repo $repoTop -RefLines @($line) -Branch $Branch -VerdictDir $vdir -Today (Get-Date) -Bypass $bypass
-  }
-  foreach ($l in $d.Lines) { Write-Output $l }
-  Write-Output ('CHAIN-REHEARSAL-CHECK-COMPLETE code={0} outcome={1}' -f $d.Code, $d.Outcome)
-  exit $d.Code
+  $decRepo = $repoTop
+  $stack = $null
+  try {
+    # -STACKFILE / -ONTO (W9.1 step 1, for W9.2): the push itself is still judged chain-touching on HEAD against
+    # <Remote>/<Branch>; when it is, the verdict looked up and rehearsed is the STACKED tip's, so a queue member finds
+    # the key the tickets ahead of it will leave behind.
+    if ($StackFile -or $Onto) {
+      $tr0 = Get-RhTrigger -Repo $repoTop -Base $originSha -Tip $headSha
+      if (-not $tr0.Absent -and ($tr0.Blind -or @($tr0.Touched).Count -gt 0)) {
+        $stack = New-RhStack -Repo $repoTop -Commit $headSha -Onto $Onto -StackFile $StackFile
+        if (-not $stack.Ok) {
+          if ($stack.Blind -eq 'stack-conflict') { Write-Output (Format-RhStackConflict $stack) }
+          Write-Output ('chain-rehearsal: COULD NOT EVALUATE blind=' + $stack.Blind + ' - ' + $stack.Why)
+          Write-Output ('CHAIN-REHEARSAL-CHECK-COMPLETE code=3 outcome=could-not-rehearse blind=' + $stack.Blind)
+          exit 3
+        }
+        $decRepo = $stack.Repo
+        $line = 'refs/heads/' + $Branch + ' ' + $stack.Tip + ' refs/heads/' + $Branch + ' ' + $stack.Onto
+        Write-Output ('chain-rehearsal: judging the STACKED tip ' + $stack.Tip.Substring(0, 9) + ': ' + $headSha.Substring(0, 9) + ' onto ' + $stack.Onto.Substring(0, 9) + ' with ' + ($stack.Applied) + ' commit(s) replayed')
+      }
+    }
+    $d = Get-RhPushDecision -Repo $decRepo -RefLines @($line) -Branch $Branch -VerdictDir $vdir -Today (Get-Date) -Bypass $bypass
+    if (-not $bypass -and ($d.Outcome -eq 'no-verdict' -or $d.Outcome -eq 'stale')) {
+      Write-Output 'chain-rehearsal: this push changes the chain and has no usable rehearsal verdict - rehearsing HEAD now, OUTSIDE the push lock.'
+      $rec = Invoke-RhRehearsal -Repo $repoTop -Commit 'HEAD' -SourceRoot $Source -Remote $Remote -Branch $Branch -VerdictDir $vdir -NoPair:$NoPair -TimeoutMin $ChainTimeoutMin -Stack $stack
+      Write-Output (Format-RhComplete $rec)
+      if ($rec.result -eq 'blind' -and $rec.blind -eq 'stopped') {
+        Write-Output 'chain-rehearsal: STOPPED - this rehearsal''s stop file appeared, so it ended without a verdict; nothing is recorded for this content'
+        Write-Output 'CHAIN-REHEARSAL-CHECK-COMPLETE code=3 outcome=could-not-rehearse blind=stopped'
+        exit 3
+      }
+      $d = Get-RhPushDecision -Repo $decRepo -RefLines @($line) -Branch $Branch -VerdictDir $vdir -Today (Get-Date) -Bypass $bypass
+    }
+    foreach ($l in $d.Lines) { Write-Output $l }
+    Write-Output ('CHAIN-REHEARSAL-CHECK-COMPLETE code={0} outcome={1}' -f $d.Code, $d.Outcome)
+    exit $d.Code
+  } finally { Remove-RhStack $stack }
 }
 
-$rec = Invoke-RhRehearsal -Repo $repoTop -Commit $Commit -SourceRoot $Source -Remote $Remote -Branch $Branch -VerdictDir $vdir -NoPair:$NoPair -TimeoutMin $ChainTimeoutMin
+$rec = Invoke-RhRehearsal -Repo $repoTop -Commit $Commit -SourceRoot $Source -Remote $Remote -Branch $Branch -VerdictDir $vdir -NoPair:$NoPair -TimeoutMin $ChainTimeoutMin -Onto $Onto -StackFile $StackFile
 Write-Output ('chain-rehearsal: {0} at {1} over data from {2}: {3}' -f $rec.result.ToUpperInvariant(), $(if ($rec.commit) { $rec.commit.Substring(0, 9) } else { $Commit }), $(if ($rec.data_date) { $rec.data_date } else { '-' }), $rec.cause)
 if ($rec.stages) { Write-Output ('chain-rehearsal: stages ' + ((@($rec.stages.Keys) | ForEach-Object { $_ + '=' + $rec.stages[$_] }) -join ' ')) }
 foreach ($w in @($rec.words | Select-Object -First 12)) { Write-Output ('    ' + $w) }
