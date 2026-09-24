@@ -61,6 +61,9 @@
 # -Include takes ONE string split on ';' (a list into -File arrives as one string, ops-and-gates.md).
 # Exit 0 report produced, 3 could not evaluate (bad target or spec, red control, original changed).
 # ---------------------------------------------------------------------------------------------------
+# Its declared inputs (lib\gate-input-key.ps1): the two libraries it dot-sources. -SelfTest builds its fixture tree,
+# its lib\ and its target under %TEMP% and mirrors THAT tree, never this one.
+# gate-inputs: lib\guard-contract.ps1, lib\selftest-verdict.ps1
 [CmdletBinding()]
 param(
   [string]$Target = '',

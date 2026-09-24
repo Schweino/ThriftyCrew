@@ -63,6 +63,11 @@ param(
   [switch]$SelfTest,
   [int]$ReadWaitMs = 3000     # the settled-read bound; lib\json-io.ps1 records where 3000 came from. Fixtures shorten it.
 )
+# Its declared inputs (lib\gate-input-key.ps1): the three libraries it dot-sources, which its self-test also copies into a
+# temp mirror. Every queue and carriage ledger a case writes is a temp file; the live carriage.json is read only as an
+# md5 before and after, to prove the run left it alone, so its content is not an input (it is still hashed, because
+# this file names it). The live queue is never opened by -SelfTest.
+# gate-inputs: lib\json-io.ps1, lib\atomic-write.ps1, lib\ledger-fixture.ps1
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile, Read-JsonFileSettled: PS 5.1 decodes a BOM-less file with the ANSI codepage, and a replace window is not an empty queue
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\atomic-write.ps1')   # Write-TcAtomicFile: a lock-free reader must not cost a writer its write

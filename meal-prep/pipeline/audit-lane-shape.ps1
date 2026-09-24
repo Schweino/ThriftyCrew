@@ -41,6 +41,10 @@ $ErrorActionPreference = 'Stop'
 # migrate-prose-tokens' first -SelfTest run execute the LIVE path.
 $runSelfTest = [bool]$SelfTest; $runJson = [bool]$Json
 
+# Its declared inputs (lib\gate-input-key.ps1): the two libraries it dot-sources. -SelfTest builds every run dir under
+# %TEMP% and runs this script as a child over them; -QueueScript defaults to grocery\ingredient-queue.ps1 and is read by
+# nothing, and that file is still hashed because this one names it.
+# gate-inputs: lib\guard-contract.ps1, grocery\native-lib.ps1
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = Split-Path -Parent $here                      # ...\meal-prep
 $repo = Split-Path -Parent $mp                        # ...\income

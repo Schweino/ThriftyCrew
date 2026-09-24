@@ -40,6 +40,9 @@
 #   .\audit-lift-completeness.ps1
 #   .\audit-lift-completeness.ps1 -SelfTest
 # Exit 0 clean, 2 an incomplete lift, 3 could not evaluate.
+# Its declared inputs (lib\gate-input-key.ps1): the one library it dot-sources. -SelfTest writes every script it scans
+# into a temp directory; builder.ps1 and merger.ps1 are names inside that fixture, not files of this checkout.
+# gate-inputs: lib\guard-contract.ps1
 # ---------------------------------------------------------------------------------------------------
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param(

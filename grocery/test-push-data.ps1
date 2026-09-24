@@ -16,6 +16,10 @@
   Run:  powershell -NoProfile -File grocery\test-push-data.ps1
   Exit: 0 pass, 1 a case failed, 3 could not find the lane (BLIND - nothing was proven).
 #>
+# Its declared inputs (lib\gate-input-key.ps1): the two libraries it dot-sources, and push-data.ps1, whose commit lane
+# it cuts out and EXECUTES, so push-data is walked like a library (json-io, bot-paths, chain-verdict-lib) rather than
+# read as text. Every repo it runs the lane in is a throwaway under %TEMP%; nothing of this checkout's data is read.
+# gate-inputs: grocery\push-data.ps1, lib\bot-paths.ps1, lib\git-repo-env.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)   # accepted so ops\run-gates.ps1 discovers this file; the cases run either way
 $ErrorActionPreference = 'Continue'

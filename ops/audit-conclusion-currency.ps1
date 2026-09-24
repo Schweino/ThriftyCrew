@@ -84,6 +84,10 @@
   EXIT: 0 held, tightened or able to tighten, 2 the count rose or -Tighten refused an implausible fall, 3 could not
   evaluate (no documents, no git, or a baseline that is absent or unreadable on a run that is not -Accept).
 #>
+# Its declared inputs (lib\gate-input-key.ps1): the four libraries it dot-sources, and the design\EVAL-* and MEASURE-*
+# documents, whose LISTING one clean-twin case reads (the population is not empty). Every other case runs on literals or
+# on this script as a child over a temp repository with a temp baseline; the real baseline is never read by -SelfTest.
+# gate-inputs: lib\guard-contract.ps1, lib\ratchet.ps1, lib\git-blob-lib.ps1, lib\git-repo-env.ps1, design\EVAL-*.md, design\MEASURE-*.md
 [CmdletBinding()]
 param([switch]$SelfTest, [switch]$Json, [switch]$Accept, [switch]$ReportOnly, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '',
       [switch]$PairState, [string]$PairDoc = '', [switch]$ListHarnessSources)
