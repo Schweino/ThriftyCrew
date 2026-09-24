@@ -5,7 +5,7 @@ item's files, so they are filed here rather than fixed.
 
 ## one stale status line would make 83 of 86 plan-citation warnings, and from 2026-09-30 refusals
 
-`NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+`DONE` `queue-7`
 
 **What was measured.** `ops/plan_citation.py --replay 2026-09-16` (harness blob `3e3fc44542991632a8ba87a0ff2101bc16c0dca3`,
 run from a linked worktree against origin/main at `23778c0760d5` on 2026-09-23) judges every first-parent, non-merge
@@ -31,6 +31,17 @@ first rung is Brad reading section 7 of that plan and saying which it is before 
 **Not done here.** The plan file was not edited (it is not this lane's file), and REFUSE_FROM was not moved: D18 fixed
 it at 7 days after landing.
 
+**ANSWERED 2026-09-24, ruled by Brad: "Close 1-7, new plan for 8-11 (Recommended)".** The source plan's Status line
+now opens with DONE (steps 1 to 7), and steps 8 to 11, R18, R11 and the step 3b build moved to
+`design/PLAN-zero-alert-days-remainder-2026-09-24.md`, which names to the check only the files no other lane writes
+and names a shared file only while its step is being built. `plan_state()` now reads the source plan as `finished`
+and the new one as `under-way`. Measured with the same harness (blob `3e3fc44542991632a8ba87a0ff2101bc16c0dca3`) over
+the same window, 2026-09-16 to `23778c0760d5`, as a counterfactual through the same `judge()` (the replay judges each
+commit against its parent's plans, so a plain re-run cannot see a later Status change): of 572 session commits, 86
+warnings before and 4 after, and all 4 name `PLAN-push-derived-conflicts-2026-09-23`. Over 2026-09-16 to origin/main
+at `da90eea25`: 681 session commits, 93 warnings before and 9 after (push-derived-conflicts 7, bot-checkout-self-heal
+2). The new plan's section 4 has the table and the variant that was tried first.
+
 ## a store_citation crash refuses the commit, because the hook reads its exit 1 as a refusal
 
 `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
@@ -50,3 +61,7 @@ the same contract: return a dedicated code for a refusal, wrap `run_commit_check
 and a traceback and returns 0, and the hook's store block maps codes the same way. Its own self-test would need a crash
 stub case and a refusal case through the real hook. Not built here: `ops/store_citation.py` is not this lane's file, and
 changing what its exit code means is a change to a rule Brad ruled on (2026-09-18).
+
+**RULED 2026-09-24, ruled by Brad: "Match plan-citation (Recommended)".** `ops/store_citation.py`'s crash prints BLIND
+and lets the commit land, and it refuses only on a dedicated refusal code, the same contract `ops/plan_citation.py`
+has (`REFUSE_EXIT = 10`). The build is owed, and a sibling agent builds it; this record is text only.

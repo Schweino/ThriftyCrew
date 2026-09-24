@@ -1,7 +1,8 @@
 # PLAN: days with no alerts, and triage that prevents instead of repairs
 
-**Status: RULED 2026-09-10, building in the order of section 7.** Brad's answers to every open question are
-recorded in section 7, which supersedes the options in section 1 wherever they differ.
+**Status: DONE 2026-09-24 for build steps 1 to 7 (ruled 2026-09-10); steps 8 to 11, R18, R11 and step 3b's build
+moved to design/PLAN-zero-alert-days-remainder-2026-09-24.md by Brad's ruling 2026-09-24.** Brad's answers to every
+open question are recorded in section 7, which supersedes the options in section 1 wherever they differ.
 
 Brad's goal, 2026-09-10: "get to a place where we have days with no alerts and triage agent is planning
 fixes to future proof and not just immediate fix."
@@ -362,6 +363,13 @@ that day's 08:00 run succeeding.
     - 10 units read variables inside code built at run time, which the variable pass does not model.
 - **Next:** R18 (own Chrome tabs) and R11 (Aldi and Fareway page JSON) change the Chrome capture code, so they start
   after the 2026-09-11 08:00 capture and the R12 probe. Then step 8, the row contract.
+- **2026-09-24: this plan closes at step 7, and the rest moves to its own plan** (RULED close 1 to 7 by Brad,
+  2026-09-24, "Close 1-7, new plan for 8-11 (Recommended)"). Asked through the question tool after the plan-citation
+  replay (backlog inbox `pd-plancite-2026-09-23.md`, first finding) found that 83 of its 86 warnings came from this
+  plan's Status line still reading RULED while the daily lanes changed the files it names. Steps 1 to 7 stand as
+  recorded above. Steps 8 to 11, R18, R11 and the step 3b build (TRIAL DONE, NOT BUILT above) are carried, each with
+  its bar verbatim, to `PLAN-zero-alert-days-remainder-2026-09-24.md` in `design/`, which is now where they are built
+  and cited. Nothing above this line was rewritten.
 
 ### Ruling 7 result: the store probes (`design/PROBE-store-direct-data-2026-09-10.md`)
 
