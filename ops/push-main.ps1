@@ -142,6 +142,13 @@
   back: the hook decides. What remains for the lock's hand-back is a move in the seconds between the catch-up fetch and
   the fetch inside the lock.
 
+  LOCK ONLY THE SWAP (2026-09-23, W9.4). Inside the lock the fetch only ASKS whether origin moved since the last outside
+  round. Unmoved, the push goes, and the hook replays the recorded run-gates verdict and test-auditors pass (about 25 s).
+  Moved, the lock is HANDED BACK without a rebase under it: the next round rebases outside (a conflict refuses, phase
+  catchup; rebase_phases says handback), re-runs the legs warm, and takes the lock again, at most $script:PmMaxHandBacks
+  (3) times. At the cap the rebase runs inside the lock as 5841e96b1 did, with the verdict check as the backstop, so the
+  rule degrades and never refuses. A hand-back never spends the rehearsal budget unless its rehearsal leg REHEARSED.
+
   SCOPE OF A CLEAN REPORT: exit 0 means the remote accepted this push while this process held the lock. It says
   nothing about a pusher that does not take the lock - an older checkout, a plain `git push --no-verify`, or another
   machine - and nothing about whether main is healthy afterwards.
@@ -438,9 +445,18 @@ $script:PmMaxRehearsalRounds = 3
 # number would catch. Past it the push goes to the lock, where the in-lock sync and the verdict check decide as the day
 # before (D11): degrade, never refuse. What it does when the producer stops: when main stops moving, no catch-up round runs.
 $script:PmMaxCatchUpRounds = 3
-# A HARD BOUND ON LEG SETS, so no combination of catch-ups and hand-backs can loop: round 1, every catch-up round, and
-# every rehearsal round. Reached only when the verdict check and the rehearsal disagree, and then refused.
-$script:PmMaxLegSets = 1 + $script:PmMaxCatchUpRounds + $script:PmMaxRehearsalRounds
+
+# LOCK ONLY THE SWAP (2026-09-23, W9.4): how many times the lock is HANDED BACK when origin moved between the last outside
+# round and the fetch inside the lock. Each hand-back releases the lock, rebases outside it, re-runs the legs warm on their
+# own keys, and takes the lock again, so no rebase and no verdict check runs while the lock is held and the hook replays
+# its recorded verdicts in about 25 s. 3 is the first plausible value, not swept; at 18 landings an hour and a 30 s window
+# about 14% of pushes are handed back once, and 3 in a row is about 0.3% (0.14 cubed, the review's model). AT THE CAP the
+# push rebases INSIDE the lock as 5841e96b1 did, and the in-lock verdict check is the backstop: never a refusal, so the rule
+# cannot livelock. When main stops moving, no hand-back runs.
+$script:PmMaxHandBacks = 3
+# A HARD BOUND ON LEG SETS, so no combination of catch-ups and hand-backs can loop: round 1, every catch-up round, every
+# lock hand-back, and every rehearsal round. Reached only when the verdict check and the rehearsal disagree, and then refused.
+$script:PmMaxLegSets =1 + $script:PmMaxCatchUpRounds + $script:PmMaxRehearsalRounds + $script:PmMaxHandBacks
 
 function Invoke-TcCheckWithRetry {
   <# The verdict check (the -RehearsalCheck seam, Invoke-TcRehearsalCheck by default), RETRIED ONCE when it cannot decide
@@ -598,7 +614,7 @@ function Invoke-TcSyncToRemote {
      push is refused-already-on-main. A dirty tree hands back its paths (DirtyPaths, sorted Ordinal, at most
      $script:TcPmDirtyCap), and its message says whether the dirt was there at the start or appeared while the legs ran,
      and names the main-checkout route when this is the main checkout. #>
-  param([string]$Dir, [string]$Remote, [string]$Branch, [string]$Phase = 'inlock', [bool]$NoRebase = $false)
+  param([string]$Dir, [string]$Remote, [string]$Branch, [string]$Phase = 'inlock', [bool]$NoRebase = $false, [bool]$ProbeOnly = $false)
   $outside = -not [string]::Equals($Phase, 'inlock', [StringComparison]::Ordinal)
   $fetchArgs = @('fetch', '--quiet', $Remote, $Branch)
   $f = Invoke-TcGit -Dir $Dir -Arguments $fetchArgs
@@ -659,13 +675,18 @@ function Invoke-TcSyncToRemote {
   }
   Say ("push-main: {0} commit(s) to land on {1}/{2}; {3}." -f $ahead, $Remote, $Branch, $plan.Reason)
   $siblings = $null
+  if ($plan.NeedsRebase -and $ProbeOnly) {
+    # THE HAND-BACK PROBE (W9.4): inside the lock, only WHETHER origin moved is asked; the rebase happens outside, after
+    # the lock is handed back. Nothing is printed or merged here, because this runs while the lock is held.
+    return (New-TcSyncResult -Code 0 -Head $head -Rem $rem -Ahead $ahead -Degraded $degraded -RebaseNeeded $true)
+  }
   if ($plan.NeedsRebase -and $NoRebase) {
     # A DRY RUN (or a round whose fetch failed) NEVER REBASES (W2.1R step 7): it says what a rebase would meet, from one
     # squashed merge-tree, which is approximate by construction and labelled so.
     $approx = Get-TcMergeTreeConflicts -Dir $Dir -Head 'HEAD' -Target $rem
     $cl = $(if ($null -eq $approx) { 'could not be computed' } elseif ($approx.Count) { 'would conflict on ' + ($approx -join ', ') } else { 'would not conflict' })
     Say ("push-main: a rebase onto {0} is needed and was NOT run (approximate, from one squashed merge-tree: it {1})." -f $rem.Substring(0, [Math]::Min(9, $rem.Length)), $cl)
-    return (New-TcSyncResult -Code 0 -Head $head -Rem $rem -Ahead $ahead -Degraded $degraded)
+    return (New-TcSyncResult -Code 0 -Head $head -Rem $rem -Ahead $ahead -Degraded $degraded -RebaseNeeded $true)
   }
   if ($plan.NeedsRebase) {
     # WHAT THE REBASE BRINGS IN, read before it moves HEAD: any main commit whose subject is one of this branch's.
@@ -727,14 +748,16 @@ function New-TcSyncResult {
      exists before it reads one. The array fields are passed through untouched: a caller hands in $null, an empty array
      or the list itself, and a PARAMETER keeps each as it came, which a function's return value would not (PowerShell
      unrolls an array returned from a function, so an empty one arrives as $null). Degraded is '' or a comma list of
-     what this sync could not do outside the lock (fetch, rebase); DirtyPaths is $null unless the tree was dirty. #>
+     what this sync could not do outside the lock (fetch, rebase); DirtyPaths is $null unless the tree was dirty;
+     RebaseNeeded says origin moved past this branch and the rebase was NOT run (a dry run, or the hand-back probe). #>
   param([int]$Code, [string]$Outcome = '', [bool]$Rebased = $false, [string]$Head = '', [string]$Rem = '', [int]$Ahead = 0,
     [string]$Message = '', [bool]$RebaseTried = $false, $Siblings = $null, $ConflictFiles = $null, [string]$ConflictScope = '',
-    $ConflictFilesAll = $null, [string]$ConflictAllBasis = '', $DirtyPaths = $null, [string]$Degraded = '')
+    $ConflictFilesAll = $null, [string]$ConflictAllBasis = '', $DirtyPaths = $null, [string]$Degraded = '', [bool]$RebaseNeeded = $false)
   return [pscustomobject]@{
     Code = $Code; Outcome = $Outcome; Rebased = $Rebased; Head = $Head; Rem = $Rem; Ahead = $Ahead; Message = $Message
     RebaseTried = $RebaseTried; Siblings = $Siblings; ConflictFiles = $ConflictFiles; ConflictScope = $ConflictScope
     ConflictFilesAll = $ConflictFilesAll; ConflictAllBasis = $ConflictAllBasis; DirtyPaths = $DirtyPaths; Degraded = $Degraded
+    RebaseNeeded = $RebaseNeeded
   }
 }
 
@@ -1417,6 +1440,10 @@ function Invoke-TcPushMain {
     # fetches made (one after every round's legs while the cap allows).
     catchups             = 0
     catchup_fetches      = 0
+    # W9.4: lock hand-backs (origin moved between the last outside round and the fetch inside the lock), and the integer
+    # seconds spent outside from each hand-back to the next lock take.
+    hand_backs           = 0
+    handback_sec         = 0
   }
   # ONE ROW PER RUN, and at most one (review of W0.1R, 2026-09-23): the guard below writes a row for a throw that no path
   # wrote one for, so every path now ends here, and a path that already wrote one is never written twice.
@@ -1485,6 +1512,12 @@ function Invoke-TcPushMain {
     $rehearsedRounds = 0
     $syncFirst = $true
     $lastSync = $null
+    # W9.4: lock hand-backs so far, the phase the next round's own sync carries (handback after a hand-back), and the
+    # outside time spent from each hand-back to the next lock take.
+    $handBacks = 0
+    $nextSyncPhase = 'catchup'
+    $handBackSw = $null
+    $handBackTotal = 0.0
     while ($true) {
       $round++
       if ($round -gt $script:PmMaxLegSets) {
@@ -1499,7 +1532,10 @@ function Invoke-TcPushMain {
       # WHICH PHASE A REFUSAL BEFORE THE LOCK BELONGS TO (W0.1R step 4): round 1's fetch and rebase are the pre-flight, and
       # everything before the lock in a later round is the catch-up. Round 1's LEGS carry no phase: their outcome already
       # names where the push stopped, and a row from before this loop existed reads the same way.
-      $syncPhase = $(if ($round -eq 1) { 'preflight' } else { 'catchup' })
+      $syncPhase = $(if ($round -eq 1) { 'preflight' } else { $nextSyncPhase })
+      $nextSyncPhase = 'catchup'
+      # A REFUSAL IN A HAND-BACK ROUND'S SYNC IS A CATCH-UP REFUSAL (W9.4 step 2): rebase_phases says handback, phase catchup.
+      $syncRefusePhase = $(if ($syncPhase -ceq 'handback') { 'catchup' } else { $syncPhase })
       $legPhase = $(if ($round -eq 1) { $null } else { 'catchup' })
       $legsDegraded = $false
 
@@ -1521,7 +1557,7 @@ function Invoke-TcPushMain {
       if ($round -eq 1 -and $s.Rem) { $pmRow['preflight_sha'] = $s.Rem }
       if ($s.Code -ne 0) {
         Say $s.Message
-        $outcome = $s.Outcome; $ledgerState = 'not-taken'; $pmRow['phase'] = $syncPhase
+        $outcome = $s.Outcome; $ledgerState = 'not-taken'; $pmRow['phase'] = $syncRefusePhase
         & $writeRow
         return $s.Code
       }
@@ -1680,6 +1716,7 @@ function Invoke-TcPushMain {
       # ---- 4. THE LOCK: a final fetch, a rebase only if origin moved again, and the ref update ----
       $lock = Enter-TcPushLock @enter
       $curPhase = 'inlock'
+      if ($handBackSw) { $handBackSw.Stop(); $handBackTotal += $handBackSw.Elapsed.TotalSeconds; $pmRow['handback_sec'] = [int][math]::Round($handBackTotal); $handBackSw = $null }
       # HOW LONG THE LOCK IS HELD (lock_held_ms): from the grant to Exit-TcPushLock, on this process's own clock, summed over
       # every take. A take that did not hold the lock has no hold. Every take counts in lock_takes and lock_wait_ms_total,
       # and the check word starts at not-run, so the row keeps the LAST take's check.
@@ -1701,7 +1738,9 @@ function Invoke-TcPushMain {
       }
       $again = $false
       try {
-        $s2 = Invoke-TcSyncToRemote -Dir $Dir -Remote $Remote -Branch $Branch -Phase 'inlock' -NoRebase $DryRun
+        # LOCK ONLY THE SWAP (W9.4): below the hand-back cap, the fetch inside the lock only ASKS whether origin moved.
+        $handBackNow = (-not $DryRun) -and ($handBacks -lt $script:PmMaxHandBacks)
+        $s2 = Invoke-TcSyncToRemote -Dir $Dir -Remote $Remote -Branch $Branch -Phase 'inlock' -NoRebase $DryRun -ProbeOnly $handBackNow
         $null = Invoke-TcRowReader 'sync' { Add-TcSyncReadings -Row $pmRow -Sync $s2 -Phase 'inlock' }
         # WHAT THE REMOTE HOLDS NOW, read under the lock. Against $ledgerBase it says whether the remote moved while this
         # push queued - recorded whatever happens next, including on the paths that refuse.
@@ -1711,9 +1750,20 @@ function Invoke-TcPushMain {
           $outcome = $s2.Outcome
           return $s2.Code
         }
-        if ($s2.Rebased) {
+        if ($handBackNow -and $s2.RebaseNeeded) {
+          # THE HAND-BACK (W9.4 step 2): origin moved since the last outside round judged this content, so the lock is
+          # released WITHOUT a rebase under it; the next round rebases outside (a conflict refuses, phase catchup), re-runs
+          # the legs warm on their own keys, and takes the lock again. A hand-back counts here, never in the rehearsal
+          # budget, unless its rehearsal leg REHEARSED.
+          $handBacks++
+          $pmRow['hand_backs'] = $handBacks
+          $again = $true
+          $nextSyncPhase = 'handback'
+          Say ("push-main: origin moved since the last outside round, so the lock is handed back without a rebase under it (hand-back {0} of at most {1}); the rebase and the legs run outside it." -f $handBacks, $script:PmMaxHandBacks)
+        } elseif ($s2.Rebased) {
           $rebasedAny = $true
-          # THE TRADE-OFF, SAID PLAINLY: origin moved AGAIN between the rebase outside the lock and this one. When that
+          # AT THE HAND-BACK CAP (W9.4 step 3) the rebase runs inside the lock, as 5841e96b1 did, and the verdict check is
+          # the backstop. THE TRADE-OFF, SAID PLAINLY: origin moved AGAIN between the rebase outside the lock and this one. When that
           # move touched no chain-manifest script the verdict key is unchanged and the rehearsal above still covers the
           # content, so this push lands now. When it did touch one, no verdict covers the new content and the hook would
           # refuse, so the lock is handed back and this push gates and rehearses again OUTSIDE it - a push can still
@@ -1776,6 +1826,7 @@ function Invoke-TcPushMain {
         # back to rehearse again writes no row; the push's one row is written when it finally lands or refuses.
         if ($lockSw) { $lockSw.Stop(); $lockHeldTotal += $lockSw.Elapsed.TotalMilliseconds; $pmRow['lock_held_ms'] = [long][math]::Round($lockHeldTotal) }
         Exit-TcPushLock $lock
+        if ($again -and $nextSyncPhase -ceq 'handback') { $handBackSw = [Diagnostics.Stopwatch]::StartNew() }
         if (-not $again) {
           # EVERYTHING THAT ENDS IN HERE WITHOUT LANDING STOPPED IN THE LOCK: a refusal, a rejected push, a fetch that
           # failed, or a throw that left the outcome unknown. A landing and a dry run carry no phase.
@@ -2220,12 +2271,21 @@ $m.Dispose()
     # inside the lock. Invoke-WithLockMover reaches it: for one run, Enter-TcPushLock is wrapped so that, immediately
     # before each real take, it applies the next entry of $script:lockMoves (a file name moved on origin, or a scriptblock),
     # and records the take's WaitedMs as the lock reported it. The real function is put back in finally.
+    # W9.4: -LmCap is the lock hand-back cap for the run. The cases written before W9.4 pass 0 (the default): they are about
+    # what happens AT the cap, where the lock rebases inside and the verdict check decides, which 0 reaches at the first
+    # take. The W9.4 cases pass -1, which keeps the production cap. -LmDir names the checkout whose HEAD is recorded at
+    # every take (after the grant) and every release, so a case can prove no rebase ran while the lock was held.
     $script:lockMoves = @()
     $script:lockWaitsSeen = [Collections.Generic.List[double]]::new()
+    $script:lockHeads = [Collections.Generic.List[string]]::new()
+    $script:lmDir = ''
     $script:enterTcPushLockReal = ${function:Enter-TcPushLock}
-    function Invoke-WithLockMover([scriptblock]$LmBody) {
-      $script:lockWaitsSeen.Clear()
+    $script:exitTcPushLockReal = ${function:Exit-TcPushLock}
+    $script:handBackCapReal = $script:PmMaxHandBacks
+    function Invoke-WithLockMover([scriptblock]$LmBody, [int]$LmCap = 0, [string]$LmDir = '') {
+      $script:lockWaitsSeen.Clear(); $script:lockHeads.Clear(); $script:lmDir = $LmDir
       try {
+        if ($LmCap -ge 0) { $script:PmMaxHandBacks = $LmCap }
         function script:Enter-TcPushLock {
           param([int]$WaitSec, [int]$PollMs, [string]$Prefix, [string]$QueueRoot, [scriptblock]$OnWait, [switch]$NoInherit)
           if ($script:lockMoves.Count) {
@@ -2234,11 +2294,19 @@ $m.Dispose()
           }
           $lk = & $script:enterTcPushLockReal @PSBoundParameters
           [void]$script:lockWaitsSeen.Add([double]$lk.WaitedMs)
+          if ($script:lmDir) { [void]$script:lockHeads.Add('take ' + ([string](@(& git -C $script:lmDir rev-parse HEAD 2>$null))[0]).Trim()) }
           return $lk
+        }
+        function script:Exit-TcPushLock {
+          param($Lock)
+          if ($script:lmDir) { [void]$script:lockHeads.Add('release ' + ([string](@(& git -C $script:lmDir rev-parse HEAD 2>$null))[0]).Trim()) }
+          & $script:exitTcPushLockReal $Lock
         }
         return (& $LmBody)
       } finally {
+        $script:PmMaxHandBacks = $script:handBackCapReal
         Set-Item -LiteralPath 'function:script:Enter-TcPushLock' -Value $script:enterTcPushLockReal
+        Set-Item -LiteralPath 'function:script:Exit-TcPushLock' -Value $script:exitTcPushLockReal
       }
     }
 
@@ -2522,7 +2590,8 @@ $m.Dispose()
     $script:cbGates = 0
     $cbGate = { param($d) $script:cbGates++; & $moveOrigin 'notes.txt'; [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
     $ledCb = Join-Path $tmp 'ledcb'
-    $cbCap = Invoke-StCapture { Invoke-TcPushMain -Dir $cb -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $cbGate -RehearsalRunner $rhModel -RehearsalCheck $rhCheck -LedgerRoot $ledCb }
+    # At hand-back cap 0 (Invoke-WithLockMover's default), so the lock rebases the last move inside, as this bar is about the catch-up.
+    $cbCap = Invoke-StCapture { Invoke-WithLockMover { Invoke-TcPushMain -Dir $cb -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $cbGate -RehearsalRunner $rhModel -RehearsalCheck $rhCheck -LedgerRoot $ledCb } }
     $cbRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledCb)
     $cbRows = @($cbRaw)
     $cbRow = $(if ($cbRows.Count) { $cbRows[0] } else { $null })
@@ -2630,7 +2699,71 @@ $m.Dispose()
     T ($kMF + '  after 3 rehearsals a catch-up that moves the key again is refused-rehearsal-churn before the lock (phase catchup, no fourth rehearsal, lock_takes 0), naming a manifest move') `
       ($cc3Cap.Result -eq 1 -and $script:rhSeen.Count -eq 3 -and $cc3Rows.Count -eq 1 -and [string]$cc3Row.outcome -ceq 'refused-rehearsal-churn' -and [string]$cc3Row.phase -ceq 'catchup' -and [int]$cc3Row.lock_takes -eq 0 -and [int]$cc3Row.rehearsed -eq 3 -and $cc3Cap.Text -match 'a manifest move') `
       ("rc={0} rehearsals={1} rows={2} outcome={3} phase={4} takes={5} rehearsed={6}" -f $cc3Cap.Result, $script:rhSeen.Count, $cc3Rows.Count, $(if ($cc3Row) { $cc3Row.outcome }), $(if ($cc3Row) { $cc3Row.phase }), $(if ($cc3Row) { $cc3Row.lock_takes }), $(if ($cc3Row) { $cc3Row.rehearsed }))
-    # CLEAN TWIN: a READER that throws costs its field, never the push. The gate's result says its run-gates leg took
+
+    # ---- W9.4: LOCK ONLY THE SWAP (2026-09-23) ----
+    # Founding figure (the review's model, from the plan's holds): a rebased in-lock hold of about 128 s against a 25 s
+    # replay, lock utilisation 0.64 at 18 landings an hour. Every move below is made by the lock-entry mover immediately
+    # before a real take, at the PRODUCTION hand-back cap (-LmCap -1), with HEAD recorded at every take and release.
+    # MUST FIRE: a remote that moves just before the in-lock fetch hands the lock back ONCE. No rebase ran while the lock
+    # was held (HEAD at each release equals HEAD at that take), the rebase ran outside (rebase_phases handback), and it lands.
+    $hk1 = & $newPusher 'hk1'
+    $script:rhSeen.Clear(); $script:rhMoves = @(); $script:rhVerdicts = @{}; $script:lockMoves = @('notes.txt')
+    $ledHk1 = Join-Path $tmp 'ledhbk1'
+    $rHk1 = Invoke-WithLockMover { Invoke-TcPushMain -Dir $hk1 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhModel -RehearsalCheck $rhCheck -LedgerRoot $ledHk1 } -LmCap -1 -LmDir $hk1
+    $hk1Heads = $script:lockHeads.ToArray()
+    $hk1Raw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledHk1)
+    $hk1Rows = @($hk1Raw)
+    $hk1Row = $(if ($hk1Rows.Count) { $hk1Rows[0] } else { $null })
+    $hk1Held = ($hk1Heads.Count -eq 4 -and ($hk1Heads[0] -replace '^take ', '') -ceq ($hk1Heads[1] -replace '^release ', ''))
+    T ($kMF + '  a remote that moves just before the in-lock fetch hands the lock back once: HEAD at the release equals HEAD at the take, the rebase ran outside (handback), hand_backs 1, lock_takes 2, and it lands') `
+      ($rHk1 -eq 0 -and $hk1Held -and $hk1Rows.Count -eq 1 -and [int]$hk1Row.hand_backs -eq 1 -and [int]$hk1Row.lock_takes -eq 2 -and (@($hk1Row.rebase_phases) -join ',') -ceq 'handback' -and ([string]$hk1Row.outcome).StartsWith('landed') -and $hk1Row.handback_sec -is [int]) `
+      ("rc={0} heads={1} rows={2} handBacks={3} takes={4} phases={5} outcome={6} hbSec={7}" -f $rHk1, ($hk1Heads -join '|'), $hk1Rows.Count, $(if ($hk1Row) { $hk1Row.hand_backs }), $(if ($hk1Row) { $hk1Row.lock_takes }), $(if ($hk1Row) { @($hk1Row.rebase_phases) -join ',' }), $(if ($hk1Row) { $hk1Row.outcome }), $(if ($hk1Row) { $hk1Row.handback_sec }))
+
+    # MUST FIRE, AT THE BAR (3 hand-backs): a remote that moves before EVERY in-lock fetch hands back exactly 3 times; the
+    # 4th take rebases INSIDE the lock (rebase_phases ends inlock) and the push lands. Never refused.
+    # CLEAN TWIN: after the cap's in-lock rebase, the sibling's in-lock verdict check still runs.
+    $hk3 = & $newPusher 'hk3'
+    $script:rhSeen.Clear(); $script:rhMoves = @(); $script:rhVerdicts = @{}; $script:lockMoves = @('notes.txt', 'notes.txt', 'notes.txt', 'notes.txt')
+    $ledHk3 = Join-Path $tmp 'ledhbk3'
+    $rHk3 = Invoke-WithLockMover { Invoke-TcPushMain -Dir $hk3 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhModel -RehearsalCheck $rhCheck -LedgerRoot $ledHk3 } -LmCap -1 -LmDir $hk3
+    $hk3Heads = $script:lockHeads.ToArray()
+    $hk3Raw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledHk3)
+    $hk3Rows = @($hk3Raw)
+    $hk3Row = $(if ($hk3Rows.Count) { $hk3Rows[0] } else { $null })
+    $hk3HeldSame = $true
+    for ($hi = 0; $hi -lt 6 -and ($hi + 1) -lt $hk3Heads.Count; $hi += 2) { if (($hk3Heads[$hi] -replace '^take ', '') -cne ($hk3Heads[$hi + 1] -replace '^release ', '')) { $hk3HeldSame = $false } }
+    T ($kMF + '  a remote that moves before every in-lock fetch hands back exactly 3 times (the bar), with no rebase under any of those takes; the 4th take rebases inside the lock, rebase_phases ends inlock, and it lands') `
+      ($rHk3 -eq 0 -and $hk3Rows.Count -eq 1 -and [int]$hk3Row.hand_backs -eq 3 -and [int]$hk3Row.lock_takes -eq 4 -and $hk3HeldSame -and $hk3Heads.Count -eq 8 -and `
+        (@($hk3Row.rebase_phases) -join ',') -ceq 'handback,handback,handback,inlock' -and ([string]$hk3Row.outcome).StartsWith('landed')) `
+      ("rc={0} rows={1} handBacks={2} takes={3} heldSame={4} heads={5} phases={6} outcome={7}" -f $rHk3, $hk3Rows.Count, $(if ($hk3Row) { $hk3Row.hand_backs }), $(if ($hk3Row) { $hk3Row.lock_takes }), $hk3HeldSame, $hk3Heads.Count, $(if ($hk3Row) { @($hk3Row.rebase_phases) -join ',' }), $(if ($hk3Row) { $hk3Row.outcome }))
+    T ($kCT + '  after the cap''s in-lock rebase the in-lock verdict check still runs (inlock_check covered, not not-run)') `
+      ($null -ne $hk3Row -and [string]$hk3Row.inlock_check -ceq 'covered') ("check={0}" -f $(if ($hk3Row) { $hk3Row.inlock_check }))
+
+    # MUST FIRE: a hand-back rebase that CONFLICTS refuses with phase catchup, and at the moment it conflicts (the abort
+    # seam runs the probe) another process finds the push lock FREE: the rebase ran outside it.
+    $hkc = New-Clone 'hkc'
+    [IO.File]::WriteAllText((Join-Path $hkc 'clashH.txt'), 'mine')
+    $null = & git -C $hkc add -- clashH.txt 2>$null; $null = & git -C $hkc commit -q -m 'hkc mine' 2>$null
+    $script:rhSeen.Clear(); $script:rhMoves = @(); $script:rhVerdicts = @{}; $script:lockMoves = @({ & $moveOriginText 'clashH.txt' 'theirs' })
+    $script:hkcProbe = ''
+    $script:TcPmRebaseAbort = { param($d) $script:hkcProbe = (@(& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $probeScript -Name ($prefix + '0')) -join ','); Invoke-TcGit -Dir $d -Arguments @('rebase', '--abort') }
+    $ledHkc = Join-Path $tmp 'ledhbkc'
+    try {
+      $rHkc = Invoke-WithLockMover { Invoke-TcPushMain -Dir $hkc -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhGreen -LedgerRoot $ledHkc } -LmCap -1
+    } finally { $script:TcPmRebaseAbort = { param($d) Invoke-TcGit -Dir $d -Arguments @('rebase', '--abort') } }
+    $hkcRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledHkc)
+    $hkcRows = @($hkcRaw)
+    $hkcRow = $(if ($hkcRows.Count) { $hkcRows[0] } else { $null })
+    T ($kMF + '  a hand-back rebase that conflicts refuses with phase catchup (rebase_phases handback), and another process found the lock free at the moment it conflicted') `
+      ($rHkc -eq 1 -and $hkcRows.Count -eq 1 -and [string]$hkcRow.outcome -ceq 'refused-rebase-conflict' -and [string]$hkcRow.phase -ceq 'catchup' -and (@($hkcRow.rebase_phases) -join ',') -ceq 'handback' -and `
+        [int]$hkcRow.hand_backs -eq 1 -and [int]$hkcRow.lock_takes -eq 1 -and $script:hkcProbe -ceq 'FREE') `
+      ("rc={0} rows={1} outcome={2} phase={3} phases={4} handBacks={5} takes={6} probe={7}" -f $rHkc, $hkcRows.Count, $(if ($hkcRow) { $hkcRow.outcome }), $(if ($hkcRow) { $hkcRow.phase }), $(if ($hkcRow) { @($hkcRow.rebase_phases) -join ',' }), $(if ($hkcRow) { $hkcRow.hand_backs }), $(if ($hkcRow) { $hkcRow.lock_takes }), $script:hkcProbe)
+
+    # MUST NOT FIRE: an origin that has not moved at the in-lock fetch gives hand_backs 0 and one take (the unmoving
+    # remote of the catch-up case above, read for W9.4's fields).
+    T ($kMNF + '  an unmoved origin at the in-lock fetch gives hand_backs 0, handback_sec 0 and one lock take') `
+      ($null -ne $nmRow -and [int]$nmRow.hand_backs -eq 0 -and [int]$nmRow.handback_sec -eq 0 -and [int]$nmRow.lock_takes -eq 1) `
+      ("handBacks={0} hbSec={1} takes={2}" -f $(if ($nmRow) { $nmRow.hand_backs }), $(if ($nmRow) { $nmRow.handback_sec }), $(if ($nmRow) { $nmRow.lock_takes }))    # CLEAN TWIN: a READER that throws costs its field, never the push. The gate's result says its run-gates leg took
     # 'not-a-number' seconds, so Add-TcRunnerReadings' [int] cast throws; the push must land and the row keep leg_sec.rg
     # null. NOT a throwing ScriptProperty: PowerShell swallows a getter's exception on member access and reads $null, and
     # the first version of this case, built that way, survived the mutant that removes the guard (0 reds).
@@ -3305,8 +3438,9 @@ $m.Dispose()
   # throw, a comment or a glued line would otherwise leave the rest green (ops-and-gates.md). 117 = the 38 of the
   # fetch-and-rebase-first loop, W0.1's 32, W0.1R's 8, the 15 its review added, W2.1R with W8.1's 14 (the index.lock
   # case was rewritten in place, not added), and W2.2R's 10 (9 catch-up cases, and the could-not-decide case split into a
-  # MUST NOT FIRE and a CLEAN TWIN); read off this file, not added up.
-  $expectedCases = 117
+  # MUST NOT FIRE and a CLEAN TWIN), and W9.4's 5 (the queue member's hand-back case lands with W9.2); read off this
+  # file, not added up.
+  $expectedCases = 122
   if ($cases -ne $expectedCases) { Write-Output ("FAIL  the suite ran {0} case(s) where this file holds {1}, so a case was skipped or lost" -f $cases, $expectedCases); $f++ }
   if ($f) { Write-Output ("push-main self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("push-main self-test PASS: {0} cases - led by a branch whose base the remote moved past landing on its FIRST attempt, and by a conflicting rebase being aborted rather than left half-finished under the lock" -f $cases)
