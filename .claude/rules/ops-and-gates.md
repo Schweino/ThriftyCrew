@@ -650,6 +650,14 @@ construction.
   comments are never read; prose about line endings is listed, not counted. Zero sites on day one over 839 scripts, so
   a gate at zero, not a ratchet. **Its pair is the literal-list rule above: a suite's own count catches a lost case of
   ANY shape**, which is why `audit-match-soundness` now asserts its 62.
+- **A comma binds tighter than `-and`, so a case body `a -and b, 'got'` never judges b** (2026-09-23). It parses as
+  `a -and (b, 'got')`, a two-element array is always truthy, and the case passes whatever b says: 28 case bodies in
+  `ops/rehearse-chain.ps1` (founding blob 17170b387). Write the verdict in parentheses, `((a) -and (b)), 'got'`.
+  `ops/audit-and-comma-case.ps1` holds it at push time over the AST: a `-and`, `-or` or `-xor` whose right operand is
+  an unparenthesised array literal, inside a self-test span or a labelled case call's arguments. A gate at zero outside
+  one named pin (`rehearse-chain`, while its own lane lands the rewrite); a fixture that executes the shape on purpose
+  carries `# and-comma-case:allow <reason>`. Its pair is a case harness that refuses a body not returning exactly
+  (verdict, got), which rehearse-chain's now does.
 
 - **A RULING PUSH IS RED ON PURPOSE, AND THE GATE ACCEPTS THAT RED ONLY WHEN THE PUSH CAUSES IT** (Brad's ruling,
   2026-09-19, "Teach the gate"). `ops/prepush-test-auditors.ps1` refuses a new failing test-auditors case, and the
