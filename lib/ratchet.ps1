@@ -46,6 +46,13 @@
   change, drift, a data-quality problem, a threshold edit, or the detector degrading. The history says
   something moved; it does not say which, and that is still worth having.
 
+  A MARK NOBODY CAN READ IS NOT A MARK (2026-09-24, design\backlog-inbox\pd-currency-2026-09-23.md). Eleven ratchets
+  read their baseline inside a try whose catch set it to $null, then wrote the CURRENT count as the mark whenever it was
+  $null, so a baseline left holding conflict markers by a botched rebase, or deleted, silently accepted whatever count
+  the push carried, a rise included, and exited 0. W1.2 fixed ops\audit-conclusion-currency.ps1 alone (Read-CcBaseline).
+  Read-TcRatchetBaseline is that rule once, for the rest: ABSENT, UNREADABLE and READ are three answers, the caller
+  exits 3 on the first two (Get-TcRatchetBlindToken names which) and writes nothing, and only its -Accept writes a mark.
+
   Dot-source:  . (Join-Path $repoRoot 'lib\ratchet.ps1')
   Self-test:   powershell -File lib\ratchet.ps1 -SelfTest
 
@@ -66,6 +73,34 @@
 # REPLACES-SILENT: $extra = @($names | Where-Object { $allow -notcontains $_ })
 # ENFORCED BY: ops/audit-one-way-actuators.ps1 (none)
 $__ratchetSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
+
+function Read-TcRatchetBaseline {
+  <# A ratchet's baseline as @{ State = read | absent | unreadable; Value; Doc; Why }. READ only when the file parses as
+     a JSON object whose -Field is a non-negative integer. No file is ABSENT. Anything else is UNREADABLE with its
+     reason: conflict markers, a JSON array or scalar, a missing field, a quoted "4", a fraction. The caller refuses both
+     non-read states unless it was asked to record a mark. Never throws. #>
+  param([string]$Path, [string]$Field)
+  if (-not $Path -or -not (Test-Path -LiteralPath $Path -PathType Leaf)) { return @{ State = 'absent'; Value = $null; Doc = $null; Why = 'no such file' } }
+  $doc = $null
+  try { $doc = [IO.File]::ReadAllText($Path) | ConvertFrom-Json } catch { return @{ State = 'unreadable'; Value = $null; Doc = $null; Why = 'it does not parse as JSON' } }
+  if ($null -eq $doc -or $doc -is [array] -or $doc -is [string] -or $doc -is [ValueType]) { return @{ State = 'unreadable'; Value = $null; Doc = $null; Why = 'it is not a JSON object' } }
+  $prop = $doc.PSObject.Properties[$Field]
+  if (-not $prop) { return @{ State = 'unreadable'; Value = $null; Doc = $doc; Why = ('it has no ' + $Field + ' field') } }
+  $v = $prop.Value
+  if (-not ($v -is [int] -or $v -is [long]) -or $v -lt 0 -or $v -gt [int]::MaxValue) {
+    return @{ State = 'unreadable'; Value = $null; Doc = $doc; Why = ('its ' + $Field + ' field is not a non-negative integer: ' + [string]$v) }
+  }
+  return @{ State = 'read'; Value = [int]$v; Doc = $doc; Why = '' }
+}
+
+function Get-TcRatchetBlindToken([string]$State) {
+  <# The blind= token for a baseline that was not READ, the same words audit-conclusion-currency prints. #>
+  switch -CaseSensitive ($State) {
+    'absent'     { return 'baseline-missing' }
+    'unreadable' { return 'baseline-unreadable' }
+    default      { throw ('Get-TcRatchetBlindToken: a baseline in state ''' + $State + ''' was read and is not blind') }
+  }
+}
 
 function Test-RatchetMove {
   <# What this run's count means against the stored baseline.
@@ -325,9 +360,33 @@ if ($__ratchetSelfTest) {
   $s = Compare-TcRatchetSites -Current @($kWt) -Baseline @($kMain)
   T 'CLEAN TWIN  a key built below a worktree root equals the key built below the main root, so the comparison holds' ($s.Verdict -ceq 'held' -and $kWt -ceq $kMain) ("{0} wt={1} main={2}" -f $s.Verdict, $kWt, $kMain)
 
-  $expected = 38
+  # ---- a mark nobody can read is not a mark (2026-09-24, pd-currency-2026-09-23.md) --------------------------------
+  $rbDir = Join-Path $env:TEMP ('tc-rbl-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $rbDir -ErrorAction Stop | Out-Null
+  try {
+    $u8r = New-Object Text.UTF8Encoding($false)
+    $rbConf = Join-Path $rbDir 'conflict.json'
+    [IO.File]::WriteAllText($rbConf, ('<' * 7) + " HEAD`n{ ""unbound"": 3 }`n" + ('=' * 7) + "`n{ ""unbound"": 4 }`n" + ('>' * 7) + " theirs`n", $u8r)
+    $rb1 = Read-TcRatchetBaseline -Path $rbConf -Field 'unbound'
+    $rb2 = Read-TcRatchetBaseline -Path (Join-Path $rbDir 'absent.json') -Field 'unbound'
+    T 'MUST FIRE  a baseline holding rebase conflict markers is UNREADABLE and a missing one ABSENT, never a $null the caller rewrites' ($rb1.State -ceq 'unreadable' -and $null -eq $rb1.Value -and $rb2.State -ceq 'absent' -and (Get-TcRatchetBlindToken $rb1.State) -ceq 'baseline-unreadable' -and (Get-TcRatchetBlindToken $rb2.State) -ceq 'baseline-missing') ("{0}/{1}" -f $rb1.State, $rb2.State)
+    $rbOdd = @()
+    foreach ($body in @('[3]', '{"unbound":"3"}', '{"unbound":3.5}', '{"unbound":-1}', '{"other":3}')) {
+      $fp = Join-Path $rbDir ('odd-' + $rbOdd.Count + '.json'); [IO.File]::WriteAllText($fp, $body, $u8r)
+      $rbOdd += (Read-TcRatchetBaseline -Path $fp -Field 'unbound').State
+    }
+    T 'MUST FIRE  an array, a quoted number, a fraction, a negative and a missing field are each UNREADABLE' ((@($rbOdd | Where-Object { $_ -ceq 'unreadable' })).Count -eq 5) ($rbOdd -join ',')
+    $rbOk = Join-Path $rbDir 'ok.json'
+    [IO.File]::WriteAllBytes($rbOk, ([byte[]](0xEF, 0xBB, 0xBF) + $u8r.GetBytes('{"unbound":0,"names":[]}' + "`n")))
+    $rb3 = Read-TcRatchetBaseline -Path $rbOk -Field 'unbound'
+    T 'CLEAN TWIN  a committed baseline with a BOM and a mark of 0 is READ as 0, with its document' ($rb3.State -ceq 'read' -and $rb3.Value -eq 0 -and $null -ne $rb3.Doc) ("{0} {1}" -f $rb3.State, $rb3.Value)
+    $threw = $false; try { $null = Get-TcRatchetBlindToken 'read' } catch { $threw = $true }
+    T 'MUST FIRE  asking for the blind token of a READ baseline throws rather than naming a blindness that is not there' $threw
+  } finally { Remove-Item -LiteralPath $rbDir -Recurse -Force -ErrorAction SilentlyContinue }
+
+  $expected = 42
   if ($cases -ne $expected) { Write-Output ("FAIL  ran {0} case(s), the list holds {1}" -f $cases, $expected); $fail++ }
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); exit 1 }
-  Write-Output ("SELF-TEST PASS ({0} cases): the rise, the hold, a believable fall, and the two refusals - a fall to nothing and a fall too large - plus history and its cap, one named-site comparison, and a static detector that read nothing" -f $cases)
+  Write-Output ("SELF-TEST PASS ({0} cases): the rise, the hold, a believable fall, and the two refusals - a fall to nothing and a fall too large - plus history and its cap, one named-site comparison, a static detector that read nothing, and a baseline that cannot be read" -f $cases)
   exit 0
 }
