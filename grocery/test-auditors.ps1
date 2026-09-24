@@ -4584,7 +4584,7 @@ if (Use-Unit 'u086-n9-public-feeds-are-bom-less-l7') {
 foreach ($bw in @(
     @{ f = 'grocery\build-deals-page.ps1'; n = 'price-history.json'; pat = '\[IO\.File\]::WriteAllText\(\$histOut' }
     @{ f = 'grocery\build-deals-page.ps1'; n = 'board.json'; pat = '\[IO\.File\]::WriteAllText\(\$boardOut' }
-    @{ f = 'grocery\export-feed.ps1'; n = 'smp-feed.json'; pat = "\[IO\.File\]::WriteAllText\(\(Join-Path \`$pub 'smp-feed\.json'\)" }
+    @{ f = 'grocery\export-feed.ps1'; n = 'smp-feed.json'; pat = "\[IO\.File\]::WriteAllText\(\(Join-Path \`$pub 'smp-feed\.json'\)|Write-TcAtomicFile -Path \`$pubFeedPath -Text \`$json -NoBom" }
     @{ f = 'meal-prep\rotate-free-dinners.ps1'; n = 'free-dinners.json'; pat = "\[IO\.File\]::WriteAllText\(\(Join-Path \`$pubDir 'free-dinners\.json'\)" }
   )) {
   $bwTxt = Get-Content (Join-Path (Split-Path $root -Parent) $bw.f) -Raw
