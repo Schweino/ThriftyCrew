@@ -37,10 +37,11 @@
     ops\audit-write-seam.ps1               scan the tree, hold the ratchet; writes nothing
     ops\audit-write-seam.ps1 -Tighten      the same, and record a believable FALL as the new high-water mark
     ops\audit-write-seam.ps1 -AcceptDrop   record a fall lib\ratchet.ps1 would refuse
+    ops\audit-write-seam.ps1 -Accept       record the CURRENT count as the mark over a baseline that is missing or unreadable (a plain run exits 3 there)
     ops\audit-write-seam.ps1 -SelfTest     frozen fixtures, plus this script's live path run against a temp tree
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([switch]$SelfTest, [switch]$AcceptDrop, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
+param([switch]$SelfTest, [switch]$Accept, [switch]$AcceptDrop, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
@@ -195,6 +196,23 @@ if ($SelfTest) {
     $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltRise
     $rc3 = $LASTEXITCODE
     T 'CLEAN TWIN  a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+    # FAIL CLOSED (2026-09-24, pd-currency-2026-09-23.md). MUST FIRE: conflict markers and an absent baseline each exit
+    # 3 naming which, and write nothing. CLEAN TWIN: -Accept still records one.
+    $ltConf = Join-Path $lt 'baseline-conflict.json'
+    [IO.File]::WriteAllText($ltConf, ('<' * 7) + " HEAD`n{ ""sites"": 2 }`n" + ('=' * 7) + "`n{ ""sites"": 0 }`n" + ('>' * 7) + " theirs`n", (New-Object Text.UTF8Encoding($false)))
+    $ltConfSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltConf))
+    $oC = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltConf)
+    $rcC = $LASTEXITCODE
+    $sameC = [string]::Equals($ltConfSeed, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltConf)), [StringComparison]::Ordinal)
+    T 'MUST FIRE  a baseline holding conflict markers exits 3, blind=baseline-unreadable, and its bytes are unchanged' ($rcC -eq 3 -and $sameC -and (($oC -join "`n") -match 'blind=baseline-unreadable')) ("rc=$rcC unchanged=$sameC")
+    $ltAbsent = Join-Path $lt 'baseline-absent.json'
+    $oA = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltAbsent)
+    $rcA = $LASTEXITCODE
+    T 'MUST FIRE  an ABSENT baseline on a plain run exits 3, blind=baseline-missing, and no file is created' ($rcA -eq 3 -and -not (Test-Path -LiteralPath $ltAbsent) -and (($oA -join "`n") -match 'blind=baseline-missing')) ("rc=$rcA created=$(Test-Path -LiteralPath $ltAbsent)")
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltAbsent -Accept
+    $rcW = $LASTEXITCODE
+    $docW = if (Test-Path -LiteralPath $ltAbsent) { [IO.File]::ReadAllText($ltAbsent) | ConvertFrom-Json } else { $null }
+    T 'CLEAN TWIN  -Accept over an absent baseline records the current count (1) and exits 0' ($rcW -eq 0 -and $null -ne $docW -and [int]$docW.sites -eq 1) ("rc=$rcW sites=$(if ($docW) { $docW.sites })")
   } finally {
     Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
   }
@@ -219,7 +237,16 @@ $hits = Get-TcSeamBypasses -Files $files -ReadLines { param($p) [IO.File]::ReadA
 $hits = @($hits)
 $count = $hits.Count
 
-if (-not (Test-Path -LiteralPath $BASELINE_FILE)) {
+# FAIL CLOSED ON A MARK NOBODY CAN READ (2026-09-24, pd-currency-2026-09-23.md). A MISSING baseline used to be written
+# with the current count on a plain run, a rise included, and exit 0; an unreadable one threw at the [int] cast. Both
+# are now a could-not-evaluate that writes nothing, and only -Accept records a mark over them.
+$blRead = Read-TcRatchetBaseline -Path $BASELINE_FILE -Field 'sites'
+if ($blRead.State -ne 'read' -and -not $Accept) {
+  $blTok = Get-TcRatchetBlindToken $blRead.State
+  Write-Output ("! write-seam: COULD NOT EVALUATE - the baseline " + $BASELINE_FILE + " is $($blRead.State) ($($blRead.Why)), so there is no mark to hold " + $count + " against. Nothing was written: a plain run, -Tighten and -AcceptDrop never record a mark over it. Restore it from git, or record the current count on purpose with -Accept.")
+  Exit-Guard -Name 'write-seam' -Summary ("sites={0} blind={1}" -f $count, $blTok) -Code 3
+}
+if ($Accept) {
   $json = @{ generated = (Get-Date).ToString('s'); sites = $count
      note = 'HIGH-WATER MARK for mutating calls to our own surfaces that bypass Invoke-GhostApi. This number may only go DOWN. A run above it is a NEW bypass and hard-fails.' } | ConvertTo-Json -Depth 3
   # LF with the BOM the committed blob carries, not the CRLF Set-Content writes under PS 5.1 (lib\lf-write.ps1).
@@ -227,7 +254,7 @@ if (-not (Test-Path -LiteralPath $BASELINE_FILE)) {
   Write-Output ("write-seam: baseline written at {0} site(s). From here the number may only go DOWN." -f $count)
   Exit-Guard -Name 'write-seam' -Summary ("baseline={0}" -f $count) -Code 0
 }
-$base = [int]((Get-Content $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json).sites)
+$base = $blRead.Value
 
 foreach ($h in ($hits | Sort-Object File, Line)) {
   Write-Output ("  bypass  {0}:{1}" -f $h.File.Replace($treeRoot, '').TrimStart('\'), $h.Line)
