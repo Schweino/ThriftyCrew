@@ -211,6 +211,15 @@
    "resolver": "lane:grocery/triage-due.ps1"
   },
   {
+   "id": "bot-push-retry",
+   "match": "exact",
+   "key": "grocery bot push retry",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "lane:grocery/triage-due.ps1"
+  },
+  {
    "id": "pipeline-moved-untracked-blocker",
    "match": "exact",
    "key": "grocery pipeline moved an untracked file out of the rebase s way",
