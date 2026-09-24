@@ -1,0 +1,119 @@
+#!/bin/sh
+# post-commit - start the commit-time chain rehearsal in the background, through ops/push-main.ps1 -Prepare.
+#
+# WHY THIS EXISTS (2026-09-23, W9.1 of design/PLAN-push-derived-conflicts-2026-09-23.md, Brad's ruling D19: yes).
+# A chain-touching push waits for a rehearsal of the daily chain (about 14 minutes) before it can land. Measured over the
+# 23 chain landings after the rehearsal gate (plan 16.1, SCRATCH): a rehearsal started when the session COMMITTED that
+# content, of HEAD rebased onto origin as it stood then, would have finished and still been valid before the push began
+# for 10 of 23 (43%), over the 30% bar Brad ruled on. The alternative trigger, a session remembering to run
+# `push-main -Prepare`, is an intention with no exit code. So the commit is the trigger, and this hook is it.
+#
+# WHAT IT DOES. It starts `powershell -File <this checkout>/ops/push-main.ps1 -Prepare` DETACHED and returns. -Prepare
+# (the push-main lane's mode) fetches, starts `ops/rehearse-chain.ps1 -Early -Onto <origin/main sha>` as a detached
+# process, and returns without moving HEAD or running a leg. -Early decides everything that costs a read: it starts
+# nothing when the commit touches no chain-manifest member, when a verdict already exists for the rebased key, or when
+# an early run in any checkout already holds that key, and it supersedes this checkout's older in-flight run when the key
+# moved. This hook computes none of that on purpose: the manifest set (files, globs, the derive rule and the dot-source
+# closure of W9.5) has exactly one implementation, Get-RhManifestSet, and a second copy here in sh would drift from it.
+#
+# IT RESPECTS THE EARLY-REHEARSAL CAP BY NEVER GOING AROUND IT. The cap (`Global\tc-rehearsal-early-`, 4 of the 6
+# rehearsal slots, plan 16.3 W9.1 step 2) is taken by rehearse-chain -Early and by nothing else, so a push-time
+# rehearsal always has 2 slots left. This hook never starts rehearse-chain.ps1 itself; its only road is -Prepare, which
+# takes the -Early road. ops/test-prepush-hook.ps1 holds that as a case.
+#
+# IT NEVER BLOCKS AND NEVER FAILS A COMMIT. post-commit runs after the commit exists, and git ignores its exit code, so
+# a refusal here could not undo anything anyway. Every path below exits 0, and the only work done before exiting is a
+# few git reads and one line written to a log inside this checkout's git dir. The -Prepare child is started with its
+# output in that log and its stdin on /dev/null, inside a subshell that exits at once, so git waits for nothing of it.
+#
+# WHEN IT STARTS NOTHING, in the order checked:
+#   1. no CLAUDE_CODE_SESSION_ID: a human or the bot. The bot's chain is not a session change, and W7.2's commit-msg
+#      checks are judged on the same variable. Silent, because the bot commits many times a day.
+#   2. TC_REHEARSAL_RUN is set: this commit is inside a rehearsal. rehearse-chain exports it to its arm, and a rehearsal
+#      that started a rehearsal would multiply itself. Read before anything else can run. (Today the rehearsal clone runs
+#      only the pre-commit hook it copies into its own .git: Invoke-RhCommitStage in ops/rehearse-chain.ps1. This guard is
+#      what keeps that true when a clone ever runs the shared hooks.)
+#   3. a rebase is in progress (rebase-merge or rebase-apply in this checkout's git dir): git runs post-commit for every
+#      replayed commit, and push-main's own catch-up rebase would otherwise start one -Prepare per commit it replays, each
+#      superseding the last. The measured condition is the FIRST commit carrying the content, never a replay of it.
+#   4. THE CHECKOUT IS OLDER THAN THIS HOOK: it has no ops/hooks/post-commit of its own. This file is installed in the
+#      SHARED .git and stands behind every checkout on the box, most of them older than it; a checkout that predates it
+#      predates -Prepare and the early road too, so it is never run there. One printed line says so.
+#   5. this checkout's ops/push-main.ps1 declares no -Prepare switch: fail open with one printed line. The switch is read
+#      from the source before it is passed, because push-main declares [CmdletBinding()] and an undeclared parameter is
+#      a hard error there (the same rule pre-push follows for run-gates' -PushRefsFile).
+# 1 and 2 print nothing; 3, 4 and 5 print one line each, because a could-not-start is never a refusal and never silent.
+#
+# THE REPOSITORY ENVIRONMENT IS CLEARED before the child starts (.claude/rules/ops-and-gates.md, "A git hook in a LINKED
+# worktree exports GIT_DIR"). Measured on git 2.54: post-commit is handed GIT_INDEX_FILE=.git/index, and from a linked
+# worktree git exports GIT_DIR too. -Prepare fetches and starts a rehearsal that clones, and neither may inherit either.
+# GIT_INDEX_FILE is NOT kept here, unlike pre-commit: the commit is already written, and nothing below reads the index.
+#
+# THE LOG. %LOCALAPPDATA%\ThriftyCrew\post-commit\post-commit-<key>.log, where <key> is the first 16 hex of the SHA-256
+# of this checkout's top path as git prints it, lower-cased: one file per checkout, overwritten by each start. Its first
+# line is written HERE, before the child starts, so a reader can tell "the hook started -Prepare" from "the hook started
+# nothing" without racing the child; -Prepare's own output follows it. OUTSIDE the checkout and its git dir on purpose:
+# the child holds the file open while it runs, and an open handle inside .git\worktrees\<name> can refuse a
+# `git worktree remove` of a throwaway checkout that commits. TC_POST_COMMIT_LOG_DIR moves it (the fixtures use it).
+# With neither that nor LOCALAPPDATA, or when the directory cannot be made, the output goes to /dev/null.
+#
+# ROLLBACK: delete this file from ops/hooks and from .git/hooks, and re-install (powershell -File ops\install-hooks.ps1).
+# Install:  powershell -File ops\install-hooks.ps1
+set -u
+
+# 1 and 2: asked of the environment alone, before any git runs.
+[ -n "${CLAUDE_CODE_SESSION_ID:-}" ] || exit 0
+[ -n "${TC_REHEARSAL_RUN:-}" ] && exit 0
+
+top="$(git rev-parse --show-toplevel 2>/dev/null)"
+gd="$(git rev-parse --path-format=absolute --git-dir 2>/dev/null)"
+if [ -z "$top" ] || [ -z "$gd" ]; then
+  echo "post-commit: git could not name this checkout's working tree or git dir, so no early chain rehearsal was started." >&2
+  exit 0
+fi
+
+# 3: a replayed commit is not a new one.
+if [ -d "$gd/rebase-merge" ] || [ -d "$gd/rebase-apply" ]; then
+  echo "post-commit: a rebase is in progress, so no early chain rehearsal was started for this replayed commit." >&2
+  exit 0
+fi
+
+# 4: never in a checkout older than this hook.
+if [ ! -f "$top/ops/hooks/post-commit" ]; then
+  echo "post-commit: this checkout predates the early-rehearsal hook (no ops/hooks/post-commit), so nothing was started." >&2
+  exit 0
+fi
+
+# 5: -Prepare is read from the source before it is passed.
+pm="$top/ops/push-main.ps1"
+if [ ! -f "$pm" ] || ! grep -q -E '\[switch\][[:space:]]*\$Prepare([^A-Za-z0-9_]|$)' "$pm" 2>/dev/null; then
+  echo "post-commit: this checkout's ops/push-main.ps1 has no -Prepare mode, so no early chain rehearsal was started." >&2
+  exit 0
+fi
+
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_PREFIX GIT_NAMESPACE
+
+if [ -n "${TC_POST_COMMIT_LOG_DIR:-}" ]; then
+  logdir="$TC_POST_COMMIT_LOG_DIR"
+elif [ -n "${LOCALAPPDATA:-}" ]; then
+  logdir="$LOCALAPPDATA/ThriftyCrew/post-commit"
+else
+  logdir=""
+fi
+logkey="$(printf '%s' "$top" | tr 'A-Z' 'a-z' | sha256sum 2>/dev/null | cut -c1-16)"
+log="/dev/null"
+if [ -n "$logdir" ] && [ -n "$logkey" ] && mkdir -p "$logdir" 2>/dev/null; then
+  log="$logdir/post-commit-$logkey.log"
+fi
+head_sha="$(git -C "$top" rev-parse HEAD 2>/dev/null)"
+now_utc="$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)"
+# printf, never echo: a Windows path carries backslashes on some roads, and an echo that interprets them rewrites it.
+if ! printf 'post-commit: started ops/push-main.ps1 -Prepare for %s at %s from %s\n' "$head_sha" "$now_utc" "$top" > "$log" 2>/dev/null; then
+  log="/dev/null"
+fi
+# DETACHED: the subshell starts the child in the background and exits, so git's wait for this hook ends here. stdin is
+# /dev/null and stdout and stderr go to the log, so no pipe git holds is inherited. The child's exit code is not read by
+# anybody, by design: -Prepare's outcome is its log and the in-flight file it prints, never this commit.
+( powershell -NoProfile -ExecutionPolicy Bypass -File "$pm" -Prepare >> "$log" 2>&1 < /dev/null & ) > /dev/null 2>&1 < /dev/null
+echo "post-commit: asked ops/push-main.ps1 -Prepare to start an early chain rehearsal if this commit changes the chain (log: $log)." >&2
+exit 0

@@ -116,6 +116,19 @@
   member behind the head is refused and told to wait; with the queue free the chain push lands with the WARN; a probe
   that throws proceeds and says so; and the probe sits between the record check and run-gates and takes nothing.
 
+  THE THIRTEENTH (2026-09-23, W9.1 of the same plan, Brad's D19): THE POST-COMMIT HOOK STARTS THE EARLY REHEARSAL. The
+  measured 43% early-verdict hit rate assumed a rehearsal started when the session committed, so ops\hooks\post-commit
+  starts the committing checkout's own ops\push-main.ps1 -Prepare, detached, and returns. It gets its own small repository
+  in this sandbox (three checkouts: one older than the hook, one whose push-main has no -Prepare, one current) and a stub
+  push-main that records what it inherited. Ten cases: a session commit from a linked worktree starts its own -Prepare
+  with no GIT_DIR or GIT_INDEX_FILE; the hook's log line names the commit; the commit RETURNS while a held child is still
+  running (a hang guard, never a bar); a throwing starter leaves the commit made and rc 0; and it starts nothing without
+  CLAUDE_CODE_SESSION_ID, under TC_REHEARSAL_RUN, in a checkout older than itself, where push-main has no -Prepare (one
+  printed line, fail open), or for the commits a rebase replays. A MUST NOT FIRE here is read twice: the hook's own log
+  line is absent when the commit returns (the hook writes it BEFORE starting anything), and a later commit that does start
+  the stub has written its marker while this one's never appeared. A static case holds that the hook's only road is
+  push-main -Prepare, so the early-rehearsal cap that rehearse-chain -Early takes is never gone around.
+
   WHAT THIS DRIVES. A sandbox repository, a linked worktree, the REAL ops\hooks\pre-push, the REAL
   ops\prepush-test-auditors.ps1 with every lib\*.ps1, and stubs for the gate and for test-auditors.
   Then real `git push`es to a sandbox bare remote. No network, nothing outside the sandbox. THIS FILE
@@ -129,7 +142,7 @@
   check it proves the hook's wiring and the script's decisions against a stub suite; it does not prove the
   real suite's input set, which the script's own -SelfTest pins live.
 #>
-# gate-inputs: ops\hooks\pre-push, ops\prepush-test-auditors.ps1, ops\hold-push-lock.ps1, ops\rehearse-chain.ps1, ops\record-hook-refusal.ps1, lib\*.ps1
+# gate-inputs: ops\hooks\pre-push, ops\hooks\post-commit, ops\prepush-test-auditors.ps1, ops\hold-push-lock.ps1, ops\rehearse-chain.ps1, ops\record-hook-refusal.ps1, lib\*.ps1
 # WHY THIS FILE DECLARES (Brad, 2026-09-12). At 67s this is the most expensive gate on the box and the one that
 # sets the floor on a push's wall clock, since no pool can finish sooner than its longest single job. It could
 # never be keyed by inference: line 258 copies the library set with `Get-ChildItem (Join-Path $RepoRoot 'lib')
@@ -1236,6 +1249,237 @@ try {
   Case 'MUST FIRE' 'the hook reads refs, resolves the tree, unsets the environment, asks for the rehearsal record, then runs the gate and the check' `
     ($iRead -ge 0 -and $iRepo -gt $iRead -and $iUnset -gt $iRepo -and $iRh -gt $iUnset -and $iRun -gt $iRh -and $iTa -gt $iRun) "read@$iRead repo@$iRepo unset@$iUnset rh@$iRh run@$iRun ta@$iTa"
 
+  # ---- THE THIRTEENTH (2026-09-23, W9.1 and D19): the post-commit hook starts the early rehearsal, detached ----
+  # Its own small repository inside this sandbox, so no pre-push case above sees a post-commit hook and no commit here
+  # reaches the pre-push sandbox. Three commits make three checkouts: A has a push-main with no -Prepare and no
+  # ops\hooks\post-commit (a checkout OLDER than the hook), B adds the hook file (push-main still has no -Prepare), C
+  # gives push-main its -Prepare switch. The stub push-main records what it was started with and inherited, and can be
+  # held on a release file (a condition this suite controls) or made to throw. Every commit goes through Invoke-PcCommit,
+  # whose wait is a hang guard only: a hook that ran -Prepare in the foreground would hold the held case's commit open,
+  # and that case reads it as a failure after releasing the stub, never as a hang.
+  $pcRoot = Join-Path $sb 'pc'
+  $pcMain = Join-Path $pcRoot 'main'
+  $pcProbe = Join-Path $pcRoot 'probe'
+  $pcLogs = Join-Path $pcRoot 'logs'
+  $pcHooks = Join-Path $pcRoot 'hooks'
+  $pcSessionHad = Test-Path -LiteralPath 'Env:\CLAUDE_CODE_SESSION_ID'
+  $pcSessionWas = [string]$env:CLAUDE_CODE_SESSION_ID
+  $pcRhRunHad = Test-Path -LiteralPath 'Env:\TC_REHEARSAL_RUN'
+  $pcRhRunWas = [string]$env:TC_REHEARSAL_RUN
+  function Invoke-PcCommit {
+    <# One `git commit --allow-empty` through the sandbox's post-commit hook, stderr to a file. Returns rc, text (the
+       hook's lines), head, a TimedOut flag, and the hook's log line for that checkout if it wrote one. The message has no
+       spaces, because Start-Process joins its arguments with them. #>
+    param([string]$Dir, [string]$Msg, [int]$GuardSec = 90)
+    $errF = Join-Path $pcRoot ('commit-err-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.txt')
+    $outF = $errF + '.out'
+    $pr = Start-Process -FilePath 'git' -ArgumentList @('-C', $Dir, '-c', ('core.hooksPath=' + $pcHooks), 'commit', '-q', '--allow-empty', '-m', $Msg) `
+      -NoNewWindow -PassThru -RedirectStandardError $errF -RedirectStandardOutput $outF
+    $null = $pr.Handle
+    $timedOut = -not $pr.WaitForExit($GuardSec * 1000)
+    $rcC = if ($timedOut) { -1 } else { $pr.ExitCode }
+    # SHARED READ, never ReadAllText: on a timed-out commit git is still running and still holds the file it writes
+    # its stderr to, and an exclusive open would throw here instead of letting the case report the timeout.
+    $txt = ''
+    if (Test-Path -LiteralPath $errF) {
+      try {
+        $fs = New-Object IO.FileStream($errF, [IO.FileMode]::Open, [IO.FileAccess]::Read, ([IO.FileShare]::ReadWrite -bor [IO.FileShare]::Delete))
+        try { $txt = (New-Object IO.StreamReader($fs)).ReadToEnd() } finally { $fs.Dispose() }
+      } catch { $txt = 'UNREADABLE: ' + $_.Exception.Message }
+    }
+    return [pscustomobject]@{ rc = $rcC; text = $txt; TimedOut = $timedOut; Process = $pr; head = (GOut -C $Dir rev-parse HEAD); subject = (GOut -C $Dir log -1 --format=%s) }
+  }
+  function Get-PcLogPath {
+    <# The log path the hook computes for a checkout: the first 16 hex of SHA-256 over its top path as git prints it,
+       lower-cased (ASCII only, as the hook's `tr` is). #>
+    param([string]$Dir)
+    $top = (GOut -C $Dir rev-parse --show-toplevel).ToLowerInvariant()
+    $sha = [Security.Cryptography.SHA256]::Create()
+    try { $hx = ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($top))) -replace '-', '').ToLowerInvariant() }
+    finally { $sha.Dispose() }
+    return (Join-Path $pcLogs ('post-commit-' + $hx.Substring(0, 16) + '.log'))
+  }
+  function Wait-PcFile {
+    # A hang guard, not a bar: returns as soon as the file exists, and $false only when it never appears.
+    param([string]$Path, [int]$GuardSec = 90)
+    $until = [datetime]::UtcNow.AddSeconds($GuardSec)
+    while (-not (Test-Path -LiteralPath $Path)) {
+      if ([datetime]::UtcNow -gt $until) { return $false }
+      Start-Sleep -Milliseconds 200
+    }
+    return $true
+  }
+  function Invoke-PcSentinel {
+    <# A commit that DOES start the stub, from the C checkout, made AFTER a case that must start nothing. Its marker
+       appearing means every child a hook started before it has had strictly longer to write its own. #>
+    param([string]$Tag)
+    $env:TC_POSTCOMMIT_TAG = $Tag
+    $s = Invoke-PcCommit $pcLinked ('sentinel-' + $Tag)
+    $ok = Wait-PcFile (Join-Path $pcProbe ('prepare-' + $Tag + '.txt'))
+    return ($s.rc -eq 0 -and $ok)
+  }
+  try {
+    $null = New-Item -ItemType Directory -Force $pcMain, $pcProbe, $pcLogs, $pcHooks
+    $pcSteps = @(
+      (G init -q $pcMain),
+      (G -C $pcMain config user.email t@t),
+      (G -C $pcMain config user.name t),
+      (G -C $pcMain config commit.gpgsign false),
+      (G -C $pcMain config core.autocrlf false)
+    )
+    $null = New-Item -ItemType Directory -Force (Join-Path $pcMain 'ops\hooks')
+    $pmNoPrepare = "[CmdletBinding()]`nparam([switch]`$Other)`n[IO.File]::WriteAllText((Join-Path `$env:TC_POSTCOMMIT_PROBE ('prepare-' + `$env:TC_POSTCOMMIT_TAG + '.txt')), 'the no-Prepare push-main ran')`n"
+    [IO.File]::WriteAllText((Join-Path $pcMain 'ops\push-main.ps1'), $pmNoPrepare, $utf8)
+    $pcSteps += (G -C $pcMain add -A)
+    $pcSteps += (G -C $pcMain commit -q -m pc-A)
+    $pcA = GOut -C $pcMain rev-parse HEAD
+    $pcHookText = [IO.File]::ReadAllText((Join-Path $RepoRoot 'ops\hooks\post-commit')).Replace("`r`n", "`n")
+    [IO.File]::WriteAllText((Join-Path $pcMain 'ops\hooks\post-commit'), $pcHookText, $utf8)
+    $pcSteps += (G -C $pcMain add -A)
+    $pcSteps += (G -C $pcMain commit -q -m pc-B)
+    $pcB = GOut -C $pcMain rev-parse HEAD
+    $pmStub = @'
+[CmdletBinding()]
+param([switch]$Prepare)
+$p = $env:TC_POSTCOMMIT_PROBE; $t = [string]$env:TC_POSTCOMMIT_TAG
+$seen = 'Prepare=' + [bool]$Prepare + "`nGIT_DIR=" + [string]$env:GIT_DIR + "`nGIT_INDEX_FILE=" + [string]$env:GIT_INDEX_FILE + "`nROOT=" + $PSScriptRoot
+[IO.File]::WriteAllText((Join-Path $p ('prepare-' + $t + '.txt')), $seen)
+if ($env:TC_POSTCOMMIT_THROW) { throw 'fixture: the starter throws' }
+if ($env:TC_POSTCOMMIT_HOLD) {
+  $rel = Join-Path $p ('release-' + $t + '.txt'); $until = [datetime]::UtcNow.AddSeconds(150)
+  while (-not (Test-Path -LiteralPath $rel) -and [datetime]::UtcNow -lt $until) { Start-Sleep -Milliseconds 200 }
+}
+[IO.File]::WriteAllText((Join-Path $p ('done-' + $t + '.txt')), 'done')
+Write-Output 'stub push-main -Prepare: done'
+'@
+    [IO.File]::WriteAllText((Join-Path $pcMain 'ops\push-main.ps1'), $pmStub, $utf8)
+    $pcSteps += (G -C $pcMain add -A)
+    $pcSteps += (G -C $pcMain commit -q -m pc-C)
+    [IO.File]::WriteAllText((Join-Path $pcHooks 'post-commit'), $pcHookText, $utf8)
+    $pcLinked = Join-Path $pcRoot 'linked'
+    $pcOld = Join-Path $pcRoot 'old'
+    $pcNoPrep = Join-Path $pcRoot 'noprep'
+    $pcSteps += (G -C $pcMain worktree add -q --detach $pcLinked)
+    $pcSteps += (G -C $pcMain worktree add -q --detach $pcOld $pcA)
+    $pcSteps += (G -C $pcMain worktree add -q --detach $pcNoPrep $pcB)
+    $pcBad = @($pcSteps | Where-Object { $_ -ne 0 })
+    $env:TC_POSTCOMMIT_PROBE = $pcProbe
+    $env:TC_POST_COMMIT_LOG_DIR = $pcLogs
+    $env:CLAUDE_CODE_SESSION_ID = 'test-prepush-hook-fixture'
+    Remove-Item -LiteralPath 'Env:\TC_REHEARSAL_RUN', 'Env:\TC_POSTCOMMIT_THROW', 'Env:\TC_POSTCOMMIT_HOLD' -ErrorAction SilentlyContinue
+    $pcLinkedLog = Get-PcLogPath $pcLinked
+
+    # MUST FIRE: a session commit from a LINKED worktree starts that checkout's OWN push-main -Prepare, with no
+    # repository environment inherited, and the log's first line names the commit it was started for.
+    $env:TC_POSTCOMMIT_TAG = 'fire'
+    $pcFire = Invoke-PcCommit $pcLinked 'pc-fire'
+    $pcFireOk = Wait-PcFile (Join-Path $pcProbe 'prepare-fire.txt')
+    $pcFireSaw = if ($pcFireOk) { [IO.File]::ReadAllText((Join-Path $pcProbe 'prepare-fire.txt')) } else { '' }
+    $pcFireLog1 = if (Test-Path -LiteralPath $pcLinkedLog) { @([IO.File]::ReadAllLines($pcLinkedLog))[0] } else { '' }
+    $pcWantRoot = 'ROOT=' + (Join-Path $pcLinked 'ops')
+    Case 'MUST FIRE' 'a session commit from a linked worktree starts ITS OWN push-main -Prepare, with no GIT_DIR or GIT_INDEX_FILE' `
+      ($pcBad.Count -eq 0 -and $pcFire.rc -eq 0 -and $pcFireOk -and $pcFireSaw.Contains('Prepare=True') -and $pcFireSaw.Contains("GIT_DIR=`n") `
+        -and $pcFireSaw.Contains("GIT_INDEX_FILE=`n") -and $pcFireSaw.EndsWith($pcWantRoot, [StringComparison]::OrdinalIgnoreCase)) `
+      ("steps-bad=" + $pcBad.Count + " rc=" + $pcFire.rc + " saw=[" + $pcFireSaw.Replace("`n", ' | ') + "] want=[" + $pcWantRoot + "] text=[" + $pcFire.text + "]")
+    Case 'MUST FIRE' 'the hook writes its start line to that checkout''s log, naming the commit, before the child runs' `
+      ($pcFire.head.Length -eq 40 -and $pcFireLog1.StartsWith('post-commit: started ops/push-main.ps1 -Prepare for ' + $pcFire.head, [StringComparison]::Ordinal)) `
+      ("log=[" + $pcLinkedLog + "] line1=[" + $pcFireLog1 + "] head=" + $pcFire.head)
+
+    # MUST FIRE, DETACHED: the commit returns while the started child is still running. The stub is held on a release
+    # file; a hook that waited for it would keep the commit open until the hang guard, and the case releases it then.
+    $env:TC_POSTCOMMIT_TAG = 'held'
+    $env:TC_POSTCOMMIT_HOLD = '1'
+    $pcHeld = Invoke-PcCommit $pcLinked 'pc-held' -GuardSec 60
+    $pcHeldDoneAtReturn = Test-Path -LiteralPath (Join-Path $pcProbe 'done-held.txt')
+    $pcHeldStarted = Wait-PcFile (Join-Path $pcProbe 'prepare-held.txt')
+    $pcHeldStillRunning = -not (Test-Path -LiteralPath (Join-Path $pcProbe 'done-held.txt'))
+    [IO.File]::WriteAllText((Join-Path $pcProbe 'release-held.txt'), 'go')
+    if ($pcHeld.TimedOut) { $null = $pcHeld.Process.WaitForExit(30000) }
+    $pcHeldDone = Wait-PcFile (Join-Path $pcProbe 'done-held.txt')
+    Remove-Item -LiteralPath 'Env:\TC_POSTCOMMIT_HOLD' -ErrorAction SilentlyContinue
+    Case 'MUST FIRE' 'the commit returns while the -Prepare child is still running, and the child then finishes on its own' `
+      (-not $pcHeld.TimedOut -and $pcHeld.rc -eq 0 -and -not $pcHeldDoneAtReturn -and $pcHeldStarted -and $pcHeldStillRunning -and $pcHeldDone) `
+      ("timedOut=" + $pcHeld.TimedOut + " rc=" + $pcHeld.rc + " doneAtReturn=" + $pcHeldDoneAtReturn + " started=" + $pcHeldStarted + " stillRunning=" + $pcHeldStillRunning + " done=" + $pcHeldDone)
+
+    # CLEAN TWIN: a starter that throws costs the commit nothing: git exits 0 and the commit exists.
+    $env:TC_POSTCOMMIT_TAG = 'throw'
+    $env:TC_POSTCOMMIT_THROW = '1'
+    $pcBeforeThrow = GOut -C $pcLinked rev-parse HEAD
+    $pcThrow = Invoke-PcCommit $pcLinked 'pc-throw'
+    $pcThrowRan = Wait-PcFile (Join-Path $pcProbe 'prepare-throw.txt')
+    Remove-Item -LiteralPath 'Env:\TC_POSTCOMMIT_THROW' -ErrorAction SilentlyContinue
+    Case 'CLEAN TWIN' 'a post-commit hook whose starter throws still returns 0, and the commit exists' `
+      ($pcThrow.rc -eq 0 -and $pcThrowRan -and $pcThrow.head -ne $pcBeforeThrow -and $pcThrow.subject -eq 'pc-throw') `
+      ("rc=" + $pcThrow.rc + " starterRan=" + $pcThrowRan + " head=" + $pcThrow.head + " before=" + $pcBeforeThrow + " subject=" + $pcThrow.subject)
+
+    # MUST NOT FIRE: without CLAUDE_CODE_SESSION_ID (a human, the bot) the hook starts nothing and writes no log line.
+    Remove-Item -LiteralPath $pcLinkedLog -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath 'Env:\CLAUDE_CODE_SESSION_ID' -ErrorAction SilentlyContinue
+    $env:TC_POSTCOMMIT_TAG = 'nosession'
+    $pcNoSess = Invoke-PcCommit $pcLinked 'pc-nosession'
+    $pcNoSessLog = Test-Path -LiteralPath $pcLinkedLog
+    $env:CLAUDE_CODE_SESSION_ID = 'test-prepush-hook-fixture'
+    $pcSent1 = Invoke-PcSentinel 'sentinel-1'
+    Case 'MUST NOT FIRE' 'without CLAUDE_CODE_SESSION_ID the post-commit hook starts nothing' `
+      ($pcNoSess.rc -eq 0 -and -not $pcNoSessLog -and $pcSent1 -and -not (Test-Path -LiteralPath (Join-Path $pcProbe 'prepare-nosession.txt'))) `
+      ("rc=" + $pcNoSess.rc + " logWritten=" + $pcNoSessLog + " sentinel=" + $pcSent1 + " text=[" + $pcNoSess.text + "]")
+
+    # MUST NOT FIRE (M20's case): inside a rehearsal (TC_REHEARSAL_RUN set) the hook starts nothing.
+    Remove-Item -LiteralPath $pcLinkedLog -ErrorAction SilentlyContinue
+    $env:TC_REHEARSAL_RUN = '1'
+    $env:TC_POSTCOMMIT_TAG = 'inrehearsal'
+    $pcInRh = Invoke-PcCommit $pcLinked 'pc-inrehearsal'
+    $pcInRhLog = Test-Path -LiteralPath $pcLinkedLog
+    Remove-Item -LiteralPath 'Env:\TC_REHEARSAL_RUN' -ErrorAction SilentlyContinue
+    $pcSent2 = Invoke-PcSentinel 'sentinel-2'
+    Case 'MUST NOT FIRE' 'with TC_REHEARSAL_RUN=1 the post-commit hook starts nothing' `
+      ($pcInRh.rc -eq 0 -and -not $pcInRhLog -and $pcSent2 -and -not (Test-Path -LiteralPath (Join-Path $pcProbe 'prepare-inrehearsal.txt'))) `
+      ("rc=" + $pcInRh.rc + " logWritten=" + $pcInRhLog + " sentinel=" + $pcSent2 + " text=[" + $pcInRh.text + "]")
+
+    # MUST NOT FIRE: a checkout OLDER than the hook (no ops\hooks\post-commit in its tree) starts nothing and says so.
+    $pcOldLog = Get-PcLogPath $pcOld
+    $env:TC_POSTCOMMIT_TAG = 'old'
+    $pcOldC = Invoke-PcCommit $pcOld 'pc-old'
+    $pcSent3 = Invoke-PcSentinel 'sentinel-3'
+    Case 'MUST NOT FIRE' 'a checkout older than the hook starts nothing and prints one line saying so' `
+      ($pcOldC.rc -eq 0 -and $pcOldC.text -match 'this checkout predates the early-rehearsal hook' -and -not (Test-Path -LiteralPath $pcOldLog) -and $pcSent3 `
+        -and -not (Test-Path -LiteralPath (Join-Path $pcProbe 'prepare-old.txt'))) ("rc=" + $pcOldC.rc + " sentinel=" + $pcSent3 + " text=[" + $pcOldC.text + "]")
+
+    # MUST NOT FIRE, FAIL OPEN: a push-main with no -Prepare switch is never started, and one line says so.
+    $pcNoPrepLog = Get-PcLogPath $pcNoPrep
+    $env:TC_POSTCOMMIT_TAG = 'noprep'
+    $pcNoPrepC = Invoke-PcCommit $pcNoPrep 'pc-noprep'
+    $pcSent4 = Invoke-PcSentinel 'sentinel-4'
+    Case 'MUST NOT FIRE' 'a checkout whose push-main has no -Prepare starts nothing, prints one line, and the commit exists' `
+      ($pcNoPrepC.rc -eq 0 -and $pcNoPrepC.subject -eq 'pc-noprep' -and $pcNoPrepC.text -match 'has no -Prepare mode' -and -not (Test-Path -LiteralPath $pcNoPrepLog) `
+        -and $pcSent4 -and -not (Test-Path -LiteralPath (Join-Path $pcProbe 'prepare-noprep.txt'))) ("rc=" + $pcNoPrepC.rc + " sentinel=" + $pcSent4 + " text=[" + $pcNoPrepC.text + "]")
+
+    # MUST NOT FIRE: the commits a rebase REPLAYS start nothing (git runs post-commit for each one).
+    Remove-Item -LiteralPath $pcLinkedLog -ErrorAction SilentlyContinue
+    $env:TC_POSTCOMMIT_TAG = 'rebase'
+    $null = G -C $pcMain commit -q --allow-empty -m pc-main-moves
+    $pcRbOut = @(& git -C $pcLinked -c ('core.hooksPath=' + $pcHooks) rebase $(GOut -C $pcMain rev-parse HEAD) 2>&1 | ForEach-Object { [string]$_ })
+    $pcRbRc = $LASTEXITCODE
+    $pcRbLog = Test-Path -LiteralPath $pcLinkedLog
+    $pcSent5 = Invoke-PcSentinel 'sentinel-5'
+    Case 'MUST NOT FIRE' 'the commits a rebase replays start nothing, and each says why' `
+      ($pcRbRc -eq 0 -and -not $pcRbLog -and ($pcRbOut -join "`n") -match 'a rebase is in progress' -and $pcSent5 -and -not (Test-Path -LiteralPath (Join-Path $pcProbe 'prepare-rebase.txt'))) `
+      ("rc=" + $pcRbRc + " logWritten=" + $pcRbLog + " sentinel=" + $pcSent5 + " out=[" + ($pcRbOut -join ' | ') + "]")
+
+    # MUST FIRE, STATIC: the hook's only road to a rehearsal is push-main -Prepare, so the early-rehearsal cap that
+    # rehearse-chain -Early takes is never gone around. Code lines only (comments name the script freely); needles by
+    # concatenation so this file is not its own match.
+    $pcCode = @($pcHookText -split "`n" | Where-Object { $_ -notmatch '^\s*#' })
+    $pcNamesRh = @($pcCode | Where-Object { $_.Contains('rehearse-' + 'chain') }).Count
+    $pcStarts = @($pcCode | Where-Object { $_.Contains('-File "$pm" -' + 'Prepare') -and $_.Contains('&') }).Count
+    Case 'MUST FIRE' 'the hook starts nothing but push-main -Prepare, in the background, and never names the rehearsal script' `
+      ($pcNamesRh -eq 0 -and $pcStarts -eq 1) ("rehearse-chain code lines=" + $pcNamesRh + " background -Prepare starts=" + $pcStarts)
+  } finally {
+    Remove-Item -LiteralPath 'Env:\TC_POSTCOMMIT_PROBE', 'Env:\TC_POSTCOMMIT_TAG', 'Env:\TC_POSTCOMMIT_HOLD', 'Env:\TC_POSTCOMMIT_THROW', 'Env:\TC_POST_COMMIT_LOG_DIR' -ErrorAction SilentlyContinue
+    if ($pcSessionHad) { $env:CLAUDE_CODE_SESSION_ID = $pcSessionWas } else { Remove-Item -LiteralPath 'Env:\CLAUDE_CODE_SESSION_ID' -ErrorAction SilentlyContinue }
+    if ($pcRhRunHad) { $env:TC_REHEARSAL_RUN = $pcRhRunWas } else { Remove-Item -LiteralPath 'Env:\TC_REHEARSAL_RUN' -ErrorAction SilentlyContinue }
+  }
+
   # ---- THE NINTH (2026-09-23, W0.2): this run's ledger rows stay inside this run's sandbox ----
   $suiteFiles = @(Get-ChildItem -LiteralPath $suiteLedger -Filter 'pushes-*.jsonl' -File -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName })
   $suiteRead = Read-LedgerLinesNaming -Files $suiteFiles -Needle $sbLeaf
@@ -1269,7 +1513,7 @@ try {
 # writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
 # and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
 # prepush-test-auditors -SelfTest pins its own count.
-$expectedCases = 77   # 77 since 2026-09-24 with THE TWELFTH's ten chain-queue cases (W8.3); 67 since 2026-09-23 with THE ELEVENTH's four refusal-row cases (W0.6); 63 with THE TENTH's nine cases (W1.1): four that read the fixed refusal line for structure, run-gates with and without a gate, and test-auditors, and five over the reordered rehearsal check; 54 with THE NINTH's two ledger cases (W0.2 of design\PLAN-push-derived-conflicts-2026-09-23.md); 52 with the case that reads the static-scanned-zero cause (W6.9); 51 since 2026-09-22 with the three chain-rehearsal cases; 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder; 48 with the two that read the slot budget from lib\gate-slots.ps1 (2026-09-18, backlog I237)
+$expectedCases = 87   # 87 since 2026-09-24 with THE THIRTEENTH's ten post-commit cases (W9.1, D19); 77 since 2026-09-24 with THE TWELFTH's ten chain-queue cases (W8.3); 67 since 2026-09-23 with THE ELEVENTH's four refusal-row cases (W0.6); 63 with THE TENTH's nine cases (W1.1): four that read the fixed refusal line for structure, run-gates with and without a gate, and test-auditors, and five over the reordered rehearsal check; 54 with THE NINTH's two ledger cases (W0.2 of design\PLAN-push-derived-conflicts-2026-09-23.md); 52 with the case that reads the static-scanned-zero cause (W6.9); 51 since 2026-09-22 with the three chain-rehearsal cases; 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder; 48 with the two that read the slot budget from lib\gate-slots.ps1 (2026-09-18, backlog I237)
 if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''
