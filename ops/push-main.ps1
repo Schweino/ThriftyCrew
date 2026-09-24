@@ -436,6 +436,14 @@ function Invoke-TcWarmTestAuditors {
 # ======================================================================================================================
 # D1, DECIDED ON W9.3 STEP 0'S MEASUREMENT: $true starts the rehearsal beside run-gates (W9.3); $false is W2.3's shape,
 # run-gates first, then test-auditors beside the rehearsal, which is what stands if the bar failed and Brad has not ruled.
+# THE BAR MET, measured 2026-09-24 (harness blob 8ce8478c, a scratch harness; bar written before the run): 6 runs in one
+# worktree, alone and overlapped alternating, one row per leg per run. Bar: 0 test-auditors timeouts over the 3
+# overlapped runs, and each overlapped leg's wall at most 1.25x the median of the same leg alone. run-gates alone 323,
+# 320, 328 s (median 323), overlapped 336, 334, 342 (worst 1.06x); test-auditors alone 626, 609, 616 s (median 616),
+# overlapped 639, 665, 652 (worst 1.08x); every leg exit 0, test-auditors failed=0 in all 6; the rehearsal beside them
+# 975, 1000, 994 s, peak working set 2.7 GB. One variant tried (this one). My own other load fell mostly on the
+# overlapped arm, which can only have widened the gap it did not show. At every sample no other run-gates, rehearsal or
+# test-auditors process was running (box cpu 4 to 28%).
 $script:PmRehearsalBesideGate = $true
 
 function Resolve-TcRehearsalExit {
