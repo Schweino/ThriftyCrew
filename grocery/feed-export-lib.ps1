@@ -37,18 +37,33 @@ function Invoke-ChainFeedExport {
     Log ('smp-feed exported (' + $Stage + ', export-feed exit 0)')
     return $out
   }
-  $verdictLines = @($lines | Where-Object { [string]$_ -match '^export-feed: ' })
+  # THE REASON IS A VERDICT LINE OR THE CHILD'S OWN LAST WORDS, NEVER AN INFO LINE (2026-09-24, triage 0f7b37). This took
+  # the last line starting 'export-feed: ', so when the quarantine re-export THREW (exit 1) after printing its
+  # informational 'export-feed: shrink check ... (0.0%)' line, that line was logged and paged as the reason for holding
+  # the board. Only REFUSED / FAILED / *** lines are verdicts; with none, the reason is the exit code plus the last line
+  # of ANY kind, which for a throw is the exception text.
+  $verdictLines = @($lines | Where-Object { [string]$_ -match '^export-feed: (REFUSED|FAILED|\*\*\*)' })
   if ($verdictLines.Count -gt 0) { $out.why = [string]$verdictLines[$verdictLines.Count - 1] }
   else {
-    $last = ''; if ($lines.Count -gt 0) { $last = [string]$lines[$lines.Count - 1] }
-    $out.why = ('export-feed exited ' + $out.rc + ' and printed no export-feed verdict line; its last line: ' + $last)
+    # An uncaught throw ends with PowerShell's error record: the message, then 'At <file>:<n> char:<n>', the code, and
+    # CategoryInfo / FullyQualifiedErrorId, then a blank line. The message is the line before the LAST 'At ...' line;
+    # with no such record, the last non-blank line. (Measured 2026-09-24: the bare last line is ' '.)
+    $nb = @($lines | ForEach-Object { [string]$_ } | Where-Object { $_.Trim() -ne '' })
+    $last = ''
+    $atIx = -1; for ($i = $nb.Count - 1; $i -ge 1; $i--) { if ($nb[$i] -match '^At .+:\d+ char:\d+$') { $atIx = $i; break } }
+    if ($atIx -ge 1) { $last = $nb[$atIx - 1] + ' (' + $nb[$atIx] + ')' } elseif ($nb.Count -gt 0) { $last = $nb[$nb.Count - 1] }
+    $out.why = ('export-feed exited ' + $out.rc + ' and printed no REFUSED or FAILED verdict line; it stopped on: ' + $last)
   }
+  # What export-feed's own words say happened to the two copies, for the page (it used to assert both were untouched).
+  $copies = 'Neither copy of the feed (public\smp-feed.json, grocery\out\smp-feed.json) was rewritten, so the served feed still carries the previous run''s prices.'
+  if ($out.why -match 'WAS rewritten') { $copies = 'export-feed says the served copy public\smp-feed.json WAS rewritten with this build and only the local grocery\out\smp-feed.json copy is stale (see the line above).' }
+  elseif ($out.why -notmatch '^export-feed: (REFUSED|FAILED)') { $copies = 'export-feed stopped without a verdict, so which copy of the feed (public\smp-feed.json, grocery\out\smp-feed.json) it rewrote is NOT known: compare their generated stamps before trusting either.' }
   Log ('smp-feed NOT exported (' + $Stage + '): export-feed exited ' + $out.rc + ' - ' + $out.why +
-       ' - the served smp-feed.json is still the previous one, and the chain verdict records feed_refreshed=false so public\board.json does not ship beside it')
+       ' - ' + $copies + ' The chain verdict records feed_refreshed=false so public\board.json does not ship beside it')
   if (-not $NoAlert) {
     $body = ('grocery\export-feed.ps1 exited ' + $out.rc + ' during the ' + $Stage + ' export on ' + $AsOf + '.' + "`n`n" +
              $out.why + "`n`n" +
-             'The served feed (public\smp-feed.json and grocery\out\smp-feed.json) was NOT rewritten, so it still carries the previous run''s prices. ' +
+             $copies + ' ' +
              'The chain verdict records feed_refreshed=false, so capture-run and push-data stage inputs only and today''s public\board.json does not ship beside the old feed, and the board post is held.' + "`n`n" +
              'Fix the input export-feed names (a missing file is usually a checkout that was not seeded or a producer that did not run; a section drop over 10% is a real fall to investigate, or pass -AcceptShrink ''<reason>'' when it is intended), then re-run grocery\check-ad-cycles.ps1.')
     try {

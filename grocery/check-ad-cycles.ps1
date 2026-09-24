@@ -279,6 +279,20 @@ if ($SelfTest) {
     $cacSt = Read-ChainVerdictStatus -Repo $cacFxRoot -OutDir $cacFxOut -Today '2026-09-23'
     Test-CacCase 'CLEAN TWIN  export-feed exit 0 proceeds unchanged: refreshed, logged as exported, no page, and the verdict ships as PASS' { ($cacK.rc -eq 0) -and $cacK.refreshed -and ($cacK.why -eq '') -and (@($script:cacFxLog | Where-Object { $_ -match '^smp-feed exported \(daily' }).Count -eq 1) -and ($script:cacFxPages.Count -eq 0) -and ($cacSt.status -eq 'PASS') -and $cacSt.ship_ok }
 
+    # THE 2026-09-24 QUARANTINE EXPORT (triage 0f7b37): export-feed printed its informational shrink line, then THREW (exit 1)
+    # on a held file, and the chain logged and paged the shrink line as the reason. A throw is not a refusal: the reason is
+    # the exit code and the child's last line (the exception), and the page does not claim both copies were untouched.
+    $cacThrow = Join-Path $cacFxRoot 'export-throws.ps1'
+    [IO.File]::WriteAllText($cacThrow, "`$ErrorActionPreference = 'Stop'`r`nWrite-Output 'export-feed: shrink check compared with the served feed x: ingredients 668 -> 668 (0.0%); recipes 570 -> 570 (0.0%)'`r`nthrow 'SELFTEST-THROW The requested operation cannot be performed on a file with a user-mapped section open.'`r`n")
+    $script:cacFxLog.Clear(); $script:cacFxPages.Clear()
+    $cacT = Invoke-ChainFeedExport -ScriptPath $cacThrow -Stage 'quarantine' -AsOf '2026-09-24'
+    Test-CacCase 'MUST FIRE  an export that prints the shrink INFO line and then throws is logged as exited 1 with the THROW as its reason, never the shrink line' { ($cacT.rc -eq 1) -and (-not $cacT.refreshed) -and ($cacT.why -notmatch 'shrink check') -and ($cacT.why -match 'exited 1') -and ($cacT.why -match 'SELFTEST-THROW') -and (@($script:cacFxLog | Where-Object { $_ -match 'smp-feed NOT exported \(quarantine\): export-feed exited 1' }).Count -eq 1) -and ($script:cacFxPages.Count -eq 1) -and ([string]$script:cacFxPages[0].body -match 'is NOT known') }
+    $cacFailed = Join-Path $cacFxRoot 'export-failed.ps1'
+    [IO.File]::WriteAllText($cacFailed, "Write-Output 'export-feed: shrink check compared with the served feed x: recipes 570 -> 570 (0.0%)'`r`nWrite-Output 'export-feed: FAILED writing C:\x\grocery\out\smp-feed.json: Write-TcAtomicFile: could not replace it. The served copy C:\x\public\smp-feed.json WAS rewritten with this build; only the local out\ copy is stale.'`r`nexit 3`r`n")
+    $script:cacFxLog.Clear(); $script:cacFxPages.Clear()
+    $cacF = Invoke-ChainFeedExport -ScriptPath $cacFailed -Stage 'quarantine' -AsOf '2026-09-24'
+    Test-CacCase 'MUST FIRE  a named FAILED line is the reason over the earlier shrink line, and the page says the served copy WAS rewritten' { ($cacF.rc -eq 3) -and ($cacF.why -match '^export-feed: FAILED writing') -and ([string]$script:cacFxPages[0].body -match 'WAS rewritten') -and ([string]$script:cacFxPages[0].body -notmatch 'Neither copy') }
+
     # The four reader-facing steps swept with it (build-sale-windows, recipe-overlay, publish-deals-page, top5-weekly).
     $cacStepBad = Join-Path $cacFxRoot 'step-fails.ps1'
     [IO.File]::WriteAllText($cacStepBad, "Write-Output 'recipe-overlay: could not read the rule set'`r`nexit 1`r`n")

@@ -38,7 +38,7 @@
 
   Self-test:  powershell -File grocery\export-feed.ps1 -SelfTest
 #>
-# gate-inputs: grocery\export-feed.ps1, grocery\cell-quarantine-lib.ps1, lib\json-io.ps1
+# gate-inputs: grocery\export-feed.ps1, grocery\cell-quarantine-lib.ps1, lib\json-io.ps1, lib\atomic-write.ps1
 [CmdletBinding()]
 param(
   # Every path is overridable so the self-test can run the WHOLE export in a sandbox; production passes none of them.
@@ -61,6 +61,8 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 # Test-TcCellQuarantined: a cell guards held at its last verified published price (2026-09-21). The feed carries the
 # SAME held value the board shows - no pin may overwrite it and no link rides with it, exactly as on the board.
 . (Join-Path $root 'cell-quarantine-lib.ps1')
+# Write-TcAtomicFile: the two served feed copies are replaced through it (2026-09-24, see the write at the end).
+. (Join-Path (Split-Path $root -Parent) 'lib\atomic-write.ps1')
 
 # THE SHRINK BAR: 10%, THE FIRST PLAUSIBLE NUMBER, NOT THE SURVIVOR OF A SWEEP. Measured 2026-09-23 over the 40 newest
 # committed public\smp-feed.json (a2e167727 .. 9827b3c77, 39 consecutive pairs): leaving out the founding pair
@@ -255,10 +257,47 @@ if ($SelfTest) {
     Remove-Item -LiteralPath $heldPath -Force
     $c7 = & $runChild
     Test-EfCase ($kMF + '  a missing held-recipes.json is refused BY NAME (exit 3) rather than serving a held recipe, and nothing is written') ($c7.Rc -eq 3 -and $c7.Text -match 'held-recipes\.json' -and $c7.PubSame -and -not $c7.OutWritten) ("rc={0} pubSame={1} outWritten={2} text={3}" -f $c7.Rc, $c7.PubSame, $c7.OutWritten, $c7.Text)
+    [IO.File]::WriteAllText($heldPath, '{"held":[]}', $utf8)
+
+    # ---- A HELD FEED FILE (2026-09-24, triage 0f7b37). The quarantine re-export threw between its two bare WriteAllText
+    # calls (out\ replaced, public\ not, exit 1) and the chain logged an info line as the reason. The holder here is a
+    # Get-Content-shaped handle (read, shared ReadWrite, no Delete) in THIS process, which is another process to the child.
+    $runHeld = {
+      param([string]$HoldPath, [switch]$Release)
+      [IO.File]::WriteAllText($pubFeed, $priorText, $utf8)
+      if (Test-Path -LiteralPath $outFeed) { Remove-Item -LiteralPath $outFeed -Force }
+      if ($HoldPath -eq $outFeed) { [IO.File]::WriteAllText($outFeed, 'OLD-OUT', $utf8) }
+      $sig = Join-Path $sb ('release-' + [guid]::NewGuid().ToString('N').Substring(0, 6))
+      # -Release: let go once the child has staged its temp file (so it met the holder), inside the retry budget.
+      # Otherwise: hold until the parent signals after the child EXITED, which is past any budget by construction.
+      $h = if ($Release) { Start-TcFileHold -Path $HoldPath -UntilFile ($HoldPath + '.tmp') -GraceMs 150 } else { Start-TcFileHold -Path $HoldPath -UntilFile $sig }
+      $o = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -DataRoot $dG -OutDir $dO -PublicDir $dP -MealPrepDir $dM -PriorFeedPath $pubFeed -SkipEverydayPs)
+      $rc = $LASTEXITCODE
+      [IO.File]::WriteAllText($sig, 'x'); Stop-TcFileHold $h
+      $pb = [IO.File]::ReadAllBytes($pubFeed)
+      $ob = $null; if (Test-Path -LiteralPath $outFeed) { $ob = [IO.File]::ReadAllBytes($outFeed) }
+      return [pscustomobject]@{ Rc = $rc; Text = ($o -join "`n"); Opened = $h.Opened; Saw = $h.Saw; PubSame = ([IO.File]::ReadAllText($pubFeed) -ceq $priorText); PubBytes = $pb; OutBytes = $ob }
+    }
+    # MUST FIRE: public\ held past the whole retry budget -> a NAMED FAILED line, exit 3, and out\ never written.
+    $c8 = & $runHeld $pubFeed
+    Test-EfCase ($kMF + '  public\smp-feed.json held past the retry budget: exit 3, a named FAILED line with the exception, served feed intact, out\ NOT written') ($c8.Opened -and $c8.Rc -eq 3 -and $c8.Text -match 'export-feed: FAILED writing \S*public\\smp-feed\.json: Write-TcAtomicFile: could not replace' -and $c8.PubSame -and $null -eq $c8.OutBytes) ("opened={0} rc={1} pubSame={2} outWritten={3} text={4}" -f $c8.Opened, $c8.Rc, $c8.PubSame, ($null -ne $c8.OutBytes), $c8.Text)
+    # MUST FIRE: the SECOND write fails after the first landed (the 09-24 shape, order now reversed): exit 3, and the line
+    # says the served copy WAS rewritten rather than claiming neither was.
+    $c9 = & $runHeld $outFeed
+    $c9Out = if ($c9.OutBytes) { [Text.Encoding]::UTF8.GetString($c9.OutBytes) } else { '' }
+    Test-EfCase ($kMF + '  out\smp-feed.json held after public\ landed: exit 3, FAILED names out\ and says the served copy WAS rewritten, out\ keeps its old bytes') ($c9.Opened -and $c9.Rc -eq 3 -and $c9.Text -match 'export-feed: FAILED writing \S*out\\smp-feed\.json: .*The served copy .* WAS rewritten' -and -not $c9.PubSame -and $c9Out -ceq 'OLD-OUT') ("opened={0} rc={1} pubSame={2} out={3} text={4}" -f $c9.Opened, $c9.Rc, $c9.PubSame, $c9Out, $c9.Text)
+    # CLEAN TWIN: the same holder on public\, released inside the budget once the child has staged its temp file: exit 0,
+    # both copies written, public\ BOM-less, out\ the SAME bytes behind a BOM (the bytes the bare WriteAllText wrote).
+    $c10 = & $runHeld $pubFeed -Release
+    $bom = [byte[]](0xEF, 0xBB, 0xBF)
+    $pubNoBom = ($c10.PubBytes.Length -ge 3 -and -not ($c10.PubBytes[0] -eq 0xEF -and $c10.PubBytes[1] -eq 0xBB -and $c10.PubBytes[2] -eq 0xBF))
+    $outIsBomPlusPub = ($null -ne $c10.OutBytes -and $c10.OutBytes.Length -eq $c10.PubBytes.Length + 3 -and [Convert]::ToBase64String($c10.OutBytes) -ceq [Convert]::ToBase64String([byte[]]($bom + $c10.PubBytes)))
+    $pubLastByte = if ($c10.PubBytes.Length) { $c10.PubBytes[$c10.PubBytes.Length - 1] } else { -1 }
+    Test-EfCase ($kCT + '  the holder released inside the budget: exit 0, public\ BOM-less with no appended newline, out\ byte-identical behind a BOM') ($c10.Opened -and $c10.Saw -and $c10.Rc -eq 0 -and $pubNoBom -and $pubLastByte -eq 0x7D -and $outIsBomPlusPub) ("opened={0} saw={1} rc={2} pubNoBom={3} lastByte={4} outIsBomPlusPub={5} text={6}" -f $c10.Opened, $c10.Saw, $c10.Rc, $pubNoBom, $pubLastByte, $outIsBomPlusPub, $c10.Text)
   } finally {
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
-  $want = 18
+  $want = 21
   if ($script:stCases -ne $want) { Write-Output ('FAIL  the suite ran {0} case(s), expected {1}' -f $script:stCases, $want); $script:stFail++ }
   if ($script:stFail) { Write-Output ('export-feed self-test FAIL: {0} of {1} case(s)' -f $script:stFail, $script:stCases); exit 1 }
   Write-Output ('export-feed self-test PASS: {0} of {0} cases - led by the empty recipes map of 2dcbe8622 being refused before either copy of the feed is written' -f $script:stCases)
@@ -661,13 +700,31 @@ if ($null -eq $prior.Doc) {
 # raw file JSON.parse'd on every mobile page view. Compact keeps the wire small (worker still gzips) and
 # the on-device parse cheap. No consumer depends on whitespace.
 # The out\ copy keeps the BOM it has always carried (feed-everyday-ps wrote it that way); public\ is BOM-less, below.
-[IO.File]::WriteAllText((Join-Path $out 'smp-feed.json'), $json, (New-Object Text.UTF8Encoding($true)))
-if (-not (Test-Path $pub)) { New-Item -ItemType Directory -Force -Path $pub | Out-Null }
 # BOM-LESS (L7, 2026-08-01). Set-Content -Encoding UTF8 emits a UTF-8 BOM in PS 5.1. Browsers strip it
 # per spec so the live page was never broken - but PS 5.1's OWN ConvertFrom-Json chokes on it, which is
 # how a verification pass reported this feed "malformed" when it was fine. Our own tooling has to be able
 # to read what we publish.
-[IO.File]::WriteAllText((Join-Path $pub 'smp-feed.json'), $json, (New-Object Text.UTF8Encoding($false)))
+# THROUGH Write-TcAtomicFile, PUBLIC\ FIRST (2026-09-24, triage 0f7b37). Both copies were bare WriteAllText, which
+# throws when another process holds or maps the file (09-23: two chain audits died on "a user-mapped section open").
+# On 09-24 the quarantine re-export threw BETWEEN the two writes: out\ replaced, public\ not, exit 1, and the chain
+# logged an informational shrink line as the reason and held the whole board. Now a held file is retried, the served
+# copy goes first so a failure never leaves the local copy ahead of the served one, and a write that still fails is a
+# NAMED exit 3 carrying the real exception. Bytes are unchanged: -NoNewline everywhere (WriteAllText appended nothing),
+# -NoBom on public\ only.
+$pubFeedPath = Join-Path $pub 'smp-feed.json'; $outFeedPath = Join-Path $out 'smp-feed.json'
+try {
+  if (-not (Test-Path $pub)) { New-Item -ItemType Directory -Force -Path $pub | Out-Null }
+  $null = Write-TcAtomicFile -Path $pubFeedPath -Text $json -NoBom -NoNewline
+} catch {
+  Write-Output ('export-feed: FAILED writing ' + $pubFeedPath + ': ' + $_.Exception.Message + ' Neither copy was rewritten; the served feed stands.')
+  exit 3
+}
+try {
+  $null = Write-TcAtomicFile -Path $outFeedPath -Text $json -NoNewline
+} catch {
+  Write-Output ('export-feed: FAILED writing ' + $outFeedPath + ': ' + $_.Exception.Message + ' The served copy ' + $pubFeedPath + ' WAS rewritten with this build; only the local out\ copy is stale.')
+  exit 3
+}
 Write-Output ("smp-feed.json: " + $ing.Count + " ingredients, " + $rec.Count + " recipes, week " + $weekOf + " -> out\ + public\")
 # EVERYDAY_PS (2026-09-23): each recipe's per-serving price on its card's own basis, computed by running the card's own
 # script against the feed, so a recipe price on an article or the homepage fills from the feed. It runs on the STAGED copy
