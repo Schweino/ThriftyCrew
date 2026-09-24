@@ -692,7 +692,7 @@ if ($SelfTest) {
     catch { $ok = $false; $got = 'threw: ' + $_.Exception.Message }
     return [pscustomobject]@{ Ok = $ok; Got = $got }
   }
-  $malformed = Get-RhCaseResult { ($true) -and ($false), ('got') }
+  $malformed = Get-RhCaseResult { ($true) -and ($false), ('got') }   # and-comma-case:allow the MUST FIRE below runs the founding shape on purpose, to prove the harness fails it
   Test-RhCase 'MUST FIRE  the case harness scores a body whose last condition the comma swallowed (`a -and b, got`) as FAILED, never as a pass' {
     ((-not $malformed.Ok) -and ($malformed.Got -match 'returned 1 value')), ('ok=' + $malformed.Ok + ' got=' + $malformed.Got)
   }
