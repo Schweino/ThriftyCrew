@@ -32,7 +32,9 @@
   design/PLAN-bot-checkout-self-heal-2026-09-23.md) DELETED, and not rewritten by the run, stays out of the commit and
   is named. The PIPELINE WRITE JOURNAL: what a lane wrote, so the next committer can tell the pipeline's own bytes from
   a session's edit. Since W3.2 of the same plan, a -Built entry (a guards-blocked day's served outputs) vouches for its
-  bytes without ever being committed, and Get-PipelineOwnBlobs hands the checkout sync every vouched blob.
+  bytes without ever being committed, and Get-PipelineOwnBlobs hands the checkout sync every vouched blob. Since
+  2026-09-24 a commit that lands resyncs the checkout's REAL index for exactly the paths it carried, deletions included
+  (Sync-PipelineSharedIndex), so the private-index commit no longer reads back as a staged revert of itself.
 
   PUSH POLICY: TRY ONCE, NEVER BLOCK. Four schedulers can race. Each caller attempts a single push and,
   on failure, leaves the commit local and says so - the next capture-run pushes it. A commit that exists
@@ -532,6 +534,55 @@ function Split-PipelineOwnHeld {
   return [pscustomobject]@{ foreign = $foreign; own = $own; note = $note }
 }
 
+function Sync-PipelineSharedIndex {
+  <# After a private-index commit LANDED, reset the checkout's real index for exactly the paths that commit carried.
+     Returns '' when it did, or a '; index resync ...' note naming why it could not, which the verdict carries.
+
+     WHY (2026-09-24, design/backlog-inbox/sh-pc-2026-09-23.md). The commit moves HEAD while the real index still holds
+     the OLD blobs of every path it committed, so `git status` read the commit back as a staged REVERT (`MM` for a
+     modification, `AD` for a deletion, `D ` for an addition), one plain `git commit` away from undoing the day's data,
+     and a restore from that index brought the commit's deletions back on disk: the resurrection of cec9779a3.
+     capture-run's own stage has done this since it began; this is the same rule for the three lanes that commit here.
+
+     WHAT IT TOUCHES, AND ONLY THAT: `git reset -q` of the commit's own paths, read from the commit itself with
+     --no-renames (a delete-plus-identical-add is a RENAME to git, which would list only the new name and leave the deleted
+     path's stale entry behind), as LITERAL pathspecs from a NUL-separated file, so a path with a glob character matches
+     only itself and no command line can overflow. Never the working tree, never a path outside the commit.
+     IDEMPOTENT: it sets each entry to HEAD's, so running it twice is running it once.
+     IT SKIPS rather than guesses when HEAD is no longer the commit this call made (its parent is not the HEAD the commit
+     started from): another committer moved HEAD in between, and resetting that commit's paths is not this lane's call. #>
+  param([Parameter(Mandatory=$true)][string]$Repo, [string]$Parent)
+  $specFile = $null
+  try {
+    $h = Invoke-GitCaptured -Repo $Repo -GitArgs @('rev-parse', '--verify', '-q', 'HEAD')
+    if ($h.rc -ne 0) { return '; index resync FAILED: HEAD could not be read, so the shared index may still hold a staged revert of this commit' }
+    $sha = ([string]$h.stdout).Trim()
+    $p = Invoke-GitCaptured -Repo $Repo -GitArgs @('rev-parse', '--verify', '-q', ($sha + '^'))
+    $par = $(if ($p.rc -eq 0) { ([string]$p.stdout).Trim() } else { '' })
+    if (-not [string]::Equals($par, [string]$Parent, [StringComparison]::Ordinal)) {
+      return '; index resync SKIPPED: HEAD is no longer the commit this call made, so no index entry was reset'
+    }
+    $dtArgs = $(if ($par) { @('diff-tree', '-r', '--no-commit-id', '--name-only', '--no-renames', '-z', $par, $sha) }
+                else { @('diff-tree', '-r', '--root', '--no-commit-id', '--name-only', '--no-renames', '-z', $sha) })
+    $d = Invoke-GitCaptured -Repo $Repo -GitArgs (@('-c', 'core.quotePath=false') + $dtArgs)
+    if ($d.rc -ne 0) { return ('; index resync FAILED: the commit''s paths could not be listed (git exit ' + $d.rc + '), so the shared index may still hold a staged revert of this commit') }
+    $cPaths = @(([string]$d.stdout).Split([char]0) | Where-Object { $_ })
+    if (-not $cPaths.Count) { return '' }
+    $specFile = Join-Path $env:TEMP ('pipe-resync-' + [guid]::NewGuid().ToString('N'))
+    [IO.File]::WriteAllText($specFile, (($cPaths -join [string][char]0) + [char]0), (New-Object Text.UTF8Encoding($false)))
+    $r = Invoke-GitCaptured -Repo $Repo -GitArgs @('--literal-pathspecs', 'reset', '-q', ('--pathspec-from-file=' + $specFile), '--pathspec-file-nul')
+    if ($r.rc -ne 0) {
+      $why = @(([string]$r.stderr) -split "`r?`n" | Where-Object { $_ } | Select-Object -First 1)
+      return ('; index resync FAILED (git exit ' + $r.rc + '): ' + ($why -join '') + ' - the shared index still holds a staged revert of ' + $cPaths.Count + ' committed path(s); `git reset -q -- <path>` for each clears it')
+    }
+    return ''
+  } catch {
+    return ('; index resync FAILED: threw: ' + $_.Exception.Message)
+  } finally {
+    if ($specFile -and (Test-Path -LiteralPath $specFile)) { Remove-Item -LiteralPath $specFile -Force -ErrorAction SilentlyContinue }
+  }
+}
+
 function Invoke-PipelineCommit {
   <# Commit exactly $Paths under a private index. Returns a verdict string.
 
@@ -562,6 +613,10 @@ function Invoke-PipelineCommit {
   if (-not $present.Count) { return ("{0}: nothing to commit - none of its owned paths exist" -f $Name) }
 
   $tmpIndex = $null; $prevIndex = $null; $held = $false
+  # What HEAD was before this commit, and whether it landed: Sync-PipelineSharedIndex resyncs the real index only then.
+  $landed = $false
+  $hbRes = Invoke-GitCaptured -Repo $Repo -GitArgs @('rev-parse', '--verify', '-q', 'HEAD')
+  $headBefore = $(if ($hbRes.rc -eq 0) { ([string]$hbRes.stdout).Trim() } else { '' })
   try {
     # A PRIVATE INDEX, for the reason capture-run.ps1 documents: `git commit` with no pathspec commits
     # the whole INDEX, so staging exactly our own paths is not enough while a session shares the tree.
@@ -623,6 +678,7 @@ function Invoke-PipelineCommit {
       return ("{0}: commit refused (git exit {1}) - a hook or git itself rejected it; the tree is untouched{4}. {2}`n{3}" -f `
               $Name, $rc, $refusal.summary, (($refusal.transcript) -join "`n"), $foreignNote)
     }
+    $landed = $true
   } catch {
     return ("{0}: committer threw and was swallowed (the lane's work is not lost, only uncommitted): {1}" -f $Name, $_.Exception.Message)
   } finally {
@@ -641,7 +697,11 @@ function Invoke-PipelineCommit {
     }
   }
 
-  $msg = ("{0}: committed {1} file(s){2}" -f $Name, $staged.Count, $foreignNote)
+  # RESYNC THE SHARED INDEX FOR WHAT WAS JUST COMMITTED, AND ONLY THAT (2026-09-24). After the finally above, so the
+  # reset reaches the real index and never the private one. See Sync-PipelineSharedIndex.
+  $resyncNote = ''
+  if ($landed) { $resyncNote = Sync-PipelineSharedIndex -Repo $Repo -Parent $headBefore }
+  $msg = ("{0}: committed {1} file(s){2}{3}" -f $Name, $staged.Count, $foreignNote, $resyncNote)
   if ($Push) {
     try {
       & git -C $Repo push origin HEAD:main | Out-Null
@@ -1139,11 +1199,101 @@ if ($__pcSelfTest) {
     Remove-Item -LiteralPath $tr4 -Recurse -Force -ErrorAction SilentlyContinue
   }
 
+  # ---- THE SHARED INDEX IS RESYNCED FOR EXACTLY WHAT THE COMMIT CARRIED (2026-09-24, design/backlog-inbox/sh-pc-2026-09-23.md) --
+  # FROZEN from the finding's probe (lib blob e9a1d1aae281): a lane commit that modified a.json, deleted gone.json and
+  # added new.json left the real index reading `MM a.json`, `AD gone.json` and `D  new.json`, a staged REVERT of the
+  # lane's commit, and the AD row is the resurrection shape of cec9779a3 (deleted files back on disk from the index).
+  # Beside them: a delete-plus-identical-add git would pair as a RENAME, a path with a space and a non-ASCII letter, and
+  # another session's staged entry that must stay staged. A fifth throwaway repo, per-run name, removed in finally.
+  $tr5 = Join-Path $env:TEMP ('pc-ix-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $tr5 'lane\out') -Force | Out-Null
+    New-Item -ItemType Directory -Path (Join-Path $tr5 'other') -Force | Out-Null
+    & git -C $tr5 init -q . | Out-Null
+    & git -C $tr5 config user.email t@t | Out-Null
+    & git -C $tr5 config user.name t | Out-Null
+    $noHook5 = Join-Path $tr5 'fixture-no-hooks'
+    New-Item -ItemType Directory -Path $noHook5 -Force | Out-Null
+    & git -C $tr5 config core.hooksPath ($noHook5 -replace '\\', '/') | Out-Null
+    $odd5 = 'lane/out/caf' + [char]0x00E9 + ' y.json'
+    $seed5 = [ordered]@{ 'lane/out/a.json' = '{"a":1}'; 'lane/out/gone.json' = '{"g":1}'; 'lane/out/moved-from.json' = '{"moved":"same bytes"}'; 'other/sess.json' = '{"s":1}' }
+    foreach ($k in @($seed5.Keys)) { [IO.File]::WriteAllText((Join-Path $tr5 $k), [string]$seed5[$k]) }
+    & git -C $tr5 add -A -- lane other | Out-Null
+    & git -C $tr5 commit -q -m seed | Out-Null
+    $seedSha5 = ([string](& git -C $tr5 rev-parse HEAD)).Trim()
+    # ANOTHER SESSION, before the lane commits: it stages sess.json at s2 and then edits it again on disk (MM).
+    [IO.File]::WriteAllText((Join-Path $tr5 'other/sess.json'), '{"s":2}')
+    & git -C $tr5 add -- other/sess.json | Out-Null
+    $sessStaged = ([string](& git -C $tr5 rev-parse ':other/sess.json')).Trim()
+    [IO.File]::WriteAllText((Join-Path $tr5 'other/sess.json'), '{"s":3}')
+    # THE LANE: modify, delete, add, delete-plus-identical-add, and an add with a space and a non-ASCII letter.
+    [IO.File]::WriteAllText((Join-Path $tr5 'lane/out/a.json'), '{"a":2}')
+    Remove-Item -LiteralPath (Join-Path $tr5 'lane/out/gone.json')
+    [IO.File]::WriteAllText((Join-Path $tr5 'lane/out/new.json'), '{"n":1}')
+    Remove-Item -LiteralPath (Join-Path $tr5 'lane/out/moved-from.json')
+    [IO.File]::WriteAllText((Join-Path $tr5 'lane/out/moved-to.json'), '{"moved":"same bytes"}')
+    [IO.File]::WriteAllText((Join-Path $tr5 $odd5), '{"o":1}')
+    $v5 = Invoke-PipelineCommit -Repo $tr5 -Paths @('lane/out') -Message 'lane' -Name 'probe'
+    $ns5 = @(([string](Invoke-GitCaptured -Repo $tr5 -GitArgs @('-c', 'core.quotePath=false', 'show', '--no-renames', '--name-status', '-z', '--pretty=format:', 'HEAD')).stdout).Split([char]0) | Where-Object { $_ -and $_.Trim() })
+    $nsPairs = @(); for ($i = 0; $i + 1 -lt $ns5.Count; $i += 2) { $nsPairs += ($ns5[$i].Trim() + ' ' + $ns5[$i + 1]) }
+    $nsText = (@($nsPairs | Sort-Object) -join ',')
+    $wantNs = (@('A lane/out/moved-to.json', 'A lane/out/new.json', ('A ' + $odd5), 'D lane/out/gone.json', 'D lane/out/moved-from.json', 'M lane/out/a.json') | Sort-Object) -join ','
+    $blobsOk = $true
+    foreach ($k in @('lane/out/a.json', 'lane/out/new.json', 'lane/out/moved-to.json', $odd5)) {
+      $hb = ([string](Invoke-GitCaptured -Repo $tr5 -GitArgs @('rev-parse', ('HEAD:' + $k))).stdout).Trim()
+      $wb = ([string](Invoke-GitCaptured -Repo $tr5 -GitArgs @('hash-object', '--', $k)).stdout).Trim()
+      if (-not $hb -or ($hb -ne $wb)) { $blobsOk = $false }
+    }
+    $parent5 = ([string](& git -C $tr5 rev-parse 'HEAD^')).Trim()
+    # The verdict's count is 5 for six changes, as it was before the resync existed: it counts `diff --cached --name-only`,
+    # which pairs the delete-plus-identical-add as ONE rename. That is also why the resync reads the commit --no-renames.
+    T 'CLEAN TWIN  the commit itself is unchanged: one commit on the seed, exactly the lane''s six changes, each blob the bytes on disk' `
+      (($v5 -match '^probe: committed 5 file\(s\)$') -and ($nsText -eq $wantNs) -and $blobsOk -and ($parent5 -eq $seedSha5)) ($v5 + ' | ns=' + $nsText + ' | blobs=' + $blobsOk + ' | parent ok=' + ($parent5 -eq $seedSha5))
+    $st5 = @(([string](Invoke-GitCaptured -Repo $tr5 -GitArgs @('-c', 'core.quotePath=false', 'status', '--porcelain', '-z', '--untracked-files=all', '--', 'lane', 'other')).stdout).Split([char]0) | Where-Object { $_ })
+    $laneRows = @($st5 | Where-Object { $_.Length -gt 3 -and $_.Substring(3).StartsWith('lane/') })
+    T 'MUST FIRE  no committed path is left staged: the real index reads nothing under the lane''s path, not MM, AD, D or ??' ($laneRows.Count -eq 0) ($laneRows -join ' | ')
+    $lsGone = @(& git -C $tr5 ls-files -- lane/out/gone.json lane/out/moved-from.json | Where-Object { $_ })
+    & git -C $tr5 checkout-index -a -q | Out-Null
+    $back5 = @(@('lane/out/gone.json', 'lane/out/moved-from.json') | Where-Object { Test-Path -LiteralPath (Join-Path $tr5 $_) })
+    T 'MUST FIRE  the RESURRECTION: a deleted path (the rename-shaped one too) leaves the index, so a restore from it brings nothing back on disk' `
+      (($lsGone.Count -eq 0) -and ($back5.Count -eq 0)) ('index=' + ($lsGone -join ',') + ' disk=' + ($back5 -join ','))
+    $sessNow = ([string](& git -C $tr5 rev-parse ':other/sess.json')).Trim()
+    T 'MUST NOT FIRE another session''s staged entry outside the commit is still staged at its own blob, and still MM against its later edit' `
+      (($sessNow -eq $sessStaged) -and ($st5 -contains 'MM other/sess.json')) ('staged=' + $sessNow + ' want=' + $sessStaged + ' | status=' + ($st5 -join ' | '))
+    $laneTree0 = ([string](& git -C $tr5 rev-parse 'HEAD:lane')).Trim()
+    & git -C $tr5 commit -q -m careless | Out-Null
+    $laneTree1 = ([string](& git -C $tr5 rev-parse 'HEAD:lane')).Trim()
+    T 'MUST FIRE  a careless whole-index commit afterwards undoes none of the lane''s commit (the lane tree is unchanged)' ($laneTree1 -eq $laneTree0) ('before=' + $laneTree0 + ' after=' + $laneTree1)
+    # HEAD IS NOT THIS CALL'S COMMIT: another committer moved it between the commit and the resync. Here HEAD is the
+    # careless commit, whose one path is the session's; a resync handed a parent that is not HEAD^ must reset nothing.
+    [IO.File]::WriteAllText((Join-Path $tr5 'other/sess.json'), '{"s":4}')
+    & git -C $tr5 add -- other/sess.json | Out-Null
+    $sess4 = ([string](& git -C $tr5 rev-parse ':other/sess.json')).Trim()
+    $vS = Sync-PipelineSharedIndex -Repo $tr5 -Parent $seedSha5
+    $sessAfter = ([string](& git -C $tr5 rev-parse ':other/sess.json')).Trim()
+    T 'MUST NOT FIRE a resync whose commit is no longer HEAD resets nothing and says SKIPPED (the session''s staged entry stays)' `
+      (($vS -match 'index resync SKIPPED') -and ($sessAfter -eq $sess4)) ($vS + ' | staged=' + $sessAfter + ' want=' + $sess4)
+    # A RESYNC THAT CANNOT RUN IS SPOKEN, never fatal: another process holds the real index's lock. The private-index commit
+    # still lands, and the verdict says the shared index was left stale rather than claiming it was synced.
+    [IO.File]::WriteAllText((Join-Path $tr5 'lane/out/a.json'), '{"a":3}')
+    $lock5 = Join-Path $tr5 '.git\index.lock'
+    [IO.File]::WriteAllText($lock5, '')
+    try { $vL = Invoke-PipelineCommit -Repo $tr5 -Paths @('lane/out') -Message 'lane-locked' -Name 'probe' } finally { Remove-Item -LiteralPath $lock5 -Force -ErrorAction SilentlyContinue }
+    $aHead = ([string](& git -C $tr5 rev-parse 'HEAD:lane/out/a.json')).Trim()
+    $aDisk = ([string](& git -C $tr5 hash-object -- lane/out/a.json)).Trim()
+    T 'MUST FIRE  a resync that cannot take the index lock is named in the verdict, and the commit still lands and classifies committed' `
+      (($vL -match '^probe: committed 1 file\(s\); index resync FAILED') -and ((Get-PipelineCommitOutcome -Verdict $vL) -eq 'committed') -and ($aHead -eq $aDisk)) ($vL + ' | head=' + $aHead + ' disk=' + $aDisk)
+  } catch {
+    T 'the index-resync end-to-end block ran to its end without throwing' $false $_.Exception.Message
+  } finally {
+    Remove-Item -LiteralPath $tr5 -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
   # The literal count: every T line in this block, with the two loops counted at their widths (3 lane kinds x 2, and 4
   # outcomes). Moving it is part of adding or removing a case.
-  $pcExpectedCases = 86
+  $pcExpectedCases = 93
   if ($ran -ne $pcExpectedCases) { Write-Output ("FAIL  the suite ran " + $ran + " case(s) against its literal count of " + $pcExpectedCases); $fail++ }
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s) of {1} run" -f $fail, $ran); exit 1 }
-  Write-Output ('SELF-TEST PASS: ' + $ran + ' of ' + $pcExpectedCases + ' cases: the source-path refusal in eleven shapes, every real path list proved data-only and non-empty, no path owned twice, the committer refusing before it touches git, a lane''s exit code earned from its verdict (a refused commit exits 1, a landed one whose push failed exits 0), a deletion present at start held out of the commit, a -Built journal entry that vouches its blob to the mover and is never committed, and a refused run''s own deletion recorded as a tombstone that the next run commits')
+  Write-Output ('SELF-TEST PASS: ' + $ran + ' of ' + $pcExpectedCases + ' cases: the source-path refusal in eleven shapes, every real path list proved data-only and non-empty, no path owned twice, the committer refusing before it touches git, a lane''s exit code earned from its verdict (a refused commit exits 1, a landed one whose push failed exits 0), a deletion present at start held out of the commit, a -Built journal entry that vouches its blob to the mover and is never committed, and a refused run''s own deletion recorded as a tombstone that the next run commits, and a landed commit resyncing the shared index for exactly its own paths, deletions and renames included, never another session''s staged entry')
   exit 0
 }
