@@ -727,6 +727,12 @@ construction.
   instance it means** - the `identity-graph-commodity-is-namespaced` shape, an agreeing answer about something else.
   Drive such a suite once with the real lock held before believing it.
 
+  **A session in the MAIN checkout lands with `ops\push-main.ps1` too, which goes through a throwaway worktree by itself**
+  (2026-09-23, W8.2): a plain push from the main checkout is the one road left that races the whole hook, and 11 of 82
+  main-checkout pushes that passed every hook check since 09-16 were then rejected. The throwaway runs the whole sequence,
+  the main checkout is never rebased, and local main is moved to the landed tip by `git reset --keep` only when HEAD did
+  not move meanwhile. It adds no lock. A plain push is the fallback, and it is still fully gated.
+
 ## The words these rules were written without `[2026-09-12, backlog I102, I103, I118, I120, I135]`
 
 Every rule above was derived here, from an incident, without the vocabulary that names it. That was

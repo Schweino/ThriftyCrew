@@ -74,6 +74,12 @@ never a refusal**: the hook says so and pushes on, gated exactly as before. **It
 checkout that has not pulled this still pushes unlocked and can still overtake you. Measured on the very push that
 shipped it: 379 gates green, rejected anyway by a checkout that had not caught up.
 `design\MEASURE-push-lock-2026-09-11.md`.
+**From the MAIN checkout, `ops\push-main.ps1` lands through a throwaway worktree by itself** (W8.2 of
+`design\PLAN-push-derived-conflicts-2026-09-23.md`): the main checkout is always dirty, so push-main there was refused
+16 of 16 times since 09-16 and it landed only by plain push, which races the whole hook. It now runs the whole sequence in
+a detached worktree of HEAD, never rebases the main checkout, and then moves local main to the landed tip with
+`git reset --keep` when HEAD is still where the run found it (dirty and untracked files untouched), or prints the one
+command to run. Like any push it lands the whole branch. A plain push is the fallback, and it is still fully gated.
 
 **THE GATE MUST NOT RUN INSIDE THE LOCK** (Brad, 2026-09-12). It did until that morning, and the arithmetic is the
 whole story: the lock serialises pushes machine-wide, so with a ~10-minute gate inside it the box lands about SIX

@@ -201,6 +201,10 @@ param(
   # THE CHAIN QUEUE (W9.2): live by default, from its first commit (D8's condition, carried to W9.2). off never opens
   # the queue and records queue=off: that is the ROLLBACK, a one-line default flip or -ChainQueue off on one push.
   [ValidateSet('live', 'off')][string]$ChainQueue = 'live',
+  # THE MAIN CHECKOUT LANDS THROUGH A THROWAWAY WORKTREE (W8.2): automatic when this runs from the main checkout (its git
+  # dir IS the common dir), or asked for with -ViaWorktree. -NoViaWorktree runs in place anyway: the rollback.
+  [switch]$ViaWorktree,
+  [switch]$NoViaWorktree,
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -787,7 +791,7 @@ function Invoke-TcSyncToRemote {
         $msg = ("push-main: REFUSED - the working tree was clean at the pre-flight, and while the legs ran something in THIS checkout wrote:`n{0}`nA leg, a board step or a reconciler run here writes into the checkout being landed; run it in a scratch clone instead, then run this again." -f $listed)
       }
       if (Test-TcMainCheckout -Dir $Dir) {
-        $msg += "`nThis is the MAIN checkout, which other sessions and the bots keep dirty: land from a clean linked worktree instead (git worktree add, then ops\push-main.ps1 there)."
+        $msg += "`nThis is the MAIN checkout, which other sessions and the bots keep dirty: ops\push-main.ps1 run here lands through a throwaway worktree by itself (-ViaWorktree, the default from the main checkout), so this refusal means it was run with -NoViaWorktree or inside that worktree."
       }
     }
     return (New-TcSyncResult -Code 1 -Outcome 'refused-not-ready' -Head $head -Rem $rem -Ahead $ahead -Message $msg -DirtyPaths $dirtyPaths -Degraded $degraded)
@@ -1810,6 +1814,70 @@ function Update-TcChainQueueRange {
   $null = Set-TcChainQueueState -Member $Member -Base $base -Range $rng
 }
 
+# ======================================================================================================================
+# THE MAIN CHECKOUT LANDS THROUGH A THROWAWAY WORKTREE (2026-09-23, W8.2). The main checkout is always dirty (other
+# sessions, the bots, board steps), so push-main from it was refused-not-ready 16 of 16 times since 09-16 and it landed
+# only by plain push, which races the whole hook (a CAS whose critical section is the hook). Here it lands like any other
+# checkout: a detached worktree of HEAD under %TEMP%, seeded by push-main's own seed after the pre-flight, runs the WHOLE
+# sequence (guard, pre-flight, legs, queue, lock); the main checkout is never rebased, and its dirt never matters. After a
+# landing, when the main checkout's HEAD is still the sha the run started from, `git reset --keep <landed tip>` brings
+# local main to the landed tip, so nothing is left for the bot's `-X theirs` replay. Step 0, measured 2026-09-23 on git
+# 2.54 in a scratch repo carrying this repo's .gitattributes: dirty tracked files the landing does not touch and untracked
+# files stay byte-identical; another session's staged entry is unstaged with its content kept (git's --keep table); a
+# local edit to a file the landing changes makes --keep refuse (exit 128) and change nothing. When HEAD moved or --keep
+# refuses, nothing is changed: the landed tip and the one command to run are printed, main_sync=manual, exit 0.
+# LIKE A PLAIN PUSH IT LANDS THE WHOLE BRANCH (UNPUSHED IS NOT PRIVATE), so every commit it will land is printed first.
+# It adds no lock. Its cost is one seed of a fresh worktree per run, and only from the main checkout.
+# ======================================================================================================================
+function Invoke-TcPushMainViaWorktree {
+  param([string]$MainDir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$WorktreeRoot = '', [System.Collections.IDictionary]$PushArgs = $null, [string]$LedgerRoot = '')
+  $f = Invoke-TcFetchWithRetry -Dir $MainDir -Remote $Remote -Branch $Branch
+  $rem = $(if ($f.Code -eq 0) { Get-TcFirstLine (Invoke-TcGit -Dir $MainDir -Arguments @('rev-parse', 'FETCH_HEAD')) } else { Get-TcFirstLine (Invoke-TcGit -Dir $MainDir -Arguments @('rev-parse', ('refs/remotes/' + $Remote + '/' + $Branch))) })
+  $startHead = Get-TcFirstLine (Invoke-TcGit -Dir $MainDir -Arguments @('rev-parse', 'HEAD'))
+  $aheadR = Invoke-TcGit -Dir $MainDir -Arguments @('log', '--format=%h %s', ($rem + '..HEAD'))
+  $ahead = @(@($aheadR.Out) | Where-Object { ([string]$_).Trim() })
+  if (-not $rem -or -not $startHead -or $aheadR.Code -ne 0 -or $ahead.Count -eq 0) {
+    Say ("push-main: REFUSED - the main checkout has no commit that {0}/{1} does not already hold, so there is nothing to land and no throwaway worktree was made." -f $Remote, $Branch)
+    $wr = Write-TcPushRow -Event 'push-main' -WaitMs -1 -State 'not-taken' -BaseSha $rem -GrantSha '' -Outcome 'refused-not-ready' -Checkout $MainDir -Root $LedgerRoot -Fields ([ordered]@{ schema = 2; via_worktree = $true; phase = 'preflight' })
+    if (-not $wr.Written) { Say ('push-main: the push ledger row was NOT written (' + $wr.Reason + ').') }
+    return 1
+  }
+  Say ("push-main: from the MAIN checkout, so this lands through a throwaway worktree. Like any push it lands the WHOLE branch, these {0} commit(s):" -f $ahead.Count)
+  foreach ($c in $ahead) { Say ('  ' + $c) }
+  $root = $(if ($WorktreeRoot) { $WorktreeRoot } else { $env:TEMP })
+  $wtDir = Join-Path $root ('tc-pm-via-' + $PID + '-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  $add = Invoke-TcGit -Dir $MainDir -Arguments @('worktree', 'add', '--detach', $wtDir, $startHead)
+  if ($add.Code -ne 0) { Say ('push-main: COULD NOT EVALUATE - the throwaway worktree could not be made (git exited ' + $add.Code + '): ' + $add.Text); return 3 }
+  try {
+    $vwMainDir = $MainDir; $vwStartHead = $startHead
+    $landedSync = {
+      param($wd)
+      $landed = Get-TcFirstLine (Invoke-TcGit -Dir $wd -Arguments @('rev-parse', 'HEAD'))
+      $now = Get-TcFirstLine (Invoke-TcGit -Dir $vwMainDir -Arguments @('rev-parse', 'HEAD'))
+      if (-not [string]::Equals($now, $vwStartHead, [StringComparison]::Ordinal)) {
+        Say ("push-main: LANDED from the throwaway worktree at {0}, but the main checkout's HEAD moved while it ran ({1} -> {2}), so it is left exactly as it is. To bring local main to what landed, when it is safe: git -C `"{3}`" reset --keep {0}" -f $landed.Substring(0, 9), $vwStartHead.Substring(0, 9), $now.Substring(0, [Math]::Min(9, $now.Length)), $vwMainDir)
+        return 'manual'
+      }
+      $rk = Invoke-TcGit -Dir $vwMainDir -Arguments @('reset', '--keep', $landed)
+      if ($rk.Code -ne 0) {
+        Say ("push-main: LANDED at {0}, but `git reset --keep` refused in the main checkout (a local change to a file the landing touched), so nothing there was changed. When it is safe: git -C `"{1}`" reset --keep {0}`n{2}" -f $landed.Substring(0, 9), $vwMainDir, $rk.Text)
+        return 'manual'
+      }
+      Say ("push-main: the main checkout's local main now carries the landed tip {0} (git reset --keep: its uncommitted files are untouched, and a staged entry keeps its content, unstaged)." -f $landed.Substring(0, 9))
+      return 'reset-keep'
+    }
+    $call = @{ Dir = $wtDir; Remote = $Remote; Branch = $Branch; LockWaitSec = $LockWaitSec; DryRun = $DryRun; ExtraRowFields = ([ordered]@{ via_worktree = $true }); AfterLanded = $landedSync }
+    if ($LedgerRoot) { $call['LedgerRoot'] = $LedgerRoot }
+    if ($PushArgs) { foreach ($k in @($PushArgs.Keys)) { $call[$k] = $PushArgs[$k] } }
+    return (Invoke-TcPushMain @call)
+  } finally {
+    # THE THROWAWAY GOES ON EVERY PATH, and the main checkout is left exactly as it was on every refusal.
+    $null = Invoke-TcGit -Dir $MainDir -Arguments @('worktree', 'remove', '--force', $wtDir)
+    $null = Invoke-TcGit -Dir $MainDir -Arguments @('worktree', 'prune')
+    if (Test-Path -LiteralPath $wtDir) { Remove-Item -LiteralPath $wtDir -Recurse -Force -ErrorAction SilentlyContinue }
+  }
+}
+
 function Invoke-TcPushMainReexec {
   <# RUN THE NEW COPY ONCE (W2.1R step 8): the script at -Path as a child, with -Arguments and TC_PUSH_MAIN_REEXEC=1, its
      lines echoed as they arrive. Returns its exit code, or $null when it could not be started, in which case the caller
@@ -1834,7 +1902,7 @@ function Invoke-TcPushMainReexec {
 $script:TcPmReexecExtra = @()
 
 function Invoke-TcPushMain {
-  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '', [string]$SeedScript = '', [scriptblock]$RehearsalRunner = $null, [scriptblock]$RehearsalCheck = $null, [bool]$NoReexec = $false, [scriptblock]$RehearsalStarter = $null, [string]$ChainQueue = 'live', [scriptblock]$ChainTouchingProbe = $null)
+  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '', [string]$SeedScript = '', [scriptblock]$RehearsalRunner = $null, [scriptblock]$RehearsalCheck = $null, [bool]$NoReexec = $false, [scriptblock]$RehearsalStarter = $null, [string]$ChainQueue = 'live', [scriptblock]$ChainTouchingProbe = $null, [System.Collections.IDictionary]$ExtraRowFields = $null, [scriptblock]$AfterLanded = $null)
   # WHICH CODE IS RUNNING, read FIRST (W0.1R step 2). The round-1 fetch and rebase below rewrite this checkout, and when
   # origin changed ops\push-main.ps1 they rewrite THIS script on disk: a hash taken after that names code this process is
   # not running, which is the one thing pm_blob exists to say.
@@ -1928,6 +1996,10 @@ function Invoke-TcPushMain {
     # W4.1 step 7 (warn only): commits adding a re-read as a doc line instead of a design/reread-ledger.tsv row.
     reread_doc_lines     = $null
     # W9.1 step 7 (B22): yes, no, not-chain or unknown, from the first -ForPush of the run; null when no child said.
+    # W8.2: whether this push ran in a throwaway worktree for the main checkout, and what became of the main checkout's
+    # local main after it landed (reset-keep, or manual when its HEAD had moved or --keep refused); null otherwise.
+    via_worktree         = $false
+    main_sync            = $null
     early_hit            = $null
     # W9.3: whether the rehearsal child ended blind=stopped (a red leg wrote its stop file), and each round's rehearsal
     # seconds, 0 for a leg that reused or found a verdict (B21).
@@ -1938,6 +2010,7 @@ function Invoke-TcPushMain {
   # wrote one for, so every path now ends here, and a path that already wrote one is never written twice.
   $rowState = @{ Written = $false }
   $curPhase = $null
+  if ($ExtraRowFields) { foreach ($xk in @($ExtraRowFields.Keys)) { $pmRow[$xk] = $ExtraRowFields[$xk] } }
   $cq = $null
   $cqState = @{ Decided = $false; AtHead = $false; Stack = $null }
   $writeRow = {
@@ -2464,6 +2537,11 @@ function Invoke-TcPushMain {
           # EVERYTHING THAT ENDS IN HERE WITHOUT LANDING STOPPED IN THE LOCK: a refusal, a rejected push, a fetch that
           # failed, or a throw that left the outcome unknown. A landing and a dry run carry no phase.
           if (-not ($outcome -ceq 'landed' -or $outcome -ceq 'landed-after-rebase' -or $outcome -ceq 'dry-run')) { $pmRow['phase'] = 'inlock' }
+          # AFTER A LANDING, OUTSIDE THE LOCK (W8.2): the via-worktree caller brings the main checkout's local main to the
+          # landed tip, and its answer goes on this row. A throw costs the field, never the landing.
+          if ($AfterLanded -and ($outcome -ceq 'landed' -or $outcome -ceq 'landed-after-rebase')) {
+            try { $pmRow['main_sync'] = [string](& $AfterLanded $Dir) } catch { $pmRow['main_sync'] = 'manual'; Say ('push-main: bringing the main checkout to the landed tip threw (' + $_.Exception.Message + '); do it by hand.') }
+          }
           & $writeRow
         }
       }
@@ -4654,6 +4732,140 @@ exit 0
     T ($kCT + '  every one of those runs handed the push lock back, including the refusals') ($freeNow.Held) ("held={0}" -f $freeNow.Held)
     Exit-TcPushLock $freeNow
 
+    # ---- THE MAIN CHECKOUT LANDS THROUGH A THROWAWAY WORKTREE (W8.2) ----
+    # A clone IS a main checkout (its git dir is the common dir), so each case makes one dirty in the three ways the real
+    # main checkout is: a modified tracked file, an untracked file, and another session's STAGED entry. The landing runs
+    # in a detached worktree under $tmp\via, and every case also asserts that no throwaway is left, on every outcome.
+    $vwRoot = Join-Path $tmp 'via'
+    $null = New-Item -ItemType Directory -Force -ErrorAction Stop $vwRoot
+    $vwLeft = { param($d) @(@(Get-ChildItem -LiteralPath $vwRoot -Force -ErrorAction SilentlyContinue).Count, @(@(& git -C $d worktree list --porcelain 2>$null) | Where-Object { "$_" -like 'worktree *' }).Count) -join '|' }
+    $vwMd5 = { param($p) if (Test-Path -LiteralPath $p) { (Get-FileHash -Algorithm MD5 -LiteralPath $p).Hash } else { '<absent>' } }
+    $vwArgs = [ordered]@{ LockPrefix = $prefix; LockQueueRoot = $qroot; GateRunner = $greenGate; RehearsalRunner = $rhGreen; NoReexec = $true }
+    $null = & git -C $mover pull -q --rebase origin main 2>$null
+    foreach ($vf in @('vw-tracked.txt', 'vw-landed.txt')) { [IO.File]::WriteAllText((Join-Path $mover $vf), ('base ' + $vf)) }
+    $null = & git -C $mover add -- vw-tracked.txt vw-landed.txt 2>$null; $null = & git -C $mover commit -q -m 'vw base' 2>$null
+    $null = & git -C $mover push -q origin HEAD:main 2>$null
+    $vwDirty = { param($d)
+      [IO.File]::WriteAllText((Join-Path $d 'vw-tracked.txt'), 'a local edit nobody committed')
+      [IO.File]::WriteAllText((Join-Path $d 'vw-untracked.txt'), 'an untracked file')
+      [IO.File]::WriteAllText((Join-Path $d 'vw-staged.txt'), 'another session staged this')
+      $null = & git -C $d add -- vw-staged.txt 2>$null
+    }
+    $vwState = { param($d) ((@(& git -C $d status --porcelain=v1 -uall 2>$null) + @('--') + @(& git -C $d ls-files -s 2>$null)) -join "`n") }
+
+    # MUST FIRE, the founding shape: a DIRTY main checkout with a commit ahead lands through the throwaway. Its dirty and
+    # untracked files are byte-identical afterwards, the staged entry keeps its content (unstaged, git's --keep table),
+    # and local main is the landed tip, so the bot's replay has nothing left to carry.
+    $vm1 = & $newPusher 'vwmain1'
+    & $vwDirty $vm1
+    $vm1Before = @((& $vwMd5 (Join-Path $vm1 'vw-tracked.txt')), (& $vwMd5 (Join-Path $vm1 'vw-untracked.txt')), (& $vwMd5 (Join-Path $vm1 'vw-staged.txt'))) -join '|'
+    $ledV1 = Join-Path $tmp 'ledvw1'
+    $rV1 = Invoke-TcPushMainViaWorktree -MainDir $vm1 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -WorktreeRoot $vwRoot -PushArgs $vwArgs -LedgerRoot $ledV1
+    $vm1After = @((& $vwMd5 (Join-Path $vm1 'vw-tracked.txt')), (& $vwMd5 (Join-Path $vm1 'vw-untracked.txt')), (& $vwMd5 (Join-Path $vm1 'vw-staged.txt'))) -join '|'
+    $vm1Head = ([string](@(& git -C $vm1 rev-parse HEAD 2>$null))[0]).Trim()
+    $vm1Cached = @(& git -C $vm1 diff --cached --name-only 2>$null)
+    $vm1RowsRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledV1)
+    $vm1Rows = @($vm1RowsRaw)
+    $vm1Row = $(if ($vm1Rows.Count) { $vm1Rows[-1] } else { $null })
+    $vm1Left = & $vwLeft $vm1
+    T ($kMF + '  a dirty main checkout lands through a throwaway worktree: dirty and untracked files byte-identical, the staged entry kept unstaged, local main at the landed tip, row via_worktree and main_sync reset-keep, no throwaway left') `
+      ($rV1 -eq 0 -and $vm1After -ceq $vm1Before -and $vm1Head -ceq (& $tipOf) -and @(& git -C $origin ls-tree --name-only main 2>$null) -contains 'vwmain1.txt' -and $vm1Cached.Count -eq 0 -and $vm1Rows.Count -eq 1 -and $vm1Row.via_worktree -eq $true -and [string]$vm1Row.main_sync -ceq 'reset-keep' -and $vm1Left -ceq '0|1') `
+      ("rc={0} md5same={1} head={2} tip={3} cached={4} rows={5} via={6} sync={7} left={8}" -f $rV1, ($vm1After -ceq $vm1Before), $vm1Head, (& $tipOf), ($vm1Cached -join ','), $vm1Rows.Count, $(if ($vm1Row) { $vm1Row.via_worktree }), $(if ($vm1Row) { $vm1Row.main_sync }), $vm1Left)
+
+    # MUST FIRE: a remote that MOVES while the legs run is rebased over IN THE THROWAWAY, never in the main checkout. The
+    # main checkout's reflog holds no rebase at all, and it still ends at the landed tip, which carries both commits.
+    $vm2 = & $newPusher 'vwmain2'
+    & $vwDirty $vm2
+    $script:vwMoved = $false
+    $vwMoveGate = { param($d) if (-not $script:vwMoved) { $script:vwMoved = $true; & $moveOrigin 'vw-moved.txt' }; [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    $vwArgs2 = [ordered]@{ LockPrefix = $prefix; LockQueueRoot = $qroot; GateRunner = $vwMoveGate; RehearsalRunner = $rhGreen; NoReexec = $true }
+    $ledV2 = Join-Path $tmp 'ledvw2'
+    $rV2 = Invoke-TcPushMainViaWorktree -MainDir $vm2 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -WorktreeRoot $vwRoot -PushArgs $vwArgs2 -LedgerRoot $ledV2
+    $vm2Head = ([string](@(& git -C $vm2 rev-parse HEAD 2>$null))[0]).Trim()
+    $vm2Reflog = @(& git -C $vm2 reflog --format=%gs 2>$null)
+    $vm2Rebases = @($vm2Reflog | Where-Object { "$_" -like 'rebase*' })
+    $vm2Tree = @(& git -C $origin ls-tree --name-only main 2>$null)
+    $vm2Left = & $vwLeft $vm2
+    T ($kMF + '  a remote that moves during the legs is rebased in the throwaway and never in the main checkout (its reflog holds no rebase), and the main checkout still ends at the landed tip carrying both') `
+      ($rV2 -eq 0 -and $script:vwMoved -and $vm2Rebases.Count -eq 0 -and $vm2Head -ceq (& $tipOf) -and $vm2Tree -contains 'vwmain2.txt' -and $vm2Tree -contains 'vw-moved.txt' -and $vm2Left -ceq '0|1') `
+      ("rc={0} moved={1} rebasesInMain={2} head={3} tip={4} left={5}" -f $rV2, $script:vwMoved, $vm2Rebases.Count, $vm2Head, (& $tipOf), $vm2Left)
+
+    # MUST FIRE, the manual road: the main checkout's HEAD MOVES while the run is in flight (a session commits there).
+    # It lands, the main checkout is left exactly as that session left it, and the row says main_sync manual.
+    $vm3 = & $newPusher 'vwmain3'
+    $script:vwCommitted = $false
+    $vwCommitGate = { param($d)
+      if (-not $script:vwCommitted) {
+        $script:vwCommitted = $true
+        [IO.File]::WriteAllText((Join-Path $vm3 'vw-later.txt'), 'committed while the run was in flight')
+        $null = & git -C $vm3 add -- vw-later.txt 2>$null; $null = & git -C $vm3 commit -q -m 'vw later' 2>$null
+      }
+      [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    $vwArgs3 = [ordered]@{ LockPrefix = $prefix; LockQueueRoot = $qroot; GateRunner = $vwCommitGate; RehearsalRunner = $rhGreen; NoReexec = $true }
+    $ledV3 = Join-Path $tmp 'ledvw3'
+    $rV3 = Invoke-TcPushMainViaWorktree -MainDir $vm3 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -WorktreeRoot $vwRoot -PushArgs $vwArgs3 -LedgerRoot $ledV3
+    $vm3Head = ([string](@(& git -C $vm3 rev-parse HEAD 2>$null))[0]).Trim()
+    $vm3Subj = ([string](@(& git -C $vm3 log -1 --format=%s 2>$null))[0]).Trim()
+    $vm3RowsRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledV3)
+    $vm3Rows = @($vm3RowsRaw)
+    $vm3Row = $(if ($vm3Rows.Count) { $vm3Rows[-1] } else { $null })
+    $vm3Left = & $vwLeft $vm3
+    T ($kMF + '  a main checkout whose HEAD moved while the run was in flight is left exactly as it is: the push lands, main_sync is manual, no throwaway left') `
+      ($rV3 -eq 0 -and $vm3Subj -ceq 'vw later' -and $vm3Head -cne (& $tipOf) -and @(& git -C $origin ls-tree --name-only main 2>$null) -contains 'vwmain3.txt' -and $vm3Row -and [string]$vm3Row.main_sync -ceq 'manual' -and $vm3Left -ceq '0|1') `
+      ("rc={0} subj={1} sync={2} left={3}" -f $rV3, $vm3Subj, $(if ($vm3Row) { $vm3Row.main_sync }), $vm3Left)
+
+    # MUST FIRE, --keep refuses: a local edit to a file the LANDING changes (origin moves vw-landed.txt during the legs,
+    # and the main checkout has an uncommitted edit to it). It lands, the edit is byte-identical, main_sync is manual.
+    $vm4 = & $newPusher 'vwmain4'
+    [IO.File]::WriteAllText((Join-Path $vm4 'vw-landed.txt'), 'a local edit to a file the landing will change')
+    $vm4Md5 = & $vwMd5 (Join-Path $vm4 'vw-landed.txt')
+    $vm4Start = ([string](@(& git -C $vm4 rev-parse HEAD 2>$null))[0]).Trim()
+    $script:vwMoved = $false
+    $vwMoveLanded = { param($d) if (-not $script:vwMoved) { $script:vwMoved = $true; & $moveOrigin 'vw-landed.txt' }; [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    $vwArgs4 = [ordered]@{ LockPrefix = $prefix; LockQueueRoot = $qroot; GateRunner = $vwMoveLanded; RehearsalRunner = $rhGreen; NoReexec = $true }
+    $ledV4 = Join-Path $tmp 'ledvw4'
+    $rV4 = Invoke-TcPushMainViaWorktree -MainDir $vm4 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -WorktreeRoot $vwRoot -PushArgs $vwArgs4 -LedgerRoot $ledV4
+    $vm4RowsRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledV4)
+    $vm4Rows = @($vm4RowsRaw)
+    $vm4Row = $(if ($vm4Rows.Count) { $vm4Rows[-1] } else { $null })
+    $vm4Head = ([string](@(& git -C $vm4 rev-parse HEAD 2>$null))[0]).Trim()
+    $vm4Left = & $vwLeft $vm4
+    T ($kMF + '  a local edit to a file the landing changes makes reset --keep refuse: the push lands, the edit and HEAD are untouched, main_sync is manual') `
+      ($rV4 -eq 0 -and $script:vwMoved -and (& $vwMd5 (Join-Path $vm4 'vw-landed.txt')) -ceq $vm4Md5 -and $vm4Head -ceq $vm4Start -and $vm4Row -and [string]$vm4Row.main_sync -ceq 'manual' -and $vm4Left -ceq '0|1') `
+      ("rc={0} moved={1} md5same={2} headSame={3} sync={4} left={5}" -f $rV4, $script:vwMoved, ((& $vwMd5 (Join-Path $vm4 'vw-landed.txt')) -ceq $vm4Md5), ($vm4Head -ceq $vm4Start), $(if ($vm4Row) { $vm4Row.main_sync }), $vm4Left)
+
+    # MUST NOT FIRE: a REFUSED run (a red gate) leaves the main checkout's status and index byte-identical, origin where
+    # it was, and no throwaway.
+    $vm5 = & $newPusher 'vwmain5'
+    & $vwDirty $vm5
+    $vm5Before = & $vwState $vm5
+    $vm5Tip = & $tipOf
+    $vwArgs5 = [ordered]@{ LockPrefix = $prefix; LockQueueRoot = $qroot; GateRunner = { param($d) [pscustomobject]@{ Ran = $true; Code = 1; Why = 'fixture: red' } }; RehearsalRunner = $rhGreen; NoReexec = $true }
+    $rV5 = Invoke-TcPushMainViaWorktree -MainDir $vm5 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -WorktreeRoot $vwRoot -PushArgs $vwArgs5 -LedgerRoot (Join-Path $tmp 'ledvw5')
+    $vm5Left = & $vwLeft $vm5
+    T ($kMNF + '  a refused run through the throwaway leaves the main checkout''s status and index byte-identical, origin unmoved, and no throwaway') `
+      ($rV5 -eq 1 -and [string]::Equals((& $vwState $vm5), $vm5Before, [StringComparison]::Ordinal) -and (& $tipOf) -ceq $vm5Tip -and $vm5Left -ceq '0|1') `
+      ("rc={0} stateSame={1} tipSame={2} left={3}" -f $rV5, [string]::Equals((& $vwState $vm5), $vm5Before, [StringComparison]::Ordinal), ((& $tipOf) -ceq $vm5Tip), $vm5Left)
+
+    # MUST NOT FIRE: a main checkout with NOTHING ahead of origin is refused before any worktree is made, and says so.
+    $vm6 = New-Clone 'vwmain6'
+    $ledV6 = Join-Path $tmp 'ledvw6'
+    $rV6 = Invoke-TcPushMainViaWorktree -MainDir $vm6 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -WorktreeRoot $vwRoot -PushArgs $vwArgs -LedgerRoot $ledV6
+    $vm6RowsRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledV6)
+    $vm6Rows = @($vm6RowsRaw)
+    $vm6Left = & $vwLeft $vm6
+    T ($kMNF + '  a main checkout with nothing ahead is refused (1) with no throwaway made, and its row says via_worktree refused-not-ready') `
+      ($rV6 -eq 1 -and $vm6Left -ceq '0|1' -and $vm6Rows.Count -eq 1 -and $vm6Rows[0].via_worktree -eq $true -and [string]$vm6Rows[0].outcome -ceq 'refused-not-ready') `
+      ("rc={0} left={1} rows={2}" -f $rV6, $vm6Left, $vm6Rows.Count)
+
+    # CLEAN TWIN, the road is chosen by the checkout: a clone reads as a main checkout and a linked worktree of it does
+    # not, so the entry point routes the first through the throwaway and runs the second in place, as before.
+    $vm7Wt = Join-Path $tmp 'vwlinked'
+    $null = & git -C $vm6 worktree add -q --detach $vm7Wt 2>$null
+    T ($kCT + '  a clone reads as the main checkout (so it goes through the throwaway) and a linked worktree of it does not (so it lands in place)') `
+      ((Test-TcMainCheckout -Dir $vm6) -and -not (Test-TcMainCheckout -Dir $vm7Wt)) ("main={0} linked={1}" -f (Test-TcMainCheckout -Dir $vm6), (Test-TcMainCheckout -Dir $vm7Wt))
+    $null = & git -C $vm6 worktree remove --force $vm7Wt 2>$null
+
     # NOTHING THIS SUITE WROTE REACHED THE PRODUCTION LEDGER. Keyed on this RUN's id, not on the file's size (a real
     # push from another session may append while these cases run) and NOT on this process's pid: the production file
     # is one per day for the whole box, pids recycle within it, and a stranger's row carrying this pid refused two of
@@ -4699,7 +4911,7 @@ exit 0
   # MUST NOT FIRE and a CLEAN TWIN), W9.4's 5 (the queue member's hand-back case lands with W9.2), and W3.2 with W3.4a
   # step 3's 7, W4.1 step 7's 3, W9.1's push-main half's 5, W9.3's 11, and W9.2's 14 (W9.4's queue-member hand-back among
   # them) and the rh_key reader's 1; read off this file, not added up.
-  $expectedCases = 164
+  $expectedCases = 171
   if ($cases -ne $expectedCases) { Write-Output ("FAIL  the suite ran {0} case(s) where this file holds {1}, so a case was skipped or lost" -f $cases, $expectedCases); $f++ }
   if ($f) { Write-Output ("push-main self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("push-main self-test PASS: {0} cases - led by a branch whose base the remote moved past landing on its FIRST attempt, and by a conflicting rebase being aborted rather than left half-finished under the lock" -f $cases)
@@ -4717,6 +4929,12 @@ if ($NoRehearsal) {
 if ($Prepare) {
   $rcP = Invoke-TcPushMainPrepare -Dir $repo -Remote $Remote -Branch $Branch
   exit $rcP
+}
+# FROM THE MAIN CHECKOUT, THROUGH A THROWAWAY WORKTREE (W8.2), unless -NoViaWorktree says otherwise. A re-executed child
+# is already the new copy of a run that chose its road.
+if ($ViaWorktree -or (-not $NoViaWorktree -and -not $env:TC_PUSH_MAIN_REEXEC -and (Test-TcMainCheckout -Dir $repo))) {
+  $rcV = Invoke-TcPushMainViaWorktree -MainDir $repo -Remote $Remote -Branch $Branch -LockWaitSec $LockWaitSec -DryRun ([bool]$DryRun) -PushArgs ([ordered]@{ NoReexec = [bool]$NoReexec; ChainQueue = $ChainQueue })
+  exit $rcV
 }
 $rc = Invoke-TcPushMain -Dir $repo -Remote $Remote -Branch $Branch -LockWaitSec $LockWaitSec -DryRun ([bool]$DryRun) -NoReexec ([bool]$NoReexec) -ChainQueue $ChainQueue
 exit $rc
