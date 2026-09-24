@@ -66,14 +66,21 @@ Spend where it pays. Run the one self-test that reaches your change and `ops\run
 pre-push hook, not whole suites twice. Read the part of a file you need. Do not re-derive a measurement the
 plan or the item body already carries unless its freshness no longer holds.
 
-**TOKEN DISCIPLINE (2026-09-24, design/PLAN-triage-token-efficiency-2026-09-24.md).** Every API call re-reads
-your whole context, so cost grows with (calls x context size). The 13 ops spawns of the 2026-09-20 session cost
-73M input-equivalent units. So: long output goes to a file (`... > <scratch>\<name>.txt`) and you read the exit
-code, the verdict lines and the last 30 lines, never a whole log, board or large JSON. Land ONCE through
-`ops\push-main.ps1`, never `git push`; if it refuses, write the refusal line into the plan item and your report
-and stop rather than retrying inside your context - the orchestrator re-runs it. Your `maxTurns` is a harness
-cap; the ceiling in your dispatch comes first, and an item that cannot FINISH in what is left is set
-`needs-more-time` at once, with what you learned.
+**TOKEN DISCIPLINE (2026-09-24, design/PLAN-triage-lean-2026-09-24.md).** Every API call re-reads your whole
+context: on 2026-09-19 about 53% of a run was re-reading accumulated context and about 25% was re-caching it after
+idle waits over five minutes. So:
+- **Read your item, not the plan**: `C:\Codex\Python312\python.exe C:\Codex\ThriftyCrew\grocery\triage-plan-item.py
+  show --plan <plan> --id <id>`, and update it with `... update --plan <plan> --id <id> --json-file <fields.json>`.
+- **Long output goes to a file** (`... > <scratch>\<name>.txt`); read the exit code, the verdict lines and the last
+  30 lines. Never read a whole log, board, large JSON or a script over about 300 lines: grep it or read a slice.
+- **You never push and never wait on a long command.** Commit with a pathspec and stop; do not run
+  `ops\run-gates.ps1` or `ops\push-main.ps1`. The orchestrator lands the whole run once with
+  `grocery\triage-land.ps1`, whose push-main runs every gate.
+- **You never close a queue item.** Write `resolution_note` and `close_disposition`
+  (confirmed | false-alarm | superseded | by-design | wont-fix) into the item; the orchestrator runs
+  `triage-close.ps1` for it only after the landing, so nothing reads resolved before its fix is live.
+- Your `maxTurns` is a harness cap; the ceiling in your dispatch comes first, and an item that cannot FINISH in
+  what is left is set `needs-more-time` at once, with what you learned. Keep your report under 15 lines.
 
 ## JOB 1 - IMPLEMENT (your dispatch names a plan file and item ids)
 
@@ -84,6 +91,19 @@ The plan passed `grocery\validate-triage-plan.ps1` before it reached you; its sc
 - A fix ships with a test that REACHES the changed code: a must-fire case from the founding bug and a clean
   twin, both frozen. Never weaken a guard, a threshold or a fixture to make a run pass.
 - Update `status`, `premise_verified`, `deviation`, `shipped_commit` in the plan and commit it with the fix.
+
+## JOB 3 - THE CHEAP ITEMS (your dispatch names Class C/D ids and the plan path to write)
+
+Since 2026-09-24 the orchestrator no longer works Class C/D items inline: on 2026-09-19 it made 228 calls at an
+average context of 289k tokens, 31% of the run, for work a small fresh context does for a fraction of that. Your
+dispatch names each id with the orchestrator's one-line tier reason. For each one, inside about 10 tool calls:
+read the queue entry and the one file or command that settles it, then write the item with the SAME four things a
+reviewer's item carries, because the gate reads them: `classification` with at least one quoted `evidence` row;
+`root_cause` one level above the instance; `root_fix` or `root_fix_none_because`; and for anything touching code,
+`proof.must_fire_case` and `proof.clean_twin`. A cheap item whose evidence contradicts the alert, or that resists
+the budget, is set `status: "promote"` with one line saying why, and the orchestrator sends it to the reviewer.
+Write the items into the plan path you were given (create it with the header fields the README names if it does
+not exist; otherwise use `triage-plan-item.py update`), commit, and report one line per id.
 
 ## JOB 2 - THE WEEKLY LANE (your dispatch names the weekly-lane queue ids)
 
@@ -161,12 +181,13 @@ back after a close.
 
 ## CLOSING
 
-- Close every queue item through `grocery\triage-close.ps1 -Id <id> -Disposition <confirmed|false-alarm|superseded|by-design|wont-fix> -Notes "<what was established>"`.
-  An item left `needs-more-time` stays open; do not close it.
-- Commit by explicit path, never `git add -A`. Write the message with
-  `[IO.File]::WriteAllText($p, $body, (New-Object Text.UTF8Encoding($false)))` and commit with `-F`. Push;
-  the pre-push hook runs `ops\run-gates.ps1`, whose exit 3 is not a pass and whose bypass is not yours to use.
-- Confirm HEAD == origin/main and that no source file of yours is uncommitted.
+- Do NOT close queue items: write `close_disposition` (confirmed | false-alarm | superseded | by-design |
+  wont-fix) and `resolution_note` into each finished item; the orchestrator closes them through
+  `grocery\triage-close.ps1` after `triage-land.ps1` reports the run landed. An item left `needs-more-time`
+  stays open.
+- Commit by explicit path with a pathspec, never `git add -A`. Write the message with
+  `[IO.File]::WriteAllText($p, $body, (New-Object Text.UTF8Encoding($false)))` and commit with `-F`. Do not push.
+- Confirm no source file of yours is uncommitted.
 
 ## CONCURRENCY
 

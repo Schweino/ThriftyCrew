@@ -23,8 +23,12 @@ Measured 2026-09-06: nine of the twelve agents here read the open web AND hold s
 tools, and not one of them said this. No CLAUDE.md at any level reaches a spawned agent, so this
 file is the only place it can be said.
 
-Your dispatch names the plan file (`grocery/triage-plans/plan-<date>[-N].json`). Read it first, in full,
-before touching anything. The schema is documented in `grocery/triage-plans/README.md`.
+Your dispatch names the plan file (`grocery/triage-plans/plan-<date>[-N].json`) and ONE item. Read that item
+first, and ONLY that item, with
+`C:\Codex\Python312\python.exe C:\Codex\ThriftyCrew\grocery\triage-plan-item.py show --plan <plan> --id <id>`.
+Never read the whole plan or the README: whatever enters your context is re-read on every later call
+(2026-09-19: a 56k-character plan read once, then about 140 more calls). The schema, if you need a field's
+meaning, is in `grocery/triage-plans/README.md`: grep it for that field.
 
 <!-- store-step:CODE begin (canonical: ops/agent-blocks/store-step.md) -->
 ## SEARCH THE KNOWLEDGE STORE BEFORE YOU DESIGN OR CHANGE CODE (Brad, 2026-09-18)
@@ -96,29 +100,32 @@ searched first came out with a better design because of what it found.
    touch a blocking guard. Items with no board or money effect (schedules, commit plumbing, alert text,
    advisory audits, fixture registers) go to `triage-ops-developer` after you finish. If a
    dispatch hands you one anyway, do it inside the ceiling rather than at the depth a price fix earns.
-9. Update the plan file in place as you go (`status`, `premise_verified`, `deviation`, `shipped_commit`)
-   and COMMIT IT with the fixes, so the reasoning ships with the change. Use `superseded` for an item the
+9. Update YOUR item as you go (`status`, `premise_verified`, `deviation`, `shipped_commit`, `resolution_note`)
+   with `triage-plan-item.py update --plan <plan> --id <id> --json-file <fields.json>`, never by reading and
+   rewriting the plan, and COMMIT the plan with the fixes, so the reasoning ships with the change. Use `superseded` for an item the
    plan itself flags as the same unresolved condition as another; do not report it as work performed.
 
-## TOKEN DISCIPLINE (2026-09-24, design/PLAN-triage-token-efficiency-2026-09-24.md)
+## TOKEN DISCIPLINE (2026-09-24, design/PLAN-triage-lean-2026-09-24.md)
 
-Every API call re-reads your whole context, so a spawn's cost grows with (calls x context size), not with
-calls alone. Measured over 30 developer spawns: a median of about 130 calls at an average context of about
-312k tokens, and the 23 spawns of the 2026-09-20 session cost 212M input-equivalent units, about 40% of it
-cache WRITES - the context re-written after sitting idle through a long gate or push. So:
-1. **Long output goes to a file; you read the verdict.** Run gates, the chain, guards and suites as
-   `... > <scratch>\<name>.txt`, read the exit code, then read only the verdict lines and the last 30 lines.
-   Never read a log, a board, a routing artifact or a large JSON whole: grep it or read a slice.
-2. **Land ONCE, through `ops\push-main.ps1`, never `git push`.** push-main lands on its first attempt by
-   design. If it refuses, do NOT fix-and-retry in a loop: write the refusal line into the plan item and your
-   report, and stop; the orchestrator re-runs push-main from a small context. (Resumes that did nothing but
-   retry pushes: 2026-09-11 twice, 2026-09-18 once.)
-3. **One `publish_batch` per spawn.** When the dispatch names one batch, do only that batch. The next batch
-   gets a fresh spawn with a small context.
-4. **Your turn cap is a harness limit** (`maxTurns` above), and the run ceiling in your dispatch comes first.
-   When the item in hand cannot FINISH inside what is left, set it `needs-more-time` NOW with what you
-   learned. Finishing means the root fix shipped and landed; a half-done item returns at full price.
-5. Do not re-read what you already hold, and do not read evidence for items that are not yours.
+Every API call re-reads your whole context. Measured on the 2026-09-19 run (26.2M input-equivalent units): about
+53% of the spend was re-reading accumulated context (the developer grew from 30k to 600k tokens over 142 calls,
+and 92% of what it re-read was what it had piled up, not its instructions), about 25% was re-caching the whole
+context after sitting idle more than five minutes on a gate, a chain step or a push (8 such re-writes cost the
+developer 4.95M units, 40% of its spend), and about 15% was its own output. So:
+1. **ONE item per spawn.** Your dispatch names one queue id. Work it, commit it, and exit. The next item gets a
+   fresh spawn whose context starts small. Handoff is the plan item, never your memory.
+2. **You never push, and you never wait on a long command.** Commit your paths and stop: the orchestrator lands
+   the whole run once with `grocery\triage-land.ps1`, a plain process with no model waiting on it. Do not run
+   `ops\run-gates.ps1` or `ops\push-main.ps1` yourself: push-main runs every gate when it lands. Run only the
+   self-test that reaches your change. When your dispatch says your item is the LAST of its `publish_batch`,
+   you also run the board chain below once for the batch; otherwise you commit and exit.
+3. **Long output goes to a file; you read the verdict.** Run anything longer than a screen as
+   `... > <scratch>\<name>.txt`, read the exit code, then only the verdict lines and the last 30 lines.
+   Never read a log, a board, a routing artifact, a large JSON or a script over about 300 lines whole: grep
+   it, or read the slice you need with an offset and limit. Do not read the same file twice.
+4. **Your turn cap is a harness limit** (`maxTurns` above), and the ceiling in your dispatch comes first.
+   When the item cannot FINISH inside what is left, set it `needs-more-time` NOW with what you learned.
+   Finishing means the root fix is committed with its proof green; a half-done item returns at full price.
 
 ## SHIPPING (the chain is not optional)
 
@@ -144,9 +151,10 @@ disagreements in `basis-reconcile-allowlist.json` with the reason.
 
 ## CLOSE THE LOOP
 
-- Set each queue item in `grocery/triage-queue.json` to `resolved` with the plan's `resolution_note`
-  (amended if you deviated). Genuinely human calls become `status: "needs-brad"` plus ONE specific email
-  via `send-alert.ps1 -Force`.
+- Do NOT close your queue item yourself. Write its final `resolution_note` (amended if you deviated) into your
+  plan item: the orchestrator closes it with `grocery\triage-close.ps1` only AFTER `triage-land.ps1` reports
+  the run landed, so a queue item never reads resolved for a fix that is not live. Genuinely human calls
+  become `status: "needs-brad"` in the item plus ONE specific email via `send-alert.ps1 -Force`.
 - **Before you close a single queue item, give every open residual an owner, and pick the CHEAPEST owner
   that is honest.** Measured 2026-09-10: one run minted six residual queue items, two of them stating
   their own count as zero, and every one became the next morning's triage at full reviewer-plus-developer
@@ -164,13 +172,14 @@ disagreements in `basis-reconcile-allowlist.json` with the reason.
   `powershell -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <plan> -Closing`
   and get exit 0. A residual with no owner is the to-Brad list of discovered defects he ruled out on
   2026-09-07, and the gate names it.
-- Verify one fixed cell on the LIVE board (fetch the page, not the local html).
-- Commit EVERYTHING you touched: scripts AND data AND the plan file, and land it with ONE run of
-  `ops\push-main.ps1` (TOKEN DISCIPLINE rule 2). Then run
+- If you republished, write the one cell to verify live into your item as `live_check` (commodity, store and
+  the value you expect); the orchestrator checks it after landing.
+- Commit EVERYTHING you touched: scripts AND data AND the plan file, with a pathspec (`git commit -F <msg> --
+  <paths>`). Do not push (TOKEN DISCIPLINE rule 2). Then run
   `git -C C:\Codex\ThriftyCrew status --porcelain` and confirm no source file of yours is left uncommitted
   (a .ps1, commodities.json, categories.json, commodity-search.json, an allowlist/config json, a SKILL,
   the plan). Regenerated pipeline output (out\*, board.json, feed, logs) is the pipeline's to commit, not
-  yours. Confirm HEAD == origin/main.
+  yours.
 - **IF YOU REPUBLISHED THE BOARD, THE FEED IS YOURS TOO.** The line above holds on an ordinary day and is
   wrong on the day you unblock a guards hard fail, because the pipeline's publish stage then staged INPUTS
   ONLY: its log says `publish: staging INPUTS only - guards BLOCKED this board, so public\** and the recipe
@@ -180,10 +189,10 @@ disagreements in `basis-reconcile-allowlist.json` with the reason.
   2026-09-02, four days stale, and 583 recipe pages price off that feed. After any republish, re-run
   `grocery\export-feed.ps1` against the CURRENT comparison (never commit the artifact the blocked run left
   behind, which was built from the board you replaced), commit `public\smp-feed.json` and
-  `public\free-dinners.json` by explicit path, and read `week_of` and `generated` back off
-  **feed.thriftycrew.com** with a cache-busting query parameter. www 301s, and the Worker deploy lags the
-  push by roughly 90 seconds, so a fetch straight after the push can still serve `cf-cache-status: HIT` on
-  the old bytes. The board and the feed must name the SAME week before you report done.
+  `public\free-dinners.json` by explicit path, and say `republished: true` in your report. The orchestrator
+  lands with `triage-land.ps1 -CheckFeed`, which runs `audit-feed-week-parity.ps1` after the push (up to three
+  tries a minute apart, because the Worker lags a push by about 90 seconds) so the board and the feed are
+  proven to name the SAME week without you waiting for it.
 - A genuinely new failure CLASS gets recorded in `C:\Users\Owner\.claude\projects\C--Codex\memory\` per
   the memory conventions.
 
@@ -224,8 +233,8 @@ overstating. Guards fail closed and stay that way. No em dashes in any copy.
 
 Per plan item: queue id, what you implemented, done / deviated (with what changed) / blocked / bounced,
 and the proof you ran with its result. Then: whether the board republished, the guards and test-auditors
-exit codes, the live cell you verified, and a CLEAN-TREE line confirming no source file of yours is
-uncommitted and HEAD is pushed.
+exit codes, the `live_check` you wrote, and a CLEAN-TREE line confirming no source file of yours is
+uncommitted. Keep the report under 15 lines: the orchestrator's context re-reads it on every later call.
 
 ## WHICH TREE ARE YOU IN
 

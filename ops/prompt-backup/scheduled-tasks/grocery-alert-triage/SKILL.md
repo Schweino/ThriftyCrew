@@ -33,7 +33,8 @@ because diagnosis and implementation fail in different ways:
   file.
 - **triage-developer** (Opus 5.5, medium effort, full tools): the MONEY lane. Implements the plan items that
   publish the board, change a matching or pricing rule, or touch a blocking guard, ships them through the
-  existing gated chain to a green board, commits, pushes, and closes those queue items.
+  existing gated chain to a green board, and commits; since 2026-09-24 it never pushes and never closes a queue
+  item: you land the run once with `grocery\triage-land.ps1` and close items after it lands (STEP 3.9).
 - **triage-ops-developer** (Opus 5.5, medium effort, full tools, since 2026-09-10): the OPS lane. Implements the
   plan items with no board or money effect after the money lane finishes, and works the WEEKLY LANE of
   triage-created items on its own. See COST CONTROLS below.
@@ -46,7 +47,8 @@ happened). It does NOT earn its cost confirming that work already queued to anot
 day, 4 of 11 items produced all of the value and the other 7 got the same machinery.
 So the tier decides WHO does the work:
 - **Class A, substantive** - the reviewer plus developer split, unchanged and unhurried.
-- **Class C/D, cheap and deterministic or owned elsewhere** - YOU handle them inline, no subagent.
+- **Class C/D, cheap and deterministic or owned elsewhere** - ONE small `triage-ops-developer` spawn in JOB 3
+  works them all (STEP 0.9). Until 2026-09-24 you worked them inline, and that made this orchestrator 31% of a run.
 
 **TIERING CHANGES WHO, NEVER WHAT.** Brad's condition for allowing it: every item still gets its root
 cause deduced, and still ships whatever stops that class recurring, not just a repair of the instance. An
@@ -137,14 +139,30 @@ left open for three days of follow-on work, 402M across 56 spawns, none of it on
   `C:\Codex\Python312\python.exe C:\Codex\ThriftyCrew\grocery\triage-cost.py --append --plan <every plan this run wrote, comma separated>`.
   It reads this session's transcripts (the orchestrator and every spawn, any agent type) and appends schema-2
   rows. Never type a ledger row. Exit 3 is BLIND (the transcript format moved): say so, never report a zero.
-- **RUN BUDGET: 30,000,000 cost_units for the whole session, orchestrator included.** Before EVERY spawn run
-  `C:\Codex\Python312\python.exe C:\Codex\ThriftyCrew\grocery\triage-cost.py --budget 30000000`. Exit 2 means
+- **RUN BUDGET: 10,000,000 cost_units for the whole session, orchestrator included (INTERIM).** Before EVERY spawn
+  run `C:\Codex\Python312\python.exe C:\Codex\ThriftyCrew\grocery\triage-cost.py --budget 10000000`. Exit 2 means
   the run is spent: spawn nothing more, leave the remaining items open (their ids are due tomorrow), and say so
-  in the report with the BUDGET line verbatim. First plausible number from the measured runs above, not a sweep.
-- **ONE DEVELOPER SPAWN PER `publish_batch`.** Cost grows with (calls x context), because every call re-reads the
-  whole context: 30 developer spawns averaged about 312k tokens of context per call, and 40% of the 09-20
-  session's developer spend was cache WRITES from context sitting idle through long gates. A fresh spawn per
-  batch keeps each context small. The plan file is the handoff between them.
+  in the report with the BUDGET line verbatim. Brad, 2026-09-24: "30M tokens per run (which runs every day) is not
+  sustainable." About 7M cost_units is 1% of the weekly plan limit (one calibration that day), so 10M a day is
+  about 10% of the week. 10M is the interim cap until Brad picks the weekly share triage may use; the lean changes
+  of that day were estimated to bring a 09-19-style day from 26M to 8-10M, an estimate the next runs measure.
+- **WHERE THE TOKENS WENT, AND THE FOUR RULES THAT FOLLOW (2026-09-24, Brad: "Implement ALL the fixes";
+  ThriftyCrew design\PLAN-triage-lean-2026-09-24.md).** Measured on 09-19 (26.2M units): about 53% was re-reading
+  accumulated context on every call, about 25% was re-caching a whole context after an idle wait over five
+  minutes (13 of 16 big re-writes followed one: gates, the chain, pushes), about 15% was output; and this
+  orchestrator was 31% of the run on its own (228 calls, context up to 437k). So:
+  1. **NO MODEL WAITS ON A LANDING.** Agents commit and exit; they never push and never run run-gates or
+     push-main. You land the whole run ONCE with `grocery\triage-land.ps1` (STEP 3.9), run in the background, and
+     read only its `TRIAGE-LAND-COMPLETE` line.
+  2. **ONE DEVELOPER SPAWN PER ITEM**, fresh and small; the plan item is the handoff, read and written with
+     `grocery\triage-plan-item.py`, never by reading the plan.
+  3. **YOU ARE A DISPATCHER, NOT A WORKER.** Target 60 calls for a whole run. Class C/D items go to
+     `triage-ops-developer` JOB 3, never inline. Every command you run writes its output to a file and you read
+     the verdict line and the last 20 lines, nothing more. Never read a plan, a README, a log or an agent's files
+     to check its work: the gates check it. Agents keep reports under 15 lines; ask for that in each dispatch.
+  4. **READ ONLY WHAT YOU NEED**, and tell every agent the same: grep or slice, never a whole large file.
+  `triage-cost.py` now prints, per agent, `ctx_avg`, the wait re-writes and the biggest read, so the report shows
+  which rule a run broke.
 - **No general-purpose agents in triage.** Its lanes are the three triage agents, whose definitions carry the
   token discipline and a `maxTurns` cap; 11 general-purpose spawns cost 65M on 09-20 to 09-23 with neither.
 - **THIS SESSION IS THE DAILY RUN, NOT A WORKSPACE.** It ends at STEP 5. If Brad asks for more work in it, run
@@ -224,7 +242,7 @@ STEP 0.75 - TRIAGE THE TRIAGE (cheap, and it is most of the savings). Before spa
       guard is red or the board did not publish, anything whose fix changes a matching rule, and anything
       whose alert body carries a COUNT you have not verified. An unverified count is the tell: three
       separate 2026-09-03 alerts were wrong about their own scale, in both directions.
-    * **Class C/D (you, inline)** - deterministic single-file items (a hardcoded list, a subset to
+    * **Class C/D (one small JOB 3 spawn)** - deterministic single-file items (a hardcoded list, a subset to
       register), items already owned by another job, `superseded` collapses, and items whose entire
       content is confirming a no-op. These get a plan item, a root cause, and a class fix or a written
       reason there is none. They do not get an agent.
@@ -251,11 +269,13 @@ STEP 0.75 - TRIAGE THE TRIAGE (cheap, and it is most of the savings). Before spa
   checkable claim; "the wall is Brad's" alone is not.
 On 2026-07-31 this step would have taken a 14-item review down to 4 substantive ones.
 
-STEP 0.9 - WORK THE CLASS C/D ITEMS YOURSELF, before you spawn anything. They are cheap precisely because
-they are deterministic: read the one file, run the one command, reach the verdict. Budget roughly 10 tool
-calls each and hold to it.
-For each one you must end with the SAME four things a reviewer would have produced, because these go into
-the plan verbatim and the gate reads them:
+STEP 0.9 - THE CLASS C/D ITEMS GO TO ONE SMALL SPAWN, before the reviewer (since 2026-09-24; until then you
+worked them inline, and that is most of why this orchestrator was 31% of the 09-19 run). Spawn
+"triage-ops-developer" synchronously in JOB 3 (CHEAP ITEMS) ONCE, with every Class C/D id, your one-line tier
+reason for each, the foreign-dirty list, about 10 tool calls per item, and the plan path to write (the next
+free sequence name). That plan holds ONLY the C/D ids; gate it with exactly those ids. Items it returns as
+`promote` go to the reviewer in STEP 1. Run `triage-cost.py --budget` before the spawn and `--append` after.
+Each item must still end with the SAME four things a reviewer would have produced, because the gate reads them:
   1. `classification` and at least one `evidence` row that is a quoted fact, never an adjective.
   2. `root_cause` - one level up from the instance. "The list at line 946 is missing four stores" is the
      instance; "a store roster is hardcoded in a fixture that no registry check can see" is the cause.
@@ -271,10 +291,9 @@ Anything that resists the budget, or whose evidence contradicts the alert, gets 
 goes to the reviewer in STEP 1. Say so in your report; a promotion is a good outcome, not a failure.
 
 STEP 1 - DIAGNOSE THE CLASS A ITEMS: spawn the reviewer, synchronously (run_in_background: false), with
-subagent_type "triage-reviewer". Give it ONLY the Class A ids to investigate. It still records an item for
-every open id, because the gate requires one and a plan that cannot see the whole queue is not a record of
-the day - but Class C/D ids are handed to it as already-decided one-liners with the verdict you reached in
-STEP 0.75, not as work. Tell it: the Class A ids in priority order, the Class C/D verdicts to transcribe,
+subagent_type "triage-reviewer". Give it ONLY the Class A ids (and any JOB 3 promoted); its plan holds only
+those, and the gate is run with exactly those ids (the C/D ids are in STEP 0.9's plan, and STEP 5's
+`triage-due.ps1` is what proves no id was dropped between the two). Tell it: the Class A ids in priority order,
 which ones are superseded, the foreign-dirty file list, the plan path to write
 (`C:\Codex\ThriftyCrew\grocery\triage-plans\` plus the next free sequence name per the rule above, which is NOT
 always the bare `plan-<today>.json`), that round = 1, and a per-item effort ceiling
@@ -302,7 +321,7 @@ STEP 0 into the dispatch, verbatim. Each names a type triage already closed in t
 ids, and the reviewer needs them because the gate derives RETURN status from the QUEUE: a RETURN code item must
 carry `prior_closes` (every id on its line), `prevention` (the upstream `source`, `what`, `exact_change`) and
 `proof.fixture_occurrences` (every prior id plus today's), and a type returned twice may not name only rule or
-exclude files as its source. A Class C/D item you work inline that is a RETURN carries the same fields.
+exclude files as its source. A Class C/D item JOB 3 works that is a RETURN carries the same fields.
 
 STEP 2 - GATE THE HANDOFF, DETERMINISTICALLY. Do not eyeball the plan; run:
   powershell -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <plan> -OpenIds <id1>,<id2>,<id3>
@@ -329,24 +348,33 @@ STEP 3 - IMPLEMENT, IN TWO LANES, ONE AFTER THE OTHER. Split the plan's code ite
 in the report: an item goes to the MONEY lane when its `publish_batch` is 1 or more, its classification is
 wrong-product, parse-basis-bug or real-economics, it changes a matching or pricing rule, or it touches a
 blocking guard. Every other code item goes to the OPS lane. When in doubt, money.
-- MONEY: spawn "triage-developer" synchronously ONCE PER `publish_batch` (a fresh, small context each time;
-  COST CONTROLS), naming the plan file path, ONLY that batch's item ids, the routing artifact, the
-  foreign-dirty file list, the per-item effort ceilings and the batch's share of the 200-call RUN CEILING,
-  and the fact that the plan has already passed the gate so it should implement rather than re-diagnose. It
-  owns the edits, the gated chain, the publish, the commit, one landing through `ops\push-main.ps1`, and those
-  queue statuses. Run `triage-cost.py --budget 30000000` before each spawn.
-- LANDING: agents land ONCE through `ops\push-main.ps1` and never retry a refused push inside their own
-  context. When a lane reports a refusal, re-run `powershell -NoProfile -File C:\Codex\ThriftyCrew\ops\push-main.ps1`
-  yourself, once, from the checkout the lane committed in, and read its outcome line. A second refusal is
-  reported verbatim, never looped.
-- OPS: once the money lane has returned, spawn "triage-ops-developer" synchronously in JOB 1 (IMPLEMENT) with
-  the same plan, ONLY its item ids, the refreshed foreign-dirty list, its per-item ceilings and a RUN CEILING
-  of 100 tool calls. Skip the spawn when there are no ops items. An item it bounces as mis-laned (it turned
-  out to touch prices or matching) goes to the money lane in this run, inside the money ceiling.
+- MONEY: spawn "triage-developer" synchronously ONCE PER ITEM, in `ship_sequence` order (a fresh, small context
+  each time; COST CONTROLS), naming the plan file path, the ONE item id, the routing artifact, the foreign-dirty
+  file list, the item's `est_tool_calls` as its ceiling, and either "commit only" or "LAST item of publish_batch N:
+  run the board chain and publish once for the batch". Say the plan already passed the gate, so it implements
+  rather than re-diagnoses; that it reads its item with `triage-plan-item.py show`; that it never pushes; and that
+  its report is under 15 lines. Run `triage-cost.py --budget 10000000` before each spawn and `--append` after.
+- OPS: once the money lane has returned, spawn "triage-ops-developer" synchronously in JOB 1 (IMPLEMENT) with the
+  same plan, at most THREE of its item ids per spawn, the refreshed foreign-dirty list and their estimates as
+  ceilings. Skip it when there are no ops items. An item it bounces as mis-laned (it turned out to touch prices
+  or matching) goes to the money lane in this run, inside the money ceiling.
 Tell both that every residual in `leaves_open` gets the CHEAPEST HONEST owner (watch, weekly-lane queue item,
 or ruling, per COST CONTROLS) before it closes a single queue item, and that
 `validate-triage-plan.ps1 -Plan <plan> -Closing` must exit 0 first. After each spawn run `triage-cost.py --append
 --plan <plans>` (COST CONTROLS); `-Closing` refuses a plan dated 2026-09-25 or later that no derived row names.
+
+STEP 3.9 - LAND THE RUN ONCE, WITH NO MODEL WAITING ON IT (2026-09-24). After STEP 3 and, when due, STEP 3.5:
+  powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\triage-land.ps1 [-CheckFeed]
+run with run_in_background: true (you are notified when it exits; do not poll it), `-CheckFeed` when any agent
+reported `republished: true`. Read ONLY its `TRIAGE-LAND-COMPLETE` line. `outcome=landed`: list each plan's items
+with `C:\Codex\Python312\python.exe C:\Codex\ThriftyCrew\grocery\triage-plan-item.py ids --plan <plan>` and close
+every item whose status is done, deviated or superseded with
+  powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\triage-close.ps1 -Id <id> -Disposition <the item's close_disposition, or confirmed> -Notes "<the item's resolution_note>"
+and check each `live_check` an agent wrote with one fetch. `outcome=refused`: read the log it names (the refusal
+lines only), fix nothing yourself; send the ONE item whose change the refusal names back to a fresh developer spawn
+with that line, then run triage-land once more. A second refusal is reported verbatim with every queue item left
+OPEN, never looped. `feed=mismatch` or `feed=blind` after a landing is reported verbatim and is the first item of
+tomorrow's run.
 
 STEP 3.5 - THE WEEKLY LANE, only when `triage-due.ps1` said it is due. After the daily lane, or on its own when
 the daily lane was empty, spawn "triage-ops-developer" synchronously ONCE, in JOB 2 (WEEKLY LANE), with the
@@ -404,7 +432,7 @@ STEP 5 - VERIFY THE RUN, DO NOT TAKE ITS WORD FOR IT:
 - Run `C:\Codex\Python312\python.exe C:\Codex\ThriftyCrew\grocery\triage-cost.py --append --plan <every plan
   this run wrote>` one last time, so the orchestrator's own row is current, and commit
   `grocery\triage-plans\cost-ledger.jsonl` with the plan. The report gives the session's cost_units against the
-  30M budget (the BUDGET line verbatim), the `--report` line of each of today's plans (cost per done item), and
+  10M budget (the BUDGET line verbatim), the `--report` line of each of today's plans (cost per done item), and
   tool calls against the ceilings. `python grocery\triage-cost.py --check-agents` must exit 0: the three copies
   of each triage agent (the repo, C:\Codex\.claude\agents, ~\.claude\agents) are identical.
 - Re-run `grocery\audit-alert-census.ps1` so its numbers include this run's closes, quote its QUIET DAYS,

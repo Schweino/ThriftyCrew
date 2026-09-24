@@ -61,9 +61,12 @@ def usage_of(path):
     uses are counted per block."""
     calls = {}
     order = []
+    call_ts = {}
     tools = 0
     ts = []
     model = None
+    tool_names = {}
+    results = []
     with open(path, encoding='utf-8') as fh:
         for line in fh:
             try:
@@ -72,19 +75,29 @@ def usage_of(path):
                 continue
             if r.get('timestamp'):
                 ts.append(r['timestamp'])
+            m = r.get('message') or {}
+            if r.get('type') == 'user' and isinstance(m.get('content'), list):
+                for c in m['content']:
+                    if isinstance(c, dict) and c.get('type') == 'tool_result':
+                        body = c.get('content')
+                        n = len(body) if isinstance(body, str) else len(json.dumps(body))
+                        results.append((n, tool_names.get(c.get('tool_use_id'), '?')))
             if r.get('type') != 'assistant':
                 continue
-            m = r.get('message') or {}
             model = m.get('model') or model
             mid = m.get('id') or r.get('uuid')
             if mid not in calls:
                 order.append(mid)
+                call_ts[mid] = r.get('timestamp')
             u = m.get('usage')
             if u or mid not in calls:
                 calls[mid] = u or {}
             for c in m.get('content') or []:
                 if isinstance(c, dict) and c.get('type') == 'tool_use':
                     tools += 1
+                    inp = c.get('input') or {}
+                    what = inp.get('file_path') or inp.get('command') or inp.get('pattern') or ''
+                    tool_names[c.get('id')] = '%s %s' % (c.get('name'), str(what)[:80].replace('\n', ' '))
     t = {'input': 0, 'cache_write': 0, 'cache_read': 0, 'output': 0}
     with_usage = 0
     for mid in order:
@@ -99,9 +112,48 @@ def usage_of(path):
     final_context = sum(int(last.get(k) or 0) for k in (
         'input_tokens', 'cache_creation_input_tokens', 'cache_read_input_tokens', 'output_tokens'))
     blind = bool(order) and with_usage == 0
+    # WHY it cost what it cost (2026-09-24, design/PLAN-triage-lean-2026-09-24.md): how big the context started, how
+    # big it ran on average (every call re-reads it), and how much was re-cached after the agent sat idle past the
+    # cache lifetime - a call whose cache write exceeds WAIT_WRITE_TOKENS after a gap of more than WAIT_GAP_S since the
+    # previous call. Measured on 09-19: 13 of 16 such re-writes followed a wait over 5 minutes.
+    ctxs = [ctx_of(calls[m]) for m in order if calls[m]]
+    wait_units = 0.0
+    wait_n = 0
+    prev = None
+    for m in order:
+        u = calls[m]
+        g = _gap_s(call_ts.get(m), call_ts.get(prev)) if prev else None
+        w = int(u.get('cache_creation_input_tokens') or 0) if u else 0
+        if g is not None and g > WAIT_GAP_S and w > WAIT_WRITE_TOKENS:
+            wait_units += W_WRITE * w
+            wait_n += 1
+        prev = m
+    results.sort(reverse=True)
     return {'api_calls': len(order), 'tool_uses': tools, 'tokens': t, 'final_context': final_context,
             'first_ts': min(ts) if ts else None, 'last_ts': max(ts) if ts else None, 'model': model,
-            'blind': blind}
+            'blind': blind, 'ctx_first': ctxs[0] if ctxs else 0,
+            'ctx_avg': int(sum(ctxs) / len(ctxs)) if ctxs else 0,
+            'wait_rewrites': wait_n, 'wait_rewrite_units': int(round(wait_units)),
+            'biggest_results': [[n, what] for n, what in results[:3]]}
+
+
+WAIT_GAP_S = 300
+WAIT_WRITE_TOKENS = 50000
+
+
+def ctx_of(u):
+    return sum(int(u.get(k) or 0) for k in ('input_tokens', 'cache_creation_input_tokens', 'cache_read_input_tokens'))
+
+
+def _gap_s(a, b):
+    from datetime import datetime
+    if not a or not b:
+        return None
+    try:
+        return (datetime.fromisoformat(a.replace('Z', '+00:00'))
+                - datetime.fromisoformat(b.replace('Z', '+00:00'))).total_seconds()
+    except ValueError:
+        return None
 
 
 def _duration_ms(a, b):
@@ -151,7 +203,9 @@ def session_rows(session, projects=PROJECTS):
             'input': t['input'], 'cache_write': t['cache_write'], 'cache_read': t['cache_read'],
             'output': t['output'], 'cost_units': int(round(cost_units(t))), 'final_context': u['final_context'],
             'duration_ms': _duration_ms(u['first_ts'], u['last_ts']), 'first_ts': u['first_ts'],
-            'last_ts': u['last_ts']})
+            'last_ts': u['last_ts'], 'ctx_first': u['ctx_first'], 'ctx_avg': u['ctx_avg'],
+            'wait_rewrites': u['wait_rewrites'], 'wait_rewrite_units': u['wait_rewrite_units'],
+            'biggest_results': u['biggest_results']})
     return rows, 'read %d transcript(s)' % len(rows)
 
 
@@ -361,13 +415,33 @@ def selftest():
         open(os.path.join(b, 'triage-developer.md'), 'wb').write(b'drifted\n')
         p1, _ = check_agents([a, b])
         case('MUST FIRE: a drifted agent copy is named', any('triage-developer differs' in p for p in p1), p1)
+
+        # WHY it cost: a re-cache after an idle gap. Bar: a gap of exactly 300 s is NOT a wait; 301 s is.
+        big = {'input_tokens': 1, 'cache_creation_input_tokens': 60000, 'cache_read_input_tokens': 0, 'output_tokens': 1}
+        small = {'input_tokens': 1, 'cache_creation_input_tokens': 10, 'cache_read_input_tokens': 60000, 'output_tokens': 1}
+        wpath = os.path.join(root, 'w.jsonl')
+        recs = (_call('w1', '2026-09-25T14:00:00Z', small, tools=1)
+                + [{'type': 'user', 'timestamp': '2026-09-25T14:00:01Z',
+                    'message': {'content': [{'type': 'tool_result', 'tool_use_id': 't0', 'content': 'y' * 1234}]}}]
+                + _call('w2', '2026-09-25T14:05:01Z', big)
+                + _call('w3', '2026-09-25T14:10:01Z', big))
+        _write(wpath, recs)
+        wu = usage_of(wpath)
+        case('BAR: a re-cache 301 s after the previous call counts as a wait re-write; one exactly 300 s after does not (1 of 2)',
+             wu['wait_rewrites'] == 1 and wu['wait_rewrite_units'] == 75000, (wu['wait_rewrites'], wu['wait_rewrite_units']))
+        case('MUST FIRE: the biggest tool result is named with its size and the call that produced it (1234 chars, Bash)',
+             wu['biggest_results'] and wu['biggest_results'][0][0] == 1234 and wu['biggest_results'][0][1].startswith('Bash'),
+             wu['biggest_results'])
+        # 60011, 60001, 60001 -> 180013 / 3 = 60004 (integer)
+        case('CLEAN TWIN: ctx_first and ctx_avg read the context each call re-read (60011 first, 60004 average)',
+             wu['ctx_first'] == 60011 and wu['ctx_avg'] == 60004, (wu['ctx_first'], wu['ctx_avg']))
     finally:
         shutil.rmtree(root, ignore_errors=True)
 
     bad = [r for r in results if not r[1]]
     for label, ok, got in results:
         print('%s  %s%s' % ('PASS' if ok else 'FAIL', label, '' if ok else '  got=%r' % (got,)))
-    expected = 12
+    expected = 15
     if len(results) != expected:
         print('FAIL  the suite ran %d case(s), expected %d' % (len(results), expected))
         bad.append(None)
@@ -421,8 +495,11 @@ def main():
         sys.exit(3)
     total = sum(r['cost_units'] for r in rows)
     for r in sorted(rows, key=lambda r: -r['cost_units']):
-        print('%-22s %-20s calls=%5d tools=%5d cost_units=%11d final_context=%8d' % (
-            r['agent'], r['agent_id'][:20], r['api_calls'], r['tool_uses'], r['cost_units'], r['final_context']))
+        print('%-22s %-20s calls=%5d tools=%5d cost_units=%11d ctx_avg=%7d wait_rewrites=%3d (%d units)' % (
+            r['agent'], r['agent_id'][:20], r['api_calls'], r['tool_uses'], r['cost_units'], r['ctx_avg'],
+            r['wait_rewrites'], r['wait_rewrite_units']))
+        for n, what in r['biggest_results'][:1]:
+            print('    biggest read: %d chars from %s' % (n, what))
     spawns = len(rows) - 1
     print('session %s: cost_units=%d over %d agent row(s) (%d spawn(s) plus the orchestrator), %s' % (
         a.session, total, len(rows), spawns, why))

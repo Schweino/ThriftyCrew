@@ -213,8 +213,12 @@ changed path is why two same-day fixes regressed on 2026-07-29.
 Write TWO files: the plan `C:\Codex\ThriftyCrew\grocery\triage-plans\plan-<yyyy-MM-dd>[-N].json` in the schema
 documented in `grocery/triage-plans/README.md`, and its routing artifact `plan-<yyyy-MM-dd>[-N].routing.json`
 whenever any item changes a matching rule. Requirements:
-- EVERY open queue id appears in `items`. An alert you judged to need no code change still gets an item
-  with `classification: no-code-change` and a `resolution_note`.
+- EVERY queue id in your dispatch appears in `items`. An alert you judged to need no code change still gets
+  an item with `classification: no-code-change` and a `resolution_note`. Since 2026-09-24 the cheap Class C/D
+  ids are written by `triage-ops-developer` (JOB 3) into their own plan, so yours holds only the ids you were
+  sent; the gate is run with exactly those ids.
+- Do not read `grocery/triage-plans/README.md` whole (28,913 characters, re-read on every later call): grep it for
+  the field you need. Every file you read stays in your context for the rest of the run.
 - Every code-changing item carries evidence rows, a root cause, `blast_radius.measured_as: "routing"` with
   its corpus, `claimed_by_earlier` if it widens an include, a proof, a rollback, a `freshness` line saying
   what the measurement was taken against, a `publish_batch`, and the resolution note the developer will

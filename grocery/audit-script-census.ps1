@@ -128,6 +128,7 @@ $KNOWN = [ordered]@{
   'grocery\stamp-fareway-instore.ps1'        = 'stamps Fareway price_mode after a manual shelf verification'
   'grocery\recover-sams-quarantine.ps1'      = "recovers a quarantined Sam's capture"
   'grocery\get-tiers.ps1'                    = 'Ghost tier lookup, used while editing the join interstitial'
+  'grocery\triage-land.ps1'                  = 'SKILL grocery-alert-triage STEP 3.9 - lands a triage run once through ops\push-main.ps1 as a plain background process, so no agent holds a 300k-600k context idle through the gates (2026-09-24, design\PLAN-triage-lean-2026-09-24.md: 25% of the 09-19 run was re-caching contexts after waits over five minutes). Uncalled here BY CONSTRUCTION: its caller is the orchestrator, whose SKILL lives in ~\.claude\scheduled-tasks\.'
   'grocery\cutover-feed-url.ps1'             = 'one command to move the public Worker base URL everywhere (source + a rebuild/republish checklist); run by hand on a Cloudflare account move or custom-domain change - last used 2026-08-08 for feed.thriftycrew.com'
   # -- semantic coverage backlog (2026-08-01): the sweep finds gaps, these three work them by hand
   'grocery\explain-coverage-gap.ps1'         = 'diagnoses WHY a swept product is invisible (NO-INCLUDE / EXCLUDED / CLAIMED / MATCHES) before any rule is touched'
