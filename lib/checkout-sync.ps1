@@ -118,8 +118,12 @@
   runs in the caller's scope and would reset the caller's own -SelfTest.
 #>
 # Its declared inputs (lib\gate-input-key.ps1): the self-test is the suite beside it, which builds every repo it reads
-# under %TEMP% and reads one file of this checkout, grocery\capture-run.ps1, for the startup-file drift case.
-# gate-inputs: lib\checkout-sync.ps1, lib\test-checkout-sync.ps1, grocery\capture-run.ps1
+# under %TEMP% and reads one file of this checkout, grocery\capture-run.ps1, for the startup-file drift case. The code
+# it loads is this file, the suite, and the four libraries they dot-source (each walked for what IT loads). capture-run
+# is read as TEXT - copied and AST-scanned, never loaded or run - so it is hashed and not walked: walking it put 2,968
+# files in this key, 1,202 of them gitignored boards and cards, and the key moved on 201 of 287 commits (2026-09-24).
+# gate-inputs: lib\checkout-sync.ps1, lib\test-checkout-sync.ps1, lib\git-repo-env.ps1, lib\git-blob-lib.ps1, lib\atomic-write.ps1, lib\append-line.ps1
+# gate-inputs-text: grocery\capture-run.ps1
 $__csSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 . (Join-Path $PSScriptRoot 'git-blob-lib.ps1')   # Invoke-GitCaptured, Get-CommittedBlobBytes, ConvertTo-GitArgString

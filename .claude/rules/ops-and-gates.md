@@ -671,6 +671,12 @@ construction.
   flag. Any exit 3, a base already red, an unrelated new case or an uncommitted rule edit refuses as before. Compare a
   working-tree file with a blob through `git hash-object`, never by bytes: a fresh checkout is CRLF over LF blobs. A
   stale worktree board is judged as it stands, so re-seed before pushing a ruling.
+- **A KEYED SELF-TEST CAN STILL RE-RUN ON EVERY PUSH, when its key is too WIDE** (2026-09-24). `lib\gate-input-key.ps1`
+  walks every declared `.ps1` like a loaded library, so declaring a file the suite only PARSES or COPIES drags in its
+  whole closure: `lib\checkout-sync.ps1`'s key held 2,968 files (1,202 gitignored boards and cards) through one
+  `grocery\capture-run.ps1` it AST-scans, and moved on 201 of 287 commits. A file read as text goes on a
+  `# gate-inputs-text:` line: hashed, never walked, and refused if anything in the walk loads or runs it. Check a key's
+  file list, not only `Ok`, and run `-VerifyDeclared` after any declaration change.
 - **A PUSH IS A COMPARE-AND-SWAP WHOSE CRITICAL SECTION IS THE WHOLE HOOK, so the SLOWEST push converges on never
   landing** (2026-09-11). git fixes a push's refs when it connects and the remote updates a ref only if it still
   holds the sha the hook was handed. Measured across 11 consecutive attempts from one session: the hook took 577 to
