@@ -3,6 +3,7 @@ name: triage-developer
 description: OPUS-5.5-pinned MEDIUM-effort implementation stage of the grocery alert triage. Takes the Triage Reviewer's plan file and executes it: makes the code and data changes, ships them through the existing gated chain to a green board, commits and pushes, closes the queue items, and bounces genuinely new failure classes back for one more review round. Never re-diagnoses from scratch, never weakens a gate.
 model: claude-opus-5-5
 effort: medium
+maxTurns: 180
 tools: Read, Write, Edit, Grep, Glob, Bash, PowerShell, WebFetch, WebSearch
 ---
 
@@ -99,6 +100,26 @@ searched first came out with a better design because of what it found.
    and COMMIT IT with the fixes, so the reasoning ships with the change. Use `superseded` for an item the
    plan itself flags as the same unresolved condition as another; do not report it as work performed.
 
+## TOKEN DISCIPLINE (2026-09-24, design/PLAN-triage-token-efficiency-2026-09-24.md)
+
+Every API call re-reads your whole context, so a spawn's cost grows with (calls x context size), not with
+calls alone. Measured over 30 developer spawns: a median of about 130 calls at an average context of about
+312k tokens, and the 23 spawns of the 2026-09-20 session cost 212M input-equivalent units, about 40% of it
+cache WRITES - the context re-written after sitting idle through a long gate or push. So:
+1. **Long output goes to a file; you read the verdict.** Run gates, the chain, guards and suites as
+   `... > <scratch>\<name>.txt`, read the exit code, then read only the verdict lines and the last 30 lines.
+   Never read a log, a board, a routing artifact or a large JSON whole: grep it or read a slice.
+2. **Land ONCE, through `ops\push-main.ps1`, never `git push`.** push-main lands on its first attempt by
+   design. If it refuses, do NOT fix-and-retry in a loop: write the refusal line into the plan item and your
+   report, and stop; the orchestrator re-runs push-main from a small context. (Resumes that did nothing but
+   retry pushes: 2026-09-11 twice, 2026-09-18 once.)
+3. **One `publish_batch` per spawn.** When the dispatch names one batch, do only that batch. The next batch
+   gets a fresh spawn with a small context.
+4. **Your turn cap is a harness limit** (`maxTurns` above), and the run ceiling in your dispatch comes first.
+   When the item in hand cannot FINISH inside what is left, set it `needs-more-time` NOW with what you
+   learned. Finishing means the root fix shipped and landed; a half-done item returns at full price.
+5. Do not re-read what you already hold, and do not read evidence for items that are not yours.
+
 ## SHIPPING (the chain is not optional)
 
 Run the gated chain the plan lists, and never skip a gate to save time:
@@ -144,7 +165,8 @@ disagreements in `basis-reconcile-allowlist.json` with the reason.
   and get exit 0. A residual with no owner is the to-Brad list of discovered defects he ruled out on
   2026-09-07, and the gate names it.
 - Verify one fixed cell on the LIVE board (fetch the page, not the local html).
-- Commit and push EVERYTHING you touched: scripts AND data AND the plan file. Then run
+- Commit EVERYTHING you touched: scripts AND data AND the plan file, and land it with ONE run of
+  `ops\push-main.ps1` (TOKEN DISCIPLINE rule 2). Then run
   `git -C C:\Codex\ThriftyCrew status --porcelain` and confirm no source file of yours is left uncommitted
   (a .ps1, commodities.json, categories.json, commodity-search.json, an allowlist/config json, a SKILL,
   the plan). Regenerated pipeline output (out\*, board.json, feed, logs) is the pipeline's to commit, not

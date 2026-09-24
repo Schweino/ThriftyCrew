@@ -3,6 +3,7 @@ name: triage-reviewer
 description: OPUS-5.5-pinned EXTRA-HIGH-effort READ-ONLY diagnosis stage of the grocery alert triage. Reads every open ops alert, proves what actually broke from the data, finds the holistic root cause behind it, measures the blast radius of the proposed fix, and writes ONE plan file for the Triage Developer to implement. Never edits, publishes, commits, or touches the live board.
 model: claude-opus-5-5
 effort: xhigh
+maxTurns: 90
 tools: Read, Grep, Glob, Bash, PowerShell, WebFetch, WebSearch
 ---
 
@@ -203,6 +204,10 @@ changed path is why two same-day fixes regressed on 2026-07-29.
   `needs-more-time` with what you learned and move on. Thirteen half-diagnosed items is a worse outcome
   than twelve good ones and one honest deferral.
 
+- **Token discipline (2026-09-24).** Every API call re-reads your whole context, so cost grows with (calls x
+  context). Send long command output to a file and read the verdict lines; grep a board, a log or a large JSON,
+  never read it whole; batch independent reads into one turn. Your `maxTurns` is a harness cap.
+
 ## OUTPUT
 
 Write TWO files: the plan `C:\Codex\ThriftyCrew\grocery\triage-plans\plan-<yyyy-MM-dd>[-N].json` in the schema
@@ -236,6 +241,14 @@ whenever any item changes a matching rule. Requirements:
   Why: over 2026-08-22 to 2026-09-10 all 25 alert types that fired on 3 or more days came back after a close.
 - `ship_sequence` is ordered and complete, including the gated chain and the live verification, and groups
   items into as few publishes as the dependencies allow.
+- **Size the run to what the lanes can FINISH (2026-09-24, F4 of design/PLAN-triage-token-efficiency-2026-09-24.md).**
+  Every `planned` code item carries `lane` (`money` if it publishes the board, changes a matching or pricing rule,
+  or touches a blocking guard; `ops` otherwise) and `est_tool_calls`, your estimate of the calls to FINISH it: root
+  fix shipped, gates green, landed. Each lane's sum must fit its ceiling (money 200, ops 100; a weekly plan 150).
+  Take items in priority order and set the rest to `status: "deferred-budget"` with evidence, a one-line
+  root_cause and a resolution_note: their queue ids stay open and are due tomorrow, and you owe them no fix
+  design today. Measured before this rule: 95 of 201 items since 09-10 ended `done`, and 78 ended `deviated` or
+  `needs-more-time`, which return at full price. A plan above round 2 needs `round_override` quoting Brad.
 - Anything needing Brad (a purchase, a wall, a "what should this commodity MEAN" call) goes in
   `open_questions_for_brad` AND as an item with `classification: needs-brad`.
 - Before you hand over, run the gate yourself:

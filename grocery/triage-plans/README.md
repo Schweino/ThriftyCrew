@@ -24,7 +24,8 @@ with the change and a future reader can see why a rule exists.
 ```jsonc
 {
   "generated": "2026-07-31T06:40:00",     // ISO, reviewer's clock
-  "round": 1,                              // 2 = a bounce-back round (max 2, see below)
+  "round": 1,                              // 2 = a bounce-back round (max 2, see below; the gate refuses 3+
+                                           // from 2026-09-25 unless "round_override" quotes Brad and the date)
   "board_week": "2026-07-30",              // week_of of the newest comparison the reviewer read
   "queue_ids_seen": ["2026-07-30-abc123"], // EVERY open id from triage-queue.json, no exceptions
 
@@ -220,7 +221,16 @@ with the change and a future reader can see why a rule exists.
       // the same batch ship together on one publish; "next-round" means it can wait.
       "publish_batch": 1,
 
+      // THE RUN FITS ITS BUDGET (2026-09-24, design/PLAN-triage-token-efficiency-2026-09-24.md). From plans dated
+      // 2026-09-25 every "planned" code item names its lane and an estimate of the tool calls to FINISH it (root
+      // fix shipped, gates green, landed); each lane's sum must fit its ceiling (money 200, ops 100, a weekly plan
+      // 150). What does not fit is planned as status "deferred-budget": evidence, root_cause and resolution_note
+      // only, its queue id stays open and is due tomorrow. Measured before: 95 of 201 items since 09-10 ended done.
+      "lane": "money",          // money | ops
+      "est_tool_calls": 60,
+
       "status": "planned",  // developer updates: done | deviated | blocked | bounced | superseded | needs-more-time
+                            // (reviewer may plan: deferred-budget)
 
       // --- fields the DEVELOPER fills in, not the reviewer ---
       // A plan premise is a claim, not a fact. Two premises were false on 2026-07-31 (the Family Fare
@@ -386,8 +396,16 @@ alongside the pipeline logs. Git history keeps the content either way. (This lin
 `run-daily-local.ps1` until 2026-09-10; that script no longer exists, and the rotation lives in
 `capture-run.ps1`, which moves `plan-*.json` only.)
 
-`cost-ledger.jsonl` (2026-09-10) is one line per agent a triage run spawns, copied from the harness usage
-block: date, plan, lane, agent, model, effort, tokens, tool_uses, duration_ms, items_worked,
-items_transcribed, items_board_changing, note. The rotation does not touch it. It is what the run ceilings
+`cost-ledger.jsonl` (2026-09-10) is one line per agent a triage run spawns. **Its rows before 2026-09-24 are
+in the WRONG UNIT**: they were copied from the harness usage block, whose `tokens` is the agent's FINAL context
+size (checked exact on 4 of 4 spawns of 2026-09-19), not what it consumed, which is one to two orders of
+magnitude more. **Since 2026-09-24 rows are `"schema": 2`, written only by `grocery\triage-cost.py --append
+--plan <plan>[,<plan>]` from the session's own transcripts** (orchestrator and every spawn, any agent type),
+never typed: agent_id, agent, plans, api_calls, tool_uses, input, cache_write, cache_read, output,
+`cost_units` (input + 1.25 x write + 0.1 x read + 5 x output, an input-token equivalent) and `final_context`
+(the old number, kept and named). The last row per agent_id wins. `validate-triage-plan.ps1 -Closing` refuses
+a plan dated 2026-09-25 or later that no schema-2 row names, and `triage-cost.py --report` prints cost_units
+per plan and per done item. The legacy fields were: date, plan, lane, agent, model, effort, tokens, tool_uses,
+duration_ms, items_worked, items_transcribed, items_board_changing, note. The rotation does not touch it. It is what the run ceilings
 and the weekly-lane cadence in the triage SKILL get revisited from. Its founding rows: the two agents of
 2026-09-10 cost 1,114,531 tokens and 571 tool calls for 11 items, 3 of which changed the board.

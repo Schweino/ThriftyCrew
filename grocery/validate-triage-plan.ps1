@@ -71,6 +71,9 @@ param(
   [switch]$Closing,
   [string]$QueueFile = '',
   [string]$CensusFile = '',
+  # -Closing on a plan dated on or after $BudgetCutoff: the cost ledger that must name it (default: cost-ledger.jsonl
+  # beside the plan). Rows are written by grocery\triage-cost.py --append, never typed (2026-09-24).
+  [string]$LedgerFile = '',
   # -KcSurvey: the knowledge_consulted rule ALONE, with the cutoff lifted, over every plan whose file-name date is in
   # [-SurveySince, -SurveyUntil] in -SurveyDir (default grocery\triage-plans). A report, never a gate: it is how the
   # rule was measured over real plans before it could refuse any (W5.3), and how the next change to it is measured.
@@ -130,6 +133,79 @@ $DATA_ONLY_SOURCES = @('grocery/commodities.json', 'grocery/category-excludes.js
 # edit of that live file, and a gate that refuses a field before the lane has been told about it refuses the lane for
 # the gate's own lateness. First value, not a sweep: moving it later is the one line to change if P3 slips again.
 $KcCutoff = '2026-09-26'
+
+# --- THE RUN FITS ITS BUDGET, AND ITS SPEND IS ON THE LEDGER (2026-09-24, design/PLAN-triage-token-efficiency-2026-09-24.md)
+# Measured that day: of 201 plan items since 09-10, 95 ended done and 78 deviated or needs-more-time, so a run that took
+# more than it could finish left the rest to come back at full price; README rule 3's "two rounds maximum" was reached
+# at round 5 (09-20) and round 6 (09-22) with nothing enforcing it; and a session that stayed open 09-20 to 09-23 spent
+# about 402M cost units that reached no ledger row. So, for a plan dated on or after $BudgetCutoff:
+#   handoff and -Closing: round above $MaxRound needs round_override (Brad's words and the date);
+#   handoff: every 'planned' code item names lane (money|ops) and est_tool_calls, and each lane's sum fits its ceiling
+#            (a weekly plan: every planned item fits $WeeklyCeiling); the overflow is status 'deferred-budget';
+#   -Closing: a schema-2 row of cost-ledger.jsonl (written by grocery/triage-cost.py, never typed) names the plan.
+# The ceilings are the SKILL's run ceilings in tool calls. First plausible values, not the survivors of a sweep.
+$BudgetCutoff = '2026-09-25'
+$MaxRound = 2
+$LaneCeilings = @{ money = 200; ops = 100 }
+$WeeklyCeiling = 150
+
+function Get-PlanDateKey([string]$PlanName, $Doc) {
+  if ($PlanName -match 'plan-(\d{4}-\d{2}-\d{2})') { return $Matches[1] }
+  $g = ([string]$Doc.generated).Trim()
+  if ($g -match '^(\d{4}-\d{2}-\d{2})') { return $Matches[1] }
+  return ''
+}
+
+function Test-PlanBudget {
+  param($Doc, [string]$PlanName, [switch]$Closing, [string]$Cutoff = $script:BudgetCutoff)
+  $problems = New-Object System.Collections.Generic.List[string]
+  $dk = Get-PlanDateKey $PlanName $Doc
+  if (-not $dk -or [string]::CompareOrdinal($dk, $Cutoff) -lt 0) { return @{ judged = $false; problems = @(); lanes = @{} } }
+  $rnd = 1
+  if (([string]$Doc.round) -match '^\s*\d+\s*$') { $rnd = [int]([string]$Doc.round) }
+  if ($rnd -gt $script:MaxRound -and -not ([string]$Doc.round_override).Trim()) {
+    $problems.Add("round is $rnd and README rule 3 allows $script:MaxRound - what is left after round $script:MaxRound becomes needs-brad; a further round needs round_override quoting Brad and the date")
+  }
+  $sums = @{}
+  if (-not $Closing) {
+    $isWeekly = (([string]$Doc.lane).Trim() -eq 'weekly')
+    foreach ($i in @($Doc.items)) {
+      if (-not $i) { continue }
+      $st = ([string]$i.status).Trim()
+      if ($st -and $st -ne 'planned') { continue }
+      if ($script:NO_CODE -contains [string]$i.classification) { continue }
+      $id = [string]$i.queue_id
+      $ln = ([string]$i.lane).Trim()
+      if ($isWeekly) { $ln = 'weekly' }
+      elseif (@('money','ops') -notcontains $ln) { $problems.Add("$id is a planned code item with no lane - write lane 'money' (publishes the board, changes a matching or pricing rule, or touches a blocking guard) or 'ops' (everything else)"); continue }
+      $est = -1
+      if ($i.PSObject.Properties['est_tool_calls'] -and ([string]$i.est_tool_calls) -match '^\s*\d+\s*$') { $est = [int]([string]$i.est_tool_calls) }
+      if ($est -le 0) { $problems.Add("$id is a planned code item with no est_tool_calls - estimate the tool calls to FINISH it (root fix shipped, gates green, landed), so the run takes only what its lane can finish"); continue }
+      if (-not $sums.ContainsKey($ln)) { $sums[$ln] = 0 }
+      $sums[$ln] += $est
+    }
+    foreach ($ln in @($sums.Keys)) {
+      $cap = if ($ln -eq 'weekly') { $script:WeeklyCeiling } else { [int]$script:LaneCeilings[$ln] }
+      if ($sums[$ln] -gt $cap) { $problems.Add("the $ln lane is planned at $($sums[$ln]) tool calls against a ceiling of $cap - keep the items it can FINISH and set the rest to status 'deferred-budget' (their queue ids stay open and are due tomorrow)") }
+    }
+  }
+  return @{ judged = $true; problems = @($problems); lanes = $sums }
+}
+
+function Test-PlanCostLedger {
+  param([string]$LedgerPath, [string]$PlanName)
+  if (-not (Test-Path -LiteralPath $LedgerPath)) { return @{ ok = $false; why = "no cost ledger at $LedgerPath" } }
+  $n = 0
+  foreach ($ln in [IO.File]::ReadAllLines($LedgerPath)) {
+    if (-not $ln.Trim()) { continue }
+    try { $r = $ln | ConvertFrom-Json } catch { continue }
+    if ([string]$r.schema -ne '2') { continue }
+    $names = @(@($r.plans) | ForEach-Object { [string]$_ })
+    if ($names -contains $PlanName) { $n++ }
+  }
+  if ($n -gt 0) { return @{ ok = $true; why = "$n schema-2 row(s) name $PlanName" } }
+  return @{ ok = $false; why = "no schema-2 row of $LedgerPath names $PlanName - run grocery\triage-cost.py --append --plan $PlanName (it derives the rows from the session transcripts)" }
+}
 # The two memory stores, in ops/store_citation.py MEMORY_PROJECTS order, and its NOTHING_RE text. Both are COPIES of
 # that file's constants, so the self-test reads that file and fails the day either copy drifts from it.
 $KcMemoryProjects = @('C--Codex-ThriftyCrew', 'C--Codex')
@@ -326,7 +402,7 @@ function Test-Plan {
   # an older plan wrote those as bare strings, which carry no id and so can own nothing.
   $ruleIds = @()
   foreach ($qb in @($Doc.open_questions_for_brad)) { if ($qb -and -not ($qb -is [string]) -and [string]$qb.id) { $ruleIds += [string]$qb.id } }
-  $END_STATES = @('done','deviated','blocked','bounced','superseded','needs-more-time','needs-brad')
+  $END_STATES = @('done','deviated','blocked','bounced','superseded','needs-more-time','needs-brad','deferred-budget')
   $problems = New-Object System.Collections.Generic.List[string]
   $items = @($Doc.items)
   if ($items.Count -eq 0) { return @{ rc = 3; problems = @('plan carries ZERO items - it proved nothing') } }
@@ -493,6 +569,10 @@ function Test-Plan {
       if ($pvSrc.Count -eq 0) { $problems.Add("$id is a prevention item with no prevention.source - name the repo path(s) of the upstream producer of the class (a capture builder, the ingest parser, the rule schema, the emitting check), with what and exact_change") }
     }
     if ($NO_CODE -contains $cls) { continue }
+    # A deferred-budget item was planned OUT of this run because the lane budget could not finish it (2026-09-24, F4 of
+    # design/PLAN-triage-token-efficiency-2026-09-24.md). Its queue id stays open and is due tomorrow, where it is
+    # diagnosed in full, so it owes the evidence and root_cause above and none of the code apparatus below.
+    if ([string]$i.status -eq 'deferred-budget') { continue }
 
     # --- code-changing items carry the anti-regression apparatus ---
     # WHICH KIND OF MEASUREMENT, THOUGH. "measured_as: routing" is the right demand for a change to a
@@ -1167,6 +1247,56 @@ if ($SelfTest) {
     else { Write-Output ("FAIL  CLEAN TWIN -KcSurvey over two plans and a routing file  rc=$svRc; last=" + $svLast); $script:fail++ }
   } finally { Remove-Item -LiteralPath $kcRoot -Recurse -Force -ErrorAction SilentlyContinue }
 
+  # --- THE RUN FITS ITS BUDGET, AND ITS SPEND IS ON THE LEDGER (2026-09-24) -----------------------------------------
+  function _BCase($label, $doc, [string]$name, [switch]$closing, $expectMatch) {
+    $script:ran++
+    $r = Test-PlanBudget $doc $name -Closing:$closing
+    $txt = (@($r.problems) -join ' | ')
+    $ok = if ($expectMatch) { $r.judged -and ($txt -match $expectMatch) } else { $r.judged -and -not $txt }
+    if ($ok) { Write-Output "ok    $label" } else { Write-Output ("FAIL  $label  judged=" + $r.judged + " problems: " + $txt); $script:fail++ }
+  }
+  function _BPlan($round, $items, $lane = '') {
+    return [pscustomobject]@{ round = $round; lane = $lane; items = @($items) }
+  }
+  function _BItem($id, $lane, $est, $status = 'planned', $cls = 'wrong-product') {
+    return [pscustomobject]@{ queue_id = $id; classification = $cls; status = $status; lane = $lane; est_tool_calls = $est }
+  }
+  _BCase 'MUST FIRE: a round-3 plan with no round_override is refused (README rule 3, two rounds maximum)' (_BPlan 3 @((_BItem 'q1' 'money' 10))) 'plan-2026-09-25-3.json' -closing:$false 'round is 3'
+  _BCase 'BAR: a round-2 plan is AT the round limit and passes' (_BPlan 2 @((_BItem 'q1' 'money' 10))) 'plan-2026-09-25-2.json' -closing:$false $null
+  $ovr = _BPlan 3 @((_BItem 'q1' 'money' 10)); $ovr | Add-Member -NotePropertyName round_override -NotePropertyValue 'Brad 2026-09-25: one more round on the multipack'
+  _BCase 'CLEAN TWIN: a round-3 plan carrying round_override passes' $ovr 'plan-2026-09-25-3.json' -closing:$false $null
+  $script:ran++
+  $pre = Test-PlanBudget (_BPlan 6 @((_BItem 'q1' '' 0))) 'plan-2026-09-22-6.json'
+  if (-not $pre.judged -and -not @($pre.problems).Count) { Write-Output 'ok    MUST NOT FIRE: a plan dated before the cutoff (round 6 on 2026-09-22) is not judged' }
+  else { Write-Output ('FAIL  MUST NOT FIRE: pre-cutoff plan judged=' + $pre.judged); $script:fail++ }
+  _BCase 'BAR: a money lane planned AT its ceiling (120 + 80 = 200 of 200) passes' (_BPlan 1 @((_BItem 'q1' 'money' 120), (_BItem 'q2' 'money' 80), (_BItem 'q3' 'ops' 100))) 'plan-2026-09-25.json' -closing:$false $null
+  _BCase 'BAR: a money lane planned one call PAST its ceiling (201 of 200) is refused' (_BPlan 1 @((_BItem 'q1' 'money' 120), (_BItem 'q2' 'money' 81))) 'plan-2026-09-25.json' -closing:$false 'money lane is planned at 201 tool calls against a ceiling of 200'
+  _BCase 'MUST FIRE: a planned code item with no est_tool_calls is refused' (_BPlan 1 @((_BItem 'q1' 'ops' 0))) 'plan-2026-09-25.json' -closing:$false 'no est_tool_calls'
+  _BCase 'MUST FIRE: a planned code item with no lane is refused' (_BPlan 1 @((_BItem 'q1' '' 20))) 'plan-2026-09-25.json' -closing:$false 'no lane'
+  _BCase 'MUST FIRE: a weekly plan past its 150-call ceiling (151) is refused' (_BPlan 1 @((_BItem 'prevention:x' '' 100), (_BItem 'q2' '' 51)) 'weekly') 'plan-2026-09-25-4.json' -closing:$false 'weekly lane is planned at 151'
+  _BCase 'CLEAN TWIN: a deferred-budget item owes no lane or estimate' (_BPlan 1 @((_BItem 'q1' 'money' 50), (_BItem 'q2' '' 0 'deferred-budget'))) 'plan-2026-09-25.json' -closing:$false $null
+  $deferred = [pscustomobject]@{ queue_ids_seen = @('q1'); ship_sequence = @('none this run'); items = @([pscustomobject]@{
+      queue_id = 'q1'; classification = 'wrong-product'; status = 'deferred-budget'; evidence = @('lemons | Sam''s | soda row')
+      root_cause = 'not diagnosed this run - deferred on budget'; resolution_note = 'deferred: the money lane was full; due tomorrow' }) }
+  _Case 'CLEAN TWIN: a deferred-budget code item needs no root_fix, proof or rollback' $deferred 0 $null
+  $ldRoot = Join-Path $env:TEMP ('vtp-ledger-' + [guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $ldRoot -ErrorAction Stop | Out-Null
+  try {
+    $ld = Join-Path $ldRoot 'cost-ledger.jsonl'
+    # a TYPED row, even one that copies the new plans field, is not a derived row: only schema 2 counts
+    [IO.File]::WriteAllText($ld, '{"date":"2026-09-25","plan":"plan-2026-09-25.json","plans":["plan-2026-09-25.json"],"agent":"triage-reviewer","tokens":317364}' + "`n", (New-Object Text.UTF8Encoding($false)))
+    $script:ran++
+    $c1 = Test-PlanCostLedger $ld 'plan-2026-09-25.json'
+    if (-not $c1.ok) { Write-Output 'ok    MUST FIRE: a plan named only by a typed row (final-context tokens, no schema 2) is not on the ledger' }
+    else { Write-Output ('FAIL  MUST FIRE: old-schema row accepted: ' + $c1.why); $script:fail++ }
+    [IO.File]::AppendAllText($ld, '{"schema":2,"agent_id":"orchestrator:s1","plans":["plan-2026-09-25.json"],"cost_units":582}' + "`n", (New-Object Text.UTF8Encoding($false)))
+    $script:ran++
+    $c2 = Test-PlanCostLedger $ld 'plan-2026-09-25.json'
+    $c3 = Test-PlanCostLedger $ld 'plan-2026-09-25-2.json'
+    if ($c2.ok -and -not $c3.ok) { Write-Output 'ok    CLEAN TWIN: a schema-2 row naming the plan puts it on the ledger, and names no other plan' }
+    else { Write-Output ('FAIL  CLEAN TWIN: ledger row c2=' + $c2.ok + ' c3=' + $c3.ok); $script:fail++ }
+  } finally { Remove-Item -LiteralPath $ldRoot -Recurse -Force -ErrorAction SilentlyContinue }
+
   # BLIND: zero items proves nothing
   _Case 'zero items reports BLIND (rc 3)' ([pscustomobject]@{ queue_ids_seen=@(); ship_sequence=@('x'); items=@() }) 3 'ZERO items'
   # MUST-FIRE: a comma-joined -OpenIds (what `powershell -File` does to a [string[]]) must be split, not
@@ -1178,7 +1308,7 @@ if ($SelfTest) {
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (2026-09-23, with W5.3's 23 cases): the count above is still COUNTED for
   # the summary, and this is the other half - a case that silently stopped running is a defect, never a smaller suite.
   # Raise it with every case added.
-  $expectedRan = 92   # +3 on 2026-09-23: the resolved-owner warning (MUST FIRE, MUST NOT FIRE, CLEAN TWIN)
+  $expectedRan = 105  # +3 on 2026-09-23: the resolved-owner warning (MUST FIRE, MUST NOT FIRE, CLEAN TWIN); +13 on 2026-09-24: budget, rounds and ledger
   if ($ran -ne $expectedRan) { Write-Output "FAIL  ran $ran plan-gate cases, expected $expectedRan"; $fail++ }
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s) of $ran"; exit 1 }
@@ -1259,10 +1389,27 @@ if (([string]$doc.lane).Trim() -eq 'weekly') {
 $retQueueItems = $queueItems
 try { $archItems = Read-TriageArchivedItems (Join-Path $root 'out\archive'); $retQueueItems = Join-TriageQueueWithArchive $queueItems $archItems } catch { $retQueueItems = $queueItems }
 $res = Test-Plan $doc $OpenIds (Split-Path $Plan -Parent) -Closing:$Closing -QueueIds $queueIds -QueueItems $retQueueItems -Now (Get-Date) -Census $census -PlanName (Split-Path $Plan -Leaf)
+$planLeaf = Split-Path $Plan -Leaf
+$bud = Test-PlanBudget $doc $planLeaf -Closing:$Closing
+$budExtra = @($bud.problems)
+$ledgerSaid = ''
+if ($Closing -and $bud.judged) {
+  if (-not $LedgerFile) { $LedgerFile = Join-Path (Split-Path $Plan -Parent) 'cost-ledger.jsonl' }
+  $cl = Test-PlanCostLedger $LedgerFile $planLeaf
+  $ledgerSaid = $cl.why
+  if (-not $cl.ok) { $budExtra += $cl.why }
+}
+if ($budExtra.Count) { $res.problems = @($res.problems) + $budExtra; if ($res.rc -eq 0) { $res.rc = 2 } }
 $items = @($doc.items)
 $mode = if ($Closing) { 'closing' } else { 'handoff' }
 Write-Output ("validate-triage-plan: " + $Plan)
 Write-Output ("  mode=" + $mode + "  round=" + $doc.round + "  items=" + $items.Count + "  ship_sequence=" + @($doc.ship_sequence).Count + "  expected ids=" + @($OpenIds).Count)
+if ($bud.judged) {
+  $laneTxt = @($bud.lanes.Keys | Sort-Object | ForEach-Object { $_ + '=' + $bud.lanes[$_] }) -join ' '
+  Write-Output ("  BUDGET: judged (dated on or after " + $BudgetCutoff + "); planned tool calls by lane: " + $(if ($laneTxt) { $laneTxt } else { 'none' }) + $(if ($ledgerSaid) { '; ledger: ' + $ledgerSaid } else { '' }))
+} else {
+  Write-Output ("  BUDGET: not judged (dated before " + $BudgetCutoff + ")")
+}
 if ($res.kc -and $res.kc.judged) {
   $kcVia = if ($res.kc.via -eq 'rca_document') { 'through its rca_document' } elseif ($res.kc.via) { [string]$res.kc.naming + ' of ' + $res.kc.entries + ' entr' + $(if ($res.kc.entries -eq 1) { 'y' } else { 'ies' }) + ' name something' } else { 'absent' }
   Write-Output ("  KNOWLEDGE CONSULTED: judged (dated on or after " + $KcCutoff + "), " + $kcVia)

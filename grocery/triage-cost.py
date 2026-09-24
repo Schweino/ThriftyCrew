@@ -1,0 +1,447 @@
+"""triage-cost.py - what a triage session ACTUALLY spent, derived from its transcripts, never typed.
+
+WHY THIS EXISTS (2026-09-24, design/PLAN-triage-token-efficiency-2026-09-24.md). The cost ledger
+(grocery/triage-plans/cost-ledger.jsonl) was hand-appended from the harness usage block after each spawn, and
+that block's `total_tokens` is the size of the agent's FINAL context window, not what it consumed. Checked on
+4 of 4 spawns of the 2026-09-19 run: every ledger `tokens` value equals input + cache read + cache write +
+output of that agent's LAST API call, exactly. What a run processes is the sum over EVERY call, one to two
+orders of magnitude more. And because the rows were typed by hand, a session that stayed open for three days
+of follow-on work (2026-09-20 to 09-23, 56 spawns, about 402M cost units) wrote no row at all.
+
+So every row here is derived from the session's own transcript files:
+  <projects>/<session>.jsonl                          the orchestrator (main thread)
+  <projects>/<session>/subagents/agent-<id>.jsonl     each spawn, with agent-<id>.meta.json naming its type
+Any agent type is counted, general-purpose included.
+
+UNITS. cost_units is an input-token equivalent: input + 1.25 x cache write + 0.1 x cache read + 5 x output.
+Those are relative list-price weights for the Opus family (cache write at the 5-minute rate); a 1-hour cache
+write costs more, so this UNDERSTATES a run that writes the long cache. It is an approximation stated as one,
+good for comparing runs with each other, not an invoice. final_context is kept and named: it is the number
+the old ledger called `tokens`, so old and new rows can be read side by side.
+
+The transcript format is internal to Claude Code and can change between releases (its own docs say so). So a
+transcript with API calls and no usage block anywhere is BLIND (exit 3), never a zero.
+
+Run:
+  python grocery/triage-cost.py                         report the current session (CLAUDE_CODE_SESSION_ID)
+  python grocery/triage-cost.py --session <id> --append --plan plan-2026-09-25.json[,plan-2026-09-25-2.json]
+                                                        append one row per agent (last row per key wins)
+  python grocery/triage-cost.py --budget 30000000       exit 2 when the session has spent more than that
+  python grocery/triage-cost.py --report                per-plan totals from schema-2 ledger rows
+  python grocery/triage-cost.py --check-agents          the three copies of each triage agent are identical
+  python grocery/triage-cost.py --selftest
+Exit: 0 ok / under budget, 2 over budget or drift, 3 could not evaluate. Last line: TRIAGE-COST-COMPLETE.
+
+SCOPE OF A CLEAN REPORT: it covers the transcript files it found and names how many; a spawn whose transcript
+was deleted, or a session run on another machine, is outside it.
+"""
+import argparse
+import glob
+import json
+import os
+import shutil
+import sys
+import tempfile
+
+W_INPUT, W_WRITE, W_READ, W_OUTPUT = 1.0, 1.25, 0.1, 5.0
+HERE = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_LEDGER = os.path.join(HERE, 'triage-plans', 'cost-ledger.jsonl')
+PROJECTS = os.path.join(os.path.expanduser('~'), '.claude', 'projects')
+AGENTS = ('triage-developer', 'triage-ops-developer', 'triage-reviewer')
+
+
+def cost_units(t):
+    return (W_INPUT * t['input'] + W_WRITE * t['cache_write'] + W_READ * t['cache_read']
+            + W_OUTPUT * t['output'])
+
+
+def usage_of(path):
+    """One transcript -> totals. Records sharing a message id are ONE API call (a streamed message is written
+    as one record per content block, each carrying the same usage), so usage is taken once per id and tool
+    uses are counted per block."""
+    calls = {}
+    order = []
+    tools = 0
+    ts = []
+    model = None
+    with open(path, encoding='utf-8') as fh:
+        for line in fh:
+            try:
+                r = json.loads(line)
+            except ValueError:
+                continue
+            if r.get('timestamp'):
+                ts.append(r['timestamp'])
+            if r.get('type') != 'assistant':
+                continue
+            m = r.get('message') or {}
+            model = m.get('model') or model
+            mid = m.get('id') or r.get('uuid')
+            if mid not in calls:
+                order.append(mid)
+            u = m.get('usage')
+            if u or mid not in calls:
+                calls[mid] = u or {}
+            for c in m.get('content') or []:
+                if isinstance(c, dict) and c.get('type') == 'tool_use':
+                    tools += 1
+    t = {'input': 0, 'cache_write': 0, 'cache_read': 0, 'output': 0}
+    with_usage = 0
+    for mid in order:
+        u = calls[mid]
+        if u:
+            with_usage += 1
+        t['input'] += int(u.get('input_tokens') or 0)
+        t['cache_write'] += int(u.get('cache_creation_input_tokens') or 0)
+        t['cache_read'] += int(u.get('cache_read_input_tokens') or 0)
+        t['output'] += int(u.get('output_tokens') or 0)
+    last = calls[order[-1]] if order else {}
+    final_context = sum(int(last.get(k) or 0) for k in (
+        'input_tokens', 'cache_creation_input_tokens', 'cache_read_input_tokens', 'output_tokens'))
+    blind = bool(order) and with_usage == 0
+    return {'api_calls': len(order), 'tool_uses': tools, 'tokens': t, 'final_context': final_context,
+            'first_ts': min(ts) if ts else None, 'last_ts': max(ts) if ts else None, 'model': model,
+            'blind': blind}
+
+
+def _duration_ms(a, b):
+    from datetime import datetime
+    if not a or not b:
+        return None
+    try:
+        fa = datetime.fromisoformat(a.replace('Z', '+00:00'))
+        fb = datetime.fromisoformat(b.replace('Z', '+00:00'))
+        return int((fb - fa).total_seconds() * 1000)
+    except ValueError:
+        return None
+
+
+def find_session(session, projects=PROJECTS):
+    """The directory holding <session>.jsonl. A session is filed under the directory it was LAUNCHED from, so
+    every project directory is searched rather than assuming C--Codex."""
+    hits = glob.glob(os.path.join(projects, '*', session + '.jsonl'))
+    return os.path.dirname(hits[0]) if hits else None
+
+
+def session_rows(session, projects=PROJECTS):
+    """-> (rows, why). rows is None when the session cannot be read; why says what was missing."""
+    home = find_session(session, projects)
+    if not home:
+        return None, 'no transcript named %s.jsonl under %s' % (session, projects)
+    specs = [('orchestrator:' + session, 'orchestrator', os.path.join(home, session + '.jsonl'))]
+    for meta in sorted(glob.glob(os.path.join(home, session, 'subagents', '*.meta.json'))):
+        try:
+            mj = json.load(open(meta, encoding='utf-8'))
+        except ValueError:
+            mj = {}
+        aid = os.path.basename(meta)[:-len('.meta.json')]
+        specs.append((aid, mj.get('agentType') or 'unknown', meta[:-len('.meta.json')] + '.jsonl'))
+    rows = []
+    for key, agent, path in specs:
+        if not os.path.exists(path):
+            continue
+        u = usage_of(path)
+        if u['blind']:
+            return None, '%s has %d API call(s) and no usage block on any of them - the transcript format moved' % (
+                path, u['api_calls'])
+        t = u['tokens']
+        rows.append({
+            'schema': 2, 'date': (u['first_ts'] or '')[:10], 'session': session, 'agent_id': key,
+            'agent': agent, 'model': u['model'], 'api_calls': u['api_calls'], 'tool_uses': u['tool_uses'],
+            'input': t['input'], 'cache_write': t['cache_write'], 'cache_read': t['cache_read'],
+            'output': t['output'], 'cost_units': int(round(cost_units(t))), 'final_context': u['final_context'],
+            'duration_ms': _duration_ms(u['first_ts'], u['last_ts']), 'first_ts': u['first_ts'],
+            'last_ts': u['last_ts']})
+    return rows, 'read %d transcript(s)' % len(rows)
+
+
+NUMERIC = ('api_calls', 'tool_uses', 'input', 'cache_write', 'cache_read', 'output', 'cost_units')
+
+
+def read_ledger(path):
+    rows = []
+    if os.path.exists(path):
+        with open(path, encoding='utf-8') as fh:
+            for line in fh:
+                line = line.strip()
+                if line:
+                    try:
+                        rows.append(json.loads(line))
+                    except ValueError:
+                        pass
+    return rows
+
+
+def latest_by_key(rows):
+    """Schema-2 rows, the LAST row per agent_id. A row is re-appended when its agent spent more, so the newest
+    one is the whole account and older ones are history."""
+    out = {}
+    for r in rows:
+        if r.get('schema') == 2 and r.get('agent_id'):
+            out[r['agent_id']] = r
+    return out
+
+
+def append_rows(rows, plans, ledger):
+    """Append each row whose numbers moved since its key's last row. Returns how many were written. Written as
+    one append of LF lines, so the file stays one JSON object per line."""
+    have = latest_by_key(read_ledger(ledger))
+    new = []
+    for r in rows:
+        r = dict(r)
+        old = have.get(r['agent_id'])
+        prev_plans = list(old.get('plans') or []) if old else []
+        r['plans'] = sorted(set(prev_plans) | set(plans))
+        if old and all(old.get(k) == r.get(k) for k in NUMERIC) and old.get('plans') == r['plans']:
+            continue
+        new.append(r)
+    if new:
+        with open(ledger, 'a', encoding='utf-8', newline='\n') as fh:
+            for r in new:
+                fh.write(json.dumps(r, sort_keys=True) + '\n')
+    return len(new)
+
+
+def plan_statuses(plan_dir, name):
+    try:
+        doc = json.load(open(os.path.join(plan_dir, name), encoding='utf-8-sig'))
+    except (OSError, ValueError):
+        return None
+    return [str(i.get('status') or '') for i in doc.get('items') or []]
+
+
+def report(ledger, plan_dir):
+    latest = latest_by_key(read_ledger(ledger))
+    by_plan = {}
+    for r in latest.values():
+        for p in r.get('plans') or ['(no plan)']:
+            by_plan.setdefault(p, []).append(r)
+    lines = []
+    for p in sorted(by_plan):
+        rs = by_plan[p]
+        cu = sum(int(r.get('cost_units') or 0) for r in rs)
+        st = plan_statuses(plan_dir, p)
+        if st is None:
+            lines.append('%s  cost_units=%d over %d agent row(s)  (plan file not found)' % (p, cu, len(rs)))
+            continue
+        done = sum(1 for s in st if s == 'done')
+        per = ('%d per done item' % (cu // done)) if done else 'no done item'
+        lines.append('%s  cost_units=%d over %d agent row(s)  done %d of %d items  %s' % (
+            p, cu, len(rs), done, len(st), per))
+    return lines, len(latest)
+
+
+def check_agents(copies):
+    """copies: list of directories. -> (problems, compared)."""
+    problems = []
+    compared = 0
+    for a in AGENTS:
+        blobs = {}
+        for d in copies:
+            p = os.path.join(d, a + '.md')
+            if not os.path.exists(p):
+                problems.append('%s is missing from %s' % (a, d))
+                continue
+            blobs[d] = open(p, 'rb').read().replace(b'\r\n', b'\n')
+        compared += len(blobs)
+        if len(set(blobs.values())) > 1:
+            problems.append('%s differs between: %s' % (a, ', '.join(sorted(blobs))))
+    return problems, compared
+
+
+def default_agent_copies():
+    """The three places a triage agent definition lives: this checkout's .claude/agents (versioned), the
+    workspace root C:\\Codex\\.claude\\agents (what a session launched from C:\\Codex loads, since a project
+    agent outranks a user one), and ~/.claude/agents. The workspace root is the parent of the MAIN checkout,
+    found through git's common dir so a worktree resolves it the same way."""
+    import subprocess
+    repo = os.path.dirname(HERE)
+    main = repo
+    try:
+        common = subprocess.run(['git', '-C', repo, 'rev-parse', '--path-format=absolute', '--git-common-dir'],
+                                capture_output=True, text=True, timeout=30).stdout.strip()
+        if common:
+            main = os.path.dirname(os.path.normpath(common))
+    except (OSError, subprocess.SubprocessError):
+        pass
+    return [os.path.join(repo, '.claude', 'agents'),
+            os.path.join(os.path.dirname(main), '.claude', 'agents'),
+            os.path.join(os.path.expanduser('~'), '.claude', 'agents')]
+
+
+# ------------------------------------------------------------------------------------------------ self-test
+def _write(path, records):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', encoding='utf-8', newline='\n') as fh:
+        for r in records:
+            fh.write(json.dumps(r) + '\n')
+
+
+def _call(mid, ts, usage, tools=0):
+    recs = [{'type': 'assistant', 'timestamp': ts,
+             'message': {'id': mid, 'model': 'claude-opus-5-5', 'usage': usage,
+                         'content': [{'type': 'text', 'text': 'x'}]}}]
+    for n in range(tools):
+        recs.append({'type': 'assistant', 'timestamp': ts,
+                     'message': {'id': mid, 'model': 'claude-opus-5-5', 'usage': usage,
+                                 'content': [{'type': 'tool_use', 'name': 'Bash', 'id': 't%d' % n}]}})
+    return recs
+
+
+def selftest():
+    results = []
+
+    def case(label, ok, got):
+        results.append((label, bool(ok), got))
+
+    root = tempfile.mkdtemp(prefix='tcost-')
+    try:
+        proj = os.path.join(root, 'projects', 'C--Codex')
+        sid = 'sess-a'
+        u1 = {'input_tokens': 10, 'cache_creation_input_tokens': 100, 'cache_read_input_tokens': 1000,
+              'output_tokens': 20}
+        u2 = {'input_tokens': 2, 'cache_creation_input_tokens': 4, 'cache_read_input_tokens': 2000,
+              'output_tokens': 8}
+        _write(os.path.join(proj, sid + '.jsonl'),
+               _call('m1', '2026-09-25T14:00:00Z', u1, tools=2) + _call('m2', '2026-09-25T14:10:00Z', u2, tools=1))
+        sub = os.path.join(proj, sid, 'subagents')
+        _write(os.path.join(sub, 'agent-x1.jsonl'), _call('s1', '2026-09-25T14:01:00Z', u1, tools=3))
+        json.dump({'agentType': 'triage-reviewer'}, open(os.path.join(sub, 'agent-x1.meta.json'), 'w'))
+        rows, why = session_rows(sid, os.path.join(root, 'projects'))
+        orch = [r for r in rows or [] if r['agent'] == 'orchestrator']
+        o = orch[0] if orch else {}
+        case('CLEAN TWIN: a session reads as one orchestrator row plus one row per spawn (2 rows)',
+             rows is not None and len(rows) == 2, why)
+        case('MUST FIRE: records sharing a message id are ONE api call, and tool uses count per block (2 calls, 3 tools)',
+             o.get('api_calls') == 2 and o.get('tool_uses') == 3, (o.get('api_calls'), o.get('tool_uses')))
+        # the founding finding: final_context is the LAST call's four classes, the number the old ledger held
+        case('MUST FIRE: final_context is the last call only (2+4+2000+8 = 2014), never the sum',
+             o.get('final_context') == 2014, o.get('final_context'))
+        # binary-exact: 12 input, 104 write, 3000 read, 28 output -> 12 + 130 + 300 + 140 = 582
+        case('CLEAN TWIN: cost_units sums every call with the stated weights (582)',
+             o.get('cost_units') == 582, o.get('cost_units'))
+
+        _write(os.path.join(proj, 'sess-blind.jsonl'),
+               [{'type': 'assistant', 'timestamp': '2026-09-25T14:00:00Z',
+                 'message': {'id': 'b1', 'content': [{'type': 'text', 'text': 'x'}]}}])
+        rows_b, why_b = session_rows('sess-blind', os.path.join(root, 'projects'))
+        case('MUST FIRE: a transcript with calls and no usage block is BLIND, never a zero',
+             rows_b is None and 'no usage block' in why_b, why_b)
+        rows_m, why_m = session_rows('no-such', os.path.join(root, 'projects'))
+        case('MUST FIRE: a session with no transcript is BLIND', rows_m is None, why_m)
+
+        ledger = os.path.join(root, 'ledger.jsonl')
+        n1 = append_rows(rows, ['plan-2026-09-25.json'], ledger)
+        n2 = append_rows(rows, ['plan-2026-09-25.json'], ledger)
+        case('CLEAN TWIN: an unchanged re-append writes nothing (2 then 0)', n1 == 2 and n2 == 0, (n1, n2))
+        grown = [dict(r) for r in rows]
+        grown[0]['cost_units'] += 1
+        n3 = append_rows(grown, ['plan-2026-09-25-2.json'], ledger)
+        latest = latest_by_key(read_ledger(ledger))
+        lo = latest['orchestrator:' + sid]
+        case('MUST FIRE: a row whose agent spent more is re-appended, the newest wins, and it keeps every plan',
+             n3 == 2 and lo['cost_units'] == 583 and lo['plans'] == ['plan-2026-09-25-2.json', 'plan-2026-09-25.json'],
+             (n3, lo['cost_units'], lo['plans']))
+
+        # budget bar: at the bar is within it, one unit past is over
+        case('BAR: spend exactly AT the budget (582 of 582) is within it', budget_verdict(582, 582) == 0,
+             budget_verdict(582, 582))
+        case('BAR: one unit PAST the budget (583 of 582) is over', budget_verdict(583, 582) == 2,
+             budget_verdict(583, 582))
+
+        a, b = os.path.join(root, 'a'), os.path.join(root, 'b')
+        for d in (a, b):
+            os.makedirs(d)
+            for n in AGENTS:
+                open(os.path.join(d, n + '.md'), 'wb').write(b'same\n')
+        open(os.path.join(b, 'triage-reviewer.md'), 'wb').write(b'same\r\n')
+        p0, c0 = check_agents([a, b])
+        case('CLEAN TWIN: copies that differ only in line endings are identical (6 compared)',
+             not p0 and c0 == 6, (p0, c0))
+        open(os.path.join(b, 'triage-developer.md'), 'wb').write(b'drifted\n')
+        p1, _ = check_agents([a, b])
+        case('MUST FIRE: a drifted agent copy is named', any('triage-developer differs' in p for p in p1), p1)
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+    bad = [r for r in results if not r[1]]
+    for label, ok, got in results:
+        print('%s  %s%s' % ('PASS' if ok else 'FAIL', label, '' if ok else '  got=%r' % (got,)))
+    expected = 12
+    if len(results) != expected:
+        print('FAIL  the suite ran %d case(s), expected %d' % (len(results), expected))
+        bad.append(None)
+    print('triage-cost self-test %s (%d of %d cases)' % ('pass' if not bad else 'FAIL',
+                                                       len(results) - len([b for b in bad if b]), len(results)))
+    return 0 if not bad else 1
+
+
+def budget_verdict(spent, budget):
+    return 0 if spent <= budget else 2
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--session', default=os.environ.get('CLAUDE_CODE_SESSION_ID', ''))
+    ap.add_argument('--projects', default=PROJECTS)
+    ap.add_argument('--ledger', default=DEFAULT_LEDGER)
+    ap.add_argument('--plan', default='', help='plan file name(s) this spend belongs to, comma separated')
+    ap.add_argument('--append', action='store_true')
+    ap.add_argument('--budget', type=float, default=None)
+    ap.add_argument('--report', action='store_true')
+    ap.add_argument('--check-agents', action='store_true')
+    ap.add_argument('--selftest', action='store_true')
+    a = ap.parse_args()
+    if a.selftest:
+        rc = selftest()
+        sys.exit(rc)
+    if a.check_agents:
+        copies = default_agent_copies()
+        problems, compared = check_agents(copies)
+        for p in problems:
+            print('DRIFT  ' + p)
+        print('triage-cost: compared %d agent file(s) across %d copies, %d problem(s)' % (
+            compared, len(copies), len(problems)))
+        print('TRIAGE-COST-COMPLETE check-agents problems=%d' % len(problems))
+        sys.exit(2 if problems else 0)
+    if a.report:
+        lines, keys = report(a.ledger, os.path.dirname(os.path.abspath(a.ledger)))
+        for ln in lines:
+            print(ln)
+        print('TRIAGE-COST-COMPLETE report agents=%d plans=%d' % (keys, len(lines)))
+        sys.exit(0)
+    if not a.session:
+        print('triage-cost: BLIND - no --session and CLAUDE_CODE_SESSION_ID is not set')
+        print('TRIAGE-COST-COMPLETE blind=no-session')
+        sys.exit(3)
+    rows, why = session_rows(a.session, a.projects)
+    if rows is None:
+        print('triage-cost: BLIND - ' + why)
+        print('TRIAGE-COST-COMPLETE blind=transcript')
+        sys.exit(3)
+    total = sum(r['cost_units'] for r in rows)
+    for r in sorted(rows, key=lambda r: -r['cost_units']):
+        print('%-22s %-20s calls=%5d tools=%5d cost_units=%11d final_context=%8d' % (
+            r['agent'], r['agent_id'][:20], r['api_calls'], r['tool_uses'], r['cost_units'], r['final_context']))
+    spawns = len(rows) - 1
+    print('session %s: cost_units=%d over %d agent row(s) (%d spawn(s) plus the orchestrator), %s' % (
+        a.session, total, len(rows), spawns, why))
+    rc = 0
+    if a.append:
+        plans = [p.strip() for p in a.plan.split(',') if p.strip()]
+        if not plans:
+            print('triage-cost: REFUSED - --append needs --plan naming the plan file(s) this spend belongs to')
+            print('TRIAGE-COST-COMPLETE refused=no-plan')
+            sys.exit(2)
+        n = append_rows(rows, plans, a.ledger)
+        print('appended %d row(s) to %s' % (n, a.ledger))
+    if a.budget is not None:
+        rc = budget_verdict(total, a.budget)
+        print('BUDGET %s: spent %d of %d cost_units (%.0f%%)' % (
+            'OVER' if rc else 'within', total, int(a.budget), 100.0 * total / a.budget if a.budget else 0))
+    print('TRIAGE-COST-COMPLETE cost_units=%d rows=%d' % (total, len(rows)))
+    sys.exit(rc)
+
+
+if __name__ == '__main__':
+    main()
