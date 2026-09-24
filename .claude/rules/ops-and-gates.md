@@ -697,7 +697,12 @@ construction.
   whole closure: `lib\checkout-sync.ps1`'s key held 2,968 files (1,202 gitignored boards and cards) through one
   `grocery\capture-run.ps1` it AST-scans, and moved on 201 of 287 commits. A file read as text goes on a
   `# gate-inputs-text:` line: hashed, never walked, and refused if anything in the walk loads or runs it. Check a key's
-  file list, not only `Ok`, and run `-VerifyDeclared` after any declaration change.
+  file list, not only `Ok`, and run `-VerifyDeclared` after any declaration change. **Two more roads in, closed the same
+  day:** a DATA GLOB in a walked file (`'meal-prep\db\recipes\*.json'` in capture-run) was hashed under a declaration where a
+  data literal was not, so eight suites keyed 585 to 2,210 boards and cards; it is now left out like the literal, and the
+  GATE'S OWN data glob stays hashed (hunt-run's `-Init` fixture really lists the boards). And a file a library only WRITES
+  goes on a `# gate-output: <path> read-by <functions>` line (`lib\event-bus.ps1`), which keeps it out of a caller's key
+  unless something else in the walk names a reader or the file. A new reader of that file joins its `read-by` list.
 - **A PUSH IS A COMPARE-AND-SWAP WHOSE CRITICAL SECTION IS THE WHOLE HOOK, so the SLOWEST push converges on never
   landing** (2026-09-11). git fixes a push's refs when it connects and the remote updates a ref only if it still
   holds the sha the hook was handed. Measured across 11 consecutive attempts from one session: the hook took 577 to

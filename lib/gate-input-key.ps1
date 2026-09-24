@@ -178,7 +178,7 @@ function Resolve-TcGateFileRefs {
      nothing refuses, because the declaration already answered the question.
      Returns Ok, Why, Paths (existing files, repo-relative) and Absent (candidates that do not exist, which still go
      into the key so a file appearing there moves it). #>
-  param([string]$Repo, [string]$FileRel, [string]$GateRel, [string]$Text, [switch]$Strict)
+  param([string]$Repo, [string]$FileRel, [string]$GateRel, [string]$Text, [switch]$Strict, [switch]$KeepDataGlobs)
   $repoFull = [IO.Path]::GetFullPath($Repo).TrimEnd('\')
   $code = Remove-TcGateComments -Text $Text
   $vars = Get-TcGateVarBase -Code $code
@@ -234,6 +234,13 @@ function Resolve-TcGateFileRefs {
         if ($Strict -and [regex]::IsMatch($grel + '\', $script:TcGateDataResolvedRx)) {
           return [pscustomobject]@{ Ok = $false; Why = ("reads '" + $lit + "', which resolves into a data directory (" + $gkey + "), whose bytes change with no commit"); Paths = @(); Absent = @() }
         }
+        # UNDER A DECLARATION A DATA GLOB IN A FILE THE WALK REACHED IS NOT HASHED, exactly as a data literal is not
+        # (2026-09-24). Until then only the literal was skipped, so grocery\capture-run.ps1's
+        # 'meal-prep\db\recipes\*.json' and meal-prep\engine\publish.ps1's 'db\built\*.body.html' put every spec and
+        # built card into the key of any declared gate whose walk reached them: 585 to 2,346 gitignored files in eight
+        # suites, so every data rebuild re-ran them. THE GATE'S OWN data glob is still hashed (-KeepDataGlobs): the
+        # gate's text is where its self-test runs, and hunt-run's -Init fixture really lists grocery\out\comparison-*.json.
+        if (-not $Strict -and -not $KeepDataGlobs -and [regex]::IsMatch($grel + '\', $script:TcGateDataResolvedRx)) { continue }
         $hits = @()
         if ([IO.Directory]::Exists($gdir)) { $hits = @([IO.Directory]::GetFiles($gdir, [IO.Path]::GetFileName($lit)) | Sort-Object) }
         if ($hits.Count) {
@@ -401,6 +408,50 @@ function Get-TcGateDeclaredTextInputs {
     }
   }
   return @($out)
+}
+
+# A LIBRARY MAY DECLARE A FILE IT ONLY WRITES (2026-09-24). One more line form, in a LIBRARY:
+#
+#     # gate-output: ops\out\events.jsonl read-by Read-TcEvents, Get-TcEventBusPath
+#
+# WHY. lib\event-bus.ps1 names its gitignored bus by a literal, so every gate whose walk reached it hashed
+# ops\out\events.jsonl: 20 keyed self-tests at 2026-09-24, and every event this checkout recorded, from any producer,
+# moved all twenty keys. Their suites append to the bus through Write-TcEvent or never touch it; an append is not a read.
+# WHAT IT DOES. In a caller's key the named file is left out when it arrives through THAT library's own literals.
+# WHAT KEEPS IT HONEST. It is put back, hashed like any input, when any OTHER walked file (the gate included) names a
+# read-by function or the file's own name, because that code may read what the library writes; and it is always hashed
+# when another road reaches it. A gate-output that names code, or carries no read-by list, refuses the gate: a writer
+# whose readers nobody listed cannot be told apart from one that has none. UNSOUND like the load rule: a read through
+# some spelling that names neither is outside it, and the read-by list is the library author's assertion to keep true.
+$script:TcGateOutDeclRx = '(?im)^[ \t]*#[ \t]*gate-output:[ \t]*(.*?)[ \t]*$'
+
+function Get-TcGateDeclaredOutputs {
+  <# Pure over text. Returns Ok, Why and Outputs (Path repo-relative with backslashes, Readers). #>
+  param([string]$Text)
+  $outs = [Collections.Generic.List[object]]::new()
+  foreach ($m in [regex]::Matches($Text, $script:TcGateOutDeclRx)) {
+    $body = $m.Groups[1].Value
+    $pm = [regex]::Match($body, '(?i)^(\S+)\s+read-by\s+(.+)$')
+    if (-not $pm.Success) { return [pscustomobject]@{ Ok = $false; Why = ("the gate-output line '" + $body + "' is not '<path> read-by <function>[, <function>]'"); Outputs = @() } }
+    $p = $pm.Groups[1].Value -replace '/', '\'
+    if ($p -match '(?i)\.psm?1$' -or $p -match '[\*\?]' -or $p -match '(?i)^[a-z]:\\' -or $p -match '\.\.') {
+      return [pscustomobject]@{ Ok = $false; Why = ("the gate-output '" + $p + "' must be one data file inside this repo, never code, a glob or an outside path"); Outputs = @() }
+    }
+    $rd = @($pm.Groups[2].Value -split '[,\s]+' | Where-Object { $_ -match '^[A-Za-z][\w-]*$' })
+    if (-not $rd.Count) { return [pscustomobject]@{ Ok = $false; Why = ("the gate-output '" + $p + "' names no reader function"); Outputs = @() } }
+    $outs.Add([pscustomobject]@{ Path = $p; Readers = $rd })
+  }
+  return [pscustomobject]@{ Ok = $true; Why = ''; Outputs = $outs.ToArray() }
+}
+
+function Test-TcGateNamesOutputReader {
+  <# Pure over comment-stripped TEXT. True when the code names one of the output's reader functions as a word, or the
+     output file's own name. Either means the code may read the file, so the caller's key keeps it. #>
+  param([string]$Code, [string]$Path, [string[]]$Readers)
+  foreach ($r in @($Readers)) { if ([regex]::IsMatch($Code, ('(?i)(?<![\w-])' + [regex]::Escape($r) + '(?![\w-])'))) { return $true } }
+  $leaf = [IO.Path]::GetFileName($Path)
+  if ($leaf -and $Code.IndexOf($leaf, [StringComparison]::OrdinalIgnoreCase) -ge 0) { return $true }
+  return $false
 }
 
 function Test-TcGateLoadsLeaf {
@@ -597,7 +648,7 @@ function Get-TcGateInputKey {
     $seen = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
     $seen[$gateRel] = $true
     $absentSeen = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
-    $gateRefs = Resolve-TcGateFileRefs -Repo $Repo -FileRel $gateRel -GateRel $gateRel -Text $text -Strict:(-not $declResolved)
+    $gateRefs = Resolve-TcGateFileRefs -Repo $Repo -FileRel $gateRel -GateRel $gateRel -Text $text -Strict:(-not $declResolved) -KeepDataGlobs
     if (-not $gateRefs.Ok) { return [pscustomobject]@{ Ok = $false; Key = ''; Why = $gateRefs.Why; Files = @() } }
     foreach ($p in $gateRefs.Paths) { $queue.Enqueue($p) }
     foreach ($p in $gateRefs.Absent) { $absentSeen[$p] = $true }
@@ -607,6 +658,7 @@ function Get-TcGateInputKey {
     # checked against every text input, including those a walked library declared after that file was read.
     $walkedCode = [Collections.Generic.List[object]]::new()
     $walkedCode.Add([pscustomobject]@{ Rel = ''; Code = (Remove-TcGateComments -Text $text) })
+    $outDecl = [Collections.Generic.List[object]]::new()
     while ($queue.Count) {
       $rel = $queue.Dequeue()
       if ($seen.ContainsKey($rel)) { continue }
@@ -664,8 +716,14 @@ function Get-TcGateInputKey {
           if (-not $subRefs.Ok) {
             return [pscustomobject]@{ Ok = $false; Key = ''; Why = ('a file it loads (' + $rel + ') ' + $subRefs.Why); Files = @() }
           }
-          foreach ($p in $subRefs.Paths) { $queue.Enqueue($p) }
-          foreach ($p in $subRefs.Absent) { $absentSeen[$p] = $true }
+          # A FILE THIS LIBRARY DECLARES IT ONLY WRITES leaves its own literals here; whether it comes back is decided
+          # after the walk, once every file that could read it has been seen.
+          $subOut = Get-TcGateDeclaredOutputs -Text $sub
+          if (-not $subOut.Ok) { return [pscustomobject]@{ Ok = $false; Key = ''; Why = ('a file it loads (' + $rel + ') ' + $subOut.Why); Files = @() } }
+          $subOutSet = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
+          foreach ($o in $subOut.Outputs) { $subOutSet[$o.Path] = $true; $outDecl.Add([pscustomobject]@{ Path = $o.Path; Readers = $o.Readers; Owner = $rel }) }
+          foreach ($p in $subRefs.Paths) { if (-not $subOutSet.ContainsKey($p)) { $queue.Enqueue($p) } }
+          foreach ($p in $subRefs.Absent) { if (-not $subOutSet.ContainsKey($p)) { $absentSeen[$p] = $true } }
         }
       }
     }
@@ -687,7 +745,23 @@ function Get-TcGateInputKey {
     }
     if (-not $conflict) { $walkDone = $true; break }
   }
-  if (-not $walkDone) { return [pscustomobject]@{ Ok = $false; Key = ''; Why = 'the text-input walk did not settle, so the key refuses rather than guess'; Files = @() } }  # A CANDIDATE THAT IS NOT THERE STILL GOES INTO THE KEY, so a file appearing where a base could point moves it.
+  if (-not $walkDone) { return [pscustomobject]@{ Ok = $false; Key = ''; Why = 'the text-input walk did not settle, so the key refuses rather than guess'; Files = @() } }
+  # A DECLARED OUTPUT COMES BACK INTO THE KEY when any walked file but its own library names a reader of it or the file
+  # itself: that code may read it. Reached by another road, it is already hashed, and nothing here removes it.
+  foreach ($o in $outDecl) {
+    if ($seen.ContainsKey($o.Path)) { continue }
+    $reads = $false
+    foreach ($wc in $walkedCode) {
+      if ([string]::Equals($wc.Rel, $o.Owner, [StringComparison]::OrdinalIgnoreCase)) { continue }
+      if (Test-TcGateNamesOutputReader -Code $wc.Code -Path $o.Path -Readers $o.Readers) { $reads = $true; break }
+    }
+    if (-not $reads) { continue }
+    $seen[$o.Path] = $true
+    $ofull = [IO.Path]::Combine($repoFull, $o.Path)
+    if ([IO.File]::Exists($ofull)) { $rows.Add('ref ' + $o.Path + ' ' + (Get-TcFileSha256 $ofull)); $files.Add($ofull) }
+    else { $rows.Add('cand ' + $o.Path + ' absent') }
+  }
+  # A CANDIDATE THAT IS NOT THERE STILL GOES INTO THE KEY, so a file appearing where a base could point moves it.
   foreach ($p in @($absentSeen.Keys)) { if (-not $seen.ContainsKey($p)) { $rows.Add('cand ' + $p + ' absent') } }
   foreach ($rf in @($RunnerFiles)) {
     if (-not $rf) { continue }
@@ -1170,6 +1244,106 @@ if ($SelfTest) { }
     T 'MUST NOT FIRE  the load rule is silent on the file named in a string, a list, a plain Join-Path read, and a file whose name only BEGINS the same' `
       (@($leafQuiet | Where-Object { Test-TcGateLoadsLeaf -Code $_ -Leaf 'zz-leaf-probe.ps1' }).Count -eq 0) (@($leafQuiet | Where-Object { Test-TcGateLoadsLeaf -Code $_ -Leaf 'zz-leaf-probe.ps1' }) -join ' | ')
 
+    # ---- A DATA GLOB IN A WALKED FILE, UNDER A DECLARATION (2026-09-24) ----
+    # The founding shape: grocery\capture-run.ps1 names 'meal-prep\db\recipes\*.json', and every declared gate whose walk
+    # reached it hashed every spec. A data LITERAL there was already left out; the glob was not.
+    $null = New-Item -ItemType Directory -Force -Path (Join-Path $sb 'meal-prep\db\recipes')
+    [IO.File]::WriteAllText((Join-Path $sb 'meal-prep\db\recipes\a.json'), '{}', $utf8)
+    $dgLib = Join-Path $sb 'grocery\globs-data-lib.ps1'
+    [IO.File]::WriteAllText($dgLib, "`$repo = Split-Path -Parent `$PSScriptRoot`n`$specs = Get-ChildItem (Join-Path `$repo 'meal-prep\db\recipes\*.json')`n", $utf8)
+    $dgGate = Join-Path $sb 'ops\declares-data-lib.ps1'
+    [IO.File]::WriteAllText($dgGate, "# gate-inputs: grocery\globs-data-lib.ps1`nif (`$SelfTest) { }`n", $utf8)
+    $kDg1 = Get-TcGateInputKey -Repo $sb -GateFile $dgGate -GateArg '-SelfTest' -RunnerFiles @($runner)
+    [IO.File]::WriteAllText((Join-Path $sb 'meal-prep\db\recipes\a.json'), '{"edited":1}', $utf8)
+    [IO.File]::WriteAllText((Join-Path $sb 'meal-prep\db\recipes\b.json'), '{}', $utf8)
+    $kDg2 = Get-TcGateInputKey -Repo $sb -GateFile $dgGate -GateArg '-SelfTest' -RunnerFiles @($runner)
+    $dgFiles = @($kDg2.Files | ForEach-Object { [string]$_ } | Where-Object { $_ -match 'recipes' })
+    T 'MUST NOT FIRE  a data glob in a LIBRARY a declared gate walks is not hashed: editing and adding a spec under it leaves the key alone, as a data literal there already did' `
+      ($kDg1.Ok -and $kDg2.Ok -and $kDg1.Key -eq $kDg2.Key -and $dgFiles.Count -eq 0) ("ok1={0} ok2={1} why={2} data-files={3}" -f $kDg1.Ok, $kDg2.Ok, $kDg1.Why, ($dgFiles -join ','))
+    [IO.File]::WriteAllText($dgLib, "`$repo = Split-Path -Parent `$PSScriptRoot`n`$specs = Get-ChildItem (Join-Path `$repo 'meal-prep\db\recipes\*.json')`n# edited`n", $utf8)
+    $kDg3 = Get-TcGateInputKey -Repo $sb -GateFile $dgGate -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  the library that names the data glob is still an input: editing it moves the key' `
+      ($kDg3.Ok -and $kDg3.Key -ne $kDg2.Key) ("ok={0} why={1}" -f $kDg3.Ok, $kDg3.Why)
+    $vDg = Test-TcGateDeclarationMoves -Repo $sb -GateFile $dgGate
+    T 'MUST FIRE  the declaration verifier still moves the key for every declared input of that gate' `
+      ($vDg.Ok) ("ok={0} why={1}" -f $vDg.Ok, $vDg.Why)
+    $dgOwn = Join-Path $sb 'ops\own-data-glob.ps1'
+    [IO.File]::WriteAllText($dgOwn, "# gate-inputs: grocery\globs-data-lib.ps1`n`$repo = Split-Path -Parent `$PSScriptRoot`n`$b = Get-ChildItem (Join-Path `$repo 'meal-prep\db\recipes\*.json')`nif (`$SelfTest) { }`n", $utf8)
+    $kDo1 = Get-TcGateInputKey -Repo $sb -GateFile $dgOwn -GateArg '-SelfTest' -RunnerFiles @($runner)
+    [IO.File]::WriteAllText((Join-Path $sb 'meal-prep\db\recipes\c.json'), '{}', $utf8)
+    $kDo2 = Get-TcGateInputKey -Repo $sb -GateFile $dgOwn -GateArg '-SelfTest' -RunnerFiles @($runner)
+    [IO.File]::WriteAllText((Join-Path $sb 'meal-prep\db\recipes\c.json'), '{"edited":1}', $utf8)
+    $kDo3 = Get-TcGateInputKey -Repo $sb -GateFile $dgOwn -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  the GATE''S OWN data glob is still hashed under a declaration: a new spec and an edited spec each move its key (hunt-run''s -Init fixture lists the real boards)' `
+      ($kDo1.Ok -and $kDo2.Ok -and $kDo3.Ok -and $kDo1.Key -ne $kDo2.Key -and $kDo2.Key -ne $kDo3.Key) ("ok={0}/{1}/{2} why={3}" -f $kDo1.Ok, $kDo2.Ok, $kDo3.Ok, $kDo1.Why)
+    $dgStrict = Join-Path $sb 'ops\loads-data-lib.ps1'
+    [IO.File]::WriteAllText($dgStrict, "`$repo = Split-Path -Parent `$PSScriptRoot`n. (Join-Path `$repo 'grocery\globs-data-lib.ps1')`nif (`$SelfTest) { }`n", $utf8)
+    $kDs = Get-TcGateInputKey -Repo $sb -GateFile $dgStrict -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  with NO declaration the same library still refuses its caller as a data reader, so the inference is not weakened' `
+      ((-not $kDs.Ok) -and $kDs.Why -match 'data directory') ("ok={0} why={1}" -f $kDs.Ok, $kDs.Why)
+
+    # ---- A FILE A LIBRARY ONLY WRITES (gate-output:, 2026-09-24) ----
+    # The founding shape: lib\event-bus.ps1 names ops\out\events.jsonl, so every event this checkout recorded moved the
+    # key of every gate that loads the bus, 20 of them, though most only append to it.
+    $null = New-Item -ItemType Directory -Force -Path (Join-Path $sb 'ops\out')
+    $busRel = 'ops\out\zz-bus.jsonl'
+    $busFull = Join-Path $sb $busRel
+    if (Test-Path -LiteralPath $busFull) { Remove-Item -LiteralPath $busFull -Force }
+    $busLibBody = "# gate-inputs: lib\zz-bus-lib.ps1`n# gate-output: ops\out\zz-bus.jsonl read-by Read-ZzBus, Get-ZzBusPath`n`$repo = Split-Path -Parent `$PSScriptRoot`nfunction Get-ZzBusPath { Join-Path `$repo 'ops\out\zz-bus.jsonl' }`nfunction Write-ZzBus([string]`$t) { Add-Content -LiteralPath (Get-ZzBusPath) -Value `$t }`nfunction Read-ZzBus { Get-Content -LiteralPath (Get-ZzBusPath) }`n"
+    $busLib = Join-Path $sb 'lib\zz-bus-lib.ps1'
+    [IO.File]::WriteAllText($busLib, $busLibBody, $utf8)
+    $busW = Join-Path $sb 'ops\writes-bus.ps1'
+    [IO.File]::WriteAllText($busW, "# gate-inputs: lib\zz-bus-lib.ps1`n# Read-ZzBus is named only in this comment, which cannot read anything`nWrite-ZzBus 'x'`nif (`$SelfTest) { }`n", $utf8)
+    $kBw1 = Get-TcGateInputKey -Repo $sb -GateFile $busW -GateArg '-SelfTest' -RunnerFiles @($runner)
+    [IO.File]::WriteAllText($busFull, "{}`n", $utf8)
+    $kBw2 = Get-TcGateInputKey -Repo $sb -GateFile $busW -GateArg '-SelfTest' -RunnerFiles @($runner)
+    [IO.File]::AppendAllText($busFull, "{`"t`":1}`n", $utf8)
+    $kBw3 = Get-TcGateInputKey -Repo $sb -GateFile $busW -GateArg '-SelfTest' -RunnerFiles @($runner)
+    $bwFiles = @($kBw3.Files | ForEach-Object { [string]$_ } | Where-Object { $_ -match 'zz-bus\.jsonl' })
+    T 'MUST NOT FIRE  a gate that only WRITES through a library''s declared output keeps it out: the file appearing and an append each leave the key alone (a comment naming a reader reads nothing)' `
+      ($kBw1.Ok -and $kBw2.Ok -and $kBw3.Ok -and $kBw1.Key -eq $kBw2.Key -and $kBw2.Key -eq $kBw3.Key -and $bwFiles.Count -eq 0) ("ok={0}/{1}/{2} why={3} bus-in-key={4}" -f $kBw1.Ok, $kBw2.Ok, $kBw3.Ok, $kBw1.Why, $bwFiles.Count)
+    [IO.File]::WriteAllText($busLib, ($busLibBody + "# edited`n"), $utf8)
+    $kBw4 = Get-TcGateInputKey -Repo $sb -GateFile $busW -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  the library that declares the output is still an input: editing it moves the writer''s key' `
+      ($kBw4.Ok -and $kBw4.Key -ne $kBw3.Key) ("ok={0} why={1}" -f $kBw4.Ok, $kBw4.Why)
+    [IO.File]::WriteAllText($busLib, $busLibBody, $utf8)
+    $vBw = Test-TcGateDeclarationMoves -Repo $sb -GateFile $busW
+    T 'MUST FIRE  the declaration verifier still moves the writer''s key for its declared library' ($vBw.Ok) ("ok={0} why={1}" -f $vBw.Ok, $vBw.Why)
+    $busReaders = @(
+      @('the gate calls a read-by function', "# gate-inputs: lib\zz-bus-lib.ps1`n`$e = Read-ZzBus`nif (`$SelfTest) { }`n", ''),
+      @('the gate asks for the path through a read-by function', "# gate-inputs: lib\zz-bus-lib.ps1`n`$p = Get-ZzBusPath`nif (`$SelfTest) { }`n", ''),
+      @('the gate names the file itself', "# gate-inputs: lib\zz-bus-lib.ps1`n`$raw = [IO.File]::ReadAllText('zz-bus.jsonl')`nif (`$SelfTest) { }`n", ''),
+      @('ANOTHER library the gate loads calls the reader', "# gate-inputs: lib\zz-bus-lib.ps1, lib\zz-bus-reader.ps1`nif (`$SelfTest) { }`n", "`$seen = Read-ZzBus`n")
+    )
+    $busRdr = Join-Path $sb 'lib\zz-bus-reader.ps1'
+    foreach ($br in $busReaders) {
+      $bg = Join-Path $sb 'ops\reads-bus.ps1'
+      [IO.File]::WriteAllText($bg, $br[1], $utf8)
+      if ($br[2]) { [IO.File]::WriteAllText($busRdr, $br[2], $utf8) }
+      if (Test-Path -LiteralPath $busFull) { Remove-Item -LiteralPath $busFull -Force }
+      $kR0 = Get-TcGateInputKey -Repo $sb -GateFile $bg -GateArg '-SelfTest' -RunnerFiles @($runner)
+      [IO.File]::WriteAllText($busFull, "{}`n", $utf8)
+      $kR1 = Get-TcGateInputKey -Repo $sb -GateFile $bg -GateArg '-SelfTest' -RunnerFiles @($runner)
+      [IO.File]::AppendAllText($busFull, "{`"t`":2}`n", $utf8)
+      $kR2 = Get-TcGateInputKey -Repo $sb -GateFile $bg -GateArg '-SelfTest' -RunnerFiles @($runner)
+      T ('MUST FIRE  the output comes back into the key when ' + $br[0] + ': the file appearing and an append each move it') `
+        ($kR0.Ok -and $kR1.Ok -and $kR2.Ok -and $kR0.Key -ne $kR1.Key -and $kR1.Key -ne $kR2.Key) ("ok={0}/{1}/{2} why={3}" -f $kR0.Ok, $kR1.Ok, $kR2.Ok, $kR0.Why)
+    }
+    Remove-Item -LiteralPath $busRdr -Force -ErrorAction SilentlyContinue
+    $busBad = @(
+      @('names no read-by list', "# gate-output: ops\out\zz-bus.jsonl`n", 'is not ''<path> read-by'),
+      @('has a read-by list holding no function name', "# gate-output: ops\out\zz-bus.jsonl read-by 42`n", 'names no reader function'),
+      @('names code', "# gate-output: lib\zz-other.ps1 read-by Read-ZzBus`n", 'never code'),
+      @('names a glob', "# gate-output: ops\out\*.jsonl read-by Read-ZzBus`n", 'never code, a glob')
+    )
+    foreach ($bb in $busBad) {
+      [IO.File]::WriteAllText($busLib, ($busLibBody -replace '(?m)^# gate-output:.*\n', $bb[1]), $utf8)
+      $kBb = Get-TcGateInputKey -Repo $sb -GateFile $busW -GateArg '-SelfTest' -RunnerFiles @($runner)
+      T ('MUST FIRE  a gate-output line that ' + $bb[0] + ' refuses the caller for that reason, rather than dropping a file on an assertion nobody could check') `
+        ((-not $kBb.Ok) -and $kBb.Why -match 'gate-output' -and $kBb.Why -match $bb[2]) ("ok={0} why={1}" -f $kBb.Ok, $kBb.Why)
+    }
+    [IO.File]::WriteAllText($busLib, $busLibBody, $utf8)
+
     # ---- THE FOUNDING REPLAY, from FROZEN BLOBS (never regenerated). grocery\capture-watchdog.ps1 at 1ec218d5f..f936a4b31
     # was one blob; capture-run.ps1 was adafac8e1070 at 1ec218d5f and cbb188c3e749 at 0da71cba5, where the bare
     # `$failed +=` that turned the watchdog red arrived. The old key was bbba10ec... over both. The new one must differ,
@@ -1300,7 +1474,7 @@ if ($SelfTest) { }
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A SUITE CAN RUN ZERO CASES AND EXIT 0, so the count is asserted.
-  if ($cases -lt 80) { $f++; Write-Output ("FAIL  only {0} of 80 cases ran" -f $cases) }
+  if ($cases -lt 96) { $f++; Write-Output ("FAIL  only {0} of 96 cases ran" -f $cases) }
   if ($f) { Write-Output ("gate-input-key SELF-TEST FAIL: {0} of {1} case(s)" -f $f, $cases); exit 1 }
   Write-Output ("gate-input-key SELF-TEST PASS: {0} cases - led by every input moving the key one at a time, including two hops down a library graph, and by the three refusals that keep a stale pass impossible" -f $cases)
   exit 0

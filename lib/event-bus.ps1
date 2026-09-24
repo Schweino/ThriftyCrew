@@ -49,6 +49,9 @@
 #>
 # Its declared inputs (2026-09-23, lib\gate-input-key.ps1 rule 2): ops\out\events.jsonl is the file it APPENDS to at run time, never an input a self-test reads.
 # gate-inputs: lib\event-bus.ps1
+# So a caller's key leaves the bus out unless the caller's own walk names a reader (2026-09-24): Read-TcEvents reads it,
+# and Get-TcEventBusPath hands its path to whoever asks. Write-TcEvent only appends. Add a reader here, or it is unkeyed.
+# gate-output: ops\out\events.jsonl read-by Read-TcEvents, Get-TcEventBusPath
 
 $script:TcEventBusPath = $null
 

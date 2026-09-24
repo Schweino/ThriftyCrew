@@ -36,7 +36,11 @@
 #>
 # What -SelfTest reads, declared so the gate key moves when any of it does (its fixtures build every git repo and
 # every out\ directory they read under %TEMP%; capture-run.ps1 is read for its AST, stores.json by the -SlotClose child).
-# gate-inputs: grocery\capture-watchdog.ps1, lib\json-io.ps1, grocery\run-log-lib.ps1, grocery\native-lib.ps1, lib\git-blob-lib.ps1, lib\git-repo-env.ps1, grocery\capture-policy-lib.ps1, grocery\capture-run.ps1, grocery\stores.json
+# gate-inputs: grocery\capture-watchdog.ps1, lib\json-io.ps1, grocery\run-log-lib.ps1, grocery\native-lib.ps1, lib\git-blob-lib.ps1, lib\git-repo-env.ps1, grocery\capture-policy-lib.ps1, grocery\stores.json
+# capture-run.ps1 is TEXT to this suite (2026-09-24): it is parsed, and its two self-contained functions Add-FailedLane and
+# Set-FailedLanePaged are lifted by AST and run. Nothing it dot-sources or launches runs here, so its bytes are the input
+# and walking into it put 757 files and the event bus in this key.
+# gate-inputs-text: grocery\capture-run.ps1
 param([switch]$Alert, [string]$OutDir = '', [string]$Today = '', [switch]$SelfTest, [switch]$SlotClose)
 
 $ErrorActionPreference = 'Stop'
