@@ -158,6 +158,16 @@
   an empty exit code, a missing completion marker, or a marker whose code disagrees with the exit code. Every catch-up and
   hand-back round runs the same start, run, wait. Row fields rh_stopped and rh_secs_list (0 for a reused verdict).
 
+  THE CHAIN QUEUE (2026-09-23, W9.2; lib\chain-queue.ps1, the queue lane's). A push that changes the daily chain (the
+  seconds-long rehearse-chain -CheckPush read, before its rehearsal starts; a -NoRehearsal push counts) takes a TICKET.
+  Until it is at the head its rehearsal judges HEAD STACKED on the tickets ahead (a stack file; only the rehearsal's own
+  clone applies them, never this worktree). After its legs it waits for every ticket ahead to land, leave or die,
+  holding nothing but the ticket; a ticket ahead that left, died or changed its key is a RESTACK, one more rehearsal. A
+  stack conflict keeps its place. It records its rh_key, updates its range after every rebase, says swapping before the
+  lock, and leaves landed (before the push lock goes) or left on every other exit. -ChainQueue off is the rollback. A
+  queue that fails is queue=error, a head that never moves is queue=timeout, and both proceed unqueued. The drill that
+  proves this path against this very file is ops\drill-chain-queue.ps1 -Drill -Runner ops\drill-push-main-runner.ps1.
+
   THE PRE-FLIGHT'S COUNTS (2026-09-23, W3.2 with W3.4a step 3), WARN ONLY: commits that edit
   design/BACKLOG-course-findings.md directly (neither deleting nor moving out an inbox file, which a merge does), inbox
   files the push adds that ops\merge-backlog-inbox.ps1 -ValidateFile says the merge would quarantine, and commits that
@@ -171,7 +181,7 @@
   machine - and nothing about whether main is healthy afterwards.
 #>
 # Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): read off the self-test block, which works in a temp sandbox and reads nothing else of this repo. Verify with: powershell -File lib\gate-input-key.ps1 -VerifyDeclared <this file>
-# gate-inputs: ops\push-main.ps1, lib\push-lock.ps1, lib\git-repo-env.ps1, lib\push-ledger.ps1, lib\seed-hint.ps1, ops\seed-worktree.ps1, ops\probe-push-convergence.ps1, lib\mutex-hold.ps1, ops\merge-backlog-inbox.ps1, lib\concurrency-probe.ps1
+# gate-inputs: ops\push-main.ps1, lib\push-lock.ps1, lib\git-repo-env.ps1, lib\push-ledger.ps1, lib\seed-hint.ps1, ops\seed-worktree.ps1, ops\probe-push-convergence.ps1, lib\mutex-hold.ps1, ops\merge-backlog-inbox.ps1, lib\concurrency-probe.ps1, lib\chain-queue.ps1
 [CmdletBinding()]
 param(
   [string]$Remote = 'origin',
@@ -188,6 +198,9 @@ param(
   # START THE COMMIT-TIME CHAIN REHEARSAL AND RETURN (W9.1, D19): fetch, start ops\rehearse-chain.ps1 -Early -Onto <origin
   # sha> detached, print what it decided. No HEAD moves, no leg runs, no lock is taken. ops/hooks/post-commit runs it.
   [switch]$Prepare,
+  # THE CHAIN QUEUE (W9.2): live by default, from its first commit (D8's condition, carried to W9.2). off never opens
+  # the queue and records queue=off: that is the ROLLBACK, a one-line default flip or -ChainQueue off on one push.
+  [ValidateSet('live', 'off')][string]$ChainQueue = 'live',
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -199,6 +212,7 @@ $script:TcPushMainPath = if ($PSCommandPath) { $PSCommandPath } else { $MyInvoca
 . (Join-Path $repo 'lib\git-repo-env.ps1')
 . (Join-Path $repo 'lib\push-ledger.ps1')
 . (Join-Path $repo 'lib\seed-hint.ps1')     # Get-TcSeedDirs: which directories ops\seed-worktree.ps1 seeds, read off its own source
+. (Join-Path $repo 'lib\chain-queue.ps1')    # W9.2: the chain queue (also loads lib\gate-slots.ps1 and lib\atomic-write.ps1)
 
 function Invoke-TcGit {
   <# git, with its exit code and its TWO STREAMS KEPT APART: Out is stdout and is the only thing any caller parses,
@@ -1703,6 +1717,99 @@ function Get-TcEarlyHit {
   return 'unknown'
 }
 
+# ======================================================================================================================
+# THE CHAIN QUEUE (2026-09-23, W9.2, replacing W6.1's lease; lib\chain-queue.ps1 is the queue lane's, and its contract is
+# design\backlog-inbox\pd-queue-interface-2026-09-23.md). A chain-touching push takes a TICKET; its rehearsal judges HEAD
+# STACKED on the tickets ahead (a stack file of their ranges; only the rehearsal's own clone applies them, never this
+# worktree); after its legs it waits until every ticket ahead has landed, left or died, holding NOTHING but the ticket
+# (no gate slot, no rehearsal slot, no push lock); then it swaps. The ticket is not a lock held across a leg: it excludes
+# nobody from running one, and defers only the next member's SWAP, which refs/heads/main serialises already (16.6, 0b).
+# THE BOUND: the queue orders chain landings and adds no rehearsal capacity. Its ceiling is 6 rehearsal slots over 800 to
+# 1,240 s, about 17 to 27 chain landings an hour (review), against about 4.2 an hour offered at the 09-19 peak (plan). Its
+# cost is head-of-line: a member ready first waits for the one ahead, up to that one's remaining rehearsal (about 21
+# minutes, review). It never livelocks: the only re-rehearsal is a restack after a ticket ahead failed or left.
+# EVERY PATH DEGRADES TO W2.2R: a queue that cannot be joined, read or written records queue=error, a head that never moves
+# for $script:TcPmChainQueueStallSec records queue=timeout, and either way the push leaves the queue and proceeds.
+# ======================================================================================================================
+$script:TcPmChainQueuePrefix = $script:TcChainQueuePrefix
+$script:TcPmChainQueueRoot = $script:TcChainQueueRoot
+$script:TcPmChainQueueStallSec = $script:TcChainQueueStallSec
+# HOW OFTEN A WAITING MEMBER REPORTS ITS POSITION (the library's 300 s), and a self-test seam run at each report, which is
+# how a fixture learns FROM THE MECHANISM that a member is really waiting for the head (never from a clock).
+$script:TcPmChainQueueReportSec = $script:TcChainQueueReportSec
+$script:TcPmOnQueueReport = $null
+function Get-TcChainTouchingNow {
+  <# Is this push chain-touching, asked BEFORE its rehearsal starts (the queue must be joined first, so the rehearsal can
+     be stacked): ops\rehearse-chain.ps1 -CheckPush over the ref line git will hand the hook, which reads verdicts and never
+     rehearses (seconds), with W6.0's union trigger. Touching $true, $false, or $null (it could not say); Outcome is its
+     word. A checkout with no rehearse-chain is not chain-touching, as it is asked for no rehearsal. #>
+  param([string]$Dir, [string]$Branch, [string]$Head, [string]$Rem)
+  if (-not (Test-Path -LiteralPath (Join-Path $Dir 'ops\rehearse-chain.ps1'))) { return [pscustomobject]@{ Touching = $false; Outcome = 'no-harness'; Why = 'this checkout has no ops\rehearse-chain.ps1' } }
+  $ck = Invoke-TcRehearsalCheck -Dir $Dir -Branch $Branch -Head $Head -RemoteSha $Rem
+  $m = [regex]::Match([string]$ck.Why, '\boutcome=(\S+)')
+  if (-not $m.Success) { return [pscustomobject]@{ Touching = $null; Outcome = ''; Why = [string]$ck.Why } }
+  $t = $null
+  try { $t = Get-TcChainTouching -Outcome $m.Groups[1].Value } catch { $t = $null }
+  return [pscustomobject]@{ Touching = $t; Outcome = $m.Groups[1].Value; Why = [string]$ck.Why }
+}
+
+function Get-TcRangeShas {
+  <# `git rev-list --reverse <Base>..HEAD`, oldest first, as a string array (empty on any failure). #>
+  param([string]$Dir, [string]$Base)
+  if (-not $Base) { return , ([string[]]@()) }
+  $r = Invoke-TcGit -Dir $Dir -Arguments @('rev-list', '--reverse', ($Base + '..HEAD'))
+  if ($r.Code -ne 0) { return , ([string[]]@()) }
+  return , ([string[]]@(@($r.Out) | ForEach-Object { ([string]$_).Trim() } | Where-Object { $_ -match '^[0-9a-f]{40}([0-9a-f]{24})?$' }))
+}
+
+function Get-TcStackConflict {
+  <# What a rehearsal child said about a stack conflict (W9.2 step 7): its "chain-rehearsal: STACK CONFLICT - applying
+     <sha9> onto the stack conflicts in: <files>" line, as Sha9 and Files, or $null when it said none. Pure. #>
+  param($Lines)
+  foreach ($l in @($Lines)) {
+    $m = [regex]::Match([string]$l, 'STACK CONFLICT - applying ([0-9a-f]+) onto the stack conflicts in: (.+)$')
+    if ($m.Success) { return [pscustomobject]@{ Sha9 = $m.Groups[1].Value; Files = [string[]]@(($m.Groups[2].Value -split ',\s*') | ForEach-Object { $_.Trim() } | Where-Object { $_ }) } }
+  }
+  if (@(@($Lines) | Where-Object { [string]$_ -match '\bblind=stack-conflict\b' }).Count) { return [pscustomobject]@{ Sha9 = ''; Files = [string[]]@() } }
+  return $null
+}
+
+function Get-TcRehearsalKey {
+  <# The verdict key a rehearsal child printed when it REHEARSED: the key= token of its CHAIN-REHEARSAL-COMPLETE line
+     (ops\rehearse-chain.ps1's Format-RhComplete, the stacked tip's key when it was stacked), or '' when it rehearsed
+     nothing (a reuse prints no key). A member records it as its rh_key, so a rebase that keeps the key does not make
+     the members behind it restack (the interface's restack rule). Pure. #>
+  param($Lines)
+  $k = ''
+  foreach ($l in @($Lines)) { $m = [regex]::Match([string]$l, '^CHAIN-REHEARSAL-COMPLETE\b.*\bkey=([0-9a-f]{12,64})\b'); if ($m.Success) { $k = $m.Groups[1].Value } }
+  return $k
+}
+
+function Resolve-TcStackConflictTicket {
+  <# The ticket ahead whose range touched the conflicting files (the interface's rule for a stop on the member's OWN
+     commit): `git diff-tree --name-only -r` over each ahead range, first match in ticket order; '' when none. #>
+  param([string]$Dir, $Stack, [string[]]$Files)
+  if (-not $Stack -or -not @($Files).Count) { return '' }
+  foreach ($a in @($Stack.Ahead)) {
+    foreach ($s in @($a.Range)) {
+      $ch = Invoke-TcGit -Dir $Dir -Arguments @('diff-tree', '--no-commit-id', '--name-only', '-r', [string]$s)
+      if (@(@($ch.Out) | Where-Object { $Files -contains ([string]$_).Trim() }).Count) { return [string]$a.Name }
+    }
+  }
+  return ''
+}
+
+function Update-TcChainQueueRange {
+  <# After ANY rebase of this worktree (catch-up, hand-back, in-lock), the member's record carries its new base and range,
+     so a member behind sees the new range with the same rh_key and does not restack (interface step 7). #>
+  param($Member, [string]$Dir, [string]$Rem)
+  if (-not $Member -or $Member.Queue -cne 'joined' -or -not $Rem) { return }
+  $base = Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('merge-base', 'HEAD', $Rem))
+  if (-not $base) { return }
+  $rng = Get-TcRangeShas -Dir $Dir -Base $base
+  $null = Set-TcChainQueueState -Member $Member -Base $base -Range $rng
+}
+
 function Invoke-TcPushMainReexec {
   <# RUN THE NEW COPY ONCE (W2.1R step 8): the script at -Path as a child, with -Arguments and TC_PUSH_MAIN_REEXEC=1, its
      lines echoed as they arrive. Returns its exit code, or $null when it could not be started, in which case the caller
@@ -1727,7 +1834,7 @@ function Invoke-TcPushMainReexec {
 $script:TcPmReexecExtra = @()
 
 function Invoke-TcPushMain {
-  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '', [string]$SeedScript = '', [scriptblock]$RehearsalRunner = $null, [scriptblock]$RehearsalCheck = $null, [bool]$NoReexec = $false, [scriptblock]$RehearsalStarter = $null)
+  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '', [string]$SeedScript = '', [scriptblock]$RehearsalRunner = $null, [scriptblock]$RehearsalCheck = $null, [bool]$NoReexec = $false, [scriptblock]$RehearsalStarter = $null, [string]$ChainQueue = 'live', [scriptblock]$ChainTouchingProbe = $null)
   # WHICH CODE IS RUNNING, read FIRST (W0.1R step 2). The round-1 fetch and rebase below rewrite this checkout, and when
   # origin changed ops\push-main.ps1 they rewrite THIS script on disk: a hash taken after that names code this process is
   # not running, which is the one thing pm_blob exists to say.
@@ -1831,9 +1938,15 @@ function Invoke-TcPushMain {
   # wrote one for, so every path now ends here, and a path that already wrote one is never written twice.
   $rowState = @{ Written = $false }
   $curPhase = $null
+  $cq = $null
+  $cqState = @{ Decided = $false; AtHead = $false; Stack = $null }
   $writeRow = {
     if ($rowState.Written) { return }
     $rowState.Written = $true
+    if ($cqState.Decided) {
+      try { $qr = Get-TcChainQueueRow -Member $cq; foreach ($qk in @($qr.Keys)) { $pmRow[$qk] = $qr[$qk] } } catch { Say ('push-main: the queue row fields could not be read (' + $_.Exception.Message + '); they are recorded as unknown.') }
+    }
+
     $wr = Write-TcPushRow -Event 'push-main' -WaitMs $ledgerWaitMs -State $ledgerState -BaseSha $ledgerBase `
       -GrantSha $ledgerGrant -Outcome $outcome -Checkout $Dir -Root $LedgerRoot -Fields $pmRow
     # A ROW THAT WAS NOT WRITTEN IS SAID, never refused: the ledger must not be able to stop a push, and a silent miss is
@@ -1947,7 +2060,7 @@ function Invoke-TcPushMain {
         & $writeRow
         return $s.Code
       }
-      if ($s.Rebased) { $rebasedAny = $true }
+      if ($s.Rebased) { $rebasedAny = $true; Update-TcChainQueueRange -Member $cq -Dir $Dir -Rem $s.Rem }
       if ($round -eq 1) {
         # ---- RE-EXEC ON SELF-CHANGE (W2.1R step 8) ----
         # When the pre-flight rebase brought in a different ops\push-main.ps1, the copy running is not the copy that will
@@ -1960,7 +2073,7 @@ function Invoke-TcPushMain {
           if ($nowBlob -and -not [string]::Equals($nowBlob, $pmBlob, [StringComparison]::Ordinal)) {
             Say ("push-main: the pre-flight rebase brought in a new ops\push-main.ps1 (blob {0} -> {1}), so the NEW copy runs this push once; this run writes no row of its own." -f $pmBlob.Substring(0, 9), $nowBlob.Substring(0, 9))
             Exit-TcCheckoutGuard $guard
-            $reArgs = [string[]](@('-Remote', $Remote, '-Branch', $Branch, '-LockWaitSec', [string]$LockWaitSec) + @($(if ($DryRun) { '-DryRun' })) + @($script:TcPmReexecExtra) | Where-Object { $null -ne $_ -and $_ -ne '' })
+            $reArgs = [string[]](@('-Remote', $Remote, '-Branch', $Branch, '-LockWaitSec', [string]$LockWaitSec) + @($(if ($DryRun) { '-DryRun' })) + @($(if ($ChainQueue -ceq 'off') { '-ChainQueue'; 'off' })) + @($script:TcPmReexecExtra) | Where-Object { $null -ne $_ -and $_ -ne '' })
             $childRc = Invoke-TcPushMainReexec -Path $script:TcPushMainPath -Arguments $reArgs
             if ($null -ne $childRc) {
               $rowState.Written = $true   # the child wrote this push's one row
@@ -1976,6 +2089,37 @@ function Invoke-TcPushMain {
         $null = Invoke-TcRowReader 'reread' { Invoke-TcRereadPreflight -Dir $Dir -Base $bcBase -Row $pmRow }
         # SEEDED AFTER THE PRE-FLIGHT, so neither leg judges a checkout that has no built cards (backlog I237).
         $null = Invoke-TcSeedBeforeGate -Dir $Dir -Seeder $SeedScript
+        # ---- THE CHAIN QUEUE (W9.2 steps 1 to 4): joined once, before the rehearsal starts, by a chain-touching push ----
+        # INCLUDING a -NoRehearsal push (rehearse-chain calls it bypassed, which is chain-touching): skipping the rehearsal
+        # does not stop it voiding the tickets behind it.
+        $cqState.Decided = $true
+        if ($ChainQueue -ceq 'off') {
+          $cq = Join-TcChainQueue -Mode off -Checkout $Dir -Prefix $script:TcPmChainQueuePrefix -QueueRoot $script:TcPmChainQueueRoot
+          Say 'push-main: -ChainQueue off, so the chain queue is not opened (queue=off).'
+        } else {
+          $ctp = $(if ($ChainTouchingProbe) { & $ChainTouchingProbe $Dir $s.Head $s.Rem } else { Get-TcChainTouchingNow -Dir $Dir -Branch $Branch -Head $s.Head -Rem $s.Rem })
+          if ($ctp.Touching -eq $true) {
+            $cqBase = Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('merge-base', 'HEAD', $s.Rem))
+            $cq = Join-TcChainQueue -Mode live -Checkout $Dir -Base $cqBase -Range (Get-TcRangeShas -Dir $Dir -Base $cqBase) -Prefix $script:TcPmChainQueuePrefix -QueueRoot $script:TcPmChainQueueRoot
+            if ($cq.Queue -ceq 'joined') {
+              $cqState.Stack = New-TcChainStackFile -Member $cq -Origin $cqBase -Path (Join-Path $env:TEMP ('tc-pm-stack-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '.txt'))
+              if (-not $cqState.Stack.Ok) {
+                Say ('push-main: the chain queue stack could not be read (' + $cqState.Stack.Reason + '); leaving the queue, and this push proceeds unqueued.')
+                Exit-TcChainQueue -Member $cq -State left; $cq.Queue = 'error'; $cq.Reason = [string]$cqState.Stack.Reason; $cqState.Stack = $null
+              } else {
+                Say ("push-main: this push changes the daily chain, so it joined the chain queue (ticket {0}, {1} ahead); its rehearsal judges HEAD stacked on {2} ahead range(s), and it swaps only after they land or leave." -f $cq.Name, $cq.Position, @($cqState.Stack.Ahead).Count)
+              }
+            } else {
+              Say ('push-main: the chain queue could not be joined (' + $cq.Reason + '); this push proceeds unqueued, as before (queue=error).')
+            }
+          } elseif ($ctp.Touching -eq $false) {
+            $cq = $null
+          } else {
+            $cq = New-TcChainMember -Prefix $script:TcPmChainQueuePrefix -QueueRoot $script:TcPmChainQueueRoot -Checkout $Dir
+            $cq.Reason = ('whether this push is chain-touching could not be read (' + $ctp.Why + ')')
+            Say ('push-main: ' + $cq.Reason + '; it proceeds unqueued (queue=error).')
+          }
+        }
       }
       }
       $syncFirst = $true
@@ -2021,7 +2165,10 @@ function Invoke-TcPushMain {
       $pmRow['rehearsals'] = $rehearsals
       $stopFile = Join-Path $env:TEMP ('tc-pm-rhstop-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '.flag')
       $rhBox = @{ Job = $null }
-      $rhDir = $Dir; $rhRunnerSeam = $RehearsalRunner; $rhStarterSeam = $RehearsalStarter; $rhStack = $stackFile; $rhStop = $stopFile
+      # A QUEUE MEMBER NOT YET AT THE HEAD rehearses HEAD STACKED on the tickets ahead (W9.2 step 4); at the head, and for
+      # every other push, the rehearsal judges HEAD on origin alone.
+      $rhStack = $(if ($cq -and $cq.Queue -ceq 'joined' -and -not $cqState.AtHead -and $cqState.Stack -and $cqState.Stack.Ok) { [string]$cqState.Stack.Path } else { $stackFile })
+      $rhDir = $Dir; $rhRunnerSeam = $RehearsalRunner; $rhStarterSeam = $RehearsalStarter; $rhStop = $stopFile
       $startRh = {
         if ($null -ne $rhBox.Job) { return }
         if ($rhStarterSeam) { $rhBox.Job = & $rhStarterSeam $rhDir $rhStack $rhStop }
@@ -2089,11 +2236,66 @@ function Invoke-TcPushMain {
         # cap on rounds that needed no rehearsal.
         $rehearsedRounds++
       }
-      if ($rh.Code -ne 0) {
+      # A STACK CONFLICT IS A WARNING, NOT A REFUSAL (W9.2 step 7): the member keeps its place. If the ticket it conflicts
+      # with lands, the catch-up rebase refuses it with phase catchup, which is the correct refusal; if it leaves, a restack.
+      $sc = $(if ($rh.Code -eq 3 -and $cq -and $cq.Queue -ceq 'joined') { Get-TcStackConflict -Lines (Get-TcOptionalProp $rh 'Lines') } else { $null })
+      if ($null -ne $sc) {
+        $scSha = ''; foreach ($a in @($cqState.Stack.Ahead)) { foreach ($x in @($a.Range)) { if ($sc.Sha9 -and ([string]$x).StartsWith($sc.Sha9)) { $scSha = [string]$x } } }
+        $cw = Set-TcChainStackConflict -Member $cq -Stack $cqState.Stack -Sha $scSha -Files $sc.Files -Ticket (Resolve-TcStackConflictTicket -Dir $Dir -Stack $cqState.Stack -Files $sc.Files)
+        Say ("push-main: WARN - this push conflicts with the chain queue ticket ahead ({0}, pid {1}) in: {2}. It keeps its place: if that ticket lands, the catch-up rebase refuses this push; if it leaves, this push restacks." -f $(if ($cw -and $cw.Checkout) { $cw.Checkout } else { 'unknown' }), $(if ($cw) { $cw.Pid } else { 0 }), (@($sc.Files) -join ', '))
+      } elseif ($rh.Code -ne 0) {
         Say ("push-main: REFUSED before the lock - {0}. The rehearsal lines above say which stage or cause. Rehearse again, or push with -NoRehearsal -NoRehearsalReason '<why>' to bypass loudly." -f $(if ($rh.Code -eq 3) { 'the chain rehearsal COULD NOT EVALUATE (exit 3), which is never a pass' } else { 'this push changes the daily chain and has no passing rehearsal (exit ' + $rh.Code + ')' }))
         $outcome = $(if ($rh.Code -eq 3) { 'refused-rehearsal-blind' } else { 'refused-rehearsal' }); $ledgerState = 'not-taken'; $pmRow['phase'] = $legPhase
         & $writeRow
         return $rh.Code
+      }
+
+      # ---- 3a. THE CHAIN QUEUE: WAIT FOR THE HEAD (W9.2 steps 5 and 6) ----
+      # After its legs pass, a member waits until every ticket ahead has landed, left or died, holding NOTHING but its
+      # ticket. A ticket ahead that left or died, or that rewrote what it stacks, is a RESTACK: a new stack file and ONE
+      # more rehearsal (the worktree did not move, so the other legs are not run again). A queue that stalls for
+      # $script:TcPmChainQueueStallSec, or cannot be read, is left, and the push proceeds as the W2.2R path does.
+      # THE KEY THIS ROUND'S REHEARSAL RECORDED, as the member's rh_key (interface step 4); a reuse keeps the one it had.
+      $rhKeyNow = Get-TcRehearsalKey -Lines (Get-TcOptionalProp $rh 'Lines')
+      if ($rhKeyNow -and $cq -and $cq.Queue -ceq 'joined') { $null = Set-TcChainQueueState -Member $cq -RhKey $rhKeyNow }
+      if ($cq -and $cq.Queue -ceq 'joined' -and -not $cqState.AtHead) {
+        $null = Set-TcChainQueueState -Member $cq -State ready
+        while ($cq.Queue -ceq 'joined') {
+          $w = Wait-TcChainQueueHead -Member $cq -Stack $cqState.Stack -StallSec $script:TcPmChainQueueStallSec -ReportEverySec $script:TcPmChainQueueReportSec -OnReport { param($qpos, $qdepth, $qsec) Say ("push-main: waiting for the chain queue head: {0} ticket(s) ahead, waited {1}s; holding nothing but the ticket." -f $qpos, $qsec); if ($script:TcPmOnQueueReport) { & $script:TcPmOnQueueReport $qpos $qsec } }
+          if ($w.Outcome -ceq 'head') { $cqState.AtHead = $true; Say 'push-main: every chain queue ticket ahead has landed or left; this push is at the head.'; break }
+          if ($w.Outcome -ceq 'restack') {
+            $rsF = Invoke-TcFetchWithRetry -Dir $Dir -Remote $Remote -Branch $Branch
+            $rsO = $(if ($rsF.Code -eq 0) { Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'FETCH_HEAD')) } else { '' })
+            if (-not $rsO) { $rsO = Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('merge-base', 'HEAD', ('refs/remotes/' + $Remote + '/' + $Branch))) }
+            $cqState.Stack = New-TcChainStackFile -Member $cq -Origin $rsO -Path (Join-Path $env:TEMP ('tc-pm-stack-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '.txt'))
+            if (-not $cqState.Stack.Ok) { Say ('push-main: the chain queue stack could not be rebuilt (' + $cqState.Stack.Reason + '); leaving the queue, and this push proceeds unqueued.'); Exit-TcChainQueue -Member $cq -State left; $cq.Queue = 'error'; $cqState.Stack = $null; break }
+            Say ("push-main: RESTACK - {0}; this push rehearses once more over {1} ahead range(s)." -f $w.Reason, @($cqState.Stack.Ahead).Count)
+            $rsStop = Join-Path $env:TEMP ('tc-pm-rhstop-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '.flag')
+            $rsJob = $(if ($RehearsalStarter) { & $RehearsalStarter $Dir $cqState.Stack.Path $rsStop } elseif ($RehearsalRunner) { New-TcRehearsalJob -Deferred $RehearsalRunner -DeferredArg $Dir } else { Start-TcRehearsalChild -Dir $Dir -Remote $Remote -Branch $Branch -StackFile $cqState.Stack.Path -StopFile $rsStop })
+            $rsRes = $rsJob.Wait()
+            Remove-Item -LiteralPath $rsStop -Force -ErrorAction SilentlyContinue
+            $rsNew = [bool](Invoke-TcRowReader 'rehearsed' { Test-TcRehearsedNew -Result $rsRes } $false)
+            $pmRow['rh_secs_list'] = [int[]](@($pmRow['rh_secs_list']) + $(if ($rsNew) { [int](Get-TcOptionalProp $rsRes 'Sec') } else { 0 }))
+            if ($rsNew) { $pmRow['rehearsed'] = [int]$pmRow['rehearsed'] + 1 }
+            $rsKey = Get-TcRehearsalKey -Lines (Get-TcOptionalProp $rsRes 'Lines')
+            if ($rsKey) { $null = Set-TcChainQueueState -Member $cq -RhKey $rsKey }
+            $rsSc = $(if ($rsRes.Code -eq 3) { Get-TcStackConflict -Lines (Get-TcOptionalProp $rsRes 'Lines') } else { $null })
+            if ($null -ne $rsSc) {
+              $null = Set-TcChainStackConflict -Member $cq -Stack $cqState.Stack -Sha '' -Files $rsSc.Files -Ticket (Resolve-TcStackConflictTicket -Dir $Dir -Stack $cqState.Stack -Files $rsSc.Files)
+              Say 'push-main: WARN - the restacked rehearsal conflicts with a ticket ahead; this push keeps its place.'
+            } elseif ($rsRes.Code -ne 0) {
+              Say ('push-main: REFUSED before the lock - the restacked chain rehearsal did not pass (exit ' + $rsRes.Code + '). The rehearsal lines above say why.')
+              $outcome = $(if ($rsRes.Code -eq 3) { 'refused-rehearsal-blind' } else { 'refused-rehearsal' }); $ledgerState = 'not-taken'; $pmRow['phase'] = 'catchup'
+              & $writeRow
+              return $rsRes.Code
+            }
+            continue
+          }
+          # timeout or error: the library set .Queue; leaving is what makes it never a refusal.
+          Say ('push-main: the chain queue ' + $w.Outcome + ' (' + $w.Reason + '); leaving the queue, and this push proceeds unqueued, as before.')
+          Exit-TcChainQueue -Member $cq -State left
+          break
+        }
       }
 
       # ---- 3b. CATCH-UP: RE-CHECK WHAT MOVED, OUTSIDE THE LOCK (W2.2R step 1) ----
@@ -2122,7 +2324,9 @@ function Invoke-TcPushMain {
         }
         if ($cu.Rebased) {
           $rebasedAny = $true
+          Update-TcChainQueueRange -Member $cq -Dir $Dir -Rem $cu.Rem
           $catchUps++
+
           $pmRow['catchups'] = $catchUps
           $lastSync = $cu
           $syncFirst = $false
@@ -2133,8 +2337,11 @@ function Invoke-TcPushMain {
       }
 
       # ---- 4. THE LOCK: a final fetch, a rebase only if origin moved again, and the ref update ----
+      # THE SWAP (W9.2 step 5): a member at the head says so before it takes the push lock.
+      if ($cq -and $cq.Queue -ceq 'joined') { $null = Set-TcChainQueueState -Member $cq -State swapping }
       $lock = Enter-TcPushLock @enter
       $curPhase = 'inlock'
+
       if ($handBackSw) { $handBackSw.Stop(); $handBackTotal += $handBackSw.Elapsed.TotalSeconds; $pmRow['handback_sec'] = [int][math]::Round($handBackTotal); $handBackSw = $null }
       # HOW LONG THE LOCK IS HELD (lock_held_ms): from the grant to Exit-TcPushLock, on this process's own clock, summed over
       # every take. A take that did not hold the lock has no hold. Every take counts in lock_takes and lock_wait_ms_total,
@@ -2181,6 +2388,7 @@ function Invoke-TcPushMain {
           Say ("push-main: origin moved since the last outside round, so the lock is handed back without a rebase under it (hand-back {0} of at most {1}); the rebase and the legs run outside it." -f $handBacks, $script:PmMaxHandBacks)
         } elseif ($s2.Rebased) {
           $rebasedAny = $true
+          Update-TcChainQueueRange -Member $cq -Dir $Dir -Rem $s2.Rem
           # AT THE HAND-BACK CAP (W9.4 step 3) the rebase runs inside the lock, as 5841e96b1 did, and the verdict check is
           # the backstop. THE TRADE-OFF, SAID PLAINLY: origin moved AGAIN between the rebase outside the lock and this one. When that
           # move touched no chain-manifest script the verdict key is unchanged and the rehearsal above still covers the
@@ -2236,6 +2444,9 @@ function Invoke-TcPushMain {
             return 1
           }
           Say ("push-main: LANDED on {0}/{1} at {2}, on the first attempt, after {3} rehearsal round(s)." -f $Remote, $Branch, $s2.Head.Substring(0, 9), $rehearsals)
+          # LANDED, THEN THE LOCK (W9.2 step 8): the ticket says landed before the push lock is released, so no member
+          # behind can read this ticket as anything but landed once it could swap.
+          if ($cq) { Exit-TcChainQueue -Member $cq -State landed }
           $outcome = $(if ($rebasedAny) { 'landed-after-rebase' } else { 'landed' })
           return 0
         }
@@ -2244,6 +2455,9 @@ function Invoke-TcPushMain {
         # this whole file exists to keep short, and nothing reads the row to decide anything. A round that hands the lock
         # back to rehearse again writes no row; the push's one row is written when it finally lands or refuses.
         if ($lockSw) { $lockSw.Stop(); $lockHeldTotal += $lockSw.Elapsed.TotalMilliseconds; $pmRow['lock_held_ms'] = [long][math]::Round($lockHeldTotal) }
+        # A REFUSAL INSIDE THE LOCK LEAVES THE QUEUE BEFORE THE LOCK GOES (W9.2 step 3); a hand-back keeps its ticket and
+        # its place (W9.4). A landing already wrote landed, and a second exit is a no-op.
+        if (-not $again -and $cq) { Exit-TcChainQueue -Member $cq -State left }
         Exit-TcPushLock $lock
         if ($again -and $nextSyncPhase -ceq 'handback') { $handBackSw = [Diagnostics.Stopwatch]::StartNew() }
         if (-not $again) {
@@ -2267,6 +2481,9 @@ function Invoke-TcPushMain {
     }
     throw
   } finally {
+    # THE TICKET GOES BACK ON EVERY PATH (W9.2 step 9), before the guard; a no-op after a landed exit.
+    if ($cq) { try { Exit-TcChainQueue -Member $cq -State left } catch { Say ('push-main: leaving the chain queue threw (' + $_.Exception.Message + ').') } }
+    if ($cqState.Stack -and $cqState.Stack.Path) { Remove-Item -LiteralPath ([string]$cqState.Stack.Path) -Force -ErrorAction SilentlyContinue }
     # THE GUARD GOES BACK ON EVERY PATH, a throw included; a guard this run never held is left alone.
     Exit-TcCheckoutGuard $guard
   }
@@ -2538,6 +2755,13 @@ $m.Dispose()
   $guardInfoWas = $script:TcPmGuardInfoRoot
   $script:TcPmGuardPrefix = 'Local\tc-pm-guard-selftest-' + [guid]::NewGuid().ToString('N').Substring(0, 12) + '-'
   $script:TcPmGuardInfoRoot = Join-Path $tmp 'guard'
+  # AND NO CASE OPENS THE PRODUCTION CHAIN QUEUE (W9.2, interface step 11): a private Local\ prefix and a root under this
+  # run's directory, with TC_CHAIN_QUEUE_SELFTEST set suite-wide, so a case that forgot the seam THROWS instead of
+  # queueing real pushes behind it.
+  $cqPrefixWas = $script:TcPmChainQueuePrefix; $cqRootWas = $script:TcPmChainQueueRoot; $cqSelfTestWas = $env:TC_CHAIN_QUEUE_SELFTEST
+  $script:TcPmChainQueuePrefix = 'Local\tc-pm-cq-selftest-' + [guid]::NewGuid().ToString('N').Substring(0, 12) + '-'
+  $script:TcPmChainQueueRoot = Join-Path $tmp 'cq'
+  $env:TC_CHAIN_QUEUE_SELFTEST = '1'
   $reexecWas = $env:TC_PUSH_MAIN_REEXEC
   Remove-Item -LiteralPath Env:TC_PUSH_MAIN_REEXEC -ErrorAction SilentlyContinue
   . (Join-Path $repo 'lib\mutex-hold.ps1')   # Start-TcMutexHold: a guard held from ANOTHER process
@@ -3473,6 +3697,307 @@ try {
     T ($kMNF + '  a push needing no rehearsal lands on the child''s not-needed answer and test-auditors'' pass: chain_touching false, rh_outcome not-needed') `
       ($rTnn -eq 0 -and $tnnRows.Count -eq 1 -and $tnnRows[0].chain_touching -eq $false -and [string]$tnnRows[0].rh_outcome -ceq 'not-needed' -and $tnnRows[0].ta_rc -eq 0) ("rc={0} chain={1} rh={2}" -f $rTnn, $(if ($tnnRows.Count) { $tnnRows[0].chain_touching }), $(if ($tnnRows.Count) { $tnnRows[0].rh_outcome }))
     Remove-TcRendezvousProbe
+
+    # ---- W9.2: THE CHAIN QUEUE, PUSH-MAIN'S INTEGRATION (2026-09-23) ----
+    # Founding figure (plan 16.1): 12 of the 13 early-rehearsal misses were a rehearsal voided by another chain landing,
+    # which the queue stacks on instead. Production shape: every push is a WORKTREE of one repo (a shared object store,
+    # which is what lets a rehearsal clone, or diff-tree, read an ahead ticket's commits), so these cases build a box
+    # clone of the fixture origin and one worktree per push. A ticket ahead is held by a HELPER PROCESS (a mutex belongs
+    # to its thread, and a ticket held by this thread reads as dead to it), which joins the private queue and then does
+    # what its mode says once the member's record reads ready: land (push its commit, then exit landed), leave, hold, or
+    # probe the push lock and a gate slot first. Every queue is this run's private Local\ prefix and root.
+    $env:TC_CHAIN_QUEUE_SELFTEST = '1'
+    $qBox = Join-Path $tmp 'qbox'
+    $null = & git clone -q $origin $qBox 2>$null
+    $null = & git -C $qBox config user.name Probe 2>$null; $null = & git -C $qBox config user.email p@p 2>$null
+    $script:qwtN = 0
+    function New-StQueueWorktree([string]$Name, [string]$File, [string]$Text) {
+      $script:qwtN++
+      $null = & git -C $qBox fetch -q origin 2>$null
+      $wtd = Join-Path $tmp ('qw-' + $Name)
+      $null = & git -C $qBox worktree add -q -b ('qb-' + $Name + '-' + $script:qwtN) $wtd origin/main 2>$null
+      $full = Join-Path $wtd ($File -replace '/', '\')
+      $null = New-Item -ItemType Directory -Force (Split-Path -Parent $full)
+      [IO.File]::WriteAllText($full, $Text)
+      $null = & git -C $wtd add -- $File 2>$null; $null = & git -C $wtd commit -q -m ('q ' + $Name) 2>$null
+      return $wtd
+    }
+    $qHelper = Join-Path $tmp 'q-helper.ps1'
+    [IO.File]::WriteAllText($qHelper, @'
+param([string]$Repo, [string]$Prefix, [string]$Root, [string]$Wt, [string]$Mode, [string]$Out, [string]$PushPrefix = '', [string]$PushRoot = '', [string]$SlotPrefix = '', [string]$SlotRoot = '')
+$ErrorActionPreference = 'Continue'
+. (Join-Path $Repo 'lib\chain-queue.ps1')
+. (Join-Path $Repo 'lib\push-lock.ps1')
+function W([string]$Leaf, [string]$Text) { [IO.File]::WriteAllText((Join-Path $Out $Leaf), $Text) }
+$base = ((& git -C $Wt merge-base HEAD origin/main) | Select-Object -First 1).Trim()
+$range = @((& git -C $Wt rev-list --reverse ($base + '..HEAD')) | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+$cq = Join-TcChainQueue -Mode live -Checkout $Wt -Base $base -Range $range -Prefix $Prefix -QueueRoot $Root
+W 'joined.txt' ([string]$cq.Queue + ' ' + $cq.Name + ' ' + $PID)
+if ($cq.Queue -ne 'joined') { exit 3 }
+$null = Set-TcChainQueueState -Member $cq -State ready
+try {
+  if ($Mode -eq 'hold') { while (-not (Test-Path -LiteralPath (Join-Path $Out 'release.txt'))) { Start-Sleep -Milliseconds 50 }; Exit-TcChainQueue -Member $cq -State left; exit 0 }
+  # WAIT UNTIL A MEMBER BEHIND THIS TICKET IS READY (it has rehearsed and is waiting for the head), a hang guard of 180 s.
+  $sw = [Diagnostics.Stopwatch]::StartNew(); $seen = $false
+  while (-not $seen -and $sw.Elapsed.TotalSeconds -lt 180 -and -not (Test-Path -LiteralPath (Join-Path $Out 'release.txt'))) {
+    foreach ($f in [IO.Directory]::GetFiles($cq.Dir, '*.json')) {
+      if ([IO.Path]::GetFileNameWithoutExtension($f) -eq $cq.Name) { continue }
+      try { $r = [IO.File]::ReadAllText($f) | ConvertFrom-Json; if ($r.state -eq 'ready' -and [string]::CompareOrdinal([string]$r.ticket, $cq.Name) -gt 0) { $seen = $true } } catch { }
+    }
+    if (-not $seen) { Start-Sleep -Milliseconds 50 }
+  }
+  W 'saw-member-ready.txt' ([string]$seen)
+  if ($Mode -eq 'land-after-wait') {
+    # THE MEMBER IS REALLY WAITING: its own head-wait report wrote this file (a hang guard of 120 s, never a clock that
+    # decides). A member that never waits never writes it, and reaches its lock before this ticket lands.
+    $sw2 = [Diagnostics.Stopwatch]::StartNew()
+    while (-not (Test-Path -LiteralPath (Join-Path $Out 'member-waiting.txt')) -and $sw2.Elapsed.TotalSeconds -lt 120 -and -not (Test-Path -LiteralPath (Join-Path $Out 'release.txt'))) { Start-Sleep -Milliseconds 50 }
+    $Mode = 'land'
+  }
+  if ($Mode -eq 'probe-then-land') {
+    $lk = Enter-TcPushLock -Prefix $PushPrefix -QueueRoot $PushRoot -WaitSec 20 -PollMs 50 -NoInherit
+    W 'probe-lock.txt' ([string]$lk.Held); Exit-TcPushLock $lk
+    $gs = Enter-TcGateSlots -Want 1 -Prefix $SlotPrefix -QueueRoot $SlotRoot -WaitSec 20
+    W 'probe-slot.txt' ([string]$gs.Count); Exit-TcGateSlots $gs
+    $Mode = 'land'
+  }
+  if ($Mode -eq 'land') {
+    $null = & git -C $Wt push -q origin HEAD:main 2>$null
+    W 'pushed.txt' ([string]$LASTEXITCODE)
+    Exit-TcChainQueue -Member $cq -State landed
+    W 'landed.txt' ([string][DateTime]::UtcNow.Ticks)
+    exit 0
+  }
+  if ($Mode -eq 'leave') { Exit-TcChainQueue -Member $cq -State left; W 'left.txt' 'left'; exit 0 }
+  exit 2
+} finally { Exit-TcChainQueue -Member $cq -State left }
+'@)
+    $script:qhN = 0
+    function Start-StQueueHelper([string]$Wt, [string]$Mode) {
+      $script:qhN++
+      $hOut = Join-Path $tmp ('qh-' + $script:qhN)
+      $null = New-Item -ItemType Directory -Force -ErrorAction Stop $hOut
+      $hArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $qHelper + '"'), '-Repo', ('"' + $repo + '"'), '-Prefix', $script:TcPmChainQueuePrefix,
+        '-Root', ('"' + $script:TcPmChainQueueRoot + '"'), '-Wt', ('"' + $Wt + '"'), '-Mode', $Mode, '-Out', ('"' + $hOut + '"'),
+        '-PushPrefix', $prefix, '-PushRoot', ('"' + $qroot + '"'), '-SlotPrefix', ('Local\tc-pm-slot-selftest-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '-'), '-SlotRoot', ('"' + (Join-Path $tmp ('slots-' + $script:qhN)) + '"'))
+      $hp = Start-Process -FilePath 'powershell.exe' -ArgumentList $hArgs -PassThru -NoNewWindow -RedirectStandardOutput (Join-Path $hOut 'out.txt') -RedirectStandardError (Join-Path $hOut 'err.txt')
+      $null = $hp.Handle
+      $hw = [Diagnostics.Stopwatch]::StartNew()
+      while (-not (Test-Path -LiteralPath (Join-Path $hOut 'joined.txt')) -and -not $hp.HasExited -and $hw.Elapsed.TotalSeconds -lt 60) { Start-Sleep -Milliseconds 50 }
+      return [pscustomobject]@{ Proc = $hp; Out = $hOut; Joined = $(if (Test-Path -LiteralPath (Join-Path $hOut 'joined.txt')) { ([IO.File]::ReadAllText((Join-Path $hOut 'joined.txt'))).Trim() } else { '' }) }
+    }
+    function Stop-StQueueHelper($H) { if ($null -eq $H) { return }; [IO.File]::WriteAllText((Join-Path $H.Out 'release.txt'), 'go'); if (-not $H.Proc.WaitForExit(60000)) { try { $H.Proc.Kill() } catch { } } }
+    # THE REHEARSAL STUB FOR QUEUE CASES: a real child that copies the stack file it was handed (if any) into a numbered
+    # record, says "rehearsing HEAD now" only when it was stacked (a new verdict), and passes. -Mode conflict makes it
+    # report a STACK CONFLICT on its first call, as rehearse-chain does, naming the files it was told.
+    $qRhStub = Join-Path $tmp 'q-rehearse-stub.ps1'
+    [IO.File]::WriteAllText($qRhStub, @'
+param([switch]$ForPush, [string]$Remote, [string]$Branch, [string]$StackFile, [string]$StopFile, [string]$Rec = '', [string]$Mode = 'pass', [string]$Files = '')
+$n = @([IO.Directory]::GetFiles($Rec, 'call-*.txt')).Count + 1
+$stack = $(if ($StackFile -and (Test-Path -LiteralPath $StackFile)) { [IO.File]::ReadAllText($StackFile) } else { '<none>' })
+[IO.File]::WriteAllText((Join-Path $Rec ('call-' + $n + '.txt')), $stack)
+if ($Mode -eq 'conflict' -and $n -eq 1) {
+  Write-Output ('chain-rehearsal: STACK CONFLICT - applying 000000000 onto the stack conflicts in: ' + $Files)
+  Write-Output 'CHAIN-REHEARSAL-CHECK-COMPLETE code=3 outcome=could-not-rehearse blind=stack-conflict'
+  exit 3
+}
+if ($StackFile) { Write-Output 'chain-rehearsal: this push changes the chain and has no usable rehearsal verdict - rehearsing HEAD now, OUTSIDE the push lock.' }
+Write-Output 'chain-rehearsal: PASSED - fixture'
+Write-Output 'CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=rehearsed-pass'
+exit 0
+'@)
+    $script:qRec = ''
+    $script:qRhMode = 'pass'; $script:qRhFiles = ''
+    $qStarter = { param($d, $stack, $stop) Start-TcRehearsalChild -Dir $d -Remote 'origin' -Branch 'main' -StackFile $stack -StopFile $stop -Script $qRhStub -ExtraArgs @('-Rec', ('"' + $script:qRec + '"'), '-Mode', $script:qRhMode, '-Files', ('"' + $script:qRhFiles + '"')) }
+    $qChain = { param($d, $h, $r) [pscustomobject]@{ Touching = $true; Outcome = 'rehearsed-pass'; Why = 'fixture: chain-touching' } }
+    $qNotChain = { param($d, $h, $r) [pscustomobject]@{ Touching = $false; Outcome = 'not-needed'; Why = 'fixture: not chain-touching' } }
+    $qGateHeads = [Collections.Generic.List[string]]::new()
+    $qGate = { param($d) [void]$qGateHeads.Add(([string](@(& git -C $d log --format=%s 2>$null)) )); [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    function New-StQueueRec { $script:qRec = Join-Path $tmp ('qrec-' + [guid]::NewGuid().ToString('N').Substring(0, 8)); $null = New-Item -ItemType Directory -Force $script:qRec }
+    function Get-StQueueCalls { return , ([string[]]@([IO.Directory]::GetFiles($script:qRec, 'call-*.txt') | Sort-Object | ForEach-Object { ([IO.File]::ReadAllText($_)).Trim() })) }
+    function Get-StRow([string]$Root) { $rr = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $Root); $rs = @($rr); if ($rs.Count) { return $rs[$rs.Count - 1] } else { return $null } }
+
+    # MUST FIRE, stacking; MUST FIRE, ordering; CLEAN TWIN, it lands after the one ahead with no second rehearsal.
+    # A helper holds the ticket ahead (its commit touches chain/a.txt) and lands once this member is ready. The member's
+    # rehearsal must have judged origin + the helper's range; its first lock take must come after the helper landed; and
+    # after the catch-up rebase over the landed ticket, its rehearsal leg reuses (no second "rehearsing HEAD now").
+    New-StQueueRec
+    $h1wt = New-StQueueWorktree 'h1' 'chain/a.txt' 'h1'
+    $m1wt = New-StQueueWorktree 'm1' 'chain/b.txt' 'm1'
+    $qOrigin1 = & $tipOf
+    $h1Sha = ([string](@(& git -C $h1wt rev-parse HEAD 2>$null))[0]).Trim()
+    # THE HELPER LANDS ONLY AFTER THE MEMBER REPORTS IT IS WAITING (the head-wait's report seam, every 1 s here): so a
+    # member that skipped the wait reaches its lock take before the ticket ahead has landed, every time (M12's case).
+    $h1 = Start-StQueueHelper $h1wt 'land-after-wait'
+    $script:lockMoves = @({ $script:lmLandedAtTake = Test-Path -LiteralPath (Join-Path $h1.Out 'landed.txt') })
+    $script:lmLandedAtTake = $null
+    $ledQ1 = Join-Path $tmp 'ledq1'
+    $reportWas = $script:TcPmChainQueueReportSec
+    $script:TcPmChainQueueReportSec = 1
+    $script:TcPmOnQueueReport = { param($qpos, $qsec) [IO.File]::WriteAllText((Join-Path $h1.Out 'member-waiting.txt'), [string]$qpos) }
+    try { $rQ1q = Invoke-WithLockMover { Invoke-TcPushMain -Dir $m1wt -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalStarter $qStarter -ChainTouchingProbe $qChain -LedgerRoot $ledQ1 } -LmCap -1 }
+    finally { $script:TcPmChainQueueReportSec = $reportWas; $script:TcPmOnQueueReport = $null }
+    Stop-StQueueHelper $h1
+    $q1Calls = Get-StQueueCalls
+    $q1Row = Get-StRow $ledQ1
+    $q1Stack = $(if ($q1Calls.Count) { @($q1Calls[0] -split "`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ }) } else { @() })
+    T ($kMF + '  stacking: with a ticket ahead, the member''s rehearsal judged origin plus the ahead ticket''s range (its own is applied on top by rehearse-chain), not origin alone') `
+      ($h1.Joined -match '^joined ' -and $q1Stack.Count -eq 2 -and $q1Stack[0] -ceq $qOrigin1 -and $q1Stack[1] -ceq $h1Sha) ("helper={0} stack={1} origin={2} ahead={3}" -f $h1.Joined, ($q1Stack -join '|'), $qOrigin1, $h1Sha)
+    T ($kMF + '  ordering: a member whose legs finished first took the push lock only after the ticket ahead had landed (read by the lock-entry wrapper, from the helper''s own landed file)') `
+      ($rQ1q -eq 0 -and $script:lmLandedAtTake -eq $true) ("rc={0} landedAtFirstTake={1}" -f $rQ1q, $script:lmLandedAtTake)
+    T ($kCT + '  the member lands after the one ahead with no second rehearsal: one rehearsing call, rehearsed 1, restacks 0, queue joined, stacked_on the join origin + 1, and its commit sits on top of the helper''s') `
+      ($rQ1q -eq 0 -and @($q1Calls | Where-Object { $_ -ne '<none>' }).Count -eq 1 -and $null -ne $q1Row -and [int]$q1Row.rehearsed -eq 1 -and [int]$q1Row.restacks -eq 0 -and [string]$q1Row.queue -ceq 'joined' -and `
+        [string]$q1Row.stacked_on -ceq ($qOrigin1.Substring(0, 9) + '+1') -and (& $isAnc $m1wt $h1Sha (& $tipOf))) `
+      ("rc={0} calls={1} rehearsed={2} restacks={3} queue={4} stacked={5}" -f $rQ1q, ($q1Calls -join ' / '), $(if ($q1Row) { $q1Row.rehearsed }), $(if ($q1Row) { $q1Row.restacks }), $(if ($q1Row) { $q1Row.queue }), $(if ($q1Row) { $q1Row.stacked_on }))
+
+    # MUST FIRE, restack; MUST NOT FIRE, the safety case. The helper ahead LEAVES once this member is ready: the member
+    # rehearses once more onto origin alone (restacks 1), lands, and neither its worktree HEAD (read by every leg) nor its
+    # landed commit ever carried the helper's commit.
+    New-StQueueRec
+    $h2wt = New-StQueueWorktree 'h2' 'chain/c.txt' 'h2'
+    $m2wt = New-StQueueWorktree 'm2' 'chain/d.txt' 'm2'
+    $h2Sha = ([string](@(& git -C $h2wt rev-parse HEAD 2>$null))[0]).Trim()
+    $h2 = Start-StQueueHelper $h2wt 'leave'
+    $qGateHeads.Clear()
+    $ledQ2 = Join-Path $tmp 'ledq2'
+    $rQ2q = Invoke-TcPushMain -Dir $m2wt -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $qGate -RehearsalStarter $qStarter -ChainTouchingProbe $qChain -LedgerRoot $ledQ2
+    Stop-StQueueHelper $h2
+    $q2Calls = Get-StQueueCalls
+    $q2Row = Get-StRow $ledQ2
+    $q2Second = $(if ($q2Calls.Count -ge 2) { @($q2Calls[1] -split "`n" | Where-Object { $_.Trim() }) } else { @() })
+    T ($kMF + '  restack: a ticket ahead that leaves makes the member rehearse once more onto origin alone, restacks 1, and it lands') `
+      ($rQ2q -eq 0 -and $q2Calls.Count -eq 2 -and $q2Second.Count -eq 1 -and $null -ne $q2Row -and [int]$q2Row.restacks -eq 1 -and ([string]$q2Row.outcome).StartsWith('landed')) `
+      ("rc={0} calls={1} secondStack={2} restacks={3} outcome={4}" -f $rQ2q, $q2Calls.Count, ($q2Second -join '|'), $(if ($q2Row) { $q2Row.restacks }), $(if ($q2Row) { $q2Row.outcome }))
+    T ($kMNF + '  safety: after the ticket ahead left, the member''s landed commit has none of its commits among its ancestors, and no leg ever saw them in the worktree') `
+      ($rQ2q -eq 0 -and -not (& $isAnc $m2wt $h2Sha (& $tipOf)) -and $qGateHeads.Count -ge 1 -and @($qGateHeads | Where-Object { $_ -match '\bq h2\b' }).Count -eq 0) ("rc={0} helperInLanded={1} legsSawIt={2}" -f $rQ2q, (& $isAnc $m2wt $h2Sha (& $tipOf)), @($qGateHeads | Where-Object { $_ -match '\bq h2\b' }).Count)
+
+    # MUST NOT FIRE: a non-chain push never takes a ticket, and lands while a member is queued (a helper holds a ticket).
+    $h3wt = New-StQueueWorktree 'h3' 'chain/e.txt' 'h3'
+    $n3wt = New-StQueueWorktree 'n3' 'other/f.txt' 'n3'
+    $h3 = Start-StQueueHelper $h3wt 'hold'
+    $ledQ3 = Join-Path $tmp 'ledq3'
+    $rQ3q = Invoke-TcPushMain -Dir $n3wt -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -ChainTouchingProbe $qNotChain -LedgerRoot $ledQ3
+    $q3Live = Get-TcChainQueueLive -Prefix $script:TcPmChainQueuePrefix -QueueRoot $script:TcPmChainQueueRoot
+    Stop-StQueueHelper $h3
+    $q3Row = Get-StRow $ledQ3
+    T ($kMNF + '  a non-chain push never takes a ticket and lands while another member is queued: queue not-chain, and the one live ticket is still the helper''s') `
+      ($rQ3q -eq 0 -and $null -ne $q3Row -and [string]$q3Row.queue -ceq 'not-chain' -and @($q3Live).Count -eq 1 -and [int]@($q3Live)[0].Pid -eq $h3.Proc.Id) ("rc={0} queue={1} live={2}" -f $rQ3q, $(if ($q3Row) { $q3Row.queue }), (@($q3Live | ForEach-Object { $_.Pid }) -join ','))
+
+    # MUST FIRE: a -NoRehearsal chain-touching push takes a ticket. The real Get-TcChainTouchingNow asks a stub
+    # rehearse-chain -CheckPush in the worktree, which says bypassed under TC_NO_REHEARSAL, as rehearse-chain does.
+    $nrwt = New-StQueueWorktree 'nr' 'chain/g.txt' 'nr'
+    $null = New-Item -ItemType Directory -Force (Join-Path $nrwt 'ops')
+    Add-Content -LiteralPath (Join-Path $qBox '.git\info\exclude') -Value @('ops/') -Encoding ascii
+    [IO.File]::WriteAllText((Join-Path $nrwt 'ops\rehearse-chain.ps1'), "param([switch]`$CheckPush, [switch]`$ForPush, [string]`$Remote, [string]`$Branch, [string]`$RefsFile)`nif (`$env:TC_NO_REHEARSAL) { Write-Output 'CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=bypassed'; exit 0 }`nWrite-Output 'CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=not-needed'`nexit 0`n")
+    $ledQ4 = Join-Path $tmp 'ledq4'
+    $nrWas = $env:TC_NO_REHEARSAL; $env:TC_NO_REHEARSAL = 'fixture: a loud bypass'
+    try { $rQ4q = Invoke-TcPushMain -Dir $nrwt -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -LedgerRoot $ledQ4 }
+    finally { if ($null -eq $nrWas) { Remove-Item -LiteralPath Env:TC_NO_REHEARSAL -ErrorAction SilentlyContinue } else { $env:TC_NO_REHEARSAL = $nrWas } }
+    $q4Row = Get-StRow $ledQ4
+    T ($kMF + '  a -NoRehearsal chain-touching push takes a ticket: rehearse-chain -CheckPush says bypassed, the row says queue joined, and it lands') `
+      ($rQ4q -eq 0 -and $null -ne $q4Row -and [string]$q4Row.queue -ceq 'joined') ("rc={0} queue={1}" -f $rQ4q, $(if ($q4Row) { $q4Row.queue }))
+
+    # MUST FIRE, the stack conflict: the member's rehearsal reports a STACK CONFLICT against the ticket ahead, whose commit
+    # touched the same file. It records stack=conflict naming that ticket's checkout, keeps its place, and once that
+    # ticket lands it is refused by the catch-up rebase with phase catchup.
+    New-StQueueRec
+    $h5wt = New-StQueueWorktree 'h5' 'chain/same.txt' 'theirs'
+    $m5wt = New-StQueueWorktree 'm5' 'chain/same.txt' 'mine'
+    $h5 = Start-StQueueHelper $h5wt 'land'
+    $script:qRhMode = 'conflict'; $script:qRhFiles = 'chain/same.txt'
+    $ledQ5 = Join-Path $tmp 'ledq5'
+    $q5Cap = Invoke-StCapture { Invoke-TcPushMain -Dir $m5wt -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalStarter $qStarter -ChainTouchingProbe $qChain -LedgerRoot $ledQ5 }
+    $script:qRhMode = 'pass'; $script:qRhFiles = ''
+    Stop-StQueueHelper $h5
+    $q5Row = Get-StRow $ledQ5
+    T ($kMF + '  a stack conflict with the ticket ahead is a warning naming that ticket''s checkout: stack conflict, the member kept its place, and once that ticket landed the catch-up rebase refused it with phase catchup') `
+      ($q5Cap.Result -eq 1 -and $null -ne $q5Row -and [string]$q5Row.stack -ceq 'conflict' -and [string]$q5Row.outcome -ceq 'refused-rebase-conflict' -and [string]$q5Row.phase -ceq 'catchup' -and `
+        $q5Cap.Text -match [regex]::Escape($h5wt) -and (Test-Path -LiteralPath (Join-Path $h5.Out 'landed.txt'))) `
+      ("rc={0} stack={1} outcome={2} phase={3} namedTicket={4} helperLanded={5}" -f $q5Cap.Result, $(if ($q5Row) { $q5Row.stack }), $(if ($q5Row) { $q5Row.outcome }), $(if ($q5Row) { $q5Row.phase }), ($q5Cap.Text -match [regex]::Escape($h5wt)), (Test-Path -LiteralPath (Join-Path $h5.Out 'landed.txt')))
+
+    # MUST FIRE, the timed-out branch: an ahead ticket held by a helper that never changes state, and a lowered stall bound,
+    # give queue timeout with queue_ahead naming the helper (pid:checkout), and a push that proceeds and lands.
+    New-StQueueRec
+    $h6wt = New-StQueueWorktree 'h6' 'chain/h.txt' 'h6'
+    $m6wt = New-StQueueWorktree 'm6' 'chain/i.txt' 'm6'
+    $h6 = Start-StQueueHelper $h6wt 'hold'
+    $stallWas = $script:TcPmChainQueueStallSec; $script:TcPmChainQueueStallSec = 3
+    $ledQ6 = Join-Path $tmp 'ledq6'
+    try { $rQ6q = Invoke-TcPushMain -Dir $m6wt -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalStarter $qStarter -ChainTouchingProbe $qChain -LedgerRoot $ledQ6 }
+    finally { $script:TcPmChainQueueStallSec = $stallWas }
+    Stop-StQueueHelper $h6
+    $q6Row = Get-StRow $ledQ6
+    T ($kMF + '  a frozen head and a lowered bound give queue timeout, queue_ahead naming the holder, and a push that proceeds and lands (never a refusal)') `
+      ($rQ6q -eq 0 -and $null -ne $q6Row -and [string]$q6Row.queue -ceq 'timeout' -and [string]$q6Row.queue_ahead -ceq ([string]$h6.Proc.Id + ':' + $h6wt) -and ([string]$q6Row.outcome).StartsWith('landed')) `
+      ("rc={0} queue={1} ahead={2} want={3}:{4}" -f $rQ6q, $(if ($q6Row) { $q6Row.queue }), $(if ($q6Row) { $q6Row.queue_ahead }), $h6.Proc.Id, $h6wt)
+
+    # MUST FIRE: with TC_CHAIN_QUEUE_SELFTEST set, a join with the PRODUCTION prefix throws, so a case that forgot the seam
+    # can never queue real pushes behind it.
+    $prodThrew = ''
+    try { $null = Join-TcChainQueue -Mode live -Checkout $tmp -Base $qOrigin1 -Range @() -Prefix $script:TcChainQueuePrefix -QueueRoot $script:TcPmChainQueueRoot } catch { $prodThrew = [string]$_.Exception.Message }
+    T ($kMF + '  with TC_CHAIN_QUEUE_SELFTEST set, a join on the production prefix throws') ([bool]$prodThrew) ("threw={0}" -f $prodThrew)
+    # MUST FIRE (pure): a member's rh_key is the key= token of the rehearsal's CHAIN-REHEARSAL-COMPLETE line; a reuse,
+    # which prints no such line, gives none, so the member keeps the key it had. Found by the drill through push-main: with
+    # no rh_key, a ticket ahead's catch-up rebase rewrote its range, and the member behind restacked for nothing.
+    $rkA = Get-TcRehearsalKey -Lines @('chain-rehearsal: rehearsing HEAD now', 'CHAIN-REHEARSAL-COMPLETE verdict=pass stage=- key=51afc2ef636f data=2026-09-23 secs=865', 'CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=rehearsed-pass')
+    $rkB = Get-TcRehearsalKey -Lines @('chain-rehearsal: PASSED - reused', 'CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=rehearsed-pass')
+    T ($kMF + '  the rehearsal key is read off its CHAIN-REHEARSAL-COMPLETE line, and a reuse gives none') ($rkA -ceq '51afc2ef636f' -and $rkB -ceq '') ("rehearsed={0} reused={1}" -f $rkA, $rkB)
+
+    # CLEAN TWIN: an unwritable queue root records queue error, and the push lands as the W2.2R path does.
+    $q7wt = New-StQueueWorktree 'q7' 'chain/j.txt' 'q7'
+    $q7File = Join-Path $tmp 'a-file-not-a-dir.txt'; [IO.File]::WriteAllText($q7File, 'x')
+    $rootWas = $script:TcPmChainQueueRoot; $script:TcPmChainQueueRoot = Join-Path $q7File 'q'
+    $ledQ7 = Join-Path $tmp 'ledq7'
+    try { $rQ7q = Invoke-TcPushMain -Dir $q7wt -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalStarter $qStarter -ChainTouchingProbe $qChain -LedgerRoot $ledQ7 }
+    finally { $script:TcPmChainQueueRoot = $rootWas }
+    $q7Row = Get-StRow $ledQ7
+    T ($kCT + '  an unwritable queue root records queue error, and the push lands as the W2.2R path does') ($rQ7q -eq 0 -and $null -ne $q7Row -and [string]$q7Row.queue -ceq 'error' -and ([string]$q7Row.outcome).StartsWith('landed')) ("rc={0} queue={1}" -f $rQ7q, $(if ($q7Row) { $q7Row.queue }))
+
+    # CLEAN TWIN, the rollback: -ChainQueue off takes no ticket (a watcher in ANOTHER process sees none throughout), records
+    # queue off, and the push lands as the W2.2R path does.
+    $q8wt = New-StQueueWorktree 'q8' 'chain/k.txt' 'q8'
+    $q8Watch = Join-Path $tmp 'q8-watch.ps1'
+    $q8Seen = Join-Path $tmp 'q8-seen.txt'; $q8Stop = Join-Path $tmp 'q8-stop.txt'
+    [IO.File]::WriteAllText($q8Watch, ("`$d = '" + (Get-TcGateQueueDir -Prefix $script:TcPmChainQueuePrefix -Root $script:TcPmChainQueueRoot) + "'`n`$n = 0`nwhile (-not (Test-Path -LiteralPath '" + $q8Stop + "')) { if ((Test-Path -LiteralPath `$d) -and @([IO.Directory]::GetFiles(`$d, '*.ticket')).Count) { `$n++ }; Start-Sleep -Milliseconds 20 }`n[IO.File]::WriteAllText('" + $q8Seen + "', [string]`$n)`n"))
+    $q8p = Start-Process -FilePath 'powershell.exe' -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $q8Watch + '"')) -PassThru -NoNewWindow
+    $null = $q8p.Handle
+    $ledQ8 = Join-Path $tmp 'ledq8'
+    $rQ8q = Invoke-TcPushMain -Dir $q8wt -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalStarter $qStarter -ChainTouchingProbe $qChain -ChainQueue 'off' -LedgerRoot $ledQ8
+    [IO.File]::WriteAllText($q8Stop, 'stop'); $null = $q8p.WaitForExit(30000)
+    $q8n = $(if (Test-Path -LiteralPath $q8Seen) { [int]([IO.File]::ReadAllText($q8Seen)).Trim() } else { -1 })
+    $q8Row = Get-StRow $ledQ8
+    T ($kCT + '  the rollback: -ChainQueue off records queue off, lands, and a watcher in another process saw no ticket at any moment') `
+      ($rQ8q -eq 0 -and $null -ne $q8Row -and [string]$q8Row.queue -ceq 'off' -and $q8n -eq 0 -and ([string]$q8Row.outcome).StartsWith('landed')) ("rc={0} queue={1} ticketSightings={2}" -f $rQ8q, $(if ($q8Row) { $q8Row.queue }), $q8n)
+
+    # MUST NOT FIRE, the lock order: while the member waits for the head, the helper (ANOTHER process) takes the push lock
+    # and a gate slot at once: the ticket holds neither.
+    $h9wt = New-StQueueWorktree 'h9' 'chain/l.txt' 'h9'
+    $m9wt = New-StQueueWorktree 'm9' 'chain/m.txt' 'm9'
+    New-StQueueRec
+    $h9 = Start-StQueueHelper $h9wt 'probe-then-land'
+    $ledQ9 = Join-Path $tmp 'ledq9'
+    $rQ9q = Invoke-TcPushMain -Dir $m9wt -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalStarter $qStarter -ChainTouchingProbe $qChain -LedgerRoot $ledQ9
+    Stop-StQueueHelper $h9
+    $q9Lock = $(if (Test-Path -LiteralPath (Join-Path $h9.Out 'probe-lock.txt')) { ([IO.File]::ReadAllText((Join-Path $h9.Out 'probe-lock.txt'))).Trim() } else { '<none>' })
+    $q9Slot = $(if (Test-Path -LiteralPath (Join-Path $h9.Out 'probe-slot.txt')) { ([IO.File]::ReadAllText((Join-Path $h9.Out 'probe-slot.txt'))).Trim() } else { '<none>' })
+    T ($kMNF + '  while a member waits for the head, another process takes the push lock and a gate slot: the ticket holds neither, and the member then lands') `
+      ($rQ9q -eq 0 -and $q9Lock -ceq 'True' -and $q9Slot -match '^[1-9]') ("rc={0} lock={1} slot={2}" -f $rQ9q, $q9Lock, $q9Slot)
+
+    # W9.4 CLEAN TWIN: a queue member that is handed back keeps its ticket: in the hand-back round, a probe in ANOTHER
+    # process reads it live and at the head.
+    $haWt = New-StQueueWorktree 'ha' 'chain/n.txt' 'ha'
+    New-StQueueRec
+    $haProbe = Join-Path $tmp 'ha-probe.ps1'; $haOut = Join-Path $tmp 'ha-probe.txt'
+    [IO.File]::WriteAllText($haProbe, ("`$env:TC_CHAIN_QUEUE_SELFTEST = '1'`n. '" + (Join-Path $repo ('lib\chain-' + 'queue.ps1')) + "'`n`$l = Get-TcChainQueueLive -Prefix '" + $script:TcPmChainQueuePrefix + "' -QueueRoot '" + $script:TcPmChainQueueRoot + "'`n[IO.File]::WriteAllText('" + $haOut + "', ((@(`$l) | ForEach-Object { [string]`$_.Pid }) -join ','))`n"))
+    $script:haGates = 0
+    $haGate = { param($d) $script:haGates++; if ($script:haGates -eq 2) { $null = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $haProbe }; [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    $script:lockMoves = @('notes.txt')
+    $ledHa = Join-Path $tmp 'ledha'
+    $rHa = Invoke-WithLockMover { Invoke-TcPushMain -Dir $haWt -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $haGate -RehearsalStarter $qStarter -ChainTouchingProbe $qChain -LedgerRoot $ledHa } -LmCap -1
+    $haSeen = $(if (Test-Path -LiteralPath $haOut) { ([IO.File]::ReadAllText($haOut)).Trim() } else { '<no probe>' })
+    $haRow = Get-StRow $ledHa
+    T ($kCT + '  (W9.4) a queue member handed back keeps its ticket: in the hand-back round another process read exactly its ticket live, at the head, and it lands with hand_backs 1') `
+      ($rHa -eq 0 -and $haSeen -ceq [string]$PID -and $null -ne $haRow -and [int]$haRow.hand_backs -eq 1 -and [string]$haRow.queue -ceq 'joined') ("rc={0} liveTickets={1} me={2} handBacks={3} queue={4}" -f $rHa, $haSeen, $PID, $(if ($haRow) { $haRow.hand_backs }), $(if ($haRow) { $haRow.queue }))
     # CLEAN TWIN: a READER that throws costs its field, never the push. The gate's result says its run-gates leg took
     # 'not-a-number' seconds, so Add-TcRunnerReadings' [int] cast throws; the push must land and the row keep leg_sec.rg
     # null. NOT a throwing ScriptProperty: PowerShell swallows a getter's exception on member access and reads $null, and
@@ -3607,10 +4132,10 @@ try {
     $reMarker = Join-Path $tmp 'reexec-marker.txt'
     $reStub = { param([string]$Tag)
       $ledgerLib = Join-Path $repo ('lib\push-' + 'ledger.ps1')
-      ("param([string]`$Remote, [string]`$Branch, [int]`$LockWaitSec, [switch]`$DryRun)`n" +
+      ("param([string]`$Remote, [string]`$Branch, [int]`$LockWaitSec, [switch]`$DryRun, [string]`$ChainQueue = 'live')`n" +
        ". '" + $ledgerLib + "'`n" +
        "`$b = ([string](@(& git -C (Split-Path -Parent `$PSCommandPath) hash-object `$PSCommandPath))[0]).Trim()`n" +
-       "[IO.File]::WriteAllText('" + $reMarker + "', ('reexec=' + `$env:TC_PUSH_MAIN_REEXEC + ' remote=' + `$Remote + ' branch=' + `$Branch + ' tag=" + $Tag + "'))`n" +
+       "[IO.File]::WriteAllText('" + $reMarker + "', ('reexec=' + `$env:TC_PUSH_MAIN_REEXEC + ' remote=' + `$Remote + ' branch=' + `$Branch + ' cq=' + `$ChainQueue + ' tag=" + $Tag + "'))`n" +
        "`$null = Write-TcPushRow -Event 'push-main' -Outcome 'landed' -Checkout 'reexec-child' -Fields ([ordered]@{ schema = 2; pm_blob = `$b })`n" +
        "exit 0`n")
     }
@@ -3632,16 +4157,37 @@ try {
     try {
       $script:TcPushMainPath = Join-Path $re1 $reRel
       $env:TC_PUSH_LEDGER_ROOT = $ledRe
-      $rRe = Invoke-TcPushMain -Dir $re1 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -RehearsalRunner $rhGreen -LedgerRoot $ledRe
+      $rRe = Invoke-TcPushMain -Dir $re1 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -RehearsalRunner $rhGreen -LedgerRoot $ledRe -ChainQueue off
     } finally { $script:TcPushMainPath = $pmPathWas2; $env:TC_PUSH_LEDGER_ROOT = $ledEnvWas }
     $reNow1 = ([string](@(& git -C $re1 hash-object (Join-Path $re1 $reRel) 2>$null))[0]).Trim()
     $reRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledRe)
     $reRows = @($reRaw)
     $reRow = $(if ($reRows.Count) { $reRows[0] } else { $null })
     $reSaid = $(if (Test-Path -LiteralPath $reMarker) { ([IO.File]::ReadAllText($reMarker)).Trim() } else { '<not run>' })
-    T ($kMF + '  a pre-flight rebase that brings in a changed push-main runs the NEW copy once, with the same arguments and TC_PUSH_MAIN_REEXEC=1; its exit is the run''s, and its row, with the new blob, is the only row') `
-      ($rRe -eq 0 -and $reSaid -ceq 'reexec=1 remote=origin branch=main tag=v2' -and $reRows.Count -eq 1 -and [string]$reRow.checkout -ceq 'reexec-child' -and [string]$reRow.pm_blob -ceq $reNow1 -and $reNow1 -ne $reStart1) `
+    T ($kMF + '  a pre-flight rebase that brings in a changed push-main runs the NEW copy once, with the same arguments (-ChainQueue off among them) and TC_PUSH_MAIN_REEXEC=1; its exit is the run''s, and its row, with the new blob, is the only row') `
+      ($rRe -eq 0 -and $reSaid -ceq 'reexec=1 remote=origin branch=main cq=off tag=v2' -and $reRows.Count -eq 1 -and [string]$reRow.checkout -ceq 'reexec-child' -and [string]$reRow.pm_blob -ceq $reNow1 -and $reNow1 -ne $reStart1) `
       ("rc={0} child={1} rows={2} checkout={3} blob={4} new={5} start={6}" -f $rRe, $reSaid, $reRows.Count, $(if ($reRow) { $reRow.checkout }), $(if ($reRow) { $reRow.pm_blob }), $reNow1, $reStart1)
+    # CLEAN TWIN, the command line's road: every top-level call of Invoke-TcPushMain in this script binds -ChainQueue to
+    # the script's own -ChainQueue. Read from the AST of this file, because a fixture drives the function and never the
+    # entry point: W9.2's first commit bound it nowhere, so `-ChainQueue off` on the command line was silently live.
+    $epErrs = $null
+    $epAst = [System.Management.Automation.Language.Parser]::ParseFile($PSCommandPath, [ref]$null, [ref]$epErrs)
+    $epCalls = @($epAst.FindAll({ param($n) $n -is [System.Management.Automation.Language.CommandAst] -and $n.GetCommandName() -ceq 'Invoke-TcPushMain' }, $true) | Where-Object {
+      $p = $_.Parent; $inFn = $false
+      while ($p) { if ($p -is [System.Management.Automation.Language.FunctionDefinitionAst]) { $inFn = $true; break }; $p = $p.Parent }
+      # THE ENTRY POINT is the call on -Dir $repo: the suite's own fixture calls sit at the top level too, on temp clones.
+      $isEntry = $false; $ce = @($_.CommandElements)
+      for ($k = 0; $k -lt $ce.Count - 1; $k++) { if ($ce[$k] -is [System.Management.Automation.Language.CommandParameterAst] -and $ce[$k].ParameterName -ceq 'Dir' -and $ce[$k + 1] -is [System.Management.Automation.Language.VariableExpressionAst] -and $ce[$k + 1].VariablePath.UserPath -ceq 'repo') { $isEntry = $true } }
+      (-not $inFn) -and $isEntry })
+    $epBound = @($epCalls | Where-Object {
+      $els = @($_.CommandElements); $ok = $false
+      for ($i = 0; $i -lt $els.Count - 1; $i++) {
+        if ($els[$i] -is [System.Management.Automation.Language.CommandParameterAst] -and $els[$i].ParameterName -ceq 'ChainQueue' -and $els[$i + 1] -is [System.Management.Automation.Language.VariableExpressionAst] -and $els[$i + 1].VariablePath.UserPath -ceq 'ChainQueue') { $ok = $true }
+      }
+      $ok })
+    T ($kCT + '  the command line''s -ChainQueue reaches the push: the entry point''s Invoke-TcPushMain call (on -Dir $repo) binds -ChainQueue $ChainQueue') `
+      (@($epErrs).Count -eq 0 -and $epCalls.Count -eq 1 -and $epBound.Count -eq $epCalls.Count) `
+      ("parseErrors={0} calls={1} bound={2}" -f @($epErrs).Count, $epCalls.Count, $epBound.Count)
     # CLEAN TWIN: with TC_PUSH_MAIN_REEXEC already set (a run that IS the new copy) it never re-executes again: the
     # stand-in moves once more, the push lands through this copy, and its own row carries the blob it started with.
     $reStart2 = ([string](@(& git -C $re2 hash-object (Join-Path $re2 $reRel) 2>$null))[0]).Trim()
@@ -4127,6 +4673,8 @@ try {
   } finally {
     $ErrorActionPreference = $prev
     $script:TcPmGuardPrefix = $guardPrefixWas
+    $script:TcPmChainQueuePrefix = $cqPrefixWas; $script:TcPmChainQueueRoot = $cqRootWas
+    if ($null -eq $cqSelfTestWas) { Remove-Item -LiteralPath Env:TC_CHAIN_QUEUE_SELFTEST -ErrorAction SilentlyContinue } else { $env:TC_CHAIN_QUEUE_SELFTEST = $cqSelfTestWas }
     $script:TcPmGuardInfoRoot = $guardInfoWas
     $script:TcPmRebaseAbort = { param($d) Invoke-TcGit -Dir $d -Arguments @('rebase', '--abort') }
     $script:TcPmBeforeFetchRetry = $null
@@ -4149,14 +4697,18 @@ try {
   # fetch-and-rebase-first loop, W0.1's 32, W0.1R's 8, the 15 its review added, W2.1R with W8.1's 14 (the index.lock
   # case was rewritten in place, not added), and W2.2R's 10 (9 catch-up cases, and the could-not-decide case split into a
   # MUST NOT FIRE and a CLEAN TWIN), W9.4's 5 (the queue member's hand-back case lands with W9.2), and W3.2 with W3.4a
-  # step 3's 7, W4.1 step 7's 3, W9.1's push-main half's 5, and W9.3's 11; read off this file, not added up.
-  $expectedCases = 148
+  # step 3's 7, W4.1 step 7's 3, W9.1's push-main half's 5, W9.3's 11, and W9.2's 14 (W9.4's queue-member hand-back among
+  # them) and the rh_key reader's 1; read off this file, not added up.
+  $expectedCases = 164
   if ($cases -ne $expectedCases) { Write-Output ("FAIL  the suite ran {0} case(s) where this file holds {1}, so a case was skipped or lost" -f $cases, $expectedCases); $f++ }
   if ($f) { Write-Output ("push-main self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("push-main self-test PASS: {0} cases - led by a branch whose base the remote moved past landing on its FIRST attempt, and by a conflicting rebase being aborted rather than left half-finished under the lock" -f $cases)
   exit 0
 }
 
+# LIBRARY MODE: dot-sourced (ops\drill-push-main-runner.ps1 drives the chain-queue drill through Invoke-TcPushMain), this file
+# defines its functions and returns here, before its main body.
+if ($MyInvocation.InvocationName -eq '.') { return }
 if ($NoRehearsal) {
   $env:TC_NO_REHEARSAL = $(if ($NoRehearsalReason) { $NoRehearsalReason } else { 'push-main -NoRehearsal, no reason given' })
   Say ('push-main: *** -NoRehearsal *** this push skips the chain rehearsal; the hook will print it and the bypass is logged. Reason: ' + $env:TC_NO_REHEARSAL)
@@ -4166,5 +4718,5 @@ if ($Prepare) {
   $rcP = Invoke-TcPushMainPrepare -Dir $repo -Remote $Remote -Branch $Branch
   exit $rcP
 }
-$rc = Invoke-TcPushMain -Dir $repo -Remote $Remote -Branch $Branch -LockWaitSec $LockWaitSec -DryRun ([bool]$DryRun) -NoReexec ([bool]$NoReexec)
+$rc = Invoke-TcPushMain -Dir $repo -Remote $Remote -Branch $Branch -LockWaitSec $LockWaitSec -DryRun ([bool]$DryRun) -NoReexec ([bool]$NoReexec) -ChainQueue $ChainQueue
 exit $rc

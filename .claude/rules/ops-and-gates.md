@@ -296,6 +296,11 @@ construction.
      for it. When the token is NOT honoured (malformed, naming another lock, or a holder pid the probe reads as dead) the
      child does ask for the lock, and that wait is BOUNDED, never a deadlock: 60 s, then `skipped-locked`, and the parent
      pages `handoff-failed` and exits 1.
+  0a. **the per-checkout guard** - `ops\push-main.ps1` (`Enter-TcCheckoutGuard`, W2.1R of
+     `design\PLAN-push-derived-conflicts-2026-09-23.md`): one push-main per checkout, a mutex named from SHA-256 of the
+     lower-cased worktree path. It is taken with ZERO wait, so it waits on nothing and nothing waits on it, and it can form
+     no wait-for edge with anything below it; it sits outermost of push-main's own locks only because it is held for the
+     whole run.
   0b. **the chain queue ticket** - `lib\chain-queue.ps1` (`Join-TcChainQueue`, W9.2 of
      `design\PLAN-push-derived-conflicts-2026-09-23.md`, section 16.6). **It is not a lock held across a leg**: while a
      member holds a ticket every other push, member or not, runs run-gates, test-auditors and its rehearsal freely. The
@@ -303,8 +308,11 @@ construction.
      the push and never the gate (the 2026-09-12 ruling). It sits outside 1, 2 and 2b because a holder waits on all three
      (its swap, its run-gates, its rehearsal child in another process). Its own blocking wait, for the tickets ahead, is
      safe under the blocking-wait paragraph below: a ticket ahead never waits on anything behind it, and no holder of the
-     push lock, a gate slot or a rehearsal slot ever waits on a ticket. The hook's W8.3 probe waits on nothing. (`0a`, the
-     per-checkout guard, and `2a`, the early-rehearsal cap, are placed by W2.1R and W9.1 when they land.)
+     push lock, a gate slot or a rehearsal slot ever waits on a ticket. The hook's W8.3 probe waits on nothing. Since
+     push-main's W9.2 integration a member holds its ticket across its own run-gates (gate slots) and its own rehearsal
+     child (a rehearsal slot, in another process): the first nested acquisitions of ticket over gate slots and ticket
+     over a rehearsal slot, both outermost-first as this list reads, and neither waits on the ticket. (`2a`, the
+     early-rehearsal cap, is placed by W9.1's rehearse-chain half when it lands.)
   1. **the push lock** - `lib\push-lock.ps1` (`Enter-TcPushLock`)
   2. **the gate worker slots** - `lib\gate-slots.ps1` (`Enter-TcGateSlots`)
   2b. **the rehearsal slots** - `Global\tc-rehearsal-slot-`, taken in `ops\rehearse-chain.ps1`. A PEER of the gate slots,
