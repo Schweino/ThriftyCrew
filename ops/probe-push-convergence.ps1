@@ -719,32 +719,34 @@ function ConvertFrom-TcPpcPlanLog {
 
 function Get-TcPpcPlanLineItems {
   <# The item ids ONE landing line lands, in order, from the text after the plan's path. Only the ID LIST counts: the
-     text is cut at the first `(`, split into segments on `,`, `;` and a spaced `and`, and each segment contributes its
-     LEADING RUN of whole ids (W<n>.<n> with at most one letter suffix, so W2.1R, W3.4a and W0.3b are ids and W2.1 is
-     never read out of W2.10). A segment that does not open with an id ends the list, and so does an id written with a
-     trailing `.` or `:`, so prose after the ids names nothing. The run is what this plan's own lines need and
-     grocery\report-checkout-sync.ps1's Get-CsPlanLineItems (d3d8c9e70, the exemplar for the rest) does not: a
-     replacement and its original are written space-separated, `W2.1R W2.1 W8.1`, and all three land. Founding case
+     text is cut at the first `(`, the first `:` and the first `.` that ends a word (a full stop, never the dot inside
+     W4.1), split into segments on `,`, `;` and a spaced `and`, and each segment contributes its LEADING RUN of whole
+     ids (W<n>.<n> with at most one letter suffix, so W2.1R, W3.4a and W0.3b are ids and W2.1 is never read out of
+     W2.10). A segment that does not open with an id ends the list, so prose after the ids names nothing. The run is
+     what this plan's own lines need and grocery\report-checkout-sync.ps1's Get-CsPlanLineItems (d3d8c9e70, the
+     exemplar for the rest) does not: a replacement and its original are written space-separated, `W2.1R W2.1 W8.1`,
+     and all three land; a run holds no colon and no word-ending full stop, so the cut never splits one. Founding case
      (2026-09-24): the previous reader took every token anywhere on the line, so `W4.2 (complements it: W4.1 owns
-     it)` would have landed W4.1, and a bar judging W4.1 would have opened its window on a commit that only named it. #>
+     it)` would have landed W4.1, and a bar judging W4.1 would have opened its window on a commit that only named it.
+     Second case (same day, the cut ae1cde44c gave Get-CsPlanLineItems): a `.` or `:` stopped the list only when it sat
+     on an ID, so `W4.1 step 7: the start sync, W4.2 owns it` broke on "step" and read on into W4.2; it now ends the
+     list wherever it falls. #>
   param([string]$Rest)
   $ids = [Collections.Generic.List[string]]::new()
   $text = [string]$Rest
-  $paren = $text.IndexOf('(')
-  if ($paren -ge 0) { $text = $text.Substring(0, $paren) }
+  $stop = [regex]::Match($text, '[(:]|\.(?=\s|$)')
+  if ($stop.Success) { $text = $text.Substring(0, $stop.Index) }
   foreach ($seg in ($text -split '\s*[,;]\s*|\s+and\s+')) {
     $s = $seg.Trim()
     if (-not $s) { continue }
     $took = 0
-    $ended = $false
     foreach ($w in ($s -split '\s+')) {
-      $t = $w.TrimEnd('.', ')', ':')
+      $t = $w.TrimEnd(')')
       if ($t -cnotmatch '^W\d+\.\d+[A-Za-z]?$') { break }
       if (-not $ids.Contains($t)) { $ids.Add($t) }
       $took++
-      if ($w.EndsWith('.') -or $w.EndsWith(':')) { $ended = $true; break }
     }
-    if ($took -eq 0 -or $ended) { break }
+    if ($took -eq 0) { break }
   }
   return ,$ids.ToArray()
 }
@@ -2317,7 +2319,7 @@ if ($SelfTest) {
   $f = 0; $cases = 0
   # THE LITERAL CASE COUNT. A literal-case suite knows its own number, so a case that never ran is a defect, never a
   # smaller tree (ops-and-gates.md). Move this with every case added or removed.
-  $expectedCases = 93
+  $expectedCases = 96
   $kMF = 'MUST' + ' FIRE'; $kMNF = 'MUST' + ' NOT FIRE'; $kCT = 'CLEAN' + ' TWIN'
   function T($m, $cond, $got) {
     $script:cases++
@@ -2636,6 +2638,20 @@ if ($SelfTest) {
     $itStep = (Get-TcPpcPlanLineItems 'W4.1 step 7, W4.2, W3.4a and W0.3b.') -join ','
     T ($kCT + '  a replacement and its original written space-separated (W2.1R W2.1 W8.1) land all three, and "W4.1 step 7, W4.2, W3.4a and W0.3b." lands four') `
       ($itRun -eq 'W2.1R,W2.1,W8.1' -and $itStep -eq 'W4.1,W4.2,W3.4a,W0.3b') ("run={0} step={1}" -f $itRun, $itStep)
+    # A colon or full stop ends the id list wherever it falls (2026-09-24). Until then it stopped the list only when it
+    # sat on an id, so one on a later word let the next segment land. One rule, two ways to reach it, a case each.
+    $stepColon = 'W4.1 step 7: the start sync, W4.2 owns it'
+    $itStepColon = (Get-TcPpcPlanLineItems $stepColon) -join ','
+    T ($kMF + '  a colon on a word after the id ends the list: "W4.1 step 7: ..., W4.2 owns it" lands W4.1 and NOT W4.2') `
+      ($itStepColon -eq 'W4.1') ("got={0}" -f $itStepColon)
+    $stepStop = 'W4.1 step 7. Next, W4.2 owns the rebase'
+    $itStepStop = (Get-TcPpcPlanLineItems $stepStop) -join ','
+    T ($kMF + '  a full stop on a word after the id ends the list: "W4.1 step 7. Next, W4.2 owns ..." lands W4.1 and NOT W4.2') `
+      ($itStepStop -eq 'W4.1') ("got={0}" -f $itStepStop)
+    $runList = 'W2.1R W2.1 W8.1, W3.2 W3.4a; W0.3b and W4.1'
+    $itRunList = (Get-TcPpcPlanLineItems $runList) -join ','
+    T ($kCT + '  suffixed space-separated runs across all three separators, with no stop, still land every id (the dot inside an id is never a stop)') `
+      ($itRunList -eq 'W2.1R,W2.1,W8.1,W3.2,W3.4a,W0.3b,W4.1') ("got={0}" -f $itRunList)
 
     # ---- read-out dates, at the bar ----
     $oneBar = @([pscustomobject]@{ Id = 'B1'; Items = @('W2.1'); ReadoutDays = 14 })
