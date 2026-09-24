@@ -236,22 +236,21 @@ function Get-SuiteRefusalRows {
   return , ($out.ToArray())
 }
 function Get-SandboxRehearsalKey {
-  <# The verdict key ops\rehearse-chain.ps1 computes for a commit (its Get-RhManifestSet): SHA-256 over the Ordinal-
-     sorted `path blob` rows of the manifest set, joined by LF. Rebuilt here because that script cannot be dot-sourced
-     (its body runs on load). The sandbox manifest lists files only, with no globs or derive lists, so its set is those
-     files as the commit holds them. A key built wrong here is LOUD, never quiet: the recorded-verdict CLEAN TWIN below
-     is then refused, and its detail prints this key beside the 12 characters the hook's own refusal named. #>
+  <# The verdict key ops\rehearse-chain.ps1 computes for a commit, READ FROM THAT SCRIPT: the sandbox's own copy's
+     read-only `-ListSet -Commit <rev>` prints it as key= on its CHAIN-REHEARSAL-LISTSET-COMPLETE line. Until 2026-09-23
+     this rebuilt the key from the manifest's files[] (the script cannot be dot-sourced), and W9.5 broke that replica the
+     day the key gained the dot-source closure: the sandbox's rehearse-chain.ps1 is a member and dot-sources lib\*.ps1,
+     so the real key covers those too. One definition, asked, cannot drift. A key read wrong here is LOUD, never quiet:
+     the recorded-verdict CLEAN TWIN below is then refused, and its detail prints this key beside the 12 characters the
+     hook's own refusal named. $Files is kept for the callers and no longer read. #>
   param([string]$Dir, [string]$Rev, [string[]]$Files)
-  $rows = New-Object Collections.Generic.List[string]
-  foreach ($f in $Files) {
-    $b = GOut -C $Dir rev-parse ($Rev + ':' + $f)
-    if ($b -match '^[0-9a-f]{40}$') { $rows.Add($f + ' ' + $b) }
-  }
-  $arr = $rows.ToArray()
-  [Array]::Sort($arr, [StringComparer]::Ordinal)
-  $sha = [Security.Cryptography.SHA256]::Create()
-  try { return ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes(($arr -join "`n")))) -replace '-', '').ToLowerInvariant() }
-  finally { $sha.Dispose() }
+  $rc = Join-Path $Dir 'ops\rehearse-chain.ps1'
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try { $ls = @(& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $rc -ListSet -Commit $Rev) } finally { $ErrorActionPreference = $prevEap }
+  $m = [regex]::Match([string]@($ls)[-1], '^CHAIN-REHEARSAL-LISTSET-COMPLETE files=\d+ .*\bkey=([0-9a-f]{64})\b')
+  if ($m.Success) { return $m.Groups[1].Value }
+  return ('no-key: ' + [string]@($ls)[-1])
 }
 
 # THE SANDBOX NAME CARRIES THIS FILE'S BLOB (W0.2), so a ledger row naming a sandbox says which suite wrote it.

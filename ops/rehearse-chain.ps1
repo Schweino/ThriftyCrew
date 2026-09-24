@@ -33,8 +33,14 @@
   -LISTSET'S OUTPUT, a contract for a parser (W0.3's -History reads it). A SET line is a bare repo path, one per member,
   sorted Ordinal. Every other line begins with CHAIN-REHEARSAL- or chain-rehearsal:, which no repo path does:
     CHAIN-REHEARSAL-TRIGGER range=<base sha>..<tip sha> decision=needed|not-needed touched=<n>   (with -Range)
+    CHAIN-REHEARSAL-CLOSURE <path> <- <file that dot-sources it>                                 (one per closure member, W9.5)
     CHAIN-REHEARSAL-TOUCHED <path>                                                               (one per touched member)
-    CHAIN-REHEARSAL-LISTSET-COMPLETE files=<n> commit=<sha> key=<verdict key>[ decision=<d>]     (always the LAST line)
+    CHAIN-REHEARSAL-LISTSET-COMPLETE files=<n> members=<m> closure=<c> commit=<sha> key=<verdict key>[ decision=<d>]
+                                                                                                 (always the LAST line)
+  files= stays the FIRST token and counts every bare SET line, closure members included, because the key covers them
+  all; n = m + c. A closure member is printed twice on purpose: as a bare SET line, so a parser that reads only bare
+  lines still gets the whole set, and on a CLOSURE line naming what reaches it (W9.5 asked for a `closure <path> <-`
+  line; it carries the CHAIN-REHEARSAL- prefix so this contract's "every other line" rule still holds).
   A tree with no manifest is a real answer, not a blind: files=0 manifest=absent (and decision=not-needed), exit 0, the
   same "nothing to rehearse against" -CheckPush allows. A could-not-evaluate prints one chain-rehearsal: COULD NOT
   EVALUATE line, NO path lines and a marker with blind=<cause> and NO files= token, so no parser can read it as an empty
@@ -75,7 +81,9 @@
   the failure standing.
 
   THE VERDICT KEY. SHA-256 over the manifest set at the commit: `path blob` for every file ops\chain-manifest.json names
-  (files, globs, and every .ps1 a derive_from script names), plus the manifest's own blob. A rebase that brings in no
+  (files, globs, and every .ps1 a derive_from script names), every .ps1 those scripts DOT-SOURCE, transitively (the
+  closure, W9.5: until 2026-09-23 a change to a library only a member dot-sources kept every verdict valid, so a push
+  could land code the chain runs that no rehearsal had run), plus the manifest's own blob. A rebase that brings in no
   manifest change keeps the key, so a verdict survives push-main's rebase; any change to a manifest file needs a new
   rehearsal. Verdicts live OUTSIDE every checkout, in %LOCALAPPDATA%\ThriftyCrew\chain-rehearsal\<key>.json
   (TC_REHEARSAL_VERDICT_DIR overrides, for fixtures), because the key is content and the push may leave from another
@@ -218,6 +226,12 @@ function Get-RhManifestSet([string]$Repo, [string]$Rev) {
     $explicit = @(@($doc.files) | ForEach-Object { [string]$_ })
     foreach ($p in @($set.Keys)) { if ($explicit -contains $p) { continue }; foreach ($x in $ex) { if ($p -match $x) { $set.Remove($p); break } } }
   }
+  # THE DOT-SOURCE CLOSURE (W9.5): every .ps1 a member dot-sources, transitively, joins the set, because the chain runs it
+  # and a change to it alone reaches the chain. Exclusions are not applied to it: a script a member dot-sources is run
+  # by the chain whatever its name. Closure maps each such path to the file that sources it.
+  $cl = Get-RhDotSourceClosure -Repo $Repo -All $all -Seeds @($set.Keys)
+  if (-not $cl.Ok) { return (& $bad $false ($cl.Why + ' at ' + $Rev)) }
+  foreach ($p in @($cl.Closure.Keys)) { $set[$p] = $all[$p] }
   $set[$mp] = $all[$mp]
   $rows = @($set.Keys | ForEach-Object { $_ + ' ' + $set[$_] })
   [Array]::Sort($rows, [StringComparer]::Ordinal)
@@ -227,7 +241,140 @@ function Get-RhManifestSet([string]$Repo, [string]$Rev) {
   $maxAge = $script:RhMaxDataAgeDays
   if ($null -ne $doc.max_data_age_days) { $maxAge = [int]$doc.max_data_age_days }
   # WHERE THE CHAIN PUTS ITS OUTPUTS is declared by the manifest (the chain's contract), not spelled here.
-  return [pscustomobject]@{ Ok = $true; Absent = $false; Set = $set; Key = $key; MaxAge = $maxAge; BoardGlob = [string]$doc.board_glob; VerdictPath = [string]$doc.chain_verdict; Why = '' }
+  return [pscustomobject]@{ Ok = $true; Absent = $false; Set = $set; Closure = $cl.Closure; Key = $key; MaxAge = $maxAge; BoardGlob = [string]$doc.board_glob; VerdictPath = [string]$doc.chain_verdict; Why = '' }
+}
+
+# Blob id -> text. A blob id names its bytes, so the cache can never go stale; it spares the base and the tip of one
+# trigger reading the same few hundred scripts twice.
+$script:RhBlobText = New-Object Collections.Hashtable ([StringComparer]::Ordinal)
+
+function Read-RhBlobTexts([string]$Repo, [string[]]$Blobs) {
+  <# Fill $script:RhBlobText for every blob in $Blobs through ONE `git cat-file --batch`, reading raw bytes and decoding
+     UTF-8 (never the console code page). Returns '' or why it could not. stdout is drained by an async copy before stdin
+     is written, so a large answer cannot fill the pipe while this is still asking. #>
+  $need = New-Object Collections.ArrayList
+  foreach ($b in @($Blobs)) { if ($b -and -not $script:RhBlobText.ContainsKey($b) -and -not $need.Contains($b)) { [void]$need.Add($b) } }
+  if ($need.Count -eq 0) { return '' }
+  $psi = New-Object System.Diagnostics.ProcessStartInfo
+  $psi.FileName = 'git'; $psi.Arguments = ('-C "' + $Repo + '" cat-file --batch')
+  $psi.UseShellExecute = $false; $psi.CreateNoWindow = $true
+  $psi.RedirectStandardInput = $true; $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true
+  $p = $null
+  try {
+    $p = [Diagnostics.Process]::Start($psi)
+    $ms = New-Object IO.MemoryStream
+    $copy = $p.StandardOutput.BaseStream.CopyToAsync($ms)
+    $errT = $p.StandardError.ReadToEndAsync()
+    # A SINK LINE FIRST: under PS 5.1 the StandardInput writer is created with the console encoding and may put its BOM
+    # on the pipe before anything is written, and git then reads the BOM as part of the first id. The sink line absorbs
+    # it: git answers it `missing`, which the parser below skips.
+    $ask = [Text.Encoding]::ASCII.GetBytes(('rh-bom-sink' + "`n" + ($need -join "`n") + "`n"))
+    $p.StandardInput.BaseStream.Write($ask, 0, $ask.Length)
+    $p.StandardInput.BaseStream.Flush()
+    $p.StandardInput.Close()
+    $copy.Wait(); $p.WaitForExit(); $null = $errT.Result
+    if ($p.ExitCode -ne 0) { return ('git cat-file --batch exited ' + $p.ExitCode) }
+    $buf = $ms.ToArray(); $i = 0; $utf8 = New-Object Text.UTF8Encoding($false)
+    while ($i -lt $buf.Length) {
+      $nl = [Array]::IndexOf($buf, [byte]10, $i)
+      if ($nl -lt 0) { return 'git cat-file --batch ended inside a header' }
+      $hdr = [Text.Encoding]::ASCII.GetString($buf, $i, $nl - $i) -split ' '
+      $i = $nl + 1
+      if ($hdr.Count -eq 2 -and $hdr[1] -eq 'missing' -and $hdr[0].EndsWith('rh-bom-sink', [StringComparison]::Ordinal)) { continue }
+      if ($hdr.Count -lt 3) { return ('git cat-file --batch could not read ' + $hdr[0]) }
+      $size = [int]$hdr[2]
+      $script:RhBlobText[$hdr[0]] = $utf8.GetString($buf, $i, $size)
+      $i += $size + 1
+    }
+    foreach ($b in $need) { if (-not $script:RhBlobText.ContainsKey($b)) { return ('git cat-file --batch returned no text for ' + $b) } }
+    return ''
+  } catch { return ('git cat-file --batch could not run: ' + $_.Exception.Message) }
+  finally { if ($p) { $p.Dispose() } }
+}
+
+function Get-RhDotSourceLiterals([string]$Text) {
+  <# Pure over TEXT. The literal path of every dot-source in a script: a `.` operator at the start of a statement
+     (after start of line, a space, `{`, `;` or `(`), followed by an expression whose quoted literals, joined with `/`
+     up to and including the first one ending in .ps1, spell the path; a leading `$var\` segment (the base) is dropped
+     and resolved by the caller. Comments are skipped. UNSOUND for a path computed at run time (a variable holding the
+     whole path, a -f format), which is the same gap lib\gate-input-key.ps1 names. #>
+  $code = [regex]::Replace($Text, '(?s)<#.*?#>', '')
+  $out = New-Object Collections.ArrayList
+  foreach ($line in ($code -split "`r?`n")) {
+    if ($line.TrimStart().StartsWith('#')) { continue }
+    foreach ($m in [regex]::Matches($line, '(?:^|[\s{;(])\.[ \t]+([\(''"$][^\r\n]*)')) {
+      $rest = $m.Groups[1].Value
+      $parts = New-Object Collections.ArrayList
+      $lit = ''
+      foreach ($q in [regex]::Matches($rest, '''([^''\r\n]*)''|"([^"\r\n]*)"')) {
+        $v = $(if ($q.Groups[1].Success) { $q.Groups[1].Value } else { $q.Groups[2].Value })
+        [void]$parts.Add($v)
+        if ($v -match '\.ps1$') { $lit = ($parts -join '/'); break }
+      }
+      if (-not $lit) {
+        $bare = [regex]::Match($rest, '^\$[\w:{}]+[\\/]([^\s''"();]+\.ps1)\b')
+        if ($bare.Success) { $lit = $bare.Groups[1].Value } else { continue }
+      }
+      $lit = ($lit -replace '\\', '/') -replace '/+', '/'
+      $lit = [regex]::Replace($lit, '^(\$\{?[\w:]+\}?/)+', '')
+      if ($lit -match '\$') { continue }
+      [void]$out.Add($lit)
+    }
+  }
+  return , $out.ToArray()
+}
+
+function Resolve-RhDotSource([string]$FilePath, [string]$Literal, $All) {
+  <# The tree paths a literal dot-source in $FilePath can name: the literal against the file's own folder (`..`
+     resolved), and the literal without its leading ./ and ../ against every ancestor folder up to the root, because
+     its base may be $PSScriptRoot, a parent of it or the checkout root. Only paths that exist in the tree count. #>
+  $dir = ''; $ix = $FilePath.LastIndexOf('/'); if ($ix -gt 0) { $dir = $FilePath.Substring(0, $ix) }
+  $cands = New-Object Collections.ArrayList
+  $segs = New-Object Collections.ArrayList
+  if ($dir) { foreach ($s in ($dir -split '/')) { [void]$segs.Add($s) } }
+  $okRel = $true
+  foreach ($s in ($Literal -split '/')) {
+    if ($s -eq '' -or $s -eq '.') { continue }
+    if ($s -eq '..') { if ($segs.Count) { $segs.RemoveAt($segs.Count - 1) } else { $okRel = $false } ; continue }
+    [void]$segs.Add($s)
+  }
+  if ($okRel) { [void]$cands.Add(($segs -join '/')) }
+  $strip = [regex]::Replace($Literal, '^(\.\.?/)+', '')
+  $anc = $dir
+  while ($true) {
+    [void]$cands.Add($(if ($anc) { $anc + '/' + $strip } else { $strip }))
+    if (-not $anc) { break }
+    $j = $anc.LastIndexOf('/'); $anc = $(if ($j -gt 0) { $anc.Substring(0, $j) } else { '' })
+  }
+  return , @($cands | Where-Object { $All.ContainsKey($_) } | Select-Object -Unique)
+}
+
+function Get-RhDotSourceClosure {
+  <# Transitive over literal dot-sources from every .ps1 in $Seeds: Closure maps each reached path that is NOT a seed to
+     the file that first sources it. A cycle terminates because a path is visited once. Ok=$false with Why when a blob
+     cannot be read. #>
+  param([string]$Repo, $All, [string[]]$Seeds)
+  $closure = New-Object Collections.Hashtable ([StringComparer]::Ordinal)
+  $seen = New-Object Collections.Hashtable ([StringComparer]::Ordinal)
+  foreach ($s in @($Seeds)) { $seen[$s] = $true }
+  $frontier = @($Seeds | Where-Object { $_ -match '\.ps1$' })
+  while ($frontier.Count) {
+    $why = Read-RhBlobTexts $Repo @($frontier | ForEach-Object { [string]$All[$_] })
+    if ($why) { return [pscustomobject]@{ Ok = $false; Closure = $closure; Why = ('the dot-source closure could not be read: ' + $why) } }
+    $next = New-Object Collections.ArrayList
+    foreach ($f in $frontier) {
+      $lits = Get-RhDotSourceLiterals ([string]$script:RhBlobText[[string]$All[$f]])
+      foreach ($l in $lits) {
+        $hits = Resolve-RhDotSource $f $l $All
+        foreach ($h in $hits) {
+          if ($seen.ContainsKey($h) -or $h -notmatch '\.ps1$') { continue }
+          $seen[$h] = $true; $closure[$h] = $f; [void]$next.Add($h)
+        }
+      }
+    }
+    $frontier = @($next)
+  }
+  return [pscustomobject]@{ Ok = $true; Closure = $closure; Why = '' }
 }
 
 function Read-RhVerdict([string]$Dir, [string]$Key) {
@@ -654,8 +801,13 @@ function Get-RhListSet {
   }
   $out = New-Object Collections.ArrayList
   $paths = [string[]]@()
-  if ($ms.Ok) { $paths = [string[]]@($ms.Set.Keys); [Array]::Sort($paths, [StringComparer]::Ordinal) }
+  $cpaths = [string[]]@()
+  if ($ms.Ok) {
+    $paths = [string[]]@($ms.Set.Keys); [Array]::Sort($paths, [StringComparer]::Ordinal)
+    $cpaths = [string[]]@($ms.Closure.Keys); [Array]::Sort($cpaths, [StringComparer]::Ordinal)
+  }
   foreach ($p in $paths) { [void]$out.Add($p) }
+  foreach ($p in $cpaths) { [void]$out.Add('CHAIN-REHEARSAL-CLOSURE ' + $p + ' <- ' + [string]$ms.Closure[$p]) }
   $tail = ''
   if ($Range) {
     $tp = [string[]]@($tr.Touched)
@@ -665,8 +817,8 @@ function Get-RhListSet {
     foreach ($p in $tp) { [void]$out.Add('CHAIN-REHEARSAL-TOUCHED ' + $p) }
     $tail = ' decision=' + $dec
   }
-  if ($ms.Ok) { [void]$out.Add(('CHAIN-REHEARSAL-LISTSET-COMPLETE files={0} commit={1} key={2}{3}' -f $paths.Count, $sha, $ms.Key, $tail)) }
-  else { [void]$out.Add(('CHAIN-REHEARSAL-LISTSET-COMPLETE files=0 commit={0} key=- manifest=absent{1}' -f $sha, $tail)) }
+  if ($ms.Ok) { [void]$out.Add(('CHAIN-REHEARSAL-LISTSET-COMPLETE files={0} members={1} closure={2} commit={3} key={4}{5}' -f $paths.Count, ($paths.Count - $cpaths.Count), $cpaths.Count, $sha, $ms.Key, $tail)) }
+  else { [void]$out.Add(('CHAIN-REHEARSAL-LISTSET-COMPLETE files=0 members=0 closure=0 commit={0} key=- manifest=absent{1}' -f $sha, $tail)) }
   return [pscustomobject]@{ Code = 0; Lines = @($out) }
 }
 
@@ -871,6 +1023,63 @@ if ($SelfTest) {
       (($dNone.Code -eq 0) -and ($dNone.Outcome -eq 'not-needed')), ('' + $dNone.Code + ' ' + $dNone.Outcome + ' ' + (@($dNone.Lines) -join ' / '))
     }
 
+    # ---- 2c. THE DOT-SOURCE CLOSURE (W9.5): a member dot-sources lib/x.ps1 (through a parent of $PSScriptRoot), x
+    # dot-sources lib/y.ps1, and y dot-sources x back (a cycle). lib/z.ps1 is named only in a COMMENTED dot-source and
+    # is reached by nothing. Three spellings: Join-Path on (Split-Path -Parent $PSScriptRoot), Join-Path $PSScriptRoot,
+    # and a double-quoted "$PSScriptRoot\...".
+    $cr = New-RhFixtureRepo 'c'
+    Write-RhFile $cr 'ops\chain-manifest.json' '{"schema":1,"max_data_age_days":2,"files":["grocery/check-ad-cycles.ps1","ops/chain-manifest.json"],"globs":[],"derive_from":[],"derive_dirs":["grocery/","lib/"]}'   # reach-fixture-ok: a fixture manifest in a throwaway repo; nothing opens the live module
+    Write-RhFile $cr 'grocery\check-ad-cycles.ps1' ("'chain'`n. (Join-Path (Split-Path -Parent `$PSScriptRoot) 'lib\x.ps1')`n# . (Join-Path (Split-Path -Parent `$PSScriptRoot) 'lib\z.ps1')`n")
+    Write-RhFile $cr 'lib\x.ps1' ("'x v1'`n. (Join-Path `$PSScriptRoot 'y.ps1')`n")
+    Write-RhFile $cr 'lib\y.ps1' ("'y v1'`nif (`$false) { . `"`$PSScriptRoot\x.ps1`" }`n")
+    Write-RhFile $cr 'lib\z.ps1' "'z, reached by nothing'`n"
+    $cc0 = Save-RhCommit $cr 'closure base'
+    Write-RhFile $cr 'lib\x.ps1' ("'x v2'`n. (Join-Path `$PSScriptRoot 'y.ps1')`n")
+    $cc1 = Save-RhCommit $cr 'edit only the library a member dot-sources'
+    Write-RhFile $cr 'lib\y.ps1' ("'y v2'`nif (`$false) { . `"`$PSScriptRoot\x.ps1`" }`n")
+    $cc2 = Save-RhCommit $cr 'edit only the library reached through a second library'
+    Write-RhFile $cr 'lib\z.ps1' "'z v2'`n"
+    $cc3 = Save-RhCommit $cr 'edit only the unreached library'
+    $vdC = Join-Path $st 'verdicts-closure'
+    $csSet = Get-RhManifestSet $cr $cc0
+    $dX = Get-RhPushDecision -Repo $cr -RefLines @('refs/heads/main ' + $cc1 + ' refs/heads/main ' + $cc0) -VerdictDir $vdC -Today $today
+    Test-RhCase 'MUST FIRE  a library a member dot-sources (lib/x.ps1) is in the set, and a push changing only it needs a rehearsal, naming it' {
+      ($csSet.Ok -and $csSet.Set.ContainsKey('lib/x.ps1') -and ($dX.Code -eq 1) -and ($dX.Outcome -eq 'no-verdict') -and ((@($dX.Lines) -join ' ') -match 'lib/x\.ps1')), ('ok=' + $csSet.Ok + ' ' + $csSet.Why + ' set=' + (@($csSet.Set.Keys) -join ',') + ' ' + $dX.Code + ' ' + $dX.Outcome)
+    }
+    $dY = Get-RhPushDecision -Repo $cr -RefLines @('refs/heads/main ' + $cc2 + ' refs/heads/main ' + $cc1) -VerdictDir $vdC -Today $today
+    Test-RhCase 'MUST FIRE  the closure is TRANSITIVE: lib/y.ps1, reached only through lib/x.ps1, is in the set and a push changing only it needs a rehearsal' {
+      ($csSet.Set.ContainsKey('lib/y.ps1') -and ($dY.Code -eq 1) -and ((@($dY.Lines) -join ' ') -match 'lib/y\.ps1')), ('set=' + (@($csSet.Set.Keys) -join ',') + ' ' + $dY.Code + ' ' + $dY.Outcome)
+    }
+    $dZ = Get-RhPushDecision -Repo $cr -RefLines @('refs/heads/main ' + $cc3 + ' refs/heads/main ' + $cc2) -VerdictDir $vdC -Today $today
+    Test-RhCase 'MUST NOT FIRE  a file no member reaches (lib/z.ps1, named only in a COMMENTED dot-source) stays out, and a push changing only it needs none' {
+      ((-not $csSet.Set.ContainsKey('lib/z.ps1')) -and ($dZ.Code -eq 0) -and ($dZ.Outcome -eq 'not-needed')), ('set=' + (@($csSet.Set.Keys) -join ',') + ' ' + $dZ.Code + ' ' + $dZ.Outcome)
+    }
+    $csCl = @(@($csSet.Closure.Keys) | Sort-Object | ForEach-Object { $_ + '<-' + $csSet.Closure[$_] }) -join ','
+    Test-RhCase 'CLEAN TWIN  a dot-source cycle (x sources y, y sources x) terminates, and the closure is exactly x <- the member and y <- x' {
+      ($csSet.Ok -and ($csCl -ceq 'lib/x.ps1<-grocery/check-ad-cycles.ps1,lib/y.ps1<-lib/x.ps1')), ('ok=' + $csSet.Ok + ' closure=' + $csCl)
+    }
+    $csLs = Get-RhListSet -Repo $cr -Commit $cc0
+    $csClLines = @(@($csLs.Lines) | Where-Object { ([string]$_).StartsWith('CHAIN-REHEARSAL-CLOSURE ', [StringComparison]::Ordinal) })
+    Test-RhCase 'MUST FIRE  -ListSet prints each closure member with the file that dot-sources it' {
+      (($csLs.Code -eq 0) -and ((@($csClLines) -join '|') -ceq 'CHAIN-REHEARSAL-CLOSURE lib/x.ps1 <- grocery/check-ad-cycles.ps1|CHAIN-REHEARSAL-CLOSURE lib/y.ps1 <- lib/x.ps1')), ((@($csLs.Lines) -join ' / '))
+    }
+    $csBare = @(@($csLs.Lines) | Where-Object { -not ([string]$_).StartsWith('CHAIN-REHEARSAL-', [StringComparison]::Ordinal) -and -not ([string]$_).StartsWith('chain-rehearsal:', [StringComparison]::Ordinal) })
+    Test-RhCase 'CLEAN TWIN  the fixture''s complete line reads files=4 members=2 closure=2, files= equals members= plus closure= and the number of bare path lines' {
+      (($csBare.Count -eq 4) -and ([string]@($csLs.Lines)[-1] -cmatch '^CHAIN-REHEARSAL-LISTSET-COMPLETE files=4 members=2 closure=2 commit=')), ('bare=' + $csBare.Count + ' last=' + [string]@($csLs.Lines)[-1])
+    }
+    # Over THIS tree at HEAD: every set member printed once as a bare line, the counts adding up, and every closure line
+    # naming a path and a sourcer that are both in the set.
+    $rtLs = Get-RhListSet -Repo $script:RhRoot -Commit 'HEAD'
+    $rtSet = Get-RhManifestSet $script:RhRoot 'HEAD'
+    $rtBare = @(@($rtLs.Lines) | Where-Object { -not ([string]$_).StartsWith('CHAIN-REHEARSAL-', [StringComparison]::Ordinal) -and -not ([string]$_).StartsWith('chain-rehearsal:', [StringComparison]::Ordinal) })
+    $rtCl = @(@($rtLs.Lines) | Where-Object { ([string]$_).StartsWith('CHAIN-REHEARSAL-CLOSURE ', [StringComparison]::Ordinal) })
+    $rtM = [regex]::Match([string]@($rtLs.Lines)[-1], '^CHAIN-REHEARSAL-LISTSET-COMPLETE files=(\d+) members=(\d+) closure=(\d+) ')
+    $rtWant = [string[]]@($rtSet.Set.Keys); [Array]::Sort($rtWant, [StringComparer]::Ordinal)
+    $rtBad = @($rtCl | Where-Object { $f = ([string]$_).Split(' '); -not ($f.Count -eq 4 -and $f[2] -eq '<-' -and $rtSet.Set.ContainsKey($f[1]) -and $rtSet.Set.ContainsKey($f[3])) })
+    Test-RhCase 'CLEAN TWIN  -ListSet over this tree prints every member plus the closure: the bare lines are exactly the set, files= equals their count and members= plus closure=, and each closure line names two set members' {
+      (($rtLs.Code -eq 0) -and $rtM.Success -and ([string]::Equals(($rtBare -join "`n"), ($rtWant -join "`n"), [StringComparison]::Ordinal)) -and ([int]$rtM.Groups[1].Value -eq $rtBare.Count) -and ([int]$rtM.Groups[1].Value -eq ([int]$rtM.Groups[2].Value + [int]$rtM.Groups[3].Value)) -and ([int]$rtM.Groups[3].Value -eq $rtCl.Count) -and ($rtCl.Count -gt 0) -and ($rtBad.Count -eq 0)), ('rc=' + $rtLs.Code + ' last=' + [string]@($rtLs.Lines)[-1] + ' bare=' + $rtBare.Count + ' closureLines=' + $rtCl.Count + ' bad=' + ($rtBad -join ';'))
+    }
+
     # ---- 3. A WHOLE REHEARSAL over a fixture source, through the seams (the seeder and the chain are the only fakes) ----
     $src = New-RhHookRepo 's' $false
     Write-RhFile $src 'ops\chain-manifest.json' '{"schema":1,"board_glob":"grocery/out/comparison-*.json","chain_verdict":"grocery/out/chain-verdict.json","files":["grocery/check-ad-cycles.ps1","ops/chain-manifest.json"],"globs":[],"derive_from":[],"derive_dirs":[]}'   # reach-fixture-ok: a fixture manifest in a throwaway repo; nothing opens the live module
@@ -1041,7 +1250,7 @@ if ($SelfTest) {
     $lsRun = Invoke-RhSandbox $lp ('-ListSet -Range ' + $l0 + '..' + $l1)
     $lsSet = Get-RhSetLines $lsRun.Lines
     $lsLast = [string]@($lsRun.Lines)[-1]
-    $lsWantLast = 'CHAIN-REHEARSAL-LISTSET-COMPLETE files=' + $lsWant.Count + ' commit=' + $l1 + ' key=' + $lsKey + ' decision=needed'
+    $lsWantLast = 'CHAIN-REHEARSAL-LISTSET-COMPLETE files=' + $lsWant.Count + ' members=' + $lsWant.Count + ' closure=0 commit=' + $l1 + ' key=' + $lsKey + ' decision=needed'
     Test-RhCase 'MUST FIRE  -ListSet over a fixture manifest prints its set EXACTLY and in Ordinal order (Zeta first): files[], a glob, a derive_from member and the manifest, and no absent entry, excluded test or unnamed audit; files= is its count and key= is the verdict key' {
       ($lpOk -and ($lsRun.Rc -eq 0) -and [string]::Equals((@($lsSet) -join "`n"), ($lsWant -join "`n"), [StringComparison]::Ordinal) -and [string]::Equals($lsLast, $lsWantLast, [StringComparison]::Ordinal)), ('rewrites=' + $lpRewrites + ' rc=' + $lsRun.Rc + ' set=' + (@($lsSet) -join ',') + ' last=' + $lsLast + ' err=' + $lsRun.Err)
     }
@@ -1062,7 +1271,7 @@ if ($SelfTest) {
     }
     $lsAbs = Get-RhListSet -Repo $lf -Commit $lPre
     Test-RhCase 'MUST NOT FIRE  a commit with no manifest lists no set, and that is a real answer, not a blind: exit 0, files=0 manifest=absent' {
-      (($lsAbs.Code -eq 0) -and (@($lsAbs.Lines).Count -eq 1) -and ([string]@($lsAbs.Lines)[-1] -ceq ('CHAIN-REHEARSAL-LISTSET-COMPLETE files=0 commit=' + $lPre + ' key=- manifest=absent'))), (@($lsAbs.Lines) -join ' / ')
+      (($lsAbs.Code -eq 0) -and (@($lsAbs.Lines).Count -eq 1) -and ([string]@($lsAbs.Lines)[-1] -ceq ('CHAIN-REHEARSAL-LISTSET-COMPLETE files=0 members=0 closure=0 commit=' + $lPre + ' key=- manifest=absent'))), (@($lsAbs.Lines) -join ' / ')
     }
     $lsDots = Get-RhListSet -Repo $lf -Range ($l0 + '...' + $l1)
     $lsMis = Get-RhListSet -Repo $lf -Range ($l0 + '..' + $l1) -Commit $l0 -CommitGiven
@@ -1179,7 +1388,7 @@ if ($SelfTest) {
   $hkSet = Get-RhManifestSet $script:RhRoot 'HEAD'
   Test-RhCase 'MUST FIRE  a pre-commit edit is a manifest change (the rehearsal commits through that hook)' { ($hkSet.Ok -and $hkSet.Set.ContainsKey('ops/hooks/pre-commit')), ('ok=' + $hkSet.Ok + ' why=' + $hkSet.Why) }
   Test-RhCase 'MUST NOT FIRE  a pre-push or commit-msg edit demands no rehearsal it cannot exercise' { ($hkSet.Ok -and -not $hkSet.Set.ContainsKey('ops/hooks/pre-push') -and -not $hkSet.Set.ContainsKey('ops/hooks/commit-msg')), ('ok=' + $hkSet.Ok) }
-  $want = 40
+  $want = 47
   if ($script:rhCases -ne $want) { Write-Output ('rehearse-chain self-test FAIL: ran {0} case(s), the suite lists {1}' -f $script:rhCases, $want); exit 1 }
   if ($script:rhFail) { Write-Output ('rehearse-chain self-test FAIL: {0} of {1} case(s)' -f $script:rhFail, $script:rhCases); exit 1 }
   Write-Output ('rehearse-chain self-test PASS: {0} of {0} cases - led by the founding defect (an empty cost-flags.txt refused by the 09-05 hook) and a manifest change with no verdict being refused' -f $script:rhCases)
