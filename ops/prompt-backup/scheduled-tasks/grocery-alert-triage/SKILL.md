@@ -28,7 +28,7 @@ searched first came out with a better design because of what it found.
 
 For SUBSTANTIVE alerts you do NOT diagnose and you do NOT implement. Subagents do that, on purpose,
 because diagnosis and implementation fail in different ways:
-- **triage-reviewer** (Opus 5.5, extra-high effort, READ ONLY): reads the alerts, proves what broke from the data,
+- **triage-reviewer** (Opus 5.5, high effort since 2026-09-24, READ ONLY): reads the alerts, proves what broke from the data,
   finds the root cause behind it, measures the blast radius of every proposed change, and writes ONE plan
   file.
 - **triage-developer** (Opus 5.5, medium effort, full tools): the MONEY lane. Implements the plan items that
@@ -97,7 +97,7 @@ WHO and HOW MUCH, never WHAT: every item still gets its root cause and its class
    `triage-developer` (money lane). Every other code item goes to `triage-ops-developer` (ops lane), AFTER the money lane
    returns and never alongside it, because both commit in one checkout.
    Since 2026-09-22 (Brad) both lanes run Opus 5.5 at MEDIUM effort; the depth is spent in planning,
-   where triage-reviewer runs Opus 5.5 at extra-high (`xhigh`). The pins live in each agent's frontmatter.
+   where triage-reviewer runs Opus 5.5 at high (Brad, 2026-09-24, down from `xhigh`: 164k output tokens of its own reasoning were most of the context it re-read on the 09-24 run). The pins live in each agent's frontmatter.
 3. **Items triage creates go to a WEEKLY LANE.** Every residual or finding a run files goes through
    `send-alert.ps1 -Lane weekly`. `triage-due.ps1` lists weekly items every day but makes the run DUE for them
    only when the lane is: its stamp `grocery\triage-weekly-lane-stamp.txt` is missing or 7 or more days old, or
@@ -233,6 +233,14 @@ STEP 0.75 - TRIAGE THE TRIAGE (cheap, and it is most of the savings). Before spa
   SAME id, so most cross-day pairs never reach you. Any that predate that behaviour, or that differ only
   in their counts, get named in the dispatch as one investigation with a primary id, and the rest are
   marked `superseded` rather than re-investigated.
+  **SAME-DAY DUPLICATES ARE GROUPED BY A SCRIPT, not by eye (2026-09-24, Brad):** run
+  `C:\Codex\Python312\python.exe C:\Codex\ThriftyCrew\grocery\triage-group.py --prefix <the day> > <file>` and read
+  its GROUP / SINGLE lines. The reviewer gets each group's PRIMARY only; the members go to STEP 0.9's JOB 3 spawn as
+  "superseded by <primary>", which verifies each in a few calls and PROMOTES a member whose evidence says it is a
+  different cause. Measured that day: 12 alerts sent to one reviewer, 6 of them duplicates it spent calls
+  proving, about 270k units per alert; the grouper read the same 14 alerts as 8 groups with no wrong join. The
+  family list is data (`grocery\triage-families.json`); add a type there only when every alert of it on a day is
+  that one symptom.
 - ROUTE THE CHEAP ONES: items whose owner is another job (browser-store link drift, a missed Wednesday
   refresh, anything the SKILL already says waits for the Wednesday browser agent) are named in the
   dispatch as ONE-LINE items. The reviewer must not spend a blast radius on them.

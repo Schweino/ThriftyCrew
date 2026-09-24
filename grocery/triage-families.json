@@ -1,0 +1,13 @@
+{
+  "_why": "Alert types that are one SYMPTOM seen by different emitters, so on one day they are one investigation (grocery/triage-group.py). Founded 2026-09-24: six of that day's alerts were 'the board did not ship' from the pipeline, the bot sync and three watchdog checks. A type belongs here only when every alert of it on a given day is that symptom; a type that can carry a different cause (the Family Fare missing-window check did, that day) stays out. The cheap lane verifies each member and promotes one whose evidence says otherwise.",
+  "families": {
+    "board-not-shipped": [
+      "grocery pipeline could not push",
+      "grocery bot checkout sync blocked at the push",
+      "grocery bot blocked the main checkout holds conflict markers",
+      "grocery capture watchdog not published",
+      "grocery capture watchdog computed but not shipped",
+      "grocery capture watchdog failed"
+    ]
+  }
+}

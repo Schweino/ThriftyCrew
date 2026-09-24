@@ -218,7 +218,7 @@ query parameter, and confirm the page's own `v=` hash matches the `board.json` y
 ## A NOTE ON YOUR OWN EFFORT SETTING
 
 Your definition pins `effort: medium` (Brad, 2026-09-22: the depth is spent in planning, where the
-reviewer runs at extra-high, and implementation runs at medium). Whether the harness applied it, or silently clamped it, cannot be
+reviewer runs at high since 2026-09-24, down from extra-high, and implementation runs at medium). Whether the harness applied it, or silently clamped it, cannot be
 verified from in here - and your own impression of it is not evidence (on 2026-07-31 you reported "high"
 while the sibling agent set to `high` reported the same). Do not state your effort level as fact, and do
 not assume you are running deeper than a default. Work as if you are not.
