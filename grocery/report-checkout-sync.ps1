@@ -46,7 +46,8 @@
     name nothing on main. So each row of the literal bars table holds its ITEM and its read-out interval, and the
     landing is the earliest commit on refs/remotes/origin/main whose message carries the line
     `Plan: design/PLAN-bot-checkout-self-heal-2026-09-23.md <item>`, which every commit of this plan carries (plan
-    section 5). The read-out is that commit's local date plus the interval. A row's `landing` and `readout` fields,
+    section 5). Only the id list right after the path counts (Get-CsPlanLineItems): prose after it, in a parenthesis or
+    not, names no item, because 1d59fbfba's `W4.2 (... W4.1 owns it)` once landed W4.1 six hours early. The read-out is that commit's local date plus the interval. A row's `landing` and `readout` fields,
     empty today, pin either one when filled (yyyy-MM-dd). An item that has not landed has no read-out and is never due.
 
   Usage:
@@ -355,6 +356,33 @@ function Measure-CsB9 { param($WdRuns, $Since, [int]$Min = 1)
 }
 
 # ---- LANDINGS, READ-OUTS AND SECTION 13 ---------------------------------------------------------------------------------
+function Get-CsPlanLineItems {
+  <# The item ids a commit message LANDS for this plan, in order. Only a `Plan: <this plan's path> <ids>` line counts,
+     and only the ID LIST that follows the path: the text is cut at the first `(`, split into segments on `,`, `;` and a
+     spaced `and`, and each segment's FIRST word, with a trailing . ) or : trimmed, is an id only when it is a whole
+     W<n>.<n> token (so W2.1 is never read out of W2.10). The first segment that does not open with an id ends the list,
+     so prose after the ids names nothing. Founding case (2026-09-23): 1d59fbfba's line is `... W4.2 (complements it:
+     ... no start sync here, W4.1 owns it)`, and reading every token anywhere on the line landed W4.1 six hours before
+     it reached origin/main. `W4.1 step 7, W4.2` still reads both ids; `(this commit adds it)` and another plan's line
+     read none. ops\probe-push-convergence.ps1's Find-TcPpcItemLanding shares the whole-token and one-plan rules but
+     takes every token on the line, so it is not shared here: it would read W4.1 out of that same parenthesis. #>
+  param([string]$Message)
+  $ids = [Collections.Generic.List[string]]::new()
+  $lineRx = '(?m)^[ \t]*Plan:[ \t]*' + [regex]::Escape($script:CsPlanPath) + '(?:[ \t]+([^\r\n]*?))?[ \t]*\r?$'
+  foreach ($m in [regex]::Matches([string]$Message, $lineRx)) {
+    $rest = $m.Groups[1].Value
+    $paren = $rest.IndexOf('(')
+    if ($paren -ge 0) { $rest = $rest.Substring(0, $paren) }
+    foreach ($seg in ($rest -split '\s*[,;]\s*|\s+and\s+')) {
+      $s = $seg.Trim()
+      if (-not $s) { continue }
+      $first = ($s -split '\s+')[0].TrimEnd('.', ')', ':')
+      if ($first -cnotmatch '^W\d+\.\d+$') { break }
+      if (-not $ids.Contains($first)) { $ids.Add($first) }
+    }
+  }
+  return ,$ids.ToArray()
+}
 function Get-CsLandings {
   <# item -> @{ sha; at } for the EARLIEST commit on refs/remotes/origin/main whose message has the plan's `Plan:` line
      naming the item. Returns @{ map; note }. #>
@@ -362,18 +390,15 @@ function Get-CsLandings {
   $map = @{}
   $r = Invoke-GitCaptured -Repo $Repo -GitArgs @('log', 'refs/remotes/origin/main', '--fixed-strings', ('--grep=Plan: ' + $script:CsPlanPath), '--format=%H%x1f%ct%x1f%B%x1e')
   if ($r.rc -ne 0) { return [pscustomobject]@{ map = $map; note = ('git log refs/remotes/origin/main exited ' + $r.rc + ': no item reads as landed') } }
-  $lineRx = '(?m)^Plan:\s+' + [regex]::Escape($script:CsPlanPath) + '\s+(.+?)\s*$'
   foreach ($rec in (([string]$r.stdout) -split [char]0x1e)) {
     $p = $rec.Trim() -split [char]0x1f
     if ($p.Count -lt 3) { continue }
     [long]$ct = 0
     if (-not [long]::TryParse($p[1].Trim(), [ref]$ct)) { continue }
-    foreach ($m in [regex]::Matches($p[2], $lineRx)) {
-      foreach ($it in [regex]::Matches($m.Groups[1].Value, 'W\d+\.\d+')) {
-        $k = $it.Value
-        $at = [DateTimeOffset]::FromUnixTimeSeconds($ct).LocalDateTime
-        if (-not $map.ContainsKey($k) -or $at -lt $map[$k].at) { $map[$k] = [pscustomobject]@{ sha = $p[0].Trim(); at = $at } }
-      }
+    $items = Get-CsPlanLineItems $p[2]
+    foreach ($k in $items) {
+      $at = [DateTimeOffset]::FromUnixTimeSeconds($ct).LocalDateTime
+      if (-not $map.ContainsKey($k) -or $at -lt $map[$k].at) { $map[$k] = [pscustomobject]@{ sha = $p[0].Trim(); at = $at } }
     }
   }
   return [pscustomobject]@{ map = $map; note = '' }
@@ -530,7 +555,7 @@ if ($SelfTest) {
     else { Write-Output ('FAIL  ' + $Label + '  ' + $What + '   got: ' + $Got); $script:csFail++ }
   }
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN: every Test-CsCase call below is counted against this.
-  $CS_SELFTEST_CASES = 37
+  $CS_SELFTEST_CASES = 44
   $csRoot = Join-Path $env:TEMP ('rcs-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
   $csPrevCd = $env:GIT_COMMITTER_DATE; $csPrevAd = $env:GIT_AUTHOR_DATE
   try {
@@ -660,6 +685,24 @@ if ($SelfTest) {
     $ids13 = Get-CsResultIds $plan13
     Test-CsCase 'CLEAN TWIN' 'section 13 answers B1a and B9 and nothing else: a B<n> line in section 8 or 14 (B7, B8), or one with nothing after the colon (B2), answers nothing' ($ids13.Count -eq 2 -and $ids13.ContainsKey('B1a') -and $ids13.ContainsKey('B9')) ((@($ids13.Keys) -join ','))
 
+    # ---- which items a Plan line lands: only the id list after the plan path ----
+    # 1d59fbfba's Plan line, frozen byte for byte from `git show -s --format=%B 1d59fbfba` (2026-09-23).
+    $pl1d59 = 'Plan: design/PLAN-bot-checkout-self-heal-2026-09-23.md W4.2 (complements it: the push-time stale-artifact check sits after the push stage''s rebase and must move with that stage when W4.2 replaces the rebase; no start sync here, W4.1 owns it)'
+    $it1d59 = Get-CsPlanLineItems ("daily chain stale code`n`n" + $pl1d59 + "`n")
+    Test-CsCase 'MUST FIRE' '1d59fbfba''s Plan line lands W4.2 and NOT W4.1: an id inside the prose after the id list names nothing' ((@($it1d59) -join ',') -eq 'W4.2') ((@($it1d59) -join ','))
+    # Two defences hold that rule, so each has its own case (ops-and-gates.md, TWO GUARDS OVER ONE RULE): the cut at the
+    # first "(" and the stop at the first segment that does not open with an id.
+    $itParen = Get-CsPlanLineItems ('Plan: ' + $script:CsPlanPath + ' W4.2 (the start sync is elsewhere, W4.1 owns it)')
+    Test-CsCase 'MUST FIRE' 'an id that opens a comma segment INSIDE a parenthesis names nothing: the list ends at the first "("' ((@($itParen) -join ',') -eq 'W4.2') ((@($itParen) -join ','))
+    $itProse = Get-CsPlanLineItems ('Plan: ' + $script:CsPlanPath + ' W4.2; no start sync here, W4.1 owns it')
+    Test-CsCase 'MUST FIRE' 'with no parenthesis, the first segment that does not open with an id ends the list, so a later "W4.1 owns it" names nothing' ((@($itProse) -join ',') -eq 'W4.2') ((@($itProse) -join ','))
+    $itTen = Get-CsPlanLineItems ('Plan: ' + $script:CsPlanPath + ' W2.10')
+    Test-CsCase 'MUST NOT FIRE' 'a Plan line naming W2.10 lands W2.10 and never W2.1: the id is a whole token' (@($itTen).Count -eq 1 -and [string]::Equals([string]$itTen[0], 'W2.10', [StringComparison]::Ordinal)) ((@($itTen) -join ','))
+    $itNone = Get-CsPlanLineItems ('Plan: ' + $script:CsPlanPath + " (this commit adds it)`nPlan: design/PLAN-other-2026-09-23.md W3.1`nnot a Plan: " + $script:CsPlanPath + ' W3.2')
+    Test-CsCase 'MUST NOT FIRE' 'the plan''s own "(this commit adds it)" line, another plan''s line and a Plan: not at line start land nothing' (@($itNone).Count -eq 0) ((@($itNone) -join ','))
+    $itReal = Get-CsPlanLineItems ("W0.2 and friends`n`nPlan: " + $script:CsPlanPath + " W0.2, W3.2, W4.1 step 7, W4.2, W5.1.`nPlan: " + $script:CsPlanPath + " W2.2 step 3 and 4`n")
+    Test-CsCase 'CLEAN TWIN' 'real landing lines still resolve: a five-item list with a step note and a full stop, and an id followed by its step, read W0.2 W3.2 W4.1 W4.2 W5.1 W2.2' ((@($itReal) -join ',') -eq 'W0.2,W3.2,W4.1,W4.2,W5.1,W2.2') ((@($itReal) -join ','))
+
     # ---- END TO END through the real script: -Due, and a plain run, against a temp repo ----
     New-Item -ItemType Directory -Path $csRoot -ErrorAction Stop | Out-Null
     . (Join-Path (Split-Path $csHere -Parent) 'lib\git-repo-env.ps1')
@@ -712,6 +755,10 @@ if ($SelfTest) {
     CsFxCommitPlan $fx $planDone "the B9 read-out`n" ($landEpoch + 172800)
     $e4 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $csSelf -Due -Repo $fx -Today '2026-10-16'); $e4rc = $LASTEXITCODE
     Test-CsCase 'CLEAN TWIN' '-Due: the same day with a B9 result line in section 13 of the committed plan exits 0 and says nothing is owed' ($e4rc -eq 0 -and @($e4 | Where-Object { $_ -like 'DUE  none*' }).Count -eq 1) ("rc=$e4rc")
+    # The same grammar through Get-CsLandings over real git: 1d59fbfba's message on origin/main lands W4.2 only.
+    CsFxCommitPlan $fx ($planDone + "`n") ("daily chain stale code`n`n" + $pl1d59 + "`n") ($landEpoch + 259200)
+    $lnd = Get-CsLandings -Repo $fx
+    Test-CsCase 'MUST FIRE' 'Get-CsLandings over a repo carrying 1d59fbfba''s message reads W1.1 and W4.2 as landed and W4.1 as not' ($lnd.map.ContainsKey('W1.1') -and $lnd.map.ContainsKey('W4.2') -and -not $lnd.map.ContainsKey('W4.1') -and $lnd.map.Count -eq 2) ((@($lnd.map.Keys | Sort-Object) -join ',') + ' note=' + $lnd.note)
   } catch {
     Write-Output ('FAIL  the self-test threw: ' + $_.Exception.Message); $script:csFail++
   } finally {
