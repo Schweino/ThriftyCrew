@@ -69,6 +69,7 @@
     ops\audit-full-path-excludes.ps1               scan the tree, hold the ratchet; writes nothing
     ops\audit-full-path-excludes.ps1 -Tighten      the same, and record a believable FALL as the new high-water mark
     ops\audit-full-path-excludes.ps1 -AcceptDrop   record a fall lib\ratchet.ps1 would refuse
+    ops\audit-full-path-excludes.ps1 -Accept       record the CURRENT count as the mark over a baseline that is missing or unreadable (a plain run exits 3 there)
     ops\audit-full-path-excludes.ps1 -SelfTest     frozen founding lines, the fixed forms, the walk, and the live path
 
   A RUN THAT IS NOT ASKED TO RECORD WRITES NOTHING (2026-09-11). run-gates runs this with no arguments on every
@@ -77,7 +78,7 @@
   and the committed mark KEPT; -Tighten records it. ops\audit-write-only-reports.ps1 carries the full account.
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([switch]$SelfTest, [switch]$AcceptDrop, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
+param([switch]$SelfTest, [switch]$Accept, [switch]$AcceptDrop, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path $here -Parent
@@ -570,6 +571,23 @@ Get-ChildItem . -Recurse | Where-Object { $_.DirectoryName -notmatch $Skip }'
     $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltRise
     $rc3 = $LASTEXITCODE
     FpeT 'CLEAN TWIN  a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+    # FAIL CLOSED (2026-09-24, pd-currency-2026-09-23.md). MUST FIRE: conflict markers and an absent baseline each exit
+    # 3 naming which, and write nothing. CLEAN TWIN: -Accept still records one.
+    $ltConf = Join-Path $lt 'baseline-conflict.json'
+    [IO.File]::WriteAllText($ltConf, ('<' * 7) + " HEAD`n{ ""sites"": 2 }`n" + ('=' * 7) + "`n{ ""sites"": 0 }`n" + ('>' * 7) + " theirs`n", (New-Object Text.UTF8Encoding($false)))
+    $ltConfSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltConf))
+    $oC = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltConf)
+    $rcC = $LASTEXITCODE
+    $sameC = [string]::Equals($ltConfSeed, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltConf)), [StringComparison]::Ordinal)
+    FpeT 'MUST FIRE  a baseline holding conflict markers exits 3, blind=baseline-unreadable, and its bytes are unchanged' ($rcC -eq 3 -and $sameC -and (($oC -join "`n") -match 'blind=baseline-unreadable')) ("rc=$rcC unchanged=$sameC")
+    $ltAbsent = Join-Path $lt 'baseline-absent.json'
+    $oA = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltAbsent)
+    $rcA = $LASTEXITCODE
+    FpeT 'MUST FIRE  an ABSENT baseline on a plain run exits 3, blind=baseline-missing, and no file is created' ($rcA -eq 3 -and -not (Test-Path -LiteralPath $ltAbsent) -and (($oA -join "`n") -match 'blind=baseline-missing')) ("rc=$rcA created=$(Test-Path -LiteralPath $ltAbsent)")
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltAbsent -Accept
+    $rcW = $LASTEXITCODE
+    $docW = if (Test-Path -LiteralPath $ltAbsent) { [IO.File]::ReadAllText($ltAbsent) | ConvertFrom-Json } else { $null }
+    FpeT 'CLEAN TWIN  -Accept over an absent baseline records the current count (1) and exits 0' ($rcW -eq 0 -and $null -ne $docW -and [int]$docW.sites -eq 1) ("rc=$rcW sites=$(if ($docW) { $docW.sites })")
   } finally {
     Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
   }
@@ -606,7 +624,16 @@ foreach ($s in $sites) { Write-Output ('  full-path  ' + $s) }
 $summary = "files={0} read={1} sites={2}" -f $files.Count, $read, $count
 
 $note = 'HIGH-WATER MARK for sites that match a file''s FULL path against an exclusion carrying worktrees or .claude. It may only go DOWN, and a fall to zero or over 60% in one run is REFUSED as a probably-broken detector (lib\ratchet.ps1).'
-if (-not (Test-Path -LiteralPath $BASELINE_FILE)) {
+# FAIL CLOSED ON A MARK NOBODY CAN READ (2026-09-24, pd-currency-2026-09-23.md). A MISSING baseline used to be written
+# with the current count on a plain run, a rise included, and exit 0; an unreadable one threw at the [int] cast. Both
+# are now a could-not-evaluate that writes nothing, and only -Accept records a mark over them.
+$blRead = Read-TcRatchetBaseline -Path $BASELINE_FILE -Field 'sites'
+if ($blRead.State -ne 'read' -and -not $Accept) {
+  $blTok = Get-TcRatchetBlindToken $blRead.State
+  Write-Output ("! full-path-excludes: COULD NOT EVALUATE - the baseline " + $BASELINE_FILE + " is $($blRead.State) ($($blRead.Why)), so there is no mark to hold " + $count + " against. Nothing was written: a plain run, -Tighten and -AcceptDrop never record a mark over it. Restore it from git, or record the current count on purpose with -Accept.")
+  Exit-Guard -Name 'full-path-excludes' -Summary ("{0} blind={1}" -f $summary, $blTok) -Code 3
+}
+if ($Accept) {
   # The day-one count goes into the history as well, so every later fall is read against what was first measured.
   $hist = Add-RatchetHistory -Doc ([pscustomobject]@{}) -Count $count
   $doc = [pscustomobject]@{ generated = (Get-Date).ToString('s'); sites = $count; history = $hist; note = $note }
@@ -615,7 +642,7 @@ if (-not (Test-Path -LiteralPath $BASELINE_FILE)) {
   Write-Output ("full-path-excludes: baseline written at {0} site(s). From here the number may only go DOWN." -f $count)
   Exit-Guard -Name 'full-path-excludes' -Summary ("{0} baseline={1}" -f $summary, $count) -Code 0
 }
-$base = [int]((Get-Content -LiteralPath $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json).sites)
+$base = $blRead.Value
 
 if ($count -gt $base) {
   Write-Output ("FULL-PATH-EXCLUDES AUDIT FAILED: {0} site(s) match a file's FULL path against a pattern carrying worktrees or .claude, against a baseline of {1}." -f $count, $base)
