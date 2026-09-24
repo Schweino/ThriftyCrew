@@ -4,25 +4,25 @@
     "K":  5,
     "W":  1.5,
     "pinned_typed_bands":  false,
-    "evidence_rows":  4804,
+    "evidence_rows":  4778,
     "derived_commodities":  105,
     "typed_commodities":  0,
     "k_sweep":  {
                     "K=3":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  1438
+                                "newly_refused_rows":  1439
                             },
                     "K=4":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  958
+                                "newly_refused_rows":  966
                             },
                     "K=5":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  685
+                                "newly_refused_rows":  689
                             },
                     "K=6":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  528
+                                "newly_refused_rows":  534
                             }
                 },
     "typed_fields_ignored":  [
@@ -224,6 +224,14 @@
                           {
                               "id":  "butter",
                               "store":  "Sam\u0027s Club",
+                              "name":  "Live Ocean Seafood Sweet Thai Chili Butter Coho Salmon, Frozen, 5 ct.",
+                              "per_unit":  0.6831,
+                              "typed":  "none",
+                              "derived":  "0.01601-0.40025"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Sam\u0027s Club",
                               "name":  "Kinder\u0027s Cowboy Butter Seasoning 9.7 oz.",
                               "per_unit":  0.6165,
                               "typed":  "none",
@@ -238,12 +246,12 @@
                               "derived":  "0.16-4"
                           },
                           {
-                              "id":  "brown-sugar",
+                              "id":  "butter",
                               "store":  "Sam\u0027s Club",
-                              "name":  "Dove Macadamia+Rice Milk and Brown Sugar+Coco Body Scrub Mixed Pack, 15 oz., 2 pk.",
-                              "per_unit":  0.4313,
+                              "name":  "Kinder\u0027s Cowboy Butter Seasoning, 26.5 oz.",
+                              "per_unit":  0.5653,
                               "typed":  "none",
-                              "derived":  "0.01238-0.3095"
+                              "derived":  "0.01601-0.40025"
                           },
                           {
                               "id":  "apple",
@@ -252,6 +260,30 @@
                               "per_unit":  5.29,
                               "typed":  "none",
                               "derived":  "0.1387-3.4675"
+                          },
+                          {
+                              "id":  "potato",
+                              "store":  "Aldi",
+                              "name":  "Organic Yellow Potato Bag 24 OZ",
+                              "per_unit":  2.66,
+                              "typed":  "none",
+                              "derived":  "0.105-2.625"
+                          },
+                          {
+                              "id":  "honey",
+                              "store":  "Aldi",
+                              "name":  "Emporium Selection Honey I D Rather Bee AT The Sea Sea Salt Honey Cheddar Cheese 4 OZ",
+                              "per_unit":  0.8725,
+                              "typed":  "none",
+                              "derived":  "0.02091-0.52275"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Aldi",
+                              "name":  "Little Salad Bar Sweet Butter Salad 6 OZ",
+                              "per_unit":  0.4917,
+                              "typed":  "none",
+                              "derived":  "0.01601-0.40025"
                           },
                           {
                               "id":  "chickpeas",
@@ -278,44 +310,12 @@
                               "derived":  "0.01833-0.45825"
                           },
                           {
-                              "id":  "carrots",
-                              "store":  "Aldi",
-                              "name":  "Organic Purple Carrot And Blueberry Puffs",
-                              "per_unit":  29.7297,
-                              "typed":  "none",
-                              "derived":  "0.1985-4.9625"
-                          },
-                          {
-                              "id":  "honey",
-                              "store":  "Aldi",
-                              "name":  "Emporium Selection Honey I D Rather Bee AT The Sea Sea Salt Honey Cheddar Cheese 4 OZ",
-                              "per_unit":  0.8725,
-                              "typed":  "none",
-                              "derived":  "0.02091-0.52275"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Aldi",
-                              "name":  "Little Salad Bar Sweet Butter Salad 6 OZ",
-                              "per_unit":  0.4917,
-                              "typed":  "none",
-                              "derived":  "0.01601-0.40025"
-                          },
-                          {
                               "id":  "butter",
                               "store":  "Aldi",
                               "name":  "Stonemill Butter Garlic Grilling Blend 5.5 OZ",
                               "per_unit":  0.5982,
                               "typed":  "none",
                               "derived":  "0.01601-0.40025"
-                          },
-                          {
-                              "id":  "potato",
-                              "store":  "Aldi",
-                              "name":  "Organic Yellow Potato Bag 24 OZ",
-                              "per_unit":  2.9267,
-                              "typed":  "none",
-                              "derived":  "0.105-2.625"
                           },
                           {
                               "id":  "butter",
@@ -430,28 +430,12 @@
                               "derived":  "0.1387-3.4675"
                           },
                           {
-                              "id":  "peanut-butter",
-                              "store":  "Baker\u0027s",
-                              "name":  "Milk-Bone 4.5 Ounce Peanut Buttery Bites Peanut Butter Dog Treat Each",
-                              "per_unit":  0.9756,
-                              "typed":  "none",
-                              "derived":  "0.01833-0.45825"
-                          },
-                          {
                               "id":  "honey",
                               "store":  "Baker\u0027s",
                               "name":  "Secret Whole Body Deodorant Spray for Women, Almond Milk \u0026 Honey Scent, Aluminum Free",
                               "per_unit":  3.7114,
                               "typed":  "none",
                               "derived":  "0.02091-0.52275"
-                          },
-                          {
-                              "id":  "brown-sugar",
-                              "store":  "Baker\u0027s",
-                              "name":  "Kinder\u0027s Hickory Brown Sugar BBQ Sauce 15.8oz",
-                              "per_unit":  0.3475,
-                              "typed":  "none",
-                              "derived":  "0.01238-0.3095"
                           },
                           {
                               "id":  "butter",
@@ -488,23 +472,7 @@
                           {
                               "id":  "butter",
                               "store":  "Baker\u0027s",
-                              "name":  "Simple Truth Organic Salted Butter Sticks",
-                              "per_unit":  0.4056,
-                              "typed":  "none",
-                              "derived":  "0.01601-0.40025"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Baker\u0027s",
                               "name":  "Kerrygold Irish Grass-Fed Salted Butter Foil",
-                              "per_unit":  0.6612,
-                              "typed":  "none",
-                              "derived":  "0.01601-0.40025"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Baker\u0027s",
-                              "name":  "Kerrygold Irish Grass-Fed Unsalted Butter Sticks, 8oz",
                               "per_unit":  0.6612,
                               "typed":  "none",
                               "derived":  "0.01601-0.40025"
@@ -520,8 +488,24 @@
                           {
                               "id":  "butter",
                               "store":  "Baker\u0027s",
+                              "name":  "Kerrygold Irish Grass-Fed Unsalted Butter Sticks, 8oz",
+                              "per_unit":  0.6612,
+                              "typed":  "none",
+                              "derived":  "0.01601-0.40025"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Baker\u0027s",
                               "name":  "Kerrygold Irish Grass-Fed Unsalted Butter Foil, 8oz",
                               "per_unit":  0.6612,
+                              "typed":  "none",
+                              "derived":  "0.01601-0.40025"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kerrygold Grass-fed Pure Irish Unsalted Butter Sticks, 16oz",
+                              "per_unit":  0.6244,
                               "typed":  "none",
                               "derived":  "0.01601-0.40025"
                           },
@@ -534,12 +518,12 @@
                               "derived":  "0.105-2.625"
                           },
                           {
-                              "id":  "dijon-mustard",
+                              "id":  "peanut-butter",
                               "store":  "Baker\u0027s",
-                              "name":  "Maille Original Dijon Mustard",
-                              "per_unit":  0.932,
+                              "name":  "Milk-Bone 4.5 Ounce Peanut Buttery Bites Peanut Butter Dog Treat Each",
+                              "per_unit":  0.9756,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.01833-0.45825"
                           },
                           {
                               "id":  "honey",
@@ -564,14 +548,6 @@
                               "per_unit":  0.8431,
                               "typed":  "none",
                               "derived":  "0.01644-0.411"
-                          },
-                          {
-                              "id":  "chickpeas",
-                              "store":  "Baker\u0027s",
-                              "name":  "Lightlife Organic Tempeh Chickpea",
-                              "per_unit":  0.6129,
-                              "typed":  "none",
-                              "derived":  "0.01278-0.3195"
                           },
                           {
                               "id":  "peanut-butter",
@@ -628,6 +604,30 @@
                               "per_unit":  1.0355,
                               "typed":  "none",
                               "derived":  "0.01833-0.45825"
+                          },
+                          {
+                              "id":  "brown-sugar",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kinder\u0027s Hickory Brown Sugar BBQ Sauce 15.8oz",
+                              "per_unit":  0.3475,
+                              "typed":  "none",
+                              "derived":  "0.01238-0.3095"
+                          },
+                          {
+                              "id":  "dijon-mustard",
+                              "store":  "Baker\u0027s",
+                              "name":  "Maille Original Dijon Mustard",
+                              "per_unit":  0.932,
+                              "typed":  "none",
+                              "derived":  "0.034-0.85"
+                          },
+                          {
+                              "id":  "chickpeas",
+                              "store":  "Baker\u0027s",
+                              "name":  "Lightlife Organic Tempeh Chickpea",
+                              "per_unit":  0.6129,
+                              "typed":  "none",
+                              "derived":  "0.01278-0.3195"
                           },
                           {
                               "id":  "butter",
@@ -1926,6 +1926,54 @@
                               "derived":  "0.1985-4.9625"
                           },
                           {
+                              "id":  "potato",
+                              "store":  "Walmart",
+                              "name":  "Fire \u0026 Smoke Society Potato Slayer Vegetable Seasoning Blend, 5 Ounce Mixed Spices \u0026 Seasonings",
+                              "per_unit":  15.904,
+                              "typed":  "none",
+                              "derived":  "0.105-2.625"
+                          },
+                          {
+                              "id":  "apple",
+                              "store":  "Walmart",
+                              "name":  "Glade Automatic Spray Refill 2 Count, Apple Cinnamon, 12.4 oz. Total, Air Freshener",
+                              "per_unit":  5.89,
+                              "typed":  "none",
+                              "derived":  "0.1387-3.4675"
+                          },
+                          {
+                              "id":  "crushed-tomatoes",
+                              "store":  "Walmart",
+                              "name":  "Italian Crushed Tomatoes 28oz",
+                              "per_unit":  0.6036,
+                              "typed":  "none",
+                              "derived":  "0.01334-0.3335"
+                          },
+                          {
+                              "id":  "crushed-tomatoes",
+                              "store":  "Walmart",
+                              "name":  "Mutti Crushed Tomatoes (Polpa) 28 oz, Can",
+                              "per_unit":  0.5529,
+                              "typed":  "none",
+                              "derived":  "0.01334-0.3335"
+                          },
+                          {
+                              "id":  "crushed-tomatoes",
+                              "store":  "Walmart",
+                              "name":  "Sclafani® Crushed Tomatoes 28 oz. Can",
+                              "per_unit":  0.51,
+                              "typed":  "none",
+                              "derived":  "0.01334-0.3335"
+                          },
+                          {
+                              "id":  "crushed-tomatoes",
+                              "store":  "Walmart",
+                              "name":  "Cento Organic Italian Crushed Tomatoes",
+                              "per_unit":  0.535,
+                              "typed":  "none",
+                              "derived":  "0.01334-0.3335"
+                          },
+                          {
                               "id":  "corn-tortillas",
                               "store":  "Walmart",
                               "name":  "Siete Maiz Yellow Corn Tortilla 12 ct",
@@ -1992,14 +2040,6 @@
                           {
                               "id":  "potato",
                               "store":  "Walmart",
-                              "name":  "Fire \u0026 Smoke Society Potato Slayer Vegetable Seasoning Blend, 5 Ounce Mixed Spices \u0026 Seasonings",
-                              "per_unit":  15.904,
-                              "typed":  "none",
-                              "derived":  "0.105-2.625"
-                          },
-                          {
-                              "id":  "potato",
-                              "store":  "Walmart",
                               "name":  "Michelina\u0027s Pop\u0027n Chicken Nuggets and Wagon Wheel Potatoes (4.5 ounces)",
                               "per_unit":  4.7644,
                               "typed":  "none",
@@ -2046,14 +2086,6 @@
                               "derived":  "0.02655-0.66375"
                           },
                           {
-                              "id":  "crushed-tomatoes",
-                              "store":  "Walmart",
-                              "name":  "Sclafani® Crushed Tomatoes 28 oz. Can",
-                              "per_unit":  0.51,
-                              "typed":  "none",
-                              "derived":  "0.01334-0.3335"
-                          },
-                          {
                               "id":  "curry-powder",
                               "store":  "Walmart",
                               "name":  "Simply Organic Curry Powder, .53 Oz",
@@ -2067,7 +2099,7 @@
                               "name":  "Maille Old Style Whole Grain Dijon Mustard, 7.3 oz Jar",
                               "per_unit":  1.2986,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.034-0.85"
                           },
                           {
                               "id":  "honey-dijon-mustard",
@@ -2083,7 +2115,7 @@
                               "name":  "Woeber\u0027S Supreme Dijon Mustard, 10 Oz.",
                               "per_unit":  1.478,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.034-0.85"
                           },
                           {
                               "id":  "dijon-mustard",
@@ -2091,7 +2123,7 @@
                               "name":  "Edmond Fallout Dijon Mustard, 7.4 Oz",
                               "per_unit":  1.0797,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.034-0.85"
                           },
                           {
                               "id":  "dijon-mustard",
@@ -2099,7 +2131,7 @@
                               "name":  "Bornier Wholegrain Dijon Mustard, 7.4 oz",
                               "per_unit":  1.8095,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.034-0.85"
                           },
                           {
                               "id":  "potato",
@@ -2148,6 +2180,38 @@
                               "per_unit":  0.3102,
                               "typed":  "none",
                               "derived":  "0.01079-0.26975"
+                          },
+                          {
+                              "id":  "dried-rosemary",
+                              "store":  "Walmart",
+                              "name":  "McCormick Gourmet Organic Crushed Rosemary, 1.0 oz Bottle",
+                              "per_unit":  5.12,
+                              "typed":  "none",
+                              "derived":  "0.19688-4.922"
+                          },
+                          {
+                              "id":  "dried-rosemary",
+                              "store":  "Walmart",
+                              "name":  "Simply Organic Rosemary Leaf, Shelf-Stable, 1.23 oz Bottle",
+                              "per_unit":  6.1545,
+                              "typed":  "none",
+                              "derived":  "0.19688-4.922"
+                          },
+                          {
+                              "id":  "dried-rosemary",
+                              "store":  "Walmart",
+                              "name":  "Great Value Organic Rosemary Leaves, 0.85 oz",
+                              "per_unit":  5.3882,
+                              "typed":  "none",
+                              "derived":  "0.19688-4.922"
+                          },
+                          {
+                              "id":  "dried-rosemary",
+                              "store":  "Walmart",
+                              "name":  "Badia Rosemary 0.5 oz – Aromatic Single Herb Spice for Versatile Culinary Use",
+                              "per_unit":  15.98,
+                              "typed":  "none",
+                              "derived":  "0.19688-4.922"
                           },
                           {
                               "id":  "carrots",
@@ -2812,14 +2876,6 @@
                               "per_unit":  1.6133,
                               "typed":  "none",
                               "derived":  "0.02841-0.71025"
-                          },
-                          {
-                              "id":  "apple",
-                              "store":  "Walmart",
-                              "name":  "Glade Automatic Spray Refill 2 Count, Apple Cinnamon, 12.4 oz. Total, Air Freshener",
-                              "per_unit":  5.89,
-                              "typed":  "none",
-                              "derived":  "0.1387-3.4675"
                           },
                           {
                               "id":  "potato",
@@ -3846,22 +3902,6 @@
                               "derived":  "0.01278-0.3195"
                           },
                           {
-                              "id":  "crushed-tomatoes",
-                              "store":  "Walmart",
-                              "name":  "Mutti Crushed Tomatoes (Polpa) 28 oz, Can",
-                              "per_unit":  0.5529,
-                              "typed":  "none",
-                              "derived":  "0.01334-0.3335"
-                          },
-                          {
-                              "id":  "crushed-tomatoes",
-                              "store":  "Walmart",
-                              "name":  "Cento Organic Italian Crushed Tomatoes",
-                              "per_unit":  0.535,
-                              "typed":  "none",
-                              "derived":  "0.01334-0.3335"
-                          },
-                          {
                               "id":  "tomato-paste",
                               "store":  "Walmart",
                               "name":  "Panos Brands Amore Tomato Paste, 4.5 oz",
@@ -4027,15 +4067,7 @@
                               "name":  "Maille Mustard Dijon Originale Squeeze 8.9 oz",
                               "per_unit":  1.0663,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
-                          },
-                          {
-                              "id":  "dijon-mustard",
-                              "store":  "Walmart",
-                              "name":  "Gulden\u0027s Stone Ground Dijon Mustard, 12 oz.",
-                              "per_unit":  0.7908,
-                              "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.034-0.85"
                           },
                           {
                               "id":  "honey-dijon-mustard",
@@ -4051,7 +4083,7 @@
                               "name":  "Maille Old Style Whole Grain Dijon Mustard, 7.3 oz Jar",
                               "per_unit":  1.5055,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.034-0.85"
                           },
                           {
                               "id":  "honey-dijon-mustard",
@@ -4107,7 +4139,7 @@
                               "name":  "Spectrum Naturals Organic Red Wine Vinegar",
                               "per_unit":  1.34,
                               "typed":  "none",
-                              "derived":  "0.03738-0.9345"
+                              "derived":  "0.03638-0.9095"
                           },
                           {
                               "id":  "enchilada-sauce",
@@ -4168,10 +4200,18 @@
                           {
                               "id":  "dried-rosemary",
                               "store":  "Walmart",
-                              "name":  "Frontier Co-op Organic Rosemary Leaf, Whole , 16 oz (453 g)",
-                              "per_unit":  0.9844,
+                              "name":  "Simply Organic Rosemary Leaf, Shelf-Stable, 1.23 oz Bottle",
+                              "per_unit":  6.0894,
                               "typed":  "none",
-                              "derived":  "1.05082-26.2705"
+                              "derived":  "0.19688-4.922"
+                          },
+                          {
+                              "id":  "dried-rosemary",
+                              "store":  "Walmart",
+                              "name":  "Badia Rosemary 0.5 oz – Aromatic Single Herb Spice for Versatile Culinary Use",
+                              "per_unit":  15.94,
+                              "typed":  "none",
+                              "derived":  "0.19688-4.922"
                           },
                           {
                               "id":  "carrots",
@@ -4910,14 +4950,6 @@
                               "derived":  "0.01833-0.45825"
                           },
                           {
-                              "id":  "dijon-mustard",
-                              "store":  "Walmart",
-                              "name":  "Grey Poupon Dijon Mustard, 48.0 oz Jar",
-                              "per_unit":  0.8435,
-                              "typed":  "none",
-                              "derived":  "0.03142-0.7855"
-                          },
-                          {
                               "id":  "honey-dijon-mustard",
                               "store":  "Walmart",
                               "name":  "Maille Mustard Honey Dijon 8 oz",
@@ -5259,7 +5291,7 @@
                               "name":  "Heinz Gourmet Red Wine Vinegar Value Pack     12 Fl Oz   Pack of 2",
                               "per_unit":  1.04,
                               "typed":  "none",
-                              "derived":  "0.03738-0.9345"
+                              "derived":  "0.03638-0.9095"
                           },
                           {
                               "id":  "red-wine-vinegar",
@@ -5267,7 +5299,7 @@
                               "name":  "Heinz Red Wine Vinegar 12 Oz - Pack Of 6",
                               "per_unit":  1.8567,
                               "typed":  "none",
-                              "derived":  "0.03738-0.9345"
+                              "derived":  "0.03638-0.9095"
                           },
                           {
                               "id":  "dijon-mustard",
@@ -5275,7 +5307,7 @@
                               "name":  "KOOPS\u0027 Mustard Dijon Mustard, 12 oz",
                               "per_unit":  0.8533,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.034-0.85"
                           },
                           {
                               "id":  "green-beans",

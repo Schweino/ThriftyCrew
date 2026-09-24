@@ -216,6 +216,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
+        "id":  "banana-peppers",
+        "store":  "Family Fare",
+        "product":  "Our Family Hot Banana Pepper Rings 16 Fl Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
         "id":  "bar-soap",
         "store":  "Family Fare",
         "product":  "Irish Spring Original Soap Bars 8 Ea",
@@ -1051,6 +1060,15 @@
         "aisle":  "deli/cheese",
         "verdict":  "ALLOW",
         "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
+    },
+    {
+        "id":  "fish-sauce",
+        "store":  "Family Fare",
+        "product":  "Thai Gluten Free Premium Fish Sauce 6.76 Fl Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/condiments_dressing",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
         "id":  "fish-sticks",

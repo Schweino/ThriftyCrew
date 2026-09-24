@@ -5,32 +5,30 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-26; next_pull 2026-09-27",
-    "cursor_start":  383,
-    "cursor_next":  386,
+    "cursor_start":  392,
+    "cursor_next":  395,
     "total_terms":  639,
     "rotation_terms":  [
-                           "arm and hammer detergent",
-                           "laundry detergent pods",
-                           "leeks"
+                           "lime juice bottle",
+                           "fresh limes",
+                           "liquid smoke"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "fennel seed",
                   "serrano peppers",
-                  "yellow bell pepper",
-                  "arm and hammer detergent",
-                  "laundry detergent pods",
-                  "leeks"
+                  "fennel seed",
+                  "lime juice bottle",
+                  "fresh limes",
+                  "liquid smoke"
               ],
     "commodities":  [
-                        "ground-fennel",
                         "serrano-peppers",
-                        "yellow-bell-pepper",
-                        "laundry-detergent",
-                        "laundry-pods",
-                        "leeks"
+                        "ground-fennel",
+                        "lime-juice",
+                        "limes",
+                        "liquid-smoke"
                     ],
     "ruling_terms":  [
 

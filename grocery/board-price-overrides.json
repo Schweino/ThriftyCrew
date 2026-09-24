@@ -1,17 +1,9 @@
 ﻿{
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
-    "updated":  "2026-09-23",
+    "updated":  "2026-09-24",
     "tol":  0.3,
-    "count":  1,
+    "count":  0,
     "cells":  [
-                  {
-                      "id":  "sriracha",
-                      "store":  "Baker\u0027s",
-                      "per_unit":  0.2139,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.3656,
-                      "link_name":  "Huy Fong Sriracha Hot Chili Sauce",
-                      "set":  "2026-09-23"
-                  }
+
               ]
 }

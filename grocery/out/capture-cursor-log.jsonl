@@ -232,3 +232,7 @@
 {"at":"2026-09-24T06:36:08","store":"Walmart","from":194,"to":202,"day":"2026-09-24","caller":"build-walmart-deals.ps1","pid":26680}
 {"at":"2026-09-24T06:37:33","store":"Aldi","from":194,"to":202,"day":"2026-09-24","caller":"build-aldi-regular.ps1","pid":33636}
 {"at":"2026-09-24T07:01:22","store":"Family Fare","from":404,"to":407,"day":"2026-09-24","caller":"pull-regular-familyfare.ps1","pid":31848}
+{"at":"2026-09-24T07:44:12","store":"Fareway","from":207,"to":215,"day":"2026-09-24","caller":"build-fareway-regular.ps1","pid":35252}
+{"at":"2026-09-24T09:00:41","store":"Hy-Vee (products)","from":0,"to":20,"day":"2026-09-24","caller":"pull-regular-hyvee.ps1","pid":25312}
+{"at":"2026-09-24T09:01:31","store":"Family Fare","from":407,"to":410,"day":"2026-09-24","caller":"pull-regular-familyfare.ps1","pid":33744}
+{"at":"2026-09-24T09:01:54","store":"Baker\u0027s","from":214,"to":222,"day":"2026-09-24","caller":"pull-regular-bakers-api.ps1","pid":34696}

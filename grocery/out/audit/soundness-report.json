@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-23 10:01",
+    "generated":  "2026-09-24 09:25",
     "drift_vs_engine":  0,
     "drift_products":  [
 
@@ -11,6 +11,14 @@
                     {
                         "name":  "Fresh Cut In Store Carrot \u0026 Cucumber Ranch",
                         "from":  "carrots"
+                    },
+                    {
+                        "name":  "Member\u0027s Mark Zero Sugar Green Tea, 16.9 fl. oz., 35 pk.",
+                        "from":  "tea-bags"
+                    },
+                    {
+                        "name":  "Colgate Max Fresh Wisp Disposable Travel Toothbrushes, Mini Toothbrush, Peppermint, 24 Count",
+                        "from":  "toothbrushes"
                     },
                     {
                         "name":  "Fresh Cut In Store Cucumber Ranch Bowl",
@@ -37,13 +45,13 @@
                               "crown":  false
                           },
                           {
-                              "name":  "Honey Stinger 16ct Peanut Butter Chocolate Waffle",
-                              "chain":  "peanut-butter (oz) \u003e honey (oz) \u003e frozen-waffles (each)",
-                              "form":  true,
-                              "winner":  "peanut-butter",
-                              "verdict":  "WITHHELD-SHIP-ONLY",
-                              "cell":  "",
-                              "crown":  false
+                              "name":  "Inglehoffer Horseradish Cream Style 9.5 OZ",
+                              "chain":  "horseradish (oz) \u003e horseradish-sauce (oz)",
+                              "form":  false,
+                              "winner":  "horseradish",
+                              "verdict":  "size 9.5 oz = 0.2989/oz",
+                              "cell":  "horseradish @ Aldi 0.2989/oz",
+                              "crown":  true
                           },
                           {
                               "name":  "Kroger Orange Rind Muenster Block Cheese",
@@ -53,25 +61,20 @@
                               "verdict":  "size 16 oz = 0.2306/oz",
                               "cell":  "",
                               "crown":  false
-                          },
-                          {
-                              "name":  "Simek\u0027s Kids Mini Breakfast Sausage Meatballs",
-                              "chain":  "breakfast-sausage (lb) \u003e frozen-meatballs (oz)",
-                              "form":  true,
-                              "winner":  "breakfast-sausage",
-                              "verdict":  "size 0.75 lb = 11.9867/lb",
-                              "cell":  "",
-                              "crown":  false
                           }
                       ],
     "new_contested_names":  [
                                 "Deutsche Küche Lentil Chickpea or Harvest Potato",
                                 "Di Lusso deli sliced ham, turkey, chicken or cheese, FREE King\u0027s Hawaiian slider buns 9 ct. with 1 lb. purchase of Di Lusso deli sliced ham, turkey or chicken,",
-                                "Honey Stinger 16ct Peanut Butter Chocolate Waffle",
-                                "Kroger Orange Rind Muenster Block Cheese",
-                                "Simek\u0027s Kids Mini Breakfast Sausage Meatballs"
+                                "Inglehoffer Horseradish Cream Style 9.5 OZ",
+                                "Kroger Orange Rind Muenster Block Cheese"
                             ],
     "cell_by_contest":  [
-
+                            {
+                                "name":  "Inglehoffer Horseradish Cream Style 9.5 OZ",
+                                "cell":  "horseradish @ Aldi 0.2989/oz",
+                                "crown":  true,
+                                "claimed_by":  "horseradish \u003e horseradish-sauce"
+                            }
                         ]
 }

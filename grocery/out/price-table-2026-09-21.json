@@ -1,6 +1,6 @@
 {
     "week_of":  "2026-09-21",
-    "built_at":  "2026-09-21T08:06:04",
+    "built_at":  "2026-09-21T13:33:30",
     "note":  "WIDE price table, one row per item. Per store: everyday price, ad price, and the ad window. ad is NULL when the item is not on ad - Brad\u0027s founding rule - and an ad whose ad_to has passed is nulled at build time rather than cleaned up later. `shown` is the cheaper of the two, which is what a page must display. Derived from the same candidate rows and the same eligibility rule the board ranks with; price-table-parity proves they agree per cell.",
     "stores":  [
                    "Hy-Vee",
@@ -36944,22 +36944,22 @@
                                                          "shown_kind":  "ad"
                                                      },
                                      "Fareway":  {
-                                                     "everyday":  1.7086,
-                                                     "everyday_product":  "Dei Fratelli Tomatoes, Whole",
-                                                     "everyday_size":  "28 oz",
-                                                     "everyday_price_text":  "$2.99",
+                                                     "everyday":  null,
+                                                     "everyday_product":  "",
+                                                     "everyday_size":  "",
+                                                     "everyday_price_text":  "",
                                                      "everyday_asof":  "",
-                                                     "everyday_source":  "shop.fareway.com",
-                                                     "ad":  1.5314,
-                                                     "ad_product":  "Dei Fratelli Tomatoes, Whole",
-                                                     "ad_size":  "28 oz",
-                                                     "ad_price_text":  "$2.68",
+                                                     "everyday_source":  "",
+                                                     "ad":  2.49,
+                                                     "ad_product":  "On The Vine Tomatoes",
+                                                     "ad_size":  "lb",
+                                                     "ad_price_text":  "$2.49",
                                                      "ad_from":  "2026-09-21",
-                                                     "ad_to":  "2026-10-21",
-                                                     "ad_basis":  "ttl",
-                                                     "ad_source":  "shop.fareway.com",
+                                                     "ad_to":  "2026-09-26",
+                                                     "ad_basis":  "",
+                                                     "ad_source":  "Fareway Weekly Ad 2026-09-21 to 2026-09-26",
                                                      "membership":  false,
-                                                     "shown":  1.5314,
+                                                     "shown":  2.49,
                                                      "shown_kind":  "ad"
                                                  },
                                      "Hy-Vee":  {

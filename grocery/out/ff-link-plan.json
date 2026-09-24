@@ -85,7 +85,7 @@
                     },
                     {
                         "id":  "french-bread",
-                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "frosting",
@@ -117,7 +117,7 @@
                     },
                     {
                         "id":  "ground-cumin",
-                        "why":  "match found but per-unit disagrees: board $1.145 vs link $1.295 (11.6%)"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "iced-tea",
@@ -145,10 +145,6 @@
                     },
                     {
                         "id":  "pepperoni",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "pesto",
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
@@ -188,10 +184,6 @@
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
-                        "id":  "toothpaste",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
                         "id":  "trash-bags",
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
@@ -200,7 +192,7 @@
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     }
                 ],
-    "worked":  50,
-    "generated":  "2026-09-23 09:50",
+    "worked":  47,
+    "generated":  "2026-09-24 09:14",
     "board":  "comparison-2026-09-23.json"
 }

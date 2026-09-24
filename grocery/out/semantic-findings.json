@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-23 21:33",
+    "generated":  "2026-09-24 09:30",
     "board":  "comparison-2026-09-23.json",
-    "sidecar_generated":  "2026-09-23 21:33:19",
+    "sidecar_generated":  "2026-09-24 09:30:15",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,9 +9,9 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2734,
-                     "corpus":  43952,
-                     "rule_invisible":  8807
+                     "board_pairs":  2762,
+                     "corpus":  44022,
+                     "rule_invisible":  8830
                  },
     "identity_count":  0,
     "coverage_count":  2,
@@ -35,25 +35,13 @@
                          "commodity":  "Hot Sauce",
                          "store":  "Family Fare",
                          "product":  "Trappey\u0027s Pepper Sauce, Cayenne, Red Devil 12 Fl Oz",
-                         "cos":  0.6291,
-                         "score":  0.910308,
+                         "cos":  0.6803,
+                         "score":  0.913109,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ],
-    "coverage_excluded_count":  8,
+    "coverage_excluded_count":  6,
     "coverage_excluded":  [
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "pork-tenderloin",
-                                  "commodity":  "Pork Tenderloin",
-                                  "store":  "Walmart",
-                                  "product":  "Smithfield Roasted Garlic \u0026 Herb Fresh Seasoned Pork Loin Filet, 1.98 - 2.5lb, 20 Grams of Protein per 4 oz Serving",
-                                  "cos":  0.7671,
-                                  "score":  0.948806,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "REFUSED-BY-EXCLUDE",
-                                  "detail":  "no admit pattern matches, and exclude \u0027seasoned\u0027 would refuse it anyway"
-                              },
                               {
                                   "kind":  "coverage",
                                   "id":  "ground-pork",
@@ -120,23 +108,11 @@
                                   "commodity":  "Pork Tenderloin",
                                   "store":  "Walmart",
                                   "product":  "Marketside Roasted Garlic and Herb Fresh Seasoned Pork Loin Filet, 1.4 - 1.9 lbs., 21g of Protein per 4 oz Serving",
-                                  "cos":  0.7361,
-                                  "score":  0.909029,
+                                  "cos":  0.7234,
+                                  "score":  0.909089,
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "REFUSED-BY-EXCLUDE",
                                   "detail":  "no admit pattern matches, and exclude \u0027seasoned\u0027 would refuse it anyway"
-                              },
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "pork-tenderloin",
-                                  "commodity":  "Pork Tenderloin",
-                                  "store":  "Walmart",
-                                  "product":  "Smithfield Roasted Garlic \u0026 Cracked Black Pepper Fresh Seasoned Pork Tenderloin, 0.5–2.5 lb, 19 Grams of Protein per 4 oz Serving",
-                                  "cos":  0.8371,
-                                  "score":  0.904848,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027pork\\s+tenderloin\u0027 matched, exclude \u0027seasoned\u0027 killed it"
                               }
                           ]
 }

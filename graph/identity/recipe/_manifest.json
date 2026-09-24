@@ -3,31 +3,31 @@
     "namespace":  "recipe",
     "rules_hash":  "a88fe11831a107188dea397b66c7c1173f8be40c3fb38dc44bfe72d600a17d75",
     "board_date":  "2026-09-23",
-    "built_at":  "2026-09-23T09:45:47",
-    "rows_total":  43276,
-    "rows_reused_from_previous":  0,
-    "rows_rematched":  43276,
+    "built_at":  "2026-09-24T09:11:26",
+    "rows_total":  43084,
+    "rows_reused_from_previous":  42787,
+    "rows_rematched":  297,
     "rows_contested":  42,
-    "key_collisions_demoted_to_name":  981,
+    "key_collisions_demoted_to_name":  988,
     "stores":  [
                    {
                        "store":  "Aldi",
-                       "rows":  3958,
+                       "rows":  3957,
                        "changed":  true
                    },
                    {
                        "store":  "Baker\u0027s",
-                       "rows":  7365,
+                       "rows":  7363,
                        "changed":  true
                    },
                    {
                        "store":  "Family Fare",
-                       "rows":  6761,
+                       "rows":  6763,
                        "changed":  true
                    },
                    {
                        "store":  "Fareway",
-                       "rows":  1086,
+                       "rows":  1077,
                        "changed":  true
                    },
                    {
@@ -37,12 +37,12 @@
                    },
                    {
                        "store":  "Sam\u0027s Club",
-                       "rows":  722,
+                       "rows":  513,
                        "changed":  true
                    },
                    {
                        "store":  "Walmart",
-                       "rows":  20951,
+                       "rows":  20978,
                        "changed":  true
                    }
                ]

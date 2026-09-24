@@ -5,38 +5,40 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-26; next_pull 2026-09-27",
-    "cursor_start":  401,
-    "cursor_next":  404,
+    "cursor_start":  404,
+    "cursor_next":  407,
     "total_terms":  640,
     "rotation_terms":  [
-                           "pancake syrup",
-                           "marshmallows",
-                           "mayonnaise"
+                           "medjool dates",
+                           "mexican cheese blend",
+                           "mexican chorizo"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "pancake syrup",
-                  "marshmallows",
-                  "mayonnaise",
-                  "canned vegetable soup",
-                  "frozen french fries",
+                  "fennel seed",
+                  "medjool dates",
+                  "mexican cheese blend",
+                  "mexican chorizo",
                   "cooked jasmine rice",
+                  "frozen french fries",
                   "garden salad bag",
                   "jumbo pasta shells",
-                  "13 gallon trash bags"
+                  "13 gallon trash bags",
+                  "canned vegetable soup"
               ],
     "commodities":  [
-                        "maple-syrup",
-                        "marshmallows",
-                        "mayonnaise",
-                        "vegetable-soup",
-                        "frozen-fries",
+                        "ground-fennel",
+                        "medjool-dates",
+                        "mexican-cheese-blend",
+                        "mexican-chorizo-fresh",
                         "cooked-jasmine-rice",
+                        "frozen-fries",
                         "garden-salad",
                         "jumbo-pasta-shells",
-                        "trash-bags"
+                        "trash-bags",
+                        "vegetable-soup"
                     ],
     "ruling_terms":  [
 
@@ -50,12 +52,12 @@
 
                  ],
     "sale_fallback_terms":  [
-                                "canned vegetable soup",
-                                "frozen french fries",
                                 "cooked jasmine rice",
+                                "frozen french fries",
                                 "garden salad bag",
                                 "jumbo pasta shells",
-                                "13 gallon trash bags"
+                                "13 gallon trash bags",
+                                "canned vegetable soup"
                             ],
     "ad_owed_total":  0,
     "ad_of":  0,

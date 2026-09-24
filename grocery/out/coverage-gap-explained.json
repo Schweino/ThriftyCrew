@@ -1,51 +1,149 @@
 ﻿[
     {
-        "id":  "ground-beef-93-7",
+        "id":  "wild-rice",
         "store":  "Walmart",
-        "product":  "Ground Beef 73% Lean/27% Fat, All Natural*, 4 lb Tray",
+        "product":  "Wild Black Rice by Gerbs - 2 LBS - Top 14 Food Allergen Free \u0026 NON GMO - Product of Canada",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
     {
-        "id":  "baby-formula",
+        "id":  "laundry-detergent",
         "store":  "Family Fare",
-        "product":  "Similac Infant Formula, With Iron, Hypoallergenic, Ready To Feed, 0 12 Months 6 Ea",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u0027(?:infant|baby)\\s+formula\u0027 matched, exclude \u0027ready[\\s-]?to[\\s-]?feed\u0027 killed it"
-    },
-    {
-        "id":  "tilapia",
-        "store":  "Walmart",
-        "product":  "Great Value Frozen Skinless \u0026 Boneless Swai Fish Fillets Value Bag, 4 lb",
+        "product":  "Arm \u0026 Hammer Detergent, Clean Meadow 100.5 Fl Oz",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
     {
-        "id":  "breakfast-sandwiches",
+        "id":  "cooked-jasmine-rice",
+        "store":  "Baker\u0027s",
+        "product":  "Ben\u0027s Original Ready Rice Cilantro Lime Flavored Rice, Easy Dinner Side, 8.5 oz Pouch",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "maple-syrup",
+        "store":  "Baker\u0027s",
+        "product":  "Pearl Milling Company Syrup Original",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "onion-soup-mix",
+        "store":  "Walmart",
+        "product":  "Lipton Recipe Secrets Onion Dry Recipe Soup and Dip Mix, 2 O",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "feminine-pads",
+        "store":  "Baker\u0027s",
+        "product":  "Stayfree Classic Pads Without Wings Super Long Unscented",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "feminine-pads",
+        "store":  "Walmart",
+        "product":  "Stayfree Classic Pads Super Long without Wings, Unscented, 22 Ct",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "cooked-jasmine-rice",
+        "store":  "Baker\u0027s",
+        "product":  "Ben\u0027s Original Ready Rice Roasted Chicken Flavored Rice, Easy Dinner Side, 8.8 oz Pouch",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "cumin-seeds",
+        "store":  "Walmart",
+        "product":  "Soeos Cumin Seeds, 8oz (227g), Whole Cumin Powder, Resealable Bag",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bpowder\\b\u0027 killed it"
+    },
+    {
+        "id":  "cumin-seeds",
+        "store":  "Walmart",
+        "product":  "Frontier Co-op Certified Organic Cumin Seed, Ground, 16 oz. Bag",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bground\\b\u0027 killed it"
+    },
+    {
+        "id":  "wild-rice",
+        "store":  "Walmart",
+        "product":  "Gourmet House Cultivated Rice, Long Grain Wild Rice, 1 lb Bag",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027long\\s+grain\u0027 killed it"
+    },
+    {
+        "id":  "laundry-detergent",
+        "store":  "Walmart",
+        "product":  "ARM \u0026 HAMMER Plus the Power of ODOR BLASTERS Odor Fighters 2-in-1 Laundry  Detergent Powder, Fresh Rush Scent, 10 lb",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)\u0027 matched, exclude \u0027\\bpowder\\b\u0027 killed it"
+    },
+    {
+        "id":  "cumin-seeds",
+        "store":  "Walmart",
+        "product":  "Simply Organic Ground Cumin Seed, Shelf-Stable, 2.31 oz Bottle",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bground\\b\u0027 killed it"
+    },
+    {
+        "id":  "wild-rice",
+        "store":  "Baker\u0027s",
+        "product":  "Lundberg Family Farms Sustainable Wild Blend Rice",
+        "verdict":  "REFUSED-BY-EXCLUDE",
+        "detail":  "no admit pattern matches, and exclude \u0027\\bblend\\b\u0027 would refuse it anyway"
+    },
+    {
+        "id":  "cumin-seeds",
+        "store":  "Walmart",
+        "product":  "Spice Islands Ground Cumin Seed, Kosher, 1.9 oz",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bground\\b\u0027 killed it"
+    },
+    {
+        "id":  "wild-rice",
+        "store":  "Walmart",
+        "product":  "Zatarain\u0027s No Artificial Flavors Gluten Free Long Grain \u0026 Wild Rice, 7.0 oz Box",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027long\\s+grain\\s+(?:\u0026|and)\\s+wild\u0027 killed it"
+    },
+    {
+        "id":  "wild-rice",
         "store":  "Family Fare",
-        "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "chicken-breast",
-        "store":  "Walmart",
-        "product":  "Freshness Guaranteed Chicken Leg Quarters, 2.75 - 7.0 lb Tray",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "ground-beef-8020",
-        "store":  "Walmart",
-        "product":  "Fresh, All Natural Ground Beef Chuck Patties, 80% Lean, 4 Count, 1.33 lb Tray",
+        "product":  "Ben\u0027s Original Long Grain \u0026 Wild Rice, Fast Cook 6.2 Oz",
         "verdict":  "EXCLUDED",
-        "detail":  "include \u0027ground\\s+beef[^.]*80\u0027 matched, exclude \u0027patties\u0027 killed it"
+        "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027long\\s+grain\\s+(?:\u0026|and)\\s+wild\u0027 killed it"
     },
     {
-        "id":  "ground-beef-8020",
-        "store":  "Aldi",
-        "product":  "Family Pack 80 Lean 20 Fat Ground Beef Patties 2.5 LB",
+        "id":  "wild-rice",
+        "store":  "Walmart",
+        "product":  "Minnesota Cultivated Long Grain Wild Rice (16oz)",
         "verdict":  "EXCLUDED",
-        "detail":  "include \u002780%?\\s*lean[^.]*20%?\\s*fat\u0027 matched, exclude \u0027patties\u0027 killed it"
+        "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027long\\s+grain\u0027 killed it"
+    },
+    {
+        "id":  "southern-mixed-greens",
+        "store":  "Walmart",
+        "product":  "Glory Foods Seasoned Southern Style Mustard Greens, 27 oz., Can",
+        "verdict":  "REFUSED-BY-EXCLUDE",
+        "detail":  "no admit pattern matches, and exclude \u0027\\b(?:collard|turnip|mustard|kale|spinach)\\s+greens?\\b(?!.*\\bmixed\\b)\u0027 would refuse it anyway"
+    },
+    {
+        "id":  "wild-rice",
+        "store":  "Family Fare",
+        "product":  "Canoe White\u0027n Wild Rice 6 Oz",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027wild\\s+rice\u0027 matched, exclude \u0027\\bwhite\\b\u0027 killed it"
+    },
+    {
+        "id":  "cumin-seeds",
+        "store":  "Walmart",
+        "product":  "Pride of India Ground Cumin Seed, 8 oz Dual Sifter Bottle",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027\\bcumin seeds?\\b\u0027 matched, exclude \u0027\\bground\\b\u0027 killed it"
     }
 ]
