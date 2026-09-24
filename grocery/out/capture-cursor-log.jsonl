@@ -228,3 +228,7 @@
 {"at":"2026-09-23T08:01:35","store":"Family Fare","from":398,"to":401,"day":"2026-09-23","caller":"pull-regular-familyfare.ps1","pid":33764}
 {"at":"2026-09-23T08:02:23","store":"Baker\u0027s","from":206,"to":214,"day":"2026-09-23","caller":"pull-regular-bakers-api.ps1","pid":38740}
 {"at":"2026-09-23T09:33:48","store":"Family Fare","from":401,"to":404,"day":"2026-09-23","caller":"pull-regular-familyfare.ps1","pid":8372}
+{"at":"2026-09-24T06:34:58","store":"Sam\u0027s Club","from":229,"to":237,"day":"2026-09-24","caller":"build-sams-deals.ps1","pid":37180}
+{"at":"2026-09-24T06:36:08","store":"Walmart","from":194,"to":202,"day":"2026-09-24","caller":"build-walmart-deals.ps1","pid":26680}
+{"at":"2026-09-24T06:37:33","store":"Aldi","from":194,"to":202,"day":"2026-09-24","caller":"build-aldi-regular.ps1","pid":33636}
+{"at":"2026-09-24T07:01:22","store":"Family Fare","from":404,"to":407,"day":"2026-09-24","caller":"pull-regular-familyfare.ps1","pid":31848}
