@@ -187,6 +187,23 @@ if ($SelfTest) {
     $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltRise
     $rc3 = $LASTEXITCODE
     T 'CLEAN TWIN  a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+    # FAIL CLOSED (2026-09-24, pd-currency-2026-09-23.md). MUST FIRE: conflict markers and an absent baseline each exit
+    # 3 naming which, and write nothing. CLEAN TWIN: -Accept still records one.
+    $ltConf = Join-Path $lt 'baseline-conflict.json'
+    [IO.File]::WriteAllText($ltConf, ('<' * 7) + " HEAD`n{ ""line_only"": 2 }`n" + ('=' * 7) + "`n{ ""line_only"": 0 }`n" + ('>' * 7) + " theirs`n", (New-Object Text.UTF8Encoding($false)))
+    $ltConfSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltConf))
+    $o4 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltConf)
+    $rc4 = $LASTEXITCODE
+    $same4 = [string]::Equals($ltConfSeed, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltConf)), [StringComparison]::Ordinal)
+    T 'MUST FIRE  a baseline holding conflict markers exits 3, blind=baseline-unreadable, and its bytes are unchanged' ($rc4 -eq 3 -and $same4 -and (($o4 -join "`n") -match 'blind=baseline-unreadable')) ("rc=$rc4 unchanged=$same4")
+    $ltAbsent = Join-Path $lt 'baseline-absent.json'
+    $o5 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltAbsent -Tighten)
+    $rc5 = $LASTEXITCODE
+    T 'MUST FIRE  an ABSENT baseline under -Tighten exits 3, blind=baseline-missing, and no file is created' ($rc5 -eq 3 -and -not (Test-Path -LiteralPath $ltAbsent) -and (($o5 -join "`n") -match 'blind=baseline-missing')) ("rc=$rc5 created=$(Test-Path -LiteralPath $ltAbsent)")
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltAbsent -Accept
+    $rc6 = $LASTEXITCODE
+    $doc6 = if (Test-Path -LiteralPath $ltAbsent) { [IO.File]::ReadAllText($ltAbsent) | ConvertFrom-Json } else { $null }
+    T 'CLEAN TWIN  -Accept over an absent baseline records the current count (1) and exits 0' ($rc6 -eq 0 -and $null -ne $doc6 -and [int]$doc6.line_only -eq 1) ("rc=$rc6 line_only=$(if ($doc6) { $doc6.line_only })")
   } finally {
     Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
   }
@@ -217,15 +234,22 @@ foreach ($w in $findings) { Write-Output ('  LINE-ONLY  ' + $w) }
 $blF = if ($BaselineFile) { $BaselineFile } else { Join-Path $here 'out\source-comment-strip-baseline.json' }
 $blDir = Split-Path $blF -Parent
 if (-not (Test-Path $blDir)) { New-Item -ItemType Directory -Force $blDir | Out-Null }
-$base = $null
-if (Test-Path $blF) { try { $base = [int]((Get-Content $blF -Raw | ConvertFrom-Json).line_only) } catch { $base = $null } }
+# FAIL CLOSED ON A MARK NOBODY CAN READ (2026-09-24, pd-currency-2026-09-23.md): an absent or unreadable baseline used to
+# set $base to $null and the next branch WROTE the current count, a rise included, and exited 0.
+$blRead = Read-TcRatchetBaseline -Path $blF -Field 'line_only'
+$base = $blRead.Value
 function Write-ScsBaseline([int]$Count) {
   $json = @{ generated = (Get-Date).ToString('s'); line_only = $Count; examined = $scanned; names = @($findings)
      note = 'High-water mark for the comment-strip ratchet (2026-09-07, the 8 libraries run-gates enrolled from their own headers). This number may only go DOWN.' } | ConvertTo-Json -Depth 3
   # LF with the BOM the committed blob carries, not the CRLF Set-Content writes under PS 5.1 (lib\lf-write.ps1).
   $null = Write-TcLfFile $blF $json
 }
-if ($Accept -or $null -eq $base) {
+if (-not $Accept -and $blRead.State -ne 'read') {
+  $blTok = Get-TcRatchetBlindToken $blRead.State
+  Write-Output ("! source-comment-strip: COULD NOT EVALUATE - the baseline $blF is $($blRead.State) ($($blRead.Why)), so there is no mark to hold $n against. Nothing was written: a plain run and -Tighten never record a mark. Restore it from git, or record the current count on purpose with -Accept.")
+  Exit-Guard -Name 'source-comment-strip' -Summary "line_only=$n examined=$scanned blind=$blTok" -Code 3
+}
+if ($Accept) {
   Write-ScsBaseline $n
   Write-Output ("  baseline written: $n of $scanned examined. From here the number may only go DOWN.")
   Exit-Guard -Name 'source-comment-strip' -Summary "line_only=$n examined=$scanned baseline=$n" -Code 0
