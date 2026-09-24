@@ -13,6 +13,11 @@ that was not applied as written, and why. Scratch scripts live under `%TEMP%\con
 scratch. W0.3 commits a harness that re-derives every baseline read from the PUSH LEDGER. Every figure read from reflog,
 git history or transcripts is marked SCRATCH where it is used, unless W0.3's `-History` section re-derives it.
 
+**AMENDED 2026-09-23 evening (section 16, ruled by Brad): design A replaces the chain lease.** Brad chose "Measure
+first, then decide"; the early-rehearsal measurement passed its 30% bar (10 of 23 chain landings), so Row 9 (W9.1 to
+W9.5) is built in full. W6.1 and W6.2 are replaced, W2.3 is absorbed into W9.3, W2.2R is extended by W9.4, and D8's
+exception to the 2026-09-12 ruling is withdrawn. Section 16.4 lists every change to the sections below.
+
 **AMENDED 2026-09-23 (section 15, adopted by Brad): the sibling fix `5841e96b1` is the base of W2.1 and W2.2, and Row 8 closes the causes the first plan left standing.** **RULED 2026-09-23 (Brad, section 12 has each ruling): build all 8 rows. Every recommendation in section 12 is the
 ruling, except D8: the chain lease goes LIVE from its first commit with no shadow period.** Brad's words on D8: *"I dont
 want to shadow. i want to push live as long as its a thoughtful fix and ready to go"*. W6.1 is rewritten for that: its
@@ -836,6 +841,7 @@ rewrites these cases in its own commit):
 Done when: `-SelfTest` exits 0 with its verdict line. B2, B3 and B8 are read on their dates (section 8).
 
 **W2.3 test-auditors and the rehearsal run side by side** (D1).
+**[ABSORBED 2026-09-23 evening into W9.3, section 16. Not built on its own; W9.3 uses this text with its changes.]**
 File: `ops/push-main.ps1`.
 1. **Step 0, before any code: three readings and one measurement.**
    - How `ops/rehearse-chain.ps1` cleans its clone, and what a killed run leaves behind (memory
@@ -1184,6 +1190,7 @@ a push that edits a member still needs one; MUST NOT FIRE: a push touching no me
 Done when: the self-test exits 0 with its verdict line.
 
 **W6.1 The chain lease: chain-touching pushes serialise their final rehearsal** (D8). Needs W2.2 and W6.0.
+**[REPLACED 2026-09-23 evening by W9.2, section 16. Not built; read 16.4 for what carries over.]**
 Files: new `lib/chain-lease.ps1`, `ops/push-main.ps1`, `.claude/rules/ops-and-gates.md` (the lock order), and, only
 when the default flips to live, `CLAUDE.md`'s "THE GATE MUST NOT RUN INSIDE THE LOCK" paragraph.
 1. **Which pushes take it.** Every push-main push whose `-ForPush` child reports it chain-touching (its `outcome=`,
@@ -1825,6 +1832,7 @@ from the landing worktree prints the pre-flight lines and moves nothing. Bars: B
 directly) and B13a.
 
 **W2.2R Catch-up on top of the sibling's loop (replaces W2.2).** File: `ops/push-main.ps1`. Needs W2.1R.
+**[Stands; EXTENDED 2026-09-23 evening by W9.4, section 16, which changes only the lock phase.]**
 1. `$script:PmMaxCatchUpRounds = 3`, the first plausible value and not swept. When main stops moving, no catch-up
    round runs. After a round's legs pass and before `Enter-TcPushLock`, run one unlocked fetch (W2.1R step 2). If the
    remote has not moved, take the lock. If it moved, rebase outside the lock (a conflict refuses with `phase=catchup`),
@@ -1952,7 +1960,8 @@ Bar: B12.
 
 **W8.3 A chain push not descended from the lease holder is refused in seconds while the lease is held (D14, NEEDS A
 RULING).** Files: `ops/hooks/pre-push`, `lib/chain-lease.ps1` (a zero-wait probe), `ops/test-prepush-hook.ps1`. Needs
-W6.1. Evidence: 15.3. 6 of 17 chain landings since the gate ignored the lease, and 1 of today's 2 during-run voids was
+W6.1. **[AMENDED 2026-09-23 evening, section 16.4: read "the lease" as the chain queue of W9.2 throughout; the probe is in
+`lib/chain-queue.ps1`, the token is `TC_CHAIN_QUEUE_HOLDER`, the cause is `chain-queue`, and it needs W9.2.]** Evidence: 15.3. 6 of 17 chain landings since the gate ignored the lease, and 1 of today's 2 during-run voids was
 one of them (row 42, `855171a1e`).
 1. Directly after the rehearsal record check that W1.1 moved to the front of the hook, and before run-gates and any
    lock: when that check's `CHAIN-REHEARSAL-CHECK-COMPLETE` outcome says the push is chain-touching (anything but its
@@ -2065,7 +2074,8 @@ Fixtures (the suite's sandbox, `TC_PUSH_LEDGER_ROOT` per run as W0.2 set it):
 Re-install the hook from a clean worktree at the landed origin/main. Done when: the suite exits 0, and the first real
 refusal afterwards is in the ledger.
 
-**W6.2 The manifest set follows dot-sources. This is a soundness gap, and it ADDS attempts.** File:
+**W6.2 The manifest set follows dot-sources. This is a soundness gap, and it ADDS attempts.**
+**[REPLACED 2026-09-23 evening by W9.5, section 16, which lands before W9.1.]** File:
 `ops/rehearse-chain.ps1` (`Get-RhManifestSet`) or `ops/chain-manifest.json`'s derive rule. This is a chain-touching
 push, so budget its rehearsal. Evidence: the 130 members at origin/main reach 44 non-member `.ps1` files through
 dot-sources (for example `meal-prep/engine/publish.ps1:40` sources `meal-prep/lib/render-tokens.ps1`). 15 of 577
@@ -2195,3 +2205,541 @@ contended stratum is judged separately.
   checkout's HEAD with `git reset --keep`, and only when HEAD is where the run found it. W8.3 adds a hook refusal that
   lasts at most one lease hold, and its rollback is a hook revert plus a re-install. W8.4 moves a check from the push
   to the daily chain. W8.5 adds a partial second test-auditors run on a red only.
+
+## 16. Amendment 2026-09-23 (evening): design A replaces the chain lease
+
+**Status: RULED 2026-09-23 (Brad).** An architecture review read the push path end to end the same afternoon and
+recommended its design A, "rehearse at commit, stack at push, lock only the swap", over the plan's chain lease (W6.1).
+Before anything was built, its section 7 step 1 wrote a bar in the metric's own units: *"if at least 30% of chain
+landings would have hit, build parts A1 and A3. If under 30%, build A2 and A4 only."* Brad chose **"Measure first, then
+decide"**. The measurement read 43%, over the bar, so **design A is built in full**, all five parts, as Row 9 below. The
+lease is not built. Everything in sections 1 to 15 that this section does not name stands as written.
+
+The review is scratch: `%TEMP%\push-arch-review\REVIEW-push-architecture-2026-09-23.md` (`git hash-object` blob
+`43938012`), code read at origin/main `a4f64d867`. **Every figure from it is marked (review)** and is its own SCRATCH
+derivation. Figures taken from earlier sections of this plan are marked (plan). The early-rehearsal measurement is
+SCRATCH too and is cited by its harness blobs below.
+
+### 16.0 Knowledge consulted (for this amendment)
+
+- `CLAUDE.md`, "THE GATE MUST NOT RUN INSIDE THE LOCK" (Brad, 2026-09-12): *"Serialising the PUSH costs nothing ...
+  serialising the GATE costs everything."* This is the test W9.2 and W9.4 are held to. The chain queue serialises the
+  swap, which `refs/heads/main` serialises already, and holds nothing that a leg waits for. The lease held a lock across
+  gate legs and needed D8's named exception; design A needs none, so that exception is withdrawn (16.8).
+- `.claude/rules/ops-and-gates.md`, "ORDER DECIDES WHICH PUSHES ARE REFUSED, NEVER HOW MANY ... State that bound beside
+  any fairness fix". W9.2 states its ceiling (6 rehearsal slots divided by the rehearsal's length) and its head-of-line
+  cost.
+- `.claude/rules/ops-and-gates.md`, "EVERY LOCK PATH DEGRADES TO THE DAY BEFORE". A queue that cannot be read or
+  written, an early rehearsal that cannot start, a stop that cannot be delivered and a hand-back cap that is reached all
+  fall back to the path before this section, and none of them refuses.
+- `.claude/rules/ops-and-gates.md`, "THE LOCK ORDER IS DECLARED, OUTERMOST FIRST", and "The order covers every BLOCKING
+  WAIT". 16.6 places the queue ticket and the early-rehearsal cap, and says why the ticket is not a lock held across a
+  leg.
+- `.claude/rules/measurement.md`, "Write the ACCEPTANCE BAR before the run": the 30% bar was written in the review
+  before the run, and 16.5's bars are written here before any W9 item runs. "NAME THE HARNESS AND THE COMMIT IT RAN AT"
+  and "Never cite your own unlanded commit hash, anywhere: cite a blob": 16.1 names every harness by its blob and the
+  origin/main commit it ran at, and no item below cites a hash of its own.
+- Store search: `"merge queue dependent pipeline rehearsal"`, nothing applicable beyond the review.
+- Memory index lines (the files were not opened): `an-intention-has-no-exit-code` (D19: an explicit "remember to
+  prepare" step is not a trigger), `powershell-exiting-event-does-not-fire` (a stopped rehearsal is stopped by its own
+  process, never killed, or its scratch clone leaks) and `ps-start-process-exitcode-needs-handle` (W9.3's starter).
+
+### 16.1 The ruling and the measurement
+
+**What was measured.** For every chain-touching landing after the rehearsal gate `a66ef0e94` (2026-09-22T21:26:14Z):
+would a rehearsal started when the session committed that content have finished, and still been valid, before the
+push started? One row per landing, written before any total, in `rows.jsonl`.
+
+- A **landing** is one `update by push` entry in the shared reflog of `refs/remotes/origin/main` whose tip changed the
+  manifest key (a replica of `Get-RhManifestSet`, `rhkey.py`). 23 landings, 2026-09-22T23:42:45Z to
+  2026-09-23T18:05:46Z: 18 through push-main, 5 plain pushes.
+- The **commit time** is the earliest committer date among every copy of the first landed commit carrying that key's
+  content (same author, author date, subject and patch-id): a pre-rebase copy for 19 of 23 rows, the landed commit for 4.
+- The **push start** is the matching push-main row's `run` start (within 30 s); for a plain push it is the landing time,
+  which is optimistic.
+- **Valid** means the manifest set of main as it stood at the commit time equals the set of the main the push landed
+  on: nothing changed the set in between. **HIT** means valid, and a gap from commit to push start at least the key's
+  recorded rehearsal seconds (804 s when no verdict records it).
+
+| Stratum | HIT | Note |
+|---|---|---|
+| all chain landings | **10 of 23 (43%)** | the ruled figure; bar 30% |
+| push-main landings | 6 of 18 (33%) | one landing above the bar: 5 of 18 would be 28% |
+| plain-push landings | 4 of 5 (80%) | plain start times are optimistic |
+| early rehearsal on HEAD as committed, NOT rebased onto origin | 6 of 23 (26%) | under the bar |
+| voided only by a change before push start (the review's variant) | 11 of 23 (48%) | reported, not the verdict |
+
+- **The misses:** 13. 12 were voided by 1 or 2 other chain landings between the commit and the landing. 1 was valid
+  with a 6 s gap against a 1,242 s rehearsal.
+- **Sensitivity**, each reading 10 of 23: a flat 804 s bar for every row; the author date as the commit time.
+- **Gaps:** median commit-to-push gap 2,597 s, median rehearsal 833 s. 21 of 23 gaps were long enough; validity is
+  what fails.
+- **Coverage:** 80 reflog push entries after the gate, all `update by push`; 67 of 67 landed push-main ledger rows in
+  that window matched a reflog entry within 30 s.
+- **Harness** (scratch, `git hash-object` blobs, never commits): `%TEMP%\early-rehearsal\measure.py` `a6a2b8ed`,
+  `derive.py` `e9d921b2`, `checks.py` `050c4a4e`, `%TEMP%\pushgood-causes\rhkey.py` `4f2f4789`, rows
+  `rows.jsonl` `5e9017ff`, run at origin/main `85238faf6`. `derive.py` and `checks.py` were re-run for this amendment,
+  exit 0 each, with the totals above.
+
+**Three things the pass does not say**, written down so the bar is not over-read:
+1. **The rebase condition is load-bearing.** The bar passes ONLY when the early rehearsal runs on HEAD rebased onto
+   origin/main as it stood at commit time (43%). On HEAD as committed it reads 26%, under the bar. So W9.1's rebase is
+   the design, not an optimisation, and a W9.1 that rehearses the unrebased commit has not built what was measured.
+2. **The push-main margin is thin.** 6 of 18 is one landing above 30%. Push-main is the route W8.3 makes the only one for
+   chain changes, so B22 re-measures the hit rate live, on push-main landings, and a live reading under the bar sends
+   W9.1's trigger back to Brad (16.5).
+3. **One day, 23 landings, one bar, five variants read.** A number that passed is not a number that will hold. The
+   misses are the queue's case, not the early rehearsal's: 12 of 13 were voids by another chain landing, which W9.2
+   stacks on instead of voiding.
+
+### 16.2 The design, in this plan's terms
+
+```
+session commit that changes the manifest set
+  EARLY REHEARSAL (W9.1)     fetch; rehearse HEAD rebased onto origin as it is now, in a scratch clone, in the
+                             background; a later commit in this checkout that changes the key supersedes it
+push-main start
+  guard, round-1 sync, seed  (W2.1R, W8.1, as ruled)
+  CHAIN QUEUE (W9.2)         a chain-touching push takes a ticket; its rehearsal is of HEAD stacked on the tickets
+                             ahead of it (or on origin when none is ahead), usually found recorded by W9.1 in seconds
+  LEGS, unlocked (W9.3)      [ run-gates, then test-auditors ]  ||  [ rehearsal of the stacked tip ]
+                             any red -> the rehearsal is stopped, the push refuses
+  CATCH-UP (W2.2R)           fetch; if main moved, rebase outside the lock and re-run each leg on its own keys
+  HEAD OF QUEUE (W9.2)       a queue member waits until every ticket ahead has landed or left
+  LOCK, the swap only (W9.4) fetch; unmoved -> git push (the hook replays); moved -> hand the lock back, rebase and
+                             re-run outside, come back; after 3 hand-backs, rebase inside as today
+    pre-push hook            rehearsal record check (W1.1), queue probe (W8.3, amended), run-gates, test-auditors
+KEY (W9.5)                   the manifest set includes the dot-source closure of its scripts
+```
+
+**Guarantees kept:** all three legs judge the exact tip that lands, and the hook inside the lock is unchanged and
+still the last word. **Removed:** the only lock this plan held across gate legs. **Gained:** a queue member is not
+voided by the members ahead of it, and dot-sourced code the chain runs is rehearsed.
+
+**The bound, stated beside the fix as the rules require.** The queue orders chain landings and adds no rehearsal
+capacity. The ceiling is the rehearsal slots divided by the rehearsal's length: 6 slots over 800 to 1,240 s is about 17
+to 27 chain landings an hour (review), against about 4.2 an hour offered at the 09-19 peak (plan, 16 landings an hour
+times 26.4%) and the lease's 2.4 to 12 (plan). Its cost is head-of-line: a member ready before the one ahead waits for
+it, up to that member's remaining rehearsal (up to about 21 minutes, review). It never livelocks, because the only
+re-rehearsal is a restack after a ticket ahead failed or left.
+
+**Still exposed, as under W6.1:** a plain `git push` of a chain change, or a checkout whose push-main predates W9.2, can
+land ahead of the queue and void a stacked verdict. The in-lock verdict check and the hook's `-CheckPush` still refuse
+content without a covering verdict, so the exposure costs time, never correctness. W8.3 (amended) and W2.1R's re-exec
+shrink it.
+
+### 16.3 Row 9: design A
+
+Every item is in the push-main lane of 15.4 (one lane, one item landed and verified before the next), because W9.1,
+W9.2, W9.3 and W9.5 also change `ops/rehearse-chain.ps1`, which is itself a chain-manifest file: each of those is a
+chain-touching push, so budget its rehearsal (about 14 minutes and one of 6 slots, plan). Section 5's rules apply to
+every item: pathspec commits, blobs never own hashes, the re-reads each item owes, `# gate-inputs:` lines verified with
+`-VerifyDeclared`, private lock names in every fixture, overlap never a wall clock, the suite's last line its verdict,
+literal-case suites asserting their count. New row fields land as W0.1R fields in `lib/push-ledger.ps1` in the item that
+first writes them.
+
+**W9.1 Rehearse at commit: HEAD rebased onto origin at commit time, with supersede.** Files: `ops/rehearse-chain.ps1`
+(`-Early`, `-Onto`, `-StackFile`, `-StopFile`, the verdict record), `ops/push-main.ps1` (`-Prepare`),
+`ops/hooks/post-commit` (new, D19), `ops/install-hooks.ps1`, `ops/audit-hook-installed.ps1`. Needs W9.5 (16.10).
+0. **Step 0, before any code: what a stopped rehearsal leaves behind.** Read `Invoke-RhProcess` and `Invoke-RhArm`
+   (`ops/rehearse-chain.ps1`, :414 and :470 at origin/main) and list everything the ship path writes OUTSIDE the scratch
+   root (`%LOCALAPPDATA%`, `%TEMP%`, any named mutex, any ledger lock). Then stop one rehearsal of a fixture chain by
+   stopping its child tree while the parent keeps running, and compare those places before and after. If the child
+   leaves shared state behind (an abandoned ledger lock, a half-written journal outside the root), the stop in step 4 is
+   NOT built: a superseded rehearsal runs to the end and records its verdict, which is harmless because a verdict covers
+   only its own key, and costs one slot. Report which it was in the landing commit.
+1. **`-Onto <sha>` and `-StackFile <path>`.** The rehearsal's arm, after `git clone --shared --no-checkout` and before
+   the seed, checks out the base (`-Onto`, or the first line of the stack file) and cherry-picks, in order, every commit
+   the stack file lists after it (W9.2 writes it), then the commits of `<merge-base>..<Commit>`. Cherry-picks, not a
+   rebase of any worktree: every commit is already in the shared object store, and the rehearsal's own clone is the only
+   tree that moves. The verdict is keyed on `Get-RhManifestSet` at the resulting tip, by the unchanged key function, and
+   written to the same store. A cherry-pick conflict records NO verdict, prints `chain-rehearsal: STACK CONFLICT` with
+   the files and the commit it stopped on, and exits 3 with `blind=stack-conflict`.
+2. **`-Early -Onto <sha>`.** Rehearse `HEAD` onto `<sha>` in the background, with every rule of a push-time rehearsal
+   (the slot cap, the verdict store, the interlock self-test), and:
+   - start nothing when the content touches no manifest member (`Get-RhTrigger` against `<sha>`, with W6.0's union),
+     when a verdict exists for the rebased key, or when an in-flight early rehearsal in any checkout already holds that
+     key;
+   - record the in-flight run at `%LOCALAPPDATA%\ThriftyCrew\chain-rehearsal\early\<SHA-256 of the lower-cased
+     checkout path>.json` (pid, key, onto, head, start, stop file), written with `Write-TcAtomicFile`;
+   - take an **early cap** before the rehearsal slot: a `gate-slots` instance, prefix `Global\tc-rehearsal-early-`,
+     `$script:RhEarlyMaxSlots = 4` of the 6. The first plausible value, not swept: an early rehearsal is speculative and a
+     push-time one is a push waiting, so 2 slots are always left to pushes. Push-time rehearsals never take it.
+3. **The trigger.** `ops\push-main.ps1 -Prepare` fetches (W2.1R step 2's fetch), starts `rehearse-chain.ps1 -Early -Onto
+   <origin/main sha>` as a detached process, prints the key and the in-flight file, and returns 0 without moving HEAD or
+   running a leg. **`ops/hooks/post-commit`** (D19) runs the same start detached and returns 0 at once. It never blocks
+   and never fails a commit, whatever the starter does. It fires only under `CLAUDE_CODE_SESSION_ID`, as W7.2's
+   commit-msg check is judged, and NEVER inside a rehearsal: `rehearse-chain.ps1` exports `TC_REHEARSAL_RUN=1` to its
+   arm, and the hook exits 0 when it is set. Read first how `Invoke-RhCommitStage` points the clone at hooks: a clone
+   that runs `ops/hooks` from the rehearsed tree would otherwise start a rehearsal from inside a rehearsal. Until D19 is
+   ruled yes, `-Prepare` is the only trigger, and B22 is not read.
+4. **Supersede.** A new early start in a checkout whose in-flight file names a DIFFERENT key writes that run's stop
+   file first. A commit that leaves the key unchanged starts nothing and stops nothing, which is the measured condition
+   (the first commit carrying the landed key's content). `Invoke-RhProcess`'s wait polls `-StopFile` every 5 s (first
+   plausible, not swept); on seeing it, it stops its OWN child tree, writes no verdict, lets its own `finally` remove the
+   scratch root, and ends with `CHAIN-REHEARSAL-CHECK-COMPLETE code=3 blind=stopped`. The rehearsal process itself is
+   never killed by anyone else. A stop that cannot be written is ignored and the older run finishes (step 0's fallback).
+5. **Deliberately not re-triggered on a main move.** An early verdict voided by a later landing is not re-rehearsed in
+   the background: that would multiply rehearsals by the landing rate. W9.2 rehearses the stacked tip at push time instead.
+6. **The verdict record** gains `early` (bool), `onto`, `head`, `checkout` (hashed as the in-flight file is) and
+   `stage_secs` (seconds for clone, checkout, seed, interlock self-test, ship path and commit stage), the one instrument
+   the review found the rehearsal lacks (review 7.2). `-CheckPush` and `-ForPush` ignore the new fields.
+7. **push-main records** `early_hit` on every chain-touching row: `yes` when the first `-ForPush` of the run found a
+   covering verdict whose record says `early`, `no` otherwise, `not-chain` when the push touched no member.
+Fixtures (temp bare remote and clones, private slot and early-cap prefixes, a stub chain):
+- MUST FIRE: a commit that changes a member starts one early rehearsal onto the fetched origin sha, and its verdict key
+  equals the key `-ForPush` computes when that same content is pushed onto that origin.
+- MUST FIRE, the measured condition: with origin moved past the commit's base by a commit touching no member, the
+  early verdict still covers the push. With origin moved by one that DOES touch a member, it does not.
+- MUST NOT FIRE: a commit touching no member starts nothing.
+- MUST NOT FIRE: a commit whose rebased key already has a verdict, or an in-flight early run in another checkout,
+  starts nothing.
+- MUST FIRE, supersede: a second commit that changes the key writes the first run's stop file; the first ends
+  `blind=stopped`, its scratch root is gone, and the second runs. CLEAN TWIN: a second commit that leaves the key
+  unchanged stops nothing.
+- MUST NOT FIRE: a stopped run changes nothing in the verdict store (every file's hash identical before and after).
+- MUST NOT FIRE: with `TC_REHEARSAL_RUN=1` the post-commit hook starts nothing.
+- MUST NOT FIRE: without `CLAUDE_CODE_SESSION_ID` the post-commit hook starts nothing.
+- MUST FIRE: a stack whose cherry-pick conflicts records no verdict and exits 3 with `blind=stack-conflict`.
+- CLEAN TWIN: a post-commit hook whose starter throws still returns 0, and the commit exists.
+- CLEAN TWIN: `-ForPush` after an early pass of the same content prints PASSED from the recorded verdict and runs no
+  rehearsal; the row carries `early_hit=yes`.
+- MUST FIRE, the early cap: with 4 early caps held from another process (`lib/mutex-hold.ps1`, private prefix), a 5th
+  early run waits, while a push-time rehearsal is still granted a slot.
+- CLEAN TWIN: the verdict record carries `early`, `onto`, `head`, `checkout` and a numeric `stage_secs` for every stage.
+Mutants: M19 rehearses `HEAD` without `-Onto` (the unrebased variant), which must turn the measured-condition MUST FIRE
+red. M20 removes the `TC_REHEARSAL_RUN` guard, which must turn its MUST NOT FIRE red.
+Done when: step 0 is reported, both suites exit 0 with their verdict lines and counts, `-VerifyDeclared` passes, the
+hook is re-installed from a clean worktree at the landed origin/main (section 5) with `audit-hook-installed` exit 0, and
+the first real chain commit afterwards writes an in-flight file. Bars: B22, B21.
+
+**W9.2 The chain queue: each ticket stacked on the one ahead (replaces W6.1's lease).** Files: new `lib/chain-queue.ps1`,
+`ops/push-main.ps1`, `ops/rehearse-chain.ps1` (reads the stack file of W9.1 step 1), `.claude/rules/ops-and-gates.md`
+(the lock order, 16.6). Needs W6.0, W9.1 and W9.3.
+1. **Who joins.** Exactly W6.1 step 1's set: every push-main push whose `-ForPush` child reports it chain-touching, with
+   W6.0's union trigger, INCLUDING a `-NoRehearsal` or `TC_NO_REHEARSAL` push, because skipping the rehearsal does not
+   stop it voiding the tickets behind it.
+2. **`lib/chain-queue.ps1`** reuses `lib/gate-slots.ps1`'s ticket functions (`New-TcGateTicket`,
+   `Test-TcGateTicketLive`, `Get-TcGateQueueAhead`, `Remove-TcGateTicket`: arrival order, liveness by the ticket's mutex,
+   dead tickets swept) and NEVER `Enter-TcGateSlots`: the queue grants no slot and excludes nobody from running a leg.
+   Read `lib/gate-slots.ps1` first; if the ticket functions cannot be called without a slot grant, factor them out in
+   this commit with gate-slots' own self-test green. It takes `-Prefix` and `-QueueRoot` seams and REFUSES the
+   production prefix whenever `$env:TC_CHAIN_QUEUE_SELFTEST` is set; push-main's `-SelfTest` sets it.
+3. **The ticket record**, beside each ticket, written with `Write-TcAtomicFile`: `ticket`, `pid`, `checkout`, `base`
+   (the origin sha it stacked on), `range` (the shas of `<merge-base>..HEAD`, oldest first), `state` (`rehearsing`,
+   `ready`, `swapping`, `landed`, `left`), `rh_key` (the manifest key of its stacked tip) and `updated_utc`. A ticket
+   rewrites its record whenever its HEAD moves (a catch-up or hand-back rebase).
+4. **Stacking.** At join, push-main reads every live ticket ahead, oldest first, and writes a per-run stack file: the
+   current origin sha, then the `range` of every ahead ticket whose `state` is not `landed` or `left`. Its push-time
+   rehearsal (W9.3's starter) runs `-ForPush -StackFile <file>`, which finds a recorded verdict for the stacked key in
+   seconds or rehearses it. **The worktree is NEVER rebased onto an ahead ticket's commits**: only the rehearsal's clone
+   applies them, because a ticket that leaves would otherwise land its commits with this push. The legs (run-gates,
+   test-auditors) judge the worktree HEAD, which is rebased onto origin only, and judge it again, warm, after the final
+   rebase (W9.4), so they always judge the exact tip that lands.
+5. **Waiting for the head.** After its legs pass and its catch-up settles, a member waits until every ticket ahead is
+   `landed`, `left` or dead, printing its position and the depth every 5 minutes. It holds nothing but its ticket while
+   it waits: no gate slot, no rehearsal slot, no push lock. When the ones ahead have landed, it runs W9.4's swap. Because
+   only members change the manifest set once W8.3 is live, its final tip's set equals the set it was rehearsed on, and
+   the in-lock verdict check passes with no second rehearsal.
+6. **Restack, the only re-rehearsal.** When a ticket ahead turns `left` or dies, or rewrites its `range` so that the
+   stacked key moves, the member rebuilds its stack file and rehearses once more (`restacks` counts it). A ticket that
+   is refused writes `left` before it releases.
+7. **A stack conflict is a warning, not a refusal.** When the rehearsal reports `blind=stack-conflict`, push-main prints
+   which ticket ahead (checkout and pid) and which files, records `stack=conflict`, and keeps its place. If that ticket
+   lands, the member's catch-up rebase refuses it with `phase=catchup`, which is the correct refusal. If that ticket
+   leaves, the member restacks.
+8. **The wait bound, and it is not a total** (W6.1 step 5's reasoning, carried over). `Get-TcGateQueueAhead` progress
+   bounds time WITHOUT QUEUE MOVEMENT: `$ChainQueueStallSec = 3600`, the first plausible value above the longest single
+   state a head ticket holds (one rehearsal plus its legs and 3 hand-backs, about 45 minutes), not swept. A waiter that
+   leaves a moving queue lands unstacked and voids the tickets behind it, so only a wedged or frozen head times a waiter
+   out. A timed-out waiter writes `left`, proceeds exactly as the W2.2R path does, and records `queue=timeout` and
+   `queue_ahead` (the head's pid and checkout). It never refuses.
+9. **Mode**, a push-main parameter `-ChainQueue`, default `live` from its first commit (D8's ruling that Brad wants a
+   thoughtful fix live, not shadowed, carried over to its replacement). `off` never opens the queue and records
+   `queue=off`: that is the ROLLBACK, a one-line default flip or `-ChainQueue off` on one push. A queue that cannot be
+   created, read or written records `queue=error` and the push proceeds as the W2.2R path does.
+10. **The holder token.** While a member holds a ticket it exports `TC_CHAIN_QUEUE_HOLDER`, a token naming the queue
+   instance and its ticket, so its own hook child can tell it descends from a member (W8.3, amended). The token names its
+   instance, as `TC_PUSH_LOCK_HOLDER` learnt to.
+11. **Row fields:** `queue` (`joined`, `off`, `error`, `timeout`, `not-chain`), `queue_pos`, `queue_wait_ms`,
+   `queue_ahead`, `stacked_on` (the stack's base sha9 and the count of ahead ranges), `restacks`, `stack`.
+12. **READY, proved before the landing commit** (W6.1 step 9's condition, carried over). In the commit message, with their
+   outputs: every fixture below passes and push-main `-SelfTest` exits 0 with its verdict line and count;
+   `-VerifyDeclared` passes for a `# gate-inputs:` line that names `lib\chain-queue.ps1`, `lib\gate-slots.ps1` and
+   `lib\mutex-hold.ps1`; mutants M12, M14, M21 and M22 each turn their named case red from a temp mirror, originals
+   md5-identical afterwards; and **the three-push drill**, 3 times, all 3 passing: in a sandbox (a temp bare remote,
+   three clones, private queue prefix and root, stub legs, a rehearsal stub that records the tree it judged), three
+   chain-touching push-main runs start together. Assert that each stub judged origin plus exactly the ranges ahead of it,
+   that all three land in ticket order, and that each has `restacks=0` and a stub rehearsal count of 1. The order is read
+   from the queue records and the ledger rows, never from a wall clock.
+13. **The watch.** W0.3's `-Cost` prints every `queue=timeout` and `queue=error` row, and W3.4's twice-daily task pages
+   on any since its last run (W6.1 step 10, carried over).
+Fixtures (every queue a private-prefix instance):
+- MUST FIRE, stacking: with a ticket ahead, the member's rehearsal stub judged origin plus the ahead ticket's range plus
+  its own, not origin plus its own.
+- MUST FIRE, ordering: a member whose legs finish first does not take the push lock until the ticket ahead has landed.
+  A probe from another process reads the ahead ticket `landed` before the member's first lock take.
+- MUST FIRE, restack: a ticket ahead that is refused (its runner stub exits 1) turns `left`, and the member rehearses
+  once more onto origin alone, with `restacks=1`.
+- MUST NOT FIRE, the safety case: after a ticket ahead leaves, the member's landed commit has none of that ticket's
+  commits among its ancestors, and at no point did the member's worktree HEAD contain them.
+- CLEAN TWIN: a member lands after the one ahead with no second rehearsal: the in-lock check reads `covered` and the
+  stub rehearsed once.
+- MUST NOT FIRE: a non-chain push never takes a ticket, and lands while two members are queued.
+- MUST FIRE: a `-NoRehearsal` chain-touching push takes a ticket.
+- MUST FIRE, the stack conflict: a member that conflicts with the ticket ahead records `stack=conflict`, names that
+  ticket, keeps its place, and is refused `phase=catchup` once that ticket lands.
+- MUST FIRE, the timed-out branch: an ahead ticket held by a holder that never changes state (another process) and a
+  lowered bound gives `queue=timeout`, `queue_ahead` naming the holder, and a push that proceeds.
+- MUST FIRE: with `TC_CHAIN_QUEUE_SELFTEST` set, a call with the production prefix throws.
+- CLEAN TWIN: an unwritable queue root records `queue=error`, and the push lands as the W2.2R path does.
+- CLEAN TWIN, the rollback: `-ChainQueue off` takes no ticket (a probe from another process sees none throughout),
+  records `queue=off`, and the push lands as the W2.2R path does.
+- MUST NOT FIRE, the lock order: while a member waits for the head, a probe from another process can take the push lock
+  and a gate slot: the ticket holds neither.
+Mutants: M12 retargets to "a member takes the push lock before the ticket ahead has landed or left", which must turn the
+ordering MUST FIRE red. M14 retargets to "`-ChainQueue off` still takes a ticket", which must turn the rollback CLEAN TWIN
+red. M21 stacks on origin alone and ignores the tickets ahead, which must turn the stacking MUST FIRE red. M22 rebases the
+worktree, not the rehearsal clone, onto the stack, which must turn the safety MUST NOT FIRE red.
+Done when: step 12's READY list is in the landing commit, the landing's own ledger row carries `queue=joined` (or `off`
+with the reason) and the first real chain landing afterwards carries every field in step 11. Bars: B6, B10, B20, B21.
+
+**W9.3 The legs run beside the rehearsal (absorbs W2.3).** File: `ops/push-main.ps1`. Needs W2.2R and W9.1 (the stop
+file). W2.3 is not built separately: its step 0 readings and measurement, its `-RehearsalStarter` seam, its `Wait()`
+rules and its fixtures are W9.3's, with the changes below.
+1. **Step 0 is W2.3's step 0**, every reading and the measurement, with one more arm: the rehearsal now starts beside
+   run-gates too. Bar, written now: over 3 overlapped runs, **0 test-auditors timeouts** (rc 124 or 3), overlapped
+   test-auditors wall at most 1.25 times its median alone wall, AND overlapped run-gates wall at most 1.25 times its
+   median alone wall. Same method, alternating arm by arm, extra load only through `ops/cpu-load.ps1`. D1 is decided on
+   it, as ruled. If it fails, Brad decides with the numbers (16.8), and until then W2.3's shape (run-gates first, then
+   test-auditors beside the rehearsal) is what gets built.
+2. **The seam** is W2.3 step 2's `-RehearsalStarter`, whose `Wait()` returns `Code` and `Why` and keeps the sibling's
+   marker rule (15.4, W2.3 amended). The starter passes `-StackFile` (W9.2) and a per-run `-StopFile`.
+3. **The order.** After the round-1 sync and the seed: call the starter, then run run-gates, then test-auditors, in
+   process, then call `Wait()`. So the rehearsal starts at the same moment as run-gates, where W2.3 started it after
+   run-gates passed. The default `Wait()` decides exactly as W2.3 step 3 says: an empty `ExitCode` is 3, and a missing
+   or disagreeing `CHAIN-REHEARSAL-CHECK-COMPLETE` marker is 3.
+4. **A red leg stops the rehearsal.** A run-gates or test-auditors red writes the stop file at once. push-main then
+   waits for the child to exit (it never kills it), prints that it is waiting and why, and refuses `refused-gate-red`.
+   The child ends `blind=stopped` and records nothing. This removes W2.3's stated cost (a red push waiting up to about 14
+   minutes for its rehearsal before refusing) and reverses section 10's "cooperative cancel: NOT BUILT" row. If W9.1's
+   step 0 found the stop unsafe, the child is not stopped and W2.3's cost stands, stated in the commit.
+5. **Slots.** The child takes a rehearsal slot in its own process, run-gates takes gate slots in its own pool,
+   test-auditors takes none, and push-main holds none of them itself while the child runs. Say in the commit that no
+   process here holds one pool while waiting on the other, so this is not a nested acquisition.
+6. **Every catch-up and hand-back round** uses the same start, run, wait sequence, so the legs also overlap there.
+7. **Row fields:** `ta_rc` for every run (W2.3 step 7), `rh_stopped` (bool), and `rh_secs_list` (each round's rehearsal
+   seconds, 0 for a reused or found verdict), which B21 reads.
+Fixtures: every W2.3 fixture, with its overlap case widened:
+- MUST FIRE, overlap: the run-gates stub and the rehearsal stub each wait, through `lib/concurrency-probe.ps1`, until
+  both have started. A pipeline that starts the rehearsal after run-gates cannot satisfy it; a 120 s hang guard fails the
+  case. (W2.3's test-auditors-and-rehearsal overlap case stays.)
+- MUST FIRE, the stop: a red run-gates stub writes the stop file; the rehearsal stub, which polls it, exits
+  `blind=stopped` before push-main returns, and push-main refuses `refused-gate-red`.
+- MUST NOT FIRE: a stopped rehearsal's refusal is `refused-gate-red`, never `refused-rehearsal` or `refused-rehearsal-blind`.
+- CLEAN TWIN: all three legs pass and the lock is taken, with `rh_stopped=false`.
+- CLEAN TWIN: a catch-up round overlaps its legs too (W2.3's round-2 case).
+Mutants: M6 retargets to "start the rehearsal after run-gates", which must turn the widened overlap MUST FIRE red. M23
+removes the stop-file write on a red, which must turn the stop MUST FIRE red.
+Done when: step 0's measurement met its bar and D1 is decided, `-SelfTest` exits 0 with its verdict line and count, and
+B7, B11 and B20 are read on their dates.
+
+**W9.4 Lock only the swap: the hand-back rule and the 3-round fallback (extends W2.2R).** File: `ops/push-main.ps1`,
+the lock phase of `Invoke-TcPushMain` and `Invoke-TcSyncToRemote`'s in-lock call. Needs W2.2R.
+1. **Inside the lock**, fetch (W2.1R step 2, with its retry). If origin is the sha the last outside round judged, push:
+   the hook then replays the recorded run-gates verdict and the test-auditors pass, which is the not-rebased hold of
+   about 25 s (plan).
+2. **The hand-back rule.** If origin moved and fewer than `$script:PmMaxHandBacks = 3` hand-backs have run, do NOT rebase
+   inside the lock. Release it (`Exit-TcPushLock`), rebase outside it (a conflict refuses with `phase=catchup`), re-run
+   the legs on their own keys (W9.3's sequence; run-gates and test-auditors warm, the rehearsal leg found by key when the
+   manifest set did not move), and take the lock again. A queue member keeps its ticket and its place throughout. 3 is
+   the first plausible value, not swept; when main stops moving, no hand-back runs.
+3. **The fallback.** At the cap, rebase inside the lock as `5841e96b1` does today and run the sibling's in-lock verdict
+   check as the backstop. The cap is never a refusal: it degrades to the day before, which is what makes the rule unable
+   to livelock.
+4. **The counters stay apart** (W2.2R step 2's reason). A hand-back counts in `hand_backs`, never in the rehearsal
+   budget, unless its rehearsal leg REHEARSED (W0.1R's `rehearsed`).
+5. **Row fields:** `hand_backs`, `handback_sec` (outside time spent in hand-back rounds), and `rebase_phases` gains
+   `handback`. `inlock` now appears only at the cap.
+6. **Cost, stated.** A push is handed back when origin moved in the window from its last outside fetch to its in-lock
+   fetch. At 18 landings an hour and a 30 s window that is about 14% of pushes, at one warm keyed round each (about 60 to
+   130 s), about 15 s a push on average (review). In exchange the rebased in-lock hold of about 128 s (plan) becomes the
+   25 s replay, and the modelled lock utilisation at 18 landings an hour falls from 0.64 to 0.125 (review, from the plan's
+   holds). B23 measures it.
+Fixtures (the self-test's existing `Enter-TcPushLock` wrapper pattern, `ops/push-main.ps1` :1811 to :1822 at origin/main,
+lands a commit on the fake remote immediately before the real take):
+- MUST FIRE: a remote that moves just before the in-lock fetch hands the lock back once. No rebase ran while the lock was
+  held (HEAD at each release equals HEAD at that take), the row reads `hand_backs=1`, `lock_takes=2`, and it lands.
+- MUST FIRE, at the bar: a remote that moves before every in-lock fetch hands back exactly 3 times. The 4th take rebases
+  inside the lock, `rebase_phases` ends `inlock`, and the push lands. Never refused.
+- MUST FIRE: a hand-back rebase that conflicts refuses with `phase=catchup`, and a probe from another process shows the
+  lock free at that moment.
+- MUST NOT FIRE: an unmoved origin at the in-lock fetch gives `hand_backs=0` and one take.
+- CLEAN TWIN: after the cap's in-lock rebase, the sibling's in-lock verdict check still runs (`inlock_check` is not
+  `not-run`).
+- CLEAN TWIN: a queue member that is handed back keeps its ticket (a probe from another process reads it live and still
+  at the head).
+Mutants: M24 rebases inside the lock on the first move (cap 0), which must turn the first MUST FIRE red. M25 sets
+`$script:PmMaxHandBacks` from 3 to 4, which must turn the at-the-bar case red.
+Done when: `-SelfTest` exits 0 with its verdict line and count, and B3 and B23 are read on their dates.
+
+**W9.5 The dot-source closure in the rehearsal key (replaces W6.2).** File: `ops/rehearse-chain.ps1`
+(`Get-RhManifestSet`, `-ListSet`), or `ops/chain-manifest.json`'s derive rule. A chain-touching push. Needs W0.5.
+1. **As W6.2 step 1:** derive the set transitively over literal dot-sources, the way `lib/gate-input-key.ps1` derives
+   self-test keys. The gap is 45 non-member scripts reached from the 129 member scripts by the review's method (review
+   3.8; UNSOUND by leaf name) and 44 by the correctness skeptic's (15.5); 16 of 633 first-parent commits in 7 days touched
+   only the gap (review), 15 of 577 by the other count (15.5).
+2. **`-ListSet` prints the closure.** Each closure member on its own line, tagged `closure <path> <- <member that
+   sources it>`, and the complete line reads `CHAIN-REHEARSAL-LISTSET-COMPLETE files=<n> members=<m> closure=<c>`, with
+   n = m + c. So the change in trigger rate is visible (review 7.3).
+3. **Why it moves ahead of W9.1, when W6.2 waited for B6.** W6.2 was held back because every extra chain-touching commit
+   raised lease contention. The queue's ceiling (16.2) makes that cost small, and design A leans on the key harder:
+   an early verdict is trusted for as long as the set does not move, so a set that misses code the chain runs is trusted
+   for longer. The review's rule: fix the key's known gap first.
+4. **Landing it voids every recorded verdict once**, because every key changes. Land it at a quiet hour and say so in
+   the commit.
+5. **Named, not fixed:** tracked rule data the chain reads (`commodities.json`, `known-wrong.json`, `stores.json`) is
+   outside the key by the design of plan-2026-09-22-7 (review 3.8). A rehearsal of a script change is not re-judged when
+   main later changes a ruling. W9.5 does not change that, and the commit says so.
+Fixtures: W6.2's four (a dot-sourced `lib/x.ps1` enters the set and a push changing only it needs a rehearsal; a file no
+member reaches stays out; a dot-source cycle terminates; `-ListSet` over the real tree prints every member plus the
+closure), plus:
+- CLEAN TWIN: the complete line's `files=` equals `members=` plus `closure=`, and equals the number of path lines printed.
+- MUST FIRE: a closure member is printed with the member that sources it.
+Mutants: M11 stands (W6.0). M26 drops the transitive step (one level of dot-source only), which must turn a fixture whose
+library is reached through a second library red.
+Done when: the self-test exits 0 with its verdict line and count, and `-ListSet` over origin/main is pasted in the
+commit with its `closure=` count. Bar: B17 (amended).
+
+### 16.4 What is replaced, and what is amended
+
+| Earlier item | Now | What changes |
+|---|---|---|
+| W6.1 (the chain lease) | **REPLACED by W9.2** | Not built. `lib/chain-lease.ps1`, `-ChainLease`, `Enter-TcChainLease` and `TC_CHAIN_LEASE_HOLDER` are never written. Its steps 1, 5, 9, 10 and its `off` rollback carry into W9.2 steps 1, 8, 12, 13 and 9. Its CLAUDE.md sentence naming the exception (step 8) is not written |
+| W6.1, amended (15.4) | withdrawn with W6.1 | the hand-back drill and the holder token move to W9.2 steps 10 and 12 and W9.4 |
+| W2.3 | **ABSORBED by W9.3** | not built on its own; its step 0, seam, `Wait()` rules and fixtures are W9.3's, with the rehearsal also beside run-gates and a stop on a red |
+| W2.3, amended (15.4) | stands inside W9.3 | the sibling's q1 to q5 model moves to the `-RehearsalStarter` seam in W9.3's commit |
+| W2.2R | **stands, EXTENDED by W9.4** | W9.4 changes only what the lock phase does when origin moved: hand back instead of rebase, up to 3 times |
+| W6.2 | **REPLACED by W9.5** | the same derive, plus `-ListSet`'s closure lines, and it moves ahead of W9.1 instead of after B6's read-out |
+| W6.0 | stands | W9.2 step 1 needs its union trigger |
+| W8.3 | **amended: the lease is the queue** | the zero-wait probe reads the chain queue (`lib/chain-queue.ps1`): while any live ticket exists, a chain-touching push whose inherited `TC_CHAIN_QUEUE_HOLDER` does not name a live ticket is refused in seconds with `PRE-PUSH-REFUSED cause=chain-queue` and a message naming push-main as the route, which joins the queue. The probe acquires nothing. D14's ruling covers it unchanged; its blast radius becomes "up to one queue drain" instead of "one lease hold" |
+| W8.2 | amended | a main-checkout chain push through `-ViaWorktree` joins the queue like any other, where 15.5 said it takes the lease |
+| W2.1R step 8 | amended reason | a stale checkout's first push after W9.2 would join no queue and could void the tickets behind it; the re-exec is what makes it join |
+| W7.1a sentence (2) | stands | "land a chain change only through push-main" now means "join the queue" |
+| B6, B10, B14 | amended text | "W6.1" and "the lease" read as W9.2 and the queue; B14 counts chain landings that joined no queue, and plain-push chain landings while a ticket was live |
+| section 9, "No lock held across a gate run, with two named exceptions" | **one exception now** | the per-checkout guard only. The chain lease exception is withdrawn, and so is D8's acceptance of it (16.8) |
+| section 10, "cooperative cancel of the rehearsal child: NOT BUILT" | **BUILT** in W9.1 step 4 and W9.3 step 4 | unless W9.1's step 0 finds the stop unsafe |
+| section 10, "taking the chain lease inside the pre-push hook: NEVER" | reads as the queue | a hook never WAITS on the queue. W8.3's zero-wait probe is not a take |
+| section 10, "a total-time bound on the lease wait: NOT BUILT" | reads as the queue | W9.2 step 8, same reason |
+| section 8 mutants | M6, M12, M14 retargeted; M19 to M26 added | as each item above says |
+
+### 16.5 Bars, written now
+
+Measured by `ops/probe-push-convergence.ps1` (W0.3 with W0.3b), cited by its blob, over rows from UPDATED copies only
+(`pm_blob`), printing the rows it excluded and why. Each value is the first plausible one, not the survivor of a sweep.
+Each item's landing commit adds its bars to the probe's literal bars table with the standard 14-day read-out. Under its
+minimum N a bar prints its N and gives no verdict. A **mechanism** bar tests a deterministic step, so any counted row is a
+defect.
+
+| # | Metric | Stratum, minimum N | Baseline (source) | Bar | Item |
+|---|---|---|---|---|---|
+| B20 | chain-push wall time: seconds from push-main start to a landed row, for chain-touching landings; (a) rows with `early_hit=yes`; (b) all | (a) at least 5 rows; (b) at least 10 rows | median 1,726 s, p25 1,036, p75 2,964, max 3,968, over 9 landed chain rows on 09-22 and 09-23 (review, time join, 26 of 50 verdicts attributed); B9's chain-touching figure from the soak, recomputed | (a) median at most 300 s; (b) median at most 1,260 s (one rehearsal, review's worst case) and p90 at most 2,400 s | W9.2, W9.3 |
+| B21 | repeat-rehearsal share: rehearsal seconds beyond each landed chain change's first rehearsal, over all rehearsal seconds of landed chain changes (`rh_secs_list`, grouped by change as W0.3b groups) | at least 10 landed chain changes | 5,457 of 14,122 s, 30%, over 9 landings (review; an upper estimate, two rows' rehearsals overlapped) | at most 10%; printed beside it, rehearsals per landed chain change, with `restacks` split out | W9.2, W9.1 |
+| B22 | the early-verdict hit rate, re-measured live: chain-touching push-main landings with `early_hit=yes`, over all chain-touching push-main landings | at least 20 landings, from copies with W9.1 and D19's hook both live | 6 of 18 push-main (33%), 10 of 23 all (43%), unrebased 6 of 23 (26%) (16.1, SCRATCH) | **at least 30%**, the bar Brad ruled on. Under it at N, W9.1's trigger goes back to Brad with the number (W9.2 to W9.5 stand on their own). Printed beside it: early runs started, superseded, stopped, stack-conflicted and blind, per chain commit. When the trigger stops, the rate falls toward 0 and this bar reads a failure, so it cannot go quiet | W9.1 |
+| B23 | lock busy fraction: sum of `lock_held_ms` in a clock hour over 3,600,000; and `lock_held_ms` on rows with `hand_backs` of 1 or more | busy hours (at least 8 push-main landings): at least 5 hours and 50 lock-taking rows | modelled 0.64 at 18 landings an hour and a 128 s rebased hold (review, from the plan's holds); the soak's direct timer recomputes it before W9.4 lands | busy-hour median at most 0.25; median `lock_held_ms` on handed-back rows at most 45 s. Printed beside it: the share of rows that reached the 3 hand-back cap, expected well under 1% (0.14 cubed, review model) | W9.4 |
+| B17 (amended) | as 15.6, plus: the share of first-parent commits that are chain-touching, before and after W9.5 | 14 days either side | 16 gap-only of 633 commits in 7 days, 2.5% (review) | as 15.6, 0 mechanism. The share should move by about 2.5 points; a move of more than 7.5 points means the closure over-reaches and the derive is read again before any other W9 item lands | W9.5 |
+
+B6, B7, B9, B10 and B11 are read as written; their items now resolve through the Plan-line rule (16.9).
+
+### 16.6 The lock order
+
+The declared order in `.claude/rules/ops-and-gates.md` gains, in W9.2's landing commit, outermost first:
+- `0.` the capture-run mutex, as landed;
+- `0a.` the per-checkout guard (W2.1R): zero wait, so it waits on nothing and nothing waits on it;
+- `0b.` **the chain queue ticket** (`lib\chain-queue.ps1`). **It is not a lock held across a leg.** It excludes nobody
+  from running a leg: while a member holds it, every other push, member or not, runs run-gates, test-auditors and its
+  rehearsal freely. The only thing it defers is the next member's SWAP, which `refs/heads/main` serialises already. So
+  it serialises the push, never the gate, which is what the 2026-09-12 ruling asks. It sits at `0b` because a holder
+  then waits on the push lock, gate slots (its run-gates) and a rehearsal slot (its rehearsal child, another process,
+  which is still a wait-for edge). Its own blocking wait, for the tickets ahead, is safe under the blocking-wait rule:
+  the ticket ahead never waits on anything behind it, and no holder of the push lock, a gate slot or a rehearsal slot
+  ever waits on a ticket. The hook's W8.3 probe takes zero wait;
+- `1.` the push lock, `2.` the gate worker slots, as today;
+- `2a.` **the early-rehearsal cap** (`Global\tc-rehearsal-early-`, W9.1 step 2), taken only by an early rehearsal and
+  always before its rehearsal slot;
+- `2b.` the rehearsal slots (`Global\tc-rehearsal-slot-`), placed by W6.1 step 7's reading, which W9.2's commit does:
+  read `ops/rehearse-chain.ps1` for any gate-slot or push-lock take made while a rehearsal slot is held; if none, `2b`
+  is a peer of the gate slots, never nested with them;
+- `3.` and `4.` as today.
+
+The commit names these as first nested acquisitions: ticket over push lock; ticket over gate slots; ticket over a
+rehearsal slot; early cap over rehearsal slot. The lease's pairs are never created.
+
+### 16.7 Deliberately not built
+
+| Proposal | Disposition |
+|---|---|
+| A warm, persistent rehearsal environment (review design C) | NOT BUILT. Setup is under 5% of a rehearsal: a clone, checkout and seed copy took about 10 s against 800 to 1,240 s (review, one probe). It would save at most about 10 to 40 s and add the risk that one rehearsal inherits the previous one's gitignored outputs. W9.1's `stage_secs` turns the 5% into a measurement; revisit only if it reads setup over 15% |
+| A stage-memoised rehearsal that re-runs only the chain stages whose inputs changed (review design D) | NOT BUILT. It is sound only with a complete input list per stage, and the stages build paths at run time; the manifest key already missed 44 to 45 dot-sourced scripts before W9.5. It would land combinations nobody rehearsed in exactly the cases nobody can enumerate. Revisit only if stage reads are traced from a real run rather than declared |
+| A batched merge train with bisection (review design B, the runner-up) | NOT BUILT. It needs a long-lived runner or a leader election among push-mains, and its latency is worse than A's at today's load (14 to 22 min idle, 21 to 31 mean busy, review). Revisit if chain pushes pass about 20 an hour, where 6 slots stop being enough |
+| Re-rehearsing an early verdict in the background whenever main moves | NOT BUILT (W9.1 step 5). It multiplies rehearsals by the landing rate; W9.2 rehearses the stacked tip once, at push time |
+| Rebasing a member's worktree onto the tickets ahead | NEVER (W9.2 step 4). A ticket that leaves would land its commits with the member's push |
+| Letting a ready member overtake the ticket ahead | NOT BUILT. The member was rehearsed on top of it, and the one ahead was rehearsed without the member, so an overtake lands a combination nobody rehearsed |
+| The ordinary-push components the review lists as F (a per-blob cache for whole-tree static audits, splitting the `test-commodity-rules-lib` long pole, re-keying the unkeyed self-tests) | NOT IN THIS AMENDMENT. They are not part of design A and were not ruled; each is its own proposal |
+
+### 16.8 Decisions
+
+- **D8 is superseded.** It accepted a lock held across gate legs as a named exception to the 2026-09-12 ruling. Design A
+  holds none, so the exception is withdrawn and never used. Brad's condition on D8, live from the first commit and
+  proved ready first, carries over to W9.2 (steps 9 and 12).
+- **D1 is carried into W9.3**, decided on W9.3's step 0 measurement, with its bar widened to run-gates (W9.3 step 1).
+  If the bar fails, Brad decides with the numbers.
+- **D19 (NEEDS A RULING): the early rehearsal's trigger is a `post-commit` hook** in `ops/hooks`, installed box-wide by
+  `ops/install-hooks.ps1` and asserted by `ops/audit-hook-installed.ps1`. It is a standing configuration change, which
+  is why the review left the choice to Brad. **Recommendation: yes.** The measured hit rate assumed a rehearsal started
+  at commit time, and the alternative, a session remembering to run `push-main -Prepare`, is an intention with no exit
+  code. The hook starts a detached process and returns at once, fires only under `CLAUDE_CODE_SESSION_ID`, never inside
+  a rehearsal, and never fails a commit. Rollback: remove the hook file and re-install. Blocks: B22's read, and W9.1's
+  done line for the hook half only.
+
+### 16.9 The Plan-line rule
+
+**Every landing commit carries BOTH ids where one item replaces or re-scopes another**, on the one Plan line, the new
+id first: `Plan: design/PLAN-push-derived-conflicts-2026-09-23.md W2.1R W2.1`. The probe resolves a bar's landing as
+the first main commit whose Plan line carries the bar's item id as a whole token, and its bars table names the ORIGINAL
+ids (B1 names W2.1, B2 and B3 name W2.2, B6 names W6.1, B7 and B11 name W2.3), so a commit that carries only the new id
+leaves its bars unresolved forever. For this plan:
+
+| Item | Its Plan line carries |
+|---|---|
+| W0.1R | `W0.1R W0.1` |
+| W2.1R | `W2.1R W2.1` |
+| W2.2R | `W2.2R W2.2` |
+| W9.2 | `W9.2 W6.1` |
+| W9.3 | `W9.3 W2.3` |
+| W9.5 | `W9.5 W6.2` |
+| W9.1, W9.4 | their own id only: they replace nothing, and their bars (B21 to B23) are added under their own ids |
+
+An item already landed with one id only is not rewritten; its bar gets a result line naming the landing by hand in
+section 13.
+
+### 16.10 The new order for the push-main lane
+
+This replaces 15.9's "after the soak, push-main lane" row and its "after W6.1 is live" and "after B6's first read-out"
+rows. Everything else in 15.9 stands. One lane, one item landed and verified before the next, because `ops/push-main.ps1`
+and `ops/rehearse-chain.ps1` are each touched by several items.
+
+| Step | Item | Why here |
+|---|---|---|
+| 1 | W2.1R with W8.1 | the pre-flight every later round starts from |
+| 2 | W2.2R | the catch-up W9.4 extends |
+| 3 | W9.4 | lock only the swap; it helps every push and needs only W2.2R |
+| 4 | W3.2 (with W3.4a step 3), then W4.1 step 7 | as 15.9 |
+| 5 | W6.0 | W9.2 needs its union trigger (chain-touching push) |
+| 6 | W9.5 | the key's gap closes before anything trusts the key for longer (chain-touching push; voids every verdict once) |
+| 7 | W9.1 (`-Onto`, `-StackFile`, `-Early`, `-Prepare`, the stop) | the stacking primitive and the stop file W9.3 and W9.2 need; the hook half waits for D19 |
+| 8 | W9.3 | legs beside the rehearsal, after its step 0 measurement and D1 |
+| 9 | W9.2 | the queue, live, after its READY list |
+| 10 | W8.2 | the main checkout joins the queue like any other push |
+| 11 | W8.3 (amended) | it reads W9.2's token and queue |
+| last | W7.1 with W7.1a | the text follows the behaviour |
