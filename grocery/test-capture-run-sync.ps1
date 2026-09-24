@@ -37,7 +37,7 @@ $repoLib = Join-Path (Split-Path $PSScriptRoot -Parent) 'lib'
 . (Join-Path $PSScriptRoot 'native-lib.ps1')
 $env:GIT_TERMINAL_PROMPT = '0'
 
-$EXPECTED_CASES = 45
+$EXPECTED_CASES = 49
 $script:pass = 0; $script:fail = 0
 function T([string]$Label, [bool]$Cond, [string]$Got = '') {
   if ($Cond) { $script:pass++; Write-Output ('  ok    ' + $Label) }
@@ -55,7 +55,8 @@ $crSrc = [IO.File]::ReadAllText($crPath)
 $crAst = [System.Management.Automation.Language.Parser]::ParseInput($crSrc, [ref]$null, [ref]$null)
 $fnNames = @('Write-RunStatus', 'Add-FailedLane', 'Set-FailedLanePaged', 'Release-RunMutex', 'Test-CaptureRunPidAlive', 'Get-CaptureRunInheritedLock',
   'Enter-CaptureRunMutex', 'Register-CaptureRunMergedWrites', 'ConvertTo-CaptureRunSyncStatus', 'Format-CaptureRunSyncLine',
-  'Get-StartSyncAction', 'Invoke-CaptureRunHandoff', 'Invoke-CaptureRunTailSync', 'Invoke-CaptureRunOwedTailSync')
+  'Get-StartSyncAction', 'Invoke-CaptureRunHandoff', 'Invoke-CaptureRunTailSync', 'Invoke-CaptureRunOwedTailSync',
+  'Invoke-CaptureRunPushRetry', 'Update-CaptureRunLanding')
 $fnAsts = @($crAst.FindAll({ param($a) $a -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $fnNames -contains $a.Name }, $true))
 $fnFound = @($fnAsts | ForEach-Object { $_.Name } | Sort-Object -Unique)
 if ($fnFound.Count -ne $fnNames.Count) { Write-Output ('BLIND: capture-run.ps1 defines ' + $fnFound.Count + ' of the ' + $fnNames.Count + ' functions this fixture lifts (' + ($fnFound -join ', ') + ') - nothing was proven'); Write-Output 'capture-run-sync SELF-TEST BLIND'; exit 3 }
@@ -574,6 +575,49 @@ try {
     $r = Invoke-TailPush $E $sha
     $script:tailTexts.Add($r.text)
     T 'disabled: nothing pushed, failed lane sync, and the bot commit is still HEAD, local' (-not $r.pushed -and $r.failed -eq 'sync' -and $r.remote -eq $tip -and (GitR $E.bot @('rev-parse', 'HEAD')).out -eq $sha -and [string]$r.status.outcome -eq 'disabled') ('pushed=' + $r.pushed + ' failed=' + $r.failed + ' outcome=' + [string]$r.status.outcome)
+  }
+
+  Invoke-Group 'PUSH-RETRY MUST FIRE - a committed-but-unlanded run refuses while a foreign file blocks, then lands once it is gone (2026-09-24-924782)' {
+    # The 2026-09-24 shape: the run committed, its tail sync met a session's file on a path upstream changed, and the
+    # commit stayed local. The retry reuses the tail's mover unchanged, so it must refuse (nothing pushed, the file
+    # untouched) while the file is there, and land the bot commit the first time it is gone.
+    $E = New-Estate 'pushretry'
+    $null = GitOk $E.bot @('fetch', '-q', 'origin')
+    Push-Up $E 'lib/code.ps1' "line1-UP`nline2`nline3`n" 'up: touches the session file'
+    $tip2 = (GitR $E.remote @('rev-parse', 'refs/heads/main')).out
+    W $E.bot 'lib/code.ps1' "line1-SESSION`nline2`nline3`n"
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`nretry`n"
+    $sha = New-BotCommit $E @('grocery')
+    $NoSync = $false; $script:TailRetrySec = 0; $script:CaptureRunSyncSeams = $script:fxSeams; $script:TailSyncStatus = $null
+    $r1 = Invoke-CaptureRunPushRetry -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'daily' -Sha $sha
+    $held = ((GitR $E.remote @('rev-parse', 'refs/heads/main')).out -eq $tip2) -and ([IO.File]::ReadAllText((Join-Path $E.bot 'lib/code.ps1')) -eq "line1-SESSION`nline2`nline3`n")
+    T 'while the foreign file is present: blocked, nothing pushed, origin unchanged, the session''s file untouched' ($r1.outcome -eq 'blocked' -and -not $r1.pushed -and $r1.rc -eq 1 -and $held) ('outcome=' + $r1.outcome + ' reason=' + $r1.reason + ' held=' + $held)
+    $null = GitOk $E.bot @('checkout', '--', 'lib/code.ps1')
+    $r2 = Invoke-CaptureRunPushRetry -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'daily' -Sha $sha
+    $onRemote = (GitR $E.remote @('show', 'refs/heads/main:grocery/ledger.json')).raw
+    $upKept = (GitR $E.remote @('show', 'refs/heads/main:lib/code.ps1')).raw
+    T 'once it is gone: landed on origin/main with the bot''s ledger AND upstream''s code, rc 0' ($r2.outcome -eq 'landed' -and $r2.pushed -and $r2.rc -eq 0 -and $onRemote -eq "a`nb`nc`nretry`n" -and $upKept -eq "line1-UP`nline2`nline3`n") ('outcome=' + $r2.outcome + ' why=' + $r2.why + ' ledger=' + $onRemote)
+  }
+
+  Invoke-Group 'PUSH-RETRY MUST NOT FIRE - a commit another push already carried is recorded landed and nothing is pushed or synced' {
+    $E = New-Estate 'pushretry-landed'
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`ncarried`n"
+    $sha = New-BotCommit $E @('grocery')
+    $null = GitOk $E.bot @('push', '-q', 'origin', 'HEAD:main')
+    $tipBefore = (GitR $E.remote @('rev-parse', 'refs/heads/main')).out
+    $NoSync = $false; $script:TailRetrySec = 0; $script:CaptureRunSyncSeams = $script:fxSeams; $script:TailSyncStatus = $null
+    $r = Invoke-CaptureRunPushRetry -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'daily' -Sha $sha
+    # The landing record: the reason changed from none (page), a repeat of the same reason does not page, and the
+    # record keeps stage 'complete' while pushed flips.
+    [IO.File]::WriteAllText($E.status, '{"daily":{"date":"2026-09-24","stage":"complete","exit_code":1,"committed_sha":"3c45a9478","pushed":false}}', $script:fxUtf8)
+    $blk = [pscustomobject]@{ outcome = 'blocked'; reason = 'sync-blocked/foreign'; pushed = $false; why = 'fixture' }
+    $c1 = Update-CaptureRunLanding -StatusFile $E.status -Kind 'daily' -Result $blk -HeadSha '3c45a9478' -Prev $null
+    $prev = (Read-JsonFile $E.status).daily.push_retry
+    $c2 = Update-CaptureRunLanding -StatusFile $E.status -Kind 'daily' -Result $blk -HeadSha '3c45a9478' -Prev $prev
+    $c3 = Update-CaptureRunLanding -StatusFile $E.status -Kind 'daily' -Result $r -HeadSha $sha -Prev (Read-JsonFile $E.status).daily.push_retry
+    $fin = (Read-JsonFile $E.status).daily
+    T 'already-landed: pushed, rc 0, no sync ran and origin did not move' ($r.outcome -eq 'already-landed' -and $r.pushed -and $r.rc -eq 0 -and $null -eq $r.sync -and (GitR $E.remote @('rev-parse', 'refs/heads/main')).out -eq $tipBefore) ('outcome=' + $r.outcome + ' sync=' + [string]$r.sync)
+    T 'the record pages on a CHANGED reason only, keeps stage complete, and reads pushed=true after the landing' ($c1 -and -not $c2 -and $c3 -and [string]$fin.stage -eq 'complete' -and $fin.pushed -eq $true -and [string]$fin.committed_sha -eq $sha -and [int]$fin.push_retry.tries -eq 3) ('c1=' + $c1 + ' c2=' + $c2 + ' c3=' + $c3 + ' stage=' + [string]$fin.stage + ' pushed=' + [string]$fin.pushed + ' tries=' + [string]$fin.push_retry.tries)
   }
 
   Invoke-Group 'NO AUTOSTASH MUST NOT FIRE - bar B3 on its mechanism' {

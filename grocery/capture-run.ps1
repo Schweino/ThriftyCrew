@@ -114,14 +114,34 @@ function Test-AlreadyRanToday {
   if ($null -eq $rec) { return '' }
   if ([string]$rec.date -ne $Today) { return '' }
   if ([string]$rec.stage -ne 'complete') { return '' }
+  # THE THIRD VERDICT: PUSH-RETRY (2026-09-24, queue 2026-09-24-924782). A complete run that COMMITTED and did not land
+  # its commit (a tail sync blocked by a session's file, a refused push) used to skip here like any other, so the 11:00
+  # to 14:00 occurrences did nothing after the blocker cleared and readers kept the previous board all day. Only a
+  # record that says so in both fields retries: committed_sha set AND pushed exactly $false. A pushed run, a run that
+  # never committed (a guards-blocked morning with nothing to commit), and an older record with neither field still
+  # return 'already ran today', so no store is ever re-pulled by this (the 2026-09-10 reason for the skip).
+  $csP = $rec.PSObject.Properties['committed_sha']; $puP = $rec.PSObject.Properties['pushed']
+  if ($csP -and [string]$csP.Value -and $puP -and ($puP.Value -is [bool]) -and -not $puP.Value) {
+    return ('push-retry: today''s run at ' + [string]$rec.started + ' committed ' + [string]$csP.Value + ' and did not land it; this occurrence retries the push only (no capture, no chain)')
+  }
   return ('already ran today at ' + [string]$rec.started + ' (rc ' + [string]$rec.exit_code + '); this repetition is a no-op')
 }
+$script:PushRetry = $false
+$script:PushRetrySha = ''
+$script:PushRetryPrev = $null
 if (-not $Force) {
   $arStatusFile = Join-Path (Join-Path $OutDir 'logs') 'capture-run-status.json'
   $arStatus = $null
   if (Test-Path $arStatusFile) { try { $arStatus = Read-JsonFile $arStatusFile } catch { $arStatus = $null } }
   $arWhy = Test-AlreadyRanToday -Status $arStatus -Kind $Kind -Today $todayS
-  if ($arWhy) {
+  if ($arWhy -like 'push-retry:*') {
+    Write-Output ('PUSH-RETRY: capture-run [' + $Kind + '] ' + $arWhy.Substring(12))
+    if ($WhatIf -or $NoDownstream) { Write-Output 'PUSH-RETRY: -WhatIf/-NoDownstream - nothing fetched, synced or pushed.'; exit 0 }
+    $script:PushRetry = $true
+    $script:PushRetrySha = [string]$arStatus.$Kind.committed_sha
+    $prPrevP = $arStatus.$Kind.PSObject.Properties['push_retry']
+    if ($prPrevP) { $script:PushRetryPrev = $prPrevP.Value }
+  } elseif ($arWhy) {
     Write-Output ('SKIP: capture-run [' + $Kind + '] ' + $arWhy + '. Pass -Force to re-run by hand.')
     exit 0
   }
@@ -152,6 +172,8 @@ $script:SyncStatus = $null
 $script:TailSyncStatus = $null
 $script:TailSyncOwed = $false
 $script:TailRetrySec = 10   # between a rejected push and the re-sync before the next attempt; unchanged from the loop it replaced
+$script:LandingSha = ''
+$script:LandingPushed = $null
 function Add-FailedLane([string]$Name, [string]$PagedSubject = '') {
   # The CALLER's failed-lane list (scope 1), exactly the variable the old bare append wrote: in this script that is the
   # script scope, and test-commit-size-gate runs the cut block inside a function whose own list it asserts on.
@@ -192,6 +214,11 @@ function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
       sync = $script:SyncStatus
       # THE TAIL SYNC (plan W4.2): the last one this run made, before its push or, uncommitted, after every watcher.
       tail_sync = $script:TailSyncStatus
+      # THE LANDING (2026-09-24, queue 2026-09-24-924782): the local tip holding this run's commit after its tail, and
+      # whether it reached origin/main. '' / $null = the run made no commit (or has not reached its tail yet). A later
+      # hourly occurrence reads committed_sha + pushed=$false as 'push-retry' (Test-AlreadyRanToday).
+      committed_sha = [string]$script:LandingSha
+      pushed = $script:LandingPushed
     }
     $dir = Split-Path $script:StatusFile -Parent
     if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
@@ -392,6 +419,97 @@ function Invoke-CaptureRunOwedTailSync {
   }
   return [pscustomobject]@{ record = $r; line = (Format-CaptureRunSyncLine 'tail' $r); bad = [bool]$bad }
 }
+# ---- THE PUSH-ONLY RETRY (2026-09-24, queue 2026-09-24-924782) ---------------------------------------------------------
+# An hourly occurrence whose record says today's run completed, committed $Sha and did not land it. It runs the tail's
+# own mover (Invoke-CaptureRunTailSync, unchanged, so a session's dirty file on a path upstream changed still blocks it and
+# is never written) and `git push origin HEAD:main`, re-syncing after a rejected push as the tail does, and NOTHING else:
+# no capture lane, no chain, no stage change. Before it moves anything it fetches and asks whether origin/main already
+# holds $Sha (another push carried it: unpushed is not private here), and whether HEAD still holds it (a checkout reset
+# since is not this run's to push). The tail's feed rebuild is NOT repeated here: when the sync brought in a change to a
+# producer of a public/smp-feed.json this range ships, the retry REFUSES (outcome stale-code-feed) rather than ship a
+# feed built by replaced code, and the next full run rebuilds it. Returns @{ outcome; reason; pushed; rc; why; sync;
+# lines }; outcome is landed | already-landed | blocked | push-failed | fetch-failed | not-on-head | stale-code-feed.
+# $StaleFeed is a seam: a scriptblock (Repo, Base, Tip) returning @{ stale; blind; why }; $null uses lib\chain-code-currency.
+function Invoke-CaptureRunPushRetry {
+  param([string]$Repo, [string]$Root, [string]$Kind, [string]$Sha, [int]$Attempts = 4, [scriptblock]$StaleFeed = $null)
+  $lines = New-Object System.Collections.Generic.List[string]
+  $res = [pscustomobject]@{ outcome = ''; reason = ''; pushed = $false; rc = 1; why = ''; sync = $null; lines = $null }
+  $f = Invoke-GitCaptured -Repo $Repo -GitArgs @('fetch', '-q', 'origin', 'main')
+  if ($f.rc -ne 0) {
+    $res.outcome = 'fetch-failed'; $res.reason = 'fetch-failed'; $res.why = ('git fetch exited ' + $f.rc + ': ' + ([string]$f.stderr).Trim())
+    $lines.Add('push-retry: ' + $res.why); $res.lines = $lines.ToArray(); return $res
+  }
+  $cnt = Invoke-GitCaptured -Repo $Repo -GitArgs @('rev-list', '--count', ('refs/remotes/origin/main..' + $Sha))
+  if ($cnt.rc -eq 0 -and ([string]$cnt.stdout).Trim() -eq '0') {
+    $res.outcome = 'already-landed'; $res.reason = 'already-landed'; $res.pushed = $true; $res.rc = 0
+    $res.why = ('origin/main already contains ' + $Sha + ' (another push carried it); nothing pushed')
+    $lines.Add('push-retry: ' + $res.why); $res.lines = $lines.ToArray(); return $res
+  }
+  $anc = Invoke-GitCaptured -Repo $Repo -GitArgs @('merge-base', '--is-ancestor', $Sha, 'HEAD')
+  if ($cnt.rc -ne 0 -or $anc.rc -ne 0) {
+    $res.outcome = 'not-on-head'; $res.reason = 'not-on-head'
+    $res.why = ('HEAD no longer holds ' + $Sha + ' (rev-list exited ' + $cnt.rc + ', merge-base exited ' + $anc.rc + '), so there is no commit of this run to push; the next full run commits again')
+    $lines.Add('push-retry: ' + $res.why); $res.lines = $lines.ToArray(); return $res
+  }
+  $res.outcome = 'push-failed'; $res.reason = 'push-failed'
+  foreach ($attempt in 1..$Attempts) {
+    $ts = Invoke-CaptureRunTailSync -Repo $Repo -Root $Root -Kind $Kind
+    $res.sync = $script:TailSyncStatus
+    $lines.Add((Format-CaptureRunSyncLine ('push-retry ' + $attempt) $ts))
+    if (@('current', 'synced') -cnotcontains [string]$ts.outcome) {
+      $res.outcome = 'blocked'; $res.reason = ('sync-' + [string]$ts.outcome + $(if ($ts.class) { '/' + [string]$ts.class } else { '' }))
+      $res.why = ('the sync ended ' + [string]$ts.outcome + $(if ($ts.class) { ' (' + [string]$ts.class + ')' } else { '' }) + ' - NOT pushing: ' + [string]$ts.why)
+      $lines.Add('push-retry[' + $attempt + ']: ' + $res.why); break
+    }
+    $sf = $null
+    $fdiff = Invoke-GitCaptured -Repo $Repo -GitArgs @('diff', '--name-only', 'refs/remotes/origin/main', 'HEAD', '--', 'public/smp-feed.json')
+    if ($fdiff.rc -eq 0 -and ([string]$fdiff.stdout).Trim()) {
+      try {
+        if ($StaleFeed) { $sf = & $StaleFeed $Repo $Sha 'HEAD' }
+        else {
+          $st = Get-TcStaleArtifacts -Repo $Repo -Base $Sha -Tip 'HEAD' -Artifacts @('public/smp-feed.json')
+          $sf = [pscustomobject]@{ stale = [bool](@($st.Rows).Count); blind = [string]$st.Blind; why = ((@($st.Rows) | ForEach-Object { @($_.Changed) -join ', ' }) -join '; ') }
+        }
+      } catch { $sf = [pscustomobject]@{ stale = $false; blind = ('the stale-code check threw: ' + $_.Exception.Message); why = '' } }
+      if ($sf.blind) { $lines.Add('push-retry[' + $attempt + ']: chain-code BLIND - ' + [string]$sf.blind + ' - pushing as the tail does') }
+      elseif ($sf.stale) {
+        $res.outcome = 'stale-code-feed'; $res.reason = 'stale-code-feed'
+        $res.why = ('the sync brought in a change to ' + [string]$sf.why + ', which produce the public/smp-feed.json this commit ships; a retry does not rebuild the feed, so it is NOT pushed and the next full run rebuilds it')
+        $lines.Add('push-retry[' + $attempt + ']: REFUSED - ' + $res.why); break
+      }
+    }
+    $pOut = @(& git -C $Repo push origin HEAD:main | ForEach-Object { [string]$_ })
+    $pRc = $LASTEXITCODE
+    foreach ($l in $pOut) { $lines.Add('push-retry push[' + $attempt + ']: ' + $l) }
+    if ($pRc -eq 0) { $res.outcome = 'landed'; $res.reason = 'landed'; $res.pushed = $true; $res.rc = 0; $res.why = ('pushed on attempt ' + $attempt); $lines.Add('push-retry: ' + $res.why); break }
+    $res.why = ('git push exited ' + $pRc + ' on attempt ' + $attempt)
+    Start-Sleep -Seconds $script:TailRetrySec
+  }
+  if ($res.outcome -eq 'push-failed') { $lines.Add('push-retry: PUSH FAILED after ' + $Attempts + ' attempts - ' + $res.why) }
+  $res.lines = $lines.ToArray()
+  return $res
+}
+# Writes the retry's result into THIS kind's record and nothing else: pushed, committed_sha (the tip it pushed or still
+# holds), push_retry { at, outcome, reason, why, pages }. stage, started, exit_code and every other field are kept, so
+# the record still reads 'complete' and a landed retry turns every later occurrence back into 'already ran today'.
+# Returns $true when the reason CHANGED from the previous retry's (the caller pages only then). Never throws.
+function Update-CaptureRunLanding {
+  param([string]$StatusFile, [string]$Kind, $Result, [string]$HeadSha, $Prev)
+  $changed = ($null -eq $Prev) -or -not [string]::Equals([string]$Prev.reason, [string]$Result.reason, [StringComparison]::Ordinal)
+  try {
+    $doc = @{}
+    if (Test-Path -LiteralPath $StatusFile) { (Read-JsonFile $StatusFile).PSObject.Properties | ForEach-Object { $doc[$_.Name] = $_.Value } }
+    $rec = $doc[$Kind]
+    if ($null -eq $rec) { return $changed }
+    $rec | Add-Member -NotePropertyName pushed -NotePropertyValue ([bool]$Result.pushed) -Force
+    if ($HeadSha) { $rec | Add-Member -NotePropertyName committed_sha -NotePropertyValue $HeadSha -Force }
+    $n = 1; if ($null -ne $Prev -and $Prev.PSObject.Properties['tries']) { $n = [int]$Prev.tries + 1 }
+    $rec | Add-Member -NotePropertyName push_retry -NotePropertyValue ([ordered]@{ at = (Get-Date).ToString('s'); outcome = [string]$Result.outcome; reason = [string]$Result.reason; why = [string]$Result.why; tries = $n }) -Force
+    $doc[$Kind] = $rec
+    [void](Write-TcAtomicFile -Path $StatusFile -Text ($doc | ConvertTo-Json -Depth 6) -UniqueTemp)
+  } catch { }
+  return $changed
+}
 
 # ---- A RUN HANDED OFF BY ITS PARENT (2026-09-23, plan W4.1 step 6), read BEFORE the lock is asked for ------------------
 $script:RunMutexName = 'Global\tc-capture-run'   # the lock below; named once so the handoff token and the lock cannot disagree
@@ -422,9 +540,36 @@ if ($script:RunMutexState.abandoned -and $null -ne $script:RunMutexState.orphan 
 }
 if (-not $script:HoldsMutex) {
   Write-Output 'SKIP: another capture-run holds the lock (a scheduled run overlapping, or a manual one). Nothing started - two runs on one working tree corrupt each other.'
-  Write-RunStatus 'skipped-locked' 0
+  # A push-retry occurrence never writes the record here: 'skipped-locked' would replace today's 'complete', and the
+  # NEXT occurrence would then run the whole day again instead of retrying the push.
+  if (-not $script:PushRetry) { Write-RunStatus 'skipped-locked' 0 }
   Stop-RunLog -ExitCode 0 -Path $runLog
   exit 0
+}
+
+# ---- THE PUSH-ONLY RETRY, UNDER THE RUN LOCK (2026-09-24, queue 2026-09-24-924782) -------------------------------------
+# Taken exactly as the full run takes Global\tc-capture-run (above), and nothing else is nested: the retry's push runs the
+# pre-push hook as the tail's does, the same (0) over (1) nesting the lock order already declares. It pages only when
+# the blocking reason CHANGED since the previous hourly retry, so a file left dirty all afternoon pages once, not six times.
+if ($script:PushRetry) {
+  $prRepo = Split-Path $root -Parent
+  # The same dot-source the run makes below (lib\checkout-sync.ps1's startup-file list names it once); git-blob-lib is loaded at the top.
+  try { . (Join-Path (Split-Path $root -Parent) 'lib\chain-code-currency.ps1') } catch { Write-Output ('push-retry: could not load the chain-code check (' + $_.Exception.Message + ') - it reads BLIND') }
+  $prRes = $null
+  try { $prRes = Invoke-CaptureRunPushRetry -Repo $prRepo -Root $root -Kind $Kind -Sha $script:PushRetrySha }
+  catch { $prRes = [pscustomobject]@{ outcome = 'failed'; reason = 'exception'; pushed = $false; rc = 1; why = ('the push retry threw: ' + $_.Exception.Message); sync = $null; lines = @('push-retry: threw - ' + $_.Exception.Message) } }
+  foreach ($l in @($prRes.lines)) { Write-Output $l }
+  $prHead = ''
+  $prH = Invoke-GitCaptured -Repo $prRepo -GitArgs @('rev-parse', 'HEAD')
+  if ($prH.rc -eq 0) { $prHead = ([string]$prH.stdout).Trim() }
+  $prChanged = Update-CaptureRunLanding -StatusFile $script:StatusFile -Kind $Kind -Result $prRes -HeadSha $(if ($prRes.outcome -eq 'not-on-head') { '' } else { $prHead }) -Prev $script:PushRetryPrev
+  Write-Output ('PUSH-RETRY [' + $Kind + ']: ' + [string]$prRes.outcome + ' pushed=' + [bool]$prRes.pushed + ' - ' + [string]$prRes.why)
+  if (-not $prRes.pushed -and $prChanged) {
+    try { Send-Alert -Subject ("Grocery bot push retry " + [string]$prRes.outcome + " - $todayS") -Body ("capture-run.ps1 [$Kind] completed today and committed " + $script:PushRetrySha + ", which is still not on origin/main, so the live board and feed are STALE. This hourly occurrence retried the push only (no capture, no chain) and it ended " + [string]$prRes.outcome + ":`n`n" + [string]$prRes.why + "`n`nThe next occurrence inside the task window retries again and pages only if the reason changes. Log: grocery\out\logs\capture-run-$Kind-$todayS.log") | Out-Null } catch { Write-Output ('push-retry: the page could not be sent (' + $_.Exception.Message + ')') }
+  }
+  Release-RunMutex
+  Stop-RunLog -ExitCode ([int]$prRes.rc) -Path $runLog
+  exit ([int]$prRes.rc)
 }
 
 # ---- THE START SYNC: THE RUN EXECUTES THE CODE ORIGIN HOLDS (2026-09-23, design\PLAN-bot-checkout-self-heal-2026-09-23.md W4.1) ----
@@ -1703,7 +1848,18 @@ try {
     }
   }
   # <<< TAIL-PUSH BLOCK <<<
-} catch { Write-Output ("commit/push threw: " + $_.Exception.Message); Add-FailedLane 'push' }
+  # THE LANDING, RECORDED FOR THE PUSH-ONLY RETRY (2026-09-24, queue 2026-09-24-924782): the local tip that holds this
+  # run's commit after its tail (a synced tail replays it, so the tip is the id to push), and whether it reached origin.
+  if ($botMadeCommit) {
+    $script:LandingPushed = [bool]$pushed
+    $lhRes = Invoke-GitCaptured -Repo $repo -GitArgs @('rev-parse', 'HEAD')
+    $script:LandingSha = $(if ($lhRes.rc -eq 0) { ([string]$lhRes.stdout).Trim() } else { [string]$script:BotCommitSha })
+  }
+} catch {
+  Write-Output ("commit/push threw: " + $_.Exception.Message); Add-FailedLane 'push'
+  # A throw after the commit still leaves a commit to land: record it for the push-only retry (2026-09-24-924782).
+  if ($botMadeCommit -and -not $script:LandingSha -and $script:BotCommitSha) { $script:LandingSha = [string]$script:BotCommitSha; $script:LandingPushed = [bool]$pushed }
+}
 finally {
   # A THROW MUST NOT LEAVE GIT_INDEX_FILE SET. It is process-wide, so every git command AFTER this stage -
   # the served-dirty check, the edge verification, anything a later lane runs - would read a temp index

@@ -121,6 +121,23 @@ else {
   $iLog = $crSrc.IndexOf('$runLog = Start-RunLog')
   $iStatus = $crSrc.IndexOf("Write-RunStatus 'skipped-locked'")
   T (($iAsk -gt 0) -and ($iAsk -lt $iLog) -and ($iAsk -lt $iStatus) -and ($crSrc -match 'if \(-not \$Force\) \{')) 'MUST FIRE  capture-run checks already-ran before its transcript and before any status write, and -Force bypasses it'
+  # ---- PUSH-RETRY (2026-09-24, queue 2026-09-24-924782). FROZEN from that day's capture-run-status.json: the 09:00
+  # daily run completed with rc 1, committed 3c45a9478, and its tail sync ended blocked/foreign on an untracked
+  # lib/chain-queue.ps1; the 11:00 to 14:00 occurrences skipped as 'already ran today' after the blocker had cleared.
+  $stFound = [pscustomobject]@{ daily = [pscustomobject]@{ date = '2026-09-24'; pid = 41220; started = '2026-09-24T09:00:02'; stage = 'complete'; exit_code = 1; committed_sha = '3c45a9478'; pushed = $false; tail_sync = [pscustomobject]@{ outcome = 'blocked'; class = 'foreign' } } }
+  T ((Test-AlreadyRanToday -Status $stFound -Kind 'daily' -Today '2026-09-24') -like 'push-retry:*3c45a9478*') 'MUST FIRE  complete + committed 3c45a9478 + pushed false (the 2026-09-24 record) -> push-retry, not a no-op'
+  $stLanded = [pscustomobject]@{ daily = [pscustomobject]@{ date = '2026-09-10'; pid = 37912; started = '2026-09-10T08:00:01'; stage = 'complete'; exit_code = 1; committed_sha = 'abc1234'; pushed = $true } }
+  $stNoCommit = [pscustomobject]@{ daily = [pscustomobject]@{ date = '2026-09-10'; pid = 37912; started = '2026-09-10T08:00:01'; stage = 'complete'; exit_code = 1; committed_sha = ''; pushed = $null } }
+  T (((Test-AlreadyRanToday -Status $stLanded -Kind 'daily' -Today '2026-09-10') -match '^already ran today') -and ((Test-AlreadyRanToday -Status $stNoCommit -Kind 'daily' -Today '2026-09-10') -match '^already ran today')) 'CLEAN TWIN  a guards-blocked morning (stage complete, rc 1) that pushed, or never committed, still SKIPS as already ran today'
+  $stOld = [pscustomobject]@{ daily = [pscustomobject]@{ date = '2026-09-10'; started = '2026-09-10T08:00:01'; stage = 'complete'; exit_code = 1; committed_sha = 'abc1234' } }
+  $stDiedC = [pscustomobject]@{ daily = [pscustomobject]@{ date = '2026-09-10'; started = '2026-09-10T08:00:01'; stage = 'publishing'; exit_code = $null; committed_sha = 'abc1234'; pushed = $false } }
+  T (((Test-AlreadyRanToday -Status $stOld -Kind 'daily' -Today '2026-09-10') -match '^already ran today') -and ((Test-AlreadyRanToday -Status $stDiedC -Kind 'daily' -Today '2026-09-10') -eq '')) 'MUST NOT FIRE a record with no pushed field is not a retry, and a run that died mid-stage still RUNS in full'
+  # The retry runs AFTER the run lock and BEFORE the start sync (so no capture lane can follow it), and a locked
+  # retry never writes 'skipped-locked' over today's 'complete'.
+  $iLock = $crSrc.IndexOf('$script:RunMutexState = Enter-CaptureRunMutex')
+  $iRetry = $crSrc.IndexOf('if ($script:PushRetry) {')
+  $iStart = $crSrc.IndexOf('# >>> START-SYNC BLOCK >>>')
+  T (($iLock -gt 0) -and ($iRetry -gt $iLock) -and ($iRetry -lt $iStart) -and ($crSrc.IndexOf('if (-not $script:PushRetry) { Write-RunStatus ''skipped-locked'' 0 }') -gt 0)) 'MUST FIRE  the push-retry branch sits under the run lock and before the start sync, and a locked retry leaves the record alone'
 }
 Remove-Item $sandbox -Recurse -Force -ErrorAction SilentlyContinue
 if ($fail) { "CADENCE SELF-TEST FAILED ($fail)"; exit 1 } else { 'CADENCE SELF-TEST PASS'; exit 0 }
