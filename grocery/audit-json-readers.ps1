@@ -58,8 +58,11 @@ $ErrorActionPreference = 'Stop'
 # so EVERY run threw, caught, set $base to $null, scored the verdict as 'first' and REWROTE the high-water
 # mark from the current count. A ratchet that re-baselines itself can never break: it would have accepted
 # any number of new bare readers in silence, which is exactly the [[guard-blindness-family]] shape this file
-# was written to catch elsewhere. The catch is kept, because a corrupt baseline file should still be a first
-# run rather than a crash, but it must no longer be able to swallow a missing dependency.
+# was written to catch elsewhere. A corrupt baseline file is still never a crash, but since 2026-09-24 it is not a
+# first run either (design\backlog-inbox\pd-currency-2026-09-23.md): a missing or unreadable mark is exit 3 with
+# blind=baseline-missing or blind=baseline-unreadable and nothing written, because a "first run" over a baseline a
+# botched rebase left holding conflict markers accepted whatever count the push carried, a rise included. -Baseline
+# is the one deliberate way to write a mark over it (lib\ratchet.ps1's Read-TcRatchetBaseline decides the state).
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 if (-not (Get-Command Read-JsonFile -ErrorAction SilentlyContinue)) { throw 'audit-json-readers: Read-JsonFile is not loaded, so the baseline read would fail-open and re-baseline the ratchet.' }
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\lf-write.ps1')   # Write-TcLfFile: the report and baseline are tracked, stored eol=lf with a BOM
@@ -189,11 +192,27 @@ if ($SelfTest) {
     $r = AjrRun @()
     if ($r.rc -eq 2 -and $r.text -match 'RATCHET BROKEN') { Write-Output '  PASS  CLEAN TWIN live: a rise over the mark still exits 2' }
     else { Write-Output ('  FAIL  CLEAN TWIN live: a rise did not exit 2 (rc=' + $r.rc + ')'); $fail++ }
+    # FAIL CLOSED (2026-09-24, pd-currency-2026-09-23.md). MUST FIRE: conflict markers and an absent mark each exit 3
+    # naming which, and write nothing. CLEAN TWIN: -Baseline still records one.
+    [IO.File]::WriteAllText($ajrBl, ('<' * 7) + " HEAD`n{ ""count"": 2 }`n" + ('=' * 7) + "`n{ ""count"": 9 }`n" + ('>' * 7) + " theirs`n", (New-Object Text.UTF8Encoding($false)))
+    $confB = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ajrBl))
+    $r = AjrRun @()
+    $confSame = [string]::Equals($confB, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ajrBl)), [StringComparison]::Ordinal)
+    if ($r.rc -eq 3 -and $confSame -and $r.text -match 'blind=baseline-unreadable') { Write-Output '  PASS  MUST FIRE live: a mark holding conflict markers exits 3, blind=baseline-unreadable, bytes unchanged' }
+    else { Write-Output ('  FAIL  MUST FIRE live: a conflicted mark did not fail closed (rc=' + $r.rc + ' unchanged=' + $confSame + ')'); $fail++ }
+    Remove-Item -LiteralPath $ajrBl -Force
+    $r = AjrRun @('-Tighten')
+    if ($r.rc -eq 3 -and -not (Test-Path -LiteralPath $ajrBl) -and $r.text -match 'blind=baseline-missing') { Write-Output '  PASS  MUST FIRE live: an ABSENT mark under -Tighten exits 3, blind=baseline-missing, and no file is created' }
+    else { Write-Output ('  FAIL  MUST FIRE live: an absent mark did not fail closed (rc=' + $r.rc + ' created=' + (Test-Path -LiteralPath $ajrBl) + ')'); $fail++ }
+    $r = AjrRun @('-Baseline')
+    $wrote = if (Test-Path -LiteralPath $ajrBl) { [int]((Read-JsonFile $ajrBl).count) } else { -1 }
+    if ($r.rc -eq 0 -and $wrote -eq 2) { Write-Output '  PASS  CLEAN TWIN live: -Baseline over an absent mark records the current count (2) and exits 0' }
+    else { Write-Output ('  FAIL  CLEAN TWIN live: -Baseline did not record the count (rc=' + $r.rc + ' count=' + $wrote + ')'); $fail++ }
   } catch { Write-Output ('  FAIL  the live-path cases threw: ' + $_.Exception.Message); $fail++ }
   finally { Remove-Item -LiteralPath $ajrTmp -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($fail) { Write-Output "SELF-TEST FAILED ($fail)"; exit 2 }
-  Write-Output 'SELF-TEST PASS - founding bug armed, four clean twins, the ratchet hold, and four live-path cases'
+  Write-Output 'SELF-TEST PASS - founding bug armed, four clean twins, the ratchet hold, and seven live-path cases'
   exit 0
 }
 
@@ -230,10 +249,16 @@ foreach ($g in ($byFile | Select-Object -First 15)) {
 if ($byFile.Count -gt 15) { Write-Output ("  ... and " + ($byFile.Count - 15) + " more file(s)") }
 
 $blF = Join-Path $OutDir 'json-readers-baseline.json'
-$base = $null
-if ((Test-Path $blF) -and -not $Baseline) { try { $base = [int]((Read-JsonFile $blF).count) } catch { $base = $null } }
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ratchet.ps1')   # Read-TcRatchetBaseline: read, absent or unreadable
+$blRead = Read-TcRatchetBaseline -Path $blF -Field 'count'
+if (-not $Baseline -and $blRead.State -ne 'read') {
+  $blTok = Get-TcRatchetBlindToken $blRead.State
+  Write-Output ("! audit-json-readers: COULD NOT EVALUATE - the baseline $blF is $($blRead.State) ($($blRead.Why)), so there is no mark to hold $count against. Nothing was written: a plain run and -Tighten never record a mark. Restore it from git, or record the current count on purpose with -Baseline.")
+  Exit-Guard -Name 'json-readers' -Summary "$count site(s), blind=$blTok" -Code 3
+}
+$base = $blRead.Value
 $verdict = Get-RatchetVerdict $count $base
-if ($Baseline -or $verdict -eq 'first') {
+if ($Baseline) {
   $null = Write-TcLfFile -Path $blF -Text (([ordered]@{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the bare-JSON-reader ratchet, set 2026-09-05 when PS 5.1 codepage decoding was found corrupting live board names. This number may only go DOWN. A run above it is a NEW bare reader and hard-fails.' }) | ConvertTo-Json -Depth 3)
   Write-Output ("  baseline written: $count site(s). From here the number may only go DOWN.")
   Exit-Guard -Name 'json-readers' -Summary "baseline $count" -Code 0
