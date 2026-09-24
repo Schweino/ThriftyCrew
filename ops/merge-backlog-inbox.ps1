@@ -318,6 +318,32 @@ function Test-State([string]$s) {
   return $false
 }
 
+function Format-TcFindingHeading([int]$Id, $Finding) {
+  <# The item heading a finding becomes, written in ONE place: the merge appends it and the per-file gate below judges
+     exactly these bytes, so the two can never disagree about what the push gate will read. #>
+  $tag = if ($Finding.Tag) { " ``$($Finding.Tag)``" } else { '' }
+  return ("### I$Id - $($Finding.Title) ``$($Finding.State)``$tag")
+}
+
+function Test-TcFindingFileGate {
+  <# THE PUSH GATE'S OWN STATE RULE over one inbox file's new findings (2026-09-24, design\backlog-inbox\
+     pd-backlog-2026-09-23.md). Test-State accepts any tag that BEGINS with a state word (`DONE-ish`, `DONE:`, `OPEN.`),
+     and audit-backlog-status.ps1 accepts only the bare state, `STATE - detail` or `STATE <date>`. A copy of the gate's
+     rule here would drift the way this file's header warns, so the file's headings are written, by
+     Format-TcFindingHeading, into a synthetic backlog that holds nothing else, and the gate itself judges them. The
+     synthetic backlog is independent of the real one, so a red real backlog never blinds a finding file. Returns
+     Invoke-TcBacklogGate's Code (0, 2, or 3 for could-not-evaluate) and Lines. #>
+  param([object[]]$Findings)
+  $sb = New-Object System.Text.StringBuilder
+  [void]$sb.Append("# Backlog`n")
+  $k = 1
+  foreach ($f in @($Findings)) {
+    [void]$sb.Append("`n" + (Format-TcFindingHeading $k $f) + "`n`nbody`n")
+    $k++
+  }
+  return (Invoke-TcBacklogGate -Text $sb.ToString())
+}
+
 function Get-NextId([string]$text) {
   # The allocator. Only ever called by THIS script, and only one of it runs, which
   # is the entire reason the ids are safe here and were not safe in four agents.
@@ -1413,6 +1439,32 @@ if ($SelfTest) {
   _C 'MUST NOT FIRE' 'a marker naming a checkout that is gone arms nothing: the merge proceeds, exit 0, with the WARN' `
     ($cA10 -eq 0 -and $oA10 -match 'WARN - no TC Backlog Merge allocator is live' -and ([IO.File]::ReadAllText($axI.otherBacklog)) -match '(?m)^### I41 - ') "exit $cA10 :: $oA10"
 
+  # ---- A NEW FINDING IS JUDGED BY THE GATE'S OWN STATE RULE (2026-09-24, pd-backlog-2026-09-23.md) ----
+  # MUST FIRE, the founding shape: `DONE-ish` passed Test-State (it BEGINS with DONE), merged as I41 with exit 0, and the
+  # gate then failed the backlog with 'I41: declares no state'. Now the file is quarantined and the backlog is untouched.
+  $gsDir = Join-Path $tmp 'gs'
+  New-Item -ItemType Directory -Path (Join-Path $gsDir 'inbox') -Force | Out-Null
+  $gsBl = Join-Path $gsDir 'backlog.md'
+  $gsSeed = "# Backlog`n`n### I40 - an old one ``DONE```n`nbody`n"
+  [IO.File]::WriteAllText($gsBl, $gsSeed, $u8)
+  [IO.File]::WriteAllText((Join-Path $gsDir 'inbox\lane-ish.md'), "## a finding with a near-miss state`n``DONE-ish`` ``queue-7```n`nbody`n", $u8)
+  $oG1 = & $PSCommandPath -InboxDir (Join-Path $gsDir 'inbox') -Backlog $gsBl -Today $DAY 2>&1 | Out-String
+  $cG1 = $LASTEXITCODE
+  $gsAfter = [IO.File]::ReadAllText($gsBl)
+  _C 'MUST FIRE' 'a finding whose state only BEGINS with a state word (DONE-ish) is quarantined by the gate, exit 2, backlog unchanged' `
+    ($cG1 -eq 2 -and [string]::Equals($gsAfter, $gsSeed, [StringComparison]::Ordinal) -and
+     (Test-Path -LiteralPath (Join-Path $gsDir 'inbox\quarantine\lane-ish.md')) -and $oG1 -match 'declares no state') "exit $cG1 :: $oG1"
+  # CLEAN TWIN: the gate's own legal long form, `DONE - detail`, still merges as the next id, exit 0.
+  $gsDir2 = Join-Path $tmp 'gs2'
+  New-Item -ItemType Directory -Path (Join-Path $gsDir2 'inbox') -Force | Out-Null
+  $gsBl2 = Join-Path $gsDir2 'backlog.md'
+  [IO.File]::WriteAllText($gsBl2, $gsSeed, $u8)
+  [IO.File]::WriteAllText((Join-Path $gsDir2 'inbox\lane-long.md'), "## a finding with a detailed state`n``DONE - shipped in the same change`` ``queue-7```n`nbody`n", $u8)
+  $oG2 = & $PSCommandPath -InboxDir (Join-Path $gsDir2 'inbox') -Backlog $gsBl2 -Today $DAY 2>&1 | Out-String
+  $cG2 = $LASTEXITCODE
+  _C 'CLEAN TWIN' 'a finding in the gate''s long form (DONE - detail) still merges as I41, exit 0' `
+    ($cG2 -eq 0 -and ([IO.File]::ReadAllText($gsBl2)) -match '(?m)^### I41 - a finding with a detailed state `DONE - shipped in the same change` `queue-7`$') "exit $cG2 :: $oG2"
+
   # MUST FIRE: a `.git` file whose pointer names nothing cannot say whether this is the allocator: exit 3, nothing written.
   $axJ = _AllocBox 'al-blind'
   [IO.File]::WriteAllText((Join-Path $axJ.other '.git'), ('gitdir: ' + (Join-Path $axJ.Dir 'no-such-admin') + "`n"), $u8)
@@ -1431,7 +1483,7 @@ if ($SelfTest) {
 
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (ops-and-gates.md). A blind case is counted as one that could not look,
   # never as a pass, and it still counts toward the list so a lost case is a shortfall rather than a smaller green.
-  $EXPECTED_CASES = 73
+  $EXPECTED_CASES = 75
   Write-Output ''
   if ($fails.Count -or ($ran + $blind) -ne $EXPECTED_CASES) {
     Write-Output ("merge-backlog-inbox SELF-TEST FAIL: {0} case(s) failed, {1} of {2} case(s) ran, {3} blind" -f $fails.Count, $ran, $EXPECTED_CASES, $blind)
@@ -1609,6 +1661,27 @@ function Invoke-TcMerge {
     }
   }
 
+  # ---- THE NEW FINDINGS, judged by the push gate's own rules, one file at a time (2026-09-24) ----
+  # A file whose headings the gate would fail is quarantined whole; one the gate could not judge stays in the inbox
+  # untouched and the run exits 3. Either way none of its findings is allocated an id.
+  $findingNames = @($findings | Where-Object { -not $_.Empty } | ForEach-Object { $_.From } | Select-Object -Unique)
+  $findHeld = @()
+  foreach ($fn in $findingNames) {
+    $mine = @($findings | Where-Object { -not $_.Empty -and $_.From -ceq $fn })
+    $fg = Test-TcFindingFileGate -Findings $mine
+    $fObj = @($files | Where-Object { $_.Name -ceq $fn })[0]
+    if ($fg.Code -eq 2) {
+      [void]$bad.Add([pscustomobject]@{ Name = $fn; Path = $fObj.FullName; QDir = $qRoot; Rel = $fn
+        Reason = ('in ' + $fn + ': written as backlog headings, its findings fail audit-backlog-status.ps1, the push gate''s own rules (the ids below are the check''s own, not the ones a merge would allocate):' + "`n" + ((@($fg.Lines | ForEach-Object { '  ' + $_.Trim() })) -join "`n")) })
+      $findHeld += $fn
+    } elseif ($fg.Code -ne 0) {
+      $pendingBlind += $fObj
+      $findHeld += $fn
+      Write-Output ("COULD NOT EVALUATE {0}: the gate could not judge its findings as backlog headings (gate exit {1}). It stays in the inbox untouched." -f $fn, $fg.Code)
+    }
+  }
+  if ($findHeld.Count) { $findings = @($findings | Where-Object { $findHeld -notcontains $_.From }) }
+
   if (@($bad).Count -gt 0) {
     $verb = 'QUARANTINED'
     if ($DryRun) { $verb = 'WOULD BE QUARANTINED' }
@@ -1621,7 +1694,8 @@ function Invoke-TcMerge {
   # separate in the output: a total that folds them together is how a number comes to mean
   # nothing.
   $badPaths = @($bad | ForEach-Object { $_.Path })
-  $accepted = @($files | Where-Object { $badPaths -notcontains $_.FullName })
+  $blindPaths = @($pendingBlind | Where-Object { $_ -is [IO.FileInfo] } | ForEach-Object { $_.FullName })
+  $accepted = @($files | Where-Object { $badPaths -notcontains $_.FullName -and $blindPaths -notcontains $_.FullName })
   $empties  = @($findings | Where-Object { $_.Empty })
   $findings = @($findings | Where-Object { -not $_.Empty })
   $updEmpties = @($updParsed | Where-Object { $_.Empty -and @($_.Updates).Count -eq 0 })
@@ -1665,7 +1739,6 @@ function Invoke-TcMerge {
   }
   $i = $next
   foreach ($f in $findings) {
-    $tag = if ($f.Tag) { " ``$($f.Tag)``" } else { '' }
     Write-Output ("  I{0,-4} {1,-58} <- {2}" -f $i, $f.Title.Substring(0, [Math]::Min(58, $f.Title.Length)), $f.From)
     # LF EXPLICITLY, never AppendLine. `[FIXED 2026-09-08, measured.]` AppendLine emits
     # [Environment]::NewLine, which is CRLF on this box, and the backlog is an LF file. The
@@ -1673,7 +1746,7 @@ function Invoke-TcMerge {
     # normalises on the way in, so the commit was clean and `git diff` showed nothing. That is
     # the estate's own crlf-flip-is-invisible-in-git-diff trap, arriving through a writer.
     [void]$block.Append("`n")
-    [void]$block.Append("### I$i - $($f.Title) ``$($f.State)``$tag`n")
+    [void]$block.Append((Format-TcFindingHeading $i $f) + "`n")
     [void]$block.Append("`n")
     [void]$block.Append("**Merged from ``design\backlog-inbox\$($f.From)`` on $Today.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.`n")
     [void]$block.Append("`n")
