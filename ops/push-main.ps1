@@ -21,6 +21,8 @@
 
   Run:        powershell -File ops\push-main.ps1
               powershell -File ops\push-main.ps1 -DryRun        (do everything except the push)
+              powershell -File ops\push-main.ps1 -Prepare       (start the commit-time chain rehearsal and return; W9.1,
+                                                                 run by ops/hooks/post-commit, D19)
   Self-test:  powershell -File ops\push-main.ps1 -SelfTest
 
   WHY THIS EXISTS AND `git push` IS NOT ENOUGH (2026-09-11, design\PLAN-push-livelock-2026-09-11.md).
@@ -176,6 +178,9 @@ param(
   # SKIP THE RE-EXEC ON SELF-CHANGE (W2.1R step 8) for this one push: the copy already running is used even when the
   # pre-flight rebase brought in a new one. The rollback for a broken re-exec, never a habit.
   [switch]$NoReexec,
+  # START THE COMMIT-TIME CHAIN REHEARSAL AND RETURN (W9.1, D19): fetch, start ops\rehearse-chain.ps1 -Early -Onto <origin
+  # sha> detached, print what it decided. No HEAD moves, no leg runs, no lock is taken. ops/hooks/post-commit runs it.
+  [switch]$Prepare,
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -582,6 +587,21 @@ $script:TcPmRebaseAbort = { param($d) Invoke-TcGit -Dir $d -Arguments @('rebase'
 # carrying the whole tree into the ledger.
 $script:TcPmDirtyCap = 20
 
+function Invoke-TcFetchWithRetry {
+  <# `git fetch --quiet <remote> <branch>`, retried ONCE on git's own words for a ref another process is updating at this
+     moment, "cannot lock ref" (W2.1R step 2). The Invoke-TcGit result of the last try. #>
+  param([string]$Dir, [string]$Remote, [string]$Branch)
+  $fetchArgs = @('fetch', '--quiet', $Remote, $Branch)
+  $f = Invoke-TcGit -Dir $Dir -Arguments $fetchArgs
+  if ($f.Code -ne 0 -and $f.Text -match 'cannot lock ref') {
+    Say ("push-main: `git fetch` could not lock the remote-tracking ref (another fetch or push was updating it); retrying once.")
+    if ($script:TcPmBeforeFetchRetry) { & $script:TcPmBeforeFetchRetry $Dir }
+    Start-Sleep -Milliseconds $script:TcPmFetchRetryPauseMs
+    $f = Invoke-TcGit -Dir $Dir -Arguments $fetchArgs
+  }
+  return $f
+}
+
 function Test-TcRebaseInProgress {
   <# Whether git left a rebase directory (rebase-merge or rebase-apply) under this checkout's own git dir. #>
   param([string]$Dir)
@@ -624,15 +644,7 @@ function Invoke-TcSyncToRemote {
      and names the main-checkout route when this is the main checkout. #>
   param([string]$Dir, [string]$Remote, [string]$Branch, [string]$Phase = 'inlock', [bool]$NoRebase = $false, [bool]$ProbeOnly = $false)
   $outside = -not [string]::Equals($Phase, 'inlock', [StringComparison]::Ordinal)
-  $fetchArgs = @('fetch', '--quiet', $Remote, $Branch)
-  $f = Invoke-TcGit -Dir $Dir -Arguments $fetchArgs
-  if ($f.Code -ne 0 -and $f.Text -match 'cannot lock ref') {
-    # ONE RETRY, on git's own words for a ref another process is updating at this moment (W2.1R step 2).
-    Say ("push-main: `git fetch` could not lock the remote-tracking ref (another fetch or push was updating it); retrying once.")
-    if ($script:TcPmBeforeFetchRetry) { & $script:TcPmBeforeFetchRetry $Dir }
-    Start-Sleep -Milliseconds $script:TcPmFetchRetryPauseMs
-    $f = Invoke-TcGit -Dir $Dir -Arguments $fetchArgs
-  }
+  $f = Invoke-TcFetchWithRetry -Dir $Dir -Remote $Remote -Branch $Branch
   $degraded = ''
   $head = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'HEAD')).Out[0]).Trim()
   if ($f.Code -ne 0) {
@@ -1483,6 +1495,126 @@ function Invoke-TcRereadPreflight {
   if ($n -gt 0) { Say ("push-main: WARN - {0} commit(s) here add a re-read as a doc line; record it with ops\add-reread.ps1 instead" -f $n) }
 }
 
+# ======================================================================================================================
+# -PREPARE: START THE COMMIT-TIME CHAIN REHEARSAL (2026-09-23, W9.1 step 3, push-main's half; D19 ruled yes, so the
+# trigger is ops/hooks/post-commit, which runs this detached). It fetches, starts `ops\rehearse-chain.ps1 -Early -Onto
+# <origin sha>` DETACHED, and reports what that child decided. It moves no HEAD, runs no leg and takes no lock; the
+# per-checkout guard is not taken either, since a fetch that only updates the remote-tracking ref cannot rewrite a
+# running push's HEAD. Every judgement that costs a read (does the content touch a manifest member, is there already a
+# verdict for the rebased key, is another checkout's early run holding it, does this commit supersede an older run) is
+# rehearse-chain's, whose Get-RhManifestSet is the one implementation of the key.
+# DETACHED MEANS OUTSIDE THIS PROCESS TREE: the rehearsal takes about 14 minutes and the hook's shell exits in seconds,
+# so the child is created by Win32_Process.Create (its parent is WmiPrvSE, measured 2026-09-23), which no job object or
+# tree-kill of the caller reaches; it inherits the user's own environment, not this process's, so GIT_DIR and the rest of
+# a hook's repository variables never reach it. When CIM is unavailable, Start-Process is the fallback, said.
+# The child's output goes to %LOCALAPPDATA%\ThriftyCrew\push-main-prepare\<key16>.log (one file per checkout, outside it,
+# overwritten per start). -Prepare waits up to $script:TcPmPrepareDecideSec for the child's first decision line and prints
+# it; a hang guard, not a speed bar.
+# ======================================================================================================================
+$script:TcPmPrepareLogRoot = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'ThriftyCrew\push-main-prepare'
+$script:TcPmPrepareDecideSec = 90
+$script:TcPmPrepareStarter = $null   # a self-test seam: { param($Exe, $Args, $Log, $WorkDir) } returning the child's pid
+
+function Start-TcDetachedProcess {
+  <# Starts `powershell.exe <-File script args>` with its stdout and stderr in $Log, outside this process tree
+     (Win32_Process.Create), or with Start-Process when CIM cannot. Returns Pid (0 when nothing started), How and Why. #>
+  param([string]$Script, [string[]]$ScriptArgs, [string]$Log, [string]$WorkDir)
+  $ps = (Get-Command powershell.exe -ErrorAction SilentlyContinue).Source
+  if (-not $ps) { $ps = 'powershell.exe' }
+  $quoted = @($ScriptArgs | ForEach-Object { $a = [string]$_; if ($a -match '[\s"]') { '"' + ($a -replace '"', '\"') + '"' } else { $a } }) -join ' '
+  $line = 'cmd.exe /d /s /c ""' + $ps + '" -NoProfile -ExecutionPolicy Bypass -File "' + $Script + '" ' + $quoted + ' > "' + $Log + '" 2>&1"'
+  try {
+    $r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = $line; CurrentDirectory = $WorkDir } -ErrorAction Stop
+    if ([int]$r.ReturnValue -eq 0 -and [int]$r.ProcessId -gt 0) { return [pscustomobject]@{ Pid = [int]$r.ProcessId; How = 'cim'; Why = '' } }
+    $why = 'Win32_Process.Create returned ' + $r.ReturnValue
+  } catch { $why = 'CIM could not start it: ' + $_.Exception.Message }
+  try {
+    $p = Start-Process -FilePath $ps -WorkingDirectory $WorkDir -WindowStyle Hidden -PassThru -ErrorAction Stop `
+      -RedirectStandardOutput $Log -RedirectStandardError ($Log + '.err') `
+      -ArgumentList (@('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $Script + '"')) + @($ScriptArgs))
+    return [pscustomobject]@{ Pid = [int]$p.Id; How = 'start-process'; Why = $why }
+  } catch {
+    return [pscustomobject]@{ Pid = 0; How = 'none'; Why = ($why + '; Start-Process could not start it either: ' + $_.Exception.Message) }
+  }
+}
+
+function Read-TcSharedText {
+  <# A file another process is still writing, read with FileShare.ReadWrite; '' when it cannot be read yet. #>
+  param([string]$Path)
+  if (-not (Test-Path -LiteralPath $Path)) { return '' }
+  try {
+    $fs = New-Object IO.FileStream($Path, [IO.FileMode]::Open, [IO.FileAccess]::Read, ([IO.FileShare]::ReadWrite -bor [IO.FileShare]::Delete))
+    try { $sr = New-Object IO.StreamReader($fs); return $sr.ReadToEnd() } finally { $fs.Dispose() }
+  } catch { return '' }
+}
+
+function Invoke-TcPushMainPrepare {
+  <# -Prepare (see the block above). Returns 0 when the early rehearsal was started or rehearse-chain decided to start
+     nothing, 3 when no child could be started at all or origin could not be named (never a pass, and never a refusal
+     of anything: the hook ignores it). -RehearseScript and -LogRoot are the self-test's seams. #>
+  param([string]$Dir, [string]$Remote, [string]$Branch, [string]$RehearseScript = '', [string]$LogRoot = '')
+  # A HOOK'S REPOSITORY VARIABLES NEVER REACH THIS RUN'S git OR ITS CHILD (.claude/rules/ops-and-gates.md, "A git hook in
+  # a LINKED worktree exports GIT_DIR"): post-commit clears them too, and this is the second line of that defence.
+  Clear-TcGitRepoEnv
+  $rh = $(if ($RehearseScript) { $RehearseScript } else { Join-Path $Dir 'ops\rehearse-chain.ps1' })
+  if (-not (Test-Path -LiteralPath $rh)) { Say 'push-main -Prepare: this checkout has no ops\rehearse-chain.ps1, so there is no early rehearsal to start.'; return 0 }
+  if ([IO.File]::ReadAllText($rh) -notmatch '\[switch\]\$Early\b') { Say 'push-main -Prepare: this checkout''s ops\rehearse-chain.ps1 has no -Early mode (it is older than W9.1), so no early rehearsal is started.'; return 0 }
+  $f = Invoke-TcFetchWithRetry -Dir $Dir -Remote $Remote -Branch $Branch
+  $onto = ''
+  if ($f.Code -eq 0) { $onto = Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'FETCH_HEAD')) }
+  if (-not $onto) {
+    $onto = Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', ('refs/remotes/' + $Remote + '/' + $Branch)))
+    if ($onto) { Say ("push-main -Prepare: `git fetch` failed (exit {0}), so the early rehearsal is based on the last-fetched {1}/{2}, {3}." -f $f.Code, $Remote, $Branch, $onto.Substring(0, 9)) }
+  }
+  if ($onto -notmatch '^[0-9a-f]{40}([0-9a-f]{24})?$') { Say ("push-main -Prepare: COULD NOT EVALUATE - {0}/{1} could not be named, so nothing was started." -f $Remote, $Branch); return 3 }
+  $root = $(if ($LogRoot) { $LogRoot } else { $script:TcPmPrepareLogRoot })
+  try { if (-not (Test-Path -LiteralPath $root)) { $null = New-Item -ItemType Directory -Force -ErrorAction Stop $root } } catch { Say ('push-main -Prepare: the log directory could not be made (' + $_.Exception.Message + '); nothing was started.'); return 3 }
+  $log = Join-Path $root ((Get-TcCheckoutGuardKey -Dir $Dir).Substring(0, 16) + '.log')
+  Remove-Item -LiteralPath $log -Force -ErrorAction SilentlyContinue
+  $childArgs = [string[]]@('-Early', '-Onto', $onto, '-Remote', $Remote, '-Branch', $Branch)
+  $st = $(if ($script:TcPmPrepareStarter) { & $script:TcPmPrepareStarter $rh $childArgs $log $Dir } else { Start-TcDetachedProcess -Script $rh -ScriptArgs $childArgs -Log $log -WorkDir $Dir })
+  if ($null -eq $st -or [int]$st.Pid -le 0) { Say ('push-main -Prepare: COULD NOT start the early rehearsal (' + $(if ($st) { $st.Why } else { 'no answer from the starter' }) + ').'); return 3 }
+  if ($st.Why) { Say ('push-main -Prepare: ' + $st.Why + '; started it with Start-Process instead, inside this process tree.') }
+  Say ("push-main -Prepare: started the early chain rehearsal of HEAD onto {0} as pid {1}; its output is {2}." -f $onto.Substring(0, 9), $st.Pid, $log)
+  # ITS FIRST DECISION, read as it is written: "rehearsing ... (key K), in-flight file F" when it started, or its
+  # completion line when it decided to start nothing. A hang guard only; past it, the log is where the answer will be.
+  $sw = [Diagnostics.Stopwatch]::StartNew()
+  $said = ''
+  while ($sw.Elapsed.TotalSeconds -lt $script:TcPmPrepareDecideSec) {
+    $txt = Read-TcSharedText -Path $log
+    $dec = @(($txt -split "`r?`n") | Where-Object { $_ -match '^chain-rehearsal: EARLY - rehearsing ' -or $_ -match '^CHAIN-REHEARSAL-EARLY-COMPLETE ' })
+    if ($dec.Count) { $said = [string]$dec[0]; break }
+    Start-Sleep -Milliseconds 250
+  }
+  if ($said) {
+    Say ('push-main -Prepare: ' + $said)
+    $mk = [regex]::Match($said, '\(key ([0-9a-f]+)\), in-flight file (.+)$')
+    if ($mk.Success) { Say ("push-main -Prepare: key {0}, in-flight file {1}" -f $mk.Groups[1].Value, $mk.Groups[2].Value.Trim()) }
+  } else {
+    Say ("push-main -Prepare: the child had not decided within {0} s; it is still running, and its answer will be in {1}." -f $script:TcPmPrepareDecideSec, $log)
+  }
+  return 0
+}
+
+function Get-TcEarlyHit {
+  <# The row's early_hit (W9.1 step 7), from what the round-1 -ForPush child said: not-chain when the push touched no
+     member; yes when its covering verdict's record says early (an early=yes token on its CHAIN-REHEARSAL-CHECK-COMPLETE
+     line, or a PASSED line naming an early rehearsal); no when it rehearsed now, found no verdict, or its marker says
+     early=no; unknown when a chain push's child did not say (a rehearse-chain older than the token). Pure. #>
+  param($ChainTouching, $Lines)
+  if ($ChainTouching -eq $false -and $null -ne $ChainTouching) { return 'not-chain' }
+  $all = @(@($Lines) | ForEach-Object { [string]$_ })
+  $mark = @($all | Where-Object { $_ -match '^CHAIN-REHEARSAL-CHECK-COMPLETE ' })
+  $last = $(if ($mark.Count) { $mark[$mark.Count - 1] } else { '' })
+  $tok = [regex]::Match($last, '\bearly=(\S+)')
+  if ($tok.Success) { if ($tok.Groups[1].Value -match '^(yes|1|true)$') { return 'yes' } else { return 'no' } }
+  if (@($all | Where-Object { $_ -match '^chain-rehearsal: PASSED\b.*\bearly\b' }).Count) { return 'yes' }
+  if (@($all | Where-Object { $_ -cmatch 'rehearsing HEAD now' }).Count) { return 'no' }
+  if ($last -match '\boutcome=(no-verdict|stale|rehearsed-fail)\b') { return 'no' }
+  if ($null -eq $ChainTouching) { return $null }
+  return 'unknown'
+}
+
 function Invoke-TcPushMainReexec {
   <# RUN THE NEW COPY ONCE (W2.1R step 8): the script at -Path as a child, with -Arguments and TC_PUSH_MAIN_REEXEC=1, its
      lines echoed as they arrive. Returns its exit code, or $null when it could not be started, in which case the caller
@@ -1600,6 +1732,8 @@ function Invoke-TcPushMain {
     inbox_updates_modified = $null
     # W4.1 step 7 (warn only): commits adding a re-read as a doc line instead of a design/reread-ledger.tsv row.
     reread_doc_lines     = $null
+    # W9.1 step 7 (B22): yes, no, not-chain or unknown, from the first -ForPush of the run; null when no child said.
+    early_hit            = $null
   }
   # ONE ROW PER RUN, and at most one (review of W0.1R, 2026-09-23): the guard below writes a row for a throw that no path
   # wrote one for, so every path now ends here, and a path that already wrote one is never written twice.
@@ -1821,6 +1955,8 @@ function Invoke-TcPushMain {
       if ($round -eq 1) {
         $rhSec = [int][math]::Round($rhSw.Elapsed.TotalSeconds)
         $null = Invoke-TcRowReader 'rehearsal' { Add-TcRehearsalReadings -Row $pmRow -Result $rh -Sec $rhSec }
+        # WAS THIS PUSH COVERED BY A COMMIT-TIME REHEARSAL (W9.1 step 7, B22)? Read off the FIRST -ForPush of the run.
+        $pmRow['early_hit'] = Invoke-TcRowReader 'early_hit' { Get-TcEarlyHit -ChainTouching $pmRow['chain_touching'] -Lines (Get-TcOptionalProp $rh 'Lines') } $null
       } else {
         $catchupTotal += $rhSw.Elapsed.TotalSeconds; $pmRow['catchup_sec'] = [int][math]::Round($catchupTotal)
       }
@@ -2997,6 +3133,64 @@ $m.Dispose()
     $rrPure2 = Get-TcRereadDocLineCount -Lines @('TC-COMMIT 1111', ('+' + $rrLine), ('+' + $rrLine), 'TC-COMMIT 2222', ('+' + $rrLine))
     T ($kMNF + '  a removed re-read line or one only in the +++ header counts 0, and two added lines in one commit count that commit once (2 commits, 2)') `
       ($rrPure -eq 0 -and $rrPure2 -eq 2) ("removed={0} twoCommits={1}" -f $rrPure, $rrPure2)
+
+    # ---- W9.1, PUSH-MAIN'S HALF: -Prepare AND early_hit (2026-09-23) ----
+    # Founding figure (plan 16.1, SCRATCH): a rehearsal started at commit time, of HEAD rebased onto origin as it stood
+    # then, would have been ready and valid before the push for 10 of 23 chain landings (43%, bar 30%). -Prepare is the
+    # start; rehearse-chain -Early decides. The stub below stands in for rehearse-chain: it declares -Early, records how it
+    # was called in a file beside itself, and prints the decision line and the completion line the real one prints. It is
+    # started through the REAL detached starter (Win32_Process.Create), so the fixture proves the child outlives the call.
+    $pr = & $newPusher 'pr'
+    & $moveOrigin 'notes.txt'
+    $prTip = & $tipOf
+    $prHead0 = ([string](@(& git -C $pr rev-parse HEAD 2>$null))[0]).Trim()
+    $prDir = Join-Path $tmp 'prstub'
+    $null = New-Item -ItemType Directory -Force -ErrorAction Stop $prDir
+    $prStub = Join-Path $prDir 'rehearse-stub.ps1'
+    $prSaw = Join-Path $prDir 'saw.txt'
+    [IO.File]::WriteAllText($prStub, ("param([switch]`$Early, [string]`$Onto, [string]`$Remote, [string]`$Branch)`n" +
+      "[IO.File]::WriteAllText('" + $prSaw + "', ('early=' + [bool]`$Early + ' onto=' + `$Onto + ' remote=' + `$Remote + ' branch=' + `$Branch + ' cwd=' + (Get-Location).Path + ' gitdir=' + `$env:GIT_DIR))`n" +
+      "Write-Output ('chain-rehearsal: EARLY - rehearsing 111111111 rebased onto ' + `$Onto.Substring(0, 9) + ' (key abcdef012345), in-flight file C:\fixture\early\x.json')`n" +
+      "Write-Output 'CHAIN-REHEARSAL-EARLY-COMPLETE started=yes reason=rehearsed verdict=pass key=abcdef012345'`n" +
+      "exit 0`n"))
+    $prLogs = Join-Path $tmp 'prlogs'
+    $gitDirWas = $env:GIT_DIR
+    $env:GIT_DIR = Join-Path $tmp 'a-hook-git-dir-that-must-not-reach-the-child'
+    try {
+      $prCap = Invoke-StCapture { Invoke-TcPushMainPrepare -Dir $pr -Remote 'origin' -Branch 'main' -RehearseScript $prStub -LogRoot $prLogs }
+    } finally { if ($null -eq $gitDirWas) { Remove-Item -LiteralPath Env:GIT_DIR -ErrorAction SilentlyContinue } else { $env:GIT_DIR = $gitDirWas } }
+    $prSaid = $(if (Test-Path -LiteralPath $prSaw) { ([IO.File]::ReadAllText($prSaw)).Trim() } else { '<the stub never ran>' })
+    $prHead1 = ([string](@(& git -C $pr rev-parse HEAD 2>$null))[0]).Trim()
+    T ($kMF + '  -Prepare fetches and starts rehearse-chain -Early -Onto the fetched origin tip, detached and outside this process''s environment, prints the key and the in-flight file, and returns 0') `
+      ($prCap.Result -eq 0 -and $prSaid -match ('^early=True onto=' + $prTip + ' remote=origin branch=main cwd=') -and $prSaid -match 'gitdir=$' -and $prCap.Text -match 'key abcdef012345, in-flight file C:\\fixture\\early\\x\.json') `
+      ("rc={0} saw={1}" -f $prCap.Result, $prSaid)
+    T ($kMNF + '  -Prepare moves no HEAD (origin had moved, and HEAD is where it was), runs no leg and writes no push row') `
+      ($prHead0 -eq $prHead1 -and $prHead1 -ne $prTip) ("before={0} after={1} origin={2}" -f $prHead0, $prHead1, $prTip)
+    # MUST NOT FIRE: a rehearse-chain with no -Early mode (a checkout older than W9.1) is not started at all.
+    $prOld = Join-Path $prDir 'rehearse-old.ps1'
+    $prOldSaw = Join-Path $prDir 'saw-old.txt'
+    [IO.File]::WriteAllText($prOld, ("param([switch]`$ForPush)`n[IO.File]::WriteAllText('" + $prOldSaw + "', 'ran')`nexit 0`n"))
+    $prOldCap = Invoke-StCapture { Invoke-TcPushMainPrepare -Dir $pr -Remote 'origin' -Branch 'main' -RehearseScript $prOld -LogRoot $prLogs }
+    T ($kMNF + '  -Prepare in a checkout whose rehearse-chain has no -Early mode starts nothing, says so, and returns 0') `
+      ($prOldCap.Result -eq 0 -and -not (Test-Path -LiteralPath $prOldSaw) -and $prOldCap.Text -match 'no -Early mode') ("rc={0} ran={1}" -f $prOldCap.Result, (Test-Path -LiteralPath $prOldSaw))
+    # early_hit, pure over what the round-1 -ForPush child printed.
+    $ehYes = Get-TcEarlyHit -ChainTouching $true -Lines @('chain-rehearsal: PASSED - 1 chain script(s) changed', 'CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=rehearsed-pass early=yes')
+    $ehNow = Get-TcEarlyHit -ChainTouching $true -Lines @('chain-rehearsal: this push changes the chain and has no usable rehearsal verdict - rehearsing HEAD now, OUTSIDE the push lock.', 'CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=rehearsed-pass')
+    $ehNc = Get-TcEarlyHit -ChainTouching $false -Lines @('CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=not-needed')
+    $ehOld = Get-TcEarlyHit -ChainTouching $true -Lines @('chain-rehearsal: PASSED - 1 chain script(s) changed', 'CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=rehearsed-pass')
+    T ($kMF + '  early_hit reads yes from an early=yes token, no for a push that rehearsed now, not-chain for a push touching no member, and unknown when a chain push''s child says neither') `
+      ($ehYes -ceq 'yes' -and $ehNow -ceq 'no' -and $ehNc -ceq 'not-chain' -and $ehOld -ceq 'unknown') ("yes={0} now={1} notChain={2} old={3}" -f $ehYes, $ehNow, $ehNc, $ehOld)
+    # CLEAN TWIN: the row of a push whose -ForPush found the early verdict carries early_hit yes, through the real row path.
+    $eh = & $newPusher 'eh'
+    $ehRunner = { param($d) [pscustomobject]@{ Code = 0; Why = 'fixture'; Ran = $true; Lines = [string[]]@('chain-rehearsal: PASSED - 1 chain script(s) changed and this content was rehearsed over data from 2026-09-23 (0 day(s) old)', 'CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=rehearsed-pass early=yes') } }
+    $ledEh = Join-Path $tmp 'ledeh'
+    $rEh = Invoke-TcPushMain -Dir $eh -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $ehRunner -LedgerRoot $ledEh
+    $ehRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledEh)
+    $ehRows = @($ehRaw)
+    $ehRow = $(if ($ehRows.Count) { $ehRows[0] } else { $null })
+    T ($kCT + '  a push whose -ForPush read the early verdict lands with early_hit yes and chain_touching true on its row, and its rehearsal leg is 0 s (a reuse)') `
+      ($rEh -eq 0 -and $ehRows.Count -eq 1 -and [string]$ehRow.early_hit -ceq 'yes' -and $ehRow.chain_touching -eq $true -and [int]$ehRow.leg_sec.rh -eq 0) `
+      ("rc={0} rows={1} early_hit={2} chain={3} rh={4}" -f $rEh, $ehRows.Count, $(if ($ehRow) { $ehRow.early_hit }), $(if ($ehRow) { $ehRow.chain_touching }), $(if ($ehRow) { $ehRow.leg_sec.rh }))
     # CLEAN TWIN: a READER that throws costs its field, never the push. The gate's result says its run-gates leg took
     # 'not-a-number' seconds, so Add-TcRunnerReadings' [int] cast throws; the push must land and the row keep leg_sec.rg
     # null. NOT a throwing ScriptProperty: PowerShell swallows a getter's exception on member access and reads $null, and
@@ -3673,8 +3867,8 @@ $m.Dispose()
   # fetch-and-rebase-first loop, W0.1's 32, W0.1R's 8, the 15 its review added, W2.1R with W8.1's 14 (the index.lock
   # case was rewritten in place, not added), and W2.2R's 10 (9 catch-up cases, and the could-not-decide case split into a
   # MUST NOT FIRE and a CLEAN TWIN), W9.4's 5 (the queue member's hand-back case lands with W9.2), and W3.2 with W3.4a
-  # step 3's 7, and W4.1 step 7's 3; read off this file, not added up.
-  $expectedCases = 132
+  # step 3's 7, W4.1 step 7's 3, and W9.1's push-main half's 5; read off this file, not added up.
+  $expectedCases = 137
   if ($cases -ne $expectedCases) { Write-Output ("FAIL  the suite ran {0} case(s) where this file holds {1}, so a case was skipped or lost" -f $cases, $expectedCases); $f++ }
   if ($f) { Write-Output ("push-main self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("push-main self-test PASS: {0} cases - led by a branch whose base the remote moved past landing on its FIRST attempt, and by a conflicting rebase being aborted rather than left half-finished under the lock" -f $cases)
@@ -3685,6 +3879,10 @@ if ($NoRehearsal) {
   $env:TC_NO_REHEARSAL = $(if ($NoRehearsalReason) { $NoRehearsalReason } else { 'push-main -NoRehearsal, no reason given' })
   Say ('push-main: *** -NoRehearsal *** this push skips the chain rehearsal; the hook will print it and the bypass is logged. Reason: ' + $env:TC_NO_REHEARSAL)
   $script:TcPmReexecExtra = @('-NoRehearsal', '-NoRehearsalReason', $env:TC_NO_REHEARSAL)
+}
+if ($Prepare) {
+  $rcP = Invoke-TcPushMainPrepare -Dir $repo -Remote $Remote -Branch $Branch
+  exit $rcP
 }
 $rc = Invoke-TcPushMain -Dir $repo -Remote $Remote -Branch $Branch -LockWaitSec $LockWaitSec -DryRun ([bool]$DryRun) -NoReexec ([bool]$NoReexec)
 exit $rc
