@@ -718,7 +718,11 @@ construction.
   `ops\hooks\pre-push` holds it across the gate through `ops\hold-push-lock.ps1`, because a mutex needs a live
   process and the hook's two PowerShell children each exit; `ops\push-main.ps1` takes it BEFORE it fetches and
   rebases, which is the only place a base can be guaranteed not to go stale, so that push lands on its first
-  attempt. **Every lock path degrades to the behaviour of the day before, never to a refusal** - no holder script in
+  attempt. **SUPERSEDED, kept because the measurement above is of it:** that was the 2026-09-11 design. The gate left
+  the lock on 2026-09-12 (CLAUDE.md, "THE GATE MUST NOT RUN INSIDE THE LOCK"), the hook now takes it for the ref update
+  only, and since 2026-09-23 push-main takes it for the swap only and rebases OUTSIDE it (the next bullet). The base is
+  still guaranteed fresh, now by the fetch inside the lock and the hand-back, never by a rebase under it.
+  **Every lock path degrades to the behaviour of the day before, never to a refusal** - no holder script in
   an older checkout, a wedged queue, anything thrown, and the hook says so and pushes on. The lock is a FAIRNESS
   device and the gate is what makes a push safe, which is why a bypassed lock is not a hole in anything and why one
   that could refuse would be worse than the livelock. `design\MEASURE-push-lock-2026-09-11.md` has the numbers, the
@@ -731,6 +735,82 @@ construction.
   failed the push for it. **A suite that reads ambient state a gate's own caller may be holding must say which
   instance it means** - the `identity-graph-commodity-is-namespaced` shape, an agreeing answer about something else.
   Drive such a suite once with the real lock held before believing it.
+- **PUSH-MAIN FITS FIRST, RE-CHECKS WHAT MOVED, AND LOCKS ONLY THE SWAP** (2026-09-23,
+  `design\PLAN-push-derived-conflicts-2026-09-23.md` W2.1R with W8.1, W2.2R, W9.4; design A, Brad's ruling that
+  evening). `ops\push-main.ps1`'s own header is the full account; the shape, in order:
+  1. **The pre-flight rebases BEFORE any leg.** One push-main per checkout (a zero-wait guard named from the worktree
+     path); a fetch that retries once on `cannot lock ref`; a conflict read and refused in seconds with the files named,
+     told apart from a rebase that could not start, and an abort that is checked; a branch the rebase empties refused as
+     `refused-already-on-main`, never read as a landing; a dirty tree refused with its paths (at most 20) and
+     `dirty_since=start` or `during-legs`; a rebase that brings a newer push-main re-executes onto it once. Then the seed,
+     which refreshes what the source rewrote. A later red leaves the branch rebased, which is where it has to land anyway.
+  2. **The legs run outside the lock**: run-gates, test-auditors, and the chain rehearsal for a chain-touching push.
+  3. **Catch-up rounds, outside the lock**, at most `$script:PmMaxCatchUpRounds = 3`: one fetch after a round's legs;
+     moved, rebase there (a conflict refuses, `phase=catchup`) and run the next round warm on each leg's own keys. The
+     rehearsal budget (`$script:PmMaxRehearsalRounds = 3`) counts only rounds whose rehearsal REHEARSED, so cheap rounds
+     never spend it, and at the budget the push is refused `refused-rehearsal-churn` (D11a, the rehearsal leg only: the
+     hook never rehearses, so pushing into the lock without a covering verdict is a certain refusal there; run-gates and
+     test-auditors still degrade to the lock, because the hook can run them again).
+  4. **The lock holds the swap only.** Inside it, a fetch that only ASKS whether origin moved since the last outside
+     round. Unmoved, `git push`, and the hook replays the recorded verdicts (about 25 s). Moved, the lock is HANDED BACK
+     with no rebase under it, the next round rebases and re-runs outside, and the lock is taken again, at most
+     `$script:PmMaxHandBacks = 3` times. At the cap it rebases inside the lock with the in-lock verdict check as the
+     backstop, which is the day before, so the rule cannot livelock and never refuses. A hand-back spends the rehearsal
+     budget only when its rehearsal leg rehearsed. The cap of 3 is the first plausible value, not a swept one.
+  **This is still the 2026-09-12 ruling, not an exception to it**: no lock is held across a leg. The chain lease (the
+  plan's W6.1) would have held one and needed D8's named exception; design A replaced it before it was built, and D8 is
+  superseded. **Two rules go with it (W7.1a)**, each from a measured refusal class: run board steps, guards and
+  reconcilers in a scratch clone, never in the checkout you land from (row 50 of the plan's case list: a lane's own
+  `reconcile-ghost-drift` wrote `grocery/ghost-tool-published.json` while its legs ran, `dirty_since=during-legs`); and
+  land a chain change only through push-main, never `git push origin HEAD:main`, with every orchestrator brief saying so
+  (6 of 17 chain landings after the rehearsal gate were plain pushes from one orchestrator's lanes, and one of them,
+  `855171a1e`, voided a rehearsal another push was relying on). **From the main checkout**, push-main refuses the tree
+  the pipelines keep dirty; land from a clean linked worktree, seeded with `ops\seed-worktree.ps1 -Target`.
+  **STILL LANDING when this was written (2026-09-24); read `git log origin/main` for the Plan id before relying on any
+  of it.** The lock order paragraph above gains `0a`, `0b`, `2a` and `2b` in W9.2's commit (plan 16.6).
+  - **Commit-time rehearsal** (W9.1, D19 ruled yes). `ops/hooks/post-commit` starts `push-main -Prepare` detached under
+    `CLAUDE_CODE_SESSION_ID`, never inside a rehearsal (`TC_REHEARSAL_RUN`), and never fails a commit; `-Prepare` fetches
+    and starts `rehearse-chain.ps1 -Early -Onto <origin sha>`, which rehearses HEAD rebased onto origin as it stood at
+    commit time, and a later commit that moves the key supersedes it through a stop file. **The rebase is the design,
+    not an optimisation**: over 23 chain landings on 2026-09-23 the rebased variant would have covered 10 (43%) and the
+    unrebased one 6 (26%), against a 30% bar written before the run; B22 re-measures it live on push-main landings.
+    `-Prepare` and the row's `early_hit` are on main; the rehearsal half and the hook are not, so `early_hit` reads
+    `unknown` on a reuse until they land.
+  - **The legs start together** (W9.3, absorbing W2.3). The rehearsal starts beside run-gates, then test-auditors runs,
+    and a red leg writes the stop file so the rehearsal ends `blind=stopped` and the push refuses `refused-gate-red`
+    without waiting up to about 14 minutes. No process holds one pool while waiting on the other.
+  - **The chain queue** (W9.2, replacing W6.1's lease). A chain-touching push, `-NoRehearsal` included, takes an
+    arrival-order ticket (`lib\chain-queue.ps1`, on `lib\gate-slots.ps1`'s ticket functions, never `Enter-TcGateSlots`),
+    and its rehearsal judges HEAD stacked on the ranges of the live tickets ahead, in the rehearsal's clone only: the
+    worktree is NEVER rebased onto another ticket's commits. It waits for the tickets ahead to land or leave before its
+    swap, holding nothing but its ticket. **ORDER, NOT CAPACITY**: its ceiling is 6 rehearsal slots over an 800 to
+    1,240 s rehearsal, about 17 to 27 chain landings an hour (review, SCRATCH); its cost is head-of-line, up to about 21
+    minutes. `-ChainQueue off` is the rollback.
+  - **The main checkout lands through push-main** (W8.2): a throwaway worktree per run, then `git reset --keep` to the
+    landed tip in the main checkout when its HEAD did not move (`main_sync=manual` when it did), and the throwaway is
+    always removed. The manual route above then retires.
+  - **The pre-push queue-head check** (W8.3, amended). Right after the rehearsal record check and before run-gates, a
+    chain-touching push that is not descended from a live ticket (`TC_CHAIN_QUEUE_HOLDER`) is refused in seconds with
+    `PRE-PUSH-REFUSED cause=chain-queue` while any ticket is live. It probes with ZERO wait and acquires nothing, so the
+    hook never waits on the queue and no wait-for edge is added.
+- **A LANE WRITES ONLY WHAT IT OWNS** (2026-09-23, W3.1, W3.3, W4.1 of the same plan). A file several lanes append to,
+  or one derived from the whole tree, is a conflict factory: **20 of 22 push-main rebase conflicts conflicted ONLY on
+  shared append-shaped or derived files, and 14 of the 22 named `design/BACKLOG-course-findings.md`** (a row can
+  name more than one file: 5 named the ready-for-brad README and 2 named re-read lines in MEASURE docs). The other 2 were
+  genuine code, and those must never be auto-resolved.
+  20 of the 22 also came from one session's parallel lanes on 09-18 and 09-19, so the rate is a busy-day rate. So:
+  - **Backlog progress is an inbox UPDATE**, a new file under `design\backlog-inbox\updates\`, never an edit of the
+    backlog itself and never an edit of an existing `updates\` file. The merge (`ops\merge-backlog-inbox.ps1`, one
+    allocator) folds it in; a new finding is its own top-level inbox file and claims no id. `design\backlog-inbox\README.md`
+    has the format.
+  - **A re-read is a ledger row**, written by `ops\add-reread.ps1` into `design\reread-ledger.tsv`, which git merges by
+    union, never a `Re-read at` line added to the doc (`.claude/rules/measurement.md` has the command).
+  - **A ready-for-brad item is its own file** under `design\ready-for-brad\`; the README is an explainer and carries no
+    item.
+  push-main's pre-flight counts each of the first two shapes and WARNS (`backlog_direct`, `inbox_invalid`,
+  `inbox_updates_modified`, `reread_doc_lines` on the row). None refuses yet. Brad ruled D3 yes: from a literal cutoff
+  one week after W3.1 and W4.1 landed (both 2026-09-23), a push that edits the backlog directly or adds a re-read as a
+  doc line is to be refused. That refusal is not built when this is written.
 
   **A session in the MAIN checkout lands with `ops\push-main.ps1` too, which goes through a throwaway worktree by itself**
   (2026-09-23, W8.2): a plain push from the main checkout is the one road left that races the whole hook, and 11 of 82

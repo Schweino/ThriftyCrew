@@ -62,17 +62,11 @@ because main moved while it waited, is refused in seconds instead of after the w
 **ONE PUSH AT A TIME ON THIS BOX, and `ops\push-main.ps1` is how you land one** (2026-09-11). A push is a
 compare-and-swap whose critical section is the whole hook, so on a busy day the slowest push never lands however
 green its gates are: measured over 11 consecutive attempts from one session, `run-gates` passed every time and every
-one was rejected with *"cannot lock ref"* while others landed every 15 to 25 minutes. The hook now holds a
-machine-wide push lock across the gate, so nothing else can land while yours runs. **A plain `git push` still works
-and is still fully gated**, but it takes the lock only after git has fixed its refs, so a long queue can still leave
-it stale and refused in seconds with "rebase and push again". `ops\push-main.ps1` **gates OUTSIDE the lock and then
-takes it for the fetch, the rebase and the ref update only**, which is what makes a verified commit land on its FIRST
-attempt without holding up the box while it does. It weakens
-nothing - it runs a plain `git push`, and a red gate refuses it like any other. **A lock that cannot be taken is
-never a refusal**: the hook says so and pushes on, gated exactly as before. **It binds only the checkouts that HAVE
-`ops\hold-push-lock.ps1`**, because the shared hook must not hard-fail in a checkout older than itself - so a
-checkout that has not pulled this still pushes unlocked and can still overtake you. Measured on the very push that
-shipped it: 379 gates green, rejected anyway by a checkout that had not caught up.
+one was rejected with *"cannot lock ref"* while others landed every 15 to 25 minutes. That is why there is a
+machine-wide push lock. **A plain `git push` still works and is still fully gated**, but it takes the lock only after
+git has fixed its refs, so a long queue can still leave it stale and refused in seconds with "rebase and push again".
+It weakens nothing - push-main runs a plain `git push` at the end, and a red gate refuses it like any other. **A lock
+that cannot be taken is never a refusal**: the hook says so and pushes on, gated exactly as before.
 `design\MEASURE-push-lock-2026-09-11.md`.
 **From the MAIN checkout, `ops\push-main.ps1` lands through a throwaway worktree by itself** (W8.2 of
 `design\PLAN-push-derived-conflicts-2026-09-23.md`): the main checkout is always dirty, so push-main there was refused
@@ -80,6 +74,55 @@ shipped it: 379 gates green, rejected anyway by a checkout that had not caught u
 a detached worktree of HEAD, never rebases the main checkout, and then moves local main to the landed tip with
 `git reset --keep` when HEAD is still where the run found it (dirty and untracked files untouched), or prints the one
 command to run. Like any push it lands the whole branch. A plain push is the fallback, and it is still fully gated.
+
+**What push-main does now** (since 2026-09-23, `design\PLAN-push-derived-conflicts-2026-09-23.md`). It rebases before
+it gates, and it re-checks what moved before it takes the lock:
+1. **Pre-flight, in seconds, before any gate.** Fetch and rebase onto origin/main. A conflict is refused right there
+   with the conflicted files named. So is a dirty tree (it lists the paths and says whether they were there at the
+   start or appeared while the gates ran), a branch that is already on main, and a second push-main in the same
+   checkout. Then it seeds the checkout, so the gates never run on stale boards or cards.
+2. **The gates run outside the lock**: run-gates, test-auditors and, for a chain change, the chain rehearsal.
+3. **Catch-up, still outside the lock.** One fetch after the gates. If main moved, rebase there and re-run only what the
+   move touched. At most 3 rounds. The rehearsal gets a budget of 3 rounds that actually rehearsed, and past it the push
+   is refused `refused-rehearsal-churn` (Brad's D11a), because the hook never rehearses and would refuse it anyway.
+4. **The lock is held for the swap only.** Inside it: fetch. If main has not moved, push, and the hook replays the
+   verdicts already earned (about 25 seconds). If it moved, hand the lock back, rebase outside, re-run warm, and come
+   back. After 3 hand-backs it rebases inside the lock as before. That cap is never a refusal.
+
+A rebase refuses on a real conflict. It never guesses at one. **Two rules go with it** (W7.1a):
+- **Run board steps, guards and reconcilers in a scratch clone, never in the checkout you land from.** A lane's own
+  `reconcile-ghost-drift` rewrote `grocery/ghost-tool-published.json` while its gates ran, and the push was refused
+  for a dirty tree it had made itself.
+- **Land a chain change only through `ops\push-main.ps1`, never `git push origin HEAD:main`, and say so in every
+  orchestrator brief.** 6 of 17 chain landings after the rehearsal gate went round push-main, all from one
+  orchestrator whose briefs said `git push origin HEAD:main`, and one of them voided a rehearsal another push was
+  counting on.
+
+**From the main checkout** push-main still refuses, because that tree is always dirty with the pipelines' data. Land
+from a clean linked worktree: `git worktree add`, `ops\seed-worktree.ps1 -Target <it>`, then push-main there.
+
+**STILL LANDING, not yet on main when this was written (2026-09-24).** Until each item is on main this is the design,
+not the behaviour. Check `git log origin/main` for its Plan id before relying on it.
+- **Commit-time rehearsal** (W9.1, D19 ruled yes). A commit that changes the chain starts its rehearsal in the
+  background from `ops/hooks/post-commit`, on HEAD rebased onto origin as it stands at commit time, so the push usually
+  finds its verdict already recorded. The rebase is the design: over 23 chain landings on 2026-09-23, a rehearsal of the
+  commit as made would have covered 6 (26%), and of the commit rebased 10 (43%), against a bar of 30% set before the run. `push-main -Prepare` is on main and starts it by hand; the rehearsal half and the hook are not.
+- **All three gates start together** (W9.3). The rehearsal starts beside run-gates instead of after it, and a red gate
+  stops the rehearsal instead of waiting up to about 14 minutes for it.
+- **The chain queue** (W9.2). A chain push takes a ticket and is rehearsed stacked on the tickets ahead of it, so one
+  chain landing no longer voids the next. It waits for its turn to SWAP, never to gate. It replaces the chain lease,
+  which was never built.
+- **The main checkout lands through push-main** (W8.2). Run from the main checkout, push-main lands through a throwaway
+  worktree of its own, then moves the main checkout's branch to what landed with `git reset --keep`, which
+  leaves its uncommitted data alone. The manual route above then goes away.
+- **The pre-push queue check** (W8.3). A plain push of a chain change is refused in seconds with `cause=chain-queue`
+  while any ticket is live, and told to use push-main.
+
+**Superseded, kept so the numbers keep their context:** until 2026-09-23 push-main took the lock BEFORE its fetch and
+rebased inside it, and before 2026-09-12 the hook held the lock across the whole gate. Neither is true now; the hook
+takes it for the ref update only. And the lock once bound only checkouts that had their own `ops\hold-push-lock.ps1`:
+measured on the very push that shipped it, 379 gates green, rejected anyway by a checkout that had not caught up.
+Since 2026-09-12 the hook falls back to the main checkout's copy.
 
 **THE GATE MUST NOT RUN INSIDE THE LOCK** (Brad, 2026-09-12). It did until that morning, and the arithmetic is the
 whole story: the lock serialises pushes machine-wide, so with a ~10-minute gate inside it the box lands about SIX
@@ -92,7 +135,12 @@ the GATE costs everything, because gating is the part that parallelises and `lib
 24 since 2026-09-12, 10 when this was written). So `push-main` gates first, unlocked, and the hook's run inside
 the lock is WARM - the whole verdict replays when the rebase changed nothing, and the per-gate input keys re-run only what the rebase actually touched. **A red gate
 now never enters the queue at all**, where before it took the lock, ran its full set and blocked every other session
-before refusing. The ordering is fixtured on the MECHANISM: the self-test's gate probes the lock FROM ANOTHER PROCESS,
+before refusing. **Since 2026-09-23 the lock holds the swap and nothing else**: no rebase runs under it unless main
+moved three times running, so the hook's warm run inside it is a replay. **No lock is held across a gate, and nothing
+planned needs one.** The chain lease proposed on 2026-09-23 would have, and it needed a named exception to this ruling;
+Brad chose design A instead the same evening, so the lease was never built and the exception is withdrawn. The chain
+queue that replaces it (still landing) waits for a turn to swap, which `refs/heads/main` serialises already, and
+never holds up anyone's gate. The ordering is fixtured on the MECHANISM: the self-test's gate probes the lock FROM ANOTHER PROCESS,
 because a Windows mutex is reentrant on its owning thread and the first version of that case, probing in-process,
 SURVIVED the mutant that hoists the lock back above the gate. Paired 3 rounds after the fix: mutant killed 3 of 3 in
 its own named case, original passed 3 of 3.
