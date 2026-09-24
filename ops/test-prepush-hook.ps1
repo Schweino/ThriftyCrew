@@ -104,6 +104,18 @@
   clears TC_PUSH_LOCK_HOLDER for its whole run: run under ops\push-main.ps1 it inherits push-main's live token, and a
   sandbox push would otherwise read as under_push_main (ops-and-gates.md: say which instance you mean).
 
+  THE TWELFTH (2026-09-23, W8.3 as amended in section 16.4, Brad's D14): A CHAIN PUSH THAT IS NOT THE CHAIN QUEUE'S
+  HEAD IS REFUSED IN SECONDS WHILE THE QUEUE IS OCCUPIED. Directly after the rehearsal record check, and only for a push
+  that check calls chain-touching, the hook asks lib\chain-queue.ps1 with zero wait whether a live ticket that has not
+  landed or left exists, and refuses (cause=chain-queue) a push whose TC_CHAIN_QUEUE_HOLDER does not name the head.
+  Tickets are held by the REAL library from another process on a private Local\ prefix and a per-run root, with
+  TC_CHAIN_QUEUE_SELFTEST set. Ten cases: a plain chain push with a recorded verdict is refused before run-gates,
+  naming the head's pid, and writes one hook-refused row; a non-chain push lands meanwhile; the head's own push lands;
+  a head whose record is 120 s under the library's own stall bound still refuses, and 120 s past it is WEDGED and the push
+  proceeds, because the queue's timed-out waiters push unqueued and must not be refused here; a
+  member behind the head is refused and told to wait; with the queue free the chain push lands with the WARN; a probe
+  that throws proceeds and says so; and the probe sits between the record check and run-gates and takes nothing.
+
   WHAT THIS DRIVES. A sandbox repository, a linked worktree, the REAL ops\hooks\pre-push, the REAL
   ops\prepush-test-auditors.ps1 with every lib\*.ps1, and stubs for the gate and for test-auditors.
   Then real `git push`es to a sandbox bare remote. No network, nothing outside the sandbox. THIS FILE
@@ -280,8 +292,23 @@ $env:TC_PUSH_LEDGER_ROOT = $suiteLedger
 $holderTokHad = Test-Path -LiteralPath 'Env:\TC_PUSH_LOCK_HOLDER'
 $holderTokWas = [string]$env:TC_PUSH_LOCK_HOLDER
 Remove-Item -LiteralPath 'Env:\TC_PUSH_LOCK_HOLDER' -ErrorAction SilentlyContinue
+# NO PRODUCTION CHAIN QUEUE FOR THE WHOLE RUN (W8.3). The hook's zero-wait probe reads lib\chain-queue.ps1, and since W9.2
+# the production queue is live: a sandbox chain push in ANY case here would otherwise be refused cause=chain-queue
+# whenever a real session on this box holds a ticket (found 2026-09-24 landing W8.3: 4 of 77 red while another
+# session's push-main queued). So every case runs against a private, empty Local\ instance under this run's sandbox,
+# and THE TWELFTH's own cases swap in their populated one and hand this one back. Restored in the outer finally.
+$cqSuiteHad = @{}; $cqSuiteWas = @{}
+foreach ($n in 'TC_CHAIN_QUEUE_PREFIX', 'TC_CHAIN_QUEUE_ROOT', 'TC_CHAIN_QUEUE_HOLDER') {
+  $cqSuiteHad[$n] = Test-Path -LiteralPath ('Env:\' + $n)
+  $cqSuiteWas[$n] = [string][Environment]::GetEnvironmentVariable($n)
+}
+$cqSuitePrefix = 'Local\tc-prepush-cq-suite-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '-'
+$cqSuiteRoot = Join-Path $sb 'cq-suite'
+$env:TC_CHAIN_QUEUE_PREFIX = $cqSuitePrefix
+$env:TC_CHAIN_QUEUE_ROOT = $cqSuiteRoot
+Remove-Item -LiteralPath 'Env:\TC_CHAIN_QUEUE_HOLDER' -ErrorAction SilentlyContinue
 try {
-  $null = New-Item -ItemType Directory -Force $sb, $probe
+  $null = New-Item -ItemType Directory -Force $sb, $probe, $cqSuiteRoot
   $steps = @(
     (G init -q $main),
     (G -C $main config user.email t@t),
@@ -999,6 +1026,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
   Case 'CLEAN TWIN' 'a chain push with a recorded passing verdict still runs run-gates and test-auditors and lands' `
     ($rhYes.rc -eq 0 -and $rhYes.remote -eq $rhYes.head -and (Test-Path -LiteralPath $sawFile) -and (Test-Path -LiteralPath $ranFile) -and $rhYes.text -match 'chain-rehearsal: PASSED') `
     "rc=$($rhYes.rc) gateRan=$(Test-Path -LiteralPath $sawFile) taRan=$(Test-Path -LiteralPath $ranFile) key=$($rhKey.Substring(0, 12)) refusalNamed=$rhK12Printed text=[$($rhYes.text)]"
+
   CommitFile $linked 'design\note.md' "rehearsal-free doc`n"
   $rhDoc = PushOut $linked 'main'
   Case 'MUST NOT FIRE' 'a push to main touching no chain script is not asked for a rehearsal' `
@@ -1019,6 +1047,170 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
   Case 'MUST NOT FIRE' 'a passing push writes no hook-refused row' `
     ($rhYes.rc -eq 0 -and $rhDoc.rc -eq 0 -and $rhTa.rc -eq 0 -and $refusedBeforePass -ge 1 -and $refusedAfterPass -eq $refusedBeforePass) `
     ("rc=" + $rhYes.rc + "," + $rhDoc.rc + "," + $rhTa.rc + " refusedRowsBefore=" + $refusedBeforePass + " after=" + $refusedAfterPass)
+  # ---- THE TWELFTH (2026-09-23, W8.3 as amended in 16.4): a chain push that is not the queue's head is refused ----
+  # Tickets are held by the REAL lib\chain-queue.ps1 (copied into the sandbox with every other library) from ANOTHER
+  # PROCESS, on a private Local\ prefix and a per-run root, and TC_CHAIN_QUEUE_SELFTEST is set throughout, so a case that
+  # forgot the seam reaches the production queue only to have the library refuse it. Each chain push commits new
+  # guards.ps1 content and records a passing verdict for exactly that content, so the rehearsal check lets it through
+  # and the queue probe is what decides.
+  $cqPrefix = 'Local\tc-prepush-cq-' + [guid]::NewGuid().ToString('N').Substring(0, 12) + '-'
+  $cqRoot = Join-Path $sb 'cq'
+  $cqLib = Join-Path $linked 'lib\chain-queue.ps1'
+  $cqHolderPs1 = Join-Path $sb 'cq-holder.ps1'
+  $cqHolderText = @'
+param([string]$Lib, [string]$Prefix, [string]$Root, [string]$Checkout, [string]$Base, [string]$Out)
+$ErrorActionPreference = 'Stop'
+try {
+  . $Lib
+  $m = Join-TcChainQueue -Checkout $Checkout -Base $Base -Range @($Base) -Mode live -Prefix $Prefix -QueueRoot $Root
+  [IO.File]::WriteAllText(($Out + '.token'), ([string]$m.Queue + "`n" + [string]$m.Token + "`n" + [string]$PID))
+  $until = [datetime]::UtcNow.AddSeconds(300)
+  while (-not (Test-Path -LiteralPath ($Out + '.release')) -and [datetime]::UtcNow -lt $until) { Start-Sleep -Milliseconds 200 }
+  Exit-TcChainQueue -Member $m -State left
+  [IO.File]::WriteAllText(($Out + '.done'), 'left')
+} catch { [IO.File]::WriteAllText(($Out + '.token'), ('error' + "`n" + $_.Exception.Message + "`n" + [string]$PID)) }
+'@
+  [IO.File]::WriteAllText($cqHolderPs1, $cqHolderText, $utf8)
+  function Start-CqHolder {
+    <# One ticket held by another powershell.exe until Stop-CqHolder. Returns Queue, Token, Pid and the process. #>
+    param([string]$Tag)
+    $out = Join-Path $sb ('cq-' + $Tag)
+    $base = GOut -C $linked rev-parse origin/main
+    $pr = Start-Process -FilePath 'powershell' -NoNewWindow -PassThru -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $cqHolderPs1,
+      '-Lib', $cqLib, '-Prefix', $cqPrefix, '-Root', $cqRoot, '-Checkout', $linked, '-Base', $base, '-Out', $out)
+    $until = [datetime]::UtcNow.AddSeconds(90)
+    while (-not (Test-Path -LiteralPath ($out + '.token')) -and [datetime]::UtcNow -lt $until -and -not $pr.HasExited) { Start-Sleep -Milliseconds 200 }
+    $lines = if (Test-Path -LiteralPath ($out + '.token')) { @([IO.File]::ReadAllLines($out + '.token')) } else { @('no-token', '', '') }
+    return [pscustomobject]@{ Queue = [string]$lines[0]; Token = [string]$lines[1]; HolderPid = [string]$lines[2]; Out = $out; Process = $pr }
+  }
+  function Stop-CqHolder {
+    param($H)
+    if ($null -eq $H) { return }
+    [IO.File]::WriteAllText(($H.Out + '.release'), 'go')
+    $null = $H.Process.WaitForExit(60000)
+  }
+  function New-CqChainCommit {
+    # New guards.ps1 content, and a passing verdict recorded for exactly that content, keyed as rehearse-chain keys it.
+    param([string]$Text)
+    CommitFile $linked 'grocery\guards.ps1' $Text
+    $k = Get-SandboxRehearsalKey -Dir $linked -Rev 'HEAD' -Files $rhFiles
+    [IO.File]::WriteAllText((Join-Path $rhVd ($k + '.json')), ('{"result":"pass","blind":"","key":"' + $k + '","stage":"","cause":"fixture pass","words":[],"data_date":"' + (Get-Date).ToString('yyyy-MM-dd') + '","preexisting":[]}'), $utf8)
+  }
+  $cqSelfTestHad = Test-Path -LiteralPath 'Env:\TC_CHAIN_QUEUE_SELFTEST'
+  $cqSelfTestWas = [string]$env:TC_CHAIN_QUEUE_SELFTEST
+  $cqTokHad = Test-Path -LiteralPath 'Env:\TC_CHAIN_QUEUE_HOLDER'
+  $cqTokWas = [string]$env:TC_CHAIN_QUEUE_HOLDER
+  $cqA = $null; $cqB = $null
+  try {
+    $env:TC_CHAIN_QUEUE_SELFTEST = '1'
+    $env:TC_CHAIN_QUEUE_PREFIX = $cqPrefix
+    $env:TC_CHAIN_QUEUE_ROOT = $cqRoot
+    Remove-Item -LiteralPath 'Env:\TC_CHAIN_QUEUE_HOLDER' -ErrorAction SilentlyContinue
+    $cqA = Start-CqHolder 'a'
+    $cqAJoined = ($cqA.Queue -eq 'joined' -and [bool]$cqA.Token)
+
+    # MUST FIRE: a plain chain push, rehearsed and recorded, while a ticket is held by another process: refused in the
+    # probe, before run-gates, with the fixed line, naming the head's pid.
+    New-CqChainCommit "# guard queued 1`n"
+    Remove-Item -LiteralPath $sawFile, $ranFile -ErrorAction SilentlyContinue
+    $cqNo = PushOut $linked 'main'
+    $cqNoGate = Test-Path -LiteralPath $sawFile
+    Case 'MUST FIRE' 'a chain push that joined no queue is refused while a ticket is held, before run-gates, naming the head' `
+      ($cqAJoined -and $cqNo.rc -ne 0 -and $cqNo.remote -ne $cqNo.head -and -not $cqNoGate -and $cqNo.text -match ('head pid ' + $cqA.HolderPid + ',') `
+        -and $cqNo.text -match '(?m)^PRE-PUSH-REFUSED cause=chain-queue\s*$') ("joined=" + $cqAJoined + " holder=[" + $cqA.Queue + "] rc=" + $cqNo.rc + " gateRan=" + $cqNoGate + " text=[" + $cqNo.text + "]")
+    # MUST FIRE (W0.6): that refusal wrote one hook-refused row with cause=chain-queue.
+    $cqRowsRaw = Get-SuiteRefusalRows -Dir $suiteLedger
+    $cqRows = @(@($cqRowsRaw) | Where-Object { [string]$_.local_sha -eq $cqNo.head -and [string]$_.cause -eq 'chain-queue' })
+    Case 'MUST FIRE' 'that refusal writes one hook-refused row with cause=chain-queue' ($cqRows.Count -eq 1) ("rows=" + $cqRows.Count)
+
+    # MUST NOT FIRE: a non-chain push lands while the ticket is held (the probe is asked only of a chain push).
+    $null = G -C $linked reset -q --hard origin/main
+    CommitFile $linked 'design\note.md' "queue-free doc`n"
+    $cqDoc = PushOut $linked 'main'
+    Case 'MUST NOT FIRE' 'a push touching no chain script lands while a queue ticket is held' `
+      ($cqAJoined -and $cqDoc.rc -eq 0 -and $cqDoc.remote -eq $cqDoc.head -and $cqDoc.text -notmatch 'chain queue') ("rc=" + $cqDoc.rc + " text=[" + $cqDoc.text + "]")
+
+    # MUST NOT FIRE: the push-main child of the HEAD member (its TC_CHAIN_QUEUE_HOLDER names ticket A) proceeds and lands.
+    New-CqChainCommit "# guard queued 2`n"
+    $env:TC_CHAIN_QUEUE_HOLDER = $cqA.Token
+    $cqHead = PushOut $linked 'main'
+    Remove-Item -LiteralPath 'Env:\TC_CHAIN_QUEUE_HOLDER' -ErrorAction SilentlyContinue
+    Case 'MUST NOT FIRE' 'the queue head''s own push (its holder token names the head ticket) proceeds and lands' `
+      ($cqAJoined -and $cqHead.rc -eq 0 -and $cqHead.remote -eq $cqHead.head -and $cqHead.text -match 'this push is the queue''s head') ("rc=" + $cqHead.rc + " text=[" + $cqHead.text + "]")
+
+    # THE WEDGE BAR: a head whose record has not moved for longer than the library's own stall bound
+    # ($script:TcChainQueueStallSec, read from the sandbox's copy) is wedged, and the queue's timed-out waiters push
+    # unqueued, so the hook must not refuse them. The age is a moving clock, so the two cases sit 120 s either side of
+    # the bar rather than on it: the record is rewritten to that age just before each push, and a push takes seconds.
+    $cqStall = 0
+    $cqStallText = [regex]::Match([IO.File]::ReadAllText($cqLib), '(?m)^\$script:TcChainQueueStallSec = (\d+)').Groups[1].Value
+    if ($cqStallText) { $cqStall = [int]$cqStallText }
+    $cqATicket = [string](@($cqA.Token -split '\|') + @('', ''))[1]
+    $cqARecs = @(Get-ChildItem -LiteralPath $cqRoot -Recurse -File -Filter ($cqATicket + '.json') -ErrorAction SilentlyContinue)
+    $cqARec = if ($cqARecs.Count -eq 1) { $cqARecs[0].FullName } else { '' }
+    function Set-CqRecordAge {
+      param([string]$Path, [int]$AgeSec)
+      if (-not $Path) { return }
+      $j = [IO.File]::ReadAllText($Path) | ConvertFrom-Json
+      $j.updated_utc = [datetime]::UtcNow.AddSeconds(-$AgeSec).ToString('o')
+      [IO.File]::WriteAllText($Path, ($j | ConvertTo-Json -Depth 5 -Compress), $utf8)
+    }
+    New-CqChainCommit "# guard queued 2b`n"
+    Set-CqRecordAge $cqARec ($cqStall - 120)
+    $cqUnder = PushOut $linked 'main'
+    Case 'MUST FIRE' ('a head whose record moved ' + ($cqStall - 120) + ' s ago, under the ' + $cqStall + ' s stall bound, still refuses a plain chain push') `
+      ($cqStall -gt 240 -and [bool]$cqARec -and $cqUnder.rc -ne 0 -and $cqUnder.remote -ne $cqUnder.head -and $cqUnder.text -match '(?m)^PRE-PUSH-REFUSED cause=chain-queue\s*$') `
+      ("stall=" + $cqStall + " record=[" + $cqARec + "] rc=" + $cqUnder.rc + " text=[" + $cqUnder.text + "]")
+    Set-CqRecordAge $cqARec ($cqStall + 120)
+    $cqPast = PushOut $linked 'main'
+    Set-CqRecordAge $cqARec 0
+    Case 'MUST NOT FIRE' ('a head whose record moved ' + ($cqStall + 120) + ' s ago, past the ' + $cqStall + ' s stall bound, is wedged: the push proceeds and says so') `
+      ($cqStall -gt 240 -and $cqPast.rc -eq 0 -and $cqPast.remote -eq $cqPast.head -and $cqPast.text -match 'the queue is wedged and this push proceeds') ("rc=" + $cqPast.rc + " text=[" + $cqPast.text + "]")
+
+    # MUST FIRE: a member that is NOT the head (ticket B, behind A) is refused, and says it must wait its turn.
+    $cqB = Start-CqHolder 'b'
+    $cqBJoined = ($cqB.Queue -eq 'joined' -and [bool]$cqB.Token)
+    New-CqChainCommit "# guard queued 3`n"
+    $env:TC_CHAIN_QUEUE_HOLDER = $cqB.Token
+    $cqBehind = PushOut $linked 'main'
+    Remove-Item -LiteralPath 'Env:\TC_CHAIN_QUEUE_HOLDER' -ErrorAction SilentlyContinue
+    Case 'MUST FIRE' 'a queue member that is not the head is refused, naming the head and saying it must wait' `
+      ($cqBJoined -and $cqBehind.rc -ne 0 -and $cqBehind.remote -ne $cqBehind.head -and $cqBehind.text -match ('head pid ' + $cqA.HolderPid + ',') `
+        -and $cqBehind.text -match 'holds a queue ticket but is not the head') ("joinedB=" + $cqBJoined + " rc=" + $cqBehind.rc + " text=[" + $cqBehind.text + "]")
+    Stop-CqHolder $cqB; $cqB = $null
+    Stop-CqHolder $cqA; $cqA = $null
+
+    # MUST NOT FIRE: with every ticket released the same chain push lands, with the WARN line naming push-main.
+    $cqFree = PushOut $linked 'main'
+    Case 'MUST NOT FIRE' 'with the queue free a plain chain push lands and prints the WARN naming push-main' `
+      ($cqFree.rc -eq 0 -and $cqFree.remote -eq $cqFree.head -and $cqFree.text -match 'WARN - this push changes the daily chain') ("rc=" + $cqFree.rc + " text=[" + $cqFree.text + "]")
+
+    # CLEAN TWIN: a probe that throws (a prefix the hook refuses to honour) proceeds as before, saying so, and lands.
+    New-CqChainCommit "# guard queued 4`n"
+    $env:TC_CHAIN_QUEUE_PREFIX = 'Global\tc-prepush-cq-not-honoured-'
+    $cqThrow = PushOut $linked 'main'
+    $env:TC_CHAIN_QUEUE_PREFIX = $cqPrefix
+    Case 'CLEAN TWIN' 'a queue probe that throws lets the chain push through as before, saying the queue could not be read' `
+      ($cqThrow.rc -eq 0 -and $cqThrow.remote -eq $cqThrow.head -and $cqThrow.text -match 'the chain queue could not be read' -and $cqThrow.text -match 'WARN - this push changes the daily chain') ("rc=" + $cqThrow.rc + " text=[" + $cqThrow.text + "]")
+
+    # MUST FIRE, STATIC: the probe sits after the rehearsal record check and before run-gates, and acquires nothing: no
+    # join, no wait and no lock take appears in the hook. Needles by concatenation, so this file is not its own match.
+    $hookNow = [IO.File]::ReadAllText($hookSrc).Replace("`r`n", "`n")
+    $iRhC = $hookNow.IndexOf('powershell -NoProfile' + ' -ExecutionPolicy Bypass -File "$rh"')
+    $iCq = $hookNow.IndexOf('Get-TcChain' + 'QueueLive')
+    $iRunC = $hookNow.IndexOf('powershell -NoProfile' + ' -ExecutionPolicy Bypass -File "$gate"')
+    $takes = @(('Join-TcChain' + 'Queue'), ('Wait-TcChain' + 'QueueHead'), ('Enter-Tc' + 'PushLock'), ('Enter-Tc' + 'GateSlots'), ('.Wait' + 'One(')) | Where-Object { $hookNow.Contains($_) }
+    Case 'MUST FIRE' 'the queue probe runs after the rehearsal record check and before run-gates, and takes nothing' `
+      ($iRhC -ge 0 -and $iCq -gt $iRhC -and $iRunC -gt $iCq -and @($takes).Count -eq 0) ("rh@" + $iRhC + " cq@" + $iCq + " run@" + $iRunC + " takes=[" + (@($takes) -join ',') + "]")
+  } finally {
+    Stop-CqHolder $cqB
+    Stop-CqHolder $cqA
+    # Back to the suite-wide private empty queue, never to none: a case after this block must not read production.
+    $env:TC_CHAIN_QUEUE_PREFIX = $cqSuitePrefix
+    $env:TC_CHAIN_QUEUE_ROOT = $cqSuiteRoot
+    if ($cqSelfTestHad) { $env:TC_CHAIN_QUEUE_SELFTEST = $cqSelfTestWas } else { Remove-Item -LiteralPath 'Env:\TC_CHAIN_QUEUE_SELFTEST' -ErrorAction SilentlyContinue }
+    Remove-Item -LiteralPath 'Env:\TC_CHAIN_QUEUE_HOLDER' -ErrorAction SilentlyContinue
+  }
   Remove-Item -LiteralPath 'Env:\TC_REHEARSAL_VERDICT_DIR' -ErrorAction SilentlyContinue
   # MUST FIRE, STATIC: run-gates clears the same environment for EVERY caller, not only this hook - a session
   # shell or a scheduled task spawned from inside a git hook inherits it just the same. Since 2026-09-11 it does so
@@ -1063,6 +1255,9 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
   Remove-Item -LiteralPath 'Env:\TC_REHEARSAL_VERDICT_DIR', 'Env:\TC_NO_REHEARSAL' -ErrorAction SilentlyContinue
   if ($ledgerRootHad) { $env:TC_PUSH_LEDGER_ROOT = $ledgerRootWas } else { Remove-Item -LiteralPath 'Env:\TC_PUSH_LEDGER_ROOT' -ErrorAction SilentlyContinue }
   if ($holderTokHad) { $env:TC_PUSH_LOCK_HOLDER = $holderTokWas } else { Remove-Item -LiteralPath 'Env:\TC_PUSH_LOCK_HOLDER' -ErrorAction SilentlyContinue }
+  foreach ($n in @($cqSuiteHad.Keys)) {
+    if ($cqSuiteHad[$n]) { [Environment]::SetEnvironmentVariable($n, $cqSuiteWas[$n]) } else { Remove-Item -LiteralPath ('Env:\' + $n) -ErrorAction SilentlyContinue }
+  }
   if (Test-Path -LiteralPath $sb) {
     # The sandbox's own worktree first, through git, then the directory. No junctions are ever made here.
     if ($built) { $null = G -C $main worktree remove --force $linked }
@@ -1074,7 +1269,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
 # writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
 # and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
 # prepush-test-auditors -SelfTest pins its own count.
-$expectedCases = 67   # 67 since 2026-09-23 with THE ELEVENTH's four refusal-row cases (W0.6); 63 with THE TENTH's nine cases (W1.1): four that read the fixed refusal line for structure, run-gates with and without a gate, and test-auditors, and five over the reordered rehearsal check; 54 with THE NINTH's two ledger cases (W0.2 of design\PLAN-push-derived-conflicts-2026-09-23.md); 52 with the case that reads the static-scanned-zero cause (W6.9); 51 since 2026-09-22 with the three chain-rehearsal cases; 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder; 48 with the two that read the slot budget from lib\gate-slots.ps1 (2026-09-18, backlog I237)
+$expectedCases = 77   # 77 since 2026-09-24 with THE TWELFTH's ten chain-queue cases (W8.3); 67 since 2026-09-23 with THE ELEVENTH's four refusal-row cases (W0.6); 63 with THE TENTH's nine cases (W1.1): four that read the fixed refusal line for structure, run-gates with and without a gate, and test-auditors, and five over the reordered rehearsal check; 54 with THE NINTH's two ledger cases (W0.2 of design\PLAN-push-derived-conflicts-2026-09-23.md); 52 with the case that reads the static-scanned-zero cause (W6.9); 51 since 2026-09-22 with the three chain-rehearsal cases; 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder; 48 with the two that read the slot budget from lib\gate-slots.ps1 (2026-09-18, backlog I237)
 if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''

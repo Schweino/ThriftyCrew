@@ -1,5 +1,6 @@
 #!/bin/sh
-# pre-push - refuse the push unless the chain rehearsal record, ops\run-gates.ps1 and the test-auditors check all pass.
+# pre-push - refuse the push unless the chain rehearsal record, ops\run-gates.ps1 and the test-auditors check all pass,
+# and, while the chain queue is occupied, refuse a chain-touching push that is not the queue's head.
 #
 # WHY THIS EXISTS (2026-09-09). ThriftyCrew's own CLAUDE.md said "ops/run-gates.ps1 is the change-time
 # gate and runs on every push". It did not, and had not since 2026-08-11. gates.yml ran `on: push` to
@@ -47,6 +48,8 @@
 #   3. clear the repository environment;
 #   4. seed a checkout with no built cards, once;
 #   5. ask ops/rehearse-chain.ps1 -CheckPush for the recorded rehearsal verdict, which takes seconds;
+#   5a. for a chain-touching push only, probe the chain queue with zero wait, and refuse one that is not its head while
+#      it is occupied (W8.3, 2026-09-23);
 #   6. run ops/run-gates.ps1;
 #   7. run ops/prepush-test-auditors.ps1;
 #   8. take the machine-wide push lock for the ref update only.
@@ -57,7 +60,7 @@
 # first: now the rehearsal's, which is also the one that prints the -NoRehearsal bypass line.
 #
 # EVERY REFUSAL ENDS WITH ONE FIXED LINE on stderr, for a machine to read rather than a person:
-#   PRE-PUSH-REFUSED cause=<run-gates|test-auditors|rehearsal|structure> [gate=<first failing gate>]
+#   PRE-PUSH-REFUSED cause=<run-gates|test-auditors|rehearsal|chain-queue|structure> [gate=<first failing gate>]
 # ops/push-main.ps1 classifies an in-lock refusal from it (the push ledger's reject_class) and prefers it to the prose
 # above it, which changes whenever somebody improves a message. gate= is the first token after FAIL on run-gates' first
 # "  FAIL" line, and is printed only when run-gates printed one. A push that exits 0 prints no such line.
@@ -414,7 +417,143 @@ if [ "$rhrc" -ne 0 ]; then
   exit 1
 fi
 grep -v -E "^CHAIN-REHEARSAL-CHECK-COMPLETE" "$rhlog" >&2
+# The check's own verdict of what this push IS, read off its completion marker before the log goes: not-needed means it
+# touches no chain script (or goes to a branch other than main); anything else that exited 0 (rehearsed-pass, bypassed)
+# is a chain-touching push. Empty when this checkout has no rehearse-chain.ps1, which asks the queue nothing below.
+rh_outcome="$(tail -n 1 "$rhlog" 2>/dev/null | sed -n -E 's/^CHAIN-REHEARSAL-CHECK-COMPLETE .*outcome=([A-Za-z0-9_-]+).*$/\1/p')"
 rm -f "$rhlog"
+
+# A CHAIN PUSH THAT IS NOT THE CHAIN QUEUE'S HEAD IS REFUSED IN SECONDS WHILE THE QUEUE IS OCCUPIED (2026-09-23, W8.3 of
+# design/PLAN-push-derived-conflicts-2026-09-23.md as amended in section 16.4, Brad's ruling D14). ops/push-main.ps1 puts
+# every chain-touching push into a machine-wide queue (lib/chain-queue.ps1, W9.2), and each member's rehearsal is of its
+# HEAD stacked on the members ahead of it, so the queue lands chain changes one at a time in ticket order and nobody's
+# verdict is voided by the push ahead. A chain push that does not go through push-main joins no queue: landing past the
+# members, it voids every stacked verdict behind it. Measured before the queue (15.3, SCRATCH): 6 of 17 chain landings
+# after the rehearsal gate ignored the lease the queue replaces, and 1 of that day's 2 during-run voids was one of them.
+#
+# SO, only for a push the check above calls chain-touching, and before run-gates and before any lock: ask the queue,
+# with ZERO WAIT, whether any live ticket that has not landed or left exists. If one does and this push's inherited
+# TC_CHAIN_QUEUE_HOLDER does not name the HEAD of the queue (the oldest such ticket, as a live member of THIS instance,
+# by Test-TcChainQueueHolderToken), refuse with cause=chain-queue. push-main exports that token for as long as its
+# member holds a ticket, so its own `git push` child passes; so does a member that is the head, which is the only time
+# push-main pushes at all. A queue that is free, or that cannot be read, proceeds exactly as before, with one WARN line
+# naming push-main as the route for a chain change.
+#
+# WHY THIS IS NOT SECTION 10's NEVER. That row forbids WAITING on the queue in the hook, which would add a wait-for edge
+# from inside the push lock's critical section. The probe acquires nothing: Get-TcChainQueueLive and
+# Test-TcChainQueueHolderToken read tickets by their mutexes without holding one, and this runs before the push lock is
+# taken. Lock order 0b (plan 16.6): nothing that holds the push lock, a gate slot or a rehearsal slot waits on this.
+#
+# A WEDGED QUEUE IS NOT A REASON TO REFUSE. lib/chain-queue.ps1 times a waiter out when the count ahead of it has not
+# fallen for $script:TcChainQueueStallSec (3600 s, read from the library, never copied), and the timed-out waiter writes
+# `left`, drops its token and pushes unqueued: "a wedge costs the queue's ordering and never a push" (its header). Without
+# this, that push would reach this probe with no token and a live head ahead, and be refused. So a head whose record has
+# not been rewritten for longer than that bound is read as wedged, and the push proceeds with a line saying so. The
+# residual, stated: a head that keeps rewriting its record (a catch-up or hand-back rebase) without ever landing is not
+# wedged by this test, and its timed-out waiters are refused here until it lands or leaves.
+#
+# NEVER A REFUSAL IT CANNOT JUSTIFY. The library is resolved like the push-lock holder: the pushing checkout's copy, else
+# the MAIN checkout's, so an older checkout is still asked (a checkout that could skip the queue is the exposure this
+# closes). No copy anywhere, a probe that throws, or anything it cannot read, is a printed line and the push proceeds.
+# TC_CHAIN_QUEUE_PREFIX and TC_CHAIN_QUEUE_ROOT move the probe to a private instance for fixtures, honoured only for a
+# Local\ prefix, the rule TC_PUSH_LOCK_PREFIX follows.
+if [ -n "$rh_outcome" ] && [ "$rh_outcome" != "not-needed" ]; then
+  cq_lib=""
+  if [ -f "$repo/lib/chain-queue.ps1" ]; then
+    cq_lib="$repo/lib/chain-queue.ps1"
+  else
+    cq_common="$(git -C "$repo" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+    case "$cq_common" in
+      */.git)
+        if [ -f "${cq_common%/.git}/lib/chain-queue.ps1" ]; then
+          cq_lib="${cq_common%/.git}/lib/chain-queue.ps1"
+        fi
+        ;;
+    esac
+  fi
+  cq_warn="pre-push: WARN - this push changes the daily chain. Land chain changes with ops\\push-main.ps1, which joins the chain queue, so this push cannot void the rehearsals queued behind it."
+  if [ -z "$cq_lib" ]; then
+    echo "pre-push: no lib/chain-queue.ps1 in this checkout or the main one, so the chain queue was not asked; this push proceeds." >&2
+    printf '%s\n' "$cq_warn" >&2
+  else
+    cqlog="${TMPDIR:-/tmp}/tc-prepush-cq-$$.log"
+    # Single-quoted for sh: the probe's own text holds no single quote, and every value reaches it through the
+    # environment, never through its source, so no path or token can change what it runs.
+    TC_HOOK_CQ_LIB="$cq_lib" powershell -NoProfile -ExecutionPolicy Bypass -Command '
+$ErrorActionPreference = "Stop"
+try {
+  . $env:TC_HOOK_CQ_LIB
+  $pa = @{}
+  $pf = [string]$env:TC_CHAIN_QUEUE_PREFIX
+  if ($pf) {
+    if (-not $pf.StartsWith("Local\", [StringComparison]::Ordinal)) { throw ("TC_CHAIN_QUEUE_PREFIX is honoured only as a private Local\ name, not " + $pf) }
+    $pa["Prefix"] = $pf
+    if ($env:TC_CHAIN_QUEUE_ROOT) { $pa["QueueRoot"] = [string]$env:TC_CHAIN_QUEUE_ROOT }
+  }
+  $liveRaw = Get-TcChainQueueLive @pa
+  $live = @($liveRaw | Where-Object { $null -ne $_ })
+  $pending = @($live | Where-Object { @("landed", "left") -notcontains [string]$_.State })
+  if ($pending.Count -eq 0) { Write-Output ("CQ-PROBE free live=" + $live.Count); exit 0 }
+  $head = $pending[0]
+  $tok = [string]$env:TC_CHAIN_QUEUE_HOLDER
+  $tokTicket = ""
+  if ($tok) { $parts = $tok.Split("|"); if ($parts.Count -ge 2) { $tokTicket = [string]$parts[1] } }
+  $member = $false
+  if ($tok) { $member = [bool](Test-TcChainQueueHolderToken -Token $tok @pa) }
+  if ($member -and [string]::Equals($tokTicket, [string]$head.Name, [StringComparison]::Ordinal)) {
+    Write-Output ("CQ-PROBE head ticket=" + $head.Name + " pending=" + $pending.Count); exit 0
+  }
+  $stall = [int]$script:TcChainQueueStallSec
+  $age = -1
+  try {
+    $u = $head.Record.updated_utc
+    if ($u -is [datetime]) { $ut = $u.ToUniversalTime() } else { $ut = [datetime]::Parse([string]$u, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::RoundtripKind).ToUniversalTime() }
+    $age = [int][Math]::Floor(([datetime]::UtcNow - $ut).TotalSeconds)
+  } catch { $age = -1 }
+  if ($stall -gt 0 -and $age -gt $stall) {
+    Write-Output ("CQ-PROBE wedged pid=" + $head.Pid + " checkout=" + $head.Checkout + " state=" + $head.State + " age=" + $age + " stall=" + $stall); exit 0
+  }
+  $why = "not-a-member"
+  if ($member) { $why = "member-not-head" }
+  Write-Output ("CQ-PROBE occupied why=" + $why + " pid=" + $head.Pid + " checkout=" + $head.Checkout + " state=" + $head.State + " pending=" + $pending.Count)
+  exit 1
+} catch {
+  Write-Output ("CQ-PROBE error " + $_.Exception.Message)
+  exit 3
+}
+' < /dev/null > "$cqlog" 2>&1
+    cqrc=$?
+    cqline="$(grep -E '^CQ-PROBE ' "$cqlog" 2>/dev/null | tail -n 1)"
+    if [ "$cqrc" -eq 1 ] && printf '%s\n' "$cqline" | grep -q -E '^CQ-PROBE occupied '; then
+      rm -f "$refs"
+      cq_pid="$(printf '%s\n' "$cqline" | sed -n -E 's/.* pid=([^ ]*).*/\1/p')"
+      cq_co="$(printf '%s\n' "$cqline" | sed -n -E 's/.* checkout=(.*) state=.*/\1/p')"
+      cq_why="$(printf '%s\n' "$cqline" | sed -n -E 's/.* why=([^ ]*).*/\1/p')"
+      echo "" >&2
+      echo "pre-push: BLOCKED - a chain-touching push is landing through the chain queue (head pid ${cq_pid:-unknown}, ${cq_co:-unknown checkout})." >&2
+      if [ "$cq_why" = "member-not-head" ]; then
+        echo "          This push holds a queue ticket but is not the head: it must wait for the tickets ahead of it to land or leave." >&2
+      fi
+      echo "          Land chain changes with ops\\push-main.ps1, which joins the queue and lands in turn." >&2
+      echo "          Bypass with: git push --no-verify" >&2
+      echo "          probe output kept at: $cqlog" >&2
+      say_refused chain-queue "" 1 "$cqlog"
+      exit 1
+    fi
+    if [ "$cqrc" -eq 0 ] && printf '%s\n' "$cqline" | grep -q -E '^CQ-PROBE head '; then
+      echo "pre-push: chain queue - this push is the queue's head, so it lands in turn." >&2
+    elif [ "$cqrc" -eq 0 ] && printf '%s\n' "$cqline" | grep -q -E '^CQ-PROBE free '; then
+      printf '%s\n' "$cq_warn" >&2
+    elif [ "$cqrc" -eq 0 ] && printf '%s\n' "$cqline" | grep -q -E '^CQ-PROBE wedged '; then
+      echo "pre-push: the chain queue's head has not moved past the queue's own stall bound (${cqline#CQ-PROBE wedged }), so the queue is wedged and this push proceeds, as its timed-out waiters do." >&2
+      printf '%s\n' "$cq_warn" >&2
+    else
+      echo "pre-push: the chain queue could not be read (${cqline:-the probe exited $cqrc and said nothing}); this push proceeds as before." >&2
+      printf '%s\n' "$cq_warn" >&2
+    fi
+    rm -f "$cqlog"
+  fi
+fi
 
 echo "pre-push: running ops/run-gates.ps1 (about 51s) - once for this push, not once per commit." >&2
 
