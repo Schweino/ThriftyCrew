@@ -305,6 +305,25 @@ if ($SelfTest) {
     $rc3 = $LASTEXITCODE
     Assert-Case 'CLEAN TWIN  a count that ROSE still fails with exit 2, so not writing on a fall did not disarm the ratchet' `
       ($rc3 -eq 2) ("rc=$rc3 out=" + ((@($o3) | Select-Object -Last 2) -join ' | '))
+    # FAIL CLOSED (2026-09-24, pd-currency-2026-09-23.md). MUST FIRE: conflict markers and an absent baseline each exit
+    # 3 naming which, and write nothing. CLEAN TWIN: -Accept still records one.
+    $blConf = Join-Path $wt 'baseline-conflict.json'
+    [IO.File]::WriteAllText($blConf, ('<' * 7) + " HEAD`n{ ""findings"": 2 }`n" + ('=' * 7) + "`n{ ""findings"": 0 }`n" + ('>' * 7) + " theirs`n", (New-Object Text.UTF8Encoding($false)))
+    $confB64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($blConf))
+    $o5 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $fxTree -BaselineFile $blConf)
+    $rc5 = $LASTEXITCODE
+    $same5 = [string]::Equals($confB64, [Convert]::ToBase64String([IO.File]::ReadAllBytes($blConf)), [StringComparison]::Ordinal)
+    Assert-Case 'MUST FIRE  a baseline holding conflict markers exits 3, blind=baseline-unreadable, and its bytes are unchanged' `
+      ($rc5 -eq 3 -and $same5 -and (($o5 -join "`n") -match 'blind=baseline-unreadable')) ("rc=$rc5 unchanged=$same5")
+    $blAbsent = Join-Path $wt 'baseline-absent.json'
+    $o6 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $fxTree -BaselineFile $blAbsent -Tighten)
+    $rc6 = $LASTEXITCODE
+    Assert-Case 'MUST FIRE  an ABSENT baseline under -Tighten exits 3, blind=baseline-missing, and no file is created' `
+      ($rc6 -eq 3 -and -not (Test-Path -LiteralPath $blAbsent) -and (($o6 -join "`n") -match 'blind=baseline-missing')) ("rc=$rc6 created=$(Test-Path -LiteralPath $blAbsent)")
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $fxTree -BaselineFile $blAbsent -Accept
+    $rc7 = $LASTEXITCODE
+    $doc7 = if (Test-Path -LiteralPath $blAbsent) { [IO.File]::ReadAllText($blAbsent) | ConvertFrom-Json } else { $null }
+    Assert-Case 'CLEAN TWIN  -Accept over an absent baseline records the current count (1) and exits 0' ($rc7 -eq 0 -and $null -ne $doc7 -and [int]$doc7.findings -eq 1) ("rc=$rc7 findings=$(if ($doc7) { $doc7.findings })")
     # A tree with no content\ at all is BLIND, never a confident clean: the boards are gitignored here and
     # the estate's standing trap is a walk that reached nothing and reported zero findings.
     $emptyTree = Join-Path $wt 'empty'
@@ -372,8 +391,10 @@ Write-Output '  (the ruling: existing lessons that quote a rate get checked the 
 $blF = if ($BaselineFile) { $BaselineFile } else { Join-Path $here 'lesson-rate-claims-baseline.json' }
 $blDir = Split-Path $blF -Parent
 if ($blDir -and -not (Test-Path -LiteralPath $blDir)) { New-Item -ItemType Directory -Force $blDir | Out-Null }
-$base = $null; $blDoc = $null
-if (Test-Path -LiteralPath $blF) { try { $blDoc = Get-Content $blF -Raw | ConvertFrom-Json; $base = [int]$blDoc.findings } catch { $base = $null } }
+# FAIL CLOSED ON A MARK NOBODY CAN READ (2026-09-24, pd-currency-2026-09-23.md): an absent or unreadable baseline used to
+# set $base to $null and the branch below WROTE the current count, a rise included, and exited 0.
+$blRead = Read-TcRatchetBaseline -Path $blF -Field 'findings'
+$base = $blRead.Value; $blDoc = $blRead.Doc
 $script:LRC_NOTE = 'High-water mark for the unqualified rate-of-return ratchet (backlog I112, Brad''s ruling 2026-09-12). This number may only go DOWN. A run above it means a NEW rate was published without its source, its period, its nominal-or-real basis and its fee statement.'
 function Write-LrcBaseline([int]$Count) {
   $note = if ($blDoc -and $blDoc.note) { [string]$blDoc.note } else { $script:LRC_NOTE }
@@ -381,7 +402,12 @@ function Write-LrcBaseline([int]$Count) {
   $json = [ordered]@{ note = $note; generated = (Get-Date).ToString('s'); findings = $Count; names = $names } | ConvertTo-Json -Depth 3
   return (Write-TcLfFile $blF $json)
 }
-if ($Accept -or $null -eq $base) {
+if (-not $Accept -and $blRead.State -ne 'read') {
+  $blTok = Get-TcRatchetBlindToken $blRead.State
+  Write-Output ("! lesson-rate-claims: COULD NOT EVALUATE - the baseline $blF is $($blRead.State) ($($blRead.Why)), so there is no mark to hold $n against. Nothing was written: a plain run and -Tighten never record a mark. Restore it from git, or record the current count on purpose with -Accept.")
+  Exit-Guard -Name 'lesson-rate-claims' -Summary "findings=$n blind=$blTok" -Code 3
+}
+if ($Accept) {
   $null = Write-LrcBaseline $n
   Write-Output ("  baseline written: $n unqualified claim(s). From here the number may only go DOWN.")
   Exit-Guard -Name 'lesson-rate-claims' -Summary "findings=$n baseline=$n" -Code 0
