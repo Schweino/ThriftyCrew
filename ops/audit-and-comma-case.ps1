@@ -211,7 +211,7 @@ if ($SelfTest) {
     # ---- CLEAN TWIN -----------------------------------------------------------------------------------------------
     $prod = "function Get-Pair(`$a, `$b, `$c) {`n  `$pair = `$a -and `$b, `$c`n  return `$pair`n}`n"
     $r = Get-AccFindings -Text $prod
-    AccT 'CLEAN TWIN  an array literal after -and in production code, outside every self-test and case call, is LISTED with its reason, never counted' ($r.Counted.Count -eq 0 -and $r.Listed.Count -eq 1 -and $r.Listed[0].Line -eq 2 -and $r.Listed[0].Why -like 'outside*') (AccGot $r)
+    AccT ($MNF + '  an array literal after -and in production code, outside every self-test and case call, is LISTED with its reason, never counted') ($r.Counted.Count -eq 0 -and $r.Listed.Count -eq 1 -and $r.Listed[0].Line -eq 2 -and $r.Listed[0].Why -like 'outside*') (AccGot $r)
     # The mechanism the rule rests on: run both spellings with a FALSE last condition.
     $bad = @(& { ($true) -and ($false), ('got') })   # and-comma-case:allow the runtime twin executes the founding shape
     $good = @(& { (($true) -and ($false)), ('got') })
@@ -225,7 +225,7 @@ if ($SelfTest) {
     $at = @($at); $past = @($past); $zero = @($zero)
     AccT ($MNF + '  a pinned file AT its pin of 28 is held, not failed') ($at.Count -eq 1 -and $at[0].Verdict -eq 'held') ($at | ForEach-Object { $_.Verdict })
     AccT ($MF + '  a pinned file one site PAST its pin (29 over 28) is exceeded') ($past.Count -eq 1 -and $past[0].Verdict -eq 'exceeded') ($past | ForEach-Object { $_.Verdict })
-    AccT 'CLEAN TWIN  a pinned file that reads 0 is clear, so the run can say the pin may go' ($zero.Count -eq 1 -and $zero[0].Verdict -eq 'clear' -and $zero[0].Count -eq 0) ($zero | ForEach-Object { $_.Verdict })
+    AccT ($MNF + '  a pinned file that reads 0 is clear, so the run can say the pin may go') ($zero.Count -eq 1 -and $zero[0].Verdict -eq 'clear' -and $zero[0].Count -eq 0) ($zero | ForEach-Object { $_.Verdict })
 
     # ---- THE WALK, FROM A WORKTREE ROOT (lib\tree-walk.ps1) ---------------------------------------------------
     $fxHit = $stHead + $rhBody + $stTail
