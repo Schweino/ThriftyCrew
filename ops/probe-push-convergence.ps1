@@ -62,7 +62,8 @@
   pushes, so the bars table below holds no hash. It holds, per bar, the items it judges and a read-out offset in days.
   At read time an item's landing is the FIRST commit on the main ref whose message carries the line
   `Plan: design/PLAN-push-derived-conflicts-2026-09-23.md <item id>`, the id matched as a whole token, so W2.1 never
-  matches W2.10. A bar that judges several items (B4, B8, B9, B10) lands with the last of them. A bar whose item has
+  matches W2.10, and read only from the id list right after the path (Get-TcPpcPlanLineItems): an id in a parenthesis
+  or in prose after the list is a mention, not a landing. A bar that judges several items (B4, B8, B9, B10) lands with the last of them. A bar whose item has
   not landed is printed NOT LANDED and is never due. A landing commit that forgot its Plan line is invisible here.
 
   READ-OUT DATES. The plan names one (B6, 14 days after W6.1 lands). Every bar takes the same 14 days: the first
@@ -337,8 +338,8 @@ function Write-TcConvergenceReport {
 # =====================================================================================================================
 
 $script:TcPpcPlanRel = 'design/PLAN-push-derived-conflicts-2026-09-23.md'
-# The landing line. The id group is split into tokens and each is compared ORDINALLY with the item id, so W2.1 never
-# matches W2.10, and the plan's own commit ("Plan: <plan> (this commit adds it)") resolves no item.
+# The landing line. Get-TcPpcPlanLineItems reads the id list off its group and each id is compared ORDINALLY with the
+# item id, so W2.1 never matches W2.10, and the plan's own commit ("Plan: <plan> (this commit adds it)") resolves no item.
 $script:TcPpcPlanLineRx = '^\s*Plan:\s*design[\\/]PLAN-push-derived-conflicts-2026-09-23\.md(?:\s+(.*?))?\s*$'
 # Every constant below is the plan's own value (section 6, W0.3, and section 8), used as written: first plausible, not
 # swept. The read-out offset is B6's 14 days applied to every bar, because the plan names no other.
@@ -716,18 +717,50 @@ function ConvertFrom-TcPpcPlanLog {
   return [pscustomobject]@{ Records = $out.ToArray(); Malformed = $bad }
 }
 
+function Get-TcPpcPlanLineItems {
+  <# The item ids ONE landing line lands, in order, from the text after the plan's path. Only the ID LIST counts: the
+     text is cut at the first `(`, split into segments on `,`, `;` and a spaced `and`, and each segment contributes its
+     LEADING RUN of whole ids (W<n>.<n> with at most one letter suffix, so W2.1R, W3.4a and W0.3b are ids and W2.1 is
+     never read out of W2.10). A segment that does not open with an id ends the list, and so does an id written with a
+     trailing `.` or `:`, so prose after the ids names nothing. The run is what this plan's own lines need and
+     grocery\report-checkout-sync.ps1's Get-CsPlanLineItems (d3d8c9e70, the exemplar for the rest) does not: a
+     replacement and its original are written space-separated, `W2.1R W2.1 W8.1`, and all three land. Founding case
+     (2026-09-24): the previous reader took every token anywhere on the line, so `W4.2 (complements it: W4.1 owns
+     it)` would have landed W4.1, and a bar judging W4.1 would have opened its window on a commit that only named it. #>
+  param([string]$Rest)
+  $ids = [Collections.Generic.List[string]]::new()
+  $text = [string]$Rest
+  $paren = $text.IndexOf('(')
+  if ($paren -ge 0) { $text = $text.Substring(0, $paren) }
+  foreach ($seg in ($text -split '\s*[,;]\s*|\s+and\s+')) {
+    $s = $seg.Trim()
+    if (-not $s) { continue }
+    $took = 0
+    $ended = $false
+    foreach ($w in ($s -split '\s+')) {
+      $t = $w.TrimEnd('.', ')', ':')
+      if ($t -cnotmatch '^W\d+\.\d+[A-Za-z]?$') { break }
+      if (-not $ids.Contains($t)) { $ids.Add($t) }
+      $took++
+      if ($w.EndsWith('.') -or $w.EndsWith(':')) { $ended = $true; break }
+    }
+    if ($took -eq 0 -or $ended) { break }
+  }
+  return ,$ids.ToArray()
+}
+
 function Find-TcPpcItemLanding {
-  <# The FIRST record whose message carries the plan's landing line naming this item as a WHOLE TOKEN, or $null.
-     Tokens split on space, comma and semicolon, with a trailing . ) or : trimmed, and compare ordinally. #>
+  <# The FIRST record whose message carries the plan's landing line LANDING this item, or $null: the item must be one
+     of the ids Get-TcPpcPlanLineItems reads off that line, compared ordinally. #>
   param($Records, [string]$ItemId)
   foreach ($rec in @($Records)) {
     if ($null -eq $rec) { continue }
     foreach ($ln in @($rec.Body)) {
       $m = [regex]::Match([string]$ln, $script:TcPpcPlanLineRx)
       if (-not $m.Success) { continue }
-      foreach ($tok in ($m.Groups[1].Value -split '[\s,;]+')) {
-        $t = $tok.TrimEnd('.', ')', ':')
-        if ($t -and [string]::Equals($t, $ItemId, [StringComparison]::Ordinal)) { return $rec }
+      $items = Get-TcPpcPlanLineItems $m.Groups[1].Value
+      foreach ($t in $items) {
+        if ([string]::Equals($t, $ItemId, [StringComparison]::Ordinal)) { return $rec }
       }
     }
   }
@@ -2284,7 +2317,7 @@ if ($SelfTest) {
   $f = 0; $cases = 0
   # THE LITERAL CASE COUNT. A literal-case suite knows its own number, so a case that never ran is a defect, never a
   # smaller tree (ops-and-gates.md). Move this with every case added or removed.
-  $expectedCases = 91
+  $expectedCases = 93
   $kMF = 'MUST' + ' FIRE'; $kMNF = 'MUST' + ' NOT FIRE'; $kCT = 'CLEAN' + ' TWIN'
   function T($m, $cond, $got) {
     $script:cases++
@@ -2586,6 +2619,23 @@ if ($SelfTest) {
     $hitSelf = Find-TcPpcItemLanding -Records $plFull.Records -ItemId 'W0.1'
     T ($kCT + '  a Plan line naming two items (with a trailing full stop) resolves each of them') ($null -ne $hitTwo -and $hitTwo.Sha -eq $sE) ("sha={0}" -f $(if ($hitTwo) { $hitTwo.Sha } else { '(none)' }))
     T ($kMNF + '  a Plan line for ANOTHER plan, and the plan''s own "(this commit adds it)" line, resolve no item') ($null -eq $hitOther -and $null -eq $hitSelf) ("other={0} self={1}" -f [bool]$hitOther, [bool]$hitSelf)
+    # A MENTION is not a landing (2026-09-24): an id inside a parenthesis, or in prose after the id list, names nothing.
+    $mentionParen = $planLead + ' W4.2 (complements it: the start sync is elsewhere, W4.1 owns it)'
+    $mentionProse = $planLead + ' W4.2; no start sync here, W4.1 owns it'
+    $logMention = @(
+      ('@@TC-COMMIT ' + $sA + ' 2026-09-23T13:00:00-05:00'), 'W4.2 lands and mentions W4.1 in brackets', $mentionParen
+      ('@@TC-COMMIT ' + $sB + ' 2026-09-23T14:00:00-05:00'), 'W4.2 again and mentions W4.1 in prose', $mentionProse
+    )
+    $plMention = ConvertFrom-TcPpcPlanLog $logMention
+    $hitMen41 = Find-TcPpcItemLanding -Records $plMention.Records -ItemId 'W4.1'
+    $hitMen42 = Find-TcPpcItemLanding -Records $plMention.Records -ItemId 'W4.2'
+    $itProse = (Get-TcPpcPlanLineItems 'W4.2; no start sync here, W4.1 owns it') -join ','
+    T ($kMF + '  an id inside brackets, or in prose after the id list, on a Plan line is a MENTION and lands nothing, while the listed id still lands') `
+      ($null -eq $hitMen41 -and $null -ne $hitMen42 -and $hitMen42.Sha -eq $sA -and $itProse -eq 'W4.2') ("W4.1={0} W4.2={1} prose={2}" -f $(if ($hitMen41) { $hitMen41.Sha } else { '(none)' }), $(if ($hitMen42) { $hitMen42.Sha } else { '(none)' }), $itProse)
+    $itRun = (Get-TcPpcPlanLineItems 'W2.1R W2.1 W8.1') -join ','
+    $itStep = (Get-TcPpcPlanLineItems 'W4.1 step 7, W4.2, W3.4a and W0.3b.') -join ','
+    T ($kCT + '  a replacement and its original written space-separated (W2.1R W2.1 W8.1) land all three, and "W4.1 step 7, W4.2, W3.4a and W0.3b." lands four') `
+      ($itRun -eq 'W2.1R,W2.1,W8.1' -and $itStep -eq 'W4.1,W4.2,W3.4a,W0.3b') ("run={0} step={1}" -f $itRun, $itStep)
 
     # ---- read-out dates, at the bar ----
     $oneBar = @([pscustomobject]@{ Id = 'B1'; Items = @('W2.1'); ReadoutDays = 14 })

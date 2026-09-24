@@ -364,8 +364,10 @@ function Get-CsPlanLineItems {
      so prose after the ids names nothing. Founding case (2026-09-23): 1d59fbfba's line is `... W4.2 (complements it:
      ... no start sync here, W4.1 owns it)`, and reading every token anywhere on the line landed W4.1 six hours before
      it reached origin/main. `W4.1 step 7, W4.2` still reads both ids; `(this commit adds it)` and another plan's line
-     read none. ops\probe-push-convergence.ps1's Find-TcPpcItemLanding shares the whole-token and one-plan rules but
-     takes every token on the line, so it is not shared here: it would read W4.1 out of that same parenthesis. #>
+     read none. ops\probe-push-convergence.ps1's Get-TcPpcPlanLineItems applies this grammar to its own plan (2026-09-24)
+     and is deliberately NOT shared: that plan writes a replacement beside its original, space-separated and suffixed
+     (`W2.1R W2.1 W8.1`, `W3.2 W3.4a`), so it takes a segment's leading RUN of ids and ends the list at an id written
+     with a trailing `.` or `:`. That would widen this reader, which is not an extraction. #>
   param([string]$Message)
   $ids = [Collections.Generic.List[string]]::new()
   $lineRx = '(?m)^[ \t]*Plan:[ \t]*' + [regex]::Escape($script:CsPlanPath) + '(?:[ \t]+([^\r\n]*?))?[ \t]*\r?$'
