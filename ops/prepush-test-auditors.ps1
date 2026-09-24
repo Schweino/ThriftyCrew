@@ -1350,8 +1350,13 @@ function Resolve-ExpectedLiveReds($V, $Known, [object[]]$Cases, [string]$Root, [
   $res = [pscustomobject]@{ v = $V; lines = @(); accepted = 0; findings = 0; arms = 0 }
   if ($V.code -ne 1 -or $Known.state -ne 'fresh' -or @($V.newLines).Count -eq 0 -or @($Cases).Count -eq 0) { return $res }
   $byLine = @{}
+  # THE HARNESS TAG IS FAIL OR LIVE-RED (2026-09-24, design\backlog-inbox\pd-tapre-2026-09-23.md). Since 2026-09-20 the
+  # food-category live twin reports through Live(), so its real line reads 'LIVE-RED  LIVE-TWIN food-category failed
+  # (rc=2) ...'. Stripping only FAIL here left that tag on, the prefix never matched, and a push adding a category
+  # ruling was refused as an ordinary new failure with no paired run: the 2026-09-19 deadlock back for that audit.
+  # Both reads of a line below strip the same tag set Get-FailLines collects.
   foreach ($l in @($V.newLines)) {
-    $t = ([string]$l) -replace '^FAIL\s+', ''
+    $t = ([string]$l) -replace '^(FAIL|LIVE-RED)\s+', ''
     $hit = $null
     foreach ($c in @($Cases)) { if ($t.StartsWith($c.prefix, [StringComparison]::Ordinal)) { $hit = $c; break } }
     if ($null -eq $hit) { return $res }   # a new failure that is not a live-board ruling case: refused exactly as before
@@ -1414,7 +1419,7 @@ function Resolve-ExpectedLiveReds($V, $Known, [object[]]$Cases, [string]$Root, [
   $okLines = @(); $allOk = $true; $out = @()
   foreach ($l in @($V.newLines)) {
     $c = $byLine[$l]; $vd = $verdicts[$c.audit]; $key = Get-CaseKey $l
-    $rcm = [regex]::Match((([string]$l) -replace '^FAIL\s+', '').Substring($c.prefix.Length), '^(\d+)\)')
+    $rcm = [regex]::Match((([string]$l) -replace '^(FAIL|LIVE-RED)\s+', '').Substring($c.prefix.Length), '^(\d+)\)')
     if ($null -ne $vd -and $vd.ok -and -not ($rcm.Success -and $rcm.Groups[1].Value -eq '2')) { $vd = [pscustomobject]@{ ok = $false; why = ('test-auditors saw this case exit ' + $(if ($rcm.Success) { $rcm.Groups[1].Value } else { 'an unreadable code' }) + ', not 2'); findings = @() } }
     if ($null -eq $vd -or -not $vd.ok) {
       $allOk = $false
@@ -2269,6 +2274,16 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
     $eA = & $runEx $shaB $shaA @($fcLine, $kwLine) $freshX
     $eAl = @($eA.lines | Where-Object { $_ -match '^\s+EXPECTED-LIVE-RED\s' })
     Case 'MUST FIRE' 'a push adding a ruling against a product on the board, base green, is ACCEPTED with EXPECTED-LIVE-RED lines' ($eA.v.code -eq 0 -and $eA.accepted -eq 2 -and $eAl.Count -eq 2 -and ($eAl -join '|').Contains('[StoreB] fx-apple ''Apple Fizz Soda 12 oz''') -and ($eAl -join '|').Contains('next board build clears it') -and $eA.v.detail.Contains('2 accepted as expected')) "code=$($eA.v.code) accepted=$($eA.accepted) arms=$($eA.arms) lines=$($eA.lines -join ' || ')"
+    # MUST FIRE (2026-09-24, pd-tapre-2026-09-23.md): the food-category case as test-auditors really prints it since it
+    # moved to the Live() tally, tagged LIVE-RED rather than FAIL. It was never recognised: no paired run, refused.
+    $fcLiveLine = 'LIVE-RED  ' + $(if ($caseFc.Count) { $caseFc[0].prefix } else { 'unmarked food-category case (rc=' }) + '2) - fixture'
+    $eL = & $runEx $shaB $shaA @($fcLiveLine, $kwLine) $freshX
+    $eLl = @($eL.lines | Where-Object { $_ -match '^\s+EXPECTED-LIVE-RED\s' })
+    Case 'MUST FIRE' 'a live case whose line carries the LIVE-RED tag test-auditors really prints is recognised, paired and ACCEPTED' ($eL.v.code -eq 0 -and $eL.accepted -eq 2 -and $eL.arms -ge 4 -and $eLl.Count -eq 2) "code=$($eL.v.code) accepted=$($eL.accepted) arms=$($eL.arms) lines=$($eL.lines -join ' || ')"
+    # CLEAN TWIN: the LIVE-RED spelling decides exactly as the FAIL spelling does: the same accepted count and the same
+    # EXPECTED-LIVE-RED findings, line for line after the case key.
+    $eLf = @($eLl | ForEach-Object { ($_ -split ': \[', 2)[1] }) -join '|'; $eAf = @($eAl | ForEach-Object { ($_ -split ': \[', 2)[1] }) -join '|'
+    Case 'CLEAN TWIN' 'the LIVE-RED tagged push decides as the FAIL tagged one: 2 accepted and the same two findings' ($eL.accepted -eq $eA.accepted -and $eLf.Length -gt 0 -and [string]::Equals($eLf, $eAf, [StringComparison]::Ordinal)) "live=$eLf fail=$eAf"
     # CLEAN TWIN (W8.5): the same founding push through the main flow's composition, PREEXISTING first. The harness text
     # handed to the trace ($ux) prints neither live line, so no base run happens, and EXPECTED LIVE RED then decides
     # exactly as it did alone: the same verdict, field for field.
@@ -2524,7 +2539,7 @@ exit 0
 
   # A SUITE THAT SILENTLY RAN A SUBSET still prints "N of N". The first run of this file did exactly that:
   # a throw inside the record block skipped five cases and the tally read 30 of 30. The count is pinned.
-  $expectedCases = 119
+  $expectedCases = 121
   if ($ran -ne $expectedCases) { $fails += "ran $ran case(s), expected $expectedCases - a block of cases was skipped" }
 
   ''
