@@ -1468,8 +1468,10 @@ Write-Output 'stub push-main -Prepare: done'
 
     # MUST FIRE, STATIC: the hook's only road to a rehearsal is push-main -Prepare, so the early-rehearsal cap that
     # rehearse-chain -Early takes is never gone around. Code lines only (comments name the script freely); needles by
-    # concatenation so this file is not its own match.
-    $pcCode = @($pcHookText -split "`n" | Where-Object { $_ -notmatch '^\s*#' })
+    # concatenation so this file is not its own match. The subject is a POSIX sh file, which has NO block comments, so
+    # dropping whole-line comments is its complete reduction; ops\audit-source-comment-strip.ps1's rule is about
+    # PowerShell subjects, whose <# #> headers a line-only strip would let through.
+    $pcCode = @($pcHookText -split "`n" | Where-Object { -not $_.TrimStart().StartsWith('#') })
     $pcNamesRh = @($pcCode | Where-Object { $_.Contains('rehearse-' + 'chain') }).Count
     $pcStarts = @($pcCode | Where-Object { $_.Contains('-File "$pm" -' + 'Prepare') -and $_.Contains('&') }).Count
     Case 'MUST FIRE' 'the hook starts nothing but push-main -Prepare, in the background, and never names the rehearsal script' `
