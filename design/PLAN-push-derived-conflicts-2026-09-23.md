@@ -2371,8 +2371,8 @@ first writes them.
    and never fails a commit, whatever the starter does. It fires only under `CLAUDE_CODE_SESSION_ID`, as W7.2's
    commit-msg check is judged, and NEVER inside a rehearsal: `rehearse-chain.ps1` exports `TC_REHEARSAL_RUN=1` to its
    arm, and the hook exits 0 when it is set. Read first how `Invoke-RhCommitStage` points the clone at hooks: a clone
-   that runs `ops/hooks` from the rehearsed tree would otherwise start a rehearsal from inside a rehearsal. Until D19 is
-   ruled yes, `-Prepare` is the only trigger, and B22 is not read.
+   that runs `ops/hooks` from the rehearsed tree would otherwise start a rehearsal from inside a rehearsal. D19 was
+   ruled yes on 2026-09-23 (16.8), so the hook is a trigger beside `-Prepare`, and B22 is read once the hook is live.
 4. **Supersede.** A new early start in a checkout whose in-flight file names a DIFFERENT key writes that run's stop
    file first. A commit that leaves the key unchanged starts nothing and stops nothing, which is the measured condition
    (the first commit carrying the landed key's content). `Invoke-RhProcess`'s wait polls `-StopFile` every 5 s (first
@@ -2699,7 +2699,7 @@ rehearsal slot; early cap over rehearsal slot. The lease's pairs are never creat
   proved ready first, carries over to W9.2 (steps 9 and 12).
 - **D1 is carried into W9.3**, decided on W9.3's step 0 measurement, with its bar widened to run-gates (W9.3 step 1).
   If the bar fails, Brad decides with the numbers.
-- **D19 (NEEDS A RULING): the early rehearsal's trigger is a `post-commit` hook** in `ops/hooks`, installed box-wide by
+- **D19 (RULED YES by Brad, 2026-09-23 19:47, "Yes, post-commit hook (Recommended)"): the early rehearsal's trigger is a `post-commit` hook** in `ops/hooks`, installed box-wide by
   `ops/install-hooks.ps1` and asserted by `ops/audit-hook-installed.ps1`. It is a standing configuration change, which
   is why the review left the choice to Brad. **Recommendation: yes.** The measured hit rate assumed a rehearsal started
   at commit time, and the alternative, a session remembering to run `push-main -Prepare`, is an intention with no exit
@@ -2742,7 +2742,7 @@ and `ops/rehearse-chain.ps1` are each touched by several items.
 | 4 | W3.2 (with W3.4a step 3), then W4.1 step 7 | as 15.9 |
 | 5 | W6.0 | W9.2 needs its union trigger (chain-touching push) |
 | 6 | W9.5 | the key's gap closes before anything trusts the key for longer (chain-touching push; voids every verdict once) |
-| 7 | W9.1 (`-Onto`, `-StackFile`, `-Early`, `-Prepare`, the stop) | the stacking primitive and the stop file W9.3 and W9.2 need; the hook half waits for D19 |
+| 7 | W9.1 (`-Onto`, `-StackFile`, `-Early`, `-Prepare`, the stop) | the stacking primitive and the stop file W9.3 and W9.2 need; the hook half follows D19, ruled yes on 2026-09-23 |
 | 8 | W9.3 | legs beside the rehearsal, after its step 0 measurement and D1 |
 | 9 | W9.2 | the queue, live, after its READY list |
 | 10 | W8.2 | the main checkout joins the queue like any other push |
