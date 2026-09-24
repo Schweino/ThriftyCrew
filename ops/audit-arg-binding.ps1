@@ -272,6 +272,23 @@ if ($SelfTest) {
     $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltRise
     $rc3 = $LASTEXITCODE
     T 'CLEAN TWIN  a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+    # FAIL CLOSED (2026-09-24, pd-currency-2026-09-23.md). MUST FIRE: a baseline a botched rebase left holding conflict
+    # markers, and one that is gone, each exit 3 naming which, and write nothing. CLEAN TWIN: -Accept still records one.
+    $ltConf = Join-Path $lt 'baseline-conflict.json'
+    [IO.File]::WriteAllText($ltConf, ('<' * 7) + " HEAD`n{ ""unbound"": 2 }`n" + ('=' * 7) + "`n{ ""unbound"": 0 }`n" + ('>' * 7) + " theirs`n", (New-Object Text.UTF8Encoding($false)))
+    $ltConfSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltConf))
+    $o6 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltConf)
+    $rc6 = $LASTEXITCODE
+    $same6 = [string]::Equals($ltConfSeed, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltConf)), [StringComparison]::Ordinal)
+    T 'MUST FIRE  a baseline holding conflict markers exits 3, blind=baseline-unreadable, and its bytes are unchanged' ($rc6 -eq 3 -and $same6 -and (($o6 -join "`n") -match 'blind=baseline-unreadable')) ("rc=$rc6 unchanged=$same6")
+    $ltAbsent = Join-Path $lt 'baseline-absent.json'
+    $o7 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltAbsent -Tighten)
+    $rc7 = $LASTEXITCODE
+    T 'MUST FIRE  an ABSENT baseline under -Tighten exits 3, blind=baseline-missing, and no file is created' ($rc7 -eq 3 -and -not (Test-Path -LiteralPath $ltAbsent) -and (($o7 -join "`n") -match 'blind=baseline-missing')) ("rc=$rc7 created=$(Test-Path -LiteralPath $ltAbsent)")
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltAbsent -Accept
+    $rc8 = $LASTEXITCODE
+    $doc8 = if (Test-Path -LiteralPath $ltAbsent) { [IO.File]::ReadAllText($ltAbsent) | ConvertFrom-Json } else { $null }
+    T 'CLEAN TWIN  -Accept over an absent baseline records the current count (1) and exits 0' ($rc8 -eq 0 -and $null -ne $doc8 -and [int]$doc8.unbound -eq 1) ("rc=$rc8 unbound=$(if ($doc8) { $doc8.unbound })")
     # RULE 2 OUTSIDE THE CHECKING CLASS (2026-09-21). The founding file is grocery\capture-sink.ps1, a LISTENER, so
     # the class filter skipped it: its interpolated default lost $PSScriptRoot and captures went to C:\out. The
     # fixture is its own param shape under a name no checking-class pattern admits, in a tree of its own.
@@ -289,6 +306,7 @@ if ($SelfTest) {
       ($rc4 -eq 2 -and (($o4 -join "`n") -match 'DEAD-AT-BIND\s+grocery\\capture-fx\.ps1')) ("rc=$rc4")
     $sinkGood = '[CmdletBinding()]' + "`n" + 'param([int] $Port = 8791, [string] $OutDir = '''')' + "`n" + 'if (-not $OutDir) { $OutDir = Join-Path $PSScriptRoot ''out\captures\_sink'' }' + "`n"
     [IO.File]::WriteAllText($sinkFx, $sinkGood, (New-Object Text.UTF8Encoding($false)))
+    $null = Write-TcLfFile (Join-Path $lt 'bl-sink.json') ([ordered]@{ generated = '2026-01-01T00:00:00'; unbound = 0; examined = 1; names = @() } | ConvertTo-Json -Depth 3)
     $o5 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $sinkTree -BaselineFile (Join-Path $lt 'bl-sink.json'))
     $rc5 = $LASTEXITCODE
     T 'CLEAN TWIN  the same script resolving its default BELOW the block exits 0 with no DEAD-AT-BIND line' `
@@ -345,15 +363,22 @@ if ($nBroken -gt 0) {
 $blF = if ($BaselineFile) { $BaselineFile } else { Join-Path $here 'out\arg-binding-baseline.json' }
 $blDir = Split-Path $blF -Parent
 if (-not (Test-Path $blDir)) { New-Item -ItemType Directory -Force $blDir | Out-Null }
-$base = $null
-if (Test-Path $blF) { try { $base = [int]((Get-Content $blF -Raw | ConvertFrom-Json).unbound) } catch { $base = $null } }
+# FAIL CLOSED ON A MARK NOBODY CAN READ (2026-09-24, pd-currency-2026-09-23.md): an absent or unreadable baseline used to
+# set $base to $null and the next line WROTE the current count, a rise included, and exited 0.
+$blRead = Read-TcRatchetBaseline -Path $blF -Field 'unbound'
+$base = $blRead.Value
 function Write-AbBaseline([int]$Count) {
   $json = @{ generated = (Get-Date).ToString('s'); unbound = $Count; examined = $scanned; names = @($findings)
      note = 'High-water mark for the arg-binding ratchet (2026-09-07, the verify-bulk-edit -Paths drop). This number may only go DOWN. A run above it means a NEW checking script can silently ignore an argument it was given.' } | ConvertTo-Json -Depth 3
   # LF with the BOM the committed blob carries, not the CRLF Set-Content writes under PS 5.1 (lib\lf-write.ps1).
   $null = Write-TcLfFile $blF $json
 }
-if ($Accept -or $null -eq $base) {
+if (-not $Accept -and $blRead.State -ne 'read') {
+  $blTok = Get-TcRatchetBlindToken $blRead.State
+  Write-Output ("! arg-binding: COULD NOT EVALUATE - the baseline $blF is $($blRead.State) ($($blRead.Why)), so there is no mark to hold $n against. Nothing was written: a plain run and -Tighten never record a mark. Restore it from git, or record the current count on purpose with -Accept.")
+  Exit-Guard -Name 'arg-binding' -Summary "unbound=$n examined=$scanned blind=$blTok" -Code 3
+}
+if ($Accept) {
   Write-AbBaseline $n
   Write-Output ("  baseline written: $n unbound of $scanned examined. From here the number may only go DOWN.")
   Exit-Guard -Name 'arg-binding' -Summary "unbound=$n examined=$scanned baseline=$n" -Code 0
