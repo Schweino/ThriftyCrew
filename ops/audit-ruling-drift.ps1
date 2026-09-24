@@ -42,10 +42,11 @@
     ops\audit-ruling-drift.ps1               check the registry, hold the ratchet; writes nothing
     ops\audit-ruling-drift.ps1 -Tighten      the same, and record a believable FALL as the new high-water mark
     ops\audit-ruling-drift.ps1 -AcceptDrop   record a fall lib\ratchet.ps1 would refuse
+    ops\audit-ruling-drift.ps1 -Accept       record the CURRENT count as the mark over a baseline that is missing or unreadable (a plain run exits 3 there)
     ops\audit-ruling-drift.ps1 -SelfTest     frozen fixtures, plus this script's live path run against a temp tree
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([switch]$SelfTest, [switch]$AcceptDrop, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
+param([switch]$SelfTest, [switch]$Accept, [switch]$AcceptDrop, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
@@ -167,6 +168,23 @@ if ($SelfTest) {
     $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltRise
     $rc3 = $LASTEXITCODE
     T 'CLEAN TWIN  a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+    # FAIL CLOSED (2026-09-24, pd-currency-2026-09-23.md). MUST FIRE: conflict markers and an absent baseline each exit
+    # 3 naming which, and write nothing. CLEAN TWIN: -Accept still records one.
+    $ltConf = Join-Path $lt 'baseline-conflict.json'
+    [IO.File]::WriteAllText($ltConf, ('<' * 7) + " HEAD`n{ ""violations"": 2 }`n" + ('=' * 7) + "`n{ ""violations"": 0 }`n" + ('>' * 7) + " theirs`n", (New-Object Text.UTF8Encoding($false)))
+    $ltConfSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltConf))
+    $oC = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltConf)
+    $rcC = $LASTEXITCODE
+    $sameC = [string]::Equals($ltConfSeed, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltConf)), [StringComparison]::Ordinal)
+    T 'MUST FIRE  a baseline holding conflict markers exits 3, blind=baseline-unreadable, and its bytes are unchanged' ($rcC -eq 3 -and $sameC -and (($oC -join "`n") -match 'blind=baseline-unreadable')) ("rc=$rcC unchanged=$sameC")
+    $ltAbsent = Join-Path $lt 'baseline-absent.json'
+    $oA = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltAbsent)
+    $rcA = $LASTEXITCODE
+    T 'MUST FIRE  an ABSENT baseline on a plain run exits 3, blind=baseline-missing, and no file is created' ($rcA -eq 3 -and -not (Test-Path -LiteralPath $ltAbsent) -and (($oA -join "`n") -match 'blind=baseline-missing')) ("rc=$rcA created=$(Test-Path -LiteralPath $ltAbsent)")
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltAbsent -Accept
+    $rcW = $LASTEXITCODE
+    $docW = if (Test-Path -LiteralPath $ltAbsent) { [IO.File]::ReadAllText($ltAbsent) | ConvertFrom-Json } else { $null }
+    T 'CLEAN TWIN  -Accept over an absent baseline records the current count (1) and exits 0' ($rcW -eq 0 -and $null -ne $docW -and [int]$docW.violations -eq 1) ("rc=$rcW violations=$(if ($docW) { $docW.violations })")
   } finally {
     Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
   }
@@ -214,7 +232,16 @@ foreach ($v in $violations) {
   Write-Output ("      why:   {0}" -f $r.why)
 }
 
-if (-not (Test-Path -LiteralPath $BASELINE)) {
+# FAIL CLOSED ON A MARK NOBODY CAN READ (2026-09-24, pd-currency-2026-09-23.md). A MISSING baseline used to be written
+# with the current count on a plain run, a rise included, and exit 0; an unreadable one threw at the [int] cast. Both
+# are now a could-not-evaluate that writes nothing, and only -Accept records a mark over them.
+$blRead = Read-TcRatchetBaseline -Path $BASELINE -Field 'violations'
+if ($blRead.State -ne 'read' -and -not $Accept) {
+  $blTok = Get-TcRatchetBlindToken $blRead.State
+  Write-Output ("! ruling-drift: COULD NOT EVALUATE - the baseline " + $BASELINE + " is $($blRead.State) ($($blRead.Why)), so there is no mark to hold " + $count + " against. Nothing was written: a plain run, -Tighten and -AcceptDrop never record a mark over it. Restore it from git, or record the current count on purpose with -Accept.")
+  Exit-Guard -Name 'ruling-drift' -Summary ("violations={0} blind={1}" -f $count, $blTok) -Code 3
+}
+if ($Accept) {
   $json = @{ generated = (Get-Date).ToString('s'); violations = $count
      note = 'HIGH-WATER MARK for ratified rulings the code does not implement. May only go DOWN.' } | ConvertTo-Json -Depth 3
   # LF with the BOM the committed blob carries, not the CRLF Set-Content writes under PS 5.1 (lib\lf-write.ps1).
@@ -222,7 +249,7 @@ if (-not (Test-Path -LiteralPath $BASELINE)) {
   Write-Output ("ruling-drift: baseline written at {0} unimplemented ruling(s). From here the number may only go DOWN." -f $count)
   Exit-Guard -Name 'ruling-drift' -Summary ("baseline={0}" -f $count) -Code 0
 }
-$base = [int]((Get-Content $BASELINE -Raw -Encoding UTF8 | ConvertFrom-Json).violations)
+$base = $blRead.Value
 if ($count -gt $base) {
   Write-Output ("RULING-DRIFT AUDIT FAILED: {0} ratified ruling(s) the code does not implement, against a baseline of {1}. A ruling was contradicted that was not contradicted before - either the code moved away from the document or a new pair was declared and is already broken." -f $count, $base)
   Exit-Guard -Name 'ruling-drift' -Summary ("violations={0} baseline={1}" -f $count, $base) -Code 2
