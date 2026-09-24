@@ -407,6 +407,11 @@ $static = @(
   # a lane that CRASHES at run time, and the value is the new site in THIS diff - the same reason
   # test-native-stderr-eap stays. It cost 24s over 785 tracked scripts on 2026-09-17. Hermetic, reads source only.
   @{ f = 'ops\audit-list-array-wrap.ps1';      n = 'no tracked script wraps a New-Object List[object] in @(), which throws "Argument types do not match" under PS 5.1 even when the list is empty - a gate at ZERO, with a marked fixture that proves the throw as its only exception' }
+  # Queue 2026-09-21-85c3b7 (plan-2026-09-22-2, Brad-ruled): one density rule, one library, two builders, and only one
+  # builder called it, so Walmart's density-contradicted derived sizes were written and then ruled by hand. The census
+  # names every builder that derives a size as lp / up and refuses a new one that does not run Test-DerivedSizeDensity.
+  # ON EVERY PUSH, because what it stops is a builder that publishes a wrong per-unit price; about 2 s over 691 scripts.
+  @{ f = 'grocery\audit-derived-size-callers.ps1'; n = 'every builder that derives a package size as linePrice / unitPrice runs the density refusal (Test-DerivedSizeDensity, with derived-size-density-lib dot-sourced) in the same function - a ratchet at 0 unguarded that also names the registered builders and fails when one stops resolving; hermetic, AST, reads source only' }
   @{ f = 'ops\audit-readjson-inline-wrap.ps1'; n = 'no script wraps the json-io reader inline in @(), which hands a loop the whole file as ONE row - a gate at ZERO (2026-09-21: it had blinded sync-recipesdb-cost''s partial-cost gate and two wave-preaudit maps)' }
   # Brad's ruling, 2026-09-12, backlog I138: a title we publish on a paid page is our claim whatever blog it came
   # from. This one is on EVERY push rather than daily, because it is one of the few detectors here that CAN put a

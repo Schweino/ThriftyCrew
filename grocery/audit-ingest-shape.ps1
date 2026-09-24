@@ -90,7 +90,7 @@ function Test-RowProvesUnit($Row, [string]$Tok) {
   $lp = [double]($m.Groups[1].Value -replace ',', '')
   $up = Get-SamsUnitPriceReading ('' + $Row.up)
   if ($null -eq $up -or $up.value -le 0 -or $lp -le 0) { return @{ ok = $false; why = 'unit price unreadable' } }
-  $derived = $lp / $up.value
+  $derived = $lp / $up.value   # derived-size:allow the quotient is quoted in a finding's message and never written as a row's size
   $cands = Get-NameQtyCandidates ('' + $Row.name) $Tok
   foreach ($q in @($cands)) {
     if ($null -eq $q -or [double]$q -le 0) { continue }

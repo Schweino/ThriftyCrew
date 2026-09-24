@@ -1,0 +1,15 @@
+﻿{
+    "note":  "High-water mark for the derived-size caller census (queue 2026-09-21-85c3b7, plan-2026-09-22-2). unguarded may only go DOWN; builders are the registered builders that route through Test-DerivedSizeDensity, and a run that no longer resolves one exits 2.",
+    "generated":  "2026-09-24T15:30:00",
+    "unguarded":  0,
+    "unguarded_sites":  [
+
+                        ],
+    "builders":  [
+                     "\\grocery\\build-sams-deals.ps1::Build-Row",
+                     "\\grocery\\walmart-row-lib.ps1::Build-Row"
+                 ],
+    "allowed":  [
+                    "\\grocery\\audit-ingest-shape.ps1::Test-RowProvesUnit::$lp / $up.value"
+                ]
+}
