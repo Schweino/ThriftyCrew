@@ -151,6 +151,13 @@
   (3) times. At the cap the rebase runs inside the lock as 5841e96b1 did, with the verdict check as the backstop, so the
   rule degrades and never refuses. A hand-back never spends the rehearsal budget unless its rehearsal leg REHEARSED.
 
+  THE LEGS RUN SIDE BY SIDE (2026-09-23, W9.3, which absorbs W2.3). Each round starts ops\rehearse-chain.ps1 -ForPush as a
+  CHILD first, runs run-gates and then test-auditors in this process, and only then waits for the child (D1, decided on
+  W9.3 step 0's measurement; $script:PmRehearsalBesideGate). A red leg writes the child's per-run stop file and waits for
+  it to exit (it stops itself within its 5 s poll and is never killed), then refuses refused-gate-red. The wait is 3 for
+  an empty exit code, a missing completion marker, or a marker whose code disagrees with the exit code. Every catch-up and
+  hand-back round runs the same start, run, wait. Row fields rh_stopped and rh_secs_list (0 for a reused verdict).
+
   THE PRE-FLIGHT'S COUNTS (2026-09-23, W3.2 with W3.4a step 3), WARN ONLY: commits that edit
   design/BACKLOG-course-findings.md directly (neither deleting nor moving out an inbox file, which a merge does), inbox
   files the push adds that ops\merge-backlog-inbox.ps1 -ValidateFile says the merge would quarantine, and commits that
@@ -164,7 +171,7 @@
   machine - and nothing about whether main is healthy afterwards.
 #>
 # Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): read off the self-test block, which works in a temp sandbox and reads nothing else of this repo. Verify with: powershell -File lib\gate-input-key.ps1 -VerifyDeclared <this file>
-# gate-inputs: ops\push-main.ps1, lib\push-lock.ps1, lib\git-repo-env.ps1, lib\push-ledger.ps1, lib\seed-hint.ps1, ops\seed-worktree.ps1, ops\probe-push-convergence.ps1, lib\mutex-hold.ps1, ops\merge-backlog-inbox.ps1
+# gate-inputs: ops\push-main.ps1, lib\push-lock.ps1, lib\git-repo-env.ps1, lib\push-ledger.ps1, lib\seed-hint.ps1, ops\seed-worktree.ps1, ops\probe-push-convergence.ps1, lib\mutex-hold.ps1, ops\merge-backlog-inbox.ps1, lib\concurrency-probe.ps1
 [CmdletBinding()]
 param(
   [string]$Remote = 'origin',
@@ -414,20 +421,90 @@ function Invoke-TcWarmTestAuditors {
   }
 }
 
-function Invoke-TcRehearsalForPush {
-  <# ops\rehearse-chain.ps1 -ForPush, outside the push lock: Code 0 allow, 1 refuse, 3 could not rehearse. A checkout older
-     than the harness has none and is not asked, as an older checkout without hold-push-lock pushes unlocked. An exit 0
-     without the completion marker as the last line decided nothing and is 3. Ran and Lines are for the row (W0.1):
-     Ran is $false when nothing was asked, so the leg reads null rather than a time. #>
-  param([string]$Dir, [string]$Remote, [string]$Branch)
-  $rh = Join-Path $Dir 'ops\rehearse-chain.ps1'
-  if (-not (Test-Path -LiteralPath $rh)) { return [pscustomobject]@{ Code = 0; Why = 'this checkout has no ops\rehearse-chain.ps1, so no rehearsal is asked'; Ran = $false; Lines = @() } }
-  $out = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $rh -ForPush -Remote $Remote -Branch $Branch)
-  $code = $LASTEXITCODE
-  foreach ($l in $out) { Say ([string]$l) }
-  $last = [string]($out | Select-Object -Last 1)
-  if ($code -eq 0 -and $last -notmatch '^CHAIN-REHEARSAL-CHECK-COMPLETE') { $code = 3 }
-  return [pscustomobject]@{ Code = $code; Why = $last; Ran = $true; Lines = [string[]]@($out | ForEach-Object { [string]$_ }) }
+# ======================================================================================================================
+# THE REHEARSAL LEG RUNS BESIDE THE OTHER TWO (2026-09-23, W9.3, which absorbs W2.3). ops\rehearse-chain.ps1 -ForPush is
+# started as a CHILD PROCESS before run-gates, run-gates and test-auditors run in this process, and only then is the
+# child waited for. A red leg writes the child's per-run stop file at once; the child (never killed by anyone, memory
+# powershell-exiting-event-does-not-fire) sees it within its 5 s poll, ends blind=stopped and records nothing, and this
+# process waits for it to exit before refusing refused-gate-red, so a red push no longer waits out a whole rehearsal.
+# SLOTS: the child takes a rehearsal slot in its own process, run-gates takes gate slots in its own pool, test-auditors
+# takes none, and this process holds none of them while it waits, so no process here holds one pool while waiting on the
+# other: no nested acquisition.
+# THE WAIT DECIDES AS W2.3 STEP 3 SAYS. Start-Process with .Handle touched at once, so the PS 5.1 empty-ExitCode trap
+# (memory ps-start-process-exitcode-needs-handle) cannot read a red as 0; and still, an empty or unreadable ExitCode is 3,
+# and the last line must be `CHAIN-REHEARSAL-CHECK-COMPLETE code=<n> ...` with <n> equal to the exit code, or it is 3.
+# ======================================================================================================================
+# D1, DECIDED ON W9.3 STEP 0'S MEASUREMENT: $true starts the rehearsal beside run-gates (W9.3); $false is W2.3's shape,
+# run-gates first, then test-auditors beside the rehearsal, which is what stands if the bar failed and Brad has not ruled.
+$script:PmRehearsalBesideGate = $true
+
+function Resolve-TcRehearsalExit {
+  <# The rehearsal leg's decision from its exit code and its lines (pure): Code, Why. An empty exit code, a missing
+     completion marker, or a marker whose code disagrees with the exit code decided nothing, and each is 3. #>
+  param($ExitCode, $Lines)
+  $all = @(@($Lines) | ForEach-Object { [string]$_ } | Where-Object { $_.Trim() })
+  $last = $(if ($all.Count) { $all[$all.Count - 1] } else { '' })
+  if ($null -eq $ExitCode -or [string]$ExitCode -notmatch '^-?\d+$') { return [pscustomobject]@{ Code = 3; Why = 'the rehearsal child''s exit code could not be read, so it decided nothing' } }
+  $m = [regex]::Match($last, '^CHAIN-REHEARSAL-CHECK-COMPLETE code=(\d+)\b')
+  if (-not $m.Success) { return [pscustomobject]@{ Code = 3; Why = 'the rehearsal child printed no completion marker as its last line, so it decided nothing' } }
+  if ([int]$m.Groups[1].Value -ne [int]$ExitCode) { return [pscustomobject]@{ Code = 3; Why = ('the rehearsal child exited {0} but its marker says code={1}; that disagreement decided nothing' -f $ExitCode, $m.Groups[1].Value) } }
+  return [pscustomobject]@{ Code = [int]$ExitCode; Why = $last }
+}
+
+function New-TcRehearsalJob {
+  <# A started (or already finished) rehearsal leg: Wait() returns Code, Why, Ran, Lines, Sec and Stopped, once, and the
+     same object on every later call. A job with -Done is finished before it starts (nothing to ask, or a runner seam). #>
+  param($Proc = $null, [string]$Out = '', [string]$Err = '', $Done = $null, [scriptblock]$Deferred = $null, $DeferredArg = $null)
+  $job = [pscustomobject]@{ Proc = $Proc; Out = $Out; Err = $Err; Result = $Done; Deferred = $Deferred; DeferredArg = $DeferredArg; Sw = [Diagnostics.Stopwatch]::StartNew() }
+  $job | Add-Member -MemberType ScriptMethod -Name Wait -Value {
+    if ($null -ne $this.Result) { return $this.Result }
+    if ($this.Deferred) {
+      # A RUNNER SEAM (the fixtures' synchronous models): it runs at the wait, in this process.
+      $r = & $this.Deferred $this.DeferredArg
+      $this.Sw.Stop()
+      if ($null -eq $r.PSObject.Properties['Sec']) { $r | Add-Member -NotePropertyName Sec -NotePropertyValue ([int][math]::Round($this.Sw.Elapsed.TotalSeconds)) -Force }
+      if ($null -eq $r.PSObject.Properties['Stopped']) { $r | Add-Member -NotePropertyName Stopped -NotePropertyValue $false -Force }
+      $this.Result = $r
+      return $r
+    }
+    $this.Proc.WaitForExit()
+    $this.Sw.Stop()
+    $code = $null
+    try { $code = $this.Proc.ExitCode } catch { $code = $null }
+    $lines = @()
+    if ($this.Out -and (Test-Path -LiteralPath $this.Out)) { $lines = @([IO.File]::ReadAllLines($this.Out) | Where-Object { $_.Trim() }) }
+    foreach ($l in $lines) { Say ([string]$l) }
+    $dec = Resolve-TcRehearsalExit -ExitCode $code -Lines $lines
+    $stopped = [bool](@($lines | Where-Object { [string]$_ -match '^CHAIN-REHEARSAL-CHECK-COMPLETE .*\bblind=stopped\b' }).Count)
+    foreach ($x in @($this.Out, $this.Err)) { if ($x -and (Test-Path -LiteralPath $x)) { Remove-Item -LiteralPath $x -Force -ErrorAction SilentlyContinue } }
+    $this.Result = [pscustomobject]@{ Code = $dec.Code; Why = $dec.Why; Ran = $true; Lines = [string[]]$lines; Sec = [int][math]::Round($this.Sw.Elapsed.TotalSeconds); Stopped = $stopped }
+    return $this.Result
+  }
+  return $job
+}
+
+function Start-TcRehearsalChild {
+  <# THE DEFAULT STARTER: ops\rehearse-chain.ps1 -ForPush as a child process, with -StackFile (W9.2) and a per-run
+     -StopFile when the checkout's rehearse-chain declares them (an older one is asked without them). A checkout with no
+     rehearse-chain is not asked, as before (Ran $false). -Script and -ExtraArgs are the self-test's seams. #>
+  param([string]$Dir, [string]$Remote, [string]$Branch, [string]$StackFile = '', [string]$StopFile = '', [string]$Script = '', [string[]]$ExtraArgs = @())
+  $rh = $(if ($Script) { $Script } else { Join-Path $Dir 'ops\rehearse-chain.ps1' })
+  if (-not (Test-Path -LiteralPath $rh)) { return (New-TcRehearsalJob -Done ([pscustomobject]@{ Code = 0; Why = 'this checkout has no ops\rehearse-chain.ps1, so no rehearsal is asked'; Ran = $false; Lines = [string[]]@(); Sec = 0; Stopped = $false })) }
+  $src = ''
+  try { $src = [IO.File]::ReadAllText($rh) } catch { }
+  $argv = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $rh + '"'), '-ForPush', '-Remote', $Remote, '-Branch', $Branch)
+  if ($StackFile -and $src -match '\$StackFile\b') { $argv += @('-StackFile', ('"' + $StackFile + '"')) }
+  if ($StopFile -and $src -match '\$StopFile\b') { $argv += @('-StopFile', ('"' + $StopFile + '"')) }
+  $argv += @($ExtraArgs)
+  $stem = Join-Path $env:TEMP ('tc-pm-rh-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  try {
+    $p = Start-Process -FilePath 'powershell.exe' -WorkingDirectory $Dir -NoNewWindow -PassThru -ErrorAction Stop `
+      -RedirectStandardOutput ($stem + '.out') -RedirectStandardError ($stem + '.err') -ArgumentList $argv
+    $null = $p.Handle   # touched at once: PS 5.1 hands back an empty ExitCode otherwise
+    return (New-TcRehearsalJob -Proc $p -Out ($stem + '.out') -Err ($stem + '.err'))
+  } catch {
+    return (New-TcRehearsalJob -Done ([pscustomobject]@{ Code = 3; Why = ('the rehearsal child could not be started: ' + $_.Exception.Message); Ran = $false; Lines = [string[]]@(); Sec = 0; Stopped = $false }))
+  }
 }
 
 function Get-TcWarmRefLine {
@@ -809,10 +886,13 @@ function Invoke-TcDefaultLegs {
      is the answer, else a test-auditors Code that is not 0 is, else run-gates' pass is. What is new is that it also hands
      back what each leg SAID, for the row: RgSec and RgLines, and TaSec, TaExit and TaLines (null when test-auditors did
      not run). #>
-  param([string]$Dir, [string]$Remote, [string]$Branch)
+  param([string]$Dir, [string]$Remote, [string]$Branch, [scriptblock]$BeforeTestAuditors = $null)
   $wg = Invoke-TcWarmGate -Dir $Dir
   $res = [pscustomobject]@{ Ran = $wg.Ran; Code = $wg.Code; Why = $wg.Why; RgSec = $wg.Sec; RgLines = $wg.Lines; TaSec = $null; TaExit = $null; TaLines = $null }
   if (-not ($wg.Ran -and $wg.Code -eq 0)) { return $res }
+  # W2.3's SHAPE (W9.3 step 3): the rehearsal starts once run-gates has passed, beside test-auditors. A no-op when it
+  # has already started beside run-gates.
+  if ($BeforeTestAuditors) { & $BeforeTestAuditors }
   $wt = Invoke-TcWarmTestAuditors -Dir $Dir -RefLine (Get-TcWarmRefLine -Dir $Dir -Remote $Remote -Branch $Branch)
   $res.TaSec = $wt.Sec; $res.TaExit = $wt.Exit; $res.TaLines = $wt.Lines
   if ($wt.Code -ne 0) { $res.Ran = $wt.Ran; $res.Code = $wt.Code; $res.Why = $wt.Why }
@@ -1639,7 +1719,7 @@ function Invoke-TcPushMainReexec {
 $script:TcPmReexecExtra = @()
 
 function Invoke-TcPushMain {
-  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '', [string]$SeedScript = '', [scriptblock]$RehearsalRunner = $null, [scriptblock]$RehearsalCheck = $null, [bool]$NoReexec = $false)
+  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '', [string]$SeedScript = '', [scriptblock]$RehearsalRunner = $null, [scriptblock]$RehearsalCheck = $null, [bool]$NoReexec = $false, [scriptblock]$RehearsalStarter = $null)
   # WHICH CODE IS RUNNING, read FIRST (W0.1R step 2). The round-1 fetch and rebase below rewrite this checkout, and when
   # origin changed ops\push-main.ps1 they rewrite THIS script on disk: a hash taken after that names code this process is
   # not running, which is the one thing pm_blob exists to say.
@@ -1734,6 +1814,10 @@ function Invoke-TcPushMain {
     reread_doc_lines     = $null
     # W9.1 step 7 (B22): yes, no, not-chain or unknown, from the first -ForPush of the run; null when no child said.
     early_hit            = $null
+    # W9.3: whether the rehearsal child ended blind=stopped (a red leg wrote its stop file), and each round's rehearsal
+    # seconds, 0 for a leg that reused or found a verdict (B21).
+    rh_stopped           = $false
+    rh_secs_list         = [int[]]@()
   }
   # ONE ROW PER RUN, and at most one (review of W0.1R, 2026-09-23): the guard below writes a row for a throw that no path
   # wrote one for, so every path now ends here, and a path that already wrote one is never written twice.
@@ -1781,7 +1865,11 @@ function Invoke-TcPushMain {
     # The default runner is BOTH hook legs: run-gates, then (only on a pass) the test-auditors check with this push's own
     # ref line, so its keyed pass is recorded before the lock and the in-lock leg can reuse it (queue 2026-09-18-1139a0).
     # Invoke-TcDefaultLegs holds that decision and also hands back what each leg said, for the row.
-    $runner = $(if ($GateRunner) { $GateRunner } else { { param($d) Invoke-TcDefaultLegs -Dir $d -Remote $Remote -Branch $Branch } })
+    # The default runner takes the rehearsal's starter as its second argument and calls it between run-gates and
+    # test-auditors, which is W2.3's shape; in W9.3's shape the rehearsal has already started, and the call is a no-op.
+    $runner = $(if ($GateRunner) { $GateRunner } else { { param($d, $bta) Invoke-TcDefaultLegs -Dir $d -Remote $Remote -Branch $Branch -BeforeTestAuditors $bta } })
+    # THE STACK FILE the rehearsal is started with (W9.2 writes it for a queue member; empty otherwise).
+    $stackFile = ''
     # THE SEED RUNS AFTER THE PRE-FLIGHT (W2.1R step 6), inside round 1 below: a seconds-long refusal should not wait for a
     # fresh worktree's 47 MB seed, and the rebase needs no seeded input (the seeded paths are gitignored).
     $checker = $(if ($RehearsalCheck) { $RehearsalCheck } else { { param($d, $h, $r) Invoke-TcRehearsalCheck -Dir $d -Branch $Branch -Head $h -RemoteSha $r } })
@@ -1909,14 +1997,32 @@ function Invoke-TcPushMain {
       }
       if (-not $skipLegs) {
 
-      # ---- 2. THE GATE, BEFORE THE LOCK (Brad, 2026-09-12; the account is above $runner): a red gate never queues, and a
-      # 3 is neither a refusal nor a pass - it leaves the gate to the hook inside the lock, exactly as before.
+      # ---- 2 AND 3. THE LEGS, BEFORE THE LOCK, SIDE BY SIDE (W9.3; the gate's account is above $runner) ----
+      # A red gate never queues, and a 3 is neither a refusal nor a pass: it leaves the gate to the hook inside the lock.
+      # The chain rehearsal (2026-09-22 RCA F2) runs here too, unlocked: a push that changes a script in
+      # ops\chain-manifest.json must carry a rehearsal over recent real data, the hook inside the lock only reads the
+      # recorded verdict, and 1 (rehearsed and failed) and 3 (could not rehearse) both refuse before the queue.
+      # SINCE W9.3 the rehearsal child is STARTED FIRST ($script:PmRehearsalBesideGate) and waited for after run-gates and
+      # test-auditors have run in this process, so the three legs overlap; in W2.3's shape it starts after run-gates
+      # passes, beside test-auditors. A red leg writes the child's stop file and waits for it to exit before refusing.
       # A LEG SET STARTS HERE, so this is what `rounds` counts. Round 1's legs are the row's leg readings (leg_sec and the
       # rest); a later round's legs are catch-up time, summed into catchup_sec.
       $pmRow['rounds'] = $round
       $curPhase = $legPhase
+      $rehearsals++
+      $pmRow['rehearsals'] = $rehearsals
+      $stopFile = Join-Path $env:TEMP ('tc-pm-rhstop-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '.flag')
+      $rhBox = @{ Job = $null }
+      $rhDir = $Dir; $rhRunnerSeam = $RehearsalRunner; $rhStarterSeam = $RehearsalStarter; $rhStack = $stackFile; $rhStop = $stopFile
+      $startRh = {
+        if ($null -ne $rhBox.Job) { return }
+        if ($rhStarterSeam) { $rhBox.Job = & $rhStarterSeam $rhDir $rhStack $rhStop }
+        elseif ($rhRunnerSeam) { $rhBox.Job = New-TcRehearsalJob -Deferred $rhRunnerSeam -DeferredArg $rhDir }
+        else { $rhBox.Job = Start-TcRehearsalChild -Dir $rhDir -Remote $Remote -Branch $Branch -StackFile $rhStack -StopFile $rhStop }
+      }
+      if ($script:PmRehearsalBesideGate) { & $startRh }
       $gateSw = [Diagnostics.Stopwatch]::StartNew()
-      $g = & $runner $Dir
+      $g = & $runner $Dir $startRh
       $gateSw.Stop()
       if ($round -eq 1) {
         $null = Invoke-TcRowReader 'runner' { Add-TcRunnerReadings -Row $pmRow -Result $g }
@@ -1925,6 +2031,17 @@ function Invoke-TcPushMain {
       }
       if ($g.Ran -and $g.Code -eq 1) {
         $redWhy = $(if ($g.Why) { [string]$g.Why } else { 'run-gates exited 1' })
+        # A RED LEG STOPS THE REHEARSAL (W9.3 step 4): its stop file is written at once, and this process waits for the
+        # child to exit (it is never killed: a killed run leaves its scratch clone), then refuses refused-gate-red. A
+        # runner seam's model has not started, so there is nothing to stop.
+        if ($null -ne $rhBox.Job -and -not $rhBox.Job.Deferred -and $null -eq $rhBox.Job.Result) {
+          try { [IO.File]::WriteAllText($stopFile, ('stopped by push-main pid ' + $PID + ': ' + $redWhy)) } catch { Say ('push-main: the rehearsal''s stop file could not be written (' + $_.Exception.Message + '); it will run to its end.') }
+          Say 'push-main: a leg is red, so the chain rehearsal beside it was told to stop; waiting for it to exit (it stops itself within about 5 s and is never killed).'
+          $rhRed = $rhBox.Job.Wait()
+          $pmRow['rh_stopped'] = [bool]$rhRed.Stopped
+          $pmRow['rh_secs_list'] = [int[]](@($pmRow['rh_secs_list']) + [int]$rhRed.Sec)
+        }
+        Remove-Item -LiteralPath $stopFile -Force -ErrorAction SilentlyContinue
         Say ("push-main: REFUSED - {0} before the lock was taken, so this push never entered the queue and nothing else on this box was held up. Fix the cause and run this again." -f $redWhy)
         $outcome = 'refused-gate-red'; $ledgerState = 'not-taken'; $pmRow['phase'] = $legPhase
         & $writeRow
@@ -1941,26 +2058,23 @@ function Invoke-TcPushMain {
         Say 'push-main: gate PASSED outside the lock, so the lock is taken only for the fetch, the rebase and the ref update.'
       }
 
-      # ---- 3. THE CHAIN REHEARSAL, ALSO BEFORE THE LOCK, AND AFTER THE REBASE (2026-09-22 RCA F2; order 2026-09-23) ----
-      # A push that changes a script in ops\chain-manifest.json must carry a rehearsal over recent real data, and the
-      # rehearsal takes the chain's own time (about 14 minutes), so it runs HERE, unlocked. The hook inside the lock only
-      # reads the recorded verdict. 1 = rehearsed and failed, 3 = could not rehearse with its blind= cause; both refuse
-      # before the queue, and neither is ever read as a pass. The cap of 6 at once and the three outcomes are
-      # ops\rehearse-chain.ps1's, unchanged.
-      $rehearsals++
-      $pmRow['rehearsals'] = $rehearsals
-      $rhSw = [Diagnostics.Stopwatch]::StartNew()
-      $rh = $(if ($RehearsalRunner) { & $RehearsalRunner $Dir } else { Invoke-TcRehearsalForPush -Dir $Dir -Remote $Remote -Branch $Branch })
-      $rhSw.Stop()
+      # ---- 3. THE REHEARSAL'S ANSWER: started above (or now, when a runner never asked for it), waited for here ----
+      & $startRh
+      $rh = $rhBox.Job.Wait()
+      Remove-Item -LiteralPath $stopFile -Force -ErrorAction SilentlyContinue
+      $rhSec = [int](Get-TcOptionalProp $rh 'Sec')
+      $pmRow['rh_stopped'] = [bool](Get-TcOptionalProp $rh 'Stopped')
+      $rhNew = [bool](Invoke-TcRowReader 'rehearsed' { Test-TcRehearsedNew -Result $rh } $false)
+      # EACH ROUND'S REHEARSAL SECONDS (W9.3 step 7, B21): 0 for a leg that reused or found a verdict.
+      $pmRow['rh_secs_list'] = [int[]](@($pmRow['rh_secs_list']) + $(if ($rhNew) { $rhSec } else { 0 }))
       if ($round -eq 1) {
-        $rhSec = [int][math]::Round($rhSw.Elapsed.TotalSeconds)
         $null = Invoke-TcRowReader 'rehearsal' { Add-TcRehearsalReadings -Row $pmRow -Result $rh -Sec $rhSec }
         # WAS THIS PUSH COVERED BY A COMMIT-TIME REHEARSAL (W9.1 step 7, B22)? Read off the FIRST -ForPush of the run.
         $pmRow['early_hit'] = Invoke-TcRowReader 'early_hit' { Get-TcEarlyHit -ChainTouching $pmRow['chain_touching'] -Lines (Get-TcOptionalProp $rh 'Lines') } $null
       } else {
-        $catchupTotal += $rhSw.Elapsed.TotalSeconds; $pmRow['catchup_sec'] = [int][math]::Round($catchupTotal)
+        $catchupTotal += [double]$rhSec; $pmRow['catchup_sec'] = [int][math]::Round($catchupTotal)
       }
-      if (Invoke-TcRowReader 'rehearsed' { Test-TcRehearsedNew -Result $rh } $false) {
+      if ($rhNew) {
         $pmRow['rehearsed'] = [int]$pmRow['rehearsed'] + 1
         # THE REHEARSAL BUDGET COUNTS ONLY THIS (W2.2R step 2): a round that made a new verdict. With one counter for every
         # round, cheap catch-up rounds over non-chain moves would spend it, and a chain push at a busy hour would reach the
@@ -2518,7 +2632,7 @@ $m.Dispose()
     T ($kMNF + '  a rehearsal that could not run is exit 3, never a pass and never read as a red') ($rR2 -eq 3) ("rc={0}" -f $rR2)
     $rR3 = Invoke-TcPushMain -Dir $s3 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -SeedScript $sdFail -RehearsalRunner $rhGreen
     T ($kCT + '  a passing rehearsal lets the push go on to the lock exactly as before') ($rR3 -eq 0) ("rc={0}" -f $rR3)
-    $rR4 = Invoke-TcRehearsalForPush -Dir $s3 -Remote 'origin' -Branch 'main'
+    $rR4 = (Start-TcRehearsalChild -Dir $s3 -Remote 'origin' -Branch 'main').Wait()
     T ($kMNF + '  a checkout with no ops\rehearse-chain.ps1 is not asked for a rehearsal (the older-checkout rule)') ($rR4.Code -eq 0) ("code={0} why={1}" -f $rR4.Code, $rR4.Why)
 
     # ---- THE REHEARSAL JUDGES THE REBASED CONTENT (2026-09-23) ----
@@ -3191,6 +3305,166 @@ $m.Dispose()
     T ($kCT + '  a push whose -ForPush read the early verdict lands with early_hit yes and chain_touching true on its row, and its rehearsal leg is 0 s (a reuse)') `
       ($rEh -eq 0 -and $ehRows.Count -eq 1 -and [string]$ehRow.early_hit -ceq 'yes' -and $ehRow.chain_touching -eq $true -and [int]$ehRow.leg_sec.rh -eq 0) `
       ("rc={0} rows={1} early_hit={2} chain={3} rh={4}" -f $rEh, $ehRows.Count, $(if ($ehRow) { $ehRow.early_hit }), $(if ($ehRow) { $ehRow.chain_touching }), $(if ($ehRow) { $ehRow.leg_sec.rh }))
+
+    # ---- W9.3: THE LEGS RUN BESIDE THE REHEARSAL (2026-09-23; W2.3's fixtures, widened) ----
+    # Founding cost: a chain push runs run-gates, test-auditors and a 13 to 15 minute rehearsal one after another, and
+    # a red leg used to wait for nothing but still paid its whole order. The rehearsal stub below is a REAL child process
+    # started through Start-TcRehearsalChild (its -Script seam): it can rendezvous with a leg through
+    # lib\concurrency-probe.ps1, wait on its stop file, and print the markers rehearse-chain prints.
+    . (Join-Path $repo 'lib\concurrency-probe.ps1')
+    $w3Dir = Join-Path $tmp 'w93'
+    $null = New-Item -ItemType Directory -Force -ErrorAction Stop $w3Dir
+    $w3Stub = Join-Path $w3Dir 'rehearse-stub.ps1'
+    [IO.File]::WriteAllText($w3Stub, @'
+param([switch]$ForPush, [string]$Remote, [string]$Branch, [string]$StackFile, [string]$StopFile, [string]$Mode = 'pass', [string]$Rendezvous = '', [string]$Started = '', [string]$Ended = '')
+if ($Started) { [IO.File]::WriteAllText($Started, [string]$PID) }
+try {
+  if ($Rendezvous) { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $Rendezvous | Out-Null }
+  if ($Mode -eq 'stopwait') {
+    $sw = [Diagnostics.Stopwatch]::StartNew()
+    while ($sw.Elapsed.TotalSeconds -lt 120) {
+      if ($StopFile -and (Test-Path -LiteralPath $StopFile)) {
+        Write-Output 'chain-rehearsal: STOPPED - fixture'
+        Write-Output 'CHAIN-REHEARSAL-CHECK-COMPLETE code=3 outcome=could-not-rehearse blind=stopped'
+        exit 3
+      }
+      Start-Sleep -Milliseconds 100
+    }
+    Write-Output 'CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=rehearsed-pass'
+    exit 0
+  }
+  if ($Mode -eq 'fail') { Write-Output 'chain-rehearsal: REFUSED - fixture'; Write-Output 'CHAIN-REHEARSAL-CHECK-COMPLETE code=1 outcome=rehearsed-fail'; exit 1 }
+  if ($Mode -eq 'badmarker') { Write-Output 'CHAIN-REHEARSAL-CHECK-COMPLETE code=1 outcome=rehearsed-fail'; exit 0 }
+  Write-Output 'chain-rehearsal: no chain-manifest script changed in this push; no rehearsal needed'
+  Write-Output 'CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=not-needed'
+  exit 0
+} finally { if ($Ended) { [IO.File]::WriteAllText($Ended, [string]$PID) } }
+'@)
+    # THE STARTER'S CONFIGURATION IS SCRIPT STATE, never a closure: a GetNewClosure scriptblock is bound to a dynamic
+    # module that cannot see this script's functions. One configuration per case, set by New-StW3Starter.
+    $script:w3Cfg = @{ Mode = 'pass'; Probes = @(); Started = ''; Ended = ''; Starts = 0 }
+    function New-StW3Starter([string]$Mode, $Probes = @(), [string]$Started = '', [string]$Ended = '') {
+      $script:w3Cfg = @{ Mode = $Mode; Probes = @($Probes); Started = $Started; Ended = $Ended; Starts = 0 }
+      return {
+        param($d, $stack, $stop)
+        $script:w3Cfg.Starts++
+        $xa = @('-Mode', $script:w3Cfg.Mode)
+        if (@($script:w3Cfg.Probes).Count -ge $script:w3Cfg.Starts) { $xa += @('-Rendezvous', ('"' + @($script:w3Cfg.Probes)[$script:w3Cfg.Starts - 1].Script + '"')) }
+        if ($script:w3Cfg.Started) { $xa += @('-Started', ('"' + $script:w3Cfg.Started + '"')) }
+        if ($script:w3Cfg.Ended) { $xa += @('-Ended', ('"' + $script:w3Cfg.Ended + '"')) }
+        Start-TcRehearsalChild -Dir $d -Remote 'origin' -Branch 'main' -StackFile $stack -StopFile $stop -Script $w3Stub -ExtraArgs $xa
+      }
+    }
+    # MUST FIRE, overlap: the run-gates stub and the rehearsal stub each wait, through lib\concurrency-probe.ps1, until
+    # BOTH have started. A pipeline that starts the rehearsal after run-gates cannot satisfy it (the 120 s deadline is a
+    # hang guard). CLEAN TWIN from the same run: all three legs pass and the lock is taken, with rh_stopped false.
+    $ov = & $newPusher 'ov'
+    $ovProbe = New-TcRendezvousProbe -Count 2 -DeadlineSec 120
+    $ovGate = { param($d) $null = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $ovProbe.Script; [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    $ledOv = Join-Path $tmp 'ledov'
+    $rOv = Invoke-TcPushMain -Dir $ov -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $ovGate -RehearsalStarter (New-StW3Starter 'pass' @($ovProbe)) -LedgerRoot $ledOv
+    $ovV = Get-TcRendezvousVerdict -Probe $ovProbe
+    $ovRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledOv)
+    $ovRows = @($ovRaw)
+    $ovRow = $(if ($ovRows.Count) { $ovRows[0] } else { $null })
+    T ($kMF + '  the rehearsal runs BESIDE run-gates: the run-gates stub and the rehearsal child were alive at the same instant (a rendezvous of 2, never a clock)') `
+      ($ovV.Ok -and $rOv -eq 0) ("rc={0} {1}" -f $rOv, $ovV.Detail)
+    T ($kCT + '  all three legs pass and the lock is taken: one take, landed, rh_stopped false, and one entry in rh_secs_list (0: the stub needed no rehearsal)') `
+      ($rOv -eq 0 -and $ovRows.Count -eq 1 -and [int]$ovRow.lock_takes -eq 1 -and ([string]$ovRow.outcome).StartsWith('landed') -and $ovRow.rh_stopped -eq $false -and (@($ovRow.rh_secs_list) -join ',') -ceq '0') `
+      ("rc={0} rows={1} takes={2} outcome={3} stopped={4} secs={5}" -f $rOv, $ovRows.Count, $(if ($ovRow) { $ovRow.lock_takes }), $(if ($ovRow) { $ovRow.outcome }), $(if ($ovRow) { $ovRow.rh_stopped }), $(if ($ovRow) { @($ovRow.rh_secs_list) -join ',' }))
+    # MUST FIRE, the stop: a red run-gates stub (it waits until the rehearsal child has started, on its started file, so
+    # the stop meets a running child) makes push-main write the stop file; the child, polling it, ends blind=stopped
+    # and has EXITED before push-main returns. MUST NOT FIRE: that refusal is refused-gate-red, never refused-rehearsal.
+    $sp1 = & $newPusher 'sp1'
+    $spStarted = Join-Path $w3Dir 'sp-started.txt'; $spEnded = Join-Path $w3Dir 'sp-ended.txt'
+    $spGate = { param($d) $w = [Diagnostics.Stopwatch]::StartNew(); while (-not (Test-Path -LiteralPath $spStarted) -and $w.Elapsed.TotalSeconds -lt 120) { Start-Sleep -Milliseconds 50 }; [pscustomobject]@{ Ran = $true; Code = 1; Why = 'fixture: run-gates red' } }
+    $ledSp = Join-Path $tmp 'ledsp'
+    $rSp = Invoke-TcPushMain -Dir $sp1 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $spGate -RehearsalStarter (New-StW3Starter 'stopwait' @() $spStarted $spEnded) -LedgerRoot $ledSp
+    $spExitedBefore = Test-Path -LiteralPath $spEnded
+    $spRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledSp)
+    $spRows = @($spRaw)
+    $spRow = $(if ($spRows.Count) { $spRows[0] } else { $null })
+    T ($kMF + '  a red run-gates writes the stop file, the rehearsal child ends blind=stopped (rh_stopped true) and has exited before push-main returns, and the push is refused') `
+      ($rSp -eq 1 -and $spExitedBefore -and $spRows.Count -eq 1 -and $spRow.rh_stopped -eq $true) ("rc={0} childExitedFirst={1} rows={2} stopped={3}" -f $rSp, $spExitedBefore, $spRows.Count, $(if ($spRow) { $spRow.rh_stopped }))
+    T ($kMNF + '  a stopped rehearsal''s refusal is refused-gate-red, never refused-rehearsal or refused-rehearsal-blind') `
+      ($null -ne $spRow -and [string]$spRow.outcome -ceq 'refused-gate-red') ("outcome={0}" -f $(if ($spRow) { $spRow.outcome }))
+    # CLEAN TWIN: a catch-up round uses the same start, run and wait sequence, so its legs overlap too. Round 1's gate
+    # moves origin (a non-chain file) and rendezvouses on probe A; round 2's gate rendezvouses on probe B; the starter hands
+    # each rehearsal child the probe of its own round.
+    $cr2 = & $newPusher 'cr2'
+    $crA = New-TcRendezvousProbe -Count 2 -DeadlineSec 120; $crB = New-TcRendezvousProbe -Count 2 -DeadlineSec 120
+    $script:crGates = 0
+    $crGate = { param($d) $script:crGates++; $pp = $(if ($script:crGates -eq 1) { $crA } else { $crB }); $null = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $pp.Script; if ($script:crGates -eq 1) { & $moveOrigin 'notes.txt' }; [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    $ledCr2 = Join-Path $tmp 'ledcr2'
+    $rCr2 = Invoke-TcPushMain -Dir $cr2 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $crGate -RehearsalStarter (New-StW3Starter 'pass' @($crA, $crB)) -LedgerRoot $ledCr2
+    $crVA = Get-TcRendezvousVerdict -Probe $crA; $crVB = Get-TcRendezvousVerdict -Probe $crB
+    $cr2Raw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledCr2)
+    $cr2Rows = @($cr2Raw)
+    $cr2Row = $(if ($cr2Rows.Count) { $cr2Rows[0] } else { $null })
+    T ($kCT + '  a catch-up round overlaps its legs too: both rounds'' run-gates stubs met their rehearsal children, the row says rounds 2 and catchups 1, and it lands') `
+      ($rCr2 -eq 0 -and $crVA.Ok -and $crVB.Ok -and $null -ne $cr2Row -and [int]$cr2Row.rounds -eq 2 -and [int]$cr2Row.catchups -eq 1) ("rc={0} A={1} B={2} rounds={3} catchups={4}" -f $rCr2, $crVA.Detail, $crVB.Detail, $(if ($cr2Row) { $cr2Row.rounds }), $(if ($cr2Row) { $cr2Row.catchups }))
+
+    # W2.3's cases, through the DEFAULT legs (stub run-gates and stub test-auditors in the clone's own ops\, excluded
+    # from git as the seeded paths are in the real repo) and the rehearsal stub child.
+    $mkLegs = { param([string]$Name, [string]$TaBody)
+      $cd = New-Clone $Name
+      Add-Content -LiteralPath (Join-Path $cd '.git\info\exclude') -Value @('ops/') -Encoding ascii
+      $null = New-Item -ItemType Directory -Force -ErrorAction Stop (Join-Path $cd 'ops')
+      [IO.File]::WriteAllText((Join-Path $cd 'ops\run-gates.ps1'), "Write-Output 'RUN-GATES-COMPLETE pass=1 fail=0'`nexit 0`n")
+      [IO.File]::WriteAllText((Join-Path $cd 'ops\prepush-test-auditors.ps1'), ("param([switch]`$RefsFromStdin)`n`$null = [Console]::In.ReadToEnd()`n" + $TaBody))
+      [IO.File]::WriteAllText((Join-Path $cd ($Name + '.txt')), $Name)
+      $null = & git -C $cd add -- ($Name + '.txt') 2>$null; $null = & git -C $cd commit -q -m $Name 2>$null
+      return $cd
+    }
+    # MUST FIRE, overlap (W2.3's, kept): the test-auditors stub and the rehearsal child each wait on one rendezvous.
+    $taProbe = New-TcRendezvousProbe -Count 2 -DeadlineSec 120
+    $tov = & $mkLegs 'tov' ("`$null = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File '" + $taProbe.Script + "'`nWrite-Output 'PREPUSH-TEST-AUDITORS-COMPLETE rc=0'`nexit 0`n")
+    $rTov = Invoke-TcPushMain -Dir $tov -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot -RehearsalStarter (New-StW3Starter 'pass' @($taProbe))
+    $taV = Get-TcRendezvousVerdict -Probe $taProbe
+    T ($kMF + '  test-auditors runs beside the rehearsal: the default legs'' test-auditors stub and the rehearsal child were alive at the same instant') ($taV.Ok -and $rTov -eq 0) ("rc={0} {1}" -f $rTov, $taV.Detail)
+    # MUST FIRE: a red rehearsal refuses refused-rehearsal when both gate legs passed.
+    $trr = & $mkLegs 'trr' "Write-Output 'PREPUSH-TEST-AUDITORS-COMPLETE rc=0'`nexit 0`n"
+    $ledTrr = Join-Path $tmp 'ledtrr'
+    $rTrr = Invoke-TcPushMain -Dir $trr -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -RehearsalStarter (New-StW3Starter 'fail') -LedgerRoot $ledTrr
+    $trrRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledTrr)
+    $trrRows = @($trrRaw)
+    T ($kMF + '  a red rehearsal with both gate legs green refuses refused-rehearsal') ($rTrr -eq 1 -and $trrRows.Count -eq 1 -and [string]$trrRows[0].outcome -ceq 'refused-rehearsal' -and $trrRows[0].ta_rc -eq 0) ("rc={0} outcome={1}" -f $rTrr, $(if ($trrRows.Count) { $trrRows[0].outcome }))
+    # MUST FIRE: a red test-auditors refuses refused-gate-red, and the rehearsal child (told to stop) has exited first.
+    $tred = & $mkLegs 'tred' "Write-Output 'prepush-test-auditors: REFUSED - fixture'`nWrite-Output 'PREPUSH-TEST-AUDITORS-COMPLETE rc=1'`nexit 1`n"
+    $tredEnded = Join-Path $w3Dir 'tred-ended.txt'
+    $ledTred = Join-Path $tmp 'ledtred'
+    $rTred = Invoke-TcPushMain -Dir $tred -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -RehearsalStarter (New-StW3Starter 'stopwait' @() '' $tredEnded) -LedgerRoot $ledTred
+    $tredFirst = Test-Path -LiteralPath $tredEnded
+    $tredRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledTred)
+    $tredRows = @($tredRaw)
+    T ($kMF + '  a red test-auditors refuses refused-gate-red, and the rehearsal child has exited, stopped, before push-main returns') `
+      ($rTred -eq 1 -and $tredFirst -and $tredRows.Count -eq 1 -and [string]$tredRows[0].outcome -ceq 'refused-gate-red' -and $tredRows[0].rh_stopped -eq $true -and $tredRows[0].ta_rc -eq 1) `
+      ("rc={0} childExitedFirst={1} outcome={2} stopped={3} ta_rc={4}" -f $rTred, $tredFirst, $(if ($tredRows.Count) { $tredRows[0].outcome }), $(if ($tredRows.Count) { $tredRows[0].rh_stopped }), $(if ($tredRows.Count) { $tredRows[0].ta_rc }))
+    # MUST FIRE (pure, the Wait rule): an empty exit code with a code=0 marker is 3; a 0 with a code=1 marker is 3; a 0 with
+    # no marker is 3; and a CLEAN TWIN 0 with code=0 is 0.
+    $wx1 = Resolve-TcRehearsalExit -ExitCode $null -Lines @('CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=not-needed')
+    $wx2 = Resolve-TcRehearsalExit -ExitCode 0 -Lines @('CHAIN-REHEARSAL-CHECK-COMPLETE code=1 outcome=rehearsed-fail')
+    $wx3 = Resolve-TcRehearsalExit -ExitCode 0 -Lines @('chain-rehearsal: something')
+    $wx4 = Resolve-TcRehearsalExit -ExitCode 0 -Lines @('CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=not-needed')
+    T ($kMF + '  the wait scores 3 for an empty exit code under a code=0 marker, a 0 under a code=1 marker and a 0 with no marker, and 0 only when both agree on 0') `
+      ($wx1.Code -eq 3 -and $wx2.Code -eq 3 -and $wx3.Code -eq 3 -and $wx4.Code -eq 0) ("empty={0} disagree={1} none={2} agree={3}" -f $wx1.Code, $wx2.Code, $wx3.Code, $wx4.Code)
+    # MUST FIRE, through a real child: a stub that exits 0 with a code=1 marker is scored 3, so the push is refused blind.
+    $tbm = & $mkLegs 'tbm' "Write-Output 'PREPUSH-TEST-AUDITORS-COMPLETE rc=0'`nexit 0`n"
+    $ledTbm = Join-Path $tmp 'ledtbm'
+    $rTbm = Invoke-TcPushMain -Dir $tbm -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -RehearsalStarter (New-StW3Starter 'badmarker') -LedgerRoot $ledTbm
+    $tbmRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledTbm)
+    $tbmRows = @($tbmRaw)
+    T ($kMF + '  a rehearsal child that exits 0 under a code=1 marker is scored 3: refused-rehearsal-blind, never a pass') ($rTbm -eq 3 -and $tbmRows.Count -eq 1 -and [string]$tbmRows[0].outcome -ceq 'refused-rehearsal-blind') ("rc={0} outcome={1}" -f $rTbm, $(if ($tbmRows.Count) { $tbmRows[0].outcome }))
+    # MUST NOT FIRE: a push that needs no rehearsal gets the child's not-needed answer, and test-auditors' result alone
+    # decides: it lands, chain_touching false.
+    $tnn = & $mkLegs 'tnn' "Write-Output 'PREPUSH-TEST-AUDITORS-COMPLETE rc=0'`nexit 0`n"
+    $ledTnn = Join-Path $tmp 'ledtnn'
+    $rTnn = Invoke-TcPushMain -Dir $tnn -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -RehearsalStarter (New-StW3Starter 'pass') -LedgerRoot $ledTnn
+    $tnnRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledTnn)
+    $tnnRows = @($tnnRaw)
+    T ($kMNF + '  a push needing no rehearsal lands on the child''s not-needed answer and test-auditors'' pass: chain_touching false, rh_outcome not-needed') `
+      ($rTnn -eq 0 -and $tnnRows.Count -eq 1 -and $tnnRows[0].chain_touching -eq $false -and [string]$tnnRows[0].rh_outcome -ceq 'not-needed' -and $tnnRows[0].ta_rc -eq 0) ("rc={0} chain={1} rh={2}" -f $rTnn, $(if ($tnnRows.Count) { $tnnRows[0].chain_touching }), $(if ($tnnRows.Count) { $tnnRows[0].rh_outcome }))
+    Remove-TcRendezvousProbe
     # CLEAN TWIN: a READER that throws costs its field, never the push. The gate's result says its run-gates leg took
     # 'not-a-number' seconds, so Add-TcRunnerReadings' [int] cast throws; the push must land and the row keep leg_sec.rg
     # null. NOT a throwing ScriptProperty: PowerShell swallows a getter's exception on member access and reads $null, and
@@ -3733,7 +4007,7 @@ $m.Dispose()
 
     # ---- THE CLEAN TWIN: a clean rebase through the DEFAULT legs, each a stub in the clone's own ops\ (W0.1) ----
     # No -GateRunner and no -RehearsalRunner: Invoke-TcDefaultLegs runs the stub run-gates and then the stub test-auditors
-    # check, and Invoke-TcRehearsalForPush runs the stub rehearsal, so every reading below travels the production road.
+    # check, and Start-TcRehearsalChild runs the stub rehearsal as a child, so every reading below travels the production road.
     # ops\ is excluded in the clone, as the seeded paths are gitignored in the real repo, so the tree stays clean.
     # THE CLONES ARE dl1 AND dl2 (default legs), never q1 and q2: the rehearsal cases above already made clones by those
     # names under this run's root, and a second `git clone` into one fails and is counted as a clone that came up empty.
@@ -3867,8 +4141,8 @@ $m.Dispose()
   # fetch-and-rebase-first loop, W0.1's 32, W0.1R's 8, the 15 its review added, W2.1R with W8.1's 14 (the index.lock
   # case was rewritten in place, not added), and W2.2R's 10 (9 catch-up cases, and the could-not-decide case split into a
   # MUST NOT FIRE and a CLEAN TWIN), W9.4's 5 (the queue member's hand-back case lands with W9.2), and W3.2 with W3.4a
-  # step 3's 7, W4.1 step 7's 3, and W9.1's push-main half's 5; read off this file, not added up.
-  $expectedCases = 137
+  # step 3's 7, W4.1 step 7's 3, W9.1's push-main half's 5, and W9.3's 11; read off this file, not added up.
+  $expectedCases = 148
   if ($cases -ne $expectedCases) { Write-Output ("FAIL  the suite ran {0} case(s) where this file holds {1}, so a case was skipped or lost" -f $cases, $expectedCases); $f++ }
   if ($f) { Write-Output ("push-main self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("push-main self-test PASS: {0} cases - led by a branch whose base the remote moved past landing on its FIRST attempt, and by a conflicting rebase being aborted rather than left half-finished under the lock" -f $cases)
