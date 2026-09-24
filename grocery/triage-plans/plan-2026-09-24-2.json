@@ -1,0 +1,70 @@
+{
+  "generated": "2026-09-24T14:30:00",
+  "round": 1,
+  "lane": "cheap",
+  "board_week": "2026-09-24",
+  "queue_ids_seen": ["2026-09-24-2311b6", "2026-09-24-ef23ea", "2026-09-24-3b1e6e"],
+  "ship_sequence": ["2026-09-24-3b1e6e", "2026-09-24-ef23ea", "2026-09-24-2311b6"],
+  "knowledge_consulted": [
+    "searched \"push blocked main checkout\", \"feed missing recipes\", \"contested crown horseradish\" (orchestrator, pasted into the brief)",
+    "reliability-craft/applies-here.md, 'The 07:00 bot, the shared index, and the fix that never reached a commit': the bots share the main checkout's index; nothing here stages a path it does not own",
+    "claude-code-craft/applies-here.md, 'A worktree is not the main tree, and main moves while you work'",
+    ".claude/rules/ops-and-gates.md and CLAUDE.md 'The ~07:00 and ~08:00 bots ... lib/checkout-sync.ps1' (D7, 2026-09-23): an untracked file on a path upstream changed is classified, never overwritten"
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-24-3b1e6e",
+      "subject": "Grocery matching soundness: 1 condition(s) need action",
+      "classification": "superseded",
+      "superseded_by": "2026-09-24-f44c88",
+      "evidence": [
+        "3b1e6e body: '[CONTESTED CROWN] - NEW-CONTESTED Inglehoffer Horseradish Cream Style 9.5 OZ | chain: horseradish (oz) > horseradish-sauce (oz) | engine: size 9.5 oz = 0.2989/oz | holds a CROWN: horseradish @ Aldi 0.2989/oz'",
+        "f44c88 body (09:26:13, eleven seconds earlier, same emitter grocery/audit-match-soundness.ps1): the identical NEW-CONTESTED line; 3b1e6e says 'Each is its own triage-queue item with its own type' and carries 1 condition"
+      ],
+      "root_cause": "audit-match-soundness pages a per-condition item AND a summary item for the same run, so a one-condition day mints two queue items for one fact; the summary carries 'unregistered': true in the queue, so the alert registry has no class for its type",
+      "root_fix_none_because": "the summary is the documented shape (its body says each condition is its own item); the condition itself is owned by 2026-09-24-f44c88 with the reviewer, and whether the summary should stop paging on a 1-condition run is an alert-registry question already counted by audit-alert-registry (FAILED, 34 findings in today's daily log)",
+      "leaves_open": "nothing in this item; the horseradish contested crown is 2026-09-24-f44c88",
+      "leaves_open_occurrences": 0,
+      "status": "superseded",
+      "close_disposition": "superseded",
+      "resolution_note": "Same single condition as 2026-09-24-f44c88 (Inglehoffer Horseradish Cream Style 9.5 OZ contesting horseradish @ Aldi 0.2989/oz); the reviewer owns it there."
+    },
+    {
+      "queue_id": "2026-09-24-ef23ea",
+      "subject": "Grocery pipeline moved an untracked file out of the rebase's way - 2026-09-24",
+      "classification": "no-code-change",
+      "evidence": [
+        "grocery/out/untracked-quarantine/2026-09-24/design/backlog-inbox/pd-land-W0.1R-2026-09-23.md: Length 0, git hash-object e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 (the empty blob)",
+        "origin/main:design/backlog-inbox/pd-land-W0.1R-2026-09-23.md = blob 2e70c412098bfc23bd898acb3958269c91ffdc2f, added by 49090e790 2026-09-23 13:20 'backlog-inbox: W0.1R landed; Row 2 waits on the 30-row soak of W0.3 step 7'",
+        "alert body: 'graded: 6f12f2af6 at C:\\Codex\\ThriftyCrew, 78 commit(s) behind origin/main' - the 07:00 run was on the pre-D7 rebase tail"
+      ],
+      "root_cause": "a session left a zero-byte placeholder at a path in the main checkout while the real file was written and committed elsewhere (a worktree or another session), so the main checkout held an untracked file on a path upstream then tracked; any untracked file on a path a later upstream commit adds collides with the bot's move to origin/main",
+      "root_fix_none_because": "the class already has its handling and nothing was lost: the quarantined copy is the empty blob and the full content is tracked on origin/main, and since D7 (2026-09-23) lib/checkout-sync.ps1 classifies such a path (line 44-47: an untracked file already holding NEW's blob gets an index update only, any other is FOREIGN and the sync goes partial and pages) instead of the rebase-then-move this alert came from",
+      "leaves_open": "nothing: the empty quarantined copy may be deleted by whoever tidies grocery/out/untracked-quarantine",
+      "leaves_open_occurrences": 0,
+      "status": "done",
+      "close_disposition": "by-design",
+      "resolution_note": "Quarantined copy is 0 bytes (empty blob e69de29); origin/main holds the real file (blob 2e70c41, 49090e790). Nothing unique lost; the move-aside worked as designed and D7's checkout-sync now classifies this shape."
+    },
+    {
+      "queue_id": "2026-09-24-2311b6",
+      "subject": "Grocery capture watchdog: MISSING-WINDOW 2026-09-24",
+      "classification": "needs-more-time",
+      "classification_note": "likely capture-gap or a watchdog counting defect; left as needs-more-time because the cheap lane promotes it rather than designing the fix",
+      "evidence": [
+        "grocery/out/capture-cursor-log.jsonl, Family Fare in the 24h ending 2026-09-24T10:36: '2026-09-24T07:01:22 from 404 to 407' and '2026-09-24T09:01:31 from 407 to 410'; the previous advance '2026-09-23T09:33:48' falls outside the window; no advance after 09:01",
+        "capture-run-daily-2026-09-24.log: 08:00:02 run 'STOPPED before any capture (stage blocked-checkout). FAILED LANES: sync', then a 09:00:03 run: 'Family Fare rc=0 ... catalog healthy' - the 08:00 window's retry DID advance the cursor (09:01:31)",
+        "capture-watchdog-2026-09-24.log, 'Family Fare shard window (3 of 3)': 'throttle streak (15 empties) - cooling down 45s...' then 'per-window request cap reached (20 of 20 attempted)'; 'term cursor at #410', and the cursor log shows no advance from this window"
+      ],
+      "premise_verified": "CONTRADICTED: the dispatch premise was that the missing window is the failed 08:00 run (2026-09-24-a0e558). It is not: that run's 09:00 retry advanced 407->410. The window that did not advance is the watchdog's own 10:36 shard, which hit a Freshop throttle streak and its 20-request cap and recorded no cursor advance, and yesterday's third window advanced at 09:33, just outside the 24h count",
+      "root_cause": "not settled in the cheap lane: either a throttled window that exhausts its request cap does not advance the Family Fare cursor (a real lost window, the class this check exists for), or the watchdog counts its own shard before that shard's advance lands and a 09:33-vs-10:36 timing shift drops a window out of the 24h count",
+      "root_fix_none_because": "promoted to the reviewer before a fix is designed; the evidence contradicts the no-code-change/superseded classification the dispatch proposed",
+      "leaves_open": "the cause of the non-advancing 10:36 watchdog shard window (1 occurrence measured today)",
+      "leaves_open_occurrences": 1,
+      "leaves_open_owner": "promote: the orchestrator hands this item to the reviewer (status promote); no new queue item minted",
+      "status": "promote",
+      "promote_reason": "Evidence contradicts the proposed owner: the 08:00 run's retry advanced FF at 09:01; the missing advance is the 10:36 watchdog shard, throttled to its 20-request cap with no cursor move.",
+      "resolution_note": "Not superseded by 2026-09-24-a0e558. Promote to reviewer: the non-advancing window is the watchdog's own throttled shard (10:36), not the failed 08:00 run."
+    }
+  ]
+}
