@@ -1,9 +1,37 @@
 ---
 name: grocery-browser-stores-refresh
-description: STAGE TWO of the daily grocery pipeline, 9:00am - the browser work a scheduled script physically cannot do. The three TC Windows tasks own the pipeline but run PowerShell, which can never reach Brad Chrome; some stores answer his real browser and refuse an automated one. Scope - everyday rotation for Walmart and Aldi (always) plus Fareway/Sams only when the 0800 driver failed, the Bakers weekly ad vision-read on rollover, the FAREWAY weekly ad vision-read (its pages arrive server-side every morning but only a read produces fareway-deals, and pull-fareway-ads.ps1 now exits 3 until it happens), rescue terms, sale-fallback research, and a bounded batch of product-URL chips. Works out what is outstanding FROM THE DATA, not from the flag. A weekly ad that is DUE outranks everything else that day - it is the only work with a hard deadline, and Bakers is the only ad nothing else in the estate can pull. Captures and builds only - never publishes, compares or pushes; 0800 owns the one chain a day.
+description: STAGE ONE of the daily grocery pipeline, 06:15 - Walmart, Sam's Club, Aldi and Fareway captured in Brad's own Chrome, one tab per store, all four concurrently, then built. The 08:00 driver covers Fareway/Sam's only on a day this did not land them; the 10:30 watchdog pages any browser store with no capture today. Brad's ruling 2026-09-19.
 ---
 
+THE SHAPE, AND IT OVERRIDES ANY OLDER TIMING OR SCOPE BELOW (Brad's ruling, 2026-09-19).
+"All browser-needed stores should be using my Chrome... each store gets its own tab and it's running concurrently."
+  - You run at 06:15, BEFORE the 07:00 ad pull and the 08:00 chain, so your captures are what 08:00 builds the board
+    from. The 08:00 driver now drives Fareway or Sam's ONLY when you left no capture dated today with a data row
+    (Get-BrowserStoresToDrive in grocery\capture-policy-lib.ps1). Walmart and Aldi have no fallback at all.
+  - ALL FOUR STORES ARE YOURS EVERY DAY: Walmart, Sam's Club, Aldi, Fareway. "Fareway/Sam's only when 0800 failed"
+    below is retired.
+  - ONE TAB PER STORE, CONCURRENTLY. Do the setup yourself, then spawn one Agent per store in ONE message:
+      1. powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\chain-idle.ps1   (must print FREE)
+      2. powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\capture-policy.ps1 -Emit
+         (today's worklists; on a FULL RECAPTURE day, Brad asks for it: add -Full)
+      3. start grocery\capture-sink.ps1 ONCE, in the background (see constraint 2 below); every store posts to it.
+      4. Spawn the four store agents together. Give each ONLY its own store's section of PER-STORE METHOD below,
+         the three constraints of running in Brad's real profile, and these rules: call tabs_context_mcp, create
+         its OWN tab with tabs_create_mcp, work only in that tab, never touch another tab, close its tab at the end;
+         assert its store and In-Store/pickup mode before trusting a price; post the emitter's output UNALTERED to
+         the sink under the file name its builder reads; report rows captured, terms UNUSABLE and why.
+         Keep them mechanical and cheap: inject the committed pull agent, start the sweep as a background
+         promise, poll it, post the CSV. Never read product pages as text. A usage limit is what stopped this
+         task on 2026-09-13, and the stores went unread for six days.
+      5. When all four have reported, run the builders yourself, one store at a time (build-walmart-deals,
+         build-sams-deals, build-aldi-regular, select-fareway-shop then build-fareway-regular -ModeVerified):
+         they write out\regular and advance the shared cursor, so they do not run side by side.
+      6. Then the ad reads and the other items below, in their stated order, with what time is left.
+  - IF CHROME OR THE EXTENSION IS NOT CONNECTED: capture nothing, say so. The 08:00 driver covers Fareway and Sam's,
+    and the 10:30 watchdog pages "BROWSER CAPTURE MISSING TODAY" for the rest. Never launch an automated Chrome.
+
 STAGE TWO of the daily grocery pipeline: the browser work that a scheduled script physically cannot do.
+(Written when this task ran at 09:00, after the chain. The timing and scope in THE SHAPE above now win.)
 
 WHY YOU EXIST, IN ONE PARAGRAPH. Three Windows tasks own the pipeline (TC Grocery Ad Pulls 0700,
 Daily Capture 0800, Capture Watchdog 0930). They run PowerShell, and PowerShell can never reach
@@ -60,6 +88,12 @@ real one, which is both fuller and more restricted.
      grocery\capture-sink.ps1 is the local file drop. Start it as a BACKGROUND command (a
      PowerShell Start-Job dies with its shell):
          powershell -NoProfile -ExecutionPolicy Bypass -File grocery\capture-sink.ps1 -OutDir <dir>
+     ALWAYS PASS -OutDir AS AN ABSOLUTE PATH (2026-09-21): with no -OutDir the sink's default resolved to
+     C:\out\captures\_sink, outside the repo, because $PSScriptRoot is empty in a CmdletBinding param
+     default. It still replies AGREE, so nothing on the page side shows it.
+     BUNDLING pull-agent-lib.js WITH A STORE AGENT IN ONE SCOPE: pull-aldi-instore.js re-declares
+     `const sleep`, so put the store file in its own nested { } block inside the wrapper, or it is a
+     SyntaxError before anything runs.
      It binds localhost ONLY, writes each POST to <OutDir>\<name>.txt, and echoes char and line
      counts back to the page so you can confirm both sides agree BEFORE running a builder. It
      also exits on its own after 30 idle minutes, and -Stop shuts it down.
@@ -72,6 +106,14 @@ real one, which is both fuller and more restricted.
      filename and times out when idle; a fresh listener written under time pressure is both
      unreviewed and, on 2026-08-25, the thing that got the whole browser half of a run refused.
      What moves here is public product-listing data, on Brad's machine, to Brad's disk.
+     POST FROM THE STORE TAB'S OWN DOCUMENT, NEVER FROM AN IFRAME (2026-09-19 full recapture). A form
+     inside an injected iframe inherits the frame's origin rules and the post did not arrive; the same
+     form built on the tab's own document landed every time. Confirm the sink's echoed char and line
+     counts match the page's before building.
+     THE IN-MEMORY SINK IS NOT OPTIONAL ON ALDI EITHER (same day). aldi.us held a stale TC_ALDI_SEARCH
+     key in localStorage from an earlier sweep, and a sweep that reads it resumes from someone else's
+     cursor. Use the plain-object tcGet/tcSet sink on every store, and never trust or clear a TC_* key
+     you did not set this run: leave it, and do not read it.
   3. THE TOOL CALL TIMES OUT AT 45s. Any sweep or long scroll must be started as a background promise
      (window.__tcRun = ...) and POLLED, never awaited in one call. Do not try to return the CSV
      through the tool output either: it truncates around 1 KB, so a 40-60 KB sweep would need ~60
@@ -140,9 +182,14 @@ out\browser-capture-due-<date>.flag is a hint and it has been INCOMPLETE before 
      Every other store's ad is a server feed that needs no reading (Aldi/Hy-Vee/Family Fare via Flipp).
   C. RESCUE TERMS - out\rescue-terms-<store>.txt. Cells already DROPPED or about to EXPIRE off the
      board. These are known losses, so they come BEFORE ordinary rotation.
-  D. SALE-FALLBACK RESEARCH - out\research-worklist.json. A commodity on sale with no everyday item
-     to revert to: when the sale ends that store vanishes from the cell. Find the cheapest NON-sale
-     everyday item and add it to that store's out\regular\ file.
+  D. SALE FALLBACKS - now inside each store's own capture plan (since 2026-09-22, plan-2026-09-22-9,
+     commit 686d83d9c). A commodity on sale with no everyday item to revert to vanishes from the cell
+     when the sale ends, so the store owes its everyday price. Get-CapturePlan hands these out as
+     SaleFallbacks, from what the expiring sales leave and always after them, so they arrive in the
+     store's daily worklist with the other terms: find the cheapest NON-sale everyday item and add it
+     to that store's out\regular\ file like any rotation term. out\research-worklist.json is NO
+     LONGER the sale-fallback list (it holds only in-store channel-doubt entries); do not work it
+     for fallbacks.
   E. PRODUCT-URL CHIPS - out\url-worklist.json, the "See item" links, across ALL SEVEN stores
      (446 outstanding on 2026-08-22). Search the chip's exact `term`, confirm the price matches, and
      write {id,url,price,size,name} to out\url-inputs\store-<store>N-urls.json.
@@ -298,6 +345,14 @@ actually touching. The parts that cost a whole day to rediscover on 2026-08-22:
     farewayShopExtract(term) from pull-fareway-shop.js. The fetch-and-regex probe is DEAD - the
     storefront is client-rendered and returns a shell.
     Assert retailerLocation 531573 AND In-Store before trusting anything.
+    ON 2026-09-19 THE SESSION WAS SITTING ON PICKUP, at the right store. The store id alone did not
+    catch it: read the fulfilment mode the page shows and switch it to In-Store in the page's own
+    picker before the first term, then assert again. Pickup prices are not shelf prices.
+    WAIT FOR A SETTLED COUNT BEFORE EXTRACTING (2026-09-21). The results page paints ~9 items, pauses
+    several seconds, then fills the rest. An extract taken at first paint read 1-14 candidates per term
+    where the settled page held 13-109 - partial rows that look like success. Wait for the page's own
+    "Results for" heading, then scroll every ~2.5 s until the item count holds for four reads, THEN
+    call farewayShopExtract. 19-27 s per term. A capture whose terms cluster at 9 is this defect.
     Emit JSONL {id,term,candidates:[...]} -> out\fareway\fareway-shop-<date>.jsonl
     Every candidate carries the `loc` farewayShopExtract stamps (the retailerLocation its own page's cache
     named, since 2026-09-18). Post the rows UNALTERED. select-fareway-shop REFUSES (exit 1, no shop file) a
