@@ -44,7 +44,10 @@
     Every chain child gets TC_REHEARSAL_RUN=1 (a post-commit hook that sees it starts nothing) and a TEMP inside the
     scratch root, so what a stopped child leaves in its temp directory goes with the root. The verdict record also
     carries early, onto, head, checkout (hashed as the in-flight file is) and stage_secs (stack, clone, checkout, seed,
-    selftest, ship, commit); -CheckPush and -ForPush read none of them.
+    selftest, ship, commit); -CheckPush and -ForPush decide on none of them, and read only `early`: when a recorded
+    verdict decided the push, their CHAIN-REHEARSAL-CHECK-COMPLETE line ends early=yes or early=no, from that verdict's
+    own record (no outranks yes over several ref lines), and with no deciding verdict the token is absent. push-main
+    reads it into early_hit (W9.1 step 7, B22); every other reader matches `code=\d+ outcome=(\S+)` and ignores it.
     -SelfTest   hermetic fixtures, per-run temp directories, nothing live.
 
   THE TRIGGER IS ONE FUNCTION. Get-RhTrigger answers "does the diff <base>..<tip> touch the manifest set at <base> OR at
@@ -473,6 +476,7 @@ function Get-RhPushDecision {
   $lines = New-Object Collections.ArrayList
   $codes = New-Object Collections.ArrayList
   $outcome = 'not-needed'
+  $early = ''
   $zero = '^0+$'
   foreach ($rl in @($RefLines)) {
     $f = @(([string]$rl).Trim() -split '\s+')
@@ -504,7 +508,14 @@ function Get-RhPushDecision {
       continue
     }
     $v = Read-RhVerdict $VerdictDir $ms.Key
-    $how = 'powershell -File ops\rehearse-chain.ps1 (about the chain''s own time; push-main does it for you), or push-main -NoRehearsal to bypass loudly'
+    # EARLY (W9.1 step 7, for push-main's early_hit and B22): whether the verdict that decided this ref line was an
+    # early (commit-time) rehearsal, read from that verdict's own record. 'no' outranks 'yes' over several ref lines, and
+    # a line no verdict decided (none recorded, not a chain push, bypassed) leaves it unset, so the marker says nothing.
+    if ($null -ne $v) {
+      $vEarly = $(if ($v.PSObject.Properties['early'] -and ($v.early -eq $true)) { 'yes' } else { 'no' })
+      if ($early -ne 'no') { $early = $vEarly }
+    }
+    $how ='powershell -File ops\rehearse-chain.ps1 (about the chain''s own time; push-main does it for you), or push-main -NoRehearsal to bypass loudly'
     if ($null -eq $v) {
       [void]$codes.Add(1); if ($outcome -ne 'could-not-rehearse') { $outcome = 'no-verdict' }
       [void]$lines.Add(('chain-rehearsal: REFUSED - {0} chain script(s) changed ({1}) and no rehearsal verdict is recorded for this content (key {2}). Run {3}.' -f $touched.Count, $named, $k12, $how))
@@ -543,7 +554,14 @@ function Get-RhPushDecision {
   }
   $code = 0
   if ($codes -contains 1) { $code = 1 } elseif ($codes -contains 3) { $code = 3 }
-  return [pscustomobject]@{ Code = $code; Outcome = $outcome; Lines = @($lines) }
+  return [pscustomobject]@{ Code = $code; Outcome = $outcome; Lines = @($lines); Early = $early }
+}
+
+function Format-RhCheckComplete($Decision) {
+  # The -CheckPush / -ForPush marker. A trailing early=yes|no is appended only when a recorded verdict decided the push;
+  # every reader of this line matches `code=\d+ outcome=(\S+)`, so the token is additive.
+  $tail = $(if ($Decision.Early) { ' early=' + $Decision.Early } else { '' })
+  return ('CHAIN-REHEARSAL-CHECK-COMPLETE code={0} outcome={1}{2}' -f $Decision.Code, $Decision.Outcome, $tail)
 }
 
 function Get-RhNewestBoardDate([string]$Root, [string]$BoardGlob) {
@@ -1694,23 +1712,28 @@ if ($SelfTest) {
     # THE -FORPUSH TWIN. The child reads the real clock, so the fixture verdict is dated today. Each state moves the
     # fixture's HEAD and origin/main, then runs the script from before -ListSet (lo) and this one (ln) back to back.
     $lsToday = (Get-Date).ToString('yyyy-MM-dd')
+    # EARLY TOKEN (W9.1 step 7): the marker now ends with early=yes|no when a recorded verdict decided the push, taken
+    # from that verdict's own record, and says nothing when none did. The twin strips that one trailing token before it
+    # compares with the older script, and asserts the token itself through each state's Tok.
     $lsStates = @(
-      [pscustomobject]@{ Name = 'allow';      Tip = $l1; Base = $l0; Verdict = 'pass'; Code = 0; Outcome = 'rehearsed-pass' },
-      [pscustomobject]@{ Name = 'not-needed'; Tip = $l2; Base = $l1; Verdict = 'pass'; Code = 0; Outcome = 'not-needed' },
-      [pscustomobject]@{ Name = 'refuse';     Tip = $l1; Base = $l0; Verdict = 'fail'; Code = 1; Outcome = 'rehearsed-fail' })
+      [pscustomobject]@{ Name = 'allow';       Tip = $l1; Base = $l0; Verdict = 'pass'; Early = $false; Code = 0; Outcome = 'rehearsed-pass'; Tok = ' early=no' },
+      [pscustomobject]@{ Name = 'allow-early'; Tip = $l1; Base = $l0; Verdict = 'pass'; Early = $true;  Code = 0; Outcome = 'rehearsed-pass'; Tok = ' early=yes' },
+      [pscustomobject]@{ Name = 'not-needed';  Tip = $l2; Base = $l1; Verdict = 'pass'; Early = $true;  Code = 0; Outcome = 'not-needed';     Tok = '' },
+      [pscustomobject]@{ Name = 'refuse';      Tip = $l1; Base = $l0; Verdict = 'fail'; Early = $false; Code = 1; Outcome = 'rehearsed-fail'; Tok = ' early=no' })
     $lsTwin = New-Object Collections.ArrayList
+    $lsStrip = { param($ls) @(@($ls) | ForEach-Object { [regex]::Replace([string]$_, '^(CHAIN-REHEARSAL-CHECK-COMPLETE .*) early=(yes|no)$', '$1') }) }
     foreach ($lsS in $lsStates) {
-      Save-RhVerdict $lsVd ([pscustomobject]@{ result = $lsS.Verdict; blind = ''; key = $lsKey; stage = 'commit'; cause = ('fixture ' + $lsS.Verdict); words = @('fixture words'); data_date = $lsToday; preexisting = @() })
+      Save-RhVerdict $lsVd ([pscustomobject]@{ result = $lsS.Verdict; blind = ''; key = $lsKey; stage = 'commit'; cause = ('fixture ' + $lsS.Verdict); words = @('fixture words'); data_date = $lsToday; preexisting = @(); early = $lsS.Early })
       $null = Invoke-RhGit $lf @('checkout', '-q', '--detach', $lsS.Tip)
       $null = Invoke-RhGit $lf @('update-ref', 'refs/remotes/origin/main', $lsS.Base)
       $lsO = Invoke-RhSandbox $lo '-ForPush'
       $lsN = Invoke-RhSandbox $ln '-ForPush'
-      $lsWantMark = 'CHAIN-REHEARSAL-CHECK-COMPLETE code=' + $lsS.Code + ' outcome=' + $lsS.Outcome
-      $lsSame = ($lsO.Rc -eq $lsN.Rc) -and [string]::Equals((@($lsO.Lines) -join "`n"), (@($lsN.Lines) -join "`n"), [StringComparison]::Ordinal)
+      $lsWantMark = 'CHAIN-REHEARSAL-CHECK-COMPLETE code=' + $lsS.Code + ' outcome=' + $lsS.Outcome + $lsS.Tok
+      $lsSame = ($lsO.Rc -eq $lsN.Rc) -and [string]::Equals(((& $lsStrip $lsO.Lines) -join "`n"), ((& $lsStrip $lsN.Lines) -join "`n"), [StringComparison]::Ordinal)
       $lsOk = $lsSame -and ($lsN.Rc -eq $lsS.Code) -and (@($lsN.Lines).Count -ge 2) -and [string]::Equals([string]@($lsN.Lines)[-1], $lsWantMark, [StringComparison]::Ordinal)
       [void]$lsTwin.Add([pscustomobject]@{ Name = $lsS.Name; Ok = $lsOk; Got = ($lsS.Name + ': before rc=' + $lsO.Rc + ' [' + (@($lsO.Lines) -join ' / ') + '] now rc=' + $lsN.Rc + ' [' + (@($lsN.Lines) -join ' / ') + '] ' + $lsN.Err) })
     }
-    Test-RhCase 'CLEAN TWIN  -ForPush over the same fixture decides exactly as before -ListSet existed: allow, not-needed and refuse print the same lines and exit codes as that script, run from its blob beside this one' {
+    Test-RhCase 'CLEAN TWIN  -ForPush over the same fixture decides exactly as before -ListSet existed: allow, allow over an early verdict, not-needed and refuse print the same lines and exit codes as that script, run from its blob beside this one, once the marker''s trailing early token is set aside; and that token reads early=no, early=yes, absent (no verdict decided it) and early=no' {
       (@($lsTwin | Where-Object { $_.Ok }).Count -eq $lsStates.Count), ((@($lsTwin | Where-Object { -not $_.Ok } | ForEach-Object { $_.Got })) -join ' || ')
     }
 
@@ -1784,6 +1807,15 @@ if ($SelfTest) {
     $dAfter = Get-RhPushDecision -Repo $rbO.Repo -RefLines @('refs/heads/main ' + $rbO.Tip + ' refs/heads/main ' + $eO) -VerdictDir $vdE -Today $today
     Test-RhCase 'CLEAN TWIN  the push of that same content, rebased onto that origin, reads PASSED from the early verdict in seconds: no rehearsal runs' {
       (($dAfter.Code -eq 0) -and ($dAfter.Outcome -eq 'rehearsed-pass') -and ((Get-RhRuns).Count -eq 0)), ('' + $dAfter.Code + ' ' + $dAfter.Outcome + ' ' + (@($dAfter.Lines) -join ' / '))
+    }
+    $dAfterMark = Format-RhCheckComplete $dAfter
+    Test-RhCase 'MUST FIRE  that decision says its covering verdict was an EARLY one: Early=yes, and the CHAIN-REHEARSAL-CHECK-COMPLETE line ends early=yes (push-main reads it into early_hit for B22)' {
+      (($dAfter.Early -ceq 'yes') -and [string]::Equals($dAfterMark, 'CHAIN-REHEARSAL-CHECK-COMPLETE code=0 outcome=rehearsed-pass early=yes', [StringComparison]::Ordinal)), ('early=' + $dAfter.Early + ' mark=' + $dAfterMark)
+    }
+    $dDocE = Get-RhPushDecision -Repo $er -RefLines @('refs/heads/main ' + $eDoc + ' refs/heads/main ' + $e0) -VerdictDir $vdE -Today $today
+    $dDocMark = Format-RhCheckComplete $dDocE
+    Test-RhCase 'MUST NOT FIRE  a push touching no member is decided by no verdict, so its marker carries no early token at all (never a guessed early=no)' {
+      (($dDocE.Outcome -eq 'not-needed') -and ($dDocE.Early -ceq '') -and ($dDocMark -cnotmatch '\bearly=')), ('outcome=' + $dDocE.Outcome + ' early=' + $dDocE.Early + ' mark=' + $dDocMark)
     }
     $rbO2 = Get-RhRebasedKey $eH $eO2
     $dO2 = Get-RhPushDecision -Repo $rbO2.Repo -RefLines @('refs/heads/main ' + $rbO2.Tip + ' refs/heads/main ' + $eO2) -VerdictDir $vdE -Today $today
@@ -1953,7 +1985,7 @@ if ($SelfTest) {
   $hkSet = Get-RhManifestSet $script:RhRoot 'HEAD'
   Test-RhCase 'MUST FIRE  a pre-commit edit is a manifest change (the rehearsal commits through that hook)' { ($hkSet.Ok -and $hkSet.Set.ContainsKey('ops/hooks/pre-commit')), ('ok=' + $hkSet.Ok + ' why=' + $hkSet.Why) }
   Test-RhCase 'MUST NOT FIRE  a pre-push or commit-msg edit demands no rehearsal it cannot exercise' { ($hkSet.Ok -and -not $hkSet.Set.ContainsKey('ops/hooks/pre-push') -and -not $hkSet.Set.ContainsKey('ops/hooks/commit-msg')), ('ok=' + $hkSet.Ok) }
-  $want = 61
+  $want = 63
   if ($script:rhCases -ne $want) { Write-Output ('rehearse-chain self-test FAIL: ran {0} case(s), the suite lists {1}' -f $script:rhCases, $want); exit 1 }
   if ($script:rhFail) { Write-Output ('rehearse-chain self-test FAIL: {0} of {1} case(s)' -f $script:rhFail, $script:rhCases); exit 1 }
   Write-Output ('rehearse-chain self-test PASS: {0} of {0} cases - led by the founding defect (an empty cost-flags.txt refused by the 09-05 hook) and a manifest change with no verdict being refused' -f $script:rhCases)
@@ -2011,7 +2043,7 @@ if ($CheckPush) {
   elseif ($RefsFile) { $refLines = @([IO.File]::ReadAllLines($RefsFile) | Where-Object { $_.Trim() }) }
   $d = Get-RhPushDecision -Repo $repoTop -RefLines $refLines -Branch $Branch -VerdictDir $vdir -Today (Get-Date) -Bypass ([string]$env:TC_NO_REHEARSAL)
   foreach ($l in $d.Lines) { Write-Output $l }
-  Write-Output ('CHAIN-REHEARSAL-CHECK-COMPLETE code={0} outcome={1}' -f $d.Code, $d.Outcome)
+  Write-Output (Format-RhCheckComplete $d)
   exit $d.Code
 }
 
@@ -2060,7 +2092,7 @@ if ($ForPush) {
       $d = Get-RhPushDecision -Repo $decRepo -RefLines @($line) -Branch $Branch -VerdictDir $vdir -Today (Get-Date) -Bypass $bypass
     }
     foreach ($l in $d.Lines) { Write-Output $l }
-    Write-Output ('CHAIN-REHEARSAL-CHECK-COMPLETE code={0} outcome={1}' -f $d.Code, $d.Outcome)
+    Write-Output (Format-RhCheckComplete $d)
     exit $d.Code
   } finally { Remove-RhStack $stack }
 }
