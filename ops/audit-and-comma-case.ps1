@@ -31,7 +31,10 @@
   The fix is to parenthesise the verdict: `((c1) -and (c2)), 'got'`.
 
   PENDING. A file another lane is landing at the time this was written is held by a PIN, not fixed here: its sites
-  must not rise above the pinned count, and the run says when the pin can go. Each entry names its owner.
+  must not rise above the pinned count, and the run says when the pin can go. Each entry names its owner. The one pin
+  this file was written with, ops\rehearse-chain.ps1 at 28, was removed on 2026-09-24 once that file read 0 counted
+  sites and 1 allowed (the fixture that runs the shape on purpose), so the table is empty and the gate holds at zero
+  in every tracked file.
 
   A GATE AT ZERO OUTSIDE THE PIN. Measured 2026-09-24 from a linked worktree over origin/main faafb042c: git listed 861
   tracked .ps1/.psm1, the walk resolved 861, 0 parse errors, 28 counted sites, all 28 in ops\rehearse-chain.ps1 (pinned), 0
@@ -65,9 +68,10 @@ $script:ACC_LABEL_RX = '^\s*(?:MUST ' + 'FIRE|MUST NOT ' + 'FIRE|CLEAN ' + 'TWIN
 $script:ACC_OPS = @('And', 'Or', 'Xor')
 # PENDING pins, keyed on the root-relative path. Max is the count on origin/main when the pin was written; a rise
 # fails, a fall is spoken. Remove an entry when its file reads 0 counted sites (the run says so).
-$script:ACC_PENDING = @{
-  'ops\rehearse-chain.ps1' = [pscustomobject]@{ Max = 28; Why = 'owned by the pd-rehearse2 lane, which rewrote all 28 on feat/pd-rehearse2 and is landing it (design\backlog-inbox\pd-rehearse2-2026-09-23.md)' }
-}
+# EMPTY since 2026-09-24: ops\rehearse-chain.ps1's pin (Max 28) went when W6.0's rewrite landed and the file read 0
+# counted sites, its one deliberate fixture carrying the allow marker. The gate now holds at zero everywhere; add an
+# entry here only for a file another lane is landing, shaped { Max = <count on origin/main>; Why = <owner> }.
+$script:ACC_PENDING = @{}
 
 function Get-AccFindings {
   <# Pure over one file's text, so the self-test drives exactly what the live scan runs. -Path is read only for its
@@ -160,7 +164,7 @@ function Get-AccScanFiles {
 # ------------------------------------------------------------------------------------------- self-test
 if ($SelfTest) {
   $script:fail = 0; $script:cases = 0
-  $script:expectedCases = 18
+  $script:expectedCases = 20
   function AccT([string]$m, [bool]$c, [string]$got = '') {
     $script:cases++
     if ($c) { Write-Output ('  ok    ' + $m) } else { Write-Output ('  FAIL  ' + $m + '   got: ' + $got); $script:fail++ }
@@ -227,6 +231,17 @@ if ($SelfTest) {
     AccT ($MF + '  a pinned file one site PAST its pin (29 over 28) is exceeded') ($past.Count -eq 1 -and $past[0].Verdict -eq 'exceeded') ($past | ForEach-Object { $_.Verdict })
     AccT ($MNF + '  a pinned file that reads 0 is clear, so the run can say the pin may go') ($zero.Count -eq 1 -and $zero[0].Verdict -eq 'clear' -and $zero[0].Count -eq 0) ($zero | ForEach-Object { $_.Verdict })
 
+    # ---- THE LIVE PIN TABLE: rehearse-chain's pin is gone (2026-09-24) ------------------------------------------
+    # Asserted on the table the live run reads, so re-adding the pin turns these red rather than passing silently.
+    $foundingRes = Get-AccFindings -Text $blobText -Path 'rehearse-chain.ps1'
+    $foundingSites = @($foundingRes.Counted)
+    $livePins = Test-AccPending -Counts @{ 'ops\rehearse-chain.ps1' = 28 } -Pending $script:ACC_PENDING
+    $livePins = @($livePins)
+    AccT ($MF + '  the founding blob''s 28 sites, filed under ops\rehearse-chain.ps1 against the LIVE pin table, are held by no pin, so they would fail the run') ((-not $script:ACC_PENDING.ContainsKey('ops\rehearse-chain.ps1')) -and $livePins.Count -eq 0) ('pins=' + $script:ACC_PENDING.Count + ' rows=' + $livePins.Count)
+    $unpinned = 0
+    foreach ($h in $foundingSites) { if (-not $script:ACC_PENDING.ContainsKey('ops\rehearse-chain.ps1')) { $unpinned++ } }
+    AccT 'CLEAN TWIN  the live scan still counts each of the founding blob''s 28 sites as a site: 28 counted, 28 outside any pin' ($foundingSites.Count -eq 28 -and $unpinned -eq 28) ('counted=' + $foundingSites.Count + ' unpinned=' + $unpinned)
+
     # ---- THE WALK, FROM A WORKTREE ROOT (lib\tree-walk.ps1) ---------------------------------------------------
     $fxHit = $stHead + $rhBody + $stTail
     $wtFx = New-TcWorktreeFixture -Files @{ 'grocery\hidden.ps1' = $fxHit; 'ops\clean.ps1' = ($stHead + $fixed + $stTail)
@@ -256,7 +271,7 @@ if ($SelfTest) {
     Write-Output ("  FAIL  CASE COUNT  ran {0} case(s), the suite lists {1}" -f $script:cases, $script:expectedCases); $script:fail++
   }
   if ($script:fail) { Write-Output ("AND-COMMA-CASE SELF-TEST FAILED ({0} of {1} case(s))" -f $script:fail, $script:cases); exit 1 }
-  Write-Output ("AND-COMMA-CASE SELF-TEST PASSED ({0} case(s): the founding blob fires on its 28 lines, the shape fires in a case body and a case call, the parenthesised and quoted forms stay silent, production code is listed, the pin holds at its bar and fails past it, and the walk reads a worktree root and only tracked files)" -f $script:cases)
+  Write-Output ("AND-COMMA-CASE SELF-TEST PASSED ({0} case(s): the founding blob fires on its 28 lines, the shape fires in a case body and a case call, the parenthesised and quoted forms stay silent, production code is listed, the pin holds at its bar and fails past it, the live pin table holds nothing, and the walk reads a worktree root and only tracked files)" -f $script:cases)
   exit 0
 }
 
