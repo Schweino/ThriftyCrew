@@ -92,7 +92,8 @@
 # Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): every case works in a per-run temp directory -
 # a bare origin, a clone standing in for the main checkout, and a worktree - into which it copies the real merge, the
 # gate that merge runs and the whole lib\ they load. It reads nothing else of this repo.
-# gate-inputs: ops\run-backlog-merge.ps1, ops\merge-backlog-inbox.ps1, ops\audit-backlog-status.ps1, lib\*.ps1, grocery\run-log-lib.ps1, .gitattributes
+# Since 2026-09-24 it also reads the alert registry, to prove every condition it pages is registered.
+# gate-inputs: ops\run-backlog-merge.ps1, ops\merge-backlog-inbox.ps1, ops\audit-backlog-status.ps1, lib\*.ps1, grocery\run-log-lib.ps1, .gitattributes, grocery\alert-registry.json, grocery\alert-registry-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [switch]$Alert,
@@ -1133,6 +1134,33 @@ if ($SelfTest) {
       ($e5.Deferred -and ($e5.MergeCalls -eq 0) -and ($e5.LanderCalls -eq 0) -and ($staleT -match 'updates/lane-old\.md \(update\) pending 25\.0 h') -and ($e5.Code -eq 2)) (_Show $e5)
     _T 'MUST NOT FIRE  an UPDATE file added 23 h before now does not' ($staleT -notmatch 'lane-new') $staleT
 
+    # ---- EVERY CONDITION THIS TASK PAGES IS REGISTERED (2026-09-24, design\backlog-inbox\pd-backlog2-2026-09-23.md) ----
+    # Its twelve alert types and its digest had no entry, so the first page would have arrived as UNREGISTERED ALERT TYPE
+    # and the daily alert-registry lane gone red, and audit-alert-registry's source half does not follow
+    # Send-AlertConditions, so no push gate could see it. The labels are read off this file's parse tree (every call of
+    # the condition collector with a literal first argument), then resolved through the real registry and matcher.
+    . (Join-Path $repo 'grocery\alert-registry-lib.ps1')
+    $regRead = Read-AlertRegistry (Join-Path $repo 'grocery\alert-registry.json')
+    $bmTok = $null; $bmErr = $null
+    $bmAst = [System.Management.Automation.Language.Parser]::ParseFile($PSCommandPath, [ref]$bmTok, [ref]$bmErr)
+    $bmCondVar = 'co' + 'nd'
+    $bmCalls = $bmAst.FindAll({ param($n) ($n -is [System.Management.Automation.Language.CommandAst]) -and $n.InvocationOperator -eq 'Ampersand' -and
+        ($n.CommandElements[0] -is [System.Management.Automation.Language.VariableExpressionAst]) -and [string]::Equals($n.CommandElements[0].VariablePath.UserPath, $bmCondVar, [StringComparison]::Ordinal) -and
+        $n.CommandElements.Count -ge 2 -and ($n.CommandElements[1] -is [System.Management.Automation.Language.StringConstantExpressionAst]) }.GetNewClosure(), $true)
+    $bmLabels = @($bmCalls | ForEach-Object { [string]$_.CommandElements[1].Value } | Sort-Object -Unique)
+    $bmWant = @('LEASE BLIND', 'LEASE ERROR', 'LEASE TIMEOUT', 'MERGE BLIND', 'PUSH BLIND', 'PUSH REFUSED', 'QUARANTINED', 'READ-OUT BLIND', 'READ-OUT DUE', 'RUN BLIND', 'STALE INBOX', 'STALE INBOX BLIND')
+    _T 'CLEAN TWIN     the conditions read off this file are exactly the twelve its header names' ($regRead.ok -and ((@($bmLabels) -join '|') -ceq (@($bmWant) -join '|'))) ((@($bmLabels) -join '|') + ' registry=' + $regRead.why)
+    $bmBad = @()
+    foreach ($lb in $bmLabels) {
+      $rc0 = Resolve-AlertClass $regRead.registry (Get-AlertTypeKey ($script:SubjectPrefix + ': ' + $lb))
+      if (-not $rc0.registered -or $rc0.ambiguous -or $rc0.class -ne 'page' -or [string]$rc0.entry.match -ne 'exact' -or (Get-AlertResolverKind (Get-AlertEntryResolver $rc0.entry)) -ne 'lane') { $bmBad += ($lb + '=' + $rc0.why + '/' + $rc0.class) }
+    }
+    $rcD = Resolve-AlertClass $regRead.registry (Get-AlertTypeKey ($script:SubjectPrefix + ': 3 condition(s) need action'))
+    _T 'MUST FIRE      every condition this task pages resolves to exactly one registered page entry with a lane resolver, and its digest to a digest entry' `
+      ($bmLabels.Count -eq 12 -and $bmBad.Count -eq 0 -and $rcD.registered -and -not $rcD.ambiguous -and $rcD.class -eq 'digest') ('bad=' + ($bmBad -join ', ') + ' digest=' + $rcD.why + '/' + $rcD.class)
+    $rcX = Resolve-AlertClass $regRead.registry (Get-AlertTypeKey ($script:SubjectPrefix + ': NOT A CONDITION IT SENDS'))
+    _T 'MUST NOT FIRE  a label this task never sends still resolves unregistered, so the entries are exact and match nothing else' ($rcX.why -ceq 'unregistered') ($rcX.why + '/' + $rcX.class)
+
     # The heartbeat's proof: a stamp written with the verdict's exit and conditions.
     $stampP = Join-Path $st 'stamp\backlog-merge-stamp.json'
     Write-TcBmStamp -Path $stampP -Res $e5 -Code $e5.Code -NowUtc $nowS
@@ -1151,7 +1179,7 @@ if ($SelfTest) {
     }
   }
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (ops-and-gates.md): a case lost to a throw is a shortfall, never a smaller green.
-  $EXPECTED_CASES = 42
+  $EXPECTED_CASES = 45
   Write-Output ''
   if ($script:stFails.Count -or ($script:stRan -ne $EXPECTED_CASES)) {
     Write-Output ('run-backlog-merge SELF-TEST FAIL: {0} case(s) failed, {1} of {2} case(s) ran' -f $script:stFails.Count, $script:stRan, $EXPECTED_CASES)
