@@ -1,50 +1,50 @@
 ﻿{
-    "generated":  "2026-09-22T21:38:09",
-    "started":  "2026-09-22T21:30:02",
-    "deadline":  "2026-09-23T00:00:02",
+    "generated":  "2026-09-23T21:45:10",
+    "started":  "2026-09-23T21:30:02",
+    "deadline":  "2026-09-24T00:00:02",
     "hard_stop":  "06:30",
     "jobs":  4,
-    "contested":  144,
-    "elapsed_sec":  487,
+    "contested":  1568,
+    "elapsed_sec":  908,
     "card_free":  true,
-    "free_vram_mib":  14324,
+    "free_vram_mib":  14246,
     "llama_started":  true,
     "stages":  [
                    {
                        "stage":  "inputs",
                        "state":  "OK",
-                       "detail":  "C:\\Codex\\ThriftyCrew\\graph\\sqlite\\graph.db is 13.1 h old, inside its 26 h window (producer: the daily chain\u0027s graph-gates lane (grocery\\audit-graph-gates.ps1 -\u003e graph\\import\\import_all.py --observations)). Its newest price_observations.observed_at is 2026-09-22, inside its 36 h window.",
+                       "detail":  "C:\\Codex\\ThriftyCrew\\graph\\sqlite\\graph.db is 11.5 h old, inside its 26 h window (producer: the daily chain\u0027s graph-gates lane (grocery\\audit-graph-gates.ps1 -\u003e graph\\import\\import_all.py --observations)). Its newest price_observations.observed_at is 2026-09-23, inside its 36 h window.",
                        "sec":  0
                    },
                    {
                        "stage":  "verdict-expiry",
                        "state":  "OK",
-                       "detail":  "total=15709 expired=0 reask=0 deferred=0",
-                       "sec":  0
+                       "detail":  "total=15059 expired=0 reask=0 deferred=0",
+                       "sec":  1
                    },
                    {
                        "stage":  "emit",
                        "state":  "OK",
-                       "detail":  "contested: 144 question(s) of 40512 (40368 settled by the deterministic layers), 9731 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 4.3s",
-                       "sec":  4
+                       "detail":  "contested: 1568 question(s) of 42268 (40700 settled by the deterministic layers), 9884 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 4.9s",
+                       "sec":  5
                    },
                    {
                        "stage":  "defs",
                        "state":  "OK",
-                       "detail":  "[21:30:09] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
+                       "detail":  "[21:30:11] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
                        "sec":  1
                    },
                    {
                        "stage":  "hunter",
                        "state":  "OK",
-                       "detail":  "ingest_hunter_events: 518 event(s) in the log, 0 newly filed, 35 review case(s), 0 gold row(s), 0 surprise(s) queued",
+                       "detail":  "ingest_hunter_events: 520 event(s) in the log, 2 newly filed, 35 review case(s), 0 gold row(s), 2 surprise(s) queued",
                        "sec":  0
                    },
                    {
                        "stage":  "durability",
-                       "state":  "OK",
-                       "detail":  "GRAPH-DURABILITY-COMPLETE findings=0",
-                       "sec":  2
+                       "state":  "FAILED",
+                       "detail":  "rc=2   FINDING     approved_patches: 186 row(s) in the database, 255 in the tracked mirror. An export_learning() call was missed on some write path.",
+                       "sec":  3
                    },
                    {
                        "stage":  "handoff",
@@ -56,7 +56,7 @@
                        "stage":  "sweep",
                        "state":  "OK",
                        "detail":  "",
-                       "sec":  195
+                       "sec":  187
                    },
                    {
                        "stage":  "serve",
@@ -67,14 +67,14 @@
                    {
                        "stage":  "resolve",
                        "state":  "OK",
-                       "detail":  "resolved 43401 rows in 184.4s (40512 distinct questions, 80 model calls)",
-                       "sec":  185
+                       "detail":  "resolved 45166 rows in 607.0s (42268 distinct questions, 424 model calls)",
+                       "sec":  608
                    },
                    {
                        "stage":  "stage1",
                        "state":  "OK",
                        "detail":  "Next: python graph/learning/stage2_review.py --emit-packet",
-                       "sec":  24
+                       "sec":  30
                    },
                    {
                        "stage":  "stage2-packet",
@@ -97,8 +97,8 @@
                    {
                        "stage":  "lint-adjacency",
                        "state":  "OK",
-                       "detail":  "775 near-miss(es); 21 on a product the board publishes",
-                       "sec":  54
+                       "detail":  "776 near-miss(es); 22 on a product the board publishes",
+                       "sec":  52
                    },
                    {
                        "stage":  "rejection-families",

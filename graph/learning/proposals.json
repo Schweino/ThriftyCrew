@@ -624,6 +624,18 @@
     "target_id": "red-bell-pepper"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-09-23T21:43:44",
+    "id": "lp:2c95414b8dbda18be8ef",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"blue\\\\s+cheese.*dressing|blue\\\\s+cheese.*ranch\"}",
+    "queue_hash": "1caf26fa00213fb47ef2d1b49da1ddbb9350e0bff6dba80c8a90867058963227",
+    "rationale": "Matches 'Hidden Valley Blue Cheese Ranch Dip Sauce Condiment and Dressing'. This is a blue cheese flavored dressing/dip. The pattern anchors on 'blue cheese' + 'dressing' or 'ranch' to be specific.",
+    "status": "proposed",
+    "target_id": "blue-cheese-dressing"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:2eef5f60353339406ab6",
@@ -937,6 +949,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-23T21:43:44",
+    "id": "lp:43409f1ebc297bd50147",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"brown\\\\s+jasmine|jasmine.*brown\"}",
+    "queue_hash": "1caf26fa00213fb47ef2d1b49da1ddbb9350e0bff6dba80c8a90867058963227",
+    "rationale": "Matches 'BEN RDYRC BROWN JASMINE'. Brown jasmine rice is a specific type of brown rice. The pattern anchors on both 'brown' and 'jasmine' to be precise.",
+    "status": "proposed",
+    "target_id": "brown-rice"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:444b333bb45567dfc6a4",
     "kind": "add_alias",
@@ -1174,6 +1198,18 @@
     "rationale": "Great Northern beans are a different variety than Cannellini beans (though similar, they are distinct commodities in grocery classification).",
     "status": "held_for_human",
     "target_id": "cannellini-beans"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-23T21:43:44",
+    "id": "lp:53be234b4cbdf66e9526",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"ravioli.*canned|canned.*ravioli\"}",
+    "queue_hash": "1caf26fa00213fb47ef2d1b49da1ddbb9350e0bff6dba80c8a90867058963227",
+    "rationale": "Matches 'Annie's Organic Cheesy Ravioli ... Canned Pasta'. Anchors on the combination of ravioli and canned to ensure it's the shelf-stable product, not fresh pasta.",
+    "status": "proposed",
+    "target_id": "canned-pasta-ravioli-spaghettios"
   },
   {
     "confidence": 0.95,
@@ -1476,6 +1512,18 @@
     "target_id": "artichoke-hearts-canned-jarred"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-09-23T21:43:44",
+    "id": "lp:6416d74961cb6367101c",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"chili\"}",
+    "queue_hash": "1caf26fa00213fb47ef2d1b49da1ddbb9350e0bff6dba80c8a90867058963227",
+    "rationale": "All listed products (Amy's, Simple Truth, Wendy's) are canned chili variants. 'Chili' is a specific food name that does not match other common grocery items in this context.",
+    "status": "proposed",
+    "target_id": "canned-chili"
+  },
+  {
     "confidence": 0.85,
     "created_at": "2026-08-24T21:32:21",
     "id": "lp:64c19418e15f80db993b",
@@ -1774,6 +1822,18 @@
     "rationale": "Matches 'Great Value Canned Pineapple Tidbits' and 'Our Family Pineapple, Tidbits'. Tidbits are a form of chunks.",
     "status": "rejected",
     "target_id": "pineapple-chunks"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-23T21:43:44",
+    "id": "lp:7672f59b2a1de7c8c9d8",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"sanitizing\\\\s+wipes|alcohol.*wipes\"}",
+    "queue_hash": "1caf26fa00213fb47ef2d1b49da1ddbb9350e0bff6dba80c8a90867058963227",
+    "rationale": "Matches 'The Honest Company Fragrance Free Alcohol Sanitizing Wipes'. These are disinfecting/sanitizing wipes, distinct from baby wipes or makeup wipes.",
+    "status": "proposed",
+    "target_id": "disinfecting-wipes"
   },
   {
     "confidence": 0.9,
@@ -2088,6 +2148,18 @@
     "target_id": "commodity:staple:refrigerated-biscuits"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-09-23T21:43:44",
+    "id": "lp:8738c9af92c8e89433d9",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"gravy\\\\s+mix\"}",
+    "queue_hash": "1caf26fa00213fb47ef2d1b49da1ddbb9350e0bff6dba80c8a90867058963227",
+    "rationale": "Matches 'Kinder's Classic Beef Gravy Mix'. 'Gravy mix' is a distinct product category from liquid gravy or gravy powder.",
+    "status": "proposed",
+    "target_id": "brown-gravy-mix-dry-packet"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-21T01:00:34",
     "id": "lp:87d5da7d229fb48f9683",
@@ -2341,6 +2413,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-23T21:43:44",
+    "id": "lp:9822766fea431236a156",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"artichokes?\\\\s+hrt?s|artichokes?\\\\s+in\\\\s+brine|quartered\\\\s+artichokes\"}",
+    "queue_hash": "1caf26fa00213fb47ef2d1b49da1ddbb9350e0bff6dba80c8a90867058963227",
+    "rationale": "Matches 'ARTICHOKES HRTS', 'Cento Artichokes in Brine', and 'Napoleon Quartered Artichokes'. These are all canned/jarred artichoke heart products. 'Marinated Grilled' is also a common canned format, but the pattern covers the clear cases.",
+    "status": "proposed",
+    "target_id": "artichoke-hearts-canned-jarred"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:99da89afddce91a4f038",
     "kind": "add_alias",
@@ -2386,6 +2470,18 @@
     "rationale": "Clancy's Spicy Margarita Chips are a type of tortilla chip. The pattern anchors on the specific flavor/name to avoid matching other chips.",
     "status": "rejected",
     "target_id": "tortilla-chips"
+  },
+  {
+    "confidence": 0.8,
+    "created_at": "2026-09-23T21:43:44",
+    "id": "lp:9ce698fb0063a5008dab",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"organic.*beet|gold\\\\s+grim\\\\s+beet\"}",
+    "queue_hash": "1caf26fa00213fb47ef2d1b49da1ddbb9350e0bff6dba80c8a90867058963227",
+    "rationale": "Matches 'Organic Gold Grim Beet'. This is a specific variety of fresh beet. The pattern is narrow to avoid matching beet juice or canned beets.",
+    "status": "proposed",
+    "target_id": "beets-fresh"
   },
   {
     "confidence": 0.9,
@@ -2698,6 +2794,18 @@
     "rationale": "Matches 'Fresh Sweet Peppers, Mini Mix'.",
     "status": "applied",
     "target_id": "mini-sweet-peppers"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-09-23T21:43:44",
+    "id": "lp:b2cc52a4eaf7cd755a97",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"wax\\\\s+beans|cut\\\\s+wax\"}",
+    "queue_hash": "1caf26fa00213fb47ef2d1b49da1ddbb9350e0bff6dba80c8a90867058963227",
+    "rationale": "Matches 'Kroger Cut Wax Beans'. Wax beans are a specific type of green bean often sold canned. The pattern is specific enough to avoid matching fresh wax beans or other green beans.",
+    "status": "proposed",
+    "target_id": "canned-green-beans"
   },
   {
     "confidence": 0.9,
@@ -3097,6 +3205,30 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-23T21:43:44",
+    "id": "lp:cd5e891ca36d2b5ba442",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"diced\\\\s+potatoes|potatoes.*diced\"}",
+    "queue_hash": "1caf26fa00213fb47ef2d1b49da1ddbb9350e0bff6dba80c8a90867058963227",
+    "rationale": "Matches 'Del Monte Cajun Style Diced Potatoes' and 'Kroger Diced & Peeled White Potatoes'. Anchors on 'diced' + 'potatoes' to avoid matching fresh whole potatoes.",
+    "status": "proposed",
+    "target_id": "canned-potatoes"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-23T21:43:44",
+    "id": "lp:d023e3ac79a1b5b2ae55",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cajun.*seasoning|cajun.*spice|cajun.*rub\"}",
+    "queue_hash": "1caf26fa00213fb47ef2d1b49da1ddbb9350e0bff6dba80c8a90867058963227",
+    "rationale": "Matches 'Cajun's Choice Cajun Shrimp Seasoning Mix', 'Rib Rack Cajun Spice Rub', and 'Tony's Cajun Kick Seasoning'. Anchors on 'cajun' combined with seasoning/spice/rub to avoid matching Cajun-flavored meats or chips.",
+    "status": "proposed",
+    "target_id": "cajun-creole-seasoning"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:55:56",
     "id": "lp:d11dcd3cbf423e74cb3a",
     "kind": "add_alias",
@@ -3130,6 +3262,18 @@
     "rationale": "Matches 'Great Value Gv Thjasmine'. This is a specific typo/abbreviation for Great Value Jasmine Rice. Anchoring on the typo ensures we don't match other jasmine rice brands.",
     "status": "accepted",
     "target_id": "jasmine-rice-dry"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-09-23T21:43:44",
+    "id": "lp:d2a036a438afa290cf05",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cranberry.*cocktail|cranberry.*juice.*drink\"}",
+    "queue_hash": "1caf26fa00213fb47ef2d1b49da1ddbb9350e0bff6dba80c8a90867058963227",
+    "rationale": "Matches 'Simply Cranberry Cocktail Juice Drink'. 'Cranberry cocktail' is a common name for cranberry juice blends. The pattern ensures it's a drink/liquid product.",
+    "status": "proposed",
+    "target_id": "cranberry-juice"
   },
   {
     "confidence": 0.95,

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-22T21:37:10",
+  "generated_at": "2026-09-23T21:44:14",
   "reviewer": "claude-fable-medium",
   "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise. hold_clears are NOT proposals to rule on here: each names a promotion hold that has matched nothing on the board for 30 consecutive daily rechecks, with its readings. Clearing one means re-running the full guard suite (promote_aliases.py --gated) and stays with a person (ruling 2026-09-09, backlog I92).",
   "gates": {
@@ -8,138 +8,6 @@
     "note": "every accepted patch is shadow-scored against the gold set before it goes live; a patch that regresses any metric is dropped regardless of this review's verdict"
   },
   "proposals": [
-    {
-      "proposal_id": "lp:3db0ce0751eb9f9d0421",
-      "kind": "add_alias",
-      "target": "au-jus-gravy-mix",
-      "target_label": null,
-      "payload": "au\\s+jus\\s+gravy\\s+mix",
-      "stage1_confidence": 0.95,
-      "rationale": "Matches 'Au Jus Gravy Mix' and variants like 'Our Family Au Jus Gravy Mix' by anchoring on the core product name.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:79a96fd4f7dc90cc554c",
-      "kind": "add_alias",
-      "target": "buffalo-wing-sauce",
-      "target_label": null,
-      "payload": "buffalo\\s+wing\\s+sauce",
-      "stage1_confidence": 0.95,
-      "rationale": "Matches multiple listings like 'Moore's Original Buffalo Wing Sauce' and 'Cookies Wings 'N Things Buffalo Wing Sauce' by anchoring on the core product name 'Buffalo Wing Sauce'.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:d3d41447422f8eae352f",
-      "kind": "add_alias",
-      "target": "hot-honey",
-      "target_label": null,
-      "payload": "hot\\s+honey",
-      "stage1_confidence": 0.95,
-      "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on the core product name 'Hot Honey'.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:ff96cdbe378d25ad36d7",
-      "kind": "add_alias",
-      "target": "part-skim-mozzarella-shredded",
-      "target_label": null,
-      "payload": "shredded\\s+mozzarella|mozzarella\\s+shredded",
-      "stage1_confidence": 0.95,
-      "rationale": "Matches multiple listings: 'Great Value Shredded Mozzarella', 'Kraft Natural Mozzarella Shredded Cheese', 'Sargento Mozzarella Shredded Cheese', etc. Anchors on the combination of 'Shredded' and 'Mozzarella'.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:b94ce818e72eca8b947c",
-      "kind": "add_alias",
-      "target": "caesar-salad-kit",
-      "target_label": null,
-      "payload": "caesar\\s+salad|chick\\s+caesar",
-      "stage1_confidence": 0.95,
-      "rationale": "Matches 'Tay Farm Chick Caesar' and other Caesar salad kit variants without matching unrelated items.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:a19a1c027540449ec0b0",
-      "kind": "add_alias",
-      "target": "jasmine-rice-dry",
-      "target_label": null,
-      "payload": "gv\\s+thjasmine",
-      "stage1_confidence": 0.95,
-      "rationale": "Matches 'Great Value Gv Thjasmine'. This is a specific typo/abbreviation for Great Value Jasmine Rice. The pattern is very specific to this listing.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:47ba5ac072a1a2c31613",
-      "kind": "add_alias",
-      "target": "caesar-salad-kit",
-      "target_label": null,
-      "payload": "chick\\s*caesar",
-      "stage1_confidence": 0.95,
-      "rationale": "Matches 'Tay Farm Chick Caesar' (20x). Anchors on the specific product name 'Chick Caesar' to avoid matching generic chicken or other caesar items.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:7294458a9496b4a94895",
-      "kind": "add_alias",
-      "target": "apple-cider",
-      "target_label": null,
-      "payload": "100%\\s+apple\\s+cider|apple\\s+cider\\s+juice",
-      "stage1_confidence": 0.95,
-      "rationale": "Covers Hy-Vee 100% Apple Cider and Our Family Apple Cider Juice. The pattern anchors on the food name 'apple cider'.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:c3c6eec7e9d544dcde9f",
-      "kind": "add_alias",
-      "target": "au-jus-gravy-mix",
-      "target_label": null,
-      "payload": "au\\s+jus\\s+(gravy|sauce)\\s+mix",
-      "stage1_confidence": 0.95,
-      "rationale": "Covers various brands of Au Jus Gravy Mix including Hy-Vee, Kroger, and Our Family. The pattern anchors on the food name 'au jus gravy mix' or 'au jus sauce mix'.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:3079a01b2b0bd3d4f5df",
-      "kind": "add_alias",
-      "target": "frozen-cut-green-beans",
-      "target_label": null,
-      "payload": "green\\s+beans,?\\s*cut",
-      "stage1_confidence": 0.95,
-      "rationale": "Matches 'Our Family Green Beans, Cut, Fresh Frozen 24 Oz' (2x)",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:929bf9e63401f5cc7f5e",
-      "kind": "add_alias",
-      "target": "jasmine-rice-dry",
-      "target_label": null,
-      "payload": "jasmine\\s+rice",
-      "stage1_confidence": 0.95,
-      "rationale": "Matches 'Mahatma Jasmine Rice' (2x)",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
     {
       "proposal_id": "lp:4a877708ced555455a0f",
       "kind": "add_alias",
@@ -285,98 +153,25 @@
       }
     },
     {
-      "proposal_id": "lp:87d5da7d229fb48f9683",
+      "proposal_id": "lp:6416d74961cb6367101c",
       "kind": "add_alias",
-      "target": "boneless-skinless-chicken-thigh",
+      "target": "canned-chili",
       "target_label": null,
-      "payload": "chicken\\s+thighs,?\\s+boneless",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Chicken Thighs, Boneless Gold N Plump'. Anchors on the cut and boneless attribute.",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 0,
-          "already_matched": 0,
-          "cross_commodity": 1,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [
-          "matches 1 name(s) already priced under a different commodity — confirm the collision is benign before accepting",
-          "captures nothing new — it settles no unmatched row and absorbs no reviewer confirmation, so it is noise"
-        ],
-        "examples": {
-          "cross_commodity": [
-            {
-              "product": "Chicken Thighs, Boneless Gold N Plump",
-              "rows": 2,
-              "priced_by": [
-                "commodity:staple:chicken-thighs"
-              ]
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:f2948717e287640a1ebe",
-      "kind": "add_alias",
-      "target": "apple-cider",
-      "target_label": null,
-      "payload": "100%\\s+apple\\s+cider",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Hy-Vee 100% Apple Cider' by anchoring on the specific '100% Apple Cider' phrase.",
+      "payload": "chili",
+      "stage1_confidence": 0.95,
+      "rationale": "All listed products (Amy's, Simple Truth, Wendy's) are canned chili variants. 'Chili' is a specific food name that does not match other common grocery items in this context.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
     },
     {
-      "proposal_id": "lp:317b9a3c1ae7b5de7582",
+      "proposal_id": "lp:8738c9af92c8e89433d9",
       "kind": "add_alias",
-      "target": "apple-cider",
+      "target": "brown-gravy-mix-dry-packet",
       "target_label": null,
-      "payload": "sparkling\\s+apple\\s+cider",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Martinelli's Sparkling Apple Cider' by anchoring on the specific 'Sparkling Apple Cider' phrase.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:e3c8d0d1ddfbae4172fd",
-      "kind": "add_alias",
-      "target": "apple-cider",
-      "target_label": null,
-      "payload": "apple\\s+cider\\s+juice",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Our Family Apple Cider Juice' by anchoring on the specific 'Apple Cider Juice' phrase.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:030a8c66c11a41806165",
-      "kind": "add_alias",
-      "target": "au-jus-gravy-mix",
-      "target_label": null,
-      "payload": "au\\s+jus\\s+sauce\\s+mix",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Hy-Vee Au Jus Sauce Mix' by anchoring on the specific 'Au Jus Sauce Mix' phrase.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:f8d5d9559584b5a30c2d",
-      "kind": "add_alias",
-      "target": "buffalo-wing-sauce",
-      "target_label": null,
-      "payload": "medium\\s+buffalo\\s+sauce",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Buffalo Wild Wings Medium Buffalo Sauce' by anchoring on the specific flavor variant name.",
+      "payload": "gravy\\s+mix",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches 'Kinder's Classic Beef Gravy Mix'. 'Gravy mix' is a distinct product category from liquid gravy or gravy powder.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
@@ -394,210 +189,6 @@
       }
     },
     {
-      "proposal_id": "lp:e889e4919a7716172629",
-      "kind": "add_alias",
-      "target": "buffalo-wing-sauce",
-      "target_label": null,
-      "payload": "zesty\\s+buffalo\\s+sauce",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Chick-fil-A Zesty Buffalo Sauce' by anchoring on the specific flavor variant name.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:81a977c15bd7b56bc4bc",
-      "kind": "add_alias",
-      "target": "buffalo-wing-sauce",
-      "target_label": null,
-      "payload": "buffalo\\s+wings\\s+hot\\s+sauce",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Frank's Red Hot Buffalo Wings Hot Sauce' by anchoring on the specific product name.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:dee170c61d48ab3d7c82",
-      "kind": "add_alias",
-      "target": "buffalo-wing-sauce",
-      "target_label": null,
-      "payload": "moore's\\s+original\\s+buffalo\\s+wing\\s+sauce",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches '(2 pack) Moore's Original Buffalo Wing Sauce' by anchoring on the specific brand and product name.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:e4a28593e58590712ecd",
-      "kind": "add_alias",
-      "target": "buffalo-wing-sauce",
-      "target_label": null,
-      "payload": "spicy\\s+garlic\\s+buffalo\\s+sauce",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Buffalo Wild Wings Spicy Garlic Buffalo Sauce' by anchoring on the specific flavor descriptor 'Spicy Garlic Buffalo Sauce'.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:2fec5989ff2298ed6721",
-      "kind": "add_alias",
-      "target": "frozen-cut-green-beans",
-      "target_label": null,
-      "payload": "cut\\s+green\\s+beans",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans' and 'Smart Way Cut Green Beans'. Anchors on 'Cut Green Beans' which is the standard form for frozen green beans.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:5a43941a25d5cb1fd300",
-      "kind": "add_alias",
-      "target": "hot-italian-sausage",
-      "target_label": null,
-      "payload": "spicy\\s+italian\\s+sausage",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage'. Anchors on 'Spicy Italian Sausage' to distinguish from mild or sweet varieties.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:38759a83f8e3ba423283",
-      "kind": "add_alias",
-      "target": "liquid-smoke",
-      "target_label": null,
-      "payload": "hickory\\s+liquid\\s+smoke",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Figaro Hickory Liquid Smoke'. Anchors on the specific flavor/type 'Hickory Liquid Smoke'.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:d40c463be57c4b456b0f",
-      "kind": "add_alias",
-      "target": "roasted-red-peppers",
-      "target_label": null,
-      "payload": "roasted\\s+peppers",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Dunbars Roasted Peppers'. Anchors on 'Roasted Peppers'.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:7d4c9691846ab0cd1016",
-      "kind": "add_alias",
-      "target": "buffalo-wing-sauce",
-      "target_label": null,
-      "payload": "buffalo\\s+sauce|zesty\\s+buffalo",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Chick-fil-A Zesty Buffalo Sauce' specifically for buffalo wing sauce.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:f6b7c1fe62147e339717",
-      "kind": "add_alias",
-      "target": "frozen-broccoli-florets",
-      "target_label": null,
-      "payload": "broccoli\\s+florets|baby\\s+broccoli",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Birds Eye Baby Broccoli Florets' for frozen broccoli florets.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:4e99c4e806c10d00cf2e",
-      "kind": "add_alias",
-      "target": "frozen-cut-green-beans",
-      "target_label": null,
-      "payload": "cut\\s+green\\s+beans|steam\\s+cut\\s+green\\s+beans",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans' and 'Smart Way Cut Green Beans' for frozen cut green beans.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:25f0837f43339ff9cce1",
-      "kind": "add_alias",
-      "target": "hot-honey",
-      "target_label": null,
-      "payload": "hot\\s+honey|habanero\\s+honey",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Pace® Hot Honey Habanero' for hot honey.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:60fc3c71c54d04cb6fe9",
-      "kind": "add_alias",
-      "target": "hot-italian-sausage",
-      "target_label": null,
-      "payload": "spicy\\s+italian\\s+sausage|cafe\\s+spicy\\s+italian",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage' for hot Italian sausage.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:f301cd43eafbf9dc2ae6",
-      "kind": "add_alias",
-      "target": "liquid-smoke",
-      "target_label": null,
-      "payload": "liquid\\s+smoke|hickory\\s+liquid\\s+smoke",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Figaro Hickory Liquid Smoke & Barbecue Marinade' for liquid smoke.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:ec266f9d4b343086748e",
-      "kind": "add_alias",
-      "target": "red-bell-pepper",
-      "target_label": null,
-      "payload": "red\\s+pepper|red\\s+bell\\s+pepper",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Red Pepper' for red bell pepper.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:41c8f5a0f04aabf6a2f2",
-      "kind": "add_alias",
-      "target": "roasted-red-peppers",
-      "target_label": null,
-      "payload": "roasted\\s+peppers|roasted\\s+red\\s+peppers",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Dunbars Roasted Peppers' for roasted red peppers.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:bee3845b24ad138577b0",
-      "kind": "add_alias",
-      "target": "jasmine-rice-dry",
-      "target_label": null,
-      "payload": "thjasmine",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Great Value Gv Thjasmine'. This appears to be a typo for 'Th Jasmine' or similar, but 'thjasmine' is unique enough to this specific listing pattern.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
       "proposal_id": "lp:6cf621d6997aff5c41e9",
       "kind": "add_alias",
       "target": "frozen-cut-green-beans",
@@ -605,222 +196,6 @@
       "payload": "smart\\s+way\\s+cut\\s+green\\s+beans",
       "stage1_confidence": 0.9,
       "rationale": "Matches 'Smart Way Cut Green Beans'. Specific to the brand and cut.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:9473738901f8444aeacf",
-      "kind": "add_alias",
-      "target": "hot-honey",
-      "target_label": null,
-      "payload": "pace\\s+hot\\s+honey",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on brand and product name.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:7953971dc8bc9b8aff14",
-      "kind": "add_alias",
-      "target": "hot-italian-sausage",
-      "target_label": null,
-      "payload": "cafe\\s+spicy\\s+italian\\s+sausage",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage'. Anchors on the specific product line name.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:6f8834729c0dc143e588",
-      "kind": "add_alias",
-      "target": "liquid-smoke",
-      "target_label": null,
-      "payload": "figaro\\s+hickory\\s+liquid\\s+smoke",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Figaro Hickory Liquid Smoke & Barbecue Marinade'. Anchors on brand and specific flavor/type.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:09510bd4b3aec846547e",
-      "kind": "add_alias",
-      "target": "part-skim-mozzarella-shredded",
-      "target_label": null,
-      "payload": "great\\s+value\\s+shredded\\s+mozzarella",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Great Value Shredded Mozzarella'. Specific to brand and form.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:61c98017ad0c21337a96",
-      "kind": "add_alias",
-      "target": "part-skim-mozzarella-shredded",
-      "target_label": null,
-      "payload": "kraft\\s+natural\\s+mozzarella\\s+(finely\\s+)?shredded",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches multiple Kraft Natural Mozzarella Shredded variants. Anchors on brand and form.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:82840d564b8bb47ce951",
-      "kind": "add_alias",
-      "target": "hot-honey",
-      "target_label": null,
-      "payload": "hot\\s+honey\\s+habanero",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on the specific flavor profile 'Hot Honey Habanero'.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:6aaa753dd8feaa520251",
-      "kind": "add_alias",
-      "target": "buffalo-wing-sauce",
-      "target_label": null,
-      "payload": "zesty\\s*buffalo\\s*sauce",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Chick-fil-A Zesty Buffalo Sauce'. Anchors on the specific flavor/brand combo to avoid matching generic buffalo sauce or other hot sauces.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:a0368ffbacd516174490",
-      "kind": "add_alias",
-      "target": "frozen-broccoli-florets",
-      "target_label": null,
-      "payload": "baby\\s*broccoli\\s*florets",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Birds Eye Baby Broccoli Florets'. Anchors on the specific cut/size 'Baby Broccoli Florets'.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:7355845ab46221826a1a",
-      "kind": "add_alias",
-      "target": "frozen-cut-green-beans",
-      "target_label": null,
-      "payload": "smart\\s*way\\s*cut\\s*green\\s*beans",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Smart Way Cut Green Beans'. Anchors on brand + cut to ensure it's the frozen/cut variety.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:3db33b8f9cc0a862b019",
-      "kind": "add_alias",
-      "target": "hot-honey",
-      "target_label": null,
-      "payload": "pace\\s*hot\\s*honey",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on brand + core product name.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:d1c18a5b22c52e3f2b96",
-      "kind": "add_alias",
-      "target": "jasmine-rice-dry",
-      "target_label": null,
-      "payload": "gv\\s*thjasmine",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Great Value Gv Thjasmine'. This is a specific typo/abbreviation for Great Value Jasmine Rice. Anchoring on the typo ensures we don't match other jasmine rice brands.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:470ec9a8e8e66875d247",
-      "kind": "add_alias",
-      "target": "liquid-smoke",
-      "target_label": null,
-      "payload": "figaro\\s*hickory\\s*liquid\\s*smoke",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Figaro Hickory Liquid Smoke'. Anchors on brand + flavor to avoid matching other liquid smoke brands or marinades.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:0019844aab8fe608dfce",
-      "kind": "add_alias",
-      "target": "buffalo-wing-sauce",
-      "target_label": null,
-      "payload": "zesty\\s+buffalo\\s+sauce|buffalo\\s+wing\\s+sauce|buffalo\\s+wild\\s+wings.*hot\\s+sauce|asian\\s+kick\\s+wing\\s+sauce",
-      "stage1_confidence": 0.9,
-      "rationale": "Covers multiple variations of Buffalo Wing Sauce including brand-specific names like Chick-fil-A Zesty Buffalo, Sweet Baby Ray's Buffalo Wing, Buffalo Wild Wings Hot Sauce, and Burman S Asian Kick Wing Sauce.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:da4edaa9b843203cddde",
-      "kind": "add_alias",
-      "target": "zero-sugar-soda-2l",
-      "target_label": null,
-      "payload": "fresca\\s+.*\\s+2\\s+liters|fresca\\s+.*\\s+2l",
-      "stage1_confidence": 0.9,
-      "rationale": "Fresca is a zero-sugar soda brand. The pattern anchors on the brand and size to match the specific commodity.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:7cdc9118b7436d6df700",
-      "kind": "add_alias",
-      "target": "frozen-peas",
-      "target_label": null,
-      "payload": "sweet\\s+peas",
-      "stage1_confidence": 0.9,
-      "rationale": "Great Value Sweet Peas are a type of frozen peas. The pattern anchors on the food name 'sweet peas'.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:c4b1135c0292b56cbcfa",
-      "kind": "add_alias",
-      "target": "buffalo-wing-sauce",
-      "target_label": null,
-      "payload": "buffalo\\s+wing\\s+sauce|buffalo\\s+sauce",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches numerous listings like 'Sweet Baby Ray's Buffalo Wing Sauce', 'Frank's RedHot Kosher Buffalo Wings Hot Sauce', 'Guy Fieri Flavortown O.G. Buffalo Sauce'. The pattern anchors on 'buffalo' and 'sauce' to avoid matching unrelated items",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:8630ffa1547156497789",
-      "kind": "add_alias",
-      "target": "hot-italian-sausage",
-      "target_label": null,
-      "payload": "hot\\s+italian.*sausage|sausage.*hot\\s+italian",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Johnsonville Hot Italian Pork Sausage Links' (2x)",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:38431c78c770107eb55f",
-      "kind": "add_alias",
-      "target": "part-skim-mozzarella-shredded",
-      "target_label": null,
-      "payload": "part-skim\\s+mozzarella.*shredded|shredded.*part-skim\\s+mozzarella",
-      "stage1_confidence": 0.9,
-      "rationale": "Matches 'Great Value Low-Moisture Part-Skim Mozzarella Shredded Cheese' (2x). The second listing 'Great Value Shredded Mozzarella, 80 oz' is ambiguous as it doesn't specify part-skim, so we only anchor on the explicit part-skim mention",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
@@ -1246,25 +621,73 @@
       }
     },
     {
-      "proposal_id": "lp:4a3463ec5779e1cce86a",
+      "proposal_id": "lp:cd5e891ca36d2b5ba442",
       "kind": "add_alias",
-      "target": "buffalo-wing-sauce",
+      "target": "canned-potatoes",
       "target_label": null,
-      "payload": "medium\\s+sauce",
-      "stage1_confidence": 0.85,
-      "rationale": "Matches 'Buffalo Wild Wings Medium Sauce' by anchoring on the specific flavor descriptor 'Medium Sauce' in the context of Buffalo Wild Wings.",
+      "payload": "diced\\s+potatoes|potatoes.*diced",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Del Monte Cajun Style Diced Potatoes' and 'Kroger Diced & Peeled White Potatoes'. Anchors on 'diced' + 'potatoes' to avoid matching fresh whole potatoes.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
     },
     {
-      "proposal_id": "lp:1ceb69e929cfd0c9d108",
+      "proposal_id": "lp:53be234b4cbdf66e9526",
       "kind": "add_alias",
-      "target": "buffalo-wing-sauce",
+      "target": "canned-pasta-ravioli-spaghettios",
       "target_label": null,
-      "payload": "spicy\\s+garlic\\s+sauce",
-      "stage1_confidence": 0.85,
-      "rationale": "Matches 'Buffalo Wild Wings Sauce, Spicy Garlic' by anchoring on the specific flavor descriptor 'Spicy Garlic Sauce'.",
+      "payload": "ravioli.*canned|canned.*ravioli",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Annie's Organic Cheesy Ravioli ... Canned Pasta'. Anchors on the combination of ravioli and canned to ensure it's the shelf-stable product, not fresh pasta.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:d023e3ac79a1b5b2ae55",
+      "kind": "add_alias",
+      "target": "cajun-creole-seasoning",
+      "target_label": null,
+      "payload": "cajun.*seasoning|cajun.*spice|cajun.*rub",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Cajun's Choice Cajun Shrimp Seasoning Mix', 'Rib Rack Cajun Spice Rub', and 'Tony's Cajun Kick Seasoning'. Anchors on 'cajun' combined with seasoning/spice/rub to avoid matching Cajun-flavored meats or chips.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:9822766fea431236a156",
+      "kind": "add_alias",
+      "target": "artichoke-hearts-canned-jarred",
+      "target_label": null,
+      "payload": "artichokes?\\s+hrt?s|artichokes?\\s+in\\s+brine|quartered\\s+artichokes",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'ARTICHOKES HRTS', 'Cento Artichokes in Brine', and 'Napoleon Quartered Artichokes'. These are all canned/jarred artichoke heart products. 'Marinated Grilled' is also a common canned format, but the pattern covers the clear cases.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:43409f1ebc297bd50147",
+      "kind": "add_alias",
+      "target": "brown-rice",
+      "target_label": null,
+      "payload": "brown\\s+jasmine|jasmine.*brown",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'BEN RDYRC BROWN JASMINE'. Brown jasmine rice is a specific type of brown rice. The pattern anchors on both 'brown' and 'jasmine' to be precise.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:7672f59b2a1de7c8c9d8",
+      "kind": "add_alias",
+      "target": "disinfecting-wipes",
+      "target_label": null,
+      "payload": "sanitizing\\s+wipes|alcohol.*wipes",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'The Honest Company Fragrance Free Alcohol Sanitizing Wipes'. These are disinfecting/sanitizing wipes, distinct from baby wipes or makeup wipes.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
@@ -1277,138 +700,6 @@
       "payload": "baby\\s+broccoli\\s+florets",
       "stage1_confidence": 0.85,
       "rationale": "Matches 'Birds Eye Baby Broccoli Florets'. Anchors on 'Baby Broccoli Florets' to distinguish from regular broccoli florets if they are priced separately, though often interchangeable. High confidence due to specific product name.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:cbbd6b5ff067974bc9b5",
-      "kind": "add_alias",
-      "target": "jasmine-rice-dry",
-      "target_label": null,
-      "payload": "thjasmine|jasmine\\s+rice",
-      "stage1_confidence": 0.85,
-      "rationale": "Matches 'Great Value Gv Thjasmine' (likely a typo for Jasmine) and standard jasmine rice listings. The regex handles the specific typo found in the data.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:96b38aeb310022de8f50",
-      "kind": "add_alias",
-      "target": "frozen-chopped-spinach",
-      "target_label": null,
-      "payload": "spinach",
-      "stage1_confidence": 0.85,
-      "rationale": "Matches 'Simply Nature Organic Spinach' for frozen chopped spinach.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:64c19418e15f80db993b",
-      "kind": "add_alias",
-      "target": "jasmine-rice-dry",
-      "target_label": null,
-      "payload": "jasmine|thjasmine",
-      "stage1_confidence": 0.85,
-      "rationale": "Matches 'Great Value Gv Thjasmine' for jasmine rice (dry).",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:485eb7ee2d2a06a5ca69",
-      "kind": "add_alias",
-      "target": "part-skim-mozzarella-shredded",
-      "target_label": null,
-      "payload": "shredded\\s+mozzarella",
-      "stage1_confidence": 0.85,
-      "rationale": "Matches multiple listings like 'Great Value Shredded Mozzarella', 'Kraft Natural Mozzarella Shredded Cheese', etc. This is the core descriptor for the commodity.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:d5f35b4ef8ad684c5ae6",
-      "kind": "add_alias",
-      "target": "frozen-chopped-spinach",
-      "target_label": null,
-      "payload": "simply\\s+nature\\s+organic\\s+spinach",
-      "stage1_confidence": 0.85,
-      "rationale": "Matches 'Simply Nature Organic Spinach'. While brand-anchored, this is a specific frozen spinach product often sold in chopped form. The pattern is specific enough to avoid matching fresh spinach or other brands.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:ac47636a10f82049e3a3",
-      "kind": "add_alias",
-      "target": "frozen-chopped-spinach",
-      "target_label": null,
-      "payload": "simply\\s*nature\\s*organic\\s*spinach",
-      "stage1_confidence": 0.85,
-      "rationale": "Matches 'Simply Nature Organic Spinach'. While 'Simply Nature' is a brand, the listing is ambiguous without it. This specific pattern ensures we only catch this exact product variant which is likely chopped/frozen in this context.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:e1df68793df689b7caaa",
-      "kind": "add_alias",
-      "target": "hot-italian-sausage",
-      "target_label": null,
-      "payload": "cafe\\s*spicy\\s*italian\\s*sausage",
-      "stage1_confidence": 0.85,
-      "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage'. Anchors on the specific flavor profile 'Cafe Spicy' to distinguish from regular or sweet Italian sausage.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:2b9b8d73f7618385c923",
-      "kind": "add_alias",
-      "target": "part-skim-mozzarella-shredded",
-      "target_label": null,
-      "payload": "great\\s*value\\s*shredded\\s*mozzarella",
-      "stage1_confidence": 0.85,
-      "rationale": "Matches 'Great Value Shredded Mozzarella'. Great Value shredded mozzarella is typically part-skim. This avoids matching whole milk or other brands.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:f5a66d65aa151507cae7",
-      "kind": "add_alias",
-      "target": "part-skim-mozzarella-shredded",
-      "target_label": null,
-      "payload": "kraft\\s+natural\\s+mozzarella\\s+shredded",
-      "stage1_confidence": 0.85,
-      "rationale": "Matches 'Kraft Natural Mozzarella Shredded Cheese'. Kraft Natural Mozzarella is typically part-skim.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:9c2648c3983482d2fe12",
-      "kind": "add_alias",
-      "target": "tortilla-chips",
-      "target_label": null,
-      "payload": "spicy\\s+margarita\\s+chips",
-      "stage1_confidence": 0.85,
-      "rationale": "Clancy's Spicy Margarita Chips are a type of tortilla chip. The pattern anchors on the specific flavor/name to avoid matching other chips.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:72d7671ec7274de8d227",
-      "kind": "add_alias",
-      "target": "frozen-chicken-nuggets",
-      "target_label": null,
-      "payload": "chicken\\s+breast\\s+bites|breaded\\s+chicken\\s+.*\\s+frozen",
-      "stage1_confidence": 0.85,
-      "rationale": "Member's Mark Chicken Breast Bites are a type of frozen chicken nugget/bite. The pattern anchors on the food name to avoid matching other chicken products.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
@@ -1486,13 +777,37 @@
       }
     },
     {
-      "proposal_id": "lp:2c32a05694b0a1fe1fd6",
+      "proposal_id": "lp:b2cc52a4eaf7cd755a97",
       "kind": "add_alias",
-      "target": "red-bell-pepper",
+      "target": "canned-green-beans",
       "target_label": null,
-      "payload": "^red\\s+pepper$",
-      "stage1_confidence": 0.8,
-      "rationale": "Matches 'Red Pepper'. Anchored to the full string to avoid matching 'Roasted Red Peppers' or 'Red Bell Pepper Sauce'. Note: 'Red Pepper' is ambiguous (could be chili flakes), but in a grocery context next to 'Roasted Red Peppers', it often指",
+      "payload": "wax\\s+beans|cut\\s+wax",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Kroger Cut Wax Beans'. Wax beans are a specific type of green bean often sold canned. The pattern is specific enough to avoid matching fresh wax beans or other green beans.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:d2a036a438afa290cf05",
+      "kind": "add_alias",
+      "target": "cranberry-juice",
+      "target_label": null,
+      "payload": "cranberry.*cocktail|cranberry.*juice.*drink",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Simply Cranberry Cocktail Juice Drink'. 'Cranberry cocktail' is a common name for cranberry juice blends. The pattern ensures it's a drink/liquid product.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:2c95414b8dbda18be8ef",
+      "kind": "add_alias",
+      "target": "blue-cheese-dressing",
+      "target_label": null,
+      "payload": "blue\\s+cheese.*dressing|blue\\s+cheese.*ranch",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Hidden Valley Blue Cheese Ranch Dip Sauce Condiment and Dressing'. This is a blue cheese flavored dressing/dip. The pattern anchors on 'blue cheese' + 'dressing' or 'ranch' to be specific.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
@@ -1505,42 +820,6 @@
       "payload": "hy-vee\\s*fresh\\s*steam\\s*cut\\s*green\\s*beans",
       "stage1_confidence": 0.8,
       "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans'. Note: 'Fresh' in frozen listings often means 'freshly frozen' or is a brand descriptor. This specific pattern avoids matching fresh green beans.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:06c5a3d12c1905644c70",
-      "kind": "add_alias",
-      "target": "red-bell-pepper",
-      "target_label": null,
-      "payload": "^red\\s*pepper$",
-      "stage1_confidence": 0.8,
-      "rationale": "Matches 'Red Pepper'. In grocery contexts, 'Red Pepper' usually implies Red Bell Pepper unless specified as chili/ground. The anchor ensures it's the whole item.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:7c6b2f2c111a970b63ec",
-      "kind": "add_alias",
-      "target": "frozen-cut-green-beans",
-      "target_label": null,
-      "payload": "hy-vee\\s+fresh\\s+steam\\s+cut\\s+green\\s+beans",
-      "stage1_confidence": 0.8,
-      "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans'. Note: 'Fresh' in the name is confusing for a frozen commodity, but this is likely the specific frozen product line from Hy-Vee. The pattern is very specific to avoid matching fresh green beans.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:2a8c63974c00fec0d0da",
-      "kind": "add_alias",
-      "target": "large-eggs-dozen",
-      "target_label": null,
-      "payload": "whitewater\\s+valley\\s+18",
-      "stage1_confidence": 0.8,
-      "rationale": "Whitewater Valley 18 is a specific brand/size of eggs. The pattern anchors on the brand and size to match the commodity.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
@@ -1589,6 +868,18 @@
       "payload": "blue\\s+cheese\\s+ranch",
       "stage1_confidence": 0.8,
       "rationale": "'Blue Cheese Ranch' is a specific dressing/dip variant. Anchors on the flavor profile and food type.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:9ce698fb0063a5008dab",
+      "kind": "add_alias",
+      "target": "beets-fresh",
+      "target_label": null,
+      "payload": "organic.*beet|gold\\s+grim\\s+beet",
+      "stage1_confidence": 0.8,
+      "rationale": "Matches 'Organic Gold Grim Beet'. This is a specific variety of fresh beet. The pattern is narrow to avoid matching beet juice or canned beets.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
