@@ -149,12 +149,18 @@
   (3) times. At the cap the rebase runs inside the lock as 5841e96b1 did, with the verdict check as the backstop, so the
   rule degrades and never refuses. A hand-back never spends the rehearsal budget unless its rehearsal leg REHEARSED.
 
+  THE PRE-FLIGHT'S COUNTS (2026-09-23, W3.2 with W3.4a step 3), WARN ONLY: commits that edit
+  design/BACKLOG-course-findings.md directly (neither deleting nor moving out an inbox file, which a merge does), inbox
+  files the push adds that ops\merge-backlog-inbox.ps1 -ValidateFile says the merge would quarantine, and commits that
+  MODIFY an existing updates/ file. Each warns and lands on the row (backlog_direct, inbox_invalid,
+  inbox_updates_modified); none refuses, which is D3's to decide from a dated cutoff.
+
   SCOPE OF A CLEAN REPORT: exit 0 means the remote accepted this push while this process held the lock. It says
   nothing about a pusher that does not take the lock - an older checkout, a plain `git push --no-verify`, or another
   machine - and nothing about whether main is healthy afterwards.
 #>
 # Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): read off the self-test block, which works in a temp sandbox and reads nothing else of this repo. Verify with: powershell -File lib\gate-input-key.ps1 -VerifyDeclared <this file>
-# gate-inputs: ops\push-main.ps1, lib\push-lock.ps1, lib\git-repo-env.ps1, lib\push-ledger.ps1, lib\seed-hint.ps1, ops\seed-worktree.ps1, ops\probe-push-convergence.ps1, lib\mutex-hold.ps1
+# gate-inputs: ops\push-main.ps1, lib\push-lock.ps1, lib\git-repo-env.ps1, lib\push-ledger.ps1, lib\seed-hint.ps1, ops\seed-worktree.ps1, ops\probe-push-convergence.ps1, lib\mutex-hold.ps1, ops\merge-backlog-inbox.ps1
 [CmdletBinding()]
 param(
   [string]$Remote = 'origin',
@@ -1334,6 +1340,120 @@ function Get-TcInlockCheckWord {
   return 'not-covered'
 }
 
+# ======================================================================================================================
+# THE PRE-FLIGHT'S COUNTS (2026-09-23, W3.2 with W3.4a step 3). WARN ONLY: nothing here refuses a push (D3 decides any
+# refusal, from a literal cutoff). They exist because design/BACKLOG-course-findings.md overlapped in 12 of 19 recent
+# rebase conflicts, and because an inbox file the scheduled merge would quarantine is otherwise found hours later,
+# unattended. The validator script is a seam: '' means this checkout's own ops\merge-backlog-inbox.ps1.
+# ======================================================================================================================
+$script:TcPmBacklogPath = 'design/BACKLOG-course-findings.md'
+$script:TcPmInboxPrefix = 'design/backlog-inbox/'
+$script:TcPmInboxValidatorScript = ''
+
+function Get-TcRangeNameStatus {
+  <# The commits of <Base>..HEAD, oldest first, each with its name-status lines, from `git log --no-renames
+     --name-status` (so a move is a D plus an A, and a move OUT of the inbox shows as the D it is). $null when git fails. #>
+  param([string]$Dir, [string]$Base)
+  $r = Invoke-TcGit -Dir $Dir -Arguments @('-c', 'core.quotepath=off', 'log', '--reverse', '--no-renames', '--name-status', '--format=TC-COMMIT %H', ($Base + '..HEAD'))
+  if ($r.Code -ne 0) { return $null }
+  $commits = [Collections.Generic.List[object]]::new()
+  $cur = $null
+  foreach ($l in @($r.Out)) {
+    $s = [string]$l
+    if ($s.StartsWith('TC-COMMIT ')) { $cur = [pscustomobject]@{ Sha = $s.Substring(10).Trim(); Files = [Collections.Generic.List[object]]::new() }; $commits.Add($cur); continue }
+    if ($null -eq $cur) { continue }
+    $parts = $s -split "`t", 2
+    if ($parts.Count -eq 2) { $cur.Files.Add([pscustomobject]@{ Status = $parts[0].Trim(); Path = $parts[1].Trim() }) }
+  }
+  return , ($commits.ToArray())
+}
+
+function Get-TcBacklogCounts {
+  <# W3.2 and W3.4a step 3 over the range's name-status (pure): BacklogDirect = commits that change the backlog file and
+     neither delete nor move out any file under the inbox (a merge does one or the other); UpdatesModified = commits that
+     MODIFY a file already under the inbox's updates/ (a lane appending to a day file the merge may already have consumed,
+     which rebases into a modify/delete conflict); Added = the inbox .md files the range adds and HEAD still holds
+     (README.md, _*.md and quarantine/ excluded, since the merge never reads them), distinct, in order. #>
+  param($Commits)
+  $direct = 0; $modUpd = 0
+  $added = [Collections.Generic.List[string]]::new()
+  $deleted = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($c in @($Commits)) {
+    if ($null -eq $c) { continue }
+    $touchesBacklog = $false; $leavesInbox = $false; $modifiesUpd = $false
+    foreach ($f in @($c.Files)) {
+      $st = [string]$f.Status; $pa = [string]$f.Path
+      if ([string]::Equals($pa, $script:TcPmBacklogPath, [StringComparison]::Ordinal)) { $touchesBacklog = $true }
+      $inInbox = $pa.StartsWith($script:TcPmInboxPrefix, [StringComparison]::Ordinal)
+      if ($inInbox -and $st.StartsWith('D')) { $leavesInbox = $true; [void]$deleted.Add($pa); [void]$added.Remove($pa) }
+      if ($inInbox -and $st.StartsWith('M') -and $pa.StartsWith($script:TcPmInboxPrefix + 'updates/', [StringComparison]::Ordinal)) { $modifiesUpd = $true }
+      if ($inInbox -and $st.StartsWith('A')) {
+        $rel = $pa.Substring($script:TcPmInboxPrefix.Length)
+        $leaf = [IO.Path]::GetFileName($rel)
+        if ($leaf -like '*.md' -and $leaf -cne 'README.md' -and -not $leaf.StartsWith('_') -and -not $rel.StartsWith('quarantine/', [StringComparison]::Ordinal) -and -not $added.Contains($pa)) {
+          $added.Add($pa); [void]$deleted.Remove($pa)
+        }
+      }
+    }
+    if ($touchesBacklog -and -not $leavesInbox) { $direct++ }
+    if ($modifiesUpd) { $modUpd++ }
+  }
+  return [pscustomobject]@{ BacklogDirect = $direct; UpdatesModified = $modUpd; Added = [string[]]$added.ToArray() }
+}
+
+function Invoke-TcInboxValidate {
+  <# ops\merge-backlog-inbox.ps1 -ValidateFile over one added inbox file, against THIS checkout's backlog. Code is the
+     validator's (0 would merge, 2 would be quarantined, 3 could not evaluate), Reason the first line under its
+     WOULD BE QUARANTINED heading. A validator that is missing or cannot start is 3. #>
+  param([string]$Dir, [string]$File)
+  $v = $(if ($script:TcPmInboxValidatorScript) { $script:TcPmInboxValidatorScript } else { Join-Path $Dir 'ops\merge-backlog-inbox.ps1' })
+  if (-not (Test-Path -LiteralPath $v)) { return [pscustomobject]@{ Code = 3; Reason = 'no ops\merge-backlog-inbox.ps1 in this checkout' } }
+  try {
+    $out = @(& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $v -ValidateFile $File -Backlog (Join-Path $Dir ($script:TcPmBacklogPath -replace '/', '\')))
+    $code = $LASTEXITCODE
+  } catch { return [pscustomobject]@{ Code = 3; Reason = ('the validator could not be started: ' + $_.Exception.Message) } }
+  $reason = ''
+  $seen = $false
+  foreach ($l in $out) {
+    $s = [string]$l
+    if ($s -match '^WOULD BE QUARANTINED') { $seen = $true; continue }
+    if ($seen -and $s.Trim()) { $reason = $s.Trim(); break }
+  }
+  if ($null -eq $code) { $code = 3 }
+  return [pscustomobject]@{ Code = [int]$code; Reason = $reason }
+}
+
+function Invoke-TcBacklogPreflight {
+  <# THE WARNINGS (W3.2 steps 2 and 3, W3.4a step 3) and the row's backlog_direct, inbox_invalid and
+     inbox_updates_modified. Never refuses; a count git could not give is null and said. #>
+  param([string]$Dir, [string]$Base, [System.Collections.IDictionary]$Row)
+  if (-not $Base) { Say 'push-main: the branch base could not be read, so the backlog and inbox counts are not taken.'; return }
+  $commits = Get-TcRangeNameStatus -Dir $Dir -Base $Base
+  if ($null -eq $commits) { Say 'push-main: git could not list this branch''s commits, so the backlog and inbox counts are not taken.'; return }
+  $bc = Get-TcBacklogCounts -Commits $commits
+  $Row['backlog_direct'] = $bc.BacklogDirect
+  $Row['inbox_updates_modified'] = $bc.UpdatesModified
+  if ($bc.BacklogDirect -gt 0) {
+    Say ("push-main: WARN - {0} commit(s) here edit design/BACKLOG-course-findings.md directly. That file overlapped in 12 of 19 recent rebase conflicts. Record progress as '## UPDATE <id>' in design/backlog-inbox/updates/ (see its README)." -f $bc.BacklogDirect)
+  }
+  if ($bc.UpdatesModified -gt 0) {
+    Say ("push-main: WARN - {0} commit(s) here MODIFY an existing file under design/backlog-inbox/updates/. The merge may already have consumed and deleted that file, and the rebase then conflicts modify/delete; write a new file per batch, <lane>-<YYYY-MM-DD>-<HHmmss>.md (see its README)." -f $bc.UpdatesModified)
+  }
+  $invalid = 0
+  foreach ($a in $bc.Added) {
+    $full = Join-Path $Dir ($a -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $full)) { continue }
+    $vr = Invoke-TcInboxValidate -Dir $Dir -File $full
+    if ($vr.Code -eq 2) {
+      $invalid++
+      Say ("push-main: WARN - {0} would be QUARANTINED by the scheduled merge, not merged: {1}" -f $a, $(if ($vr.Reason) { $vr.Reason } else { 'the validator gave no reason line' }))
+    } elseif ($vr.Code -ne 0) {
+      Say ("push-main: {0} could not be validated (exit {1}): {2}. Not counted either way." -f $a, $vr.Code, $vr.Reason)
+    }
+  }
+  $Row['inbox_invalid'] = $invalid
+}
+
 function Invoke-TcPushMainReexec {
   <# RUN THE NEW COPY ONCE (W2.1R step 8): the script at -Path as a child, with -Arguments and TC_PUSH_MAIN_REEXEC=1, its
      lines echoed as they arrive. Returns its exit code, or $null when it could not be started, in which case the caller
@@ -1444,6 +1564,11 @@ function Invoke-TcPushMain {
     # seconds spent outside from each hand-back to the next lock take.
     hand_backs           = 0
     handback_sec         = 0
+    # W3.2 and W3.4a step 3 (warn only): commits editing the backlog directly, added inbox files the merge would
+    # quarantine, and commits modifying an existing updates/ file. Null when the pre-flight could not count them.
+    backlog_direct       = $null
+    inbox_invalid        = $null
+    inbox_updates_modified = $null
   }
   # ONE ROW PER RUN, and at most one (review of W0.1R, 2026-09-23): the guard below writes a row for a throw that no path
   # wrote one for, so every path now ends here, and a path that already wrote one is never written twice.
@@ -1583,6 +1708,10 @@ function Invoke-TcPushMain {
             $guard = Enter-TcCheckoutGuard -Dir $Dir
           }
         }
+        # THE PRE-FLIGHT'S COUNTS (W3.2, W3.4a step 3): warnings and row fields, never a refusal. The range is the branch's
+        # own commits over what the pre-flight just fetched, so a sibling's commits on main are never counted as this one's.
+        $bcBase = $(if ($s.Rem) { Get-TcFirstLine (Invoke-TcGit -Dir $Dir -Arguments @('merge-base', 'HEAD', $s.Rem)) } else { '' })
+        $null = Invoke-TcRowReader 'backlog' { Invoke-TcBacklogPreflight -Dir $Dir -Base $bcBase -Row $pmRow }
         # SEEDED AFTER THE PRE-FLIGHT, so neither leg judges a checkout that has no built cards (backlog I237).
         $null = Invoke-TcSeedBeforeGate -Dir $Dir -Seeder $SeedScript
       }
@@ -2763,7 +2892,62 @@ $m.Dispose()
     # remote of the catch-up case above, read for W9.4's fields).
     T ($kMNF + '  an unmoved origin at the in-lock fetch gives hand_backs 0, handback_sec 0 and one lock take') `
       ($null -ne $nmRow -and [int]$nmRow.hand_backs -eq 0 -and [int]$nmRow.handback_sec -eq 0 -and [int]$nmRow.lock_takes -eq 1) `
-      ("handBacks={0} hbSec={1} takes={2}" -f $(if ($nmRow) { $nmRow.hand_backs }), $(if ($nmRow) { $nmRow.handback_sec }), $(if ($nmRow) { $nmRow.lock_takes }))    # CLEAN TWIN: a READER that throws costs its field, never the push. The gate's result says its run-gates leg took
+      ("handBacks={0} hbSec={1} takes={2}" -f $(if ($nmRow) { $nmRow.hand_backs }), $(if ($nmRow) { $nmRow.handback_sec }), $(if ($nmRow) { $nmRow.lock_takes }))
+
+    # ---- W3.2 WITH W3.4a STEP 3: THE PRE-FLIGHT'S BACKLOG AND INBOX COUNTS (2026-09-23), warn only ----
+    # Founding figure: design/BACKLOG-course-findings.md overlapped in 12 of 19 recent rebase conflicts. The fixture origin
+    # carries a backlog with one item, a findings file in the inbox and one UPDATE file; each clone makes one kind of
+    # commit and runs a -DryRun, so origin never moves under the next. The validator is this repo's real one, pointed at
+    # the clone's own backlog.
+    $bkRel = 'design/BACKLOG-course-' + 'findings.md'
+    $ibRel = 'design/backlog-inbox/lane-x-2026-09-23.md'
+    $upRel = 'design/backlog-inbox/updates/lane-u-2026-09-23-100000.md'
+    $null = & git -C $mover pull -q --rebase origin main 2>$null
+    $null = New-Item -ItemType Directory -Force -ErrorAction Stop (Join-Path $mover 'design\backlog-inbox\updates')
+    [IO.File]::WriteAllText((Join-Path $mover $bkRel), "# Backlog`n`n### I1 - a fixture item ``OPEN`` ``queue-1```n`nbody one`n")
+    [IO.File]::WriteAllText((Join-Path $mover $ibRel), "# a lane's findings`n`nnothing yet`n")
+    [IO.File]::WriteAllText((Join-Path $mover $upRel), "## UPDATE I1`n``DONE`` ``queue-1```nfinished`n")
+    $null = & git -C $mover add -- $bkRel $ibRel $upRel 2>$null; $null = & git -C $mover commit -q -m 'backlog fixture' 2>$null
+    $null = & git -C $mover push -q origin HEAD:main 2>$null
+    $script:TcPmInboxValidatorScript = Join-Path $repo ('ops\merge-backlog-' + 'inbox.ps1')
+    $script:bkRun = 0
+    function Invoke-StBacklogCase([string]$Name, [scriptblock]$Change) {
+      $script:bkRun++
+      $bd = New-Clone $Name
+      & $Change $bd
+      $null = & git -C $bd commit -q -m ($Name + ' change') 2>$null
+      $root = Join-Path $tmp ('ledbk' + $script:bkRun)
+      $cap = Invoke-StCapture { Invoke-TcPushMain -Dir $bd -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $greenGate -RehearsalRunner $rhGreen -LedgerRoot $root }
+      $raw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $root)
+      $rows = @($raw)
+      return [pscustomobject]@{ Rc = $cap.Result; Text = $cap.Text; Row = $(if ($rows.Count) { $rows[0] } else { $null }); Rows = $rows.Count }
+    }
+    $editBacklog = { param($d) Add-Content -LiteralPath (Join-Path $d $bkRel) -Value 'a direct edit' -Encoding ascii; $null = & git -C $d add -- $bkRel 2>$null }
+    $warnBk = 'WARN - 1 commit\(s\) here edit design/BACKLOG-course-findings\.md directly'
+    try {
+      $b1 = Invoke-StBacklogCase 'bk1' $editBacklog
+      T ($kMF + '  a commit that edits the backlog and touches no inbox file warns, with backlog_direct 1, and the push is not refused') `
+        ($b1.Rc -eq 0 -and $b1.Rows -eq 1 -and [int]$b1.Row.backlog_direct -eq 1 -and $b1.Text -match $warnBk) ("rc={0} rows={1} direct={2} warned={3}" -f $b1.Rc, $b1.Rows, $(if ($b1.Row) { $b1.Row.backlog_direct }), ($b1.Text -match $warnBk))
+      $b2 = Invoke-StBacklogCase 'bk2' { param($d) & $editBacklog $d; $null = & git -C $d rm -q -- $ibRel 2>$null }
+      T ($kMNF + '  a commit that edits the backlog and deletes an inbox file (a merge) does not warn: backlog_direct 0') `
+        ($b2.Rc -eq 0 -and $null -ne $b2.Row -and [int]$b2.Row.backlog_direct -eq 0 -and $b2.Text -notmatch 'edit design/BACKLOG') ("rc={0} direct={1}" -f $b2.Rc, $(if ($b2.Row) { $b2.Row.backlog_direct }))
+      $b3 = Invoke-StBacklogCase 'bk3' { param($d) & $editBacklog $d; $null = New-Item -ItemType Directory -Force (Join-Path $d 'design\backlog-inbox\quarantine'); $null = & git -C $d mv -- $ibRel 'design/backlog-inbox/quarantine/lane-x-2026-09-23.md' 2>$null }
+      T ($kMNF + '  a commit that edits the backlog and moves an inbox file into quarantine/ (a merge) does not warn: backlog_direct 0') `
+        ($b3.Rc -eq 0 -and $null -ne $b3.Row -and [int]$b3.Row.backlog_direct -eq 0 -and $b3.Text -notmatch 'edit design/BACKLOG') ("rc={0} direct={1}" -f $b3.Rc, $(if ($b3.Row) { $b3.Row.backlog_direct }))
+      $b4 = Invoke-StBacklogCase 'bk4' { param($d) [IO.File]::WriteAllText((Join-Path $d 'bk4.txt'), 'x'); $null = & git -C $d add -- bk4.txt 2>$null }
+      T ($kMNF + '  a branch that does not touch the backlog does not warn: backlog_direct 0, inbox_invalid 0, inbox_updates_modified 0') `
+        ($b4.Rc -eq 0 -and $null -ne $b4.Row -and [int]$b4.Row.backlog_direct -eq 0 -and [int]$b4.Row.inbox_invalid -eq 0 -and [int]$b4.Row.inbox_updates_modified -eq 0 -and $b4.Text -notmatch 'WARN') `
+        ("rc={0} direct={1} invalid={2} modified={3}" -f $b4.Rc, $(if ($b4.Row) { $b4.Row.backlog_direct }), $(if ($b4.Row) { $b4.Row.inbox_invalid }), $(if ($b4.Row) { $b4.Row.inbox_updates_modified }))
+      $b5 = Invoke-StBacklogCase 'bk5' { param($d) $f = Join-Path $d 'design\backlog-inbox\updates\lane-n-2026-09-23-110000.md'; [IO.File]::WriteAllText($f, "## UPDATE I999`n``DONE`` ``queue-1```nprogress on an item the backlog does not hold`n"); $null = & git -C $d add -- 'design/backlog-inbox/updates/lane-n-2026-09-23-110000.md' 2>$null }
+      T ($kMF + '  an added UPDATE file naming a missing id warns that the merge would quarantine it, with inbox_invalid 1, and the push is not refused') `
+        ($b5.Rc -eq 0 -and $null -ne $b5.Row -and [int]$b5.Row.inbox_invalid -eq 1 -and $b5.Text -match 'lane-n-2026-09-23-110000\.md would be QUARANTINED') ("rc={0} invalid={1}" -f $b5.Rc, $(if ($b5.Row) { $b5.Row.inbox_invalid }))
+      T ($kMNF + '  (W3.4a step 3) a commit that ADDS a new updates/ file does not warn as a modification: inbox_updates_modified 0') `
+        ($b5.Rc -eq 0 -and $null -ne $b5.Row -and [int]$b5.Row.inbox_updates_modified -eq 0 -and $b5.Text -notmatch 'MODIFY an existing file') ("modified={0}" -f $(if ($b5.Row) { $b5.Row.inbox_updates_modified }))
+      $b6 = Invoke-StBacklogCase 'bk6' { param($d) Add-Content -LiteralPath (Join-Path $d $upRel) -Value 'more on the same day file' -Encoding ascii; $null = & git -C $d add -- $upRel 2>$null }
+      T ($kMF + '  (W3.4a step 3) a commit that MODIFIES an existing updates/ file warns with a count of 1') `
+        ($b6.Rc -eq 0 -and $null -ne $b6.Row -and [int]$b6.Row.inbox_updates_modified -eq 1 -and $b6.Text -match 'WARN - 1 commit\(s\) here MODIFY an existing file under design/backlog-inbox/updates/') ("rc={0} modified={1}" -f $b6.Rc, $(if ($b6.Row) { $b6.Row.inbox_updates_modified }))
+    } finally { $script:TcPmInboxValidatorScript = '' }
+    # CLEAN TWIN: a READER that throws costs its field, never the push. The gate's result says its run-gates leg took
     # 'not-a-number' seconds, so Add-TcRunnerReadings' [int] cast throws; the push must land and the row keep leg_sec.rg
     # null. NOT a throwing ScriptProperty: PowerShell swallows a getter's exception on member access and reads $null, and
     # the first version of this case, built that way, survived the mutant that removes the guard (0 reds).
@@ -3438,9 +3622,9 @@ $m.Dispose()
   # throw, a comment or a glued line would otherwise leave the rest green (ops-and-gates.md). 117 = the 38 of the
   # fetch-and-rebase-first loop, W0.1's 32, W0.1R's 8, the 15 its review added, W2.1R with W8.1's 14 (the index.lock
   # case was rewritten in place, not added), and W2.2R's 10 (9 catch-up cases, and the could-not-decide case split into a
-  # MUST NOT FIRE and a CLEAN TWIN), and W9.4's 5 (the queue member's hand-back case lands with W9.2); read off this
-  # file, not added up.
-  $expectedCases = 122
+  # MUST NOT FIRE and a CLEAN TWIN), W9.4's 5 (the queue member's hand-back case lands with W9.2), and W3.2 with W3.4a
+  # step 3's 7; read off this file, not added up.
+  $expectedCases = 129
   if ($cases -ne $expectedCases) { Write-Output ("FAIL  the suite ran {0} case(s) where this file holds {1}, so a case was skipped or lost" -f $cases, $expectedCases); $f++ }
   if ($f) { Write-Output ("push-main self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("push-main self-test PASS: {0} cases - led by a branch whose base the remote moved past landing on its FIRST attempt, and by a conflicting rebase being aborted rather than left half-finished under the lock" -f $cases)
