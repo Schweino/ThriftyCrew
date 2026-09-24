@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-09-24 09:30",
+    "generated":  "2026-09-24 17:08",
     "today":  "2026-09-24",
     "note":  "The matching lane\u0027s worklist (plan-2026-09-22-9 b96f21). decision release/widen waits for apply-coverage-batch.ps1 -FromWorklist (weekly lane); ad-line waits for the per-product ingest split (Brad, Q-adline-two-products); undecided rows carry the classifier\u0027s reading in why (and suggestion, for a docket-only kind). A decided key lives in match-verdicts.json and never returns here.",
     "deciding_kinds":  [
@@ -10,14 +10,14 @@
 
               ],
     "by_kind":  {
-                    "coverage":  7,
+                    "coverage":  8,
                     "semantic":  2,
                     "contested":  4,
                     "band":  1116
                 },
     "by_decision":  {
                         "widen":  2,
-                        "undecided":  1126,
+                        "undecided":  1127,
                         "release":  1
                     },
     "confirmed_today":  0,
@@ -101,6 +101,22 @@
                      "why":  "the head noun \u0027seeds\u0027 names toasted-sesame-seeds, and tahini\u0027s own words do not",
                      "decision":  "release",
                      "pattern":  "\\bseed"
+                 },
+                 {
+                     "key":  "coverage|fresh-basil|Baker\u0027s|Simple Truth Organic Basil Leaves",
+                     "kind":  "coverage",
+                     "commodity":  "fresh-basil",
+                     "store":  "Baker\u0027s",
+                     "name":  "Simple Truth Organic Basil Leaves",
+                     "claimer":  "dried-basil",
+                     "evidence":  "CLAIMED-BY: first-match-wins gave this name to \u0027dried-basil\u0027",
+                     "first_seen":  "2026-09-24",
+                     "last_seen":  "2026-09-24",
+                     "new":  true,
+                     "head":  "leaves",
+                     "why":  "head noun \u0027leaves\u0027 in target=False claimer=False: the two signals do not agree",
+                     "decision":  "undecided",
+                     "pattern":  ""
                  },
                  {
                      "key":  "coverage|canned-butter-beans|Fareway|Fareway Large Butter Beans",

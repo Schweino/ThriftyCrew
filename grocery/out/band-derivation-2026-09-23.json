@@ -4,25 +4,25 @@
     "K":  5,
     "W":  1.5,
     "pinned_typed_bands":  false,
-    "evidence_rows":  38834,
+    "evidence_rows":  38832,
     "derived_commodities":  559,
     "typed_commodities":  0,
     "k_sweep":  {
                     "K=3":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  7990
+                                "newly_refused_rows":  7988
                             },
                     "K=4":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  5016
+                                "newly_refused_rows":  5014
                             },
                     "K=5":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  3470
+                                "newly_refused_rows":  3468
                             },
                     "K=6":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  2538
+                                "newly_refused_rows":  2537
                             }
                 },
     "typed_fields_ignored":  [
@@ -3057,6 +3057,70 @@
                               "derived":  "0.0194-0.485"
                           },
                           {
+                              "id":  "dried-oregano",
+                              "store":  "Baker\u0027s",
+                              "name":  "McCormick Gourmet Organic Oregano Leaves",
+                              "per_unit":  7.48,
+                              "typed":  "none",
+                              "derived":  "0.2384-5.96"
+                          },
+                          {
+                              "id":  "dried-oregano",
+                              "store":  "Baker\u0027s",
+                              "name":  "McCormick Gourmet Organic Oregano Leaves",
+                              "per_unit":  14.98,
+                              "typed":  "none",
+                              "derived":  "0.2384-5.96"
+                          },
+                          {
+                              "id":  "italian-seasoning",
+                              "store":  "Baker\u0027s",
+                              "name":  "Private Selection Italian Seasoning Shaker",
+                              "per_unit":  7.2885,
+                              "typed":  "none",
+                              "derived":  "0.26517-6.62925"
+                          },
+                          {
+                              "id":  "paprika",
+                              "store":  "Baker\u0027s",
+                              "name":  "Private Selection Ground Paprika Shaker",
+                              "per_unit":  2.988,
+                              "typed":  "none",
+                              "derived":  "0.09664-2.416"
+                          },
+                          {
+                              "id":  "sugar",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kroger Low Sugar Dried Cranberries",
+                              "per_unit":  8.928,
+                              "typed":  "none",
+                              "derived":  "0.15021-3.75525"
+                          },
+                          {
+                              "id":  "sugar",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kroger Low Sugar Dried Cranberries",
+                              "per_unit":  6.3822,
+                              "typed":  "none",
+                              "derived":  "0.15021-3.75525"
+                          },
+                          {
+                              "id":  "strawberries",
+                              "store":  "Baker\u0027s",
+                              "name":  "Ocean Spray Craisins Dried Cranberries, Strawberry, 1 Ounce, 5 Count",
+                              "per_unit":  0.798,
+                              "typed":  "none",
+                              "derived":  "0.03056-0.764"
+                          },
+                          {
+                              "id":  "yogurt",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kroger Yogurt Coated Cranberries",
+                              "per_unit":  0.5825,
+                              "typed":  "none",
+                              "derived":  "0.02074-0.5185"
+                          },
+                          {
                               "id":  "cereal",
                               "store":  "Baker\u0027s",
                               "name":  "Food For Life Organic Ezekiel 4:9 Almond Sprouted Whole Grain Cereal",
@@ -4657,66 +4721,10 @@
                               "derived":  "0.01049-0.26225"
                           },
                           {
-                              "id":  "crackers",
-                              "store":  "Baker\u0027s",
-                              "name":  "Simple Mills Almond Flour Crackers Sun-dried Tomato \u0026 Basil",
-                              "per_unit":  1.1741,
-                              "typed":  "none",
-                              "derived":  "0.02356-0.589"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Baker\u0027s",
-                              "name":  "Kroger Low Sugar Dried Cranberries",
-                              "per_unit":  8.928,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Baker\u0027s",
-                              "name":  "Kroger Low Sugar Dried Cranberries",
-                              "per_unit":  6.3822,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
-                              "id":  "strawberries",
-                              "store":  "Baker\u0027s",
-                              "name":  "Ocean Spray Craisins Dried Cranberries, Strawberry, 1 Ounce, 5 Count",
-                              "per_unit":  0.798,
-                              "typed":  "none",
-                              "derived":  "0.03056-0.764"
-                          },
-                          {
-                              "id":  "yogurt",
-                              "store":  "Baker\u0027s",
-                              "name":  "Kroger Yogurt Coated Cranberries",
-                              "per_unit":  0.5825,
-                              "typed":  "none",
-                              "derived":  "0.02074-0.5185"
-                          },
-                          {
                               "id":  "dried-oregano",
                               "store":  "Baker\u0027s",
                               "name":  "Simple Truth Organic Oregano Leaves",
                               "per_unit":  7.2545,
-                              "typed":  "none",
-                              "derived":  "0.2384-5.96"
-                          },
-                          {
-                              "id":  "dried-oregano",
-                              "store":  "Baker\u0027s",
-                              "name":  "McCormick Gourmet Organic Oregano Leaves",
-                              "per_unit":  7.48,
-                              "typed":  "none",
-                              "derived":  "0.2384-5.96"
-                          },
-                          {
-                              "id":  "dried-oregano",
-                              "store":  "Baker\u0027s",
-                              "name":  "McCormick Gourmet Organic Oregano Leaves",
-                              "per_unit":  14.98,
                               "typed":  "none",
                               "derived":  "0.2384-5.96"
                           },
@@ -5227,14 +5235,6 @@
                           {
                               "id":  "italian-seasoning",
                               "store":  "Baker\u0027s",
-                              "name":  "Private Selection Italian Seasoning Shaker",
-                              "per_unit":  7.2885,
-                              "typed":  "none",
-                              "derived":  "0.26517-6.62925"
-                          },
-                          {
-                              "id":  "italian-seasoning",
-                              "store":  "Baker\u0027s",
                               "name":  "McCormick Gourmet Organic Italian Seasoning",
                               "per_unit":  6.8,
                               "typed":  "none",
@@ -5599,14 +5599,6 @@
                               "per_unit":  0.299,
                               "typed":  "none",
                               "derived":  "0.00912-0.228"
-                          },
-                          {
-                              "id":  "paprika",
-                              "store":  "Baker\u0027s",
-                              "name":  "Private Selection Ground Paprika Shaker",
-                              "per_unit":  2.988,
-                              "typed":  "none",
-                              "derived":  "0.09664-2.416"
                           },
                           {
                               "id":  "paprika",
@@ -9543,14 +9535,6 @@
                               "per_unit":  27.96,
                               "typed":  "none",
                               "derived":  "0.79734-19.9335"
-                          },
-                          {
-                              "id":  "dried-arbol-chiles",
-                              "store":  "Hy-Vee",
-                              "name":  "Don Enrique De Arbol Dried Chile Peppers",
-                              "per_unit":  5.98,
-                              "typed":  "none",
-                              "derived":  "0.218-5.45"
                           },
                           {
                               "id":  "rice",
@@ -20206,7 +20190,7 @@
                               "name":  "Brooks Chili Beans, Canned Red Beans in Chili Sauce, Hot Flavor, 15.5 oz.",
                               "per_unit":  0.7794,
                               "typed":  "none",
-                              "derived":  "0.01278-0.3195"
+                              "derived":  "0.01233-0.30825"
                           },
                           {
                               "id":  "chili-beans",
@@ -20214,7 +20198,7 @@
                               "name":  "Bush\u0027s Chili Beans, Canned Pinto Beans in Medium Chili Sauce, 16 oz Can",
                               "per_unit":  0.3312,
                               "typed":  "none",
-                              "derived":  "0.01278-0.3195"
+                              "derived":  "0.01233-0.30825"
                           },
                           {
                               "id":  "chili-beans",
@@ -20222,7 +20206,7 @@
                               "name":  "Bush\u0027s Chili Magic Beans, Slow Simmered White Beans in Mild Chili Sauce, 15.5 oz Can",
                               "per_unit":  0.451,
                               "typed":  "none",
-                              "derived":  "0.01278-0.3195"
+                              "derived":  "0.01233-0.30825"
                           },
                           {
                               "id":  "tomatoes-green-chilies",
@@ -27894,7 +27878,7 @@
                               "name":  "Bush\u0027s White Chili Beans, Canned Great Northern Beans in Mil",
                               "per_unit":  0.3226,
                               "typed":  "none",
-                              "derived":  "0.01278-0.3195"
+                              "derived":  "0.01233-0.30825"
                           },
                           {
                               "id":  "coconut-milk-canned",

@@ -407,3 +407,35 @@
 [2026-09-24T10:01:27] SENT 'Grocery: a GUARD has gone blind (test-auditors failed)' -> schweino68@gmail.com (id 1a0d3ef855fc8073)
 [2026-09-24T10:02:54] QUEUE ABSORBED into open item 2026-09-23-373ac2 (day 1 of this condition, count now 3) - no new id minted
 [2026-09-24T10:02:54] REVIEW 'Ops: a live Ghost page is neither produced by the repo nor declared' [type: ops a live ghost page is neither produced by the repo nor declared] - queued, NOT emailed (registry entry ghost-page-census)
+[2026-09-24T10:04:21] SENT 'Grocery bot checkout sync blocked at the push - 2026-09-24' -> schweino68@gmail.com (id 1a0d3f22c9e8cd50)
+[2026-09-24T10:04:24] SENT 'Grocery pipeline: feed did not truly refresh - 2026-09-24' -> schweino68@gmail.com (id 1a0d3f23651378be)
+[2026-09-24T10:30:12] QUEUE BODY UPGRADED on 2026-09-23-4f9842 (1042 -> 1668 chars) - a later occurrence carried fuller evidence
+[2026-09-24T10:30:12] QUEUE ABSORBED into open item 2026-09-23-4f9842 (day 1 of this condition, count now 2) - no new id minted
+[2026-09-24T10:30:12] MAIL DEFERRED 'Automation silent-death: TASK FAILED' [type: automation silent death task failed] - queued; listed in the caller's one digest message
+[2026-09-24T10:30:13] DIGEST 'Automation silent-death: 1 condition(s) need action' [type: automation silent death condition s need action] - registry entry silent-death-digest is digest class, so it is mailed and NOT queued
+[2026-09-24T10:30:14] SENT 'Automation silent-death: 1 condition(s) need action' -> schweino68@gmail.com (id 1a0d409e18a725f7)
+[2026-09-24T10:36:10] QUEUE ABSORBED into open item 2026-09-23-822c30 (day 1 of this condition, count now 2) - no new id minted
+[2026-09-24T10:36:10] MAIL DEFERRED 'Grocery capture watchdog: RUN RECORD 2026-09-24' [type: grocery capture watchdog run record] - queued; listed in the caller's one digest message
+[2026-09-24T10:36:11] MAIL DEFERRED 'Grocery capture watchdog: NOT PUBLISHED 2026-09-24' [type: grocery capture watchdog not published] - queued; listed in the caller's one digest message
+[2026-09-24T10:36:12] MAIL DEFERRED 'Grocery capture watchdog: FAILED 2026-09-24' [type: grocery capture watchdog failed] - queued; listed in the caller's one digest message
+[2026-09-24T10:36:12] MAIL DEFERRED 'Grocery capture watchdog: COMPUTED BUT NOT SHIPPED 2026-09-24' [type: grocery capture watchdog computed but not shipped] - queued; listed in the caller's one digest message
+[2026-09-24T10:36:13] QUEUE ABSORBED into open item 2026-09-23-90de7b (day 1 of this condition, count now 2) - no new id minted
+[2026-09-24T10:36:13] MAIL DEFERRED 'Grocery capture watchdog: NO FRESH ROWS 2026-09-24' [type: grocery capture watchdog no fresh rows] - queued; listed in the caller's one digest message
+[2026-09-24T10:36:14] PENDING 'Grocery capture watchdog: MISSING-WINDOW 2026-09-24' [type: grocery capture watchdog missing window] - observation 1 of the 2 this type must reach before it mails (registry entry watchdog-missing-window, hold_observations). Queued and visible to triage; only the mail waits.
+[2026-09-24T10:36:15] DIGEST 'Grocery capture watchdog: 5 condition(s) need action 2026-09-24' [type: grocery capture watchdog condition s need action] - registry entry watchdog-digest is digest class, so it is mailed and NOT queued
+[2026-09-24T10:36:16] SENT 'Grocery capture watchdog: 5 condition(s) need action 2026-09-24' -> schweino68@gmail.com (id 1a0d40f6731f2cb7)
+[2026-09-24T16:38:28] SENT 'Grocery bot checkout sync partial - 2026-09-24' -> schweino68@gmail.com (id 1a0d55afe8766d43)
+[2026-09-24T16:41:33] SENT 'Baker's ad window advanced with no capture behind it' -> schweino68@gmail.com (id 1a0d55dd3c901870)
+[2026-09-24T17:02:20] QUEUE ABSORBED into open item 2026-09-23-5ad03d (day 1 of this condition, count now 3) - no new id minted
+[2026-09-24T17:02:20] SUPPRESSED (already sent this type today) 'Price surfaces disagree with the manifest' [type: price surfaces disagree with the manifest]
+[2026-09-24T17:03:15] QUEUE ABSORBED into open item 2026-09-23-be3b90 (day 1 of this condition, count now 4) - no new id minted
+[2026-09-24T17:03:15] SUPPRESSED (already sent this type today) 'Live recipe price monitor could not look' [type: live recipe price monitor could not look]
+[2026-09-24T17:08:05] QUEUE ABSORBED into open item 2026-09-23-d493dd (day 1 of this condition, count now 4) - no new id minted
+[2026-09-24T17:08:05] REVIEW 'Grocery: 18 store(s) dropped from a commodity they carry - 2026-09-24' [type: grocery store s dropped from a commodity they carry] - queued, NOT emailed (registry entry stores-dropped)
+[2026-09-24T17:11:30] SUPPRESSED (already sent this type today) 'Live recipe prices: a placeholder names something the feed does not carry' [type: live recipe prices a placeholder names something the feed does not carry]
+[2026-09-24T17:11:31] -CausedBy guards-hold did not absorb 'Board prices aging inside a fresh file': guards are not blocked today - it goes out as a normal alert
+[2026-09-24T17:11:33] SENT 'Board prices aging inside a fresh file' -> schweino68@gmail.com (id 1a0d579466e0a65c)
+[2026-09-24T17:12:47] QUEUE ABSORBED into open item 2026-09-23-57b66b (day 1 of this condition, count now 3) - no new id minted
+[2026-09-24T17:12:47] REVIEW 'Grocery: a price band refused rows it cannot explain - 2026-09-24' [type: grocery a price band refused rows it cannot explain] - queued, NOT emailed (registry entry band-refusal-unexplained)
+[2026-09-24T17:29:31] QUEUE ABSORBED into open item 2026-09-23-373ac2 (day 1 of this condition, count now 4) - no new id minted
+[2026-09-24T17:29:31] REVIEW 'Ops: a live Ghost page is neither produced by the repo nor declared' [type: ops a live ghost page is neither produced by the repo nor declared] - queued, NOT emailed (registry entry ghost-page-census)

@@ -7,7 +7,7 @@
     "sources":  [
                     "Family Fare: canonical_url from 29 file(s) within 30d -\u003e 5421 product(s) with a department (newest family-fare-regular-2026-09-24.json)",
                     "Hy-Vee: row field store_department in hyvee-regular-2026-09-24.json -\u003e 491 product(s) with a department",
-                    "Baker\u0027s: row field store_category in bakers-regular-2026-09-24.json -\u003e 6804 product(s) with a department"
+                    "Baker\u0027s: row field store_category in bakers-regular-2026-09-24.json -\u003e 6794 product(s) with a department"
                 ],
     "note":  "The store said one thing about this product and our include regex said another. A LIVE CELL entry is on the board right now. A candidate entry has not won a cell but proves the rule matches the wrong product. This is a REVIEW QUEUE, not a gate - see the header.",
     "date":  "2026-09-24",

@@ -1359,6 +1359,15 @@
         "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
     },
     {
+        "id":  "hoisin-sauce",
+        "store":  "Family Fare",
+        "product":  "Lee Kum Kee Hoisin Sauce 20 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/condiments_dressing",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
         "id":  "honey",
         "store":  "Family Fare",
         "product":  "Our Family Honey, Pure 48 Oz",

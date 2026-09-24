@@ -6080,14 +6080,6 @@
                                                    "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
                                                    "board_pu":  0.0548
                                                },
-                                      "Baker\u0027s":  {
-                                                           "url":  "https://www.bakersplus.com/p/kroger-chili-beans-each/0001111012054",
-                                                           "name":  "Kroger Chili Beans Each",
-                                                           "price":  1,
-                                                           "size":  "15.5oz",
-                                                           "verified":  "2026-09-18",
-                                                           "board_pu":  0.0645
-                                                       },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/24680/hy-vee-chili-style-beans-in-chili-gravy",
                                                      "price":  0.99,
@@ -6121,7 +6113,14 @@
                                                       "price":  "$0.99",
                                                       "size":  "15.5 oz",
                                                       "verified":  "2026-09-20 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/kroger-mixed-chili-beans-in-mild-sauce/0001111013770",
+                                                           "name":  "Kroger Mixed Chili Beans in Mild Sauce",
+                                                           "price":  "$0.88",
+                                                           "size":  "15.5 oz",
+                                                           "verified":  "2026-09-24 DERIVED from the price row (same record the board priced)"
+                                                       }
                                   },
                   "chili-crisp":  {
                                       "commodity":  "Chili Crisp / Chili Oil",

@@ -4,7 +4,7 @@
     "K":  5,
     "W":  1.5,
     "pinned_typed_bands":  false,
-    "evidence_rows":  4778,
+    "evidence_rows":  4775,
     "derived_commodities":  105,
     "typed_commodities":  0,
     "k_sweep":  {
@@ -428,6 +428,14 @@
                               "per_unit":  4.99,
                               "typed":  "none",
                               "derived":  "0.1387-3.4675"
+                          },
+                          {
+                              "id":  "paprika",
+                              "store":  "Baker\u0027s",
+                              "name":  "Private Selection Ground Paprika Shaker",
+                              "per_unit":  2.988,
+                              "typed":  "none",
+                              "derived":  "0.09664-2.416"
                           },
                           {
                               "id":  "honey",
@@ -1052,14 +1060,6 @@
                               "per_unit":  0.698,
                               "typed":  "none",
                               "derived":  "0.01601-0.40025"
-                          },
-                          {
-                              "id":  "paprika",
-                              "store":  "Baker\u0027s",
-                              "name":  "Private Selection Ground Paprika Shaker",
-                              "per_unit":  2.988,
-                              "typed":  "none",
-                              "derived":  "0.09664-2.416"
                           },
                           {
                               "id":  "paprika",
