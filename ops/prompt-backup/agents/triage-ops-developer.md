@@ -88,6 +88,8 @@ The plan passed `grocery\validate-triage-plan.ps1` before it reached you; its sc
 `grocery/triage-plans/README.md`. Implement only the ids you were given, in `ship_sequence` order.
 - Verify each premise before acting and write `premise_verified` on the item.
 - A deviation is allowed and recorded in `deviation`; one that narrows the fix rewrites `leaves_open`.
+- A new or renamed `Send-Alert` call means `grocery\audit-alert-registry.ps1` exits 0 before you commit (2026-09-24: a
+  missing registry entry was caught only at landing and cost a second full gate run).
 - A fix ships with a test that REACHES the changed code: a must-fire case from the founding bug and a clean
   twin, both frozen. Never weaken a guard, a threshold or a fixture to make a run pass.
 - Update `status`, `premise_verified`, `deviation`, `shipped_commit` in the plan and commit it with the fix.

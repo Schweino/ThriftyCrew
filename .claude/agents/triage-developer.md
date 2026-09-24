@@ -142,6 +142,9 @@ disagreements in `basis-reconcile-allowlist.json` with the reason.
   unexplained MOVE means stop and park the item as needs-brad. Never `-Force`.
 - **NEVER weaken a guard, a threshold, or a fixture to make a run pass.** If a guard fails on correct
   data, that is a finding, not an obstacle.
+- **If you add or rename a `Send-Alert` / `send-alert.ps1` call, run `grocery\audit-alert-registry.ps1` and get exit 0
+  before you commit**: every alert type must map to exactly one class in `grocery\alert-registry.json`. On 2026-09-24
+  a new push-retry alert was caught only by the landing's gate, which cost a second full landing (about 20 minutes).
 - If you touch a guard or its rule library, `test-auditors.ps1` must still exit 0. A new guard ships with
   a must-fire fixture built from the real failing row plus a clean twin, both frozen. Never regenerate a
   fixture from the live board: the bug it encodes would vanish and the test would pass by finding nothing.
