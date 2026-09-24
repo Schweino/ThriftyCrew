@@ -190,22 +190,25 @@ if ($SelfTest) {
   # MUST FIRE (the false NEGATIVE the first cut had): the real consumer wired on 2026-09-07 spells its
   # read across TWO lines - the family name is on the Join-Path, the verb is on the next line. A
   # line-at-a-time detector called ff-carry-report write-only even after its reader existed.
+  $fx3a = '$ffcF = Join-Path $OutDir ' + "'ff-carry-report.json'"
+  $fx3b = 'if (Test-Path $ffcF) { $ffcDoc = Read-' + 'JsonFile $ffcF }'
   $fx3 = @{ 'writer.ps1' = @($wLine)
-            'consumer.ps1' = @('$ffcF = Join-Path $OutDir ' + "'ff-carry-report.json'",
-                               'if (Test-Path $ffcF) { $ffcDoc = Read-' + 'JsonFile $ffcF }') }
+            'consumer.ps1' = @($fx3a, $fx3b) }
   $r4 = Find-WriteOnlyFamilies $fx3
   T 'MUST NOT FIRE  a two-line read (name on the Join-Path, verb on the next line) counts as a reader' `
     (-not ($r4.write_only -contains 'ff-carry-report')) (($r4.write_only -join ', '))
   # MUST NOT FIRE (the false POSITIVES the first cut had): a Join-Path against a variable that is not an
   # out directory is not a report family at all. The first live run reported out\a.json and out\ws.json.
-  $fx4 = @{ 'unrelated.ps1' = @('Set-Content (Join-Path $specDir ' + "'a.json'" + ') -Value $x',
-                                'Set-Content (Join-Path $tmp ' + "'ws.json'" + ') -Value $y') }
+  $fx4a = 'Set-Content (Join-Path $specDir ' + "'a.json'" + ') -Value $x'
+  $fx4b = 'Set-Content (Join-Path $tmp ' + "'ws.json'" + ') -Value $y'
+  $fx4 = @{ 'unrelated.ps1' = @($fx4a, $fx4b) }
   $r5 = Find-WriteOnlyFamilies $fx4
   T 'MUST NOT FIRE  a Join-Path against a non-out variable is not a report family' `
     ((@($r5.write_only)).Count -eq 0 -and $r5.written -eq 0) (($r5.write_only -join ', '))
   # CLEAN TWIN: a checkpoint written and read back by the SAME script is a real consumer, not a finding.
-  $fx2 = @{ 'solo.ps1' = @('Set-Content (Join-Path $OutDir ' + "'capture-cursor.json'" + ') -Value $j -Encoding UTF8',
-                           'if (Test-Path (Join-Path $OutDir ' + "'capture-cursor.json'" + ')) { $c = Read-' + 'JsonFile $p }') }
+  $fx2a = 'Set-Content (Join-Path $OutDir ' + "'capture-cursor.json'" + ') -Value $j -Encoding UTF8'
+  $fx2b = 'if (Test-Path (Join-Path $OutDir ' + "'capture-cursor.json'" + ')) { $c = Read-' + 'JsonFile $p }'
+  $fx2 = @{ 'solo.ps1' = @($fx2a, $fx2b) }
   $r2 = Find-WriteOnlyFamilies $fx2
   T 'CLEAN TWIN  a write-then-read-back checkpoint in one file is NOT write-only' `
     ((@($r2.write_only)).Count -eq 0) (($r2.write_only -join ', '))
@@ -213,15 +216,19 @@ if ($SelfTest) {
   # shape is audit-spec-contradictions as it shipped that day: the family is named on a Join-Path against
   # $ReportDir and written on the next line by Write-ReportJson. The old verb list could not see it, so a
   # write-only report left the count and the ratchet recorded a false improvement.
-  $fx6 = @{ 'helper.ps1' = @('$outPath = Join-Path $ReportDir ' + "'spec-contradictions.json'",
-                             '$null = Write-ReportJson $outPath @{ specs = 1 } 5') }
+  # Each concatenated line is its own variable first: inside @(...) the comma binds tighter than +, so
+  # @('a' + "'b'", 'c') is ONE line, 'a' plus a two-element array (2026-09-24; rule in ops-and-gates.md).
+  $fx6a = '$outPath = Join-Path $ReportDir ' + "'spec-contradictions.json'"
+  $fx6b = '$null = Write-ReportJson $outPath @{ specs = 1 } 5'
+  $fx6 = @{ 'helper.ps1' = @($fx6a, $fx6b) }
   $r6 = Find-WriteOnlyFamilies $fx6
   T 'MUST FIRE  a family written by a Write-*Json helper (Write-ReportJson) is still a write-only family' `
     ($r6.write_only -contains 'spec-contradictions') ("written=$($r6.written) write_only=" + ($r6.write_only -join ', '))
   # MUST NOT FIRE: widening the verb must not make every Write- command a write. Write-Output naming the
   # path in a message writes nothing.
-  $fx7 = @{ 'message.ps1' = @('$outPath = Join-Path $ReportDir ' + "'noisy-report.json'",
-                              'Write-Output ("full list in " + $outPath)') }
+  $fx7a = '$outPath = Join-Path $ReportDir ' + "'noisy-report.json'"
+  $fx7b = 'Write-Output ("full list in " + $outPath)'
+  $fx7 = @{ 'message.ps1' = @($fx7a, $fx7b) }
   $r7 = Find-WriteOnlyFamilies $fx7
   T 'MUST NOT FIRE  Write-Output naming a report path is not a write' ($r7.written -eq 0) ("written=$($r7.written)")
   # DATED FAMILIES (2026-09-22). The founding shape: derive-not-carried's self-test plants a dated fixture board, and
