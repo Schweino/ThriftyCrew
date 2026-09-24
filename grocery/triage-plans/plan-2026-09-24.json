@@ -1,0 +1,536 @@
+{
+  "generated": "2026-09-24T15:55:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-23.json (week_of 2026-09-23), built 2026-09-24 09:16:39 by the 09:00 daily run; triage-due printed 'BOARD comparison-2026-09-23 built 09:16:39 (374 min ago)', not MID-BUILD and not JUST LANDED",
+  "queue_ids_seen": [
+    "2026-09-24-3ca22f",
+    "2026-09-24-924782",
+    "2026-09-24-f72978",
+    "2026-09-24-9d3565",
+    "2026-09-24-b1c31a",
+    "2026-09-24-a0e558",
+    "2026-09-24-a4b7c1",
+    "2026-09-24-755c23",
+    "2026-09-24-af8109",
+    "2026-09-24-0f7b37",
+    "2026-09-24-f44c88",
+    "2026-09-24-2311b6"
+  ],
+  "scope_note": "Brad's instruction for this run: today's ids only; every older queue item is archived for this run. 2026-09-24-ef23ea and 2026-09-24-3b1e6e belong to the cheap lane and are not here. The dispatch counted '10 ids' and then '11 with 2311b6'; the ids it actually named are the 12 above, and all 12 are items here and in the gate run.",
+  "untrusted_input_note": "No fetched page, log or tool result in this run addressed the agent or asked for anything. Nothing to quote.",
+  "knowledge_consulted": {
+    "searched": [
+      "test-auditors guard blind",
+      "push rebase conflict daily",
+      "feed missing recipes export",
+      "horseradish cream contested crown",
+      "gitignored file worktree lost",
+      "regex timeout under load",
+      "retry push stranded commit"
+    ],
+    "used": [
+      "reliability-craft/applies-here.md ('The 07:00 bot, the shared index, and the fix that never reached a commit'): a repair not committed and pushed is not a repair - frames 924782 as a landing problem, not a data problem",
+      "claude-code-craft/applies-here.md ('A worktree is not the main tree, and main moves while you work'): gitignored state does not travel between checkouts - the 755c23 root cause exactly (published-hashes.json is gitignored)",
+      "data-quality-craft/applies-here.md ('First-match-wins and freshness ranking let the wrong row take a board cell'): f44c88 judged on the routing and the precedent in match-baseline.json, not on the token match",
+      "algorithms-craft/applies-here.md ('### 6. A regex bound belongs to the engine, and the production matcher has none'): STALE - match-lib has bounded every regex at 250 ms since 2026-09-19 (grocery/test-match-lib.ps1:349-352); that bound is what produced 3ca22f's could-not-look",
+      ".claude/rules/ops-and-gates.md ('A hermetic self-test never asserts an UPPER wall-clock bar'; 'To prove a regex bound, count the timeout the code RECORDS'): 3ca22f is a recorded timeout turned into a verdict under load",
+      ".claude/rules/ops-and-gates.md ('A mutex serialises WRITERS, never READERS'; lib/atomic-write.ps1 Write-TcAtomicFile): the 0f7b37 root fix reuses it",
+      "design/PLAN-bot-checkout-self-heal-2026-09-23.md (outcome table, lines 356-370: blocked/foreign continues on H0 and pages): f72978 is the designed refusal"
+    ]
+  },
+  "routing_artifact": null,
+  "routing_artifact_note": "No item changes a matching rule. f44c88 is accepted as a correct product with no rule edit, so no routing sidecar is written.",
+  "items": [
+    {
+      "queue_id": "2026-09-24-3ca22f",
+      "subject": "Grocery: a GUARD has gone blind (test-auditors failed)",
+      "classification": "infra",
+      "verdict_for_the_day": "NOT BLIND. The one failing case is a load-induced regex timeout in test-match-lib; re-run at rest it passes over the same 45,420 names. The other 787 test-auditors cases passed, so every other green result today stands.",
+      "evidence": [
+        "grocery/out/test-auditors-fail-2026-09-24.txt:796-797 'test-auditors FAIL (1 failed, 787 passed)'; :707 the only FAIL: 'test-match-lib FAILED (rc=1) ... MATCH-LIB FAILED (1 divergence(s): 0 fast-path, 0 detail-winner, 0 detail-no-include-hit, 1 could-not-look, 0 Get-MatchTexts) | MATCH-LIB-COMPLETE names=45420 divergences=1'",
+        "reviewer re-run 2026-09-24 ~15:25, main checkout, `powershell -NoProfile -File grocery/test-match-lib.ps1` (no -Quiet): exit 0, 'MATCH-LIB PASSED', 45420 distinct names, divergences 0, Get-MatchTexts 0 of 45420, 'could-not-look : 0 name look(s) hit the regex bound', 16 shards 28.1 s wall",
+        "grocery/ad-cycle-log.txt [2026-09-24T10:01:24] 'test-auditors: 1117 s (rc=2)': an 18.6-minute run while the daily chain ran on the same box; test-match-lib is one of five 'early' children launched at once (grocery/test-auditors.ps1:354-358) and itself fans out 16 shard processes",
+        "grocery/test-match-lib.ps1:349-352: every regex is bounded at 250 ms and a timed-out look counts as a failure; the comment records 'worst 15.1 ms over 42,753 names on 2026-09-19'",
+        "production on the same day did not go blind: grocery/out/flagged-2026-09-23.json (written 09:08) match_could_not_look = 0, and 0 in flagged-2026-09-21.json and flagged-2026-09-22.json",
+        "the red names no name: the shard result carries 'blind' as a COUNT only (test-match-lib.ps1:365), and the -Quiet parent prints the tally, so a load spike and a catastrophic pattern read identically",
+        "first occurrence of this shape: none of the 11 earlier saved test-auditors-fail-*.txt (2026-08-22 .. 2026-09-19) carries a match-lib could-not-look"
+      ],
+      "root_cause": "test-match-lib turns a wall-clock bound into a verdict: a name whose regex exceeds 250 ms ONCE, on a box where test-auditors took 1117 s, fails the suite exactly like a matcher that decides differently, and the red does not say which name, so load and a real catastrophic pattern cannot be told apart without a re-run. It is the estate's 'a hermetic self-test never asserts an UPPER wall-clock bar' shape arriving through a timeout the code records. One level up, for this RETURN type: test-auditors pages a red on LIVE data as 'a guard has gone blind', which is how six unrelated reds became one returning type.",
+      "surface_fix": {
+        "what": "none needed today: the watcher is intact (0 divergences at rest) and nothing on the board depends on the failed run",
+        "files": [],
+        "exact_change": "none"
+      },
+      "root_fix": {
+        "what": "name every blind look, re-look it once serially after the shard pool drains at the SAME 250 ms bound, count only a name that is blind again, and require the re-look's decision to equal the reference's",
+        "files": [
+          "grocery/test-match-lib.ps1",
+          "grocery/test-auditors.ps1"
+        ],
+        "exact_change": "shard (around :353-367): emit blindNames = the names from (Get-CommodityMatcherBlind -Matcher $matcher).could_not_look and from the psOnly matcher, each with its path (compiled | fallback), beside the existing count. parent (after the merge at :465-467): for each blind name, run the compiled matcher and the fallback once more in the parent, single-threaded, at the unchanged 250 ms bound (never a raised bound); a name that resolves prints '  could-not-look RETRIED (load): <name> -> <decision>' and joins the divergence check against the reference Match-Category decision (a different decision is a divergence, rc 1); a name still blind stays a could-not-look and fails. Put up to 15 still-blind names ON the 'MATCH-LIB FAILED' line, because test-auditors.ps1:7181 keeps only lines matching FAIL|diverg in its Bad message. No change to match-lib.ps1 or to the production bound."
+      },
+      "leaves_open": "the wider class of this RETURN type is untouched: a red on LIVE data (out\\ boards, the live tree, live prompts) still pages as 'a guard has gone blind' (rc 2) instead of LIVE (rc 4). 3 of the 6 prior closes were that shape (2026-08-30 script-census on the live tree, 2026-09-04 prompt-backup drift, 2026-09-19 LIVE-TWIN food-category), plus today's live-corpus red",
+      "leaves_open_occurrences": 4,
+      "leaves_open_window": "2026-08-30 .. 2026-09-24 (26 days), counted from the saved test-auditors-fail-*.txt of each prior close",
+      "leaves_open_followup": "2026-09-24-b606fd",
+      "prior_closes": [
+        "2026-08-30-b9d48f",
+        "2026-08-31-4b2f47",
+        "2026-09-04-0b63d3",
+        "2026-09-07-76ec7f",
+        "2026-09-11-220094",
+        "2026-09-19-ae9df2"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/test-match-lib.ps1",
+          "grocery/test-auditors.ps1"
+        ],
+        "what": "the emitting check stops turning a load-induced timeout into a 'guard gone blind' page, and every red it does raise names the input it saw",
+        "exact_change": "as root_fix: blind names are named, re-looked once at the production bound, and only a reproducible blind look or a disagreeing re-look fails; test-auditors' u128 Bad line carries the named names"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule, bound or engine branch changes, so routing moves 0 of the 45,420 names test-match-lib reads (commodities.json unchanged; the re-look calls the same matchers). Behavioural radius measured over the 12 saved test-auditors-fail-*.txt: 1 of 12 carries a match-lib could-not-look (today's)",
+        "affected_now": 1,
+        "names": [
+          "the one unnamed name that timed out at ~09:45 on 2026-09-24 (not recoverable: the -Quiet run did not print it)"
+        ],
+        "risk": "a real catastrophic pattern must still fail: the re-look uses the same 250 ms bound, and the must-fire below proves a pattern blind on every look still exits 1. A re-look that resolves to a different decision is a divergence, so a blind name can never pass by agreeing with an unmatched original (the I183/I209 property the count was added for).",
+        "cell_effects": []
+      },
+      "freshness": "re-run taken 2026-09-24 ~15:25 against the main checkout (HEAD 3c45a9478) and its out\\ corpus (45,420 names, the same count the failing ~09:45 run reported); the failing run's corpus is not preserved, so 'same names' rests on the equal count",
+      "proof": {
+        "guard_or_fixture": "a new -SelfTest block in grocery/test-match-lib.ps1 (it has no self-test for the could-not-look path today), plus test-auditors.ps1 unit u128-the-precompiled-matcher",
+        "must_fire_case": "frozen 2-name corpus with one commodity whose include is a genuine ReDoS victim (unbounded cost a few seconds on one name, sized per .claude/rules/ops-and-gates.md so a neutered bound finishes and goes red): the name is blind on the first look AND the re-look -> 'MATCH-LIB FAILED', rc 1, could-not-look 1, and the FAILED line names it",
+        "clean_twin": "same corpus with a test-only seam that forces ONLY the first look of a benign name to score could-not-look (e.g. -ForceBlindFirstLook <name>): the re-look resolves, its decision equals the reference's -> rc 0 and the output carries 'could-not-look RETRIED (load): <name>'",
+        "must_not_fire_case": "the seam forces a first-look blind whose re-look resolves to a DIFFERENT decision than the reference: counted as a divergence, rc 1 (a retry never launders a disagreement)",
+        "fixture_occurrences": [
+          {
+            "queue_id": "2026-08-30-b9d48f",
+            "shape": "script-census red on the live tree (a new orphan) - a LIVE red paged as blind; not this fixture's shape, carried in leaves_open"
+          },
+          {
+            "queue_id": "2026-08-31-4b2f47",
+            "shape": "triage-due fixture failed open (a sandbox path) - a real fixture defect, fixed at its own cause; not this shape"
+          },
+          {
+            "queue_id": "2026-09-04-0b63d3",
+            "shape": "prompt-backup drift (rc 2) - a LIVE red paged as blind; carried in leaves_open"
+          },
+          {
+            "queue_id": "2026-09-07-76ec7f",
+            "shape": "test-capture-builders BLIND (could not find the builder block) - a real blindness, fixed at its own cause; not this shape"
+          },
+          {
+            "queue_id": "2026-09-11-220094",
+            "shape": "Hy-Vee tag/identity fixtures failed - a real fixture failure, fixed at its own cause; not this shape"
+          },
+          {
+            "queue_id": "2026-09-19-ae9df2",
+            "shape": "LIVE-TWIN food-category (rc 2) - a LIVE red paged as blind; carried in leaves_open"
+          },
+          {
+            "queue_id": "2026-09-24-3ca22f",
+            "shape": "load-induced 250 ms regex timeout on the live corpus - the must-fire and clean twin above are built from this one"
+          }
+        ],
+        "commands": [
+          "powershell -NoProfile -File grocery\\test-match-lib.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\test-match-lib.ps1",
+          "powershell -NoProfile -File grocery\\test-auditors.ps1"
+        ]
+      },
+      "rollback": "revert the test-match-lib.ps1 hunks (and the test-auditors.ps1 message hunk if one was needed); no data, no board, no production matcher involved",
+      "do_not_touch": [
+        "grocery/match-lib.ps1 and its 250 ms production bound",
+        "the I183/I209 rule that a still-blind name fails",
+        "compare-deals.ps1"
+      ],
+      "resolution_note": "Not blind: test-match-lib failed on one 250 ms regex timeout during an 1117 s test-auditors run on a loaded box; re-run at rest passed 45,420 names with 0 divergences and 0 blind looks, and production recorded 0 could-not-look. test-match-lib now names blind looks and re-looks them once at the same bound, failing only a reproducible or disagreeing one.",
+      "publish_batch": 1,
+      "lane": "ops",
+      "est_tool_calls": 30,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": "no -ForceBlindFirstLook parameter: the clean twin feeds a forced-blind record into the live re-look function; the shard fallback matcher got its own timeout bookkeeping; test-auditors.ps1 unchanged because blind names ride on the FAILED line it already keeps. The live run had 0 blind names, so the shard mapping has not yet run on real data.",
+      "shipped_commit": "c2ff876d6",
+      "close_disposition": "false-alarm"
+    },
+    {
+      "queue_id": "2026-09-24-924782",
+      "subject": "Grocery pipeline could not push - 2026-09-24",
+      "classification": "infra",
+      "evidence": [
+        "grocery/out/logs/capture-run-ad-2026-09-24.log:65 'commit: [main 6f12f2af6] ... [ad]'; :95 'rebase[1]: Created autostash'; :96-103 an untracked design/backlog-inbox/pd-land-W0.1R-2026-09-23.md blocked the checkout and was moved aside; :107-113 'rebase[2]: Rebasing (3/3) ... Applying autostash resulted in conflicts ... Successfully rebased'; :114-127 rebase[3] and [4] 'ops/test-prepush-hook.ps1: unmerged ... fatal: Cannot autostash'; :128 'PUSH FAILED after 4 attempts'",
+        "main reflog: at 07:00 main was a5cb50b12 (graph, 2026-09-23 21:45) on 5a27f1fab (harvest, 2026-09-23 18:04) on cec9779a3 (2026-09-23 10:39), so the 07:00 run executed capture-run.ps1 from BEFORE a6c5b6228 (W4.1 start sync, 18:10) and 94a05ad05 (W4.2 'the autostash rebase loop is deleted', 18:35). The deleted tail ran one last time; after rebase[2] HEAD carries both",
+        "grocery/out/logs/capture-run-daily-2026-09-24.log:20 08:00 run (new code): 'sync[start]: blocked/conflict ... ops/test-prepush-hook.ps1 (unmerged, not the bot's); nothing was written' -> STOPPED before any capture (the designed refusal). The :21 'TerminatingError(Get-Variable) ... failed' is capture-run.ps1:160's probe inside try/catch, caught, not a crash",
+        "same log :47 09:00 run 'sync[start]: current'; :185 commit 3c45a9478; :198 'sync[tail 1]: blocked/foreign ... lib/chain-queue.ps1 (??)' (first changed upstream at d1d26d9af); :199 'the sync ended blocked - NOT pushing'",
+        "grocery/out/logs/capture-run-status.json daily: stage complete, exit_code 1, tail_sync {outcome blocked, class foreign}. Task 'TC Grocery Daily Capture 0800' repeats PT1H for PT6H (08:00-14:00), last run 14:00:02 rc 0, and no capture-run log exists after 10:04:24: the 11:00-14:00 occurrences were no-ops by Test-AlreadyRanToday (capture-run.ps1:109-127, stage complete -> SKIP whatever the exit code)",
+        "at 15:37 lib/chain-queue.ps1 is gone from the main checkout and git status shows no unmerged path: the blocker cleared and nothing retried",
+        "the main checkout is 4 ahead / 42 behind origin/main: 558a2927d harvest 09-23, 01d9478ea graph 09-23, e98f662d5 ad 09-24, 3c45a9478 daily 09-24. None touches public/ (git show --stat). Their 138 paths share 0 paths with the 71 upstream paths since merge-base b8634029e, so a replay is clean",
+        "live, cache-busted at ~15:40: https://feed.thriftycrew.com/smp-feed.json 'generated' 2026-09-23T10:54:41 (= origin/main ed7422559); board.json 2,711,600 bytes (= origin/main 2dcbe8622, 2026-09-23 02:46). Readers see the 2026-09-23 02:46 board",
+        "even a clean push would not have shipped today's board: the 09:00 chain staged INPUTS only because the quarantine feed export exited 1 (item 2026-09-24-0f7b37)"
+      ],
+      "root_cause": "Two stacked causes. (1) The 07:00 [ad] run executed 2026-09-23 10:39 code because the checkout had not moved since then (the 09-23 harvest and graph bots commit without pushing, and no capture-run synced), so the autostash-rebase tail that W4.2 deleted ran once more and did what W4.2 was written to stop: its autostash pop conflicted on a foreign uncommitted edit to ops/test-prepush-hook.ps1 and left the shared checkout unmerged. That shape cannot recur now that W4.1/W4.2 are in HEAD. (2) The mechanism that stranded the refresh for the rest of the day: once a daily run COMPLETES with its commit unlanded (a tail sync blocked by foreign work, a refused push), nothing retries the push. Test-AlreadyRanToday skips every later hourly occurrence on stage=complete whatever the exit code, so 11:00-14:00 exited 0 as no-ops while the blocker went away. The class: any committed-but-unlanded bot run waits for the next morning, whatever made the push fail - which is also what 2026-09-19-c7c57d (an untracked blocker) and 2026-09-21-5ac200 (a pre-push refusal) were.",
+      "surface_fix": {
+        "what": "land today's refresh by one hand re-run once the foreign blockers are clear (recovery_today below); no file edit",
+        "files": [],
+        "exact_change": "none"
+      },
+      "root_fix": {
+        "what": "a push-only retry: an hourly occurrence that finds today's run complete, committed and not landed runs the tail sync and push, and nothing else",
+        "files": [
+          "grocery/capture-run.ps1",
+          "grocery/test-cadence.ps1"
+        ],
+        "exact_change": "(a) record the landing in capture-run-status.json <kind>: committed_sha and pushed (true|false), written where the tail already knows them ($botCommitted and the push outcome the edge check logs as 'pushed=False'). (b) Test-AlreadyRanToday returns a third verdict 'push-retry' when date == today AND stage == complete AND committed_sha is set AND pushed is false; every other case is unchanged (a pushed or never-committed complete run still returns 'already ran today', so a guards-blocked morning still never re-pulls the stores, the 2026-09-10 reason for the skip). (c) on 'push-retry': take Global\\tc-capture-run as the full run does, fetch, and if `git rev-list --count origin/main..<committed_sha>` is 0 (another push carried it; unpushed is not private here) record pushed=true and exit 0; otherwise run the SAME tail the full run uses (Invoke-TcCheckoutSync tail, then the push with its re-sync attempts), append one line to that day's capture-run log, record the outcome, exit 0 on a landed push and 1 on a still-blocked one, and page only on a CHANGE of blocking reason, not every hour. No capture lane, no chain, no stage change."
+      },
+      "leaves_open": "a foreign file left dirty on an upstream-changed path past the 14:00 end of the task window still strands the commit until the next morning's run (the retry rides the existing 08:00-14:00 occurrences and adds no task)",
+      "leaves_open_occurrences": 0,
+      "leaves_open_window": "since W4.2 went live 2026-09-23 18:35: the only blocked tail (today 10:04) had cleared by 15:37, and would have been retried at 11:00",
+      "leaves_open_followup": "watch:grocery/capture-watchdog.ps1",
+      "leaves_open_owner_hint": "watch:grocery/capture-watchdog.ps1 (it pages NOT PUBLISHED and COMPUTED BUT NOT SHIPPED on the first stranded day)",
+      "prior_closes": [
+        "2026-09-19-c7c57d",
+        "2026-09-21-5ac200"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/capture-run.ps1"
+        ],
+        "what": "capture-run's tail is the producer of every 'could not push' page; give a committed-but-unlanded run a same-day retry lane instead of a next-morning wait",
+        "exact_change": "root_fix (a)-(c): persist committed_sha/pushed, Test-AlreadyRanToday -> 'push-retry' for complete+committed+unpushed, and a tail-only path for that verdict"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule, pricing input or board field changes: routing moves 0 of 45,420 names and 0 cells by construction. Behavioural radius = hourly occurrences whose verdict changes from 'already ran today' to 'push-retry': in capture-run-status.json since W4.2 went live, exactly one run (2026-09-24 daily, committed 3c45a9478, tail blocked/foreign)",
+        "affected_now": 1,
+        "names": [],
+        "risk": "a retry cannot push past a foreign file: it reuses the unchanged tail sync, which refuses one. Risk is repetition, bounded by the 6-occurrence window and a page only on a changed reason.",
+        "cell_effects": []
+      },
+      "recovery_today": [
+        "1. In C:\\Codex\\ThriftyCrew confirm: `git status --porcelain` has no unmerged line, and capture-run-status.json daily.stage is 'complete' (no run holds Global\\tc-capture-run).",
+        "2. Measure the blockers: `git diff --name-only $(git merge-base HEAD origin/main) origin/main` intersected with `git status --porcelain --untracked-files=all`. At 15:40 that was 4 paths: .claude/agents/triage-developer.md, .claude/agents/triage-ops-developer.md, .claude/agents/triage-reviewer.md (foreign edits, differ from origin; changed upstream at a39912a58 13:19) and meal-prep/pipeline/audit-lane-shape.ps1 (byte-identical to origin, classified already-upstream, does not block). The three prompts would make the start sync go PARTIAL and the tail could then not push. Ask the orchestrator to have their owner commit or discard them. NEVER revert them yourself.",
+        "3. Do not touch: stash@{0} (the 07:01:50 autostash, 50 paths of foreign work incl. ops/test-prepush-hook.ps1 blob fad38db9 that never landed); the staged public/board.json (blob c90646fa, a stale foreign build: 185 commodities differ from HEAD); the working public/smp-feed.json (the 09:12 PRE-guards export). The chain rewrites the last two.",
+        "4. Run `powershell -NoProfile -ExecutionPolicy Bypass -File C:\\Codex\\ThriftyCrew\\grocery\\capture-run.ps1 -Kind daily -Force` (-Force is required: the status says complete, so the scheduled task would no-op). Expect: sync[start] synced (the 4 stranded commits replayed onto origin/main, re-exec on synced code); GUARDS QUARANTINED (exit 4) or PASSED; 'smp-feed exported' on the daily AND the quarantine export; sync[tail] then a landed push.",
+        "5. If the quarantine export exits non-zero again, stop: land 0f7b37 first, then repeat step 4.",
+        "6. Verify: `git log -1 --format='%h %ci' origin/main -- public/board.json public/smp-feed.json` is today's [daily] commit; a cache-busted fetch of https://feed.thriftycrew.com/smp-feed.json?cb=<n> reads today's 'generated'; board.json at the edge carries today's cells (for example the quarantined energy-drinks / Family Fare cell at the value that run's guards held) rather than 2dcbe8622's."
+      ],
+      "freshness": "measured against the main checkout at 15:37-15:45 (HEAD 3c45a9478, 4 ahead / 42 behind origin/main fc55f4f29), capture-run-status.json as written 10:04:24, the ad and daily logs, and the live edge at ~15:40. If any capture-run or push has run since, re-read the status record and re-measure step 2 before acting",
+      "proof": {
+        "guard_or_fixture": "grocery/test-cadence.ps1 (it lifts Test-AlreadyRanToday out of capture-run.ps1 at :105 and drives the shipped function), plus a scratch-repo drill of the tail-only path",
+        "must_fire_case": "the founding record frozen from today's capture-run-status.json: {date 2026-09-24, stage complete, exit_code 1, committed_sha 3c45a9478, pushed false, tail_sync {blocked, foreign}} -> 'push-retry'",
+        "clean_twin": "the existing case 'a guards-blocked morning (stage complete, rc 1) SKIPS the repetition' stays green with pushed true (and with no committed_sha); and the tail-only drill in a scratch repo lands a committed-but-unpushed bot commit once a foreign file on an upstream-changed path is removed, while it still refuses (no push, nothing written) while that file is present",
+        "must_not_fire_case": "complete + committed + pushed false, but origin/main already contains the sha: records pushed=true and pushes nothing",
+        "fixture_occurrences": [
+          {
+            "queue_id": "2026-09-19-c7c57d",
+            "shape": "untracked file in the rebase's way; with the retry lane the next occurrence lands once the blocker is set aside"
+          },
+          {
+            "queue_id": "2026-09-21-5ac200",
+            "shape": "every push refused by the pre-push test-auditors leg; the retry lands once the refusal's cause is fixed (it was, the same day)"
+          },
+          {
+            "queue_id": "2026-09-24-924782",
+            "shape": "tail sync blocked/foreign on an untracked lib/chain-queue.ps1 that cleared later in the day - the must-fire record"
+          }
+        ],
+        "commands": [
+          "powershell -NoProfile -File grocery\\test-cadence.ps1",
+          "powershell -NoProfile -File lib\\test-checkout-sync.ps1",
+          "powershell -NoProfile -File grocery\\test-auditors.ps1"
+        ]
+      },
+      "rollback": "revert the capture-run.ps1 and test-cadence.ps1 hunks; older code ignores the two extra status fields",
+      "do_not_touch": [
+        "lib/checkout-sync.ps1's foreign-path refusal (the safety property; the retry reuses it unchanged)",
+        "the 'guards-blocked morning skips' rule (never re-pull the stores every hour)",
+        "stash@{0} in the main checkout",
+        "public/board.json staged in the main index"
+      ],
+      "resolution_note": "Push stranded by (1) the last run of the deleted autostash-rebase tail on 09-23 code, which left ops/test-prepush-hook.ps1 unmerged, and (2) no retry for a completed-but-unpushed run after the 09:00 tail met a foreign untracked lib/chain-queue.ps1. capture-run now retries the push on its hourly occurrences; today's refresh landed by a hand -Force re-run.",
+      "publish_batch": 2,
+      "lane": "money",
+      "est_tool_calls": 50,
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "the push-only retry does not repeat the tail feed rebuild: a stranded commit whose feed was built by code the sync replaced is refused as stale-code-feed and paged. Recovery: the forced daily run rebuilt and committed today at 17:29 but its tail sync blocked on meal-prep/pipeline/audit-lane-shape.ps1, a dirty file byte-identical to origin/main (af7835422); landed instead by ops/push-main.ps1 from the main checkout at e90682129. That already-upstream-but-blocking shape is a checkout-sync finding (weekly lane).",
+      "shipped_commit": "a9d1f1691 (landed tip; worktree 8fcf979e3, registry 6f484e711)",
+      "close_disposition": "confirmed"
+    },
+    {
+      "queue_id": "2026-09-24-0f7b37",
+      "subject": "Grocery: smp feed export refused - 2026-09-24",
+      "classification": "infra",
+      "evidence": [
+        "grocery/ad-cycle-log.txt:34032 [09:12:54] 'smp-feed exported (daily, export-feed exit 0)' - the pre-guards export",
+        ":34193-34194 [09:18:22] 'GUARDS QUARANTINED: 2 cell(s) held ..., 1 withheld ... Safe to publish.' (energy-drinks / Family Fare held 0.1353, lotion / Walmart held 0.2175, yellow-bell-pepper / Family Fare withheld)",
+        ":34195 [09:19:36] 'smp-feed NOT exported (quarantine): export-feed exited 1 - export-feed: shrink check compared with the served feed ...: ingredients 668 -> 668 (0.0%); pricing_inputs 668 -> 668 (0.0%); recipes 570 -> 570 (0.0%); board_item_count 572 -> 572 (0.0%)' - the reason given is an informational line, and every section is 0.0%",
+        "grocery/export-feed.ps1 exits 0 at :676 and 3 at every refusal (:286, :302, :546, :551, :577, :626, :632, :643, :653); it has no exit 1, so exit 1 is an uncaught terminating error",
+        "grocery/out/smp-feed.json mtime 09:19:36, 'generated' 2026-09-24T09:18:24 (written by :664 in the quarantine export); public/smp-feed.json mtime 09:12:54, 'generated' 09:11:40 (not rewritten). So the throw is at :665-671, the public\\ write, after out\\ was already replaced",
+        "grocery/feed-export-lib.ps1:40-41 takes the LAST line starting 'export-feed: ' as the reason; the exception text is recorded nowhere (not in ad-cycle-log, the daily transcript or chain-stages-2026-09-24.jsonl). Its page body says both copies were NOT rewritten, which is false for out\\",
+        "the same failure class the day before: ad-cycle-log [2026-09-23T10:07:05] audit-hyvee-store-blend and audit-price-capture-reach each died on 'Exception calling \"WriteAllText\" ... The requested operation cannot be performed on a file with a user-mapped section open.'",
+        "consequence: chain verdict feed_refreshed=false -> capture-run-daily log :177 'publish: staging INPUTS only', :182 30 served files vouched never-to-be-committed, ad-cycle-log :34199 'POST HELD'. Today's board never reached public/board.json (mtime 07:01:50, from the ad run's autostash pop)"
+      ],
+      "root_cause": "export-feed replaces the two served feed copies, which other processes read all day, with bare [IO.File]::WriteAllText. That throws when another handle holds or maps the file (the exact error that killed two chain audits on 09-23), and a throw is not a refusal: it lands as exit 1 BETWEEN the two writes, leaves out\\ and public\\ disagreeing, and the caller's reason-picker prints an informational line, so a transient held file reads as a refusal and holds the WHOLE board instead of retrying. UNPROVEN: the exact exception at 09:19:36 was not recorded; a reader holding or mapping public\\smp-feed.json is the probable cause (file state plus the 09-23 twin), not a proven one.",
+      "surface_fix": {
+        "what": "none on its own: the recovery run in 924782 re-exports; this item makes that export survive a held file",
+        "files": [],
+        "exact_change": "none"
+      },
+      "root_fix": {
+        "what": "write both served copies through Write-TcAtomicFile (retry on a held or mapped file), public\\ first; a write that still fails prints a named FAILED verdict and exits 3; the chain reports that line, never an informational one",
+        "files": [
+          "grocery/export-feed.ps1",
+          "grocery/feed-export-lib.ps1"
+        ],
+        "exact_change": "export-feed.ps1:664-670: dot-source lib/atomic-write.ps1 and replace the two WriteAllText calls with Write-TcAtomicFile, public\\smp-feed.json first (-NoBom, as today) and out\\smp-feed.json second (keeping its BOM as today), inside try/catch that prints 'export-feed: FAILED writing <path>: <Exception.Message>. The served feed stands.' (or, if public\\ landed and out\\ failed, says exactly that) and exits 3. feed-export-lib.ps1:40-52: prefer the last line matching '^export-feed: (REFUSED|FAILED|\\*\\*\\*)'; with none, report the exit code plus the last line of ANY kind, never an 'export-feed: shrink check' line; word the page from what export-feed printed rather than asserting both copies were untouched."
+      },
+      "leaves_open": "other bare [IO.File]::WriteAllText writers in the daily chain over files a concurrent process can hold (the two 09-23 audits among them) are not converted by this item",
+      "leaves_open_occurrences": 2,
+      "leaves_open_window": "2026-09-01 .. 2026-09-24 in grocery/ad-cycle-log.txt: 2026-09-23 10:07 audit-hyvee-store-blend and audit-price-capture-reach",
+      "leaves_open_followup": "2026-09-24-5bce76",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule, pricing input or feed field changes: routing moves 0 of 45,420 names and 0 cells by construction; the feed's bytes are identical (same $json, same BOM rules). Behavioural radius: every export-feed run; 'smp-feed NOT exported' appears once in ad-cycle-log since 2026-09-01 (today's)",
+        "affected_now": 1,
+        "names": [],
+        "risk": "the served bytes must not change: public\\smp-feed.json stays BOM-less and out\\ keeps its BOM. A refusal must still write neither copy.",
+        "cell_effects": []
+      },
+      "freshness": "file states read 2026-09-24 ~15:30 (out\\ 09:19:36 / generated 09:18:24; public\\ 09:12:54 / generated 09:11:40); if the recovery run in 924782 has re-exported since, the two copies will agree and only the logs remain as evidence",
+      "proof": {
+        "guard_or_fixture": "export-feed.ps1 -SelfTest (18 Test-EfCase cases today) and check-ad-cycles.ps1's Invoke-ChainFeedExport cases (check-ad-cycles.ps1:258-273)",
+        "must_fire_case": "export-feed self-test: hold public\\smp-feed.json open from ANOTHER process past the retry budget -> exit 3, a line 'export-feed: FAILED writing ...public\\smp-feed.json', out\\ untouched; and a chain case: a stub export that prints an informational 'export-feed: shrink check ...' line and then throws (exit 1) -> the logged reason is the throw with 'exited 1', never the shrink line",
+        "clean_twin": "the same holder released inside the retry budget -> exit 0, both copies written, byte-identical to a no-contention run (public\\ BOM-less, out\\ with BOM); the existing 18 cases stay green",
+        "commands": [
+          "powershell -NoProfile -File grocery\\export-feed.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\check-ad-cycles.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\test-auditors.ps1"
+        ]
+      },
+      "rollback": "revert the export-feed.ps1 and feed-export-lib.ps1 hunks; no data migration",
+      "do_not_touch": [
+        "the shrink check and its 10% bar",
+        "the feed_refreshed=false hold when export-feed genuinely refuses",
+        "the feed's content and encoding"
+      ],
+      "resolution_note": "The quarantine re-export threw between its two writes (out\\ replaced at 09:19:36, public\\ not) and the chain logged an informational line as the reason, holding the whole board. export-feed now writes both copies through Write-TcAtomicFile with a named FAILED exit 3, and the chain reports the real line. Exact exception unrecorded; a held or mapped file is the probable cause.",
+      "publish_batch": 2,
+      "lane": "money",
+      "est_tool_calls": 30,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": "chain cases went into check-ad-cycles.ps1 (named by the proof); the no-verdict reason is taken from the error record. u086 in test-auditors widened to accept the BOM-less Write-TcAtomicFile -NoBom write (checked: new code and old code match, a mutant without -NoBom does not).",
+      "shipped_commit": "a9d1f1691 (landed tip; worktree 55143df7e)",
+      "close_disposition": "confirmed"
+    },
+    {
+      "queue_id": "2026-09-24-755c23",
+      "subject": "Grocery pipeline: feed did not truly refresh - 2026-09-24",
+      "classification": "infra",
+      "independent_of_item_2": "YES. The 11 slugs are absent from the stale live feed AND from today's fresh feed, so landing today's feed changes nothing for them.",
+      "evidence": [
+        "the 11 slugs: andong-jjimdak-braised-chicken, beef-chow-mein-noodles, beijing-zha-jiang-mian-pork-noodles, blackened-chicken-with-mango-salsa, five-spice-turkey-noodle-bowls, ground-turkey-lo-mein, korean-beef-japchae-noodle-bowls, korean-turkey-japchae, sheet-pan-tandoori-chicken-cauliflower, spicy-pork-noodles, turkey-zha-jiang-mian",
+        "0 of 11 in grocery/out/smp-feed.json (570 recipes, generated 09:18:24) and 0 in the live feed (570 recipes, generated 2026-09-23T10:54:41)",
+        "11 of 11 are in meal-prep/db/held-recipes.json (17 held in all), each held 2026-09-23 by hold-recipe.ps1 under Brad's 2026-09-22 ruling 'That recipe should not be live if an ingredient is not carried in Omaha with a price'; landed on main in 2dcbe8622 (plan-2026-09-22-11)",
+        "11 of 11 are STILL keys in the main checkout's meal-prep/db/published-hashes.json (577 keys, mtime 2026-09-24 09:20:20; gitignored: not in origin/main), while the worktree the holds ran in, .claude/worktrees/agent-a5049c84c8b14f0df, has 566 keys and none of the 11. plan-2026-09-22-11.json records each hold's 'published-hashes: entry removed' - in that worktree",
+        "the 6 slugs held on 2026-09-19 are absent from main's published-hashes.json (0 of 6): the split is specific to a hold applied outside the main checkout",
+        "not live: cache-busted GET https://www.thriftycrew.com/<slug>/ returned 404 for all 11; positive control: pizza-pasta-bowls, chicken-enchilada-rice-bowls, crustless-bacon-gruyere-quiche returned 200. No reader sees an empty cost section",
+        "readers of the stale set: capture-run.ps1:2039-2060 (the FEED ASSERT reads published-hashes.json as 'published') and audit-live-price-contract's '[published] 577 built card(s)' scope (ad-cycle-log [09:36:45], 11 with findings = these 11), which produced 2026-09-24-af8109"
+      ],
+      "root_cause": "A recipe's publish state lives on two roads. The hold's first half (db/held-recipes.json) is TRACKED and reached main by commit; its second half (removing the slug from db/published-hashes.json) is a GITIGNORED file, so the removal stayed in the worktree that ran hold-recipe and never reached the main checkout. Every main-checkout reader that takes published-hashes.json as 'the published set' then reports held drafts as live. The class: any hold applied from a linked worktree, which is where the money lane runs.",
+      "surface_fix": {
+        "what": "covered by the root fix's first run: it removes the 11 keys from the main checkout's published-hashes.json",
+        "files": [],
+        "exact_change": "none separately"
+      },
+      "root_fix": {
+        "what": "reconcile the untracked half from the tracked half in the main checkout's own chain: remove from published-hashes.json every slug listed in held-recipes.json, before any reader of the published set runs",
+        "files": [
+          "meal-prep/pipeline/hold-recipe.ps1",
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "exact_change": "hold-recipe.ps1: add -Reconcile (dry run by default, -Apply writes) that loads db/held-recipes.json and db/published-hashes.json, removes every held slug still keyed in the hashes, writes through Write-TcAtomicFile (keeping a .bak on first -Apply), and prints one line per slug plus 'HOLD-RECONCILE-COMPLETE held=N removed=M'. Safe by the file's own ordering argument (header lines 23-32): publish.ps1 refuses a held slug, so a missing hash cannot trigger a republish. check-ad-cycles.ps1: call it with -Apply in the recipe stage before export-feed and audit-live-price-contract; a non-zero exit is logged, never fatal to the board."
+      },
+      "leaves_open": "retire-recipe.ps1 applied from a linked worktree has the same split, and a retirement leaves no tracked list to reconcile from",
+      "leaves_open_occurrences": 0,
+      "leaves_open_window": "today's main-checkout state: published-hashes minus feed is exactly the 11 held slugs, so no retirement residue exists",
+      "leaves_open_followup": "watch:grocery/capture-run.ps1",
+      "leaves_open_owner_hint": "watch:grocery/capture-run.ps1 (its FEED ASSERT caught this one and pages the first retirement residue)",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule or price touched: routing moves 0 of 45,420 names and 0 board cells. The reconcile over today's files removes exactly 11 keys (577 -> 566), all 11 held and 404 live; 0 non-held keys touched",
+        "affected_now": 11,
+        "names": [
+          "andong-jjimdak-braised-chicken",
+          "beef-chow-mein-noodles",
+          "beijing-zha-jiang-mian-pork-noodles",
+          "blackened-chicken-with-mango-salsa",
+          "five-spice-turkey-noodle-bowls",
+          "ground-turkey-lo-mein",
+          "korean-beef-japchae-noodle-bowls",
+          "korean-turkey-japchae",
+          "sheet-pan-tandoori-chicken-cauliflower",
+          "spicy-pork-noodles",
+          "turkey-zha-jiang-mian"
+        ],
+        "risk": "a hash removed for a slug publish.ps1 does NOT refuse would invite a republish; the reconcile removes only slugs listed in held-recipes.json, which publish.ps1 refuses (hold-recipe -SelfTest drills that refusal)",
+        "cell_effects": []
+      },
+      "freshness": "main-checkout files read 2026-09-24 ~15:45 (published-hashes.json mtime 09:20:20, held-recipes.json mtime 2026-09-23 09:30:36); live pages fetched ~15:47",
+      "proof": {
+        "guard_or_fixture": "hold-recipe.ps1 -SelfTest (temp db) plus capture-run's daily FEED ASSERT and audit-live-price-contract on the next chain",
+        "must_fire_case": "temp db whose published-hashes.json keys a slug held-recipes.json lists (the andong-jjimdak shape): -Reconcile -Apply removes it, names it, reports removed=1",
+        "clean_twin": "the existing drill still holds: publish.ps1 refuses that held slug after its hash is gone (no republish)",
+        "must_not_fire_case": "a published, not-held slug in the same temp db is left byte-for-byte in place, and a dry run writes nothing",
+        "commands": [
+          "powershell -NoProfile -File meal-prep\\pipeline\\hold-recipe.ps1 -SelfTest",
+          "powershell -NoProfile -File meal-prep\\pipeline\\hold-recipe.ps1 -Reconcile",
+          "powershell -NoProfile -File meal-prep\\pipeline\\audit-live-price-contract.ps1"
+        ]
+      },
+      "rollback": "revert the two hunks; restore published-hashes.json from the .bak the first -Apply writes",
+      "do_not_touch": [
+        "meal-prep/db/held-recipes.json (Brad's rulings)",
+        "the Ghost posts (correctly draft)",
+        "publish.ps1's held-slug refusal"
+      ],
+      "resolution_note": "Not a stale-feed problem and not live: the 11 are Brad-ruled holds (2026-09-23), 404 on the site, absent from every feed. The hold ran in a worktree, so its removal from the gitignored published-hashes.json never reached main and the daily assert read them as published. check-ad-cycles now reconciles published-hashes against the tracked held list.",
+      "publish_batch": 1,
+      "lane": "ops",
+      "est_tool_calls": 25,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": "be1380e42",
+      "close_disposition": "confirmed"
+    },
+    {
+      "queue_id": "2026-09-24-af8109",
+      "subject": "Live recipe prices: a placeholder names something the feed does not carry",
+      "classification": "superseded",
+      "superseded_by": "2026-09-24-755c23",
+      "evidence": [
+        "the same 11 slugs; ad-cycle-log [09:36:45] 'live-price-contract: [published] 577 built card(s) ... 11 with findings' - its [published] scope is the 577 keys of the stale published-hashes.json"
+      ],
+      "root_cause": "same condition as 2026-09-24-755c23: held recipes still keyed in the main checkout's published-hashes.json",
+      "resolution_note": "Superseded by 2026-09-24-755c23: the 11 cards belong to held (draft, 404) recipes still listed in the gitignored published-hashes.json; the reconcile removes them from the audit's [published] scope.",
+      "status": "superseded"
+    },
+    {
+      "queue_id": "2026-09-24-f72978",
+      "subject": "Grocery bot checkout sync blocked at the push - 2026-09-24",
+      "classification": "superseded",
+      "superseded_by": "2026-09-24-924782",
+      "evidence": [
+        "capture-run-daily-2026-09-24.log:198 'sync[tail 1]: blocked/foreign ... lib/chain-queue.ps1 (??)' (upstream d1d26d9af); the file is gone from the main checkout by 15:37"
+      ],
+      "root_cause": "the designed refusal (PLAN-bot-checkout-self-heal-2026-09-23 outcome table: blocked/foreign never writes a foreign file); what made it cost the day is the missing retry, 924782's root fix",
+      "resolution_note": "Superseded by 2026-09-24-924782: the tail correctly refused to overwrite a foreign untracked lib/chain-queue.ps1; the blocker cleared later but nothing retried until the push-retry lane.",
+      "status": "superseded"
+    },
+    {
+      "queue_id": "2026-09-24-9d3565",
+      "subject": "Grocery bot BLOCKED: the main checkout holds conflict markers - 2026-09-24",
+      "classification": "superseded",
+      "superseded_by": "2026-09-24-924782",
+      "evidence": [
+        "capture-run-ad-2026-09-24.log:110 'Applying autostash resulted in conflicts' then :114-117 'ops/test-prepush-hook.ps1: unmerged' (the old tail on 09-23 code); daily log :20 the 08:00 start sync refused it; the file now equals HEAD's blob 05c26712 and the foreign edit (blob fad38db9) survives in stash@{0}"
+      ],
+      "root_cause": "left by the 07:00 run's last autostash pop (924782 cause 1); the 08:00 refusal was correct and the :21 'TerminatingError(Get-Variable)' line is capture-run.ps1:160's caught probe, not a crash",
+      "resolution_note": "Superseded by 2026-09-24-924782: the conflict markers came from the deleted autostash-rebase tail running once more on stale code; the start sync refused them as designed and they were resolved before 09:00.",
+      "status": "superseded"
+    },
+    {
+      "queue_id": "2026-09-24-a0e558",
+      "subject": "Grocery capture watchdog: FAILED 2026-09-24",
+      "classification": "superseded",
+      "superseded_by": "2026-09-24-924782",
+      "evidence": [
+        "capture-run-status.json daily exit_code 1, failed_lanes guards-blocked (the feed refusal, 0f7b37) and sync (tail blocked/foreign, 924782)"
+      ],
+      "root_cause": "the task's exit 1 is the 09:00 run's two failed lanes, each owned by its own item here",
+      "resolution_note": "Superseded by 2026-09-24-924782 (and 0f7b37 for the guards-blocked lane): the task exited 1 because the run's feed export and its push both failed; not a task-scheduler fault.",
+      "status": "superseded"
+    },
+    {
+      "queue_id": "2026-09-24-b1c31a",
+      "subject": "Grocery capture watchdog: NOT PUBLISHED 2026-09-24",
+      "classification": "superseded",
+      "superseded_by": "2026-09-24-0f7b37",
+      "evidence": [
+        "public/board.json mtime 07:01:50 (the ad run's autostash pop), comparison-2026-09-23.json built 09:16:39: 135 min; the chain never wrote the board because the quarantine export's exit 1 held the ship path (feed_refreshed=false)"
+      ],
+      "root_cause": "the board was not written at all today; the hold comes from the feed export (0f7b37), not from the push",
+      "resolution_note": "Superseded by 2026-09-24-0f7b37: export-feed's quarantine exit 1 held the ship path, so today's board was never written to public/board.json; the recovery re-run in 924782 ships it.",
+      "status": "superseded"
+    },
+    {
+      "queue_id": "2026-09-24-a4b7c1",
+      "subject": "Grocery capture watchdog: COMPUTED BUT NOT SHIPPED 2026-09-24",
+      "classification": "superseded",
+      "superseded_by": "2026-09-24-0f7b37",
+      "evidence": [
+        "neither file is today's shippable output: the staged public/board.json (blob c90646fa vs HEAD 13b282bf) differs from HEAD in 185 commodities, was foreign-dirty before the 07:00 run and was re-applied by the autostash at 07:01:50; the working public/smp-feed.json is the 09:12:54 export (generated 09:11:40), built before the 09:18 quarantine"
+      ],
+      "root_cause": "the watchdog reads any dirty served file as 'the pipeline rebuilt them'; here the feed copy is a pre-guards export and the board copy is not today's build. The ship was held by 0f7b37",
+      "resolution_note": "Superseded by 2026-09-24-0f7b37: the dirty public/board.json is a stale foreign build and public/smp-feed.json a pre-quarantine export; neither may be committed by hand. The recovery re-run in 924782 rewrites both.",
+      "status": "superseded"
+    },
+    {
+      "queue_id": "2026-09-24-f44c88",
+      "subject": "Grocery matching soundness: CONTESTED CROWN",
+      "classification": "no-code-change",
+      "evidence": [
+        "horseradish | Aldi | 'Inglehoffer Horseradish Cream Style 9.5 OZ' | $2.84 / 9.5 oz | $0.2989/oz everyday, as_of 2026-09-24 (comparison-2026-09-23.json). Same cell, Walmart: 'Inglehoffer Creamy Style Prepared Horseradish, 9.5 oz' $2.88 = $0.3032/oz; Baker's 'Silver Spring Coarse Cut Prepared Horseradish' $2.99 / 8 oz = $0.3738/oz. match-baseline.json already routes 'Inglehoffer Cream Style Horseradish, 3.75 oz' and 'Beaver Extra Hot and Creamy Horseradish, 4 oz Jar' to horseradish; horseradish-sauce holds only products named 'Horseradish Sauce' (Great Value 12 fl oz $1.92 = $0.16/oz, Kroger, Silver Spring Sassy)"
+      ],
+      "root_cause": "Correct product, contested only by rule overlap: horseradish-sauce (commodities.json index 460) carries includes 'horseradish\\s+cream' and 'cream\\s+style\\s+horseradish', horseradish (index 386) owns every horseradish name first, and Aldi's reversed word order matches both. It is the same maker's creamy PREPARED horseradish that the reviewed baseline and Walmart's own title already put on Prepared Horseradish; moving it would split one product across two commodities and hand the prepared crown to Baker's at $0.3738/oz (+25%). No recipe spec bids horseradish, so no recipe cost moves.",
+      "resolution_note": "Round 1 ruled the Inglehoffer horseradish row correct. The 16:56 rebuild of today board added 7 unreviewed soundness lines (4 drops, 3 contested), so the baseline accept is held and the whole condition goes to round 2 in plan-2026-09-24-3.json.",
+      "status": "bounced"
+    },
+    {
+      "queue_id": "2026-09-24-2311b6",
+      "subject": "Grocery capture watchdog: MISSING-WINDOW 2026-09-24",
+      "classification": "no-code-change",
+      "evidence": [
+        "capture-cursor-log.jsonl Family Fare: 2026-09-24 07:01 404->407 and 09:01 407->410; 2026-09-23 07:10, 08:01, 09:33. capture-watchdog-2026-09-24.log:46-72 (window 3 of 3, 10:36): cursor #410, 'throttle streak (15 empties)', 'per-window request cap reached (20 of 20 attempted)', 'got only 0 items vs 5520' -> no advance; 'catalog healthy - 5520 items, 0 expired, 86 re-verified in 48h'"
+      ],
+      "root_cause": "The coordinator's measurement holds (24 h back from 10:36:14 excludes 09-23 09:33, leaving 2). It is a REAL lost window, not the watchdog's counting: its own 10:30 shard bought 0 terms under a Freshop throttle. The same window bought 0 on 09-23 too and passed only because the 09:33 retry filled the count; over 2026-09-12..09-24 the ~10:34 window advanced on 7 of 11 days with rows. What triggers the throttle is unproven.",
+      "resolution_note": "Real lost window: the 10:36 watchdog shard hit a Freshop throttle (20 of 20 requests empty) after the 09:00 run's advance. Covered by the 90-day carry (5,520 items, 0 expired). No code change; the check paged correctly.",
+      "status": "done",
+      "close_disposition": "confirmed"
+    }
+  ],
+  "lane_budget": {
+    "money": {
+      "ceiling": 200,
+      "planned": 80,
+      "items": [
+        "2026-09-24-924782 (50, includes the recovery run)",
+        "2026-09-24-0f7b37 (30)"
+      ]
+    },
+    "ops": {
+      "ceiling": 100,
+      "planned": 55,
+      "items": [
+        "2026-09-24-3ca22f (30)",
+        "2026-09-24-755c23 (25)"
+      ]
+    }
+  },
+  "ship_sequence": [
+    "0. The main checkout carries 94 dirty paths of other sessions' work and stash@{0} (the 07:01:50 autostash, 50 foreign paths). Never revert, stage, stash-drop or commit them; land code only from a worktree through ops\\push-main.ps1.",
+    "1. RECOVERY FIRST (money, 924782 recovery_today 1-6): clear the 3 foreign agent-prompt blockers through their owner, then `powershell -NoProfile -ExecutionPolicy Bypass -File C:\\Codex\\ThriftyCrew\\grocery\\capture-run.ps1 -Kind daily -Force`; it runs the real chain (repair-multipack-sizes and stamp-ad-as-of before compare-deals, guards, quarantine, both feed exports, publish, recipes) and the tail pushes. If the quarantine export exits non-zero again, do step 2 first and repeat.",
+    "2. Batch 2 code (money): 0f7b37 export-feed.ps1 + feed-export-lib.ps1 and 924782 capture-run.ps1 + test-cadence.ps1; gates: export-feed -SelfTest, check-ad-cycles -SelfTest, test-cadence, lib\\test-checkout-sync.ps1, then ops\\push-main.ps1 (run-gates + test-auditors). No board rebuild: served bytes do not change.",
+    "3. Batch 1 code (ops): 3ca22f test-match-lib.ps1 (-SelfTest, live run, then test-auditors must be 0) and 755c23 hold-recipe.ps1 -Reconcile + its check-ad-cycles call (hold-recipe -SelfTest; a dry -Reconcile in the main checkout must list exactly the 11 slugs); ops\\push-main.ps1.",
+    "4. After the recovery rebuild: audit-match-soundness.ps1, confirm the only NEW-CONTESTED row is the Inglehoffer horseradish row, -Accept, commit grocery/out/audit/match-baseline.json through push-main (ops\\verify-commodities-gate.ps1 checks it) - f44c88.",
+    "5. Live verification: cache-busted feed 'generated' is today's; board.json at the edge carries today's cells; the next FEED ASSERT reports no absent published recipe and audit-live-price-contract reports cards=566.",
+    "6. Close all 12 ids with grocery\\triage-close.ps1 using each resolution_note; mint weekly-lane items for 3ca22f's and 0f7b37's non-zero leaves_open (send-alert.ps1 -Lane weekly)."
+  ],
+  "open_questions_for_brad": []
+}

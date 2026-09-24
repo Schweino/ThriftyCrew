@@ -1,0 +1,96 @@
+{
+  "generated": "2026-09-24T18:05:00",
+  "round": 2,
+  "lane": "money",
+  "board_week": "comparison-2026-09-23.json (week_of 2026-09-23, built_at 2026-09-24T16:45:40, file landed 16:56; triage-due printed 'BOARD comparison-2026-09-23  built 16:56:55 (51 min ago)', not MID-BUILD and not JUST LANDED). Published board: public/board.json at e90682129, byte-identical to origin/main a9d1f1691 at 17:36.",
+  "queue_ids_seen": [
+    "2026-09-24-f44c88"
+  ],
+  "scope_note": "Round 2, the one STEP 4.5 drain round (cap 2). One item: 2026-09-24-f44c88, which owns the whole soundness condition today; 2026-09-24-3b1e6e is superseded by it in plan-2026-09-24-2.json. The 17:05 run's lines ALSO landed as count increments on yesterday's open ids 2026-09-23-b2850b (NEW CONTESTED, x3, a RETURN routed to the ops lane by triage-due) and 2026-09-23-f77857 (RULE CHANGE UNREVIEWED, x2). Those ids are outside this run's scope; the accept planned here clears the condition behind both, and the orchestrator should close or supersede them against this item.",
+  "untrusted_input_note": "No fetched page, log line, capture row or tool result in this run addressed the agent or asked for anything. Nothing to quote. No web fetch was made.",
+  "knowledge_consulted": {
+    "searched": [
+      "match soundness baseline accept",
+      "form token wrong product",
+      "block cheese oranges"
+    ],
+    "used": [
+      "data-quality-craft/applies-here.md ('First-match-wins and freshness ranking let the wrong row take a board cell', excerpt pasted in the dispatch): every line below is ruled on the ROW that holds the cell (name, size, price) read from the comparison AND the published board.json, not on the token match.",
+      "data-quality-craft/applies-here.md ('Baselines and ratchets', read lines 198-209): a baseline is raised only by an explicit -Accept, so the accept is the designed valve and must be taken against exactly the reviewed line set, never a later corpus.",
+      ".claude/rules/grocery.md (founding rule quoted in the dispatch, 'a wrong product is a SELLER SHAPE, not a brand'): the one wrong route (Deutsche Küche) is judged as a shape (an Aldi weekly-ad 'A or B' prepared-flavour line), which is why a flavour-word exclude is refused below."
+    ],
+    "nothing_applicable": "searched 'form token wrong product' and 'block cheese oranges': no store section beyond the two above bears on these rows."
+  },
+  "routing_artifact": null,
+  "routing_artifact_note": "No item changes a matching rule, so no routing sidecar is written. The engine's own routing is already frozen in grocery/out/audit/soundness-report.json (generated 2026-09-24 17:05, drift_vs_engine 0) and candidates-2026-09-23.json.",
+  "items": [
+    {
+      "queue_id": "2026-09-24-f44c88",
+      "subject": "Grocery matching soundness: CONTESTED CROWN (17:05 re-run: MOVED=0 DROPPED=4 new-contested=4, CAUSE [RULE CHANGE UNREVIEWED], carried-forward names)",
+      "classification": "no-code-change",
+      "lane": "money",
+      "est_tool_calls": 8,
+      "verdict_for_the_day": "All four DROPPED lines are correct drops by reviewed rules; three of four NEW-CONTESTED names route correctly; one (Deutsche Küche) routes wrongly to chickpeas but holds no cell, is not an engine candidate, and cannot take the Aldi chickpeas cell at twice its per-oz. No wrong product holds a crown on the live board. The fix is the baseline accept; no rule changes.",
+      "evidence": [
+        "CAUSE (ad-cycle-log.txt:35610, 17:08:05): 'CAUSE [RULE CHANGE UNREVIEWED]: 4 of these names were absent when the baseline was last accepted and were carried forward with the route they had when last seen, so the rules they now route under (rules_hash a88fe11831a1) were never reviewed for them.' match-baseline.json: generated 2026-09-23 02:02, rules_hash a88fe11831a1..., committed dc4be7174 WITH commodities.json; no commit to commodities.json since. last_seen for the four dropped names: 2026-09-22, 2026-09-22, 2026-09-19, 2026-09-19, all before that accept.",
+        "DROPPED carrots 'Fresh Cut In Store Carrot & Cucumber Ranch' -> unmatched. RULING: correct drop. A cut-veg-with-ranch snack cup, not carrots. Dropped by carrots (commodities.json index 50) exclude '\\branch\\b', added in dc4be7174. Live cell: carrots crown Fareway 'Carrot' $3.99 / 5 lb = $0.798/lb sale; every store row is whole or baby carrots. Holds no cell.",
+        "DROPPED cucumbers 'Fresh Cut In Store Cucumber Ranch Bowl' -> unmatched. RULING: correct drop. Same snack-cup shape; cucumbers (index 55) exclude '\\branch\\b' (dc4be7174). Live cell: cucumbers crown Aldi 'Cucumber Each' $0.75 each; every row is a whole cucumber. Holds no cell.",
+        "DROPPED tea-bags \"Member's Mark Zero Sugar Green Tea, 16.9 fl. oz., 35 pk.\" -> unmatched. RULING: correct drop. A 35-pack of bottled drink, not tea bags. tea-bags (index 256) excludes 'zero\\s+sugar', '\\bfl\\.?\\s*oz\\b' and 'bottle', and its include is 'green\\s+tea\\b(?!.{0,15}(?:bottle|drink))'. Live cell: tea-bags crown Walmart 'Great Value Black Tea Bags, 8 oz' $2.04 / 100 ct = $0.0204 each. Holds no cell.",
+        "DROPPED toothbrushes 'Colgate Max Fresh Wisp Disposable Travel Toothbrushes, Mini Toothbrush, Peppermint, 24 Count' -> unmatched. RULING: correct drop. A single-use disposable mini brush is a different product from the manual toothbrush the commodity prices; toothbrushes (index 294) exclude '\\bwisps?\\b'. Live cell: toothbrushes crown Walmart 'Reach Essentials Manual Toothbrush with Cap, Soft, 2 Count' $1.00 = $0.50 each; Sam's row is 'Oral-B ProHealth Advanced Manual Soft Toothbrush, 8 ct.' $14.97 = $1.8712 each. Holds no cell.",
+        "NEW-CONTESTED 'Inglehoffer Horseradish Cream Style 9.5 OZ' (Aldi, $2.84 / 9.5 oz = $0.2989/oz everyday, as_of 2026-09-24), chain horseradish (oz) > horseradish-sauce (oz). RULING: correct product, round 1's ruling stands (a creamy PREPARED horseradish; Walmart sells the identical maker's 9.5 oz jar as 'Inglehoffer Creamy Style Prepared Horseradish' on the same cell). CROWN: in comparison-2026-09-23.json it holds horseradish @ Aldi $0.2989/oz. On the PUBLISHED board (public/board.json at e90682129 = origin/main) the horseradish chips are Walmart 0.3032 (is-best), Baker's 0.3738, Family Fare 0.4988: the Aldi chip is not published, so the live crown is Walmart's Inglehoffer Creamy 9.5 oz at $0.3032/oz. Why Aldi is withheld was NOT traced; out/product-urls.json no longer carries the Aldi row (only out/product-urls.backup-preprune.json does), which points at the link prune, unproven.",
+        "NEW-CONTESTED [FORM] 'Deutsche Küche Lentil Chickpea or Harvest Potato' (Aldi Weekly Ad 2026-09-23..2026-09-29, $3.15, 28 oz. = $0.1125/oz), chain chickpeas (oz) > brown-lentils (lb). RULING: WRONG PRODUCT ROUTE, no cell. An 'A or B' two-flavour line of a prepared 28 oz product; 'Harvest Potato' is not chickpeas in any reading. It is NOT in candidates-2026-09-23.json (soundness verdict 'not in the newest candidates file'), so the engine never priced it; the chickpeas cell is 'Aldi Garbanzo Beans 15.5 OZ' $0.85 = $0.0548/oz (published board: Aldi 0.0548 is-best), so even as a candidate it loses the Aldi cell at 2.05x. No rule change this round: see root_cause.",
+        "NEW-CONTESTED 'Di Lusso deli sliced ham, turkey, chicken or cheese, FREE King's Hawaiian slider buns 9 ct. with 1 lb. purchase of Di Lusso deli sliced ham, turkey or chicken,' (Hy-Vee Weekly Ad 2026-09-21..2026-09-27, no price), chain deli-ham (oz) > sliced-cheese (oz). RULING: correct holding of nothing. A free-with-purchase promo line with no price; it sits in the deli-ham candidates with price_text equal to its own name and verdict UNPRICED. Hy-Vee's deli-ham cell is 'Smithfield Sliced Deli Ham' $4.99/lb = $0.3119/oz; crown Sam's 'Extra Lean Premium Ham, 1.25 lbs each., 2 pk.' $8.24 = $0.206/oz. Routing a ham/turkey/chicken deli offer to deli-ham is the right commodity. No change.",
+        "NEW-CONTESTED [FORM] 'Kroger Orange Rind Muenster Block Cheese' (Baker's, $3.69 / 16 oz = $0.2306/oz everyday, as_of 2026-09-23), chain block-cheese (oz) > oranges (lb). RULING: correct product, correct commodity, no cell. The dispatch premise 'Muenster on oranges' is REFUTED: the winner is block-cheese (index 16), oranges (index 45, include '\\boranges?\\b' matching the word 'Orange' in 'Orange Rind') is only the losing contestant. It loses the Baker's block-cheese cell to 'Kroger Colby Jack Block Cheese BIG DEAL!' $7.29 / 32 oz = $0.2278/oz; the crown is Sam's 'Member's Mark Sharp Cheddar Cheese Block 2 lbs.' $5.73 = $0.1791/oz (published board: Sam's 0.1791 is-best). The oranges cell is all navel oranges (crown Fareway 'Navel Oranges' $0.99/lb sale). No change."
+      ],
+      "root_cause": "No rule moved anything: rules_hash a88fe11831a1 equals the one the baseline was accepted against, commodities.json is unchanged since dc4be7174, and drift_vs_engine is 0. The alert is the carried-forward shape the audit names itself: the 2026-09-23 02:02 accept ran while the four dropped names were absent from the corpus, Merge-BaselineCarryForward kept them at the routes they had before dc4be7174's reviewed excludes ('\\branch\\b' on carrots and cucumbers, the bottled-drink excludes on tea-bags, '\\bwisps?\\b' on toothbrushes), and when they reappeared in today's captures they routed to nothing exactly as those rules intend. The four new-contested names are genuinely new arrivals (Aldi weekly ad from 2026-09-23, Hy-Vee weekly ad from 2026-09-21, Baker's capture 2026-09-23, Aldi everyday 2026-09-24) that two rules each admit. The one wrong route (Deutsche Küche to chickpeas) is left without a rule change on purpose: the obvious exclude ('\\blentil\\b' on chickpeas) re-lands the name on brown-lentils via its include '\\blentils?\\b', where 28 oz at $3.15 is $1.80/lb, BELOW the Walmart brown-lentils crown of $1.92/lb, so the naive fix turns an inert wrong route into a potential wrong CROWN; and a flavour-word exclude ('harvest potato') is a brand-word patch the founding rule refuses. The name is seasonal (German-week ad ending 2026-09-29), holds no cell, and is not an engine candidate.",
+      "surface_fix": "None to the board: no published cell is wrong. The condition closes by accepting the reviewed line set into grocery/out/audit/match-baseline.json.",
+      "root_fix": "None needed for the mechanism that fired: the carry-forward cause is the audit working as designed (it names the absent-at-accept names and asks for a review, which this plan is).",
+      "root_fix_none_because": "The alert's cause is a reviewed rule meeting names that were absent at the last accept; the audit already detects and labels exactly that shape (Get-RegressionCause, the CarriedCount branch). The only defect found (the Deutsche Küche route) holds no cell and its only cheap fix is measured above to be worse than leaving it.",
+      "leaves_open": "One wrong route, not fixed: 'Deutsche Küche Lentil Chickpea or Harvest Potato' is recorded as chickpeas when the accept runs. The class it belongs to is 'an Aldi weekly-ad A-or-B line naming two flavours of a prepared product, routed by the first commodity word in a flavour'. Measured today: 1 name, 0 cells, 0 crowns.",
+      "leaves_open_occurrences": "1 name in the 2026-09-24 corpus, 0 board cells and 0 crowns held, over the one day it has existed (first seen in the Aldi weekly ad of 2026-09-23).",
+      "leaves_open_window": "2026-09-23 to 2026-09-24",
+      "leaves_open_followup": "watch:grocery/build-arrivals-docket.ps1 (run by check-ad-cycles.ps1, logged as arrivals: FLAG#) - it already flags a NEW crown by a new arrival (it caught this very Aldi horseradish crown as FLAG#2 at 17:08:20), so if this name ever became a chickpeas or brown-lentils candidate and took a crown it would page. No queue item.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "corpus": "No rule change, so no new routing to measure. The routing of all eight names is the engine's own, read from grocery/out/audit/soundness-report.json (17:05, drift_vs_engine 0) and out/candidates-2026-09-23.json; the counterfactual re-landing of the Deutsche Küche name under a chickpeas exclude was reasoned from the brown-lentils include '\\blentils?\\b' and its excludes (none of which match the name), not simulated.",
+        "cell_effects": []
+      },
+      "freshness": "Measured against out/comparison-2026-09-23.json built_at 2026-09-24T16:45:40 (triage-due BOARD built 16:56:55, 51 min old at read, not MID-BUILD, not JUST LANDED); out/audit/soundness-report.json generated 2026-09-24 17:05 (the run in ad-cycle-log.txt 17:08:05, committed in e90682129); out/candidates-2026-09-23.json; public/board.json at e90682129 (== origin/main a9d1f1691 at 17:36); commodities.json at dc4be7174 (rules_hash a88fe11831a1); match-baseline.json generated 2026-09-23 02:02. A capture that lands after 17:05 can add names the accept would silently absorb, which is why ship step 1 re-runs the audit read-only first.",
+      "proof": {
+        "harness": "grocery/audit-match-soundness.ps1 (its own self-test carries the carried-forward MUST FIRE, 'equal hashes but a moved name the baseline CARRIED FORWARD ... reads as RULE CHANGE UNREVIEWED'). After the accept, a read-only re-run must exit 0 with MOVED=0 DROPPED=0 new-contested=0 drift=0.",
+        "fixture_occurrences": []
+      },
+      "rollback": "git revert the single commit that touches grocery/out/audit/match-baseline.json; the previous baseline (dc4be7174) comes back and the eight lines re-alert.",
+      "do_not_touch": "commodities.json and global-exclude-lib.ps1 (no rule change is planned, and a rule edit here would need its own routing artifact); the published board (no cell changes).",
+      "publish_batch": "none - baseline-only commit, no board rebuild",
+      "resolution_note": "Reviewed all eight 17:05 lines against the 16:56 board. DROPPED x4 (carrots and cucumbers ranch snack cups, Member's Mark bottled green tea 35 pk, Colgate Wisp disposables) are correct drops by reviewed dc4be7174 rules; they were absent at the 2026-09-23 accept and carried forward. NEW-CONTESTED: Inglehoffer Cream Style is a correct prepared horseradish (live crown is Walmart's identical Inglehoffer 9.5 oz at $0.3032/oz; the Aldi chip is not published); Kroger Orange Rind Muenster correctly routes to block-cheese, not oranges, and holds no cell; the Di Lusso promo line is unpriced and correctly on deli-ham; Deutsche Kuche Lentil Chickpea or Harvest Potato is a wrong route to chickpeas that holds no cell and is not an engine candidate, left unfixed because the obvious exclude would re-land it on brown-lentils below the $1.92/lb crown. No rule change. Closed by audit-match-soundness.ps1 -Accept and the baseline commit.",
+      "status": "done",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null,
+      "close_disposition": "confirmed"
+    }
+  ],
+  "lane_budget": {
+    "money": {
+      "ceiling": 200,
+      "planned": 8,
+      "items": [
+        "2026-09-24-f44c88 (8: read-only audit, accept, read-only re-run, pathspec commit, push, queue close)"
+      ]
+    }
+  },
+  "ship_sequence": [
+    "1. On the main checkout synced to origin/main, confirm commodities.json and global-exclude-lib.ps1 equal HEAD (no RULE EDIT IN PROGRESS), then run powershell -NoProfile -ExecutionPolicy Bypass -File grocery\\audit-match-soundness.ps1 WITHOUT -Accept. Proceed only if it prints exactly MOVED=0 DROPPED=4 new-contested=4 with the eight names in this item's evidence and rules_hash a88fe11831a1. Any extra or different line means a later capture brought a name nobody reviewed: stop and bounce the item with that line, do not accept.",
+    "2. Run grocery\\audit-match-soundness.ps1 -Accept.",
+    "3. Re-run grocery\\audit-match-soundness.ps1 read-only; read the EXIT CODE first: it must be 0 with MOVED=0 DROPPED=0 new-contested=0 drift=0. Spot-check that match-baseline.json now records 'Kroger Orange Rind Muenster Block Cheese' as block-cheese and the four dropped names as absent or unmatched.",
+    "4. Commit with a pathspec: git commit -F <msgfile> -- grocery/out/audit/match-baseline.json, message carrying the queue id and 'Store: data-quality-craft/applies-here.md (\"Baselines and ratchets\")'. Check git show --stat HEAD shows only that file; push.",
+    "5. Close 2026-09-24-f44c88 with the resolution_note. Tell the orchestrator the same accept clears the condition behind 2026-09-23-b2850b and 2026-09-23-f77857 (not this run's ids).",
+    "6. Live verification: none on the board (no cell moves). The next scheduled soundness run must be green or name only names that arrived after this accept."
+  ],
+  "open_questions_for_brad": [],
+  "out_of_scope_observations": [
+    "tea-bags @ Aldi: 'Benner Black Tea Bags 100 CT' is priced as size '24 ct' ($1.49 = $0.0621 each, as_of 2026-08-05); the raw row in out/regular/aldi-regular-2026-08-05.json carries size '24 ct' while its name and link slug say 100 ct. If 100 ct is true the row is $0.0149 each and would take the tea-bags crown from Walmart's $0.0204. Not proven either way; not today's alert.",
+    "deli-ham @ Fareway: 'Smoked Ham Shanks' $3.99/lb = $0.2494/oz holds the Fareway deli-ham cell; a bone-in shank is not deli ham. No crown (Sam's $0.206). Not today's alert."
+  ]
+}

@@ -3,8 +3,16 @@
   "round": 1,
   "lane": "cheap",
   "board_week": "2026-09-24",
-  "queue_ids_seen": ["2026-09-24-2311b6", "2026-09-24-ef23ea", "2026-09-24-3b1e6e"],
-  "ship_sequence": ["2026-09-24-3b1e6e", "2026-09-24-ef23ea", "2026-09-24-2311b6"],
+  "queue_ids_seen": [
+    "2026-09-24-2311b6",
+    "2026-09-24-ef23ea",
+    "2026-09-24-3b1e6e"
+  ],
+  "ship_sequence": [
+    "2026-09-24-3b1e6e",
+    "2026-09-24-ef23ea",
+    "2026-09-24-2311b6"
+  ],
   "knowledge_consulted": [
     "searched \"push blocked main checkout\", \"feed missing recipes\", \"contested crown horseradish\" (orchestrator, pasted into the brief)",
     "reliability-craft/applies-here.md, 'The 07:00 bot, the shared index, and the fix that never reached a commit': the bots share the main checkout's index; nothing here stages a path it does not own",
@@ -59,12 +67,13 @@
       "premise_verified": "CONTRADICTED: the dispatch premise was that the missing window is the failed 08:00 run (2026-09-24-a0e558). It is not: that run's 09:00 retry advanced 407->410. The window that did not advance is the watchdog's own 10:36 shard, which hit a Freshop throttle streak and its 20-request cap and recorded no cursor advance, and yesterday's third window advanced at 09:33, just outside the 24h count",
       "root_cause": "not settled in the cheap lane: either a throttled window that exhausts its request cap does not advance the Family Fare cursor (a real lost window, the class this check exists for), or the watchdog counts its own shard before that shard's advance lands and a 09:33-vs-10:36 timing shift drops a window out of the 24h count",
       "root_fix_none_because": "promoted to the reviewer before a fix is designed; the evidence contradicts the no-code-change/superseded classification the dispatch proposed",
-      "leaves_open": "the cause of the non-advancing 10:36 watchdog shard window (1 occurrence measured today)",
+      "leaves_open": "nothing - promoted and ruled in plan-2026-09-24.json item 2026-09-24-2311b6: a real lost window (the 10:36 shard got 20 of 20 throttled empties from Family Fare), covered by the 90-day carry, no code change",
       "leaves_open_occurrences": 1,
       "leaves_open_owner": "promote: the orchestrator hands this item to the reviewer (status promote); no new queue item minted",
-      "status": "promote",
+      "status": "superseded",
       "promote_reason": "Evidence contradicts the proposed owner: the 08:00 run's retry advanced FF at 09:01; the missing advance is the 10:36 watchdog shard, throttled to its 20-request cap with no cursor move.",
-      "resolution_note": "Not superseded by 2026-09-24-a0e558. Promote to reviewer: the non-advancing window is the watchdog's own throttled shard (10:36), not the failed 08:00 run."
+      "resolution_note": "Not superseded by 2026-09-24-a0e558. Promote to reviewer: the non-advancing window is the watchdog's own throttled shard (10:36), not the failed 08:00 run.",
+      "close_disposition": "superseded"
     }
   ]
 }
