@@ -358,27 +358,31 @@ function Measure-CsB9 { param($WdRuns, $Since, [int]$Min = 1)
 # ---- LANDINGS, READ-OUTS AND SECTION 13 ---------------------------------------------------------------------------------
 function Get-CsPlanLineItems {
   <# The item ids a commit message LANDS for this plan, in order. Only a `Plan: <this plan's path> <ids>` line counts,
-     and only the ID LIST that follows the path: the text is cut at the first `(`, split into segments on `,`, `;` and a
-     spaced `and`, and each segment's FIRST word, with a trailing . ) or : trimmed, is an id only when it is a whole
-     W<n>.<n> token (so W2.1 is never read out of W2.10). The first segment that does not open with an id ends the list,
-     so prose after the ids names nothing. Founding case (2026-09-23): 1d59fbfba's line is `... W4.2 (complements it:
-     ... no start sync here, W4.1 owns it)`, and reading every token anywhere on the line landed W4.1 six hours before
-     it reached origin/main. `W4.1 step 7, W4.2` still reads both ids; `(this commit adds it)` and another plan's line
-     read none. ops\probe-push-convergence.ps1's Get-TcPpcPlanLineItems applies this grammar to its own plan (2026-09-24)
+     and only the ID LIST that follows the path: the text is cut at the first `(`, the first `:` and the first `.` that
+     ends a word (a full stop, never the dot inside W4.1), split into segments on `,`, `;` and a spaced `and`, and each
+     segment's FIRST word, with a trailing `)` trimmed, is an id only when it is a whole W<n>.<n> token (so W2.1 is never
+     read out of W2.10). The first segment that does not open with an id ends the list, so prose after the ids names
+     nothing. Founding case (2026-09-23): 1d59fbfba's line is `... W4.2 (complements it: ... no start sync here, W4.1
+     owns it)`, and reading every token anywhere on the line landed W4.1 six hours before it reached origin/main. Second
+     case (2026-09-24): a colon or full stop was only TRIMMED off the id, so `W4.2: ..., W4.1 owns it` landed W4.1; it
+     now ends the list wherever it falls, on the id or on a word after it (`W4.1 step 7: ..., W4.2 owns it`).
+     `W4.1 step 7, W4.2` still reads both ids; `(this commit adds it)` and another plan's line read none.
+     ops\probe-push-convergence.ps1's Get-TcPpcPlanLineItems applies this grammar to its own plan (2026-09-24)
      and is deliberately NOT shared: that plan writes a replacement beside its original, space-separated and suffixed
-     (`W2.1R W2.1 W8.1`, `W3.2 W3.4a`), so it takes a segment's leading RUN of ids and ends the list at an id written
-     with a trailing `.` or `:`. That would widen this reader, which is not an extraction. #>
+     (`W2.1R W2.1 W8.1`, `W3.2 W3.4a`), so it takes a segment's leading RUN of ids, which this plan never writes (its
+     27 landing commits on origin/main at 2026-09-24 separate ids with commas and mint no suffixed id). That reader ends
+     the list only at an id written with a trailing `.` or `:`, so a colon on a later word does not stop it. #>
   param([string]$Message)
   $ids = [Collections.Generic.List[string]]::new()
   $lineRx = '(?m)^[ \t]*Plan:[ \t]*' + [regex]::Escape($script:CsPlanPath) + '(?:[ \t]+([^\r\n]*?))?[ \t]*\r?$'
   foreach ($m in [regex]::Matches([string]$Message, $lineRx)) {
     $rest = $m.Groups[1].Value
-    $paren = $rest.IndexOf('(')
-    if ($paren -ge 0) { $rest = $rest.Substring(0, $paren) }
+    $stop = [regex]::Match($rest, '[(:]|\.(?=\s|$)')
+    if ($stop.Success) { $rest = $rest.Substring(0, $stop.Index) }
     foreach ($seg in ($rest -split '\s*[,;]\s*|\s+and\s+')) {
       $s = $seg.Trim()
       if (-not $s) { continue }
-      $first = ($s -split '\s+')[0].TrimEnd('.', ')', ':')
+      $first = ($s -split '\s+')[0].TrimEnd(')')
       if ($first -cnotmatch '^W\d+\.\d+$') { break }
       if (-not $ids.Contains($first)) { $ids.Add($first) }
     }
@@ -557,7 +561,7 @@ if ($SelfTest) {
     else { Write-Output ('FAIL  ' + $Label + '  ' + $What + '   got: ' + $Got); $script:csFail++ }
   }
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN: every Test-CsCase call below is counted against this.
-  $CS_SELFTEST_CASES = 44
+  $CS_SELFTEST_CASES = 48
   $csRoot = Join-Path $env:TEMP ('rcs-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
   $csPrevCd = $env:GIT_COMMITTER_DATE; $csPrevAd = $env:GIT_AUTHOR_DATE
   try {
@@ -704,6 +708,21 @@ if ($SelfTest) {
     Test-CsCase 'MUST NOT FIRE' 'the plan''s own "(this commit adds it)" line, another plan''s line and a Plan: not at line start land nothing' (@($itNone).Count -eq 0) ((@($itNone) -join ','))
     $itReal = Get-CsPlanLineItems ("W0.2 and friends`n`nPlan: " + $script:CsPlanPath + " W0.2, W3.2, W4.1 step 7, W4.2, W5.1.`nPlan: " + $script:CsPlanPath + " W2.2 step 3 and 4`n")
     Test-CsCase 'CLEAN TWIN' 'real landing lines still resolve: a five-item list with a step note and a full stop, and an id followed by its step, read W0.2 W3.2 W4.1 W4.2 W5.1 W2.2' ((@($itReal) -join ',') -eq 'W0.2,W3.2,W4.1,W4.2,W5.1,W2.2') ((@($itReal) -join ','))
+    # A colon or a full stop ends the id list wherever it falls (2026-09-24). Until then the colon was only trimmed off
+    # the first word, so the segment after it still opened a new id. The cut is one rule reached three ways, so each
+    # way has its own case: a colon on the id, a colon on a later word, a full stop on a later word.
+    $plColon = 'Plan: ' + $script:CsPlanPath + ' W4.2: the stale check moves with the push stage, W4.1 owns it'
+    $itColon = Get-CsPlanLineItems $plColon
+    Test-CsCase 'MUST FIRE' 'a colon on the id ends the list: "W4.2: ..., W4.1 owns it" lands W4.2 and NOT W4.1' ((@($itColon) -join ',') -eq 'W4.2') ((@($itColon) -join ','))
+    $plStepColon = 'Plan: ' + $script:CsPlanPath + ' W4.1 step 7: the start sync, W4.2 owns it'
+    $itStepColon = Get-CsPlanLineItems $plStepColon
+    Test-CsCase 'MUST FIRE' 'a colon on a word after the id ends the list: "W4.1 step 7: ..., W4.2 owns it" lands W4.1 and NOT W4.2' ((@($itStepColon) -join ',') -eq 'W4.1') ((@($itStepColon) -join ','))
+    $plStop = 'Plan: ' + $script:CsPlanPath + ' W4.1 step 7. Next, W4.2 owns the rebase'
+    $itStop = Get-CsPlanLineItems $plStop
+    Test-CsCase 'MUST FIRE' 'a full stop after the ids ends the list: "W4.1 step 7. Next, W4.2 owns ..." lands W4.1 and NOT W4.2' ((@($itStop) -join ',') -eq 'W4.1') ((@($itStop) -join ','))
+    $plPlain = 'Plan: ' + $script:CsPlanPath + ' W0.2, W3.2; W4.1 and W4.2'
+    $itPlain = Get-CsPlanLineItems $plPlain
+    Test-CsCase 'CLEAN TWIN' 'a plain id list with no colon or full stop still lands every id, across all three separators: W0.2 W3.2 W4.1 W4.2 (the dot inside an id is never a stop)' ((@($itPlain) -join ',') -eq 'W0.2,W3.2,W4.1,W4.2') ((@($itPlain) -join ','))
 
     # ---- END TO END through the real script: -Due, and a plain run, against a temp repo ----
     New-Item -ItemType Directory -Path $csRoot -ErrorAction Stop | Out-Null
