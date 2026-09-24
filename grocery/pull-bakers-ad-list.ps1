@@ -55,6 +55,11 @@
   Self-test:  pull-bakers-ad-list.ps1 -SelfTest   (hermetic: the frozen 2026-09-16 ad in
               regression-inputs\bakers-ad-2026-09-16, a temp out dir, no network)
 #>
+# Its declared inputs (lib\gate-input-key.ps1): -SelfTest runs this script as a child over the frozen fixture (root.json
+# and pages\*.json, a LISTING, so each is a glob) with a temp -OutDir and a fixed -Today. The child loads the libraries
+# below (capture-policy-lib loads ledger-lock and flag-verify-lib through $script:PolicyRoot, which the key cannot read,
+# so both are named) and reads commodities.json and commodity-search.json to route the offers; nothing under out\ is read.
+# gate-inputs: grocery\regression-inputs\bakers-ad-2026-09-16\*.json, grocery\regression-inputs\bakers-ad-2026-09-16\pages\*.json, lib\json-io.ps1, lib\atomic-write.ps1, grocery\capture-policy-lib.ps1, lib\ledger-lock.ps1, grocery\flag-verify-lib.ps1, grocery\match-lib.ps1, grocery\global-exclude-lib.ps1, grocery\commodities.json, grocery\commodity-search.json
 [CmdletBinding()]
 param(
   [string]$AdId = '',
