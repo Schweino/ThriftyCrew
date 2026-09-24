@@ -706,11 +706,12 @@ def selftest():
              and "plan-citation: BLOCKED" not in (mr.stderr or ""))
         # The hook used to `exit 1` the moment store_citation refused. It now runs both checks and then decides, so
         # the adjacent behaviour most likely broken on the way past is a store refusal: it must still refuse, and the
-        # plan check must have run as well. A stub store_citation.py that refuses stands in for the real one.
+        # plan check must have run as well. A stub store_citation.py that refuses stands in for the real one. It exits 10,
+        # store_citation's REFUSE_EXIT since 2026-09-24: the hook reads every other non-zero code from it as BLIND.
         set_copy("9999-12-31")
         stub_store = os.path.join(hrepo, "ops", "store_citation.py")
         with open(stub_store, "w", encoding="utf-8", newline="\n") as f:
-            f.write("import sys\nsys.exit(1)\n")
+            f.write("import sys\nsys.exit(10)\n")
         r, landed = hook_commit("ops/x.ps1", "store refuses\n\nbody\n")
         case("CLEAN TWIN a store-citation refusal still refuses the commit, and the plan check ran before the hook decided",
              r.returncode != 0 and not landed and ("plan-citation: WARN - ops/x.ps1 is named by " + pa) in (r.stderr or ""))

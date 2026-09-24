@@ -71,6 +71,16 @@ of index files (CLAUDE.md, MEMORY.md, memory:MEMORY, CATALOGUE.md, knowledge-sea
 and a `Store-Exempt:` reason under three words. Each is recorded as verdict `escape-warn` with `escape` naming the
 form, and the hook prints a NOTE and lets the commit through, until ESCAPES_REFUSE_FROM is set (D1b).
 
+IT FAILS OPEN, AND NEVER SILENTLY (Brad's ruling, 2026-09-24: "Match plan-citation (Recommended)"). A refusal is
+exit REFUSE_EXIT (10), the value ops/plan_citation.py already uses, and ops/hooks/commit-msg refuses on that code and
+on no other. Until that day main() had no top-level try and the hook refused on ANY non-zero code, so a traceback
+(exit 1) refused the commit: a could-not-look settled the question. Now an exception inside the commit check prints
+`store-citation: BLIND - the check raised ...` and its traceback and returns 0, and the hook prints every non-zero code
+but 10 as BLIND and lets the commit through.
+
+EXIT CODES. --commit-msg: 0 (ok, exempt, escape-warn, warn, not judged, BLIND) or 10 (refused). --selftest: 0 pass,
+1 a case failed. The plan audit (no arguments): 0 clean, 1 a plan without the section.
+
 SCOPE OF A CLEAN REPORT: sound for what it checks and nothing more. A clean plan audit proves every new
 plan HAS the section, never that the section is honest or that the design used it well; a judgement has
 no exit code. A clean commit check proves the named files exist, not that they were read.
@@ -82,6 +92,13 @@ import subprocess
 import sys
 import tempfile
 import time
+import traceback
+
+# The ONE exit code that refuses a commit (Brad, 2026-09-24). ops/hooks/commit-msg maps exactly this code to a refusal
+# and every other non-zero code to a BLIND line. The same value as ops/plan_citation.py's REFUSE_EXIT, so the hook
+# reads one contract for both checks; 10 is outside what an interpreter failure gives (1 for a traceback, 2 for a file
+# it cannot open, 120 for a flush failure, 128 and up for a signal).
+REFUSE_EXIT = 10
 
 PLAN_CUTOFF = "2026-09-20"   # plans named with an earlier date are not judged (first day after landing)
 REFUSE_FROM = "2026-09-25"   # Brad, 2026-09-18: one week of warnings, then refuse. First value, not a sweep.
@@ -602,7 +619,7 @@ def emit_verdict(d, n_code, out=None):
           "                  Store: .claude/rules/ops-and-gates.md (\"A catch around a native redirect is not a guard\"); lib/atomic-write.ps1 (reused)\n"
           "                  Store: searched \"regex timeout\", nothing applicable\n"
           "                  Store-Exempt: <reason>   (mechanical commits only - logged)", file=out)
-    return 1 if d["verdict"] == "refuse" else 0
+    return REFUSE_EXIT if d["verdict"] == "refuse" else 0
 
 
 # ---- self-test --------------------------------------------------------------------------------------
@@ -886,6 +903,43 @@ def selftest():
              hr2.returncode == 0 and hhead2 == "cites a rule" and len(hrows) == 1 and hrows[0].get("verdict") == "ok"
              and hrows[0].get("cited") == [".claude/rules/r.md"])
 
+        # ---- Brad, 2026-09-24 ("Match plan-citation (Recommended)"): only REFUSE_EXIT refuses; a crash is BLIND ----
+        # Each case rewrites the checkout's copy of THIS file and commits through the real hook. Until that day main()
+        # had no top-level try and the hook refused on any non-zero code, so a traceback refused the commit.
+        sc_path = os.path.join(hrepo, "ops", "store_citation.py")
+        refuse_needle = ('REFUSE_FROM = "%s"' % REFUSE_FROM).encode()
+        crash_needle = b"def run_commit_check(msg_path):\n"
+        case("CLEAN TWIN the fixture copy's REFUSE_FROM line and run_commit_check head were each found exactly once",
+             me.count(refuse_needle) == 1 and me.count(crash_needle) == 1)
+        past = me.replace(refuse_needle, b'REFUSE_FROM = "2000-01-01"')
+        with open(sc_path, "wb") as f:
+            f.write(past)
+        hr3, hhead3 = hook_commit(hrepo, "lib/x.ps1", "w\n", "no store line\n\nbody\n", "refuse")
+        case("MUST FIRE through the real hook a genuine missing-Store verdict past REFUSE_FROM refuses: BLOCKED, not BLIND,"
+             " and the commit does not land",
+             hr3.returncode != 0 and hhead3 == "cites a rule" and "store-citation: BLOCKED" in (hr3.stderr or "")
+             and "store-citation: BLIND" not in (hr3.stderr or ""))
+        hr6, hhead6 = hook_commit(hrepo, "lib/x.ps1", "t\n", 'cites again\n\nStore: .claude/rules/r.md ("a rule")\n', "ok2")
+        case("CLEAN TWIN past REFUSE_FROM a commit that cites a rule still lands through the real hook, with no BLOCKED or BLIND",
+             hr6.returncode == 0 and hhead6 == "cites again" and "store-citation: BLOCKED" not in (hr6.stderr or "")
+             and "store-citation: BLIND" not in (hr6.stderr or ""))
+        with open(sc_path, "wb") as f:
+            f.write(past.replace(crash_needle, crash_needle + b"    raise RuntimeError('fixture crash')\n"))
+        hr4, hhead4 = hook_commit(hrepo, "lib/x.ps1", "v\n", "crash inside\n\nbody\n", "raise")
+        case("MUST FIRE a check that raises inside run_commit_check prints BLIND and its traceback, and the uncited commit"
+             " lands through the real hook, past REFUSE_FROM",
+             hr4.returncode == 0 and hhead4 == "crash inside"
+             and "store-citation: BLIND - the check raised RuntimeError: fixture crash" in (hr4.stderr or "")
+             and "Traceback" in (hr4.stderr or ""))
+        with open(sc_path, "w", encoding="utf-8", newline="\n") as f:
+            f.write("raise RuntimeError('fixture crash before main')\n")
+        hr5, hhead5 = hook_commit(hrepo, "lib/x.ps1", "u\n", "crash before main\n\nbody\n", "stub")
+        case("MUST FIRE a copy that dies before main (exit 1) is BLIND in the hook, never a refusal: the uncited commit lands",
+             hr5.returncode == 0 and hhead5 == "crash before main"
+             and "store-citation: BLIND - ops/store_citation.py exited 1" in (hr5.stderr or ""))
+        with open(sc_path, "wb") as f:
+            f.write(me)
+
         # ---- W4.5 step 0: a commit to the BRAIN repo resolves estate tokens, and warns until BRAIN_REFUSE_FROM ----
         # A temp estate repo tracks design/PLAN-x.md and .claude/rules/r.md; a temp brain repo IS the temp home's
         # .claude, so repo_is_brain is decided the way run_commit_check decides it. RECALL_ESTATE_ROOT names the temp
@@ -1003,8 +1057,8 @@ def selftest():
             globals()["ESCAPES_REFUSE_FROM"] = saved_esc
         eo = __import__("io").StringIO()
         erc = emit_verdict(d, 1, out=eo)
-        case("MUST FIRE with ESCAPES_REFUSE_FROM set to a past date the same line refuses (exit 1, BLOCKED)",
-             d["verdict"] == "refuse" and erc == 1 and "BLOCKED" in eo.getvalue())
+        case("MUST FIRE with ESCAPES_REFUSE_FROM set to a past date the same line refuses (exit REFUSE_EXIT, BLOCKED)",
+             d["verdict"] == "refuse" and erc == REFUSE_EXIT and "BLOCKED" in eo.getvalue())
         d = judge_message("fix\n\nbody\n", code, store, late, None)
         case("CLEAN TWIN on 2026-09-30 a code commit with no Store: line still refuses (the mode, not an escape)",
              d["verdict"] == "refuse" and d["escape"] is None)
@@ -1031,7 +1085,7 @@ def selftest():
 
     for f in fails:
         print("  FAIL  " + f)
-    expected = 72
+    expected = 77
     if n != expected:
         fails.append("ran %d cases, expected %d" % (n, expected))
         print("  FAIL  ran %d cases, expected %d" % (n, expected))
@@ -1044,7 +1098,16 @@ def main(argv):
         return selftest()
     if "--commit-msg" in argv:
         i = argv.index("--commit-msg")
-        return run_commit_check(argv[i + 1]) if i + 1 < len(argv) else 0
+        if i + 1 >= len(argv):
+            print("store-citation: BLIND - no message file was passed; the commit is not judged", file=sys.stderr)
+            return 0
+        try:
+            return run_commit_check(argv[i + 1])
+        except Exception as e:                    # FAILS OPEN, and says so: never a silent pass, never a refusal
+            print("store-citation: BLIND - the check raised %s: %s; the commit is not judged" % (type(e).__name__, e),
+                  file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
+            return 0
     return run_plan_audit(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 

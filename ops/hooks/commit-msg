@@ -6,7 +6,7 @@
 #      (ops/plan_citation.py, W7.2 of design/PLAN-push-derived-conflicts-2026-09-23.md).
 # 2 and 3 run from the COMMITTING checkout's own copy, judge only when CLAUDE_CODE_SESSION_ID is set, and both run
 # before the hook decides, so one commit shows every finding at once. Anything they cannot evaluate is a BLIND line
-# and never a refusal.
+# and never a refusal: each refuses on exit 10 and on no other code (2026-09-24 for 2, W7.2 for 3).
 #
 # THE BOM CHECK (1):
 # WHY THIS EXISTS (2026-09-07). Commit 79c62b0f0's subject line starts EF BB BF:
@@ -59,6 +59,11 @@ fi
 # own copy, so a branch can test its own edit to it. This hook is shared by every checkout, though, and on
 # 2026-09-22 57 of 92 checkouts had no ops/store_citation.py at all: their commits were never judged and the
 # hook said nothing. A could-not-look is never a refusal, and it is never silent either.
+#
+# IT FAILS OPEN, LIKE PLAN CITATION BELOW (Brad's ruling, 2026-09-24: "Match plan-citation (Recommended)"). Until that
+# day this block refused on ANY non-zero code, so a traceback in store_citation.py refused the commit. Its ONE refusal
+# code is now 10 (its REFUSE_EXIT, the same value plan_citation.py uses); every other non-zero code is printed as BLIND
+# and the commit goes through.
 py="/c/Codex/Python312/python.exe"
 top="$(git rev-parse --show-toplevel 2>/dev/null)"
 refuse=0
@@ -68,7 +73,13 @@ if [ -n "${CLAUDE_CODE_SESSION_ID:-}" ]; then
   elif [ ! -x "$py" ]; then
     echo "store-citation: BLIND - no interpreter at $py; the commit is not judged" >&2
   else
-    "$py" "$top/ops/store_citation.py" --commit-msg "$msg" || refuse=1
+    "$py" "$top/ops/store_citation.py" --commit-msg "$msg"
+    src=$?
+    case "$src" in
+      0) ;;
+      10) refuse=1 ;;
+      *) echo "store-citation: BLIND - ops/store_citation.py exited $src, which is not a verdict (only 0 and 10 are); the commit is not judged" >&2 ;;
+    esac
   fi
 fi
 
