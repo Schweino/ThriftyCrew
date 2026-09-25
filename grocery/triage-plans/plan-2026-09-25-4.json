@@ -1,0 +1,727 @@
+{
+  "generated": "2026-09-25T17:20:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-23 (week_of 2026-09-23), built_at 2026-09-25T08:06:39, quarantine applied 08:14:10",
+  "queue_ids_seen": [
+    "2026-09-18-ceab00",
+    "2026-09-20-bec597",
+    "2026-09-21-85c3b7",
+    "2026-09-21-274e4b",
+    "2026-09-19-c9f0f3",
+    "2026-09-22-a09096",
+    "2026-09-22-5d20b9",
+    "2026-09-23-0c8e6e",
+    "2026-09-23-a83841",
+    "2026-09-23-92e552",
+    "2026-09-23-822c30",
+    "2026-09-23-90de7b",
+    "2026-09-24-c59dce"
+  ],
+  "note": "JOB 3 transcription for Brad's 2026-09-25 second run. Written as plan-2026-09-25-4 because plan-2026-09-25-3.json already exists (the laundry-terms item, committed in fc2b4c6fd). Eight RESUME ids were already resolved in the queue with their fixes on origin/main; they are recorded done and owe no close.",
+  "routing_artifact": null,
+  "items": [
+    {
+      "queue_id": "2026-09-18-ceab00",
+      "subject": "Baker's ad list: brand-only offers name tracked goods through multi-commodity brands (RESUME from plan-2026-09-22-5)",
+      "classification": "infra",
+      "evidence": [
+        "grocery/triage-queue.json 2026-09-25 re-read: status 'resolved', resolved_ts '2026-09-22T21:45:58', notes: 'Shipped in plan-2026-09-22-5 (batch 2), landed on origin/main 427327335 ... Residual owner: watch:grocery/audit-known-wrong.ps1'",
+        "the landing commit 427327335 is on origin/main (git branch -r --contains, 2026-09-25)"
+      ],
+      "root_cause": "the commodity was one brand line by policy, so every other liquid detergent was invisible or ruled wrong one SKU at a time; the brand-only offers have no honest single commodity",
+      "root_fix": {
+        "what": "laundry-detergent redefined by form and unit through the matching gate; policy rulings reversed; brand-only offers unrouted by design",
+        "files": [
+          "grocery/commodities.json",
+          "grocery/known-wrong.json"
+        ],
+        "exact_change": "as shipped in plan-2026-09-22-5 (landed 427327335)"
+      },
+      "leaves_open": "nothing (reversed-ruling link skip fixtured in test-auditors)",
+      "leaves_open_occurrences": 0,
+      "proof": {
+        "must_fire_case": "carried: the first apply-coverage-batch run was REVERTED by audit-known-wrong while the 10 policy rulings stood",
+        "clean_twin": "carried: the 3 form rulings (powder, paks, in-wash booster) stay active and the form excludes still refuse them",
+        "guard_or_fixture": "apply-coverage-batch gates and the match-soundness baseline (plan-2026-09-22-5)"
+      },
+      "rollback": "none owed here: the fix landed under its own plan and is reverted there if ever",
+      "freshness": "queue and origin/main read 2026-09-25 ~17:00; board comparison-2026-09-23 built 2026-09-25 08:14",
+      "lane": "money",
+      "est_tool_calls": 0,
+      "actual_tool_calls": 1,
+      "status": "done",
+      "premise_verified": "false: the RESUME premise (item still open) no longer holds; the queue closed it at 2026-09-22T21:45:58",
+      "deviation": "nothing implemented in this run: already resolved and landed. The orchestrator owes NO triage-close for this id.",
+      "shipped_commit": "427327335 (already on origin/main; not this run)",
+      "resolution_note": "Already resolved in the queue at 2026-09-22T21:45:58 with its fix on origin/main (427327335); nothing further. Do not re-close.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "carried from the prior plan item that shipped it; not re-measured here (already landed)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none new: no change in this run",
+        "cell_effects": []
+      }
+    },
+    {
+      "queue_id": "2026-09-20-bec597",
+      "subject": "198 tile links record a price the board no longer publishes; 81 Sam's cells cannot be relinked (RESUME from plan-2026-09-22-5)",
+      "classification": "infra",
+      "evidence": [
+        "grocery/triage-queue.json 2026-09-25 re-read: status 'resolved', resolved_ts '2026-09-22T22:51:12', notes: 'Fixed (plan-2026-09-22-10, landed 1fb95392f): derive-links-from-prices derives Sam's /ip/<alphanumeric id> only when the newest out/sams/sams-url-shape file proves 3 of 3 ... PRICE-DRIFT is a per-store ratchet (first mark 83)'",
+        "the landing commit 1fb95392f is on origin/main (git branch -r --contains, 2026-09-25)"
+      ],
+      "root_cause": "tile links were derived once and never refreshed when the board price moved, and Sam's links could not be derived at all without a proven URL shape",
+      "root_fix": {
+        "what": "derive-links-from-prices refreshes drifted links and derives Sam's ids under a proven url shape; PRICE-DRIFT is a per-store ratchet paged on a rise",
+        "files": [
+          "grocery/derive-links-from-prices.ps1"
+        ],
+        "exact_change": "as shipped in plan-2026-09-22-10 (landed 1fb95392f)"
+      },
+      "leaves_open": "nothing beyond the ratchet's standing mark (paged by check-ad-cycles on a rise)",
+      "leaves_open_occurrences": 0,
+      "proof": {
+        "must_fire_case": "carried from plan-2026-09-22-10: Sam's PRICE-DRIFT 68 -> 3 on a copy of the link layer",
+        "clean_twin": "carried: a link whose price matches the board is left untouched",
+        "guard_or_fixture": "derive-links-from-prices -SelfTest and the PRICE-DRIFT ratchet (plan-2026-09-22-10)"
+      },
+      "rollback": "none owed here: the fix landed under its own plan and is reverted there if ever",
+      "freshness": "queue and origin/main read 2026-09-25 ~17:00; board comparison-2026-09-23 built 2026-09-25 08:14",
+      "lane": "money",
+      "est_tool_calls": 0,
+      "actual_tool_calls": 1,
+      "status": "done",
+      "premise_verified": "false: the RESUME premise (item still open) no longer holds; the queue closed it at 2026-09-22T22:51:12",
+      "deviation": "nothing implemented in this run: already resolved and landed. The orchestrator owes NO triage-close for this id.",
+      "shipped_commit": "1fb95392f (already on origin/main; not this run)",
+      "resolution_note": "Already resolved in the queue at 2026-09-22T22:51:12 with its fix on origin/main (1fb95392f); nothing further. Do not re-close.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "carried from the prior plan item that shipped it; not re-measured here (already landed)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none new: no change in this run",
+        "cell_effects": []
+      }
+    },
+    {
+      "queue_id": "2026-09-21-85c3b7",
+      "subject": "Walmart row builder does not run the density refusal (RESUME from plan-2026-09-22-5)",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "grocery/triage-queue.json 2026-09-25 re-read: status 'resolved', resolved_ts '2026-09-22T21:46:00', notes: 'Shipped in plan-2026-09-22-5 (batch 2), landed on origin/main 427327335 (status deviated). The Walmart builder now refuses a density-contradicted derived size, as Sam's does. Residual owner: watch:grocery/derived-size-density-lib.ps1.'",
+        "the landing commit 427327335 is on origin/main (git branch -r --contains, 2026-09-25)"
+      ],
+      "root_cause": "one rule, one library, two builders, one caller (F1)",
+      "root_fix": {
+        "what": "Build-Row refuses a density flag on a derived size",
+        "files": [
+          "grocery/walmart-row-lib.ps1"
+        ],
+        "exact_change": "as shipped in plan-2026-09-22-5; caller census audit-derived-size-callers.ps1 since 2026-09-24"
+      },
+      "leaves_open": "nothing: audit-derived-size-callers.ps1 refuses a third lp/up builder at push",
+      "leaves_open_occurrences": 0,
+      "proof": {
+        "must_fire_case": "SPECTRUM peanut oil 32 OZ at 93.7 c/fl oz and Melinda's ketchup 12 Ounce are refused DENSITY CONFLICT (build-walmart-deals -SelfTest)",
+        "clean_twin": "Great Value Vegetable Oil 48 fl oz at 9.3 c/fl oz builds 48 fl oz",
+        "guard_or_fixture": "grocery/build-walmart-deals.ps1 -SelfTest"
+      },
+      "rollback": "none owed here: the fix landed under its own plan and is reverted there if ever",
+      "freshness": "queue and origin/main read 2026-09-25 ~17:00; board comparison-2026-09-23 built 2026-09-25 08:14",
+      "lane": "money",
+      "est_tool_calls": 0,
+      "actual_tool_calls": 1,
+      "status": "done",
+      "premise_verified": "false: the RESUME premise (item still open) no longer holds; the queue closed it at 2026-09-22T21:46:00",
+      "deviation": "nothing implemented in this run: already resolved and landed. The orchestrator owes NO triage-close for this id.",
+      "shipped_commit": "427327335 (already on origin/main; not this run)",
+      "resolution_note": "Already resolved in the queue at 2026-09-22T21:46:00 with its fix on origin/main (427327335); nothing further. Do not re-close.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "carried from the prior plan item that shipped it; not re-measured here (already landed)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none new: no change in this run",
+        "cell_effects": []
+      }
+    },
+    {
+      "queue_id": "2026-09-21-274e4b",
+      "subject": "price-history keeps a second record of each board that a rebuild does not rewrite (RESUME from plan-2026-09-22-5)",
+      "classification": "infra",
+      "evidence": [
+        "grocery/triage-queue.json 2026-09-25 re-read: status 'resolved', resolved_ts '2026-09-22T22:51:12', notes: 'Fixed (plan-2026-09-22-10, landed 1fb95392f): every history entry names the board it came from, and check-ad-cycles runs update-history -Reconcile each morning ... 216 disagreeing commodity-weeks -> 0, second run idempotent'",
+        "the landing commit 1fb95392f is on origin/main (git branch -r --contains, 2026-09-25)"
+      ],
+      "root_cause": "update-history ran once a day in check-ad-cycles while a hand rebuild did not run it, so a rebuilt board left its history week stale",
+      "root_fix": {
+        "what": "every history entry names its board; update-history -Reconcile runs each morning and re-derives every week whose board is on disk",
+        "files": [
+          "grocery/update-history.ps1",
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "exact_change": "as shipped in plan-2026-09-22-10 (landed 1fb95392f)"
+      },
+      "leaves_open": "nothing: an unreadable board pages 'price history could not be reconciled with the boards'",
+      "leaves_open_occurrences": 0,
+      "proof": {
+        "must_fire_case": "carried: 216 disagreeing commodity-weeks over main's 33 boards reconcile to 0",
+        "clean_twin": "carried: a second -Reconcile run changes nothing (idempotent)",
+        "guard_or_fixture": "grocery/update-history.ps1 -SelfTest (-Reconcile cases)"
+      },
+      "rollback": "none owed here: the fix landed under its own plan and is reverted there if ever",
+      "freshness": "queue and origin/main read 2026-09-25 ~17:00; board comparison-2026-09-23 built 2026-09-25 08:14",
+      "lane": "money",
+      "est_tool_calls": 0,
+      "actual_tool_calls": 1,
+      "status": "done",
+      "premise_verified": "false: the RESUME premise (item still open) no longer holds; the queue closed it at 2026-09-22T22:51:12",
+      "deviation": "nothing implemented in this run: already resolved and landed. The orchestrator owes NO triage-close for this id.",
+      "shipped_commit": "1fb95392f (already on origin/main; not this run)",
+      "resolution_note": "Already resolved in the queue at 2026-09-22T22:51:12 with its fix on origin/main (1fb95392f); nothing further. Do not re-close.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "carried from the prior plan item that shipped it; not re-measured here (already landed)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none new: no change in this run",
+        "cell_effects": []
+      }
+    },
+    {
+      "queue_id": "2026-09-19-c9f0f3",
+      "subject": "2 on-sale items have no everyday fallback and no one is working them (RESUME from plan-2026-09-25)",
+      "classification": "infra",
+      "evidence": [
+        "grocery/triage-queue.json 2026-09-25 re-read: status 'resolved', resolved_ts '2026-09-22T18:43:09', notes: 'research-worklist.json retired (no reader existed); unreached channel doubts now surface as a REVIEW summary line in check-ad-cycles. Sale-fallback gaps all owned on 2026-09-25 (11/11).'",
+        "the landing commit 977ba3a0c is on origin/main (git branch -r --contains, 2026-09-25)"
+      ],
+      "root_cause": "carried from plan-2026-09-22-9.json: ownership of a fallback gap was asserted by a label chosen from a hard-coded store list and no owner's worklist contained the gap; the residual is a writer whose only reader is prose",
+      "root_fix": {
+        "what": "retire the prose-only reader (research-worklist.json)",
+        "files": [
+          "grocery/audit-instore-channel.ps1",
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "exact_change": "as shipped in 977ba3a0c"
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "proof": {
+        "must_fire_case": "audit-sale-fallback reports a gap no plan-owned worklist carries",
+        "clean_twin": "a gap carried in Get-CaptureWorklist sale_fallback_terms reads owned",
+        "fixture_occurrences": [
+          "2026-09-06-22b4dd",
+          "2026-09-19-c9f0f3"
+        ],
+        "guard_or_fixture": "grocery/audit-sale-fallback.ps1 -SelfTest"
+      },
+      "rollback": "none owed here: the fix landed under its own plan and is reverted there if ever",
+      "freshness": "queue and origin/main read 2026-09-25 ~17:00; board comparison-2026-09-23 built 2026-09-25 08:14",
+      "lane": "money",
+      "est_tool_calls": 0,
+      "actual_tool_calls": 1,
+      "status": "done",
+      "premise_verified": "false: the RESUME premise (item still open) no longer holds; the queue closed it at 2026-09-22T18:43:09",
+      "deviation": "nothing implemented in this run: already resolved and landed. The orchestrator owes NO triage-close for this id.",
+      "shipped_commit": "977ba3a0c (already on origin/main; not this run)",
+      "resolution_note": "Already resolved in the queue at 2026-09-22T18:43:09 with its fix on origin/main (977ba3a0c); nothing further. Do not re-close.",
+      "prior_closes": [
+        "2026-09-06-22b4dd"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/audit-sale-fallback.ps1"
+        ],
+        "what": "the emitting check proves ownership from a code worklist, and the prose-only reader is retired",
+        "exact_change": "as shipped in 977ba3a0c"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "carried from the prior plan item that shipped it; not re-measured here (already landed)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none new: no change in this run",
+        "cell_effects": []
+      }
+    },
+    {
+      "queue_id": "2026-09-22-a09096",
+      "subject": "price disagreement - Hummus at Sam's Club (RESUME from plan-2026-09-25)",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "grocery/triage-queue.json 2026-09-25 re-read: status 'resolved', resolved_ts '2026-09-22T13:41:24', notes: 'pu-lib Get-LinkPerUnit reads a size range at its smaller end, matching the engine. Proof: audit-size-parser-parity -SelfTest exit 0 ... -Board exit 0, 0 findings over 2,668 comparable'",
+        "the landing commit 5c0f0dfee is on origin/main (git branch -r --contains, 2026-09-25)"
+      ],
+      "root_cause": "carried: 'what quantity does this size string state' is one rule with two implementations (engine Get-SizeAmount, pu-lib Get-LinkPerUnit) and nothing proved they agreed",
+      "root_fix": {
+        "what": "close the parser divergences and keep audit-size-parser-parity -Board in the daily chain",
+        "files": [
+          "grocery/pu-lib.ps1"
+        ],
+        "exact_change": "as shipped in 5c0f0dfee"
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "proof": {
+        "must_fire_case": "eggs|Sam's Club '15 dozen' and '13-16 oz'@lb read by both parsers agree",
+        "clean_twin": "the frozen parity corpus stays agree",
+        "guard_or_fixture": "grocery/audit-size-parser-parity.ps1 -SelfTest"
+      },
+      "rollback": "none owed here: the fix landed under its own plan and is reverted there if ever",
+      "freshness": "queue and origin/main read 2026-09-25 ~17:00; board comparison-2026-09-23 built 2026-09-25 08:14",
+      "lane": "money",
+      "est_tool_calls": 0,
+      "actual_tool_calls": 1,
+      "status": "done",
+      "premise_verified": "false: the RESUME premise (item still open) no longer holds; the queue closed it at 2026-09-22T13:41:24",
+      "deviation": "nothing implemented in this run: already resolved and landed. The orchestrator owes NO triage-close for this id.",
+      "shipped_commit": "5c0f0dfee (already on origin/main; not this run)",
+      "resolution_note": "Already resolved in the queue at 2026-09-22T13:41:24 with its fix on origin/main (5c0f0dfee); nothing further. Do not re-close.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "carried from the prior plan item that shipped it; not re-measured here (already landed)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none new: no change in this run",
+        "cell_effects": []
+      }
+    },
+    {
+      "queue_id": "2026-09-22-5d20b9",
+      "subject": "Weekly lane residual: resolver-contract worklist and browser-capture slot leftovers (RESUME from plan-2026-09-22-9)",
+      "classification": "infra",
+      "evidence": [
+        "grocery/triage-queue.json 2026-09-25 re-read: status 'resolved', resolved_ts '2026-09-22T16:09:10', notes: 'Ops lane plan-2026-09-22-8: (1) daily ratchets green at their cause ... (2) resolver cap 176 -> 4 ... 8 fired review types are digest pending Q-5d20b9-lanes'",
+        "the landing commit d642ca001 is on origin/main (git branch -r --contains, 2026-09-25)"
+      ],
+      "root_cause": "RCA F5: a type registered by condition and class, never by what closes it",
+      "root_fix": {
+        "what": "each type's resolver moves from digest to the lane that closes it, in the same commit as that lane",
+        "files": [
+          "grocery/alert-registry.json"
+        ],
+        "exact_change": "as landed; ghost-drift flipped with d642ca001"
+      },
+      "leaves_open": "nothing (corrected 2026-09-23 to the landed state)",
+      "leaves_open_occurrences": 0,
+      "proof": {
+        "must_fire_case": "a lane: resolver naming a path absent from the checkout is invalid (audit-alert-registry)",
+        "clean_twin": "after each flip: missing 0, invalid 0, unassigned at its mark of 4",
+        "guard_or_fixture": "grocery/audit-alert-registry.ps1"
+      },
+      "rollback": "none owed here: the fix landed under its own plan and is reverted there if ever",
+      "freshness": "queue and origin/main read 2026-09-25 ~17:00; board comparison-2026-09-23 built 2026-09-25 08:14",
+      "lane": "ops",
+      "est_tool_calls": 0,
+      "actual_tool_calls": 1,
+      "status": "done",
+      "premise_verified": "false: the RESUME premise (item still open) no longer holds; the queue closed it at 2026-09-22T16:09:10",
+      "deviation": "nothing implemented in this run: already resolved and landed. The orchestrator owes NO triage-close for this id.",
+      "shipped_commit": "d642ca001 (already on origin/main; not this run)",
+      "resolution_note": "Already resolved in the queue at 2026-09-22T16:09:10 with its fix on origin/main (d642ca001); nothing further. Do not re-close.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "carried from the prior plan item that shipped it; not re-measured here (already landed)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none new: no change in this run",
+        "cell_effects": []
+      }
+    },
+    {
+      "queue_id": "2026-09-23-0c8e6e",
+      "subject": "GUARDS FAILED - board not published - 2026-09-23 (RESUME from plan-2026-09-25)",
+      "classification": "infra",
+      "evidence": [
+        "grocery/triage-queue.json 2026-09-25 re-read: status 'resolved', resolved_ts '2026-09-25T11:39:46', notes: 'The 09-23 hold was one Sam's vegetable-oil held value (0.0373) condemned on the verify pass, which held the whole board; guards have ended quarantined since (09-23 09:54, 09-24, 09-25 hard=0)'",
+        "the landing commit a7923fab1 is on origin/main (git branch -r --contains, 2026-09-25)"
+      ],
+      "root_cause": "one cell holds the whole board: when the last verified value a quarantine held is itself condemned on the verify pass, Get-TcGuardsDisposition returned HOLD for the board instead of withholding the cell",
+      "root_fix": {
+        "what": "a condemned HELD value withholds its cell, not the board",
+        "files": [
+          "grocery/cell-quarantine-lib.ps1",
+          "grocery/apply-cell-quarantine.ps1",
+          "grocery/check-ad-cycles.ps1",
+          "grocery/guards.ps1"
+        ],
+        "exact_change": "as shipped in a7923fab1"
+      },
+      "leaves_open": "nothing inside the disposition; the other hold routes are by design",
+      "leaves_open_occurrences": 0,
+      "proof": {
+        "must_fire_case": "frozen 09-23 shape: vegetable-oil|Sam's Club held 0.0373 with a factor finding at 0.0373 -> reapply_withhold, not hold",
+        "clean_twin": "energy-drinks|Family Fare finding at 0.0625 vs held 0.1353 stays covered and quarantined",
+        "fixture_occurrences": [
+          "2026-08-31-0465b5",
+          "2026-09-03-83b57e",
+          "2026-09-06-79fe01",
+          "2026-09-07-e9edb9",
+          "2026-09-10-d9e085",
+          "2026-09-18-f90ba6",
+          "2026-09-19-b66b54",
+          "2026-09-21-da5011",
+          "2026-09-23-0c8e6e"
+        ],
+        "guard_or_fixture": "grocery/test-cell-quarantine.ps1"
+      },
+      "rollback": "none owed here: the fix landed under its own plan and is reverted there if ever",
+      "freshness": "queue and origin/main read 2026-09-25 ~17:00; board comparison-2026-09-23 built 2026-09-25 08:14",
+      "lane": "money",
+      "est_tool_calls": 0,
+      "actual_tool_calls": 1,
+      "status": "done",
+      "premise_verified": "false: the RESUME premise (item still open) no longer holds; the queue closed it at 2026-09-25T11:39:46",
+      "deviation": "nothing implemented in this run: already resolved and landed. The orchestrator owes NO triage-close for this id.",
+      "shipped_commit": "a7923fab1 (already on origin/main; not this run)",
+      "resolution_note": "Already resolved in the queue at 2026-09-25T11:39:46 with its fix on origin/main (a7923fab1); nothing further. Do not re-close.",
+      "prior_closes": [
+        "2026-08-31-0465b5",
+        "2026-09-03-83b57e",
+        "2026-09-06-79fe01",
+        "2026-09-07-e9edb9",
+        "2026-09-10-d9e085",
+        "2026-09-18-f90ba6",
+        "2026-09-19-b66b54",
+        "2026-09-21-da5011"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/cell-quarantine-lib.ps1"
+        ],
+        "what": "the emitting decision withholds a cell whose held value is condemned instead of holding the board",
+        "exact_change": "as shipped in a7923fab1"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "carried from the prior plan item that shipped it; not re-measured here (already landed)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none new: no change in this run",
+        "cell_effects": []
+      }
+    },
+    {
+      "queue_id": "2026-09-23-a83841",
+      "subject": "The knowledge store's nightly pass went RED (RETURN; fired 09-23, 09-24, 09-25)",
+      "classification": "infra",
+      "evidence": [
+        "C:\\Users\\Owner\\.claude\\recall-sleep-latest.md '# Recall sleep, 2026-09-25 04:41': '**brain commit hook** (exit 1): BROKEN', 'forgetting (exit 1): waiting on a judgement', 'memory clusters (exit 1): waiting on a judgement', '**gate** (exit 1): BROKEN'",
+        "the gate step's own lines: '85 of 85 passed' then 'FAIL: 1 unruled candidates, above the high-water mark of 0', 'FAIL: 9 unruled clusters, above the high-water mark of 0', 'FAIL: 2 unruled cross-project clusters, above the high-water mark of 0'",
+        "'brain commit hook | 1 | 83' (exit 1 in 83 ms) and 'commit: NOT committed: brain commit hook exited 1; gate exited 1'; the report carries no reason for the hook's exit",
+        "09-24 recurrence body: 'reflex fire rates (exit 1), brain commit hook (exit 1)' also failed; reflex fire rates is exit 0 today",
+        "prior 4fc24c leaves_open: 'the judgement queues ... still grow with each day's memory writing and only a person rules on them, so a night with a new cluster reports VERDICT: FAIL and now exits 3'"
+      ],
+      "root_cause": "the pass labels a judgement the store owes a person as BROKEN: the gate step re-counts the unruled clusters and candidates against marks of 0 and fails, so every night on which memory writing added a cluster reads as a broken gate beside the honest 'waiting on a judgement' lines; and the brain commit hook step exits 1 in 83 ms with no reason in the report, so the one genuinely broken step cannot be told from the judgement backlog",
+      "root_fix": {
+        "what": "Detective: the gate counts a judgement backlog under 'waiting on a judgement', never BROKEN, and a step that exits nonzero records its stderr tail in the report; Responsive: the page names which of the two a night was",
+        "files": [
+          "~/.claude/skills/recall-sleep.py",
+          "ops/scheduled-tasks/tc-recall-sleep-0435.xml"
+        ],
+        "exact_change": "recall-sleep.py: classify the gate's unruled-cluster/candidate FAIL lines as judgement (exit 3 per Brad's 4fc24c ruling), and a gate failure on anything else as broken; capture and print each failed step's last stderr lines (the brain commit hook today prints none); diagnose and fix the brain commit hook's exit 1"
+      },
+      "prior_closes": [
+        "2026-09-11-18da92",
+        "2026-09-18-35e0f5",
+        "2026-09-19-4fc24c"
+      ],
+      "prevention": {
+        "source": [
+          "~/.claude/skills/recall-sleep.py",
+          "ops/scheduled-tasks/tc-recall-sleep-0435.xml"
+        ],
+        "what": "the emitter separates 'a person owes a ruling' from 'a step broke' at the step that produces the verdict, and names the broken step's reason",
+        "exact_change": "as root_fix.exact_change"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not measured: no board or matching surface; affects only the nightly pass's step classification and page text",
+        "affected_now": 0,
+        "names": [],
+        "risk": "a real gate failure must still read BROKEN (clean twin)",
+        "cell_effects": []
+      },
+      "freshness": "recall-sleep-latest.md 2026-09-25 04:41; the next pass is 04:35 tomorrow and may add clusters",
+      "leaves_open": "the judgement queues themselves (9 clusters, 2 cross-project, 1 forgetting candidate on 09-25) still need a person's ruling; by Brad's 4fc24c ruling a waiting night stays nonzero",
+      "leaves_open_occurrences": 3,
+      "proof": {
+        "must_fire_case": "a frozen gate output whose only FAIL line is not a judgement queue (e.g. a recognition floor) is classified BROKEN, and a step exiting 1 with stderr 'X' prints 'X' in the report",
+        "clean_twin": "the frozen 09-25 gate output (85 of 85 passed, FAIL lines only for unruled clusters/candidates) is classified 'waiting on a judgement', not BROKEN",
+        "fixture_occurrences": [
+          "2026-09-11-18da92",
+          "2026-09-18-35e0f5",
+          "2026-09-19-4fc24c",
+          "2026-09-23-a83841"
+        ],
+        "commands": [
+          "C:\\Codex\\Python312\\python.exe ~/.claude/skills/recall-sleep.py --selftest"
+        ],
+        "guard_or_fixture": "~/.claude/skills/recall-sleep.py --selftest (new cases)"
+      },
+      "rollback": "revert the recall-sleep.py hunks",
+      "lane": "ops",
+      "est_tool_calls": 35,
+      "status": "planned",
+      "resolution_note": "Still red 09-25: 'gate BROKEN' is the unruled-cluster backlog 4fc24c left open, mislabelled as broken, and the brain commit hook exits 1 with no reason recorded. Planned for the ops lane."
+    },
+    {
+      "queue_id": "2026-09-23-92e552",
+      "subject": "Grocery: board cells quarantined - 2026-09-23 (RETURN of 2026-09-21-de4f72)",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "re-measured on comparison-2026-09-23 (built_at 2026-09-25T08:06:39, quarantine applied 08:14:10) - the SAME three cells as 09-23: energy-drinks | Family Fare | last-good 0.1353 since 2026-09-22 | bad 0.0625 'Venom Energy Drink, Black Mamba 16 Oz' | 'HARD FAIL: no cell wins a row while measured in a different KIND of quantity than the ro[w]'",
+        "lotion | Walmart | last-good 0.2175 since 2026-09-22 | bad 0.1244 'Queen Helene Cocoa Butter Hand & Body Lotion for Dry Skin, 32 oz' | same unit-basis KIND hard fail",
+        "yellow-bell-pepper | Family Fare | withheld 'no previously published value for this cell' | bad 1 'Yellow Bell Pepper' | 'HARD FAIL: no published cell carries a price its own store contradicted on a later read'",
+        "prior close 2026-09-21-de4f72 was a different cell (vegetable-oil | Sam's Club, band-censorship)"
+      ],
+      "root_cause": "carried from plan-2026-09-25-2: a store writes a bare 'Oz' on a liquid for a commodity priced per fl oz, and the size reader and the unit-basis guard disagree about whether it is volume, so a probably-real cheaper price is condemned and the cell holds an older DEARER number (overstating); the third cell is a store contradicting itself, withheld as ruled",
+      "root_fix": {
+        "what": "one reading of a bare 'oz' on a floz commodity, decided in the size reader and used by the guard",
+        "files": [
+          "grocery/pu-lib.ps1",
+          "grocery/audit-unit-basis-outlier.ps1"
+        ],
+        "exact_change": "carried, not yet designed: measure every floz-commodity cell whose winning or candidate row carries a bare oz size before choosing (some bare-oz liquids are true weights, e.g. '32 oz (907 g)')"
+      },
+      "prior_closes": [
+        "2026-09-21-de4f72"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/pu-lib.ps1",
+          "grocery/audit-unit-basis-outlier.ps1"
+        ],
+        "what": "the size reader and the guard share one reading of a bare oz on a floz commodity",
+        "exact_change": "as root_fix.exact_change"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "owed: before/after per-unit of every floz-commodity row with a bare oz size across comparison-2026-09-23 and out/regular",
+        "affected_now": 2,
+        "names": [
+          "Venom Energy Drink, Black Mamba 16 Oz",
+          "Queen Helene Cocoa Butter Hand & Body Lotion for Dry Skin, 32 oz"
+        ],
+        "risk": "a bare-oz lotion sold by weight read as volume would understate",
+        "cell_effects": [
+          {
+            "commodity": "energy-drinks",
+            "store": "Family Fare",
+            "before": 0.1353,
+            "after": 0.0625
+          },
+          {
+            "commodity": "lotion",
+            "store": "Walmart",
+            "before": 0.2175,
+            "after": 0.1244
+          }
+        ]
+      },
+      "freshness": "comparison-2026-09-23 built 2026-09-25 08:14; re-read the quarantine block before building",
+      "leaves_open": "yellow-bell-pepper | Family Fare stays withheld as ruled (a self-contradicting store read)",
+      "leaves_open_occurrences": 1,
+      "proof": {
+        "must_fire_case": "frozen Venom 16 Oz 2-for-$2 row on energy-drinks and Queen Helene 32 oz on lotion no longer produce a KIND hard fail when the reader and guard agree they are fl oz",
+        "clean_twin": "a '16 fl oz' energy drink row and a lotion labelled in fl oz are unchanged; a '32 oz (907 g)' weight label stays weight",
+        "fixture_occurrences": [
+          "2026-09-21-de4f72",
+          "2026-09-23-92e552"
+        ],
+        "guard_or_fixture": "grocery/audit-unit-basis-outlier.ps1 -SelfTest and grocery/test-cell-quarantine.ps1 (new cases)"
+      },
+      "rollback": "revert the pu-lib and audit hunks; the board rebuilds on the next chain",
+      "lane": "money",
+      "est_tool_calls": 45,
+      "status": "planned",
+      "resolution_note": "Reproduces today with the same three cells. Two are one bare-oz-on-a-liquid basis class that holds a DEARER old price; planned for the money lane."
+    },
+    {
+      "queue_id": "2026-09-23-822c30",
+      "subject": "Grocery capture watchdog: RUN RECORD 2026-09-23 (RETURN of 2026-09-22-7c932a; fired 09-23, 09-24, 09-25)",
+      "classification": "infra",
+      "evidence": [
+        "capture-run-ad-2026-09-23.log 'FAILED LANES: commit-size-gate'; -24.log 'FAILED LANES: push' after 'PUSH FAILED after 4 attempts'; -25.log 'FAILED LANES: sync' (degraded/replay, local 447b42efe rename/delete conflict)",
+        "out/logs/capture-run-status.json ad record 2026-09-25: exit_code 1, failed_lanes [{lane: 'sync', paged: 'Grocery bot checkout sync degraded at the push - 2026-09-25'}]; alert-log.txt '[2026-09-25T07:01:52] SENT 'Grocery bot checkout sync degraded at the push - 2026-09-25''",
+        "capture-watchdog-2026-09-25.log (10:34, after the 10:18 watchdog change): 'FIND  RUN RECORD: capture-run [ad] completed with exit 1' beside 'FOLD  RUN RECORD: capture-run [daily] exit 1 - every failed lane paged as itself: sync (...); served-dirty (...). Nothing sent from here.'",
+        "capture-watchdog.ps1 (before this fix) line ~1296: 'if ($kind -eq 'daily') { Add-DerivativeFinding $rrText; ... } else { [void]$findings.Add($rrText) }' and the fold call 'Merge-PagedLaneFindings ... $dailyRunRecordText 'daily'' ran for the daily record only"
+      ],
+      "root_cause": "7c932a's fold (page RUN RECORD only for a failed lane that did not page as itself) was wired for the DAILY record alone; the 07:00 [ad] record carries the same failed_lanes field but went straight into the findings, so every ad-run failure paged twice: once as itself (could not push 09-24, sync degraded 09-25) and again as RUN RECORD. The underlying lane failures are owned by their own pages (the bot checkout sync items).",
+      "root_fix": {
+        "what": "the [ad] record goes through the same paged-lane fold (Detective kept: an unpaged ad lane still pages, by name)",
+        "files": [
+          "grocery/capture-watchdog.ps1"
+        ],
+        "exact_change": "new pure Merge-AdRunRecord (Merge-PagedLaneFindings with the ad text as its own derivative, kind 'ad'); the main path records $adRunRecord/$adRunRecordText and folds it after the daily fold, printing a FOLD transcript line; WD_SELFTEST_CASES 67 -> 70"
+      },
+      "prior_closes": [
+        "2026-09-22-7c932a"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/capture-watchdog.ps1"
+        ],
+        "what": "the emitting check folds EVERY capture-run kind's record under the pages its lanes already sent, not only the daily one",
+        "exact_change": "as root_fix.exact_change"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "alert routing only: which RUN RECORD findings page; no board, price or match rule touched",
+        "affected_now": 1,
+        "names": [
+          "RUN RECORD: capture-run [ad] (09-24 push, 09-25 sync: both folded; 09-23 commit-size-gate was paged as itself too per capture-run.ps1:1636 when its send returned 0)"
+        ],
+        "risk": "an [ad] lane whose own send failed or was deduped still pages RUN RECORD by name (MUST FIRE case)",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-25 ~17:00 against capture-run-status.json (ad 07:01:52, daily 08:32:05) and capture-watchdog-2026-09-25.log 10:34",
+      "leaves_open": "nothing in the fold; the degraded sync itself (local commit 447b42efe conflicting with upstream) is paged as itself and owned by the bot checkout sync alert, not this type",
+      "leaves_open_occurrences": 0,
+      "proof": {
+        "guard_or_fixture": "grocery/capture-watchdog.ps1 -SelfTest (3 new cases)",
+        "must_fire_case": "MUST FIRE [ad] record with an unpaged lane (commit-size-gate, paged '') still pages 'RUN RECORD: capture-run [ad] exit 1 - failed lane(s) with no page of their own: commit-size-gate'",
+        "clean_twin": "frozen 09-25 [ad] record (sync paged as itself) folds to one transcript line and the unrelated NO FRESH ROWS finding stays; an [ad] record with no failed_lanes field pages its old text unchanged",
+        "fixture_occurrences": [
+          "2026-09-22-7c932a",
+          "2026-09-23-822c30"
+        ],
+        "commands": [
+          "powershell -NoProfile -ExecutionPolicy Bypass -File grocery\\capture-watchdog.ps1 -SelfTest  (exit 0, SELFTEST PASSED, 70 case lines)"
+        ]
+      },
+      "rollback": "revert the capture-watchdog.ps1 hunks; no data",
+      "lane": "ops",
+      "est_tool_calls": 10,
+      "actual_tool_calls": 12,
+      "status": "done",
+      "premise_verified": "true: re-measured 2026-09-25, the ad record's only failed lane had paged as itself and the watchdog still paged RUN RECORD [ad] at 10:34",
+      "deviation": "finished in the JOB 3 lane (cheap, one file). full_suite: deferred-to-land",
+      "shipped_commit": "this plan's commit: 'Triage plan-2026-09-25-4: capture-watchdog folds the [ad] RUN RECORD too (822c30)'",
+      "close_disposition": "confirmed",
+      "resolution_note": "RUN RECORD [ad] paged for lanes that had already paged as themselves (09-24 could-not-push, 09-25 sync degraded): 7c932a's fold covered only the daily record. The [ad] record now folds the same way; an unpaged ad lane still pages by name. capture-watchdog -SelfTest exit 0 (70 cases, 3 new)."
+    },
+    {
+      "queue_id": "2026-09-23-90de7b",
+      "subject": "Grocery capture watchdog: NO FRESH ROWS 2026-09-23 (Hy-Vee), grouped under 822c30",
+      "classification": "capture-gap",
+      "evidence": [
+        "queue body: 'NO FRESH ROWS: Hy-Vee has a headless lane and the 08:00 capture ran, but it contributed ZERO rows dated 2026-09-23'; its 09-24 recurrence says the same",
+        "822c30's cause is the watchdog folding only the daily RUN RECORD; this one is plan-2026-09-25-2's measured Hy-Vee ask-order livelock ('the whole daily budget is spent re-asking the same 20 refusals'), with a built patch parked at grocery/triage-plans/plan-2026-09-25-2.90de7b-hyvee-ask-ledger.patch"
+      ],
+      "root_cause": "carried from plan-2026-09-25-2: Get-HyVeeAskOrder ranks by last successful READ, and a refused ask keeps the row old and uncovered, so the same 20 refused products fill the 20-ask budget every day",
+      "root_fix": {
+        "what": "order by last ASK and park size conflicts; watchdog says ANSWERS REFUSED",
+        "files": [
+          "grocery/pull-regular-hyvee.ps1",
+          "grocery/capture-watchdog.ps1"
+        ],
+        "exact_change": "carried from plan-2026-09-25-2; the pull-regular-hyvee half is the parked patch"
+      },
+      "leaves_open": "carried from plan-2026-09-25-2",
+      "leaves_open_occurrences": 0,
+      "proof": {
+        "must_fire_case": "carried: frozen 09-24 work list, old order returns the same 20, new order admits the 5 never-asked",
+        "clean_twin": "carried: an empty ledger gives the old order exactly",
+        "guard_or_fixture": "grocery/pull-regular-hyvee.ps1 -SelfTest and grocery/capture-watchdog.ps1 -SelfTest (carried)"
+      },
+      "lane": "ops",
+      "est_tool_calls": 15,
+      "status": "promote",
+      "resolution_note": "PROMOTE: not superseded by 822c30. Different cause (Hy-Vee ask-order livelock, not the RUN RECORD fold); it already carries a reviewed diagnosis and a built patch in plan-2026-09-25-2, so resume it there in the ops lane (about 15 calls) rather than re-diagnose.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "carried from plan-2026-09-25-2: ask-order routing over capture_terms 09-23/24/25",
+        "affected_now": 20,
+        "names": [],
+        "risk": "none new: no change in this run",
+        "cell_effects": []
+      },
+      "rollback": "carried: revert the two script hunks; the order falls back to as_of with no ledger",
+      "freshness": "plan-2026-09-25-2 measured 2026-09-25 10:40-11:15 against hyvee-regular-2026-09-25.json; re-read tomorrow's 08:00 file first"
+    },
+    {
+      "queue_id": "2026-09-24-c59dce",
+      "subject": "Baker's ad window advanced with no capture behind it (RETURN; 2026-09-24)",
+      "classification": "capture-gap",
+      "evidence": [
+        "queue body 2026-09-24 16:41: '77 of the 78 search term(s) its ad list bakers-ad-list-2026-09-23.json routes were never asked through the Kroger API inside the window'",
+        "out/regular/bakers-regular-2026-09-24.json (written 09-24 16:38) header: 'ad_list': 'bakers-ad-list-2026-09-23.json', 'ad_terms_owed': 0, 'ad_terms_asked': 1, 'terms_asked': 9 - the lane believed nothing was owed three minutes before the check counted 77 owed",
+        "out/regular/bakers-regular-2026-09-25.json (08:01) header: 'ad_terms_owed': 77, 'ad_terms_asked': 81, 'terms_asked': 89, fresh_rows 1532",
+        "re-measured 2026-09-25 through Get-BakersAdCaptureState -Date: 2026-09-24 and 2026-09-25 both 'captured=True owed=0/78 ... all 78 routed ad term(s) asked'. Before 77/78 owed, after 0/78: the instance no longer reproduces",
+        "the ad list landed 09-23 10:39 (bakers-ad-list-2026-09-23.json mtime), so it was on disk for both the 09-24 lane run and the check"
+      ],
+      "root_cause": "one rule, two readers again: the Baker's API lane's own owed count (pull-regular-bakers-api.ps1, ad_terms_owed 0 on 09-24) and the check's Get-BakersAdCaptureState (77 of 78 unasked) disagreed about the same ad list on the same day, so the lane asked its 8-term rotation and skipped the ad terms, and the check paged; the next morning the lane counted 77 owed and asked them",
+      "root_fix": {
+        "what": "the lane computes owed ad terms through Get-BakersAdCaptureState (the check's own function) instead of its own count, and refuses to write ad_terms_owed 0 when that function says otherwise",
+        "files": [
+          "grocery/pull-regular-bakers-api.ps1",
+          "grocery/capture-policy-lib.ps1"
+        ],
+        "exact_change": "diagnose why the 09-24 run read 0 owed (a stale cursor, a list-date window, or a different -Date form: Get-BakersAdCaptureState takes -Date as a 'yyyy-MM-dd' string and a [datetime] cast yields 'no Baker's ad list covers 09/24/2026 00:00:00'), then make the lane read owed terms from the one function"
+      },
+      "prior_closes": [
+        "2026-09-02-68183c",
+        "2026-09-09-e60137",
+        "2026-09-18-de39ec"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/pull-regular-bakers-api.ps1",
+          "grocery/capture-policy-lib.ps1"
+        ],
+        "what": "the capture lane and the emitting check share one owed-terms rule",
+        "exact_change": "as root_fix.exact_change"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "owed: which ad terms the lane asks on the day after an ad list lands; no price or match rule moves",
+        "affected_now": 77,
+        "names": [
+          "the 77 ad terms of bakers-ad-list-2026-09-23.json unasked on 09-24"
+        ],
+        "risk": "asking ad terms takes budget from the 7-term rotation that day",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-25 ~17:10 against bakers-regular-2026-09-24/25 and bakers-ad-list-2026-09-23; the next ad turnover is 2026-09-30",
+      "leaves_open": "nothing once the lane reads the one rule; the 09-02/09-09 closes predate the ad-list producer",
+      "leaves_open_occurrences": 0,
+      "proof": {
+        "must_fire_case": "frozen 09-24 state: ad list 2026-09-23 on disk with 78 routed terms and 1 asked -> the lane's owed count is 77, never 0",
+        "clean_twin": "frozen 09-25 state (all 78 asked) -> owed 0 and the check does not page",
+        "fixture_occurrences": [
+          "2026-09-02-68183c",
+          "2026-09-09-e60137",
+          "2026-09-18-de39ec",
+          "2026-09-24-c59dce"
+        ],
+        "commands": [
+          "powershell -File grocery\\pull-regular-bakers-api.ps1 -SelfTest",
+          "powershell -File grocery\\check-ad-cycles.ps1 -SelfTest"
+        ],
+        "guard_or_fixture": "grocery/pull-regular-bakers-api.ps1 -SelfTest and grocery/check-ad-cycles.ps1 -SelfTest (new cases)"
+      },
+      "rollback": "revert the lane hunk",
+      "lane": "money",
+      "est_tool_calls": 30,
+      "status": "planned",
+      "resolution_note": "No longer reproduces (77/78 owed on 09-24 -> 0/78 on 09-25), but the lane and the check disagreed on the owed count for a day; planned for the money lane to give both one rule."
+    }
+  ],
+  "ship_sequence": [
+    "done here: 2026-09-23-822c30 (grocery/capture-watchdog.ps1, -SelfTest exit 0); orchestrator closes it after landing",
+    "ops lane: 2026-09-23-a83841 (35); 2026-09-23-90de7b promoted (resume plan-2026-09-25-2 with its patch, ~15)",
+    "money lane: 2026-09-23-92e552 (45), 2026-09-24-c59dce (30)",
+    "already resolved, no close: ceab00, bec597, 85c3b7, 274e4b, c9f0f3, a09096, 5d20b9, 0c8e6e"
+  ],
+  "knowledge_consulted": [
+    "searched \"alert triage root cause recurrence\", \"watchdog fold alert already paged\"",
+    "reliability-craft/MAP.md (section 5: do not declare resolved on the alert going quiet)",
+    "reliability-craft/rca-and-chaos.md (section 2: Preventive, Detective, Responsive)",
+    ".claude/rules/ops-and-gates.md ('Three fixture labels, three jobs')"
+  ],
+  "open_questions_for_brad": []
+}

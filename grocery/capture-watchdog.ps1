@@ -347,6 +347,20 @@ function Merge-PagedLaneFindings {
   return [pscustomobject]@{ findings = $outF; sub = $outS; derivative = $outD; line = $line }
 }
 
+function Merge-AdRunRecord {
+  <#
+    .SYNOPSIS The 07:00 [ad] run's RUN RECORD gets the same paged-lane fold as the daily one (2026-09-25, item 2026-09-23-822c30).
+    .DESCRIPTION
+      Pure. Until this, only the daily record went through Merge-PagedLaneFindings; the ad record went straight into the
+      findings, so on 09-24 (push, paged 'Grocery pipeline could not push') and 09-25 (sync, paged 'Grocery bot checkout
+      sync degraded at the push') the watchdog paged RUN RECORD [ad] for a lane that had already paged as itself. The ad
+      text is its own derivative here, so no other finding is moved. Returns findings and the transcript line.
+  #>
+  param($Findings, $Record, [string]$RunRecordText)
+  $m = Merge-PagedLaneFindings $Findings @($RunRecordText) (Get-FailedLanePaging $Record) $RunRecordText 'ad'
+  return [pscustomobject]@{ findings = $m.findings; line = $m.line }
+}
+
 function Get-WatchdogAlertPlan {
   <#
     .SYNOPSIS Which alerts one watchdog run sends (2026-09-10, design\PLAN-zero-alert-days-2026-09-10.md Phase 1).
@@ -689,7 +703,7 @@ if ($SelfTest) {
   # to 6a (6 of them the checkout-sync lane's run-record stages), 13 for the bot checkout floors (7 to 9). A case lost to a thrown setup or a glued line reads as a shortfall.
   # Captured with a plain dot-source, never inside @( ): audit-store-registry widens a store name to the smallest
   # multi-line array around it, and a whole suite inside one would hide every fixture's own store-subset-ok marker.
-  $WD_SELFTEST_CASES = 67
+  $WD_SELFTEST_CASES = 70
   $wdStOut = . {
   $now = [datetime]'2026-08-21 06:47'
 
@@ -929,6 +943,29 @@ if ($SelfTest) {
   if ($rrM3.findings.Count -eq 1 -and $rrM3.findings[0] -eq $rrTxt) {
     Write-Output 'ok    CLEAN TWIN a record with no failed_lanes field still pages RUN RECORD with its old text'
   } else { Write-Output ('FAIL  CLEAN TWIN old record: findings=' + ($rrM3.findings -join ' | ')); $fail++ }
+
+  # ---- THE [ad] RECORD FOLDS TOO (2026-09-25, item 2026-09-23-822c30). FROZEN from capture-run-status.json on 09-25:
+  # the 07:00 ad run failed only 'sync' and paged it as itself; the watchdog still paged RUN RECORD [ad] at 10:34.
+  $adTxt = 'RUN RECORD: capture-run [ad] completed with exit 1 - see capture-run-ad-2026-09-25.log'
+  $adF1 = New-Object System.Collections.Generic.List[string]; [void]$adF1.Add($adTxt); [void]$adF1.Add('NO FRESH ROWS: Hy-Vee x')
+  $adRec1 = [pscustomobject]@{ exit_code = 1; failed_lanes = @([pscustomobject]@{ lane = 'sync'; paged = 'Grocery bot checkout sync degraded at the push - 2026-09-25' }) }
+  $adM1 = Merge-AdRunRecord $adF1 $adRec1 $adTxt
+  if ($adM1.findings.Count -eq 1 -and $adM1.findings[0] -eq 'NO FRESH ROWS: Hy-Vee x' -and $adM1.line -match '^RUN RECORD: capture-run \[ad\] exit 1 - every failed lane paged as itself: sync \(') {
+    Write-Output 'ok    MUST NOT FIRE [ad] record whose only failed lane (sync, 09-25) paged as itself folds to a transcript line; the other finding stays'
+  } else { Write-Output ('FAIL  [ad] all-paged fold: findings=' + ($adM1.findings -join ' | ') + ' line=' + $adM1.line); $fail++ }
+  # MUST FIRE: the 09-23 shape with the lane unpaged still pages, naming the lane.
+  $adF2 = New-Object System.Collections.Generic.List[string]; [void]$adF2.Add($adTxt)
+  $adRec2 = [pscustomobject]@{ exit_code = 1; failed_lanes = @([pscustomobject]@{ lane = 'commit-size-gate'; paged = '' }) }
+  $adM2 = Merge-AdRunRecord $adF2 $adRec2 $adTxt
+  if ($adM2.findings.Count -eq 1 -and $adM2.findings[0] -match '^RUN RECORD: capture-run \[ad\] exit 1 - failed lane\(s\) with no page of their own: commit-size-gate$' -and -not $adM2.line) {
+    Write-Output 'ok    MUST FIRE [ad] record with an unpaged lane (commit-size-gate) still pages RUN RECORD naming that lane'
+  } else { Write-Output ('FAIL  [ad] unpaged lane: findings=' + ($adM2.findings -join ' | ')); $fail++ }
+  # CLEAN TWIN: an [ad] record with no failed_lanes field pages its old text unchanged.
+  $adF3 = New-Object System.Collections.Generic.List[string]; [void]$adF3.Add($adTxt)
+  $adM3 = Merge-AdRunRecord $adF3 ([pscustomobject]@{ exit_code = 1 }) $adTxt
+  if ($adM3.findings.Count -eq 1 -and $adM3.findings[0] -eq $adTxt) {
+    Write-Output 'ok    CLEAN TWIN an [ad] record with no failed_lanes field still pages RUN RECORD with its old text'
+  } else { Write-Output ('FAIL  CLEAN TWIN [ad] old record: findings=' + ($adM3.findings -join ' | ')); $fail++ }
 
   # ---- THE CHECKOUT-SYNC LANE'S STAGES (2026-09-23, the lane's review) ------------------------------------------------
   # FROZEN from the review's probe: blocked-checkout and handoff-failed are FINAL stages written with exit 1 on a day that
@@ -1277,6 +1314,7 @@ try {
 $derivative = New-Object System.Collections.Generic.List[string]
 function Add-DerivativeFinding([string]$t) { [void]$findings.Add($t); [void]$derivative.Add($t) }
 $dailyRunRecord = $null; $dailyRunRecordText = ''   # the daily record and its RUN RECORD line, for the paged-lane fold
+$adRunRecord = $null; $adRunRecordText = ''         # the same for the 07:00 ad run (Merge-AdRunRecord)
 
 $statusF = Join-Path $OutDir 'logs\capture-run-status.json'
 if (Test-Path $statusF) {
@@ -1293,7 +1331,7 @@ if (Test-Path $statusF) {
         # Only the DAILY run can be a symptom of a guards hold: the 07:00 ad run finishes before
         # check-ad-cycles ever runs guards, so its exit code is always its own news.
         $rrText = $rrV.text
-        if ($kind -eq 'daily') { Add-DerivativeFinding $rrText; $dailyRunRecord = $r; $dailyRunRecordText = $rrText } else { [void]$findings.Add($rrText) }
+        if ($kind -eq 'daily') { Add-DerivativeFinding $rrText; $dailyRunRecord = $r; $dailyRunRecordText = $rrText } else { [void]$findings.Add($rrText); $adRunRecord = $r; $adRunRecordText = $rrText }
       } elseif ($rrV.verdict -eq 'finding') { [void]$findings.Add($rrV.text) }
       else { [void]$ok.Add($rrV.text) }
     }
@@ -2111,6 +2149,12 @@ if (-not $heldNow -and $dailyRunRecordText) {
   $heldSub = $rrFold.sub
   $rrFoldLine = $rrFold.line
 }
+$adFoldLine = ''
+if ($adRunRecordText) {
+  $adFold = Merge-AdRunRecord $findings $adRunRecord $adRunRecordText
+  $findings = $adFold.findings
+  $adFoldLine = $adFold.line
+}
 if ($heldNow) {
   $hMin = if ($cmp -and (Test-Path $cmp) -and $pubW) { [int]((Get-Item $cmp).LastWriteTime - $pubW).TotalMinutes } else { 0 }
   # NOT `$x = try {...} catch {...}` - that is PS 7 syntax and a parse error in 5.1.
@@ -2127,6 +2171,7 @@ Write-Output "CAPTURE WATCHDOG - $todayS"
 foreach ($o in $ok) { Write-Output "  ok    $o" }
 foreach ($f in $findings) { Write-Output "  FIND  $f" }
 if ($rrFoldLine) { Write-Output ("  FOLD  " + $rrFoldLine) }
+if ($adFoldLine) { Write-Output ("  FOLD  " + $adFoldLine) }
 foreach ($s in $heldSub) { Write-Output "          - $s" }
 # Check 7's own numbers, one machine-readable line per run, for grocery\report-checkout-sync.ps1's bar B9.
 Write-Output ('  ' + $flMarker)
