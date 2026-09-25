@@ -603,6 +603,55 @@ function Invoke-BakersCarryMerge {
                             Undated = $undated; WrongStore = $wrongStore; Unstamped = $unstamped }
 }
 
+# A SAME-DAY REWRITE KEEPS THE RECEIPTS IT DID NOT EARN ITSELF (2026-09-25, queue 2026-09-24-818b3e,
+# grocery/triage-plans/plan-2026-09-25-5.json). The proof that an ad term was asked lives only in capture_terms of
+# the dated file, and every run of that day rewrites the file whole. On 2026-09-24 the 09:00 run proved all 78 ad
+# terms (81 ad asks, 89 success/empty receipts); a 16:38 re-run read that proof through Get-BakersAdOwed, owed and
+# asked none of them, and wrote the file with 9 receipts of its own, so the 16:41 check read 77 of 78 unasked.
+# Rules: only a file of the SAME date AND the same week_of is read (yesterday's asks must still be owed); a prior
+# receipt fills a key (term_key|term) this run recorded as not_asked or did not record at all; a key this run
+# asked keeps this run's receipt, whatever its outcome. A prior 'not_asked' carries nothing.
+function Get-BakersSameDayPriorReceipts {
+  param([Parameter(Mandatory)][string]$Path, [Parameter(Mandatory)][string]$Today)
+  if (-not (Test-Path -LiteralPath $Path)) { return $null }
+  $r = Get-BakersRegularReceipts -Path $Path
+  if (-not [string]::Equals([string]$r.WeekOf, $Today, [StringComparison]::Ordinal)) { return $null }
+  $stamp = (Get-Item -LiteralPath $Path).LastWriteTime.ToString('yyyy-MM-ddTHH:mm:ss')
+  return [pscustomobject]@{ Receipts = @($r.Receipts); Stamp = $stamp }
+}
+
+function Merge-BakersSameDayReceipts {
+  param([object[]]$Fresh = @(), [object[]]$Prior = @(), [string]$PriorStamp = '')
+  $key = { param($c) ([string]$c.term_key) + '|' + ([string]$c.term).Trim() }
+  $priorBy = @{}
+  foreach ($p in @($Prior)) {
+    if ($null -eq $p -or [string]$p.outcome -eq 'not_asked') { continue }
+    $k = & $key $p
+    if (-not $priorBy.ContainsKey($k)) { $priorBy[$k] = $p }
+  }
+  $out = New-Object System.Collections.Generic.List[object]
+  $seen = @{}; $carried = New-Object System.Collections.Generic.List[object]
+  $asCarry = {
+    param($p)
+    $o = [ordered]@{}
+    foreach ($pr in $p.PSObject.Properties) { $o[$pr.Name] = $pr.Value }
+    if (-not $o.Contains('carried_from_run')) { $o['carried_from_run'] = $PriorStamp }
+    [pscustomobject]$o
+  }
+  foreach ($f in @($Fresh)) {
+    if ($null -eq $f) { continue }
+    $k = & $key $f; $seen[$k] = $true
+    if ([string]$f.outcome -eq 'not_asked' -and $priorBy.ContainsKey($k)) {
+      $c = & $asCarry $priorBy[$k]; [void]$out.Add($c); [void]$carried.Add($c)
+    } else { [void]$out.Add($f) }
+  }
+  foreach ($k in @($priorBy.Keys)) {
+    if ($seen.ContainsKey($k)) { continue }
+    $c = & $asCarry $priorBy[$k]; [void]$out.Add($c); [void]$carried.Add($c)
+  }
+  return [pscustomobject]@{ Receipts = $out.ToArray(); Carried = $carried.ToArray() }
+}
+
 # ---------------------------------------------------------------- self-test (no credentials, no network)
 # Fixtures are REAL rows read off the Saddlecreek store on 2026-07-24 - every case is a known answer, and
 # several are the exact products that produced the 4x Kerrygold underprice this resolver exists to prevent.
@@ -958,6 +1007,61 @@ if ($SelfTest) {
     $asLeft = @(Get-ChildItem -LiteralPath $asTmp -File | Where-Object { $_.Name -like '*.tmp' })
     B '(f) and it leaves no temp file behind' ($asLeft.Count -eq 0)
   } finally { Remove-Item -LiteralPath $asTmp -Recurse -Force -ErrorAction SilentlyContinue }
+
+  # --- a same-day rewrite keeps this morning's receipts (2026-09-25, queue 2026-09-24-818b3e) --------------------
+  # Frozen from 2026-09-24: the 09:00 run's bakers-regular-2026-09-24.json proved every ad term (e839c8ad2), the
+  # 16:38 re-run owed none, asked 9 rotation terms, and its rewrite (e90682129) proved 0 of 78. Three ad terms stand
+  # for the 78 here; the shape (ad terms success in the morning, not_asked in the re-run) is the real one.
+  $sdTmp = Join-Path ([IO.Path]::GetTempPath()) ('bksd-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path (Join-Path $sdTmp 'regular') -Force -ErrorAction Stop | Out-Null
+  New-Item -ItemType Directory -Path (Join-Path $sdTmp 'bakers') -Force -ErrorAction Stop | Out-Null
+  try {
+    ([ordered]@{ ad_from = '2026-09-23'; ad_to = '2026-09-29'; terms = @('ground beef', 'strawberries', 'coffee pods') } |
+      ConvertTo-Json -Depth 4) | Set-Content -LiteralPath (Join-Path $sdTmp 'bakers\bakers-ad-list-2026-09-23.json') -Encoding UTF8
+    $rc = { param($id, $term, $oc) [pscustomobject][ordered]@{ term_key = $id; term = $term; ordinal = 0; outcome = $oc; row_count = 0; reason = '' } }
+    $sdWrite = { param($path, $wk, $terms)
+      ([ordered]@{ store = "Baker's"; week_of = $wk; capture_terms = @($terms); deal_count = 0; deals = @() } |
+        ConvertTo-Json -Depth 6) | Set-Content -LiteralPath $path -Encoding UTF8 }
+    $sdFile = Join-Path $sdTmp 'regular\bakers-regular-2026-09-24.json'
+    $morning = @((& $rc 'ground-beef' 'ground beef' 'success'), (& $rc 'strawberries' 'strawberries' 'success'),
+                 (& $rc 'coffee-pods' 'coffee pods' 'empty'), (& $rc 'onions' 'onions' 'not_asked'))
+    $rerun   = @((& $rc 'ground-beef' 'ground beef' 'not_asked'), (& $rc 'strawberries' 'strawberries' 'not_asked'),
+                 (& $rc 'coffee-pods' 'coffee pods' 'not_asked'), (& $rc 'onions' 'onions' 'success'))
+    # THE DEFECT, measured in this fixture: writing the re-run's receipts alone leaves every ad term owed.
+    & $sdWrite $sdFile '2026-09-24' $rerun
+    $owedOld = @((Get-BakersAdOwed -OutDir $sdTmp -Date '2026-09-24').Owed).Count
+    B ('(same-day) the unfixed rewrite (re-run receipts only) leaves 3 of 3 ad terms owed - the fixture can see the 09-24 defect (owed=' + $owedOld + ')') ($owedOld -eq 3)
+    & $sdWrite $sdFile '2026-09-24' $morning
+    $pr = Get-BakersSameDayPriorReceipts -Path $sdFile -Today '2026-09-24'
+    $mg = Merge-BakersSameDayReceipts -Fresh $rerun -Prior $pr.Receipts -PriorStamp $pr.Stamp
+    & $sdWrite $sdFile '2026-09-24' $mg.Receipts
+    $owedNew = @((Get-BakersAdOwed -OutDir $sdTmp -Date '2026-09-24').Owed).Count
+    $onion = @($mg.Receipts | Where-Object { $_.term -eq 'onions' })
+    B ('(same-day) MUST FIRE: a same-day re-run that asks only rotation terms still proves every ad term (owed=' + $owedNew + ', carried=' + @($mg.Carried).Count + ')') (
+        ($owedNew -eq 0) -and (@($mg.Carried).Count -eq 3) -and (@($mg.Receipts).Count -eq 4) -and
+        (@($mg.Carried | Where-Object { -not $_.carried_from_run }).Count -eq 0))
+    B '(same-day) CLEAN TWIN: the re-run''s own ask keeps its own receipt (onions success, not carried)' (
+        ($onion.Count -eq 1) -and ([string]$onion[0].outcome -eq 'success') -and (-not $onion[0].PSObject.Properties['carried_from_run']))
+    # A term this run DID ask, and failed, replaces the morning's receipt: the re-ask always wins.
+    $rerunBlk = @((& $rc 'ground-beef' 'ground beef' 'blocked'), (& $rc 'strawberries' 'strawberries' 'not_asked'),
+                  (& $rc 'coffee-pods' 'coffee pods' 'not_asked'), (& $rc 'onions' 'onions' 'success'))
+    & $sdWrite $sdFile '2026-09-24' $morning
+    $mgB = Merge-BakersSameDayReceipts -Fresh $rerunBlk -Prior (Get-BakersSameDayPriorReceipts -Path $sdFile -Today '2026-09-24').Receipts -PriorStamp 'x'
+    & $sdWrite $sdFile '2026-09-24' $mgB.Receipts
+    $owB = @((Get-BakersAdOwed -OutDir $sdTmp -Date '2026-09-24').Owed)
+    B ('(same-day) CLEAN TWIN: a term the re-run asked and got ''blocked'' replaces the morning''s success, so it is owed again (owed=' + ($owB -join ',') + ')') (
+        ($owB.Count -eq 1) -and ($owB[0] -eq 'ground beef'))
+    # Receipts move forward only inside one date and one week_of.
+    Remove-Item -LiteralPath $sdFile -Force
+    & $sdWrite (Join-Path $sdTmp 'regular\bakers-regular-2026-09-23.json') '2026-09-23' $morning
+    B '(same-day) MUST NOT FIRE: the first run of a day with only YESTERDAY''s file present carries nothing' (
+        $null -eq (Get-BakersSameDayPriorReceipts -Path $sdFile -Today '2026-09-24'))
+    & $sdWrite $sdFile '2026-09-17' $morning
+    B '(same-day) MUST NOT FIRE: a same-date file with a different week_of carries nothing' (
+        $null -eq (Get-BakersSameDayPriorReceipts -Path $sdFile -Today '2026-09-24'))
+    $mgN = Merge-BakersSameDayReceipts -Fresh $rerun -Prior @((& $rc 'ground-beef' 'ground beef' 'not_asked')) -PriorStamp 'x'
+    B '(same-day) MUST NOT FIRE: a morning ''not_asked'' receipt is never carried as proof' (@($mgN.Carried).Count -eq 0)
+  } finally { Remove-Item -LiteralPath $sdTmp -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output ("SELF-TEST FAIL: " + $fail + " case(s)"); exit 1 }
 }
@@ -1510,6 +1614,31 @@ if (Test-BakersWipeout -RowCount $allRows.Count -PrevMax $prevMax) {
   Write-Warning ("bakers-api: THROTTLE-WIPEOUT guard tripped - only " + $allRows.Count + " rows vs " + $prevMax + " last time. NOT overwriting.")
   exit 2   # never a bare return: at script scope that reports SUCCESS to capture-run
 }
+# Same-day receipt carry (Merge-BakersSameDayReceipts, above -SelfTest): a re-run keeps this morning's proof.
+$file = Join-Path $out ('regular\bakers-regular-' + $today + '.json')
+$adAskedN = $(if ($script:BkAsk) { @($script:BkAsk.AdTerms).Count } else { 0 })
+if ($script:PolicyOk) {
+  try {
+    $sameDay = Get-BakersSameDayPriorReceipts -Path $file -Today $today
+    if ($sameDay) {
+      $rm = Merge-BakersSameDayReceipts -Fresh $captureTerms.ToArray() -Prior $sameDay.Receipts -PriorStamp $sameDay.Stamp
+      $captureTerms = New-Object System.Collections.Generic.List[object]
+      foreach ($ct in @($rm.Receipts)) { [void]$captureTerms.Add($ct) }
+      # ad_terms_asked grows only by carried ad terms the store answered; this run's own count is unchanged.
+      if ($script:BkAd -and $script:BkAd.HasList) {
+        $adAll = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+        foreach ($t in @($script:BkAd.All)) { [void]$adAll.Add([string]$t) }
+        $mine = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+        if ($script:BkAsk) { foreach ($t in @($script:BkAsk.AdTerms)) { [void]$mine.Add(([string]$t).Trim()) } }
+        foreach ($c in @($rm.Carried)) {
+          $tt = ([string]$c.term).Trim()
+          if ($adAll.Contains($tt) -and ($script:BakersAdAskedOutcomes -contains [string]$c.outcome) -and $mine.Add($tt)) { $adAskedN++ }
+        }
+      }
+      Write-Output ("bakers-api: carried {0} receipt(s) from this morning's run of {1} (written {2})" -f @($rm.Carried).Count, $today, $sameDay.Stamp)
+    }
+  } catch { Write-Output ("bakers-api: same-day receipt carry could NOT read " + (Split-Path $file -Leaf) + ' (' + $_.Exception.Message + ') - only this run''s receipts are written') }
+}
 $doc = [ordered]@{
   store = "Baker's"; week_of = $today; price_type = 'everyday'
   price_mode = 'in-store'; mode_verified = $today   # Kroger's API prices ARE the store's shelf prices (locationId-scoped, no delivery markup layer)
@@ -1524,7 +1653,7 @@ $doc = [ordered]@{
   # The weekly ad's asks (2026-09-18). capture_terms below is the receipt Get-BakersAdOwed reads to discharge them.
   ad_list = $(if ($script:BkAd) { [string]$script:BkAd.List } else { '' })
   ad_terms_owed = $(if ($script:BkAd) { @($script:BkAd.Owed).Count } else { 0 })
-  ad_terms_asked = $(if ($script:BkAsk) { @($script:BkAsk.AdTerms).Count } else { 0 })
+  ad_terms_asked = $adAskedN
   fresh_rows = $deals.Count; carried_rows = $merge.Carried; not_reverified = $merge.Carried
   carry_expired = $merge.Expired; carry_days = $script:CarryDays
   carry_refused_undated = $merge.Undated; carry_refused_wrong_store = $merge.WrongStore; carried_unstamped = $merge.Unstamped
@@ -1533,7 +1662,6 @@ $doc = [ordered]@{
   pull_terms = $stats.terms; capture_terms = $captureTerms.ToArray(); deal_count = $allRows.Count
   deals = $allRows
 }
-$file = Join-Path $out ('regular\bakers-regular-' + $today + '.json')
 ($doc | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8
 Write-Output ("bakers-api: wrote $($allRows.Count) rows ($($deals.Count) fresh) -> " + (Split-Path $file -Leaf))
 $bakersWindow = Update-BakersAdSchedule (Join-Path $root 'ad-schedule.json') $today

@@ -1,0 +1,305 @@
+{
+  "generated": "2026-09-25T17:40:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-23",
+  "queue_ids_seen": [
+    "2026-09-24-a9e8a0",
+    "2026-09-25-5d89a7",
+    "2026-09-24-a211ad",
+    "2026-09-24-818b3e",
+    "2026-09-23-4f9842"
+  ],
+  "routing_artifact": null,
+  "note": "Round 1 of Brad's second 2026-09-25 run. No item changes a matching or pricing rule, so no routing artifact is written; every blast_radius below is measured over the pipeline state it touches (journal entries, dirty paths, receipt sets) and says so. Board pinned: comparison-2026-09-23 built 08:14:10 (triage-due BOARD line, 500 min old at read). No item needs a hand board rebuild or publish; each is verified on the next scheduled capture-run.",
+  "items": [
+    {
+      "queue_id": "2026-09-24-a9e8a0",
+      "subject": "Daily chain left served files uncommitted - 2026-09-24",
+      "classification": "infra",
+      "evidence": [
+        "RE-MEASURED FIRST (capture-run.ps1 changed 09-24 17:36 in b6be9c8c3, a push-only retry; git diff 140b7e692..HEAD shows no line of the SERVED-DIRTY or FOREIGN-HELD blocks changed). The condition is live: it fired again 2026-09-25 08:32 (count 2).",
+        "grocery/out/logs/capture-run-daily-2026-09-24.log (the 16:38 forced run): 'foreign-held: 6 tracked owned file(s) another session dirtied before this run started, left uncommitted: ... meal-prep/free-rotation.json, meal-prep/pipeline/v2-perserving.prev.json, meal-prep/recipes-db.json, public/free-dinners.json' then 'commit: [main 140b7e692]' then 'served-dirty: 4 tracked served file(s) still dirty after the chain's commit' naming the SAME four. capture-run-daily-2026-09-25.log lines 163 and 179: identical pair (foreign-held 13 incl. the four; served-dirty the four).",
+        "All four are already in lib/bot-paths.ps1 Get-BotServedPaths (lines 108-111), so the alert's prescription 'Add the writer's output to $servedPaths' is inert, exactly as it was for prior close 2026-09-09-f0b5f2.",
+        "Nobody else dirtied them. .git/tc-pipeline-writes.json holds, for c:\\codex\\thriftycrew, -Built entries (commit=false) lane capture-run-daily-built ts 2026-09-24T10:03:32 for free-rotation.json blob f063ed23c, recipes-db.json dd89f91ac, free-dinners.json 65c903c80, and git hash-object of each working file today returns exactly those blobs (3 of 3). That 09-24 morning run staged INPUTS only because export-feed refused the feed, so W3.2 vouched its served outputs never to be committed.",
+        "Why the next two shipping runs did not rewrite them: ad-cycle-log 2026-09-24T17:00:14 and 2026-09-25T08:16:59 'free-rotation: rotation: same week, same set - nothing to do' (board-week=2026-09-23). rotate-free-dinners wrote nothing, so the mtime stayed before RunStart and lib/pipeline-commit.ps1 Get-ForeignHeldPaths (line 245: modified + mtime -lt RunStart = held) held them; Split-PipelineOwnHeld does not rescue them because Get-PipelineOwnHeld skips -Built entries (line 456).",
+        "v2-perserving.prev.json is a second shape of the same mtime test: meal-prep/pipeline/compute-v2-perserving.ps1 line 365 'Copy-Item $curPath $prevPath -Force' carries the SOURCE file's LastWriteTime, so the run's own write of .prev always reads as older than RunStart, and Register-PipelineWrites -Since RunStart never journals it (no journal entry exists for it). Once .prev is dirty at start it is held on every later run.",
+        "Reader effect, measured: origin/main public/free-dinners.json and meal-prep/recipes-db.json are the 09-23 set. The 09-24 09:20 rotation made 23 live Ghost visibility flips (ad-cycle-log 2026-09-24T09:20:33 '23 flip(s), 0 error(s)'). git diff -U0 recipes-db.json shows only visibility lines (paid<->public), so the repo's free list and visibility record have disagreed with live Ghost since 09-24 09:20. No upstream commit touched any of the four paths after 2026-09-24T10:03:32 (git log --since)."
+      ],
+      "surface_fix": {
+        "what": "land the three -Built-vouched served files at their vouched blobs so the served free list matches live Ghost again; leave .prev to the fixed chain",
+        "files": [
+          "meal-prep/free-rotation.json",
+          "meal-prep/recipes-db.json",
+          "public/free-dinners.json"
+        ],
+        "exact_change": "Preferred: none by hand - the root fix below promotes them on the next shipping run (09-26 07:00/08:00). Only if Brad wants it sooner: re-check each blob with git hash-object (f063ed23c / dd89f91ac / 65c903c80) and that git log --since 2026-09-24T10:03:32 is still empty for the path, then commit exactly those three paths with a pathspec and land through ops/push-main.ps1, staging those three paths by name and nothing else."
+      },
+      "root_cause": "The bot's commit decides 'this run wrote it' from a file's mtime (Get-ForeignHeldPaths, and Register-PipelineWrites -Since RunStart), and a -Built vouch can never be committed by anyone. So any served file the pipeline itself wrote on a non-shipping day is held forever once the next shipping run legitimately does not rewrite it: a no-op writer (rotate-free-dinners 'same week, same set') or an mtime-preserving writer (Copy-Item into v2-perserving.prev.json). The served-dirty watcher then reads the pipeline's own hold as a staging gap because it never subtracts what the commit step deliberately held (the f0b5f2 shape one step later: a watcher that does not read the decision made just above it).",
+      "root_fix": {
+        "what": "judge ownership by CONTENT, promote a still-current -Built vouch on a shipping run, and make the served-dirty watcher name holds instead of prescribing a list edit",
+        "files": [
+          "lib/pipeline-commit.ps1",
+          "grocery/capture-run.ps1",
+          "grocery/test-commit-size-gate.ps1"
+        ],
+        "exact_change": "(1) Get-DirtyOwnedSnapshot adds blob = (git hash-object) to each 'modified' entry; Get-ForeignHeldPaths holds a 'modified' entry only when its mtime is before RunStart AND its current blob equals the start blob (a snapshot entry with no blob keeps today's mtime-only rule, so old snapshots behave as before). This catches the Copy-Item .prev shape. (2) New Get-PipelineBuiltPromotable -Repo -Held in lib/pipeline-commit.ps1: a held path whose current blob equals a -Built entry for THIS checkout key AND whose HEAD history has no commit after that entry's ts (git log -1 --format=%cI -- <path> older than ts) is promotable. (3) capture-run.ps1 FOREIGN-HELD BLOCK: when $shipServed is true (guards passed, feed exported), promotable served paths are kept staged and printed 'built-promoted: N served file(s) a non-shipping run of this pipeline built and no later writer changed: <paths>'; Register-PipelineWrites re-records them committable. A promotable path on a non-shipping run stays held exactly as today. (4) Register-PipelineWrites path selection: a served path whose blob differs from its start-of-run snapshot blob counts as written this run even when its mtime is older (the .prev shape). (5) SERVED-DIRTY BLOCK: subtract $foreignHeld from $servedDirty before paging; held served paths print one line 'served-held: N served path(s) held as another session's edit: <paths>' and page ONLY when a held served path is NOT pipeline-vouched, with a subject that names a foreign edit on a served path, never the 'Add the writer's output to $servedPaths' prescription. The founding 2026-09-02 case (a served path written after staging, not held, not vouched) keeps its current alert unchanged."
+      },
+      "leaves_open": "the commit-size gate's 'own' tally (capture-run.ps1, 'written at or after this run started') still counts by mtime, so a Copy-Item-preserved own file is tallied as unvouched rather than own: 1 known file (.prev), 0 wrong size verdicts",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/capture-run.ps1",
+      "prior_closes": [
+        "2026-09-09-f0b5f2"
+      ],
+      "prevention": {
+        "source": [
+          "lib/pipeline-commit.ps1",
+          "grocery/capture-run.ps1"
+        ],
+        "what": "the producer of the hold decision decides by content and promotes a still-current pipeline vouch; the emitting check reads that decision before it diagnoses",
+        "exact_change": "root_fix steps (1)-(5) above: blob in the dirty snapshot, Get-PipelineBuiltPromotable, built-promoted on shipping runs, content-based Register-PipelineWrites selection, and served-dirty subtracting and naming $foreignHeld"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching rule: measured over the pipeline write journal and the working tree of the main checkout at 2026-09-25 ~17:20. -Built entries for this checkout: 3; dirty AND blob equals the -Built blob: 3 (free-rotation.json, recipes-db.json, free-dinners.json); dirty but blob differs: 0. Upstream commits to those paths after the vouch ts: 0.",
+        "affected_now": 4,
+        "names": [
+          "meal-prep/free-rotation.json",
+          "meal-prep/recipes-db.json",
+          "public/free-dinners.json",
+          "meal-prep/pipeline/v2-perserving.prev.json"
+        ],
+        "risk": "Promotion commits bytes built on a day whose feed export was refused. It is bounded to paths a shipping run's guards passed over, whose bytes no later writer changed and which upstream has not touched since the build; a guards-blocked board file cannot qualify because every shipping run rewrites the board. The content test in step (1) can only hold FEWER files than today, never more.",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured 2026-09-25 ~17:20 against the main checkout (local main 0 ahead / 0 behind origin/main), .git/tc-pipeline-writes.json of 08:31:33, capture-run-daily logs of 09-24 17:30 and 09-25 08:32; board comparison-2026-09-23 built 08:14. If a capture-run has shipped since, re-read the journal and git status of the four paths first.",
+      "proof": {
+        "guard_or_fixture": "grocery/test-commit-size-gate.ps1 (lifts the FOREIGN-HELD and SERVED-DIRTY blocks verbatim and runs them in a throwaway repo, so it reaches the changed code) plus the lib/pipeline-commit.ps1 functions it dot-sources",
+        "must_fire_case": "MUST FIRE, frozen from 2026-09-25: a served path dirty at start whose bytes equal a -Built journal entry (lane capture-run-daily-built), NOT rewritten this run, on a shipping run -> it is staged and printed 'built-promoted', and served-dirty prints none. Second must-fire: a served path copied with Copy-Item (mtime older than RunStart, bytes changed since the start snapshot) -> it is the run's own and committed.",
+        "clean_twin": "CLEAN TWIN: the founding 2026-09-02 shape (a served path written AFTER staging, not dirty at start) still pages 'Daily chain left served files uncommitted'. MUST NOT FIRE twins: a -Built match on a NON-shipping run stays held; a -Built match whose path upstream changed after the vouch ts stays held; a dirty-at-start served path with no journal entry and unchanged bytes (a real session edit) stays held and pages the foreign-edit subject, not the $servedPaths prescription; the f0b5f2 refused-commit case still sends no served-dirty alert.",
+        "fixture_occurrences": [
+          "2026-09-09-f0b5f2",
+          "2026-09-24-a9e8a0"
+        ],
+        "commands": [
+          "powershell -NoProfile -File grocery\\test-commit-size-gate.ps1",
+          "powershell -NoProfile -File grocery\\test-auditors.ps1",
+          "powershell -NoProfile -File ops\\run-gates.ps1"
+        ]
+      },
+      "rollback": "revert the lib/pipeline-commit.ps1 and capture-run.ps1 hunks; the journal format gains no field (blob lives only in the in-run snapshot), so nothing on disk needs migrating",
+      "do_not_touch": [
+        "the W3.2 rule that a guards-blocked run's served outputs are never committed BY THAT RUN",
+        "Get-BotServedPaths",
+        "any guard threshold",
+        "rotate-free-dinners' same-week no-op (it is correct; the commit must stop punishing it)"
+      ],
+      "resolution_note": "False prescription, real defect. The four files were the pipeline's own 09-24 morning outputs (journal -Built blobs match 3 of 3), held because the commit judged 'rewritten' by mtime and the next runs' rotation correctly no-opped; .prev is a Copy-Item that keeps its source mtime. Ownership is now judged by content, a still-current -Built vouch is promoted on a shipping run, and served-dirty names holds instead of prescribing a list edit.",
+      "publish_batch": 1,
+      "lane": "money",
+      "est_tool_calls": 55,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-25-5d89a7",
+      "subject": "Grocery bot checkout sync degraded - 2026-09-25",
+      "classification": "no-code-change",
+      "evidence": [
+        "capture-run-daily-2026-09-25.log:20 and :177 'sync[start]/sync[tail 1]: degraded/replay ... local commit 447b42efe conflicts with upstream even under -X theirs ... CONFLICT (rename/delete)'. 447b42efe is a local copy of 7e70f5fae, landed 09-24 17:35 by a session's push-main from the main checkout that could not move local main (memory push-main-from-main-can-strand-duplicate-bot-commits). Fixed by 91680deee (2026-09-25 10:34, W0.2: the sync drops a local commit whose raw diff equals a non-merge commit on the target before replaying; proven in a throwaway clone at the stuck HEAD: 'synced, dropped 6, replayed 12', 447b42efe=7e70f5fae). Now: git rev-list --left-right --count main...origin/main = 0 0, and 447b42efe is on neither."
+      ],
+      "root_cause": "The bot shares a checkout and a branch with sessions, so a session landing the bot's commits from that checkout can leave local copies the bot later replays onto their own twins. The instance cause (replaying a landed copy) is fixed by 91680deee; the class (a shared production checkout) is design D in design/PLAN-bot-dedicated-checkout-2026-09-25.md, ruled by Brad 2026-09-25 and being built in stage order.",
+      "prevention_none_because": "not a RETURN; the prevention already shipped (91680deee) and the structural fix is a ruled plan with its own stages",
+      "resolution_note": "Fixed upstream of this triage: 91680deee (W0.2) makes the sync drop a local commit already on origin before replaying, which is exactly the 447b42efe/7e70f5fae clash; local main is level with origin. Verify on the 09-26 07:00 ad run: sync[start] must not read degraded/replay. The shared-checkout class is design D (PLAN-bot-dedicated-checkout-2026-09-25).",
+      "publish_batch": 1,
+      "status": "planned"
+    },
+    {
+      "queue_id": "2026-09-24-a211ad",
+      "subject": "Triage finding: tail sync blocks on a dirty path identical to upstream",
+      "classification": "infra",
+      "evidence": [
+        "capture-run-daily-2026-09-24.log (16:38 forced run): start 'sync[start]: partial/foreign ... first changed upstream by af7835422' and tail 'sync[tail 1]: blocked/foreign 140b7e692.. ... meal-prep/pipeline/audit-lane-shape.ps1 (M ); nothing was written'. The status code is 'M ' (index column): a STAGED edit, as design/PLAN-bot-dedicated-checkout-2026-09-25.md row 143 also records.",
+        "lib/checkout-sync.ps1 line 1247: any code matching '^[^ ]' is classed foreign ('a staged change ... the sync never rewrites an index entry it did not make') WITHOUT reading bytes, while line 1251 (' M') and line 1243 ('??') class a path whose bytes equal upstream's new blob as already-upstream.",
+        "PREMISE CORRECTED: the finding says start and tail disagreed. They did not: both sync phases classed the path foreign (start went partial on it, tail blocked on it). The disagreement was with the recovery plan's hand classification 'already-upstream'. The bytes-identical claim (blob b935f13e7 from af7835422) is the finding's and was not re-measured here, since the path has since been committed."
+      ],
+      "root_cause": "The sync classifies a STAGED entry by its status code alone, never by its bytes, so a session's staged copy of a file that upstream has since landed byte-identically is 'foreign' and blocks the bot's push, although moving HEAD to upstream changes nothing in that entry's index or working bytes. The unstaged and untracked branches already apply the bytes test; the staged branch was never given it.",
+      "root_fix": {
+        "what": "give the staged branch the same bytes test the ' M' and '??' branches have",
+        "files": [
+          "lib/checkout-sync.ps1"
+        ],
+        "exact_change": "Before the '^[^ ]' branch at line 1247, add a branch for codes 'M ' and 'A ' only: when $x.st -ne 'D' and the INDEX blob (git rev-parse :<path>) and the WORKING blob (git hash-object -- <path>) both equal $x.newBlob (Ordinal compare), class it already-upstream. Every other staged code ('MM', 'AM', 'D ', 'R', 'T', unmerged) keeps line 1247 unchanged. Keep the existing already-upstream handling (line 967 re-adds a blob the index already holds, a no-op; the fingerprint check at line 1457 still proves bytes and mtime unchanged)."
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching rule: measured over capture-run sync outcomes. Occurrences of a staged byte-identical path blocking a sync: 1 run (2026-09-24 16:38, start partial + tail blocked). design/PLAN-bot-dedicated-checkout-2026-09-25.md section 2.3 lists every other 09-17..09-25 sync refusal and none is this shape (untracked copy, autostash conflict, replay clash).",
+        "affected_now": 0,
+        "names": [
+          "meal-prep/pipeline/audit-lane-shape.ps1 (09-24, no longer dirty)"
+        ],
+        "risk": "Only 'M ' and 'A ' with index == worktree == upstream blob change class. Moving HEAD onto those bytes leaves the index entry and the file byte-identical; the session's staged state simply becomes committed history. 'MM' (worktree holds a further edit) stays foreign by design.",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured 2026-09-25 ~17:20 against lib/checkout-sync.ps1 at HEAD (includes 91680deee, 10:34 today) and the 09-24 daily capture-run log; re-read the classifier lines if checkout-sync.ps1 moves again (design D work is active on it).",
+      "proof": {
+        "guard_or_fixture": "lib/checkout-sync.ps1 -SelfTest (its temp-repo sync fixtures reach the classifier through the real sync)",
+        "must_fire_case": "MUST FIRE, frozen from 2026-09-24: a temp repo where a non-owned path is staged 'M ' with bytes equal to the upstream commit's new blob; the tail sync ends 'synced' (not blocked/foreign), the path is clean afterwards, and its bytes and mtime are unchanged.",
+        "clean_twin": "MUST NOT FIRE: the same path staged 'M ' with bytes DIFFERENT from upstream still ends blocked/foreign naming it; and 'MM' where the index equals upstream but the worktree holds a further edit still ends blocked/foreign. CLEAN TWIN: the existing ' M' already-upstream case still passes unchanged.",
+        "commands": [
+          "powershell -NoProfile -File lib\\checkout-sync.ps1 -SelfTest",
+          "powershell -NoProfile -File ops\\run-gates.ps1"
+        ]
+      },
+      "rollback": "revert the one added classifier branch and its fixtures",
+      "do_not_touch": [
+        "the '^[^ ]' refusal for every other staged code",
+        "the owned-path and journal-vouch rules",
+        "91680deee's landed-twin drop"
+      ],
+      "resolution_note": "A staged edit was judged by its status code, never its bytes, so a session's staged copy of a file upstream had landed byte-identically blocked the bot's push on 09-24. Staged 'M '/'A ' entries whose index and working bytes both equal upstream now count as already-upstream; every other staged shape still blocks. The finding's 'start and tail disagreed' was the recovery plan's classification, not the sync's.",
+      "publish_batch": 1,
+      "lane": "ops",
+      "est_tool_calls": 30,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-24-818b3e",
+      "subject": "Board prices aging inside a fresh file",
+      "classification": "infra",
+      "evidence": [
+        "RE-MEASURED FIRST (check-ad-cycles.ps1 changed 09-25 14:45 in bda9e5e0d, recipe take-down, unrelated). The condition is gone today: ad-cycle-log 2026-09-25T08:03:27 'SCHEDULE-VS-DATA Baker's ... all 78 routed term(s) asked inside the window (979 API promo row(s))'.",
+        "Timeline from ad-cycle-log: 09-24 09:03 'all 78 routed term(s) asked' -> 09-24 16:41 (the forced -Force hand run) '77 of 78 ... not yet asked' -> 17:11 row-age '! AD COVERAGE GONE' (this alert) -> 09-25 08:03 'all 78'.",
+        "capture_terms receipts counted per committed version against bakers-ad-list-2026-09-23.json (78 terms): bakers-regular-2026-09-24.json at e839c8ad2 (morning) asked 89 terms, ad terms covered 78/78, ad_terms_asked 81; the SAME dated file at e90682129 (17:31, rewritten by the hand re-run) asked 9, covered 0/78, ad_terms_asked 1. bakers-regular-2026-09-23.json at cec9779a3 covers 1/78 although 09-23 08:04 logged all 78 asked: the same overwrite on 09-23. bakers-regular-2026-09-25.json at HEAD covers 77/78.",
+        "The sale ROWS survived: live promo rows (ad_to >= 09-24) 986 in the morning file, 988 in the rewritten one; rows 7,377 vs 7,367 (Invoke-BakersCarryMerge carries rows by product_id). So the alert's 'this week's new Baker's sale items are off the board' was false: only the receipt was erased.",
+        "Mechanism: pull-regular-bakers-api.ps1:1035 '$bkAd = Get-BakersAdOwed -OutDir $out -Date $today' reads today's own file, which already proves all 78, so the re-run owes and asks none; it then writes today's file whole with capture_terms for its own 9 asks only (captureTerms built fresh at :1287), erasing the proof it trusted."
+      ],
+      "surface_fix": {
+        "what": "none needed today: the 09-25 file covers the ad and the alert condition is gone",
+        "files": [],
+        "exact_change": "none"
+      },
+      "root_cause": "The proof that a Baker's ad term was asked lives only inside the dated capture file that every run of that day rewrites whole, so a same-day re-run trusts the proof (owes nothing, asks nothing) and then erases it, and the coverage check pages a board that still carries every sale row. One level up for the type: across its five closes this alert has repeatedly read a proxy for coverage (file dates, as_of stamps, receipts) that moved while the rows on the board did not.",
+      "root_fix": {
+        "what": "a same-day rewrite of bakers-regular-<today>.json carries forward the receipts of terms this run did not ask",
+        "files": [
+          "grocery/pull-regular-bakers-api.ps1"
+        ],
+        "exact_change": "Before writing capture_terms (around line 1287-1301): if out/regular/bakers-regular-<today>.json already exists and its week_of equals this run's, read its receipts with Get-BakersRegularReceipts (capture-policy-lib.ps1:651) and append every receipt whose (commodity id | term) key this run did not ask, marked carried_from_run = <that file's as_of or write time>; this run's receipt wins for every key it asked. ad_terms_asked becomes the count of distinct ad terms with an asked outcome across the merged receipts. Never carry receipts from a file of another date (yesterday's asks must still be owed by the ad logic). Print one line 'bakers-api: carried N receipt(s) from this morning's run of <date>'."
+      },
+      "leaves_open": "build-walmart-deals.ps1 rewrites walmart-regular-<date>.json whole with no merge, so a same-day rebuild could erase ruling-term proof that Get-WalmartRulingOwed reads (import-walmart-batch merges and is not exposed); 0 occurrences over the 9 walmart-regular files dated 2026-09-12..2026-09-25 (none rewritten same day), failure mode a redundant re-ask that nothing pages on.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "2026-09-25-ef83cf",
+      "prior_closes": [
+        "2026-08-30-fec3dc",
+        "2026-09-02-c9c140",
+        "2026-09-06-6e08ed",
+        "2026-09-09-04e0af"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/pull-regular-bakers-api.ps1"
+        ],
+        "what": "the capture builder that writes the receipt stops erasing it on a same-day re-run, so the coverage proof can only grow within a day",
+        "exact_change": "root_fix above: same-date, same-week_of receipt carry in the capture_terms writer, this run's receipt winning per key, no cross-date carry"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching rule: receipt sets counted from capture_terms of 6 committed versions of bakers-regular-2026-09-23/24/25.json against the 78 terms of out/bakers/bakers-ad-list-2026-09-23.json. Rows and promo rows compared between the two 09-24 versions. No row, price or asked term changes; only the receipt list of a same-day rewrite grows.",
+        "affected_now": 0,
+        "names": [
+          "grocery/out/regular/bakers-regular-2026-09-24.json at e90682129 (0/78, would have read 78/78)",
+          "grocery/out/regular/bakers-regular-2026-09-23.json at cec9779a3 (1/78)"
+        ],
+        "risk": "A carried receipt could discharge a term that later failed; bounded because a re-ask in the same run always wins and nothing crosses a date. Ask volume is unchanged (the re-run already asked none of them).",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured 2026-09-25 ~17:30 against committed versions cec9779a3, 3c45a9478, e839c8ad2, e90682129 and HEAD, bakers-ad-list-2026-09-23.json, and ad-cycle-log through 09-25 08:26; board comparison-2026-09-23 built 08:14.",
+      "proof": {
+        "guard_or_fixture": "grocery/pull-regular-bakers-api.ps1 -SelfTest (the file already carries its (a)/(b) carry fixtures around lines 776-811) and grocery/test-capture-builders.ps1",
+        "must_fire_case": "MUST FIRE, frozen from 2026-09-24: an existing bakers-regular-<today>.json holding the morning's 81 ad-term receipts (e839c8ad2 shape) and a re-run that asks 9 rotation terms -> the rewritten file still proves all 78 ad terms and Get-BakersAdOwed returns 0 owed; without the fix it returns 77.",
+        "clean_twin": "CLEAN TWIN: a term the re-run DOES ask with outcome 'error' replaces the morning's receipt for that key. MUST NOT FIRE: the first run of a day with only YESTERDAY's file present carries no receipt, so yesterday's asks do not discharge today's owed terms; and a same-date file with a different week_of carries nothing.",
+        "fixture_occurrences": [
+          {
+            "queue_id": "2026-08-30-fec3dc",
+            "covered_by": "audit-row-age.ps1 self-test WINDOW-DATED case (lines 138/278): ad rows are never undated"
+          },
+          {
+            "queue_id": "2026-09-02-c9c140",
+            "covered_by": "new must-still-fire case: a Baker's ad whose window has expired with no in-window receipts still reads not captured (the real 09-02 condition must keep paging)"
+          },
+          {
+            "queue_id": "2026-09-06-6e08ed",
+            "covered_by": "audit-row-age.ps1 self-test 'AN AD IN HAND IS NOT A FAILED PULL' case (lines 91/195)"
+          },
+          {
+            "queue_id": "2026-09-09-04e0af",
+            "covered_by": "same must-still-fire case as c9c140 (superseded twin of an expired Baker's ad)"
+          },
+          {
+            "queue_id": "2026-09-24-818b3e",
+            "covered_by": "the new same-day rewrite must-fire above"
+          }
+        ],
+        "commands": [
+          "powershell -NoProfile -File grocery\\pull-regular-bakers-api.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\test-capture-builders.ps1",
+          "powershell -NoProfile -File grocery\\audit-row-age.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "revert the receipt-carry hunk; files written meanwhile only carry extra receipts, which Get-BakersRegularReceipts already reads",
+      "do_not_touch": [
+        "Invoke-BakersCarryMerge row carry",
+        "Get-BakersAdOwed and Get-BakersAdCaptureState rules",
+        "the Baker's ask allowance and rotation cursor"
+      ],
+      "resolution_note": "False alarm about the board, real defect in the receipt: the 09-24 hand re-run rewrote bakers-regular-2026-09-24.json and erased the morning's 78 ad-term receipts it had just trusted, while every sale row survived by carry. pull-regular-bakers-api.ps1 now reads a same-date, same-week_of bakers-regular file before rewriting it (Get-BakersSameDayPriorReceipts) and carries each receipt whose key this run recorded as not_asked or did not record (Merge-BakersSameDayReceipts, stamped carried_from_run); a key this run asked keeps this run's receipt, a prior not_asked carries nothing, and nothing crosses a date. ad_terms_asked grows only by carried ad terms with a success/empty outcome. 7 new self-test cases (same-day): the unfixed rewrite leaves 3 of 3 ad terms owed, the fixed one 0; a re-ask that comes back blocked is owed again; yesterday's file and a different week_of carry nothing. Proof: pull-regular-bakers-api.ps1 -SelfTest exit 0 SELF-TEST PASS; test-capture-builders.ps1 exit 0 45/45; audit-row-age.ps1 -SelfTest exit 0 SELF-TEST PASS; full_suite: deferred-to-land. Also owns 2026-09-24-c59dce (plan-2026-09-25-4, superseded). 09-25 covers the ad (all 78). Walmart residual measured and enqueued as 2026-09-25-ef83cf (weekly).",
+      "publish_batch": 1,
+      "lane": "money",
+      "est_tool_calls": 45,
+      "status": "done",
+      "premise_verified": "true: git show of bakers-regular-2026-09-24.json at e839c8ad2 reads week_of 2026-09-24, 640 receipts, 89 success/empty, ad_terms_asked 81; at e90682129 the same file reads 640 receipts, 9 success/empty, ad_terms_asked 1. Code read: the capture_terms writer builds only this run's receipts and the file is written whole; Get-BakersAdOwed proves only from success/empty receipts in files inside the ad window.",
+      "deviation": null,
+      "shipped_commit": "see git log -- grocery/pull-regular-bakers-api.ps1 (Triage plan-2026-09-25-5: 818b3e); cite the landed hash after triage-land",
+      "close_disposition": "fixed-root-cause",
+      "actual_tool_calls": 35
+    },
+    {
+      "queue_id": "2026-09-23-4f9842",
+      "subject": "Automation silent-death: TASK FAILED",
+      "classification": "needs-more-time",
+      "evidence": [
+        "Get-ScheduledTaskInfo: 'TC Recall Sleep 0435' last 09-25 12:35 result 1 (a run-once repeat reporting the 04:35 run's rc=1); ops/out/recall-sleep-stamp.json 09-25 04:41 ok=false, failed = brain commit hook, gate (BROKEN, exit 1 each) plus forgetting and memory clusters (judgement waiting). 'TC Daily Ratchets 0315' child exit 1 on 09-24 and 09-25, green on 09-23 (ops/out/logs/run-once/daily-ratchets-2026-09-2[345].stamp). The silent-death check that owns both DID run: it is what paged. The ratchets run log (run-once-daily-ratchets-2026-09-25.log) carries only 'child exit 1', so WHICH ratchet rose is recorded nowhere I found."
+      ],
+      "root_cause": "Unfinished at the 12-call ceiling. Two separate reds: the knowledge store's own recall-sleep pass (its 'brain commit hook' and 'gate' steps, outside this repo), and a daily-ratchets red whose cause is not recorded because ops/run-once-a-day.ps1's run log keeps only its own summary line (UNPROVEN: I did not confirm that its live path drops the child's stdout; only its self-test path was read).",
+      "resolution_note": "Deferred with findings: recall-sleep is red on its brain-commit-hook and gate steps (store-side, see C:\\Users\\Owner\\.claude\\recall-sleep-latest.md); daily ratchets exit 1 on 09-24 and 09-25 with no recorded cause. Next pass: run ops/run-daily-ratchets.ps1 by hand in a scratch clone to name the red ratchet, and check whether run-once-a-day keeps child output.",
+      "status": "needs-more-time"
+    }
+  ],
+  "ship_sequence": [
+    "1. a211ad (ops): edit lib/checkout-sync.ps1 classifier + its -SelfTest cases; run lib\\checkout-sync.ps1 -SelfTest (exit 0, last line its verdict), then ops\\run-gates.ps1; land through ops\\push-main.ps1 (chain change: never a plain push to main).",
+    "2. a9e8a0 (money): edit lib/pipeline-commit.ps1 and grocery/capture-run.ps1 (FOREIGN-HELD and SERVED-DIRTY blocks, markers unrenamed) + grocery/test-commit-size-gate.ps1 fixtures; run test-commit-size-gate.ps1, test-auditors.ps1, run-gates.ps1; land through ops\\push-main.ps1 (its chain rehearsal covers capture-run). Run nothing against the live out\\ and no capture-run by hand.",
+    "3. 818b3e (money): edit grocery/pull-regular-bakers-api.ps1 receipt carry + -SelfTest cases; run pull-regular-bakers-api.ps1 -SelfTest, test-capture-builders.ps1, audit-row-age.ps1 -SelfTest, run-gates.ps1; land through ops\\push-main.ps1.",
+    "4. No board rebuild and no publish: none of the three changes a rule, a price or a guard.",
+    "5. Live verification on the 2026-09-26 scheduled runs: capture-run-ad/daily logs show sync[start] and sync[tail] not degraded/replay (5d89a7) and not blocked/foreign on a byte-identical staged path (a211ad); the daily log shows 'built-promoted: 3' (or the three paths already rewritten) and 'served-dirty: none'; git show origin/main:public/free-dinners.json matches the rotation state; Baker's: ad-cycle-log SCHEDULE-VS-DATA 'all 78', and if any same-day re-run happens its bakers-regular file still proves 78/78."
+  ],
+  "knowledge_consulted": [
+    "searched \"alert triage root cause recurrence\" (dispatch), and --multi \"mtime rewritten by this run\" \"same-day rerun overwrites receipts\" \"staged path identical upstream sync\"",
+    "memory:mtime-is-not-liveness-for-a-noop-writer (C--Codex store): an output rewritten only when it changes has no mtime signal; prove currency from content. Used for a9e8a0's content test.",
+    "memory:push-main-from-main-can-strand-duplicate-bot-commits: the 5d89a7 mechanism, fixed by 91680deee",
+    "memory:refused-bot-commit-freezes-the-checkout: context for the served-dirty RETURN (f0b5f2)",
+    "reliability-craft/MAP.md section 5 (do not declare resolved on the alert going quiet) and reliability-craft/rca-and-chaos.md section 2 (preventive, detective and responsive actions): each code item carries a preventive root fix and a detective must-fire",
+    "reliability-craft/applies-here.md ('The 07:00 bot, the shared index, and the fix that never reached a commit')"
+  ],
+  "open_questions_for_brad": []
+}
