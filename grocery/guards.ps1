@@ -1712,7 +1712,7 @@ $gdFailures = (ConvertTo-TcGuardFailures -Messages $fail -Scoped $script:FailSco
 $gd = Get-TcGuardsDisposition -Failures $gdFailures -Board $cmp
 try { $null = Write-TcQuarantinePlan -OutDir (Join-Path $root 'out') -Disposition $gd -BoardPath $cmpF.FullName }
 catch {
-  if ($gd.action -eq 'quarantine') { $gd.action = 'hold'; $gd.reasons = @($gd.reasons) + @('the quarantine plan could not be written, so nothing can apply it: ' + $_.Exception.Message) }
+  if ($gd.action -eq 'quarantine' -or $gd.action -eq 'reapply') { $gd.action = 'hold'; $gd.reasons = @($gd.reasons) + @('the quarantine plan could not be written, so nothing can apply it: ' + $_.Exception.Message) }
 }
 $gv = Get-TcGuardsVerdictLines -Disposition $gd -FailCount $fail.Count
 if ($fail.Count -gt 0) {

@@ -98,8 +98,9 @@ Assert-QCase 'CLEAN TWIN the second run prints GUARDS QUARANTINED naming the hel
 $b1t = Invoke-QRoundTrip $b1; (Get-QCell $b1t 'c3' 'B').per_unit = $bad3
 Assert-QCase 'MUST FIRE  a held cell carrying the BAD value again (tampered after the apply) HOLDS the board' {
   (Get-TcGuardsDisposition -Failures @((New-QFail 'c3' 'B' 'value' $bad3)) -Board $b1t).action -eq 'hold' }
-Assert-QCase 'MUST FIRE  a VALUE finding on the second run whose number IS the held price (0.95) HOLDS - the last verified price is condemned too' {
-  (Get-TcGuardsDisposition -Failures @((New-QFail 'c3' 'B' 'value' 0.95)) -Board (Invoke-QRoundTrip $b1)).action -eq 'hold' }
+Assert-QCase 'MUST FIRE  a VALUE finding on the second run whose number IS the held price (0.95) asks to WITHHOLD that cell (reapply, exit 2), never to hold the board (2026-09-25)' {
+  $dh = Get-TcGuardsDisposition -Failures @((New-QFail 'c3' 'B' 'value' 0.95)) -Board (Invoke-QRoundTrip $b1)
+  $dh.action -eq 'reapply' -and (Get-TcGuardsExitCode $dh.action) -eq 2 -and @($dh.reapply_withhold).Count -eq 1 -and @($dh.reasons).Count -eq 0 }
 Assert-QCase 'CLEAN TWIN a SELECTION finding at the held price stays covered - censorship does not condemn the number shown' {
   (Get-TcGuardsDisposition -Failures @((New-QFail 'c3' 'B' 'selection' 0.95), (New-QFail 'c4' 'C')) -Board (Invoke-QRoundTrip $b1)).action -eq 'quarantined' }
 Assert-QCase 'MUST FIRE  a NEW cell failure on a board that is already quarantined HOLDS (a quarantine is applied once per build)' {
@@ -273,6 +274,59 @@ Assert-QCase 'MUST NOT FIRE  a cell held at the SAME value kept its row, so its 
 $acqSrc = [IO.File]::ReadAllText((Join-Path $root 'apply-cell-quarantine.ps1'))
 Assert-QCase 'MUST FIRE  apply-cell-quarantine.ps1 moves the links in the same step, after writing the board' {
   $acqSrc.Contains('Update-TcQuarantine' + 'Links -Items') -and $acqSrc.IndexOf('Update-TcQuarantine' + 'Links -Items') -gt $acqSrc.IndexOf('Set-Content -LiteralPath $board' + 'F') }
+
+# ---- A CONDEMNED HELD VALUE WITHHOLDS ITS CELL, NOT THE BOARD (2026-09-25, queue 2026-09-23-0c8e6e) ----------------
+# FOUNDING CASE, frozen from grocery\ad-cycle-log.txt [2026-09-23T08:20:44]: vegetable-oil / Sam's Club was held at its
+# last verified 0.0373, then the second guards pass said "HARD FAIL: 1.94x factor  vegetable-oil / Sam's Club
+# board=0.0373 link=0.0723", and the whole board was held. The clean twin is energy-drinks / Family Fare held at 0.1353
+# with a finding on a DIFFERENT value (0.0625), which stays covered.
+$vr = @(
+  [pscustomobject]@{ commodity = 'Vegetable Oil'; id = 'vegetable-oil'; unit = 'fl oz'; cheapest_store = ''; cheapest_price = 0.0; cheapest_type = ''; nomem_store = ''; nomem_price = 0.0; nomem_type = ''; stores = @(
+    [pscustomobject]@{ store = "Sam's Club"; per_unit = 0.0373; unit = 'fl oz'; type = 'everyday'; item = ''; membership = $true; bulk = $true; quarantine = [pscustomobject]@{ since = '2026-09-22'; kind = 'value'; bad_per_unit = 0.0301; bad_item = 'x'; reasons = @('first pass') } },
+    [pscustomobject]@{ store = 'Walmart'; per_unit = 0.0625; unit = 'fl oz'; type = 'everyday'; item = 'Great Value Vegetable Oil 48 fl oz'; membership = $false; bulk = $false }) },
+  [pscustomobject]@{ commodity = 'Energy Drinks'; id = 'energy-drinks'; unit = 'fl oz'; cheapest_store = ''; cheapest_price = 0.0; cheapest_type = ''; nomem_store = ''; nomem_price = 0.0; nomem_type = ''; stores = @(
+    [pscustomobject]@{ store = 'Family Fare'; per_unit = 0.1353; unit = 'fl oz'; type = 'everyday'; item = ''; membership = $false; bulk = $false; quarantine = [pscustomobject]@{ since = '2026-09-22'; kind = 'value'; bad_per_unit = 0.0625; bad_item = 'y'; reasons = @('first pass') } },
+    [pscustomobject]@{ store = 'Walmart'; per_unit = 0.1400; unit = 'fl oz'; type = 'everyday'; item = 'Monster 16 fl oz'; membership = $false; bulk = $false }) })
+foreach ($i in 1..60) { $vr += [pscustomobject]@{ commodity = ('F' + $i); id = ('f' + $i); unit = 'oz'; cheapest_store = ''; cheapest_price = 0.0; cheapest_type = ''; nomem_store = ''; nomem_price = 0.0; nomem_type = ''; stores = @([pscustomobject]@{ store = "Sam's Club"; per_unit = 1.0 + $i * 0.01; unit = 'oz'; type = 'everyday'; item = ('S' + $i) }, [pscustomobject]@{ store = 'Family Fare'; per_unit = 1.1 + $i * 0.01; unit = 'oz'; type = 'everyday'; item = ('F' + $i) }) } }
+$veg23 = [pscustomobject]@{ week_of = '2026-09-23'; max_publish_age_days = 90; comparison = @($vr); quarantine = [pscustomobject]@{ applied_at = '2026-09-23T08:18:00'; applied_by = 'fixture'; rule = 'fixture'; last_published = $null; stores = @(); cells = @(
+  [pscustomobject]@{ id = 'vegetable-oil'; store = "Sam's Club"; action = 'last-good'; why = ''; per_unit = 0.0373; since = '2026-09-22'; kind = 'value'; bad_per_unit = 0.0301; bad_item = 'x'; reasons = @('first pass') },
+  [pscustomobject]@{ id = 'energy-drinks'; store = 'Family Fare'; action = 'last-good'; why = ''; per_unit = 0.1353; since = '2026-09-22'; kind = 'value'; bad_per_unit = 0.0625; bad_item = 'y'; reasons = @('first pass') }) } }
+foreach ($r in $veg23.comparison) { Update-TcRowWinners $r }
+$veg23 = Invoke-QRoundTrip $veg23
+$vegF = New-TcGuardFailure -Message "HARD FAIL: 1.94x factor  vegetable-oil / Sam's Club  board=0.0373 link=0.0723" -Family 'cell' -Id 'vegetable-oil' -Store "Sam's Club" -Kind 'value' -BadPerUnit 0.0373 -Check 'fixture'
+$edF = New-TcGuardFailure -Message 'HARD FAIL: fixture energy-drinks / Family Fare at 0.0625' -Family 'cell' -Id 'energy-drinks' -Store 'Family Fare' -Kind 'value' -BadPerUnit 0.0625 -Check 'fixture'
+$dv = Get-TcGuardsDisposition -Failures @($vegF, $edF) -Board $veg23
+Assert-QCase 'MUST FIRE  FOUNDING CASE 09-23: vegetable-oil | Sam''s Club held at 0.0373 and condemned at 0.0373 is reapply_withhold naming that cell, NOT hold' {
+  $dv.action -eq 'reapply' -and @($dv.reapply_withhold).Count -eq 1 -and [string]$dv.reapply_withhold[0].id -eq 'vegetable-oil' -and [string]$dv.reapply_withhold[0].store -eq "Sam's Club" -and @($dv.reasons).Count -eq 0 }
+Assert-QCase 'CLEAN TWIN energy-drinks | Family Fare held at 0.1353 with a finding on 0.0625 stays covered: alone it is QUARANTINED, exit 4' {
+  $de = Get-TcGuardsDisposition -Failures @($edF) -Board $veg23
+  $de.action -eq 'quarantined' -and (Get-TcGuardsExitCode $de.action) -eq 4 -and @($de.reapply_withhold).Count -eq 0 }
+Assert-QCase 'CLEAN TWIN an unscoped failure beside the condemned held value still HOLDS the board' {
+  (Get-TcGuardsDisposition -Failures @($vegF, (New-TcGuardFailure -Message 'HARD FAIL: pu-lib per-unit math regressed' -Family 'board')) -Board $veg23).action -eq 'hold' }
+$vPlan = (([ordered]@{ action = 'reapply'; reapply_withhold = @(@($dv.reapply_withhold) | ForEach-Object { [ordered]@{ id = $_.id; store = $_.store; per_unit = $_.per_unit; reasons = @($_.reasons) } }) } | ConvertTo-Json -Depth 6) | ConvertFrom-Json)
+$vSnap = Get-QSnapshot $veg23
+$vra = Invoke-TcQuarantineReapply -Board $veg23 -Plan $vPlan
+Assert-QCase 'MUST FIRE  the reapply WITHHOLDS vegetable-oil | Sam''s Club: absent from the board, never the condemned 0.0373, recorded withheld with its reason' {
+  $e = @(@($veg23.quarantine.cells) | Where-Object { $_.id -eq 'vegetable-oil' })[0]
+  $vra.ok -and $null -eq (Get-QCell $veg23 'vegetable-oil' "Sam's Club") -and $e.action -eq 'withheld' -and $e.why -eq 'the held value was itself condemned' -and $null -eq $e.per_unit }
+Assert-QCase 'CLEAN TWIN every other cell is unchanged after the reapply (123 of 123, value and product), energy-drinks still held at 0.1353' {
+  $after = Get-QSnapshot $veg23; $same = 0
+  foreach ($k in $vSnap.Keys) { if ($k -eq "vegetable-oil|Sam's Club") { continue }; if ($after.ContainsKey($k) -and $after[$k] -eq $vSnap[$k]) { $same++ } }
+  $same -eq 123 -and [double](Get-QCell $veg23 'energy-drinks' 'Family Fare').per_unit -eq 0.1353 }
+$veg23b = Invoke-QRoundTrip $veg23
+$dv3 = Get-TcGuardsDisposition -Failures @($edF) -Board $veg23b
+Assert-QCase 'MUST FIRE  the third guards pass over the re-applied board (through JSON) is QUARANTINED, exit 4, the block verified' {
+  $dv3.action -eq 'quarantined' -and (Get-TcGuardsExitCode $dv3.action) -eq 4 -and $dv3.block.ok -and $dv3.block.reapplied }
+Assert-QCase 'MUST FIRE  a SECOND condemnation of a held value on an already re-applied board HOLDS (once per build)' {
+  $edHeld = New-TcGuardFailure -Message 'HARD FAIL: fixture energy-drinks / Family Fare at 0.1353' -Family 'cell' -Id 'energy-drinks' -Store 'Family Fare' -Kind 'value' -BadPerUnit 0.1353 -Check 'fixture'
+  $d2x = Get-TcGuardsDisposition -Failures @($edHeld) -Board $veg23b
+  $d2x.action -eq 'hold' -and (@($d2x.reasons) -join ' ') -match 'already re-applied once' }
+Assert-QCase 'MUST FIRE  the applier refuses a second reapply on the same board, leaving it untouched' {
+  $r2 = Invoke-TcQuarantineReapply -Board $veg23b -Plan $vPlan
+  (-not $r2.ok) -and $r2.refusal -match 'already re-applied once' }
+Assert-QCase 'CLEAN TWIN the reapply verdict line keeps the GUARDS QUARANTINE-REQUIRED words (exit 2) and names the cell' {
+  $vl = Get-TcGuardsVerdictLines -Disposition $dv -FailCount 2
+  $vl.code -eq 2 -and $vl.lines[-1].StartsWith('GUARDS QUARANTINE-REQUIRED: 2 hard failure(s); the held value of 1') -and ($vl.lines -join "`n") -match "WITHHOLD    vegetable-oil / Sam's Club  its held value 0\.0373" }
 
 if ($script:qFail -gt 0) { Write-Output ("test-cell-quarantine self-test: FAIL ({0} of {1} case(s) failed)" -f $script:qFail, $script:qCases); exit 1 }
 Write-Output ("test-cell-quarantine self-test: PASS ({0} of {0} case(s))" -f $script:qCases)

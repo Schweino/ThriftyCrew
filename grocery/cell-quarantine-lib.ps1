@@ -180,10 +180,11 @@ function Test-TcQuarantineBlock($Board) {
   # THE SECOND RUN'S PROOF that an applied quarantine actually holds on THIS board: a held cell publishes exactly its
   # recorded last verified price and carries the marker renderers read, a withheld cell is absent, and a dropped
   # store prices nothing at an everyday price. Anything else is a problem, and a problem holds the board.
-  $res = [pscustomobject]@{ present = $false; ok = $true; problems = @(); cells = @(); stores = @(); withheldPerStore = @{} }
+  $res = [pscustomobject]@{ present = $false; ok = $true; problems = @(); cells = @(); stores = @(); withheldPerStore = @{}; reapplied = $false }
   $b = Get-TcQuarantineBlock $Board
   if ($null -eq $b) { return $res }
   $res.present = $true
+  if ($b.PSObject.Properties['reapplied'] -and $null -ne $b.reapplied) { $res.reapplied = $true }
   $probs = New-Object System.Collections.ArrayList
   $byId = @{}; foreach ($r in @($Board.comparison)) { if ($r) { $byId[[string]$r.id] = $r } }
   $cells = @(@($b.cells) | Where-Object { $null -ne $_ })
@@ -243,7 +244,7 @@ function Get-TcGuardsDisposition($Failures, $Board) {
   $blk = Test-TcQuarantineBlock -Board $Board
   $cov = @{}; foreach ($e in @($blk.cells)) { $cov[[string]$e.id + '|' + [string]$e.store] = $e }
   $covSt = @{}; foreach ($e in @($blk.stores)) { $covSt[[string]$e.store] = $true }
-  $cells = [ordered]@{}; $stores = [ordered]@{}
+  $cells = [ordered]@{}; $stores = [ordered]@{}; $reapply = [ordered]@{}
   $hold = New-Object System.Collections.ArrayList
   foreach ($f in @($Failures)) {
     if ($null -eq $f) { continue }
@@ -253,10 +254,18 @@ function Get-TcGuardsDisposition($Failures, $Board) {
       if ($cov.ContainsKey($k)) {
         # COVERED - unless the guard condemns the HELD value itself. A held cell's failures on the second run are
         # expected (the same defect, judged against the same capture), but a VALUE finding whose number IS the held
-        # price says the last verified price is wrong too, and that must not publish: hold.
+        # price says the last verified price is wrong too, and that must not publish. It is still ONE CELL, so it
+        # withholds that cell (reapply), never the board (2026-09-25, queue 2026-09-23-0c8e6e: on 09-23 one Sam's
+        # vegetable-oil held value, 0.0373, was condemned by the factor guard and held all ~2,705 cells). The board
+        # holds only when that cell was ALREADY re-applied once (a second condemnation), below.
         $ce = $cov[$k]
         if ([string]$ce.action -eq 'last-good' -and [string]$f.kind -ne 'selection' -and $null -ne $f.bad_per_unit -and [math]::Abs([double]$f.bad_per_unit - [double]$ce.per_unit) -lt 0.00005) {
-          [void]$hold.Add('a guard condemns the HELD value itself on ' + $k + ' (' + [string]$ce.per_unit + '), so the last verified price is not safe to show either: ' + [string]$f.message)
+          if ($blk.reapplied) {
+            [void]$hold.Add('a guard condemns the HELD value itself on ' + $k + ' (' + [string]$ce.per_unit + ') on a board whose quarantine was already re-applied once, so this holds: ' + [string]$f.message)
+          } elseif (-not $reapply.Contains($k)) {
+            $reapply[$k] = [pscustomobject]@{ id = [string]$f.id; store = [string]$f.store; per_unit = [double]$ce.per_unit; reasons = (New-Object System.Collections.ArrayList) }
+            [void]$reapply[$k].reasons.Add([string]$f.message)
+          } elseif ($reapply[$k].reasons -notcontains [string]$f.message) { [void]$reapply[$k].reasons.Add([string]$f.message) }
         }
         continue
       }
@@ -287,15 +296,51 @@ function Get-TcGuardsDisposition($Failures, $Board) {
   if ($br.tripped) { [void]$hold.Add('CIRCUIT BREAKER: ' + $br.why + ' - that many bad cells is a systemic defect, not a few bad items') }
   $action = 'pass'
   if ($hold.Count -gt 0) { $action = 'hold' }
+  elseif ($reapply.Count -gt 0) { $action = 'reapply' }
   elseif (-not $blk.present -and ($cells.Count -gt 0 -or $stores.Count -gt 0)) { $action = 'quarantine' }
   elseif ($blk.present -and (@($blk.cells).Count + @($blk.stores).Count) -gt 0) { $action = 'quarantined' }
-  return [pscustomobject]@{ action = $action; reasons = $hold.ToArray(); cells = @($cells.Values); stores = @($stores.Values); breaker = $br; block = $blk; priced = $counts.total }
+  return [pscustomobject]@{ action = $action; reasons = $hold.ToArray(); cells = @($cells.Values); stores = @($stores.Values); reapply_withhold = @($reapply.Values); breaker = $br; block = $blk; priced = $counts.total }
+}
+
+function Invoke-TcQuarantineReapply {
+  # The ONE re-application a quarantined board may take (2026-09-25): each cell guards named in reapply_withhold was
+  # held at a last verified value that a VALUE guard then condemned, so it is WITHHELD instead ('the held value was
+  # itself condemned'). In memory; the caller writes only when .ok. It refuses (the board holds) when the board has no
+  # applied quarantine, was already re-applied once, names a cell that is not held at a last verified value, or would
+  # leave a row with no priced store (recipes cost from that row). Withheld cells are no longer on the board, so the
+  # breaker's denominator adds them back exactly as for any other withheld cell.
+  param($Board, $Plan)
+  $res = [pscustomobject]@{ ok = $false; refusal = ''; cells = @() }
+  $b = Get-TcQuarantineBlock $Board
+  if ($null -eq $b) { $res.refusal = 'the board carries no applied quarantine, so there is nothing to re-apply'; return $res }
+  if ($b.PSObject.Properties['reapplied'] -and $b.reapplied) { $res.refusal = 'this board''s quarantine was already re-applied once - a second condemnation holds the board'; return $res }
+  $want = @(@($Plan.reapply_withhold) | Where-Object { $null -ne $_ })
+  if ($want.Count -eq 0) { $res.refusal = 'the plan names no cell to withhold'; return $res }
+  $byId = @{}; foreach ($r in @($Board.comparison)) { if ($r) { $byId[[string]$r.id] = $r } }
+  $entries = @(@($b.cells) | Where-Object { $null -ne $_ })
+  $changed = New-Object System.Collections.ArrayList
+  foreach ($w in $want) {
+    $id = [string]$w.id; $st = [string]$w.store
+    $e = $null; foreach ($x in $entries) { if ([string]$x.id -eq $id -and [string]$x.store -eq $st) { $e = $x; break } }
+    if ($null -eq $e -or [string]$e.action -ne 'last-good') { $res.refusal = "the plan names $id / $st, which this board does not hold at a last verified value"; return $res }
+    if (-not $byId.ContainsKey($id)) { $res.refusal = "the plan names $id / $st but the board has no row $id"; return $res }
+    $row = $byId[$id]
+    $row.stores = @(@($row.stores) | Where-Object { $_ -and [string]$_.store -ne $st })
+    if (@(@($row.stores) | Where-Object { [double]$_.per_unit -gt 0 }).Count -eq 0) { $res.refusal = "withholding $id / $st would leave $id with no priced store at all, and recipes cost from that row - hold the board instead"; return $res }
+    Update-TcRowWinners $row
+    $e.action = 'withheld'; $e.why = 'the held value was itself condemned'; $e.per_unit = $null
+    $e.reasons = @(@($e.reasons) + @(@($w.reasons) | Where-Object { $_ } | ForEach-Object { [string]$_ }))
+    [void]$changed.Add($e)
+  }
+  Set-TcCellField $b 'reapplied' ([pscustomobject]@{ at = (Get-Date).ToString('s'); cells = @($changed.ToArray() | ForEach-Object { [string]$_.id + '|' + [string]$_.store }) })
+  $res.ok = $true; $res.cells = $changed.ToArray()
+  return $res
 }
 
 function Get-TcGuardsExitCode([string]$Action) {
   if ($Action -eq 'pass') { return 0 }
   if ($Action -eq 'quarantined') { return 4 }
-  if ($Action -eq 'quarantine' -or $Action -eq 'hold') { return 2 }
+  if ($Action -eq 'quarantine' -or $Action -eq 'reapply' -or $Action -eq 'hold') { return 2 }
   throw "unknown guards disposition: $Action"
 }
 
@@ -311,6 +356,9 @@ function Get-TcGuardsVerdictLines($Disposition, [int]$FailCount) {
     foreach ($c in @($Disposition.cells)) { [void]$lines.Add(("  QUARANTINE  {0} / {1} [{2}]  {3}" -f $c.id, $c.store, $c.kind, (@($c.reasons) -join ' || '))) }
     foreach ($s in @($Disposition.stores)) { [void]$lines.Add(("  DROP STORE  {0}  {1}" -f $s.store, (@($s.reasons) -join ' || '))) }
     [void]$lines.Add(("GUARDS QUARANTINE-REQUIRED: {0} hard failure(s), every one scoped to {1} cell(s) and {2} store(s), under the circuit breaker ({3} of {4} priced cells). The board AS IT STANDS is not safe to publish: apply-cell-quarantine.ps1 holds those cells at their last verified published price, then guards runs again." -f $FailCount, @($Disposition.cells).Count, @($Disposition.stores).Count, $Disposition.breaker.quarantined, $Disposition.breaker.priced))
+  } elseif ($a -eq 'reapply') {
+    foreach ($c in @($Disposition.reapply_withhold)) { [void]$lines.Add(("  WITHHOLD    {0} / {1}  its held value {2} was itself condemned  {3}" -f $c.id, $c.store, $c.per_unit, (@($c.reasons) -join ' || '))) }
+    [void]$lines.Add(("GUARDS QUARANTINE-REQUIRED: {0} hard failure(s); the held value of {1} quarantined cell(s) was itself condemned. The board AS IT STANDS is not safe to publish: apply-cell-quarantine.ps1 withholds those cells (once per build), then guards runs again." -f $FailCount, @($Disposition.reapply_withhold).Count))
   } elseif ($a -eq 'quarantined') {
     $held = 0; $wh = 0
     foreach ($e in @($Disposition.block.cells)) {
@@ -334,8 +382,9 @@ function Write-TcQuarantinePlan([string]$OutDir, $Disposition, [string]$BoardPat
     reasons = @($Disposition.reasons)
     cells = @(@($Disposition.cells) | ForEach-Object { [ordered]@{ id = $_.id; store = $_.store; kind = $_.kind; bad_per_unit = $_.bad_per_unit; bad_item = $_.bad_item; reasons = @($_.reasons) } })
     stores = @(@($Disposition.stores) | ForEach-Object { [ordered]@{ store = $_.store; reasons = @($_.reasons) } })
+    reapply_withhold = @(@($Disposition.reapply_withhold) | Where-Object { $_ } | ForEach-Object { [ordered]@{ id = $_.id; store = $_.store; per_unit = $_.per_unit; reasons = @($_.reasons) } })
     breaker = $Disposition.breaker
-    note = 'Written by every guards run. action: pass | quarantine (required: run apply-cell-quarantine.ps1, then guards again) | quarantined (applied and verified) | hold. See grocery\cell-quarantine-lib.ps1.'
+    note = 'Written by every guards run. action: pass | quarantine (required: run apply-cell-quarantine.ps1, then guards again) | reapply (a held value was itself condemned: apply-cell-quarantine.ps1 withholds reapply_withhold once, then guards again) | quarantined (applied and verified) | hold. See grocery\cell-quarantine-lib.ps1.'
   }
   $path = Join-Path $OutDir 'cell-quarantine.json'
   ($doc | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $path -Encoding UTF8

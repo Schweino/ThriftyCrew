@@ -674,6 +674,25 @@ function Invoke-GuardsGate([switch]$Silent) {
     $res.rc = $LASTEXITCODE
   } catch { $res.rc = 2; Log ('guards threw on the quarantined board: ' + $_.Exception.Message) }
   $res.runs = 2
+  # A HELD VALUE CONDEMNED ON THE SECOND PASS WITHHOLDS ITS CELL, NOT THE BOARD (2026-09-25, queue 2026-09-23-0c8e6e:
+  # on 09-23 one Sam's vegetable-oil held value held the whole board). guards says action=reapply; this re-applies ONCE
+  # (the applier refuses a second time) and guards runs a third time, which must exit 4. Anything else holds.
+  if ($res.rc -eq 2) {
+    $plan2 = $null; try { $plan2 = Read-JsonFile (Join-Path $OutDir 'cell-quarantine.json') } catch { $plan2 = $null }
+    if ($null -ne $plan2 -and [string]$plan2.action -eq 'reapply') {
+      Log ('guards condemned the HELD value of ' + @($plan2.reapply_withhold).Count + ' quarantined cell(s) - withholding them, then running guards a third time')
+      $ap2 = 2
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'apply-cell-quarantine.ps1') -OutDir $OutDir | ForEach-Object { Log ('quarantine: ' + $_) }; $ap2 = $LASTEXITCODE } catch { Log ('apply-cell-quarantine (reapply) threw: ' + $_.Exception.Message) }
+      if ($ap2 -ne 0) { $res.why = ('the re-applied quarantine could not be applied (rc ' + $ap2 + ')'); Log ('REAPPLY NOT APPLIED (rc ' + $ap2 + ') - the board is held'); return $res }
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null } catch { Log ('name-drift re-derive after the reapply threw: ' + $_.Exception.Message) }
+      try {
+        if ($Silent) { & powershell -ExecutionPolicy Bypass -File $gPath -Quiet | Out-Null }
+        else { & powershell -ExecutionPolicy Bypass -File $gPath | ForEach-Object { Log ('guards: ' + $_) } }
+        $res.rc = $LASTEXITCODE
+      } catch { $res.rc = 2; Log ('guards threw on the re-applied board: ' + $_.Exception.Message) }
+      $res.runs = 3
+    }
+  }
   if ($res.rc -eq 4) {
     try {
       $qb = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1

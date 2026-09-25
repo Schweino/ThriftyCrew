@@ -57,7 +57,7 @@
         ],
         "exact_change": "Get-TcGuardsDisposition (cell-quarantine-lib.ps1:258): instead of adding a board HOLD, return the cell in a new 'reapply_withhold' list; guards/apply-cell-quarantine re-applies once with that cell forced to WITHHELD (reason 'the held value was itself condemned'), then guards runs again and must exit 4. A second condemnation after the forced withhold, or a cell that cannot be withheld, still HOLDS. The breaker counts are unchanged."
       },
-      "leaves_open": "nothing inside the disposition; the other hold routes (unscoped failure, breaker) are by design",
+      "leaves_open": "nothing inside the disposition; the other hold routes (unscoped failure, breaker, a second condemnation after the one re-apply) are by design",
       "leaves_open_occurrences": 0,
       "prior_closes": [
         "2026-08-31-0465b5",
@@ -103,13 +103,16 @@
       },
       "rollback": "revert the two files; the disposition falls back to HOLD as today",
       "freshness": "measured 2026-09-25 ~09:55 against HEAD/origin 8581e0348 and the 08:14 comparison-2026-09-23 build; re-measure if the board or the named file moved",
-      "resolution_note": "The 09-23 hold was one Sam's vegetable-oil held value condemned on the verify pass, which held the whole board; guards have ended quarantined since (09-23 09:54, 09-24, 09-25 hard=0). Fix: a condemned held value withholds its cell, not the board.",
+      "resolution_note": "The 09-23 hold was one Sam's vegetable-oil held value (0.0373) condemned on the verify pass, which held the whole board; guards have ended quarantined since (09-23 09:54, 09-24, 09-25 hard=0). Fix: Get-TcGuardsDisposition returns action=reapply with reapply_withhold instead of a board HOLD; apply-cell-quarantine withholds that cell once per build ('the held value was itself condemned'), and the chain runs guards a third time, which must exit 4. A second condemnation, or a cell that cannot be withheld, still holds. test-cell-quarantine -SelfTest 52 of 52, exit 0 (9 new cases incl. the frozen 09-23 must-fire and the energy-drinks clean twin). Takes effect on the next chain run; no republish needed.",
       "lane": "money",
       "est_tool_calls": 35,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "Files widened from the plan's two: the re-apply needs the chain step and a guards fallback. grocery/check-ad-cycles.ps1 Invoke-GuardsGate now runs ONE re-apply when the second guards pass writes action=reapply, re-derives name-drift, and runs guards a third time (must exit 4, anything else holds). grocery/guards.ps1: a reapply plan that cannot be written holds, like a quarantine. New lib function Invoke-TcQuarantineReapply does the withhold in memory (refuses with no block, a second reapply, a cell not held at last-good, or an emptied row) and marks the block 'reapplied'. action 'reapply' exits 2 and prints GUARDS QUARANTINE-REQUIRED, so every old reader of exit 2 still fails closed. Existing fixture line 101 asserted the old HOLD and now asserts reapply.",
+      "shipped_commit": "see git log: 'cell quarantine: a condemned HELD value withholds its cell, not the board'",
+      "premise_check": "cell-quarantine-lib.ps1:254-261 (Get-TcGuardsDisposition) read 2026-09-25: a covered last-good cell whose VALUE finding equals the held per_unit added a board HOLD, exactly as the evidence row says. The 09-23 log line and today's 'hard=0 disposition=quarantined' are the plan's measurement and were not re-derived.",
+      "needs_publish": false,
+      "leaves_open_followup": "watch:grocery/guards.ps1"
     },
     {
       "queue_id": "2026-09-25-5d89a7",

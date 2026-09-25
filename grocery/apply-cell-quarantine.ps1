@@ -28,8 +28,8 @@ if (-not $Today) { $Today = (Get-Date).ToString('yyyy-MM-dd') }
 $planF = Join-Path $OutDir 'cell-quarantine.json'
 if (-not (Test-Path -LiteralPath $planF)) { Write-Output 'BLIND: no out\cell-quarantine.json - guards has not run over this board, so there is nothing to apply'; Exit-Guard -Name 'apply-cell-quarantine' -Summary 'no plan' -Code 3 }
 $plan = Read-JsonFile $planF
-if ([string]$plan.action -ne 'quarantine') {
-  Write-Output ("REFUSED: the guards plan says action='" + [string]$plan.action + "', not 'quarantine' - only a quarantine guards asked for is applied")
+if ([string]$plan.action -ne 'quarantine' -and [string]$plan.action -ne 'reapply') {
+  Write-Output ("REFUSED: the guards plan says action='" + [string]$plan.action + "', not 'quarantine' or 'reapply' - only a quarantine guards asked for is applied")
   Exit-Guard -Name 'apply-cell-quarantine' -Summary ('action=' + [string]$plan.action) -Code 2
 }
 $boardF = Join-Path $OutDir ([string]$plan.board_file)
@@ -40,6 +40,23 @@ if ($shaNow -ne [string]$plan.board_sha256) {
   Exit-Guard -Name 'apply-cell-quarantine' -Summary 'board moved' -Code 2
 }
 $doc = Read-JsonFile $boardF
+# REAPPLY (2026-09-25, queue 2026-09-23-0c8e6e): the second guards pass condemned a HELD value itself. That cell is
+# withheld, once per build, and guards runs again; the board holds only if this refuses or a second condemnation comes.
+if ([string]$plan.action -eq 'reapply') {
+  $rr = Invoke-TcQuarantineReapply -Board $doc -Plan $plan
+  if (-not $rr.ok) { Write-Output ('REFUSED: ' + $rr.refusal + '. The board file is untouched.'); Exit-Guard -Name 'apply-cell-quarantine' -Summary 'reapply refused' -Code 2 }
+  foreach ($e in @($rr.cells)) { Write-Output ("  withheld  {0} / {1}  ({2})" -f $e.id, $e.store, $e.why) }
+  ($doc | ConvertTo-Json -Depth 12) | Set-Content -LiteralPath $boardF -Encoding UTF8
+  if (-not $ProductUrlsFile) { $ProductUrlsFile = Join-Path $Repo 'grocery\product-urls.json' }
+  if (Test-Path -LiteralPath $ProductUrlsFile) {
+    $puDoc = Read-JsonFile $ProductUrlsFile
+    $lc = Update-TcQuarantineLinks -Items $puDoc.items -Entries $rr.cells -PublishedItems $null
+    foreach ($c in $lc) { Write-Output ("  link      {0} / {1}  {2}  {3}" -f $c.id, $c.store, $c.action, $c.url) }
+    if (@($lc).Count -gt 0) { ($puDoc | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $ProductUrlsFile -Encoding UTF8 }
+  } else { Write-Output ('links: BLIND - no ' + $ProductUrlsFile + ', so no withheld cell''s link could be removed') }
+  Write-Output ("re-applied to {0}: {1} held cell(s) withheld because the held value was itself condemned. Run guards.ps1 again: it must exit 4." -f (Split-Path $boardF -Leaf), @($rr.cells).Count)
+  Exit-Guard -Name 'apply-cell-quarantine' -Summary ("reapplied withheld=" + @($rr.cells).Count) -Code 0
+}
 if (Get-TcQuarantineBlock $doc) { Write-Output 'REFUSED: this board already carries an applied quarantine - it is applied once per build'; Exit-Guard -Name 'apply-cell-quarantine' -Summary 'already applied' -Code 2 }
 
 if ($LastPublishedFile) {
