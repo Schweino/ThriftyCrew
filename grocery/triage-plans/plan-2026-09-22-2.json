@@ -1814,7 +1814,8 @@
     },
     {
       "id": "q-2026-09-18-4-laundry-scope",
-      "question": "Carried unchanged: does laundry-detergent stay one brand line (Arm & Hammer) or become any liquid laundry detergent per fl oz; and which, if any, of the 15 multi-commodity brands on the Baker's ad (Swanson, Progresso, Tyson, Oscar Mayer, four wine offers, Kroger, Ken's/Kraft, Johnsonville, Spice Islands, Land O Frost) may be admit words on one commodity each. Owns 2026-09-18-ceab00."
+      "question": "Carried unchanged: does laundry-detergent stay one brand line (Arm & Hammer) or become any liquid laundry detergent per fl oz; and which, if any, of the 15 multi-commodity brands on the Baker's ad (Swanson, Progresso, Tyson, Oscar Mayer, four wine offers, Kroger, Ken's/Kraft, Johnsonville, Spice Islands, Land O Frost) may be admit words on one commodity each. Owns 2026-09-18-ceab00.",
+      "answer": "Brad 2026-09-25, on the brand half: \"No, a brand-only line never prices a cell (Recommended)\". The laundry half was ruled and shipped earlier (laundry-detergent widened to any liquid laundry detergent per fl oz, plan-2026-09-22-5). Read the same day: pull-bakers-ad-list.ps1 builds an offer's search terms only from commodities match-lib resolves (lines 365-380) and writes an offer with no term to unrouted[] with the phrases tried (lines 384-387); the list carries terms, never prices (line 411). Over the frozen 2026-09-16 fixture the 14 brand-only offers of the 15 are all in unrouted[] (Tide Laundry Detergent now routes, the laundry half). unrouted[] does not label a row brand-only; it is the generic unrouted list. Queue item 2026-09-18-ceab00 was already resolved on 2026-09-22 and was not re-closed."
     },
     {
       "id": "Q-homepage-injection-session",

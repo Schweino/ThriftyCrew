@@ -1,0 +1,2830 @@
+{
+    "generated":  "2026-09-25T14:13:19",
+    "harness":  "grocery/probe-known-wrong-patterns.ps1",
+    "rulings":  347,
+    "active_rulings":  333,
+    "corpus_rows":  54923,
+    "capture_files_read":  428,
+    "capture_files_unreadable":  [
+
+                                 ],
+    "dated_boards":  31,
+    "newest_board":  "comparison-2026-09-23.json",
+    "first_board":  "comparison-2026-08-11.json",
+    "review_sources":  [
+                           {
+                               "label":  "match-verdicts",
+                               "files":  1
+                           },
+                           {
+                               "label":  "discovery-verdicts",
+                               "files":  1
+                           },
+                           {
+                               "label":  "verdict-suppressions",
+                               "files":  1
+                           },
+                           {
+                               "label":  "coverage-gap-allowlist",
+                               "files":  1
+                           },
+                           {
+                               "label":  "multipack-allowlist",
+                               "files":  1
+                           },
+                           {
+                               "label":  "triage-plans",
+                               "files":  79
+                           },
+                           {
+                               "label":  "triage-queue",
+                               "files":  1
+                           }
+                       ],
+    "flavour_lexicon":  [
+                            "flavor",
+                            "flavors",
+                            "flavored",
+                            "flavour",
+                            "flavours",
+                            "flavoured",
+                            "scent",
+                            "scents",
+                            "scented",
+                            "unscented",
+                            "fragrance",
+                            "free",
+                            "original",
+                            "classic",
+                            "regular",
+                            "plain",
+                            "traditional",
+                            "homestyle",
+                            "variety",
+                            "vanilla",
+                            "chocolate",
+                            "strawberry",
+                            "cherry",
+                            "apple",
+                            "lemon",
+                            "lime",
+                            "orange",
+                            "grape",
+                            "peach",
+                            "mango",
+                            "pineapple",
+                            "coconut",
+                            "banana",
+                            "blueberry",
+                            "raspberry",
+                            "berry",
+                            "berries",
+                            "mixed",
+                            "cinnamon",
+                            "maple",
+                            "honey",
+                            "caramel",
+                            "mint",
+                            "peppermint",
+                            "pumpkin",
+                            "spice",
+                            "spiced",
+                            "garlic",
+                            "herb",
+                            "herbs",
+                            "onion",
+                            "butter",
+                            "buttery",
+                            "cheddar",
+                            "cheese",
+                            "ranch",
+                            "bbq",
+                            "barbecue",
+                            "buffalo",
+                            "teriyaki",
+                            "cilantro",
+                            "roasted",
+                            "chicken",
+                            "beef",
+                            "pork",
+                            "bacon",
+                            "sausage",
+                            "tomato",
+                            "basil",
+                            "pepper",
+                            "jalapeno",
+                            "chipotle",
+                            "sweet",
+                            "spicy",
+                            "hot",
+                            "mild",
+                            "salted",
+                            "unsalted",
+                            "smoked",
+                            "seasoned",
+                            "italian",
+                            "mexican",
+                            "southwest",
+                            "fruit",
+                            "tropical",
+                            "watermelon",
+                            "lavender",
+                            "fresh",
+                            "clean",
+                            "meadow",
+                            "linen",
+                            "breeze",
+                            "spring",
+                            "ocean",
+                            "rain",
+                            "sea",
+                            "salt",
+                            "sour",
+                            "cream"
+                        ],
+    "totals":  [
+                   {
+                       "derivation":  "D1",
+                       "active_rulings":  333,
+                       "rulings_with_no_pattern":  0,
+                       "rulings_whose_store_has_no_corpus":  0,
+                       "rulings_seen_by_exact_name":  303,
+                       "rulings_blocking_extra_in_scope":  7,
+                       "rulings_blocking_never_reviewed":  1,
+                       "extra_in_scope_row_sum":  10,
+                       "extra_in_scope_distinct":  10,
+                       "extra_distinct_already_ruled_same_scope":  0,
+                       "extra_distinct_never_reviewed":  1,
+                       "extra_distinct_published_newest_unruled":  1,
+                       "extra_store_wide_row_sum":  20,
+                       "motivating_covered_of_3":  0,
+                       "bar_safe":  false,
+                       "bar_value":  false,
+                       "fit":  false
+                   },
+                   {
+                       "derivation":  "D2",
+                       "active_rulings":  333,
+                       "rulings_with_no_pattern":  2,
+                       "rulings_whose_store_has_no_corpus":  0,
+                       "rulings_seen_by_exact_name":  303,
+                       "rulings_blocking_extra_in_scope":  9,
+                       "rulings_blocking_never_reviewed":  1,
+                       "extra_in_scope_row_sum":  12,
+                       "extra_in_scope_distinct":  12,
+                       "extra_distinct_already_ruled_same_scope":  0,
+                       "extra_distinct_never_reviewed":  1,
+                       "extra_distinct_published_newest_unruled":  1,
+                       "extra_store_wide_row_sum":  79,
+                       "motivating_covered_of_3":  2,
+                       "bar_safe":  false,
+                       "bar_value":  true,
+                       "fit":  false
+                   },
+                   {
+                       "derivation":  "D3",
+                       "active_rulings":  333,
+                       "rulings_with_no_pattern":  3,
+                       "rulings_whose_store_has_no_corpus":  0,
+                       "rulings_seen_by_exact_name":  303,
+                       "rulings_blocking_extra_in_scope":  70,
+                       "rulings_blocking_never_reviewed":  10,
+                       "extra_in_scope_row_sum":  206,
+                       "extra_in_scope_distinct":  169,
+                       "extra_distinct_already_ruled_same_scope":  10,
+                       "extra_distinct_never_reviewed":  14,
+                       "extra_distinct_published_newest_unruled":  16,
+                       "extra_store_wide_row_sum":  1937,
+                       "motivating_covered_of_3":  2,
+                       "bar_safe":  false,
+                       "bar_value":  true,
+                       "fit":  false
+                   }
+               ],
+    "motivating":  [
+                       {
+                           "derivation":  "D1",
+                           "ben_cilantro_key":  "bens original ready rice cilantro lime flavored rice easy dinner side",
+                           "ben_chicken_key":  "bens original ready rice roasted chicken flavored rice easy dinner side",
+                           "ben_second_covered_by_first":  false,
+                           "stayfree_rows":  [
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Maxi Pads Regular Absorbency Unscented",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Equate Multi Channel Maxi Pads, Super, Unscented, Compare to Stayfree Maxi (288 Count)",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Ultra Thin Overnight Pads with Wings, 40 Count",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Ultra Thin Overnight Pads With Wings, 40 Ct, Multi-Fluid Absorption, Protection For Up To 10 Hours",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Maxi Super Pads Wingless, Unscented, 66 Ct, Absorbs 30% More, Multi-Fluid Absorption, Comfortably Dry for up to 8 Hours",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "(2 pack) Stayfree Maxi Pads with Wings, Unscented, Overnight, 28 Ct",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Ultra Thin Pads without Wings, Regular Absorbency, (44 Count)",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Maxi Pads (without Wings), Unscented, Super, 48 ct",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Classic Pads Super Long without Wings, Unscented, 22 Ct",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "(2 pack) Stayfree Maxi Super Pads Wingless, Unscented, 66 Ct, Absorbs 30% More, Multi-Fluid Absorption, Comfortably Dry for up to 8 Hours",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Classic Pads Without Wings Super Long Unscented",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Maxi Regular Long Pads Wingless, Unscented, 24 Ct, Multi-Fluid Absorption, Comfortably Dry For Up To 8 Hours",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Hy-Vee",
+                                                     "name":  "Playtex, Carefree or Stayfree products, 10% off regular price,",
+                                                     "rule_match":  "",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Maxi Pads Super Absorbency Unscented",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Maxi Feminine Pads Without Wings Super Absorbency Unscented",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Hy-Vee",
+                                                     "name":  "Playtex, Carefree, Stayfree or o.b. products, 10% off regular price,",
+                                                     "rule_match":  "",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Maxi Feminine Pads Super Absorbency",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 }
+                                             ],
+                           "stayfree_covered":  false
+                       },
+                       {
+                           "derivation":  "D2",
+                           "ben_cilantro_key":  "bens ready rice rice easy dinner side",
+                           "ben_chicken_key":  "bens ready rice rice easy dinner side",
+                           "ben_second_covered_by_first":  true,
+                           "stayfree_rows":  [
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Maxi Pads Regular Absorbency Unscented",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Equate Multi Channel Maxi Pads, Super, Unscented, Compare to Stayfree Maxi (288 Count)",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Ultra Thin Overnight Pads with Wings, 40 Count",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Ultra Thin Overnight Pads With Wings, 40 Ct, Multi-Fluid Absorption, Protection For Up To 10 Hours",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Maxi Super Pads Wingless, Unscented, 66 Ct, Absorbs 30% More, Multi-Fluid Absorption, Comfortably Dry for up to 8 Hours",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "(2 pack) Stayfree Maxi Pads with Wings, Unscented, Overnight, 28 Ct",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Ultra Thin Pads without Wings, Regular Absorbency, (44 Count)",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Maxi Pads (without Wings), Unscented, Super, 48 ct",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Classic Pads Super Long without Wings, Unscented, 22 Ct",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "(2 pack) Stayfree Maxi Super Pads Wingless, Unscented, 66 Ct, Absorbs 30% More, Multi-Fluid Absorption, Comfortably Dry for up to 8 Hours",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Classic Pads Without Wings Super Long Unscented",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Maxi Regular Long Pads Wingless, Unscented, 24 Ct, Multi-Fluid Absorption, Comfortably Dry For Up To 8 Hours",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Hy-Vee",
+                                                     "name":  "Playtex, Carefree or Stayfree products, 10% off regular price,",
+                                                     "rule_match":  "",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Maxi Pads Super Absorbency Unscented",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Maxi Feminine Pads Without Wings Super Absorbency Unscented",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Hy-Vee",
+                                                     "name":  "Playtex, Carefree, Stayfree or o.b. products, 10% off regular price,",
+                                                     "rule_match":  "",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Maxi Feminine Pads Super Absorbency",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 }
+                                             ],
+                           "stayfree_covered":  false
+                       },
+                       {
+                           "derivation":  "D3",
+                           "ben_cilantro_key":  "bens original ready",
+                           "ben_chicken_key":  "bens original ready",
+                           "ben_second_covered_by_first":  true,
+                           "stayfree_rows":  [
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Maxi Pads Regular Absorbency Unscented",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Equate Multi Channel Maxi Pads, Super, Unscented, Compare to Stayfree Maxi (288 Count)",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Ultra Thin Overnight Pads with Wings, 40 Count",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Ultra Thin Overnight Pads With Wings, 40 Ct, Multi-Fluid Absorption, Protection For Up To 10 Hours",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Maxi Super Pads Wingless, Unscented, 66 Ct, Absorbs 30% More, Multi-Fluid Absorption, Comfortably Dry for up to 8 Hours",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "(2 pack) Stayfree Maxi Pads with Wings, Unscented, Overnight, 28 Ct",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Ultra Thin Pads without Wings, Regular Absorbency, (44 Count)",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Maxi Pads (without Wings), Unscented, Super, 48 ct",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Classic Pads Super Long without Wings, Unscented, 22 Ct",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "(2 pack) Stayfree Maxi Super Pads Wingless, Unscented, 66 Ct, Absorbs 30% More, Multi-Fluid Absorption, Comfortably Dry for up to 8 Hours",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Classic Pads Without Wings Super Long Unscented",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Walmart",
+                                                     "name":  "Stayfree Maxi Regular Long Pads Wingless, Unscented, 24 Ct, Multi-Fluid Absorption, Comfortably Dry For Up To 8 Hours",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Hy-Vee",
+                                                     "name":  "Playtex, Carefree or Stayfree products, 10% off regular price,",
+                                                     "rule_match":  "",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Maxi Pads Super Absorbency Unscented",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Maxi Feminine Pads Without Wings Super Absorbency Unscented",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Hy-Vee",
+                                                     "name":  "Playtex, Carefree, Stayfree or o.b. products, 10% off regular price,",
+                                                     "rule_match":  "",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 },
+                                                 {
+                                                     "store":  "Baker\u0027s",
+                                                     "name":  "Stayfree Maxi Feminine Pads Super Absorbency",
+                                                     "rule_match":  "feminine-pads",
+                                                     "rulings_whose_pattern_matches":  [
+
+                                                                                       ]
+                                                 }
+                                             ],
+                           "stayfree_covered":  false
+                       }
+                   ],
+    "input_fingerprint_sha256":  "c2c6cd3427b3b7dbcf9a19c6f97572be4ba199074c478777672b6e8284706863",
+    "inputs_unhashed":  0,
+    "inputs":  [
+                   {
+                       "path":  "grocery\\commodities.json",
+                       "blob":  "a0c290317a41306055a5701f7d81581f2aad5275"
+                   },
+                   {
+                       "path":  "grocery\\coverage-gap-allowlist.json",
+                       "blob":  "31dd2c6990a3185ef31b11bdd93f36f97b823669"
+                   },
+                   {
+                       "path":  "grocery\\discovery-verdicts.json",
+                       "blob":  "bed50f737a45d855d84dd255c8ec10a617c3c669"
+                   },
+                   {
+                       "path":  "grocery\\known-wrong.json",
+                       "blob":  "4542d96e5111f9ff22af6b58a443572874b6aa2c"
+                   },
+                   {
+                       "path":  "grocery\\match-verdicts.json",
+                       "blob":  "60c543413ee88f213216fe95900751343680dc57"
+                   },
+                   {
+                       "path":  "grocery\\multipack-allowlist.json",
+                       "blob":  "e95aa9640ab2692fca53688900981bc293874673"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-08-26.json",
+                       "blob":  "1c9d8d3b9dd4634f8fc8b2d3f6702409503a7840"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-08-30.json",
+                       "blob":  "8960bc87915e6f7e1c2fe5861237269fec41eba9"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-08-31.json",
+                       "blob":  "0d4083dfe1b5c9071e27daead89441a9d1fbc93d"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-02.json",
+                       "blob":  "236f75a4ffd5adc0da0568c2256ebf808887b93b"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-05.json",
+                       "blob":  "eaf325b062eb91370a95477cc6be78b1488f2854"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-06.json",
+                       "blob":  "255d26c693dce6b5e853afce7b101f8e4e8cb9b0"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-07.json",
+                       "blob":  "1023474e62013ff43809f08976b2330c52b44cce"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-08.json",
+                       "blob":  "09fdcf65815c667ec692f290b0f16729bf28e548"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-09.json",
+                       "blob":  "114d78c7b6644d732fa3ddbd6c1cddb84c95195a"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-11.json",
+                       "blob":  "7f5cbd1bd5b950847d227dc9371e941371b762d8"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-13.json",
+                       "blob":  "d55af4f7ccd5a860a7a01590dca893d253441397"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-14.json",
+                       "blob":  "7abac25c77d3455be6b4e236354c8ff2b4aeba9e"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-17.json",
+                       "blob":  "2018b2357fe05545314ebd1e25ae68e1a09afa75"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-20.json",
+                       "blob":  "685aca64a0eff2383b6e6ea81d87a0c8fa10d358"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-21.json",
+                       "blob":  "7593ac3888d0665f401024c1c4572b1a5157a7c6"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-22.json",
+                       "blob":  "a351694af897e62e9c28dac7fffefeeb3a6b4fc4"
+                   },
+                   {
+                       "path":  "grocery\\out\\ads-2026-09-23.json",
+                       "blob":  "b9bbdd4a1bc9dace569f33e0a0050e1631601d6c"
+                   },
+                   {
+                       "path":  "grocery\\out\\bakers\\bakers-deals-2026-07-05.json",
+                       "blob":  "9f49f5cdca1901ccbac259813592f60ef4958515"
+                   },
+                   {
+                       "path":  "grocery\\out\\bakers\\bakers-deals-2026-07-08.json",
+                       "blob":  "e1403df3f3edebc85f27e7b984c022a36902756a"
+                   },
+                   {
+                       "path":  "grocery\\out\\bakers\\bakers-deals-2026-07-15.json",
+                       "blob":  "5586e96ebd1d150c5f6ff6e45512c28320782378"
+                   },
+                   {
+                       "path":  "grocery\\out\\bakers\\bakers-deals-2026-07-23.json",
+                       "blob":  "dcd37df8895469b57ca31b24dc6d0f5fa1b6921b"
+                   },
+                   {
+                       "path":  "grocery\\out\\bakers\\bakers-deals-2026-07-29.json",
+                       "blob":  "0113fb930cf4a6d9409d2533a3dbd92f98858dc1"
+                   },
+                   {
+                       "path":  "grocery\\out\\bakers\\bakers-deals-2026-08-05.json",
+                       "blob":  "44a7a0082f8ddcdf2fb6c44f1dba607ef496297b"
+                   },
+                   {
+                       "path":  "grocery\\out\\bakers\\bakers-deals-2026-08-20.json",
+                       "blob":  "077c2a7cc95f2e9eec870a69a2be51e02ade2a7b"
+                   },
+                   {
+                       "path":  "grocery\\out\\bakers\\bakers-deals-2026-08-26.json",
+                       "blob":  "3cf57acc7bc1cf517ed1f1b5fafe2fdfdc4e6b3d"
+                   },
+                   {
+                       "path":  "grocery\\out\\bakers\\bakers-deals-2026-09-02.json",
+                       "blob":  "358ddf51e6123ae2b65cada8434a5ad797d8ae79"
+                   },
+                   {
+                       "path":  "grocery\\out\\bakers\\bakers-deals-2026-09-09.json",
+                       "blob":  "4284df338d22bc5fcecae42c8f0f17e41cbe5f17"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-11.json",
+                       "blob":  "0ca305ecce439c31a4251e52b349e431a9a97d98"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-12.json",
+                       "blob":  "c8c488a9972f09963046200ac6ed9abb6c7e8649"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-13.json",
+                       "blob":  "f7f441646da264c7a7e667bc23c18c7ce626ca72"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-14.json",
+                       "blob":  "22604092e5013745fcbb3306c27cfc99016feeb6"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-15.json",
+                       "blob":  "d3f7f7ca7c2c1332b9e35dd6f16734e073cdbf7c"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-16.json",
+                       "blob":  "be3e69a584d4998384f4f40b01ef6cffae15fe99"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-17.json",
+                       "blob":  "12bebcee7f2e3f381f2dceb9d34400128ba3c136"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-18.json",
+                       "blob":  "226d3334e89a69ba8c13ccd2aae0954caf99239d"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-19.json",
+                       "blob":  "d74cfbfce58cf370a63c9eb9c76ca480aaa59d59"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-20.json",
+                       "blob":  "47eb8296d811f761bebf2754ceaf5354be1a3016"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-21.json",
+                       "blob":  "e4144968f5756ccdb7d6289061b21212f7cba357"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-23.json",
+                       "blob":  "1ea2655769acec83fdee250d042b85b86331adaf"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-24.json",
+                       "blob":  "d53818fd462e8b1767d9a45ee13e72a6bc24eee6"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-25.json",
+                       "blob":  "859850f785b873b116cdca50a0d2d4d7dcf51d4b"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-26.json",
+                       "blob":  "dd054d2d303d8ef11b544bf1242569b9067e17a0"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-30.json",
+                       "blob":  "2af954b25396703e4ea9abe01a980071bc475aa9"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-08-31.json",
+                       "blob":  "466193c4759973896246317e7ee8a87ed7b6bcec"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-02.json",
+                       "blob":  "61edea5430b7f617ec463a95170d19286abbaba2"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-05.json",
+                       "blob":  "4a45fc6047f0a8fc8d1b76748067b46def97ed02"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-06.json",
+                       "blob":  "7246b97ef2253b98b049403aedf8ad11154b38df"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-07.json",
+                       "blob":  "a641efeea5d8fe334384de3dcd0845dabfe43c42"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-08.json",
+                       "blob":  "4d7ab4b0a4e1c486e70b7adce9f35b13b6da8dbd"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-09.json",
+                       "blob":  "edb50cce980cded1327fcda8d4928375fce2ccce"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-11.json",
+                       "blob":  "4eb4d539c4358014fd0a16437098e56264f943a2"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-13.json",
+                       "blob":  "1c1b6d7b4094201fb86e9eda995dfe2d33b8937c"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-14.json",
+                       "blob":  "347a23dc1dfb1b8970fbed3d2b24d6b54f700444"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-17.json",
+                       "blob":  "4c4bf9d5ae0eb81f26f0e98b18bffc0c1c53d66b"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-20.json",
+                       "blob":  "cc10d6eee390f6f8b33dbb97cf26e50b8ee7f473"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-21.json",
+                       "blob":  "0e058a2571017611657c1f2767194e147e08d18e"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-22.json",
+                       "blob":  "c7683c226cc2e68d9847191cd34c216a0cfae47b"
+                   },
+                   {
+                       "path":  "grocery\\out\\comparison-2026-09-23.json",
+                       "blob":  "614e4feeca0b9f71897516ac01b36819cf6e0a1f"
+                   },
+                   {
+                       "path":  "grocery\\out\\extra-deals-2026-07-08.json",
+                       "blob":  "27343b41dfb965bd2f1c6fe1dd4acbdf8edf8593"
+                   },
+                   {
+                       "path":  "grocery\\out\\extra-deals-2026-07-12.json",
+                       "blob":  "cda71f28ab467b69576f3d21c9d0c5be7661aabc"
+                   },
+                   {
+                       "path":  "grocery\\out\\extra-deals-2026-07-15.json",
+                       "blob":  "7f4fcb0207b4db4540decebdb469bbcd9e95e588"
+                   },
+                   {
+                       "path":  "grocery\\out\\extra-deals-2026-07-23.json",
+                       "blob":  "070d9ba67a44fc243c710f92e8c88d463e19d6cc"
+                   },
+                   {
+                       "path":  "grocery\\out\\extra-deals-2026-07-29.json",
+                       "blob":  "18d983aeece717cee1fa1a551bd13e868170bb40"
+                   },
+                   {
+                       "path":  "grocery\\out\\fareway\\fareway-deals-2026-07-12.json",
+                       "blob":  "cce5d409d1af879cbe8d6cf91fe93ef817f79dc0"
+                   },
+                   {
+                       "path":  "grocery\\out\\fareway\\fareway-deals-2026-07-23.json",
+                       "blob":  "b5372ff3e1d02c18586e628687f393662fac63dd"
+                   },
+                   {
+                       "path":  "grocery\\out\\fareway\\fareway-deals-2026-07-27.json",
+                       "blob":  "b1ee325e0415881e5fe6ef0e315a159ddd9557e0"
+                   },
+                   {
+                       "path":  "grocery\\out\\fareway\\fareway-deals-2026-08-03.json",
+                       "blob":  "49404faa96c3addd4e73ccd33cb42c0c6e1da223"
+                   },
+                   {
+                       "path":  "grocery\\out\\fareway\\fareway-deals-2026-08-10.json",
+                       "blob":  "c19a867efee4a7303762ab1321a4e8bbd5d2c1fb"
+                   },
+                   {
+                       "path":  "grocery\\out\\fareway\\fareway-deals-2026-08-20.json",
+                       "blob":  "e1307e0535c53571e645bab898b48d5d638981cc"
+                   },
+                   {
+                       "path":  "grocery\\out\\fareway\\fareway-deals-2026-08-25.json",
+                       "blob":  "2597fe5c1a6b654081ff88d28d5df34d2657e720"
+                   },
+                   {
+                       "path":  "grocery\\out\\fareway\\fareway-deals-2026-08-30.json",
+                       "blob":  "c357b4a4d2aa735dc15042ab7d686da0b8d81e11"
+                   },
+                   {
+                       "path":  "grocery\\out\\fareway\\fareway-deals-2026-09-06.json",
+                       "blob":  "d6ce2d90c9ab70b3c075bb804142d57ed7aa6c15"
+                   },
+                   {
+                       "path":  "grocery\\out\\fareway\\fareway-deals-2026-09-17.json",
+                       "blob":  "c181ca51493a416807be13e4b0504fd65f54cc7d"
+                   },
+                   {
+                       "path":  "grocery\\out\\fareway\\fareway-deals-2026-09-20.json",
+                       "blob":  "119c8d4a2c65c8042bfdac7335acc9590bc0117c"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-07-06.json",
+                       "blob":  "b9bf5624bd3ee99fc6c0516fc16daea0d568c4a4"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-07-08.json",
+                       "blob":  "87de13f5f8b021dbacfa1c8428c0cb1d0f903b8c"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-07-12.json",
+                       "blob":  "00e0e4d6f0d565150d445ba04cb0c8bb3ace48ef"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-07-14.json",
+                       "blob":  "8499189d5fc51c6f3aeb055be218d61fb9a6e457"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-07-15.json",
+                       "blob":  "ef413628b91ef7cfc4eb9e9d07edb441d1a4216d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-07-18.json",
+                       "blob":  "1155992ab466f27fedd6dc269589578f6c161408"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-07-29.json",
+                       "blob":  "e7e52c316bb45a9b42f1db9613483bb6d391ac37"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-08-01.json",
+                       "blob":  "8a3edbbf59b4b10ec07d22568c2363404f285eb4"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-08-05.json",
+                       "blob":  "d3d73709352ebcb91fcbcf61466c72d8952877fc"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-08-15.json",
+                       "blob":  "2dff877318d3a7f283c4ad5c1705425bd6190e93"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-08-22.json",
+                       "blob":  "2dce49e9125667f418b93d2d63917486cd34faee"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-08-25.json",
+                       "blob":  "f33f9df82035137d0d0024c4ce0c62c7ff5d8c86"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-08-26.json",
+                       "blob":  "1b3b38f5fbeb3e215c0c0197fcec9a5a61c29d14"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-08-27.json",
+                       "blob":  "96e12985a3de15887353b0a5d0eb46a3153327bc"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-08-28.json",
+                       "blob":  "438db940254c63d4ef508bf0c91ea5faacadbac6"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-08-29.json",
+                       "blob":  "ee91344bdc2df8eb6d8bef0061cfd28a72c1d6a1"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-01.json",
+                       "blob":  "f44caad8aa413b8d2c39831b95ed99d6ac1dd860"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-02.json",
+                       "blob":  "d0658d8e7c4b6e4d091c9f248cf1802f8d2b0f03"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-03.json",
+                       "blob":  "e586fb707e79008eabe370c04ce397d014392cee"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-04.json",
+                       "blob":  "9f4af4e6999d6f04cf03500e02c1303258726b1b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-05.json",
+                       "blob":  "c87dcfa173f5cc59a01d4a7f800a8aba1d88c3ef"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-06.json",
+                       "blob":  "d95ec4f5804dab159437dd3c81d187a82ede0c22"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-07.json",
+                       "blob":  "002627dee85681ee495e4250b1028548919c1bec"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-08.json",
+                       "blob":  "2fda403d56f7b676ccb954d927d7c0533598b7cf"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-09.json",
+                       "blob":  "dc4215c7bcc5dc6e64e81d4ce75f00bff40f8e2f"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-10.json",
+                       "blob":  "79fe61c9b333d8a8c6586b5f5fa7b3108663fc80"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-11.json",
+                       "blob":  "0de91bf8ab960d16d71ca9d6181a1e42e3cf251b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-17.json",
+                       "blob":  "acb45fc4dc1fb723539b360cdf314309d0d511ec"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-19.json",
+                       "blob":  "90b3e153650ffe980c66274f08e1de5310816404"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-20.json",
+                       "blob":  "306c96c01be10011d7f7c2a53c1b0a465465cb2b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-21.json",
+                       "blob":  "f74b24cf343bf756c67eff4f6cf9c4fcdc0a291a"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-22.json",
+                       "blob":  "17839f5ce75ad675112cf19d18fb5ddc6da9e730"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-23.json",
+                       "blob":  "1b259393bdbdc9dab66b659e2909508957c8591e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-24.json",
+                       "blob":  "619cbae0984e799fe61298746ce97c4c3881fdb4"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\aldi-regular-2026-09-25.json",
+                       "blob":  "317e888c99a6b31b31c8bbbed8dc1fee6cdca21e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-05.json",
+                       "blob":  "a0f1e882339e45cd81874495af2d88c6c2ed6850"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-06.json",
+                       "blob":  "8ee47cb58ea06c1f49bbd259248fb73b565dea69"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-07.json",
+                       "blob":  "0b889f9f621b3826e0a1ed7d5f62c82e32aa8587"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-08.json",
+                       "blob":  "26ec28985c0d8a965811dad7c7f68c48957448f9"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-12.json",
+                       "blob":  "feaab5882cb29c909a163baf21c582807b152712"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-14.json",
+                       "blob":  "78f74f25a0b2669a2f81ca7464ea3881f60268bb"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-15.json",
+                       "blob":  "0ea21aa2499eec94735967723ad5daab2305c269"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-18.json",
+                       "blob":  "497df9f07c4ff0fc7c3c1e66c6723f3b6474b6ed"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-24.json",
+                       "blob":  "98d3bab91730bc67c6f2e282ab4de5ac51ab3af3"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-25.json",
+                       "blob":  "6402c1cb90957f21838954b85c5a8ef4f9615bf0"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-26.json",
+                       "blob":  "2c62451086acdcbc89f6d9cd7348f75ff4073231"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-27.json",
+                       "blob":  "c4fa3d9440c1a7a919f39c6aff97ba953e694a3a"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-28.json",
+                       "blob":  "799cbd842037dc025740c65993572389ca47863a"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-29.json",
+                       "blob":  "3bd133b0f96cd8303ad5303dc808e39deec42f16"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-30.json",
+                       "blob":  "4cd2edad675c343240d2ac069df4dbe5fcf5ace6"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-07-31.json",
+                       "blob":  "dd6ef2bee8d94188fb7e0c32f56fa5eaf63b691f"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-01.json",
+                       "blob":  "24d44739ad7e5d34fbbb903824ec0d7570c33db4"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-02.json",
+                       "blob":  "cb6bd7d69dd0f89a4cf09c13d5d2558e14461dc0"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-03.json",
+                       "blob":  "a0670d98c29689fbde3fb182385f86ccf8e4d022"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-04.json",
+                       "blob":  "f3b0caec73349afc4048c398be8264f76e993d86"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-05.json",
+                       "blob":  "ddeb7756c2f331350f8cb098f548534bc70f2731"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-06.json",
+                       "blob":  "c7e07177515facbcfe376dc5521faa0f0d8f35c0"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-07.json",
+                       "blob":  "b48c56548ca370b8519f830c1c944b7f9901a51e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-08.json",
+                       "blob":  "7b034efaf39a8a150f9f6e16fb9d7b9079965c39"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-09.json",
+                       "blob":  "b8f95fb08d55ce8e60a7cfc38c2d0e20da8c8849"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-10.json",
+                       "blob":  "70a660f2ef52921a7623c3bac7599c9129391a0f"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-11.json",
+                       "blob":  "fe810cebb1ac18ca07dd6dd08e02c5ff7bb6a36b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-12.json",
+                       "blob":  "bd371f659ef92f1afd6b191f4fef630e619b0533"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-13.json",
+                       "blob":  "ca727c4f6a224698ba780310080b10d7047ff4ba"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-14.json",
+                       "blob":  "992de694ec04d7ef4b454dd150c21dc3ef514d85"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-15.json",
+                       "blob":  "79dc8ca2c1419a85a8675d0e5f47c19f4f0efd09"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-16.json",
+                       "blob":  "cd7d897cd14940aff7ef2b32e35955aaaa332e37"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-17.json",
+                       "blob":  "97a12b179d2b3747cdca9bb6604274c907306e3e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-18.json",
+                       "blob":  "d63c036b01788273820dd82503503adf016b2761"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-19.json",
+                       "blob":  "8d3eb3c5bc285bb8cc4bbc717a90b7f8596ea65b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-20.json",
+                       "blob":  "4df11c32f7724cca0fc0192d3d8a9716e91bb7d8"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-21.json",
+                       "blob":  "4db549e43b09a89cb6cd9dd93214ade763f39efa"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-22.json",
+                       "blob":  "88af9e2e38222f4587f43918e4d3fa010db3a451"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-23.json",
+                       "blob":  "18aa8141ba022e4c055dea6e0a425ea60e75b800"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-24.json",
+                       "blob":  "0fcb41d9dc6a65d54a14fe94518d740dafc64b82"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-25.json",
+                       "blob":  "f728a101d666573cc41b7dfce135e58a39f622e2"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-26.json",
+                       "blob":  "258b0b2803f49feaff9ac867d498204966abd90b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-27.json",
+                       "blob":  "f0a6f67fb02ae31d3a10ef4b26781882c4bc267d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-28.json",
+                       "blob":  "95f042e2b7e4c1288b10d9d7a079c301fb729aec"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-29.json",
+                       "blob":  "1347655442022e3f2211639aff17dd74950c4c0b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-30.json",
+                       "blob":  "7e4d4723d5d055fd3ea543669892c509852c8e0f"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-08-31.json",
+                       "blob":  "917a46eb84d23fe4d37cc3c895300feee683b4b9"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-01.json",
+                       "blob":  "fa9962f4f24ee5054de60c3ec7868aeeacd77a92"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-02.json",
+                       "blob":  "9819a64e2297c67b2616709671246802e391e52b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-03.json",
+                       "blob":  "0628e31bd5247af7fc9886a7fc6981b0c65c516e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-04.json",
+                       "blob":  "f30960876b1817301509c9a5e9f026819a3c072e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-05.json",
+                       "blob":  "9ab9fc923c5c1aa4712fe8d8797682caad6c3856"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-06.json",
+                       "blob":  "5b86ee19a022a4888ded831f3542d9cd2f894b75"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-07.json",
+                       "blob":  "eaba437ed87340ee15b516432edc00b8192395c7"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-08.json",
+                       "blob":  "b3669aefd8f2a824c8814b2d5a178fd1faccadbf"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-09.json",
+                       "blob":  "c4ae49bf43bfc2d85ec7f3250b3540fa8e8438a9"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-10.json",
+                       "blob":  "6fb05a1dc546e1111f41e54ddaa1ebf4f6aec006"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-11.json",
+                       "blob":  "35e977678115488b4cca3bd56b0b3c6772f2c5b2"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-12.json",
+                       "blob":  "27f45ca635fdd06c91b61b649e7ac63c4e467c12"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-13.json",
+                       "blob":  "6c7e702e0b0160f3fe811954f4bd7863a2ba800f"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-14.json",
+                       "blob":  "10b13beec0ea28b53a4bc1f12afc2a5600e12907"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-17.json",
+                       "blob":  "4996b257f79e31f4bb0750b4984797227c34fdd3"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-18.json",
+                       "blob":  "4e1ce51360a12fbff6c1cb269e9a5a88a5dedd9b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-19.json",
+                       "blob":  "59ca82aec1cdfa2a038db6c846b1ed29afeff931"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-20.json",
+                       "blob":  "00fa8c5027a6458ac98dfa3364af131ed17081d8"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-21.json",
+                       "blob":  "fc1835241b2de78c97b0d2e3ff3bd477245056e1"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-22.json",
+                       "blob":  "c02aadcb2d14203e11bca778a971b18b1f661763"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-23.json",
+                       "blob":  "90f279b0cd561df65fdb41014386c8a13a7f2490"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-24.json",
+                       "blob":  "ab0e85cd8dcd402cd1d3997e5a38afa416d841d8"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\bakers-regular-2026-09-25.json",
+                       "blob":  "42e1308c1ab842de9cc237f0ccc70393c53ee678"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-05.json",
+                       "blob":  "887b023753526f47021638c545ad20c671eeb0ab"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-06.json",
+                       "blob":  "d2ad3f33e36e56ead07b6f9948471910dd17ebf5"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-08.json",
+                       "blob":  "e9d7ecb71e2e34d654b3777704271daacf648daf"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-09.json",
+                       "blob":  "9fde75762093ae7773b4a18829624f156357461a"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-10.json",
+                       "blob":  "b6e16ed66befe99300ac1b4b974eb0ee407cff65"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-11.json",
+                       "blob":  "0c58c166bc8c379b97174dc9ac776966ea000a74"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-12.json",
+                       "blob":  "3b3e1bbc720a40cc2017b98118cfe6b9b3bb553a"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-13.json",
+                       "blob":  "fc5a89cda6dd47e11c72238da021a0f2f98e5263"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-14.json",
+                       "blob":  "9af8290d0545085d34db4085d5c6edac8c5e65f7"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-15.json",
+                       "blob":  "f09e6f639e8a911bacc84839e941e01749c71261"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-16.json",
+                       "blob":  "6f90089ceef9947b1360393f440b110c6bd64669"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-18.json",
+                       "blob":  "23f09be3d88830392173cc39ceccc590abe3b7eb"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-25.json",
+                       "blob":  "bf3a0e36e33ec978877d284ac81ddb467fd26a0b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-26.json",
+                       "blob":  "28f625fb3097e0f0e2a5aaf8031fdd89563be51d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-30.json",
+                       "blob":  "b4ae5fbb4fbe1c916ae3c8b8adb966f90b24abed"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-07-31.json",
+                       "blob":  "f143b58bc972cba57d5222650c84929bd61a3215"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-01.json",
+                       "blob":  "839727893fee66ec6161b7145ea2c47941a2cc33"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-02.json",
+                       "blob":  "c1f70af9e2ffd7891f7138d1ec4def63c34cbd4d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-03.json",
+                       "blob":  "a1d78418286ba0f3d0eb2f1153f258218e87dc9b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-04.json",
+                       "blob":  "b62efe2d432fccf9878c95b27680ac65cc19f07e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-05.json",
+                       "blob":  "4f405ba6346c90203e67a2490f4de8fcb679abaa"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-06.json",
+                       "blob":  "5d9e410aab766a9732978cf2a143c1349ee22781"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-07.json",
+                       "blob":  "2b95727423118e4fc23cdb418a494bfde137a9e6"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-08.json",
+                       "blob":  "31e6bf19e1a0011224df4643d823415d3b37e431"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-09.json",
+                       "blob":  "972eb493cc64f6bc11e33d435e654791f0a82944"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-10.json",
+                       "blob":  "6dba42c21754b8c2725f6b3d1154a202a07a6f65"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-11.json",
+                       "blob":  "33652811e3e62db380b075968c87fa64b87f8766"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-12.json",
+                       "blob":  "9af6776a2d5f3402303cbaa985963256ea36d708"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-13.json",
+                       "blob":  "5c9246031b2c8aff97f470dd3d5021191049cd7b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-14.json",
+                       "blob":  "62b81abe133a040ec476e400f282a4a00c815f91"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-15.json",
+                       "blob":  "251893b594d1f14e304863310de479380eead7cc"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-16.json",
+                       "blob":  "c1bdeef2e62041c3cb9878e39beb621b4e7ce89c"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-17.json",
+                       "blob":  "ee74dc001ed838798139eecfe5b7ce87b3acd445"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-18.json",
+                       "blob":  "c8e7e72ccebd2b36794a304dd9ad1d2b8f494f35"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-19.json",
+                       "blob":  "8294d3a499894ddf7ac1c1fdaaba59d444a29c14"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-20.json",
+                       "blob":  "9b5d95eb950999796d3692d9ee46d0afd34e3cb6"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-21.json",
+                       "blob":  "e081a506d455070c9cfbf52c8f55d982b8465329"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-22.json",
+                       "blob":  "c0bf9262d7f106411597e3e0bb2cb9be4ac6b0de"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-23.json",
+                       "blob":  "cc7b657d009e9deadd1a1511b1b8a3597a162d43"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-24.json",
+                       "blob":  "b62c1f0a655cac8e2a6aed97d6bdbab30e109b91"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-25.json",
+                       "blob":  "a163bff9ae9b8a40a064dabc7282d4b7dc5ca47b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-26.json",
+                       "blob":  "1b102328542d37a76df13ff7737a49487fad4cc0"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-27.json",
+                       "blob":  "f335f323028a5992afe5bfb5e6270ab09f4a3cdc"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-28.json",
+                       "blob":  "460adb962956a65b2fbbdfa445e02dd962dcdcb8"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-29.json",
+                       "blob":  "5c1a9660b9dedd7938845d7311c4539dcbf2a88d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-30.json",
+                       "blob":  "6dbe32d2a2bdb9d95808e4807d0a74948a1f130e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-08-31.json",
+                       "blob":  "ae830efe07dfbb5ab13ff10b95241ad65b52d9fb"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-01.json",
+                       "blob":  "6ae13c894d544a98da7b03d67c8c0271aa67afaa"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-02.json",
+                       "blob":  "67f824e81d675fc13b3157ccd2dc4d72b9bad9a4"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-03.json",
+                       "blob":  "7d1397fc304f4670e6199087a28eb9345b989f98"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-04.json",
+                       "blob":  "8532ac703b99d298b101ab8ad71a4c31d699d3bf"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-05.json",
+                       "blob":  "d5f68c5046d03a4436f3da975f5c4d1427d7036d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-06.json",
+                       "blob":  "832eadb1320cee9b7088e7b8a80ec373782df98c"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-07.json",
+                       "blob":  "364d356f3488f87c351d5d799e64ca280527ee14"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-08.json",
+                       "blob":  "47fcc502915332a0d2716a1cec25a52fad5c25f1"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-09.json",
+                       "blob":  "0c4b7f391c2606bc418b979e56a9859bbba12eea"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-10.json",
+                       "blob":  "f2cb2c9ed8b68bcf9e12c3ce4beb7270a4e67b88"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-11.json",
+                       "blob":  "ac8e591124b3a8cd9b17fd36ae2a3b8ff990be8d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-12.json",
+                       "blob":  "a7c1de2dc0918d174b655213af542c8190a461aa"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-13.json",
+                       "blob":  "66c303a5a12a60563e61cf0275f49a1adce52d53"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-14.json",
+                       "blob":  "ec3a0aada83ad7ddaf8b0b115787302fce63ee7c"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-17.json",
+                       "blob":  "197c8f956a30d3788932b4f72aea02dd03961813"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-18.json",
+                       "blob":  "4b66aaef1846dece129dd1812e748a1c80b7777c"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-19.json",
+                       "blob":  "35670795170a9abea06ddca658c445c40bdf6a66"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-20.json",
+                       "blob":  "9aa9b366ae1eeaaa23298acaae99cf849e891890"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-21.json",
+                       "blob":  "8bea6d95e02acceea805ec28ff5bcfe0a99374d7"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-22.json",
+                       "blob":  "8ee2b82512288c1f5cd082da848817a903137e5d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-23.json",
+                       "blob":  "abf5262c28e860aa6a2cd785c730a79499a9c498"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-24.json",
+                       "blob":  "bcd8a3b03c88a94d0941e00c723fd4b1a09e0ccb"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\family-fare-regular-2026-09-25.json",
+                       "blob":  "89f6412a940ab93cbe0affccceeb2fc3c284ed82"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-07-12.json",
+                       "blob":  "9d624b52d7f07a0f84931f1c185c97b30b88bb6a"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-07-13.json",
+                       "blob":  "853c4378e5239c154dc2980b30ca76fbd5148b99"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-07-14.json",
+                       "blob":  "307e89683766366f0c6711d2dc5d378dbf2f788f"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-07-15.json",
+                       "blob":  "1e17ffb6a1b5ab1820d08362616b6113485dcb83"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-07-18.json",
+                       "blob":  "dfb8ebc06173cd04dd53b5c87d73901d34a35bde"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-07-23.json",
+                       "blob":  "5648fb5526db0e05e634ca06a2666e2e3c755f19"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-07-27.json",
+                       "blob":  "d06b7a0a8b95e3b179249962eca0f98f6e55ac89"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-07-31.json",
+                       "blob":  "3e49a37fcae4ede465d8328c35b856374ed08940"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-01.json",
+                       "blob":  "ebbce7f393975a4089641ebe6a5ccb2040310144"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-03.json",
+                       "blob":  "ec62b52e409c7fb5d88ae5036688d5787b103a7d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-05.json",
+                       "blob":  "04987f1f73ff2a3a2c389ad72bd7d94f28a7e039"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-09.json",
+                       "blob":  "825f2d8995a7e2c0dcb1fddac38d02288759b3e6"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-11.json",
+                       "blob":  "df7f0438cf4a208dbbbecde5a5c3d8c3d30eb197"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-15.json",
+                       "blob":  "794e7c34e0d790d6ee37e9fc031eaacff37697d8"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-20.json",
+                       "blob":  "ae5bd88a0c0d930a8f3dc97c5cdd88418f889548"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-21.json",
+                       "blob":  "a3d10f146293e329363a34238ffb0e5f37008195"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-22.json",
+                       "blob":  "08d0093ba8babc2c9e14a6a9fc27a2e18ade5170"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-23.json",
+                       "blob":  "4a7e249961681064e014824854339be7d5a5243a"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-24.json",
+                       "blob":  "1a99c7a0127e25b3188a9f4b894173a828639e5d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-25.json",
+                       "blob":  "bf5c3aa539e558e0e52a2c183ae56e094bfe7e2c"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-26.json",
+                       "blob":  "4970030037d4fff5f4b65750765c5937ab2e78de"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-27.json",
+                       "blob":  "a5a16eb26ff9335d8a942773b60ce63924c4b918"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-28.json",
+                       "blob":  "ac7e96141f5ecb253f101123f35e7d0575a48c8f"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-29.json",
+                       "blob":  "32fe6b7625976887dc5c93f5ae2367975bfdee0c"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-30.json",
+                       "blob":  "4165e5ac4a621a54228f250709d3776291461cc6"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-08-31.json",
+                       "blob":  "8e6841a8789586deec3744871562720a39f4b741"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-01.json",
+                       "blob":  "db3da838ebc253e48da6d9c66af22bef4525f16b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-02.json",
+                       "blob":  "00871c53b9b62fa59c79985b55f471233a9b2128"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-03.json",
+                       "blob":  "4a410fb2e21488548cc71e40d9bb53970f66cd39"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-04.json",
+                       "blob":  "fc7735520a007a97043f38a000d908367e10b021"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-05.json",
+                       "blob":  "748b9150dbe21c17e0a2ca8b9f96c59486d1a9e3"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-06.json",
+                       "blob":  "0c550f2b212733131c083bac98daa70221fc95c5"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-07.json",
+                       "blob":  "405bd081fb88e31fa38e55c7c2d9f4251692cab3"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-08.json",
+                       "blob":  "e38d008fc618e8bca45fb8bd18aa29924f6272b1"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-09.json",
+                       "blob":  "c224ec820d5417440ed5bced3f4994a226a08e9e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-10.json",
+                       "blob":  "bcbed6bf2d534a7dc673863efeadfc45eff7aaad"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-11.json",
+                       "blob":  "a19eab3fee1a1d33f89324dd8dfce38c46f62794"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-12.json",
+                       "blob":  "0762ef0669aa83d0ec06331dfa69ed8e3b1e0433"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-19.json",
+                       "blob":  "c772a9bfc1ae7a5f832e60751e8298788962a52e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-20.json",
+                       "blob":  "dc1d2be7d228536f0ee65894b12c47fc990c8437"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-21.json",
+                       "blob":  "50d3d0b7e3c4934c994e4b9d936815f03618f7ce"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-22.json",
+                       "blob":  "b284f57101f2f9df89b988c3ec4c7f40b1193a3b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-23.json",
+                       "blob":  "88cae0336280478e7bacf39d1c5ab47fe0adf1c3"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-24.json",
+                       "blob":  "00a1ca1004cf83245d8a238a8cf51c9481c215c5"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\fareway-regular-2026-09-25.json",
+                       "blob":  "43babd0e79503a438b866861b6af27568e6cd841"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hunter-aldi-regular-2026-08-16.json",
+                       "blob":  "c31ef48a38bd20a1822bd87fd22642832d1c024e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hunter-bakers-regular-2026-08-16.json",
+                       "blob":  "e03784ecefeadf7deb042b51b5c6de3372802135"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hunter-familyfare-regular-2026-08-16.json",
+                       "blob":  "751fdec5258ba5d5fa7c6b55c52e8d745f8af6ae"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hunter-fareway-regular-2026-08-16.json",
+                       "blob":  "e7a1bd573b475fbc1deed46a70b1d86ebce669d4"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hunter-hyvee-regular-2026-08-16.json",
+                       "blob":  "b0b94d82f7b1c74620c8a691e1aa76cbad948bf1"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hunter-samsclub-regular-2026-08-16.json",
+                       "blob":  "b81fc9e256ef8218d955683df98b726d72d87021"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hunter-walmart-regular-2026-08-16.json",
+                       "blob":  "2cc54aef6609d065c27db70de7ba4c81468be60c"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-05.json",
+                       "blob":  "dca1fbbe4379e06262ab2e9e968cc9fdb2365e3f"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-06.json",
+                       "blob":  "26f2870d7fe806f2ee3d845bb772ec5c0d143d49"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-08.json",
+                       "blob":  "23faccf6a663e7e9a6de463e2154b5c7389c1360"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-12.json",
+                       "blob":  "fc5c5ec582d29c0859d258cfb72ccaea377b63d5"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-14.json",
+                       "blob":  "149f0808819353af9cbac9124f4b4dd6c17cbfa5"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-15.json",
+                       "blob":  "82b19defce3946c3b1ce5936370f44e1c7109297"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-16.json",
+                       "blob":  "955214397e85b794a02b1ba7f84342e0a9f2cb7e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-17.json",
+                       "blob":  "437355e98329d7b307426fc2bbc415ba6d27c82e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-18.json",
+                       "blob":  "99adb04cd99aea2614f427a316bb43ef734356fb"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-19.json",
+                       "blob":  "d9ffd674559f14c3fe72d31789150d35a02ce2b8"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-20.json",
+                       "blob":  "9172ae8caccf92dd00eb6f0b39d300126e6e2220"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-21.json",
+                       "blob":  "0cdc39f5bd7e8b8eba5a468c958025fc44333fd7"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-22.json",
+                       "blob":  "febddbcb63a80a9ca17d27c426e57eefbebae058"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-23.json",
+                       "blob":  "2543ef28745c6cd64fefd94eafdf36a21dd9a106"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-24.json",
+                       "blob":  "a9c0f57b6e5b45d0bb4967db4e6916ed6ec55aef"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-25.json",
+                       "blob":  "262db3c749788516a7cfb4c1c599898855200b3a"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-26.json",
+                       "blob":  "b81eff0ec6dce1377e1917b5f5fef5ff6b017388"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-27.json",
+                       "blob":  "d9f2f6311dbb20bc208aa8a6febc5a00a4559655"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-28.json",
+                       "blob":  "354b484e0b9d6fb86af84b0f58e1312a47afa414"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-29.json",
+                       "blob":  "dc219ae992b24cc9cfa2d53af1eab1615623c447"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-30.json",
+                       "blob":  "e500edba954876bdafcdd24017c7b633d1c55b9e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-07-31.json",
+                       "blob":  "3eea7bf560457ccb2b101bc135d032fddbe8203f"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-01.json",
+                       "blob":  "34aa69aa715f91415f71dcbea715face1545cc0d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-02.json",
+                       "blob":  "d60ba2f006edcc056c20969b6d492c85f67f21b4"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-03.json",
+                       "blob":  "5e3da1967b1cce5cfd929eb3bbb6a1c5ff45308e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-04.json",
+                       "blob":  "15303b0664b276977a76f3724b14078e2bca9fd2"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-05.json",
+                       "blob":  "1823d14a61ac4f8ed04b46a5c2a64ab5f094f772"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-07.json",
+                       "blob":  "bc4dfbfd4f6aae3519de08c0c4f967396295288a"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-08.json",
+                       "blob":  "6e590ceea8ed185f2b7176a23688c706380907ce"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-09.json",
+                       "blob":  "550eef982deeb2325cf1cdd7ab60606481fade28"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-10.json",
+                       "blob":  "b29cce9ba2c21877ddea6d45456874fe3d8e45ea"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-11.json",
+                       "blob":  "cd957602f186856634a56536c0bce9fc936a8129"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-12.json",
+                       "blob":  "83f95fdf744ec841c3c67a17da5b02452cb0b716"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-13.json",
+                       "blob":  "0b217f90a56b14fd79a8ac4ec55a206170186057"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-14.json",
+                       "blob":  "0a25f93f7be1062157ec36bf565cc972eeda64c4"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-15.json",
+                       "blob":  "2ac0ce92f9243940a149fcbc6e028bf7d410a65a"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-17.json",
+                       "blob":  "3b1ac9270e1fa9bd045fa3083f98ceca43a04f6e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-18.json",
+                       "blob":  "f735872e2672f2540fdb980d46551fda44193435"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-21.json",
+                       "blob":  "66dbcec2c8fa750283dc8f147ea0071eb4a22bda"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-22.json",
+                       "blob":  "34b3898ac9b719d40e23cd1d1c01c0ad14439ceb"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-23.json",
+                       "blob":  "ee1dcfe0591b8673eff242a64eb6fb601614c444"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-24.json",
+                       "blob":  "6d13554d281d9611f1cf5b2135df13ca90fb2d85"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-25.json",
+                       "blob":  "2a0884d8ee767252ddaf45d7ed9632ab90166e05"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-26.json",
+                       "blob":  "428a26ac80f05ff8fdbcb5787af918e434bf945c"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-27.json",
+                       "blob":  "258423f854f69a5861fd26cccdc8276de9d8019c"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-28.json",
+                       "blob":  "e4cb252da3de72c9c87de036221fc75e7112cae2"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-29.json",
+                       "blob":  "a6c73cbbd5fc0626507c38dc87701ae83b75b76a"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-30.json",
+                       "blob":  "8fb4d4c42abb709dc634d2d18f9004759713d289"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-08-31.json",
+                       "blob":  "0add0a1bad5e9abbf9ffaf9146352d309d2de732"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-01.json",
+                       "blob":  "ae9171090419b46c60959f7a2982783d056da608"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-02.json",
+                       "blob":  "f531a92730d8191d0155701e36527000c6db7701"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-03.json",
+                       "blob":  "888ee0787235f4281d471cc55d8dd46f3c84df9f"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-04.json",
+                       "blob":  "5c8e51dde8621cb81c3609f52e00a19b5188220e"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-05.json",
+                       "blob":  "a4eb0cb0fae687a972119048900fea621dfedc8d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-06.json",
+                       "blob":  "1f26f5acf90420de0eb16e7a725d7b51c1870ac8"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-07.json",
+                       "blob":  "b8b03d2eacce66732fff4fcdd8ab92e0e0c7473f"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-08.json",
+                       "blob":  "0fab9be231d97d223bc6c8750c193f0f05eb1706"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-09.json",
+                       "blob":  "78194f1a5bb5fd323e2f1f9717ed1a1c4cefdd13"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-10.json",
+                       "blob":  "f70af639963ed85977497787bf7b5e8bb8bb5d1d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-11.json",
+                       "blob":  "6896cca636fc781ab1d49c62c486f97273aa77b0"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-12.json",
+                       "blob":  "ee9d455630ad40d3667c08ff001ee1619860b822"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-13.json",
+                       "blob":  "23ae886f8f7527628d981634f009c2577eaa74ca"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-14.json",
+                       "blob":  "0de13480c18de787881bd3eb132565ec2531c926"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-17.json",
+                       "blob":  "d9c32c52592b258b4d7e94d978afc7e9db7478b5"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-18.json",
+                       "blob":  "556f2bf3cfb0adbcd17792b582b7c71623709a3d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-19.json",
+                       "blob":  "fa41e3317484cd3b75ab4d332ad0db6c1f425af0"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-20.json",
+                       "blob":  "436e0423ba44e2f896af55fe370a23950aaccfd7"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-21.json",
+                       "blob":  "3f96ecb880d7002c70ed22a6a638b36c006979fa"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-22.json",
+                       "blob":  "a2b1e609cb0a03c9cfe9bfc4839d9910713b982d"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-23.json",
+                       "blob":  "8462ec84ab1068993c12fa2a71b12da032246307"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-24.json",
+                       "blob":  "4de8175f75a350dd407027e86ac4346643008e17"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\hyvee-regular-2026-09-25.json",
+                       "blob":  "cb7d3739dda2c1f63c280b5256b952b673fe5d95"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\sams-regular-2026-07-14.json",
+                       "blob":  "1575b8c296cc818ff9bab7accb2eb4bbdd9b24dc"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\sams-regular-2026-08-01.json",
+                       "blob":  "c1485ae54832d70287eb88dc81beef05e60011e8"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-07-05.json",
+                       "blob":  "4a5d34c7333188b5d3ed5d7deb861bbd284237e5"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-07-06.json",
+                       "blob":  "0e5beaea70553f1aea247fb0123c7309c8e28738"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-07-08.json",
+                       "blob":  "2efca6f31df7559bb1c85c66cb5c70f734647ccc"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-07-12.json",
+                       "blob":  "e871eff763c4a2d2fe2d07458a4f53889e850653"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-07-14.json",
+                       "blob":  "49195689d77272cbc81d075feeec9997556d6010"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-07-15.json",
+                       "blob":  "00d97cf28da5dd3f31a63ce236568a77fe75fb1f"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-07-18.json",
+                       "blob":  "f9ad287d69e0962532e1c37ba44d96ace4f5e6ce"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-07-23.json",
+                       "blob":  "3368f44d968034ecbb458c18edac1cef4d2df207"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-07-25.json",
+                       "blob":  "65dc17e0e3ca52357cce06ba84221896efa513ec"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-07-29.json",
+                       "blob":  "173c9ebc5dec79d857e97625a3f36ce95465dc28"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-07-30.json",
+                       "blob":  "68157e5d9e2aadbdb780570635a62aedffe29f58"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-07-31.json",
+                       "blob":  "ecbe89b70356323b7db854be91ea65b2166931af"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-08-01.json",
+                       "blob":  "1a9419c9880525d9b08a898bd676a66824777928"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-08-05.json",
+                       "blob":  "4329c07fc91a74ef12585c5b48a8a39952b51a46"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-08-06.json",
+                       "blob":  "6df3e4825552a5e21546fb3706574981f3921683"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-08-11.json",
+                       "blob":  "006129723ad15e4063bff88f7c81a7a7e1fd97ad"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-08-22.json",
+                       "blob":  "22d022a7911127414e2b2f7ff59fb1e66d0d90c9"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-08-25.json",
+                       "blob":  "cbc23e983e4b3f810a730e92c1a3d1b7e403e7ee"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-08-26.json",
+                       "blob":  "dfc9b31dda7dad409264ebfbe0101cfb3960fbc7"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-08-29.json",
+                       "blob":  "f1b38568434d05c7ba1585cb8d2f5e941ca37b13"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-08-30.json",
+                       "blob":  "37d6ca8f7abda9b488fc5aebe1ed02e426fb0168"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-08-31.json",
+                       "blob":  "f4477c428540f2342780c480cf1589f0cfbf4fcd"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-01.json",
+                       "blob":  "89ee28c23ccb05cd8979bda12dbe41577e423e47"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-02.json",
+                       "blob":  "fb5286d753d390cdb995d475e85f488224439d73"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-03.json",
+                       "blob":  "1fd038b88745d479773788944b3f404f805b7e25"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-04.json",
+                       "blob":  "d8d66fd38ceebcd1aa79891cdce699c757be81c5"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-05.json",
+                       "blob":  "19aa2e187e33808cd2cb3a81536abd7e1be4f10b"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-06.json",
+                       "blob":  "32ffd537019341100121a1e90eea0ccd784a6b99"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-07.json",
+                       "blob":  "1a0fad70e0ef740124b221d667330b6898a38db3"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-08.json",
+                       "blob":  "50c0e8870088a9b87298870752edbf165fc840b7"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-09.json",
+                       "blob":  "e034ac640b0c8ad5552a9298dd8f95e53b994969"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-10.json",
+                       "blob":  "e8a7034a14e64f5a0bd1bae980372d9bd0eba774"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-11.json",
+                       "blob":  "4c95f83c14e79a0484193e743e0c3dd61022e9ec"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-12.json",
+                       "blob":  "b652efc6b7b11519a8146117cb5e984487234892"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-17.json",
+                       "blob":  "9380c973c9fc961ea6b42cf5e4e3693c6b8962ae"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-19.json",
+                       "blob":  "7f20771d4e9e209409a0af2cd34e5eb8c1cb9a81"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-20.json",
+                       "blob":  "1a303aaaae3415bb5fb8580f844fcc537949b66c"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-21.json",
+                       "blob":  "342a0c28ffc1ae57ad82c6a4105cb676bac6ca29"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-22.json",
+                       "blob":  "e19702d16bc7c22333b2d08111e460b900aab334"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-23.json",
+                       "blob":  "d321a211ed4275cf1cac725006311441bc9b6b89"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-24.json",
+                       "blob":  "527ff30dff5234faca067d7ac20e23673ec71dc6"
+                   },
+                   {
+                       "path":  "grocery\\out\\regular\\walmart-regular-2026-09-25.json",
+                       "blob":  "6464796c63876394176aea93e47f980e93267748"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-07-05.json",
+                       "blob":  "65e94b183f150f74c883c3385ad5633d11a60b78"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-07-06.json",
+                       "blob":  "9466ec4e3e09882f41fb47e860df8410498c8d5c"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-07-08.json",
+                       "blob":  "1304a2ca15b79e5aa4e051dc20948070d704af21"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-07-15.json",
+                       "blob":  "fbe88ab7287261a0bff7968166ddcc462e86d1c4"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-07-17.json",
+                       "blob":  "cfbbefc37eb27108da451e9cce5d767939f24fe9"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-07-18.json",
+                       "blob":  "7b7921a9109528514541c60a21eeb8cae10172c9"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-07-23.json",
+                       "blob":  "b1a0381cd4ed48e54ad7881eb4b366fd5cd55f89"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-07-29.json",
+                       "blob":  "aafbb76df2987525608d7108ebaaba50fcc567cd"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-08-01.json",
+                       "blob":  "e7e1e75b6d53da8dace44439cfa731cbda1a1327"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-08-05.json",
+                       "blob":  "269c909f7efc9db1b1934b29362ce0ef5594bd7c"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-08-15.json",
+                       "blob":  "262f642c613c07c6470ccbb5ac4b13fe15e84afc"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-08-22.json",
+                       "blob":  "7eed4c84509fa9f8fae4803130d3a92640646927"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-08-23.json",
+                       "blob":  "8a44fe1da5b9981b6343d6623bbfb72bc8d6a1f6"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-08-24.json",
+                       "blob":  "e4b9330f48c6343d4620d9f13ae2a7ab7bbd6b76"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-08-25.json",
+                       "blob":  "b3a2d4309abe7f76159a04c53703c716495b376b"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-08-26.json",
+                       "blob":  "7f9af8b1ffbfd93ae51592309ba56acbb64c4501"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-08-27.json",
+                       "blob":  "3c91c25870b6fa9523387ba513f0deeec7acdff3"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-08-28.json",
+                       "blob":  "9b20045d29147b0b9db8b8bd096960a6b439af3f"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-08-29.json",
+                       "blob":  "ea62f005b873253d71959008ce95b9d534cfccbe"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-08-30.json",
+                       "blob":  "c18ae4ea62ac389232ba3917064baec3a87446c4"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-08-31.json",
+                       "blob":  "f13e53f324ab353eb935239908e8de3ea893bbab"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-01.json",
+                       "blob":  "18b3693b6823de3a1705026e93c0e5de09228235"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-02.json",
+                       "blob":  "113bb37a9bc6256cda609f1f4b6b3b234f9b9106"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-03.json",
+                       "blob":  "adda56536197ba389174de1cf330755be736d674"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-04.json",
+                       "blob":  "5b64637c60d0d08fa1f8799000caae35b413c9db"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-05.json",
+                       "blob":  "e4b1b4d0adc3b55d929850c8b5c94790472354dd"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-06.json",
+                       "blob":  "5602916d83a3e58b9f6048012c01c24d35b4067a"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-07.json",
+                       "blob":  "dc687a63e220ec715c3726c62df58974370afdfe"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-08.json",
+                       "blob":  "d8b5c8e6699828c435301836d5fe5035e8153f82"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-09.json",
+                       "blob":  "483f13902654ccd79abc74d3e481967f2c7f503a"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-10.json",
+                       "blob":  "ff30cd7c689d6bfc64f2920cbace0d2caa8d1189"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-11.json",
+                       "blob":  "5c9212fdfde8dc272c50e9e4f1af83393b4babbe"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-12.json",
+                       "blob":  "69f03360541e094173054b9ed785daa1cbd4cc13"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-17.json",
+                       "blob":  "12103b0caa7ea63ddd91a80351b96cb2649bda9b"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-19.json",
+                       "blob":  "d79a6f7a9e0f2f564e650e6ee6052ffab3f7867e"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-20.json",
+                       "blob":  "c0b64d85aa75427b10f0e630ee83d0a714376cd2"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-20.pre-rescue-bak.json",
+                       "blob":  "5a526949c68bd47d72299cb5ce3a1cc2fc0fcdc3"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-21.json",
+                       "blob":  "9385581e18cfb1ffb652b9aafd999dbeb49cb177"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-22.json",
+                       "blob":  "b4b3d31f362d6d434e4a60cb071f8afadf52b528"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-23.json",
+                       "blob":  "9e7eecd8e48d59893c1b9e8efc6f19b615e1a059"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-24.json",
+                       "blob":  "8595ab15f2aff79087319ac54a890502c0a7250b"
+                   },
+                   {
+                       "path":  "grocery\\out\\sams\\sams-deals-2026-09-25.json",
+                       "blob":  "a6ce3bda9c97de3257ccaaaa68ca5090f743a518"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\coverage-census-2026-09-22.json",
+                       "blob":  "3b103b53f3ab18b2acf4414e89998849e1ea1595"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-01.json",
+                       "blob":  "924fe8990a594285f4d510fa1385f6daab64b6ed"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-01.routing.json",
+                       "blob":  "fe00e84f18f3957b5ddd5015fa9e783bcc908a1e"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-01-2.json",
+                       "blob":  "998dd2d0bcc97bde8815fd6b567d935e96e808cc"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-02.json",
+                       "blob":  "683839739b63e46e8c0c6f8502e9a2c4ff5285f5"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-02-2.developer-record.json",
+                       "blob":  "2fa16f55ad3e23719dd35ce816a440419e99e8ad"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-02-2.json",
+                       "blob":  "a51207881b0ce35be1fb17ca92f6c9addf75c598"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-02-2.routing.json",
+                       "blob":  "f1015838b962e7d586dea2bdd46412007a136ada"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-02-3.json",
+                       "blob":  "9b75104ff9afb5bd6989131b1fe87d312a892c50"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-02-3.routing.json",
+                       "blob":  "1a42011baf20b48d60238ad7cc834ea65ce6e4e6"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-03.json",
+                       "blob":  "65c33f721a5ebba724a02d16a93825e730f5812b"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-03.routing.json",
+                       "blob":  "68de2664372d791e5df7b4cc1e09bc4d91d155da"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-03-2.json",
+                       "blob":  "e67e4a09ea4bf682518e9382aa50c5d8418ceb38"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-04.json",
+                       "blob":  "8d7c6762904bb6df19cefdca2052ca6fcbd06fd7"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-04.routing.json",
+                       "blob":  "7f711af776466f70a14ccad231dc75a688792c90"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-04-2.json",
+                       "blob":  "2bb2fb09acd360b6d8357563b1786b314740e519"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-05.json",
+                       "blob":  "3e597dbd0c73186a499e33c397684d23fb1f197f"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-05.routing.json",
+                       "blob":  "2718fa14954d0d0df2e70ce5777af50c785ae689"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-06.json",
+                       "blob":  "1adbe5f40526a3424ab0a7d2ab5fcd02434e0621"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-06.routing.json",
+                       "blob":  "0f79e65c6923654d8135248bf866f4e70d18cf3a"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-07.json",
+                       "blob":  "ab3b3ce53d23fced0ddb94a57b5aae962b3b26ba"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-07.routing.json",
+                       "blob":  "bfb4ee3ebffe049fc8d2167b0c5f7cc55e0bf2ae"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-07-2.json",
+                       "blob":  "fac74420bf690893f96d82c62f018efc07b8c855"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-07-3.json",
+                       "blob":  "7da578e02ed515fc19dcc1620bd2bfafe315b521"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-08.json",
+                       "blob":  "87068fada159bf23d4239f6e3fae4ec82881a576"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-08.routing.json",
+                       "blob":  "0e2a0432633e28f8d8d8605d674632ccd9f203c9"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-09.json",
+                       "blob":  "99266a7252694ed125b5921d49d661cda8a48079"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-09.routing.json",
+                       "blob":  "ec77bf2526d0ab61123e72837734657f511a5faf"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-09-2.json",
+                       "blob":  "256ea1b968469d6277810ded2cd3357aebea7e46"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-10.json",
+                       "blob":  "18395816946caa1eeca0f7a9fa952ea79c0a6953"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-10.routing.json",
+                       "blob":  "d8082176a32287bc0a370ff0a2b08fc26e43bb6c"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-10-2.json",
+                       "blob":  "b8fadb76558609b830d843d5318d33d4ca78f431"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-11.json",
+                       "blob":  "9162be2b5726437149bf39b99cefc7aa5c273e3f"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-11.routing.json",
+                       "blob":  "fe9f4b87e54698078f2254c2518bccc803471888"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-11-2.json",
+                       "blob":  "847e2c8d53797da12e935c238f4a98281fb3a755"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-11-3.json",
+                       "blob":  "d53e46e0e669740031ea4d7e5b2c0c16604509b5"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-11-3.routing.json",
+                       "blob":  "a280a47d72f16cebf0e062523bbef0ae22f39935"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-18.json",
+                       "blob":  "9cc6d2e684a63ade152a70276b7813193111c655"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-18.routing.json",
+                       "blob":  "f90aaec805efa5023d4760224f51c7f82491f9e1"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-18-2.json",
+                       "blob":  "071d79b6e932cbcf2640005566b54c517e782f0c"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-18-3.json",
+                       "blob":  "ae3d50b39939f73e679c7dea6deee489da2bcb79"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-18-4.json",
+                       "blob":  "6170d0e0067c851765de5fade38ec7cecef8a24a"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-18-4.routing.json",
+                       "blob":  "2e9c276684fe11da4e48bbd59e8cf925b1547134"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-19.json",
+                       "blob":  "18d29915a53f3d761a03edc5adbe79faad7b9286"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-19.routing.json",
+                       "blob":  "26f1be22da01eef45c0af89c356cc03679c35026"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-20.json",
+                       "blob":  "291ade3b9212f8482057dbada3fd2b711275cf50"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-20-2.json",
+                       "blob":  "f0924c685344cda249fb841eaced76b4303265c5"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-20-3.json",
+                       "blob":  "1711d0215b479d361c1b02fdaabf2544229475eb"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-20-4.json",
+                       "blob":  "197a9d32489fdd0f447e52afa01807b9103292bb"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-20-4.routing.json",
+                       "blob":  "015cd9000a0a6bb885507adb4fdc6e975c63fdcc"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-20-5.json",
+                       "blob":  "8feb3d8aefdeaf9e5e19e0391034db5b75c77d60"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-20-5.routing.json",
+                       "blob":  "745eaa281e753562502d847860037893ecb0bf3f"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-20-6.json",
+                       "blob":  "e9061970d32e64d91921228c6e63106fd8c14613"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-21.json",
+                       "blob":  "265df14e74b1e2a281f3b9fdfd95b94f537cc0cb"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-21-2.json",
+                       "blob":  "8a2b18aea5e9b9fd16c351531d79dafbeb98038a"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-21-3.json",
+                       "blob":  "ff3ba888595e451d5ed449b1bf3ef7a2a26b5fb4"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-21-4.json",
+                       "blob":  "2343dd63396a006c8f4c50bddf728c5efe7fe1fa"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-21-5.json",
+                       "blob":  "56adb6eb7b6c7572491287ed8ca554ea4d0cfdb9"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-21-6.json",
+                       "blob":  "64191941b717588bc1c26d3efba322bc330e5690"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-21-7.json",
+                       "blob":  "f5eed59d1cbd16174cf53c787cd1572dad92ba21"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-21-8.json",
+                       "blob":  "00b80a366af46e02e1206ff8e1fe3c245e6be844"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-22.json",
+                       "blob":  "79c5381dfc8dbff307979fd75f76b18409be6f0b"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-22-10.json",
+                       "blob":  "6e44f46769d1657d5a54d73cba3e9a100c8c0a15"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-22-11.json",
+                       "blob":  "92739d96b2516b34ee05a2e46e928184144631d8"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-22-2.json",
+                       "blob":  "11b5ebaacc333d06bbe2d4be41fc44a5178069c9"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-22-3.json",
+                       "blob":  "4b7a4c410e9c2c4ac2c592ce4c5eb048b1a9558b"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-22-4.json",
+                       "blob":  "710bc37f0a11a92087ac9a1d8e62699da7a95898"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-22-5.json",
+                       "blob":  "2b936772b8c8b03924085a42b50a6e8dcfc13e85"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-22-5.routing.json",
+                       "blob":  "bd6de418c80e25c105f91eb58462627781143b70"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-22-6.json",
+                       "blob":  "3967cf3f677c7dbc2324f7024ec88546bf4a1316"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-22-7.json",
+                       "blob":  "25ca49d5fb1db83f1f5299a0bdded6ea14828247"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-22-8.json",
+                       "blob":  "916da3116327709cdbdd55955ad29466257c59a5"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-22-9.json",
+                       "blob":  "10be2df03881ad305c4c3315f7fa59f1db5b72ad"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-24.json",
+                       "blob":  "fd4897e50233938de594dd19266afcfa1c730da6"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-24-2.json",
+                       "blob":  "afcb8697f41149ddd8c87f7f46c92c0a23545d16"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-24-3.json",
+                       "blob":  "1b5946a0b29299fd6e4ab59cc1f9c44a267636a5"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-25.json",
+                       "blob":  "3b483876ab4d9a74c140a49666f4fff0f6624fe4"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\plan-2026-09-25-2.json",
+                       "blob":  "d7dedd385bf44fc09cbdc3b3ca229b64c3427b5d"
+                   },
+                   {
+                       "path":  "grocery\\triage-plans\\registrar-2026-09-22.json",
+                       "blob":  "134007c9e7e6e820d94a0e7c90c3a01624dae919"
+                   },
+                   {
+                       "path":  "grocery\\verdict-suppressions.json",
+                       "blob":  "740f752b459ced36172612510d1d2aae09346571"
+                   },
+                   {
+                       "path":  "C:\\Users\\Owner\\AppData\\Local\\Temp\\claude\\C--Codex-ThriftyCrew\\134f2f6e-7fb9-4057-a890-b2c27ba9dfc0\\scratchpad\\triage-queue-snapshot.json",
+                       "blob":  "c47349e0f08ff3b22755d38f5b875bb35e205826"
+                   }
+               ],
+    "seconds":  1461.6
+}
