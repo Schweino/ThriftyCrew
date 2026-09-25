@@ -1,0 +1,522 @@
+{
+  "generated": "2026-09-25T10:00:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-23.json (week_of 2026-09-23), built 2026-09-25 08:14:10 by the 08:00 daily run; guards 08:15:35 'GUARDS-COMPLETE hard=0 warn=19 disposition=quarantined'; HEAD and origin/main 8581e0348 at measurement",
+  "queue_ids_seen": [
+    "2026-09-23-0c8e6e",
+    "2026-09-25-5d89a7",
+    "2026-09-25-cdba35",
+    "2026-09-24-f293ee",
+    "2026-09-24-924782",
+    "2026-09-24-a9e8a0",
+    "2026-09-25-af4f33",
+    "2026-09-23-822c30",
+    "2026-09-23-4090fc",
+    "2026-09-23-90de7b",
+    "2026-09-23-80f302",
+    "2026-09-23-92e552",
+    "2026-09-23-a83841",
+    "2026-09-25-114c1a",
+    "2026-09-23-4f9842",
+    "2026-09-23-be3b90",
+    "2026-09-22-a09096",
+    "2026-09-19-c9f0f3",
+    "2026-09-23-5ad03d",
+    "2026-09-21-dca1a1"
+  ],
+  "scope_note": "JOB 3 cheap lane (Class C/D ids named by the orchestrator) plus four lane items transcribed without implementation (a09096, c9f0f3, 5ad03d money; dca1a1 ops) so the gate sees them. Every other RESUME/DUE id is not in this plan and stays open for tomorrow.",
+  "untrusted_input_note": "No log, queue body or tool result read in this run addressed the agent or asked for anything. Nothing to quote.",
+  "knowledge_consulted": {
+    "searched": [
+      "bot checkout sync degraded replay",
+      "quarantine held value condemned withhold (nothing applicable: top hits were a course drop-file quarantine and decision notes, none on the board disposition)"
+    ],
+    "used": [
+      "reliability-craft/applies-here.md ('The 07:00 bot, the shared index, and the fix that never reached a commit'): a repair not on the HEAD the bot runs is not a repair - frames af4f33/114c1a as the reconcile fix be1380e42 absent from the stale HEAD the degraded sync left",
+      "design/PLAN-bot-dedicated-checkout-2026-09-25.md (orchestrator brief; section 0 and W0.2 at line 443): owner of the bot-checkout family"
+    ]
+  },
+  "routing_artifact": null,
+  "routing_artifact_note": "No item in this plan changes a matching rule.",
+  "items": [
+    {
+      "queue_id": "2026-09-23-0c8e6e",
+      "subject": "Grocery: GUARDS FAILED - board not published - 2026-09-23",
+      "classification": "infra",
+      "evidence": [
+        "grocery/ad-cycle-log.txt [2026-09-23T08:20:44] 'HOLD  a guard condemns the HELD value itself on vegetable-oil|Sam's Club (0.0373), so the last verified price is not safe to show either: HARD FAIL: 1.94x factor  vegetable-oil / Sam's Club  board=0.0373 link=0.0723' then 'GUARDS-COMPLETE hard=2 warn=19 disposition=hold' and 'GUARDS FAILED - board NOT republished'",
+        "re-measure today: [2026-09-25T08:15:35] 'guards: GUARDS-COMPLETE hard=0 warn=19 disposition=quarantined'; [08:16:43] 'QUARANTINED - 3 cell(s) held ... every other cell publishes'; grocery/out/chain-verdict.json 'verdict: quarantine', 'quarantined: 3'. 09-23 09:54 and 09-24 16:58 also ended 'disposition=quarantined'. So the instance does not reproduce.",
+        "grocery/cell-quarantine-lib.ps1:254-261 (Get-TcGuardsDisposition): a covered cell whose VALUE finding equals the held last-good per_unit adds a HOLD for the whole board, rather than withholding that one cell"
+      ],
+      "root_cause": "one cell holds the whole board: when the last verified value a quarantine held is itself condemned on the verify pass, Get-TcGuardsDisposition returns HOLD for the board instead of withholding the cell, which is the one-bad-item-holds-the-board shape Brad's 2026-09-21 ruling forbids (a held cell shows its last verified price, or is withheld).",
+      "root_fix": {
+        "what": "a condemned HELD value withholds its cell, not the board",
+        "files": [
+          "grocery/cell-quarantine-lib.ps1",
+          "grocery/apply-cell-quarantine.ps1"
+        ],
+        "exact_change": "Get-TcGuardsDisposition (cell-quarantine-lib.ps1:258): instead of adding a board HOLD, return the cell in a new 'reapply_withhold' list; guards/apply-cell-quarantine re-applies once with that cell forced to WITHHELD (reason 'the held value was itself condemned'), then guards runs again and must exit 4. A second condemnation after the forced withhold, or a cell that cannot be withheld, still HOLDS. The breaker counts are unchanged."
+      },
+      "leaves_open": "nothing inside the disposition; the other hold routes (unscoped failure, breaker) are by design",
+      "leaves_open_occurrences": 0,
+      "prior_closes": [
+        "2026-08-31-0465b5",
+        "2026-09-03-83b57e",
+        "2026-09-06-79fe01",
+        "2026-09-07-e9edb9",
+        "2026-09-10-d9e085",
+        "2026-09-18-f90ba6",
+        "2026-09-19-b66b54",
+        "2026-09-21-da5011"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/cell-quarantine-lib.ps1"
+        ],
+        "what": "the emitting decision withholds a cell whose held value is condemned instead of holding the board",
+        "exact_change": "as root_fix.exact_change: Get-TcGuardsDisposition returns reapply_withhold for a covered cell whose value finding equals the held per_unit; the board HOLD stays only for an unscoped failure, the breaker, or a cell condemned after its forced withhold"
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/test-cell-quarantine.ps1 (new MUST FIRE + CLEAN TWIN cases)",
+        "must_fire_case": "frozen 09-23 shape: board with vegetable-oil|Sam's Club covered last-good 0.0373 and a factor finding bad_per_unit 0.0373 -> disposition is reapply_withhold naming that cell, NOT hold",
+        "clean_twin": "a covered cell whose finding is on a different value (0.0625 vs held 0.1353, energy-drinks|Family Fare) stays covered and the disposition is quarantined, and an unscoped failure still returns hold",
+        "fixture_occurrences": [
+          "2026-08-31-0465b5",
+          "2026-09-03-83b57e",
+          "2026-09-06-79fe01",
+          "2026-09-07-e9edb9",
+          "2026-09-10-d9e085",
+          "2026-09-18-f90ba6",
+          "2026-09-19-b66b54",
+          "2026-09-21-da5011",
+          "2026-09-23-0c8e6e"
+        ],
+        "commands": [
+          "powershell -NoProfile -File grocery\\test-cell-quarantine.ps1"
+        ]
+      },
+      "blast_radius": {
+        "measured_as": "cells",
+        "measured_by": "grep of ad-cycle-log for guards disposition=hold with a HELD-value condemnation, 2026-09-21..2026-09-25",
+        "affected_now": 0,
+        "risk": "changes the board-publish decision only when a held value is condemned: 1 day of 5 in the quarantine era (09-23 08:20); no cell on today's board is in that state"
+      },
+      "rollback": "revert the two files; the disposition falls back to HOLD as today",
+      "freshness": "measured 2026-09-25 ~09:55 against HEAD/origin 8581e0348 and the 08:14 comparison-2026-09-23 build; re-measure if the board or the named file moved",
+      "resolution_note": "The 09-23 hold was one Sam's vegetable-oil held value condemned on the verify pass, which held the whole board; guards have ended quarantined since (09-23 09:54, 09-24, 09-25 hard=0). Fix: a condemned held value withholds its cell, not the board.",
+      "lane": "money",
+      "est_tool_calls": 35,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-25-5d89a7",
+      "subject": "Grocery bot checkout sync degraded - 2026-09-25 (PRIMARY for the bot-checkout family in this plan)",
+      "classification": "no-code-change",
+      "evidence": [
+        "queue body: 'local commit 447b42efe conflicts with upstream even under -X theirs (merge-tree rc 1): CONFLICT (rename/delete): grocery/out/browser-capture-due-2026-09-21.flag renamed to ...-2026-09-24.flag'",
+        "design/PLAN-bot-dedicated-checkout-2026-09-25.md:144 'ad 09-25 07:00 ... start and tail sync degraded/replay: local commit 447b42efe is patch-identical to 7e70f5fae on origin'; :443 'W0.2 The sync drops a local commit that is already upstream. File: lib/checkout-sync.ps1'",
+        "W0.2 not landed at measurement: git log origin/main --since '2026-09-24 18:00' -- lib/checkout-sync.ps1 returns nothing; today's data landed by hand as ae7434bf1 09:28 'today's stuck bot data, landed by hand past six duplicate commits'"
+      ],
+      "root_cause": "the bot shares its checkout and branch with sessions, so a session landing the bot's own commit through a worktree leaves a patch-identical local commit that the replay cannot merge (design D section 0: 6 of 10 non-first-round runs stopped by the shared checkout)",
+      "root_fix_none_because": "owned by design D in design/PLAN-bot-dedicated-checkout-2026-09-25.md: W0.2 (lib/checkout-sync.ps1 drops a local commit already upstream by patch-id) is being built by a sibling session, and Stage 2 (sessions never touch the production checkout) closes the foreign-file shape; this item stays open until W0.2 lands",
+      "leaves_open": "the whole family until W0.2 and Stage 2 land; owner design/PLAN-bot-dedicated-checkout-2026-09-25.md",
+      "leaves_open_occurrences": 4,
+      "resolution_note": "Owned by design D (PLAN-bot-dedicated-checkout-2026-09-25.md W0.2, sibling session). Left open until W0.2 lands; cdba35, f293ee, 924782, af4f33 and 114c1a are superseded into it.",
+      "lane": "ops",
+      "est_tool_calls": 0,
+      "status": "blocked",
+      "premise_verified": "true: 447b42efe is not on origin; ae7434bf1 landed today's data by hand; W0.2 not on origin/main",
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-25-cdba35",
+      "subject": "Grocery bot checkout sync degraded at the push - 2026-09-25",
+      "classification": "superseded",
+      "superseded_by": "2026-09-25-5d89a7",
+      "evidence": [
+        "queue body names the same 'local commit 447b42efe conflicts with upstream even under -X theirs (merge-tree rc 1)' as 5d89a7, at the tail sync of the same [ad] run"
+      ],
+      "root_cause": "same condition as 2026-09-25-5d89a7 (patch-identical local commit, W0.2)",
+      "resolution_note": "Superseded by 2026-09-25-5d89a7: the tail-sync half of the same degraded/replay on 447b42efe; the data landed by hand as ae7434bf1.",
+      "status": "superseded",
+      "close_disposition": "superseded"
+    },
+    {
+      "queue_id": "2026-09-24-f293ee",
+      "subject": "Grocery bot checkout sync partial - 2026-09-24",
+      "classification": "superseded",
+      "superseded_by": "2026-09-25-5d89a7",
+      "evidence": [
+        "queue body 'uncommitted work the bot does not own sits on path(s) first changed upstream by af7835422 ...: meal-prep/pipeline/audit-lane-shape.ps1 (M )'; design/PLAN-bot-dedicated-checkout-2026-09-25.md:143 records this exact run as a shared-checkout stop"
+      ],
+      "root_cause": "same family as 2026-09-25-5d89a7: a session's staged edit in the shared checkout (design D Stage 2)",
+      "resolution_note": "Superseded by 2026-09-25-5d89a7: design D's shared-checkout family (plan row at line 143), owned by PLAN-bot-dedicated-checkout-2026-09-25.md.",
+      "status": "superseded",
+      "close_disposition": "superseded"
+    },
+    {
+      "queue_id": "2026-09-24-924782",
+      "subject": "Grocery pipeline could not push - 2026-09-24 (RESUME, plan-2026-09-24.json deviated)",
+      "classification": "superseded",
+      "superseded_by": "2026-09-25-5d89a7",
+      "evidence": [
+        "plan-2026-09-24.json item leaves_open: 'a foreign file left dirty on an upstream-changed path past the 14:00 end of the task window still strands the commit'; deviation: 'tail sync blocked on meal-prep/pipeline/audit-lane-shape.ps1' - the same run design D row 143 records"
+      ],
+      "root_cause": "same family as 2026-09-25-5d89a7: the shared checkout strands the bot's push",
+      "resolution_note": "Superseded by 2026-09-25-5d89a7: its residual (a foreign file strands the commit) is design D's shared-checkout family; the retry it shipped (a9d1f1691) stays.",
+      "status": "superseded",
+      "close_disposition": "superseded"
+    },
+    {
+      "queue_id": "2026-09-24-a9e8a0",
+      "subject": "Daily chain left served files uncommitted - 2026-09-24",
+      "classification": "needs-more-time",
+      "evidence": [
+        "grocery/out/logs/capture-run-daily-2026-09-25.log 'served-dirty: 4 tracked served file(s) still dirty after the chain's commit:  M meal-prep/free-rotation.json |  M meal-prep/pipeline/v2-perserving.prev.json |  M meal-prep/recipes-db.json |  M public/free-dinners.json' - identical on 09-24 and 09-25",
+        "the four are still dirty now (git status), last written 2026-09-25 09:51:19, after the 09:28 hand landing ae7434bf1; public/free-dinners.json last committed cec9779a3 09-23; grocery/capture-run.ps1 names free-dinners only in a comment (line 1165)"
+      ],
+      "root_cause": "a writer in (or after) the chain rewrites the free-rotation outputs after the staging list is built; not a consequence of the unlanded push, since the files stay dirty after the push landed",
+      "resolution_note": "PROMOTE: contradicts the dispatch hypothesis. The same 4 files were served-dirty on 09-24 and 09-25 and are dirty now after ae7434bf1 landed, rewritten at 09:51; a writer/staging-list cause, not the stranded commit.",
+      "status": "promote"
+    },
+    {
+      "queue_id": "2026-09-25-af4f33",
+      "subject": "Grocery pipeline: feed did not truly refresh - 2026-09-25",
+      "classification": "superseded",
+      "superseded_by": "2026-09-25-5d89a7",
+      "evidence": [
+        "the reconcile that removes held slugs from published-hashes.json (be1380e42, 09-24 16:40, wired at grocery/check-ad-cycles.ps1:1321) is NOT an ancestor of 327b471b4, a7f0ea126 or 0c9d8a903, the stale HEADs today's degraded runs executed (git merge-base --is-ancestor rc 1 each); meal-prep/db/published-hashes.json last written 09-24 09:20 and still keys spicy-pork-noodles, ground-turkey-lo-mein, beef-chow-mein-noodles"
+      ],
+      "root_cause": "today's runs executed code 39 commits behind origin because the start sync degraded (5d89a7), so the 755c23 fix never ran in the main checkout",
+      "resolution_note": "Superseded by 2026-09-25-5d89a7: the 755c23 reconcile (be1380e42) was not on the HEAD today's degraded runs executed; it runs on the next run that syncs.",
+      "status": "superseded",
+      "close_disposition": "superseded"
+    },
+    {
+      "queue_id": "2026-09-23-822c30",
+      "subject": "Grocery capture watchdog: RUN RECORD 2026-09-23",
+      "classification": "needs-more-time",
+      "evidence": [
+        "grocery/out/logs/capture-run-ad-2026-09-23.log 'FAILED LANES: commit-size-gate'",
+        "capture-watchdog-2026-09-24.log 'RUN RECORD: capture-run [daily] exit 1 - failed lane(s) with no page of their own: guards-blocked (paged as themselves: sync ...)'; today's watchdog (10:30) had not run at measurement"
+      ],
+      "root_cause": "RUN RECORD folds any exit-1 run; 09-23's cause was a commit-size-gate lane, a different cause from the 09-24/25 bot-checkout runs",
+      "resolution_note": "PROMOTE: RETURN of 7c932a with a cause (commit-size-gate refused the 09-23 [ad] commit) that no item here owns and that did not fit the budget to trace.",
+      "status": "promote"
+    },
+    {
+      "queue_id": "2026-09-23-4090fc",
+      "subject": "Grocery capture watchdog: AD STALE 2026-09-23",
+      "classification": "no-code-change",
+      "evidence": [
+        "capture-run-ad-2026-09-23.log 'lanes run=1 failed=0 browser-pending=1': the Wednesday ad turnover left one browser store pending that morning",
+        "capture-watchdog-2026-09-24.log carries no AD STALE finding; ad-cycle-log [2026-09-25T08:26:39] board-freshness: all 7 stores 'withheld for age 0' of their judged rows"
+      ],
+      "root_cause": "the ad week turned over on Wednesday 09-23 and one browser-lane store had not been pulled by the 10:30 watchdog; the pull landed and the check cleared the next day",
+      "prevention_none_because": "the watchdog paged a true one-day browser-pending state that cleared by itself; nothing upstream was wrong",
+      "resolution_note": "By design: one store pending the Wednesday browser pull on ad-turnover day; no AD STALE on 09-24, every store fresh on 09-25.",
+      "status": "done",
+      "close_disposition": "by-design",
+      "premise_verified": "true: 09-24 watchdog has no AD STALE line"
+    },
+    {
+      "queue_id": "2026-09-23-90de7b",
+      "subject": "Grocery capture watchdog: NO FRESH ROWS 2026-09-23 (Hy-Vee)",
+      "classification": "needs-more-time",
+      "evidence": [
+        "capture-watchdog-2026-09-24.log 'NO FRESH ROWS: Hy-Vee ... ZERO rows dated 2026-09-24 (newest 2026-09-22, 2d old)' - it recurred",
+        "yet grocery/out/regular/hyvee-regular-2026-09-23.json (1,649,314 B, 09-23 10:39), -2026-09-24.json (1,681,788 B, 09-24 16:39) and -2026-09-25.json (1,682,385 B, 08:00:47) exist and the lane logged 'Hy-Vee rc=0'"
+      ],
+      "root_cause": "the watchdog's freshness read (capture-watchdog.ps1:1932) and the Hy-Vee lane disagree on whether a day's rows exist; unresolved inside the budget",
+      "resolution_note": "PROMOTE: evidence contradicts the alert - Hy-Vee wrote a 1.6 MB regular file each day 09-23..09-25 while the watchdog read newest 2026-09-22 twice; watchdog-vs-lane disagreement needs the reviewer.",
+      "status": "promote"
+    },
+    {
+      "queue_id": "2026-09-23-80f302",
+      "subject": "Grocery page HELD after its data shipped - 2026-09-23",
+      "classification": "needs-more-time",
+      "evidence": [
+        "capture-run-daily-2026-09-24.log 'REVIEW    commodity matching changed vs baseline (a product MOVED/DROPPED) ... publish will HOLD until reviewed + audit-match-soundness.ps1 -Accept'",
+        "ad-cycle-log [2026-09-25T08:23:53] match-soundness 'MOVED lotion -> facial-tissues', DROPPED carrots, tea-bags, limes, toothbrushes, cucumbers, 'CAUSE [RULE CHANGE UNREVIEWED]'; grocery/out/post-deferred.json rewritten 2026-09-25 08:16:44"
+      ],
+      "root_cause": "the soundness baseline is unaccepted after rule changes, so every day's post holds on review; accepting a matching baseline is a matching decision",
+      "resolution_note": "PROMOTE: live today (soundness REVIEW, post deferred 08:16); the fix is a matching-baseline review (money lane), not a cheap item.",
+      "status": "promote"
+    },
+    {
+      "queue_id": "2026-09-23-92e552",
+      "subject": "Grocery: board cells quarantined - 2026-09-23",
+      "classification": "needs-more-time",
+      "evidence": [
+        "ad-cycle-log [2026-09-25T08:16:43] 'QUARANTINED - 3 cell(s) held ...' and 'quarantine set unchanged since the last page': energy-drinks|Family Fare and lotion|Walmart (unit-basis volume among weights), yellow-bell-pepper|Family Fare (withheld, flag verification)",
+        "same day soundness 'MOVED lotion -> facial-tissues 'Puffs Plus Lotion 2-Ply Facial Tissues''"
+      ],
+      "root_cause": "the quarantine is working as ruled; the three cells stay held because their underlying product/basis defects are live and their fix is matching or pricing (money lane)",
+      "resolution_note": "PROMOTE: live today, same 3 cells; the fix touches matching/pricing files on THE LINE (commodities.json), so it belongs to the money lane.",
+      "status": "promote"
+    },
+    {
+      "queue_id": "2026-09-23-a83841",
+      "subject": "The knowledge store's nightly pass went RED",
+      "classification": "needs-more-time",
+      "evidence": [
+        "C:\\Users\\Owner\\.claude\\recall-sleep-latest.md (2026-09-25 04:41): '**brain commit hook** (exit 1): BROKEN', 'forgetting (exit 1): waiting on a judgement', 'memory clusters (exit 1): waiting on a judgement', '**gate** (exit 1): BROKEN'",
+        "Get-ScheduledTaskInfo 'TC Recall Sleep 0435' last 2026-09-25 09:35:02 rc=1"
+      ],
+      "root_cause": "still RED today with two BROKEN steps (gate, brain commit hook), beyond the judgement-queue residual 4fc24c left",
+      "resolution_note": "PROMOTE: live red today (gate and brain commit hook BROKEN), RETURN x3; needs diagnosis beyond the cheap budget.",
+      "status": "promote"
+    },
+    {
+      "queue_id": "2026-09-25-114c1a",
+      "subject": "Live recipe prices: a placeholder names something the feed does not carry",
+      "classification": "superseded",
+      "superseded_by": "2026-09-25-5d89a7",
+      "evidence": [
+        "same slugs as af4f33 (andong-jjimdak-braised-chicken, beef-chow-mein-noodles, ...), held recipes still keyed in meal-prep/db/published-hashes.json because the be1380e42 reconcile was not on the HEAD today's degraded runs executed"
+      ],
+      "root_cause": "same condition as 2026-09-25-af4f33, itself 2026-09-25-5d89a7's stale HEAD",
+      "resolution_note": "Superseded by 2026-09-25-5d89a7 (via af4f33): held recipes' keys survive because today's runs executed pre-be1380e42 code.",
+      "status": "superseded",
+      "close_disposition": "superseded"
+    },
+    {
+      "queue_id": "2026-09-23-4f9842",
+      "subject": "Automation silent-death: TASK FAILED (Recall Sleep, Daily Ratchets)",
+      "classification": "needs-more-time",
+      "evidence": [
+        "Get-ScheduledTaskInfo today: 'TC Recall Sleep 0435' last 09/25/2026 09:35:02 rc=1; 'TC Daily Ratchets 0315' last 09/25/2026 03:15:01 rc=1",
+        "capture-watchdog-2026-09-24.log '!! TASK FAILED: 'TC Daily Ratchets 0315' last result 1'"
+      ],
+      "root_cause": "both tasks still exit 1 daily; Recall Sleep is a83841's red, Daily Ratchets is an unowned separate failure",
+      "resolution_note": "PROMOTE: both tasks still fail today (rc=1); the Daily Ratchets half has no owner and was not traced inside the budget.",
+      "status": "promote"
+    },
+    {
+      "queue_id": "2026-09-23-be3b90",
+      "subject": "Live recipe price monitor could not look",
+      "classification": "no-code-change",
+      "evidence": [
+        "queue body 'beef-chow-mein-noodles : public page did not load: (404) Not Found' - a held (draft) recipe, 755c23's condition",
+        "ad-cycle-log [2026-09-25T08:26:38] 'live-recipe-prices exit 0: LIVE-RECIPE-PRICES-COMPLETE pages=15 clean=15 legacy=0 findings=0 blind=0'"
+      ],
+      "root_cause": "the monitor was pointed at a held recipe still listed as published (755c23, fixed by be1380e42)",
+      "prevention_none_because": "the producer fix is 755c23's reconcile (be1380e42); the monitor itself was right to say it could not look",
+      "resolution_note": "No longer reproduces: today's live monitor read 15 of 15 pages clean, blind=0. The 404 was a held recipe listed as published, 755c23's condition.",
+      "status": "done",
+      "close_disposition": "confirmed",
+      "premise_verified": "true: 2026-09-25 08:26 monitor blind=0"
+    },
+    {
+      "queue_id": "2026-09-22-a09096",
+      "subject": "Grocery: price disagreement - Hummus at Sam's Club (RESUME, plan-2026-09-22.json deviated)",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "plan-2026-09-22.json leaves_open: '5 size-string shapes still read differently by the two parsers over comparison-2026-09-22, of 2,584 comparable strings'; -Board deliberately not wired into the daily chain"
+      ],
+      "root_cause": "carried from plan-2026-09-22.json: 'what quantity does this size string state' is one rule with two implementations (engine Get-SizeAmount, pu-lib Get-LinkPerUnit) and nothing proved they agreed",
+      "root_fix": {
+        "what": "close the 5 remaining parser divergences, then wire audit-size-parser-parity -Board into the daily chain",
+        "files": [
+          "grocery/audit-size-parser-parity.ps1"
+        ],
+        "exact_change": "resolve each of the 5 shapes in the weaker reader (never the engine without the money review), then add -Board to the chain at exit 0"
+      },
+      "leaves_open": "the 5 shapes until built",
+      "leaves_open_occurrences": 5,
+      "proof": {
+        "must_fire_case": "eggs|Sam's Club '15 dozen' read by both parsers must agree (today 29.56 vs 1.9707)",
+        "clean_twin": "the 20-row frozen parity corpus stays agree",
+        "guard_or_fixture": "grocery/audit-size-parser-parity.ps1 -SelfTest"
+      },
+      "resolution_note": "Transcribed for the money lane; not implemented in this plan.",
+      "lane": "money",
+      "est_tool_calls": 40,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null,
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "plan-2026-09-22.json: parity over 2,584 comparable size strings on comparison-2026-09-22",
+        "affected_now": 5,
+        "risk": "a parser change moves a per-unit on up to 5 cells (deli-ham|Fareway, taco-seasoning|Walmart, aluminum-foil|Fareway, instant-coffee|Family Fare, eggs|Sam's Club); re-measure on the current board first"
+      },
+      "rollback": "revert the parser hunk and the chain wiring",
+      "freshness": "carried from plan-2026-09-22.json (comparison-2026-09-22); re-run the parity over comparison-2026-09-23 before building"
+    },
+    {
+      "queue_id": "2026-09-19-c9f0f3",
+      "subject": "Grocery: 2 on-sale items have no everyday fallback (RESUME, plan-2026-09-22-9.json deviated)",
+      "classification": "infra",
+      "evidence": [
+        "plan-2026-09-22-9.json leaves_open: 'audit-instore-channel.ps1 still writes channel-doubt cells to research-worklist.json, whose only reader is prose ... the live SKILL section D still describes research-worklist.json as the sale-fallback list'"
+      ],
+      "root_cause": "carried from plan-2026-09-22-9.json: ownership of a fallback gap was asserted by a label chosen from a hard-coded store list and no owner's worklist contained the gap; the residual is a writer whose only reader is prose",
+      "root_fix": {
+        "what": "retire the prose-only reader: the live browser SKILL's section D names the worklist terms, and research-worklist.json's channel-doubt writer gets a code reader or is removed",
+        "files": [
+          "grocery/audit-sale-fallback.ps1"
+        ],
+        "exact_change": "per plan-2026-09-22-9.json leaves_open; edit the live prompt then mirror it"
+      },
+      "leaves_open": "the prose-only research-worklist reader until built",
+      "leaves_open_occurrences": 0,
+      "proof": {
+        "must_fire_case": "audit-sale-fallback reports a gap no plan-owned worklist carries",
+        "clean_twin": "a gap carried in Get-CaptureWorklist sale_fallback_terms reads owned",
+        "guard_or_fixture": "grocery/audit-sale-fallback.ps1 -SelfTest",
+        "fixture_occurrences": [
+          "2026-09-06-22b4dd",
+          "2026-09-19-c9f0f3"
+        ]
+      },
+      "resolution_note": "Transcribed for the money lane; not implemented in this plan.",
+      "lane": "money",
+      "est_tool_calls": 25,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null,
+      "prior_closes": [
+        "2026-09-06-22b4dd"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/audit-sale-fallback.ps1"
+        ],
+        "what": "the emitting check proves ownership from a code worklist, and the prose-only research-worklist reader is retired",
+        "exact_change": "audit-sale-fallback counts a gap owned only when Get-CaptureWorklist carries it; audit-instore-channel stops writing research-worklist.json or a code reader consumes it"
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "plan-2026-09-22-9.json leaves_open: one writer (audit-instore-channel.ps1) and one prose reader (browser SKILL section D)",
+        "affected_now": 1,
+        "risk": "the live browser prompt must be edited then mirrored; no price moves"
+      },
+      "rollback": "revert the audit and prompt edits",
+      "freshness": "carried from plan-2026-09-22-9.json; re-read sale-fallback-gaps.json before building"
+    },
+    {
+      "queue_id": "2026-09-23-5ad03d",
+      "subject": "Price surfaces disagree with the manifest x4 (RETURN of 2026-09-10-1fa212)",
+      "classification": "infra",
+      "evidence": [
+        "queue body: 'cheap-dinners rows=587 findings=234', 'dinner-tonight rows=587 findings=234', 'payday-stretcher findings=0', 'hub (live, working-tree) findings=0' (guards_rc=4, QUARANTINE)"
+      ],
+      "root_cause": "carried from plan-2026-09-10.json 1fa212: the audit's reference differs by surface and day; today the two tool pages lag the working-tree manifest by up to 6 cents on 234 of 587 rows while the hub agrees, so the tool pages were not republished after the manifest moved",
+      "root_fix": {
+        "what": "republish the two tool pages from the chain whenever the manifest they render moved, so the audit's working-tree reference and the live pages cannot drift",
+        "files": [
+          "site/build/publish-tool-post.ps1",
+          "meal-prep/pipeline/audit-surface-staleness.ps1"
+        ],
+        "exact_change": "to be sized by the money lane: the chain calls publish-tool-post for cheap-dinners-right-now and dinner-tonight after compute-v2 when their source hash moved"
+      },
+      "leaves_open": "until built",
+      "leaves_open_occurrences": 4,
+      "prior_closes": [
+        "2026-09-10-1fa212"
+      ],
+      "prevention": {
+        "source": [
+          "site/build/publish-tool-post.ps1"
+        ],
+        "what": "the tool-page producer republishes when its manifest moved",
+        "exact_change": "chain step after compute-v2: publish-tool-post for each tool page whose rendered source hash differs from the live one"
+      },
+      "proof": {
+        "must_fire_case": "frozen manifest moved 0.04 on albondigas-en-chipotle-rice-bowls with the tool page unrepublished -> audit-surface-staleness reports cheap-dinners STALE",
+        "clean_twin": "after the chain republishes, the same rows read findings=0",
+        "fixture_occurrences": [
+          "2026-09-10-1fa212",
+          "2026-09-23-5ad03d"
+        ],
+        "guard_or_fixture": "meal-prep/pipeline/audit-surface-staleness.ps1 -SelfTest"
+      },
+      "resolution_note": "Transcribed for the money lane; not implemented in this plan.",
+      "lane": "money",
+      "est_tool_calls": 40,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null,
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "queue body: audit-surface-staleness over 587 rows per surface",
+        "affected_now": 234,
+        "risk": "two tool pages republished from the chain; hub and payday-stretcher unaffected (0 findings)"
+      },
+      "rollback": "remove the chain step; pages stay as last published",
+      "freshness": "queue body of 2026-09-23-5ad03d (guards_rc=4 day); re-run audit-surface-staleness on the current manifest before building"
+    },
+    {
+      "queue_id": "2026-09-21-dca1a1",
+      "subject": "Grocery: Sam's 'fluid ounce (us)' / 'gallon (us)' / 'gl' unit spellings refused (RESUME, plan-2026-09-22-5.json deviated)",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "plan-2026-09-22-5.json deviation: 'Surface fix only. The per-reason reject spike page in the daily chain (root fix) was not built inside this run's ceiling.'; leaves_open 1 occurrence (2026-09-21, 52 rows)"
+      ],
+      "root_cause": "carried from plan-2026-09-22-5.json: an unknown unit spelling is refused silently into a rejects file (F4), so a store-side rendering change costs coverage without a page",
+      "root_fix": {
+        "what": "a per-reason reject spike page in the daily chain",
+        "files": [
+          "grocery/build-sams-deals.ps1"
+        ],
+        "exact_change": "compare today's per-reason reject counts in out/sams/sams-rejects-*.json with the previous capture's and page a new reason, or a reason that grew past its prior count, through Send-Alert (registry entry added)"
+      },
+      "leaves_open": "the same shape at the other builders until each reports per-reason rejects",
+      "leaves_open_occurrences": 1,
+      "proof": {
+        "must_fire_case": "frozen rejects: 2026-09-20 0x 'fluid ounce (us)', 2026-09-21 52x -> spike page names the reason",
+        "clean_twin": "an unchanged 53x 'sq ft' reason day over day stays quiet",
+        "guard_or_fixture": "grocery/build-sams-deals.ps1 -SelfTest"
+      },
+      "resolution_note": "Transcribed for the ops lane; not implemented in this plan.",
+      "lane": "ops",
+      "est_tool_calls": 30,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null,
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "plan-2026-09-22-5.json: 52 + 1 + 2 rows of new spellings on 2026-09-21",
+        "affected_now": 0,
+        "risk": "a new page only; no row is admitted or refused differently"
+      },
+      "rollback": "remove the spike comparison; rejects keep landing in the file as today",
+      "freshness": "carried from plan-2026-09-22-5.json; read the newest out/sams/sams-rejects-*.json before building"
+    }
+  ],
+  "lane_budget": {
+    "money": {
+      "ceiling": 200,
+      "planned": 140,
+      "items": [
+        "2026-09-23-0c8e6e (35)",
+        "2026-09-22-a09096 (40)",
+        "2026-09-19-c9f0f3 (25)",
+        "2026-09-23-5ad03d (40)"
+      ]
+    },
+    "ops": {
+      "ceiling": 100,
+      "planned": 30,
+      "items": [
+        "2026-09-21-dca1a1 (30)",
+        "2026-09-25-5d89a7 (0, blocked on design D W0.2)"
+      ]
+    }
+  },
+  "ship_sequence": [
+    "money: 2026-09-23-0c8e6e (cell-quarantine-lib + test-cell-quarantine), 2026-09-22-a09096, 2026-09-19-c9f0f3, 2026-09-23-5ad03d",
+    "ops: 2026-09-21-dca1a1",
+    "orchestrator: send the promote items (a9e8a0, 822c30, 90de7b, 80f302, 92e552, a83841, 4f9842) to the reviewer; close the superseded/done items only after landing"
+  ],
+  "open_questions_for_brad": []
+}
