@@ -1011,6 +1011,37 @@ function Test-RhInFlightLive($Rec) {
   return ([string]$st -eq [string]$Rec.pid_start)
 }
 
+function Wait-RhInFlightKey {
+  <# E1 of design\PLAN-faster-pushes-no-accuracy-loss-2026-09-25.md: a push that would rehearse KEY waits for a LIVE early
+     run of that EXACT key (any checkout) to end, instead of starting a second, identical rehearsal beside it. Measured
+     before this: 6 of 16 chain landings did exactly that. Returns Outcome none (no live run of the key; nothing waited),
+     ended (the run is no longer live; the caller re-reads the verdict and rehearses itself when there is none), stopped
+     (this run's own stop file appeared) or timeout (MaxMin passed; the caller rehearses itself), and Polls. It never
+     decides a verdict: the caller reads the recorded one, exactly as it reads any other. -OnPoll is the self-test's seam. #>
+  param([string]$VerdictDir, [string]$Key, [int]$MaxMin = 90, [int]$PollMs = 5000, [scriptblock]$OnPoll = $null, [scriptblock]$Say = $null)
+  $earlyDir = Join-Path $VerdictDir 'early'
+  $findLive = {
+    if (-not $Key -or -not [IO.Directory]::Exists($earlyDir)) { return $null }
+    foreach ($f in [IO.Directory]::GetFiles($earlyDir, '*.json')) {
+      $o = $null; try { $o = [IO.File]::ReadAllText($f) | ConvertFrom-Json } catch { $o = $null }
+      if ($o -and [string]::Equals([string]$o.key, $Key, [StringComparison]::Ordinal) -and (Test-RhInFlightLive $o)) { return $o }
+    }
+    return $null
+  }
+  $live = & $findLive
+  if ($null -eq $live) { return [pscustomobject]@{ Outcome = 'none'; Polls = 0 } }
+  if ($Say) { & $Say ('chain-rehearsal: an early rehearsal of this exact content is already running (pid ' + $live.pid + ', key ' + $Key.Substring(0, 12) + '); waiting for its verdict instead of starting a second one') }
+  $sw = [Diagnostics.Stopwatch]::StartNew(); $polls = 0
+  while ($true) {
+    if (Test-RhStopped) { return [pscustomobject]@{ Outcome = 'stopped'; Polls = $polls } }
+    if ($sw.Elapsed.TotalMinutes -ge $MaxMin) { return [pscustomobject]@{ Outcome = 'timeout'; Polls = $polls } }
+    if ($OnPoll) { & $OnPoll $polls }
+    Start-Sleep -Milliseconds $PollMs
+    $polls++
+    if ($null -eq (& $findLive)) { return [pscustomobject]@{ Outcome = 'ended'; Polls = $polls } }
+  }
+}
+
 function Invoke-RhEarly {
   <# -EARLY (W9.1 step 2): rehearse $Commit rebased onto $Onto (or the stack a -StackFile lists) as the speculative
      rehearsal a commit starts, under every rule of a push-time one plus four of its own:
@@ -1985,7 +2016,30 @@ if ($SelfTest) {
   $hkSet = Get-RhManifestSet $script:RhRoot 'HEAD'
   Test-RhCase 'MUST FIRE  a pre-commit edit is a manifest change (the rehearsal commits through that hook)' { ($hkSet.Ok -and $hkSet.Set.ContainsKey('ops/hooks/pre-commit')), ('ok=' + $hkSet.Ok + ' why=' + $hkSet.Why) }
   Test-RhCase 'MUST NOT FIRE  a pre-push or commit-msg edit demands no rehearsal it cannot exercise' { ($hkSet.Ok -and -not $hkSet.Set.ContainsKey('ops/hooks/pre-push') -and -not $hkSet.Set.ContainsKey('ops/hooks/commit-msg')), ('ok=' + $hkSet.Ok) }
-  $want = 63
+  # E1 (PLAN-faster-pushes-no-accuracy-loss-2026-09-25): a push waits for a LIVE early run of its exact key. The live run
+  # is a real child process held open on a release file the case controls, never a clock: the first poll releases it,
+  # so the wait can only end by seeing the process gone.
+  $e1Root = Join-Path $env:TEMP ('rh-e1-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  $null = New-Item -ItemType Directory -Force -ErrorAction Stop (Join-Path $e1Root 'early')
+  $e1Rel = Join-Path $e1Root 'release'
+  $e1Key = ('ab' * 32)
+  $e1Hold = Start-Process -FilePath 'powershell.exe' -PassThru -WindowStyle Hidden -ArgumentList @('-NoProfile', '-Command', ('while (-not (Test-Path -LiteralPath ''' + $e1Rel + ''')) { Start-Sleep -Milliseconds 100 }'))
+  $null = $e1Hold.Handle
+  try {
+    $e1Rec = [ordered]@{ pid = $e1Hold.Id; pid_start = [string]$e1Hold.StartTime.ToUniversalTime().Ticks; key = $e1Key }
+    [IO.File]::WriteAllText((Join-Path $e1Root 'early\x.json'), ($e1Rec | ConvertTo-Json -Compress))
+    $e1Other = Wait-RhInFlightKey -VerdictDir $e1Root -Key ('cd' * 32) -PollMs 50
+    Test-RhCase 'MUST NOT FIRE  a live early run of a DIFFERENT key is not waited for (outcome none, 0 polls)' { (($e1Other.Outcome -ceq 'none') -and ($e1Other.Polls -eq 0)), ('outcome=' + $e1Other.Outcome + ' polls=' + $e1Other.Polls) }
+    $e1Same = Wait-RhInFlightKey -VerdictDir $e1Root -Key $e1Key -PollMs 50 -MaxMin 2 -OnPoll { param($n) if ($n -eq 0) { [IO.File]::WriteAllText($e1Rel, 'go') } }
+    Test-RhCase 'MUST FIRE  a live early run of the SAME key is waited for until its process is gone (outcome ended, at least 1 poll, the holder exited)' { (($e1Same.Outcome -ceq 'ended') -and ($e1Same.Polls -ge 1) -and $e1Hold.WaitForExit(30000)), ('outcome=' + $e1Same.Outcome + ' polls=' + $e1Same.Polls + ' exited=' + $e1Hold.HasExited) }
+    $e1Dead = Wait-RhInFlightKey -VerdictDir $e1Root -Key $e1Key -PollMs 50
+    Test-RhCase 'CLEAN TWIN  a record whose process has exited is not live, so a push rehearses at once as before (outcome none, 0 polls)' { (($e1Dead.Outcome -ceq 'none') -and ($e1Dead.Polls -eq 0)), ('outcome=' + $e1Dead.Outcome + ' polls=' + $e1Dead.Polls) }
+  } finally {
+    [IO.File]::WriteAllText($e1Rel, 'go')
+    if (-not $e1Hold.HasExited) { $null = $e1Hold.WaitForExit(10000) }
+    Remove-Item -LiteralPath $e1Root -Recurse -Force -ErrorAction SilentlyContinue
+  }
+  $want = 66
   if ($script:rhCases -ne $want) { Write-Output ('rehearse-chain self-test FAIL: ran {0} case(s), the suite lists {1}' -f $script:rhCases, $want); exit 1 }
   if ($script:rhFail) { Write-Output ('rehearse-chain self-test FAIL: {0} of {1} case(s)' -f $script:rhFail, $script:rhCases); exit 1 }
   Write-Output ('rehearse-chain self-test PASS: {0} of {0} cases - led by the founding defect (an empty cost-flags.txt refused by the 09-05 hook) and a manifest change with no verdict being refused' -f $script:rhCases)
@@ -2080,6 +2134,24 @@ if ($ForPush) {
       }
     }
     $d = Get-RhPushDecision -Repo $decRepo -RefLines @($line) -Branch $Branch -VerdictDir $vdir -Today (Get-Date) -Bypass $bypass
+    if (-not $bypass -and ($d.Outcome -eq 'no-verdict' -or $d.Outcome -eq 'stale')) {
+      # E1 (PLAN-faster-pushes-no-accuracy-loss-2026-09-25): an early rehearsal of this EXACT key already running is
+      # waited for, never duplicated. Its verdict is read below exactly as any recorded verdict is; if it ends with none
+      # (stopped, blind, died) or the wait times out, this push rehearses itself as before.
+      $lf = @(([string]$line).Trim() -split '\s+')
+      $trK = Get-RhTrigger -Repo $decRepo -Base $lf[3] -Tip $lf[1]
+      $wantKey = $(if (-not $trK.Absent -and -not $trK.Blind -and $trK.Manifest) { [string]$trK.Manifest.Key } else { '' })
+      $wt = Wait-RhInFlightKey -VerdictDir $vdir -Key $wantKey -MaxMin $ChainTimeoutMin -Say { param($t) Write-Output $t }
+      if ($wt.Outcome -eq 'stopped') {
+        Write-Output 'chain-rehearsal: STOPPED - this run''s stop file appeared while it waited for the early rehearsal; nothing is recorded for this content'
+        Write-Output 'CHAIN-REHEARSAL-CHECK-COMPLETE code=3 outcome=could-not-rehearse blind=stopped'
+        exit 3
+      }
+      if ($wt.Outcome -ne 'none') {
+        Write-Output ('chain-rehearsal: the early rehearsal it waited for is over (' + $wt.Outcome + ' after ' + $wt.Polls + ' poll(s)); reading the recorded verdict')
+        $d = Get-RhPushDecision -Repo $decRepo -RefLines @($line) -Branch $Branch -VerdictDir $vdir -Today (Get-Date) -Bypass $bypass
+      }
+    }
     if (-not $bypass -and ($d.Outcome -eq 'no-verdict' -or $d.Outcome -eq 'stale')) {
       Write-Output 'chain-rehearsal: this push changes the chain and has no usable rehearsal verdict - rehearsing HEAD now, OUTSIDE the push lock.'
       $rec = Invoke-RhRehearsal -Repo $repoTop -Commit 'HEAD' -SourceRoot $Source -Remote $Remote -Branch $Branch -VerdictDir $vdir -NoPair:$NoPair -TimeoutMin $ChainTimeoutMin -Stack $stack

@@ -755,6 +755,7 @@ $gateKey = New-Object string[] $allJobs.Count
 $gateCachePath = New-Object string[] $allJobs.Count
 $cacheHit = New-Object bool[] $allJobs.Count
 $cacheVerdict = New-Object string[] $allJobs.Count
+$unkeyWhy = New-Object string[] $allJobs.Count
 $reusedCount = 0; $unkeyable = 0
 $nowUtcKey = [DateTime]::UtcNow
 if ($cacheDir) {
@@ -762,7 +763,7 @@ if ($cacheDir) {
     $fullPath = [string]$selfKeys[$i]
     $swName = '-' + [string]$selfSwitch[$fullPath]
     $k = Get-TcGateInputKey -Repo $repo -GateFile $fullPath -GateArg $swName -RunnerFiles $runnerFiles
-    if (-not $k.Ok) { $unkeyable++; continue }
+    if (-not $k.Ok) { $unkeyable++; $unkeyWhy[$offSelf + $i] = [string]$k.Why; continue }
     $idx = $offSelf + $i
     $gateKey[$idx] = $k.Key
     # NAMED BY THE PATH BELOW THE CHECKOUT AND BY THE KEY, never by $fullPath (2026-09-12). The full path made every
@@ -793,7 +794,7 @@ if ($cacheDir -and $pyRunner.Count) {
     $pyParts = ([string]$pySuiteKeys[$i]) -split '\|', 2
     $pyFull = Join-Path $repo $pyParts[0]
     $k = Get-TcGateInputKey -Repo $repo -GateFile $pyFull -GateArg $pyParts[1] -RunnerFiles $pyRunner
-    if (-not $k.Ok) { continue }
+    if (-not $k.Ok) { $unkeyWhy[$offPySuite + $i] = [string]$k.Why; continue }
     $idx = $offPySuite + $i
     $gateKey[$idx] = $k.Key
     $gateCachePath[$idx] = Get-TcGateCachePath -CacheDir $cacheDir -GateId (Get-TcGateCacheId -Repo $repo -GateFile $pyFull -GateArg $pyParts[1] -Key $k.Key)
@@ -879,6 +880,30 @@ if ($cacheDir) {
   $pruned = 0
   try { $pruned = Remove-TcGateStaleEntries -CacheDir $cacheDir -NowUtc ([DateTime]::UtcNow) } catch { $pruned = 0 }
   if ($pruned -gt 0) { Write-Output ("run-gates: removed {0} gate cache entr(y/ies) past the {1}h backstop - none of them could have been reused." -f $pruned, $script:TcGateKeyMaxAgeHours) }
+}
+# EACH GATE'S OWN TIME AND WHY IT COULD NOT BE SKIPPED (G1 of design\PLAN-faster-pushes-no-accuracy-loss-2026-09-25.md).
+# Nothing recorded either before this, so "convert the slowest unkeyable gates first" had no list to start from. One row
+# per job per run, outside the repo (%LOCALAPPDATA%\ThriftyCrew\gate-times, or TC_GATE_TIMES_ROOT; 'off' writes nothing),
+# appended through Add-TcLine because concurrent runs share the day's file. It only records: a failure to write is
+# swallowed and changes no verdict. state is reused, ran or unkeyable; why is the key's own refusal.
+$gtRoot = $(if ($env:TC_GATE_TIMES_ROOT) { [string]$env:TC_GATE_TIMES_ROOT } elseif ($env:LOCALAPPDATA) { Join-Path $env:LOCALAPPDATA 'ThriftyCrew\gate-times' } else { '' })
+if ($gtRoot -and $gtRoot -ne 'off') {
+  try {
+    . (Join-Path $repo 'lib\append-line.ps1')
+    if (-not [IO.Directory]::Exists($gtRoot)) { $null = [IO.Directory]::CreateDirectory($gtRoot) }
+    $gtFile = Join-Path $gtRoot ('gate-times-' + (Get-Date -Format 'yyyy-MM-dd') + '.jsonl')
+    $gtRun = ([string]$PID + '@' + [DateTime]::UtcNow.ToString('o'))
+    $gtRepoFull = ([IO.Path]::GetFullPath($repo)).TrimEnd('\') + '\'
+    for ($i = 0; $i -lt $allJobs.Count; $i++) {
+      $gj = $allJobs[$i]; $gr = $allRes[$i]
+      $gName = ''; $gArg = ''
+      foreach ($ga in @($gj.ArgList)) { $gs = [string]$ga; if (-not $gName -and $gs -match '\.(ps1|py)$') { $gName = $gs } elseif ($gName -and -not $gArg -and $gs -match '^-') { $gArg = $gs } }
+      if ($gName.StartsWith($gtRepoFull, [StringComparison]::OrdinalIgnoreCase)) { $gName = $gName.Substring($gtRepoFull.Length) }
+      $gState = $(if ($cacheHit[$i]) { 'reused' } elseif ($unkeyWhy[$i]) { 'unkeyable' } else { 'ran' })
+      $gRow = [ordered]@{ run = $gtRun; gate = $gName; arg = $gArg; state = $gState; ms = $(if ($gr) { [int]$gr.Ms } else { -1 }); rc = $(if ($gr) { $gr.ExitCode } else { $null }); why = [string]$unkeyWhy[$i] }
+      $null = Add-TcLine -Path $gtFile -Text ($gRow | ConvertTo-Json -Compress)
+    }
+  } catch { }
 }
 $leftAfter = Get-TcTreeSnapshot -Root $repoFull -Paths $leftPaths
 Write-Output ("run-gates: pool width reached {0} of the {1} asked, and its slots were handed back as the last gates finished" -f $script:gateWidthMax, $askedJobs)
