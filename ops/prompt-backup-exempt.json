@@ -42,6 +42,12 @@
       "name": "d17-brain-refuse-date-1002",
       "reason": "a one-time task (fires once, 2026-10-02) carrying Brad's D17 ruling of 2026-09-25: it replays a week of brain commits and sets BRAIN_REFUSE_FROM only if the bar holds; its instructions and result land in design\\brain-consults-2026-09-22\\phase-4-coding.md W4.5, so a mirror would be an orphan the day after it runs",
       "added": "2026-09-25"
+    },
+    {
+      "kind": "scheduled-task",
+      "name": "brain-plan-october-readings-1008",
+      "reason": "a one-time task (fires once, 2026-10-08) carrying the brain-consults plan's two owed October readings (W5.5's intent analysis card, W6.2's control arm): it reads each against its written bar and reports to Brad; its instructions and results land in design\\brain-consults-2026-09-22\\phase-5-analysis.md W5.5 and phase-6-evidence.md W6.2, so a mirror would be an orphan the day after it runs",
+      "added": "2026-09-25"
     }
   ]
 }
