@@ -399,7 +399,7 @@ window to minutes, and never leave step 2 uncommitted overnight.
 | W5.4 | Prompt analysis route (bar first) | brain | W2.2, W1.9 | D19 |
 | W5.5 | Intent analysis card | brain | W1.4 plus 7 days, W4.2 | - |
 | W5.6 | SubagentStop telemetry | brain | W1.1 | D4b |
-| W5.7 | Stop gates see prompt offers; analysis rung log-only | brain | W2.2, W4.2, W5.4 | D4 |
+| W5.7 | Stop gates see prompt offers; analysis rung refuses once without a search (D4, 2026-09-25) | brain | W2.2, W4.2, W5.4 | D4 |
 | W6.1 | Subagent failures recorded | brain | W1.1, W1.7, W1.8, W4.2 | - |
 | W6.2 | Did a reminder change the next edit (control arm) | brain | W4.1, W4.2, W6.1 | D12b |
 | W6.3 | The nightly signal means what it says | brain | - | - |
@@ -407,7 +407,7 @@ window to minutes, and never leave step 2 uncommitted overnight.
 | W6.5 | Bridge currency; frozen refusal cases | brain | - | - |
 | W6.6 | Always-loaded budget ratchet | both | D2 | - |
 | W6.7 | Log archive, never delete | brain | W2.4 | - |
-| W6.8 | Memory semantic leg stays gated | - | W2.1 | D16 |
+| W6.8 | Memory semantic leg stays gated: CLOSED 2026-09-25 (D16 ruled no) | - | W2.1 | D16 |
 | W6.9 | The push tier stops reading green when blind | TC | - | - |
 | W6.10 | Harness facts carry a re-check date | brain | - | - |
 | W6.11 | Store: escape forms (warn-only first) | TC | W0.1 | D1b |
@@ -516,11 +516,11 @@ disposition.
 |---|---|---|---|
 | D1 | Land W0.1 by 2026-09-24, or move REFUSE_FROM | land it: one file, with a written bar | W0.1 |
 | D1b | Refuse date for the escape forms (W6.11) | after one warn week, with its count | W6.11 |
-| D2 | Rules: unconditional (A, now) or lead plus scoped depth (B, after the probe) | A now; judge B on W2.3's rubric once W1.1 and W1.2 report | W2.3 option B, W6.6 |
-| D3 | First-write gate: shadow, then remind (3 days), then deny | yes, if the shadow bars and W3.3's bar hold | W4.2 deny |
+| D2 | Rules: unconditional (A, now) or lead plus scoped depth (B, after the probe) | A now; judge B on W2.3's rubric once W1.1 and W1.2 report (option A ruled earlier and on main; option B RULED by Brad 2026-09-25: built on branch experiment/rules-split-option-b and judged on W2.3's three-bar rubric before anything loads differently; W6.6's ratchet is set after Brad's decision on B, "Build B on a branch, judge it on the bar (Recommended)") | W2.3 option B, W6.6 |
+| D3 | First-write gate: shadow, then remind (3 days), then deny | yes, if the shadow bars and W3.3's bar hold (RULED by Brad 2026-09-25: remind now; refusals decided by Brad after 3 days of remind data, a one-time job on 2026-09-28 reports, "Remind now, decide refusals after 3 days (Recommended)") | W4.2 deny |
 | D3b | Deny headless runs too | decide on the shadow count; until then headless is log-only | W4.2 |
-| D4 | Consulted gate reads prompt offers (about 15 refusals a week), and which refusal shape for chat analysis: a missing footer, or no search in the context | shadow first; prefer "no search in the context", judged on named items | W5.7 |
-| D4b | Absence rung refuses on Agent-tool helpers | only if the rate bar holds; workflow agents report-only | W5.6 |
+| D4 | Consulted gate reads prompt offers (about 15 refusals a week), and which refusal shape for chat analysis: a missing footer, or no search in the context | shadow first; prefer "no search in the context", judged on named items (RULED by Brad 2026-09-25: shape (b) now, trigger tuned on 2026-09-30, "(b) now, tune trigger on Sep 30 (Recommended)") | W5.7 |
+| D4b | Absence rung refuses on Agent-tool helpers | only if the rate bar holds; workflow agents report-only (RULED by Brad 2026-09-25: keep measuring to 7 days; on 2026-09-30 switch absence refusals on for Agent-tool helpers only if the would-refuse rate is at most 10% as N of M, workflow agents report-only whatever the rate, "Wait to Sep 30, switch on if under 10% (Recommended)") | W5.6 |
 | D5 | spawn_task and Workflow brief gates go live | yes, after the probe | W4.4 |
 | D6 | The exact ANALYSIS PREFLIGHT lines in `~/.claude/CLAUDE.md`, and a brain pointer line if needed | approve the 10 lines | W5.1 step 2, W4.5 step 7 |
 | D7 | The two memory stores: one business, one store, or read-side only | read-side now; migration as its own plan (two git repos, link closures) | none |
@@ -531,10 +531,10 @@ disposition.
 | D12 | Per-row edit_block for machinery rows whose gate holds at zero | later, per row, on W6.2's numbers | later |
 | D12b | A 14-day shown-against-shadow split on machinery rows | yes; it is the only way M9 means anything | W6.2 |
 | D13 | Re-apply the 2026-09-12 rulings, and WHERE the ingest runs | yes, from a worktree with graph.db | W6.4 |
-| D14 | Run the decisive store A/B (about 60 plus 60 sessions) | after M1b clears | none |
+| D14 | Run the decisive store A/B (about 60 plus 60 sessions) | after M1b clears (RULED by Brad 2026-09-25: yes, once M1b clears (at least 80% after 14 days of deny); a weekly scheduled check, d14-store-ab-readiness-weekly, brings Brad a concrete A/B design the week it clears, "Yes, bring it back when 80% clears (Recommended)") | none |
 | D15 | Hand-fix `C:\Codex\CLAUDE.md`'s project table (Fantasy has git; ThriftyCrew is at 3,249 commits, not 2,284) | yes | none |
-| D16 | Build the memory semantic leg's held-out floor | after W2.1, if still wanted | W6.8 |
-| D17 | BRAIN_REFUSE_FROM for the brain repo's Store: check | after a warn period and a replay count | W4.5 |
+| D16 | Build the memory semantic leg's held-out floor | after W2.1, if still wanted (RULED NO by Brad 2026-09-25: the memory semantic leg is not built; lessons reach the work through command-shape reflexes and the always-loaded index; re-trying needs a new labelled set and a bar written first, per memory:similarity-recall-of-memories-fails, "Don't build it (Recommended)") | W6.8 |
+| D17 | BRAIN_REFUSE_FROM for the brain repo's Store: check | after a warn period and a replay count (RULED by Brad 2026-09-25: BRAIN_REFUSE_FROM 2026-10-02 after a week of warnings from the hook install; a one-time job on 2026-10-02 replays the week and sets it only if at most 2, or 10%, of code commits would refuse, "Oct 2, after a week of warnings (Recommended)") | W4.5 |
 | D18 | Approve W1.1's temporary box-wide logger hooks | yes: logger only, session-filtered, self-expiring | W1.1 step 2 |
 | D19 | Per-session dedup for the analysis route, reversing recall-hook.py's "NO PER-SESSION DEDUP ON THIS EVENT" for that route only | yes | W5.4 step 4 |
 

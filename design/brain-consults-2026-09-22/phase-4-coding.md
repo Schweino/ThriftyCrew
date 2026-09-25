@@ -247,6 +247,12 @@ RECALL_FIRST_WRITE_MODE; the live mode file's sha256 is unchanged afterwards):
     paths with forward slashes, case-insensitively.
   Below either bar, the finding goes to Brad, never into a second deny.
 
+**2026-09-25, Brad's D3 ruling:** "Remind now, decide refusals after 3 days (Recommended)". The mode moved from shadow
+to remind the same day (brain commit db77e20). The shadow's numbers, from `first-write-report.py` on 2026-09-25: M1b 5
+of 62 contexts (8%); M3 main 0 of 2 and workflow 1 of 6 against the 25% bar; would-deny contexts 37 on 09-23 and 21 on
+09-24. Refusals are Brad's call on 3 days of remind data, which the one-time task d3-first-write-remind-review-0928
+reports on 2026-09-28.
+
 **Traps.**
 - Keying the marker on session_id alone lets one parent's search back every subagent.
 - Writing the marker into shared state loses it.
@@ -402,6 +408,11 @@ vii; record-tier/brain-repo-unjudged; plan-review-compliance)
    is missing or stale, and 3 when blind. The nightly sleep report runs `--check`.
 3. **Before asking D17:** replay brain commits since 2026-09-15 through `judge_message`, and print "would refuse N of M"
    in the commit.
+   **2026-09-25, Brad's D17 ruling:** "Oct 2, after a week of warnings (Recommended)". The brain commit-msg hook was
+   installed 2026-09-25 (`install-brain-hooks.py --check` exit 0, CURRENT), so the warning week starts that day.
+   Heuristic count: 44 of 140 brain commits since 09-15 carry no Store: line, 34 of them on 09-18, before the rule.
+   The one-time task d17-brain-refuse-date-1002 replays the week through `judge_message` on 2026-10-02 and sets
+   BRAIN_REFUSE_FROM only if at most 2, or 10%, of code commits would refuse.
 4. **Brain-scoped reflex rows** (scope `.claude/skills`, exts ['.py']):
    - `brain-log-not-redirectable`: an assignment STATEMENT (continuation lines joined) whose right side has
      `os.path.join(...'recall-*.jsonl')` and no `environ` read. MUST NOT FIRE on recall-reflex-hook.py:62-63, whose

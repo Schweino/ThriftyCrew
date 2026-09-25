@@ -240,6 +240,15 @@ analysis or mechanical.
 10%, printed as N of M. Workflow agents stay report-only whatever the rate: exit 2 after a StructuredOutput call risks a
 second output.
 
+**2026-09-25, Brad's D4b ruling:** "Wait to Sep 30, switch on if under 10% (Recommended)". The 2-day reading, from
+recall-subagent-stop-log.jsonl t=1790160393 to 1790327875: 22 of 235 non-workflow helper answers would refuse (9.4%);
+general-purpose 14 of 105, triage-developer 3 of 7, triage-ops-developer 2 of 15; 104 rows with an empty agent_type (1
+would refuse); 79 workflow rows (11 would refuse). Only 3 of 235 carry a Consulted line, and that does not bear on the
+rate: `would_refuse_absence` is `recall_absence.owes_line(text)`, which fires when the helper's final answer matches one
+of eight absence-assertion cues (there-is-no, does-not-exist, no-caller, nothing-in, appears-nowhere, is-not-scheduled,
+no-such, i-could-not-find) and carries no `Checked:` line. It never reads the footer. The one-time task
+d4-analysis-trigger-tune-0930 reads the 7-day rate on 2026-09-30 and builds the refusal only if the bar holds.
+
 ## W5.7 The Stop gates see what the prompt hook offered, and chat analysis is measured
 
 **Repo:** brain. **Lands via:** `~/.claude` commit. **Effort:** S. **Needs:** W2.2, W4.2 (its marker), W5.4 (its
@@ -273,6 +282,16 @@ second output.
    - (a) a missing Consulted: or Checked: line;
    - (b) no search in the context, refused once with the same command and brake as W4.2.
    Precision is hand-labelled on 50 analysis-rung fires first.
+   **2026-09-25: the shadow was cut short at day 2 by Brad's D4 ruling**, "(b) now, tune trigger on Sep 30
+   (Recommended)". Shape (b) went live that day behind its own mode key (`skills/recall-consulted-mode.json`:
+   `"mode": "on", "analysis": "refuse-once"`; brain commits 599694a, the code, and 3087110, the flip): an
+   analysis reply with no valid W4.2 marker is refused once per context with W4.2's command and an O_EXCL
+   `.analysis-refused` brake; shape (a) stays logged only. `recall-consulted-hook.py --report --days 3` at the flip,
+   exit 0: prompt offers armed 31 of 223 W5.7 Stop rows (14%); the prompt source would refuse 10 of 223 against 13
+   live refusals on the old source; named items 21 over 31 armed turns (0.68 each); analysis answers with no search
+   in the context 34 of 45 (76%); shape (a) 14 of 45; shape (b) 8 of 10 contexts; by cue rate 44, verdict 1; 45 fires
+   on record and 0 hand-labelled, against the 50 this step asks for. The 50-case precision check and any trigger
+   tightening move to the one-time task d4-analysis-trigger-tune-0930 (2026-09-30).
 5. **Report:** "analysis answers with no search in the context: N of M" (M10), and "named items per armed turn". Never
    the footer rate.
 

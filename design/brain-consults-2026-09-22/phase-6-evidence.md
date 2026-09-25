@@ -191,6 +191,10 @@ PLAN-brain-efficiency's held-out memory floor is still the ruled next step, and 
 does not build it. If Brad wants it (D16), follow memory-and-budget/memory-bodies-never-retrieved's steps and critique.
 Never reuse MIN_COSINE 0.548. Derive the floor once, on a seeded half.
 
+**CLOSED 2026-09-25 by Brad's D16 ruling:** "Don't build it (Recommended)". The memory semantic leg is not built;
+lessons reach the work through command-shape reflexes and the always-loaded index, and re-trying needs a new labelled
+set and a bar written first (memory:similarity-recall-of-memories-fails).
+
 ## W6.9 The push tier stops reading green when blind
 
 **Repo:** ThriftyCrew. **Lands via:** `ops\push-main.ps1`. **Effort:** M. Order matters.
