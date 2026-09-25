@@ -362,7 +362,9 @@ $clampedCount = @($rows | Where-Object { [double]$_.cheapest_ps -eq [double]$_.e
 # The writer now takes its own before-picture. Nothing to remember.
 $prevPath = Join-Path $here 'v2-perserving.prev.json'
 $curPath  = Join-Path $here 'v2-perserving.json'
-if(Test-Path $curPath){ Copy-Item $curPath $prevPath -Force }
+# Copy-Item keeps the SOURCE's LastWriteTime, so the bot commit read this run's own .prev as older than the run and held
+# it as another session's edit (2026-09-25, queue 2026-09-24-a9e8a0). Stamp the write time the copy actually happened.
+if(Test-Path $curPath){ Copy-Item $curPath $prevPath -Force; (Get-Item -LiteralPath $prevPath).LastWriteTime = Get-Date }
 Save-JsonArray -Array $rows -Path $curPath -Depth 4 | Out-Null
 $evAll = $rows | ForEach-Object { $_.everyday_ps }; $chAll = $rows | ForEach-Object { $_.cheapest_ps }
 Write-Output ("computed {0} recipes -> pipeline\v2-perserving.json" -f $rows.Count)

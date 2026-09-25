@@ -1442,12 +1442,31 @@ try {
     Write-Output $foreignHeldLine
   } else {
     $fhNow = Get-PathMtimes -Repo $repo -Paths @($script:DirtyAtStart.files | ForEach-Object { [string]$_.path })
-    $fhCand = Get-ForeignHeldPaths -Snapshot $script:DirtyAtStart -RunStart $script:RunStart -CurrentMtimes $fhNow
+    # BY CONTENT (2026-09-25, queue 2026-09-24-a9e8a0): a file whose bytes moved off its start-of-run blob is the run's
+    # own whatever its mtime says (compute-v2-perserving's Copy-Item keeps the source's mtime on the .prev it writes).
+    $fhBlobs = Get-PipelineBlobIds -Repo $repo -Paths @($script:DirtyAtStart.files | Where-Object { (Get-DirtyEntryKind -Entry $_) -eq 'modified' } | ForEach-Object { [string]$_.path })
+    $fhCand = Get-ForeignHeldPaths -Snapshot $script:DirtyAtStart -RunStart $script:RunStart -CurrentMtimes $fhNow -CurrentBlobs $fhBlobs
     # (2026-09-23, queue 2026-09-22-9bc4d2) A candidate whose bytes a pipeline lane recorded as its own write - the
     # watchdog's Family Fare shard window, a hand-run pricing chain, a lane whose commit was refused - is the pipeline's
     # and stays staged. Only what no lane vouches for is held. lib\pipeline-commit.ps1 has the rule.
     $fhSplit = Split-PipelineOwnHeld -Repo $repo -Held $fhCand
     $foreignHeld = @($fhSplit.foreign)
+    # A STILL-CURRENT -Built VOUCH IS PROMOTED ON A RUN THAT SHIPS (2026-09-25, queue 2026-09-24-a9e8a0). A guards-blocked
+    # run's served outputs are never committed BY THAT RUN (W3.2); a later run whose guards passed and whose feed exported
+    # commits them when their bytes are still exactly what that run built and no commit touched the path since. Without
+    # this, a writer that correctly no-ops (rotate-free-dinners: "same week, same set") leaves them held for ever.
+    $script:BuiltPromoted = @()
+    if ($shipServed -and $foreignHeld.Count) {
+      $bpList = @()
+      try { $bpRaw = Get-PipelineBuiltPromotable -Repo $repo -Held $foreignHeld; $bpList = @($bpRaw) }
+      catch { Write-Output ('built-promoted: the write journal could not be read (' + $_.Exception.Message + '), so every held file stays held') }
+      if ($bpList.Count) {
+        $bpPaths = @($bpList | ForEach-Object { [string]$_.path })
+        $foreignHeld = @($foreignHeld | Where-Object { $bpPaths -notcontains $_ })
+        $script:BuiltPromoted = $bpPaths
+        Write-Output ('built-promoted: ' + $bpPaths.Count + ' served file(s) a non-shipping run of this pipeline built and no later writer changed: ' + ($bpPaths -join ', '))
+      }
+    }
     foreach ($fh in $foreignHeld) { & git -C $repo reset -q -- $fh | Out-Null }
     if ($foreignHeld.Count) {
       $foreignHeldLine = ('foreign-held: ' + $foreignHeld.Count + ' tracked owned file(s) another session dirtied before this run started, left uncommitted: ' + ($foreignHeld -join ', '))
@@ -1652,8 +1671,14 @@ try {
   # W3.2 step 3). The chain still wrote public\** and the recipe files; -Built records their bytes with commit = $false, so
   # the checkout sync can tell the pipeline's own output from a session's edit (Get-PipelineOwnBlobs) while no committer
   # ever ships a board the guards held. Registered BEFORE the committable set, which on this path holds inputs only.
+  # START BLOBS (2026-09-25, queue 2026-09-24-a9e8a0): a file whose bytes moved since the start is this run's write even
+  # when its mtime is older (a Copy-Item keeps its source's mtime), so both registrations select by content too, and a
+  # promoted -Built vouch is re-recorded committable.
+  $pwStartBlobs = @{}
+  if ($null -ne $script:DirtyAtStart -and $script:DirtyAtStart.ok) { foreach ($sbf in @($script:DirtyAtStart.files)) { if ($null -ne $sbf -and $sbf.PSObject.Properties['blob'] -and [string]$sbf.blob) { $pwStartBlobs[[string]$sbf.path] = [string]$sbf.blob } } }
+  $pwInclude = @($script:BuiltPromoted | Where-Object { $_ })
   if ($runDownstream -and -not $shipServed) {
-    try { $jB = Register-PipelineWrites -Repo $repo -Built -Lane ('capture-run-' + $Kind + '-built') -Since $script:RunStart -Paths $servedPaths; Write-Output ('pipeline-writes: vouched ' + $jB + ' served file(s) this guards-blocked run built, never to be committed') }
+    try { $jB = Register-PipelineWrites -Repo $repo -Built -Lane ('capture-run-' + $Kind + '-built') -Since $script:RunStart -Paths $servedPaths -StartBlobs $pwStartBlobs; Write-Output ('pipeline-writes: vouched ' + $jB + ' served file(s) this guards-blocked run built, never to be committed') }
     catch { Write-Output ('pipeline-writes: could not vouch this run''s built served files (' + $_.Exception.Message + ') - the checkout sync treats them as another session''s edits, as before') }
   }
   # ITS OWN DELETIONS TOO (2026-09-23, the lane's review): a tracked file this run deleted, recorded as a tombstone, so a
@@ -1661,7 +1686,7 @@ try {
   # after. Owned paths UNFILTERED, because $paths drops a single-file path that is no longer on disk.
   try {
     $jDel = Get-PipelineRunDeletions -Repo $repo -Paths @($inputPaths + $(if ($shipServed) { $servedPaths } else { @() })) -DirtyAtStart $script:DirtyAtStart
-    $jN = Register-PipelineWrites -Repo $repo -Lane ('capture-run-' + $Kind) -Since $script:RunStart -Paths $paths -Deleted $jDel
+    $jN = Register-PipelineWrites -Repo $repo -Lane ('capture-run-' + $Kind) -Since $script:RunStart -Paths $paths -Deleted $jDel -StartBlobs $pwStartBlobs -Include $pwInclude
     Write-Output ('pipeline-writes: recorded ' + $jN + ' file(s) this run wrote or deleted' + $(if ($jDel.Count) { ' (deleted: ' + ($jDel -join ', ') + ')' } else { '' }))
   }
   catch { Write-Output ('pipeline-writes: could not record this run''s writes (' + $_.Exception.Message + ') - a file it leaves uncommitted is held by the next run as before') }
@@ -1892,8 +1917,34 @@ finally {
 # than one that stays quiet, and it did it on the morning the operator was already busy with a real
 # hard fail. So: the founding 2026-09-02 check keeps its behaviour when the commit landed, and the
 # refused case says what actually happened and pages nobody, because commit-refused is already a lane.
+# IT ALSO HAS TO READ THE HOLD DECISION (2026-09-25, queue 2026-09-24-a9e8a0). A served path the FOREIGN-HELD block
+# unstaged on purpose is not a $servedPaths gap, and this block paged it as one with the same inert prescription on
+# 09-24 and 09-25 (the four files were already in Get-BotServedPaths). So held served paths are subtracted, named on
+# their own line, and page only when a held served path is NOT pipeline-vouched output (a real session edit, with a
+# subject that says so). A -Built vouch that could not be promoted (upstream moved the path) is named and not paged.
 if ($shipServed -and $botCommitted) {
-  $servedDirty = @(& git -C $repo status --porcelain -- $servedPaths | Where-Object { $_ })
+  $sdAll = @(& git -C $repo status --porcelain -- $servedPaths | Where-Object { $_ })
+  $sdHeldSet = @($foreignHeld | Where-Object { $_ } | ForEach-Object { [string]$_ })
+  $servedDirty = @(); $servedHeld = @()
+  foreach ($sdl in $sdAll) {
+    $sdp = ([string]$sdl).Substring(3).Trim().Trim('"')
+    if ($sdHeldSet -contains $sdp) { $servedHeld += $sdp } else { $servedDirty += $sdl }
+  }
+  if ($servedHeld.Count) {
+    Write-Output ('served-held: ' + $servedHeld.Count + ' served path(s) held as another session''s edit: ' + ($servedHeld -join ', '))
+    $sdVouch = Get-PipelineOwnBlobs -Repo $repo
+    $sdIds = Get-PipelineBlobIds -Repo $repo -Paths $servedHeld
+    $sdForeign = @($servedHeld | Where-Object { -not ($sdVouch.ContainsKey($_) -and $sdIds.ContainsKey($_) -and [string]::Equals([string]$sdVouch[$_], [string]$sdIds[$_], [StringComparison]::Ordinal)) })
+    if ($sdForeign.Count) {
+      Add-FailedLane 'served-held'
+      try {
+        Send-Alert -Subject "Daily chain held a session's edit on a served file - $today" -Body ("Guards passed and the bot commit went out, but " + $sdForeign.Count + " served file(s) were dirty before this run started, were not rewritten by it, and match no bytes any pipeline lane recorded, so the commit held them as another session's edit and readers are still served the committed version:`n`n" + (($sdForeign | Select-Object -First 20) -join "`n") + "`n`nThis is not a `$servedPaths gap. Find who edited the file: commit it if the edit is meant to ship, or restore it (git checkout -- <path>) so the next run writes it.") | Out-Null
+        Set-FailedLanePaged 'served-held' ("Daily chain held a session's edit on a served file - $today") $LASTEXITCODE
+      } catch { Write-Output ('served-held alert threw: ' + $_.Exception.Message) }
+    } else {
+      Write-Output 'served-held: every held served path is pipeline-built output that could not be promoted (a commit touched it after the build), so no alert'
+    }
+  }
   if ($servedDirty.Count) {
     Write-Output ('served-dirty: ' + $servedDirty.Count + ' tracked served file(s) still dirty after the chain''s commit: ' + (($servedDirty | Select-Object -First 8) -join ' | '))
     Add-FailedLane 'served-dirty'

@@ -209,6 +209,17 @@ function Get-DirtyOwnedSnapshot {
     # Any other worktree column (' ' for a staged-only change, 'T', an unmerged code) is not a file the run could
     # have been handed dirty and then hold back unchanged, which is the rule of the day before for everything but D.
   }
+  # THE START BLOB (2026-09-25, queue 2026-09-24-a9e8a0): each 'modified' entry also carries the git blob id of its
+  # bytes at the start, so Get-ForeignHeldPaths can tell a run's own write whose mtime is OLD (a Copy-Item keeps its
+  # source's LastWriteTime: compute-v2-perserving's .prev copy) from a file nobody touched. A path git could not hash
+  # gets '' and keeps the mtime-only rule of the day before.
+  $modRel = @($files | Where-Object { $_.kind -eq 'modified' } | ForEach-Object { [string]$_.path })
+  $startIds = if ($modRel.Count) { Get-PipelineBlobIds -Repo $Repo -Paths $modRel } else { @{} }
+  foreach ($f in $files) {
+    $b = ''
+    if ($f.kind -eq 'modified' -and $startIds.ContainsKey([string]$f.path)) { $b = [string]$startIds[[string]$f.path] }
+    Add-Member -InputObject $f -NotePropertyName blob -NotePropertyValue $b
+  }
   return [pscustomobject]@{ ok = $true; files = $files.ToArray(); why = '' }
 }
 
@@ -232,8 +243,12 @@ function Get-ForeignHeldPaths {
        bring the file back (one that exists again was rewritten by the run and is the run's own).
      $CurrentMtimes is Get-PathMtimes' map, which holds only the paths that exist now. An unusable snapshot holds
      nothing back. An entry of any other kind THROWS: it is a defect in whoever built the snapshot, and guessing it
-     held or free would hide that. Comma-returned, so a caller assigns it and reads .Count. #>
-  param($Snapshot, [datetime]$RunStart, $CurrentMtimes)
+     held or free would hide that. Comma-returned, so a caller assigns it and reads .Count.
+     BY CONTENT TOO (2026-09-25, queue 2026-09-24-a9e8a0): with $CurrentBlobs (Get-PipelineBlobIds' map) a 'modified'
+     entry whose start blob is known and whose CURRENT blob differs was rewritten by the run whatever its mtime says,
+     so it is not held. An entry with no start blob, or a path absent from $CurrentBlobs, keeps the mtime-only rule. So
+     the content test can only hold FEWER files than the mtime test, never more. #>
+  param($Snapshot, [datetime]$RunStart, $CurrentMtimes, $CurrentBlobs = $null)
   $held = New-Object System.Collections.Generic.List[string]
   if ($null -eq $Snapshot -or -not $Snapshot.ok -or $null -eq $CurrentMtimes) { return ,$held.ToArray() }
   foreach ($f in @($Snapshot.files)) {
@@ -241,7 +256,13 @@ function Get-ForeignHeldPaths {
     $p = [string]$f.path
     $kind = Get-DirtyEntryKind -Entry $f
     switch -CaseSensitive ($kind) {
-      'modified' { if ($CurrentMtimes.ContainsKey($p) -and ([datetime]$CurrentMtimes[$p] -lt $RunStart)) { $held.Add($p) } }
+      'modified' {
+        if ($CurrentMtimes.ContainsKey($p) -and ([datetime]$CurrentMtimes[$p] -lt $RunStart)) {
+          $sb = if ($f -isnot [System.Collections.IDictionary] -and $f.PSObject.Properties['blob']) { [string]$f.blob } else { '' }
+          $rewritten = ($sb -and ($null -ne $CurrentBlobs) -and $CurrentBlobs.ContainsKey($p) -and -not [string]::Equals($sb, [string]$CurrentBlobs[$p], [StringComparison]::Ordinal))
+          if (-not $rewritten) { $held.Add($p) }
+        }
+      }
       'deleted'  { if (-not $CurrentMtimes.ContainsKey($p)) { $held.Add($p) } }
       default    { throw ('Get-ForeignHeldPaths: unknown snapshot kind ''' + $kind + ''' for ' + $p) }
     }
@@ -404,11 +425,19 @@ function Register-PipelineWrites {
     [Parameter(Mandatory = $true)][datetime]$Since,
     [string[]]$Paths,
     [switch]$Built,
-    [string[]]$Deleted = @()
+    [string[]]$Deleted = @(),
+    # (2026-09-25, queue 2026-09-24-a9e8a0) BY CONTENT, NOT ONLY BY MTIME. $StartBlobs is path -> the blob at the start of
+    # the run (Get-DirtyOwnedSnapshot's 'blob'); a path differing from HEAD whose mtime is before $Since but whose bytes
+    # moved off that start blob was written by this run (a Copy-Item keeps its source's mtime). $Include names paths the
+    # caller already proved are this run's to commit (a promoted -Built vouch, Get-PipelineBuiltPromotable).
+    $StartBlobs = $null,
+    [string[]]$Include = @()
   )
   $present = @($Paths | Where-Object { $_ -and (Test-Path -LiteralPath (Join-Path $Repo $_)) })
   $gone = @($Deleted | Where-Object { $_ -and -not (Test-Path -LiteralPath (Join-Path $Repo $_)) } | Sort-Object -Unique)
   $mine = New-Object System.Collections.Generic.List[string]
+  $older = New-Object System.Collections.Generic.List[string]
+  $inc = @($Include | Where-Object { $_ } | ForEach-Object { [string]$_ })
   if ($present.Count) {
     # AGAINST HEAD, NOT THE INDEX: capture-run calls this under its private index, where a staged file reads clean in the
     # worktree column, and after a private-index commit the session's index is stale. HEAD-to-worktree is the question.
@@ -420,6 +449,14 @@ function Register-PipelineWrites {
       $full = Join-Path $Repo $rel
       if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { continue }
       if ((Get-Item -LiteralPath $full).LastWriteTime -ge $Since) { $mine.Add($rel) }
+      elseif ($inc -contains $rel) { $mine.Add($rel) }
+      elseif (($null -ne $StartBlobs) -and $StartBlobs.ContainsKey($rel) -and [string]$StartBlobs[$rel]) { $older.Add($rel) }
+    }
+    if ($older.Count) {
+      $oIds = Get-PipelineBlobIds -Repo $Repo -Paths $older.ToArray()
+      foreach ($rel in $older) {
+        if ($oIds.ContainsKey($rel) -and -not [string]::Equals([string]$oIds[$rel], [string]$StartBlobs[$rel], [StringComparison]::Ordinal)) { $mine.Add($rel) }
+      }
     }
   }
   if (-not $mine.Count -and -not $gone.Count) { return 0 }
@@ -480,6 +517,47 @@ function Get-PipelineOwnHeld {
     }
   }
   return ,$own.ToArray()
+}
+
+function Get-PipelineBuiltPromotable {
+  <# (2026-09-25, queue 2026-09-24-a9e8a0) Of $Held (foreign-held candidates), the ones a SHIPPING run may commit because
+     a guards-blocked run of this pipeline built them: the path's CURRENT bytes equal a -Built entry (commit = $false) for
+     THIS checkout, and no commit in HEAD's history touched the path after that entry's time. Founding case: the 09-24
+     morning run built free-rotation.json, recipes-db.json and free-dinners.json, its feed was refused so W3.2 vouched them
+     never to be committed BY THAT RUN, and every later shipping run held them because rotate-free-dinners correctly wrote
+     nothing ("same week, same set"), so their mtimes stayed before RunStart. The caller asks only on a run that ships
+     (guards passed, feed exported); a non-shipping run keeps them held. Returns [pscustomobject]@{ path; lane; ts }[],
+     comma-returned. Throws when the journal is present and unreadable; the caller keeps every candidate held. #>
+  param([Parameter(Mandatory = $true)][string]$Repo, [string[]]$Held)
+  $out = New-Object System.Collections.Generic.List[object]
+  $cand = @($Held | Where-Object { $_ })
+  if (-not $cand.Count) { return ,$out.ToArray() }
+  $jp = Get-PipelineWriteJournalPath -Repo $Repo
+  if (-not $jp) { return ,$out.ToArray() }
+  $j = Read-PipelineWriteJournal -JournalPath $jp
+  if (-not $j.Count) { return ,$out.ToArray() }
+  $ck = Get-PipelineCheckoutKey -Repo $Repo
+  $ids = Get-PipelineBlobIds -Repo $Repo -Paths $cand
+  foreach ($p in $cand) {
+    $e = $j[($ck + '|' + [string]$p)]
+    if ($null -eq $e -or $e.commit -or $e.deleted -or -not [string]$e.blob) { continue }
+    if (-not $ids.ContainsKey([string]$p)) { continue }
+    if (-not [string]::Equals([string]$e.blob, [string]$ids[[string]$p], [StringComparison]::Ordinal)) { continue }
+    $vt = [datetime]::MinValue
+    if (-not [datetime]::TryParse([string]$e.ts, [ref]$vt)) { continue }
+    # UPSTREAM MUST NOT HAVE MOVED THE PATH SINCE THE BUILD: a commit after the vouch means the bytes we hold are older
+    # than what main says, and committing them would revert it. No history at all is fine (the path is new).
+    $g = Invoke-GitCaptured -Repo $Repo -GitArgs @('log', '-1', '--format=%cI', 'HEAD', '--', [string]$p)
+    if ($g.rc -ne 0) { continue }
+    $ci = ([string]$g.stdout).Trim()
+    if ($ci) {
+      $ct = [datetimeoffset]::MinValue
+      if (-not [datetimeoffset]::TryParse($ci, [ref]$ct)) { continue }
+      if ($ct.LocalDateTime -ge $vt) { continue }
+    }
+    $out.Add([pscustomobject]@{ path = [string]$p; lane = [string]$e.lane; ts = [string]$e.ts })
+  }
+  return ,$out.ToArray()
 }
 
 function Get-PipelineOwnBlobs {
@@ -636,7 +714,9 @@ function Invoke-PipelineCommit {
         $foreignNote = ('; foreign-held: the start-of-run snapshot is unavailable (' + [string]$DirtyAtStart.why + '), so nothing was held back')
       } else {
         $fhNow = Get-PathMtimes -Repo $Repo -Paths @($DirtyAtStart.files | ForEach-Object { [string]$_.path })
-        $fhCand = Get-ForeignHeldPaths -Snapshot $DirtyAtStart -RunStart $RunStart -CurrentMtimes $fhNow
+        # By content too (2026-09-25, queue 2026-09-24-a9e8a0): bytes that moved off the start blob are the lane's own.
+        $fhBlobs = Get-PipelineBlobIds -Repo $Repo -Paths @($DirtyAtStart.files | Where-Object { (Get-DirtyEntryKind -Entry $_) -eq 'modified' } | ForEach-Object { [string]$_.path })
+        $fhCand = Get-ForeignHeldPaths -Snapshot $DirtyAtStart -RunStart $RunStart -CurrentMtimes $fhNow -CurrentBlobs $fhBlobs
         # A candidate a pipeline lane wrote and recorded is the pipeline's own and stays staged (2026-09-23, 9bc4d2).
         $fhSplit = Split-PipelineOwnHeld -Repo $Repo -Held $fhCand
         $foreignHeld = @($fhSplit.foreign)

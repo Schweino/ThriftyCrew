@@ -44,9 +44,9 @@
         ],
         "exact_change": "(1) Get-DirtyOwnedSnapshot adds blob = (git hash-object) to each 'modified' entry; Get-ForeignHeldPaths holds a 'modified' entry only when its mtime is before RunStart AND its current blob equals the start blob (a snapshot entry with no blob keeps today's mtime-only rule, so old snapshots behave as before). This catches the Copy-Item .prev shape. (2) New Get-PipelineBuiltPromotable -Repo -Held in lib/pipeline-commit.ps1: a held path whose current blob equals a -Built entry for THIS checkout key AND whose HEAD history has no commit after that entry's ts (git log -1 --format=%cI -- <path> older than ts) is promotable. (3) capture-run.ps1 FOREIGN-HELD BLOCK: when $shipServed is true (guards passed, feed exported), promotable served paths are kept staged and printed 'built-promoted: N served file(s) a non-shipping run of this pipeline built and no later writer changed: <paths>'; Register-PipelineWrites re-records them committable. A promotable path on a non-shipping run stays held exactly as today. (4) Register-PipelineWrites path selection: a served path whose blob differs from its start-of-run snapshot blob counts as written this run even when its mtime is older (the .prev shape). (5) SERVED-DIRTY BLOCK: subtract $foreignHeld from $servedDirty before paging; held served paths print one line 'served-held: N served path(s) held as another session's edit: <paths>' and page ONLY when a held served path is NOT pipeline-vouched, with a subject that names a foreign edit on a served path, never the 'Add the writer's output to $servedPaths' prescription. The founding 2026-09-02 case (a served path written after staging, not held, not vouched) keeps its current alert unchanged."
       },
-      "leaves_open": "the commit-size gate's 'own' tally (capture-run.ps1, 'written at or after this run started') still counts by mtime, so a Copy-Item-preserved own file is tallied as unvouched rather than own: 1 known file (.prev), 0 wrong size verdicts",
+      "leaves_open": "nothing",
       "leaves_open_occurrences": 0,
-      "leaves_open_followup": "watch:grocery/capture-run.ps1",
+      "leaves_open_followup": "none",
       "prior_closes": [
         "2026-09-09-f0b5f2"
       ],
@@ -94,14 +94,20 @@
         "any guard threshold",
         "rotate-free-dinners' same-week no-op (it is correct; the commit must stop punishing it)"
       ],
-      "resolution_note": "False prescription, real defect. The four files were the pipeline's own 09-24 morning outputs (journal -Built blobs match 3 of 3), held because the commit judged 'rewritten' by mtime and the next runs' rotation correctly no-opped; .prev is a Copy-Item that keeps its source mtime. Ownership is now judged by content, a still-current -Built vouch is promoted on a shipping run, and served-dirty names holds instead of prescribing a list edit.",
+      "resolution_note": "False prescription, real defect. The four files were the pipeline's own 09-24 morning outputs (journal -Built blobs match 3 of 3), held because the commit judged 'rewritten' by mtime and the next runs' rotation correctly no-opped; .prev is a Copy-Item that kept its source mtime. Ownership is now judged by content (start blob in the dirty snapshot, in capture-run and Invoke-PipelineCommit), a still-current -Built vouch is promoted on a shipping run when no commit touched the path since the vouch (Get-PipelineBuiltPromotable, 'built-promoted:'), Register-PipelineWrites selects by content and records promoted paths committable, compute-v2-perserving stamps .prev's write time, and served-dirty subtracts held paths, names them 'served-held:', and pages only an unvouched hold under its own registered subject. Reader effect: the served free list (feed.thriftycrew.com/free-dinners.json, week_of 2026-09-23, updated 09-23T09:56:58) still disagrees with Ghost's 09-24 rotation on 3 of 20 slugs; not corrected today (no hand commit, plan's preferred path); the 09-26 shipping run commits the vouched bytes if its guards pass and its feed exports, and if they do not the files stay held under W3.2 and the served-held line names them. Proof: test-commit-size-gate 42/42 (7 new cases: promote on ship, held on non-ship, held after upstream commit, Copy-Item shape committed, served-held unvouched pages the new subject and never the list-edit prescription, vouched hold pages nobody, count 41), pipeline-commit -SelfTest 93/93, audit-alert-registry PASSED; full_suite: deferred-to-land.",
       "publish_batch": 1,
       "lane": "money",
       "est_tool_calls": 55,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "Implemented root_fix (1)-(5) as written, plus two additive changes inside the same intent: (a) Invoke-PipelineCommit in lib/pipeline-commit.ps1 (the other lanes' committer) passes -CurrentBlobs too, so the content rule is one rule; (b) meal-prep/pipeline/compute-v2-perserving.ps1 stamps LastWriteTime after its Copy-Item to .prev, which closes the plan's leaves_open (the commit-size gate's mtime-based 'own' tally) at the writer and a second shape the plan did not name: a .prev dirty at start whose next copy yields IDENTICAL bytes would stay held and, with the new served-held page, page as a session's edit. The new page 'Daily chain held a session's edit on a served file' is registered in grocery/alert-registry.json (page, condition 1); audit-alert-registry exit 0. surface_fix NOT done by hand, per the plan's preferred path: the 09-26 07:00/08:00 shipping run promotes the three vouched files.",
+      "shipped_commit": null,
+      "premise_check": "2026-09-25 ~18:10, main checkout: git hash-object of free-rotation.json / recipes-db.json / free-dinners.json = f063ed23c / dd89f91ac / 65c903c80 (3 of 3 equal the -Built vouches); git log --since 2026-09-24T10:03:32 empty for all four paths; no capture-run since 08:32 (journal mtime 08:31:33, newest daily log 08:32). v2-perserving.prev.json dirty at 239aa4890, v2-perserving.json at 2e7028059, so the next Copy-Item changes its bytes. Live https://feed.thriftycrew.com/free-dinners.json (cache-busted) serves updated 2026-09-23T09:56:58, the origin/main copy; the working file (the 09-24 09:20 rotation Ghost was flipped to) differs from it on 3 of 20 free slugs each way. Live Ghost visibility itself was not re-read (no Admin API call made): the 23 flips are the ad-cycle-log's record.",
+      "close_disposition": "fixed",
+      "live_check": "2026-09-26 capture-run-daily log shows 'built-promoted: 3' (or the three paths rewritten) and 'served-dirty: none'; then feed.thriftycrew.com/free-dinners.json?cb=<n> reads updated 2026-09-24T09:20:08 (or a later rotation), not 2026-09-23T09:56:58",
+      "republished": false,
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 34
     },
     {
       "queue_id": "2026-09-25-5d89a7",

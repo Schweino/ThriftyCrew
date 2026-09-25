@@ -265,6 +265,15 @@
    "resolver": "lane:grocery/triage-due.ps1"
   },
   {
+   "id": "served-file-held-foreign-edit",
+   "match": "exact",
+   "key": "daily chain held a session s edit on a served file",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "lane:grocery/triage-due.ps1"
+  },
+  {
    "id": "pipeline-did-not-commit",
    "match": "prefix",
    "key": "daily pipeline ran but did not commit",

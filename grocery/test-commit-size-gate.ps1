@@ -308,7 +308,8 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
   # $committed DEFAULTS TO $true (2026-09-09, queue 2026-09-09-f0b5f2), so the three cases below are
   # byte-for-byte the same assertions they were: they were all written for runs where the commit landed,
   # which is precisely why nothing caught the block reading $shipServed as if it implied that.
-  function Run-Served([bool]$ship, [scriptblock]$Setup, [bool]$committed = $true) {
+  # $held (2026-09-25, queue 2026-09-24-a9e8a0) is $foreignHeld exactly as the FOREIGN-HELD block leaves it for this block.
+  function Run-Served([bool]$ship, [scriptblock]$Setup, [bool]$committed = $true, [string[]]$held = @()) {
     $c = Join-Path $env:TEMP ('served-' + [guid]::NewGuid().ToString('N').Substring(0,8))
     New-Item -ItemType Directory $c -Force | Out-Null
     & git -C $c init -q .
@@ -326,6 +327,7 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
     # wrong arm. That is the risk the plan names, and it is why this is asserted rather than assumed.
     $botCommitted = $committed
     $servedPaths = @('public', 'meal-prep/db/recipes')
+    $foreignHeld = @($held)
     $failed = @()
     $script:alertSubject = ''; $script:alertBody = ''
     # DOT-SOURCE, not &: the block's `$failed += ...` must land in THIS scope or the assertion below
@@ -380,6 +382,19 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
     (($sStillCatches.failed -match 'served-dirty') -and ($sStillCatches.body -match [regex]::Escape($fxServedFile))) `
     ("failed=$($sStillCatches.failed) body=$($sStillCatches.body)")
 
+  # ---- THE HOLD DECISION IS READ BEFORE THE DIAGNOSIS (2026-09-25, queue 2026-09-24-a9e8a0) ----
+  # FROZEN from 09-24 17:30 and 09-25 08:32: the FOREIGN-HELD block held four served files and this block then paged
+  # them as a $servedPaths gap, prescribing an edit that was already made. A held path is subtracted and named; it pages,
+  # under a subject that says what it is, only when no pipeline lane vouches for its bytes.
+  $sHeldForeign = Run-Served $true { param($c) '{"slug":"x","cost_ps":4.56}' | Set-Content (Join-Path $c $fxServedFile) } $true @($fxServedFile)
+  T 'MUST FIRE  a held served path with no pipeline vouch is named served-held and pages the foreign-edit subject' `
+    (($sHeldForeign.text -match 'served-held: 1 served path') -and ($sHeldForeign.subject -match 'held a session''s edit on a served file') -and ($sHeldForeign.failed -match 'served-held')) ("failed=$($sHeldForeign.failed) subject=$($sHeldForeign.subject) text=$($sHeldForeign.text)")
+  T 'MUST NOT FIRE and a held served path is never reported as a $servedPaths gap (no served-dirty lane, no list-edit prescription)' `
+    (($sHeldForeign.failed -notmatch 'served-dirty') -and ($sHeldForeign.body -notmatch 'Add the writer') -and ($sHeldForeign.text -match 'served-dirty: none')) ("failed=$($sHeldForeign.failed) text=$($sHeldForeign.text)")
+  $sHeldVouched = Run-Served $true { param($c) '{"slug":"x","cost_ps":4.56}' | Set-Content (Join-Path $c $fxServedFile); [void](Register-PipelineWrites -Repo $c -Built -Lane 'capture-run-daily-built' -Since (Get-Date).AddHours(-1) -Paths @('meal-prep/db/recipes')) } $true @($fxServedFile)
+  T 'MUST NOT FIRE a held served path whose bytes a -Built vouch records is named and pages nobody' `
+    (($sHeldVouched.text -match 'served-held: every held served path is pipeline-built') -and ($sHeldVouched.subject -eq '') -and ($sHeldVouched.failed -eq '')) ("failed=$($sHeldVouched.failed) subject=$($sHeldVouched.subject) text=$($sHeldVouched.text)")
+
   # ---- FOREIGN-HELD: a session's dirty owned file stays out of the bot commit (2026-09-10, queue 2026-09-10-3a9de4) ----
   # Third shipped block, same harness: lifted by marker out of capture-run.ps1 and run against a throwaway repo, never
   # this one. FROZEN from the founding case: a session stripped the BOM from a pipeline-written baseline under
@@ -390,7 +405,10 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
   $fhBlock = $src.Substring($fi, $fj - $fi)
   . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\git-blob-lib.ps1')
   . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\pipeline-commit.ps1')
-  function Run-ForeignHeld([bool]$rewriteForeign, [bool]$snapshotOk, [bool]$pipelineWrote = $false) {
+  # $mode (2026-09-25, queue 2026-09-24-a9e8a0): 'built' = a guards-blocked run of this pipeline built the held file's
+  # exact bytes (a -Built journal entry); 'built-upstream' = the same, and then a commit touched the path after the vouch;
+  # 'copy' = the run rewrites the held file and keeps an OLD mtime, the Copy-Item shape of v2-perserving.prev.json.
+  function Run-ForeignHeld([bool]$rewriteForeign, [bool]$snapshotOk, [bool]$pipelineWrote = $false, [bool]$ship = $false, [string]$mode = '') {
     $c = Join-Path $env:TEMP ('fh-' + [guid]::NewGuid().ToString('N').Substring(0,8))
     New-Item -ItemType Directory $c -Force | Out-Null
     & git -C $c init -q .
@@ -399,26 +417,39 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
     $foreign = Join-Path $c 'grocery/out/json-readers-baseline.json'
     [IO.File]::WriteAllBytes($foreign, ([byte[]](0xEF, 0xBB, 0xBF) + [Text.Encoding]::UTF8.GetBytes('{"n":1}')))
     [IO.File]::WriteAllText((Join-Path $c 'grocery/out/run-output.txt'), 'v1')
+    # The seed is committed three hours back, so a -Built vouch made below is strictly AFTER HEAD's last touch of the path.
+    $env:GIT_COMMITTER_DATE = (Get-Date).AddHours(-3).ToString('o')
     & git -C $c add -A | Out-Null; & git -C $c commit -q -m seed | Out-Null
+    Remove-Item Env:\GIT_COMMITTER_DATE -ErrorAction SilentlyContinue
     # THE SESSION'S EDIT, BEFORE THE RUN: the BOM stripped, and the file's mtime well before the run start.
     [IO.File]::WriteAllBytes($foreign, [Text.Encoding]::UTF8.GetBytes('{"n":1}'))
     (Get-Item $foreign).LastWriteTime = (Get-Date).AddHours(-2)
     # (2026-09-23, queue 2026-09-22-9bc4d2) THE PIPELINE'S OWN WRITE: a non-committing lane wrote these exact bytes and
     # recorded them in the write journal, in the temp repo's own .git, so the lifted block must stage them, not hold them.
     if ($pipelineWrote) { [void](Register-PipelineWrites -Repo $c -Lane 'fixture-watchdog-ff' -Since (Get-Date).AddHours(-3) -Paths @('grocery/out')) }
+    if ($mode -like 'built*') { [void](Register-PipelineWrites -Repo $c -Built -Lane 'capture-run-daily-built' -Since (Get-Date).AddHours(-3) -Paths @('grocery/out')) }
+    if ($mode -eq 'built-upstream') {
+      # UPSTREAM MOVED THE PATH AFTER THE BUILD: a commit lands a different version, then the checkout still holds the built bytes.
+      Start-Sleep -Milliseconds 1100
+      [IO.File]::WriteAllBytes($foreign, [Text.Encoding]::UTF8.GetBytes('{"n":9}'))
+      & git -C $c add -- 'grocery/out/json-readers-baseline.json' | Out-Null; & git -C $c commit -q -m upstream | Out-Null
+      [IO.File]::WriteAllBytes($foreign, [Text.Encoding]::UTF8.GetBytes('{"n":1}'))
+      (Get-Item $foreign).LastWriteTime = (Get-Date).AddHours(-2)
+    }
     $snap = if ($snapshotOk) { Get-DirtyOwnedSnapshot -Repo $c -Paths @('grocery/out') } else { [pscustomobject]@{ ok = $false; files = @(); why = 'fixture: git status failed' } }
     $runStart = (Get-Date).AddMinutes(-30)
     # THE RUN writes its own file; in the clean twin it also rewrites the foreign one.
     [IO.File]::WriteAllText((Join-Path $c 'grocery/out/run-output.txt'), 'v2')
     if ($rewriteForeign) { [IO.File]::WriteAllBytes($foreign, ([byte[]](0xEF, 0xBB, 0xBF) + [Text.Encoding]::UTF8.GetBytes('{"n":2}'))) }
+    if ($mode -eq 'copy') { [IO.File]::WriteAllBytes($foreign, [Text.Encoding]::UTF8.GetBytes('{"n":3}')); (Get-Item $foreign).LastWriteTime = (Get-Date).AddHours(-2) }
     & git -C $c add -A -- 'grocery/out' | Out-Null
-    $repo = $c
+    $repo = $c; $shipServed = $ship
     $script:DirtyAtStart = $snap; $script:RunStart = $runStart
     $out = . ([scriptblock]::Create($fhBlock))
     $stagedNames = @(& git -C $c diff --cached --name-only | Where-Object { $_ })
     $dirtyNames = @(& git -C $c status --porcelain | Where-Object { $_ })
     Remove-Item $c -Recurse -Force -ErrorAction SilentlyContinue
-    return [pscustomobject]@{ staged = ($stagedNames -join ','); dirty = ($dirtyNames -join ','); text = ((@($out) | ForEach-Object { [string]$_ }) -join "`n"); line = [string]$foreignHeldLine }
+    return [pscustomobject]@{ staged = ($stagedNames -join ','); dirty = ($dirtyNames -join ','); text = ((@($out) | ForEach-Object { [string]$_ }) -join "`n"); line = [string]$foreignHeldLine; promoted = (@($script:BuiltPromoted) -join ',') }
   }
   $fh1 = Run-ForeignHeld $false $true
   T 'MUST FIRE  a foreign dirty file the run never rewrote is unstaged and named, and the run''s own file stays staged' `
@@ -435,6 +466,24 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
   $fh3 = Run-ForeignHeld $false $false
   T 'MUST FIRE  a snapshot that could not be taken holds NOTHING back, and says so' `
     (($fh3.staged -match 'json-readers-baseline\.json') -and ($fh3.text -match 'holding NOTHING back')) ("staged=$($fh3.staged) text=$($fh3.text)")
+
+  # ---- A STILL-CURRENT -Built VOUCH IS PROMOTED ON A SHIPPING RUN (2026-09-25, queue 2026-09-24-a9e8a0) ----
+  # FROZEN from 2026-09-25: free-rotation.json, recipes-db.json and free-dinners.json were dirty at start with exactly the
+  # bytes the 09-24 morning (guards-blocked) run vouched -Built, rotate-free-dinners correctly wrote nothing, and every
+  # shipping run held them, so the served free list disagreed with live Ghost from 09-24 09:20.
+  $fhB = Run-ForeignHeld $false $true $false $true 'built'
+  T 'MUST FIRE  a held file whose bytes equal a -Built vouch is staged and printed built-promoted on a SHIPPING run' `
+    (($fhB.staged -match 'json-readers-baseline\.json') -and ($fhB.text -match 'built-promoted: 1 served file') -and ($fhB.line -eq '') -and ($fhB.promoted -eq 'grocery/out/json-readers-baseline.json')) ("staged=$($fhB.staged) promoted=$($fhB.promoted) text=$($fhB.text)")
+  $fhBn = Run-ForeignHeld $false $true $false $false 'built'
+  T 'MUST NOT FIRE the same -Built match on a NON-shipping run stays held (W3.2: a blocked run never commits served output)' `
+    (($fhBn.staged -notmatch 'json-readers-baseline') -and ($fhBn.text -notmatch 'built-promoted') -and ($fhBn.line -match 'json-readers-baseline\.json')) ("staged=$($fhBn.staged) text=$($fhBn.text)")
+  $fhBu = Run-ForeignHeld $false $true $false $true 'built-upstream'
+  T 'MUST NOT FIRE a -Built match whose path a commit touched AFTER the vouch stays held on a shipping run' `
+    (($fhBu.staged -notmatch 'json-readers-baseline') -and ($fhBu.text -notmatch 'built-promoted') -and ($fhBu.line -match 'json-readers-baseline\.json')) ("staged=$($fhBu.staged) text=$($fhBu.text)")
+  # FROZEN from compute-v2-perserving.ps1's `Copy-Item $curPath $prevPath -Force`: the run's own write carries an OLD mtime.
+  $fhC = Run-ForeignHeld $false $true $false $true 'copy'
+  T 'MUST FIRE  a dirty-at-start file whose BYTES the run changed is the run''s own although its mtime is before RunStart' `
+    (($fhC.staged -match 'json-readers-baseline\.json') -and ($fhC.line -eq '')) ("staged=$($fhC.staged) line=$($fhC.line)")
 
   # ---- A DELETION PRESENT AT START IS HELD (2026-09-23, design\PLAN-bot-checkout-self-heal-2026-09-23.md W0.2 step 3) ----
   # FROZEN from 09-23: graph/provenance/2026-09-22.jsonl was deleted from the main checkout BEFORE a forced run, nothing
@@ -476,7 +525,7 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
 
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (.claude\rules\ops-and-gates.md): every case above is a literal T line, so
   # a case lost to a thrown helper or a mis-lifted block is a shortfall here, never a smaller green total.
-  $EXPECTED_CASES = 34
+  $EXPECTED_CASES = 41
   $ranBefore = $n
   T ('CLEAN TWIN every literal case ran: ' + $ranBefore + ' of ' + $EXPECTED_CASES) ($ranBefore -eq $EXPECTED_CASES) ("ran=$ranBefore")
   Write-Output ''
