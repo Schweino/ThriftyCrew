@@ -374,7 +374,7 @@ if ($SelfTest) {
   $pS = Get-RulePairingFindings -Files @{ 'grocery.md' = $depthT; 'grocery-depth.md' = $depthT }
   Case 'MUST FIRE' 'a depth file whose lead is itself scoped is a finding' (@($pS.Findings).Count -eq 1 -and $pS.Findings[0] -match 'lead grocery\.md is SCOPED') (@($pS.Findings) -join ';')
   $pN = Get-RulePairingFindings -Files @{ 'measurement.md' = $leadT; 'graph.md' = $leadT }
-  Case 'CLEAN TWIN' 'leads with no depth file (the option-A shape) have nothing to pair and no finding' (@($pN.Findings).Count -eq 0 -and $pN.Depths -eq 0 -and $pN.Pairs -eq 0) ("findings={0} depths={1}" -f (@($pN.Findings) -join ';'), $pN.Depths)
+  Case 'MUST NOT FIRE' 'leads with no depth file (the option-A shape) have nothing to pair and no finding' (@($pN.Findings).Count -eq 0 -and $pN.Depths -eq 0 -and $pN.Pairs -eq 0) ("findings={0} depths={1}" -f (@($pN.Findings) -join ';'), $pN.Depths)
 
   # ---- check 3: dated claims
   $cR = Get-DatedClaims -Text ('---' + $nl + 'paths: "a/**"' + $nl + '---' + $nl + 'Measured 2026-08-01: 41 of 492 commodities (8%).') -Today $today -StaleDays 90
