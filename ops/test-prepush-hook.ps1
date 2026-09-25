@@ -1299,6 +1299,16 @@ try {
     finally { $sha.Dispose() }
     return (Join-Path $pcLogs ('post-commit-' + $hx.Substring(0, 16) + '.log'))
   }
+  function Read-PcFirstLine {
+    # The hook's detached child can still hold its log open for writing when this reads it, and ReadAllLines asks for
+    # FileShare.Read, which a live writer's handle refuses ("being used by another process"): run-gates went red on it
+    # twice on 2026-09-25 under load, naming no case. Open it sharing READ and WRITE, the way the child writes it.
+    param([string]$Path)
+    if (-not (Test-Path -LiteralPath $Path)) { return '' }
+    $fs = New-Object IO.FileStream($Path, [IO.FileMode]::Open, [IO.FileAccess]::Read, ([IO.FileShare]::ReadWrite -bor [IO.FileShare]::Delete))
+    try { $sr = New-Object IO.StreamReader($fs, [Text.Encoding]::UTF8); $l = $sr.ReadLine(); if ($null -eq $l) { return '' }; return $l }
+    finally { $fs.Dispose() }
+  }
   function Wait-PcFile {
     # A hang guard, not a bar: returns as soon as the file exists, and $false only when it never appears.
     param([string]$Path, [int]$GuardSec = 90)
@@ -1375,7 +1385,7 @@ Write-Output 'stub push-main -Prepare: done'
     $pcFire = Invoke-PcCommit $pcLinked 'pc-fire'
     $pcFireOk = Wait-PcFile (Join-Path $pcProbe 'prepare-fire.txt')
     $pcFireSaw = if ($pcFireOk) { [IO.File]::ReadAllText((Join-Path $pcProbe 'prepare-fire.txt')) } else { '' }
-    $pcFireLog1 = if (Test-Path -LiteralPath $pcLinkedLog) { @([IO.File]::ReadAllLines($pcLinkedLog))[0] } else { '' }
+    $pcFireLog1 = Read-PcFirstLine $pcLinkedLog
     $pcWantRoot = 'ROOT=' + (Join-Path $pcLinked 'ops')
     Case 'MUST FIRE' 'a session commit from a linked worktree starts ITS OWN push-main -Prepare, with no GIT_DIR or GIT_INDEX_FILE' `
       ($pcBad.Count -eq 0 -and $pcFire.rc -eq 0 -and $pcFireOk -and $pcFireSaw.Contains('Prepare=True') -and $pcFireSaw.Contains("GIT_DIR=`n") `
