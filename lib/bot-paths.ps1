@@ -77,6 +77,13 @@ function Get-BotInputPaths {
     # every one of them existed only in this working tree. Re-earning it means re-probing the open web, so
     # it is evidence in exactly the sense this list means.
     'meal-prep/db/source-domains.json',
+    # THE TAKE-DOWN RECORD (2026-09-25, Brad's ruling Q1-2026-09-20-partial-cost). When its switch is on, the daily chain
+    # drafts a live recipe the recost cannot fully price (meal-prep\pipeline\unpriced-takedown.ps1, through hold-recipe) and
+    # writes the hold and its reason into these two files. The Ghost draft has ALREADY happened by then, whatever guards say
+    # about the board, so the record of it is evidence and ships on every run like the ledgers above: left unstaged it sits
+    # dirty in the shared checkout, and the next hold landed from a worktree conflicts with it. With the switch at dry-run
+    # nothing writes either file and this stages nothing.
+    'meal-prep/db/held-recipes.json', 'meal-prep/db/unpriced-takedowns.json',
     # THE PRODUCT IDENTITY TABLE. It is regenerated every morning, so if it is not staged here it never
     # leaves this PC - which is exactly the last-mile failure found on 2026-08-22 (public\board.json
     # rebuilt daily, last bot commit four days old). It also has to be tracked for the table to exist in

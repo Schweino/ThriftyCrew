@@ -46,6 +46,8 @@ account lives in the named memory or file.
   ledger's `ledger:` basis is the one interim road, because it is an in-store read, and it is a ONE-TIME read
   bounded by the quarter. Brad's same-day rule binds the order of any such change: *"a recipe page should ALWAYS
   be able to be costed"*, so nothing is retired until what replaces it is live. `grocery/triage-plans/plan-2026-09-21-2.json`.
+  **2026-09-25, Brad (Q1-2026-09-20-partial-cost, B): a LIVE recipe that cannot be fully costed is TAKEN DOWN** until every
+  line prices, overriding "ALWAYS be able to be costed" for that case: `pipeline/unpriced-takedown.ps1`, shipped dry-run.
 
 - **A PRICE IN A RECIPE POST RENDERS FROM THE FEED AT VIEW TIME; NO PRICE LITERAL SHIPS IN A BUILT CARD**
   (Brad's instruction, 2026-09-21: *"The recipe pages should be fetching the pricing from our database. That should

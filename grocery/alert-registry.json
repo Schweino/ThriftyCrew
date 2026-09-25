@@ -598,7 +598,67 @@
    "class": "review",
    "condition": "review until Brad rules Q1-2026-09-20-partial-cost (2026-09-20): the manifest RAN and LANDED for 578 of 584 recipes; the 6 it skips are all LIVE=False and their ingredients (Berbere, Harissa, Pomegranate Molasses) are recorded in meal-prep/db/cost-flags.txt as CARRIAGE NOT-CARRIED at all seven Omaha stores on two or more wordings. Condition 3 does not hold and there is nothing for a reader to do until the ruling says what a page shows when a cost cannot be fully built, so it pages daily for a state that is true every day",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "resolver": "ruling:Q1-2026-09-20-partial-cost"
+   "resolver": "lane:meal-prep/pipeline/unpriced-takedown.ps1",
+   "note": "2026-09-25: Brad ruled Q1-2026-09-20-partial-cost (B), take the recipe down. meal-prep/pipeline/unpriced-takedown.ps1 takes a live recipe the recost cannot fully price down to a draft, so it leaves the manifest as HELD, not SKIPPED. It ships in dry-run behind meal-prep/db/unpriced-takedown-switch.json, so until that switch is on a skip here stays review"
+  },
+  {
+   "id": "recipe-taken-down",
+   "match": "prefix",
+   "key": "recipe taken down",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "lane:meal-prep/pipeline/unpriced-takedown.ps1",
+   "note": "2026-09-25, Brad Q1-2026-09-20-partial-cost (B). One page per recipe, the day it comes down: a live recipe the recost could not fully price was drafted through hold-recipe. The subject names the recipe; the body names the unpriced line, its carriage class and the engine's reason. It comes back by itself when every line prices; the fix is a store fetch for that ingredient, never a typed price"
+  },
+  {
+   "id": "recipe-takedown-failed",
+   "match": "prefix",
+   "key": "recipe takedown failed",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "lane:meal-prep/pipeline/unpriced-takedown.ps1",
+   "note": "2026-09-25: the take-down was due and hold-recipe refused it, so the recipe is STILL LIVE with a cost that leaves out a line"
+  },
+  {
+   "id": "recipe-restored",
+   "match": "prefix",
+   "key": "recipe restored",
+   "class": "digest",
+   "condition": "information: a recipe taken down for an unpriced line priced fully again and was republished cost-only and verified at its sold visibility; nothing to do",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "digest"
+  },
+  {
+   "id": "recipe-restore-refused",
+   "match": "prefix",
+   "key": "recipe restore refused",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "lane:meal-prep/pipeline/unpriced-takedown.ps1",
+   "note": "2026-09-25: every line prices again but the restore did not finish: Ghost could not be read, a paid recipe's post is public (it would come back FREE), the gated republish held it, or it came back public and was drafted again. One page per recipe per cause. The recipe stays down, which is the side that loses no money"
+  },
+  {
+   "id": "recipe-takedown-breaker",
+   "match": "exact",
+   "key": "recipe takedown breaker held",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "note": "2026-09-25: more than 1/50 of live recipes would have come down in one run, so none did: a mass take-down means the board or feed broke, not the recipes. Read the board and feed first"
+  },
+  {
+   "id": "recipe-takedown-blind",
+   "match": "exact",
+   "key": "recipe takedown could not evaluate",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "note": "2026-09-25: unpriced-takedown.ps1 exited without a readable verdict (stale recost, unreadable costed.json, held list, published set or switch), so nothing was taken down or restored"
   },
   {
    "id": "reanchor-incomplete",
@@ -715,7 +775,8 @@
    "class": "review",
    "condition": "review, not page (2026-09-20, queue 2026-09-20-fb37b9, on Brad's 2026-09-20 daily-lane ruling: a condition that is true every day is not news every day). This alert cannot reach condition 1, because the reader-facing half is held by a BLOCKING gate rather than by this email: wave-preaudit refuses a first publish whose costed row has lines_unpriced > 0, and since 2026-09-20 sync-recipesdb-cost refuses to write a partial cost for a slug in published-hashes.json (exit 2, names the slugs) - both page through their own emitters. Measured on 2026-09-20: 26 flagged lines over 6 recipes, all six unpublished and HELD as not carried in Omaha, 0 live recipes with an unpriced line. What is left is the standing five-spice label-vs-ledger precedence question (Q1-2026-09-20-partial-cost), which is a ruling and not news.",
    "emitter": "grocery/check-ad-cycles.ps1",
-   "resolver": "ruling:Q1-2026-09-20-partial-cost"
+   "resolver": "lane:meal-prep/pipeline/unpriced-takedown.ps1",
+   "note": "2026-09-25: Q1-2026-09-20-partial-cost is answered (B, take the recipe down; meal-prep/pipeline/unpriced-takedown.ps1). Its side question, whether a fresh ledger read outranks an old label price, is moot: since 2026-09-21 db/label-prices.json is macros only and cost-recipes refuses a label: basis"
   },
   {
    "id": "dedup-evidence-stale",

@@ -1,0 +1,4 @@
+{
+  "_doc": "Kill switch for meal-prep/pipeline/unpriced-takedown.ps1, the daily chain's take-down of a LIVE recipe whose recost cannot price a line (Brad, 2026-09-25, Q1-2026-09-20-partial-cost, option B). 'dry-run' reports what it WOULD take down or bring back and writes nothing. 'on' acts: it drafts the recipe through hold-recipe.ps1, records it in db/unpriced-takedowns.json, pages once, and republishes it through the gated cost-only road when every line prices again. Any other value is refused. Human-owned: the chain never writes this file. Shipped 'dry-run' on 2026-09-25; turn it 'on' only after Brad has seen the dry-run list.",
+  "mode": "dry-run"
+}

@@ -1220,6 +1220,7 @@ price-history.json is a reconciled copy of the comparison boards on disk. A boar
       # exits 1 - so the catch below never fired and 'refreshed db\costed' was logged over a recost that had
       # died, leaving every recipe priced off the previous board with nothing said. Still non-fatal: a failed
       # recost is not a reason to withhold a correct board, the same reasoning as the freshness check below.
+      $crRc = $null   # read by the unpriced take-down below: a recost that threw before its exit code is not a recost that passed
       try {
         # -LedgerMaxAgeDays: the engine may price an ingredient from a CARRIED carriage-ledger read (a live
         # in-store price + size + product id + date for something no capture reaches), bounded by the quarter.
@@ -1334,6 +1335,58 @@ price-history.json is a reconciled copy of the comparison boards on disk. A boar
           }
         }
       } catch { Log ('price-claims threw: ' + $_.Exception.Message) }
+      # A LIVE RECIPE THE RECOST CANNOT FULLY PRICE COMES DOWN, AND GOES BACK UP WHEN IT CAN (Brad, 2026-09-25,
+      # Q1-2026-09-20-partial-cost, option B: "Take the recipe down"). Until this step the manifest silently SKIPPED such a
+      # recipe and its page kept the last cost, unmarked. meal-prep\pipeline\unpriced-takedown.ps1 decides, through
+      # hold-recipe (down) and the gated cost-only republish (up); its header carries the breaker bar, the idempotency
+      # argument and the paywall check. It ships behind its own kill switch (meal-prep\db\unpriced-takedown-switch.json,
+      # 'dry-run'), so until Brad turns it on this step REPORTS what it would do and writes nothing. HERE, BEFORE the hold
+      # reconcile and the feed export, so a recipe taken down today is already off today's feed and manifest.
+      # ONLY AFTER A RECOST THAT PASSED IN THIS RUN: acting on yesterday's costed.json could take a page down, or bring one
+      # back, on a board that is no longer live. Under -NoPublish (a rehearsal) it is forced to dry-run and can reach no
+      # reader. PAGES ARE AT LEAST ONCE: a page stays due in the take-down ledger until it is sent and marked here.
+      if ($crRc -eq 0) {
+        try {
+          $utdScript = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\unpriced-takedown.ps1'
+          $utdResult = Join-Path $env:TEMP ('utd-result-' + [guid]::NewGuid().ToString('N') + '.json')
+          $utdArgs = @('-ResultFile', $utdResult)
+          if ($NoPublish) { $utdArgs += '-DryRun' }
+          $utdRun = Invoke-NativeScript $utdScript $utdArgs
+          foreach ($l in @($utdRun.Lines)) { Log ('unpriced-takedown: ' + [string]$l) }
+          $utd = $null
+          if (Test-Path -LiteralPath $utdResult) { try { $utd = Get-Content -LiteralPath $utdResult -Raw -Encoding UTF8 | ConvertFrom-Json } catch { $utd = $null } finally { Remove-Item -LiteralPath $utdResult -Force -ErrorAction SilentlyContinue } }
+          if ($utdRun.ExitCode -ne 0 -or $null -eq $utd) {
+            $utdWhy = if ($utd -and $utd.blind) { [string]$utd.blind } else { 'exit ' + $utdRun.ExitCode + ', no readable result' }
+            $summary += ('REVIEW    unpriced take-down could not evaluate - nothing taken down or restored: ' + $utdWhy)
+            if (-not $NoAlert) { try { Send-Alert -Subject "Recipe takedown could not evaluate - $asofS" -Body ("meal-prep\pipeline\unpriced-takedown.ps1 could not look, so no live recipe was taken down and none was brought back this run. A live recipe whose cost leaves out an ingredient may still be up. Why: " + $utdWhy + "`n`nLast lines:`n" + ((@($utdRun.Lines) | Select-Object -Last 8) -join "`n")) | Out-Null } catch {} }
+          } else {
+            $utdWould = @($utd.would).Count
+            if ($utd.mode -eq 'dry-run' -and $utdWould -gt 0) { $summary += ('REVIEW    unpriced take-down (dry-run, switch off): ' + $utdWould + ' live recipe(s) WOULD come down - ' + ((@($utd.would) | ForEach-Object { [string]$_.slug }) -join ', ')) }
+            if (@($utd.taken_down).Count -gt 0) { $summary += ('REVIEW    unpriced take-down: ' + @($utd.taken_down).Count + ' live recipe(s) taken down to a draft - an ingredient has no store price') }
+            if ($utd.breaker.tripped) { $summary += ('ERROR     unpriced take-down BREAKER HELD: ' + $utd.breaker.count + ' of ' + $utd.breaker.live + ' live recipes would come down, over the bar of ' + $utd.breaker.bar + '; none was') }
+            $utdSent = @()
+            foreach ($pg in @($utd.pages)) {
+              if ($NoAlert) { continue }
+              $pgName = [string]$pg.name; $pgBody = ([string]$pg.detail + "`n`nRecipe: " + [string]$pg.slug + "`nLedger: meal-prep\db\unpriced-takedowns.json. Rule: Brad 2026-09-25, Q1-2026-09-20-partial-cost (B).")
+              $pgRc = 9; $pgOut = $null
+              switch ([string]$pg.kind) {
+                'takedown'        { $pgOut = Send-Alert -Subject "Recipe taken down - $pgName" -Body $pgBody }
+                'takedown-failed' { $pgOut = Send-Alert -Subject "Recipe takedown failed - $pgName" -Body $pgBody }
+                'restored'        { $pgOut = Send-Alert -Subject "Recipe restored - $pgName" -Body $pgBody }
+                'restore-refused' { $pgOut = Send-Alert -Subject "Recipe restore refused - $pgName" -Body $pgBody }
+                'breaker'         { $pgOut = Send-Alert -Subject "Recipe takedown breaker held - $asofS" -Body $pgBody }
+                default           { Log ('unpriced-takedown: UNKNOWN page kind ' + [string]$pg.kind + ' for ' + [string]$pg.key + ' - not sent, left due') }
+              }
+              if ($null -ne $pgOut) { $pgOuts = @($pgOut); $pgRc = $pgOuts[$pgOuts.Count - 1] }   # Send-Alert returns send-alert.ps1's exit code last
+              if ($pgRc -eq 0) { $utdSent += [string]$pg.key }
+            }
+            if ($utdSent.Count) {
+              $mk = Invoke-NativeScript $utdScript @('-MarkPaged', ($utdSent -join ','))
+              Log ('unpriced-takedown: marked ' + $utdSent.Count + ' page(s) sent, rc ' + $mk.ExitCode)
+            }
+          }
+        } catch { Log ('unpriced-takedown threw: ' + $_.Exception.Message) }
+      } else { Log ('unpriced-takedown: SKIPPED - the recost did not pass this run (rc ' + $crRc + '), so nothing is taken down or restored on a stale cost') }
       # RECONCILE HOLDS BEFORE ANY READER OF THE PUBLISHED SET (2026-09-24, triage 2026-09-24-755c23). A hold applied
       # in a linked worktree removes its hash from the GITIGNORED db\published-hashes.json only there, so this checkout
       # kept 11 held recipes keyed as published and the FEED ASSERT and audit-live-price-contract read them as live.
