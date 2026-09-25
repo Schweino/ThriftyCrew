@@ -488,11 +488,12 @@ if ($SelfTest) {
   catch { $canonErr = $_.Exception.Message }
   if ($null -eq $canon) { Write-Output ('SELF-TEST FAIL: the canonical file ' + $STORE_STEP_FILE + ' did not parse: ' + $canonErr); exit 1 }
   $code = [string]$canon['CODE']; $ana = [string]$canon['ANALYSIS']
-  $cmd  = 'C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/' + 'search.py "<3-6 words>"'
+  $cmd  = 'C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/' + 'search.py --' + 'estate "<3-6 words>"'
   T 'CLEAN TWIN the shipped canonical file parses into exactly CODE and ANALYSIS, each holding the section 4.7 command' `
     ($canon.Count -eq 2 -and $code.Contains($cmd) -and $ana.Contains($cmd) -and $code.StartsWith('<!-- store-step:CODE begin') -and $ana.EndsWith('<!-- store-step:ANALYSIS end -->')) ($canon.Keys -join ',')
-  T 'MUST NOT FIRE the canonical command carries no --estate until W3.4 adds it to every carrier together' `
-    (-not $code.Contains('--estate') -and -not $ana.Contains('--estate')) 'a variant carries --estate'
+  $bare = 'knowledge-search/' + 'search.py "<3-6 words>"'
+  T 'MUST NOT FIRE since W3.4 (2026-09-25) neither canonical variant still carries the command without --estate' `
+    (-not $code.Contains($bare) -and -not $ana.Contains($bare)) 'a variant still carries the bare command'
 
   function Join-TcFixture {
     param([string[]]$Head, [string[]]$Blocks)
