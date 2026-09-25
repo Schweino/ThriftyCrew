@@ -1,33 +1,18 @@
 ---
-description: Rules for the identity graph, provenance and learning state.
+description: Rules for the identity graph, provenance and learning state - one line each; the account is graph-depth.md.
 ---
 
-> **Resolving the `[[citations]]` below.** Each is a filename without its extension, under
-> `~/.claude/projects/C--Codex-ThriftyCrew/memory/`. So `[[propagate-has-no-slugs]]` is
-> `~/.claude/projects/C--Codex-ThriftyCrew/memory/propagate-has-no-slugs.md`. The line here is a
-> pointer; the file is the account. Read it before acting on the pointer, and never write to that
-> directory - it is outside the repo and outside your worktree.
+# Graph rules, one line each
 
+LEAD FILE: loads in every ThriftyCrew session, because it has no `paths:` key, on purpose
+(design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md, W2.3 option B, D2). The account behind each line, with
+its dates and measurements, is `.claude/rules/graph-depth.md`, which loads only after a session reads a file under
+`graph/`. A `[[name]]` is `~/.claude/projects/C--Codex-ThriftyCrew/memory/<name>.md`: read it, never write it.
 
-# Working in `graph/`
-
-Loaded in every ThriftyCrew session: this file has no `paths:` key, on purpose
-(design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md, W2.3).
-
-- **A commodity id is NAMESPACED: `commodity:staple:<id>`.** The bare id returns an agreeing zero,
-  which is the worst possible answer - it looks like a clean lookup.
-  [[identity-graph-commodity-is-namespaced]]
-- **Time gates are ad timing plus the 90-day quarter only**, and the window is read from
-  `capture-policy.ps1`, never hard-coded. [[graph-time-gates-decision]]
-- **Learning must be per-batch, not nightly** - check WHICH half before believing it is not learning.
-  [[learning-must-be-per-batch-not-nightly]]
-- **An agreeing number escapes scrutiny.** Run the check by rule, not by suspicion.
-  [[an-agreeing-number-escapes-scrutiny]]
-- **A graph.db that EXISTS may hold no nodes** (2026-09-23). `graph/lib/rebuild.py`'s plain mode
-  restores only the five learning tables, by design, and `design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md`
-  W6.4 sends worktrees down that road, so `question_verdicts` names commodities the index cannot compile.
-  A check that reads graph.db when it is present asks whether it holds `Commodity` nodes before resolving
-  one, and a no is BLIND: counted, never ok, never a failure. `_index_blind` in
-  `graph/bench/priors_ablation.py` is the exemplar; its self-test red a push over exactly this.
+- A commodity id is NAMESPACED, `commodity:staple:<id>`: a bare id returns an agreeing zero that looks like a clean lookup. [[identity-graph-commodity-is-namespaced]]
+- Time gates are ad timing plus the 90-day quarter only, with the window read from `capture-policy.ps1`, never hard-coded. [[graph-time-gates-decision]]
+- Learning must be per-batch, not nightly: check WHICH half is not learning before believing it. [[learning-must-be-per-batch-not-nightly]]
+- An agreeing number escapes scrutiny: run the check by rule, not by suspicion. [[an-agreeing-number-escapes-scrutiny]]
+- A graph.db that EXISTS may hold no nodes: ask whether it holds `Commodity` nodes before resolving one, and score a no as BLIND (counted, never ok, never a failure); copy `_index_blind` in `graph/bench/priors_ablation.py`.
 
 Regime: this holds for files under `graph/`.

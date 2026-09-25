@@ -5,7 +5,8 @@
   WS 7e of design\PLAN-brain-v2-2026-09-09.md. Checks 1 and 2 rewritten by W2.3 of
   design\PLAN-brain-consults-on-code-and-analysis-2026-09-22.md.
 
-  THREE CHECKS, AND ONLY TWO OF THEM ARE VERDICTS.
+  FOUR CHECKS, AND ONLY THREE OF THEM ARE VERDICTS (check 4 was added by the option-B experiment and is
+  numbered last although it is written after check 2, which it extends).
 
   1. INERT SCOPE KEYS - HARD. Claude Code scopes a rules file by its `paths:` front matter key and by
      nothing else. Every installed build checked (2.1.173, 2.1.236, 2.1.263, 2.1.280) carries one loader:
@@ -25,8 +26,17 @@
      left, or only `**`, means the file is UNCONDITIONAL, exactly as the loader treats it. An entry that
      matches nothing DISARMS its file: it loads for no path, silently, and a session editing that area
      gets none of the traps written for it. That is the fail-open shape, decided by source alone. Exit 2.
-     A file with no `paths:` key, or no front matter, is reported UNCONDITIONAL BY DESIGN, never a finding:
-     every ThriftyCrew rules file is that today, on purpose (W2.3 option A).
+     A file with no `paths:` key, or no front matter, is reported UNCONDITIONAL BY DESIGN, never a finding.
+     Under W2.3 option B (D2, the experiment/rules-split-option-b branch) that is every LEAD file and
+     measurement.md, on purpose; each `<name>-depth.md` carries a `paths:` key and loads only after a session
+     READS a matching file (the loader matches the path relative to the checkout holding .claude\rules, with
+     gitignore semantics, so a slashless entry matches at any depth).
+
+  4. PAIRING - HARD, option B only. A `<name>-depth.md` must be SCOPED, or it loads in every session beside its
+     lead and the split buys nothing; and its lead `<name>.md` must EXIST and be UNCONDITIONAL, or the one-line
+     rules reach no session that has not read a matching file, which is the fail-open shape of check 2 one file
+     over. A lead with no depth file (measurement.md) is fine. With no `-depth.md` file at all the check has
+     nothing to judge and says so. Exit 2.
 
   3. DATED CLAIMS - A REPORT, NOT THE PLANNED RATCHET. A line carrying a date older than $StaleDays is
      listed with the numbers it states, for a person to re-verify and re-date. The plan asked for a
@@ -50,8 +60,12 @@
   line that nobody actually re-verified reads as fresh. A finding of checks 1 and 2 is COMPLETE, because
   the match IS the defect: an inert key is inert wherever it appears, and a dead entry matches nothing.
 
-  EXIT: 0 no inert key and every paths: entry matches (stale claims are content, not a verdict),
-        2 an inert scope key or a dead paths: entry, 3 could not evaluate (no rules directory, or no git).
+  The pairing check is exact over the file names and the scope it reads, and COMPLETE for the same reason:
+  an unscoped depth file loads everywhere and a missing or scoped lead reaches nobody, whatever the text says.
+
+  EXIT: 0 no inert key, every paths: entry matches and every depth file is paired (stale claims are content,
+        not a verdict), 2 an inert scope key, a dead paths: entry or a pairing finding, 3 could not evaluate
+        (no rules directory, or no git).
 #>
 [CmdletBinding()]
 param([switch]$SelfTest, [switch]$Json, [int]$StaleDays = 90)
@@ -235,6 +249,29 @@ function Get-RuleVerdict {
   return [pscustomobject]@{ Scope = $sc; Counts = $counts; Dead = $dead.ToArray() }
 }
 
+function Get-RulePairingFindings {
+  <# Check 4 over a set of rules files, name -> text. Pure. Returns Findings (strings), Pairs (depth files whose
+     lead is present and unconditional and which are themselves scoped) and Depths (how many -depth.md exist). #>
+  param([hashtable]$Files)
+  $find = New-Object System.Collections.Generic.List[string]
+  $pairs = 0; $depths = 0
+  foreach ($name in @($Files.Keys | Sort-Object)) {
+    if ($name -notmatch '^(.+)-depth\.md$') { continue }
+    $depths++
+    $leadName = $Matches[1] + '.md'
+    $ok = $true
+    $ds = Get-RuleScope -Text $Files[$name]
+    if ($ds.Scope -ne 'scoped') { [void]$find.Add(("{0}: depth file is UNCONDITIONAL ({1}), so it loads in every session beside its lead" -f $name, $ds.Why)); $ok = $false }
+    if (-not $Files.ContainsKey($leadName)) { [void]$find.Add(("{0}: no lead file {1}, so its rules reach no session that has not read a matching path" -f $name, $leadName)); $ok = $false }
+    else {
+      $ls = Get-RuleScope -Text $Files[$leadName]
+      if ($ls.Scope -ne 'unconditional') { [void]$find.Add(("{0}: its lead {1} is SCOPED, so the one-line rules reach no session that has not read a matching path" -f $name, $leadName)); $ok = $false }
+    }
+    if ($ok) { $pairs++ }
+  }
+  return [pscustomobject]@{ Findings = $find.ToArray(); Pairs = $pairs; Depths = $depths }
+}
+
 function Get-DatedClaims {
   <# One object per line carrying a claim date: Line, Date, AgeDays, Stale, Numbers, Text. #>
   param([string]$Text, [datetime]$Today, [int]$StaleDays)
@@ -273,7 +310,7 @@ if ($SelfTest) {
     Write-Output ("  {0,-14} {1,-76} {2}" -f $Label, $Name, $(if ($Ok) { 'ok' } else { "FAIL $Detail" }))
   }
   # A literal case list knows its own size, so a shortfall is a defect, not a smaller suite.
-  $EXPECTED_CASES = 30
+  $EXPECTED_CASES = 35
   $today = [datetime]'2026-12-01'
   $nl = "`n"
 
@@ -324,6 +361,20 @@ if ($SelfTest) {
   $vDeep = Get-RuleVerdict -Repo $repo -Text ('---' + $nl + 'paths: "audit-rule-' + 'currency.ps1"' + $nl + '---' + $nl)
   Case 'MUST NOT FIRE' 'a slashless entry that matches only below the root is not dead' (@($vDeep.Dead).Count -eq 0) ("dead={0}" -f ($vDeep.Dead -join '|'))
   Case 'CLEAN TWIN' 'a paths entry that matches tracked files reports its count' ($vCs.Counts['ops'] -gt 0 -and $vCs.Counts['.claude/rules/*.md'] -ge 1) ("ops={0} rules={1}" -f $vCs.Counts['ops'], $vCs.Counts['.claude/rules/*.md'])
+
+  # ---- check 4: pairing (pure)
+  $leadT = '---' + $nl + 'description: lead' + $nl + '---' + $nl + '- one line' + $nl
+  $depthT = '---' + $nl + 'description: depth' + $nl + 'paths:' + $nl + '  - "grocery/**"' + $nl + '---' + $nl + 'the account' + $nl
+  $pOk = Get-RulePairingFindings -Files @{ 'grocery.md' = $leadT; 'grocery-depth.md' = $depthT; 'measurement.md' = $leadT }
+  Case 'MUST NOT FIRE' 'a scoped depth file with an unconditional lead is one clean pair' (@($pOk.Findings).Count -eq 0 -and $pOk.Pairs -eq 1 -and $pOk.Depths -eq 1) ("findings={0} pairs={1}" -f (@($pOk.Findings) -join ';'), $pOk.Pairs)
+  $pU = Get-RulePairingFindings -Files @{ 'grocery.md' = $leadT; 'grocery-depth.md' = $leadT }
+  Case 'MUST FIRE' 'a depth file with no paths: key loads everywhere and is a finding' (@($pU.Findings).Count -eq 1 -and $pU.Findings[0] -match 'UNCONDITIONAL' -and $pU.Pairs -eq 0) (@($pU.Findings) -join ';')
+  $pM = Get-RulePairingFindings -Files @{ 'grocery-depth.md' = $depthT }
+  Case 'MUST FIRE' 'a depth file whose lead is missing is a finding' (@($pM.Findings).Count -eq 1 -and $pM.Findings[0] -match 'no lead file grocery\.md') (@($pM.Findings) -join ';')
+  $pS = Get-RulePairingFindings -Files @{ 'grocery.md' = $depthT; 'grocery-depth.md' = $depthT }
+  Case 'MUST FIRE' 'a depth file whose lead is itself scoped is a finding' (@($pS.Findings).Count -eq 1 -and $pS.Findings[0] -match 'lead grocery\.md is SCOPED') (@($pS.Findings) -join ';')
+  $pN = Get-RulePairingFindings -Files @{ 'measurement.md' = $leadT; 'graph.md' = $leadT }
+  Case 'CLEAN TWIN' 'leads with no depth file (the option-A shape) have nothing to pair and no finding' (@($pN.Findings).Count -eq 0 -and $pN.Depths -eq 0 -and $pN.Pairs -eq 0) ("findings={0} depths={1}" -f (@($pN.Findings) -join ';'), $pN.Depths)
 
   # ---- check 3: dated claims
   $cR = Get-DatedClaims -Text ('---' + $nl + 'paths: "a/**"' + $nl + '---' + $nl + 'Measured 2026-08-01: 41 of 492 commodities (8%).') -Today $today -StaleDays 90
@@ -413,6 +464,11 @@ foreach ($f in $files) {
   $cR = Get-DatedClaims -Text $text -Today $today -StaleDays $StaleDays
   foreach ($c in @($cR)) { $c | Add-Member -NotePropertyName File -NotePropertyValue $f.Name; [void]$claims.Add($c) }
 }
+$texts = @{}
+foreach ($f in $files) { $texts[$f.Name] = [IO.File]::ReadAllText($f.FullName) }
+$pairing = Get-RulePairingFindings -Files $texts
+if ($pairing.Depths -eq 0) { Write-Output '  pairing: no -depth.md file, so no lead/depth pair to judge (the option-A shape)' }
+else { Write-Output ("  pairing: {0} of {1} depth file(s) scoped with an unconditional lead" -f $pairing.Pairs, $pairing.Depths) }
 $stale = @($claims | Where-Object { $_.Stale } | Sort-Object Date)
 $oldest = if ($claims.Count) { (@($claims | Sort-Object Date))[0].Date } else { $null }
 Write-Output ''
@@ -423,10 +479,12 @@ foreach ($s in ($stale | Select-Object -First 20)) {
 if ($Json) {
   'rule-currency-json: ' + (([ordered]@{ known = $true; files = $files.Count; inert_files = $inertF.Count; paths = $nPaths
                                            dead_paths = $dead.Count; unconditional = $nUncond
+                                           depth_files = $pairing.Depths; pairs = $pairing.Pairs; pairing_findings = @($pairing.Findings).Count
                                            dated_claims = $claims.Count; stale_claims = $stale.Count; oldest_claim = $oldest }) | ConvertTo-Json -Compress)
 }
-$summary = "files=$($files.Count) inert=$($inertF.Count) paths=$nPaths dead=$($dead.Count) unconditional=$nUncond dated=$($claims.Count) stale=$($stale.Count)"
-if ($inertF.Count -or $dead.Count) {
+$pairFind = @($pairing.Findings)
+$summary = "files=$($files.Count) inert=$($inertF.Count) paths=$nPaths dead=$($dead.Count) unconditional=$nUncond depth=$($pairing.Depths) pairs=$($pairing.Pairs) pairing=$($pairFind.Count) dated=$($claims.Count) stale=$($stale.Count)"
+if ($inertF.Count -or $dead.Count -or $pairFind.Count) {
   Write-Output ''
   if ($inertF.Count) {
     Write-Output ("RULE CURRENCY FAILED: {0} file(s) carry a scope key the Claude Code loader never reads (it reads paths: only):" -f $inertF.Count)
@@ -436,7 +494,11 @@ if ($inertF.Count -or $dead.Count) {
     Write-Output ("RULE CURRENCY FAILED: {0} paths: entr(y/ies) match no tracked file, so their rules load for nothing:" -f $dead.Count)
     $dead | ForEach-Object { Write-Output "    $_" }
   }
+  if ($pairFind.Count) {
+    Write-Output ("RULE CURRENCY FAILED: {0} lead/depth pairing finding(s):" -f $pairFind.Count)
+    $pairFind | ForEach-Object { Write-Output "    $_" }
+  }
   Exit-Guard -Name 'RULE-CURRENCY' -Code 2 -Summary $summary
 }
-Write-Output ("rule-currency: PASSED - no inert scope key in {0} file(s); all {1} paths: entr(y/ies) match tracked files; {2} file(s) unconditional by design. Stale claims above are for a person, not a verdict." -f $files.Count, $nPaths, $nUncond)
+Write-Output ("rule-currency: PASSED - no inert scope key in {0} file(s); all {1} paths: entr(y/ies) match tracked files; {2} file(s) unconditional by design; {3} of {4} depth file(s) paired. Stale claims above are for a person, not a verdict." -f $files.Count, $nPaths, $nUncond, $pairing.Pairs, $pairing.Depths)
 Exit-Guard -Name 'RULE-CURRENCY' -Code 0 -Summary $summary

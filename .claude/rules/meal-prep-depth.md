@@ -1,0 +1,113 @@
+---
+description: DEPTH for meal-prep.md: the full account behind each one-line meal-prep rule.
+paths:
+  - "meal-prep/**"
+  - ".claude/skills/recipe-hunter/**"
+  - ".claude/skills/meal-macro/**"
+---
+
+> **Resolving the `[[citations]]` below.** Each is a filename without its extension, under
+> `~/.claude/projects/C--Codex-ThriftyCrew/memory/`. So `[[propagate-has-no-slugs]]` is
+> `~/.claude/projects/C--Codex-ThriftyCrew/memory/propagate-has-no-slugs.md`. The line here is a
+> pointer; the file is the account. Read it before acting on the pointer, and never write to that
+> directory - it is outside the repo and outside your worktree.
+
+
+# Working in `meal-prep/`
+
+DEPTH FILE (option B, design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md W2.3 D2): it loads
+only after a session READS a file matching its `paths:` key, never at session start and never from an
+Edit, a Write or a shell command alone. One line per rule is in `.claude/rules/meal-prep.md`, which loads in
+every session. Apart from this sentence and the front matter, this file is the option-A file verbatim. Pointers, not copies - the full
+account lives in the named memory or file.
+
+- **`set-board-cell.ps1` is the RECIPE-board corrector**, one cell at a time on
+  `recipe-board-everyday.json`. It is not `known-wrong`, which corrects the main board.
+  [[set-board-cell-is-the-recipe-board-corrector]]
+- **Recost aftercare:** `sync-recipesdb-cost` BEFORE `propagate`, and `-Slugs` has two different shapes.
+  `propagate` itself has no `-Slugs` at all - it publishes the whole dirty set, and dirty is
+  spec-hash-versus-stamps. [[recost-needs-sync-recipesdb-cost-and-the-slugs-trap]], [[propagate-has-no-slugs]]
+  **Since 2026-09-19 (Brad's ruling) a hand run REFUSES** (exit 2, `PROPAGATE-SCOPE-REFUSED` and the list) when
+  any dirty spec is not named: pass `-SlugsFile <file, one slug per line>` naming what you meant to ship, or
+  `-AllowCatalogue` when republishing everything dirty is the decision. `-DryRun` prints the scope line first.
+- **A spec's bid is not a pricing input.** An unbid scaler line blacks out the card's live scaler.
+  [[spec-bid-is-not-a-pricing-input]]
+- **A publish crash loses the journal** unless the journal is written per slug, and `-All` iterates
+  `db/built` rather than the specs. [[publish-wave-crash-loses-the-journal]]
+- **`retire-recipe` only retires LIVE recipes.** The built-but-unpublished have no gated disposal.
+  [[retire-recipe-only-retires-live-recipes]]
+- **The paywall split is `html|paywall|html` at `<!--TC-PAYWALL-->`**, before "What This Batch Costs".
+  [[recipe-paywall-split]]
+- **A spec's mtime is not evidence of a recost** - reanchor rewrites every spec daily.
+  [[spec-mtime-is-not-evidence-of-a-recost]]
+- **EVERY PRICE IS FETCHED FROM AN OMAHA STORE, BY THE PIPELINE** (Brad's standing ruling, 2026-09-21: *"We
+  should never have hand-typed pricing. The pricing must be fetched from a store always."* and *"Pricing should
+  always come from Ads or websites from stores directly."*). A pricing input is a store's ad or a store's own
+  site, read by the capture pipeline onto the board. **No hand-typed, one-off, agent-captured or walmart.com
+  MARKETPLACE price is a pricing input**, and `set-board-cell.ps1` writing a number nobody fetched is a
+  hand-typed price by another name. **`db/label-prices.json` is MACROS ONLY**: `engine/cost-recipes.ps1` loads
+  its nutrition fields and never its `package_price_usd` (still in the file, unread), and the engine REFUSES to
+  write `costed.json` while any line carries a `label:` basis (`Get-LabelBasisLines`, fixtured). An ingredient the
+  board cannot price stays NO PRICE BASIS and pages: the repair is a store fetch, never a label. The carriage
+  ledger's `ledger:` basis is the one interim road, because it is an in-store read, and it is a ONE-TIME read
+  bounded by the quarter. Brad's same-day rule binds the order of any such change: *"a recipe page should ALWAYS
+  be able to be costed"*, so nothing is retired until what replaces it is live. `grocery/triage-plans/plan-2026-09-21-2.json`.
+
+- **A PRICE IN A RECIPE POST RENDERS FROM THE FEED AT VIEW TIME; NO PRICE LITERAL SHIPS IN A BUILT CARD**
+  (Brad's instruction, 2026-09-21: *"The recipe pages should be fetching the pricing from our database. That should
+  be a constant and we shouldn't need to 'republish'. If a pricing updates in the DB its automatically updated on all
+  recipe pages."* and *"Be thorough so this can't ever 'break' again."*). A price is a
+  `<span data-tc-live-price data-tc-slug data-tc-field="cost_ps" data-tc-basis="feed-everyday-whole-package"
+  data-tc-fallback data-tc-asof>`, written ONLY by `Format-TcLivePriceSpan` (`meal-prep/lib/render-tokens.ps1`) and filled by
+  the card script's `fillLivePrices()` (`meal-prep/pipeline/tpl2-scaler-prefix.html`), which depends on nothing the theme
+  injects and refuses a non-finite or non-positive value, keeping the fallback. **The fallback is on the FILL's
+  basis, never `stat.cost_ps`**: that is the recipe board's everyday at the recipe's package, and it disagreed with
+  the fill by up to 33 cents a serving on the canary. `meal-prep/engine/build-cards.ps1` runs each card's own script against
+  the canonical feed (`meal-prep/pipeline/stamp-live-price-fallback.ps1`) and stamps the result, and a card it cannot stamp is
+  a build error. Four checks hold it: the BUILD GATE `meal-prep/lib/price-literal-gate.ps1` (build-card2 before writing,
+  publish with `-RequireAsOf` before sending; allowlist is two exact membership phrases), the FEED CONTRACT
+  `meal-prep/pipeline/audit-live-price-contract.ps1`, the LIVE MONITOR `meal-prep/pipeline/monitor-live-recipe-prices.ps1` (runs each
+  live post's own script in jsdom against the deployed feed, daily in `check-ad-cycles`, pages as `live recipe
+  prices`), and the rollout hold `meal-prep/db/live-price-rollout.json` (stage `catalogue` since Brad approved stage 2 the same day: nothing is held, and a legacy placeholder is a
+  finding everywhere). **COMPLETENESS is checked daily**: `audit-live-price-contract.ps1 -LivePosts` reads every
+  published post from the Admin API and fails one without `fillLivePrices()`, still on the old fill behind
+  `if(!bar) return;`, or with an unstamped placeholder (lane `live-price-completeness`). A new live field needs a registry entry in
+  `meal-prep/lib/render-tokens.ps1`, a branch in `fillLivePrices()` and a feed key, or all three checks refuse it.
+  `design/PLAN-live-recipe-prices-2026-09-21.md`.
+
+- **THE PANEL IS READ IN FULL AND THE FOOD DB KEEPS FOUR FIELDS OF IT** (2026-09-12, backlog I145).
+  `db/food-label-captures.json` carries `sodium_mg` and populates it - the Great Value chicken broth
+  capture records 830 mg, the beef broth 810. `food-macros-db.json` has **no sodium field on any of
+  its 441 rows**, and no sugar field; fibre survives on 98 of 441. So the expensive half was done -
+  sodium was transcribed by hand off a photograph, at the five-to-eight round trips per label that
+  `[[reading-a-nutrition-label-off-a-product-photo]]` records as the cost - and then it was dropped
+  on the way in. A US panel must declare thirteen things; we keep four of them.
+  **THIS IS AN OPEN QUESTION FOR BRAD AND IS RECORDED HERE ONLY SO IT STOPS BEING INVISIBLE.** If we
+  want sodium, the captures already hold it for the rows they cover and the field costs nothing; if
+  we do not, the CAPTURE schema should stop collecting it so the next label sweep stops paying for a
+  number nobody stores. What is wrong today is neither answer - it is paying for it and discarding
+  it. Worth knowing while deciding: a meal-prep audience is a plausible sodium-watching audience, and
+  broth, canned tomatoes and soy sauce are exactly where it concentrates.
+  **ANSWERED 2026-09-19 (backlog I137, option A): SODIUM IS STORED, NOT SHOWN.** `sodium_mg` (per
+  serving, the row's own basis) and `sodium_source` (`fdc:<id>` or `label-capture:<ref>`) are optional
+  fields; an absent value is UNKNOWN, never 0. `pipeline/food_sodium_backfill.py` is the only writer
+  (label capture first, CONFLICT captures never, an FDC record only when it reproduces the row's
+  macros) and `food_provenance.py` gates the field. **No renderer may read it** until every ingredient
+  of a recipe has a value, and showing it even then is a separate ruling; `--coverage` says how far off
+  that is (0 of 584 recipes on the day it landed: Salt alone blocks 522).
+- **A DUAL-COLUMN PANEL DECLARES TWO DIFFERENT FOODS, AND NOTHING WE CAPTURE RECORDS WHICH COLUMN A
+  NUMBER CAME FROM** (2026-09-12, backlog I146). A cereal box legally carries both "per 1.5 cup
+  serving" and "per serving with three quarters of a cup of skim milk", side by side. The capture
+  fields are `item`, `status`, `product`, `url`, `label`, `stored_brand` and `note`, and **there is
+  no field naming the column**; `food-macros-db.json`'s only nearby field is a free-text `notes`
+  carrying things like `"raw"`. That `"raw"` is the tell that this estate already knows the shape:
+  `[[food-db-naming-rulings]]` ruling 2 exists because bone-in skin-on chicken thigh is 221 cal per
+  100 g edible and 177 as-purchased, with nothing in either name saying so, and Brad's ruling was to
+  put the basis IN THE NAME. **A dual-column panel is that same defect one step earlier**, and it is
+  worse in one respect: raw-versus-cooked at least leaves a trace, and an as-prepared column leaves
+  none at all once transcribed. Fourteen captures exist today and none is obviously a dual-column
+  product, so **the cost of fixing this BEFORE the next sweep is one field and the cost after it is a
+  re-read of every affected label.**
+
+Regime: this holds for files under `meal-prep/`. The grocery board has a different corrector and a
+different rebuild cadence.
