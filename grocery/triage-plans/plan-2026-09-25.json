@@ -329,19 +329,19 @@
         ],
         "exact_change": "resolve each of the 5 shapes in the weaker reader (never the engine without the money review), then add -Board to the chain at exit 0"
       },
-      "leaves_open": "the 5 shapes until built",
-      "leaves_open_occurrences": 5,
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
       "proof": {
         "must_fire_case": "eggs|Sam's Club '15 dozen' read by both parsers must agree (today 29.56 vs 1.9707)",
         "clean_twin": "the 20-row frozen parity corpus stays agree",
         "guard_or_fixture": "grocery/audit-size-parser-parity.ps1 -SelfTest"
       },
-      "resolution_note": "Transcribed for the money lane; not implemented in this plan.",
+      "resolution_note": "pu-lib Get-LinkPerUnit reads a size range at its smaller end, matching the engine. Proof: audit-size-parser-parity -SelfTest exit 0 (7 cases, 34/34 frozen rows agree, 9 new); -Board exit 0, 0 findings over 2,668 comparable of 2,759 strings on comparison-2026-09-23 (was 8 over 2,659). Mutant check: HEAD pu-lib returns 3.88 / 0.095 on '13-16 oz'@lb / '25-42 ct'@each, new returns 4.7754 / 0.1596, equal to the engine. Board prices are unchanged (the engine prices the board); guards, prune-bad-links and link per-units now judge range-sized links on the board's own basis from the next daily chain. No republish needed.",
       "lane": "money",
       "est_tool_calls": 40,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
+      "status": "deviated",
+      "premise_verified": false,
+      "deviation": "PREMISE STALE: the 5 shapes (bare oz x2, 200 g, 15 dozen, 30 sq ft) were already fixed in pu-lib, frozen in the corpus and -Board wired into check-ad-cycles (fanout lane size-parser-parity, check-ad-cycles.ps1:2237) by ff3c3a33b (queue 2026-09-22-43e8c0, on origin/main). Must-fire eggs|Sam's '15 dozen' already agrees. RE-MEASURED over comparison-2026-09-23: -Board exit 2, 8 NEW disagreements of 2,659 comparable, every one a size RANGE ('13-16 oz' at lb $3.88: pu-lib 3.8800, engine 4.7754; '25-42 ct' each $3.99: 0.0950 vs 0.1596). Same class (one rule, two readers), new shape: Get-SizeAmount reads a range at its SMALLER end since plan-2026-09-22-5 (laundry crown), pu-lib still read the larger. Fixed in pu-lib toward the engine (the weaker reader; engine untouched): ascending ranges read the low bound and skip both pack multipliers, as the engine's early return does; descending 'N-M oz' stays count-x-size. The 8 real rows plus a descending twin are frozen in the corpus.",
       "shipped_commit": null,
       "blast_radius": {
         "measured_as": "rows",
@@ -350,7 +350,9 @@
         "risk": "a parser change moves a per-unit on up to 5 cells (deli-ham|Fareway, taco-seasoning|Walmart, aluminum-foil|Fareway, instant-coffee|Family Fare, eggs|Sam's Club); re-measure on the current board first"
       },
       "rollback": "revert the parser hunk and the chain wiring",
-      "freshness": "carried from plan-2026-09-22.json (comparison-2026-09-22); re-run the parity over comparison-2026-09-23 before building"
+      "freshness": "carried from plan-2026-09-22.json (comparison-2026-09-22); re-run the parity over comparison-2026-09-23 before building",
+      "leaves_open_followup": "watch:grocery/audit-size-parser-parity.ps1",
+      "needs_publish": false
     },
     {
       "queue_id": "2026-09-19-c9f0f3",

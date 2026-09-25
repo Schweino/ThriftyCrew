@@ -129,6 +129,18 @@ function Get-TcSizeParityCorpus {
   [void]$rows.Add('200 g|oz|7.99')
   [void]$rows.Add('15 dozen|dozen|29.56')
   [void]$rows.Add('30 sq ft|sq_ft|3.99')
+  # the eight the -Board arm read on comparison-2026-09-23 (queue 2026-09-22-a09096, 2026-09-25): a size RANGE, which the
+  # engine reads at its SMALLER end since plan-2026-09-22-5 and pu-lib read at the larger. Fixed in pu-lib toward the engine.
+  [void]$rows.Add('19.2-25.9 oz|oz|5.99')
+  [void]$rows.Add('13-16 oz|lb|3.88')
+  [void]$rows.Add('25-28 oz|oz|7.99')
+  [void]$rows.Add('10-12 oz|oz|8.98')
+  [void]$rows.Add('25-42 ct|each|3.99')
+  [void]$rows.Add('10-10.5 oz|oz|1.68')
+  [void]$rows.Add('23.9-24 oz|oz|2.48')
+  [void]$rows.Add('15-16 oz|oz|3.99')
+  # and the idiom the range rule must NOT take: a DESCENDING pair is count-x-size, never a range
+  [void]$rows.Add('24-12 oz|floz|9.99')
   return ,$rows.ToArray()
 }
 

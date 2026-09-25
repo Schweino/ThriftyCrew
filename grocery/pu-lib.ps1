@@ -119,9 +119,25 @@ function Get-LinkPerUnit {
         $un = (($mf.Groups[3].Value -replace '\s','') -replace 'fl','') -replace '^(ltr|liters?|litres?)$','l'
       }
     }
+    # A SIZE RANGE READS ITS SMALLER END (2026-09-25, queue 2026-09-22-a09096). "13-16 oz", "10 to 12 oz", "9 or 12 oz"
+    # name two sizes at one price. Get-SizeAmount, which prices the board, reads the SMALLER one since plan-2026-09-22-5
+    # (the laundry crown: the least favourable reading, so the per-unit is the most a shopper pays). This reader went on
+    # landing on the unit-adjacent LARGER number, so over comparison-2026-09-23 audit-size-parser-parity -Board read 8
+    # disagreements, every one this shape ('13-16 oz' at lb $3.88: 3.8800 here, 4.7754 on the board). ASCENDING pairs
+    # only, as in the engine: "24-12 oz" is the count-x-size idiom and falls through. Resolved like the engine's early
+    # return, so neither pack multiplier below touches it.
+    $rngDone = $false
+    if ($null -eq $n) {
+      $rg = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*(?:to|or|-|&ndash;|thru)\s*(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|gallon|gal|quart|qt|ml|ltr|liters?|litres?|l|grams?|g|count|ct)\b')
+      if ($rg.Success -and ([double]$rg.Groups[1].Value -lt [double]$rg.Groups[2].Value)) {
+        $n = [double]$rg.Groups[1].Value
+        $un = (($rg.Groups[3].Value -replace '\s','') -replace 'fl','') -replace '^gallon$','gal' -replace '^quart$','qt' -replace '^(ltr|liters?|litres?)$','l' -replace '^grams?$','g'
+        $rngDone = $true
+      }
+    }
     $q = if ($null -eq $n) { [regex]::Match($s, '(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|lbs?|pound|ct|count|ea|pk|gal|gallon|qt|quart|dozen|doz|ml|ltr|liters?|litres?|l|sq\.?\s*ft|kg|grams?|g)\b') } else { $null }
     if ($null -ne $n) {
-      # already resolved by the fractional branch
+      # already resolved by the fractional or the range branch
     } elseif ($q.Success) {
       $n = [double]$q.Groups[1].Value
       $un = (($q.Groups[2].Value -replace '\s','') -replace 'fl','') -replace '^(ltr|liters?|litres?)$','l' -replace '^sq\.?ft$','sqft' -replace '^grams?$','g'
@@ -156,7 +172,7 @@ function Get-LinkPerUnit {
   #    pack-first branch already ran, so "6 pk 16 oz" is not multiplied by the pack count twice.
   #    LITRE / ML / QUART JOINED 2026-08-22: "2 l 6 pk" multiplied only oz/lb/gal, so a six-pack of 2-litre
   #    bottles priced as ONE bottle (6x over). compare-deals' weight-first branch carries the same addition.
-  if (-not $mpDone) {
+  if ((-not $mpDone) -and (-not $rngDone)) {
     $pk = [regex]::Match($s, '([0-9]+)\s*-?\s*(pk|pack)\b')
     if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal|l|ml|qt)$')) { $n = $n * [double]$pk.Groups[1].Value }
   }
@@ -164,7 +180,7 @@ function Get-LinkPerUnit {
   # 5. multipack in the NAME. A link whose size is just "each" but whose NAME says "24 Pack" is 24 items, not
   #    1 - without this the whole pack price publishes as the per-item price (Fareway bottled water went out
   #    at $3.87 EACH). Only for 'each' commodities, and only when the size itself carries no count.
-  if ($unit -eq 'each' -and $name -and (($null -eq $n) -or ($n -eq 1))) {
+  if ($unit -eq 'each' -and $name -and (-not $rngDone) -and (($null -eq $n) -or ($n -eq 1))) {
     $pn = [regex]::Match(([string]$name).ToLower(), '([0-9]+)\s*-?\s*(?:pk\b|pack\b|ct\b|count\b)')
     if ($pn.Success) {
       $cnt = [double]$pn.Groups[1].Value
