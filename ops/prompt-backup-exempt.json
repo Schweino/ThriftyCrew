@@ -48,6 +48,12 @@
       "name": "brain-plan-october-readings-1008",
       "reason": "a one-time task (fires once, 2026-10-08) carrying the brain-consults plan's two owed October readings (W5.5's intent analysis card, W6.2's control arm): it reads each against its written bar and reports to Brad; its instructions and results land in design\\brain-consults-2026-09-22\\phase-5-analysis.md W5.5 and phase-6-evidence.md W6.2, so a mirror would be an orphan the day after it runs",
       "added": "2026-09-25"
+    },
+    {
+      "kind": "scheduled-task",
+      "name": "morning-check-0926",
+      "reason": "a one-time, read-only task (fires once, 2026-09-26 09:30): it reports to Brad on the first live run of the recipe take-down rule switched on in cd4aaba4f, whether the 07:00 and 08:00 bots landed their own data, the main checkout's sync and hook install, and TC Boot Watch's last result; it changes nothing it checks and its result is its report, so a mirror would be an orphan the day after it runs",
+      "added": "2026-09-25"
     }
   ]
 }

@@ -1,0 +1,13 @@
+{
+ "rule_change": "laundry-detergent.exclude += \\bflings?\\b",
+ "corpus": "one corpus: 572 files (out/regular/*-regular-*.json, out/comparison-*.json, out/sams, out/bakers, out/fareway, out/*-deals-*.json, out/extra-deals-*.json, out/ads-*.json) seeded 2026-09-25 14:45; every distinct item/name/product field matching fling|detergent|laundry|hammer|oxi, 772 names, routed through match-lib's Resolve-Commodity before (HEAD commodities.json) and after",
+ "harness": "scratch flings-routing-diff.ps1 (session scratchpad, not committed: a one-off), engine match-lib.ps1 and global-exclude-lib.ps1 at ef1296ac9",
+ "files": 572,
+ "names_routed": 772,
+ "moved": [
+  { "name": "Gain Liquid Detergent or Flings", "before": "laundry-detergent", "after": "laundry-pods", "where": "out/fareway/fareway-deals-2026-08-10.json only, a two-product ad line outside the publish window; no live cell" }
+ ],
+ "positive_control": { "name": "Gain Laundry Detergent Flings Bl Pl", "expected": "laundry-pods", "observed": "laundry-pods" },
+ "apply_coverage_batch": "grocery/apply-coverage-batch.ps1 -Excludes @{ 'laundry-detergent' = @('\\bflings?\\b') } in a scratch clone with sidecar/data/corpus-current.json: crown changes 0, laundry-detergent 7 -> 7 cells, value +0/-0, suppresses 22 corpus rows its include still admits (every one a Gain Flings pod, pac or pack product), theft check OK, tile-integrity 0 faults on the batch commodity (19 pre-existing elsewhere, the same 19 as before the edit): BATCH ACCEPTED. Without the corpus the same batch was REVERTED as blind on visibility with no board move.",
+ "soundness": "audit-match-soundness over the same clone: MOVED=1 DROPPED=1 new-contested=2 under BOTH HEAD rules and the new rules (limes drops True Lime packets; lotion -> facial-tissues for Puffs Plus Lotion tissues; Lay's Honey Barbecue chips and a Pledge aerosol contested). The rule change adds none; all four are corpus drift since 2026-09-24's accept, each read and correct, accepted with the new rules."
+}

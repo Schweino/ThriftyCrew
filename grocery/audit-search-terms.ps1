@@ -18,6 +18,21 @@
 # belongs to the commodity-registrar. This check catches the doubanjiang class: a distinctive name that
 # never appears in what the search brings back. Claiming more would make it another gate that looks green
 # over the thing it cannot see.
+#
+# A SECOND QUESTION, ADDED 2026-09-25: does a commodity's own term READ AS that commodity? Brad widened
+# laundry-detergent to any liquid laundry detergent priced per fl oz (ruling q-2026-09-18-4-laundry-scope) and
+# the matching rule followed, but the term stayed "arm and hammer detergent", so every store that rotates
+# through commodity-search.json asked for one brand and pull-bakers-ad-list routed Baker's "Tide Laundry
+# Detergent" offer to that one-brand search. The engine's own matcher read that term as NO commodity at all.
+# So the live run also routes every commodity's first term through the engine matcher (match-lib over
+# commodities.json and the global exclude, what compare-deals runs) and lists each term that reads as no
+# commodity. A LISTING, NOT A GATE: 38 of 634 first terms read as nothing on the day it landed, and several are
+# fine (a store-shelf phrase the rule spells differently). A term that reads as a DIFFERENT commodity is not
+# listed: first-match-wins hands "penne pasta" to pasta, which says nothing about the term.
+# SCOPE OF A CLEAN REPORT: unsound. A brand-scoped term that also carries the generic words ("tide liquid
+# laundry detergent") reads as its commodity and is not listed; the self-test's frozen brand words cover
+# laundry-detergent only.
+# gate-inputs: grocery\match-lib.ps1, grocery\global-exclude-lib.ps1, grocery\commodities.json, grocery\commodity-search.json, grocery\search-terms-lib.ps1, lib\json-io.ps1, lib\guard-contract.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 
 param([string]$OutDir = '', [int]$MinRows = 3, [switch]$Json, [switch]$SelfTest)
@@ -58,10 +73,27 @@ function Test-TermReturnsItsFood {
   }
   return @{ testable = $true; hits = $hits; tokens = $tk }
 }
+# 'self' when the term, read as a product name by the engine matcher, lands in its own commodity; 'none' when it
+# lands nowhere (the laundry founding case); 'other' when first-match-wins hands it to another commodity.
+function Get-TermScope {
+  param([string]$CommodityId, [string]$ResolvedId)
+  if (-not $ResolvedId) { return 'none' }
+  if ([string]::Equals($ResolvedId, $CommodityId, [StringComparison]::Ordinal)) { return 'self' }
+  return 'other'
+}
+# The engine's matcher, loaded at SCRIPT scope (a dot-source inside a function would leave its functions behind
+# when the function returns). Called by the self-test and by the live run.
+function Get-EngineCommodityId {
+  param($Matcher, [string]$Name)
+  $r = Resolve-Commodity -Matcher $Matcher -Name $Name
+  if ($r) { return [string]$r.id }
+  return ''
+}
 
 if ($SelfTest) {
   $script:__b = 0
-  function T([string]$n, [bool]$ok, [string]$got) { if ($ok) { Write-Output "  ok  $n" } else { Write-Output "  X   $n  ($got)"; $script:__b++ } }
+  $script:__n = 0
+  function T([string]$n, [bool]$ok, [string]$got) { $script:__n++; if ($ok) { Write-Output "  ok  $n" } else { Write-Output "  X   $n  ($got)"; $script:__b++ } }
 
   $r = Test-TermReturnsItsFood -CommodityId 'doubanjiang' -Items @('Bush''s Best Chili Beans', 'Kroger Hot Dog Chili Sauce')
   T 'MUST FIRE  the doubanjiang case: rows returned, none are the food' ($r.testable -and $r.hits -eq 0) "hits=$($r.hits)"
@@ -93,6 +125,48 @@ if ($SelfTest) {
   $r = Test-TermReturnsItsFood -CommodityId 'cooking-oil' -Items @('Crisco Vegetable Oil')
   T 'an id made only of generic words is reported untestable, not clean' (-not $r.testable) 'claimed testable'
 
+  # ---- does a commodity's own term READ AS that commodity (2026-09-25, the laundry-detergent widening)
+  T 'MUST FIRE  a term the engine reads as no commodity is scoped none' ((Get-TermScope 'laundry-detergent' '') -eq 'none') (Get-TermScope 'laundry-detergent' '')
+  T 'a term handed to another commodity by first-match-wins is scoped other, not none' ((Get-TermScope 'penne-pasta' 'pasta') -eq 'other') (Get-TermScope 'penne-pasta' 'pasta')
+  T 'CLEAN TWIN  a term that lands in its own commodity is scoped self' ((Get-TermScope 'laundry-detergent' 'laundry-detergent') -eq 'self') (Get-TermScope 'laundry-detergent' 'laundry-detergent')
+  # The rest reads the TRACKED rule and term files through the engine's own matcher, so a later edit to either
+  # that re-narrows the term or lets a pod into the liquid cell goes red here.
+  . (Join-Path $root 'match-lib.ps1')
+  . (Join-Path $root 'global-exclude-lib.ps1')
+  . (Join-Path $root 'search-terms-lib.ps1')
+  $stDoc = Read-JsonFile (Join-Path $root 'commodities.json')
+  $stCl = if ($stDoc.PSObject.Properties['commodities']) { $stDoc.commodities } else { $stDoc }
+  $stGex = Get-TcGlobalExclude
+  $stM = New-CommodityMatcher -Commodities $stCl -GlobalExclude $stGex
+  # The founding term, FROZEN: under the widened rule it reads as nothing, which is how it hid.
+  $fd = Get-EngineCommodityId $stM 'arm and hammer detergent'
+  T 'MUST FIRE  the founding term "arm and hammer detergent" is scoped none under the widened laundry rule' ((Get-TermScope 'laundry-detergent' $fd) -eq 'none') "resolved=$fd"
+  $stTerms = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
+  $ldPairs0 = Get-SearchTermPairs $stTerms
+  $ldPairs = @($ldPairs0 | Where-Object { $_.id -eq 'laundry-detergent' })
+  $ldGot = @($ldPairs | ForEach-Object { $_.term + '=' + (Get-EngineCommodityId $stM $_.term) })
+  $ldSelf = @($ldPairs | Where-Object { (Get-TermScope 'laundry-detergent' (Get-EngineCommodityId $stM $_.term)) -eq 'self' })
+  T 'CLEAN TWIN  every live laundry-detergent term reads as laundry-detergent' (($ldPairs.Count -gt 0) -and ($ldSelf.Count -eq $ldPairs.Count)) ($ldGot -join '; ')
+  # Brands the widened cell must not be limited to: its current and recent crowns and the brands Omaha shelves.
+  $ldBrand = @($ldPairs | Where-Object { $_.term -match '(?i)\barm\s*(?:&|and)\s*hammer\b|\btide\b|\bgain\b|\bpersil\b|\bxtra\b|\bpurex\b|\btandil\b' })
+  T 'MUST NOT FIRE  no live laundry-detergent term names a brand (the rule is any brand)' ($ldBrand.Count -eq 0) (@($ldBrand | ForEach-Object { $_.term }) -join '; ')
+  # Liquids of three brands, named the way the stores name them (Baker's 2026-09-25, Family Fare 2026-09-25).
+  foreach ($liq in @('Tide Original Scent Liquid Laundry Detergent', 'ARM & HAMMER Liquid Laundry Detergent Clean Burst Scent', 'Our Family Free & Clear Laundry Detergent 50 Fl Oz')) {
+    $g1 = Get-EngineCommodityId $stM $liq
+    T ('CLEAN TWIN  a liquid laundry detergent of any brand lands in laundry-detergent: ' + $liq) ($g1 -eq 'laundry-detergent') "resolved=$g1"
+  }
+  # Pods, sheets and powder are refused by the MATCHER, never by the term. Gain Flings are pods whose name can
+  # omit the word (Family Fare 2026-09-25: 'Gain Laundry Detergent Flings Bl Pl', 18 ct).
+  foreach ($notLiq in @('Gain Laundry Detergent Flings Bl Pl', 'Tide Pods Spring Meadow Laundry Detergent Pods', 'ARM & HAMMER Power Sheets Laundry Detergent Fresh Breeze', 'ARM & HAMMER Plus OxiClean Fresh Scent Powder Laundry Detergent')) {
+    $g2 = Get-EngineCommodityId $stM $notLiq
+    T ('MUST FIRE  the laundry-detergent excludes refuse a non-liquid: ' + $notLiq) ($g2 -ne 'laundry-detergent') "resolved=$g2"
+  }
+  $g3 = Get-EngineCommodityId $stM 'Gain Laundry Detergent Flings Bl Pl'
+  T 'CLEAN TWIN  a Gain Flings name with no "pods" word lands in laundry-pods' ($g3 -eq 'laundry-pods') "resolved=$g3"
+
+  # A LITERAL LIST KNOWS ITS OWN NUMBER: 9 original cases, 3 scope cases, 3 live-term cases, 3 liquids, 4 non-liquids, 1 Flings.
+  $expect = 23
+  if ($script:__n -ne $expect) { Write-Output ("  X   the suite ran {0} case(s), expected {1}" -f $script:__n, $expect); $script:__b++ }
   Write-Output ("audit-search-terms SELF-TEST " + $(if ($script:__b -eq 0) { 'PASS' } else { "FAILED ($($script:__b))" }))
   exit $(if ($script:__b -eq 0) { 0 } else { 1 })
 }
@@ -153,8 +227,27 @@ foreach ($p in $terms.PSObject.Properties) {
 $suspect = @($suspect | Sort-Object { -$_.rows })
 $drift   = @($drift   | Sort-Object { -$_.rows })
 
-if ($Json) { ([pscustomobject]@{ checked = $checked; untestable = $untestable; suspect = $suspect; term_drift = $drift } | ConvertTo-Json -Depth 6); exit 0 }
+# Does each commodity's FIRST term read as that commodity? (2026-09-25; see the header.)
+. (Join-Path $root 'match-lib.ps1')
+. (Join-Path $root 'global-exclude-lib.ps1')
+. (Join-Path $root 'search-terms-lib.ps1')
+$scDoc = Read-JsonFile (Join-Path $root 'commodities.json')
+$scCl = if ($scDoc.PSObject.Properties['commodities']) { $scDoc.commodities } else { $scDoc }
+$scGex = Get-TcGlobalExclude
+$scM = New-CommodityMatcher -Commodities $scCl -GlobalExclude $scGex
+$scPairs = Get-SearchTermPairs $terms
+$scRead = 0
+$scNone = New-Object System.Collections.Generic.List[object]
+foreach ($sp in @($scPairs | Where-Object { $_.primary })) {
+  $scRead++
+  $rid = Get-EngineCommodityId $scM $sp.term
+  if ((Get-TermScope $sp.id $rid) -eq 'none') { [void]$scNone.Add([pscustomobject]@{ commodity = $sp.id; term = $sp.term }) }
+}
+
+if ($Json) { ([pscustomobject]@{ checked = $checked; untestable = $untestable; suspect = $suspect; term_drift = $drift; scope_read = $scRead; scope_none = $scNone.ToArray() } | ConvertTo-Json -Depth 6); exit 0 }
 Write-Output ("SEARCHTERMS: {0} commodity term(s) testable against >= {1} captured rows ({2} ids too generic to test)" -f $checked, $MinRows, $untestable)
+Write-Output ("SEARCHTERMS-SCOPE: {0} of {1} first term(s) read as NO commodity through the engine matcher - a term that cannot read as its own food may be asking a narrower question than the rule answers:" -f $scNone.Count, $scRead)
+foreach ($s in $scNone) { Write-Output ("  - {0,-26} term '{1}'" -f $s.commodity, $s.term) }
 if ($drift.Count) {
   Write-Output ("SEARCHTERMS: {0} term(s) never return the food, but the food IS in the corpus under another key - a term/matcher bug, NOT a carriage question:" -f $drift.Count)
   foreach ($s in $drift) { Write-Output ("  ~ {0,-26} term '{1}' -> {2} rows, e.g. '{3}'" -f $s.commodity, $s.term, $s.rows, $s.example) }
@@ -162,7 +255,7 @@ if ($drift.Count) {
 if (-not $suspect.Count) {
   Write-Output '  ok  no term returns rows while its food is absent from the whole corpus'
   . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
-  Exit-Guard -Name 'search-terms' -Summary ("0 suspect, {0} drift, {1} untestable" -f @($drift).Count, @($untestable).Count) -Code 0
+  Exit-Guard -Name 'search-terms' -Summary ("0 suspect, {0} drift, {1} untestable, scope none {2} of {3}" -f @($drift).Count, $untestable, $scNone.Count, $scRead) -Code 0
 }
 Write-Output ("SEARCHTERMS: {0} term(s) return rows but the food they name appears NOWHERE in the corpus:" -f $suspect.Count)
 foreach ($s in $suspect) { Write-Output ("  ? {0,-26} term '{1}' -> {2} rows, e.g. '{3}'" -f $s.commodity, $s.term, $s.rows, $s.example) }
@@ -174,4 +267,4 @@ Write-Output '     Fix the term in commodity-search.json and re-capture BEFORE p
 # matters more here than most: this is a fan-out lane now, and a lane that dies quietly in a pool is
 # harder to notice than one that dies in a serial chain.
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
-Exit-Guard -Name 'search-terms' -Summary ("{0} suspect, {1} drift, {2} untestable" -f @($suspect).Count, @($drift).Count, @($untestable).Count) -Code 0
+Exit-Guard -Name 'search-terms' -Summary ("{0} suspect, {1} drift, {2} untestable, scope none {3} of {4}" -f @($suspect).Count, @($drift).Count, $untestable, $scNone.Count, $scRead) -Code 0

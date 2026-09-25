@@ -180,8 +180,11 @@ Once registered, EVERY automation picks the item up with no further wiring (all 
    store might separate. NEVER leave a bare `lb` token in a deal's item NAME (per-lb marker trap).
 2. **`categories.json`** - add the id to a category (create one if needed; `household` was added this way).
 3. **`commodity-search.json`** - the search term every store pull uses. TEST it: an over-specific term
-   ("arm hammer oxiclean") can return nothing while a broader one ("arm and hammer detergent") finds the
-   product; prefer broad + let include/exclude filter.
+   ("arm hammer oxiclean") can return nothing, and a BRAND term ("arm and hammer detergent") returns one
+   brand only, which is how the widened any-brand laundry cell kept asking for Arm & Hammer until 2026-09-25.
+   Name the food the rule defines ("liquid laundry detergent") and let include/exclude filter; when a
+   commodity is widened, its term is part of the change. `audit-search-terms.ps1` lists every first term the
+   engine matcher reads as no commodity.
 4. **Same-day pricing at all 7 stores** (each price needs a matching product URL in `out\url-inputs\`):
    Walmart = product page in the browser (`__NEXT_DATA__`; raw fetch gets bot-walled); Sam's = browser
    search; Hy-Vee = Aisles Online (verify the store `Get-HyVeeStore` names, "Shopping Omaha #02, NE" as of 2026-09-10); Family Fare = Freshop API (base_price everyday,

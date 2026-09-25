@@ -1,0 +1,110 @@
+{
+    "generated":  "2026-09-25T16:30:00",
+    "round":  1,
+    "board_week":  "comparison-2026-09-23 (week_of 2026-09-23), built_at 2026-09-25T08:06:39",
+    "queue_ids_seen":  [
+
+                       ],
+    "note":  "Not a triage run: Brad\u0027s instruction of 2026-09-25, \u0027Yes, check and fix the search terms (Recommended)\u0027, after the known-wrong pattern measurement (design/MEASURE-known-wrong-pattern-rulings-2026-09-25.md) found that rerunning grocery/pull-bakers-ad-list.ps1 over the frozen 2026-09-16 ad routed Baker\u0027s \u0027Tide Laundry Detergent\u0027 offer to the search term \u0027arm and hammer detergent\u0027. No alert queue item carries it, so queue_ids_seen is empty and the item id is minted here. The same commit closes Q1-shape-scoped-rulings in plan-2026-09-20-4.json on Brad\u0027s second ruling of the day.",
+    "routing_artifact":  "plan-2026-09-25-3.routing.json",
+    "items":  [
+                  {
+                      "queue_id":  "2026-09-25-laundry-terms",
+                      "subject":  "laundry-detergent was widened to any liquid laundry detergent, but its search term still named one brand",
+                      "classification":  "capture-gap",
+                      "evidence":  [
+                                       "grocery/commodity-search.json: \"laundry-detergent\": \"arm and hammer detergent\", the only place the commodity\u0027s term lives (every term-rotation store and discover-hyvee read it through Get-AllTerms / Get-SearchTermPairs / Get-PrimarySearchTerm; pull-bakers-ad-list routes ad offers onto it). No store lane carries its own copy: grep over tracked files outside grocery/out finds the string only there, in a pull-sams-instore.js comment and in grocery/README.md.",
+                                       "the engine matcher (match-lib over commodities.json and the global exclude) reads \u0027arm and hammer detergent\u0027 as NO commodity: the widened rule admits \\blaundry\\s+detergent\\b and \\bliquid\\s+detergent\\b, and its Arm \u0026 Hammer patterns need oxi clean or odor blasters. 38 of 634 first terms read as no commodity that day; this was one.",
+                                       "board comparison-2026-09-23 (built 2026-09-25 08:06): laundry-detergent crown Aldi 0.0549 Tandil Essentials 100 fl oz; Hy-Vee 0.0595 Xtra (ad); Fareway 0.0694 Bright Essentials (ad); Sam\u0027s 0.0735 Member\u0027s Mark; Baker\u0027s 0.0804, Walmart 0.0815 and Family Fare 0.1014 are all Arm \u0026 Hammer, the three stores whose captures come from the term.",
+                                       "seeded captures, 336 out/regular files from the last 60 days routed through the engine: every laundry-detergent row at Family Fare and Walmart was found by \u0027arm and hammer detergent\u0027 (Family Fare 2 products, Walmart 42 Arm \u0026 Hammer products); the only liquid Tide rows (5 products) are at Aldi, found by other terms. Tide is carried at Aldi, Baker\u0027s, Family Fare, Fareway and Walmart (Tide pods rows at each) and at Hy-Vee (brands/out-hyvee-buckets.json).",
+                                       "read-only probe 2026-09-25 at the production limit of 25 results, through the engine matcher: Family Fare \u0027arm and hammer detergent\u0027 16 rows, 4 laundry-detergent, all Arm \u0026 Hammer; \u0027liquid laundry detergent\u0027 25 rows, 18 laundry-detergent: Tide, Gain, Our Family, Seventh Generation, Woolite. Baker\u0027s (Kroger API) \u0027arm and hammer detergent\u0027 25 rows, 17 laundry-detergent, all Arm \u0026 Hammer; \u0027liquid laundry detergent\u0027 25 rows, 25 laundry-detergent: Arm \u0026 Hammer, Gain, Persil, Tide, all, Seventh Generation.",
+                                       "the new term also surfaces \u0027Gain Laundry Detergent Flings Bl Pl\u0027 (18 ct) at Family Fare, a pod whose name omits the word pods; the laundry-detergent rule routes it to laundry-detergent today."
+                                   ],
+                      "surface_fix":  {
+                                          "what":  "name the food the widened rule defines, not a brand; and refuse in the MATCHER the one pod shape the new term surfaces whose name omits the word pods",
+                                          "files":  [
+                                                        "grocery/commodity-search.json",
+                                                        "grocery/commodities.json",
+                                                        "grocery/out/audit/match-baseline.json"
+                                                    ],
+                                          "exact_change":  "\"laundry-detergent\": \"arm and hammer detergent\" -\u003e \"liquid laundry detergent\"; laundry-detergent.exclude += \\\\bflings?\\\\b (Gain Flings are pods); soundness baseline accepted under the new rules"
+                                      },
+                      "root_cause":  "a commodity\u0027s scope and its search term live in two files and nothing ties them: q-2026-09-18-4-laundry-scope widened the rule in commodities.json and reversed 10 known-wrong rulings, and the term that decides what every term-rotation store (and Baker\u0027s weekly-ad routing) actually asks stayed on the one brand the old rule was written for. No check asks whether a term reads as its own commodity.",
+                      "root_fix":  {
+                                       "what":  "audit-search-terms.ps1 routes every commodity\u0027s first term through the engine matcher and lists each one that reads as no commodity (a listing, not a gate: 37 of 634 after this fix), and its -SelfTest freezes the founding term and the laundry case: every live laundry-detergent term must read as laundry-detergent and name no brand, three brands\u0027 liquids must land in the cell, and pods, sheets and powder must not. grocery/README.md\u0027s term guidance, which held \u0027arm and hammer detergent\u0027 up as the good broad example, now says a brand term asks for one brand and that a widening carries its term.",
+                                       "files":  [
+                                                     "grocery/audit-search-terms.ps1",
+                                                     "grocery/README.md"
+                                                 ],
+                                       "exact_change":  "Get-TermScope and Get-EngineCommodityId; a SEARCHTERMS-SCOPE listing and \u0027scope none N of M\u0027 on the SEARCH-TERMS-COMPLETE marker; 14 new self-test cases and a literal case count (23)"
+                                   },
+                      "leaves_open":  "five liquid laundry detergents the widened rule still cannot read, none cheaper than the crown: Arm \u0026 Hammer Baking Soda Fresh liquids (Walmart 110 fl oz 0.0815, Baker\u0027s 0.0894 and 0.0999) are refused by the global \\bsoda\\b and sparkling excludes, and at Aldi Gain Original Detergent 132 FL OZ (0.1208) and Tide Simply Detergent 31 fl oz (0.1110) carry neither laundry nor liquid in the name. 5 products over 3 stores in the seeded captures. Widening the rule is a scope question, not a term fix, so it is filed as Q-laundry-rule-gaps.",
+                      "leaves_open_occurrences":  5,
+                      "leaves_open_followup":  "Q-laundry-rule-gaps",
+                      "blast_radius":  {
+                                           "measured_as":  "routing",
+                                           "measured_by":  "the term: live read-only answers at Family Fare (Freshop) and Baker\u0027s (Kroger API) at the production limit of 25, routed through the engine; the exclude: before/after routing of 772 laundry-shaped names over 572 files (plan-2026-09-25-3.routing.json) and apply-coverage-batch in a scratch clone",
+                                           "affected_now":  1,
+                                           "names":  [
+                                                         "Gain Liquid Detergent or Flings"
+                                                     ],
+                                           "risk":  "A search term moves no row by itself: rows reach the board only when a store capture asks the term. The term was measured at Family Fare and Baker\u0027s live (read-only) and over the seeded captures; the four browser stores (Walmart, Sam\u0027s Club, Aldi, Fareway) cannot be probed headless, so the first capture there is the measurement. Walmart\u0027s in-store lane is store-scoped, but a broad term can surface a bulk seller shape (FOCA 287.42 fl oz is already in the soundness baseline), which rules/grocery.md warns is a seller shape, not a brand. Predicted from the probe, not yet on the board: Family Fare\u0027s laundry cell would move from Arm \u0026 Hammer Odor Blasters 138 fl oz 0.1014 to Our Family Free \u0026 Clear 50 fl oz 0.0838, a newly found cheaper real product; Baker\u0027s best new-term liquid is Arm \u0026 Hammer Sensitive Skin 170 fl oz 0.0823 against its 0.0804 cell. Nothing found beats the Aldi crown 0.0549, so the crown does not move on this evidence.",
+                                           "cell_effects":  [
+
+                                                            ]
+                                       },
+                      "freshness":  "measured 2026-09-25 14:40-16:30 against comparison-2026-09-23 built 2026-09-25T08:06:39, out/regular seeded 14:45, and live Freshop and Kroger API answers at about 15:10",
+                      "proof":  {
+                                    "guard_or_fixture":  "grocery/audit-search-terms.ps1 -SelfTest (run by run-gates)",
+                                    "must_fire_case":  "the frozen founding term \u0027arm and hammer detergent\u0027 is scoped none under the widened rule; a live laundry-detergent term that names a brand (mutant \u0027tide liquid laundry detergent\u0027) goes red; the term put back to \u0027arm and hammer detergent\u0027 goes red in two cases; the laundry excludes refuse a Gain Flings name with no pods word, a Tide pod, an Arm \u0026 Hammer sheet and a powder (mutant: the Flings exclude removed goes red in two cases)",
+                                    "clean_twin":  "Tide, Arm \u0026 Hammer and Our Family liquids named as the stores name them all land in laundry-detergent, and every live laundry term reads as laundry-detergent",
+                                    "commands":  [
+                                                     "powershell -NoProfile -File grocery\\audit-search-terms.ps1 -SelfTest",
+                                                     "powershell -NoProfile -File grocery\\audit-search-terms.ps1",
+                                                     "powershell -NoProfile -File grocery\\pull-bakers-ad-list.ps1 -SelfTest"
+                                                 ]
+                                },
+                      "rollback":  "revert the one line in commodity-search.json; the audit change is additive",
+                      "do_not_touch":  [
+                                           "known-wrong.json and the three laundry form rulings kept by plan-2026-09-22-2",
+                                           "the laundry-detergent include patterns",
+                                           "the rotation budget and the quarter"
+                                       ],
+                      "resolution_note":  "laundry-detergent now searches \"liquid laundry detergent\" at every store instead of \"arm and hammer detergent\"; Tide, Gain, Persil and store brands come back at Family Fare and Baker\u0027s, the rule refuses Gain Flings pods, and audit-search-terms now lists every term the engine reads as no commodity. No cell or crown moved today; the first capture that asks the term is the measurement at the browser stores.",
+                      "publish_batch":  0,
+                      "lane":  "money",
+                      "est_tool_calls":  140,
+                      "status":  "done",
+                      "premise_verified":  "yes, 2026-09-25: commodity-search.json held \"arm and hammer detergent\"; no lane holds its own copy; the frozen 2026-09-16 Baker\u0027s ad routed Tide Laundry Detergent onto that term before the fix and onto \"liquid laundry detergent\" after it (97 of 169 offers routed onto 89 terms, unchanged)",
+                      "deviation":  "The brief said pods stay excluded by the matcher. The new term surfaced a Gain Flings product at Family Fare that the rule would have admitted, so the Flings exclude was added through apply-coverage-batch (accepted with the sidecar corpus present; reverted as blind without it) rather than by hand.",
+                      "shipped_commit":  "the commit on origin/main whose message names 2026-09-25-laundry-terms (a local hash is rewritten by push-main\u0027s rebase)"
+                  }
+              ],
+    "ship_sequence":  [
+                          "edit commodity-search.json (term) and audit-search-terms.ps1 (scope listing and fixtures)",
+                          "in a scratch clone: apply-coverage-batch.ps1 -Excludes laundry-detergent \\bflings?\\b (crowns, coverage, visibility, theft, tile-integrity, guards), then audit-match-soundness.ps1 read line by line and -Accept; copy commodities.json and match-baseline.json back",
+                          "audit-search-terms.ps1 -SelfTest and a live run; pull-bakers-ad-list.ps1 over the frozen 2026-09-16 ad into a temp -OutDir",
+                          "commit with pathspecs, then ops\\push-main.ps1 (run-gates, test-auditors and the chain rehearsal when the manifest is touched)",
+                          "no publish: the term moves no row until each store\u0027s rotation asks it"
+                      ],
+    "knowledge_consulted":  [
+                                ".claude/rules/grocery.md (\u0027A wrong product is a SELLER SHAPE, not a brand\u0027; \u0027A 200 with a correct selector and ZERO ROWS has FOUR causes\u0027)",
+                                "grocery/triage-plans/plan-2026-09-22-2.json item 2026-09-18-ceab00 deviation: the laundry widening, 10 of 13 known-wrong rulings reversed, crown Hy-Vee 0.0494 -\u003e Aldi 0.0549",
+                                "memory:wrong-product-class-is-a-seller-shape (C--Codex-ThriftyCrew store)",
+                                "memory:known-wrong-is-the-main-board-corrector (C--Codex-ThriftyCrew store): no ruling was touched",
+                                "memory:pull-depth-findings (C--Codex store): Family Fare is search-budget and vocabulary bound, and a shallow feed is an accidental relevance filter",
+                                "searched \"search term brand widened commodity\" (knowledge-search --estate)"
+                            ],
+    "open_questions_for_brad":  [
+                                    {
+                                        "id":  "Q-laundry-rule-gaps",
+                                        "question":  "The widened laundry-detergent rule still cannot read five liquid products in the seeded captures: Arm \u0026 Hammer Baking Soda Fresh liquids at Walmart and Baker\u0027s (blocked by the board-wide soda and sparkling excludes, which exist for drinks), and at Aldi Gain Original Detergent 132 FL OZ and Tide Simply Detergent, whose names say neither laundry nor liquid. None is cheaper than the Aldi crown (the cheapest is Walmart\u0027s 0.0815, equal to its current cell). Should the rule admit them?",
+                                        "options":  [
+                                                        "A: admit them: release the soda and sparkling excludes for laundry-detergent, and admit a detergent name with a fl oz size and no dish or dishwasher word, through apply-coverage-batch",
+                                                        "B: leave them: the crown is unaffected and each store\u0027s cell is already priced from another liquid"
+                                                    ],
+                                        "recommendation":  "A, through the matching lane with its gates: the rule is any liquid laundry detergent, and a product the rule means but cannot read is how a cheaper one would be missed later",
+                                        "status":  "open"
+                                    }
+                                ]
+}
