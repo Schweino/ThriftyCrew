@@ -24,7 +24,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'checkout-sync.ps1')
 $env:GIT_TERMINAL_PROMPT = '0'
 
-$EXPECTED_CASES = 162
+$EXPECTED_CASES = 178
 $script:pass = 0; $script:fail = 0
 function T([string]$Label, [bool]$Cond, [string]$Got = '') {
   if ($Cond) { $script:pass++; Write-Output ('  ok    ' + $Label) }
@@ -316,6 +316,86 @@ try {
     $s = Sync $E @{ Phase = 'tail' }
     T 'degraded class replay, naming the local commit' (($s.outcome -eq 'degraded') -and ($s.class -eq 'replay') -and ($s.why -match [regex]::Escape($local.Substring(0, 9)))) ($s.outcome + '/' + $s.class + ': ' + $s.why)
     T 'tree, index and HEAD byte-identical' ((Snap $E.bot) -eq $b4)
+  }
+
+  # ---- LANDED TWINS (design\PLAN-bot-dedicated-checkout-2026-09-25.md W0.2) ----------------------------------------
+  # The 2026-09-25 shape: the bot's two oldest local commits were landed as exact copies by another checkout, the first
+  # renames a due-flag that a later upstream commit deleted, and a third local commit is new. Returns the shas.
+  function New-LandedTwinStack($E) {
+    Push-Up $E 'grocery/flags/due-21.flag' "due`n" 'up: the flag'
+    $null = GitOk $E.bot @('pull', '-q', '--ff-only')
+    $null = GitOk $E.bot @('mv', 'grocery/flags/due-21.flag', 'grocery/flags/due-24.flag')
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`nday24`n"; $null = GitOk $E.bot @('add', 'grocery/ledger.json')
+    $null = GitOk $E.bot @('commit', '-q', '-m', 'Daily pipeline (ad, landed elsewhere)'); $l1 = (GitR $E.bot @('rev-parse', 'HEAD')).out
+    W $E.bot 'public/derived.json' "{`n  ""v"": 24`n}`n"; $null = GitOk $E.bot @('add', 'public/derived.json')
+    $null = GitOk $E.bot @('commit', '-q', '-m', 'Daily pipeline (daily, landed elsewhere)'); $l2 = (GitR $E.bot @('rev-parse', 'HEAD')).out
+    # Another checkout lands exact copies of both (push-main through a throwaway worktree), then upstream moves on.
+    $null = GitOk $E.up @('fetch', '-q', $E.bot, 'main')
+    $null = GitOk $E.up @('-c', 'user.name=other', 'cherry-pick', $l1, $l2)
+    $t1 = (GitR $E.up @('rev-parse', 'HEAD~1')).out; $t2 = (GitR $E.up @('rev-parse', 'HEAD')).out
+    $null = GitOk $E.up @('push', '-q', 'origin', 'HEAD:main')
+    $null = GitOk $E.up @('rm', '-q', 'grocery/flags/due-24.flag'); $null = GitOk $E.up @('commit', '-q', '-m', 'up: the flag is retired')
+    $null = GitOk $E.up @('push', '-q', 'origin', 'HEAD:main')
+    W $E.bot 'graph/nightly.json' "graph 25`n"; $null = GitOk $E.bot @('add', 'graph/nightly.json')
+    $null = GitOk $E.bot @('commit', '-q', '-m', 'Graph nightly (new)'); $l3 = (GitR $E.bot @('rev-parse', 'HEAD')).out
+    return [pscustomobject]@{ l1 = $l1; l2 = $l2; l3 = $l3; t1 = $t1; t2 = $t2 }
+  }
+
+  Invoke-Group 'LANDED TWIN MUST FIRE - the 09-25 wedge: two local copies of landed commits, one a rename/delete clash with its twin, are dropped and the run syncs and pushes' {
+    $E = New-Estate 'twin'; $L = New-LandedTwinStack $E
+    $s = Sync $E @{ Phase = 'tail' }
+    $o = (GitR $E.bot @('rev-parse', 'refs/remotes/origin/main')).out
+    T 'outcome is synced, never degraded/replay' ($s.outcome -eq 'synced') ($s.outcome + '/' + $s.class + ': ' + $s.why)
+    T 'landed names both copies with their exact twins, oldest first' ((@($s.landed) -join ',') -eq ($L.l1 + '=' + $L.t1 + ',' + $L.l2 + '=' + $L.t2)) (@($s.landed) -join ',')
+    T 'dropped counts the 2 landed copies and replayed counts the 1 new commit' (($s.dropped -eq 2) -and ($s.replayed -eq 1)) ('dropped=' + $s.dropped + ' replayed=' + $s.replayed)
+    $pair1 = $L.l1.Substring(0, 9) + ' (twin ' + $L.t1.Substring(0, 9) + ')'; $pair2 = $L.l2.Substring(0, 9) + ' (twin ' + $L.t2.Substring(0, 9) + ')'
+    T 'the log line names every dropped commit with its twin on origin' (($s.why -match [regex]::Escape($pair1)) -and ($s.why -match [regex]::Escape($pair2)) -and ($s.why -match '2 local commit\(s\) already on origin')) $s.why
+    T 'HEAD is origin plus the one new commit, and the retired flag stays retired' (((GitR $E.bot @('rev-parse', 'HEAD~1')).out -eq $o) -and ((ReadOr (Join-Path $E.bot 'graph/nightly.json')) -eq "graph 25`n") -and -not (Test-Path -LiteralPath (Join-Path $E.bot 'grocery/flags/due-24.flag')) -and -not (Test-Path -LiteralPath (Join-Path $E.bot 'grocery/flags/due-21.flag'))) ((GitR $E.bot @('log', '--oneline', '-3')).out)
+    T 'the tree is clean afterwards' ((Status $E.bot) -eq '') (Status $E.bot)
+    $pu = GitR $E.bot @('push', '-q', 'origin', 'HEAD:main')
+    T 'the push lands' (($pu.rc -eq 0) -and ((GitR $E.bot @('rev-parse', 'HEAD')).out -eq @((GitR $E.bot @('ls-remote', 'origin', 'refs/heads/main')).out -split "`t")[0])) ('rc ' + $pu.rc + ' ' + $pu.err)
+  }
+
+  Invoke-Group 'LANDED TWIN CLEAN TWIN - a genuinely new local commit beside a one-byte near-twin upstream still replays, and its bytes win' {
+    $E = New-Estate 'twinnew'
+    Push-Up $E 'grocery/ledger.json' "a`nb`nc`nUP`n" 'up: near twin'
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`nUq`n"; $null = GitOk $E.bot @('add', 'grocery/ledger.json'); $null = GitOk $E.bot @('commit', '-q', '-m', 'bot: one byte apart')
+    $s = Sync $E @{ Phase = 'tail' }
+    T 'synced with 1 replayed, 0 dropped and no landed twin' (($s.outcome -eq 'synced') -and ($s.replayed -eq 1) -and ($s.dropped -eq 0) -and (@($s.landed).Count -eq 0)) ($s.outcome + ' replayed=' + $s.replayed + ' dropped=' + $s.dropped + ' landed=' + (@($s.landed) -join ','))
+    T 'the local bytes are in HEAD, as -X theirs always gave them' ((GitR $E.bot @('show', 'HEAD:grocery/ledger.json')).raw -eq "a`nb`nc`nUq`n") ((GitR $E.bot @('show', 'HEAD:grocery/ledger.json')).raw)
+  }
+
+  Invoke-Group 'LANDED TWIN MUST NOT FIRE - a local commit only PARTLY on origin is kept whole and replayed' {
+    $E = New-Estate 'twinpart'
+    Push-Up $E 'public/derived.json' "{`n  ""v"": 7`n}`n" 'up: half of the bot''s change'
+    W $E.bot 'public/derived.json' "{`n  ""v"": 7`n}`n"; W $E.bot 'grocery/ledger.json' "a`nb`nc`nmine`n"
+    $null = GitOk $E.bot @('add', 'public/derived.json', 'grocery/ledger.json'); $null = GitOk $E.bot @('commit', '-q', '-m', 'bot: two paths, one already upstream')
+    $s = Sync $E @{ Phase = 'tail' }
+    T 'synced with the commit replayed, never dropped' (($s.outcome -eq 'synced') -and ($s.replayed -eq 1) -and ($s.dropped -eq 0) -and (@($s.landed).Count -eq 0) -and ($s.why -notmatch 'already on origin')) ($s.outcome + ' replayed=' + $s.replayed + ' dropped=' + $s.dropped + ': ' + $s.why)
+    T 'the half upstream lacked arrived with it' ((GitR $E.bot @('show', 'HEAD:grocery/ledger.json')).raw -eq "a`nb`nc`nmine`n") ((GitR $E.bot @('show', 'HEAD:grocery/ledger.json')).raw)
+  }
+
+  Invoke-Group 'LANDED TWIN ONE-TO-ONE MUST FIRE - one upstream twin claims one local commit: A->B, B->A, A->B over one landed A->B keeps the last two' {
+    $E = New-Estate 'twin1to1'
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`nB`n"; $null = GitOk $E.bot @('commit', '-q', '-am', 'bot: A to B'); $l1 = (GitR $E.bot @('rev-parse', 'HEAD')).out
+    $null = GitOk $E.up @('fetch', '-q', $E.bot, 'main'); $null = GitOk $E.up @('-c', 'user.name=other', 'cherry-pick', $l1); $t1 = (GitR $E.up @('rev-parse', 'HEAD')).out
+    $null = GitOk $E.up @('push', '-q', 'origin', 'HEAD:main')
+    Push-Up $E 'tools/verifier.txt' "strict2`n" 'up: moves on'
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`n"; $null = GitOk $E.bot @('commit', '-q', '-am', 'bot: B back to A')
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`nB`n"; $null = GitOk $E.bot @('commit', '-q', '-am', 'bot: A to B again')
+    $s = Sync $E @{ Phase = 'tail' }
+    T 'only the first copy is dropped, and the later A->B keeps its change' (($s.outcome -eq 'synced') -and ((@($s.landed) -join ',') -eq ($l1 + '=' + $t1)) -and ($s.replayed -eq 2) -and ((GitR $E.bot @('show', 'HEAD:grocery/ledger.json')).raw -eq "a`nb`nc`nB`n")) ($s.outcome + ' landed=' + (@($s.landed) -join ',') + ' replayed=' + $s.replayed + ' ledger=' + (GitR $E.bot @('show', 'HEAD:grocery/ledger.json')).raw)
+  }
+
+  Invoke-Group 'LANDED TWIN SCAN ERROR MUST FIRE - a scan that throws drops nothing and the sync is exactly the day before: degraded/replay, nothing written' {
+    $E = New-Estate 'twinerr'; $L = New-LandedTwinStack $E
+    $b4 = Snap $E.bot
+    $s = Sync $E @{ Phase = 'tail'; TwinScanFault = { throw 'fixture: the scan is broken' } }
+    T 'degraded class replay on the first copy, as on 09-25' (($s.outcome -eq 'degraded') -and ($s.class -eq 'replay') -and ($s.why -match [regex]::Escape($L.l1.Substring(0, 9) + ' conflicts with upstream'))) ($s.outcome + '/' + $s.class + ': ' + $s.why)
+    T 'nothing was dropped, and the why and twin_scan say the scan could not run' ((@($s.landed).Count -eq 0) -and ($s.twin_scan -match 'fixture: the scan is broken') -and ($s.why -match 'landed-twin scan could not run')) ('landed=' + (@($s.landed) -join ',') + ' twin_scan=' + $s.twin_scan)
+    T 'tree, index and HEAD byte-identical' ((Snap $E.bot) -eq $b4)
+    $u = Get-TcCsLandedTwins -Repo $E.bot -Upstream 'no-such-ref-xyz' -Tip 'HEAD' -Onto 'refs/remotes/origin/main'
+    T 'a git failure inside the scan (an unknown ref) returns ok false with no twins, never a throw' ((-not $u.ok) -and ($u.twins.Count -eq 0) -and ($u.why -match 'git log --raw')) ('ok=' + $u.ok + ' twins=' + $u.twins.Count + ' why=' + $u.why)
   }
 
   Invoke-Group 'F1 MUST FIRE - the founding bug over two runs: a refused commit still syncs, so a later run gets the fix and lands BOTH days' {

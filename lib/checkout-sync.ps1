@@ -37,7 +37,8 @@
        resync, which only a caller passing -BotCommit asks for).
     4. A merge commit among the local commits: `degraded`. It is never linearised.
     5. The target NEW: origin, or the local commits replayed onto it off to the side with merge-tree -X theirs and
-       commit-tree, which builds the tree `rebase -X theirs` builds and touches neither the index nor the tree.
+       commit-tree, which builds the tree `rebase -X theirs` builds and touches neither the index nor the tree. A local
+       commit whose change is ALREADY on the target is dropped first and never replayed (LANDED TWINS below).
     6. Every startup file (capture-run.ps1 and what it dot-sources, $script:TcCheckoutSyncStartupFiles) that the move
        changes is PARSED at NEW from the object database first. A missing file or a parse error is `degraded` and
        nothing moves. `startup_changed` tells the caller to re-execute.
@@ -99,6 +100,37 @@
   and ref-lock retries), fetch 3 attempts 5 s apart, each bounded at 300 s and at 1,000 B/s for 60 s, marker scan
   cap 52,428,800 bytes, NUL probe 8,000 bytes. What each does when the producer stops: none is a floor; a sync that
   never runs writes no row, and capture-watchdog's CHECKOUT floor (W1.1) is what sees that.
+
+  LANDED TWINS (design\PLAN-bot-dedicated-checkout-2026-09-25.md W0.2, decision D8, ruled "Yes, now" by Brad on
+  2026-09-25). At 17:35 on 2026-09-24 a session landed the main checkout's unpushed bot commits through push-main, which
+  could not move local main afterwards, so local main kept six exact copies of commits now on origin. The 07:00 and
+  08:00 runs of 09-25 then replayed the oldest copies onto origin, and copy 447b42efe clashed with its own landed twin
+  7e70f5fae (merge-tree rc 1, CONFLICT (rename/delete) of a browser-capture-due flag an upstream commit had since
+  deleted): `degraded/replay`, `NOT pushing`, 18 ahead and 39 behind by the 08:00 run. So before the replay, every
+  local commit whose change is already on the target is DROPPED: named in `landed` as `<local>=<twin>` and in the
+  outcome's `why` with its twin, counted in `dropped`, never replayed. The later local commits replay exactly as before;
+  a dropped commit's change is in the target already, so the next commit's three-way merge (base = the dropped commit)
+  is the one it always had. The dropped sha stays in the reflog and in the object store.
+  THE TEST IS IDENTITY, NOT EQUIVALENCE. A local commit's key is its raw diff against its parent: every (path, old
+  mode, new mode, old blob, new blob) from `git log --raw --no-abbrev --no-renames`. It is dropped only when a
+  non-merge commit reachable from the target and NOT from local HEAD has the byte-identical key, one twin per local
+  commit. Equal keys mean the two commits took the same paths from the same bytes to the same bytes, so the change IS
+  on the target. Chosen over the two alternatives that were weighed:
+    - `git patch-id --stable` (and `git cherry`, which is patch-id) is EQUIVALENCE: it drops hunk line numbers, so the
+      same hunk applied at a different offset of a different file state matches; by default it also ignores whitespace
+      (`--verbatim` fixes only that); and a binary change hashes only the abbreviated index line unless the diff was
+      made with --full-index. It is what `git rebase` uses to skip a cherry-pick, which is right for a person watching a
+      rebase and wrong for a bot nobody watches. On the real 09-25 stack the two tests agree exactly: over the 18 local
+      commits a7f0ea126 carried against the 41 upstream commits of c02f11eac..b48c4464a, patch-id found twins for the
+      oldest 6 and raw identity found the same 6 with the same twins, and neither found one for the other 12.
+    - A per-file tree check (each touched path at origin holds the commit's blob, or a later blob in that path's
+      history) accepts a commit whose NEW bytes merely reappear upstream, a flag file or a revert to an old version,
+      without that commit's change ever landing. That is a guess about intent.
+  Identity is the strictest of the three, so its only failure is the safe one: a copy rebased over a base where one
+  of its paths had changed has a different old blob, finds no twin, and replays as it did before this existed. A
+  commit only PARTLY on origin (some of its paths landed in another commit) never has a twin, so it is kept whole.
+  DEGRADES TO THE DAY BEFORE. Any error while reading keys (a git exit, an unreadable line, a throw) drops nothing,
+  replays every local commit as before, and the outcome's `why` and `twin_scan` say the scan could not run.
 
   STARTUP FILES. $script:TcCheckoutSyncStartupFiles is a LITERAL list: capture-run.ps1 plus every file it dot-sources.
   lib\test-checkout-sync.ps1 asserts it equals Get-TcCaptureRunDotSources over the real grocery\capture-run.ps1, so a
@@ -396,27 +428,92 @@ function Test-TcCsBytePrefix([byte[]]$Prefix, [byte[]]$Whole) {
   return $true
 }
 
+# ---- LOCAL COMMITS ALREADY ON THE TARGET (LANDED TWINS in the header) ----------------------------------------------
+# Every non-merge commit of $Range as sha -> change key, in `git log` order (newest first). The key is the commit's raw
+# diff against its parent, one ':<old mode> <new mode> <old blob> <new blob> <status>\t<path>' line per path, full
+# blob ids, renames off, joined with LF. A commit that changes nothing has an empty key. Throws on any git failure or
+# a line it cannot read: the caller turns a throw into "drop nothing".
+function Get-TcCsChangeKeys([string]$Repo, [string]$Range) {
+  $g = Invoke-TcCsGit -Repo $Repo -GitArgs @('log', '--no-merges', '--no-renames', '--no-color', '--raw', '--no-abbrev', '--format=%x01%H', $Range)
+  if ($g.rc -ne 0) { throw ('git log --raw ' + $Range + ' exited ' + $g.rc + ': ' + $g.err) }
+  $order = [System.Collections.Generic.List[string]]::new()
+  $keys = New-Object System.Collections.Hashtable ([StringComparer]::Ordinal)
+  $cur = ''; $lines = $null
+  foreach ($ln in @($g.raw -split "`n")) {
+    $t = $ln.TrimEnd("`r")
+    if (-not $t) { continue }
+    if ($t[0] -eq [char]1) {
+      if ($cur) { $keys[$cur] = ($lines -join "`n") }
+      $cur = $t.Substring(1).Trim()
+      if ($cur -notmatch '^[0-9a-f]{40}$') { throw ('unreadable commit line in git log --raw: ' + $t) }
+      $order.Add($cur); $lines = [System.Collections.Generic.List[string]]::new()
+      continue
+    }
+    if ($t[0] -ne ':' -or -not $cur) { throw ('unreadable line in git log --raw: ' + $t) }
+    $lines.Add($t)
+  }
+  if ($cur) { $keys[$cur] = ($lines -join "`n") }
+  return [pscustomobject]@{ order = $order.ToArray(); keys = $keys }
+}
+
+# Which commits of Upstream..Tip already have a twin in Tip..Onto. Returns @{ ok; twins (local -> twin); why }. ok is
+# false, with twins EMPTY, on any error: nothing is dropped and the replay runs as it did before this existed.
+# -Fault is a test seam, run inside the try.
+function Get-TcCsLandedTwins {
+  param([string]$Repo, [string]$Upstream, [string]$Tip, [string]$Onto, [scriptblock]$Fault = $null)
+  $twins = New-Object System.Collections.Hashtable ([StringComparer]::Ordinal)
+  try {
+    if ($Fault) { $null = & $Fault }
+    $loc = Get-TcCsChangeKeys -Repo $Repo -Range ($Upstream + '..' + $Tip)
+    if (-not $loc.order.Count) { return @{ ok = $true; twins = $twins; why = '' } }
+    $up = Get-TcCsChangeKeys -Repo $Repo -Range ($Tip + '..' + $Onto)
+    # key -> twins still unclaimed, oldest first, so each upstream commit is the twin of at most one local commit.
+    $pool = New-Object System.Collections.Hashtable ([StringComparer]::Ordinal)
+    for ($i = $up.order.Count - 1; $i -ge 0; $i--) {
+      $u = $up.order[$i]; $k = [string]$up.keys[$u]
+      if (-not $k) { continue }
+      if (-not $pool.ContainsKey($k)) { $pool[$k] = [System.Collections.Generic.List[string]]::new() }
+      $pool[$k].Add($u)
+    }
+    for ($i = $loc.order.Count - 1; $i -ge 0; $i--) {
+      $c = $loc.order[$i]; $k = [string]$loc.keys[$c]
+      if (-not $k -or -not $pool.ContainsKey($k) -or -not $pool[$k].Count) { continue }
+      $twins[$c] = $pool[$k][0]; $pool[$k].RemoveAt(0)
+    }
+    return @{ ok = $true; twins = $twins; why = '' }
+  } catch {
+    return @{ ok = $false; twins = (New-Object System.Collections.Hashtable ([StringComparer]::Ordinal)); why = ('the landed-twin scan could not run (' + $_.Exception.Message + '), so no local commit was dropped and every one was replayed as before') }
+  }
+}
+
 # ---- THE LOCAL COMMITS, REPLAYED OFF TO THE SIDE -------------------------------------------------------------------
 # Replays Upstream..Tip onto -Onto (default Upstream) with -X theirs, exactly the tree `git rebase -X theirs` builds,
 # touching neither the index nor the working tree. Authors are kept; the committer is the bot, as the old tail's was.
-# Returns @{ ok; tip; replayed; dropped; why }.
+# A local commit with a LANDED TWIN in Tip..Onto (the header's rule) is dropped before its replay and named in `landed`
+# as '<local>=<twin>', full shas, oldest first; `twin_scan` is '' or why the scan could not run (nothing dropped then).
+# `dropped` counts both kinds: a landed twin, and a commit whose replay changed nothing.
+# Returns @{ ok; tip; replayed; dropped; landed; twin_scan; why }.
 function Invoke-TcCsLocalCommitReplay {
-  param([string]$Repo, [string]$Upstream, [string]$Tip, [string]$Onto = '', [string]$BotName, [string]$BotEmail)
+  param([string]$Repo, [string]$Upstream, [string]$Tip, [string]$Onto = '', [string]$BotName, [string]$BotEmail, [scriptblock]$TwinScanFault = $null)
   $list = Invoke-TcCsGit -Repo $Repo -GitArgs @('rev-list', '--reverse', '--topo-order', '--parents', ($Upstream + '..' + $Tip))
-  if ($list.rc -ne 0) { return @{ ok = $false; why = ('git rev-list exited ' + $list.rc + ': ' + $list.err) } }
+  if ($list.rc -ne 0) { return @{ ok = $false; landed = @(); twin_scan = ''; why = ('git rev-list exited ' + $list.rc + ': ' + $list.err) } }
   $nb = if ($Onto) { $Onto } else { $Upstream }
   $n = 0; $dropped = 0
+  $tw = Get-TcCsLandedTwins -Repo $Repo -Upstream $Upstream -Tip $Tip -Onto $nb -Fault $TwinScanFault
+  $landed = [System.Collections.Generic.List[string]]::new()
   $msgFile = Join-Path $env:TEMP ('tc-cs-msg-' + [guid]::NewGuid().ToString('N') + '.txt')
   $envNames = @('GIT_AUTHOR_NAME', 'GIT_AUTHOR_EMAIL', 'GIT_AUTHOR_DATE', 'GIT_COMMITTER_NAME', 'GIT_COMMITTER_EMAIL')
   try {
     foreach ($ln in @($list.out -split "`r?`n" | Where-Object { $_ })) {
       $parts = @($ln -split ' ')
-      if ($parts.Count -ne 2) { return @{ ok = $false; why = ('local commit ' + $parts[0].Substring(0, 9) + ' is a merge; it is never linearised') } }
+      if ($parts.Count -ne 2) { return @{ ok = $false; landed = $landed.ToArray(); twin_scan = $tw.why; why = ('local commit ' + $parts[0].Substring(0, 9) + ' is a merge; it is never linearised') } }
       $c = $parts[0]; $cp = $parts[1]
+      # Already on the target: never replayed. The next commit's merge base is still its own parent, this one.
+      if ($tw.twins.ContainsKey($c)) { $landed.Add(($c + '=' + $tw.twins[$c])); $dropped++; continue }
       $mt = Invoke-TcCsGit -Repo $Repo -GitArgs @('merge-tree', '--write-tree', ('--merge-base=' + $cp), '-X', 'theirs', $nb, $c)
       if ($mt.rc -ne 0) {
         $first = @($mt.out -split "`r?`n" | Where-Object { $_ -match 'CONFLICT' } | Select-Object -First 1)
-        return @{ ok = $false; why = ('local commit ' + $c.Substring(0, 9) + ' conflicts with upstream even under -X theirs (merge-tree rc ' + $mt.rc + ')' + $(if ($first.Count) { ': ' + $first[0].Trim() } else { '' })) }
+        return @{ ok = $false; landed = $landed.ToArray(); twin_scan = $tw.why; why = ('local commit ' + $c.Substring(0, 9) + ' conflicts with upstream even under -X theirs (merge-tree rc ' + $mt.rc + ')' + $(if ($first.Count) { ': ' + $first[0].Trim() } else { '' })) }
       }
       $tree = @($mt.out -split "`r?`n")[0].Trim()
       $nbTree = (Invoke-TcCsGit -Repo $Repo -GitArgs @('rev-parse', ($nb + '^{tree}'))).out
@@ -432,11 +529,11 @@ function Invoke-TcCsLocalCommitReplay {
         [Environment]::SetEnvironmentVariable('GIT_COMMITTER_NAME', $BotName); [Environment]::SetEnvironmentVariable('GIT_COMMITTER_EMAIL', $BotEmail)
         $ct = Invoke-TcCsGit -Repo $Repo -GitArgs @('commit-tree', $tree, '-p', $nb, '-F', $msgFile)
       } finally { foreach ($v in $envNames) { [Environment]::SetEnvironmentVariable($v, $saved[$v]) } }
-      if ($ct.rc -ne 0) { return @{ ok = $false; why = ('git commit-tree exited ' + $ct.rc + ': ' + $ct.err) } }
+      if ($ct.rc -ne 0) { return @{ ok = $false; landed = $landed.ToArray(); twin_scan = $tw.why; why = ('git commit-tree exited ' + $ct.rc + ': ' + $ct.err) } }
       $nb = $ct.out; $n++
     }
   } finally { Remove-Item -LiteralPath $msgFile -Force -ErrorAction SilentlyContinue }
-  return @{ ok = $true; tip = $nb; replayed = $n; dropped = $dropped; why = '' }
+  return @{ ok = $true; tip = $nb; replayed = $n; dropped = $dropped; landed = $landed.ToArray(); twin_scan = $tw.why; why = '' }
 }
 
 # ---- STARTUP FILES -------------------------------------------------------------------------------------------------
@@ -542,7 +639,9 @@ function Invoke-TcCheckoutSync {
     # between the tree move and update-ref (a lane committing in that window).
     [scriptblock]$BeforeMove = $null,
     [scriptblock]$AfterReadTree = $null,
-    [scriptblock]$BeforeRef = $null
+    [scriptblock]$BeforeRef = $null,
+    # A throw from here stands for a landed-twin scan that failed: the sync must then replay every commit as before.
+    [scriptblock]$TwinScanFault = $null
   )
   $clock = [Diagnostics.Stopwatch]::StartNew()
   $rec = [ordered]@{
@@ -550,7 +649,7 @@ function Invoke-TcCheckoutSync {
     H0 = ''; O = ''; NEW = ''; behind = 0; behind_after = 0; ahead = 0; replayed = 0; dropped = 0; changed = 0
     quarantined = @(); set_aside = @(); merged = @(); already_upstream = @(); own_deleted = @(); foreign = @()
     partial_target = ''; partial_blocker = ''; held = ''; unscanned = @(); startup_changed = $false; startup_files = @()
-    index_resynced = @(); cas_recovered = ''; notes = @(); tree = ''; sec = 0; lib_blob = ''; logged = $false
+    index_resynced = @(); cas_recovered = ''; notes = @(); landed = @(); twin_scan = ''; tree = ''; sec = 0; lib_blob = ''; logged = $false
   }
   $ctx = @{ commonDir = ''; log = $true; preSetAside = [System.Collections.Generic.List[string]]::new(); leftover = $null; leftoverText = '' }
   if (-not $OwnBlobs) { $OwnBlobs = @{} }
@@ -576,6 +675,14 @@ function Invoke-TcCheckoutSync {
       $rec.page = $true
       $rec.why = $rec.why + '; before the move the sync set aside and restored from HEAD the pipeline''s own conflicted path(s): ' + ($ctx.preSetAside -join ', ')
     }
+    # Every local commit dropped as already on origin is named with its twin, on every outcome (W0.2), and so is a
+    # twin scan that could not run and dropped nothing.
+    $landedNow = @($rec.landed | Where-Object { $_ })
+    if ($landedNow.Count) {
+      $names = @($landedNow | ForEach-Object { $pr = ([string]$_).Split('='); $pr[0].Substring(0, 9) + ' (twin ' + $pr[1].Substring(0, 9) + ')' })
+      $rec.why = $rec.why + '; ' + $landedNow.Count + ' local commit(s) already on origin were dropped, never replayed: ' + ($names -join ', ')
+    }
+    if ($rec.twin_scan) { $rec.why = $rec.why + '; ' + $rec.twin_scan }
     # A leftover intent this run did not resolve is named on every outcome that is not clean, and KEPT (finding 7).
     if ($ctx.leftover -and -not $resolved -and $ctx.leftoverText) { $rec.why = $rec.why + ' [' + $ctx.leftoverText + ']' }
     $rec.sec = [math]::Round($clock.Elapsed.TotalSeconds, 2)
@@ -954,7 +1061,8 @@ function Invoke-TcCheckoutSync {
       # EVERY failure from here is class mixed-tree: HEAD is H1 and the index is at the target, so they disagree.
       $h1 = (Invoke-TcCsGit -Repo $Repo -GitArgs @('rev-parse', ('refs/heads/' + $Branch))).out
       if ((Invoke-TcCsGit -Repo $Repo -GitArgs @('merge-base', '--is-ancestor', $rec.H0, $h1)).rc -ne 0) { return (Complete-TcCsSync 'failed' 'mixed-tree' ('lost the compare-and-swap: main moved to ' + $h1 + ', which does not descend from ' + $rec.H0 + '; the index holds the target and HEAD does not - repair by hand: git read-tree -m ' + $plan.new + ' ' + $h1)) }
-      $rp2 = Invoke-TcCsLocalCommitReplay -Repo $Repo -Upstream $rec.H0 -Tip $h1 -Onto $plan.new -BotName $BotName -BotEmail $BotEmail
+      $rp2 = Invoke-TcCsLocalCommitReplay -Repo $Repo -Upstream $rec.H0 -Tip $h1 -Onto $plan.new -BotName $BotName -BotEmail $BotEmail -TwinScanFault $TwinScanFault
+      if (@($rp2.landed).Count) { $rec.landed = @($rec.landed) + @($rp2.landed) }
       if (-not $rp2.ok) { return (Complete-TcCsSync 'failed' 'mixed-tree' ('lost the compare-and-swap and the interloper ' + $h1 + ' did not replay: ' + $rp2.why + '; HEAD is ' + $h1 + ' and the index holds ' + $plan.new)) }
       $ctx.casPaths = New-Object System.Collections.Generic.HashSet[string] ([StringComparer]::Ordinal)
       foreach ($x in (Get-TcCsTreeDiff -Repo $Repo -A $rec.H0 -B $h1)) { [void]$ctx.casPaths.Add($x.path) }
@@ -1097,7 +1205,9 @@ function Get-TcCsPlanFor {
   $out = @{ ok = $false; cls = ''; why = ''; new = $Onto; replayed = 0; dropped = 0; entries = @(); foreign = @(); startup = @() }
   $ahead = [int](Invoke-TcCsGit -Repo $Repo -GitArgs @('rev-list', '--count', ($Onto + '..' + $rec.H0))).out
   if ($ahead -gt 0) {
-    $rp = Invoke-TcCsLocalCommitReplay -Repo $Repo -Upstream $Onto -Tip $rec.H0 -BotName $BotName -BotEmail $BotEmail
+    $rp = Invoke-TcCsLocalCommitReplay -Repo $Repo -Upstream $Onto -Tip $rec.H0 -BotName $BotName -BotEmail $BotEmail -TwinScanFault $TwinScanFault
+    # Recorded on failure too, so a degraded replay still names what it dropped. A partial's second plan overwrites.
+    $rec.landed = @($rp.landed); $rec.twin_scan = [string]$rp.twin_scan
     if (-not $rp.ok) { $out.cls = 'replay'; $out.why = $rp.why; return $out }
     $out.new = $rp.tip; $out.replayed = $rp.replayed; $out.dropped = $rp.dropped
   }
