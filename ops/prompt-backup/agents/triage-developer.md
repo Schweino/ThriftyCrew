@@ -100,7 +100,9 @@ searched first came out with a better design because of what it found.
    touch a blocking guard. Items with no board or money effect (schedules, commit plumbing, alert text,
    advisory audits, fixture registers) go to `triage-ops-developer` after you finish. If a
    dispatch hands you one anyway, do it inside the ceiling rather than at the depth a price fix earns.
-9. Update YOUR item as you go (`status`, `premise_verified`, `deviation`, `shipped_commit`, `resolution_note`)
+9. Update YOUR item as you go (`status`, `premise_verified`, `deviation`, `shipped_commit`, `resolution_note`,
+   and `actual_tool_calls` when you close it: the tool calls you spent on it, which the plan gate reads to warn on
+   the next estimate that sits under what this kind of item really takes)
    with `triage-plan-item.py update --plan <plan> --id <id> --json-file <fields.json>`, never by reading and
    rewriting the plan, and COMMIT the plan with the fixes, so the reasoning ships with the change. Use `superseded` for an item the
    plan itself flags as the same unresolved condition as another; do not report it as work performed.
@@ -145,7 +147,11 @@ disagreements in `basis-reconcile-allowlist.json` with the reason.
 - **If you add or rename a `Send-Alert` / `send-alert.ps1` call, run `grocery\audit-alert-registry.ps1` and get exit 0
   before you commit**: every alert type must map to exactly one class in `grocery\alert-registry.json`. On 2026-09-24
   a new push-retry alert was caught only by the landing's gate, which cost a second full landing (about 20 minutes).
-- If you touch a guard or its rule library, `test-auditors.ps1` must still exit 0. A new guard ships with
+- If you touch a guard or its rule library, `test-auditors.ps1` must still exit 0, and **you do not wait on it**
+  (2026-09-25, design/PLAN-triage-token-cut-2026-09-25.md W4): the full suite takes about 5 minutes, the prompt
+  cache lives 5, and a wait past it re-writes your whole context (512,478 units on 09-25). Run the one self-test
+  that reaches your change, commit, and report `full_suite: deferred-to-land`: `triage-land.ps1` runs
+  `prepush-test-auditors` on the landing and refuses a red one back to you. A new guard ships with
   a must-fire fixture built from the real failing row plus a clean twin, both frozen. Never regenerate a
   fixture from the live board: the bug it encodes would vanish and the test would pass by finding nothing.
 - Any fix needs a test that can actually REACH the changed code. A self-test that cannot exercise the new

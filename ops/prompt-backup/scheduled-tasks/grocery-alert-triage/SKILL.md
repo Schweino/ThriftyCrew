@@ -168,6 +168,14 @@ left open for three days of follow-on work, 402M across 56 spawns, none of it on
 - **THIS SESSION IS THE DAILY RUN, NOT A WORKSPACE.** It ends at STEP 5. If Brad asks for more work in it, run
   `triage-cost.py` first and tell him the session's cost so far, and recommend a fresh session for work that is
   not today's queue: a session carried forward keeps paying for everything already in its context.
+  **Since 2026-09-25 this is a block, not a request** (W2 of ThriftyCrew design\PLAN-triage-token-cut-2026-09-25.md):
+  on 09-25 the ruling-A work and two landings ran here after the report and the orchestrator came to 2.1M of 9.3M.
+  STEP 5's last command stamps the session closed, and `~\.claude\skills\triage-spawn-guard-hook.py` refuses any
+  later spawn from it. Do not delete the stamp to carry on; say the work needs a fresh session.
+- **NEVER RESUME A BIG AGENT; SPAWN FRESH FROM THE PLAN ITEM (W3, 2026-09-25).** A follow-up, a send-back or a
+  refused landing goes to a NEW spawn seeded with `triage-plan-item.py show` for its item, never a SendMessage to an
+  agent that already ran: developer aee6ba8 was resumed on 09-25 and re-read a 150k context on every call (1.3M).
+  The spawn guard refuses a SendMessage to a triage agent whose last context is over 60,000 tokens.
 - The report gives the run's cost_units against the budget, and `triage-cost.py --report` lines for today's
   plans (cost per done item). Revisit the budget, the ceilings and the 7/21-day numbers after five runs.
 
@@ -324,8 +332,12 @@ budget instead of becoming the new answer. It still needs a plan item (the gate 
 transcribe it the way STEP 0.9 transcribes an inline item, carrying the prior plan's root cause forward. A
 RETURN with NO route line (no committed plan holds its priors) is Class A as before, and so is one the lane
 hands back. The RETURN fields below are unchanged and the gate still demands them.
-RETURNS ARE FAILURES (Brad's ruling 5, 2026-09-10). Paste every `RETURN:` line `triage-due.ps1` printed in
-STEP 0 into the dispatch, verbatim. Each names a type triage already closed in the last 30 days and its prior
+**THE RETURN BLOCK IS A FILE (W2, 2026-09-25).** `triage-due.ps1` prints one short line per RETURN
+(`RETURN <id>  ROUTE <lane>`, enough to route on) and writes the full RETURN and ROUTE lines to the file its
+`RETURNS:` line names; on 09-25 the block was about 10k characters in this context, re-read on every later call.
+Route from the short lines. Do not read the file yourself: name its path in each dispatch that needs the lines.
+RETURNS ARE FAILURES (Brad's ruling 5, 2026-09-10). Hand the reviewer every RETURN line `triage-due.ps1` wrote in
+STEP 0, by naming that file in the dispatch (it reads it; the lines are verbatim there). Each names a type triage already closed in the last 30 days and its prior
 ids, and the reviewer needs them because the gate derives RETURN status from the QUEUE: a RETURN code item must
 carry `prior_closes` (every id on its line), `prevention` (the upstream `source`, `what`, `exact_change`) and
 `proof.fixture_occurrences` (every prior id plus today's), and a type returned twice may not name only rule or
@@ -337,9 +349,11 @@ STEP 2 - GATE THE HANDOFF, DETERMINISTICALLY. Do not eyeball the plan; run:
 positional parameter (the queue path), and the gate exits 3 BLIND - failing closed, correctly, but costing a run. The
 script splits a single argument on `,` and `;` (validate-triage-plan.ps1 line 86). Every dispatch that names this command
 for an agent writes the ids the same way.
-Exit 0 = hand it over. Exit 2 = it prints exactly what is missing; send the reviewer back ONCE with that
-text (SendMessage to the same agent). Exit 3 = BLIND (no plan, unparseable, zero items): treat like a
-second failure.
+Exit 0 = hand it over. Exit 2 = it prints exactly what is missing; send it back ONCE with that text to a FRESH
+triage-reviewer spawn naming the plan path and the gate's lines, never a SendMessage to the reviewer that wrote it
+(W3, 2026-09-25: a resume re-reads that reviewer's whole context, about 140k, on every call, and
+`triage-spawn-guard-hook.py` refuses a SendMessage to a triage agent past 60k). Exit 3 = BLIND (no plan,
+unparseable, zero items): treat like a second failure.
 
 **A FAILED GATE MUST NEVER COST A DAY OF TRIAGE.** If the plan still does not pass after that one
 send-back, do NOT stop with nothing shipped - a gate is there to stop a BAD PLAN reaching the developer,
@@ -362,6 +376,9 @@ blocking guard. Every other code item goes to the OPS lane. When in doubt, money
   run the board chain and publish once for the batch". Say the plan already passed the gate, so it implements
   rather than re-diagnoses; that it reads its item with `triage-plan-item.py show`; that it never pushes; and that
   its report is under 15 lines. Run `triage-cost.py --budget 10000000` before each spawn and `--append` after.
+  Say that it never waits on the full `test-auditors.ps1` (about 5 minutes, past the 5-minute cache: 512,478 units
+  of re-writes on 09-25), reports `full_suite: deferred-to-land` because triage-land runs it, and writes
+  `actual_tool_calls` on its item when it closes it (W4; the plan gate warns an estimate under that history).
 - OPS: once the money lane has returned, spawn "triage-ops-developer" synchronously in JOB 1 (IMPLEMENT) with the
   same plan, at most THREE of its item ids per spawn, the refreshed foreign-dirty list and their estimates as
   ceilings. Skip it when there are no ops items. An item it bounces as mis-laned (it turned out to touch prices
@@ -443,6 +460,9 @@ STEP 5 - VERIFY THE RUN, DO NOT TAKE ITS WORD FOR IT:
   10M budget (the BUDGET line verbatim), the `--report` line of each of today's plans (cost per done item), and
   tool calls against the ceilings. `python grocery\triage-cost.py --check-agents` must exit 0: the three copies
   of each triage agent (the repo, C:\Codex\.claude\agents, ~\.claude\agents) are identical.
+- **LAST, after the report is written:** `C:\Codex\Python312\python.exe C:\Codex\ThriftyCrew\grocery\triage-cost.py
+  --session-closed`. It stamps this session closed with its spend, and from then on any Agent or Task call here is
+  refused by the spawn guard (W2). Nothing is spawned after it; more work is a fresh session.
 - Re-run `grocery\audit-alert-census.ps1` so its numbers include this run's closes, quote its QUIET DAYS,
   TARGET and RETURNS lines, and commit `grocery\out\alert-census.jsonl` by explicit path with the plan. That
   file is the only history of alerts older than the queue's 30 days, so a copy that lives on one disk is not

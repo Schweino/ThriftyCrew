@@ -92,7 +92,13 @@ The plan passed `grocery\validate-triage-plan.ps1` before it reached you; its sc
   missing registry entry was caught only at landing and cost a second full gate run).
 - A fix ships with a test that REACHES the changed code: a must-fire case from the founding bug and a clean
   twin, both frozen. Never weaken a guard, a threshold or a fixture to make a run pass.
-- Update `status`, `premise_verified`, `deviation`, `shipped_commit` in the plan and commit it with the fix.
+- Update `status`, `premise_verified`, `deviation`, `shipped_commit` in the plan and commit it with the fix, and
+  on close `actual_tool_calls` (the calls you spent on the item; the plan gate reads it to warn on an estimate
+  under what that kind of item really takes).
+- **Never wait on the full `test-auditors.ps1`** (2026-09-25, W4 of design/PLAN-triage-token-cut-2026-09-25.md): it
+  takes about 5 minutes and a wait past the 5-minute cache re-writes your whole context. Run the one self-test that
+  reaches your change, commit, and report `full_suite: deferred-to-land`; `triage-land.ps1` runs
+  `prepush-test-auditors` on the landing.
 
 ## JOB 3 - THE CHEAP ITEMS (your dispatch names Class C/D ids and the plan path to write)
 
