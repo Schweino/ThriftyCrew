@@ -29,6 +29,9 @@
                     the file sizes on disk, never capture-run's record.
     9. KILL SWITCH  is <git common dir>\tc-checkout-sync.disabled present? BOT CHECKOUT SYNC DISABLED on every run, so
                     it cannot be forgotten. When capture-run STOPS it still fires: it reads the file, never a record.
+    10. INTRUDERS   report only: how many dirty or untracked entries no declared writer owns, one row a day in
+                    <git common dir>\tc-production-intruders.jsonl (design\PLAN-bot-dedicated-checkout-2026-09-25.md W0.3).
+                    An ok line, never a finding.
     (7 to 9 are design\PLAN-bot-checkout-self-heal-2026-09-23.md W1.1. The per-store freshness scan further down is
     headed "7." in the body for historical reasons and is not one of them. The -SlotClose run grades only check 6a.)
 
@@ -1767,6 +1770,17 @@ try {
   foreach ($x in $ksF.findings) { [void]$findings.Add($x) }
   foreach ($x in $ksF.ok) { [void]$ok.Add($x) }
 } catch { [void]$findings.Add('KILL SWITCH: BLIND - the check threw (' + $_.Exception.Message + '), so whether the checkout sync is disabled is unknown this run.') }
+
+# ---- 10. PRODUCTION INTRUDERS, REPORT ONLY (design\PLAN-bot-dedicated-checkout-2026-09-25.md W0.3) -----------------
+# Who owns each dirty or untracked path in this checkout: the bot (lib\bot-paths.ps1), a registered scheduled writer
+# (ops\production-writers.json), or nobody. Records one row a day in <git common dir>\tc-production-intruders.jsonl,
+# outside every working tree. It is an ok line, never a finding: D4's set-aside waits for 7 clean days of these rows,
+# and a count nobody has ruled on must not page. A BLIND census says BLIND in the line. It moves nothing.
+try {
+  . (Join-Path $flRepo 'lib\production-writers.ps1')
+  $piChk = Invoke-TcProductionCensusCheck -Repo $flRepo -RegistryPath (Join-Path $flRepo 'ops\production-writers.json') -Record -Date $todayS
+  [void]$ok.Add($piChk.line)
+} catch { [void]$ok.Add('production intruders: BLIND - the check threw (' + $_.Exception.Message + ')') }
 
 
 # ---- 6b. IS ANYTHING STILL HOLDING THE RUN LOG MUTE? (2026-08-25) ------------------------------------

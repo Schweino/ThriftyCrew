@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "about": "The production ownership registry (design/PLAN-bot-dedicated-checkout-2026-09-25.md W0.3, D4). Every scheduled writer that leaves a file dirty or untracked in the production checkout (the main checkout, C:\\Codex\\ThriftyCrew) declares it here, beside the capture bot and the three lanes, which declare theirs in lib/bot-paths.ps1 and lib/pipeline-commit.ps1 and are NOT repeated here. A dirty or untracked path no declaration owns is UNREGISTERED. Patterns follow Test-BotPathOwned: an entry owns its subtree (the boundary is the slash), and * or ? make it a -like glob. ADDING A PATH IS A DECISION SOMEBODY DEFENDS IN A DIFF: name the writer and the evidence.",
+  "intruder_policy": "wait",
+  "intruder_policy_about": "D4, ruled (b) on 2026-09-25: set an unregistered file on a moved path aside into the dated quarantine, page, and proceed. It switches on ONLY after ops/report-production-intruders.ps1 reads 0 unregistered producer paths for 7 clean days (W2.2). Until then, and as the kill switch after, 'wait' is today's rule exactly: the sync goes partial or blocked and pages.",
+  "writers": [
+    {
+      "name": "check-ad-cycles",
+      "runs": "inside capture-run (TC Grocery Ad Pulls 0700, TC Grocery Daily Capture 0800); these outputs are not on the bot's staging list",
+      "evidence": "grocery/check-ad-cycles.ps1 writes the weekly stamps ($tgStampF, $gdStampF, $cfStampF, $slStampF), the proved stamp, and runs golden-test (meal-prep/engine/golden-test.ps1 -> golden-frozen-actual.json), audit-spec-contradictions (meal-prep/out/spec-contradictions.json) and seo_search_console.py (ops/seo-search-console-history.jsonl)",
+      "paths": [
+        "grocery/*-weekly-stamp.txt",
+        "grocery/test-guards-proved-stamp.txt",
+        "meal-prep/db/golden-frozen-actual.json",
+        "meal-prep/out/spec-contradictions.json",
+        "ops/seo-search-console-history.jsonl"
+      ]
+    },
+    {
+      "name": "capture-run prompt-sync",
+      "runs": "inside capture-run: audit-prompt-backup -SyncScopes -SyncMirror",
+      "evidence": "grocery/capture-run.ps1 prompt-sync step; ops/audit-prompt-backup.ps1 -SyncMirror refreshes mirrors that already exist",
+      "paths": [
+        "ops/prompt-backup"
+      ]
+    },
+    {
+      "name": "brain-digest incident trigger",
+      "runs": "TC Brain Digest 0645",
+      "evidence": "ops/brain-digest.ps1 runs ops/incident-trigger.ps1, which writes a recurring-red report per incident",
+      "paths": [
+        "grocery/INCIDENT-*.md"
+      ]
+    },
+    {
+      "name": "process reaper",
+      "runs": "TC Process Reaper",
+      "evidence": "ops/reap-runaway-processes.ps1 -Reap appends its reaped-process log",
+      "paths": [
+        "ops/out/reaped-processes.jsonl"
+      ]
+    },
+    {
+      "name": "capture-watchdog member cohorts",
+      "runs": "TC Grocery Capture Watchdog 1030",
+      "evidence": "grocery/capture-watchdog.ps1 runs ops/member-cohorts.ps1",
+      "paths": [
+        "ops/member-cohorts.json"
+      ]
+    },
+    {
+      "name": "alert triage ledger",
+      "runs": "grocery/send-alert.ps1 from every scheduled sender, and the grocery-alert-triage scheduled agent",
+      "evidence": "grocery/triage-cost.py, grocery/triage-return-lib.ps1 and grocery/send-alert.ps1 append grocery/triage-plans/cost-ledger.jsonl",
+      "paths": [
+        "grocery/triage-plans/cost-ledger.jsonl"
+      ]
+    },
+    {
+      "name": "graph-nightly scoreboard and gold",
+      "runs": "TC Graph Nightly Matching",
+      "evidence": "measured 2026-09-11 on branch bot-paths-graph-tracked-writers (22ef53718, not landed): graphdb.py export_learning and score.py --context nightly write eval-runs.json, seed_gold.py writes gold.jsonl, ingest_hunter_events.py appends hunter-gold.jsonl, service_time.record writes llm-service-time.jsonl on every local model call",
+      "paths": [
+        "graph/eval/eval-runs.json",
+        "graph/gold/gold.jsonl",
+        "graph/gold/hunter-gold.jsonl",
+        "graph/out/llm-service-time.jsonl"
+      ]
+    }
+  ]
+}

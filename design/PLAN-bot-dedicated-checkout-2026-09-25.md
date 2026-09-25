@@ -468,6 +468,16 @@ bot through `Test-BotPathOwned`, the lanes through `Get-PipelinePaths`, and new 
 the incident reports, the reaper log and the prompt-backup mirror) or UNREGISTERED. Writes one row a day; the capture
 watchdog prints the count. Read branches `bot-paths-graph-tracked-writers` and `fix/bot-paths-restore-lane-state` first.
 Done when a week of rows exists and every unregistered path names its writer or is a session's.
+**Built 2026-09-25, the week not yet run.** The registry is `ops/production-writers.json` (seven writers, each with
+its task and evidence, `intruder_policy: wait`), the rules are `lib/production-writers.ps1`, the CLI is
+`ops/report-production-intruders.ps1`, and the watchdog's check 10 records the day's row in
+`<git common dir>\tc-production-intruders.jsonl` as an ok line, never a finding. First reading of the live main
+checkout, read-only at about 10:20: 59 entries, 18 the bot's, 32 registered writers', **9 UNREGISTERED**: 8
+session-shaped (6 code files being edited in the main checkout and 2 plan drafts) and 1 writer unknown
+(`grocery/triage-plans/investigation-red-on-main-2026-09-23.md`). Branch `fix/bot-paths-restore-lane-state` has
+landed; `bot-paths-graph-tracked-writers` (09-11, not landed) is cited as evidence for graph nightly's registry entry
+and was not merged. The first row is written by the first watchdog run on code that carries check 10, which in the
+main checkout means the first successful sync after this lands.
 
 ### Stage 1: sessions leave, in warn mode (the bot is unchanged)
 
