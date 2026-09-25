@@ -173,10 +173,14 @@
       "publish_batch": 1,
       "lane": "ops",
       "est_tool_calls": 30,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "shipped",
+      "premise_verified": "yes: lib/checkout-sync.ps1 at HEAD (after 91680deee) classed any staged code via '^[^ ]' as foreign with no bytes read (line 1247), while ' M' (1251) and '??' (1243) applied the newBlob test.",
+      "deviation": "Implemented as a '^[MA] $' switch branch ahead of '^[^ ]' that breaks out as already-upstream only when index blob (rev-parse :path) and working blob (hash-object) both equal newBlob and st is not D; otherwise it falls through to the unchanged refusal. Fixtures live in lib/test-checkout-sync.ps1 (the file -SelfTest runs), EXPECTED_CASES 178 -> 183. The existing F3b group is the staged-different-bytes MUST NOT FIRE twin and was left as is. ops/run-gates.ps1 not run by this lane (orchestrator lands).",
+      "shipped_commit": "see git log: 'Triage plan-2026-09-25-5: a staged copy of upstream's bytes is already upstream (a211ad)'",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 14,
+      "full_suite": "deferred-to-land",
+      "proof_run": "powershell -NoProfile -File lib\\checkout-sync.ps1 -SelfTest: exit 0, 'checkout-sync: 183 passed, 0 failed, 183 of 183 literal cases ran', 'CHECKOUT-SYNC SELF-TEST PASS'. New groups: STAGED ALREADY-UPSTREAM MUST FIRE (M and A staged copies of upstream end synced, clean, mtime unchanged) and MUST NOT FIRE (MM with index == upstream and a further worktree edit stays blocked/foreign, tree byte-identical)."
     },
     {
       "queue_id": "2026-09-24-818b3e",

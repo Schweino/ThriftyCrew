@@ -1244,6 +1244,16 @@ function Get-TcCsPlanFor {
         else { $e.cls = 'foreign'; $e.why = 'an untracked file the bot does not own, where upstream adds this path' }
       } else {
         switch -Regex ($code) {
+          '^[MA] $' {
+            # A STAGED 'M '/'A ' whose index blob AND working bytes both already equal upstream's new blob is
+            # already-upstream like its ' M' and '??' twins (triage 2026-09-24-a211ad): moving HEAD onto those bytes
+            # rewrites neither the index entry nor the file. Any other staged shape falls through to the refusal.
+            if ($x.st -ne 'D') {
+              $idxBlob = (Invoke-TcCsGit -Repo $Repo -GitArgs @('rev-parse', (':' + $p))).out
+              $wtBlob = (Invoke-TcCsGit -Repo $Repo -GitArgs @('hash-object', '--', $p)).out
+              if ([string]::Equals($idxBlob, $x.newBlob, [StringComparison]::Ordinal) -and [string]::Equals($wtBlob, $x.newBlob, [StringComparison]::Ordinal)) { $e.cls = 'already-upstream'; break }
+            }
+          }
           '^[^ ]' { $e.cls = 'foreign'; $e.why = ('a staged change (' + $code + ') on a path upstream changed; the sync never rewrites an index entry it did not make') }
           '^ M$' {
             $cur = (Invoke-TcCsGit -Repo $Repo -GitArgs @('hash-object', '--', $p)).out

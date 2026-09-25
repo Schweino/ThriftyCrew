@@ -24,7 +24,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'checkout-sync.ps1')
 $env:GIT_TERMINAL_PROMPT = '0'
 
-$EXPECTED_CASES = 178
+$EXPECTED_CASES = 183
 $script:pass = 0; $script:fail = 0
 function T([string]$Label, [bool]$Cond, [string]$Got = '') {
   if ($Cond) { $script:pass++; Write-Output ('  ok    ' + $Label) }
@@ -687,6 +687,29 @@ try {
     T 'outcome is synced, listing it already upstream' (($s.outcome -eq 'synced') -and (@($s.already_upstream) -contains 'lib/code.ps1')) ($s.outcome + ': ' + $s.why)
     T 'its mtime is unchanged' ((Mtime $f) -eq $mt0)
     T 'it ends clean' (-not (Status $E.bot)) (Status $E.bot)
+  }
+
+  Invoke-Group 'STAGED ALREADY-UPSTREAM MUST FIRE (frozen from 2026-09-24, triage a211ad) - a session''s STAGED M and A copies of upstream''s bytes are carried through, not blocked' {
+    $E = New-Estate 'stagedau'
+    Push-Up $E 'lib/code.ps1' "line1`nline2-SAME`nline3`nline4`nline5`n" 'up: code'
+    Push-Up $E 'lib/added.ps1' "brand new`n" 'up: added'
+    W $E.bot 'lib/code.ps1' "line1`nline2-SAME`nline3`nline4`nline5`n"; W $E.bot 'lib/added.ps1' "brand new`n"
+    $null = GitOk $E.bot @('add', 'lib/code.ps1', 'lib/added.ps1')
+    $f = Join-Path $E.bot 'lib\code.ps1'; (Get-Item $f).LastWriteTime = [datetime]'2020-01-01T00:00:00'; $mt0 = Mtime $f
+    $s = Sync $E
+    T 'outcome is synced (not blocked/foreign), listing the staged M copy already upstream' (($s.outcome -eq 'synced') -and (@($s.already_upstream) -contains 'lib/code.ps1')) ($s.outcome + '/' + $s.class + ': ' + $s.why)
+    T 'the staged A copy of an upstream-added path is already upstream too' (@($s.already_upstream) -contains 'lib/added.ps1') ((@($s.already_upstream) -join ','))
+    T 'its mtime is unchanged and it ends clean' (((Mtime $f) -eq $mt0) -and (-not (Status $E.bot))) (Status $E.bot)
+  }
+
+  Invoke-Group 'STAGED ALREADY-UPSTREAM MUST NOT FIRE - an MM path whose INDEX equals upstream but whose worktree holds a further edit stays FOREIGN' {
+    $E = New-Estate 'stagedmm'
+    Push-Up $E 'lib/code.ps1' "line1`nline2-SAME`nline3`nline4`nline5`n" 'up: code'
+    W $E.bot 'lib/code.ps1' "line1`nline2-SAME`nline3`nline4`nline5`n"; $null = GitOk $E.bot @('add', 'lib/code.ps1')
+    W $E.bot 'lib/code.ps1' "line1`nline2-SAME`nline3`nline4`nline5-FURTHER`n"; $b4 = Snap $E.bot
+    $s = Sync $E
+    T 'outcome is blocked class foreign, naming the MM path' (($s.outcome -eq 'blocked') -and ($s.class -eq 'foreign') -and (($s.foreign -join ' ') -match 'lib/code\.ps1')) ($s.outcome + '/' + $s.class + ': ' + ($s.foreign -join ' '))
+    T 'tree, index and HEAD byte-identical' ((Snap $E.bot) -eq $b4)
   }
 
   Invoke-Group '-z MUST NOT FIRE - a path holding a DEL byte, a space, an apostrophe and a non-ASCII letter round-trips exactly' {
