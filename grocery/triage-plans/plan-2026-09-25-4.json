@@ -523,7 +523,7 @@
         ]
       },
       "freshness": "comparison-2026-09-23 built 2026-09-25 08:14; re-read the quarantine block before building",
-      "leaves_open": "yellow-bell-pepper | Family Fare stays withheld as ruled (a self-contradicting store read)",
+      "leaves_open": "yellow-bell-pepper | Family Fare stays withheld as ruled (a self-contradicting store read, a different class from the bare-oz fix): 1 cell",
       "leaves_open_occurrences": 1,
       "proof": {
         "must_fire_case": "frozen Venom 16 Oz 2-for-$2 row on energy-drinks and Queen Helene 32 oz on lotion no longer produce a KIND hard fail when the reader and guard agree they are fl oz",
@@ -537,8 +537,20 @@
       "rollback": "revert the pu-lib and audit hunks; the board rebuilds on the next chain",
       "lane": "money",
       "est_tool_calls": 45,
-      "status": "planned",
-      "resolution_note": "Reproduces today with the same three cells. Two are one bare-oz-on-a-liquid basis class that holds a DEARER old price; planned for the money lane."
+      "status": "done",
+      "resolution_note": "Bare 'oz' on a fl-oz commodity now has one reading, decided in pu-lib (Get-SizeMeasureKind) where the size is divided and used by audit-unit-basis-outlier: volume unless the size also names g/kg/lb/pound. The Venom (energy-drinks|Family Fare 0.0625) and Queen Helene (lotion|Walmart 0.1244) cells no longer hard-fail, so the next chain build publishes them instead of the dearer held 0.1353 and 0.2175. Guard findings on the current board 67 -> 16, strict subset, 0 new. yellow-bell-pepper|Family Fare residual queued weekly as 2026-09-25-17c0da. No republish from this lane.",
+      "premise_verified": true,
+      "premise_check": "comparison-2026-09-23 still the 08:14:10 generation; its quarantine block names the same three cells. Source rows: ads-2026-09-22 Family Fare Venom size '16 oz' 2 for $2.00; walmart-regular-2026-09-25 Queen Helene size '32 oz' $3.98. Get-LinkPerUnit's floz arm divides a bare oz as fl oz (16 oz at 1.00 -> 0.0625), the guard's Get-MeasureKind read it as weight: the disagreement is real.",
+      "measurement": "71 cells on floz commodities of comparison-2026-09-23 carry a bare oz size; 0 of 71 also name another weight unit (g, kg, lb, pound); 12 of 71 already held a crown and passed only because their peers were bare oz too. Many names state FL OZ while the size drops the 'fl' (Aldi Coconut Milk 13.66 FL OZ as '13.66 oz', Goldhen Liquid Egg Whites 32 FL OZ as '32 oz').",
+      "shipped_change": "grocery/pu-lib.ps1 gains Get-SizeMeasureKind (the only copy of the kind regexes): on a floz or gallon commodity a bare oz reads volume, as Get-LinkPerUnit divides it; a size that also names g/kg/lb/pound stays weight. audit-unit-basis-outlier.ps1 dot-sources pu-lib and passes the row unit. Size reader arithmetic unchanged.",
+      "blast_radius_result": "guard before/after on comparison-2026-09-23 as built: kind findings 67 -> 16, a strict subset (0 added, 51 bare-oz accusations removed), unreviewed crowns 0 -> 0, reviewed crowns 7 -> 4. On a scratch copy with the two quarantined cells restored to their captured rows: old guard 69 findings with 2 unreviewed crowns (the hard fail), new guard 16 with 0, exit 0. Board values are not changed by this commit; the next chain build stops condemning the two cells, so energy-drinks|Family Fare can show 0.0625 while the Family Fare ad runs (to 2026-09-26) and lotion|Walmart 0.1244.",
+      "proof_run": "audit-unit-basis-outlier.ps1 -SelfTest exit 0 'SELF-TEST PASS' (before the fixture update the frozen teriyaki must-fire went red, proving the new code is reached); new cases: MUST NOT FIRE frozen Venom '16 oz' energy-drinks and Queen Helene '32 oz' lotion rows with real peers; MUST FIRE '32 oz (907 g)' lotion crown still weight among volumes; 12 kind-reading cases; CLEAN TWIN Get-LinkPerUnit '16 oz' floz = 0.0625; the inverted-reference arm is still reached by a floz row whose peers NAME a weight unit. test-pu-lib.ps1 exit 0 PU-LIB PASSED; audit-size-parser-parity.ps1 -SelfTest exit 0 PASS. full_suite: deferred-to-land.",
+      "deviation_note": "Fixture change, stated not hidden: the frozen 2026-09-02 teriyaki-sauce row used to assert the peer-majority ACCUSED the Walmart 15 fl oz crown; under the one reading its four bare-oz peers read fl oz, so it now asserts no finding, and the accusation arm moved to a synthetic floz row whose peers name grams/pounds. test-cell-quarantine.ps1 got no new case: the quarantine library is untouched and the must-fire lives in the guard's own self-test. Three allowlist entries in the guard's kind allowlist are now unused (reviewed crowns 7 -> 4); left in place.",
+      "leaves_open_followup": "2026-09-25-17c0da",
+      "close_disposition": "confirmed",
+      "republished": false,
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 40
     },
     {
       "queue_id": "2026-09-23-822c30",

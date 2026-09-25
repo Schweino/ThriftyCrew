@@ -29,6 +29,7 @@ param([string]$CompareFile = '', [double]$Ratio = 4.0, [int]$MinStores = 4, [swi
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+. (Join-Path $PSScriptRoot 'pu-lib.ps1')   # Get-SizeMeasureKind: the size reader's own reading of a size's KIND
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
 # THE DETECTOR, kept pure so the fixture can reach it without any data files (fix-needs-reachable-selftest).
@@ -70,12 +71,12 @@ function Test-PackShape([string]$size) {
 # different KIND of quantity than its shelf-mates: a volume among weights, on a commodity priced by weight.
 # That is a statement about the data, not an inference from a ratio, which is the same standard the
 # size-shape mismatch above is held to. Magnitude does not enter into it.
-function Get-MeasureKind([string]$size) {
-  if (-not $size) { return 'unknown' }
-  if ($size -imatch '\bfl\.?\s*oz|\bfluid\b|\bml\b|\blitre|\bliter\b|\bgal(lon)?\b|\bqt\b|\bquart\b|\bpt\b|\bpint\b') { return 'volume' }
-  if ($size -imatch '\boz\b|\bounce|\blb\b|\bpound|\bg\b|\bgram|\bkg\b')                                             { return 'weight' }
-  if ($size -imatch '\bct\b|\bcount\b|\beach\b|\bea\b|\bpk\b|\bpack\b|\broll')                                       { return 'count'  }
-  return 'unknown'
+# ONE READING, THE SIZE READER'S (2026-09-25, queue 2026-09-23-92e552): the kind rules live in pu-lib's
+# Get-SizeMeasureKind, beside the Get-LinkPerUnit arithmetic that divides the size. Passing the row's unit
+# matters: on a floz commodity a bare "16 oz" is divided as fluid ounces, so it is read as volume here too,
+# and only a size that names another weight unit ("32 oz (907 g)") still reads as weight.
+function Get-MeasureKind([string]$size, [string]$unit = '') {
+  return (Get-SizeMeasureKind -Size $size -Unit $unit)
 }
 
 # WHICH KIND OF QUANTITY THE ENGINE ACTUALLY DIVIDED BY (2026-09-03, queue 2026-09-03-83b57e).
@@ -133,7 +134,7 @@ function Find-MeasureKindMismatch {
     $priced = @($allPriced | Where-Object { $_.size })
     if (@($priced).Count -lt $MinStores) { continue }
     $kinds = @{}
-    foreach ($s in $priced) { $k = Get-MeasureKind ([string]$s.size); if (-not $kinds.ContainsKey($k)) { $kinds[$k] = 0 }; $kinds[$k]++ }
+    foreach ($s in $priced) { $k = Get-MeasureKind ([string]$s.size) $unit; if (-not $kinds.ContainsKey($k)) { $kinds[$k] = 0 }; $kinds[$k]++ }
     $known = @($kinds.Keys | Where-Object { $_ -ne 'unknown' })
     if (@($known).Count -lt 2) { continue }                    # everybody agrees, nothing to say
     # the majority kind is the row's basis; anything else is measured in a different currency
@@ -142,7 +143,7 @@ function Find-MeasureKindMismatch {
     $cheapest = ($allPriced | Sort-Object { [double]$_.per_unit } | Select-Object -First 1)
     $unitKind = Get-UnitKind $unit
     foreach ($s in $priced) {
-      $k = Get-MeasureKind ([string]$s.size)
+      $k = Get-MeasureKind ([string]$s.size) $unit
       if ($k -eq 'unknown' -or $k -eq $major) { continue }
       # the commodity has declared this particular pair of kinds interchangeable for its products
       if (Test-KindEquivalentSkip $KindEquivalent ([string]$r.id) $k $major) { continue }
@@ -420,17 +421,79 @@ if ($SelfTest) {
       [pscustomobject]@{ store='Hy-Vee';     per_unit=0.2376; size='21 oz';    item='Soy Vay Marinade and Sauce, Less Sodium, Veri Veri Teriyaki' }
     )}
   )
+  # SINCE 2026-09-25 (queue 2026-09-23-92e552) THIS ROW PRODUCES NO FINDING AT ALL, and that is the fix, not a
+  # lost case: the four bare-oz peers are read the way Get-LinkPerUnit divides them on a floz row (as fluid
+  # ounces), so there is no weight majority left to accuse the Walmart crown. Until that day this case asserted
+  # the accusation (the inverted-reference arm); that arm is still reached below by a floz row whose peers NAME
+  # a weight unit, which is the only way left for a label to be weight on a volume commodity.
   $k3 = Find-MeasureKindMismatch -Rows $kindInverted
-  $ki = @($k3 | Where-Object { $_.id -eq 'teriyaki-sauce' -and $_.store -eq 'Walmart' })
-  if (@($ki).Count -ne 1) { Write-Output ("  X MUST-FIRE: teriyaki-sauce did not flag Walmart's 15 fl oz crown (found " + @($ki).Count + ")"); $bad++ }
+  if (@($k3).Count -ne 0) { Write-Output ("  X MUST NOT FIRE: teriyaki-sauce 2026-09-02 (bare-oz peers on a floz row read as fl oz, as priced) produced " + @($k3).Count + " finding(s)"); $bad++ }
+  $kindInvertedNamed = @(
+    [pscustomobject]@{ id='teriyaki-sauce'; commodity='Teriyaki Sauce / Marinade'; unit='floz'; stores=@(
+      [pscustomobject]@{ store='Walmart';    per_unit=0.1653; size='15 fl oz';         item='Great Value Teriyaki Sauce, 15 fl oz, 1 Count' }
+      [pscustomobject]@{ store="Sam's Club"; per_unit=0.1738; size='27.5 oz (779 g)';  item='synthetic weight-labelled peer' }
+      [pscustomobject]@{ store="Baker's";    per_unit=0.1856; size='21.5 oz (609g)';   item='synthetic weight-labelled peer' }
+      [pscustomobject]@{ store='Hy-Vee';     per_unit=0.2376; size='1 lb 5 oz';        item='synthetic weight-labelled peer' }
+    )}
+  )
+  $k3b = Find-MeasureKindMismatch -Rows $kindInvertedNamed
+  $ki = @($k3b | Where-Object { $_.id -eq 'teriyaki-sauce' -and $_.store -eq 'Walmart' })
+  if (@($ki).Count -ne 1) { Write-Output ("  X MUST-FIRE: a 15 fl oz crown among NAMED-weight peers on a floz row was not flagged (found " + @($ki).Count + ")"); $bad++ }
   else {
     if (-not $ki[0].holds_crown) { Write-Output '  X MUST-FIRE: the teriyaki Walmart cell holds the crown and was not marked as such'; $bad++ }
     if ($ki[0].kind -ne 'volume' -or $ki[0].row_kind -ne 'weight') { Write-Output ("  X MUST-FIRE: teriyaki kinds wrong (" + $ki[0].kind + " vs row " + $ki[0].row_kind + ")"); $bad++ }
-    # THESE TWO ASSERTIONS ARE UNSATISFIABLE BEFORE THE 2026-09-03 CHANGE, which is what makes this fixture
-    # able to REACH the new code rather than pass by finding nothing.
     if ($ki[0].unit_kind -ne 'volume') { Write-Output ("  X MUST-FIRE: teriyaki unit_kind should be volume (unit 'floz'), got '" + $ki[0].unit_kind + "'"); $bad++ }
     if (-not $ki[0].agrees_with_engine_divisor) { Write-Output '  X MUST-FIRE: the teriyaki Walmart cell DOES agree with its engine divisor (15 fl oz on a floz row) and must be reported as such'; $bad++ }
   }
+
+  # ---- A BARE oz ON A floz COMMODITY (2026-09-25, queue 2026-09-23-92e552, prior 2026-09-21-de4f72) ----
+  # FROZEN BY HAND from comparison-2026-09-23 (built 2026-09-25 08:06, quarantine 08:14): the two cells the
+  # quarantine condemned, restored to their captured size strings (ads-2026-09-22 Family Fare "16 oz" 2 for
+  # $2.00; walmart-regular-2026-09-25 "32 oz" $3.98) beside their real peers. NEVER regenerated from a board:
+  # the quarantined board shows the last-good cell with no size, so a regenerated fixture finds nothing.
+  $bareOzFounding = @(
+    [pscustomobject]@{ id='energy-drinks'; commodity='Energy Drinks'; unit='floz'; stores=@(
+      [pscustomobject]@{ store='Family Fare'; per_unit=0.0625; size='16 oz';        item='Venom Energy Drink, Black Mamba 16 Oz' }
+      [pscustomobject]@{ store='Aldi';        per_unit=0.0763; size='30 fl oz';     item='Summit Berry Waves Blue Raspberry Energy Drink' }
+      [pscustomobject]@{ store="Sam's Club";  per_unit=0.0911; size='384 fl oz';    item='NOS High Performance Energy Drink, 16 fl. oz., 24 pk.' }
+      [pscustomobject]@{ store='Fareway';     per_unit=0.1029; size='12 x 16 fl oz'; item='Monster Energy Ultra Zero Ultra Sugar Free Energy Drink' }
+      [pscustomobject]@{ store='Hy-Vee';      per_unit=0.1744; size='16 fl oz';     item='Ghost Zero Sugar Energy Drink, Welch''s Grape, 16 fl oz can' }
+    )}
+    [pscustomobject]@{ id='lotion'; commodity='Lotion'; unit='floz'; stores=@(
+      [pscustomobject]@{ store='Walmart';     per_unit=0.1244; size='32 oz';        item='Queen Helene Cocoa Butter Hand & Body Lotion for Dry Skin, 32 oz' }
+      [pscustomobject]@{ store="Baker's";     per_unit=0.2064; size='20.3 fl oz';   item='Kroger Cocoa Butter Lotion' }
+      [pscustomobject]@{ store="Sam's Club";  per_unit=0.2196; size='45 fl oz';     item='Jergens Ultra Healing Extra Dry Skin Moisturizer, 45 fl. oz.' }
+      [pscustomobject]@{ store='Aldi';        per_unit=0.2217; size='18 fl oz';     item='Lacura Body Lotion 18 OZ' }
+    )}
+  )
+  $kb = Find-MeasureKindMismatch -Rows $bareOzFounding
+  if (@($kb).Count -ne 0) { Write-Output ("  X MUST NOT FIRE: Venom '16 oz' on energy-drinks / Queen Helene '32 oz' on lotion (bare oz on a floz row, divided as fl oz) produced " + @($kb).Count + " finding(s): " + (($kb | ForEach-Object { $_.id + '/' + $_.store }) -join ', ')); $bad++ }
+  # MUST FIRE twin: the same lotion crown labelled by NET WEIGHT ('32 oz (907 g)') is a weight among volumes
+  $bareOzWeight = @(
+    [pscustomobject]@{ id='lotion'; commodity='Lotion'; unit='floz'; stores=@(
+      [pscustomobject]@{ store='Walmart';     per_unit=0.1244; size='32 oz (907 g)'; item='synthetic: Queen Helene labelled by net weight' }
+      [pscustomobject]@{ store="Baker's";     per_unit=0.2064; size='20.3 fl oz';    item='Kroger Cocoa Butter Lotion' }
+      [pscustomobject]@{ store="Sam's Club";  per_unit=0.2196; size='45 fl oz';      item='Jergens Ultra Healing Extra Dry Skin Moisturizer, 45 fl. oz.' }
+      [pscustomobject]@{ store='Aldi';        per_unit=0.2217; size='18 fl oz';      item='Lacura Body Lotion 18 OZ' }
+    )}
+  )
+  $kw = Find-MeasureKindMismatch -Rows $bareOzWeight
+  $kwc = @($kw | Where-Object { $_.store -eq 'Walmart' -and $_.holds_crown -and $_.kind -eq 'weight' -and $_.row_kind -eq 'volume' })
+  if (@($kwc).Count -ne 1) { Write-Output ("  X MUST-FIRE: '32 oz (907 g)' crown on a floz row must still read as weight among volumes (found " + @($kwc).Count + ")"); $bad++ }
+  # the reading itself, case by case: a volume commodity reads a bare oz as volume; another weight unit keeps it weight
+  $kindCases = @(
+    @('16 oz', 'floz', 'volume'), @('32 oz.', 'floz', 'volume'), @('13.66 oz', 'gallon', 'volume'),
+    @('16 fl oz', 'floz', 'volume'), @('32 oz (907 g)', 'floz', 'weight'), @('32 oz (907g)', 'floz', 'weight'),
+    @('2 lb 4 oz', 'floz', 'weight'), @('16 oz', 'oz', 'weight'), @('16 oz', '', 'weight'), @('16 fl oz', 'oz', 'volume'),
+    @('12 ct', 'floz', 'count'), @('', 'floz', 'unknown')
+  )
+  foreach ($kc in $kindCases) {
+    $got = Get-MeasureKind $kc[0] $kc[1]
+    if ($got -ne $kc[2]) { Write-Output ("  X KIND READING: size '{0}' on unit '{1}' read '{2}', expected '{3}'" -f $kc[0], $kc[1], $got, $kc[2]); $bad++ }
+  }
+  # CLEAN TWIN: the reader divides the frozen bare-oz cells exactly as the guard now reads them (fl oz)
+  $puV = Get-LinkPerUnit -size '16 oz' -unit 'floz' -price 1.0
+  if ($null -eq $puV -or [math]::Abs($puV - 0.0625) -gt 1e-9) { Write-Output ("  X CLEAN TWIN: Get-LinkPerUnit '16 oz' at 1.00 on floz should be 0.0625, got " + $puV); $bad++ }
   # THE 08-31 SHAPE, same six cells with Baker's back at 'Subway Sweet Onion Teriyaki Sauce' 16 fl oz. That
   # makes the label tally 3-3 and NO crown finding is produced, which is why the identical Walmart crown was
   # green on 08-30 and 08-31. This pins the claim that a single peer product swap flipped the gate verdict

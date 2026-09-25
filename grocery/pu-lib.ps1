@@ -228,6 +228,36 @@ function Get-LinkPerUnit {
   return $null
 }
 
+# WHICH KIND OF QUANTITY A SIZE STRING NAMES, READ THE WAY Get-LinkPerUnit DIVIDES IT (2026-09-25, queue
+# 2026-09-23-92e552, plan-2026-09-25-4). A store writes a bare "oz" on a liquid all the time: on
+# comparison-2026-09-23, 71 cells on the floz commodities carried one ('Venom Energy Drink, Black Mamba 16 Oz'
+# as "16 oz", 'Aldi Coconut Milk 13.66 FL OZ' as "13.66 oz", 'Goldhen Liquid Egg Whites 32 FL OZ' as "32 oz"),
+# and not one of the 71 named a second weight unit. The 'floz' arm above divides a bare oz as fluid ounces.
+# audit-unit-basis-outlier read the same string as WEIGHT, so whether a bare-oz cell was accused depended only
+# on how its shelf-mates happened to be labelled: Venom (0.0625/floz, 2 for $2) and Queen Helene lotion
+# "32 oz" (0.1244) were condemned and each cell held an older DEARER price, while 12 other bare-oz crowns on
+# floz rows passed because their peers were bare oz too. One reading now: on a volume commodity (floz or
+# gallon) a bare oz is volume, as it is priced. A size that ALSO names a weight unit ("32 oz (907 g)",
+# "2 lb 4 oz") is a weight label and stays weight, so the guard still accuses it when it takes a crown.
+# The kind regexes live here and nowhere else; the audit's Get-MeasureKind calls this.
+$script:PuVolumeKindRx = '\bfl\.?\s*oz|\bfluid\b|\bml\b|\blitre|\bliter\b|\bgal(lon)?\b|\bqt\b|\bquart\b|\bpt\b|\bpint\b'
+$script:PuWeightKindRx = '\boz\b|\bounce|\blb\b|\bpound|\bg\b|\bgram|\bkg\b'
+$script:PuCountKindRx  = '\bct\b|\bcount\b|\beach\b|\bea\b|\bpk\b|\bpack\b|\broll'
+# a weight unit OTHER than oz: grams (also glued to the number, "907g"), kilograms, pounds
+$script:PuNonOzWeightRx = '(?<![a-z])(g|grams?|kg|lbs?|pounds?)\b'
+function Get-SizeMeasureKind {
+  param([string]$Size, [string]$Unit = '')
+  if (-not $Size) { return 'unknown' }
+  if ($Size -imatch $script:PuVolumeKindRx) { return 'volume' }
+  if ($Size -imatch $script:PuWeightKindRx) {
+    $volumeUnit = ($Unit -imatch '^\s*(floz|fl\.?\s*oz|gallon)\s*$')
+    if ($volumeUnit -and ($Size -imatch '\boz\b|\bounce') -and ($Size -inotmatch $script:PuNonOzWeightRx)) { return 'volume' }
+    return 'weight'
+  }
+  if ($Size -imatch $script:PuCountKindRx) { return 'count' }
+  return 'unknown'
+}
+
 # ONE READER FOR "CAN THIS CELL BE COMPARED AGAINST ITS STORED LINK", because the estate asked that
 # question in two files on the same day and got it wrong in both. Get-LinkPerUnit already taught this
 # lesson here - it lived in two files and they disagreed on 13 of 3,342 links, the private copy wrong
