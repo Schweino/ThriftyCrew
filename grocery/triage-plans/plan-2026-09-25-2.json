@@ -1,0 +1,219 @@
+{
+  "generated": "2026-09-25T11:20:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-23 (week_of 2026-09-23), built_at 2026-09-25T08:06:39, quarantine applied 08:14:10 by apply-cell-quarantine.ps1; triage-due printed 'BOARD comparison-2026-09-23 built 08:14:10 (161 min ago)', so not MID-BUILD and not JUST LANDED at measurement",
+  "queue_ids_seen": [
+    "2026-09-23-90de7b",
+    "2026-09-23-80f302",
+    "2026-09-23-92e552"
+  ],
+  "routing_artifact": null,
+  "routing_artifact_none_because": "no item in this plan changes a matching rule: item 1 changes the Hy-Vee lane's ASK order (which products are re-read), item 2 accepts a soundness baseline the board already reflects, item 3 is deferred",
+  "items": [
+    {
+      "queue_id": "2026-09-23-90de7b",
+      "subject": "Grocery capture watchdog: NO FRESH ROWS 2026-09-23 (Hy-Vee), fired 09-23 and 09-24",
+      "classification": "capture-gap",
+      "premise_check": "JOB 3's premise (the watchdog is blind to a 1.6 MB file) is FALSE. The watchdog counts rows whose as_of is today (capture-watchdog.ps1:1907-1918) and was RIGHT: the 09-23 and 09-24 Hy-Vee files are pure carry-forward. Today's 10:30 run read 'ok Hy-Vee: 1 fresh row(s) today (newest 2026-09-25)' (capture-watchdog-2026-09-25.log:100), which is also true and is the same defect: 1 of 1,546 rows. The file size is a carry alibi, the promoted-file-is-not-a-capture shape.",
+      "evidence": [
+        "out/regular/hyvee-regular-2026-09-23.json, -24.json: rows=1545, newest as_of 2026-09-22 (16 rows), refreshed_today=0, asked=19/20, answered=15/16, budget_skipped 1268/1267",
+        "out/regular/hyvee-regular-2026-09-25.json: rows=1546, as_of 2026-09-25 = 1 row, refreshed_today=1, asked=20, answered=16",
+        "capture_terms on 09-23, 09-24 and 09-25 ask the SAME products every day: product-0563-2950925, 0696-11342, 0720-47144, 1045-444508, 1076-19478, 1238-2918306, 1266-2925188, 1312-1334638, 1350-37464, 1351-37443, 1352-332699 (+1353-269490 from 09-24) each 'rejected | source product size conflicts with the worklist variant'; 0790-9285, 1071-3796212, 1107-3503550, 1225-3972711 each 'rejected | store product lookup returned no usable offer'; 1545-52837, 1546-8652, 1547-90791, 1548-24848 'refused-below-shelf-tag ... no earlier read to carry' (8652 finally succeeded 09-25)",
+        "the stuck rows are the retired store: e.g. 11342 '38 oz' as_of 2026-08-21 sid 1465 $6.99; 47144 '25 oz' 2026-08-21 sid 1465; 9285 '20 oz' 2026-07-18 sid 1465; 3796212 Spice World Pesto 6.7 oz 2026-07-15 sid 1465. 1,219 of 1,546 rows are still not stamped 1466",
+        "pull-regular-hyvee.ps1 Get-HyVeeAskOrder:309-316 ranks 0 expiring / 1 off-target AND in Get-HyVeeUncoveredIds / 2 requeued, unstamped or off-target, then OLDEST as_of first; a refusal carries the row at its OLD as_of and store_id (lines 662-666, 676-685), so nothing about the product changes after a refused ask",
+        "coverage-cycle 2026-09-25T08:31:21 'SHORTFALL pull-regular-hyvee - examined 16 of the 20 row(s) it was ALLOWED to examine today (80%)'"
+      ],
+      "surface_fix": {
+        "what": "nothing to hand-repair: no row is wrong, the lane is starved. The instance clears only through the root fix",
+        "files": [],
+        "exact_change": "none"
+      },
+      "root_cause": "Get-HyVeeAskOrder promotes a product on a condition the REFUSAL itself preserves: rank 1 is 'the board has no cell for this commodity because the Hy-Vee row was read at the wrong store', and a size-conflict or no-offer refusal keeps the row at its old store and old as_of, so the board still has no cell, so tomorrow the product is rank 1 again and oldest again. With 16 such products plus 4 tag-refused products that have no row (as_of '' sorts oldest of all) and a quarter budget of 20 asks, the whole daily budget is spent re-asking the same 20 refusals: a livelock (responsive, finishing nothing), not a dead API. Nothing records that a product was ASKED, only when it was last READ, so the order cannot tell 'never asked' from 'asked and refused yesterday'.",
+      "root_fix": {
+        "what": "order by last ASK, not last successful read, and stop re-promoting a refusal that cannot change until its input changes; make the watchdog say which failure it saw",
+        "files": [
+          "grocery/pull-regular-hyvee.ps1",
+          "grocery/out/hyvee-ask-ledger.json (new, gitignored beside the cursor)",
+          "grocery/capture-watchdog.ps1"
+        ],
+        "exact_change": "(1) Invoke-HyVeeWorkPass records every ASKED pid in an ask ledger {pid: {last_asked, last_outcome, streak}} written with Write-TcAtomicFile under Enter-TcLedgerLock (lib/ledger-lock.ps1; read inside the lock). (2) Get-HyVeeAskOrder takes the ledger as a parameter (stays pure) and sorts within a rank by max(as_of, last_asked) instead of as_of, so a product asked today goes behind every product of its rank not asked since. (3) A pid whose last_outcome is 'source product size conflicts with the worklist variant' is NOT promoted to rank 0/1/2 again until its worklist size or pid changes (it keeps rank 3, oldest-first by max(as_of,last_asked)) and is listed in the file header as size_conflict_parked [pid, ours, theirs] so the binding defect is visible instead of silently re-asked; 'no usable offer' and a below-tag refusal with no prior row re-promote at most once per 7 days (last_asked gate). (4) The file header gains asked_repeat_of_yesterday (count of pids asked today that were also asked on the previous run). (5) capture-watchdog.ps1 lines 1931-1932: when the headless lane's newest file has answered>0 and refreshed_today=0, the finding reads 'ANSWERS REFUSED: Hy-Vee asked N, answered M, refreshed 0 (reasons from capture_terms)' instead of 'saw nothing', and a lane whose asked set repeats 3 runs running is its own finding 'SAME SLICE 3 DAYS'. Do NOT change the budget, the quarter, the size-conflict check or the shelf-tag check."
+      },
+      "leaves_open": "the 12 size-conflict pids stay unpriced at Hy-Vee's pinned store until their worklist binding is repaired (a pid bound to a different variant; parked and listed by the fix, not repaired by it); and the same promote-until-success shape may exist in capture-policy-lib.ps1 Get-WalmartRulingOwed ruling_terms and the sale-fallback asks, which were NOT measured in this run",
+      "leaves_open_occurrences": 0,
+      "leaves_open_occurrences_window": "size-conflict parking: 12 pids live today (this occurrence). Other lanes: 0 observed 2026-09-01..09-25 because nobody has looked; unmeasured, not zero-by-measurement. capture-watchdog's new SAME SLICE finding would page on the first one in a headless lane",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "ask-order routing (which products land in the daily slice), read from capture_terms of hyvee-regular-2026-09-23/24/25.json (1,549 work items each) and a scratch simulation over the 09-25 file's 1,235 askable rows",
+        "affected_now": 20,
+        "names": [
+          "pids 2950925, 11342, 47144, 444508, 19478, 2918306, 2925188, 1334638, 37464, 37443, 332699, 269490 (size conflict)",
+          "pids 9285, 3796212, 3503550, 3972711 (no offer)",
+          "pids 52837, 90791, 24848 (below tag, no prior row)"
+        ],
+        "risk": "LOUD CAVEAT: my scratch simulation ranks rows by store stamp and as_of only; it lacks rank 0 (expiring sales) and rank 1 (Get-HyVeeUncoveredIds needs the board and candidates file), so it reproduced only 4 of the 20 pids actually asked on 09-25. Its only safe conclusion is directional: removing the 20 repeat pids frees 20 of 20 slots for the next-oldest rank-2 products (908 rank-2 rows, as_of 2026-07 x306, 2026-08 x602). The developer must take the real before/after from pull-regular-hyvee.ps1 -DryRun (which prints the order without asking) in a scratch copy, with and without the ledger, and record both. No price, match or size rule moves.",
+        "cell_effects": [],
+        "cell_effects_note": "empty is the claim: the change decides which products are re-read, not how any row is priced or routed. Cells move later only as fresh reads land, each through the existing gates"
+      },
+      "freshness": "measured 2026-09-25 10:40-11:15 against hyvee-regular-2026-09-25.json (08:00:47 write) and capture-watchdog-2026-09-25.log (10:34:59); the board pin comparison-2026-09-23 built 08:14:10 bears on the ask order only through rank 1. If tomorrow's 08:00 file shows a different asked set, re-read capture_terms before building",
+      "proof": {
+        "guard_or_fixture": "pull-regular-hyvee.ps1 -SelfTest (Get-HyVeeAskOrder is pure; the existing fixtures at lines 1113-1149 drive it) plus capture-watchdog.ps1 -SelfTest",
+        "must_fire_case": "FROZEN from the 09-24 file: a work list of 25 products where 20 are rank 1/2 with as_of 2026-08-21 and a ledger saying all 20 were asked 2026-09-24 with outcome size-conflict or no-offer, budget 20, Today 2026-09-25. The OLD order returns the same 20 (assert it, so the fixture reproduces the livelock); the new order must contain all 5 never-asked products and must not contain any size-conflict pid. Watchdog: a lane file with asked 20, answered 16, refreshed_today 0 must produce 'ANSWERS REFUSED', never 'saw nothing'",
+        "clean_twin": "with an EMPTY ledger the new order equals the old order exactly on the existing fixtures ('order 7,2,3 at a budget of 3' and the uncovered-ids 'eggs, 08-10' case), so a first run and a healthy day are unchanged; and a watchdog lane file with refreshed_today 16 still reads 'ok'",
+        "at_the_bar": "the 7-day re-promotion gate carries a case at exactly 7 days (re-promoted) and at 6 days (not), per .claude/rules/ops-and-gates.md",
+        "commands": [
+          "powershell -NoProfile -File grocery\\pull-regular-hyvee.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\capture-watchdog.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\test-auditors.ps1"
+        ]
+      },
+      "rollback": "revert the two script hunks; delete out/hyvee-ask-ledger.json (the order falls back to as_of when the ledger is absent, which is the clean twin)",
+      "do_not_touch": [
+        "the quarter budget and capture-policy-lib.ps1",
+        "the size-conflict tolerance and the shelf-tag check",
+        "any guard threshold"
+      ],
+      "resolution_note": "Watchdog was right, not blind: Hy-Vee re-asked the same 20 refused products every day (12 size conflicts, 4 no-offer, 4 below-tag) because the ask order ranks by last READ and a refusal keeps the row old and uncovered. Order now uses the last ASK, size conflicts are parked and listed, and the watchdog says ANSWERS REFUSED instead of saw nothing.",
+      "publish_batch": 0,
+      "lane": "ops",
+      "est_tool_calls": 28,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-23-80f302",
+      "subject": "Grocery page HELD after its data shipped - 2026-09-23",
+      "classification": "wrong-product",
+      "premise_check": "The REVIEW is NOT a live wrong-product move on the board. It is a soundness baseline that lags rule changes that REMOVED wrong products; the board already reflects them. Accepting it is not a judgement about what we sell: every one of the 6 moved/dropped names is plainly a different product. Separately, today's post was held for a DIFFERENT reason: the served files never landed ('tail[1]: the sync ended degraded - NOT pushing', capture-run-daily-2026-09-25.log:178-182), so publish-deals-page never ran; that part is owned by 2026-09-24-a9e8a0.",
+      "evidence": [
+        "capture-run-daily-2026-09-23.log:426-427 'publish-verdict: HELD: commodity matching changed vs the reviewed baseline' / 'POST NOT PUBLISHED: publish-deals-page rc=2 after the data went live'; publish-deals-page.ps1:238-244 is the hold",
+        "ad-cycle-log 2026-09-25T08:23:53 match-soundness 'MOVED=1 DROPPED=5 new-contested=6 drift-vs-engine=0', rc=2",
+        "DROPPED carrots <- 'Fresh Cut In Store Carrot & Cucumber Ranch' (a snack bowl, not carrots): correct",
+        "DROPPED cucumbers <- 'Fresh Cut In Store Cucumber Ranch Bowl' (a snack bowl): correct",
+        "DROPPED tea-bags <- 'Member's Mark Zero Sugar Green Tea, 16.9 fl. oz., 35 pk.' (bottled tea, not bags): correct",
+        "DROPPED limes <- 'True Lime Crystallized Lime Packets, 100 ct.' (flavour packets, not fresh limes): correct",
+        "DROPPED toothbrushes <- 'Colgate Max Fresh Wisp Disposable Travel Toothbrushes, Mini Toothbrush, Peppermint, 24 Count' (single-use disposables priced per each against reusable brushes): correct, the one line a reader could argue",
+        "MOVED lotion -> facial-tissues 'Puffs Plus Lotion 2-Ply Facial Tissues 12 Cube Boxes, 72 tissues/box': correct",
+        "none of the 6 names is an item on comparison-2026-09-23 (scanned every store cell); tea-bags and limes carry no Sam's cell; toothbrushes Sam's 1.8712 each is another product",
+        "new-contested 6: the only crown is horseradish @ Aldi 0.2989/oz 'Inglehoffer Horseradish Cream Style 9.5 OZ' (chain horseradish > horseradish-sauce): Aldi's store-brand prepared horseradish, judged the right cell (UNCERTAIN: a cream-style horseradish sits between the two commodities). 'Lay's Honey Barbecue Potato Chips' routes to honey (honey > potato-chips) and is on no honey cell: a wrong ROUTE with no cell, owned by 2026-09-23-b2850b (new-contested RETURN)",
+        "post-deferred.json written 2026-09-25T08:16:44 guards_rc 4 flips []; soundness had moved+dropped > 0 on 6 of 23 run days since 2026-09-01 (09-06 10, 09-19 24, 09-20 3, 09-23 2, 09-24 4, 09-25 6)"
+      ],
+      "surface_fix": {
+        "what": "the designed valve: re-run the soundness audit, confirm its lines are exactly the 12 reviewed here, then accept",
+        "files": [
+          "grocery/out/audit/soundness-report.json (read)",
+          "the soundness baseline that audit-match-soundness.ps1 -Accept writes"
+        ],
+        "exact_change": "powershell -File grocery\\audit-match-soundness.ps1 -OutDir grocery\\out ; if and only if it prints MOVED=1 DROPPED=5 with the six names above and cell_by_contest is only the Inglehoffer horseradish line, run it again with -Accept. Any other line is unreviewed: stop and bounce. Paste this item's line-by-line verdicts into the commit."
+      },
+      "root_cause": "the soundness gate holds the whole reader-facing POST on ANY moved or dropped name, including names no published cell reads, and its baseline advances only by a hand -Accept that no lane owns, so every correct rule change that removes a wrong product holds the page until a human reads the report (6 of 23 run days since 09-01). It is the board-held-hostage shape Brad ruled against on 2026-09-21, one surface over: the post, not the board.",
+      "root_fix_none_because": "the class fix changes WHAT A BLOCKING PUBLISH GATE HOLDS (hold only on a moved/dropped/contested name that is a published cell's winning item; report the rest as REVIEW without holding). That narrows a hard gate, which the standing rules forbid a plan to do on its own authority, so it is put to Brad as Q-2026-09-25-2-A. Until he rules, the reviewed -Accept is the whole fix.",
+      "leaves_open": "the post stays HELD: soundness review not accepted because the re-run shows 1 unreviewed new-contested line (Pledge Multisurface Cleaner, all-purpose-cleaner > furniture-polish, no board cell) and 5 of the reviewed lines no longer present; the recurrence (6 of 23 run days) waits on Q-2026-09-25-2-A; the push landing is a9e8a0's; the Lay's Honey BBQ -> honey route is b2850b's",
+      "leaves_open_occurrences": 6,
+      "leaves_open_occurrences_window": "run days with soundness moved+dropped > 0, 2026-09-01..2026-09-25 (ad-cycle-log 'match-soundness: MOVED= DROPPED=' lines); of those, the post was recorded HELD with its data live on 2026-09-23",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "the soundness audit's own before/after routing against its baseline (soundness-report.json generated 2026-09-25 08:21: moved 1, dropped 5, new_contested 6, cell_by_contest 1) plus a scan of every store cell on comparison-2026-09-23 for each of the 6 moved/dropped names",
+        "affected_now": 6,
+        "names": [
+          "Fresh Cut In Store Carrot & Cucumber Ranch",
+          "Fresh Cut In Store Cucumber Ranch Bowl",
+          "Member's Mark Zero Sugar Green Tea, 16.9 fl. oz., 35 pk.",
+          "True Lime Crystallized Lime Packets, 100 ct.",
+          "Colgate Max Fresh Wisp Disposable Travel Toothbrushes, Mini Toothbrush, Peppermint, 24 Count",
+          "Puffs Plus Lotion 2-Ply Facial Tissues 12 Cube Boxes, 72 tissues/box"
+        ],
+        "risk": "-Accept moves no route and no price: the board was built under the new rules (rules_hash a88fe11831a1) and already excludes all six. The risk is accepting lines nobody reviewed, which the exact_change guards by requiring the report to match these 12 lines first.",
+        "cell_effects": []
+      },
+      "freshness": "measured against soundness-report.json 2026-09-25 08:21:42 and comparison-2026-09-23 built 08:06:39 / quarantined 08:14:10. A rebuild or a rule commit after that changes the report: re-run the audit and diff its lines against this item before -Accept",
+      "proof": {
+        "guard_or_fixture": "audit-match-soundness.ps1 -SelfTest (asserts its own 62 cases) and the publish-deals-page soundness stage",
+        "must_fire_case": "before -Accept, copy the current baseline to scratch; after -Accept, run audit-match-soundness against that saved OLD baseline in scratch: it must still exit 2 and name all six moved/dropped lines (the gate still sees the change, nothing was weakened)",
+        "clean_twin": "against the accepted baseline the audit exits 0 with MOVED=0 DROPPED=0, and the horseradish @ Aldi cell still reads 0.2989/oz on the next build (accepting moved no cell)",
+        "commands": [
+          "powershell -NoProfile -File grocery\\audit-match-soundness.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\audit-match-soundness.ps1 -OutDir grocery\\out"
+        ]
+      },
+      "rollback": "restore the previous soundness baseline from git (it is the only file -Accept writes)",
+      "do_not_touch": [
+        "grocery/commodities.json",
+        "publish-deals-page.ps1's soundness hold (Brad's ruling Q-2026-09-25-2-A)",
+        "any guard threshold"
+      ],
+      "resolution_note": "Not accepted this run. Re-run soundness audit differs from the reviewed 12 lines: MOVED=1 DROPPED=1 new-contested=2, with one unreviewed contest (Pledge Multisurface Cleaner routed all-purpose-cleaner over furniture-polish, withheld by the engine, on no board cell) and the carrots/cucumbers/tea-bags/toothbrushes drops and the horseradish contest gone. Per exact_change, stopped before -Accept. Next run: review the Pledge line and why four drops left the report, then -Accept with the must-fire against a saved old baseline. Whether such a change should hold the post at all is Brad's call (Q-2026-09-25-2-A).",
+      "publish_batch": 1,
+      "lane": "money",
+      "est_tool_calls": 12,
+      "status": "needs-more-time",
+      "premise_verified": false,
+      "deviation": "Did NOT run -Accept. The freshness clause fired: re-running audit-match-soundness.ps1 -OutDir grocery\\out at 2026-09-25 ~11:10 (exit 2) prints 'MOVED=1 DROPPED=1 new-contested=2 drift-vs-engine=0', not the reviewed MOVED=1 DROPPED=5. Present and reviewed: DROPPED limes <- 'True Lime Crystallized Lime Packets, 100 ct.'; MOVED lotion -> facial-tissues 'Puffs Plus Lotion 2-Ply Facial Tissues...'; NEW-CONTESTED 'Lay's Honey Barbecue Potato Chips' honey > potato-chips (b2850b). Gone since review: the carrots, cucumbers, tea-bags and toothbrushes drops and the Inglehoffer horseradish contest (cell_by_contest now empty). UNREVIEWED line not among the plan's 12: NEW-CONTESTED [FORM] 'Pledge Multisurface Cleaner, Everyday Clean, Aerosol, Rainshower Scent, 9.7 oz, Pack of 3' chain all-purpose-cleaner (floz) > furniture-polish (oz), engine WITHHELD-UNPROVEN-CHANNEL. exact_change says any other line is unreviewed: stop. Measured against comparison-2026-09-23 (08:14:10): none of the 3 current moved/dropped names and not the Pledge Multisurface name is any store cell's item (the only Pledge items on the board are 3 furniture-polish products: Wood Oil 16 oz, Wood Oil Amber & Argan 9.7 oz, Lemon Clean 9.7 oz). match-baseline.json is unchanged vs HEAD 2283c64cd (09-24 accept) but its mtime is 09:34:49 today, which is after the plan's 08:21 measurement and unexplained. Developer's read, not a ruling: the Pledge route to all-purpose-cleaner matches its name and it feeds no cell, so a reviewer can likely clear it in one line; the four vanished drops need one check of why they left the report before an accept.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-23-92e552",
+      "subject": "Grocery: board cells quarantined - 2026-09-23 (RETURN of 2026-09-21-de4f72)",
+      "classification": "parse-basis-bug",
+      "status": "deferred-budget",
+      "lane": "money",
+      "est_tool_calls": 45,
+      "evidence": [
+        "comparison-2026-09-23 quarantine.cells: energy-drinks | Family Fare | held last-good 0.1353/floz since 2026-09-22 | bad 0.0625 'Venom Energy Drink, Black Mamba 16 Oz' on '2 for $2' | HARD FAIL unit-basis-outlier (volume among weights)",
+        "lotion | Walmart | held last-good 0.2175/floz since 2026-09-22 | bad 0.1244 'Queen Helene Cocoa Butter Hand & Body Lotion for Dry Skin, 32 oz' | HARD FAIL unit-basis-outlier",
+        "yellow-bell-pepper | Family Fare | WITHHELD, no prior value | bad 1.00/each 'Yellow Bell Pepper' | HARD FAIL 'no published cell carries a price its own store contradicted on a later read of the same product' (audit-flag-verification.ps1)",
+        "prior close 2026-09-21-de4f72 was a DIFFERENT cell and cause: vegetable-oil | Sam's Club held at 0.0723, band-censorship ratchet"
+      ],
+      "root_cause": "two of the three cells are one class: a store writes a bare 'Oz' on a liquid (a 16 oz can, a 32 oz lotion) for a commodity priced per fl oz, and the size reading and the unit-basis guard disagree about whether that is volume, so a probably-real price (Venom $1.00 per 16 oz can = $0.0625/floz) is condemned and the cell shows an older, DEARER number (0.1353): overstating, which is as wrong as understating. The third is a store contradicting itself, withheld as ruled. The alert type itself is by design and each occurrence so far has had a different cause.",
+      "prior_closes": [
+        "2026-09-21-de4f72"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/pu-lib.ps1",
+          "grocery/audit-unit-basis-outlier.ps1"
+        ],
+        "what": "decide ONE reading of a bare 'oz' on a commodity whose unit is floz, in the size reader, and have the guard judge the row by that same reading instead of re-deriving the kind from the label",
+        "exact_change": "NOT DESIGNED in this run (deferred-budget). Unverified starting point: Get-LinkPerUnit (pu-lib.ps1:22) and Get-UnitKind (audit-unit-basis-outlier.ps1:89). The design must measure every floz-commodity cell whose winning or candidate row carries a bare oz size before choosing, because some bare-oz liquids are true weights (a lotion labelled 32 oz (907 g))"
+      },
+      "proof": {
+        "fixture_occurrences": [
+          "2026-09-21-de4f72",
+          "2026-09-23-92e552"
+        ],
+        "must_fire_case": "deferred: frozen Venom 16 Oz 2-for-$2 row on energy-drinks and the Queen Helene 32 oz row on lotion",
+        "clean_twin": "deferred: a '16 fl oz' energy drink row and a lotion row labelled in fl oz stay unchanged"
+      },
+      "resolution_note": "DEFERRED-BUDGET: the quarantine worked as ruled. Two cells (energy-drinks FF, lotion Walmart) are one bare-oz-on-a-liquid basis class that holds a DEARER old price; yellow-bell-pepper FF is withheld for a self-contradicting store read. Needs a measured pu-lib/unit-basis design in the money lane; due tomorrow."
+    }
+  ],
+  "ship_sequence": [
+    "ops lane (no board publish): 2026-09-23-90de7b - edit grocery/pull-regular-hyvee.ps1 (ask ledger + last-ask order + size-conflict parking) and grocery/capture-watchdog.ps1 (ANSWERS REFUSED, SAME SLICE 3 DAYS); run pull-regular-hyvee.ps1 -DryRun in a SCRATCH copy with and without the ledger and record both orders in the item; pull-regular-hyvee.ps1 -SelfTest, capture-watchdog.ps1 -SelfTest, test-auditors.ps1 (exit 0 each); commit with a pathspec and land through ops\\push-main.ps1. Live verification: the next 08:00 hyvee-regular file's capture_terms asks a set that shares at most the 7-day re-promotions with 2026-09-25's, and refreshed_today > 1",
+    "money lane, publish batch 1: 2026-09-23-80f302 - re-run audit-match-soundness.ps1, diff its lines against this item's 12, save the old baseline to scratch, run -Accept, run the must_fire and clean_twin, commit the baseline with a pathspec and land through ops\\push-main.ps1. No compare-deals rebuild is needed (the board already reflects the rules). The post publishes on the next capture-run whose served push lands; if the sync is still degraded that is 2026-09-24-a9e8a0's, not this item's",
+    "deferred-budget: 2026-09-23-92e552 stays open, due tomorrow, money lane",
+    "Brad: Q-2026-09-25-2-A below"
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q-2026-09-25-2-A",
+      "question": "Should a matching change that moves or drops a product NO board cell shows still hold the whole grocery post until someone runs the soundness -Accept?",
+      "why_now": "On 6 of 23 run days since 2026-09-01 a rule change moved or dropped names; on 2026-09-23 the post was held although the data was live, and the six names that held it this week were all wrong products correctly leaving, none on a cell.",
+      "options": [
+        "A (recommended): hold the post only when a moved, dropped or contested name is a published cell's winning item; everything else stays a REVIEW line for the weekly lane, and -Accept is still how the baseline moves. Matches your 2026-09-21 ruling that one bad item does not hold the board.",
+        "B: keep the whole-post hold, and give the -Accept an owner: the daily triage reviewer accepts after a line-by-line review like this one (about one review per rule change, 6 in 25 days).",
+        "C: keep today's behaviour (the post waits for a human -Accept)."
+      ]
+    }
+  ],
+  "knowledge_consulted": [
+    "searched \"refused item re-asked every day starves budget\", \"oldest first order head of line\", \"soundness baseline accept post hold\", \"livelock refused retry ask order\" (knowledge-search --estate)",
+    "concurrency-craft/applies-here.md ('### 2. A timed lock wait is tryLock, and the refusal branch must RELEASE before it retries': a timeout converts a deadlock into a livelock) - the Hy-Vee refusal keeps its promotion while it loops",
+    "concurrency-craft/applies-here.md ('### 21. Fairness is built with an ordering structure': an order buys fairness and never capacity) - the order is fair by age but has no memory of a failed turn",
+    ".claude/rules/ops-and-gates.md ('A threshold or count detector's self-test carries a case exactly AT its bar') - the 7-day re-promotion cases",
+    ".claude/rules/grocery.md ('A BAD CELL QUARANTINES ITSELF', and the 2026-09-21 Hy-Vee uncovered-ids bullet) - item 3 and rank 1 of item 1",
+    "data-quality-craft/applies-here.md ('## Baselines and ratchets': raised only by an explicit -Accept) - item 2",
+    "memory:promoted-file-is-not-a-capture (C--Codex store), index hook only, file not opened: the 1.6 MB carry file is the alibi shape",
+    "memory:audit-classifies-by-elimination (C--Codex store), index hook only: checked the watchdog's INPUT before believing JOB 3's blindness claim"
+  ]
+}
