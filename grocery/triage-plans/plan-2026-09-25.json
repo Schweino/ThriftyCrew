@@ -477,19 +477,24 @@
         ],
         "exact_change": "compare today's per-reason reject counts in out/sams/sams-rejects-*.json with the previous capture's and page a new reason, or a reason that grew past its prior count, through Send-Alert (registry entry added)"
       },
-      "leaves_open": "the same shape at the other builders until each reports per-reason rejects",
-      "leaves_open_occurrences": 1,
+      "leaves_open": "the Family Fare, Hy-Vee, Baker's API and Fareway builders write no per-row rejects, so a rendering change there is first met by the engine: owned by weekly item 2026-09-22-293660 (20fecf's leaves_open (a), which rides on that item's text); overlap noted, not absorbed here",
+      "leaves_open_occurrences": 0,
       "proof": {
-        "must_fire_case": "frozen rejects: 2026-09-20 0x 'fluid ounce (us)', 2026-09-21 52x -> spike page names the reason",
-        "clean_twin": "an unchanged 53x 'sq ft' reason day over day stays quiet",
-        "guard_or_fixture": "grocery/build-sams-deals.ps1 -SelfTest"
+        "must_fire_case": "audit-ingest-shape.ps1 -Date 2026-09-21 over the live Sam's rejects files: exit 2, UNPROVED 'fluid ounce (us)' and 'gallon (us)' named (observed 2026-09-25); frozen as the self-test's founding-day MUST FIRE case",
+        "clean_twin": "audit-ingest-shape.ps1 -Date 2026-09-25: exit 0, 'unknown unit \"sq ft\"' x61 present on prior days stays quiet, 0 unproved; self-test MUST NOT FIRE Sam's 2026-09-20",
+        "guard_or_fixture": "grocery/audit-ingest-shape.ps1 -SelfTest",
+        "commands": [
+          "powershell -NoProfile -File grocery/audit-ingest-shape.ps1 -SelfTest (exit 0, 'PASS (21 cases)')",
+          "powershell -NoProfile -File grocery/audit-ingest-shape.ps1 -Date 2026-09-21 -AliasFile <scratch> (exit 2)",
+          "powershell -NoProfile -File grocery/audit-ingest-shape.ps1 -Date 2026-09-25 -AliasFile <scratch> (exit 0)"
+        ]
       },
-      "resolution_note": "Transcribed for the ops lane; not implemented in this plan.",
+      "resolution_note": "Superseded by 2026-09-22-20fecf (967f06033, grocery/audit-ingest-shape.ps1 in capture-run): the per-reason reject comparison this item's root fix asked for is live over Sam's, Walmart and Aldi and replays the founding day as a page (exit 2) while today reads clean (exit 0, self-test 21 cases PASS). The spellings themselves were read in build-sams-deals by plan-2026-09-22-5. Residual (other builders write no rejects) is owned by 2026-09-22-293660.",
       "lane": "ops",
       "est_tool_calls": 30,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
+      "status": "superseded",
+      "premise_verified": "false as a gap, true as a condition: the per-reason reject comparison this item plans for build-sams-deals already exists as grocery/audit-ingest-shape.ps1 (queue 2026-09-22-20fecf, landed 967f06033, header: 'also closes batch 2's unbuilt per-reason reject spike check residual (2026-09-22-f23a00): the two are one condition'), run by capture-run.ps1 after the store builders with Send-Alert 'Grocery: ingest shape - new unit spelling unproved' (capture-run.ps1:1258), over Sam's, Walmart and Aldi rejects. Re-measured 2026-09-25: replay of the founding day (-Date 2026-09-21, scratch alias file) exit 2, 'UNPROVED Sam's Club unit \"fluid ounce (us)\" -> fl oz: 50 of 52 rows proved' and 'UNPROVED ... \"gallon (us)\"', 'PROVED ... \"gl\" -> gal'; today (-Date 2026-09-25) exit 0, 'INGEST-SHAPE-COMPLETE stores=3 scanned=3 new=1 proved=0 unproved=0 blind=0', and today's Sam's rejects (438) carry no 'unknown unit \"fluid ounce (us)\"' key (top keys: no unitPrice 273, unknown unit \"sq ft\" 61, NAME CONFLICT ct 32).",
+      "deviation": "No code change. The planned spike page in build-sams-deals.ps1 would duplicate audit-ingest-shape.ps1, which already compares each day's reason keys against the prior 14 days of rejects files for three builders and pages an unproved new unit spelling. 'A reason that grew past its prior count' is not built: a store rendering change arrives as a NEW key (the spelling is quoted in the key, Get-RejectReasonKey), so a count rise under an existing key is the same spelling, not a rendering change (today's 'no unitPrice' 273 sits inside 127..279 over 09-21..09-25).",
       "shipped_commit": null,
       "blast_radius": {
         "measured_as": "rows",
@@ -498,7 +503,9 @@
         "risk": "a new page only; no row is admitted or refused differently"
       },
       "rollback": "remove the spike comparison; rejects keep landing in the file as today",
-      "freshness": "carried from plan-2026-09-22-5.json; read the newest out/sams/sams-rejects-*.json before building"
+      "freshness": "carried from plan-2026-09-22-5.json; read the newest out/sams/sams-rejects-*.json before building",
+      "leaves_open_owner": "2026-09-22-293660",
+      "close_disposition": "superseded"
     }
   ],
   "lane_budget": {
