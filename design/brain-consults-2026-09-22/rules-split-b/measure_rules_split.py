@@ -307,13 +307,19 @@ def replay_context(path, depths):
     val = []
     by_idx = dict(msgs)
     for mi, ap in nested:
-        adir = os.path.dirname(os.path.dirname(ap)) if os.sep + '.claude' + os.sep + 'rules' in ap else os.path.dirname(ap)
+        # a rules file at <root>\.claude\rules\x.md is loaded for a read under <root>; a CLAUDE.md for one under its dir
+        low = ap.lower().replace('/', '\\')
+        k = low.find('\\.claude\\rules\\')
+        adir = ap[:k] if k >= 0 else os.path.dirname(ap)
         prev = by_idx.get(mi, [])
         reads = [u for u in prev if u.get('name') == 'Read' and not results.get(u.get('id'), False)
                  and (u.get('input') or {}).get('file_path', '').lower().startswith(adir.lower())]
         others = [u.get('name') for u in prev]
         ide = [fn for fn in ide_by_idx.get(mi, []) if fn.lower().startswith(adir.lower())]
+        earlier = any(u.get('name') == 'Read' and (u.get('input') or {}).get('file_path', '').lower().startswith(adir.lower())
+                      for j, us in msgs if j < mi for u in us)
         val.append({'attachment': ap, 'read_under_dir_in_prev_turn': bool(reads), 'ide_opened_under_dir': bool(ide),
+                    'read_under_dir_any_earlier_turn': earlier,
                     'prev_turn_tools': others})
 
     def before(ev, table=None):
@@ -424,6 +430,10 @@ def main():
     vide = [v for v in vals if v['read_under_dir_in_prev_turn'] or v['ide_opened_under_dir']]
     print(f'trigger validation: nested_memory attachments preceded by a successful Read under their directory in the turn before: {pct(len(vok), len(vals))}')
     print(f'trigger validation: ... by a Read OR an opened_file_in_ide attachment under it: {pct(len(vide), len(vals))}')
+    un = [v for v in vals if not v['read_under_dir_in_prev_turn']]
+    lag = [v for v in un if v['read_under_dir_any_earlier_turn']]
+    shell_only = [v for v in un if v['prev_turn_tools'] and set(v['prev_turn_tools']) <= {'PowerShell', 'Bash', 'Grep', 'Glob'}]
+    print(f'trigger validation: of the {len(un)} not explained by the turn before, a Read under the directory happened in an EARLIER turn in {len(lag)}; the turn before held only shell or search tools in {len(shell_only)}')
     print(f'opened_file_in_ide attachments in the corpus: {sum(r["ide_opened_count"] for r in ctx)} across {sum(1 for r in ctx if r["ide_opened_count"])} contexts')
     for v in [v for v in vals if not (v['read_under_dir_in_prev_turn'] or v['ide_opened_under_dir'])][:10]:
         print(f'      UNEXPLAINED {v["attachment"]} prev-turn tools {v["prev_turn_tools"]}')
