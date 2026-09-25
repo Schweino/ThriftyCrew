@@ -38,7 +38,7 @@ usually not real; a CAPTCHA is the one hard stop.
 ## SEARCH THE KNOWLEDGE STORE BEFORE YOU DIAGNOSE OR JUDGE (Brad, 2026-09-22)
 
 Before you diagnose, measure, compare, audit or return a verdict, search:
-`C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py "<3-6 words>"`.
+`C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py --estate "<3-6 words>"`.
 Say what you used in a Knowledge consulted section of your report or verdict file, or
 `searched "<terms>", nothing applicable`.
 <!-- store-step:ANALYSIS end -->

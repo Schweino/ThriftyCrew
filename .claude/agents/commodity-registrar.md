@@ -84,7 +84,7 @@ The knowledge store holds the engineering rules this estate has already paid for
 `~\.claude\projects\C--Codex-ThriftyCrew\memory\`. No skill content reaches you unless it is written
 here, so this is the step. **Before you write a plan item, a fix or a finding that proposes code, search:**
 
-    C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py "<3-6 words>"
+    C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py --estate "<3-6 words>"
 
 One term at a time widens it; `--multi a b c` probes each. Open what it returns and read the section.
 Then **say what you used**: a plan or report carries a `Knowledge consulted` section listing the terms you
@@ -101,7 +101,7 @@ searched first came out with a better design because of what it found.
 ## SEARCH THE KNOWLEDGE STORE BEFORE YOU DIAGNOSE OR JUDGE (Brad, 2026-09-22)
 
 Before you diagnose, measure, compare, audit or return a verdict, search:
-`C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py "<3-6 words>"`.
+`C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py --estate "<3-6 words>"`.
 Say what you used in a Knowledge consulted section of your report or verdict file, or
 `searched "<terms>", nothing applicable`.
 <!-- store-step:ANALYSIS end -->

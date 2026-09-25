@@ -14,14 +14,15 @@ P3 of `design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md` (section 4
 Two variants (plan W5.2):
 
 - **CODE** is for a context that designs or changes code. It is the 2026-09-18 text with two lines replaced:
-  the command is the plan's section 4.7 string WITHOUT `--estate` (the old `%USERPROFILE%` form failed in both
-  shells when launched without cmd, and its backslash interpreter path failed in Bash with exit 127), and the
-  Store: example is W0.1's, which resolves since W0.1 landed.
+  the command is the plan's section 4.7 string (the old `%USERPROFILE%` form failed in both shells when
+  launched without cmd, and its backslash interpreter path failed in Bash with exit 127), and the Store:
+  example is W0.1's, which resolves since W0.1 landed.
 - **ANALYSIS** is for a context that diagnoses, measures, compares, audits or returns a verdict.
 
 Which agent carries which variant, and which are allow-listed and why, is declared in
 `ops/audit-agent-tools.ps1` (`$STORE_STEP_REQUIRED` and `$STORE_STEP_ALLOW`), beside the rule that enforces it.
-W3.4 later adds `--estate` to both variants, here and in every copy together, and only if W3.3's bar held.
+W3.4 added `--estate` to both variants, here and in every copy together, on 2026-09-25, after W3.3's bar held
+(10 of 16 "nothing applicable" commits got a relevant rules, memory or machinery section back, against a bar of 5).
 
 <!-- store-step:CODE begin (canonical: ops/agent-blocks/store-step.md) -->
 ## SEARCH THE KNOWLEDGE STORE BEFORE YOU DESIGN OR CHANGE CODE (Brad, 2026-09-18)
@@ -31,7 +32,7 @@ The knowledge store holds the engineering rules this estate has already paid for
 `~\.claude\projects\C--Codex-ThriftyCrew\memory\`. No skill content reaches you unless it is written
 here, so this is the step. **Before you write a plan item, a fix or a finding that proposes code, search:**
 
-    C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py "<3-6 words>"
+    C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py --estate "<3-6 words>"
 
 One term at a time widens it; `--multi a b c` probes each. Open what it returns and read the section.
 Then **say what you used**: a plan or report carries a `Knowledge consulted` section listing the terms you
@@ -48,7 +49,7 @@ searched first came out with a better design because of what it found.
 ## SEARCH THE KNOWLEDGE STORE BEFORE YOU DIAGNOSE OR JUDGE (Brad, 2026-09-22)
 
 Before you diagnose, measure, compare, audit or return a verdict, search:
-`C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py "<3-6 words>"`.
+`C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py --estate "<3-6 words>"`.
 Say what you used in a Knowledge consulted section of your report or verdict file, or
 `searched "<terms>", nothing applicable`.
 <!-- store-step:ANALYSIS end -->

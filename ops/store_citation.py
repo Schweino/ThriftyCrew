@@ -614,7 +614,7 @@ def emit_verdict(d, n_code, out=None):
     print("store-citation: %s. This commit changes %d code file(s) and %s." % (head, n_code, d["why"]), file=out)
     if d["unresolved"]:
         print("                not found in the store: %s" % ", ".join(d["unresolved"]), file=out)
-    print("                Search first:  C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py \"<terms>\"\n"
+    print("                Search first:  C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py --estate \"<terms>\"\n"
           "                then add a line such as:\n"
           "                  Store: database-craft/transactions-and-recovery.md (section 3); memory:ps-null-count-is-one\n"
           "                  Store: .claude/rules/ops-and-gates.md (\"A catch around a native redirect is not a guard\"); lib/atomic-write.ps1 (reused)\n"

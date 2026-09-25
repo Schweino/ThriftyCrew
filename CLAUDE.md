@@ -16,6 +16,8 @@ beats reassurance: understating is exactly as wrong as overstating.
   not delete the Cloudflare estate**: D1, R2 buckets, Workflows and a live Ghost Admin key still
   exist and one frozen route still answers 200 with stale prices. Anything pointed back at it gets
   confidently wrong numbers. The estate is declared in `ops/cloudflare-estate.json`.
+- Before writing a file write, walk, lock, native call or helper-shaped function, run
+  `C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py --estate "<3-6 words>"`.
 
 | Where | What |
 |---|---|

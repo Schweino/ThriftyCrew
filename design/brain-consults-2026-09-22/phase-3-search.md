@@ -119,6 +119,12 @@ Rules for the seeds:
 - The honest prototype figure is 5 of 7 (71%), which is below this bar. Record a miss as a miss, and never rewrite a
   probe after seeing its score.
 
+**Read 2026-09-25: HELD, hit@3 9 of 12, exactly at the bar** (`score-estate-bars.py --machinery`, exit 0,
+`ESTATE-BARS-COMPLETE broken=0 rc=0`, 0 could not run; index rebuilt first with `machinery_index.py --build
+C:/Codex/ThriftyCrew`, exit 0, `MACHINERY-INDEX-COMPLETE entries=295 gates=63 blind=0`, at estate HEAD 0bd66af40).
+Misses: mp-01 (atomic-write), mp-08 (gate-slots), mp-12 (json-io). One variant, one run; no probe was changed. At the
+bar, so one more miss on a re-run would fail it.
+
 ## W3.3 `search.py --estate`: one definition
 
 **Repo:** brain. **Lands via:** `~/.claude` commit. **Effort:** M. **Needs:** W3.1, W3.2, W1.6.
@@ -165,6 +171,25 @@ Rules for the seeds:
   back for at least 5 of 16, `--estate` becomes the recommended command (W3.4).
 - Otherwise record the result in automatic-recall.md s7, and keep it opt-in everywhere except W4.2 (see W4.2 step 6).
 
+**Read 2026-09-25: HELD, 10 of 16 against a bar of 5.** Harness `score-estate-bars.py --null-cases`, exit 0,
+`ESTATE-BARS-COMPLETE broken=0 rc=0`, 16 rows, 0 replays could not run, every replay ending
+`KNOWLEDGE-SEARCH-COMPLETE legs=5 ... blind=0`. The named single reader was the session that ran it (Claude Opus 5.5),
+with the bar written down before the run. A case counted only when a MEMORY, RULES or MACHINERY (index) section that
+bears on the change came back AND existed before the commit (the replay searches today's tree, so a rule the commit
+itself wrote is hindsight and was not counted) AND is not merely the file the commit edited; SKILLS and grep hits did
+not count. Relevant: baece0f29 (memory mtime-is-not-liveness-for-a-noop-writer), 127af236c (memory
+grocery-method-bakers, kroger-api-bakers; grocery/search-terms-lib.ps1), 2bf6f549f (memory
+prompt-backup-audit-red-for-agent-edits-from-a-worktree; ops/audit-prompt-backup.ps1), 6c5e56678 (memory
+golden-test-frozen-inputs), 561aa14af (rules grocery "known-wrong.json is the MAIN-board corrector": a fresh ruling
+reads red until the next build), 689f03dba (rules grocery "AN EVERYDAY PRICE IS RE-READ ABOUT ONCE EVERY 90 DAYS",
+written 5 minutes before it), f27215e9e and e6e22da17 (the live-price rules 98ba12efd wrote before them), 4c75e9d4e
+(rules "Three fixture labels, three jobs"), b453a01fb (rules "A walk over this tree excludes on the path BELOW its
+root"). Not relevant: 50d890d0f (only the lib it edited), b3e012b0e (only the file it edited), 2f9cbe9ec, 5cb4198ba
+and a5a349113 (one shared multi-query; nothing about the idiom, stores.json or excludes), 98ba12efd (its best hits
+are rules it wrote itself). The 16 cases hold 12 distinct queries. Even the strictest reading, dropping 561aa14af,
+2bf6f549f and 6c5e56678 as arguable, leaves 7 of 16. The judged rows are
+`~/.claude/skills/knowledge-search/estate-null-judged-2026-09-25.jsonl`. So W3.4 ran.
+
 ## W3.4 Add `--estate` to every carrier, in one sweep
 
 **Repo:** both. **Lands via:** one ThriftyCrew push-main commit (store-step.md, the agents, their mirrors, the CLAUDE.md
@@ -187,3 +212,9 @@ W5.2 has already moved every carrier to the Bash-safe section 4.7 string without
   --estate "<3-6 words>"`."
 
 **Trap.** Never paste "run search.py" into an agent without Bash (recipe-dedup-selector, recipe-writer); see W5.2.
+
+**Done 2026-09-25**, after W3.3's bar held: both store-step variants and the 10 agents that carry them, the three
+scheduled tasks that carry a command (grocery-alert-triage line 17, and the ANALYSIS spans of store-usage-weekly and
+verify-board-sample, by procedure P3 with their mirrors), store_citation's refusal text, the CLAUDE.md Orientation
+line, the brief gate's SEARCH_CMD (which the workflow gate imports) and knowledge-search/SKILL.md's step 3. Each
+carrier's commit message has the verification and the mutation probe.
