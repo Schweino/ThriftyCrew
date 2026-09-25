@@ -164,8 +164,29 @@ if ($SelfTest) {
   $g3 = Get-EngineCommodityId $stM 'Gain Laundry Detergent Flings Bl Pl'
   T 'CLEAN TWIN  a Gain Flings name with no "pods" word lands in laundry-pods' ($g3 -eq 'laundry-pods') "resolved=$g3"
 
-  # A LITERAL LIST KNOWS ITS OWN NUMBER: 9 original cases, 3 scope cases, 3 live-term cases, 3 liquids, 4 non-liquids, 1 Flings.
-  $expect = 23
+  # ---- Q-laundry-rule-gaps (Brad, 2026-09-25, "Yes, through the rule-change gate"): the five liquids the widened rule
+  # could not read, frozen as the stores name them. Walmart and Baker's were refused by the board-wide '\bsoda\b' and
+  # 'sparkling' excludes, which laundry-detergent now relaxes; the two Aldi names say neither laundry nor liquid and are
+  # read by a 'detergent' plus fluid-ounce size include and the one Tide Simply line.
+  foreach ($j in @('ARM & HAMMER Baking Soda Fresh Liquid Laundry Detergent, Sparkling Fresh, 110 Fl Oz', 'ARM & HAMMER Baking Soda Fresh Liquid Laundry Detergent Sparkling Fresh Scent', 'ARM & HAMMER Baking Soda Fresh Sparkling Fresh Scent Liquid Laundry Detergent', 'Gain Original Detergent 132 FL OZ', 'Tide Simply Detergent')) {
+    $gj = Get-EngineCommodityId $stM $j
+    T ('MUST FIRE  a liquid the widened rule could not read now lands in laundry-detergent: ' + $j) ($gj -eq 'laundry-detergent') "resolved=$gj"
+  }
+  # The relax is laundry-detergent's alone: a soda or sparkling DRINK, and a Baking Soda box, still reach no laundry cell.
+  foreach ($dr in @('Coca-Cola Classic Soda 12 pk 12 fl oz', 'LaCroix Sparkling Water Lime 12 pk 12 fl oz', 'ARM & HAMMER Pure Baking Soda 1 lb')) {
+    $gd = Get-EngineCommodityId $stM $dr
+    T ('MUST NOT FIRE  the soda and sparkling relax admits no drink or baking soda to laundry-detergent: ' + $dr) ($gd -ne 'laundry-detergent') "resolved=$gd"
+  }
+  # Each name below HITS an include under the new rules (the detergent-plus-size include, or the old include once the soda
+  # relax lets it through), so it is the laundry excludes that refuse the pod, the sheet, the powder and the dish detergent.
+  foreach ($np in @('Tide Pods Original Detergent 42 ct 34 fl oz', 'ARM & HAMMER Baking Soda Fresh Laundry Detergent Sheets 50 ct', 'ARM & HAMMER Baking Soda Fresh Powder Laundry Detergent 45 oz', 'Power Force Original Blue Dishwashing Detergent 24 FL OZ')) {
+    $gn = Get-EngineCommodityId $stM $np
+    T ('MUST FIRE  the laundry-detergent excludes still refuse what the new rules let reach them: ' + $np) ($gn -ne 'laundry-detergent') "resolved=$gn"
+  }
+
+  # A LITERAL LIST KNOWS ITS OWN NUMBER: 9 original cases, 3 scope cases, 3 live-term cases, 3 liquids, 4 non-liquids, 1 Flings,
+  # and for Q-laundry-rule-gaps 5 joins, 3 drinks and a baking soda box, 4 non-liquids under the new include.
+  $expect = 35
   if ($script:__n -ne $expect) { Write-Output ("  X   the suite ran {0} case(s), expected {1}" -f $script:__n, $expect); $script:__b++ }
   Write-Output ("audit-search-terms SELF-TEST " + $(if ($script:__b -eq 0) { 'PASS' } else { "FAILED ($($script:__b))" }))
   exit $(if ($script:__b -eq 0) { 0 } else { 1 })

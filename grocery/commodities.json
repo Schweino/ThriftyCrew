@@ -6073,7 +6073,9 @@
                         "\\blndry\\s+dtrgnt\\b.*\\bpls\\s+o\\b",
                         "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}\\bplus\\s+oxi\\b",
                         "\\blaundry\\s+detergent\\b",
-                        "\\bliquid\\s+detergent\\b"
+                        "\\bliquid\\s+detergent\\b",
+                        "\\bdetergent\\b.{0,60}?\\b\\d+(?:\\.\\d+)?\\s*fl\\.?\\s*oz\\b",
+                        "\\btide\\s+simply\\s+detergent\\b"
                     ],
         "exclude":  [
                         "\\bpods?\\b",
@@ -6095,7 +6097,9 @@
                     ],
         "relax_global":  [
                              "\\bscent(?:s|ed)?\\b",
-                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)",
+                             "\\bsoda\\b",
+                             "sparkling"
                          ]
     },
     {

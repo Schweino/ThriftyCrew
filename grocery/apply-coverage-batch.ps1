@@ -30,9 +30,22 @@
     - the theft check still applies unchanged - an exclude must not disturb any commodity it does not own
   A batch may carry both; each pattern is judged by its own kind.
 
+  A RELAX IS A WIDENING TOO, AND GETS THE WIDENING'S GATES (2026-09-25, Q-laundry-rule-gaps). -Relax adds a board-wide
+  exclude token to one commodity's relax_global, so that commodity may take a name the token would otherwise refuse
+  (the laundry-detergent cell could not read 'Arm & Hammer Baking Soda Fresh ... Detergent' because '\bsoda\b' and
+  'sparkling' exist for drinks). Until this parameter a relax could only be hand-edited, and plan-2026-09-03 had to say
+  "run the same two gates explicitly" beside one. It is judged like an include: the commodity may not lose a cell, and
+  the theft, known-wrong, tile and guards gates run unchanged. Two things are its own:
+    - a token that is not EXACTLY the text of a global exclude is refused before any work: the engine relaxes by exact
+      string equality, so a near-miss spelling would be a rule that can never fire (Get-InertRelaxTokens)
+    - its visibility is measured through the ENGINE'S matcher, before and after, over the corpus
+      (Get-MatcherRevealed): a relax only matters where the commodity's own include already hits, so counting
+      token hits alone would overstate it. A relax that reveals nothing bought nothing and is reverted.
+
   Usage:
     .\apply-coverage-batch.ps1 -Patterns @{ 'sun-dried-tomatoes' = @('sun.?dried.{0,30}tomato') }
     .\apply-coverage-batch.ps1 -Excludes @{ 'dried-thyme' = @('local\s+roots') }
+    .\apply-coverage-batch.ps1 -Relax @{ 'laundry-detergent' = @('\bsoda\b') }   (in-process: an array does not survive -File)
     .\apply-coverage-batch.ps1 -Patterns $p -WhatIfOnly     measure without keeping
     .\apply-coverage-batch.ps1 -FromWorklist 5             the weekly lane: the 5 oldest decided keys of the matching worklist
 
@@ -47,6 +60,7 @@
 param(
   [hashtable]$Patterns = @{},
   [hashtable]$Excludes = @{},
+  [hashtable]$Relax = @{},
   [switch]$WhatIfOnly,
   [int]$FromWorklist = 0,
   [string]$WorklistFile = '',
@@ -97,8 +111,8 @@ if (-not $SelfTest -and $FromWorklist -gt 0) {
   Write-Output ('from the matching worklist: ' + $script:FwKeys.Count + ' decided key(s) of ' + $FromWorklist + ' asked')
   foreach ($k in @($script:FwKeys.Keys | Sort-Object)) { Write-Output ('    ' + $script:FwKeys[$k].kind + '  ' + $script:FwKeys[$k].pattern + '  <- ' + $k) }
 }
-if (-not $SelfTest -and @($Patterns.Keys).Count -eq 0 -and @($Excludes.Keys).Count -eq 0) {
-  Write-Output 'apply-coverage-batch: pass -Patterns (includes) and/or -Excludes. An empty batch would run every gate and prove nothing.'
+if (-not $SelfTest -and @($Patterns.Keys).Count -eq 0 -and @($Excludes.Keys).Count -eq 0 -and @($Relax.Keys).Count -eq 0) {
+  Write-Output 'apply-coverage-batch: pass -Patterns (includes), -Excludes and/or -Relax. An empty batch would run every gate and prove nothing.'
   exit 1
 }
 # Every gate below reasons about "the commodities this batch touched". Keep ONE list, built once: the
@@ -108,7 +122,7 @@ if (-not $SelfTest -and @($Patterns.Keys).Count -eq 0 -and @($Excludes.Keys).Cou
 # Facial Tissue Plus Lotion' from lotion re-priced facial-tissues, the product's own commodity, and the theft gate reverted
 # the whole batch for doing exactly what plan-9's claimed_by_earlier said it would). Declared, printed, never inferred.
 if (-not (Get-Variable -Name FwBeneficiaries -Scope Script -ErrorAction SilentlyContinue)) { $script:FwBeneficiaries = @() }
-$TouchedIds = @(@($Patterns.Keys) + @($Excludes.Keys) + @($script:FwBeneficiaries) | Where-Object { $_ } | Sort-Object -Unique)
+$TouchedIds = @(@($Patterns.Keys) + @($Excludes.Keys) + @($Relax.Keys) + @($script:FwBeneficiaries) | Where-Object { $_ } | Sort-Object -Unique)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -153,6 +167,38 @@ function Test-BatchGuardsVerdict([int]$Rc, [string[]]$Lines, [hashtable]$BaseCel
   if ($new.Count -gt 0) { return ('fail:the batch added quarantined cell(s): ' + ($new -join '; ')) }
   return 'pass'
 }
+# ---- -Relax (Q-laundry-rule-gaps, 2026-09-25). The engine's matcher and the global list, loaded at SCRIPT scope so
+# the two functions below and the visibility gate call the same matcher the board is built with.
+. (Join-Path $root 'match-lib.ps1')
+. (Join-Path $root 'global-exclude-lib.ps1')
+function Get-InertRelaxTokens([hashtable]$RelaxBatch, [string[]]$GlobalTexts) {
+  <# Pure. Every "<id>: <token>" in the batch that is NOT exactly the text of a global exclude. The engine relaxes by
+     exact string equality (match-lib: "relax_global by exact pattern-string equality"), so such a token can never fire. #>
+  $have = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($g in @($GlobalTexts)) { [void]$have.Add([string]$g) }
+  $bad = @()
+  foreach ($id in @($RelaxBatch.Keys | Sort-Object)) { foreach ($t in @($RelaxBatch[$id])) { if (-not $have.Contains([string]$t)) { $bad += ([string]$id + ': ' + [string]$t) } } }
+  return ,$bad
+}
+function Get-MatcherRevealed($BeforeCommodities, $AfterCommodities, [string[]]$GlobalTexts, [string]$Id, [string[]]$Names) {
+  <# The names the ENGINE'S matcher hands to $Id under the after-rules and not under the before-rules, each once. This is
+     the visibility of a relax: the relaxed token only matters where $Id's own include already hits and no other global
+     token still refuses the name, which a count of token hits cannot see. #>
+  $mB = New-CommodityMatcher -Commodities $BeforeCommodities -GlobalExclude $GlobalTexts
+  $mA = New-CommodityMatcher -Commodities $AfterCommodities -GlobalExclude $GlobalTexts
+  $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  $out = New-Object 'System.Collections.Generic.List[string]'
+  foreach ($nm in @($Names)) {
+    $s = [string]$nm
+    if (-not $s -or -not $seen.Add($s)) { continue }
+    $a = Resolve-Commodity -Matcher $mA -Name $s
+    if (-not $a -or -not [string]::Equals([string]$a.id, $Id, [StringComparison]::Ordinal)) { continue }
+    $b = Resolve-Commodity -Matcher $mB -Name $s
+    if ($b -and [string]::Equals([string]$b.id, $Id, [StringComparison]::Ordinal)) { continue }
+    $out.Add($s)
+  }
+  return ,($out.ToArray())
+}
 if ($SelfTest) {
   $bad = 0; $n = 0
   function _BT([string]$label, [bool]$ok) { $script:n++; if ($ok) { Write-Output ('  ok   ' + $label) } else { Write-Output ('  FAIL ' + $label); $script:bad++ } }
@@ -177,6 +223,23 @@ if ($SelfTest) {
   $fw1 = Get-WorklistBatch $fwRows @() 1
   _BT 'MECHANISM  -FromWorklist 1 takes exactly the OLDEST decided key (AT the bar: 1 asked, 1 taken)' ($fw1.Keys.Count -eq 1 -and $fw1.Patterns.ContainsKey('apple-juice'))
   _BT 'MUST FIRE  a release names its TARGET as an intended beneficiary (sun-dried-tomatoes), never its claimer' (($fwB.Beneficiaries -contains 'sun-dried-tomatoes') -and ($fwB.Beneficiaries -notcontains 'turkey-lunchmeat'))
+  # -Relax (Q-laundry-rule-gaps): the token must be a global exclude's exact text, and visibility is the engine's answer
+  $rxG = Get-TcGlobalExclude
+  $rxInert = Get-InertRelaxTokens @{ 'laundry-detergent' = @('\bsoda', 'sparkling') } $rxG
+  _BT 'MUST FIRE  a relax token spelled unlike the global exclude (\bsoda for \bsoda\b) is inert and named' ($rxInert.Count -eq 1 -and $rxInert[0] -eq 'laundry-detergent: \bsoda')
+  $rxOk = Get-InertRelaxTokens @{ 'laundry-detergent' = @('\bsoda\b', 'sparkling') } $rxG
+  _BT 'MUST NOT FIRE  the two exact global texts the laundry ruling relaxes are accepted' ($rxOk.Count -eq 0)
+  $rxBefore = @([pscustomobject]@{ id = 'laundry-detergent'; include = @('\blaundry\s+detergent\b'); exclude = @('\bpods?\b'); relax_global = @('\bscent(?:s|ed)?\b') })
+  $rxAfter = @([pscustomobject]@{ id = 'laundry-detergent'; include = @('\blaundry\s+detergent\b'); exclude = @('\bpods?\b'); relax_global = @('\bscent(?:s|ed)?\b', '\bsoda\b', 'sparkling') })
+  $rxNames = @('ARM & HAMMER Baking Soda Fresh Liquid Laundry Detergent Sparkling Fresh Scent', 'Coca-Cola Classic Soda 12 pk', 'Baking Soda Fresh Laundry Detergent Pods', 'Tide Original Liquid Laundry Detergent', 'ARM & HAMMER Baking Soda Fresh Liquid Laundry Detergent Sparkling Fresh Scent')
+  $rxRev = Get-MatcherRevealed $rxBefore $rxAfter $rxG 'laundry-detergent' $rxNames
+  _BT 'MUST FIRE  the relax reveals exactly the soda-and-sparkling liquid, once, through the engine matcher (1 of 4 distinct names)' ($rxRev.Count -eq 1 -and $rxRev[0] -like 'ARM & HAMMER Baking Soda Fresh*')
+  _BT 'MUST NOT FIRE  a soda drink, a pod and an already-visible liquid are not counted as revealed' (@($rxRev | Where-Object { $_ -match 'Coca|Pods|Tide' }).Count -eq 0)
+  $rxSame = Get-MatcherRevealed $rxBefore $rxBefore $rxG 'laundry-detergent' $rxNames
+  _BT 'MUST NOT FIRE  unchanged rules reveal nothing, so a relax that changes no routing is judged as buying nothing' ($rxSame.Count -eq 0)
+  $rxMA = New-CommodityMatcher -Commodities $rxAfter -GlobalExclude $rxG
+  $rxTide = Resolve-Commodity -Matcher $rxMA -Name 'Tide Original Liquid Laundry Detergent'
+  _BT 'CLEAN TWIN  the already-visible liquid still lands in laundry-detergent under the relaxed rules' ($rxTide -and $rxTide.id -eq 'laundry-detergent')
   Write-Output ('apply-coverage-batch self-test ' + $(if ($bad -eq 0) { 'pass' } else { 'FAIL' }) + ': ' + ($n - $bad) + ' of ' + $n + ' case(s)')
   exit $(if ($bad -eq 0) { 0 } else { 1 })
 }
@@ -204,6 +267,11 @@ foreach ($id in $Patterns.Keys) {
     try { [void][regex]::new([string]$p, 'IgnoreCase') }
     catch { Write-Output ("apply-coverage-batch: include pattern for '" + $id + "' is not a valid regex and would silently match nothing: " + $p); exit 1 }
   }
+}
+$inertRelax = Get-InertRelaxTokens $Relax (Get-TcGlobalExclude)
+if ($inertRelax.Count -gt 0) {
+  Write-Output ('apply-coverage-batch: a relax token must be EXACTLY the text of a global exclude (global-exclude-lib.ps1), or it can never fire: ' + ($inertRelax -join '; '))
+  exit 1
 }
 
 $bak = Join-Path $OutDir ('_commodities-batchbak-' + (Get-Date -Format 'HHmmss') + '.json')
@@ -262,8 +330,17 @@ foreach ($id in $Excludes.Keys) {
     if (@($c.exclude) -notcontains $p) { $c.exclude = @($c.exclude) + $p; $addedEx++ }
   }
 }
+$addedRx = 0
+foreach ($id in $Relax.Keys) {
+  $c = @($coms | Where-Object { $_.id -eq $id })[0]
+  if (-not $c) { throw "commodity '$id' not found" }
+  if (-not $c.PSObject.Properties['relax_global']) { $c | Add-Member -NotePropertyName relax_global -NotePropertyValue @() }
+  foreach ($p in @($Relax[$id])) {
+    if (@($c.relax_global) -notcontains $p) { $c.relax_global = @($c.relax_global) + $p; $addedRx++ }
+  }
+}
 ($coms | ConvertTo-Json -Depth 12) | Set-Content $comFile -Encoding UTF8
-Write-Output ("added {0} include pattern(s) across {1} commodit(y/ies), {2} exclude pattern(s) across {3}" -f $added, @($Patterns.Keys).Count, $addedEx, @($Excludes.Keys).Count)
+Write-Output ("added {0} include pattern(s) across {1} commodit(y/ies), {2} exclude pattern(s) across {3}, {4} relax token(s) across {5}" -f $added, @($Patterns.Keys).Count, $addedEx, @($Excludes.Keys).Count, $addedRx, @($Relax.Keys).Count)
 
 function Revert([string]$why) {
   Copy-Item $bak $comFile -Force
@@ -395,7 +472,7 @@ if (Test-Path $corpusFile) {
       foreach ($k in $keys) { Write-Output ("        - " + $k) }
     }
   }  $deadEx = @($Excludes.Keys | Where-Object { @($suppressed[$_]).Count -eq 0 -and @($absorbed[$_]).Count -eq 0 })
-  if ($deadEx.Count -eq @($Excludes.Keys).Count -and @($Excludes.Keys).Count -gt 0 -and @($Patterns.Keys).Count -eq 0) {
+  if ($deadEx.Count -eq @($Excludes.Keys).Count -and @($Excludes.Keys).Count -gt 0 -and @($Patterns.Keys).Count -eq 0 -and @($Relax.Keys).Count -eq 0) {
     Revert 'no exclude in the batch suppressed a single row its commodity actually matches, or absorbed a known-wrong ruling of its shape - it bought nothing'
   }
   if ($deadEx.Count -gt 0) { Write-Output ("    NOTE: {0} exclude(s) suppressed nothing and should be dropped: {1}" -f $deadEx.Count, ($deadEx -join ', ')) }
@@ -414,6 +491,28 @@ if (Test-Path $corpusFile) {
   }
   if (@($Patterns.Keys).Count -gt 0 -and $dead.Count -eq @($Patterns.Keys).Count) { Revert 'no pattern in the batch revealed a single invisible row - it bought nothing' }
   if ($dead.Count -gt 0) { Write-Output ("    NOTE: {0} pattern(s) revealed nothing and should be dropped: {1}" -f $dead.Count, ($dead -join ', ')) }
+
+  # RELAX VISIBILITY, judged on its OWN contribution: the rules as edited, against the same rules with only this
+  # commodity's relax tokens taken back out, through the engine matcher over every corpus name. So an include in the
+  # same batch cannot lend a relax its reveals, and a relax that changes no routing reads 0.
+  if (@($Relax.Keys).Count -gt 0) {
+    $gxTexts = Get-TcGlobalExclude
+    $corpNames = @($corp | ForEach-Object { [string]$_.product })
+    $deadRx = @()
+    foreach ($id in @($Relax.Keys | Sort-Object)) {
+      $rxAfter = Get-Content $comFile -Raw -Encoding UTF8 | ConvertFrom-Json
+      $rxBefore = Get-Content $comFile -Raw -Encoding UTF8 | ConvertFrom-Json
+      $rb = @($rxBefore | Where-Object { $_.id -eq $id })[0]
+      $rb.relax_global = @(@($rb.relax_global) | Where-Object { @($Relax[$id]) -notcontains $_ })
+      $rv = Get-MatcherRevealed $rxBefore $rxAfter $gxTexts ([string]$id) $corpNames
+      Write-Output ("    {0,-24} relax reveals {1} name(s) the engine matcher now hands it (of {2} corpus names)" -f $id, $rv.Count, $corpNames.Count)
+      foreach ($nm in ($rv | Select-Object -First 12)) { Write-Output ("        + " + $nm) }
+      if ($rv.Count -gt 12) { Write-Output ("        ... and " + ($rv.Count - 12) + " more (READ THEM: a relax admits every name the include already hits)") }
+      if ($rv.Count -eq 0) { $deadRx += $id }
+    }
+    if ($deadRx.Count -eq @($Relax.Keys).Count) { Revert 'no relax in the batch revealed a single name through the engine matcher - it bought nothing' }
+    if ($deadRx.Count -gt 0) { Write-Output ("    NOTE: {0} relax(es) revealed nothing and should be dropped: {1}" -f $deadRx.Count, ($deadRx -join ', ')) }
+  }
 } else {
   # BLIND, not block: no corpus means we cannot measure visibility, so fall back to the board-effect test
   # rather than silently passing an unmeasured batch.
