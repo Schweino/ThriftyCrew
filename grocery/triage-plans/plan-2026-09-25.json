@@ -414,51 +414,53 @@
       "evidence": [
         "queue body: 'cheap-dinners rows=587 findings=234', 'dinner-tonight rows=587 findings=234', 'payday-stretcher findings=0', 'hub (live, working-tree) findings=0' (guards_rc=4, QUARANTINE)"
       ],
-      "root_cause": "carried from plan-2026-09-10.json 1fa212: the audit's reference differs by surface and day; today the two tool pages lag the working-tree manifest by up to 6 cents on 234 of 587 rows while the hub agrees, so the tool pages were not republished after the manifest moved",
+      "root_cause": "The two dinner tools' builders were repointed from v2-perserving to the feed on 2026-09-22 (f4ab3d20e) and audit-surface-staleness was not; it graded current pages against a producer they no longer read, so every feed-vs-v2 disagreement (30 of 570 slugs on 2026-09-25) read as a stale page.",
       "root_fix": {
-        "what": "republish the two tool pages from the chain whenever the manifest they render moved, so the audit's working-tree reference and the live pages cannot drift",
+        "what": "audit-surface-staleness grades cheap-dinners and dinner-tonight against the reference their builders bake: smp-feed per_serving, v2 only where the feed lacks the slug",
         "files": [
-          "site/build/publish-tool-post.ps1",
           "meal-prep/pipeline/audit-surface-staleness.ps1"
         ],
-        "exact_change": "to be sized by the money lane: the chain calls publish-tool-post for cheap-dinners-right-now and dinner-tonight after compute-v2 when their source hash moved"
+        "exact_change": "new pure Get-ToolFallbackRef (feed per_serving rounded to cents when > 0, v2 fill for missing slugs, v2 for all when the feed will not parse, named in ref_name); Get-ToolSurfaceRefs takes -ToolRef/-ToolRefName; live sweep reads grocery/out/smp-feed.json"
       },
-      "leaves_open": "until built",
-      "leaves_open_occurrences": 4,
+      "leaves_open": "feed per_serving and v2-perserving cheapest_ps disagree on 30 of 570 slugs, so the hub (v2, static) and the dinner tools/recipe cards (feed) can show two per-serving prices for one recipe; no check watches that pair",
+      "leaves_open_occurrences": "30 of 570 slugs on 2026-09-25; 100 of 577 on 2026-09-22 (f4ab3d20e); continuous since at least 2026-09-22",
       "prior_closes": [
         "2026-09-10-1fa212"
       ],
       "prevention": {
         "source": [
-          "site/build/publish-tool-post.ps1"
+          "meal-prep/pipeline/audit-surface-staleness.ps1"
         ],
-        "what": "the tool-page producer republishes when its manifest moved",
-        "exact_change": "chain step after compute-v2: publish-tool-post for each tool page whose rendered source hash differs from the live one"
+        "what": "the guard's tool-page reference is built by the same rule the builders use, and a frozen fixture holds the founding 2026-09-23 row",
+        "exact_change": "self-test cases: FOUNDING ROW (v2 alone still flags the current beef-birria page), MUST NOT FIRE (page carrying the feed value reads no STALE row), MUST FIRE (feed moved 0.04 on albondigas, page not rebuilt -> STALE), MUST FIRE (unreadable feed falls back to v2), CLEAN TWIN (reference is feed where present, v2 where absent or 0)"
       },
       "proof": {
-        "must_fire_case": "frozen manifest moved 0.04 on albondigas-en-chipotle-rice-bowls with the tool page unrepublished -> audit-surface-staleness reports cheap-dinners STALE",
-        "clean_twin": "after the chain republishes, the same rows read findings=0",
+        "must_fire_case": "frozen feed 2.82 on albondigas-en-chipotle-rice-bowls with the page still at 2.78 -> audit-surface-staleness reports cheap-dinners STALE on albondigas (self-test case 'MUST FIRE the feed moved 0.04...')",
+        "clean_twin": "frozen 2026-09-25 row beef-birria-rice-bowls page 7.12, feed 7.12, v2 7.21 -> no STALE row against the feed reference, while the v2-only reference still flags it (founding alarm reproduced)",
         "fixture_occurrences": [
           "2026-09-10-1fa212",
           "2026-09-23-5ad03d"
         ],
-        "guard_or_fixture": "meal-prep/pipeline/audit-surface-staleness.ps1 -SelfTest"
+        "guard_or_fixture": "meal-prep/pipeline/audit-surface-staleness.ps1 -SelfTest",
+        "result": "self-test exit 0, 'audit-surface-staleness SELF-TEST PASS', 38 ok lines; live sweep exit 0, 0 findings on 587 rows x 4 surfaces; ops/audit-fixture-vocabulary.ps1 exit 0"
       },
-      "resolution_note": "Transcribed for the money lane; not implemented in this plan.",
+      "resolution_note": "Premise false on re-measure: the tool pages were current. The guard graded them against v2 after f4ab3d20e moved their builders to the feed. Guard now uses the builders' own reference; 60 findings -> 0, self-test PASS with founding-row fixture. Feed-vs-v2 producer disagreement (30 of 570) routed to weekly item 2026-09-25-602457. No republish needed.",
       "lane": "money",
       "est_tool_calls": 40,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
+      "status": "deviated",
+      "premise_verified": false,
+      "deviation": "Re-measured 2026-09-25 against today's surfaces: audit-surface-staleness read cheap-dinners 30, dinner-tonight 30, payday-stretcher 0, hub 0 (60 findings, rc=1). The plan's premise (tool pages not republished after the manifest moved) is FALSE: site/tools/cheap-dinners-tool.html 08:18:51 and dinner-tonight-tool.html 08:18:53 were rebuilt AFTER v2-perserving.json 08:10:47. Real cause: f4ab3d20e (2026-09-22, queue 115180) repointed build-cheapnow-data.ps1 and build-dinner-data.ps1 to bake the fallback from grocery/out/smp-feed.json per_serving (v2 only for a slug the feed lacks), and the audit kept grading both pages against v2 alone. The alert fired 09-23, the first chain after that commit. 30 of 570 shared slugs differ feed-vs-v2 by more than a cent, exactly the 30 findings per page. Same class the prior item named (the audit's reference differs by surface), so fixed, not bounced: no chain republish step was built (it would not have changed a byte), and the guard now grades each tool page against the source its builder bakes (Get-ToolFallbackRef, mirroring the builders incl. the unreadable-feed fallback). After: 0 findings on all four surfaces, refs cheap-dinners=feed dinner-tonight=feed.",
       "shipped_commit": null,
       "blast_radius": {
         "measured_as": "rows",
-        "measured_by": "queue body: audit-surface-staleness over 587 rows per surface",
-        "affected_now": 234,
-        "risk": "two tool pages republished from the chain; hub and payday-stretcher unaffected (0 findings)"
+        "measured_by": "audit-surface-staleness live sweep before and after, 2026-09-25, 587 rows per surface",
+        "affected_now": 60,
+        "risk": "guard-only change; no page, price or board byte moves. Findings 60 -> 0; hub and payday-stretcher references unchanged"
       },
       "rollback": "remove the chain step; pages stay as last published",
-      "freshness": "queue body of 2026-09-23-5ad03d (guards_rc=4 day); re-run audit-surface-staleness on the current manifest before building"
+      "freshness": "queue body of 2026-09-23-5ad03d (guards_rc=4 day); re-run audit-surface-staleness on the current manifest before building",
+      "leaves_open_followup": "2026-09-25-602457",
+      "needs_publish": false
     },
     {
       "queue_id": "2026-09-21-dca1a1",

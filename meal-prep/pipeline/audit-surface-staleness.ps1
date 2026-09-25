@@ -170,13 +170,42 @@ function ConvertTo-CatalogMap {
   return $map
 }
 
+function Get-ToolFallbackRef {
+  <# PURE. The reference the two dinner tools are BUILT from, rebuilt the way their builders build it.
+     Since f4ab3d20e (2026-09-22, queue 115180) build-cheapnow-data.ps1 and build-dinner-data.ps1 bake each
+     fallback from grocery\out\smp-feed.json recipes[slug].per_serving (rounded to cents, only when > 0) and
+     take v2-perserving cheapest_ps ONLY for a slug the feed lacks. This guard kept grading both pages against
+     v2 alone, so from 2026-09-23 it reported every row where the FEED and v2 disagree as a stale page: 234 rows
+     that day, 30 per page on 2026-09-25 (equal to the 30 of 570 feed-vs-v2 disagreements, with both pages
+     rebuilt eight minutes after the manifest). Queue 2026-09-23-5ad03d. A feed that will not parse leaves the
+     builders on v2 for every slug, so it does here too; the caller names which one it used. #>
+  param([string]$FeedText, $Manifest)
+  $ref = @{}; $fromFeed = $false
+  if (-not [string]::IsNullOrWhiteSpace($FeedText)) {
+    try {
+      $fd = $FeedText.TrimStart([char]0xFEFF) | ConvertFrom-Json
+      if ($fd.recipes) {
+        foreach ($p in $fd.recipes.PSObject.Properties) {
+          if ([double]$p.Value.per_serving -gt 0) { $ref[[string]$p.Name] = [math]::Round([double]$p.Value.per_serving, 2); $fromFeed = $true }
+        }
+      }
+    } catch { $ref = @{}; $fromFeed = $false }
+  }
+  foreach ($k in @($Manifest.Keys)) { if (-not $ref.ContainsKey([string]$k)) { $ref[[string]$k] = [math]::Round([double]$Manifest[$k], 2) } }
+  return @{ ref = $ref; name = $(if ($fromFeed) { 'feed' } else { 'working-tree(feed-unreadable)' }) }
+}
+
 function Get-ToolSurfaceRefs {
   <# PURE. The three tool pages and the reference each is graded against. check-ad-cycles rebuilds them from the
-     WORKING TREE on every run, held or not, so a held day does not change their reference. #>
-  param($Manifest, $BatchRef, [string]$Repo)
+     WORKING TREE on every run, held or not, so a held day does not change their reference. The two dinner
+     tools are graded against $ToolRef (Get-ToolFallbackRef: the feed, v2 for a slug the feed lacks), which is
+     what their builders bake; with no $ToolRef they fall back to the manifest. #>
+  param($Manifest, $BatchRef, [string]$Repo, $ToolRef = $null, [string]$ToolRefName = 'working-tree')
+  $tr = if ($null -ne $ToolRef) { $ToolRef } else { $Manifest }
+  $tn = if ($null -ne $ToolRef) { $ToolRefName } else { 'working-tree' }
   return @(
-    @{ label = 'cheap-dinners';    kind = 'CN';  ref = $Manifest; ref_name = 'working-tree'; path = (Join-Path $Repo 'site\tools\cheap-dinners-tool.html') },
-    @{ label = 'dinner-tonight';   kind = 'DIN'; ref = $Manifest; ref_name = 'working-tree'; path = (Join-Path $Repo 'site\tools\dinner-tonight-tool.html') },
+    @{ label = 'cheap-dinners';    kind = 'CN';  ref = $tr; ref_name = $tn; path = (Join-Path $Repo 'site\tools\cheap-dinners-tool.html') },
+    @{ label = 'dinner-tonight';   kind = 'DIN'; ref = $tr; ref_name = $tn; path = (Join-Path $Repo 'site\tools\dinner-tonight-tool.html') },
     @{ label = 'payday-stretcher'; kind = 'PSD'; ref = $BatchRef; ref_name = 'everyday';     path = (Join-Path $Repo 'site\tools\payday-stretcher-tool.html') }
   )
 }
@@ -288,6 +317,36 @@ if ($SelfTest) {
   $tsrA = @($tsr)
   T 'CLEAN TWIN  the three tool pages keep the WORKING-TREE manifest (and the stretcher its everyday batch) on any day' `
     (($tsrA.Count -eq 3) -and [object]::ReferenceEquals($tsrA[0].ref, $zWt) -and [object]::ReferenceEquals($tsrA[1].ref, $zWt) -and [object]::ReferenceEquals($tsrA[2].ref, $zSh)) ($tsrA.Count)
+  # ---- THE TOOLS BAKE THE FEED (2026-09-23, queue 2026-09-23-5ad03d, return of 2026-09-10-1fa212) ----------
+  # FROZEN from the real rows of 2026-09-25: both tools were rebuilt at 08:18 from grocery\out\smp-feed.json
+  # (generated 08:15:36), eight minutes after v2-perserving.json. beef-birria-rice-bowls showed 7.12, the feed
+  # said 7.12 and v2 said 7.21, so grading the page against v2 called a current page STALE (30 such rows per
+  # page that day, 234 on the 23rd). albondigas-en-chipotle-rice-bowls: feed 2.82, v2 2.82. Findings are
+  # filtered to STALE lines, because the extra v2-only slugs below are absent from the two-row page.
+  $zFeed = '{"generated":"2026-09-25T08:15:36","recipes":{"beef-birria-rice-bowls":{"per_serving":7.12},"albondigas-en-chipotle-rice-bowls":{"per_serving":2.82},"zero-row":{"per_serving":0}}}'
+  $zV2   = @{ 'beef-birria-rice-bowls' = 7.21; 'albondigas-en-chipotle-rice-bowls' = 2.82; 'only-in-v2' = 3.05; 'zero-row' = 4.10 }
+  $zCat5 = @{ 'beef-birria-rice-bowls' = 'Beef Birria Rice Bowls'; 'albondigas-en-chipotle-rice-bowls' = 'Albondigas en Chipotle Rice Bowls'; 'only-in-v2' = 'X'; 'zero-row' = 'Z' }
+  $zCur  = '/*CN-DATA*/var CN={asof:"2026-09-25T08:15:36",rec:[{"n":"Beef Birria Rice Bowls","s":"beef-birria-rice-bowls","sv":6,"c":7.12},{"n":"Albondigas en Chipotle Rice Bowls","s":"albondigas-en-chipotle-rice-bowls","sv":6,"c":2.82}]};/*CN-END*/'
+  $zOld  = $zCur.Replace('"c":2.82', '"c":2.78')
+  $tfrZ = Get-ToolFallbackRef -FeedText $zFeed -Manifest $zV2
+  T 'CLEAN TWIN  the tool reference is the FEED value where the feed has one, v2 only where it lacks one (or carries 0), as the builders bake it' `
+    (($tfrZ.name -eq 'feed') -and ($tfrZ.ref['beef-birria-rice-bowls'] -eq 7.12) -and ($tfrZ.ref['only-in-v2'] -eq 3.05) -and ($tfrZ.ref['zero-row'] -eq 4.10)) ($tfrZ.name)
+  $fV2 = Get-StalenessFindings (Get-SurfaceRows $zCur 'CN') $zV2 $zCat5 'cheap-dinners'
+  $fV2S = @(@($fV2) -match 'STALE ')
+  T 'FOUNDING ROW  graded against v2 alone, the current page still reproduces the 2026-09-23 false alarm on beef-birria' `
+    (($fV2S.Count -eq 1) -and ($fV2S[0] -match 'beef-birria-rice-bowls')) ($fV2S -join ' | ')
+  $tsrF = @(Get-ToolSurfaceRefs -Manifest $zV2 -BatchRef $zSh -Repo $repo -ToolRef $tfrZ.ref -ToolRefName $tfrZ.name)
+  $fCur = Get-StalenessFindings (Get-SurfaceRows $zCur 'CN') $tsrF[0].ref $zCat5 'cheap-dinners'
+  $fCurS = @(@($fCur) -match 'STALE ')
+  T 'MUST NOT FIRE  a tool page that carries the feed value it was built from has no STALE row although v2 disagrees' `
+    (($tsrF[0].ref_name -eq 'feed') -and ($tsrF[1].ref_name -eq 'feed') -and ($fCurS.Count -eq 0)) ($fCurS -join ' | ')
+  $fOld = Get-StalenessFindings (Get-SurfaceRows $zOld 'CN') $tsrF[0].ref $zCat5 'cheap-dinners'
+  $fOldS = @(@($fOld) -match 'STALE ')
+  T 'MUST FIRE  the feed moved 0.04 on albondigas-en-chipotle-rice-bowls and the page was not rebuilt: cheap-dinners is STALE' `
+    (($fOldS.Count -eq 1) -and ($fOldS[0] -match 'albondigas-en-chipotle-rice-bowls')) ($fOldS -join ' | ')
+  $tfrBad = Get-ToolFallbackRef -FeedText '{"generated":"2026-09-25T08:1' -Manifest $zV2
+  T 'MUST FIRE  an unreadable feed falls back to v2 for every slug, as the builders do, and says so in its name' `
+    (($tfrBad.name -ne 'feed') -and ($tfrBad.ref['beef-birria-rice-bowls'] -eq 7.21)) ($tfrBad.name)
   $mm2 = ConvertTo-ManifestMap '[{"slug":"a","cheapest_ps":3.61},{"slug":"b","cheapest_ps":2.30}]'
   $mm1 = ConvertTo-ManifestMap '[{"slug":"a","cheapest_ps":3.61}]'
   T 'CLEAN TWIN  a committed manifest blob parses to one entry per row, for two rows and for one' `
@@ -347,7 +406,10 @@ foreach ($r in @($doc.recipes)) {
     $batchRef[[string]$r.slug] = [double]$r.cost_batch_true / $sv
   }
 }
-$toolRefs = Get-ToolSurfaceRefs -Manifest $manifest -BatchRef $batchRef -Repo $repo
+$feedPath = Join-Path $repo 'grocery\out\smp-feed.json'
+$feedText = if (Test-Path $feedPath) { [IO.File]::ReadAllText($feedPath) } else { '' }
+$tfr = Get-ToolFallbackRef -FeedText $feedText -Manifest $manifest
+$toolRefs = Get-ToolSurfaceRefs -Manifest $manifest -BatchRef $batchRef -Repo $repo -ToolRef $tfr.ref -ToolRefName $tfr.name
 $surfaces = @($toolRefs)
 $findings = @(); $unevaluated = @(); $summary = @(); $refNames = @()
 foreach ($s in $surfaces) {
