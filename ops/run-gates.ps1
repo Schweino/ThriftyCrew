@@ -382,6 +382,9 @@ $static = @(
   # size"): every rules file loads in full, so their bytes are paid by every session. ON EVERY PUSH, because the value is the
   # edit in THIS push that grows them, and it reads seven files. Hermetic, reads tracked source only.
   @{ f = 'ops\audit-always-loaded-bytes.ps1';  n = 'the bytes every ThriftyCrew session loads at start (CLAUDE.md plus every unconditional .claude\rules file, as git stores them) have not grown past their mark - a ratchet that fails only on a rise; a fall is "can tighten" and keeps the mark' }
+  # design\PLAN-rules-trim-2026-09-25.md (Brad, 2026-09-25): the size above is held by the ratchet; this holds the SHAPE, so a
+  # new rule arrives as operative text plus a channel tag and its history goes to docs\rules-history. Hermetic, reads source only.
+  @{ f = 'ops\audit-rule-format.ps1';          n = 'every rule in a channel-tagged rules file (ops-and-gates.md) ends with a channel tag naming a gate that exists or judgement, points at its own history anchor, and stays under the per-rule bar; no history anchor is orphaned' }
   @{ f = 'ops\audit-measurement-provenance.ps1'; n = 'a recorded measurement names the harness it ran through and the commit or date it ran at - a RATCHET at 8, because retro-filling the existing set was explicitly not asked for and a bar over them would be red on day one' }
   @{ f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
   # From a linked worktree every FULL path carries \.claude\worktrees\, so a walk excluding on it reads nothing and reports clean; e1afb523b fixed nineteen and this blocks the next.
