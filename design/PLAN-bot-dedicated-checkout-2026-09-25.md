@@ -243,6 +243,10 @@ Session landings made between a bot run's start and its end, per run (20 armed r
   or `.py`; 4 changed the generated `meal-prep/cheapnow-data.js`, `dinner-data.js` or `stretcher-data.js`, which are
   served data and not in the set. So a bot push is not a chain-touching push and needs no chain-queue ticket. The set
   was read at today's HEAD, not at each landing's own commit.
+  **Read again at each landing's own commit (W0.1, `ops/measure-bot-checkout.py manifest`, 2026-09-25): 3 of the 24
+  landings can be judged, and 0 of those 3 touched the manifest (165 to 185 files); the other 21 are BLIND, because
+  `-ListSet` lists nothing at a commit older than 09-22, before the manifest existed.** So "0 of 24" stands only as a
+  reading at HEAD; at the landings' own commits it is 0 of 3 with 21 unjudgeable.
 
 **What this means.** The ownership boundary is real but porous: sessions legitimately correct bot-owned data (money
 lanes edit recipe specs and the feed). So a catch-up is mechanical 27 times in 28, and the design must keep a
@@ -439,6 +443,12 @@ overlap never a wall clock, the suite's last line its verdict, a literal-case su
 `--selftest` over a frozen fixture of three logs (a clean run, an untracked-blocker run, a new-sync blocked run), and
 the chain-manifest check read at each landing's own commit rather than at today's HEAD. A report, never a gate. Done when
 it re-derives section 2's totals from the committed rows.
+**Done 2026-09-25.** `derive design/MEASURE-bot-checkout-2026-09-25.jsonl --until 2026-09-24` prints 6 of 16, 13 of
+20 (7 shared checkout, 0 unattributed), 1 of 16 main moved, lag median 5,204 s over 9, 36 of 362 in the window over 8
+days, 37 of 447 push-main starts, 28 in-run landings with 7 owned and 1 on the bot commit's own paths; without
+`--until` it prints the 22-run and 54-of-366 figures, and the 5 of 5 new-sync row. A fresh `measure` over the live
+logs agreed on every one of those (45 owned entries exported from `lib/bot-paths.ps1`). The manifest reading at each
+landing's own commit is in section 2.6.
 
 **W0.2 The sync drops a local commit that is already upstream.** File: `lib/checkout-sync.ps1`. Before replaying local
 commits onto O, compute `git patch-id --stable` for each local commit and for each commit in `merge-base..O`; a local
@@ -623,6 +633,7 @@ Brad's words, verbatim: on D1 to D7, *"Adopt D with all its recommendations (Rec
 | the rows | `design/MEASURE-bot-checkout-2026-09-25.jsonl`, blob `c46b20bcdb6e`, written by `commit_rows.py` `66e3012497a1` (every row kept; a landing keeps its full path list only when it fell inside a live run) | one row per run, landing, push-main row and sync row |
 | the owned set | `lib/bot-paths.ps1` blob `86587b43`, `lib/pipeline-commit.ps1` blob `d279509b` | 45 entries |
 | harness base | origin/main `c42d0a679` | |
+| the committed harness (W0.1) | `ops/measure-bot-checkout.py` blob `c7232110e39e`, folding `measure.py`, `derive.py`, `commit_rows.py` and `botmanifest.py` | `--selftest` 20 of 20, exit 0; `derive --until 2026-09-24` over rows blob `c46b20bcdb6e` re-derives section 2; `manifest` exit 3, `landings=24 touching_manifest=0 blind=21` |
 | patch-identity of today's duplicates | `git show <sha> \| git patch-id --stable` | `447b42efe` = `7e70f5fae`, `c574142d3` = `e839c8ad2`, `1e0cb20b9` = `8b98eb49e` |
 | the 09-21 refusals | `%TEMP%\tc-prepush-181009.log`, `-181914`, `-181971`, `-181993` | `RUN-GATES-COMPLETE pass=451 fail=3` to `pass=450 fail=5` |
 | the 09-24 17:35 landing | push ledger `pushes-2026-09-24.jsonl`, `2026-09-24T22:35:50Z`, `via_worktree=true`, `main_sync=manual`, 6 subjects, a Claude host session | |
