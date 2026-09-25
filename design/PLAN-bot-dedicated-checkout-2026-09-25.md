@@ -4,7 +4,9 @@ Brad, 2026-09-25, on the rule that nobody may push between 06:30 and 09:00: *"Th
 design/architecture/process problem. The fact it has to do another round is insane."* He then ruled: *"Measure, then
 plan the lasting fix (Recommended)"*. This file is that measurement and that plan. Nothing is built by it.
 
-**Status: PLAN, not ruled.** Section 13 lists what only Brad can decide, each with a recommendation.
+**Status: RULED 2026-09-25, design D adopted with every recommendation; building in stage order.** Brad's rulings are
+recorded verbatim in section 13.1. Stage 0 is under way (W0.2 by a sibling session, W0.1 and W0.3 here); Stage 2 waits
+on W0.3's 7 clean days and a week of warnings.
 
 **Numbers.** Every number in Part 1 comes from one scratch harness run over the main checkout's logs, the shared
 reflogs, the checkout-sync record and the push ledger, read-only. The harness is named with its blobs in section 14,
@@ -593,6 +595,22 @@ no rollback copies anything back.
 | D6 | One lock for every committing scheduled writer | (a) graph nightly, harvest and push-data take `Global\tc-capture-run`; (b) leave them unlocked | **(a).** It is already lock level 0 and already nests over the push lock |
 | D7 | The 06:30 to 09:00 rule | (a) retire it after Stage 2's bars hold; (b) keep it | **(a).** It defers about 4.5 landings a day and protects against a cost that 1 committed run in 16 paid |
 | D8 | W0.2, the patch-id drop, ahead of any ruling on D1 | (a) now; (b) with D | **(a).** It is today's wedge and stands alone |
+
+### 13.1 Rulings (Brad, 2026-09-25)
+
+Brad's words, verbatim: on D1 to D7, *"Adopt D with all its recommendations (Recommended)"*; on D8, *"Yes, now
+(Recommended)"*. Taken together, each decision above is ruled as its recommendation:
+
+| # | Ruled | What it binds |
+|---|---|---|
+| D1 | **D**, with B (the standalone production clone) as the named fallback | the main checkout becomes the production checkout, written only by scheduled jobs; section 5.5's "what would change it" stays the trigger for B or C |
+| D2 | **(a)** | Brad's primary session moves to a named linked worktree; every interactive session works in one (W1.2) |
+| D3 | **(a)** | the write barrier is a Claude Code hook in user settings; it WARNS for a week, then BLOCKS (W1.1, then W2.1). It ships warn-only under procedure P1 of `design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md` section 4.4 |
+| D4 | **(b)** | the stray-file quarantine switches on only after W0.3's ownership list reads 0 unregistered producer paths for 7 clean days; `intruder_policy = wait` (today's rule) stays as the switch position (W2.2) |
+| D5 | **(b)** | the bot lands through `push-main` from the production checkout, with its own sync-then-push tail kept as the fallback (W2.3) |
+| D6 | **(a)** | one lock, `Global\tc-capture-run` (lock order 0), for every committing scheduled job: graph nightly, harvest and push-data take it (W2.3) |
+| D7 | **(a)** | the 06:30 to 09:00 rule stays until Stage 2's bars (section 10) hold, then retires by a CLAUDE.md edit (W3.2) |
+| D8 | **(a)** | W0.2 now, ahead of the rest; it is being landed by a sibling session in `lib/checkout-sync.ps1`, not by this plan's builder |
 
 ## 14. Evidence register
 
