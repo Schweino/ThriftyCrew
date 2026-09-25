@@ -69,6 +69,35 @@ fi
 # temp repo still clears its own environment first (lib/git-repo-env.ps1): a temp-repo `git add` under this
 # hook would write the commit's index. ops/test-precommit-hook.ps1 drives both halves from a linked worktree.
 unset GIT_DIR GIT_WORK_TREE GIT_COMMON_DIR GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_PREFIX GIT_NAMESPACE
+
+# ---- THE PRODUCTION CHECKOUT, WARN ONLY (2026-09-25, design/PLAN-bot-dedicated-checkout-2026-09-25.md W1.1) -----
+# Under design D the main checkout is the PRODUCTION checkout: only scheduled jobs commit there, and every session
+# commits from a linked worktree. A commit made IN the production checkout by anything that is not the pipeline
+# (author smp-pipeline-bot, or TC_BOT_COMMIT=1: ops/verify-bot-commit-scope.ps1's Test-IsBotCommit) is WARNED on
+# stderr and recorded, one row, in %LOCALAPPDATA%\ThriftyCrew\production-barrier\commits-<date>.jsonl. It NEVER
+# refuses in Stage 1 and it touches nothing else. The production checkout is the toplevel equal to
+# TC_PRODUCTION_ROOT (default C:/Codex/ThriftyCrew), so a linked worktree, a rehearsal clone and a fixture repo never
+# warn unless a fixture names itself production. Measured before it landed: 110 session commits were made on the
+# main checkout's local main between 09-16 and 09-24 (the plan's section 2.4).
+pb_root="${TC_PRODUCTION_ROOT:-C:/Codex/ThriftyCrew}"
+pb_top="$(printf '%s' "$repo" | tr '\\' '/' | tr '[:upper:]' '[:lower:]')"
+pb_want="$(printf '%s' "$pb_root" | tr '\\' '/' | sed 's:/*$::' | tr '[:upper:]' '[:lower:]')"
+if [ "$pb_top" = "$pb_want" ] && [ "${TC_BOT_COMMIT:-}" != "1" ]; then
+  pb_author="$(git var GIT_AUTHOR_IDENT 2>/dev/null | sed 's/ <.*$//')"
+  if [ "$pb_author" != "smp-pipeline-bot" ]; then
+    echo "pre-commit: WARN - this commit is made IN the production checkout ($repo) by '$pb_author'." >&2
+    echo "            Only scheduled jobs commit here now; a session commits from a linked worktree under" >&2
+    echo "            .claude/worktrees/ and lands with ops/push-main.ps1. Nothing was refused (Stage 1 of design D)." >&2
+    pb_log="${TC_PRODUCTION_BARRIER_LOG:-$(printf '%s' "${LOCALAPPDATA:-$HOME}" | tr '\\' '/')/ThriftyCrew/production-barrier}"
+    pb_n="$(printf '%s\n' "$staged" | grep -c .)"
+    pb_who="$(printf '%s' "$pb_author" | tr -d '"\\')"
+    if mkdir -p "$pb_log" 2>/dev/null; then
+      printf '{"ts":"%s","mode":"warn","kind":"commit","toplevel":"%s","author":"%s","staged":%s}\n' \
+        "$(date '+%Y-%m-%dT%H:%M:%S')" "$pb_top" "$pb_who" "${pb_n:-0}" >> "$pb_log/commits-$(date '+%Y-%m-%d').jsonl" 2>/dev/null || true
+    fi
+  fi
+fi
+
 checker="$repo/ops/verify-bulk-edit.ps1"
 
 # A MISSING CHECKER MUST NOT READ AS A PASS. That is the fail-open-reads-as-empty class, and it is exactly

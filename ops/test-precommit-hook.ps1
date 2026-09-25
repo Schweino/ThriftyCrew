@@ -305,6 +305,40 @@ exit 0
   $cq = Try-Commit -Work $wq -Paths @('grocery/out/regular/day1.json')   # reach-fixture-ok: the same %TEMP% seed file, committed by path
   T 'CLEAN TWIN a PARTIAL commit of a data file from a linked worktree still lands' $cq.Landed $cq.Text
 
+  # ---- THE PRODUCTION CHECKOUT ARM, WARN ONLY (2026-09-25, design/PLAN-bot-dedicated-checkout-2026-09-25.md W1.1) --
+  # A fixture repo names ITSELF production through TC_PRODUCTION_ROOT; every row goes to a per-run log directory.
+  $pbLog = Join-Path $env:TEMP ('hookpb-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  [void]$made.Add($pbLog)
+  $env:TC_PRODUCTION_BARRIER_LOG = $pbLog
+  $pbRows = { $f = @(Get-ChildItem -LiteralPath $pbLog -Filter 'commits-*.jsonl' -ErrorAction SilentlyContinue); if ($f.Count) { @([IO.File]::ReadAllLines($f[0].FullName)).Count } else { 0 } }
+  $wpb = New-HookRepo
+  $env:TC_PRODUCTION_ROOT = $wpb
+  'x' | Set-Content (Join-Path $wpb 'design\PLAN-p.md')
+  & git -C $wpb add -- 'design/PLAN-p.md' | Out-Null
+  $cpb = Try-Commit -Work $wpb
+  T 'MUST FIRE  a SESSION commit in the production checkout warns by name, lands, and writes one row' `
+    ($cpb.Landed -and ($cpb.Text -match 'WARN - this commit is made IN the production checkout') -and ((& $pbRows) -eq 1)) ("rows=" + (& $pbRows) + " " + $cpb.Text)
+  'y' | Set-Content (Join-Path $wpb 'grocery\out\regular\day3.json')   # reach-fixture-ok: a %TEMP% hook repo's own seed directory
+  & git -C $wpb add -- 'grocery/out/regular/day3.json' | Out-Null   # reach-fixture-ok: the same %TEMP% file
+  $cpb2 = Try-Commit -Work $wpb -AsBot
+  T 'MUST NOT FIRE  the pipeline''s own commit in the production checkout is not warned (Test-IsBotCommit''s author)' `
+    ($cpb2.Landed -and ($cpb2.Text -notmatch 'production checkout') -and ((& $pbRows) -eq 1)) ("rows=" + (& $pbRows) + " " + $cpb2.Text)
+  'z' | Set-Content (Join-Path $wpb 'design\PLAN-q.md')
+  & git -C $wpb add -- 'design/PLAN-q.md' | Out-Null
+  $env:TC_BOT_COMMIT = '1'
+  $cpb3 = Try-Commit -Work $wpb
+  Remove-Item -LiteralPath 'Env:\TC_BOT_COMMIT' -ErrorAction SilentlyContinue
+  T 'MUST NOT FIRE  TC_BOT_COMMIT=1 is the pipeline whatever the author (no warning, no row)' `
+    (($cpb3.Text -notmatch 'production checkout') -and ((& $pbRows) -eq 1)) ("rows=" + (& $pbRows) + " " + $cpb3.Text)
+  $wpbl = New-LinkedWorktree $wpb
+  New-Item -ItemType Directory -Force (Join-Path $wpbl 'design') | Out-Null
+  'w' | Set-Content (Join-Path $wpbl 'design\PLAN-r.md')
+  & git -C $wpbl add -- 'design/PLAN-r.md' | Out-Null
+  $cpb4 = Try-Commit -Work $wpbl
+  T 'MUST NOT FIRE  a session commit from a LINKED worktree of the production repo lands with no warning' `
+    ($cpb4.Landed -and ($cpb4.Text -notmatch 'production checkout') -and ((& $pbRows) -eq 1)) ("rows=" + (& $pbRows) + " " + $cpb4.Text)
+  Remove-Item -LiteralPath 'Env:\TC_PRODUCTION_ROOT' -ErrorAction SilentlyContinue
+
   # ---- --no-verify IS STILL THE LOUD BYPASS ----------------------------------------------------------
   # It is deliberate, and audit-hook-installed asserts the hook is present so skipping it is a choice.
   $w6 = New-HookRepo
@@ -324,5 +358,6 @@ exit 0
   exit 0
 } finally {
   Remove-Item -LiteralPath 'Env:\TC_PRECOMMIT_PROBE_OUT' -ErrorAction SilentlyContinue
+  foreach ($v in @('TC_PRODUCTION_ROOT', 'TC_PRODUCTION_BARRIER_LOG', 'TC_BOT_COMMIT')) { Remove-Item -LiteralPath ('Env:\' + $v) -ErrorAction SilentlyContinue }
   foreach ($d in $made) { Remove-Item -LiteralPath $d -Recurse -Force -ErrorAction SilentlyContinue }
 }

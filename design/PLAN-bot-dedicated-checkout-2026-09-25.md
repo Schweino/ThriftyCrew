@@ -490,6 +490,15 @@ from a session warns; MUST NOT FIRE a Write inside `.claude\worktrees\<name>\`; 
 commit (author `smp-pipeline-bot` or `TC_BOT_COMMIT=1`, the test `ops/verify-bot-commit-scope.ps1` already makes with
 `Test-IsBotCommit`); CLEAN TWIN a relative path
 inside a worktree still resolves to the worktree.
+**Built 2026-09-25.** The hook is `ops/hooks/claude/production_barrier.py` (warn only: one row per write in
+`%LOCALAPPDATA%\ThriftyCrew\production-barrier\writes-<date>.jsonl`, and one context note the first time in a session;
+exit 0 on every path). The commit half is a self-contained block in `ops/hooks/pre-commit` (a row per warned commit in
+`commits-<date>.jsonl` beside it; the production checkout is the toplevel equal to `TC_PRODUCTION_ROOT`, default
+`C:/Codex/ThriftyCrew`). **Both go live only when the main checkout carries them**: the settings entry launches the
+main checkout's copy and exits 0 while it is absent, and the pre-commit copy is installed into the shared
+`.git\hooks` by `ops/install-hooks.ps1` only after the main checkout has synced past it, because
+`ops/audit-hook-installed.ps1` compares the installed hook with the main checkout's `ops\hooks` and would page STALE
+in between. The main checkout was 39 behind origin and wedged on `degraded/replay` when this landed (W0.2's case).
 
 **W1.2 Brad's primary session moves to a worktree** (D2). Not code: the desktop session starts in a named linked
 worktree, and the CLAUDE.md "Spawned agents run in worktrees" rule becomes "every session runs in a worktree; the main
