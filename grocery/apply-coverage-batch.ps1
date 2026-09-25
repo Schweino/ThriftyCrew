@@ -128,6 +128,8 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
 . (Join-Path $root 'native-lib.ps1')   # Invoke-NativeScript
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\lf-write.ps1')   # Write-TcLfFile, under Write-TcCommoditiesFile
+. (Join-Path $root 'commodity-rule-text-lib.ps1')   # Add-TcCommodityRulePattern: the batch edits the rule TEXT, never re-serialises the file
 # EVERY POWERSHELL CHILD BELOW RUNS THROUGH Invoke-BatchChild (2026-09-11). Under 'Stop' a redirected native
 # child's first stderr line is a terminating throw in PS 5.1, and a throw between the rule edit and its Revert
 # would leave the edit applied. Invoke-NativeScript runs the child under Continue and returns its real exit
@@ -240,6 +242,62 @@ if ($SelfTest) {
   $rxMA = New-CommodityMatcher -Commodities $rxAfter -GlobalExclude $rxG
   $rxTide = Resolve-Commodity -Matcher $rxMA -Name 'Tide Original Liquid Laundry Detergent'
   _BT 'CLEAN TWIN  the already-visible liquid still lands in laundry-detergent under the relaxed rules' ($rxTide -and $rxTide.id -eq 'laundry-detergent')
+  # ---- THE RULE WRITE (2026-09-25, Q-laundry-rule-gaps): the batch writes the bytes a hand edit would. The round trip runs
+  # over the REAL committed file, so a layout the writer has never met fails here before a batch meets it.
+  . (Join-Path (Split-Path $root -Parent) 'lib\git-blob-lib.ps1')
+  $blob = Get-CommittedBlobBytes -Repo (Split-Path $root -Parent) -Spec 'HEAD:grocery/commodities.json'
+  $scr = Join-Path ([IO.Path]::GetTempPath()) ('acb-st-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $scr -ErrorAction Stop | Out-Null
+  try {
+    if ($null -eq $blob) { _BT 'ROUND TRIP  HEAD:grocery/commodities.json could not be read, so the writer was never judged' $false }
+    else {
+      $real = (New-Object Text.UTF8Encoding($false)).GetString($blob)
+      $parsed = ConvertFrom-Json $real
+      $out = Join-Path $scr 'commodities.json'
+      $rt = Add-TcCommodityRulePattern -Text $real -Id ([string]$parsed[0].id) -Field include -Pattern ([string]@($parsed[0].include)[0])
+      $null = Write-TcCommoditiesFile -Path $out -Text $rt
+      $same = { param($a, $b) [string]::Equals([Convert]::ToBase64String($a), [Convert]::ToBase64String($b), [StringComparison]::Ordinal) }
+      _BT ('ROUND TRIP  the real HEAD:grocery/commodities.json (' + $blob.Length + ' bytes) written back through the batch writer, with a pattern it already holds, is byte-identical to the blob') (& $same ([IO.File]::ReadAllBytes($out)) $blob)
+      $null = Write-TcCommoditiesFile -Path $out -Text ($rt -replace "`n", "`r`n")
+      _BT 'CLEAN TWIN  the same file read from a CRLF checkout is written back as the LF, BOM-less blob' (& $same ([IO.File]::ReadAllBytes($out)) $blob)
+      $bo = @($parsed | Where-Object { $_.PSObject.Properties['band_override'] })[0]
+      $pat = 'jalape[n' + [char]0xF1 + ']o<x>&''y"z\d'
+      $ed = Add-TcCommodityRulePattern -Text $real -Id ([string]$bo.id) -Field exclude -Pattern $pat
+      $la = $real -split "`n"; $lb = $ed -split "`n"
+      $i = 0; while ($i -lt $la.Count -and [string]::Equals($la[$i], $lb[$i], [StringComparison]::Ordinal)) { $i++ }
+      $tailSame = ($lb.Count -eq $la.Count + 1) -and ($i -lt $la.Count)
+      if ($tailSame) { for ($k = $i + 1; $k -lt $la.Count; $k++) { if (-not [string]::Equals($la[$k], $lb[$k + 1], [StringComparison]::Ordinal)) { $tailSame = $false; break } } }
+      _BT ('MECHANISM  one exclude added to ' + $bo.id + ' (a commodity with a one-line band_override) is ONE new line plus a comma on the element before it, every other line byte-identical') ($tailSame -and [string]::Equals($lb[$i], $la[$i] + ',', [StringComparison]::Ordinal))
+      _BT 'MUST FIRE  the new element sits at the indent of its siblings and is escaped the way the file already is: \u00f1 \u003c \u003e \u0026 \u0027, quote and backslash, and the file stays pure ASCII' ($tailSame -and [string]::Equals($lb[$i + 1], ([regex]::Match($la[$i], '^ *').Value + '"jalape[n\u00f1]o\u003cx\u003e\u0026\u0027y\"z\\d"'), [StringComparison]::Ordinal) -and ($ed -notmatch '[^\x00-\x7f]'))
+      # relax_global (the -Relax batch): the text must parse to exactly what the batch's in-memory edit makes, both where the
+      # array exists and where Add-Member has to create it as the LAST property.
+      foreach ($rxCase in @(@('present', @($parsed | Where-Object { $_.PSObject.Properties['relax_global'] })[0]), @('absent', @($parsed | Where-Object { -not $_.PSObject.Properties['relax_global'] })[0]))) {
+        $rxObjs = ConvertFrom-Json $real
+        $rxC = @($rxObjs | Where-Object { $_.id -eq $rxCase[1].id })[0]
+        if (-not $rxC.PSObject.Properties['relax_global']) { $rxC | Add-Member -NotePropertyName relax_global -NotePropertyValue @() }
+        $rxC.relax_global = @($rxC.relax_global) + 'probe\s+relax'
+        $rxText = Add-TcCommodityRulePattern -Text $real -Id ([string]$rxCase[1].id) -Field relax_global -Pattern 'probe\s+relax'
+        $rxGrew = (($rxText -split "`n").Count - $la.Count)
+        $rxWant = if ($rxCase[0] -eq 'absent') { 3 } else { 1 }
+        _BT ('MECHANISM  a relax_global token on a commodity whose array is ' + $rxCase[0] + ' (' + $rxCase[1].id + ') adds ' + $rxWant + ' line(s) and parses to exactly the batch''s in-memory Add-Member edit') (($rxGrew -eq $rxWant) -and [string]::Equals((ConvertTo-Json -InputObject (ConvertFrom-Json $rxText) -Depth 12 -Compress), (ConvertTo-Json -InputObject $rxObjs -Depth 12 -Compress), [StringComparison]::Ordinal))
+        if ($rxCase[0] -eq 'absent') { _BT ('MUST FIRE  the created relax_global on ' + $rxCase[1].id + ' is laid out as PS 5.1 writes one: the key at 8, the element at 29, the close at 25, after the old last property') ((($rxText -split "`n") -join "`n").Contains("],`n        `"relax_global`":  [`n" + (' ' * 29) + '"probe\\s+relax"' + "`n" + (' ' * 25) + "]`n    }")) }
+      }
+      $edAll = ConvertFrom-Json $ed
+      $edBo = @($edAll | Where-Object { $_.id -eq $bo.id })[0]
+      _BT 'MECHANISM  the edited text parses, and that exclude list is the old one plus the pattern, exactly' ([string]::Equals((ConvertTo-Json -InputObject @(@($bo.exclude) + $pat) -Compress), (ConvertTo-Json -InputObject @($edBo.exclude) -Compress), [StringComparison]::Ordinal))
+    }
+    $fx = "[`n    {`n        `"id`":  `"a`",`n        `"include`":  [`n                        `"x`"`n                    ],`n        `"exclude`":  [`n`n                    ]`n    }`n]"
+    $fxWant = "[`n    {`n        `"id`":  `"a`",`n        `"include`":  [`n                        `"x`"`n                    ],`n        `"exclude`":  [`n                        `"y`"`n                    ]`n    }`n]"
+    _BT 'MECHANISM  an EMPTY array (PS 5.1 writes one blank line between the brackets) takes its first element on that line' ([string]::Equals((Add-TcCommodityRulePattern -Text $fx -Id 'a' -Field exclude -Pattern 'y'), $fxWant, [StringComparison]::Ordinal))
+    $threw = $false; try { $null = Add-TcCommodityRulePattern -Text $fx -Id 'no-such-id' -Field include -Pattern 'y' } catch { $threw = $true }
+    _BT 'MUST FIRE  an id the file does not hold throws, never appends to some other commodity' $threw
+    $fxDup = $fx.Substring(0, $fx.Length - 2) + ",`n    {`n        `"id`":  `"a`",`n        `"include`":  [`n                        `"z`"`n                    ]`n    }`n]"
+    $threw = $false; try { $null = Add-TcCommodityRulePattern -Text $fxDup -Id 'a' -Field include -Pattern 'y' } catch { $threw = $true }
+    _BT 'MUST FIRE  an id written on two commodities throws rather than editing whichever comes first' $threw
+    $fxObj = $fx.Replace("`"include`":  [`n                        `"x`"", "`"include`":  [`n                        { `"x`":  1 }")
+    $threw = $false; try { $null = Add-TcCommodityRulePattern -Text $fxObj -Id 'a' -Field include -Pattern 'y' } catch { $threw = $true }
+    _BT 'MUST FIRE  an array that is not one quoted string per line throws rather than guessing at its layout' $threw
+  } finally { Remove-Item -LiteralPath $scr -Recurse -Force -ErrorAction SilentlyContinue }
   Write-Output ('apply-coverage-batch self-test ' + $(if ($bad -eq 0) { 'pass' } else { 'FAIL' }) + ': ' + ($n - $bad) + ' of ' + $n + ' case(s)')
   exit $(if ($bad -eq 0) { 0 } else { 1 })
 }
@@ -315,19 +373,19 @@ Write-Output ("baseline guards: rc=" + $gBase.ExitCode + ", " + $script:BatchBas
 
 # ---- edit
 $coms = Get-Content $comFile -Raw -Encoding UTF8 | ConvertFrom-Json
-$added = 0; $addedEx = 0
+$added = 0; $addedEx = 0; $ruleEdits = @()
 foreach ($id in $Patterns.Keys) {
   $c = @($coms | Where-Object { $_.id -eq $id })[0]
   if (-not $c) { throw "commodity '$id' not found" }
   foreach ($p in @($Patterns[$id])) {
-    if (@($c.include) -notcontains $p) { $c.include = @($c.include) + $p; $added++ }
+    if (@($c.include) -notcontains $p) { $c.include = @($c.include) + $p; $added++; $ruleEdits += , @($id, 'include', [string]$p) }
   }
 }
 foreach ($id in $Excludes.Keys) {
   $c = @($coms | Where-Object { $_.id -eq $id })[0]
   if (-not $c) { throw "commodity '$id' not found" }
   foreach ($p in @($Excludes[$id])) {
-    if (@($c.exclude) -notcontains $p) { $c.exclude = @($c.exclude) + $p; $addedEx++ }
+    if (@($c.exclude) -notcontains $p) { $c.exclude = @($c.exclude) + $p; $addedEx++; $ruleEdits += , @($id, 'exclude', [string]$p) }
   }
 }
 $addedRx = 0
@@ -336,10 +394,21 @@ foreach ($id in $Relax.Keys) {
   if (-not $c) { throw "commodity '$id' not found" }
   if (-not $c.PSObject.Properties['relax_global']) { $c | Add-Member -NotePropertyName relax_global -NotePropertyValue @() }
   foreach ($p in @($Relax[$id])) {
-    if (@($c.relax_global) -notcontains $p) { $c.relax_global = @($c.relax_global) + $p; $addedRx++ }
+    if (@($c.relax_global) -notcontains $p) { $c.relax_global = @($c.relax_global) + $p; $addedRx++; $ruleEdits += , @($id, 'relax_global', [string]$p) }
   }
 }
-($coms | ConvertTo-Json -Depth 12) | Set-Content $comFile -Encoding UTF8
+# THE WRITE IS A TEXT EDIT (2026-09-25, Q-laundry-rule-gaps, plan-2026-09-25-3). A ConvertTo-Json | Set-Content re-serialise
+# turned every \u00XX rule escape into a raw character, added a BOM, wrote CRLF over an eol=lf blob and reflowed every
+# one-line band_override, so one pattern was an 85+/45- diff and the soundness -Accept recorded a rules_hash the committed
+# file never matched. Each added pattern is now inserted into its array's text, and the result must parse to exactly the
+# objects $coms holds before a byte is written; a mismatch throws with the file untouched.
+$comText = [IO.File]::ReadAllText($comFile, [Text.Encoding]::UTF8) -replace "`r`n", "`n"
+foreach ($ed in $ruleEdits) { $comText = Add-TcCommodityRulePattern -Text $comText -Id $ed[0] -Field $ed[1] -Pattern $ed[2] }
+$comParsed = ConvertFrom-Json $comText
+if (-not [string]::Equals((ConvertTo-Json -InputObject $comParsed -Depth 12 -Compress), (ConvertTo-Json -InputObject $coms -Depth 12 -Compress), [StringComparison]::Ordinal)) {
+  throw 'apply-coverage-batch: the text edit of commodities.json does not parse to the edited rules - nothing was written'
+}
+$null = Write-TcCommoditiesFile -Path $comFile -Text $comText
 Write-Output ("added {0} include pattern(s) across {1} commodit(y/ies), {2} exclude pattern(s) across {3}, {4} relax token(s) across {5}" -f $added, @($Patterns.Keys).Count, $addedEx, @($Excludes.Keys).Count, $addedRx, @($Relax.Keys).Count)
 
 function Revert([string]$why) {
