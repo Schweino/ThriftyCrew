@@ -2772,13 +2772,16 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       # pre-field row still pricing the board while the SAME item id is refused as FC in a fresher one.
       # Advisory and drops nothing - the browser agent's shelf-badge check is the only instrument that can
       # answer, so each doubted cell is queued for it.
-      # It is research-worklist.json's only writer since 2026-09-22 and writes it whole from today's doubts.
+      # It wrote research-worklist.json until 2026-09-25, when that file was retired for having no reader (c9f0f3).
       try {
         # NO 2>&1: EAP is 'Stop' here and a native child's redirected stderr becomes a terminating throw.
         $icOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-instore-channel.ps1')
         foreach ($ln in @($icOut)) { Log ('  ' + $ln) }
         $icCrown = @($icOut | Where-Object { "$_" -match '^\s*CROWN\s' })
         if ($icCrown.Count) { $summary += ("REVIEW    instore-channel: " + $icCrown.Count + " commodity CROWN(s) price from a row that cannot prove an in-store channel - queued for the browser shelf-badge check (out\instore-channel-doubt.json)") }
+        # A non-crown UNREACHED doubt used to reach only research-worklist.json, which nothing read (retired 2026-09-25, c9f0f3).
+        $icUnr = @($icOut | Where-Object { "$_" -match '^\s{8}UNREACHED\s' })
+        if ($icUnr.Count) { $summary += ("REVIEW    instore-channel: " + $icUnr.Count + " non-crown cell(s) price from a row the engine's in-store refusal did not reach (out\instore-channel-doubt.json)") }
       } catch { Log ('audit-instore-channel threw: ' + $_.Exception.Message) }
       # COST-FLAG ALERT (2026-07-26 scale hardening): an unpriced ingredient line silently makes a recipe
       # look CHEAPER (the line is dropped from the batch cost). cost-recipes records these to db\cost-flags.txt

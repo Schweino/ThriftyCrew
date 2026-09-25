@@ -5133,9 +5133,11 @@ if ($icA.text -notmatch 'fx-clean') {
 } else { Bad 'instore-channel doubted a row that records STORE fulfillment - the finding set is not selective and will be ignored' }
 if ($icA.rc -eq 0) { Ok 'instore-channel stays ADVISORY (exit 0) with findings: the answer lives at the store, so it queues a shelf-badge check rather than holding the publish' }
 else { Bad ('instore-channel exited ' + $icA.rc + ' with findings - it must not block the chain on a question it cannot answer itself') }
-if ($icA.worklist -match 'channel doubt' -and $icA.worklist -match 'SHELF BADGE') {
-  Ok 'instore-channel queues each doubted cell into research-worklist.json for the browser agent'
-} else { Bad 'instore-channel found doubt but queued nothing - the finding dies here instead of reaching the only instrument that can settle it' }
+# research-worklist.json had no reader (2026-09-25, queue 2026-09-19-c9f0f3): the doubt must reach the OUTPUT that
+# check-ad-cycles logs, and the unread file must not come back.
+if ($icA.text -match 'UNREACHED' -and -not $icA.worklist) {
+  Ok 'instore-channel prints each unreached doubt in its output and writes no research-worklist.json (a queue with no reader)'
+} else { Bad ('instore-channel either lost its UNREACHED line or writes research-worklist.json again, which nothing reads. worklist bytes=' + $icA.worklist.Length) }
 $icB = IcFixture 'instore-channel-clean'
 if ($icB.text -match 'every published cell traces to a row that either records an in-store channel or predates the field with no fresher refusal' -and $icB.rc -eq 0) {
   Ok 'instore-channel CLEAN TWIN: a wholly pre-field capture with no fresher channel evidence stays SILENT (absence is not a verdict)'

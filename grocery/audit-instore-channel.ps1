@@ -21,7 +21,7 @@
   WHAT IT DOES NOT DO: drop anything. El Guapo bay leaves and Great Value apple cider vinegar are almost
   certainly real Omaha shelf items, and an automatic refusal would overstate those cells in the other
   direction. The only instrument that can answer is a shelf-badge check by the browser agent, so every
-  doubted cell is queued into out\research-worklist.json for it. That check is not theoretical: run on
+  doubted cell was queued into out\research-worklist.json for it (until 2026-09-25, see Output below). That check is not theoretical: run on
   2026-09-01 it cleared Shirakiku white miso (Pickup today, price stands) and condemned the Nalley
   "(4 pack)" beef stew (out of stock in both pack sizes, no pickup, no delivery), which had been holding
   the beef-stew crown at 5.2 c/oz against a true cheapest of 15.4.
@@ -52,17 +52,19 @@
   Advisory: exit 0 even with findings, because the answer lives at the store and not here. A doubted cell
   that is ALSO the commodity crown prints a loud CROWN line so guards output carries it.
 
-  Output: out\instore-channel-doubt.json, plus out\research-worklist.json, which since 2026-09-22 this script
-  alone writes, whole, from today's unreached doubts (audit-sale-fallback's gaps moved into the capture plans).
+  Output: out\instore-channel-doubt.json ONLY. research-worklist.json is no longer written (2026-09-25, queue
+  2026-09-19-c9f0f3): after 2026-09-22 this script was its only writer and NOTHING read it - no script, and the
+  browser SKILL's section D says only "do not work it for fallbacks". A queue with no reader is a finding that dies
+  silently. An UNREACHED doubt is a defect in the engine's refusal (see the note written into the report), so it
+  is surfaced in this script's output, which check-ad-cycles logs, and in instore-channel-doubt.json.
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([string]$OutDir = "", [string]$CompareFile = "", [string]$WorklistFile = "", [string]$AllowlistFile = "", [switch]$NoWorklist)
+param([string]$OutDir = "", [string]$CompareFile = "", [string]$AllowlistFile = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $contract = Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1'
 if (Test-Path $contract) { . $contract }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
-if (-not $WorklistFile) { $WorklistFile = Join-Path $OutDir 'research-worklist.json' }
 # THE SAME EXCEPTION LIST THE ENGINE READS, not a second opinion about it. An auditor that disagrees with
 # the engine is a permanent false alarm - the reason instore-lib.ps1 exists as one file in the first place.
 . (Join-Path $root 'instore-lib.ps1')
@@ -217,32 +219,10 @@ $rep = [ordered]@{
 }
 $rep | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $OutDir 'instore-channel-doubt.json') -Encoding UTF8
 
-# ---- APPEND to the worklist, never overwrite it -----------------------------------------------------
-# Only the UNREACHED ones. A reviewed exception has already had its shelf-badge check; sending it back to
-# the browser agent every morning is how a queue stops being read.
-# THIS SCRIPT IS NOW THE FILE'S ONLY WRITER (2026-09-22, plan-2026-09-22-9): audit-sale-fallback no longer rewrites it
-# wholesale each morning (its gaps are owed in the stores' capture plans), so an append would only ever grow. It is
-# written whole from TODAY's unreached doubts, and an empty day writes an empty list rather than leaving yesterday's.
-if (-not $NoWorklist) {
-  $existing = New-Object System.Collections.Generic.List[object]
-  $have = @{}
-  foreach ($e in $existing) { $have[(("" + $e.commodity) + '|' + ("" + $e.store))] = $true }
-  $added = 0
-  foreach ($d in $unreached) {
-    $k = $d.commodity + '|' + $d.store
-    if ($have.ContainsKey($k)) { continue }
-    $have[$k] = $true; $added++
-    $existing.Add([pscustomobject]@{
-      commodity = $d.commodity; store = $d.store
-      reason = ("channel doubt ({0}) - check the SHELF BADGE for '{1}': is it actually stocked in the Omaha store, or is this an online-only listing? {2}" -f $d.why, $d.item, $d.detail)
-    })
-  }
-  ([ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); items = $existing }) | ConvertTo-Json -Depth 5 | Set-Content $WorklistFile -Encoding UTF8
-  # PARENTHESES ARE LOAD-BEARING: `-f $a, $b - $c` binds as `($string -f $a, $b) - $c`, which tries to
-  # cast the formatted line to an int and dies with "Input string was not in a correct format".
-  $kept = ($existing.Count - $added)
-  Write-Output ("instore-channel: {0} cell(s) queued into research-worklist.json (kept {1} pre-existing entries)" -f $added, $kept)
-}
+# ---- NO WORKLIST (2026-09-25, queue 2026-09-19-c9f0f3) ---------------------------------------------
+# This block wrote out\research-worklist.json, whole, from today's unreached doubts. Since 2026-09-22 it was the
+# file's only writer and no script or live prompt read it, so every entry died there. Removed rather than kept as
+# a queue nobody works; the unreached doubts stay in instore-channel-doubt.json and in the lines printed below.
 
 if ($doubt.Count) {
   Write-Output ("instore-channel: {0} published cell(s) cannot prove an in-store channel from the capture alone - {1} REVIEWED on the live page, {2} the engine's refusal did not reach ({3} of the {0} hold the commodity crown)" -f $doubt.Count, $reviewedCells.Count, $unreached.Count, $rep.crown_count)
@@ -253,7 +233,7 @@ if ($doubt.Count) {
     if ($d.reviewed) { Write-Output ("         kept deliberately: {0}" -f $d.reviewed) }
     else { Write-Output ("         {0}" -f $d.detail) }
   }
-  if ($unreached.Count) { Write-Output '  -> nothing dropped here; the UNREACHED ones are queued for the browser agent shelf-badge check, and each is also a cell instore-lib.ps1 was meant to refuse and did not' }
+  if ($unreached.Count) { Write-Output '  -> nothing dropped here; no worklist is written (nothing read it); each UNREACHED one is a cell instore-lib.ps1 was meant to refuse and did not' }
   else { Write-Output '  -> every one is a reviewed exception; nothing queued' }
 } else {
   Write-Output 'instore-channel: every published cell traces to a row that either records an in-store channel or predates the field with no fresher refusal'

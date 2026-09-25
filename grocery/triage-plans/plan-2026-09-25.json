@@ -369,7 +369,7 @@
         ],
         "exact_change": "per plan-2026-09-22-9.json leaves_open; edit the live prompt then mirror it"
       },
-      "leaves_open": "the prose-only research-worklist reader until built",
+      "leaves_open": "nothing",
       "leaves_open_occurrences": 0,
       "proof": {
         "must_fire_case": "audit-sale-fallback reports a gap no plan-owned worklist carries",
@@ -380,12 +380,12 @@
           "2026-09-19-c9f0f3"
         ]
       },
-      "resolution_note": "Transcribed for the money lane; not implemented in this plan.",
+      "resolution_note": "research-worklist.json retired (no reader existed); unreached channel doubts now surface as a REVIEW summary line in check-ad-cycles. Sale-fallback gaps all owned on 2026-09-25 (11/11). No board or price effect, needs_publish false.",
       "lane": "money",
       "est_tool_calls": 25,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
+      "status": "deviated",
+      "premise_verified": false,
+      "deviation": "Re-measured 2026-09-25 08:19 out\\sale-fallback-gaps.json: 11 gaps, 11 owned by capture-plan:<store>, 0 escalated, 0 unproven, so the '2 on-sale items NO ONE IS WORKING' condition no longer reproduces; audit-sale-fallback already routes ownership through Get-SaleFallbackConsumer/Get-CapturePlan (shipped 2026-09-22, -SelfTest exit 0), so no change there. The live browser SKILL section D did not direct anyone to work research-worklist.json at all (it said only 'do not work it for fallbacks'), so the channel-doubt entries had NO reader, prose or code. Chose REMOVE over a new reader: audit-instore-channel.ps1 no longer writes research-worklist.json (its own report note says an UNREACHED doubt is a refusal defect, not a store question), check-ad-cycles now adds a REVIEW summary line for non-crown UNREACHED doubts (crown ones already had one), live SKILL line 195 and its design/ready-for-brad mirror say the file is retired, test-auditors u098 asserts UNREACHED printed and no worklist written.",
       "shipped_commit": null,
       "prior_closes": [
         "2026-09-06-22b4dd"
@@ -404,7 +404,8 @@
         "risk": "the live browser prompt must be edited then mirrored; no price moves"
       },
       "rollback": "revert the audit and prompt edits",
-      "freshness": "carried from plan-2026-09-22-9.json; re-read sale-fallback-gaps.json before building"
+      "freshness": "carried from plan-2026-09-22-9.json; re-read sale-fallback-gaps.json before building",
+      "proof_result": "instore-channel-mustfire fixture: exit 0, 3 UNREACHED lines, no research-worklist.json; instore-channel-clean: exit 0, 0 UNREACHED, no worklist; audit-sale-fallback -SelfTest exit 0 'SALE-FALLBACK SELF-TEST PASS'. History: 22 instore-channel log lines since 2026-09-02, 4 with unreached>0, all crowns, 0 non-crown."
     },
     {
       "queue_id": "2026-09-23-5ad03d",

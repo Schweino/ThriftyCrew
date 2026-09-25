@@ -188,8 +188,7 @@ out\browser-capture-due-<date>.flag is a hint and it has been INCOMPLETE before 
      SaleFallbacks, from what the expiring sales leave and always after them, so they arrive in the
      store's daily worklist with the other terms: find the cheapest NON-sale everyday item and add it
      to that store's out\regular\ file like any rotation term. out\research-worklist.json is NO
-     LONGER the sale-fallback list (it holds only in-store channel-doubt entries); do not work it
-     for fallbacks.
+     LONGER written at all (retired 2026-09-25, it had no reader); ignore it if a stale copy exists.
   E. PRODUCT-URL CHIPS - out\url-worklist.json, the "See item" links, across ALL SEVEN stores
      (446 outstanding on 2026-08-22). Search the chip's exact `term`, confirm the price matches, and
      write {id,url,price,size,name} to out\url-inputs\store-<store>N-urls.json.
