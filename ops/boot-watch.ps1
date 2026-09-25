@@ -361,7 +361,7 @@ if ($SelfTest) {
     $cap = @($rows | Where-Object { $_.name -eq 'TC Grocery Daily Capture 0800' })
     T 'MUST FIRE  the founding case: the daily capture lost two whole days (09-15, 09-16)' (($cap.Count -eq 1) -and ($cap[0].lostDays -eq 2) -and ($cap[0].kind -eq 'daily')) (($cap | ForEach-Object { "$($_.kind) lost=$($_.lostDays)" }) -join ';')
     T 'MUST FIRE  and that pages' (Test-BwBootPage $rows) 'no page'
-    T 'CLEAN TWIN a logon-triggered task is never counted as missing a run' (@($rows | Where-Object { $_.name -eq 'TC Approvals Page' }).Count -eq 0) 'listed'
+    T 'MUST NOT FIRE a logon-triggered task is never counted as missing a run' (@($rows | Where-Object { $_.name -eq 'TC Approvals Page' }).Count -eq 0) 'listed'
     $odd = @($rows | Where-Object { $_.name -eq 'TC Odd' })
     T 'MUST FIRE  a trigger kind this cannot read is listed as UNREADABLE, never as nothing missed' (($odd.Count -eq 1) -and ($odd[0].kind -eq 'unreadable')) (($odd | ForEach-Object { $_.kind }) -join ';')
     $body = Format-BwBootBody -BootTime $b14 -LogonTime $l17 -Rows $rows -Locked $false
