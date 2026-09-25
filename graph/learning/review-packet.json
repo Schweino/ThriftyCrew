@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T21:44:14",
+  "generated_at": "2026-09-25T05:37:42",
   "reviewer": "claude-fable-medium",
   "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise. hold_clears are NOT proposals to rule on here: each names a promotion hold that has matched nothing on the board for 30 consecutive daily rechecks, with its readings. Clearing one means re-running the full guard suite (promote_aliases.py --gated) and stays with a person (ruling 2026-09-09, backlog I92).",
   "gates": {
@@ -172,6 +172,18 @@
       "payload": "gravy\\s+mix",
       "stage1_confidence": 0.95,
       "rationale": "Matches 'Kinder's Classic Beef Gravy Mix'. 'Gravy mix' is a distinct product category from liquid gravy or gravy powder.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:95f1beaf8a135a7e24d8",
+      "kind": "add_alias",
+      "target": "dried-cranberries",
+      "target_label": null,
+      "payload": "dried\\s+cranberries",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches 'Simple Truth Organic Dried Sweetened Cranberries' by anchoring on the food name 'Dried Cranberries'. This is a clear case of brand/word-order variation for the same commodity.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
@@ -693,6 +705,30 @@
       }
     },
     {
+      "proposal_id": "lp:edf6788b9a2c9c1e42c2",
+      "kind": "add_alias",
+      "target": "artichoke-hearts-canned-jarred",
+      "target_label": null,
+      "payload": "artichokes\\s+in\\s+brine",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Cento Artichokes in Brine'. Anchors on the specific preparation 'in brine' which is standard for canned/jarred hearts, avoiding match to fresh or marinated varieties.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:9991149d3604a5eabfe4",
+      "kind": "add_alias",
+      "target": "canned-pasta-ravioli-spaghettios",
+      "target_label": null,
+      "payload": "annie's\\s+organic.*ravioli",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Annie's Organic Cheesy Ravioli... Canned Pasta'. Anchors on brand + specific pasta type (ravioli) to avoid matching fresh pasta or other canned goods.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
       "proposal_id": "lp:c5a0e98911b2e1a0b373",
       "kind": "add_alias",
       "target": "frozen-broccoli-florets",
@@ -813,6 +849,15 @@
       }
     },
     {
+      "proposal_id": "lp:c469af506ce5b6d480a9",
+      "kind": "add_known_wrong",
+      "target": "donuts",
+      "target_label": null,
+      "payload": "Bakery Fresh Glazed Apple Fritters",
+      "stage1_confidence": 0.85,
+      "rationale": "Apple fritters are a distinct pastry category from donuts (typically ring-shaped or cake-based without the specific fritter shape/ingredients). Mapping them to 'Donuts' would skew price data for both categories."
+    },
+    {
       "proposal_id": "lp:a5c91ae0c05071d0dcde",
       "kind": "add_alias",
       "target": "frozen-cut-green-beans",
@@ -883,6 +928,15 @@
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
+    },
+    {
+      "proposal_id": "lp:1ae826f5286949b353a9",
+      "kind": "add_known_wrong",
+      "target": "brown-gravy-mix-dry-packet",
+      "target_label": null,
+      "payload": "Kinder's Classic Beef Gravy Mix 0.9 oz",
+      "stage1_confidence": 0.8,
+      "rationale": "While 'Beef Gravy' is a type of brown gravy, 'Kinder's' is a specific brand often associated with different flavor profiles or formulations than generic 'Brown Gravy Mix'. However, more importantly, if the commodity is strictly 'Brown Gravy"
     },
     {
       "proposal_id": "lp:6f55b85052f55a2672d4",

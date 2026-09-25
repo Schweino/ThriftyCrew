@@ -65,6 +65,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "eggs",
+        "store":  "Sam\u0027s Club",
+        "unit":  "dozen",
+        "board":  2.41,
+        "link":  1.9707,
+        "ratio":  0.82,
+        "price":  29.56,
+        "size":  "15 dozen",
+        "boardItem":  "Member’s Mark Cage Free Grade AA Large White Eggs, 2 dozen",
+        "linkItem":  "Large Eggs 15 dozen",
+        "board_src":  "main"
+    },
+    {
         "id":  "pasta-sauce",
         "store":  "Aldi",
         "unit":  "oz",
@@ -192,6 +205,19 @@
         "size":  "12 ct",
         "boardItem":  "Millville Frosted Brown Sugar Cinnamon Toaster Tarts Pastries 12 CT",
         "linkItem":  "Millville Frosted Brown Sugar Cinnamon Toaster Tarts Pastries 12 CT",
+        "board_src":  "main"
+    },
+    {
+        "id":  "yukon-gold-potatoes",
+        "store":  "Aldi",
+        "unit":  "lb",
+        "board":  2.1933,
+        "link":  1.86,
+        "ratio":  0.85,
+        "price":  2.79,
+        "size":  "24 oz",
+        "boardItem":  "Farmer\u0027s Promise Yellow Potatoes",
+        "linkItem":  "Bite Size Yellow Potatoes Bag 24 OZ",
         "board_src":  "main"
     },
     {
@@ -606,7 +632,7 @@
         "ratio":  0.52,
         "price":  5.99,
         "size":  "28 oz",
-        "boardItem":  "TABASCO Sriracha Sauce, 11 oz Bottle",
+        "boardItem":  "TABASCO Sriracha Sauce, Hot Sauce",
         "linkItem":  "Huy Fong Sriracha Hot Chili Sauce",
         "board_src":  "recipe"
     },

@@ -247,11 +247,11 @@
                                                                 "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
                                                             },
                                         "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/5626758123",
-                                                        "name":  "Great Value Aerosol Air Freshener, Hawaiian, 8 oz",
+                                                        "url":  "https://www.walmart.com/ip/5508575075",
+                                                        "name":  "Great Value Aerosol Air Freshener, Linen Fresh, 8 oz",
                                                         "price":  "$0.97",
                                                         "size":  "8 oz",
-                                                        "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
+                                                        "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
                   "alfredo-sauce":  {
@@ -316,13 +316,6 @@
                                                                   "size":  "32 oz",
                                                                   "board_pu":  0.1247
                                                               },
-                                              "Fareway":  {
-                                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/314508-fabuloso-multi-purpose-cleaner-lavender-128-fl-oz",
-                                                              "name":  "Fabuloso Multi-Purpose Cleaner, Lavender",
-                                                              "price":  "$8.98",
-                                                              "size":  "128 fl oz",
-                                                              "verified":  "2026-09-13 DERIVED from the price row (same record the board priced)"
-                                                          },
                                               "Walmart":  {
                                                               "url":  "https://www.walmart.com/ip/5080177347",
                                                               "name":  "Great Value Multi Purpose Cleaner, Lavender Scent, 128 fl oz",
@@ -357,7 +350,14 @@
                                                                       "price":  "$10.98",
                                                                       "size":  "210 fl oz",
                                                                       "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                                  }
+                                                                  },
+                                              "Fareway":  {
+                                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39547-fabuloso-multi-purpose-cleaner-lavender-56-fl-oz",
+                                                              "name":  "Fabuloso Multi-Purpose Cleaner, Lavender",
+                                                              "price":  "$4.98",
+                                                              "size":  "56 fl oz",
+                                                              "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                          }
                                           },
                   "all-purpose-flour":  {
                                             "commodity":  "All-Purpose Flour",
@@ -810,13 +810,6 @@
                                                          "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                          "board_pu":  0.0894
                                                      },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24303014-fareway-applesauce-cinnamon-48-oz",
-                                                     "name":  "Fareway Cinnamon Applesauce",
-                                                     "price":  "$3.88",
-                                                     "size":  "48 oz",
-                                                     "verified":  "2026-09-09 DERIVED from the price row (same record the board priced)"
-                                                 },
                                      "Walmart":  {
                                                      "url":  "https://www.walmart.com/ip/10535474",
                                                      "name":  "Motts Original Applesauce Jar, 48 oz Jar",
@@ -844,7 +837,14 @@
                                                   "price":  "$1.95",
                                                   "size":  "6 pk 4 oz",
                                                   "verified":  "2026-09-24 DERIVED from the price row (same record the board priced)"
-                                              }
+                                              },
+                                     "Fareway":  {
+                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24300825-fareway-applesauce-original-48-oz",
+                                                     "name":  "Fareway Original Applesauce",
+                                                     "price":  "$3.88",
+                                                     "size":  "48 oz",
+                                                     "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                 }
                                  },
                   "apricots":  {
                                    "commodity":  "Apricots",
@@ -1601,7 +1601,14 @@
                                                      "price":  "$1.19",
                                                      "size":  "16 oz",
                                                      "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                      "Fareway":  {
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24227952-fareway-baking-soda-16-oz",
+                                                      "name":  "Fareway Baking Soda",
+                                                      "price":  "$0.99",
+                                                      "size":  "16 oz",
+                                                      "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                  }
                                   },
                   "balsamic-vinegar":  {
                                            "commodity":  "Balsamic Vinegar",
@@ -2051,12 +2058,6 @@
                                        },
                   "beef-jerky":  {
                                      "commodity":  "beef-jerky",
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3302949-old-trapper-beef-jerky-teriyaki-naturally-smoked-10-oz",
-                                                     "price":  14.99,
-                                                     "size":  "10 oz",
-                                                     "name":  "Old Trapper Teriyaki Jerky"
-                                                 },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/1746190/jack-link-s-beef-jerky-original",
                                                     "price":  6.99,
@@ -2098,7 +2099,14 @@
                                                              "price":  "$19.98",
                                                              "size":  "18 oz",
                                                              "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                         }
+                                                         },
+                                     "Fareway":  {
+                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3302949-old-trapper-beef-jerky-teriyaki-naturally-smoked-10-oz",
+                                                     "name":  "Old Trapper Teriyaki Jerky",
+                                                     "price":  "$15.99",
+                                                     "size":  "10 oz",
+                                                     "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                 }
                                  },
                   "beef-stew":  {
                                     "commodity":  "Canned Beef Stew",
@@ -2579,12 +2587,6 @@
                                                         "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                         "board_pu":  0.1325
                                                     },
-                                    "Fareway":  {
-                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91726334-suave-essentials-body-wash-ocean-breeze-18-oz",
-                                                    "price":  2.97,
-                                                    "size":  "18 fl oz",
-                                                    "name":  "Suave Ocean Breeze Moisturizing Body Wash with Glycerin \u0026 Vitamin E, 18 FL OZ"
-                                                },
                                     "Baker\u0027s":  {
                                                          "url":  "https://www.bakersplus.com/p/suave-essentials-cocoa-butter-shea-body-wash/0038371100447",
                                                          "name":  "Suave Essentials Cocoa Butter \u0026 Shea Body Wash",
@@ -2619,7 +2621,14 @@
                                                             "price":  "$10.96",
                                                             "size":  "60 fl oz",
                                                             "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                        }
+                                                        },
+                                    "Fareway":  {
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91726334-suave-essentials-body-wash-ocean-breeze-18-oz",
+                                                    "name":  "Suave Ocean Breeze Moisturizing Body Wash with Glycerin \u0026 Vitamin E, 18 FL OZ",
+                                                    "price":  "$3.97",
+                                                    "size":  "18 fl oz",
+                                                    "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                }
                                 },
                   "bok-choy":  {
                                    "commodity":  "Bok Choy",
@@ -4023,14 +4032,6 @@
                                                    "name":  "Happy Harvest Whole Kernel Corn",
                                                    "board_pu":  0.0511
                                                },
-                                      "Baker\u0027s":  {
-                                                           "url":  "https://www.bakersplus.com/p/smart-way-whole-kernel-sweet-golden-corn/0001111010926",
-                                                           "name":  "Smart Way Whole Kernel Sweet Golden Corn",
-                                                           "price":  0.83,
-                                                           "size":  "15.25 oz",
-                                                           "verified":  "2026-09-18",
-                                                           "board_pu":  0.0511
-                                                       },
                                       "Family Fare":  {
                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/vegetables/our_family_no_salt_added_super_sweet_whole_kernel_corn_15_25_oz/p/6786968",
                                                           "name":  "Our Family No Salt Added Super Sweet Whole Kernel Corn 15.25 Oz",
@@ -4065,7 +4066,14 @@
                                                               "price":  "$6.28",
                                                               "size":  "106 oz",
                                                               "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                          }
+                                                          },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/kroger-whole-kernel-sweet-golden-corn-big-deal-/0001111011381",
+                                                           "name":  "Kroger Whole Kernel Sweet Golden Corn BIG DEAL!",
+                                                           "price":  "$3.89",
+                                                           "size":  "4 pk 15.25 oz",
+                                                           "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                       }
                                   },
                   "canned-green-beans":  {
                                              "commodity":  "canned-green-beans",
@@ -4213,12 +4221,6 @@
                                                                "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                                "board_pu":  0.2231
                                                            },
-                                           "Fareway":  {
-                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20543846-fareway-mushrooms-pieces-stems-1325-oz",
-                                                           "price":  2.58,
-                                                           "size":  "13.25 oz",
-                                                           "name":  "Fareway Pieces \u0026 Stems Mushrooms"
-                                                       },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/24708/hy-vee-mushrooms-stems-pieces",
                                                           "price":  1.89,
@@ -4232,6 +4234,13 @@
                                                            "price":  "$1.52",
                                                            "size":  "6.5 oz",
                                                            "verified":  "2026-09-21 DERIVED from the price row (same record the board priced)"
+                                                       },
+                                           "Fareway":  {
+                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20543846-fareway-mushrooms-pieces-stems-1325-oz",
+                                                           "name":  "Fareway Pieces \u0026 Stems Mushrooms",
+                                                           "price":  "$2.99",
+                                                           "size":  "13.25 oz",
+                                                           "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                                        }
                                        },
                   "canned-pasta":  {
@@ -4265,11 +4274,11 @@
                                                                "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
                                                            },
                                        "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/73856-chef-boyardee-mini-spaghetti-rings-meatballs-7-5-oz",
-                                                       "name":  "Chef Boyardee Mini Spaghetti Rings \u0026 Meatballs",
-                                                       "price":  "$1.50",
-                                                       "size":  "7.5 oz",
-                                                       "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1532555-campbell-s-spaghettios-canned-pasta-meatballs-22-2-oz",
+                                                       "name":  "Campbell\u0027s SpaghettiOs Canned Pasta with Meatballs",
+                                                       "price":  "$1.99",
+                                                       "size":  "22.2 oz",
+                                                       "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "canned-peaches":  {
@@ -6925,11 +6934,11 @@
                                                          "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
                                                      },
                                  "Baker\u0027s":  {
-                                                      "url":  "https://www.bakersplus.com/p/kroger-classic-blend-medium-roast-ground-coffee/0001111014953",
-                                                      "name":  "Kroger Classic Blend Medium Roast Ground Coffee",
+                                                      "url":  "https://www.bakersplus.com/p/kroger-original-medium-roast-ground-coffee/0001111015000",
+                                                      "name":  "Kroger Original Medium Roast Ground Coffee",
                                                       "price":  "$14.49",
                                                       "size":  "29 oz",
-                                                      "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
+                                                      "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                                   }
                              },
                   "coffee-creamer":  {
@@ -7188,20 +7197,20 @@
                                                               "size":  "38.2 fl oz",
                                                               "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
                                                           },
-                                      "Baker\u0027s":  {
-                                                           "url":  "https://www.bakersplus.com/p/vo5-extra-body-volumizing-conditioner-with-collagen-for-all-hair-types/0081655901098",
-                                                           "name":  "VO5 Extra Body Volumizing Conditioner with Collagen for All Hair Types",
-                                                           "price":  "$1.39",
-                                                           "size":  "15 fl oz",
-                                                           "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                       },
                                       "Fareway":  {
                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91212795-suave-ess-refrsh-cond-ocean-br",
                                                       "name":  "Suave Essentials Ocean Breeze Conditioner for Dry Hair, 22.5 fl oz, 1-Count",
                                                       "price":  "$2.49",
                                                       "size":  "22.5 fl oz",
                                                       "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/suave-tropical-coconut-nourishing-conditioner-with-coconut-extract-vitamin-e-22-5-fl-oz/0038371100456",
+                                                           "name":  "Suave Tropical Coconut Nourishing Conditioner with Coconut Extract \u0026 Vitamin E, 22.5 FL OZ",
+                                                           "price":  "$2.00",
+                                                           "size":  "22.5 fl oz",
+                                                           "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                       }
                                   },
                   "cooked-shredded-chicken":  {
                                                   "commodity":  "Cooked Shredded Chicken",
@@ -7399,7 +7408,13 @@
                                                     "price":  "$4.98",
                                                     "size":  "4 ct",
                                                     "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                                }
+                                                },
+                                    "Family Fare":  {
+                                                        "url":  "https://www.shopfamilyfare.com/shop/freezer/other_frozen_items/bar_s_corn_dogs_classic_honey_crisp_batter_dipped_16_ea/p/3127552",
+                                                        "name":  "Bar S Corn Dogs, Classic, Honey Crisp, Batter Dipped 16 Ea",
+                                                        "price":  "$9.99",
+                                                        "size":  "16 ea"
+                                                    }
                                 },
                   "corned-beef-brisket":  {
                                               "commodity":  "Corned Beef Brisket (raw)",
@@ -8372,13 +8387,6 @@
                                                   "size":  "lb",
                                                   "verified":  "2026-08-18 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                               },
-                                   "Walmart":  {
-                                                   "url":  "https://www.walmart.com/ip/37447827",
-                                                   "name":  "Farmland, Hickory Smoked Deli Ham, 4 lb",
-                                                   "price":  "$14.42",
-                                                   "size":  "4 lb",
-                                                   "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                               },
                                    "Sam\u0027s Club":  {
                                                            "url":  "https://www.samsclub.com/ip/4POJC00HFA8K",
                                                            "name":  "Extra Lean Premium Ham, 1.25 lbs each., 2 pk.",
@@ -8392,6 +8400,13 @@
                                                    "price":  "$3.99",
                                                    "size":  "lb",
                                                    "verified":  "2026-09-24 DERIVED from the price row (same record the board priced)"
+                                               },
+                                   "Walmart":  {
+                                                   "url":  "https://www.walmart.com/ip/29209909",
+                                                   "name":  "Bar-S Deli Style Honey Ham Sliced Lunch Meat, 1 lb",
+                                                   "price":  "$4.22",
+                                                   "size":  "lb",
+                                                   "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                                }
                                },
                   "deodorant":  {
@@ -8418,13 +8433,6 @@
                                                          "size":  "2.6 oz",
                                                          "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                                      },
-                                    "Walmart":  {
-                                                    "url":  "https://www.walmart.com/ip/34495616",
-                                                    "name":  "ARM \u0026 HAMMER ULTRA MAX Deodorant, Fresh Scent, Solid Stick 2.6 oz, Twin Pack (Pack of Two)",
-                                                    "price":  "$3.92",
-                                                    "size":  "5.199 oz",
-                                                    "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                                },
                                     "Aldi":  {
                                                  "url":  "https://www.aldi.us/store/aldi/products/36053-old-spice-anti-perspirant-deodorant-for-men-pure-sport-scent-3-oz",
                                                  "name":  "Old Spice Anti Perspirant Deodorant For Men Pure Sport Scent 3 OZ",
@@ -8445,7 +8453,14 @@
                                                             "price":  "$13.48",
                                                             "size":  "15 oz",
                                                             "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                        }
+                                                        },
+                                    "Walmart":  {
+                                                    "url":  "https://www.walmart.com/ip/271929452",
+                                                    "name":  "Speed Stick Men\u0027s Antiperspirant Deodorant, Regular, 3 oz, 4 Pack",
+                                                    "price":  "$8.97",
+                                                    "size":  "12 oz",
+                                                    "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                }
                                 },
                   "diapers":  {
                                   "commodity":  "diapers",
@@ -8884,11 +8899,11 @@
                                                              "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                                          },
                                              "Sam\u0027s Club":  {
-                                                                     "url":  "https://www.samsclub.com/ip/2RDPR8MYSN9K",
-                                                                     "name":  "Member\u0027s Mark Disinfecting Wipes, Variety Pack, 4 pk., 312 ct.",
-                                                                     "price":  "$10.98",
-                                                                     "size":  "312 ct",
-                                                                     "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
+                                                                     "url":  "https://www.samsclub.com/ip/59HV61ID8QMX",
+                                                                     "name":  "Clorox Disinfecting Cleaning Wipes, Bleach Free, Fresh Scent and Crisp Lemon, 5 pk., 425 Wipes Total",
+                                                                     "price":  "$18.78",
+                                                                     "size":  "425 ct",
+                                                                     "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                                                  }
                                          },
                   "dog-food":  {
@@ -9066,13 +9081,6 @@
                                                                   "size":  "2 oz",
                                                                   "verified":  "2026-08-18"
                                                               },
-                                             "Family Fare":  {
-                                                                 "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/chile_de_arbol/p/1564405684702623794",
-                                                                 "name":  "Chile De Arbol",
-                                                                 "price":  "$2.49",
-                                                                 "size":  "3 oz",
-                                                                 "verified":  "2026-08-18 DERIVED from the price row (same record the board priced)"
-                                                             },
                                              "Hy-Vee":  {
                                                             "url":  "https://www.hy-vee.com/aisles-online/p/16685/don-enrique-de-arbol-dried-chile-peppers",
                                                             "price":  2.99,
@@ -9080,7 +9088,14 @@
                                                             "name":  "Don Enrique De Arbol Dried Chile Peppers",
                                                             "verified":  "2026-08-01 Hy-Vee search API (storeId 1465)",
                                                             "board_pu":  5.98
-                                                        }
+                                                        },
+                                             "Family Fare":  {
+                                                                 "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/chile_de_arbol/p/1564405684708922046",
+                                                                 "name":  "Chile De Arbol",
+                                                                 "price":  "$5.39",
+                                                                 "size":  "8 oz",
+                                                                 "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                             }
                                          },
                   "dried-basil":  {
                                       "commodity":  "Basil (dried)",
@@ -9621,9 +9636,9 @@
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/2RCOFNRICNIO",
                                                              "name":  "Member\u0027s Mark Liquid Egg Whites 16 oz., 6 pk.",
-                                                             "price":  "$14.96",
+                                                             "price":  "$16.13",
                                                              "size":  "6 ct 16 oz",
-                                                             "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
+                                                             "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                                          }
                                  },
                   "enchilada-sauce":  {
@@ -9702,20 +9717,20 @@
                                                        "size":  "16 fl oz",
                                                        "verified":  "2026-09-21 DERIVED from the price row (same record the board priced)"
                                                    },
-                                        "Sam\u0027s Club":  {
-                                                                "url":  "https://www.samsclub.com/ip/1J6IXN0EJFX8",
-                                                                "name":  "Celsius Live Fit Sparkling Vibe Variety Pack 12 fl. oz., 18 pk.",
-                                                                "price":  "$17.98",
-                                                                "size":  "216 fl oz",
-                                                                "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                            },
                                         "Family Fare":  {
                                                             "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/juice_boxes_pouches/v8_pomegranate_blueberry_energy_drink_96_000_fl_oz/p/8134906",
                                                             "name":  "V8® Pomegranate Blueberry Energy Drink 96.000 Fl Oz",
                                                             "price":  "$12.99",
                                                             "size":  "96.000 fl oz",
                                                             "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                                        }
+                                                        },
+                                        "Sam\u0027s Club":  {
+                                                                "url":  "https://www.samsclub.com/ip/4LUE77BBKA2E",
+                                                                "name":  "NOS High Performance Energy Drink, 16 fl. oz., 24 pk.",
+                                                                "price":  "$34.98",
+                                                                "size":  "384 fl oz",
+                                                                "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                            }
                                     },
                   "english-muffins":  {
                                           "commodity":  "english-muffins",
@@ -9899,13 +9914,6 @@
                                                       "size":  "160 ct",
                                                       "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                                   },
-                                         "Sam\u0027s Club":  {
-                                                                 "url":  "https://www.samsclub.com/ip/2DZOLPW0UJ54",
-                                                                 "name":  "Kleenex Trusted Care Facial Tissues 12 boxes, 160 tissues/box",
-                                                                 "price":  "$17.94",
-                                                                 "size":  "1794 ct",
-                                                                 "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                             },
                                          "Fareway":  {
                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21297412-puffs-lotion-facial-tissue-496-0-ct",
                                                          "name":  "Puffs Facial Tissue Plus Lotion",
@@ -9919,7 +9927,14 @@
                                                          "price":  "$6.58",
                                                          "size":  "480 ct",
                                                          "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/3JU948Y12HGX",
+                                                                 "name":  "Member’s Mark Soft \u0026 Strong 2-Ply Premium Facial Tissues 12 Flat Boxes, 160 tissues/box",
+                                                                 "price":  "$14.98",
+                                                                 "size":  "1872 ct",
+                                                                 "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                             }
                                      },
                   "fajita-seasoning":  {
                                            "commodity":  "Fajita Seasoning Packet",
@@ -11410,7 +11425,14 @@
                                                                "price":  "$7.91",
                                                                "size":  "3 ct",
                                                                "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                           },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/45942065",
+                                                       "name":  "Tony\u0027s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz",
+                                                       "price":  "$2.96",
+                                                       "size":  "18.56 oz",
+                                                       "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "frozen-vegetables":  {
                                             "commodity":  "frozen-vegetables",
@@ -12399,20 +12421,20 @@
                                               "size":  "lb",
                                               "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
                                           },
-                                 "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/449YNUBF0YMU",
-                                                         "name":  "Green Seedless Grapes, 3 lbs.",
-                                                         "price":  "$5.97",
-                                                         "size":  "3 lb",
-                                                         "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                     },
                                  "Baker\u0027s":  {
                                                       "url":  "https://www.bakersplus.com/p/fresh-california-seedless-red-grapes/0001111061376",
                                                       "name":  "Fresh California Seedless Red Grapes",
                                                       "price":  "$7.99",
                                                       "size":  "3 lb",
                                                       "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                 "Sam\u0027s Club":  {
+                                                         "url":  "https://www.samsclub.com/ip/3J9FOP8EP9O5",
+                                                         "name":  "Moon Drop Seedless Grapes, 3 lbs.",
+                                                         "price":  "$6.97",
+                                                         "size":  "3 lb",
+                                                         "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                     }
                              },
                   "greek-yogurt":  {
                                        "commodity":  "Greek Yogurt",
@@ -13394,11 +13416,11 @@
                                                        "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                                    },
                                         "Sam\u0027s Club":  {
-                                                                "url":  "https://www.samsclub.com/ip/21R2YYBZM791",
-                                                                "name":  "Coffee mate Half and Half Liquid Creamer Singles, 0.3 fl. oz., 180 ct.",
-                                                                "price":  "$12.78",
-                                                                "size":  "180 ct 0.3 fl oz",
-                                                                "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
+                                                                "url":  "https://www.samsclub.com/ip/1X26IOPEP7ZR",
+                                                                "name":  "Member\u0027s Mark Half \u0026 Half, 32 Fl. Oz.",
+                                                                "price":  "$2.24",
+                                                                "size":  "32 fl oz",
+                                                                "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                                             }
                                     },
                   "hamburger-buns":  {
@@ -15340,13 +15362,6 @@
                                                          "size":  "100 fl oz",
                                                          "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
                                                      },
-                                            "Sam\u0027s Club":  {
-                                                                    "url":  "https://www.samsclub.com/ip/5T825A4WH6E9",
-                                                                    "name":  "Member\u0027s Mark Plant Based Liquid Laundry Detergent, Lavender, 127 loads, 196 fl. oz.",
-                                                                    "price":  "$14.98",
-                                                                    "size":  "196 fl oz",
-                                                                    "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                                },
                                             "Walmart":  {
                                                             "url":  "https://www.walmart.com/ip/17308602413",
                                                             "name":  "ARM \u0026 HAMMER Laundry Detergent Liquid, Clean Burst, 110 fl oz, 110 Loads",
@@ -15360,7 +15375,14 @@
                                                                  "price":  "$13.99",
                                                                  "size":  "174 fl oz",
                                                                  "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                             }
+                                                             },
+                                            "Sam\u0027s Club":  {
+                                                                    "url":  "https://www.samsclub.com/ip/2V2PPWS8ONHV",
+                                                                    "name":  "Member\u0027s Mark Liquid Laundry Detergent, Paradise Splash, 127 loads, 196 fl. oz.",
+                                                                    "price":  "$14.41",
+                                                                    "size":  "196 fl oz",
+                                                                    "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                                }
                                         },
                   "laundry-pods":  {
                                        "commodity":  "laundry-pods",
@@ -15871,7 +15893,7 @@
                                                  "name":  "Queen Helene Cocoa Butter Hand \u0026 Body Lotion for Dry Skin, 32 oz",
                                                  "price":  "$3.98",
                                                  "size":  "32 oz",
-                                                 "verified":  "2026-09-24 DERIVED from the price row (same record the board priced)"
+                                                 "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                              }
                              },
                   "mac-and-cheese":  {
@@ -16302,20 +16324,20 @@
                                                     "size":  "1 gal",
                                                     "verified":  "2026-09-21 DERIVED from the price row (same record the board priced)"
                                                 },
-                               "Sam\u0027s Club":  {
-                                                       "url":  "https://www.samsclub.com/ip/2T0W0AVWOW1F",
-                                                       "name":  "Member\u0027s Mark 2% Reduced Fat Milk 1 gal.",
-                                                       "price":  "$3.77",
-                                                       "size":  "gal",
-                                                       "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                   },
                                "Fareway":  {
                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2873407-kemps-select-1-lowfat-milk-946-0-ml",
                                                "name":  "Kemps Lowfat Milk",
                                                "price":  "$1.99",
                                                "size":  "32 oz",
                                                "verified":  "2026-09-24 DERIVED from the price row (same record the board priced)"
-                                           }
+                                           },
+                               "Sam\u0027s Club":  {
+                                                       "url":  "https://www.samsclub.com/ip/2T0W0AVWOW1F",
+                                                       "name":  "Member\u0027s Mark 2% Reduced Fat Milk 1 gal.",
+                                                       "price":  "$3.87",
+                                                       "size":  "gal",
+                                                       "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                   }
                            },
                   "minced-garlic":  {
                                         "commodity":  "Minced Garlic (jarred)",
@@ -17859,11 +17881,11 @@
                                                   "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                               },
                                   "Sam\u0027s Club":  {
-                                                          "url":  "https://www.samsclub.com/ip/17HCK6CQYPY4",
-                                                          "name":  "White Peaches, 4 lbs.",
-                                                          "price":  "$9.87",
-                                                          "size":  "4 lb",
-                                                          "verified":  "2026-09-24 DERIVED from the price row (same record the board priced)"
+                                                          "url":  "https://www.samsclub.com/ip/6SYBG06HHWYV",
+                                                          "name":  "Member\u0027s Mark Organic Diced Peach Bowls, 4 oz., 24 pk.",
+                                                          "price":  "$11.98",
+                                                          "size":  "96 oz",
+                                                          "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                                       }
                               },
                   "peanut-butter":  {
@@ -17979,13 +18001,6 @@
                                                "size":  "lb",
                                                "verified":  "2026-09-21 DERIVED from the price row (same record the board priced)"
                                            },
-                                "Sam\u0027s Club":  {
-                                                        "url":  "https://www.samsclub.com/ip/1A1PCVOK5D9R",
-                                                        "name":  "Bartlett Pears, 4 lbs.",
-                                                        "price":  "$6.64",
-                                                        "size":  "4 lb",
-                                                        "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                    },
                                 "Aldi":  {
                                              "url":  "https://www.aldi.us/store/aldi/products/17327278-bartlett-pear-3-lbs",
                                              "name":  "Bartlett Pear 3 Lbs",
@@ -17999,7 +18014,14 @@
                                                      "price":  "$5.29",
                                                      "size":  "2 lb",
                                                      "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                "Sam\u0027s Club":  {
+                                                        "url":  "https://www.samsclub.com/ip/1A1PCVOK5D9R",
+                                                        "name":  "Bartlett Pears, 4 lbs.",
+                                                        "price":  "$6.82",
+                                                        "size":  "4 lb",
+                                                        "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                    }
                             },
                   "pecorino-romano":  {
                                           "commodity":  "Pecorino Romano Cheese",
@@ -19670,11 +19692,11 @@
                                                         "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
                                                     },
                                 "Baker\u0027s":  {
-                                                     "url":  "https://www.bakersplus.com/p/top-ramen-beef-flavor-ramen-noodle-soup/0007066206002",
-                                                     "name":  "Top Ramen Beef Flavor Ramen Noodle Soup",
+                                                     "url":  "https://www.bakersplus.com/p/top-ramen-chicken-flavor-ramen-noodle-soup/0007066206003",
+                                                     "name":  "Top Ramen Chicken Flavor Ramen Noodle Soup",
                                                      "price":  "$3.49",
                                                      "size":  "6 pk 3 oz",
-                                                     "verified":  "2026-09-24 DERIVED from the price row (same record the board priced)"
+                                                     "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                                  }
                             },
                   "ranch-dressing":  {
@@ -20129,13 +20151,6 @@
                                                       "size":  "lb",
                                                       "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                                   },
-                                       "Aldi":  {
-                                                    "url":  "https://www.aldi.us/store/aldi/products/26357805-paragon-potato-farms-red-potatoes-in-bag-5-lb",
-                                                    "name":  "Paragon Potato Farms Red Potatoes IN Bag 5 LB",
-                                                    "price":  "$4.29",
-                                                    "size":  "5 lb",
-                                                    "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                                },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/5FQI9Z9VCTXU",
                                                                "name":  "Red Potatoes, 8 lbs.",
@@ -20149,7 +20164,14 @@
                                                             "price":  "$7.49",
                                                             "size":  "5 lb",
                                                             "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                        }
+                                                        },
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/227198-red-potatoes-bag-5-lb",
+                                                    "name":  "Red Potatoes Bag 5 LB",
+                                                    "price":  "$3.89",
+                                                    "size":  "5 lb",
+                                                    "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                }
                                    },
                   "reduced-fat-mozzarella":  {
                                                  "commodity":  "Part-Skim Mozzarella, Shredded",
@@ -20529,11 +20551,11 @@
                                                "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                            },
                                "Sam\u0027s Club":  {
-                                                       "url":  "https://www.samsclub.com/ip/74NAPE6IB3LW",
-                                                       "name":  "Member\u0027s Mark Long Grain White Rice, 50 lbs.",
-                                                       "price":  "$22.98",
-                                                       "size":  "800 oz",
-                                                       "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
+                                                       "url":  "https://www.samsclub.com/ip/24R9RMHHLLCP",
+                                                       "name":  "Member\u0027s Mark Parboiled White Rice, 25 lbs.",
+                                                       "price":  "$14.98",
+                                                       "size":  "400 oz",
+                                                       "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                                    }
                            },
                   "rice-arborio":  {
@@ -23636,13 +23658,6 @@
                                                                     "verified":  "2026-09-18",
                                                                     "board_pu":  1.5354
                                                                 },
-                                               "Family Fare":  {
-                                                                   "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_sesame_seed_1_oz/p/34659",
-                                                                   "name":  "Mc Cormick Sesame Seed 1 Oz",
-                                                                   "price":  "$2.69",
-                                                                   "size":  "1 oz",
-                                                                   "board_pu":  2.69
-                                                               },
                                                "Sam\u0027s Club":  {
                                                                        "url":  "https://www.samsclub.com/ip/17777018655",
                                                                        "name":  "Member\u0027s Mark White Sesame Seed, 20.5 oz.",
@@ -23670,7 +23685,14 @@
                                                               "price":  "$9.99",
                                                               "size":  "2.3 oz",
                                                               "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                                          }
+                                                          },
+                                               "Family Fare":  {
+                                                                   "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/tones_sesame_seed/p/2001101",
+                                                                   "name":  "Tones Sesame Seed",
+                                                                   "price":  "$1.99",
+                                                                   "size":  "0.75 oz",
+                                                                   "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                               }
                                            },
                   "toaster-pastries":  {
                                            "commodity":  "toaster-pastries",
@@ -25859,7 +25881,7 @@
                                                                  "name":  "Yellow Bell Pepper",
                                                                  "price":  "$1.99",
                                                                  "size":  "1 ea",
-                                                                 "verified":  "2026-09-24 DERIVED from the price row (same record the board priced)"
+                                                                 "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                                              }
                                          },
                   "frozen-lima-beans":  {

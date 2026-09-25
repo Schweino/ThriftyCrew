@@ -336,6 +336,18 @@
     "target_id": "cheddar-cheese-shredded"
   },
   {
+    "confidence": 0.8,
+    "created_at": "2026-09-25T05:37:27",
+    "id": "lp:1ae826f5286949b353a9",
+    "kind": "add_known_wrong",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"Kinder's Classic Beef Gravy Mix 0.9 oz\"}",
+    "queue_hash": "b53f102b3068afb09e4dd72d928bb80b49fde505335a3bf25d82ab9b91455aef",
+    "rationale": "While 'Beef Gravy' is a type of brown gravy, 'Kinder's' is a specific brand often associated with different flavor profiles or formulations than generic 'Brown Gravy Mix'. However, more importantly, if the commodity is strictly 'Brown Gravy",
+    "status": "proposed",
+    "target_id": "brown-gravy-mix-dry-packet"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T18:29:19",
     "id": "lp:1b6b86ac2d9313406147",
@@ -2388,6 +2400,18 @@
     "target_id": "greek-yogurt"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-09-25T05:37:27",
+    "id": "lp:95f1beaf8a135a7e24d8",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"dried\\\\s+cranberries\"}",
+    "queue_hash": "b53f102b3068afb09e4dd72d928bb80b49fde505335a3bf25d82ab9b91455aef",
+    "rationale": "Matches 'Simple Truth Organic Dried Sweetened Cranberries' by anchoring on the food name 'Dried Cranberries'. This is a clear case of brand/word-order variation for the same commodity.",
+    "status": "proposed",
+    "target_id": "dried-cranberries"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:9690d1341791fed303ef",
@@ -2422,6 +2446,18 @@
     "rationale": "Matches 'ARTICHOKES HRTS', 'Cento Artichokes in Brine', and 'Napoleon Quartered Artichokes'. These are all canned/jarred artichoke heart products. 'Marinated Grilled' is also a common canned format, but the pattern covers the clear cases.",
     "status": "proposed",
     "target_id": "artichoke-hearts-canned-jarred"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-25T05:37:27",
+    "id": "lp:9991149d3604a5eabfe4",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"annie's\\\\s+organic.*ravioli\"}",
+    "queue_hash": "b53f102b3068afb09e4dd72d928bb80b49fde505335a3bf25d82ab9b91455aef",
+    "rationale": "Matches 'Annie's Organic Cheesy Ravioli... Canned Pasta'. Anchors on brand + specific pasta type (ravioli) to avoid matching fresh pasta or other canned goods.",
+    "status": "proposed",
+    "target_id": "canned-pasta-ravioli-spaghettios"
   },
   {
     "confidence": 0.9,
@@ -3022,6 +3058,18 @@
     "rationale": "Covers various brands of Au Jus Gravy Mix including Hy-Vee, Kroger, and Our Family. The pattern anchors on the food name 'au jus gravy mix' or 'au jus sauce mix'.",
     "status": "accepted",
     "target_id": "au-jus-gravy-mix"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-09-25T05:37:27",
+    "id": "lp:c469af506ce5b6d480a9",
+    "kind": "add_known_wrong",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"Bakery Fresh Glazed Apple Fritters\"}",
+    "queue_hash": "b53f102b3068afb09e4dd72d928bb80b49fde505335a3bf25d82ab9b91455aef",
+    "rationale": "Apple fritters are a distinct pastry category from donuts (typically ring-shaped or cake-based without the specific fritter shape/ingredients). Mapping them to 'Donuts' would skew price data for both categories.",
+    "status": "proposed",
+    "target_id": "donuts"
   },
   {
     "confidence": 0.9,
@@ -3634,6 +3682,18 @@
     "rationale": "brand-anchored 2-in-1 shampoo bottles whose titles omit the word 'shampoo'",
     "status": "applied",
     "target_id": "commodity:staple:shampoo"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-25T05:37:27",
+    "id": "lp:edf6788b9a2c9c1e42c2",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"artichokes\\\\s+in\\\\s+brine\"}",
+    "queue_hash": "b53f102b3068afb09e4dd72d928bb80b49fde505335a3bf25d82ab9b91455aef",
+    "rationale": "Matches 'Cento Artichokes in Brine'. Anchors on the specific preparation 'in brine' which is standard for canned/jarred hearts, avoiding match to fresh or marinated varieties.",
+    "status": "proposed",
+    "target_id": "artichoke-hearts-canned-jarred"
   },
   {
     "confidence": 0.9,

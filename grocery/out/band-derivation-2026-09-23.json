@@ -4,25 +4,25 @@
     "K":  5,
     "W":  1.5,
     "pinned_typed_bands":  false,
-    "evidence_rows":  38832,
+    "evidence_rows":  38937,
     "derived_commodities":  559,
     "typed_commodities":  0,
     "k_sweep":  {
                     "K=3":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  7988
+                                "newly_refused_rows":  8017
                             },
                     "K=4":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  5014
+                                "newly_refused_rows":  5040
                             },
                     "K=5":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  3468
+                                "newly_refused_rows":  3484
                             },
                     "K=6":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  2537
+                                "newly_refused_rows":  2551
                             }
                 },
     "typed_fields_ignored":  [
@@ -769,6 +769,14 @@
                               "derived":  "0.01025-0.25625"
                           },
                           {
+                              "id":  "ramen",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Samyang Buldak Carbonara Spicy Chicken Ramen Bowl, 3.7 oz., 6 pk.",
+                              "per_unit":  2.08,
+                              "typed":  "none",
+                              "derived":  "0.0665-1.6625"
+                          },
+                          {
                               "id":  "milk",
                               "store":  "Sam\u0027s Club",
                               "name":  "Horizon Organic Whole Milk, 8 fl. oz, 18 pk.",
@@ -777,12 +785,12 @@
                               "derived":  "0.605-15.125"
                           },
                           {
-                              "id":  "ramen",
+                              "id":  "pasta",
                               "store":  "Sam\u0027s Club",
-                              "name":  "Samyang Buldak Carbonara Spicy Chicken Ramen Bowl, 3.7 oz., 6 pk.",
-                              "per_unit":  2.08,
+                              "name":  "Barilla Pasta Rotini \u0026 Farfalle, Variety Pack, 1 lb., 6 pk.",
+                              "per_unit":  0.5325,
                               "typed":  "none",
-                              "derived":  "0.0665-1.6625"
+                              "derived":  "0.01537-0.38425"
                           },
                           {
                               "id":  "paper-towels",
@@ -793,18 +801,26 @@
                               "derived":  "0.24416-6.104"
                           },
                           {
-                              "id":  "sugar",
+                              "id":  "paper-napkins",
                               "store":  "Sam\u0027s Club",
-                              "name":  "Fresh Sugar Face Polish, 4.4 oz.",
-                              "per_unit":  176.2909,
+                              "name":  "Artstyle 3-Ply Lunch Napkins, 6.5\", 200 ct., Choose Color",
+                              "per_unit":  0.0549,
                               "typed":  "none",
-                              "derived":  "0.15021-3.75525"
+                              "derived":  "0.00212-0.053"
+                          },
+                          {
+                              "id":  "all-purpose-cleaner",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Pledge® Multisurface Cleaner, Everyday Clean™, Aerosol, Rainshower Scent, 9.7 oz, Pack of 3",
+                              "per_unit":  1.2907,
+                              "typed":  "none",
+                              "derived":  "0.01744-0.436"
                           },
                           {
                               "id":  "sugar",
                               "store":  "Sam\u0027s Club",
-                              "name":  "BranchOut Crunchy Fruit Chips with Strawberry, Apple, Banana \u0026 Pineapple, No Added Sugar, 7 oz.",
-                              "per_unit":  19.3829,
+                              "name":  "Fresh Sugar Face Polish, 4.4 oz.",
+                              "per_unit":  176.2909,
                               "typed":  "none",
                               "derived":  "0.15021-3.75525"
                           },
@@ -815,6 +831,22 @@
                               "per_unit":  36.3273,
                               "typed":  "none",
                               "derived":  "0.605-15.125"
+                          },
+                          {
+                              "id":  "pasta-sauce",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Member\u0027s Mark Calzones with Marinara Sauce, 4 ct., priced per pound",
+                              "per_unit":  0.4088,
+                              "typed":  "none",
+                              "derived":  "0.01532-0.383"
+                          },
+                          {
+                              "id":  "sugar",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "BranchOut Crunchy Fruit Chips with Strawberry, Apple, Banana \u0026 Pineapple, No Added Sugar, 7 oz.",
+                              "per_unit":  19.3829,
+                              "typed":  "none",
+                              "derived":  "0.15021-3.75525"
                           },
                           {
                               "id":  "dog-treats",
@@ -1211,14 +1243,6 @@
                           {
                               "id":  "paper-napkins",
                               "store":  "Sam\u0027s Club",
-                              "name":  "Artstyle 3-Ply Lunch Napkins, 6.5\", 200 ct., Choose Color",
-                              "per_unit":  0.0549,
-                              "typed":  "none",
-                              "derived":  "0.00212-0.053"
-                          },
-                          {
-                              "id":  "paper-napkins",
-                              "store":  "Sam\u0027s Club",
                               "name":  "Party Essentials Napkin Roll Bag Set with Black Cutlery (4 - 25 ct. packs, 100 total)",
                               "per_unit":  0.2448,
                               "typed":  "none",
@@ -1537,14 +1561,6 @@
                               "derived":  "0.15021-3.75525"
                           },
                           {
-                              "id":  "pasta",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "Barilla Pasta Rotini \u0026 Farfalle, Variety Pack, 1 lb., 6 pk.",
-                              "per_unit":  0.5325,
-                              "typed":  "none",
-                              "derived":  "0.01537-0.38425"
-                          },
-                          {
                               "id":  "bottled-water",
                               "store":  "Sam\u0027s Club",
                               "name":  "Member\u0027s Mark Purified Water, 1 gal., 6 pk.",
@@ -1761,14 +1777,6 @@
                               "derived":  "0.03274-0.8185"
                           },
                           {
-                              "id":  "pasta-sauce",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "Member\u0027s Mark Calzones with Marinara Sauce, 4 ct., priced per pound",
-                              "per_unit":  0.4088,
-                              "typed":  "none",
-                              "derived":  "0.01532-0.383"
-                          },
-                          {
                               "id":  "shampoo",
                               "store":  "Sam\u0027s Club",
                               "name":  "Nexxus Therappe Moisture Shampoo, 43 fl. oz.",
@@ -1937,14 +1945,6 @@
                               "derived":  "0.11196-2.799"
                           },
                           {
-                              "id":  "all-purpose-cleaner",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "Pledge Multisurface Cleaner, Rainshower, 3 ct., 29 oz.",
-                              "per_unit":  0.4317,
-                              "typed":  "none",
-                              "derived":  "0.01635-0.40875"
-                          },
-                          {
                               "id":  "marshmallows",
                               "store":  "Sam\u0027s Club",
                               "name":  "Lucky Charms Just Magical Marshmallows, 8 oz.",
@@ -2006,7 +2006,7 @@
                               "name":  "GoGo SqueeZ Applesauce Pouches, Variety Pack, 3.2 oz., 32 ct.",
                               "per_unit":  5,
                               "typed":  "none",
-                              "derived":  "0.01505-0.37625"
+                              "derived":  "0.01575-0.39375"
                           },
                           {
                               "id":  "bread",
@@ -2169,6 +2169,46 @@
                               "derived":  "0.05411-1.35275"
                           },
                           {
+                              "id":  "sugar",
+                              "store":  "Aldi",
+                              "name":  "Stonemill Cinnamon Sugar 3.5 OZ",
+                              "per_unit":  9.0971,
+                              "typed":  "none",
+                              "derived":  "0.15021-3.75525"
+                          },
+                          {
+                              "id":  "brown-sugar",
+                              "store":  "Aldi",
+                              "name":  "Stonemill Smoky Brown Sugar Rub 6.7 OZ",
+                              "per_unit":  5.2299,
+                              "typed":  "none",
+                              "derived":  "0.198-4.95"
+                          },
+                          {
+                              "id":  "salt",
+                              "store":  "Aldi",
+                              "name":  "Stonemill Salt Pepper Garlic Grilling Blend 6 OZ",
+                              "per_unit":  0.5483,
+                              "typed":  "none",
+                              "derived":  "0.00766-0.1915"
+                          },
+                          {
+                              "id":  "crackers",
+                              "store":  "Aldi",
+                              "name":  "Simply Nature Cheddar Flavor Cauliflower Crackers 4 OZ",
+                              "per_unit":  0.7225,
+                              "typed":  "none",
+                              "derived":  "0.02356-0.589"
+                          },
+                          {
+                              "id":  "shredded-cheese",
+                              "store":  "Aldi",
+                              "name":  "Savoritz Cheddar Cheese Crisps 1.95 OZ",
+                              "per_unit":  1.3282,
+                              "typed":  "none",
+                              "derived":  "0.04433-1.10825"
+                          },
+                          {
                               "id":  "jelly",
                               "store":  "Aldi",
                               "name":  "Aldi Strawberry Superfood Fruit Spread 8 OZ",
@@ -2183,14 +2223,6 @@
                               "per_unit":  0.4817,
                               "typed":  "none",
                               "derived":  "0.01854-0.4635"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Aldi",
-                              "name":  "Stonemill Cinnamon Sugar 3.5 OZ",
-                              "per_unit":  9.0971,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
                           },
                           {
                               "id":  "crackers",
@@ -2297,22 +2329,6 @@
                               "derived":  "0.021-0.525"
                           },
                           {
-                              "id":  "shredded-cheese",
-                              "store":  "Aldi",
-                              "name":  "Savoritz Cheddar Cheese Crisps 1.95 OZ",
-                              "per_unit":  1.3282,
-                              "typed":  "none",
-                              "derived":  "0.04433-1.10825"
-                          },
-                          {
-                              "id":  "crackers",
-                              "store":  "Aldi",
-                              "name":  "Simply Nature Cheddar Flavor Cauliflower Crackers 4 OZ",
-                              "per_unit":  0.7225,
-                              "typed":  "none",
-                              "derived":  "0.02356-0.589"
-                          },
-                          {
                               "id":  "brown-sugar",
                               "store":  "Aldi",
                               "name":  "Park Street Deli Brown Sugar Turkey Bites With Sharp Cheddar 4.5 OZ",
@@ -2327,22 +2343,6 @@
                               "per_unit":  0.1658,
                               "typed":  "none",
                               "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "salt",
-                              "store":  "Aldi",
-                              "name":  "Stonemill Salt Pepper Garlic Grilling Blend 6 OZ",
-                              "per_unit":  0.5483,
-                              "typed":  "none",
-                              "derived":  "0.00766-0.1915"
-                          },
-                          {
-                              "id":  "brown-sugar",
-                              "store":  "Aldi",
-                              "name":  "Stonemill Smoky Brown Sugar Rub 6.7 OZ",
-                              "per_unit":  5.2299,
-                              "typed":  "none",
-                              "derived":  "0.198-4.95"
                           },
                           {
                               "id":  "sugar",
@@ -2478,7 +2478,7 @@
                               "name":  "Lunch Buddies Apple Cinnamon Applesauce Squeezies 3.2 OZ",
                               "per_unit":  2.0281,
                               "typed":  "none",
-                              "derived":  "0.01505-0.37625"
+                              "derived":  "0.01575-0.39375"
                           },
                           {
                               "id":  "oat-milk",
@@ -3057,6 +3057,142 @@
                               "derived":  "0.0194-0.485"
                           },
                           {
+                              "id":  "cereal",
+                              "store":  "Baker\u0027s",
+                              "name":  "Food For Life Organic Ezekiel 4:9 Almond Sprouted Whole Grain Cereal",
+                              "per_unit":  0.6556,
+                              "typed":  "none",
+                              "derived":  "0.0256-0.64"
+                          },
+                          {
+                              "id":  "crackers",
+                              "store":  "Baker\u0027s",
+                              "name":  "Blue Diamond Nut-Thins Artisan Sesame Seeds Almond Rice Crackers",
+                              "per_unit":  1.144,
+                              "typed":  "none",
+                              "derived":  "0.02356-0.589"
+                          },
+                          {
+                              "id":  "canned-tuna",
+                              "store":  "Baker\u0027s",
+                              "name":  "Wild Planet Albacore Wild Tuna",
+                              "per_unit":  1.158,
+                              "typed":  "none",
+                              "derived":  "0.0366-0.915"
+                          },
+                          {
+                              "id":  "canned-tuna",
+                              "store":  "Baker\u0027s",
+                              "name":  "Wild Planet Albacore No Salt Added Wild Tuna",
+                              "per_unit":  1.158,
+                              "typed":  "none",
+                              "derived":  "0.0366-0.915"
+                          },
+                          {
+                              "id":  "canned-tuna",
+                              "store":  "Baker\u0027s",
+                              "name":  "Safe Catch Elite Pure Wild Tuna",
+                              "per_unit":  0.998,
+                              "typed":  "none",
+                              "derived":  "0.0366-0.915"
+                          },
+                          {
+                              "id":  "canned-tuna",
+                              "store":  "Baker\u0027s",
+                              "name":  "TUNA CHUNK LT MSC SKJ 8/3/3OZ/CASE-KROGER (EACH)",
+                              "per_unit":  1.33,
+                              "typed":  "none",
+                              "derived":  "0.0366-0.915"
+                          },
+                          {
+                              "id":  "hot-dogs",
+                              "store":  "Baker\u0027s",
+                              "name":  "Home Chef Cold Frank\u0027s Buffalo Boneless Chicken Wings",
+                              "per_unit":  0.6244,
+                              "typed":  "none",
+                              "derived":  "0.02044-0.511"
+                          },
+                          {
+                              "id":  "hot-sauce",
+                              "store":  "Baker\u0027s",
+                              "name":  "Cholula Chili Garlic Hot Sauce",
+                              "per_unit":  0.998,
+                              "typed":  "none",
+                              "derived":  "0.0275-0.6875"
+                          },
+                          {
+                              "id":  "conditioner",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kristin Ess Hair Strengthening Conditioner",
+                              "per_unit":  1.249,
+                              "typed":  "none",
+                              "derived":  "0.04274-1.0685"
+                          },
+                          {
+                              "id":  "conditioner",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kristin Ess Castor Oil Curly Hair Conditioner For Dry Damaged Hair - Detangling + Deep Moisture",
+                              "per_unit":  1.249,
+                              "typed":  "none",
+                              "derived":  "0.04274-1.0685"
+                          },
+                          {
+                              "id":  "conditioner",
+                              "store":  "Baker\u0027s",
+                              "name":  "Not Your Mother\u0027s Curl Talk Bond Building Curly Hair Conditioner",
+                              "per_unit":  1.2862,
+                              "typed":  "none",
+                              "derived":  "0.04274-1.0685"
+                          },
+                          {
+                              "id":  "conditioner",
+                              "store":  "Baker\u0027s",
+                              "name":  "Not Your Mother\u0027s Curl Talk Bond Building Curly Hair Conditioner",
+                              "per_unit":  1.3738,
+                              "typed":  "none",
+                              "derived":  "0.04274-1.0685"
+                          },
+                          {
+                              "id":  "conditioner",
+                              "store":  "Baker\u0027s",
+                              "name":  "Mielle Kalahari Melon \u0026 Aloe VeraDeep Hydration 2-Minute Deep Conditioner",
+                              "per_unit":  1.4158,
+                              "typed":  "none",
+                              "derived":  "0.04274-1.0685"
+                          },
+                          {
+                              "id":  "conditioner",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kristin Ess Weightless Shine Leave In Conditioner Spray For Dry Hair - Moisture Repair + Detangler",
+                              "per_unit":  1.4781,
+                              "typed":  "none",
+                              "derived":  "0.04274-1.0685"
+                          },
+                          {
+                              "id":  "cookies",
+                              "store":  "Baker\u0027s",
+                              "name":  "Pepperidge Farm Farmhouse Thin \u0026 Crispy Dark Chocolate Chip Cookies",
+                              "per_unit":  0.8681,
+                              "typed":  "none",
+                              "derived":  "0.03066-0.7665"
+                          },
+                          {
+                              "id":  "cookies",
+                              "store":  "Baker\u0027s",
+                              "name":  "Famous Amos Classic Chocolate Chip Cookies Bite-size cookies Sweet Treats",
+                              "per_unit":  0.849,
+                              "typed":  "none",
+                              "derived":  "0.03066-0.7665"
+                          },
+                          {
+                              "id":  "crackers",
+                              "store":  "Baker\u0027s",
+                              "name":  "Schar Gluten Free Table Crackers",
+                              "per_unit":  0.9014,
+                              "typed":  "none",
+                              "derived":  "0.02356-0.589"
+                          },
+                          {
                               "id":  "dried-oregano",
                               "store":  "Baker\u0027s",
                               "name":  "McCormick Gourmet Organic Oregano Leaves",
@@ -3121,132 +3257,556 @@
                               "derived":  "0.02074-0.5185"
                           },
                           {
-                              "id":  "cereal",
+                              "id":  "frozen-pizza",
                               "store":  "Baker\u0027s",
-                              "name":  "Food For Life Organic Ezekiel 4:9 Almond Sprouted Whole Grain Cereal",
-                              "per_unit":  0.6556,
+                              "name":  "Screamin Sicilian Pepperoni Stuffed Crust Frozen Pizza",
+                              "per_unit":  9.99,
                               "typed":  "none",
-                              "derived":  "0.0256-0.64"
+                              "derived":  "0.3995-9.9875"
                           },
                           {
-                              "id":  "crackers",
+                              "id":  "frozen-pizza",
                               "store":  "Baker\u0027s",
-                              "name":  "Blue Diamond Nut-Thins Artisan Sesame Seeds Almond Rice Crackers",
-                              "per_unit":  1.144,
+                              "name":  "Motor City Pizza Co. Pepperoni Detroit Deep Dish Frozen Pizza",
+                              "per_unit":  9.99,
                               "typed":  "none",
-                              "derived":  "0.02356-0.589"
+                              "derived":  "0.3995-9.9875"
                           },
                           {
-                              "id":  "canned-tuna",
+                              "id":  "frozen-pizza",
                               "store":  "Baker\u0027s",
-                              "name":  "Wild Planet Albacore Wild Tuna",
-                              "per_unit":  1.158,
+                              "name":  "DiGiorno Pepperoni Stuffed Crust Frozen Pizza",
+                              "per_unit":  9.99,
                               "typed":  "none",
-                              "derived":  "0.0366-0.915"
-                          },
-                          {
-                              "id":  "canned-tuna",
-                              "store":  "Baker\u0027s",
-                              "name":  "Wild Planet Albacore No Salt Added Wild Tuna",
-                              "per_unit":  1.158,
-                              "typed":  "none",
-                              "derived":  "0.0366-0.915"
-                          },
-                          {
-                              "id":  "canned-tuna",
-                              "store":  "Baker\u0027s",
-                              "name":  "Safe Catch Elite Pure Wild Tuna",
-                              "per_unit":  0.998,
-                              "typed":  "none",
-                              "derived":  "0.0366-0.915"
-                          },
-                          {
-                              "id":  "hot-dogs",
-                              "store":  "Baker\u0027s",
-                              "name":  "Home Chef Cold Frank\u0027s Buffalo Boneless Chicken Wings",
-                              "per_unit":  0.6244,
-                              "typed":  "none",
-                              "derived":  "0.02044-0.511"
+                              "derived":  "0.3995-9.9875"
                           },
                           {
                               "id":  "hot-sauce",
                               "store":  "Baker\u0027s",
-                              "name":  "Cholula Chili Garlic Hot Sauce",
+                              "name":  "Cholula Original Hot Sauce",
                               "per_unit":  0.998,
                               "typed":  "none",
                               "derived":  "0.0275-0.6875"
                           },
                           {
-                              "id":  "conditioner",
+                              "id":  "hot-sauce",
                               "store":  "Baker\u0027s",
-                              "name":  "Kristin Ess Hair Strengthening Conditioner",
-                              "per_unit":  1.249,
+                              "name":  "El Yucateco Chile Habanero Hot Sauce",
+                              "per_unit":  0.7475,
                               "typed":  "none",
-                              "derived":  "0.04274-1.0685"
+                              "derived":  "0.0275-0.6875"
                           },
                           {
-                              "id":  "conditioner",
+                              "id":  "hot-sauce",
                               "store":  "Baker\u0027s",
-                              "name":  "Mielle Kalahari Melon \u0026 Aloe VeraDeep Hydration 2-Minute Deep Conditioner",
-                              "per_unit":  1.4158,
+                              "name":  "Yellowbird Habanero Hot Sauce",
+                              "per_unit":  0.7448,
                               "typed":  "none",
-                              "derived":  "0.04274-1.0685"
+                              "derived":  "0.0275-0.6875"
                           },
                           {
-                              "id":  "conditioner",
+                              "id":  "hot-sauce",
                               "store":  "Baker\u0027s",
-                              "name":  "Kristin Ess Castor Oil Curly Hair Conditioner For Dry Damaged Hair - Detangling + Deep Moisture",
-                              "per_unit":  1.249,
+                              "name":  "Cholula Green Pepper Hot Sauce",
+                              "per_unit":  0.998,
                               "typed":  "none",
-                              "derived":  "0.04274-1.0685"
+                              "derived":  "0.0275-0.6875"
                           },
                           {
-                              "id":  "conditioner",
+                              "id":  "hot-sauce",
                               "store":  "Baker\u0027s",
-                              "name":  "Not Your Mother\u0027s Curl Talk Bond Building Curly Hair Conditioner",
-                              "per_unit":  1.2862,
+                              "name":  "El Yucateco Green Habanero Hot Sauce",
+                              "per_unit":  0.7475,
                               "typed":  "none",
-                              "derived":  "0.04274-1.0685"
+                              "derived":  "0.0275-0.6875"
                           },
                           {
-                              "id":  "conditioner",
+                              "id":  "hot-sauce",
                               "store":  "Baker\u0027s",
-                              "name":  "Not Your Mother\u0027s Curl Talk Bond Building Curly Hair Conditioner",
-                              "per_unit":  1.3738,
+                              "name":  "Cholula Original Hot Sauce",
+                              "per_unit":  0.7492,
                               "typed":  "none",
-                              "derived":  "0.04274-1.0685"
+                              "derived":  "0.0275-0.6875"
                           },
                           {
-                              "id":  "cookies",
+                              "id":  "hot-sauce",
                               "store":  "Baker\u0027s",
-                              "name":  "Famous Amos Classic Chocolate Chip Cookies Bite-size cookies Sweet Treats",
+                              "name":  "Yellowbird Serrano Hot Sauce",
+                              "per_unit":  0.7448,
+                              "typed":  "none",
+                              "derived":  "0.0275-0.6875"
+                          },
+                          {
+                              "id":  "hot-sauce",
+                              "store":  "Baker\u0027s",
+                              "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
+                              "per_unit":  0.898,
+                              "typed":  "none",
+                              "derived":  "0.0275-0.6875"
+                          },
+                          {
+                              "id":  "hot-sauce",
+                              "store":  "Baker\u0027s",
+                              "name":  "TABASCO Green Pepper Sauce, Hot Sauce",
+                              "per_unit":  0.898,
+                              "typed":  "none",
+                              "derived":  "0.0275-0.6875"
+                          },
+                          {
+                              "id":  "hot-sauce",
+                              "store":  "Baker\u0027s",
+                              "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
+                              "per_unit":  1.095,
+                              "typed":  "none",
+                              "derived":  "0.0275-0.6875"
+                          },
+                          {
+                              "id":  "hummus",
+                              "store":  "Baker\u0027s",
+                              "name":  "Simple Truth Organic Original Hummus",
+                              "per_unit":  2.3762,
+                              "typed":  "none",
+                              "derived":  "0.06066-1.5165"
+                          },
+                          {
+                              "id":  "ice-cream",
+                              "store":  "Baker\u0027s",
+                              "name":  "Halo Top Low-Calorie Vanilla Bean Light Ice Cream",
+                              "per_unit":  0.3431,
+                              "typed":  "none",
+                              "derived":  "0.01207-0.30175"
+                          },
+                          {
+                              "id":  "instant-coffee",
+                              "store":  "Baker\u0027s",
+                              "name":  "Cafe Bustelo Instant Coffee Single Serve Packets",
+                              "per_unit":  3.6182,
+                              "typed":  "none",
+                              "derived":  "0.14258-3.5645"
+                          },
+                          {
+                              "id":  "instant-coffee",
+                              "store":  "Baker\u0027s",
+                              "name":  "Simple Truth Organic Mushroom Instant Coffee",
+                              "per_unit":  5.184,
+                              "typed":  "none",
+                              "derived":  "0.14258-3.5645"
+                          },
+                          {
+                              "id":  "instant-coffee",
+                              "store":  "Baker\u0027s",
+                              "name":  "Nescafe Gold Decaf Espresso Instant Coffee",
+                              "per_unit":  3.6246,
+                              "typed":  "none",
+                              "derived":  "0.14258-3.5645"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Sprite Lemon-Lime Caffeine Free Soda Fridge Pack Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Sprite Lemon-Lime Caffeine Free Soda Bottle",
+                              "per_unit":  0.1445,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "7UP Lime Lemon Caffeine-Free Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Sprite Zero Sugar Lemon-Lime Caffeine Free Soda Bottle",
+                              "per_unit":  0.1445,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Sprite Zero Sugar Lemon-Lime Caffeine Free Soda Fridge Pack Mini Cans",
+                              "per_unit":  0.0999,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "mayonnaise",
+                              "store":  "Baker\u0027s",
+                              "name":  "Chosen Foods 100% Pure Avocado Oil Classic Mayo",
+                              "per_unit":  0.6658,
+                              "typed":  "none",
+                              "derived":  "0.0259-0.6475"
+                          },
+                          {
+                              "id":  "mayonnaise",
+                              "store":  "Baker\u0027s",
+                              "name":  "Chosen Foods 100% Pure Avocado Oil Classic Mayo",
+                              "per_unit":  0.7492,
+                              "typed":  "none",
+                              "derived":  "0.0259-0.6475"
+                          },
+                          {
+                              "id":  "mayonnaise",
+                              "store":  "Baker\u0027s",
+                              "name":  "Primal Kitchen Avocado Oil Mayo",
+                              "per_unit":  0.7325,
+                              "typed":  "none",
+                              "derived":  "0.0259-0.6475"
+                          },
+                          {
+                              "id":  "mayonnaise",
+                              "store":  "Baker\u0027s",
+                              "name":  "Primal Kitchen Avocado Oil Mayo",
+                              "per_unit":  0.8325,
+                              "typed":  "none",
+                              "derived":  "0.0259-0.6475"
+                          },
+                          {
+                              "id":  "pasta-sauce",
+                              "store":  "Baker\u0027s",
+                              "name":  "Sturdy Sauce Marinara High Protein Sauce",
+                              "per_unit":  0.8431,
+                              "typed":  "none",
+                              "derived":  "0.01532-0.383"
+                          },
+                          {
+                              "id":  "pasta-sauce",
+                              "store":  "Baker\u0027s",
+                              "name":  "Private Selection Meatballs with Marinara Sauce and Mozzarella Cheese",
+                              "per_unit":  0.411,
+                              "typed":  "none",
+                              "derived":  "0.01532-0.383"
+                          },
+                          {
+                              "id":  "pretzels",
+                              "store":  "Baker\u0027s",
+                              "name":  "DOT\u0027S Homestyle Pretzels Original Seasoned Pretzel Twists Bags",
                               "per_unit":  0.849,
                               "typed":  "none",
-                              "derived":  "0.03066-0.7665"
+                              "derived":  "0.03286-0.8215"
                           },
                           {
-                              "id":  "cookies",
+                              "id":  "ramen",
                               "store":  "Baker\u0027s",
-                              "name":  "Grandma\u0027s Chocolate Chip Cookies",
-                              "per_unit":  0.796,
+                              "name":  "Maruchan Ramen Noodle Soup, Chicken Flavor Instant Noodles",
+                              "per_unit":  3.5,
                               "typed":  "none",
-                              "derived":  "0.03066-0.7665"
+                              "derived":  "0.0665-1.6625"
                           },
                           {
-                              "id":  "cookies",
+                              "id":  "ramen",
                               "store":  "Baker\u0027s",
-                              "name":  "Pepperidge Farm Farmhouse Thin \u0026 Crispy Dark Chocolate Chip Cookies",
-                              "per_unit":  0.8681,
+                              "name":  "Maruchan Ramen Noodle Soup, Chicken Flavor Instant Noodles",
+                              "per_unit":  3.99,
                               "typed":  "none",
-                              "derived":  "0.03066-0.7665"
+                              "derived":  "0.0665-1.6625"
                           },
                           {
-                              "id":  "crackers",
+                              "id":  "ramen",
                               "store":  "Baker\u0027s",
-                              "name":  "Schar Gluten Free Table Crackers",
-                              "per_unit":  0.9014,
+                              "name":  "Maruchan Ramen Noodle Soup Chicken Flavor Instant Noodles Souper 6",
+                              "per_unit":  2.69,
                               "typed":  "none",
-                              "derived":  "0.02356-0.589"
+                              "derived":  "0.0665-1.6625"
+                          },
+                          {
+                              "id":  "ramen",
+                              "store":  "Baker\u0027s",
+                              "name":  "Maruchan Ramen Noodle Soup Beef Flavor Instant Noodles Souper 6",
+                              "per_unit":  2.69,
+                              "typed":  "none",
+                              "derived":  "0.0665-1.6625"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Baker\u0027s",
+                              "name":  "Pantene Daily Moisture Renewal Shampoo, 72 Hour Lush Moisture",
+                              "per_unit":  0.5408,
+                              "typed":  "none",
+                              "derived":  "0.021-0.525"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Baker\u0027s",
+                              "name":  "Dove Shampoo Conditioner Intensive Repair",
+                              "per_unit":  0.9158,
+                              "typed":  "none",
+                              "derived":  "0.021-0.525"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Baker\u0027s",
+                              "name":  "MONDAY Haircare Moisture Shampoo Gardenia Scented with Hyaluronic Acid \u0026 Shea Butter",
+                              "per_unit":  0.6658,
+                              "typed":  "none",
+                              "derived":  "0.021-0.525"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Baker\u0027s",
+                              "name":  "MONDAY Haircare Gardenia Volume + Collagen Shampoo for Thin \u0026 Fine Hair",
+                              "per_unit":  0.6658,
+                              "typed":  "none",
+                              "derived":  "0.021-0.525"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Baker\u0027s",
+                              "name":  "Herbal Essences Classics Smooth Shampoo and Conditioner Set with Rose Hips",
+                              "per_unit":  0.5922,
+                              "typed":  "none",
+                              "derived":  "0.021-0.525"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Baker\u0027s",
+                              "name":  "MONDAY Haircare Gardenia Scented Smooth Shampoo",
+                              "per_unit":  0.6658,
+                              "typed":  "none",
+                              "derived":  "0.021-0.525"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Baker\u0027s",
+                              "name":  "MONDAY Haircare Moisture + Hyaluronic Acid Gardenia Scent Shampoo",
+                              "per_unit":  0.5552,
+                              "typed":  "none",
+                              "derived":  "0.021-0.525"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Baker\u0027s",
+                              "name":  "Raw Sugar The Scalp Restore Shampoo Bottle",
+                              "per_unit":  0.6869,
+                              "typed":  "none",
+                              "derived":  "0.021-0.525"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "RC Cola Zero Sugar Soda, 12 fl oz cans, 12 pack",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Coca-Cola Zero Sugar Cherry Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Coca-Cola Caffeine-Free Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Coca-Cola Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Coca-Cola Cherry Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Coca-Cola Zero Sugar Cherry Float Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Coca-Cola Vanilla Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Coca-Cola Cherry Float Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "RC Cola Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Pepsi Cola Diet Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Pepsi Cola Wild Cherry Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Pepsi Cola Real Sugar Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Pepsi Cola Caffeine Free Diet Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Pepsi Cola Wild Cherry \u0026 Cream Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Zevia Cola Zero-Sugar Soda Cans",
+                              "per_unit":  0.0867,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Diet Coke Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Coca-Cola Zero Sugar Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Diet Coke Caffeine-Free Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Baker\u0027s",
+                              "name":  "Coca-Cola Zero Sugar Caffeine-Free Soda Cans",
+                              "per_unit":  0.0833,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "sparkling-water",
+                              "store":  "Baker\u0027s",
+                              "name":  "Waterloo Cherry Limeade Sparkling Water",
+                              "per_unit":  0.4992,
+                              "typed":  "none",
+                              "derived":  "0.00592-0.148"
+                          },
+                          {
+                              "id":  "sparkling-water",
+                              "store":  "Baker\u0027s",
+                              "name":  "Waterloo Lemon-Lime Sparkling Water",
+                              "per_unit":  0.4992,
+                              "typed":  "none",
+                              "derived":  "0.00592-0.148"
+                          },
+                          {
+                              "id":  "sparkling-water",
+                              "store":  "Baker\u0027s",
+                              "name":  "Waterloo Raspberry Nectarine Sparkling Water",
+                              "per_unit":  0.4992,
+                              "typed":  "none",
+                              "derived":  "0.00592-0.148"
+                          },
+                          {
+                              "id":  "sparkling-water",
+                              "store":  "Baker\u0027s",
+                              "name":  "Waterloo Strawberry Sparkling Water",
+                              "per_unit":  0.4992,
+                              "typed":  "none",
+                              "derived":  "0.00592-0.148"
+                          },
+                          {
+                              "id":  "sparkling-water",
+                              "store":  "Baker\u0027s",
+                              "name":  "Waterloo Summer Berry Sparkling Water",
+                              "per_unit":  0.4992,
+                              "typed":  "none",
+                              "derived":  "0.00592-0.148"
+                          },
+                          {
+                              "id":  "canned-corn",
+                              "store":  "Baker\u0027s",
+                              "name":  "Del Monte Summer Crisp Whole Kernel Corn Golden Sweet Corn",
+                              "per_unit":  0.2718,
+                              "typed":  "none",
+                              "derived":  "0.01049-0.26225"
+                          },
+                          {
+                              "id":  "canned-corn",
+                              "store":  "Baker\u0027s",
+                              "name":  "Del Monte Summer Crisp No Salt Added Whole Kernel Golden Sweet Corn",
+                              "per_unit":  0.2718,
+                              "typed":  "none",
+                              "derived":  "0.01049-0.26225"
+                          },
+                          {
+                              "id":  "tortilla-chips",
+                              "store":  "Baker\u0027s",
+                              "name":  "Siete Sea Salt Tortilla Chips",
+                              "per_unit":  1.098,
+                              "typed":  "none",
+                              "derived":  "0.03463-0.86575"
                           },
                           {
                               "id":  "dinner-rolls",
@@ -3367,526 +3927,6 @@
                               "per_unit":  0.665,
                               "typed":  "none",
                               "derived":  "0.0195-0.4875"
-                          },
-                          {
-                              "id":  "frozen-pizza",
-                              "store":  "Baker\u0027s",
-                              "name":  "Screamin Sicilian Pepperoni Stuffed Crust Frozen Pizza",
-                              "per_unit":  9.99,
-                              "typed":  "none",
-                              "derived":  "0.3995-9.9875"
-                          },
-                          {
-                              "id":  "frozen-pizza",
-                              "store":  "Baker\u0027s",
-                              "name":  "Motor City Pizza Co. Pepperoni Detroit Deep Dish Frozen Pizza",
-                              "per_unit":  9.99,
-                              "typed":  "none",
-                              "derived":  "0.3995-9.9875"
-                          },
-                          {
-                              "id":  "frozen-pizza",
-                              "store":  "Baker\u0027s",
-                              "name":  "DiGiorno Pepperoni Stuffed Crust Frozen Pizza",
-                              "per_unit":  9.99,
-                              "typed":  "none",
-                              "derived":  "0.3995-9.9875"
-                          },
-                          {
-                              "id":  "hot-sauce",
-                              "store":  "Baker\u0027s",
-                              "name":  "Cholula Original Hot Sauce",
-                              "per_unit":  0.998,
-                              "typed":  "none",
-                              "derived":  "0.0275-0.6875"
-                          },
-                          {
-                              "id":  "hot-sauce",
-                              "store":  "Baker\u0027s",
-                              "name":  "El Yucateco Chile Habanero Hot Sauce",
-                              "per_unit":  0.7475,
-                              "typed":  "none",
-                              "derived":  "0.0275-0.6875"
-                          },
-                          {
-                              "id":  "hot-sauce",
-                              "store":  "Baker\u0027s",
-                              "name":  "Cholula Original Hot Sauce",
-                              "per_unit":  0.7492,
-                              "typed":  "none",
-                              "derived":  "0.0275-0.6875"
-                          },
-                          {
-                              "id":  "hot-sauce",
-                              "store":  "Baker\u0027s",
-                              "name":  "Yellowbird Habanero Hot Sauce",
-                              "per_unit":  0.7448,
-                              "typed":  "none",
-                              "derived":  "0.0275-0.6875"
-                          },
-                          {
-                              "id":  "hot-sauce",
-                              "store":  "Baker\u0027s",
-                              "name":  "Yellowbird Serrano Hot Sauce",
-                              "per_unit":  0.7448,
-                              "typed":  "none",
-                              "derived":  "0.0275-0.6875"
-                          },
-                          {
-                              "id":  "hot-sauce",
-                              "store":  "Baker\u0027s",
-                              "name":  "Cholula Green Pepper Hot Sauce",
-                              "per_unit":  0.998,
-                              "typed":  "none",
-                              "derived":  "0.0275-0.6875"
-                          },
-                          {
-                              "id":  "hot-sauce",
-                              "store":  "Baker\u0027s",
-                              "name":  "Cholula Chipotle Hot Sauce",
-                              "per_unit":  0.998,
-                              "typed":  "none",
-                              "derived":  "0.0275-0.6875"
-                          },
-                          {
-                              "id":  "hot-sauce",
-                              "store":  "Baker\u0027s",
-                              "name":  "Cholula Extra Hot Sauce",
-                              "per_unit":  0.998,
-                              "typed":  "none",
-                              "derived":  "0.0275-0.6875"
-                          },
-                          {
-                              "id":  "hummus",
-                              "store":  "Baker\u0027s",
-                              "name":  "Simple Truth Organic Original Hummus",
-                              "per_unit":  2.3762,
-                              "typed":  "none",
-                              "derived":  "0.06066-1.5165"
-                          },
-                          {
-                              "id":  "instant-coffee",
-                              "store":  "Baker\u0027s",
-                              "name":  "Cafe Bustelo Instant Coffee Single Serve Packets",
-                              "per_unit":  3.6182,
-                              "typed":  "none",
-                              "derived":  "0.14258-3.5645"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Sprite Zero Sugar Lemon-Lime Caffeine Free Soda Fridge Pack Mini Cans",
-                              "per_unit":  0.0999,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Sprite Lemon-Lime Caffeine Free Soda Fridge Pack Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Sprite Lemon-Lime Caffeine Free Soda Bottle",
-                              "per_unit":  0.1445,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "7UP Lime Lemon Caffeine-Free Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Sprite Zero Sugar Lemon-Lime Caffeine Free Soda Bottle",
-                              "per_unit":  0.1445,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "mayonnaise",
-                              "store":  "Baker\u0027s",
-                              "name":  "Primal Kitchen Avocado Oil Mayo",
-                              "per_unit":  0.7325,
-                              "typed":  "none",
-                              "derived":  "0.0259-0.6475"
-                          },
-                          {
-                              "id":  "mayonnaise",
-                              "store":  "Baker\u0027s",
-                              "name":  "Primal Kitchen Avocado Oil Mayo",
-                              "per_unit":  0.8325,
-                              "typed":  "none",
-                              "derived":  "0.0259-0.6475"
-                          },
-                          {
-                              "id":  "mayonnaise",
-                              "store":  "Baker\u0027s",
-                              "name":  "Chosen Foods 100% Pure Avocado Oil Classic Mayo",
-                              "per_unit":  0.6658,
-                              "typed":  "none",
-                              "derived":  "0.0259-0.6475"
-                          },
-                          {
-                              "id":  "mayonnaise",
-                              "store":  "Baker\u0027s",
-                              "name":  "Chosen Foods 100% Pure Avocado Oil Classic Mayo",
-                              "per_unit":  0.7492,
-                              "typed":  "none",
-                              "derived":  "0.0259-0.6475"
-                          },
-                          {
-                              "id":  "pasta-sauce",
-                              "store":  "Baker\u0027s",
-                              "name":  "Sturdy Sauce Marinara High Protein Sauce",
-                              "per_unit":  0.8431,
-                              "typed":  "none",
-                              "derived":  "0.01532-0.383"
-                          },
-                          {
-                              "id":  "pasta-sauce",
-                              "store":  "Baker\u0027s",
-                              "name":  "Private Selection Meatballs with Marinara Sauce and Mozzarella Cheese",
-                              "per_unit":  0.411,
-                              "typed":  "none",
-                              "derived":  "0.01532-0.383"
-                          },
-                          {
-                              "id":  "pretzels",
-                              "store":  "Baker\u0027s",
-                              "name":  "DOT\u0027S Homestyle Pretzels Original Seasoned Pretzel Twists Bags",
-                              "per_unit":  0.849,
-                              "typed":  "none",
-                              "derived":  "0.03286-0.8215"
-                          },
-                          {
-                              "id":  "ramen",
-                              "store":  "Baker\u0027s",
-                              "name":  "Maruchan Ramen Noodle Soup, Chicken Flavor Instant Noodles",
-                              "per_unit":  3.5,
-                              "typed":  "none",
-                              "derived":  "0.0665-1.6625"
-                          },
-                          {
-                              "id":  "ramen",
-                              "store":  "Baker\u0027s",
-                              "name":  "Maruchan Ramen Noodle Soup, Chicken Flavor Instant Noodles",
-                              "per_unit":  3.99,
-                              "typed":  "none",
-                              "derived":  "0.0665-1.6625"
-                          },
-                          {
-                              "id":  "ramen",
-                              "store":  "Baker\u0027s",
-                              "name":  "Maruchan Ramen Noodle Soup Chicken Flavor Instant Noodles Souper 6",
-                              "per_unit":  2.69,
-                              "typed":  "none",
-                              "derived":  "0.0665-1.6625"
-                          },
-                          {
-                              "id":  "ramen",
-                              "store":  "Baker\u0027s",
-                              "name":  "Maruchan Ramen Noodle Soup Beef Flavor Instant Noodles Souper 6",
-                              "per_unit":  2.69,
-                              "typed":  "none",
-                              "derived":  "0.0665-1.6625"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Baker\u0027s",
-                              "name":  "Pantene Daily Moisture Renewal Shampoo, 72 Hour Lush Moisture",
-                              "per_unit":  0.5408,
-                              "typed":  "none",
-                              "derived":  "0.021-0.525"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Baker\u0027s",
-                              "name":  "Dove Shampoo Conditioner Intensive Repair",
-                              "per_unit":  0.9158,
-                              "typed":  "none",
-                              "derived":  "0.021-0.525"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Baker\u0027s",
-                              "name":  "MONDAY Haircare Moisture Shampoo Gardenia Scented with Hyaluronic Acid \u0026 Shea Butter",
-                              "per_unit":  0.6658,
-                              "typed":  "none",
-                              "derived":  "0.021-0.525"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Baker\u0027s",
-                              "name":  "Herbal Essences Classics Smooth Shampoo and Conditioner Set with Rose Hips",
-                              "per_unit":  0.5922,
-                              "typed":  "none",
-                              "derived":  "0.021-0.525"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Baker\u0027s",
-                              "name":  "MONDAY Haircare Moisture + Hyaluronic Acid Gardenia Scent Shampoo",
-                              "per_unit":  0.5552,
-                              "typed":  "none",
-                              "derived":  "0.021-0.525"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Baker\u0027s",
-                              "name":  "L\u0027Oreal Paris Sulfate Free Moisture Shampoo for Hydrating Dry Hair, EverPure, 23 fl oz",
-                              "per_unit":  0.6952,
-                              "typed":  "none",
-                              "derived":  "0.021-0.525"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Baker\u0027s",
-                              "name":  "L\u0027Oreal Paris Sulfate Free Moisture Shampoo for Hydrating Dry Hair, EverPure, 8.5 fl oz",
-                              "per_unit":  1.1753,
-                              "typed":  "none",
-                              "derived":  "0.021-0.525"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Baker\u0027s",
-                              "name":  "L\u0027Oreal Paris Sulfate Free Moisture Shampoo for Hydrating Dry Hair, EverPure, 8.5 fl oz",
-                              "per_unit":  1.2929,
-                              "typed":  "none",
-                              "derived":  "0.021-0.525"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Baker\u0027s",
-                              "name":  "L\u0027Oreal Paris EverPure Thickening Shampoo Sulfate Free for Fortifying Fine Hair",
-                              "per_unit":  1.1753,
-                              "typed":  "none",
-                              "derived":  "0.021-0.525"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Baker\u0027s",
-                              "name":  "L\u0027Oreal Paris EverPure Thickening Shampoo Sulfate Free for Fortifying Fine Hair",
-                              "per_unit":  1.2929,
-                              "typed":  "none",
-                              "derived":  "0.021-0.525"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "RC Cola Zero Sugar Soda, 12 fl oz cans, 12 pack",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Coca-Cola Zero Sugar Cherry Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Coca-Cola Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Coca-Cola Cherry Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Coca-Cola Zero Sugar Cherry Float Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Coca-Cola Vanilla Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Coca-Cola Cherry Float Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Coca-Cola Caffeine-Free Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "RC Cola Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Pepsi Cola Diet Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Pepsi Cola Wild Cherry Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Pepsi Cola Real Sugar Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Pepsi Cola Caffeine Free Diet Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Pepsi Cola Wild Cherry \u0026 Cream Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Zevia Cola Zero-Sugar Soda Cans",
-                              "per_unit":  0.0867,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Diet Coke Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Coca-Cola Zero Sugar Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Diet Coke Caffeine-Free Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "soda",
-                              "store":  "Baker\u0027s",
-                              "name":  "Coca-Cola Zero Sugar Caffeine-Free Soda Cans",
-                              "per_unit":  0.0833,
-                              "typed":  "none",
-                              "derived":  "0.00296-0.074"
-                          },
-                          {
-                              "id":  "sparkling-water",
-                              "store":  "Baker\u0027s",
-                              "name":  "Waterloo Raspberry Nectarine Sparkling Water",
-                              "per_unit":  0.4992,
-                              "typed":  "none",
-                              "derived":  "0.00592-0.148"
-                          },
-                          {
-                              "id":  "sparkling-water",
-                              "store":  "Baker\u0027s",
-                              "name":  "Waterloo Cherry Limeade Sparkling Water",
-                              "per_unit":  0.4992,
-                              "typed":  "none",
-                              "derived":  "0.00592-0.148"
-                          },
-                          {
-                              "id":  "sparkling-water",
-                              "store":  "Baker\u0027s",
-                              "name":  "Waterloo Peach Sparkling Water",
-                              "per_unit":  0.4992,
-                              "typed":  "none",
-                              "derived":  "0.00592-0.148"
-                          },
-                          {
-                              "id":  "sparkling-water",
-                              "store":  "Baker\u0027s",
-                              "name":  "Waterloo Lemon-Lime Sparkling Water",
-                              "per_unit":  0.4992,
-                              "typed":  "none",
-                              "derived":  "0.00592-0.148"
-                          },
-                          {
-                              "id":  "strawberries",
-                              "store":  "Baker\u0027s",
-                              "name":  "Fresh Cut In Store Strawberry",
-                              "per_unit":  0.8738,
-                              "typed":  "none",
-                              "derived":  "0.03056-0.764"
-                          },
-                          {
-                              "id":  "canned-corn",
-                              "store":  "Baker\u0027s",
-                              "name":  "Del Monte Summer Crisp Whole Kernel Corn Golden Sweet Corn",
-                              "per_unit":  0.2718,
-                              "typed":  "none",
-                              "derived":  "0.01049-0.26225"
-                          },
-                          {
-                              "id":  "canned-corn",
-                              "store":  "Baker\u0027s",
-                              "name":  "Del Monte Summer Crisp No Salt Added Whole Kernel Golden Sweet Corn",
-                              "per_unit":  0.2718,
-                              "typed":  "none",
-                              "derived":  "0.01049-0.26225"
                           },
                           {
                               "id":  "caesar-dressing",
@@ -4390,7 +4430,15 @@
                               "name":  "McCormick Gourmet Cajun Seasoning",
                               "per_unit":  3.3289,
                               "typed":  "none",
-                              "derived":  "0.07476-1.869"
+                              "derived":  "0.0696-1.74"
+                          },
+                          {
+                              "id":  "cajun-seasoning",
+                              "store":  "Baker\u0027s",
+                              "name":  "Weber N\u0027Orleans Cajun Seasoning, Gluten-Free, Kosher, 2.75 oz",
+                              "per_unit":  1.8145,
+                              "typed":  "none",
+                              "derived":  "0.0696-1.74"
                           },
                           {
                               "id":  "cake-mix",
@@ -6022,7 +6070,7 @@
                               "name":  "Clorox 2 for Colors Bleach Free Fresh Stain Remover \u0026 Laundry Additive",
                               "per_unit":  0.2101,
                               "typed":  "none",
-                              "derived":  "0.0079-0.1975"
+                              "derived":  "0.00712-0.178"
                           },
                           {
                               "id":  "taco-seasoning",
@@ -6215,6 +6263,14 @@
                               "per_unit":  0.999,
                               "typed":  "none",
                               "derived":  "0.02356-0.589"
+                          },
+                          {
+                              "id":  "hot-sauce",
+                              "store":  "Family Fare",
+                              "name":  "Fly By Jing Hot Sauce, Xtra Spicy Chili Crisp 6 Oz",
+                              "per_unit":  2.115,
+                              "typed":  "none",
+                              "derived":  "0.0275-0.6875"
                           },
                           {
                               "id":  "balsamic-vinegar",
@@ -7470,7 +7526,7 @@
                               "name":  "Mr. Clean Multi Purpose Cleaner 16 Fl Oz",
                               "per_unit":  0.4369,
                               "typed":  "none",
-                              "derived":  "0.01635-0.40875"
+                              "derived":  "0.01744-0.436"
                           },
                           {
                               "id":  "all-purpose-cleaner",
@@ -7478,7 +7534,7 @@
                               "name":  "Mr. Clean Lemon Zest Multi Purpose Cleaner 16 Fl Oz",
                               "per_unit":  0.4369,
                               "typed":  "none",
-                              "derived":  "0.01635-0.40875"
+                              "derived":  "0.01744-0.436"
                           },
                           {
                               "id":  "all-purpose-cleaner",
@@ -7486,7 +7542,7 @@
                               "name":  "Mr. Clean Kitchen With Dawn Fresh Multi Purpose Cleaner 16 Fl Oz",
                               "per_unit":  0.4369,
                               "typed":  "none",
-                              "derived":  "0.01635-0.40875"
+                              "derived":  "0.01744-0.436"
                           },
                           {
                               "id":  "hand-soap",
@@ -8110,7 +8166,7 @@
                               "name":  "River City Meat Korean Bbq Style Chicken Thigh",
                               "per_unit":  9.6,
                               "typed":  "none",
-                              "derived":  "0.376-9.4"
+                              "derived":  "0.37567-9.39175"
                           },
                           {
                               "id":  "sea-salt",
@@ -8257,20 +8313,12 @@
                               "derived":  "0.261-6.525"
                           },
                           {
-                              "id":  "hot-sauce",
-                              "store":  "Family Fare",
-                              "name":  "Fly By Jing Hot Sauce, Xtra Spicy Chili Crisp 6 Oz",
-                              "per_unit":  2.115,
-                              "typed":  "none",
-                              "derived":  "0.0275-0.6875"
-                          },
-                          {
                               "id":  "cajun-seasoning",
                               "store":  "Family Fare",
                               "name":  "Mc Cormick Gourmet Cajun Seasoning 2.25 Oz",
                               "per_unit":  3.1067,
                               "typed":  "none",
-                              "derived":  "0.07476-1.869"
+                              "derived":  "0.0696-1.74"
                           },
                           {
                               "id":  "taco-seasoning",
@@ -9169,14 +9217,6 @@
                               "derived":  "0.08334-2.0835"
                           },
                           {
-                              "id":  "applesauce",
-                              "store":  "Fareway",
-                              "name":  "Motts Applesauce Ss Original Applesauce",
-                              "per_unit":  0.0023,
-                              "typed":  "none",
-                              "derived":  "0.01505-0.37625"
-                          },
-                          {
                               "id":  "frozen-pizza",
                               "store":  "Fareway",
                               "name":  "Brew Pub Pizza Sausage \u0026 Mushroom Pizza",
@@ -9454,7 +9494,7 @@
                               "name":  "McCormick Gourmet Cajun Seasoning, 2.25 oz",
                               "per_unit":  3.1067,
                               "typed":  "none",
-                              "derived":  "0.07476-1.869"
+                              "derived":  "0.0696-1.74"
                           },
                           {
                               "id":  "taco-seasoning",
@@ -9627,8 +9667,24 @@
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
+                              "name":  "Bounty Essentials Paper Towels Select-A-Size 6 Double Rolls, White, 108 Sheets Per Roll",
+                              "per_unit":  0.0123,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
                               "name":  "Viva Signature Cloth Paper Towels, 8 Triple Rolls",
                               "per_unit":  0.0203,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Sparkle Pick-A-Size Paper Towels, Limited Edition Summer Design, 2 Double Roll",
+                              "per_unit":  0.0171,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
                           },
@@ -9643,23 +9699,7 @@
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
-                              "name":  "Bounty Essentials Paper Towels Select-A-Size 6 Double Rolls, White, 108 Sheets Per Roll",
-                              "per_unit":  0.0123,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
                               "name":  "Sparkle Tear-A-Square Paper Towels, 2 Double Rolls, 110 Sheets per Roll",
-                              "per_unit":  0.0171,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
-                              "name":  "Sparkle Pick-A-Size Paper Towels, Limited Edition Summer Design, 2 Double Roll",
                               "per_unit":  0.0171,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
@@ -9683,16 +9723,8 @@
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
-                              "name":  "Great Value Everyday Strong Paper Towels, 6 Triple Rolls, Split Sheets",
-                              "per_unit":  0.0082,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
-                              "name":  "Scott Paper Towels, Choose-A-Sheet, 12 Double Rolls",
-                              "per_unit":  0.0094,
+                              "name":  "Great Value Everyday Strong Paper Towels, 2 Double Rolls",
+                              "per_unit":  0.0135,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
                           },
@@ -9707,8 +9739,8 @@
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
-                              "name":  "Great Value Everyday Strong Paper Towels, 2 Double Rolls",
-                              "per_unit":  0.0135,
+                              "name":  "Great Value Everyday Strong Paper Towels, 6 Triple Rolls, Split Sheets",
+                              "per_unit":  0.0082,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
                           },
@@ -9739,56 +9771,8 @@
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
-                              "name":  "Great Value Everyday Strong Paper Towels, 12 Double Rolls",
-                              "per_unit":  0.0083,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
-                              "name":  "Bounty Paper Towels Select-a-Size, 4 Triple Rolls",
-                              "per_unit":  0.0218,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
-                              "name":  "Bounty Paper Towels Select-a-Size, 10 Triple Rolls",
-                              "per_unit":  0.0333,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
-                              "name":  "Scott Choose-a-Sheet Paper Towels, 12 Double Rolls",
-                              "per_unit":  0.0137,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
-                              "name":  "Bounty Paper Towels Select-a-Size, 8 Triple Rolls",
-                              "per_unit":  0.0208,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
-                              "name":  "Viva Signature Cloth Paper Towels, 6 Double Rolls",
-                              "per_unit":  0.0328,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
-                              "name":  "Bounty Paper Towels Select-A-Size Print, 2 Triple Rolls, 123 Sheets per Roll",
-                              "per_unit":  0.0283,
+                              "name":  "Great Value Ultra Strong Paper Towels, 2 Triple Rolls",
+                              "per_unit":  0.019,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
                           },
@@ -9803,6 +9787,30 @@
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
+                              "name":  "Viva Signature Cloth Paper Towels, 6 Double Rolls",
+                              "per_unit":  0.0328,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Great Value Everyday Strong Paper Towels, 12 Double Rolls",
+                              "per_unit":  0.0083,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Bounty Paper Towels Select-A-Size White, 1 Mega Roll, 164 Sheets per Roll",
+                              "per_unit":  0.0304,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
                               "name":  "Bounty Paper Towels Select-A-Size White, 12 Double Rolls, 82 Sheets per Roll",
                               "per_unit":  0.0228,
                               "typed":  "none",
@@ -9811,8 +9819,16 @@
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
-                              "name":  "Viva Signature Cloth Paper Towels, 8 Triple Rolls",
-                              "per_unit":  0.0232,
+                              "name":  "Bounty Paper Towels Select-a-Size, 4 Triple Rolls",
+                              "per_unit":  0.0218,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Bounty Paper Towels Select-a-Size, 2 Triple Rolls",
+                              "per_unit":  0.0479,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
                           },
@@ -9820,14 +9836,30 @@
                               "id":  "paper-towels",
                               "store":  "Walmart",
                               "name":  "Bounty Paper Towels Select-a-Size, 6 Triple Rolls",
-                              "per_unit":  0.0333,
+                              "per_unit":  0.0321,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
                           },
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
-                              "name":  "Bounty Paper Towels Select-A-Size, 6 Mega Rolls",
+                              "name":  "Bounty Paper Towels Select-a-Size, 8 Triple Rolls",
+                              "per_unit":  0.0208,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Bounty Paper Towels Select-A-Size Print, 2 Triple Rolls, 123 Sheets per Roll",
+                              "per_unit":  0.0283,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Bounty Paper Towels Select-a-Size, 10 Triple Rolls",
                               "per_unit":  0.0296,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
@@ -9843,8 +9875,8 @@
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
-                              "name":  "Bounty Paper Towels Select-a-Size, 2 Triple Rolls",
-                              "per_unit":  0.0479,
+                              "name":  "Viva Signature Cloth Paper Towels, 8 Triple Rolls",
+                              "per_unit":  0.028,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
                           },
@@ -9867,16 +9899,16 @@
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
-                              "name":  "Great Value Ultra Strong Paper Towels, 6 Triple Rolls",
-                              "per_unit":  0.0151,
+                              "name":  "Scott Paper Towels, Choose-A-Sheet, 6 Double Rolls",
+                              "per_unit":  0.0226,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
                           },
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
-                              "name":  "Scott Paper Towels, Choose-A-Sheet, 6 Double Rolls",
-                              "per_unit":  0.0212,
+                              "name":  "Bounty Paper Towels Select-A-Size, 6 Mega Rolls",
+                              "per_unit":  0.0264,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
                           },
@@ -9893,14 +9925,6 @@
                               "store":  "Walmart",
                               "name":  "Viva Signature Cloth Paper Towels, 2 Triple Rolls",
                               "per_unit":  0.0496,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
-                              "name":  "Great Value Ultra Strong Paper Towels, Split Sheets, 12 Double Rolls",
-                              "per_unit":  0.0114,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
                           },
@@ -9947,8 +9971,8 @@
                           {
                               "id":  "toilet-paper",
                               "store":  "Walmart",
-                              "name":  "Charmin Toilet Paper Ultra Soft, 12 Mega XL Rolls",
-                              "per_unit":  0.0058,
+                              "name":  "Charmin Ultra Strong Toilet Paper 12 Mega Rolls, 220 Sheets Per Roll",
+                              "per_unit":  0.0057,
                               "typed":  "none",
                               "derived":  "0.10217-2.55425"
                           },
@@ -9971,16 +9995,16 @@
                           {
                               "id":  "toilet-paper",
                               "store":  "Walmart",
-                              "name":  "Charmin Ultra Strong Toilet Paper 12 Mega Rolls, 220 Sheets Per Roll",
-                              "per_unit":  0.0057,
+                              "name":  "Charmin Ultra Soft Toilet Paper, 12 Mega Rolls, 2-Ply Bath Tissue",
+                              "per_unit":  0.006,
                               "typed":  "none",
                               "derived":  "0.10217-2.55425"
                           },
                           {
                               "id":  "toilet-paper",
                               "store":  "Walmart",
-                              "name":  "Charmin Ultra Strong Toilet Paper 12 Mega XL Rolls, 330 Sheets Per Roll",
-                              "per_unit":  0.0054,
+                              "name":  "Charmin Toilet Paper Ultra Soft, 12 Mega XL Rolls",
+                              "per_unit":  0.0058,
                               "typed":  "none",
                               "derived":  "0.10217-2.55425"
                           },
@@ -9995,8 +10019,16 @@
                           {
                               "id":  "toilet-paper",
                               "store":  "Walmart",
-                              "name":  "Charmin Ultra Soft Toilet Paper, 12 Mega Rolls, 2-Ply Bath Tissue",
-                              "per_unit":  0.006,
+                              "name":  "Charmin Ultra Strong Toilet Paper 12 Mega XL Rolls, 330 Sheets Per Roll",
+                              "per_unit":  0.0054,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Angel Soft 2-Ply Toilet Paper, 6 Mega XL Rolls, 480 Sheets Per Roll",
+                              "per_unit":  0.0026,
                               "typed":  "none",
                               "derived":  "0.10217-2.55425"
                           },
@@ -10005,14 +10037,6 @@
                               "store":  "Walmart",
                               "name":  "Scott 1000 1-Ply Toilet Paper, 12 Rolls, 1,000 Sheets per Roll",
                               "per_unit":  0.0009,
-                              "typed":  "none",
-                              "derived":  "0.10217-2.55425"
-                          },
-                          {
-                              "id":  "toilet-paper",
-                              "store":  "Walmart",
-                              "name":  "Great Value Toilet Paper, 1000 Sheets per Roll, 12 Rolls",
-                              "per_unit":  0.0008,
                               "typed":  "none",
                               "derived":  "0.10217-2.55425"
                           },
@@ -10035,24 +10059,16 @@
                           {
                               "id":  "toilet-paper",
                               "store":  "Walmart",
+                              "name":  "Great Value Toilet Paper, 1000 Sheets per Roll, 12 Rolls",
+                              "per_unit":  0.0008,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
                               "name":  "Scott Comfort Plus Toilet Paper, 12 Triple Rolls",
                               "per_unit":  0.002,
-                              "typed":  "none",
-                              "derived":  "0.10217-2.55425"
-                          },
-                          {
-                              "id":  "toilet-paper",
-                              "store":  "Walmart",
-                              "name":  "Angel Soft 2-Ply Toilet Paper, 6 Mega XL Rolls, 480 Sheets Per Roll",
-                              "per_unit":  0.0026,
-                              "typed":  "none",
-                              "derived":  "0.10217-2.55425"
-                          },
-                          {
-                              "id":  "toilet-paper",
-                              "store":  "Walmart",
-                              "name":  "Angel Soft 2-Ply Toilet Paper, Fresh Linen Scented Tube, 12 Mega Rolls, 320 Sheets per Roll",
-                              "per_unit":  0.0038,
                               "typed":  "none",
                               "derived":  "0.10217-2.55425"
                           },
@@ -10068,7 +10084,15 @@
                               "id":  "toilet-paper",
                               "store":  "Walmart",
                               "name":  "Charmin Ultra Strong Toilet Paper, 24 Mega Roll",
-                              "per_unit":  0.006,
+                              "per_unit":  0.007,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Charmin Ultra Soft Toilet Paper 6 Mega Rolls, 224 Sheets Per Roll",
+                              "per_unit":  0.0127,
                               "typed":  "none",
                               "derived":  "0.10217-2.55425"
                           },
@@ -10099,24 +10123,8 @@
                           {
                               "id":  "toilet-paper",
                               "store":  "Walmart",
-                              "name":  "Charmin Ultra Soft Toilet Paper 6 Mega Rolls, 224 Sheets Per Roll",
-                              "per_unit":  0.0127,
-                              "typed":  "none",
-                              "derived":  "0.10217-2.55425"
-                          },
-                          {
-                              "id":  "toilet-paper",
-                              "store":  "Walmart",
                               "name":  "Quilted Northern Ultra Soft \u0026 Strong 2-Ply Toilet Paper, 12 Mega Rolls, 295 Sheets per Roll",
                               "per_unit":  0.0039,
-                              "typed":  "none",
-                              "derived":  "0.10217-2.55425"
-                          },
-                          {
-                              "id":  "toilet-paper",
-                              "store":  "Walmart",
-                              "name":  "Charmin Essentials Soft Toilet Paper 12 Mega Rolls, 330 Sheets Per Roll",
-                              "per_unit":  0.002,
                               "typed":  "none",
                               "derived":  "0.10217-2.55425"
                           },
@@ -10132,15 +10140,7 @@
                               "id":  "toilet-paper",
                               "store":  "Walmart",
                               "name":  "Charmin Ultra Soft Toilet Paper 12 Mega Rolls, 224 Sheets Per Roll",
-                              "per_unit":  0.0093,
-                              "typed":  "none",
-                              "derived":  "0.10217-2.55425"
-                          },
-                          {
-                              "id":  "toilet-paper",
-                              "store":  "Walmart",
-                              "name":  "Charmin Ultra Strong Toilet Paper 12 Mega Rolls, 242 Sheets Per Roll",
-                              "per_unit":  0.0067,
+                              "per_unit":  0.0078,
                               "typed":  "none",
                               "derived":  "0.10217-2.55425"
                           },
@@ -10149,6 +10149,46 @@
                               "store":  "Walmart",
                               "name":  "Charmin Essentials Strong Toilet Paper 12 Mega Rolls, 429 Sheets Per Roll",
                               "per_unit":  0.0019,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Quilted Northern Ultra Soft \u0026 Strong 2-Ply Toilet Paper, 6 Mega Rolls, 255 Sheets Per Roll",
+                              "per_unit":  0.0048,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Scott Rapid-Dissolving Toilet Paper for RVs \u0026 Boats, 4 Double Rolls",
+                              "per_unit":  0.0038,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Charmin Ultra Strong Toilet Paper Mega Roll, 242 Sheets per Roll, 30 Count",
+                              "per_unit":  0.006,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Charmin Ultra Strong Toilet Paper 12 Mega Rolls, 242 Sheets Per Roll",
+                              "per_unit":  0.0079,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Charmin Essentials Soft Toilet Paper 12 Mega Rolls, 330 Sheets Per Roll",
+                              "per_unit":  0.002,
                               "typed":  "none",
                               "derived":  "0.10217-2.55425"
                           },
@@ -10171,48 +10211,16 @@
                           {
                               "id":  "toilet-paper",
                               "store":  "Walmart",
-                              "name":  "Quilted Northern Ultra Soft \u0026 Strong 2-Ply Toilet Paper, 6 Mega Rolls, 255 Sheets Per Roll",
-                              "per_unit":  0.0048,
-                              "typed":  "none",
-                              "derived":  "0.10217-2.55425"
-                          },
-                          {
-                              "id":  "toilet-paper",
-                              "store":  "Walmart",
-                              "name":  "Angel Soft Toilet Paper, 18 Mega Rolls = 72 Regular Rolls, 2-Ply Bath Tissue",
-                              "per_unit":  0.003,
-                              "typed":  "none",
-                              "derived":  "0.10217-2.55425"
-                          },
-                          {
-                              "id":  "toilet-paper",
-                              "store":  "Walmart",
-                              "name":  "Charmin Ultra Strong Toilet Paper Mega Roll, 242 Sheets per Roll, 30 Count",
-                              "per_unit":  0.0061,
-                              "typed":  "none",
-                              "derived":  "0.10217-2.55425"
-                          },
-                          {
-                              "id":  "toilet-paper",
-                              "store":  "Walmart",
-                              "name":  "Scott Rapid-Dissolving Toilet Paper for RVs \u0026 Boats, 4 Double Rolls",
-                              "per_unit":  0.0038,
-                              "typed":  "none",
-                              "derived":  "0.10217-2.55425"
-                          },
-                          {
-                              "id":  "toilet-paper",
-                              "store":  "Walmart",
                               "name":  "Charmin Ultra Soft Toilet Paper, 12 Mega Roll",
-                              "per_unit":  0.008,
+                              "per_unit":  0.0074,
                               "typed":  "none",
                               "derived":  "0.10217-2.55425"
                           },
                           {
                               "id":  "dishwasher-detergent",
                               "store":  "Walmart",
-                              "name":  "Cooks Standard Stainless Steel Cookware Set, 8-Piece Kitchen Pots and Pans Set with Glass Lid for Cooking, Induction \u0026 Dishwasher Safe",
-                              "per_unit":  17.4988,
+                              "name":  "Gotham Steel Hammered 20 Pc Ceramic Cookware Set Nonstick, Induction Pots and Pans Set, Non Toxic Cookware Sets, Oven \u0026 Dishwasher Safe, Copper",
+                              "per_unit":  12.4995,
                               "typed":  "none",
                               "derived":  "0.04394-1.0985"
                           },
@@ -10245,6 +10253,14 @@
                               "store":  "Walmart",
                               "name":  "McCormick Gourmet Kosher Adobo Seasoning, 1.76 oz Bottle",
                               "per_unit":  3.4034,
+                              "typed":  "none",
+                              "derived":  "0.06226-1.5565"
+                          },
+                          {
+                              "id":  "adobo-seasoning",
+                              "store":  "Walmart",
+                              "name":  "Simply Organic Adobo Seasoning, 4.41 oz.",
+                              "per_unit":  1.7596,
                               "typed":  "none",
                               "derived":  "0.06226-1.5565"
                           },
@@ -10297,6 +10313,14 @@
                               "derived":  "0.06498-1.6245"
                           },
                           {
+                              "id":  "air-freshener",
+                              "store":  "Walmart",
+                              "name":  "Glade Air Freshener Spray, Golden Pumpkin \u0026 Spice, Fragrance Infused with Essential Oils, 8.3 oz",
+                              "per_unit":  1.506,
+                              "typed":  "none",
+                              "derived":  "0.04205-1.05125"
+                          },
+                          {
                               "id":  "baby-wipes",
                               "store":  "Walmart",
                               "name":  "Huggies Natural Care Sensitive Little Monsters Edition Baby Wipes, 10 Pack, 560 Count",
@@ -10319,14 +10343,6 @@
                               "per_unit":  11.3333,
                               "typed":  "none",
                               "derived":  "0.398-9.95"
-                          },
-                          {
-                              "id":  "air-freshener",
-                              "store":  "Walmart",
-                              "name":  "Glade Air Freshener Spray, Golden Pumpkin \u0026 Spice, Fragrance Infused with Essential Oils, 8.3 oz",
-                              "per_unit":  1.506,
-                              "typed":  "none",
-                              "derived":  "0.04205-1.05125"
                           },
                           {
                               "id":  "toothbrushes",
@@ -10371,6 +10387,14 @@
                           {
                               "id":  "toothbrushes",
                               "store":  "Walmart",
+                              "name":  "Colgate Optic White Charcoal Soft Toothbrush for Adults, 2 Pack",
+                              "per_unit":  4.98,
+                              "typed":  "none",
+                              "derived":  "0.19067-4.76675"
+                          },
+                          {
+                              "id":  "toothbrushes",
+                              "store":  "Walmart",
                               "name":  "(3 pack) Colgate 360 Advanced Whitening Toothbrush, Medium Adult Toothbrush, 1 Pack",
                               "per_unit":  5.0667,
                               "typed":  "none",
@@ -10383,6 +10407,222 @@
                               "per_unit":  0.1667,
                               "typed":  "none",
                               "derived":  "0.19067-4.76675"
+                          },
+                          {
+                              "id":  "cumin-seeds",
+                              "store":  "Walmart",
+                              "name":  "El Guapo No Artificial Flavors Whole Cumin, 0.75 oz Bag",
+                              "per_unit":  10.08,
+                              "typed":  "none",
+                              "derived":  "0.229-5.725"
+                          },
+                          {
+                              "id":  "cumin-seeds",
+                              "store":  "Walmart",
+                              "name":  "McCormick Kosher Cumin Seed, 0.95 oz Bottle",
+                              "per_unit":  10.4,
+                              "typed":  "none",
+                              "derived":  "0.229-5.725"
+                          },
+                          {
+                              "id":  "curry-powder",
+                              "store":  "Walmart",
+                              "name":  "Simply Organic Curry Powder, .53 Oz",
+                              "per_unit":  11.3019,
+                              "typed":  "none",
+                              "derived":  "0.3198-7.995"
+                          },
+                          {
+                              "id":  "deodorant",
+                              "store":  "Walmart",
+                              "name":  "Dove Clinical + Care Antiperspirant Deodorant Soft Solid for Women Original Clean, 1.7 oz",
+                              "per_unit":  6.4529,
+                              "typed":  "none",
+                              "derived":  "0.214-5.35"
+                          },
+                          {
+                              "id":  "deodorant",
+                              "store":  "Walmart",
+                              "name":  "Secret Clinical 100HR Antiperspirant Deodorant, Invisible Solid, Stress Response, 2.6 oz",
+                              "per_unit":  5.3731,
+                              "typed":  "none",
+                              "derived":  "0.214-5.35"
+                          },
+                          {
+                              "id":  "deodorant",
+                              "store":  "Walmart",
+                              "name":  "Secret Clinical 100HR Antiperspirant Deodorant, Invisible Solid, Completely Clean, 2.6 oz",
+                              "per_unit":  5.3731,
+                              "typed":  "none",
+                              "derived":  "0.214-5.35"
+                          },
+                          {
+                              "id":  "deodorant",
+                              "store":  "Walmart",
+                              "name":  "Wild Refillable Deodorant Starter Pack  Aluminum Free. Love Heart Case + Fresh Cotton \u0026 Sea Salt Refill, for Women and Men, 1.4oz",
+                              "per_unit":  12.1214,
+                              "typed":  "none",
+                              "derived":  "0.214-5.35"
+                          },
+                          {
+                              "id":  "deodorant",
+                              "store":  "Walmart",
+                              "name":  "Secret Clinical 100HR Antiperspirant Deodorant, Invisible Solid, Protecting Powder, 2.6 oz",
+                              "per_unit":  5.3731,
+                              "typed":  "none",
+                              "derived":  "0.214-5.35"
+                          },
+                          {
+                              "id":  "deodorant",
+                              "store":  "Walmart",
+                              "name":  "Secret Clinical 100HR Antiperspirant Deodorant, Invisible Solid, Stress Response, 1.6 oz",
+                              "per_unit":  5.9188,
+                              "typed":  "none",
+                              "derived":  "0.214-5.35"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Scott Paper Towels, Choose-A-Sheet, 12 Double Rolls",
+                              "per_unit":  0.0094,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Bounty Paper Towels Select-a-Size, 10 Triple Rolls",
+                              "per_unit":  0.0333,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Scott Choose-a-Sheet Paper Towels, 12 Double Rolls",
+                              "per_unit":  0.0137,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Scott Choose-a-Sheet Paper Towels, 12 Double Rolls",
+                              "per_unit":  0.015,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Viva Signature Cloth Paper Towels, 8 Triple Rolls",
+                              "per_unit":  0.0232,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Bounty Paper Towels Select-a-Size, 6 Triple Rolls",
+                              "per_unit":  0.0333,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Bounty Paper Towels Select-A-Size, 6 Mega Rolls",
+                              "per_unit":  0.0296,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Great Value Ultra Strong Paper Towels, 6 Triple Rolls",
+                              "per_unit":  0.0151,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Scott Paper Towels, Choose-A-Sheet, 6 Double Rolls",
+                              "per_unit":  0.0212,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Walmart",
+                              "name":  "Great Value Ultra Strong Paper Towels, Split Sheets, 12 Double Rolls",
+                              "per_unit":  0.0114,
+                              "typed":  "none",
+                              "derived":  "0.24416-6.104"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Angel Soft 2-Ply Toilet Paper, Fresh Linen Scented Tube, 12 Mega Rolls, 320 Sheets per Roll",
+                              "per_unit":  0.0038,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Charmin Ultra Strong Toilet Paper, 24 Mega Roll",
+                              "per_unit":  0.006,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Charmin Ultra Soft Toilet Paper 12 Mega Rolls, 224 Sheets Per Roll",
+                              "per_unit":  0.0093,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Charmin Ultra Strong Toilet Paper 12 Mega Rolls, 242 Sheets Per Roll",
+                              "per_unit":  0.0067,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Angel Soft Toilet Paper, 18 Mega Rolls = 72 Regular Rolls, 2-Ply Bath Tissue",
+                              "per_unit":  0.003,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Charmin Ultra Strong Toilet Paper Mega Roll, 242 Sheets per Roll, 30 Count",
+                              "per_unit":  0.0061,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "toilet-paper",
+                              "store":  "Walmart",
+                              "name":  "Charmin Ultra Soft Toilet Paper, 12 Mega Roll",
+                              "per_unit":  0.008,
+                              "typed":  "none",
+                              "derived":  "0.10217-2.55425"
+                          },
+                          {
+                              "id":  "dishwasher-detergent",
+                              "store":  "Walmart",
+                              "name":  "Cooks Standard Stainless Steel Cookware Set, 8-Piece Kitchen Pots and Pans Set with Glass Lid for Cooking, Induction \u0026 Dishwasher Safe",
+                              "per_unit":  17.4988,
+                              "typed":  "none",
+                              "derived":  "0.04394-1.0985"
                           },
                           {
                               "id":  "cream-of-chicken-soup",
@@ -10547,24 +10787,8 @@
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
-                              "name":  "Bounty Paper Towels Select-A-Size White, 1 Mega Roll, 164 Sheets per Roll",
-                              "per_unit":  0.0304,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
                               "name":  "Scott Choose-a-Sheet Paper Towels, 12 Double Rolls",
                               "per_unit":  0.015,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
-                              "name":  "Bounty Paper Towels Select-a-Size, 6 Triple Rolls",
-                              "per_unit":  0.0321,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
                           },
@@ -10605,14 +10829,6 @@
                               "store":  "Walmart",
                               "name":  "Bounty Essentials Select-A-Size Paper Towels, Double Rolls, White, 108 Sheets Per Roll, 2 Count",
                               "per_unit":  0.0586,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
-                              "name":  "Great Value Ultra Strong Paper Towels, 2 Triple Rolls",
-                              "per_unit":  0.019,
                               "typed":  "none",
                               "derived":  "0.24416-6.104"
                           },
@@ -10859,14 +11075,6 @@
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
-                              "name":  "Scott Paper Towels, Choose-A-Sheet, 6 Double Rolls",
-                              "per_unit":  0.0226,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
                               "name":  "Bounty Paper Towels Select-a-Size, 2 Triple Rolls, Print",
                               "per_unit":  0.0701,
                               "typed":  "none",
@@ -10926,7 +11134,7 @@
                               "name":  "Santini Organic Sweetened Condensed Milk 14 fl oz",
                               "per_unit":  12.38,
                               "typed":  "none",
-                              "derived":  "0.03914-0.9785"
+                              "derived":  "0.03771-0.94275"
                           },
                           {
                               "id":  "conditioner",
@@ -11219,14 +11427,6 @@
                           {
                               "id":  "toilet-paper",
                               "store":  "Walmart",
-                              "name":  "Charmin Ultra Strong Toilet Paper Mega Roll, 242 Sheets per Roll, 30 Count",
-                              "per_unit":  0.006,
-                              "typed":  "none",
-                              "derived":  "0.10217-2.55425"
-                          },
-                          {
-                              "id":  "toilet-paper",
-                              "store":  "Walmart",
                               "name":  "Charmin Ultra Soft Toilet Paper 12 Mega XL Rolls, 336 Sheets Per Roll",
                               "per_unit":  0.005,
                               "typed":  "none",
@@ -11494,7 +11694,7 @@
                               "name":  "Lakanto Sugar Free Semi-Sweet Chocolate Chips - Sweetened with Monk Fruit Sweetener",
                               "per_unit":  2.25,
                               "typed":  "none",
-                              "derived":  "0.0665-1.6625"
+                              "derived":  "0.06367-1.59175"
                           },
                           {
                               "id":  "chocolate-chips",
@@ -11502,7 +11702,7 @@
                               "name":  "Nestle Toll House Organic Allergen Free Semi-Sweet Regular Chocolate Chips, 10 oz Bag",
                               "per_unit":  2.262,
                               "typed":  "none",
-                              "derived":  "0.0665-1.6625"
+                              "derived":  "0.06367-1.59175"
                           },
                           {
                               "id":  "chocolate-milk",
@@ -11689,49 +11889,9 @@
                               "derived":  "0.229-5.725"
                           },
                           {
-                              "id":  "curry-powder",
-                              "store":  "Walmart",
-                              "name":  "Simply Organic Curry Powder, .53 Oz",
-                              "per_unit":  11.3019,
-                              "typed":  "none",
-                              "derived":  "0.3198-7.995"
-                          },
-                          {
-                              "id":  "deodorant",
-                              "store":  "Walmart",
-                              "name":  "Secret Clinical 100HR Antiperspirant Deodorant, Invisible Solid, Stress Response, 2.6 oz",
-                              "per_unit":  5.3731,
-                              "typed":  "none",
-                              "derived":  "0.214-5.35"
-                          },
-                          {
-                              "id":  "deodorant",
-                              "store":  "Walmart",
-                              "name":  "Dove Clinical + Care Antiperspirant Deodorant Soft Solid for Women Original Clean, 1.7 oz",
-                              "per_unit":  6.4529,
-                              "typed":  "none",
-                              "derived":  "0.214-5.35"
-                          },
-                          {
                               "id":  "deodorant",
                               "store":  "Walmart",
                               "name":  "Secret Clinical Antiperspirant Deodorant for Women, Clear Gel, Completely Clean, 2.6 oz",
-                              "per_unit":  5.3731,
-                              "typed":  "none",
-                              "derived":  "0.214-5.35"
-                          },
-                          {
-                              "id":  "deodorant",
-                              "store":  "Walmart",
-                              "name":  "Secret Clinical 100HR Antiperspirant Deodorant, Invisible Solid, Stress Response, 1.6 oz",
-                              "per_unit":  5.9188,
-                              "typed":  "none",
-                              "derived":  "0.214-5.35"
-                          },
-                          {
-                              "id":  "deodorant",
-                              "store":  "Walmart",
-                              "name":  "Secret Clinical 100HR Antiperspirant Deodorant, Invisible Solid, Protecting Powder, 2.6 oz",
                               "per_unit":  5.3731,
                               "typed":  "none",
                               "derived":  "0.214-5.35"
@@ -12294,7 +12454,7 @@
                               "name":  "Pledge Clean It Dust \u0026 Allergen Multi Surface Cleaner Spray, Spring Cleaning Supplies, Lemon Scent, 9.7 Ounce",
                               "per_unit":  0.499,
                               "typed":  "none",
-                              "derived":  "0.01635-0.40875"
+                              "derived":  "0.01744-0.436"
                           },
                           {
                               "id":  "garlic",
@@ -12398,7 +12558,7 @@
                               "name":  "Windex Fast Shine Foam Glass, Window, and Mirror All Purpose Cleaner, No-Drip Aerosol Cleaning Spray, Grapefruit, 19 oz",
                               "per_unit":  0.4474,
                               "typed":  "none",
-                              "derived":  "0.01635-0.40875"
+                              "derived":  "0.01744-0.436"
                           },
                           {
                               "id":  "glass-cleaner",
@@ -14798,7 +14958,7 @@
                               "name":  "Clorox 2 For Colors Stain Remover, 2 in 1 Laundry + Fabric, Bleach Free, Fresh Scent, 33 Fl Oz.",
                               "per_unit":  0.2388,
                               "typed":  "none",
-                              "derived":  "0.0079-0.1975"
+                              "derived":  "0.00712-0.178"
                           },
                           {
                               "id":  "steak-sauce",
@@ -15123,14 +15283,6 @@
                           {
                               "id":  "toilet-paper",
                               "store":  "Walmart",
-                              "name":  "Charmin Ultra Strong Toilet Paper 12 Mega Rolls, 242 Sheets Per Roll",
-                              "per_unit":  0.0079,
-                              "typed":  "none",
-                              "derived":  "0.10217-2.55425"
-                          },
-                          {
-                              "id":  "toilet-paper",
-                              "store":  "Walmart",
                               "name":  "Charmin Ultra Strong Toilet Paper Mega Roll, 242 Sheets per Roll, 30 Count",
                               "per_unit":  0.006,
                               "typed":  "none",
@@ -15183,14 +15335,6 @@
                               "per_unit":  0.6442,
                               "typed":  "none",
                               "derived":  "0.01607-0.40175"
-                          },
-                          {
-                              "id":  "toothbrushes",
-                              "store":  "Walmart",
-                              "name":  "Colgate Optic White Charcoal Soft Toothbrush for Adults, 2 Pack",
-                              "per_unit":  4.98,
-                              "typed":  "none",
-                              "derived":  "0.19067-4.76675"
                           },
                           {
                               "id":  "toothpaste",
@@ -15518,7 +15662,7 @@
                               "name":  "Dan-O\u0027s Cajun Seasoning - All-Purpose for Cooking and Grilling - Small 2.8 oz Bottle",
                               "per_unit":  1.9357,
                               "typed":  "none",
-                              "derived":  "0.07476-1.869"
+                              "derived":  "0.0696-1.74"
                           },
                           {
                               "id":  "cajun-seasoning",
@@ -15526,7 +15670,7 @@
                               "name":  "McCormick Gourmet Kosher Cajun Seasoning, 2.25 oz Bottle",
                               "per_unit":  2.9289,
                               "typed":  "none",
-                              "derived":  "0.07476-1.869"
+                              "derived":  "0.0696-1.74"
                           },
                           {
                               "id":  "cajun-seasoning",
@@ -15534,7 +15678,7 @@
                               "name":  "McCormick Gourmet Kosher Cajun Seasoning, 2.25 oz Bottle",
                               "per_unit":  4.3956,
                               "typed":  "none",
-                              "derived":  "0.07476-1.869"
+                              "derived":  "0.0696-1.74"
                           },
                           {
                               "id":  "cajun-seasoning",
@@ -15542,7 +15686,7 @@
                               "name":  "Tony Chachere’s, Seasoning, Cajun, Spice N’ Herbs, 5 oz",
                               "per_unit":  1.898,
                               "typed":  "none",
-                              "derived":  "0.07476-1.869"
+                              "derived":  "0.0696-1.74"
                           },
                           {
                               "id":  "cake-mix",
@@ -15766,7 +15910,7 @@
                               "name":  "bettergoods Dried Brussels Sprouts with Sea Salt, 3.3 oz",
                               "per_unit":  31.1273,
                               "typed":  "none",
-                              "derived":  "0.60943-15.23575"
+                              "derived":  "0.581-14.525"
                           },
                           {
                               "id":  "bread",
@@ -15950,7 +16094,7 @@
                               "name":  "Molly\u0027s Suds Oxygen Whitener Bleach Alternative, Chlorine-Free \u0026 Color Safe with Lemon Essential Oil, 41.09 oz",
                               "per_unit":  0.3402,
                               "typed":  "none",
-                              "derived":  "0.0079-0.1975"
+                              "derived":  "0.00712-0.178"
                           },
                           {
                               "id":  "bleach",
@@ -15958,7 +16102,7 @@
                               "name":  "Evolve Concentrated Bleach Tablets, 5.64 oz, Original Scent, 32 Count",
                               "per_unit":  0.7039,
                               "typed":  "none",
-                              "derived":  "0.0079-0.1975"
+                              "derived":  "0.00712-0.178"
                           },
                           {
                               "id":  "bleach",
@@ -15966,7 +16110,7 @@
                               "name":  "Evolve Concentrated Bleach Tablets, 5.64 oz, Fresh Lemon Scent, 32 Count, 2 Pack",
                               "per_unit":  0.6977,
                               "typed":  "none",
-                              "derived":  "0.0079-0.1975"
+                              "derived":  "0.00712-0.178"
                           },
                           {
                               "id":  "bleach",
@@ -15974,7 +16118,7 @@
                               "name":  "Clorox Concentrated Bleach Powder, 21.1 oz",
                               "per_unit":  1.1043,
                               "typed":  "none",
-                              "derived":  "0.0079-0.1975"
+                              "derived":  "0.00712-0.178"
                           },
                           {
                               "id":  "blue-cheese-dressing",
@@ -17323,14 +17467,6 @@
                           {
                               "id":  "paper-towels",
                               "store":  "Walmart",
-                              "name":  "Viva Signature Cloth Paper Towels, 8 Triple Rolls",
-                              "per_unit":  0.028,
-                              "typed":  "none",
-                              "derived":  "0.24416-6.104"
-                          },
-                          {
-                              "id":  "paper-towels",
-                              "store":  "Walmart",
                               "name":  "Bounty Paper Towels Select-a-Size, 10 Triple Rolls",
                               "per_unit":  0.0333,
                               "typed":  "none",
@@ -17630,7 +17766,7 @@
                               "name":  "Cloralen Max Ultragel No Splash Bleach, Household Cleaner, 32.12 Fl Oz, 1 Count",
                               "per_unit":  0.4969,
                               "typed":  "none",
-                              "derived":  "0.0079-0.1975"
+                              "derived":  "0.00712-0.178"
                           },
                           {
                               "id":  "bleach",
@@ -17638,7 +17774,7 @@
                               "name":  "Evolve Concentrated Bleach Tablets, 5.64 oz, Linen Breeze Scent, 32 Count",
                               "per_unit":  0.6986,
                               "typed":  "none",
-                              "derived":  "0.0079-0.1975"
+                              "derived":  "0.00712-0.178"
                           },
                           {
                               "id":  "hand-soap",
@@ -18030,7 +18166,7 @@
                               "name":  "Bob\u0027s Red Mill Baking Soda, 16oz (Pack of 1)",
                               "per_unit":  0.5938,
                               "typed":  "none",
-                              "derived":  "0.01414-0.3535"
+                              "derived":  "0.01289-0.32225"
                           },
                           {
                               "id":  "baking-soda",
@@ -18038,7 +18174,7 @@
                               "name":  "Clabber Girl Gluten Free Baking Soda, 12 oz",
                               "per_unit":  0.6108,
                               "typed":  "none",
-                              "derived":  "0.01414-0.3535"
+                              "derived":  "0.01289-0.32225"
                           },
                           {
                               "id":  "baking-soda",
@@ -18046,7 +18182,7 @@
                               "name":  "Clabber Girl Gluten Free Baking Soda, 12 oz",
                               "per_unit":  0.6833,
                               "typed":  "none",
-                              "derived":  "0.01414-0.3535"
+                              "derived":  "0.01289-0.32225"
                           },
                           {
                               "id":  "chocolate-chips",
@@ -18054,7 +18190,7 @@
                               "name":  "Lakanto Sugar Free Semi-Sweet Chocolate Chips - Sweetened with Monk Fruit Sweetener",
                               "per_unit":  1.6901,
                               "typed":  "none",
-                              "derived":  "0.0665-1.6625"
+                              "derived":  "0.06367-1.59175"
                           },
                           {
                               "id":  "chocolate-chips",
@@ -18062,7 +18198,7 @@
                               "name":  "Lakanto Sugar Free Semi-Sweet Chocolate Chips - Sweetened with Monk Fruit Sweetener",
                               "per_unit":  1.878,
                               "typed":  "none",
-                              "derived":  "0.0665-1.6625"
+                              "derived":  "0.06367-1.59175"
                           },
                           {
                               "id":  "powdered-sugar",
@@ -18134,7 +18270,7 @@
                               "name":  "Santini Organic Sweetened Condensed Milk 14 fl oz",
                               "per_unit":  8.99,
                               "typed":  "none",
-                              "derived":  "0.03914-0.9785"
+                              "derived":  "0.03771-0.94275"
                           },
                           {
                               "id":  "cooking-spray",
@@ -18977,6 +19113,14 @@
                               "derived":  "0.0223-0.5575"
                           },
                           {
+                              "id":  "bleach",
+                              "store":  "Walmart",
+                              "name":  "Clorox 2 for Colors Stain Remover and Laundry Additive, Free and Clear, Bleach Free, 66 Fl Oz",
+                              "per_unit":  0.1965,
+                              "typed":  "none",
+                              "derived":  "0.00712-0.178"
+                          },
+                          {
                               "id":  "stain-remover",
                               "store":  "Walmart",
                               "name":  "Carbona Stain Devils® #2   Ketchup, Mustard \u0026 Chocolate   Professional Strength Laundry Stain Remover   Multi-Fabric Cleaner   Safe On Skin \u0026 Washable Fabrics   1.7 Fl Oz, 1 Pack",
@@ -19118,7 +19262,7 @@
                               "name":  "Pledge Antibacterial Multisurface Cleaner Spray, Fresh Citrus - Household Antibacterial Spray, 9.7 oz (Pack of 3)",
                               "per_unit":  0.536,
                               "typed":  "none",
-                              "derived":  "0.01635-0.40875"
+                              "derived":  "0.01744-0.436"
                           },
                           {
                               "id":  "air-freshener",
@@ -19795,18 +19939,10 @@
                           {
                               "id":  "all-purpose-cleaner",
                               "store":  "Walmart",
-                              "name":  "Mr. Clean All Purpose Cleaner, Floor Cleaner, Mop Soap, Cleaning Liquid, Spiced Harvest Pumpkin, Frosted Cranberry, and Fresh Pine",
-                              "per_unit":  0.4349,
-                              "typed":  "none",
-                              "derived":  "0.01635-0.40875"
-                          },
-                          {
-                              "id":  "all-purpose-cleaner",
-                              "store":  "Walmart",
                               "name":  "Soft Scrub Cleanser, Oxi, Multi-Surface Cleaner, Stain Fighting Oxi Power for Deep Cleaning, 24oz",
                               "per_unit":  0.4417,
                               "typed":  "none",
-                              "derived":  "0.01635-0.40875"
+                              "derived":  "0.01744-0.436"
                           },
                           {
                               "id":  "shower-cleaner",
@@ -20534,7 +20670,7 @@
                               "name":  "McCormick Gourmet Kosher Cajun Seasoning, 2.25 oz Bottle",
                               "per_unit":  4.6933,
                               "typed":  "none",
-                              "derived":  "0.07476-1.869"
+                              "derived":  "0.0696-1.74"
                           },
                           {
                               "id":  "taco-seasoning",
@@ -21230,7 +21366,7 @@
                               "name":  "North Coast Organic Applesauce Pouches 12-3.2oz",
                               "per_unit":  2.12,
                               "typed":  "none",
-                              "derived":  "0.01505-0.37625"
+                              "derived":  "0.01575-0.39375"
                           },
                           {
                               "id":  "almond-milk",
@@ -22142,7 +22278,7 @@
                               "name":  "Dan-O\u0027s Cajun Seasoning - All-Purpose Seasoning for Cooking and Grilling - Small 2.8 oz Bottle",
                               "per_unit":  1.9357,
                               "typed":  "none",
-                              "derived":  "0.07476-1.869"
+                              "derived":  "0.0696-1.74"
                           },
                           {
                               "id":  "oatmeal",
@@ -22182,7 +22318,7 @@
                               "name":  "Nestle Toll House Organic Allergen Free Semi-Sweet Regular Chocolate Chips, 10 oz Bag",
                               "per_unit":  2.244,
                               "typed":  "none",
-                              "derived":  "0.0665-1.6625"
+                              "derived":  "0.06367-1.59175"
                           },
                           {
                               "id":  "conditioner",
@@ -23118,7 +23254,7 @@
                               "name":  "Pledge Antibacterial Multi Surface Cleaner Spray, Fresh Citrus - Household Antibacterial Spray (2 Pack Aerosol), 9.7 oz",
                               "per_unit":  0.5294,
                               "typed":  "none",
-                              "derived":  "0.01635-0.40875"
+                              "derived":  "0.01744-0.436"
                           },
                           {
                               "id":  "glass-cleaner",
@@ -23686,7 +23822,7 @@
                               "name":  "Tony Chachere’s, Seasoning, Cajun, Spice N’ Herbs, 5 oz",
                               "per_unit":  1.94,
                               "typed":  "none",
-                              "derived":  "0.07476-1.869"
+                              "derived":  "0.0696-1.74"
                           },
                           {
                               "id":  "paprika",
@@ -23750,7 +23886,7 @@
                               "name":  "Mott\u0027s Mighty No Sugar Added Honeycrisp Applesauce, 3.2 oz, 12 Count Clear Pouches",
                               "per_unit":  0.5195,
                               "typed":  "none",
-                              "derived":  "0.01505-0.37625"
+                              "derived":  "0.01575-0.39375"
                           },
                           {
                               "id":  "bananas",
@@ -23791,14 +23927,6 @@
                               "per_unit":  8.9667,
                               "typed":  "none",
                               "derived":  "0.1275-3.1875"
-                          },
-                          {
-                              "id":  "deodorant",
-                              "store":  "Walmart",
-                              "name":  "Secret Clinical 100HR Antiperspirant Deodorant, Invisible Solid, Completely Clean, 2.6 oz",
-                              "per_unit":  5.3731,
-                              "typed":  "none",
-                              "derived":  "0.214-5.35"
                           },
                           {
                               "id":  "canned-mushrooms",
@@ -24886,7 +25014,7 @@
                               "name":  "Method Antibacterial All-Purpose Cleaner Citron 28 fl oz",
                               "per_unit":  0.4407,
                               "typed":  "none",
-                              "derived":  "0.01635-0.40875"
+                              "derived":  "0.01744-0.436"
                           },
                           {
                               "id":  "cereal",
@@ -25190,7 +25318,7 @@
                               "name":  "Clorox Zero Splash Bleach Packs, Regular Scent, 8.9 oz, 12 Count",
                               "per_unit":  1.0501,
                               "typed":  "none",
-                              "derived":  "0.0079-0.1975"
+                              "derived":  "0.00712-0.178"
                           },
                           {
                               "id":  "half-and-half",
@@ -25390,7 +25518,7 @@
                               "name":  "Spice Supreme oriental five spices, 3.5-oz. plastic shaker",
                               "per_unit":  0.279,
                               "typed":  "none",
-                              "derived":  "0.98438-24.6095"
+                              "derived":  "0.9779-24.4475"
                           },
                           {
                               "id":  "italian-dressing",
@@ -25862,7 +25990,7 @@
                               "name":  "Pledge Antibacterial Multisurface Cleaner Spray, Fresh Citrus - Household Antibacterial Spray, 9.7 oz (Pack of 3)",
                               "per_unit":  0.514,
                               "typed":  "none",
-                              "derived":  "0.01635-0.40875"
+                              "derived":  "0.01744-0.436"
                           },
                           {
                               "id":  "disinfectant-spray",
@@ -26174,7 +26302,7 @@
                               "name":  "ARM \u0026 HAMMER Baking Soda, Multi-Purpose 100% Pure Sodium Bicarbonate Powder, 8 oz Box",
                               "per_unit":  0.625,
                               "typed":  "none",
-                              "derived":  "0.01414-0.3535"
+                              "derived":  "0.01289-0.32225"
                           },
                           {
                               "id":  "baking-soda",
@@ -26182,7 +26310,7 @@
                               "name":  "Clabber Girl Gluten Free Baking Soda, 12 oz",
                               "per_unit":  0.7908,
                               "typed":  "none",
-                              "derived":  "0.01414-0.3535"
+                              "derived":  "0.01289-0.32225"
                           },
                           {
                               "id":  "baking-soda",
@@ -26190,7 +26318,7 @@
                               "name":  "Bob\u0027s Red Mill Baking Soda, 16oz (Pack of 1)",
                               "per_unit":  0.4769,
                               "typed":  "none",
-                              "derived":  "0.01414-0.3535"
+                              "derived":  "0.01289-0.32225"
                           },
                           {
                               "id":  "bay-leaves",
@@ -26414,7 +26542,7 @@
                               "name":  "Equal Exchange Organic Fair Trade Semisweet Chocolate Chips 55%, 10 oz Bag",
                               "per_unit":  1.963,
                               "typed":  "none",
-                              "derived":  "0.0665-1.6625"
+                              "derived":  "0.06367-1.59175"
                           },
                           {
                               "id":  "frosting",
@@ -27118,7 +27246,7 @@
                               "name":  "ARM \u0026 HAMMER Baking Soda, Multi-Purpose 100% Pure Sodium Bicarbonate Powder, 8 oz Box",
                               "per_unit":  0.7488,
                               "typed":  "none",
-                              "derived":  "0.01414-0.3535"
+                              "derived":  "0.01289-0.32225"
                           },
                           {
                               "id":  "chicken-broth",
@@ -27326,7 +27454,7 @@
                               "name":  "Dan-O\u0027s Cajun Seasoning - All-Purpose Seasoning - Great for cooking and grilling anything - Small bottle (2.8 oz)",
                               "per_unit":  1.9357,
                               "typed":  "none",
-                              "derived":  "0.07476-1.869"
+                              "derived":  "0.0696-1.74"
                           },
                           {
                               "id":  "hot-sauce",
@@ -27934,7 +28062,7 @@
                               "name":  "Dan-O\u0027s Cajun Seasoning - All-Purpose Seasoning - Great for",
                               "per_unit":  2.1286,
                               "typed":  "none",
-                              "derived":  "0.07476-1.869"
+                              "derived":  "0.0696-1.74"
                           },
                           {
                               "id":  "fresh-ginger",

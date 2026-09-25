@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-09-24T16:58:51",
+    "generated":  "2026-09-25T08:15:35",
     "written_by":  "guards.ps1",
     "board_file":  "comparison-2026-09-23.json",
-    "board_sha256":  "a2d0e823c0d52353d29d83cc87936fa43627cb395fe6b8beb42831dff28fc1c7",
+    "board_sha256":  "0d78902f1befdafa5da37900820bc724a28983423d6c55d2218cdbb65c2b9eba",
     "action":  "quarantined",
     "exit_code":  4,
     "reasons":  [
@@ -18,7 +18,7 @@
                     "tripped":  false,
                     "why":  "",
                     "quarantined":  3,
-                    "priced":  2765,
+                    "priced":  2783,
                     "board_pct_bar":  2,
                     "store_pct_bar":  10,
                     "stores":  [

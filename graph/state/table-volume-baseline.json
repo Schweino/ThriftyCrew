@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-22T21:30:11",
+  "generated": "2026-09-25T05:30:09",
   "history": [
     {
       "date": "2026-09-07T07:43:28",
@@ -84,20 +84,56 @@
     {
       "date": "2026-09-22T21:30:11",
       "total_rows": 344592
+    },
+    {
+      "date": "2026-09-24T21:30:09",
+      "total_rows": 351757
+    },
+    {
+      "date": "2026-09-24T22:30:08",
+      "total_rows": 351758
+    },
+    {
+      "date": "2026-09-24T23:30:08",
+      "total_rows": 351759
+    },
+    {
+      "date": "2026-09-25T00:30:09",
+      "total_rows": 351760
+    },
+    {
+      "date": "2026-09-25T01:30:08",
+      "total_rows": 351761
+    },
+    {
+      "date": "2026-09-25T02:30:09",
+      "total_rows": 351762
+    },
+    {
+      "date": "2026-09-25T03:30:08",
+      "total_rows": 351763
+    },
+    {
+      "date": "2026-09-25T04:30:09",
+      "total_rows": 351764
+    },
+    {
+      "date": "2026-09-25T05:30:09",
+      "total_rows": 351765
     }
   ],
   "note": "Row counts per table in graph/sqlite/graph.db. Growth is the steady state, so a rise retrains this silently; a fall past 40% or to zero is a finding. This is the VOLUME limb of the four data-quality checks.",
   "tables": {
-    "aliases": 83816,
-    "approved_patches": 186,
-    "cell_state": 3401,
-    "decision_log": 10013,
-    "edges": 93629,
-    "eval_runs": 52,
-    "learning_proposals": 312,
-    "nodes": 55560,
-    "price_observations": 68937,
-    "provenance": 12977,
-    "question_verdicts": 15709
+    "aliases": 84131,
+    "approved_patches": 255,
+    "cell_state": 3426,
+    "decision_log": 10556,
+    "edges": 94470,
+    "eval_runs": 54,
+    "learning_proposals": 325,
+    "nodes": 56296,
+    "price_observations": 71387,
+    "provenance": 14865,
+    "question_verdicts": 16000
   }
 }

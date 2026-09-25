@@ -439,3 +439,24 @@
 [2026-09-24T17:12:47] REVIEW 'Grocery: a price band refused rows it cannot explain - 2026-09-24' [type: grocery a price band refused rows it cannot explain] - queued, NOT emailed (registry entry band-refusal-unexplained)
 [2026-09-24T17:29:31] QUEUE ABSORBED into open item 2026-09-23-373ac2 (day 1 of this condition, count now 4) - no new id minted
 [2026-09-24T17:29:31] REVIEW 'Ops: a live Ghost page is neither produced by the repo nor declared' [type: ops a live ghost page is neither produced by the repo nor declared] - queued, NOT emailed (registry entry ghost-page-census)
+[2026-09-24T17:30:07] SUPPRESSED (already sent this type today) 'Grocery bot checkout sync blocked at the push - 2026-09-24' [type: grocery bot checkout sync blocked at the push]
+[2026-09-24T17:30:09] SENT 'Daily chain left served files uncommitted - 2026-09-24' -> schweino68@gmail.com (id 1a0d58a50c28a035)
+[2026-09-24T17:30:10] SUPPRESSED (already sent this type today) 'Grocery pipeline: feed did not truly refresh - 2026-09-24' [type: grocery pipeline feed did not truly refresh]
+[2026-09-25T04:41:28] QUEUE ABSORBED into open item 2026-09-23-a83841 (day 2 of this condition, count now 3) - no new id minted
+[2026-09-25T04:41:29] SENT 'The knowledge store's nightly pass went RED' -> schweino68@gmail.com (id 1a0d7f0eb2865a67)
+[2026-09-25T06:45:34] DIGEST 'Brain digest: the night, the weakest link, and what is waiting' [type: brain digest the night the weakest link and what is waiting] - registry entry brain-digest is digest class, so it is mailed and NOT queued
+[2026-09-25T06:45:35] SENT 'Brain digest: the night, the weakest link, and what is waiting' -> schweino68@gmail.com (id 1a0d8628aed784a5)
+[2026-09-25T07:00:06] SENT 'Grocery bot checkout sync degraded - 2026-09-25' -> schweino68@gmail.com (id 1a0d86fd57260fbf)
+[2026-09-25T07:01:52] SENT 'Grocery bot checkout sync degraded at the push - 2026-09-25' -> schweino68@gmail.com (id 1a0d8716fc27c7b8)
+[2026-09-25T08:00:05] SUPPRESSED (already sent this type today) 'Grocery bot checkout sync degraded - 2026-09-25' [type: grocery bot checkout sync degraded]
+[2026-09-25T08:19:17] QUEUE ABSORBED into open item 2026-09-23-5ad03d (day 2 of this condition, count now 4) - no new id minted
+[2026-09-25T08:19:18] SENT 'Price surfaces disagree with the manifest' -> schweino68@gmail.com (id 1a0d8b8578bb70a8)
+[2026-09-25T08:21:44] QUEUE ABSORBED into open item 2026-09-23-f77857 (day 2 of this condition, count now 3) - no new id minted
+[2026-09-25T08:21:44] REVIEW 'Grocery matching soundness: RULE CHANGE UNREVIEWED' [type: grocery matching soundness rule change unreviewed] - queued, NOT emailed (registry entry match-soundness-rule-change-unreviewed)
+[2026-09-25T08:21:44] QUEUE ABSORBED into open item 2026-09-23-b2850b (day 2 of this condition, count now 4) - no new id minted
+[2026-09-25T08:21:44] REVIEW 'Grocery matching soundness: NEW CONTESTED' [type: grocery matching soundness new contested] - queued, NOT emailed (registry entry match-soundness-new-contested)
+[2026-09-25T08:26:38] SENT 'Live recipe prices: a placeholder names something the feed does not carry' -> schweino68@gmail.com (id 1a0d8bf0a45b0d8b)
+[2026-09-25T08:27:54] QUEUE ABSORBED into open item 2026-09-23-57b66b (day 2 of this condition, count now 4) - no new id minted
+[2026-09-25T08:27:54] REVIEW 'Grocery: a price band refused rows it cannot explain - 2026-09-25' [type: grocery a price band refused rows it cannot explain] - queued, NOT emailed (registry entry band-refusal-unexplained)
+[2026-09-25T08:31:20] QUEUE ABSORBED into open item 2026-09-23-373ac2 (day 2 of this condition, count now 5) - no new id minted
+[2026-09-25T08:31:20] REVIEW 'Ops: a live Ghost page is neither produced by the repo nor declared' [type: ops a live ghost page is neither produced by the repo nor declared] - queued, NOT emailed (registry entry ghost-page-census)

@@ -1,0 +1,29 @@
+{
+    "store":  "sams",
+    "date":  "2026-09-25",
+    "rows_in":  1645,
+    "rows_out":  793,
+    "rejects":  438,
+    "rejects_by_reason":  {
+                              "no unitprice":  273,
+                              "name conflict: name states # ct but none reproduces sam\u0027s #/ct (lp/up derives #)":  32,
+                              "name conflict: name states # oz but none reproduces sam\u0027s #/oz (lp/up derives #)":  13,
+                              "name conflict: name states # lb but none reproduces sam\u0027s #/lb (lp/up derives #)":  10,
+                              "name conflict: name states #, # oz but none reproduces sam\u0027s #/oz (lp/up derives #)":  19,
+                              "density conflict: the name states # lbs = # g but the derived size is # fl oz = # ml, an implied density of # g/ml - outside #-# g/ml, which no grocery liquid is - sam\u0027s # ¢/fl oz was computed against a volume this package cannot hold, so no per-unit price from it is publishable":  2,
+                              "name conflict: per-piece unit price - the name states a multipack and sam\u0027s #/oz prices one piece (lp/up derives #)":  4,
+                              "unknown unit \"sq ft\"":  61,
+                              "name conflict: count-first name reads # oz as the pack total, but sam\u0027s #/oz reproduces only # x that (# oz) - the name wins, and a name the store contradicts is refused (the febreze #-#-# shape)":  4,
+                              "name conflict: count-first name reads # gal as the pack total, but sam\u0027s #/fl oz reproduces only # x that (# fl oz) - the name wins, and a name the store contradicts is refused (the febreze #-#-# shape)":  3,
+                              "name conflict: name states #, # fl oz but none reproduces sam\u0027s #/fl oz (lp/up derives #)":  5,
+                              "name conflict: count-first name reads # fl oz as the pack total, but sam\u0027s #/fl oz reproduces only # x that (# fl oz) - the name wins, and a name the store contradicts is refused (the febreze #-#-# shape)":  1,
+                              "unknown unit \"pad\"":  4,
+                              "name conflict: name states # fl oz but none reproduces sam\u0027s #/fl oz (lp/up derives #)":  4,
+                              "name conflict: per-piece unit price - the name states a multipack and sam\u0027s #/fl oz prices one piece (lp/up derives #)":  2,
+                              "name conflict: name states #, # lb but none reproduces sam\u0027s #/lb (lp/up derives #)":  1
+                          },
+    "unknown_unit_spellings":  {
+                                   "sq ft":  61,
+                                   "pad":  4
+                               }
+}

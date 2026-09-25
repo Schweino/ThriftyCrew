@@ -1,7 +1,7 @@
 ﻿{
     "_doc":  "What the pipeline has learned about recipe publishers. Written automatically on every fetch outcome; read by sourcers before searching and before fetching. Replaces the prose blocked-domain lists that used to live, duplicated, in two agent prompts.",
     "_rule":  "One failure is `unreliable`, not `blocked` - a 404 is a fact about one URL. Only a repeated pattern with no successes earns `blocked`. Counts stay visible so the judgment is auditable.",
-    "updated":  "2026-09-23T18:00:17",
+    "updated":  "2026-09-24T18:00:16",
     "count":  45,
     "domains":  [
                     {
@@ -182,14 +182,14 @@
                     },
                     {
                         "domain":  "lecremedelacrumb.com",
-                        "ok":  926,
+                        "ok":  927,
                         "fail":  28,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "unreliable",
                         "note":  "fetch-recipe: The remote server returned an error: (429) Too Many Requests.",
-                        "updated":  "2026-09-23T18:00:17"
+                        "updated":  "2026-09-24T18:00:16"
                     },
                     {
                         "domain":  "thecleaneatingcouple.com",

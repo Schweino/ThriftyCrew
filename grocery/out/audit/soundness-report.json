@@ -1,11 +1,15 @@
 ﻿{
-    "generated":  "2026-09-24 17:05",
+    "generated":  "2026-09-25 08:21",
     "drift_vs_engine":  0,
     "drift_products":  [
 
                        ],
     "moved":  [
-
+                  {
+                      "name":  "Puffs Plus Lotion 2-Ply Facial Tissues 12 Cube Boxes, 72 tissues/box",
+                      "from":  "lotion",
+                      "to":  "facial-tissues"
+                  }
               ],
     "dropped":  [
                     {
@@ -15,6 +19,10 @@
                     {
                         "name":  "Member\u0027s Mark Zero Sugar Green Tea, 16.9 fl. oz., 35 pk.",
                         "from":  "tea-bags"
+                    },
+                    {
+                        "name":  "True Lime Crystallized Lime Packets, 100 ct.",
+                        "from":  "limes"
                     },
                     {
                         "name":  "Colgate Max Fresh Wisp Disposable Travel Toothbrushes, Mini Toothbrush, Peppermint, 24 Count",
@@ -61,13 +69,33 @@
                               "verdict":  "size 16 oz = 0.2306/oz",
                               "cell":  "",
                               "crown":  false
+                          },
+                          {
+                              "name":  "Lay\u0027s Honey Barbecue Potato Chips",
+                              "chain":  "honey (oz) \u003e potato-chips (oz)",
+                              "form":  false,
+                              "winner":  "honey",
+                              "verdict":  "size 7.75 oz = 0.5148/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Pledge® Multisurface Cleaner, Everyday Clean™, Aerosol, Rainshower Scent, 9.7 oz, Pack of 3",
+                              "chain":  "all-purpose-cleaner (floz) \u003e furniture-polish (oz)",
+                              "form":  true,
+                              "winner":  "all-purpose-cleaner",
+                              "verdict":  "WITHHELD-UNPROVEN-CHANNEL",
+                              "cell":  "",
+                              "crown":  false
                           }
                       ],
     "new_contested_names":  [
                                 "Deutsche Küche Lentil Chickpea or Harvest Potato",
                                 "Di Lusso deli sliced ham, turkey, chicken or cheese, FREE King\u0027s Hawaiian slider buns 9 ct. with 1 lb. purchase of Di Lusso deli sliced ham, turkey or chicken,",
                                 "Inglehoffer Horseradish Cream Style 9.5 OZ",
-                                "Kroger Orange Rind Muenster Block Cheese"
+                                "Kroger Orange Rind Muenster Block Cheese",
+                                "Lay\u0027s Honey Barbecue Potato Chips",
+                                "Pledge® Multisurface Cleaner, Everyday Clean™, Aerosol, Rainshower Scent, 9.7 oz, Pack of 3"
                             ],
     "cell_by_contest":  [
                             {

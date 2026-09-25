@@ -972,6 +972,15 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
+        "id":  "dried-arbol-chiles",
+        "store":  "Family Fare",
+        "product":  "Chile De Arbol",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/peppers",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is a reviewed exception department for \u0027dried-arbol-chiles\u0027"
+    },
+    {
         "id":  "dryer-sheets",
         "store":  "Family Fare",
         "product":  "Arm \u0026 Hammer Mountain Rain Dryer Sheets 144 Ea",
@@ -2068,6 +2077,24 @@
         "aisle":  "fresh_fruits_vegetables/peppers",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "sesame-oil",
+        "store":  "Family Fare",
+        "product":  "Kikkoman Sesame Oil 5 Fl Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/condiments_dressing",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
+        "id":  "toasted-sesame-seeds",
+        "store":  "Family Fare",
+        "product":  "Tones Sesame Seed",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "shampoo",
