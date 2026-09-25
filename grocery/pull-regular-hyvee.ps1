@@ -58,7 +58,9 @@
 # pass against a stub store that answers nothing - so every count below is printed - then exits 0 before the
 # first request, the cursor, the coverage ledger or any file write. It is how a change to this lane is checked
 # against real seeded data without touching the store or grocery\out.
-param([string]$OutDir = "", [int]$StoreId = 0, [string]$LocationId = "", [switch]$Quick, [switch]$DryRun, [switch]$SelfTest)
+# -AskLedgerFile (2026-09-25) points the ask ledger somewhere else; it exists so a -DryRun can show the order with a
+# seeded ledger and with none. Default: <OutDir>\hyvee-ask-ledger.json.
+param([string]$OutDir = "", [int]$StoreId = 0, [string]$LocationId = "", [switch]$Quick, [switch]$DryRun, [switch]$SelfTest, [string]$AskLedgerFile = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'omaha-time.ps1')
@@ -288,7 +290,14 @@ function Get-HyVeeAskOrder {
              chosen indices in ask order), and the rank counts inside the slice.
   #>
   param([Parameter(Mandatory)][AllowEmptyCollection()]$Work, [int]$Budget, [string]$TargetStoreId,
-        [hashtable]$ExpiringIdx = @{}, [hashtable]$UncoveredIds = @{})
+        [hashtable]$ExpiringIdx = @{}, [hashtable]$UncoveredIds = @{}, [hashtable]$AskLedger = @{}, [string]$Today = '')
+  # ORDERED BY LAST ASK, NOT LAST READ (2026-09-25, queue 2026-09-23-90de7b). Within a rank the key is the LATER of
+  # as_of and the ask ledger's last_asked, so a product asked yesterday and refused goes behind every product of its
+  # rank not asked since. A refusal keeps the row at its old as_of and old store, so ordering by as_of alone asked the
+  # same 20 refused products every day (09-23..09-25: 12 size conflicts, 4 no-offer, 4 below-tag), a livelock. A
+  # size conflict is PARKED (rank 4, behind everything) until its worklist size or product id changes; a no-offer or a
+  # below-tag refusal with no row re-promotes at most once per 7 days (Test-HyVeeAskParked). An EMPTY ledger leaves
+  # this order exactly as it was: that is the fixture's clean twin and the rollback.
   # RANK 1 (2026-09-21): an off-target or unstamped row whose product id the newest board named as the only
   # thing standing between a commodity and its first cell (Get-HyVeeUncoveredIds). It is asked ahead of the
   # plain off-target rows, INSIDE the same budget: the quarter decides how many products are asked, this decides
@@ -310,10 +319,21 @@ function Get-HyVeeAskOrder {
     if ($ExpiringIdx.ContainsKey($i)) { $rank = 0 }
     elseif ($offT -and $UncoveredIds.ContainsKey([string][int]$w.pid)) { $rank = 1 }
     elseif ($req -or (-not $sid) -or $offT) { $rank = 2 }
-    [void]$cands.Add([pscustomobject]@{ i = $i; rank = $rank; asOf = $asOf; off = $offT; unc = ($offT -and $UncoveredIds.ContainsKey([string][int]$w.pid)) })
+    $key = $asOf; $park = ''
+    $pk = [string][int]$w.pid
+    if ($AskLedger.ContainsKey($pk)) {
+      $le = $AskLedger[$pk]
+      $la = [string]$le['last_asked']
+      if ([string]::CompareOrdinal($la, $key) -gt 0) { $key = $la }
+      $park = Test-HyVeeAskParked -Entry $le -WorkSize ([string]$w.size) -HasRow ([bool]$w.prow) -Today $Today
+      if ($park -eq 'size-conflict') { $rank = 4 }
+      elseif ($park -and $rank -lt 3) { $rank = 3 }
+    }
+    [void]$cands.Add([pscustomobject]@{ i = $i; rank = $rank; asOf = $key; off = $offT; unc = ($offT -and $UncoveredIds.ContainsKey([string][int]$w.pid)); park = $park; pid = $pk })
   }
   # Ordinal-safe: as_of is yyyy-MM-dd or '', and '' sorts first under any comparer.
   $sorted = @($cands.ToArray() | Sort-Object -Property @{ Expression = { $_.rank } }, @{ Expression = { $_.asOf } }, @{ Expression = { $_.i } })
+  $parkedPids = @($cands.ToArray() | Where-Object { $_.park } | ForEach-Object { $_.pid + ':' + $_.park })
   $take = [math]::Min([math]::Max(0, $Budget), $sorted.Count)
   $idx = @{}; $order = New-Object System.Collections.Generic.List[int]
   $nExp = 0; $nOff = 0; $nUnc = 0
@@ -328,7 +348,101 @@ function Get-HyVeeAskOrder {
   $uncAll = @($sorted | Where-Object { $_.unc }).Count
   return [pscustomobject]@{ Index = $idx; Order = $order.ToArray(); Askable = $sorted.Count
     ExpiringInSlice = $nExp; OffTargetInSlice = $nOff; OffTargetAskable = $offAll
-    UncoveredInSlice = $nUnc; UncoveredAskable = $uncAll }
+    UncoveredInSlice = $nUnc; UncoveredAskable = $uncAll; Parked = $parkedPids }
+}
+
+$script:HvSizeConflictReason = 'source product size conflicts with the worklist variant'
+function Test-HyVeeAskParked {
+  <#
+    .SYNOPSIS Is this product held out of its promoted rank by its own last refusal? '' (no), 'size-conflict', 'recent-refusal'.
+    .DESCRIPTION
+      size-conflict: the last ask was refused because Hy-Vee's product is a different size from our worklist row, and
+      the worklist size is still the one that conflicted. Re-asking cannot change that answer; the worklist binding has
+      to, so it is parked and listed (size_conflict_parked in the file header) until the size or the product id moves.
+      recent-refusal: a no-usable-offer answer, or a below-shelf-tag refusal with no row to carry, asked fewer than 7
+      days ago. At exactly 7 days it is promoted again. Without -Today there is no gate. Pure.
+  #>
+  param($Entry, [string]$WorkSize, [bool]$HasRow, [string]$Today)
+  if ($null -eq $Entry) { return '' }
+  $lo = [string]$Entry['last_outcome']
+  if ($lo -eq $script:HvSizeConflictReason) {
+    if ([string]::Equals([string]$Entry['size'], $WorkSize, [StringComparison]::Ordinal)) { return 'size-conflict' }
+    return ''
+  }
+  $gated = ($lo -like '*no usable offer*') -or (($lo -eq 'refused-below-shelf-tag') -and (-not $HasRow))
+  $la = [string]$Entry['last_asked']
+  if ($gated -and $Today -and $la) {
+    $d = ([datetime]::ParseExact($Today, 'yyyy-MM-dd', $null) - [datetime]::ParseExact($la, 'yyyy-MM-dd', $null)).TotalDays
+    if ($d -lt 7) { return 'recent-refusal' }
+  }
+  return ''
+}
+
+function Update-HyVeeAskLedger {
+  <#
+    .SYNOPSIS The ask ledger after today's pass: every product ASKED (success, rejected, refused-below-shelf-tag) gets
+              last_asked = Today, its outcome, its refusal streak and the worklist size it was asked at.
+    .DESCRIPTION
+      Pure: returns a NEW hashtable plus RepeatOfPrevious (products asked today that were also asked on the previous
+      run) and PreviousRun. A replay on the same day does not double a streak. not_attempted and expired are not asks.
+      The caller writes the result only AFTER the day's file has landed (a watermark written before the work turns a
+      failed write into a skip).
+  #>
+  param([hashtable]$Ledger, $CaptureTerms, $Work, [string]$Today, $SizeConflictRows = @())
+  $new = @{}
+  foreach ($k in @($Ledger.Keys)) { $new[$k] = @{} + $Ledger[$k] }
+  $prevRun = ''
+  foreach ($k in @($Ledger.Keys)) { $la = [string]$Ledger[$k]['last_asked']; if ($la -and [string]::CompareOrdinal($la, $Today) -lt 0 -and [string]::CompareOrdinal($la, $prevRun) -gt 0) { $prevRun = $la } }
+  $sizeByPid = @{}; foreach ($w in @($Work)) { $p = [string][int]$w.pid; if (-not $sizeByPid.ContainsKey($p)) { $sizeByPid[$p] = [string]$w.size } }
+  $theirs = @{}; foreach ($s in @($SizeConflictRows)) { if ($s) { $theirs[[string][int]$s['product_id']] = [string]$s['theirs'] } }
+  $repeat = 0
+  foreach ($t in @($CaptureTerms)) {
+    if ($null -eq $t) { continue }
+    $o = [string]$t['outcome']
+    if (@('success', 'rejected', 'refused-below-shelf-tag') -notcontains $o) { continue }
+    $m = [regex]::Match([string]$t['term'], '-(\d+)$')
+    if (-not $m.Success) { continue }
+    $p = $m.Groups[1].Value
+    $outc = if ($o -eq 'rejected') { [string]$t['reason'] } else { $o }
+    $old = $Ledger[$p]
+    if ($old -and $prevRun -and [string]$old['last_asked'] -eq $prevRun) { $repeat++ }
+    $streak = 0
+    if ($o -ne 'success') {
+      $streak = 1
+      if ($old) { $streak = [int]$old['streak'] + $(if ([string]$old['last_asked'] -eq $Today) { 0 } else { 1 }) }
+    }
+    $e = @{ last_asked = $Today; last_outcome = $outc; streak = $streak; size = [string]$sizeByPid[$p] }
+    if ($outc -eq $script:HvSizeConflictReason -and $theirs.ContainsKey($p)) { $e['theirs'] = $theirs[$p] }
+    elseif ($outc -eq $script:HvSizeConflictReason -and $old -and $old['theirs']) { $e['theirs'] = [string]$old['theirs'] }
+    $new[$p] = $e
+  }
+  return [pscustomobject]@{ Ledger = $new; RepeatOfPrevious = $repeat; PreviousRun = $prevRun }
+}
+
+function Read-HyVeeAskLedger([string]$Path) {
+  # A missing ledger is an EMPTY one, which leaves the ask order exactly as it was before the ledger existed.
+  $h = @{}
+  if (-not $Path -or -not (Test-Path -LiteralPath $Path)) { return $h }
+  $doc = [IO.File]::ReadAllText($Path, [Text.Encoding]::UTF8) | ConvertFrom-Json
+  foreach ($pr in @($doc.PSObject.Properties)) {
+    $e = @{}
+    foreach ($f in @($pr.Value.PSObject.Properties)) { $e[$f.Name] = $f.Value }
+    $h[[string]$pr.Name] = $e
+  }
+  return $h
+}
+
+function Get-HyVeeSizeConflictParked([hashtable]$Ledger, $Work) {
+  # The header list: every product whose last ask was a size conflict at the worklist size it still carries.
+  $out = New-Object System.Collections.ArrayList
+  foreach ($w in @($Work)) {
+    $p = [string][int]$w.pid
+    if ([int]$w.pid -le 0 -or -not $Ledger.ContainsKey($p)) { continue }
+    if ((Test-HyVeeAskParked -Entry $Ledger[$p] -WorkSize ([string]$w.size) -HasRow ([bool]$w.prow) -Today '') -eq 'size-conflict') {
+      [void]$out.Add([ordered]@{ product_id = [int]$w.pid; item = [string]$w.name; ours = [string]$w.size; theirs = [string]$Ledger[$p]['theirs']; since = [string]$Ledger[$p]['last_asked'] })
+    }
+  }
+  return ,$out.ToArray()
 }
 
 function Get-HyVeeUncoveredIds {
@@ -542,6 +656,7 @@ function Invoke-HyVeeWorkPass {
   $deals = New-Object System.Collections.ArrayList
   $captureTerms = New-Object System.Collections.ArrayList
   $sizeConflicts = New-Object System.Collections.Generic.List[string]
+  $sizeConflictRows = New-Object System.Collections.ArrayList
   $tagRefusedRows = New-Object System.Collections.ArrayList
   $fresh = 0; $fail = 0; $markdown = 0; $stale = 0; $newProd = 0; $mismatch = 0
   $tagRefused = 0; $multRefused = 0; $multDescriptive = 0
@@ -663,6 +778,7 @@ function Invoke-HyVeeWorkPass {
               $mismatch++
               $workReason = 'source product size conflicts with the worklist variant'
               [void]$sizeConflicts.Add(('{0}  ours=[{1}] hy-vee=[{2}]  qty {3} vs {4}  (productId {5})' -f $w.name, $size, $theirSize, [math]::Round($ourQty,2), [math]::Round($theirQty,2), $w.pid))
+              [void]$sizeConflictRows.Add([ordered]@{ product_id = [int]$w.pid; theirs = [string]$theirSize })
               $got = $null   # refuse the refresh; fall through to "could not re-verify"
             }
           }
@@ -801,7 +917,7 @@ function Invoke-HyVeeWorkPass {
     $workOrdinal++
   }
   return [pscustomobject]@{
-    Deals = $deals; CaptureTerms = $captureTerms; SizeConflicts = $sizeConflicts
+    Deals = $deals; CaptureTerms = $captureTerms; SizeConflicts = $sizeConflicts; SizeConflictRows = $sizeConflictRows
     TagRefusedRows = $tagRefusedRows
     Fresh = $fresh; Fail = $fail; Markdown = $markdown; Stale = $stale; NewProd = $newProd
     Mismatch = $mismatch; CapSkipped = $capSkipped; BudgetSkipped = $budgetSkipped
@@ -1153,6 +1269,62 @@ if ($SelfTest) {
   _T "MUST NOT FIRE: a row already read at the pinned store is not promoted, whatever the board says" (((@($u4.Order) -join ',') -eq '0') -and ($u4.UncoveredInSlice -eq 0))
   $u5 = Get-HyVeeAskOrder -Work $uw -Budget 2 -TargetStoreId '1466' -ExpiringIdx @{ 2 = $true } -UncoveredIds $fsU
   _T "an expiring sale still goes first of all, the uncovered commodity second (order 2,1)" ((@($u5.Order) -join ',') -eq '2,1')
+
+  # --- THE ASK LEDGER: ORDER BY LAST ASK, PARK A SIZE CONFLICT (2026-09-25, queue 2026-09-23-90de7b) ---------------
+  # FOUNDING SHAPE, frozen from hyvee-regular-2026-09-24.json: 20 products read at the retired store 1465 on 2026-08-21,
+  # all asked on 09-24 and refused (12 size conflicts, 8 no usable offer), and 5 on-target products never asked. The
+  # old order re-asks the refused ones because a refusal leaves as_of and store unchanged.
+  $lw = New-Object System.Collections.ArrayList
+  $lled = @{}
+  for ($k = 0; $k -lt 20; $k++) {
+    $lp = 5000 + $k
+    [void]$lw.Add([pscustomobject]@{ name = "refused $k"; size = '38 oz'; prow = ([pscustomobject]@{ item = "refused $k"; store_id = '1465'; as_of = '2026-08-21' }); pid = $lp; cid = '' })
+    $lled[[string]$lp] = @{ last_asked = '2026-09-24'; streak = 3; size = '38 oz'; last_outcome = $(if ($k -lt 12) { $script:HvSizeConflictReason } else { 'store product lookup returned no usable offer' }) }
+  }
+  for ($k = 0; $k -lt 5; $k++) { [void]$lw.Add([pscustomobject]@{ name = "never asked $k"; size = '1 ct'; prow = ([pscustomobject]@{ item = "never asked $k"; store_id = '1466'; as_of = '2026-09-01' }); pid = 6000 + $k; cid = '' }) }
+  $lOld = Get-HyVeeAskOrder -Work $lw -Budget 13 -TargetStoreId '1466'
+  $lNew = Get-HyVeeAskOrder -Work $lw -Budget 13 -TargetStoreId '1466' -AskLedger $lled -Today '2026-09-25'
+  $newSet = @($lNew.Order | ForEach-Object { [int]$lw[$_].pid })
+  _T "FIXTURE REPRODUCES THE LIVELOCK: without the ledger, 13 asks take 13 refused products and 0 of the 5 never-asked" ((@($lOld.Order | Where-Object { $_ -ge 20 }).Count -eq 0) -and (@($lOld.Order).Count -eq 13))
+  _T "MUST FIRE: with the ledger the 13 asks include all 5 never-asked products and NO size-conflict product (8 no-offer fill the rest)" ((@($newSet | Where-Object { $_ -ge 6000 }).Count -eq 5) -and (@($newSet | Where-Object { $_ -lt 5012 }).Count -eq 0) -and (@($lNew.Parked).Count -eq 20))
+  $lAll = Get-HyVeeAskOrder -Work $lw -Budget 25 -TargetStoreId '1466' -AskLedger $lled -Today '2026-09-25'
+  _T "a parked size conflict is asked only when nothing else is owed: the last 12 of 25 are the size conflicts" ((@($lAll.Order | Select-Object -Last 12 | Where-Object { $_ -lt 12 }).Count -eq 12))
+  $lsz = @{}; foreach ($lk in @($lled.Keys)) { $lsz[$lk] = @{} + $lled[$lk] }; $lsz['5000']['size'] = '40 oz'
+  _T "a size conflict is UNPARKED when its worklist size changes (ledger 40 oz, worklist 38 oz): off-target rank again, asked first" (((@((Get-HyVeeAskOrder -Work $lw -Budget 1 -TargetStoreId '1466' -AskLedger $lsz -Today '2026-09-25').Order) -join ',')) -eq '0')
+  # AT THE BAR: a no-offer refusal re-promotes at exactly 7 days and not at 6.
+  $bw = New-Object System.Collections.ArrayList
+  [void]$bw.Add([pscustomobject]@{ name = 'on-target'; size = '1 ct'; prow = ([pscustomobject]@{ item = 'on-target'; store_id = '1466'; as_of = '2026-09-10' }); pid = 71; cid = '' })
+  [void]$bw.Add([pscustomobject]@{ name = 'no-offer'; size = '20 oz'; prow = ([pscustomobject]@{ item = 'no-offer'; store_id = '1465'; as_of = '2026-07-18' }); pid = 72; cid = '' })
+  $b7 = Get-HyVeeAskOrder -Work $bw -Budget 1 -TargetStoreId '1466' -Today '2026-09-25' -AskLedger @{ '72' = @{ last_asked = '2026-09-18'; last_outcome = 'store product lookup returned no usable offer'; streak = 1; size = '20 oz' } }
+  $b6 = Get-HyVeeAskOrder -Work $bw -Budget 1 -TargetStoreId '1466' -Today '2026-09-25' -AskLedger @{ '72' = @{ last_asked = '2026-09-19'; last_outcome = 'store product lookup returned no usable offer'; streak = 1; size = '20 oz' } }
+  _T "AT THE BAR: a no-offer asked exactly 7 days ago is promoted again (asked), 6 days ago it is not (the on-target product goes)" ((((@($b7.Order) -join ',')) -eq '1') -and (((@($b6.Order) -join ',')) -eq '0'))
+  # CLEAN TWIN: an EMPTY ledger leaves every existing order exactly as it was.
+  $ct = @(
+    ((@((Get-HyVeeAskOrder -Work $ow -Budget 3 -TargetStoreId '1466' -AskLedger @{} -Today '2026-09-25').Order) -join ',') -eq (@($o1.Order) -join ',')),
+    ((@((Get-HyVeeAskOrder -Work $ow -Budget 7 -TargetStoreId '1466' -AskLedger @{} -Today '2026-09-25').Order) -join ',') -eq (@($o2.Order) -join ',')),
+    ((@((Get-HyVeeAskOrder -Work $uw -Budget 1 -TargetStoreId '1466' -AskLedger @{} -Today '2026-09-25').Order) -join ',') -eq '0'),
+    ((@((Get-HyVeeAskOrder -Work $uw -Budget 3 -TargetStoreId '1466' -UncoveredIds $fsU -AskLedger @{} -Today '2026-09-25').Order) -join ',') -eq '1,0,2'),
+    ((@((Get-HyVeeAskOrder -Work $lw -Budget 25 -TargetStoreId '1466' -AskLedger @{} -Today '2026-09-25').Order) -join ',') -eq (@((Get-HyVeeAskOrder -Work $lw -Budget 25 -TargetStoreId '1466').Order) -join ',')))
+  _T "CLEAN TWIN: an empty ledger gives exactly the pre-ledger order on 5 of 5 fixtures (o1, o2, eggs 08-10, 1,0,2, the 25-product list)" (@($ct | Where-Object { $_ }).Count -eq 5)
+  $ctmpL = Join-Path ([IO.Path]::GetTempPath()) ('hv-ask-ledger-missing-' + [guid]::NewGuid().ToString('N') + '.json')
+  _T "a MISSING ledger file reads as an empty ledger (0 entries), which is the clean twin above" ((Read-HyVeeAskLedger $ctmpL).Count -eq 0)
+  # THE LEDGER UPDATE: asks are recorded, non-asks are not, a replay does not double a streak, repeats are counted.
+  $lt = @(
+    [ordered]@{ term = 'product-0000-5000'; outcome = 'rejected'; reason = $script:HvSizeConflictReason },
+    [ordered]@{ term = 'product-0001-5012'; outcome = 'rejected'; reason = 'store product lookup returned no usable offer' },
+    [ordered]@{ term = 'product-0002-6000'; outcome = 'success' },
+    [ordered]@{ term = 'product-0003-6001'; outcome = 'refused-below-shelf-tag' },
+    [ordered]@{ term = 'product-0004-6002'; outcome = 'not_attempted'; reason = 'x' },
+    [ordered]@{ term = 'product-0005-6003'; outcome = 'expired' })
+  $lu = Update-HyVeeAskLedger -Ledger $lled -CaptureTerms $lt -Work $lw -Today '2026-09-25' -SizeConflictRows @([ordered]@{ product_id = 5000; theirs = '25 oz' })
+  $lu2 = Update-HyVeeAskLedger -Ledger $lu.Ledger -CaptureTerms $lt -Work $lw -Today '2026-09-25'
+  _T "the ledger records 4 asks (not not_attempted, not expired), streak 3->4 on a refusal and 0 on success, 2 repeats of 2026-09-24, theirs kept, and a same-day replay leaves the streak at 4" (
+    ($lu.Ledger.Count -eq 22) -and ([string]$lu.Ledger['6000']['last_outcome'] -eq 'success') -and ([int]$lu.Ledger['6000']['streak'] -eq 0) -and
+    ([int]$lu.Ledger['5000']['streak'] -eq 4) -and ($lu.RepeatOfPrevious -eq 2) -and ($lu.PreviousRun -eq '2026-09-24') -and
+    (-not $lu.Ledger.ContainsKey('6002')) -and (-not $lu.Ledger.ContainsKey('6003')) -and ([string]$lu.Ledger['5000']['theirs'] -eq '25 oz') -and
+    ([int]$lu2.Ledger['5000']['streak'] -eq 4) -and ([int]$lled['5000']['streak'] -eq 3))
+  $lpk = Get-HyVeeSizeConflictParked -Ledger $lu.Ledger -Work $lw
+  _T "size_conflict_parked lists the 12 size-conflict products with ours and theirs" ((@($lpk).Count -eq 12) -and ([string]$lpk[0]['ours'] -eq '38 oz') -and ([string]$lpk[0]['theirs'] -eq '25 oz'))
 
   # --- THE LOOKUP BODY NAMES ITS STORE AS A JSON NUMBER, WHOEVER CALLS IT (2026-09-21) ----------------------
   # FOUNDING BODY, the variables exactly as the lane sent them from 9f5059eec to this fix (asked 93, answered 0
@@ -1564,6 +1736,8 @@ $HV_SEC_PER_PRODUCT = 0.6
 # triage counted "days the cursor moved" from.
 $askIndex = $null       # $null = unbudgeted, ask about everything
 $hvBudget = 0
+$hvAskLedgerPath = if ($AskLedgerFile) { $AskLedgerFile } else { Join-Path $OutDir 'hyvee-ask-ledger.json' }
+$hvAskLedger = @{}
 $hvOrder = $null
 $hvUnc = @{}            # product id -> commodity the board prices nowhere (Get-HyVeeUncoveredIds); empty = none promoted
 $hvCap = $null
@@ -1645,7 +1819,12 @@ if (-not $Quick) {
       $script:HvFallbackAskedIds = $hvFbAsked.ToArray()
       if (@($hvPlan.SaleFallbacks).Count -gt 0 -or $hvPlan.SaleFallbackBlind) { Write-Output ('Hy-Vee: sale fallbacks owed ' + @($hvPlan.SaleFallbackPending).Count + ', ' + @($hvPlan.SaleFallbacks).Count + ' in today''s plan, ' + $hvFbAsked.Count + ' promoted to rank 0 behind the expiries' + $(if ($hvPlan.SaleFallbackBlind) { ' (BLIND: ' + $hvPlan.SaleFallbackWhy + ')' } else { '' })) }
     } catch { Write-Warning ('Hy-Vee: sale-fallback asks NOT promoted (' + $_.Exception.Message + '); the order is as before') }
-    $hvOrder = Get-HyVeeAskOrder -Work $work -Budget $hvBudget -TargetStoreId ([string]$StoreId) -ExpiringIdx $hvExpIdx -UncoveredIds $hvUnc
+    # THE ASK LEDGER (2026-09-25): its own try, like the board verdict. An unreadable ledger costs only the last-ask
+    # ordering, never the budget; the order is then exactly the pre-ledger order.
+    try { $hvAskLedger = Read-HyVeeAskLedger $hvAskLedgerPath }
+    catch { Write-Warning ('Hy-Vee: ask ledger unreadable (' + $_.Exception.Message + '); the order is oldest-read-first as before'); $hvAskLedger = @{} }
+    $hvOrder = Get-HyVeeAskOrder -Work $work -Budget $hvBudget -TargetStoreId ([string]$StoreId) -ExpiringIdx $hvExpIdx -UncoveredIds $hvUnc -AskLedger $hvAskLedger -Today $todayS
+    Write-Output ("Hy-Vee: ask ledger " + $hvAskLedger.Count + " product(s) (" + $hvAskLedgerPath + "); " + @($hvOrder.Parked).Count + " held out of their promoted rank by their own last refusal")
     $askIndex = $hvOrder.Index
     Write-Output ("Hy-Vee: $($hvOrder.UncoveredInSlice) of today's asks re-read a row the board withheld for its store on a commodity it prices NOWHERE " +
       "($($hvOrder.UncoveredAskable) such row(s) askable; $($hvUnc.Count) product id(s) named by $(if ($hvUncBoard) { $hvUncBoard } else { 'no readable board' }))")
@@ -1693,6 +1872,7 @@ if ($DryRun) {
   if ($hvOrder) {
     $firstTen = @($hvOrder.Order | Select-Object -First 10 | ForEach-Object { $w = $work[$_]; ('[' + $w.pid + '] ' + $w.name + ' (' + $(if ($w.prow) { [string]$w.prow.as_of + ', store ' + (Get-HyVeeRowStoreId $w.prow) } else { 'never priced' }) + ')') })
     Write-Output ("HYVEE-DRYRUN first asks: " + ($firstTen -join '; '))
+    Write-Output ("HYVEE-DRYRUN ask ledger entries=" + $hvAskLedger.Count + " parked=" + @($hvOrder.Parked).Count + " order pids: " + ((@($hvOrder.Order) | ForEach-Object { [string][int]$work[$_].pid }) -join ','))
     $uncAsked = @(@($hvOrder.Order) | Where-Object { $hvUnc.ContainsKey([string][int]$work[$_].pid) } | ForEach-Object { '[' + $work[$_].pid + '] ' + $work[$_].name + ' -> ' + $hvUnc[[string][int]$work[$_].pid] })
     Write-Output ("HYVEE-DRYRUN uncovered-commodity asks in slice=" + $hvOrder.UncoveredInSlice + " askable=" + $hvOrder.UncoveredAskable + " named=" + $hvUnc.Count + ": " + ($uncAsked -join '; '))
   }
@@ -1827,6 +2007,9 @@ if ((-not $Quick) -and (Test-HyVeeWipeout -RowCount $deals.Count -PrevMax $prevM
   exit 2
 }
 
+# The header's view of the ask ledger, computed (pure) before the file; the ledger itself is written after it lands.
+$hvLedgerNext = Update-HyVeeAskLedger -Ledger $hvAskLedger -CaptureTerms $captureTerms -Work $work -Today $todayS -SizeConflictRows $pass.SizeConflictRows
+$hvSizeParked = Get-HyVeeSizeConflictParked -Ledger $hvLedgerNext.Ledger -Work $work
 $file = if ($Quick) { Join-Path $OutDir 'hyvee-quick-test.json' } else { Join-Path $regDir ("hyvee-regular-$todayS.json") }
 $out = [ordered]@{
   store='Hy-Vee'; week_of=$todayS; price_type='everyday'; price_mode='in-store'; mode_verified=$todayS
@@ -1849,11 +2032,31 @@ $out = [ordered]@{
   expired_past_carry=$pass.Expired; max_carry_days=$hvCarryDays; requeued_below_tag=$pass.Requeued
   product_ids_recovered=$hvPidRecovered; product_id_conflicts=$hvPidConflicts; read_at_store_id=[string]$StoreId
   ask_threw=$script:HvAskThrew; ask_empty=$script:HvAskEmpty; ask_other_store=$script:HvAskOtherStore
+  # 2026-09-25, additive: the ask ledger's view of today (queue 2026-09-23-90de7b). size_conflict_parked lists the
+  # products whose worklist binding names a different variant, so the defect is visible instead of re-asked daily.
+  asked_repeat_of_yesterday=$hvLedgerNext.RepeatOfPrevious; asked_previous_run=$hvLedgerNext.PreviousRun
+  size_conflict_parked=$hvSizeParked
   capture_terms=$captureTerms.ToArray()
   deals=$deals.ToArray()
 }
 ($out | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8
 Write-Output ("Hy-Vee everyday prices -> " + $file)
+
+# THE ASK LEDGER IS WRITTEN AFTER THE FILE LANDED, and read again inside its lock (lib\ledger-lock.ps1), so a run that
+# died before its file must re-ask its slice rather than record it as asked. Never on -Quick.
+if ((-not $Quick) -and (Test-Path $file) -and $hvAskLedgerPath) {
+  try {
+    . (Join-Path (Split-Path -Parent $root) 'lib\atomic-write.ps1')
+    . (Join-Path (Split-Path -Parent $root) 'lib\ledger-lock.ps1')
+    $alk = Enter-TcLedgerLock -Path $hvAskLedgerPath
+    try {
+      $alNow = Read-HyVeeAskLedger $hvAskLedgerPath
+      $alNext = Update-HyVeeAskLedger -Ledger $alNow -CaptureTerms $captureTerms -Work $work -Today $todayS -SizeConflictRows $pass.SizeConflictRows
+      [void](Write-TcAtomicFile -Path $hvAskLedgerPath -Text ($alNext.Ledger | ConvertTo-Json -Depth 4) -NoBom)
+      Write-Output ("Hy-Vee: ask ledger recorded " + $alNext.Ledger.Count + " product(s); " + $alNext.RepeatOfPrevious + " of today's asks were also asked on " + $(if ($alNext.PreviousRun) { $alNext.PreviousRun } else { 'no earlier run' }))
+    } finally { Exit-TcLedgerLock $alk }
+  } catch { Write-Warning ("Hy-Vee: ask ledger not updated (" + $_.Exception.Message + ") - tomorrow orders by last read for these products") }
+}
 
 # THE ROTATION COMMIT USED TO BE HERE, and this note is left in its place on purpose. It was the last
 # statement in the file, gated on the everyday file existing, and it never ran once - the wipeout guard

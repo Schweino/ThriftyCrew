@@ -446,7 +446,7 @@
         "cell_effects": []
       },
       "freshness": "recall-sleep-latest.md 2026-09-25 04:41; the next pass is 04:35 tomorrow and may add clusters",
-      "leaves_open": "the judgement queues themselves (9 clusters, 2 cross-project, 1 forgetting candidate on 09-25) still need a person's ruling; by Brad's 4fc24c ruling a waiting night stays nonzero",
+      "leaves_open": "(1) The judgement queues (9 unruled clusters, 2 cross-project, 1 forgetting candidate on 09-25) keep the pass nonzero every night memory writing adds one: a ruling, Q-recall-judgement-queues. (2) The ThriftyCrew memory store holds an uncommitted memory file past the gate's 48 h bar (git status in ~/.claude: projects/C--Codex-ThriftyCrew/memory/what-actually-reaches-a-spawned-agent.md modified); the gate reads BROKEN until a session commits it, and this lane may not write that store. Both are in the same question.",
       "leaves_open_occurrences": 3,
       "proof": {
         "must_fire_case": "a frozen gate output whose only FAIL line is not a judgement queue (e.g. a recognition floor) is classified BROKEN, and a step exiting 1 with stderr 'X' prints 'X' in the report",
@@ -465,8 +465,16 @@
       "rollback": "revert the recall-sleep.py hunks",
       "lane": "ops",
       "est_tool_calls": 35,
-      "status": "planned",
-      "resolution_note": "Still red 09-25: 'gate BROKEN' is the unruled-cluster backlog 4fc24c left open, mislabelled as broken, and the brain commit hook exits 1 with no reason recorded. Planned for the ops lane."
+      "status": "done",
+      "resolution_note": "Red 09-23..09-25. The gate was not the judgement backlog mislabelled: it was broken by an uncommitted memory file past its 48 h bar (real) and by a prose header read as a failure (fixed). The brain commit hook was MISSING (the reason sat in the run log, not the report); it was reinstalled 09-25 04:50 and --check is CURRENT. The report now prints why each BROKEN step broke. The judgement queues and the uncommitted memory file are Brad's (Q-recall-judgement-queues).",
+      "premise_verified": "PARTLY FALSE, 2026-09-25. (1) The gate is NOT the unruled backlog mislabelled: step_class already reads every 'unruled' / 'above the high-water mark' line as judgement (18da92, 4fc24c). The 09-25 gate read BROKEN on two other lines: the hard reason 'C--Codex-ThriftyCrew: 2 memory file(s) uncommitted, 1 past the 48 h bar, oldest 49 h' (a real finding, correctly broken), and check-skills' prose header '... against marks that FAIL ONLY ON A RISE:', which failure_lines took for a reason. (2) The brain commit hook's reason WAS recorded, in the run log tail (recall-sleep-log.jsonl, runs 20260924T043502 and 20260925T043502): 'install-brain-hooks: MISSING - no commit-msg in C:\\Users\\Owner\\.claude\\.git\\hooks'. The report dropped it because that line carries no digest keyword and the step sits in neither digest section. The hook was installed at 2026-09-25 04:50:10, nine minutes after the pass; install-brain-hooks.py --check now exits 0 'CURRENT'.",
+      "deviation": "No reclassification of the judgement queues (already right). Shipped in ~/.claude/skills/recall-sleep.py (the brain repo, commit 23bbacb, local, not ThriftyCrew): the failed-steps block prints 'why:' lines for each BROKEN step (its hard reasons, neither a fall nor a judgement; with none, its last non-marker lines; with no output, 'no output at all'), and a line carrying 'FAIL ONLY ON A RISE' is not a reason. ops/scheduled-tasks/tc-recall-sleep-0435.xml untouched: nothing in it bears on either cause. The hook MISSING itself was already repaired by someone at 04:50 and is not re-fixed here.",
+      "shipped_commit": "~/.claude brain repo 23bbacb (recall-sleep.py); plan update in ThriftyCrew commit 'Triage plan-2026-09-25-4: ... (a83841, 90de7b)'",
+      "proof_run": "C:\\Codex\\Python312\\python.exe ~/.claude/skills/recall-sleep.py --selftest: exit 0, 'recall-sleep selftest: 75 of 75 cases pass' (EXPECTED_CASES 71 -> 75). MUST FIRE: the frozen 09-24/25 hook output (MISSING line, fix line, COMPLETE marker) renders 'why: install-brain-hooks: MISSING' and not the marker; MUST FIRE: the frozen 09-25 gate is broken and its only reason printed is the uncommitted-memory line; MUST NOT FIRE: the same gate without that line (judgement lines plus the FAIL ONLY ON A RISE header) is a judgement; CLEAN TWIN: a bare crash names itself and a waiting step prints no why. install-brain-hooks.py --check: exit 0, state=current.",
+      "leaves_open_followup": "Q-recall-judgement-queues",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 22,
+      "full_suite": "deferred-to-land"
     },
     {
       "queue_id": "2026-09-23-92e552",
@@ -626,24 +634,29 @@
       ],
       "root_cause": "carried from plan-2026-09-25-2: Get-HyVeeAskOrder ranks by last successful READ, and a refused ask keeps the row old and uncovered, so the same 20 refused products fill the 20-ask budget every day",
       "root_fix": {
-        "what": "order by last ASK and park size conflicts; watchdog says ANSWERS REFUSED",
+        "what": "order Hy-Vee asks by the last ASK as well as the last read, and park a refusal that cannot change until its input changes",
         "files": [
           "grocery/pull-regular-hyvee.ps1",
-          "grocery/capture-watchdog.ps1"
+          "grocery/out/hyvee-ask-ledger.json (new, written by the lane)"
         ],
-        "exact_change": "carried from plan-2026-09-25-2; the pull-regular-hyvee half is the parked patch"
+        "exact_change": "the plan-2026-09-25-2 patch: Update-HyVeeAskLedger / Read-HyVeeAskLedger / Test-HyVeeAskParked / Get-HyVeeSizeConflictParked, -AskLedger and -Today on Get-HyVeeAskOrder (sort within a rank by max(as_of, last_asked); a size conflict parked at rank 4 until its worklist size moves; no-offer and no-row below-tag refusals re-promoted at 7 days), header fields asked_repeat_of_yesterday, asked_previous_run, size_conflict_parked, and the ledger write after the file lands under Enter-TcLedgerLock and Write-TcAtomicFile. The watchdog half is not in this change."
       },
-      "leaves_open": "carried from plan-2026-09-25-2",
-      "leaves_open_occurrences": 0,
+      "leaves_open": "(1) The 12 size-conflict pids stay unpriced at Hy-Vee's pinned store until their worklist binding is repaired; now parked and listed in size_conflict_parked, owned by 2026-09-25-c2a750 (weekly). (2) capture-watchdog.ps1 still says NO FRESH ROWS / saw nothing where 'ANSWERS REFUSED' would be clearer, and has no SAME SLICE detector; the same promote-until-success shape in Get-WalmartRulingOwed and the sale-fallback asks is unmeasured. The watchdog's NO FRESH ROWS pages on any headless lane that refreshes nothing, which is how this one was found.",
+      "leaves_open_occurrences": 12,
       "proof": {
-        "must_fire_case": "carried: frozen 09-24 work list, old order returns the same 20, new order admits the 5 never-asked",
-        "clean_twin": "carried: an empty ledger gives the old order exactly",
-        "guard_or_fixture": "grocery/pull-regular-hyvee.ps1 -SelfTest and grocery/capture-watchdog.ps1 -SelfTest (carried)"
+        "guard_or_fixture": "grocery/pull-regular-hyvee.ps1 -SelfTest (Get-HyVeeAskOrder is pure)",
+        "must_fire_case": "FROZEN from the 09-24 file (budget 13): the OLD order returns the same refused products (livelock reproduced and asserted); the new order holds every never-asked product and no size-conflict pid. AT THE BAR: a no-offer refusal is re-promoted at exactly 7 days and not at 6.",
+        "clean_twin": "with an EMPTY ledger the new order equals the old order on 5 of 5 existing fixtures; a missing ledger file reads as empty; a parked size conflict unparks when its worklist size changes.",
+        "commands": [
+          "powershell -NoProfile -File grocery\\pull-regular-hyvee.ps1 -SelfTest",
+          "powershell -NoProfile -File grocery\\pull-regular-hyvee.ps1 -DryRun -AskLedgerFile <path>"
+        ],
+        "run": "-SelfTest: exit 0, 108 ok lines, 0 FAIL, last line 'SELF-TEST PASS'. -DryRun before (no ledger): order above, 19 of 20 refused pids; -DryRun after (ledger seeded from the 09-25 capture_terms, 20 entries, 14 carrying a size, scratch only): 'ask ledger entries=20 parked=16', order 536497, 4145663, 2526087, 299680, 2973867, 393598, 3794446, 3644206, 55979, 3432897, 3603868, 129138, 1820677, 11153, 3731139, 282855, 17440, 57033, 23563, 5161: 0 of the 19 refused pids, 19 of 20 slots freed. Both exit 0, 'HYVEE-DRYRUN-COMPLETE no request issued, nothing written'. The seeded ledger approximates sizes from rows (6 of 20 had none), so parked=16 is an estimate of the second run, not a measurement of it."
       },
       "lane": "ops",
       "est_tool_calls": 15,
-      "status": "promote",
-      "resolution_note": "PROMOTE: not superseded by 822c30. Different cause (Hy-Vee ask-order livelock, not the RUN RECORD fold); it already carries a reviewed diagnosis and a built patch in plan-2026-09-25-2, so resume it there in the ops lane (about 15 calls) rather than re-diagnose.",
+      "status": "done",
+      "resolution_note": "Watchdog was right, not blind: Hy-Vee re-asked the same 20 refused products every day (12 size conflicts, 4 no-offer, 4 below-tag) because the ask order ranked by last READ and a refusal keeps the row old. The order now also uses the last ASK and parks size conflicts; a dry run over today frees 19 of 20 slots. It takes effect from the second run after landing. The 12 size-conflict bindings are 2026-09-25-c2a750.",
       "blast_radius": {
         "measured_as": "routing",
         "measured_by": "carried from plan-2026-09-25-2: ask-order routing over capture_terms 09-23/24/25",
@@ -653,7 +666,14 @@
         "cell_effects": []
       },
       "rollback": "carried: revert the two script hunks; the order falls back to as_of with no ledger",
-      "freshness": "plan-2026-09-25-2 measured 2026-09-25 10:40-11:15 against hyvee-regular-2026-09-25.json; re-read tomorrow's 08:00 file first"
+      "freshness": "plan-2026-09-25-2 measured 2026-09-25 10:40-11:15 against hyvee-regular-2026-09-25.json; re-read tomorrow's 08:00 file first",
+      "premise_verified": "yes, re-measured 2026-09-25: the newest Hy-Vee file is still hyvee-regular-2026-09-25.json (08:00:47). pull-regular-hyvee.ps1 -DryRun with NO ask ledger ordered 52837, 90791, 24848, 2950925, 11342, 47144, 444508, 3796212, 19478, 9285, 3503550, 3972711, 2918306, 2925188, 1334638, 37464, 37443, 332699, 269490, 536497: 19 of the 20 slots are the refused pids of 09-23..09-25, so the livelock reproduces today. The patch applied cleanly to HEAD (git apply --check exit 0; pull-regular-hyvee.ps1 unchanged since 686d83d9c).",
+      "deviation": "Shipped the pull-regular-hyvee.ps1 half exactly as built in plan-2026-09-25-2 (patch applied unchanged, with its three recorded design deviations: must-fire at budget 13, a parked size conflict goes to rank 4, a missing ledger keeps today's order). NARROWED: the capture-watchdog.ps1 half (ANSWERS REFUSED wording and the SAME SLICE 3 DAYS finding) is NOT built; the watchdog's NO FRESH ROWS already paged this correctly on 09-23 and 09-24, so the wording is a clarity change and moves to leaves_open. Because a missing ledger keeps today's order, the first run after landing still asks the same slice and writes the ledger; the order changes from the second run (live verification: the 2026-09-27 08:00 file, capture_terms should not repeat the 09-26 asked set, and asked_repeat_of_yesterday should read near 0).",
+      "leaves_open_followup": "2026-09-25-c2a750",
+      "shipped_commit": "ThriftyCrew commit 'Triage plan-2026-09-25-4: ... (a83841, 90de7b)'",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 14,
+      "full_suite": "deferred-to-land"
     },
     {
       "queue_id": "2026-09-24-c59dce",
@@ -741,5 +761,16 @@
     "reliability-craft/rca-and-chaos.md (section 2: Preventive, Detective, Responsive)",
     ".claude/rules/ops-and-gates.md ('Three fixture labels, three jobs')"
   ],
-  "open_questions_for_brad": []
+  "open_questions_for_brad": [
+    {
+      "id": "Q-recall-judgement-queues",
+      "question": "The knowledge store's nightly pass (recall-sleep) has exited nonzero on 09-23, 09-24 and 09-25. Two things keep it red that no code change should decide: the judgement queues (9 unruled clusters, 2 cross-project clusters and 1 forgetting candidate on 09-25, marks at 0, which by the 4fc24c ruling keep a waiting night nonzero), and a ThriftyCrew memory file uncommitted past the gate's 48 h bar (projects/C--Codex-ThriftyCrew/memory/what-actually-reaches-a-spawned-agent.md). Which do you want?",
+      "options": [
+        "A: rule on the queues now (recall-consolidate and recall-forget), commit the memory store, and keep the rule that a waiting night is nonzero",
+        "B: keep the queues for a weekly sitting, and let a night whose only failures are waiting judgements exit 0 with the queue counts in the report",
+        "C: move the unruled marks to today's counts so only growth pages, and commit the memory store"
+      ],
+      "raised_by": "2026-09-23-a83841"
+    }
+  ]
 }
