@@ -183,8 +183,8 @@
         "the four are still dirty now (git status), last written 2026-09-25 09:51:19, after the 09:28 hand landing ae7434bf1; public/free-dinners.json last committed cec9779a3 09-23; grocery/capture-run.ps1 names free-dinners only in a comment (line 1165)"
       ],
       "root_cause": "a writer in (or after) the chain rewrites the free-rotation outputs after the staging list is built; not a consequence of the unlanded push, since the files stay dirty after the push landed",
-      "resolution_note": "PROMOTE: contradicts the dispatch hypothesis. The same 4 files were served-dirty on 09-24 and 09-25 and are dirty now after ae7434bf1 landed, rewritten at 09:51; a writer/staging-list cause, not the stranded commit.",
-      "status": "promote"
+      "resolution_note": "PROMOTED by JOB 3 (dirty served files persist after the 09:28 hand landing, a writer or staging-list cause) and not reached today: run budget went to the money lane. Id stays open, due tomorrow.",
+      "status": "deferred-budget"
     },
     {
       "queue_id": "2026-09-25-af4f33",
@@ -208,8 +208,8 @@
         "capture-watchdog-2026-09-24.log 'RUN RECORD: capture-run [daily] exit 1 - failed lane(s) with no page of their own: guards-blocked (paged as themselves: sync ...)'; today's watchdog (10:30) had not run at measurement"
       ],
       "root_cause": "RUN RECORD folds any exit-1 run; 09-23's cause was a commit-size-gate lane, a different cause from the 09-24/25 bot-checkout runs",
-      "resolution_note": "PROMOTE: RETURN of 7c932a with a cause (commit-size-gate refused the 09-23 [ad] commit) that no item here owns and that did not fit the budget to trace.",
-      "status": "promote"
+      "resolution_note": "PROMOTED by JOB 3 (09-23 cause was a commit-size-gate lane failure nothing owns) and not reached today within the 10M run budget. Id stays open, due tomorrow.",
+      "status": "deferred-budget"
     },
     {
       "queue_id": "2026-09-23-4090fc",
@@ -235,8 +235,8 @@
         "yet grocery/out/regular/hyvee-regular-2026-09-23.json (1,649,314 B, 09-23 10:39), -2026-09-24.json (1,681,788 B, 09-24 16:39) and -2026-09-25.json (1,682,385 B, 08:00:47) exist and the lane logged 'Hy-Vee rc=0'"
       ],
       "root_cause": "the watchdog's freshness read (capture-watchdog.ps1:1932) and the Hy-Vee lane disagree on whether a day's rows exist; unresolved inside the budget",
-      "resolution_note": "PROMOTE: evidence contradicts the alert - Hy-Vee wrote a 1.6 MB regular file each day 09-23..09-25 while the watchdog read newest 2026-09-22 twice; watchdog-vs-lane disagreement needs the reviewer.",
-      "status": "promote"
+      "resolution_note": "Carried in plan-2026-09-25-2.json (reviewed; JOB 3 premise of a blind watchdog was false; ops fix half-built as a committed patch, needs-more-time). Id stays open.",
+      "status": "deferred-budget"
     },
     {
       "queue_id": "2026-09-23-80f302",
@@ -247,8 +247,8 @@
         "ad-cycle-log [2026-09-25T08:23:53] match-soundness 'MOVED lotion -> facial-tissues', DROPPED carrots, tea-bags, limes, toothbrushes, cucumbers, 'CAUSE [RULE CHANGE UNREVIEWED]'; grocery/out/post-deferred.json rewritten 2026-09-25 08:16:44"
       ],
       "root_cause": "the soundness baseline is unaccepted after rule changes, so every day's post holds on review; accepting a matching baseline is a matching decision",
-      "resolution_note": "PROMOTE: live today (soundness REVIEW, post deferred 08:16); the fix is a matching-baseline review (money lane), not a cheap item.",
-      "status": "promote"
+      "resolution_note": "Carried in plan-2026-09-25-2.json (reviewed; developer stopped before -Accept on an unreviewed new line, needs-more-time). Id stays open.",
+      "status": "deferred-budget"
     },
     {
       "queue_id": "2026-09-23-92e552",
@@ -259,8 +259,8 @@
         "same day soundness 'MOVED lotion -> facial-tissues 'Puffs Plus Lotion 2-Ply Facial Tissues''"
       ],
       "root_cause": "the quarantine is working as ruled; the three cells stay held because their underlying product/basis defects are live and their fix is matching or pricing (money lane)",
-      "resolution_note": "PROMOTE: live today, same 3 cells; the fix touches matching/pricing files on THE LINE (commodities.json), so it belongs to the money lane.",
-      "status": "promote"
+      "resolution_note": "Carried in plan-2026-09-25-2.json as deferred-budget (energy drinks at Family Fare and lotion at Walmart: bare oz on a liquid). Id stays open.",
+      "status": "deferred-budget"
     },
     {
       "queue_id": "2026-09-23-a83841",
@@ -271,8 +271,8 @@
         "Get-ScheduledTaskInfo 'TC Recall Sleep 0435' last 2026-09-25 09:35:02 rc=1"
       ],
       "root_cause": "still RED today with two BROKEN steps (gate, brain commit hook), beyond the judgement-queue residual 4fc24c left",
-      "resolution_note": "PROMOTE: live red today (gate and brain commit hook BROKEN), RETURN x3; needs diagnosis beyond the cheap budget.",
-      "status": "promote"
+      "resolution_note": "PROMOTED by JOB 3 (nightly pass still red today: gate and brain commit hook BROKEN at 04:41) and not reached today within the 10M run budget. Id stays open, due tomorrow.",
+      "status": "deferred-budget"
     },
     {
       "queue_id": "2026-09-25-114c1a",
@@ -296,8 +296,8 @@
         "capture-watchdog-2026-09-24.log '!! TASK FAILED: 'TC Daily Ratchets 0315' last result 1'"
       ],
       "root_cause": "both tasks still exit 1 daily; Recall Sleep is a83841's red, Daily Ratchets is an unowned separate failure",
-      "resolution_note": "PROMOTE: both tasks still fail today (rc=1); the Daily Ratchets half has no owner and was not traced inside the budget.",
-      "status": "promote"
+      "resolution_note": "PROMOTED by JOB 3 (TC Recall Sleep 0435 and TC Daily Ratchets 0315 both exit 1 today) and not reached today within the 10M run budget. Id stays open, due tomorrow.",
+      "status": "deferred-budget"
     },
     {
       "queue_id": "2026-09-23-be3b90",
