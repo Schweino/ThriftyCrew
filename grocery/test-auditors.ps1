@@ -598,6 +598,16 @@ else { Bad ('triage-due missed an open item - it said: ' + $t) }
 $t = RunTriage '{"items":[{"id":"a","status":"resolved","count":1,"subject":"done"}]}'
 if ($t -match '^IDLE') { Ok 'triage-due says IDLE only when the queue is really clear' }
 else { Bad ('triage-due cried wolf on a clear queue - it said: ' + $t) }
+# W2 of design\PLAN-triage-token-cut-2026-09-25.md: a RETURN prints ONE short line per id, and the full RETURN line
+# goes to a file the orchestrator names in the reviewer's dispatch (the block was about 10k characters on 09-25).
+$d0 = (Get-Date).AddDays(-20).ToString('yyyy-MM-ddTHH:mm:ss'); $d1 = (Get-Date).AddDays(-10).ToString('yyyy-MM-ddTHH:mm:ss'); $d2 = (Get-Date).ToString('yyyy-MM-ddTHH:mm:ss')
+$retQ = '{"items":[{"id":"p1","ts":"' + $d0 + '","type":"fixture return type","status":"resolved","count":1,"subject":"fixture return type"},{"id":"p2","ts":"' + $d1 + '","type":"fixture return type","status":"resolved","count":1,"subject":"fixture return type"},{"id":"cur9","ts":"' + $d2 + '","type":"fixture return type","status":"open","count":1,"subject":"fixture return type"}]}'
+$retF = Join-Path $tmp 'returns.txt'
+$env:TC_TRIAGE_DUE_RETURNS_FILE = $retF
+try { $t = RunTriage $retQ } finally { Remove-Item Env:\TC_TRIAGE_DUE_RETURNS_FILE -ErrorAction SilentlyContinue }
+$full = if (Test-Path $retF) { [IO.File]::ReadAllText($retF) } else { '' }
+if ($t -match 'RETURN cur9' -and $t -notmatch 'closed 2 time' -and $full -match 'RETURN: cur9 .*closed 2 time\(s\) in 30 days') { Ok 'MUST FIRE: triage-due prints a RETURN as one short line and writes the full RETURN line to its file' }
+else { Bad ('triage-due RETURN block did not split into a short line and a file - it said: ' + $t + ' | file: ' + $full) }
 Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue
 } # u008-3-triage-due-must-fail-closed
 

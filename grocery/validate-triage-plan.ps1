@@ -192,6 +192,51 @@ function Test-PlanBudget {
   return @{ judged = $true; problems = @($problems); lanes = $sums }
 }
 
+# AN ESTIMATE UNDER WHAT THE SAME KIND OF ITEM ACTUALLY TOOK WARNS (W4 of design\PLAN-triage-token-cut-2026-09-25.md).
+# On 2026-09-25 the reviewer estimated 90de7b at 28 tool calls, the work needed about 40, and the ops spawn stopped at its
+# ceiling with nothing shipped: 544,468 cost_units for no fix. A developer now records `actual_tool_calls` on its item
+# when it closes it, and at handoff each planned code item whose est_tool_calls is BELOW the median of the finished
+# items of the same classification in the last $EstHistoryDays days warns. Fewer than $EstHistoryMin finished items is
+# no history, and says nothing. A WARN, never a refusal: a median of a handful of items is a hint, not a bar. Both
+# constants are first plausible values, not the survivors of a sweep.
+$EstHistoryDays = 21
+$EstHistoryMin = 3
+function Get-EstimateHistoryWarnings {
+  param($Doc, [string]$PlanDir, [string]$PlanName, [datetime]$Now = (Get-Date))
+  $warn = New-Object System.Collections.Generic.List[string]
+  $hist = @{}
+  $floor = $Now.AddDays(-$script:EstHistoryDays).ToString('yyyy-MM-dd')
+  foreach ($f in @(Get-ChildItem -LiteralPath $PlanDir -Filter 'plan-*.json' -ErrorAction SilentlyContinue)) {
+    if ($f.Name -eq $PlanName) { continue }
+    if ($f.Name -notmatch '^plan-(\d{4}-\d{2}-\d{2})') { continue }
+    if ([string]::CompareOrdinal($Matches[1], $floor) -lt 0) { continue }
+    try { $d = [IO.File]::ReadAllText($f.FullName) | ConvertFrom-Json } catch { continue }
+    foreach ($it in @($d.items)) {
+      if (-not $it -or -not $it.PSObject.Properties['actual_tool_calls']) { continue }
+      if (([string]$it.actual_tool_calls) -notmatch '^\s*\d+\s*$') { continue }
+      $c = [string]$it.classification
+      if (-not $hist.ContainsKey($c)) { $hist[$c] = New-Object System.Collections.Generic.List[int] }
+      $hist[$c].Add([int]([string]$it.actual_tool_calls))
+    }
+  }
+  foreach ($i in @($Doc.items)) {
+    if (-not $i) { continue }
+    $st = ([string]$i.status).Trim()
+    if ($st -and $st -ne 'planned') { continue }
+    if (([string]$i.est_tool_calls) -notmatch '^\s*\d+\s*$') { continue }
+    $c = [string]$i.classification
+    if (-not $hist.ContainsKey($c) -or $hist[$c].Count -lt $script:EstHistoryMin) { continue }
+    $sorted = $hist[$c].ToArray() | Sort-Object
+    $n = $sorted.Count
+    $med = if ($n % 2) { [double]$sorted[[int](($n - 1) / 2)] } else { ([double]$sorted[$n / 2 - 1] + [double]$sorted[$n / 2]) / 2 }
+    $est = [int]([string]$i.est_tool_calls)
+    if ($est -lt $med) {
+      $warn.Add(("{0} estimates {1} tool calls; finished '{2}' items took a median of {3} over {4} item(s) in {5} days (actual_tool_calls) - raise the estimate or split the item, or the lane stops at its ceiling with nothing shipped" -f [string]$i.queue_id, $est, $c, $med, $n, $script:EstHistoryDays))
+    }
+  }
+  return ,$warn.ToArray()
+}
+
 function Test-PlanCostLedger {
   param([string]$LedgerPath, [string]$PlanName)
   if (-not (Test-Path -LiteralPath $LedgerPath)) { return @{ ok = $false; why = "no cost ledger at $LedgerPath" } }
@@ -1297,6 +1342,32 @@ if ($SelfTest) {
     else { Write-Output ('FAIL  CLEAN TWIN: ledger row c2=' + $c2.ok + ' c3=' + $c3.ok); $script:fail++ }
   } finally { Remove-Item -LiteralPath $ldRoot -Recurse -Force -ErrorAction SilentlyContinue }
 
+  # --- W4 (2026-09-25): an estimate under the median of finished items of its classification WARNS ----------------
+  # History, relative to 2026-09-25: infra 30, 40, 50 (median 40) inside 21 days, plus infra 1000 on 2026-09-01, which
+  # is outside it and would move the median to 45 if it were read. 'other' has only 2 finished items: no history.
+  $ehRoot = Join-Path $env:TEMP ('vtp-esthist-' + [guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $ehRoot -ErrorAction Stop | Out-Null
+  try {
+    $ehPlans = @{ 'plan-2026-09-20.json' = '{"items":[{"queue_id":"h1","classification":"infra","actual_tool_calls":30}]}'
+                  'plan-2026-09-21.json' = '{"items":[{"queue_id":"h2","classification":"infra","actual_tool_calls":40},{"queue_id":"h5","classification":"other","actual_tool_calls":5}]}'
+                  'plan-2026-09-22.json' = '{"items":[{"queue_id":"h3","classification":"infra","actual_tool_calls":"50"},{"queue_id":"h6","classification":"other","actual_tool_calls":5}]}'
+                  'plan-2026-09-01.json' = '{"items":[{"queue_id":"h4","classification":"infra","actual_tool_calls":1000}]}' }
+    foreach ($k in $ehPlans.Keys) { [IO.File]::WriteAllText((Join-Path $ehRoot $k), $ehPlans[$k], (New-Object Text.UTF8Encoding($false))) }
+    $ehNow = [datetime]'2026-09-25T09:00:00'
+    $script:ran++
+    $w39 = Get-EstimateHistoryWarnings (_BPlan 1 @((_BItem 'q1' 'ops' 39 'planned' 'infra'))) $ehRoot 'plan-2026-09-25.json' $ehNow
+    if (@($w39).Count -eq 1 -and @($w39)[0] -match 'q1 estimates 39' -and @($w39)[0] -match 'median of 40 over 3 item') { Write-Output 'ok    MUST FIRE: an estimate one call under the median (39 against 40 over 3 finished infra items) warns, naming both' }
+    else { Write-Output ('FAIL  MUST FIRE: estimate-history 39  got: ' + (@($w39) -join ' | ')); $script:fail++ }
+    $script:ran++
+    $w40 = Get-EstimateHistoryWarnings (_BPlan 1 @((_BItem 'q1' 'ops' 40 'planned' 'infra'))) $ehRoot 'plan-2026-09-25.json' $ehNow
+    if (@($w40).Count -eq 0) { Write-Output 'ok    BAR: an estimate AT the median (40 of 40) is silent, and the 22-day-old 1000 is outside the window' }
+    else { Write-Output ('FAIL  BAR: estimate-history 40  got: ' + (@($w40) -join ' | ')); $script:fail++ }
+    $script:ran++
+    $wOt = Get-EstimateHistoryWarnings (_BPlan 1 @((_BItem 'q1' 'ops' 1 'planned' 'other'))) $ehRoot 'plan-2026-09-25.json' $ehNow
+    if (@($wOt).Count -eq 0) { Write-Output 'ok    MUST NOT FIRE: a classification with only 2 finished items has no history and says nothing' }
+    else { Write-Output ('FAIL  MUST NOT FIRE: estimate-history thin  got: ' + (@($wOt) -join ' | ')); $script:fail++ }
+  } finally { Remove-Item -LiteralPath $ehRoot -Recurse -Force -ErrorAction SilentlyContinue }
+
   # BLIND: zero items proves nothing
   _Case 'zero items reports BLIND (rc 3)' ([pscustomobject]@{ queue_ids_seen=@(); ship_sequence=@('x'); items=@() }) 3 'ZERO items'
   # MUST-FIRE: a comma-joined -OpenIds (what `powershell -File` does to a [string[]]) must be split, not
@@ -1308,7 +1379,7 @@ if ($SelfTest) {
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (2026-09-23, with W5.3's 23 cases): the count above is still COUNTED for
   # the summary, and this is the other half - a case that silently stopped running is a defect, never a smaller suite.
   # Raise it with every case added.
-  $expectedRan = 105  # +3 on 2026-09-23: the resolved-owner warning (MUST FIRE, MUST NOT FIRE, CLEAN TWIN); +13 on 2026-09-24: budget, rounds and ledger
+  $expectedRan = 108  # +3 on 2026-09-23: the resolved-owner warning (MUST FIRE, MUST NOT FIRE, CLEAN TWIN); +13 on 2026-09-24: budget, rounds and ledger; +3 on 2026-09-25: estimate history (W4)
   if ($ran -ne $expectedRan) { Write-Output "FAIL  ran $ran plan-gate cases, expected $expectedRan"; $fail++ }
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s) of $ran"; exit 1 }
@@ -1435,6 +1506,12 @@ if ($res.prevention) {
 # EVERY RESIDUAL, VERBATIM. These lines are what the orchestrator's report copies. A summary of them is how
 # the 2026-09-09 report called eight items closed when four had left part of their own class open.
 if ($Closing) { $staleOwners = Get-ResolvedOwnerWarnings $items $retQueueItems; foreach ($sw in @($staleOwners)) { Write-Output ('  WARN  ' + $sw) } }
+if (-not $Closing) {
+  # a history that cannot be read costs the warning, never the gate
+  $estWarn = @()
+  try { $estWarn = Get-EstimateHistoryWarnings $doc (Split-Path $Plan -Parent) $planLeaf; $estWarn = @($estWarn) } catch { $estWarn = @() }
+  foreach ($ew in $estWarn) { if ($ew) { Write-Output ('  WARN  ' + $ew) } }
+}
 $residuals = @($items | Where-Object { $_ -and ([string]$_.leaves_open).Trim() -and (([string]$_.leaves_open).Trim() -notmatch '^nothing\b') })
 if ($residuals.Count) {
   Write-Output ("  LEAVES OPEN: " + $residuals.Count + " of " + $items.Count + " item(s) - copy these into the report as written, never summarised:")

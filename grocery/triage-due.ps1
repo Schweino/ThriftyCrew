@@ -562,20 +562,46 @@ try {
   try { $arch = Read-TriageArchivedItems (Join-Path $root 'out\archive'); $retItems = Join-TriageQueueWithArchive $q.items $arch } catch { $retItems = $q.items }
   $retLines = Get-TriageReturnLines $open $retItems (Get-Date)
   # $planRecs was read once above, for the RESUME section; one read, one ordering, no second copy of it.
+  # THE FULL BLOCK GOES TO A FILE, ONE LINE PER ID TO THE CONSOLE (W2 of design\PLAN-triage-token-cut-2026-09-25.md).
+  # On 2026-09-25 this block printed about 10k characters into the orchestrator's context, which every later call
+  # of that session re-read. The orchestrator only routes on it; the reviewer is the one that needs the full lines,
+  # so the orchestrator hands it the file.
+  $retBlock = New-Object System.Collections.Generic.List[string]
+  $retShort = New-Object System.Collections.Generic.List[string]
   foreach ($l in @($retLines)) {
     if (-not $l) { continue }
-    Write-Output $l
+    $retBlock.Add([string]$l)
+    $rid = ''
+    if ($l -match 'RETURN:\s+(\S+)\s') { $rid = $Matches[1] }
+    $short = '  RETURN ' + $rid
     try {
-      $rid = ''
-      if ($l -match 'RETURN:\s+(\S+)\s') { $rid = $Matches[1] }
       $item = @($open | Where-Object { [string]$_.id -eq $rid })
       if ($item.Count -eq 1) {
         $priors = Get-TriageReturnPriors $retItems $item[0] (Get-Date)
         $route = Get-TriageReturnRoute $priors $planRecs
         $rl = Format-TriageRouteLine $rid $route
-        if ($rl) { Write-Output $rl }
+        if ($rl) { $retBlock.Add([string]$rl); $short += ('  ROUTE ' + [string]$route.lane) }
       }
     } catch { }
+    $retShort.Add($short)
+  }
+  if ($retBlock.Count) {
+    # TC_TRIAGE_DUE_RETURNS_FILE is the fixture's road: a test must never overwrite the file a live run handed out.
+    $retFile = $env:TC_TRIAGE_DUE_RETURNS_FILE
+    if (-not $retFile) { $retFile = Join-Path (Join-Path ($(if ($env:LOCALAPPDATA) { $env:LOCALAPPDATA } else { $env:TEMP })) 'ThriftyCrew') 'triage-due-returns.txt' }
+    $wrote = $false
+    try {
+      [void][IO.Directory]::CreateDirectory((Split-Path -Parent $retFile))
+      [IO.File]::WriteAllText($retFile, (($retBlock.ToArray() -join "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
+      $wrote = $true
+    } catch { }
+    if ($wrote) {
+      foreach ($s in $retShort) { Write-Output $s }
+      Write-Output ('  RETURNS: ' + $retShort.Count + ' item(s); the full RETURN and ROUTE lines are in ' + $retFile + ' - name that file in the reviewer dispatch, do not read it')
+    } else {
+      # a file that cannot be written costs the context saving, never the lines
+      foreach ($l in $retBlock) { Write-Output $l }
+    }
   }
 } catch { }
 

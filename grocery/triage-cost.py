@@ -141,6 +141,76 @@ WAIT_GAP_S = 300
 WAIT_WRITE_TOKENS = 50000
 
 
+def first_call_of(path):
+    """WHAT A SPAWN PAYS FOR BEFORE IT HAS DONE ANYTHING (W1 of design/PLAN-triage-token-cut-2026-09-25.md).
+    -> {'ctx_first', 'prelude': [(chars, what)], 'loads': [...]}.
+
+    prelude is everything written to the transcript before the first API call: the dispatch, each instruction
+    file (CLAUDE.md files and a MEMORY.md index), the agent's system prompt snapshot, and the other attachments.
+    Sizes are CHARACTERS of the recorded text, not tokens: the API reports tokens only per call, so the one token
+    figure here is ctx_first, the first call's whole context.
+
+    loads are nested_memory attachments written AFTER the first call: the harness adds a directory's CLAUDE.md and
+    rules the first time an agent touches a file there. Each is priced by what it MEASURABLY did: jump is the
+    context growth across the call that first carried it, and carry_units is 1.25 x jump (written once) plus
+    0.1 x jump for every later call that re-read it. A jump also holds whatever tool result arrived in the same
+    turn, so it is an upper bound on the load, stated as one."""
+    recs = []
+    with open(path, encoding='utf-8') as fh:
+        for line in fh:
+            try:
+                recs.append(json.loads(line))
+            except ValueError:
+                continue
+    prelude = []
+    pending = []
+    loads = []
+    calls = []
+    seen = set()
+    for r in recs:
+        t = r.get('type')
+        m = r.get('message') or {}
+        if t == 'assistant':
+            mid = m.get('id') or r.get('uuid')
+            u = m.get('usage')
+            if mid in seen:
+                continue
+            seen.add(mid)
+            calls.append(ctx_of(u or {}))
+            if pending:
+                loads.append({'paths': pending, 'call': len(calls) - 1})
+                pending = []
+            continue
+        if not calls:
+            if t == 'user' and not prelude:
+                c = m.get('content')
+                prelude.append((len(c) if isinstance(c, str) else len(json.dumps(c)), 'dispatch'))
+            elif t == 'attachment':
+                a = r.get('attachment') or {}
+                if a.get('type') == 'instructions':
+                    for f in a.get('files') or []:
+                        prelude.append((len(f.get('content') or ''), 'instructions ' + str(f.get('path'))))
+                elif a.get('type') == 'prompt_snapshot':
+                    prelude.append((len(str(a.get('systemPrompt') or '')), 'system prompt snapshot'))
+                else:
+                    prelude.append((len(json.dumps(a)), 'attachment ' + str(a.get('type'))))
+        elif t == 'attachment':
+            a = r.get('attachment') or {}
+            if a.get('type') == 'nested_memory':
+                c = a.get('content') or ''
+                if isinstance(c, dict):  # the harness nests {path, type, content} inside content
+                    c = c.get('content') or ''
+                pending.append((len(c) if isinstance(c, str) else len(json.dumps(c)), str(a.get('path'))))
+    for ld in loads:
+        i = ld['call']
+        jump = max(0, calls[i] - calls[i - 1]) if i > 0 else 0
+        later = len(calls) - i - 1
+        ld.update({'jump': jump, 'later_calls': later,
+                   'carry_units': int(round(W_WRITE * jump + W_READ * jump * later)),
+                   'chars': sum(n for n, _ in ld['paths'])})
+    return {'ctx_first': calls[0] if calls else 0, 'calls': len(calls), 'prelude': prelude, 'loads': loads}
+
+
 def ctx_of(u):
     return sum(int(u.get(k) or 0) for k in ('input_tokens', 'cache_creation_input_tokens', 'cache_read_input_tokens'))
 
@@ -323,6 +393,20 @@ def default_agent_copies():
             os.path.join(os.path.expanduser('~'), '.claude', 'agents')]
 
 
+# The directory triage-spawn-guard-hook.py reads (its STAMPS); both default to the same place.
+CLOSED_DIR = os.environ.get('TC_TRIAGE_CLOSED_DIR') or os.path.join(
+    os.environ.get('LOCALAPPDATA') or os.path.expanduser('~'), 'ThriftyCrew', 'triage-closed')
+
+
+def write_closed_stamp(session, spent, closed_dir):
+    import time
+    os.makedirs(closed_dir, exist_ok=True)
+    path = os.path.join(closed_dir, '%s.json' % session)
+    with open(path, 'w', encoding='utf-8', newline='\n') as fh:
+        json.dump({'session': session, 'closed_at': time.strftime('%Y-%m-%dT%H:%M:%S'), 'cost_units': spent}, fh)
+    return path
+
+
 # ------------------------------------------------------------------------------------------------ self-test
 def _write(path, records):
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -435,13 +519,44 @@ def selftest():
         # 60011, 60001, 60001 -> 180013 / 3 = 60004 (integer)
         case('CLEAN TWIN: ctx_first and ctx_avg read the context each call re-read (60011 first, 60004 average)',
              wu['ctx_first'] == 60011 and wu['ctx_avg'] == 60004, (wu['ctx_first'], wu['ctx_avg']))
+
+        # W1 first-call breakdown. Contexts 1000, 1000 (load arrives), 5000, 5000: the jump is 4000 at call 3, re-read
+        # by 1 later call, so 1.25 x 4000 + 0.1 x 4000 x 1 = 5400.
+        def cu(n):
+            return {'input_tokens': 0, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': n, 'output_tokens': 1}
+        fpath = os.path.join(root, 'f.jsonl')
+        _write(fpath,
+               [{'type': 'user', 'message': {'content': 'd' * 100}},
+                {'type': 'attachment', 'attachment': {'type': 'instructions', 'files': [
+                    {'path': 'C:\\x\\MEMORY.md', 'content': 'm' * 300}]}},
+                {'type': 'attachment', 'attachment': {'type': 'prompt_snapshot', 'systemPrompt': 's' * 200}}]
+               + _call('f1', '2026-09-25T14:00:00Z', cu(1000)) + _call('f2', '2026-09-25T14:00:10Z', cu(1000))
+               + [{'type': 'attachment', 'attachment': {'type': 'nested_memory', 'path': 'C:\\r\\ops.md',
+                                                       'content': {'path': 'C:\\r\\ops.md', 'content': 'r' * 700}}}]
+               + _call('f3', '2026-09-25T14:00:20Z', cu(5000)) + _call('f4', '2026-09-25T14:00:30Z', cu(5000)))
+        fc = first_call_of(fpath)
+        pre = dict((w, n) for n, w in fc['prelude'])
+        case('CLEAN TWIN: the prelude names the dispatch, each instruction file and the system prompt (100, 300, 200 chars)',
+             pre.get('dispatch') == 100 and pre.get('instructions C:\\x\\MEMORY.md') == 300
+             and pre.get('system prompt snapshot') == 200 and fc['ctx_first'] == 1000, (fc['prelude'], fc['ctx_first']))
+        ld = fc['loads'][0] if fc['loads'] else {}
+        case('MUST FIRE: a nested-memory load after call 2 is priced on the call that carried it (+4000, 5400 units, 700 chars)',
+             len(fc['loads']) == 1 and ld.get('call') == 2 and ld.get('jump') == 4000 and ld.get('carry_units') == 5400
+             and ld.get('chars') == 700, fc['loads'])
+
+        # W2: the stamp is <closed_dir>/<session>.json, the exact name triage-spawn-guard-hook.py's stamp_path() reads
+        sp = write_closed_stamp('sess-z', 582, os.path.join(root, 'closed'))
+        st = json.load(open(sp, encoding='utf-8'))
+        case('MUST FIRE: --session-closed writes <dir>/<session>.json carrying the session and its spend (582)',
+             os.path.basename(sp) == 'sess-z.json' and st.get('session') == 'sess-z' and st.get('cost_units') == 582,
+             (sp, st))
     finally:
         shutil.rmtree(root, ignore_errors=True)
 
     bad = [r for r in results if not r[1]]
     for label, ok, got in results:
         print('%s  %s%s' % ('PASS' if ok else 'FAIL', label, '' if ok else '  got=%r' % (got,)))
-    expected = 15
+    expected = 18
     if len(results) != expected:
         print('FAIL  the suite ran %d case(s), expected %d' % (len(results), expected))
         bad.append(None)
@@ -464,6 +579,11 @@ def main():
     ap.add_argument('--budget', type=float, default=None)
     ap.add_argument('--report', action='store_true')
     ap.add_argument('--check-agents', action='store_true')
+    ap.add_argument('--first-call', action='store_true',
+                    help='what each transcript loaded before its first call, and each nested-memory load after it')
+    ap.add_argument('--session-closed', action='store_true',
+                    help='STEP 5: stamp this session closed, so triage-spawn-guard-hook refuses any later spawn')
+    ap.add_argument('--closed-dir', default='')
     ap.add_argument('--selftest', action='store_true')
     a = ap.parse_args()
     if a.selftest:
@@ -478,6 +598,60 @@ def main():
             compared, len(copies), len(problems)))
         print('TRIAGE-COST-COMPLETE check-agents problems=%d' % len(problems))
         sys.exit(2 if problems else 0)
+    if a.session_closed:
+        # W2: STEP 5 stamps the session, and ~/.claude/skills/triage-spawn-guard-hook.py refuses any later spawn
+        # from it. The stamp lives outside the repo (it is per machine and per session, never a tracked file).
+        if not a.session:
+            print('triage-cost: BLIND - no --session and CLAUDE_CODE_SESSION_ID is not set, so nothing was stamped')
+            print('TRIAGE-COST-COMPLETE blind=no-session')
+            sys.exit(3)
+        rows, why = session_rows(a.session, a.projects)
+        spent = sum(r['cost_units'] for r in rows) if rows else None
+        path = write_closed_stamp(a.session, spent, a.closed_dir or CLOSED_DIR)
+        print('triage-cost: session %s stamped CLOSED at %s cost_units in %s; a later spawn from it is refused' % (
+            a.session, spent if spent is not None else 'unknown', path))
+        print('TRIAGE-COST-COMPLETE session-closed cost_units=%s' % (spent if spent is not None else 'unknown'))
+        sys.exit(0)
+    if a.first_call:
+        if not a.session:
+            print('triage-cost: BLIND - no --session and CLAUDE_CODE_SESSION_ID is not set')
+            print('TRIAGE-COST-COMPLETE blind=no-session')
+            sys.exit(3)
+        home = find_session(a.session, a.projects)
+        if not home:
+            print('triage-cost: BLIND - no transcript named %s.jsonl' % a.session)
+            print('TRIAGE-COST-COMPLETE blind=transcript')
+            sys.exit(3)
+        paths = [('orchestrator', os.path.join(home, a.session + '.jsonl'))]
+        for meta in sorted(glob.glob(os.path.join(home, a.session, 'subagents', '*.meta.json'))):
+            try:
+                at = json.load(open(meta, encoding='utf-8')).get('agentType') or 'unknown'
+            except ValueError:
+                at = 'unknown'
+            paths.append(('%s %s' % (at, os.path.basename(meta)[6:14]), meta[:-len('.meta.json')] + '.jsonl'))
+        total_carry = 0
+        loaded = 0
+        for label, p in paths:
+            if not os.path.exists(p):
+                continue
+            fc = first_call_of(p)
+            print('%s: ctx_first=%d tokens over %d call(s); prelude %d chars' % (
+                label, fc['ctx_first'], fc['calls'], sum(n for n, _ in fc['prelude'])))
+            for n, what in sorted(fc['prelude'], reverse=True):
+                if n >= 1000:
+                    print('    %7d chars  %s' % (n, what))
+            for ld in fc['loads']:
+                loaded += 1
+                total_carry += ld['carry_units']
+                print('    LOAD at call %d: %d file(s), %d chars, context +%d tokens, re-read by %d later call(s), '
+                      'about %d cost_units' % (ld['call'] + 1, len(ld['paths']), ld['chars'], ld['jump'],
+                                               ld['later_calls'], ld['carry_units']))
+                for n, what in sorted(ld['paths'], reverse=True)[:3]:
+                    print('        %7d chars  %s' % (n, what))
+        print('first-call: %d transcript(s), %d nested-memory load(s) carrying about %d cost_units' % (
+            len(paths), loaded, total_carry))
+        print('TRIAGE-COST-COMPLETE first-call transcripts=%d loads=%d carry_units=%d' % (len(paths), loaded, total_carry))
+        sys.exit(0)
     if a.report:
         lines, keys = report(a.ledger, os.path.dirname(os.path.abspath(a.ledger)))
         for ln in lines:

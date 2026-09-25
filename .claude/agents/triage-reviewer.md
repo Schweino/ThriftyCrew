@@ -248,7 +248,10 @@ whenever any item changes a matching rule. Requirements:
 - **Size the run to what the lanes can FINISH (2026-09-24, F4 of design/PLAN-triage-token-efficiency-2026-09-24.md).**
   Every `planned` code item carries `lane` (`money` if it publishes the board, changes a matching or pricing rule,
   or touches a blocking guard; `ops` otherwise) and `est_tool_calls`, your estimate of the calls to FINISH it: root
-  fix shipped, gates green, landed. Each lane's sum must fit its ceiling (money 200, ops 100; a weekly plan 150).
+  fix shipped, gates green, landed. Size it from what finished items of the same classification took, not from
+  the diff you picture: on 2026-09-25 90de7b was estimated at 28, needed about 40, and its spawn stopped at the
+  ceiling with nothing shipped. The gate WARNS when an estimate sits under the median `actual_tool_calls` of that
+  classification over 21 days; raise the estimate or split the item. Each lane's sum must fit its ceiling (money 200, ops 100; a weekly plan 150).
   Take items in priority order and set the rest to `status: "deferred-budget"` with evidence, a one-line
   root_cause and a resolution_note: their queue ids stay open and are due tomorrow, and you owe them no fix
   design today. Measured before this rule: 95 of 201 items since 09-10 ended `done`, and 78 ended `deviated` or
