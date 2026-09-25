@@ -93,7 +93,7 @@ if ($SelfTest) {
     $hist = '<a id="og-01"></a>' + "`n- **one**`n" + '<a id="og-02"></a>' + "`n- **two**`n"
     $good = "# head`n`n- **Rule one.** Do it.`n  (channel: gate ops/audit-x.ps1; full: og-01)`n- **Rule two.** Think. (channel: judgement; full: og-02)`n"
     $r = Test-TcRuleFormat $good $hist $root 'x.md'
-    _Case 'CLEAN TWIN: two tagged rules, one gate that exists and one judgement, each on its own anchor, pass (2 rules, 2 anchors)' (($r.Findings.Count -eq 0) -and ($r.Bullets -eq 2)) (($r.Findings -join ' | ') + " bullets=$($r.Bullets)")
+    _Case 'MUST NOT FIRE: two tagged rules, one gate that exists and one judgement, each on its own anchor, pass (2 rules, 2 anchors)' (($r.Findings.Count -eq 0) -and ($r.Bullets -eq 2)) (($r.Findings -join ' | ') + " bullets=$($r.Bullets)")
     $r = Test-TcRuleFormat ($good -replace ' \(channel: judgement; full: og-02\)', '') $hist $root 'x.md'
     _Case 'MUST FIRE: a rule with no channel tag is a finding' ((@($r.Findings | Where-Object { $_ -match 'no channel tag' })).Count -eq 1) ($r.Findings -join ' | ')
     $r = Test-TcRuleFormat ($good -replace 'audit-x', 'audit-gone') $hist $root 'x.md'
@@ -112,7 +112,7 @@ if ($SelfTest) {
     $r = Test-TcRuleFormat ($one + $pre + 'y' + $atBar.Substring($pre.Length) + "`n") $hist $root 'x.md' -Max 60
     _Case 'BAR: a rule one character PAST the 60-character bar is a finding' ((@($r.Findings | Where-Object { $_ -match 'is 61 characters, over the 60 bar' })).Count -eq 1) ($r.Findings -join ' | ')
     $r = Test-TcRuleFormat ("# head`n- **Rule one.** Do it.`n  (channel: gate ops/audit-x.ps1, ops/audit-x.ps1; full: og-01)`n- **Rule two.** Think. (channel: judgement; full: og-02)`n") $hist $root 'x.md'
-    _Case 'CLEAN TWIN: a rule may name two gates, comma separated, and a wrapped tag line still reads as the tag' ($r.Findings.Count -eq 0) ($r.Findings -join ' | ')
+    _Case 'MUST NOT FIRE: a rule may name two gates, comma separated, and a wrapped tag line still reads as the tag' ($r.Findings.Count -eq 0) ($r.Findings -join ' | ')
   } finally { Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue }
   if ($script:cases -ne 8) { Write-Output "FAIL  ran $($script:cases) case(s), expected 8"; $script:fail++ }
   if ($script:fail) { Write-Output ("RULE-FORMAT SELF-TEST FAILED ({0} of {1} case(s))" -f $script:fail, $script:cases); exit 1 }
