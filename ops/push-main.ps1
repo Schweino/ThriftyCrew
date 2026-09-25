@@ -503,7 +503,12 @@ function New-TcRehearsalJob {
     $dec = Resolve-TcRehearsalExit -ExitCode $code -Lines $lines
     $stopped = [bool](@($lines | Where-Object { [string]$_ -match '^CHAIN-REHEARSAL-CHECK-COMPLETE .*\bblind=stopped\b' }).Count)
     foreach ($x in @($this.Out, $this.Err)) { if ($x -and (Test-Path -LiteralPath $x)) { Remove-Item -LiteralPath $x -Force -ErrorAction SilentlyContinue } }
-    $this.Result = [pscustomobject]@{ Code = $dec.Code; Why = $dec.Why; Ran = $true; Lines = [string[]]$lines; Sec = [int][math]::Round($this.Sw.Elapsed.TotalSeconds); Stopped = $stopped }
+    # THE CHILD'S OWN RUN TIME (M1 of design\PLAN-faster-pushes-no-accuracy-loss-2026-09-25.md): exit minus start, never
+    # this stopwatch, which runs until push-main COLLECTS the child and so charged a "not needed" answer with the whole
+    # gate leg (266 s median over 2026-09-22..25). The stopwatch is the fallback when the process times cannot be read.
+    $sec = [int][math]::Round($this.Sw.Elapsed.TotalSeconds)
+    try { $own = ($this.Proc.ExitTime - $this.Proc.StartTime).TotalSeconds; if ($own -ge 0) { $sec = [int][math]::Round($own) } } catch { }
+    $this.Result = [pscustomobject]@{ Code = $dec.Code; Why = $dec.Why; Ran = $true; Lines = [string[]]$lines; Sec = $sec; Stopped = $stopped }
     return $this.Result
   }
   return $job
@@ -3665,6 +3670,23 @@ try {
         Start-TcRehearsalChild -Dir $d -Remote 'origin' -Branch 'main' -StackFile $stack -StopFile $stop -Script $w3Stub -ExtraArgs $xa
       }
     }
+    # MUST FIRE (M1, PLAN-faster-pushes-no-accuracy-loss-2026-09-25): a rehearsal leg's Sec is the CHILD'S own run time,
+    # never the time push-main took to collect it. The child finishes, collection is held 5 s past its end (a LOWER bar,
+    # which load can only lengthen), and Sec must fall short of the collection time by at least 4 s. The collector's
+    # stopwatch, the founding bug, charges the whole hold and fails the second half.
+    $m1Ended = Join-Path $w3Dir 'm1-ended.txt'
+    $m1Sw = [Diagnostics.Stopwatch]::StartNew()
+    $m1Job = Start-TcRehearsalChild -Dir $w3Dir -Remote 'origin' -Branch 'main' -Script $w3Stub -ExtraArgs @('-Mode', 'pass', '-Ended', ('"' + $m1Ended + '"'))
+    while (-not (Test-Path -LiteralPath $m1Ended) -and $m1Sw.Elapsed.TotalSeconds -lt 120) { Start-Sleep -Milliseconds 100 }
+    $m1Proc = $m1Job.Proc
+    if ($m1Proc) { $null = $m1Proc.WaitForExit(120000) }
+    $m1EndAt = $m1Sw.Elapsed.TotalSeconds
+    Start-Sleep -Seconds 5
+    $m1R = $m1Job.Wait()
+    $m1Collect = $m1Sw.Elapsed.TotalSeconds
+    T ($kMF + '  a rehearsal leg collected 5 s after its child exited records the child''s own run time, not the collection time (Sec at most the time to exit plus 1, and at least 4 s under the collection time)') `
+      ((Test-Path -LiteralPath $m1Ended) -and [int]$m1R.Sec -le ([math]::Ceiling($m1EndAt) + 1) -and ($m1Collect - [int]$m1R.Sec) -ge 4) `
+      ("sec={0} exited_by={1:N1} collected_at={2:N1}" -f $m1R.Sec, $m1EndAt, $m1Collect)
     # MUST FIRE, overlap: the run-gates stub and the rehearsal stub each wait, through lib\concurrency-probe.ps1, until
     # BOTH have started. A pipeline that starts the rehearsal after run-gates cannot satisfy it (the 120 s deadline is a
     # hang guard). CLEAN TWIN from the same run: all three legs pass and the lock is taken, with rh_stopped false.
@@ -4911,7 +4933,7 @@ exit 0
   # MUST NOT FIRE and a CLEAN TWIN), W9.4's 5 (the queue member's hand-back case lands with W9.2), and W3.2 with W3.4a
   # step 3's 7, W4.1 step 7's 3, W9.1's push-main half's 5, W9.3's 11, and W9.2's 14 (W9.4's queue-member hand-back among
   # them) and the rh_key reader's 1; read off this file, not added up.
-  $expectedCases = 171
+  $expectedCases = 172
   if ($cases -ne $expectedCases) { Write-Output ("FAIL  the suite ran {0} case(s) where this file holds {1}, so a case was skipped or lost" -f $cases, $expectedCases); $f++ }
   if ($f) { Write-Output ("push-main self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("push-main self-test PASS: {0} cases - led by a branch whose base the remote moved past landing on its FIRST attempt, and by a conflicting rebase being aborted rather than left half-finished under the lock" -f $cases)

@@ -101,3 +101,32 @@ number of variants tried.
 - `.claude/rules/measurement.md`: denominators, bars before the run, one row per case, name the harness and blob.
 - `lib/gate-input-key.ps1` (machinery index): the key library G1 extends. Harness blobs at the time of writing:
   `ops/push-main.ps1` fc312015, `ops/run-gates.ps1` 32b06b95, `lib/push-ledger.ps1` 99d38754.
+
+## 5. Rulings and what the first measurement changed (2026-09-25)
+
+**Brad ruled the same day: build M1, E1, E2 and G1+G2.**
+
+**M1 landed first** (this commit): `New-TcRehearsalJob` now records the child's own run time (exit minus start), and
+`ops\report-push-time.ps1` is the committed reader. Its first run over 2026-09-22..25 (546 rows, 0 malformed):
+
+| kind | landings | timed | run-gates med / p90 | test-auditors med / p90 | rehearsal med / p90 |
+|---|---|---|---|---|---|
+| chain | 30 | 30 | 309 / 388 s | 88 / 437 s | 894 / 1,116 s |
+| plain | 94 | 36 | 271 / 443 s | 1 / 230 s | (not printed, see M1) |
+
+**E2's premise was a counting error, so E2 is HELD, not built.** Section 1 said 8 of 30 chain landings rehearsed two or
+three times (39 over 30). That counted the ledger's `rehearsals` field, which is every round that ASKED for the
+rehearsal. The field for a rehearsal that actually RAN is `rehearsed`: 31 over 30 landings (1.03), and one landing ran
+two new rehearsals by `rh_secs_list`. The catch-up rounds already reuse the verdict when the key is unchanged. E2's bar
+(1.1 or less) is met today, so there is nothing for it to save. It comes back only if the report shows the rate rise.
+
+**E1, the cause found** (ledger rows matched to each checkout's `push-main-prepare` log). Of 16 chain landings that
+recorded `early_hit`: 1 hit (through the main-checkout throwaway worktree); **6 had an early rehearsal of their own that PASSED, and it was still running when the
+push started**, so the push started a second, identical rehearsal instead of waiting (5 of the 6 early logs were last written 4 to 17 minutes
+after the push began, the sixth in the same minute); 8 had no early run at all (all 8 on 2026-09-24, the day the
+hook landed); 1 more missed through the main-checkout throwaway worktree. The in-flight record today
+only stops a second EARLY run of the same key; `-ForPush` never reads it. **The fix: `-ForPush` waits for a live
+in-flight early run of the EXACT key it would rehearse, and uses its verdict; if that run ends with no pass or fail
+verdict (stopped, blind, died), the push rehearses itself, as today.** Accuracy: the same key, the same rehearsal,
+done once. Limit of the evidence: the prepare log keeps only each checkout's LAST run, so 6 of 16 is a floor on this
+cause, not a rate.
