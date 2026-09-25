@@ -24,6 +24,24 @@
       "name": "resume-grocery-alert-triage-0924",
       "reason": "a one-time task (fires once, 2026-09-24 09:00) whose only job is to re-enable the grocery-alert-triage task Brad paused on 2026-09-21 'until 9/24', changing nothing else about it; the same shape as walmart-headed-probe-once, so a mirror would be an orphan the day after it runs. Its whole instruction is this sentence. Exempted by the ops lane (plan-2026-09-21-5.json) when this NO BACKUP line refused an unrelated push",
       "added": "2026-09-21"
+    },
+    {
+      "kind": "scheduled-task",
+      "name": "d3-first-write-remind-review-0928",
+      "reason": "a one-time task (fires once, 2026-09-28) carrying Brad's D3 ruling of 2026-09-25: it reports 3 days of first-write reminders to Brad and changes no mode; its instructions and result land in design\\brain-consults-2026-09-22\\phase-4-coding.md W4.2, so a mirror would be an orphan the day after it runs",
+      "added": "2026-09-25"
+    },
+    {
+      "kind": "scheduled-task",
+      "name": "d4-analysis-trigger-tune-0930",
+      "reason": "a one-time task (fires once, 2026-09-30) carrying Brad's D4 and D4b rulings of 2026-09-25: it labels 50 analysis fires and reads the 7-day helper rate; its instructions and results land in design\\brain-consults-2026-09-22\\phase-5-analysis.md W5.7 and W5.6, so a mirror would be an orphan the day after it runs",
+      "added": "2026-09-25"
+    },
+    {
+      "kind": "scheduled-task",
+      "name": "d17-brain-refuse-date-1002",
+      "reason": "a one-time task (fires once, 2026-10-02) carrying Brad's D17 ruling of 2026-09-25: it replays a week of brain commits and sets BRAIN_REFUSE_FROM only if the bar holds; its instructions and result land in design\\brain-consults-2026-09-22\\phase-4-coding.md W4.5, so a mirror would be an orphan the day after it runs",
+      "added": "2026-09-25"
     }
   ]
 }

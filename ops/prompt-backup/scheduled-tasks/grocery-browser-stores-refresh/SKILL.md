@@ -15,6 +15,11 @@ THE SHAPE, AND IT OVERRIDES ANY OLDER TIMING OR SCOPE BELOW (Brad's ruling, 2026
       2. powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\capture-policy.ps1 -Emit
          (today's worklists; on a FULL RECAPTURE day, Brad asks for it: add -Full)
       3. start grocery\capture-sink.ps1 ONCE, in the background (see constraint 2 below); every store posts to it.
+         PASS -MaxIdleMinutes 90 (2026-09-24): the default 30 expired between the fast stores' posts (~06:40) and
+         Fareway's (~07:15), the POST hit a dead port, and the whole Fareway sweep was lost. Probe the sink from the
+         shell before a slow store posts. A router-driven Fareway sweep pushes '/fareway-meat-grocery/s?k=<term>' (basename is /store),
+         waits ~1.5 s, THEN resetStore(), then settles - an immediate reset still leaks the previous term's rows:
+         memory fareway-router-sweep-needs-apollo-reset.
       4. Spawn the four store agents together. Give each ONLY its own store's section of PER-STORE METHOD below,
          the three constraints of running in Brad's real profile, and these rules: call tabs_context_mcp, create
          its OWN tab with tabs_create_mcp, work only in that tab, never touch another tab, close its tab at the end;
