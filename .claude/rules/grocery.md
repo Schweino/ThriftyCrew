@@ -189,9 +189,9 @@ restating it, so there is one copy of every rule and nothing here can drift from
   were only 10" from "page 2 never loaded".
   **And the cheaper repair that may retire half of this:** open the Network tab, filter to Fetch/XHR,
   and read the URL the page's own JavaScript calls - that call usually returns the data as JSON with no
-  browser needed. Three of the seven feeds here are already server-side JSON. **Nobody has checked
-  whether any of the four browser-required stores is browser-required only because nobody looked.**
-  That is one hour per store and it could retire the 75-minute Walmart pull.
+  browser needed. Three of the seven feeds here are already server-side JSON. **This was checked on
+  2026-09-10** (`design/PROBE-store-direct-data-2026-09-10.md`, ruling 7 of `design/PLAN-zero-alert-days-2026-09-10.md`):
+  Family Fare direct data found, Aldi and Fareway partial, Sam's none, and Walmart not probed on purpose.
 
 - **A DEEP DISCOUNT IS EVIDENCE ABOUT A CELL'S FUTURE, not only about its price today** (2026-09-12,
   backlog I126). A retailer's markdown is either **temporary** (a promotion, the item stays) or

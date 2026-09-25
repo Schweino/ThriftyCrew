@@ -248,6 +248,8 @@ zero-file scan as ok. (estate-machinery/readjson-gate-reproduced-founding-bug, s
 
 **Repo:** ThriftyCrew. **Lands via:** `ops\push-main.ps1`. **Effort:** S. **Needs:** W0.1. **Brad:** D1b.
 
+**2026-09-25, D1b ruled:** Brad set `ESCAPES_REFUSE_FROM = "2026-09-30"` ("Sep 30, a week after landing (Recommended)"). The warning week, read from `store-citation-log.jsonl` since 2026-09-23: 174 code commits, 162 ok, 12 warn, 0 used an escape form. The self-test now also reads the REAL constant (no monkeypatch): an index-only escape on 2026-09-29 is escape-warn and on 2026-09-30 refuses, and the other escape fixtures run on 2026-09-29, so the "on 2026-09-30" dates below now read 2026-09-29.
+
 **The forms to catch:**
 - `NOTHING_RE` (store_citation.py:67) has no quote requirement today. It gains one: `searched` must be followed by at
   least one `"..."`, `'...'` or smart-quoted term. It keeps accepting the observed "nothing further applicable".

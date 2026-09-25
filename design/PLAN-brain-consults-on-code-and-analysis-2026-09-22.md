@@ -515,7 +515,7 @@ disposition.
 | # | Decision | Recommendation | Blocks |
 |---|---|---|---|
 | D1 | Land W0.1 by 2026-09-24, or move REFUSE_FROM | land it: one file, with a written bar | W0.1 |
-| D1b | Refuse date for the escape forms (W6.11) | after one warn week, with its count | W6.11 |
+| D1b | Refuse date for the escape forms (W6.11) | after one warn week, with its count (RULED by Brad 2026-09-25: ESCAPES_REFUSE_FROM 2026-09-30, "Sep 30, a week after landing (Recommended)"; warning week 0 of 174 code commits used an escape) | W6.11 |
 | D2 | Rules: unconditional (A, now) or lead plus scoped depth (B, after the probe) | A now; judge B on W2.3's rubric once W1.1 and W1.2 report (option A ruled earlier and on main; option B RULED by Brad 2026-09-25: built on branch experiment/rules-split-option-b and judged on W2.3's three-bar rubric before anything loads differently; W6.6's ratchet is set after Brad's decision on B, "Build B on a branch, judge it on the bar (Recommended)") | W2.3 option B, W6.6 |
 | D3 | First-write gate: shadow, then remind (3 days), then deny | yes, if the shadow bars and W3.3's bar hold (RULED by Brad 2026-09-25: remind now; refusals decided by Brad after 3 days of remind data, a one-time job on 2026-09-28 reports, "Remind now, decide refusals after 3 days (Recommended)") | W4.2 deny |
 | D3b | Deny headless runs too | decide on the shadow count; until then headless is log-only | W4.2 |

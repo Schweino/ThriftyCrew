@@ -69,7 +69,8 @@ THE CHEAP ESCAPES ARE MEASURED BEFORE THEY ARE CLOSED (2026-09-23, W6.11). Three
 and say nothing a reader can check: `searched ..., nothing applicable` with no quoted term, a citation set made only
 of index files (CLAUDE.md, MEMORY.md, memory:MEMORY, CATALOGUE.md, knowledge-search/SKILL.md, knowledge/SKILL.md),
 and a `Store-Exempt:` reason under three words. Each is recorded as verdict `escape-warn` with `escape` naming the
-form, and the hook prints a NOTE and lets the commit through, until ESCAPES_REFUSE_FROM is set (D1b).
+form, and the hook prints a NOTE and lets the commit through, until ESCAPES_REFUSE_FROM (Brad set it to 2026-09-30 on
+2026-09-25, D1b); from that day each form is refused.
 
 IT FAILS OPEN, AND NEVER SILENTLY (Brad's ruling, 2026-09-24: "Match plan-citation (Recommended)"). A refusal is
 exit REFUSE_EXIT (10), the value ops/plan_citation.py already uses, and ops/hooks/commit-msg refuses on that code and
@@ -108,7 +109,7 @@ BRAIN_REFUSE_FROM = None     # Brad sets this (D17); None means warn only
 # THE CHEAP ESCAPES (W6.11): an unquoted "searched ..., nothing applicable", a citation set made only of index
 # files, and a Store-Exempt reason of fewer than three words. Measured first, recorded as escape-warn, never refused
 # until this is set. It never goes through the REFUSE_FROM mode, which is already refuse by the time this lands.
-ESCAPES_REFUSE_FROM = None   # Brad sets this (D1b); None means warn only
+ESCAPES_REFUSE_FROM = "2026-09-30"   # Brad, 2026-09-25 (D1b): one week of warnings after W6.11 landed (2026-09-23), then refuse. 0 of 174 code commits used an escape form in that week. First value, not a sweep.
 BACKING_HOURS = 24           # a search this recent in the same session backs a Store: line. First value.
 # THE MEMORY STORES A CITATION MAY NAME, in lookup order (2026-09-22, queue 2026-09-22-7d991c). Claude Code keys
 # a session's memory directory on the directory it was LAUNCHED from, so this estate has two live stores:
@@ -1042,13 +1043,27 @@ def selftest():
         os.makedirs(os.path.join(store["skills"], "knowledge-search"))
         open(os.path.join(store["skills"], "knowledge-search", "SKILL.md"), "w").close()
         open(os.path.join(store["skills"], "database-craft", "SKILL.md"), "w").close()
-        late = "2026-09-30"
+        # The escape cases below run on 2026-09-29: past REFUSE_FROM (the mode refuses) and one day before the REAL
+        # ESCAPES_REFUSE_FROM (2026-09-30, D1b), so each escape form still reads escape-warn there.
+        late = "2026-09-29"
         d = judge_message("fix\n\nStore: CLAUDE.md\n", code, store, late, True)
         eo = __import__("io").StringIO()
         erc = emit_verdict(d, 1, out=eo)
-        case("CLEAN TWIN on 2026-09-30 'Store: CLAUDE.md' alone is escape-warn, exits 0, prints the NOTE head and never BLOCKED",
-             ESCAPES_REFUSE_FROM is None and d["verdict"] == "escape-warn" and d["escape"] == "index-only" and erc == 0
+        case("CLEAN TWIN on 2026-09-29, a step before the real ESCAPES_REFUSE_FROM, 'Store: CLAUDE.md' alone is escape-warn, "
+             "exits 0, prints the NOTE head and never BLOCKED",
+             late >= REFUSE_FROM and ESCAPES_REFUSE_FROM is not None and late < ESCAPES_REFUSE_FROM
+             and d["verdict"] == "escape-warn" and d["escape"] == "index-only" and erc == 0
              and "NOTE (escape form, recorded, not refused)" in eo.getvalue() and "BLOCKED" not in eo.getvalue())
+        # D1b at the bar, on the REAL constant (no monkeypatch): the day before warns, the day itself refuses.
+        d_before = judge_message("fix\n\nStore: CLAUDE.md\n", code, store, "2026-09-29", True)
+        d_at = judge_message("fix\n\nStore: CLAUDE.md\n", code, store, "2026-09-30", True)
+        eo = __import__("io").StringIO()
+        erc = emit_verdict(d_at, 1, out=eo)
+        case("MUST FIRE on the real ESCAPES_REFUSE_FROM 2026-09-30 an index-only escape refuses (exit REFUSE_EXIT, BLOCKED) "
+             "while 2026-09-29, one day before the bar, is escape-warn",
+             ESCAPES_REFUSE_FROM == "2026-09-30" and d_at["verdict"] == "refuse" and d_at["escape"] == "index-only"
+             and erc == REFUSE_EXIT and "BLOCKED" in eo.getvalue()
+             and d_before["verdict"] == "escape-warn" and d_before["escape"] == "index-only")
         saved_esc = ESCAPES_REFUSE_FROM
         try:
             globals()["ESCAPES_REFUSE_FROM"] = "2026-09-01"
@@ -1060,7 +1075,7 @@ def selftest():
         case("MUST FIRE with ESCAPES_REFUSE_FROM set to a past date the same line refuses (exit REFUSE_EXIT, BLOCKED)",
              d["verdict"] == "refuse" and erc == REFUSE_EXIT and "BLOCKED" in eo.getvalue())
         d = judge_message("fix\n\nbody\n", code, store, late, None)
-        case("CLEAN TWIN on 2026-09-30 a code commit with no Store: line still refuses (the mode, not an escape)",
+        case("CLEAN TWIN on 2026-09-29 a code commit with no Store: line still refuses (the mode, not an escape)",
              d["verdict"] == "refuse" and d["escape"] is None)
         d = judge_message("fix\n\nStore: searched regex timeout, nothing applicable\n", code, store, late, True)
         case("MUST FIRE a nothing-applicable line with no quoted search term is escape-warn (unquoted-search)",
@@ -1085,7 +1100,7 @@ def selftest():
 
     for f in fails:
         print("  FAIL  " + f)
-    expected = 77
+    expected = 78
     if n != expected:
         fails.append("ran %d cases, expected %d" % (n, expected))
         print("  FAIL  ran %d cases, expected %d" % (n, expected))
