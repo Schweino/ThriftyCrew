@@ -699,7 +699,7 @@
         "cell_effects": []
       },
       "freshness": "measured 2026-09-25 ~17:10 against bakers-regular-2026-09-24/25 and bakers-ad-list-2026-09-23; the next ad turnover is 2026-09-30",
-      "leaves_open": "nothing once the lane reads the one rule; the 09-02/09-09 closes predate the ad-list producer",
+      "leaves_open": "nothing here; the receipt-erasing same-day rewrite is owned by 2026-09-24-818b3e (plan-2026-09-25-5)",
       "leaves_open_occurrences": 0,
       "proof": {
         "must_fire_case": "frozen 09-24 state: ad list 2026-09-23 on disk with 78 routed terms and 1 asked -> the lane's owed count is 77, never 0",
@@ -719,8 +719,14 @@
       "rollback": "revert the lane hunk",
       "lane": "money",
       "est_tool_calls": 30,
-      "status": "planned",
-      "resolution_note": "No longer reproduces (77/78 owed on 09-24 -> 0/78 on 09-25), but the lane and the check disagreed on the owed count for a day; planned for the money lane to give both one rule."
+      "status": "superseded",
+      "resolution_note": "Superseded by 2026-09-24-818b3e (plan-2026-09-25-5). Premise false: the Baker's lane and the check already share Get-BakersAdOwed. On 09-24 the 09:00 run asked 81 ad terms (committed 3c45a9478: owed 77, asked 81); the 16:38 same-day re-run correctly owed 0, asked 9, and rewrote the dated file whole, erasing the morning receipts, so the 16:41 check counted 77 of 78 unasked. Close together with 818b3e once its receipt carry-forward lands.",
+      "premise_verified": false,
+      "premise_check": "FALSE. The lane already reads the one rule: pull-regular-bakers-api.ps1:1035 calls Get-BakersAdOwed -OutDir $out -Date $today, the same function Get-BakersAdCaptureState wraps (capture-policy-lib.ps1:747); there is no second owed count to unify. What happened on 2026-09-24: capture-run-daily ran Baker's twice (09:00:03 and 16:38:20, capture-run-daily-2026-09-24.log lines 46 and 230). The 09:00 run's file, committed in 3c45a9478, reads ad_terms_owed 77, ad_terms_asked 81, terms_asked 89, 640 receipts. The 16:38 re-run read those receipts, correctly owed 0, asked 9 terms (1 ad) and rewrote bakers-regular-2026-09-24.json whole, erasing the morning's receipts; the check at 16:41 then counted 77 of 78 unasked. The 09-25 run read the erased file and re-asked all 77. Same function, two different moments of one file.",
+      "deviation": "Not implemented. The planned fix (lane reads owed through Get-BakersAdCaptureState) is already true in the code and would change nothing. The real mechanism is the same-day rewrite erasing receipts, which is plan-2026-09-25-5 item 2026-09-24-818b3e (carry forward unasked receipts on a same-day rewrite). No code touched here, to avoid colliding with that item.",
+      "superseded_by": "plan-2026-09-25-5 / 2026-09-24-818b3e",
+      "close_disposition": "superseded",
+      "actual_tool_calls": 13
     }
   ],
   "ship_sequence": [
